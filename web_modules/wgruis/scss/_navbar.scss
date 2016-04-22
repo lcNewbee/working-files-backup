@@ -1,0 +1,46 @@
+.navbar {
+  position: relative;
+  min-height: $g-navbar-height; // Ensure a navbar always shows (e.g., without a .navbar-brand in collapsed mode)
+  border: none;
+  // Prevent floats from breaking the navbar
+
+  @include clearfix;
+
+  .brand {
+    float: left;
+    padding: $g-distance-base + 3px;
+    font-size: 24px;
+    font-weight: normal;
+    color: $g-main-color;
+    img{
+      margin-right: 13px;
+    }
+  }
+
+  .nav {
+    float: right;
+    margin-bottom: -1px;
+
+    li {
+      float: left;
+
+      a {
+        display: block;
+        font-size: 16px;
+        line-height: $g-navbar-height;
+        padding: 0 14px;
+
+        &:hover,
+        &:focus {
+          text-decoration: none;
+        }
+
+        &.active {
+          color: $g-main-color;
+          text-decoration: none;
+          border-bottom: 3px solid $g-main-color;
+        }
+      }
+    }
+  }
+}

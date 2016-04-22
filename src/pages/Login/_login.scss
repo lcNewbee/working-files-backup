@@ -1,0 +1,30 @@
+.login {
+  width: 500px;
+  padding: 2.5em;
+  margin: 10px auto;
+  margin-top: 8em;
+  background: #f2f2f2;
+  border: 1px solid #c0c0c0;
+  h1 {
+    margin-bottom: .6em;
+    font-weight: 300;
+    color: #1292c5;
+  }
+  p {
+    margin-bottom: .8em;
+  }
+  .form-control {
+
+    input {
+      width: 100%;
+      padding: 0.61538em 1.2em;
+      height: 2.84615em;
+      font-size: 1.23077em;
+      border: none;
+      border-bottom: 1px solid #c0c0c0;
+      &:focus {
+        border-bottom-color: #1292c5;
+      } 
+    }
+  }
+}

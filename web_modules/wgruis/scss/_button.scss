@@ -1,0 +1,39 @@
+//
+// Button
+// --------------------------------------------------
+
+.g-btn {
+  display: inline-block;
+  padding: $g-distance-small $g-size-base * .6;
+  font-size: $g-font-size-large;
+  color: $g-text-btn;
+  text-decoration: none;
+  background-color: $g-red;
+  border: none;
+  border-radius: $g-size-base;
+  &:hover,
+  &:focus,
+  &:active,
+  &:visited {
+    color: $g-text-btn;
+    text-decoration: none;
+  }
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.g-btn-block {
+  display: block;
+}
+
+.g-btn-success {
+  background-color: $g-brand-success;
+}
+.g-btn-info {
+  background-color: $g-brand-info;
+}
+.g-btn-warning {
+  background-color: $g-brand-warning;
+}

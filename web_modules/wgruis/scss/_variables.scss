@@ -1,0 +1,121 @@
+// Core 
+// FontAwesome Version
+$g-fa-version:          "4.4.0" !default;
+
+//== Colors
+//
+//## Main Colors
+$g-main-color:            #0080ff !default;
+$g-main-color-light:      #0099ff !default;
+$g-main-color-lighter:    #00bbff !default;
+
+//## Gray and brand colors for use across wgruis.
+//### Gray color
+$g-gray-base:               #000 !default;
+$g-gray-darker:             lighten($g-gray-base, 13.5%) !default; // #222
+$g-gray-dark:               lighten($g-gray-base, 20%) !default;   // #333
+$g-gray:                    lighten($g-gray-base, 33.5%) !default; // #555
+$g-gray-light:              lighten($g-gray-base, 46.7%) !default; // #777
+$g-gray-lighter:            lighten($g-gray-base, 93.5%) !default; // #eee
+
+//### Brand color
+$g-brand-primary:           #666666 !default;
+$g-brand-success:           #1FC360 !default;
+$g-brand-info:              #1781FB !default;
+$g-brand-warning:           #ffb500 !default;
+$g-brand-danger:            #F7304E !default;
+
+$g-red:  					          #F7304E !default;
+$g-white:                   #ffffff !default;
+
+
+//== Scaffolding
+//
+//## Settings for some of the most global styles.
+
+//### Background color for `<body>`.
+$g-body-bg:                 #fafafa !default;
+
+//### Global text color on `<body>`.
+$g-text-color:              $g-gray-dark !default;
+
+//### Global text color
+$g-text-highlight:          $g-brand-danger !default;
+$g-text-help:               #b1b1b1 !default;
+$g-text-btn:                $g-white !default;
+
+//### Global textual link color.
+$g-link-color:              $g-brand-primary !default;
+
+//### Link hover color set via `darken()` function.
+$g-link-hover-color:        darken($g-link-color, 15%) !default;
+
+//### Link hover decoration.
+$g-link-hover-decoration:   underline !default;
+
+
+//== Typography
+//
+//## Font, line-height, and color for body text, headings, and more.
+$g-line-height-base:        1.428571429 !default; // 20/14
+$g-line-height-small:       1.2 !default; // 16/14
+
+$g-font-path:             '../fonts' !default;
+// font family
+$g-font-family-base:        'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+// font size
+$g-font-size-base:          14px !default;
+$g-font-size-large:         ceil(($g-font-size-base * 1.25)) !default; // ~18px
+$g-font-size-small:         ceil(($g-font-size-base * 0.85)) !default; // ~12px
+
+$g-font-size-h1:            floor(($g-font-size-base * 2.6)) !default; // ~36px
+$g-font-size-h2:            floor(($g-font-size-base * 2.15)) !default; // ~30px
+$g-font-size-h3:            ceil(($g-font-size-base * 1.7)) !default; // ~24px
+$g-font-size-h4:            ceil(($g-font-size-base * 1.25)) !default; // ~18px
+$g-font-size-h5:            $g-font-size-base !default;
+$g-font-size-h6:            ceil(($g-font-size-base * 0.85)) !default; // ~12px
+
+//== Distance
+//
+//** width, height, padding, margin size for use across kuaizhuan
+$g-distance-base: 			    10px !default;
+$g-distance-normal: 		    floor(($g-distance-base * 1.25)) !default;
+$g-distance-large: 			    ceil(($g-distance-base * 1.5)) !default;
+$g-distance-small:          floor(($g-distance-base * 0.85)) !default;
+$g-distance-min:          floor(($g-distance-base * 0.5)) !default;
+
+//== Size
+//
+// Common size
+$g-size-base:               30px !default;
+$g-size-large:              ($g-size-base * 2) !default;
+$g-size-small:              ceil($g-size-base * 0.53) !default;
+
+// App icon size
+$g-icon-size-base:          55px !default;
+$g-icon-size-large:         $g-icon-size-base * 2 !default;
+$g-icon-size-small:         ceil(($g-font-size-base * 0.29)) !default; 
+
+//== Container size
+//
+// pc
+$g-screen-pc-small:           800px !default;
+$g-screen-pc-base:            1000px !default;
+$g-screen-pc-large:           1200px !default;
+
+// mobile
+$g-screen-mobile-small:       320px !default;
+$g-screen-mobile-base:        375px !default;
+$g-screen-mobile-large:       420px !default;
+
+//== Grid system
+//
+//## Grid system for all
+$g-grid-columns:              12 !default;
+
+//== navbar
+$g-navbar-height:             80px !default;
+
+
+

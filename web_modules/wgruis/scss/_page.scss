@@ -1,0 +1,77 @@
+//
+// Button
+// --------------------------------------------------
+ 
+.g-page {
+  margin: 30px 0;
+  overflow: hidden;
+  a {
+    display: inline-block;
+    padding: 5px 9px;
+    margin: 0 3px;
+    font: 12px/14px arial, 'microsoft yahei', 'simsun', sans-serif;
+    color: #555;
+    background-color: transparent;
+    border: 1px solid #ccc;
+
+    *display: inline;
+    *zoom: 1;
+
+    &:visited {
+      color: #333;
+    }
+    &:hover {
+      color: #fff;
+      text-decoration: none;
+      background: $g-main-color-light;
+      border: 1px solid $g-main-color;
+    }
+  }
+
+  span {
+    &.curr {
+      display: inline-block;
+      padding: 5px 9px;
+      margin: 0 3px;
+      font: 12px/14px 'simsun', arial, sans-serif;
+      color: #fff;
+      background: $g-main-color-light;
+      border: 1px solid $g-main-color;
+
+      *display: inline;
+      *zoom: 1;
+    }
+    &.ellipsis {
+      font-family: monospace, arial;
+    }
+  }
+
+  .g-glyphicon {
+    font-size: 1.14em;
+    color: red;
+  }
+
+  .prev,
+  .next {
+    position: relative;
+  }
+
+  .prev {
+    padding-left: 12px;
+    margin-left: 0;
+
+    .g-glyphicon {
+      margin-right: 3px;
+    }
+  }
+
+  .next {
+    padding-right: 12px;
+    margin-right: 0;
+
+    .g-glyphicon {
+      margin-left: 3px;
+    }
+  }
+
+}

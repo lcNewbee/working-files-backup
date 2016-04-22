@@ -1,0 +1,16 @@
+//
+// Layout
+// --------------------------------------------------
+
+.inline-block {
+  
+  // Firefox 2
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: top;
+  zoom: 1;
+
+  // ie6,ie7
+  *display: inline;
+  _height: 250px;
+}

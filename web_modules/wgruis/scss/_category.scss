@@ -1,0 +1,241 @@
+//
+// Category
+// --------------------------------------------------
+
+.g-category {
+  position: relative;
+  float: left;
+  width: 212px;
+  overflow: visible;
+
+  h3 {
+    padding: 8px 18px 7px;
+    font-size: 16px;
+    color: #fff;
+    background-color: $g-main-color-light;
+    a {
+      margin-left: -2px;
+      color: #fff;
+    }
+    .icon {
+      margin-left: 86px;
+    }
+  }
+
+  &:hover {
+    .g-category-list {
+      display: block;
+    }
+  }
+}
+
+.g-category--popup {
+  .g-category-list {
+    display: block;
+  }
+}
+.g-category-list {
+  position: absolute;
+  z-index: 22;
+  display: none;
+  min-height: 470px;
+  background-color: #fff;
+  border: 2px solid $g-main-color-light;
+  border-top: 0;
+
+  .first {
+    padding-top: 7px;
+  }
+  .g-category-level1 {
+    position: relative;
+    width: 208px;
+    line-height: 19px;
+
+    a {
+      color: #3d3d3d;
+    }
+    h4 {
+      .level1-more {
+        cursor: default;
+      }
+      > .level1-more, > a {
+        font-size: 14px;
+        font-weight: 700;
+      }
+    }
+    p {
+      font-size: 12px;
+    }
+    .children > a {
+      font-size: 12px;
+      color: #6d6d6d;
+    }
+    .title {
+      position: relative;
+      z-index: 2;
+      padding: 7px 0;
+      margin: 0 14px;
+      border-bottom: 1px solid #eee;
+      ul {
+        zoom: 1;
+        @include clearfix;
+
+        li {
+          float: left;
+          margin-right: 5px;
+        }
+      }
+    }
+    .g-category-list .g-category-level1 p a {
+      margin-right: 9px;
+    }
+
+    // g-category-level1 的 hover 状态
+    &:hover {
+      background-color: $g-main-color;
+
+      .title {
+        border-bottom: 1px solid transparent;
+      }
+      a,
+      .level1-more {
+        color: #fff;
+      }
+      .g-category-level2 {
+        a {
+          color: #3d3d3d;
+          &:hover {
+            color: $g-main-color;
+          }
+        }
+      }
+    }
+  }
+  .g-category-future {
+    margin-left: 39px;
+    a {
+      color: #6d6d6d;
+    }
+  }
+  .last {
+    height: 37px;
+    line-height: 1;
+    .title {
+      border-bottom: none;
+    }
+    .g-category-level2 {
+      top: -89px;
+    }
+  }
+}
+
+.g-category-level2 {
+  position: absolute;
+  top: 0;
+  left: 208px;
+  z-index: 1;
+  display: none;
+  width: 544px;
+  padding: 10px;
+  zoom: 1;
+  background: #fff;
+  filter: alpha(opacity=98);
+  border: 2px solid $g-main-color;
+  opacity: .98;
+  @include clearfix;
+
+  a {
+    font-size: 12px !important;
+  }
+  dl {
+    zoom: 1;
+
+    @include clearfix;
+  }
+  dt {
+    width: 15%;
+    a {
+      float: right;
+      width: 85px;
+      padding-right: 5px;
+      font-size: 12px;
+      font-weight: 500;
+      color: $g-main-color!important;
+      text-align: right;
+    }
+  }
+  dd {
+    width: 85%;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    line-height: 17px;
+    cursor: default;
+    a {
+      display: inline-block;
+      padding: 0 6px;
+      margin: 1px 0;
+      font-weight: 400;
+      color: #6d6d6d!important;
+      white-space: nowrap;
+      border-left: 1px solid #ddd;
+
+      *display: inline;
+      *zoom: 1;
+      &:hover {
+        color: $g-main-color!important;
+      }
+    }
+  }
+  dd,
+  dt {
+    float: left;
+    margin-top: 4px;
+  }
+  .split {
+    height: 1px;
+    margin: 2px 0;
+    background-color: #ddd;
+  }
+  .more {
+    margin: 0 10px;
+    ul {
+      width: 100%;
+      padding: 10px 0;
+      zoom: 1;
+      border-bottom: 1px dotted #ddd;
+
+      @include clearfix;
+    }
+    li {
+      float: left;
+      width: 20%;
+      line-height: 24px;
+      text-align: center;
+      a {
+        font-size: 14px !important;
+        color: #3d3d3d;
+      }
+    }
+    p {
+      margin: 10px 0;
+      text-align: center;
+      a {
+        margin-left: 2px;
+        font-size: 14px !important;
+        color: $g-main-color !important;
+      }
+    }
+  }
+
+  &.hidden,
+  &.hide {
+    display: none;
+  }
+  
+  &.show {
+    display: inline-block;
+
+    *display: inline;
+    *zoom: 1;
+  }
+}

@@ -1,0 +1,11 @@
+//
+// Utility
+// --------------------------------------------------
+
+.none {
+  display: none;
+}
+
+.clearfix {
+  @include clearfix;
+}
