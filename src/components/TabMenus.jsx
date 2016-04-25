@@ -7,16 +7,13 @@ export default class Main extends Component {
   render() {
     return (
       <div>
-        <header className="navbar">
-          <a href="" className="brand">Comlanos 管理系统</a>
-        </header>
-        <div className="main">
-          <div className='main-content'>
-            <div className='main-content-wrap'>
+        <div className="tabs">
+          <Nav className="tabs-nav" menus={this.props.route.childRoutes} />
+          <div className='tabs-content'>
+            <div className='tabs-content-wrap'>
               {this.props.children}
             </div>
           </div>
-          <Nav className="main-nav" menus={this.props.route.childRoutes} />
         </div>
       </div>
     )

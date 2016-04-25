@@ -10,9 +10,18 @@ export const Settings = React.createClass({
 
   render() {
     return (
-      <div className="login">
-        <p>设置</p>
-        {this.props.fetching ? 'dsd': 'ok'}
+      <div>
+        <h2>设置</h2>
+        <div className="clearfix">
+          <div className="btn-group">
+            <a className="btn active">设备组</a>
+            <a className="btn">流量控制</a>
+            <a className="btn">无线网络</a>
+            <a className="btn">Portal模板</a>
+            <a className="btn">来宾用户设置</a>
+            <a className="btn">管理员</a>
+          </div>
+        </div>
       </div>
     );
   }
@@ -23,8 +32,7 @@ function mapStateToProps(state) {
 
   return {
     fetching: myState.get('fetching'),
-    logined: myState.get('logined'),
-    data: myState.get('data')
+    logined: myState.get('logined')
   };
 }
 

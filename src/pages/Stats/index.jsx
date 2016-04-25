@@ -215,7 +215,19 @@ export const Status = React.createClass({
 
   componentDidUpdate() {
 
-    option.series[0].data = [
+    clientNetworkOption.series[0].data = [
+      {
+        value: 335,
+        name: '2.4G'
+      }, {
+        value: 200,
+        name: '5G'
+      }
+    ].sort(function (a, b) {
+      return a.value - b.value
+    });
+
+    clientProducterOption.series[0].data = [
       {
         value: 335,
         name: '华为'
@@ -243,14 +255,17 @@ export const Status = React.createClass({
       }, {
         value: 310,
         name: '已关机'
+      }, {
+        value: 102,
+        name: '未初始化'
       },
     ].sort(function (a, b) {
       return a.value - b.value
     });
 
     myChart.setOption(apOption);
-    clientsChannelChart.setOption(option);
-    clientsProducerChart.setOption(option);
+    clientsChannelChart.setOption(clientNetworkOption);
+    clientsProducerChart.setOption(clientProducterOption);
     statsChart.setOption(ClientsStatsOption);
   },
 

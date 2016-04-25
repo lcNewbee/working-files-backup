@@ -7,12 +7,31 @@ function setFetching(state) {
 function updateData(state, name, value) {
   return state.updateIn(['data', name], val => value);
 }
-
 let defaultState = fromJS({
   fetching: false,
-  data: {
-    username: '',
-    password: ''
+  deviceGroup: {
+    data: {
+      list: []
+    }
+  },
+  bandwidth: {
+    data: {
+      upSpeed: 32,
+      downloadSpeed: 233,
+      groupId: 'test1'
+    }
+  },
+  wirelessNetwork: {
+
+  },
+  portalTemplate: {
+
+  },
+  guest: {
+
+  },
+  admin: {
+
   }
 });
 

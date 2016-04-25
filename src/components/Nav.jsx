@@ -1,25 +1,23 @@
 import React from 'react';
 import {Link} from 'react-router';
+import {fromJS} from 'immutable';
+
 const ACTIVE = { color: 'red' }
 
 export default React.createClass({
   render: function() {
-    var navList = [];
-
-    this.props.mainNav.forEach(function(item, i) {
-      navList.push(
-        <li key={'nav' + i}>
-          <Link to={item.path} activeStyle={ACTIVE}>
-            {item.text}
-          </Link>
-        </li>
-      );
-    });
-
     return (
       <nav {...this.props}>
         <ul>
-          {navList}
+          {
+            fromJS(this.props.menus).map(function(item, i) {
+              return <li key={'nav' + i}>
+                <Link to={item.get('path')} activeStyle={ACTIVE}>
+                  {item.get('text')}
+                </Link>
+              </li>;
+            })
+          }
         </ul>
       </nav>
     );
