@@ -10,8 +10,8 @@ export const DeviceMap = React.createClass({
 
   render() {
     return (
-      <div className="login">
-        <p>设备信息</p>
+      <div>
+        <h2>地图</h2>
         {this.props.fetching ? 'dsd': 'ok'}
       </div>
     );

@@ -6,10 +6,10 @@ var utils = require('./lib/core');
 utils.version = version;
 utils.extend(require('./lib/string'));
 utils.extend(require('./lib/query'));
+utils.extend(require('./lib/sync'));
 
 // extend utils self module
 utils.extend({
-  moment: require('./lib/moment'),
   storage: require('./lib/storage')
 });
 

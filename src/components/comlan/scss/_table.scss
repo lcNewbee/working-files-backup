@@ -1,12 +1,12 @@
 .table {
   width: 100%;
-  border-collapse: collapse;
   border-spacing: 1;
-  
+  border-collapse: collapse;
+
   th, td {
     padding: 3px 5px;
-    text-align: left;
     border: 1px solid #dedede;
+    text-align: left;
   }
   th {
     background: #666;

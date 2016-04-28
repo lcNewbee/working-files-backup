@@ -75,23 +75,13 @@ utils.find = function(obj, predicate) {
  * @param  {[type]} source [description]
  * @return {[type]}        [description]
  */
-utils.extend = Object.assign || function (target, source) {
+utils.objectAssign = Object.assign || function (target, source) {
   var fromObj;
   var ret = toObject(target);
   var len = arguments.length;
 
-  if(len === 1) {
-    for (var key in ret) {
-      if (hasOwnProperty.call(ret, key)) {
-        this[key] = ret[key];
-      }
-    }
-
-    return this;
-  }
-
   for (var i = 1; i < len; i++) {
-    fromObj = Object(arguments[i]);
+    fromObj = toObject(arguments[i]);
 
     for (var key in fromObj) {
       if (hasOwnProperty.call(fromObj, key)) {
@@ -99,6 +89,20 @@ utils.extend = Object.assign || function (target, source) {
       }
     }
   }
+
+  return ret;
+};
+
+utils.extend = function (target, source) {
+  var len = arguments.length;
+  var ret;
+
+  if(len === 1) {
+    utils.objectAssign(this, target)
+    return this;
+  }
+
+  ret = utils.objectAssign.apply(Object, [].slice.call(arguments))
 
   return ret;
 };

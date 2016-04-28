@@ -12,7 +12,7 @@ export default React.createClass({
           {
             fromJS(this.props.menus).map(function(item, i) {
               return <li key={'nav' + i}>
-                <Link to={item.get('path')} activeStyle={ACTIVE}>
+                <Link to={item.get('path')} activeClassName="active">
                   {item.get('text')}
                 </Link>
               </li>;

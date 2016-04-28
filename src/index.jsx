@@ -20,7 +20,10 @@ const hashHistory = ReactRouter.hashHistory;
 const prodConfig = require('./products/ac5000');
 
 // Store
-const store = remoteActionMiddleware(combineReducers(prodConfig.reducers));
+const store = remoteActionMiddleware(
+  combineReducers(prodConfig.reducers),
+  window.devToolsExtension ? window.devToolsExtension() : f => f
+);
 
 // 主渲染入口
 ReactDOM.render(

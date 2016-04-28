@@ -1,0 +1,28 @@
+{
+    "state": {
+        "code": 2000,
+        "msg": "用户名或密码错误"
+    },
+    "data": {
+        "list": [{
+                "id": 1,
+                "name": "00:22:33:33:22:11",
+                "addr": "中国",
+                "status": "运行中",
+                "model": "AP5000",
+                "version": "V1.0.1",
+                "channel": "12",
+                "runTime": "23"
+            }, {
+                "id": 2,
+                "name": "AP1",
+                "addr": "中国",
+                "status": "未初始化",
+                "model": "AP5000",
+                "version": "V1.0.1",
+                "channel": "12",
+                "runTime": "23"
+            }
+        ]
+    }
+}

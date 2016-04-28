@@ -10,8 +10,8 @@ export const Statistics = React.createClass({
 
   render() {
     return (
-      <div className="login">
-        <p>设备统计报表</p>
+      <div>
+        <h2>统计报表</h2>
         {this.props.fetching ? 'dsd': 'ok'}
       </div>
     );
@@ -19,7 +19,7 @@ export const Statistics = React.createClass({
 });
 
 function mapStateToProps(state) {
-  var myState = state.device;
+  var myState = state.statistics;
 
   return {
     fetching: myState.get('fetching'),
@@ -34,5 +34,5 @@ export const View = connect(
   actions
 )(Statistics);
 
-export const device = reducer;
+export const statistics = reducer;
 

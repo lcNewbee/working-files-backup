@@ -13,9 +13,19 @@
   p {
     margin-bottom: .8em;
   }
-  .form-control {
 
+  .form-control {
+    margin: 0;
     input {
+      padding: 6px 12px;
+      height: 34px;
+      border: 1px solid #ccc;
+      background-color: #fff;
+      background-image: none;
+      color: #555;
+      font-size: 14px;
+      line-height: 1.42857143;
+      transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
       width: 100%;
       padding: 0.61538em 1.2em;
       height: 2.84615em;
@@ -24,7 +34,7 @@
       border-bottom: 1px solid #c0c0c0;
       &:focus {
         border-bottom-color: #1292c5;
-      } 
+      }
     }
   }
 }

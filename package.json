@@ -5,18 +5,15 @@
   "main": "src/index.jsx",
   "repository": "none",
   "scripts": {
+    "eslint": "eslint src/*",
     "open:src": "babel-node ./tools/srcServer.js",
     "open:dist": "babel-node ./tools/distServer.js",
-
     "clean-dist": "npm run remove-dist && mkdir build",
     "remove-dist": "node_modules/.bin/rimraf ./build",
-
     "build:html": "babel-node tools/buildHtml.js",
     "prebuild": "npm run clean-dist && npm run build:html",
     "build": "babel-node tools/build.js && npm run open:dist",
-
     "webpack:prod": "webpack --config webpack.config.prod.js",
-
     "test": "mocha --compilers js:babel-core/register --require ./test/helper/jsdom.js './test/**/*.@(js|jsx)'",
     "test:watch": "npm test -- --watch --watch-extensions jsx"
   },
@@ -75,6 +72,7 @@
     "fixed-data-table": "^0.6.0",
     "immutable": "^3.7.6",
     "react": "^0.14.7",
+    "react-addons-css-transition-group": "^0.14.7",
     "react-addons-pure-render-mixin": "^0.14.7",
     "react-dom": "^0.14.7",
     "react-redux": "^4.4.1",

@@ -19,7 +19,12 @@ export default function serverApi(options) {
       let resText = '';
 
       if(err) {
-        resText = err.message;
+        resText = JSON.stringify({
+          state: {
+            code: 7001,
+            msg: err.message
+          }
+        });
       } else {
         resText = markup;
       }

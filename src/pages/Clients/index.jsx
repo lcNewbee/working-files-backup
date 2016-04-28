@@ -10,9 +10,8 @@ export const Clients = React.createClass({
 
   render() {
     return (
-      <div className="login">
-        <p>客户端列表</p>
-        
+      <div>
+        <h2>客户端列表</h2>
       </div>
     );
   }

@@ -19,16 +19,17 @@ const NotFound = require('../../components/NotFound');
 const pStatus = require('../../pages/Stats');
 
 // 设备
-const pDevice = require('../../pages/Device');
+const pDevices = require('../../pages/Devices');
 
 // 设备地图
 const pDeviceMap = require('../../pages/DeviceMap');
 
-// 设置
-const pSettings = require('../../pages/Settings');
 const pStatistics = require('../../pages/Statistics');
 const pLogs = require('../../pages/Logs');
 const pClients = require('../../pages/Clients');
+
+// 设置
+const pGroupSettings = require('../../pages/GroupSettings');
 
 let routes = [{
     path: '/',
@@ -44,20 +45,15 @@ let routes = [{
           text: '热点统计',
           component: pStatus.View
         }, {
-          id: 'device',
-          path: '/main/device',
+          id: 'devices',
+          path: '/main/devices',
           text: '设备',
-          component: pDevice.View
+          component: pDevices.View
         }, {
           id: 'clients',
           path: '/main/clients',
           text: '客户端',
           component: pClients.View
-        }, {
-          id: 'deviceMap',
-          path: '/main/deviceMap',
-          text: '地图',
-          component: pDeviceMap.View
         }, {
           id: 'logs',
           path: '/main/logs',
@@ -73,11 +69,22 @@ let routes = [{
           path: '/main/settings',
           text: '设置',
           component: TabMenus,
-          indexRoute: {component: pDevice.View},
+          indexRoute: {
+            component: pGroupSettings.View
+          },
           childRoutes: [{
             id: 'deviceGroup',
-            path: '/main/settings/deviceGroup',
+            path: '/main/settings',
             text: '组设置',
+          },{
+            id: 'deviceGroup',
+            path: '/main/settings/bandwidth',
+            text: '流量设置',
+            component: pStatistics.View
+          },{
+            id: 'deviceGroup',
+            path: '/main/settings/wireless',
+            text: '无线设置',
             component: pStatistics.View
           }]
       }]
@@ -90,11 +97,11 @@ let routes = [{
 // 配置模块页面 store
 const reducers = {
   status: pStatus.status,
-  device: pDevice.device,
+  devices: pDevices.devices,
   login: pLogin.login,
   clients: pClients.clients,
   logs: pLogs.logs,
-  settings: pSettings.settings,
+  groupSettings: pGroupSettings.settings,
   statistics: pStatistics.statistics
 };
 
