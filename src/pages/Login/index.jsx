@@ -2,11 +2,12 @@ import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {Input, FormGruop} from '../../components/form/Input';
+import {Input, FormGruop} from '../../components/Form/Input';
 import * as actions from './actions';
 import reducer from './reducer';
 
 import './_login.scss';
+
 
 const formGroups = [
   {

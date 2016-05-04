@@ -185,7 +185,7 @@ function getRuleObj(rule) {
     ret.fun = fun;
   }
   if(args) {
-    
+
     if(args.indexOf('[') === 0 &&
         args.indexOf(']') === (args.length - 1)) {
       ret.args = eval(args);
@@ -237,7 +237,7 @@ function checkClear(str, rules) {
       }
       ret = ruleObj.fun.specific.apply(ruleObj.fun, args);
     }
-    
+
     if(ret) {
       return ret;
     }
@@ -263,7 +263,7 @@ function check(str, rules) {
     // 如果是对象
     if(typeof ruleObj.fun.all === 'function') {
       ret = ruleObj.fun.all.apply(ruleObj.fun, args);
-    
+
     // 如果是函数
     } else {
       ret = ruleObj.fun.apply(ruleObj, args);
@@ -304,6 +304,5 @@ var init = validator.fn.init = function(options) {
 
 init.prototype = validator.fn;
 
-validator.ddd = 2;
 export default validator;
 

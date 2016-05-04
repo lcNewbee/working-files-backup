@@ -10,7 +10,7 @@ import {
 
 import {
   Input, FormGruop
-} from '../../components/form/Input';
+} from '../../components/Form/Input';
 import * as actions from './actions';
 import reducer from './reducer';
 import echarts from 'echarts';

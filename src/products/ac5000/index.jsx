@@ -1,5 +1,7 @@
 // 公用 样式
-require('../../components/comlan/scss/main.scss')
+require('../../../web_modules/comlan/scss/main.scss')
+require('font-awesome/css/font-awesome.css');
+var lang = require('../../lang/zh-cn.json');
 
 /*************************************************************
  * 产品界面配置
@@ -42,49 +44,49 @@ let routes = [{
           id: 'status',
           isIndex: true,
           path: '/main/status',
-          text: '热点统计',
+          text: 'STATISTICS',
           component: pStatus.View
         }, {
           id: 'devices',
           path: '/main/devices',
-          text: '设备',
+          text: 'DEVICES',
           component: pDevices.View
         }, {
           id: 'clients',
           path: '/main/clients',
-          text: '客户端',
+          text: 'CLIENTS',
           component: pClients.View
         }, {
           id: 'logs',
           path: '/main/logs',
-          text: '日志',
+          text: 'LOGS',
           component: pLogs.View
         }, {
           id: 'statistics',
           path: '/main/statistics',
-          text: '统计报表',
+          text: 'REPORTS',
           component: pStatistics.View
         }, {
           id: 'settings',
           path: '/main/settings',
-          text: '设置',
+          text: 'SETTINGS',
           component: TabMenus,
           indexRoute: {
-            component: pGroupSettings.View
+            onEnter: (nextState, replace) => replace('/main/settings/group')
           },
           childRoutes: [{
-            id: 'deviceGroup',
-            path: '/main/settings',
-            text: '组设置',
-          },{
-            id: 'deviceGroup',
+              path: '/main/settings/group',
+              text: 'Groups',
+              component: pGroupSettings.View
+            },{
+            id: 'bandwidth',
             path: '/main/settings/bandwidth',
-            text: '流量设置',
+            text: 'Bandwidth',
             component: pStatistics.View
           },{
-            id: 'deviceGroup',
+            id: 'wireless',
             path: '/main/settings/wireless',
-            text: '无线设置',
+            text: 'Wireless',
             component: pStatistics.View
           }]
       }]
@@ -93,6 +95,7 @@ let routes = [{
     path: '*',
     component: NotFound
 }];
+
 
 // 配置模块页面 store
 const reducers = {

@@ -22,6 +22,7 @@ export default function(
         status: action.result,
         loginedAt: action.loginedAt
       });
+    default:
   }
   return state;
 };

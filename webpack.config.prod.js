@@ -47,13 +47,33 @@ module.exports = {
           limit: 11000
         }
       },
+      
+      {
+        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: 'url-loader?name=font/[hash].[ext]&limit=10000&mimetype=application/font-woff'
+      },
+      
+      {
+        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: 'file-loader?name=font/[hash].[ext]'
+      },
+      
+      {
+        test: /\.json$/,
+        loader: "json"
+      },
+      
+      {
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract("style-loader", "css-loader")
+      },
 
       {
         test: /\.scss$/,
         loader: ExtractTextPlugin.extract("css-loader?minimize!postcss-loader!sass")
       },
       {
-      test: /\.jsx|js?$/,
+      test: /\.(jsx|js)?$/,
       exclude: /node_modules/,
       loader: 'es3ify!babel'
     }]
@@ -76,8 +96,8 @@ module.exports = {
   plugins: [
     new webpack.optimize.OccurenceOrderPlugin(),
     new ExtractTextPlugin('styles/comlanos.css'),
-    // new webpack.optimize.DedupePlugin(),
-    // new webpack.optimize.UglifyJsPlugin(),
+    //new webpack.optimize.DedupePlugin(),
+    //new webpack.optimize.UglifyJsPlugin(),
     new webpack.DefinePlugin(GLOBALS.DEFINE_OBJ)
   ]
 };

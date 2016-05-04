@@ -1,12 +1,15 @@
 import React from 'react';
+import { bindActionCreators } from 'redux';
+import {fromJS} from 'immutable';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import {FormGruop} from '../../components/form/Input';
-import {Table} from '../../components/Table';
 import * as actions from './actions';
+import {fetchDevices} from '../Devices/actions';
 import reducer from './reducer';
 import Modal from '../../components/Modal';
-import {fromJS} from 'immutable';
+import {FormGruop} from '../../components/Form/Input';
+import {Table} from '../../components/Table';
+import Button from 'comlan/components/Button';
 
 // 原生的 react 页面
 export const Settings = React.createClass({
@@ -14,20 +17,18 @@ export const Settings = React.createClass({
 
   componentWillMount() {
     this.props.fetchDeviceGroups();
+    this.props.fetchDevices();
   },
 
   onAddGroup() {
     this.props.addDeviceGroups();
   },
 
-  onEditGroup(e) {
-     var id = e.target.id;
-
+  onEditGroup(id) {
      this.props.editDeviceGroups(id);
   },
 
-  onDeleteGroup(e) {
-    var id = e.target.id;
+  onDeleteGroup(id) {
 
     if(confirm('你确定要删除？')) {
       this.props.deleteDeviceGroups(id)
@@ -50,25 +51,47 @@ export const Settings = React.createClass({
       transform: function(item) {
         return (
           <div>
-            <button
-              onClick={this.onEditGroup}
-              className="btn btn-info"
-              id={item.get('id')}
-            >
-              修改
-            </button>
+            <Button
+              onClick={this.onEditGroup.bind(this, item.get('id'))}
+              role="edit"
+              text="修改"
+              size="sm"
+            />
 
-            <button
-              className="btn btn-warning"
-              onClick={this.onDeleteGroup}
+            <Button
               id={item.get('id')}
-            >
-              删除
-            </button>
+              role="trash"
+              onClick={this.onDeleteGroup.bind(this, item.get('id'))}
+              text="删除"
+              size="sm"
+            />
+              
           </div>
         )
       }.bind(this)
     }];
+    
+    var devicesTableOptions = [{
+        'id': 'name',
+        'text': ' 设备名称'
+      }, {
+        'id': 'addr',
+        'text': '地址'
+      }, {
+        'id': 'status',
+        'text': '状态'
+      }, {
+        'id': 'op',
+        'text': '选择',
+        transform: function(item) {
+          return (
+            <div>
+              <input type="checkbox" value="2" />
+            </div>
+          )
+        }.bind(this)
+      }];
+    console.log(1)
 
     return (
       <div>
@@ -79,16 +102,15 @@ export const Settings = React.createClass({
           list={this.props.data.get('list')}
         />
 
-        <button
-          type="button"
-          className="btn fr"
+        <Button
+          role="plus"
+          className="fr"
           onClick={this.onAddGroup}
-        >
-          添加
-        </button>
-
+          text="添加"
+        />
+          
         <Modal
-          isShow={this.props.data.get('edit')}
+          isShow={this.props.data.get('edit') ? true : false}
           title={"修改组" + this.props.data.getIn(['edit', 'name'])}
           onClose={this.props.removeEditDeviceGroups}
         >
@@ -102,8 +124,8 @@ export const Settings = React.createClass({
           />
           <Table
             className="table"
-            options={fromJS(groupTableOptions)}
-            list={this.props.data.get('list')}
+            options={fromJS(devicesTableOptions)}
+            list={this.props.devices}
           />
         </Modal>
       </div>
@@ -114,17 +136,23 @@ export const Settings = React.createClass({
 //React.PropTypes.instanceOf(Immutable.List).isRequired
 function mapStateToProps(state) {
   var myState = state.groupSettings;
+  var devices = state.devices.getIn(['data', 'list'])
 
   return {
     fetching: myState.get('fetching'),
-    data: myState.get('data')
+    data: myState.get('data'),
+    devices
   };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(Object.assign({fetchDevices}, actions), dispatch)
 }
 
 // 添加 redux 属性的 react 页面
 export const View = connect(
   mapStateToProps,
-  actions
+  mapDispatchToProps
 )(Settings);
 
 export const settings = reducer;

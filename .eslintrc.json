@@ -1,0 +1,14 @@
+{
+  "extends": "airbnb",
+  
+  "plugins": [
+    "import"
+  ],
+  
+  "settings": {
+    "ecmascript": 6,
+    "import/resolver": {
+      "webpack": {}
+    }
+  }
+}

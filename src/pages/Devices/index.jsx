@@ -6,6 +6,9 @@ import * as actions from './actions';
 import reducer from './reducer';
 import {fromJS} from 'immutable';
 import {Table} from '../../components/Table';
+import {Search} from '../../components/Form/Input';
+import Button from 'comlan/components/Button';
+import Select from 'comlan/components/Select';
 
 // css
 import './_index.scss';
@@ -95,6 +98,18 @@ export const Device = React.createClass({
         this.handleSearch()
       }.bind(this));
   },
+  
+  onChangeTableSize(option) {
+    var val = '';
+    
+    if(option) {
+      val = option.value;
+    }
+    
+    this.props.changeDevicesQuery({
+      size: val
+    });
+  },
 
   render() {
     // 添加操作项
@@ -102,26 +117,21 @@ export const Device = React.createClass({
       function(item) {
         return (
           <div>
-            <button
+            <Button
               onClick={this.onRebootDevice.bind(this, item.get('id'), item.get('name'))}
-              className="btn btn-info"
-            >
-              重启
-            </button>
-
-            <button
-              className="btn btn-warning"
+              text="重启"
+              role="recycle"
+            />
+            <Button
               onClick={this.onLocateDevice.bind(this, item.get('id'), item.get('name'))}
-            >
-              定位
-            </button>
-
-            <button
-              className="btn btn-warning"
+              text="定位"
+              role="location-arrow"
+            />
+            <Button
               onClick={this.onResetDevice.bind(this, item.get('id'), item.get('name'))}
-            >
-              复位
-            </button>
+              text="复位"
+              role="reply-all"
+            />
           </div>
         )
       }.bind(this)
@@ -133,17 +143,23 @@ export const Device = React.createClass({
       '点对点网桥',
       '室外接入点'
     ]);
+    
+    const selectOptions = [
+      { value: 20, label: '20' },
+      { value: 50, label: '50' },
+      { value: 100, label: '100' },
+    ]
+    
 
     return (
       <div className="page-device">
         <h2>设备信息</h2>
         <div className="clearfix">
-          <input
-            type="text"
+          <Search
             className="search fl"
             value={this.props.query.get('text')}
-            onChange={this.onChangeSearchText}
-            onKeyUp={this.onSearchKeyUp}
+            updater={this.onChangeSearchText}
+            onSearch={this.handleSearch}
           />
           <div className="btn-group fl">
             {
@@ -167,9 +183,13 @@ export const Device = React.createClass({
             }.bind(this))
           }
           </div>
-          <select name="" id="" className="fr">
-            <option value="ds">dsdsd</option>
-          </select>
+          <Select
+            className="fr"
+            clearable={false}
+            value={this.props.query.get('size')}
+            onChange={this.onChangeTableSize}
+            options={selectOptions}
+          />
         </div>
 
         <Table

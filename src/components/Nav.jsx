@@ -1,11 +1,14 @@
-import React from 'react';
+import React, {Component, PropTypes} from 'react';
 import {Link} from 'react-router';
-import {fromJS} from 'immutable';
+import Immutable, {fromJS} from 'immutable';
 
-const ACTIVE = { color: 'red' }
+const propTypes = {
+  menus: PropTypes.array.isRequired
+};
 
-export default React.createClass({
-  render: function() {
+class Nav extends Component{
+  render() {
+    
     return (
       <nav {...this.props}>
         <ul>
@@ -22,4 +25,10 @@ export default React.createClass({
       </nav>
     );
   }
-});
+};
+
+Nav.propTypes = propTypes;
+
+export default Nav;
+
+

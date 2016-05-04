@@ -28,8 +28,15 @@ const store = remoteActionMiddleware(
 // 主渲染入口
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={hashHistory} routes={prodConfig.routes}>
-    </Router>
+    <Router history={hashHistory} routes={prodConfig.routes} />
   </Provider>,
   document.getElementById('app')
 );
+
+fetch('/lang/zh-cn.json')
+  .then(function(rq) {
+    return rq.json();
+  })
+  .then(function(json) {
+    //alert(json)
+  })

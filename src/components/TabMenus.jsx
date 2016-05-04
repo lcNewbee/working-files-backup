@@ -8,7 +8,11 @@ export default class Main extends Component {
     return (
       <div>
         <div className="tabs">
-          <Nav className="tabs-nav" menus={this.props.route.childRoutes} />
+          <Nav
+            className="tabs-nav"
+            linkTo={this.props.route.linkTo}
+            menus={this.props.route.childRoutes}
+          />
           <div className='tabs-content'>
             <div className='tabs-content-wrap'>
               {this.props.children}

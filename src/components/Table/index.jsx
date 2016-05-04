@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Pagination from 'comlan/components/Pagination';
 
 export class Row extends Component {
   render() {
@@ -42,25 +43,34 @@ export class Table extends Component {
   }
 
   render() {
+    var total = this.props.list.size;
+    var size = this.props.size;
+    
     return (
-      <table className={this.props.className}>
-        <thead>
-          <Row options={this.props.options} isTh={true} />
-        </thead>
-        <tbody>
-          {
-            this.props.list.map(function(item, i) {
-              return (
-                <Row
-                  key={'table' + i}
-                  options={this.props.options}
-                  item={item}
-                />
-              );
-            }.bind(this))
-          }
-        </tbody>
-      </table>
+      <div>
+        <table className={this.props.className}>
+          <thead>
+            <Row options={this.props.options} isTh={true} />
+          </thead>
+          <tbody>
+            {
+              this.props.list.map(function(item, i) {
+                return (
+                  <Row
+                    key={'tableRow' + i}
+                    options={this.props.options}
+                    item={item}
+                  />
+                );
+              }.bind(this))
+            }
+          </tbody>
+        </table>
+        <Pagination
+          size={size}
+          total={total}
+        />
+      </div>
     )
   }
 }

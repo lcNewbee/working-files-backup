@@ -1,21 +1,21 @@
 export function reqeustLogin() {
   return {
-    type: 'REQEUST_LOGIN'
+    type: 'REQEUST_LOGIN',
   };
 }
 
 export function loginResult(result) {
   return {
     type: 'RESPONSE_LOGIN',
-    result: result,
-    loginedAt: Date.now()
+    loginedAt: Date.now(),
+    result,
   }
 }
 
 export function updateData(data) {
   return {
     type: 'UPDATE_DATA',
-    data
+    data,
   };
 }
 

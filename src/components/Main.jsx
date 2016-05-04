@@ -3,6 +3,7 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {connect} from 'react-redux';
 import Nav from './Nav';
+import Icon from 'comlan/components/Icon';
 
 export default class Main extends Component {
   render() {
@@ -10,6 +11,10 @@ export default class Main extends Component {
       <div>
         <header className="navbar">
           <a href="" className="brand">Comlanos 管理系统</a>
+          <div className="fr user">
+            <Icon name="user" className="icon-user" />
+            <Icon name="caret-down" className="icon-down" />
+          </div>
         </header>
         <div className="main">
           <div className='main-content'>
@@ -24,7 +29,7 @@ export default class Main extends Component {
                   key: this.props.location.pathname
                 })}
               </ReactCSSTransitionGroup>
-            </div>
+            </div>  
           </div>
           <Nav className="main-nav" menus={this.props.route.childRoutes} />
         </div>

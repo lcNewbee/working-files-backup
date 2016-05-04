@@ -1,28 +1,32 @@
 import {Map, List, fromJS} from 'immutable';
 
+const defaultState = fromJS({
+  fetching: false,
+  data: {
+    list: []
+  },
+  query: {
+    type: 0,
+    size: 20
+  }
+});
+
 function setFetching(state) {
   return state.update('fetching', val => true);
 }
 
-function updateData(state, name, value) {
-  return state.updateIn(['data', name], val => value);
-}
-
-let defaultState = fromJS({
-  fetching: false,
-  data: {
-    username: '',
-    password: ''
-  }
-});
-
 export default function(state = defaultState, action) {
   switch (action.type) {
-    case 'UPDATE_DATA':
-      return updateData(state, action.name, action.value);
+    case 'REQEUST_FETCH_CLIENT':
+      return state.set('fetching', true);
 
-    case 'REQEUST_LOGIN':
-      return setFetching(state);
+    case 'RECIVE_FETCH_CLIENTS':
+      return state.set('fetching', false)
+        .set('updateAt', action.updateAt)
+        .mergeIn(['data'], action.data);
+
+    case 'CHANGE_CLIENTS_QUERY':
+      return state.mergeIn(['query'], action.query);
 
   }
   return state;
