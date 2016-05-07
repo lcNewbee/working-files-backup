@@ -10,16 +10,17 @@ import './_login.scss';
 
 
 const formGroups = [
+  // {
+  //   //label: '用户名',
+  //   name: 'username',
+  //   maxLength: 23,
+  //   placeholder: 'Username',
+  //   validator: {
+  //     label: '用户名',
+  //     rules: 'required|matches[1,23]'
+  //   }
+  // },
   {
-    //label: '用户名',
-    name: 'username',
-    maxLength: 23,
-    placeholder: 'Username',
-    validator: {
-      label: '用户名',
-      rules: 'required|matches[1,23]'
-    }
-  }, {
     //label: '密码',
     type: 'password',
     name: 'password',

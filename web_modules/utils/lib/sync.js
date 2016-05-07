@@ -11,7 +11,14 @@ function checkStatus(response) {
 }
 
 function parseJSON(response) {
-  return response.json()
+  return response.json();
+}
+
+function handleServerError(json) {
+  if(json.state.code !== 2000) {
+    console.log('State code not 2000', json.state);
+  }
+  return json;
 }
 
 var sync = {
@@ -31,6 +38,7 @@ var sync = {
       })
       .then(checkStatus)
       .then(parseJSON)
+      .then(handleServerError)
       .catch(function(error) {
         console.log('request failed', error)
       });
@@ -50,6 +58,7 @@ var sync = {
     return fetch(url)
       .then(checkStatus)
       .then(parseJSON)
+      .then(handleServerError)
       .catch(function(error) {
         console.error('request failed', error)
       });

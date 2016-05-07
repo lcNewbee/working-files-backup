@@ -66,10 +66,12 @@ export class Table extends Component {
             }
           </tbody>
         </table>
-        <Pagination
-          size={size}
-          total={total}
-        />
+        {
+          this.props.page ? <Pagination
+            page={this.props.page}
+            onPageChange={this.props.onPageChange}
+          /> : ''
+        }
       </div>
     )
   }

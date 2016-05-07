@@ -13,7 +13,7 @@ export default function serverApi(options) {
 
   return function(req, res, next) {
     // handle any requests at /api
-    const urlName = 'src/api' + req.url.split('?')[0] + '.json';
+    const urlName = 'tools/data' + req.url.split('?')[0] + '.json';
 
     fs.readFile(urlName, (err, markup) => {
       let resText = '';

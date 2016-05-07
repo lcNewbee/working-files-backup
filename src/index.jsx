@@ -25,6 +25,14 @@ const store = remoteActionMiddleware(
   window.devToolsExtension ? window.devToolsExtension() : f => f
 );
 
+if (module.hot) {
+  // Enable Webpack hot module replacement for reducers
+  module.hot.accept('./products/ac5000', () => {
+    const nextRootReducer = require('./products/ac5000').reducers;
+    store.replaceReducer(nextRootReducer);
+  });
+}
+
 // 主渲染入口
 ReactDOM.render(
   <Provider store={store}>
@@ -32,11 +40,3 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('app')
 );
-
-fetch('/lang/zh-cn.json')
-  .then(function(rq) {
-    return rq.json();
-  })
-  .then(function(json) {
-    //alert(json)
-  })

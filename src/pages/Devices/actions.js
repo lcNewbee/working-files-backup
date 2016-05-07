@@ -21,33 +21,34 @@ export function changeDevicesQuery(query) {
   };
 }
 
-export function rebootDevice(id) {
+export function rebootDevice(mac) {
   return {
     type: 'REBOOT_DEVICE',
-    id,
+    mac,
   };
 }
 
-export function resetDevice(id) {
+export function resetDevice(mac) {
   return {
     type: 'RESET_DEVICE',
-    id,
+    mac,
   };
 }
 
-export function locateDevice(id) {
+export function locateDevice(mac) {
   return {
     type: 'LOCATE_DEVICE',
-    id,
+    mac,
   };
 }
 
 
 export function fetchDevices() {
-  const url = '/api/devices';
+  const url = '/goform/getApDevInfo';
+  
   return (dispatch, getState) => {
     const query = getState().devices.get('query').toJS();
-
+    
     dispatch(reqeustFetchDevices());
 
     utils.fetch(url, query)

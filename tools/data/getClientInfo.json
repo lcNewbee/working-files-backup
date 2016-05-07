@@ -1,0 +1,45 @@
+{
+    "state": {
+        "code": 2000,
+        "msg": "ok"
+    },
+    "data": {
+        "page": {
+            "start": 2,
+            "size": 2,
+            "currPage": 2,
+            "totalPage": 2,
+            "total": 4,
+            "nextPage": -1,
+            "lastPage": 4
+        },
+        "list": [
+            {
+                "type": "wireless",
+                "devicename": "12:22:33:44:55:66/android-1213",
+                "ip": "192.168.5.123",
+                "ssid": "ssid1",
+                "connectap": "ap1",
+                "downstream": "256",
+                "upstream": "128",
+                "rssi": "-70db",
+                "authtype": "portal",
+                "operationhours": "23444",
+                "islock": "lock"
+            },
+            {
+                "type": "guest/wired",
+                "devicename": "12:22:33:44:55:66/android-32432",
+                "ip": "192.168.5.32",
+                "ssid": "ssid2",
+                "connectap": "ap2",
+                "downstream": "128",
+                "upstream": "64",
+                "rssi": "-65db",
+                "authtype": "portal",
+                "operationhours": "6600",
+                "islock": "unlock"
+            }
+        ]
+    }
+}

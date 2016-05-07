@@ -1,0 +1,26 @@
+{
+  "state": {
+      "code":2000,
+      "msg":"ok"
+  },
+      
+  "data":{
+      "list":[{   
+              "name": "ap1",
+              "type": "ap",
+              "time": "2016-05-23",
+              "ipaddress": "192.168.6.41",
+              "macaddress": "12:22:33:44:55:66",
+              "loginfo": "up line!"
+          },
+          {
+              "name": "ap2",
+              "type": "client",
+              "time": "2016-05-24",
+              "ipaddress": "192.168.6.42",
+              "macaddress": "12:22:33:44:55:66",
+              "loginfo": "down line!"
+          }
+     ]
+  }
+}

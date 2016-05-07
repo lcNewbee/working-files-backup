@@ -3,6 +3,12 @@ import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import * as actions from './actions';
 import reducer from './reducer';
+import Button from 'comlan/components/Button';
+
+const msg = {
+  TITIE: _('Reports'),
+  EXPORTING: _('Exporting The Reports')
+}
 
 // 原生的 react 页面
 export const Statistics = React.createClass({
@@ -10,9 +16,14 @@ export const Statistics = React.createClass({
 
   render() {
     return (
-      <div>
-        <h2>统计报表</h2>
-        {this.props.fetching ? 'dsd': 'ok'}
+      <div className="page-reports">
+        <h2>{msg.TITIE}</h2>
+        <div>
+          <Button
+            role="download"
+            text={msg.EXPORTING}
+          />
+        </div>
       </div>
     );
   }

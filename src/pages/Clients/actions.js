@@ -1,5 +1,8 @@
 import utils from 'utils';
 
+const FETCH_URL = '/goform/getClientInfo';
+const ACTION_URL = '/goform/setClientAction';
+
 export function reqeustFetchClients() {
   return {
     type: 'REQEUST_FETCH_CLIENT'
@@ -21,37 +24,59 @@ export function changeClientsQuery(query) {
   };
 }
 
-export function rebootClient(id) {
+export function rebootClient(mac) {
   return {
     type: 'REBOOT_CLIENT',
     id
   };
 }
 
-export function resetClient(id) {
+export function resetClient(mac) {
   return {
     type: 'RESET_CLIENT',
     id
   };
 }
 
-export function locateClient(id) {
+export function changeClientActionQuery(actionQuery) {
+  return {
+    type: 'CHANGE_CLIENT_ACTION_QUERY',
+    actionQuery
+  }
+}
+
+export function locateClient(mac) {
   return {
     type: 'LOCATE_CLIENT',
     id
   };
 }
 
-export function fetchClients(url) {
+export function fetchClients() {
   return (dispatch, getState) => {
-    let query = getState().clients.get('query').toJS();
+    const query = getState().clients.get('query').toJS();
 
     dispatch(reqeustFetchClients());
 
-    utils.fetch(url, query)
+    utils.fetch(FETCH_URL, query)
       .then(function(json) {
         if(json.state && json.state.code === 2000) {
           dispatch(reciveFetchClients(json.data))
+        }
+      });
+  };
+}
+
+export function saveClientsAction() {
+  return (dispatch, getState) => {
+    const query = getState().clients.get('actionQuery').toJS();
+
+    dispatch(reqeustFetchClients());
+
+    utils.fetch(ACTION_URL, query)
+      .then(function(json) {
+        if(json.state && json.state.code === 2000) {
+          dispatch(fetchClients(json.data))
         }
       });
   };

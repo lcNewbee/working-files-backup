@@ -5,12 +5,14 @@ import {connect} from 'react-redux';
 import Nav from './Nav';
 import Icon from 'comlan/components/Icon';
 
+const BRAND_TEXT = 'Comlanos ' + _('Management');
+
 export default class Main extends Component {
   render() {
     return (
       <div>
         <header className="navbar">
-          <a href="" className="brand">Comlanos 管理系统</a>
+          <a href="" className="brand">{BRAND_TEXT}</a>
           <div className="fr user">
             <Icon name="user" className="icon-user" />
             <Icon name="caret-down" className="icon-down" />

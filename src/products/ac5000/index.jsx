@@ -1,7 +1,17 @@
 // 公用 样式
 require('../../../web_modules/comlan/scss/main.scss')
 require('font-awesome/css/font-awesome.css');
-var lang = require('../../lang/zh-cn.json');
+
+// 多语言工具
+var b28n = require('b28n');
+var langCn = require('../../lang/cn/core.json');
+
+b28n.addDict(langCn, 'cn');
+
+b28n.init({
+  supportLang:['en', 'cn'],
+  lang: 'cn'
+})
 
 /*************************************************************
  * 产品界面配置
@@ -30,6 +40,7 @@ const pStatistics = require('../../pages/Statistics');
 const pLogs = require('../../pages/Logs');
 const pClients = require('../../pages/Clients');
 
+
 // 设置
 const pGroupSettings = require('../../pages/GroupSettings');
 
@@ -44,49 +55,49 @@ let routes = [{
           id: 'status',
           isIndex: true,
           path: '/main/status',
-          text: 'STATISTICS',
+          text: _('STATISTICS'),
           component: pStatus.View
         }, {
           id: 'devices',
           path: '/main/devices',
-          text: 'DEVICES',
+          text: _('DEVICES'),
           component: pDevices.View
         }, {
           id: 'clients',
           path: '/main/clients',
-          text: 'CLIENTS',
+          text: _('CLIENTS'),
           component: pClients.View
         }, {
           id: 'logs',
           path: '/main/logs',
-          text: 'LOGS',
+          text: _('LOGS'),
           component: pLogs.View
         }, {
           id: 'statistics',
           path: '/main/statistics',
-          text: 'REPORTS',
+          text: _('REPORTS'),
           component: pStatistics.View
         }, {
           id: 'settings',
           path: '/main/settings',
-          text: 'SETTINGS',
+          text: _('SETTINGS'),
           component: TabMenus,
           indexRoute: {
             onEnter: (nextState, replace) => replace('/main/settings/group')
           },
           childRoutes: [{
               path: '/main/settings/group',
-              text: 'Groups',
+              text: _('Groups'),
               component: pGroupSettings.View
             },{
             id: 'bandwidth',
             path: '/main/settings/bandwidth',
-            text: 'Bandwidth',
+            text: _('Bandwidth'),
             component: pStatistics.View
           },{
             id: 'wireless',
             path: '/main/settings/wireless',
-            text: 'Wireless',
+            text: _('Wireless'),
             component: pStatistics.View
           }]
       }]

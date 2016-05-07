@@ -23,7 +23,7 @@ export function login() {
   return dispatch => {
     dispatch(reqeustLogin());
 
-    fetch('/api/login')
+    fetch('/goform/login')
       .then(function(response) {
          return response.json();
       })

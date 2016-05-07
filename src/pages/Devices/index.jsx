@@ -13,30 +13,44 @@ import Select from 'comlan/components/Select';
 // css
 import './_index.scss';
 
+const typeArr = fromJS([
+      _('All'),
+    _('INSIDE'),
+    _('PIONT TO PIONT'),
+    _('OUTSIDE')
+  ]);
+const labelPre = _('Items per page: ');
+
+const selectOptions = [
+  { value: 20, label: labelPre + '20' },
+  { value: 50, label: labelPre + '50' },
+  { value: 100, label: labelPre + '100' },
+];
+
 const devicesTableOptions = fromJS([{
-    'id': 'name',
-    'text': 'MAC地址/设备名'
+    'id': 'devicename',
+    'text': _('MAC Address') + '/' + _('Name')
   }, {
-    'id': 'addr',
-    'text': '地址'
+    'id': 'ip',
+    'text': _('IP Address')
   }, {
     'id': 'status',
-    'text': '状态'
+    'text': _('Online Status')
   }, {
     'id': 'model',
-    'text': '型号'
+    'text': _('Model')
   }, {
-    'id': 'version',
-    'text': '版本号'
+    'id': 'softversion',
+    'text':  _('Version')
   }, {
     'id': 'channel',
-    'text': '信道'
+    'text': _('Channel')
   }, {
-    'id': 'runTime',
-    'text': '运行时间'
+    'id': 'operationhours',
+    'text': _('Uptime')
   }, {
     id: 'op',
-    text: '操作'
+    text: _('Actions')
   }]);
 
 // 原生的 react 页面
@@ -48,7 +62,19 @@ export const Device = React.createClass({
   },
 
   handleSearch() {
-    this.props.fetchDevices('/api/devices');
+    this.props.fetchDevices('/goform/devices');
+  },
+  
+  /**
+   * action: reboot | reset | locate
+   */
+  handleAction(mac, action) {
+    let url = `/goform/locateDevice?mac=${mac}&action=${action}`;
+    
+    utils.fetch(url)
+      .then(function(json) {
+        this.handleSearch()
+      }.bind(this));
   },
 
   onChangeSearchText(e) {
@@ -61,7 +87,7 @@ export const Device = React.createClass({
 
   onChangeType(i) {
     this.props.changeDevicesQuery({
-      type: i
+      devicetype: i
     });
     this.handleSearch()
   },
@@ -74,29 +100,23 @@ export const Device = React.createClass({
     }
   },
 
-  onResetDevice(id, name) {
-    if(confirm('你确定要复位设备：' + name + '？')) {
-      utils.fetch('/api/resetDevice?id=' + id)
-        .then(function(json) {
-          this.handleSearch()
-        }.bind(this));
+  onResetDevice(mac) {
+    var msg_text = _('Are you sure reset device: %s?', mac);
+    if(confirm(msg_text)) {
+      this.handleAction(mac, 'reboot');
     }
   },
 
-  onRebootDevice(id, name) {
-    if(confirm('你确定要重启设备：' + name + '？')) {
-      utils.fetch('/api/rebootDevice?id=' + id)
-        .then(function(json) {
-          this.handleSearch()
-        }.bind(this));
+  onRebootDevice(mac) {
+    var msg_text = _('Are you sure reboot device: %s?', mac);
+    
+    if(confirm(msg_text)) {
+      this.handleAction(mac, 'reboot');
     }
   },
 
-  onLocateDevice(id, name) {
-    utils.fetch('/api/locateDevice?id=' + id)
-      .then(function(json) {
-        this.handleSearch()
-      }.bind(this));
+  onLocateDevice(mac) {
+    this.handleAction(mac, 'locate');
   },
   
   onChangeTableSize(option) {
@@ -107,53 +127,53 @@ export const Device = React.createClass({
     }
     
     this.props.changeDevicesQuery({
-      size: val
+      size: val,
+      page: 1
     });
+    this.handleSearch()
+  },
+  
+  onPageChange(i) {
+    this.props.changeDevicesQuery({
+      page: i
+    });
+    this.handleSearch()
   },
 
   render() {
     // 添加操作项
     const options = devicesTableOptions.setIn([-1, 'transform'],
       function(item) {
+        var deviceMac = item.get('devicename').split('/')[0];
+      
         return (
           <div>
             <Button
-              onClick={this.onRebootDevice.bind(this, item.get('id'), item.get('name'))}
+              onClick={this.onRebootDevice.bind(this, deviceMac)}
               text="重启"
+              size="sm"
               role="recycle"
             />
             <Button
-              onClick={this.onLocateDevice.bind(this, item.get('id'), item.get('name'))}
+              onClick={this.onLocateDevice.bind(this, deviceMac)}
               text="定位"
+              size="sm"
               role="location-arrow"
             />
             <Button
-              onClick={this.onResetDevice.bind(this, item.get('id'), item.get('name'))}
+              onClick={this.onResetDevice.bind(this, deviceMac)}
               text="复位"
+              size="sm"
               role="reply-all"
             />
           </div>
         )
       }.bind(this)
     )
-
-    const typeArr = fromJS([
-      'all',
-      '室内接入点全部',
-      '点对点网桥',
-      '室外接入点'
-    ]);
     
-    const selectOptions = [
-      { value: 20, label: '20' },
-      { value: 50, label: '50' },
-      { value: 100, label: '100' },
-    ]
-    
-
     return (
       <div className="page-device">
-        <h2>设备信息</h2>
+        <h2>{_('Devices Info')}</h2>
         <div className="clearfix">
           <Search
             className="search fl"
@@ -166,7 +186,7 @@ export const Device = React.createClass({
             typeArr.map(function(val, i){
               var classNameVal = 'btn';
 
-              if(this.props.query.get('type') === i) {
+              if(this.props.query.get('devicetype') === i) {
                 classNameVal += ' active';
               }
 
@@ -196,6 +216,8 @@ export const Device = React.createClass({
           className="table"
           options={options}
           list={this.props.data.get('list')}
+          page={this.props.data.get('page')}
+          onPageChange={this.onPageChange}
         />
 
       </div>
@@ -205,7 +227,7 @@ export const Device = React.createClass({
 
 function mapStateToProps(state) {
   var myState = state.devices;
-
+  
   return {
     fetching: myState.get('fetching'),
     query: myState.get('query'),

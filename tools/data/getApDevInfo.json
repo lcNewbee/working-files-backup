@@ -1,0 +1,39 @@
+{
+    "state": {
+        "code": 2000,
+        "msg": "ok"
+    },
+    "data": {
+        "page": {
+            "start": 2,
+            "size": 2,
+            "currPage": 2,
+            "totalPage": 2,
+            "total": 4,
+            "nextPage": -1,
+            "lastPage": 4
+        },
+        "list": [
+            {
+                "devicetype": "point2point",
+                "devicename": "12:33:44:55:66:78/ap1",
+                "ip": "192.168.5.53",
+                "status": "online/offline",
+                "model": "V2.2",
+                "softversion": "V1.1",
+                "channel": "auto",
+                "operationhours": 3600
+            },
+            {
+                "devicetype": "inside",
+                "devicename": "12:33:44:55:66:78/ap2",
+                "ip": "192.168.5.54",
+                "status": "online/offline",
+                "model": "V2.2",
+                "softversion": "V1.1",
+                "channel": "1",
+                "operationhours": 6600
+            }
+        ]
+    }
+}

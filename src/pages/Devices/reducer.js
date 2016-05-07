@@ -6,7 +6,7 @@ const defaultState = fromJS({
     list: [],
   },
   query: {
-    type: 0,
+    devicetype: 0,
     size: 20
   },
 });

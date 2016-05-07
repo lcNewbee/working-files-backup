@@ -14,40 +14,87 @@ const defaultProps = {
 class Pagination extends Component {
   constructor(props) {
     super(props);
-  
+    
+    this.onGoPage = this.onGoPage.bind(this);
+    this.onPrev = this.onPrev.bind(this);
+    this.onNext = this.onNext.bind(this);
+    this.onGoFrist = this.onGoFrist.bind(this);
+    this.onGoEnd = this.onGoEnd.bind(this);
+    this.getPageOptions = this.getPageOptions.bind(this);
+    this.goPage = this.goPage.bind(this);
   }
   
-  onGoPage(i) {
-    
+  goPage(i) {
+    console.log(i)
+    if(typeof this.props.onPageChange === 'function') {
+      this.props.onPageChange(i)
+    }
   }
   
-  onPrev() {
+  onGoPage(e) {
+    let page;
+    e.preventDefault();
     
+    page = parseInt(e.target.innerHTML);
+    this.goPage(page);
   }
   
-  onNext() {
+  onPrev(e) {
+    let page;
     
+    e.preventDefault();
+    
+    page = this.getPageOptions().currPage - 1;
+    
+    page = page > 0 ? page : 1;
+    
+    this.goPage(page);
   }
   
-  onGoFrist() {
+  onNext(e) {
+    let page;
     
+    e.preventDefault();
+    
+    page = this.getPageOptions().nextPage;
+    
+    this.goPage(page);
   }
   
-  onGoEnd() {
+  onGoFrist(e) {
+    e.preventDefault();
+    this.goPage(1);
+  }
+  
+  onGoEnd(e) {
+    let page;
     
+    e.preventDefault();
+    
+    page = this.getPageOptions().lastPage;
+    this.goPage(page);   
+  }
+  
+  getPageOptions() {
+    var ret = {};
+    
+    if(this.props.page) {
+      if(this.props.page.toJS) {
+        ret = this.props.page.toJS()
+      } else {
+        ret = this.props.page;
+      }
+    }
+    return ret;
   }
   
   render() {
-    var total = this.props.total;
-    var currPage = this.props.currPage;
-    var lastPage = this.props.lastPage;
-    var nextPage = this.props.nextPage;
-    var totalPage = this.props.totalPage;
-    var prevClassName = currPage == 1 ? 'disabled' : '';
-    var nextClassName = nextPage == -1 ? 'disabled' : '';
-    var list = [];
-    var key;
-    var i;
+    let {total, currPage, lastPage, nextPage, totalPage} = this.getPageOptions();
+    let prevClassName = currPage == 1 ? 'disabled' : '';
+    let nextClassName = nextPage == -1 ? 'disabled' : '';
+    let list = [];
+    let key;
+    let i;
     
     var startPage = (currPage < 5)  || (totalPage < 8)? 1 : (currPage - 4);
     var endPage = startPage + 8;
@@ -66,11 +113,11 @@ class Pagination extends Component {
     
     return (
       <ul className="pagination">
-        <li className={prevClassName}><a href="#" onClick={this.onGoFrist}>首页</a></li>
-        <li className={prevClassName}><a href="#" onClick={this.onPrev}>上页</a></li>
+        <li className={prevClassName}><a href="#" onClick={this.onGoFrist}>{_('First')}</a></li>
+        <li className={prevClassName}><a href="#" onClick={this.onPrev}>{_('Prev')}</a></li>
         {list}
-        <li className={nextClassName}><a href="#" onClick={this.onNext}>下页</a></li>
-        <li className={nextClassName}><a href="#" onClick={this.onGoEnd}>尾页</a></li> 
+        <li className={nextClassName}><a href="#" onClick={this.onNext}>{_('Next')}</a></li>
+        <li className={nextClassName}><a href="#" onClick={this.onGoEnd}>{_('Last')}</a></li> 
       </ul>
     );
   }

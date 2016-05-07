@@ -11,36 +11,64 @@ import reducer from './reducer';
 
 const clientsTableOptions = fromJS([
   {
-    'id': 'name',
-    'text': 'MAC地址/名称'
+    'id': 'devicename',
+    'text': _('MAC Address') + '/' + _('Name')
   }, {
     'id': 'ip',
-    'text': 'ip地址'
+    'text': _('IP Address')
   }, {
     'id': 'ssid',
     'text': 'SSID'
   }, {
-    'id': 'relateAp',
-    'text': '关联AP'
+    'id': 'connectap',
+    'text': _('Associated AP')
   }, {
     'id': 'bandwidth',
-    'text': '上下行流量'
+    'text': _('Up/Down Speed'),
+    transform: function(item) {
+      return item.get('upstream') + 'KB/' + item.get('downstream');
+    }
   }, {
-    'id': 'signalQuality',
-    'text': '信号质量'
+    'id': 'rssi',
+    'text': _('RSSI')
   }, {
-    'id': 'channel',
-    'text': '认证类型'
+    'id': 'authtype',
+    'text': _('Authentication')
   }, {
-    'id': 'runTime',
-    'text': '运行时间'
+    'id': 'operationhours',
+    'text': _('Uptime')
   }, {
     id: 'op',
-    text: '操作'
+    text: _('Actions')
   }
 ]);
 
-let testVal = 'one';
+const msg = {
+  TITLE: _('Clients Info'),
+  reconnect: _('Reconnect'),
+  lock: _('Lock'),
+  unlock: _('Unlock'),
+  perPage: _('Items per page: ')
+};
+
+const selectOptions = [
+  { value: 20, label: msg.perPage + '20' },
+  { value: 50, label: msg.perPage + '50' },
+  { value: 100, label: msg.perPage + '100' },
+];
+
+const typeArr = fromJS([
+  _('ALL'),
+  _('WIRELESS'),
+  _('WIRED'),
+  _('GUEST')
+]);
+
+const styles = {
+  actionButton: {
+    minWidth: "90px"
+  }
+}
 
 // 原生的 react 页面
 export const Clients = React.createClass({
@@ -51,71 +79,109 @@ export const Clients = React.createClass({
   },
 
   handleSearch() {
-    this.props.fetchClients('/api/clients');
+    this.props.fetchClients();
+  },
+  
+  handleChangeQuery(data, needSearch) {
+    this.props.changeClientsQuery(data);
+    
+    if(needSearch) {
+      this.handleSearch();
+    }
+  },
+  
+  handleActions(actionQuery, needSave) {
+    this.props.changeClientActionQuery(actionQuery);
+    
+    if(needSave) {
+      this.props.saveClientsAction();
+    }
+  },
+  
+  onAction(mac, action) {
+    this.handleActions({
+      action,
+      mac
+    }, true);
   },
 
   onChangeSearchText(e) {
     var val = e.target.value;
 
-    this.props.changeClientsQuery({
+    this.handleChangeQuery({
       text: val
     });
   },
 
   onChangeType(i) {
-    this.props.changeClientsQuery({
+    this.handleChangeQuery({
       type: i
-    });
-    this.handleSearch()
+    }, true);
   },
-  
+
   onChangeTableSize(option) {
     var val = '';
-    
+
     if(option) {
       val = option.value;
     }
-    
-    this.props.changeClientsQuery({
-      size: val
-    });
+
+    this.handleChangeQuery({
+      size: val,
+      page: 1
+    }, true);
+  },
+  
+  onPageChange(i) {
+    this.handleChangeQuery({
+      page: i
+    }, true);
   },
 
   render() {
     // 添加操作项
     const options = clientsTableOptions.setIn([-1, 'transform'],
       function(item) {
+        var deviceMac = item.get('devicename').split('/')[0];
+        var isLock = item.get('islock') === 'lock' ? true : false;
+         
         return (
           <div>
-            <Button
-              role="unlock"
-              text="解除封锁"
-            />
+            {
+              isLock ? (
+                <Button
+                  role="unlock"
+                  size="sm"
+                  text={msg.unlock}
+                  style={styles.actionButton}
+                  onClick={this.onAction.bind(this, deviceMac, 'unlock')}
+                />
+              ) : (
+                <Button
+                  role="lock"
+                  size="sm"
+                  text={msg.lock}
+                  style={styles.actionButton}
+                  onClick={this.onAction.bind(this, deviceMac, 'lock')}
+                />
+              )
+            }
             
             <Button
               role="repeat"
-              text="重新连接"
+              size="sm"
+              text={msg.reconnect}
+              style={styles.actionButton}
+              onClick={this.onAction.bind(this, deviceMac, 'reconnect')}
             />
           </div>
         )
       }.bind(this)
     )
-    const typeArr = fromJS([
-      '全部',
-      '无线',
-      '有线',
-      '来宾'
-    ]);
-    
-    const selectOptions = [
-      { value: 20, label: '20' },
-      { value: 50, label: '50' },
-      { value: 100, label: '100' },
-    ];
 
     return (
       <div className="page-device">
-        <h2>设备信息</h2>
+        <h2>{msg.TITLE}</h2>
         <div className="clearfix">
 
           <Search
@@ -158,6 +224,8 @@ export const Clients = React.createClass({
           className="table"
           options={options}
           list={this.props.data.get('list')}
+          page={this.props.data.get('page')}
+          onPageChange={this.onPageChange}
         />
 
       </div>
@@ -172,7 +240,8 @@ function mapStateToProps(state) {
     fetching: myState.get('fetching'),
     query: myState.get('query'),
     updateAt: myState.get('updateAt'),
-    data: myState.get('data')
+    data: myState.get('data'),
+    page: myState.get('page')
   };
 }
 

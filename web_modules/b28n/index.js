@@ -4,90 +4,198 @@
 //	$Id: b28new.js 2014-12-23 ETw $
 /***********************************************************************************************
  ************************************************************************************************/
-const doc = document;
-const win = window;
-const b28n = function(options) {
-  return new b28n.fn.init(options);
-};
+import storage from '../utils/lib/storage';
+import strUtils from '../utils/lib/string';
+import utilsCore from '../utils/lib/core';
 
-b28n.fn = b28n.prototype = {
-  constructor: b28n,
-
-  isSupport(lang) {
-    var support = this.options.support;
-    var len = support.length;
-    var i;
-
-    for (i = 0; i < len; i++) {
-      if (lang === support[i]) {
-        return support[i];
-      }
-    }
-  },
-
-  setLang(lang) {
-    if (lang !== undefined) {
-
-      if (!this.isSupport(lang)) {
-        lang = this.options.defaultLang;
-      }
-      doc.cookie = "bLanguage=" + lang + ";";
-    }
-    return lang;
-  },
-
-  getLang() {
-    var special = {
-        "zh": "cn",
-        "zh-chs": "cn",
-        "zh-cn": "cn",
-        "zh-cht": "cn",
-        "zh-hk": "zh",
-        "zh-mo": "zh",
-        "zh-tw": "zh",
-        "zh-sg": "zh"
-      };
-    var defLang = this.options.defaultLang,
-    var local, ret, start, end;
-
-    if ((doc.cookie.indexOf("bLanguage=")) === -1) {
-      local = (win.navigator.language || win.navigator.userLanguage ||
-          win.navigator.browserLanguage || win.navigator.systemLanguage ||
-          defLang).toLowerCase();
-
-      ret = special[local] || local.split("-")[0].toString();
-    } else {
-      if (doc.cookie.indexOf("bLanguage=") === 0) {
-        start = 10;
-
-        //incase there has cookie like: **bLanguage=cn
-      } else if (doc.cookie.indexOf("; bLanguage=") !== -1) {
-        start = doc.cookie.indexOf("; bLanguage=") + 12;
-      }
-
-      if (start !== undefined) {
-        end = (doc.cookie.indexOf(';', start) !== -1) ?
-          doc.cookie.indexOf(';', start) : doc.cookie.length;
-        ret = doc.cookie.substring(start, end);
-      }
-    }
-
-    return this.isSupport(ret) || this.options.defaultLang;
-  }
-
-};
-const init = b28n.fn.init = function(options) {
-  let defaultOptions = {
-    supportLang: ["en", "zh"],
+const b28n = (function(doc, win) {
+  const STROE_KEY = 'B_LANGUAGE';
+  const DEFAULT_OPTIONS = {
+    supportLang: ["en", "cn"],
     defaultLang: 'en'
   };
-  this.options = {};
+  const special = {
+    "zh": "cn",
+    "zh-chs": "cn",
+    "zh-cn": "cn",
+    "zh-cht": "cn",
+    "zh-hk": "zh",
+    "zh-mo": "zh",
+    "zh-tw": "zh",
+    "zh-sg": "zh"
+  };
+  const b28n = {};
+  
+  // Local Config
+  let localLang = 'en';
+  let localOptions = DEFAULT_OPTIONS;
+  let dicts = {};
+  let currDict;
+ 
+  function toObject(val) {
+    if (val === null || val === undefined) {
+      throw new TypeError('b28n.addDict cannot be called with null or undefined');
+    }
 
-  Object.assign(this.options, defaultOptions, options);
+    return Object(val);
+  }
+  
+  function saveLangWithBrowserLocal(lang) {
+    storage.set(STROE_KEY, lang);
+  }
 
-  return this;
-}
+  function getLangWithBrowserLocal() {
+    var ret = storage.get(STROE_KEY);
+  
+    return ret;
+  }
 
-init.prototype = b28n.fn;
+  /**
+   * find support lang in supports array
+   */
+  function isSupportLang(lang, supports) {
+    var len = supports.length;
+    var i;
+    
+    for (i = 0; i < len; i++) {
+      if (lang === supports[i]) {
+        return supports[i];
+      }
+    }
+  }
+
+  b28n.extend = function (target, source) {
+    var len = arguments.length;
+    var ret;
+
+    if(len === 1) {
+      utilsCore.objectAssign(this, target)
+      return this;
+    }
+
+    ret = utilsCore.objectAssign.apply(Object, [].slice.call(arguments))
+
+    return ret;
+  };
+
+  b28n.extend({
+    version: '0.0.1',
+
+    isSupport(lang, supports) {    
+      return isSupportLang(lang, localOptions.supportLang)
+    },
+    
+    addDict(dict, lang) {
+      lang = this.isSupport(lang) || this.getLang();
+      dict = toObject(dict);
+      
+      if (dicts[lang]) {
+        utilsCore.objectAssign(dicts[lang], dict);
+      } else {
+        dicts[lang] = utilsCore.objectAssign({}, dict);
+      }
+      
+      return this;
+    },
+    
+    getDict(lang) {
+      lang = this.isSupport(lang) || this.getLang();
+      
+      return dicts[lang];
+    },
+
+    setLang(lang) {
+      if (lang !== undefined) {
+        lang = special[lang] || lang;
+        
+        
+        if (!this.isSupport(lang)) {
+          lang = localOptions.defaultLang;
+        }
+        
+        saveLangWithBrowserLocal(lang);
+        localLang = lang;
+        currDict = dicts[lang] || {};
+      }
+      
+      return this;
+    },
+
+    getLang() {
+      var defLang = localOptions.defaultLang;
+      var local, start, end;
+      var ret = getLangWithBrowserLocal() || localLang;
+      
+      return this.isSupport(ret) || defLang;
+    },
+    
+    translate(str) {
+      return currDict[str] || str;
+    }
+
+  });
+
+  b28n.init = function(options) {
+    let initLang;
+    let initOptions = {};
+    
+    // Extend options
+    utilsCore.objectAssign(initOptions, DEFAULT_OPTIONS, options);
+    
+    // init lang
+    if(initOptions.lang) {
+      initLang = initOptions.lang;
+    } else {
+      initLang = getLangWithBrowserLocal();
+      
+      if(!initLang) {
+        initLang = initOptions.defaultLang;
+        
+        initLang = (win.navigator.language || win.navigator.userLanguage ||
+            win.navigator.browserLanguage || win.navigator.systemLanguage ||
+            initLang).toLowerCase();
+
+        initLang = special[initLang] || initLang.split("-")[0].toString();
+      }
+    }
+    
+    initLang = isSupportLang(initLang, initOptions.supportLang) || initOptions.defaultLang;
+    
+    // 把初始化的语言保存在本地
+    saveLangWithBrowserLocal(initLang);
+    
+    localLang = initLang;
+    currDict = dicts[localLang] || {};
+  
+    localOptions = initOptions;
+
+    return this;
+  }
+  
+  // 初始化默认字典
+  if(!currDict) {
+    currDict = dicts[b28n.getLang()] = {};
+  }
+
+  win.b28n = b28n;
+  
+  win._ = function(str) {
+    var translateStr = b28n.translate(str);
+    var args = [].slice.call(arguments);
+    var ret;
+    
+    if(arguments.length <= 1) {
+      ret = translateStr;
+    } else {
+      args.shift();
+      args.unshift(translateStr);
+      ret = strUtils.format.apply(strUtils, args);
+    }
+    
+    return ret;
+  }
+  
+  return b28n;
+})(document, window);
 
 export default b28n;

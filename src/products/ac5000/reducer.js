@@ -1,4 +1,4 @@
-import {Map, List, fromJS} from 'immutable';
+import {fromJS} from 'immutable';
 
 const defaultState = fromJS({
   fetching: false,
@@ -8,9 +8,12 @@ const defaultState = fromJS({
   query: {
     type: 0,
     size: 20
-  },
-  actionQuery: {}
+  }
 });
+
+function setFetching(state) {
+  return state.update('fetching', val => true);
+}
 
 export default function(state = defaultState, action) {
   switch (action.type) {
@@ -24,9 +27,6 @@ export default function(state = defaultState, action) {
 
     case 'CHANGE_CLIENTS_QUERY':
       return state.mergeIn(['query'], action.query);
-    
-    case "CHANGE_CLIENT_ACTION_QUERY":
-      return state.mergeIn(['actionQuery'], action.actionQuery);
 
   }
   return state;

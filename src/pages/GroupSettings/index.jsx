@@ -37,14 +37,11 @@ export const Settings = React.createClass({
 
   render() {
     var groupTableOptions = [{
-      'id': 'name',
+      'id': 'groupname',
       'text': '组名称'
     }, {
       'id': 'remarks',
       'text': '备注'
-    }, {
-      'id': 'devices',
-      'text': '设备列表'
     }, {
       'id': 'op',
       'text': '操作',
@@ -91,7 +88,6 @@ export const Settings = React.createClass({
           )
         }.bind(this)
       }];
-    console.log(1)
 
     return (
       <div>
@@ -111,7 +107,7 @@ export const Settings = React.createClass({
           
         <Modal
           isShow={this.props.data.get('edit') ? true : false}
-          title={"修改组" + this.props.data.getIn(['edit', 'name'])}
+          title={"修改组" + this.props.data.getIn(['edit', 'groupname'])}
           onClose={this.props.removeEditDeviceGroups}
         >
           <FormGruop
@@ -126,6 +122,7 @@ export const Settings = React.createClass({
             className="table"
             options={fromJS(devicesTableOptions)}
             list={this.props.devices}
+            page={this.props.page}
           />
         </Modal>
       </div>
@@ -136,12 +133,14 @@ export const Settings = React.createClass({
 //React.PropTypes.instanceOf(Immutable.List).isRequired
 function mapStateToProps(state) {
   var myState = state.groupSettings;
-  var devices = state.devices.getIn(['data', 'list'])
+  var devices = state.devices.getIn(['data', 'list']);
+  var page = state.devices.getIn(['data', 'page'])
 
   return {
     fetching: myState.get('fetching'),
     data: myState.get('data'),
-    devices
+    devices,
+    page
   };
 }
 

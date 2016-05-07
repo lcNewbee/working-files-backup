@@ -1,3 +1,8 @@
+import utils from 'utils';
+
+const urls = {
+  fetch: "/goform/getDevGroup"
+}
 export function reqeustFetchDeviceGroups() {
   return {
     type: 'REQEUST_FETCH_DEVICE_GROUPS'
@@ -42,19 +47,12 @@ export function fetchDeviceGroups() {
   return dispatch => {
     dispatch(reqeustFetchDeviceGroups());
 
-    fetch('api/deviceGroup')
-      .then(function(response) {
-        return response.json();
-      })
-      .catch(function() {
-
-      })
-      .then(function(json) {
-
-        if(json.state && json.state.code === 2000) {
-          dispatch(receiveDeviceGroups(json.data))
+    utils.fetch(urls.fetch)
+      .then((json) => {
+        if (json.state && json.state.code === 2000) {
+          dispatch(receiveDeviceGroups(json.data));
         }
-      })
+      });
   };
 }
 

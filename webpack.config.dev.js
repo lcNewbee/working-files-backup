@@ -43,7 +43,7 @@ module.exports = {
 
   entry: [
     'webpack-hot-middleware/client?reload=true',
-    './src/index.jsx'
+    'mocha!./src/index.jsx'
   ],
 
   // necessary per https://webpack.github.io/docs/testing.html#compile-and-test
