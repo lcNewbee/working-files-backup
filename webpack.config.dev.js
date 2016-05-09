@@ -51,7 +51,7 @@ module.exports = {
   output: {
     path: GLOBALS.folders.BUILD,
     publicPath: '/',
-    filename: 'bundle.js'
+    filename: 'scripts/bundle.js'
   },
 
   module: {
@@ -101,7 +101,8 @@ module.exports = {
     return [autoprefixerHandle];
   },
   resolve: {
-    extensions: ['', '.js', '.jsx']
+    extensions: ['', '.js', '.jsx'],
+    modulesDirectories: ['node_modules', 'shared']
   },
 
   plugins: [

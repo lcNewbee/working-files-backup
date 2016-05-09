@@ -1,0 +1,10 @@
+.fr {
+  float: right;
+}
+.fl {
+  float: left;
+}
+
+.clearfix {
+  @include clearfix();
+}

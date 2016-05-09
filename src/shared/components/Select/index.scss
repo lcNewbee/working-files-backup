@@ -1,0 +1,17 @@
+.Select {
+  min-width: 150px;
+  max-width: 200px;
+  font-size: 12px; 
+}
+
+.Select-placeholder, .Select--single > .Select-control .Select-value {
+  line-height: 30px;
+}
+
+.Select-input, .Select-control {
+  height: 30px;
+}
+
+.Select-control {
+  border-radius: 2px;
+}

@@ -1,0 +1,15 @@
+.table {
+  width: 100%;
+  border-spacing: 1;
+  border-collapse: collapse;
+
+  th, td {
+    padding: 6px 6px;
+    border: 1px solid #dedede;
+    text-align: left;
+  }
+  th {
+    background: #666;
+    color: #fff;
+  }
+}

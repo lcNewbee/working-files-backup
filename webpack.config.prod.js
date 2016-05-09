@@ -82,12 +82,13 @@ module.exports = {
     return [autoprefixerHandle];
   },
   resolve: {
-    extensions: ['', '.js', '.jsx']
+    extensions: ['', '.js', '.jsx'],
+    modulesDirectories: ['node_modules', 'shared']
   },
   output: {
     path: GLOBALS.folders.BUILD,
     publicPath: '/',
-    filename: 'bundle.js'
+    filename: '/scripts/bundle.js'
   },
   devServer: {
     contentBase: GLOBALS.folders.BUILD,

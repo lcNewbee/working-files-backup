@@ -10,32 +10,24 @@ require('fetch-ie8');
 const React = require('react');
 const ReactDOM = require('react-dom');
 const ReactRouter = require('react-router');
-const remoteActionMiddleware = require('./components/remote_action_middleware');
 const Provider = require('react-redux').Provider;
-const combineReducers = require('redux').combineReducers;
 const Router = ReactRouter.Router;
 const hashHistory = ReactRouter.hashHistory;
 
 // 引入产品配置
-const prodConfig = require('./products/ac5000');
-
-// Store
-const store = remoteActionMiddleware(
-  combineReducers(prodConfig.reducers),
-  window.devToolsExtension ? window.devToolsExtension() : f => f
-);
+const prodConfig = require('./config/ac5000');
 
 if (module.hot) {
   // Enable Webpack hot module replacement for reducers
-  module.hot.accept('./products/ac5000', () => {
-    const nextRootReducer = require('./products/ac5000').reducers;
-    store.replaceReducer(nextRootReducer);
+  module.hot.accept('./config/ac5000', () => {
+    const nextRootReducer = require('./config/ac5000').reducers;
+    prodConfig.stores.replaceReducer(nextRootReducer);
   });
 }
 
 // 主渲染入口
 ReactDOM.render(
-  <Provider store={store}>
+  <Provider store={prodConfig.stores}>
     <Router history={hashHistory} routes={prodConfig.routes} />
   </Provider>,
   document.getElementById('app')
