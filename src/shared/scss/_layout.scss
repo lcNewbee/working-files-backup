@@ -18,12 +18,12 @@ body {
 
 .navbar {
   position: fixed;
+  top: 0;
   z-index: 1000;
   padding: 0 $g-distance-base;
   width: 100%;
   height: $g-navbar-height;
   background: #666;
-  top: 0;
 
   .brand {
     display: block;
@@ -97,7 +97,11 @@ body {
   width: 100%;
 
   .main-content-wrap {
-    margin-left: 190px;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    bottom: $g-distance-base;
+    left: 190px;
     padding: 0 $g-distance-base;
 
     h2 {
@@ -106,22 +110,28 @@ body {
   }
 }
 
-.tabs-nav {
-  margin-bottom: 10px;
-  @include clearfix;
+.tab-nav {
+  margin-bottom: 20px;
+
+  ul {
+    @include clearfix;
+    
+    border-bottom: 1px solid #666;
+  }
   
   li {
     float: left;
-    border: 1px solid #fff;
+    margin-right: 5px;
     
     a {
-      padding: 4px 6px;
       display: block;
-      background: #ccc;
+      padding: 4px 6px;
+      background-color: #fff;
       color: #333;
       
       &.active {
-        background-color: #fff;
+        background: #666;
+        color: #fff
       }
     }
   }

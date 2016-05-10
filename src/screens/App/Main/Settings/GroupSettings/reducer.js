@@ -8,6 +8,10 @@ function mergeData(state, action) {
   return state.update('data', data => data.merge(action.data))
 }
 
+function mergeDevice(state, action) {
+  return state.update('devices', data => data.merge(action.data))
+}
+
 function deleteListById(state, groupname) {
   let ret = state;
   
@@ -22,16 +26,53 @@ function deleteListById(state, groupname) {
   return ret;
 }
 
-function getItemById(state, groupname) {
+function getDevicesByGroup(state, groupname) {
+  return state.getIn(['devices', 'list']).filter(function(item){
+    return item.get('groupname') == groupname;
+  }).map(function(item) {
+    return item.get('devicename').split('/')[0];
+  });
+}
+
+function getEditGroupByName(state, groupname) {
+  var devices = getDevicesByGroup(state, groupname);
+  
   return state.getIn(['data', 'list']).find(function(item) {
     return item.get('groupname') == groupname;
-  })
+  }).set('devices', devices)
+}
+
+function selectDevice(state, mac, unselect) {
+  
+  return state.updateIn(['edit', 'devices'], data => {
+    let ret;
+    
+    if(unselect) {
+      ret = data.filterNot(function(val) {
+        return val === mac;
+      });
+    } else {
+      if(data.indexOf(mac) !== -1) {
+        ret = data;
+      } else {
+        ret = data.push(mac)
+      }
+    }
+    
+    return ret
+  });
 }
 
 let defaultState = fromJS({
   fetching: false,
   data: {
     list: []
+  },
+  devices: {
+    list: []
+  },
+  validator: {
+    
   }
 });
 
@@ -42,18 +83,30 @@ export default function(state = defaultState, action) {
 
     case 'REQEUST_FETCH_DEVICE_GROUPS':
       return setFetching(state);
+    
+    case 'RECEIVE_GROUP_DEVICES':
+      return mergeDevice(state, action);
 
     case 'EDIT_GROUP':
-      return state.setIn(['data', 'edit'], getItemById(state, action.groupname));
+      return state.set('edit', getEditGroupByName(state, action.groupname))
+        .set('actionType', 'edit');;
 
     case 'ADD_GROUP':
-      return state.setIn(['data', 'edit'], Map({}))
+      return state.set('edit', fromJS({
+        devices: []
+      })).set('actionType', 'add');
 
     case 'REMOVE_EDIT_GROUP':
-      return state.deleteIn(['data', 'edit']);
+      return state.delete('edit').delete('actionType');
 
     case 'DELETE_DEVICE_GROUP':
       return deleteListById(state, action.groupname);
+      
+    case 'SELECT_DEVICE':
+      return selectDevice(state, action.mac, action.unselect);
+      
+    case 'CHANGE_EDIT_GROUP':
+      return state.update('edit', data => data.merge(action.data));
 
   }
   return state;

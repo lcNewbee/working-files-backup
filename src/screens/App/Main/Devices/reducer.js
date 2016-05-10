@@ -24,6 +24,7 @@ export default function (state = defaultState, action) {
 
     case 'CHANGE_DEVICES_QUERY':
       return state.mergeIn(['query'], action.query);
+      
     default:
 
   }

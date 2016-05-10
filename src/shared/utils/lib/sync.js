@@ -23,18 +23,21 @@ function handleServerError(json) {
 
 var sync = {
 
-  // 默认或吧URL 中的search参数传回给后台
   // 默认使用 JSON 格式数据传递
   save: function(url, data) {
     var queryStr = '';
-
-    if(typeof data === 'object') {
-      queryStr = query.queryToParamsStr(data);
+    
+    if(data !== undefined) {
+      data = JSON.stringify(data);
     }
 
     return fetch(url, {
         method: 'POST',
-        body: queryStr
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: data
       })
       .then(checkStatus)
       .then(parseJSON)
@@ -43,8 +46,15 @@ var sync = {
         console.log('request failed', error)
       });
   },
+  
+  postForm: function(url, form) {
+    return fetch(url, {
+      method: 'POST',
+      body: new FormData(form)
+    })
+  },
 
-  // 默认或吧URL 中的search参数传回给后台
+  // 
   fetch: function(url, data) {
     var queryStr = '';
 

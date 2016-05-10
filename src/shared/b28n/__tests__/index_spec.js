@@ -11,7 +11,7 @@ describe('b28n', () => {
   describe('#getLang() and #setLang()', () => {
     
     it('should return default lang "en" when init with empty or not support lang', () => {
-      
+      b28n.setLang('');
       expect(b28n.getLang()).to.be.equal('en');
       
       b28n.init({

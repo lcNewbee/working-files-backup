@@ -25,9 +25,12 @@ class Pagination extends Component {
   }
   
   goPage(i) {
-    console.log(i)
     if(typeof this.props.onPageChange === 'function') {
-      this.props.onPageChange(i)
+      
+      if(this.getPageOptions().currPage !== i && i > 0) {
+        this.props.onPageChange(i)
+      } 
+      
     }
   }
   
@@ -68,11 +71,11 @@ class Pagination extends Component {
   
   onGoEnd(e) {
     let page;
-    
     e.preventDefault();
     
     page = this.getPageOptions().lastPage;
-    this.goPage(page);   
+    
+    this.goPage(page);
   }
   
   getPageOptions() {

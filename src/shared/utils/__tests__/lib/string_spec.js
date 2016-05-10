@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import string from '../../../../web_modules/utils/lib/string';
+import string from '../../lib/string';
 
 describe('utils string', () => {
   describe('#prefixInteger()', () => {

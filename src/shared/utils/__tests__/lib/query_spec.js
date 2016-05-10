@@ -1,6 +1,6 @@
 import {expect, assert} from 'chai';
 
-import query from '../../../../web_modules/utils/lib/query';
+import query from '../../lib/query';
 
 describe('utils query', () => {
 

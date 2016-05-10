@@ -1,3 +1,5 @@
+import utils from 'utils';
+
 export function reqeustLogin() {
   return {
     type: 'REQEUST_LOGIN',
@@ -20,13 +22,13 @@ export function updateData(data) {
 }
 
 export function login() {
-  return dispatch => {
+  
+  return (dispatch, getState) => {
+    const data = getState().login.get('data');
+    
     dispatch(reqeustLogin());
 
-    fetch('/goform/login')
-      .then(function(response) {
-         return response.json();
-      })
+    utils.save('/goform/login', data)
       .then(function(json) {
         let result = '未知错误';
 
@@ -38,10 +40,7 @@ export function login() {
           }
         }
         dispatch(loginResult(result));
-      })
-      .catch(function() {
-        dispatch(loginResult('网络异常'));
-      })
+      });
 
   };
 }

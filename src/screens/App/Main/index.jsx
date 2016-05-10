@@ -21,16 +21,9 @@ export default class Main extends Component {
         <div className="main">
           <div className='main-content'>
             <div className='main-content-wrap'>
-              <ReactCSSTransitionGroup
-                component="div"
-                transitionName="fade-up"
-                transitionEnterTimeout={500}
-                transitionLeave={false}
-              >
-                {React.cloneElement(this.props.children, {
-                  key: this.props.location.pathname
-                })}
-              </ReactCSSTransitionGroup>
+              {React.cloneElement(this.props.children, {
+                key: this.props.location.pathname
+              })}
             </div>  
           </div>
           <Nav className="main-nav" menus={this.props.route.childRoutes} />

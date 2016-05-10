@@ -4,7 +4,7 @@ import {fromJS} from 'immutable';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import * as actions from './actions';
-import {fetchDevices} from '../Devices/actions';
+import {fetchDevices} from '../../Devices/actions';
 import reducer from './reducer';
 
 import {FormGruop} from 'components/Form/Input';
@@ -22,28 +22,63 @@ const msg = {
 }
 
 // 原生的 react 页面
-export const Settings = React.createClass({
+export const GroupSettings = React.createClass({
   mixins: [PureRenderMixin],
-
+  
   componentWillMount() {
     this.props.fetchDeviceGroups();
-    this.props.fetchDevices();
+    this.props.fetchGroupDevices();
+  },
+  
+  getEditVal(key) {
+    var ret = '';
+    
+    if(this.props.edit) {
+      ret = this.props.edit.get(key);
+    }
+    return ret;
+  },
+  
+  onSelectDevice(e) {
+    let elem = e.target;
+    let mac = elem.value;
+    
+    if(elem.checked) {
+      this.props.selectDevice(mac);
+    } else {
+      this.props.selectDevice(mac, true);
+    }
   },
 
   onAddGroup() {
-    this.props.addDeviceGroups();
+    this.props.addDeviceGroup();
   },
 
   onEditGroup(groupname) {
-     this.props.editDeviceGroups(groupname);
+     this.props.editDeviceGroup(groupname);
   },
 
   onDeleteGroup(groupname) {
     var comfri_text = _('Are you sure delete group: %s?', groupname);
     
     if(confirm(comfri_text)) {
-      this.props.deleteDeviceGroups(groupname)
+      this.props.deleteDeviceGroup(groupname)
     }
+  },
+  
+  onChangeGroupname(e) {
+    var groupname = e.target.value;
+     
+    this.props.changeEditGroup({
+      groupname
+    })
+  },
+  
+  onChangeRemark(e) {
+    var remark = e.target.value;
+    this.props.changeEditGroup({
+      remark
+    })
   },
 
   render() {
@@ -51,7 +86,7 @@ export const Settings = React.createClass({
       'id': 'groupname',
       'text': msg.groupname
     }, {
-      'id': 'remarks',
+      'id': 'remark',
       'text': msg.remarks
     }, {
       'id': 'op',
@@ -92,18 +127,33 @@ export const Settings = React.createClass({
         'id': 'op',
         'text': _('Select'),
         transform: function(item) {
-          var deviceMac = item.get('devicename').split('/')[0];
+          var deviceMac;
+          var selectedDevices = this.props.edit.get('devices');
           
+          if(!item.get('devicename')) {
+            return '';
+          }
+          deviceMac = item.get('devicename').split('/')[0]
+         
           return (
             <div>
-              <input type="checkbox" value={deviceMac} />
+              <input
+                type="checkbox"
+                value={deviceMac}
+                onChange={this.onSelectDevice}
+                checked={selectedDevices.indexOf(deviceMac) !== -1}
+              />
             </div>
           )
         }.bind(this)
       }];
-    let modalTitle = this.props.data.getIn(['edit', 'groupname']);
+    let modalTitle = this.getEditVal('groupname');
     
-    modalTitle = modalTitle ? (msg.edit + modalTitle) : msg.add;
+    if(this.props.actionType === 'add') {
+      modalTitle = msg.add;
+    } else {
+      modalTitle = msg.edit + modalTitle;
+    }
     
     return (
       <div>
@@ -113,31 +163,36 @@ export const Settings = React.createClass({
           options={fromJS(groupTableOptions)}
           list={this.props.data.get('list')}
         />
-
-        <Button
-          role="plus"
-          className="fr"
-          onClick={this.onAddGroup}
-          text={msg.add}
-        />
+        <div className="form-footer">
+          <Button
+            role="plus"
+            className="fr"
+            onClick={this.onAddGroup}
+            text={msg.add}
+          />
+        </div>
+        
           
         <Modal
-          isShow={this.props.data.get('edit') ? true : false}
+          isShow={this.props.edit ? true : false}
           title={modalTitle}
-          onClose={this.props.removeEditDeviceGroups}
+          onClose={this.props.removeEditDeviceGroup}
+          onOk={this.props.saveDeviceGroup}
         >
           <FormGruop
             label={msg.groupname}
-            value={this.props.data.getIn(['edit', 'groupname'])}
+            value={this.getEditVal('groupname')}
+            updater={this.onChangeGroupname}
           />
           <FormGruop
             label={msg.remarks}
-            value={this.props.data.getIn(['edit', 'remarks'])}
+            value={this.getEditVal('remark')}
+            updater={this.onChangeRemark}
           />
           <Table
             className="table"
             options={fromJS(devicesTableOptions)}
-            list={this.props.devices}
+            list={this.props.devices.get('list')}
             page={this.props.page}
           />
         </Modal>
@@ -149,14 +204,13 @@ export const Settings = React.createClass({
 //React.PropTypes.instanceOf(Immutable.List).isRequired
 function mapStateToProps(state) {
   var myState = state.groupSettings;
-  var devices = state.devices.getIn(['data', 'list']);
-  var page = state.devices.getIn(['data', 'page'])
 
   return {
     fetching: myState.get('fetching'),
     data: myState.get('data'),
-    devices,
-    page
+    actionType: myState.get('actionType'),
+    edit: myState.get('edit'),
+    devices: myState.get('devices')
   };
 }
 
@@ -168,7 +222,7 @@ function mapDispatchToProps(dispatch) {
 export const View = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Settings);
+)(GroupSettings);
 
 export const settings = reducer;
 

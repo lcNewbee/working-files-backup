@@ -45,9 +45,9 @@ const pStatistics = require('../../screens/App/Main/Statistics');
 const pLogs = require('../../screens/App/Main/Logs');
 const pClients = require('../../screens/App/Main/Clients');
 
-
 // 设置
-const pGroupSettings = require('../../screens/App/Main/GroupSettings');
+const pGroupSettings = require('../../screens/App/Main/Settings/GroupSettings');
+const sBandwidth = require('../../screens/App/Main/Settings/Bandwidth');
 
 let routes = [{
     path: '/',
@@ -98,13 +98,29 @@ let routes = [{
             id: 'bandwidth',
             path: '/main/settings/bandwidth',
             text: _('Bandwidth'),
-            component: pStatistics.View
+            component: sBandwidth.Screen
           },{
             id: 'wireless',
             path: '/main/settings/wireless',
             text: _('Wireless'),
             component: pStatistics.View
-          }]
+          },{
+            id: 'wireless',
+            path: '/main/settings/portal',
+            text: _('Portal设置'),
+            component: pStatistics.View
+          },{
+            id: 'wireless',
+            path: '/main/settings/guest',
+            text: _('来宾用户设置'),
+            component: pStatistics.View
+          },{
+            id: 'wireless',
+            path: '/main/settings/admin',
+            text: _('管理员'),
+            component: pStatistics.View
+          }
+        ]
       }]
     }]
   }, {
@@ -120,8 +136,9 @@ const reducers = {
   login: pLogin.login,
   clients: pClients.clients,
   logs: pLogs.logs,
+  statistics: pStatistics.statistics,
   groupSettings: pGroupSettings.settings,
-  statistics: pStatistics.statistics
+  bandwidth: sBandwidth.reducer
 };
 
 // Store

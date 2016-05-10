@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Pagination from 'comlan/components/Pagination';
+import Pagination from '../Pagination';
 
 export class Row extends Component {
   render() {

@@ -72,8 +72,8 @@ export function saveClientsAction() {
     const query = getState().clients.get('actionQuery').toJS();
 
     dispatch(reqeustFetchClients());
-
-    utils.fetch(ACTION_URL, query)
+    
+    utils.save(ACTION_URL, query)
       .then(function(json) {
         if(json.state && json.state.code === 2000) {
           dispatch(fetchClients(json.data))

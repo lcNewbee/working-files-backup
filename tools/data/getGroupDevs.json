@@ -1,0 +1,43 @@
+{
+    "state": {
+        "code": 2000,
+        "msg": "ok"
+    },
+    "data": {
+        "page": {
+            "start": 2,
+            "size": 2,
+            "currPage": 2,
+            "totalPage": 2,
+            "total": 4,
+            "nextPage": -1,
+            "lastPage": 4
+        },
+        "list": [
+            {
+                "devicename": "10:33:44:55:66:78/ap1",
+                "ip": "192.168.5.53",
+                "status": "online",
+                "groupname": "研发"
+            },
+            {
+                "devicename": "02:33:44:55:66:78/ap2",
+                "ip": "192.168.5.53",
+                "status": "offline",
+                "groupname": "研发"
+            },
+            {
+                "devicename": "22:33:44:55:66:78/ap2",
+                "ip": "192.168.5.53",
+                "status": "online",
+                "groupname": "测试"
+            },
+            {
+                "devicename": "46:33:44:55:66:78/ap2",
+                "ip": "192.168.5.53",
+                "status": "未初始化",
+                "groupname": ""
+            }
+        ]
+    }
+}

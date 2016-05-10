@@ -105,7 +105,9 @@ export const Clients = React.createClass({
   onAction(mac, action) {
     this.handleActions({
       action,
-      mac
+      macs: [
+        mac
+      ]
     }, true);
   },
 
@@ -113,7 +115,7 @@ export const Clients = React.createClass({
     var val = e.target.value;
 
     this.handleChangeQuery({
-      text: val
+      search: val
     });
   },
 

@@ -201,6 +201,10 @@ function getRulesObj(rules) {
   var ret = [];
   var rulesArr = rules.split('|');
   var ruleObj;
+  
+  if(typeof rules !== 'string') {
+    throw new TypeError('Rules must be called with string');
+  }
 
   for (var i = 0; i < rulesArr.length; i++) {
     ruleObj = getRuleObj(rulesArr[i]);
@@ -287,8 +291,8 @@ validator.fn = validator.prototype = {
     return check(str, this.rules)
   },
 
-  addVaildate: function(funs) {
-
+  addVaildate: function(ruleName, funs) {
+    
   }
 }
 
@@ -303,6 +307,23 @@ var init = validator.fn.init = function(options) {
 }
 
 init.prototype = validator.fn;
+
+validator.checkClear = function(str, rules) {
+  rules = getRulesObj(rules)
+  
+  return checkClear(str, rules);
+}
+
+validator.check = function(str, rules) {
+  rules = getRulesObj(rules);
+  
+  return check(str, rules);
+}
+
+validator.addVaildate = function(str, rules) {
+  
+  return this;
+}
 
 export default validator;
 

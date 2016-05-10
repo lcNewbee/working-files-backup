@@ -1,5 +1,5 @@
 import React from 'react';
-import Icon from 'comlan/components/Icon';
+import Icon from '../Icon';
 
 export const Input = React.createClass({
   getType: function () {

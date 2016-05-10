@@ -7,15 +7,13 @@ export default class TabMenus extends Component {
   render() {
     return (
       <div>
-        <div className="tabs">
+        <div className="tab">
           <Nav
-            className="tabs-nav"
+            className="tab-nav"
             menus={this.props.menus}
           />
-          <div className='tabs-content'>
-            <div className='tabs-content-wrap'>
-              {this.props.children}
-            </div>
+          <div className='tab-content'>
+            {this.props.children}
           </div>
         </div>
       </div>

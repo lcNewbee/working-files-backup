@@ -60,3 +60,20 @@ export function fetchDevices() {
   };
 }
 
+export function saveDevicesAction(data) {
+  const url = '/goform/setApAction';
+  
+  return (dispatch, getState) => {
+    //const query = getState().devices.get('query').toJS();
+    
+    dispatch(reqeustFetchDevices());
+
+    utils.save(url, data)
+      .then((json) => {
+        if (json.state && json.state.code === 2000) {
+          dispatch(fetchDevices(json.data));
+        }
+      });
+  };
+}
+

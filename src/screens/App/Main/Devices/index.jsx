@@ -70,19 +70,21 @@ export const Device = React.createClass({
    * action: reboot | reset | locate
    */
   handleAction(mac, action) {
-    let url = `/goform/locateDevice?mac=${mac}&action=${action}`;
+    const data = {
+      action,
+      macs: [
+        mac
+      ]
+    }
     
-    utils.fetch(url)
-      .then(function(json) {
-        this.handleSearch()
-      }.bind(this));
+    this.props.saveDevicesAction(data)
   },
 
   onChangeSearchText(e) {
     var val = e.target.value;
-
+    
     this.props.changeDevicesQuery({
-      text: val
+      search: val
     });
   },
 
@@ -103,6 +105,7 @@ export const Device = React.createClass({
 
   onResetDevice(mac) {
     var msg_text = _('Are you sure reset device: %s?', mac);
+    
     if(confirm(msg_text)) {
       this.handleAction(mac, 'reboot');
     }
