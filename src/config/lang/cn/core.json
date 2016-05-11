@@ -66,8 +66,8 @@
   "GUEST": "来宾",
   
   "Associated AP": "关联 AP",
-  "Up Speed": "上行流量",
-  "Down Speed": "下行流量",
+  "Up Speed": "上传流量",
+  "Down Speed": "下载流量",
   "Up/Down Speed": "上下行流量",
   "Authentication": "认证类型",
   "RSSI": "信号质量",
@@ -76,5 +76,6 @@
   "Unlock": "解除封锁",
   
   "Group Name": "组名称",
-  "Remarks": "备注"
+  "Remarks": "备注",
+  "Select Group": "选择组"
 }

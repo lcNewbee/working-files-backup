@@ -4,6 +4,7 @@ import { fromJS, Map, List } from 'immutable';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import * as myActions from './actions';
+import { fetchDeviceGroups } from '../GroupSettings/actions';
 import myReducer from './reducer';
 
 import {FormGruop} from 'components/Form/Input';
@@ -13,61 +14,38 @@ import Button from 'components/Button';
 const msg = {
   'upSpeed': _('Up Speed'),
   'downSpeed': _('Down Speed'),
-  'selectGroup': _('Select Group'),
-  'save': _('Save')
+  'selectGroup': _('Select Group')
 };
 
 const propTypes = {
   fetchDeviceGroups: PropTypes.func,
   fetching: PropTypes.bool,
-  data: PropTypes.instanceOf(Map)
+  data: PropTypes.instanceOf(Map),
+  groups: PropTypes.instanceOf(List)
 };
 
 export const Bandwidth = React.createClass({
   mixins: [PureRenderMixin],
   
   componentWillMount() {
-    this.props.fetchBandwidth();
+    this.props.fetchDeviceGroups();
   },
   
-  handleQosChange(data) {
-    this.props.changeQosSettings(data)
-  },
-  
-  onChangeUpSpeed(e) {
-    var val = e.target.value;
+  onChangeUpSpeed() {
     
-    this.handleQosChange({
-      upstream: val
-    });
   },
   
-  onChangeDownSpeed(e) {
-    var val = e.target.value;
+  onChangeDownSpeed() {
     
-    this.handleQosChange({
-      downstream: val
-    });
-  },
-  
-  onChangeGroup(item) {
-    this.props.changeQosGroup(item.value);
-  },
-  
-  onSave() {
-    this.props.setBandwidth();
   },
   
   render() {
-    const selectOptions = this.props.data
-      .get('list').map(function(item, i) {
-        return {
-          value: item.get('groupname'),
-          label: item.get('groupname')
-        }
-      }).toJS();
-      
-    const currData = this.props.data.get('curr');
+    const selectOptions = this.props.groups.map(function(item) {
+      return {
+        value: item.get('groupname'),
+        label: item.get('groupname')
+      }
+    }).toJS();
 
     return (
       <div>
@@ -75,22 +53,18 @@ export const Bandwidth = React.createClass({
           <label htmlFor="">{msg.selectGroup}</label>
           <div className="form-control">
             <Select
-              clearable={false}
-              onChange={this.onChangeGroup}
-              value={currData.get('groupname')}
               options={selectOptions}
             />
           </div>
         </div>
+        
         <FormGruop
           label={msg.upSpeed}
-          value={currData.get('upstream')}
           updater={this.onChangeUpSpeed}
         />
         
         <FormGruop
           label={msg.downSpeed}
-          value={currData.get('downstream')}
           updater={this.onChangeDownSpeed}
         />
         
@@ -98,9 +72,8 @@ export const Bandwidth = React.createClass({
           <div className="form-control">
              <Button
               type='button'
-              text={msg.save}
+              text="保存"
               role="save"
-              onClick={this.onSave}
             />
           </div>
         </div>
@@ -108,21 +81,27 @@ export const Bandwidth = React.createClass({
     );
   }
 });
+
 Bandwidth.propTypes = propTypes;
 
+//React.PropTypes.instanceOf(Immutable.List).isRequired
 function mapStateToProps(state) {
   var myState = state.bandwidth;
 
   return {
     fetching: myState.get('fetching'),
     data: myState.get('data'),
+    groups: state.groupSettings.getIn(['data', 'list'])
   };
 }
 
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(Object.assign({fetchDeviceGroups}, myActions), dispatch)
+}
 
 export const Screen = connect(
   mapStateToProps,
-  myActions
+  mapDispatchToProps
 )(Bandwidth);
 
 export const reducer = myReducer;

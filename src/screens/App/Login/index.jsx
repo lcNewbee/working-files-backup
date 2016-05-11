@@ -86,7 +86,6 @@ export const Login = React.createClass({
         />
       )
     }.bind(this));
-
     return (
       <div>
         <header className="navbar">

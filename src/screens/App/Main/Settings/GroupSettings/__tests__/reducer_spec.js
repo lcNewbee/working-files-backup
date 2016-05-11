@@ -337,5 +337,4 @@ describe('Group Settings Rudex', () => {
     
   });
   
-  
 });

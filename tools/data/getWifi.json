@@ -1,0 +1,37 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "groupname": "group231",
+        "ssid": "128",
+        "wifienable": "0/1",
+        "encryption": "open",
+        "password": "124567786",
+        "vlanenable": "0/1",
+        "vlanid": "1"
+      },
+      {
+        "groupname": "group33333",
+        "ssid": "128",
+        "wifienable": "0/1",
+        "encryption": "open",
+        "password": "124567786",
+        "vlanenable": "0/1",
+        "vlanid": "1"
+      },
+      {
+        "groupname": "group33547",
+        "ssid": "128",
+        "wifienable": "0/1",
+        "encryption": "open",
+        "password": "124567786",
+        "vlanenable": "0/1",
+        "vlanid": "1"
+      }
+    ]
+  }
+}

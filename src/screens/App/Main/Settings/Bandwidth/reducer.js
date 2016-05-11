@@ -1,14 +1,56 @@
 import Immutable, {Map, List, fromJS} from 'immutable';
 
 const defaultState = fromJS({
-  
+  fetching: false,
+  saving: false,
+  data: {
+    list: [],
+    curr: {}
+  }
 });
 
-export default function(state = defaultState, action) {
-  switch (action.type) {
+function receiveQosData(state, qosData) {
+  let ret = state.update('data', data => data.merge(qosData));
+  let list0 = ret.getIn(['data', 'list', 0]);
+ 
+  if(state.getIn(['data', 'curr']).isEmpty()) {
     
+    ret = ret.setIn(['data', 'curr'], list0);
+    
+  }
+  
+  return ret.set('fetching', false);
+}
+
+export default function(state = defaultState, action) {
+  
+  switch (action.type) {
+    case 'REQEUST_FETCH_QOS':
+      return state.set('fetching', true);
+      
+    case 'RECEIVE_QOS':
+      return receiveQosData(state, action.data);
+      
+    case "CHANGE_QOS_GROUP":
+      return state.updateIn(['data', 'curr'], data => {
+        return state.getIn(['data', 'list'])
+          .find(function(item) {
+            return item.get('groupname') === action.name;
+          })
+      })
+      
+    case "REQEUST_SET_QOS":
+      return state.set('saving', true);
+    
+    case "RECEIVE_SET_QOS":
+      return state.set('saving', false)
+      
+    case "CHANGE_QOS_SETTINGS":
+      return state.mergeIn(['data', 'curr'], action.data)
+      
     default:
 
   }
+  
   return state;
 };

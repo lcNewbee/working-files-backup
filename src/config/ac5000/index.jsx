@@ -48,6 +48,10 @@ const pClients = require('../../screens/App/Main/Clients');
 // 设置
 const pGroupSettings = require('../../screens/App/Main/Settings/GroupSettings');
 const sBandwidth = require('../../screens/App/Main/Settings/Bandwidth');
+const sWireless = require('../../screens/App/Main/Settings/Wireless');
+const sPortal = require('../../screens/App/Main/Settings/Portal');
+const sGuest = require('../../screens/App/Main/Settings/Guest');
+const sPassword = require('../../screens/App/Main/Settings/Password');
 
 let routes = [{
     path: '/',
@@ -103,22 +107,22 @@ let routes = [{
             id: 'wireless',
             path: '/main/settings/wireless',
             text: _('Wireless'),
-            component: pStatistics.View
+            component: sWireless.Screen
           },{
-            id: 'wireless',
+            id: 'portal',
             path: '/main/settings/portal',
             text: _('Portal设置'),
-            component: pStatistics.View
+            component: sPortal.Screen
           },{
-            id: 'wireless',
+            id: 'guest',
             path: '/main/settings/guest',
             text: _('来宾用户设置'),
-            component: pStatistics.View
+            component: sGuest.Screen
           },{
-            id: 'wireless',
+            id: 'password',
             path: '/main/settings/admin',
             text: _('管理员'),
-            component: pStatistics.View
+            component: sPassword.Screen
           }
         ]
       }]
@@ -138,7 +142,11 @@ const reducers = {
   logs: pLogs.logs,
   statistics: pStatistics.statistics,
   groupSettings: pGroupSettings.settings,
-  bandwidth: sBandwidth.reducer
+  bandwidth: sBandwidth.reducer,
+  wireless: sWireless.reducer,
+  portal: sPortal.reducer,
+  guest: sGuest.reducer,
+  password: sPassword.reducer
 };
 
 // Store
