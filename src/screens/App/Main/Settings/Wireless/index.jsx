@@ -28,7 +28,7 @@ export const Bandwidth = React.createClass({
   mixins: [PureRenderMixin],
   
   componentWillMount() {
-    this.props.fetchDeviceGroups();
+    this.props.fetchWifiSettings();
   },
   
   onChangeUpSpeed() {
@@ -39,13 +39,40 @@ export const Bandwidth = React.createClass({
     
   },
   
+  onUpdate(name) {
+    return function(e) {
+      var data = {};
+      
+      data[name] = e.target.value;
+      this.props.changeWirelessSettings();
+    }.bind(this)
+  },
+  
+  onChangeGroup() {
+    
+  },
+  
   render() {
-    const selectOptions = this.props.groups.map(function(item) {
-      return {
-        value: item.get('groupname'),
-        label: item.get('groupname')
-      }
-    }).toJS();
+    const groupOptions = this.props.data
+      .get('list').map(function(item, i) {
+        return {
+          value: item.get('groupname'),
+          label: item.get('groupname')
+        }
+      }).toJS();
+      
+   const encryptionOptions = [
+     {
+       value: 'none',
+       label: _('NONE')
+     },
+     {
+       value: 'psk-mixed',
+       label: "STRONG"
+     }
+   ];
+    
+    const currData =  this.props.data.get('curr');
 
     return (
       <div>
@@ -53,8 +80,47 @@ export const Bandwidth = React.createClass({
           <label htmlFor="">{msg.selectGroup}</label>
           <div className="form-control">
             <Select
-              options={selectOptions}
+              options={groupOptions}
+              clearable={false}
+              onChange={this.onChangeGroup}
+              value={currData.get('groupname')}
             />
+          </div>
+        </div>
+        
+        <FormGruop
+          label={ _('SSID') }
+          value={currData.get('ssid')}
+          updater={this.onUpdate('ssid')}
+        />
+        
+        <div className="form-group">
+          <label htmlFor="">{ _('Encryption') }</label>
+          <div className="form-control">
+            <Select
+              clearable={false}
+              value={currData.get('encryption')}
+              options={encryptionOptions}
+            />
+          </div>
+        </div>
+        
+        <FormGruop
+          label={ _('Password') }
+          type="password"
+          className="text"
+          value={currData.get('password')}
+          updater={this.onUpdate('password')}
+        />
+        
+        <div className="form-group">
+          <label htmlFor="">{ _('VLAN') }</label>
+          <div className="form-control">
+            <input type="checkbox"/>
+            <span style={{'marginLeft': '5px'}} className="none">
+              { _('Use VLAN ID:') }
+              <input type="text" className="input-sm"/>
+            </span>
           </div>
         </div>
         
@@ -76,12 +142,11 @@ Bandwidth.propTypes = propTypes;
 
 //React.PropTypes.instanceOf(Immutable.List).isRequired
 function mapStateToProps(state) {
-  var myState = state.bandwidth;
+  var myState = state.wireless;
 
   return {
     fetching: myState.get('fetching'),
     data: myState.get('data'),
-    groups: state.groupSettings.getIn(['data', 'list'])
   };
 }
 

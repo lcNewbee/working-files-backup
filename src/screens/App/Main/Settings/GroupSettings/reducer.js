@@ -89,7 +89,7 @@ export default function(state = defaultState, action) {
 
     case 'EDIT_GROUP':
       return state.set('edit', getEditGroupByName(state, action.groupname))
-        .set('actionType', 'edit');;
+        .set('actionType', 'edit').setIn(['edit', 'orignName'], action.groupname);
 
     case 'ADD_GROUP':
       return state.set('edit', fromJS({

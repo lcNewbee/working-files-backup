@@ -7,8 +7,8 @@ import 'scss/main.scss';
 import 'font-awesome/css/font-awesome.css';
 
 // 多语言工具
-var b28n = require('b28n');
-var langCn = require('../lang/cn/core.json');
+const b28n = require('b28n');
+const langCn = require('../lang/cn/core.json');
 
 b28n.addDict(langCn, 'cn');
 b28n.init({

@@ -77,5 +77,11 @@
   
   "Group Name": "组名称",
   "Remarks": "备注",
-  "Select Group": "选择组"
+  "Select Group": "选择组",
+  
+  "Encryption": "加密方式",
+  "NONE": "不加密",
+  "STRONG": "强加密",
+  
+  "Use VLAN ID:": "使用 VLAN ID："
 }

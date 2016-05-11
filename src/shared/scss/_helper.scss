@@ -8,3 +8,7 @@
 .clearfix {
   @include clearfix();
 }
+
+.none {
+  display: none;
+}

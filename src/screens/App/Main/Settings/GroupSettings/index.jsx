@@ -147,7 +147,7 @@ export const GroupSettings = React.createClass({
           )
         }.bind(this)
       }];
-    let modalTitle = this.getEditVal('groupname');
+    let modalTitle = this.getEditVal('orignName');
     
     if(this.props.actionType === 'add') {
       modalTitle = msg.add;

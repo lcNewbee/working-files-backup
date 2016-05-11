@@ -106,10 +106,16 @@ export function fetchGroupDevices() {
 export function saveDeviceGroup() {
   return (dispatch, getState) => {
     const data = getState().groupSettings.get('edit').toJS();
+    const actionType = getState().groupSettings.get('actionType');
+    let saveUrl = urls.addGroup;
     
     dispatch(reqeustFetchDeviceGroups());
     
-    utils.save(urls.editGroup, data)
+    if(actionType === 'edit') {
+      saveUrl = urls.editGroup;
+    }
+    
+    utils.save(saveUrl, data)
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(fetchDeviceGroups());
