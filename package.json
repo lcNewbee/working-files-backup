@@ -13,7 +13,7 @@
     "build:html": "babel-node tools/buildHtml.js",
     "prebuild": "npm run clean-dist && npm run build:html",
     "build": "babel-node tools/build.js && npm run open:dist",
-    "pub:ac": "babel-node ./tools/release.js",
+    "pub:ac": "babel-node tools/build.js && babel-node ./tools/release.js",
     "webpack:prod": "webpack --config webpack.config.prod.js",
     "test": "mocha --compilers js:babel-core/register --require ./tools/test/step.js './src/**/*spec.@(js|jsx)'",
     "test:watch": "npm test --  --watch --watch-extensions jsx --reporter dot",
