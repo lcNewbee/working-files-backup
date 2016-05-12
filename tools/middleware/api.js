@@ -3,8 +3,8 @@ import url from 'url';
 import mime from 'mime';
 
 /**
- * 简单的 http api 中间件请求处理,
- * 把 api 请求的按路径访问相应的json文件
+ * 简单的 http api connect 中间件请求处理, 
+ * 把特定路径请求的按路径访问相应的json文件
  *
  * @param  {[object]} options   初始化选项
  * @return {[function]}         处理函数

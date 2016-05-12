@@ -9,13 +9,21 @@ const defaultState = fromJS({
 
 function receiveSettings(state, settingData) {
   let ret = state.update('data', data => data.merge(settingData));
-  let list0 = ret.getIn(['data', 'list', 0]);
+  let listCurr = ret.getIn(['data', 'list', 0]);
+  const currData = state.getIn(['data', 'curr']) || Map({});
  
-  if(state.getIn(['data', 'curr']).isEmpty()) {
-    ret = ret.setIn(['data', 'curr'], list0);
+  if(currData.isEmpty()) {
+    
+    ret = ret.setIn(['data', 'curr'], listCurr);
+    
+  } else {
+    listCurr = ret.getIn(['data', 'list']).find(function(item) {
+      return currData.get('groupname') === item.get('groupname');
+    });
   }
   
-  return ret.set('fetching', false);
+  return ret.setIn(['data', 'curr'], listCurr)
+      .set('fetching', false);
 }
 
 export default function(state = defaultState, action) {
@@ -25,6 +33,16 @@ export default function(state = defaultState, action) {
       
     case 'RECEIVE_WIFI':
       return receiveSettings(state, action.data);
+      
+    case "CHANGE_WIFI_GROUP":
+      return state.updateIn(['data', 'curr'], data => {
+        return state.getIn(['data', 'list'])
+          .find(function(item) {
+            return item.get('groupname') === action.name;
+          })
+      });
+   case "CHANGE_WIFI_SETTINGS":
+      return state.mergeIn(['data', 'curr'], action.data)
       
     default:
 

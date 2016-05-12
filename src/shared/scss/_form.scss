@@ -1,19 +1,20 @@
 body textarea,
 body input[type=text],
-body input[type=password] {
+body input[type=password],
+body input[type=file] {
   box-sizing: border-box;
   padding: 6px 8px 5px 8px;
   outline: 0;
-  border: 1px solid #a4a4a4;
+  border: 1px solid #ccc;
   border-radius: 2px;
-  background: #f6f6f6;
+  background: #fff;
   box-shadow: 0px 1px 2px rgba(0,0,0,0.2) inset;
   font-size: 11px;
 }
 
 label {
   display: inline-block;
-  min-width: 100px;
+  min-width: 150px;
 }
 
 .form-group {
@@ -24,6 +25,10 @@ label {
     margin-right: 15px;
     text-align: right;
     line-height: 28px;
+    
+    .btn {
+      line-height: 14px;
+    }
   }
   
   .text {
@@ -35,8 +40,14 @@ label {
   }
   
   .form-control {
-    margin-left: 120px;
-  }  
+    margin-left: 165px;
+  }
+  
+  .help {
+    color: #999;
+    margin-left: 10px;
+    line-height: 28px;
+  }
 }
 
 .msg-error {

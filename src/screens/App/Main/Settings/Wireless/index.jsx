@@ -31,25 +31,40 @@ export const Bandwidth = React.createClass({
     this.props.fetchWifiSettings();
   },
   
-  onChangeUpSpeed() {
-    
-  },
-  
-  onChangeDownSpeed() {
-    
-  },
-  
   onUpdate(name) {
     return function(e) {
-      var data = {};
+      const elem = e.target;
+      let data = {};
       
-      data[name] = e.target.value;
-      this.props.changeWirelessSettings();
+      if(elem.type !== 'checkbox') {
+        data[name] = e.target.value;
+      } else {
+        
+        if(elem.checked) {
+          data[name] = '1';
+        } else {
+          data[name] = '0';
+        }
+      }
+      
+      this.props.changeWifiSettings(data);
     }.bind(this)
   },
   
-  onChangeGroup() {
+  onChangeGroup(item) {
+    this.props.changeWifiGroup(item.value);
+  },
+  
+  onChangeEncryption(item) {
+    const data = {
+      encryption: item.value
+    };
     
+    this.props.changeWifiSettings(data);
+  },
+  
+  onSave() {
+    this.props.setWifi();
   },
   
   render() {
@@ -68,7 +83,7 @@ export const Bandwidth = React.createClass({
      },
      {
        value: 'psk-mixed',
-       label: "STRONG"
+       label: _('STRONG')
      }
    ];
     
@@ -76,6 +91,7 @@ export const Bandwidth = React.createClass({
 
     return (
       <div>
+        <h3>无线设置</h3>
         <div className="form-group">
           <label htmlFor="">{msg.selectGroup}</label>
           <div className="form-control">
@@ -101,26 +117,47 @@ export const Bandwidth = React.createClass({
               clearable={false}
               value={currData.get('encryption')}
               options={encryptionOptions}
+              searchable={false}
+              onChange={this.onChangeEncryption}
             />
           </div>
         </div>
         
-        <FormGruop
-          label={ _('Password') }
-          type="password"
-          className="text"
-          value={currData.get('password')}
-          updater={this.onUpdate('password')}
-        />
+        {
+          currData.get('encryption') === 'psk-mixed' ?
+            <FormGruop
+              label={ _('Password') }
+              type="password"
+              className="text"
+              value={currData.get('password')}
+              updater={this.onUpdate('password')}
+            /> : ''
+        }
         
         <div className="form-group">
           <label htmlFor="">{ _('VLAN') }</label>
           <div className="form-control">
-            <input type="checkbox"/>
-            <span style={{'marginLeft': '5px'}} className="none">
-              { _('Use VLAN ID:') }
-              <input type="text" className="input-sm"/>
-            </span>
+            <input
+              type="checkbox"
+              checked={currData.get('vlanenable') == '1'}
+              onChange={this.onUpdate('vlanenable')}
+            />
+            
+            {
+              currData.get('vlanenable') == '1' ? 
+                (
+                  <span style={{'marginLeft': '5px'}}>
+                    { _('Use VLAN ID:') }
+                    <input
+                      type="text"
+                      className="input-sm"
+                      value={currData.get('vlanid')}
+                      onChange={this.onUpdate('vlanid')}
+                    />
+                  </span>
+                ) : ''
+            }
+            
           </div>
         </div>
         
@@ -130,6 +167,7 @@ export const Bandwidth = React.createClass({
               type='button'
               text={_('Save')}
               role="save"
+              onClick={this.onSave}
             />
           </div>
         </div>

@@ -19,10 +19,20 @@ export const Input = React.createClass({
   },
 
   render: function () {
+    let {className, id, name} = this.props;
+    
+    if(className) {
+      className = 'text ' + className;
+    } else {
+      className = 'text';
+    }
+    id = id || name;
+    
     return <input {...this.props}
-      id={this.props.name}
-      type={this.getType() }
-      value={this.getValue() }
+      id={id}
+      type={this.getType()}
+      value={this.getValue()}
+      className={className}
       onChange={this.handleChange}
     />;
   }
@@ -47,6 +57,7 @@ export const Search = React.createClass({
   },
 
   render() {
+    
     return (
       <div className="input-search fl">
         
@@ -77,7 +88,9 @@ export const FormGruop = React.createClass({
       }
       <div className="form-control">
         <Input {...this.props} />
-        <span></span>
+        {
+          this.props.help ? <span className="help">{this.props.help}</span> : ''
+        }
       </div>
     </div>
   }

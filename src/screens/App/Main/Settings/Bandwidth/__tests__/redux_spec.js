@@ -5,6 +5,49 @@ import reducer from '../reducer';
 import * as actions from '../actions';
 
 describe('Bandwidth Rudex', () => {
+  it('should updata data.curr when RECEIVE_QOS_DATA', () => {
+    const initialState = fromJS({
+      fetching: true,
+      saving: false,
+      data: {
+        list: [
+          
+        ],
+        curr: {}
+      }
+    });
+    
+    let action = actions.receiveQos({
+      list: [
+        {
+          "groupname": "group33333",
+          "downstream": "128",
+          "upstream": "64"
+        }
+      ]
+    });
+    
+    let nextState = reducer(initialState, action);
+    
+    expect(nextState).to.be.equal(fromJS({
+      fetching: false,
+      saving: false,
+      data: {
+        list: [
+          {
+            "groupname": "group33333",
+            "downstream": "128",
+            "upstream": "64"
+          }
+        ],
+        curr: {
+          "groupname": "group33333",
+          "downstream": "128",
+          "upstream": "64"
+        }
+      }
+    }));
+  });
   
   it('should change data.curr when CHANGE_QOS_GROUP', () => {
     const initialState = fromJS({

@@ -4,8 +4,9 @@ import { fromJS, Map, List } from 'immutable';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import * as myActions from './actions';
-import { fetchDeviceGroups } from '../GroupSettings/actions';
 import myReducer from './reducer';
+import validator from 'utils/lib/validator';
+
 
 import {FormGruop} from 'components/Form/Input';
 import Select from 'components/Select';
@@ -24,19 +25,34 @@ const propTypes = {
   groups: PropTypes.instanceOf(List)
 };
 
-export const Bandwidth = React.createClass({
+export const Password = React.createClass({
   mixins: [PureRenderMixin],
   
   componentWillMount() {
-    this.props.fetchDeviceGroups();
   },
   
-  onChangeUpSpeed() {
-    
+  onSave() {
+     this.props.savePassword();
   },
   
-  onChangeDownSpeed() {
-    
+  createUpdateFunc(name) {
+    return function(e) {
+      const elem = e.target;
+      let data = {};
+      
+      if(elem.type !== 'checkbox') {
+        data[name] = e.target.value;
+      } else {
+        
+        if(elem.checked) {
+          data[name] = '1';
+        } else {
+          data[name] = '0';
+        }
+      }
+      
+      this.props.changePasswordSettings(data);
+    }.bind(this) 
   },
   
   render() {
@@ -48,41 +64,45 @@ export const Bandwidth = React.createClass({
     }).toJS();
 
     return (
-      <div>
-        <div className="form-group">
-          <label htmlFor="">{msg.selectGroup}</label>
-          <div className="form-control">
-            <Select
-              options={selectOptions}
-            />
-          </div>
-        </div>
+      <form>
+        <h3>修改密码</h3>
         
         <FormGruop
-          label={msg.upSpeed}
-          updater={this.onChangeUpSpeed}
+          label={_('Old Password')}
+          name="oldpasswd"
+          updater={this.createUpdateFunc('oldpasswd')}
         />
         
         <FormGruop
-          label={msg.downSpeed}
-          updater={this.onChangeDownSpeed}
+          type="password"
+          label={_('New Password')}
+          name="newpasswd"
+          updater={this.createUpdateFunc('newpasswd')}
+        />
+        
+        <FormGruop
+          type="password"
+          label={_('Confirm Password')}
+          name="confirmpasswd"
+          updater={this.createUpdateFunc('confirmpasswd')}
         />
         
         <div className="form-group">
           <div className="form-control">
              <Button
               type='button'
-              text="保存"
+              text={_('Save')}
               role="save"
+              onClick={this.onSave}
             />
           </div>
         </div>
-      </div>
+      </form>
     );
   }
 });
 
-Bandwidth.propTypes = propTypes;
+Password.propTypes = propTypes;
 
 //React.PropTypes.instanceOf(Immutable.List).isRequired
 function mapStateToProps(state) {
@@ -95,13 +115,10 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(Object.assign({fetchDeviceGroups}, myActions), dispatch)
-}
 
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
-)(Bandwidth);
+  myActions
+)(Password);
 
 export const reducer = myReducer;

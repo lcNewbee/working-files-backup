@@ -157,7 +157,7 @@ export const GroupSettings = React.createClass({
     
     return (
       <div>
-
+        <h3>组列表</h3>
         <Table
           className="table"
           options={fromJS(groupTableOptions)}

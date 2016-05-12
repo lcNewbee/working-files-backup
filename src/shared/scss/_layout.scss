@@ -136,6 +136,13 @@ body {
     }
   }
 }
+.tab-content {
+  h3 {
+    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 15px;
+    padding: 5px 10px;
+  }
+}
 .page-footer {
   position: absolute;
   right: 0;

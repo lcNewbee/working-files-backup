@@ -9,17 +9,23 @@ const defaultState = fromJS({
   }
 });
 
-function receiveQosData(state, qosData) {
-  let ret = state.update('data', data => data.merge(qosData));
-  let list0 = ret.getIn(['data', 'list', 0]);
+function receiveQosData(state, settingData) {
+  let ret = state.update('data', data => data.merge(settingData));
+  let listCurr = ret.getIn(['data', 'list', 0]);
+  const currData = state.getIn(['data', 'curr']) || Map({});
  
-  if(state.getIn(['data', 'curr']).isEmpty()) {
+  if(currData.isEmpty()) {
     
-    ret = ret.setIn(['data', 'curr'], list0);
+    ret = ret.setIn(['data', 'curr'], listCurr);
     
+  } else {
+    listCurr = ret.getIn(['data', 'list']).find(function(item) {
+      return currData.get('groupname') === item.get('groupname');
+    });
   }
   
-  return ret.set('fetching', false);
+  return ret.setIn(['data', 'curr'], listCurr)
+      .set('fetching', false);
 }
 
 export default function(state = defaultState, action) {
@@ -37,7 +43,7 @@ export default function(state = defaultState, action) {
           .find(function(item) {
             return item.get('groupname') === action.name;
           })
-      })
+      });
       
     case "REQEUST_SET_QOS":
       return state.set('saving', true);

@@ -2,9 +2,7 @@ import utils from 'utils';
 
 const urls = {
   fetch: "/goform/getWifi",
-  fetchDevs: "/goform/getGroupDevs",
-  editGroup: "/goform/updateDevGroup",
-  addGroup: "/goform/updateDevGroup"
+  save: "/goform/setWifi",
 }
 
 // Fetch
@@ -59,9 +57,9 @@ export function receiveSetWifi() {
     type: "RECEIVE_SET_WIFI"
   }
 }
-export function setBandwidth() {
+export function setWifi() {
   return (dispatch, getState) => {
-    const data = getState().bandwidth.getIn(['data', 'curr']);
+    const data = getState().wireless.getIn(['data', 'curr']);
     
     dispatch(reqeustSetWifi());
 

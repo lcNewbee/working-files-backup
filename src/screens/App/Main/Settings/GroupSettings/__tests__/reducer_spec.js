@@ -202,14 +202,15 @@ describe('Group Settings Rudex', () => {
             }
         ]
       },
-      actionType: 'edit',
       edit: {
+        "orignName": "研发",
         "groupname": "研发",
         "remarks": "只有开通网络权限",
         "devices": [
           "12:33:44:55:66:78"
         ]
-      }
+      },
+      actionType: 'edit',
     });
 
     nextState.should.equal(expectMap);
