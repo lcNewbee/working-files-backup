@@ -1,0 +1,36 @@
+{
+  "state": {
+      "code": 2000,
+      "msg": "ok"
+  },
+      
+  "data":{  
+      
+      "list": [
+          {
+            "groupname": "group231",
+            "enable": "0",
+            "guestssid": "www",
+            "encryption": "none",
+            "password": "",
+            "portalenable": "1"
+          },
+          {
+            "groupname": "group33333",
+            "enable": "1",
+            "guestssid": "www",
+            "encryption": "psk-mixed",
+            "password": "12345678",
+            "portalenable": "0"
+          },
+          {
+            "groupname": "group33547",
+            "enable": "1",
+            "guestssid": "www",
+            "encryption": "none",
+            "password": "12345678",
+            "portalenable": "1"
+          }
+      ]
+  }
+}

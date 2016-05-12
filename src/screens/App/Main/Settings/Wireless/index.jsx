@@ -91,7 +91,6 @@ export const Bandwidth = React.createClass({
 
     return (
       <div>
-        <h3>无线设置</h3>
         <div className="form-group">
           <label htmlFor="">{msg.selectGroup}</label>
           <div className="form-control">
@@ -104,6 +103,8 @@ export const Bandwidth = React.createClass({
           </div>
         </div>
         
+        <h3>无线设置</h3>
+     
         <FormGruop
           label={ _('SSID') }
           value={currData.get('ssid')}

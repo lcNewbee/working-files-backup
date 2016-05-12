@@ -71,7 +71,6 @@ export const Bandwidth = React.createClass({
 
     return (
       <div>
-        <h3>{_('Qos Settings')}</h3>
         <div className="form-group">
           <label htmlFor="">{msg.selectGroup}</label>
           <div className="form-control">
@@ -83,6 +82,9 @@ export const Bandwidth = React.createClass({
             />
           </div>
         </div>
+        
+        <h3>{_('Qos Settings')}</h3>
+       
         <FormGruop
           label={msg.upSpeed}
           value={currData.get('upstream')}

@@ -95,8 +95,9 @@ export const Portal = React.createClass({
     const currData =  this.props.data.get('curr');
    
     return (
-      <div>
       
+      <div>
+        <h3>{_('Portal Settings')}</h3>
         <FormGruop
           label={_('Portal Name')}
           name="portalname"
