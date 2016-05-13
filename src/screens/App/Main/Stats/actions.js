@@ -1,24 +1,29 @@
-function reqeustLogin() {
+import utils from 'utils';
+
+function reqeustStats() {
   return {
-    type: 'REQEUST_LOGIN'
+    type: 'REQEUST_STATS'
   };
 }
 
-export function updateData(name, val) {
+export function reveviceStats(data) {
   return {
-    type: 'UPDATE_DATA',
-    name: name,
-    value: val
+    type: 'REVEVICE_STATS',
+    data
   };
 }
 
-export function login() {
-  return dispatch => {
-    dispatch(reqeustLogin());
+export function fetchStatus() {
+  return (dispatch, getState) => {
+    var query = getState().status.get('query').toJS();
+    
+    dispatch(reqeustStats());
 
-    fetch('bundle.js')
-      .then(function(response) {
-        console.log(response)
+    utils.fetch('/goform/getApClientInfo', query)
+      .then(function(json) {
+        if(json.state && json.state.code === 2000) {
+          dispatch(reveviceStats(json.data))
+        }
       })
   };
 }

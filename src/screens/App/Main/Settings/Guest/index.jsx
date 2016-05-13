@@ -91,6 +91,7 @@ export const Bandwidth = React.createClass({
 
     return (
       <div>
+        <h3>{ _('Current Group') }</h3>
         <div className="form-group">
           <label htmlFor="">{msg.selectGroup}</label>
           <div className="form-control">
@@ -144,7 +145,7 @@ export const Bandwidth = React.createClass({
               className="text"
               value={currData.get('password')}
               updater={this.onUpdate('password')}
-            /> : ''
+            /> : null
         }
         
         <div className="form-group">

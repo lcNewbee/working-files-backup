@@ -10,19 +10,27 @@ function updateData(state, name, value) {
 
 let defaultState = fromJS({
   fetching: false,
+  query: {
+    sort_type: 1,
+    time_type: 'today' 
+  },
   data: {
-    username: '',
-    password: ''
+    apInfo: {},
+    clientInfo: {
+      
+    },
+    aplist: [],
+    clientlist: []
   }
 });
 
 export default function(state = defaultState, action) {
   switch (action.type) {
-    case 'UPDATE_DATA':
-      return updateData(state, action.name, action.value);
-
-    case 'REQEUST_LOGIN':
+    case 'REQEUST_STATS':
       return setFetching(state);
+
+    case 'REVEVICE_STATS':
+      return state.mergeIn(['data'], action.data);
 
   }
   return state;

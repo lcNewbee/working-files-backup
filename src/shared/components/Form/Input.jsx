@@ -84,12 +84,13 @@ export const FormGruop = React.createClass({
       {
         this.props.label ?
           <label htmlFor={this.props.name}>{this.props.label}</label> :
-          ''
+          null
       }
       <div className="form-control">
         <Input {...this.props} />
         {
-          this.props.help ? <span className="help">{this.props.help}</span> : ''
+          this.props.help ? <span className="help">{this.props.help}</span> :
+          null
         }
       </div>
     </div>

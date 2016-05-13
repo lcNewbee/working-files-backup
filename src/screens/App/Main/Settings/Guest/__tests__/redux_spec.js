@@ -6,7 +6,7 @@ import * as actions from '../actions';
 
 describe('Bandwidth Rudex', () => {
   
-  it('should change data.curr when CHANGE_WIFI_GROUP', () => {
+  it('should change data.curr when CHANGE_GUEST_GROUP', () => {
     const initialState = fromJS({
       data: {
          "list": [
@@ -35,7 +35,7 @@ describe('Bandwidth Rudex', () => {
       }
     });
     
-    let action = actions.changeQosGroup("group33547");
+    let action = actions.changeGuestGroup("group33547");
     
     let nextState = reducer(initialState, action);
     let expectMap = fromJS({
@@ -69,7 +69,7 @@ describe('Bandwidth Rudex', () => {
     expect(nextState).to.be.equal(expectMap);
   });
   
-  it('should updata data.curr when CHANGE_QOS_SETTINGS', () => {
+  it('should updata data.curr when CHANGE_GUEST_SETTINGS', () => {
     const initialState = fromJS({
       data: {
         curr: {
@@ -80,7 +80,7 @@ describe('Bandwidth Rudex', () => {
       }
     });
     
-    let action = actions.changeQosSettings({
+    let action = actions.changeGuestSettings({
       "downstream": "12",
       "upstream": "33"
     });

@@ -83,5 +83,7 @@
   "NONE": "不加密",
   "STRONG": "强加密",
   
-  "Use VLAN ID:": "使用 VLAN ID："
+  "Use VLAN ID:": "使用 VLAN ID：",
+  "Activity": "活跃度",
+  "Connect Time": "连接时长"
 }

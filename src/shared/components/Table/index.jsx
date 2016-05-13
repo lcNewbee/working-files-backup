@@ -70,7 +70,7 @@ export class Table extends Component {
           this.props.page ? <Pagination
             page={this.props.page}
             onPageChange={this.props.onPageChange}
-          /> : ''
+          /> : null
         }
       </div>
     )
