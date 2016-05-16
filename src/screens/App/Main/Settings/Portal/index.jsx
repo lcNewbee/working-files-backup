@@ -111,13 +111,13 @@ export const Portal = React.createClass({
           updater={this.onUpdate('url')}
         />
         <FormGruop
-          label={_('Portal Title')}
+          label={_('Title')}
           name="title"
           value={currData.get('title')}
           updater={this.onUpdate('title')}
         />
         <FormGruop
-          label={_('Portal Timeout')}
+          label={_('Timeout')}
           help={_('Seconds')}
           name="timeout"
           value={currData.get('timeout')}
@@ -131,7 +131,7 @@ export const Portal = React.createClass({
         />
         
         <div className="images-list">
-          <p className="form-group">选择网页幻灯片图片 选择1-3张，宽高尺寸为640px*640px</p>
+          <p className="form-group">{_('msg_select_img')}</p>
           {
             currData.get('image') ? currData.get('image').map(function(item){
               return <img src={item.get('image')} key={item.get('count')} />
@@ -149,7 +149,7 @@ export const Portal = React.createClass({
           <label htmlFor="filename">
             <Button
               type='button'
-              text={_('Upload Image 1')}
+              text={_('Upload Image') + ' 1'}
               role="upload"
               onClick={this.onUploadImage(1)}
             />
@@ -170,7 +170,7 @@ export const Portal = React.createClass({
           <label htmlFor="filename">
             <Button
               type='button'
-              text={_('Upload Image 2')}
+              text={_('Upload Image') + ' 2'}
               role="upload"
               onClick={this.onUploadImage(3)}
             />
@@ -191,7 +191,7 @@ export const Portal = React.createClass({
           <label htmlFor="filename">
             <Button
               type='button'
-              text={_('Upload Image 3')}
+              text={_('Upload Image') + ' 3'}
               role="upload"
               onClick={this.onUploadImage(3)}
             />

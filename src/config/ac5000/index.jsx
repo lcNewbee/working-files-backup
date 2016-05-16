@@ -111,17 +111,17 @@ let routes = [{
           },{
             id: 'portal',
             path: '/main/settings/portal',
-            text: _('Portal设置'),
+            text: _(_('Portal Settings')),
             component: sPortal.Screen
           },{
             id: 'guest',
             path: '/main/settings/guest',
-            text: _('来宾用户设置'),
+            text: _('Guest'),
             component: sGuest.Screen
           },{
             id: 'password',
             path: '/main/settings/admin',
-            text: _('管理员'),
+            text: _('Admin'),
             component: sPassword.Screen
           }
         ]

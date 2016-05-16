@@ -292,14 +292,14 @@ export const Status = React.createClass({
         'id': 'hostname',
         'text': _('Name')
       }, {
-        'id': 'ip/mac',
-        'text':  _('IP/MAC Address'),
-        transform(item) {
-          return item.get('ipaddress') + '/' + item.get('macaddress');
-        }
+        'id': 'ipaddress',
+        'text':  _('IP Address')
+      }, {
+        'id': 'macaddress',
+        'text':  _('MAC Address')
       }, {
         'id': 'softversion',
-        'text':  _('UP/Down Flow '),
+        'text':  _('UP/Down Flow'),
         transform(item) {
           return item.get('upstream') + '/' + item.get('downstream');
         }
@@ -321,7 +321,7 @@ export const Status = React.createClass({
         'text':  _('MAC Address')
       }, {
         'id': 'up/down flow',
-        'text':  _('UP/Down Flow '),
+        'text':  _('UP/Down Flow'),
         transform(item) {
           return item.get('upstream') + '/' + item.get('downstream');
         }
