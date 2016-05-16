@@ -1,10 +1,23 @@
 {
   "STATISTICS": "热点统计",
-  "Statistics Info": "设备信息",
+  "Statistics": "热点统计",
+  "Statistics Info": "统计信息",
+  "AP Number": "AP数量",
+  "Clients Number": "客户端数量",
+  "AP Status Characterize": "AP状态分布",
+  "Total:": "总数：",
+  "offline:": "在线",
+  "online:": "离线",
+  "Clients Frequency Characterize": "客服端频段分布",
+  "Clients Producter Characterize": "客服端产商分布",
+  
   "DEVICES": "设备",
   "Devices Info": "设备信息",
+  
   "CLIENTS": "客户端",
   "Clients Info": "客户端信息",
+  "LOCKED": "已封锁",
+  
   "LOGS": "日志",
   "Logs": "日志",
   "REPORTS": "统计报表",
@@ -85,5 +98,9 @@
   
   "Use VLAN ID:": "使用 VLAN ID：",
   "Activity": "活跃度",
-  "Connect Time": "连接时长"
+  "Connect Time": "连接时长",
+  
+  "Days": "天",
+  "Today": "今天",
+  "Yesterday": "昨天"
 }

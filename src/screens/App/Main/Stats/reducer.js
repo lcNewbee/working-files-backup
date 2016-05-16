@@ -11,7 +11,7 @@ function updateData(state, name, value) {
 let defaultState = fromJS({
   fetching: false,
   query: {
-    sort_type: 1,
+    sort_type: '1',
     time_type: 'today' 
   },
   data: {
@@ -31,6 +31,9 @@ export default function(state = defaultState, action) {
 
     case 'REVEVICE_STATS':
       return state.mergeIn(['data'], action.data);
+    
+    case 'CHANGE_STATS_QUERY':
+      return state.mergeIn(['query'], action.data);
 
   }
   return state;

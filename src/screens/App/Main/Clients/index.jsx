@@ -65,7 +65,8 @@ const typeArr = fromJS([
   _('ALL'),
   _('WIRELESS'),
   _('WIRED'),
-  _('GUEST')
+  _('GUEST'),
+  _('LOCKED'),
 ]);
 
 const styles = {
@@ -184,6 +185,38 @@ export const Clients = React.createClass({
         )
       }.bind(this)
     )
+    
+    const blockOption = fromJS([
+      {
+        'id': 'devicename',
+        'text': _('MAC Address') + '/' + _('Name')
+      }, {
+        'id': 'ssid',
+        'text': 'SSID'
+      }, {
+        id: 'op',
+        text: _('Actions'),
+        transform: function(item) {
+          var deviceMac = item.get('devicename').split('/')[0];
+          var isLock = item.get('islock') === 'lock' ? true : false;
+          
+          return (
+            <Button
+              role="unlock"
+              size="sm"
+              text={msg.unlock}
+              style={styles.actionButton}
+              onClick={this.onAction.bind(this, deviceMac, 'unlock')}
+            />
+          );
+        }.bind(this)
+      }
+    ]);
+    let tableOptions = options;
+    
+    if(this.props.query.get('type') == '4') {
+      tableOptions = blockOption;
+    }
 
     return (
       <div className="page-device">
@@ -228,7 +261,7 @@ export const Clients = React.createClass({
 
         <Table
           className="table"
-          options={options}
+          options={tableOptions}
           list={this.props.data.get('list')}
           page={this.props.data.get('page')}
           onPageChange={this.onPageChange}

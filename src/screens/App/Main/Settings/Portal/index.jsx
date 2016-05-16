@@ -135,7 +135,7 @@ export const Portal = React.createClass({
           {
             currData.get('image') ? currData.get('image').map(function(item){
               return <img src={item.get('image')} key={item.get('count')} />
-            }) : ''
+            }) : null
           }
         </div>
         

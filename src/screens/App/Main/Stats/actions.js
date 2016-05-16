@@ -27,3 +27,10 @@ export function fetchStatus() {
       })
   };
 }
+
+export function changeStatsQuery(data) {
+  return {
+    type: 'CHANGE_STATS_QUERY',
+    data
+  };
+}
