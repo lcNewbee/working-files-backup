@@ -26,7 +26,7 @@ b28n.init({
 const App = require('../../screens/App');
 
 // 登录界面
-const pLogin = require('../../screens/App/Login');
+const pLogin = require('../../screens/App/screens/Login');
 
 // 布局
 const Main = require('../../screens/App/screens/Main');
@@ -40,7 +40,6 @@ const pDevices = require('../../screens/App/screens/Main/screens/Devices');
 
 // 设备地图
 const pDeviceMap = require('../../screens/App/screens/Main/screens/DeviceMap');
-
 const pStatistics = require('../../screens/App/screens/Main/screens/Statistics');
 const pLogs = require('../../screens/App/screens/Main/screens/Logs');
 const pClients = require('../../screens/App/screens/Main/screens/Clients');

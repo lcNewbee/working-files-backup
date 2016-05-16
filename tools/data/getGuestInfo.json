@@ -4,8 +4,7 @@
       "msg": "ok"
   },
       
-  "data":{  
-      
+  "data":{
       "list": [
           {
             "groupname": "group231",
@@ -13,6 +12,9 @@
             "guestssid": "www",
             "encryption": "none",
             "password": "",
+            "startip": "192.168.8.1",
+            "endip": "192.168.8.1",
+            "mask": "255.255.0.0",
             "portalenable": "1"
           },
           {
@@ -21,6 +23,9 @@
             "guestssid": "www",
             "encryption": "psk-mixed",
             "password": "12345678",
+            "startip": "192.168.8.1",
+            "endip": "192.168.8.1",
+            "mask": "",
             "portalenable": "0"
           },
           {
@@ -29,6 +34,9 @@
             "guestssid": "www",
             "encryption": "none",
             "password": "12345678",
+            "startip": "192.168.8.1",
+            "endip": "192.168.8.1",
+            "mask": "255.255.0.0",
             "portalenable": "1"
           }
       ]

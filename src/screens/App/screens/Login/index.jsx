@@ -25,9 +25,9 @@ const formGroups = [
     type: 'password',
     name: 'password',
     maxLength: 21,
-    placeholder: 'Password',
+    placeholder: _('Password'),
     validator: {
-      label: '密码',
+      label: _('Password'),
       rules: 'required|matches[1,23]'
     }
   }
@@ -89,10 +89,10 @@ export const Login = React.createClass({
     return (
       <div>
         <header className="navbar">
-          <a href="" className="brand">Comlanos 管理系统</a>
+          <a href="" className="brand">Comlanos {_('Management')}</a>
         </header>
         <div className="login">
-          <h1>Please Login</h1>
+          <h1>{_('Please Login')}</h1>
           {formGruopList}
           {
             this.props.status !== 'ok' ?
@@ -101,7 +101,7 @@ export const Login = React.createClass({
           }
           <button className="btn"
             onClick={this.onClickLogin}>
-            Login
+            {_('Login')}
           </button>
         </div>
       </div>

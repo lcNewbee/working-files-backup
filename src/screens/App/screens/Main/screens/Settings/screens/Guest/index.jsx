@@ -88,6 +88,12 @@ export const Bandwidth = React.createClass({
    ];
     
     const currData =  this.props.data.get('curr');
+    
+    let settngClassName = 'none';
+    
+    if(currData.get('enable') == '1') {
+      settngClassName = '';
+    }
 
     return (
       <div>
@@ -118,46 +124,71 @@ export const Bandwidth = React.createClass({
           </div>
         </div>
         
-        <FormGruop
-          label={ _('Guest SSID') }
-          value={currData.get('guestssid')}
-          updater={this.onUpdate('guestssid')}
-        />
-        
-        <div className="form-group">
-          <label htmlFor="">{ _('Encryption') }</label>
-          <div className="form-control">
-            <Select
-              clearable={false}
-              value={currData.get('encryption')}
-              options={encryptionOptions}
-              searchable={false}
-              onChange={this.onChangeEncryption}
-            />
+        <div className={settngClassName}>
+          <FormGruop
+            label={ _('Guest SSID') }
+            value={currData.get('guestssid')}
+            updater={this.onUpdate('guestssid')}
+          />
+          
+          <div className="form-group">
+            <label htmlFor="">{ _('Encryption') }</label>
+            <div className="form-control">
+              <Select
+                clearable={false}
+                value={currData.get('encryption')}
+                options={encryptionOptions}
+                searchable={false}
+                onChange={this.onChangeEncryption}
+              />
+            </div>
           </div>
-        </div>
-        
-        {
-          currData.get('encryption') === 'psk-mixed' ?
-            <FormGruop
-              label={ _('Password') }
-              type="password"
-              className="text"
-              value={currData.get('password')}
-              updater={this.onUpdate('password')}
-            /> : null
-        }
-        
-        <div className="form-group">
-          <label htmlFor="">{ _('Portal Enable') }</label>
-          <div className="form-control">
-            <input
-              type="checkbox"
-              checked={currData.get('portalenable') == '1'}
-              onChange={this.onUpdate('portalenable')}
-            />
-            <span className="help">{_('Enable')}</span>
+          
+          {
+            currData.get('encryption') === 'psk-mixed' ?
+              <FormGruop
+                label={ _('Password') }
+                type="password"
+                className="text"
+                value={currData.get('password')}
+                updater={this.onUpdate('password')}
+              /> : null
+          }
+          
+          <div className="form-group">
+            <label htmlFor="">{ _('Portal Enable') }</label>
+            <div className="form-control">
+              <input
+                type="checkbox"
+                checked={currData.get('portalenable') == '1'}
+                onChange={this.onUpdate('portalenable')}
+              />
+              <span className="help">{_('Enable')}</span>
+            </div>
           </div>
+          
+          <div className="form-group">
+            <label htmlFor="">{ _('DHCP Range') }</label>
+            <div className="form-control">
+              <input
+                type="text"
+                value={currData.get('startip')}
+                onChange={this.onUpdate('startip')}
+              />
+              -
+              <input
+                type="text"
+                value={currData.get('endip')}
+                onChange={this.onUpdate('endip')}
+              />
+            </div>
+          </div>
+          
+          <FormGruop
+            label={ _('Subnet Mask') }
+            value={currData.get('mask')}
+            updater={this.onUpdate('mask')}
+          />
         </div>
         
         <div className="form-group">

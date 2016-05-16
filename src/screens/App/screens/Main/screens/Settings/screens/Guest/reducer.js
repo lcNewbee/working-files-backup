@@ -3,7 +3,8 @@ import Immutable, {Map, List, fromJS} from 'immutable';
 const defaultState = fromJS({
   data: {
     list: [],
-    curr: {}
+    curr: {
+    }
   }
 });
 

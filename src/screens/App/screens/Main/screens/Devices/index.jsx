@@ -28,32 +28,6 @@ const selectOptions = [
   { value: 100, label: labelPre + '100' },
 ];
 
-const devicesTableOptions = fromJS([{
-    'id': 'devicename',
-    'text': _('MAC Address') + '/' + _('Name')
-  }, {
-    'id': 'ip',
-    'text': _('IP Address')
-  }, {
-    'id': 'status',
-    'text': _('Online Status')
-  }, {
-    'id': 'model',
-    'text': _('Model')
-  }, {
-    'id': 'softversion',
-    'text':  _('Version')
-  }, {
-    'id': 'channel',
-    'text': _('Channel')
-  }, {
-    'id': 'operationhours',
-    'text': _('Uptime')
-  }, {
-    id: 'op',
-    text: _('Actions')
-  }]);
-
 // 原生的 react 页面
 export const Device = React.createClass({
   mixins: [PureRenderMixin],
@@ -145,9 +119,31 @@ export const Device = React.createClass({
   },
 
   render() {
-    // 添加操作项
-    const options = devicesTableOptions.setIn([-1, 'transform'],
-      function(item) {
+    const devicesTableOptions = fromJS([{
+      'id': 'devicename',
+      'text': _('MAC Address') + '/' + _('Name')
+    }, {
+      'id': 'ip',
+      'text': _('IP Address')
+    }, {
+      'id': 'status',
+      'text': _('Online Status')
+    }, {
+      'id': 'model',
+      'text': _('Model')
+    }, {
+      'id': 'softversion',
+      'text':  _('Version')
+    }, {
+      'id': 'channel',
+      'text': _('Channel')
+    }, {
+      'id': 'operationhours',
+      'text': _('Uptime')
+    }, {
+      id: 'op',
+      text: _('Actions'),
+      transform: function(item) {
         var deviceMac = item.get('devicename').split('/')[0];
       
         return (
@@ -173,7 +169,8 @@ export const Device = React.createClass({
           </div>
         )
       }.bind(this)
-    )
+    }]);
+   
     
     return (
       <div className="page-device">
@@ -218,7 +215,7 @@ export const Device = React.createClass({
 
         <Table
           className="table"
-          options={options}
+          options={devicesTableOptions}
           list={this.props.data.get('list')}
           page={this.props.data.get('page')}
           onPageChange={this.onPageChange}
