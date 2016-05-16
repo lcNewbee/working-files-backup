@@ -76,7 +76,6 @@
     "es6-promise": "^3.1.2",
     "fetch-detector": "^1.0.0",
     "fetch-ie8": "^1.4.2",
-    "fixed-data-table": "^0.6.0",
     "font-awesome": "^4.6.1",
     "immutable": "^3.7.6",
     "react": "^0.14.7",

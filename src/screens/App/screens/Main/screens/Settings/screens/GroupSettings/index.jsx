@@ -4,7 +4,6 @@ import {fromJS} from 'immutable';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import * as actions from './actions';
-import {fetchDevices} from '../../Devices/actions';
 import reducer from './reducer';
 
 import {FormGruop} from 'components/Form/Input';
@@ -214,14 +213,11 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(Object.assign({fetchDevices}, actions), dispatch)
-}
 
 // 添加 redux 属性的 react 页面
 export const View = connect(
   mapStateToProps,
-  mapDispatchToProps
+  actions
 )(GroupSettings);
 
 export const settings = reducer;

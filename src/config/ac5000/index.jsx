@@ -29,29 +29,29 @@ const App = require('../../screens/App');
 const pLogin = require('../../screens/App/Login');
 
 // 布局
-const Main = require('../../screens/App/Main');
-const Settings = require('../../screens/App/Main/Settings');
+const Main = require('../../screens/App/screens/Main');
+const Settings = require('../../screens/App/screens/Main/screens/Settings');
 
 // 热点统计
-const pStatus = require('../../screens/App/Main/Stats');
+const pStatus = require('../../screens/App/screens/Main/screens/Stats');
 
 // 设备
-const pDevices = require('../../screens/App/Main/Devices');
+const pDevices = require('../../screens/App/screens/Main/screens/Devices');
 
 // 设备地图
-const pDeviceMap = require('../../screens/App/Main/DeviceMap');
+const pDeviceMap = require('../../screens/App/screens/Main/screens/DeviceMap');
 
-const pStatistics = require('../../screens/App/Main/Statistics');
-const pLogs = require('../../screens/App/Main/Logs');
-const pClients = require('../../screens/App/Main/Clients');
+const pStatistics = require('../../screens/App/screens/Main/screens/Statistics');
+const pLogs = require('../../screens/App/screens/Main/screens/Logs');
+const pClients = require('../../screens/App/screens/Main/screens/Clients');
 
 // 设置
-const pGroupSettings = require('../../screens/App/Main/Settings/GroupSettings');
-const sBandwidth = require('../../screens/App/Main/Settings/Bandwidth');
-const sWireless = require('../../screens/App/Main/Settings/Wireless');
-const sPortal = require('../../screens/App/Main/Settings/Portal');
-const sGuest = require('../../screens/App/Main/Settings/Guest');
-const sPassword = require('../../screens/App/Main/Settings/Password');
+const pGroupSettings = require('../../screens/App/screens/Main/screens/Settings/screens/GroupSettings');
+const sBandwidth = require('../../screens/App/screens/Main/screens/Settings/screens/Bandwidth');
+const sWireless = require('../../screens/App/screens/Main/screens/Settings/screens/Wireless');
+const sPortal = require('../../screens/App/screens/Main/screens/Settings/screens/Portal');
+const sGuest = require('../../screens/App/screens/Main/screens/Settings/screens/Guest');
+const sPassword = require('../../screens/App/screens/Main/screens/Settings/screens/Password');
 
 let routes = [{
     path: '/',
