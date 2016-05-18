@@ -12,7 +12,10 @@
         "encryption": "none",
         "password": "124567786",
         "vlanenable": "0",
-        "vlanid": "1"
+        "vlanid": "1",
+        "country": "AR",
+        "channel": "12",
+        "channelsBandwidth": "20"
       },
       {
         "groupname": "group33333",
@@ -21,7 +24,10 @@
         "encryption": "psk-mixed",
         "password": "124567786",
         "vlanenable": "1",
-        "vlanid": "1"
+        "vlanid": "1",
+        "country": "AR",
+        "channel": "12",
+        "channelsBandwidth": "20"
       },
       {
         "groupname": "group33547",
@@ -30,7 +36,10 @@
         "encryption": "psk-mixed",
         "password": "124567786",
         "vlanenable": "1",
-        "vlanid": "1"
+        "vlanid": "1",
+        "country": "AM",
+        "channel": "12",
+        "channelsBandwidth": "20"
       }
     ]
   }

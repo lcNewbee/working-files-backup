@@ -47,6 +47,12 @@ label {
     color: #999;
     margin-left: 10px;
     line-height: 28px;
+    display: inline-block;
+  }
+  .error {
+    display: inline-block;
+    margin-top: 5px;
+    color: red;
   }
 }
 

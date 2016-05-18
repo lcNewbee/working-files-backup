@@ -10,6 +10,7 @@ import {Table} from 'components/Table';
 import {Search} from 'components/Form/Input';
 import Button from 'components/Button';
 import Select from 'components/Select';
+import Modal from 'components/Modal';
 
 // css
 import './_index.scss';
@@ -117,29 +118,43 @@ export const Device = React.createClass({
     });
     this.handleSearch()
   },
+  
+  showEditDevice() {
+    
+  },
 
   render() {
     const devicesTableOptions = fromJS([{
-      'id': 'devicename',
-      'text': _('MAC Address') + '/' + _('Name')
+      id: 'devicename',
+      text: _('MAC Address') + '/' + _('Name')
     }, {
-      'id': 'ip',
-      'text': _('IP Address')
+      id: 'ip',
+      text: _('IP Address'),
+      transform: function(item) {
+        return (
+          <span
+            className="link-text"
+            onClick={this.showEditNetwork}
+          >
+            {item.get('ip')}
+          </span>
+        )
+      }.bind(this)
     }, {
-      'id': 'status',
-      'text': _('Online Status')
+      id: 'status',
+      text: _('Online Status')
     }, {
-      'id': 'model',
-      'text': _('Model')
+      id: 'model',
+      text: _('Model')
     }, {
-      'id': 'softversion',
-      'text':  _('Version')
+      id: 'softversion',
+      text:  _('Version')
     }, {
-      'id': 'channel',
-      'text': _('Channel')
+      id: 'channel',
+      text: _('Channel')
     }, {
-      'id': 'operationhours',
-      'text': _('Uptime')
+      id: 'operationhours',
+      text: _('Uptime')
     }, {
       id: 'op',
       text: _('Actions'),
@@ -220,7 +235,13 @@ export const Device = React.createClass({
           page={this.props.data.get('page')}
           onPageChange={this.onPageChange}
         />
-
+        
+        <Modal
+          isShow={this.props.edit ? true : false}
+          title="ds"
+        >
+         
+        </Modal>
       </div>
     );
   }
@@ -233,7 +254,8 @@ function mapStateToProps(state) {
     fetching: myState.get('fetching'),
     query: myState.get('query'),
     updateAt: myState.get('updateAt'),
-    data: myState.get('data')
+    data: myState.get('data'),
+    edit: myState.get('edit'),
   };
 }
 

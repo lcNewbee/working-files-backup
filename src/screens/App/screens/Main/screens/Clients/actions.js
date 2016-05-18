@@ -73,6 +73,8 @@ export function saveClientsAction() {
 
     dispatch(reqeustFetchClients());
     
+    query.type = getState().clients.getIn(['query', 'type']);
+    
     utils.save(ACTION_URL, query)
       .then(function(json) {
         if(json.state && json.state.code === 2000) {

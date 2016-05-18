@@ -2,6 +2,12 @@ import React from 'react';
 import Icon from '../Icon';
 
 export const Input = React.createClass({
+  getInitialState: function() {
+    return {
+      errMsg: ''
+    }
+  },
+  
   getType: function () {
     return this.props.type || 'text';
   },
@@ -10,11 +16,18 @@ export const Input = React.createClass({
     let ret = this.props.value;
     return ret;
   },
-
+  
+  onBlur: function() {
+    
+      
+      this.props.checkValue();
+  },
+  
   //
   handleChange: function (e) {
     if (typeof this.props.updater === 'function') {
       this.props.updater(e);
+      this.props.checkValue();
     }
   },
 
@@ -27,13 +40,13 @@ export const Input = React.createClass({
       className = 'text';
     }
     id = id || name;
-    
     return <input {...this.props}
       id={id}
       type={this.getType()}
       value={this.getValue()}
       className={className}
       onChange={this.handleChange}
+      onBlur={this.onBlur}
     />;
   }
 });
@@ -73,13 +86,20 @@ export const Search = React.createClass({
 });
 
 export const FormGruop = React.createClass({
-
-  renderValidator() {
-
+  getInitialState() {
+    return {};
+  },
+  
+  checkValue() {
+    if(this.props.validator) {
+      this.setState({
+        errMsg: this.props.validator.check(this.props.value)
+      });
+    }
   },
 
   render() {
-
+    
     return <div className="form-group">
       {
         this.props.label ?
@@ -87,11 +107,15 @@ export const FormGruop = React.createClass({
           null
       }
       <div className="form-control">
-        <Input {...this.props} />
+        <Input 
+          {...this.props}
+          checkValue={this.checkValue}
+        />
         {
           this.props.help ? <span className="help">{this.props.help}</span> :
           null
         }
+        { this.state.errMsg ? <span className="error">{this.state.errMsg}</span> : null}
       </div>
     </div>
   }

@@ -144,6 +144,10 @@ export const Clients = React.createClass({
       page: i
     }, true);
   },
+  
+  showEditNetwork() {
+    
+  },
 
   render() {
     // 添加操作项
@@ -184,7 +188,7 @@ export const Clients = React.createClass({
           </div>
         )
       }.bind(this)
-    )
+    );
     
     const blockOption = fromJS([
       {
@@ -266,7 +270,7 @@ export const Clients = React.createClass({
           page={this.props.data.get('page')}
           onPageChange={this.onPageChange}
         />
-
+        
       </div>
     );
   }
@@ -280,7 +284,8 @@ function mapStateToProps(state) {
     query: myState.get('query'),
     updateAt: myState.get('updateAt'),
     data: myState.get('data'),
-    page: myState.get('page')
+    page: myState.get('page'),
+    edit: myState.get('edit'),
   };
 }
 

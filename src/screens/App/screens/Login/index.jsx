@@ -3,42 +3,34 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {Input, FormGruop} from 'components/Form/Input';
+import {fromJS, Map} from 'immutable';
+import validator from 'utils/lib/validator';
 import * as actions from './actions';
 import reducer from './reducer';
 
 import './_login.scss';
 
-
-const formGroups = [
-  // {
-  //   //label: '用户名',
-  //   name: 'username',
-  //   maxLength: 23,
-  //   placeholder: 'Username',
-  //   validator: {
-  //     label: '用户名',
-  //     rules: 'required|matches[1,23]'
-  //   }
-  // },
-  {
-    //label: '密码',
-    type: 'password',
-    name: 'password',
-    maxLength: 21,
-    placeholder: _('Password'),
-    validator: {
+const formGroups = Map({
+  password: {
+    input: {
+      type: 'password',
+      name: 'password',
+      maxLength: 21,
+      placeholder: _('Password'),
+    },
+    validator: validator({
       label: _('Password'),
-      rules: 'required|matches[1,23]'
-    }
+      rules: 'required'
+    })
   }
-];
+});
 
 // 原生的 react 页面
 export const Login = React.createClass({
   mixins: [PureRenderMixin],
 
   componentWillMount() {
-
+    
   },
 
   componentWillReceiveProps(nextProps) {
@@ -52,9 +44,26 @@ export const Login = React.createClass({
 
     }
   },
+  
+  checkData() {
+    var data = this.props.data.toJS();
+    var passCheck = validator.check(data.password, 'required');
+    
+    return passCheck;
+  },
 
-  onClickLogin(e) {
-    this.props.login();
+  onLogin() {
+    var checkRusult = this.checkData();
+    
+    // 如果有验证错误信息
+    if(checkRusult) {
+      this.props.loginResult(checkRusult)
+      
+    //
+    } else {
+      this.props.login();
+    }
+    
   },
 
   onChangeData(name) {
@@ -71,21 +80,33 @@ export const Login = React.createClass({
     return typeof this.props.data.get === 'function' ?
       this.props.data.get(name) : this.props.data[name];
   },
+  
+  onInputKeyUp(e) {
+    
+    if(e.which === 13) {
+      this.onLogin();
+    }
+  },
 
   render() {
-    var formGruopList = [];
+    var formGruopList;
     var that = this;
+    var myMsg = this.props.status;
 
-    formGroups.forEach(function (item) {
-      formGruopList.push(
+    formGruopList = formGroups.toArray().map(function(item) {
+      var input = item.input;
+      
+      return (
         <FormGruop
-          {...item}
-          key={item.name}
-          value={this.getDataValue(item.name) }
-          updater={this.onChangeData(item.name) }
+          {...input}
+          key={input.name}
+          value={this.getDataValue(input.name) }
+          updater={this.onChangeData(input.name) }
+          onKeyUp={this.onInputKeyUp}
         />
-      )
+      );
     }.bind(this));
+    
     return (
       <div>
         <header className="navbar">
@@ -100,7 +121,7 @@ export const Login = React.createClass({
               ''
           }
           <button className="btn"
-            onClick={this.onClickLogin}>
+            onClick={this.onLogin}>
             {_('Login')}
           </button>
         </div>

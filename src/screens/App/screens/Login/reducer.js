@@ -14,7 +14,8 @@ export default function(
       return state.update('data', obj => obj.merge(action.data));
 
     case 'REQEUST_LOGIN':
-      return state.update('fetching', val => true);
+      return state.update('fetching', val => true)
+        .set('status', '');
 
     case 'RESPONSE_LOGIN':
       return state.merge({

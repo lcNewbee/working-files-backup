@@ -14,6 +14,13 @@ export function loginResult(result) {
   }
 }
 
+export function checkResult(result) {
+  return {
+    type: "checkResult",
+    result
+  }
+}
+
 export function updateData(data) {
   return {
     type: 'UPDATE_DATA',

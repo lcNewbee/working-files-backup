@@ -1,10 +1,13 @@
 'use strict';
 var utils = require('./core');
 var string = require('./string');
-var _ = string.format;
 var validator = function(options) {
   return new validator.fn.init(options);
-};;
+};
+
+if(!_) {
+  _ = string.format;
+}
 
 // 验证函数
 var vaildate = {
@@ -170,7 +173,7 @@ var vaildate = {
 
   required: function(str) {
     if (str === undefined || str === '') {
-      return _('It required');
+      return _('This field is required');
     }
   }
 };
@@ -203,7 +206,7 @@ function getRulesObj(rules) {
   var ruleObj;
   
   if(typeof rules !== 'string') {
-    throw new TypeError('Rules must be called with string');
+    throw new TypeError('validator Rules must be called with string');
   }
 
   for (var i = 0; i < rulesArr.length; i++) {
