@@ -3,7 +3,7 @@ import remoteActionMiddleware from 'utils/lib/remote_action_middleware';
 import {combineReducers} from 'redux';
 
 // 公用 样式
-import 'scss/main.scss';
+import 'scss/styles.scss';
 import 'font-awesome/css/font-awesome.css';
 
 // 多语言工具

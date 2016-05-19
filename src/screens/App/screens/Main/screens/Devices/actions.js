@@ -42,7 +42,6 @@ export function locateDevice(mac) {
   };
 }
 
-
 export function fetchDevices() {
   const url = '/goform/getApDevInfo';
   
@@ -72,6 +71,69 @@ export function saveDevicesAction(data) {
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(fetchDevices(json.data));
+        }
+      });
+  };
+}
+
+// Edit
+export function reqeustFetchDeviceNetwork(mac) {
+  return {
+    type: 'REQEUST_FETCH_DEVICE_NETWORK',
+    mac,
+  };
+}
+export function reciveFetchDeviceNetwork(data) {
+  return {
+    type: 'RECIVE_FETCH_DEVICE_NETWORK',
+    data,
+  };
+}
+export function changeDeviceNetwork(data) {
+  return {
+    type: 'CHANGE_DEVICE_NETWORK',
+    data
+  }
+}
+
+export function closeDeviceEdit() {
+  return {
+    type: 'CLOSE_DEVICE_EDIT',
+  };
+}
+
+export function fetchDeviceNetwork(mac) {
+  const url = '/goform/getDeviceNetwork';
+  
+  return (dispatch, getState) => {
+    const query = {
+      mac: mac
+    };
+    dispatch(reqeustFetchDeviceNetwork(mac));
+
+    utils.fetch(url, query)
+      .then((json) => {
+        if (json.state && json.state.code === 2000) {
+          dispatch(reciveFetchDeviceNetwork(json.data));
+        }
+      });
+  };
+}
+
+
+export function saveDeviceNetwork(mac) {
+  const url = '/goform/setDeviceNetwork';
+  
+  return (dispatch, getState) => {
+    const data = getState().devices.get('edit').toJS();
+    
+    dispatch(reqeustFetchDevices());
+
+    utils.save(url, data)
+      .then((json) => {
+        if (json.state && json.state.code === 2000) {
+          dispatch(closeDeviceEdit());
+          dispatch(fetchDevices());
         }
       });
   };

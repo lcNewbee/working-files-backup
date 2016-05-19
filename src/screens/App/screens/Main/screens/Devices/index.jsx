@@ -4,13 +4,14 @@ import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import * as actions from './actions';
 import reducer from './reducer';
-import {fromJS} from 'immutable';
+import {fromJS, Map} from 'immutable';
 
 import {Table} from 'components/Table';
-import {Search} from 'components/Form/Input';
+import {Search, FormGruop} from 'components/Form/Input';
 import Button from 'components/Button';
 import Select from 'components/Select';
 import Modal from 'components/Modal';
+import Switchs from 'components/Switchs';
 
 // css
 import './_index.scss';
@@ -119,8 +120,32 @@ export const Device = React.createClass({
     this.handleSearch()
   },
   
-  showEditDevice() {
+  showEditNetwork(mac) {
     
+    return function(e) {
+      this.props.fetchDeviceNetwork(mac)
+    }.bind(this);
+  },
+  
+  onChangeConnectType(data) {
+    this.props.changeDeviceNetwork({
+      connect_type: data.value
+    });
+  },
+  
+  onChangeDeviceNetwork(name) {
+     return function(e) {
+       var val = e.target.value;
+       var data = {};
+       
+       data[name] = val;
+       
+       this.props.changeDeviceNetwork(data);
+     }.bind(this)
+  },
+  
+  onSaveDeviceNetWork() {
+    this.props.saveDeviceNetwork();
   },
 
   render() {
@@ -131,10 +156,13 @@ export const Device = React.createClass({
       id: 'ip',
       text: _('IP Address'),
       transform: function(item) {
+        var deviceMac = item.get('mac');
+        
         return (
           <span
             className="link-text"
-            onClick={this.showEditNetwork}
+            onClick={this.showEditNetwork(deviceMac)}
+            value={deviceMac}
           >
             {item.get('ip')}
           </span>
@@ -185,6 +213,17 @@ export const Device = React.createClass({
         )
       }.bind(this)
     }]);
+    
+    const currData = this.props.edit || Map({});
+    const typeOptions = fromJS([
+      {
+        value: 'dhcp',
+        label: 'DHCP'
+      }, {
+        value: 'static',
+        label: _('Static IP')
+      }
+    ]);
    
     
     return (
@@ -238,9 +277,55 @@ export const Device = React.createClass({
         
         <Modal
           isShow={this.props.edit ? true : false}
-          title="ds"
+          title={currData.get('mac')}
+          onClose={this.props.closeDeviceEdit}
+          onOk={this.saveDeviceNetwork}
         >
-         
+          <div className="form-group">
+            <label htmlFor="">{_('Connect Type')}</label>
+            <div className="form-control">
+              <Switchs
+                options={typeOptions}
+                clearable={false}
+                onChange={this.onChangeConnectType}
+                value={currData.get('connect_type')}
+              />
+            </div>
+          </div>
+          {
+            currData.get('connect_type') === 'static' ? (
+              <div>
+                <FormGruop
+                  label={_('IP Address')}
+                  value={currData.get('ip')}
+                  updater={this.onChangeDeviceNetwork('ip')}
+                />
+               
+                <FormGruop
+                  label={_('Subnet Mask')}
+                  value={currData.get('mask')}
+                  updater={this.onChangeDeviceNetwork('mask')}
+                />
+               
+                <FormGruop
+                  label={_('Gateway')}
+                  value={currData.get('gateway')}
+                  updater={this.onChangeDeviceNetwork('gateway')}
+                />
+                <FormGruop
+                  label={_('DNS 1')}
+                  value={currData.get('main_dns')}
+                  updater={this.onChangeDeviceNetwork('main_dns')}
+                />
+                <FormGruop
+                  label={_('DNS 2')}
+                  value={currData.get('second_dns')}
+                  updater={this.onChangeDeviceNetwork('second_dns')}
+                />
+              </div>
+             ) : null
+          }
+          
         </Modal>
       </div>
     );

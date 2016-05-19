@@ -1,0 +1,25 @@
+//## media query
+$mw-sm:  320px;
+$mw-md:  768px;
+$mw-lg:  1024px;
+$mw-xl:  1382px;
+
+// Mobile
+@media screen and (min-width: $mw-sm) {
+
+}
+
+// Tablets
+@media screen and (min-width: $mw-md) {
+
+}
+
+// Ipads
+@media screen and (min-width: $mw-lg) {
+
+}
+
+// Powerbooks
+@media screen and (min-width: $mw-xl) {
+
+}

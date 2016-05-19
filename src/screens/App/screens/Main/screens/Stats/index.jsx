@@ -208,7 +208,7 @@ export const Status = React.createClass({
         },
         toolbox: {
           feature: {
-            dataView: { show: true }
+            //dataView: { show: fasle }
           }
         },
         xAxis: [{

@@ -1,4 +1,4 @@
-$top-distance: $g-navbar-height + $g-distance-base;
+$top-distance: $g-navbar-height + $g-distance;
 
 html,
 body {
@@ -20,7 +20,7 @@ body {
   position: fixed;
   top: 0;
   z-index: 1000;
-  padding: 0 $g-distance-base;
+  padding: 0 $g-distance;
   width: 100%;
   height: $g-navbar-height;
   background: #666;
@@ -34,8 +34,8 @@ body {
   }
   .user {
     position: absolute;
-    right: $g-distance-base;
-    padding: 5px $g-distance-base;
+    right: $g-distance;
+    padding: 5px $g-distance;
     border-left: 1px solid #ccc;
     color: #f2f2f2;
   }
@@ -102,13 +102,13 @@ body {
 }
 .main {
   overflow: auto;
-  padding: $g-distance-base;
+  padding: $g-distance;
   padding-top: $top-distance;
 }
 .main-nav {
   position: fixed;
   top: $top-distance;
-  bottom: $g-distance-base;
+  bottom: $g-distance;
   z-index: 1000;
   width: 180px;
   background: #e4e4e4;
@@ -120,7 +120,7 @@ body {
       list-style: none;
       a {
         display: block;
-        padding: $g-distance-base;
+        padding: $g-distance;
         border-bottom: 1px solid #f2f2f2;
         color: #333;
 
@@ -147,9 +147,9 @@ body {
     position: absolute;
     top: 60px;
     right: 0;
-    bottom: $g-distance-base;
+    bottom: $g-distance;
     left: 190px;
-    padding: 0 $g-distance-base;
+    padding: 0 $g-distance;
 
     h2 {
       margin-bottom: 20px;
@@ -198,7 +198,7 @@ body {
   right: 0;
   bottom: 0;
   left: 0;
-  padding: $g-distance-base;
+  padding: $g-distance;
   height: 50px;
   background: #e4e4e4;
 }

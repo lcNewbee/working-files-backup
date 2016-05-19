@@ -4,6 +4,9 @@
 .fl {
   float: left;
 }
+.fn {
+  float: none;
+}
 
 .clearfix {
   @include clearfix();
