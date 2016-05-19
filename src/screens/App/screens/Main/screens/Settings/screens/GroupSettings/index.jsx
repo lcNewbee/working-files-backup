@@ -135,7 +135,7 @@ export const GroupSettings = React.createClass({
           if(!item.get('devicename')) {
             return '';
           }
-          deviceMac = item.get('devicename').split('/')[0]
+          deviceMac = item.get('mac');
          
           return (
             <div>

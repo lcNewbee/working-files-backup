@@ -8,6 +8,10 @@
   line-height: 30px;
 }
 
+.Select-placeholder, :not(.Select--multi) > .Select-control .Select-value  {
+  line-height: 30px;
+}
+
 .Select-input, .Select-control {
   height: 30px;
 }
