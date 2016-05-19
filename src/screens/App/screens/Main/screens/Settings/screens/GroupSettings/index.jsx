@@ -115,7 +115,10 @@ export const GroupSettings = React.createClass({
     
     var devicesTableOptions = [{
         'id': 'devicename',
-        'text': _('MAC Address') + '/' + _('Name')
+        'text': _('MAC Address') + '/' + _('Name'),
+        transform: function(item) {
+          return item.get('devicename') || item.get('mac');
+        }
       }, {
         'id': 'ip',
         'text': _('IP Address')
@@ -156,7 +159,7 @@ export const GroupSettings = React.createClass({
     
     return (
       <div>
-        <h3>组列表</h3>
+        <h3>{_('Group List')}</h3>
         <Table
           className="table"
           options={fromJS(groupTableOptions)}

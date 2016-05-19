@@ -16,7 +16,7 @@
         "list": [
             {
                 "devicetype": "point2point",
-                "devicename": "12:33:44:55:66:78/ap1",
+                "devicename": "神器",
                 "ip": "192.168.5.53",
                 "mac": "12:33:44:55:66:78",
                 "status": "online/offline",
@@ -27,7 +27,7 @@
             },
             {
                 "devicetype": "inside",
-                "devicename": "12:33:44:55:66:78/ap2",
+                "devicename": "",
                 "ip": "192.168.5.54",
                 "mac": "12:33:44:55:66:78",
                 "status": "online/offline",

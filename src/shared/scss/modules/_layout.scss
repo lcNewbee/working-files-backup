@@ -120,19 +120,34 @@ body {
       list-style: none;
       a {
         display: block;
-        padding: $g-distance;
+        line-height: 20px;
+        padding: $g-distance-md 0;
+        padding-left: $g-size;
         border-bottom: 1px solid #f2f2f2;
-        color: #333;
+        color: #666;
 
-        &:hover,
+        
         &:focus,
         &:active,
         &:visited {
+          color: #666;
+        }
+        
+        &:hover {
           color: #333;
         }
+        
 
         &.active {
-          color: red;
+          color: $g-brand-danger;
+        }
+        
+        .icon {
+          margin-right: 10px;
+          float: left;
+          font-size: 20px;
+          width: 20px;
+          display: inline-block;
         }
       }
     }
@@ -154,43 +169,6 @@ body {
     h2 {
       margin-bottom: 20px;
     }
-  }
-}
-
-.tab-nav {
-  margin-bottom: 20px;
-
-  ul {
-    border-bottom: 1px solid #666;
-
-    @include clearfix;
-  }
-  
-  li {
-    float: left;
-    margin-right: 5px;
-    
-    a {
-      display: block;
-      padding: 4px 6px;
-      background-color: #fff;
-      color: #333;
-      
-      &.active {
-        background: #666;
-        color: #fff
-      }
-    }
-  }
-}
-.tab-content {
-  overflow-y: auto;
-  padding: 0 40px;
-  
-  h3 {
-    margin-bottom: 15px;
-    padding: 5px 10px;
-    border-bottom: 1px solid #e5e5e5;
   }
 }
 .page-footer {

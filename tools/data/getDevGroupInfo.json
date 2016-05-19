@@ -9,14 +9,14 @@
       "remark": "description2",
       "list": [
            {
-               "devicename": "12:33:44:55:66:78/ap1",
+               "devicename": "ap1",
                "ip": "192.168.5.53",
                "mac": "12:33:44:55:66:78",
                "status": "online/offline",
                "groupname": "xxx"
            },
            {
-               "devicename": "12:33:44:55:66:78/ap2",
+               "devicename": "ap2",
                "ip": "192.168.5.53",
                "mac": "12:33:44:55:66:73",
                "status": "online/offline",

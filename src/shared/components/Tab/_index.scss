@@ -1,0 +1,48 @@
+@import "../../scss/variables";
+@import "../../scss/mixins";
+
+.tab-nav {
+  position: absolute;
+  left: $g-distance;
+  right: $g-distance;
+  background-color: #fff;
+  z-index: 2;
+
+  ul {
+    border-bottom: 1px solid #666;
+
+    @include clearfix;
+  }
+  
+  li {
+    float: left;
+    margin-right: 5px;
+    
+    a {
+      display: block;
+      padding: 4px 6px;
+      background-color: #fff;
+      color: #333;
+      
+      &.active {
+        background: #666;
+        color: #fff
+      }
+    }
+  }
+}
+.tab-content {
+  position: absolute;
+  overflow-y: auto;
+  top: 30px;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  padding: 10px 40px;
+  
+  h3 {
+    margin-bottom: 15px;
+    padding: 5px 10px;
+    border-bottom: 1px solid #e5e5e5;
+  }
+}

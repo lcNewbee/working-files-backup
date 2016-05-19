@@ -16,7 +16,10 @@ import reducer from './reducer';
 const clientsTableOptions = fromJS([
   {
     'id': 'devicename',
-    'text': _('MAC Address') + '/' + _('Name')
+    'text': _('MAC Address') + '/' + _('Name'),
+    transform: function(item) {
+      return item.get('devicename') || item.get('mac');
+    }
   }, {
     'id': 'ip',
     'text': _('IP Address')
@@ -153,7 +156,7 @@ export const Clients = React.createClass({
     // 添加操作项
     const options = clientsTableOptions.setIn([-1, 'transform'],
       function(item) {
-        var deviceMac = item.get('devicename').split('/')[0];
+        var deviceMac = item.get('mac');
         var isLock = item.get('islock') === 'lock' ? true : false;
          
         return (

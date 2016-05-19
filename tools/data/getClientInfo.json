@@ -16,7 +16,7 @@
         "list": [
             {
                 "type": "wireless",
-                "devicename": "12:22:33:44:55:66/android-1213",
+                "devicename": "android-1213",
                 "ip": "192.168.5.123",
                 "mac": "12:22:33:44:55:66",
                 "ssid": "ssid1",
@@ -30,7 +30,7 @@
             },
             {
                 "type": "guest/wired",
-                "devicename": "12:22:33:44:55:65/android-32432",
+                "devicename": "android-32432",
                 "ip": "192.168.5.32",
                 "mac": "12:22:33:44:55:65",
                 "ssid": "ssid2",

@@ -40,9 +40,9 @@ export default class Main extends Component {
         >
           <div className='main-content'>
             <div className='main-content-wrap'>
-              {React.cloneElement(this.props.children, {
-                key: this.props.location.pathname
-              })}
+              {
+                this.props.children
+              }
             </div>  
           </div>
           <Nav className="main-nav" menus={this.props.route.childRoutes} />

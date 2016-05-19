@@ -151,7 +151,21 @@ export const Device = React.createClass({
   render() {
     const devicesTableOptions = fromJS([{
       id: 'devicename',
-      text: _('MAC Address') + '/' + _('Name')
+      text: _('MAC Address') + '/' + _('Name'),
+      transform: function(item) {
+        var deviceMac = item.get('mac');
+        var name = item.get('devicename') || deviceMac;
+        
+        return (
+          <span
+            className="link-text"
+            onClick={this.showEditNetwork(deviceMac)}
+            value={deviceMac}
+          >
+            {name}
+          </span>
+        )
+      }.bind(this)
     }, {
       id: 'ip',
       text: _('IP Address'),
@@ -187,7 +201,7 @@ export const Device = React.createClass({
       id: 'op',
       text: _('Actions'),
       transform: function(item) {
-        var deviceMac = item.get('devicename').split('/')[0];
+        var deviceMac = item.get('mac');
       
         return (
           <div>
@@ -279,8 +293,14 @@ export const Device = React.createClass({
           isShow={this.props.edit ? true : false}
           title={currData.get('mac')}
           onClose={this.props.closeDeviceEdit}
-          onOk={this.saveDeviceNetwork}
+          onOk={this.onSaveDeviceNetWork}
         >
+          <FormGruop
+            label={_('Nickname')}
+            value={currData.get('nickname')}
+            updater={this.onChangeDeviceNetwork('nickname')}
+          />
+                
           <div className="form-group">
             <label htmlFor="">{_('Connect Type')}</label>
             <div className="form-control">

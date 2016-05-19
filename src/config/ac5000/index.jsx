@@ -9,12 +9,15 @@ import 'font-awesome/css/font-awesome.css';
 // 多语言工具
 const b28n = require('b28n');
 const langCn = require('../lang/cn/core.json');
+const curLang = 'cn';
 
 b28n.addDict(langCn, 'cn');
 b28n.init({
-  supportLang:['en', 'cn'],
-  lang: 'cn'
-})
+  supportLang:['en', curLang],
+  lang: curLang
+});
+
+document.getElementsByTagName('body')[0].className += ' ' + curLang;
 
 /*************************************************************
  * 产品界面配置
@@ -63,31 +66,37 @@ let routes = [{
           id: 'status',
           isIndex: true,
           path: '/main/status',
+          icon: 'bar-chart',
           text: _('STATISTICS'),
           component: pStatus.View
         }, {
           id: 'devices',
           path: '/main/devices',
+          icon: 'bullseye',
           text: _('DEVICES'),
           component: pDevices.View
         }, {
           id: 'clients',
           path: '/main/clients',
+          icon: 'desktop',
           text: _('CLIENTS'),
           component: pClients.View
         }, {
           id: 'logs',
           path: '/main/logs',
+          icon: 'file-text-o',
           text: _('LOGS'),
           component: pLogs.View
         }, {
           id: 'statistics',
           path: '/main/statistics',
+          icon: 'file-pdf-o',
           text: _('REPORTS'),
           component: pStatistics.View
         }, {
           id: 'settings',
           path: '/main/settings',
+          icon: 'cog',
           text: _('SETTINGS'),
           component: Settings,
           indexRoute: {

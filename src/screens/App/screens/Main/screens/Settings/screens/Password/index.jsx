@@ -65,7 +65,7 @@ export const Password = React.createClass({
 
     return (
       <form>
-        <h3>修改密码</h3>
+        <h3>{_('Change Password')}</h3>
         
         <FormGruop
           label={_('Old Password')}

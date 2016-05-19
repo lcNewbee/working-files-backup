@@ -1,5 +1,12 @@
 import utils from 'utils';
 
+const urls = {
+  fetchDevices: '/goform/getApDevInfo',
+  fetchDeviceInfo: '/goform/getDeviceInfo',
+  setDevice: '/goform/setDevice',
+  action: '/goform/setApAction'
+}
+
 export function reqeustFetchDevices() {
   return {
     type: 'REQEUST_FETCH_DEVICE',
@@ -43,14 +50,12 @@ export function locateDevice(mac) {
 }
 
 export function fetchDevices() {
-  const url = '/goform/getApDevInfo';
-  
   return (dispatch, getState) => {
     const query = getState().devices.get('query').toJS();
     
     dispatch(reqeustFetchDevices());
 
-    utils.fetch(url, query)
+    utils.fetch(urls.fetchDevices, query)
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(reciveFetchDevices(json.data));
@@ -60,14 +65,12 @@ export function fetchDevices() {
 }
 
 export function saveDevicesAction(data) {
-  const url = '/goform/setApAction';
-  
   return (dispatch, getState) => {
     //const query = getState().devices.get('query').toJS();
     
     dispatch(reqeustFetchDevices());
 
-    utils.save(url, data)
+    utils.save(urls.action, data)
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(fetchDevices(json.data));
@@ -103,15 +106,13 @@ export function closeDeviceEdit() {
 }
 
 export function fetchDeviceNetwork(mac) {
-  const url = '/goform/getDeviceNetwork';
-  
   return (dispatch, getState) => {
     const query = {
       mac: mac
     };
     dispatch(reqeustFetchDeviceNetwork(mac));
 
-    utils.fetch(url, query)
+    utils.fetch(urls.fetchDeviceInfo, query)
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(reciveFetchDeviceNetwork(json.data));
@@ -122,14 +123,12 @@ export function fetchDeviceNetwork(mac) {
 
 
 export function saveDeviceNetwork(mac) {
-  const url = '/goform/setDeviceNetwork';
-  
   return (dispatch, getState) => {
     const data = getState().devices.get('edit').toJS();
     
     dispatch(reqeustFetchDevices());
 
-    utils.save(url, data)
+    utils.save(urls.setDevice, data)
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(closeDeviceEdit());
