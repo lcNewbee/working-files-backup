@@ -12,8 +12,8 @@
         },
         "clientInfo": {
             "total": 123,
-            "g5": 21,
-            "g2.4": 120,
+            "5G": 21,
+            "2.4G": 120,
             "producerlist": {
                 "apple": 50,
                 "iphone": 12,

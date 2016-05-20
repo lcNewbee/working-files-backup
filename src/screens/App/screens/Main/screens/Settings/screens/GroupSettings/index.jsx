@@ -131,10 +131,7 @@ export const GroupSettings = React.createClass({
         transform: function(item) {
           var deviceMac;
           var selectedDevices = this.props.edit.get('devices');
-          
-          if(!item.get('devicename')) {
-            return '';
-          }
+         
           deviceMac = item.get('mac');
          
           return (
@@ -174,7 +171,6 @@ export const GroupSettings = React.createClass({
           />
         </div>
         
-          
         <Modal
           isShow={this.props.edit ? true : false}
           title={modalTitle}

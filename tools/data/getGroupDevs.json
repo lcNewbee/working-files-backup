@@ -15,26 +15,30 @@
         },
         "list": [
             {
-                "devicename": "10:33:44:55:66:78/ap1",
+                "devicename": "ap1",
                 "ip": "192.168.5.53",
+                "mac": "10:33:44:55:66:78",
                 "status": "online",
                 "groupname": "研发"
             },
             {
-                "devicename": "02:33:44:55:66:78/ap2",
+                "devicename": "/ap2",
                 "ip": "192.168.5.53",
+                "mac": "02:33:44:55:66:78",
                 "status": "offline",
                 "groupname": "研发"
             },
             {
-                "devicename": "22:33:44:55:66:78/ap2",
+                "devicename": "/ap2",
                 "ip": "192.168.5.53",
+                "mac": "22:33:44:55:66:78",
                 "status": "online",
                 "groupname": "测试"
             },
             {
-                "devicename": "46:33:44:55:66:78/ap2",
+                "devicename": "/ap2",
                 "ip": "192.168.5.53",
+                "mac": "46:33:44:55:66:78",
                 "status": "未初始化",
                 "groupname": ""
             }

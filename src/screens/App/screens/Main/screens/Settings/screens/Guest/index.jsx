@@ -167,28 +167,6 @@ export const Bandwidth = React.createClass({
             </div>
           </div>
           
-          <div className="form-group">
-            <label htmlFor="">{ _('DHCP Range') }</label>
-            <div className="form-control">
-              <input
-                type="text"
-                value={currData.get('startip')}
-                onChange={this.onUpdate('startip')}
-              />
-              -
-              <input
-                type="text"
-                value={currData.get('endip')}
-                onChange={this.onUpdate('endip')}
-              />
-            </div>
-          </div>
-          
-          <FormGruop
-            label={ _('Subnet Mask') }
-            value={currData.get('mask')}
-            updater={this.onUpdate('mask')}
-          />
         </div>
         
         <div className="form-group">

@@ -51,8 +51,10 @@ label {
   }
   .error {
     display: inline-block;
+    margin-left: 5px;
     margin-top: 5px;
     color: red;
+    font-size: 12px;
   }
 }
 

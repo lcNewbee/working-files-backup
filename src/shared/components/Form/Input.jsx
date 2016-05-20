@@ -17,17 +17,24 @@ export const Input = React.createClass({
     return ret;
   },
   
-  onBlur: function() {
+  onBlur: function(e) {
     
-      
-      this.props.checkValue();
+    if(this.props.checkValue) {
+      this.props.checkValue(e.target.value);
+    }
   },
   
   //
   handleChange: function (e) {
+    
+    // 数据更新
     if (typeof this.props.updater === 'function') {
       this.props.updater(e);
-      this.props.checkValue();
+    }
+    
+    // 数据验证
+    if(typeof this.props.checkClearValue === 'function') {
+      this.props.checkClearValue(e.target.value);
     }
   },
 
@@ -90,10 +97,19 @@ export const FormGruop = React.createClass({
     return {};
   },
   
-  checkValue() {
+  checkValue(val) {
     if(this.props.validator) {
       this.setState({
-        errMsg: this.props.validator.check(this.props.value)
+        errMsg: this.props.validator.check(val)
+      });
+    }
+  },
+  
+  checkClearValue(val) {
+    
+    if(this.props.validator) {
+      this.setState({
+        errMsg: this.props.validator.checkClear(val)
       });
     }
   },
@@ -110,6 +126,7 @@ export const FormGruop = React.createClass({
         <Input 
           {...this.props}
           checkValue={this.checkValue}
+          checkClearValue={this.checkClearValue}
         />
         {
           this.props.help ? <span className="help">{this.props.help}</span> :

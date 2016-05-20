@@ -23,6 +23,8 @@
   "Number": "数量",
   "Hours": "小时",
   "Gateway": "网关",
+  "CHANGE PASSWORD": "修改密码",
+  "SIGN OUT": "退出登录",
   
   "Management": "管理系统",
   "Please Login": "请登录",
@@ -45,6 +47,9 @@
   "AP Activity Ranklist": "AP活跃度排行",
   "Clients Ranklist": "客户端排行",
   "UP/Down Flow": "上/下行流量",
+  "Status": "状态",
+  "Frequency": "频段",
+  "Producter": "生产商",
   
   "DEVICES": "设备",
   "Devices Info": "设备信息",
@@ -157,7 +162,7 @@
   
   "Must be number": "请输入数字",
   "Input range is: %s - %s": "输入范围：%s - %s",
-  "This field is required": "本项不能为空",
+  "%s is required": "%s不能为空",
   "String length range is: %s - %s bit": "长度范围：%s - %s 位",
   "String length range is: %s - %s byte": "长度范围：%s - %s 位字节",
   "Please input a validity IP address": "请输入正确的 IP 地址",
@@ -175,5 +180,6 @@
   "First input %s greater than 223.": "以%s开始的地址无效，请指定一个1到223之间的值。",
   "First input %s less than 223.": "以 %s 开始的地址无效，请指定一个223到255之间的值。",
   "Invalid Url": "无效的网址格式",
-  "please enter a valid IP segment": "请输入正确的IP网段"
+  "Please enter a valid IP segment": "请输入正确的IP网段",
+  "Password and confirm password must match": "密码与确认密码必须一致"
 }

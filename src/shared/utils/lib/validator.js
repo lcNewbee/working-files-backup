@@ -8,6 +8,9 @@ var validator = function(options) {
 if(!_) {
   _ = string.format;
 }
+var msg = {
+  thisField: _('This field')
+}
 
 // 验证函数
 var vaildate = {
@@ -173,7 +176,7 @@ var vaildate = {
 
   required: function(str) {
     if (str === undefined || str === '') {
-      return _('This field is required');
+      return _('%s is required');
     }
   }
 };
@@ -226,7 +229,7 @@ function getRulesObj(rules) {
  * @param  {[type]} rules [description]
  * @return {[type]}       [description]
  */
-function checkClear(str, rules) {
+function checkClear(str, rules, label) {
   var len = rules.length;
   var ret, args, rulesArr, i, ruleObj;
 
@@ -251,7 +254,7 @@ function checkClear(str, rules) {
   }
 }
 
-function check(str, rules) {
+function check(str, rules, label) {
   var len = rules.length;
   var ret, args, rulesArr, i, ruleObj;
 
@@ -287,11 +290,33 @@ validator.fn = validator.prototype = {
   vaildate: vaildate,
 
   checkClear: function(str) {
-    return checkClear(str, this.rules)
+    var ret = checkClear(str, this.rules);
+    var label = msg.thisField;
+    
+    if(this.label) {
+      label = this.label;
+    }
+    
+    if(ret) {
+      ret = string.format(ret, label);
+    }
+    
+    return ret;
   },
 
   check: function(str) {
-    return check(str, this.rules)
+    var ret = check(str, this.rules);
+    var label = msg.thisField;
+    
+    if(this.label) {
+      label = this.label;
+    }
+    
+    if(ret) {
+      ret = string.format(ret, label);
+    }
+    
+    return ret;
   },
 
   addVaildate: function(ruleName, funs) {
@@ -305,6 +330,7 @@ var init = validator.fn.init = function(options) {
   }
 
   this.rules = getRulesObj(options.rules);
+  this.label = options.label;
 
   return this;
 }

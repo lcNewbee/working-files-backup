@@ -30,6 +30,7 @@ const App = require('../../screens/App');
 
 // 登录界面
 const pLogin = require('../../screens/App/screens/Login');
+const sRegister = require('../../screens/App/screens/SignUp');
 
 // 布局
 const Main = require('../../screens/App/screens/Main');
@@ -59,82 +60,87 @@ let routes = [{
     path: '/',
     component: App,
     indexRoute: {component: pLogin.View},
-    childRoutes: [{
-      path: '/main',
-      component: Main,
-      childRoutes: [{
-          id: 'status',
-          isIndex: true,
-          path: '/main/status',
-          icon: 'bar-chart',
-          text: _('STATISTICS'),
-          component: pStatus.View
-        }, {
-          id: 'devices',
-          path: '/main/devices',
-          icon: 'bullseye',
-          text: _('DEVICES'),
-          component: pDevices.View
-        }, {
-          id: 'clients',
-          path: '/main/clients',
-          icon: 'desktop',
-          text: _('CLIENTS'),
-          component: pClients.View
-        }, {
-          id: 'logs',
-          path: '/main/logs',
-          icon: 'file-text-o',
-          text: _('LOGS'),
-          component: pLogs.View
-        }, {
-          id: 'statistics',
-          path: '/main/statistics',
-          icon: 'file-pdf-o',
-          text: _('REPORTS'),
-          component: pStatistics.View
-        }, {
-          id: 'settings',
-          path: '/main/settings',
-          icon: 'cog',
-          text: _('SETTINGS'),
-          component: Settings,
-          indexRoute: {
-            onEnter: (nextState, replace) => replace('/main/settings/group')
-          },
-          childRoutes: [{
-              path: '/main/settings/group',
-              text: _('Groups'),
-              component: pGroupSettings.View
+    childRoutes: [
+      {
+        path: '/main',
+        component: Main,
+        childRoutes: [{
+            id: 'status',
+            isIndex: true,
+            path: '/main/status',
+            icon: 'bar-chart',
+            text: _('STATISTICS'),
+            component: pStatus.View
+          }, {
+            id: 'devices',
+            path: '/main/devices',
+            icon: 'bullseye',
+            text: _('DEVICES'),
+            component: pDevices.View
+          }, {
+            id: 'clients',
+            path: '/main/clients',
+            icon: 'desktop',
+            text: _('CLIENTS'),
+            component: pClients.View
+          }, {
+            id: 'logs',
+            path: '/main/logs',
+            icon: 'file-text-o',
+            text: _('LOGS'),
+            component: pLogs.View
+          }, {
+            id: 'statistics',
+            path: '/main/statistics',
+            icon: 'file-pdf-o',
+            text: _('REPORTS'),
+            component: pStatistics.View
+          }, {
+            id: 'settings',
+            path: '/main/settings',
+            icon: 'cog',
+            text: _('SETTINGS'),
+            component: Settings,
+            indexRoute: {
+              onEnter: (nextState, replace) => replace('/main/settings/group')
+            },
+            childRoutes: [{
+                path: '/main/settings/group',
+                text: _('Groups'),
+                component: pGroupSettings.View
+              },{
+              id: 'bandwidth',
+              path: '/main/settings/bandwidth',
+              text: _('Bandwidth'),
+              component: sBandwidth.Screen
             },{
-            id: 'bandwidth',
-            path: '/main/settings/bandwidth',
-            text: _('Bandwidth'),
-            component: sBandwidth.Screen
-          },{
-            id: 'wireless',
-            path: '/main/settings/wireless',
-            text: _('Wireless'),
-            component: sWireless.Screen
-          },{
-            id: 'portal',
-            path: '/main/settings/portal',
-            text: _(_('Portal Settings')),
-            component: sPortal.Screen
-          },{
-            id: 'guest',
-            path: '/main/settings/guest',
-            text: _('Guest'),
-            component: sGuest.Screen
-          },{
-            id: 'password',
-            path: '/main/settings/admin',
-            text: _('Admin'),
-            component: sPassword.Screen
-          }
-        ]
-      }]
-    }]
+              id: 'wireless',
+              path: '/main/settings/wireless',
+              text: _('Wireless'),
+              component: sWireless.Screen
+            },{
+              id: 'portal',
+              path: '/main/settings/portal',
+              text: _(_('Portal Settings')),
+              component: sPortal.Screen
+            },{
+              id: 'guest',
+              path: '/main/settings/guest',
+              text: _('Guest'),
+              component: sGuest.Screen
+            },{
+              id: 'password',
+              path: '/main/settings/admin',
+              text: _('Admin'),
+              component: sPassword.Screen
+            }
+          ]
+        }]
+      }, {
+        path: '/register',
+        component: sRegister.Screen
+      }
+    ]
   }, {
     path: '*',
     component: NotFound

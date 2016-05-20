@@ -107,6 +107,8 @@ export const Login = React.createClass({
       );
     }.bind(this));
     
+    console.log(this.props.location.query, this.props.params)
+    
     return (
       <div>
         <header className="navbar">

@@ -30,7 +30,7 @@ function getDevicesByGroup(state, groupname) {
   return state.getIn(['devices', 'list']).filter(function(item){
     return item.get('groupname') == groupname;
   }).map(function(item) {
-    return item.get('devicename').split('/')[0];
+    return item.get('mac');
   });
 }
 

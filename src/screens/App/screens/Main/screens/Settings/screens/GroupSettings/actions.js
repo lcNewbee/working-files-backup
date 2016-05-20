@@ -119,7 +119,8 @@ export function saveDeviceGroup() {
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(fetchDeviceGroups());
-          dispatch(removeEditDeviceGroup())
+          dispatch(removeEditDeviceGroup());
+          dispatch(fetchGroupDevices());
         }
       });
   };
@@ -137,6 +138,7 @@ export function deleteDeviceGroup(groupname) {
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(fetchDeviceGroups());
+          dispatch(fetchGroupDevices());
         }
       });
   };

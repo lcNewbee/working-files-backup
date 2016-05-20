@@ -5,6 +5,7 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import * as actions from './actions';
 import reducer from './reducer';
 import {fromJS, Map} from 'immutable';
+import validator from 'utils/lib/validator';
 
 import {Table} from 'components/Table';
 import {Search, FormGruop} from 'components/Form/Input';
@@ -297,6 +298,7 @@ export const Device = React.createClass({
         >
           <FormGruop
             label={_('Nickname')}
+            maxLength="24"
             value={currData.get('nickname')}
             updater={this.onChangeDeviceNetwork('nickname')}
           />
@@ -319,12 +321,18 @@ export const Device = React.createClass({
                   label={_('IP Address')}
                   value={currData.get('ip')}
                   updater={this.onChangeDeviceNetwork('ip')}
+                  validator={validator({
+                    rules: 'ip'
+                  })}
                 />
                
                 <FormGruop
                   label={_('Subnet Mask')}
                   value={currData.get('mask')}
                   updater={this.onChangeDeviceNetwork('mask')}
+                  validator={validator({
+                    rules: 'mask'
+                  })}
                 />
                
                 <FormGruop

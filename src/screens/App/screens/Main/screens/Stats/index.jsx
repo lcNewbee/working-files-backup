@@ -67,7 +67,7 @@ export const Status = React.createClass({
       },
       series: [
         {
-          name: _('Status:'),
+          name: _('Status'),
           type: 'pie',
           radius: ['10%', '45%'],
           center: ['50%', '58%'],
@@ -106,7 +106,7 @@ export const Status = React.createClass({
 
       series: [
         {
-          name: 'Frequency',
+          name: _('Frequency'),
           type: 'pie',
           radius: ['10%', '45%'],
           center: ['50%', '58%'],
@@ -133,7 +133,7 @@ export const Status = React.createClass({
 
       series: [
         {
-          name: 'Producter',
+          name: _('Producter'),
           type: 'pie',
           radius: ['10%', '45%'],
           center: ['50%', '58%'],
