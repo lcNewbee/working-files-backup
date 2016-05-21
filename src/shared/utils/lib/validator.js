@@ -24,7 +24,7 @@ var vaildate = {
 
   num: function(str, min, max) {
 
-    if (!isInteger(str)) {
+    if (!string.isInteger(str)) {
       return _("Must be integer");
     }
     if (min && max) {
@@ -86,7 +86,31 @@ var vaildate = {
     }
   },
 
-  dns: function() {},
+  dns: {
+    all: function(str) {
+      var ret = this.specific(str);
+
+      if (ret) {
+        return ret;
+      }
+
+      if (!(/^([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){2}([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])$/).test(str)) {
+        return _("Please input a validity IP address");
+      }
+    },
+
+    specific: function(str) {
+      var ipArr = str.split('.'),
+        ipHead = ipArr[0];
+
+      if (ipArr[0] === '127') {
+        return _("IP address first input don't be 127, becuse it is loopback address.");
+      }
+      if (ipArr[0] > 223) {
+        return _("First input %s greater than 223.", ipHead);
+      }
+    }
+  },
 
   mask: function(str) {
     var rel = /^(254|252|248|240|224|192|128)\.0\.0\.0$|^(255\.(254|252|248|240|224|192|128|0)\.0\.0)$|^(255\.255\.(254|252|248|240|224|192|128|0)\.0)$|^(255\.255\.255\.(254|252|248|240|224|192|128|0))$/;
@@ -311,7 +335,6 @@ validator.fn = validator.prototype = {
     if(this.label) {
       label = this.label;
     }
-    
     if(ret) {
       ret = string.format(ret, label);
     }
@@ -353,6 +376,120 @@ validator.addVaildate = function(str, rules) {
   
   return this;
 }
+
+validator.mergeProps = function(validOptions) {
+  
+  return function(stateProps, dispatchProps, ownProps) {
+ 
+    return Object.assign({}, ownProps, stateProps, dispatchProps, {
+      validateOption: (function() {
+        var ret = {};
+        
+        // 验证单独框
+        validOptions.forEach((validate, name) => {
+          ret[name] = {
+            name,
+            validator: validate,
+            errMsg: stateProps.app.getIn(['invalid', name]),
+            validateAt: stateProps.app.get('validateAt'),
+            onValidError: dispatchProps.reportValidError
+          }
+        });
+        
+        return ret;
+      })()
+    });
+  }
+}
+
+function isSameNet(ip_lan, ip_wan, mask_lan, mask_wan) {
+  var ip1Arr = ip_lan.split("."),
+    ip2Arr = ip_wan.split("."),
+    maskArr1 = mask_lan.split("."),
+    maskArr2 = mask_wan.split("."),
+    i;
+
+  for (i = 0; i < 4; i++) {
+    if ((ip1Arr[i] & maskArr1[i]) != (ip2Arr[i] & maskArr2[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+validator.combineValid = {
+  //必须一样
+  equal: function (str1, str2, msg) {
+    if (str1 != str2) {
+      return msg;
+    }
+  },
+
+  //不能一样
+  notequal: function (str1, str2, msg) {
+    if (str1 == str2) {
+      return msg;
+    }
+  },
+
+  //ip mask gateway 组合验证
+  staticIP: function (ip, mask, gateway, msg) {
+    if (ip == gateway) {
+      return _("Static IP cannot be the same as default gateway.");
+    }
+
+    if (!isSameNet(ip, gateway, mask, mask)) {
+      return _("Static IP and default gateway be in the same net segment");
+    }
+  },
+
+  ipSegment: function (ipElem, maskElem) {
+    var ip,
+      mask,
+      ipArry,
+      maskArry,
+      len,
+      maskArry2 = [],
+      netIndex = 0,
+      netIndex1 = 0,
+      broadIndex = 0,
+      i = 0;
+
+
+    ip = ipElem;
+    mask = maskElem;
+
+    ipArry = ip.split(".");
+    maskArry = mask.split(".");
+    len = ipArry.length;
+
+    for (i = 0; i < len; i++) {
+      maskArry2[i] = 255 - Number(maskArry[i]);
+    }
+
+    for (var k = 0; k < 4; k++) { // ip & mask
+      if ((ipArry[k] & maskArry[k]) == 0) {
+        netIndex1 += 0;
+      } else {
+        netIndex1 += 1;
+      }
+    }
+    for (var k = 0; k < 4; k++) { // ip & 255 - mask
+      if ((ipArry[k] & maskArry2[k]) == 0) {
+        netIndex += 0;
+      } else {
+        netIndex += 1;
+      }
+    }
+
+    if (netIndex == 0 || netIndex1 == 0) {
+      return;
+    } else {
+      return _("please enter a valid IP segment");
+    }
+  }
+};
+  
 
 export default validator;
 

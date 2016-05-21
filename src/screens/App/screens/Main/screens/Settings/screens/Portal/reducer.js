@@ -2,15 +2,16 @@ import Immutable, {Map, List, fromJS} from 'immutable';
 
 const defaultState = fromJS({
   data: {
-    list: [],
+    list: [
+      {}
+    ],
     curr: {}
   }
 });
 
 function receiveSettings(state, settingData) {
   let ret = state.update('data', data => data.merge(settingData));
-  let listCurr = ret.getIn(['data', 'list', 0]);
-  const currData = state.getIn(['data', 'curr']) || Map({});
+  let listCurr = ret.getIn(['data', 'list', 0]) || Map({});
   
   return ret.setIn(['data', 'curr'], listCurr)
       .set('fetching', false);

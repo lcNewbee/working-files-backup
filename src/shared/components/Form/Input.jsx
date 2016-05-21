@@ -1,13 +1,41 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import Icon from '../Icon';
 
-export const Input = React.createClass({
-  getInitialState: function() {
-    return {
-      errMsg: ''
+export const Search = React.createClass({
+
+  onChange(e) {
+    if (typeof this.props.updater === 'function') {
+      this.props.updater(e);
     }
   },
-  
+
+  onKeyUp(e) {
+    let which = e.which;
+    
+    if(which === 13) {
+      if (typeof this.props.onSearch === 'function') {
+        this.props.onSearch(e);
+      }
+    }
+  },
+
+  render() {
+    
+    return (
+      <div className="input-search fl">
+        
+        <Icon className="icon-search" name="search"/>
+        <input {...this.props}
+          type="text"
+          onChange={this.onChange}
+          onKeyUp={this.onKeyUp}
+        />
+      </div>
+    );
+  }
+});
+
+export const Input = React.createClass({
   getType: function () {
     return this.props.type || 'text';
   },
@@ -17,10 +45,15 @@ export const Input = React.createClass({
     return ret;
   },
   
-  onBlur: function(e) {
-    
-    if(this.props.checkValue) {
-      this.props.checkValue(e.target.value);
+  onBlur(e) {
+    if(this.props.check) {
+      this.props.check(e)
+    }
+  },
+  
+  onFoucs(e) {
+    if(this.props.checkClear) {
+      this.props.checkClear(e)
     }
   },
   
@@ -58,81 +91,89 @@ export const Input = React.createClass({
   }
 });
 
-export const Search = React.createClass({
-
-  onChange(e) {
-    if (typeof this.props.updater === 'function') {
-      this.props.updater(e);
+export const FormGruop = React.createClass({
+  propTypes: {
+    onValidError: PropTypes.func
+  },
+  
+  // 验证不确定的错误
+  check() {
+    const {name, label, value, required} = this.props;
+    let checkResult;
+    
+    if(value == '') {
+      if(required) {
+        checkResult = _('%s is required', label);
+      }
+    } else {
+      if(this.props.validator) {
+        checkResult = this.props.validator.check(value);
+        console.log(checkResult)
+      }
+    }
+    
+    if(this.props.onValidError) {
+      this.props.onValidError({name, checkResult});
     }
   },
-
-  onKeyUp(e) {
-    let which = e.which;
+  
+  // 验证可确定的错误
+  checkClear() {
+    const { name, label, value} = this.props;
+    let checkResult;
     
-    if(which === 13) {
-      if (typeof this.props.onSearch === 'function') {
-        this.props.onSearch(e);
+    if(this.props.validator) {
+      checkResult = this.props.validator.checkClear(value);
+      if(this.props.onValidError) {
+        this.props.onValidError({name, checkResult});
       }
     }
   },
-
-  render() {
-    
-    return (
-      <div className="input-search fl">
-        
-        <Icon className="icon-search" name="search"/>
-        <input {...this.props}
-          type="text"
-          onChange={this.onChange}
-          onKeyUp={this.onKeyUp}
-        />
-      </div>
-    );
-  }
-});
-
-export const FormGruop = React.createClass({
-  getInitialState() {
-    return {};
-  },
   
-  checkValue(val) {
+  componentDidUpdate(prevProps) {
+    const {value} = this.props;
+    
+    // 数据验证
     if(this.props.validator) {
-      this.setState({
-        errMsg: this.props.validator.check(val)
-      });
+      
+      if(prevProps.value !== value) {
+        this.checkClear();
+      } else if (prevProps.validateAt !== this.props.validateAt) {
+        this.check();
+      }
     }
   },
   
-  checkClearValue(val) {
-    
-    if(this.props.validator) {
-      this.setState({
-        errMsg: this.props.validator.checkClear(val)
-      });
-    }
-  },
-
   render() {
+    const { help, errMsg, name, label, required, children} = this.props;
     
     return <div className="form-group">
       {
-        this.props.label ?
-          <label htmlFor={this.props.name}>{this.props.label}</label> :
-          null
+        label ? (
+          <label htmlFor={name}>
+            {label}
+            {required ? <span className="text-required">*</span> : null}
+          </label>) : null
       }
+      
       <div className="form-control">
-        <Input 
-          {...this.props}
-          checkValue={this.checkValue}
-          checkClearValue={this.checkClearValue}
-        />
         {
-          this.props.help ? <span className="help">{this.props.help}</span> :
-          null
+          children ? children : (
+            <Input 
+              {...this.props}
+              check={this.check}
+              checkClear={this.checkClear}
+            />
+          )
         }
-        { this.state.errMsg ? <span className="error">{this.state.errMsg}</span> : null}
+        
+        { 
+          help ? <span className="help">{help}</span> : null 
+        }
+        
+        { 
+          errMsg ? <span className="error">{errMsg}</span> : null
+        }
       </div>
     </div>
   }

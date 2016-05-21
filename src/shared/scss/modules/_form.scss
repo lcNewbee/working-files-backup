@@ -25,6 +25,7 @@ label {
     margin-right: 15px;
     text-align: right;
     line-height: 28px;
+    color: #666;
     
     .btn {
       line-height: 14px;
@@ -47,12 +48,13 @@ label {
     color: #999;
     margin-left: 10px;
     line-height: 28px;
+    font-size: 12px;
     display: inline-block;
   }
   .error {
     display: inline-block;
+    line-height: 28px;
     margin-left: 5px;
-    margin-top: 5px;
     color: red;
     font-size: 12px;
   }

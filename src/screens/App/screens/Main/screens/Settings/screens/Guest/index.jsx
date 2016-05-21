@@ -1,8 +1,10 @@
 import React, {PropTypes} from 'react';
 import { bindActionCreators } from 'redux';
-import { fromJS, Map, List } from 'immutable';
+import {fromJS, Map, List} from 'immutable';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import validator from 'utils/lib/validator';
+import * as validateActions from 'actions/valid';
 import * as myActions from './actions';
 import { fetchDeviceGroups } from '../GroupSettings/actions';
 import myReducer from './reducer';

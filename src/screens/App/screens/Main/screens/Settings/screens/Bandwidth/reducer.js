@@ -11,7 +11,7 @@ const defaultState = fromJS({
 
 function receiveQosData(state, settingData) {
   let ret = state.update('data', data => data.merge(settingData));
-  let listCurr = ret.getIn(['data', 'list', 0]);
+  let listCurr = ret.getIn(['data', 'list', 0])|| Map({});
   const currData = state.getIn(['data', 'curr']) || Map({});
  
   if(currData.isEmpty()) {

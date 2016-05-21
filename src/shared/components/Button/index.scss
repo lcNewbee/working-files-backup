@@ -14,7 +14,8 @@
   background-color: #e8e8e8;
   background-image: linear-gradient(#e8e8e8,#e2e2e2);
   border: none;
-  box-shadow: inset 1px 1px 0 0 rgba(255,255,255,.7),inset -1px -1px 0 0 rgba(255,255,255,.4),1px 1px 1px 0 rgba(50,50,50,.1);
+  box-shadow: inset 1px 1px 0 0 rgba(255,255,255,.7),
+    inset -1px -1px 0 0 rgba(255,255,255,.4), 1px 1px 1px 0 rgba(50,50,50,.1);
 
   &:active {
     opacity: .8;
@@ -40,14 +41,28 @@ a.btn {
   font-size: 13px;
 }
 
+.btn-lg {
+  padding: 9px 18px;
+  font-size: 16px;
+}
+
 .btn-block {
   display: block;
 }
 
+.btn-default {
+  background-color: #e8e8e8;
+  background-image: linear-gradient(#e8e8e8,#e2e2e2);
+  border: none;
+  box-shadow: inset 1px 1px 0 0 rgba(255,255,255,.7),inset -1px -1px 0 0 rgba(255,255,255,.4),1px 1px 1px 0 rgba(50,50,50,.1);
+}
+
 .btn-success {
   color: #fff;
-  background-color: $g-brand-success;
-  background-image: linear-gradient($g-brand-success, $g-brand-success - #222);
+  background-color: #07c;
+  background-image: none;
+  border:1px solid #005999;
+  box-shadow: inset 0 1px 0 #3af;
 }
 .btn-info {
   color: #fff;

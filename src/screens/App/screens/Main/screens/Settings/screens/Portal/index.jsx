@@ -1,13 +1,13 @@
 import React, {PropTypes} from 'react';
 import { bindActionCreators } from 'redux';
-import { fromJS, Map, List } from 'immutable';
+import {fromJS, Map, List} from 'immutable';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import validator from 'utils/lib/validator';
+import * as validateActions from 'actions/valid';
 import * as myActions from './actions';
 import myReducer from './reducer';
-
 import './index.scss';
-
 import {FormGruop} from 'components/Form/Input';
 import Select from 'components/Select';
 import Button from 'components/Button';
@@ -79,7 +79,6 @@ export const Portal = React.createClass({
         body: data
       })
       .then(function(rq) {
-        console.log(rq)
       })
     }
   },
@@ -92,7 +91,7 @@ export const Portal = React.createClass({
           label: item.get('groupname')
         }
       }).toJS();
-    const currData =  this.props.data.get('curr');
+    const currData =  this.props.data.get('curr') || Map({});
    
     return (
       
@@ -172,7 +171,7 @@ export const Portal = React.createClass({
               type='button'
               text={_('Upload Image') + ' 2'}
               role="upload"
-              onClick={this.onUploadImage(3)}
+              onClick={this.onUploadImage(2)}
             />
           </label>
           <div className="form-control">

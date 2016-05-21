@@ -1,8 +1,11 @@
 import React, {PropTypes} from 'react';
 import { bindActionCreators } from 'redux';
-import { fromJS, Map, List } from 'immutable';
+import {fromJS, Map, List} from 'immutable';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import validator from 'utils/lib/validator';
+import * as validateActions from 'actions/valid';
+
 import * as myActions from './actions';
 import { fetchDeviceGroups } from '../GroupSettings/actions';
 import myReducer from './reducer';
@@ -19,6 +22,18 @@ const msg = {
   'selectGroup': _('Select Group')
 };
 
+const validOptions = Map({
+  password: validator({
+    rules: 'len:[8, 64]'
+  }),
+  vlanid: validator({
+    rules: 'num:[0, 4096]'
+  }),
+  ssid: validator({
+    rules: 'len:[1, 64]'
+  }),
+});
+
 const channelsList = List(channels);
 
 const propTypes = {
@@ -28,7 +43,7 @@ const propTypes = {
   groups: PropTypes.instanceOf(List)
 };
 
-export const Bandwidth = React.createClass({
+export const Wireless = React.createClass({
   mixins: [PureRenderMixin],
   
   componentWillMount() {
@@ -71,7 +86,6 @@ export const Bandwidth = React.createClass({
     
     return function(item) {
       const data = {};
-      console.log(item)
       data[name] = item.value;
       
       this.props.changeWifiSettings(data);
@@ -79,7 +93,12 @@ export const Bandwidth = React.createClass({
   },
   
   onSave() {
-    this.props.setWifi();
+    this.props.validateAll(function(invalid) {
+      if(invalid.isEmpty()) {
+        this.props.setWifi();
+      }
+    }.bind(this));
+    
   },
   
   render() {
@@ -116,6 +135,7 @@ export const Bandwidth = React.createClass({
         label: '40'
       }
     ]);
+    const {password, vlanid, ssid} = this.props.validateOption;
     
     const currData =  this.props.data.get('curr');
     let i, len, channelsRange;
@@ -166,8 +186,10 @@ export const Bandwidth = React.createClass({
      
         <FormGruop
           label={ _('SSID') }
+          required={true}
           value={currData.get('ssid')}
           updater={this.onUpdate('ssid')}
+          {...ssid}
         />
         
         <div className="form-group">
@@ -188,38 +210,44 @@ export const Bandwidth = React.createClass({
             <FormGruop
               label={ _('Password') }
               type="password"
+              required={true}
               className="text"
               value={currData.get('password')}
               updater={this.onUpdate('password')}
+              {...password}
             /> : ''
         }
         
-        <div className="form-group">
-          <label htmlFor="">{ _('VLAN') }</label>
-          <div className="form-control">
-            <input
-              type="checkbox"
-              checked={currData.get('vlanenable') == '1'}
-              onChange={this.onUpdate('vlanenable')}
-            />
+        
+        <FormGruop
+          label={_('VLAN')}
+          value={currData.get('vlanid')}
+          {...vlanid}
+        >
+          <input
+            type="checkbox"
+            required={true}
+            checked={currData.get('vlanenable') == '1'}
+            onChange={this.onUpdate('vlanenable')}
+          />
             
-            {
-              currData.get('vlanenable') == '1' ? 
-                (
-                  <span style={{'marginLeft': '5px'}}>
-                    { _('Use VLAN ID:') }
-                    <input
-                      type="text"
-                      className="input-sm"
-                      value={currData.get('vlanid')}
-                      onChange={this.onUpdate('vlanid')}
-                    />
-                  </span>
-                ) : ''
-            }
-            
-          </div>
-        </div>
+          {
+            currData.get('vlanenable') == '1' ? 
+              (
+                <span style={{'marginLeft': '5px'}}>
+                  { _('Use VLAN ID:') }
+                  <input
+                    type="text"
+                    className="input-sm"
+                    value={currData.get('vlanid')}
+                    onChange={this.onUpdate('vlanid')}
+                  />
+                </span>
+              ) : ''
+          }
+        </FormGruop>
+        
+        
         <h3>{_('Wireless Channel')}</h3>
         
         <div className="form-group">
@@ -274,7 +302,7 @@ export const Bandwidth = React.createClass({
   }
 });
 
-Bandwidth.propTypes = propTypes;
+Wireless.propTypes = propTypes;
 
 //React.PropTypes.instanceOf(Immutable.List).isRequired
 function mapStateToProps(state) {
@@ -283,16 +311,23 @@ function mapStateToProps(state) {
   return {
     fetching: myState.get('fetching'),
     data: myState.get('data'),
+    app: state.app
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(Object.assign({fetchDeviceGroups}, myActions), dispatch)
+  return bindActionCreators(Object.assign({},
+    {fetchDeviceGroups},
+    validateActions,
+    myActions
+  ), dispatch)
 }
 
+// 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
-)(Bandwidth);
+  mapDispatchToProps,
+  validator.mergeProps(validOptions)
+)(Wireless);
 
 export const reducer = myReducer;

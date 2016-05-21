@@ -9,9 +9,12 @@ import 'font-awesome/css/font-awesome.css';
 // 多语言工具
 const b28n = require('b28n');
 const langCn = require('../lang/cn/core.json');
+const validateCn = require('../lang/cn/validate.json')
 const curLang = 'cn';
 
 b28n.addDict(langCn, 'cn');
+b28n.addDict(validateCn, 'cn');
+
 b28n.init({
   supportLang:['en', curLang],
   lang: curLang
@@ -58,8 +61,8 @@ const sPassword = require('../../screens/App/screens/Main/screens/Settings/scree
 
 let routes = [{
     path: '/',
-    component: App,
-    indexRoute: {component: pLogin.View},
+    component: App.Screen,
+    indexRoute: {component: pLogin.Screen},
     childRoutes: [
       {
         path: '/main',
@@ -70,31 +73,31 @@ let routes = [{
             path: '/main/status',
             icon: 'bar-chart',
             text: _('STATISTICS'),
-            component: pStatus.View
+            component: pStatus.Screen
           }, {
             id: 'devices',
             path: '/main/devices',
             icon: 'bullseye',
             text: _('DEVICES'),
-            component: pDevices.View
+            component: pDevices.Screen
           }, {
             id: 'clients',
             path: '/main/clients',
             icon: 'desktop',
             text: _('CLIENTS'),
-            component: pClients.View
+            component: pClients.Screen
           }, {
             id: 'logs',
             path: '/main/logs',
             icon: 'file-text-o',
             text: _('LOGS'),
-            component: pLogs.View
+            component: pLogs.Screen
           }, {
             id: 'statistics',
             path: '/main/statistics',
             icon: 'file-pdf-o',
             text: _('REPORTS'),
-            component: pStatistics.View
+            component: pStatistics.Screen
           }, {
             id: 'settings',
             path: '/main/settings',
@@ -107,7 +110,7 @@ let routes = [{
             childRoutes: [{
                 path: '/main/settings/group',
                 text: _('Groups'),
-                component: pGroupSettings.View
+                component: pGroupSettings.Screen
               },{
               id: 'bandwidth',
               path: '/main/settings/bandwidth',
@@ -149,6 +152,7 @@ let routes = [{
 
 // 配置模块页面 store
 const reducers = {
+  app: App.app,
   status: pStatus.status,
   devices: pDevices.devices,
   login: pLogin.login,

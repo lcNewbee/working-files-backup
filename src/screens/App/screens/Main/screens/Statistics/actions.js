@@ -18,7 +18,6 @@ export function login() {
 
     fetch('bundle.js')
       .then(function(response) {
-        console.log(response)
       })
   };
 }

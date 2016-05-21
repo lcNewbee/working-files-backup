@@ -47,7 +47,7 @@ export const Login = React.createClass({
   
   checkData() {
     var data = this.props.data.toJS();
-    var passCheck = validator.check(data.password, 'required');
+    var passCheck = formGroups.get('password').validator.check(data.password);
     
     return passCheck;
   },
@@ -107,8 +107,6 @@ export const Login = React.createClass({
       );
     }.bind(this));
     
-    console.log(this.props.location.query, this.props.params)
-    
     return (
       <div>
         <header className="navbar">
@@ -122,7 +120,7 @@ export const Login = React.createClass({
               <p className="msg-error ">{this.props.status}</p> :
               ''
           }
-          <button className="btn"
+          <button className="btn btn-success btn-lg"
             onClick={this.onLogin}>
             {_('Login')}
           </button>
@@ -144,7 +142,7 @@ function mapStateToProps(state) {
 }
 
 // 添加 redux 属性的 react 页面
-export const View = connect(
+export const Screen = connect(
   mapStateToProps,
   actions
 )(Login);

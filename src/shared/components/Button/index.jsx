@@ -26,6 +26,7 @@ class Button extends React.Component {
       classNames = `${classNames} btn-${size}`;
     }
     
+    
     if (className) {
       classNames = className + ' ' + classNames;
     }

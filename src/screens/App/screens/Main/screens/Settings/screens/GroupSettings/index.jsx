@@ -1,11 +1,12 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
-import {fromJS} from 'immutable';
+import {fromJS, Map} from 'immutable';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import * as actions from './actions';
+import * as validateActions from 'actions/valid';
+import validator from 'utils/lib/validator';
 import reducer from './reducer';
-
 import {FormGruop} from 'components/Form/Input';
 import {Table} from 'components/Table';
 import Modal from 'components/Modal';
@@ -18,7 +19,16 @@ const msg = {
   remarks: _('Remarks'),
   groupname: _('Group Name'),
   action: _('Actions')
-}
+};
+
+const validOptions = Map({
+  groupname: validator({
+    rules: 'required'
+  }),
+  remarks: validator({
+    rules: 'required'
+  })
+});
 
 // 原生的 react 页面
 export const GroupSettings = React.createClass({
@@ -78,6 +88,15 @@ export const GroupSettings = React.createClass({
     this.props.changeEditGroup({
       remark
     })
+  },
+  
+  onSaveDeviceGroup() {
+    this.props.validateAll(function(invalid) {
+      if(invalid.isEmpty()) {
+        this.props.saveDeviceGroup();
+      }
+    }.bind(this))
+    
   },
 
   render() {
@@ -148,6 +167,8 @@ export const GroupSettings = React.createClass({
       }];
     let modalTitle = this.getEditVal('orignName');
     
+    const {groupname, remarks} = this.props.validateOption;
+    
     if(this.props.actionType === 'add') {
       modalTitle = msg.add;
     } else {
@@ -175,17 +196,23 @@ export const GroupSettings = React.createClass({
           isShow={this.props.edit ? true : false}
           title={modalTitle}
           onClose={this.props.removeEditDeviceGroup}
-          onOk={this.props.saveDeviceGroup}
+          onOk={this.onSaveDeviceGroup}
         >
           <FormGruop
             label={msg.groupname}
+            required={true}
             value={this.getEditVal('groupname')}
+            maxLength="24"
             updater={this.onChangeGroupname}
+            {...groupname}
           />
           <FormGruop
             label={msg.remarks}
+            required={true}
+            maxLength="64"
             value={this.getEditVal('remark')}
             updater={this.onChangeRemark}
+            {...remarks}
           />
           <Table
             className="table"
@@ -208,15 +235,23 @@ function mapStateToProps(state) {
     data: myState.get('data'),
     actionType: myState.get('actionType'),
     edit: myState.get('edit'),
-    devices: myState.get('devices')
+    devices: myState.get('devices'),
+    app: state.app
   };
 }
 
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(Object.assign({},
+    validateActions,
+    actions
+  ), dispatch)
+}
 
 // 添加 redux 属性的 react 页面
-export const View = connect(
+export const Screen = connect(
   mapStateToProps,
-  actions
+  mapDispatchToProps,
+  validator.mergeProps(validOptions)
 )(GroupSettings);
 
 export const settings = reducer;

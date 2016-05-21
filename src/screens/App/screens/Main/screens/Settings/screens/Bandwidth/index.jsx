@@ -3,7 +3,9 @@ import { bindActionCreators } from 'redux';
 import { fromJS, Map, List } from 'immutable';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import validator from 'utils/lib/validator';
 import * as myActions from './actions';
+import * as validateActions from 'actions/valid';
 import myReducer from './reducer';
 
 import {FormGruop} from 'components/Form/Input';
@@ -16,6 +18,15 @@ const msg = {
   'selectGroup': _('Select Group'),
   'save': _('Save')
 };
+
+const validOptions = Map({
+  upstream: validator({
+    rules: 'num:[0, 102400]'
+  }),
+  downstream: validator({
+    rules: 'num:[0, 102400]',
+  })
+});
 
 const propTypes = {
   fetchDeviceGroups: PropTypes.func,
@@ -55,7 +66,12 @@ export const Bandwidth = React.createClass({
   },
   
   onSave() {
-    this.props.setBandwidth();
+    this.props.validateAll(function(invalid) {
+      if(invalid.isEmpty()) {
+        this.props.setBandwidth();
+      }
+    }.bind(this));
+    
   },
   
   render() {
@@ -66,6 +82,8 @@ export const Bandwidth = React.createClass({
           label: item.get('groupname')
         }
       }).toJS();
+      
+    const {upstream, downstream} = this.props.validateOption;
       
     const currData = this.props.data.get('curr');
 
@@ -88,14 +106,22 @@ export const Bandwidth = React.createClass({
        
         <FormGruop
           label={msg.upSpeed}
+          required={true}
+          maxLength="6"
+          help="KB"
           value={currData.get('upstream')}
           updater={this.onChangeUpSpeed}
+          {...upstream}
         />
         
         <FormGruop
           label={msg.downSpeed}
+          help="KB"
+          maxLength="6"
+          required={true}
           value={currData.get('downstream')}
           updater={this.onChangeDownSpeed}
+          {...downstream}
         />
         
         <div className="form-group">
@@ -120,13 +146,22 @@ function mapStateToProps(state) {
   return {
     fetching: myState.get('fetching'),
     data: myState.get('data'),
+    app: state.app
   };
 }
 
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(Object.assign({},
+    validateActions,
+    myActions
+  ), dispatch)
+}
 
+// 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  myActions
+  mapDispatchToProps,
+  validator.mergeProps(validOptions)
 )(Bandwidth);
 
 export const reducer = myReducer;

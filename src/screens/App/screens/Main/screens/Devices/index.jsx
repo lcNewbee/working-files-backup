@@ -2,7 +2,9 @@ import React from 'react';
 import utils from 'utils';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import { bindActionCreators } from 'redux'
 import * as actions from './actions';
+import * as validateActions from 'actions/valid';
 import reducer from './reducer';
 import {fromJS, Map} from 'immutable';
 import validator from 'utils/lib/validator';
@@ -24,6 +26,28 @@ const typeArr = fromJS([
     _('OUTSIDE')
   ]);
 const labelPre = _('Items per page: ');
+
+const validOptions = Map({
+  ip: validator({
+    rules: 'ip'
+  }),
+  
+  mask: validator({
+    rules: 'mask'
+  }),
+  
+  gateway: validator({
+    rules: 'ip'
+  }),
+  
+  main_dns: validator({
+    rules: 'dns'
+  }),
+  
+  second_dns: validator({
+    rules: 'dns'
+  })
+});
 
 const selectOptions = [
   { value: 20, label: labelPre + '20' },
@@ -84,7 +108,7 @@ export const Device = React.createClass({
     var msg_text = _('Are you sure reset device: %s?', mac);
     
     if(confirm(msg_text)) {
-      this.handleAction(mac, 'reboot');
+      this.handleAction(mac, 'reset');
     }
   },
 
@@ -145,8 +169,35 @@ export const Device = React.createClass({
      }.bind(this)
   },
   
+  // 组合验证
+  combineValid() {
+    const {ip, mask, gateway, connect_type} = this.props.edit.toJS();
+    var ret;
+    
+    if(connect_type === 'static') {
+      ret = validator.combineValid.staticIP(ip, mask, gateway);
+    }
+    
+    return ret;
+  },
+  
   onSaveDeviceNetWork() {
-    this.props.saveDeviceNetwork();
+    
+    this.props.validateAll(function(invalid) {
+      let combineValidResult = this.combineValid();
+      
+      if(invalid.isEmpty()) {
+        if(combineValidResult) {
+          alert(combineValidResult)
+        } else {
+          this.props.saveDeviceNetwork();
+        }
+        
+      } else {
+        console.log(invalid.toJS())
+      }
+    }.bind(this));
+   
   },
 
   render() {
@@ -239,7 +290,8 @@ export const Device = React.createClass({
         label: _('Static IP')
       }
     ]);
-   
+    
+    const {ip, mask, gateway, main_dns, second_dns} = this.props.validateOption;
     
     return (
       <div className="page-device">
@@ -318,37 +370,47 @@ export const Device = React.createClass({
             currData.get('connect_type') === 'static' ? (
               <div>
                 <FormGruop
-                  label={_('IP Address')}
+                  label={_('Static IP')}
+                  required={true}
+                  maxLength="12"
                   value={currData.get('ip')}
                   updater={this.onChangeDeviceNetwork('ip')}
-                  validator={validator({
-                    rules: 'ip'
-                  })}
+                
+                  {...ip}
                 />
                
                 <FormGruop
+                  {...mask}
                   label={_('Subnet Mask')}
+                  required={true}
+                  maxLength="12"
                   value={currData.get('mask')}
                   updater={this.onChangeDeviceNetwork('mask')}
-                  validator={validator({
-                    rules: 'mask'
-                  })}
+                 
+                  
                 />
                
                 <FormGruop
-                  label={_('Gateway')}
+                  label={_('Default Gateway')}
+                  required={true}
+                  maxLength="12"
                   value={currData.get('gateway')}
                   updater={this.onChangeDeviceNetwork('gateway')}
+                  {...gateway}
                 />
                 <FormGruop
                   label={_('DNS 1')}
+                  maxLength="12"
                   value={currData.get('main_dns')}
                   updater={this.onChangeDeviceNetwork('main_dns')}
+                  {...main_dns}
                 />
                 <FormGruop
                   label={_('DNS 2')}
+                  maxLength="12"
                   value={currData.get('second_dns')}
                   updater={this.onChangeDeviceNetwork('second_dns')}
+                  {...second_dns}
                 />
               </div>
              ) : null
@@ -369,13 +431,22 @@ function mapStateToProps(state) {
     updateAt: myState.get('updateAt'),
     data: myState.get('data'),
     edit: myState.get('edit'),
+    app: state.app
   };
 }
 
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(Object.assign({},
+    validateActions,
+    actions
+  ), dispatch)
+}
+
 // 添加 redux 属性的 react 页面
-export const View = connect(
+export const Screen = connect(
   mapStateToProps,
-  actions
+  mapDispatchToProps,
+  validator.mergeProps(validOptions)
 )(Device);
 
 export const devices = reducer;
