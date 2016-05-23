@@ -45,7 +45,8 @@ export class Table extends Component {
 
   render() {
     const {className, options, list, size, page, loading} = this.props;
-    var total = this.props.list.size;
+    const listLen = this.props.list.size;
+    
     return (
       <div className="table-wrap">
         <table className={className}>
@@ -54,7 +55,7 @@ export class Table extends Component {
           </thead>
           <tbody>
             {
-              total > 0 ? list.map(function(item, i) {
+              listLen > 0 ? list.map(function(item, i) {
                 return (
                   <Row
                     key={'tableRow' + i}
@@ -76,7 +77,8 @@ export class Table extends Component {
           </tbody>
         </table>
         {
-          page ? <Pagination
+          // 只有当 总页数大于 1时 才显示分页
+          (page && page.totalPage > 1) ? <Pagination
             page={page}
             onPageChange={this.props.onPageChange}
           /> : null
