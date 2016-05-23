@@ -1,11 +1,12 @@
 import React from 'react';
+import utils from 'utils';
 import { bindActionCreators } from 'redux';
 import {fromJS, Map} from 'immutable';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import * as actions from './actions';
-import * as validateActions from 'actions/valid';
 import validator from 'utils/lib/validator';
+import * as validateActions from 'actions/valid';
+import * as actions from './actions';
 import reducer from './reducer';
 import {FormGruop} from 'components/Form/Input';
 import {Table} from 'components/Table';
@@ -241,7 +242,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(Object.assign({},
+  return bindActionCreators(utils.extend({},
     validateActions,
     actions
   ), dispatch)

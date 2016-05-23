@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Pagination from '../Pagination';
+import Icon from '../Icon';
 
 export class Row extends Component {
   render() {
@@ -43,18 +44,17 @@ export class Table extends Component {
   }
 
   render() {
+    const {className, options, list, size, page, loading} = this.props;
     var total = this.props.list.size;
-    var size = this.props.size;
-    
     return (
-      <div>
-        <table className={this.props.className}>
+      <div className="table-wrap">
+        <table className={className}>
           <thead>
-            <Row options={this.props.options} isTh={true} />
+            <Row options={options} isTh={true} />
           </thead>
           <tbody>
             {
-              this.props.list.map(function(item, i) {
+              total > 0 ? list.map(function(item, i) {
                 return (
                   <Row
                     key={'tableRow' + i}
@@ -62,16 +62,36 @@ export class Table extends Component {
                     item={item}
                   />
                 );
-              }.bind(this))
+              }.bind(this)) : (
+                <tr>
+                  <td
+                    colSpan={options.size}
+                    className="empty"
+                  >
+                    {_('No Data')}
+                  </td>
+                </tr>
+              )
             }
           </tbody>
         </table>
         {
-          this.props.page ? <Pagination
-            page={this.props.page}
+          page ? <Pagination
+            page={page}
             onPageChange={this.props.onPageChange}
           /> : null
         }
+        
+        {
+          loading ? (
+            <div className="table-loading">
+              <div className="backdrop"></div>
+              <Icon name="spinner" spin={true} />
+            </div>
+          ) : null
+        }
+        
+        
       </div>
     )
   }

@@ -5,7 +5,7 @@ var utils = {};
 
 function toObject(val) {
   if (val === null || val === undefined) {
-    throw new TypeError('Object.assign cannot be called with null or undefined');
+    throw new TypeError('utils.extend cannot be called with null or undefined');
   }
 
   return Object(val);
@@ -70,7 +70,7 @@ utils.find = function(obj, predicate) {
 };
 
 /**
- * Object.assign
+ * objectAssign
  * @param  {[type]} target [description]
  * @param  {[type]} source [description]
  * @return {[type]}        [description]
@@ -92,6 +92,7 @@ utils.objectAssign = Object.assign || function (target, source) {
 
   return ret;
 };
+
 
 utils.extend = function (target, source) {
   var len = arguments.length;

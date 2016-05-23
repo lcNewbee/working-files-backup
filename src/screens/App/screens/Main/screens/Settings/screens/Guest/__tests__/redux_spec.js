@@ -1,6 +1,5 @@
 import {List, Map, fromJS} from 'immutable';
 import chai, {expect} from 'chai';
-
 import reducer from '../reducer';
 import * as actions from '../actions';
 

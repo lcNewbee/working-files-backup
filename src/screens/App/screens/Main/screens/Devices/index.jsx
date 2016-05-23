@@ -336,6 +336,7 @@ export const Device = React.createClass({
 
         <Table
           className="table"
+          loading={this.props.fetching}
           options={devicesTableOptions}
           list={this.props.data.get('list')}
           page={this.props.data.get('page')}
@@ -436,7 +437,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(Object.assign({},
+  return bindActionCreators(utils.extend({},
     validateActions,
     actions
   ), dispatch)

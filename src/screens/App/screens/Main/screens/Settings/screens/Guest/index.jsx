@@ -1,4 +1,5 @@
 import React, {PropTypes} from 'react';
+import utils from 'utils';
 import { bindActionCreators } from 'redux';
 import {fromJS, Map, List} from 'immutable';
 import { connect } from 'react-redux';
@@ -199,7 +200,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(Object.assign({fetchDeviceGroups}, myActions), dispatch)
+  return bindActionCreators(utils.extend({fetchDeviceGroups}, myActions), dispatch)
 }
 
 export const Screen = connect(

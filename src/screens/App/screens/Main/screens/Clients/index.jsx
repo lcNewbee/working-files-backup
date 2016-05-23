@@ -272,6 +272,7 @@ export const Clients = React.createClass({
           list={this.props.data.get('list')}
           page={this.props.data.get('page')}
           onPageChange={this.onPageChange}
+          loading={this.props.fetching}
         />
         
       </div>

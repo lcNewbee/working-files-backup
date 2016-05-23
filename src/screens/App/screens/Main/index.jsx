@@ -7,6 +7,7 @@ import Icon from 'components/Icon';
 import Sidebar from './components/Sidebar';
 import * as actions from './actions';
 
+
 const BRAND_TEXT = 'Comlanos ' + _('Management');
 
 export default class Main extends Component {

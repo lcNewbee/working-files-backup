@@ -360,48 +360,7 @@ var init = validator.fn.init = function(options) {
 
 init.prototype = validator.fn;
 
-validator.checkClear = function(str, rules) {
-  rules = getRulesObj(rules)
-  
-  return checkClear(str, rules);
-}
-
-validator.check = function(str, rules) {
-  rules = getRulesObj(rules);
-  
-  return check(str, rules);
-}
-
-validator.addVaildate = function(str, rules) {
-  
-  return this;
-}
-
-validator.mergeProps = function(validOptions) {
-  
-  return function(stateProps, dispatchProps, ownProps) {
- 
-    return Object.assign({}, ownProps, stateProps, dispatchProps, {
-      validateOption: (function() {
-        var ret = {};
-        
-        // 验证单独框
-        validOptions.forEach((validate, name) => {
-          ret[name] = {
-            name,
-            validator: validate,
-            errMsg: stateProps.app.getIn(['invalid', name]),
-            validateAt: stateProps.app.get('validateAt'),
-            onValidError: dispatchProps.reportValidError
-          }
-        });
-        
-        return ret;
-      })()
-    });
-  }
-}
-
+// 关联验证
 function isSameNet(ip_lan, ip_wan, mask_lan, mask_wan) {
   var ip1Arr = ip_lan.split("."),
     ip2Arr = ip_wan.split("."),
@@ -490,6 +449,48 @@ validator.combineValid = {
   }
 };
   
+
+validator.mergeProps = function(validOptions) {
+  
+  return function(stateProps, dispatchProps, ownProps) {
+ 
+    return utils.extend({}, ownProps, stateProps, dispatchProps, {
+      validateOption: (function() {
+        var ret = {};
+        
+        // 验证单独框
+        validOptions.forEach((validate, name) => {
+          ret[name] = {
+            name,
+            validator: validate,
+            errMsg: stateProps.app.getIn(['invalid', name]),
+            validateAt: stateProps.app.get('validateAt'),
+            onValidError: dispatchProps.reportValidError
+          }
+        });
+        
+        return ret;
+      })()
+    });
+  }
+}
+
+validator.checkClear = function(str, rules) {
+  rules = getRulesObj(rules)
+  
+  return checkClear(str, rules);
+}
+
+validator.check = function(str, rules) {
+  rules = getRulesObj(rules);
+  
+  return check(str, rules);
+}
+
+validator.addVaildate = function(str, rules) {
+  
+  return this;
+}
 
 export default validator;
 

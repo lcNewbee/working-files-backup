@@ -1,22 +1,20 @@
 // Core 
-// FontAwesome Version
-$g-fa-version:          "4.4.0" !default;
 
 //== Colors
 //
 //## Main Colors
-$g-main-color:            #0080ff !default;
-$g-main-color-light:      #0099ff !default;
-$g-main-color-lighter:    #00bbff !default;
+$g-main-color:            #666 !default;
+$g-main-color-light:      #777 !default;
+$g-main-color-lighter:    #999 !default;
 
 //## Gray and brand colors for use across wgruis.
 //### Gray color
-$g-gray-base:               #000 !default;
-$g-gray-darker:             lighten($g-gray-base, 13.5%) !default; // #222
-$g-gray-dark:               lighten($g-gray-base, 20%) !default;   // #333
-$g-gray:                    lighten($g-gray-base, 33.5%) !default; // #555
-$g-gray-light:              lighten($g-gray-base, 46.7%) !default; // #777
-$g-gray-lighter:            lighten($g-gray-base, 93.5%) !default; // #eee
+$g-black:                 #000 !default;
+$g-gray-darker:             lighten($g-black, 13.5%) !default; // #222
+$g-gray-dark:               lighten($g-black, 20%)   !default; // #333
+$g-gray:                    lighten($g-black, 33.5%) !default; // #555
+$g-gray-light:              lighten($g-black, 46.7%) !default; // #777
+$g-gray-lighter:            lighten($g-black, 93.5%) !default; // #eee
 
 //### Brand color
 $g-brand-primary:           #666666 !default;
@@ -77,11 +75,11 @@ $g-font-size-h6:            ceil(($g-font-size * 0.85)) !default; // ~12px
 //== Distance
 //
 //** width, height, padding, margin size for use across kuaizhuan
-$g-distance: 			        10px !default;
-$g-distance-md: 		      floor(($g-distance * 1.25)) !default;
-$g-distance-lg: 			    ceil(($g-distance * 1.5)) !default;
-$g-distance-sm:           floor(($g-distance * 0.85)) !default;
-$g-distance-min:          floor(($g-distance * 0.5)) !default;
+$g-distance: 			          10px !default;
+$g-distance-md: 		        floor(($g-distance * 1.25)) !default;
+$g-distance-lg: 			      ceil(($g-distance * 1.5)) !default;
+$g-distance-sm:             floor(($g-distance * 0.85)) !default;
+$g-distance-min:            floor(($g-distance * 0.5)) !default;
 
 //== Size
 //
@@ -91,16 +89,16 @@ $g-size-lg:               ($g-size * 2) !default;
 $g-size-sm:               ceil($g-size * 0.53) !default;
 
 // App icon size
-$g-icon-size:          55px !default;
+$g-icon-size:               55px !default;
 $g-icon-size-large:         $g-icon-size * 2 !default;
 $g-icon-size-small:         ceil(($g-font-size * 0.29)) !default; 
 
 //== Container size
 
 // mobile
-$g-screen-mobile-small:       320px !default;
-$g-screen-mobile-base:        375px !default;
-$g-screen-mobile-large:       420px !default;
+$g-mw-mobile-sm:              320px !default;
+$g-mw-mobile-md:              375px !default;
+$g-mw-mobile-lg:              420px !default;
 
 //== Grid system
 //

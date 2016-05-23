@@ -12,4 +12,38 @@
     background: #666;
     color: #fff;
   }
+  
+  .empty {
+    padding: $g-distance;
+    color: $g-gray-light;
+  }
+}
+.table-wrap {
+  position: relative;
+  
+  .table-loading {
+    position: absolute;
+    top: 30px;
+    width: 100%;
+    bottom: 0;
+    text-align: center;
+    
+    .backdrop {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      bottom: 0;
+      z-index: 1;
+      background: #000;
+      @include opacity(.3);
+    }
+    .fa {
+      position: absolute;
+      top: 50%;
+      margin-top: -10px;
+      z-index: 2;
+      font-size: 20px;
+      color: #fff;
+    }
+  }
 }
