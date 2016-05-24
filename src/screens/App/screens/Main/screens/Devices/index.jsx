@@ -19,11 +19,20 @@ import Switchs from 'components/Switchs';
 // css
 import './_index.scss';
 
+/**
+ *
+ */
 const typeArr = [
-  _('All'),
-  _('INSIDE'),
-  _('PIONT TO PIONT'),
-  _('OUTSIDE')
+  {
+    value: '0',
+    label: _('All')
+  }, {
+    value: '1',
+    label: _('INSIDE')
+  },{
+    value: '3',
+    label: _('OUTSIDE')
+  }
 ];
 
 const labelPre = _('Items per page: ');
@@ -126,7 +135,15 @@ export const Device = React.createClass({
     }
   },
   onLocateDevice(mac) {
+    
     this.handleAction(mac, 'locate');
+  },
+  onUpgradeDevice(mac) {
+    var msg_text = _('Upgrade need reboot Device, are you sure upgrade device: %s?', mac);
+    
+    if (confirm(msg_text)) {
+      this.handleAction(mac, 'upgrade');
+    }
   },
 
   // onEdit
@@ -147,7 +164,7 @@ export const Device = React.createClass({
 
   // 组合验证
   combineValid() {
-    const {ip, mask, gateway, connect_type} = this.props.edit.toJS();
+    const {ip, mask, gateway, connect_type} = this.props.store.get('edit').toJS();
     var ret;
 
     if (connect_type === 'static') {
@@ -175,6 +192,7 @@ export const Device = React.createClass({
     }.bind(this));
 
   },
+  
 
   render() {
     const devicesTableOptions = fromJS([
@@ -184,14 +202,19 @@ export const Device = React.createClass({
         transform: function (item) {
           var deviceMac = item.get('mac');
           var name = item.get('devicename') || deviceMac;
-
+          var deviceStatus = item.get('status');
+         
+          if(deviceStatus === 'disable') {
+            return <span>{name}</span>
+          }
+          
           return (
             <span
               className="link-text"
               onClick={this.showEditNetwork(deviceMac) }
               value={deviceMac}
               title={_('MAC Address') + ': ' + deviceMac}
-              >
+            >
               {name}
             </span>
           )
@@ -201,7 +224,12 @@ export const Device = React.createClass({
         text: _('IP Address'),
         transform: function (item) {
           var deviceMac = item.get('mac');
-
+          var deviceStatus = item.get('status');
+         
+          if(deviceStatus === 'disable') {
+            return <span>{item.get('ip')}</span>
+          }
+          
           return (
             <span
               className="link-text"
@@ -214,7 +242,10 @@ export const Device = React.createClass({
         }.bind(this)
       }, {
         id: 'status',
-        text: _('Online Status')
+        text: _('Online Status'),
+        transform: function(item) {
+          return <span>{_(item.get('status'))}</span>
+        }
       }, {
         id: 'model',
         text: _('Model')
@@ -223,7 +254,10 @@ export const Device = React.createClass({
         text: _('Version')
       }, {
         id: 'channel',
-        text: _('Channel')
+        text: _('Channel'),
+        transform: function(item) {
+          return <span>{_(item.get('channel'))}</span>
+        }
       }, {
         id: 'operationhours',
         text: _('Uptime')
@@ -232,7 +266,23 @@ export const Device = React.createClass({
         text: _('Actions'),
         transform: function (item) {
           var deviceMac = item.get('mac');
-
+          var deviceStatus = item.get('status');
+          var upgradeBtn = null;
+          
+          if(deviceStatus === 'disable') {
+            return null;
+          }
+          
+          if(item.get('newest') === '0') {
+            upgradeBtn = <Button
+                onClick={this.onUpgradeDevice.bind(this, deviceMac) }
+                text={_('Upgrade') }
+                size="sm"
+                role="level-up"
+              />;
+          }
+          
+          
           return (
             <div>
               <Button
@@ -253,6 +303,7 @@ export const Device = React.createClass({
                 size="sm"
                 role="reply-all"
               />
+              {upgradeBtn}
             </div>
           )
         }.bind(this)

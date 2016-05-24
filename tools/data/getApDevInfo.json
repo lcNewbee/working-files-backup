@@ -19,22 +19,48 @@
                 "devicename": "神器",
                 "ip": "192.168.5.53",
                 "mac": "12:33:44:55:66:78",
-                "status": "online/offline",
+                "status": "online",
                 "model": "V2.2",
                 "softversion": "V1.1",
                 "channel": "auto",
-                "operationhours": 3600
+                "operationhours": 3600,
+                "newest": "1"
             },
             {
                 "devicetype": "inside",
                 "devicename": "",
                 "ip": "192.168.5.54",
                 "mac": "12:33:44:55:66:78",
-                "status": "online/offline",
+                "status": "offline",
                 "model": "V2.2",
                 "softversion": "V1.1",
                 "channel": "1",
-                "operationhours": 6600
+                "operationhours": 6600,
+                "newest": "0"
+            },
+            {
+                "devicetype": "inside",
+                "devicename": "",
+                "ip": "192.168.5.54",
+                "mac": "12:33:44:55:66:21",
+                "status": "unconfig",
+                "model": "V2.2",
+                "softversion": "V1.1",
+                "channel": "1",
+                "operationhours": 6600,
+                "hasNewSoft": "1"
+            },
+            {
+                "devicetype": "inside",
+                "devicename": "",
+                "ip": "192.168.5.54",
+                "mac": "12:33:44:55:66:21",
+                "status": "disable",
+                "model": "V2.2",
+                "softversion": "V1.1",
+                "channel": "1",
+                "operationhours": 6600,
+                "hasNewSoft": "1"
             }
         ]
     }

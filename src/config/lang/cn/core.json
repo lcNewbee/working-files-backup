@@ -73,12 +73,16 @@
   "Reset": "复位",
   "Reboot": "重启",
   "Locate": "定位",
+  "Upgrade": "升级",
   "Are you sure reset device: %s?": "你确定要复位设备：%s?",
   "Are you sure reboot device: %s?": "你确定要重启设备：%s?",
   "Name": "名称",
   "Nickname": "别名",
   "Connect Type": "连接方式",
-
+  "online": "在线",
+  "offline": "离线",
+  "unconfig": "未配置",
+  "disable": "不可用",
   
   "CLIENTS": "客户端",
   "Clients Info": "客户端信息",

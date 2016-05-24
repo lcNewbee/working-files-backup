@@ -88,7 +88,9 @@ export class Table extends Component {
           loading ? (
             <div className="table-loading">
               <div className="backdrop"></div>
-              <Icon name="spinner" spin={true} />
+              <div className="table-loading-content">
+                <Icon name="spinner" spin={true} />
+              </div>
             </div>
           ) : null
         }

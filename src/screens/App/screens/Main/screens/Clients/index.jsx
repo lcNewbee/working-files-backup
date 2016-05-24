@@ -34,7 +34,7 @@ const clientsTableOptions = fromJS([
     'id': 'bandwidth',
     'text': _('Up/Down Speed'),
     transform: function(item) {
-      return item.get('upstream') + 'KB/' + item.get('downstream');
+      return item.get('upstream') + 'KB/' + item.get('downstream')+ 'KB';
     }
   }, {
     'id': 'rssi',
