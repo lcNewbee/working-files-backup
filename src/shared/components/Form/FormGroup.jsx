@@ -120,7 +120,6 @@ export const FormGroup = React.createClass({
         checkResult = this.props.validator.check(value);
       }
     }
-    console.log(checkResult)
     if(this.props.onValidError) {
       this.props.onValidError({name, checkResult});
     }
@@ -147,7 +146,6 @@ export const FormGroup = React.createClass({
       
       if(prevProps.value !== value) {
         this.checkClear();
-        console.log(prevProps.value, value)
       } else if (prevProps.validateAt !== this.props.validateAt) {
         this.check();
       }
