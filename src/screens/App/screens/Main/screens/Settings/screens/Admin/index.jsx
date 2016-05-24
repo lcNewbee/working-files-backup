@@ -1,4 +1,5 @@
 import React, {PropTypes} from 'react';
+import utils from 'utils';
 import { bindActionCreators } from 'redux';
 import {fromJS, Map, List} from 'immutable';
 import { connect } from 'react-redux';
@@ -24,7 +25,18 @@ const languageOptions = List(b28n.getOptions().supportLang).map((item) => {
     label: b28n.langMap[item] || 'English'
   }
 }).toJS();
-
+const validOptions = Map({
+  oldpasswd: validator({
+    rules: 'len:[1, 64]'
+  }),
+  newpasswd: validator({
+    rules: 'len:[1,, 64]'
+  }),
+  
+  confirmpasswd: validator({
+    rules: 'len:[1,, 64]'
+  })
+});
 
 const propTypes = {
   fetchDeviceGroups: PropTypes.func,
@@ -40,7 +52,11 @@ export const Admin = React.createClass({
   },
   
   onSave() {
-     this.props.savePassword();
+    this.props.validateAll(function (invalid) {
+      if (invalid.isEmpty()) {
+        this.props.savePassword();
+      }
+    }.bind(this));
   },
   
   createUpdateFunc(name) {
@@ -57,36 +73,45 @@ export const Admin = React.createClass({
     window.location.reload();
   },
   
+  getSetting(name) {
+    return this.props.store.getIn(['data', name])
+  },
+  
   render() {
-    const selectOptions = this.props.groups.map(function(item) {
-      return {
-        value: item.get('groupname'),
-        label: item.get('groupname')
-      }
-    }).toJS();
-     
+    const {oldpasswd, newpasswd, confirmpasswd} = this.props.validateOption;
+    
     return (
       <form>
         <h3>{_('Change Password')}</h3>
         
         <FormGroup
+          type="password"
           label={_('Old Password')}
+          required={true}
           name="oldpasswd"
+          value={this.getSetting('oldpasswd')}
           onChange={this.createUpdateFunc('oldpasswd')}
+          {...oldpasswd}
         />
         
         <FormGroup
           type="password"
           label={_('New Password')}
+          required={true}
           name="newpasswd"
+          value={this.getSetting('newpasswd')}
           onChange={this.createUpdateFunc('newpasswd')}
+          {...newpasswd}
         />
         
         <FormGroup
           type="password"
           label={_('Confirm Password')}
+          required={true}
           name="confirmpasswd"
+          value={this.getSetting('confirmpasswd')}
           onChange={this.createUpdateFunc('confirmpasswd')}
+          {...confirmpasswd}
         />
         
         <h3>{_('System Settings')}</h3>
@@ -116,21 +141,24 @@ export const Admin = React.createClass({
 
 Admin.propTypes = propTypes;
 
-//React.PropTypes.instanceOf(Immutable.List).isRequired
 function mapStateToProps(state) {
-  var myState = state.bandwidth;
-
   return {
-    fetching: myState.get('fetching'),
-    data: myState.get('data'),
-    groups: state.groupSettings.getIn(['data', 'list'])
+    store: state.admin,
+    app: state.app
   };
 }
 
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(utils.extend({},
+    validateActions,
+    myActions
+  ), dispatch)
+}
 
 export const Screen = connect(
   mapStateToProps,
-  myActions
+  mapDispatchToProps,
+  validator.mergeProps(validOptions)
 )(Admin);
 
 export const reducer = myReducer;

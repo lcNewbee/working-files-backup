@@ -111,7 +111,7 @@ export const FormGroup = React.createClass({
     const {name, label, value, required} = this.props;
     let checkResult;
     
-    if(value == '') {
+    if(value == '' || value === undefined) {
       if(required) {
         checkResult = _('%s is required', label);
       }

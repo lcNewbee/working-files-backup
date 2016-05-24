@@ -1,4 +1,5 @@
 import React, {PropTypes} from 'react';
+import utils from 'utils';
 import { bindActionCreators } from 'redux';
 import {fromJS, Map, List} from 'immutable';
 import { connect } from 'react-redux';
@@ -12,11 +13,31 @@ import {FormGroup} from 'components/Form';
 import Select from 'components/Select';
 import Button from 'components/Button';
 
-const msg = {
-  'upSpeed': _('Up Speed'),
-  'downSpeed': _('Down Speed'),
-  'selectGroup': _('Select Group')
-};
+const MSG = {
+  Seconds: _('Seconds'),
+  minutes: _('Minutes'),
+  hours: _('Hours'),
+  days: _('Days'),
+  userDef: _('User Defined')
+}
+
+const validOptions = Map({
+  portalname: validator({
+    rules: 'len:[1, 64]'
+  }),
+  url: validator({
+    rules: 'url'
+  }),
+  title: validator({
+    rules: 'url'
+  }),
+  timeout: validator({
+    rules: 'num:[0,9999999]'
+  }),
+  refreshtime: validator({
+    rules: 'num:[0,50]'
+  })
+});
 
 const propTypes = {
   reqeustFetchPortal: PropTypes.func,
@@ -42,7 +63,11 @@ export const Portal = React.createClass({
   },
   
   onSave() {
-    this.props.setPortal();
+    this.props.validateAll(function (invalid) {
+      if (invalid.isEmpty()) {
+        this.props.setPortal();
+      }
+    }.bind(this));
   },
   
   onUploadImage(i) {
@@ -63,59 +88,120 @@ export const Portal = React.createClass({
     }
   },
   
+  getCurrData(name, defaultVal) {
+    return this.props.store.getIn(['data', 'curr', name]) || defaultVal;
+  },
+  
   render() {
-    const groupOptions = this.props.data
-      .get('list').map(function(item, i) {
-        return {
-          value: item.get('groupname'),
-          label: item.get('groupname')
-        }
-      }).toJS();
-    const currData =  this.props.data.get('curr') || Map({});
+    const { getCurrData } = this;
+    const images = getCurrData('image');
+    
+    // validate const
+    const {
+      portalname, url, title, timeout, refreshtime 
+    } = this.props.validateOption;
+    const refreshtimeOtions = [
+      {
+        value: 2,
+        label: '2 ' + MSG.Seconds
+      }, {
+        value: 3,
+        label: '3 ' + MSG.Seconds
+      }, {
+        value: 5,
+        label: '5 ' + MSG.Seconds,
+        default: true
+      }, {
+        value: 10,
+        label: '10 ' + MSG.Seconds
+      }, {
+        value: 20,
+        label: '20 ' + MSG.Seconds
+      }, 
+    ];
+    // minutes
+    const expirationOptions = [
+      {
+        value: 3600,
+        label: '1 ' + MSG.hours
+      }, {
+        value: 14400,
+        label: '4 ' + MSG.hours
+      }, {
+        value: 28800,
+        label: '8 ' + MSG.hours
+      }, {
+        value: 86400,
+        label: '24 ' + MSG.hours
+      }, {
+        value: 172800,
+        label: '2 ' + MSG.days
+      }, {
+        value: 4320,
+        label: '3 ' +  MSG.days
+      }, {
+        value: 432000,
+        label: '5 ' +  MSG.days
+      }, {
+        value: 604800,
+        label: '7 ' +  MSG.days
+      },
+    ]
    
     return (
-      
       <div>
         <h3>{_('Portal Settings')}</h3>
         <FormGroup
           label={_('Portal Name')}
           name="portalname"
-          value={currData.get('portalname')}
+          value={getCurrData('portalname')}
           onChange={this.onUpdateSettings('portalname')}
+          required={true}
+          {...portalname}
         />
         <FormGroup
-          label={_('Auth Rederict URL')}
+          label={ _('Auth Rederict URL') }
           name="url"
-          value={currData.get('url')}
+          value={getCurrData('url')}
           onChange={this.onUpdateSettings('url')}
+          {...url}
         />
         <FormGroup
           label={_('Title')}
           name="title"
-          value={currData.get('title')}
+          value={getCurrData('title')}
           onChange={this.onUpdateSettings('title')}
+          required={true}
+          {...title}
         />
         
         <FormGroup
-          label={_('Timeout')}
-          help={_('Seconds')}
-          name="timeout"
-          value={currData.get('timeout')}
-          onChange={this.onUpdateSettings('timeout')}
-        />
+          label={_('Expiration')}
+          {...timeout}
+        >
+          <Select
+            name="timeout"
+            options={expirationOptions}
+            value={getCurrData('timeout')}
+            onChange={this.onUpdateSettings('timeout')}
+            clearable={ false }
+            searchable={ false }
+          />
+        </FormGroup>
         
         <FormGroup
           label={_('Images Slider Time')}
-          help={_('Seconds')}
+          type="select"
+          options={refreshtimeOtions}
           name="refreshtime"
-          value={currData.get('refreshtime')}
+          value={getCurrData('refreshtime')}
           onChange={this.onUpdateSettings('refreshtime')}
         />
         
         <div className="images-list">
           <p className="form-group">{_('msg_select_img')}</p>
           {
-            currData.get('image') ? currData.get('image').map(function(item){
+            images ? images.map(function(item){
               return <img src={item.get('image')} key={item.get('count')} />
             }) : null
           }
@@ -207,14 +293,22 @@ function mapStateToProps(state) {
   var myState = state.portal;
 
   return {
-    fetching: myState.get('fetching'),
-    data: myState.get('data')
+    store: state.portal,
+    app: state.app
   };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(utils.extend({},
+    validateActions,
+    myActions
+  ), dispatch)
 }
 
 export const Screen = connect(
   mapStateToProps,
-  myActions
+  mapDispatchToProps,
+  validator.mergeProps(validOptions)
 )(Portal);
 
 export const reducer = myReducer;

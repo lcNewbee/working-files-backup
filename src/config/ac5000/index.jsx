@@ -57,7 +57,7 @@ const sBandwidth = require('../../screens/App/screens/Main/screens/Settings/scre
 const sWireless = require('../../screens/App/screens/Main/screens/Settings/screens/Wireless');
 const sPortal = require('../../screens/App/screens/Main/screens/Settings/screens/Portal');
 const sGuest = require('../../screens/App/screens/Main/screens/Settings/screens/Guest');
-const sPassword = require('../../screens/App/screens/Main/screens/Settings/screens/Admin');
+const sAdmin = require('../../screens/App/screens/Main/screens/Settings/screens/Admin');
 
 let routes = [{
     path: '/',
@@ -135,7 +135,7 @@ let routes = [{
               id: 'password',
               path: '/main/settings/admin',
               text: _('Admin'),
-              component: sPassword.Screen
+              component: sAdmin.Screen
             }
           ]
         }]
@@ -164,7 +164,7 @@ const reducers = {
   wireless: sWireless.reducer,
   portal: sPortal.reducer,
   guest: sGuest.reducer,
-  password: sPassword.reducer
+  admin: sAdmin.reducer
 };
 
 // Store

@@ -108,7 +108,7 @@ class FormInput extends React.Component {
   }
 
   render() {
-    const {Component, type, clearable, className} = this.props;
+    const {Component, type, clearable, className, searchable} = this.props;
     let MyComponent = Component;
     let classNames = className;
     
@@ -116,7 +116,8 @@ class FormInput extends React.Component {
       
       return <Select 
         {...this.props}
-        clearable={clearable || false}
+        clearable={ clearable || false }
+        searchable={ searchable || false }
       />
     }
     

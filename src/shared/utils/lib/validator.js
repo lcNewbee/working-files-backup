@@ -27,7 +27,8 @@ var vaildate = {
     if (!string.isInteger(str)) {
       return _("Must be integer");
     }
-    if (min && max) {
+    
+    if (min !== undefined && max !== undefined) {
       if (parseInt(str, 10) < min || parseInt(str, 10) > max) {
 
         return _("Input integer range is: %s - %s", min, max);
@@ -257,9 +258,14 @@ function checkClear(str, rules, label) {
   var len = rules.length;
   var ret, args, rulesArr, i, ruleObj;
 
+  if(str === undefined) {
+    return ;
+  }
+  
   if(typeof str !== 'string') {
     throw new TypeError('validate function should be called with string');
   }
+  
   for (i = 0; i < len; i++) {
     args = [str];
     ruleObj = rules[i];
@@ -281,9 +287,13 @@ function checkClear(str, rules, label) {
 function check(str, rules, label) {
   var len = rules.length;
   var ret, args, rulesArr, i, ruleObj;
+  
+  if(str === undefined) {
+    return ;
+  }
 
   if(typeof str !== 'string') {
-    throw new TypeError('validate function should be called with string');
+    throw new TypeError('validate function should be called with string, but ' + str);
   }
 
   for (i = 0; i < len; i++) {

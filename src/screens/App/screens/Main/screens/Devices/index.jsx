@@ -20,7 +20,7 @@ import Switchs from 'components/Switchs';
 import './_index.scss';
 
 const typeArr = [
-    _('All'),
+  _('All'),
   _('INSIDE'),
   _('PIONT TO PIONT'),
   _('OUTSIDE')
@@ -32,19 +32,19 @@ const validOptions = Map({
   ip: validator({
     rules: 'ip'
   }),
-  
+
   mask: validator({
     rules: 'mask'
   }),
-  
+
   gateway: validator({
     rules: 'ip'
   }),
-  
+
   main_dns: validator({
     rules: 'dns'
   }),
-  
+
   second_dns: validator({
     rules: 'dns'
   })
@@ -67,7 +67,7 @@ export const Device = React.createClass({
   handleSearch() {
     this.props.fetchDevices('/goform/devices');
   },
-  
+
   /**
    * action: reboot | reset | locate
    */
@@ -78,7 +78,7 @@ export const Device = React.createClass({
         mac
       ]
     }
-    
+
     this.props.saveDevicesAction(data)
   },
 
@@ -113,151 +113,150 @@ export const Device = React.createClass({
    */
   onResetDevice(mac) {
     var msg_text = _('Are you sure reset device: %s?', mac);
-    
-    if(confirm(msg_text)) {
+
+    if (confirm(msg_text)) {
       this.handleAction(mac, 'reset');
     }
   },
   onRebootDevice(mac) {
     var msg_text = _('Are you sure reboot device: %s?', mac);
-    
-    if(confirm(msg_text)) {
+
+    if (confirm(msg_text)) {
       this.handleAction(mac, 'reboot');
     }
   },
   onLocateDevice(mac) {
     this.handleAction(mac, 'locate');
   },
-  
+
   // onEdit
   showEditNetwork(mac) {
-    
-    return function(e) {
+
+    return function (e) {
       this.props.fetchDeviceNetwork(mac)
     }.bind(this);
   },
   onChangeDeviceNetwork(name) {
-     return function(data) {
-       var editObj = {};
-       
-       editObj[name] = data.value;
-       this.props.changeDeviceNetwork(editObj);
-     }.bind(this)
+    return function (data) {
+      var editObj = {};
+
+      editObj[name] = data.value;
+      this.props.changeDeviceNetwork(editObj);
+    }.bind(this)
   },
-  
+
   // 组合验证
   combineValid() {
     const {ip, mask, gateway, connect_type} = this.props.edit.toJS();
     var ret;
-    
-    if(connect_type === 'static') {
+
+    if (connect_type === 'static') {
       ret = validator.combineValid.staticIP(ip, mask, gateway);
     }
-    
+
     return ret;
   },
-  
+
   onSaveDeviceNetWork() {
-    
-    this.props.validateAll(function(invalid) {
+
+    this.props.validateAll(function (invalid) {
       let combineValidResult = this.combineValid();
-      
-      if(invalid.isEmpty()) {
-        if(combineValidResult) {
+
+      if (invalid.isEmpty()) {
+        if (combineValidResult) {
           alert(combineValidResult)
         } else {
           this.props.saveDeviceNetwork();
         }
-        
+
       } else {
         console.log(invalid.toJS())
       }
     }.bind(this));
-   
+
   },
 
   render() {
-    const devicesTableOptions = fromJS([{
-      id: 'devicename',
-      text: _('MAC Address') + '/' + _('Name'),
-      transform: function(item) {
-        var deviceMac = item.get('mac');
-        var name = item.get('devicename') || deviceMac;
-        
-        return (
-          <span
-            className="link-text"
-            onClick={this.showEditNetwork(deviceMac)}
-            value={deviceMac}
-            title={_('MAC Address') + ': ' + deviceMac}
-          >
-            {name}
-          </span>
-        )
-      }.bind(this)
-    }, {
-      id: 'ip',
-      text: _('IP Address'),
-      transform: function(item) {
-        var deviceMac = item.get('mac');
-        
-        return (
-          <span
-            className="link-text"
-            onClick={this.showEditNetwork(deviceMac)}
-            value={deviceMac}
-          >
-            {item.get('ip')}
-          </span>
-        )
-      }.bind(this)
-    }, {
-      id: 'status',
-      text: _('Online Status')
-    }, {
-      id: 'model',
-      text: _('Model')
-    }, {
-      id: 'softversion',
-      text:  _('Version')
-    }, {
-      id: 'channel',
-      text: _('Channel')
-    }, {
-      id: 'operationhours',
-      text: _('Uptime')
-    }, {
-      id: 'op',
-      text: _('Actions'),
-      transform: function(item) {
-        var deviceMac = item.get('mac');
-      
-        return (
-          <div>
-            <Button
-              onClick={this.onRebootDevice.bind(this, deviceMac)}
-              text={_('Reboot')}
-              size="sm"
-              role="recycle"
-            />
-            <Button
-              onClick={this.onLocateDevice.bind(this, deviceMac)}
-              text={_('Locate')}
-              size="sm"
-              role="location-arrow"
-            />
-            <Button
-              onClick={this.onResetDevice.bind(this, deviceMac)}
-              text={_('Reset')}
-              size="sm"
-              role="reply-all"
-            />
-          </div>
-        )
-      }.bind(this)
-    }]);
-    
-    const currData = this.props.edit || Map({});
+    const devicesTableOptions = fromJS([
+      {
+        id: 'devicename',
+        text: _('MAC Address') + '/' + _('Name'),
+        transform: function (item) {
+          var deviceMac = item.get('mac');
+          var name = item.get('devicename') || deviceMac;
+
+          return (
+            <span
+              className="link-text"
+              onClick={this.showEditNetwork(deviceMac) }
+              value={deviceMac}
+              title={_('MAC Address') + ': ' + deviceMac}
+              >
+              {name}
+            </span>
+          )
+        }.bind(this)
+      }, {
+        id: 'ip',
+        text: _('IP Address'),
+        transform: function (item) {
+          var deviceMac = item.get('mac');
+
+          return (
+            <span
+              className="link-text"
+              onClick={this.showEditNetwork(deviceMac) }
+              value={deviceMac}
+              >
+              {item.get('ip') }
+            </span>
+          )
+        }.bind(this)
+      }, {
+        id: 'status',
+        text: _('Online Status')
+      }, {
+        id: 'model',
+        text: _('Model')
+      }, {
+        id: 'softversion',
+        text: _('Version')
+      }, {
+        id: 'channel',
+        text: _('Channel')
+      }, {
+        id: 'operationhours',
+        text: _('Uptime')
+      }, {
+        id: 'op',
+        text: _('Actions'),
+        transform: function (item) {
+          var deviceMac = item.get('mac');
+
+          return (
+            <div>
+              <Button
+                onClick={this.onRebootDevice.bind(this, deviceMac) }
+                text={_('Reboot') }
+                size="sm"
+                role="recycle"
+              />
+              <Button
+                onClick={this.onLocateDevice.bind(this, deviceMac) }
+                text={_('Locate') }
+                size="sm"
+                role="location-arrow"
+              />
+              <Button
+                onClick={this.onResetDevice.bind(this, deviceMac) }
+                text={_('Reset') }
+                size="sm"
+                role="reply-all"
+              />
+            </div>
+          )
+        }.bind(this)
+      }]);
     const typeOptions = fromJS([
       {
         value: 'dhcp',
@@ -267,12 +266,13 @@ export const Device = React.createClass({
         label: _('Static IP')
       }
     ]);
+    const currData = this.props.store.get('edit') || Map({});
     const {ip, mask, gateway, main_dns, second_dns} = this.props.validateOption;
-    const { text, devicetype, size } = this.props.query.toJS();
-    
+    const { text, devicetype, size } = this.props.store.get('query').toJS();
+
     return (
       <div className="page-device">
-        <h2>{_('Devices Info')}</h2>
+        <h2>{_('Devices Info') }</h2>
         <div className="clearfix">
           <Search
             className="search fl"
@@ -280,13 +280,13 @@ export const Device = React.createClass({
             onChange={this.onChangeSearchText}
             onSearch={this.handleSearch}
           />
-          
+
           <Switchs
             options={typeArr}
             value={devicetype}
             onChange={this.onChangeDevicesQuery}
           />
-         
+
           <Select
             className="fr"
             clearable={false}
@@ -300,32 +300,32 @@ export const Device = React.createClass({
           className="table"
           loading={this.props.fetching}
           options={devicesTableOptions}
-          list={this.props.data.get('list')}
-          page={this.props.data.get('page')}
+          list={this.props.store.getIn(['data', 'list']) }
+          page={this.props.store.getIn(['data', 'page']) }
           onPageChange={this.onPageChange}
         />
-        
+
         <Modal
-          isShow={this.props.edit ? true : false}
-          title={currData.get('mac')}
+          isShow={currData.isEmpty() ? false : true}
+          title={currData.get('mac') }
           onClose={this.props.closeDeviceEdit}
           onOk={this.onSaveDeviceNetWork}
-        >
+          >
           <FormGroup
-            label={_('Nickname')}
+            label={_('Nickname') }
             maxLength="24"
-            value={currData.get('nickname')}
-            onChange={this.onChangeDeviceNetwork('nickname')}
+            value={currData.get('nickname') }
+            onChange={this.onChangeDeviceNetwork('nickname') }
           />
-                
+
           <div className="form-group">
-            <label htmlFor="">{_('Connect Type')}</label>
+            <label htmlFor="">{_('Connect Type') }</label>
             <div className="form-control">
               <Switchs
                 options={typeOptions}
                 clearable={false}
-                onChange={this.onChangeDeviceNetwork('connect_type')}
-                value={currData.get('connect_type')}
+                onChange={this.onChangeDeviceNetwork('connect_type') }
+                value={currData.get('connect_type') }
               />
             </div>
           </div>
@@ -333,50 +333,50 @@ export const Device = React.createClass({
             currData.get('connect_type') === 'static' ? (
               <div>
                 <FormGroup
-                  label={_('Static IP')}
+                  label={_('Static IP') }
                   required={true}
                   maxLength="12"
-                  value={currData.get('ip')}
-                  onChange={this.onChangeDeviceNetwork('ip')}
-                
+                  value={currData.get('ip') }
+                  onChange={this.onChangeDeviceNetwork('ip') }
+
                   {...ip}
                 />
-               
+
                 <FormGroup
                   {...mask}
-                  label={_('Subnet Mask')}
+                  label={_('Subnet Mask') }
                   required={true}
                   maxLength="12"
-                  value={currData.get('mask')}
-                  onChange={this.onChangeDeviceNetwork('mask')}
+                  value={currData.get('mask') }
+                  onChange={this.onChangeDeviceNetwork('mask') }
                 />
-               
+
                 <FormGroup
-                  label={_('Default Gateway')}
+                  label={_('Default Gateway') }
                   required={true}
                   maxLength="12"
-                  value={currData.get('gateway')}
-                  onChange={this.onChangeDeviceNetwork('gateway')}
+                  value={currData.get('gateway') }
+                  onChange={this.onChangeDeviceNetwork('gateway') }
                   {...gateway}
                 />
                 <FormGroup
-                  label={_('DNS 1')}
+                  label={_('DNS 1') }
                   maxLength="12"
-                  value={currData.get('main_dns')}
-                  onChange={this.onChangeDeviceNetwork('main_dns')}
+                  value={currData.get('main_dns') }
+                  onChange={this.onChangeDeviceNetwork('main_dns') }
                   {...main_dns}
                 />
                 <FormGroup
-                  label={_('DNS 2')}
+                  label={_('DNS 2') }
                   maxLength="12"
-                  value={currData.get('second_dns')}
-                  onChange={this.onChangeDeviceNetwork('second_dns')}
+                  value={currData.get('second_dns') }
+                  onChange={this.onChangeDeviceNetwork('second_dns') }
                   {...second_dns}
                 />
               </div>
-             ) : null
+            ) : null
           }
-          
+
         </Modal>
       </div>
     );
@@ -384,14 +384,13 @@ export const Device = React.createClass({
 });
 
 function mapStateToProps(state) {
-  var myState = state.devices;
-  
+
   return {
-    fetching: myState.get('fetching'),
-    query: myState.get('query'),
-    updateAt: myState.get('updateAt'),
-    data: myState.get('data'),
-    edit: myState.get('edit'),
+    // fetching: myState.get('fetching'),
+    // query: myState.get('query'),
+    // data: myState.get('data'),
+    // edit: myState.get('edit'),
+    store: state.devices,
     app: state.app
   };
 }

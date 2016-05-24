@@ -5,13 +5,22 @@ const defaultState = fromJS({
     list: [
       {}
     ],
-    curr: {}
+    curr: {
+      
+    }
   }
 });
 
 function receiveSettings(state, settingData) {
   let ret = state.update('data', data => data.merge(settingData));
-  let listCurr = ret.getIn(['data', 'list', 0]) || Map({});
+  let listCurr = ret.getIn(['data', 'list', 0]);
+  
+  if (listCurr === undefined || listCurr.isEmpty()) {
+    listCurr = Map({
+      refreshtime: 3,
+      timeout: 14400
+    });
+  }
   
   return ret.setIn(['data', 'curr'], listCurr)
       .set('fetching', false);
