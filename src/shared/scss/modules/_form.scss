@@ -12,20 +12,18 @@ body input[type=file] {
   font-size: 11px;
 }
 
-label {
-  display: inline-block;
-  min-width: 150px;
-}
 
 .form-group {
   margin-bottom: 12px;
 
-  label {
+  > label {
+    display: inline-block;
     float: left;
     margin-right: 15px;
-    text-align: right;
-    line-height: 28px;
+    min-width: 150px;
     color: #666;
+    text-align: right;
+    line-height: 29px;
     
     .btn {
       line-height: 14px;
@@ -34,6 +32,11 @@ label {
   
   .text {
     width: 200px;
+    line-height: 20px;
+    
+    &:focus {
+      border: 1px solid $g-brand-info;
+    }
   }
   
   .input-sm {
@@ -42,20 +45,28 @@ label {
   
   .form-control {
     margin-left: 165px;
+    color: #666;
   }
   
   .help {
-    color: #999;
-    margin-left: 10px;
-    line-height: 28px;
-    font-size: 12px;
     display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+    color: #999;
+    font-size: 12px;
+    line-height: 29px;
   }
   .error {
     display: inline-block;
-    line-height: 28px;
+    vertical-align: middle;
     margin-left: 5px;
     color: red;
+    font-size: 12px;
+    line-height: 29px;
+  }
+  .checkbox {
+    line-height: 29px;
+    color: #999;
     font-size: 12px;
   }
 }
@@ -81,5 +92,15 @@ label {
   
   input[type=text] {
     padding-left: 25px;
+  }
+}
+
+.checkbox {
+  display: inline-block;
+  overflow: auto;
+  vertical-align: middle;
+
+  input {
+    margin-right: 4px;
   }
 }

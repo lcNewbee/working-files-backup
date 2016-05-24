@@ -6,8 +6,9 @@ import {fromJS} from 'immutable';
 // components
 import {Table} from 'components/Table';
 import Button from 'components/Button';
-import {Search} from 'components/Form/Input';
+import {Search} from 'components/Form';
 import Select from 'components/Select';
+import Switchs from 'components/Switchs';
 
 // custom 
 import * as actions from './actions';
@@ -64,13 +65,13 @@ const selectOptions = [
   { value: 100, label: msg.perPage + '100' },
 ];
 
-const typeArr = fromJS([
+const typeArr = [
   _('ALL'),
   _('WIRELESS'),
   _('WIRED'),
   _('GUEST'),
   _('LOCKED'),
-]);
+];
 
 const styles = {
   actionButton: {
@@ -115,29 +116,21 @@ export const Clients = React.createClass({
     }, true);
   },
 
-  onChangeSearchText(e) {
-    var val = e.target.value;
-
+  onChangeSearchText(val, e) {
     this.handleChangeQuery({
       search: val
     });
   },
 
-  onChangeType(i) {
+  onChangeType(data) {
     this.handleChangeQuery({
-      type: i
+      type: data.value
     }, true);
   },
 
-  onChangeTableSize(option) {
-    var val = '';
-
-    if(option) {
-      val = option.value;
-    }
-
+  onChangeTableSize(data) {
     this.handleChangeQuery({
-      size: val,
+      size: data.value,
       page: 1
     }, true);
   },
@@ -146,10 +139,6 @@ export const Clients = React.createClass({
     this.handleChangeQuery({
       page: i
     }, true);
-  },
-  
-  showEditNetwork() {
-    
   },
 
   render() {
@@ -235,28 +224,11 @@ export const Clients = React.createClass({
             updater={this.onChangeSearchText}
             onSearch={this.handleSearch}
           />
-
-          <div className="btn-group fl">
-            {
-            typeArr.map(function(val, i){
-              var classNameVal = 'btn';
-
-              if(this.props.query.get('type') === i) {
-                classNameVal += ' active';
-              }
-
-              return (
-                <button
-                  className={classNameVal}
-                  key={'btnGroup' + i}
-                  onClick={this.onChangeType.bind(this, i)}
-                >
-                  {val}
-                </button>
-              )
-            }.bind(this))
-          }
-          </div>
+          <Switchs
+            value={this.props.query.get('type')}
+            options={typeArr}
+            onChange={this.onChangeType}
+          />
           <Select
             className="fr"
             clearable={false}

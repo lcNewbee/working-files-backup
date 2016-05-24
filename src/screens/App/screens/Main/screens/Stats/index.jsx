@@ -5,7 +5,6 @@ import { bindActionCreators } from 'redux';
 import {List, fromJS} from 'immutable';
 
 // components
-import { Input, FormGruop } from 'components/Form/Input';
 import {Table} from 'components/Table';
 import Switchs from 'components/Switchs';
 

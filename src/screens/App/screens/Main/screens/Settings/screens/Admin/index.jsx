@@ -9,7 +9,7 @@ import * as myActions from './actions';
 import myReducer from './reducer';
 
 
-import {FormGruop} from 'components/Form/Input';
+import {FormGroup} from 'components/Form';
 import Select from 'components/Select';
 import Button from 'components/Button';
 
@@ -18,6 +18,13 @@ const msg = {
   'downSpeed': _('Down Speed'),
   'selectGroup': _('Select Group')
 };
+const languageOptions = List(b28n.getOptions().supportLang).map((item) => {
+  return {
+    value: item,
+    label: b28n.langMap[item] || 'English'
+  }
+}).toJS();
+
 
 const propTypes = {
   fetchDeviceGroups: PropTypes.func,
@@ -26,7 +33,7 @@ const propTypes = {
   groups: PropTypes.instanceOf(List)
 };
 
-export const Password = React.createClass({
+export const Admin = React.createClass({
   mixins: [PureRenderMixin],
   
   componentWillMount() {
@@ -37,23 +44,17 @@ export const Password = React.createClass({
   },
   
   createUpdateFunc(name) {
-    return function(e) {
-      const elem = e.target;
-      let data = {};
+    return function(data) {
+      let settings = {};
       
-      if(elem.type !== 'checkbox') {
-        data[name] = e.target.value;
-      } else {
-        
-        if(elem.checked) {
-          data[name] = '1';
-        } else {
-          data[name] = '0';
-        }
-      }
-      
-      this.props.changePasswordSettings(data);
+      settings[name] = data.value
+      this.props.changePasswordSettings(settings);
     }.bind(this) 
+  },
+  
+  onChangeLang(data) {
+    b28n.setLang(data.value);
+    window.location.reload();
   },
   
   render() {
@@ -63,29 +64,39 @@ export const Password = React.createClass({
         label: item.get('groupname')
       }
     }).toJS();
-
+     
     return (
       <form>
         <h3>{_('Change Password')}</h3>
         
-        <FormGruop
+        <FormGroup
           label={_('Old Password')}
           name="oldpasswd"
-          updater={this.createUpdateFunc('oldpasswd')}
+          onChange={this.createUpdateFunc('oldpasswd')}
         />
         
-        <FormGruop
+        <FormGroup
           type="password"
           label={_('New Password')}
           name="newpasswd"
-          updater={this.createUpdateFunc('newpasswd')}
+          onChange={this.createUpdateFunc('newpasswd')}
         />
         
-        <FormGruop
+        <FormGroup
           type="password"
           label={_('Confirm Password')}
           name="confirmpasswd"
-          updater={this.createUpdateFunc('confirmpasswd')}
+          onChange={this.createUpdateFunc('confirmpasswd')}
+        />
+        
+        <h3>{_('System Settings')}</h3>
+        
+        <FormGroup
+          label={_('Select Language')}
+          type="select"
+          options={languageOptions}
+          value={b28n.getLang()}
+          onChange={this.onChangeLang}
         />
         
         <div className="form-group">
@@ -103,7 +114,7 @@ export const Password = React.createClass({
   }
 });
 
-Password.propTypes = propTypes;
+Admin.propTypes = propTypes;
 
 //React.PropTypes.instanceOf(Immutable.List).isRequired
 function mapStateToProps(state) {
@@ -120,6 +131,6 @@ function mapStateToProps(state) {
 export const Screen = connect(
   mapStateToProps,
   myActions
-)(Password);
+)(Admin);
 
 export const reducer = myReducer;

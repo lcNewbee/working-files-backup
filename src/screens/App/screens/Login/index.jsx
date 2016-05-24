@@ -2,7 +2,7 @@ import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {Input, FormGruop} from 'components/Form/Input';
+import {Input, FormGroup} from 'components/Form';
 import {fromJS, Map} from 'immutable';
 import validator from 'utils/lib/validator';
 import * as actions from './actions';
@@ -10,7 +10,7 @@ import reducer from './reducer';
 
 import './_login.scss';
 
-const formGroups = Map({
+const formGroups = {
   password: {
     input: {
       type: 'password',
@@ -23,7 +23,7 @@ const formGroups = Map({
       rules: 'required'
     })
   }
-});
+};
 
 // 原生的 react 页面
 export const Login = React.createClass({
@@ -47,7 +47,7 @@ export const Login = React.createClass({
   
   checkData() {
     var data = this.props.data.toJS();
-    var passCheck = formGroups.get('password').validator.check(data.password);
+    var passCheck = formGroups.password.validator.check(data.password);
     
     return passCheck;
   },
@@ -67,13 +67,12 @@ export const Login = React.createClass({
   },
 
   onChangeData(name) {
-    const thisProp = this.props;
-
-    return function (e) {
-      const data = {};
-      data[name] = e.target.value;
-      thisProp.updateData(data);
-    };
+    return function (data) {
+      const subData = {};
+      
+      subData[name] = data.value;
+      this.props.updateData(subData);
+    }.bind(this);
   },
 
   getDataValue(name) {
@@ -89,24 +88,9 @@ export const Login = React.createClass({
   },
 
   render() {
-    var formGruopList;
     var that = this;
     var myMsg = this.props.status;
-
-    formGruopList = formGroups.toArray().map(function(item) {
-      var input = item.input;
-      
-      return (
-        <FormGruop
-          {...input}
-          key={input.name}
-          value={this.getDataValue(input.name) }
-          updater={this.onChangeData(input.name) }
-          onKeyUp={this.onInputKeyUp}
-        />
-      );
-    }.bind(this));
-    
+ 
     return (
       <div>
         <header className="navbar">
@@ -114,7 +98,16 @@ export const Login = React.createClass({
         </header>
         <div className="login">
           <h1>{_('Please Login')}</h1>
-          {formGruopList}
+          <FormGroup
+            type="password"
+            name="password"
+            maxLength="21"
+            placeholder={_('Password')}
+            value={this.getDataValue('password') }
+            onChange={this.onChangeData('password') }
+            onKeyUp={this.onInputKeyUp}
+            validator={formGroups.password.validator}
+          />
           {
             this.props.status !== 'ok' ?
               <p className="msg-error ">{this.props.status}</p> :

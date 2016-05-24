@@ -10,7 +10,7 @@ import {fromJS, Map} from 'immutable';
 import validator from 'utils/lib/validator';
 
 import {Table} from 'components/Table';
-import {Search, FormGruop} from 'components/Form/Input';
+import {Search, FormGroup, Checkbox} from 'components/Form';
 import Button from 'components/Button';
 import Select from 'components/Select';
 import Modal from 'components/Modal';
@@ -19,12 +19,13 @@ import Switchs from 'components/Switchs';
 // css
 import './_index.scss';
 
-const typeArr = fromJS([
-      _('All'),
-    _('INSIDE'),
-    _('PIONT TO PIONT'),
-    _('OUTSIDE')
-  ]);
+const typeArr = [
+    _('All'),
+  _('INSIDE'),
+  _('PIONT TO PIONT'),
+  _('OUTSIDE')
+];
+
 const labelPre = _('Items per page: ');
 
 const validOptions = Map({
@@ -81,29 +82,35 @@ export const Device = React.createClass({
     this.props.saveDevicesAction(data)
   },
 
-  onChangeSearchText(e) {
-    var val = e.target.value;
-    
+  // on Query changed
+  onChangeSearchText(val) {
     this.props.changeDevicesQuery({
       search: val
     });
   },
-
-  onChangeType(i) {
+  onChangeTableSize(option) {
     this.props.changeDevicesQuery({
-      devicetype: i
+      size: option.value,
+      page: 1
+    });
+    this.handleSearch()
+  },
+  onChangeDevicesQuery(data) {
+    this.props.changeDevicesQuery({
+      devicetype: data.value
+    });
+    this.handleSearch()
+  },
+  onPageChange(i) {
+    this.props.changeDevicesQuery({
+      page: i
     });
     this.handleSearch()
   },
 
-  onSearchKeyUp(e) {
-    var which = e.which;
-
-    if(which === 13) {
-      this.handleSearch()
-    }
-  },
-
+  /**
+   * 
+   */
   onResetDevice(mac) {
     var msg_text = _('Are you sure reset device: %s?', mac);
     
@@ -111,7 +118,6 @@ export const Device = React.createClass({
       this.handleAction(mac, 'reset');
     }
   },
-
   onRebootDevice(mac) {
     var msg_text = _('Are you sure reboot device: %s?', mac);
     
@@ -119,53 +125,23 @@ export const Device = React.createClass({
       this.handleAction(mac, 'reboot');
     }
   },
-
   onLocateDevice(mac) {
     this.handleAction(mac, 'locate');
   },
   
-  onChangeTableSize(option) {
-    var val = '';
-    
-    if(option) {
-      val = option.value;
-    }
-    
-    this.props.changeDevicesQuery({
-      size: val,
-      page: 1
-    });
-    this.handleSearch()
-  },
-  
-  onPageChange(i) {
-    this.props.changeDevicesQuery({
-      page: i
-    });
-    this.handleSearch()
-  },
-  
+  // onEdit
   showEditNetwork(mac) {
     
     return function(e) {
       this.props.fetchDeviceNetwork(mac)
     }.bind(this);
   },
-  
-  onChangeConnectType(data) {
-    this.props.changeDeviceNetwork({
-      connect_type: data.value
-    });
-  },
-  
   onChangeDeviceNetwork(name) {
-     return function(e) {
-       var val = e.target.value;
-       var data = {};
+     return function(data) {
+       var editObj = {};
        
-       data[name] = val;
-       
-       this.props.changeDeviceNetwork(data);
+       editObj[name] = data.value;
+       this.props.changeDeviceNetwork(editObj);
      }.bind(this)
   },
   
@@ -213,6 +189,7 @@ export const Device = React.createClass({
             className="link-text"
             onClick={this.showEditNetwork(deviceMac)}
             value={deviceMac}
+            title={_('MAC Address') + ': ' + deviceMac}
           >
             {name}
           </span>
@@ -259,19 +236,19 @@ export const Device = React.createClass({
           <div>
             <Button
               onClick={this.onRebootDevice.bind(this, deviceMac)}
-              text="重启"
+              text={_('Reboot')}
               size="sm"
               role="recycle"
             />
             <Button
               onClick={this.onLocateDevice.bind(this, deviceMac)}
-              text="定位"
+              text={_('Locate')}
               size="sm"
               role="location-arrow"
             />
             <Button
               onClick={this.onResetDevice.bind(this, deviceMac)}
-              text="复位"
+              text={_('Reset')}
               size="sm"
               role="reply-all"
             />
@@ -290,8 +267,8 @@ export const Device = React.createClass({
         label: _('Static IP')
       }
     ]);
-    
     const {ip, mask, gateway, main_dns, second_dns} = this.props.validateOption;
+    const { text, devicetype, size } = this.props.query.toJS();
     
     return (
       <div className="page-device">
@@ -299,36 +276,21 @@ export const Device = React.createClass({
         <div className="clearfix">
           <Search
             className="search fl"
-            value={this.props.query.get('text')}
-            updater={this.onChangeSearchText}
+            value={text}
+            onChange={this.onChangeSearchText}
             onSearch={this.handleSearch}
           />
-          <div className="btn-group fl">
-            {
-            typeArr.map(function(val, i){
-              var classNameVal = 'btn';
-
-              if(this.props.query.get('devicetype') === i) {
-                classNameVal += ' active';
-              }
-
-              return (
-                <button
-                  className={classNameVal}
-                  key={'device_type' + i}
-                  id="all"
-                  onClick={this.onChangeType.bind(this, i)}
-                >
-                  {val}
-                </button>
-              )
-            }.bind(this))
-          }
-          </div>
+          
+          <Switchs
+            options={typeArr}
+            value={devicetype}
+            onChange={this.onChangeDevicesQuery}
+          />
+         
           <Select
             className="fr"
             clearable={false}
-            value={this.props.query.get('size')}
+            value={size}
             onChange={this.onChangeTableSize}
             options={selectOptions}
           />
@@ -349,11 +311,11 @@ export const Device = React.createClass({
           onClose={this.props.closeDeviceEdit}
           onOk={this.onSaveDeviceNetWork}
         >
-          <FormGruop
+          <FormGroup
             label={_('Nickname')}
             maxLength="24"
             value={currData.get('nickname')}
-            updater={this.onChangeDeviceNetwork('nickname')}
+            onChange={this.onChangeDeviceNetwork('nickname')}
           />
                 
           <div className="form-group">
@@ -362,7 +324,7 @@ export const Device = React.createClass({
               <Switchs
                 options={typeOptions}
                 clearable={false}
-                onChange={this.onChangeConnectType}
+                onChange={this.onChangeDeviceNetwork('connect_type')}
                 value={currData.get('connect_type')}
               />
             </div>
@@ -370,47 +332,45 @@ export const Device = React.createClass({
           {
             currData.get('connect_type') === 'static' ? (
               <div>
-                <FormGruop
+                <FormGroup
                   label={_('Static IP')}
                   required={true}
                   maxLength="12"
                   value={currData.get('ip')}
-                  updater={this.onChangeDeviceNetwork('ip')}
+                  onChange={this.onChangeDeviceNetwork('ip')}
                 
                   {...ip}
                 />
                
-                <FormGruop
+                <FormGroup
                   {...mask}
                   label={_('Subnet Mask')}
                   required={true}
                   maxLength="12"
                   value={currData.get('mask')}
-                  updater={this.onChangeDeviceNetwork('mask')}
-                 
-                  
+                  onChange={this.onChangeDeviceNetwork('mask')}
                 />
                
-                <FormGruop
+                <FormGroup
                   label={_('Default Gateway')}
                   required={true}
                   maxLength="12"
                   value={currData.get('gateway')}
-                  updater={this.onChangeDeviceNetwork('gateway')}
+                  onChange={this.onChangeDeviceNetwork('gateway')}
                   {...gateway}
                 />
-                <FormGruop
+                <FormGroup
                   label={_('DNS 1')}
                   maxLength="12"
                   value={currData.get('main_dns')}
-                  updater={this.onChangeDeviceNetwork('main_dns')}
+                  onChange={this.onChangeDeviceNetwork('main_dns')}
                   {...main_dns}
                 />
-                <FormGruop
+                <FormGroup
                   label={_('DNS 2')}
                   maxLength="12"
                   value={currData.get('second_dns')}
-                  updater={this.onChangeDeviceNetwork('second_dns')}
+                  onChange={this.onChangeDeviceNetwork('second_dns')}
                   {...second_dns}
                 />
               </div>

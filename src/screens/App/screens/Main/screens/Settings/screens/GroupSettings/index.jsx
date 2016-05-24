@@ -8,7 +8,7 @@ import validator from 'utils/lib/validator';
 import * as validateActions from 'actions/valid';
 import * as actions from './actions';
 import reducer from './reducer';
-import {FormGruop} from 'components/Form/Input';
+import {FormGroup} from 'components/Form';
 import {Table} from 'components/Table';
 import Modal from 'components/Modal';
 import Button from 'components/Button';
@@ -76,19 +76,13 @@ export const GroupSettings = React.createClass({
     }
   },
   
-  onChangeGroupname(e) {
-    var groupname = e.target.value;
-     
-    this.props.changeEditGroup({
-      groupname
-    })
-  },
-  
-  onChangeRemark(e) {
-    var remark = e.target.value;
-    this.props.changeEditGroup({
-      remark
-    })
+  onChangeGroupSettings(name) {
+    return function(data) {
+       var editObj = {};
+       
+       editObj[name] = data.value;
+       this.props.changeEditGroup(editObj);
+     }.bind(this)
   },
   
   onSaveDeviceGroup() {
@@ -199,20 +193,20 @@ export const GroupSettings = React.createClass({
           onClose={this.props.removeEditDeviceGroup}
           onOk={this.onSaveDeviceGroup}
         >
-          <FormGruop
+          <FormGroup
             label={msg.groupname}
             required={true}
             value={this.getEditVal('groupname')}
             maxLength="24"
-            updater={this.onChangeGroupname}
+            onChange={this.onChangeGroupSettings('groupname')}
             {...groupname}
           />
-          <FormGruop
+          <FormGroup
             label={msg.remarks}
             required={true}
             maxLength="64"
             value={this.getEditVal('remark')}
-            updater={this.onChangeRemark}
+            onChange={this.onChangeGroupSettings('remark')}
             {...remarks}
           />
           <Table

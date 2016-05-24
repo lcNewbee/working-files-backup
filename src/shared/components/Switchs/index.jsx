@@ -1,10 +1,12 @@
 import './index.scss';
 import React, {PropTypes} from 'react';
+import {fromJS} from 'immutable';
 
 const propTypes = {
   role: PropTypes.string,
   className: PropTypes.string,
   size: PropTypes.oneOf(['sm', 'lg']),
+  onChange: PropTypes.func,
 };
 
 const defaultProps = {
@@ -19,11 +21,16 @@ class Switchs extends React.Component {
   };
   
   onClick(e) {
-    if(e.target.value) {
-      this.props.onChange({
-        value: e.target.value,
-        label: e.target.innerHTML
-      });
+    
+    if(e.target.value !== this.props.value) {
+      
+      if(this.props.onChange) {
+        this.props.onChange({
+          value: e.target.value,
+          label: e.target.innerHTML
+        });
+      }
+      
     }
   };
   
@@ -40,6 +47,8 @@ class Switchs extends React.Component {
       classNames = className + ' ' + classNames;
     }
     
+    options = fromJS(options);
+    
     return (
       <div
         className={classNames}
@@ -50,15 +59,15 @@ class Switchs extends React.Component {
             let myClassName = 'btn';
             let val, label;
             
-            if(item.get) {
+            if(typeof item.get === 'function') {
               val = item.get('value');
               label = item.get('label');
             } else {
-              val = i;
+              val = i + '';
               label = item;
             }
             
-            if(item.get('value') === value) {
+            if(val === value) {
               myClassName += ' active';
             }
             

@@ -9,7 +9,7 @@ import * as myActions from './actions';
 import * as validateActions from 'actions/valid';
 import myReducer from './reducer';
 
-import {FormGruop} from 'components/Form/Input';
+import {FormGroup} from 'components/Form';
 import Select from 'components/Select';
 import Button from 'components/Button';
 
@@ -46,16 +46,16 @@ export const Bandwidth = React.createClass({
     this.props.changeQosSettings(data)
   },
   
-  onChangeUpSpeed(e) {
-    var val = e.target.value;
+  onChangeUpSpeed(data) {
+    var val = data.value;
     
     this.handleQosChange({
       upstream: val
     });
   },
   
-  onChangeDownSpeed(e) {
-    var val = e.target.value;
+  onChangeDownSpeed(data) {
+    var val = data.value;
     
     this.handleQosChange({
       downstream: val
@@ -105,23 +105,23 @@ export const Bandwidth = React.createClass({
         
         <h3>{_('Qos Settings')}</h3>
        
-        <FormGruop
+        <FormGroup
           label={msg.upSpeed}
           required={true}
           maxLength="6"
           help="KB"
           value={currData.get('upstream')}
-          updater={this.onChangeUpSpeed}
+          onChange={this.onChangeUpSpeed}
           {...upstream}
         />
         
-        <FormGruop
+        <FormGroup
           label={msg.downSpeed}
           help="KB"
           maxLength="6"
           required={true}
           value={currData.get('downstream')}
-          updater={this.onChangeDownSpeed}
+          onChange={this.onChangeDownSpeed}
           {...downstream}
         />
         

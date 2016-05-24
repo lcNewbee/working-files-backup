@@ -120,6 +120,10 @@ const b28n = (function(doc, win) {
       
       return this;
     },
+    
+    getOptions() {
+      return  localOptions;
+    },
 
     getLang() {
       var defLang = localOptions.defaultLang;
@@ -194,6 +198,23 @@ const b28n = (function(doc, win) {
     
     return ret;
   }
+  
+  b28n.langMap = {
+		"cn": "简体中文",
+		"zh": "繁體中文",
+		"de": "Deutsch", //德语
+		"en": "English", //英语
+		"es": "Español", //西班牙
+		"fr": "Français", //法国
+		"hu": "Magyar", //匈牙利
+		"it": "Italiano", //意大利
+		"pl": "Polski", //波兰
+		"ro": "Română", //罗马尼亚
+		"ar": "العربية", //阿拉伯
+		"tr": "Türkçe", //土耳其
+		"ru": "Русский", //Russian	俄语
+		"pt": "Português" //Portugal 葡萄牙语
+	};
   
   return b28n;
 })(document, window);

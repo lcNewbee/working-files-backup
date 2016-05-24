@@ -161,8 +161,10 @@
   "Subnet Mask": "子网掩码",
   
   "Admin": "管理员",
+  "System Settings": "系统设置",
   "Change Password": "修改密码",
   "Old Password": "旧密码",
   "New Password": "新密码",
-  "Confirm Password": "确认密码"
+  "Confirm Password": "确认密码",
+  "Select Language": "选择显示语言"
 }

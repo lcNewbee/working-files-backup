@@ -10,7 +10,7 @@ import * as myActions from './actions';
 import { fetchDeviceGroups } from '../GroupSettings/actions';
 import myReducer from './reducer';
 
-import {FormGruop} from 'components/Form/Input';
+import {FormGroup, Checkbox} from 'components/Form';
 import Select from 'components/Select';
 import Button from 'components/Button';
 import channels from './channels.json';
@@ -82,8 +82,7 @@ export const Wireless = React.createClass({
     this.props.changeWifiSettings(data);
   },
   
-  onUpdateSelect(name) {
-    
+  onUpdateSettings(name) {
     return function(item) {
       const data = {};
       data[name] = item.value;
@@ -98,7 +97,6 @@ export const Wireless = React.createClass({
         this.props.setWifi();
       }
     }.bind(this));
-    
   },
   
   render() {
@@ -170,64 +168,48 @@ export const Wireless = React.createClass({
     return (
       <div>
         <h3>{ _('Current Group') }</h3>
-        <div className="form-group">
-          <label htmlFor="">{msg.selectGroup}</label>
-          <div className="form-control">
-            <Select
-              options={groupOptions}
-              clearable={false}
-              onChange={this.onChangeGroup}
-              value={currData.get('groupname')}
-            />
-          </div>
-        </div>
+        <FormGroup
+          type="select"
+          label={msg.selectGroup}
+          options={groupOptions}
+          value={currData.get('groupname')}
+          onChange={this.onChangeGroup}
+        />
         
         <h3>{_('Base Options')}</h3>
-     
-        <FormGruop
+        <FormGroup
           label={ _('SSID') }
           required={true}
           value={currData.get('ssid')}
-          updater={this.onUpdate('ssid')}
+          onChange={this.onUpdateSettings('ssid')}
           {...ssid}
         />
-        
-        <div className="form-group">
-          <label htmlFor="">{ _('Encryption') }</label>
-          <div className="form-control">
-            <Select
-              clearable={false}
-              value={currData.get('encryption')}
-              options={encryptionOptions}
-              searchable={false}
-              onChange={this.onUpdateSelect('encryption')}
-            />
-          </div>
-        </div>
-        
+        <FormGroup
+          type="select"
+          label={_('Encryption')}
+          options={encryptionOptions}
+          value={currData.get('encryption')}
+          onChange={this.onUpdateSettings('encryption')}
+        />
         {
           currData.get('encryption') === 'psk-mixed' ?
-            <FormGruop
+            <FormGroup
               label={ _('Password') }
               type="password"
               required={true}
-              className="text"
               value={currData.get('password')}
-              updater={this.onUpdate('password')}
+              onChange={this.onUpdateSettings('password')}
               {...password}
             /> : ''
         }
-        
-        
-        <FormGruop
+        <FormGroup
           label={_('VLAN')}
           value={currData.get('vlanid')}
+          required={true}
           
           {...vlanid}
-        >
-          <input
-            type="checkbox"
-            required={true}
+        > 
+          <Checkbox
             checked={currData.get('vlanenable') == '1'}
             onChange={this.onUpdate('vlanenable')}
           />
@@ -246,47 +228,30 @@ export const Wireless = React.createClass({
                 </span>
               ) : ''
           }
-        </FormGruop>
-        
+        </FormGroup>
         
         <h3>{_('Wireless Channel')}</h3>
-        
-        <div className="form-group">
-          <label htmlFor="">{ _('Country') }</label>
-          <div className="form-control">
-            <Select
-              clearable={false}
-              value={currData.get('country')}
-              options={countryOption}
-              searchable={false}
-              onChange={this.onUpdateSelect('country')}
-            />
-          </div>
-        </div>
-        <div className="form-group">
-          <label htmlFor="">{ _('Channel') }</label>
-          <div className="form-control">
-            <Select
-              clearable={false}
-              value={currData.get('channel')}
-              options={channelsOptions}
-              searchable={false}
-              onChange={this.onUpdateSelect('channel')}
-            />
-          </div>
-        </div>
-        
-        <div className="form-group">
-          <label htmlFor="">{ _('Channel Bandwidth') }</label>
-          <div className="form-control">
-            <Switchs
-              options={channelBandwidthOptions}
-              value={currData.get('channelsBandwidth')}
-              onChange={this.onUpdateSelect('channelsBandwidth')}
-            />
-          </div>
-        </div>
-        
+        <FormGroup
+          type="select"
+          label={ _('Country')}
+          options={countryOption}
+          value={currData.get('country')}
+          onChange={this.onUpdateSettings('country')}
+        />
+        <FormGroup
+          type="select"
+          label={ _('Channel')}
+          options={channelsOptions}
+          value={currData.get('channel')}
+          onChange={this.onUpdateSettings('channel')}
+        />
+        <FormGroup label={_('Channel Bandwidth')} >
+          <Switchs
+            options={channelBandwidthOptions}
+            value={currData.get('channelsBandwidth')}
+            onChange={this.onUpdateSettings('channelsBandwidth')}
+          />
+        </FormGroup>
         
         <div className="form-group">
           <div className="form-control">

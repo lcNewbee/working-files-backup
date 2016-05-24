@@ -1,44 +1,43 @@
 import React, {PropTypes} from 'react';
 import Icon from '../Icon';
+import Select from '../Select';
+import Checkbox from './Checkbox';
+import FormInput from './FormInput';
 
-export const Search = React.createClass({
+const MAX_INDEX = 999999;
+let formInputIndex = 0;
 
-  onChange(e) {
-    if (typeof this.props.updater === 'function') {
-      this.props.updater(e);
-    }
-  },
-
-  onKeyUp(e) {
-    let which = e.which;
-    
-    if(which === 13) {
-      if (typeof this.props.onSearch === 'function') {
-        this.props.onSearch(e);
-      }
-    }
-  },
-
-  render() {
-    
-    return (
-      <div className="input-search fl">
-        
-        <Icon className="icon-search" name="search"/>
-        <input {...this.props}
-          type="text"
-          onChange={this.onChange}
-          onKeyUp={this.onKeyUp}
-        />
-      </div>
-    );
+function createFormInputId(name) {
+  let ret = name || 'formGroup_';
+  
+  ret += formInputIndex;
+  
+  if(formInputIndex < MAX_INDEX) {
+    formInputIndex += 1;
+  } else {
+    formInputIndex = 0;
   }
-});
+  
+  return ret;
+}
 
-export const Input = React.createClass({
+const propTypes = {
+  className: PropTypes.string,
+  Component: PropTypes.string,
+};
+
+const defaultProps = {
+  Component: 'input',
+}
+
+export const FormInputss = React.createClass({
+  propTypes,
+  defaultProps,
+  
   getType: function () {
     return this.props.type || 'text';
   },
+  
 
   getValue: function () {
     let ret = this.props.value;
@@ -59,41 +58,52 @@ export const Input = React.createClass({
   
   //
   handleChange: function (e) {
-    
+    const val = e.target.value;
+    let data = {
+      value: val,
+      label: this.props.label
+    };
+   
     // 数据更新
-    if (typeof this.props.updater === 'function') {
-      this.props.updater(e);
+    if (typeof this.props.onChange === 'function') {
+      this.props.onChange(data, e);
     }
     
     // 数据验证
     if(typeof this.props.checkClearValue === 'function') {
-      this.props.checkClearValue(e.target.value);
+      this.props.checkClearValue(val);
     }
   },
 
   render: function () {
-    let {className, id, name} = this.props;
+    let {className, id, name, Component} = this.props;
+    const type = this.getType();
+    let classNames = '';
+    
+    if(type !== 'checkbox' && type !== 'radio') {
+      classNames = 'text ';
+    }
     
     if(className) {
-      className = 'text ' + className;
-    } else {
-      className = 'text';
+      classNames += className;
     }
-    id = id || name;
+    
     return <input {...this.props}
-      id={id}
-      type={this.getType()}
+      type={type}
       value={this.getValue()}
-      className={className}
+      className={classNames}
       onChange={this.handleChange}
       onBlur={this.onBlur}
     />;
   }
 });
 
-export const FormGruop = React.createClass({
+export const FormGroup = React.createClass({
   propTypes: {
-    onValidError: PropTypes.func
+    onValidError: PropTypes.func,
+    errMsg: PropTypes.string,
+    help: PropTypes.string,
+    label: PropTypes.string,
   },
   
   // 验证不确定的错误
@@ -108,10 +118,9 @@ export const FormGruop = React.createClass({
     } else {
       if(this.props.validator) {
         checkResult = this.props.validator.check(value);
-        console.log(checkResult)
       }
     }
-    
+    console.log(checkResult)
     if(this.props.onValidError) {
       this.props.onValidError({name, checkResult});
     }
@@ -138,19 +147,25 @@ export const FormGruop = React.createClass({
       
       if(prevProps.value !== value) {
         this.checkClear();
+        console.log(prevProps.value, value)
       } else if (prevProps.validateAt !== this.props.validateAt) {
         this.check();
       }
     }
   },
   
+  
   render() {
-    const { help, errMsg, name, label, required, children} = this.props;
+    const { help, errMsg, name, label, required,
+      children, type, clearable
+    } = this.props;
+    
+    let id = this.props.id;
     
     return <div className="form-group">
       {
         label ? (
-          <label htmlFor={name}>
+          <label htmlFor={id}>
             {label}
             {required ? <span className="text-required">*</span> : null}
           </label>) : null
@@ -159,8 +174,9 @@ export const FormGruop = React.createClass({
       <div className="form-control">
         {
           children ? children : (
-            <Input 
+            <FormInput
               {...this.props}
+              id={id}
               check={this.check}
               checkClear={this.checkClear}
             />
@@ -179,3 +195,4 @@ export const FormGruop = React.createClass({
   }
 });
 
+export default FormGroup;

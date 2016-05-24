@@ -29,7 +29,7 @@
                 "islock": "lock"
             },
             {
-                "type": "guest/wired",
+                "type": "guest",
                 "devicename": "android-32432",
                 "ip": "192.168.5.32",
                 "mac": "12:22:33:44:55:65",

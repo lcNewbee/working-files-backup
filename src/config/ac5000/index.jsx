@@ -10,13 +10,13 @@ import 'font-awesome/css/font-awesome.css';
 const b28n = require('b28n');
 const langCn = require('../lang/cn/core.json');
 const validateCn = require('../lang/cn/validate.json')
-const curLang = 'cn';
+const curLang = b28n.getLang();
 
 b28n.addDict(langCn, 'cn');
 b28n.addDict(validateCn, 'cn');
 
-b28n.init({
-  supportLang:['en', curLang],
+window.CB = b28n.init({
+  supportLang:['en', 'cn'],
   lang: curLang
 });
 
@@ -57,7 +57,7 @@ const sBandwidth = require('../../screens/App/screens/Main/screens/Settings/scre
 const sWireless = require('../../screens/App/screens/Main/screens/Settings/screens/Wireless');
 const sPortal = require('../../screens/App/screens/Main/screens/Settings/screens/Portal');
 const sGuest = require('../../screens/App/screens/Main/screens/Settings/screens/Guest');
-const sPassword = require('../../screens/App/screens/Main/screens/Settings/screens/Password');
+const sPassword = require('../../screens/App/screens/Main/screens/Settings/screens/Admin');
 
 let routes = [{
     path: '/',

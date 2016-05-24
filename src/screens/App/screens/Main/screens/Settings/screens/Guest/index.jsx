@@ -10,8 +10,7 @@ import * as myActions from './actions';
 import { fetchDeviceGroups } from '../GroupSettings/actions';
 import myReducer from './reducer';
 
-import {FormGruop} from 'components/Form/Input';
-import Select from 'components/Select';
+import {FormGroup} from 'components/Form';
 import Button from 'components/Button';
 
 const msg = {
@@ -27,30 +26,29 @@ const propTypes = {
   groups: PropTypes.instanceOf(List)
 };
 
-export const Bandwidth = React.createClass({
+const validOptions = Map({
+  guestssid: validator({
+    rules: 'len:[1, 64]'
+  }),
+  password: validator({
+    rules: 'len:[8, 64]'
+  })
+});
+
+export const Guest = React.createClass({
   mixins: [PureRenderMixin],
+  
+  propTypes,
   
   componentWillMount() {
     this.props.fetchGuestSettings();
   },
   
   onUpdate(name) {
-    return function(e) {
-      const elem = e.target;
-      let data = {};
-      
-      if(elem.type !== 'checkbox') {
-        data[name] = e.target.value;
-      } else {
-        
-        if(elem.checked) {
-          data[name] = '1';
-        } else {
-          data[name] = '0';
-        }
-      }
-      
-      this.props.changeGuestSettings(data);
+    return function(data) {
+      let settings = {};
+      settings[name] = data.value
+      this.props.changeGuestSettings(settings);
     }.bind(this)
   },
   
@@ -89,6 +87,8 @@ export const Bandwidth = React.createClass({
        label: _('STRONG')
      }
    ];
+   
+   const {password, guestssid} = this.props.validateOption;
     
     const currData =  this.props.data.get('curr');
     
@@ -101,111 +101,98 @@ export const Bandwidth = React.createClass({
     return (
       <div>
         <h3>{ _('Current Group') }</h3>
-        <div className="form-group">
-          <label htmlFor="">{msg.selectGroup}</label>
-          <div className="form-control">
-            <Select
-              options={groupOptions}
-              clearable={false}
-              onChange={this.onChangeGroup}
-              value={currData.get('groupname')}
-            />
-          </div>
-        </div>
+        <FormGroup
+          label={msg.selectGroup}
+          type="select"
+          options={groupOptions}
+          value={currData.get('groupname')}
+          onChange={this.onChangeGroup}
+        />
         
         <h3>{_('Guest Settings')}</h3>
-        
-        <div className="form-group">
-          <label htmlFor="">{ _('Enable Guest') }</label>
-          <div className="form-control">
-            <input
-              type="checkbox"
-              checked={currData.get('enable') == '1'}
-              onChange={this.onUpdate('enable')}
-            />
-            <span className="help">{_('Enable')}</span>
-          </div>
-        </div>
+        <FormGroup
+          label={_('Enable Guest')}
+          type="checkbox"
+          options={{
+            label: _('Enable')
+          }}
+          checked={ currData.get('enable') == '1'}
+          onChange={this.onUpdate('enable')}
+        />
         
         <div className={settngClassName}>
-          <FormGruop
+          <FormGroup
             label={ _('Guest SSID') }
+            required={true}
             value={currData.get('guestssid')}
-            updater={this.onUpdate('guestssid')}
+            onChange={this.onUpdate('guestssid')}
+            
+            {...guestssid}
           />
           
-          <div className="form-group">
-            <label htmlFor="">{ _('Encryption') }</label>
-            <div className="form-control">
-              <Select
-                clearable={false}
-                value={currData.get('encryption')}
-                options={encryptionOptions}
-                searchable={false}
-                onChange={this.onChangeEncryption}
-              />
-            </div>
-          </div>
-          
+          <FormGroup
+            label={_('Encryption')}
+            type="select"
+            value={currData.get('encryption')}
+            options={encryptionOptions}
+            onChange={this.onChangeEncryption}
+          />
           {
             currData.get('encryption') === 'psk-mixed' ?
-              <FormGruop
+              <FormGroup
                 label={ _('Password') }
+                required={true}
                 type="password"
                 className="text"
                 value={currData.get('password')}
-                updater={this.onUpdate('password')}
+                onChange={this.onUpdate('password')}
+                {...password}
               /> : null
           }
-          
-          <div className="form-group">
-            <label htmlFor="">{ _('Portal Enable') }</label>
-            <div className="form-control">
-              <input
-                type="checkbox"
-                checked={currData.get('portalenable') == '1'}
-                onChange={this.onUpdate('portalenable')}
-              />
-              <span className="help">{_('Enable')}</span>
-            </div>
-          </div>
-          
+          <FormGroup
+            label={_('Portal Enable')}
+            type="checkbox"
+            help={_('Enable')}
+            checked={ currData.get('portalenable') == '1'}
+            onChange={this.onUpdate('portalenable')}
+          />
         </div>
         
-        <div className="form-group">
-          <div className="form-control">
-             <Button
-              type='button'
-              text={_('Save')}
-              role="save"
-              onClick={this.onSave}
-            />
-          </div>
-        </div>
+        <FormGroup>
+          <Button
+            type='button'
+            text={_('Save')}
+            role="save"
+            onClick={this.onSave}
+          />
+        </FormGroup>
       </div>
     );
   }
 });
 
-Bandwidth.propTypes = propTypes;
-
-//React.PropTypes.instanceOf(Immutable.List).isRequired
 function mapStateToProps(state) {
   var myState = state.guest;
 
   return {
     fetching: myState.get('fetching'),
     data: myState.get('data'),
+    app: state.app
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(utils.extend({fetchDeviceGroups}, myActions), dispatch)
+  return bindActionCreators(utils.extend({},
+    {fetchDeviceGroups},
+    validateActions,
+    myActions
+  ), dispatch)
 }
 
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
-)(Bandwidth);
+  mapDispatchToProps,
+  validator.mergeProps(validOptions)
+)(Guest);
 
 export const reducer = myReducer;

@@ -8,7 +8,7 @@ import * as validateActions from 'actions/valid';
 import * as myActions from './actions';
 import myReducer from './reducer';
 import './index.scss';
-import {FormGruop} from 'components/Form/Input';
+import {FormGroup} from 'components/Form';
 import Select from 'components/Select';
 import Button from 'components/Button';
 
@@ -31,39 +31,19 @@ export const Portal = React.createClass({
   componentWillMount() {
     this.props.fetchPortalSettings();
   },
-  
-  onChangeUpSpeed() {
-    
-  },
-  
-  onChangeDownSpeed() {
-    
-  },
-  
-  onUpdate(name) {
-    return function(e) {
-      const elem = e.target;
-      let data = {};
+   
+  onUpdateSettings(name) {
+    return function(data, e) {
+      let settings = {};
       
-      if(elem.type !== 'checkbox') {
-        data[name] = e.target.value;
-      } else {
-        
-        if(elem.checked) {
-          data[name] = '1';
-        } else {
-          data[name] = '0';
-        }
-      }
-      
-      this.props.changePortalSettings(data);
+      settings[name] = data.value;
+      this.props.changePortalSettings(settings);
     }.bind(this)
   },
   
   onSave() {
     this.props.setPortal();
   },
-  
   
   onUploadImage(i) {
     return function() {
@@ -97,36 +77,39 @@ export const Portal = React.createClass({
       
       <div>
         <h3>{_('Portal Settings')}</h3>
-        <FormGruop
+        <FormGroup
           label={_('Portal Name')}
           name="portalname"
           value={currData.get('portalname')}
-          updater={this.onUpdate('portalname')}
+          onChange={this.onUpdateSettings('portalname')}
         />
-        <FormGruop
+        <FormGroup
           label={_('Auth Rederict URL')}
           name="url"
           value={currData.get('url')}
-          updater={this.onUpdate('url')}
+          onChange={this.onUpdateSettings('url')}
         />
-        <FormGruop
+        <FormGroup
           label={_('Title')}
           name="title"
           value={currData.get('title')}
-          updater={this.onUpdate('title')}
+          onChange={this.onUpdateSettings('title')}
         />
-        <FormGruop
+        
+        <FormGroup
           label={_('Timeout')}
           help={_('Seconds')}
           name="timeout"
           value={currData.get('timeout')}
+          onChange={this.onUpdateSettings('timeout')}
         />
         
-        <FormGruop
+        <FormGroup
           label={_('Images Slider Time')}
           help={_('Seconds')}
           name="refreshtime"
           value={currData.get('refreshtime')}
+          onChange={this.onUpdateSettings('refreshtime')}
         />
         
         <div className="images-list">

@@ -6,7 +6,7 @@ const defaultState = fromJS({
     list: []
   },
   query: {
-    type: 0,
+    type: '0',
     size: 20,
     page: 1
   },

@@ -2,7 +2,7 @@ import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {Input, FormGruop} from 'components/Form/Input';
+import {Input, FormGroup} from 'components/Form';
 import {fromJS, Map, List} from 'immutable';
 import validator from 'utils/lib/validator';
 import utils from 'utils';
@@ -41,6 +41,21 @@ const formGroups = List([
     })
   }
 ]);
+
+function createList(item) {
+  var input = item.input;
+  
+  return (
+    <FormGroup
+      {...input}
+      key={input.name}
+      id={input.name}
+      value={this.getDataValue(input.name) }
+      onChange={this.onChangeData(input.name) }
+      onKeyUp={this.onInputKeyUp}
+    />
+  );
+}
 
 // 原生的 react 页面
 export const SignUp = React.createClass({
@@ -117,10 +132,10 @@ export const SignUp = React.createClass({
   },
 
   onChangeData(name) {
-    return function(e) {
+    return function(options) {
       let data = {};
       
-      data[name] = e.target.value;
+      data[name] = options.value;
       this.updateState(data);
     }.bind(this)
   },
@@ -132,28 +147,16 @@ export const SignUp = React.createClass({
   onInputKeyUp(e) {
     
     if(e.which === 13) {
-      this.onLogin();
+      this.onSignUp();
     }
   },
 
   render() {
-    var formGruopList;
+    var FormGroupList;
     var that = this;
     var myMsg = this.props.status;
 
-    formGruopList = formGroups.map(function(item) {
-      var input = item.input;
-      
-      return (
-        <FormGruop
-          {...input}
-          key={input.name}
-          value={this.getDataValue(input.name) }
-          updater={this.onChangeData(input.name) }
-          onKeyUp={this.onInputKeyUp}
-        />
-      );
-    }.bind(this));
+    FormGroupList = formGroups.map(createList.bind(this));
     
     return (
       <div>
@@ -162,7 +165,7 @@ export const SignUp = React.createClass({
         </header>
         <div className="sign-up">
           <h1>{_('Please Sign Up')}</h1>
-          {formGruopList}
+          {FormGroupList}
           {
             this.state.status !== 'ok' ?
               <p className="msg-error ">{this.state.status}</p> :
