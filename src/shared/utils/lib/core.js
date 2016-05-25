@@ -10,7 +10,6 @@ function toObject(val) {
 
   return Object(val);
 }
-
 // find
 function property(key) {
   return function(obj) {

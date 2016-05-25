@@ -13,8 +13,8 @@ body {
 
 .app-wrap {
   padding-top: $top-distance;
-  min-height: 100%;
   min-width: $mw-lg;
+  min-height: 100%;
 }
 
 .navbar {
@@ -116,19 +116,19 @@ body {
 
   ul {
     padding: 0;
-    background: #e4e4e4;
     border: 1px solid #e4e4e4;
     border-right: none;
+    background: #e4e4e4;
     
     li {
       list-style: none;
       a {
         display: block;
-        line-height: 20px;
         padding: $g-distance-md 0;
         padding-left: $g-size;
         border-bottom: 1px solid #f2f2f2;
         color: #666;
+        line-height: 20px;
         transition: background-color .2s ease-in-out;
         
         &:focus,
@@ -136,23 +136,23 @@ body {
         &:visited {
           color: #666;
         }
-        
+
         &:hover {
           color: #333;
         }
         
 
         &.active {
-          color: $g-brand-danger;
           background-color: #fafafa;
+          color: $g-brand-danger;
         }
         
         .icon {
-          margin-right: 10px;
-          float: left;
-          font-size: 20px;
-          width: 20px;
           display: inline-block;
+          margin-right: 10px;
+          width: 20px;
+          vertical-align: middle;
+          font-size: 20px;
         }
       }
     }
@@ -169,8 +169,8 @@ body {
     right: 0;
     bottom: $g-distance;
     left: 190px;
-    min-width: 1024px - 200px;
     padding: 0 $g-distance;
+    min-width: 1024px - 200px;
 
     h2 {
       margin-bottom: 20px;
@@ -205,7 +205,7 @@ body {
     -webkit-overflow-scrolling: touch;
     outline: 0;
     background-color: #000;
-    
+
     @include opacity(0);
   }
 }

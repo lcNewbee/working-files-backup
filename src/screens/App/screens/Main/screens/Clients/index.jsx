@@ -14,6 +14,7 @@ import Switchs from 'components/Switchs';
 import * as actions from './actions';
 import reducer from './reducer';
 
+
 const clientsTableOptions = fromJS([
   {
     'id': 'devicename',
@@ -44,7 +45,7 @@ const clientsTableOptions = fromJS([
     'text': _('Authentication')
   }, {
     'id': 'operationhours',
-    'text': _('Uptime')
+    'text': _('Connect Time')
   }, {
     id: 'op',
     text: _('Actions')

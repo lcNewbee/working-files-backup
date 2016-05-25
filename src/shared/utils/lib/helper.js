@@ -2,7 +2,12 @@ var helper = {
 
 };
 
-
-function filter(val, filterStr) {
+function connectTime(val, unit) {
+  var ret = '';
   
+  val = parseInt(val, 10);
+  
+  if(val > 86400) {
+    
+  }
 }

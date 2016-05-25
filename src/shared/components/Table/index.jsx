@@ -8,8 +8,9 @@ export class Row extends Component {
 
     if(this.props.isTh) {
       tds = this.props.options.map(function(option, i) {
+        console.log(option)
         return (
-          <th key={'tableRow' + i}>
+          <th key={'tableRow' + i} width={option.get('width')}>
             {option.get('text')}
           </th>
         );
@@ -51,7 +52,10 @@ export class Table extends Component {
       <div className="table-wrap">
         <table className={className}>
           <thead>
-            <Row options={options} isTh={true} />
+            <Row
+              options={options}
+              isTh={true}
+            />
           </thead>
           <tbody>
             {

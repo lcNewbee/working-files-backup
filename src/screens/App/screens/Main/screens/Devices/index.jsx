@@ -29,8 +29,11 @@ const typeArr = [
   }, {
     value: '1',
     label: _('INSIDE')
-  },{
+  }, {
     value: '3',
+    label: _('OUTSIDE')
+  }, {
+    value: '4',
     label: _('OUTSIDE')
   }
 ];
@@ -264,6 +267,7 @@ export const Device = React.createClass({
       }, {
         id: 'op',
         text: _('Actions'),
+        width: '280',
         transform: function (item) {
           var deviceMac = item.get('mac');
           var deviceStatus = item.get('status');
@@ -284,7 +288,7 @@ export const Device = React.createClass({
           
           
           return (
-            <div>
+            <div className="action-btns">
               <Button
                 onClick={this.onRebootDevice.bind(this, deviceMac) }
                 text={_('Reboot') }
