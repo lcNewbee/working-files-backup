@@ -34,7 +34,7 @@ const typeArr = [
     label: _('OUTSIDE')
   }, {
     value: '4',
-    label: _('OUTSIDE')
+    label: _('IN OPERATION...')
   }
 ];
 
@@ -74,6 +74,10 @@ export const Device = React.createClass({
 
   componentWillMount() {
     this.handleSearch()
+  },
+  
+  componentWillUnmount() {
+    this.props.resetVaildateMsg();
   },
 
   handleSearch() {
@@ -202,7 +206,7 @@ export const Device = React.createClass({
       {
         id: 'devicename',
         text: _('MAC Address') + '/' + _('Name'),
-        transform: function (item) {
+        transform: function (val, item) {
           var deviceMac = item.get('mac');
           var name = item.get('devicename') || deviceMac;
           var deviceStatus = item.get('status');
@@ -225,7 +229,7 @@ export const Device = React.createClass({
       }, {
         id: 'ip',
         text: _('IP Address'),
-        transform: function (item) {
+        transform: function (val, item) {
           var deviceMac = item.get('mac');
           var deviceStatus = item.get('status');
          
@@ -246,9 +250,7 @@ export const Device = React.createClass({
       }, {
         id: 'status',
         text: _('Online Status'),
-        transform: function(item) {
-          return <span>{_(item.get('status'))}</span>
-        }
+        filter: 'translate'
       }, {
         id: 'model',
         text: _('Model')
@@ -258,22 +260,21 @@ export const Device = React.createClass({
       }, {
         id: 'channel',
         text: _('Channel'),
-        transform: function(item) {
-          return <span>{_(item.get('channel'))}</span>
-        }
+        filter: 'translate'
       }, {
         id: 'operationhours',
-        text: _('Uptime')
+        text: _('Uptime'),
+        filter: 'connectTime',
       }, {
         id: 'op',
         text: _('Actions'),
         width: '280',
-        transform: function (item) {
+        transform: function (val, item) {
           var deviceMac = item.get('mac');
           var deviceStatus = item.get('status');
           var upgradeBtn = null;
           
-          if(deviceStatus === 'disable') {
+          if(deviceStatus === 'disable' || this.p) {
             return null;
           }
           
@@ -441,10 +442,6 @@ export const Device = React.createClass({
 function mapStateToProps(state) {
 
   return {
-    // fetching: myState.get('fetching'),
-    // query: myState.get('query'),
-    // data: myState.get('data'),
-    // edit: myState.get('edit'),
     store: state.devices,
     app: state.app
   };

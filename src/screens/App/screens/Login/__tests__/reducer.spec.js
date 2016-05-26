@@ -48,7 +48,8 @@ describe('Login reducer', () => {
       data: {
         username: 'ewe',
         password: 'ewe'
-      }
+      },
+      status: ''
     }));
   });
 

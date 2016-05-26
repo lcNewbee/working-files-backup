@@ -23,6 +23,9 @@ export default function( state = defaultState, action ) {
     case 'START_VALIDATE_ALL':
       return state.set('validateAt', action.validateAt)
           .set('invalid', Map({}));
+          
+    case 'RESET_VAILDATE_MSG':
+      return state.set('invalid', Map({}));
       
     case 'REQUEST_SAVE':
       return state.set('saving', true);

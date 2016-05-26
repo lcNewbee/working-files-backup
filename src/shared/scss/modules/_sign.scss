@@ -1,4 +1,4 @@
-.login {
+.sign {
   width: 500px;
   padding: 2.5em;
   margin: 10px auto;
@@ -13,10 +13,17 @@
   p {
     margin-bottom: .8em;
   }
-
+  .form-group {
+    
+    > label {
+      text-align: left;
+      padding-left: 3px;
+    }
+  }
   .form-control {
     margin: 0;
-    input {
+    
+    .text {
       padding: 6px 12px;
       height: 34px;
       border: 1px solid #ccc;
@@ -25,14 +32,16 @@
       color: #555;
       font-size: 14px;
       line-height: 1.42857143;
-      transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+      transition: border-bottom-color ease-in-out .15s, box-shadow ease-in-out .15s;
       width: 100%;
       padding: 0.61538em 1.2em;
       height: 2.84615em;
       font-size: 1.23077em;
       border: none;
       border-bottom: 1px solid #c0c0c0;
+      
       &:focus {
+        border: 1px solid #ccc;
         border-bottom-color: #1292c5;
       }
     }

@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import utils from 'utils';
 import Pagination from '../Pagination';
 import Icon from '../Icon';
 
@@ -8,7 +9,6 @@ export class Row extends Component {
 
     if(this.props.isTh) {
       tds = this.props.options.map(function(option, i) {
-        console.log(option)
         return (
           <th key={'tableRow' + i} width={option.get('width')}>
             {option.get('text')}
@@ -17,13 +17,23 @@ export class Row extends Component {
       });
     } else {
       tds = this.props.options.map(function(option, i) {
-        let tdDom = <td key={'tableRow' + i}></td>;
+        let tdDom = null;
         let id = option.get('id');
+        let currVal = this.props.item.get(id);
+        let filterObj = option.get('filterObj');
+        
+        if(filterObj && typeof filterObj.transform === 'function') {
+          currVal = filterObj.transform(currVal);
+        }
 
         if(!option.get('transform')) {
-          tdDom = <td key={'tableRow' + i}>{this.props.item.get(id)}</td>
+          tdDom = <td key={'tableRow' + i}>{currVal}</td>
         } else {
-          tdDom = <td key={'tableRow' + i}>{option.get('transform')(this.props.item)}</td>
+          tdDom = (
+            <td key={'tableRow' + i}>
+              { option.get('transform')(currVal, this.props.item) }
+            </td>
+          )
         }
 
         return tdDom;
@@ -47,13 +57,22 @@ export class Table extends Component {
   render() {
     const {className, options, list, size, page, loading} = this.props;
     const listLen = this.props.list.size;
+    const filterOptions = options.map((item) => {
+      var ret = item;
+      var filterStr = item.get('filter');
+      
+      if(filterStr) {
+        ret = item.set('filterObj', utils.filter(filterStr));
+      }
+      return ret;
+    });
     
     return (
       <div className="table-wrap">
         <table className={className}>
           <thead>
             <Row
-              options={options}
+              options={filterOptions}
               isTh={true}
             />
           </thead>
@@ -63,7 +82,7 @@ export class Table extends Component {
                 return (
                   <Row
                     key={'tableRow' + i}
-                    options={this.props.options}
+                    options={filterOptions}
                     item={item}
                   />
                 );

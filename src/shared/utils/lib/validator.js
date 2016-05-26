@@ -4,10 +4,12 @@ var string = require('./string');
 var validator = function(options) {
   return new validator.fn.init(options);
 };
+var _ = window._;
 
 if(!_) {
   _ = string.format;
 }
+
 var msg = {
   thisField: _('This field')
 }
@@ -206,48 +208,6 @@ var vaildate = {
   }
 };
 
-function getRuleObj(rule) {
-  var ret = {};
-  var ruleSplit = rule.split(':');
-  var fun = vaildate[ruleSplit[0]];
-  var args = ruleSplit[1];
-
-  if(fun) {
-    ret.fun = fun;
-  }
-  if(args) {
-
-    if(args.indexOf('[') === 0 &&
-        args.indexOf(']') === (args.length - 1)) {
-      ret.args = eval(args);
-    } else {
-      ret.args = [args];
-    }
-  }
-
-  return ret;
-}
-
-function getRulesObj(rules) {
-  var ret = [];
-  var rulesArr = rules.split('|');
-  var ruleObj;
-  
-  if(typeof rules !== 'string') {
-    throw new TypeError('validator Rules must be called with string');
-  }
-
-  for (var i = 0; i < rulesArr.length; i++) {
-    ruleObj = getRuleObj(rulesArr[i]);
-
-    if (ruleObj.fun) {
-      ret.push(ruleObj);
-    }
-  }
-
-  return ret;
-}
-
 /**
  * 只验证明确的错误，验证有 specific 函数
  * @param  {[type]} str   [description]
@@ -362,7 +322,7 @@ var init = validator.fn.init = function(options) {
     return this;
   }
 
-  this.rules = getRulesObj(options.rules);
+  this.rules = utils.getRulesObj(options.rules, vaildate);
   this.label = options.label;
 
   return this;

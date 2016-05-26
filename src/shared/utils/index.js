@@ -10,7 +10,8 @@ utils.extend(require('./lib/sync'));
 
 // extend utils self module
 utils.extend({
-  storage: require('./lib/storage')
+  storage: require('./lib/storage'),
+  filter: require('./lib/filter')
 });
 
 // exports

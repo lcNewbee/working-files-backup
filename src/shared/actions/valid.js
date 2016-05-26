@@ -18,6 +18,12 @@ export function validateAll(func) {
   }
 }
 
+export function resetVaildateMsg() {
+  return {
+    type: 'RESET_VAILDATE_MSG'
+  }
+}
+
 export function reportValidError(data) {
   return {
     type: 'REPORT_VALID_ERROR',

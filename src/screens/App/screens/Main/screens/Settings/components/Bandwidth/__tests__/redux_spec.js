@@ -10,9 +10,7 @@ describe('Bandwidth Rudex', () => {
       fetching: true,
       saving: false,
       data: {
-        list: [
-          
-        ],
+        list: [],
         curr: {}
       }
     });
@@ -77,7 +75,6 @@ describe('Bandwidth Rudex', () => {
         }
       }
     });
-    
     let action = actions.changeQosGroup("group33547");
     
     let nextState = reducer(initialState, action);

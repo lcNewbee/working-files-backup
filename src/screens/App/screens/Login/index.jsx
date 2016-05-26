@@ -8,8 +8,6 @@ import validator from 'utils/lib/validator';
 import * as actions from './actions';
 import reducer from './reducer';
 
-import './_login.scss';
-
 const formGroups = {
   password: {
     input: {
@@ -96,7 +94,7 @@ export const Login = React.createClass({
         <header className="navbar">
           <a href="" className="brand">Comlanos {_('Management')}</a>
         </header>
-        <div className="login">
+        <div className="sign">
           <h1>{_('Please Login')}</h1>
           <FormGroup
             type="password"

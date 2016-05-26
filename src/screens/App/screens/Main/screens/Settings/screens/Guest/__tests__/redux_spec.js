@@ -3,7 +3,7 @@ import chai, {expect} from 'chai';
 import reducer from '../reducer';
 import * as actions from '../actions';
 
-describe('Bandwidth Rudex', () => {
+describe('Guest Rudex', () => {
   
   it('should change data.curr when CHANGE_GUEST_GROUP', () => {
     const initialState = fromJS({

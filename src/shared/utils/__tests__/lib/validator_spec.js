@@ -36,7 +36,7 @@ describe('utils validator', () => {
         });
 
         expect(oneRuleValidator.check('12')).to.be.equal(undefined);
-        expect(oneRuleValidator.check('')).to.be.equal('It required');
+        expect(oneRuleValidator.check('')).to.be.equal('This field is required');
       });
 
       // rules = 'len:[1, 3]'
@@ -66,7 +66,7 @@ describe('utils validator', () => {
         });
 
         expect(rulesWithArgsValidator.check(''))
-          .to.be.equal("It required");
+          .to.be.equal("This field is required");
 
         expect(rulesWithArgsValidator.check('afggg'))
           .to.be.equal("Can't input: 'a'");

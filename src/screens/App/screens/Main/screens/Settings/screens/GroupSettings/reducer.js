@@ -26,7 +26,7 @@ function deleteListById(state, groupname) {
   return ret;
 }
 
-function getDevicesByGroup(state, groupname) {
+function getDevicesByGroupname(state, groupname) {
   return state.getIn(['devices', 'list']).filter(function(item){
     return item.get('groupname') == groupname;
   }).map(function(item) {
@@ -35,7 +35,7 @@ function getDevicesByGroup(state, groupname) {
 }
 
 function getEditGroupByName(state, groupname) {
-  var devices = getDevicesByGroup(state, groupname);
+  var devices = getDevicesByGroupname(state, groupname);
   
   return state.getIn(['data', 'list']).find(function(item) {
     return item.get('groupname') == groupname;

@@ -150,12 +150,14 @@ describe('Group Settings Rudex', () => {
             {
                 "devicename": "12:33:44:55:66:78/ap1",
                 "ip": "192.168.5.53",
+                "mac": "12:33:44:55:66:78",
                 "status": "online/offline",
                 "groupname": "研发"
             },
             {
-                "devicename": "12:33:44:55:66:78/ap2",
+                "devicename": "12:33:44:55:66:76/ap2",
                 "ip": "192.168.5.53",
+                "mac": "12:33:44:55:66:76",
                 "status": "online/offline",
                 "groupname": "xxxxxx"
             }
@@ -191,12 +193,14 @@ describe('Group Settings Rudex', () => {
             {
                 "devicename": "12:33:44:55:66:78/ap1",
                 "ip": "192.168.5.53",
+                "mac": "12:33:44:55:66:78",
                 "status": "online/offline",
                 "groupname": "研发"
             },
             {
-                "devicename": "12:33:44:55:66:78/ap2",
+                "devicename": "12:33:44:55:66:76/ap2",
                 "ip": "192.168.5.53",
+                "mac": "12:33:44:55:66:76",
                 "status": "online/offline",
                 "groupname": "xxxxxx"
             }

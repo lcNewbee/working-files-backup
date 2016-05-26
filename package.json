@@ -19,8 +19,16 @@
     "test:watch": "npm test --  --watch --watch-extensions jsx --reporter dot",
     "wtest": "mocha-webpack --webpack-config webpack.config.dev.js './test/**/*.@(js|jsx)'"
   },
-  "keywords": [],
+  "keywords": [
+    "webpack",
+    "fetch",
+    "es6",
+    "react",
+    "mocha",
+    "immutable"
+  ],
   "author": "",
+  "private": true,
   "license": "none",
   "devDependencies": {
     "autoprefixer": "^6.3.6",

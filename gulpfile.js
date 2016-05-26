@@ -34,7 +34,7 @@ gulp.task('webpack', ['clean'],  shell.task([
   'babel-node tools/buildHtml.js'
 ]))
 
-gulp.task('build:html', ['webpack'], function() {
+gulp.task('build', ['webpack'], function() {
  return gulp.src(paths.build + '/index.html')
     .pipe(staticHash({asset: 'static'}))
     .pipe(gulp.dest(paths.build));
@@ -43,4 +43,6 @@ gulp.task('build:html', ['webpack'], function() {
 gulp.task('pub:ac',['build:html'],  shell.task([
   'babel-node ./tools/release.js'
 ]));
+
+gulp.task('default', ['open:src']);
 

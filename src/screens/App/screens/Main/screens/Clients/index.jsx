@@ -19,7 +19,7 @@ const clientsTableOptions = fromJS([
   {
     'id': 'devicename',
     'text': _('MAC Address') + '/' + _('Name'),
-    transform: function(item) {
+    transform: function(val, item) {
       return item.get('devicename') || item.get('mac');
     }
   }, {
@@ -34,7 +34,7 @@ const clientsTableOptions = fromJS([
   }, {
     'id': 'bandwidth',
     'text': _('Up/Down Speed'),
-    transform: function(item) {
+    transform: function(val, item) {
       return item.get('upstream') + 'KB/' + item.get('downstream')+ 'KB';
     }
   }, {
@@ -145,7 +145,7 @@ export const Clients = React.createClass({
   render() {
     // 添加操作项
     const options = clientsTableOptions.setIn([-1, 'transform'],
-      function(item) {
+      function(val, item) {
         var deviceMac = item.get('mac');
         var isLock = item.get('islock') === 'lock' ? true : false;
          
@@ -193,7 +193,7 @@ export const Clients = React.createClass({
       }, {
         id: 'op',
         text: _('Actions'),
-        transform: function(item) {
+        transform: function(val, item) {
           var deviceMac = item.get('devicename').split('/')[0];
           var isLock = item.get('islock') === 'lock' ? true : false;
           

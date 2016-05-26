@@ -16,7 +16,7 @@ b28n.addDict(langCn, 'cn');
 b28n.addDict(validateCn, 'cn');
 
 window.CB = b28n.init({
-  supportLang:['en', 'cn'],
+  supportLang: ['en', 'cn'],
   lang: curLang
 });
 
@@ -60,78 +60,74 @@ const sGuest = require('../../screens/App/screens/Main/screens/Settings/screens/
 const sAdmin = require('../../screens/App/screens/Main/screens/Settings/screens/Admin');
 
 let routes = [{
-    path: '/',
-    component: App.Screen,
-    indexRoute: {component: pLogin.Screen},
-    childRoutes: [
-      {
-        path: '/main',
-        component: Main,
-        childRoutes: [{
-            id: 'status',
-            isIndex: true,
-            path: '/main/status',
-            icon: 'bar-chart',
-            text: _('STATISTICS'),
-            component: pStatus.Screen
-          }, {
-            id: 'devices',
-            path: '/main/devices',
-            icon: 'bullseye',
-            text: _('DEVICES'),
-            component: pDevices.Screen
-          }, {
-            id: 'clients',
-            path: '/main/clients',
-            icon: 'desktop',
-            text: _('CLIENTS'),
-            component: pClients.Screen
-          }, {
-            id: 'logs',
-            path: '/main/logs',
-            icon: 'file-text-o',
-            text: _('LOGS'),
-            component: pLogs.Screen
-          }, {
-            id: 'statistics',
-            path: '/main/statistics',
-            icon: 'file-pdf-o',
-            text: _('REPORTS'),
-            component: pStatistics.Screen
-          }, {
-            id: 'settings',
-            path: '/main/settings',
-            icon: 'cog',
-            text: _('SETTINGS'),
-            component: Settings,
-            indexRoute: {
-              onEnter: (nextState, replace) => replace('/main/settings/group')
-            },
-            childRoutes: [{
-                path: '/main/settings/group',
-                text: _('Groups'),
-                component: pGroupSettings.Screen
-              },{
-              id: 'bandwidth',
-              path: '/main/settings/bandwidth',
-              text: _('Bandwidth'),
-              component: sBandwidth.Screen
-            },{
+  path: '/',
+  component: App.Screen,
+  indexRoute: { component: pLogin.Screen },
+  childRoutes: [
+    {
+      path: '/main',
+      component: Main,
+      childRoutes: [{
+        id: 'status',
+        isIndex: true,
+        path: '/main/status',
+        icon: 'bar-chart',
+        text: _('STATISTICS'),
+        component: pStatus.Screen
+      }, {
+          id: 'devices',
+          path: '/main/devices',
+          icon: 'bullseye',
+          text: _('DEVICES'),
+          component: pDevices.Screen
+        }, {
+          id: 'clients',
+          path: '/main/clients',
+          icon: 'desktop',
+          text: _('CLIENTS'),
+          component: pClients.Screen
+        }, {
+          id: 'logs',
+          path: '/main/logs',
+          icon: 'file-text-o',
+          text: _('LOGS'),
+          component: pLogs.Screen
+        }, {
+          id: 'statistics',
+          path: '/main/statistics',
+          icon: 'file-pdf-o',
+          text: _('REPORTS'),
+          component: pStatistics.Screen
+        }, {
+          id: 'settings',
+          path: '/main/settings',
+          icon: 'cog',
+          text: _('SETTINGS'),
+          component: Settings,
+          indexRoute: {
+            onEnter: (nextState, replace) => replace('/main/settings/group')
+          },
+          childRoutes: [
+            {
+              path: '/main/settings/group',
+              text: _('Groups'),
+              component: pGroupSettings.Screen
+            }, {
               id: 'wireless',
               path: '/main/settings/wireless',
               text: _('Wireless'),
               component: sWireless.Screen
-            },{
+            }, {
               id: 'portal',
               path: '/main/settings/portal',
               text: _(_('Portal Settings')),
               component: sPortal.Screen
-            },{
+            }, {
               id: 'guest',
               path: '/main/settings/guest',
               text: _('Guest'),
               component: sGuest.Screen
-            },{
+            }, {
               id: 'password',
               path: '/main/settings/admin',
               text: _('Admin'),
@@ -139,15 +135,15 @@ let routes = [{
             }
           ]
         }]
-      }, {
-        path: '/register',
-        component: sRegister.Screen
-      }
-    ]
-  }, {
+    }, {
+      path: '/register',
+      component: sRegister.Screen
+    }
+  ]
+}, {
     path: '*',
     component: NotFound
-}];
+  }];
 
 
 // 配置模块页面 store
@@ -160,7 +156,6 @@ const reducers = {
   logs: pLogs.logs,
   statistics: pStatistics.statistics,
   groupSettings: pGroupSettings.settings,
-  bandwidth: sBandwidth.reducer,
   wireless: sWireless.reducer,
   portal: sPortal.reducer,
   guest: sGuest.reducer,
@@ -170,7 +165,7 @@ const reducers = {
 // Store
 const stores = remoteActionMiddleware(
   combineReducers(reducers),
-  
+
   // 支持 chrome 插件 Redux DevTools
   window.devToolsExtension ? window.devToolsExtension() : f => f
 );

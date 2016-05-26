@@ -83,6 +83,7 @@
   "offline": "离线",
   "unconfig": "未配置",
   "disable": "不可用",
+  "IN OPERATION...": "操作中...",
   
   "CLIENTS": "客户端",
   "Clients Info": "客户端信息",
@@ -157,10 +158,10 @@
   "Upload Image": "上传图片",
   "msg_select_img": "选择网页幻灯片图片 选择1-3张，宽高尺寸为640px*640px",
   
-  "Guest": "来宾账号",
-  "Guest Settings": "来宾账号设置",
+  "Guest": "来宾设置",
+  "Guest Settings": "来宾设置",
   "Enable Guest": "启用来宾账号",
-  "Guest SSID": "来宾账号SSID",
+  "Guest SSID": "来宾SSID",
   "Portal Enable": "启用Portal",
   "Enable": "启用",
   "DHCP Range": "DHCP范围",

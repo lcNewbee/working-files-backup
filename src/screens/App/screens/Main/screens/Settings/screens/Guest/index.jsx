@@ -18,6 +18,16 @@ const msg = {
   'downSpeed': _('Down Speed'),
   'selectGroup': _('Select Group')
 };
+const encryptionOptions = [
+  {
+    value: 'none',
+    label: _('NONE')
+  },
+  {
+    value: 'psk-mixed',
+    label: _('STRONG')
+  }
+];
 
 const propTypes = {
   fetchDeviceGroups: PropTypes.func,
@@ -32,6 +42,12 @@ const validOptions = Map({
   }),
   password: validator({
     rules: 'len:[8, 64]'
+  }),
+  upstream: validator({
+    rules: 'num:[1, 102400]'
+  }),
+  downstream: validator({
+    rules: 'num:[1, 102400]',
   })
 });
 
@@ -43,6 +59,11 @@ export const Guest = React.createClass({
   componentWillMount() {
     this.props.fetchGuestSettings();
   },
+  
+  componentWillUnmount() {
+    this.props.resetVaildateMsg();
+  },
+  
 
   onUpdate(name) {
     return function (data) {
@@ -71,34 +92,31 @@ export const Guest = React.createClass({
       }
     }.bind(this));
   },
-
-  render() {
-    const groupOptions = this.props.data
-      .get('list').map(function (item, i) {
+  
+  getCurrData(name) {
+    return this.props.store.getIn(['data', 'curr', name]);
+  },
+  
+  getGroupOptions() {
+    return this.props.store
+      .getIn(['data', 'list'])
+      .map(function(item, i) {
         return {
           value: item.get('groupname'),
           label: item.get('groupname')
         }
-      }).toJS();
+      })
+      .toJS();
+  },
 
-    const encryptionOptions = [
-      {
-        value: 'none',
-        label: _('NONE')
-      },
-      {
-        value: 'psk-mixed',
-        label: _('STRONG')
-      }
-    ];
-
-    const {password, guestssid} = this.props.validateOption;
-
-    const currData = this.props.data.get('curr');
+  render() {
+    const groupOptions = this.getGroupOptions();
+    const {password, guestssid, upstream, downstream} = this.props.validateOption;
+    const getCurrData = this.getCurrData;
 
     let settngClassName = 'none';
 
-    if (currData.get('enable') == '1') {
+    if (getCurrData('enable') == '1') {
       settngClassName = '';
     }
 
@@ -109,7 +127,7 @@ export const Guest = React.createClass({
           label={msg.selectGroup}
           type="select"
           options={groupOptions}
-          value={currData.get('groupname') }
+          value={getCurrData('groupname') }
           onChange={this.onChangeGroup}
           />
 
@@ -120,7 +138,7 @@ export const Guest = React.createClass({
           options={{
             label: _('Enable')
           }}
-          checked={ currData.get('enable') == '1'}
+          checked={ getCurrData('enable') == '1'}
           onChange={this.onUpdate('enable') }
           />
 
@@ -128,7 +146,7 @@ export const Guest = React.createClass({
           <FormGroup
             label={ _('Guest SSID') }
             required={true}
-            value={currData.get('guestssid') }
+            value={getCurrData('guestssid') }
             onChange={this.onUpdate('guestssid') }
 
             {...guestssid}
@@ -137,18 +155,18 @@ export const Guest = React.createClass({
           <FormGroup
             label={_('Encryption') }
             type="select"
-            value={currData.get('encryption') }
+            value={getCurrData('encryption') }
             options={encryptionOptions}
             onChange={this.onChangeEncryption}
             />
           {
-            currData.get('encryption') === 'psk-mixed' ?
+            getCurrData('encryption') === 'psk-mixed' ?
               <FormGroup
                 label={ _('Password') }
                 required={true}
                 type="password"
                 className="text"
-                value={currData.get('password') }
+                value={getCurrData('password') }
                 onChange={this.onUpdate('password') }
                 {...password}
                 /> : null
@@ -157,11 +175,33 @@ export const Guest = React.createClass({
             label={_('Portal Enable') }
             type="checkbox"
             help={_('Enable') }
-            checked={ currData.get('portalenable') == '1'}
+            checked={ getCurrData('portalenable') == '1'}
             onChange={this.onUpdate('portalenable') }
             />
+            
+          <FormGroup
+            type="number"
+            label={msg.upSpeed}
+            required={true}
+            maxLength="6"
+            help="KB"
+            value={getCurrData('upstream')}
+            onChange={this.onUpdate('upstream')}
+            {...upstream}
+          />
+          
+          <FormGroup
+            type="number"
+            label={msg.downSpeed}
+            help="KB"
+            maxLength="6"
+            required={true}
+            value={getCurrData('downstream')}
+            onChange={this.onUpdate('downstream')}
+            {...downstream}
+          />
         </div>
-        div 
+        
         <FormGroup>
           <Button
             type='button'
@@ -179,8 +219,7 @@ function mapStateToProps(state) {
   var myState = state.guest;
 
   return {
-    fetching: myState.get('fetching'),
-    data: myState.get('data'),
+    store: myState,
     app: state.app
   };
 }

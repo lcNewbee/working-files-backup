@@ -52,6 +52,10 @@ export const Portal = React.createClass({
   componentWillMount() {
     this.props.fetchPortalSettings();
   },
+  
+  componentWillUnmount() {
+    this.props.resetVaildateMsg();
+  },
    
   onUpdateSettings(name) {
     return function(data, e) {

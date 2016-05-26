@@ -9,7 +9,6 @@ import * as validateActions from 'actions/valid';
 import * as myActions from './actions';
 import myReducer from './reducer';
 
-
 import {FormGroup} from 'components/Form';
 import Select from 'components/Select';
 import Button from 'components/Button';
@@ -49,6 +48,10 @@ export const Admin = React.createClass({
   mixins: [PureRenderMixin],
   
   componentWillMount() {
+  },
+  
+  componentWillUnmount() {
+    this.props.resetVaildateMsg();
   },
   
   onSave() {

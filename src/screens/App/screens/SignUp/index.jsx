@@ -7,8 +7,6 @@ import {fromJS, Map, List} from 'immutable';
 import validator from 'utils/lib/validator';
 import utils from 'utils';
 
-import './_signUp.scss';
-
 const msg = {
   password:  _('Password'),
   confirmpasswd: _('Confirm Password')
@@ -163,7 +161,7 @@ export const SignUp = React.createClass({
         <header className="navbar">
           <a href="" className="brand">Comlanos {_('Management')}</a>
         </header>
-        <div className="sign-up">
+        <div className="sign">
           <h1>{_('Please Sign Up')}</h1>
           {FormGroupList}
           {

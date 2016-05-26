@@ -4,7 +4,7 @@ import chai, {expect} from 'chai';
 import reducer from '../reducer';
 import * as actions from '../actions';
 
-describe('Bandwidth Rudex', () => {
+describe('Wireless Rudex', () => {
   
   it('should change data.curr when CHANGE_WIFI_GROUP', () => {
     const initialState = fromJS({
@@ -35,7 +35,7 @@ describe('Bandwidth Rudex', () => {
       }
     });
     
-    let action = actions.changeQosGroup("group33547");
+    let action = actions.changeWifiGroup("group33547");
     
     let nextState = reducer(initialState, action);
     let expectMap = fromJS({
@@ -80,7 +80,7 @@ describe('Bandwidth Rudex', () => {
       }
     });
     
-    let action = actions.changeQosSettings({
+    let action = actions.changeWifiSettings({
       "downstream": "12",
       "upstream": "33"
     });

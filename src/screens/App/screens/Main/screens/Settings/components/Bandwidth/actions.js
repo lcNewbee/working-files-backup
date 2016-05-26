@@ -31,7 +31,6 @@ export function fetchBandwidth() {
   };
 }
 
-// handle user custom action
 export function changeQosGroup(name) {
   return {
     type: "CHANGE_QOS_GROUP",

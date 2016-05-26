@@ -42,6 +42,10 @@ export const Bandwidth = React.createClass({
     this.props.fetchBandwidth();
   },
   
+  componentWillUnmount() {
+    this.props.resetVaildateMsg();
+  },
+  
   handleQosChange(data) {
     this.props.changeQosSettings(data)
   },

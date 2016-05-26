@@ -299,7 +299,7 @@ export const Status = React.createClass({
       }, {
         'id': 'softversion',
         'text':  _('UP/Down Flow'),
-        transform(item) {
+        transform(val, item) {
           return item.get('upstream') + '/' + item.get('downstream');
         }
       }, {
@@ -321,7 +321,7 @@ export const Status = React.createClass({
       }, {
         'id': 'up/down flow',
         'text':  _('UP/Down Flow'),
-        transform(item) {
+        transform(val, item) {
           return item.get('upstream') + '/' + item.get('downstream');
         }
       }

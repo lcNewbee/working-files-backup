@@ -40,6 +40,10 @@ export const GroupSettings = React.createClass({
     this.props.fetchGroupDevices();
   },
   
+  componentWillUnmount() {
+    this.props.resetVaildateMsg();
+  },
+  
   getEditVal(key) {
     var ret = '';
     
@@ -93,9 +97,9 @@ export const GroupSettings = React.createClass({
     }.bind(this))
     
   },
-
-  render() {
-    var groupTableOptions = [{
+  
+  getGroupTableOptions() {
+    return [{
       'id': 'groupname',
       'text': msg.groupname
     }, {
@@ -104,7 +108,7 @@ export const GroupSettings = React.createClass({
     }, {
       'id': 'op',
       'text': msg.action,
-      transform: function(item) {
+      transform: function(val, item) {
         return (
           <div>
             <Button
@@ -126,11 +130,13 @@ export const GroupSettings = React.createClass({
         )
       }.bind(this)
     }];
-    
-    var devicesTableOptions = [{
+  },
+  
+  getDevicesTableOptions() {
+    let ret = [{
         'id': 'devicename',
         'text': _('MAC Address') + '/' + _('Name'),
-        transform: function(item) {
+        transform: function(val, item) {
           return item.get('devicename') || item.get('mac');
         }
       }, {
@@ -142,7 +148,7 @@ export const GroupSettings = React.createClass({
       }, {
         'id': 'op',
         'text': _('Select'),
-        transform: function(item) {
+        transform: function(val, item) {
           var deviceMac;
           var selectedDevices = this.props.edit.get('devices');
          
@@ -160,9 +166,16 @@ export const GroupSettings = React.createClass({
           )
         }.bind(this)
       }];
-    let modalTitle = this.getEditVal('orignName');
     
+    return ret;
+  },
+
+  render() {
     const {groupname, remarks} = this.props.validateOption;
+    const groupTableOptions = this.getGroupTableOptions();
+    const devicesTableOptions = this.getDevicesTableOptions();
+    
+    let modalTitle = this.getEditVal('orignName');
     
     if(this.props.actionType === 'add') {
       modalTitle = msg.add;

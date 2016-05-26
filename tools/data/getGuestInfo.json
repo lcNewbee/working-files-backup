@@ -15,7 +15,9 @@
             "startip": "192.168.8.1",
             "endip": "192.168.8.1",
             "mask": "255.255.0.0",
-            "portalenable": "1"
+            "portalenable": "1",
+            "downstream": "128",
+            "upstream": "64"
           },
           {
             "groupname": "group33333",
@@ -26,7 +28,9 @@
             "startip": "192.168.8.1",
             "endip": "192.168.8.1",
             "mask": "",
-            "portalenable": "0"
+            "portalenable": "0",
+            "downstream": "128",
+            "upstream": "64"
           },
           {
             "groupname": "group33547",
@@ -37,7 +41,9 @@
             "startip": "192.168.8.1",
             "endip": "192.168.8.1",
             "mask": "255.255.0.0",
-            "portalenable": "1"
+            "portalenable": "1",
+            "downstream": "128",
+            "upstream": "64"
           }
       ]
   }

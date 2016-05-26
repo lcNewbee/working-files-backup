@@ -21,6 +21,25 @@ const msg = {
   'downSpeed': _('Down Speed'),
   'selectGroup': _('Select Group')
 };
+const encryptionOptions = [
+  {
+    value: 'none',
+    label: _('NONE')
+  },
+  {
+    value: 'psk-mixed',
+    label: _('STRONG')
+  }
+];
+const channelBandwidthOptions = fromJS([
+  {
+    value: '20',
+    label: '20'
+  }, {
+    value: '40',
+    label: '40'
+  }
+]);
 
 const validOptions = Map({
   password: validator({
@@ -32,6 +51,12 @@ const validOptions = Map({
   ssid: validator({
     rules: 'len:[1, 64]'
   }),
+  upstream: validator({
+    rules: 'num:[1, 102400]'
+  }),
+  downstream: validator({
+    rules: 'num:[1, 102400]',
+  })
 });
 
 const channelsList = List(channels);
@@ -48,6 +73,10 @@ export const Wireless = React.createClass({
   
   componentWillMount() {
     this.props.fetchWifiSettings();
+  },
+  
+  componentWillUnmount() {
+    this.props.resetVaildateMsg();
   },
   
   onUpdate(name) {
@@ -99,43 +128,32 @@ export const Wireless = React.createClass({
     }.bind(this));
   },
   
-  render() {
-    const groupOptions = this.props.data
-      .get('list').map(function(item, i) {
+  getCurrData(name) {
+    return this.props.store.getIn(['data', 'curr', name]);
+  },
+  
+  getGroupOptions() {
+    return this.props.store
+      .getIn(['data', 'list'])
+      .map(function(item, i) {
         return {
           value: item.get('groupname'),
           label: item.get('groupname')
         }
-      }).toJS();
-      
-    const encryptionOptions = [
-      {
-        value: 'none',
-        label: _('NONE')
-      },
-      {
-        value: 'psk-mixed',
-        label: _('STRONG')
-      }
-    ];
-    const countryOption = channelsList.map(function(item) {
+      })
+      .toJS();
+  },
+  
+  getCountryOptions() {
+    return channelsList.map(function(item) {
       return {
         value: item.country,
-        label: _(item.en)
+        label: b28n.getLang() === 'cn' ? _(item.cn) : _(item.en)
       }
     }).toJS();
-    const channelBandwidthOptions = fromJS([
-      {
-        value: '20',
-        label: '20'
-      }, {
-        value: '40',
-        label: '40'
-      }
-    ]);
-    const {password, vlanid, ssid} = this.props.validateOption;
-    
-    const currData =  this.props.data.get('curr');
+  },
+  
+  getChannelsOptions(currCountry) {
     let i, len, channelsRange;
     let channelsOptions = [
       {
@@ -143,13 +161,11 @@ export const Wireless = React.createClass({
         label: _('auto')
       }
     ];
-    
     let channelsOption = channelsList.find(function(item) {
-      return item.country === currData.get('country');
+      return item.country === currCountry;
     });
     
     if(channelsOption) {
-      
       channelsRange = channelsOption['2.4g'].split('-');
       i = parseInt(channelsRange[0], 10);
       len = parseInt(channelsRange[1], 10);
@@ -164,7 +180,19 @@ export const Wireless = React.createClass({
         label: i + ''
       });
     }
-
+    
+    return channelsOptions;
+  },
+  
+  render() {
+    const {
+        password, vlanid, ssid, upstream, downstream
+      } = this.props.validateOption;
+    const groupOptions = this.getGroupOptions();
+    const countryOptions = this.getCountryOptions();
+    const getCurrData =  this.getCurrData;
+    const channelsOptions = this.getChannelsOptions(getCurrData('country'));
+    
     return (
       <div>
         <h3>{ _('Current Group') }</h3>
@@ -172,7 +200,7 @@ export const Wireless = React.createClass({
           type="select"
           label={msg.selectGroup}
           options={groupOptions}
-          value={currData.get('groupname')}
+          value={getCurrData('groupname')}
           onChange={this.onChangeGroup}
         />
         
@@ -180,7 +208,7 @@ export const Wireless = React.createClass({
         <FormGroup
           label={ _('SSID') }
           required={true}
-          value={currData.get('ssid')}
+          value={getCurrData('ssid')}
           onChange={this.onUpdateSettings('ssid')}
           {...ssid}
         />
@@ -188,41 +216,41 @@ export const Wireless = React.createClass({
           type="select"
           label={_('Encryption')}
           options={encryptionOptions}
-          value={currData.get('encryption')}
+          value={getCurrData('encryption')}
           onChange={this.onUpdateSettings('encryption')}
         />
         {
-          currData.get('encryption') === 'psk-mixed' ?
+          getCurrData('encryption') === 'psk-mixed' ?
             <FormGroup
               label={ _('Password') }
               type="password"
               required={true}
-              value={currData.get('password')}
+              value={getCurrData('password')}
               onChange={this.onUpdateSettings('password')}
               {...password}
             /> : ''
         }
         <FormGroup
           label={_('VLAN')}
-          value={currData.get('vlanid')}
+          value={getCurrData('vlanid')}
           required={true}
           
           {...vlanid}
         > 
           <Checkbox
-            checked={currData.get('vlanenable') == '1'}
+            checked={getCurrData('vlanenable') == '1'}
             onChange={this.onUpdate('vlanenable')}
           />
             
           {
-            currData.get('vlanenable') == '1' ? 
+            getCurrData('vlanenable') == '1' ? 
               (
                 <span style={{'marginLeft': '5px'}}>
                   { _('Use VLAN ID:') }
                   <input
                     type="text"
                     className="input-sm"
-                    value={currData.get('vlanid')}
+                    value={getCurrData('vlanid')}
                     onChange={this.onUpdate('vlanid')}
                   />
                 </span>
@@ -234,25 +262,47 @@ export const Wireless = React.createClass({
         <FormGroup
           type="select"
           label={ _('Country')}
-          options={countryOption}
-          value={currData.get('country')}
+          options={countryOptions}
+          value={getCurrData('country')}
           onChange={this.onUpdateSettings('country')}
         />
         <FormGroup
           type="select"
           label={ _('Channel')}
           options={channelsOptions}
-          value={currData.get('channel')}
+          value={getCurrData('channel')}
           onChange={this.onUpdateSettings('channel')}
         />
         <FormGroup label={_('Channel Bandwidth')} >
           <Switchs
             options={channelBandwidthOptions}
-            value={currData.get('channelsBandwidth')}
+            value={getCurrData('channelsBandwidth')}
             onChange={this.onUpdateSettings('channelsBandwidth')}
           />
         </FormGroup>
         
+        <h3>{_('Bandwidth')}</h3>
+        <FormGroup
+          type="number"
+          label={msg.upSpeed}
+          required={true}
+          maxLength="6"
+          help="KB"
+          value={getCurrData('upstream')}
+          onChange={this.onUpdate('upstream')}
+          {...upstream}
+        />
+        
+        <FormGroup
+          type="number"
+          label={msg.downSpeed}
+          help="KB"
+          maxLength="6"
+          required={true}
+          value={getCurrData('downstream')}
+          onChange={this.onUpdate('downstream')}
+          {...downstream}
+        />
         <div className="form-group">
           <div className="form-control">
              <Button
@@ -275,8 +325,7 @@ function mapStateToProps(state) {
   var myState = state.wireless;
 
   return {
-    fetching: myState.get('fetching'),
-    data: myState.get('data'),
+    store: myState,
     app: state.app
   };
 }
