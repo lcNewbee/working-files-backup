@@ -40,7 +40,7 @@ gulp.task('build', ['webpack'], function() {
     .pipe(gulp.dest(paths.build));
 });
 
-gulp.task('pub:ac',['build:html'],  shell.task([
+gulp.task('pub:ac',['build'],  shell.task([
   'babel-node ./tools/release.js'
 ]));
 
