@@ -3,58 +3,10 @@ import Icon from '../Icon';
 import Select from '../Select';
 import Checkbox from './Checkbox';
 
-const InputComponets = {
-  input() {
-    let classNames = 'text ' + this.props.className;
-    
-    return <input {...this.props}
-      className={classNames}
-      onChange={this.handleChange}
-      onBlur={this.onBlur}
-    />;
-  },
-  
-  select() {
-    return <Select {...this.props}
-      clearable={this.props.clearable || false}
-    />;
-  },
-  
-  checkbox() {
-    let {checked, value, options} = this.props;
-    let label = '';
-    
-    if(options && options.label) {
-      label = options.label;
-    }
-    
-    return <Checkbox {...this.props}
-      onChange={this.handleChange}
-      label={label}
-    />;
-  },
-  
-  radio() {
-    return <Checkbox {...this.props}
-      onChange={this.handleChange}
-      onBlur={this.onBlur}
-    />;
-  }
-}
-
-function getComponetName(type) {
-  var ret = type;
-  
-  if(ret !== 'select' && ret !== 'checkbox' && ret !== 'radio') {
-    ret = 'input';
-  }
-  
-  return ret;
-}
-
 const propTypes = {
   className: PropTypes.string,
   Component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+  size: PropTypes.oneOf(['min', 'sm', 'md', 'lg', 'xl'])
 };
 
 const defaultProps = {
@@ -84,17 +36,21 @@ class FormInput extends React.Component {
   }
   
   handleChange(e) {
-    let val = e.target.value;
+    const elem = e.target;
+    let val = elem.value;
+    let checkedValue = '1';
     let data = {
       label: this.props.label
     }
     
-    if(e.target.type === 'checkbox') {
-      val = e.target.checked ? '1' : '0';
+    if(elem.type === 'checkbox') {
+      if(elem.value) {
+        checkedValue = elem.value;
+      }
+      val = elem.checked ? checkedValue : '0';
     }
     
     data.value = val;
-    
     
     // 数据更新
     if (typeof this.props.onChange === 'function') {
@@ -108,14 +64,22 @@ class FormInput extends React.Component {
   }
 
   render() {
-    const {Component, type, clearable, className, searchable} = this.props;
+    const {
+      Component, type, clearable, className, searchable,
+      size
+    } = this.props;
     let MyComponent = Component;
     let classNames = className;
+    
+    if (size) {
+      classNames = `${classNames} input-${size}`;
+    }
     
     if(type === 'select') {
       
       return <Select 
         {...this.props}
+        className={classNames}
         clearable={ clearable || false }
         searchable={ searchable || false }
       />
@@ -126,7 +90,7 @@ class FormInput extends React.Component {
     }
     
     if(type !== 'checkbox' && type !== 'radio') {
-      classNames += ' text'
+      classNames = `${classNames} text`;
     }
     
     return <MyComponent 

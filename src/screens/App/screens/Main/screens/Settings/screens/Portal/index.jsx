@@ -203,7 +203,7 @@ export const Portal = React.createClass({
         />
         
         <div className="images-list">
-          <p className="form-group">{_('msg_select_img')}</p>
+          <p className="form-group">{_('Select 1-3 page slide show of pictures, height and width dimensions for 640px*640px')}</p>
           {
             images ? images.map(function(item){
               return <img src={item.get('image')} key={item.get('count')} />

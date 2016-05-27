@@ -10,12 +10,6 @@
 import fs from 'fs';
 import colors from 'colors';
 import cheerio from 'cheerio';
-import mv from  'mv';
-import copy from 'copy';
-
-copy('src/shared/jspdf/jspdf.min.js', 'build/scripts/jspdf.js', {mkdirp: true}, function(err) {
- 
-});
 
 fs.readFile('src/index.html', 'utf8', (err, markup) => {
   if (err) {
@@ -27,7 +21,7 @@ fs.readFile('src/index.html', 'utf8', (err, markup) => {
   // since a separate stylesheet is only utilized for the production build, need to dynamically add this here.
   $('head').append('  <link rel="stylesheet" href="styles/comlanos.css">\n');
 
-  $('#jspdfScript').attr('src', "scripts/jspdf.js");
+  $('#jspdfScript').attr('src', "scripts/jspdf.min.js");
 
   fs.writeFile('build/index.html', $.html(), 'utf8', function (err) {
     if (err) {

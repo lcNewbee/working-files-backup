@@ -15,7 +15,9 @@
         "vlanid": "1",
         "country": "AR",
         "channel": "12",
-        "channelsBandwidth": "20"
+        "channelsBandwidth": "20",
+        "downstream": "128",
+        "upstream": "64"
       },
       {
         "groupname": "group33333",
@@ -27,7 +29,9 @@
         "vlanid": "1",
         "country": "AR",
         "channel": "12",
-        "channelsBandwidth": "20"
+        "channelsBandwidth": "20",
+        "downstream": "128",
+        "upstream": "64"
       },
       {
         "groupname": "group33547",
@@ -39,7 +43,9 @@
         "vlanid": "1",
         "country": "AM",
         "channel": "12",
-        "channelsBandwidth": "20"
+        "channelsBandwidth": "20",
+        "downstream": "128",
+        "upstream": "64"
       }
     ]
   }

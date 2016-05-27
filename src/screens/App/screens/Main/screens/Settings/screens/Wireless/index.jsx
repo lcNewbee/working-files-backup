@@ -10,7 +10,7 @@ import * as myActions from './actions';
 import { fetchDeviceGroups } from '../GroupSettings/actions';
 import myReducer from './reducer';
 
-import {FormGroup, Checkbox} from 'components/Form';
+import {FormGroup, Checkbox, FormInput} from 'components/Form';
 import Select from 'components/Select';
 import Button from 'components/Button';
 import channels from './channels.json';
@@ -52,10 +52,10 @@ const validOptions = Map({
     rules: 'len:[1, 64]'
   }),
   upstream: validator({
-    rules: 'num:[1, 102400]'
+    rules: 'num:[0, 102400]'
   }),
   downstream: validator({
-    rules: 'num:[1, 102400]',
+    rules: 'num:[0, 102400]',
   })
 });
 
@@ -80,21 +80,9 @@ export const Wireless = React.createClass({
   },
   
   onUpdate(name) {
-    return function(e) {
-      const elem = e.target;
+    return function(item) {
       let data = {};
-      
-      if(elem.type !== 'checkbox') {
-        data[name] = e.target.value;
-      } else {
-        
-        if(elem.checked) {
-          data[name] = '1';
-        } else {
-          data[name] = '0';
-        }
-      }
-      
+      data[name] = item.value;
       this.props.changeWifiSettings(data);
     }.bind(this)
   },
@@ -283,15 +271,29 @@ export const Wireless = React.createClass({
         
         <h3>{_('Bandwidth')}</h3>
         <FormGroup
-          type="number"
           label={msg.upSpeed}
           required={true}
-          maxLength="6"
           help="KB"
           value={getCurrData('upstream')}
-          onChange={this.onUpdate('upstream')}
           {...upstream}
-        />
+    
+        >
+          <FormInput
+            type="checkbox"
+            value="64"
+            checked={ getCurrData('upstream') === '' || getCurrData('upstream') > 0 }
+            onChange={this.onUpdate('upstream')}
+          />
+          {_('limited to') + ' '}
+          <FormInput
+            type="number"
+            maxLength="6"
+            size="sm"
+            disabled={ getCurrData('upstream') === '0' }
+            value={getCurrData('upstream')}
+            onChange={this.onUpdate('upstream')}
+          />
+        </FormGroup>
         
         <FormGroup
           type="number"
@@ -302,7 +304,23 @@ export const Wireless = React.createClass({
           value={getCurrData('downstream')}
           onChange={this.onUpdate('downstream')}
           {...downstream}
-        />
+        >
+          <FormInput
+            type="checkbox"
+            value="256"
+            checked={ getCurrData('downstream') === '' || getCurrData('downstream') > 0 }
+            onChange={this.onUpdate('downstream')}
+          />
+          {_('limited to') + ' '}
+          <FormInput
+            type="number"
+            maxLength="6"
+            size="sm"
+            disabled={ getCurrData('downstream') === '0' }
+            value={getCurrData('downstream')}
+            onChange={this.onUpdate('downstream')}
+          />
+        </FormGroup>
         <div className="form-group">
           <div className="form-control">
              <Button

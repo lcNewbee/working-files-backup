@@ -10,7 +10,7 @@ import * as myActions from './actions';
 import { fetchDeviceGroups } from '../GroupSettings/actions';
 import myReducer from './reducer';
 
-import {FormGroup} from 'components/Form';
+import {FormGroup, FormInput} from 'components/Form';
 import Button from 'components/Button';
 
 const msg = {
@@ -44,10 +44,10 @@ const validOptions = Map({
     rules: 'len:[8, 64]'
   }),
   upstream: validator({
-    rules: 'num:[1, 102400]'
+    rules: 'num:[0, 102400]'
   }),
   downstream: validator({
-    rules: 'num:[1, 102400]',
+    rules: 'num:[0, 102400]',
   })
 });
 
@@ -172,23 +172,38 @@ export const Guest = React.createClass({
                 /> : null
           }
           <FormGroup
-            label={_('Portal Enable') }
             type="checkbox"
-            help={_('Enable') }
+            label={_('Portal Enable') }
+            options={{
+              label: _('Enable')
+            }}
             checked={ getCurrData('portalenable') == '1'}
             onChange={this.onUpdate('portalenable') }
-            />
-            
+          />
+          
           <FormGroup
-            type="number"
             label={msg.upSpeed}
             required={true}
-            maxLength="6"
             help="KB"
             value={getCurrData('upstream')}
-            onChange={this.onUpdate('upstream')}
             {...upstream}
+          >
+          <FormInput
+            type="checkbox"
+            value="64"
+            checked={ getCurrData('upstream') === '' || getCurrData('upstream') > 0 }
+            onChange={this.onUpdate('upstream')}
           />
+            {_('limited to') + ' '}
+            <FormInput
+              type="number"
+              maxLength="6"
+              size="sm"
+              disabled={ getCurrData('upstream') === '0' }
+              value={getCurrData('upstream')}
+              onChange={this.onUpdate('upstream')}
+            />
+          </FormGroup>
           
           <FormGroup
             type="number"
@@ -199,7 +214,23 @@ export const Guest = React.createClass({
             value={getCurrData('downstream')}
             onChange={this.onUpdate('downstream')}
             {...downstream}
-          />
+          >
+            <FormInput
+              type="checkbox"
+              value="256"
+              checked={ getCurrData('downstream') === '' || getCurrData('downstream') > 0 }
+              onChange={this.onUpdate('downstream')}
+            />
+            {_('limited to') + ' '}
+            <FormInput
+              type="number"
+              maxLength="6"
+              size="sm"
+              disabled={ getCurrData('downstream') === '0' }
+              value={getCurrData('downstream')}
+              onChange={this.onUpdate('downstream')}
+            />
+          </FormGroup>
         </div>
         
         <FormGroup>

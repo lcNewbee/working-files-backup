@@ -25,5 +25,7 @@
   "Static IP and default gateway be in the same net segment": "静态IP和默认网关必须在同一网段",
   "please enter a valid IP segment": "请输入正确的IP网段",
   "Must be integer": "请输入整数",
-  "Input integer range is: %s - %s": "整数大小范围：%s - %s"
+  "Input integer range is: %s - %s": "整数大小范围：%s - %s",
+  "Please select a country": "请选择国家",
+  "Please select time zone": "请选择时区"
 }

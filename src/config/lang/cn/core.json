@@ -15,7 +15,7 @@
   "Prev": "上一页",
   "First": "第一页",
   "Last": "最后一页",
-  "Password": "密码", 
+  "Password": "密码",
   "Days": "天",
   "Today": "今天",
   "Yesterday": "昨天",
@@ -30,10 +30,14 @@
   "Sign Up": "注册",
   "Seconds": "秒",
   "No Data": "没有数据",
+  "limited to": "不超过",
+  "Time Zone": "时区",
   
   "Management": "管理系统",
   "Please Login": "请登录",
   "Login": "登录",
+  
+  "Setup Wizard": "设置向导",
   
   "STATISTICS": "热点统计",
   "Statistics": "热点统计",
@@ -156,7 +160,7 @@
   "Timeout": "过期时间",
   "Images Slider Time": "图片轮播间隔",
   "Upload Image": "上传图片",
-  "msg_select_img": "选择网页幻灯片图片 选择1-3张，宽高尺寸为640px*640px",
+  "Select 1-3 page slide show of pictures, height and width dimensions for 640px*640px": "选择1-3张网页幻灯片图片，宽高尺寸为640px*640px",
   
   "Guest": "来宾设置",
   "Guest Settings": "来宾设置",

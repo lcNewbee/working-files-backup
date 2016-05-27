@@ -34,6 +34,7 @@ const App = require('../../screens/App');
 // 登录界面
 const pLogin = require('../../screens/App/screens/Login');
 const sRegister = require('../../screens/App/screens/SignUp');
+const sWizard = require('../../screens/App/screens/Wizard');
 
 // 布局
 const Main = require('../../screens/App/screens/Main');
@@ -92,13 +93,15 @@ let routes = [{
           icon: 'file-text-o',
           text: _('LOGS'),
           component: pLogs.Screen
-        }, {
-          id: 'statistics',
-          path: '/main/statistics',
-          icon: 'file-pdf-o',
-          text: _('REPORTS'),
-          component: pStatistics.Screen
-        }, {
+        },
+        // {
+        //   id: 'statistics',
+        //   path: '/main/statistics',
+        //   icon: 'file-pdf-o',
+        //   text: _('REPORTS'),
+        //   component: pStatistics.Screen
+        // }, 
+        {
           id: 'settings',
           path: '/main/settings',
           icon: 'cog',
@@ -137,7 +140,10 @@ let routes = [{
         }]
     }, {
       path: '/register',
-      component: sRegister.Screen
+      component: sWizard.Screen
+    }, {
+      path: '/wizard',
+      component: sWizard.Screen
     }
   ]
 }, {

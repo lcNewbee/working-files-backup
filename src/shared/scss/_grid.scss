@@ -4,6 +4,22 @@ $mw-md:  768px;
 $mw-lg:  1024px;
 $mw-xl:  1382px;
 
+.container {
+  width: $mw-lg;
+  margin-right: auto;
+  margin-left: auto;
+
+  @include clearfix;
+}
+.row {
+  @include clearfix;
+}
+.cols {
+  float: left;
+}
+
+@include make-grid();
+
 // Mobile
 @media screen and (min-width: $mw-sm) {
 

@@ -23,13 +23,16 @@ class Checkbox extends React.Component {
     let {
       name, className, value, options
     } = this.props;
+    
     let label = options && options.label;
     
+    value = value === undefined ? '1' : value;
     
     return (
       <label className="checkbox">
         <input
           {...this.props}
+          value={value}
         />
         {label || ' '}
       </label>

@@ -29,20 +29,31 @@ gulp.task('open:src', shell.task([
   'babel-node ./tools/srcServer.js'
 ]));
 
-gulp.task('webpack', ['clean'],  shell.task([
+gulp.task('webpack', shell.task([
   'webpack --config webpack.config.prod.js',
   'babel-node tools/buildHtml.js'
 ]))
 
-gulp.task('build', ['webpack'], function() {
+gulp.task('build:assets', function() {
+  return gulp.src(paths.src + '/assets/**/*')
+    .pipe(gulp.dest(paths.build))
+});
+
+gulp.task('build:html', function() {
  return gulp.src(paths.build + '/index.html')
     .pipe(staticHash({asset: 'static'}))
     .pipe(gulp.dest(paths.build));
 });
 
-gulp.task('pub:ac',['build'],  shell.task([
-  'babel-node ./tools/release.js'
-]));
+gulp.task('build', function(callback) {
+  runSequence('clean', ['build:assets', 'webpack'], 'build:html', callback);
+});
+
+gulp.task('pub:ac',['build'], function() {
+  return gulp.src(paths.build + '/**/*')
+    .pipe(gulp.dest(paths.pub));
+});
+
 
 gulp.task('default', ['open:src']);
 
