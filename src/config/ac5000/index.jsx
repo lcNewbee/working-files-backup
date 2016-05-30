@@ -54,7 +54,6 @@ const pClients = require('../../screens/App/screens/Main/screens/Clients');
 
 // 设置
 const pGroupSettings = require('../../screens/App/screens/Main/screens/Settings/screens/GroupSettings');
-const sBandwidth = require('../../screens/App/screens/Main/screens/Settings/screens/Bandwidth');
 const sWireless = require('../../screens/App/screens/Main/screens/Settings/screens/Wireless');
 const sPortal = require('../../screens/App/screens/Main/screens/Settings/screens/Portal');
 const sGuest = require('../../screens/App/screens/Main/screens/Settings/screens/Guest');
@@ -140,7 +139,7 @@ let routes = [{
         }]
     }, {
       path: '/register',
-      component: sWizard.Screen
+      component: sRegister.Screen
     }, {
       path: '/wizard',
       component: sWizard.Screen

@@ -92,7 +92,7 @@ export const Login = React.createClass({
     return (
       <div>
         <header className="navbar">
-          <a href="" className="brand">Comlanos {_('Management')}</a>
+          <a href="" className="brand">Axilspot {_('Management')}</a>
         </header>
         <div className="sign">
           <h1>{_('Please Login')}</h1>

@@ -46,6 +46,18 @@ init = filter.fn.init = function (ruleStr) {
 }
 init.prototype = filter.fn;
 
+helper.toDecimal = function(x, len) { 
+  var f = parseFloat(x);
+  var UNIT = Math.pow(10, len)
+  
+  if (isNaN(f)) { 
+    return;
+  }
+  f = Math.round(x * UNIT) / UNIT;
+  
+  return f; 
+}
+
 helper.connectTime = function (time, unit) {
   var ret = '';
   var remainder = coreUtils.toNumber(time, 'connectTime');
@@ -81,8 +93,24 @@ helper.connectTime = function (time, unit) {
   return ret;
 }
 
-helper.add = function (str, val) {
-  return str + val;
+helper.flowRate = function (rate) {
+  var ret = 0;
+  var UNIT_GB = 1024 * 1024;
+  var UNIT_MB = 1024;
+  var unitSize = coreUtils.toNumber(rate, 'flowRate');
+  var unit = 'KB';
+  
+  if(unitSize > UNIT_GB) {
+    ret = rate / UNIT_GB;
+    unit = 'GB';
+  } else if(unitSize > UNIT_MB) {
+    ret = rate / UNIT_MB;
+    unit = 'MB';
+  } else {
+    ret = rate;
+  }
+  
+  return helper.toDecimal(ret, 1) + unit;
 }
 
 helper.translate = window._;

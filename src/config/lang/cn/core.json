@@ -32,6 +32,10 @@
   "No Data": "没有数据",
   "limited to": "不超过",
   "Time Zone": "时区",
+  "Back": "返回",
+  "Next Step": "下一步",
+  "Completed": "完成",
+  "Welcome": "欢迎",
   
   "Management": "管理系统",
   "Please Login": "请登录",
@@ -177,5 +181,9 @@
   "Old Password": "旧密码",
   "New Password": "新密码",
   "Confirm Password": "确认密码",
-  "Select Language": "选择显示语言"
+  "Select Language": "选择显示语言",
+  
+  "Thank you for purchasing Axilspot enterprise - class products, you will complete the configuration management system in minutes": "非常感谢你购买 Axilspot 企业级产品，您将在几分钟内完成管理系统配置",
+  "lease provide an administrator password to login to axilspot management system": "请提供一个管理员密码来登录 axilspot 管理系统",
+  "": ""
 }

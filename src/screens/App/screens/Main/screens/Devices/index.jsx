@@ -391,7 +391,7 @@ export const Device = React.createClass({
                 <FormGroup
                   label={_('Static IP') }
                   required={true}
-                  maxLength="12"
+                  maxLength="15"
                   value={currData.get('ip') }
                   onChange={this.onChangeDeviceNetwork('ip') }
 
@@ -402,7 +402,7 @@ export const Device = React.createClass({
                   {...mask}
                   label={_('Subnet Mask') }
                   required={true}
-                  maxLength="12"
+                  maxLength="15"
                   value={currData.get('mask') }
                   onChange={this.onChangeDeviceNetwork('mask') }
                 />
@@ -410,21 +410,21 @@ export const Device = React.createClass({
                 <FormGroup
                   label={_('Default Gateway') }
                   required={true}
-                  maxLength="12"
+                  maxLength="15"
                   value={currData.get('gateway') }
                   onChange={this.onChangeDeviceNetwork('gateway') }
                   {...gateway}
                 />
                 <FormGroup
                   label={_('DNS 1') }
-                  maxLength="12"
+                  maxLength="15"
                   value={currData.get('main_dns') }
                   onChange={this.onChangeDeviceNetwork('main_dns') }
                   {...main_dns}
                 />
                 <FormGroup
                   label={_('DNS 2') }
-                  maxLength="12"
+                  maxLength="15"
                   value={currData.get('second_dns') }
                   onChange={this.onChangeDeviceNetwork('second_dns') }
                   {...second_dns}

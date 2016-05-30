@@ -72,8 +72,10 @@ export const Admin = React.createClass({
   },
   
   onChangeLang(data) {
-    b28n.setLang(data.value);
-    window.location.reload();
+    if(b28n.getLang() !== data.value) {
+      b28n.setLang(data.value);
+      window.location.reload();
+    }
   },
   
   getSetting(name) {

@@ -91,6 +91,18 @@ str.prefixInteger = function(num, length) {
   return (Array(length).join('0') + num).slice(-length);
 }
 
+str.toDecimal = function(x, len) { 
+  var f = parseFloat(x);
+  var UNIT = Math.pow(10, len)
+  
+  if (isNaN(f)) { 
+    return;
+  }
+  f = Math.round(x * UNIT) / UNIT;
+  
+  return f; 
+}
+
 str.toCamel = function(str) {
   var re = /^(\w)/;
 

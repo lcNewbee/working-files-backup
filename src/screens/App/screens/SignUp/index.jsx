@@ -145,7 +145,11 @@ export const SignUp = React.createClass({
   onInputKeyUp(e) {
     
     if(e.which === 13) {
-      this.onSignUp();
+      if(e.target.id === 'password') {
+        document.getElementById('confirmpasswd').focus();
+      } else {
+        this.onSignUp();
+      }
     }
   },
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import {fromJS} from 'immutable';
+import utils from 'utils';
 
 // components
 import {Table} from 'components/Table';
@@ -14,6 +15,7 @@ import Switchs from 'components/Switchs';
 import * as actions from './actions';
 import reducer from './reducer';
 
+const flowRateFilter = utils.filter('flowRate');
 
 const clientsTableOptions = fromJS([
   {
@@ -35,7 +37,10 @@ const clientsTableOptions = fromJS([
     'id': 'bandwidth',
     'text': _('Up/Down Speed'),
     transform: function(val, item) {
-      return item.get('upstream') + 'KB/' + item.get('downstream')+ 'KB';
+      var upRate = flowRateFilter.transform(item.get('upstream'));
+      var downRate = flowRateFilter.transform(item.get('downstream'));
+      
+      return upRate + '/' + downRate;
     }
   }, {
     'id': 'rssi',
@@ -194,7 +199,7 @@ export const Clients = React.createClass({
         id: 'op',
         text: _('Actions'),
         transform: function(val, item) {
-          var deviceMac = item.get('devicename').split('/')[0];
+          var deviceMac = item.get('mac');
           var isLock = item.get('islock') === 'lock' ? true : false;
           
           return (

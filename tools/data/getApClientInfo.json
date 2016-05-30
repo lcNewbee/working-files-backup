@@ -27,15 +27,15 @@
                 "devicename": "ap1",
                 "ipaddress": "192.168.6.41",
                 "macaddress": "12:22:33:44:55:66",
-                "downstream": "12G",
-                "upstream": "1G"
+                "downstream": "12323",
+                "upstream": "12323"
             },
             {
                 "devicename": "ap2",
                 "ipaddress": "192.168.6.42",
                 "macaddress": "12:22:33:44:55:66",
-                "downstream": "12G",
-                "upstream": "1G"
+                "downstream": "12323",
+                "upstream": "23"
             }
         ],
         "clientlist": [
@@ -44,16 +44,16 @@
                 "ipaddress": "192.168.6.42",
                 "macaddress": "12:22:33:44:55:66",
                 "connecttime": "120",
-                "downstream": "12G",
-                "upstream": "1G"
+                "downstream": "12323",
+                "upstream": "32"
             },
             {
                 "hostname": "iphone-23221",
                 "ipaddress": "192.168.6.42",
                 "macaddress": "12:22:33:44:55:66",
                 "connecttime": "120",
-                "downstream": "12G",
-                "upstream": "1G"
+                "downstream": "12323",
+                "upstream": "22"
             }
         ]
     }

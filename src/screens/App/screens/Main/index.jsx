@@ -8,7 +8,7 @@ import Sidebar from './components/Sidebar';
 import * as actions from './actions';
 
 
-const BRAND_TEXT = 'Comlanos ' + _('Management');
+const BRAND_TEXT = 'Axilspot ' + _('Management');
 
 export default class Main extends Component {
   constructor(props) {

@@ -22,7 +22,7 @@
                 "ssid": "ssid1",
                 "connectap": "ap1",
                 "downstream": "256",
-                "upstream": "128",
+                "upstream": "1232323",
                 "rssi": "-70db",
                 "authtype": "portal",
                 "operationhours": "23444",

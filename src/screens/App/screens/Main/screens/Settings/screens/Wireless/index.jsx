@@ -321,6 +321,7 @@ export const Wireless = React.createClass({
             onChange={this.onUpdate('downstream')}
           />
         </FormGroup>
+        
         <div className="form-group">
           <div className="form-control">
              <Button

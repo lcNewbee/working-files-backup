@@ -1,4 +1,5 @@
 import React from 'react';
+import utils from 'utils';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -13,13 +14,13 @@ import reducer from './reducer';
 import echarts from 'echarts';
 import './index.scss';
 
-let apChart, statsChart, clientsChannelChart, clientsProducerChart;
-
-
+const flowRateFilter = utils.filter('flowRate');
 const tooltip = {
   trigger: 'item',
   formatter: "{a} <br/>{b} : {c} 台 ({d}%)"
 }
+
+let apChart, statsChart, clientsChannelChart, clientsProducerChart;
 
 // 原生的 react 页面
 export const Status = React.createClass({
@@ -300,7 +301,8 @@ export const Status = React.createClass({
         'id': 'softversion',
         'text':  _('UP/Down Flow'),
         transform(val, item) {
-          return item.get('upstream') + '/' + item.get('downstream');
+          return flowRateFilter.transform(item.get('upstream')) +
+              ' / ' + flowRateFilter.transform(item.get('downstream'));
         }
       }, {
         'id': 'connecttime',
@@ -322,7 +324,8 @@ export const Status = React.createClass({
         'id': 'up/down flow',
         'text':  _('UP/Down Flow'),
         transform(val, item) {
-          return item.get('upstream') + '/' + item.get('downstream');
+          return flowRateFilter.transform(item.get('upstream')) + ' / ' +
+              flowRateFilter.transform(item.get('downstream'));
         }
       }
     ]);

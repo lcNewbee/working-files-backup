@@ -264,7 +264,12 @@ export const SignUp = React.createClass({
   onInputKeyUp(e) {
     
     if(e.which === 13) {
-      this.onSignUp();
+      
+      if(e.target.id === 'password') {
+        document.getElementById('confirmpasswd').focus();
+      } else {
+        this.onNext();
+      }
     }
   },
   
@@ -309,7 +314,7 @@ export const SignUp = React.createClass({
     return (
       <div>
         <div className="navbar">
-          <a href="" className="brand">Comlanos {_('Management')}</a>
+          <a href="" className="brand">Axilspot {_('Management')}</a>
         </div>
         <div className="wizard">
           <h2>{_('Setup Wizard')}</h2>
@@ -317,15 +322,15 @@ export const SignUp = React.createClass({
             <ul>
               <li className={stepOneClass}>
                 <span className="icon" />
-                <h3>1. 欢迎</h3>
+                <h3>1. {_('Welcome')}</h3>
               </li>
               <li className={stepTwoClass}>
                 <span className="icon" />
-                <h3>2. 密码</h3>
+                <h3>2. {_('Password')}</h3>
               </li>
               <li className={stepThreeClass}>
                 <span className="icon" />
-                <h3>3. 完成</h3>
+                <h3>3. {_('Completed')}</h3>
               </li>
             </ul>
           </div>
@@ -334,7 +339,7 @@ export const SignUp = React.createClass({
             {
               this.state.currStep === 1 ? (
                 <div className="step-0">
-                  <p>非常感谢你购买 axilspot 企业级产品，您几分钟内完成管理系统配置</p>
+                  <p>非常感谢你购买 Axilspot 企业级产品，您将在几分钟内完成管理系统配置</p>
                   <div className="row">
                     <div className="cols cols-first col-6">
                       {this.createFormGruop('country')}
@@ -377,7 +382,7 @@ export const SignUp = React.createClass({
             {
               this.state.currStep === 3 ? (
                 <div className="step-1">
-                  <p>请再确定你的以下配置，点击返回修改配置，点击完成来激活设置，完成后你将会跳转到管理界面 </p>
+                  <p>请再确定你的以下配置，点击返回修改配置或完成来激活设置，完成后你将会跳转到管理界面</p>
                   <div className="row">
                     <div className="cols cols-first col-6">
                       
