@@ -15,6 +15,13 @@ export default function(state = defaultState, action) {
     case 'RECEIVE_SAVE_PASSWORD':
       return state.set('saving', false);
       
+    case 'RESET_PASSWORD':
+      return state.mergeIn(['data'], {
+        oldpasswd: '',
+        newpasswd: '',
+        confirmpasswd: ''
+      });
+      
     default:
 
   }

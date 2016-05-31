@@ -21,6 +21,7 @@
   "Invalid Url": "无效的网址格式",
   "Please enter a valid IP segment": "请输入正确的IP网段",
   "Password and confirm password must match": "密码与确认密码必须一致",
+  "New password and confirm password must match": "新密码与确认密码必须一致",
   "Static IP cannot be the same as default gateway.": "静态IP不能和默认网关一样",
   "Static IP and default gateway be in the same net segment": "静态IP和默认网关必须在同一网段",
   "please enter a valid IP segment": "请输入正确的IP网段",

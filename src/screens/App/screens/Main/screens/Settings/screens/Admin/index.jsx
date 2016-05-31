@@ -48,15 +48,30 @@ export const Admin = React.createClass({
   mixins: [PureRenderMixin],
   
   componentWillMount() {
+    
   },
   
   componentWillUnmount() {
     this.props.resetVaildateMsg();
+    this.props.resetPassword();
+  },
+  
+  combineValid() {
+    const {newpasswd, confirmpasswd} = this.props.store.get('data').toJS();
+    let ret;
+    
+    if (newpasswd !== confirmpasswd) {
+       ret = _('New password and confirm password must match');
+       alert(ret);
+    }
+
+    return ret;
   },
   
   onSave() {
     this.props.validateAll(function (invalid) {
-      if (invalid.isEmpty()) {
+      if (invalid.isEmpty() && this.combineValid()) {
+        
         this.props.savePassword();
       }
     }.bind(this));

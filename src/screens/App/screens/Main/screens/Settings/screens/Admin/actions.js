@@ -22,10 +22,15 @@ export function receiveSavePassword() {
     savedAt: Date.now(),
   }
 }
+export function resetPassword() {
+  return {
+    type: "RESET_PASSWORD"
+  }
+}
 
 export function savePassword() {
   return (dispatch, getState) => {
-    const data = getState().password.get('data');
+    const data = getState().admin.get('data');
     
     dispatch(reqeustSavePassword());
 

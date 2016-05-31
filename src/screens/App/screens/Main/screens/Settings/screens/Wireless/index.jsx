@@ -46,7 +46,7 @@ const validOptions = Map({
     rules: 'len:[8, 64]'
   }),
   vlanid: validator({
-    rules: 'num:[0, 4096]'
+    rules: 'num:[2, 4094]'
   }),
   ssid: validator({
     rules: 'len:[1, 64]'
@@ -82,7 +82,9 @@ export const Wireless = React.createClass({
   onUpdate(name) {
     return function(item) {
       let data = {};
+      
       data[name] = item.value;
+      console.log(item)
       this.props.changeWifiSettings(data);
     }.bind(this)
   },
@@ -221,11 +223,12 @@ export const Wireless = React.createClass({
         <FormGroup
           label={_('VLAN')}
           value={getCurrData('vlanid')}
-          required={true}
-          
+          required={getCurrData('vlanenable') == '1'}
+         
           {...vlanid}
         > 
-          <Checkbox
+          <FormInput
+            type="checkbox"
             checked={getCurrData('vlanenable') == '1'}
             onChange={this.onUpdate('vlanenable')}
           />
@@ -235,8 +238,9 @@ export const Wireless = React.createClass({
               (
                 <span style={{'marginLeft': '5px'}}>
                   { _('Use VLAN ID:') }
-                  <input
+                  <FormInput
                     type="text"
+                    style={{'marginLeft': '3px'}}
                     className="input-sm"
                     value={getCurrData('vlanid')}
                     onChange={this.onUpdate('vlanid')}
@@ -276,7 +280,6 @@ export const Wireless = React.createClass({
           help="KB"
           value={getCurrData('upstream')}
           {...upstream}
-    
         >
           <FormInput
             type="checkbox"
