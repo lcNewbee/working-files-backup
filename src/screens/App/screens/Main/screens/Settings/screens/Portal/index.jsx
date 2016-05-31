@@ -223,7 +223,7 @@ export const Portal = React.createClass({
             <Button
               type='button'
               text={_('Upload Image') + ' 1'}
-              role="upload"
+              icon="upload"
               onClick={this.onUploadImage(1)}
             />
           </label>
@@ -245,7 +245,7 @@ export const Portal = React.createClass({
             <Button
               type='button'
               text={_('Upload Image') + ' 2'}
-              role="upload"
+              icon="upload"
               onClick={this.onUploadImage(2)}
             />
           </label>
@@ -267,7 +267,7 @@ export const Portal = React.createClass({
             <Button
               type='button'
               text={_('Upload Image') + ' 3'}
-              role="upload"
+              icon="upload"
               onClick={this.onUploadImage(3)}
             />
           </label>
@@ -278,12 +278,13 @@ export const Portal = React.createClass({
           </div>
         </form>
         
-        <div className="form-group">
+        <div className="form-group form-group-save">
           <div className="form-control">
              <Button
               type='button'
               text={_('Save')}
-              role="save"
+              icon="save"
+              role="success"
               onClick={this.onSave}
             />
           </div>

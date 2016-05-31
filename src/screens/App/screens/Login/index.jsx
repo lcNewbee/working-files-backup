@@ -111,7 +111,7 @@ export const Login = React.createClass({
               <p className="msg-error ">{this.props.status}</p> :
               ''
           }
-          <button className="btn btn-success btn-lg"
+          <button className="btn btn-info btn-lg"
             onClick={this.onLogin}>
             {_('Login')}
           </button>

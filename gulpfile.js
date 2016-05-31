@@ -16,6 +16,7 @@ paths = gulp.paths = {
   release: 'release',
   src: 'src',
   pub: '../win_ac/ws031202/comlanweb/',
+  pubNew: '../win_ac/mysql/web/',
   webpack: 'webpack.config.dev.js',
   pubWebpack: 'webpack.config.prop.js'
 };
@@ -51,7 +52,8 @@ gulp.task('build', function(callback) {
 
 gulp.task('pub:ac',['build'], function() {
   return gulp.src(paths.build + '/**/*')
-    .pipe(gulp.dest(paths.pub));
+    .pipe(gulp.dest(paths.pub))
+    .pipe(gulp.dest(paths.pubNew));
 });
 
 

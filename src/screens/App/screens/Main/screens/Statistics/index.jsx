@@ -20,7 +20,7 @@ export const Statistics = React.createClass({
         <h2>{msg.TITIE}</h2>
         <div>
           <Button
-            role="download"
+            icon="download"
             text={msg.EXPORTING}
           />
         </div>

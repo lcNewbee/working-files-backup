@@ -17,7 +17,10 @@ const msg = {
   confirmpasswd: _('Confirm Password'),
   welcomeDes: _('Thank you for purchasing Axilspot enterprise-class products,' +
     ' you will complete the configuration for management system in minutes'),
-  passwordDes: _('Please provide an administrator password to login to Axilspot management system')
+  passwordDes: _('Please provide an administrator password to login to Axilspot management system'),
+  completeDes: _('Please confirm your configuration below.' +
+    ' Click back to modify the configuration or click finish to activate the configuration.' +
+    ' After finish you will skip to management interface.')
 }
 const defaultCountry = ((window.navigator.language || window.navigator.userLanguage ||
     window.navigator.browserLanguage || window.navigator.systemLanguage ||
@@ -385,7 +388,7 @@ export const SignUp = React.createClass({
             {
               this.state.currStep === 3 ? (
                 <div className="step-1">
-                  <p>请再确定你的以下配置，点击返回修改配置或完成来激活设置，完成后你将会跳转到管理界面</p>
+                  <p>{msg.completeDes}</p>
                   <div className="row">
                     <div className="cols cols-first col-6">
                       

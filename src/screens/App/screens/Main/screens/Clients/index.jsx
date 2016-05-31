@@ -52,8 +52,10 @@ const clientsTableOptions = fromJS([
     id: 'operationhours',
     text: _('Connect Time'),
     filter: 'connectTime',
+    width: '160',
   }, {
     id: 'op',
+    width: '220',
     text: _('Actions')
   }
 ]);
@@ -160,7 +162,7 @@ export const Clients = React.createClass({
             {
               isLock ? (
                 <Button
-                  role="unlock"
+                  icon="unlock"
                   size="sm"
                   text={msg.unlock}
                   style={styles.actionButton}
@@ -168,7 +170,7 @@ export const Clients = React.createClass({
                 />
               ) : (
                 <Button
-                  role="lock"
+                  icon="lock"
                   size="sm"
                   text={msg.lock}
                   style={styles.actionButton}
@@ -178,7 +180,7 @@ export const Clients = React.createClass({
             }
             
             <Button
-              role="repeat"
+              icon="repeat"
               size="sm"
               text={msg.reconnect}
               style={styles.actionButton}
@@ -205,7 +207,7 @@ export const Clients = React.createClass({
           
           return (
             <Button
-              role="unlock"
+              icon="unlock"
               size="sm"
               text={msg.unlock}
               style={styles.actionButton}

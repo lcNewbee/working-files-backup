@@ -155,12 +155,13 @@ export const FormGroup = React.createClass({
   
   render() {
     const { help, errMsg, name, label, required,
-      children, type, clearable
+      children, type, clearable, role
     } = this.props;
     
     let id = this.props.id;
+    let groupClassName = `form-group form-group-${role}`;
     
-    return <div className="form-group">
+    return <div className={groupClassName}>
       {
         label ? (
           <label htmlFor={id}>

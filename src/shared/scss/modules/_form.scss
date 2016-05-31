@@ -1,3 +1,5 @@
+$boder-color:         #e5e5e5;
+
 body textarea,
 body input[type=text],
 body input[type=password],
@@ -13,12 +15,17 @@ body input[type=number] {
   font-size: 11px;
   
   &:disabled {
-    background-color: #e5e5e5;
+    background-color: $boder-color;
   }
 }
 
 .form-group {
   margin-bottom: 12px;
+  
+  &.form-group-save {
+    border-top: 1px solid $boder-color;
+    padding-top: 12px;
+  }
 
   > label {
     display: inline-block;

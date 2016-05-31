@@ -113,14 +113,14 @@ export const GroupSettings = React.createClass({
           <div>
             <Button
               onClick={this.onEditGroup.bind(this, item.get('groupname'))}
-              role="edit"
+              icon="edit"
               text={msg.edit}
               size="sm"
             />
 
             <Button
               id={item.get('id')}
-              role="trash"
+              icon="trash"
               onClick={this.onDeleteGroup.bind(this, item.get('groupname'))}
               text={msg.delete}
               size="sm"
@@ -193,7 +193,7 @@ export const GroupSettings = React.createClass({
         />
         <div className="form-footer">
           <Button
-            role="plus"
+            icon="plus"
             className="fr"
             onClick={this.onAddGroup}
             text={msg.add}

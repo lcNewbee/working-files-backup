@@ -264,6 +264,7 @@ export const Device = React.createClass({
       }, {
         id: 'operationhours',
         text: _('Uptime'),
+        width: '160',
         filter: 'connectTime',
       }, {
         id: 'op',
@@ -283,7 +284,7 @@ export const Device = React.createClass({
                 onClick={this.onUpgradeDevice.bind(this, deviceMac) }
                 text={_('Upgrade') }
                 size="sm"
-                role="level-up"
+                icon="level-up"
               />;
           }
           
@@ -294,19 +295,19 @@ export const Device = React.createClass({
                 onClick={this.onRebootDevice.bind(this, deviceMac) }
                 text={_('Reboot') }
                 size="sm"
-                role="recycle"
+                icon="recycle"
               />
               <Button
                 onClick={this.onLocateDevice.bind(this, deviceMac) }
                 text={_('Locate') }
                 size="sm"
-                role="location-arrow"
+                icon="location-arrow"
               />
               <Button
                 onClick={this.onResetDevice.bind(this, deviceMac) }
                 text={_('Reset') }
                 size="sm"
-                role="reply-all"
+                icon="reply-all"
               />
               {upgradeBtn}
             </div>

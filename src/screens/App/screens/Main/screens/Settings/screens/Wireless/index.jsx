@@ -273,7 +273,7 @@ export const Wireless = React.createClass({
           />
         </FormGroup>
         
-        <h3>{_('Bandwidth Control')}</h3>
+        <h3>{_('Bandwidth')}</h3>
         <FormGroup
           label={msg.upSpeed}
           required={true}
@@ -325,12 +325,13 @@ export const Wireless = React.createClass({
           />
         </FormGroup>
         
-        <div className="form-group">
+        <div className="form-group form-group-save">
           <div className="form-control">
              <Button
               type='button'
               text={_('Save')}
-              role="save"
+              icon="save"
+              role="success"
               onClick={this.onSave}
             />
           </div>

@@ -233,11 +233,12 @@ export const Guest = React.createClass({
           </FormGroup>
         </div>
         
-        <FormGroup>
+        <FormGroup role="save">
           <Button
             type='button'
             text={_('Save') }
-            role="save"
+            icon="save"
+            role="success"
             onClick={this.onSave}
             />
         </FormGroup>

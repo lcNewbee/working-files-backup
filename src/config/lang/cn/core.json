@@ -23,12 +23,12 @@
   "Number": "数量",
   "Hours": "小时",
   "Minutes": "分钟",
+  "Seconds": "秒",
   "Gateway": "网关",
   "CHANGE PASSWORD": "修改密码",
   "SIGN OUT": "退出登录",
   "Please Sign Up": "请注册",
   "Sign Up": "注册",
-  "Seconds": "秒",
   "No Data": "没有数据",
   "limited to": "不超过",
   "Time Zone": "时区",
@@ -186,5 +186,5 @@
   
   "Thank you for purchasing Axilspot enterprise-class products, you will complete the configuration for management system in minutes": "非常感谢你购买Axilspot企业级产品，您将在几分钟内完成管理系统配置",
   "Please provide an administrator password to login to Axilspot management system": "请提供一个管理员密码来登录 Axilspot 管理系统",
-  "": ""
+  "Please confirm your configuration below. Click back to modify the configuration or click finish to activate the configuration. After finish you will skip to management interface.": "请再确定你的以下配置，点击返回修改配置或完成来激活设置，完成后你将会跳转到管理界面"
 }

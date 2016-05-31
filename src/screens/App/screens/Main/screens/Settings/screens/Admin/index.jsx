@@ -144,12 +144,13 @@ export const Admin = React.createClass({
           onChange={this.onChangeLang}
         />
         
-        <div className="form-group">
+        <div className="form-group form-group-save">
           <div className="form-control">
              <Button
               type='button'
               text={_('Save')}
-              role="save"
+              icon="save"
+              role="success"
               onClick={this.onSave}
             />
           </div>

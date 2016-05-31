@@ -4,8 +4,9 @@ import Icon from '../Icon';
 
 const propTypes = {
   iconName: PropTypes.string,
-  role: PropTypes.string,
+  icon: PropTypes.string,
   className: PropTypes.string,
+  role: PropTypes.oneOf(['success', 'info', 'warning']),
   size: PropTypes.oneOf(['sm', 'lg']),
   inverse: PropTypes.bool,
   Component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
@@ -18,12 +19,16 @@ const defaultProps = {
 class Button extends React.Component {
 
   render() {
-    let { Component, role, size, className} = this.props;
+    let { Component, icon, size, role, className} = this.props;
     
     let classNames = `btn`;
     
     if (size) {
       classNames = `${classNames} btn-${size}`;
+    }
+    
+    if (role) {
+      classNames = `${classNames} btn-${role}`;
     }
     
     
@@ -37,7 +42,7 @@ class Button extends React.Component {
         className={classNames}
         type="button"
       >
-        <Icon name={role} />
+        <Icon name={icon} />
         {this.props.text}
       </Component>
     );

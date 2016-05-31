@@ -58,6 +58,20 @@ helper.toDecimal = function(x, len) {
   return f; 
 }
 
+function transformComplex(num, unit) {
+  var ret = unit;
+  
+  if(num > 1) {
+    ret = num + _(ret + 's');
+  } else if(num === 1) {
+    ret = num + _(ret);
+  } else {
+    ret = '';
+  }
+  
+  return ret;
+}
+
 helper.connectTime = function (time, unit) {
   var ret = '';
   var remainder = coreUtils.toNumber(time, 'connectTime');
@@ -76,18 +90,18 @@ helper.connectTime = function (time, unit) {
 
   // 大于一天
   if (time >= 86400) {
-    ret = days + '天，' + hours + '小时';
+    ret = transformComplex(days, 'Day') + ', ' + transformComplex(hours, 'Hour');
 
     // 大于一小时
   } else if (time >= 3600) {
-    ret = hours + '小时，' + minutes + '分钟';
+    ret = transformComplex(hours, 'Hour') + ', ' + transformComplex(minutes, 'Minute');
 
     // 大于1 分钟
   } else if (time >= 60) {
-    ret = minutes + '分钟，' + seconds + '秒';
+    ret = transformComplex(minutes, 'Minute') + ', ' + transformComplex(seconds, 'Second');
 
   } else {
-    ret = seconds + '秒';
+    ret = transformComplex(seconds, 'Second');
   }
 
   return ret;
