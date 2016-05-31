@@ -1,4 +1,5 @@
 import utils from 'utils';
+import * as appActions from 'actions/ajax'
 
 const urls = {
   fetchDevices: '/goform/getApDevInfo',
@@ -126,14 +127,16 @@ export function saveDeviceNetwork(mac) {
   return (dispatch, getState) => {
     const data = getState().devices.get('edit').toJS();
     
-    dispatch(reqeustFetchDevices());
-
+    dispatch(appActions.requestSave());
+    
     utils.save(urls.setDevice, data)
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(closeDeviceEdit());
           dispatch(fetchDevices());
         }
+        
+        dispatch(appActions.receiveSave());
       });
   };
 }

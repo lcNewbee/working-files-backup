@@ -1,4 +1,5 @@
 import utils from 'utils';
+import * as appActions from 'actions/ajax';
 
 const urls = {
   fetch: "/goform/getDevGroups",
@@ -109,7 +110,7 @@ export function saveDeviceGroup() {
     const actionType = getState().groupSettings.get('actionType');
     let saveUrl = urls.addGroup;
     
-    dispatch(reqeustFetchDeviceGroups());
+    dispatch(appActions.requestSave());
     
     if(actionType === 'edit') {
       saveUrl = urls.editGroup;
@@ -122,6 +123,8 @@ export function saveDeviceGroup() {
           dispatch(removeEditDeviceGroup());
           dispatch(fetchGroupDevices());
         }
+        
+        dispatch(appActions.receiveSave());
       });
   };
 }
@@ -133,6 +136,7 @@ export function deleteDeviceGroup(groupname) {
     };
     
     dispatch(reqeustFetchDeviceGroups());
+    dispatch(appActions.requestSave());
     
     utils.save(urls.deleteGroup, data)
       .then((json) => {
@@ -140,6 +144,8 @@ export function deleteDeviceGroup(groupname) {
           dispatch(fetchDeviceGroups());
           dispatch(fetchGroupDevices());
         }
+        
+        dispatch(appActions.receiveSave());
       });
   };
 }

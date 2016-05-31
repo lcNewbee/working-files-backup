@@ -14,7 +14,10 @@ const msg = {
   password:  _('Password'),
   country: _('Country'),
   timeZone: _('Time Zone'),
-  confirmpasswd: _('Confirm Password')
+  confirmpasswd: _('Confirm Password'),
+  welcomeDes: _('Thank you for purchasing Axilspot enterprise-class products,' +
+    ' you will complete the configuration for management system in minutes'),
+  passwordDes: _('Please provide an administrator password to login to Axilspot management system')
 }
 const defaultCountry = ((window.navigator.language || window.navigator.userLanguage ||
     window.navigator.browserLanguage || window.navigator.systemLanguage ||
@@ -339,7 +342,7 @@ export const SignUp = React.createClass({
             {
               this.state.currStep === 1 ? (
                 <div className="step-0">
-                  <p>非常感谢你购买 Axilspot 企业级产品，您将在几分钟内完成管理系统配置</p>
+                  <p>{msg.welcomeDes}</p>
                   <div className="row">
                     <div className="cols cols-first col-6">
                       {this.createFormGruop('country')}
@@ -360,7 +363,7 @@ export const SignUp = React.createClass({
             {
               this.state.currStep === 2 ? (
                 <div className="step-1">
-                  <p>请提供一个管理员密码来登录 axilspot 管理系统</p>
+                  <p>{msg.passwordDes}</p>
                   <div className="row">
                     <div className="cols cols-first col-6">
                       {this.createFormGruop('password')}

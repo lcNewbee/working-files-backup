@@ -38,6 +38,7 @@ export function savePassword() {
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(receiveSavePassword());
+          window.location.hash = '#';
         }
       });
   };

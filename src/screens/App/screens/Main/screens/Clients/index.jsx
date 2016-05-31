@@ -19,23 +19,23 @@ const flowRateFilter = utils.filter('flowRate');
 
 const clientsTableOptions = fromJS([
   {
-    'id': 'devicename',
-    'text': _('MAC Address') + '/' + _('Name'),
+    id: 'devicename',
+    text: _('MAC Address') + '/' + _('Name'),
     transform: function(val, item) {
       return item.get('devicename') || item.get('mac');
     }
   }, {
-    'id': 'ip',
-    'text': _('IP Address')
+    id: 'ip',
+    text: _('IP Address')
   }, {
-    'id': 'ssid',
-    'text': 'SSID'
+    id: 'ssid',
+    text: 'SSID'
   }, {
-    'id': 'connectap',
-    'text': _('Associated AP')
+    id: 'connectap',
+    text: _('Associated AP')
   }, {
-    'id': 'bandwidth',
-    'text': _('Up/Down Speed'),
+    id: 'bandwidth',
+    text: _('Up/Down Speed'),
     transform: function(val, item) {
       var upRate = flowRateFilter.transform(item.get('upstream'));
       var downRate = flowRateFilter.transform(item.get('downstream'));
@@ -43,14 +43,15 @@ const clientsTableOptions = fromJS([
       return upRate + '/' + downRate;
     }
   }, {
-    'id': 'rssi',
-    'text': _('RSSI')
+    id: 'rssi',
+    text: _('RSSI')
   }, {
-    'id': 'authtype',
-    'text': _('Authentication')
+    id: 'authtype',
+    text: _('Authentication')
   }, {
-    'id': 'operationhours',
-    'text': _('Connect Time')
+    id: 'operationhours',
+    text: _('Connect Time'),
+    filter: 'connectTime',
   }, {
     id: 'op',
     text: _('Actions')
@@ -190,11 +191,11 @@ export const Clients = React.createClass({
     
     const blockOption = fromJS([
       {
-        'id': 'devicename',
-        'text': _('MAC Address') + '/' + _('Name')
+        id: 'devicename',
+        text: _('MAC Address') + '/' + _('Name')
       }, {
-        'id': 'ssid',
-        'text': 'SSID'
+        id: 'ssid',
+        text: 'SSID'
       }, {
         id: 'op',
         text: _('Actions'),

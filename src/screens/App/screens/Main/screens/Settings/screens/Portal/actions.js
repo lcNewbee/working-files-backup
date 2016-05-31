@@ -1,4 +1,5 @@
 import utils from 'utils';
+import * as appActions from 'actions/ajax';
 
 const urls = {
   fetch: "/goform/getPortal",
@@ -63,7 +64,7 @@ export function setPortal() {
   return (dispatch, getState) => {
     const data = getState().portal.getIn(['data', 'curr']).delete('image');
     
-    dispatch(reqeustSetPortal());
+    dispatch(appActions.requestSave());
 
     utils.save(urls.save, data)
       .then((json) => {
@@ -71,6 +72,8 @@ export function setPortal() {
           dispatch(receivePortal());
           dispatch(fetchPortalSettings());
         }
+        
+        dispatch(appActions.receiveSave());
       });
   };
 }

@@ -194,7 +194,7 @@ export const Wireless = React.createClass({
           onChange={this.onChangeGroup}
         />
         
-        <h3>{_('Base Options')}</h3>
+        <h3>{_('Basic Configuration')}</h3>
         <FormGroup
           label={ _('SSID') }
           required={true}
@@ -273,7 +273,7 @@ export const Wireless = React.createClass({
           />
         </FormGroup>
         
-        <h3>{_('Bandwidth')}</h3>
+        <h3>{_('Bandwidth Control')}</h3>
         <FormGroup
           label={msg.upSpeed}
           required={true}

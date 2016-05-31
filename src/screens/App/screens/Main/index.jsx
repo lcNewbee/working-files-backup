@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import Nav from 'components/Nav';
 import Icon from 'components/Icon';
 import Sidebar from './components/Sidebar';
+import Modal from 'components/Modal';
 import * as actions from './actions';
 
 
@@ -24,6 +25,9 @@ export default class Main extends Component {
   };
   
   render() {
+    const { saving } = this.props.app.toJS();
+    const { isShow } = this.state;
+    
     return (
       <div>
         <header className="navbar">
@@ -36,21 +40,18 @@ export default class Main extends Component {
             />
           </div>
         </header>
-        <div
-          className="main"
-        >
+        <div className="main">
           <div className='main-content'>
             <div className='main-content-wrap'>
               {
                 this.props.children
               }
-            </div>  
+            </div>
           </div>
           <Nav className="main-nav" menus={this.props.route.childRoutes} />
-         
         </div>
         {
-            this.state.isShow ? (
+            isShow ? (
               <div className="pop-over" onClick={this.showUserPopOver}>
                 <div
                   className="user-pop-over"
@@ -77,22 +78,31 @@ export default class Main extends Component {
               </div>
             ) : null
           }
+          
+          {
+            saving ? (
+              <Modal
+                role="message"
+                isShow="true"
+              >
+                { _('Saving') }
+              </Modal>
+            ) : null
+          }
       </div>
     )
   }
 }
 
-// function mapStateToProps(state) {
-//   var myState = state.main;
+function mapStateToProps(state) {
+  var myState = state.app;
 
-//   return {
-//     fetching: myState.get('fetching'),
-//     logined: myState.get('logined'),
-//     data: myState.get('data')
-//   };
-// }
+  return {
+    app: myState
+  };
+}
 
-// export const Screen = connect(
-//   mapStateToProps,
-//   actions
-// )(Main);
+export const Screen = connect(
+  mapStateToProps,
+  actions
+)(Main);

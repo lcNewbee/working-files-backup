@@ -1,4 +1,5 @@
 import utils from 'utils';
+import * as appActions from 'actions/ajax';
 
 const urls = {
   fetch: "/goform/getGuestInfo",
@@ -61,7 +62,7 @@ export function setGuest() {
   return (dispatch, getState) => {
     const data = getState().guest.getIn(['data', 'curr']);
     
-    dispatch(reqeustSetGuest());
+    dispatch(appActions.requestSave());
 
     utils.save(urls.save, data)
       .then((json) => {
@@ -69,6 +70,8 @@ export function setGuest() {
           dispatch(receiveGuest());
           dispatch(fetchGuestSettings());
         }
+        
+        dispatch(appActions.receiveSave())
       });
   };
 }

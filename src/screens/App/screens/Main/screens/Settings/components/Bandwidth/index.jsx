@@ -107,7 +107,7 @@ export const Bandwidth = React.createClass({
           </div>
         </div>
         
-        <h3>{_('Qos Settings')}</h3>
+        <h3>{_('QoS Settings')}</h3>
        
         <FormGroup
           label={msg.upSpeed}

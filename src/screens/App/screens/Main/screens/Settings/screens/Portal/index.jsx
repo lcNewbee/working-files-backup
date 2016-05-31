@@ -18,7 +18,8 @@ const MSG = {
   minutes: _('Minutes'),
   hours: _('Hours'),
   days: _('Days'),
-  userDef: _('User Defined')
+  userDef: _('User Defined'),
+  imageDes: _('Select 1-3 slide pictures of dimension 640px*640px')
 }
 
 const validOptions = Map({
@@ -171,7 +172,7 @@ export const Portal = React.createClass({
           {...url}
         />
         <FormGroup
-          label={_('Title')}
+          label={_('Portal Title')}
           name="title"
           value={getCurrData('title')}
           onChange={this.onUpdateSettings('title')}
@@ -194,7 +195,7 @@ export const Portal = React.createClass({
         </FormGroup>
         
         <FormGroup
-          label={_('Images Slider Time')}
+          label={_('Images Slide Interval')}
           type="select"
           options={refreshtimeOtions}
           name="refreshtime"
@@ -203,7 +204,7 @@ export const Portal = React.createClass({
         />
         
         <div className="images-list">
-          <p className="form-group">{_('Select 1-3 page slide show of pictures, height and width dimensions for 640px*640px')}</p>
+          <p className="form-group">{MSG.imageDes}</p>
           {
             images ? images.map(function(item){
               return <img src={item.get('image')} key={item.get('count')} />
@@ -228,6 +229,7 @@ export const Portal = React.createClass({
           </label>
           <div className="form-control">
             <input type="hidden" name="count" value="1"/>
+            <input type="hidden" name="pid" value={getCurrData('pid')}/>
             <input type="file" className="text" id="filename1" name="filename" />
           </div>
         </form>
@@ -249,6 +251,7 @@ export const Portal = React.createClass({
           </label>
           <div className="form-control">
             <input type="hidden" name="count" value="2"/>
+            <input type="hidden" name="pid" value={getCurrData('pid')}/>
             <input type="file" className="text" id="filename2" name="filename" />
           </div>
         </form>
@@ -270,6 +273,7 @@ export const Portal = React.createClass({
           </label>
           <div className="form-control">
             <input type="hidden" name="count" value="3"/>
+            <input type="hidden" name="pid" value={getCurrData('pid')}/>
             <input type="file" className="text" id="filename3" name="filename" />
           </div>
         </form>

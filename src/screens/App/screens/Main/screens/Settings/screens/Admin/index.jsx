@@ -70,7 +70,7 @@ export const Admin = React.createClass({
   
   onSave() {
     this.props.validateAll(function (invalid) {
-      if (invalid.isEmpty() && this.combineValid()) {
+      if (invalid.isEmpty() && !this.combineValid()) {
         
         this.props.savePassword();
       }

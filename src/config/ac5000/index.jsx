@@ -37,7 +37,7 @@ const sRegister = require('../../screens/App/screens/SignUp');
 const sWizard = require('../../screens/App/screens/Wizard');
 
 // 布局
-const Main = require('../../screens/App/screens/Main');
+const Main = require('../../screens/App/screens/Main').Screen;
 const Settings = require('../../screens/App/screens/Main/screens/Settings');
 
 // 热点统计
@@ -127,7 +127,7 @@ let routes = [{
             }, {
               id: 'guest',
               path: '/main/settings/guest',
-              text: _('Guest'),
+              text: _('Guest Settings'),
               component: sGuest.Screen
             }, {
               id: 'password',

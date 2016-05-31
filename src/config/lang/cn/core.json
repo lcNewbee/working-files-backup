@@ -1,4 +1,4 @@
-{
+﻿{
   "Operation": "操作",
   "Actions": "操作",
   "Add": "添加",
@@ -36,6 +36,7 @@
   "Next Step": "下一步",
   "Completed": "完成",
   "Welcome": "欢迎",
+  "Saving": "正在保存",
   
   "Management": "管理系统",
   "Please Login": "请登录",
@@ -48,21 +49,21 @@
   "Statistics Info": "统计信息",
   "AP Number": "AP数量",
   "Clients Number": "客户端数量",
-  "AP Status Characterize": "AP状态分布",
+  "AP Status": "AP状态分布",
   "Activity": "活跃度",
   "Connect Time": "连接时长",
   "Total:": "总数：",
-  "offline:": "在线",
-  "online:": "离线",
-  "Clients Frequency Characterize": "客户端频段分布",
-  "Clients Producter Characterize": "客户端产商分布",
+  "offline:": "离线",
+  "online:": "在线",
+  "Clients Frequency Diagram": "客户端频段分布",
+  "Clients Producer Diagram": "客户端产商分布",
   "Clients Statistics": "客户端日志",
   "AP Activity Ranklist": "AP活跃度排行",
   "Clients Ranklist": "客户端排行",
   "UP/Down Flow": "上/下行流量",
   "Status": "状态",
   "Frequency": "频段",
-  "Producter": "生产商",
+  "Producer": "生产商",
   
   "DEVICES": "设备",
   "Devices Info": "设备信息",
@@ -110,7 +111,7 @@
   
   "SETTINGS": "设置",
   "Settings": "设置",
-  "Base Options": "基本配置",
+  "Basic Configuration": "基本配置",
   "Advanced Options": "高级配置",
   
   "Current Group": "当前组",
@@ -118,8 +119,8 @@
   "Group List": "组列表",
   "Are you sure delete group: %s?": "你确定要删除组：%s?",
   
-  "Bandwidth": "流量控制",
-  "Qos Settings": "流量控制设置",
+  "Bandwidth Control": "流量控制",
+  "QoS Settings": "流量控制设置",
   
   "Wireless": "无线设置",
   "Wireless Channel": "无线信道",
@@ -159,18 +160,18 @@
   "Portal Settings": "Portal设置",
   "Portal Name": "Portal名称",
   "Auth Rederict URL": "认证后跳转链接",
-  "Title": "Portal界面标题",
+  "Portal Title": "Portal界面标题",
   "Expiration": "过期时间",
   "Timeout": "过期时间",
-  "Images Slider Time": "图片轮播间隔",
+  "Images Slide Interval": "图片轮播间隔",
   "Upload Image": "上传图片",
-  "Select 1-3 page slide show of pictures, height and width dimensions for 640px*640px": "选择1-3张网页幻灯片图片，宽高尺寸为640px*640px",
+  "Select 1-3 slide pictures of dimension 640px*640px": "选择1-3张幻灯片图片，宽高尺寸为640px*640px",
   
-  "Guest": "来宾设置",
+  "Guest": "来宾",
   "Guest Settings": "来宾设置",
   "Enable Guest": "启用来宾账号",
   "Guest SSID": "来宾SSID",
-  "Portal Enable": "启用Portal",
+  "Enable Portal": "启用Portal",
   "Enable": "启用",
   "DHCP Range": "DHCP范围",
   "Subnet Mask": "子网掩码",
@@ -183,7 +184,7 @@
   "Confirm Password": "确认密码",
   "Select Language": "选择显示语言",
   
-  "Thank you for purchasing Axilspot enterprise - class products, you will complete the configuration management system in minutes": "非常感谢你购买 Axilspot 企业级产品，您将在几分钟内完成管理系统配置",
-  "lease provide an administrator password to login to axilspot management system": "请提供一个管理员密码来登录 axilspot 管理系统",
+  "Thank you for purchasing Axilspot enterprise-class products, you will complete the configuration for management system in minutes": "非常感谢你购买Axilspot企业级产品，您将在几分钟内完成管理系统配置",
+  "Please provide an administrator password to login to Axilspot management system": "请提供一个管理员密码来登录 Axilspot 管理系统",
   "": ""
 }

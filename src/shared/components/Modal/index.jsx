@@ -7,7 +7,7 @@ const propTypes = {
   isShow: PropTypes.bool,
   title: PropTypes.string,
   size: PropTypes.oneOf(['lg', '2x', '3x', '4x', '5x']),
-  role: PropTypes.oneOf(['dialog', 'alert', 'comfirm']),
+  role: PropTypes.oneOf(['dialog', 'alert', 'comfirm', 'message']),
   okText: PropTypes.string,
   cancelText: PropTypes.string,
   // onClose: PropTypes.function,
@@ -42,6 +42,7 @@ class Modal extends Component {
   };
 
   render() {
+    const {isShow, title, cancelText} = this.props;
     let {size, role, id} = this.props;
     let classNames;
     let keyVal = 'onlyModal';
@@ -62,7 +63,7 @@ class Modal extends Component {
         transitionLeaveTimeout={300}
       >
         {
-          this.props.isShow ? (
+          isShow ? (
             <div
               key={keyVal}
               className="modal"
@@ -71,41 +72,54 @@ class Modal extends Component {
               <div className="modal-backdrop"></div>
               <div className={classNames}>
                 <div className="modal-content">
-                  <div className="modal-header">
-                    <button
-                      type="button"
-                      className="close fr"
-                      onClick={this.onClose}
-                    >
-                      &times;
-                    </button>
-                    <h4 className="modal-title" id="myModalLabel">
-                      {this.props.title}
-                    </h4>
-                  </div>
+                  {
+                    title ? (
+                      <div className="modal-header">
+                        {
+                          role !== 'message' ? (
+                            <button
+                              type="button"
+                              className="close fr"
+                              onClick={this.onClose}
+                            >
+                              &times;
+                            </button>
+                          ) : null
+                        }
+                        <h4 className="modal-title" id="myModalLabel">
+                          {title}
+                        </h4>
+                      </div>
+                    ) : null
+                  }
+                  
                   <div className="modal-body">
                     {this.props.children}
                   </div>
-                  <div className="modal-footer">
-                    <button
-                      type="button"
-                      className="btn btn-default"
-                      onClick={this.onClose}
-                    >
-                      {this.props.cancelText}
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-primary"
-                      onClick={this.onOk}
-                    >
-                      {this.props.okText}
-                    </button>
-                  </div>
+                  {
+                    role !== 'message' ? (
+                      <div className="modal-footer">
+                        <button
+                          type="button"
+                          className="btn btn-default"
+                          onClick={this.onClose}
+                        >
+                          {this.props.cancelText}
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-primary"
+                          onClick={this.onOk}
+                        >
+                          {this.props.okText}
+                        </button>
+                      </div>
+                    ) : null
+                  }
                 </div>
               </div>
             </div>
-          ) : ''
+          ) : null
         }
       </ReactCSSTransitionGroup>
     )

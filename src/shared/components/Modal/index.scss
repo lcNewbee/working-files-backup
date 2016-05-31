@@ -34,6 +34,19 @@
   margin: 10px;
   z-index: 1050;
 }
+.modal-message {
+  position: fixed;
+  width: 150px;
+  left: 50%;
+  top: 40%;
+  margin-left: -75px;
+  z-index: 1050;
+  
+  .modal-content {
+    padding: 10px 0;
+    text-align: center;
+  }
+}
 .modal-content {
   position: relative;
   background-color: #fff;

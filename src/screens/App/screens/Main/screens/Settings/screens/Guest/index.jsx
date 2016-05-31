@@ -173,7 +173,7 @@ export const Guest = React.createClass({
           }
           <FormGroup
             type="checkbox"
-            label={_('Portal Enable') }
+            label={_('Enable Portal') }
             options={{
               label: _('Enable')
             }}

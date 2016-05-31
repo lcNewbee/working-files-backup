@@ -1,4 +1,5 @@
 import utils from 'utils';
+import * as appActions from 'actions/ajax';
 
 const urls = {
   fetch: "/goform/getWifi",
@@ -61,7 +62,7 @@ export function setWifi() {
   return (dispatch, getState) => {
     const data = getState().wireless.getIn(['data', 'curr']);
     
-    dispatch(reqeustSetWifi());
+    dispatch(appActions.requestSave());
 
     utils.save(urls.save, data)
       .then((json) => {
@@ -69,6 +70,8 @@ export function setWifi() {
           dispatch(receiveWifi());
           dispatch(fetchWifiSettings());
         }
+        
+        dispatch(appActions.receiveSave());
       });
   };
 }

@@ -47,7 +47,7 @@ var vaildate = {
       }
 
       if (!(/^([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$/).test(str)) {
-        return _("Please input a validity MAC address");
+        return _("Please input a valid MAC address");
       }
     },
 
@@ -72,7 +72,7 @@ var vaildate = {
       }
 
       if (!(/^([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){2}([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])$/).test(str)) {
-        return _("Please input a validity IP address");
+        return _("Please input a valid IP address");
       }
     },
 
@@ -81,10 +81,10 @@ var vaildate = {
         ipHead = ipArr[0];
 
       if (ipArr[0] === '127') {
-        return _("IP address first input don't be 127, becuse it is loopback address.");
+        return _("IP address begin with 127 is a reserved loopback address, please input another value between 1 to 233");
       }
       if (ipArr[0] > 223) {
-        return _("First input %s greater than 223.", ipHead);
+        return _("Address begin with %s is invalid, please input a value between 1 to 223.", ipHead);
       }
     }
   },
@@ -98,7 +98,7 @@ var vaildate = {
       }
 
       if (!(/^([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){2}([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])$/).test(str)) {
-        return _("Please input a validity IP address");
+        return _("Please input a valid IP address");
       }
     },
 
@@ -107,10 +107,10 @@ var vaildate = {
         ipHead = ipArr[0];
 
       if (ipArr[0] === '127') {
-        return _("IP address first input don't be 127, becuse it is loopback address.");
+        return _("IP address begin with 127 is a reserved loopback address, please input another value between 1 to 233");
       }
       if (ipArr[0] > 223) {
-        return _("First input %s greater than 223.", ipHead);
+        return _("Address begin with %s is invalid, please input a value between 1 to 223.", ipHead);
       }
     }
   },
@@ -119,14 +119,14 @@ var vaildate = {
     var rel = /^(254|252|248|240|224|192|128)\.0\.0\.0$|^(255\.(254|252|248|240|224|192|128|0)\.0\.0)$|^(255\.255\.(254|252|248|240|224|192|128|0)\.0)$|^(255\.255\.255\.(254|252|248|240|224|192|128|0))$/;
 
     if (!rel.test(str)) {
-      return _("Please input a validity subnet mask");
+      return _("Please input a valid subnet mask");
     }
   },
 
   email: function(str) {
     var rel = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (!rel.test(str)) {
-      return _("Please input a validity E-mail address");
+      return _("Please input a valid E-mail address");
     }
 
   },
@@ -170,7 +170,7 @@ var vaildate = {
 
   username: function(str) {
     if (!(/^\w{1,}$/).test(str)) {
-      return _("Please input a validity username.");
+      return _("Please input a valid username.");
     }
   },
 
@@ -368,7 +368,7 @@ validator.combineValid = {
     }
 
     if (!isSameNet(ip, gateway, mask, mask)) {
-      return _("Static IP and default gateway be in the same net segment");
+      return _("Static IP and default gateway must be in the same network segment");
     }
   },
 
@@ -414,7 +414,7 @@ validator.combineValid = {
     if (netIndex == 0 || netIndex1 == 0) {
       return;
     } else {
-      return _("please enter a valid IP segment");
+      return _("Please enter a valid IP segment");
     }
   }
 };

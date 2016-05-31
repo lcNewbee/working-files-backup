@@ -19,6 +19,12 @@ const tooltip = {
   trigger: 'item',
   formatter: "{a} <br/>{b} : {c} 台 ({d}%)"
 }
+const msg = {
+  ip: _("IP Address"),
+  mac: _("MAC Address"),
+  apStatus: _('AP Status'),
+  total: _('Total:')
+};
 
 let apChart, statsChart, clientsChannelChart, clientsProducerChart;
 
@@ -61,8 +67,8 @@ export const Status = React.createClass({
     let apOption = {
       tooltip,
       title: {
-        text: _('AP Status Characterize'),
-        subtext: _('Total:') + apInfo.get('total'),
+        text: msg.apStatus,
+        subtext: msg.total + apInfo.get('total'),
         x: 'center'
       },
       series: [
@@ -99,7 +105,7 @@ export const Status = React.createClass({
       tooltip,
 
       title: {
-        text: _('Clients Frequency Characterize'),
+        text: _('Clients Frequency Diagram'),
         subtext: _('Total:') + clientInfo.get('total'),
         x: 'center'
       },
@@ -122,18 +128,18 @@ export const Status = React.createClass({
       ]
     };
 
-    const clientProducterOption = {
+    const clientProducerOption = {
       tooltip,
 
       title: {
-        text: _('Clients Producter Characterize'),
+        text: _('Clients Producer Diagram'),
         subtext: _('Total:') + clientInfo.get('total'),
         x: 'center'
       },
 
       series: [
         {
-          name: _('Producter'),
+          name: _('Producer'),
           type: 'pie',
           radius: ['10%', '45%'],
           center: ['50%', '58%'],
@@ -150,7 +156,7 @@ export const Status = React.createClass({
     };
     
     if(clientInfo.get('producerlist')) {
-      clientProducterOption.series[0].data = clientInfo.get('producerlist')
+      clientProducerOption.series[0].data = clientInfo.get('producerlist')
         .map(function(val, key) {
           return {
             value: val,
@@ -169,7 +175,7 @@ export const Status = React.createClass({
       }).toArray();
       
     clientsChannelChart.setOption(clientNetworkOption);
-    clientsProducerChart.setOption(clientProducterOption);
+    clientsProducerChart.setOption(clientProducerOption);
   },
   
   renderClientStatistics() {
