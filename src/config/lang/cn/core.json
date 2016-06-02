@@ -196,6 +196,8 @@
   "New Password": "新密码",
   "Confirm Password": "确认密码",
   "Select Language": "选择显示语言",
+  "Old password error!": "旧密码错误!",
+  "New password and confirm password must match": "新密码与确认密码必须一致",
   
   "Thank you for purchasing Axilspot enterprise-class products, you will complete the configuration for management system in minutes": "非常感谢你购买Axilspot企业级产品，您将在几分钟内完成管理系统配置",
   "Please provide an administrator password to login to Axilspot management system": "请提供一个管理员密码来登录 Axilspot 管理系统",

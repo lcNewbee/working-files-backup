@@ -16,15 +16,23 @@ export function reqeustSavePassword() {
     type: "REQEUST_SAVE_PASSWORD"
   }
 }
-export function receiveSavePassword() {
+export function receiveSavePassword(state) {
   return {
     type: "RECEIVE_SAVE_PASSWORD",
     savedAt: Date.now(),
+    state
   }
 }
 export function resetPassword() {
   return {
     type: "RESET_PASSWORD"
+  }
+}
+
+export function setPasswordError(state) {
+  return {
+    type: "SET_PASSWORD_ERROR",
+    state
   }
 }
 
@@ -37,8 +45,10 @@ export function savePassword() {
     utils.save(urls.save, data)
       .then((json) => {
         if (json.state && json.state.code === 2000) {
-          dispatch(receiveSavePassword());
+          dispatch(receiveSavePassword(json.state));
           window.location.hash = '#';
+        } else {
+          dispatch(setPasswordError(json.state))
         }
       });
   };

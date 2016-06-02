@@ -146,6 +146,13 @@ export const Admin = React.createClass({
         
         <div className="form-group form-group-save">
           <div className="form-control">
+             {
+                this.props.store.getIn(['state', 'code']) === 4000 ? (
+                  <div>
+                    <p className="error">{_('Old password error!')}</p>
+                  </div>
+                ) : null
+             }
              <Button
               type='button'
               text={_('Save')}

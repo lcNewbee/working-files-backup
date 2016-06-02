@@ -48,7 +48,11 @@ const validOptions = Map({
   }),
   downstream: validator({
     rules: 'num:[0, 102400]',
-  })
+  }),
+  
+  vlanid: validator({
+    rules: 'num:[2, 4095]'
+  }),
 });
 
 export const Guest = React.createClass({
@@ -68,6 +72,7 @@ export const Guest = React.createClass({
   onUpdate(name) {
     return function (data) {
       let settings = {};
+      
       settings[name] = data.value
       this.props.changeGuestSettings(settings);
     }.bind(this)
@@ -111,7 +116,7 @@ export const Guest = React.createClass({
 
   render() {
     const groupOptions = this.getGroupOptions();
-    const {password, guestssid, upstream, downstream} = this.props.validateOption;
+    const {password, guestssid, upstream, downstream, vlanid} = this.props.validateOption;
     const getCurrData = this.getCurrData;
 
     let settngClassName = 'none';
@@ -180,6 +185,32 @@ export const Guest = React.createClass({
             checked={ getCurrData('portalenable') == '1'}
             onChange={this.onUpdate('portalenable') }
           />
+          
+          <FormGroup
+            label={_('VLAN')}
+            value={getCurrData('vlanid')}
+            required={getCurrData('vlanenable') == '1'}
+            disabled={getCurrData('vlanenable') != '1'}
+          
+            {...vlanid}
+          > 
+            <FormInput
+              type="checkbox"
+              checked={getCurrData('vlanenable') == '1'}
+              onChange={this.onUpdate('vlanenable')}
+            />
+            
+            { _('Use VLAN ID:') }
+            <FormInput
+              type="text"
+              style={{'marginLeft': '3px'}}
+              className="input-sm"
+              disabled={getCurrData('vlanenable') != '1'}
+              value={getCurrData('vlanid')}
+              onChange={this.onUpdate('vlanid')}
+            />
+            <span className="help">(2 - 4095)</span>
+          </FormGroup>
           
           <FormGroup
             label={msg.upSpeed}

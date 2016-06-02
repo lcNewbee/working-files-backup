@@ -13,14 +13,18 @@ export default function(state = defaultState, action) {
       return state.set('saving', true);
       
     case 'RECEIVE_SAVE_PASSWORD':
-      return state.set('saving', false);
+      return state.set('saving', false)
+          .set('state', action.state);
       
     case 'RESET_PASSWORD':
       return state.mergeIn(['data'], {
         oldpasswd: '',
         newpasswd: '',
         confirmpasswd: ''
-      });
+      }).set('state', Map({}));
+      
+    case 'SET_PASSWORD_ERROR':
+      return state.set('state', fromJS(action.state));
       
     default:
 

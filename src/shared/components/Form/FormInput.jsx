@@ -24,7 +24,6 @@ class FormInput extends React.Component {
   };
   
   onBlur(e) {
-    console.log(this.props)
     if(this.props.check) {
       this.props.check(e)
     }
@@ -51,6 +50,7 @@ class FormInput extends React.Component {
       val = elem.checked ? checkedValue : '0';
     }
     
+    
     data.value = val;
     
     // 数据更新
@@ -59,7 +59,7 @@ class FormInput extends React.Component {
     }
     
     // 数据验证
-    if(typeof this.props.checkClearValue === 'function') {
+    if(typeof this.props.checkClearValue === 'function' && !e.target.disabled) {
       
       this.props.checkClearValue(val);
     }

@@ -23,7 +23,6 @@
   "Password and confirm password must match": "密码与确认密码必须一致",
   "Static IP cannot be the same as default gateway.": "静态IP不能和默认网关一样",
   "Static IP and default gateway must be in the same network segment": "静态IP和默认网关必须在同一网段",
-  "Please enter a valid IP segment": "请输入正确的IP网段",
   "Must be integer": "请输入整数",
   "Input integer range is: %s - %s": "整数大小范围：%s - %s",
   "Please select a country": "请选择国家",
