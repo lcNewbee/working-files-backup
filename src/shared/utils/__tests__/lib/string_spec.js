@@ -129,5 +129,32 @@ describe('utils string', () => {
       expect(string.isAscii('~!@#$%^&*()_+')).to.be.true;
     });
   });
+  
+  describe('#.getExtension()', () => {
+    it('should return empty when path is empty', () => {
+      expect(string.getExtension('')).to.be.empty;
+    });
+    
+    it('should throw TypeError when path is not string', () => {
+      expect(function() {
+        string.getExtension();
+      }).to.throw(TypeError);
+      expect(function() {
+        string.getExtension({});
+      }).to.throw(TypeError);
+      expect(function() {
+        string.getExtension(0);
+      }).to.throw(TypeError);
+      expect(function() {
+        string.getExtension();
+      }).to.throw(TypeError);
+    });
+    
+    it('should return Extension when path is string', () => {
+      expect(string.getExtension('sdd.')).to.be.empty;
+      expect(string.getExtension('sdd.232.pn')).to.be.equal('pn');
+      expect(string.getExtension('sdd.bmp')).to.be.equal('bmp');
+    });
+  })
 
 });

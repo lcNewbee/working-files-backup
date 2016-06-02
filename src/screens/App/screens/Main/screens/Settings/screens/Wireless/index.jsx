@@ -46,7 +46,7 @@ const validOptions = Map({
     rules: 'len:[8, 64]'
   }),
   vlanid: validator({
-    rules: 'num:[2, 4094]'
+    rules: 'num:[2, 4095]'
   }),
   ssid: validator({
     rules: 'len:[1, 64]'
@@ -84,7 +84,6 @@ export const Wireless = React.createClass({
       let data = {};
       
       data[name] = item.value;
-      console.log(item)
       this.props.changeWifiSettings(data);
     }.bind(this)
   },
@@ -191,6 +190,7 @@ export const Wireless = React.createClass({
           label={msg.selectGroup}
           options={groupOptions}
           value={getCurrData('groupname')}
+          id="groupname"
           onChange={this.onChangeGroup}
         />
         
@@ -199,6 +199,7 @@ export const Wireless = React.createClass({
           label={ _('SSID') }
           required={true}
           value={getCurrData('ssid')}
+          id="ssid"
           onChange={this.onUpdateSettings('ssid')}
           {...ssid}
         />
@@ -224,6 +225,7 @@ export const Wireless = React.createClass({
           label={_('VLAN')}
           value={getCurrData('vlanid')}
           required={getCurrData('vlanenable') == '1'}
+          disabled={getCurrData('vlanenable') != '1'}
          
           {...vlanid}
         > 
@@ -232,22 +234,16 @@ export const Wireless = React.createClass({
             checked={getCurrData('vlanenable') == '1'}
             onChange={this.onUpdate('vlanenable')}
           />
-            
-          {
-            getCurrData('vlanenable') == '1' ? 
-              (
-                <span style={{'marginLeft': '5px'}}>
-                  { _('Use VLAN ID:') }
-                  <FormInput
-                    type="text"
-                    style={{'marginLeft': '3px'}}
-                    className="input-sm"
-                    value={getCurrData('vlanid')}
-                    onChange={this.onUpdate('vlanid')}
-                  />
-                </span>
-              ) : ''
-          }
+          { _('Use VLAN ID:') }
+          <FormInput
+            type="text"
+            style={{'marginLeft': '3px'}}
+            className="input-sm"
+            disabled={getCurrData('vlanenable') != '1'}
+            value={getCurrData('vlanid')}
+            onChange={this.onUpdate('vlanid')}
+          />
+          <span className="help">(2 - 4095)</span>
         </FormGroup>
         
         <h3>{_('Wireless Channel')}</h3>

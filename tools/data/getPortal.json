@@ -4,6 +4,25 @@
     "msg": "ok"
   },
   "data": {
-    "list": []
+    "list": [
+      {
+        "pid": "1",
+        "portalname": "zhangsan",
+        "url": "www.baidu.com",
+        "title": "comlanos",
+        "refreshtime": "12",
+        "timeout": "180",
+        "image": [
+          {
+            "count": "1",
+            "url": "etc/image1.jpg"
+          },
+          {
+            "count": "2",
+            "url": "etc/image2.jpg"
+          }
+        ]
+      }
+    ]
   }
 }

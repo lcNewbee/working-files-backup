@@ -8,7 +8,8 @@ describe('utils', () => {
     const connectTimefilter = filter('add:[3602]|connectTime');
     
     it('should handle correct', function () {
-      expect(connectTimefilter.transform(86450)).to.be.equal('1天，1小时')
+      expect(connectTimefilter.transform(86450)).to.be.equal('1day, 1hour')
+      expect(connectTimefilter.transform(186450)).to.be.equal('2days, 4hours')
     });
   });
 
@@ -33,20 +34,20 @@ describe('utils', () => {
 
 
     it('should return day and hour string when input greater than 1 day', function () {
-      expect(connectTime(86450)).to.be.equal('1天，0小时')
+      expect(connectTime(86450)).to.be.equal('1day, 0hour')
     });
 
     it('should return hour and minute string when time range: 1hour - 1day', function () {
-      expect(connectTime(3601)).to.be.equal('1小时，0分钟')
-      expect(connectTime(3681)).to.be.equal('1小时，1分钟')
+      expect(connectTime(3601)).to.be.equal('1hour, 0minute')
+      expect(connectTime(7381)).to.be.equal('2hours, 3minutes')
     });
 
     it('should return minute and second unit string when time range: 1minute - 1hour', function () {
-      expect(connectTime(681)).to.be.equal('11分钟，21秒')
+      expect(connectTime(681)).to.be.equal('11minutes, 21seconds')
     });
 
     it('should return seconds string when time range: 1second - 1minute', function () {
-      expect(connectTime(34)).to.be.equal('34秒')
+      expect(connectTime(34)).to.be.equal('34seconds')
     });
   })
 });

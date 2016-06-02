@@ -50,6 +50,14 @@ const propTypes = {
 export const Portal = React.createClass({
   mixins: [PureRenderMixin],
   
+  getInitialState() {
+    return {
+      imageStatus1: 'default',
+      imageStatus2: 'default',
+      imageStatus3: 'default'
+    }
+  },
+  
   componentWillMount() {
     this.props.fetchPortalSettings();
   },
@@ -75,20 +83,72 @@ export const Portal = React.createClass({
     }.bind(this));
   },
   
+  onChangeImage(i) {
+    return function(e) {
+      var data = {};
+      var filePath = e.target.value;
+      var extension = utils.getExtension(filePath);
+      
+      if(!filePath) {
+        alert(_('Please select a upload image'));
+        return ;
+      }
+      
+      if('png,gif,jpg,bmp'.indexOf(extension) === -1) {
+        alert(_('Please select a upload image'));
+        e.target.value = '';
+        this.restImageStatus(i);
+        return ;
+      }
+      
+      data['imageStatus' + i] = 'selected';
+      this.setState(utils.extend({}, this.state, data));
+    }.bind(this)
+  },
+  
+  restImageStatus(i) {
+    var input = document.getElementById('filename' + i);
+    var data = {};
+        
+    data['imageStatus' + i] = 'default';
+    this.setState(utils.extend({}, this.state, data));
+    input.value = '';
+  },
+  
+  imageUploading(i) {
+    var data = {};
+        
+    data['imageStatus' + i] = 'loading';
+    this.setState(utils.extend({}, this.state, data));
+  },
+  
   onUploadImage(i) {
+    const that = this;
+    
     return function() {
       var input = document.getElementById('filename' + i);
-      
       var data = new FormData();
+      
+      if(!input.value) {
+        alert(_('Please select a upload image'));
+        return ;
+      }
+      
+      if(that.state['imageStatus' + i] !== 'selected') {
+         return ;
+      }
       
       data.append('filename', input.files[0])
       data.append('count', i)
+      
+      that.imageUploading(i)
 
       fetch('/goform/setPortalImage', {
         method: 'POST',
         body: data
       })
       .then(function(rq) {
+        that.restImageStatus(i)
       })
     }
   },
@@ -151,7 +211,10 @@ export const Portal = React.createClass({
         value: 604800,
         label: '7 ' +  MSG.days
       },
-    ]
+    ];
+    const uploadStyles = {
+      marginLeft: '8px'
+    };
    
     return (
       <div>
@@ -219,18 +282,25 @@ export const Portal = React.createClass({
           method="POST"
           encType="multipart/form-data"
         >
-          <label htmlFor="filename">
+          <div className="form-control">
+            <input type="hidden" name="count" value="1"/>
+            <input type="hidden" name="pid" value={getCurrData('pid')}/>
+            <input
+              type="file"
+              className="text"
+              id="filename1"
+              name="filename"
+              onChange={this.onChangeImage('1')}
+            />
             <Button
               type='button'
               text={_('Upload Image') + ' 1'}
               icon="upload"
+              loading={this.state.imageStatus1 === 'loading'}
+              role={this.state.imageStatus1 === 'selected' ? 'info' : undefined}
+              style={uploadStyles}
               onClick={this.onUploadImage(1)}
             />
-          </label>
-          <div className="form-control">
-            <input type="hidden" name="count" value="1"/>
-            <input type="hidden" name="pid" value={getCurrData('pid')}/>
-            <input type="file" className="text" id="filename1" name="filename" />
           </div>
         </form>
         
@@ -241,18 +311,25 @@ export const Portal = React.createClass({
           method="POST"
           encType="multipart/form-data"
         >
-          <label htmlFor="filename">
+          <div className="form-control">
+            <input type="hidden" name="count" value="2"/>
+            <input type="hidden" name="pid" value={getCurrData('pid')}/>
+            <input
+              type="file"
+              className="text"
+              id="filename2"
+              name="filename"
+              onChange={this.onChangeImage('2')}
+            />
             <Button
               type='button'
               text={_('Upload Image') + ' 2'}
               icon="upload"
+              style={uploadStyles}
+              loading={this.state.imageStatus2 === 'loading'}
+              role={this.state.imageStatus2 === 'selected' ? 'info' : undefined}
               onClick={this.onUploadImage(2)}
             />
-          </label>
-          <div className="form-control">
-            <input type="hidden" name="count" value="2"/>
-            <input type="hidden" name="pid" value={getCurrData('pid')}/>
-            <input type="file" className="text" id="filename2" name="filename" />
           </div>
         </form>
         
@@ -263,18 +340,25 @@ export const Portal = React.createClass({
           method="POST"
           encType="multipart/form-data"
         >
-          <label htmlFor="filename">
+          <div className="form-control">
+            <input type="hidden" name="count" value="3"/>
+            <input type="hidden" name="pid" value={getCurrData('pid')}/>
+            <input
+              type="file"
+              className="text"
+              id="filename3"
+              name="filename"
+              onChange={this.onChangeImage('3')}
+            />
             <Button
               type='button'
               text={_('Upload Image') + ' 3'}
               icon="upload"
+              style={uploadStyles}
+              loading={this.state.imageStatus3 === 'loading'}
+              role={this.state.imageStatus3 === 'selected' ? 'info' : undefined}
               onClick={this.onUploadImage(3)}
             />
-          </label>
-          <div className="form-control">
-            <input type="hidden" name="count" value="3"/>
-            <input type="hidden" name="pid" value={getCurrData('pid')}/>
-            <input type="file" className="text" id="filename3" name="filename" />
           </div>
         </form>
         

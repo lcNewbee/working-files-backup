@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no,maximum-scale=1">
+
+  <!-- 避免IE使用兼容模式 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+  <!-- 启用360浏览器的极速模式(webkit) -->
+  <meta name="renderer" content="webkit" />
+
+  <title>Axilspot</title>
+  <meta name="description" content="">
+  <meta name="author" content="taijisanfeng@yahoo.com">
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/slick.css">
+  <link rel="stylesheet" href="styles/slick-theme.css">
+</head>
+
+<body class="none">
+  <div class="phone-content">
+    <div class="banner slick-slider"></div>
+    <div class="content">
+      <h2 id="portalTitle"></h2>
+      <button type="button" class="btn" id="online"></button>
+    </div>
+  </div>
+
+  <script src="scripts/jquery-1.12.4.min.js"></script>
+  <script src="scripts/slick.min.js"></script>
+  <script>
+    var currData;
+    var onlineMsg = {
+      en: 'Click on Internet',
+      cn: '点击上网'
+    };
+  
+    function getPortalUrl() {
+      var ret = window.location.protocol + "//" + window.location.hostname +
+          '/goform/portalAath?callback=?';
+      
+      return ret;
+    }
+    
+    function createSlick(images) {
+      var ret = '';
+      
+      $.each(images, function(i, item) {
+        ret += '<div><img src="' + item.url + '" alt="' + i + '"></div>'
+      });
+      
+      return ret;
+    }
+    
+    function getLang() {
+      var special = {
+        "zh": "cn",
+        "zh-chs": "cn",
+        "zh-cn": "cn",
+        "zh-cht": "cn",
+        "zh-hk": "zh",
+        "zh-mo": "zh",
+        "zh-tw": "zh",
+        "zh-sg": "zh"
+      };
+      var nav = window.navigator;
+      var ret = 'en';
+      
+      ret = (nav.language || nav.userLanguage ||
+            nav.browserLanguage || nav.systemLanguage ||
+            ret).toLowerCase();
+
+      ret = special[ret] || ret.split("-")[0].toString();
+      
+      return ret;
+    }
+
+    function initPage(data) {
+      currData = data;
+      document.title = data.title;
+      $('#portalTitle').text(data.title);
+      $('#online').text(onlineMsg[getLang()]);
+      
+      $('.banner').html(createSlick(data.image))
+      $('.banner').slick({
+        autoplay: true,
+        arrows: false,
+        autoplaySpeed: data.refreshtime * 1000,
+      });
+    }
+    $(function() {
+      var portalUrl = getPortalUrl();
+      
+      // 本地测试代码
+      //portalUrl = '/goform/portalAath';
+      
+      $.get(portalUrl, function(data) {
+        if (data.state.code === 2000) {
+          initPage(data.data)
+        }
+        
+        $('body').removeClass('none');
+      });
+      
+      $('btn').on('click', function() {
+        $.get('/auth_portal', function(data) {
+          
+          if(currData.data.url) {
+            window.location.href = currData.data.url;
+          }
+          
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

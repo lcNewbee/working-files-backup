@@ -1,0 +1,35 @@
+.none {
+  display: none;
+}
+.loaded {
+  display: block;
+}
+.phone-content {
+  text-align: center;
+  margin: 0 auto;
+  max-width: 600px;
+  min-height: 400px;
+  padding-bottom: 20px;
+}
+.banner {
+  min-height: 200px;
+}
+img {
+  width: 100%;
+}
+.btn {
+  display: block;
+  padding: 8px 0;
+  min-width: 160px;
+  width: 60%;
+  margin: 0 auto;
+  background-color: green;
+  color: #fff;
+  font-size: 18px;
+  border: 1px solid green;
+  margin-top: 30px;
+}
+
+.btn:focus {
+  outline: none;
+}

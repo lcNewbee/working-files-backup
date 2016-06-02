@@ -21,83 +21,6 @@ function createFormInputId(name) {
   return ret;
 }
 
-const propTypes = {
-  className: PropTypes.string,
-  Component: PropTypes.string,
-};
-
-const defaultProps = {
-  Component: 'input',
-}
-
-export const FormInputss = React.createClass({
-  propTypes,
-  defaultProps,
-  
-  getType: function () {
-    return this.props.type || 'text';
-  },
-  
-
-  getValue: function () {
-    let ret = this.props.value;
-    return ret;
-  },
-  
-  onBlur(e) {
-    if(this.props.check) {
-      this.props.check(e)
-    }
-  },
-  
-  onFoucs(e) {
-    if(this.props.checkClear) {
-      this.props.checkClear(e)
-    }
-  },
-  
-  //
-  handleChange: function (e) {
-    const val = e.target.value;
-    let data = {
-      value: val,
-      label: this.props.label
-    };
-   
-    // 数据更新
-    if (typeof this.props.onChange === 'function') {
-      this.props.onChange(data, e);
-    }
-    
-    // 数据验证
-    if(typeof this.props.checkClearValue === 'function') {
-      this.props.checkClearValue(val);
-    }
-  },
-
-  render: function () {
-    let {className, id, name, Component} = this.props;
-    const type = this.getType();
-    let classNames = '';
-    
-    if(type !== 'checkbox' && type !== 'radio') {
-      classNames = 'text ';
-    }
-    
-    if(className) {
-      classNames += className;
-    }
-    
-    return <input {...this.props}
-      type={type}
-      value={this.getValue()}
-      className={classNames}
-      onChange={this.handleChange}
-      onBlur={this.onBlur}
-    />;
-  }
-});
-
 export const FormGroup = React.createClass({
   propTypes: {
     onValidError: PropTypes.func,
@@ -138,27 +61,41 @@ export const FormGroup = React.createClass({
     }
   },
   
+  // clearError
+  clearValidError() {
+    this.props.onValidError({
+      name: this.props.name,
+      checkResult: undefined
+    });
+  },
+  
   componentDidUpdate(prevProps) {
     const {value} = this.props;
     
     // 数据验证
     if(this.props.validator) {
       
-      if(prevProps.value !== value) {
-        this.checkClear();
-      } else if (prevProps.validateAt !== this.props.validateAt) {
-        this.check();
+      // 如果组是可用的
+      if(!this.props.disabled) {
+        if(prevProps.value !== value) {
+          this.checkClear();
+        } else if (prevProps.validateAt !== this.props.validateAt) {
+          this.check();
+        }
+      
+      } else {
+        this.clearValidError()
       }
+      
     }
   },
   
   
   render() {
     const { help, errMsg, name, label, required,
-      children, type, clearable, role
+      children, type, clearable, role, id
     } = this.props;
-    
-    let id = this.props.id;
+    const {check, checkClear} = this;
     let groupClassName = `form-group form-group-${role}`;
     
     return <div className={groupClassName}>
@@ -172,10 +109,20 @@ export const FormGroup = React.createClass({
       
       <div className="form-control">
         {
-          children ? children : (
+          children ? React.Children.map(children, function(elem) {
+            var ret = elem;
+            
+            if(elem && elem.type && elem.type.name === 'FormInput') {
+              ret = React.cloneElement(elem, {
+                check: check,
+                checkClear: checkClear
+              });
+            }
+            
+            return ret;
+          }) : (
             <FormInput
               {...this.props}
-              id={id}
               check={this.check}
               checkClear={this.checkClear}
             />

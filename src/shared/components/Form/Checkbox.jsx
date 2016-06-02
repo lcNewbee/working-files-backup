@@ -18,7 +18,9 @@ const defaultProps = {
 };
 
 class Checkbox extends React.Component {
-
+  constructor(props) {
+    super(props);
+  }
   render() {
     let {
       name, className, value, options

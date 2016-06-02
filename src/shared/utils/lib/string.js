@@ -1,3 +1,4 @@
+var coreUtils = require('./core');
 var str;
 
 function getText(val) {
@@ -130,6 +131,18 @@ str.format = [].reduce ? function() {
   }
   return args.reduce(replacer, initial);
 } : __format;
+
+str.getExtension = function(path) {
+  var pathName = coreUtils.toString(path, 'str.getExtension')
+  var startIndex = path.lastIndexOf(".");
+  var ret = '';
+  
+  if(startIndex !== -1) {
+    ret = path.substring(startIndex + 1).toLowerCase();
+  }
+  
+  return ret;
+}
 
 // exports
 if (typeof module === "object" && typeof module.exports === "object" ) {

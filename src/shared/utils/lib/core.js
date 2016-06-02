@@ -150,13 +150,25 @@ utils.extend({
   },
   
   toNumber: function(val, funcName) {
+    var valType = typeof val;
     var ret = parseInt(val, 10);
 
     if (isNaN(ret)) {
-      throw new TypeError(funcName + ' cannot be called number or number string');
+      throw new TypeError(funcName + ' expected be called with number or number string,'+
+          ' actual is' + valType);
     }
 
     return ret;
+  },
+  
+  toString: function(val, funcName) {
+    var valType = typeof val;
+    
+    if(valType !== 'string') {
+      throw new TypeError(funcName + ' expected be called with string, actual is ' + valType);
+    }
+    
+    return val;
   }
 })
 

@@ -24,6 +24,7 @@ class FormInput extends React.Component {
   };
   
   onBlur(e) {
+    console.log(this.props)
     if(this.props.check) {
       this.props.check(e)
     }
@@ -59,6 +60,7 @@ class FormInput extends React.Component {
     
     // 数据验证
     if(typeof this.props.checkClearValue === 'function') {
+      
       this.props.checkClearValue(val);
     }
   }

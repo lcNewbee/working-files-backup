@@ -211,6 +211,7 @@ export const GroupSettings = React.createClass({
             required={true}
             value={this.getEditVal('groupname')}
             maxLength="24"
+            id="groupname"
             onChange={this.onChangeGroupSettings('groupname')}
             {...groupname}
           />
@@ -219,6 +220,7 @@ export const GroupSettings = React.createClass({
             required={true}
             maxLength="64"
             value={this.getEditVal('remark')}
+            id="remark"
             onChange={this.onChangeGroupSettings('remark')}
             {...remarks}
           />
