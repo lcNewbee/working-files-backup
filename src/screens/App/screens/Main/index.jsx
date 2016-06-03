@@ -83,7 +83,7 @@ export default class Main extends Component {
             saving ? (
               <Modal
                 role="message"
-                isShow="true"
+                isShow={true}
               >
                 { _('Saving') }
               </Modal>

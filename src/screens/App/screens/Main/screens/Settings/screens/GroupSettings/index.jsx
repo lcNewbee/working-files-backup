@@ -91,9 +91,26 @@ export const GroupSettings = React.createClass({
   
   onSaveDeviceGroup() {
     this.props.validateAll(function(invalid) {
+      var editData = this.props.edit.toJS();
+      var groupList = this.props.data.get('list');
+      var hasSameName = false;
+      
       if(invalid.isEmpty()) {
-        this.props.saveDeviceGroup();
+        
+        // 验证组名是否与其它组相同
+        if(editData.groupname !== editData.orignName) {
+          hasSameName = !!groupList.find(function(group) {
+            return group.get('groupname') === editData.groupname;
+          });
+        }
+        
+        if(hasSameName) {
+          alert(_("Group name '%s' is already in use", editData.groupname));
+        } else {
+          this.props.saveDeviceGroup();
+        }
       }
+      
     }.bind(this))
     
   },
@@ -106,7 +123,14 @@ export const GroupSettings = React.createClass({
   getGroupTableOptions() {
     return [{
       'id': 'groupname',
-      'text': msg.groupname
+      'text': msg.groupname,
+      transform: function(val) {
+        
+        if(val === 'default') {
+          val = _('Ungrouped Device Group');
+        }
+        return val;
+      }
     }, {
       'id': 'remark',
       'text': msg.remarks
@@ -114,6 +138,9 @@ export const GroupSettings = React.createClass({
       'id': 'op',
       'text': msg.action,
       transform: function(val, item) {
+        if(item.get('groupname') === 'default') {
+          return null;
+        }
         return (
           <div>
             <Button

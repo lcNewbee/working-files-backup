@@ -106,9 +106,15 @@ export const Guest = React.createClass({
     return this.props.store
       .getIn(['data', 'list'])
       .map(function(item, i) {
+        var groupname = item.get('groupname');
+        var label = groupname
+        
+        if(groupname === 'default') {
+          label = _('Ungrouped Device Group');
+        }
         return {
-          value: item.get('groupname'),
-          label: item.get('groupname')
+          value: groupname,
+          label: label
         }
       })
       .toJS();

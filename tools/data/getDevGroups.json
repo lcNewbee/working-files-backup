@@ -6,7 +6,18 @@
   
   "data": {
       "list": [
-          
+          {   
+              "groupname": "default",
+              "remark": "description1"
+          },
+          {   
+              "groupname": "group1",
+              "remark": "description1"
+          },
+          {
+              "groupname": "group2",
+              "remark": "description2"
+          }
       ]
   }
 
