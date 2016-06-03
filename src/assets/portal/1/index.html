@@ -39,7 +39,14 @@
   
     function getPortalUrl() {
       var ret = window.location.protocol + "//" + window.location.hostname +
-          '/goform/portalAath?callback=?';
+          ':2051/goform/getPortal?callback=?';
+      
+      return ret;
+    }
+    
+    function getPortalAuthUrl() {
+      var ret = window.location.protocol + "//" + window.location.hostname +
+          '/auth_portal?callback=?';
       
       return ret;
     }
@@ -87,16 +94,27 @@
       $('.banner').slick({
         autoplay: true,
         arrows: false,
-        autoplaySpeed: data.refreshtime * 1000,
+        autoplaySpeed: (data.refreshtime || 3) * 1000,
       });
     }
+    $.ajaxSetup({
+      timeOut: 3000
+    });
+    
+    function authComplete() {
+      if(currData.data && currData.data.url) {
+        window.location.href = currData.data.url;
+      }
+      $('#online').removeClass('active');
+    }
+    
     $(function() {
       var portalUrl = getPortalUrl();
       
       // 本地测试代码
       //portalUrl = '/goform/portalAath';
       
-      $.get(portalUrl, function(data) {
+      $.getJSON(portalUrl, function(data) {
         if (data.state.code === 2000) {
           initPage(data.data)
         }
@@ -104,14 +122,11 @@
         $('body').removeClass('none');
       });
       
-      $('btn').on('click', function() {
-        $.get('/auth_portal', function(data) {
-          
-          if(currData.data.url) {
-            window.location.href = currData.data.url;
-          }
-          
-        });
+      $('#online').on('click', function() {
+        $(this).addClass('active');
+        $.getJSON(getPortalAuthUrl(), authComplete)
+        .fail(authComplete)
+        .always(authComplete);
       });
     });
   </script>

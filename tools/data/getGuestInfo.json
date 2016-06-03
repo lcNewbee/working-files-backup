@@ -6,6 +6,9 @@
   "data": {
     "list": [
       {
+        "groupname": "default"
+      },
+      {
         "groupname": "group231",
         "enable": "0",
         "guestssid": "www",

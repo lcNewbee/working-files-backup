@@ -173,6 +173,18 @@ export const Wireless = React.createClass({
     return channelsOptions;
   },
   
+  handleChannelsValue(options) {
+    var curr = parseInt(this.getCurrData('channel'));
+    var maxChannel = options.length;
+    
+    if(curr > maxChannel) {
+      this.props.changeWifiSettings({
+        channel: maxChannel.toString()
+      });
+    }
+    
+  },
+  
   render() {
     const {
         password, vlanid, ssid, upstream, downstream
@@ -182,6 +194,7 @@ export const Wireless = React.createClass({
     const getCurrData =  this.getCurrData;
     const channelsOptions = this.getChannelsOptions(getCurrData('country'));
     
+    this.handleChannelsValue(channelsOptions);
     return (
       <div>
         <h3>{ _('Current Group') }</h3>

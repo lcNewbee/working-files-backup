@@ -98,6 +98,11 @@ export const GroupSettings = React.createClass({
     
   },
   
+  onCloseEditDialog() {
+    this.props.resetVaildateMsg();
+    this.props.removeEditDeviceGroup();
+  },
+  
   getGroupTableOptions() {
     return [{
       'id': 'groupname',
@@ -203,7 +208,7 @@ export const GroupSettings = React.createClass({
         <Modal
           isShow={this.props.edit ? true : false}
           title={modalTitle}
-          onClose={this.props.removeEditDeviceGroup}
+          onClose={this.onCloseEditDialog}
           onOk={this.onSaveDeviceGroup}
         >
           <FormGroup

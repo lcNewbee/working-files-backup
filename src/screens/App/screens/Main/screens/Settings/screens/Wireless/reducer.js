@@ -1,5 +1,16 @@
 import Immutable, {Map, List, fromJS} from 'immutable';
 
+const defaultSettings = Map({
+  encryption: 'none',
+  vlanenable: '0',
+  upstream: '0',
+  downstream: '0',
+  country: 'CN',
+  channel: '6',
+  channelsBandwidth: '20',
+  ssid: ''
+});
+
 const defaultState = fromJS({
   data: {
     list: [],
@@ -9,41 +20,45 @@ const defaultState = fromJS({
 
 function receiveSettings(state, settingData) {
   let ret = state.update('data', data => data.merge(settingData));
-  let listCurr = ret.getIn(['data', 'list', 0])|| Map({});
   const currData = state.getIn(['data', 'curr']) || Map({});
- 
-  if(currData.isEmpty()) {
-    
-    ret = ret.setIn(['data', 'curr'], listCurr);
-    
-  } else {
-    listCurr = ret.getIn(['data', 'list']).find(function(item) {
+  let listCurr;
+
+  if (!currData.isEmpty()) {
+    listCurr = currData.merge(defaultSettings).merge(ret.getIn(['data', 'list']).find(function (item) {
       return currData.get('groupname') === item.get('groupname');
-    });
+    }))
+
+  } else {
+    listCurr = currData.merge(defaultSettings).merge(ret.getIn(['data', 'list', 0]))
   }
-  
   return ret.setIn(['data', 'curr'], listCurr)
-      .set('fetching', false);
+    .set('fetching', false);
 }
 
-export default function(state = defaultState, action) {
+function changeGroup(state, groupname) {
+  let ret = state.mergeIn(['data', 'curr'], defaultSettings);
+  let selectGroup = state.getIn(['data', 'list'])
+    .find(function (item) {
+      return item.get('groupname') === groupname;
+    })
+
+  return ret.mergeIn(['data', 'curr'], selectGroup);
+}
+
+export default function (state = defaultState, action) {
   switch (action.type) {
     case 'REQEUST_FETCH_WIFI':
       return state.set('fetching', true);
-      
+
     case 'RECEIVE_WIFI':
       return receiveSettings(state, action.data);
-      
+
     case "CHANGE_WIFI_GROUP":
-      return state.updateIn(['data', 'curr'], data => {
-        return state.getIn(['data', 'list'])
-          .find(function(item) {
-            return item.get('groupname') === action.name;
-          })
-      });
-   case "CHANGE_WIFI_SETTINGS":
+      return changeGroup(state, action.name);
+
+    case "CHANGE_WIFI_SETTINGS":
       return state.mergeIn(['data', 'curr'], action.data)
-      
+
     default:
 
   }
