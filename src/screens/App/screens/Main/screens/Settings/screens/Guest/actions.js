@@ -71,7 +71,7 @@ export function setGuest() {
           dispatch(fetchGuestSettings());
         }
         
-        dispatch(appActions.receiveSave())
+        dispatch(appActions.receiveSave(json.state))
       });
   };
 }

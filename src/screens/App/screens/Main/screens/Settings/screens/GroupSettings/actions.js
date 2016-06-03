@@ -124,7 +124,7 @@ export function saveDeviceGroup() {
           dispatch(fetchGroupDevices());
         }
         
-        dispatch(appActions.receiveSave());
+        dispatch(appActions.receiveSave(json.state));
       });
   };
 }
@@ -145,7 +145,7 @@ export function deleteDeviceGroup(groupname) {
           dispatch(fetchGroupDevices());
         }
         
-        dispatch(appActions.receiveSave());
+        dispatch(appActions.receiveSave(json.state));
       });
   };
 }

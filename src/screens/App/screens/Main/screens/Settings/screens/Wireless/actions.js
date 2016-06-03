@@ -71,7 +71,7 @@ export function setWifi() {
           dispatch(fetchWifiSettings());
         }
         
-        dispatch(appActions.receiveSave());
+        dispatch(appActions.receiveSave(json.state));
       });
   };
 }

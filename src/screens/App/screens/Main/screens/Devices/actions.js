@@ -136,7 +136,7 @@ export function saveDeviceNetwork(mac) {
           dispatch(fetchDevices());
         }
         
-        dispatch(appActions.receiveSave());
+        dispatch(appActions.receiveSave(json.state));
       });
   };
 }

@@ -100,7 +100,7 @@ export const GroupSettings = React.createClass({
         // 验证组名是否与其它组相同
         if(editData.groupname !== editData.orignName) {
           hasSameName = !!groupList.find(function(group) {
-            return group.get('groupname') === editData.groupname;
+            return group.get('groupname').trim() === editData.groupname.trim();
           });
         }
         

@@ -73,7 +73,7 @@ export function setPortal() {
           dispatch(fetchPortalSettings());
         }
         
-        dispatch(appActions.receiveSave());
+        dispatch(appActions.receiveSave(json.state));
       });
   };
 }

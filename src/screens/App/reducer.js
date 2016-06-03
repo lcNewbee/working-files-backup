@@ -32,7 +32,8 @@ export default function( state = defaultState, action ) {
     
     case 'RECEIVE_SAVE':
       return state.set('saving', false)
-        .set('savedAt', action.savedAt);
+        .set('savedAt', action.savedAt)
+        .set('state', action.state);
         
     case 'REPORT_VALID_ERROR':
       return receiveReport(state, action.data);

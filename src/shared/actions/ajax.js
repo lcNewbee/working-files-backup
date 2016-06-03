@@ -4,9 +4,10 @@ export function requestSave() {
   }
 }
 
-export function receiveSave() {
+export function receiveSave(state) {
   return {
     type: 'RECEIVE_SAVE',
-    savedAt: Date.now()
+    savedAt: Date.now(),
+    state
   }
 }
