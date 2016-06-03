@@ -127,7 +127,8 @@ export const Portal = React.createClass({
     
     return function() {
       var input = document.getElementById('filename' + i);
-      var data = new FormData();
+      var formElem = document.getElementById('imageForm' + i);
+      var data;
       
       if(!input.value) {
         alert(_('Please select a upload image'));
@@ -138,18 +139,27 @@ export const Portal = React.createClass({
          return ;
       }
       
-      data.append('filename', input.files[0])
-      data.append('count', i)
-      
-      that.imageUploading(i)
+      // 
+      if(typeof FormData === 'function') {
+        data = new FormData()
+        data.append('filename', input.files[0])
+        data.append('count', i)
+        that.imageUploading(i)
 
-      fetch('/goform/setPortalImage', {
-        method: 'POST',
-        body: data
-      })
-      .then(function(rq) {
+        fetch('/goform/setPortalImage', {
+          method: 'POST',
+          body: data
+        })
+        .then(function(rq) {
+          that.restImageStatus(i)
+        })
+      
+      } else {
+        that.imageUploading(i)
+        formElem.submit();
         that.restImageStatus(i)
-      })
+      }
+      
     }
   },
   
@@ -275,11 +285,14 @@ export const Portal = React.createClass({
           }
         </div>
         
+        // For image form upload
+        <iframe id="imagesIf" name="imagesIf" className="none"></iframe>
         <form
           className="form-group"
           action="/goform/setPortalImage"
           id="imageForm1"
           method="POST"
+          target="imagesIf"
           encType="multipart/form-data"
         >
           <div className="form-control">
@@ -309,6 +322,7 @@ export const Portal = React.createClass({
           action="/goform/setPortalImage"
           id="imageForm2"
           method="POST"
+          target="imagesIf"
           encType="multipart/form-data"
         >
           <div className="form-control">
@@ -338,6 +352,7 @@ export const Portal = React.createClass({
           action="/goform/setPortalImage"
           id="imageForm3"
           method="POST"
+          target="imagesIf"
           encType="multipart/form-data"
         >
           <div className="form-control">

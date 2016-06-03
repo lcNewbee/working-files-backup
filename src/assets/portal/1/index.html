@@ -98,12 +98,12 @@
       });
     }
     $.ajaxSetup({
-      timeOut: 3000
+      timeout: 3000
     });
     
     function authComplete() {
-      if(currData.data && currData.data.url) {
-        window.location.href = currData.data.url;
+      if(currData && currData.url) {
+        window.location.href = currData.url;
       }
       $('#online').removeClass('active');
     }
