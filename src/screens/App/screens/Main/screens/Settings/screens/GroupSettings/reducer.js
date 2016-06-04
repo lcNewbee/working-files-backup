@@ -9,7 +9,11 @@ function mergeData(state, action) {
 }
 
 function mergeDevice(state, action) {
+  var defaultGroupDevices = fromJS(action.data.list).filter(function(item) {
+    return item.get('groupname') === 'Default';
+  });
   return state.update('devices', data => data.merge(action.data))
+    .set('defaultGroupDevices', defaultGroupDevices)
 }
 
 function deleteListById(state, groupname) {
@@ -107,6 +111,11 @@ export default function(state = defaultState, action) {
       
     case 'CHANGE_EDIT_GROUP':
       return state.update('edit', data => data.merge(action.data));
+    
+    case 'LOOK_GROUP_DEVICES':
+      return state.set('edit', Map({
+        groupname: action.groupname
+      })).set('actionType', 'look')
 
   }
   return state;

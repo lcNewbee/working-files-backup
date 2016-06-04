@@ -1,5 +1,10 @@
 import Immutable, {Map, List, fromJS} from 'immutable';
 
+const defaultSettings = Map({
+  refreshtime: '3',
+  timeout: '3600'
+});
+
 const defaultState = fromJS({
   data: {
     list: [

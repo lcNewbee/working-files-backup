@@ -33,10 +33,10 @@ const validOptions = Map({
     rules: 'url'
   }),
   timeout: validator({
-    rules: 'num:[0,9999999]'
+    rules: 'required'
   }),
   refreshtime: validator({
-    rules: 'num:[0,50]'
+    rules: 'required'
   })
 });
 
@@ -261,11 +261,11 @@ export const Portal = React.createClass({
         
         <FormGroup
           label={_('Expiration')}
+          value={getCurrData('timeout')}
           {...timeout}
         >
           <Select
             name="timeout"
-            required={true}
             options={expirationOptions}
             value={getCurrData('timeout')}
             onChange={this.onUpdateSettings('timeout')}
@@ -277,11 +277,11 @@ export const Portal = React.createClass({
         <FormGroup
           label={_('Images Slide Interval')}
           type="select"
-          required={true}
           options={refreshtimeOtions}
           name="refreshtime"
           value={getCurrData('refreshtime')}
           onChange={this.onUpdateSettings('refreshtime')}
+          {...refreshtime}
         />
         
         <div className="images-list">

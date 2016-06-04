@@ -16,6 +16,7 @@ import Button from 'components/Button';
 const msg = {
   delete: _('Delete'),
   edit: _('Edit'),
+  look: _('Look'),
   add: _('Add'),
   remarks: _('Remarks'),
   groupname: _('Group Name'),
@@ -97,6 +98,10 @@ export const GroupSettings = React.createClass({
   },
   
   onSaveDeviceGroup() {
+    if(this.props.actionType === 'look') {
+      this.onCloseEditDialog();
+      return ;
+    }
     this.props.validateAll(function(invalid) {
       var editData = this.props.edit.toJS();
       var groupList = this.props.data.get('list');
@@ -120,6 +125,12 @@ export const GroupSettings = React.createClass({
       
     }.bind(this))
     
+  },
+  
+  createLookFunc(groupname) {
+    return function() {
+      this.props.lookGroupDevices(groupname);
+    }.bind(this)
   },
   
   onCloseEditDialog() {
@@ -146,7 +157,12 @@ export const GroupSettings = React.createClass({
       'text': msg.action,
       transform: function(val, item) {
         if(item.get('groupname') === 'Default') {
-          return null;
+          return <Button
+            icon="eye"
+            size="sm"
+            text={msg.look}
+            onClick={this.createLookFunc('Default')}
+          />;
         }
         return (
           <div>
@@ -213,13 +229,15 @@ export const GroupSettings = React.createClass({
     const {groupname, remarks} = this.props.validateOption;
     const groupTableOptions = this.getGroupTableOptions();
     const devicesTableOptions = this.getDevicesTableOptions();
-    
+    const isLook = this.props.actionType === 'look';
     let modalTitle = this.getEditVal('orignName');
     
     if(this.props.actionType === 'add') {
       modalTitle = msg.add;
-    } else {
+    } else if (this.props.actionType === 'edit') {
       modalTitle = msg.edit + modalTitle;
+    } else if(this.props.actionType === 'look') {
+      modalTitle = _('Ungrouped Devices');
     }
     
     return (
@@ -246,30 +264,42 @@ export const GroupSettings = React.createClass({
           onClose={this.onCloseEditDialog}
           onOk={this.onSaveDeviceGroup}
         >
-          <FormGroup
-            label={msg.groupname}
-            required={true}
-            value={this.getEditVal('groupname')}
-            maxLength="24"
-            id="groupname"
-            onChange={this.onChangeGroupSettings('groupname')}
-            {...groupname}
-          />
-          <FormGroup
-            label={msg.remarks}
-            required={true}
-            maxLength="64"
-            value={this.getEditVal('remark')}
-            id="remark"
-            onChange={this.onChangeGroupSettings('remark')}
-            {...remarks}
-          />
-          <Table
-            className="table"
-            options={fromJS(devicesTableOptions)}
-            list={this.props.devices.get('list')}
-            page={this.props.page}
-          />
+          {
+            isLook ? (
+              <Table
+                className="table"
+                options={fromJS(devicesTableOptions).delete(-1)}
+                list={this.props.defaultGroupDevices}
+              />
+            ) : (
+              <div>
+                <FormGroup
+                  label={msg.groupname}
+                  required={true}
+                  value={this.getEditVal('groupname')}
+                  maxLength="24"
+                  id="groupname"
+                  onChange={this.onChangeGroupSettings('groupname')}
+                  {...groupname}
+                />
+                <FormGroup
+                  label={msg.remarks}
+                  required={true}
+                  maxLength="64"
+                  value={this.getEditVal('remark')}
+                  id="remark"
+                  onChange={this.onChangeGroupSettings('remark')}
+                  {...remarks}
+                />
+                <Table
+                  className="table"
+                  options={fromJS(devicesTableOptions)}
+                  list={this.props.devices.get('list')}
+                  page={this.props.page}
+                />
+              </div>
+            )
+          }
         </Modal>
       </div>
     );
@@ -286,6 +316,7 @@ function mapStateToProps(state) {
     actionType: myState.get('actionType'),
     edit: myState.get('edit'),
     devices: myState.get('devices'),
+    defaultGroupDevices: myState.get('defaultGroupDevices'),
     app: state.app
   };
 }

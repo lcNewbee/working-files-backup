@@ -42,6 +42,13 @@ export function editDeviceGroup(groupname) {
   };
 }
 
+export function lookGroupDevices(groupname) {
+  return {
+    type: 'LOOK_GROUP_DEVICES',
+    groupname
+  };
+}
+
 // 选择或取消 设备
 export function selectDevice(mac, unselect) {
   return {
