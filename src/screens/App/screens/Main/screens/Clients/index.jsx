@@ -95,6 +95,13 @@ export const Clients = React.createClass({
   componentWillMount() {
     this.handleSearch()
   },
+  
+  componentDidUpdate(prevProps) {
+    if(prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
+      this.handleSearch();
+    }
+  },
+  
 
   handleSearch() {
     this.props.fetchClients();
@@ -265,6 +272,7 @@ function mapStateToProps(state) {
   var myState = state.clients;
 
   return {
+    app: state.app,
     fetching: myState.get('fetching'),
     query: myState.get('query'),
     updateAt: myState.get('updateAt'),

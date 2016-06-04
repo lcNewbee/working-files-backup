@@ -151,11 +151,11 @@ utils.extend({
   
   toNumber: function(val, funcName) {
     var valType = typeof val;
-    var ret = parseInt(val, 10);
+    var ret = parseInt(val || '0', 10);
 
     if (isNaN(ret)) {
       throw new TypeError(funcName + ' expected be called with number or number string,'+
-          ' actual is' + valType);
+          ' actual is ' + valType);
     }
 
     return ret;

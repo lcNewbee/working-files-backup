@@ -64,10 +64,15 @@ export const Guest = React.createClass({
     this.props.fetchGuestSettings();
   },
   
+  componentDidUpdate(prevProps) {
+    if(prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
+      this.props.fetchGuestSettings();
+    }
+  },
+  
   componentWillUnmount() {
     this.props.resetVaildateMsg();
   },
-  
 
   onUpdate(name) {
     return function (data) {
@@ -109,8 +114,8 @@ export const Guest = React.createClass({
         var groupname = item.get('groupname');
         var label = groupname
         
-        if(groupname === 'default') {
-          label = _('Ungrouped Device Group');
+        if(groupname === 'Default') {
+          label = _('Ungrouped Devices');
         }
         return {
           value: groupname,

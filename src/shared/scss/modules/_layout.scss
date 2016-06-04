@@ -1,5 +1,7 @@
+$g-navbar-height: 60px;
 $top-distance: $g-navbar-height + $g-distance;
 $sidebar-width: 190px;
+$nav-text-color: #ababab;
 
 html,
 body {
@@ -21,38 +23,101 @@ body {
   position: fixed;
   top: 0;
   z-index: 1000;
-  padding: 0 $g-distance;
   width: 100%;
   height: $g-navbar-height;
   background: $g-main-color;
-
+  
   .brand {
     display: block;
+    width: 190px;
+    height: 58px;
     float: left;
-    padding: 10px 0;
-    color: #f2f2f2;
-    line-height: 30px;
+    padding: 10px;
+    padding-left: $g-size - 12px;
+    color: $nav-text-color;
+    background: $g-main-color-light url(../../assets/images/logo.png) 25px center no-repeat;
+    background-size: 60px;
+    line-height: 40px;
+    padding-left: 100px;
+    border-radius: 2px;
+    
+    .logo {
+      color: #fff;
+      font-size: 16px;
+      display: inline-block;
+      margin-right: 8px;
+      padding-right: 8px;
+    }
   }
-  .user {
-    position: absolute;
-    right: $g-distance;
-    padding: 5px $g-distance;
-    border-left: 1px solid #ccc;
-    color: #f2f2f2;
+  .aside {
+    float: right;
   }
-  
   .icon-user {
     padding: 5px 15px 0 15px;
-    background-color: #e4e4e4;
+    background-color: $nav-text-color;
+    vertical-align: middle;    
     color: #000;
     font-size: 35px;
+    transition: background .3s ease;
   }
   
   .icon-down {
     float: right;
-    margin-left: 5px;
+    margin-left: 8px;
     font-size: 20px;
     line-height: 40px;
+    transition: transform .3s ease;
+  }
+  
+  .as-control {
+    padding: $g-distance $g-distance-md;
+    border-left: 1px solid #333;
+    color: #ababab;
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 12px; 
+    transition: background .3s ease,color .3s ease;
+    
+    .icon {
+      display: block;
+      width: 18px;
+      height: 18px;
+      margin: 0 auto;
+      margin-bottom: 5px;
+      font-size: 20px;
+      transition: transform .3s ease;
+      font-weight: 300;
+    }
+    
+    &:hover {
+      background-color: $g-main-color-light;
+      color: #fff;
+      
+      .icon {
+        transform: rotate(360deg)scale(1.1);
+      }
+    }
+  }
+  .user {
+    display: inline-block;
+    vertical-align: middle;
+    padding: $g-distance $g-distance-md;
+    border-left: 1px solid $g-main-color-light;
+    color: $nav-text-color;
+    transition: background .3s ease,color .3s ease;
+    
+    &:hover {
+      background-color: $g-main-color-light;
+      color: #fff;
+      
+      .icon-user {
+        background-color: #fff;
+      }
+      
+      .icon-down {
+        transform: rotate(360deg);
+      }
+    }
   }
 }
 .user-pop-over {
@@ -104,21 +169,22 @@ body {
 .main {
   overflow: auto;
   padding: $g-distance;
+  padding-left: 0;
   padding-top: $top-distance;
 }
 .main-nav {
   position: fixed;
-  top: $top-distance;
-  bottom: $g-distance;
+  top: $g-navbar-height;
+  bottom: 0;
   z-index: 1000;
-  width: 180px;
-  background: #e4e4e4;
+  width: 190px;
+  background: #444;
 
   ul {
     padding: 0;
-    border: 1px solid #e4e4e4;
+    //border-top: 1px solid #222;
     border-right: none;
-    background: #e4e4e4;
+    background: #444;
     
     li {
       list-style: none;
@@ -126,25 +192,23 @@ body {
         display: block;
         padding: $g-distance-md 0;
         padding-left: $g-size;
-        border-bottom: 1px solid #f2f2f2;
-        color: #666;
+        border-bottom: 1px solid #363636;
+        color: $nav-text-color;
         line-height: 20px;
         transition: background-color .2s ease-in-out;
         
-        &:focus,
-        &:active,
-        &:visited {
-          color: #666;
-        }
-
         &:hover {
-          color: #333;
+          color: #fff;
         }
         
 
         &.active {
-          background-color: #fafafa;
-          color: $g-brand-danger;
+          background-color: #363636;
+          color: #fff;
+          
+          .icon {
+            color: $g-brand-danger;
+          }
         }
         
         .icon {
@@ -165,7 +229,7 @@ body {
 
   .main-content-wrap {
     position: absolute;
-    top: 60px;
+    top: $top-distance;
     right: 0;
     bottom: $g-distance;
     left: 190px;

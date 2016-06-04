@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import utils from 'utils';
+import { bindActionCreators } from 'redux'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {connect} from 'react-redux';
@@ -7,9 +9,10 @@ import Icon from 'components/Icon';
 import Sidebar from './components/Sidebar';
 import Modal from 'components/Modal';
 import * as actions from './actions';
+import * as appActions from 'actions/app';
 
 
-const BRAND_TEXT = 'Axilspot ' + _('Management');
+const BRAND_TEXT =  _('Management');
 
 export default class Main extends Component {
   constructor(props) {
@@ -18,10 +21,23 @@ export default class Main extends Component {
     this.state = {isShow: false};
     
     this.showUserPopOver = this.showUserPopOver.bind(this);
+    this.onRefresh = this.onRefresh.bind(this);
+    
+    document.onkeypress = function(e){
+      if(e.keyCode == 116){
+        e.preventDefault();
+        this.onRefresh();
+      }
+    }
   };
   
   showUserPopOver() {
     this.setState({isShow: !this.state.isShow});
+  };
+  
+  onRefresh(e) {
+    e.preventDefault();
+    this.props.refreshAll();
   };
   
   render() {
@@ -31,14 +47,23 @@ export default class Main extends Component {
     return (
       <div>
         <header className="navbar">
-          <a href="" className="brand">{BRAND_TEXT}</a>
-          <div className="fr user" onClick={this.showUserPopOver}>
-            <Icon name="user-secret" className="icon-user" />
-            <Icon
-              name="caret-down"
-              className="icon-down"
-            />
+          <a href="#/main/status" className="brand">
+            <span className="logo">Axilspot</span>
+          </a>
+          <div className="aside">
+            <a href="#" className="as-control" onClick={this.onRefresh}>
+              <Icon name="refresh" className="icon" />
+              REFRESH ALL
+            </a>
+            <div className="user" onClick={this.showUserPopOver}>
+              <Icon name="user-secret" className="icon-user" />
+              <Icon
+                name="caret-down"
+                className="icon-down"
+              />
+            </div>
           </div>
+          
         </header>
         <div className="main">
           <div className='main-content'>
@@ -102,7 +127,14 @@ function mapStateToProps(state) {
   };
 }
 
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(utils.extend({},
+    appActions,
+    actions
+  ), dispatch)
+}
+
 export const Screen = connect(
   mapStateToProps,
-  actions
+  mapDispatchToProps
 )(Main);

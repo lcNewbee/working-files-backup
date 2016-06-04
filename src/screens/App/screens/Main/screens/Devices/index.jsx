@@ -76,6 +76,12 @@ export const Device = React.createClass({
     this.handleSearch()
   },
   
+  componentDidUpdate(prevProps) {
+    if(prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
+      this.handleSearch();
+    }
+  },
+  
   componentWillUnmount() {
     this.props.resetVaildateMsg();
   },
@@ -355,7 +361,7 @@ export const Device = React.createClass({
 
         <Table
           className="table"
-          loading={this.props.fetching}
+          loading={this.props.store.get('fetching')}
           options={devicesTableOptions}
           list={this.props.store.getIn(['data', 'list']) }
           page={this.props.store.getIn(['data', 'page']) }

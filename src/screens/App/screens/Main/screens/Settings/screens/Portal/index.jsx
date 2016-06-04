@@ -62,6 +62,12 @@ export const Portal = React.createClass({
     this.props.fetchPortalSettings();
   },
   
+  componentDidUpdate(prevProps) {
+    if(prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
+      this.props.fetchPortalSettings();
+    }
+  },
+  
   componentWillUnmount() {
     this.props.resetVaildateMsg();
   },
@@ -177,48 +183,48 @@ export const Portal = React.createClass({
     } = this.props.validateOption;
     const refreshtimeOtions = [
       {
-        value: 2,
+        value: '2',
         label: '2 ' + MSG.Seconds
       }, {
-        value: 3,
+        value: '3',
         label: '3 ' + MSG.Seconds
       }, {
-        value: 5,
+        value: '5',
         label: '5 ' + MSG.Seconds,
         default: true
       }, {
-        value: 10,
+        value: '10',
         label: '10 ' + MSG.Seconds
       }, {
-        value: 20,
+        value: '20',
         label: '20 ' + MSG.Seconds
       }, 
     ];
     // minutes
     const expirationOptions = [
       {
-        value: 3600,
+        value: '3600',
         label: '1 ' + MSG.hours
       }, {
-        value: 14400,
+        value: '14400',
         label: '4 ' + MSG.hours
       }, {
-        value: 28800,
+        value: '28800',
         label: '8 ' + MSG.hours
       }, {
-        value: 86400,
+        value: '86400',
         label: '24 ' + MSG.hours
       }, {
-        value: 172800,
+        value: '172800',
         label: '2 ' + MSG.days
       }, {
-        value: 4320,
+        value: '259200',
         label: '3 ' +  MSG.days
       }, {
-        value: 432000,
+        value: '432000',
         label: '5 ' +  MSG.days
       }, {
-        value: 604800,
+        value: '604800',
         label: '7 ' +  MSG.days
       },
     ];
@@ -259,6 +265,7 @@ export const Portal = React.createClass({
         >
           <Select
             name="timeout"
+            required={true}
             options={expirationOptions}
             value={getCurrData('timeout')}
             onChange={this.onUpdateSettings('timeout')}
@@ -270,6 +277,7 @@ export const Portal = React.createClass({
         <FormGroup
           label={_('Images Slide Interval')}
           type="select"
+          required={true}
           options={refreshtimeOtions}
           name="refreshtime"
           value={getCurrData('refreshtime')}
@@ -285,7 +293,6 @@ export const Portal = React.createClass({
           }
         </div>
         
-        // For image form upload
         <iframe id="imagesIf" name="imagesIf" className="none"></iframe>
         <form
           className="form-group"

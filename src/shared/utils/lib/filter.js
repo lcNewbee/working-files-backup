@@ -81,13 +81,13 @@ helper = {
     var unit = 'KB';
     
     if(unitSize > UNIT_GB) {
-      ret = rate / UNIT_GB;
+      ret = unitSize / UNIT_GB;
       unit = 'GB';
     } else if(unitSize > UNIT_MB) {
-      ret = rate / UNIT_MB;
+      ret = unitSize / UNIT_MB;
       unit = 'MB';
     } else {
-      ret = rate;
+      ret = unitSize;
     }
     
     return helper.toDecimal(ret, 1) + unit;

@@ -38,6 +38,9 @@ export default function( state = defaultState, action ) {
     case 'REPORT_VALID_ERROR':
       return receiveReport(state, action.data);
       
+    case 'REFRESH_ALL':
+      return state.set('refreshAt', action.refreshAt);
+      
     default:
   }
   return state;

@@ -24,6 +24,10 @@
       background-color: #fff;
       color: #333;
       
+      &:hover {
+        background-color: #e5e5e5;
+      }
+      
       &.active {
         background: #666;
         color: #fff

@@ -79,13 +79,13 @@ let defaultState = fromJS({
 export default function(state = defaultState, action) {
   switch (action.type) {
     case 'RECEIVE_DEVICE_GROUPS':
-      return mergeData(state, action);
+      return mergeData(state, action).set('fetching', false);
 
     case 'REQEUST_FETCH_DEVICE_GROUPS':
       return setFetching(state);
     
     case 'RECEIVE_GROUP_DEVICES':
-      return mergeDevice(state, action);
+      return mergeDevice(state, action).set('fetching', false);
 
     case 'EDIT_GROUP':
       return state.set('edit', getEditGroupByName(state, action.groupname))

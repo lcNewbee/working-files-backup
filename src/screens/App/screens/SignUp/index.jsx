@@ -163,7 +163,7 @@ export const SignUp = React.createClass({
     return (
       <div>
         <header className="navbar">
-          <a href="" className="brand">Comlanos {_('Management')}</a>
+          <a href="#/register" className="brand">Comlanos</a>
         </header>
         <div className="sign">
           <h1>{_('Please Sign Up')}</h1>
@@ -173,7 +173,7 @@ export const SignUp = React.createClass({
               <p className="msg-error ">{this.state.status}</p> :
               ''
           }
-          <button className="btn"
+          <button className="btn btn-info btn-lg"
             onClick={this.onSignUp}>
             {_('Sign Up')}
           </button>

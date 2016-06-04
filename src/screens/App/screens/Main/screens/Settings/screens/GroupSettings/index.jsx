@@ -40,6 +40,13 @@ export const GroupSettings = React.createClass({
     this.props.fetchGroupDevices();
   },
   
+  componentDidUpdate(prevProps) {
+    if(prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
+      this.props.fetchDeviceGroups();
+      this.props.fetchGroupDevices();
+    }
+  },
+  
   componentWillUnmount() {
     this.props.resetVaildateMsg();
   },
@@ -126,8 +133,8 @@ export const GroupSettings = React.createClass({
       'text': msg.groupname,
       transform: function(val) {
         
-        if(val === 'default') {
-          val = _('Ungrouped Device Group');
+        if(val === 'Default') {
+          val = _('Ungrouped Devices');
         }
         return val;
       }
@@ -138,7 +145,7 @@ export const GroupSettings = React.createClass({
       'id': 'op',
       'text': msg.action,
       transform: function(val, item) {
-        if(item.get('groupname') === 'default') {
+        if(item.get('groupname') === 'Default') {
           return null;
         }
         return (
@@ -220,6 +227,7 @@ export const GroupSettings = React.createClass({
         <h3>{_('Group List')}</h3>
         <Table
           className="table"
+          loading={this.props.fetching}
           options={fromJS(groupTableOptions)}
           list={this.props.data.get('list')}
         />

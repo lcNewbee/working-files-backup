@@ -75,6 +75,12 @@ export const Wireless = React.createClass({
     this.props.fetchWifiSettings();
   },
   
+  componentDidUpdate(prevProps) {
+    if(prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
+      this.props.fetchWifiSettings();
+    }
+  },
+  
   componentWillUnmount() {
     this.props.resetVaildateMsg();
   },
@@ -143,8 +149,8 @@ export const Wireless = React.createClass({
         var groupname = item.get('groupname');
         var label = groupname
         
-        if(groupname === 'default') {
-          label = _('Ungrouped Device Group');
+        if(groupname === 'Default') {
+          label = _('Ungrouped Devices');
         }
         return {
           value: groupname,

@@ -22,6 +22,18 @@
                 "others": 11
             }
         },
+        "clientStatisticsList": [
+            {
+                "name": "5G",
+                
+                "data": [2, 4, 7, 23, 25, 76, 135, 162, 32, 20, 6, 3]
+            },
+            {
+                "name": "2.4G",
+                
+                "data": [2, 4, 7, 23, 25, 76, 135, 162, 32, 20, 6, 3]
+            }
+        ],
         "aplist": [
             {
                 "devicename": "ap1",
@@ -51,9 +63,9 @@
                 "hostname": "iphone-23221",
                 "ipaddress": "192.168.6.42",
                 "macaddress": "12:22:33:44:55:66",
-                "connecttime": "120",
-                "downstream": "12323",
-                "upstream": "22"
+                "connecttime": "",
+                "downstream": "",
+                "upstream": ""
             }
         ]
     }

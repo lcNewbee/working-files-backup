@@ -320,7 +320,7 @@ export const SignUp = React.createClass({
     return (
       <div>
         <div className="navbar">
-          <a href="" className="brand">Axilspot {_('Management')}</a>
+          <a href="#/wizard" className="brand">Axilspot</a>
         </div>
         <div className="wizard">
           <h2>{_('Setup Wizard')}</h2>

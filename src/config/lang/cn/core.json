@@ -131,7 +131,7 @@
   "Group List": "组列表",
   "Are you sure delete group: %s?": "你确定要删除组：%s?",
   "Group name '%s' is already in use": "组名称 “%s” 已经被使用",
-  "Ungrouped Device Group": "无组设备组",
+  "Ungrouped Devices": "未分组设备",
   
   "Bandwidth Control": "流量控制",
   "QoS Settings": "流量控制设置",

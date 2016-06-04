@@ -45,6 +45,7 @@ export const Status = React.createClass({
     // this.renderApNumber();
     // this.renderClientNumber();
     // this.renderClientStatistics();
+    
   },
   
   componentDidUpdate(prevProps) {
@@ -180,8 +181,15 @@ export const Status = React.createClass({
   
   renderClientStatistics() {
     const dayText = _('D')
+    let clientStatisticsList = this.props.data.get('clientStatisticsList');
     let xAxisData;
     let xAxisName = _('Days');
+    
+    if(!clientStatisticsList) {
+      return ;
+    }
+    
+    clientStatisticsList = clientStatisticsList.toJS();
     
     if(this.props.query.get('time_type') === 'yesterday' ||
         this.props.query.get('time_type') === 'today') {
@@ -237,12 +245,12 @@ export const Status = React.createClass({
           {
             name: '5G',
             type: 'bar',
-            data: [2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23]
+            data: clientStatisticsList[0].data
           },
           {
             name: '2.4G',
             type: 'bar',
-            data: [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23]
+            data: clientStatisticsList[1].data
           }
         ]
       };
@@ -312,7 +320,9 @@ export const Status = React.createClass({
         }
       }, {
         'id': 'connecttime',
-        'text':  _('Connect Time')
+        'text':  _('Connect Time'),
+        filter: 'connectTime',
+        width: '160',
       }
     ]);
     
@@ -472,6 +482,7 @@ function mapStateToProps(state) {
   const myState = state.status;
 
   return {
+    app: state.app,
     fetching: myState.get('fetching'),
     data: myState.get('data'),
     query: myState.get('query')
