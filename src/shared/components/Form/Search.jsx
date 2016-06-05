@@ -3,13 +3,22 @@ import Icon from '../Icon';
 
 const propTypes = {
   className: PropTypes.string,
+  searchOnChange: PropTypes.bool
 };
 
 const defaultProps = {
   Component: 'span',
+  searchOnChange: true
 };
 
-export const Search = React.createClass({
+class Search extends React.Component {
+  constructor(props) {
+    super(props);
+    
+    this.onChange = this.onChange.bind(this);
+    this.onKeyUp = this.onKeyUp.bind(this);
+  };
+  
   onChange(e) {
     const val = e.target.value;
     
@@ -20,7 +29,14 @@ export const Search = React.createClass({
     if (typeof this.props.onChange === 'function') {
       this.props.onChange(val, e);
     }
-  },
+    
+    if(this.props.searchOnChange) {
+      
+      if (typeof this.props.onSearch === 'function') {
+        this.props.onSearch(e);
+      }
+    }
+  };
 
   onKeyUp(e) {
     let which = e.which;
@@ -30,13 +46,12 @@ export const Search = React.createClass({
         this.props.onSearch(e);
       }
     }
-  },
+  };
 
   render() {
     
     return (
       <div className="input-search fl">
-        
         <Icon className="icon-search" name="search"/>
         <input {...this.props}
           type="text"
@@ -45,7 +60,10 @@ export const Search = React.createClass({
         />
       </div>
     );
-  }
-});
+  };
+};
+
+Search.propTypes = propTypes
+Search.defaultProps = defaultProps;
 
 export default Search;

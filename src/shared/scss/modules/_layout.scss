@@ -42,7 +42,6 @@ body {
     border-radius: 2px;
     
     .logo {
-      color: #fff;
       font-size: 16px;
       display: inline-block;
       margin-right: 8px;
@@ -96,6 +95,10 @@ body {
       .icon {
         transform: rotate(360deg)scale(1.1);
       }
+    }
+    
+    &:active {
+      opacity: .7;
     }
   }
   .user {
@@ -195,12 +198,11 @@ body {
         border-bottom: 1px solid #363636;
         color: $nav-text-color;
         line-height: 20px;
-        transition: background-color .2s ease-in-out;
+        transition: background-color .2s ease-in-out, color .2s ease;
         
         &:hover {
           color: #fff;
         }
-        
 
         &.active {
           background-color: #363636;
