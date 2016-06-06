@@ -8,6 +8,7 @@ import {List, fromJS} from 'immutable';
 // components
 import {Table} from 'components/Table';
 import Switchs from 'components/Switchs';
+import Icon from 'components/Icon';
 
 import * as actions from './actions';
 import reducer from './reducer';
@@ -381,7 +382,7 @@ export const Status = React.createClass({
     ]);
    
     return (
-      <div id="jspdf">
+      <div className="Stats">
         <h2>{ _('Statistics') }</h2>
         <div className="stats-group clearfix" >
           <div className="stats-group-small" >
@@ -441,13 +442,17 @@ export const Status = React.createClass({
           </div>
           
           <div className="stats-group-large">
-            <div className="stats-group-cell">
+            <div className="stats-group-header">
               <h3>{_('Clients Ranklist')}
                 <Switchs
                   options={clientTypeSwitchs}
                   value={this.props.query.get('sort_type')}
                   onChange={this.onChangeClientSortType}
                 />
+                <a className="link-more" href="#/main/clients">
+                  {_('See More')}
+                  <Icon name="arrow-circle-o-right" className="icon" />
+                </a>
               </h3>
             </div>
             <div className="stats-group-cell">
@@ -460,8 +465,12 @@ export const Status = React.createClass({
           </div>
           
           <div className="stats-group-large">
-            <div className="stats-group-cell">
-              <h3>{ _('AP Activity Ranklist') }</h3>
+            <div className="stats-group-header">
+              <h3>{ _('AP Activity Ranklist') }
+                <a className="link-more" href="#/main/devices">{_('See More')}
+                  <Icon name="arrow-circle-o-right" className="icon" />
+                </a>
+              </h3>
             </div>
             <div className="stats-group-cell">
               <Table

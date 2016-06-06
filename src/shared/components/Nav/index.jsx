@@ -7,6 +7,10 @@ const propTypes = {
   menus: PropTypes.array.isRequired
 };
 
+const defaultProps = {
+  menus: [],
+};
+
 class Nav extends Component{
   render() {
     

@@ -25,3 +25,13 @@
 .text-required {
   color: red;
 }
+
+.link-more {
+  float: right;
+  font-size: 12px;
+  color: #1163f0;
+  .icon {
+    margin-left: 4px;
+    font-size: 14px;
+  }
+}
