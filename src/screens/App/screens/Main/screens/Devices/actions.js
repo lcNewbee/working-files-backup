@@ -6,7 +6,8 @@ const urls = {
   fetchDeviceInfo: '/goform/getDeviceInfo',
   setDevice: '/goform/setDevice',
   action: '/goform/setApAction'
-}
+};
+let refreshTimeout = null;
 
 export function reqeustFetchDevices() {
   return {
@@ -50,9 +51,21 @@ export function locateDevice(mac) {
   };
 }
 
+export function leaveDevicesScreen() {
+  window.clearTimeout(refreshTimeout);
+  
+  return {
+    type: 'LEAVE_DEVICES_SCREEN'
+  };
+}
+
 export function fetchDevices() {
   return (dispatch, getState) => {
+    const refreshTime = getState().app.get('rateInterval');
     const query = getState().devices.get('query').toJS();
+    const isEdit = getState().devices.get('edit');
+    
+    window.clearTimeout(refreshTimeout);
     
     dispatch(reqeustFetchDevices());
 
@@ -60,6 +73,12 @@ export function fetchDevices() {
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(reciveFetchDevices(json.data));
+        }
+        
+        if(refreshTime && refreshTime > 0 && !isEdit) {
+          refreshTimeout = window.setTimeout(function() {
+            dispatch(fetchDevices())
+          }, refreshTime)
         }
       });
   };

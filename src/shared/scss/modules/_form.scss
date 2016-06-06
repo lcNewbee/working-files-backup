@@ -117,3 +117,19 @@ body input[type=number] {
     margin-right: 4px;
   }
 }
+.input-password {
+  position: relative;
+  display: inline-block;
+  
+  input[type=password],
+  input[type=text] {
+    padding-right: 25px;
+  }
+  
+  .icon {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    margin-top: -8px;
+  }
+}

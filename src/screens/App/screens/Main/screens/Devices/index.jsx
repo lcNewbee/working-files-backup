@@ -84,6 +84,7 @@ export const Device = React.createClass({
   
   componentWillUnmount() {
     this.props.resetVaildateMsg();
+    this.props.leaveDevicesScreen();
   },
 
   handleSearch() {

@@ -2,6 +2,7 @@ import React, {PropTypes} from 'react';
 import Icon from '../Icon';
 import Select from '../Select';
 import Checkbox from './Checkbox';
+import Password from './Password';
 
 const propTypes = {
   className: PropTypes.string,
@@ -87,7 +88,10 @@ class FormInput extends React.Component {
       />
     }
     
-    if(type === 'checkbox') {
+    if(type === 'password') {
+      MyComponent = Password;
+      
+    } else if(type === 'checkbox') {
       MyComponent = Checkbox;
     }
     

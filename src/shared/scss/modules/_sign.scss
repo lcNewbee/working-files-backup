@@ -22,7 +22,9 @@
   }
   .form-control {
     margin: 0;
-    
+    .input-password {
+      display: block;
+    }
     .text {
       padding: 6px 12px;
       height: 34px;

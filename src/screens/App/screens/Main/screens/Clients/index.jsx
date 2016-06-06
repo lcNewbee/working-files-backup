@@ -102,7 +102,10 @@ export const Clients = React.createClass({
     }
   },
   
-
+  componentWillUnmount() {
+    this.props.leaveClientsScreen();
+  },
+  
   handleSearch() {
     this.props.fetchClients();
   },

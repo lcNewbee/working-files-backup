@@ -23,11 +23,46 @@ const tooltip = {
 const msg = {
   ip: _("IP Address"),
   mac: _("MAC Address"),
+  days: _("Days"),
   apStatus: _('AP Status'),
-  total: _('Total:')
+  total: _('Total:'),
+  apNumber: _('AP Number')
 };
+const timeTypeSwitchs = fromJS([
+  {
+    value: 'today',
+    label: _('Today')
+  },
+  {
+    value: 'yesterday',
+    label: _('Yesterday')
+  },
+  {
+    value: 'week',
+    label: '7 ' + msg.days
+  },
+  {
+    value: 'half_month',
+    label: '15 ' + msg.days
+  },
+  {
+    value: 'month',
+    label: '30 ' + msg.days
+  }
+]);
+const clientTypeSwitchs = fromJS([
+  {
+    value: '1',
+    label: _('Activity')
+  },
+  {
+    value: '2',
+    label: _('Connect Time')
+  }
+]);
 
 let apChart, statsChart, clientsChannelChart, clientsProducerChart;
+
 
 // 原生的 react 页面
 export const Status = React.createClass({
@@ -62,6 +97,11 @@ export const Status = React.createClass({
     //}
     
   },
+  
+  componentWillUnmount() {
+    this.props.leaveStatusScreen();
+  },
+  
   
   renderApNumber() {
     const apInfo = this.props.data.get('apInfo');
@@ -301,45 +341,55 @@ export const Status = React.createClass({
     return ret;
   },
   
-  render() {
-    const clientsListOption = fromJS([
+  getClientsListOption() {
+    const ret = fromJS([
       {
-        'id': 'hostname',
-        'text': _('Name')
+        id: 'hostname',
+        text: _('Name'),
+        transform: function(val, item) {
+          return val || item.get('mac');
+        }
       }, {
-        'id': 'ipaddress',
-        'text':  _('IP Address')
+        id: 'ipaddress',
+        text:  _('IP Address')
       }, {
-        'id': 'macaddress',
-        'text':  _('MAC Address')
+        id: 'macaddress',
+        text:  _('MAC Address')
       }, {
-        'id': 'softversion',
-        'text':  _('UP/Down Flow'),
+        id: 'softversion',
+        text:  _('UP/Down Flow'),
         transform(val, item) {
           return flowRateFilter.transform(item.get('upstream')) +
               ' / ' + flowRateFilter.transform(item.get('downstream'));
         }
       }, {
-        'id': 'connecttime',
-        'text':  _('Connect Time'),
+        id: 'connecttime',
+        text:  _('Connect Time'),
         filter: 'connectTime',
         width: '160',
       }
     ]);
     
-    const apListOption = fromJS([
+    return ret;
+  },
+  
+  getApListOption() {
+    var ret = fromJS([
       {
-        'id': 'devicename',
-        'text': _('Name')
+        id: 'devicename',
+        text: _('Name'),
+        transform: function(val, item) {
+          return val || item.get('mac');
+        }
       }, {
-        'id': 'ipaddress',
-        'text':  _('IP Address')
+        id: 'ipaddress',
+        text:  _('IP Address')
       }, {
-        'id': 'macaddress',
-        'text':  _('MAC Address')
+        id: 'macaddress',
+        text:  _('MAC Address')
       }, {
-        'id': 'up/down flow',
-        'text':  _('UP/Down Flow'),
+        id: 'up/down flow',
+        text:  _('UP/Down Flow'),
         transform(val, item) {
           return flowRateFilter.transform(item.get('upstream')) + ' / ' +
               flowRateFilter.transform(item.get('downstream'));
@@ -347,39 +397,12 @@ export const Status = React.createClass({
       }
     ]);
     
-    const timeTypeSwitchs = fromJS([
-      {
-        value: 'today',
-        label: _('Today')
-      },
-      {
-        value: 'yesterday',
-        label: _('Yesterday')
-      },
-      {
-        value: 'week',
-        label: '7 ' + _('Days')
-      },
-      {
-        value: 'half_month',
-        label: '15 ' + _('Days')
-      },
-      {
-        value: 'month',
-        label: '30 ' + _('Days')
-      }
-    ]);
-    
-    const clientTypeSwitchs = fromJS([
-      {
-        value: '1',
-        label: _('Activity')
-      },
-      {
-        value: '2',
-        label: _('Connect Time')
-      }
-    ]);
+    return ret;
+  },
+  
+  render() {
+    const clientsListOption = this.getClientsListOption();
+    const apListOption = this.getApListOption();
    
     return (
       <div className="Stats">
@@ -387,14 +410,13 @@ export const Status = React.createClass({
         <div className="stats-group clearfix" >
           <div className="stats-group-small" >
             <div className="stats-group-cell">
-              <h3>{ _('AP Number') }</h3>
+              <h3>{ msg.apNumber }</h3>
             </div>
             <div className="stats-group-cell">
               <div
                 id="echartsContent"
                 className="stats-group-canvas"
-                >
-              </div>
+              />
             </div>
           </div>
           <div className="stats-group-medium" >
@@ -408,15 +430,13 @@ export const Status = React.createClass({
                 style={{
                   width: '50%'
                 }}
-                >
-              </div>
+              />
               <div id="clientsProducerStats"
                 className="stats-group-canvas"
                 style={{
                   width: '50%'
                 }}
-                >
-              </div>
+              />
             </div>
           </div>
           <div className="stats-group-large" >
@@ -436,8 +456,7 @@ export const Status = React.createClass({
                 style={{
                   width: '100%'
                 }}
-                >
-              </div>
+              />
             </div>
           </div>
           

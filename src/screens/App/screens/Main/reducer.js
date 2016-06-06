@@ -3,6 +3,7 @@ import {Map, List, fromJS} from 'immutable';
 
 let defaultState = fromJS({
   userPop: false,
+  rateInterval: 5000,
   sidebar: false
 });
 

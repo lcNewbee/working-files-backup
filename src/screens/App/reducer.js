@@ -2,6 +2,7 @@ import {Map, List, fromJS} from 'immutable';
 
 const defaultState = fromJS({
   saving: false,
+  rateInterval: 15000,
   invalid: {}
 });
 

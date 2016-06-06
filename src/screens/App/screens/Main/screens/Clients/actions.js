@@ -2,6 +2,7 @@ import utils from 'utils';
 
 const FETCH_URL = '/goform/getClientInfo';
 const ACTION_URL = '/goform/setClientAction';
+let refreshTimeout = null;
 
 export function reqeustFetchClients() {
   return {
@@ -52,16 +53,32 @@ export function locateClient(mac) {
   };
 }
 
+export function leaveClientsScreen() {
+  window.clearTimeout(refreshTimeout);
+  
+  return {
+    type: 'LEAVE_CLIENTS_SCREEN'
+  };
+}
+
 export function fetchClients() {
   return (dispatch, getState) => {
+    const refreshTime = getState().app.get('rateInterval');
     const query = getState().clients.get('query').toJS();
 
+    window.clearTimeout(refreshTimeout);
     dispatch(reqeustFetchClients());
-
+    
     utils.fetch(FETCH_URL, query)
       .then(function(json) {
         if(json.state && json.state.code === 2000) {
           dispatch(reciveFetchClients(json.data))
+        }
+        
+        if(refreshTime && refreshTime > 0) {
+          refreshTimeout = window.setTimeout(function() {
+            dispatch(fetchClients())
+          }, refreshTime)
         }
       });
   };
@@ -78,7 +95,7 @@ export function saveClientsAction() {
     utils.save(ACTION_URL, query)
       .then(function(json) {
         if(json.state && json.state.code === 2000) {
-          dispatch(fetchClients(json.data))
+          dispatch(fetchClients(5000))
         }
       });
   };
