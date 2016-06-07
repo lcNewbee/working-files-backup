@@ -15,11 +15,11 @@
         "image": [
           {
             "count": "1",
-            "url": "etc/image1.jpg"
+            "url": "images/logo.png"
           },
           {
             "count": "2",
-            "url": "etc/image2.jpg"
+            "url": "images/logo.png"
           }
         ]
       }

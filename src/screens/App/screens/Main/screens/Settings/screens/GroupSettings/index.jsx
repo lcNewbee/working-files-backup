@@ -235,7 +235,7 @@ export const GroupSettings = React.createClass({
     if(this.props.actionType === 'add') {
       modalTitle = msg.add;
     } else if (this.props.actionType === 'edit') {
-      modalTitle = msg.edit + modalTitle;
+      modalTitle = msg.edit + ' ' + modalTitle;
     } else if(this.props.actionType === 'look') {
       modalTitle = _('Ungrouped Devices');
     }

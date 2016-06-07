@@ -134,12 +134,14 @@ export const Portal = React.createClass({
     return function() {
       var input = document.getElementById('filename' + i);
       var formElem = document.getElementById('imageForm' + i);
-      var data;
+      var data, extension;
       
       if(!input.value) {
         alert(_('Please select a upload image'));
         return ;
       }
+      
+      extension = utils.getExtension(input.value);
       
       if(that.state['imageStatus' + i] !== 'selected') {
          return ;
@@ -148,9 +150,11 @@ export const Portal = React.createClass({
       // 
       if(typeof FormData === 'function') {
         data = new FormData()
-        data.append('filename', input.files[0])
-        data.append('count', i)
-        that.imageUploading(i)
+        data.append('filename', input.files[0]);
+        data.append('pid', that.getCurrData('pid'));
+        data.append('count', i);
+        data.append('suffix', extension);
+        that.imageUploading(i);
 
         fetch('/goform/setPortalImage', {
           method: 'POST',
@@ -158,12 +162,14 @@ export const Portal = React.createClass({
         })
         .then(function(rq) {
           that.restImageStatus(i)
+          that.props.fetchPortalSettings();
         })
       
       } else {
-        that.imageUploading(i)
+        that.imageUploading(i);
         formElem.submit();
-        that.restImageStatus(i)
+        that.restImageStatus(i);
+        that.props.fetchPortalSettings();
       }
       
     }
@@ -288,7 +294,7 @@ export const Portal = React.createClass({
           <p className="form-group">{MSG.imageDes}</p>
           {
             images ? images.map(function(item){
-              return <img src={item.get('image')} key={item.get('count')} />
+              return <img src={item.get('url')} key={item.get('count')} />
             }) : null
           }
         </div>
