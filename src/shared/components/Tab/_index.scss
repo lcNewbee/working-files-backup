@@ -42,6 +42,7 @@
         border-width: 15px 7px;
         border-color:transparent #fff #fff transparent;
         border-style: solid;
+        filter: drop-shadow(-3px -2px 2px #ccc);
         //transition: border-color .3s ease-in;
       }
       
@@ -55,6 +56,7 @@
         border-width: 15px 7px;
         border-color: transparent transparent #fff #fff;
         border-style: solid;
+        filter:drop-shadow(3px -2px 2px #ccc);
         //transition: border .3s ease-in;
       }
       
@@ -78,10 +80,12 @@
         
         &:before {
           border-color:transparent $g-main-color-light $g-main-color-light transparent;
+          filter: none;
         }
         
         &:after {
           border-color: transparent transparent $g-main-color-light $g-main-color-light;
+          filter: none;
         }
       }
     }

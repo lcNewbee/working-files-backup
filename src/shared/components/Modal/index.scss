@@ -30,17 +30,17 @@
 }
 .modal-dialog {
   position: relative;
-  width: auto;
-  margin: 10px;
   z-index: 1050;
+  margin: 10px;
+  width: auto;
 }
 .modal-message {
   position: fixed;
-  width: 150px;
-  left: 50%;
   top: 40%;
-  margin-left: -75px;
+  left: 50%;
   z-index: 1050;
+  margin-left: -75px;
+  width: 150px;
   
   .modal-content {
     padding: 10px 0;
@@ -49,12 +49,12 @@
 }
 .modal-content {
   position: relative;
-  background-color: #fff;
-  background-clip: padding-box;
+  outline: 0;
   border: 1px solid #999;
   border: 1px solid rgba(0, 0, 0, .2);
   border-radius: 6px;
-  outline: 0;
+  background-color: #fff;
+  background-clip: padding-box;
   box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
 }
 .modal-backdrop {
@@ -68,12 +68,12 @@
   opacity: .5;
 }
 .modal-backdrop.fade {
-  filter: alpha(opacity=0);
   opacity: 0;
+  filter: alpha(opacity=0);
 }
 .modal-backdrop.in {
-  filter: alpha(opacity=50);
   opacity: .5;
+  filter: alpha(opacity=50);
 }
 .modal-header {
   padding: 15px;
@@ -81,10 +81,10 @@
 }
 .modal-header .close {
   margin-top: -2px;
-  background: #333;
-  color: #fff;
   border: none;
   border-radius: 20px;
+  background: #333;
+  color: #fff;
 }
 .modal-title {
   margin: 0;
@@ -96,8 +96,8 @@
 }
 .modal-footer {
   padding: 15px;
-  text-align: right;
   border-top: 1px solid #e5e5e5;
+  text-align: right;
 }
 .modal-footer .btn + .btn {
   margin-bottom: 0;
@@ -112,14 +112,14 @@
 .modal-scrollbar-measure {
   position: absolute;
   top: -9999px;
+  overflow: scroll;
   width: 50px;
   height: 50px;
-  overflow: scroll;
 }
 @media (min-width: $mw-md) {
   .modal-dialog {
-    width: 600px;
     margin: 30px auto;
+    width: 600px;
   }
   .modal-content {
     box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
