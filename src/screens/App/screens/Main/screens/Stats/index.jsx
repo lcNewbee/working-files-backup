@@ -160,7 +160,7 @@ export const Status = React.createClass({
     apChart.setOption(apOption);
     
     apChart.on('click', function(params) {
-      if(params.name === 'offline') {
+      if(params.dataIndex === 0) {
         this.showOfflineAp();
       } else {
         window.location.hash = "#/main/devices";

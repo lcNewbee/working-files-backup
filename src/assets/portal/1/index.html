@@ -15,15 +15,12 @@
   <meta name="description" content="">
   <meta name="author" content="taijisanfeng@yahoo.com">
   <link rel="stylesheet" href="styles/main.css">
-  <link rel="stylesheet" href="styles/slick.css">
-  <link rel="stylesheet" href="styles/slick-theme.css">
 </head>
 
 <body class="none">
   <div class="phone-content">
     <div class="banner slick-slider"></div>
     <div class="content">
-      <h2 id="portalTitle"></h2>
       <button type="button" class="btn" id="online"></button>
     </div>
   </div>
@@ -36,31 +33,33 @@
       en: 'Click on Internet',
       cn: '点击上网'
     };
-  
+
     function getPortalUrl() {
       var ret = window.location.protocol + "//" + window.location.hostname +
-          ':2051/goform/getPortal?callback=?';
-      
+        ':2051/goform/getPortal?callback=?';
+
       return ret;
     }
-    
+
     function getPortalAuthUrl() {
       var ret = window.location.protocol + "//" + window.location.hostname +
-          '/auth_portal?callback=?';
-      
+        '/auth_portal?callback=?';
+
       return ret;
     }
-    
+
     function createSlick(images) {
       var ret = '';
-      
+
       $.each(images, function(i, item) {
-        ret += '<div><img src="' + item.url + '" alt="' + i + '"></div>'
+        if (item.url) {
+          ret += '<div><img src="' + item.url + '"></div>'
+        }
       });
-      
+
       return ret;
     }
-    
+
     function getLang() {
       var special = {
         "zh": "cn",
@@ -74,13 +73,13 @@
       };
       var nav = window.navigator;
       var ret = 'en';
-      
+
       ret = (nav.language || nav.userLanguage ||
-            nav.browserLanguage || nav.systemLanguage ||
-            ret).toLowerCase();
+        nav.browserLanguage || nav.systemLanguage ||
+        ret).toLowerCase();
 
       ret = special[ret] || ret.split("-")[0].toString();
-      
+
       return ret;
     }
 
@@ -89,10 +88,11 @@
       document.title = data.title;
       $('#portalTitle').text(data.title);
       $('#online').text(onlineMsg[getLang()]);
-      
+
       $('.banner').html(createSlick(data.image))
       $('.banner').slick({
         autoplay: true,
+        dots: true,
         arrows: false,
         autoplaySpeed: (data.refreshtime || 3) * 1000,
       });
@@ -100,33 +100,33 @@
     $.ajaxSetup({
       timeout: 3000
     });
-    
+
     function authComplete() {
-      if(currData && currData.url) {
+      if (currData && currData.url) {
         window.location.href = currData.url;
       }
       $('#online').removeClass('active');
     }
-    
+
     $(function() {
       var portalUrl = getPortalUrl();
-      
+
       // 本地测试代码
       //portalUrl = '/goform/portalAath';
-      
+
       $.getJSON(portalUrl, function(data) {
         if (data.state.code === 2000) {
           initPage(data.data)
         }
-        
+
         $('body').removeClass('none');
       });
-      
+
       $('#online').on('click', function() {
         $(this).addClass('active');
         $.getJSON(getPortalAuthUrl(), authComplete)
-        .fail(authComplete)
-        .always(authComplete);
+          .fail(authComplete)
+          .always(authComplete);
       });
     });
   </script>

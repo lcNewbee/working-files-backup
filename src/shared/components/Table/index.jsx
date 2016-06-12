@@ -99,9 +99,10 @@ export class Table extends Component {
             }
           </tbody>
         </table>
+        
         {
           // 只有当 总页数大于 1时 才显示分页
-          (page && page.totalPage > 1) ? <Pagination
+          (page && page.get('totalPage') > 1) ? <Pagination
             page={page}
             onPageChange={this.props.onPageChange}
           /> : null
