@@ -30,6 +30,7 @@ describe('Group Settings Rudex', () => {
     const nextState = reducer(initialState, action);
 
     nextState.should.equal(fromJS({
+      fetching: false,
       data: {
         list: [
           {
@@ -79,6 +80,8 @@ describe('Group Settings Rudex', () => {
     const nextState = reducer(initialState, action);
 
     nextState.should.equal(fromJS({
+      fetching: false,
+      defaultGroupDevices: [],
       devices: {
         "page": {
             "start": 2,

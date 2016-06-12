@@ -52,3 +52,34 @@ export function changeStatsQuery(data) {
     data
   };
 }
+
+function reqeustFetchOfflineAp() {
+  return {
+    type: 'REQEUST_FETCH_OFFLINE_AP'
+  };
+}
+
+export function reveviceFetchOfflineAp(data) {
+  return {
+    type: 'REVEVICE_FETCH_OFFLINE_AP',
+    data
+  };
+}
+
+export function fetchOfflineAp() {
+  return (dispatch, getState) => {
+    const query = {
+        page: 1,
+        size: 100
+    };
+    
+    dispatch(reqeustFetchOfflineAp());
+
+    utils.fetch('/goform/getOfflineDevInfo', {query})
+      .then(function(json) {
+        if(json.state && json.state.code === 2000) {
+          dispatch(reveviceFetchOfflineAp(json.data))
+        }
+      })
+  };
+}

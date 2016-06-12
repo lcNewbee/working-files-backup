@@ -20,18 +20,11 @@ describe('utils', () => {
       expect(connectTime.length).to.be.equal(2)
     });
 
-    it('should throw when str is not string or number', function () {
-      assert.throws(function () {
-        connectTime(null);
-      }, TypeError);
-      assert.throws(function () {
-        connectTime(undefined);
-      }, TypeError);
-      assert.throws(function () {
-        connectTime({});
-      }, TypeError);
+    it('should return 0second when time is empty', function () {
+      expect(connectTime(null)).to.be.equal('0second')
+      expect(connectTime(undefined)).to.be.equal('0second')
     });
-
+    
 
     it('should return day and hour string when input greater than 1 day', function () {
       expect(connectTime(86450)).to.be.equal('1day, 0hour')

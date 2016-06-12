@@ -23,8 +23,8 @@ body input[type=number] {
   margin-bottom: 12px;
   
   &.form-group-save {
-    border-top: 1px solid $boder-color;
     padding-top: 12px;
+    border-top: 1px solid $boder-color;
   }
 
   > label {
@@ -62,25 +62,25 @@ body input[type=number] {
   
   .help {
     display: inline-block;
-    vertical-align: middle;
     margin-left: 10px;
     color: #999;
+    vertical-align: middle;
     font-size: 12px;
     line-height: 29px;
   }
   .error {
     display: inline-block;
-    vertical-align: middle;
     margin-left: 5px;
     color: red;
+    vertical-align: middle;
     font-size: 12px;
     line-height: 29px;
   }
   .checkbox {
-    line-height: 29px;
+    margin-right: 6px;
     color: #999;
     font-size: 12px;
-    margin-right: 6px;
+    line-height: 29px;
   }
 }
 
@@ -128,8 +128,8 @@ body input[type=number] {
   
   .icon {
     position: absolute;
-    right: 6px;
     top: 50%;
+    right: 6px;
     margin-top: -8px;
   }
 }

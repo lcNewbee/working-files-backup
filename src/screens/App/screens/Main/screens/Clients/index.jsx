@@ -44,7 +44,30 @@ const clientsTableOptions = fromJS([
     }
   }, {
     id: 'rssi',
-    text: _('RSSI')
+    text: _('RSSI'),
+    transform: function(val, item) {
+      var intVal = parseInt(val, 10);
+      var classNames = 'Icon Icon-block Icon-wifi';
+      
+      // 判断加密范式
+      if(item.get('encryption') === 'open') {
+        classNames += '-nopass';
+      } else {
+        classNames += '-pass';
+      }
+      
+      if(intVal > -60) {
+        classNames += '-3';
+      } else if(intVal > -70) {
+        classNames += '-2';
+      } else if(intVal > -80) {
+        classNames += '-1';
+      } else {
+        classNames += '-0';
+      }
+      
+      return <span className={classNames}></span>;
+    }
   }, {
     id: 'authtype',
     text: _('Authentication')

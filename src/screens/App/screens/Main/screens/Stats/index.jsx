@@ -9,6 +9,7 @@ import {List, fromJS} from 'immutable';
 import {Table} from 'components/Table';
 import Switchs from 'components/Switchs';
 import Icon from 'components/Icon';
+import Modal from 'components/Modal';
 
 import * as actions from './actions';
 import reducer from './reducer';
@@ -68,8 +69,15 @@ let apChart, statsChart, clientsChannelChart, clientsProducerChart;
 export const Status = React.createClass({
   mixins: [PureRenderMixin],
   
+  getInitialState() {
+     return {
+       showOfflineAp: false
+     }
+  },
+  
   componentWillMount() {
     this.props.fetchStatus();
+    this.props.fetchOfflineAp();
   },
 
   componentDidMount() {
@@ -102,6 +110,17 @@ export const Status = React.createClass({
     this.props.leaveStatusScreen();
   },
   
+  hideOfflineApp() {
+    this.setState({
+      showOfflineAp: false
+    })
+  },
+  
+  showOfflineAp() {
+    this.setState({
+      showOfflineAp: true
+    })
+  },
   
   renderApNumber() {
     const apInfo = this.props.data.get('apInfo');
@@ -130,7 +149,7 @@ export const Status = React.createClass({
         }
       ]
     };
-    const data = apInfo.delete('total').map(function(val, key) {
+    const data = apInfo.delete('total').delete('default').map(function(val, key) {
       return {
         value: val,
         name: _(key)
@@ -139,6 +158,15 @@ export const Status = React.createClass({
     
     apOption.series[0].data = data;
     apChart.setOption(apOption);
+    
+    apChart.on('click', function(params) {
+      if(params.name === 'offline') {
+        this.showOfflineAp();
+      } else {
+        window.location.hash = "#/main/devices";
+      }
+      
+    }.bind(this));
   },
   
   renderClientNumber() {
@@ -400,9 +428,34 @@ export const Status = React.createClass({
     return ret;
   },
   
+  getOfflineApListOption() {
+    var ret = fromJS([
+      {
+        id: 'devicename',
+        text: _('Name'),
+        transform: function(val, item) {
+          return val || item.get('mac');
+        }
+      }, {
+        id: 'model',
+        text: _('Model')
+      }, {
+        id: 'softversion',
+        text: _('Version')
+      }, {
+        id: 'channel',
+        text: _('Channel'),
+        filter: 'translate'
+      }
+    ]);
+    
+    return ret;
+  },
+  
   render() {
     const clientsListOption = this.getClientsListOption();
     const apListOption = this.getApListOption();
+    const offlineApOption = this.getOfflineApListOption();
    
     return (
       <div className="Stats">
@@ -501,6 +554,21 @@ export const Status = React.createClass({
           </div>
           
         </div>
+        
+        <Modal
+          isShow={this.state.showOfflineAp}
+          title={_("Offline Ap List")}
+          onClose={this.hideOfflineApp}
+          onOk={this.hideOfflineApp}
+        >
+          <Table
+            className="table"
+            options={offlineApOption}
+            list={this.props.offlineAp.get('list')}
+            page={this.props.offlineAp.get('page')}
+          />
+          
+        </Modal>
       </div>
     );
   }
@@ -513,6 +581,7 @@ function mapStateToProps(state) {
     app: state.app,
     fetching: myState.get('fetching'),
     data: myState.get('data'),
+    offlineAp: myState.get('offlineAp'),
     query: myState.get('query')
   };
 }
