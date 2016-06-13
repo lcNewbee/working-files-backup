@@ -75,10 +75,11 @@ helper = {
 
   flowRate: function (rate) {
     var ret = 0;
-    var UNIT_GB = 1024 * 1024;
-    var UNIT_MB = 1024;
+    var UNIT_GB = 1024 * 1024 * 1024;
+    var UNIT_MB = 1024 * 1024;
+    var UNIT_KB = 1024;
     var unitSize = coreUtils.toNumber(rate, 'helper.flowRate');
-    var unit = 'KB';
+    var unit = 'B';
     
     if(unitSize > UNIT_GB) {
       ret = unitSize / UNIT_GB;
@@ -86,6 +87,9 @@ helper = {
     } else if(unitSize > UNIT_MB) {
       ret = unitSize / UNIT_MB;
       unit = 'MB';
+    } else if(unitSize > UNIT_KB) {
+      ret = unitSize / UNIT_KB;
+      unit = 'KB';
     } else {
       ret = unitSize;
     }

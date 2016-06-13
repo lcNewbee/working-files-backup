@@ -383,7 +383,7 @@ export const Status = React.createClass({
         id: 'hostname',
         text: _('Name'),
         transform: function(val, item) {
-          return val || item.get('mac');
+          return val || item.get('macaddress');
         }
       }, {
         id: 'ipaddress',
@@ -415,7 +415,7 @@ export const Status = React.createClass({
         id: 'devicename',
         text: _('Name'),
         transform: function(val, item) {
-          return val || item.get('mac');
+          return val || item.get('macaddress');
         }
       }, {
         id: 'ipaddress',
@@ -585,7 +585,6 @@ export const Status = React.createClass({
 
 function mapStateToProps(state) {
   const myState = state.status;
-
   return {
     app: state.app,
     fetching: myState.get('fetching'),
