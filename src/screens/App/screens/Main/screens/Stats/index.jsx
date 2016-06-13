@@ -117,9 +117,10 @@ export const Status = React.createClass({
   },
   
   showOfflineAp() {
+    this.props.fetchOfflineAp();
     this.setState({
       showOfflineAp: true
-    })
+    });
   },
   
   renderApNumber() {
@@ -359,6 +360,13 @@ export const Status = React.createClass({
     }
   },
   
+  onOfflineApPageChange(i) {
+    this.props.changeOfflineApQuery({
+      page: i
+    });
+    this.props.fetchOfflineAp();
+  },
+  
   createTimeTypeClass(type) {
     var ret = 'btn';
     
@@ -566,6 +574,7 @@ export const Status = React.createClass({
             options={offlineApOption}
             list={this.props.offlineAp.get('list')}
             page={this.props.offlineAp.get('page')}
+            onPageChange={this.onOfflineApPageChange}
           />
           
         </Modal>

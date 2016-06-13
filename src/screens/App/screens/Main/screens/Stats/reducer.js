@@ -23,9 +23,11 @@ let defaultState = fromJS({
     clientlist: []
   },
   offlineAp: {
-    list: [
-      
-    ]
+    query: {
+     page: 1,
+     size: 50 
+    },
+    list: []
   }
 });
 
@@ -42,6 +44,9 @@ export default function(state = defaultState, action) {
       
     case 'REVEVICE_FETCH_OFFLINE_AP':
       return state.mergeIn(['offlineAp'], action.data);
+    
+    case 'CHANGE_OFFLINE_AP_QUERY':
+      return state.mergeIn(['offlineAp', 'query'], action.data);
   }
   return state;
 };

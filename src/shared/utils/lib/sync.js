@@ -15,7 +15,7 @@ function parseJSON(response) {
 }
 
 function handleServerError(json) {
-  if(json.state.code !== 2000) {
+  if(!json.state || (json.state && json.state.code !== 2000)) {
     console.log('State code not 2000', json.state);
   }
   return json;

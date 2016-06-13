@@ -66,16 +66,20 @@ export function reveviceFetchOfflineAp(data) {
   };
 }
 
+export function changeOfflineApQuery(data) {
+  return {
+    type: 'CHANGE_OFFLINE_AP_QUERY',
+    data
+  };
+}
+
 export function fetchOfflineAp() {
   return (dispatch, getState) => {
-    const query = {
-        page: 1,
-        size: 100
-    };
+    const query = getState().status.getIn(['offlineAp', 'query']).toJS();
     
     dispatch(reqeustFetchOfflineAp());
 
-    utils.fetch('/goform/getOfflineDevInfo', {query})
+    utils.fetch('/goform/getOfflineDevInfo', query)
       .then(function(json) {
         if(json.state && json.state.code === 2000) {
           dispatch(reveviceFetchOfflineAp(json.data))
