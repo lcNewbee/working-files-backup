@@ -295,7 +295,7 @@ export const Wireless = React.createClass({
           />
         </FormGroup>
         
-        <h3>{_('Bandwidth')}</h3>
+        <h3>{_('Bandwidth Control')}</h3>
         <FormGroup
           label={msg.upSpeed}
           required={true}

@@ -50,7 +50,7 @@ const clientsTableOptions = fromJS([
       var classNames = 'Icon Icon-block Icon-wifi';
       
       // 判断加密范式
-      if(item.get('encryption') === 'open') {
+      if(item.get('encryption') === 'none') {
         classNames += '-nopass';
       } else {
         classNames += '-pass';
