@@ -56,14 +56,14 @@ const clientsTableOptions = fromJS([
         classNames += '-pass';
       }
       
-      if(intVal > -60) {
-        classNames += '-3';
-      } else if(intVal > -70) {
-        classNames += '-2';
-      } else if(intVal > -80) {
-        classNames += '-1';
-      } else {
+      if(intVal > 85) {
         classNames += '-0';
+      } else if(intVal > 75) {
+        classNames += '-1';
+      } else if(intVal > 65) {
+        classNames += '-2';
+      } else {
+        classNames += '-3';
       }
       
       return <span className={classNames}></span>;
@@ -265,6 +265,7 @@ export const Clients = React.createClass({
             value={this.props.query.get('text')}
             updater={this.onChangeSearchText}
             onSearch={this.handleSearch}
+            placeholder={_('IP or MAC Address')}
           />
           <Switchs
             value={this.props.query.get('type')}

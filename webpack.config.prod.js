@@ -44,7 +44,8 @@ module.exports = {
         loader: "url-loader",
         query: {
           mimetype: "image/png",
-          limit: 11000
+          limit: 11000,
+          name: 'images/[hash].[ext]'
         }
       },
       

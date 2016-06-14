@@ -23,12 +23,12 @@ export default class Main extends Component {
     this.showUserPopOver = this.showUserPopOver.bind(this);
     this.onRefresh = this.onRefresh.bind(this);
     
-    document.onkeypress = function(e){
+    document.onkeydown = function(e) {
+      
       if(e.keyCode == 116){
-        e.preventDefault();
-        this.onRefresh();
+        this.onRefresh(e);
       }
-    }
+    }.bind(this);
   };
   
   showUserPopOver() {

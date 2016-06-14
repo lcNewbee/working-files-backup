@@ -353,7 +353,7 @@ export const Wireless = React.createClass({
               type='button'
               text={_('Save')}
               icon="save"
-              role="success"
+              role="primary"
               onClick={this.onSave}
             />
           </div>

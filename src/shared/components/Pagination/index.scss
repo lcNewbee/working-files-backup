@@ -1,3 +1,6 @@
+@import "../../scss/variables";
+@import "../../scss/mixins";
+
 .pagination {
   display: inline-block;
   padding-left: 0;
@@ -6,7 +9,9 @@
   font-size: 12px;
   
   li {
-    display: inline;
+    display: inline-block;
+    vertical-align: middle;
+    overflow: hidden;
     
     a,
     span {
@@ -15,24 +20,17 @@
       padding: 6px 12px;
       margin-left: -1px;
       line-height: 1.42857143;
-      color: #337ab7;
+      color: $g-color-primary-dark;
       text-decoration: none;
       background-color: #fff;
-      border: 1px solid #ddd;
+      border: 1px solid #dedede;
     }
     
     &:first-child {
       a,
       span {
         margin-left: 0;
-        border-top-left-radius: 4px;
-        border-bottom-left-radius: 4px;
       }
-    }
-    
-    &:last-child {
-      border-top-right-radius: 4px;
-      border-bottom-right-radius: 4px;
     }
   }
 }
@@ -41,9 +39,9 @@
 .pagination > li > a:focus,
 .pagination > li > span:focus {
   z-index: 2;
-  color: #23527c;
+  color: $g-color-primary-darker;
   background-color: #eee;
-  border-color: #ddd;
+  border-color: #dedede;
 }
 .pagination > .active > a,
 .pagination > .active > span,
@@ -54,8 +52,8 @@
   z-index: 3;
   color: #fff;
   cursor: default;
-  background-color: #337ab7;
-  border-color: #337ab7;
+  background-color: $g-color-primary-dark;
+  border-color: $g-color-primary-dark;;
 }
 .pagination > .disabled > span,
 .pagination > .disabled > span:hover,
@@ -66,7 +64,7 @@
   color: #777;
   cursor: not-allowed;
   background-color: #fff;
-  border-color: #ddd;
+  border-color: #dedede;
 }
 .pagination-lg > li > a,
 .pagination-lg > li > span {
@@ -114,13 +112,13 @@
   display: inline-block;
   padding: 5px 14px;
   background-color: #fff;
-  border: 1px solid #ddd;
+  border: 1px solid #ccc;
   border-radius: 15px;
 }
 .pager li > a:hover,
 .pager li > a:focus {
   text-decoration: none;
-  background-color: #eee;
+  background-color: #dedede;
 }
 .pager .next > a,
 .pager .next > span {

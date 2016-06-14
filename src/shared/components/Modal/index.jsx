@@ -108,7 +108,7 @@ class Modal extends Component {
                         </button>
                         <button
                           type="button"
-                          className="btn btn-info"
+                          className="btn btn-primary"
                           onClick={this.onOk}
                         >
                           {this.props.okText}

@@ -71,7 +71,7 @@ body input[type=number] {
   .error {
     display: inline-block;
     margin-left: 5px;
-    color: red;
+    color: $g-brand-danger;
     vertical-align: middle;
     font-size: 12px;
     line-height: 29px;

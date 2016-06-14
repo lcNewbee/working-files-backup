@@ -16,7 +16,7 @@ paths = gulp.paths = {
   release: 'release',
   src: 'src',
   pub: '../win_ac/ws031202/comlanweb/',
-  pubNew: '../win_ac/mysql/web/',
+  pubNew: '../win_ac/software/web/',
   webpack: 'webpack.config.dev.js',
   pubWebpack: 'webpack.config.prop.js'
 };
@@ -50,12 +50,16 @@ gulp.task('build', function(callback) {
   runSequence('clean', ['build:assets', 'webpack'], 'build:html', callback);
 });
 
-gulp.task('pub:ac',['build'], function() {
+
+gulp.task('clean:pubac', function(callback) {
+  return del([paths.pubNew], {force: true});
+});
+
+gulp.task('pub:ac',['clean:pubac', 'build'], function() {
   return gulp.src(paths.build + '/**/*')
     .pipe(gulp.dest(paths.pub))
     .pipe(gulp.dest(paths.pubNew));
 });
-
 
 gulp.task('default', ['open:src']);
 

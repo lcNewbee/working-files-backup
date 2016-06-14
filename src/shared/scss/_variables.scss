@@ -3,28 +3,36 @@
 //== Colors
 //
 //## Main Colors
-$g-main-color:            #222 !default;
-$g-main-color-light:      #333 !default;
-$g-main-color-lighter:    #666 !default;
+
+$g-main-color:               #222 !default;
+$g-main-color-light:         #333 !default;
+$g-main-color-lighter:       #666 !default;
+
+$g-color-primary:              #0093DD !default;
+$g-color-primary-dark:         #0070d2 !default;
+$g-color-primary-darker:       #005fb2 !default;
+$g-color-primary-darkest:      #00396b !default;
+
+$g-color-neutral:              #4F6A92 !default;
+$g-color-neutral-light:        #A7B8D1 !default;
+$g-color-neutral-lighter:      #CFD7E7 !default;
+$g-color-neutral-lightest:     #EEF1F6 !default;
 
 //## Gray and brand colors for use across wgruis.
 //### Gray color
-$g-black:                 #000 !default;
-$g-gray-darker:             lighten($g-black, 13.5%) !default; // #222
-$g-gray-dark:               lighten($g-black, 20%)   !default; // #333
-$g-gray:                    lighten($g-black, 33.5%) !default; // #555
-$g-gray-light:              lighten($g-black, 46.7%) !default; // #777
-$g-gray-lighter:            lighten($g-black, 93.5%) !default; // #eee
+$g-black:                   #000 !default;
+$g-gray-darker:               lighten($g-black, 13.5%) !default; // #222
+$g-gray-dark:                 lighten($g-black, 20%)   !default; // #333
+$g-gray:                      lighten($g-black, 33.5%) !default; // #555
+$g-gray-light:                lighten($g-black, 46.7%) !default; // #777
+$g-gray-lighter:              lighten($g-black, 93.5%) !default; // #eee
 
 //### Brand color
-$g-brand-primary:           #666666 !default;
-$g-brand-success:           #1FC360 !default;
-$g-brand-info:              #1781FB !default;
-$g-brand-warning:           #ffb500 !default;
-$g-brand-danger:            #F7304E !default;
-
-$g-red:  					          #F7304E !default;
-$g-white:                   #ffffff !default;
+$g-brand-primary:           #0093DD !default;
+$g-brand-success:           #4BC076 !default;
+$g-brand-info:              #62B7ED !default;
+$g-brand-warning:           #F7B64B !default;
+$g-brand-danger:            #C23934 !default;
 
 //== Scaffolding
 //
@@ -39,7 +47,7 @@ $g-text-color:              $g-gray-dark !default;
 //### Global text color
 $g-text-highlight:          $g-brand-danger !default;
 $g-text-help:               #b1b1b1 !default;
-$g-text-btn:                $g-white !default;
+$g-text-btn:                #FFF !default;
 
 //### Global textual link color.
 $g-link-color:              $g-brand-primary !default;

@@ -341,6 +341,7 @@ export const Device = React.createClass({
           <Search
             className="search fl"
             value={text}
+            placeholder={_('IP or MAC Address')}
             onChange={this.onChangeSearchText}
             onSearch={this.handleSearch}
           />
