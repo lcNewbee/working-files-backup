@@ -403,4 +403,5 @@ textarea {
 ::-webkit-input-placeholder {
   color: inherit;
   opacity: 0.54;
+  filter:alpha(opacity=54); 
 }

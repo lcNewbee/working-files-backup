@@ -99,7 +99,7 @@ body {
     }
     
     &:active {
-      opacity: .7;
+      @include opacity(.7);
     }
   }
   .user {

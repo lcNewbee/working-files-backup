@@ -85,7 +85,7 @@ $main-blue: #0093dd;
       
       &.completed {
         color: $g-brand-success;
-        opacity: 1;
+        @include opacity(1);
         
         .icon {
           &:before {
@@ -96,7 +96,7 @@ $main-blue: #0093dd;
       }
       &.active {
         color: $g-main-color;
-        opacity: 1;
+        @include opacity(1);
         
         .icon {
           &:before {
