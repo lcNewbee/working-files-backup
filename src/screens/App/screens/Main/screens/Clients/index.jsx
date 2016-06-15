@@ -32,7 +32,10 @@ const clientsTableOptions = fromJS([
     text: 'SSID'
   }, {
     id: 'connectap',
-    text: _('Associated AP')
+    text: _('Associated AP'),
+    transform: function(val, item) {
+      return item.get('connectap') || item.get('apmac');
+    }
   }, {
     id: 'bandwidth',
     text: _('Up/Down Speed'),
@@ -70,7 +73,19 @@ const clientsTableOptions = fromJS([
     }
   }, {
     id: 'authtype',
-    text: _('Authentication')
+    text: _('Authentication'),
+    transform(val, item) {
+      var ret = val;
+
+      if(val == '0') {
+        ret = 'None';
+      } else if (val === 'portal') {
+        ret = 'Portal';
+      }
+      ret = _(ret);
+      
+      return ret;
+    }
   }, {
     id: 'operationhours',
     text: _('Connect Time'),
