@@ -1,11 +1,13 @@
 import Immutable, {Map, List, fromJS} from 'immutable';
+import channels from './channels.json';
 
+const channelsList = List(channels);
 const defaultSettings = Map({
   encryption: 'none',
   vlanenable: '0',
   upstream: '0',
   downstream: '0',
-  country: 'CN',
+  country: getCountry(),
   channel: '6',
   channelsBandwidth: '20',
   ssid: ''
@@ -17,6 +19,43 @@ const defaultState = fromJS({
     curr: {}
   }
 });
+
+function getCountry(country) {
+  var initLang = country;
+  var ret = '';
+  var navigator = window.navigator;
+
+  if (!initLang) {
+    initLang = (navigator.language || navigator.userLanguage ||
+      navigator.browserLanguage || navigator.systemLanguage ||
+      'CN').substr(-2).toUpperCase();
+  }
+
+  channelsList.find(function (item) {
+    if (item.country === initLang) {
+      ret = item.country;
+    }
+  });
+
+  return ret || 'CN';
+}
+
+function transformCountryData(settingData) {
+  var ret;
+
+  ret = settingData.set('country', getCountry(settingData.get('country')));
+
+  channelsList.forEach(function (item) {
+
+    if (item.country === ret.get('country')) {
+      if (parseInt(ret.get('channel'), 10) > parseInt(item['2.4g'].substr(-2), 10)) {
+        ret = ret.set('channel', '0');
+      }
+    }
+  });
+
+  return ret;
+}
 
 function receiveSettings(state, settingData) {
   let ret = state.update('data', data => data.merge(settingData));
@@ -31,6 +70,9 @@ function receiveSettings(state, settingData) {
   } else {
     listCurr = currData.merge(defaultSettings).merge(ret.getIn(['data', 'list', 0]))
   }
+
+  listCurr = transformCountryData(listCurr);
+
   return ret.setIn(['data', 'curr'], listCurr)
     .set('fetching', false);
 }
@@ -41,6 +83,8 @@ function changeGroup(state, groupname) {
     .find(function (item) {
       return item.get('groupname') === groupname;
     })
+
+  selectGroup = transformCountryData(selectGroup);
 
   return ret.mergeIn(['data', 'curr'], selectGroup);
 }

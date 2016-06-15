@@ -38,10 +38,10 @@ const propTypes = {
 
 const validOptions = Map({
   guestssid: validator({
-    rules: 'len:[1, 64]'
+    rules: 'len:[1, 31]'
   }),
   password: validator({
-    rules: 'len:[8, 64]'
+    rules: 'len:[8, 31]'
   }),
   upstream: validator({
     rules: 'num:[0, 102400]'
@@ -162,6 +162,7 @@ export const Guest = React.createClass({
           <FormGroup
             label={ _('Guest SSID') }
             required={true}
+            maxLength="31"
             value={getCurrData('guestssid') }
             onChange={this.onUpdate('guestssid') }
 
@@ -181,6 +182,7 @@ export const Guest = React.createClass({
                 label={ _('Password') }
                 required={true}
                 type="password"
+                maxLength="31"
                 className="text"
                 value={getCurrData('password') }
                 onChange={this.onUpdate('password') }

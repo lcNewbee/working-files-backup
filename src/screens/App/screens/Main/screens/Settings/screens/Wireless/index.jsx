@@ -43,13 +43,13 @@ const channelBandwidthOptions = fromJS([
 
 const validOptions = Map({
   password: validator({
-    rules: 'len:[8, 64]'
+    rules: 'len:[8, 31]'
   }),
   vlanid: validator({
     rules: 'num:[2, 4095]'
   }),
   ssid: validator({
-    rules: 'len:[1, 64]'
+    rules: 'len:[1, 31]'
   }),
   upstream: validator({
     rules: 'num:[0, 102400]'
@@ -225,6 +225,7 @@ export const Wireless = React.createClass({
           label={ _('SSID') }
           required={true}
           value={getCurrData('ssid')}
+          maxLength="31"
           id="ssid"
           onChange={this.onUpdateSettings('ssid')}
           {...ssid}
@@ -243,6 +244,7 @@ export const Wireless = React.createClass({
               type="password"
               required={true}
               value={getCurrData('password')}
+              maxLength="31"
               onChange={this.onUpdateSettings('password')}
               {...password}
             /> : ''

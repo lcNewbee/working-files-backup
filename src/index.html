@@ -6,11 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no,maximum-scale=1">
 
   <!-- 避免IE使用兼容模式 -->
-  <meta http-equiv="X-UA-Compatible" content="IE=EDGE"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
   <!-- 启用360浏览器的极速模式(webkit) -->
   <meta name="renderer" content="webkit" />
-  
+
   <link rel="shortcut icon" href="favicon.ico" />
 
   <title>Axilspot</title>
@@ -19,10 +19,20 @@
 </head>
 
 <body>
-  <div id="app" class="app-wrap"></div>
+  <div id="app" class="app-wrap">
+    <div class="modal" role="message">
+      <div class="modal-backdrop"></div>
+      <div class="modal-message">
+        <div class="modal-content">
+          <div class="modal-body">&nbsp;
+            <span class="fa fa-spinner fa-spin" style="color: #0093dd; margin-left: 5px;"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <script id="jspdfScript" src="assets/scripts/jspdf.min.js"></script>
   <script src="scripts/bundle.js"></script>
 </body>
 
 </html>
-

@@ -35,6 +35,11 @@ gulp.task('webpack', shell.task([
   'babel-node tools/buildHtml.js'
 ]))
 
+gulp.task('webpack', shell.task([
+  'webpack --config webpack.config.prod.js',
+  'babel-node tools/buildHtml.js'
+]))
+
 gulp.task('build:assets', function() {
   return gulp.src(paths.src + '/assets/**/*')
     .pipe(gulp.dest(paths.build))
@@ -50,6 +55,7 @@ gulp.task('build', function(callback) {
   runSequence('clean', ['build:assets', 'webpack'], 'build:html', callback);
 });
 
+gulp.task('open:dist', ['build'], shell.task(['npm run open:dist']));
 
 gulp.task('clean:pubac', function(callback) {
   return del([paths.pubNew], {force: true});

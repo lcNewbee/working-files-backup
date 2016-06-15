@@ -71,22 +71,24 @@ const clientsTableOptions = fromJS([
       
       return <span className={classNames}></span>;
     }
-  }, {
-    id: 'authtype',
-    text: _('Authentication'),
-    transform(val, item) {
-      var ret = val;
+  },
+  // {
+  //   id: 'authtype',
+  //   text: _('Authentication'),
+  //   transform(val, item) {
+  //     var ret = val;
 
-      if(val == '0') {
-        ret = 'None';
-      } else if (val === 'portal') {
-        ret = 'Portal';
-      }
-      ret = _(ret);
-      
-      return ret;
-    }
-  }, {
+  //     if(val == '0') {
+  //       ret = 'None';
+  //     } else if (val === 'portal') {
+  //       ret = 'Portal';
+  //     }
+  //     ret = _(ret);
+
+  //     return ret;
+  //   }
+  // },
+   {
     id: 'operationhours',
     text: _('Connect Time'),
     filter: 'connectTime',

@@ -265,10 +265,6 @@ export const Device = React.createClass({
         id: 'softversion',
         text: _('Version')
       }, {
-        id: 'channel',
-        text: _('Channel'),
-        filter: 'translate'
-      }, {
         id: 'operationhours',
         text: _('Uptime'),
         width: '160',

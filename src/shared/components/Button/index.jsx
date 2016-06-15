@@ -6,7 +6,7 @@ const propTypes = {
   iconName: PropTypes.string,
   icon: PropTypes.string,
   className: PropTypes.string,
-  role: PropTypes.oneOf(['success', 'info', 'warning']),
+  role: PropTypes.oneOf(['default', 'primary', 'success', 'info', 'warning']),
   size: PropTypes.oneOf(['sm', 'lg']),
   inverse: PropTypes.bool,
   Component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
@@ -14,6 +14,7 @@ const propTypes = {
 
 const defaultProps = {
   Component: 'button',
+  role: 'default'
 };
 
 class Button extends React.Component {
@@ -30,7 +31,6 @@ class Button extends React.Component {
     if (role) {
       classNames = `${classNames} btn-${role}`;
     }
-    
     
     if (className) {
       classNames = className + ' ' + classNames;
