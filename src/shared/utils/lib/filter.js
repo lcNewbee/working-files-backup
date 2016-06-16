@@ -73,13 +73,19 @@ helper = {
     return ret;
   },
 
-  flowRate: function (rate, unit) {
+  flowRate: function (rate, unitType) {
     var ret = 0;
     var UNIT_GB = 1024 * 1024 * 1024;
     var UNIT_MB = 1024 * 1024;
     var UNIT_KB = 1024;
     var unitSize = coreUtils.toNumber(rate, 'helper.flowRate');
-    var unit = 'B';
+    var unit;
+
+    if(unitType === "KB") {
+      UNIT_GB = 1024 * 1024;
+      UNIT_MB = 1024 ;
+      UNIT_KB = 1;
+    }
     
     if(unitSize > UNIT_GB) {
       ret = unitSize / UNIT_GB;
@@ -92,6 +98,7 @@ helper = {
       unit = 'KB';
     } else {
       ret = unitSize;
+      unit = 'B'
     }
     
     return helper.toDecimal(ret, 1) + unit;

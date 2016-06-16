@@ -15,7 +15,7 @@ import Switchs from 'components/Switchs';
 import * as actions from './actions';
 import reducer from './reducer';
 
-const flowRateFilter = utils.filter('flowRate');
+const flowRateFilter = utils.filter('flowRate:["KB"]');
 
 const clientsTableOptions = fromJS([
   {
