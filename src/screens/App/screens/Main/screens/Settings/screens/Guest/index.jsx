@@ -38,10 +38,10 @@ const propTypes = {
 
 const validOptions = Map({
   guestssid: validator({
-    rules: 'len:[1, 31]'
+    rules: 'remarkTxt:["\'\\\\"]|len:[1, 31]'
   }),
   password: validator({
-    rules: 'len:[8, 31]'
+    rules: 'remarkTxt:["\'\\\\"]|len:[8, 31]'
   }),
   upstream: validator({
     rules: 'num:[0, 102400]'

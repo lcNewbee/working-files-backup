@@ -43,13 +43,13 @@ const channelBandwidthOptions = fromJS([
 
 const validOptions = Map({
   password: validator({
-    rules: 'len:[8, 31]'
+    rules: 'remarkTxt:["\'\\\\"]|len:[8, 31]'
   }),
   vlanid: validator({
     rules: 'num:[2, 4095]'
   }),
   ssid: validator({
-    rules: 'len:[1, 31]'
+    rules: 'remarkTxt:["\'\\\\"]|len:[1, 31]'
   }),
   upstream: validator({
     rules: 'num:[0, 102400]'

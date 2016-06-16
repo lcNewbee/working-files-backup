@@ -196,7 +196,7 @@ var vaildate = {
     for (i = 0; i < len; i++) {
       curChar = banStr.charAt(i);
       if (str.indexOf(curChar) !== -1) {
-        return _("Can't input: '%s'", curChar);
+        return _("Can't input: %s", curChar);
       }
     }
   },
