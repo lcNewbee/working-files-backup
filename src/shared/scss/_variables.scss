@@ -67,9 +67,10 @@ $g-line-height-sm:          1.2 !default; // 16/14
 
 // font family
 $g-font-family-base:        'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$g-font-family-base-en:     "Myriad Set Pro", "Helvetica Neue","Helvetica","Arial",sans-serif;
 
 // font size
-$g-font-size:               14px !default;
+$g-font-size:               12px !default;
 $g-font-size-lg:            ceil(($g-font-size * 1.25)) !default; // ~18px
 $g-font-size-sm:            ceil(($g-font-size * 0.85)) !default; // ~12px
 

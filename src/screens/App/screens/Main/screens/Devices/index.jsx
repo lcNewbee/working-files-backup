@@ -206,117 +206,150 @@ export const Device = React.createClass({
     }.bind(this));
 
   },
-  
 
-  render() {
-    const devicesTableOptions = fromJS([
-      {
-        id: 'devicename',
-        text: _('MAC Address') + '/' + _('Name'),
-        transform: function (val, item) {
-          var deviceMac = item.get('mac');
-          var name = item.get('devicename') || deviceMac;
-          var deviceStatus = item.get('status');
-         
-          if(deviceStatus === 'disable') {
-            return <span>{name}</span>
+  getDevicesTableOptions() {
+    let ret = '';
+    if (this.props.store.getIn(['query', 'devicetype']) === '4') {
+      ret = fromJS([
+          {
+            id: 'devicename',
+            text: _('MAC Address') + '/' + _('Name'),
+            transform: function (val, item) {
+              var deviceMac = item.get('mac');
+
+              return val || deviceMac;
+            }
+          }, {
+            id: 'model',
+            text: _('Model')
+          }, {
+            id: 'softversion',
+            text: _('Version')
+          }, {
+            id: 'operationhours',
+            text: _('Uptime'),
+            filter: 'connectTime',
+          }, {
+            id: 'operate',
+            text: _('Action'),
+            filter: 'translate'
           }
-          
-          return (
-            <span
-              className="link-text"
-              onClick={this.showEditNetwork(deviceMac) }
-              value={deviceMac}
-              title={_('MAC Address') + ': ' + deviceMac}
-            >
-              {name}
-            </span>
-          )
-        }.bind(this)
-      }, {
-        id: 'ip',
-        text: _('IP Address'),
-        transform: function (val, item) {
-          var deviceMac = item.get('mac');
-          var deviceStatus = item.get('status');
-         
-          if(deviceStatus === 'disable') {
-            return <span>{item.get('ip')}</span>
-          }
-          
-          return (
-            <span
-              className="link-text"
-              onClick={this.showEditNetwork(deviceMac) }
-              value={deviceMac}
-              >
-              {item.get('ip') }
-            </span>
-          )
-        }.bind(this)
-      }, {
-        id: 'status',
-        text: _('Online Status'),
-        filter: 'translate'
-      }, {
-        id: 'model',
-        text: _('Model')
-      }, {
-        id: 'softversion',
-        text: _('Version')
-      }, {
-        id: 'operationhours',
-        text: _('Uptime'),
-        width: '160',
-        filter: 'connectTime',
-      }, {
-        id: 'op',
-        text: _('Actions'),
-        width: '280',
-        transform: function (val, item) {
-          var deviceMac = item.get('mac');
-          var deviceStatus = item.get('status');
-          var upgradeBtn = null;
-          
-          if(deviceStatus === 'disable' || this.p) {
-            return null;
-          }
-          
-          if(item.get('newest') === '0') {
-            upgradeBtn = <Button
+      ]);
+
+    } else {
+      ret = fromJS([
+        {
+          id: 'devicename',
+          text: _('MAC Address') + '/' + _('Name'),
+          transform: function (val, item) {
+            var deviceMac = item.get('mac');
+            var name = item.get('devicename') || deviceMac;
+            var deviceStatus = item.get('status');
+
+            if (deviceStatus === 'disable') {
+              return <span>{name}</span>
+            }
+
+            return (
+              <span
+                className="link-text"
+                onClick={this.showEditNetwork(deviceMac) }
+                value={deviceMac}
+                title={_('MAC Address') + ': ' + deviceMac}
+                >
+                {name}
+              </span>
+            )
+          }.bind(this)
+        }, {
+          id: 'ip',
+          text: _('IP Address'),
+          transform: function (val, item) {
+            var deviceMac = item.get('mac');
+            var deviceStatus = item.get('status');
+
+            if (deviceStatus === 'disable') {
+              return <span>{item.get('ip') }</span>
+            }
+
+            return (
+              <span
+                className="link-text"
+                onClick={this.showEditNetwork(deviceMac) }
+                value={deviceMac}
+                >
+                {item.get('ip') }
+              </span>
+            )
+          }.bind(this)
+        }, {
+          id: 'status',
+          text: _('Status'),
+          filter: 'translate'
+        }, {
+          id: 'model',
+          text: _('Model')
+        }, {
+          id: 'softversion',
+          text: _('Version')
+        }, {
+          id: 'operationhours',
+          text: _('Uptime'),
+          filter: 'connectTime',
+        }, {
+          id: 'op',
+          text: _('Actions'),
+          width: '360',
+          transform: function (val, item) {
+            var deviceMac = item.get('mac');
+            var deviceStatus = item.get('status');
+            var upgradeBtn = null;
+
+            if (deviceStatus === 'disable' || this.p) {
+              return null;
+            }
+
+            if (item.get('newest') === '0') {
+              upgradeBtn = <Button
                 onClick={this.onUpgradeDevice.bind(this, deviceMac) }
                 text={_('Upgrade') }
                 size="sm"
                 icon="level-up"
-              />;
-          }
-          
-          
-          return (
-            <div className="action-btns">
-              <Button
-                onClick={this.onRebootDevice.bind(this, deviceMac) }
-                text={_('Reboot') }
-                size="sm"
-                icon="recycle"
-              />
-              <Button
-                onClick={this.onLocateDevice.bind(this, deviceMac) }
-                text={_('Locate') }
-                size="sm"
-                icon="location-arrow"
-              />
-              <Button
-                onClick={this.onResetDevice.bind(this, deviceMac) }
-                text={_('Reset') }
-                size="sm"
-                icon="reply-all"
-              />
-              {upgradeBtn}
-            </div>
-          )
-        }.bind(this)
-      }]);
+                />;
+            }
+
+            return (
+              <div className="action-btns">
+                <Button
+                  onClick={this.onRebootDevice.bind(this, deviceMac) }
+                  text={_('Reboot') }
+                  size="sm"
+                  icon="recycle"
+                  />
+                <Button
+                  onClick={this.onLocateDevice.bind(this, deviceMac) }
+                  text={_('Locate') }
+                  size="sm"
+                  icon="location-arrow"
+                  />
+                <Button
+                  onClick={this.onResetDevice.bind(this, deviceMac) }
+                  text={_('Reset') }
+                  size="sm"
+                  icon="reply-all"
+                  />
+                {upgradeBtn}
+              </div>
+            )
+          }.bind(this)
+        }]);
+    }
+    
+    return ret;
+  },
+
+  render() {
+    const devicesTableOptions = this.getDevicesTableOptions();
     const typeOptions = fromJS([
       {
         value: 'dhcp',

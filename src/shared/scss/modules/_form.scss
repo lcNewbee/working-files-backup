@@ -99,7 +99,8 @@ body input[type=number] {
   
   .icon-search {
     position: absolute;
-    top: 6px;
+    top: 50%;
+    margin-top: -.5em;
     left: 6px;
   }
   

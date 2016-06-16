@@ -69,7 +69,8 @@ const clientsTableOptions = fromJS([
         classNames += '-3';
       }
       
-      return <span className={classNames}></span>;
+      //return <span className={classNames}></span>;
+      return '-' + val;
     }
   },
   // {
@@ -91,8 +92,7 @@ const clientsTableOptions = fromJS([
    {
     id: 'operationhours',
     text: _('Connect Time'),
-    filter: 'connectTime',
-    width: '160',
+    filter: 'connectTime'
   }, {
     id: 'op',
     width: '220',
@@ -208,7 +208,7 @@ export const Clients = React.createClass({
         var isLock = item.get('islock') === 'lock' ? true : false;
          
         return (
-          <div>
+          <div className="action-btns">
             {
               isLock ? (
                 <Button
@@ -246,8 +246,16 @@ export const Clients = React.createClass({
         id: 'devicename',
         text: _('MAC Address') + '/' + _('Name')
       }, {
-        id: 'ssid',
-        text: 'SSID'
+        id: 'wirelessType',
+        text: _('Type'),
+        transform: function(val, item) {
+          var typeMap = {
+            main: _('Main SSID'),
+            guest: _('Guest SSID')
+          };
+
+          return typeMap[val] || _('Main Wireless');
+        }
       }, {
         id: 'op',
         text: _('Actions'),

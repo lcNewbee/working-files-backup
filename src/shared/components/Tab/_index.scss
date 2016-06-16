@@ -1,11 +1,11 @@
 @import "../../scss/variables";
 @import "../../scss/mixins";
+$tab-nav-height:    28px;
 
 .tab-nav {
   position: absolute;
   left: $g-distance;
   right: $g-distance;
-  //background-color: #fff;
   z-index: 2;
 
   ul {
@@ -26,10 +26,11 @@
       background-color: #fff;
       color: $g-main-color-light;
       position: relative;
-      height: 30px;
-      line-height: 30px;
+      height: $tab-nav-height;
+      line-height: $tab-nav-height;
       text-align: center;
       min-width: 80px;
+      font-size: 1.1em;
       //transition: background .3s ease-in, color .1s ease-in;
       
       &:before {
@@ -39,7 +40,7 @@
         left: 0;
         margin-left: -14px;
         height: 0;
-        border-width: 15px 7px;
+        border-width: ($tab-nav-height / 2) 7px;
         border-color:transparent #fff #fff transparent;
         border-style: solid;
         filter: drop-shadow(-3px -2px 2px #ccc);
@@ -53,7 +54,7 @@
         right: 0;
         margin-right: -14px;
         height: 0;
-        border-width: 15px 7px;
+        border-width: ($tab-nav-height / 2) 7px;
         border-color: transparent transparent #fff #fff;
         border-style: solid;
         filter:drop-shadow(3px -2px 2px #ccc);

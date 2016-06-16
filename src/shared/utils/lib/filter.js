@@ -56,24 +56,24 @@ helper = {
 
     // 大于一天
     if (time >= 86400) {
-      ret = transformComplex(days, 'day') + ', ' + transformComplex(hours, 'hour');
+      ret = days + 'd ' + hours + 'h';
 
       // 大于一小时
     } else if (time >= 3600) {
-      ret = transformComplex(hours, 'hour') + ', ' + transformComplex(minutes, 'minute');
+      ret = hours + 'h ' + minutes + 'm';
 
       // 大于1 分钟
     } else if (time >= 60) {
-      ret = transformComplex(minutes, 'minute') + ', ' + transformComplex(seconds, 'second');
+      ret = minutes + 'm ' + seconds + 's';
 
     } else {
-      ret = transformComplex(seconds, 'second');
+      ret = seconds + 's';
     }
 
     return ret;
   },
 
-  flowRate: function (rate) {
+  flowRate: function (rate, unit) {
     var ret = 0;
     var UNIT_GB = 1024 * 1024 * 1024;
     var UNIT_MB = 1024 * 1024;

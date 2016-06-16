@@ -1,5 +1,5 @@
 var coreUtils = require('./core');
-var str;
+var str = {};
 
 function getText(val) {
   var ret = '';
@@ -66,83 +66,97 @@ function isNumber(str) {
   return false;
 }
 
-str = {
+function addClass(oldClass, addClass) {
+  var ret = oldClass;
+
+  return oldClass;
+}
+
+function removeClass(oldClass, removeClass) {
+  var ret = oldClass;
+
+  return oldClass;
+}
+
+coreUtils.extend(str, {
   isAscii: isAscii,
   isInteger: isInteger,
-  isNumber: isNumber
-};
+  isNumber: isNumber,
+  addClass: addClass,
+  removeClass: removeClass,
 
-str.prefixInteger = function(num, length) {
-  var ret = '';
-  var defaultLen;
+  prefixInteger: function(num, length) {
+    var ret = '';
+    var defaultLen;
 
-  if(typeof num === 'string') {
-    defaultLen = num.length;
-  } else if(typeof num === 'number') {
-    defaultLen = ('' + num).length;
+    if(typeof num === 'string') {
+      defaultLen = num.length;
+    } else if(typeof num === 'number') {
+      defaultLen = ('' + num).length;
 
-  } else {
-    return ret
+    } else {
+      return ret
+    }
+
+    if(!length || length < defaultLen) {
+      length = defaultLen;
+    }
+
+    return (Array(length).join('0') + num).slice(-length);
+  },
+
+  toDecimal: function(x, len) { 
+    var f = parseFloat(x);
+    var UNIT = Math.pow(10, len)
+    
+    if (isNaN(f)) { 
+      return;
+    }
+    f = Math.round(x * UNIT) / UNIT;
+    
+    return f; 
+  },
+
+  toCamel: function(str) {
+    var re = /^(\w)/;
+
+    // 如果为空，null
+    if (typeof str !== 'string' || str === '') {
+      return '';
+    }
+
+    return str.replace(re, function($0) {
+      return $0.toUpperCase();
+    });
+  },
+
+  format: [].reduce ? function() {
+    var args = [].slice.call(arguments);
+    var initial = args.shift();
+
+    if(typeof initial !== 'string' || initial === '') {
+      return '';
+    }
+
+    function replacer(text, replacement) {
+      replacement = getText(replacement);
+      return text.replace('%s', replacement);
+    }
+    return args.reduce(replacer, initial);
+  } : __format,
+
+  getExtension: function(path) {
+    var pathName = coreUtils.toString(path, 'str.getExtension')
+    var startIndex = path.lastIndexOf(".");
+    var ret = '';
+    
+    if(startIndex !== -1) {
+      ret = path.substring(startIndex + 1).toLowerCase();
+    }
+    
+    return ret;
   }
-
-  if(!length || length < defaultLen) {
-    length = defaultLen;
-  }
-
-  return (Array(length).join('0') + num).slice(-length);
-}
-
-str.toDecimal = function(x, len) { 
-  var f = parseFloat(x);
-  var UNIT = Math.pow(10, len)
-  
-  if (isNaN(f)) { 
-    return;
-  }
-  f = Math.round(x * UNIT) / UNIT;
-  
-  return f; 
-}
-
-str.toCamel = function(str) {
-  var re = /^(\w)/;
-
-  // 如果为空，null
-  if (typeof str !== 'string' || str === '') {
-    return '';
-  }
-
-  return str.replace(re, function($0) {
-    return $0.toUpperCase();
-  });
-};
-
-str.format = [].reduce ? function() {
-  var args = [].slice.call(arguments);
-  var initial = args.shift();
-
-  if(typeof initial !== 'string' || initial === '') {
-    return '';
-  }
-
-  function replacer(text, replacement) {
-    replacement = getText(replacement);
-    return text.replace('%s', replacement);
-  }
-  return args.reduce(replacer, initial);
-} : __format;
-
-str.getExtension = function(path) {
-  var pathName = coreUtils.toString(path, 'str.getExtension')
-  var startIndex = path.lastIndexOf(".");
-  var ret = '';
-  
-  if(startIndex !== -1) {
-    ret = path.substring(startIndex + 1).toLowerCase();
-  }
-  
-  return ret;
-}
+});
 
 // exports
 if (typeof module === "object" && typeof module.exports === "object" ) {

@@ -26,6 +26,7 @@
                 "rssi": "86",
                 "authtype": "portal",
                 "operationhours": "23444",
+                "wirelessType": "main",
                 "islock": "lock"
             },
             {
@@ -40,6 +41,7 @@
                 "rssi": "76",
                 "authtype": "portal",
                 "operationhours": "6600",
+                "wirelessType": "main",
                 "islock": "unlock"
             },
             {
@@ -55,6 +57,7 @@
                 "rssi": "70",
                 "authtype": "0",
                 "operationhours": "6600",
+                "wirelessType": "main",
                 "islock": "unlock"
             },
             {
@@ -69,6 +72,7 @@
                 "rssi": "60",
                 "authtype": "portal",
                 "operationhours": "6600",
+                "wirelessType": "guest",
                 "islock": "unlock"
             }
         ]

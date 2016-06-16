@@ -5,13 +5,15 @@
   border-collapse: collapse;
 
   th, td {
-    padding: 6px 6px;
-    border: 1px solid #dedede;
+    padding: 4px 6px;
+    border-top: 1px solid #dedede;
+    border-bottom: 1px solid #dedede;
     text-align: left;
   }
   th {
     background: #666;
     color: #fff;
+    font-weight: 400;
   }
   
   .empty {
@@ -25,31 +27,32 @@
   .table-loading {
     position: absolute;
     top: 30px;
-    width: 100%;
     bottom: 0;
+    width: 100%;
     text-align: center;
     
     .backdrop {
       position: absolute;
       top: 0;
-      width: 100%;
       bottom: 0;
       z-index: 1;
+      width: 100%;
       background: #000;
+
       @include opacity(0);
     }
     .table-loading-content {
       position: relative;
-      margin: 10px auto;
       z-index: 2;
+      margin: 10px auto;
       padding: 10px;
-      background-color: #f4f4f4;
       width: 60px;
       border-radius: 6px;
+      background-color: #f4f4f4;
       
       .fa {
-        font-size: 20px;
         color: $g-brand-primary;
+        font-size: 20px;
       }
     }
     

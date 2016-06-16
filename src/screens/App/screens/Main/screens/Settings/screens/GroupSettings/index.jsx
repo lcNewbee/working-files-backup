@@ -165,7 +165,7 @@ export const GroupSettings = React.createClass({
           />;
         }
         return (
-          <div>
+          <div className="action-btns">
             <Button
               onClick={this.onEditGroup.bind(this, item.get('groupname'))}
               icon="edit"
@@ -210,7 +210,7 @@ export const GroupSettings = React.createClass({
           deviceMac = item.get('mac');
          
           return (
-            <div>
+            <div className="action-btns">
               <input
                 type="checkbox"
                 value={deviceMac}

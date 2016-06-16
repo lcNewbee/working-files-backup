@@ -20,7 +20,7 @@ const defaultProps = {
 class Button extends React.Component {
 
   render() {
-    let { Component, icon, size, role, className, loading} = this.props;
+    let { Component, icon, size, role, className, loading, text} = this.props;
     
     let classNames = `btn`;
     
@@ -47,8 +47,7 @@ class Button extends React.Component {
             <Icon name="spinner" spin={true} style={{marginLeft: '3px'}}/>
           ) : <Icon name={icon} />
         }
-        {this.props.text}
-        
+        {text}
       </Component>
     );
   }

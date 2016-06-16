@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import utils from 'utils';
+import classNames from 'classnames';
 import { bindActionCreators } from 'redux';
 import {fromJS, Map, List} from 'immutable';
 import { connect } from 'react-redux';
@@ -24,6 +25,7 @@ const languageOptions = List(b28n.getOptions().supportLang).map((item) => {
     label: b28n.langMap[item] || 'English'
   }
 }).toJS();
+
 const validOptions = Map({
   oldpasswd: validator({
     rules: 'len:[1, 64]'
