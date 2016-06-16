@@ -70,7 +70,7 @@ const clientsTableOptions = fromJS([
       }
       
       //return <span className={classNames}></span>;
-      return '-' + val;
+      return val;
     }
   },
   // {
