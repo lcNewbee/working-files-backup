@@ -155,6 +155,7 @@ export const GroupSettings = React.createClass({
     }, {
       'id': 'op',
       'text': msg.action,
+      width: '200',
       transform: function(val, item) {
         if(item.get('groupname') === 'Default') {
           return <Button
@@ -253,6 +254,7 @@ export const GroupSettings = React.createClass({
           <Button
             icon="plus"
             className="fr"
+            role="primary"
             onClick={this.onAddGroup}
             text={msg.add}
           />

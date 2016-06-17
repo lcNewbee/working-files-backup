@@ -11,15 +11,13 @@ import Modal from 'components/Modal';
 import * as actions from './actions';
 import * as appActions from 'actions/app';
 
-
-const BRAND_TEXT =  _('Management');
-
 export default class Main extends Component {
   constructor(props) {
     super(props)
     
     this.state = {isShow: false};
     
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.showUserPopOver = this.showUserPopOver.bind(this);
     this.onRefresh = this.onRefresh.bind(this);
     

@@ -5,10 +5,12 @@ const propTypes = {
   size: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   total: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   currPage: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  lastPage: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  nextPage: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 const defaultProps = {
-  curIndex: 1
+  currPage: 1
 };
 
 class Pagination extends Component {
