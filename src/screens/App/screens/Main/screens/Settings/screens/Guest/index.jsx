@@ -49,7 +49,7 @@ const validOptions = Map({
   downstream: validator({
     rules: 'num:[0, 102400]',
   }),
-  
+
   vlanid: validator({
     rules: 'num:[2, 4095]'
   }),
@@ -63,13 +63,13 @@ export const Guest = React.createClass({
   componentWillMount() {
     this.props.fetchGuestSettings();
   },
-  
+
   componentDidUpdate(prevProps) {
     if(prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
       this.props.fetchGuestSettings();
     }
   },
-  
+
   componentWillUnmount() {
     this.props.resetVaildateMsg();
   },
@@ -77,7 +77,7 @@ export const Guest = React.createClass({
   onUpdate(name) {
     return function (data) {
       let settings = {};
-      
+
       settings[name] = data.value
       this.props.changeGuestSettings(settings);
     }.bind(this)
@@ -102,18 +102,18 @@ export const Guest = React.createClass({
       }
     }.bind(this));
   },
-  
+
   getCurrData(name) {
     return this.props.store.getIn(['data', 'curr', name]);
   },
-  
+
   getGroupOptions() {
     return this.props.store
       .getIn(['data', 'list'])
       .map(function(item, i) {
         var groupname = item.get('groupname');
         var label = groupname
-        
+
         if(groupname === 'Default') {
           label = _('Ungrouped Devices');
         }
@@ -129,6 +129,7 @@ export const Guest = React.createClass({
     const groupOptions = this.getGroupOptions();
     const {password, guestssid, upstream, downstream, vlanid} = this.props.validateOption;
     const getCurrData = this.getCurrData;
+    const noControl = this.props.app.get('noControl');
 
     let settngClassName = 'none';
 
@@ -198,21 +199,21 @@ export const Guest = React.createClass({
             checked={ getCurrData('portalenable') == '1'}
             onChange={this.onUpdate('portalenable') }
           />
-          
+
           <FormGroup
             label={_('VLAN')}
             value={getCurrData('vlanid')}
             required={getCurrData('vlanenable') == '1'}
             disabled={getCurrData('vlanenable') != '1'}
-          
+
             {...vlanid}
-          > 
+          >
             <FormInput
               type="checkbox"
               checked={getCurrData('vlanenable') == '1'}
               onChange={this.onUpdate('vlanenable')}
             />
-            
+
             { _('Use VLAN ID:') }
             <FormInput
               type="text"
@@ -224,7 +225,7 @@ export const Guest = React.createClass({
             />
             <span className="help">(2 - 4095)</span>
           </FormGroup>
-          
+
           <FormGroup
             label={msg.upSpeed}
             required={true}
@@ -248,7 +249,7 @@ export const Guest = React.createClass({
               onChange={this.onUpdate('upstream')}
             />
           </FormGroup>
-          
+
           <FormGroup
             type="number"
             label={msg.downSpeed}
@@ -276,15 +277,19 @@ export const Guest = React.createClass({
             />
           </FormGroup>
         </div>
-        
+
         <FormGroup role="save">
-          <Button
-            type='button'
-            text={_('Save') }
-            icon="save"
-            role="primary"
-            onClick={this.onSave}
-            />
+          {
+            noControl ? null : (
+              <Button
+                type='button'
+                text={_('Save') }
+                icon="save"
+                role="primary"
+                onClick={this.onSave}
+                />
+            )
+          }
         </FormGroup>
       </div>
     );

@@ -70,66 +70,66 @@ const propTypes = {
 
 export const Wireless = React.createClass({
   mixins: [PureRenderMixin],
-  
+
   componentWillMount() {
     this.props.fetchWifiSettings();
   },
-  
+
   componentDidUpdate(prevProps) {
     if(prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
       this.props.fetchWifiSettings();
     }
   },
-  
+
   componentWillUnmount() {
     this.props.resetVaildateMsg();
   },
-  
+
   onUpdate(name) {
     return function(item) {
       let data = {};
-      
+
       data[name] = item.value;
       this.props.changeWifiSettings(data);
     }.bind(this)
   },
-  
+
   onChangeGroup(item) {
     this.props.changeWifiGroup(item.value);
   },
-  
+
   onChangeEncryption(item) {
     const data = {
       encryption: item.value
     };
-    
+
     this.props.changeWifiSettings(data);
   },
-  
+
   getChannelsValue(country) {
     var ret = parseInt(this.getCurrData('channel'));
     var maxChannel = this.getChannelsOptions(country).length - 1;
-    
+
     if(ret > maxChannel) {
       ret = maxChannel.toString();
     }
-    
+
     return ret + '';
   },
-  
+
   onUpdateSettings(name) {
     return function(item) {
       const data = {};
       data[name] = item.value;
-      
+
       if(name === 'country') {
         data.channel = this.getChannelsValue(item.value);
       }
-      
+
       this.props.changeWifiSettings(data);
     }.bind(this)
   },
-  
+
   onSave() {
     this.props.validateAll(function(invalid) {
       if(invalid.isEmpty()) {
@@ -137,18 +137,18 @@ export const Wireless = React.createClass({
       }
     }.bind(this));
   },
-  
+
   getCurrData(name) {
     return this.props.store.getIn(['data', 'curr', name]);
   },
-  
+
   getGroupOptions() {
     return this.props.store
       .getIn(['data', 'list'])
       .map(function(item, i) {
         var groupname = item.get('groupname');
         var label = groupname
-        
+
         if(groupname === 'Default') {
           label = _('Ungrouped Devices');
         }
@@ -159,7 +159,7 @@ export const Wireless = React.createClass({
       })
       .toJS();
   },
-  
+
   getCountryOptions() {
     return channelsList.map(function(item) {
       return {
@@ -168,7 +168,7 @@ export const Wireless = React.createClass({
       }
     }).toJS();
   },
-  
+
   getChannelsOptions(currCountry) {
     let i, len, channelsRange;
     let channelsOptions = [
@@ -180,7 +180,7 @@ export const Wireless = React.createClass({
     let channelsOption = channelsList.find(function(item) {
       return item.country === currCountry;
     });
-    
+
     if(channelsOption) {
       channelsRange = channelsOption['2.4g'].split('-');
       i = parseInt(channelsRange[0], 10);
@@ -189,17 +189,17 @@ export const Wireless = React.createClass({
       i = 1;
       len = 13;
     }
-    
+
     for(i; i <= len ; i++) {
       channelsOptions.push({
         value: i + '',
         label: i + ''
       });
     }
-    
+
     return channelsOptions;
   },
-  
+
   render() {
     const {
         password, vlanid, ssid, upstream, downstream
@@ -208,6 +208,8 @@ export const Wireless = React.createClass({
     const countryOptions = this.getCountryOptions();
     const getCurrData =  this.getCurrData;
     const channelsOptions = this.getChannelsOptions(getCurrData('country'));
+    const noControl = this.props.app.get('noControl');
+
     return (
       <div>
         <h3>{ _('Current Group') }</h3>
@@ -219,7 +221,7 @@ export const Wireless = React.createClass({
           id="groupname"
           onChange={this.onChangeGroup}
         />
-        
+
         <h3>{_('Basic Configuration')}</h3>
         <FormGroup
           label={ _('SSID') }
@@ -254,9 +256,9 @@ export const Wireless = React.createClass({
           value={getCurrData('vlanid')}
           required={getCurrData('vlanenable') == '1'}
           disabled={getCurrData('vlanenable') != '1'}
-         
+
           {...vlanid}
-        > 
+        >
           <FormInput
             type="checkbox"
             checked={getCurrData('vlanenable') == '1'}
@@ -273,7 +275,7 @@ export const Wireless = React.createClass({
           />
           <span className="help">(2 - 4095)</span>
         </FormGroup>
-        
+
         <h3>{_('Wireless Channel')}</h3>
         <FormGroup
           type="select"
@@ -296,7 +298,7 @@ export const Wireless = React.createClass({
             onChange={this.onUpdateSettings('channelsBandwidth')}
           />
         </FormGroup>
-        
+
         <h3>{_('Bandwidth Control')}</h3>
         <FormGroup
           label={msg.upSpeed}
@@ -321,7 +323,7 @@ export const Wireless = React.createClass({
             onChange={this.onUpdate('upstream')}
           />
         </FormGroup>
-        
+
         <FormGroup
           type="number"
           label={msg.downSpeed}
@@ -348,16 +350,20 @@ export const Wireless = React.createClass({
             onChange={this.onUpdate('downstream')}
           />
         </FormGroup>
-        
+
         <div className="form-group form-group-save">
           <div className="form-control">
-             <Button
-              type='button'
-              text={_('Save')}
-              icon="save"
-              role="primary"
-              onClick={this.onSave}
-            />
+            {
+              noControl ? null : (
+                <Button
+                  type='button'
+                  text={_('Save')}
+                  icon="save"
+                  role="primary"
+                  onClick={this.onSave}
+                />
+              )
+            }
           </div>
         </div>
       </div>

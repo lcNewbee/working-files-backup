@@ -11,7 +11,7 @@ import {Search} from 'components/Form';
 import Select from 'components/Select';
 import Switchs from 'components/Switchs';
 
-// custom 
+// custom
 import * as actions from './actions';
 import reducer from './reducer';
 
@@ -42,7 +42,7 @@ const clientsTableOptions = fromJS([
     transform: function(val, item) {
       var upRate = flowRateFilter.transform(item.get('upstream'));
       var downRate = flowRateFilter.transform(item.get('downstream'));
-      
+
       return upRate + '/' + downRate;
     }
   }, {
@@ -51,14 +51,14 @@ const clientsTableOptions = fromJS([
     transform: function(val, item) {
       var intVal = parseInt(val, 10);
       var classNames = 'Icon Icon-block Icon-wifi';
-      
+
       // 判断加密范式
       if(item.get('encryption') === 'none') {
         classNames += '-nopass';
       } else {
         classNames += '-pass';
       }
-      
+
       if(intVal > 85) {
         classNames += '-0';
       } else if(intVal > 75) {
@@ -68,7 +68,7 @@ const clientsTableOptions = fromJS([
       } else {
         classNames += '-3';
       }
-      
+
       //return <span className={classNames}></span>;
       return val;
     }
@@ -135,37 +135,37 @@ export const Clients = React.createClass({
   componentWillMount() {
     this.handleSearch()
   },
-  
+
   componentDidUpdate(prevProps) {
     if(prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
       this.handleSearch();
     }
   },
-  
+
   componentWillUnmount() {
     this.props.leaveClientsScreen();
   },
-  
+
   handleSearch() {
     this.props.fetchClients();
   },
-  
+
   handleChangeQuery(data, needSearch) {
     this.props.changeClientsQuery(data);
-    
+
     if(needSearch) {
       this.handleSearch();
     }
   },
-  
+
   handleActions(actionQuery, needSave) {
     this.props.changeClientActionQuery(actionQuery);
-    
+
     if(needSave) {
       this.props.saveClientsAction();
     }
   },
-  
+
   onAction(mac, action) {
     this.handleActions({
       action,
@@ -193,7 +193,7 @@ export const Clients = React.createClass({
       page: 1
     }, true);
   },
-  
+
   onPageChange(i) {
     this.handleChangeQuery({
       page: i
@@ -201,12 +201,13 @@ export const Clients = React.createClass({
   },
 
   render() {
+    const noControl = this.props.app.get('noControl');
     // 添加操作项
-    const options = clientsTableOptions.setIn([-1, 'transform'],
+    let options = clientsTableOptions.setIn([-1, 'transform'],
       function(val, item) {
         var deviceMac = item.get('mac');
         var isLock = item.get('islock') === 'lock' ? true : false;
-         
+
         return (
           <div className="action-btns">
             {
@@ -228,7 +229,7 @@ export const Clients = React.createClass({
                 />
               )
             }
-            
+
             <Button
               icon="repeat"
               size="sm"
@@ -240,7 +241,7 @@ export const Clients = React.createClass({
         )
       }.bind(this)
     );
-    
+
     const blockOption = fromJS([
       {
         id: 'devicename',
@@ -262,7 +263,7 @@ export const Clients = React.createClass({
         transform: function(val, item) {
           var deviceMac = item.get('mac');
           var isLock = item.get('islock') === 'lock' ? true : false;
-          
+
           return (
             <Button
               icon="unlock"
@@ -276,9 +277,14 @@ export const Clients = React.createClass({
       }
     ]);
     let tableOptions = options;
-    
+
     if(this.props.query.get('type') == '4') {
       tableOptions = blockOption;
+    }
+
+    if(noControl) {
+      options = options.delete(-1);
+      tableOptions = tableOptions.delete(-1);
     }
 
     return (
@@ -314,7 +320,7 @@ export const Clients = React.createClass({
           onPageChange={this.onPageChange}
           loading={this.props.fetching}
         />
-        
+
       </div>
     );
   }

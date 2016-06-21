@@ -35,36 +35,36 @@ const validOptions = Map({
 // 原生的 react 页面
 export const GroupSettings = React.createClass({
   mixins: [PureRenderMixin],
-  
+
   componentWillMount() {
     this.props.fetchDeviceGroups();
     this.props.fetchGroupDevices();
   },
-  
+
   componentDidUpdate(prevProps) {
     if(prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
       this.props.fetchDeviceGroups();
       this.props.fetchGroupDevices();
     }
   },
-  
+
   componentWillUnmount() {
     this.props.resetVaildateMsg();
   },
-  
+
   getEditVal(key) {
     var ret = '';
-    
+
     if(this.props.edit) {
       ret = this.props.edit.get(key);
     }
     return ret;
   },
-  
+
   onSelectDevice(e) {
     let elem = e.target;
     let mac = elem.value;
-    
+
     if(elem.checked) {
       this.props.selectDevice(mac);
     } else {
@@ -82,21 +82,21 @@ export const GroupSettings = React.createClass({
 
   onDeleteGroup(groupname) {
     var comfri_text = _('Are you sure delete group: %s?', groupname);
-    
+
     if(confirm(comfri_text)) {
       this.props.deleteDeviceGroup(groupname)
     }
   },
-  
+
   onChangeGroupSettings(name) {
     return function(data) {
        var editObj = {};
-       
+
        editObj[name] = data.value;
        this.props.changeEditGroup(editObj);
      }.bind(this)
   },
-  
+
   onSaveDeviceGroup() {
     if(this.props.actionType === 'look') {
       this.onCloseEditDialog();
@@ -106,44 +106,44 @@ export const GroupSettings = React.createClass({
       var editData = this.props.edit.toJS();
       var groupList = this.props.data.get('list');
       var hasSameName = false;
-      
+
       if(invalid.isEmpty()) {
-        
+
         // 验证组名是否与其它组相同
         if(editData.groupname !== editData.orignName) {
           hasSameName = !!groupList.find(function(group) {
             return group.get('groupname').trim() === editData.groupname.trim();
           });
         }
-        
+
         if(hasSameName) {
           alert(_("Group name '%s' is already in use", editData.groupname));
         } else {
           this.props.saveDeviceGroup();
         }
       }
-      
+
     }.bind(this))
-    
+
   },
-  
+
   createLookFunc(groupname) {
     return function() {
       this.props.lookGroupDevices(groupname);
     }.bind(this)
   },
-  
+
   onCloseEditDialog() {
     this.props.resetVaildateMsg();
     this.props.removeEditDeviceGroup();
   },
-  
+
   getGroupTableOptions() {
-    return [{
+    let ret = fromJS([{
       'id': 'groupname',
       'text': msg.groupname,
       transform: function(val) {
-        
+
         if(val === 'Default') {
           val = _('Ungrouped Devices');
         }
@@ -181,15 +181,22 @@ export const GroupSettings = React.createClass({
               text={msg.delete}
               size="sm"
             />
-              
+
           </div>
         )
       }.bind(this)
-    }];
+    }]);
+    const noControl = this.props.app.get('noControl');
+
+    if(noControl) {
+      ret = ret.delete(-1);
+    }
+
+    return ret;
   },
-  
+
   getDevicesTableOptions() {
-    let ret = [{
+    let ret = fromJS([{
         'id': 'devicename',
         'text': _('MAC Address') + '/' + _('Name'),
         transform: function(val, item) {
@@ -207,9 +214,9 @@ export const GroupSettings = React.createClass({
         transform: function(val, item) {
           var deviceMac;
           var selectedDevices = this.props.edit.get('devices');
-         
+
           deviceMac = item.get('mac');
-         
+
           return (
             <div className="action-btns">
               <input
@@ -221,8 +228,12 @@ export const GroupSettings = React.createClass({
             </div>
           )
         }.bind(this)
-      }];
-    
+      }]);
+    const noControl = this.props.app.get('noControl');
+
+    if(noControl) {
+      ret = ret.delete(-1);
+    }
     return ret;
   },
 
@@ -231,8 +242,9 @@ export const GroupSettings = React.createClass({
     const groupTableOptions = this.getGroupTableOptions();
     const devicesTableOptions = this.getDevicesTableOptions();
     const isLook = this.props.actionType === 'look';
+    const noControl = this.props.app.get('noControl');
     let modalTitle = this.getEditVal('orignName');
-    
+
     if(this.props.actionType === 'add') {
       modalTitle = msg.add;
     } else if (this.props.actionType === 'edit') {
@@ -240,7 +252,7 @@ export const GroupSettings = React.createClass({
     } else if(this.props.actionType === 'look') {
       modalTitle = _('Ungrouped Devices');
     }
-    
+
     return (
       <div>
         <h3>{_('Group List')}</h3>
@@ -251,15 +263,20 @@ export const GroupSettings = React.createClass({
           list={this.props.data.get('list')}
         />
         <div className="form-footer">
-          <Button
-            icon="plus"
-            className="fr"
-            role="primary"
-            onClick={this.onAddGroup}
-            text={msg.add}
-          />
+          {
+            noControl ? null : (
+              <Button
+                icon="plus"
+                className="fr"
+                role="primary"
+                onClick={this.onAddGroup}
+                text={msg.add}
+              />
+            )
+          }
+
         </div>
-        
+
         <Modal
           isShow={this.props.edit ? true : false}
           title={modalTitle}

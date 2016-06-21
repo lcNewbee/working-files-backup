@@ -53,13 +53,16 @@
   "Saving": "正在保存",
   "IP or MAC Address": "IP或MAC地址",
   "Group": "组",
-  
+  "start": "开始",
+  "success": "成功",
+  "failed": "失败",
+
   "Management": "管理系统",
   "Please Login": "请登录",
   "Login": "登录",
-  
+
   "Setup Wizard": "设置向导",
-  
+
   "STATISTICS": "热点统计",
   "Statistics": "热点统计",
   "Statistics Info": "统计信息",
@@ -82,7 +85,7 @@
   "Producer": "生产商",
   "REFRESH": "刷新",
   "Offline Ap List": "离线AP列表",
-  
+
   "DEVICES": "设备",
   "Devices Info": "设备信息",
   "Time": "时间",
@@ -115,52 +118,52 @@
   "See": "查看",
   "See More": "查看更多",
   "None": "无",
-  
+
   "CLIENTS": "客户端",
   "Clients Info": "客户端信息",
   "LOCKED": "已封锁",
-  
+
   "LOGS": "日志",
   "Logs": "日志",
   "Logs Info": "日志信息",
   "Type": "类型",
   "Info": "信息",
   "Describe": "描述",
-  
+
   "REPORTS": "统计报表",
   "Reports": "统计报表",
   "Exporting The Reports": "导出报表",
-  
+
   "SETTINGS": "设置",
   "Settings": "设置",
   "Basic Configuration": "基本配置",
   "Advanced Options": "高级配置",
-  
+
   "Current Group": "当前组",
   "Groups": "组设置",
   "Group List": "组列表",
   "Are you sure delete group: %s?": "你确定要删除组：%s?",
   "Group name '%s' is already in use": "组名称 “%s” 已经被使用",
   "Ungrouped Devices": "未分组设备",
-  
+
   "Bandwidth Control": "流量控制",
   "QoS Settings": "流量控制设置",
-  
+
   "Wireless": "无线设置",
   "Wireless Channel": "无线信道",
   "ALL": "全部",
   "INSIDE": "室内接入",
   "PIONT TO PIONT": "点对点接入",
   "OUTSIDE": "室外接入",
-  
+
   "Online": "在线",
   "Offline": "离线",
   "auto": "自动",
-  
+
   "WIRELESS": "无线",
   "WIRED": "有线",
   "GUEST": "来宾",
-  
+
   "Associated AP": "关联 AP",
   "Up Speed": "上传流量",
   "Down Speed": "下载流量",
@@ -170,17 +173,17 @@
   "Reconnect": "重新连接",
   "Lock": "立即封锁",
   "Unlock": "解除封锁",
-  
+
   "Group Name": "组名称",
   "Remarks": "备注",
   "Select Group": "选择组",
-  
+
   "Encryption": "加密方式",
   "NONE": "不加密",
   "STRONG": "强加密",
   "Use VLAN ID:": "使用 VLAN ID：",
   "Channel Bandwidth": "信道频宽",
-  
+
   "Portal Settings": "Portal设置",
   "Portal Name": "Portal名称",
   "Auth Rederict URL": "认证后跳转链接",
@@ -191,7 +194,7 @@
   "Upload Image": "上传图片",
   "Select 1-3 slide pictures of dimension 640px*640px": "选择1-3张幻灯片图片，宽高尺寸为640px*640px",
   "Please select a upload image": "请选择一张要上传的图片",
-  
+
   "Guest": "来宾",
   "Guest Settings": "来宾设置",
   "Enable Guest": "启用来宾账号",
@@ -201,7 +204,7 @@
   "Enable": "启用",
   "DHCP Range": "DHCP范围",
   "Subnet Mask": "子网掩码",
-  
+
   "Admin": "管理员",
   "System Settings": "系统设置",
   "Change Password": "修改密码",
@@ -211,7 +214,7 @@
   "Select Language": "选择显示语言",
   "Old password error!": "旧密码错误!",
   "New password and confirm password must match": "新密码与确认密码必须一致",
-  
+
   "Thank you for purchasing Axilspot enterprise-class products, you will complete the configuration for management system in minutes": "非常感谢你购买Axilspot企业级产品，您将在几分钟内完成管理系统配置",
   "Please provide an administrator password to login to Axilspot management system": "请提供一个管理员密码来登录 Axilspot 管理系统",
   "Please confirm your configuration below. Click back to modify the configuration or click finish to activate the configuration. After finish you will skip to management interface.": "请再确定你的以下配置，点击返回修改配置或完成来激活设置，完成后你将会跳转到管理界面"

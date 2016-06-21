@@ -44,9 +44,28 @@
 				"logaction":	"reboot",
 				"loginfo":	{
 					"mac":	"11:22:ac:ff:07:01",
-					"name":	"sdfdsf"
+					"name":	"sdfdsf",
+          "status":"0"
 				}
 			}, {
+				"time":	"2016-6-16 16:51:0",
+				"type":	"ap",
+				"logaction":	"reboot",
+				"loginfo":	{
+					"mac":	"11:22:ac:ff:07:01",
+					"name":	"sdfdsf",
+          "status":"1"
+				}
+			},{
+				"time":	"2016-6-16 16:51:0",
+				"type":	"ap",
+				"logaction":	"reboot",
+				"loginfo":	{
+					"mac":	"11:22:ac:ff:07:01",
+					"name":	"sdfdsf",
+          "status":"2"
+				}
+			},{
 				"time":	"2016-6-16 16:51:56",
 				"type":	"group",
 				"logaction":	"add",

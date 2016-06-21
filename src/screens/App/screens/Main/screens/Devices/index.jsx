@@ -75,13 +75,13 @@ export const Device = React.createClass({
   componentWillMount() {
     this.handleSearch()
   },
-  
+
   componentDidUpdate(prevProps) {
     if(prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
       this.handleSearch();
     }
   },
-  
+
   componentWillUnmount() {
     this.props.resetVaildateMsg();
     this.props.leaveDevicesScreen();
@@ -132,7 +132,7 @@ export const Device = React.createClass({
   },
 
   /**
-   * 
+   *
    */
   onResetDevice(mac) {
     var msg_text = _('Are you sure reset device: %s?', mac);
@@ -149,12 +149,12 @@ export const Device = React.createClass({
     }
   },
   onLocateDevice(mac) {
-    
+
     this.handleAction(mac, 'locate');
   },
   onUpgradeDevice(mac) {
     var msg_text = _('Upgrade need reboot Device, are you sure upgrade device: %s?', mac);
-    
+
     if (confirm(msg_text)) {
       this.handleAction(mac, 'upgrade');
     }
@@ -208,7 +208,9 @@ export const Device = React.createClass({
   },
 
   getDevicesTableOptions() {
+    const noControl = this.props.app.get('noControl');
     let ret = '';
+
     if (this.props.store.getIn(['query', 'devicetype']) === '4') {
       ret = fromJS([
           {
@@ -246,7 +248,7 @@ export const Device = React.createClass({
             var name = item.get('devicename') || deviceMac;
             var deviceStatus = item.get('status');
 
-            if (deviceStatus === 'disable') {
+            if (deviceStatus === 'disable' || noControl) {
               return <span>{name}</span>
             }
 
@@ -268,7 +270,7 @@ export const Device = React.createClass({
             var deviceMac = item.get('mac');
             var deviceStatus = item.get('status');
 
-            if (deviceStatus === 'disable') {
+            if (deviceStatus === 'disable' || noControl) {
               return <span>{item.get('ip') }</span>
             }
 
@@ -305,7 +307,7 @@ export const Device = React.createClass({
             var deviceStatus = item.get('status');
             var upgradeBtn = null;
 
-            if (deviceStatus === 'disable' || this.p) {
+            if (deviceStatus === 'disable' || noControl) {
               return null;
             }
 
@@ -344,7 +346,11 @@ export const Device = React.createClass({
           }.bind(this)
         }]);
     }
-    
+
+    if(noControl) {
+      ret = ret.delete(-1);
+    }
+
     return ret;
   },
 

@@ -49,7 +49,7 @@ const propTypes = {
 
 export const Portal = React.createClass({
   mixins: [PureRenderMixin],
-  
+
   getInitialState() {
     return {
       imageStatus1: 'default',
@@ -57,30 +57,30 @@ export const Portal = React.createClass({
       imageStatus3: 'default'
     }
   },
-  
+
   componentWillMount() {
     this.props.fetchPortalSettings();
   },
-  
+
   componentDidUpdate(prevProps) {
     if(prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
       this.props.fetchPortalSettings();
     }
   },
-  
+
   componentWillUnmount() {
     this.props.resetVaildateMsg();
   },
-   
+
   onUpdateSettings(name) {
     return function(data, e) {
       let settings = {};
-      
+
       settings[name] = data.value;
       this.props.changePortalSettings(settings);
     }.bind(this)
   },
-  
+
   onSave() {
     this.props.validateAll(function (invalid) {
       if (invalid.isEmpty()) {
@@ -88,66 +88,66 @@ export const Portal = React.createClass({
       }
     }.bind(this));
   },
-  
+
   onChangeImage(i) {
     return function(e) {
       var data = {};
       var filePath = e.target.value;
       var extension = utils.getExtension(filePath);
-      
+
       if(!filePath) {
         alert(_('Please select a upload image'));
         return ;
       }
-      
+
       if('png,gif,jpg,bmp'.indexOf(extension) === -1) {
         alert(_('Please select a upload image'));
         e.target.value = '';
         this.restImageStatus(i);
         return ;
       }
-      
+
       data['imageStatus' + i] = 'selected';
       this.setState(utils.extend({}, this.state, data));
     }.bind(this)
   },
-  
+
   restImageStatus(i) {
     var input = document.getElementById('filename' + i);
     var data = {};
-        
+
     data['imageStatus' + i] = 'default';
     this.setState(utils.extend({}, this.state, data));
     input.value = '';
   },
-  
+
   imageUploading(i) {
     var data = {};
-        
+
     data['imageStatus' + i] = 'loading';
     this.setState(utils.extend({}, this.state, data));
   },
-  
+
   onUploadImage(i) {
     const that = this;
-    
+
     return function() {
       var input = document.getElementById('filename' + i);
       var formElem = document.getElementById('imageForm' + i);
       var data, extension;
-      
+
       if(!input.value) {
         alert(_('Please select a upload image'));
         return ;
       }
-      
+
       extension = utils.getExtension(input.value);
-      
+
       if(that.state['imageStatus' + i] !== 'selected') {
          return ;
       }
-      
-      // 
+
+      //
       if(typeof FormData === 'function') {
         data = new FormData()
         data.append('filename', input.files[0]);
@@ -164,28 +164,28 @@ export const Portal = React.createClass({
           that.restImageStatus(i)
           that.props.fetchPortalSettings();
         })
-      
+
       } else {
         that.imageUploading(i);
         formElem.submit();
         that.restImageStatus(i);
         that.props.fetchPortalSettings();
       }
-      
+
     }
   },
-  
+
   getCurrData(name, defaultVal) {
     return this.props.store.getIn(['data', 'curr', name]) || defaultVal;
   },
-  
+
   render() {
     const { getCurrData } = this;
     const images = getCurrData('image');
-    
+
     // validate const
     const {
-      portalname, url, title, timeout, refreshtime 
+      portalname, url, title, timeout, refreshtime
     } = this.props.validateOption;
     const refreshtimeOtions = [
       {
@@ -204,7 +204,7 @@ export const Portal = React.createClass({
       }, {
         value: '20',
         label: '20 ' + MSG.Seconds
-      }, 
+      },
     ];
     // minutes
     const expirationOptions = [
@@ -237,8 +237,10 @@ export const Portal = React.createClass({
     const uploadStyles = {
       marginLeft: '8px'
     };
-   
+    const noControl = this.props.app.get('noControl');
+
     return (
+
       <div>
         <h3>{_('Portal Settings')}</h3>
         <FormGroup
@@ -264,7 +266,7 @@ export const Portal = React.createClass({
           required={true}
           {...title}
         />
-        
+
         <FormGroup
           label={_('Expiration')}
           value={getCurrData('timeout')}
@@ -279,7 +281,7 @@ export const Portal = React.createClass({
             searchable={ false }
           />
         </FormGroup>
-        
+
         <FormGroup
           label={_('Images Slide Interval')}
           type="select"
@@ -289,7 +291,7 @@ export const Portal = React.createClass({
           onChange={this.onUpdateSettings('refreshtime')}
           {...refreshtime}
         />
-        
+
         <div className="images-list">
           <p className="form-group">{MSG.imageDes}</p>
           {
@@ -298,7 +300,7 @@ export const Portal = React.createClass({
             }) : null
           }
         </div>
-        
+
         <iframe id="imagesIf" name="imagesIf" className="none"></iframe>
         <form
           className="form-group"
@@ -318,18 +320,23 @@ export const Portal = React.createClass({
               name="filename"
               onChange={this.onChangeImage('1')}
             />
-            <Button
-              type='button'
-              text={_('Upload Image') + ' 1'}
-              icon="upload"
-              loading={this.state.imageStatus1 === 'loading'}
-              role={this.state.imageStatus1 === 'selected' ? 'info' : undefined}
-              style={uploadStyles}
-              onClick={this.onUploadImage(1)}
-            />
+            {
+              noControl ? null : (
+                <Button
+                  type='button'
+                  text={_('Upload Image') + ' 1'}
+                  icon="upload"
+                  loading={this.state.imageStatus1 === 'loading'}
+                  role={this.state.imageStatus1 === 'selected' ? 'info' : undefined}
+                  style={uploadStyles}
+                  onClick={this.onUploadImage(1)}
+                />
+              )
+            }
+
           </div>
         </form>
-        
+
         <form
           className="form-group"
           action="/goform/setPortalImage"
@@ -348,18 +355,23 @@ export const Portal = React.createClass({
               name="filename"
               onChange={this.onChangeImage('2')}
             />
-            <Button
-              type='button'
-              text={_('Upload Image') + ' 2'}
-              icon="upload"
-              style={uploadStyles}
-              loading={this.state.imageStatus2 === 'loading'}
-              role={this.state.imageStatus2 === 'selected' ? 'info' : undefined}
-              onClick={this.onUploadImage(2)}
-            />
+
+            {
+              noControl ? null : (
+                <Button
+                  type='button'
+                  text={_('Upload Image') + ' 2'}
+                  icon="upload"
+                  style={uploadStyles}
+                  loading={this.state.imageStatus2 === 'loading'}
+                  role={this.state.imageStatus2 === 'selected' ? 'info' : undefined}
+                  onClick={this.onUploadImage(2)}
+                />
+              )
+            }
           </div>
         </form>
-        
+
         <form
           className="form-group"
           action="/goform/setPortalImage"
@@ -378,30 +390,40 @@ export const Portal = React.createClass({
               name="filename"
               onChange={this.onChangeImage('3')}
             />
-            <Button
-              type='button'
-              text={_('Upload Image') + ' 3'}
-              icon="upload"
-              style={uploadStyles}
-              loading={this.state.imageStatus3 === 'loading'}
-              role={this.state.imageStatus3 === 'selected' ? 'info' : undefined}
-              onClick={this.onUploadImage(3)}
-            />
+
+            {
+              noControl ? null : (
+                <Button
+                  type='button'
+                  text={_('Upload Image') + ' 3'}
+                  icon="upload"
+                  style={uploadStyles}
+                  loading={this.state.imageStatus3 === 'loading'}
+                  role={this.state.imageStatus3 === 'selected' ? 'info' : undefined}
+                  onClick={this.onUploadImage(3)}
+                />
+              )
+            }
+
           </div>
         </form>
-        
+
         <div className="form-group form-group-save">
           <div className="form-control">
-             <Button
-              type='button'
-              text={_('Save')}
-              icon="save"
-              role="primary"
-              onClick={this.onSave}
-            />
+             {
+              noControl ? null : (
+                <Button
+                  type='button'
+                  text={_('Save')}
+                  icon="save"
+                  role="primary"
+                  onClick={this.onSave}
+                />
+              )
+            }
           </div>
         </div>
-       
+
       </div>
     );
   }

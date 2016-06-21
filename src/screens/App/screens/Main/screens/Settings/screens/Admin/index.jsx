@@ -33,7 +33,7 @@ const validOptions = Map({
   newpasswd: validator({
     rules: 'len:[1,, 64]'
   }),
-  
+
   confirmpasswd: validator({
     rules: 'len:[1,, 64]'
   })
@@ -48,20 +48,20 @@ const propTypes = {
 
 export const Admin = React.createClass({
   mixins: [PureRenderMixin],
-  
+
   componentWillMount() {
-    
+
   },
-  
+
   componentWillUnmount() {
     this.props.resetVaildateMsg();
     this.props.resetPassword();
   },
-  
+
   combineValid() {
     const {newpasswd, confirmpasswd} = this.props.store.get('data').toJS();
     let ret;
-    
+
     if (newpasswd !== confirmpasswd) {
        ret = _('New password and confirm password must match');
        alert(ret);
@@ -69,43 +69,44 @@ export const Admin = React.createClass({
 
     return ret;
   },
-  
+
   onSave() {
     this.props.validateAll(function (invalid) {
       if (invalid.isEmpty() && !this.combineValid()) {
-        
+
         this.props.savePassword();
       }
     }.bind(this));
   },
-  
+
   createUpdateFunc(name) {
     return function(data) {
       let settings = {};
-      
+
       settings[name] = data.value
       this.props.changePasswordSettings(settings);
-    }.bind(this) 
+    }.bind(this)
   },
-  
+
   onChangeLang(data) {
     if(b28n.getLang() !== data.value) {
       b28n.setLang(data.value);
       window.location.reload();
     }
   },
-  
+
   getSetting(name) {
     return this.props.store.getIn(['data', name])
   },
-  
+
   render() {
     const {oldpasswd, newpasswd, confirmpasswd} = this.props.validateOption;
-    
+    const noControl = this.props.app.get('noControl');
+
     return (
       <form>
         <h3>{_('Change Password')}</h3>
-        
+
         <FormGroup
           type="password"
           label={_('Old Password')}
@@ -115,7 +116,7 @@ export const Admin = React.createClass({
           onChange={this.createUpdateFunc('oldpasswd')}
           {...oldpasswd}
         />
-        
+
         <FormGroup
           type="password"
           label={_('New Password')}
@@ -125,7 +126,7 @@ export const Admin = React.createClass({
           onChange={this.createUpdateFunc('newpasswd')}
           {...newpasswd}
         />
-        
+
         <FormGroup
           type="password"
           label={_('Confirm Password')}
@@ -135,9 +136,9 @@ export const Admin = React.createClass({
           onChange={this.createUpdateFunc('confirmpasswd')}
           {...confirmpasswd}
         />
-        
+
         <h3>{_('System Settings')}</h3>
-        
+
         <FormGroup
           label={_('Select Language')}
           type="select"
@@ -145,7 +146,7 @@ export const Admin = React.createClass({
           value={b28n.getLang()}
           onChange={this.onChangeLang}
         />
-        
+
         <div className="form-group form-group-save">
           <div className="form-control">
              {
@@ -155,13 +156,17 @@ export const Admin = React.createClass({
                   </div>
                 ) : null
              }
-             <Button
-              type='button'
-              text={_('Save')}
-              icon="save"
-              role="primary"
-              onClick={this.onSave}
-            />
+             {
+               noControl ? null : (
+                <Button
+                  type='button'
+                  text={_('Save')}
+                  icon="save"
+                  role="primary"
+                  onClick={this.onSave}
+                />
+               )
+             }
           </div>
         </div>
       </form>
