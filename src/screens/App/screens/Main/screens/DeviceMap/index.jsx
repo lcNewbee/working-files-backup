@@ -4,27 +4,28 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import * as actions from './actions';
 import reducer from './reducer';
 
-// 原生的 react 页面
-export const DeviceMap = React.createClass({
-  mixins: [PureRenderMixin],
+class DeviceMap extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+  };
 
   render() {
     return (
       <div>
         <h2>地图</h2>
-        {this.props.fetching ? 'dsd': 'ok'}
       </div>
     );
   }
-});
+}
 
 function mapStateToProps(state) {
-  var myState = state.device;
+  var myState = state.deviceMap;
 
   return {
-    fetching: myState.get('fetching'),
-    logined: myState.get('logined'),
-    data: myState.get('data')
+    store: myState,
+    app: state.app
   };
 }
 

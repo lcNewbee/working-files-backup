@@ -56,6 +56,7 @@
   "start": "开始",
   "success": "成功",
   "failed": "失败",
+  "User": "用户",
 
   "Management": "管理系统",
   "Please Login": "请登录",
@@ -80,9 +81,11 @@
   "AP Activity Ranklist": "AP活跃度排行",
   "Clients Ranklist": "客户端排行",
   "UP/Down Flow": "上/下行流量",
+  "Last Seen": "最近出现时间",
   "Status": "状态",
   "Frequency": "频段",
   "Producer": "生产商",
+  "Manufacturer": "制造商",
   "REFRESH": "刷新",
   "Offline Ap List": "离线AP列表",
 

@@ -27,7 +27,9 @@
                 "authtype": "portal",
                 "operationhours": "23444",
                 "wirelessType": "main",
-                "islock": "lock"
+                "islock": "lock",
+                "vendor": "huawei",
+                "lasttime":"2016-06-22 17:25:51"
             },
             {
                 "type": "guest",
@@ -42,7 +44,9 @@
                 "authtype": "portal",
                 "operationhours": "6600",
                 "wirelessType": "main",
-                "islock": "unlock"
+                "islock": "unlock",
+                "vendor": "huawei",
+                "lasttime":"2016-06-22 17:25:51"
             },
             {
                 "type": "guest",
@@ -58,7 +62,9 @@
                 "authtype": "0",
                 "operationhours": "6600",
                 "wirelessType": "main",
-                "islock": "unlock"
+                "islock": "unlock",
+                "vendor": "huawei",
+                "lasttime":"2016-06-22 17:25:51"
             },
             {
                 "type": "guest",
@@ -73,7 +79,9 @@
                 "authtype": "portal",
                 "operationhours": "6600",
                 "wirelessType": "guest",
-                "islock": "unlock"
+                "islock": "unlock",
+                "vendor": "huawei",
+                "lasttime":"2016-06-22 17:25:51"
             }
         ]
     }

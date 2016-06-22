@@ -28,7 +28,7 @@ export const Login = React.createClass({
   mixins: [PureRenderMixin],
 
   componentWillMount() {
-    
+
   },
 
   componentWillReceiveProps(nextProps) {
@@ -42,32 +42,32 @@ export const Login = React.createClass({
 
     }
   },
-  
+
   checkData() {
     var data = this.props.data.toJS();
     var passCheck = formGroups.password.validator.check(data.password);
-    
+
     return passCheck;
   },
 
   onLogin() {
     var checkRusult = this.checkData();
-    
+
     // 如果有验证错误信息
     if(checkRusult) {
       this.props.loginResult(checkRusult)
-      
+
     //
     } else {
       this.props.login();
     }
-    
+
   },
 
   onChangeData(name) {
     return function (data) {
       const subData = {};
-      
+
       subData[name] = data.value;
       this.props.updateData(subData);
     }.bind(this);
@@ -77,9 +77,9 @@ export const Login = React.createClass({
     return typeof this.props.data.get === 'function' ?
       this.props.data.get(name) : this.props.data[name];
   },
-  
+
   onInputKeyUp(e) {
-    
+
     if(e.which === 13) {
       this.onLogin();
     }
@@ -88,14 +88,15 @@ export const Login = React.createClass({
   render() {
     var that = this;
     var myMsg = this.props.status;
- 
+
     return (
       <div>
         <header className="navbar">
           <a href="#" className="brand">Axilspot</a>
         </header>
         <div className="sign">
-          <h1>{_('Please Login')}</h1>
+          <h1 className="title">{_('Please Login')}</h1>
+
           <FormGroup
             type="password"
             name="password"

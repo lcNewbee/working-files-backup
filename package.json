@@ -60,6 +60,7 @@
     "file-loader": "^0.8.5",
     "gulp": "^3.9.1",
     "gulp-copy": "0.0.2",
+    "gulp-header": "^1.8.3",
     "gulp-load-plugins": "^1.2.4",
     "gulp-static-hash": "^0.1.4",
     "html-webpack-plugin": "^2.15.0",

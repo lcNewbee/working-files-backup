@@ -247,6 +247,9 @@ export const Clients = React.createClass({
         id: 'devicename',
         text: _('MAC Address') + '/' + _('Name')
       }, {
+        id: 'vendor',
+        text: _('Manufacturer')
+      }, {
         id: 'wirelessType',
         text: _('Type'),
         transform: function(val, item) {
@@ -257,6 +260,18 @@ export const Clients = React.createClass({
 
           return typeMap[val] || _('Main Wireless');
         }
+      }, {
+        id: 'bandwidth',
+        text: _('Up/Down Speed'),
+        transform: function(val, item) {
+          var upRate = flowRateFilter.transform(item.get('upstream'));
+          var downRate = flowRateFilter.transform(item.get('downstream'));
+
+          return upRate + '/' + downRate;
+        }
+      }, {
+        id: "lasttime",
+        text: _('Last Seen')
       }, {
         id: 'op',
         text: _('Actions'),

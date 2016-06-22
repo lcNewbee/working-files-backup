@@ -51,8 +51,13 @@ gulp.task('build:html', function() {
     .pipe(gulp.dest(paths.build));
 });
 
+gulp.task('build:header', function() {
+  return gulp.src(paths.build + '/scripts/bundle.js')
+    .pipe($.header('var a_165F8BA5ABE1A5DA = 0;'))
+    .pipe(gulp.dest(paths.build + '/scripts/'));
+})
 gulp.task('build', function(callback) {
-  runSequence('clean', ['build:assets', 'webpack'], 'build:html', callback);
+  runSequence('clean', ['build:assets', 'webpack'], 'build:header', 'build:html', callback);
 });
 
 gulp.task('open:dist', ['build'], shell.task(['npm run open:dist']));
