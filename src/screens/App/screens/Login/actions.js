@@ -28,20 +28,21 @@ export function updateData(data) {
   };
 }
 
-export function login() {
-  
+export function login(callBack) {
+
   return (dispatch, getState) => {
     const data = getState().login.get('data');
-    
+
     dispatch(reqeustLogin());
 
     utils.save('/goform/login', data)
       .then(function(json) {
         let result = '未知错误';
-
         if(json.state) {
           if(json.state.code === 2000) {
             result = 'ok';
+            console.log('a_165F8BA5ABE1A5DA')
+            callBack(json.data.a_165F8BA5ABE1A5DA);
           } else {
             result = json.state.msg;
           }

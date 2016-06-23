@@ -1,11 +1,13 @@
 import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import utils from 'utils';
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {Input, FormGroup} from 'components/Form';
 import {fromJS, Map} from 'immutable';
 import validator from 'utils/lib/validator';
 import * as actions from './actions';
+import * as appActions from 'actions/app';
 import reducer from './reducer';
 
 const formGroups = {
@@ -59,7 +61,9 @@ export const Login = React.createClass({
 
     //
     } else {
-      this.props.login();
+      this.props.login(function(status) {
+        this.props.changeLoginStatus(status)
+      }.bind(this));
     }
 
   },
@@ -130,13 +134,19 @@ function mapStateToProps(state) {
     status: myState.get('status'),
     data: myState.get('data')
   };
+}
 
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(utils.extend({},
+    appActions,
+    actions
+  ), dispatch)
 }
 
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  actions
+  mapDispatchToProps
 )(Login);
 
 export const login = reducer;

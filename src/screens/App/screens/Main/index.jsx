@@ -14,34 +14,40 @@ import * as appActions from 'actions/app';
 export default class Main extends Component {
   constructor(props) {
     super(props)
-    
+
     this.state = {isShow: false};
-    
+
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.showUserPopOver = this.showUserPopOver.bind(this);
     this.onRefresh = this.onRefresh.bind(this);
-    
+    this.onLogout = this.onLogout.bind(this);
     document.onkeydown = function(e) {
-      
+
       if(e.keyCode == 116){
         this.onRefresh(e);
       }
     }.bind(this);
   };
-  
+
   showUserPopOver() {
     this.setState({isShow: !this.state.isShow});
   };
-  
+
   onRefresh(e) {
     e.preventDefault();
     this.props.refreshAll();
   };
-  
+
+  onLogout(e) {
+    e.preventDefault();
+    this.props.changeLoginStatus('0');
+    window.location.hash = "#";
+  }
+
   render() {
     const { saving } = this.props.app.toJS();
     const { isShow } = this.state;
-    
+
     return (
       <div>
         <header className="navbar">
@@ -61,7 +67,7 @@ export default class Main extends Component {
               />
             </div>
           </div>
-          
+
         </header>
         <div className="main">
           <div className='main-content'>
@@ -89,7 +95,7 @@ export default class Main extends Component {
                       />
                       {_('CHANGE PASSWORD')}
                     </a>
-                    <a className="sign-out" href="#">
+                    <a className="sign-out" href="#" onClick={this.onLogout}>
                       <Icon
                         name="sign-out"
                       />
@@ -101,7 +107,7 @@ export default class Main extends Component {
               </div>
             ) : null
           }
-          
+
           {
             saving ? (
               <Modal

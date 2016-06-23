@@ -4,3 +4,10 @@ export function refreshAll() {
     refreshAt: Date.now()
   }
 }
+
+export function changeLoginStatus(data) {
+  return {
+    type: 'CHANGE_LOGIN_STATUS',
+    data
+  }
+}

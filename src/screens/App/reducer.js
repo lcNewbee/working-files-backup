@@ -1,8 +1,20 @@
 import {Map, List, fromJS} from 'immutable';
 
 function getControlStatus() {
-  return typeof a_165F8BA5ABE1A5DA === 'number' && a_165F8BA5ABE1A5DA === 0;
+  var a_165F8BA5ABE1A5DA = '0';
+
+  if(sessionStorage && sessionStorage.getItem('a_165F8BA5ABE1A5DA') !== null) {
+    a_165F8BA5ABE1A5DA = sessionStorage.getItem('a_165F8BA5ABE1A5DA');
+  }
+
+  return typeof a_165F8BA5ABE1A5DA === 'string' && a_165F8BA5ABE1A5DA === '0';
 };
+
+function clearLoginSession() {
+  if(typeof sessionStorage.removeItem === 'function') {
+    sessionStorage.removeItem('a_165F8BA5ABE1A5DA')
+  }
+}
 
 const defaultState = fromJS({
   saving: false,
@@ -43,6 +55,10 @@ export default function( state = defaultState, action ) {
 
     case 'REPORT_VALID_ERROR':
       return receiveReport(state, action.data);
+
+    case "CHANGE_LOGIN_STATUS":
+      sessionStorage.setItem('a_165F8BA5ABE1A5DA', action.data);
+      return state.set('noControl', action.data === '0');
 
     case 'REFRESH_ALL':
       return state.set('refreshAt', action.refreshAt);
