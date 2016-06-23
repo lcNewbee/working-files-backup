@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import validator from 'utils/lib/validator';
 import * as validateActions from 'actions/valid';
+import * as appActions from 'actions/app';
 import * as myActions from './actions';
 import myReducer from './reducer';
 
@@ -74,7 +75,10 @@ export const Admin = React.createClass({
     this.props.validateAll(function (invalid) {
       if (invalid.isEmpty() && !this.combineValid()) {
 
-        this.props.savePassword();
+        this.props.savePassword(function() {
+          this.props.changeLoginStatus('0');
+          window.location.hash = "#";
+        }.bind(this));
       }
     }.bind(this));
   },
@@ -186,6 +190,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     validateActions,
+    appActions,
     myActions
   ), dispatch)
 }

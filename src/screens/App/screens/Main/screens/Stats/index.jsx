@@ -68,13 +68,13 @@ let apChart, statsChart, clientsChannelChart, clientsProducerChart;
 // 原生的 react 页面
 export const Status = React.createClass({
   mixins: [PureRenderMixin],
-  
+
   getInitialState() {
      return {
        showOfflineAp: false
      }
   },
-  
+
   componentWillMount() {
     this.props.fetchStatus();
     this.props.fetchOfflineAp();
@@ -85,47 +85,47 @@ export const Status = React.createClass({
     // statsChart = echarts.init(document.getElementById('clientsStats'));
     // clientsChannelChart = echarts.init(document.getElementById('clientsChannelStats'));
     // clientsProducerChart = echarts.init(document.getElementById('clientsProducerStats'));
-    
+
     // this.renderApNumber();
     // this.renderClientNumber();
     // this.renderClientStatistics();
-    
+
   },
-  
+
   componentDidUpdate(prevProps) {
     apChart = echarts.init(document.getElementById('echartsContent'));
     statsChart = echarts.init(document.getElementById('clientsStats'));
     clientsChannelChart = echarts.init(document.getElementById('clientsChannelStats'));
     clientsProducerChart = echarts.init(document.getElementById('clientsProducerStats'));
-    
+
     //if(!prevProps.data.equals(this.props.data)) {
       this.renderApNumber();
       this.renderClientNumber();
       this.renderClientStatistics();
     //}
-    
+
   },
-  
+
   componentWillUnmount() {
     this.props.leaveStatusScreen();
   },
-  
+
   hideOfflineApp() {
     this.setState({
       showOfflineAp: false
     })
   },
-  
+
   showOfflineAp() {
     this.props.fetchOfflineAp();
     this.setState({
       showOfflineAp: true
     });
   },
-  
+
   renderApNumber() {
     const apInfo = this.props.data.get('apInfo');
-    
+
     let apOption = {
       tooltip,
       title: {
@@ -156,20 +156,20 @@ export const Status = React.createClass({
         name: _(key)
       }
     }).toArray();
-    
+
     apOption.series[0].data = data;
     apChart.setOption(apOption);
-    
+
     apChart.on('click', function(params) {
       if(params.dataIndex === 0) {
         this.showOfflineAp();
       } else {
         window.location.hash = "#/main/devices";
       }
-      
+
     }.bind(this));
   },
-  
+
   renderClientNumber() {
     const clientInfo = this.props.data.get('clientInfo');
     const clientNetworkOption = {
@@ -225,7 +225,7 @@ export const Status = React.createClass({
         }
       ]
     };
-    
+
     if(clientInfo.get('producerlist')) {
       clientProducerOption.series[0].data = clientInfo.get('producerlist')
         .map(function(val, key) {
@@ -235,8 +235,8 @@ export const Status = React.createClass({
           }
         }).toArray();
     }
-    
-    
+
+
     clientNetworkOption.series[0].data = clientInfo.delete('total').delete('producerlist')
       .map(function(val, key) {
         return {
@@ -244,48 +244,54 @@ export const Status = React.createClass({
           name: _(key)
         }
       }).toArray();
-      
+
     clientsChannelChart.setOption(clientNetworkOption);
     clientsProducerChart.setOption(clientProducerOption);
   },
-  
+
   renderClientStatistics() {
     const dayText = _('D')
     let clientStatisticsList = this.props.data.get('clientStatisticsList');
     let xAxisData;
     let xAxisName = _('Days');
-    
+    let maxData = 200;
+
     if(!clientStatisticsList) {
       return ;
     }
-    
+
     clientStatisticsList = clientStatisticsList.toJS();
-    
+
+    maxData = Math.max.apply(null, clientStatisticsList[0].data.concat(clientStatisticsList[1].data));
+
+    maxData = parseInt(maxData * 1.2, 10);
+    console.log(maxData)
+
     if(this.props.query.get('time_type') === 'yesterday' ||
         this.props.query.get('time_type') === 'today') {
-      
+
       xAxisData = List(new Array(24)).map(function(val, i) {
         return i + ':00';
       }).toJS();
       xAxisName = _('Hours');
-      
+
     } else if (this.props.query.get('time_type') === 'week') {
-      
+
       xAxisData = List(new Array(7)).map(function(val, i) {
         return i;
       }).toJS();
     } else if (this.props.query.get('time_type') === 'half_month') {
-      
+
       xAxisData = List(new Array(15)).map(function(val, i) {
         return i;
       }).toJS();
     } else {
-      
+
       xAxisData = List(new Array(30)).map(function(val, i) {
         return i;
       }).toJS();
     }
-    
+
     const ClientsStatsOption = {
         tooltip: {
           trigger: 'axis'
@@ -305,20 +311,20 @@ export const Status = React.createClass({
           type: 'value',
           name: _('Number'),
           min: 0,
-          max: 250,
-          interval: 50,
+          max: maxData,
+          interval: parseInt(maxData / 5, 10),
           axisLabel: {
             formatter: '{value}'
           }
         }],
         series: [
           {
-            name: '5G',
+            name: '2.4G',
             type: 'bar',
             data: clientStatisticsList[0].data
           },
           {
-            name: '2.4G',
+            name: '5G',
             type: 'bar',
             data: clientStatisticsList[1].data
           }
@@ -326,27 +332,27 @@ export const Status = React.createClass({
       };
     statsChart.setOption(ClientsStatsOption);
   },
-  
+
   toPdf() {
     var doc = new jsPDF();
     var imgData;
     var Context;
     var Canvas = document.getElementsByTagName("canvas")[0];
-    
+
     Context = Canvas.getContext("2d");
     imgData = Canvas.toDataURL('image/png');
     doc.text(20, 20, 'AP数量');
     doc.addImage(imgData, 'png', 20, 30, 50, 50);
-    
+
     doc.save('download1.pdf');
   },
-  
+
   onChangeTime(data) {
     if(data.value) {
       this.props.changeStatsQuery({
         'time_type': data.value
       });
-      
+
       this.props.fetchStatus();
     }
   },
@@ -355,28 +361,28 @@ export const Status = React.createClass({
       this.props.changeStatsQuery({
         'sort_type': data.value
       });
-      
+
       this.props.fetchStatus();
     }
   },
-  
+
   onOfflineApPageChange(i) {
     this.props.changeOfflineApQuery({
       page: i
     });
     this.props.fetchOfflineAp();
   },
-  
+
   createTimeTypeClass(type) {
     var ret = 'btn';
-    
+
     if(this.props.query.get('time_type') === name) {
       ret += ' active';
     }
-    
+
     return ret;
   },
-  
+
   getClientsListOption() {
     const ret = fromJS([
       {
@@ -405,10 +411,10 @@ export const Status = React.createClass({
         width: '160',
       }
     ]);
-    
+
     return ret;
   },
-  
+
   getApListOption() {
     var ret = fromJS([
       {
@@ -432,10 +438,10 @@ export const Status = React.createClass({
         }
       }
     ]);
-    
+
     return ret;
   },
-  
+
   getOfflineApListOption() {
     var ret = fromJS([
       {
@@ -456,15 +462,15 @@ export const Status = React.createClass({
         filter: 'translate'
       }
     ]);
-    
+
     return ret;
   },
-  
+
   render() {
     const clientsListOption = this.getClientsListOption();
     const apListOption = this.getApListOption();
     const offlineApOption = this.getOfflineApListOption();
-   
+
     return (
       <div className="Stats">
         <h2>{ _('Statistics') }</h2>
@@ -520,7 +526,7 @@ export const Status = React.createClass({
               />
             </div>
           </div>
-          
+
           <div className="stats-group-large">
             <div className="stats-group-header">
               <h3>{_('Clients Ranklist')}
@@ -543,7 +549,7 @@ export const Status = React.createClass({
               />
             </div>
           </div>
-          
+
           <div className="stats-group-large">
             <div className="stats-group-header">
               <h3>{ _('AP Activity Ranklist') }
@@ -560,9 +566,9 @@ export const Status = React.createClass({
               />
             </div>
           </div>
-          
+
         </div>
-        
+
         <Modal
           isShow={this.state.showOfflineAp}
           title={_("Offline Ap List")}
@@ -576,7 +582,7 @@ export const Status = React.createClass({
             page={this.props.offlineAp.get('page')}
             onPageChange={this.onOfflineApPageChange}
           />
-          
+
         </Modal>
       </div>
     );

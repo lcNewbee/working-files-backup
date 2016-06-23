@@ -36,10 +36,10 @@ export function setPasswordError(state) {
   }
 }
 
-export function savePassword() {
+export function savePassword(callBack) {
   return (dispatch, getState) => {
     const data = getState().admin.get('data');
-    
+
     dispatch(reqeustSavePassword());
 
     utils.save(urls.save, data)
@@ -47,6 +47,10 @@ export function savePassword() {
         if (json.state && json.state.code === 2000) {
           dispatch(receiveSavePassword(json.state));
           window.location.hash = '#';
+
+          if(typeof callBack === 'function') {
+            callBack();
+          }
         } else {
           dispatch(setPasswordError(json.state))
         }

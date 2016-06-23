@@ -1,6 +1,6 @@
 $g-navbar-height: 60px;
-$top-distance: $g-navbar-height + $g-distance;
-$sidebar-width: 190px;
+$top-distance: $g-navbar-height + $g-distance * 2;
+$sidebar-width: 170px;
 $nav-text-color: #ababab;
 $main-blue: #0093dd;
 
@@ -27,21 +27,31 @@ body {
   width: 100%;
   height: $g-navbar-height;
   background: $g-main-color;
-  
+  background-color: #fff;
+  box-shadow: 0 2px 8px 0 rgba(50, 50, 50, 0.48);
+
+  > h1 {
+    color: #333;
+    float: left;
+    line-height: $g-navbar-height;
+    font-size: 1.4em;
+    font-weight: 500;
+    font-style: italic;
+    font-family: $g-font-family-base-en;
+  }
   .brand {
     display: block;
-    width: 190px;
-    height: 58px;
+    //width: $sidebar-width;
+    height: $g-navbar-height;
     float: left;
     padding: 10px;
     padding-left: $g-size - 12px;
-    color: $nav-text-color;
-    background: $g-main-color-light url(../../assets/images/logo.png) 25px center no-repeat;
+    color: #333;
+    background: url(../../assets/images/logo.png) 25px center no-repeat;
     background-size: 60px;
     line-height: 40px;
-    padding-left: 100px;
-    border-radius: 2px;
-    
+    padding-left: 85px;
+
     .logo {
       font-size: 16px;
       display: inline-block;
@@ -53,14 +63,14 @@ body {
     float: right;
   }
   .icon-user {
-    padding: 5px 15px 0 15px;
-    background-color: $nav-text-color;
-    vertical-align: middle;    
-    color: #000;
-    font-size: 35px;
+    padding: 8px 20px;
+    background-color: #333;
+    vertical-align: middle;
+    color: #999;
+    font-size: 28px;
     transition: background .3s ease;
   }
-  
+
   .icon-down {
     float: right;
     margin-left: 8px;
@@ -68,16 +78,17 @@ body {
     line-height: 40px;
     transition: transform .3s ease;
   }
-  
+
   .as-control {
     padding: $g-distance $g-distance-md;
-    border-left: 1px solid #333;
-    color: #ababab;
+    //border-left: 1px solid #333;
+    color: #333;
     display: inline-block;
     vertical-align: middle;
-    font-size: 12px; 
+    font-size: 12px;
     transition: background .3s ease,color .3s ease;
-    
+        font-style: italic;
+
     .icon {
       display: block;
       width: 18px;
@@ -88,16 +99,16 @@ body {
       transition: transform .3s ease;
       font-weight: 300;
     }
-    
+
     &:hover {
-      background-color: $g-main-color-light;
-      color: #fff;
-      
+      //background-color: $g-main-color-light;
+      color: #0093dd;
+
       .icon {
         transform: rotate(360deg)scale(1.1);
       }
     }
-    
+
     &:active {
       @include opacity(.7);
     }
@@ -106,18 +117,17 @@ body {
     display: inline-block;
     vertical-align: middle;
     padding: $g-distance $g-distance-md;
-    border-left: 1px solid $g-main-color-light;
-    color: $nav-text-color;
+    //border-left: 1px solid $g-main-color-light;
+    color: #333;
     transition: background .3s ease,color .3s ease;
-    
+
     &:hover {
-      background-color: $g-main-color-light;
-      color: #fff;
-      
+      //background-color: $g-main-color-light;
+
       .icon-user {
-        background-color: #fff;
+        //background-color: #fff;
       }
-      
+
       .icon-down {
         transform: rotate(360deg);
       }
@@ -132,12 +142,12 @@ body {
   min-width: 340px;
   background: $g-main-color;
   color: #f5f5f5;
-  
+
   a {
     padding: 8px 12px;
     color: #f5f5f5;
     transition: background-color .3s;
-    
+
     &:hover {
       background: $main-blue;
       color: #f5f5f5;
@@ -152,19 +162,19 @@ body {
       font-size: 86px;
     }
   }
-  
+
   .user-controls {
     background-color: $g-main-color-light;
 
     @include clearfix;
-    
+
     .change-pas {
       float: left;
     }
     .sign-out {
       float: right;
     }
-    
+
     .fa {
       margin-right: 4px;
     }
@@ -181,40 +191,41 @@ body {
   top: $g-navbar-height;
   bottom: 0;
   z-index: 1000;
-  width: 190px;
-  background: #444;
+  width: $sidebar-width;
+  background: #333;
 
   ul {
     padding: 0;
     //border-top: 1px solid #222;
     border-right: none;
-    background: #444;
-    
+    background: #333;
+
     li {
       list-style: none;
       a {
         display: block;
-        padding: $g-distance-md 0;
+        padding: ($g-distance-md + 4px) 0;
         padding-left: $g-size;
-        border-bottom: 1px solid #363636;
+        //border-bottom: 1px solid #666;
+        letter-spacing: 1px;
         color: $nav-text-color;
         font-size: 13px;
         line-height: 20px;
         transition: background-color .2s ease-in-out, color .2s ease;
-        
+
         &:hover {
           color: #fff;
         }
 
         &.active {
-          background-color: #363636;
+          background-color: #444;
           color: #fff;
-          
+
           .icon {
             color: $main-blue;
           }
         }
-        
+
         .icon {
           display: inline-block;
           margin-right: 10px;
@@ -234,7 +245,7 @@ body {
     top: $top-distance;
     right: 0;
     bottom: $g-distance;
-    left: 190px;
+    left: $sidebar-width + 10px;
     padding: 0 $g-distance;
     min-width: 1024px - 200px;
 
@@ -260,7 +271,7 @@ body {
   left: 0;
   z-index: 1040;
   overflow: hidden;
-  
+
   .overlay {
     position: absolute;
     top: 0;

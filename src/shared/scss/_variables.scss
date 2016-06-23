@@ -1,4 +1,4 @@
-// Core 
+// Core
 
 //== Colors
 //
@@ -39,7 +39,7 @@ $g-brand-danger:            #C23934 !default;
 //## Settings for some of the most global styles.
 
 //### Background color for `<body>`.
-$g-body-bg:                 #fafafa !default;
+$g-body-bg:                 #f2f2f2 !default;
 
 //### Global text color on `<body>`.
 $g-text-color:              $g-gray-dark !default;
@@ -67,7 +67,7 @@ $g-line-height-sm:          1.2 !default; // 16/14
 
 // font family
 $g-font-family-base:        'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-$g-font-family-base-en:     "Myriad Set Pro", "Helvetica Neue","Helvetica","Arial",sans-serif;
+$g-font-family-base-en:     "Helvetica Neue","Helvetica","Arial",sans-serif;
 
 // font size
 $g-font-size:               12px !default;
@@ -100,7 +100,7 @@ $g-size-sm:               ceil($g-size * 0.53) !default;
 // App icon size
 $g-icon-size:               55px !default;
 $g-icon-size-large:         $g-icon-size * 2 !default;
-$g-icon-size-small:         ceil(($g-font-size * 0.29)) !default; 
+$g-icon-size-small:         ceil(($g-font-size * 0.29)) !default;
 
 //== Container size
 

@@ -51,9 +51,8 @@ export default class Main extends Component {
     return (
       <div>
         <header className="navbar">
-          <a href="#/main/status" className="brand">
-            <span className="logo">Axilspot</span>
-          </a>
+          <div className="brand"></div>
+          <h1>{_('Axilspot Access Manager')}</h1>
           <div className="aside">
             <a href="#" className="as-control" onClick={this.onRefresh}>
               <Icon name="refresh" className="icon" />
