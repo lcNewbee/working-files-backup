@@ -265,7 +265,7 @@ export const Status = React.createClass({
     maxData = Math.max.apply(null, clientStatisticsList[0].data.concat(clientStatisticsList[1].data));
 
     maxData = parseInt(maxData * 1.2, 10);
-    console.log(maxData)
+    maxData = maxData < 5 ? 5 : maxData;
 
     if(this.props.query.get('time_type') === 'yesterday' ||
         this.props.query.get('time_type') === 'today') {
@@ -304,15 +304,13 @@ export const Status = React.createClass({
         xAxis: [{
           type: 'category',
           data: xAxisData,
-          name: xAxisName,
-          max: 24
+          name: xAxisName
         }],
         yAxis: [{
           type: 'value',
           name: _('Number'),
-          min: 0,
+          minInterval: 1,
           max: maxData,
-          interval: parseInt(maxData / 5, 10),
           axisLabel: {
             formatter: '{value}'
           }

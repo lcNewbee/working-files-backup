@@ -17,6 +17,7 @@ var GLOBALS = {
     NPM: path.resolve(__dirname, 'node_modules')
   },
 
+
   autoprefixer: {
     browsers: [
       'Android 2.3',
@@ -37,6 +38,7 @@ module.exports = {
   entry: [
     './src/index.jsx'
   ],
+  cache: true,
   module: {
     loaders: [
       {
@@ -48,22 +50,27 @@ module.exports = {
           name: 'images/[hash].[ext]'
         }
       },
-      
+
+      {
+        test: /\.jpg$/,
+        loader: "url-loader"
+      },
+
       {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         loader: 'url-loader?name=font/[hash].[ext]&limit=10000&mimetype=application/font-woff'
       },
-      
+
       {
         test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         loader: 'file-loader?name=font/[hash].[ext]'
       },
-      
+
       {
         test: /\.json$/,
         loader: "json"
       },
-      
+
       {
         test: /\.css$/,
         loader: ExtractTextPlugin.extract("style-loader", "css-loader")
@@ -76,7 +83,7 @@ module.exports = {
       {
       test: /\.(jsx|js)?$/,
       exclude: /node_modules/,
-      loader: 'es3ify!babel'
+      loader: 'es3ify!babel?cacheDirectory=true'
     }]
   },
   postcss: function() {

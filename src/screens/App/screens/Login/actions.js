@@ -41,7 +41,6 @@ export function login(callBack) {
         if(json.state) {
           if(json.state.code === 2000) {
             result = 'ok';
-            console.log('a_165F8BA5ABE1A5DA')
             callBack(json.data.a_165F8BA5ABE1A5DA);
           } else {
             result = json.state.msg;

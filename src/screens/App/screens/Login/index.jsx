@@ -30,7 +30,7 @@ export const Login = React.createClass({
   mixins: [PureRenderMixin],
 
   componentWillMount() {
-
+    document.getElementsByTagName('body')[0].className += ' sign-body';
   },
 
   componentWillReceiveProps(nextProps) {
@@ -45,12 +45,20 @@ export const Login = React.createClass({
     }
   },
 
+  componentWillUnmount() {
+    var currClass = document.getElementsByTagName('body')[0].className;
+
+    document.getElementsByTagName('body')[0].className = currClass.replace(' sign-body', '');
+  },
+
+
   checkData() {
     var data = this.props.data.toJS();
     var passCheck = formGroups.password.validator.check(data.password);
 
     return passCheck;
   },
+
 
   onLogin() {
     var checkRusult = this.checkData();
@@ -62,7 +70,10 @@ export const Login = React.createClass({
     //
     } else {
       this.props.login(function(status) {
-        this.props.changeLoginStatus(status)
+        var currClass = document.getElementsByTagName('body')[0].className;
+
+        document.getElementsByTagName('body')[0].className = currClass.replace(' sign-body', '');
+        this.props.changeLoginStatus(status);
       }.bind(this));
     }
 
@@ -89,6 +100,10 @@ export const Login = React.createClass({
     }
   },
 
+  componentDidUpdate(prevProps, prevState) {
+    //console.log(this.ref)
+  },
+
   render() {
     var that = this;
     var myMsg = this.props.status;
@@ -96,30 +111,34 @@ export const Login = React.createClass({
     return (
       <div>
         <header className="navbar">
-          <a href="#" className="brand">Axilspot</a>
+          <div className="brand"></div>
+          <h1>{_('Axilspot Access Manager')}</h1>
         </header>
         <div className="sign">
-          <h1 className="title">{_('Please Login')}</h1>
+          <div className="sign-backdrop"></div>
+          <div className="sign-content">
+            <h1 className="title">{_('Please Login')}</h1>
+            <FormGroup
+              type="password"
+              name="password"
+              maxLength="21"
+              placeholder={_('Password')}
+              value={this.getDataValue('password') }
+              onChange={this.onChangeData('password') }
+              onKeyUp={this.onInputKeyUp}
+              validator={formGroups.password.validator}
+            />
+            {
+              this.props.status !== 'ok' ?
+                <p className="msg-error ">{this.props.status}</p> :
+                ''
+            }
+            <button className="btn btn-primary btn-lg"
+              onClick={this.onLogin}>
+              {_('Login')}
+            </button>
+          </div>
 
-          <FormGroup
-            type="password"
-            name="password"
-            maxLength="21"
-            placeholder={_('Password')}
-            value={this.getDataValue('password') }
-            onChange={this.onChangeData('password') }
-            onKeyUp={this.onInputKeyUp}
-            validator={formGroups.password.validator}
-          />
-          {
-            this.props.status !== 'ok' ?
-              <p className="msg-error ">{this.props.status}</p> :
-              ''
-          }
-          <button className="btn btn-primary btn-lg"
-            onClick={this.onLogin}>
-            {_('Login')}
-          </button>
         </div>
       </div>
     );

@@ -201,7 +201,6 @@ export const Device = React.createClass({
         }
 
       } else {
-        console.log(invalid.toJS())
       }
     }.bind(this));
 

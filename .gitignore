@@ -32,6 +32,7 @@ build
 
 #Webstorm metadata
 .idea
+.happypack
 
 #VSCode metadata
 .vscode

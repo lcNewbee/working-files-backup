@@ -28,7 +28,7 @@ const defaultCountry = ((window.navigator.language || window.navigator.userLangu
 const defaultCountryLabel = List(countries).find(function(item) {
   return item.country === defaultCountry;
 })[b28n.getLang()];
-            
+
 const countryList = List(countries).map((item) => {
   return {
     value: item.country,
@@ -69,7 +69,7 @@ const formGroups = Map({
       label: msg.password,
       rules: 'required'
     })
-  }, 
+  },
   confirmpasswd: {
     input: {
       label: msg.confirmpasswd,
@@ -87,7 +87,7 @@ const formGroups = Map({
 
 function createList(item) {
   var input = item.input;
-  
+
   return (
     <FormGroup
       {...input}
@@ -103,7 +103,7 @@ function createList(item) {
 // 原生的 react 页面
 export const SignUp = React.createClass({
   mixins: [PureRenderMixin],
-  
+
   getInitialState() {
     return {
       password: '',
@@ -112,52 +112,52 @@ export const SignUp = React.createClass({
       countryLabel: defaultCountryLabel,
       //timeZone: ((new Date()).getTimezoneOffset() / 60).toString(),
       currStep: 1
-      
+
     }
   },
-  
+
   componentWillMount() {
-    
+
   },
 
   componentWillReceiveProps(nextProps) {
-   
+
   },
-  
+
   checkStepTwo() {
     const data = this.state;
     const groupPass = formGroups.get('password');
     const groupConfirmPass = formGroups.get('confirmpasswd');
     let checkResult;
-    
+
     checkResult = groupPass.validator.check(data.password);
-    
+
     if(!checkResult) {
       if(data.password !== data.confirmpasswd) {
         checkResult = _('Password and confirm password must match')
       }
     }
-    
+
     return checkResult;
   },
-  
+
   checkStepOne() {
     const data = this.state;
     const groupCountry = formGroups.get('country');
     const groupTimeZone = formGroups.get('timeZone');
     let checkResult;
-    
+
     if(!data.country || data.country.length < 1) {
       return _('Please select a country')
     }
-    
+
     if(!data.timeZone || data.timeZone.length < 1) {
       return _('Please select time zone')
     }
-    
+
     return checkResult;
   },
-  
+
   signUp() {
     utils.save('/goform/regist', {
       country: this.state.country,
@@ -174,35 +174,35 @@ export const SignUp = React.createClass({
 
   onSignUp() {
     var checkResult = this.checkData();
-    
+
     // 如果有验证错误信息
     if(checkResult) {
       this.updateState({
         status: checkResult
       });
-      
-    // 
+
+    //
     } else {
       this.signUp();
     }
-    
+
   },
-  
+
   updateState(data) {
     this.setState(utils.extend({}, this.state, data));
   },
-  
+
   onNext() {
     const MAX_STEP = 3;
     var currStep = this.state.currStep;
     var checkResult;
-    
+
     if(currStep < MAX_STEP) {
       currStep += 1;
-      
+
       if(this.state.currStep === 2) {
         checkResult = this.checkStepTwo();
-        
+
         if(!checkResult) {
           this.updateState({
             currStep,
@@ -215,7 +215,7 @@ export const SignUp = React.createClass({
         }
       } else if(this.state.currStep === 1) {
         checkResult = this.checkStepOne();
-        
+
         if(!checkResult) {
           this.updateState({
             currStep,
@@ -226,7 +226,6 @@ export const SignUp = React.createClass({
             status: checkResult
           });
         }
-        
       } else {
         this.updateState({
           currStep
@@ -235,12 +234,12 @@ export const SignUp = React.createClass({
     } else {
       this.signUp();
     }
-    
+
   },
-  
+
   onPrev() {
     var currStep = this.state.currStep;
-    
+
     if(currStep > 1) {
       currStep -= 1;
       this.updateState({
@@ -252,13 +251,13 @@ export const SignUp = React.createClass({
   onChangeData(name) {
     return function(options) {
       let data = {};
-      
+
       data[name] = options.value;
-      
+
       if(options.label) {
         data[name + 'Label'] = options.label;
       }
-      
+
       this.updateState(data);
     }.bind(this)
   },
@@ -266,11 +265,11 @@ export const SignUp = React.createClass({
   getDataValue(name) {
     return this.state[name] || '';
   },
-  
+
   onInputKeyUp(e) {
-    
+
     if(e.which === 13) {
-      
+
       if(e.target.id === 'password') {
         document.getElementById('confirmpasswd').focus();
       } else {
@@ -278,11 +277,11 @@ export const SignUp = React.createClass({
       }
     }
   },
-  
+
   createFormGruop(name) {
     const myGroup = formGroups.get(name);
     const input = myGroup.input;
-  
+
     return (
       <FormGroup
         {...input}
@@ -303,24 +302,25 @@ export const SignUp = React.createClass({
     var stepOneClass = '';
     var stepTwoClass = '';
     var stepThreeClass = '';
-    
+
     if(currStep === 1) {
       stepOneClass = 'active';
-      
+
     } else if(currStep === 2) {
       stepOneClass = 'completed';
       stepTwoClass = 'active';
-      
+
     } else if(currStep === 3) {
       stepOneClass = 'completed';
       stepTwoClass = 'completed';
       stepThreeClass = 'active';
     }
-    
+
     return (
       <div>
         <div className="navbar">
-          <a href="#/wizard" className="brand">Axilspot</a>
+          <div className="brand"></div>
+          <h1>{_('Axilspot Access Manager')}</h1>
         </div>
         <div className="wizard">
           <h2>{_('Setup Wizard')}</h2>
@@ -341,7 +341,7 @@ export const SignUp = React.createClass({
             </ul>
           </div>
           <div className="wizard-content">
-            
+
             {
               this.state.currStep === 1 ? (
                 <div className="step-0">
@@ -362,7 +362,7 @@ export const SignUp = React.createClass({
                 </div>
               ) : null
             }
-            
+
             {
               this.state.currStep === 2 ? (
                 <div className="step-1">
@@ -375,7 +375,7 @@ export const SignUp = React.createClass({
                       {this.createFormGruop('confirmpasswd')}
                     </div>
                   </div>
-                  
+
                   {
                     this.state.status !== 'ok' ?
                       <p className="msg-error ">{this.state.status}</p> :
@@ -384,14 +384,14 @@ export const SignUp = React.createClass({
                 </div>
               ) : null
             }
-            
+
             {
               this.state.currStep === 3 ? (
                 <div className="step-1">
                   <p>{msg.completeDes}</p>
                   <div className="row">
                     <div className="cols cols-first col-6">
-                      
+
                       <FormGroup
                         label={msg.country}
                       >
@@ -409,7 +409,7 @@ export const SignUp = React.createClass({
                 </div>
               ) : null
             }
-            
+
           </div>
           <div className="wizard-footer">
             {
@@ -420,7 +420,7 @@ export const SignUp = React.createClass({
                 </button>
               ) : null
             }
-            
+
             <button className="btn btn-info"
               onClick={this.onNext}>
               {this.state.currStep !== 3 ? _('Next Step') : _('Completed')}

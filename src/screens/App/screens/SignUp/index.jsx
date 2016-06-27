@@ -42,7 +42,7 @@ const formGroups = List([
 
 function createList(item) {
   var input = item.input;
-  
+
   return (
     <FormGroup
       {...input}
@@ -58,45 +58,47 @@ function createList(item) {
 // 原生的 react 页面
 export const SignUp = React.createClass({
   mixins: [PureRenderMixin],
-  
+
   getInitialState() {
     return {
       password: '',
       confirmpasswd: ''
     }
   },
-  
+
   componentWillMount() {
-    
+    document.getElementsByTagName('body')[0].className += ' sign-body';
   },
 
-  componentWillReceiveProps(nextProps) {
-   
+  componentWillUnmount() {
+    var currClass = document.getElementsByTagName('body')[0].className;
+
+    document.getElementsByTagName('body')[0].className = currClass.replace(' sign-body', '');
   },
-  
+
   checkData() {
     const data = this.state;
     let checkResult;
-    
+
     formGroups.forEach(function(item) {
       var key = item.input.name;
-      
+
       checkResult = item.validator.check(data[key]);
-      
+
       if(checkResult) {
         return false;
       }
     });
-    
+
     if(!checkResult) {
       if(this.state.password !== this.state.confirmpasswd) {
         checkResult = _('Password and confirm password must match')
       }
     }
-    
+
     return checkResult;
   },
-  
+
   signUp() {
     utils.save('/goform/regist', {
       password: this.state.password,
@@ -111,20 +113,20 @@ export const SignUp = React.createClass({
 
   onSignUp() {
     var checkResult = this.checkData();
-    
+
     // 如果有验证错误信息
     if(checkResult) {
       this.updateState({
         status: checkResult
       })
-      
+
     //
     } else {
       this.signUp();
     }
-    
+
   },
-  
+
   updateState(data) {
     this.setState(utils.extend({}, this.state, data));
   },
@@ -132,7 +134,7 @@ export const SignUp = React.createClass({
   onChangeData(name) {
     return function(options) {
       let data = {};
-      
+
       data[name] = options.value;
       this.updateState(data);
     }.bind(this)
@@ -141,9 +143,9 @@ export const SignUp = React.createClass({
   getDataValue(name) {
     return this.state[name] || '';
   },
-  
+
   onInputKeyUp(e) {
-    
+
     if(e.which === 13) {
       if(e.target.id === 'password') {
         document.getElementById('confirmpasswd').focus();
@@ -159,24 +161,28 @@ export const SignUp = React.createClass({
     var myMsg = this.props.status;
 
     FormGroupList = formGroups.map(createList.bind(this));
-    
+
     return (
       <div>
         <header className="navbar">
-          <a href="#/register" className="brand">Comlanos</a>
+          <div className="brand"></div>
+          <h1>{_('Axilspot Access Manager')}</h1>
         </header>
         <div className="sign">
-          <h1>{_('Please Sign Up')}</h1>
-          {FormGroupList}
-          {
-            this.state.status !== 'ok' ?
-              <p className="msg-error ">{this.state.status}</p> :
-              ''
-          }
-          <button className="btn btn-info btn-lg"
-            onClick={this.onSignUp}>
-            {_('Sign Up')}
-          </button>
+          <div className="sign-backdrop"></div>
+          <div className="sign-content">
+            <h1>{_('Please Sign Up')}</h1>
+            {FormGroupList}
+            {
+              this.state.status !== 'ok' ?
+                <p className="msg-error ">{this.state.status}</p> :
+                ''
+            }
+            <button className="btn btn-info btn-lg"
+              onClick={this.onSignUp}>
+              {_('Sign Up')}
+            </button>
+          </div>
         </div>
       </div>
     );

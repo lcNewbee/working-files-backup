@@ -16,7 +16,6 @@ function mapStateToProps(state) {
     app: myState
   };
 }
-
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps
