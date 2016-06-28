@@ -31,7 +31,7 @@ $tab-nav-height:    28px;
       line-height: $tab-nav-height;
       text-align: center;
       min-width: 80px;
-      font-size: 1.1em;
+      font-size: 13px;
       //transition: background .3s ease-in, color .1s ease-in;
 
       &:before {
@@ -39,9 +39,9 @@ $tab-nav-height:    28px;
         position: absolute;
         top: 0;
         left: 0;
-        margin-left: -14px;
+        margin-left: -12px;
         height: 0;
-        border-width: ($tab-nav-height / 2) 7px;
+        border-width: ($tab-nav-height / 2) 6px;
         border-color:transparent #fff #fff transparent;
         border-style: solid;
         filter: drop-shadow(-3px -2px 2px #ccc);
@@ -53,12 +53,12 @@ $tab-nav-height:    28px;
         position: absolute;
         top: 0;
         right: 0;
-        margin-right: -14px;
+        margin-right: -12px;
         height: 0;
-        border-width: ($tab-nav-height / 2) 7px;
+        border-width: ($tab-nav-height / 2) 6px;
         border-color: transparent transparent #fff #fff;
         border-style: solid;
-        filter:drop-shadow(3px -2px 2px #ccc);
+        filter: drop-shadow(3px -2px 2px #ccc);
         //transition: border .3s ease-in;
       }
 
