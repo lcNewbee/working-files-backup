@@ -105,14 +105,17 @@ export const Login = React.createClass({
   },
 
   render() {
+    const { version } = this.props.app.toJS();
     var that = this;
     var myMsg = this.props.status;
+
 
     return (
       <div>
         <header className="navbar">
           <div className="brand"></div>
           <h1>{_('Axilspot Access Manager')}</h1>
+          <span className="version">GUI {version}</span>
         </header>
         <div className="sign">
           <div className="sign-backdrop"></div>
@@ -151,7 +154,8 @@ function mapStateToProps(state) {
   return {
     loginedAt: myState.get('loginedAt'),
     status: myState.get('status'),
-    data: myState.get('data')
+    data: myState.get('data'),
+    app: state.app
   };
 }
 

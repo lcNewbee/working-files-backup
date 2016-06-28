@@ -1,6 +1,6 @@
 {
   "name": "comlanos",
-  "version": "0.0.1",
+  "version": "1.0.4",
   "description": "comlanos 前端开发平台",
   "main": "src/index.jsx",
   "repository": "none",
@@ -59,6 +59,7 @@
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
     "gulp": "^3.9.1",
+    "gulp-bump": "^2.2.0",
     "gulp-copy": "0.0.2",
     "gulp-header": "^1.8.3",
     "gulp-load-plugins": "^1.2.4",

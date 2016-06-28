@@ -140,8 +140,8 @@ export const GroupSettings = React.createClass({
 
   getGroupTableOptions() {
     let ret = fromJS([{
-      'id': 'groupname',
-      'text': msg.groupname,
+      id: 'groupname',
+      text: msg.groupname,
       transform: function(val) {
 
         if(val === 'Default') {
@@ -150,11 +150,11 @@ export const GroupSettings = React.createClass({
         return val;
       }
     }, {
-      'id': 'remark',
-      'text': msg.remarks
+      id: 'remark',
+      text: msg.remarks
     }, {
-      'id': 'op',
-      'text': msg.action,
+      id: 'op',
+      text: msg.action,
       width: '200',
       transform: function(val, item) {
         if(item.get('groupname') === 'Default') {
@@ -197,20 +197,21 @@ export const GroupSettings = React.createClass({
 
   getDevicesTableOptions() {
     let ret = fromJS([{
-        'id': 'devicename',
-        'text': _('MAC Address') + '/' + _('Name'),
+        id: 'devicename',
+        text: _('MAC Address') + '/' + _('Name'),
         transform: function(val, item) {
           return item.get('devicename') || item.get('mac');
         }
       }, {
-        'id': 'ip',
-        'text': _('IP Address')
+        id: 'ip',
+        text: _('IP Address')
       }, {
-        'id': 'status',
-        'text': _('Online Status')
+        id: 'status',
+        text: _('Status'),
+        filter: 'translate'
       }, {
-        'id': 'op',
-        'text': _('Select'),
+        id: 'op',
+        text: _('Select'),
         transform: function(val, item) {
           var deviceMac;
           var selectedDevices = this.props.edit.get('devices');
@@ -304,7 +305,7 @@ export const GroupSettings = React.createClass({
                 <FormGroup
                   label={msg.remarks}
                   required={true}
-                  maxLength="64"
+                  maxLength="32"
                   value={this.getEditVal('remark')}
                   id="remark"
                   onChange={this.onChangeGroupSettings('remark')}

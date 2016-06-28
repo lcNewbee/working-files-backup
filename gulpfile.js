@@ -6,6 +6,7 @@ var $ = require('gulp-load-plugins')();
 var runSequence = require('run-sequence');
 var pkg = require('./package.json');
 var staticHash = require('gulp-static-hash')
+var bump = require('gulp-bump');
 var del = require('del');
 var shell = require('gulp-shell')
 var paths;
@@ -53,7 +54,7 @@ gulp.task('build:html', function() {
 
 gulp.task('build:header', function() {
   return gulp.src(paths.build + '/scripts/bundle.js')
-    .pipe($.header('var a_165F8BA5ABE1A5DA = 0;'))
+    .pipe($.header('var a_165F8BA5ABE1A5DA = 0;var v_165F8BA5ABE1A5DA = "' + pkg.version + '";'))
     .pipe(gulp.dest(paths.build + '/scripts/'));
 })
 gulp.task('build', function(callback) {
@@ -71,6 +72,62 @@ gulp.task('pub:ac',['clean:pubac', 'build'], function() {
     .pipe(gulp.dest(paths.pub))
     .pipe(gulp.dest(paths.pubNew));
 });
+
+/**
+ * 更新主版本号
+ */
+gulp.task('bump:major', function() {
+  gulp.src('package.json')
+    .pipe(bump({
+      type: 'major',
+    }))
+    .pipe(gulp.dest('./'));
+});
+
+/**
+ * 更新次版本号
+ */
+gulp.task('bump:minor', function() {
+  gulp.src('package.json')
+    .pipe(bump({
+      type: 'minor',
+    }))
+    .pipe(gulp.dest('./'));
+});
+
+/**
+ * 更新Patch布版本号
+ */
+gulp.task('bump', function() {
+  gulp.src('package.json')
+    .pipe(bump())
+    .pipe(gulp.dest('./'));
+});
+
+/**
+ * 更新预发布版本号
+ */
+gulp.task('bump:pre', function() {
+  gulp.src('package.json')
+    .pipe(bump({
+      type: 'prerelease',
+      preid: 'alpha'
+    }))
+    .pipe(gulp.dest('./'));
+});
+
+/**
+ * 更新开发调试版本号
+ */
+gulp.task('bump:dev', function() {
+  gulp.src('package.json')
+    .pipe(bump({
+      type: 'prerelease',
+      preid: 'dev'
+    }))
+    .pipe(gulp.dest('./'));
+});
+
 
 gulp.task('default', ['open:src']);
 

@@ -39,6 +39,12 @@ body {
     font-style: italic;
     font-family: $g-font-family-base-en;
   }
+  .version {
+    font-family: $g-font-family-base-en;
+    line-height: $g-navbar-height;
+    margin-left: 12px;
+    font-size: 10px;
+  }
   .brand {
     display: block;
     //width: $sidebar-width;

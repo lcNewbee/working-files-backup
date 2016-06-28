@@ -302,6 +302,7 @@ export const SignUp = React.createClass({
     var stepOneClass = '';
     var stepTwoClass = '';
     var stepThreeClass = '';
+    const { version } = this.props.app.toJS();
 
     if(currStep === 1) {
       stepOneClass = 'active';
@@ -321,6 +322,7 @@ export const SignUp = React.createClass({
         <div className="navbar">
           <div className="brand"></div>
           <h1>{_('Axilspot Access Manager')}</h1>
+          <span className="version">GUI {version}</span>
         </div>
         <div className="wizard">
           <h2>{_('Setup Wizard')}</h2>
@@ -432,5 +434,13 @@ export const SignUp = React.createClass({
   }
 });
 
+function mapStateToProps(state) {
+  return {
+    app: state.app
+  };
+}
+
 // 添加 redux 属性的 react 页面
-export const Screen = SignUp;
+export const Screen = connect(
+  mapStateToProps
+)(SignUp);

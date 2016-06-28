@@ -18,6 +18,7 @@ function clearLoginSession() {
 
 const defaultState = fromJS({
   saving: false,
+  version: '1.0.4',
   rateInterval: 15000,
   invalid: {},
   noControl: getControlStatus()

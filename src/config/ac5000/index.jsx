@@ -99,7 +99,7 @@ let routes = [{
         //   icon: 'file-pdf-o',
         //   text: _('REPORTS'),
         //   component: pStatistics.Screen
-        // }, 
+        // },
         {
           id: 'settings',
           path: '/main/settings',

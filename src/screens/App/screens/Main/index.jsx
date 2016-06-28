@@ -45,7 +45,7 @@ export default class Main extends Component {
   }
 
   render() {
-    const { saving } = this.props.app.toJS();
+    const { saving, version } = this.props.app.toJS();
     const { isShow } = this.state;
 
     return (
@@ -53,6 +53,7 @@ export default class Main extends Component {
         <header className="navbar">
           <div className="brand"></div>
           <h1>{_('Axilspot Access Manager')}</h1>
+          <span className="version">GUI {version}</span>
           <div className="aside">
             <a href="#" className="as-control" onClick={this.onRefresh}>
               <Icon name="refresh" className="icon" />

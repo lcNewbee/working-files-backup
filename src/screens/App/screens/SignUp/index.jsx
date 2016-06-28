@@ -156,6 +156,7 @@ export const SignUp = React.createClass({
   },
 
   render() {
+    const { version } = this.props.app.toJS();
     var FormGroupList;
     var that = this;
     var myMsg = this.props.status;
@@ -167,6 +168,7 @@ export const SignUp = React.createClass({
         <header className="navbar">
           <div className="brand"></div>
           <h1>{_('Axilspot Access Manager')}</h1>
+          <span className="version">GUI {version}</span>
         </header>
         <div className="sign">
           <div className="sign-backdrop"></div>
@@ -189,5 +191,13 @@ export const SignUp = React.createClass({
   }
 });
 
+function mapStateToProps(state) {
+  return {
+    app: state.app
+  };
+}
+
 // 添加 redux 属性的 react 页面
-export const Screen = SignUp;
+export const Screen = connect(
+  mapStateToProps
+)(SignUp);
