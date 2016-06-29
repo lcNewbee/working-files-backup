@@ -46,7 +46,7 @@ describe('utils validator', () => {
           rules: 'remarkTxt:"adc"',
         });
         expect(oneRuleOneArgValidator.check('addd'))
-          .to.be.equal("Can't input: 'a'");
+          .to.be.equal("Can't input: a");
       });
 
       it('should handle correct when option has one rule with params',
@@ -69,7 +69,7 @@ describe('utils validator', () => {
           .to.be.equal("This field is required");
 
         expect(rulesWithArgsValidator.check('afggg'))
-          .to.be.equal("Can't input: 'a'");
+          .to.be.equal("Can't input: a");
 
         expect(rulesWithArgsValidator.check('efggg'))
           .to.be.equal("String length range is: 1 - 3 bit");

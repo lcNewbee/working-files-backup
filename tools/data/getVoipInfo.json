@@ -1,0 +1,25 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "groupname": "Default"
+      },
+      {
+        "groupname": "group231",
+        "enable": "0"
+      },
+      {
+        "groupname": "group33333",
+        "enable": "1"
+      },
+      {
+        "groupname": "group33547",
+        "enable": "1"
+      }
+    ]
+  }
+}

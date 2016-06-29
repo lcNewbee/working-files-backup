@@ -57,6 +57,7 @@ const pGroupSettings = require('../../screens/App/screens/Main/screens/Settings/
 const sWireless = require('../../screens/App/screens/Main/screens/Settings/screens/Wireless');
 const sPortal = require('../../screens/App/screens/Main/screens/Settings/screens/Portal');
 const sGuest = require('../../screens/App/screens/Main/screens/Settings/screens/Guest');
+const sVoip = require('../../screens/App/screens/Main/screens/Settings/screens/Voip');
 const sAdmin = require('../../screens/App/screens/Main/screens/Settings/screens/Admin');
 
 let routes = [{
@@ -130,6 +131,11 @@ let routes = [{
               text: _('Guest Settings'),
               component: sGuest.Screen
             }, {
+              id: 'voip',
+              path: '/main/settings/voip',
+              text: _('VoIP'),
+              component: sVoip.Screen
+            }, {
               id: 'password',
               path: '/main/settings/admin',
               text: _('Admin'),
@@ -164,6 +170,7 @@ const reducers = {
   wireless: sWireless.reducer,
   portal: sPortal.reducer,
   guest: sGuest.reducer,
+  voip: sVoip.reducer,
   admin: sAdmin.reducer
 };
 
