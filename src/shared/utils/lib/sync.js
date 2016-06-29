@@ -26,7 +26,7 @@ var sync = {
   // 默认使用 JSON 格式数据传递
   save: function(url, data) {
     var queryStr = '';
-    
+
     if(data !== undefined) {
       data = JSON.stringify(data);
     }
@@ -35,6 +35,8 @@ var sync = {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
+          'Cache-Control': 'no-cache',
+          'If-Modified-Since': '1',
           'Content-Type': 'application/json'
         },
         body: data
@@ -46,7 +48,7 @@ var sync = {
         console.log('request failed', error)
       });
   },
-  
+
   postForm: function(url, form) {
     return fetch(url, {
       method: 'POST',
@@ -54,7 +56,7 @@ var sync = {
     })
   },
 
-  // 
+  //
   fetch: function(url, data) {
     var queryStr = '';
 
@@ -65,7 +67,14 @@ var sync = {
     if(queryStr) {
       url += '?' + queryStr;
     }
-    return fetch(url)
+    return fetch(url, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Cache-Control': 'no-cache',
+          'If-Modified-Since': '1'
+        }
+      })
       .then(checkStatus)
       .then(parseJSON)
       .then(handleServerError)
