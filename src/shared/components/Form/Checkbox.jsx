@@ -23,21 +23,26 @@ class Checkbox extends React.Component {
   }
   render() {
     let {
-      name, className, value, options
+      name, className, value, options, id
     } = this.props;
-    
+
     let label = options && options.label;
-    
+
     value = value === undefined ? '1' : value;
-    
+
+    if(!id) {
+      id = 'checkbox_' + Math.random();
+    }
+
     return (
-      <label className="checkbox">
+      <div className="checkbox">
         <input
           {...this.props}
+          id={id}
           value={value}
         />
-        {label || ' '}
-      </label>
+        <label htmlFor={id}>{label || ' '}</label>
+      </div>
     );
   }
 }

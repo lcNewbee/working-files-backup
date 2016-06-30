@@ -170,11 +170,12 @@ export const SignUp = React.createClass({
           <h1>{_('Axilspot Access Manager')}</h1>
           <span className="version">GUI {version}</span>
         </header>
-        <div className="sign">
+        <div className="sign sign-up">
           <div className="sign-backdrop"></div>
           <div className="sign-content">
             <h1>{_('Please Sign Up')}</h1>
             {FormGroupList}
+            <a href="#/" className="help-link">{_('Login in')}</a>
             {
               this.state.status !== 'ok' ?
                 <p className="msg-error ">{this.state.status}</p> :

@@ -245,7 +245,10 @@ export const Clients = React.createClass({
     const blockOption = fromJS([
       {
         id: 'devicename',
-        text: _('MAC Address') + '/' + _('Name')
+        text: _('MAC Address') + '/' + _('Name'),
+        transform: function(val, item) {
+          return item.get('devicename') || item.get('mac');
+        }
       }, {
         id: 'vendor',
         text: _('Manufacturer')

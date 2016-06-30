@@ -11,6 +11,15 @@
   box-shadow: 0 2px 8px 0 rgba(50, 50, 50, 0.48);
   //border: 1px solid #ccc;
 
+  &.sign-up {
+    margin-top: 3em;
+  }
+  .help-link {
+    float: right;
+    margin-right: 5px;
+    color: $g-brand-primary;
+    text-decoration: underline;
+  }
   .sign-backdrop {
     position: absolute;
     top: 0;
