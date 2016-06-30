@@ -9,15 +9,15 @@ let formInputIndex = 0;
 
 function createFormInputId(name) {
   let ret = name || 'formGroup_';
-  
+
   ret += formInputIndex;
-  
+
   if(formInputIndex < MAX_INDEX) {
     formInputIndex += 1;
   } else {
     formInputIndex = 0;
   }
-  
+
   return ret;
 }
 
@@ -28,12 +28,12 @@ export const FormGroup = React.createClass({
     help: PropTypes.string,
     label: PropTypes.string,
   },
-  
+
   // 验证不确定的错误
   check() {
     const {name, label, value, required} = this.props;
     let checkResult;
-    
+
     if(value == '' || value === undefined) {
       if(required) {
         checkResult = _('%s is required', label);
@@ -47,12 +47,12 @@ export const FormGroup = React.createClass({
       this.props.onValidError({name, checkResult});
     }
   },
-  
+
   // 验证可确定的错误
   checkClear() {
     const { name, label, value} = this.props;
     let checkResult;
-    
+
     if(this.props.validator) {
       checkResult = this.props.validator.checkClear(value);
       if(this.props.onValidError) {
@@ -60,7 +60,7 @@ export const FormGroup = React.createClass({
       }
     }
   },
-  
+
   // clearError
   clearValidError() {
     this.props.onValidError({
@@ -68,13 +68,13 @@ export const FormGroup = React.createClass({
       checkResult: undefined
     });
   },
-  
+
   componentDidUpdate(prevProps) {
     const {value} = this.props;
-    
+
     // 数据验证
     if(this.props.validator) {
-      
+
       // 如果组是可用的
       if(!this.props.disabled) {
         if(prevProps.value !== value) {
@@ -82,22 +82,22 @@ export const FormGroup = React.createClass({
         } else if (prevProps.validateAt !== this.props.validateAt) {
           this.check();
         }
-      
+
       } else {
         this.clearValidError()
       }
-      
+
     }
   },
-  
-  
+
+
   render() {
     const { help, errMsg, name, label, required,
-      children, type, clearable, role, id
+      children, type, clearable, role, id, focus
     } = this.props;
     const {check, checkClear} = this;
     let groupClassName = `form-group form-group-${role}`;
-    
+
     return <div className={groupClassName}>
       {
         label ? (
@@ -106,19 +106,19 @@ export const FormGroup = React.createClass({
             {required ? <span className="text-required">*</span> : null}
           </label>) : null
       }
-      
+
       <div className="form-control">
         {
           children ? React.Children.map(children, function(elem) {
             var ret = elem;
-            
+
             if(elem && elem.type && elem.type.name === 'FormInput') {
               ret = React.cloneElement(elem, {
                 check: check,
                 checkClear: checkClear
               });
             }
-            
+
             return ret;
           }) : (
             <FormInput
@@ -128,12 +128,12 @@ export const FormGroup = React.createClass({
             />
           )
         }
-        
-        { 
-          help ? <span className="help">{help}</span> : null 
+
+        {
+          help ? <span className="help">{help}</span> : null
         }
-        
-        { 
+
+        {
           errMsg ? <span className="error">{errMsg}</span> : null
         }
       </div>

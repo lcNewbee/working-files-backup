@@ -109,7 +109,6 @@ export const Login = React.createClass({
     var that = this;
     var myMsg = this.props.status;
 
-
     return (
       <div>
         <header className="navbar">

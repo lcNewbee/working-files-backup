@@ -209,6 +209,15 @@ export const Portal = React.createClass({
     // minutes
     const expirationOptions = [
       {
+        value: '600',
+        label: '10 ' + MSG.minutes
+      }, {
+        value: '1200',
+        label: '20 ' + MSG.minutes
+      }, {
+        value: '1800',
+        label: '30 ' + MSG.minutes
+      }, {
         value: '3600',
         label: '1 ' + MSG.hours
       }, {
