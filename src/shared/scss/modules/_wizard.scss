@@ -69,7 +69,7 @@ $main-blue: #0093dd;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
 
-        &:before {
+        &::before {
           display: inline-block;
           content: "\F111";
           width: 80px;
@@ -88,7 +88,7 @@ $main-blue: #0093dd;
         @include opacity(1);
 
         .icon {
-          &:before {
+          &::before {
             border: 4px solid $g-brand-success;
             content: "\F00C";
           }
@@ -99,7 +99,7 @@ $main-blue: #0093dd;
         @include opacity(1);
 
         .icon {
-          &:before {
+          &::before {
             border: 4px solid $g-main-color;
             content: "\F0C9";
           }

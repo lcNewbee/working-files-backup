@@ -123,15 +123,17 @@ body input[type=number] {
 
       &::before {
         margin: 0 5px 0 0;
-        width: 16px;
-        height: 16px;
+        width: 14px;
+        height: 14px;
         border: 1px solid #ccc;
         content: "\2713";
         color: transparent;
-        transition: color ease .3s;
+        transition: color ease .3s,
+          background-color ease .3s,
+          border ease .3s ;
         text-align: center;
-        font-size: 16px;
-        line-height: 15px;
+        font-size: 12px;
+        line-height: 12px;
         border-radius: 2px;
         display: inline-block;
       }
@@ -163,15 +165,16 @@ body input[type=number] {
 
       &::before {
         margin: 0 5px 0 0;
-        width: 16px;
-        height: 16px;
+        font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+        width: 14px;
+        height: 14px;
         border: 1px solid #ccc;
         content: "\26AB";
         color: transparent;
         transition: color ease .3s;
         text-align: center;
-        font-size: 16px;
-        line-height: 15px;
+        font-size: 12px;
+        line-height: 12px;
         border-radius: 8px;
         display: inline-block;
       }

@@ -17,6 +17,7 @@ import echarts from 'echarts';
 import './index.scss';
 
 const flowRateFilter = utils.filter('flowRate');
+const flowRateKbFilter = utils.filter('flowRate:["KB"]');
 const tooltip = {
   trigger: 'item',
   formatter: "{a} <br/>{b} : {c} 台 ({d}%)"
@@ -399,8 +400,8 @@ export const Status = React.createClass({
         id: 'softversion',
         text:  _('UP/Down Flow'),
         transform(val, item) {
-          return flowRateFilter.transform(item.get('upstream')) +
-              ' / ' + flowRateFilter.transform(item.get('downstream'));
+          return flowRateKbFilter.transform(item.get('upstream')) +
+              ' / ' + flowRateKbFilter.transform(item.get('downstream'));
         }
       }, {
         id: 'connecttime',

@@ -13,29 +13,29 @@ if(!_) {
 
 function transformComplex(num, unit) {
   var ret = unit;
-  
+
   if(num > 1) {
     ret = num + _(ret + 's');
   } else {
     ret = num + _(ret);
   }
-  
+
   return ret;
 }
 
 helper = {
   translate: _,
-  
-  toDecimal: function(x, len) { 
+
+  toDecimal: function(x, len) {
     var f = parseFloat(x);
     var UNIT = Math.pow(10, len)
-    
-    if (isNaN(f)) { 
+
+    if (isNaN(f)) {
       return;
     }
     f = Math.round(x * UNIT) / UNIT;
-    
-    return f; 
+
+    return f;
   },
 
   connectTime: function (time, unit) {
@@ -86,7 +86,7 @@ helper = {
       UNIT_MB = 1024 ;
       UNIT_KB = 1;
     }
-    
+
     if(unitSize > UNIT_GB) {
       ret = unitSize / UNIT_GB;
       unit = 'GB';
@@ -100,13 +100,13 @@ helper = {
       ret = unitSize;
       unit = 'B'
     }
-    
+
     return helper.toDecimal(ret, 1) + unit;
   },
 
   add: function(str, num) {
     var ret = coreUtils.toNumber(str, 'helper.add');
-    
+
     num = coreUtils.toNumber(num, 'helper.add');
     ret += num;
     return ret;
