@@ -136,6 +136,8 @@
   "Info": "信息",
   "Describe": "描述",
   "Type or Describe": "类型或描述",
+  "Clean All Logs": "清除所有日志",
+  "Are you sure clean all logs?": "你确定要清除所有日志？",
 
   "REPORTS": "统计报表",
   "Reports": "统计报表",

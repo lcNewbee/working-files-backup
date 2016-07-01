@@ -83,6 +83,13 @@ a.btn {
   background-image: linear-gradient($g-brand-warning, $g-brand-warning - #060606);
 }
 
+.btn-danger {
+  color: #fff;
+  background-color: $g-brand-danger;
+  background-image: linear-gradient($g-brand-danger, $g-brand-danger - #060606);
+}
+
+
 .btn-group {
   display: inline-block;
   margin: 0 5px;

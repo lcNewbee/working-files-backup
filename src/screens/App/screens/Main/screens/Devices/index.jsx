@@ -148,9 +148,13 @@ export const Device = React.createClass({
       this.handleAction(mac, 'reboot');
     }
   },
-  onLocateDevice(mac) {
+  onLocateDevice(mac, isLocating) {
+    let actionType = 'location';
 
-    this.handleAction(mac, 'locate');
+    if (isLocating) {
+      actionType = 'unlocation';
+    }
+    this.handleAction(mac, actionType);
   },
   onUpgradeDevice(mac) {
     var msg_text = _('Upgrade need reboot Device, are you sure upgrade device: %s?', mac);
@@ -304,10 +308,16 @@ export const Device = React.createClass({
           transform: function (val, item) {
             var deviceMac = item.get('mac');
             var deviceStatus = item.get('status');
+            var isLocating = item.get('locatestatus') === 'location';
             var upgradeBtn = null;
+            var locationClassName = '';
 
             if (deviceStatus === 'disable' || noControl) {
               return null;
+            }
+
+            if(isLocating) {
+              locationClassName = 'animated infinite flash';
             }
 
             if (item.get('newest') === '0') {
@@ -328,7 +338,8 @@ export const Device = React.createClass({
                   icon="recycle"
                   />
                 <Button
-                  onClick={this.onLocateDevice.bind(this, deviceMac) }
+                  className={locationClassName}
+                  onClick={this.onLocateDevice.bind(this, deviceMac, isLocating) }
                   text={_('Locate') }
                   size="sm"
                   icon="location-arrow"
