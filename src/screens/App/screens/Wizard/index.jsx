@@ -64,6 +64,7 @@ const formGroups = Map({
       name: 'password',
       maxLength: 21,
       placeholder: msg.password,
+      autoFocus: true
     },
     validator: validator({
       label: msg.password,
@@ -110,7 +111,7 @@ export const SignUp = React.createClass({
       confirmpasswd: '',
       country: defaultCountry,
       countryLabel: defaultCountryLabel,
-      //timeZone: ((new Date()).getTimezoneOffset() / 60).toString(),
+      timeZone: ((new Date()).getTimezoneOffset() / 60).toString(),
       currStep: 1
 
     }

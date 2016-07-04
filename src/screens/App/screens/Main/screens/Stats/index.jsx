@@ -253,6 +253,7 @@ export const Status = React.createClass({
   renderClientStatistics() {
     const dayText = _('D')
     let clientStatisticsList = this.props.data.get('clientStatisticsList');
+    let totalClientStatisticsList = null;
     let xAxisData;
     let xAxisName = _('Days');
     let maxData = 200;
@@ -260,7 +261,9 @@ export const Status = React.createClass({
     if(!clientStatisticsList) {
       return ;
     }
-
+    totalClientStatisticsList = clientStatisticsList.getIn([0, 'data']).map(function (item, i){
+      return item + clientStatisticsList.getIn([1, 'data', i]);
+    }).toJS();
     clientStatisticsList = clientStatisticsList.toJS();
 
     maxData = Math.max.apply(null, clientStatisticsList[0].data.concat(clientStatisticsList[1].data));
@@ -272,7 +275,7 @@ export const Status = React.createClass({
         this.props.query.get('time_type') === 'today') {
 
       xAxisData = List(new Array(24)).map(function(val, i) {
-        return i + ':00';
+        return (i) + ':00';
       }).toJS();
       xAxisName = _('Hours');
 
@@ -293,6 +296,8 @@ export const Status = React.createClass({
       }).toJS();
     }
 
+    console.log(xAxisData)
+
     const ClientsStatsOption = {
         tooltip: {
           trigger: 'axis'
@@ -305,17 +310,24 @@ export const Status = React.createClass({
         xAxis: [{
           type: 'category',
           data: xAxisData,
-          name: xAxisName
+          name: xAxisName,
+          interval: 1,
+          splitLine: {
+            interval: 0
+          },
+          axisLabel: {
+            interval: 0
+          }
         }],
         yAxis: [{
           type: 'value',
           name: _('Number'),
           minInterval: 1,
-          max: maxData,
           axisLabel: {
             formatter: '{value}'
           }
         }],
+        color: ['#c23531','#2f4554', '#0093dd', '#d48265', '#91c7ae','#749f83',  '#ca8622', '#bda29a','#6e7074', '#546570', '#c4ccd3'],
         series: [
           {
             name: '2.4G',
@@ -326,6 +338,12 @@ export const Status = React.createClass({
             name: '5G',
             type: 'bar',
             data: clientStatisticsList[1].data
+          },
+          {
+            name: _('Total'),
+            type: 'line',
+            color: '#009344',
+            data: totalClientStatisticsList
           }
         ]
       };

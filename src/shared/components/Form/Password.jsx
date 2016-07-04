@@ -22,6 +22,15 @@ class Password extends React.Component {
     this.seePassword = this.seePassword.bind(this);
   };
 
+  componentDidMount() {
+    let {type, autoFocus} = this.props;
+
+    if(autoFocus) {
+      this.refs.passwordInput.focus();
+    }
+  };
+
+
   onChange(e) {
     const val = e.target.value;
 
@@ -38,8 +47,7 @@ class Password extends React.Component {
     this.setState({
       isSee: !this.state.isSee
     })
-
-    this.refs.myInput.focus();
+    this.refs.passwordInput.focus();
   };
 
   render() {
@@ -53,20 +61,12 @@ class Password extends React.Component {
       iconName = 'eye-slash';
     }
 
-    if(autoFocus) {
-      myRef = function(input) {
-        if(input != null && typeof input.focus === 'function') {
-          input.focus();
-        }
-      }
-    }
-
     return (
       <div className="input-password">
         <Icon className="icon" name={iconName} onClick={this.seePassword}/>
 
         <input {...this.props}
-          ref={myRef}
+          ref="passwordInput"
           type={type}
           onChange={this.onChange}
         />

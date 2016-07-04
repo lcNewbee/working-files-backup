@@ -81,7 +81,8 @@
                 "wirelessType": "guest",
                 "islock": "unlock",
                 "vendor": "huawei",
-                "lasttime":"2016-06-22 17:25:51"
+                "lasttime":"2016-06-22 17:25:51",
+                "status": "disable"
             }
         ]
     }

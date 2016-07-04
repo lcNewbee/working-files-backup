@@ -67,6 +67,12 @@ export default function( state = defaultState, action ) {
     case 'REFRESH_ALL':
       return state.set('refreshAt', action.refreshAt);
 
+    case 'REQUEST_FETCH_AC_INFO':
+      return state.set('fetching', true);
+
+    case 'RECIVECE_FETCH_AC_INFO':
+      return state.set('fetching', false).merge(action.data);
+
     default:
   }
   return state;

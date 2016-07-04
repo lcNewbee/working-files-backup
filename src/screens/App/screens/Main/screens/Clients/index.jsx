@@ -205,8 +205,13 @@ export const Clients = React.createClass({
     // 添加操作项
     let options = clientsTableOptions.setIn([-1, 'transform'],
       function(val, item) {
-        var deviceMac = item.get('mac');
+        var mac = item.get('mac');
+        var status = item.get('status');
         var isLock = item.get('islock') === 'lock' ? true : false;
+
+        if (status === 'disable' || noControl) {
+          return null;
+        }
 
         return (
           <div className="action-btns">
@@ -217,7 +222,7 @@ export const Clients = React.createClass({
                   size="sm"
                   text={msg.unlock}
                   style={styles.actionButton}
-                  onClick={this.onAction.bind(this, deviceMac, 'unlock')}
+                  onClick={this.onAction.bind(this, mac, 'unlock')}
                 />
               ) : (
                 <Button
@@ -225,7 +230,7 @@ export const Clients = React.createClass({
                   size="sm"
                   text={msg.lock}
                   style={styles.actionButton}
-                  onClick={this.onAction.bind(this, deviceMac, 'lock')}
+                  onClick={this.onAction.bind(this, mac, 'lock')}
                 />
               )
             }
@@ -235,7 +240,7 @@ export const Clients = React.createClass({
               size="sm"
               text={msg.reconnect}
               style={styles.actionButton}
-              onClick={this.onAction.bind(this, deviceMac, 'reconnect')}
+              onClick={this.onAction.bind(this, mac, 'reconnect')}
             />
           </div>
         )

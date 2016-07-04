@@ -6,7 +6,7 @@ export default function(
     data: {
       conutry: '',
       password: '',
-      timeZone: (new Date()).getTimezoneOffset() / 60
+      timeZone: (new Date()).getTimezoneOffset()
     }
   }), action ) {
 
