@@ -29,6 +29,15 @@ const defaultCountryLabel = List(countries).find(function(item) {
   return item.country === defaultCountry;
 })[b28n.getLang()];
 
+const defaultTimeZone = (((new Date()).getTimezoneOffset() / 60) * -1).toString();
+let defaultTimeZoneLabel;
+
+TIME_ZONE.forEach(function(item, i) {
+  if(item.value ===  defaultTimeZone) {
+    defaultTimeZoneLabel = item.label;
+  }
+})
+
 const countryList = List(countries).map((item) => {
   return {
     value: item.country,
@@ -111,9 +120,9 @@ export const SignUp = React.createClass({
       confirmpasswd: '',
       country: defaultCountry,
       countryLabel: defaultCountryLabel,
-      timeZone: ((new Date()).getTimezoneOffset() / 60).toString(),
+      timeZone: defaultTimeZone,
+      timeZoneLabel: defaultTimeZoneLabel,
       currStep: 1
-
     }
   },
 
