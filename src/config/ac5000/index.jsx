@@ -11,6 +11,9 @@ const b28n = require('b28n');
 const langCn = require('../lang/cn/core.json');
 const validateCn = require('../lang/cn/validate.json')
 const curLang = b28n.getLang();
+const GUI_CONFIG = require('../package.json');
+
+window.GUI_CONFIG = GUI_CONFIG;
 
 b28n.addDict(langCn, 'cn');
 b28n.addDict(validateCn, 'cn');

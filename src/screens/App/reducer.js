@@ -1,5 +1,7 @@
 import {Map, List, fromJS} from 'immutable';
 
+let guiVersion = '.' + GUI_CONFIG.version.replace(/\./g, '');
+
 function getControlStatus() {
   var ret = false;
   var a_165F8BA5ABE1A5DA = '0';
@@ -21,7 +23,6 @@ function clearLoginSession() {
 
 const defaultState = fromJS({
   saving: false,
-  version: '1.0.4',
   rateInterval: 15000,
   invalid: {},
   noControl: false
@@ -71,6 +72,7 @@ export default function( state = defaultState, action ) {
       return state.set('fetching', true);
 
     case 'RECIVECE_FETCH_AC_INFO':
+      action.data.version += guiVersion;
       return state.set('fetching', false).merge(action.data);
 
     default:

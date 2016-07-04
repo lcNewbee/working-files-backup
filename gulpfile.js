@@ -9,6 +9,7 @@ var staticHash = require('gulp-static-hash')
 var bump = require('gulp-bump');
 var del = require('del');
 var shell = require('gulp-shell')
+var rename = require("gulp-rename");
 var paths;
 
 paths = gulp.paths = {
@@ -67,17 +68,23 @@ gulp.task('clean:pubac', function(callback) {
   return del([paths.pubNew], {force: true});
 });
 
-gulp.task('pub:ac',['clean:pubac', 'build'], function() {
+gulp.task('pub:copy', function() {
   return gulp.src(paths.build + '/**/*')
     .pipe(gulp.dest(paths.pub))
     .pipe(gulp.dest(paths.pubNew));
+})
+
+gulp.task('pub:ac', function(callback) {
+  runSequence('bump', [ 'clean:pubac', 'build' ], 'pub:copy', callback)
 });
 
 /**
  * 更新主版本号
  */
+var packageFiles = ['./package.json', '**/app.json'];
+
 gulp.task('bump:major', function() {
-  gulp.src('package.json')
+  gulp.src(packageFiles)
     .pipe(bump({
       type: 'major',
     }))
@@ -88,7 +95,7 @@ gulp.task('bump:major', function() {
  * 更新次版本号
  */
 gulp.task('bump:minor', function() {
-  gulp.src('package.json')
+  gulp.src(packageFiles)
     .pipe(bump({
       type: 'minor',
     }))
@@ -99,7 +106,7 @@ gulp.task('bump:minor', function() {
  * 更新Patch布版本号
  */
 gulp.task('bump', function() {
-  gulp.src('package.json')
+  gulp.src(packageFiles)
     .pipe(bump())
     .pipe(gulp.dest('./'));
 });
@@ -108,7 +115,7 @@ gulp.task('bump', function() {
  * 更新预发布版本号
  */
 gulp.task('bump:pre', function() {
-  gulp.src('package.json')
+  gulp.src(packageFiles)
     .pipe(bump({
       type: 'prerelease',
       preid: 'alpha'
@@ -120,7 +127,7 @@ gulp.task('bump:pre', function() {
  * 更新开发调试版本号
  */
 gulp.task('bump:dev', function() {
-  gulp.src('package.json')
+  gulp.src(packageFiles)
     .pipe(bump({
       type: 'prerelease',
       preid: 'dev'

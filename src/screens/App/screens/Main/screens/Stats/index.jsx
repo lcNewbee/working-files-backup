@@ -282,17 +282,17 @@ export const Status = React.createClass({
     } else if (this.props.query.get('time_type') === 'week') {
 
       xAxisData = List(new Array(7)).map(function(val, i) {
-        return i;
+        return i + 1;
       }).toJS();
     } else if (this.props.query.get('time_type') === 'half_month') {
 
       xAxisData = List(new Array(15)).map(function(val, i) {
-        return i;
+        return i + 1;
       }).toJS();
     } else {
 
       xAxisData = List(new Array(30)).map(function(val, i) {
-        return i;
+        return i + 1;
       }).toJS();
     }
 
