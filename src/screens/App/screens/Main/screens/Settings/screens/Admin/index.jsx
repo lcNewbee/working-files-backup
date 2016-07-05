@@ -1,6 +1,5 @@
 import React, {PropTypes} from 'react';
 import utils from 'utils';
-import classNames from 'classnames';
 import { bindActionCreators } from 'redux';
 import {fromJS, Map, List} from 'immutable';
 import { connect } from 'react-redux';
@@ -14,6 +13,7 @@ import myReducer from './reducer';
 import {FormGroup} from 'components/Form';
 import Select from 'components/Select';
 import Button from 'components/Button';
+import SaveButton from 'components/Button/Save';
 
 const msg = {
   'upSpeed': _('Up Speed'),
@@ -162,11 +162,9 @@ export const Admin = React.createClass({
              }
              {
                noControl ? null : (
-                <Button
+                <SaveButton
                   type='button'
-                  text={_('Save')}
-                  icon="save"
-                  role="primary"
+                  loading={this.props.app.get('saving')}
                   onClick={this.onSave}
                 />
                )

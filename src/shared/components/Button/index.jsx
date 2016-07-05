@@ -44,7 +44,7 @@ class Button extends React.Component {
       >
         {
           loading ? (
-            <Icon name="spinner" spin={true} style={{marginLeft: '3px'}}/>
+            <Icon name="spinner" spin={true} />
           ) : <Icon name={icon} />
         }
         {text}

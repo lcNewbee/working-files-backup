@@ -64,6 +64,7 @@
     "gulp-header": "^1.8.3",
     "gulp-load-plugins": "^1.2.4",
     "gulp-rename": "^1.2.2",
+    "gulp-shell": "^0.5.2",
     "gulp-static-hash": "^0.1.4",
     "html-webpack-plugin": "^2.15.0",
     "imports-loader": "^0.6.5",

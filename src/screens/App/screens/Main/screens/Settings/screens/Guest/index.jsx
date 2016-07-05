@@ -12,6 +12,7 @@ import myReducer from './reducer';
 
 import {FormGroup, FormInput} from 'components/Form';
 import Button from 'components/Button';
+import SaveButton from 'components/Button/Save';
 
 const msg = {
   'upSpeed': _('Up Speed'),
@@ -281,13 +282,11 @@ export const Guest = React.createClass({
         <FormGroup role="save">
           {
             noControl ? null : (
-              <Button
+              <SaveButton
                 type='button'
-                text={_('Save') }
-                icon="save"
-                role="primary"
+                loading={this.props.app.get('saving')}
                 onClick={this.onSave}
-                />
+              />
             )
           }
         </FormGroup>

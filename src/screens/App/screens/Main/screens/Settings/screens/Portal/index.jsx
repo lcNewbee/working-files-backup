@@ -12,6 +12,7 @@ import './index.scss';
 import {FormGroup} from 'components/Form';
 import Select from 'components/Select';
 import Button from 'components/Button';
+import SaveButton from 'components/Button/Save';
 
 const MSG = {
   Seconds: _('Seconds'),
@@ -421,11 +422,9 @@ export const Portal = React.createClass({
           <div className="form-control">
              {
               noControl ? null : (
-                <Button
+                <SaveButton
                   type='button'
-                  text={_('Save')}
-                  icon="save"
-                  role="primary"
+                  loading={this.props.app.get('saving')}
                   onClick={this.onSave}
                 />
               )

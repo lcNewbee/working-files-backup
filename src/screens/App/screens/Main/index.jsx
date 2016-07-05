@@ -109,14 +109,7 @@ export default class Main extends Component {
           }
 
           {
-            saving ? (
-              <Modal
-                role="message"
-                isShow={true}
-              >
-                { _('Saving') }
-              </Modal>
-            ) : null
+            saving ? <div className="body-backdrop"></div> : null
           }
       </div>
     )
