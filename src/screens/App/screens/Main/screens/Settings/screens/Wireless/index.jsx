@@ -303,7 +303,7 @@ export const Wireless = React.createClass({
         <FormGroup
           label={msg.upSpeed}
           required={true}
-          help="KB"
+          help="KB/s"
           value={getCurrData('upstream')}
           {...upstream}
         >
@@ -327,7 +327,7 @@ export const Wireless = React.createClass({
         <FormGroup
           type="number"
           label={msg.downSpeed}
-          help="KB"
+          help="KB/s"
           maxLength="6"
           required={true}
           value={getCurrData('downstream')}
