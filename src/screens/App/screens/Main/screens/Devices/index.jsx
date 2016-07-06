@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { bindActionCreators } from 'redux'
 import * as actions from './actions';
-import * as validateActions from 'actions/valid';
+import * as appActions from 'actions/app';
 import reducer from './reducer';
 import {fromJS, Map} from 'immutable';
 import validator from 'utils/lib/validator';
@@ -137,16 +137,26 @@ export const Device = React.createClass({
   onResetDevice(mac) {
     var msg_text = _('Are you sure reset device: %s?', mac);
 
-    if (confirm(msg_text)) {
-      this.handleAction(mac, 'reset');
-    }
+    this.props.createModal({
+      id: 'settings',
+      role: 'comfirm',
+      text: msg_text,
+      apply: function() {
+        this.handleAction(mac, 'reset');
+      }.bind(this)
+    });
   },
   onRebootDevice(mac) {
     var msg_text = _('Are you sure reboot device: %s?', mac);
 
-    if (confirm(msg_text)) {
-      this.handleAction(mac, 'reboot');
-    }
+    this.props.createModal({
+      id: 'settings',
+      role: 'comfirm',
+      text: msg_text,
+      apply: function() {
+        this.handleAction(mac, 'reboot');
+      }.bind(this)
+    });
   },
   onLocateDevice(mac, isLocating) {
     let actionType = 'location';
@@ -159,9 +169,14 @@ export const Device = React.createClass({
   onUpgradeDevice(mac) {
     var msg_text = _('Upgrade need reboot Device, are you sure upgrade device: %s?', mac);
 
-    if (confirm(msg_text)) {
-      this.handleAction(mac, 'upgrade');
-    }
+    this.props.createModal({
+      id: 'settings',
+      role: 'comfirm',
+      text: msg_text,
+      apply: function() {
+        this.handleAction(mac, 'upgrade');
+      }.bind(this)
+    });
   },
 
   // onEdit
@@ -199,7 +214,13 @@ export const Device = React.createClass({
 
       if (invalid.isEmpty()) {
         if (combineValidResult) {
-          alert(combineValidResult)
+
+          this.props.createModal({
+            title: _('DEVICES'),
+            role: 'alert',
+            text: combineValidResult
+          });
+
         } else {
           this.props.saveDeviceNetwork();
         }
@@ -503,7 +524,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
-    validateActions,
+    appActions,
     actions
   ), dispatch)
 }

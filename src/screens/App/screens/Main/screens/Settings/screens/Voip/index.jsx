@@ -5,7 +5,7 @@ import {fromJS, Map, List} from 'immutable';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import validator from 'utils/lib/validator';
-import * as validateActions from 'actions/valid';
+import * as appActions from 'actions/app';
 import * as myActions from './actions';
 import myReducer from './reducer';
 
@@ -168,7 +168,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
-    validateActions,
+    appActions,
     myActions
   ), dispatch)
 }

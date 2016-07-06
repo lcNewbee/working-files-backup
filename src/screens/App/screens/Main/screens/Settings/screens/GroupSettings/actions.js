@@ -1,5 +1,5 @@
 import utils from 'utils';
-import * as appActions from 'actions/ajax';
+import * as appActions from 'actions/app';
 
 const urls = {
   fetch: "/goform/getDevGroups",
@@ -97,6 +97,7 @@ export function receiveGroupDevices(data) {
     updateAt: Date.now()
   };
 }
+
 export function fetchGroupDevices() {
   return dispatch => {
     dispatch(reqeustFetchGroupDevices());

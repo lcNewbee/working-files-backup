@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import {connect} from 'react-redux';
 import * as actions from 'actions/app';
 import reducer from './reducer';
+import Modal from 'components/Modal';
 
 export const App = React.createClass({
 
@@ -11,8 +12,37 @@ export const App = React.createClass({
     this.props.fetchAcInfo();
   },
 
+  onModalClose() {
+    this.props.closeModal({
+      status: 'cancel'
+    });
+  },
+
+  onModalApply() {
+    this.props.closeModal({
+      status: 'ok'
+    });
+  },
+
   render: function() {
-    return this.props.children;
+    const { modal } = this.props.app.toJS();
+
+    return (
+      <div>
+        { this.props.children }
+        <Modal
+          isShow={modal.status === 'show' ? true : false}
+          title={modal.title}
+          role={modal.role}
+          transitionEnter={false}
+          transitionLeave={false}
+          onClose={this.onModalClose}
+          onOk={this.onModalApply}
+        >
+          {modal.text}
+        </Modal>
+      </div>
+    );
   }
 });
 

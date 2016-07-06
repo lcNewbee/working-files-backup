@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import validator from 'utils/lib/validator';
 import * as myActions from './actions';
-import * as validateActions from 'actions/valid';
+import * as appActions from 'actions/app';
 import myReducer from './reducer';
 
 import {FormGroup} from 'components/Form';
@@ -157,7 +157,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
-    validateActions,
+    appActions,
     myActions
   ), dispatch)
 }

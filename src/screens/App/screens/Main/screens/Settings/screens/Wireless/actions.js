@@ -1,5 +1,5 @@
 import utils from 'utils';
-import * as appActions from 'actions/ajax';
+import * as appActions from 'actions/app';
 
 const urls = {
   fetch: "/goform/getWifi",
@@ -47,7 +47,7 @@ export function changeWifiSettings(data) {
   }
 }
 
-// Set 
+// Set
 export function reqeustSetWifi() {
   return {
     type: "REQEUST_SET_WIFI"
@@ -61,7 +61,7 @@ export function receiveSetWifi() {
 export function setWifi() {
   return (dispatch, getState) => {
     const data = getState().wireless.getIn(['data', 'curr']);
-    
+
     dispatch(appActions.requestSave());
 
     utils.save(urls.save, data)
@@ -70,7 +70,7 @@ export function setWifi() {
           dispatch(receiveWifi());
           dispatch(fetchWifiSettings());
         }
-        
+
         dispatch(appActions.receiveSave(json.state));
       });
   };

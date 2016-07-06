@@ -5,7 +5,7 @@ import {fromJS, Map, List} from 'immutable';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import validator from 'utils/lib/validator';
-import * as validateActions from 'actions/valid';
+import * as appActions from 'actions/app';
 import * as myActions from './actions';
 import myReducer from './reducer';
 import './index.scss';
@@ -17,6 +17,7 @@ import SaveButton from 'components/Button/Save';
 const MSG = {
   Seconds: _('Seconds'),
   minutes: _('Minutes'),
+  hour: _('Hour'),
   hours: _('Hours'),
   days: _('Days'),
   userDef: _('User Defined'),
@@ -97,12 +98,21 @@ export const Portal = React.createClass({
       var extension = utils.getExtension(filePath);
 
       if(!filePath) {
-        alert(_('Please select a upload image'));
+        this.props.createModal({
+          id: 'admin',
+          role: 'alert',
+          text: _('Please select a upload image')
+        });
         return ;
       }
 
       if('png,gif,jpg,bmp'.indexOf(extension) === -1) {
-        alert(_('Please select a upload image'));
+        this.props.createModal({
+          id: 'admin',
+          role: 'alert',
+          text: _('Please select a upload image')
+        });
+
         e.target.value = '';
         this.restImageStatus(i);
         return ;
@@ -138,7 +148,11 @@ export const Portal = React.createClass({
       var data, extension;
 
       if(!input.value) {
-        alert(_('Please select a upload image'));
+        that.props.createModal({
+          id: 'admin',
+          role: 'alert',
+          text: _('Please select a upload image')
+        });
         return ;
       }
 
@@ -220,7 +234,7 @@ export const Portal = React.createClass({
         label: '30 ' + MSG.minutes
       }, {
         value: '3600',
-        label: '1 ' + MSG.hours
+        label: '1 ' + MSG.hour
       }, {
         value: '14400',
         label: '4 ' + MSG.hours
@@ -451,7 +465,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
-    validateActions,
+    appActions,
     myActions
   ), dispatch)
 }

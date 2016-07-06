@@ -80,7 +80,11 @@ export const FormGroup = React.createClass({
         if(prevProps.value !== value) {
           this.checkClear();
         } else if (prevProps.validateAt !== this.props.validateAt) {
-          this.check();
+          console.log(this.refs._formGroup.offsetWidth)
+          if (this.refs._formGroup.offsetWidth > 0) {
+             this.check();
+          }
+
         }
 
       } else {
@@ -96,9 +100,13 @@ export const FormGroup = React.createClass({
       children, type, clearable, role, id, focus
     } = this.props;
     const {check, checkClear} = this;
-    let groupClassName = `form-group form-group-${role}`;
+    let groupClassName = 'form-group';
 
-    return <div className={groupClassName}>
+    if(role) {
+      groupClassName +=  ` form-group-${role}`;
+    }
+
+    return <div className={groupClassName} ref="_formGroup">
       {
         label ? (
           <label htmlFor={id}>

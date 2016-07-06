@@ -25,6 +25,9 @@ const defaultState = fromJS({
   saving: false,
   rateInterval: 15000,
   invalid: {},
+  modal: {
+    role: 'alert',
+  },
   noControl: false
 });
 
@@ -74,6 +77,16 @@ export default function( state = defaultState, action ) {
     case 'RECIVECE_FETCH_AC_INFO':
       action.data.version += guiVersion;
       return state.set('fetching', false).merge(action.data);
+
+    case 'CREATE_MODAL':
+      return state.set('modal', Map({
+          status: 'show',
+          role: 'alert',
+          title: _('MESSAGE'),
+        })).mergeIn(['modal'], action.data);
+
+    case 'CHANGE_MODAL_STATE':
+      return state.mergeIn(['modal'], action.data);
 
     default:
   }

@@ -5,7 +5,7 @@ import {fromJS, Map} from 'immutable';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import validator from 'utils/lib/validator';
-import * as validateActions from 'actions/valid';
+import * as appActions from 'actions/app';
 import * as actions from './actions';
 import reducer from './reducer';
 import {FormGroup} from 'components/Form';
@@ -42,6 +42,8 @@ export const GroupSettings = React.createClass({
   },
 
   componentDidUpdate(prevProps) {
+    var modalStatus = this.props.app.getIn(['modal', 'status']);
+
     if(prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
       this.props.fetchDeviceGroups();
       this.props.fetchGroupDevices();
@@ -83,9 +85,15 @@ export const GroupSettings = React.createClass({
   onDeleteGroup(groupname) {
     var comfri_text = _('Are you sure delete group: %s?', groupname);
 
-    if(confirm(comfri_text)) {
-      this.props.deleteDeviceGroup(groupname)
-    }
+    this.props.createModal({
+      id: 'groupSettings',
+      groupname: groupname,
+      role: 'comfirm',
+      text: comfri_text,
+      apply: function() {
+        this.props.deleteDeviceGroup(groupname);
+      }.bind(this)
+    });
   },
 
   onChangeGroupSettings(name) {
@@ -117,7 +125,11 @@ export const GroupSettings = React.createClass({
         }
 
         if(hasSameName) {
-          alert(_("Group name '%s' is already in use", editData.groupname));
+          this.props.createModal({
+            id: 'groupSettings',
+            role: 'alert',
+            text: _("Group name '%s' is already in use", editData.groupname)
+          });
         } else {
           this.props.saveDeviceGroup();
         }
@@ -343,7 +355,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
-    validateActions,
+    appActions,
     actions
   ), dispatch)
 }

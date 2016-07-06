@@ -1,5 +1,5 @@
 import utils from 'utils';
-import * as appActions from 'actions/ajax';
+import * as appActions from 'actions/app';
 
 const FETCH_URL = '/goform/getLogInfo';
 const CLEAN_URL = '/goform/clearAllLogInfo'

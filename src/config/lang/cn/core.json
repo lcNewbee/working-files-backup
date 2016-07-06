@@ -60,6 +60,8 @@
   "failed": "失败",
   "User": "用户",
 
+  "MESSAGE": "消息",
+
   "Management": "管理系统",
   "Please Login": "请登录",
   "Login": "登录",
@@ -80,6 +82,7 @@
   "Total": "总数",
   "offline:": "离线",
   "online:": "在线",
+  "Clients": "客户端",
   "Clients Frequency Diagram": "客户端频段分布",
   "Clients Producer Diagram": "客户端产商分布",
   "Clients Statistics": "客户端统计数据",
@@ -94,6 +97,8 @@
   "REFRESH": "刷新",
   "Offline Ap List": "离线AP列表",
   "Axilspot Access Manager": "Axilspot Access Manager",
+  "apUnit": "台",
+  "clientUnit": "台",
 
   "DEVICES": "设备",
   "Devices Info": "设备信息",
@@ -113,6 +118,7 @@
   "Reboot": "重启",
   "Locate": "定位",
   "Upgrade": "升级",
+  "Upgrade need reboot Device, are you sure upgrade device: %s?": "升级需要重启设备，你确定要升级设备：%s?",
   "Are you sure reset device: %s?": "你确定要复位设备：%s?",
   "Are you sure reboot device: %s?": "你确定要重启设备：%s?",
   "Name": "名称",

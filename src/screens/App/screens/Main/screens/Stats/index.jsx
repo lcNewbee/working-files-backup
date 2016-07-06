@@ -20,7 +20,7 @@ const flowRateFilter = utils.filter('flowRate');
 const flowRateKbFilter = utils.filter('flowRate:["KB"]');
 const tooltip = {
   trigger: 'item',
-  formatter: "{a} <br/>{b} : {c} 台 ({d}%)"
+  formatter: "{a} <br/>{b} : {c} ({d}%)"
 }
 const msg = {
   ip: _("IP Address"),
@@ -128,7 +128,10 @@ export const Status = React.createClass({
     const apInfo = this.props.data.get('apInfo');
 
     let apOption = {
-      tooltip,
+      tooltip:  {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} " + _('apUnit') + " ({d}%)"
+      },
       title: {
         text: msg.apStatus,
         subtext: msg.total + apInfo.get('total'),
@@ -174,7 +177,10 @@ export const Status = React.createClass({
   renderClientNumber() {
     const clientInfo = this.props.data.get('clientInfo');
     const clientNetworkOption = {
-      tooltip,
+      tooltip:  {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} " + _('clientUnit') + " ({d}%)"
+      },
 
       title: {
         text: _('Clients Frequency Diagram'),
@@ -201,7 +207,10 @@ export const Status = React.createClass({
     };
 
     const clientProducerOption = {
-      tooltip,
+      tooltip:  {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} " + _('clientUnit') + " ({d}%)"
+      },
 
       title: {
         text: _('Clients Producer Diagram'),
@@ -295,8 +304,6 @@ export const Status = React.createClass({
         return i + 1;
       }).toJS();
     }
-
-    console.log(xAxisData)
 
     const ClientsStatsOption = {
         tooltip: {

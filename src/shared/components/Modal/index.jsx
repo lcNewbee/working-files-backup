@@ -18,7 +18,9 @@ const defaultProps = {
   title: '',
   role: 'dialog',
   okText: _('OK'),
-  cancelText: _('Cancel')
+  cancelText: _('Cancel'),
+  transitionEnter: true,
+  transitionLeave: true
 }
 
 class Modal extends Component {
@@ -42,23 +44,29 @@ class Modal extends Component {
   };
 
   render() {
-    const {isShow, title, cancelText} = this.props;
-    let {size, role, id} = this.props;
+    const {isShow, title, cancelText,size, role, id, transitionLeave, transitionEnter} = this.props;
     let classNames;
     let keyVal = 'onlyModal';
-    
+    let hasCloseBtn = true;
+
     if (role) {
       classNames = `modal-${role}`;
     }
-    
+
     if(id) {
       keyVal = `${id}Modal`;
     }
 
+    // No top close button
+    if(role === 'message' || role === 'comfirm') {
+      hasCloseBtn = false;
+    }
     return (
       <ReactCSSTransitionGroup
         component="div"
         transitionName="fade-up"
+        transitionEnter={transitionEnter}
+        transitionLeave={transitionLeave}
         transitionEnterTimeout={500}
         transitionLeaveTimeout={300}
       >
@@ -76,7 +84,7 @@ class Modal extends Component {
                     title ? (
                       <div className="modal-header">
                         {
-                          role !== 'message' ? (
+                          hasCloseBtn ? (
                             <button
                               type="button"
                               className="close fr"
@@ -92,7 +100,7 @@ class Modal extends Component {
                       </div>
                     ) : null
                   }
-                  
+
                   <div className="modal-body">
                     {this.props.children}
                   </div>
