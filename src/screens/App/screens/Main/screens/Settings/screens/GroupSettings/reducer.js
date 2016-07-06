@@ -8,17 +8,15 @@ function mergeData(state, action) {
   return state.update('data', data => data.merge(action.data))
 }
 
-function mergeDevice(state, action) {
-  var defaultGroupDevices = fromJS(action.data.list).filter(function(item) {
-    return item.get('groupname') === 'Default';
+function getSeeDevices(state, groupname) {
+  return state.getIn(['devices', 'list']).filter(function(item) {
+    return item.get('groupname') === groupname;
   });
-  return state.update('devices', data => data.merge(action.data))
-    .set('defaultGroupDevices', defaultGroupDevices)
 }
 
 function deleteListById(state, groupname) {
   let ret = state;
-  
+
   const index = state.getIn(['data', 'list']).findIndex(function(item) {
     return item.get('groupname') == groupname;
   });
@@ -40,17 +38,17 @@ function getDevicesByGroupname(state, groupname) {
 
 function getEditGroupByName(state, groupname) {
   var devices = getDevicesByGroupname(state, groupname);
-  
+
   return state.getIn(['data', 'list']).find(function(item) {
     return item.get('groupname') == groupname;
   }).set('devices', devices)
 }
 
 function selectDevice(state, mac, unselect) {
-  
+
   return state.updateIn(['edit', 'devices'], data => {
     let ret;
-    
+
     if(unselect) {
       ret = data.filterNot(function(val) {
         return val === mac;
@@ -62,7 +60,7 @@ function selectDevice(state, mac, unselect) {
         ret = data.push(mac)
       }
     }
-    
+
     return ret
   });
 }
@@ -75,8 +73,9 @@ let defaultState = fromJS({
   devices: {
     list: []
   },
+  seeDevices: [],
   validator: {
-    
+
   }
 });
 
@@ -87,9 +86,10 @@ export default function(state = defaultState, action) {
 
     case 'REQEUST_FETCH_DEVICE_GROUPS':
       return setFetching(state);
-    
+
     case 'RECEIVE_GROUP_DEVICES':
-      return mergeDevice(state, action).set('fetching', false);
+      return state.update('devices', data => data.merge(action.data))
+        .set('fetching', false);
 
     case 'EDIT_GROUP':
       return state.set('edit', getEditGroupByName(state, action.groupname))
@@ -105,17 +105,19 @@ export default function(state = defaultState, action) {
 
     case 'DELETE_DEVICE_GROUP':
       return deleteListById(state, action.groupname);
-      
+
     case 'SELECT_DEVICE':
       return selectDevice(state, action.mac, action.unselect);
-      
+
     case 'CHANGE_EDIT_GROUP':
       return state.update('edit', data => data.merge(action.data));
-    
+
     case 'LOOK_GROUP_DEVICES':
       return state.set('edit', Map({
-        groupname: action.groupname
-      })).set('actionType', 'look')
+          groupname: action.groupname
+        }))
+        .set('actionType', 'look')
+        .set('seeDevices', getSeeDevices(state, action.groupname))
 
   }
   return state;

@@ -167,7 +167,7 @@ export const GroupSettings = React.createClass({
     }, {
       id: 'op',
       text: msg.action,
-      width: '200',
+      width: '240',
       transform: function(val, item) {
         if(item.get('groupname') === 'Default') {
           return <Button
@@ -177,8 +177,15 @@ export const GroupSettings = React.createClass({
             onClick={this.createLookFunc('Default')}
           />;
         }
+
         return (
           <div className="action-btns">
+            <Button
+              icon="eye"
+              size="sm"
+              text={msg.look}
+              onClick={this.createLookFunc(item.get('groupname'))}
+            />
             <Button
               onClick={this.onEditGroup.bind(this, item.get('groupname'))}
               icon="edit"
@@ -223,7 +230,14 @@ export const GroupSettings = React.createClass({
         filter: 'translate'
       }, {
         id: 'groupname',
-        text: _('Current Group')
+        text: _('Current Group'),
+        transform: function(val) {
+
+          if(val === 'Default') {
+            val = _('Ungrouped Devices');
+          }
+          return val;
+        }
       }, {
         id: 'op',
         text: _('Select'),
@@ -267,7 +281,11 @@ export const GroupSettings = React.createClass({
     } else if (this.props.actionType === 'edit') {
       modalTitle = msg.edit + ' ' + modalTitle;
     } else if(this.props.actionType === 'look') {
-      modalTitle = _('Ungrouped Devices');
+      if(this.props.edit.get('groupname') === 'Default') {
+        modalTitle = _('Ungrouped Devices');
+      } else {
+        modalTitle = this.props.edit.get('groupname');
+      }
     }
 
     return (
@@ -305,7 +323,7 @@ export const GroupSettings = React.createClass({
               <Table
                 className="table"
                 options={fromJS(devicesTableOptions).delete(-1)}
-                list={this.props.defaultGroupDevices}
+                list={this.props.seeDevices}
               />
             ) : (
               <div>
@@ -352,7 +370,7 @@ function mapStateToProps(state) {
     actionType: myState.get('actionType'),
     edit: myState.get('edit'),
     devices: myState.get('devices'),
-    defaultGroupDevices: myState.get('defaultGroupDevices'),
+    seeDevices: myState.get('seeDevices'),
     app: state.app
   };
 }
