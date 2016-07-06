@@ -222,8 +222,12 @@ export const GroupSettings = React.createClass({
         text: _('Status'),
         filter: 'translate'
       }, {
+        id: 'groupname',
+        text: _('Current Group')
+      }, {
         id: 'op',
         text: _('Select'),
+        width: '50',
         transform: function(val, item) {
           var deviceMac;
           var selectedDevices = this.props.edit.get('devices');
