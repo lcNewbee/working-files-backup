@@ -225,6 +225,7 @@ export const Logs = React.createClass({
             value={query.get('size')}
             onChange={onChangeTableSize}
             options={selectOptions}
+            searchable={false}
           />
 
         </div>

@@ -424,6 +424,7 @@ export const Device = React.createClass({
             value={size}
             onChange={this.onChangeTableSize}
             options={selectOptions}
+            searchable={false}
           />
         </div>
 

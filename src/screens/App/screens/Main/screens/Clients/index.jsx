@@ -338,6 +338,7 @@ export const Clients = React.createClass({
             value={this.props.query.get('size')}
             onChange={this.onChangeTableSize}
             options={selectOptions}
+            searchable={false}
           />
         </div>
 
