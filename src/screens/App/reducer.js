@@ -53,6 +53,9 @@ export default function( state = defaultState, action ) {
     case 'RESET_VAILDATE_MSG':
       return state.set('invalid', Map({}));
 
+    /**
+     * Ajax
+     */
     case 'REQUEST_SAVE':
       return state.set('saving', true);
 
@@ -60,6 +63,14 @@ export default function( state = defaultState, action ) {
       return state.set('saving', false)
         .set('savedAt', action.savedAt)
         .set('state', action.state);
+
+    case 'RECEIVE_AJAX_ERROR':
+      return state.set('ajaxError', {
+        url: action.url
+      });
+
+    case 'RECEIVE_SERVER_ERROR':
+      return state.set('state', action.state)
 
     case 'REPORT_VALID_ERROR':
       return receiveReport(state, action.data);

@@ -80,11 +80,9 @@ export const FormGroup = React.createClass({
         if(prevProps.value !== value) {
           this.checkClear();
         } else if (prevProps.validateAt !== this.props.validateAt) {
-          console.log(this.refs._formGroup.offsetWidth)
           if (this.refs._formGroup.offsetWidth > 0) {
-             this.check();
+            this.check();
           }
-
         }
 
       } else {

@@ -63,8 +63,13 @@ export const Admin = React.createClass({
     let ret;
 
     if (newpasswd !== confirmpasswd) {
-       ret = _('New password and confirm password must match');
-       alert(ret);
+      ret = _('New password and confirm password must match');
+
+      this.props.createModal({
+        id: 'admin',
+        role: 'alert',
+        text: ret
+      });
     }
 
     return ret;

@@ -72,7 +72,7 @@ export function fetchAcInfo() {
 
 
 /**
- * Ajax Save
+ * Ajax
  */
 export function requestSave() {
   return {
@@ -85,6 +85,38 @@ export function receiveSave(state) {
     type: 'RECEIVE_SAVE',
     savedAt: Date.now(),
     state
+  }
+}
+
+export function receiveAjaxError(url) {
+  return {
+    type: 'RECEIVE_AJAX_ERROR',
+    errorAt: Date.now(),
+    url
+  }
+}
+
+export function receiveServerError(state) {
+  return {
+    type: 'RECEIVE_SERVER_ERROR',
+    errorAt: Date.now(),
+    state
+  }
+}
+
+export function aFetch(url, query) {
+  return (dispatch, getState) => {
+
+    return utils.fetch(url, query)
+      .then(function(json) {
+        if(!json.state || (json.state && json.state.code !== 2000)) {
+          dispatch(receiveServerError(json.state));
+        }
+        return json.data;
+      })
+      .catch(function(error) {
+        dispatch(receiveAjaxError(url));
+      });
   }
 }
 
@@ -101,10 +133,10 @@ export function startValidateAll() {
 export function validateAll(func) {
   return (dispatch, getState) => {
     dispatch(startValidateAll());
-    
+
     setTimeout(() => {
       const invalid = getState().app.get('invalid');
-      
+
       if(typeof func === 'function') {
         func(invalid)
       }

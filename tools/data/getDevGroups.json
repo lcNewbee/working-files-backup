@@ -3,20 +3,23 @@
       "code":2000,
       "msg":"ok"
   },
-  
+
   "data": {
       "list": [
-          {   
+          {
               "groupname": "Default",
-              "remark": "description1"
+              "remark": "description1",
+              "num": 23
           },
-          {   
+          {
               "groupname": "group1",
-              "remark": "description1"
+              "remark": "description1",
+              "num": 23
           },
           {
               "groupname": "group2",
-              "remark": "description2"
+              "remark": "description2",
+              "num": 2
           }
       ]
   }

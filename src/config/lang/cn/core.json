@@ -163,6 +163,7 @@
   "Are you sure delete group: %s?": "你确定要删除组：%s?",
   "Group name '%s' is already in use": "组名称 “%s” 已经被使用",
   "Ungrouped Devices": "未分组设备",
+  "Devices Number": "设备数量",
 
   "Bandwidth Control": "流量控制",
   "QoS Settings": "流量控制设置",

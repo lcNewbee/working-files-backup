@@ -1,4 +1,5 @@
 import utils from 'utils';
+import * as appActions from 'actions/app';
 
 const FETCH_URL = '/goform/getClientInfo';
 const ACTION_URL = '/goform/setClientAction';
@@ -69,10 +70,10 @@ export function fetchClients() {
     window.clearTimeout(refreshTimeout);
     dispatch(reqeustFetchClients());
 
-    utils.fetch(FETCH_URL, query)
-      .then(function(json) {
-        if(json.state && json.state.code === 2000) {
-          dispatch(reciveFetchClients(json.data))
+    dispatch(appActions.aFetch(FETCH_URL, query))
+      .then(function(data) {
+        if(data) {
+          dispatch(reciveFetchClients(data))
         }
 
         if(refreshTime && refreshTime > 0) {

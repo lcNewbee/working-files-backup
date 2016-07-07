@@ -20,7 +20,8 @@ const msg = {
   add: _('Add'),
   remarks: _('Remarks'),
   groupname: _('Group Name'),
-  action: _('Actions')
+  action: _('Actions'),
+  devicesNum: _('Devices Number'),
 };
 
 const validOptions = Map({
@@ -161,6 +162,9 @@ export const GroupSettings = React.createClass({
         }
         return val;
       }
+    }, {
+      id: 'num',
+      text: msg.devicesNum
     }, {
       id: 'remark',
       text: msg.remarks
