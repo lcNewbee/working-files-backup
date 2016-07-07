@@ -55,7 +55,7 @@ export function locateClient(mac) {
 
 export function leaveClientsScreen() {
   window.clearTimeout(refreshTimeout);
-  
+
   return {
     type: 'LEAVE_CLIENTS_SCREEN'
   };
@@ -68,13 +68,13 @@ export function fetchClients() {
 
     window.clearTimeout(refreshTimeout);
     dispatch(reqeustFetchClients());
-    
+
     utils.fetch(FETCH_URL, query)
       .then(function(json) {
         if(json.state && json.state.code === 2000) {
           dispatch(reciveFetchClients(json.data))
         }
-        
+
         if(refreshTime && refreshTime > 0) {
           refreshTimeout = window.setTimeout(function() {
             dispatch(fetchClients())
@@ -89,9 +89,9 @@ export function saveClientsAction() {
     const query = getState().clients.get('actionQuery').toJS();
 
     dispatch(reqeustFetchClients());
-    
+
     query.type = getState().clients.getIn(['query', 'type']);
-    
+
     utils.save(ACTION_URL, query)
       .then(function(json) {
         if(json.state && json.state.code === 2000) {

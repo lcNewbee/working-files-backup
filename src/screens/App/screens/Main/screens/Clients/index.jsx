@@ -166,13 +166,19 @@ export const Clients = React.createClass({
     }
   },
 
-  onAction(mac, action) {
-    this.handleActions({
+  onAction(mac, action, wirelessType) {
+    var subData = {
       action,
       macs: [
         mac
       ]
-    }, true);
+    };
+
+    if(typeof wirelessType === 'string') {
+      subData.wirelessType = wirelessType;
+    }
+
+    this.handleActions(subData, true);
   },
 
   onChangeSearchText(val, e) {
@@ -293,7 +299,7 @@ export const Clients = React.createClass({
               size="sm"
               text={msg.unlock}
               style={styles.actionButton}
-              onClick={this.onAction.bind(this, deviceMac, 'unlock')}
+              onClick={this.onAction.bind(this, deviceMac, 'unlock', item.get('wirelessType'))}
             />
           );
         }.bind(this)
