@@ -41,7 +41,7 @@ export function fetchLogs() {
     window.clearTimeout(refreshTimeout)
     dispatch(reqeustFetchLogs());
 
-    utils.fetch(FETCH_URL, query)
+    dispatch(appActions.fetch(FETCH_URL, query))
       .then(function(json) {
         if(json.state && json.state.code === 2000) {
           dispatch(reciveFetchLogs(json.data))
@@ -61,7 +61,7 @@ export function cleanAllLog() {
     window.clearTimeout(refreshTimeout);
     dispatch(appActions.requestSave());
 
-    utils.fetch(CLEAN_URL)
+    dispatch(appActions.fetch(CLEAN_URL))
       .then((json) => {
         dispatch(fetchLogs());
         dispatch(appActions.receiveSave(json.state))

@@ -23,7 +23,7 @@ export function fetchVoipSettings() {
   return dispatch => {
     dispatch(reqeustFetchVoip());
 
-    utils.fetch(urls.fetch)
+    dispatch(appActions.fetch(urls.fetch))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(receiveVoip(json.data));
@@ -62,16 +62,11 @@ export function setVoip() {
   return (dispatch, getState) => {
     const data = getState().voip.getIn(['data', 'curr']);
 
-    dispatch(appActions.requestSave());
-
-    utils.save(urls.save, data)
-      .then((json) => {
+    dispatch(appActions.save(urls.save, data))
+      .then(function(json){
         if (json.state && json.state.code === 2000) {
-          dispatch(receiveVoip());
           dispatch(fetchVoipSettings());
         }
-
-        dispatch(appActions.receiveSave(json.state))
       });
   };
 }

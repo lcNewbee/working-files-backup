@@ -36,7 +36,7 @@ export function closeModal(data) {
   return (dispatch, getState) => {
     var handleOk = getState().app.getIn(['modal', 'apply']);
 
-    if(data.status === 'ok') {
+    if(data.status === 'ok' && typeof handleOk === 'function') {
       handleOk();
     }
 
@@ -104,7 +104,10 @@ export function receiveServerError(state) {
   }
 }
 
-export function aFetch(url, query) {
+/**
+ * 全局Ajax fetch action
+ */
+export function fetch(url, query) {
   return (dispatch, getState) => {
 
     return utils.fetch(url, query)
@@ -112,7 +115,29 @@ export function aFetch(url, query) {
         if(!json.state || (json.state && json.state.code !== 2000)) {
           dispatch(receiveServerError(json.state));
         }
-        return json.data;
+
+        return json;
+      })
+      .catch(function(error) {
+        dispatch(receiveAjaxError(url));
+      });
+  }
+}
+
+/**
+ * 全局Ajax save action
+ */
+export function save(url, query) {
+  return (dispatch, getState) => {
+    dispatch(requestSave());
+
+    return utils.save(url, query)
+      .then(function(json) {
+        if(!json.state || (json.state && json.state.code !== 2000)) {
+          dispatch(receiveServerError(json.state));
+        }
+        dispatch(receiveSave());
+        return json;
       })
       .catch(function(error) {
         dispatch(receiveAjaxError(url));

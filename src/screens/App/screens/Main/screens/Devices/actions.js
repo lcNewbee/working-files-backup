@@ -53,7 +53,7 @@ export function locateDevice(mac) {
 
 export function leaveDevicesScreen() {
   window.clearTimeout(refreshTimeout);
-  
+
   return {
     type: 'LEAVE_DEVICES_SCREEN'
   };
@@ -64,17 +64,18 @@ export function fetchDevices() {
     const refreshTime = getState().app.get('rateInterval');
     const query = getState().devices.get('query').toJS();
     const isEdit = getState().devices.get('edit');
-    
+
     window.clearTimeout(refreshTimeout);
-    
+
     dispatch(reqeustFetchDevices());
 
-    utils.fetch(urls.fetchDevices, query)
+    dispatch(appActions.fetch(urls.fetchDevices, query))
       .then((json) => {
-        if (json.state && json.state.code === 2000) {
+
+        if(json.state && json.state.code === 2000) {
           dispatch(reciveFetchDevices(json.data));
         }
-        
+
         if(refreshTime && refreshTime > 0 && !isEdit) {
           refreshTimeout = window.setTimeout(function() {
             dispatch(fetchDevices())
@@ -87,10 +88,8 @@ export function fetchDevices() {
 export function saveDevicesAction(data) {
   return (dispatch, getState) => {
     //const query = getState().devices.get('query').toJS();
-    
-    dispatch(reqeustFetchDevices());
 
-    utils.save(urls.action, data)
+    dispatch(appActions.save(urls.action, data))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(fetchDevices(json.data));
@@ -145,16 +144,16 @@ export function fetchDeviceNetwork(mac) {
 export function saveDeviceNetwork(mac) {
   return (dispatch, getState) => {
     const data = getState().devices.get('edit').toJS();
-    
+
     dispatch(appActions.requestSave());
-    
+
     utils.save(urls.setDevice, data)
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(closeDeviceEdit());
           dispatch(fetchDevices());
         }
-        
+
         dispatch(appActions.receiveSave(json.state));
       });
   };

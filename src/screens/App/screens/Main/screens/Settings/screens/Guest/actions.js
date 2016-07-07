@@ -23,7 +23,7 @@ export function fetchGuestSettings() {
   return dispatch => {
     dispatch(reqeustFetchGuest());
 
-    utils.fetch(urls.fetch)
+    dispatch(appActions.fetch(urls.fetch))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(receiveGuest(json.data));
@@ -47,7 +47,7 @@ export function changeGuestSettings(data) {
   }
 }
 
-// Set 
+// Set
 export function reqeustSetGuest() {
   return {
     type: "REQEUST_SET_GUEST"
@@ -61,17 +61,12 @@ export function receiveSetGuest() {
 export function setGuest() {
   return (dispatch, getState) => {
     const data = getState().guest.getIn(['data', 'curr']);
-    
-    dispatch(appActions.requestSave());
 
-    utils.save(urls.save, data)
-      .then((json) => {
+    dispatch(appActions.save(urls.save, data))
+      .then(function(json){
         if (json.state && json.state.code === 2000) {
-          dispatch(receiveGuest());
           dispatch(fetchGuestSettings());
         }
-        
-        dispatch(appActions.receiveSave(json.state))
       });
   };
 }

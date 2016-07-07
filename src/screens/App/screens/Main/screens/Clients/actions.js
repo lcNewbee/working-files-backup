@@ -70,10 +70,10 @@ export function fetchClients() {
     window.clearTimeout(refreshTimeout);
     dispatch(reqeustFetchClients());
 
-    dispatch(appActions.aFetch(FETCH_URL, query))
-      .then(function(data) {
-        if(data) {
-          dispatch(reciveFetchClients(data))
+    dispatch(appActions.fetch(FETCH_URL, query))
+      .then(function(json) {
+        if(json.state && json.state.code === 2000) {
+          dispatch(reciveFetchClients(json.data))
         }
 
         if(refreshTime && refreshTime > 0) {
@@ -93,7 +93,7 @@ export function saveClientsAction() {
 
     query.type = getState().clients.getIn(['query', 'type']);
 
-    utils.save(ACTION_URL, query)
+    dispatch(appActions.save(ACTION_URL, query))
       .then(function(json) {
         if(json.state && json.state.code === 2000) {
           dispatch(fetchClients(5000))

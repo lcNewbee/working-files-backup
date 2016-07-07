@@ -21,11 +21,11 @@ export function receivePortal(data) {
   }
 }
 export function fetchPortalSettings() {
-  
+
   return dispatch => {
     dispatch(reqeustFetchPortal());
 
-    utils.fetch(urls.fetch)
+    dispatch(appActions.fetch(urls.fetch))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(receivePortal(json.data));
@@ -49,7 +49,7 @@ export function changePortalSettings(data) {
   }
 }
 
-// Set 
+// Set
 export function reqeustSetPortal() {
   return {
     type: "REQEUST_SET_PORTAL"
@@ -63,17 +63,13 @@ export function receiveSetPortal() {
 export function setPortal() {
   return (dispatch, getState) => {
     const data = getState().portal.getIn(['data', 'curr']).delete('image');
-    
-    dispatch(appActions.requestSave());
 
-    utils.save(urls.save, data)
-      .then((json) => {
+    dispatch(appActions.save(urls.save, data))
+      .then(function(json){
         if (json.state && json.state.code === 2000) {
-          dispatch(receivePortal());
           dispatch(fetchPortalSettings());
         }
-        
-        dispatch(appActions.receiveSave(json.state));
       });
+
   };
 }

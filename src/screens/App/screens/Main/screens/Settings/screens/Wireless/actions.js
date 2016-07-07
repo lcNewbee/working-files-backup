@@ -23,7 +23,7 @@ export function fetchWifiSettings() {
   return dispatch => {
     dispatch(reqeustFetchWifi());
 
-    utils.fetch(urls.fetch)
+    dispatch(appActions.fetch(urls.fetch))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(receiveWifi(json.data));
@@ -62,16 +62,11 @@ export function setWifi() {
   return (dispatch, getState) => {
     const data = getState().wireless.getIn(['data', 'curr']);
 
-    dispatch(appActions.requestSave());
-
-    utils.save(urls.save, data)
-      .then((json) => {
+    dispatch(appActions.save(urls.save, data))
+      .then(function(json){
         if (json.state && json.state.code === 2000) {
-          dispatch(receiveWifi());
           dispatch(fetchWifiSettings());
         }
-
-        dispatch(appActions.receiveSave(json.state));
       });
   };
 }

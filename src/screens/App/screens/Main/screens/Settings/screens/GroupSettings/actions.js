@@ -75,7 +75,7 @@ export function fetchDeviceGroups() {
   return dispatch => {
     dispatch(reqeustFetchDeviceGroups());
 
-    utils.fetch(urls.fetch)
+    dispatch(appActions.fetch(urls.fetch))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(receiveDeviceGroups(json.data));
@@ -102,7 +102,7 @@ export function fetchGroupDevices() {
   return dispatch => {
     dispatch(reqeustFetchGroupDevices());
 
-    utils.fetch(urls.fetchDevs)
+    dispatch(appActions.fetch(urls.fetchDevs))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(receiveGroupDevices(json.data));
@@ -117,22 +117,19 @@ export function saveDeviceGroup() {
     const data = getState().groupSettings.get('edit').toJS();
     const actionType = getState().groupSettings.get('actionType');
     let saveUrl = urls.addGroup;
-    
-    dispatch(appActions.requestSave());
-    
+
+
     if(actionType === 'edit') {
       saveUrl = urls.editGroup;
     }
-    
-    utils.save(saveUrl, data)
+
+    dispatch(appActions.save(saveUrl, data))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(fetchDeviceGroups());
           dispatch(removeEditDeviceGroup());
           dispatch(fetchGroupDevices());
         }
-        
-        dispatch(appActions.receiveSave(json.state));
       });
   };
 }
@@ -142,18 +139,15 @@ export function deleteDeviceGroup(groupname) {
     const data = {
       groupname
     };
-    
+
     dispatch(reqeustFetchDeviceGroups());
-    dispatch(appActions.requestSave());
-    
-    utils.save(urls.deleteGroup, data)
+
+    dispatch(appActions.save(urls.deleteGroup, data))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(fetchDeviceGroups());
           dispatch(fetchGroupDevices());
         }
-        
-        dispatch(appActions.receiveSave(json.state));
       });
   };
 }

@@ -1,6 +1,11 @@
 import utils from 'utils';
+import * as appActions from 'actions/app';
 
 let refreshTimeout = null;
+const urls = {
+  fetch: '/goform/getApClientInfo',
+  offlineAp: '/goform/getOfflineDevInfo'
+}
 
 function reqeustStats() {
   return {
@@ -17,7 +22,7 @@ export function reveviceStats(data) {
 
 export function leaveStatusScreen() {
   window.clearTimeout(refreshTimeout);
-  
+
   return {
     type: 'LEAVE_STATUS_SCREEN'
   };
@@ -27,16 +32,16 @@ export function fetchStatus() {
   return (dispatch, getState) => {
     var query = getState().status.get('query').toJS();
     const refreshTime = getState().app.get('rateInterval');
-    
+
     window.clearTimeout(refreshTimeout)
     dispatch(reqeustStats());
 
-    utils.fetch('/goform/getApClientInfo', query)
+    dispatch(appActions.fetch(urls.fetch, query))
       .then(function(json) {
         if(json.state && json.state.code === 2000) {
           dispatch(reveviceStats(json.data))
         }
-        
+
         if(refreshTime > 0) {
           refreshTimeout = window.setTimeout(function() {
             dispatch(fetchStatus())
@@ -76,10 +81,10 @@ export function changeOfflineApQuery(data) {
 export function fetchOfflineAp() {
   return (dispatch, getState) => {
     const query = getState().status.getIn(['offlineAp', 'query']).toJS();
-    
+
     dispatch(reqeustFetchOfflineAp());
 
-    utils.fetch('/goform/getOfflineDevInfo', query)
+    dispatch(appActions.fetch(urls.offlineAp, query))
       .then(function(json) {
         if(json.state && json.state.code === 2000) {
           dispatch(reveviceFetchOfflineAp(json.data))

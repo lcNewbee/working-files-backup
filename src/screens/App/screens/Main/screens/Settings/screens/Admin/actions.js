@@ -1,4 +1,5 @@
 import utils from 'utils';
+import * as appActions from 'actions/app';
 
 const urls = {
   save: "/goform/setAdmin",
@@ -42,8 +43,8 @@ export function savePassword(callBack) {
 
     dispatch(reqeustSavePassword());
 
-    utils.save(urls.save, data)
-      .then((json) => {
+    dispatch(appActions.save(urls.save, data))
+      .then(function(json){
         if (json.state && json.state.code === 2000) {
           dispatch(receiveSavePassword(json.state));
           window.location.hash = '#';

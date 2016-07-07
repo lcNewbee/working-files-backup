@@ -1,6 +1,7 @@
 import React from 'react';
 import utils from 'utils';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import {fromJS} from 'immutable';
 
@@ -12,6 +13,7 @@ import Select from 'components/Select';
 
 // custom
 import * as actions from './actions';
+import * as appActions from 'actions/app';
 import reducer from './reducer';
 
 const logsTableOptions = fromJS([
@@ -128,9 +130,14 @@ export const Logs = React.createClass({
   cleanAllLog() {
     var msg_text = _('Are you sure clean all logs?');
 
-    if (confirm(msg_text)) {
-      this.props.cleanAllLog();
-    }
+    this.props.createModal({
+      id: 'Logs',
+      role: 'comfirm',
+      text: msg_text,
+      apply: function() {
+        this.props.cleanAllLog();
+      }.bind(this)
+    });
   },
 
   onChangeSearchText(val, e) {
@@ -249,10 +256,17 @@ function mapStateToProps(state) {
   };
 }
 
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(utils.extend({},
+    appActions,
+    actions
+  ), dispatch)
+}
+
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  actions
+  mapDispatchToProps
 )(Logs);
 
 export const logs = reducer;
