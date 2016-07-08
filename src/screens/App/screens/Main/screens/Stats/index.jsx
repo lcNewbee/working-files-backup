@@ -309,6 +309,10 @@ export const Status = React.createClass({
         tooltip: {
           trigger: 'axis'
         },
+        legend: {
+            data: ['2.4G', '5G', _('Total')],
+            align: 'left'
+        },
         toolbox: {
           feature: {
             //dataView: { show: fasle }

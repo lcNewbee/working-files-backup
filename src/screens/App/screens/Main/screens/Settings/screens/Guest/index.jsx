@@ -52,7 +52,7 @@ const validOptions = Map({
   }),
 
   vlanid: validator({
-    rules: 'num:[3, 4095]'
+    rules: 'num:[2, 4095]'
   }),
 });
 
@@ -224,7 +224,7 @@ export const Guest = React.createClass({
               value={getCurrData('vlanid')}
               onChange={this.onUpdate('vlanid')}
             />
-            <span className="help">(3 - 4095)</span>
+            <span className="help">(2 - 4095)</span>
           </FormGroup>
 
           <FormGroup

@@ -48,7 +48,7 @@ const validOptions = Map({
     rules: 'remarkTxt:["\'\\\\"]|len:[8, 31]'
   }),
   vlanid: validator({
-    rules: 'num:[3, 4095]'
+    rules: 'num:[2, 4095]'
   }),
   ssid: validator({
     rules: 'remarkTxt:["\'\\\\"]|len:[1, 31]'
@@ -275,7 +275,7 @@ export const Wireless = React.createClass({
             value={getCurrData('vlanid')}
             onChange={this.onUpdate('vlanid')}
           />
-          <span className="help">(3 - 4095)</span>
+          <span className="help">(2 - 4095)</span>
         </FormGroup>
 
         <h3>{_('Wireless Channel')}</h3>
