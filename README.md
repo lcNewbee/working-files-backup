@@ -5,8 +5,10 @@
 首先确保安装node.js环境.
 接下来安装 npm 依赖
 ``npm install``
+由于我们使用gulp，接下来安装 gulp-cli
+``npm install gulp-cli -g``
 在浏览器中查看效果
-``npm run serve``
+``gulp run``
 
 ## 原则
 在Comlanos前端平台设计与开发过程中我们尽量遵守以下原则
@@ -24,6 +26,4 @@
 * 每个人的问题都有些许不同，专注哪每个人都相同的部分，然后解决掉它。
 
 参考文档：[Docker libcontainer 原则][https://github.com/docker/libcontainer/blob/master/PRINCIPLES.md]
-
-## 发布记录
 
