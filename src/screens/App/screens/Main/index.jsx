@@ -69,7 +69,8 @@ export default class Main extends Component {
           </div>
 
         </header>
-        <div className="main">
+        <div className="main main--open">
+          <Nav className="main-nav" menus={this.props.route.childRoutes} />
           <div className='main-content'>
             <div className='main-content-wrap'>
               {
@@ -77,7 +78,6 @@ export default class Main extends Component {
               }
             </div>
           </div>
-          <Nav className="main-nav" menus={this.props.route.childRoutes} />
         </div>
         {
             isShow ? (

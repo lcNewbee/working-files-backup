@@ -10,6 +10,8 @@ const propTypes = {
   role: PropTypes.oneOf(['dialog', 'alert', 'comfirm', 'message']),
   okText: PropTypes.string,
   cancelText: PropTypes.string,
+  okButton: PropTypes.bool,
+  cancelButton: PropTypes.bool,
   // onClose: PropTypes.function,
   // onOk: PropTypes.function
 };
@@ -20,7 +22,9 @@ const defaultProps = {
   okText: _('OK'),
   cancelText: _('Cancel'),
   transitionEnter: true,
-  transitionLeave: true
+  transitionLeave: true,
+  okButton: true,
+  cancelButton: true
 }
 
 class Modal extends Component {
@@ -44,7 +48,8 @@ class Modal extends Component {
   };
 
   render() {
-    const {isShow, title, cancelText,size, role, id, transitionLeave, transitionEnter} = this.props;
+    let { cancelButton, okButton, isShow, title, cancelText } = this.props;
+    const { size, role, id, transitionLeave, transitionEnter } = this.props;
     let classNames;
     let keyVal = 'onlyModal';
     let hasCloseBtn = true;
@@ -60,7 +65,10 @@ class Modal extends Component {
     // No top close button
     if(role === 'message' || role === 'comfirm') {
       hasCloseBtn = false;
+    } else if (role === 'alert') {
+      cancelButton = false;
     }
+
     return (
       <ReactCSSTransitionGroup
         component="div"
@@ -107,20 +115,30 @@ class Modal extends Component {
                   {
                     role !== 'message' ? (
                       <div className="modal-footer">
-                        <button
-                          type="button"
-                          className="btn btn-default"
-                          onClick={this.onClose}
-                        >
-                          {this.props.cancelText}
-                        </button>
-                        <button
-                          type="button"
-                          className="btn btn-primary"
-                          onClick={this.onOk}
-                        >
-                          {this.props.okText}
-                        </button>
+                        {
+                          cancelButton ? (
+                            <button
+                              type="button"
+                              className="btn btn-default"
+                              onClick={this.onClose}
+                            >
+                              {this.props.cancelText}
+                            </button>
+                          ) : null
+                        }
+
+                        {
+                          okButton ? (
+                            <button
+                              type="button"
+                              className="btn btn-primary"
+                              onClick={this.onOk}
+                            >
+                              {this.props.okText}
+                            </button>
+                          ) : null
+                        }
+
                       </div>
                     ) : null
                   }

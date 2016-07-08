@@ -321,6 +321,8 @@ export const GroupSettings = React.createClass({
           title={modalTitle}
           onClose={this.onCloseEditDialog}
           onOk={this.onSaveDeviceGroup}
+          cancelButton={!isLook}
+          okButton={!isLook}
         >
           {
             isLook ? (
