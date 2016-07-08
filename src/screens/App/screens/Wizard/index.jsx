@@ -433,8 +433,10 @@ export const SignUp = React.createClass({
               ) : null
             }
 
-            <button className="btn btn-info"
-              onClick={this.onNext}>
+            <button
+              className="btn btn-info"
+              onClick={this.onNext}
+            >
               {this.state.currStep !== 3 ? _('Next Step') : _('Completed')}
             </button>
           </div>

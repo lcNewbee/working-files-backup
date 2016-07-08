@@ -21,8 +21,8 @@ export default class Main extends Component {
     this.showUserPopOver = this.showUserPopOver.bind(this);
     this.onRefresh = this.onRefresh.bind(this);
     this.onLogout = this.onLogout.bind(this);
-    document.onkeydown = function(e) {
 
+    document.onkeydown = function(e) {
       if(e.keyCode == 116){
         this.onRefresh(e);
       }

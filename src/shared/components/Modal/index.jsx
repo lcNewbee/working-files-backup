@@ -48,23 +48,29 @@ class Modal extends Component {
   };
 
   render() {
-    let { cancelButton, okButton, isShow, title, cancelText } = this.props;
-    const { size, role, id, transitionLeave, transitionEnter } = this.props;
     let classNames;
     let keyVal = 'onlyModal';
     let hasCloseBtn = true;
+    let { cancelButton, okButton } = this.props;
+    const { size, role, id, transitionLeave, transitionEnter,
+      isShow, title, cancelText } = this.props;
 
+    // role is shown in classNames
     if (role) {
       classNames = `modal-${role}`;
     }
 
+    // ReactCSSTransitionGroup need key value
     if(id) {
       keyVal = `${id}Modal`;
     }
 
+
     // No top close button
     if(role === 'message' || role === 'comfirm') {
       hasCloseBtn = false;
+
+    // when role is "alert" no cancelButton
     } else if (role === 'alert') {
       cancelButton = false;
     }
