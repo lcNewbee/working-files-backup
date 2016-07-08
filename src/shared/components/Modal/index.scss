@@ -1,0 +1,141 @@
+@import "../../scss/variables";
+@import "../../scss/mixins";
+
+.modal-open {
+  overflow: hidden;
+}
+.modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1050;
+  //display: none;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  outline: 0;
+}
+
+.modal-open .modal {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.modal-comfirm,
+.modal-alert,
+.modal-dialog {
+  position: relative;
+  z-index: 1050;
+  margin: 10px;
+  width: auto;
+}
+
+.modal-comfirm,
+.modal-alert {
+  width: 380px;
+  margin: 20px auto;
+}
+
+.modal-message {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  z-index: 1050;
+  margin-left: -75px;
+  width: 150px;
+
+  .modal-content {
+    padding: 10px 0;
+    text-align: center;
+  }
+}
+.modal-content {
+  position: relative;
+  outline: 0;
+  border: 1px solid #999;
+  border: 1px solid rgba(0, 0, 0, .2);
+  border-radius: 6px;
+  background-color: #fff;
+  background-clip: padding-box;
+  box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+}
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1040;
+  background-color: #000;
+  @include opacity(0.5);
+}
+.modal-backdrop.fade {
+  @include opacity(0);
+}
+.modal-backdrop.in {
+  @include opacity(5);
+}
+.modal-header {
+  padding: 15px;
+  border-bottom: 1px solid #e5e5e5;
+}
+.modal-header .close {
+  margin-top: -2px;
+  border: none;
+  border-radius: 20px;
+  background: #333;
+  color: #fff;
+  cursor: pointer;
+
+  &:hover {
+    color: $g-brand-danger;
+  }
+}
+.modal-title {
+  margin: 0;
+  line-height: 1.42857143;
+}
+.modal-body {
+  position: relative;
+  padding: 15px;
+}
+.modal-footer {
+  padding: 15px;
+  border-top: 1px solid #e5e5e5;
+  text-align: right;
+}
+.modal-footer .btn + .btn {
+  margin-bottom: 0;
+  margin-left: 5px;
+}
+.modal-footer .btn-group .btn + .btn {
+  margin-left: -1px;
+}
+.modal-footer .btn-block + .btn-block {
+  margin-left: 0;
+}
+.modal-scrollbar-measure {
+  position: absolute;
+  top: -9999px;
+  overflow: scroll;
+  width: 50px;
+  height: 50px;
+}
+@media (min-width: $mw-md) {
+  .modal-dialog {
+    margin: 30px auto;
+    width: 600px;
+  }
+  .modal-content {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+  }
+  .modal-sm {
+    width: 300px;
+  }
+}
+@media (min-width: $mw-lg) {
+  .modal-lg {
+    width: 900px;
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "groupname": "Default"
+      },
+      {
+        "groupname": "group231",
+        "enable": "0",
+        "guestssid": "www",
+        "encryption": "none",
+        "password": "",
+        "startip": "192.168.8.1",
+        "endip": "192.168.8.1",
+        "mask": "255.255.0.0",
+        "portalenable": "1",
+        "vlanenable": "1",
+        "vlanid": "23",
+        "downstream": "128",
+        "upstream": "64"
+      },
+      {
+        "groupname": "group33333",
+        "enable": "1",
+        "guestssid": "www",
+        "encryption": "psk-mixed",
+        "password": "12345678",
+        "startip": "192.168.8.1",
+        "endip": "192.168.8.1",
+        "mask": "",
+        "portalenable": "0",
+        "vlanenable": "0",
+        "vlanid": "45",
+        "downstream": "128",
+        "upstream": "64"
+      },
+      {
+        "groupname": "group33547",
+        "enable": "1",
+        "guestssid": "www",
+        "encryption": "none",
+        "password": "12345678",
+        "startip": "192.168.8.1",
+        "endip": "192.168.8.1",
+        "mask": "255.255.0.0",
+        "portalenable": "1",
+        "vlanenable": "0",
+        "vlanid": "23",
+        "downstream": "128",
+        "upstream": "64"
+      }
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "state": {
+      "code":2000,
+      "msg":"ok"
+  },
+  
+  "data": {
+      "groupname": "xx",
+      "remark": "description2",
+      "list": [
+           {
+               "devicename": "ap1",
+               "ip": "192.168.5.53",
+               "mac": "12:33:44:55:66:78",
+               "status": "online/offline",
+               "groupname": "xxx"
+           },
+           {
+               "devicename": "ap2",
+               "ip": "192.168.5.53",
+               "mac": "12:33:44:55:66:73",
+               "status": "online/offline",
+               "groupname": "xxxxxx"
+           }
+      ]
+  }
+
+}

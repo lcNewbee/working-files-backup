@@ -1,5 +1,5 @@
 # Logs
-logs
+./logs
 *.log
 
 # Runtime data
@@ -28,12 +28,15 @@ node_modules
 
 #dist folder
 dist
+build
 
 #Webstorm metadata
 .idea
+.happypack
 
 #VSCode metadata
 .vscode
 
 # Mac files
 .DS_Store
+

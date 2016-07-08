@@ -1,0 +1,9 @@
+{
+    "state": {
+        "code": 2000,
+        "msg": "ok"
+    },
+    "data": {
+      "version":"1.7.1"
+    }
+}

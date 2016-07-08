@@ -1,0 +1,15 @@
+{
+  "state": {
+      "code": 2000,
+      "msg": "ok"
+  },
+  "data": {
+      "nickname": "xxx",
+      "connect_type":"dhcp",
+      "ip":"",
+      "mask":"255.255.255.0",
+      "gateway":"192.168.5.1",
+      "main_dns":"192.168.10.1",
+      "second_dns":"192.168.10.2"
+  }
+}

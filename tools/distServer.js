@@ -3,7 +3,7 @@
 
 import browserSync from 'browser-sync';
 import historyApiFallback from 'connect-history-api-fallback';
-import serverApiMiddleware from './server-middleware/api';
+import serverApiMiddleware from './middleware/api';
 
 // Run Browsersync
 browserSync({
@@ -21,7 +21,7 @@ browserSync({
 
   middleware: [
     {
-      route: "/api",
+      route: "/goform",
       handle: serverApiMiddleware()
     },
     historyApiFallback()

@@ -1,0 +1,25 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "groupname": "group231",
+        "downstream": "22",
+        "upstream": "1"
+      },
+      {
+        "groupname": "group33333",
+        "downstream": "128",
+        "upstream": "64"
+      },
+      {
+        "groupname": "group33547",
+        "downstream": "1234",
+        "upstream": "128"
+      }
+    ]
+  }
+}

@@ -9,7 +9,7 @@ import historyApiFallback from 'connect-history-api-fallback';
 import webpack from 'webpack';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
-import serverApiMiddleware from './server-middleware/api';
+import serverApiMiddleware from './middleware/api';
 import config from '../webpack.config.dev';
 
 const bundler = webpack(config);
@@ -22,7 +22,7 @@ browserSync({
 
     middleware: [
       {
-        route: "/api",
+        route: "/goform",
         handle: serverApiMiddleware()
       },
       webpackDevMiddleware(bundler, {
@@ -46,10 +46,12 @@ browserSync({
 
     ]
   },
-
+  
   // no need to watch '*.js' here, webpack will take care of it for us,
   // including full page reloads if HMR won't work
   files: [
-    'src/*.html'
+    'src/*.html',
+    'tools/data/*.json',
+    'src/assets/**/*'
   ]
 });

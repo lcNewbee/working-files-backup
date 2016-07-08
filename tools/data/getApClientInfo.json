@@ -1,0 +1,72 @@
+{
+    "state": {
+        "code": 2000,
+        "msg": "ok"
+    },
+    "data": {
+        "apInfo": {
+            "total": 123,
+            "online": 21,
+            "offline": 120,
+            "default": 3
+        },
+        "clientInfo": {
+            "total": 123,
+            "5G": 21,
+            "2.4G": 120,
+            "producerlist": {
+                "apple": 50,
+                "iphone": 12,
+                "huawei": 23,
+                "xiaomi": 22,
+                "others": 11
+            }
+        },
+        "clientStatisticsList": [
+            {
+                "name": "5G",
+
+                "data": [2,2, 2, 2, 2, 20, 2, 2, 2, 2, 2, 2, 2, 3, 2, 1,2,2, 2, 2, 2, 20, 2, 2]
+            },
+            {
+                "name": "2.4G",
+
+                "data": [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,2,2, 2, 2, 2, 20, 2, 2]
+            }
+        ],
+        "aplist": [
+            {
+                "devicename": "ap1",
+                "ipaddress": "192.168.6.41",
+                "macaddress": "12:22:33:44:55:66",
+                "downstream": "12323",
+                "upstream": "12323"
+            },
+            {
+                "devicename": "ap2",
+                "ipaddress": "192.168.6.42",
+                "macaddress": "12:22:33:44:55:66",
+                "downstream": "12323",
+                "upstream": "23"
+            }
+        ],
+        "clientlist": [
+            {
+                "hostname": "android-1231",
+                "ipaddress": "192.168.6.42",
+                "macaddress": "12:22:33:44:55:66",
+                "connecttime": "120",
+                "downstream": "12323",
+                "upstream": "32"
+            },
+            {
+                "hostname": "",
+                "ipaddress": "192.168.6.42",
+                "macaddress": "12:22:33:44:55:66",
+                "connecttime": "",
+                "downstream": "",
+                "upstream": ""
+            }
+        ]
+    }
+}

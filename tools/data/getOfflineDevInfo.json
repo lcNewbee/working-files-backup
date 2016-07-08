@@ -1,0 +1,47 @@
+{
+    "state": {
+        "code": 2000,
+        "msg": "ok"
+    },
+    "data": {
+        "page": {
+            "start": 2,
+            "size": 2,
+            "currPage": 2,
+            "totalPage": 4,
+            "total": 4,
+            "nextPage": 3,
+            "lastPage": 4
+        },
+        "list": [
+            {
+                "devicename": "神器",
+                "mac": "12:33:44:55:66:78",
+                "model": "V2.2",
+                "softversion": "V1.1",
+                "channel": "auto"
+            },
+            {
+                "devicename": "",
+                "mac": "12:33:44:55:66:78",
+                "model": "V2.2",
+                "softversion": "V1.1",
+                "channel": "1"
+            },
+            {
+                "devicename": "",
+                "mac": "12:33:44:35:66:78",
+                "model": "V2.2",
+                "softversion": "V1.1",
+                "channel": "1"
+            },
+            {
+               "devicename": "",
+                "mac": "12:33:44:54:66:78",
+                "model": "V2.2",
+                "softversion": "V1.1",
+                "channel": "1"
+            }
+        ]
+    }
+}

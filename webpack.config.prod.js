@@ -17,6 +17,7 @@ var GLOBALS = {
     NPM: path.resolve(__dirname, 'node_modules')
   },
 
+
   autoprefixer: {
     browsers: [
       'Android 2.3',
@@ -37,6 +38,7 @@ module.exports = {
   entry: [
     './src/index.jsx'
   ],
+  cache: true,
   module: {
     loaders: [
       {
@@ -44,8 +46,34 @@ module.exports = {
         loader: "url-loader",
         query: {
           mimetype: "image/png",
-          limit: 11000
+          limit: 11000,
+          name: 'images/[hash].[ext]'
         }
+      },
+
+      {
+        test: /\.jpg$/,
+        loader: "url-loader"
+      },
+
+      {
+        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: 'url-loader?name=font/[hash].[ext]&limit=10000&mimetype=application/font-woff'
+      },
+
+      {
+        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        loader: 'file-loader?name=font/[hash].[ext]'
+      },
+
+      {
+        test: /\.json$/,
+        loader: "json"
+      },
+
+      {
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract("style-loader", "css-loader")
       },
 
       {
@@ -53,21 +81,22 @@ module.exports = {
         loader: ExtractTextPlugin.extract("css-loader?minimize!postcss-loader!sass")
       },
       {
-      test: /\.jsx|js?$/,
+      test: /\.(jsx|js)?$/,
       exclude: /node_modules/,
-      loader: 'es3ify!babel'
+      loader: 'es3ify!babel?cacheDirectory=true'
     }]
   },
   postcss: function() {
     return [autoprefixerHandle];
   },
   resolve: {
-    extensions: ['', '.js', '.jsx']
+    extensions: ['', '.js', '.jsx'],
+    modulesDirectories: ['node_modules', 'shared']
   },
   output: {
     path: GLOBALS.folders.BUILD,
     publicPath: '/',
-    filename: 'bundle.js'
+    filename: '/scripts/bundle.js'
   },
   devServer: {
     contentBase: GLOBALS.folders.BUILD,
@@ -76,8 +105,8 @@ module.exports = {
   plugins: [
     new webpack.optimize.OccurenceOrderPlugin(),
     new ExtractTextPlugin('styles/comlanos.css'),
-    // new webpack.optimize.DedupePlugin(),
-    // new webpack.optimize.UglifyJsPlugin(),
+    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.UglifyJsPlugin(),
     new webpack.DefinePlugin(GLOBALS.DEFINE_OBJ)
   ]
 };

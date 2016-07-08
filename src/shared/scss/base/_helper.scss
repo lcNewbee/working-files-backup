@@ -1,0 +1,50 @@
+.fr {
+  float: right;
+}
+.fl {
+  float: left;
+}
+.fn {
+  float: none;
+}
+
+.clearfix {
+  @include clearfix();
+}
+
+.none {
+  display: none;
+}
+
+.link-text {
+  text-decoration: underline;
+  color: $g-color-primary-dark;
+  cursor: pointer;
+}
+
+.text-required {
+  color: $g-brand-danger;
+  font-weight: bold;
+}
+
+.link-more {
+  float: right;
+  font-size: 12px;
+  color: $g-color-primary-dark;
+
+  .icon {
+    margin-left: 4px;
+    font-size: 14px;
+  }
+}
+
+.body-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1040;
+  background-color: #fff;
+  @include opacity(0.0);
+}

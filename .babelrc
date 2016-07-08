@@ -6,6 +6,11 @@
     "plugins": [
         "add-module-exports",
         "transform-es5-property-mutators",
-        "transform-jscript"
+        "transform-jscript",
+        [
+            "resolver", { "resolveDirs": [
+                "src/shared"
+            ]}
+        ]
     ]
 }

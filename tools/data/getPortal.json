@@ -1,0 +1,28 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "pid": "1",
+        "portalname": "zhangsan",
+        "url": "www.baidu.com",
+        "title": "comlanos",
+        "timeout": "3600",
+        "refreshtime": "0",
+        "image": [
+          {
+            "count": "1",
+            "url": "images/4.jpg"
+          },
+          {
+            "count": "2",
+            "url": "images/logo.png"
+          }
+        ]
+      }
+    ]
+  }
+}

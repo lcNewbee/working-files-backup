@@ -1,0 +1,130 @@
+// Core
+
+//== Colors
+//
+//## Main Colors
+
+$g-main-color:               #222 !default;
+$g-main-color-light:         #333 !default;
+$g-main-color-lighter:       #666 !default;
+
+$g-color-primary:              #0093DD !default;
+$g-color-primary-dark:         #0070d2 !default;
+$g-color-primary-darker:       #005fb2 !default;
+$g-color-primary-darkest:      #00396b !default;
+
+$g-color-neutral:              #4F6A92 !default;
+$g-color-neutral-light:        #A7B8D1 !default;
+$g-color-neutral-lighter:      #CFD7E7 !default;
+$g-color-neutral-lightest:     #EEF1F6 !default;
+
+//## Gray and brand colors for use across wgruis.
+//### Gray color
+$g-black:                   #000 !default;
+$g-gray-darker:               lighten($g-black, 13.5%) !default; // #222
+$g-gray-dark:                 lighten($g-black, 20%)   !default; // #333
+$g-gray:                      lighten($g-black, 33.5%) !default; // #555
+$g-gray-light:                lighten($g-black, 46.7%) !default; // #777
+$g-gray-lighter:              lighten($g-black, 93.5%) !default; // #eee
+
+//### Brand color
+$g-brand-primary:           #0093DD !default;
+$g-brand-success:           #4BC076 !default;
+$g-brand-info:              #62B7ED !default;
+$g-brand-warning:           #F7B64B !default;
+$g-brand-danger:            #C23934 !default;
+
+//== Scaffolding
+//
+//## Settings for some of the most global styles.
+
+//### Background color for `<body>`.
+$g-body-bg:                 #f2f2f2 !default;
+
+//### Global text color on `<body>`.
+$g-text-color:              $g-gray-dark !default;
+
+//### Global text color
+$g-text-highlight:          $g-brand-danger !default;
+$g-text-help:               #b1b1b1 !default;
+$g-text-btn:                #FFF !default;
+
+//### Global textual link color.
+$g-link-color:              $g-brand-primary !default;
+
+//### Link hover color set via `darken()` function.
+$g-link-hover-color:        darken($g-link-color, 15%) !default;
+
+//### Link hover decoration.
+$g-link-hover-decoration:   underline !default;
+
+
+//== Typography
+//
+//## Font, line-height, and color for body text, headings, and more.
+$g-line-height:             1.428571429 !default; // 20/14
+$g-line-height-sm:          1.2 !default; // 16/14
+
+// font family
+$g-font-family-base:        'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$g-font-family-base-en:     "Helvetica Neue","Helvetica","Arial",sans-serif;
+
+// font size
+$g-font-size:               12px !default;
+$g-font-size-lg:            ceil(($g-font-size * 1.25)) !default; // ~18px
+$g-font-size-sm:            ceil(($g-font-size * 0.85)) !default; // ~12px
+
+$g-font-size-h1:            floor(($g-font-size * 2.6)) !default; // ~36px
+$g-font-size-h2:            floor(($g-font-size * 2.15)) !default; // ~30px
+$g-font-size-h3:            ceil(($g-font-size * 1.7)) !default; // ~24px
+$g-font-size-h4:            ceil(($g-font-size * 1.25)) !default; // ~18px
+$g-font-size-h5:            $g-font-size !default;
+$g-font-size-h6:            ceil(($g-font-size * 0.85)) !default; // ~12px
+
+//== Distance
+//
+//** width, height, padding, margin size for use across kuaizhuan
+$g-distance: 			          10px !default;
+$g-distance-md: 		        floor(($g-distance * 1.25)) !default;
+$g-distance-lg: 			      ceil(($g-distance * 1.5)) !default;
+$g-distance-sm:             floor(($g-distance * 0.85)) !default;
+$g-distance-min:            floor(($g-distance * 0.5)) !default;
+
+//== Size
+//
+// Common size
+$g-size:                  30px !default;
+$g-size-lg:               ($g-size * 2) !default;
+$g-size-sm:               ceil($g-size * 0.53) !default;
+
+// App icon size
+$g-icon-size:               55px !default;
+$g-icon-size-large:         $g-icon-size * 2 !default;
+$g-icon-size-small:         ceil(($g-font-size * 0.29)) !default;
+
+//== Container size
+
+// mobile
+$g-mw-mobile-sm:              320px !default;
+$g-mw-mobile-md:              375px !default;
+$g-mw-mobile-lg:              420px !default;
+
+//== Grid system
+//
+//## Grid system for all
+$g-grid-columns:              12 !default;
+
+//## media query
+$mw-sm:                       320px  !default;
+$mw-md:                       768px  !default;
+$mw-lg:                       1024px  !default;
+$mw-xl:                       1382px !default;
+
+
+//== navbar
+$g-navbar-height:             50px !default;
+
+
+
+
+

@@ -1,0 +1,6 @@
+{
+  "name": "utils",
+  "version": "1.0.4",
+  "private": true,
+  "main": "./index.js"
+}

@@ -11,9 +11,6 @@ import fs from 'fs';
 import colors from 'colors';
 import cheerio from 'cheerio';
 
-const useTrackJs = true; // If you choose not to use TrackJS, just set this to false and the build warning will go away.
-const trackJsToken = ''; // If you choose to use TrackJS, insert your unique token here. To get a token, go to https://trackjs.com
-
 fs.readFile('src/index.html', 'utf8', (err, markup) => {
   if (err) {
     return console.log(err);
@@ -22,17 +19,9 @@ fs.readFile('src/index.html', 'utf8', (err, markup) => {
   const $ = cheerio.load(markup);
 
   // since a separate stylesheet is only utilized for the production build, need to dynamically add this here.
-  $('head').append('  <link rel="stylesheet" href="/styles/comlanos.css">\n');
+  $('head').append('  <link rel="stylesheet" href="styles/comlanos.css">\n');
 
-  if (useTrackJs) {
-    if (trackJsToken) {
-      const trackJsCode = `<!-- BEGIN TRACKJS Note: This should be the first <script> on the page per https://my.trackjs.com/install --><script>window._trackJs = { token: '${trackJsToken}' };</script><script src=https://d2zah9y47r7bi2.cloudfront.net/releases/current/tracker.js></script><!-- END TRACKJS -->`;
-
-      $('head').prepend(trackJsCode); // add TrackJS tracking code to the top of <head>
-    } else {
-      console.log('To track JavaScript errors, sign up for a free trial at TrackJS.com and enter your token in /tools/buildHtml.js on line 15.'.yellow);
-    }
-  }
+  $('#jspdfScript').attr('src', "scripts/jspdf.min.js");
 
   fs.writeFile('build/index.html', $.html(), 'utf8', function (err) {
     if (err) {
@@ -41,3 +30,4 @@ fs.readFile('src/index.html', 'utf8', (err, markup) => {
     console.log('index.html written to /build'.green);
   });
 });
+
