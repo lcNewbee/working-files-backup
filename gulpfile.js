@@ -75,7 +75,7 @@ gulp.task('pub:copy', function() {
 })
 
 gulp.task('pub:ac', function(callback) {
-  runSequence('bump', [ 'clean:pubac', 'build' ], 'pub:copy', callback)
+  runSequence('bump:dev', [ 'clean:pubac', 'build' ], 'pub:copy', callback)
 });
 
 /**

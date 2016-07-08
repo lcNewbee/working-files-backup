@@ -1,6 +1,6 @@
 {
   "name": "comlanos",
-  "version": "1.0.16",
+  "version": "1.0.18-dev.1",
   "description": "comlanos 前端开发平台",
   "main": "src/index.jsx",
   "repository": "none",
