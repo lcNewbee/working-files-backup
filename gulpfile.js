@@ -37,6 +37,10 @@ gulp.task('webpack', shell.task([
   'babel-node tools/buildHtml.js'
 ]))
 
+gulp.task('test', shell.task([
+  "mocha --compilers js:babel-core/register --require ./tools/test/step.js \"./shared/**/*spec.@(js|jsx)\" --watch --watch-extensions jsx --reporter dot -c"
+]))
+
 gulp.task('webpack', shell.task([
   'webpack --config webpack.config.prod.js',
   'babel-node tools/buildHtml.js'

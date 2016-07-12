@@ -6,9 +6,9 @@
   "repository": "none",
   "scripts": {
     "webpack:prod": "webpack --config webpack.config.prod.js",
-    "test": "mocha --require ./tools/test/step.js './src/**/*spec.@(js|jsx)'",
-    "test:watch": "npm test --  --watch --watch-extensions jsx --reporter dot",
-    "test:shared": "mocha --compilers js:babel-core/register --require ./tools/test/step.js './shared/**/*spec.@(js|jsx)' --watch --watch-extensions jsx --reporter dot"
+    "test": "mocha --compilers js:babel-core/register --require ./tools/test/step.js \"./src/**/*spec.@(js|jsx)\"",
+    "test:watch": "npm test --  --watch --watch-extensions jsx --reporter dot -c",
+    "test:shared": "mocha --compilers js:babel-core/register --require ./tools/test/step.js \"./shared/**/*spec.@(js|jsx)\" --watch --watch-extensions jsx --reporter dot -c"
   },
   "keywords": [
     "webpack",
