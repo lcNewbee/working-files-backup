@@ -1,11 +1,8 @@
-var babelRegister = require('babel-register');
+var babelRegister = require('babel-core/register');
 var jsdom = require('jsdom');
 var chai = require('chai');
 var chaiImmutable = require('chai-immutable');
 var path = require('path');
-var babelResolver = require('babel-resolver');
-var localModulesDir = __dirname;
-var anotherDirToCheck = path.resolve(__dirname, 'shared');
 var doc = jsdom.jsdom('<!doctype html><html><body></body></html>');
 var win = doc.defaultView;
 
