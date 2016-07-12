@@ -38,6 +38,7 @@ describe('Login reducer', () => {
         password: 'ewe'
       }
     });
+
     const action = {
       type: 'REQEUST_LOGIN'
     };

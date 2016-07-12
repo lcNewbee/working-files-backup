@@ -1,17 +1,17 @@
 import React from 'react';
-import utils from 'utils';
+import utils from 'shared/utils';
 import { bindActionCreators } from 'redux';
 import {fromJS, Map} from 'immutable';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import validator from 'utils/lib/validator';
-import * as appActions from 'actions/app';
+import validator from 'shared/utils/lib/validator';
+import * as appActions from 'shared/actions/app';
 import * as actions from './actions';
 import reducer from './reducer';
-import {FormGroup} from 'components/Form';
-import {Table} from 'components/Table';
-import Modal from 'components/Modal';
-import Button from 'components/Button';
+import {FormGroup} from 'shared/components/Form';
+import {Table} from 'shared/components/Table';
+import Modal from 'shared/components/Modal';
+import Button from 'shared/components/Button';
 
 const msg = {
   delete: _('Delete'),

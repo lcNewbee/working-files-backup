@@ -1,13 +1,13 @@
-import NotFound from 'components/NotFound';
-import remoteActionMiddleware from 'utils/lib/remote_action_middleware';
+import NotFound from 'shared/components/NotFound';
+import remoteActionMiddleware from 'shared/utils/lib/remote_action_middleware';
 import {combineReducers} from 'redux';
 
 // 公用 样式
-import 'scss/styles.scss';
+import 'shared/scss/styles.scss';
 import 'font-awesome/css/font-awesome.css';
 
 // 多语言工具
-const b28n = require('b28n');
+const b28n = require('shared/b28n');
 const langCn = require('../lang/cn/core.json');
 const validateCn = require('../lang/cn/validate.json')
 const langEn = require('../lang/en/core.json');

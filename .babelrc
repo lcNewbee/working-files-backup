@@ -8,9 +8,10 @@
         "transform-es5-property-mutators",
         "transform-jscript",
         [
-            "resolver", { "resolveDirs": [
-                "src/shared"
-            ]}
+          "module-alias",
+          [
+            { "src": "./shared", "expose": "shared" }
+          ]
         ]
     ]
 }

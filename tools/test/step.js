@@ -1,14 +1,23 @@
-import jsdom from 'jsdom';
-import chai from 'chai';
-import chaiImmutable from 'chai-immutable';
+var babelRegister = require('babel-register');
+var jsdom = require('jsdom');
+var chai = require('chai');
+var chaiImmutable = require('chai-immutable');
+var path = require('path');
+var babelResolver = require('babel-resolver');
+var localModulesDir = __dirname;
+var anotherDirToCheck = path.resolve(__dirname, 'shared');
+var doc = jsdom.jsdom('<!doctype html><html><body></body></html>');
+var win = doc.defaultView;
 
-const doc = jsdom.jsdom('<!doctype html><html><body></body></html>');
-const win = doc.defaultView;
+// Register babel so that it will transpile ES6 to ES5
+// before our tests run.
+babelRegister({
+});
 
 global.document = doc;
 global.window = win;
 
-Object.keys(window).forEach((key) => {
+Object.keys(window).forEach(function(key) {
   if (!(key in global)) {
     global[key] = window[key];
   }
@@ -35,9 +44,5 @@ require.extensions['.css'] = noop;
 require.extensions['.scss'] = noop;
 require.extensions['.png'] = noop;
 require.extensions['.jpg'] = noop;
-
-// Register babel so that it will transpile ES6 to ES5
-// before our tests run.
-require('babel-register')();
 
 chai.use(chaiImmutable);

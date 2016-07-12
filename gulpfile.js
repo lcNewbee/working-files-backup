@@ -141,6 +141,4 @@ gulp.task('bump:dev', function() {
     .pipe(gulp.dest('./'));
 });
 
-
 gulp.task('default', ['open:src']);
-

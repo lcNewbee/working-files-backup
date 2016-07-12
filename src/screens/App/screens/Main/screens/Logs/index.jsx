@@ -1,19 +1,19 @@
 import React from 'react';
-import utils from 'utils';
+import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import {fromJS} from 'immutable';
 
 // components
-import {Table} from 'components/Table';
-import Button from 'components/Button';
-import {Search} from 'components/Form';
-import Select from 'components/Select';
+import {Table} from 'shared/components/Table';
+import Button from 'shared/components/Button';
+import {Search} from 'shared/components/Form';
+import Select from 'shared/components/Select';
 
 // custom
 import * as actions from './actions';
-import * as appActions from 'actions/app';
+import * as appActions from 'shared/actions/app';
 import reducer from './reducer';
 
 const logsTableOptions = fromJS([

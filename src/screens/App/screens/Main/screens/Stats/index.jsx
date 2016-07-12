@@ -1,15 +1,15 @@
 import React from 'react';
-import utils from 'utils';
+import utils from 'shared/utils';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {List, fromJS} from 'immutable';
 
 // components
-import {Table} from 'components/Table';
-import Switchs from 'components/Switchs';
-import Icon from 'components/Icon';
-import Modal from 'components/Modal';
+import {Table} from 'shared/components/Table';
+import Switchs from 'shared/components/Switchs';
+import Icon from 'shared/components/Icon';
+import Modal from 'shared/components/Modal';
 
 import * as actions from './actions';
 import reducer from './reducer';

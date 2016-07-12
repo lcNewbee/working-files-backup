@@ -1,5 +1,5 @@
-import utils from 'utils';
-import * as appActions from 'actions/app';
+import utils from 'shared/utils';
+import * as appActions from 'shared/actions/app';
 
 const FETCH_URL = '/goform/getClientInfo';
 const ACTION_URL = '/goform/setClientAction';

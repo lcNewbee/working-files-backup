@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Tab from 'components/Tab';
+import Tab from 'shared/components/Tab';
 
 export default class Setings extends Component {
   render() {
