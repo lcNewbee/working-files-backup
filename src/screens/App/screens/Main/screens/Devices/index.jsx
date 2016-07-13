@@ -1,20 +1,20 @@
 import React from 'react';
-import utils from 'utils';
+import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { bindActionCreators } from 'redux'
 import * as actions from './actions';
-import * as appActions from 'actions/app';
+import * as appActions from 'shared/actions/app';
 import reducer from './reducer';
 import {fromJS, Map} from 'immutable';
-import validator from 'utils/lib/validator';
+import validator from 'shared/utils/lib/validator';
 
-import {Table} from 'components/Table';
-import {Search, FormGroup, Checkbox} from 'components/Form';
-import Button from 'components/Button';
-import Select from 'components/Select';
-import Modal from 'components/Modal';
-import Switchs from 'components/Switchs';
+import {Table} from 'shared/components/Table';
+import {Search, FormGroup, Checkbox} from 'shared/components/Form';
+import Button from 'shared/components/Button';
+import Select from 'shared/components/Select';
+import Modal from 'shared/components/Modal';
+import Switchs from 'shared/components/Switchs';
 
 // css
 import './_index.scss';

@@ -1,4 +1,4 @@
-import React, { Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import './index.scss';
@@ -6,14 +6,17 @@ import './index.scss';
 const propTypes = {
   isShow: PropTypes.bool,
   title: PropTypes.string,
+  id: PropTypes.string,
   size: PropTypes.oneOf(['lg', '2x', '3x', '4x', '5x']),
   role: PropTypes.oneOf(['dialog', 'alert', 'comfirm', 'message']),
   okText: PropTypes.string,
   cancelText: PropTypes.string,
+  transitionLeave: PropTypes.bool,
+  transitionEnter: PropTypes.bool,
   okButton: PropTypes.bool,
   cancelButton: PropTypes.bool,
-  // onClose: PropTypes.function,
-  // onOk: PropTypes.function
+  onClose: PropTypes.func,
+  onOk: PropTypes.func,
 };
 
 const defaultProps = {
@@ -24,8 +27,8 @@ const defaultProps = {
   transitionEnter: true,
   transitionLeave: true,
   okButton: true,
-  cancelButton: true
-}
+  cancelButton: true,
+};
 
 class Modal extends Component {
   constructor(props) {
@@ -33,27 +36,27 @@ class Modal extends Component {
 
     this.onClose = this.onClose.bind(this);
     this.onOk = this.onOk.bind(this);
-  };
+  }
 
   onClose() {
     if (typeof this.props.onClose === 'function') {
       this.props.onClose();
     }
-  };
+  }
 
   onOk() {
     if (typeof this.props.onOk === 'function') {
       this.props.onOk();
     }
-  };
+  }
 
   render() {
     let classNames;
     let keyVal = 'onlyModal';
     let hasCloseBtn = true;
-    let { cancelButton, okButton } = this.props;
+    let { cancelButton } = this.props;
     const { size, role, id, transitionLeave, transitionEnter,
-      isShow, title, cancelText } = this.props;
+      isShow, title, cancelText, okButton, okText } = this.props;
 
     // role is shown in classNames
     if (role) {
@@ -61,13 +64,17 @@ class Modal extends Component {
     }
 
     // ReactCSSTransitionGroup need key value
-    if(id) {
+    if (size) {
+      keyVal += ` modal-${role}`;
+    }
+
+    // ReactCSSTransitionGroup need key value
+    if (id) {
       keyVal = `${id}Modal`;
     }
 
-
     // No top close button
-    if(role === 'message' || role === 'comfirm') {
+    if (role === 'message' || role === 'comfirm') {
       hasCloseBtn = false;
 
     // when role is "alert" no cancelButton
@@ -128,7 +135,7 @@ class Modal extends Component {
                               className="btn btn-default"
                               onClick={this.onClose}
                             >
-                              {this.props.cancelText}
+                              {cancelText}
                             </button>
                           ) : null
                         }
@@ -140,7 +147,7 @@ class Modal extends Component {
                               className="btn btn-primary"
                               onClick={this.onOk}
                             >
-                              {this.props.okText}
+                              {okText}
                             </button>
                           ) : null
                         }
@@ -154,8 +161,8 @@ class Modal extends Component {
           ) : null
         }
       </ReactCSSTransitionGroup>
-    )
-  };
+    );
+  }
 }
 
 Modal.propTypes = propTypes;

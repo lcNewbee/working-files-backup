@@ -1,13 +1,13 @@
 import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import utils from 'utils';
+import utils from 'shared/utils';
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {Input, FormGroup} from 'components/Form';
+import {Input, FormGroup} from 'shared/components/Form';
 import {fromJS, Map} from 'immutable';
-import validator from 'utils/lib/validator';
+import validator from 'shared/utils/lib/validator';
 import * as actions from './actions';
-import * as appActions from 'actions/app';
+import * as appActions from 'shared/actions/app';
 import reducer from './reducer';
 
 const formGroups = {
@@ -130,7 +130,6 @@ export const Login = React.createClass({
               onKeyUp={this.onInputKeyUp}
               validator={formGroups.password.validator}
             />
-            <a href="#/register" className="help-link">{_('Sign up')}</a>
             {
               this.props.status !== 'ok' ?
                 <p className="msg-error ">{this.props.status}</p> :

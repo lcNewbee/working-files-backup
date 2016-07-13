@@ -1,4 +1,4 @@
-import utils from 'utils';
+import utils from 'shared/utils';
 
 export function reqeustLogin() {
   return {

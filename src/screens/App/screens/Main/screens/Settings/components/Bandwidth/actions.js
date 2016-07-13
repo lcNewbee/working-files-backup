@@ -1,4 +1,4 @@
-import utils from 'utils';
+import utils from 'shared/utils';
 
 const urls = {
   fetch: "/goform/getQos",

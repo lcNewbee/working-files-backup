@@ -1,18 +1,18 @@
 import React, {PropTypes} from 'react';
-import utils from 'utils';
+import utils from 'shared/utils';
 import { bindActionCreators } from 'redux';
 import {fromJS, Map, List} from 'immutable';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import validator from 'utils/lib/validator';
-import * as appActions from 'actions/app';
+import validator from 'shared/utils/lib/validator';
+import * as appActions from 'shared/actions/app';
 import * as myActions from './actions';
 import myReducer from './reducer';
 
-import {FormGroup} from 'components/Form';
-import Select from 'components/Select';
-import Button from 'components/Button';
-import SaveButton from 'components/Button/Save';
+import {FormGroup} from 'shared/components/Form';
+import Select from 'shared/components/Select';
+import Button from 'shared/components/Button';
+import SaveButton from 'shared/components/Button/Save';
 
 const msg = {
   'upSpeed': _('Up Speed'),

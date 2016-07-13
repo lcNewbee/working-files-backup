@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import 'font-awesome/css/font-awesome.css';
+import './index.scss';
 
 const propTypes = {
   name: PropTypes.string.isRequired,
@@ -27,9 +28,9 @@ class Icon extends React.Component {
       name, size, rotate, flip, spin, fixedWidth, stack, inverse,
       pulse, className
     } = this.props;
-    
+
     let classNames = `fa fa-${name}`;
-    
+
     if (size) {
       classNames = `${classNames} fa-${size}`;
     }
@@ -59,11 +60,11 @@ class Icon extends React.Component {
     if (className) {
       classNames = `${classNames} ${className}`;
     }
-    
+
     if (className) {
       classNames = className + ' ' + classNames;
     }
-    
+
     return <Component {...this.props} className={classNames} />;
   }
 }

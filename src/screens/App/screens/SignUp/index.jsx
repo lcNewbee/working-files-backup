@@ -2,10 +2,10 @@ import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {Input, FormGroup} from 'components/Form';
+import {Input, FormGroup} from 'shared/components/Form';
 import {fromJS, Map, List} from 'immutable';
-import validator from 'utils/lib/validator';
-import utils from 'utils';
+import validator from 'shared/utils/lib/validator';
+import utils from 'shared/utils';
 
 const msg = {
   password:  _('Password'),

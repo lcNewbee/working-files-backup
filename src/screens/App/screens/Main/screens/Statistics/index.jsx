@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import * as actions from './actions';
 import reducer from './reducer';
-import Button from 'components/Button';
+import Button from 'shared/components/Button';
 
 const msg = {
   TITIE: _('Reports'),

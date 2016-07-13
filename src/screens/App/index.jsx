@@ -1,10 +1,11 @@
 import React from 'react';
-import utils from 'utils';
+import utils from 'shared/utils';
 import { bindActionCreators } from 'redux';
-import {connect} from 'react-redux';
-import * as actions from 'actions/app';
+import { connect } from 'react-redux';
+import * as actions from 'shared/actions/app';
 import reducer from './reducer';
-import Modal from 'components/Modal';
+import Modal from 'shared/components/Modal';
+import './_index.scss';
 
 export const App = React.createClass({
 
@@ -14,24 +15,24 @@ export const App = React.createClass({
 
   onModalClose() {
     this.props.closeModal({
-      status: 'cancel'
+      status: 'cancel',
     });
   },
 
   onModalApply() {
     this.props.closeModal({
-      status: 'ok'
+      status: 'ok',
     });
   },
 
-  render: function() {
+  render() {
     const { modal } = this.props.app.toJS();
 
     return (
       <div>
         { this.props.children }
         <Modal
-          isShow={modal.status === 'show' ? true : false}
+          isShow={modal.status === 'show'}
           title={modal.title}
           role={modal.role}
           transitionEnter={false}
@@ -43,20 +44,18 @@ export const App = React.createClass({
         </Modal>
       </div>
     );
-  }
+  },
 });
 
 function mapStateToProps(state) {
-  var myState = state.app;
-
   return {
-    app: myState
+    app: state.app,
   };
 }
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     actions
-  ), dispatch)
+  ), dispatch);
 }
 
 // 添加 redux 属性的 react 页面

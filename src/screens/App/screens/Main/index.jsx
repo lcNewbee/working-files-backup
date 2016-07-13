@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
-import utils from 'utils';
+import utils from 'shared/utils';
 import { bindActionCreators } from 'redux'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import {connect} from 'react-redux';
-import Nav from 'components/Nav';
-import Icon from 'components/Icon';
-import Sidebar from './components/Sidebar';
-import Modal from 'components/Modal';
+import Nav from 'shared/components/Nav';
+import Icon from 'shared/components/Icon';
+import Modal from 'shared/components/Modal';
 import * as actions from './actions';
-import * as appActions from 'actions/app';
+import * as appActions from 'shared/actions/app';
 
 export default class Main extends Component {
   constructor(props) {

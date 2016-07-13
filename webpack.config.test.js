@@ -2,6 +2,7 @@ var webpack = require('webpack');
 var path = require('path');
 var autoprefixer = require('autoprefixer');
 var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
+
 var GLOBALS = {
   DEFINE_OBJ: {
     'process.env.NODE_ENV': JSON.stringify('development'),
@@ -32,7 +33,7 @@ var GLOBALS = {
 // 自动添加兼容性css
 var autoprefixerHandle = autoprefixer(GLOBALS.autoprefixer);
 
-var config = {
+module.exports = {
   debug: true,
 
   // more info:https://webpack.github.io/docs/build-performance.html#sourcemaps and https://webpack.github.io/docs/configuration.html#devtool
@@ -44,22 +45,12 @@ var config = {
 
   entry: {
     'index': [
-      'webpack-hot-middleware/client?reload=true',
       './src/index.jsx'
-    ],
-    // vendors: [
-    //   'webpack-hot-middleware/client?reload=true',
-    //   'react',
-    //   'react-dom',
-    //   'immutable',
-    //   'react-router',
-    //   'redux',
-    //   'react-redux'
-    // ]
+    ]
   },
 
   // necessary per https://webpack.github.io/docs/testing.html#compile-and-test
-  target: 'web',
+  target: 'node',
   output: {
     path: GLOBALS.folders.BUILD,
     publicPath: '/',
@@ -110,7 +101,7 @@ var config = {
       {
         test: /\.(js|jsx)?$/,
         exclude: /node_modules/,
-        loader: 'react-hot!babel'
+        loader: 'babel'
       }
     ]
   },
@@ -125,14 +116,6 @@ var config = {
   plugins: [
     new webpack.DefinePlugin(GLOBALS.DEFINE_OBJ),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
-    // new CommonsChunkPlugin({
-    //   name: 'vendors',
-    //   filename: 'scripts/public/vendors.js',
-    //   minChunks: 2
-    // })
+    new webpack.NoErrorsPlugin()
   ]
 };
-
-module.exports = config;
-
