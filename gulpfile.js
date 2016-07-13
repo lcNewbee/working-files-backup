@@ -11,6 +11,7 @@ var del = require('del');
 var shell = require('gulp-shell')
 var rename = require("gulp-rename");
 var paths;
+var mochaShellprefix = 'mocha --require ./tools/test/step.js --reporter dot -c';
 
 paths = gulp.paths = {
   tmp: '.tmp',
@@ -30,6 +31,14 @@ gulp.task('clean', function(callback) {
 
 gulp.task('open:src', shell.task([
   'babel-node ./tools/srcServer.js'
+]));
+
+gulp.task('test', shell.task([
+  mochaShellprefix + ' \"./src/**/*spec.@(js|jsx)\" --watch --watch-extensions jsx'
+]));
+
+gulp.task('test:shared', shell.task([
+  mochaShellprefix + ' \"./shared/**/*spec.@(js|jsx)\" --watch --watch-extensions jsx'
 ]));
 
 gulp.task('webpack', shell.task([
