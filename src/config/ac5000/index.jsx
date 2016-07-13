@@ -149,9 +149,6 @@ let routes = [{
           ]
         }]
     }, {
-      path: '/register',
-      component: sRegister.Screen
-    }, {
       path: '/wizard',
       component: sWizard.Screen
     }
