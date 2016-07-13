@@ -85,7 +85,7 @@ gulp.task('pub:copy', function() {
 
 // 发布 AC 正式版
 gulp.task('pub:ac', function(callback) {
-  runSequence('bump', ['clean:pubac', 'build' ], 'pub:copy', callback);
+  runSequence(['clean:pubac', 'build' ], 'pub:copy', callback);
 });
 
 // 发布AC测试版本

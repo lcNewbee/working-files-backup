@@ -313,9 +313,8 @@ export const Status = React.createClass({
           trigger: 'axis'
         },
         legend: {
-            data:['2.4G', '5G', _('Total')]
+          data: ['2.4G', '5G', _('Total')],
         },
-
         xAxis: [{
           type: 'category',
           data: xAxisData,
