@@ -261,6 +261,7 @@ export const Status = React.createClass({
 
   renderClientStatistics() {
     const dayText = _('D')
+    const colors = ['#c23531','#2f4554', '#0093dd', '#d48265', '#91c7ae'];
     let clientStatisticsList = this.props.data.get('clientStatisticsList');
     let totalClientStatisticsList = null;
     let xAxisData;
@@ -306,13 +307,13 @@ export const Status = React.createClass({
     }
 
     const ClientsStatsOption = {
+        color: colors,
+
         tooltip: {
           trigger: 'axis'
         },
-        toolbox: {
-          feature: {
-            //dataView: { show: fasle }
-          }
+        legend: {
+          data: ['2.4G', '5G', _('Total')],
         },
         xAxis: [{
           type: 'category',
@@ -327,14 +328,21 @@ export const Status = React.createClass({
           }
         }],
         yAxis: [{
-          type: 'value',
-          name: _('Number'),
-          minInterval: 1,
-          axisLabel: {
-            formatter: '{value}'
+            type: 'value',
+            name: _('Number'),
+            minInterval: 1,
+            color: colors[0],
+            axisLabel: {
+              formatter: '{value}'
+            },
+            axisLine: {
+              lineStyle: {
+                  color: colors[1]
+              }
+            },
           }
-        }],
-        color: ['#c23531','#2f4554', '#0093dd', '#d48265', '#91c7ae','#749f83',  '#ca8622', '#bda29a','#6e7074', '#546570', '#c4ccd3'],
+        ],
+
         series: [
           {
             name: '2.4G',
@@ -349,7 +357,6 @@ export const Status = React.createClass({
           {
             name: _('Total'),
             type: 'line',
-            color: '#009344',
             data: totalClientStatisticsList
           }
         ]

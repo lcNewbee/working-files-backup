@@ -130,7 +130,6 @@ export const Login = React.createClass({
               onKeyUp={this.onInputKeyUp}
               validator={formGroups.password.validator}
             />
-            <a href="#/register" className="help-link">{_('Sign up')}</a>
             {
               this.props.status !== 'ok' ?
                 <p className="msg-error ">{this.props.status}</p> :
