@@ -89,6 +89,8 @@
   "AP Activity Ranklist": "AP活跃度排行",
   "Clients Ranklist": "客户端排行",
   "UP/Down Flow": "上/下行流量",
+  "upstream":"上传",
+  "downstream":"下载",
   "Last Seen": "最近出现时间",
   "Status": "状态",
   "Frequency": "频段",

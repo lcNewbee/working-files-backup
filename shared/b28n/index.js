@@ -8,7 +8,6 @@ import storage from '../utils/lib/storage';
 import strUtils from '../utils/lib/string';
 import utilsCore from '../utils/lib/core';
 
-
 const b28n = (function (doc, win) {
   const STROE_KEY = 'B_LANGUAGE';
   const DEFAULT_OPTIONS = {
