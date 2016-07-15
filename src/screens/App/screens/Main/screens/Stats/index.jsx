@@ -8,6 +8,7 @@ import {List, fromJS} from 'immutable';
 // components
 import {Table} from 'shared/components/Table';
 import Switchs from 'shared/components/Switchs';
+import Button from 'shared/components/Button';
 import Icon from 'shared/components/Icon';
 import Modal from 'shared/components/Modal';
 
@@ -46,6 +47,7 @@ const msg = {
   apStatus: _('AP Status'),
   total: _('Total:'),
   apNumber: _('AP Number')
+
 };
 const timeTypeSwitchs = fromJS([
   {
@@ -330,7 +332,7 @@ export const Status = React.createClass({
           trigger: 'axis'
         },
         legend: {
-          data: ['2.4G', '5G', _('Total')],
+          data: ['2.4G', '5G', _('Total'),_('upstream'),_('downstream')],
         },
         xAxis: [{
           type: 'category',
@@ -357,6 +359,20 @@ export const Status = React.createClass({
                   color: colors[1]
               }
             },
+          },
+          {
+            type:'value',
+            name:_('UP/Down Flow'),
+            minInterval:0.1,
+            color:colors[2],
+            axisLabel:{
+              fromatter:'{value}'
+            },
+            axisLine:{
+              lineStyle:{
+                color:colors[3]
+              }
+            }
           }
         ],
 
@@ -375,6 +391,18 @@ export const Status = React.createClass({
             name: _('Total'),
             type: 'line',
             data: totalClientStatisticsList
+          },
+          {
+            name:'上传',
+            type:'line',
+            yAxisIndex:1,
+            data:clientStatisticsList[2].data
+          },
+          {
+            name:'下载',
+            type:'line',
+            yAxisIndex: 1,
+            data:clientStatisticsList[3].data
           }
         ]
       };
@@ -515,10 +543,28 @@ export const Status = React.createClass({
           }
           return ret;
         }
+      }, {
+        id: 'op',
+        text: _('Actions'),
+        transform: function(val, item) {
+          var mac = item.get('mac');
+          return (
+            <Button
+              icon="bomb"
+              size="sm"
+              text={_('Delete')}
+              onClick={this.onDeleteOfflineDev.bind(this, mac)}
+            />
+          );
+        }.bind(this)
       }
     ]);
 
     return ret;
+  },
+
+  onDeleteOfflineDev: function(mac) {
+    this.props.deleteOfflineAp(mac);
   },
 
   render() {

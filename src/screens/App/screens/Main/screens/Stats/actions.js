@@ -92,3 +92,18 @@ export function fetchOfflineAp() {
       })
   };
 }
+
+export function deleteOfflineAp(mac) {
+  return (dispatch, getState) => {
+    var subData = {
+      mac: mac
+    };
+
+    dispatch(appActions.save('/goform/delApOfflineDev', subData))
+      .then(function(json) {
+        if(json.state && json.state.code === 2000) {
+          dispatch(fetchOfflineAp(5000))
+        }
+      });
+  };
+}
