@@ -46,8 +46,8 @@ gulp.task('webpack', shell.task([
   'babel-node tools/buildHtml.js'
 ]))
 
-gulp.task('webpack', shell.task([
-  'webpack --config webpack.config.prod.js',
+gulp.task('webpack:test', shell.task([
+  'webpack --config webpack.config.test.js',
   'babel-node tools/buildHtml.js'
 ]))
 

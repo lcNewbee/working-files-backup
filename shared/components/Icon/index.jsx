@@ -29,7 +29,7 @@ class Icon extends React.Component {
       pulse, className
     } = this.props;
 
-    let classNames = `fa fa-${name}`;
+    let classNames = `icon fa fa-${name}`;
 
     if (size) {
       classNames = `${classNames} fa-${size}`;

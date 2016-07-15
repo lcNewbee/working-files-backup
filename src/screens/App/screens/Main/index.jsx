@@ -7,6 +7,7 @@ import {connect} from 'react-redux';
 import Nav from 'shared/components/Nav';
 import Icon from 'shared/components/Icon';
 import Modal from 'shared/components/Modal';
+import AsiderBar from './components/AsiderBar';
 import * as actions from './actions';
 import * as appActions from 'shared/actions/app';
 
@@ -77,6 +78,9 @@ export default class Main extends Component {
               }
             </div>
           </div>
+          <AsiderBar
+            data={this.props.sideData}
+          />
         </div>
         {
             isShow ? (
