@@ -49,6 +49,7 @@ export const Login = React.createClass({
     var currClass = document.getElementsByTagName('body')[0].className;
 
     document.getElementsByTagName('body')[0].className = currClass.replace(' sign-body', '');
+    this.props.resetData();
   },
 
 
@@ -94,7 +95,6 @@ export const Login = React.createClass({
   },
 
   onInputKeyUp(e) {
-
     if(e.which === 13) {
       this.onLogin();
     }

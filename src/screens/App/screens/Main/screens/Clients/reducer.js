@@ -25,9 +25,14 @@ export default function(state = defaultState, action) {
 
     case 'CHANGE_CLIENTS_QUERY':
       return state.mergeIn(['query'], action.query);
-    
+
     case "CHANGE_CLIENT_ACTION_QUERY":
       return state.mergeIn(['actionQuery'], action.actionQuery);
+
+    case 'LEAVE_CLIENTS_SCREEN':
+      return state.mergeIn(['query'], {
+        search: ''
+      });
 
   }
   return state;

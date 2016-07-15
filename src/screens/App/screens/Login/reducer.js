@@ -13,6 +13,12 @@ export default function(
     case 'UPDATE_DATA':
       return state.update('data', obj => obj.merge(action.data));
 
+    case 'RESET_DATA':
+      return state.set('data', Map({
+        username: '',
+        password: ''
+      }));
+
     case 'REQEUST_LOGIN':
       return state.update('fetching', val => true)
         .set('status', '');

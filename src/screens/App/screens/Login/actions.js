@@ -28,6 +28,12 @@ export function updateData(data) {
   };
 }
 
+export function resetData() {
+  return {
+    type: 'RESET_DATA'
+  };
+}
+
 export function login(callBack) {
 
   return (dispatch, getState) => {
