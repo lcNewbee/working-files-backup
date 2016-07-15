@@ -15,30 +15,46 @@ class AsiderBar extends React.Component {
   };
 
   render() {
+    const isShow = this.props.data.show;
+    let propertyPanelClassName = 'main-property-panel';
+
+    if(isShow) {
+      propertyPanelClassName += ' active';
+    }
 
     return (
-      <asider className="main-property-panel">
-        <header className="app-action-bar">
-          <div className="app-action-bar-left">PROPERTIES</div>
-          <div className="app-action-bar-right">
-            <div className="app-action-icon-group">
-              <Icon
-                title={_('Remove All')}
-                name='trash'
-              />
-              <Icon
-                title={_('Remove All')}
-                name='navicon'
-              />
-              <Icon
-                title={_('Remove All')}
-                name='angle-double-right'
-              />
+      <asider className={propertyPanelClassName}>
+        <div className="panel-toggle-button">
+          <Icon
+            title={_('Remove All')}
+            name='angle-double-left'
+            size="2x"
+          />
+        </div>
+        <div className="main-property-panel-inner">
+          <header className="app-action-bar">
+            <div className="app-action-bar-left">PROPERTIES</div>
+            <div className="app-action-bar-right">
+              <div className="app-action-icon-group">
+                <Icon
+                  title={_('Remove All')}
+                  name='trash'
+                />
+                <Icon
+                  title={_('Remove All')}
+                  name='navicon'
+                />
+                <Icon
+                  title={_('Remove All')}
+                  name='angle-double-right'
+                />
+              </div>
             </div>
-          </div>
-        </header>
-        <div className="main-properties-container">
-          <div className="main-properties-container-item">
+          </header>
+          <div className="main-properties-container">
+            <div className="main-properties-container-item">
+
+            </div>
           </div>
         </div>
       </asider>

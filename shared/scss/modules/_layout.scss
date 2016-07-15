@@ -128,10 +128,6 @@ body {
     &:hover {
       //background-color: $g-main-color-light;
 
-      .icon-user {
-        //background-color: #fff;
-      }
-
       .icon-down {
         transform: rotate(360deg);
       }
@@ -263,9 +259,34 @@ body {
   top: 70px;
   right: 0;
   bottom: 0;
-  width: 380px;
-  border-left: 1px solid #333;
-  background-color: #f2f2f2;
+  .panel-toggle-button {
+    background-color: #333;
+    text-align: center;
+    color: #fff;
+    width: 24px;
+    height: 24px;
+    border-radius: 16px 0 16px 16px;
+    box-shadow: -2px 2px 0px 0px rgba(0,0,0,0.2);
+    margin-right: 4px;
+
+    .icon {
+      line-height: 24px;
+      font-size: 16px;
+    }
+  }
+  .main-property-panel-inner {
+     width: 0;
+     height: 100%;
+     background-color: #f2f2f2;
+     overflow: hidden;
+  }
+
+  &.active {
+    .main-property-panel-inner {
+      width: 380px;
+      border-left: 1px solid #333;
+    }
+  }
 
   .main-properties-container {
     background-color: #fff;
@@ -292,6 +313,7 @@ body {
       font-size: 16px;
       margin-right: 6px;
       font-weight: 200;
+      cursor: pointer;
     }
   }
 }

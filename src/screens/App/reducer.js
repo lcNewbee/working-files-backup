@@ -28,6 +28,10 @@ const defaultState = fromJS({
   modal: {
     role: 'alert',
   },
+  propertyData: {
+    show: false,
+    items: []
+  },
   noControl: false
 });
 
@@ -98,6 +102,13 @@ export default function( state = defaultState, action ) {
 
     case 'CHANGE_MODAL_STATE':
       return state.mergeIn(['modal'], action.data);
+
+
+    case 'changePropertyStatus':
+      return state.setIn();
+
+    case 'changePropertyStatus':
+      return state;
 
     default:
   }

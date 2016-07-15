@@ -21,9 +21,10 @@ const defaultProps = {
 
 class Nav extends Component{
   render() {
+    let {className} = this.props;
 
     return (
-      <nav {...this.props}>
+      <nav className={className}>
         <ul>
           {
             fromJS(this.props.menus).map(function(item, i) {
@@ -32,7 +33,7 @@ class Nav extends Component{
               return <li key={'nav' + i}>
                 <Link to={item.get('path')} activeClassName="active">
                   {
-                    icon ? <Icon name={icon} className="icon" /> : null
+                    icon ? <Icon name={icon} /> : null
                   }
                   {item.get('text')}
                 </Link>

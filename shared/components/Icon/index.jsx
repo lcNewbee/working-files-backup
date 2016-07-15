@@ -28,6 +28,8 @@ class Icon extends React.Component {
       name, size, rotate, flip, spin, fixedWidth, stack, inverse,
       pulse, className
     } = this.props;
+    const iconProps = Object.assign({}, this.props);
+    delete iconProps.Component;
 
     let classNames = `icon fa fa-${name}`;
 
@@ -65,7 +67,7 @@ class Icon extends React.Component {
       classNames = className + ' ' + classNames;
     }
 
-    return <Component {...this.props} className={classNames} />;
+    return <Component {...iconProps} className={classNames} />;
   }
 }
 

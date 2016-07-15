@@ -1,10 +1,7 @@
 // 支持 ie8
 require('es5-shim');
 require('es5-shim/es5-sham');
-require('console-polyfill');
 require('es6-promise');
-require('fetch-detector');
-require('fetch-ie8');
 // end 支持 ie8
 
 const React = require('react');

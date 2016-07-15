@@ -45,7 +45,7 @@ export default class Main extends Component {
   }
 
   render() {
-    const { saving, version } = this.props.app.toJS();
+    const { saving, version, propertyData } = this.props.app.toJS();
     const { isShow } = this.state;
 
     return (
@@ -79,7 +79,7 @@ export default class Main extends Component {
             </div>
           </div>
           <AsiderBar
-            data={this.props.sideData}
+            data={propertyData}
           />
         </div>
         {
