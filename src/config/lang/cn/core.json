@@ -207,7 +207,7 @@
 
   "Portal Settings": "Portal设置",
   "Portal Name": "Portal名称",
-  "Auth Rederict URL": "认证后跳转链接",
+  "Auth Redirect URL": "认证后跳转链接",
   "Portal Title": "Portal界面标题",
   "Expiration": "过期时间",
   "Timeout": "过期时间",

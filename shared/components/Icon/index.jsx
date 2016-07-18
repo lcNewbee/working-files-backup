@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import 'font-awesome/css/font-awesome.css';
+import utils from 'shared/utils';
 import './index.scss';
 
 const propTypes = {
@@ -28,7 +29,7 @@ class Icon extends React.Component {
       name, size, rotate, flip, spin, fixedWidth, stack, inverse,
       pulse, className
     } = this.props;
-    const iconProps = Object.assign({}, this.props);
+    const iconProps = utils.objectAssign({}, this.props);
     delete iconProps.Component;
 
     let classNames = `icon fa fa-${name}`;

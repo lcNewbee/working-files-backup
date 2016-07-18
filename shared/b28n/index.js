@@ -27,10 +27,36 @@ const b28n = (function (doc, win) {
   const b28n = {};
 
   // Local Config
-  let localLang = 'en';
+  let localLang = getLangWithBrowserSetting();
   let localOptions = DEFAULT_OPTIONS;
   let dicts = {};
   let currDict;
+
+  /**
+   * find support lang in supports array
+   */
+  function isSupportLang(lang, supports) {
+    var len = supports.length;
+    var i;
+
+    for (i = 0; i < len; i++) {
+      if (lang === supports[i]) {
+        return supports[i];
+      }
+    }
+  }
+
+  function getLangWithBrowserSetting() {
+    var ret = (win.navigator.language || win.navigator.userLanguage ||
+      win.navigator.browserLanguage || win.navigator.systemLanguage ||
+      localLang).toLowerCase();
+
+    ret = special[ret] || ret.split('-')[0].toString();
+
+    ret = isSupportLang(ret, DEFAULT_OPTIONS) || 'en';
+
+    return ret;
+  }
 
   function toObject(val) {
     if (val === null || val === undefined) {
@@ -48,20 +74,6 @@ const b28n = (function (doc, win) {
     var ret = storage.get(STROE_KEY);
 
     return ret;
-  }
-
-  /**
-   * find support lang in supports array
-   */
-  function isSupportLang(lang, supports) {
-    var len = supports.length;
-    var i;
-
-    for (i = 0; i < len; i++) {
-      if (lang === supports[i]) {
-        return supports[i];
-      }
-    }
   }
 
   b28n.extend = function (target, source) {
@@ -156,8 +168,8 @@ const b28n = (function (doc, win) {
         initLang = initOptions.defaultLang;
 
         initLang = (win.navigator.language || win.navigator.userLanguage ||
-            win.navigator.browserLanguage || win.navigator.systemLanguage ||
-            initLang).toLowerCase();
+          win.navigator.browserLanguage || win.navigator.systemLanguage ||
+          initLang).toLowerCase();
 
         initLang = special[initLang] || initLang.split('-')[0].toString();
       }
@@ -200,21 +212,21 @@ const b28n = (function (doc, win) {
   };
 
   b28n.langMap = {
-		    'cn': '简体中文',
-		    'zh': '繁體中文',
-		    'de': 'Deutsch', // 德语
-		    'en': 'English', // 英语
-		    'es': 'Español', // 西班牙
-		    'fr': 'Français', // 法国
-		    'hu': 'Magyar', // 匈牙利
-		    'it': 'Italiano', // 意大利
-		    'pl': 'Polski', // 波兰
-		    'ro': 'Română', // 罗马尼亚
-		    'ar': 'العربية', // 阿拉伯
-		    'tr': 'Türkçe', // 土耳其
-		    'ru': 'Русский', // Russian	俄语
-		    'pt': 'Português', // Portugal 葡萄牙语
-	  };
+    'cn': '简体中文',
+    'zh': '繁體中文',
+    'de': 'Deutsch', // 德语
+    'en': 'English', // 英语
+    'es': 'Español', // 西班牙
+    'fr': 'Français', // 法国
+    'hu': 'Magyar', // 匈牙利
+    'it': 'Italiano', // 意大利
+    'pl': 'Polski', // 波兰
+    'ro': 'Română', // 罗马尼亚
+    'ar': 'العربية', // 阿拉伯
+    'tr': 'Türkçe', // 土耳其
+    'ru': 'Русский', // Russian	俄语
+    'pt': 'Português', // Portugal 葡萄牙语
+  };
 
   return b28n;
 })(document, window);

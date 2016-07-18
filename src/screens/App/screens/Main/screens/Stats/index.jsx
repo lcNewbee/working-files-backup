@@ -32,6 +32,7 @@ require('echarts/lib/chart/pie');
 
 // 引入提示框和标题组件
 require('echarts/lib/component/tooltip');
+require('echarts/lib/component/legend');
 require('echarts/lib/component/title');
 
 const flowRateFilter = utils.filter('flowRate');
@@ -332,7 +333,7 @@ export const Status = React.createClass({
           trigger: 'axis'
         },
         legend: {
-          data: ['2.4G', '5G', _('Total'),_('upstream'),_('downstream')],
+          data: ['2.4G', '5G', _('Total'), _('upstream'), _('downstream')]
         },
         xAxis: [{
           type: 'category',
@@ -363,7 +364,7 @@ export const Status = React.createClass({
           {
             type:'value',
             name:_('UP/Down Flow'),
-            minInterval:0.1,
+            minInterval: 0.1,
             color:colors[2],
             axisLabel:{
               fromatter:'{value}'
@@ -393,13 +394,13 @@ export const Status = React.createClass({
             data: totalClientStatisticsList
           },
           {
-            name:'上传',
+            name: _('upstream'),
             type:'line',
             yAxisIndex:1,
             data:clientStatisticsList[2].data
           },
           {
-            name:'下载',
+            name: _('downstream'),
             type:'line',
             yAxisIndex: 1,
             data:clientStatisticsList[3].data

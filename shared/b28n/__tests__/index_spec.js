@@ -12,6 +12,12 @@ describe('b28n', () => {
 
     it('should return default lang "en" when init with empty or not support lang', () => {
       b28n.setLang('');
+
+      expect(b28n.getLang()).to.be.equal('en');
+    });
+
+    it('should return default lang "en" when init with empty or not support lang', () => {
+      b28n.setLang('');
       expect(b28n.getLang()).to.be.equal('en');
 
       b28n.init({
