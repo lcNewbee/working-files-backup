@@ -276,7 +276,7 @@ export const Portal = React.createClass({
           {...portalname}
         />
         <FormGroup
-          label={ _('Auth Rederict URL') }
+          label={ _('Auth Redirect URL') }
           name="url"
           value={getCurrData('url')}
           onChange={this.onUpdateSettings('url')}
