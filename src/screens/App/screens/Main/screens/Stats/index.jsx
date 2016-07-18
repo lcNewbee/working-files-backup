@@ -14,8 +14,25 @@ import Modal from 'shared/components/Modal';
 
 import * as actions from './actions';
 import reducer from './reducer';
-import echarts from 'echarts';
+import echarts from 'echarts/lib/echarts';
 import './index.scss';
+
+/**
+ * echarts图标按需引入
+ */
+// 引入柱状图
+require('echarts/lib/chart/bar');
+
+// 引入折线图
+require('echarts/lib/chart/line');
+require('echarts/lib/chart/lines');
+
+// 引入折饼图
+require('echarts/lib/chart/pie');
+
+// 引入提示框和标题组件
+require('echarts/lib/component/tooltip');
+require('echarts/lib/component/title');
 
 const flowRateFilter = utils.filter('flowRate');
 const flowRateKbFilter = utils.filter('flowRate:["KB"]');
@@ -30,7 +47,7 @@ const msg = {
   apStatus: _('AP Status'),
   total: _('Total:'),
   apNumber: _('AP Number')
-  
+
 };
 const timeTypeSwitchs = fromJS([
   {
@@ -380,7 +397,7 @@ export const Status = React.createClass({
           {
             name:_('upstream'),
             type:'line',
-            yAxisIndex:1,  
+            yAxisIndex:1,
             data:clientStatisticsList[2].data
           },
           {
@@ -520,7 +537,14 @@ export const Status = React.createClass({
       }, {
         id: 'channel',
         text: _('Channel'),
-        filter: 'translate'
+        transform: function(val, item) {
+          var ret = val;
+
+          if(val == 0) {
+            ret = _('auto');
+          }
+          return ret;
+        }
       }, {
         id: 'op',
         text: _('Actions'),

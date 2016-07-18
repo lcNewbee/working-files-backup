@@ -145,16 +145,6 @@ export const Admin = React.createClass({
           {...confirmpasswd}
         />
 
-        <h3>{_('System Settings')}</h3>
-
-        <FormGroup
-          label={_('Select Language')}
-          type="select"
-          options={languageOptions}
-          value={b28n.getLang()}
-          onChange={this.onChangeLang}
-        />
-
         <div className="form-group form-group-save">
           <div className="form-control">
              {
@@ -175,6 +165,17 @@ export const Admin = React.createClass({
              }
           </div>
         </div>
+
+        <h3>{_('System Settings')}</h3>
+
+        <FormGroup
+          label={_('Select Language')}
+          type="select"
+          options={languageOptions}
+          value={b28n.getLang()}
+          onChange={this.onChangeLang}
+        />
+
       </form>
     );
   }
