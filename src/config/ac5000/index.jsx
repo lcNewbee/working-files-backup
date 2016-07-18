@@ -56,6 +56,7 @@ const pDeviceMap = require('../../screens/App/screens/Main/screens/DeviceMap');
 const pStatistics = require('../../screens/App/screens/Main/screens/Statistics');
 const pLogs = require('../../screens/App/screens/Main/screens/Logs');
 const pClients = require('../../screens/App/screens/Main/screens/Clients');
+//const pPreview = require('../../screens/App/screens/Main/screens/Preview');
 
 // 设置
 const pGroupSettings = require('../../screens/App/screens/Main/screens/Settings/screens/GroupSettings');
@@ -98,15 +99,13 @@ let routes = [{
           icon: 'file-text-o',
           text: _('LOGS'),
           component: pLogs.Screen
-        },
-        // {
-        //   id: 'statistics',
-        //   path: '/main/statistics',
-        //   icon: 'file-pdf-o',
-        //   text: _('REPORTS'),
-        //   component: pStatistics.Screen
-        // },
-        {
+        }, {
+           id: 'statistics',
+           path: '/main/statistics',
+           icon: 'file-pdf-o',
+           text: _('REPORTS'),
+           component: pStatistics.Screen
+         },{
           id: 'settings',
           path: '/main/settings',
           icon: 'cog',

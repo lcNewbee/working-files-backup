@@ -333,6 +333,7 @@ export const Status = React.createClass({
             type: 'value',
             name: _('Number'),
             minInterval: 1,
+            splitNumber:5,
             color: colors[0],
             axisLabel: {
               formatter: '{value}'
@@ -347,6 +348,7 @@ export const Status = React.createClass({
             type:'value',
             name:_('UP/Down Flow'),
             minInterval:0.1,
+            splitNumber:5,
             color:colors[2],
             axisLabel:{
               fromatter:'{value}'
@@ -376,13 +378,13 @@ export const Status = React.createClass({
             data: totalClientStatisticsList
           },
           {
-            name:'上传',
+            name:_('upstream'),
             type:'line',
             yAxisIndex:1,  
             data:clientStatisticsList[2].data
           },
           {
-            name:'下载',
+            name:_('downstream'),
             type:'line',
             yAxisIndex: 1,
             data:clientStatisticsList[3].data

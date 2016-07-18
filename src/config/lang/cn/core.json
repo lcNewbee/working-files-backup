@@ -136,6 +136,16 @@
   "See More": "查看更多",
   "None": "无",
 
+  "Statistics Report":"统计报表",
+  "Period Start":"起始时间",
+  "Start Time:":"起始时间：",
+  "End Time:":"结束时间：",
+  "Create Time":"创建时间",
+  "Period End":"结束时间",
+  "1 day":"一天",
+  "1 week":"一周",
+  "1 month":"一月",
+
   "CLIENTS": "客户端",
   "Clients Info": "客户端信息",
   "LOCKED": "已封锁",

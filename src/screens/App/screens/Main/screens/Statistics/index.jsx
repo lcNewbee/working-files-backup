@@ -4,20 +4,35 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import * as actions from './actions';
 import reducer from './reducer';
 import Button from 'shared/components/Button';
+import {Search, FormGroup, Checkbox} from 'shared/components/Form';
 
 const msg = {
   TITIE: _('Reports'),
   EXPORTING: _('Exporting The Reports')
 }
 
+const typeArr = [
+  {
+    value:'0',
+    label:_('1 day')
+  },{
+    value:'1',
+    label:_('1 week')
+  },{
+    value:'2',
+    label:_('1 month')
+  }
+];
+
 // 原生的 react 页面
+
 export const Statistics = React.createClass({
   mixins: [PureRenderMixin],
 
   render() {
     return (
       <div className="page-reports">
-        <h2>{msg.TITIE}</h2>
+        <h2>{msg.TITIE}</h2>        
         <div>
           <Button
             icon="download"
