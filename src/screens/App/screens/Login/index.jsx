@@ -1,10 +1,9 @@
 import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import utils from 'shared/utils';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {Input, FormGroup} from 'shared/components/Form';
-import {fromJS, Map} from 'immutable';
+import { FormGroup } from 'shared/components/Form';
 import validator from 'shared/utils/lib/validator';
 import * as actions from './actions';
 import * as appActions from 'shared/actions/app';
@@ -20,9 +19,9 @@ const formGroups = {
     },
     validator: validator({
       label: _('Password'),
-      rules: 'required'
-    })
-  }
+      rules: 'required',
+    }),
+  },
 };
 
 // 原生的 react 页面
@@ -35,13 +34,11 @@ export const Login = React.createClass({
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.status === 'ok') {
-
       // 如果登录时间不一致
       // 后续可以做记住密码的功能
       if (this.props.loginedAt !== nextProps.loginedAt) {
         window.location.hash = '#/main/status';
       }
-
     }
   },
 
@@ -65,19 +62,18 @@ export const Login = React.createClass({
     var checkRusult = this.checkData();
 
     // 如果有验证错误信息
-    if(checkRusult) {
-      this.props.loginResult(checkRusult)
+    if (checkRusult) {
+      this.props.loginResult(checkRusult);
 
     //
     } else {
-      this.props.login(function(status) {
+      this.props.login(function (status) {
         var currClass = document.getElementsByTagName('body')[0].className;
 
         document.getElementsByTagName('body')[0].className = currClass.replace(' sign-body', '');
         this.props.changeLoginStatus(status);
       }.bind(this));
     }
-
   },
 
   onChangeData(name) {
@@ -95,13 +91,9 @@ export const Login = React.createClass({
   },
 
   onInputKeyUp(e) {
-    if(e.which === 13) {
+    if (e.which === 13) {
       this.onLogin();
     }
-  },
-
-  componentDidUpdate(prevProps, prevState) {
-    //console.log(this.ref)
   },
 
   render() {
@@ -125,8 +117,8 @@ export const Login = React.createClass({
               name="password"
               maxLength="21"
               placeholder={_('Password')}
-              value={this.getDataValue('password') }
-              onChange={this.onChangeData('password') }
+              value={this.getDataValue('password')}
+              onChange={this.onChangeData('password')}
               onKeyUp={this.onInputKeyUp}
               validator={formGroups.password.validator}
             />
@@ -136,7 +128,8 @@ export const Login = React.createClass({
                 ''
             }
             <button className="btn btn-primary btn-lg"
-              onClick={this.onLogin}>
+              onClick={this.onLogin}
+            >
               {_('Login')}
             </button>
           </div>
@@ -144,17 +137,17 @@ export const Login = React.createClass({
         </div>
       </div>
     );
-  }
+  },
 });
 
 function mapStateToProps(state) {
-  var myState = state.login;
+  const myState = state.login;
 
   return {
     loginedAt: myState.get('loginedAt'),
     status: myState.get('status'),
     data: myState.get('data'),
-    app: state.app
+    app: state.app,
   };
 }
 
@@ -162,7 +155,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
     actions
-  ), dispatch)
+  ), dispatch);
 }
 
 // 添加 redux 属性的 react 页面

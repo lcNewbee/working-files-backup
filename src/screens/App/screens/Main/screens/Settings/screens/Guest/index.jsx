@@ -104,8 +104,10 @@ export const Guest = React.createClass({
     }.bind(this));
   },
 
-  getCurrData(name) {
-    return this.props.store.getIn(['data', 'curr', name]);
+  getCurrData(name, defaultVal) {
+    const myDefault = defaultVal || '';
+
+    return this.props.store.getIn(['data', 'curr', name]) || myDefault;
   },
 
   getGroupOptions() {

@@ -10,7 +10,8 @@ const defaultSettings = Map({
   country: getCountry(),
   channel: '6',
   channelsBandwidth: '20',
-  ssid: ''
+  ssid: '',
+  vlanid: '',
 });
 
 const defaultState = fromJS({

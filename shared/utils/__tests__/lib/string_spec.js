@@ -1,12 +1,13 @@
+/* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
-
+import { describe, it } from 'mocha';
 import string from '../../lib/string';
 
 describe('utils string', () => {
   describe('#prefixInteger()', () => {
     it('on input not string or number, return empty', () => {
       expect(string.prefixInteger({ as: 123 })).to.be.empty;
-      expect(string.prefixInteger(function() {})).to.be.empty;
+      expect(string.prefixInteger(() => {})).to.be.empty;
       expect(string.prefixInteger(new RegExp())).to.be.empty;
       expect(string.prefixInteger()).to.be.empty;
     });
@@ -25,7 +26,7 @@ describe('utils string', () => {
   describe('#toCamel()', () => {
     it('on input not string or empty, return empty', () => {
       expect(string.toCamel({ as: 123 })).to.be.empty;
-      expect(string.toCamel(function() {})).to.be.empty;
+      expect(string.toCamel(() => {})).to.be.empty;
       expect(string.toCamel(new RegExp())).to.be.empty;
       expect(string.toCamel()).to.be.empty;
       expect(string.toCamel('')).to.be.empty;
@@ -40,21 +41,22 @@ describe('utils string', () => {
   describe('#format()', () => {
     it('on input first param not string or empty', () => {
       expect(string.format({ as: 123 })).to.be.empty;
-      expect(string.format(function() {})).to.be.empty;
+      expect(string.format(() => {})).to.be.empty;
       expect(string.format(new RegExp())).to.be.empty;
       expect(string.format()).to.be.empty;
       expect(string.format('')).to.be.empty;
     });
 
     it('on input after first param is object', () => {
-      expect(string.format('%swork%%%%sdas%s', 123, "=", new Date('2016-04-08T03:17:01.169Z'))).to.equal('123work%%%=das"2016-04-08T03:17:01.169Z"');
-      expect(string.format('%swork%%%%sdas%s', 123, "=", {})).to.equal('123work%%%=das{}');
+      expect(string.format('%swork%%%%sdas%s', 123, '=', new Date('2016-04-08T03:17:01.169Z')))
+        .to.equal('123work%%%=das"2016-04-08T03:17:01.169Z"');
+      expect(string.format('%swork%%%%sdas%s', 123, '=', {})).to.equal('123work%%%=das{}');
     });
 
     it('on input two or more params', () => {
       expect(string.format('work %s', 123)).to.equal('work 123');
       expect(string.format('work', 123)).to.equal('work');
-      expect(string.format('%swork%%%%sand%s', 123, "=", '%s')).to.equal('123work%%%=and%s');
+      expect(string.format('%swork%%%%sand%s', 123, '=', '%s')).to.equal('123work%%%=and%s');
     });
   });
 
@@ -106,11 +108,10 @@ describe('utils string', () => {
 
     it('on input float string', () => {
       expect(string.isNumber('0.13')).to.be.true;
-    })
+    });
   });
 
   describe('#isAscii()', () => {
-   
     it('on input empty', () => {
       expect(string.isAscii('')).to.be.false;
       expect(string.isAscii()).to.be.false;
@@ -118,7 +119,7 @@ describe('utils string', () => {
 
     it('on input not sting and number', () => {
       expect(string.isAscii({})).to.be.false;
-      expect(string.isAscii(function(){})).to.be.false;
+      expect(string.isAscii(() => {})).to.be.false;
     });
 
     it('on input not ascii string', () => {
@@ -129,32 +130,31 @@ describe('utils string', () => {
       expect(string.isAscii('~!@#$%^&*()_+')).to.be.true;
     });
   });
-  
+
   describe('#.getExtension()', () => {
     it('should return empty when path is empty', () => {
       expect(string.getExtension('')).to.be.empty;
     });
-    
+
     it('should throw TypeError when path is not string', () => {
-      expect(function() {
+      expect(() => {
         string.getExtension();
       }).to.throw(TypeError);
-      expect(function() {
+      expect(() => {
         string.getExtension({});
       }).to.throw(TypeError);
-      expect(function() {
+      expect(() => {
         string.getExtension(0);
       }).to.throw(TypeError);
-      expect(function() {
+      expect(() => {
         string.getExtension();
       }).to.throw(TypeError);
     });
-    
+
     it('should return Extension when path is string', () => {
       expect(string.getExtension('sdd.')).to.be.empty;
       expect(string.getExtension('sdd.232.pn')).to.be.equal('pn');
       expect(string.getExtension('sdd.bmp')).to.be.equal('bmp');
     });
-  })
-
+  });
 });

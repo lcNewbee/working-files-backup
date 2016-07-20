@@ -191,7 +191,9 @@ export const Portal = React.createClass({
   },
 
   getCurrData(name, defaultVal) {
-    return this.props.store.getIn(['data', 'curr', name]) || defaultVal;
+    const myDefault = defaultVal || '';
+
+    return this.props.store.getIn(['data', 'curr', name]) || myDefault;
   },
 
   render() {

@@ -1,24 +1,32 @@
-import React, {PropTypes} from 'react';
-import {fromJS} from 'immutable';
+import React, { PropTypes } from 'react';
+// import { fromJS } from 'immutable';
 import Icon from 'shared/components/Icon';
 
 const propTypes = {
-
+  isShow: PropTypes.bool,
 };
 
 const defaultProps = {
+  isShow: false,
 };
 
 class AsiderBar extends React.Component {
   constructor(props) {
     super(props);
-  };
+
+    this.onToggleShow = this.onToggleShow.bind(this);
+  }
+
+  onToggleShow() {
+
+  }
 
   render() {
-    const isShow = this.props.data.show;
+    const { isShow } = this.props;
+
     let propertyPanelClassName = 'main-property-panel';
 
-    if(isShow) {
+    if (isShow) {
       propertyPanelClassName += ' active';
     }
 
@@ -27,26 +35,26 @@ class AsiderBar extends React.Component {
         <div className="panel-toggle-button">
           <Icon
             title={_('Remove All')}
-            name='angle-double-left'
+            name="angle-double-left"
             size="2x"
           />
         </div>
         <div className="main-property-panel-inner">
-          <header className="app-action-bar">
-            <div className="app-action-bar-left">PROPERTIES</div>
-            <div className="app-action-bar-right">
-              <div className="app-action-icon-group">
+          <header className="action-bar">
+            <div className="action-bar__left">PROPERTIES</div>
+            <div className="action-bar__right">
+              <div className="action-icon-group">
                 <Icon
                   title={_('Remove All')}
-                  name='trash'
+                  name="trash"
                 />
                 <Icon
                   title={_('Remove All')}
-                  name='navicon'
+                  name="navicon"
                 />
                 <Icon
                   title={_('Remove All')}
-                  name='angle-double-right'
+                  name="angle-double-right"
                 />
               </div>
             </div>

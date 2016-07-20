@@ -1,0 +1,21 @@
+{
+  "extends": "airbnb",
+  "plugins": [
+    "import"
+  ],
+  "settings": {
+    "ecmascript": 6,
+    "import/resolver": {
+      "node": {
+        "paths": "./"
+      }
+    }
+  },
+  "globals": {
+    "window": true,
+    "document": true,
+    "fetch": true,
+    "_": true,
+    "GUI_CONFIG": true
+  }
+}

@@ -1,7 +1,11 @@
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react';
+import Input from './Input';
 
 const propTypes = {
   className: PropTypes.string,
+  value: PropTypes.string,
+  options: PropTypes.object,
+  id: PropTypes.string,
   size: PropTypes.oneOf(['lg', '2x', '3x', '4x', '5x']),
   rotate: PropTypes.oneOf(['45', '90', '135', '180', '225', '270', '315']),
   flip: PropTypes.oneOf(['horizontal', 'vertical']),
@@ -18,25 +22,21 @@ const defaultProps = {
 };
 
 class Checkbox extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
-    let {
-      name, className, value, options, id
-    } = this.props;
+    const options = this.props.options;
+    let { value, id } = this.props;
 
     let label = options && options.label;
 
     value = value === undefined ? '1' : value;
 
-    if(!id) {
-      id = 'checkbox_' + Math.random();
+    if (!id) {
+      id = `checkbox_${Math.random()}`;
     }
 
     return (
       <div className="checkbox">
-        <input
+        <Input
           {...this.props}
           id={id}
           value={value}

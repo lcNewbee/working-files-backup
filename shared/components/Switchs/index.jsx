@@ -1,12 +1,13 @@
 import './index.scss';
-import React, {PropTypes} from 'react';
-import {fromJS} from 'immutable';
+import React, { PropTypes } from 'react';
+import { fromJS } from 'immutable';
 
 const propTypes = {
-  role: PropTypes.string,
+  value: PropTypes.string,
   className: PropTypes.string,
   size: PropTypes.oneOf(['sm', 'lg']),
   onChange: PropTypes.func,
+  options: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 };
 
 const defaultProps = {
@@ -18,59 +19,55 @@ class Switchs extends React.Component {
     super(props);
 
     this.onClick = this.onClick.bind(this);
-  };
-  
+  }
+
   onClick(e) {
-    
-    if(e.target.value !== this.props.value) {
-      
-      if(this.props.onChange) {
+    if (e.target.value !== this.props.value) {
+      if (this.props.onChange) {
         this.props.onChange({
           value: e.target.value,
-          label: e.target.innerHTML
+          label: e.target.innerHTML,
         });
       }
-      
     }
-  };
-  
+  }
+
   render() {
-    let {role, size, className, options, value} = this.props;
-    
+    const { size, className, options, value } = this.props;
+
     let classNames = 'btn-group';
-    
+
     if (size) {
       classNames = `${classNames} btn-${size}`;
     }
-    
+
     if (className) {
-      classNames = className + ' ' + classNames;
+      classNames = `${className} ${classNames}`;
     }
-    
-    options = fromJS(options);
-    
+
     return (
       <div
         className={classNames}
         onClick={this.onClick}
       >
         {
-          options ? options.map((item, i) => {
+          options ? fromJS(options).map((item, i) => {
             let myClassName = 'btn';
-            let val, label;
-            
-            if(typeof item.get === 'function') {
+            let val;
+            let label;
+
+            if (typeof item.get === 'function') {
               val = item.get('value');
               label = item.get('label');
             } else {
-              val = i + '';
+              val = `${i}`;
               label = item;
             }
-            
-            if(val === value) {
+
+            if (val === value) {
               myClassName += ' active';
             }
-            
+
             return (
               <button
                 key={i}

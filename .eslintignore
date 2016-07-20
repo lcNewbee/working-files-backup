@@ -1,0 +1,5 @@
+node_modules/*
+**/vendor/*.js
+bulid/*
+shared/utils/*
+src/*

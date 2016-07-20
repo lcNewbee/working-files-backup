@@ -80,6 +80,7 @@ export default class Main extends Component {
           </div>
           <AsiderBar
             data={propertyData}
+            isShow={propertyData.isShow}
           />
         </div>
         {

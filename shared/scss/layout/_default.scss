@@ -259,6 +259,7 @@ body {
   top: 70px;
   right: 0;
   bottom: 0;
+
   .panel-toggle-button {
     background-color: #333;
     text-align: center;
@@ -291,21 +292,6 @@ body {
   .main-properties-container {
     background-color: #fff;
     padding: 0;
-  }
-
-  .app-action-bar {
-    background: #333;
-    color: #fff;
-    overflow: auto;
-    padding: 6px;
-    font-size: 14px;
-
-    .app-action-bar-left {
-      float: left;
-    }
-    .app-action-bar-right {
-      float: right;
-    }
   }
 
   .app-action-icon-group {

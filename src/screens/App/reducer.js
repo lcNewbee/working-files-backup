@@ -1,25 +1,25 @@
-import {Map, List, fromJS} from 'immutable';
+import { fromJS } from 'immutable';
 
-let guiVersion = '.' + GUI_CONFIG.version.replace(/\./g, '');
+const guiVersion = `.${GUI_CONFIG.version}`;
 
-function getControlStatus() {
-  var ret = false;
-  var a_165F8BA5ABE1A5DA = '0';
+// function getControlStatus() {
+//   let ret = false;
+//   let a_165F8BA5ABE1A5DA = '0';
 
-  if(sessionStorage && sessionStorage.getItem('a_165F8BA5ABE1A5DA') !== null) {
-    a_165F8BA5ABE1A5DA = sessionStorage.getItem('a_165F8BA5ABE1A5DA');
-  }
+//   if (sessionStorage && sessionStorage.getItem('a_165F8BA5ABE1A5DA') !== null) {
+//     a_165F8BA5ABE1A5DA = sessionStorage.getItem('a_165F8BA5ABE1A5DA');
+//   }
 
-  ret = typeof a_165F8BA5ABE1A5DA === 'string' && a_165F8BA5ABE1A5DA === '0';
+//   ret = typeof a_165F8BA5ABE1A5DA === 'string' && a_165F8BA5ABE1A5DA === '0';
 
-  return ret;
-};
+//   return ret;
+// }
 
-function clearLoginSession() {
-  if(typeof sessionStorage.removeItem === 'function') {
-    sessionStorage.removeItem('a_165F8BA5ABE1A5DA')
-  }
-}
+// function clearLoginSession() {
+//   if (typeof sessionStorage.removeItem === 'function') {
+//     sessionStorage.removeItem('a_165F8BA5ABE1A5DA');
+//   }
+// }
 
 const defaultState = fromJS({
   saving: false,
@@ -30,15 +30,15 @@ const defaultState = fromJS({
   },
   propertyData: {
     show: false,
-    items: []
+    items: [],
   },
-  noControl: false
+  noControl: false,
 });
 
 function receiveReport(state, data) {
-  var ret;
+  let ret;
 
-  if(!data.checkResult) {
+  if (!data.checkResult) {
     ret = state.deleteIn(['invalid', data.name]);
   } else {
     ret = state.setIn(['invalid', data.name], data.checkResult);
@@ -47,15 +47,22 @@ function receiveReport(state, data) {
   return ret;
 }
 
-export default function( state = defaultState, action ) {
+function receiveAcInfo(state, action) {
+  const myData = fromJS(action.data)
+    .set('version', action.data.version + guiVersion);
 
+  return state.set('fetching', false).merge(myData);
+}
+
+export default function (state = defaultState, action) {
   switch (action.type) {
+
     case 'START_VALIDATE_ALL':
       return state.set('validateAt', action.validateAt)
-          .set('invalid', Map({}));
+          .set('invalid', fromJS({}));
 
     case 'RESET_VAILDATE_MSG':
-      return state.set('invalid', Map({}));
+      return state.set('invalid', fromJS({}));
 
     /**
      * Ajax
@@ -70,16 +77,16 @@ export default function( state = defaultState, action ) {
 
     case 'RECEIVE_AJAX_ERROR':
       return state.set('ajaxError', {
-        url: action.url
+        url: action.url,
       });
 
     case 'RECEIVE_SERVER_ERROR':
-      return state.set('state', action.state)
+      return state.set('state', action.state);
 
     case 'REPORT_VALID_ERROR':
       return receiveReport(state, action.data);
 
-    case "CHANGE_LOGIN_STATUS":
+    case 'CHANGE_LOGIN_STATUS':
       sessionStorage.setItem('a_165F8BA5ABE1A5DA', action.data);
       return state;
 
@@ -90,27 +97,22 @@ export default function( state = defaultState, action ) {
       return state.set('fetching', true);
 
     case 'RECIVECE_FETCH_AC_INFO':
-      action.data.version += guiVersion;
-      return state.set('fetching', false).merge(action.data);
+      return receiveAcInfo(state, action);
 
     case 'CREATE_MODAL':
-      return state.set('modal', Map({
-          status: 'show',
-          role: 'alert',
-          title: _('MESSAGE'),
-        })).mergeIn(['modal'], action.data);
+      return state.set('modal', fromJS({
+        status: 'show',
+        role: 'alert',
+        title: _('MESSAGE'),
+      })).mergeIn(['modal'], action.data);
 
     case 'CHANGE_MODAL_STATE':
       return state.mergeIn(['modal'], action.data);
 
-
     case 'changePropertyStatus':
       return state.setIn();
-
-    case 'changePropertyStatus':
-      return state;
 
     default:
   }
   return state;
-};
+}
