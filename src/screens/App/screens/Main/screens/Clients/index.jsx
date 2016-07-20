@@ -119,7 +119,7 @@ const typeArr = [
   _('WIRELESS'),
   _('WIRED'),
   _('GUEST'),
-  _('LOCKED'),
+  _('BLOCKED/LAST APPEARED'),
 ];
 
 const styles = {

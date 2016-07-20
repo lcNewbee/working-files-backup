@@ -16,7 +16,7 @@ import Button from 'shared/components/Button';
 const msg = {
   delete: _('Delete'),
   edit: _('Edit'),
-  look: _('See'),
+  look: _('View'),
   add: _('Add'),
   remarks: _('Remarks'),
   groupname: _('Group Name'),

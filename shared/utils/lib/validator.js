@@ -29,11 +29,11 @@ var vaildate = {
     if (!string.isInteger(str)) {
       return _("Must be integer");
     }
-    
+
     if (min !== undefined && max !== undefined) {
       if (parseInt(str, 10) < min || parseInt(str, 10) > max) {
 
-        return _("Input integer range is: %s - %s", min, max);
+        return _("Range: %s - %s", min, max);
       }
     }
   },
@@ -221,11 +221,11 @@ function checkClear(str, rules, label) {
   if(str === undefined) {
     return ;
   }
-  
+
   if(typeof str !== 'string') {
     throw new TypeError('validate function should be called with string');
   }
-  
+
   for (i = 0; i < len; i++) {
     args = [str];
     ruleObj = rules[i];
@@ -247,7 +247,7 @@ function checkClear(str, rules, label) {
 function check(str, rules, label) {
   var len = rules.length;
   var ret, args, rulesArr, i, ruleObj;
-  
+
   if(str === undefined) {
     return ;
   }
@@ -286,34 +286,34 @@ validator.fn = validator.prototype = {
   checkClear: function(str) {
     var ret = checkClear(str, this.rules);
     var label = msg.thisField;
-    
+
     if(this.label) {
       label = this.label;
     }
-    
+
     if(ret) {
       ret = string.format(ret, label);
     }
-    
+
     return ret;
   },
 
   check: function(str) {
     var ret = check(str, this.rules);
     var label = msg.thisField;
-    
+
     if(this.label) {
       label = this.label;
     }
     if(ret) {
       ret = string.format(ret, label);
     }
-    
+
     return ret;
   },
 
   addVaildate: function(ruleName, funs) {
-    
+
   }
 }
 
@@ -418,16 +418,16 @@ validator.combineValid = {
     }
   }
 };
-  
+
 
 validator.mergeProps = function(validOptions) {
-  
+
   return function(stateProps, dispatchProps, ownProps) {
- 
+
     return utils.extend({}, ownProps, stateProps, dispatchProps, {
       validateOption: (function() {
         var ret = {};
-        
+
         // 验证单独框
         validOptions.forEach((validate, name) => {
           ret[name] = {
@@ -438,7 +438,7 @@ validator.mergeProps = function(validOptions) {
             onValidError: dispatchProps.reportValidError
           }
         });
-        
+
         return ret;
       })()
     });
@@ -447,18 +447,18 @@ validator.mergeProps = function(validOptions) {
 
 validator.checkClear = function(str, rules) {
   rules = getRulesObj(rules)
-  
+
   return checkClear(str, rules);
 }
 
 validator.check = function(str, rules) {
   rules = getRulesObj(rules);
-  
+
   return check(str, rules);
 }
 
 validator.addVaildate = function(str, rules) {
-  
+
   return this;
 }
 
