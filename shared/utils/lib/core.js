@@ -113,7 +113,7 @@ utils.extend({
     var ruleSplit = rule.split(':');
     var fun = rulesContainer[ruleSplit[0]];
     var args = ruleSplit[1];
-    
+
     if(fun) {
       ret.fun = fun;
     }
@@ -131,12 +131,14 @@ utils.extend({
   },
   getRulesObj: function getRulesObj(rules, rulesContainer) {
     var ret = [];
-    var rulesArr = rules.split('|');
+    var rulesArr;
     var ruleObj;
-    
+
     if(typeof rules !== 'string') {
       throw new TypeError('utils.getRulesObj must be called with string');
     }
+
+    rulesArr = rules.split('|');
 
     for (var i = 0; i < rulesArr.length; i++) {
       ruleObj = this.getRuleObj(rulesArr[i], rulesContainer);
@@ -148,7 +150,7 @@ utils.extend({
 
     return ret;
   },
-  
+
   toNumber: function(val, funcName) {
     var valType = typeof val;
     var ret = parseInt(val || '0', 10);
@@ -160,14 +162,14 @@ utils.extend({
 
     return ret;
   },
-  
+
   toString: function(val, funcName) {
     var valType = typeof val;
-    
+
     if(valType !== 'string') {
       throw new TypeError(funcName + ' expected be called with string, actual is ' + valType);
     }
-    
+
     return val;
   }
 })

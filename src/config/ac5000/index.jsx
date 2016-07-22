@@ -11,7 +11,6 @@ const b28n = require('shared/b28n');
 const langCn = require('../lang/cn/core.json');
 const validateCn = require('../lang/cn/validate.json')
 const langEn = require('../lang/en/core.json');
-const curLang = b28n.getLang();
 const GUI_CONFIG = require('../app.json');
 
 window.GUI_CONFIG = GUI_CONFIG;
@@ -21,11 +20,10 @@ b28n.addDict(validateCn, 'cn');
 b28n.addDict(langEn, 'en');
 
 window.CB = b28n.init({
-  supportLang: ['en', 'cn'],
-  lang: curLang
+  supportLang: ['en', 'cn']
 });
 
-document.getElementsByTagName('body')[0].className += ' ' + curLang;
+document.getElementsByTagName('body')[0].className += ' ' + b28n.getLang();
 
 /*************************************************************
  * 产品界面配置

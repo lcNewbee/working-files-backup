@@ -43,13 +43,13 @@ export function login(callBack) {
 
     utils.save('/goform/login', data)
       .then(function(json) {
-        let result = '未知错误';
+        let result = _('Password Error');
         if(json.state) {
           if(json.state.code === 2000) {
             result = 'ok';
             callBack(json.data.a_165F8BA5ABE1A5DA);
           } else {
-            result = json.state.msg;
+            // result = json.state.msg;
           }
         }
         dispatch(loginResult(result));

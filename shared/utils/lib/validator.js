@@ -322,7 +322,10 @@ var init = validator.fn.init = function(options) {
     return this;
   }
 
-  this.rules = utils.getRulesObj(options.rules, vaildate);
+  if(options.rules) {
+    this.rules = utils.getRulesObj(options.rules, vaildate);
+  }
+
   this.label = options.label;
 
   return this;
@@ -446,12 +449,18 @@ validator.mergeProps = function(validOptions) {
 }
 
 validator.checkClear = function(str, rules) {
+  if(!rules) {
+    return ;
+  }
   rules = getRulesObj(rules)
 
   return checkClear(str, rules);
 }
 
 validator.check = function(str, rules) {
+  if(!rules) {
+    return ;
+  }
   rules = getRulesObj(rules);
 
   return check(str, rules);
