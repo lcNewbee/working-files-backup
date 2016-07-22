@@ -1,19 +1,19 @@
 // Fade
 .fade-enter {
   opacity: 0;
-  margin-top: 10px;
-  transition: margin-top .5s ease-in, opacity .5s ease-in;
-}
-.fade-enter.fade-enter-active {
-  opacity: 1;
-  margin-top: 0;
+  transition: opacity .5s ease-in;
+
+  &.fade-enter-active {
+    opacity: 1;
+  }
 }
 .fade-leave {
   opacity: 1;
   transition: opacity .5s ease-in;
-}
-.fade-leave.fade-leave-active {
-  opacity: 0;
+
+  &.fade-leave-active {
+    opacity: 0;
+  }
 }
 
 // Fade Down
