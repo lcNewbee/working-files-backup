@@ -1,4 +1,5 @@
 ﻿{
+  "Please input a valid value.": "请输入正确的值",
   "Must be number": "请输入数字",
   "Input range is: %s - %s": "输入范围：%s - %s",
   "Range: %s - %s": "范围：%s - %s",
@@ -18,7 +19,7 @@
   "IP address can't be multicast, broadcast or loopback address.": "IP 地址不能为组播,广播或环回地址",
   "IP address begin with 127 is a reserved loopback address, please input another value between 1 to 233": "以127开始的地址为保留的环回地址，请指定一个1到223之间的值。",
   "Address begin with %s is invalid, please input a value between 1 to 223.": "以%s开始的地址无效，请指定一个1到223之间的值。",
-  " Address begin with %s is invalid, please input a value between 223 to 255.": "以 %s 开始的地址无效，请指定一个223到255之间的值。",
+  "Address begin with %s is invalid, please input a value between 223 to 255.": "以 %s 开始的地址无效，请指定一个223到255之间的值。",
   "Invalid Url": "无效的网址格式",
   "Please enter a valid IP segment": "请输入正确的IP网段",
   "Password and confirm password must match": "密码与确认密码必须一致",

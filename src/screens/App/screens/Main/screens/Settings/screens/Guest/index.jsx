@@ -45,10 +45,10 @@ const validOptions = Map({
     rules: 'remarkTxt:["\'\\\\"]|len:[8, 31]'
   }),
   upstream: validator({
-    rules: 'num:[32, 102400]'
+    rules: 'num:[32, 102400, 0]'
   }),
   downstream: validator({
-    rules: 'num:[32, 102400]',
+    rules: 'num:[32, 102400, 0]',
   }),
 
   vlanid: validator({
@@ -229,7 +229,7 @@ export const Guest = React.createClass({
 
           <FormGroup
             label={msg.upSpeed}
-            required={true}
+            required={getCurrData('upstream') !== '0'}
             help="KB/s"
             value={getCurrData('upstream')}
             {...upstream}
@@ -256,7 +256,7 @@ export const Guest = React.createClass({
             label={msg.downSpeed}
             help="KB/s"
             maxLength="6"
-            required={true}
+            required={getCurrData('downstream') !== '0'}
             value={getCurrData('downstream')}
             onChange={this.onUpdate('downstream')}
             {...downstream}
