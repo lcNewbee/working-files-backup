@@ -26,10 +26,19 @@ const b28n = (function _b28n(doc, _win) {
   };
   const win = _win;
   const dicts = {};
+<<<<<<< HEAD
   const localB28n = {};
 
   // Local can change Config
   let localLang = 'en';
+=======
+  const localB28n = {
+    options: DEFAULT_OPTIONS,
+  };
+
+  // Local can change Config
+  let localLang;
+>>>>>>> hotfixed-1.0.21
   let localOptions = DEFAULT_OPTIONS;
   let currDict;
 
@@ -52,11 +61,10 @@ const b28n = (function _b28n(doc, _win) {
   function getLangWithBrowserSetting() {
     let ret = (win.navigator.language || win.navigator.userLanguage ||
         win.navigator.browserLanguage || win.navigator.systemLanguage ||
-        localLang).toLowerCase();
+        'en').toLowerCase();
 
     ret = special[ret] || ret.split('-')[0].toString();
-
-    ret = isSupportLang(ret, DEFAULT_OPTIONS) || 'en';
+    ret = isSupportLang(ret, localB28n.options.supportLang) || 'en';
 
     return ret;
   }
@@ -76,7 +84,7 @@ const b28n = (function _b28n(doc, _win) {
   function getLangWithBrowserLocal() {
     const ret = storage.get(STROE_KEY);
 
-    return ret;
+    return ret || localLang;
   }
 
   function extend(target, ...rest) {
@@ -93,7 +101,6 @@ const b28n = (function _b28n(doc, _win) {
   }
 
   localLang = getLangWithBrowserSetting();
-
   localB28n.extend = extend;
   localB28n.extend({
     version: '0.0.1',
@@ -146,7 +153,7 @@ const b28n = (function _b28n(doc, _win) {
 
     getLang() {
       const defLang = localOptions.defaultLang;
-      let ret = getLangWithBrowserLocal() || localLang;
+      let ret = getLangWithBrowserLocal();
 
       ret = this.isSupport(ret) || defLang;
 

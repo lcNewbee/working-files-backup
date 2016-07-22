@@ -54,10 +54,10 @@ const validOptions = Map({
     rules: 'remarkTxt:["\'\\\\"]|len:[1, 31]'
   }),
   upstream: validator({
-    rules: 'num:[0, 102400]'
+    rules: 'num:[32, 102400]',
   }),
   downstream: validator({
-    rules: 'num:[0, 102400]',
+    rules: 'num:[32, 102400]',
   })
 });
 
@@ -268,7 +268,7 @@ export const Wireless = React.createClass({
             checked={getCurrData('vlanenable') == '1'}
             onChange={this.onUpdate('vlanenable')}
           />
-          { _('Use VLAN ID:') }
+          { _('VLAN ID:') }
           <FormInput
             type="text"
             style={{'marginLeft': '3px'}}

@@ -233,7 +233,7 @@ export const Status = React.createClass({
       },
 
       title: {
-        text: _('Clients Producer Diagram'),
+        text: _('Terminal Type'),
         subtext: _('Total:') + clientInfo.get('total'),
         x: 'center'
       },
@@ -476,7 +476,7 @@ export const Status = React.createClass({
         text:  _('MAC Address')
       }, {
         id: 'softversion',
-        text:  _('UP/Down Flow'),
+        text:  _('UP/Down'),
         transform(val, item) {
           return flowRateKbFilter.transform(item.get('upstream')) +
               ' / ' + flowRateKbFilter.transform(item.get('downstream'));
@@ -508,7 +508,7 @@ export const Status = React.createClass({
         text:  _('MAC Address')
       }, {
         id: 'up/down flow',
-        text:  _('UP/Down Flow'),
+        text:  _('UP/Down'),
         transform(val, item) {
           return flowRateFilter.transform(item.get('upstream')) + ' / ' +
               flowRateFilter.transform(item.get('downstream'));

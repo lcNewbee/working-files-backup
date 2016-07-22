@@ -28,10 +28,10 @@ const typeArr = [
     label: _('All')
   }, {
     value: '1',
-    label: _('INSIDE')
+    label: _('INDOOR')
   }, {
     value: '3',
-    label: _('OUTSIDE')
+    label: _('OUTDOOR')
   }, {
     value: '4',
     label: _('IN OPERATION...')

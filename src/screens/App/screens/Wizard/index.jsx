@@ -70,13 +70,14 @@ const formGroups = Map({
       type: 'password',
       label: msg.password,
       name: 'password',
-      maxLength: 21,
+      maxLength: 32,
       placeholder: msg.password,
       autoFocus: true,
+      required: true,
     },
     validator: validator({
       label: msg.password,
-      rules: 'required',
+      rules: 'len:[8, 32]',
     }),
   },
   confirmpasswd: {
@@ -84,12 +85,13 @@ const formGroups = Map({
       label: msg.confirmpasswd,
       type: 'password',
       name: 'confirmpasswd',
-      maxLength: 21,
+      maxLength: 32,
+      required: true,
       placeholder: msg.confirmpasswd,
     },
     validator: validator({
       label: msg.confirmpasswd,
-      rules: 'required',
+      rules: 'len:[8, 32]',
     }),
   },
 });
