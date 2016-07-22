@@ -26,19 +26,12 @@ const b28n = (function _b28n(doc, _win) {
   };
   const win = _win;
   const dicts = {};
-<<<<<<< HEAD
-  const localB28n = {};
-
-  // Local can change Config
-  let localLang = 'en';
-=======
   const localB28n = {
     options: DEFAULT_OPTIONS,
   };
 
   // Local can change Config
   let localLang;
->>>>>>> hotfixed-1.0.21
   let localOptions = DEFAULT_OPTIONS;
   let currDict;
 
