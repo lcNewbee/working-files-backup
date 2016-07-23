@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 const propTypes = {
   options: PropTypes.object,

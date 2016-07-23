@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { Link } from 'react-router';
 import { fromJS } from 'immutable';
 import Icon from '../Icon';
@@ -15,6 +16,8 @@ const defaultProps = {
 class Nav extends Component {
   constructor(props) {
     super(props);
+
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onSelectItem = this.onSelectItem.bind(this);
   }
   onSelectItem() {

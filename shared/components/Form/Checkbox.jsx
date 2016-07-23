@@ -1,9 +1,11 @@
 import React, { PropTypes } from 'react';
-import Input from './Input';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
+import Input from './atom/Input';
 
 const propTypes = {
   className: PropTypes.string,
   value: PropTypes.string,
+  id: PropTypes.string,
   options: PropTypes.object,
 };
 
@@ -12,6 +14,11 @@ const defaultProps = {
 };
 
 class Checkbox extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+  }
   render() {
     const options = this.props.options;
     let { value, id } = this.props;

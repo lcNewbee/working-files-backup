@@ -7,6 +7,7 @@ import { FormGroup } from 'shared/components/Form';
 import validator from 'shared/utils/lib/validator';
 import * as actions from './actions';
 import * as appActions from 'shared/actions/app';
+import Navbar from 'shared/components/Navbar';
 import reducer from './reducer';
 
 const formGroups = {
@@ -41,6 +42,7 @@ export const Login = React.createClass({
       }
     }
   },
+  
 
   componentWillUnmount() {
     var currClass = document.getElementsByTagName('body')[0].className;
@@ -97,17 +99,17 @@ export const Login = React.createClass({
   },
 
   render() {
-    const { version } = this.props.app.toJS();
+    const { version, guiName } = this.props.app.toJS();
     var that = this;
     var myMsg = this.props.status;
 
     return (
       <div>
-        <header className="navbar">
-          <div className="brand"></div>
-          <h1>{_('Axilspot Access Manager')}</h1>
-          <span className="version">GUI {version}</span>
-        </header>
+        <Navbar
+          title={guiName}
+          version={version}
+        />
+
         <div className="sign">
           <div className="sign-backdrop"></div>
           <div className="sign-content">

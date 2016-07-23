@@ -1,6 +1,7 @@
 import './index.scss';
 import React, { PropTypes } from 'react';
 import { fromJS } from 'immutable';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 const propTypes = {
   value: PropTypes.string,
@@ -18,6 +19,7 @@ class Switchs extends React.Component {
   constructor(props) {
     super(props);
 
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onClick = this.onClick.bind(this);
   }
 

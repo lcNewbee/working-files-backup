@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Select from '../Select';
 import Checkbox from './Checkbox';
 import Password from './Password';
-import Input from './Input';
+import Input from './atom/Input';
 import utils from '../../utils';
 
 const propTypes = {
@@ -30,6 +31,7 @@ class FormInput extends React.Component {
   constructor(props) {
     super(props);
 
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onBlur = this.onBlur.bind(this);
     this.onFoucs = this.onFoucs.bind(this);
     this.handleChange = this.handleChange.bind(this);

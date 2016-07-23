@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Nav from '../Nav';
 import './_index.scss';
 
@@ -14,11 +15,8 @@ const defaultProps = {
 class TabMenus extends Component {
   constructor(props) {
     super(props);
-    this.onNavChange = this.onNavChange.bind(this);
-  }
 
-  onNavChange() {
-
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
 
   render() {

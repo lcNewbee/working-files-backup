@@ -1,5 +1,6 @@
 import './index.scss';
 import React, { PropTypes, Component } from 'react';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 const propTypes = {
   size: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -19,6 +20,7 @@ class Pagination extends Component {
   constructor(props) {
     super(props);
 
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onGoPage = this.onGoPage.bind(this);
     this.onPrev = this.onPrev.bind(this);
     this.onNext = this.onNext.bind(this);

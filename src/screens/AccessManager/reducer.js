@@ -1,28 +1,10 @@
 import { fromJS } from 'immutable';
+import guiConfig from './app.json';
 
-const guiVersion = `.${GUI_CONFIG.version}`;
-
-// function getControlStatus() {
-//   let ret = false;
-//   let a_165F8BA5ABE1A5DA = '0';
-
-//   if (sessionStorage && sessionStorage.getItem('a_165F8BA5ABE1A5DA') !== null) {
-//     a_165F8BA5ABE1A5DA = sessionStorage.getItem('a_165F8BA5ABE1A5DA');
-//   }
-
-//   ret = typeof a_165F8BA5ABE1A5DA === 'string' && a_165F8BA5ABE1A5DA === '0';
-
-//   return ret;
-// }
-
-// function clearLoginSession() {
-//   if (typeof sessionStorage.removeItem === 'function') {
-//     sessionStorage.removeItem('a_165F8BA5ABE1A5DA');
-//   }
-// }
-
+let guiVersion = guiConfig.version.replace(/\./g, '');
 const defaultState = fromJS({
   saving: false,
+  guiName: guiConfig.name,
   rateInterval: 15000,
   invalid: {},
   modal: {
@@ -34,6 +16,8 @@ const defaultState = fromJS({
   },
   noControl: false,
 });
+
+guiVersion = `.${guiVersion}`;
 
 function receiveReport(state, data) {
   let ret;

@@ -1,7 +1,8 @@
-import './_button.scss';
 import React, { PropTypes } from 'react';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Icon from '../Icon';
 import utils from '../../utils';
+import './_button.scss';
 
 const propTypes = {
   iconName: PropTypes.string,
@@ -20,81 +21,53 @@ const defaultProps = {
   role: 'default',
 };
 
-function Button(props) {
-  const { Component, icon, size, role, className, loading, text } = props;
-  const componentProps = utils.extend({}, props);
+class Button extends React.Component {
+  constructor(props) {
+    super(props);
 
-
-  let classNames = 'btn';
-
-  if (size) {
-    classNames = `${classNames} btn-${size}`;
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
 
-  if (role) {
-    classNames = `${classNames} btn-${role}`;
-  }
+  render() {
+    const { Component, icon, size, role, className, loading, text } = this.props;
+    const componentProps = utils.extend({}, this.props);
 
-  if (className) {
-    classNames = `${className} ${classNames}`;
-  }
+    let classNames = 'btn';
 
-  if (Component === 'button' || Component === 'input') {
-    delete componentProps.text;
-    delete componentProps.Component;
-    delete componentProps.loading;
-  }
+    if (size) {
+      classNames = `${classNames} btn-${size}`;
+    }
 
-  return (
-    <Component
-      {...componentProps}
-      className={classNames}
-      type="button"
-    >
-      {
-        loading ? (
-          <Icon name="spinner" spin />
-        ) : <Icon name={icon} />
-      }
-      {text}
-    </Component>
-  );
+    if (role) {
+      classNames = `${classNames} btn-${role}`;
+    }
+
+    if (className) {
+      classNames = `${className} ${classNames}`;
+    }
+
+    if (Component === 'button' || Component === 'input') {
+      delete componentProps.text;
+      delete componentProps.Component;
+      delete componentProps.loading;
+    }
+
+    return (
+      <Component
+        {...this.props}
+        className={classNames}
+        type="button"
+      >
+        {
+          loading ? (
+            <Icon name="spinner" spin />
+          ) : <Icon name={icon} />
+        }
+        {text}
+      </Component>
+    );
+  }
 }
-// class Button extends React.Component {
-
-//   render() {
-//     const { Component, icon, size, role, className, loading, text } = this.props;
-
-//     let classNames = 'btn';
-
-//     if (size) {
-//       classNames = `${classNames} btn-${size}`;
-//     }
-
-//     if (role) {
-//       classNames = `${classNames} btn-${role}`;
-//     }
-
-//     if (className) {
-//       classNames = `${className} ${classNames}`;
-//     }
-
-//     return (
-//       <Component
-//         {...this.props}
-//         className={classNames}
-//         type="button"
-//       >
-//         {
-//           loading ? (
-//             <Icon name="spinner" spin />
-//           ) : <Icon name={icon} />
-//         }
-//         {text}
-//       </Component>
-//     );
-//   }
-// }
 
 Button.propTypes = propTypes;
 Button.defaultProps = defaultProps;

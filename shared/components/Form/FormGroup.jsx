@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import FormInput from './FormInput';
 
 const propTypes = {
@@ -7,10 +8,13 @@ const propTypes = {
   help: PropTypes.string,
   label: PropTypes.string,
   value: PropTypes.string,
+  id: PropTypes.string,
   disabled: PropTypes.bool,
+  required: PropTypes.bool,
   validateAt: PropTypes.string,
   name: PropTypes.string,
   validator: PropTypes.object,
+  role: PropTypes.string,
 };
 
 const defaultProps = {
@@ -21,6 +25,7 @@ class FormGroup extends React.Component {
   constructor(props) {
     super(props);
 
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.check = this.check.bind(this);
     this.checkClear = this.checkClear.bind(this);
     this.clearValidError = this.clearValidError.bind(this);
@@ -86,7 +91,7 @@ class FormGroup extends React.Component {
   }
 
   render() {
-    const { help, errMsg, required, children, type, role, id, label,
+    const { help, errMsg, required, children, role, id, label,
       } = this.props;
     const { check, checkClear } = this;
     let groupClassName = 'form-group';

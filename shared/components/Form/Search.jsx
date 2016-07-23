@@ -1,5 +1,7 @@
 import React, { PropTypes } from 'react';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Icon from '../Icon';
+import Input from './atom/Input';
 import utils from '../../utils';
 
 const propTypes = {
@@ -18,6 +20,7 @@ class Search extends React.Component {
   constructor(props) {
     super(props);
 
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onChange = this.onChange.bind(this);
     this.onKeyUp = this.onKeyUp.bind(this);
   }
@@ -56,7 +59,7 @@ class Search extends React.Component {
     return (
       <div className="input-search fl">
         <Icon className="icon-search" name="search" />
-        <input
+        <Input
           {...inputProps}
           type="text"
           onChange={this.onChange}

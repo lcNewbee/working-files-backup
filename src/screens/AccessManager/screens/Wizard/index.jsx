@@ -7,6 +7,7 @@ import validator from 'shared/utils/lib/validator';
 import utils from 'shared/utils';
 import TIME_ZONE from 'shared/config/timeZone';
 import countries from 'shared/config/country.json';
+import Navbar from 'shared/components/Navbar';
 
 const _ = window._;
 const msg = {
@@ -164,6 +165,7 @@ export const SignUp = React.createClass({
       currStep -= 1;
       this.updateState({
         currStep,
+        status: '',
       });
     }
   },
@@ -279,7 +281,7 @@ export const SignUp = React.createClass({
     let stepOneClass = '';
     let stepTwoClass = '';
     let stepThreeClass = '';
-    const { version } = this.props.app.toJS();
+    const { version, guiName } = this.props.app.toJS();
 
     if (currStep === 1) {
       stepOneClass = 'active';
@@ -294,11 +296,10 @@ export const SignUp = React.createClass({
 
     return (
       <div>
-        <div className="navbar">
-          <div className="brand"></div>
-          <h1>{_('Axilspot Access Manager')}</h1>
-          <span className="version">GUI {version}</span>
-        </div>
+        <Navbar
+          title={guiName}
+          version={version}
+        />
         <div className="wizard">
           <h2>{_('Setup Wizard')}</h2>
           <div className="wizard-header">

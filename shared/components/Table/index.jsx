@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import utils from '../../utils';
 import Pagination from '../Pagination';
 import Icon from '../Icon';
@@ -21,6 +22,7 @@ export class Table extends Component {
   constructor(props) {
     super(props);
 
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onSelectRow = this.onSelectRow.bind(this);
   }
   onSelectRow() {

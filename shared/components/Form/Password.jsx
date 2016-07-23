@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Icon from '../Icon';
-import Input from './Input';
+import Input from './atom/Input';
 
 const propTypes = {
   className: PropTypes.string,
@@ -20,18 +21,12 @@ class Password extends React.Component {
 
     this.state = {
       isSee: false,
+      isFocus: !!props.autoFocus,
     };
 
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onChange = this.onChange.bind(this);
     this.seePassword = this.seePassword.bind(this);
-  }
-
-  componentDidMount() {
-    const { autoFocus } = this.props;
-
-    if (autoFocus) {
-      this.myRef.passwordInput.focus();
-    }
   }
 
 
@@ -44,12 +39,12 @@ class Password extends React.Component {
   seePassword() {
     this.setState({
       isSee: !this.state.isSee,
+      isFocus: true,
     });
-    this.refs.passwordInput.focus();
   }
 
   render() {
-    const { isSee } = this.state;
+    const { isSee, isFocus } = this.state;
     let { type } = this.props;
     let iconName = 'eye';
 
@@ -64,7 +59,7 @@ class Password extends React.Component {
 
         <Input
           {...this.props}
-          ref={(ref) => (this.myRef = ref)}
+          isFocus={isFocus}
           type={type}
           onChange={this.onChange}
         />
