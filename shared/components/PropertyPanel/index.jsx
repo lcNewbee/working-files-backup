@@ -24,7 +24,7 @@ class AsiderBar extends React.Component {
   render() {
     const { isShow } = this.props;
 
-    let propertyPanelClassName = 'main-property-panel';
+    let propertyPanelClassName = 'm-property-panel';
 
     if (isShow) {
       propertyPanelClassName += ' active';
@@ -32,14 +32,14 @@ class AsiderBar extends React.Component {
 
     return (
       <asider className={propertyPanelClassName}>
-        <div className="panel-toggle-button">
+        <div className="m-property-panel__toggle-button">
           <Icon
             title={_('Remove All')}
             name="angle-double-left"
             size="2x"
           />
         </div>
-        <div className="main-property-panel-inner">
+        <div className="m-property-panel__inner">
           <header className="action-bar">
             <div className="action-bar__left">PROPERTIES</div>
             <div className="action-bar__right">
@@ -59,8 +59,8 @@ class AsiderBar extends React.Component {
               </div>
             </div>
           </header>
-          <div className="main-properties-container">
-            <div className="main-properties-container-item">
+          <div className="m-properties-container">
+            <div className="m-properties-container__item">
 
             </div>
           </div>

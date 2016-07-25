@@ -37,7 +37,7 @@ const App = require('../../screens/App');
 const sLogin = require('../../screens/App/screens/Login');
 const sWizard = require('../../screens/App/screens/Wizard');
 
-const sAcHome = require('../../screens/App/screens/AcHome');
+const sAcHome = require('../../screens/App/screens/MainAc');
 
 // 热点统计
 const sStatus = require('../../screens/App/screens/Main/screens/Stats');

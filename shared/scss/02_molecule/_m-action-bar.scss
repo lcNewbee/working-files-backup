@@ -1,14 +1,14 @@
-.action-bar {
+.m-action-bar {
   background: #333;
   color: #fff;
   overflow: auto;
   padding: 6px;
   font-size: 14px;
 
-  .action-bar__left {
+  .m-action-bar__left {
     float: left;
   }
-  .action-bar__right {
+  .m-action-bar__right {
     float: right;
   }
 }

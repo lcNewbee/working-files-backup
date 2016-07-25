@@ -8,7 +8,7 @@ import Nav from 'shared/components/Nav';
 import Icon from 'shared/components/Icon';
 import Modal from 'shared/components/Modal';
 import Navbar from 'shared/components/Navbar';
-import AsiderBar from './components/AsiderBar';
+import PropertyPanel from 'shared/components/PropertyPanel';
 import * as actions from './actions';
 import * as appActions from 'shared/actions/app';
 
@@ -55,16 +55,18 @@ export default class Main extends Component {
           title={guiName}
           version={version}
         >
-          <a href="#" className="as-control" onClick={this.onRefresh}>
-            <Icon name="refresh" className="icon" />
-            {_('REFRESH')}
-          </a>
-          <div className="user" onClick={this.showUserPopOver}>
-            <Icon name="user-secret" className="icon-user" />
-            <Icon
-              name="caret-down"
-              className="icon-down"
-            />
+          <div className="aside">
+            <a href="#" className="as-control" onClick={this.onRefresh}>
+              <Icon name="refresh" className="icon" />
+              {_('REFRESH')}
+            </a>
+            <div className="user" onClick={this.showUserPopOver}>
+              <Icon name="user-secret" className="icon-user" />
+              <Icon
+                name="caret-down"
+                className="icon-down"
+              />
+            </div>
           </div>
         </Navbar>
 
@@ -77,10 +79,12 @@ export default class Main extends Component {
               }
             </div>
           </div>
-          <AsiderBar
+          <PropertyPanel
             data={propertyData}
             isShow={propertyData.isShow}
-          />
+          >
+            内容
+          </PropertyPanel>
         </div>
         {
             isShow ? (
