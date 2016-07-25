@@ -4,22 +4,23 @@
   border-spacing: 1;
   border-collapse: collapse;
 
-  th, td {
+  th,
+  td {
     padding: 4px 6px;
+    text-align: left;
     border-top: 1px solid #dedede;
     border-bottom: 1px solid #dedede;
-    text-align: left;
   }
   th {
-    background: #666;
-    color: #fff;
     font-weight: 400;
+    color: #fff;
+    background: #666;
   }
 
   tr:hover {
     background-color: #fff;
   }
-  
+
   .empty {
     padding: $g-distance;
     color: $g-gray-light;
@@ -27,14 +28,14 @@
 }
 .table-wrap {
   position: relative;
-  
+
   .table-loading {
     position: absolute;
     top: 30px;
     bottom: 0;
     width: 100%;
     text-align: center;
-    
+
     .backdrop {
       position: absolute;
       top: 0;
@@ -48,18 +49,17 @@
     .table-loading-content {
       position: relative;
       z-index: 2;
-      margin: 10px auto;
-      padding: 10px;
       width: 60px;
-      border-radius: 6px;
+      padding: 10px;
+      margin: 10px auto;
       background-color: #f4f4f4;
-      
+      border-radius: 6px;
+
       .fa {
-        color: $g-brand-primary;
         font-size: 20px;
+        color: $g-brand-primary;
       }
     }
-    
   }
 }
 .action-btns {

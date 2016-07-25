@@ -198,23 +198,29 @@ export const Device = React.createClass({
   // 组合验证
   combineValid() {
     const {ip, mask, gateway, connect_type} = this.props.store.get('edit').toJS();
+    const oriMask = this.props.store.getIn(['oriEdit', 'mask']);
+    const oriGateway = this.props.store.getIn(['oriEdit', 'gateway']);
     var ret;
 
     if (connect_type === 'static') {
-      ret = validator.combineValid.staticIP(ip, mask, gateway);
+      if(!ret) {
+        ret = validator.combineValid.staticIP(ip, mask, gateway);
+      }
+
     }
 
     return ret;
   },
 
   onSaveDeviceNetWork() {
-
     this.props.validateAll(function (invalid) {
       let combineValidResult = this.combineValid();
+      const {ip, mask, gateway, connect_type} = this.props.store.get('edit').toJS();
+      const oriMask = this.props.store.getIn(['oriEdit', 'mask']);
+      const oriGateway = this.props.store.getIn(['oriEdit', 'gateway']);
 
       if (invalid.isEmpty()) {
         if (combineValidResult) {
-
           this.props.createModal({
             title: _('DEVICES'),
             role: 'alert',
@@ -222,7 +228,20 @@ export const Device = React.createClass({
           });
 
         } else {
-          this.props.saveDeviceNetwork();
+          if(validator.combineValid.staticIP(ip, oriMask, oriGateway) || oriMask !== mask) {
+            this.props.createModal({
+              title: _('DEVICES'),
+              role: 'comfirm',
+              text: _('Modify device segment, may make it impossible to control the device, are you sure you want to modify it?'),
+              apply: function() {
+                this.props.saveDeviceNetwork();
+              }.bind(this)
+            });
+          } else {
+            this.props.saveDeviceNetwork();
+          }
+
+
         }
 
       } else {

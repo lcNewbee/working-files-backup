@@ -14,7 +14,7 @@ const defaultState = fromJS({
 
 function getEditObjByMac(state, mac) {
   return state.getIn(['data', 'list']).find(function(item) {
-    return item.get('mac') == groupname;
+    return item.get('mac') == mac;
   }).set('devices', devices)
 }
 
@@ -39,7 +39,8 @@ export default function (state = defaultState, action) {
     case 'RECIVE_FETCH_DEVICE_NETWORK':
       return state.set('fetching', false)
         .set('updateAt', action.updateAt)
-        .mergeIn(['edit'], action.data);
+        .mergeIn(['edit'], action.data)
+        .mergeIn(['oriEdit'], action.data);
 
     case 'CLOSE_DEVICE_EDIT':
       return state.delete('edit');
