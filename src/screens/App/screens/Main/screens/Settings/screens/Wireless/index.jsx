@@ -54,10 +54,10 @@ const validOptions = Map({
     rules: 'remarkTxt:["\'\\\\"]|len:[1, 31]'
   }),
   upstream: validator({
-    rules: 'num:[32, 102400]',
+    rules: 'num:[32, 102400, 0]',
   }),
   downstream: validator({
-    rules: 'num:[32, 102400]',
+    rules: 'num:[32, 102400, 0]',
   })
 });
 
@@ -306,8 +306,8 @@ export const Wireless = React.createClass({
         <h3>{_('Bandwidth Control')}</h3>
         <FormGroup
           label={msg.upSpeed}
-          required={true}
           help="KB/s"
+          required={getCurrData('upstream') !== '0'}
           value={getCurrData('upstream')}
           {...upstream}
         >
@@ -322,7 +322,7 @@ export const Wireless = React.createClass({
             type="number"
             maxLength="6"
             size="sm"
-            disabled={ getCurrData('upstream') === '0' }
+            disabled={getCurrData('upstream') === '0'}
             value={getCurrData('upstream')}
             onChange={this.onUpdate('upstream')}
           />
@@ -333,7 +333,7 @@ export const Wireless = React.createClass({
           label={msg.downSpeed}
           help="KB/s"
           maxLength="6"
-          required={true}
+          required={getCurrData('downstream') !== '0'}
           value={getCurrData('downstream')}
           onChange={this.onUpdate('downstream')}
           {...downstream}

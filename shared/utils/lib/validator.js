@@ -24,18 +24,27 @@ var vaildate = {
     }
   },
 
-  num: function(str, min, max) {
+  num: function(str, min, max, expand) {
 
     if (!string.isInteger(str)) {
       return _("Must be integer");
     }
 
+    if(expand !== undefined) {
+      if(parseInt(str, 10) === parseInt(expand, 10)) {
+        return ;
+      }
+    }
+
     if (min !== undefined && max !== undefined) {
       if (parseInt(str, 10) < min || parseInt(str, 10) > max) {
-
         return _("Range: %s - %s", min, max);
       }
     }
+
+
+
+
   },
 
   mac: {
