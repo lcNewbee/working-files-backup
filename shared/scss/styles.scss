@@ -14,21 +14,17 @@
 @import "./01_atom/animation";
 @import "./01_atom/a-input";
 
-/* 02: 分子(molecule) 由多个原子组件组合 */
+/* 02: 分子(molecule) 由原子或分子组件组合而成 */
 @import "./02_molecule/m-action-bar";
-@import "./02_molecule/m-property-panel";
 
 /* 03: 组织(organism),把分子按一定的结构组合起来 */
-// @import "./03_organism/o-action-bar";
+@import "./03_organism/o-table";
+@import "./03_organism/o-form";
 
 /* 04：模板 css */
-@import './04_template/default';
-
-/* Modules css */
-@import "./modules/form";
-@import "./modules/table";
-@import "./modules/sign";
-@import "./modules/wizard";
+@import './04_template/t-sign';
+@import './04_template/t-wizard';
+@import './04_template/t-main';
 
 /* Theme css */
 @import "./05_theme/colors";

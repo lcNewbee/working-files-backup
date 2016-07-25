@@ -2,6 +2,8 @@ import React, { PropTypes } from 'react';
 // import { fromJS } from 'immutable';
 import Icon from 'shared/components/Icon';
 
+import 'shared/scss/02_molecule/_m-property-panel.scss';
+
 const propTypes = {
   isShow: PropTypes.bool,
 };
