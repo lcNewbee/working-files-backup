@@ -46,7 +46,7 @@ export default class Main extends Component {
   }
 
   render() {
-    const { saving, version, propertyData } = this.props.app.toJS();
+    const { saving, version, propertyData, guiName } = this.props.app.toJS();
     const { isShow } = this.state;
 
     return (
