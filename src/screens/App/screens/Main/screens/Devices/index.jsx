@@ -75,18 +75,19 @@ export const Device = React.createClass({
   componentWillMount() {
     this.handleSearch()
   },
-
+  //加载后如果app的refreshAt属性有更新则从后台抓取数据
+  //什么时候执行这个函数？
   componentDidUpdate(prevProps) {
     if(prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
       this.handleSearch();
     }
   },
-
+  //离开页面时执行？
   componentWillUnmount() {
     this.props.resetVaildateMsg();
     this.props.leaveDevicesScreen();
   },
-
+  //从后台抓取数据
   handleSearch() {
     this.props.fetchDevices('/goform/devices');
   },

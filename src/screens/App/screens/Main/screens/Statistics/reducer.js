@@ -1,29 +1,33 @@
 import {Map, List, fromJS} from 'immutable';
 
-function setFetching(state) {
-  return state.update('fetching', val => true);
-}
-
-function updateData(state, name, value) {
-  return state.updateIn(['data', name], val => value);
-}
-
-let defaultState = fromJS({
+let defaultState = fromJS({//组件本身所需的数据
   fetching: false,
-  data: {
-    username: '',
-    password: ''
-  }
+  query: {
+    timeType: '0'
+  },
+  reports: [
+    
+  ]
 });
 
-export default function(state = defaultState, action) {
+
+function reciveData(state, action) {
+  var tmp = fromJS({
+    reports:action.data
+  });
+  return state.delete("reports").merge(tmp);
+}
+
+export default function(state = defaultState, action) {//根据action修改本身的state数据，reducer
   switch (action.type) {
-    case 'UPDATE_DATA':
-      return updateData(state, action.name, action.value);
+    case 'REQEUST_FETCH_REPORT_INFO':
+      return state.set('fetching', true);
+    
+    case 'RECIVE_FETCH_REPORT_INFO':
+      return reciveData(state, action);
 
-    case 'REQEUST_LOGIN':
-      return setFetching(state);
-
+    case 'CHANGE_TIME_RANGE_INFO':
+      return state.setIn(['query', 'timeType'], action.timeType);
   }
   return state;
 };
