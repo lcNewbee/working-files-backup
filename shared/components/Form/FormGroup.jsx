@@ -11,10 +11,12 @@ const propTypes = {
   id: PropTypes.string,
   disabled: PropTypes.bool,
   required: PropTypes.bool,
-  validateAt: PropTypes.string,
+  validateAt: PropTypes.number,
   name: PropTypes.string,
   validator: PropTypes.object,
   role: PropTypes.string,
+  children: PropTypes.node,
+  'data-label': PropTypes.string,
 };
 
 const defaultProps = {
@@ -57,7 +59,7 @@ class FormGroup extends React.Component {
 
     if (value === '' || value === undefined) {
       if (required) {
-        checkResult = _('%s is required', label);
+        checkResult = _('%s is required', label || this.props['data-label']);
       }
     } else {
       if (this.props.validator) {

@@ -1,4 +1,5 @@
 import utils from 'shared/utils';
+import URLS from 'shared/config/urls';
 
 export function reqeustLogin() {
   return {
@@ -41,7 +42,7 @@ export function login(callBack) {
 
     dispatch(reqeustLogin());
 
-    utils.save('/goform/login', data)
+    utils.save(URLS.login, data)
       .then(function(json) {
         let result = _('Password Error');
         if(json.state) {

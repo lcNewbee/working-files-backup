@@ -1,0 +1,23 @@
+.m-pop-over {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1040;
+  overflow: hidden;
+
+  .m-pop-over__overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+    -webkit-overflow-scrolling: touch;
+    background-color: #000;
+    outline: 0;
+
+    @include opacity(0);
+  }
+}

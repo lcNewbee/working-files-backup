@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import './_index.scss';
 
 const propTypes = {
   title: PropTypes.string,
@@ -17,9 +18,7 @@ function Navbar(props) {
       <div className="brand"></div>
       <h1>{title}</h1>
       <span className="version">GUI {version}</span>
-      <div className="aside">
-        {props.children}
-      </div>
+      {props.children}
     </header>
   );
 }

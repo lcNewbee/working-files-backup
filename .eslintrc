@@ -6,7 +6,7 @@
   ],
 
   "settings": {
-    "ecmascript": 6,
+    //"ecmascript": 6,
     "import/resolver": {
       "node": {
         "paths": "./"

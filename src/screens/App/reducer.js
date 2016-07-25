@@ -1,10 +1,10 @@
 import { fromJS } from 'immutable';
-import guiConfig from './app.json';
 
 let guiVersion = guiConfig.version.replace(/\./g, '');
+
 const defaultState = fromJS({
   saving: false,
-  guiName: guiConfig.name,
+  guiName: guiConfig.title,
   rateInterval: 15000,
   invalid: {},
   modal: {
@@ -41,12 +41,18 @@ function receiveAcInfo(state, action) {
 export default function (state = defaultState, action) {
   switch (action.type) {
 
+    /**
+     * 全局数据验证
+     */
     case 'START_VALIDATE_ALL':
       return state.set('validateAt', action.validateAt)
           .set('invalid', fromJS({}));
 
     case 'RESET_VAILDATE_MSG':
       return state.set('invalid', fromJS({}));
+
+    case 'REPORT_VALID_ERROR':
+      return receiveReport(state, action.data);
 
     /**
      * Ajax
@@ -67,9 +73,9 @@ export default function (state = defaultState, action) {
     case 'RECEIVE_SERVER_ERROR':
       return state.set('state', action.state);
 
-    case 'REPORT_VALID_ERROR':
-      return receiveReport(state, action.data);
-
+    /**
+     * 登录状态
+     */
     case 'CHANGE_LOGIN_STATUS':
       sessionStorage.setItem('a_165F8BA5ABE1A5DA', action.data);
       return state;
@@ -77,12 +83,14 @@ export default function (state = defaultState, action) {
     case 'REFRESH_ALL':
       return state.set('refreshAt', action.refreshAt);
 
+    // 获取 设备基本配置信息
     case 'REQUEST_FETCH_AC_INFO':
       return state.set('fetching', true);
 
     case 'RECIVECE_FETCH_AC_INFO':
       return receiveAcInfo(state, action);
 
+    // 全局摸态框通知
     case 'CREATE_MODAL':
       return state.set('modal', fromJS({
         status: 'show',
@@ -92,9 +100,6 @@ export default function (state = defaultState, action) {
 
     case 'CHANGE_MODAL_STATE':
       return state.mergeIn(['modal'], action.data);
-
-    case 'changePropertyStatus':
-      return state.setIn();
 
     default:
   }

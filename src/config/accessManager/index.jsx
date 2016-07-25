@@ -2,9 +2,9 @@ import NotFound from 'shared/components/NotFound';
 import remoteActionMiddleware from 'shared/utils/lib/remote_action_middleware';
 import { combineReducers } from 'redux';
 
-// 公用 样式
+//
 import 'shared/scss/styles.scss';
-import 'font-awesome/css/font-awesome.css';
+import guiConfig from './package.json';
 
 // 多语言工具
 const b28n = require('shared/b28n');
@@ -19,6 +19,7 @@ b28n.addDict(langEn, 'en');
 window.CB = b28n.init({
   supportLang: ['en', 'cn']
 });
+window.guiConfig = guiConfig;
 
 document.getElementsByTagName('body')[0].className += ' ' + b28n.getLang();
 
@@ -29,36 +30,36 @@ document.getElementsByTagName('body')[0].className += ' ' + b28n.getLang();
 // 公用组件
 
 // 主APP
-const App = require('../../screens/AccessManager');
+const App = require('../../screens/App');
 
 // 登录界面
-const pLogin = require('../../screens/AccessManager/screens/Login');
-// const sRegister = require('../../screens/AccessManager/screens/SignUp');
-const sWizard = require('../../screens/AccessManager/screens/Wizard');
+const pLogin = require('../../screens/App/screens/Login');
+// const sRegister = require('../../screens/App/screens/SignUp');
+const sWizard = require('../../screens/App/screens/Wizard');
 
 // 布局
-const Main = require('../../screens/AccessManager/screens/Main').Screen;
-const Settings = require('../../screens/AccessManager/screens/Main/screens/Settings');
+const Main = require('../../screens/App/screens/Main').Screen;
+const Settings = require('../../screens/App/screens/Main/screens/Settings');
 
 // 热点统计
-const pStatus = require('../../screens/AccessManager/screens/Main/screens/Stats');
+const pStatus = require('../../screens/App/screens/Main/screens/Stats');
 
 // 设备
-const pDevices = require('../../screens/AccessManager/screens/Main/screens/Devices');
+const pDevices = require('../../screens/App/screens/Main/screens/Devices');
 
 // 设备地图
-// const pDeviceMap = require('../../screens/AccessManager/screens/Main/screens/DeviceMap');
-const pStatistics = require('../../screens/AccessManager/screens/Main/screens/Statistics');
-const pLogs = require('../../screens/AccessManager/screens/Main/screens/Logs');
-const pClients = require('../../screens/AccessManager/screens/Main/screens/Clients');
+// const pDeviceMap = require('../../screens/App/screens/Main/screens/DeviceMap');
+const pStatistics = require('../../screens/App/screens/Main/screens/Statistics');
+const pLogs = require('../../screens/App/screens/Main/screens/Logs');
+const pClients = require('../../screens/App/screens/Main/screens/Clients');
 
 // 设置
-const pGroupSettings = require('../../screens/AccessManager/screens/Main/screens/Settings/screens/GroupSettings');
-const sWireless = require('../../screens/AccessManager/screens/Main/screens/Settings/screens/Wireless');
-const sPortal = require('../../screens/AccessManager/screens/Main/screens/Settings/screens/Portal');
-const sGuest = require('../../screens/AccessManager/screens/Main/screens/Settings/screens/Guest');
-const sVoip = require('../../screens/AccessManager/screens/Main/screens/Settings/screens/Voip');
-const sAdmin = require('../../screens/AccessManager/screens/Main/screens/Settings/screens/Admin');
+const pGroupSettings = require('../../screens/App/screens/Main/screens/Settings/screens/GroupSettings');
+const sWireless = require('../../screens/App/screens/Main/screens/Settings/screens/Wireless');
+const sPortal = require('../../screens/App/screens/Main/screens/Settings/screens/Portal');
+const sGuest = require('../../screens/App/screens/Main/screens/Settings/screens/Guest');
+const sVoip = require('../../screens/App/screens/Main/screens/Settings/screens/Voip');
+const sAdmin = require('../../screens/App/screens/Main/screens/Settings/screens/Admin');
 
 const routes = [{
   path: '/',

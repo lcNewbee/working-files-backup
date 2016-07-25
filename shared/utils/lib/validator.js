@@ -324,6 +324,8 @@ var init = validator.fn.init = function(options) {
 
   if(options.rules) {
     this.rules = utils.getRulesObj(options.rules, vaildate);
+  } else {
+    this.rules = [];
   }
 
   this.label = options.label;

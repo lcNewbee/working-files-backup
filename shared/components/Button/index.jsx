@@ -5,7 +5,6 @@ import utils from '../../utils';
 import './_button.scss';
 
 const propTypes = {
-  iconName: PropTypes.string,
   icon: PropTypes.string,
   className: PropTypes.string,
   role: PropTypes.oneOf(['default', 'primary', 'success', 'info', 'warning', 'danger']),
@@ -31,6 +30,7 @@ class Button extends React.Component {
   render() {
     const { Component, icon, size, role, className, loading, text } = this.props;
     const componentProps = utils.extend({}, this.props);
+    const myIcon = icon ? <Icon name={icon} /> : null;
 
     let classNames = 'btn';
 
@@ -52,16 +52,17 @@ class Button extends React.Component {
       delete componentProps.loading;
     }
 
+
     return (
       <Component
-        {...this.props}
+        {...componentProps}
         className={classNames}
         type="button"
       >
         {
           loading ? (
             <Icon name="spinner" spin />
-          ) : <Icon name={icon} />
+          ) : myIcon
         }
         {text}
       </Component>
