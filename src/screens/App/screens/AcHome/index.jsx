@@ -69,13 +69,19 @@ export default class Main extends Component {
               />
             </div>
           </div>
-          <div className="top-menus">
+          <div className="m-top-menus">
             <Icon name="save" />
-            <div className="fr">
-              <a href="">一级菜单</a>
-              <a href="">二级菜单</a>
-              <a href="">三级菜单</a>
-            </div>
+            <ol className="breadcrumb">
+              <li>
+                <a href="">一级菜单</a>
+              </li>
+              <li>
+                <a href="">二级菜单</a>
+              </li>
+              <li>
+                <a href="">三级菜单</a>
+              </li>
+            </ol>
           </div>
         </Navbar>
 
