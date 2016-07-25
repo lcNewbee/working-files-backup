@@ -8,14 +8,14 @@ import storage from '../utils/lib/storage';
 import strUtils from '../utils/lib/string';
 import utilsCore from '../utils/lib/core';
 
-const b28n = (function (doc, win) {
+const b28n = (function _b28n(doc, _win) {
   const STROE_KEY = 'B_LANGUAGE';
   const DEFAULT_OPTIONS = {
     supportLang: ['en', 'cn'],
     defaultLang: 'en',
   };
   const special = {
-    'zh': 'cn',
+    zh: 'cn',
     'zh-chs': 'cn',
     'zh-cn': 'cn',
     'zh-cht': 'cn',
@@ -24,13 +24,43 @@ const b28n = (function (doc, win) {
     'zh-tw': 'zh',
     'zh-sg': 'zh',
   };
-  const b28n = {};
+  const win = _win;
+  const dicts = {};
+  const localB28n = {
+    options: DEFAULT_OPTIONS,
+  };
 
-  // Local Config
-  let localLang = 'en';
+  // Local can change Config
+  let localLang;
   let localOptions = DEFAULT_OPTIONS;
-  let dicts = {};
   let currDict;
+
+  /**
+   * find support lang in supports array
+   */
+  function isSupportLang(lang, supports) {
+    const len = supports.length;
+    let i;
+
+    for (i = 0; i < len; i++) {
+      if (lang === supports[i]) {
+        return supports[i];
+      }
+    }
+
+    return false;
+  }
+
+  function getLangWithBrowserSetting() {
+    let ret = (win.navigator.language || win.navigator.userLanguage ||
+        win.navigator.browserLanguage || win.navigator.systemLanguage ||
+        'en').toLowerCase();
+
+    ret = special[ret] || ret.split('-')[0].toString();
+    ret = isSupportLang(ret, localB28n.options.supportLang) || 'en';
+
+    return ret;
+  }
 
   function toObject(val) {
     if (val === null || val === undefined) {
@@ -45,49 +75,36 @@ const b28n = (function (doc, win) {
   }
 
   function getLangWithBrowserLocal() {
-    var ret = storage.get(STROE_KEY);
+    const ret = storage.get(STROE_KEY);
 
-    return ret;
+    return ret || localLang;
   }
 
-  /**
-   * find support lang in supports array
-   */
-  function isSupportLang(lang, supports) {
-    var len = supports.length;
-    var i;
+  function extend(target, ...rest) {
+    let ret = null;
 
-    for (i = 0; i < len; i++) {
-      if (lang === supports[i]) {
-        return supports[i];
-      }
-    }
-  }
-
-  b28n.extend = function (target, source) {
-    var len = arguments.length;
-    var ret;
-
-    if (len === 1) {
+    if (rest.length < 1) {
       utilsCore.objectAssign(this, target);
       return this;
     }
 
-    ret = utilsCore.objectAssign.apply(Object, [].slice.call(arguments));
+    ret = utilsCore.objectAssign.call(Object, target, ...rest);
 
     return ret;
-  };
+  }
 
-  b28n.extend({
+  localLang = getLangWithBrowserSetting();
+  localB28n.extend = extend;
+  localB28n.extend({
     version: '0.0.1',
 
-    isSupport(lang, supports) {
+    isSupport(lang) {
       return isSupportLang(lang, localOptions.supportLang);
     },
 
-    addDict(dict, lang) {
-      lang = this.isSupport(lang) || this.getLang();
-      dict = toObject(dict);
+    addDict(_dict, _lang) {
+      const lang = this.isSupport(_lang) || this.getLang();
+      const dict = toObject(_dict);
 
       if (dicts[lang]) {
         utilsCore.objectAssign(dicts[lang], dict);
@@ -98,13 +115,15 @@ const b28n = (function (doc, win) {
       return this;
     },
 
-    getDict(lang) {
-      lang = this.isSupport(lang) || this.getLang();
+    getDict(_lang) {
+      const lang = this.isSupport(_lang) || this.getLang();
 
       return dicts[lang];
     },
 
-    setLang(lang) {
+    setLang(_lang) {
+      let lang = _lang;
+
       if (lang !== undefined) {
         lang = special[lang] || lang;
 
@@ -126,97 +145,94 @@ const b28n = (function (doc, win) {
     },
 
     getLang() {
-      var defLang = localOptions.defaultLang;
-      var local, start, end;
-      var ret = getLangWithBrowserLocal() || localLang;
+      const defLang = localOptions.defaultLang;
+      let ret = getLangWithBrowserLocal();
 
-      return this.isSupport(ret) || defLang;
+      ret = this.isSupport(ret) || defLang;
+
+      return ret;
     },
 
     translate(str) {
       return currDict[str] || str;
     },
 
-  });
+    init(options) {
+      let initOptions = {};
+      let initLang;
 
-  b28n.init = function (options) {
-    let initLang;
-    let initOptions = {};
+      // Extend options
+      initOptions = utilsCore.objectAssign({}, DEFAULT_OPTIONS, options);
 
-    // Extend options
-    utilsCore.objectAssign(initOptions, DEFAULT_OPTIONS, options);
+      // init lang
+      if (initOptions.lang) {
+        initLang = initOptions.lang;
+      } else {
+        initLang = getLangWithBrowserLocal();
 
-    // init lang
-    if (initOptions.lang) {
-      initLang = initOptions.lang;
-    } else {
-      initLang = getLangWithBrowserLocal();
+        if (!initLang) {
+          initLang = initOptions.defaultLang;
 
-      if (!initLang) {
-        initLang = initOptions.defaultLang;
-
-        initLang = (win.navigator.language || win.navigator.userLanguage ||
+          initLang = (win.navigator.language || win.navigator.userLanguage ||
             win.navigator.browserLanguage || win.navigator.systemLanguage ||
             initLang).toLowerCase();
 
-        initLang = special[initLang] || initLang.split('-')[0].toString();
+          initLang = special[initLang] || initLang.split('-')[0].toString();
+        }
       }
-    }
 
-    initLang = isSupportLang(initLang, initOptions.supportLang) || initOptions.defaultLang;
+      initLang = isSupportLang(initLang, initOptions.supportLang) || initOptions.defaultLang;
 
-    // 把初始化的语言保存在本地
-    saveLangWithBrowserLocal(initLang);
+      // 把初始化的语言保存在本地
+      saveLangWithBrowserLocal(initLang);
 
-    localLang = initLang;
-    currDict = dicts[localLang] || {};
+      localLang = initLang;
+      currDict = dicts[localLang] || {};
 
-    localOptions = initOptions;
+      localOptions = initOptions;
 
-    return this;
-  };
+      return this;
+    },
+  });
 
   // 初始化默认字典
   if (!currDict) {
-    currDict = dicts[b28n.getLang()] = {};
+    currDict = dicts[localB28n.getLang()] = {};
   }
 
-  win.b28n = b28n;
+  win._ = function _(str, ...rest) {
+    const translateStr = localB28n.translate(str);
+    let ret;
 
-  win._ = function (str) {
-    var translateStr = b28n.translate(str);
-    var args = [].slice.call(arguments);
-    var ret;
-
-    if (arguments.length <= 1) {
+    if (rest.length === 0) {
       ret = translateStr;
     } else {
-      args.shift();
-      args.unshift(translateStr);
-      ret = strUtils.format.apply(strUtils, args);
+      ret = strUtils.format.call(strUtils, translateStr, ...rest);
     }
 
     return ret;
   };
 
-  b28n.langMap = {
-		    'cn': '简体中文',
-		    'zh': '繁體中文',
-		    'de': 'Deutsch', // 德语
-		    'en': 'English', // 英语
-		    'es': 'Español', // 西班牙
-		    'fr': 'Français', // 法国
-		    'hu': 'Magyar', // 匈牙利
-		    'it': 'Italiano', // 意大利
-		    'pl': 'Polski', // 波兰
-		    'ro': 'Română', // 罗马尼亚
-		    'ar': 'العربية', // 阿拉伯
-		    'tr': 'Türkçe', // 土耳其
-		    'ru': 'Русский', // Russian	俄语
-		    'pt': 'Português', // Portugal 葡萄牙语
-	  };
+  localB28n.langMap = {
+    cn: '简体中文',
+    zh: '繁體中文',
+    de: 'Deutsch', // 德语
+    en: 'English', // 英语
+    es: 'Español', // 西班牙
+    fr: 'Français', // 法国
+    hu: 'Magyar', // 匈牙利
+    it: 'Italiano', // 意大利
+    pl: 'Polski', // 波兰
+    ro: 'Română', // 罗马尼亚
+    ar: 'العربية', // 阿拉伯
+    tr: 'Türkçe', // 土耳其
+    ru: 'Русский', // Russian	俄语
+    pt: 'Português', // Portugal 葡萄牙语
+  };
 
-  return b28n;
-})(document, window);
+  return localB28n;
+}(document, window));
+
+window.b28n = b28n;
 
 export default b28n;

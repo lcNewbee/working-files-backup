@@ -1,28 +1,38 @@
-import './index.scss';
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Icon from '../Icon';
+import utils from '../../utils';
+import './_button.scss';
 
 const propTypes = {
-  iconName: PropTypes.string,
   icon: PropTypes.string,
   className: PropTypes.string,
   role: PropTypes.oneOf(['default', 'primary', 'success', 'info', 'warning', 'danger']),
   size: PropTypes.oneOf(['sm', 'lg']),
   inverse: PropTypes.bool,
   Component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+  loading: PropTypes.bool,
+  text: PropTypes.string,
 };
 
 const defaultProps = {
   Component: 'button',
-  role: 'default'
+  role: 'default',
 };
 
 class Button extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+  }
 
   render() {
-    let { Component, icon, size, role, className, loading, text} = this.props;
+    const { Component, icon, size, role, className, loading, text } = this.props;
+    const componentProps = utils.extend({}, this.props);
+    const myIcon = icon ? <Icon name={icon} /> : null;
 
-    let classNames = `btn`;
+    let classNames = 'btn';
 
     if (size) {
       classNames = `${classNames} btn-${size}`;
@@ -33,19 +43,26 @@ class Button extends React.Component {
     }
 
     if (className) {
-      classNames = className + ' ' + classNames;
+      classNames = `${className} ${classNames}`;
     }
+
+    if (Component === 'button' || Component === 'input') {
+      delete componentProps.text;
+      delete componentProps.Component;
+      delete componentProps.loading;
+    }
+
 
     return (
       <Component
-        {...this.props}
+        {...componentProps}
         className={classNames}
         type="button"
       >
         {
           loading ? (
-            <Icon name="spinner" spin={true} />
-          ) : <Icon name={icon} />
+            <Icon name="spinner" spin />
+          ) : myIcon
         }
         {text}
       </Component>

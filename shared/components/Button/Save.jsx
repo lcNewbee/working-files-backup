@@ -1,16 +1,17 @@
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react';
 import Button from './index';
 
 let timeOut = null;
 
 const propTypes = {
-  text: PropTypes.string
+  text: PropTypes.string,
+  loading: PropTypes.bool,
 };
 
 const defaultProps = {
   text: _('Save'),
   role: 'primary',
-  icon: 'save'
+  icon: 'save',
 };
 
 class SaveButton extends React.Component {
@@ -18,36 +19,36 @@ class SaveButton extends React.Component {
     super(props);
 
     this.state = {
-      status: 'default'
+      status: 'default',
     };
-  };
+  }
 
   componentWillReceiveProps(nextProps) {
-    if(this.props.loading && !nextProps.loading) {
+    if (this.props.loading && !nextProps.loading) {
       this.setState({
-        status: 'ok'
+        status: 'ok',
       });
 
-      timeOut = setTimeout(function(){
+      timeOut = setTimeout(() => {
         this.setState({
-          status: 'default'
+          status: 'default',
         });
-      }.bind(this), 1000)
+      }, 1000);
     } else if (nextProps.loading) {
       this.setState({
-        status: 'saving'
+        status: 'saving',
       });
     }
-  };
+  }
 
   componentWillUnmount() {
     clearTimeout(timeOut);
-  };
+  }
 
   render() {
-    let { text, loading, status} = this.props;
+    let { text } = this.props;
 
-    if(this.state.status === 'saving') {
+    if (this.state.status === 'saving') {
       text = _('Saving');
     } else if (this.state.status === 'ok') {
       text = _('Saved');

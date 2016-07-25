@@ -27,15 +27,13 @@ const languageOptions = List(b28n.getOptions().supportLang).map((item) => {
 }).toJS();
 
 const validOptions = Map({
-  oldpasswd: validator({
-    rules: 'len:[1, 64]'
-  }),
+  oldpasswd: validator({}),
   newpasswd: validator({
-    rules: 'len:[1,, 64]'
+    rules: 'len:[8, 32]'
   }),
 
   confirmpasswd: validator({
-    rules: 'len:[1,, 64]'
+    rules: 'len:[8, 32]'
   })
 });
 

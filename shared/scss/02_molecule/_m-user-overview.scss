@@ -1,0 +1,45 @@
+.user-overview {
+  position: fixed;
+  top: $g-navbar-height + 1px;
+  right: 0;
+  z-index: 1070;
+  min-width: 340px;
+  background: $g-main-color;
+  color: #f5f5f5;
+
+  a {
+    padding: 8px 12px;
+    color: #f5f5f5;
+    transition: background-color .3s;
+
+    &:hover {
+      background: $main-blue;
+      color: #f5f5f5;
+    }
+  }
+  .user-info {
+    .icon-user {
+      margin: 10px;
+      padding: 5px 30px 0 30px;
+      background-color: #e5e5e5;
+      color: #000;
+      font-size: 86px;
+    }
+  }
+
+  .user-controls {
+    background-color: $g-main-color-light;
+    @include clearfix;
+
+    .change-pas {
+      float: left;
+    }
+    .sign-out {
+      float: right;
+    }
+
+    .fa {
+      margin-right: 4px;
+    }
+  }
+}

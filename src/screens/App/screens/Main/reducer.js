@@ -1,18 +1,17 @@
-import {Map, List, fromJS} from 'immutable';
+import { fromJS } from 'immutable';
 
-
-let defaultState = fromJS({
+const defaultState = fromJS({
   userPop: false,
   rateInterval: 5000,
-  sidebar: false
+  sidebar: false,
 });
 
-export default function(state = defaultState, action) {
+export default function (state = defaultState, action) {
   switch (action.type) {
-    case "SHOW_USER_POP":
+    case 'SHOW_USER_POP':
       return state.set('userPop', !!action.isShow);
-    
+
     default:
   }
   return state;
-};
+}

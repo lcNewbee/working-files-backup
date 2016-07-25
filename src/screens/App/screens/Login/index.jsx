@@ -1,29 +1,25 @@
 import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import utils from 'shared/utils';
-import {connect} from 'react-redux';
+import { Map } from 'immutable';
+import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {Input, FormGroup} from 'shared/components/Form';
-import {fromJS, Map} from 'immutable';
 import validator from 'shared/utils/lib/validator';
 import * as actions from './actions';
 import * as appActions from 'shared/actions/app';
+import Navbar from 'shared/components/Navbar';
+import { FormGroup } from 'shared/components/Form';
+import Button from 'shared/components/Button';
 import reducer from './reducer';
 
-const formGroups = {
-  password: {
-    input: {
-      type: 'password',
-      name: 'password',
-      maxLength: 21,
-      placeholder: _('Password'),
-    },
-    validator: validator({
-      label: _('Password'),
-      rules: 'required'
-    })
-  }
-};
+const validOptions = Map({
+  username: validator({
+    label: _('Username')
+  }),
+  password: validator({
+    label: _('Password')
+  }),
+});
 
 // 原生的 react 页面
 export const Login = React.createClass({
@@ -35,13 +31,11 @@ export const Login = React.createClass({
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.status === 'ok') {
-
       // 如果登录时间不一致
       // 后续可以做记住密码的功能
       if (this.props.loginedAt !== nextProps.loginedAt) {
         window.location.hash = '#/main/status';
       }
-
     }
   },
 
@@ -52,32 +46,39 @@ export const Login = React.createClass({
     this.props.resetData();
   },
 
-
   checkData() {
     var data = this.props.data.toJS();
-    var passCheck = formGroups.password.validator.check(data.password);
+    var ret = formGroups.password.validator.check(data.password);
 
-    return passCheck;
+    return ret;
   },
 
-
   onLogin() {
-    var checkRusult = this.checkData();
 
-    // 如果有验证错误信息
-    if(checkRusult) {
-      this.props.loginResult(checkRusult)
+    this.props.validateAll(function (invalid) {
+      if (invalid.isEmpty()) {
+        this.props.login(function (status) {
+          var currClass = document.getElementsByTagName('body')[0].className;
 
-    //
-    } else {
-      this.props.login(function(status) {
-        var currClass = document.getElementsByTagName('body')[0].className;
+          document.getElementsByTagName('body')[0].className = currClass.replace(' sign-body', '');
+          this.props.changeLoginStatus(status);
+        }.bind(this));
+      }
+    }.bind(this));
 
-        document.getElementsByTagName('body')[0].className = currClass.replace(' sign-body', '');
-        this.props.changeLoginStatus(status);
-      }.bind(this));
-    }
+    // // 如果有验证错误信息
+    // if (checkRusult) {
+    //   this.props.loginResult(checkRusult);
 
+    // //
+    // } else {
+    //   this.props.login(function (status) {
+    //     var currClass = document.getElementsByTagName('body')[0].className;
+
+    //     document.getElementsByTagName('body')[0].className = currClass.replace(' sign-body', '');
+    //     this.props.changeLoginStatus(status);
+    //   }.bind(this));
+    // }
   },
 
   onChangeData(name) {
@@ -95,66 +96,89 @@ export const Login = React.createClass({
   },
 
   onInputKeyUp(e) {
-    if(e.which === 13) {
+    if (e.which === 13) {
       this.onLogin();
     }
   },
 
-  componentDidUpdate(prevProps, prevState) {
-    //console.log(this.ref)
+  onUsernameKeyUp(e) {
+    if (e.which === 13) {
+      // 聚焦到 密码输入框
+      //this.onLogin();
+    }
   },
 
   render() {
-    const { version } = this.props.app.toJS();
+    const { version, guiName } = this.props.app.toJS();
+    const { username, password} = this.props.validateOption;
     var that = this;
     var myMsg = this.props.status;
 
     return (
       <div>
-        <header className="navbar">
-          <div className="brand"></div>
-          <h1>{_('Axilspot Access Manager')}</h1>
-          <span className="version">GUI {version}</span>
-        </header>
+        <Navbar
+          title={guiName}
+          version={version}
+        />
+
         <div className="sign">
           <div className="sign-backdrop"></div>
           <div className="sign-content">
             <h1 className="title">{_('Please Login')}</h1>
+            {
+              guiConfig.hasUsername ? (
+                <FormGroup
+                  required
+                  name="username"
+                  maxLength="21"
+                  data-label={_('Username')}
+                  placeholder={_('Username')}
+                  value={this.getDataValue('username')}
+                  onChange={this.onChangeData('username')}
+                  onKeyUp={this.onUsernameKeyUp}
+                  {...username}
+                />
+              ) : null
+            }
             <FormGroup
               type="password"
               name="password"
+              required
               maxLength="21"
+              data-label={_('Password')}
               placeholder={_('Password')}
-              value={this.getDataValue('password') }
-              onChange={this.onChangeData('password') }
+              value={this.getDataValue('password')}
+              onChange={this.onChangeData('password')}
               onKeyUp={this.onInputKeyUp}
-              validator={formGroups.password.validator}
+              {...password}
             />
+
             {
               this.props.status !== 'ok' ?
                 <p className="msg-error ">{this.props.status}</p> :
                 ''
             }
-            <button className="btn btn-primary btn-lg"
-              onClick={this.onLogin}>
-              {_('Login')}
-            </button>
+            <Button
+              size="lg"
+              role="primary"
+              text={_('Login')}
+              onClick={this.onLogin}
+            />
           </div>
-
         </div>
       </div>
     );
-  }
+  },
 });
 
 function mapStateToProps(state) {
-  var myState = state.login;
+  const myState = state.login;
 
   return {
     loginedAt: myState.get('loginedAt'),
     status: myState.get('status'),
     data: myState.get('data'),
-    app: state.app
+    app: state.app,
   };
 }
 
@@ -162,13 +186,15 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
     actions
-  ), dispatch)
+  ), dispatch);
 }
+
 
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  validator.mergeProps(validOptions)
 )(Login);
 
 export const login = reducer;

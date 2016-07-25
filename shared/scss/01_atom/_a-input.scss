@@ -1,0 +1,19 @@
+$boder-color:         #e5e5e5;
+
+textarea,
+input[type=text],
+input[type=password],
+input[type=file],
+input[type=number] {
+  box-sizing: border-box;
+  padding: 6px 8px 5px 8px;
+  outline: 0;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  background: #fff;
+  font-size: 11px;
+
+  &:disabled {
+    background-color: $boder-color;
+  }
+}

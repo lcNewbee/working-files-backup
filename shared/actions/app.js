@@ -1,70 +1,69 @@
 import utils from '../utils';
 
 const APP_CONFIG = {
-  fetchInfo: '/goform/getAcInfo'
+  fetchInfo: '/goform/getAcInfo',
 };
 
 export function refreshAll() {
   return {
     type: 'REFRESH_ALL',
-    refreshAt: Date.now()
-  }
+    refreshAt: Date.now(),
+  };
 }
 
 export function changeLoginStatus(data) {
   return {
     type: 'CHANGE_LOGIN_STATUS',
-    data
-  }
+    data,
+  };
 }
 
 export function createModal(data) {
   return {
     type: 'CREATE_MODAL',
-    data
-  }
+    data,
+  };
 }
 
 export function changeModalState(data) {
   return {
     type: 'CHANGE_MODAL_STATE',
-    data
-  }
+    data,
+  };
 }
 
 export function closeModal(data) {
   return (dispatch, getState) => {
-    var handleOk = getState().app.getIn(['modal', 'apply']);
+    const handleOk = getState().app.getIn(['modal', 'apply']);
 
-    if(data.status === 'ok' && typeof handleOk === 'function') {
+    if (data.status === 'ok' && typeof handleOk === 'function') {
       handleOk();
     }
 
     dispatch(changeModalState(data));
-  }
+  };
 }
 
 export function requestFetchAcInfo() {
   return {
-    type: 'REQUEST_FETCH_AC_INFO'
-  }
+    type: 'REQUEST_FETCH_AC_INFO',
+  };
 }
 export function receiveFetchAcInfo(data) {
   return {
     type: 'RECIVECE_FETCH_AC_INFO',
-    data
-  }
+    data,
+  };
 }
 
 export function fetchAcInfo() {
-  return (dispatch, getState) => {
-
+  return (dispatch) => {
     dispatch(requestFetchAcInfo());
 
     utils.fetch(APP_CONFIG.fetchInfo)
-      .then(function(json) {
-        if(json.state && json.state.code === 2000) {
-          dispatch(receiveFetchAcInfo(json.data))
+      .then((json) => {
+        if (json.state && json.state.code === 2000) {
+          dispatch(receiveFetchAcInfo(json.data));
         }
       });
   };
@@ -76,73 +75,72 @@ export function fetchAcInfo() {
  */
 export function requestSave() {
   return {
-    type: 'REQUEST_SAVE'
-  }
+    type: 'REQUEST_SAVE',
+  };
 }
 
 export function receiveSave(state) {
   return {
     type: 'RECEIVE_SAVE',
     savedAt: Date.now(),
-    state
-  }
+    state,
+  };
 }
 
 export function receiveAjaxError(url) {
   return {
     type: 'RECEIVE_AJAX_ERROR',
     errorAt: Date.now(),
-    url
-  }
+    url,
+  };
 }
 
 export function receiveServerError(state) {
   return {
     type: 'RECEIVE_SERVER_ERROR',
     errorAt: Date.now(),
-    state
-  }
+    state,
+  };
 }
 
 /**
  * 全局Ajax fetch action
  */
 export function fetch(url, query) {
-  return (dispatch, getState) => {
-
+  return (dispatch) => {
     return utils.fetch(url, query)
-      .then(function(json) {
-        if(!json.state || (json.state && json.state.code !== 2000)) {
+      .then((json) => {
+        if (!json.state || (json.state && json.state.code !== 2000)) {
           dispatch(receiveServerError(json.state));
         }
 
         return json;
       })
-      .catch(function(error) {
+      .catch(() => {
         dispatch(receiveAjaxError(url));
       });
-  }
+  };
 }
 
 /**
  * 全局Ajax save action
  */
 export function save(url, query) {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     dispatch(requestSave());
 
     return utils.save(url, query)
-      .then(function(json) {
-        if(!json.state || (json.state && json.state.code !== 2000)) {
+      .then((json) => {
+        if (!json.state || (json.state && json.state.code !== 2000)) {
           dispatch(receiveServerError(json.state));
         }
         dispatch(receiveSave());
         return json;
       })
-      .catch(function(error) {
+      .catch(() => {
         dispatch(receiveAjaxError(url));
       });
-  }
+  };
 }
 
 
@@ -152,8 +150,8 @@ export function save(url, query) {
 export function startValidateAll() {
   return {
     type: 'START_VALIDATE_ALL',
-    validateAt: Date.now()
-  }
+    validateAt: Date.now(),
+  };
 }
 export function validateAll(func) {
   return (dispatch, getState) => {
@@ -162,22 +160,22 @@ export function validateAll(func) {
     setTimeout(() => {
       const invalid = getState().app.get('invalid');
 
-      if(typeof func === 'function') {
-        func(invalid)
+      if (typeof func === 'function') {
+        func(invalid);
       }
-    }, 20)
-  }
+    }, 20);
+  };
 }
 
 export function resetVaildateMsg() {
   return {
-    type: 'RESET_VAILDATE_MSG'
-  }
+    type: 'RESET_VAILDATE_MSG',
+  };
 }
 
 export function reportValidError(data) {
   return {
     type: 'REPORT_VALID_ERROR',
-    data
-  }
+    data,
+  };
 }

@@ -1,8 +1,10 @@
-// 支持 ie8
+// 浏览器更好的支持es5, fetch,  promise等标准
+require('console-polyfill');
 require('es5-shim');
 require('es5-shim/es5-sham');
 require('es6-promise');
-// end 支持 ie8
+require('whatwg-fetch');
+// end 支持
 
 const React = require('react');
 const ReactDOM = require('react-dom');
@@ -12,12 +14,12 @@ const Router = ReactRouter.Router;
 const hashHistory = ReactRouter.hashHistory;
 
 // 引入产品配置
-const prodConfig = require('./config/ac5000');
+const prodConfig = require('./config/ac');
 
 if (module.hot) {
   // Enable Webpack hot module replacement for reducers
-  module.hot.accept('./config/ac5000', () => {
-    const nextRootReducer = require('./config/ac5000').reducers;
+  module.hot.accept('./config/ac', () => {
+    const nextRootReducer = require('./config/ac').reducers;
     prodConfig.stores.replaceReducer(nextRootReducer);
   });
 }

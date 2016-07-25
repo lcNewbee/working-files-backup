@@ -1,37 +1,36 @@
-import chai, { expect, assert} from 'chai';
+import { expect, assert } from 'chai';
+import { describe, it } from 'mocha';
 import validator from '../../lib/validator';
 
-const should = chai.should();
-
 describe('utils validator', () => {
-  let myValidator = validator();
+  const myValidator = validator();
 
   describe('core', () => {
-    it('should have the correct Constructor', function () {
+    it('should have the correct Constructor', () => {
       expect(myValidator.constructor).to.equal(validator);
     });
   });
 
   describe('prototype', () => {
     describe('#check()', () => {
-      it('should have the correct length', function() {
+      it('should have the correct length', () => {
         expect(myValidator.check.length).to.be.equal(1);
       });
 
-      it('should throw when str is not string', function () {
-        assert.throws(function () {
+      it('should throw when str is not string', () => {
+        assert.throws(() => {
           myValidator.check(null);
         }, TypeError);
-        assert.throws(function () {
+        assert.throws(() => {
           myValidator.check(undefined);
         }, TypeError);
-        assert.throws(function () {
+        assert.throws(() => {
           myValidator.check({});
         }, TypeError);
       });
 
-      it('should handle correct when option has one rule', function () {
-        var oneRuleValidator = validator({
+      it('should handle correct when option has one rule', () => {
+        const oneRuleValidator = validator({
           rules: 'required',
         });
 
@@ -41,65 +40,66 @@ describe('utils validator', () => {
 
       // rules = 'len:[1, 3]'
       it('should handle correct when option has one rule one param',
-          function () {
-        let oneRuleOneArgValidator = validator({
-          rules: 'remarkTxt:"adc"',
-        });
-        expect(oneRuleOneArgValidator.check('addd'))
+        () => {
+          const oneRuleOneArgValidator = validator({
+            rules: 'remarkTxt:"adc"',
+          }
+      );
+          expect(oneRuleOneArgValidator.check('addd'))
           .to.be.equal("Can't input: a");
-      });
+        });
 
       it('should handle correct when option has one rule with params',
-          function () {
-        let oneRuleArgsValidator = validator({
-          rules: 'len:[1, 3]',
-        });
+          () => {
+            const oneRuleArgsValidator = validator({
+              rules: 'len:[1, 3]',
+            });
 
-        expect(oneRuleArgsValidator.check(''))
-          .to.be.equal("String length range is: 1 - 3 bit");
-      });
+            expect(oneRuleArgsValidator.check(''))
+          .to.be.equal('String length range is: 1 - 3 bit');
+          });
 
       it('should handle correct when option has rules with params',
-          function () {
-        let rulesWithArgsValidator = validator({
-          rules: 'required|remarkTxt:"adc"|len:[1, 3]',
-        });
+          () => {
+            const rulesWithArgsValidator = validator({
+              rules: 'required|remarkTxt:"adc"|len:[1, 3]',
+            });
 
-        expect(rulesWithArgsValidator.check(''))
-          .to.be.equal("This field is required");
+            expect(rulesWithArgsValidator.check(''))
+          .to.be.equal('This field is required');
 
-        expect(rulesWithArgsValidator.check('afggg'))
+            expect(rulesWithArgsValidator.check('afggg'))
           .to.be.equal("Can't input: a");
 
-        expect(rulesWithArgsValidator.check('efggg'))
-          .to.be.equal("String length range is: 1 - 3 bit");
-      });
+            expect(rulesWithArgsValidator.check('efggg'))
+          .to.be.equal('String length range is: 1 - 3 bit');
+          });
     });
 
     describe('#checkClear()', () => {
-      it('should have the correct length', function() {
+      it('should have the correct length', () => {
         expect(myValidator.checkClear.length).to.be.equal(1);
       });
 
-      it('should throw when str is not string', function () {
-        assert.throws(function () {
+      it('should throw when str is not string', () => {
+        assert.throws(() => {
           myValidator.checkClear(null);
         }, TypeError);
-        assert.throws(function () {
+        assert.throws(() => {
           myValidator.checkClear(undefined);
         }, TypeError);
-        assert.throws(function () {
+        assert.throws(() => {
           myValidator.checkClear({});
         }, TypeError);
       });
 
       it('should handle correct when option has rules with params',
-          function () {
-        let rulesWithArgsValidator = validator({
-          rules: 'required|mac|ip',
-        });
+          () => {
+            const rulesWithArgsValidator = validator({
+              rules: 'required|mac|ip',
+            });
 
-        expect(rulesWithArgsValidator.checkClear(''))
+            expect(rulesWithArgsValidator.checkClear(''))
           .to.be.equal(undefined);
 
         // expect(rulesWithArgsValidator.checkClear('00:00:00:00:00:00'))
@@ -109,9 +109,7 @@ describe('utils validator', () => {
         //   .to.be.equal("IP address first input don't be 127, becuse it is loopback address.");
         // expect(rulesWithArgsValidator.checkClear('245'))
         //   .to.be.equal("First input 245 greater than 223.");
-
-      });
+          });
     });
   });
-
 });

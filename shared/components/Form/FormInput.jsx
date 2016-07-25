@@ -1,13 +1,25 @@
-import React, {PropTypes} from 'react';
-import Icon from '../Icon';
+import React, { PropTypes } from 'react';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Select from '../Select';
 import Checkbox from './Checkbox';
 import Password from './Password';
+import Input from './atom/Input';
+import utils from '../../utils';
 
 const propTypes = {
   className: PropTypes.string,
   Component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
-  size: PropTypes.oneOf(['min', 'sm', 'md', 'lg', 'xl'])
+  size: PropTypes.oneOf(['min', 'sm', 'md', 'lg', 'xl']),
+  type: PropTypes.oneOf([undefined, '', 'text', 'password', 'radio', 'checkbox',
+    'date', 'email', 'number', 'color', 'select']),
+  check: PropTypes.func,
+  checkClear: PropTypes.func,
+  checkClearValue: PropTypes.func,
+  onChange: PropTypes.func,
+  label: PropTypes.string,
+  value: PropTypes.string,
+  clearable: PropTypes.bool,
+  searchable: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -19,20 +31,21 @@ class FormInput extends React.Component {
   constructor(props) {
     super(props);
 
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onBlur = this.onBlur.bind(this);
     this.onFoucs = this.onFoucs.bind(this);
     this.handleChange = this.handleChange.bind(this);
-  };
+  }
 
   onBlur(e) {
-    if(this.props.check) {
-      this.props.check(e)
+    if (this.props.check) {
+      this.props.check(e);
     }
   }
 
   onFoucs(e) {
-    if(this.props.checkClear) {
-      this.props.checkClear(e)
+    if (this.props.checkClear) {
+      this.props.checkClear(e);
     }
   }
 
@@ -40,17 +53,16 @@ class FormInput extends React.Component {
     const elem = e.target;
     let val = elem.value;
     let checkedValue = '1';
-    let data = {
-      label: this.props.label
-    }
+    const data = {
+      label: this.props.label,
+    };
 
-    if(elem.type === 'checkbox') {
-      if(elem.value) {
+    if (elem.type === 'checkbox') {
+      if (elem.value) {
         checkedValue = elem.value;
       }
       val = elem.checked ? checkedValue : '0';
     }
-
 
     data.value = val;
 
@@ -60,8 +72,7 @@ class FormInput extends React.Component {
     }
 
     // 数据验证
-    if(typeof this.props.checkClearValue === 'function' && !e.target.disabled) {
-
+    if (typeof this.props.checkClearValue === 'function' && !e.target.disabled) {
       this.props.checkClearValue(val);
     }
   }
@@ -69,44 +80,50 @@ class FormInput extends React.Component {
   render() {
     const {
       Component, type, clearable, className, searchable,
-      size, focus
+      size, value,
     } = this.props;
+    const inpputType = this.props.type;
+    const inputProps = utils.extend({}, this.props);
     let MyComponent = Component;
     let classNames = className;
-    let myRef;
 
     if (size) {
       classNames = `${classNames} input-${size}`;
     }
 
-    if(type === 'select') {
-
-      return <Select
-        {...this.props}
+    if (inpputType === 'select') {
+      return (<Select
+        {...inputProps}
         className={classNames}
-        clearable={ clearable || false }
-        searchable={ searchable || false }
-      />
+        clearable={clearable || false}
+        searchable={searchable || false}
+      />);
     }
 
-    if(type === 'password') {
-      MyComponent = Password;
-
-    } else if(type === 'checkbox') {
-      MyComponent = Checkbox;
+    if (Component === 'input') {
+      if (inpputType === 'password') {
+        MyComponent = Password;
+      } else if (inpputType === 'checkbox') {
+        MyComponent = Checkbox;
+      } else {
+        MyComponent = Input;
+      }
     }
 
-    if(type !== 'checkbox' && type !== 'radio') {
+    if (inpputType !== 'checkbox' && inpputType !== 'radio') {
       classNames = `${classNames} text`;
     }
 
-
-    return <MyComponent
-      {...this.props}
-      className={classNames}
-      onChange={this.handleChange}
-      onBlur={this.onBlur}
-    />;
+    return (
+      <MyComponent
+        {...inputProps}
+        type={type}
+        value={value}
+        className={classNames}
+        onChange={this.handleChange}
+        onBlur={this.onBlur}
+      />
+    );
   }
 }
 

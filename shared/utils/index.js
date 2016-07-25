@@ -11,10 +11,10 @@ utils.extend(require('./lib/sync'));
 // extend utils self module
 utils.extend({
   storage: require('./lib/storage'),
-  filter: require('./lib/filter')
+  filter: require('./lib/filter'),
 });
 
 // exports
-if (typeof module === "object" && typeof module.exports === "object" ) {
+if (typeof module === 'object' && typeof module.exports === 'object') {
   module.exports = utils;
 }

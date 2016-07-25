@@ -128,11 +128,12 @@ export const Logs = React.createClass({
   },
 
   cleanAllLog() {
-    var msg_text = _('Are you sure clean all logs?');
+    var msg_text = _('Are you sure to clean all logs?');
 
     this.props.createModal({
       id: 'Logs',
       role: 'comfirm',
+      title: _('CONFIRM'),
       text: msg_text,
       apply: function() {
         this.props.cleanAllLog();

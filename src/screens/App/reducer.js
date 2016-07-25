@@ -1,28 +1,10 @@
-import {Map, List, fromJS} from 'immutable';
+import { fromJS } from 'immutable';
 
-let guiVersion = '.' + GUI_CONFIG.version.replace(/\./g, '');
-
-function getControlStatus() {
-  var ret = false;
-  var a_165F8BA5ABE1A5DA = '0';
-
-  if(sessionStorage && sessionStorage.getItem('a_165F8BA5ABE1A5DA') !== null) {
-    a_165F8BA5ABE1A5DA = sessionStorage.getItem('a_165F8BA5ABE1A5DA');
-  }
-
-  ret = typeof a_165F8BA5ABE1A5DA === 'string' && a_165F8BA5ABE1A5DA === '0';
-
-  return ret;
-};
-
-function clearLoginSession() {
-  if(typeof sessionStorage.removeItem === 'function') {
-    sessionStorage.removeItem('a_165F8BA5ABE1A5DA')
-  }
-}
+let guiVersion = guiConfig.version.replace(/\./g, '');
 
 const defaultState = fromJS({
   saving: false,
+  guiName: guiConfig.title,
   rateInterval: 15000,
   invalid: {},
   modal: {
@@ -30,15 +12,17 @@ const defaultState = fromJS({
   },
   propertyData: {
     show: false,
-    items: []
+    items: [],
   },
-  noControl: false
+  noControl: false,
 });
 
-function receiveReport(state, data) {
-  var ret;
+guiVersion = `.${guiVersion}`;
 
-  if(!data.checkResult) {
+function receiveReport(state, data) {
+  let ret;
+
+  if (!data.checkResult) {
     ret = state.deleteIn(['invalid', data.name]);
   } else {
     ret = state.setIn(['invalid', data.name], data.checkResult);
@@ -47,15 +31,28 @@ function receiveReport(state, data) {
   return ret;
 }
 
-export default function( state = defaultState, action ) {
+function receiveAcInfo(state, action) {
+  const myData = fromJS(action.data)
+    .set('version', action.data.version + guiVersion);
 
+  return state.set('fetching', false).merge(myData);
+}
+
+export default function (state = defaultState, action) {
   switch (action.type) {
+
+    /**
+     * 全局数据验证
+     */
     case 'START_VALIDATE_ALL':
       return state.set('validateAt', action.validateAt)
-          .set('invalid', Map({}));
+          .set('invalid', fromJS({}));
 
     case 'RESET_VAILDATE_MSG':
-      return state.set('invalid', Map({}));
+      return state.set('invalid', fromJS({}));
+
+    case 'REPORT_VALID_ERROR':
+      return receiveReport(state, action.data);
 
     /**
      * Ajax
@@ -70,47 +67,41 @@ export default function( state = defaultState, action ) {
 
     case 'RECEIVE_AJAX_ERROR':
       return state.set('ajaxError', {
-        url: action.url
+        url: action.url,
       });
 
     case 'RECEIVE_SERVER_ERROR':
-      return state.set('state', action.state)
+      return state.set('state', action.state);
 
-    case 'REPORT_VALID_ERROR':
-      return receiveReport(state, action.data);
-
-    case "CHANGE_LOGIN_STATUS":
+    /**
+     * 登录状态
+     */
+    case 'CHANGE_LOGIN_STATUS':
       sessionStorage.setItem('a_165F8BA5ABE1A5DA', action.data);
       return state;
 
     case 'REFRESH_ALL':
       return state.set('refreshAt', action.refreshAt);
 
+    // 获取 设备基本配置信息
     case 'REQUEST_FETCH_AC_INFO':
       return state.set('fetching', true);
 
     case 'RECIVECE_FETCH_AC_INFO':
-      action.data.version += guiVersion;
-      return state.set('fetching', false).merge(action.data);
+      return receiveAcInfo(state, action);
 
+    // 全局摸态框通知
     case 'CREATE_MODAL':
-      return state.set('modal', Map({
-          status: 'show',
-          role: 'alert',
-          title: _('MESSAGE'),
-        })).mergeIn(['modal'], action.data);
+      return state.set('modal', fromJS({
+        status: 'show',
+        role: 'alert',
+        title: _('MESSAGE'),
+      })).mergeIn(['modal'], action.data);
 
     case 'CHANGE_MODAL_STATE':
       return state.mergeIn(['modal'], action.data);
 
-
-    case 'changePropertyStatus':
-      return state.setIn();
-
-    case 'changePropertyStatus':
-      return state;
-
     default:
   }
   return state;
-};
+}

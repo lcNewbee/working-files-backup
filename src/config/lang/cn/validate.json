@@ -1,6 +1,7 @@
 ﻿{
   "Must be number": "请输入数字",
   "Input range is: %s - %s": "输入范围：%s - %s",
+  "Range: %s - %s": "范围：%s - %s",
   "%s is required": "%s不能为空",
   "String length range is: %s - %s bit": "长度范围：%s - %s 位",
   "String length range is: %s - %s byte": "长度范围：%s - %s 位字节",

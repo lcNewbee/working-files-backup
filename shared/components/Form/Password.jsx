@@ -1,13 +1,18 @@
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Icon from '../Icon';
+import Input from './atom/Input';
 
 const propTypes = {
   className: PropTypes.string,
-  seeAble: PropTypes.bool
+  seeAble: PropTypes.bool,
+  autoFocus: PropTypes.bool,
+  onChange: PropTypes.func,
+  type: PropTypes.oneOf(['text', 'password']),
 };
 
 const defaultProps = {
-  seeAble: true
+  seeAble: true,
 };
 
 class Password extends React.Component {
@@ -15,67 +20,55 @@ class Password extends React.Component {
     super(props);
 
     this.state = {
-      isSee: false
+      isSee: false,
+      isFocus: !!props.autoFocus,
     };
 
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onChange = this.onChange.bind(this);
     this.seePassword = this.seePassword.bind(this);
-  };
-
-  componentDidMount() {
-    let {type, autoFocus} = this.props;
-
-    if(autoFocus) {
-      this.refs.passwordInput.focus();
-    }
-  };
+  }
 
 
   onChange(e) {
-    const val = e.target.value;
-
-    if (typeof this.props.updater === 'function') {
-      this.props.updater(e);
-    }
-
     if (typeof this.props.onChange === 'function') {
       this.props.onChange(e);
     }
-  };
+  }
 
   seePassword() {
     this.setState({
-      isSee: !this.state.isSee
-    })
-    this.refs.passwordInput.focus();
-  };
+      isSee: !this.state.isSee,
+      isFocus: true,
+    });
+  }
 
   render() {
-    let {type, autoFocus} = this.props;
-    const {isSee} = this.state;
+    const { isSee, isFocus } = this.state;
+    let { type } = this.props;
     let iconName = 'eye';
-    let myRef = null;
 
-    if(isSee) {
+    if (isSee) {
       type = 'text';
       iconName = 'eye-slash';
     }
 
     return (
       <div className="input-password">
-        <Icon className="icon" name={iconName} onClick={this.seePassword}/>
+        <Icon className="icon" name={iconName} onClick={this.seePassword} />
 
-        <input {...this.props}
-          ref="passwordInput"
+        <Input
+          {...this.props}
+          isFocus={isFocus}
           type={type}
           onChange={this.onChange}
         />
       </div>
     );
-  };
-};
+  }
+}
 
-Password.propTypes = propTypes
+Password.propTypes = propTypes;
 Password.defaultProps = defaultProps;
 
 export default Password;

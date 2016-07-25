@@ -32,6 +32,7 @@ require('echarts/lib/chart/pie');
 
 // 引入提示框和标题组件
 require('echarts/lib/component/tooltip');
+require('echarts/lib/component/legend');
 require('echarts/lib/component/title');
 
 const flowRateFilter = utils.filter('flowRate');
@@ -232,7 +233,7 @@ export const Status = React.createClass({
       },
 
       title: {
-        text: _('Clients Producer Diagram'),
+        text: _('Terminal Type'),
         subtext: _('Total:') + clientInfo.get('total'),
         x: 'center'
       },
@@ -332,7 +333,7 @@ export const Status = React.createClass({
           trigger: 'axis'
         },
         legend: {
-          data: ['2.4G', '5G', _('Total'),_('upstream'),_('downstream')],
+          data: ['2.4G', '5G', _('Total'), _('upstream'), _('downstream')]
         },
         xAxis: [{
           type: 'category',
@@ -395,13 +396,14 @@ export const Status = React.createClass({
             data: totalClientStatisticsList
           },
           {
-            name:_('upstream'),
+
+            name: _('upstream'),
             type:'line',
             yAxisIndex:1,
             data:clientStatisticsList[2].data
           },
           {
-            name:_('downstream'),
+            name: _('downstream'),
             type:'line',
             yAxisIndex: 1,
             data:clientStatisticsList[3].data
@@ -477,7 +479,7 @@ export const Status = React.createClass({
         text:  _('MAC Address')
       }, {
         id: 'softversion',
-        text:  _('UP/Down Flow'),
+        text:  _('UP/Down'),
         transform(val, item) {
           return flowRateKbFilter.transform(item.get('upstream')) +
               ' / ' + flowRateKbFilter.transform(item.get('downstream'));
@@ -509,7 +511,7 @@ export const Status = React.createClass({
         text:  _('MAC Address')
       }, {
         id: 'up/down flow',
-        text:  _('UP/Down Flow'),
+        text:  _('UP/Down'),
         transform(val, item) {
           return flowRateFilter.transform(item.get('upstream')) + ' / ' +
               flowRateFilter.transform(item.get('downstream'));

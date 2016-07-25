@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import './index.scss';
@@ -17,6 +18,7 @@ const propTypes = {
   cancelButton: PropTypes.bool,
   onClose: PropTypes.func,
   onOk: PropTypes.func,
+  children: PropTypes.any,
 };
 
 const defaultProps = {
@@ -34,6 +36,7 @@ class Modal extends Component {
   constructor(props) {
     super(props);
 
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onClose = this.onClose.bind(this);
     this.onOk = this.onOk.bind(this);
   }

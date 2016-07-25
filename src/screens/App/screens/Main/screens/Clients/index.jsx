@@ -119,7 +119,7 @@ const typeArr = [
   _('WIRELESS'),
   _('WIRED'),
   _('GUEST'),
-  _('LOCKED'),
+  _('BLOCKED/LAST APPEARED'),
 ];
 
 const styles = {
@@ -323,7 +323,7 @@ export const Clients = React.createClass({
 
           <Search
             value={this.props.query.get('text')}
-            updater={this.onChangeSearchText}
+            onChange={this.onChangeSearchText}
             onSearch={this.handleSearch}
             placeholder={_('IP or MAC Address')}
           />

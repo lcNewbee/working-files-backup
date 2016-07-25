@@ -1,5 +1,6 @@
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react';
 import 'font-awesome/css/font-awesome.css';
+import utils from '../../utils';
 import './index.scss';
 
 const propTypes = {
@@ -20,55 +21,49 @@ const defaultProps = {
   Component: 'span',
 };
 
-class Icon extends React.Component {
+function Icon(props) {
+  const {
+    Component,
+    name, size, rotate, flip, spin, fixedWidth, stack, inverse,
+    pulse, className,
+  } = props;
+  const iconProps = utils.objectAssign({}, props);
+  delete iconProps.Component;
+  delete iconProps.spin;
 
-  render() {
-    let {
-      Component,
-      name, size, rotate, flip, spin, fixedWidth, stack, inverse,
-      pulse, className
-    } = this.props;
-    const iconProps = Object.assign({}, this.props);
-    delete iconProps.Component;
+  let classNames = `icon fa fa-${name}`;
 
-    let classNames = `icon fa fa-${name}`;
-
-    if (size) {
-      classNames = `${classNames} fa-${size}`;
-    }
-    if (rotate) {
-      classNames = `${classNames} fa-rotate-${rotate}`;
-    }
-    if (flip) {
-      classNames = `${classNames} fa-flip-${flip}`;
-    }
-    if (fixedWidth) {
-      classNames = `${classNames} fa-fw`;
-    }
-    if (spin) {
-      classNames = `${classNames} fa-spin`;
-    }
-    if (pulse) {
-      classNames = `${classNames} fa-pulse`;
-    }
-
-    if (stack) {
-      classNames = `${classNames} fa-stack-${stack}`;
-    }
-    if (inverse) {
-      classNames = `${classNames} fa-inverse`;
-    }
-
-    if (className) {
-      classNames = `${classNames} ${className}`;
-    }
-
-    if (className) {
-      classNames = className + ' ' + classNames;
-    }
-
-    return <Component {...iconProps} className={classNames} />;
+  if (size) {
+    classNames = `${classNames} fa-${size}`;
   }
+  if (rotate) {
+    classNames = `${classNames} fa-rotate-${rotate}`;
+  }
+  if (flip) {
+    classNames = `${classNames} fa-flip-${flip}`;
+  }
+  if (fixedWidth) {
+    classNames = `${classNames} fa-fw`;
+  }
+  if (spin) {
+    classNames = `${classNames} fa-spin`;
+  }
+  if (pulse) {
+    classNames = `${classNames} fa-pulse`;
+  }
+
+  if (stack) {
+    classNames = `${classNames} fa-stack-${stack}`;
+  }
+  if (inverse) {
+    classNames = `${classNames} fa-inverse`;
+  }
+
+  if (className) {
+    classNames = `${classNames} ${className}`;
+  }
+
+  return <Component {...iconProps} className={classNames} />;
 }
 
 Icon.propTypes = propTypes;

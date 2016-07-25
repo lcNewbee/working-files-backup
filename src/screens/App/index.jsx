@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import * as actions from 'shared/actions/app';
 import reducer from './reducer';
 import Modal from 'shared/components/Modal';
-import './_index.scss';
 
 export const App = React.createClass({
 

@@ -19,121 +19,6 @@ body {
   min-height: 100%;
 }
 
-.navbar {
-  position: fixed;
-  top: 0;
-  z-index: 1000;
-  width: 100%;
-  height: $g-navbar-height;
-  background: $g-main-color;
-  background-color: #fff;
-  box-shadow: 0 2px 8px 0 rgba(50, 50, 50, 0.48);
-
-  > h1 {
-    color: #333;
-    float: left;
-    line-height: $g-navbar-height;
-    font-size: 1.4em;
-    font-weight: 500;
-    font-style: italic;
-    font-family: $g-font-family-base-en;
-  }
-  .version {
-    font-family: $g-font-family-base-en;
-    line-height: $g-navbar-height;
-    margin-left: 12px;
-    font-size: 10px;
-  }
-  .brand {
-    display: block;
-    //width: $sidebar-width;
-    height: $g-navbar-height;
-    float: left;
-    padding: 10px;
-    padding-left: $g-size - 12px;
-    color: #333;
-    background-size: 60px;
-    line-height: 40px;
-    padding-left: 85px;
-
-    .logo {
-      font-size: 16px;
-      display: inline-block;
-      margin-right: 8px;
-      padding-right: 8px;
-    }
-  }
-  .aside {
-    float: right;
-  }
-  .icon-user {
-    padding: 8px 20px;
-    background-color: #333;
-    vertical-align: middle;
-    color: #999;
-    font-size: 28px;
-    transition: background .3s ease;
-  }
-
-  .icon-down {
-    float: right;
-    margin-left: 8px;
-    font-size: 20px;
-    line-height: 40px;
-    transition: transform .3s ease;
-  }
-
-  .as-control {
-    padding: $g-distance $g-distance-md;
-    //border-left: 1px solid #333;
-    color: #333;
-    display: inline-block;
-    vertical-align: middle;
-    font-size: 12px;
-    transition: background .3s ease,color .3s ease;
-        font-style: italic;
-
-    .icon {
-      display: block;
-      width: 18px;
-      height: 18px;
-      margin: 0 auto;
-      margin-bottom: 5px;
-      font-size: 20px;
-      transition: transform .3s ease;
-      font-weight: 300;
-    }
-
-    &:hover {
-      //background-color: $g-main-color-light;
-      color: #0093dd;
-
-      .icon {
-        transform: rotate(360deg)scale(1.1);
-      }
-    }
-
-    &:active {
-      @include opacity(.7);
-    }
-  }
-  .user {
-    display: inline-block;
-    vertical-align: middle;
-    padding: $g-distance $g-distance-md;
-    //border-left: 1px solid $g-main-color-light;
-    color: #333;
-    transition: background .3s ease,color .3s ease;
-
-    &:hover {
-      //background-color: $g-main-color-light;
-
-      .icon-down {
-        transform: rotate(360deg);
-      }
-    }
-  }
-}
 .user-pop-over {
   position: fixed;
   top: $g-navbar-height + 1px;
@@ -259,6 +144,7 @@ body {
   top: 70px;
   right: 0;
   bottom: 0;
+
   .panel-toggle-button {
     background-color: #333;
     text-align: center;
@@ -293,21 +179,6 @@ body {
     padding: 0;
   }
 
-  .app-action-bar {
-    background: #333;
-    color: #fff;
-    overflow: auto;
-    padding: 6px;
-    font-size: 14px;
-
-    .app-action-bar-left {
-      float: left;
-    }
-    .app-action-bar-right {
-      float: right;
-    }
-  }
-
   .app-action-icon-group {
     .icon {
       font-size: 16px;
@@ -316,15 +187,6 @@ body {
       cursor: pointer;
     }
   }
-}
-.page-footer {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  padding: $g-distance;
-  height: 50px;
-  background: #e5e5e5;
 }
 .pop-over {
   position: fixed;
