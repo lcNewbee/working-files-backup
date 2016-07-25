@@ -126,7 +126,7 @@
   "Upgrade need reboot Device, are you sure upgrade device: %s?": "升级需要重启设备，你确定要升级设备：%s?",
   "Are you sure reset device: %s?": "你确定要复位设备：%s?",
   "Are you sure reboot device: %s?": "你确定要重启设备：%s?",
-  "Modify device segment, may make it impossible to control the device, are you sure you want to modify it?": "修改设备网段，可能导致无法控制该设备，您确定要修改吗？",
+  "You might be unable to control the device after modifying its network segment, are you sure you want to modify it?": "修改设备网段，可能导致无法控制该设备，您确定要修改吗？",
   "Name": "名称",
   "Nickname": "别名",
   "Connect Type": "连接方式",

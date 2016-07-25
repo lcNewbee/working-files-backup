@@ -232,7 +232,7 @@ export const Device = React.createClass({
             this.props.createModal({
               title: _('DEVICES'),
               role: 'comfirm',
-              text: _('Modify device segment, may make it impossible to control the device, are you sure you want to modify it?'),
+              text: _('You might be unable to control the device after modifying its network segment, are you sure you want to modify it?'),
               apply: function() {
                 this.props.saveDeviceNetwork();
               }.bind(this)
