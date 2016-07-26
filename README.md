@@ -1,9 +1,12 @@
 # 柯蓝前端开发平台
 简单，跨平台，复用，持续优化的前端开发平台。
 
+## 简介
+本平台支持es6语法
+
 ## 快速上手
 首先确保安装node.js环境.
-接下来安装 npm 依赖
+接下来安装 npm 依赖,在国内推荐安装 npm淘宝镜像
 ``npm install``
 由于我们使用gulp，接下来安装 gulp-cli
 ``npm install gulp-cli -g``
@@ -27,3 +30,11 @@
 
 参考文档：[Docker libcontainer 原则][https://github.com/docker/libcontainer/blob/master/PRINCIPLES.md]
 
+## 修改记录
+
+### 1.0.18(2016-7-8)
+- 初始版本发布
+- 使用 webpack，babel构建代码打包及编译打包环境
+- 测试使用 mocha与chai
+- 开发核心使用的前端库或框架如下：react, redux，immutable, react-router, react-redux，fetch等
+- 并实现了软AC的第一个版本

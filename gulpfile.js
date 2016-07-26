@@ -91,9 +91,9 @@ gulp.task('dev:ac', function (callback) {
 });
 
 /**
- * 更新主版本号
+ * 更新前端开发平台主版本号
  */
-var packageFiles = ['./package.json', '**/app.json'];
+var packageFiles = ['./package.json'];
 
 gulp.task('bump:major', function () {
   gulp.src(packageFiles)

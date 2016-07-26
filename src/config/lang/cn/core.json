@@ -63,15 +63,14 @@
   "Username": "用户名",
   "CONFIRM": "确认",
   "Password Error": "密码错误",
-
   "MESSAGE": "消息",
-
-  "Management": "管理系统",
   "Please Login": "请登录",
   "Login": "登录",
   "Login in": "直接登录",
   "Sign up": "注册",
 
+
+  "Management": "管理系统",
   "Setup Wizard": "设置向导",
 
   "STATISTICS": "热点统计",
@@ -129,6 +128,7 @@
   "Upgrade need reboot Device, are you sure upgrade device: %s?": "升级需要重启设备，你确定要升级设备：%s?",
   "Are you sure reset device: %s?": "你确定要复位设备：%s?",
   "Are you sure reboot device: %s?": "你确定要重启设备：%s?",
+  "You might be unable to control the device after modifying its network segment, are you sure you want to modify it?": "修改设备网段，可能导致无法控制该设备，您确定要修改吗？",
   "Name": "名称",
   "Nickname": "别名",
   "Connect Type": "连接方式",
