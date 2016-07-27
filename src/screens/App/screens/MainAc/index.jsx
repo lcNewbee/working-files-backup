@@ -9,6 +9,7 @@ import Icon from 'shared/components/Icon';
 import Modal from 'shared/components/Modal';
 import Navbar from 'shared/components/Navbar';
 import AsiderBar from './components/AsiderBar';
+import { Link } from 'react-router';
 import * as actions from './actions';
 import * as appActions from 'shared/actions/app';
 
@@ -51,7 +52,7 @@ export default class Main extends Component {
     const { isShow } = this.state;
 
     return (
-      <div className="t-main--ac">
+      <div>
         <Navbar
           title={guiName}
           version={version}
@@ -69,30 +70,62 @@ export default class Main extends Component {
               />
             </div>
           </div>
-          <div className="m-top-menus">
-            <Icon name="save" />
-            <ol className="breadcrumb">
+          <div className="o-menu-bar">
+            <nav className="o-menu-bar__nav">
+              <h3><Icon name="navicon" />网络设置</h3>
+              <ul className="o-menu-bar__nav-menus">
+                <li>
+                  <Link
+                    to="/main/network"
+                    activeClassName="active"
+                  >
+                    网络设置
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/main/group"
+                    activeClassName="active"
+                  >
+                    AP组管理
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/main/system"
+                    activeClassName="active"
+                  >
+                    系统设置
+                  </Link>
+                </li>
+              </ul>
+            </nav>
+
+            <ol className="m-breadcrumb">
               <li>
-                <a href="">一级菜单</a>
+                <a className="m-breadcrumb__link" href="">一级菜单</a>
               </li>
               <li>
-                <a href="">二级菜单</a>
+                <a className="m-breadcrumb__link" href="">二级菜单</a>
               </li>
               <li>
-                <a href="">三级菜单</a>
+                <a className="m-breadcrumb__link" href="">三级菜单</a>
               </li>
             </ol>
           </div>
         </Navbar>
 
-        <div className="main main--open">
-          <Nav className="main-nav" menus={this.props.route.childRoutes} />
-          <div className='main-content'>
-            <div className='main-content-wrap'>
-              {
-                this.props.children
-              }
-            </div>
+        <div className="t-main t-main--ac main--open">
+          <Nav
+            className="t-main__nav o-nav"
+            menus={this.props.route.childRoutes}
+            location={this.props.location}
+            isTree
+          />
+          <div className='t-main__content'>
+            {
+              this.props.children
+            }
           </div>
           <AsiderBar
             data={propertyData}
@@ -101,7 +134,7 @@ export default class Main extends Component {
         </div>
         {
             isShow ? (
-              <div className="pop-over" onClick={this.showUserPopOver}>
+              <div className="m-pop-over" onClick={this.showUserPopOver}>
                 <div
                   className="user-pop-over"
                 >
@@ -123,7 +156,7 @@ export default class Main extends Component {
                     </a>
                   </div>
                 </div>
-                <div className="overlay"></div>
+                <div className="m-pop-over__overlay"></div>
               </div>
             ) : null
           }

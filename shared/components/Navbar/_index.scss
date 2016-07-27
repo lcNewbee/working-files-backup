@@ -7,9 +7,9 @@ $g-navbar-height: 60px;
 .navbar {
   position: fixed;
   top: 0;
-  z-index: 1000;
+  z-index: 1001;
   width: 100%;
-  height: $g-navbar-height;
+  min-height: $g-navbar-height;
   background: $g-main-color;
   background-color: #fff;
   box-shadow: 0 2px 8px 0 rgba(50, 50, 50, 0.48);

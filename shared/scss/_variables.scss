@@ -96,6 +96,7 @@ $g-distance-min:            floor(($g-distance * 0.5)) !default;
 $g-size:                  30px !default;
 $g-size-lg:               ($g-size * 2) !default;
 $g-size-sm:               ceil($g-size * 0.53) !default;
+$g-main-bar-height:         40px;
 
 // App icon size
 $g-icon-size:               55px !default;

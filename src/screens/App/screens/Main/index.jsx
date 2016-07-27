@@ -70,14 +70,12 @@ export default class Main extends Component {
           </div>
         </Navbar>
 
-        <div className="main main--open">
-          <Nav className="main-nav" menus={this.props.route.childRoutes} />
-          <div className='main-content'>
-            <div className='main-content-wrap'>
-              {
-                this.props.children
-              }
-            </div>
+        <div className="t-main main--open">
+          <Nav className="t-main__nav o-nav" menus={this.props.route.childRoutes} />
+          <div className='t-main__content'>
+            {
+              this.props.children
+            }
           </div>
           <PropertyPanel
             data={propertyData}
@@ -88,7 +86,7 @@ export default class Main extends Component {
         </div>
         {
             isShow ? (
-              <div className="pop-over" onClick={this.showUserPopOver}>
+              <div className="m-pop-over" onClick={this.showUserPopOver}>
                 <div
                   className="user-pop-over"
                 >
@@ -110,7 +108,7 @@ export default class Main extends Component {
                     </a>
                   </div>
                 </div>
-                <div className="overlay"></div>
+                <div className="m-pop-over__overlay"></div>
               </div>
             ) : null
           }

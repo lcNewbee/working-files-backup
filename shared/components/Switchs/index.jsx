@@ -1,10 +1,9 @@
-import './index.scss';
 import React, { PropTypes } from 'react';
 import { fromJS } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 const propTypes = {
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   className: PropTypes.string,
   size: PropTypes.oneOf(['sm', 'lg']),
   onChange: PropTypes.func,
@@ -37,14 +36,14 @@ class Switchs extends React.Component {
   render() {
     const { size, className, options, value } = this.props;
 
-    let classNames = 'btn-group';
+    let classNames = 'm-switch';
 
     if (size) {
       classNames = `${classNames} btn-${size}`;
     }
 
     if (className) {
-      classNames = `${className} ${classNames}`;
+      classNames = `${classNames} ${className}`;
     }
 
     return (
@@ -54,7 +53,7 @@ class Switchs extends React.Component {
       >
         {
           options ? fromJS(options).map((item, i) => {
-            let myClassName = 'btn';
+            let myClassName = 'a-switch__item a-btn';
             let val;
             let label;
 
@@ -66,7 +65,7 @@ class Switchs extends React.Component {
               label = item;
             }
 
-            if (val === value) {
+            if (val === `${value}`) {
               myClassName += ' active';
             }
 

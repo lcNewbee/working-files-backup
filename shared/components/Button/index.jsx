@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Icon from '../Icon';
 import utils from '../../utils';
-import './_button.scss';
+import '../../scss/01_atom/_a-button.scss';
 
 const propTypes = {
   icon: PropTypes.string,
@@ -32,18 +32,18 @@ class Button extends React.Component {
     const componentProps = utils.extend({}, this.props);
     const myIcon = icon ? <Icon name={icon} /> : null;
 
-    let classNames = 'btn';
+    let classNames = 'a-btn';
 
     if (size) {
-      classNames = `${classNames} btn-${size}`;
+      classNames = `${classNames} a-btn--${size}`;
     }
 
     if (role) {
-      classNames = `${classNames} btn-${role}`;
+      classNames = `${classNames} a-btn--${role}`;
     }
 
     if (className) {
-      classNames = `${className} ${classNames}`;
+      classNames = `${classNames} ${className}`;
     }
 
     if (Component === 'button' || Component === 'input') {
@@ -51,7 +51,6 @@ class Button extends React.Component {
       delete componentProps.Component;
       delete componentProps.loading;
     }
-
 
     return (
       <Component

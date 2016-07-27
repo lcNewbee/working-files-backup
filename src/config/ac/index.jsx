@@ -32,12 +32,11 @@ document.getElementsByTagName('body')[0].className += ' ' + b28n.getLang();
 // 主APP
 const App = require('../../screens/App');
 
-
 //
 const sLogin = require('../../screens/App/screens/Login');
 const sWizard = require('../../screens/App/screens/Wizard');
 
-const sAcHome = require('../../screens/App/screens/MainAc');
+const sMainAc = require('../../screens/App/screens/MainAc');
 
 // 热点统计
 const sStatus = require('../../screens/App/screens/Main/screens/Stats');
@@ -49,12 +48,75 @@ const routes = [{
   indexRoute: { component: sLogin.Screen },
   childRoutes: [
     {
-      path: '/main',
-      component: sAcHome.Screen,
+      path: '/main/network',
+      component: sMainAc.Screen,
+      indexRoute: { onEnter: (nextState, replace) => replace('/main/network/status') },
       childRoutes: [{
           id: 'status',
           isIndex: true,
-          path: '/main/status',
+          path: '/main/network/status',
+          icon: 'bar-chart',
+          text: _('STATISTICS'),
+          component: sStatus.Screen,
+        }
+      ],
+    }, {
+      path: '/main/group',
+      component: sMainAc.Screen,
+      indexRoute: { onEnter: (nextState, replace) => replace('/main/group/status') },
+      childRoutes: [{
+          id: 'status',
+          isIndex: true,
+          path: '/main/group/status',
+          icon: 'bar-chart',
+          text: _('STATISTICS'),
+          component: sStatus.Screen,
+          indexRoute: { onEnter: (nextState, replace) => replace('/main/group/status/232') },
+          childRoutes: [{
+              id: 'status',
+              path: '/main/group/status/232',
+              text: _('STATISTICS'),
+              component: sStatus.Screen,
+            }, {
+              id: 'status',
+              path: '/main/group/status/23',
+              text: _('STATISTICS'),
+              component: sStatus.Screen,
+            }
+          ]
+        }, {
+          id: 'status',
+          isIndex: true,
+          path: '/main/group/staxcusss',
+          icon: 'bar-chart',
+          text: _('STATISTICS'),
+          component: sStatus.Screen,
+          indexRoute: { onEnter: (nextState, replace) => replace('/main/group/staxcusss/232') },
+          childRoutes: [{
+              id: 'status',
+              isIndex: true,
+              path: '/main/group/staxcusss/232',
+              text: _('STATISTICS'),
+              component: sStatus.Screen,
+            }
+          ]
+        }
+      ],
+    }, {
+      path: '/main/system',
+      component: sMainAc.Screen,
+      indexRoute: { onEnter: (nextState, replace) => replace('/main/system/status') },
+      childRoutes: [{
+          id: 'status',
+          isIndex: true,
+          path: '/main/system/status',
+          icon: 'bar-chart',
+          text: _('STATISTICS'),
+          component: sStatus.Screen,
+        }, {
+          id: 'status',
+          isIndex: true,
+          path: '/main/system/statusss',
           icon: 'bar-chart',
           text: _('STATISTICS'),
           component: sStatus.Screen,
@@ -65,6 +127,9 @@ const routes = [{
       component: sWizard.Screen,
     },
   ],
+},{
+  path: '/main/status',
+  indexRoute: { onEnter: (nextState, replace) => replace('/main/network/status') },
 }, {
   path: '*',
   component: NotFound,

@@ -2,8 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
-import './index.scss';
-
 const propTypes = {
   isShow: PropTypes.bool,
   title: PropTypes.string,
@@ -63,12 +61,12 @@ class Modal extends Component {
 
     // role is shown in classNames
     if (role) {
-      classNames = `modal-${role}`;
+      classNames = `o-modal__${role}`;
     }
 
     // ReactCSSTransitionGroup need key value
     if (size) {
-      keyVal += ` modal-${role}`;
+      keyVal += ` o-modal__${size}`;
     }
 
     // ReactCSSTransitionGroup need key value
@@ -98,15 +96,15 @@ class Modal extends Component {
           isShow ? (
             <div
               key={keyVal}
-              className="modal"
+              className="o-modal"
               role={role}
             >
-              <div className="modal-backdrop"></div>
+              <div className="o-modal__backdrop"></div>
               <div className={classNames}>
-                <div className="modal-content">
+                <div className="o-modal__content">
                   {
                     title ? (
-                      <div className="modal-header">
+                      <div className="o-modal__header">
                         {
                           hasCloseBtn ? (
                             <button
@@ -118,24 +116,24 @@ class Modal extends Component {
                             </button>
                           ) : null
                         }
-                        <h4 className="modal-title" id="myModalLabel">
+                        <h4 className="o-modal__title" id="myModalLabel">
                           {title}
                         </h4>
                       </div>
                     ) : null
                   }
 
-                  <div className="modal-body">
+                  <div className="o-modal__body">
                     {this.props.children}
                   </div>
                   {
                     role !== 'message' ? (
-                      <div className="modal-footer">
+                      <div className="o-modal__footer">
                         {
                           cancelButton ? (
                             <button
                               type="button"
-                              className="btn btn-default"
+                              className="a-btn a-btn-default"
                               onClick={this.onClose}
                             >
                               {cancelText}
@@ -147,7 +145,7 @@ class Modal extends Component {
                           okButton ? (
                             <button
                               type="button"
-                              className="btn btn-primary"
+                              className="a-btn a-btn--primary"
                               onClick={this.onOk}
                             >
                               {okText}

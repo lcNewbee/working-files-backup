@@ -14,9 +14,9 @@ body {
 }
 
 .app-wrap {
-  padding-top: $top-distance;
   min-width: $mw-lg;
   min-height: 100%;
+  padding-top: $top-distance;
 }
 
 .user-pop-over {
@@ -25,8 +25,8 @@ body {
   right: 0;
   z-index: 1070;
   min-width: 340px;
-  background: $g-main-color;
   color: #f5f5f5;
+  background: $g-main-color;
 
   a {
     padding: 8px 12px;
@@ -34,17 +34,17 @@ body {
     transition: background-color .3s;
 
     &:hover {
-      background: $main-blue;
       color: #f5f5f5;
+      background: $main-blue;
     }
   }
   .user-info {
     .icon-user {
-      margin: 10px;
       padding: 5px 30px 0 30px;
-      background-color: #e5e5e5;
-      color: #000;
+      margin: 10px;
       font-size: 86px;
+      color: #000;
+      background-color: #e5e5e5;
     }
   }
 
@@ -65,98 +65,40 @@ body {
     }
   }
 }
-.main {
-  overflow: auto;
+
+.t-main {
   padding: $g-distance;
   padding-left: 0;
-  padding-top: $top-distance;
+  overflow: auto;
+
+  &.t-main--ac {
+    .t-main__nav {
+      top: $g-navbar-height + $g-main-bar-height;
+    }
+    .t-main__content-wrap {
+      top: $g-navbar-height + $g-main-bar-height;
+    }
+  }
 }
-.main-nav {
+.t-main__nav {
   position: fixed;
   top: $g-navbar-height;
   bottom: 0;
   z-index: 1000;
   width: $sidebar-width;
   background: #333;
-
-  ul {
-    padding: 0;
-    //border-top: 1px solid #222;
-    border-right: none;
-    background: #333;
-
-    li {
-      list-style: none;
-      a {
-        display: block;
-        padding: ($g-distance-md + 4px) 0;
-        padding-left: $g-size;
-        //border-bottom: 1px solid #666;
-        letter-spacing: 1px;
-        color: $nav-text-color;
-        font-size: 13px;
-        line-height: 20px;
-        transition: background-color .2s ease-in-out, color .2s ease;
-
-        &:hover {
-          color: #fff;
-        }
-
-        &.active {
-          background-color: #444;
-          color: #fff;
-
-          .icon {
-            color: $main-blue;
-          }
-        }
-
-        .icon {
-          display: inline-block;
-          margin-right: 10px;
-          width: 20px;
-          vertical-align: middle;
-          font-size: 20px;
-        }
-      }
-    }
-  }
 }
-.main-content {
-  .main-content-wrap {
-    position: absolute;
-    top: $top-distance;
-    right: 0;
-    bottom: $g-distance;
-    left: $sidebar-width + 10px;
-    padding: 0 $g-distance;
-    min-width: 1024px - 200px;
-
-    h2 {
-      margin-bottom: 20px;
-    }
-  }
-}
-.pop-over {
-  position: fixed;
-  top: 0;
+.t-main__content {
+  position: absolute;
+  top: $top-distance;
   right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 1040;
-  overflow: hidden;
+  bottom: $g-distance;
+  left: $sidebar-width + 10px;
+  min-width: 1024px - 200px;
+  padding: 0 $g-distance;
 
-  .overlay {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    overflow: hidden;
-    -webkit-overflow-scrolling: touch;
-    outline: 0;
-    background-color: #000;
-
-    @include opacity(0);
+  h2,
+  .t-main__content-title {
+    margin-bottom: 20px;
   }
 }

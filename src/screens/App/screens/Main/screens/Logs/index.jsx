@@ -10,6 +10,7 @@ import {Table} from 'shared/components/Table';
 import Button from 'shared/components/Button';
 import {Search} from 'shared/components/Form';
 import Select from 'shared/components/Select';
+import Switchs from 'shared/components/Switchs';
 
 // custom
 import * as actions from './actions';
@@ -147,12 +148,10 @@ export const Logs = React.createClass({
     });
   },
 
-  onChangeType(i) {
-    return function(e) {
-      this.handleChangeQuery({
-        type: i
-      }, true);
-    }.bind(this)
+  onChangeType(data) {
+    this.handleChangeQuery({
+      type: data.value
+    }, true);
   },
 
   onChangeTableSize(option) {
@@ -169,6 +168,7 @@ export const Logs = React.createClass({
   },
 
   onPageChange(i) {
+
     this.handleChangeQuery({
       page: i
     }, true);
@@ -190,29 +190,13 @@ export const Logs = React.createClass({
       <div className="page-device">
         <h2>{msg.TITLE}</h2>
         <div className="clearfix">
+          <Switchs
+            className="fl"
+            options={typeArr}
+            value={this.props.query.get('type')}
+            onChange={this.onChangeType}
+          />
 
-
-          <div className="btn-group fl">
-            {
-            typeArr.map(function(val, i){
-              var classNameVal = 'btn';
-
-              if(this.props.query.get('type') === i) {
-                classNameVal += ' active';
-              }
-
-              return (
-                <button
-                  className={classNameVal}
-                  key={'btnGroup' + i}
-                  onClick={onChangeType(i)}
-                >
-                  {val}
-                </button>
-              )
-            }.bind(this))
-          }
-          </div>
           <Button
             className="fl"
             text={_("Clean All Logs")}
