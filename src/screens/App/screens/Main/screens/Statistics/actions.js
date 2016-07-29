@@ -1,4 +1,5 @@
 import utils from 'shared/utils';
+import urls from 'shared/config/urls';
 import * as appActions from 'shared/actions/app'
 
 
@@ -8,7 +9,7 @@ export function createReport() {
 
     dispatch(reqeustFetchReportInfo());
 
-    dispatch(appActions.fetch('/goform/createReport', query))
+    dispatch(appActions.fetch(urls.createReport, query))
       .then((json) => {
         if(json.state && json.state.code === 2000) {
           console.log('json ok');
@@ -22,7 +23,7 @@ export function emailReport(num){
   return (dispatch,getState) => {
     const id = {id:num};
 
-    dispatch(appActions.fetch('/goform/emailReport',id))
+    dispatch(appActions.fetch(urls.emailReport,id))
             .then((json) => {
               if(json.state && json.state.code === 2000){
                 console.log('email report ok')
@@ -35,7 +36,7 @@ export function downloadReport(num){
   return (dispatch,getState) => {
     const id = {id:num};
 
-    dispatch(appActions.fetch('/goform/getReport',id))
+    dispatch(appActions.fetch(urls.fetchReport,id))
             .then((json) => {
               if(json.state && json.state.code === 2000){
                 console.log("download report")
@@ -49,7 +50,7 @@ export function deleteReport(num){
 
     const id = {id:num};
 
-    dispatch(appActions.fetch('/goform/deleteReport', id))
+    dispatch(appActions.fetch(urls.deleteReport, id))
       .then((json) => {
           if(json.state && json.state.code === 2000) {
           console.log('json ok');
@@ -81,12 +82,12 @@ export function changeTimeRangeInfo(timeType) {
 
 
 export function fetchReportInfo() {
-  
+
   return (dispatch, getState) => {
 
     dispatch(reqeustFetchReportInfo());
 
-    dispatch(appActions.fetch('/goform/getReportList'))
+    dispatch(appActions.fetch(urls.fetchReportList))
       .then((json) => {
         if(json.state && json.state.code === 2000) {
           console.log("fetch")

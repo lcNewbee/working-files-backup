@@ -49,6 +49,13 @@
       text-align: left;
       padding-left: 3px;
     }
+
+    &.form-group--error {
+      .text {
+        border: none;
+        border-left: 4px solid #f0f0ef;
+      }
+    }
   }
   .a-btn {
     margin-top: 16px;
@@ -64,7 +71,6 @@
     .text {
       padding: 6px 12px;
       height: 50px;
-      border: 1px solid #ccc;
       background-color: #f0f0ef;
       background-image: none;
       color: #555;
@@ -79,6 +85,7 @@
       border-radius: 0;
 
       &:focus {
+        border: none;
         border-left: 4px solid #0093dd;
       }
     }

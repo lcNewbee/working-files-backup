@@ -89,7 +89,7 @@ export const Device = React.createClass({
   },
   //从后台抓取数据
   handleSearch() {
-    this.props.fetchDevices('/goform/devices');
+    this.props.fetchDevices();
   },
 
   /**

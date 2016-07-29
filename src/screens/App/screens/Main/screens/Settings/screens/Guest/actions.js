@@ -1,10 +1,6 @@
 import utils from 'shared/utils';
 import * as appActions from 'shared/actions/app';
-
-const urls = {
-  fetch: "/goform/getGuestInfo",
-  save: "/goform/setGuestInfo",
-}
+import urls from 'shared/config/urls';
 
 // Fetch
 export function reqeustFetchGuest() {
@@ -23,7 +19,7 @@ export function fetchGuestSettings() {
   return dispatch => {
     dispatch(reqeustFetchGuest());
 
-    dispatch(appActions.fetch(urls.fetch))
+    dispatch(appActions.fetch(urls.fetchGuestInfo))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(receiveGuest(json.data));
@@ -62,7 +58,7 @@ export function setGuest() {
   return (dispatch, getState) => {
     const data = getState().guest.getIn(['data', 'curr']);
 
-    dispatch(appActions.save(urls.save, data))
+    dispatch(appActions.save(urls.saveGuest, data))
       .then(function(json){
         if (json.state && json.state.code === 2000) {
           dispatch(fetchGuestSettings());

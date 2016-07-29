@@ -12,6 +12,8 @@ const propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   role: PropTypes.oneOf(['block']),
   style: PropTypes.object,
+  isFocus: PropTypes.bool,
+  canSee: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -48,7 +50,8 @@ class Password extends React.Component {
 
   render() {
     const { isSee, isFocus } = this.state;
-    const { role, style } = this.props;
+    const { role, style, seeAble } = this.props;
+    let myIsFocus = isFocus || this.props.isFocus;
     let passwordClassName = 'a-password';
     let iconClassName = 'a-password__icon';
     let { type } = this.props;
@@ -64,6 +67,9 @@ class Password extends React.Component {
     if (this.props.value === '') {
       showIcon = false;
     }
+
+    showIcon = seeAble && showIcon;
+    console.log(seeAble)
 
     if (role) {
       passwordClassName = `${passwordClassName} a-password--${role}`;
@@ -86,7 +92,7 @@ class Password extends React.Component {
 
         <Input
           {...this.props}
-          isFocus={isFocus}
+          isFocus={myIsFocus}
           type={type}
           onChange={this.onChange}
         />

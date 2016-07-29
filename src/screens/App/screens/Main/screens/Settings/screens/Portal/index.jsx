@@ -1,5 +1,6 @@
 import React, {PropTypes} from 'react';
 import utils from 'shared/utils';
+import urls from 'shared/config/urls';
 import { bindActionCreators } from 'redux';
 import {fromJS, Map, List} from 'immutable';
 import { connect } from 'react-redux';
@@ -171,7 +172,7 @@ export const Portal = React.createClass({
         data.append('suffix', extension);
         that.imageUploading(i);
 
-        fetch('/goform/setPortalImage', {
+        fetch(urls.uploadPortalImage, {
           method: 'POST',
           body: data
         })
@@ -330,7 +331,7 @@ export const Portal = React.createClass({
         <iframe id="imagesIf" name="imagesIf" className="none"></iframe>
         <form
           className="form-group"
-          action="/goform/setPortalImage"
+          action={urls.uploadPortalImage}
           id="imageForm1"
           method="POST"
           target="imagesIf"
@@ -365,7 +366,7 @@ export const Portal = React.createClass({
 
         <form
           className="form-group"
-          action="/goform/setPortalImage"
+          action={urls.uploadPortalImage}
           id="imageForm2"
           method="POST"
           target="imagesIf"
@@ -400,7 +401,7 @@ export const Portal = React.createClass({
 
         <form
           className="form-group"
-          action="/goform/setPortalImage"
+          action={urls.uploadPortalImage}
           id="imageForm3"
           method="POST"
           target="imagesIf"

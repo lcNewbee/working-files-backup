@@ -6,6 +6,7 @@ import {Input, FormGroup} from 'shared/components/Form';
 import {fromJS, Map, List} from 'immutable';
 import validator from 'shared/utils/lib/validator';
 import utils from 'shared/utils';
+import urls from 'shared/config/urls';
 
 const msg = {
   password:  _('Password'),
@@ -100,7 +101,7 @@ export const SignUp = React.createClass({
   },
 
   signUp() {
-    utils.save('/goform/regist', {
+    utils.save(urls.regist, {
       password: this.state.password,
       confirmpasswd: this.state.confirmpasswd
     })

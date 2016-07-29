@@ -1,11 +1,6 @@
 import utils from 'shared/utils';
 import * as appActions from 'shared/actions/app';
-
-const urls = {
-  fetch: "/goform/getPortal",
-  save: "/goform/setPortalInfo",
-  upload: "/goform/setPortalImage",
-}
+import urls from 'shared/config/urls';
 
 // Fetch
 export function reqeustFetchPortal() {
@@ -25,7 +20,7 @@ export function fetchPortalSettings() {
   return dispatch => {
     dispatch(reqeustFetchPortal());
 
-    dispatch(appActions.fetch(urls.fetch))
+    dispatch(appActions.fetch(urls.fetchPortal))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(receivePortal(json.data));
@@ -64,7 +59,7 @@ export function setPortal() {
   return (dispatch, getState) => {
     const data = getState().portal.getIn(['data', 'curr']).delete('image');
 
-    dispatch(appActions.save(urls.save, data))
+    dispatch(appActions.save(urls.savePortal, data))
       .then(function(json){
         if (json.state && json.state.code === 2000) {
           dispatch(fetchPortalSettings());

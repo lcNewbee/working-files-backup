@@ -36,7 +36,7 @@ export function setWizard() {
 
     dispatch(reqeustLogin());
 
-    utils.save('/goform/login', data)
+    utils.save(urls.login, data)
       .then(function(json) {
         let result = '未知错误';
 

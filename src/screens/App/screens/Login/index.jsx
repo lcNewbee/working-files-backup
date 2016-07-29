@@ -145,6 +145,7 @@ export const Login = React.createClass({
               type="password"
               name="password"
               role="block"
+              seeAble={false}
               required
               maxLength="21"
               data-label={_('Password')}

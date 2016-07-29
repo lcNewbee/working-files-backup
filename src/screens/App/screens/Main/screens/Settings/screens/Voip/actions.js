@@ -1,10 +1,6 @@
 import utils from 'shared/utils';
 import * as appActions from 'shared/actions/app';
-
-const urls = {
-  fetch: "/goform/getVoipInfo",
-  save: "/goform/setVoipInfo",
-}
+import urls from 'shared/config/urls';
 
 // Fetch
 export function reqeustFetchVoip() {
@@ -23,7 +19,7 @@ export function fetchVoipSettings() {
   return dispatch => {
     dispatch(reqeustFetchVoip());
 
-    dispatch(appActions.fetch(urls.fetch))
+    dispatch(appActions.fetch(urls.fetchVoip))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(receiveVoip(json.data));
@@ -62,7 +58,7 @@ export function setVoip() {
   return (dispatch, getState) => {
     const data = getState().voip.getIn(['data', 'curr']);
 
-    dispatch(appActions.save(urls.save, data))
+    dispatch(appActions.save(urls.saveVoip, data))
       .then(function(json){
         if (json.state && json.state.code === 2000) {
           dispatch(fetchVoipSettings());
