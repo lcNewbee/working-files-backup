@@ -38,7 +38,7 @@ $main-blue: #0093dd;
       position: relative;
       float: left;
       width: 33%;
-      color: #b2b2b2;
+      color: #ccc;
       text-align: center;
       font-size: 1.4em;
       padding-top: 50px;
@@ -120,7 +120,7 @@ $main-blue: #0093dd;
     padding: 20px 0;
     text-align: right;
 
-    .a-btn-info {
+    .a-btn--info {
       background-color: $main-blue;
       background-image: none;
       color: #fff;

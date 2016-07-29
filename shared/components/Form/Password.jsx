@@ -11,6 +11,7 @@ const propTypes = {
   type: PropTypes.oneOf(['text', 'password']),
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   role: PropTypes.oneOf(['block']),
+  style: PropTypes.object,
 };
 
 const defaultProps = {
@@ -47,7 +48,7 @@ class Password extends React.Component {
 
   render() {
     const { isSee, isFocus } = this.state;
-    const { role } = this.props;
+    const { role, style } = this.props;
     let passwordClassName = 'a-password';
     let iconClassName = 'a-password__icon';
     let { type } = this.props;
@@ -69,7 +70,10 @@ class Password extends React.Component {
     }
 
     return (
-      <div className={passwordClassName}>
+      <div
+        className={passwordClassName}
+        style={style}
+      >
         {
           showIcon ? (
             <Icon

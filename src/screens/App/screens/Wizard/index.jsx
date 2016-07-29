@@ -77,6 +77,9 @@ const formGroups = Map({
       placeholder: msg.password,
       autoFocus: true,
       required: true,
+      style: {
+        display: 'block'
+      }
     },
     validator: validator({
       label: msg.password,
@@ -91,6 +94,9 @@ const formGroups = Map({
       maxLength: 32,
       required: true,
       placeholder: msg.confirmpasswd,
+      style: {
+        display: 'block'
+      }
     },
     validator: validator({
       label: msg.confirmpasswd,
@@ -400,7 +406,6 @@ export const SignUp = React.createClass({
                 />
               ) : null
             }
-
 
             <Button
               role="info"
