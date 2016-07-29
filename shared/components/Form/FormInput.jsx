@@ -85,7 +85,7 @@ class FormInput extends React.Component {
     const inpputType = this.props.type;
     const inputProps = utils.extend({}, this.props);
     let MyComponent = Component;
-    let classNames = className;
+    let classNames = className || '';
 
     if (size) {
       classNames = `${classNames} input-${size}`;

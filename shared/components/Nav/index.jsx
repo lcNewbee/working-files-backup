@@ -8,6 +8,7 @@ const propTypes = {
   menus: PropTypes.array.isRequired,
   className: PropTypes.string,
   location: PropTypes.object,
+  role: PropTypes.oneOf(['nav', 'tab']),
 
   // 是否渲染多级菜单
   isTree: PropTypes.bool,
@@ -18,18 +19,34 @@ const defaultProps = {
   isTree: false,
 };
 
-function NavList(props) {
-  const { item, icon } = props;
+/**
+ * DSAD
+ * DSD
+ * @param {any} props
+ * @returns
+ */
+function NavLink(props) {
+  const { item, className } = props;
+  const { icon, path, text } = item.toJS();
 
-  return (<li>
-    <Link to={item.get('path')} className="o-nav__link" activeClassName="active">
+  return (
+    <Link
+      to={path}
+      className={className}
+      activeClassName="active"
+    >
       {
         icon ? <Icon name={icon} /> : null
       }
-      {item.get('text')}
+      {text}
     </Link>
-  </li>);
+  );
 }
+NavLink.propTypes = {
+  item: PropTypes.object.isRequired,
+  className: PropTypes.string,
+};
+
 
 class Nav extends Component {
   constructor(props) {
@@ -42,16 +59,24 @@ class Nav extends Component {
 
   }
   render() {
-    const { className, menus, location, isTree } = this.props;
+    const { className, menus, location, isTree, role } = this.props;
+    let navClassName = className;
+    let linkClassName = 'm-menu__link';
+
+    if (role === 'nav') {
+      linkClassName = `${linkClassName} o-nav__link`;
+      navClassName = `${navClassName} o-nav`;
+    } else if (role === 'nav') {
+      navClassName = `${navClassName} o-tab__nav`;
+    }
     return (
-      <nav className={className}>
-        <ul className="o-nav__menus">
+      <nav className={navClassName}>
+        <ul className="m-menu m-menu--open">
           {
             fromJS(menus).map((item, i) => {
-              const icon = item.get('icon');
               const myKey = `nav${i}`;
               const hasSubmenus = isTree && item.get('childRoutes');
-              let listClassName = 'o-nav__list';
+              let subMenuClassName = 'o-nav__sub-menus m-menu';
               let isActive = false;
 
               if (location && location.pathname) {
@@ -60,28 +85,29 @@ class Nav extends Component {
               }
 
               if (isActive) {
-                listClassName = `${listClassName} active`;
+                subMenuClassName = `${subMenuClassName} m-menu--open`;
               }
 
               return (
-                <li key={myKey} className={listClassName}>
-                  <Link to={item.get('path')} className="o-nav__link" activeClassName="active">
-                    {
-                      icon ? <Icon name={icon} /> : null
-                    }
-                    {item.get('text')}
-                  </Link>
+                <li key={myKey}>
+                  <NavLink
+                    item={item}
+                    className={linkClassName}
+                  />
                   {
                     hasSubmenus ? (
-                      <ul className="o-nav__sub-menus">
+                      <ul className={subMenuClassName}>
                         {
                           item.get('childRoutes').map((subItem, n) => {
                             const thisKey = `${myKey}.${n}`;
-                            return (<NavList
-                              key={thisKey}
-                              item={subItem}
-                              icon={subItem.get('icon')}
-                            />);
+                            return (
+                              <li key={thisKey}>
+                                <NavLink
+                                  item={subItem}
+                                  className={linkClassName}
+                                />
+                              </li>
+                            );
                           })
                         }
                       </ul>

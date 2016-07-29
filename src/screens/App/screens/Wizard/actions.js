@@ -1,4 +1,5 @@
 import utils from 'shared/utils';
+import urls from 'shared/config/urls';
 
 export function reqeustLogin() {
   return {
@@ -29,10 +30,10 @@ export function updateData(data) {
 }
 
 export function setWizard() {
-  
+
   return (dispatch, getState) => {
     const data = getState().login.get('data');
-    
+
     dispatch(reqeustLogin());
 
     utils.save('/goform/login', data)

@@ -7,6 +7,10 @@
   z-index: 1040;
   overflow: hidden;
 
+  .m-pop-over__content {
+    position: absolute;
+  }
+
   .m-pop-over__overlay {
     position: absolute;
     top: 0;

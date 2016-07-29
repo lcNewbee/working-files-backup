@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { fromJS } from 'immutable';
 import utils from 'shared/utils';
 import { bindActionCreators } from 'redux'
 import PureRenderMixin from 'react-addons-pure-render-mixin';
@@ -12,6 +13,7 @@ import AsiderBar from './components/AsiderBar';
 import { Link } from 'react-router';
 import * as actions from './actions';
 import * as appActions from 'shared/actions/app';
+import reducer from './reducer';
 
 export default class Main extends Component {
   constructor(props) {
@@ -23,12 +25,14 @@ export default class Main extends Component {
     this.showUserPopOver = this.showUserPopOver.bind(this);
     this.onRefresh = this.onRefresh.bind(this);
     this.onLogout = this.onLogout.bind(this);
+    this.onToggleTopMenu = this.onToggleTopMenu.bind(this);
 
     document.onkeydown = function(e) {
       if(e.keyCode == 116){
         this.onRefresh(e);
       }
     }.bind(this);
+
   };
 
   showUserPopOver() {
@@ -45,12 +49,20 @@ export default class Main extends Component {
     this.props.changeLoginStatus('0');
     window.location.hash = "#";
   }
-
+  onToggleTopMenu() {
+    this.props.onToggleTopMenu()
+  }
   render() {
-
     const { saving, version, propertyData, guiName } = this.props.app.toJS();
+    const { topMenu } = this.props.mainAc.toJS();
     const { isShow } = this.state;
+    let curTopNavText = _('NETWORK');
 
+    if(this.props.location.pathname.indexOf('/main/group') === 0) {
+      curTopNavText = _('AP GROUP');
+    } else if (this.props.location.pathname.indexOf('/main/system') === 0) {
+      curTopNavText = _('SYSTEM');
+    }
     return (
       <div>
         <Navbar
@@ -71,34 +83,12 @@ export default class Main extends Component {
             </div>
           </div>
           <div className="o-menu-bar">
-            <nav className="o-menu-bar__nav">
-              <h3><Icon name="navicon" />网络设置</h3>
-              <ul className="o-menu-bar__nav-menus">
-                <li>
-                  <Link
-                    to="/main/network"
-                    activeClassName="active"
-                  >
-                    网络设置
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/main/group"
-                    activeClassName="active"
-                  >
-                    AP组管理
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/main/system"
-                    activeClassName="active"
-                  >
-                    系统设置
-                  </Link>
-                </li>
-              </ul>
+            <nav
+              onClick={this.onToggleTopMenu}
+              onMouseOver={this.onToggleTopMenu}
+              className="o-menu-bar__nav"
+            >
+              <h3><Icon name="navicon" />{curTopNavText}</h3>
             </nav>
 
             <ol className="m-breadcrumb">
@@ -133,47 +123,72 @@ export default class Main extends Component {
           />
         </div>
         {
-            isShow ? (
-              <div className="m-pop-over" onClick={this.showUserPopOver}>
-                <div
-                  className="user-pop-over"
-                >
-                  <div className="user-info">
-                    <Icon name="user-secret" className="icon-user" />
-                  </div>
-                  <div className="user-controls">
-                    <a className="change-pas" href="#/main/settings/admin">
-                      <Icon
-                        name="key"
-                      />
-                      {_('CHANGE PASSWORD')}
-                    </a>
-                    <a className="sign-out" href="#" onClick={this.onLogout}>
-                      <Icon
-                        name="sign-out"
-                      />
-                      {_('SIGN OUT')}
-                    </a>
-                  </div>
+          isShow ? (
+            <div className="m-pop-over" onClick={this.showUserPopOver}>
+              <div className="m-pop-over__content m-user-overview">
+                <div className="m-user-overview__info">
+                  <Icon name="user-secret" className="icon-user" />
                 </div>
-                <div className="m-pop-over__overlay"></div>
+                <div className="m-user-overview__controls">
+                  <a className="change-pas" href="#/main/settings/admin">
+                    <Icon
+                      name="key"
+                    />
+                    {_('CHANGE PASSWORD')}
+                  </a>
+                  <a className="sign-out" href="#" onClick={this.onLogout}>
+                    <Icon
+                      name="sign-out"
+                    />
+                    {_('SIGN OUT')}
+                  </a>
+                </div>
               </div>
-            ) : null
-          }
+              <div className="m-pop-over__overlay"></div>
+            </div>
+          ) : null
+        }
 
-          {
-            saving ? <div className="body-backdrop"></div> : null
-          }
+        {
+          topMenu ? (
+            <div className="m-pop-over" onClick={this.onToggleTopMenu}>
+              <div className="m-pop-over__overlay"></div>
+              <ul
+                className="m-pop-over__content m-menu m-menu--open"
+                style={{top: '93px', left: '20px', width: '140px'}}
+              >
+                {
+                  fromJS(this.props.routes[0].childRoutes).map((item) => {
+                    const keyVal = `${item.get('path')}`;
+
+                    return item.get('text') ? (<li key={keyVal}>
+                      <Link
+                        to={item.get('path')}
+                        className="m-menu__link"
+                        activeClassName="active"
+                      >
+                        {item.get('text')}
+                      </Link>
+                    </li>) : null;
+                  })
+                }
+              </ul>
+            </div>
+          ) : null
+        }
+
+        {
+          saving ? <div className="body-backdrop"></div> : null
+        }
       </div>
     )
   }
 }
 
 function mapStateToProps(state) {
-  var myState = state.app;
-
   return {
-    app: myState
+    app: state.app,
+    mainAc: state.mainAc,
   };
 }
 
@@ -188,3 +203,5 @@ export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps
 )(Main);
+
+export const mainAc = reducer;

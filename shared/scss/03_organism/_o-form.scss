@@ -3,13 +3,20 @@ $boder-color:         #e5e5e5;
 .form-group {
   margin-bottom: 12px;
 
-  &.form-group-save {
+  &.form-group--save {
     padding-top: 12px;
     border-top: 1px solid $boder-color;
   }
 
+  &.form-group--error {
+    .form-control {
+      .text {
+        border: 1px solid $g-brand-danger;
+      }
+    }
+  }
+
   > label {
-    display: inline-block;
     float: left;
     margin-right: 15px;
     min-width: 150px;
@@ -17,7 +24,7 @@ $boder-color:         #e5e5e5;
     text-align: right;
     line-height: 29px;
 
-    .btn {
+    .a-btn {
       line-height: 14px;
     }
   }
@@ -39,6 +46,7 @@ $boder-color:         #e5e5e5;
   .form-control {
     margin-left: 165px;
     color: #666;
+    line-height: 29px;
   }
 
   .help {
@@ -86,103 +94,5 @@ $boder-color:         #e5e5e5;
 
   input[type=text] {
     padding-left: 25px;
-  }
-}
-
-.checkbox {
-  display: inline-block;
-  overflow: auto;
-  vertical-align: middle;
-
-  input[type=checkbox] {
-    display: none;
-
-    & + label {
-      line-height: 16px;
-      display: inline-block;
-
-      &::before {
-        margin: 0 5px 0 0;
-        width: 14px;
-        height: 14px;
-        border: 1px solid #ccc;
-        content: "\2713";
-        color: transparent;
-        transition: color ease .3s,
-          background-color ease .3s,
-          border ease .3s ;
-        text-align: center;
-        font-size: 12px;
-        line-height: 12px;
-        border-radius: 2px;
-        display: inline-block;
-      }
-    }
-
-    &:checked {
-      & + label {
-        &::before {
-          background-color: $g-brand-success;
-          border: 1px solid $g-brand-success;
-          color: #fff;
-        }
-      }
-    }
-  }
-}
-
-.radio {
-  display: inline-block;
-  overflow: auto;
-  vertical-align: middle;
-
-  input[type=checkbox] {
-    display: none;
-    margin-right: 4px;
-
-    & + label {
-      line-height: 16px;
-
-      &::before {
-        margin: 0 5px 0 0;
-        font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
-        width: 14px;
-        height: 14px;
-        border: 1px solid #ccc;
-        content: "\26AB";
-        color: transparent;
-        transition: color ease .3s;
-        text-align: center;
-        font-size: 12px;
-        line-height: 12px;
-        border-radius: 8px;
-        display: inline-block;
-      }
-    }
-
-    &:checked {
-      & + label {
-        &::before {
-          color: #666;
-        }
-      }
-    }
-  }
-}
-
-.input-password {
-  position: relative;
-  display: inline-block;
-
-  input[type=password],
-  input[type=text] {
-    padding-right: 25px;
-  }
-
-  .icon {
-    position: absolute;
-    top: 50%;
-    right: 6px;
-    margin-top: -8px;
   }
 }

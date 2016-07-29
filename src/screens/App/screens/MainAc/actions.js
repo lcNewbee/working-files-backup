@@ -1,6 +1,5 @@
-export function showUserPop(isShow) {
+export function onToggleTopMenu() {
   return {
-    type: 'SHOW_USER_POP',
-    isShow,
-  };
+    type: 'ON_TOGGLE_TOP_MENU'
+  }
 }

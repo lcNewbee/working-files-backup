@@ -8,6 +8,8 @@ import utils from 'shared/utils';
 import TIME_ZONE from 'shared/config/timeZone';
 import countries from 'shared/config/country.json';
 import Navbar from 'shared/components/Navbar';
+import Button from 'shared/components/Button';
+import urls from 'shared/config/urls';
 
 const _ = window._;
 const msg = {
@@ -243,7 +245,7 @@ export const SignUp = React.createClass({
   },
 
   signUp() {
-    utils.save('/goform/regist', {
+    utils.save(urls.regist, {
       country: this.state.country,
       timeZone: this.state.timeZone,
       password: this.state.password,
@@ -300,9 +302,9 @@ export const SignUp = React.createClass({
           title={guiName}
           version={version}
         />
-        <div className="wizard">
+        <div className="t-wizard">
           <h2>{_('Setup Wizard')}</h2>
-          <div className="wizard-header">
+          <div className="t-wizard__header">
             <ul>
               <li className={stepOneClass}>
                 <span className="icon" />
@@ -318,7 +320,7 @@ export const SignUp = React.createClass({
               </li>
             </ul>
           </div>
-          <div className="wizard-content">
+          <div className="t-wizard__content">
 
             {
               this.state.currStep === 1 ? (
@@ -389,23 +391,22 @@ export const SignUp = React.createClass({
             }
 
           </div>
-          <div className="wizard-footer">
+          <div className="t-wizard__footer">
             {
               currStep > 1 ? (
-                <button className="btn"
+                <Button
                   onClick={this.onPrev}
-                >
-                  {_('Back')}
-                </button>
+                  text={_('Back')}
+                />
               ) : null
             }
 
-            <button
-              className="btn btn-info"
+
+            <Button
+              role="info"
               onClick={this.onNext}
-            >
-              {this.state.currStep !== 3 ? _('Next Step') : _('Completed')}
-            </button>
+              text={this.state.currStep !== 3 ? _('Next Step') : _('Completed')}
+            />
           </div>
         </div>
       </div>

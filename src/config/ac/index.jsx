@@ -50,38 +50,150 @@ const routes = [{
     {
       path: '/main/network',
       component: sMainAc.Screen,
-      indexRoute: { onEnter: (nextState, replace) => replace('/main/network/status') },
+      text: _('NETWORK'),
+      indexRoute: { onEnter: (nextState, replace) => replace('/main/network/vlan') },
       childRoutes: [{
           id: 'status',
           isIndex: true,
-          path: '/main/network/status',
+          path: '/main/network/vlan',
           icon: 'bar-chart',
-          text: _('STATISTICS'),
-          component: sStatus.Screen,
+          text: _('VLAN'),
+          indexRoute: { onEnter: (nextState, replace) => replace('/main/network/vlan/port') },
+          childRoutes: [{
+              id: 'vlanPort',
+              path: '/main/network/vlan/port',
+              text: _('Port Settings')
+            }, {
+              id: 'vlanDhcp',
+              path: '/main/network/vlan/dhcp',
+              text: _('DHCP Settings'),
+            }, {
+              id: 'vlanRoutes',
+              path: '/main/network/vlan/routes',
+              text: _('Routes Settings'),
+            }, {
+              id: 'vlanNat',
+              path: '/main/network/vlan/nat',
+              text: _('NAT Settings'),
+            }, {
+              id: 'vlanAcl',
+              path: '/main/network/vlan/acl',
+              text: _('ACL Settings'),
+            }, {
+              id: 'vlanAaa',
+              path: '/main/network/vlan/aaa',
+              text: _('AAA Settings'),
+            }
+          ]
+        }, {
+          id: 'port',
+          path: '/main/network/port',
+          text: _('Port Settings'),
+        }, {
+          id: 'portal',
+          path: '/main/network/portal',
+          text: _('Portal'),
+        }, {
+          id: 'radius',
+          path: '/main/network/radius',
+          text: _('Radius'),
         }
       ],
     }, {
       path: '/main/group',
       component: sMainAc.Screen,
-      indexRoute: { onEnter: (nextState, replace) => replace('/main/group/status') },
-      childRoutes: [{
-          id: 'status',
+      text: _('AP GROUP'),
+      indexRoute: { onEnter: (nextState, replace) => replace('/main/group/monitor') },
+      childRoutes: [
+        {
+          id: 'monitor',
           isIndex: true,
-          path: '/main/group/status',
+          path: '/main/group/monitor',
           icon: 'bar-chart',
-          text: _('STATISTICS'),
-          component: sStatus.Screen,
-          indexRoute: { onEnter: (nextState, replace) => replace('/main/group/status/232') },
+          text: _('Monitor'),
+          indexRoute: { onEnter: (nextState, replace) => replace('/main/group/monitor/user') },
           childRoutes: [{
-              id: 'status',
-              path: '/main/group/status/232',
-              text: _('STATISTICS'),
-              component: sStatus.Screen,
+              id: 'user',
+              path: '/main/group/monitor/user',
+              text: _('User'),
             }, {
-              id: 'status',
-              path: '/main/group/status/23',
-              text: _('STATISTICS'),
-              component: sStatus.Screen,
+              id: 'client',
+              path: '/main/group/monitor/client',
+              text: _('Clients'),
+            }, {
+              id: 'flow',
+              path: '/main/group/monitor/flow',
+              text: _('Flow'),
+            }, {
+              id: 'wirelessStatus',
+              path: '/main/group/monitor/wireless',
+              text: _('Wireless Status'),
+            }, {
+              id: 'safeStatus',
+              path: '/main/group/monitor/safe',
+              text: _('Safe Status'),
+            }, {
+              id: 'alarmStatus',
+              path: '/main/group/monitor/alarm',
+              text: _('Alarm Status'),
+            }
+          ]
+        }, {
+          id: 'map',
+          isIndex: true,
+          path: '/main/group/map',
+          icon: 'bar-chart',
+          text: _('Monitor'),
+          indexRoute: { onEnter: (nextState, replace) => replace('/main/group/map/live') },
+          childRoutes: [{
+              id: 'live',
+              path: '/main/group/map/live',
+              text: _('Live'),
+            }, {
+              id: 'rf',
+              path: '/main/group/map/rf',
+              text: _('RF'),
+            }, {
+              id: 'heat',
+              path: '/main/group/monitor/heat',
+              text: _('Heat Map'),
+            }, {
+              id: 'cientsTrace',
+              path: '/main/group/monitor/trace',
+              text: _('Cients Trace'),
+            }
+          ]
+        }, {
+          id: 'settings',
+          isIndex: true,
+          path: '/main/group/setting',
+          icon: 'bar-chart',
+          text: _('Settings'),
+          indexRoute: { onEnter: (nextState, replace) => replace('/main/group/setting/user') },
+          childRoutes: [{
+              id: 'user',
+              path: '/main/group/setting/user',
+              text: _('User'),
+            }, {
+              id: 'client',
+              path: '/main/group/monitor/client',
+              text: _('Clients'),
+            }, {
+              id: 'flow',
+              path: '/main/group/monitor/flow',
+              text: _('Flow'),
+            }, {
+              id: 'wirelessStatus',
+              path: '/main/group/monitor/wireless',
+              text: _('Wireless Status'),
+            }, {
+              id: 'safeStatus',
+              path: '/main/group/monitor/safe',
+              text: _('Safe Status'),
+            }, {
+              id: 'alarmStatus',
+              path: '/main/group/monitor/alarm',
+              text: _('Alarm Status'),
             }
           ]
         }, {
@@ -105,6 +217,7 @@ const routes = [{
     }, {
       path: '/main/system',
       component: sMainAc.Screen,
+      text: _('SYSTEM'),
       indexRoute: { onEnter: (nextState, replace) => replace('/main/system/status') },
       childRoutes: [{
           id: 'status',
@@ -129,7 +242,7 @@ const routes = [{
   ],
 },{
   path: '/main/status',
-  indexRoute: { onEnter: (nextState, replace) => replace('/main/network/status') },
+  indexRoute: { onEnter: (nextState, replace) => replace('/main/network') },
 }, {
   path: '*',
   component: NotFound,
@@ -140,6 +253,7 @@ const routes = [{
 const reducers = {
   app: App.app,
   login: sLogin.login,
+  mainAc: sMainAc.mainAc,
   status: sStatus.status,
 };
 

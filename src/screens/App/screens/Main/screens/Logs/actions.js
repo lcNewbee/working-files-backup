@@ -1,8 +1,7 @@
 import utils from 'shared/utils';
 import * as appActions from 'shared/actions/app';
+import urls from 'shared/config/urls';
 
-const FETCH_URL = '/goform/getLogInfo';
-const CLEAN_URL = '/goform/clearAllLogInfo'
 let refreshTimeout = null;
 
 export function reqeustFetchLogs() {
@@ -41,7 +40,7 @@ export function fetchLogs() {
     window.clearTimeout(refreshTimeout)
     dispatch(reqeustFetchLogs());
 
-    dispatch(appActions.fetch(FETCH_URL, query))
+    dispatch(appActions.fetch(urls.fetchLog, query))
       .then(function(json) {
         if(json.state && json.state.code === 2000) {
           dispatch(reciveFetchLogs(json.data))
@@ -61,7 +60,7 @@ export function cleanAllLog() {
     window.clearTimeout(refreshTimeout);
     dispatch(appActions.requestSave());
 
-    dispatch(appActions.fetch(CLEAN_URL))
+    dispatch(appActions.fetch(urls.clearAllLog))
       .then((json) => {
         dispatch(fetchLogs());
         dispatch(appActions.receiveSave(json.state))

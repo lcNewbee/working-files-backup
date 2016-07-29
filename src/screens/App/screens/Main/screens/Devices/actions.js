@@ -1,12 +1,7 @@
 import utils from 'shared/utils';
 import * as appActions from 'shared/actions/app'
+import urls from 'shared/config/urls';
 
-const urls = {
-  fetchDevices: '/goform/getApDevInfo',
-  fetchDeviceInfo: '/goform/getDeviceInfo',
-  setDevice: '/goform/setDevice',
-  action: '/goform/setApAction'
-};
 let refreshTimeout = null;
 
 export function reqeustFetchDevices() {
@@ -89,7 +84,7 @@ export function saveDevicesAction(data) {
   return (dispatch, getState) => {
     //const query = getState().devices.get('query').toJS();
 
-    dispatch(appActions.save(urls.action, data))
+    dispatch(appActions.save(urls.setApAction, data))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(fetchDevices(json.data));

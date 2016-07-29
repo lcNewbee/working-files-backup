@@ -1,8 +1,7 @@
 import utils from 'shared/utils';
 import * as appActions from 'shared/actions/app';
+import urls from 'shared/config/urls';
 
-const FETCH_URL = '/goform/getClientInfo';
-const ACTION_URL = '/goform/setClientAction';
 let refreshTimeout = null;
 
 export function reqeustFetchClients() {
@@ -70,7 +69,7 @@ export function fetchClients() {
     window.clearTimeout(refreshTimeout);
     dispatch(reqeustFetchClients());
 
-    dispatch(appActions.fetch(FETCH_URL, query))
+    dispatch(appActions.fetch(urls.fetchClientInfo, query))
       .then(function(json) {
         if(json.state && json.state.code === 2000) {
           dispatch(reciveFetchClients(json.data))
@@ -93,7 +92,7 @@ export function saveClientsAction() {
 
     query.type = getState().clients.getIn(['query', 'type']);
 
-    dispatch(appActions.save(ACTION_URL, query))
+    dispatch(appActions.save(urls.setClientAction, query))
       .then(function(json) {
         if(json.state && json.state.code === 2000) {
           dispatch(fetchClients(5000))

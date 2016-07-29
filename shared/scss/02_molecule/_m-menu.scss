@@ -1,7 +1,47 @@
 .m-menu {
   list-style: none;
+  display: none;
 
-  .m-menu__list {
-    
+  &.m-menu--open {
+    display: block;
+  }
+
+  &.m-menu--tip {
+    &::before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: none;
+      height: 0;
+      margin-top: -4px;
+      margin-left: 4px;
+      content: '';
+      border-color: transparent transparent #222 transparent;
+      border-style: solid;
+      border-width: 4px;
+      border-top: none;
+    }
+  }
+
+  .m-menu__link {
+    display: block;
+    padding: .6em 1.2em;
+    font-size: 1.14em;
+    color: #bababa;
+
+    .icon {
+      margin-right: .2em;
+      font-size: 1.54em;
+      vertical-align: middle;
+    }
+
+    &:hover {
+      color: #fff;
+    }
+
+    &.active {
+      background-color: #666;
+      color: #fff;
+    }
   }
 }

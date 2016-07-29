@@ -1,0 +1,41 @@
+.a-checkbox {
+  display: inline-block;
+  overflow: auto;
+  vertical-align: middle;
+
+  input[type=checkbox] {
+    display: none;
+
+    & + label {
+      display: inline-block;
+      line-height: 16px;
+
+      &::before {
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        margin: 0 5px 0 0;
+        font-size: 12px;
+        line-height: 12px;
+        color: transparent;
+        text-align: center;
+        content: "\2713";
+        border: 1px solid #ccc;
+        border-radius: 2px;
+        transition: color ease .3s,
+                    background-color ease .3s,
+                    border ease .3s ;
+      }
+    }
+
+    &:checked {
+      & + label {
+        &::before {
+          color: #fff;
+          background-color: $g-brand-success;
+          border: 1px solid $g-brand-success;
+        }
+      }
+    }
+  }
+}

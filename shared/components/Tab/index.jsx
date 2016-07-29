@@ -21,9 +21,9 @@ class TabMenus extends Component {
 
   render() {
     return (
-      <div className="tab">
+      <div className="o-tab">
         <Nav
-          className="tab-nav"
+          className="o-tab__nav"
           menus={this.props.menus}
           onChange={this.onNavChange}
         />

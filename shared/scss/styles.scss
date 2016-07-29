@@ -12,14 +12,16 @@
 /* 01: 原子(Atom) 不可再分的组件 */
 @import "./01_atom/transition";
 @import "./01_atom/animation";
-@import "./01_atom/a-input";
 @import "./01_atom/a-button";
-
+@import "./01_atom/a-input";
+@import "./01_atom/a-password";
+@import "./01_atom/a-checkbox";
 
 /* 02: 分子(molecule) 由原子组件组合而成*/
 @import "./02_molecule/m-action-bar";
 @import "./02_molecule/m-pop-over";
 @import "./02_molecule/m-user-overview";
+@import "./02_molecule/m-menu";
 @import "./02_molecule/m-breadcrumb";
 @import "./02_molecule/m-switch";
 
@@ -28,6 +30,7 @@
 @import "./03_organism/o-form";
 @import "./03_organism/o-menu-bar";
 @import "./03_organism/o-nav";
+@import "./03_organism/o-tab";
 @import "./03_organism/o-modal";
 
 /* 04：模板(Template)，能搭建一个页面或Screen的布局 */

@@ -161,4 +161,10 @@ gulp.task('config:acs', function() {
     .pipe(gulp.dest(paths.src));
 })
 
+gulp.task('config:ap', function() {
+  gulp.src(paths.src + '/index.jsx')
+    .pipe($.replace(configReg, "'./config/ap'"))
+    .pipe(gulp.dest(paths.src));
+})
+
 gulp.task('default', ['open:src']);

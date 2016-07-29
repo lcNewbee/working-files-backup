@@ -99,7 +99,11 @@ class FormGroup extends React.Component {
     let groupClassName = 'form-group';
 
     if (role) {
-      groupClassName += ` form-group-${role}`;
+      groupClassName += ` form-group--${role}`;
+    }
+
+    if (errMsg) {
+      groupClassName = `${groupClassName} form-group--error`;
     }
 
     return (
@@ -125,6 +129,7 @@ class FormGroup extends React.Component {
                 ret = React.cloneElement(elem, {
                   check,
                   checkClear,
+                  isFocus: !!errMsg,
                 });
               }
 
@@ -132,6 +137,7 @@ class FormGroup extends React.Component {
             }) : (
               <FormInput
                 {...this.props}
+                isFocus={!!errMsg}
                 check={this.check}
                 checkClear={this.checkClear}
               />

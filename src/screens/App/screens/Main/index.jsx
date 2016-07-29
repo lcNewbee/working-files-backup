@@ -71,45 +71,37 @@ export default class Main extends Component {
         </Navbar>
 
         <div className="t-main main--open">
-          <Nav className="t-main__nav o-nav" menus={this.props.route.childRoutes} />
+          <Nav className="t-main__nav" role="nav" menus={this.props.route.childRoutes} />
           <div className='t-main__content'>
             {
               this.props.children
             }
           </div>
-          <PropertyPanel
-            data={propertyData}
-            isShow={propertyData.isShow}
-          >
-            内容
-          </PropertyPanel>
         </div>
         {
             isShow ? (
               <div className="m-pop-over" onClick={this.showUserPopOver}>
-                <div
-                  className="user-pop-over"
-                >
-                  <div className="user-info">
-                    <Icon name="user-secret" className="icon-user" />
-                  </div>
-                  <div className="user-controls">
-                    <a className="change-pas" href="#/main/settings/admin">
-                      <Icon
-                        name="key"
-                      />
-                      {_('CHANGE PASSWORD')}
-                    </a>
-                    <a className="sign-out" href="#" onClick={this.onLogout}>
-                      <Icon
-                        name="sign-out"
-                      />
-                      {_('SIGN OUT')}
-                    </a>
-                  </div>
+              <div className="m-pop-over__content m-user-overview">
+                <div className="m-user-overview__info">
+                  <Icon name="user-secret" className="icon-user" />
                 </div>
-                <div className="m-pop-over__overlay"></div>
+                <div className="m-user-overview__controls">
+                  <a className="change-pas" href="#/main/settings/admin">
+                    <Icon
+                      name="key"
+                    />
+                    {_('CHANGE PASSWORD')}
+                  </a>
+                  <a className="sign-out" href="#" onClick={this.onLogout}>
+                    <Icon
+                      name="sign-out"
+                    />
+                    {_('SIGN OUT')}
+                  </a>
+                </div>
               </div>
+              <div className="m-pop-over__overlay"></div>
+            </div>
             ) : null
           }
 

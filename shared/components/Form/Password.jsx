@@ -9,6 +9,8 @@ const propTypes = {
   autoFocus: PropTypes.bool,
   onChange: PropTypes.func,
   type: PropTypes.oneOf(['text', 'password']),
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  role: PropTypes.oneOf(['block']),
 };
 
 const defaultProps = {
@@ -45,17 +47,38 @@ class Password extends React.Component {
 
   render() {
     const { isSee, isFocus } = this.state;
+    const { role } = this.props;
+    let passwordClassName = 'a-password';
+    let iconClassName = 'a-password__icon';
     let { type } = this.props;
+    let showIcon = true;
     let iconName = 'eye';
 
     if (isSee) {
       type = 'text';
       iconName = 'eye-slash';
+      iconClassName = 'a-password__icon a-password__icon--hidden';
+    }
+
+    if (this.props.value === '') {
+      showIcon = false;
+    }
+
+    if (role) {
+      passwordClassName = `${passwordClassName} a-password--${role}`;
     }
 
     return (
-      <div className="input-password">
-        <Icon className="icon" name={iconName} onClick={this.seePassword} />
+      <div className={passwordClassName}>
+        {
+          showIcon ? (
+            <Icon
+              className={iconClassName}
+              name={iconName}
+              onClick={this.seePassword}
+            />
+          ) : null
+        }
 
         <Input
           {...this.props}

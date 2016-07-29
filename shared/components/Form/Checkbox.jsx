@@ -32,14 +32,14 @@ class Checkbox extends React.Component {
     }
 
     return (
-      <div className="checkbox">
+      <span className="a-checkbox">
         <Input
           {...this.props}
           id={id}
           value={value}
         />
         <label htmlFor={id}>{label || ' '}</label>
-      </div>
+      </span>
     );
   }
 }

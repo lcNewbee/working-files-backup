@@ -65,6 +65,7 @@ $tab-nav-height:    28px;
         &:hover {
           background: #e5e5e5;
           z-index: 1;
+          color: $g-main-color-light;
 
           &::before {
             border-color:transparent #e5e5e5 #e5e5e5 transparent;
