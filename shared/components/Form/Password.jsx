@@ -69,7 +69,6 @@ class Password extends React.Component {
     }
 
     showIcon = seeAble && showIcon;
-    console.log(seeAble)
 
     if (role) {
       passwordClassName = `${passwordClassName} a-password--${role}`;
