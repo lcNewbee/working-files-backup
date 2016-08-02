@@ -1,39 +1,74 @@
 .a-checkbox {
   display: inline-block;
+  margin-right: 6px;
   overflow: auto;
   vertical-align: middle;
+  user-select: none;
 
   input[type=checkbox] {
     display: none;
 
     & + label {
       display: inline-block;
-      line-height: 16px;
+      width: 30px;
+      height: 16px;
+      padding: 2px 3px;
+      overflow: hidden;
+      line-height: 12px;
+      background-color: #c5c5c5;
+      border-radius: 12px;
+      transition: background-color .3s ease-in-out,
+                  padding-left .2s ease-in-out;
 
       &::before {
         display: inline-block;
-        width: 14px;
-        height: 14px;
-        margin: 0 5px 0 0;
+        width: 12px;
+        height: 12px;
         font-size: 12px;
         line-height: 12px;
         color: transparent;
-        text-align: center;
-        content: "\2713";
-        border: 1px solid #ccc;
-        border-radius: 2px;
-        transition: color ease .3s,
-                    background-color ease .3s,
-                    border ease .3s ;
+        content: "";
+        background-color: #fff;
+        border-radius: 8px;
+        transition: float .6s ease-in-out;
       }
     }
 
     &:checked {
       & + label {
+        padding-left: 15px;
+        background-color: $g-brand-success;
+
         &::before {
           color: #fff;
+        }
+      }
+    }
+  }
+
+  &.a-checkbox--lg {
+    input[type=checkbox] {
+      & + label {
+        min-width: 52px;
+        height: 28px;
+        padding: 3px;
+        border-radius: 30px;
+
+        &::before {
+          width: 22px;
+          height: 22px;
+          border-radius: 30px;
+        }
+      }
+
+      &:checked {
+        & + label {
+          text-align: right;
           background-color: $g-brand-success;
-          border: 1px solid $g-brand-success;
+
+          &::before {
+            color: #fff;
+          }
         }
       }
     }

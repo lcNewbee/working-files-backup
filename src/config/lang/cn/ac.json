@@ -1,0 +1,46 @@
+{
+  "Flow": "流量",
+  "Interface Settings": "接口配置",
+  "Port Settings": "端口配置",
+  "DHCP Settings": "DHCP配置",
+  "Routes Settings": "路由配置",
+  "NAT Settings": "NAT配置",
+  "ACL Settings": "ACL配置",
+  "AAA Settings": "AAA配置",
+  "Portal Policy": "Portal策略",
+  "Radius Template": "Radius模板",
+
+  "Monitor": "监控",
+  "Wireless Status": "无线状态",
+  "Safe Status": "安全状态",
+  "Alarm Events": "告警事件",
+
+  "Map": "地图",
+  "Live Map": "实时地图",
+  "RF": "RF规划",
+  "Heat Map": "热力图",
+  "Cients Trace": "终端行动轨迹",
+
+  "ACL Policy": "ACL策略",
+  "Smart RF": "智能RF",
+  "Timer Policy": "定时策略",
+  "Wireless Safe Policy": "无线安全检测策略",
+
+
+  "Report": "报表",
+  "Flow Report": "流量报表",
+  "Business Report": "商业报表",
+
+  "System": "系统",
+  "System Upgrade": "系统升级",
+  "AP Correlation": "AP关联量",
+  "AP Logs": "AP日志设置",
+
+  "AC Upgrade": "AC升级",
+  "Admin Settings": "管理员配置",
+  "License": "License管理",
+  "System Monitor": "系统监控",
+  "Active-Standby": "主备设置",
+  "Custer Settings": "集群设置",
+  "Signatures": "特征库维护"
+}

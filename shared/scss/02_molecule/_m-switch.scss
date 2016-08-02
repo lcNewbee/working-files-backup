@@ -1,11 +1,21 @@
 .m-switch {
   display: inline-block;
   margin: 0 5px;
+  background-color: #c5c5c5;
+  padding: 2px;
+  line-height: 20px;
 
-  .a-switch__item {
+  .m-switch__item {
     padding: 4px 12px;
     font-size: 12px;
     text-shadow: 1px 1px 0 rgba(255,255,255, .4);
+    color: #333;
+    background-color: transparent;
+    background-image: none;
+    box-shadow: none;
+    color: #777;
+    transition: background-color .2s ease;
+
     &:hover,
     &:focus,
     &:active,
@@ -16,9 +26,8 @@
       border-right: none;
     }
     &.active {
-      background-color: #c5c5c5;
-      background-image: linear-gradient(#cbcbcb,#c5c5c5);
-      box-shadow: inset 1px -1px 1px 0 rgba(255,255,255,.4),inset 1px 1px 1px 0 rgba(0,0,0,.2);
+      background-color: #fff;
+      color: #333;
     }
   }
 }

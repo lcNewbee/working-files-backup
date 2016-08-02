@@ -27,31 +27,85 @@ body {
   &.t-main--ac {
     .t-main__nav {
       top: $g-navbar-height + $g-main-bar-height;
+      width: $sidebar-width + 20px;
     }
     .t-main__content {
-      top: $top-distance + $g-main-bar-height;
+      top: $g-navbar-height + $g-main-bar-height + 20px;
+      left: $sidebar-width + 30px;
+    }
+    .t-main__asider-left {
+      top: $g-navbar-height + $g-main-bar-height;
+    }
+  }
+
+  &.main--open-left {
+    .t-main__nav {
+      left: 170px;
+    }
+  }
+
+  .t-main__nav {
+    position: fixed;
+    top: $g-navbar-height;
+    left: 0;
+    bottom: 0;
+    z-index: 1000;
+    width: $sidebar-width;
+    background: #333;
+    transition: left .4s ease-in-out;
+
+    &.o-nav--tree {
+      width: $sidebar-width + 20px;
+    }
+  }
+  .t-main__content {
+    position: absolute;
+    top: $top-distance;
+    right: 0;
+    bottom: $g-distance;
+    left: $sidebar-width + 10px;
+    min-width: 1024px - 200px;
+    padding: 0 $g-distance;
+
+    h2,
+    .t-main__content-title {
+      font-size: 1.5em;
+      margin-bottom: .3em;
     }
   }
 }
-.t-main__nav {
-  position: fixed;
-  top: $g-navbar-height;
-  bottom: 0;
-  z-index: 1000;
-  width: $sidebar-width;
-  background: #333;
-}
-.t-main__content {
-  position: absolute;
-  top: $top-distance;
-  right: 0;
-  bottom: $g-distance;
-  left: $sidebar-width + 10px;
-  min-width: 1024px - 200px;
-  padding: 0 $g-distance;
 
-  h2,
-  .t-main__content-title {
-    margin-bottom: 20px;
+.t-main__asider-left {
+  position: absolute;
+  top: $g-navbar-height + $g-main-bar-height;
+  bottom: 0;
+  left: 0;
+  z-index: 999;
+  width: 170px;
+  color: #fff;
+  background: #222;
+  overflow-y: auto;
+}
+
+.t-main__asider-header {
+  padding: 16px;
+  line-height: 20px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 0;
+    border-width: 26px 16px;
+    border-color: transparent #444 transparent transparent ;
+    border-style: solid;
   }
+}
+
+.t-main__asider-footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 12px;
 }

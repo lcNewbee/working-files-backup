@@ -1,4 +1,5 @@
 var gulp = require('gulp');
+var gutil = require('gulp-util');
 var $ = require('gulp-load-plugins')();
 var runSequence = require('run-sequence');
 var pkg = require('./package.json');
@@ -9,6 +10,7 @@ var shell = require('gulp-shell');
 var rename = require('gulp-rename');
 var paths;
 var mochaShellprefix = 'mocha --require ./tools/test/step.js --reporter dot -c';
+var argv = require('minimist')(process.argv.slice(2));
 
 paths = gulp.paths = {
   tmp: '.tmp',
@@ -19,6 +21,7 @@ paths = gulp.paths = {
   webpack: 'webpack.config.dev.js',
   pubWebpack: 'webpack.config.prop.js',
 };
+
 
 // 删除
 gulp.task('clean', function (callback) {
@@ -163,6 +166,19 @@ gulp.task('config:acs', function() {
 gulp.task('config:ap', function() {
   gulp.src(paths.src + '/index.jsx')
     .pipe($.replace(configReg, "'./config/ap'"))
+    .pipe(gulp.dest(paths.src));
+})
+
+gulp.task('config', function() {
+  var name = 'accessManager';
+  if(argv.n) {
+    name = argv.n;
+  }
+  return gulp.src(paths.src + '/index.jsx')
+    .pipe($.replace(configReg, "'./config/" + name + "'"))
+    .on('end', function(){
+      gutil.log('切换到配置文件：', gutil.colors.magenta(name));
+    })
     .pipe(gulp.dest(paths.src));
 })
 

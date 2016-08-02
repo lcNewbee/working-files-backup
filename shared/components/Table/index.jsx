@@ -6,7 +6,7 @@ import Icon from '../Icon';
 import Row from './Row';
 
 const propTypes = {
-  options: PropTypes.object,
+  options: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   list: PropTypes.object,
   page: PropTypes.object,
   loading: PropTypes.bool,

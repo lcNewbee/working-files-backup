@@ -7,7 +7,7 @@ const propTypes = {
   errMsg: PropTypes.string,
   help: PropTypes.string,
   label: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   id: PropTypes.string,
   disabled: PropTypes.bool,
   required: PropTypes.bool,

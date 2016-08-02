@@ -9,6 +9,9 @@ const propTypes = {
   className: PropTypes.string,
   location: PropTypes.object,
   role: PropTypes.oneOf(['nav', 'tab']),
+  onChange: PropTypes.func,
+  onClick: PropTypes.func,
+  style: PropTypes.object,
 
   // 是否渲染多级菜单
   isTree: PropTypes.bool,
@@ -34,6 +37,7 @@ function NavLink(props) {
       to={path}
       className={className}
       activeClassName="active"
+      onClick={(e) => props.onClick(path, e)}
     >
       {
         icon ? <Icon name={icon} /> : null
@@ -45,6 +49,7 @@ function NavLink(props) {
 NavLink.propTypes = {
   item: PropTypes.object.isRequired,
   className: PropTypes.string,
+  onClick: PropTypes.func,
 };
 
 
@@ -55,22 +60,33 @@ class Nav extends Component {
     // this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onSelectItem = this.onSelectItem.bind(this);
   }
-  onSelectItem() {
 
+  onSelectItem(path, e) {
+    if (this.props.onChange) {
+      this.props.onChange(path, e);
+    }
   }
   render() {
     const { className, menus, location, isTree, role } = this.props;
-    let navClassName = className;
+    let navClassName = className || '';
     let linkClassName = 'm-menu__link';
 
     if (role === 'nav') {
       linkClassName = `${linkClassName} o-nav__link`;
       navClassName = `${navClassName} o-nav`;
-    } else if (role === 'nav') {
+
+      if (isTree) {
+        navClassName = `${navClassName} o-nav--tree`;
+      }
+    } else if (role === 'tab') {
       navClassName = `${navClassName} o-tab__nav`;
     }
     return (
-      <nav className={navClassName}>
+      <nav
+        className={navClassName}
+        style={this.props.style}
+        onClick={this.props.onClick}
+      >
         <ul className="m-menu m-menu--open">
           {
             fromJS(menus).map((item, i) => {
@@ -93,6 +109,7 @@ class Nav extends Component {
                   <NavLink
                     item={item}
                     className={linkClassName}
+                    onClick={this.onSelectItem}
                   />
                   {
                     hasSubmenus ? (
@@ -105,6 +122,7 @@ class Nav extends Component {
                                 <NavLink
                                   item={subItem}
                                   className={linkClassName}
+                                  onClick={this.onSelectItem}
                                 />
                               </li>
                             );

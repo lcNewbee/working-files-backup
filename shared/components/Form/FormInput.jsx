@@ -17,7 +17,7 @@ const propTypes = {
   checkClearValue: PropTypes.func,
   onChange: PropTypes.func,
   label: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   clearable: PropTypes.bool,
   searchable: PropTypes.bool,
 };

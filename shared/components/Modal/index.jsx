@@ -4,7 +4,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 const propTypes = {
   isShow: PropTypes.bool,
-  title: PropTypes.string,
+  title: PropTypes.any,
   id: PropTypes.string,
   size: PropTypes.oneOf(['lg', '2x', '3x', '4x', '5x']),
   role: PropTypes.oneOf(['dialog', 'alert', 'comfirm', 'message']),

@@ -26,6 +26,9 @@ export default class Main extends Component {
     this.onRefresh = this.onRefresh.bind(this);
     this.onLogout = this.onLogout.bind(this);
     this.onToggleTopMenu = this.onToggleTopMenu.bind(this);
+    this.onToggleAsiderLeft = this.onToggleAsiderLeft.bind(this);
+    this.onClickNav = this.onClickNav.bind(this);
+    this.onSelectVlan = this.onSelectVlan.bind(this);
 
     document.onkeydown = function(e) {
       if(e.keyCode == 116){
@@ -52,16 +55,36 @@ export default class Main extends Component {
   onToggleTopMenu() {
     this.props.onToggleTopMenu()
   }
+  onToggleAsiderLeft() {
+    this.props.onToggleAsiderLeft()
+  }
+
+  onClickNav(path) {
+    if(path === '/main/network/vlan') {
+      this.props.onToggleAsiderLeft();
+    }
+  }
+  onSelectVlan(id, e) {
+    e.preventDefault();
+    this.props.onToggleAsiderLeft();
+    this.props.onSelectVlan(id);
+  }
   render() {
     const { saving, version, propertyData, guiName } = this.props.app.toJS();
-    const { topMenu } = this.props.mainAc.toJS();
+    const { topMenu, asiderLeft } = this.props.mainAc.toJS();
     const { isShow } = this.state;
+    const selectVlanId = this.props.mainAc.getIn(['vlan', 'selected']);
     let curTopNavText = _('NETWORK');
+    let mainClassName = 't-main t-main--ac';
 
     if(this.props.location.pathname.indexOf('/main/group') === 0) {
       curTopNavText = _('AP GROUP');
     } else if (this.props.location.pathname.indexOf('/main/system') === 0) {
       curTopNavText = _('SYSTEM');
+    }
+
+    if(asiderLeft) {
+      mainClassName = `${mainClassName} main--open-left`
     }
     return (
       <div>
@@ -85,10 +108,10 @@ export default class Main extends Component {
           <div className="o-menu-bar">
             <nav
               onClick={this.onToggleTopMenu}
-              onMouseOver={this.onToggleTopMenu}
               className="o-menu-bar__nav"
             >
-              <h3><Icon name="navicon" />{curTopNavText}</h3>
+              <h3>
+                <Icon name="navicon" onMouseOver={this.onToggleTopMenu} />{curTopNavText}</h3>
             </nav>
 
             <ol className="m-breadcrumb">
@@ -105,11 +128,13 @@ export default class Main extends Component {
           </div>
         </Navbar>
 
-        <div className="t-main t-main--ac main--open">
+        <div className={mainClassName}>
           <Nav
-            className="t-main__nav o-nav"
+            className="t-main__nav"
+            role="nav"
             menus={this.props.route.childRoutes}
             location={this.props.location}
+            onChange={this.onClickNav}
             isTree
           />
           <div className='t-main__content'>
@@ -117,10 +142,6 @@ export default class Main extends Component {
               this.props.children
             }
           </div>
-          <AsiderBar
-            data={propertyData}
-            isShow={propertyData.isShow}
-          />
         </div>
         {
           isShow ? (
@@ -152,10 +173,11 @@ export default class Main extends Component {
         {
           topMenu ? (
             <div className="m-pop-over" onClick={this.onToggleTopMenu}>
-              <div className="m-pop-over__overlay"></div>
+              <div className="m-pop-over__overlay"
+              ></div>
               <ul
                 className="m-pop-over__content m-menu m-menu--open"
-                style={{top: '93px', left: '20px', width: '140px'}}
+                style={{top: '93px', left: '20px', width: '140px', backgroundColor: '#222'}}
               >
                 {
                   fromJS(this.props.routes[0].childRoutes).map((item) => {
@@ -174,6 +196,57 @@ export default class Main extends Component {
                 }
               </ul>
             </div>
+          ) : null
+        }
+        {
+          asiderLeft ? (
+            <asider
+              className="t-main__asider-left"
+            >
+              <h3 className="t-main__asider-header">{_('VLAN列表')}</h3>
+              <ul
+                className="m-menu m-menu--open"
+              >
+                {
+                  this.props.mainAc.getIn(['vlan', 'list']).map((item) => {
+                    var curId = item.get('id');
+                    var remark = item.get('remark');
+                    let classNames = 'm-menu__link';
+
+                    if (curId === selectVlanId) {
+                      classNames = `${classNames} active`;
+                    }
+
+                    return (
+                      <li>
+                        <a
+                          className={classNames}
+                          onClick={(e) => this.onSelectVlan(curId, e)}
+                        >
+                          {curId}({remark})
+                        </a>
+                      </li>
+                    );
+                  })
+                }
+              </ul>
+              <footer className="t-main__asider-footer">
+                <div className="m-action-bar">
+                  <div className="m-action-bar__left">
+                    <Icon
+                      name="cog"
+                    />
+                    修改
+                  </div>
+                  <div className="m-action-bar__right">
+                    <Icon
+                      name="plus"
+                    />
+                    添加
+                  </div>
+                </div>
+              </footer>
+            </asider>
           ) : null
         }
 
