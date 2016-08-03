@@ -44,19 +44,22 @@ let InterfaceTableOption = fromJS([
     text: _('Status'),
   }, {
     id: 'arpProxy',
-    text: _('ARP proxy'),
+    text: _('ARP Proxy'),
   }, {
     id: 'mainIp',
-    text: _('Main IP'),
+    text: _('Main IPV4'),
   }, {
     id: 'mainMask',
-    text: _('Main Mak'),
+    text: _('Main IPV4 Mask'),
   }, {
     id: 'secondIp',
-    text: _('Second IP'),
+    text: _('Second IPV4'),
   }, {
     id: 'secondMask',
-    text: _('Second IP'),
+    text: _('Second IPV4 Mask'),
+  }, {
+    id: 'description',
+    text: _('Description'),
   }, {
     id: 'op',
     text: _('Actions'),
@@ -76,6 +79,19 @@ export default class View extends Component {
     changeData[key] = data.value;
 
     this.props.updateInterfaceEdit(changeData)
+  }
+
+  onDeleteInterface(item) {
+    var msg_text = _('Are you sure delete interface: %s?', item.get('id'));
+
+    this.props.createModal({
+      id: 'interfaceSettings',
+      role: 'comfirm',
+      text: msg_text,
+      apply: function() {
+
+      }.bind(this)
+    });
   }
 
   render() {
@@ -99,6 +115,9 @@ export default class View extends Component {
               icon="trash"
               size="sm"
               text="删除"
+              onClick={() => {
+                this.onDeleteInterface(item)
+              }}
             />
           </div>
         )
@@ -122,27 +141,6 @@ export default class View extends Component {
               text="删除"
             />
           </div>
-
-          <Switchs
-            value="0"
-            options={
-              [
-                {
-                  value: '1',
-                  label: "on"
-                }, {
-                  value: '0',
-                  label: "off"
-                }, {
-                  value: '2',
-                  label: "off"
-                }, {
-                  value: '3',
-                  label: "off"
-                }
-              ]
-            }
-          />
         </div>
 
         <Table

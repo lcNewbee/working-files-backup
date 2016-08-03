@@ -1,0 +1,55 @@
+{
+    "state": {
+        "code": 2000,
+        "msg": "ok"
+    },
+    "data": {
+        "page": {
+            "start": 2,
+            "size": 2,
+            "currPage": 2,
+            "totalPage": 4,
+            "total": 4,
+            "nextPage": 3,
+            "lastPage": 4
+        },
+        "list": [
+            {
+                "name": "point",
+                "type": "ipv4",
+                "domain": "192.168.5.53",
+                "startIp": "192.168.5.53",
+                "endIp": "192.168.5.55",
+                "mask": "255.255.0.0",
+                "gateway": "192.168.5.53",
+                "mainDns": "192.168.5.53",
+                "secondDns": "8.8.8.8",
+                "releaseTime": 3600
+            },
+            {
+                "name": "point2",
+                "type": "ipv4",
+                "domain": "192.168.5.53",
+                "startIp": "192.168.5.53",
+                "endIp": "192.168.5.55",
+                "mask": "255.255.0.0",
+                "gateway": "192.168.5.53",
+                "mainDns": "192.168.5.53",
+                "secondDns": "8.8.8.8",
+                "releaseTime": 3600
+            },
+            {
+               "name": "point3",
+                "type": "ipv6",
+                "domain": "192.168.5.53",
+                "startIp": "192.168.5.53",
+                "endIp": "192.168.5.55",
+                "mask": "255.255.0.0",
+                "gateway": "192.168.5.53",
+                "mainDns": "192.168.5.53",
+                "secondDns": "8.8.8.8",
+                "releaseTime": 3600
+            }
+        ]
+    }
+}

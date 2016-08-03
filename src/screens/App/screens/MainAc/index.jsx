@@ -89,7 +89,7 @@ export default class Main extends Component {
     return (
       <div>
         <Navbar
-          title={guiName}
+          title={_(guiName)}
           version={version}
         >
           <div className="aside">
@@ -200,53 +200,54 @@ export default class Main extends Component {
         }
         {
           asiderLeft ? (
-            <asider
-              className="t-main__asider-left"
-            >
-              <h3 className="t-main__asider-header">{_('VLAN列表')}</h3>
-              <ul
-                className="m-menu m-menu--open"
-              >
-                {
-                  this.props.mainAc.getIn(['vlan', 'list']).map((item) => {
-                    var curId = item.get('id');
-                    var remark = item.get('remark');
-                    let classNames = 'm-menu__link';
+            <div className="m-pop-over">
+              <div className="m-pop-over__overlay" onClick={this.props.onToggleAsiderLeft}></div>
+              <asider className="t-main__asider-left">
+                <h3 className="t-main__asider-header">{_('VLAN列表')}</h3>
+                <ul
+                  className="m-menu m-menu--open"
+                >
+                  {
+                    this.props.mainAc.getIn(['vlan', 'list']).map((item) => {
+                      var curId = item.get('id');
+                      var remark = item.get('remark');
+                      let classNames = 'm-menu__link';
 
-                    if (curId === selectVlanId) {
-                      classNames = `${classNames} active`;
-                    }
+                      if (curId === selectVlanId) {
+                        classNames = `${classNames} active`;
+                      }
 
-                    return (
-                      <li>
-                        <a
-                          className={classNames}
-                          onClick={(e) => this.onSelectVlan(curId, e)}
-                        >
-                          {curId}({remark})
-                        </a>
-                      </li>
-                    );
-                  })
-                }
-              </ul>
-              <footer className="t-main__asider-footer">
-                <div className="m-action-bar">
-                  <div className="m-action-bar__left">
-                    <Icon
-                      name="cog"
-                    />
-                    修改
+                      return (
+                        <li>
+                          <a
+                            className={classNames}
+                            onClick={(e) => this.onSelectVlan(curId, e)}
+                          >
+                            {curId}({remark})
+                          </a>
+                        </li>
+                      );
+                    })
+                  }
+                </ul>
+                <footer className="t-main__asider-footer">
+                  <div className="m-action-bar">
+                    <div className="m-action-bar__left">
+                      <Icon
+                        name="cog"
+                      />
+                      修改
+                    </div>
+                    <div className="m-action-bar__right">
+                      <Icon
+                        name="plus"
+                      />
+                      添加
+                    </div>
                   </div>
-                  <div className="m-action-bar__right">
-                    <Icon
-                      name="plus"
-                    />
-                    添加
-                  </div>
-                </div>
-              </footer>
-            </asider>
+                </footer>
+              </asider>
+            </div>
           ) : null
         }
 

@@ -17,4 +17,7 @@ input[type=number] {
   &:disabled {
     background-color: $boder-color;
   }
+  &:focus {
+    border: 1px solid #333;
+  }
 }

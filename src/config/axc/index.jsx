@@ -41,12 +41,25 @@ const sWizard = require('../../screens/App/screens/Wizard');
 
 //
 const sMainAc = require('../../screens/App/screens/MainAc');
-const sInterfaces = require('../../screens/App/screens/MainAc/screens/vlan/screens/Interfaces');
-const sVlanAaa = require('../../screens/App/screens/MainAc/screens/vlan/screens/Aaa');
-const sVlanAcl = require('../../screens/App/screens/MainAc/screens/vlan/screens/Acl');
-const sVlanNat = require('../../screens/App/screens/MainAc/screens/vlan/screens/Nat');
-const sVlanDhcp = require('../../screens/App/screens/MainAc/screens/vlan/screens/Dhcp');
-const sVlanRoutes = require('../../screens/App/screens/MainAc/screens/vlan/screens/Routes');
+
+/**
+ * 网络设置
+ */
+// VLAN 设置
+const sInterfaces = require('../../screens/App/screens/MainAc/screens/VLAN/screens/Interfaces');
+const sVlanAaa = require('../../screens/App/screens/MainAc/screens/VLAN/screens/Aaa');
+const sVlanAcl = require('../../screens/App/screens/MainAc/screens/VLAN/screens/Acl');
+const sVlanNat = require('../../screens/App/screens/MainAc/screens/VLAN/screens/Nat');
+const sVlanDhcp = require('../../screens/App/screens/MainAc/screens/VLAN/screens/Dhcp');
+const sRoutes = require('../../screens/App/screens/MainAc/screens/Routes');
+
+/**
+ * AP组管理
+ */
+const sClients = require('../../screens/App/screens/MainAc/screens/Monitor/screens/Clients');
+const sFlowStatus = require('../../screens/App/screens/MainAc/screens/Monitor/screens/FlowStatus');
+const sWlanStatus = require('../../screens/App/screens/MainAc/screens/Monitor/screens/WlanStatus');
+const sSafeStatus = require('../../screens/App/screens/MainAc/screens/Monitor/screens/SafeStatus');
 
 const routes = [{
   path: '/',
@@ -76,11 +89,6 @@ const routes = [{
               text: _('DHCP Settings'),
               component: sVlanDhcp.Screen,
             }, {
-              id: 'vlanRoutes',
-              path: '/main/network/vlan/routes',
-              text: _('Routes Settings'),
-              component: sVlanRoutes.Screen,
-            }, {
               id: 'vlanNat',
               path: '/main/network/vlan/nat',
               text: _('NAT Settings'),
@@ -97,6 +105,12 @@ const routes = [{
               component: sVlanAaa.Screen,
             }
           ]
+        }, {
+          id: 'routes',
+          path: '/main/network/routes',
+          text: _('Routes Settings'),
+          icon: 'map-signs',
+          component: sRoutes.Screen,
         }, {
           id: 'port',
           path: '/main/network/port',
@@ -124,33 +138,29 @@ const routes = [{
           id: 'monitor',
           isIndex: true,
           path: '/main/group/monitor',
-          icon: 'bar-chart',
+          icon: 'pie-chart',
           text: _('Monitor'),
           indexRoute: { onEnter: (nextState, replace) => replace('/main/group/monitor/user') },
           childRoutes: [{
               id: 'user',
               path: '/main/group/monitor/user',
               text: _('User'),
-            }, {
-              id: 'client',
-              path: '/main/group/monitor/client',
-              text: _('Clients'),
+              component: sClients.Screen,
             }, {
               id: 'flow',
               path: '/main/group/monitor/flow',
               text: _('Flow'),
+              component: sFlowStatus.Screen,
             }, {
               id: 'wirelessStatus',
               path: '/main/group/monitor/wireless',
               text: _('Wireless Status'),
+              component: sWlanStatus.Screen,
             }, {
               id: 'safeStatus',
               path: '/main/group/monitor/safe',
               text: _('Safe Status'),
-            }, {
-              id: 'alarmStatus',
-              path: '/main/group/monitor/alarm',
-              text: _('Alarm Events'),
+              component: sSafeStatus.Screen,
             }
           ]
         }, {
@@ -254,8 +264,14 @@ const routes = [{
       path: '/main/system',
       component: sMainAc.Screen,
       text: _('SYSTEM'),
-      indexRoute: { onEnter: (nextState, replace) => replace('/main/system/upgrade') },
-      childRoutes: [{
+      indexRoute: { onEnter: (nextState, replace) => replace('/main/system/status') },
+      childRoutes: [
+        {
+          id: 'systemStatus',
+          icon: "area-chart",
+          path: '/main/system/status',
+          text: _('System Status'),
+        }, {
           id: 'acUpgrade',
           isIndex: true,
           path: '/main/system/upgrade',
@@ -297,6 +313,11 @@ const routes = [{
           path: '/main/system/signatures',
           icon: 'tasks',
           text: _('Signatures'),
+        }, {
+          id: 'alarmStatus',
+          icon: 'exclamation-circle',
+          path: '/main/system/alarm',
+          text: _('Alarm Events'),
         }
       ],
     }, {
@@ -318,7 +339,14 @@ const reducers = {
   app: App.app,
   login: sLogin.login,
   mainAc: sMainAc.mainAc,
-  interfaces: sInterfaces.reducer
+  interfaces: sInterfaces.reducer,
+  dhcpAdressPool: sVlanDhcp.reducer,
+
+  // ap组管理
+  clients: sClients.reducer,
+  flow: sFlowStatus.reducer,
+  wlanStatus: sWlanStatus.reducer,
+  safeStatus: sSafeStatus.reducer,
 };
 
 // Store

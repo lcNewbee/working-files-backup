@@ -1,20 +1,18 @@
 .m-switch {
   display: inline-block;
   margin: 0 5px;
-  background-color: #c5c5c5;
-  padding: 2px;
+  border: 1px solid #666;
+  border-radius: 3px;
   line-height: 20px;
 
   .m-switch__item {
     padding: 4px 12px;
     font-size: 12px;
-    text-shadow: 1px 1px 0 rgba(255,255,255, .4);
-    color: #333;
     background-color: transparent;
     background-image: none;
     box-shadow: none;
-    color: #777;
-    transition: background-color .2s ease;
+    border-right: 1px solid #666;
+    color: #666;
 
     &:hover,
     &:focus,
@@ -26,8 +24,8 @@
       border-right: none;
     }
     &.active {
-      background-color: #fff;
-      color: #333;
+      background-color: #666;
+      color: #fff;
     }
   }
 }
