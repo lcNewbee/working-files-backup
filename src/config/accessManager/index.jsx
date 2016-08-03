@@ -66,8 +66,7 @@ const routes = [{
   path: '/',
   component: App.Screen,
   indexRoute: { component: pLogin.Screen },
-  childRoutes: [
-    {
+  childRoutes: [{
       path: '/main',
       component: Main,
       childRoutes: [{
