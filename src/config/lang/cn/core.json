@@ -266,5 +266,76 @@
 
   "Thank you for purchasing Axilspot enterprise-class products, you will complete the configuration for management system in minutes": "非常感谢你购买Axilspot企业级产品，您将在几分钟内完成管理系统配置",
   "Please provide an administrator password to login to Axilspot management system": "请提供一个管理员密码来登录 Axilspot 管理系统",
-  "Please confirm your configuration below. Click back to modify the configuration or click finish to activate the configuration. After finish you will skip to management interface.": "请再确定你的以下配置，点击返回修改配置或完成来激活设置，完成后你将会跳转到管理界面"
+  "Please confirm your configuration below. Click back to modify the configuration or click finish to activate the configuration. After finish you will skip to management interface.": "请再确定你的以下配置，点击返回修改配置或完成来激活设置，完成后你将会跳转到管理界面",
+
+
+  "MAINMENU":"主菜单",
+  "SYSTEM STATUS":"系统状态",
+  "NETWORK MONITOR":"网络监控",
+
+  "Device Model: ":"设备型号：",
+  "Device Name: ":"设备名称：",
+  "Network Mode: ":"网络模式：",
+  "Wireless Mode: ":"无线模式：",
+  "Security Mode: ":"安全模式：",
+  "Software Version: ":"软件版本：",
+  "Run Time: ":"运行时间：",
+  "System Time: ":"系统时间：",
+  "Channel/Frequency: ":"信道和频段：",
+  "Channel Width: ":"信道带宽：",
+  "Distance: ":"距离：",
+  "RF Power: ":"传输功率：",
+  "Antenna: ":"天线：",
+  "Online User: ":"连接数：",
+  "Background Noise: ":"背景噪声：",
+  "Transform CCQ: ":"传输CCQ：",
+  "Singal Stength: ":"信号强度：",
+  "TX/RX Rate: ":"TX/RX速率：",
+
+  "Device Model":"设备型号",
+  "Device Name ":"设备名称",
+  "Network Mode":"网络模式",
+  "Wireless Mode":"无线模式",
+  "Security Mode":"安全模式",
+  "Software Version":"软件版本",
+  "Run Time":"运行时间",
+  "System Time":"系统时间",
+  "Channel/Frequency":"信道和频段",
+  "Channel Width":"信道带宽",
+  "Distance":"距离",
+  "RF Power":"传输功率",
+  "Antenna":"天线",
+  "Online User":"连接数",
+  "Background Noise":"背景噪声",
+  "Transform CCQ":"传输CCQ",
+  "Singal Stength":"信号强度",
+  "TX/RX Rate":"TX/RX速率",
+
+  "TX Singal Strength":"TX信号强度",
+  "RX Singal Strength":"RX信号强度",
+
+
+  "Remote AP Info":"对端AP信息",
+  "Remote Station Info":"对端Station信息",
+  "Interface: ":"接口：",
+  "Interface":"接口",
+  "Log Info":"日志信息",
+  "TX Flow":"TX流量",
+  "RX Flow":"RX流量",
+  "TX Error":"发送错误包数",
+  "RX Error":"接收错误包数",
+
+  "WIRELESS CONFIGURATION":"无线设置",
+
+  "ADVANCE":"高级设置",
+  "RTS Threshold":"RTS阈值",
+  "RTS Switch":"RTS开关",
+  "Distance Adjust Mode":"距离调整模式",
+  "Distance Value":"距离值",
+  "Client Isolation":"客户端隔离",
+
+  "Range: ":"范围：",
+  "Sensitivity Threshold":"灵敏度",
+  "Threshold Value":"灵敏度阈值",
+  "Signal LED Thresholds":"信号强度指示灯"
 }
