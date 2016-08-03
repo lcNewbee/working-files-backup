@@ -14,12 +14,12 @@ const Router = ReactRouter.Router;
 const hashHistory = ReactRouter.hashHistory;
 
 // 引入产品配置
-const prodConfig = require('./config/accessManager');
+const prodConfig = require('./config/ap');
 
 if (module.hot) {
   // Enable Webpack hot module replacement for reducers
-  module.hot.accept('./config/accessManager', () => {
-    const nextRootReducer = require('./config/accessManager').reducers;
+  module.hot.accept('./config/ap', () => {
+    const nextRootReducer = require('./config/ap').reducers;
     prodConfig.stores.replaceReducer(nextRootReducer);
   });
 }
