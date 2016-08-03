@@ -25,11 +25,11 @@ const flowTableOptions = fromJS([
   }, {
     id: 'type',
     width: '140',
-    text: _('Online Nnmbers'),
+    text: _('Online Numbers'),
   }, {
     id: 'connectap',
     width: '140',
-    text: _('AP Nnmbers'),
+    text: _('AP Numbers'),
   }, {
     id: 'bandwidth',
     text: _('Up/Down Speed'),
@@ -60,7 +60,7 @@ const apWlanOption = fromJS([
   }, {
     id: 'type',
     width: '140',
-    text: _('Connected Nnmbers'),
+    text: _('Connected Numbers'),
   }, {
     id: 'bandwidth',
     text: _('Up/Down Speed'),

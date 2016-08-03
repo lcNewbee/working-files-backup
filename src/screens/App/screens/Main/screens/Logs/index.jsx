@@ -187,9 +187,9 @@ export const Logs = React.createClass({
     } = this;
 
     return (
-      <div className="page-device">
+      <div>
         <h2>{msg.TITLE}</h2>
-        <div className="clearfix">
+        <div className="m-action-bar">
           <Switchs
             className="fl"
             options={typeArr}

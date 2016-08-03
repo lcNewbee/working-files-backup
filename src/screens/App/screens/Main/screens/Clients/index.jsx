@@ -317,10 +317,9 @@ export const Clients = React.createClass({
     }
 
     return (
-      <div className="page-device">
+      <div>
         <h2>{msg.TITLE}</h2>
-        <div className="clearfix">
-
+        <div className="m-action-bar">
           <Search
             value={this.props.query.get('text')}
             onChange={this.onChangeSearchText}

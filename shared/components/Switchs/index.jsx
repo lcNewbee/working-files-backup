@@ -57,7 +57,7 @@ class Switchs extends React.Component {
       >
         {
           options ? optionsList.map((item, i) => {
-            let myClassName = 'm-switch__item a-btn';
+            let myClassName = 'm-switch__item';
             let val;
             let label;
 

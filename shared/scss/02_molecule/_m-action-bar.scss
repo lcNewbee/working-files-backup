@@ -1,6 +1,8 @@
 .m-action-bar {
   padding: 8px 0;
 
+  @include clearfix;
+
   .m-action-bar__left {
     float: left;
   }

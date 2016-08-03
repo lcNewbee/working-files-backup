@@ -42,6 +42,10 @@ class Button extends React.Component {
       classNames = `${classNames} a-btn--${role}`;
     }
 
+    if (!text) {
+      classNames = `${classNames} a-btn--no-text`;
+    }
+
     if (className) {
       classNames = `${classNames} ${className}`;
     }
