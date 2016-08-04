@@ -90,7 +90,7 @@ const clientsTableOptions = fromJS([
 ]);
 
 const msg = {
-  TITLE: _('Clients Info'),
+  TITLE: _('User List'),
   reconnect: _('Reconnect'),
   lock: _('Lock'),
   unlock: _('Unlock'),

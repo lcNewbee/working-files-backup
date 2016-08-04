@@ -1,4 +1,5 @@
-.m-pop-over {
+
+.o-pop-over {
   position: fixed;
   top: 0;
   right: 0;
@@ -7,12 +8,12 @@
   z-index: 1040;
   overflow: hidden;
 
-  .m-pop-over__content {
+  .o-pop-over__content {
     position: absolute;
   }
 
-  .m-pop-over__overlay {
-    position: absolute;
+  .o-pop-over__overlay {
+    position: fixed;
     top: 0;
     right: 0;
     bottom: 0;

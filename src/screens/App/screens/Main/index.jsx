@@ -80,8 +80,8 @@ export default class Main extends Component {
         </div>
         {
             isShow ? (
-              <div className="m-pop-over" onClick={this.showUserPopOver}>
-              <div className="m-pop-over__content m-user-overview">
+              <div className="o-pop-over" onClick={this.showUserPopOver}>
+              <div className="o-pop-over__content m-user-overview">
                 <div className="m-user-overview__info">
                   <Icon name="user-secret" className="icon-user" />
                 </div>
@@ -100,7 +100,7 @@ export default class Main extends Component {
                   </a>
                 </div>
               </div>
-              <div className="m-pop-over__overlay"></div>
+              <div className="o-pop-over__overlay"></div>
             </div>
             ) : null
           }

@@ -151,24 +151,6 @@ gulp.task('bump:dev', function () {
 
 var configReg = /\'\.\/config\/(\w+)\'/g;
 
-gulp.task('config:ach', function() {
-  gulp.src(paths.src + '/index.jsx')
-    .pipe($.replace(configReg, "'./config/ac'"))
-    .pipe(gulp.dest(paths.src));
-})
-
-gulp.task('config:acs', function() {
-  gulp.src(paths.src + '/index.jsx')
-    .pipe($.replace(configReg, "'./config/accessManager'"))
-    .pipe(gulp.dest(paths.src));
-})
-
-gulp.task('config:ap', function() {
-  gulp.src(paths.src + '/index.jsx')
-    .pipe($.replace(configReg, "'./config/ap'"))
-    .pipe(gulp.dest(paths.src));
-})
-
 gulp.task('config', function() {
   var name = 'accessManager';
   if(argv.n) {

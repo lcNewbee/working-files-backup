@@ -8,6 +8,7 @@ const propTypes = {
   size: PropTypes.oneOf(['sm', 'lg']),
   onChange: PropTypes.func,
   options: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+  style: PropTypes.object,
 };
 
 const defaultProps = {
@@ -54,6 +55,7 @@ class Switchs extends React.Component {
       <div
         className={classNames}
         onClick={this.onClick}
+        style={this.props.style}
       >
         {
           options ? optionsList.map((item, i) => {

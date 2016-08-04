@@ -1,18 +1,30 @@
-export function onToggleTopMenu() {
+export function toggleMainPopOver(option) {
   return {
-    type: 'ON_TOGGLE_TOP_MENU'
+    type: 'TOGGLE_MAIN_POP_OVER',
+    option
   }
 }
 
-export function onToggleAsiderLeft() {
+export function showMainModal(option) {
   return {
-    type: 'ON_TOGGLE_ASIDER_LEFT'
+    type: 'SHOW_MAIN_MODAL',
+    option
   }
 }
 
-export function onSelectVlan(id) {
+export function saveMainModal() {
+
+}
+
+export function selectVlan(id) {
   return {
-    type: 'ON_SELECT_VLAN',
+    type: 'SELECT_VLAN',
+    id
+  }
+}
+export function selectGroup(id) {
+  return {
+    type: 'SELECT_GROUP',
     id
   }
 }

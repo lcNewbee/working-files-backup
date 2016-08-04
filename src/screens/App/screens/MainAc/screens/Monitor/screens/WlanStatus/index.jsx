@@ -200,6 +200,9 @@ export const Clients = React.createClass({
             value={this.props.query.get('type')}
             options={typeArr}
             onChange={this.onChangeType}
+            style={{
+              'margin-left': 0
+            }}
           />
           <Select
             className="fr"

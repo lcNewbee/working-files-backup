@@ -21,24 +21,13 @@ const clientsTableOptions = fromJS([
   {
     id: 'appName',
     text: _('App Name'),
+    width: "200",
     transform: function(val, item) {
       return item.get('devicename') || item.get('mac');
     }
   }, {
-    id: 'ip',
-    text: _('IP Address'),
-  }, {
     id: 'type',
-    text: _('Online Nnmbers'),
-  }, {
-    id: 'ssid',
-    text: 'SSID',
-  }, {
-    id: 'connectap',
-    text: _('Associated AP'),
-    transform: function(val, item) {
-      return item.get('connectap') || item.get('apmac');
-    }
+    text: _('User Numbers'),
   }, {
     id: 'bandwidth',
     text: _('Up/Down Speed'),
@@ -49,35 +38,8 @@ const clientsTableOptions = fromJS([
       return upRate + '/' + downRate;
     }
   }, {
-    id: 'rssi',
-    text: _('RSSI'),
-    transform: function(val, item) {
-      var intVal = parseInt(val, 10);
-      var classNames = 'Icon Icon-block Icon-wifi';
-
-      // 判断加密范式
-      if(item.get('encryption') === 'none') {
-        classNames += '-nopass';
-      } else {
-        classNames += '-pass';
-      }
-
-      if(intVal > 85) {
-        classNames += '-0';
-      } else if(intVal > 75) {
-        classNames += '-1';
-      } else if(intVal > 65) {
-        classNames += '-2';
-      } else {
-        classNames += '-3';
-      }
-
-      //return <span className={classNames}></span>;
-      return val;
-    }
-  }, {
     id: 'operationhours',
-    text: _('Connect Time'),
+    text: _('Percentage'),
     filter: 'connectTime'
   }
 ]);

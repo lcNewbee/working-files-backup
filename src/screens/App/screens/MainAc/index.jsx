@@ -8,7 +8,9 @@ import {connect} from 'react-redux';
 import Nav from 'shared/components/Nav';
 import Icon from 'shared/components/Icon';
 import Modal from 'shared/components/Modal';
+import PopOver from 'shared/components/PopOver'
 import Navbar from 'shared/components/Navbar';
+import { FormGroup } from 'shared/components/Form';
 import AsiderBar from './components/AsiderBar';
 import { Link } from 'react-router';
 import * as actions from './actions';
@@ -19,16 +21,17 @@ export default class Main extends Component {
   constructor(props) {
     super(props)
 
-    this.state = {isShow: false};
+    this.state = {isShowUserPop: false};
 
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.showUserPopOver = this.showUserPopOver.bind(this);
     this.onRefresh = this.onRefresh.bind(this);
     this.onLogout = this.onLogout.bind(this);
-    this.onToggleTopMenu = this.onToggleTopMenu.bind(this);
-    this.onToggleAsiderLeft = this.onToggleAsiderLeft.bind(this);
     this.onClickNav = this.onClickNav.bind(this);
     this.onSelectVlan = this.onSelectVlan.bind(this);
+    this.renderPopOverContent = this.renderPopOverContent.bind(this);
+    this.onHiddenPopOver = this.onHiddenPopOver.bind(this);
+    this.onToggleMainPopOver = this.onToggleMainPopOver.bind(this);
 
     document.onkeydown = function(e) {
       if(e.keyCode == 116){
@@ -39,7 +42,9 @@ export default class Main extends Component {
   };
 
   showUserPopOver() {
-    this.setState({isShow: !this.state.isShow});
+    this.onToggleMainPopOver({
+      name: 'userOverview'
+    });
   };
 
   onRefresh(e) {
@@ -52,28 +57,270 @@ export default class Main extends Component {
     this.props.changeLoginStatus('0');
     window.location.hash = "#";
   }
-  onToggleTopMenu() {
-    this.props.onToggleTopMenu()
+
+  onToggleMainPopOver(option) {
+    this.props.toggleMainPopOver(option);
   }
-  onToggleAsiderLeft() {
-    this.props.onToggleAsiderLeft()
+
+  onHiddenPopOver() {
+    this.onToggleMainPopOver({
+      isShow: false
+    });
   }
 
   onClickNav(path) {
     if(path === '/main/network/vlan') {
-      this.props.onToggleAsiderLeft();
+      this.onToggleMainPopOver({
+        name: 'vlanAsider'
+      });
     }
   }
+
+  onClickTopMenu(path) {
+    if(path === '/main/group') {
+      this.onToggleMainPopOver({
+        name: 'groupAsider',
+        isShow: true
+      });
+    } else {
+      this.onToggleMainPopOver({
+        isShow: false
+      });
+    }
+  }
+
   onSelectVlan(id, e) {
     e.preventDefault();
-    this.props.onToggleAsiderLeft();
-    this.props.onSelectVlan(id);
+    this.props.selectVlan(id);
   }
+
+  onSelectGroup(id, e) {
+    e.preventDefault();
+    this.props.selectGroup(id);
+  }
+
+  renderPopOverContent(popOver) {
+    const selectVlanId = this.props.mainAc.getIn(['vlan', 'selected']);
+    const selectGroupId = this.props.mainAc.getIn(['group', 'selected']);
+
+    switch (popOver.name) {
+      case 'userOverview':
+        return (
+          <div className="m-user-overview">
+            <div className="m-user-overview__info">
+              <Icon name="user-secret" className="icon-user" />
+            </div>
+            <div className="m-user-overview__controls">
+              <a className="change-pas" href="#/main/settings/admin">
+                <Icon
+                  name="key"
+                />
+                {_('CHANGE PASSWORD')}
+              </a>
+              <a className="sign-out" href="#" onClick={this.onLogout}>
+                <Icon
+                  name="sign-out"
+                />
+                {_('SIGN OUT')}
+              </a>
+            </div>
+          </div>
+        );
+      case 'topMenu':
+        return (
+          <ul
+            className="o-pop-over__content m-menu m-menu--open"
+            style={{
+              top: '93px',
+              left: '20px',
+              width: '140px',
+              backgroundColor: '#222'
+            }}
+          >
+            {
+              fromJS(this.props.routes[0].childRoutes).map((item) => {
+                const keyVal = `${item.get('path')}`;
+
+                return item.get('text') ? (<li key={keyVal}>
+                  <Link
+                    to={item.get('path')}
+                    className="m-menu__link"
+                    activeClassName="active"
+                    onClick={() => {
+                      this.onClickTopMenu(item.get('path'))
+                    }}
+                  >
+                    {item.get('text')}
+                  </Link>
+                </li>) : null;
+              })
+            }
+          </ul>
+        );
+      case 'vlanAsider':
+        return (
+          <asider className="t-main__asider-left">
+            <h3 className="t-main__asider-header">{_('VLAN列表')}</h3>
+            <ul
+              className="m-menu m-menu--open"
+            >
+              {
+                this.props.mainAc.getIn(['vlan', 'list']).map((item) => {
+                  var curId = item.get('id');
+                  var remark = item.get('remark');
+                  let classNames = 'm-menu__link';
+
+                  if (curId === selectVlanId) {
+                    classNames = `${classNames} active`;
+                  }
+
+                  return (
+                    <li key={curId}>
+                      <a
+                        className={classNames}
+                        onClick={(e) => this.onSelectVlan(curId, e)}
+                      >
+                        {curId}({remark})
+                      </a>
+                    </li>
+                  );
+                })
+              }
+            </ul>
+            <footer className="t-main__asider-footer">
+              <div className="m-action-bar">
+                <div className="m-action-bar__left">
+                  <Icon
+                    name="cog"
+                    size="2x"
+                    onClick={() => {
+                      this.props.showMainModal({
+                        title: _('Manage VLAN'),
+                        isShow: true,
+                        name: 'vlan'
+                      })
+                    }}
+                  />
+                </div>
+                <div className="m-action-bar__right">
+                  <Icon
+                    name="plus"
+                    size="2x"
+                    onClick={() => {
+                      this.props.showMainModal({
+                        title: _('Add VLAN'),
+                        isShow: true,
+                        name: 'vlan'
+                      })
+                    }}
+                  />
+                </div>
+              </div>
+            </footer>
+          </asider>
+        );
+
+      case 'groupAsider':
+        return (
+          <asider className="t-main__asider-left">
+            <h3 className="t-main__asider-header">{_('组列表')}</h3>
+            <ul
+              className="m-menu m-menu--open"
+            >
+              {
+                this.props.mainAc.getIn(['group', 'list']).map((item) => {
+                  var curId = item.get('id');
+                  var remark = item.get('remark');
+                  let classNames = 'm-menu__link';
+
+                  if (curId === selectGroupId) {
+                    classNames = `${classNames} active`;
+                  }
+
+                  return (
+                    <li key={curId}>
+                      <a
+                        className={classNames}
+                        onClick={(e) => this.onSelectGroup(curId, e)}
+                      >
+                        {curId}({remark})
+                      </a>
+                    </li>
+                  );
+                })
+              }
+            </ul>
+            <footer className="t-main__asider-footer">
+              <div className="m-action-bar">
+                <div className="m-action-bar__left">
+                  <Icon
+                    name="cog"
+                    size="2x"
+                    onClick={() => {
+                      this.props.showMainModal({
+                        title: _('Manage Ap Groups'),
+                        isShow: true,
+                        name: 'group'
+                      })
+                    }}
+                  />
+                </div>
+                <div className="m-action-bar__right">
+                  <Icon
+                    name="plus"
+                    size="2x"
+                    onClick={() => {
+                      this.props.showMainModal({
+                        title: _('Add Ap Group'),
+                        isShow: true,
+                        name: 'group'
+                      })
+                    }}
+                  />
+                </div>
+              </div>
+            </footer>
+          </asider>
+        );
+
+      default:
+        return null;
+    }
+  }
+
+  renderModalContent(option) {
+    switch (option.name) {
+      case 'vlan':
+        return (
+          <p>我是valn</p>
+        );
+      case 'group':
+        return (
+          <div>
+            <FormGroup
+              type="number"
+              label={_('Group No')}
+              disabled
+            />
+            <FormGroup
+              type="text"
+              label={_('Group Name')}
+            />
+            <FormGroup
+              type="text"
+              label={_('Remarks')}
+            />
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  }
+
   render() {
     const { saving, version, propertyData, guiName } = this.props.app.toJS();
-    const { topMenu, asiderLeft } = this.props.mainAc.toJS();
-    const { isShow } = this.state;
-    const selectVlanId = this.props.mainAc.getIn(['vlan', 'selected']);
+    const { popOver, modal } = this.props.mainAc.toJS();
     let curTopNavText = _('NETWORK');
     let mainClassName = 't-main t-main--ac';
 
@@ -83,15 +330,15 @@ export default class Main extends Component {
       curTopNavText = _('SYSTEM');
     }
 
-    if(asiderLeft) {
+    if(popOver.isShow && (popOver.name === 'vlanAsider' ||
+        popOver.name === 'groupAsider')) {
+
       mainClassName = `${mainClassName} main--open-left`
     }
+
     return (
       <div>
-        <Navbar
-          title={_(guiName)}
-          version={version}
-        >
+        <Navbar title={_(guiName)} version={version}>
           <div className="aside">
             <a href="#" className="as-control" onClick={this.onRefresh}>
               <Icon name="refresh" className="icon" />
@@ -107,11 +354,24 @@ export default class Main extends Component {
           </div>
           <div className="o-menu-bar">
             <nav
-              onClick={this.onToggleTopMenu}
+              onClick={() =>
+                this.onToggleMainPopOver({
+                  name: 'topMenu'
+                })
+              }
               className="o-menu-bar__nav"
             >
               <h3>
-                <Icon name="navicon" onMouseOver={this.onToggleTopMenu} />{curTopNavText}</h3>
+                <Icon
+                  name="navicon"
+                  onMouseOver={() =>
+                    this.onToggleMainPopOver({
+                      name: 'topMenu'
+                    })
+                  }
+                />
+                {curTopNavText}
+              </h3>
             </nav>
 
             <ol className="m-breadcrumb">
@@ -143,113 +403,24 @@ export default class Main extends Component {
             }
           </div>
         </div>
-        {
-          isShow ? (
-            <div className="m-pop-over" onClick={this.showUserPopOver}>
-              <div className="m-pop-over__content m-user-overview">
-                <div className="m-user-overview__info">
-                  <Icon name="user-secret" className="icon-user" />
-                </div>
-                <div className="m-user-overview__controls">
-                  <a className="change-pas" href="#/main/settings/admin">
-                    <Icon
-                      name="key"
-                    />
-                    {_('CHANGE PASSWORD')}
-                  </a>
-                  <a className="sign-out" href="#" onClick={this.onLogout}>
-                    <Icon
-                      name="sign-out"
-                    />
-                    {_('SIGN OUT')}
-                  </a>
-                </div>
-              </div>
-              <div className="m-pop-over__overlay"></div>
-            </div>
-          ) : null
-        }
 
-        {
-          topMenu ? (
-            <div className="m-pop-over" onClick={this.onToggleTopMenu}>
-              <div className="m-pop-over__overlay"
-              ></div>
-              <ul
-                className="m-pop-over__content m-menu m-menu--open"
-                style={{top: '93px', left: '20px', width: '140px', backgroundColor: '#222'}}
-              >
-                {
-                  fromJS(this.props.routes[0].childRoutes).map((item) => {
-                    const keyVal = `${item.get('path')}`;
+        <PopOver onClose={this.onHiddenPopOver} {...popOver}>
+          {
+            this.renderPopOverContent(popOver)
+          }
+        </PopOver>
 
-                    return item.get('text') ? (<li key={keyVal}>
-                      <Link
-                        to={item.get('path')}
-                        className="m-menu__link"
-                        activeClassName="active"
-                      >
-                        {item.get('text')}
-                      </Link>
-                    </li>) : null;
-                  })
-                }
-              </ul>
-            </div>
-          ) : null
-        }
-        {
-          asiderLeft ? (
-            <div className="m-pop-over">
-              <div className="m-pop-over__overlay" onClick={this.props.onToggleAsiderLeft}></div>
-              <asider className="t-main__asider-left">
-                <h3 className="t-main__asider-header">{_('VLAN列表')}</h3>
-                <ul
-                  className="m-menu m-menu--open"
-                >
-                  {
-                    this.props.mainAc.getIn(['vlan', 'list']).map((item) => {
-                      var curId = item.get('id');
-                      var remark = item.get('remark');
-                      let classNames = 'm-menu__link';
-
-                      if (curId === selectVlanId) {
-                        classNames = `${classNames} active`;
-                      }
-
-                      return (
-                        <li>
-                          <a
-                            className={classNames}
-                            onClick={(e) => this.onSelectVlan(curId, e)}
-                          >
-                            {curId}({remark})
-                          </a>
-                        </li>
-                      );
-                    })
-                  }
-                </ul>
-                <footer className="t-main__asider-footer">
-                  <div className="m-action-bar">
-                    <div className="m-action-bar__left">
-                      <Icon
-                        name="cog"
-                      />
-                      修改
-                    </div>
-                    <div className="m-action-bar__right">
-                      <Icon
-                        name="plus"
-                      />
-                      添加
-                    </div>
-                  </div>
-                </footer>
-              </asider>
-            </div>
-          ) : null
-        }
+        <Modal onClose={this.onHiddenPopOver} {...modal}
+          onClose={() => {
+            this.props.showMainModal({
+              isShow: false,
+            })
+          }}
+        >
+          {
+            this.renderModalContent(modal)
+          }
+        </Modal>
 
         {
           saving ? <div className="body-backdrop"></div> : null
