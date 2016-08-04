@@ -24,26 +24,7 @@ export const Advance = React.createClass({
           <FormGroup
             label={_('RTS Switch') }
             type="checkbox"
-          >
-            <label htmlFor="rtsOn" className="radio">
-              <FormInput
-                name="rtsSwitch"
-                type="radio"
-                id="rtsOn"
-                value='on'
-              />
-              <span>On</span>
-            </label>
-            <label htmlFor="rtsOff" className="radio">
-              <FormInput
-                name="rtsSwitch"
-                type="radio"
-                id="rtsOff"
-                value='off'
-              />
-              <span>Off</span>
-            </label>
-          </FormGroup>
+          />
           <FormGroup
             className="rtsThresholdValue"
             label={_('RTS Threshold') }
@@ -90,51 +71,15 @@ export const Advance = React.createClass({
         <div className="clientIsoConfg">
           <FormGroup
             label={_("Client Isolation") }
-          >
-            <label htmlFor="isolateOn">
-              <FormInput
-                name="clientIsolateConfg"
-                type="radio"
-                id="isolateOn"
-                value='on'
-              />
-              <span>On</span>
-            </label>
-            <label htmlFor="isolateOff">
-              <FormInput
-                name="clientIsolateConfg"
-                type="radio"
-                id="isolateOff"
-                value='off'
-              />
-              <span>Off</span>
-            </label>
-          </FormGroup>
+            type="checkbox"
+          />
         </div>
 
         <div className="sensitivityConfg">
           <FormGroup
             label={_("Sensitivity Threshold") }
-          >
-            <label htmlFor="thresholdOn">
-              <FormInput
-                name="sensitivityThresConfg"
-                type="radio"
-                id="thresholdOn"
-                value='on'
-              />
-              <span>On</span>
-            </label>
-            <label htmlFor="thresholdOff">
-              <FormInput
-                name="sensitivityThresConfg"
-                type="radio"
-                id="thresholdOff"
-                value='off'
-              />
-              <span>Off</span>
-            </label>
-          </FormGroup>
+            type="checkbox"
+          />
           <FormGroup
             className="sensThresholdValue"
             label={_('Threshold Value') }

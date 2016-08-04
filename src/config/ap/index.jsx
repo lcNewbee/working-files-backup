@@ -44,6 +44,12 @@ const pWirelessConfig = require('../../screens/App/screens/Main/screens/Wireless
 //高级设置
 const pAdvance = require('../../screens/App/screens/Main/screens/Advance');
 
+//网络服务
+const pNetworkService = require('../../screens/App/screens/Main/screens/NetworkService');
+//子菜单
+const sNTPClient = require('../../screens/App/screens/Main/screens/NetworkService/NTPClient');
+const sSystemLog = require('../../screens/App/screens/Main/screens/NetworkService/SystemLog');
+
 
 
 
@@ -126,6 +132,27 @@ const routes = [{
           icon:'cog',
           text:_('ADVANCE'),
           component:pAdvance.Screen,
+        },{
+          id:'networkservice',
+          path:'/main/networkservice',
+          icon:'cog',
+          text:_('NETWORK SERVICE'),
+          component:pNetworkService,
+          indexRoute: {
+            onEnter: (nextState, replace) => replace('/main/networkservice/ntpclient'),
+          },
+          childRoutes: [
+            {
+              id:'ntpclient',
+              path: '/main/networkservice/ntpclient',
+              text: _('NTP Client'),
+              component: sNTPClient.Screen,
+            }, {
+              id: 'systemlog',
+              path: '/main/settings/systemlog',
+              text: _('System Log'),
+              component: sSystemLog.Screen,
+            }]
         },{
           id: 'status',
           isIndex: true,
@@ -219,7 +246,10 @@ const reducers = {
   admin: sAdmin.reducer,
   networkmonitor: sNetworkmonitor.networkmonitor,
   wirelessconfig:pWirelessConfig.wirelessconfig,
-  advance:pAdvance.advance
+  advance:pAdvance.advance,
+  networkservice:pNetworkService.networkservice,
+  ntpclient:sNTPClient.ntpclient,
+  systemlog:sSystemLog.systemlog
 };
 
 // Store
