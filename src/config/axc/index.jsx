@@ -40,26 +40,26 @@ const sLogin = require('../../screens/App/screens/Login');
 const sWizard = require('../../screens/App/screens/Wizard');
 
 //
-const sMainAc = require('../../screens/App/screens/MainAc');
+const sMainAxc = require('../../screens/App/screens/MainAxc');
 
 /**
  * 网络设置
  */
 // VLAN 设置
-const sInterfaces = require('../../screens/App/screens/MainAc/screens/VLAN/screens/Interfaces');
-const sVlanAaa = require('../../screens/App/screens/MainAc/screens/VLAN/screens/Aaa');
-const sVlanAcl = require('../../screens/App/screens/MainAc/screens/VLAN/screens/Acl');
-const sVlanNat = require('../../screens/App/screens/MainAc/screens/VLAN/screens/Nat');
-const sVlanDhcp = require('../../screens/App/screens/MainAc/screens/VLAN/screens/Dhcp');
-const sRoutes = require('../../screens/App/screens/MainAc/screens/Routes');
+const sInterfaces = require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Interfaces');
+const sVlanAaa = require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Aaa');
+const sVlanAcl = require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Acl');
+const sVlanNat = require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Nat');
+const sVlanDhcp = require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Dhcp');
+const sRoutes = require('../../screens/App/screens/MainAxc/screens/Routes');
 
 /**
  * AP组管理
  */
-const sClients = require('../../screens/App/screens/MainAc/screens/Monitor/screens/Clients');
-const sFlowStatus = require('../../screens/App/screens/MainAc/screens/Monitor/screens/FlowStatus');
-const sWlanStatus = require('../../screens/App/screens/MainAc/screens/Monitor/screens/WlanStatus');
-const sSafeStatus = require('../../screens/App/screens/MainAc/screens/Monitor/screens/SafeStatus');
+const sClients = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Clients');
+const sFlowStatus = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/FlowStatus');
+const sWlanStatus = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/WlanStatus');
+const sSafeStatus = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/SafeStatus');
 
 const routes = [{
   path: '/',
@@ -68,7 +68,7 @@ const routes = [{
   childRoutes: [
     {
       path: '/main/network',
-      component: sMainAc.Screen,
+      component: sMainAxc.Screen,
       text: _('NETWORK'),
       indexRoute: { onEnter: (nextState, replace) => replace('/main/network/vlan') },
       childRoutes: [{
@@ -130,7 +130,7 @@ const routes = [{
       ],
     }, {
       path: '/main/group',
-      component: sMainAc.Screen,
+      component: sMainAxc.Screen,
       text: _('AP GROUP'),
       indexRoute: { onEnter: (nextState, replace) => replace('/main/group/monitor') },
       childRoutes: [
@@ -262,7 +262,7 @@ const routes = [{
       ],
     }, {
       path: '/main/system',
-      component: sMainAc.Screen,
+      component: sMainAxc.Screen,
       text: _('SYSTEM'),
       indexRoute: { onEnter: (nextState, replace) => replace('/main/system/status') },
       childRoutes: [
@@ -338,9 +338,10 @@ const routes = [{
 const reducers = {
   app: App.app,
   login: sLogin.login,
-  mainAc: sMainAc.mainAc,
+  mainAxc: sMainAxc.reducer,
   interfaces: sInterfaces.reducer,
   dhcpAdressPool: sVlanDhcp.reducer,
+
 
   // ap组管理
   clients: sClients.reducer,

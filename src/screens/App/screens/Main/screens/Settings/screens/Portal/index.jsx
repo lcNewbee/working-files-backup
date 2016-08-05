@@ -275,7 +275,7 @@ export const Portal = React.createClass({
           name="portalname"
           value={getCurrData('portalname')}
           onChange={this.onUpdateSettings('portalname')}
-          required={true}
+          required
           {...portalname}
         />
         <FormGroup

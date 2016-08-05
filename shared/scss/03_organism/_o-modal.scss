@@ -16,7 +16,6 @@
   bottom: 0;
   left: 0;
   z-index: 1050;
-  //display: none;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   outline: 0;
@@ -44,7 +43,7 @@
 .o-modal__dialog {
   position: relative;
   z-index: 1050;
-  margin: 10px;
+  margin: 10px auto;
   width: auto;
 }
 
@@ -52,6 +51,16 @@
 .o-modal__alert {
   width: 380px;
   margin: 20px auto;
+}
+.o-modal__dialog {
+  margin: 30px auto;
+  width: 600px;
+}
+
+.o-modal--lg {
+  .o-modal__dialog {
+    width: 900px;
+  }
 }
 
 .o-modal__message {
@@ -137,17 +146,12 @@
 @media (min-width: $mw-md) {
   .o-modal__dialog {
     margin: 30px auto;
-    width: 600px;
+    max-width: 900px;
   }
   .o-modal__content {
     box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
   }
-  .o-modal--sm {
-    width: 300px;
-  }
 }
 @media (min-width: $mw-lg) {
-  .o-modal--lg {
-    width: 900px;
-  }
+
 }

@@ -36,7 +36,7 @@ export class Table extends Component {
   render() {
     const { className, options, list, page, loading, selectAble } = this.props;
     const listLen = this.props.list.size;
-    
+
     let filterOptions = options.map((item) => {
       let ret = item;
       const filterStr = item.get('filter');
@@ -72,7 +72,7 @@ export class Table extends Component {
               ) : (
                 <tr>
                   <td
-                    colSpan={options.size}
+                    colSpan={options.size + (selectAble ? 1 : 0)}
                     className="empty"
                   >
                     {_('No Data')}

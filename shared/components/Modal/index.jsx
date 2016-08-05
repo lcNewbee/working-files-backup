@@ -52,12 +52,13 @@ class Modal extends Component {
   }
 
   render() {
+    const { size, role, id, transitionLeave, transitionEnter,
+      isShow, title, cancelText, okButton, okText } = this.props;
     let classNames;
     let keyVal = 'onlyModal';
     let hasCloseBtn = true;
     let { cancelButton } = this.props;
-    const { size, role, id, transitionLeave, transitionEnter,
-      isShow, title, cancelText, okButton, okText } = this.props;
+    let modalClassName = 'o-modal';
 
     // role is shown in classNames
     if (role) {
@@ -66,7 +67,7 @@ class Modal extends Component {
 
     // ReactCSSTransitionGroup need key value
     if (size) {
-      keyVal += ` o-modal__${size}`;
+      modalClassName = `${modalClassName} o-modal--${size}`;
     }
 
     // ReactCSSTransitionGroup need key value
@@ -96,7 +97,7 @@ class Modal extends Component {
           isShow ? (
             <div
               key={keyVal}
-              className="o-modal"
+              className={modalClassName}
               role={role}
             >
               <div className="o-modal__backdrop"></div>

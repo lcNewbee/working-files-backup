@@ -7,11 +7,12 @@
 
   .o-menu-bar__nav {
     float: left;
-    width: 170px;
+    width: 190px;
     position: relative;
     padding-left: 20px;
     background-color: #666;
     z-index: 10;
+    user-select: none;
 
     &::after {
       content: '';

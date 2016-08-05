@@ -201,7 +201,7 @@ export const Clients = React.createClass({
             options={typeArr}
             onChange={this.onChangeType}
             style={{
-              'margin-left': 0
+              marginLeft: 0
             }}
           />
           <Select

@@ -10,6 +10,7 @@ const defaultState = fromJS({
   },
   modal: {
     isShow: false,
+    size: 'lg',
     name: 'group',
   },
   vlan: {
@@ -39,7 +40,7 @@ const defaultState = fromJS({
         ]
       }, {
         id: '2',
-        groupName: '测试',
+        groupName: '研发',
         remark: '研发',
         devices: [
           {
@@ -53,9 +54,9 @@ const defaultState = fromJS({
 });
 
 function togglePopOverState(state, option) {
-  let ret = state;
-  let isShow = option.isShow;
-  let name = option.name || state.getIn(['popOver', 'name']);
+  let thisOption = option || {};
+  let isShow = thisOption.isShow;
+  let name = thisOption.name || state.getIn(['popOver', 'name']);
 
   if(isShow === undefined) {
     isShow = !state.getIn(['popOver', 'isShow']);
@@ -73,6 +74,13 @@ function changeModalState(state, option) {
 
   if(myOption.isShow === undefined) {
     myOption.isShow = !state.getIn(['modal', 'isShow']);
+  }
+
+  if(myOption.okButton === undefined) {
+    myOption.okButton = true;
+  }
+  if(myOption.cancelButton === undefined) {
+    myOption.cancelButton = true;
   }
 
   myOption.name = option.name || state.getIn(['modal', 'name']);

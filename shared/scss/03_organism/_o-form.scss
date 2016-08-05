@@ -2,6 +2,7 @@ $boder-color:         #e5e5e5;
 
 .form-group {
   margin-bottom: 12px;
+  @include clearfix;
 
   &.form-group--save {
     padding-top: 12px;

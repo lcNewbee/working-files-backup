@@ -8,14 +8,17 @@ import {connect} from 'react-redux';
 import Nav from 'shared/components/Nav';
 import Icon from 'shared/components/Icon';
 import Modal from 'shared/components/Modal';
-import PopOver from 'shared/components/PopOver'
+import Table from 'shared/components/Table';
+import PopOver from 'shared/components/PopOver';
+import Button from 'shared/components/Button';
+import SaveButton from 'shared/components/Button/Save';
 import Navbar from 'shared/components/Navbar';
 import { FormGroup } from 'shared/components/Form';
 import AsiderBar from './components/AsiderBar';
 import { Link } from 'react-router';
 import * as actions from './actions';
 import * as appActions from 'shared/actions/app';
-import reducer from './reducer';
+import myReducer from './reducer';
 
 export default class Main extends Component {
   constructor(props) {
@@ -32,6 +35,8 @@ export default class Main extends Component {
     this.renderPopOverContent = this.renderPopOverContent.bind(this);
     this.onHiddenPopOver = this.onHiddenPopOver.bind(this);
     this.onToggleMainPopOver = this.onToggleMainPopOver.bind(this);
+    this.renderBreadcrumb = this.renderBreadcrumb.bind(this);
+    this.onClickTopMenuTitle= this.onClickTopMenuTitle.bind(this);
 
     document.onkeydown = function(e) {
       if(e.keyCode == 116){
@@ -89,6 +94,18 @@ export default class Main extends Component {
     }
   }
 
+  onClickTopMenuTitle() {
+    if(this.props.location.pathname.indexOf('/main/group/') !== -1) {
+      this.onToggleMainPopOver({
+        name: 'groupAsider'
+      })
+    } else {
+      this.onToggleMainPopOver({
+        name: 'topMenu'
+      })
+    }
+  }
+
   onSelectVlan(id, e) {
     e.preventDefault();
     this.props.selectVlan(id);
@@ -100,8 +117,8 @@ export default class Main extends Component {
   }
 
   renderPopOverContent(popOver) {
-    const selectVlanId = this.props.mainAc.getIn(['vlan', 'selected']);
-    const selectGroupId = this.props.mainAc.getIn(['group', 'selected']);
+    const selectVlanId = this.props.mainAxc.getIn(['vlan', 'selected']);
+    const selectGroupId = this.props.mainAxc.getIn(['group', 'selected']);
 
     switch (popOver.name) {
       case 'userOverview':
@@ -165,7 +182,7 @@ export default class Main extends Component {
               className="m-menu m-menu--open"
             >
               {
-                this.props.mainAc.getIn(['vlan', 'list']).map((item) => {
+                this.props.mainAxc.getIn(['vlan', 'list']).map((item) => {
                   var curId = item.get('id');
                   var remark = item.get('remark');
                   let classNames = 'm-menu__link';
@@ -197,7 +214,10 @@ export default class Main extends Component {
                       this.props.showMainModal({
                         title: _('Manage VLAN'),
                         isShow: true,
-                        name: 'vlan'
+                        size: 'lg',
+                        cancelButton: false,
+                        okButton: false,
+                        name: 'vlanManage'
                       })
                     }}
                   />
@@ -210,6 +230,7 @@ export default class Main extends Component {
                       this.props.showMainModal({
                         title: _('Add VLAN'),
                         isShow: true,
+                        size: '',
                         name: 'vlan'
                       })
                     }}
@@ -228,7 +249,7 @@ export default class Main extends Component {
               className="m-menu m-menu--open"
             >
               {
-                this.props.mainAc.getIn(['group', 'list']).map((item) => {
+                this.props.mainAxc.getIn(['group', 'list']).map((item) => {
                   var curId = item.get('id');
                   var remark = item.get('remark');
                   let classNames = 'm-menu__link';
@@ -260,7 +281,8 @@ export default class Main extends Component {
                       this.props.showMainModal({
                         title: _('Manage Ap Groups'),
                         isShow: true,
-                        name: 'group'
+                        size: 'lg',
+                        name: 'groupManage'
                       })
                     }}
                   />
@@ -273,6 +295,7 @@ export default class Main extends Component {
                       this.props.showMainModal({
                         title: _('Add Ap Group'),
                         isShow: true,
+                        size: '',
                         name: 'group'
                       })
                     }}
@@ -289,6 +312,25 @@ export default class Main extends Component {
   }
 
   renderModalContent(option) {
+    const selectVlanId = this.props.mainAxc.getIn(['vlan', 'selected']);
+    const selectGroupId = this.props.mainAxc.getIn(['group', 'selected']);
+    let tableOption = fromJS([
+      {
+        id: 'devicename',
+        text: _('MAC Address') + '/' + _('Name'),
+        transform: function(val, item) {
+          return item.get('devicename') || item.get('mac');
+        }
+      }, {
+        id: 'ip',
+        text: _('IP Address')
+      }, {
+        id: 'status',
+        text: _('Status'),
+        filter: 'translate'
+      }
+    ]);
+
     switch (option.name) {
       case 'vlan':
         return (
@@ -298,18 +340,100 @@ export default class Main extends Component {
         return (
           <div>
             <FormGroup
-              type="number"
-              label={_('Group No')}
-              disabled
-            />
-            <FormGroup
               type="text"
               label={_('Group Name')}
+              required
             />
             <FormGroup
               type="text"
               label={_('Remarks')}
+              required
             />
+            <Table
+              className="table"
+              options={tableOption}
+              selectAble
+              list={fromJS([{
+                devicename: '12',
+                ip: 'dasd',
+                status: '23',
+              }])}
+            />
+          </div>
+        );
+
+      case 'groupManage':
+        return (
+          <div>
+
+          </div>
+        );
+
+      case 'vlanManage':
+        return (
+          <div className="row">
+            <div className="cols col-6">
+              <h3>{_('VLAN 列表')}</h3>
+              <ul
+                className="m-menu m-menu--open"
+              >
+              {
+                this.props.mainAxc.getIn(['vlan', 'list']).map((item) => {
+                  var curId = item.get('id');
+                  var remark = item.get('remark');
+                  let classNames = 'm-menu__link';
+
+                  if (curId === selectVlanId) {
+                    classNames = `${classNames} active`;
+                  }
+
+                  return (
+                    <li key={curId}>
+                      <a
+                        className={classNames}
+                        onClick={(e) => this.onSelectVlan(curId, e)}
+                      >
+                        {curId}({remark})
+                      </a>
+                    </li>
+                  );
+                })
+              }
+              </ul>
+              <div className="action-btns">
+                <Button
+                  icon="plus"
+                  text={_('添加VLAN')}
+                />
+                <Button
+                  icon="trash"
+                  text={_('删除VLAN')}
+                />
+              </div>
+            </div>
+            <div className="cols col-6">
+              <h3>{_('VLAN 列表')}</h3>
+              <FormGroup
+                type="number"
+                label={_('Group No')}
+                disabled
+              />
+              <FormGroup
+                type="text"
+                label={_('Group Name')}
+              />
+              <FormGroup
+                type="text"
+                label={_('Remarks')}
+              />
+              <div className="form-group form-group-save">
+                <div className="form-control">
+                  <SaveButton
+                    type='button'
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         );
 
@@ -318,9 +442,57 @@ export default class Main extends Component {
     }
   }
 
+  renderBreadcrumb() {
+    const groupData = this.props.mainAxc.get('group');
+    const curRoutes = this.props.routes;
+    let breadcrumbList = fromJS([]);
+    let len = curRoutes.length;
+    let i = 2;
+
+    // 如果是 AP组管理
+    if (curRoutes[1].path === '/main/group') {
+      breadcrumbList = breadcrumbList.unshift({
+        path: '/main/group',
+        text: _('All Group'),
+      })
+      .unshift({
+        path: '/main/group',
+        text: groupData.get('list').find((item) => {
+            return item.get('id') === groupData.get('selected');
+          }).get('groupName'),
+      });
+    }
+
+    for (i; i < len; i++) {
+      breadcrumbList = breadcrumbList.unshift({
+        path: curRoutes[i].path,
+        text: curRoutes[i].text
+      })
+    }
+
+
+    return (
+      <ol className="m-breadcrumb">
+        {
+          breadcrumbList.map((item, i) => {
+            return <li key={i}>
+              <Link
+                className="m-breadcrumb__link"
+                to={item.path}
+              >
+                {item.text}
+              </Link>
+            </li>;
+          })
+        }
+      </ol>
+    );
+  }
+
   render() {
     const { saving, version, propertyData, guiName } = this.props.app.toJS();
-    const { popOver, modal } = this.props.mainAc.toJS();
+    const { popOver, modal } = this.props.mainAxc.toJS();
+
     let curTopNavText = _('NETWORK');
     let mainClassName = 't-main t-main--ac';
 
@@ -355,9 +527,7 @@ export default class Main extends Component {
           <div className="o-menu-bar">
             <nav
               onClick={() =>
-                this.onToggleMainPopOver({
-                  name: 'topMenu'
-                })
+                this.onClickTopMenuTitle()
               }
               className="o-menu-bar__nav"
             >
@@ -373,18 +543,9 @@ export default class Main extends Component {
                 {curTopNavText}
               </h3>
             </nav>
-
-            <ol className="m-breadcrumb">
-              <li>
-                <a className="m-breadcrumb__link" href="">一级菜单</a>
-              </li>
-              <li>
-                <a className="m-breadcrumb__link" href="">二级菜单</a>
-              </li>
-              <li>
-                <a className="m-breadcrumb__link" href="">三级菜单</a>
-              </li>
-            </ol>
+            {
+              this.renderBreadcrumb()
+            }
           </div>
         </Navbar>
 
@@ -433,7 +594,7 @@ export default class Main extends Component {
 function mapStateToProps(state) {
   return {
     app: state.app,
-    mainAc: state.mainAc,
+    mainAxc: state.mainAxc,
   };
 }
 
@@ -449,4 +610,4 @@ export const Screen = connect(
   mapDispatchToProps
 )(Main);
 
-export const mainAc = reducer;
+export const reducer = myReducer;
