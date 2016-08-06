@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import {List, fromJS} from 'immutable';
 
 // components
-import {Table} from 'shared/components/Table';
+import Table from 'shared/components/Table';
 import Switchs from 'shared/components/Switchs';
 import Button from 'shared/components/Button';
 import Icon from 'shared/components/Icon';

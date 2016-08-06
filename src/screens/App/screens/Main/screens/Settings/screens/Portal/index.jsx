@@ -1,19 +1,18 @@
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
 import urls from 'shared/config/urls';
 import { bindActionCreators } from 'redux';
-import {fromJS, Map, List} from 'immutable';
+import { fromJS, Map, List } from 'immutable';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import validator from 'shared/utils/lib/validator';
+import { FormGroup } from 'shared/components/Form';
+import Select from 'shared/components/Select';
+import { Button, SaveButton } from 'shared/components';
 import * as appActions from 'shared/actions/app';
 import * as myActions from './actions';
 import myReducer from './reducer';
 import './index.scss';
-import {FormGroup} from 'shared/components/Form';
-import Select from 'shared/components/Select';
-import Button from 'shared/components/Button';
-import SaveButton from 'shared/components/Button/Save';
 
 const MSG = {
   Seconds: _('Seconds'),
@@ -22,32 +21,32 @@ const MSG = {
   hours: _('Hours'),
   days: _('Days'),
   userDef: _('User Defined'),
-  imageDes: _('Select 1-3 slide pictures of dimension 640px*640px')
-}
+  imageDes: _('Select 1-3 slide pictures of dimension 640px*640px'),
+};
 
-const validOptions = Map({
+const validOptions = fromJS({
   portalname: validator({
-    rules: 'len:[1, 64]'
+    rules: 'len:[1, 64]',
   }),
   url: validator({
-    rules: 'url'
+    rules: 'url',
   }),
   title: validator({
-    rules: 'url'
+    rules: 'url',
   }),
   timeout: validator({
-    rules: 'required'
+    rules: 'required',
   }),
   refreshtime: validator({
-    rules: 'required'
-  })
+    rules: 'required',
+  }),
 });
 
 const propTypes = {
   reqeustFetchPortal: PropTypes.func,
   fetching: PropTypes.bool,
   data: PropTypes.instanceOf(Map),
-  groups: PropTypes.instanceOf(List)
+  groups: PropTypes.instanceOf(List),
 };
 
 export const Portal = React.createClass({
@@ -57,8 +56,8 @@ export const Portal = React.createClass({
     return {
       imageStatus1: 'default',
       imageStatus2: 'default',
-      imageStatus3: 'default'
-    }
+      imageStatus3: 'default',
+    };
   },
 
   componentWillMount() {
@@ -66,7 +65,7 @@ export const Portal = React.createClass({
   },
 
   componentDidUpdate(prevProps) {
-    if(prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
+    if (prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
       this.props.fetchPortalSettings();
     }
   },
@@ -76,57 +75,57 @@ export const Portal = React.createClass({
   },
 
   onUpdateSettings(name) {
-    return function(data, e) {
-      let settings = {};
+    return function (data) {
+      const settings = {};
 
       settings[name] = data.value;
       this.props.changePortalSettings(settings);
-    }.bind(this)
+    }.bind(this);
   },
 
   onSave() {
-    this.props.validateAll(function (invalid) {
+    this.props.validateAll((invalid) => {
       if (invalid.isEmpty()) {
         this.props.setPortal();
       }
-    }.bind(this));
+    });
   },
 
   onChangeImage(i) {
-    return function(e) {
-      var data = {};
-      var filePath = e.target.value;
-      var extension = utils.getExtension(filePath);
+    return function (e) {
+      let data = {};
+      let filePath = e.target.value;
+      let extension = utils.getExtension(filePath);
 
-      if(!filePath) {
+      if (!filePath) {
         this.props.createModal({
           id: 'admin',
           role: 'alert',
-          text: _('Please select a upload image')
+          text: _('Please select a upload image'),
         });
-        return ;
+        return;
       }
 
-      if('png,gif,jpg,bmp'.indexOf(extension) === -1) {
+      if ('png,gif,jpg,bmp'.indexOf(extension) === -1) {
         this.props.createModal({
           id: 'admin',
           role: 'alert',
-          text: _('Please select a upload image')
+          text: _('Please select a upload image'),
         });
 
         e.target.value = '';
         this.restImageStatus(i);
-        return ;
+        return;
       }
 
       data['imageStatus' + i] = 'selected';
       this.setState(utils.extend({}, this.state, data));
-    }.bind(this)
+    }.bind(this);
   },
 
   restImageStatus(i) {
-    var input = document.getElementById('filename' + i);
-    var data = {};
+    let input = document.getElementById('filename' + i);
+    let data = {};
 
     data['imageStatus' + i] = 'default';
     this.setState(utils.extend({}, this.state, data));
@@ -134,7 +133,7 @@ export const Portal = React.createClass({
   },
 
   imageUploading(i) {
-    var data = {};
+    let data = {};
 
     data['imageStatus' + i] = 'loading';
     this.setState(utils.extend({}, this.state, data));
@@ -143,29 +142,29 @@ export const Portal = React.createClass({
   onUploadImage(i) {
     const that = this;
 
-    return function() {
-      var input = document.getElementById('filename' + i);
-      var formElem = document.getElementById('imageForm' + i);
-      var data, extension;
+    return function () {
+      let input = document.getElementById('filename' + i);
+      let formElem = document.getElementById('imageForm' + i);
+      let data, extension;
 
-      if(!input.value) {
+      if (!input.value) {
         that.props.createModal({
           id: 'admin',
           role: 'alert',
-          text: _('Please select a upload image')
+          text: _('Please select a upload image'),
         });
-        return ;
+        return;
       }
 
       extension = utils.getExtension(input.value);
 
-      if(that.state['imageStatus' + i] !== 'selected') {
-         return ;
+      if (that.state['imageStatus' + i] !== 'selected') {
+        return;
       }
 
       //
-      if(typeof FormData === 'function') {
-        data = new FormData()
+      if (typeof FormData === 'function') {
+        data = new FormData();
         data.append('filename', input.files[0]);
         data.append('pid', that.getCurrData('pid'));
         data.append('count', i);
@@ -174,21 +173,19 @@ export const Portal = React.createClass({
 
         fetch(urls.uploadPortalImage, {
           method: 'POST',
-          body: data
+          body: data,
         })
-        .then(function(rq) {
-          that.restImageStatus(i)
+        .then(function (rq) {
+          that.restImageStatus(i);
           that.props.fetchPortalSettings();
-        })
-
+        });
       } else {
         that.imageUploading(i);
         formElem.submit();
         that.restImageStatus(i);
         that.props.fetchPortalSettings();
       }
-
-    }
+    };
   },
 
   getCurrData(name, defaultVal) {
@@ -203,66 +200,66 @@ export const Portal = React.createClass({
 
     // validate const
     const {
-      portalname, url, title, timeout, refreshtime
+      portalname, url, title, timeout, refreshtime,
     } = this.props.validateOption;
     const refreshtimeOtions = [
       {
         value: '2',
-        label: '2 ' + MSG.Seconds
+        label: '2 ' + MSG.Seconds,
       }, {
         value: '3',
-        label: '3 ' + MSG.Seconds
+        label: '3 ' + MSG.Seconds,
       }, {
         value: '5',
         label: '5 ' + MSG.Seconds,
-        default: true
+        default: true,
       }, {
         value: '10',
-        label: '10 ' + MSG.Seconds
+        label: '10 ' + MSG.Seconds,
       }, {
         value: '20',
-        label: '20 ' + MSG.Seconds
+        label: '20 ' + MSG.Seconds,
       },
     ];
     // minutes
     const expirationOptions = [
       {
         value: '600',
-        label: '10 ' + MSG.minutes
+        label: '10 ' + MSG.minutes,
       }, {
         value: '1200',
-        label: '20 ' + MSG.minutes
+        label: '20 ' + MSG.minutes,
       }, {
         value: '1800',
-        label: '30 ' + MSG.minutes
+        label: '30 ' + MSG.minutes,
       }, {
         value: '3600',
-        label: '1 ' + MSG.hour
+        label: '1 ' + MSG.hour,
       }, {
         value: '14400',
-        label: '4 ' + MSG.hours
+        label: '4 ' + MSG.hours,
       }, {
         value: '28800',
-        label: '8 ' + MSG.hours
+        label: '8 ' + MSG.hours,
       }, {
         value: '86400',
-        label: '24 ' + MSG.hours
+        label: '24 ' + MSG.hours,
       }, {
         value: '172800',
-        label: '2 ' + MSG.days
+        label: '2 ' + MSG.days,
       }, {
         value: '259200',
-        label: '3 ' +  MSG.days
+        label: '3 ' + MSG.days,
       }, {
         value: '432000',
-        label: '5 ' +  MSG.days
+        label: '5 ' + MSG.days,
       }, {
         value: '604800',
-        label: '7 ' +  MSG.days
+        label: '7 ' + MSG.days,
       },
     ];
     const uploadStyles = {
-      marginLeft: '8px'
+      marginLeft: '8px',
     };
     const noControl = this.props.app.get('noControl');
 
@@ -279,7 +276,7 @@ export const Portal = React.createClass({
           {...portalname}
         />
         <FormGroup
-          label={ _('Auth Redirect URL') }
+          label={_('Auth Redirect URL')}
           name="url"
           value={getCurrData('url')}
           onChange={this.onUpdateSettings('url')}
@@ -290,7 +287,7 @@ export const Portal = React.createClass({
           name="title"
           value={getCurrData('title')}
           onChange={this.onUpdateSettings('title')}
-          required={true}
+          required
           {...title}
         />
 
@@ -304,8 +301,8 @@ export const Portal = React.createClass({
             options={expirationOptions}
             value={getCurrData('timeout')}
             onChange={this.onUpdateSettings('timeout')}
-            clearable={ false }
-            searchable={ false }
+            clearable={false}
+            searchable={false}
           />
         </FormGroup>
 
@@ -322,8 +319,8 @@ export const Portal = React.createClass({
         <div className="images-list">
           <p className="form-group">{MSG.imageDes}</p>
           {
-            images ? images.map(function(item){
-              return <img src={item.get('url')} key={item.get('count')} />
+            images ? images.map(function (item) {
+              return <img src={item.get('url')} key={item.get('count')} />;
             }) : null
           }
         </div>
@@ -338,8 +335,8 @@ export const Portal = React.createClass({
           encType="multipart/form-data"
         >
           <div className="form-control">
-            <input type="hidden" name="count" value="1"/>
-            <input type="hidden" name="pid" value={getCurrData('pid')}/>
+            <input type="hidden" name="count" value="1" />
+            <input type="hidden" name="pid" value={getCurrData('pid')} />
             <input
               type="file"
               className="text"
@@ -350,7 +347,7 @@ export const Portal = React.createClass({
             {
               noControl ? null : (
                 <Button
-                  type='button'
+                  type="button"
                   text={_('Upload Image') + ' 1'}
                   icon="upload"
                   loading={this.state.imageStatus1 === 'loading'}
@@ -373,8 +370,8 @@ export const Portal = React.createClass({
           encType="multipart/form-data"
         >
           <div className="form-control">
-            <input type="hidden" name="count" value="2"/>
-            <input type="hidden" name="pid" value={getCurrData('pid')}/>
+            <input type="hidden" name="count" value="2" />
+            <input type="hidden" name="pid" value={getCurrData('pid')} />
             <input
               type="file"
               className="text"
@@ -386,7 +383,7 @@ export const Portal = React.createClass({
             {
               noControl ? null : (
                 <Button
-                  type='button'
+                  type="button"
                   text={_('Upload Image') + ' 2'}
                   icon="upload"
                   style={uploadStyles}
@@ -408,8 +405,8 @@ export const Portal = React.createClass({
           encType="multipart/form-data"
         >
           <div className="form-control">
-            <input type="hidden" name="count" value="3"/>
-            <input type="hidden" name="pid" value={getCurrData('pid')}/>
+            <input type="hidden" name="count" value="3" />
+            <input type="hidden" name="pid" value={getCurrData('pid')} />
             <input
               type="file"
               className="text"
@@ -421,7 +418,7 @@ export const Portal = React.createClass({
             {
               noControl ? null : (
                 <Button
-                  type='button'
+                  type="button"
                   text={_('Upload Image') + ' 3'}
                   icon="upload"
                   style={uploadStyles}
@@ -440,7 +437,7 @@ export const Portal = React.createClass({
              {
               noControl ? null : (
                 <SaveButton
-                  type='button'
+                  type="button"
                   loading={this.props.app.get('saving')}
                   onClick={this.onSave}
                 />
@@ -451,18 +448,18 @@ export const Portal = React.createClass({
 
       </div>
     );
-  }
+  },
 });
 
 Portal.propTypes = propTypes;
 
-//React.PropTypes.instanceOf(Immutable.List).isRequired
+// React.PropTypes.instanceOf(Immutable.List).isRequired
 function mapStateToProps(state) {
-  var myState = state.portal;
+  let myState = state.portal;
 
   return {
     store: state.portal,
-    app: state.app
+    app: state.app,
   };
 }
 
@@ -470,7 +467,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
     myActions
-  ), dispatch)
+  ), dispatch);
 }
 
 export const Screen = connect(

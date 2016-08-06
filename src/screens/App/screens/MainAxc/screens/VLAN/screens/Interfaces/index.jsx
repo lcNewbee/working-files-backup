@@ -10,7 +10,7 @@ import * as appActions from 'shared/actions/app';
 import myReducer from './reducer';
 
 // components
-import {Table} from 'shared/components/Table';
+import Table from 'shared/components/Table';
 import Button from 'shared/components/Button';
 import {Search, FormGroup, Checkbox} from 'shared/components/Form';
 import Select from 'shared/components/Select';

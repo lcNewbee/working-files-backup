@@ -1,30 +1,29 @@
 import React, { Component } from 'react';
 import { fromJS } from 'immutable';
 import utils from 'shared/utils';
-import { bindActionCreators } from 'redux'
+import { bindActionCreators } from 'redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import Nav from 'shared/components/Nav';
 import Icon from 'shared/components/Icon';
 import Modal from 'shared/components/Modal';
 import Table from 'shared/components/Table';
 import PopOver from 'shared/components/PopOver';
 import Button from 'shared/components/Button';
-import SaveButton from 'shared/components/Button/Save';
+import SaveButton from 'shared/components/Button/SaveButton';
 import Navbar from 'shared/components/Navbar';
 import { FormGroup } from 'shared/components/Form';
-import AsiderBar from './components/AsiderBar';
 import { Link } from 'react-router';
-import * as actions from './actions';
 import * as appActions from 'shared/actions/app';
+import * as actions from './actions';
 import myReducer from './reducer';
+
 
 export default class Main extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
-    this.state = {isShowUserPop: false};
+    this.state = { isShowUserPop: false };
 
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.showUserPopOver = this.showUserPopOver.bind(this);
@@ -36,31 +35,29 @@ export default class Main extends Component {
     this.onHiddenPopOver = this.onHiddenPopOver.bind(this);
     this.onToggleMainPopOver = this.onToggleMainPopOver.bind(this);
     this.renderBreadcrumb = this.renderBreadcrumb.bind(this);
-    this.onClickTopMenuTitle= this.onClickTopMenuTitle.bind(this);
+    this.onClickTopMenuTitle = this.onClickTopMenuTitle.bind(this);
 
-    document.onkeydown = function(e) {
-      if(e.keyCode == 116){
+    document.onkeydown = (e) => {
+      if (e.keyCode === 116) {
         this.onRefresh(e);
       }
-    }.bind(this);
+    };
+  }
 
-  };
-
-  showUserPopOver() {
-    this.onToggleMainPopOver({
-      name: 'userOverview'
-    });
-  };
+  componentWillMount() {
+    this.props.fetchApGroup();
+    this.props.fetchGroupAps();
+  }
 
   onRefresh(e) {
     e.preventDefault();
     this.props.refreshAll();
-  };
+  }
 
   onLogout(e) {
     e.preventDefault();
     this.props.changeLoginStatus('0');
-    window.location.hash = "#";
+    window.location.hash = '#';
   }
 
   onToggleMainPopOver(option) {
@@ -69,40 +66,40 @@ export default class Main extends Component {
 
   onHiddenPopOver() {
     this.onToggleMainPopOver({
-      isShow: false
+      isShow: false,
     });
   }
 
   onClickNav(path) {
-    if(path === '/main/network/vlan') {
+    if (path === '/main/network/vlan') {
       this.onToggleMainPopOver({
-        name: 'vlanAsider'
+        name: 'vlanAsider',
       });
     }
   }
 
   onClickTopMenu(path) {
-    if(path === '/main/group') {
+    if (path === '/main/group') {
       this.onToggleMainPopOver({
         name: 'groupAsider',
-        isShow: true
+        isShow: true,
       });
     } else {
       this.onToggleMainPopOver({
-        isShow: false
+        isShow: false,
       });
     }
   }
 
   onClickTopMenuTitle() {
-    if(this.props.location.pathname.indexOf('/main/group/') !== -1) {
+    if (this.props.location.pathname.indexOf('/main/group/') !== -1) {
       this.onToggleMainPopOver({
-        name: 'groupAsider'
-      })
+        name: 'groupAsider',
+      });
     } else {
       this.onToggleMainPopOver({
-        name: 'topMenu'
-      })
+        name: 'topMenu',
+      });
     }
   }
 
@@ -116,9 +113,15 @@ export default class Main extends Component {
     this.props.selectGroup(id);
   }
 
+  showUserPopOver() {
+    this.onToggleMainPopOver({
+      name: 'userOverview',
+    });
+  }
+
   renderPopOverContent(popOver) {
-    const selectVlanId = this.props.mainAxc.getIn(['vlan', 'selected']);
-    const selectGroupId = this.props.mainAxc.getIn(['group', 'selected']);
+    const selectVlanId = this.props.mainAxc.getIn(['vlan', 'selected', 'id']);
+    const selectGroupId = this.props.mainAxc.getIn(['group', 'selected', 'id']);
 
     switch (popOver.name) {
       case 'userOverview':
@@ -134,7 +137,7 @@ export default class Main extends Component {
                 />
                 {_('CHANGE PASSWORD')}
               </a>
-              <a className="sign-out" href="#" onClick={this.onLogout}>
+              <a className="sign-out" href="#/" onClick={this.onLogout}>
                 <Icon
                   name="sign-out"
                 />
@@ -151,7 +154,7 @@ export default class Main extends Component {
               top: '93px',
               left: '20px',
               width: '140px',
-              backgroundColor: '#222'
+              backgroundColor: '#222',
             }}
           >
             {
@@ -164,7 +167,7 @@ export default class Main extends Component {
                     className="m-menu__link"
                     activeClassName="active"
                     onClick={() => {
-                      this.onClickTopMenu(item.get('path'))
+                      this.onClickTopMenu(item.get('path'));
                     }}
                   >
                     {item.get('text')}
@@ -183,8 +186,8 @@ export default class Main extends Component {
             >
               {
                 this.props.mainAxc.getIn(['vlan', 'list']).map((item) => {
-                  var curId = item.get('id');
-                  var remark = item.get('remark');
+                  let curId = item.get('id');
+                  let remark = item.get('remark');
                   let classNames = 'm-menu__link';
 
                   if (curId === selectVlanId) {
@@ -217,8 +220,8 @@ export default class Main extends Component {
                         size: 'lg',
                         cancelButton: false,
                         okButton: false,
-                        name: 'vlanManage'
-                      })
+                        name: 'vlanManage',
+                      });
                     }}
                   />
                 </div>
@@ -230,9 +233,8 @@ export default class Main extends Component {
                       this.props.showMainModal({
                         title: _('Add VLAN'),
                         isShow: true,
-                        size: '',
-                        name: 'vlan'
-                      })
+                        name: 'vlan',
+                      });
                     }}
                   />
                 </div>
@@ -250,8 +252,8 @@ export default class Main extends Component {
             >
               {
                 this.props.mainAxc.getIn(['group', 'list']).map((item) => {
-                  var curId = item.get('id');
-                  var remark = item.get('remark');
+                  const curId = item.get('id');
+                  const remark = item.get('remark');
                   let classNames = 'm-menu__link';
 
                   if (curId === selectGroupId) {
@@ -262,9 +264,14 @@ export default class Main extends Component {
                     <li key={curId}>
                       <a
                         className={classNames}
-                        onClick={(e) => this.onSelectGroup(curId, e)}
+                        onClick={(e) => {
+                          this.onSelectGroup(curId, e);
+                          this.onToggleMainPopOver({
+                            name: 'groupAsider',
+                          });
+                        }}
                       >
-                        {curId}({remark})
+                        {item.get('groupname')} ({item.get('num')})
                       </a>
                     </li>
                   );
@@ -282,8 +289,8 @@ export default class Main extends Component {
                         title: _('Manage Ap Groups'),
                         isShow: true,
                         size: 'lg',
-                        name: 'groupManage'
-                      })
+                        name: 'groupManage',
+                      });
                     }}
                   />
                 </div>
@@ -292,12 +299,12 @@ export default class Main extends Component {
                     name="plus"
                     size="2x"
                     onClick={() => {
+                      this.props.fetchGroupAps();
                       this.props.showMainModal({
                         title: _('Add Ap Group'),
                         isShow: true,
-                        size: '',
-                        name: 'group'
-                      })
+                        name: 'group',
+                      });
                     }}
                   />
                 </div>
@@ -312,23 +319,23 @@ export default class Main extends Component {
   }
 
   renderModalContent(option) {
-    const selectVlanId = this.props.mainAxc.getIn(['vlan', 'selected']);
-    const selectGroupId = this.props.mainAxc.getIn(['group', 'selected']);
+    const selectVlanId = this.props.mainAxc.getIn(['vlan', 'selected', 'id']);
+    const selectGroupId = this.props.mainAxc.getIn(['group', 'selected', 'id']);
     let tableOption = fromJS([
       {
         id: 'devicename',
         text: _('MAC Address') + '/' + _('Name'),
-        transform: function(val, item) {
+        transform(val, item) {
           return item.get('devicename') || item.get('mac');
-        }
+        },
       }, {
         id: 'ip',
-        text: _('IP Address')
+        text: _('IP Address'),
       }, {
         id: 'status',
         text: _('Status'),
-        filter: 'translate'
-      }
+        filter: 'translate',
+      },
     ]);
 
     switch (option.name) {
@@ -353,19 +360,80 @@ export default class Main extends Component {
               className="table"
               options={tableOption}
               selectAble
-              list={fromJS([{
-                devicename: '12',
-                ip: 'dasd',
-                status: '23',
-              }])}
+              list={this.props.mainAxc.get('devices')}
+              onSelectRow={(data) => {
+                this.props.selectAddApGroupDevice(data);
+              }}
             />
           </div>
         );
 
       case 'groupManage':
         return (
-          <div>
+          <div className="row">
+            <div className="o-list cols col-6">
+              <h3 className="o-list__header">{_('组列表')}</h3>
+              <ul className="m-menu m-menu--open">
+                {
+                  this.props.mainAxc.getIn(['group', 'list']).map((item) => {
+                    let curId = item.get('id');
+                    const remark = item.get('remark');
+                    let classNames = 'm-menu__link';
 
+                    if (curId === selectGroupId) {
+                      classNames = `${classNames} active`;
+                    }
+
+                    return (
+                      <li key={curId}>
+                        <a
+                          className={classNames}
+                          onClick={(e) => this.onSelectGroup(curId, e)}
+                        >
+                          {item.get('groupname')} ({item.get('num')})
+                        </a>
+                      </li>
+                    );
+                  })
+                }
+              </ul>
+              <div className="o-list__footer action-btns">
+                <Button
+                  icon="plus"
+                  text={_('添加组')}
+                  onClick={() => {
+                    this.props.fetchGroupAps();
+                    this.props.showMainModal({
+                      title: _('Add Ap Group'),
+                      isShow: true,
+                      name: 'group',
+                    });
+                  }}
+                />
+                <Button
+                  icon="trash"
+                  text={_('删除组')}
+                />
+              </div>
+            </div>
+            <div className="o-list cols col-6">
+              <h3 className="o-list__header">{_('组内AP')}</h3>
+              <Table
+                className="table"
+                options={tableOption}
+                selectAble
+                list={this.props.mainAxc.get('devices')}
+                onSelectRow={(data) => {
+                  this.props.selectAddApGroupDevice(data);
+                }}
+              />
+              <div className="o-list__footer">
+                <Button
+                  icon="move"
+                  text={_('移动到其他组')}
+                />
+              </div>
+            </div>
           </div>
         );
 
@@ -379,8 +447,8 @@ export default class Main extends Component {
               >
               {
                 this.props.mainAxc.getIn(['vlan', 'list']).map((item) => {
-                  var curId = item.get('id');
-                  var remark = item.get('remark');
+                  let curId = item.get('id');
+                  let remark = item.get('remark');
                   let classNames = 'm-menu__link';
 
                   if (curId === selectVlanId) {
@@ -429,7 +497,7 @@ export default class Main extends Component {
               <div className="form-group form-group-save">
                 <div className="form-control">
                   <SaveButton
-                    type='button'
+                    type="button"
                   />
                 </div>
               </div>
@@ -446,7 +514,7 @@ export default class Main extends Component {
     const groupData = this.props.mainAxc.get('group');
     const curRoutes = this.props.routes;
     let breadcrumbList = fromJS([]);
-    let len = curRoutes.length;
+    const len = curRoutes.length;
     let i = 2;
 
     // 如果是 AP组管理
@@ -457,33 +525,30 @@ export default class Main extends Component {
       })
       .unshift({
         path: '/main/group',
-        text: groupData.get('list').find((item) => {
-            return item.get('id') === groupData.get('selected');
-          }).get('groupName'),
+        text: groupData.getIn(['selected', 'groupname']) || '',
       });
     }
 
     for (i; i < len; i++) {
       breadcrumbList = breadcrumbList.unshift({
         path: curRoutes[i].path,
-        text: curRoutes[i].text
-      })
+        text: curRoutes[i].text,
+      });
     }
-
 
     return (
       <ol className="m-breadcrumb">
         {
-          breadcrumbList.map((item, i) => {
-            return <li key={i}>
+          breadcrumbList.map((item, i) => (
+            <li key={i}>
               <Link
                 className="m-breadcrumb__link"
                 to={item.path}
               >
                 {item.text}
               </Link>
-            </li>;
-          })
+            </li>
+          ))
         }
       </ol>
     );
@@ -496,26 +561,25 @@ export default class Main extends Component {
     let curTopNavText = _('NETWORK');
     let mainClassName = 't-main t-main--ac';
 
-    if(this.props.location.pathname.indexOf('/main/group') === 0) {
+    if (this.props.location.pathname.indexOf('/main/group') === 0) {
       curTopNavText = _('AP GROUP');
     } else if (this.props.location.pathname.indexOf('/main/system') === 0) {
       curTopNavText = _('SYSTEM');
     }
 
-    if(popOver.isShow && (popOver.name === 'vlanAsider' ||
+    if (popOver.isShow && (popOver.name === 'vlanAsider' ||
         popOver.name === 'groupAsider')) {
-
-      mainClassName = `${mainClassName} main--open-left`
+      mainClassName = `${mainClassName} main--open-left`;
     }
 
     return (
       <div>
         <Navbar title={_(guiName)} version={version}>
           <div className="aside">
-            <a href="#" className="as-control" onClick={this.onRefresh}>
+            <button className="as-control" onClick={this.onRefresh}>
               <Icon name="refresh" className="icon" />
               {_('REFRESH')}
-            </a>
+            </button>
             <div className="user" onClick={this.showUserPopOver}>
               <Icon name="user-secret" className="icon-user" />
               <Icon
@@ -524,31 +588,30 @@ export default class Main extends Component {
               />
             </div>
           </div>
-          <div className="o-menu-bar">
-            <nav
-              onClick={() =>
-                this.onClickTopMenuTitle()
-              }
-              className="o-menu-bar__nav"
-            >
-              <h3>
-                <Icon
-                  name="navicon"
-                  onMouseOver={() =>
-                    this.onToggleMainPopOver({
-                      name: 'topMenu'
-                    })
-                  }
-                />
-                {curTopNavText}
-              </h3>
-            </nav>
-            {
-              this.renderBreadcrumb()
-            }
-          </div>
         </Navbar>
-
+        <div className="o-menu-bar">
+          <nav
+            onClick={() =>
+              this.onClickTopMenuTitle()
+            }
+            className="o-menu-bar__nav"
+          >
+            <h3>
+              <Icon
+                name="navicon"
+                onMouseOver={() =>
+                  this.onToggleMainPopOver({
+                    name: 'topMenu',
+                  })
+                }
+              />
+              {curTopNavText}
+            </h3>
+          </nav>
+          {
+            this.renderBreadcrumb()
+          }
+        </div>
         <div className={mainClassName}>
           <Nav
             className="t-main__nav"
@@ -558,7 +621,7 @@ export default class Main extends Component {
             onChange={this.onClickNav}
             isTree
           />
-          <div className='t-main__content'>
+          <div className="t-main__content">
             {
               this.props.children
             }
@@ -571,11 +634,13 @@ export default class Main extends Component {
           }
         </PopOver>
 
-        <Modal onClose={this.onHiddenPopOver} {...modal}
+        <Modal
+          {...modal}
+          onClose={this.onHiddenPopOver}
           onClose={() => {
             this.props.showMainModal({
               isShow: false,
-            })
+            });
           }}
         >
           {
@@ -584,10 +649,10 @@ export default class Main extends Component {
         </Modal>
 
         {
-          saving ? <div className="body-backdrop"></div> : null
+          saving ? <div className="body-backdrop" /> : null
         }
       </div>
-    )
+    );
   }
 }
 
@@ -602,7 +667,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
     actions
-  ), dispatch)
+  ), dispatch);
 }
 
 export const Screen = connect(

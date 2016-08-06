@@ -13,7 +13,7 @@ const defaultProps = {
   isTh: false,
 };
 
-export class Row extends Component {
+class Row extends Component {
   constructor(props) {
     super(props);
 
@@ -44,7 +44,7 @@ export class Row extends Component {
           <th width="15" key="tableRow_select">
             <input
               type="checkbox"
-              onClick={(e) => {
+              onChange={(e) => {
                 this.onSelect(-1, e);
               }}
             />
@@ -82,8 +82,8 @@ export class Row extends Component {
           <td width="15" key="tableRow_select">
             <input
               type="checkbox"
-              checked={props.item.get('selected')}
-              onClick={(e) => {
+              checked={!!props.item.get('selected')}
+              onChange={(e) => {
                 this.onSelect(props.index, e);
               }}
             />
@@ -99,7 +99,6 @@ export class Row extends Component {
     );
   }
 }
-
 
 Row.propTypes = propTypes;
 Row.defaultProps = defaultProps;

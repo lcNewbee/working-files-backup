@@ -1,11 +1,5 @@
-import MyFormGroup from './FormGroup';
-import MyFormInput from './FormInput';
-import MyCheckbox from './Checkbox';
-import MySearch from './Search';
-import MyPassword from './Password';
-
-export const FormGroup = MyFormGroup;
-export const FormInput = MyFormInput;
-export const Checkbox = MyCheckbox;
-export const Search = MySearch;
-export const Password = MyPassword;
+export { default as FormGroup } from './FormGroup';
+export { default as FormInput } from './FormInput';
+export { default as Checkbox } from './Checkbox';
+export { default as Search } from './Search';
+export { default as Password } from './Password';

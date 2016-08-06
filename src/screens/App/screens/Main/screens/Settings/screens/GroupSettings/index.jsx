@@ -1,15 +1,15 @@
 import React from 'react';
 import utils from 'shared/utils';
 import { bindActionCreators } from 'redux';
-import {fromJS, Map} from 'immutable';
+import { fromJS, Map } from 'immutable';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import validator from 'shared/utils/lib/validator';
 import * as appActions from 'shared/actions/app';
 import * as actions from './actions';
 import reducer from './reducer';
-import {FormGroup} from 'shared/components/Form';
-import {Table} from 'shared/components/Table';
+import { FormGroup } from 'shared/components/Form';
+import Table from 'shared/components/Table';
 import Modal from 'shared/components/Modal';
 import Button from 'shared/components/Button';
 
@@ -26,11 +26,11 @@ const msg = {
 
 const validOptions = Map({
   groupname: validator({
-    rules: 'required'
+    rules: 'required',
   }),
   remarks: validator({
-    rules: 'required'
-  })
+    rules: 'required',
+  }),
 });
 
 // 原生的 react 页面
@@ -43,9 +43,9 @@ export const GroupSettings = React.createClass({
   },
 
   componentDidUpdate(prevProps) {
-    var modalStatus = this.props.app.getIn(['modal', 'status']);
+    let modalStatus = this.props.app.getIn(['modal', 'status']);
 
-    if(prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
+    if (prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
       this.props.fetchDeviceGroups();
       this.props.fetchGroupDevices();
     }
@@ -56,19 +56,19 @@ export const GroupSettings = React.createClass({
   },
 
   getEditVal(key) {
-    var ret = '';
+    let ret = '';
 
-    if(this.props.edit) {
+    if (this.props.edit) {
       ret = this.props.edit.get(key);
     }
     return ret;
   },
 
   onSelectDevice(e) {
-    let elem = e.target;
-    let mac = elem.value;
+    const elem = e.target;
+    const mac = elem.value;
 
-    if(elem.checked) {
+    if (elem.checked) {
       this.props.selectDevice(mac);
     } else {
       this.props.selectDevice(mac, true);
@@ -80,70 +80,67 @@ export const GroupSettings = React.createClass({
   },
 
   onEditGroup(groupname) {
-     this.props.editDeviceGroup(groupname);
+    this.props.editDeviceGroup(groupname);
   },
 
   onDeleteGroup(groupname) {
-    var comfri_text = _('Are you sure delete group: %s?', groupname);
+    let comfri_text = _('Are you sure delete group: %s?', groupname);
 
     this.props.createModal({
       id: 'groupSettings',
-      groupname: groupname,
+      groupname,
       role: 'comfirm',
       text: comfri_text,
-      apply: function() {
+      apply: function () {
         this.props.deleteDeviceGroup(groupname);
-      }.bind(this)
+      }.bind(this),
     });
   },
 
   onChangeGroupSettings(name) {
-    return function(data) {
-       var editObj = {};
+    return function (data) {
+      let editObj = {};
 
-       editObj[name] = data.value;
-       this.props.changeEditGroup(editObj);
-     }.bind(this)
+      editObj[name] = data.value;
+      this.props.changeEditGroup(editObj);
+    }.bind(this);
   },
 
   onSaveDeviceGroup() {
-    if(this.props.actionType === 'look') {
+    if (this.props.actionType === 'look') {
       this.onCloseEditDialog();
-      return ;
+      return;
     }
-    this.props.validateAll(function(invalid) {
-      var editData = this.props.edit.toJS();
-      var groupList = this.props.data.get('list');
-      var hasSameName = false;
+    this.props.validateAll(function (invalid) {
+      let editData = this.props.edit.toJS();
+      let groupList = this.props.data.get('list');
+      let hasSameName = false;
 
-      if(invalid.isEmpty()) {
-
+      if (invalid.isEmpty()) {
         // 验证组名是否与其它组相同
-        if(editData.groupname !== editData.orignName) {
-          hasSameName = !!groupList.find(function(group) {
+        if (editData.groupname !== editData.orignName) {
+          hasSameName = !!groupList.find(function (group) {
             return group.get('groupname').trim() === editData.groupname.trim();
           });
         }
 
-        if(hasSameName) {
+        if (hasSameName) {
           this.props.createModal({
             id: 'groupSettings',
             role: 'alert',
-            text: _("Group name '%s' is already in use", editData.groupname)
+            text: _("Group name '%s' is already in use", editData.groupname),
           });
         } else {
           this.props.saveDeviceGroup();
         }
       }
-
-    }.bind(this))
-
+    }.bind(this));
   },
 
   createLookFunc(groupname) {
-    return function() {
+    return function () {
       this.props.lookGroupDevices(groupname);
-    }.bind(this)
+    }.bind(this);
   },
 
   onCloseEditDialog() {
@@ -154,33 +151,32 @@ export const GroupSettings = React.createClass({
   getGroupTableOptions() {
     let ret = fromJS([
       {
-      id: 'groupname',
-      text: msg.groupname,
-      transform: function(val) {
-
-        if(val === 'Default') {
+        id: 'groupname',
+        text: msg.groupname,
+        transform (val) {
+        if (val === 'Default') {
           val = _('Ungrouped Devices');
         }
         return val;
-      }
-    }, {
+      },
+      }, {
       id: 'num',
-      text: msg.devicesNum
+      text: msg.devicesNum,
     }, {
       id: 'remark',
-      text: msg.remarks
+      text: msg.remarks,
     }, {
       id: 'op',
       text: msg.action,
       width: '240',
-      transform: function(val, item) {
-        if(item.get('groupname') === 'Default') {
-          return <Button
+      transform: function (val, item) {
+        if (item.get('groupname') === 'Default') {
+          return (<Button
             icon="eye"
             size="sm"
             text={msg.look}
             onClick={this.createLookFunc('Default')}
-          />;
+          />);
         }
 
         return (
@@ -207,12 +203,12 @@ export const GroupSettings = React.createClass({
             />
 
           </div>
-        )
-      }.bind(this)
+        );
+      }.bind(this),
     }]);
     const noControl = this.props.app.get('noControl');
 
-    if(noControl) {
+    if (noControl) {
       ret = ret.delete(-1);
     }
 
@@ -221,35 +217,34 @@ export const GroupSettings = React.createClass({
 
   getDevicesTableOptions() {
     let ret = fromJS([{
-        id: 'devicename',
-        text: _('MAC Address') + '/' + _('Name'),
-        transform: function(val, item) {
+      id: 'devicename',
+      text: _('MAC Address') + '/' + _('Name'),
+      transform (val, item) {
           return item.get('devicename') || item.get('mac');
-        }
-      }, {
+        },
+    }, {
         id: 'ip',
-        text: _('IP Address')
+        text: _('IP Address'),
       }, {
         id: 'status',
         text: _('Status'),
-        filter: 'translate'
+        filter: 'translate',
       }, {
         id: 'groupname',
         text: _('Current Group'),
-        transform: function(val) {
-
-          if(val === 'Default') {
+        transform (val) {
+          if (val === 'Default') {
             val = _('Ungrouped Devices');
           }
           return val;
-        }
+        },
       }, {
         id: 'op',
         text: _('Select'),
         width: '50',
-        transform: function(val, item) {
-          var deviceMac;
-          var selectedDevices = this.props.edit.get('devices');
+        transform: function (val, item) {
+          let deviceMac;
+          let selectedDevices = this.props.edit.get('devices');
 
           deviceMac = item.get('mac');
 
@@ -262,31 +257,31 @@ export const GroupSettings = React.createClass({
                 checked={selectedDevices.indexOf(deviceMac) !== -1}
               />
             </div>
-          )
-        }.bind(this)
+          );
+        }.bind(this),
       }]);
     const noControl = this.props.app.get('noControl');
 
-    if(noControl) {
+    if (noControl) {
       ret = ret.delete(-1);
     }
     return ret;
   },
 
   render() {
-    const {groupname, remarks} = this.props.validateOption;
+    const { groupname, remarks } = this.props.validateOption;
     const groupTableOptions = this.getGroupTableOptions();
     const devicesTableOptions = this.getDevicesTableOptions();
     const isLook = this.props.actionType === 'look';
     const noControl = this.props.app.get('noControl');
     let modalTitle = this.getEditVal('orignName');
 
-    if(this.props.actionType === 'add') {
+    if (this.props.actionType === 'add') {
       modalTitle = msg.add;
     } else if (this.props.actionType === 'edit') {
       modalTitle = msg.edit + ' ' + modalTitle;
-    } else if(this.props.actionType === 'look') {
-      if(this.props.edit.get('groupname') === 'Default') {
+    } else if (this.props.actionType === 'look') {
+      if (this.props.edit.get('groupname') === 'Default') {
         modalTitle = _('Ungrouped Devices');
       } else {
         modalTitle = this.props.edit.get('groupname');
@@ -336,7 +331,7 @@ export const GroupSettings = React.createClass({
               <div>
                 <FormGroup
                   label={msg.groupname}
-                  required={true}
+                  required
                   value={this.getEditVal('groupname')}
                   maxLength="24"
                   id="groupname"
@@ -345,7 +340,7 @@ export const GroupSettings = React.createClass({
                 />
                 <FormGroup
                   label={msg.remarks}
-                  required={true}
+                  required
                   maxLength="32"
                   value={this.getEditVal('remark')}
                   id="remark"
@@ -364,12 +359,12 @@ export const GroupSettings = React.createClass({
         </Modal>
       </div>
     );
-  }
+  },
 });
 
-//React.PropTypes.instanceOf(Immutable.List).isRequired
+// React.PropTypes.instanceOf(Immutable.List).isRequired
 function mapStateToProps(state) {
-  var myState = state.groupSettings;
+  let myState = state.groupSettings;
 
   return {
     fetching: myState.get('fetching'),
@@ -378,7 +373,7 @@ function mapStateToProps(state) {
     edit: myState.get('edit'),
     devices: myState.get('devices'),
     seeDevices: myState.get('seeDevices'),
-    app: state.app
+    app: state.app,
   };
 }
 
@@ -386,7 +381,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
     actions
-  ), dispatch)
+  ), dispatch);
 }
 
 // 添加 redux 属性的 react 页面

@@ -9,7 +9,7 @@ import reducer from './reducer';
 import {fromJS, Map} from 'immutable';
 import validator from 'shared/utils/lib/validator';
 
-import {Table} from 'shared/components/Table';
+import Table from 'shared/components/Table';
 import {Search, FormGroup, Checkbox} from 'shared/components/Form';
 import Button from 'shared/components/Button';
 import Select from 'shared/components/Select';

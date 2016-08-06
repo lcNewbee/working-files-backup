@@ -44,7 +44,7 @@ class Checkbox extends React.Component {
           id={id}
           value={value}
         />
-        <label htmlFor={id}></label>
+        <label htmlFor={id} />
       </span>
     );
   }

@@ -1,11 +1,10 @@
-var webpack = require('webpack');
-var path = require('path');
-var autoprefixer = require('autoprefixer');
-var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
-var GLOBALS = {
+let webpack = require('webpack');
+let path = require('path');
+let autoprefixer = require('autoprefixer');
+let GLOBALS = {
   DEFINE_OBJ: {
     'process.env.NODE_ENV': JSON.stringify('development'),
-    __DEV__: true
+    __DEV__: true,
   },
 
   folders: {
@@ -13,7 +12,7 @@ var GLOBALS = {
     COMPONENT: path.resolve(__dirname, 'src/components'),
     BUILD: path.resolve(__dirname, 'build'),
     BOWER: path.resolve(__dirname, 'bower_components'),
-    NPM: path.resolve(__dirname, 'node_modules')
+    NPM: path.resolve(__dirname, 'node_modules'),
   },
 
   autoprefixer: {
@@ -24,15 +23,15 @@ var GLOBALS = {
       'Firefox >= 24', // Firefox 24 is the latest ESR
       'iOS >= 6',
       'Opera >= 12',
-      'Safari >= 6'
-    ]
-  }
+      'Safari >= 6',
+    ],
+  },
 };
 
 // 自动添加兼容性css
-var autoprefixerHandle = autoprefixer(GLOBALS.autoprefixer);
+let autoprefixerHandle = autoprefixer(GLOBALS.autoprefixer);
 
-var config = {
+let config = {
   debug: true,
 
   // more info:https://webpack.github.io/docs/build-performance.html#sourcemaps and https://webpack.github.io/docs/configuration.html#devtool
@@ -41,21 +40,15 @@ var config = {
   // set to false to see a list of every file being bundled.
   noInfo: true,
 
-
   entry: {
-    'index': [
+    index: [
+       // necessary for hot reloading with IE:
+      'eventsource-polyfill',
+
       'webpack-hot-middleware/client?reload=true',
-      './src/index.jsx'
+
+      './src/index.jsx',
     ],
-    // vendors: [
-    //   'webpack-hot-middleware/client?reload=true',
-    //   'react',
-    //   'react-dom',
-    //   'immutable',
-    //   'react-router',
-    //   'redux',
-    //   'react-redux'
-    // ]
   },
 
   // necessary per https://webpack.github.io/docs/testing.html#compile-and-test
@@ -63,75 +56,70 @@ var config = {
   output: {
     path: GLOBALS.folders.BUILD,
     publicPath: '/',
-    filename: 'scripts/bundle.js'
+    filename: 'scripts/bundle.js',
   },
 
   module: {
     loaders: [
       {
         test: /\.png$/,
-        loader: "url-loader",
+        loader: 'url-loader',
         query: {
-          mimetype: "image/png",
-          limit: 11000
-        }
+          mimetype: 'image/png',
+          limit: 11000,
+        },
       },
 
       {
         test: /\.jpg$/,
-        loader: "url-loader"
+        loader: 'url-loader',
       },
 
       {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'url-loader?limit=10000&mimetype=application/font-woff'
+        loader: 'url-loader?limit=10000&mimetype=application/font-woff',
       },
 
       {
         test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'file-loader'
+        loader: 'file-loader',
       },
 
       {
         test: /\.json$/,
-        loader: "json"
+        loader: 'json',
       },
 
       {
         test: /\.css$/,
-        loader: "style-loader!css-loader"
+        loader: 'style-loader!css-loader',
       },
 
       {
         test: /\.scss$/,
-        loader: "style-loader!css-loader!postcss-loader!sass"
+        loader: 'style-loader!css-loader!postcss-loader!sass',
       },
 
       {
         test: /\.(js|jsx)?$/,
         exclude: /node_modules/,
-        loader: 'react-hot!babel'
-      }
-    ]
+        loader: 'babel',
+      },
+    ],
   },
-  postcss: function() {
+  postcss() {
     return [autoprefixerHandle];
   },
   resolve: {
     extensions: ['', '.js', '.jsx'],
-    modulesDirectories: ['node_modules', 'shared']
+    modulesDirectories: ['node_modules', 'shared'],
   },
 
   plugins: [
     new webpack.DefinePlugin(GLOBALS.DEFINE_OBJ),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
-    // new CommonsChunkPlugin({
-    //   name: 'vendors',
-    //   filename: 'scripts/public/vendors.js',
-    //   minChunks: 2
-    // })
-  ]
+  ],
 };
 
 module.exports = config;

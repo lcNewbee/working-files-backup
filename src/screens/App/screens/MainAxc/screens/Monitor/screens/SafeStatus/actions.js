@@ -1,6 +1,6 @@
 import utils from 'shared/utils';
 import * as appActions from 'shared/actions/app';
-import urls from 'shared/config/urls';
+import urls from 'shared/config/urls_axc';
 
 let refreshTimeout = null;
 

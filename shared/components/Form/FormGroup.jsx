@@ -61,10 +61,8 @@ class FormGroup extends React.Component {
       if (required) {
         checkResult = _('%s is required', label || this.props['data-label']);
       }
-    } else {
-      if (this.props.validator) {
-        checkResult = this.props.validator.check(value);
-      }
+    } else if (this.props.validator) {
+      checkResult = this.props.validator.check(value);
     }
     if (this.props.onValidError) {
       this.props.onValidError({ name, checkResult });

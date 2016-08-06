@@ -27,9 +27,9 @@ const msg = {
 const defaultCountry = ((window.navigator.language || window.navigator.userLanguage ||
     window.navigator.browserLanguage || window.navigator.systemLanguage ||
     'en').toUpperCase().split('-')[1] || '').toString();
-const defaultCountryLabel = List(countries).find(function (item) {
-  return item.country === defaultCountry;
-})[b28n.getLang()];
+const defaultCountryLabel = List(countries).find((item) =>
+  (item.country === defaultCountry)
+)[b28n.getLang()];
 
 const defaultTimeZone = (((new Date()).getTimezoneOffset() / 60) * -1).toString();
 let defaultTimeZoneLabel;
@@ -78,8 +78,8 @@ const formGroups = Map({
       autoFocus: true,
       required: true,
       style: {
-        display: 'block'
-      }
+        display: 'block',
+      },
     },
     validator: validator({
       label: msg.password,
@@ -95,8 +95,8 @@ const formGroups = Map({
       required: true,
       placeholder: msg.confirmpasswd,
       style: {
-        display: 'block'
-      }
+        display: 'block',
+      },
     },
     validator: validator({
       label: msg.confirmpasswd,
@@ -124,8 +124,8 @@ export const SignUp = React.createClass({
 
   onNext() {
     const MAX_STEP = 3;
-    var currStep = this.state.currStep;
-    var checkResult;
+    let currStep = this.state.currStep;
+    let checkResult;
 
     if (currStep < MAX_STEP) {
       currStep += 1;
@@ -167,7 +167,7 @@ export const SignUp = React.createClass({
   },
 
   onPrev() {
-    var currStep = this.state.currStep;
+    let currStep = this.state.currStep;
 
     if (currStep > 1) {
       currStep -= 1;
@@ -278,7 +278,7 @@ export const SignUp = React.createClass({
         key={input.name}
         id={input.name}
         value={this.getDataValue(input.name)}
-        onChange={this.onChangeData(input.name) }
+        onChange={this.onChangeData(input.name)}
         onKeyUp={this.onInputKeyUp}
       />
     );
@@ -286,10 +286,11 @@ export const SignUp = React.createClass({
 
   render() {
     const { currStep } = this.state;
+    const btnInfoRole = 'info';
+    const { version, guiName } = this.props.app.toJS();
     let stepOneClass = '';
     let stepTwoClass = '';
     let stepThreeClass = '';
-    const { version, guiName } = this.props.app.toJS();
 
     if (currStep === 1) {
       stepOneClass = 'active';
@@ -408,7 +409,7 @@ export const SignUp = React.createClass({
             }
 
             <Button
-              role="info"
+              role={btnInfoRole}
               onClick={this.onNext}
               text={this.state.currStep !== 3 ? _('Next Step') : _('Completed')}
             />

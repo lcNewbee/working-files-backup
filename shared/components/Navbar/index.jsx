@@ -15,7 +15,7 @@ function Navbar(props) {
   const { title, version } = props;
   return (
     <header className="navbar">
-      <div className="brand"></div>
+      <div className="brand" />
       <h1>{title}</h1>
       <span className="version">GUI {version}</span>
       {props.children}

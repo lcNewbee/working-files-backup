@@ -1,39 +1,38 @@
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
 import { bindActionCreators } from 'redux';
-import {fromJS, Map, List} from 'immutable';
+import { fromJS, Map, List } from 'immutable';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import validator from 'shared/utils/lib/validator';
+import { FormGroup } from 'shared/components/Form';
+import { SaveButton } from 'shared/components';
 import * as appActions from 'shared/actions/app';
 import * as myActions from './actions';
 import myReducer from './reducer';
 
-import {FormGroup, FormInput} from 'shared/components/Form';
-import Button from 'shared/components/Button';
-import SaveButton from 'shared/components/Button/Save';
 
 const msg = {
   'upSpeed': _('Up Speed'),
   'downSpeed': _('Down Speed'),
-  'selectGroup': _('Select Group')
+  'selectGroup': _('Select Group'),
 };
 const encryptionOptions = [
   {
     value: 'none',
-    label: _('NONE')
+    label: _('NONE'),
   },
   {
     value: 'psk-mixed',
-    label: _('STRONG')
-  }
+    label: _('STRONG'),
+  },
 ];
 
 const propTypes = {
   fetchDeviceGroups: PropTypes.func,
   fetching: PropTypes.bool,
   data: PropTypes.instanceOf(Map),
-  groups: PropTypes.instanceOf(List)
+  groups: PropTypes.instanceOf(List),
 };
 
 const validOptions = Map({});
@@ -48,7 +47,7 @@ export const Voip = React.createClass({
   },
 
   componentDidUpdate(prevProps) {
-    if(prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
+    if (prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
       this.props.fetchVoipSettings();
     }
   },
@@ -59,11 +58,11 @@ export const Voip = React.createClass({
 
   onUpdate(name) {
     return function (data) {
-      let settings = {};
+      const settings = {};
 
-      settings[name] = data.value
+      settings[name] = data.value;
       this.props.changeVoipSettings(settings);
-    }.bind(this)
+    }.bind(this);
   },
 
   onChangeGroup(item) {
@@ -72,7 +71,7 @@ export const Voip = React.createClass({
 
   onChangeEncryption(item) {
     const data = {
-      encryption: item.value
+      encryption: item.value,
     };
 
     this.props.changeVoipSettings(data);
@@ -93,17 +92,17 @@ export const Voip = React.createClass({
   getGroupOptions() {
     return this.props.store
       .getIn(['data', 'list'])
-      .map(function(item, i) {
-        var groupname = item.get('groupname');
-        var label = groupname
+      .map(function (item, i) {
+        let groupname = item.get('groupname');
+        let label = groupname;
 
-        if(groupname === 'Default') {
+        if (groupname === 'Default') {
           label = _('Ungrouped Devices');
         }
         return {
           value: groupname,
-          label: label
-        }
+          label,
+        };
       })
       .toJS();
   },
@@ -126,26 +125,26 @@ export const Voip = React.createClass({
           label={msg.selectGroup}
           type="select"
           options={groupOptions}
-          value={getCurrData('groupname') }
+          value={getCurrData('groupname')}
           onChange={this.onChangeGroup}
-          />
+        />
 
         <h3>{_('VoIP Settings') }</h3>
         <FormGroup
-          label={_('Enable VoIP') }
+          label={_('Enable VoIP')}
           type="checkbox"
           options={{
-            label: _('Enable')
+            label: _('Enable'),
           }}
-          checked={ getCurrData('enable') == '1'}
-          onChange={this.onUpdate('enable') }
+          checked={getCurrData('enable') == '1'}
+          onChange={this.onUpdate('enable')}
         />
 
         <FormGroup role="save">
           {
             noControl ? null : (
               <SaveButton
-                type='button'
+                type="button"
                 loading={this.props.app.get('saving')}
                 onClick={this.onSave}
               />
@@ -154,15 +153,15 @@ export const Voip = React.createClass({
         </FormGroup>
       </div>
     );
-  }
+  },
 });
 
 function mapStateToProps(state) {
-  var myState = state.voip;
+  let myState = state.voip;
 
   return {
     store: myState,
-    app: state.app
+    app: state.app,
   };
 }
 
@@ -170,7 +169,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
     myActions
-  ), dispatch)
+  ), dispatch);
 }
 
 export const Screen = connect(

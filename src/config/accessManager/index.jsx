@@ -17,7 +17,7 @@ b28n.addDict(validateCn, 'cn');
 b28n.addDict(langEn, 'en');
 
 window.CB = b28n.init({
-  supportLang: ['en', 'cn']
+  supportLang: ['en', 'cn'],
 });
 window.guiConfig = guiConfig;
 
@@ -52,7 +52,7 @@ const pDevices = require('../../screens/App/screens/Main/screens/Devices');
 const pStatistics = require('../../screens/App/screens/Main/screens/Statistics');
 const pLogs = require('../../screens/App/screens/Main/screens/Logs');
 const pClients = require('../../screens/App/screens/Main/screens/Clients');
-//const pPreview = require('../../screens/App/screens/Main/screens/Preview');
+// const pPreview = require('../../screens/App/screens/Main/screens/Preview');
 
 // 设置
 const pGroupSettings = require('../../screens/App/screens/Main/screens/Settings/screens/GroupSettings');
@@ -70,7 +70,8 @@ const routes = [{
     {
       path: '/main',
       component: Main,
-      childRoutes: [{
+      childRoutes: [
+        {
           id: 'status',
           isIndex: true,
           path: '/main/status',
@@ -94,15 +95,14 @@ const routes = [{
           path: '/main/logs',
           icon: 'file-text-o',
           text: _('LOGS'),
-          component: pLogs.Screen
+          component: pLogs.Screen,
         }, {
-           id: 'statistics',
-           path: '/main/statistics',
-           icon: 'file-pdf-o',
-           text: _('REPORTS'),
-           component: pStatistics.Screen
-         },{
-
+          id: 'statistics',
+          path: '/main/statistics',
+          icon: 'file-pdf-o',
+          text: _('REPORTS'),
+          component: pStatistics.Screen,
+        }, {
           id: 'settings',
           path: '/main/settings',
           icon: 'cog',

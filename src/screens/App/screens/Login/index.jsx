@@ -5,19 +5,19 @@ import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/utils/lib/validator';
-import * as actions from './actions';
 import * as appActions from 'shared/actions/app';
 import Navbar from 'shared/components/Navbar';
 import { FormGroup } from 'shared/components/Form';
 import Button from 'shared/components/Button';
+import * as actions from './actions';
 import reducer from './reducer';
 
 const validOptions = Map({
   username: validator({
-    label: _('Username')
+    label: _('Username'),
   }),
   password: validator({
-    label: _('Password')
+    label: _('Password'),
   }),
 });
 
@@ -40,25 +40,24 @@ export const Login = React.createClass({
   },
 
   componentWillUnmount() {
-    var currClass = document.getElementsByTagName('body')[0].className;
+    let currClass = document.getElementsByTagName('body')[0].className;
 
     document.getElementsByTagName('body')[0].className = currClass.replace(' sign-body', '');
     this.props.resetData();
   },
 
   checkData() {
-    var data = this.props.data.toJS();
-    var ret = formGroups.password.validator.check(data.password);
+    let data = this.props.data.toJS();
+    let ret = formGroups.password.validator.check(data.password);
 
     return ret;
   },
 
   onLogin() {
-
     this.props.validateAll(function (invalid) {
       if (invalid.isEmpty()) {
         this.props.login(function (status) {
-          var currClass = document.getElementsByTagName('body')[0].className;
+          let currClass = document.getElementsByTagName('body')[0].className;
 
           document.getElementsByTagName('body')[0].className = currClass.replace(' sign-body', '');
           this.props.changeLoginStatus(status);
@@ -104,15 +103,15 @@ export const Login = React.createClass({
   onUsernameKeyUp(e) {
     if (e.which === 13) {
       // 聚焦到 密码输入框
-      //this.onLogin();
+      // this.onLogin();
     }
   },
 
   render() {
     const { version, guiName } = this.props.app.toJS();
-    const { username, password} = this.props.validateOption;
-    var that = this;
-    var myMsg = this.props.status;
+    const { username, password } = this.props.validateOption;
+    let that = this;
+    let myMsg = this.props.status;
 
     return (
       <div>

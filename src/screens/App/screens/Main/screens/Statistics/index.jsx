@@ -7,7 +7,7 @@ import reducer from './reducer';
 import Button from 'shared/components/Button';
 import {Search, FormGroup, Checkbox} from 'shared/components/Form';
 import Switchs from 'shared/components/Switchs';
-import {Table} from 'shared/components/Table';
+import Table from 'shared/components/Table';
 
 const msg = {
   TITIE: _('Reports'),

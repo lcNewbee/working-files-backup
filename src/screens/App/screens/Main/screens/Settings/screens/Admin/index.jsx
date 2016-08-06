@@ -1,47 +1,44 @@
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
 import { bindActionCreators } from 'redux';
-import {fromJS, Map, List} from 'immutable';
+import { fromJS, Map, List } from 'immutable';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import { FormGroup } from 'shared/components/Form';
+import { SaveButton } from 'shared/components';
 import validator from 'shared/utils/lib/validator';
 import * as appActions from 'shared/actions/app';
 import * as myActions from './actions';
 import myReducer from './reducer';
 
-import {FormGroup} from 'shared/components/Form';
-import Select from 'shared/components/Select';
-import Button from 'shared/components/Button';
-import SaveButton from 'shared/components/Button/Save';
-
 const msg = {
   'upSpeed': _('Up Speed'),
   'downSpeed': _('Down Speed'),
-  'selectGroup': _('Select Group')
+  'selectGroup': _('Select Group'),
 };
 const languageOptions = List(b28n.getOptions().supportLang).map((item) => {
   return {
     value: item,
-    label: b28n.langMap[item] || 'English'
-  }
+    label: b28n.langMap[item] || 'English',
+  };
 }).toJS();
 
 const validOptions = Map({
   oldpasswd: validator({}),
   newpasswd: validator({
-    rules: 'len:[8, 32]'
+    rules: 'len:[8, 32]',
   }),
 
   confirmpasswd: validator({
-    rules: 'len:[8, 32]'
-  })
+    rules: 'len:[8, 32]',
+  }),
 });
 
 const propTypes = {
   fetchDeviceGroups: PropTypes.func,
   fetching: PropTypes.bool,
   data: PropTypes.instanceOf(Map),
-  groups: PropTypes.instanceOf(List)
+  groups: PropTypes.instanceOf(List),
 };
 
 export const Admin = React.createClass({
@@ -57,7 +54,7 @@ export const Admin = React.createClass({
   },
 
   combineValid() {
-    const {newpasswd, confirmpasswd} = this.props.store.get('data').toJS();
+    const { newpasswd, confirmpasswd } = this.props.store.get('data').toJS();
     let ret;
 
     if (newpasswd !== confirmpasswd) {
@@ -66,7 +63,7 @@ export const Admin = React.createClass({
       this.props.createModal({
         id: 'admin',
         role: 'alert',
-        text: ret
+        text: ret,
       });
     }
 
@@ -76,37 +73,36 @@ export const Admin = React.createClass({
   onSave() {
     this.props.validateAll(function (invalid) {
       if (invalid.isEmpty() && !this.combineValid()) {
-
-        this.props.savePassword(function() {
+        this.props.savePassword(function () {
           this.props.changeLoginStatus('0');
-          window.location.hash = "#";
+          window.location.hash = '#';
         }.bind(this));
       }
     }.bind(this));
   },
 
   createUpdateFunc(name) {
-    return function(data) {
-      let settings = {};
+    return function (data) {
+      const settings = {};
 
-      settings[name] = data.value
+      settings[name] = data.value;
       this.props.changePasswordSettings(settings);
-    }.bind(this)
+    }.bind(this);
   },
 
   onChangeLang(data) {
-    if(b28n.getLang() !== data.value) {
+    if (b28n.getLang() !== data.value) {
       b28n.setLang(data.value);
       window.location.reload();
     }
   },
 
   getSetting(name) {
-    return this.props.store.getIn(['data', name])
+    return this.props.store.getIn(['data', name]);
   },
 
   render() {
-    const {oldpasswd, newpasswd, confirmpasswd} = this.props.validateOption;
+    const { oldpasswd, newpasswd, confirmpasswd } = this.props.validateOption;
     const noControl = this.props.app.get('noControl');
 
     return (
@@ -155,7 +151,7 @@ export const Admin = React.createClass({
              {
                noControl ? null : (
                 <SaveButton
-                  type='button'
+                  type="button"
                   loading={this.props.app.get('saving')}
                   onClick={this.onSave}
                 />
@@ -176,7 +172,7 @@ export const Admin = React.createClass({
 
       </form>
     );
-  }
+  },
 });
 
 Admin.propTypes = propTypes;
@@ -184,7 +180,7 @@ Admin.propTypes = propTypes;
 function mapStateToProps(state) {
   return {
     store: state.admin,
-    app: state.app
+    app: state.app,
   };
 }
 
@@ -192,7 +188,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
     myActions
-  ), dispatch)
+  ), dispatch);
 }
 
 export const Screen = connect(

@@ -1,28 +1,41 @@
-import React from 'react';
-import utils from 'shared/utils';
-import { bindActionCreators } from 'redux';
+import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from 'shared/actions/app';
-import reducer from './reducer';
-import Modal from 'shared/components/Modal';
+import { Modal } from 'shared/components';
 
-export const App = React.createClass({
+const propTypes = {
+  closeModal: PropTypes.func,
+  fetchAcInfo: PropTypes.func,
+  app: PropTypes.object,
+  children: PropTypes.node,
+};
 
+const defaultProps = {
+  closeModal: () => true,
+};
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.onModalClose = this.onModalClose.bind(this);
+    this.onModalApply = this.onModalApply.bind(this);
+  }
   componentWillMount() {
     this.props.fetchAcInfo();
-  },
+  }
 
   onModalClose() {
     this.props.closeModal({
       status: 'cancel',
     });
-  },
+  }
 
   onModalApply() {
     this.props.closeModal({
       status: 'ok',
     });
-  },
+  }
 
   render() {
     const { modal } = this.props.app.toJS();
@@ -43,24 +56,21 @@ export const App = React.createClass({
         </Modal>
       </div>
     );
-  },
-});
+  }
+}
+
+App.propTypes = propTypes;
+App.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
     app: state.app,
   };
 }
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(utils.extend({},
-    actions
-  ), dispatch);
-}
-
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
+  actions
 )(App);
 
-export const app = reducer;
+export { default as app } from './reducer';

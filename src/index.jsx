@@ -10,16 +10,20 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const ReactRouter = require('react-router');
 const Provider = require('react-redux').Provider;
+const combineReducers = require('redux').combineReducers;
+
 const Router = ReactRouter.Router;
 const hashHistory = ReactRouter.hashHistory;
 
 // 引入产品配置
-const prodConfig = require('./config/axc');
+const prodConfig = require('./config/accessManager');
 
 if (module.hot) {
   // Enable Webpack hot module replacement for reducers
-  module.hot.accept('./config/axc', () => {
-    const nextRootReducer = require('./config/axc').reducers;
+  module.hot.accept('./config/accessManager', () => {
+    const newConfig =  require('./config/accessManager');
+    const nextRootReducer = combineReducers(newConfig.reducers);
+
     prodConfig.stores.replaceReducer(nextRootReducer);
   });
 }
