@@ -12,6 +12,8 @@ const langCn = require('../lang/cn/core.json');
 const validateCn = require('../lang/cn/validate.json');
 const langEn = require('../lang/en/core.json');
 
+const bodyElem = document.getElementsByTagName('body')[0];
+
 b28n.addDict(langCn, 'cn');
 b28n.addDict(validateCn, 'cn');
 b28n.addDict(langEn, 'en');
@@ -21,7 +23,7 @@ window.CB = b28n.init({
 });
 window.guiConfig = guiConfig;
 
-document.getElementsByTagName('body')[0].className += ' ' + b28n.getLang();
+bodyElem.className = `${bodyElem.className} ${b28n.getLang()}`;
 
 /** ***********************************************************
  * 产品界面配置
@@ -55,12 +57,14 @@ const pClients = require('../../screens/App/screens/Main/screens/Clients');
 // const pPreview = require('../../screens/App/screens/Main/screens/Preview');
 
 // 设置
-const pGroupSettings = require('../../screens/App/screens/Main/screens/Settings/screens/GroupSettings');
+const pGroupSettings =
+    require('../../screens/App/screens/Main/screens/Settings/screens/GroupSettings');
 const sWireless = require('../../screens/App/screens/Main/screens/Settings/screens/Wireless');
 const sPortal = require('../../screens/App/screens/Main/screens/Settings/screens/Portal');
 const sGuest = require('../../screens/App/screens/Main/screens/Settings/screens/Guest');
 const sVoip = require('../../screens/App/screens/Main/screens/Settings/screens/Voip');
 const sAdmin = require('../../screens/App/screens/Main/screens/Settings/screens/Admin');
+
 
 const routes = [{
   path: '/',

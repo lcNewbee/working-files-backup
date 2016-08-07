@@ -12,3 +12,4 @@ export { default as Switchs } from './Switchs';
 export { default as Tab } from './Tab';
 export { default as Table } from './Table';
 export { default as Pagination } from './Pagination';
+export { default as EchartReact } from './EchartReact';
