@@ -1,11 +1,8 @@
 import utils from 'shared/utils';
 import * as appActions from 'shared/actions/app';
+import urls from 'shared/config/urls';
 
 let refreshTimeout = null;
-const urls = {
-  fetch: '/goform/getApClientInfo',
-  offlineAp: '/goform/getOfflineDevInfo'
-}
 
 function reqeustStats() {
   return {
@@ -36,7 +33,7 @@ export function fetchStatus() {
     window.clearTimeout(refreshTimeout)
     dispatch(reqeustStats());
 
-    dispatch(appActions.fetch(urls.fetch, query))
+    dispatch(appActions.fetch(urls.fetchStatsInfo, query))
       .then(function(json) {
         if(json.state && json.state.code === 2000) {
           dispatch(reveviceStats(json.data))
@@ -84,7 +81,7 @@ export function fetchOfflineAp() {
 
     dispatch(reqeustFetchOfflineAp());
 
-    dispatch(appActions.fetch(urls.offlineAp, query))
+    dispatch(appActions.fetch(urls.fetchOfflineAp, query))
       .then(function(json) {
         if(json.state && json.state.code === 2000) {
           dispatch(reveviceFetchOfflineAp(json.data))
@@ -99,7 +96,7 @@ export function deleteOfflineAp(mac) {
       mac: mac
     };
 
-    dispatch(appActions.save('/goform/delApOfflineDev', subData))
+    dispatch(appActions.save(urls.deleteOfflineAp, subData))
       .then(function(json) {
         if(json.state && json.state.code === 2000) {
           dispatch(fetchOfflineAp(5000))

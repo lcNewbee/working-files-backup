@@ -31,7 +31,7 @@ const typeArr = [
 
 // 原生的 react 页面
 export const Statistics = React.createClass({
-  
+
   mixins: [PureRenderMixin],
 
   componentWillMount() {
@@ -61,7 +61,7 @@ export const Statistics = React.createClass({
       this.props.deleteReport(num)
   },
 
-  render() { 
+  render() {
     const reportsTableOptions = fromJS([
       {
         id: 'id',
@@ -83,7 +83,7 @@ export const Statistics = React.createClass({
 
           return (
             <div>
-              <Button 
+              <Button
                 icon="download"
                 title={msg.EXPORTING}
                 onClick={() => this.onDownloadReport(curId)}
@@ -99,7 +99,6 @@ export const Statistics = React.createClass({
                 onClick={() =>  this.onDeleteReport(curId) }
               />
             </div>
-        
           )
         }.bind(this)
       }
@@ -108,13 +107,13 @@ export const Statistics = React.createClass({
     return (
       <div className="page-reports">
         <h2>{msg.TITIE}</h2>
-        <div>
+        <div className="m-action-bar">
           <Switchs
             options={typeArr}
             value={this.props.query.get('timeType')}
             onChange={this.onTimeSwitch}
           />
-          <Button 
+          <Button
             icon="plus"
             text={_("Generate Report")}
             onClick={this.onGenerateReport}
@@ -127,11 +126,9 @@ export const Statistics = React.createClass({
             list={this.props.reports}
           />
         </div>
-        
       </div>
     );
   },
-
 });
 
 function mapStateToProps(state) {//state是整个应用的state？如何知道？

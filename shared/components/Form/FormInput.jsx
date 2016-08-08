@@ -17,7 +17,7 @@ const propTypes = {
   checkClearValue: PropTypes.func,
   onChange: PropTypes.func,
   label: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   clearable: PropTypes.bool,
   searchable: PropTypes.bool,
 };
@@ -85,7 +85,7 @@ class FormInput extends React.Component {
     const inpputType = this.props.type;
     const inputProps = utils.extend({}, this.props);
     let MyComponent = Component;
-    let classNames = className;
+    let classNames = className || '';
 
     if (size) {
       classNames = `${classNames} input-${size}`;

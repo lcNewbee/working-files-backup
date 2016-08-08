@@ -19,53 +19,6 @@ body {
   padding-top: $top-distance;
 }
 
-.user-pop-over {
-  position: fixed;
-  top: $g-navbar-height + 1px;
-  right: 0;
-  z-index: 1070;
-  min-width: 340px;
-  color: #f5f5f5;
-  background: $g-main-color;
-
-  a {
-    padding: 8px 12px;
-    color: #f5f5f5;
-    transition: background-color .3s;
-
-    &:hover {
-      color: #f5f5f5;
-      background: $main-blue;
-    }
-  }
-  .user-info {
-    .icon-user {
-      padding: 5px 30px 0 30px;
-      margin: 10px;
-      font-size: 86px;
-      color: #000;
-      background-color: #e5e5e5;
-    }
-  }
-
-  .user-controls {
-    background-color: $g-main-color-light;
-
-    @include clearfix;
-
-    .change-pas {
-      float: left;
-    }
-    .sign-out {
-      float: right;
-    }
-
-    .fa {
-      margin-right: 4px;
-    }
-  }
-}
-
 .t-main {
   padding: $g-distance;
   padding-left: 0;
@@ -74,31 +27,90 @@ body {
   &.t-main--ac {
     .t-main__nav {
       top: $g-navbar-height + $g-main-bar-height;
+      width: $sidebar-width + 20px;
     }
-    .t-main__content-wrap {
+    .t-main__content {
+      top: $g-navbar-height + $g-main-bar-height + 20px;
+      left: $sidebar-width + 30px;
+    }
+    .t-main__asider-left {
       top: $g-navbar-height + $g-main-bar-height;
     }
   }
-}
-.t-main__nav {
-  position: fixed;
-  top: $g-navbar-height;
-  bottom: 0;
-  z-index: 1000;
-  width: $sidebar-width;
-  background: #333;
-}
-.t-main__content {
-  position: absolute;
-  top: $top-distance;
-  right: 0;
-  bottom: $g-distance;
-  left: $sidebar-width + 10px;
-  min-width: 1024px - 200px;
-  padding: 0 $g-distance;
 
-  h2,
-  .t-main__content-title {
-    margin-bottom: 20px;
+  &.main--open-left {
+    .t-main__nav {
+      left: 170px;
+    }
+
+    .t-main__content {
+      left: $sidebar-width + 200px;
+    }
   }
+
+  .t-main__nav {
+    position: fixed;
+    top: $g-navbar-height;
+    left: 0;
+    bottom: 0;
+    z-index: 1000;
+    width: $sidebar-width;
+    background: #333;
+    transition: left .3s ease-in;
+
+    &.o-nav--tree {
+      width: $sidebar-width + 20px;
+    }
+  }
+  .t-main__content {
+    position: absolute;
+    top: $top-distance;
+    right: 0;
+    bottom: $g-distance;
+    left: $sidebar-width + 10px;
+    min-width: 1024px - 200px;
+    padding: 0 $g-distance;
+    transition: left .3s ease-in;
+
+    h2,
+    .t-main__content-title {
+      font-size: 1.5em;
+      margin-bottom: .3em;
+    }
+  }
+}
+
+.t-main__asider-left {
+  position: absolute;
+  top: $g-navbar-height + $g-main-bar-height;
+  bottom: 0;
+  left: 0;
+  z-index: 999;
+  width: 170px;
+  color: #fff;
+  background: #222;
+  overflow-y: auto;
+}
+
+.t-main__asider-header {
+  padding: 16px;
+  line-height: 20px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 0;
+    border-width: 26px 16px;
+    border-color: transparent #444 transparent transparent ;
+    border-style: solid;
+  }
+}
+
+.t-main__asider-footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 12px;
 }

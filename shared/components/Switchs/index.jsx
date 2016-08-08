@@ -8,6 +8,7 @@ const propTypes = {
   size: PropTypes.oneOf(['sm', 'lg']),
   onChange: PropTypes.func,
   options: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+  style: PropTypes.object,
 };
 
 const defaultProps = {
@@ -22,12 +23,12 @@ class Switchs extends React.Component {
     this.onClick = this.onClick.bind(this);
   }
 
-  onClick(e) {
+  onClick(e, labelVal) {
     if (e.target.value !== this.props.value) {
       if (this.props.onChange) {
         this.props.onChange({
           value: e.target.value,
-          label: e.target.innerHTML,
+          label: labelVal,
         });
       }
     }
@@ -35,11 +36,15 @@ class Switchs extends React.Component {
 
   render() {
     const { size, className, options, value } = this.props;
-
+    let optionsList;
     let classNames = 'm-switch';
 
+    if (options) {
+      optionsList = fromJS(options);
+    }
+
     if (size) {
-      classNames = `${classNames} btn-${size}`;
+      classNames = `${classNames} m-switch-${size}`;
     }
 
     if (className) {
@@ -50,10 +55,11 @@ class Switchs extends React.Component {
       <div
         className={classNames}
         onClick={this.onClick}
+        style={this.props.style}
       >
         {
-          options ? fromJS(options).map((item, i) => {
-            let myClassName = 'a-switch__item a-btn';
+          options ? optionsList.map((item, i) => {
+            let myClassName = 'm-switch__item';
             let val;
             let label;
 
@@ -74,6 +80,9 @@ class Switchs extends React.Component {
                 key={i}
                 className={myClassName}
                 value={val}
+                onClick={(e) => {
+                  this.onClick(e, label);
+                }}
               >
                 {label}
               </button>

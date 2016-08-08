@@ -130,6 +130,7 @@ export const Login = React.createClass({
                 <FormGroup
                   required
                   name="username"
+                  role="block"
                   maxLength="21"
                   data-label={_('Username')}
                   placeholder={_('Username')}
@@ -143,6 +144,8 @@ export const Login = React.createClass({
             <FormGroup
               type="password"
               name="password"
+              role="block"
+              seeAble={false}
               required
               maxLength="21"
               data-label={_('Password')}

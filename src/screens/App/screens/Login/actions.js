@@ -1,5 +1,5 @@
 import utils from 'shared/utils';
-import URLS from 'shared/config/urls';
+import urls from 'shared/config/urls';
 
 export function reqeustLogin() {
   return {
@@ -42,7 +42,7 @@ export function login(callBack) {
 
     dispatch(reqeustLogin());
 
-    utils.save(URLS.login, data)
+    utils.save(urls.login, data)
       .then(function(json) {
         let result = _('Password Error');
         if(json.state) {

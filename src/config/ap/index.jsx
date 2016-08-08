@@ -60,7 +60,6 @@ const sSystemLog = require('../../screens/App/screens/Main/screens/NetworkServic
 
 
 
-
 // 登录界面
 const pLogin = require('../../screens/App/screens/Login');
 // const sRegister = require('../../screens/App/screens/SignUp');
@@ -112,7 +111,7 @@ const routes = [{
               id: 'systemstatus',
               path: '/main/mainmenu/systemstatus',
               text: _('SYSTEM STATUS'),
-              component: sSystemstatus,
+              component: sSystemstatus.Screen,
             }, {
               id: 'networkmonitor',
               path: '/main/mainmenu/networkmonitor',
@@ -249,7 +248,8 @@ const reducers = {
   advance:pAdvance.advance,
   networkservice:pNetworkService.networkservice,
   ntpclient:sNTPClient.ntpclient,
-  systemlog:sSystemLog.systemlog
+  systemlog:sSystemLog.systemlog,
+  systemstatus:sSystemstatus.systemstatus,
 };
 
 // Store

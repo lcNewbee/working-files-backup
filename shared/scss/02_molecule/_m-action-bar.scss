@@ -1,9 +1,7 @@
 .m-action-bar {
-  background: #333;
-  color: #fff;
-  overflow: auto;
-  padding: 6px;
-  font-size: 14px;
+  padding: 8px 0;
+
+  @include clearfix;
 
   .m-action-bar__left {
     float: left;

@@ -1,10 +1,6 @@
 import utils from 'shared/utils';
 import * as appActions from 'shared/actions/app';
-
-const urls = {
-  fetch: "/goform/getWifi",
-  save: "/goform/setWifi",
-}
+import urls from 'shared/config/urls';
 
 // Fetch
 export function reqeustFetchWifi() {
@@ -23,7 +19,7 @@ export function fetchWifiSettings() {
   return dispatch => {
     dispatch(reqeustFetchWifi());
 
-    dispatch(appActions.fetch(urls.fetch))
+    dispatch(appActions.fetch(urls.fetchWifi))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(receiveWifi(json.data));
@@ -62,7 +58,7 @@ export function setWifi() {
   return (dispatch, getState) => {
     const data = getState().wireless.getIn(['data', 'curr']);
 
-    dispatch(appActions.save(urls.save, data))
+    dispatch(appActions.save(urls.saveWifi, data))
       .then(function(json){
         if (json.state && json.state.code === 2000) {
           dispatch(fetchWifiSettings());

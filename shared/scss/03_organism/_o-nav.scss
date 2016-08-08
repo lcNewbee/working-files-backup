@@ -16,14 +16,6 @@ $main-blue: #0093dd;
     letter-spacing: 1px;
     transition: background-color .2s ease-in-out, color .2s ease;
 
-    .icon {
-      display: inline-block;
-      width: 20px;
-      margin-right: 10px;
-      font-size: 20px;
-      vertical-align: middle;
-    }
-
     &:hover {
       color: #fff;
     }
@@ -39,24 +31,13 @@ $main-blue: #0093dd;
   }
 
   .o-nav__sub-menus {
-    display: none;
     .o-nav__link {
       padding: $g-distance-md 0;
-      padding-left: $g-size + 30px;
+      padding-left: $g-size;
       background-color: #555;
 
       &.active {
         background-color: #666;
-      }
-    }
-  }
-
-  .o-nav__list {
-    list-style: none;
-
-    &.active {
-      .o-nav__sub-menus {
-        display: block;
       }
     }
   }

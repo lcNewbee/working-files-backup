@@ -152,7 +152,8 @@ export const GroupSettings = React.createClass({
   },
 
   getGroupTableOptions() {
-    let ret = fromJS([{
+    let ret = fromJS([
+      {
       id: 'groupname',
       text: msg.groupname,
       transform: function(val) {

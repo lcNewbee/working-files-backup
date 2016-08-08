@@ -9,6 +9,11 @@ const propTypes = {
   autoFocus: PropTypes.bool,
   onChange: PropTypes.func,
   type: PropTypes.oneOf(['text', 'password']),
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  role: PropTypes.oneOf(['block']),
+  style: PropTypes.object,
+  isFocus: PropTypes.bool,
+  canSee: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -45,21 +50,48 @@ class Password extends React.Component {
 
   render() {
     const { isSee, isFocus } = this.state;
+    const { role, style, seeAble } = this.props;
+    let myIsFocus = isFocus || this.props.isFocus;
+    let passwordClassName = 'a-password';
+    let iconClassName = 'a-password__icon';
     let { type } = this.props;
+    let showIcon = true;
     let iconName = 'eye';
 
     if (isSee) {
       type = 'text';
       iconName = 'eye-slash';
+      iconClassName = 'a-password__icon a-password__icon--hidden';
+    }
+
+    if (this.props.value === '') {
+      showIcon = false;
+    }
+
+    showIcon = seeAble && showIcon;
+
+    if (role) {
+      passwordClassName = `${passwordClassName} a-password--${role}`;
     }
 
     return (
-      <div className="input-password">
-        <Icon className="icon" name={iconName} onClick={this.seePassword} />
+      <div
+        className={passwordClassName}
+        style={style}
+      >
+        {
+          showIcon ? (
+            <Icon
+              className={iconClassName}
+              name={iconName}
+              onClick={this.seePassword}
+            />
+          ) : null
+        }
 
         <Input
           {...this.props}
-          isFocus={isFocus}
+          isFocus={myIsFocus}
           type={type}
           onChange={this.onChange}
         />

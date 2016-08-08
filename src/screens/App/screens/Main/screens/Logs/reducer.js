@@ -25,7 +25,7 @@ export default function(state = defaultState, action) {
 
     case 'CHANGE_LOGS_QUERY':
       return state.mergeIn(['query'], action.query);
-    
+
     case "CHANGE_LOG_ACTION_QUERY":
       return state.mergeIn(['actionQuery'], action.actionQuery);
 

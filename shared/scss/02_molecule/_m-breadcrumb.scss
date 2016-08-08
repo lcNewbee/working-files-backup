@@ -1,6 +1,16 @@
 .m-breadcrumb {
   li {
-    float: left;
+    float: right;
+
+    &:nth-child(odd) {
+      .m-breadcrumb__link {
+        background-color: #888;
+
+        &::after {
+          border-color: transparent transparent transparent #888;
+        }
+      }
+    }
   }
   .m-breadcrumb__link {
     display: block;
@@ -22,7 +32,5 @@
       border-style: solid;
       border-right: none;
     }
-
-    
   }
 }

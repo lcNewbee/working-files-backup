@@ -68,7 +68,12 @@
   "Login": "登录",
   "Login in": "直接登录",
   "Sign up": "注册",
+  "No": "序号",
+  "Mask": "子网掩码",
+  "Release Time": "租约时间",
 
+  "Main DNS": "主DNS",
+  "Second DNS": "备用DNS",
 
   "Management": "管理系统",
   "Setup Wizard": "设置向导",

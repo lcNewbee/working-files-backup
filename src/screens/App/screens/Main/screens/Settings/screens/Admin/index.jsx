@@ -116,31 +116,31 @@ export const Admin = React.createClass({
         <FormGroup
           type="password"
           label={_('Old Password')}
-          required={true}
           name="oldpasswd"
           value={this.getSetting('oldpasswd')}
           onChange={this.createUpdateFunc('oldpasswd')}
           {...oldpasswd}
+          required
         />
 
         <FormGroup
           type="password"
           label={_('New Password')}
-          required={true}
           name="newpasswd"
           value={this.getSetting('newpasswd')}
           onChange={this.createUpdateFunc('newpasswd')}
           {...newpasswd}
+          required
         />
 
         <FormGroup
           type="password"
           label={_('Confirm Password')}
-          required={true}
           name="confirmpasswd"
           value={this.getSetting('confirmpasswd')}
           onChange={this.createUpdateFunc('confirmpasswd')}
           {...confirmpasswd}
+          required
         />
 
         <div className="form-group form-group-save">

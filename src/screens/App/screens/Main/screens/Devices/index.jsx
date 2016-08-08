@@ -25,7 +25,7 @@ import './_index.scss';
 const typeArr = [
   {
     value: '0',
-    label: _('All')
+    label: _('ALL')
   }, {
     value: '1',
     label: _('INDOOR')
@@ -89,7 +89,7 @@ export const Device = React.createClass({
   },
   //从后台抓取数据
   handleSearch() {
-    this.props.fetchDevices('/goform/devices');
+    this.props.fetchDevices();
   },
 
   /**
@@ -421,9 +421,9 @@ export const Device = React.createClass({
     const { text, devicetype, size } = this.props.store.get('query').toJS();
 
     return (
-      <div className="page-device">
+      <div>
         <h2>{_('Devices Info') }</h2>
-        <div className="clearfix">
+        <div className="m-action-bar">
           <Search
             className="search fl"
             value={text}

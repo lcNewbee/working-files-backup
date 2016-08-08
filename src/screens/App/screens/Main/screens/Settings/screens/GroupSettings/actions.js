@@ -1,13 +1,6 @@
 import utils from 'shared/utils';
 import * as appActions from 'shared/actions/app';
-
-const urls = {
-  fetch: "/goform/getDevGroups",
-  fetchDevs: "/goform/getGroupDevs",
-  editGroup: "/goform/updateDevGroup",
-  deleteGroup: "/goform/deleteDevGroup",
-  addGroup: "/goform/addDevGroup"
-}
+import urls from 'shared/config/urls';
 
 export function removeEditDeviceGroup() {
   return {
@@ -75,7 +68,7 @@ export function fetchDeviceGroups() {
   return dispatch => {
     dispatch(reqeustFetchDeviceGroups());
 
-    dispatch(appActions.fetch(urls.fetch))
+    dispatch(appActions.fetch(urls.fetchGroups))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(receiveDeviceGroups(json.data));
@@ -102,7 +95,7 @@ export function fetchGroupDevices() {
   return dispatch => {
     dispatch(reqeustFetchGroupDevices());
 
-    dispatch(appActions.fetch(urls.fetchDevs))
+    dispatch(appActions.fetch(urls.fetchGroupDevs))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(receiveGroupDevices(json.data));

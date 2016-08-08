@@ -6,13 +6,13 @@ import * as actions from '../actions';
 
 describe('Group Settings Rudex', () => {
 
-  it('handle RECEIVE_DEVICE_GROUPS', () => {
+  it('handles RECEIVE_DEVICE_GROUPS', () => {
     const initialState = fromJS({
       data: {
         list: []
       }
     });
-    
+
     const action = {
       type: 'RECEIVE_DEVICE_GROUPS',
       data: {
@@ -44,14 +44,14 @@ describe('Group Settings Rudex', () => {
       }
     }));
   });
-  
+
   it('handle RECEIVE_GROUP_DEVICES', () => {
     const initialState = fromJS({
       devices: {
         list: []
       }
     });
-    
+
     const action  = actions.receiveGroupDevices({
         "page": {
             "start": 2,
@@ -81,7 +81,6 @@ describe('Group Settings Rudex', () => {
 
     nextState.should.equal(fromJS({
       fetching: false,
-      defaultGroupDevices: [],
       devices: {
         "page": {
             "start": 2,
@@ -109,7 +108,7 @@ describe('Group Settings Rudex', () => {
       }
     }));
   });
-  
+
   it('handle ADD_GROUP', () => {
     const initialState = fromJS({
       data: {}
@@ -123,7 +122,7 @@ describe('Group Settings Rudex', () => {
         devices: []
       }
     }));
-    
+
   });
 
   it('handle EDIT_GROUP', () => {
@@ -169,7 +168,7 @@ describe('Group Settings Rudex', () => {
     });
     let action = actions.editDeviceGroup("研发");
     let nextState = reducer(initialState, action);
-    
+
     const expectMap = fromJS({
       data: {
         list: [
@@ -222,7 +221,7 @@ describe('Group Settings Rudex', () => {
 
     nextState.should.equal(expectMap);
   });
-  
+
   it('handle SELECT_DEVICES when edit or add group', () => {
     const initialState = fromJS({
       edit: {
@@ -231,7 +230,7 @@ describe('Group Settings Rudex', () => {
         devices: ['12:23:44:55:66:78']
       }
     });
-    
+
     let action = actions.selectDevice("12:23:44:55:66:78");
     let nextState = reducer(initialState, action);
     let expectMap = fromJS({
@@ -241,14 +240,14 @@ describe('Group Settings Rudex', () => {
           "12:23:44:55:66:78"
         ]
     });
-    
+
     expect(nextState.get('edit')).to.be.equal(expectMap);
-    
-    
+
+
     action = actions.selectDevice("12:33:44:55:66:78");
-    
+
     nextState = reducer(nextState, action);
-    
+
     expectMap = fromJS({
         "groupname": "研发",
         "remark": "只有开通网络权限",
@@ -259,7 +258,7 @@ describe('Group Settings Rudex', () => {
     });
     expect(nextState.get('edit')).to.be.equal(expectMap);
   });
-  
+
   it('handle UNSELECT_DEVICES when edit or add group', () => {
     const initialState = fromJS({
       edit: {
@@ -271,7 +270,7 @@ describe('Group Settings Rudex', () => {
         ]
       }
     });
-    
+
     let action = actions.selectDevice("12:23:44:55:66:78", true);
     let nextState = reducer(initialState, action);
     let expectMap = fromJS({
@@ -281,14 +280,14 @@ describe('Group Settings Rudex', () => {
           "12:33:44:55:66:78"
         ]
     });
-    
+
     expect(nextState.get('edit')).to.be.equal(expectMap);
-    
-    
+
+
     action = actions.selectDevice("12:33:44:55:66:78", true);
-    
+
     nextState = reducer(nextState, action);
-    
+
     expectMap = fromJS({
         "groupname": "研发",
         "remark": "只有开通网络权限",
@@ -296,7 +295,7 @@ describe('Group Settings Rudex', () => {
     });
     expect(nextState.get('edit')).to.be.equal(expectMap);
   });
-  
+
   it('handle CHANGE_EDIT_GROUP when edit or add group', () => {
     const initialState = fromJS({
       edit: {
@@ -308,7 +307,7 @@ describe('Group Settings Rudex', () => {
         ]
       }
     });
-    
+
     let action = actions.changeEditGroup({
       groupname: "测试吧"
     });
@@ -321,15 +320,15 @@ describe('Group Settings Rudex', () => {
           '12:33:44:55:66:78'
         ]
     });
-    
+
     expect(nextState.get('edit')).to.be.equal(expectMap);
-    
+
     action = actions.changeEditGroup({
       remark: "ok"
     });
-    
+
     nextState = reducer(nextState, action);
-    
+
     expectMap = fromJS({
         "groupname": "测试吧",
         "remark": "ok",
@@ -340,9 +339,9 @@ describe('Group Settings Rudex', () => {
     });
     expect(nextState.get('edit')).to.be.equal(expectMap);
   });
-  
+
   it('should checks data after edit to SAVE_DEVICE_GROUP', () => {
-    
+
   });
-  
+
 });

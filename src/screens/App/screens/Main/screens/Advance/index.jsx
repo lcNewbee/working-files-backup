@@ -16,6 +16,8 @@ import * as actions from './actions';
 
 
 export const Advance = React.createClass({
+
+
   render() {
     return (
       <div className='advanceWrap'>
@@ -24,6 +26,7 @@ export const Advance = React.createClass({
           <FormGroup
             label={_('RTS Switch') }
             type="checkbox"
+            onChange={this.onRtsSwitchToggle}
           />
           <FormGroup
             className="rtsThresholdValue"
@@ -99,7 +102,6 @@ export const Advance = React.createClass({
                 id="threshdForLed1"
                 label="LED1"
                 type="number"
-                defaultValue="-94"
               />
               <span>{" "+"dbm"}</span>
             </label>
@@ -111,8 +113,6 @@ export const Advance = React.createClass({
                 id="threshdForLed2"
                 label="LED2"
                 type="number"
-                help="dbm"
-                defaultValue="-80"
               />
               <span>{" "+"dbm"}</span>
             </label>
@@ -124,8 +124,6 @@ export const Advance = React.createClass({
                 id="threshdForLed3"
                 label="LED3"
                 type="number"
-                help="dbm"
-                defaultValue="-73"
               />
               <span>{" "+"dbm"}</span>
             </label>
@@ -137,8 +135,6 @@ export const Advance = React.createClass({
                 id="threshdForLed4"
                 label="LED4"
                 type="number"
-                help="dbm"
-                defaultValue="-65"
               />
               <span>{" "+"dbm"}</span>
             </label>

@@ -1,9 +1,6 @@
 import utils from 'shared/utils';
+import urls from 'shared/config/urls';
 import * as appActions from 'shared/actions/app';
-
-const urls = {
-  save: "/goform/setAdmin",
-}
 
 export function changePasswordSettings(data) {
   return {
@@ -43,7 +40,7 @@ export function savePassword(callBack) {
 
     dispatch(reqeustSavePassword());
 
-    dispatch(appActions.save(urls.save, data))
+    dispatch(appActions.save(urls.saveAdmin, data))
       .then(function(json){
         if (json.state && json.state.code === 2000) {
           dispatch(receiveSavePassword(json.state));

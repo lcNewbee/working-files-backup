@@ -57,7 +57,6 @@ describe('Wireless Rudex', () => {
             "upstream": "64"
           }
         ],
-
         curr: {
           "channelsBandwidth": "20",
           "downstream": "128",
@@ -65,9 +64,10 @@ describe('Wireless Rudex', () => {
           "encryption": "none",
           "vlanenable": "0",
           "groupname": "group33547",
-          "country": "CN",
+          "country": "US",
           "upstream": "64",
-          "ssid": ""
+          "ssid": "",
+          "vlanid": ""
         }
       }
     });
