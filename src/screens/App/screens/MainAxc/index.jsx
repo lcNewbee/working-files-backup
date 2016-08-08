@@ -1,23 +1,44 @@
-import React, { Component } from 'react';
-import { fromJS } from 'immutable';
-import utils from 'shared/utils';
+import React, { Component, PropTypes } from 'react';
+import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
-import Nav from 'shared/components/Nav';
-import Icon from 'shared/components/Icon';
-import Modal from 'shared/components/Modal';
-import Table from 'shared/components/Table';
-import PopOver from 'shared/components/PopOver';
-import Button from 'shared/components/Button';
-import SaveButton from 'shared/components/Button/SaveButton';
-import Navbar from 'shared/components/Navbar';
-import { FormGroup } from 'shared/components/Form';
 import { Link } from 'react-router';
+import utils from 'shared/utils';
+import {
+  Nav, Icon, Modal, PopOver, Button, SaveButton, Navbar, FormGroup,
+  Table,
+} from 'shared/components';
 import * as appActions from 'shared/actions/app';
 import * as actions from './actions';
 import myReducer from './reducer';
 
+const propTypes = {
+  fetchApGroup: PropTypes.func,
+  fetchGroupAps: PropTypes.func,
+  refreshAll: PropTypes.func,
+  changeLoginStatus: PropTypes.func,
+  toggleMainPopOver: PropTypes.func,
+  selectVlan: PropTypes.func,
+  selectGroup: PropTypes.func,
+  selectAddApGroupDevice: PropTypes.func,
+  showMainModal: PropTypes.func,
+  showUserPopOver: PropTypes.func,
+  route: PropTypes.object,
+  location: PropTypes.object,
+  routes: PropTypes.array,
+
+  children: PropTypes.node,
+
+  // immutable data
+  app: PropTypes.instanceOf(Map),
+  mainAxc: PropTypes.instanceOf(Map),
+};
+
+const defaultProps = {
+  Component: 'button',
+  role: 'default',
+};
 
 export default class Main extends Component {
   constructor(props) {
@@ -253,7 +274,6 @@ export default class Main extends Component {
               {
                 this.props.mainAxc.getIn(['group', 'list']).map((item) => {
                   const curId = item.get('id');
-                  const remark = item.get('remark');
                   let classNames = 'm-menu__link';
 
                   if (curId === selectGroupId) {
@@ -324,7 +344,7 @@ export default class Main extends Component {
     let tableOption = fromJS([
       {
         id: 'devicename',
-        text: _('MAC Address') + '/' + _('Name'),
+        text: `${_('MAC Address')}/${_('Name')}`,
         transform(val, item) {
           return item.get('devicename') || item.get('mac');
         },
@@ -377,7 +397,6 @@ export default class Main extends Component {
                 {
                   this.props.mainAxc.getIn(['group', 'list']).map((item) => {
                     let curId = item.get('id');
-                    const remark = item.get('remark');
                     let classNames = 'm-menu__link';
 
                     if (curId === selectGroupId) {
@@ -539,8 +558,8 @@ export default class Main extends Component {
     return (
       <ol className="m-breadcrumb">
         {
-          breadcrumbList.map((item, i) => (
-            <li key={i}>
+          breadcrumbList.map((item, index) => (
+            <li key={index}>
               <Link
                 className="m-breadcrumb__link"
                 to={item.path}
@@ -555,7 +574,7 @@ export default class Main extends Component {
   }
 
   render() {
-    const { saving, version, propertyData, guiName } = this.props.app.toJS();
+    const { saving, version, guiName } = this.props.app.toJS();
     const { popOver, modal } = this.props.mainAxc.toJS();
 
     let curTopNavText = _('NETWORK');
@@ -655,6 +674,9 @@ export default class Main extends Component {
     );
   }
 }
+
+Main.propTypes = propTypes;
+Main.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {

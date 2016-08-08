@@ -4,7 +4,9 @@ import remoteActionMiddleware from 'shared/utils/lib/remote_action_middleware';
 
 // 公用 样式
 import 'shared/scss/styles.scss';
-import guiConfig from './package.json';
+
+// 产品配置
+import guiConfig from './config.json';
 
 // 多语言工具
 const b28n = require('shared/b28n');
@@ -67,6 +69,8 @@ const sSafeStatus = require('../../screens/App/screens/MainAxc/screens/Monitor/s
  */
 const sSystemStatus =
     require('../../screens/App/screens/MainAxc/screens/System/screens/SystemStatus');
+const sSystemAdmin =
+    require('../../screens/App/screens/MainAxc/screens/System/screens/SystemAdmin');
 
 const routes = [
   {
@@ -299,6 +303,7 @@ const routes = [
             path: '/main/system/admin',
             icon: 'user',
             text: _('Admin Settings'),
+            component: sSystemAdmin.Screen,
           }, {
             id: 'License',
             isIndex: true,
@@ -365,6 +370,7 @@ const reducers = {
   wlanStatus: sWlanStatus.reducer,
   safeStatus: sSafeStatus.reducer,
   system: sSystemStatus.reducer,
+  admin: sSystemAdmin.reducer,
 };
 
 // Store

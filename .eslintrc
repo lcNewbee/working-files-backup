@@ -4,12 +4,21 @@
   "plugins": [
     "import"
   ],
-
   "settings": {
     "ecmascript": 6,
     "import/resolver": {
       "node": {
-        "paths": "./"
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".es6"
+        ],
+        "paths": [
+          "./"
+        ],
+        "moduleDirectory": [
+          "node_modules"
+        ]
       }
     }
   },
@@ -22,5 +31,19 @@
     "guiConfig": true,
     "sessionStorage": true,
     "b28n": true
+  },
+  "rules": {
+    "new-cap": [
+      2,
+      {
+        // for Immutable
+        "capIsNewExceptions": [
+          "List",
+          "OrderedSet",
+          "Range",
+          "Map"
+        ]
+      }
+    ]
   }
 }

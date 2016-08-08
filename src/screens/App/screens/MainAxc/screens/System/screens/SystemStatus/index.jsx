@@ -1,20 +1,23 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { bindActionCreators } from 'redux';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import utils from 'shared/utils';
-import { EchartReact } from 'shared/components';
+import {
+  PureComponent, EchartReact,
+} from 'shared/components';
 import * as appActions from 'shared/actions/app';
 import * as actions from './actions';
 import myReducer from './reducer';
 
-export default class View extends Component {
+export default class View extends PureComponent {
   constructor(props) {
     super(props);
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+
+    this.binds('getCpuOption');
   }
-  render() {
-    const option = {
+
+  getCpuOption() {
+    const ret = {
       tooltip: {
         trigger: 'item',
         formatter: '{a} <br/>{b}: {c} ({d}%)',
@@ -48,13 +51,22 @@ export default class View extends Component {
               show: false,
             },
           },
-          data: [
-            { value: 335, name: '已使用' },
-            { value: 310, name: '未使用' },
-          ],
+
         },
       ],
     };
+
+    ret.series[0].data = [
+      { value: 335, name: '已使用' },
+      { value: 310, name: '未使用' },
+    ];
+
+
+    return ret;
+  }
+  render() {
+    const apStatusOption = this.getCpuOption();
+
     return (
       <div>
         <h3 className="t-main__content-title">{_('System Status') }</h3>
@@ -65,7 +77,7 @@ export default class View extends Component {
             </div>
             <div className="stats-group-cell">
               <EchartReact
-                option={option}
+                option={apStatusOption}
                 className="stats-group-canvas"
                 style={{
                   width: '100%',
@@ -79,14 +91,14 @@ export default class View extends Component {
             </div>
             <div className="stats-group-cell">
               <EchartReact
-                option={option}
+                option={apStatusOption}
                 className="stats-group-canvas"
                 style={{
                   width: '50%',
                 }}
               />
               <EchartReact
-                option={option}
+                option={apStatusOption}
                 className="stats-group-canvas"
                 style={{
                   width: '50%',

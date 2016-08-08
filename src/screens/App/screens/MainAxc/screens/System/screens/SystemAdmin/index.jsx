@@ -1,9 +1,10 @@
 import React, { PropTypes } from 'react';
-import utils from 'shared/utils';
 import { bindActionCreators } from 'redux';
 import { Map, List } from 'immutable';
 import { connect } from 'react-redux';
 import { SaveButton, PureComponent, FormGroup } from 'shared/components';
+
+import utils from 'shared/utils';
 import validator from 'shared/utils/lib/validator';
 import * as appActions from 'shared/actions/app';
 import * as myActions from './actions';

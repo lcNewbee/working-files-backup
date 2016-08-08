@@ -1,10 +1,10 @@
+import { combineReducers } from 'redux';
 import NotFound from 'shared/components/NotFound';
 import remoteActionMiddleware from 'shared/utils/lib/remote_action_middleware';
-import { combineReducers } from 'redux';
 
 //
 import 'shared/scss/styles.scss';
-import guiConfig from './package.json';
+import guiConfig from './config.json';
 
 // 多语言工具
 const b28n = require('shared/b28n');
