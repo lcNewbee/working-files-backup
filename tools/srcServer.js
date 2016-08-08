@@ -1,8 +1,11 @@
+/* eslint-disable import/no-extraneous-dependencies */
+
 // This file configures the development web server
 // which supports hot reloading and synchronized testing.
 
 // Require Browsersync along with webpack and middleware for it
 import browserSync from 'browser-sync';
+
 // Required for react-router browserHistory
 // see https://github.com/BrowserSync/browser-sync/issues/204#issuecomment-102623643
 import historyApiFallback from 'connect-history-api-fallback';
@@ -18,12 +21,11 @@ const bundler = webpack(config);
 browserSync({
   server: {
     baseDir: 'src',
-    index: "index.html",
-
+    index: 'index.html',
     middleware: [
       {
-        route: "/goform",
-        handle: serverApiMiddleware()
+        route: '/goform',
+        handle: serverApiMiddleware(),
       },
       webpackDevMiddleware(bundler, {
         // Dev middleware can't access config, so we provide publicPath
@@ -33,7 +35,7 @@ browserSync({
         stats: { colors: true },
 
         // Set to false to display a list of each file that is being bundled.
-        noInfo: true
+        noInfo: true,
 
         // for other settings see
         // http://webpack.github.io/docs/webpack-dev-middleware.html
@@ -42,16 +44,18 @@ browserSync({
       // bundler should be the same as above
       webpackHotMiddleware(bundler),
 
-      historyApiFallback()
+      historyApiFallback(),
 
-    ]
+    ],
   },
-  
+  port: 8081,
+
   // no need to watch '*.js' here, webpack will take care of it for us,
   // including full page reloads if HMR won't work
   files: [
     'src/*.html',
     'tools/data/*.json',
-    'src/assets/**/*'
-  ]
+    'src/assets/**/*',
+    'src/screens/**/reducer.js',
+  ],
 });

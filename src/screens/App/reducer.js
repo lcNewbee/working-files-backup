@@ -3,6 +3,7 @@ import { fromJS } from 'immutable';
 let guiVersion = guiConfig.version.replace(/\./g, '');
 
 const defaultState = fromJS({
+  fetching: false,
   saving: false,
   guiName: guiConfig.title,
   rateInterval: 15000,
@@ -72,6 +73,12 @@ export default function (state = defaultState, action) {
 
     case 'RECEIVE_SERVER_ERROR':
       return state.set('state', action.state);
+
+    case 'RQ_FETCH':
+      return state.set('fetching', true);
+
+    case 'RC_FETCH':
+      return state.set('fetching', false);
 
     /**
      * 登录状态

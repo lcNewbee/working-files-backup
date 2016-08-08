@@ -53,7 +53,7 @@ class PopOver extends Component {
               <div
                 className="o-pop-over__overlay"
                 onClick={this.onClose}
-              ></div>
+              />
               {this.props.children}
             </div>
           ) : null

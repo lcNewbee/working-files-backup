@@ -13,20 +13,24 @@ const defaultState = fromJS({
     size: 'lg',
     name: 'group',
   },
+
   vlan: {
-    selected: '2',
+    selected: {
+      id: '2',
+      remark: '市场部',
+    },
     list: [
       {
         id: '1',
-        remark: '测试'
+        remark: '测试',
       }, {
         id: '2',
-        remark: '研发'
-      }
-    ]
+        remark: '市场部',
+      },
+    ],
   },
   group: {
-    selected: '2',
+    selected: {},
     list: [
       {
         id: '1',
@@ -34,58 +38,89 @@ const defaultState = fromJS({
         remark: '测试',
         devices: [
           {
-            name: "23",
-            ip: "32",
-          }
-        ]
+            name: '23',
+            ip: '32',
+          },
+        ],
       }, {
         id: '2',
         groupName: '研发',
         remark: '研发',
         devices: [
           {
-            name: "23",
-            ip: "32",
-          }
-        ]
-      }
-    ]
-  }
+            name: '23',
+            ip: '32',
+          },
+        ],
+      },
+    ],
+  },
+
+  devices: {
+
+  },
 });
 
 function togglePopOverState(state, option) {
-  let thisOption = option || {};
-  let isShow = thisOption.isShow;
-  let name = thisOption.name || state.getIn(['popOver', 'name']);
+  const thisOption = option || {};
 
-  if(isShow === undefined) {
-    isShow = !state.getIn(['popOver', 'isShow']);
+  if (thisOption.isShow === undefined) {
+    thisOption.isShow = !state.getIn(['popOver', 'isShow']);
   }
 
-  return state.mergeIn(['popOver'], {
-    isShow,
-    name,
-  });
+  return state.mergeIn(['popOver'], thisOption);
 }
 
 function changeModalState(state, option) {
-  let ret = state;
-  let myOption = option;
+  const myOption = option || {};
 
-  if(myOption.isShow === undefined) {
+  if (myOption.isShow === undefined) {
     myOption.isShow = !state.getIn(['modal', 'isShow']);
   }
 
-  if(myOption.okButton === undefined) {
+  if (myOption.okButton === undefined) {
     myOption.okButton = true;
   }
-  if(myOption.cancelButton === undefined) {
+  if (myOption.cancelButton === undefined) {
     myOption.cancelButton = true;
   }
 
-  myOption.name = option.name || state.getIn(['modal', 'name']);
+  if (myOption.size === undefined) {
+    myOption.size = 'md';
+  }
 
   return state.mergeIn(['modal'], myOption);
+}
+
+function rcApGroup(state, list) {
+  let selectedItem = state.getIn(['group', 'selected']);
+
+  if (selectedItem.isEmpty() && list[0]) {
+    selectedItem = fromJS(list[0]);
+  }
+
+  return state.setIn(['group', 'selected'], selectedItem)
+    .setIn(['group', 'list'], fromJS(list));
+}
+
+function selectList(state, name, id) {
+  const selectedItem = state.getIn([name, 'list'])
+      .find((item) => item.get('id') === id) ||
+      state.getIn([name, 'selected']);
+
+  return state.setIn([name, 'selected'], selectedItem);
+}
+
+function selectedListItem(list, data) {
+  let ret = list;
+
+  if (data.index !== -1) {
+    ret = ret.setIn([data.index, 'selected'], data.selected);
+  } else {
+    ret = ret.map((item) => item.set('selected', data.selected));
+  }
+
+  return ret;
 }
 
 export default function (state = defaultState, action) {
@@ -97,16 +132,19 @@ export default function (state = defaultState, action) {
       return changeModalState(state, action.option);
 
     case 'SELECT_VLAN':
-      return togglePopOverState(state, {
-          name: 'vlanAsider',
-          isShow: false
-        }).setIn(['vlan', 'selected'], action.id);
+      return selectList(state, 'vlan', action.id);
 
     case 'SELECT_GROUP':
-      return togglePopOverState(state, {
-          name: 'groupAsider',
-          isShow: false,
-        }).setIn(['group', 'selected'], action.id);
+      return selectList(state, 'group', action.id);
+
+    case 'RC_DELETE_AP_GROUP':
+      return rcApGroup(state, action.data.list);
+
+    case 'RC_FETCH_GROUP_APS':
+      return state.setIn(['devices'], fromJS(action.data.list));
+
+    case 'SELECT_ADD_AP_GROUP_DEVICE':
+      return state.set('devices', selectedListItem(state.get('devices'), action.data));
 
     default:
   }

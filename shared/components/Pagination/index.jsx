@@ -1,6 +1,7 @@
-import './index.scss';
 import React, { PropTypes, Component } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+
+import './index.scss';
 
 const propTypes = {
   size: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -104,21 +105,21 @@ class Pagination extends Component {
       key = `pager_${i}`;
 
       if (+currPage !== i) {
-        list.push(<li key={key}><a href="#" onClick={this.onGoPage}>{i}</a></li>);
+        list.push(<li key={key}><a href="#/" onClick={this.onGoPage}>{i}</a></li>);
       } else {
         list.push(<li key={key} className="active">
-          <a href="#" onClick={this.onGoPage}>{i}</a>
+          <a href="#/" onClick={this.onGoPage}>{i}</a>
         </li>);
       }
     }
 
     return (
       <ul className="pagination">
-        <li className={prevClassName}><a href="#" onClick={this.onGoFrist}>{_('First')}</a></li>
-        <li className={prevClassName}><a href="#" onClick={this.onPrev}>{_('Prev')}</a></li>
+        <li className={prevClassName}><a href="#/" onClick={this.onGoFrist}>{_('First')}</a></li>
+        <li className={prevClassName}><a href="#/" onClick={this.onPrev}>{_('Prev')}</a></li>
         {list}
-        <li className={nextClassName}><a href="#" onClick={this.onNext}>{_('Next')}</a></li>
-        <li className={nextClassName}><a href="#" onClick={this.onGoEnd}>{_('Last')}</a></li>
+        <li className={nextClassName}><a href="#/" onClick={this.onNext}>{_('Next')}</a></li>
+        <li className={nextClassName}><a href="#/" onClick={this.onGoEnd}>{_('Last')}</a></li>
       </ul>
     );
   }

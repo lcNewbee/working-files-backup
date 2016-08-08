@@ -2,8 +2,11 @@ const urls = {
   login: '/goform/login',
   regist: '/goform/regist',
 
-  // 客户端
+  // DHCP
   fetchDhcpAddressPoolList: '/goform/getDhcpAddressPoolList',
+
+   // 客户端
+  fetchClientInfo: '/goform/getClientInfo',
   setClientAction: '/goform/setClientAction',
 
   // 设备

@@ -106,14 +106,25 @@ export function receiveServerError(state) {
 /**
  * 全局Ajax fetch action
  */
+export function rqFetch() {
+  return {
+    type: 'RQ_FETCH',
+  };
+}
+export function rcFetch() {
+  return {
+    type: 'RC_FETCH',
+  };
+}
 export function fetch(url, query) {
   return (dispatch) => {
+    dispatch(rqFetch());
     return utils.fetch(url, query)
       .then((json) => {
         if (!json.state || (json.state && json.state.code !== 2000)) {
           dispatch(receiveServerError(json.state));
         }
-
+        dispatch(rqFetch());
         return json;
       })
       .catch(() => {

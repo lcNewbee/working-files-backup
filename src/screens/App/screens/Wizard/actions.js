@@ -12,14 +12,14 @@ export function loginResult(result) {
     type: 'RESPONSE_LOGIN',
     loginedAt: Date.now(),
     result,
-  }
+  };
 }
 
 export function checkResult(result) {
   return {
-    type: "checkResult",
-    result
-  }
+    type: 'checkResult',
+    result,
+  };
 }
 
 export function updateData(data) {
@@ -30,18 +30,17 @@ export function updateData(data) {
 }
 
 export function setWizard() {
-
   return (dispatch, getState) => {
     const data = getState().login.get('data');
 
     dispatch(reqeustLogin());
 
     utils.save(urls.login, data)
-      .then(function(json) {
+      .then((json) => {
         let result = '未知错误';
 
-        if(json.state) {
-          if(json.state.code === 2000) {
+        if (json.state) {
+          if (json.state.code === 2000) {
             result = 'ok';
           } else {
             result = json.state.msg;
@@ -49,7 +48,6 @@ export function setWizard() {
         }
         dispatch(loginResult(result));
       });
-
   };
 }
 

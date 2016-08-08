@@ -1,5 +1,7 @@
-import { expect } from 'chai';
+/* eslint-disable import/no-extraneous-dependencies */
+
 import { describe, it } from 'mocha';
+import { expect } from 'chai';
 import b28n from '../index';
 
 describe('b28n', () => {

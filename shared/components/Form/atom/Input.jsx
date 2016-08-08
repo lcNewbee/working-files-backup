@@ -25,7 +25,6 @@ class Input extends React.Component {
   }
   render() {
     const inputProps = utils.extend({}, this.props);
-
     delete inputProps.seeAble;
     delete inputProps.Component;
     delete inputProps.loading;

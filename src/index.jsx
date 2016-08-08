@@ -10,6 +10,8 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const ReactRouter = require('react-router');
 const Provider = require('react-redux').Provider;
+const combineReducers = require('redux').combineReducers;
+
 const Router = ReactRouter.Router;
 const hashHistory = ReactRouter.hashHistory;
 
@@ -18,8 +20,11 @@ const prodConfig = require('./config/ap');
 
 if (module.hot) {
   // Enable Webpack hot module replacement for reducers
+
   module.hot.accept('./config/ap', () => {
-    const nextRootReducer = require('./config/ap').reducers;
+    const newConfig = require('./config/ap');
+    const nextRootReducer = combineReducers(newConfig.reducers);
+
     prodConfig.stores.replaceReducer(nextRootReducer);
   });
 }

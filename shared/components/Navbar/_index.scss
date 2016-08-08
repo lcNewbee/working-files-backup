@@ -1,7 +1,6 @@
 /* Sass utils */
 @import "../../scss/variables";
 @import "../../scss/mixins";
-
 $g-navbar-height: 60px;
 
 .navbar {
@@ -12,41 +11,41 @@ $g-navbar-height: 60px;
   min-height: $g-navbar-height;
   background: $g-main-color;
   background-color: #fff;
-  box-shadow: 0 2px 8px 0 rgba(50, 50, 50, 0.48);
+  box-shadow: 0 2px 8px 0 rgba(50, 50, 50, .48);
 
   > h1 {
-    color: #333;
     float: left;
-    line-height: $g-navbar-height;
-    font-size: 1.4em;
-    font-weight: 500;
-    font-style: italic;
     font-family: $g-font-family-base-en;
+    font-size: 1.4em;
+    font-style: italic;
+    font-weight: 500;
+    line-height: $g-navbar-height;
+    color: #333;
   }
   .version {
-    font-family: $g-font-family-base-en;
-    line-height: $g-navbar-height;
     margin-left: 12px;
+    font-family: $g-font-family-base-en;
     font-size: 10px;
+    line-height: $g-navbar-height;
   }
   .brand {
     display: block;
-    background: url(images/logo.png) 25px center no-repeat;
-    background-size: 60px;
-    height: $g-navbar-height;
     float: left;
+    height: $g-navbar-height;
     padding: 10px;
     padding-left: $g-size - 12px;
-    color: #333;
-    background-size: 60px;
-    line-height: 40px;
     padding-left: 85px;
+    line-height: 40px;
+    color: #333;
+    background: url(images/logo.png) 25px center no-repeat;
+    background-size: 60px;
+    background-size: 60px;
 
     .logo {
-      font-size: 16px;
       display: inline-block;
-      margin-right: 8px;
       padding-right: 8px;
+      margin-right: 8px;
+      font-size: 16px;
     }
   }
   .aside {
@@ -54,10 +53,10 @@ $g-navbar-height: 60px;
   }
   .icon-user {
     padding: 6px 20px;
-    background-color: #333;
-    vertical-align: middle;
-    color: #999;
     font-size: 28px;
+    color: #999;
+    vertical-align: middle;
+    background-color: #333;
     transition: background .3s ease;
   }
 
@@ -70,14 +69,16 @@ $g-navbar-height: 60px;
   }
 
   .as-control {
-    padding: $g-distance $g-distance-md;
-    //border-left: 1px solid #333;
-    color: #333;
     display: inline-block;
-    vertical-align: middle;
+    padding: $g-distance $g-distance-md;
     font-size: 12px;
+    font-style: italic;
+    color: #333;
+    vertical-align: middle;
+    background-color: transparent;
+    border: none;
     transition: background .3s ease,color .3s ease;
-        font-style: italic;
+    cursor: pointer;
 
     .icon {
       display: block;
@@ -86,8 +87,8 @@ $g-navbar-height: 60px;
       margin: 0 auto;
       margin-bottom: 5px;
       font-size: 20px;
-      transition: transform .3s ease;
       font-weight: 300;
+      transition: transform .3s ease;
     }
 
     &:hover {
@@ -105,10 +106,10 @@ $g-navbar-height: 60px;
   }
   .user {
     display: inline-block;
-    vertical-align: middle;
     padding: $g-distance $g-distance-md;
     //border-left: 1px solid $g-main-color-light;
     color: #333;
+    vertical-align: middle;
     transition: background .3s ease,color .3s ease;
 
     &:hover {

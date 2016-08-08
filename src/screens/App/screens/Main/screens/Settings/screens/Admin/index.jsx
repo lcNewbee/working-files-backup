@@ -1,63 +1,89 @@
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
 import { bindActionCreators } from 'redux';
-import {fromJS, Map, List} from 'immutable';
+import { Map, List } from 'immutable';
 import { connect } from 'react-redux';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import { SaveButton, PureComponent, FormGroup } from 'shared/components';
 import validator from 'shared/utils/lib/validator';
 import * as appActions from 'shared/actions/app';
 import * as myActions from './actions';
 import myReducer from './reducer';
 
-import {FormGroup} from 'shared/components/Form';
-import Select from 'shared/components/Select';
-import Button from 'shared/components/Button';
-import SaveButton from 'shared/components/Button/Save';
-
-const msg = {
-  'upSpeed': _('Up Speed'),
-  'downSpeed': _('Down Speed'),
-  'selectGroup': _('Select Group')
-};
-const languageOptions = List(b28n.getOptions().supportLang).map((item) => {
-  return {
+const languageOptions = List(b28n.getOptions().supportLang).map((item) => (
+  {
     value: item,
-    label: b28n.langMap[item] || 'English'
+    label: b28n.langMap[item] || 'English',
   }
-}).toJS();
+)).toJS();
 
 const validOptions = Map({
   oldpasswd: validator({}),
   newpasswd: validator({
-    rules: 'len:[8, 32]'
+    rules: 'len:[8, 32]',
   }),
 
   confirmpasswd: validator({
-    rules: 'len:[8, 32]'
-  })
+    rules: 'len:[8, 32]',
+  }),
 });
 
 const propTypes = {
-  fetchDeviceGroups: PropTypes.func,
-  fetching: PropTypes.bool,
-  data: PropTypes.instanceOf(Map),
-  groups: PropTypes.instanceOf(List)
+  resetVaildateMsg: PropTypes.func,
+  resetPassword: PropTypes.func,
+  validateAll: PropTypes.func,
+  savePassword: PropTypes.func,
+  changeLoginStatus: PropTypes.func,
+  changePasswordSettings: PropTypes.func,
+  createModal: PropTypes.func,
+  validateOption: PropTypes.object,
+  store: PropTypes.instanceOf(Map),
+  app: PropTypes.instanceOf(Map),
 };
+const defaultProps = {};
 
-export const Admin = React.createClass({
-  mixins: [PureRenderMixin],
+export default class Admin extends PureComponent {
+  constructor(props) {
+    super(props);
 
-  componentWillMount() {
-
-  },
+    this.binds('onSave', 'onUpdate',
+      'onChangeLang', 'onChangeLang', 'getSetting', 'combineValid');
+  }
 
   componentWillUnmount() {
     this.props.resetVaildateMsg();
     this.props.resetPassword();
-  },
+  }
 
+  onSave() {
+    this.props.validateAll((invalid) => {
+      if (invalid.isEmpty() && !this.combineValid()) {
+        this.props.savePassword(() => {
+          this.props.changeLoginStatus('0');
+          window.location.hash = '#';
+        });
+      }
+    });
+  }
+
+  onUpdate(name, data) {
+    const settings = {};
+
+    settings[name] = data.value;
+    this.props.changePasswordSettings(settings);
+  }
+
+  onChangeLang(data) {
+    if (b28n.getLang() !== data.value) {
+      b28n.setLang(data.value);
+      window.location.reload();
+    }
+  }
+
+  getSetting(name) {
+    return this.props.store.getIn(['data', name]);
+  }
   combineValid() {
-    const {newpasswd, confirmpasswd} = this.props.store.get('data').toJS();
+    const { newpasswd, confirmpasswd } = this.props.store.get('data').toJS();
     let ret;
 
     if (newpasswd !== confirmpasswd) {
@@ -66,59 +92,27 @@ export const Admin = React.createClass({
       this.props.createModal({
         id: 'admin',
         role: 'alert',
-        text: ret
+        text: ret,
       });
     }
 
     return ret;
-  },
-
-  onSave() {
-    this.props.validateAll(function (invalid) {
-      if (invalid.isEmpty() && !this.combineValid()) {
-
-        this.props.savePassword(function() {
-          this.props.changeLoginStatus('0');
-          window.location.hash = "#";
-        }.bind(this));
-      }
-    }.bind(this));
-  },
-
-  createUpdateFunc(name) {
-    return function(data) {
-      let settings = {};
-
-      settings[name] = data.value
-      this.props.changePasswordSettings(settings);
-    }.bind(this)
-  },
-
-  onChangeLang(data) {
-    if(b28n.getLang() !== data.value) {
-      b28n.setLang(data.value);
-      window.location.reload();
-    }
-  },
-
-  getSetting(name) {
-    return this.props.store.getIn(['data', name])
-  },
+  }
 
   render() {
-    const {oldpasswd, newpasswd, confirmpasswd} = this.props.validateOption;
+    const { oldpasswd, newpasswd, confirmpasswd } = this.props.validateOption;
     const noControl = this.props.app.get('noControl');
 
     return (
       <form>
-        <h3>{_('Change Password')}</h3>
+        <h3>{_('Change Password') }</h3>
 
         <FormGroup
           type="password"
           label={_('Old Password')}
           name="oldpasswd"
           value={this.getSetting('oldpasswd')}
-          onChange={this.createUpdateFunc('oldpasswd')}
+          onChange={(data) => this.onUpdate('oldpasswd', data)}
           {...oldpasswd}
           required
         />
@@ -128,7 +122,7 @@ export const Admin = React.createClass({
           label={_('New Password')}
           name="newpasswd"
           value={this.getSetting('newpasswd')}
-          onChange={this.createUpdateFunc('newpasswd')}
+          onChange={(data) => this.onUpdate('newpasswd', data)}
           {...newpasswd}
           required
         />
@@ -138,33 +132,33 @@ export const Admin = React.createClass({
           label={_('Confirm Password')}
           name="confirmpasswd"
           value={this.getSetting('confirmpasswd')}
-          onChange={this.createUpdateFunc('confirmpasswd')}
+          onChange={(data) => this.onUpdate('confirmpasswd', data)}
           {...confirmpasswd}
           required
         />
 
         <div className="form-group form-group-save">
           <div className="form-control">
-             {
-                this.props.store.getIn(['state', 'code']) === 4000 ? (
-                  <div>
-                    <p className="error">{_('Old password error!')}</p>
-                  </div>
-                ) : null
-             }
-             {
-               noControl ? null : (
+            {
+              this.props.store.getIn(['state', 'code']) === 4000 ? (
+                <div>
+                  <p className="error">{_('Old password error!') }</p>
+                </div>
+              ) : null
+            }
+            {
+              noControl ? null : (
                 <SaveButton
-                  type='button'
+                  type="button"
                   loading={this.props.app.get('saving')}
                   onClick={this.onSave}
                 />
-               )
-             }
+              )
+            }
           </div>
         </div>
 
-        <h3>{_('System Settings')}</h3>
+        <h3>{_('System Settings') }</h3>
 
         <FormGroup
           label={_('Select Language')}
@@ -177,14 +171,15 @@ export const Admin = React.createClass({
       </form>
     );
   }
-});
+}
 
 Admin.propTypes = propTypes;
+Admin.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
     store: state.admin,
-    app: state.app
+    app: state.app,
   };
 }
 
@@ -192,7 +187,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
     myActions
-  ), dispatch)
+  ), dispatch);
 }
 
 export const Screen = connect(

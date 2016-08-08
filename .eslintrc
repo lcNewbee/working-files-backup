@@ -1,15 +1,24 @@
 {
   "extends": "airbnb",
-
+  "parser": "babel-eslint",
   "plugins": [
     "import"
   ],
-
   "settings": {
-    //"ecmascript": 6,
+    "ecmascript": 6,
     "import/resolver": {
       "node": {
-        "paths": "./"
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".es6"
+        ],
+        "paths": [
+          "./"
+        ],
+        "moduleDirectory": [
+          "node_modules"
+        ]
       }
     }
   },
@@ -18,6 +27,23 @@
     "document": true,
     "fetch": true,
     "_": true,
-    "GUI_CONFIG": true
+    "GUI_CONFIG": true,
+    "guiConfig": true,
+    "sessionStorage": true,
+    "b28n": true
+  },
+  "rules": {
+    "new-cap": [
+      2,
+      {
+        // for Immutable
+        "capIsNewExceptions": [
+          "List",
+          "OrderedSet",
+          "Range",
+          "Map"
+        ]
+      }
+    ]
   }
 }

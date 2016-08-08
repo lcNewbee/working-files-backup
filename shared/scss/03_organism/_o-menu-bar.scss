@@ -3,6 +3,9 @@
   width: 100%;
   background-color: #999;
   color: #fff;
+  position: fixed;
+  top: 60px;
+  width: 100%;
   @include clearfix;
 
   .o-menu-bar__nav {

@@ -1,13 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import {fromJS} from 'immutable';
+import { fromJS } from 'immutable';
 import utils from 'shared/utils';
 
 // components
-import {Table} from 'shared/components/Table';
-import Button from 'shared/components/Button';
-import {Search} from 'shared/components/Form';
+import Table from 'shared/components/Table';
 import Select from 'shared/components/Select';
 import Switchs from 'shared/components/Switchs';
 
@@ -33,22 +31,22 @@ const flowTableOptions = fromJS([
   }, {
     id: 'bandwidth',
     text: _('Up/Down Speed'),
-    transform: function(val, item) {
-      var upRate = flowRateFilter.transform(item.get('upstream'));
-      var downRate = flowRateFilter.transform(item.get('downstream'));
+    transform(val, item) {
+      const upRate = flowRateFilter.transform(item.get('upstream'));
+      const downRate = flowRateFilter.transform(item.get('downstream'));
 
-      return upRate + '/' + downRate;
-    }
-  }
+      return `${upRate}/${downRate}`;
+    },
+  },
 ]);
 const apWlanOption = fromJS([
   {
     id: 'devicename',
     width: '180',
     text: _('MAC Address') + '/' + _('Name'),
-    transform: function(val, item) {
+    transform(val, item) {
       return item.get('devicename') || item.get('mac');
-    }
+    },
   }, {
     id: 'ip',
     width: '160',
@@ -64,13 +62,13 @@ const apWlanOption = fromJS([
   }, {
     id: 'bandwidth',
     text: _('Up/Down Speed'),
-    transform: function(val, item) {
-      var upRate = flowRateFilter.transform(item.get('upstream'));
-      var downRate = flowRateFilter.transform(item.get('downstream'));
+    transform(val, item) {
+      const upRate = flowRateFilter.transform(item.get('upstream'));
+      const downRate = flowRateFilter.transform(item.get('downstream'));
 
-      return upRate + '/' + downRate;
-    }
-  }
+      return `${upRate}/${downRate}`;
+    },
+  },
 ]);
 
 const msg = {
@@ -78,13 +76,13 @@ const msg = {
   reconnect: _('Reconnect'),
   lock: _('Lock'),
   unlock: _('Unlock'),
-  perPage: _('Items per page: ')
+  perPage: _('Items per page: '),
 };
 
 const selectOptions = [
-  { value: 20, label: msg.perPage + '20' },
-  { value: 50, label: msg.perPage + '50' },
-  { value: 100, label: msg.perPage + '100' },
+  { value: 20, label: `${msg.perPage}20` },
+  { value: 50, label: `${msg.perPage}50` },
+  { value: 100, label: `${msg.perPage}100` },
 ];
 
 const typeArr = [
@@ -92,22 +90,16 @@ const typeArr = [
   _('AP'),
 ];
 
-const styles = {
-  actionButton: {
-    minWidth: "90px"
-  }
-}
-
 // 原生的 react 页面
 export const Clients = React.createClass({
   mixins: [PureRenderMixin],
 
   componentWillMount() {
-    this.handleSearch()
+    this.handleSearch();
   },
 
   componentDidUpdate(prevProps) {
-    if(prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
+    if (prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
       this.handleSearch();
     }
   },
@@ -123,7 +115,7 @@ export const Clients = React.createClass({
   handleChangeQuery(data, needSearch) {
     this.props.changeFlowQuery(data);
 
-    if(needSearch) {
+    if (needSearch) {
       this.handleSearch();
     }
   },
@@ -131,20 +123,20 @@ export const Clients = React.createClass({
   handleActions(actionQuery, needSave) {
     this.props.changeClientActionQuery(actionQuery);
 
-    if(needSave) {
+    if (needSave) {
       this.props.saveFlowAction();
     }
   },
 
   onAction(mac, action, wirelessType) {
-    var subData = {
+    const subData = {
       action,
       macs: [
-        mac
-      ]
+        mac,
+      ],
     };
 
-    if(typeof wirelessType === 'string') {
+    if (typeof wirelessType === 'string') {
       subData.wirelessType = wirelessType;
     }
 
@@ -153,26 +145,26 @@ export const Clients = React.createClass({
 
   onChangeSearchText(val, e) {
     this.handleChangeQuery({
-      search: val
+      search: val,
     });
   },
 
   onChangeType(data) {
     this.handleChangeQuery({
-      type: data.value
+      type: data.value,
     }, true);
   },
 
   onChangeTableSize(data) {
     this.handleChangeQuery({
       size: data.value,
-      page: 1
+      page: 1,
     }, true);
   },
 
   onPageChange(i) {
     this.handleChangeQuery({
-      page: i
+      page: i,
     }, true);
   },
 
@@ -182,11 +174,11 @@ export const Clients = React.createClass({
     let options = flowTableOptions;
     let tableOptions = options;
 
-    if(this.props.query.get('type') == '1') {
+    if (this.props.query.get('type') === '1') {
       tableOptions = apWlanOption;
     }
 
-    if(noControl) {
+    if (noControl) {
       options = options.delete(-1);
       tableOptions = tableOptions.delete(-1);
     }
@@ -201,7 +193,7 @@ export const Clients = React.createClass({
             options={typeArr}
             onChange={this.onChangeType}
             style={{
-              marginLeft: 0
+              marginLeft: 0,
             }}
           />
           <Select
@@ -225,11 +217,11 @@ export const Clients = React.createClass({
 
       </div>
     );
-  }
+  },
 });
 
 function mapStateToProps(state) {
-  var myState = state.wlanStatus;
+  const myState = state.wlanStatus;
 
   return {
     app: state.app,

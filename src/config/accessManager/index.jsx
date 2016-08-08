@@ -1,11 +1,10 @@
-//误删恢复
+import { combineReducers } from 'redux';
 import NotFound from 'shared/components/NotFound';
 import remoteActionMiddleware from 'shared/utils/lib/remote_action_middleware';
-import { combineReducers } from 'redux';
 
 //
 import 'shared/scss/styles.scss';
-import guiConfig from './package.json';
+import guiConfig from './config.json';
 
 // 多语言工具
 const b28n = require('shared/b28n');
@@ -13,16 +12,18 @@ const langCn = require('../lang/cn/core.json');
 const validateCn = require('../lang/cn/validate.json');
 const langEn = require('../lang/en/core.json');
 
+const bodyElem = document.getElementsByTagName('body')[0];
+
 b28n.addDict(langCn, 'cn');
 b28n.addDict(validateCn, 'cn');
 b28n.addDict(langEn, 'en');
 
 window.CB = b28n.init({
-  supportLang: ['en', 'cn']
+  supportLang: ['en', 'cn'],
 });
 window.guiConfig = guiConfig;
 
-document.getElementsByTagName('body')[0].className += ' ' + b28n.getLang();
+bodyElem.className = `${bodyElem.className} ${b28n.getLang()}`;
 
 /** ***********************************************************
  * 产品界面配置
@@ -53,15 +54,17 @@ const pDevices = require('../../screens/App/screens/Main/screens/Devices');
 const pStatistics = require('../../screens/App/screens/Main/screens/Statistics');
 const pLogs = require('../../screens/App/screens/Main/screens/Logs');
 const pClients = require('../../screens/App/screens/Main/screens/Clients');
-//const pPreview = require('../../screens/App/screens/Main/screens/Preview');
+// const pPreview = require('../../screens/App/screens/Main/screens/Preview');
 
 // 设置
-const pGroupSettings = require('../../screens/App/screens/Main/screens/Settings/screens/GroupSettings');
+const pGroupSettings =
+    require('../../screens/App/screens/Main/screens/Settings/screens/GroupSettings');
 const sWireless = require('../../screens/App/screens/Main/screens/Settings/screens/Wireless');
 const sPortal = require('../../screens/App/screens/Main/screens/Settings/screens/Portal');
 const sGuest = require('../../screens/App/screens/Main/screens/Settings/screens/Guest');
 const sVoip = require('../../screens/App/screens/Main/screens/Settings/screens/Voip');
 const sAdmin = require('../../screens/App/screens/Main/screens/Settings/screens/Admin');
+
 
 const routes = [{
   path: '/',
@@ -70,7 +73,8 @@ const routes = [{
   childRoutes: [{
       path: '/main',
       component: Main,
-      childRoutes: [{
+      childRoutes: [
+        {
           id: 'status',
           isIndex: true,
           path: '/main/status',
@@ -94,15 +98,14 @@ const routes = [{
           path: '/main/logs',
           icon: 'file-text-o',
           text: _('LOGS'),
-          component: pLogs.Screen
+          component: pLogs.Screen,
         }, {
-           id: 'statistics',
-           path: '/main/statistics',
-           icon: 'file-pdf-o',
-           text: _('REPORTS'),
-           component: pStatistics.Screen
-         },{
-
+          id: 'statistics',
+          path: '/main/statistics',
+          icon: 'file-pdf-o',
+          text: _('REPORTS'),
+          component: pStatistics.Screen,
+        }, {
           id: 'settings',
           path: '/main/settings',
           icon: 'cog',

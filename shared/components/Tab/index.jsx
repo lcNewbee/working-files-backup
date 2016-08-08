@@ -12,7 +12,7 @@ const defaultProps = {
   menus: [],
 };
 
-class TabMenus extends Component {
+class Tabs extends Component {
   constructor(props) {
     super(props);
 
@@ -35,7 +35,7 @@ class TabMenus extends Component {
   }
 }
 
-TabMenus.propTypes = propTypes;
-TabMenus.defaultProps = defaultProps;
+Tabs.propTypes = propTypes;
+Tabs.defaultProps = defaultProps;
 
-export default TabMenus;
+export default Tabs;

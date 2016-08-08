@@ -22,7 +22,6 @@ paths = gulp.paths = {
   pubWebpack: 'webpack.config.prop.js',
 };
 
-
 // 删除
 gulp.task('clean', function (callback) {
   return del([paths.build, paths.release]);
