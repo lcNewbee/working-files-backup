@@ -38,6 +38,16 @@ helper = {
     return f;
   },
 
+  checkbox: function(val) {
+    var ret = _('Enabled');
+
+    if(!val || val == '0') {
+      ret = _('Disabled')
+    }
+
+    return ret;
+  },
+
   connectTime: function (time, unit) {
     var ret = '';
     var remainder = coreUtils.toNumber(time, 'connectTime');

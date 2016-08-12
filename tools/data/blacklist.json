@@ -1,0 +1,44 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  {
+    id: 'mac',
+    text: _('MAC Address'),
+  }, {
+    id: 'vendor',
+    text: _('Manufacturer'),
+  }, {
+    id: 'ssid',
+    text: _('终端类型'),
+  }, {
+    id: 'ssid',
+    text: _('封锁原因'),
+  },
+  "data": {
+    "list": [
+      {
+        "mac": "22:11:22:14:22:22",
+        "vendor": "huawei",
+        "clientType": "andriod",
+        "reason": "动态封锁",
+        "lastTime": "124567786",
+      },
+      {
+        "mac": "22:11:22:14:22:22",
+        "vendor": "huawei",
+        "clientType": "andriod",
+        "reason": "动态封锁",
+        "lastTime": "124567786",
+      },
+      {
+        "mac": "22:11:22:14:22:22",
+        "vendor": "huawei",
+        "clientType": "andriod",
+        "reason": "动态封锁",
+        "lastTime": "124567786",
+      }
+    ]
+  }
+}

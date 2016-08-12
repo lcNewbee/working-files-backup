@@ -103,7 +103,7 @@ let config = {
       {
         test: /\.(js|jsx)?$/,
         exclude: /node_modules/,
-        loader: 'babel',
+        loader: 'react-hot!babel',
       },
     ],
   },

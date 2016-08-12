@@ -1,4 +1,3 @@
-import utils from 'shared/utils';
 import * as appActions from 'shared/actions/app';
 import urls from 'shared/config/urls_axc';
 
@@ -6,7 +5,7 @@ let refreshTimeout = null;
 
 export function reqeustFetchClients() {
   return {
-    type: 'REQEUST_FETCH_CLIENT'
+    type: 'REQEUST_FETCH_CLIENT',
   };
 }
 
@@ -14,42 +13,21 @@ export function reciveFetchClients(data) {
   return {
     type: 'RECIVE_FETCH_CLIENTS',
     updateAt: Date.now(),
-    data
+    data,
   };
 }
 
 export function changeClientsQuery(query) {
   return {
     type: 'CHANGE_CLIENTS_QUERY',
-    query
-  };
-}
-
-export function rebootClient(mac) {
-  return {
-    type: 'REBOOT_CLIENT',
-    id
-  };
-}
-
-export function resetClient(mac) {
-  return {
-    type: 'RESET_CLIENT',
-    id
+    query,
   };
 }
 
 export function changeClientActionQuery(actionQuery) {
   return {
     type: 'CHANGE_CLIENT_ACTION_QUERY',
-    actionQuery
-  }
-}
-
-export function locateClient(mac) {
-  return {
-    type: 'LOCATE_CLIENT',
-    id
+    actionQuery,
   };
 }
 
@@ -57,7 +35,7 @@ export function leaveClientsScreen() {
   window.clearTimeout(refreshTimeout);
 
   return {
-    type: 'LEAVE_CLIENTS_SCREEN'
+    type: 'LEAVE_CLIENTS_SCREEN',
   };
 }
 
@@ -70,15 +48,15 @@ export function fetchClients() {
     dispatch(reqeustFetchClients());
 
     dispatch(appActions.fetch(urls.fetchClientInfo, query))
-      .then(function(json) {
-        if(json.state && json.state.code === 2000) {
-          dispatch(reciveFetchClients(json.data))
+      .then((json) => {
+        if (json.state && json.state.code === 2000) {
+          dispatch(reciveFetchClients(json.data));
         }
 
-        if(refreshTime && refreshTime > 0) {
-          refreshTimeout = window.setTimeout(function() {
-            dispatch(fetchClients())
-          }, refreshTime)
+        if (refreshTime && refreshTime > 0) {
+          refreshTimeout = window.setTimeout(() => {
+            dispatch(fetchClients());
+          }, refreshTime);
         }
       });
   };
@@ -93,9 +71,9 @@ export function saveClientsAction() {
     query.type = getState().clients.getIn(['query', 'type']);
 
     dispatch(appActions.save(urls.setClientAction, query))
-      .then(function(json) {
-        if(json.state && json.state.code === 2000) {
-          dispatch(fetchClients(5000))
+      .then((json) => {
+        if (json.state && json.state.code === 2000) {
+          dispatch(fetchClients(5000));
         }
       });
   };

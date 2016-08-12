@@ -1,0 +1,31 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "appName": "Chrome",
+        "number": "2323",
+        "upstream": "23132",
+        "downstream": "1233",
+        "percentage": "20%"
+      },
+      {
+        "appName": "Chrome",
+        "number": "2323",
+        "upstream": "23132",
+        "downstream": "1233",
+        "percentage": "20%"
+      },
+      {
+        "appName": "Chrome",
+        "number": "2323",
+        "upstream": "23132",
+        "downstream": "1233",
+        "percentage": "20%"
+      }
+    ]
+  }
+}

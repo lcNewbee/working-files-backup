@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-// import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { Link } from 'react-router';
 import { fromJS } from 'immutable';
 import Icon from '../Icon';
@@ -8,18 +7,16 @@ const propTypes = {
   menus: PropTypes.array.isRequired,
   className: PropTypes.string,
   location: PropTypes.object,
-  role: PropTypes.oneOf(['nav', 'tab']),
+  role: PropTypes.oneOf(['tree', 'menu']),
   onChange: PropTypes.func,
   onClick: PropTypes.func,
   style: PropTypes.object,
-
-  // 是否渲染多级菜单
-  isTree: PropTypes.bool,
 };
 
 const defaultProps = {
   menus: [],
   isTree: false,
+  role: 'menu',
 };
 
 /**
@@ -67,19 +64,17 @@ class Nav extends Component {
     }
   }
   render() {
-    const { className, menus, location, isTree, role } = this.props;
+    const { className, menus, location, role } = this.props;
     let navClassName = className || '';
     let linkClassName = 'm-menu__link';
+    let isTree = false;
 
-    if (role === 'nav') {
-      linkClassName = `${linkClassName} o-nav__link`;
-      navClassName = `${navClassName} o-nav`;
+    navClassName = `${navClassName} o-nav`;
+    linkClassName = `${linkClassName} o-nav__link`;
 
-      if (isTree) {
-        navClassName = `${navClassName} o-nav--tree`;
-      }
-    } else if (role === 'tab') {
-      navClassName = `${navClassName} o-tab__nav`;
+    if (role === 'tree') {
+      navClassName = `${navClassName} o-nav--tree`;
+      isTree = true;
     }
     return (
       <nav

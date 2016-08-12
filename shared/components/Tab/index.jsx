@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import Nav from '../Nav';
+import { fromJS } from 'immutable';
+import { Link } from 'react-router';
+import Icon from '../Icon';
 import './_index.scss';
 
 const propTypes = {
@@ -19,15 +21,38 @@ class Tabs extends Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
 
+  onSelectTab() {
+
+  }
+
   render() {
+    const { menus } = this.props;
     return (
-      <div className="o-tab">
-        <Nav
-          className="o-tab__nav"
-          menus={this.props.menus}
-          onChange={this.onNavChange}
-        />
-        <div className="tab-content">
+      <div className="o-tab" role="tab">
+        <ul className="o-tab__nav">
+          {
+            fromJS(menus).map((item, i) => {
+              const { icon, path, text } = item.toJS();
+
+              return (
+                <li key={i}>
+                  <Link
+                    to={path}
+                    activeClassName="active"
+                    onClick={(e) => this.onSelectTab(path, e)}
+                  >
+                    {
+                      icon ? <Icon name={icon} /> : null
+                    }
+                    {text}
+                  </Link>
+                </li>
+              );
+            })
+          }
+        </ul>
+
+        <div className="o-tab__content">
           {this.props.children}
         </div>
       </div>

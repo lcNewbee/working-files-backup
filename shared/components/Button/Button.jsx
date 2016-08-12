@@ -7,7 +7,7 @@ import '../../scss/01_atom/_a-button.scss';
 const propTypes = {
   icon: PropTypes.string,
   className: PropTypes.string,
-  role: PropTypes.oneOf(['default', 'primary', 'success', 'info', 'warning', 'danger']),
+  theme: PropTypes.oneOf(['default', 'primary', 'success', 'info', 'warning', 'danger']),
   size: PropTypes.oneOf(['sm', 'lg']),
   inverse: PropTypes.bool,
   Component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
@@ -17,7 +17,8 @@ const propTypes = {
 
 const defaultProps = {
   Component: 'button',
-  role: 'default',
+  theme: 'default',
+  role: 'button',
 };
 
 class Button extends React.Component {
@@ -28,7 +29,7 @@ class Button extends React.Component {
   }
 
   render() {
-    const { Component, icon, size, role, className, loading, text } = this.props;
+    const { Component, icon, size, theme, className, loading, text } = this.props;
     const componentProps = utils.extend({}, this.props);
     const myIcon = icon ? <Icon name={icon} /> : null;
 
@@ -38,8 +39,8 @@ class Button extends React.Component {
       classNames = `${classNames} a-btn--${size}`;
     }
 
-    if (role) {
-      classNames = `${classNames} a-btn--${role}`;
+    if (theme) {
+      classNames = `${classNames} a-btn--${theme}`;
     }
 
     if (!text) {
@@ -54,13 +55,15 @@ class Button extends React.Component {
       delete componentProps.text;
       delete componentProps.Component;
       delete componentProps.loading;
+      delete componentProps.theme;
+
+      componentProps.type = 'button';
     }
 
     return (
       <Component
         {...componentProps}
         className={classNames}
-        type="button"
       >
         {
           loading ? (

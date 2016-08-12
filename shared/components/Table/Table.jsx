@@ -60,7 +60,7 @@ class Table extends Component {
           </thead>
           <tbody>
             {
-              myList.size > 0 ? myList.map((item, i) =>
+              myList && myList.size > 0 ? myList.map((item, i) =>
                 <Row
                   key={`tableRow${i}`}
                   options={filterOptions}

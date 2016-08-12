@@ -15,6 +15,11 @@ const urls = {
   setDevice: '/goform/setDevice',
   setApAction: '/goform/setApAction',
 
+  getFlowList: '/goform/getFlowList',
+  getSsidList: '/goform/getSsidList',
+
+  getAlarmEvents: '/goform/getAlarmEvents',
+
   // 日志
   fetchLog: '/goform/getLogInfo',
   clearAllLog: '/goform/clearAllLogInfo',

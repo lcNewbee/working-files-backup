@@ -71,6 +71,9 @@
   "No": "序号",
   "Mask": "子网掩码",
   "Release Time": "租约时间",
+  "Remark": "描述",
+  "Enabled": "已启用",
+  "Disabled": "已关闭",
 
   "Main DNS": "主DNS",
   "Second DNS": "备用DNS",

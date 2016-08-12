@@ -201,7 +201,7 @@ export const Logs = React.createClass({
             className="fl"
             text={_("Clean All Logs")}
             icon="trash"
-            role="danger"
+            theme="danger"
             onClick={this.cleanAllLog}
           />
           <Select

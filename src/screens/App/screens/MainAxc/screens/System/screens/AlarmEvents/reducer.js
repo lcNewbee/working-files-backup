@@ -1,40 +1,37 @@
-import {Map, List, fromJS} from 'immutable';
+import { fromJS } from 'immutable';
 
 const defaultState = fromJS({
   fetching: false,
   data: {
-    list: []
+    list: [],
   },
   query: {
     type: '0',
     size: 20,
-    page: 1
+    page: 2,
   },
-  actionQuery: {}
+  actionQuery: {},
 });
 
-export default function(state = defaultState, action) {
+export default function (state = defaultState, action) {
   switch (action.type) {
-    case 'REQEUST_FETCH_FlOW':
+    case 'REQEUST_FETCH_ALARM_EVENTS':
       return state.set('fetching', true);
 
-    case 'RECIVE_FETCH_FlOW':
+    case 'RECIVE_FETCH_ALARM_EVENTS':
       return state.set('fetching', false)
         .set('updateAt', action.updateAt)
         .mergeIn(['data'], action.data);
 
-    case 'CHANGE_FlOW_QUERY':
-      console.log(action)
+    case 'CHANGE_ALARM_EVENTS_QUERY':
       return state.mergeIn(['query'], action.query);
 
-    case "CHANGE_FlOW_ACTION_QUERY":
-      return state.mergeIn(['actionQuery'], action.actionQuery);
-
-    case 'LEAVE_FlOW_SCREEN':
+    case 'LEAVE_ALARM_EVENTS_SCREEN':
       return state.mergeIn(['query'], {
-        search: ''
+        search: '',
       });
 
+    default:
   }
   return state;
-};
+}

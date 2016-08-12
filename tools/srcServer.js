@@ -56,6 +56,5 @@ browserSync({
     'src/*.html',
     'tools/data/*.json',
     'src/assets/**/*',
-    'src/screens/**/reducer.js',
   ],
 });

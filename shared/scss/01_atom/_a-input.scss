@@ -1,4 +1,4 @@
-$boder-color:         #e5e5e5;
+$boder-color: #e5e5e5;
 
 .a-text,
 textarea,
@@ -8,16 +8,37 @@ input[type=file],
 input[type=number] {
   box-sizing: border-box;
   padding: 6px 8px 5px 8px;
-  outline: 0;
+  font-size: 11px;
+  background: #fff;
   border: 1px solid #ccc;
   border-radius: 2px;
-  background: #fff;
-  font-size: 11px;
+  outline: 0;
 
   &:disabled {
     background-color: $boder-color;
   }
   &:focus {
     border: 1px solid #333;
+  }
+}
+
+input[type="range"] {
+  width: 400px;
+  height: 10px;
+  -webkit-appearance: none;
+  margin-top: 2px;
+  background-color: #666;
+  border-radius: 15px;
+
+  &::-webkit-slider-thumb {
+    top: -5px;
+    width: 16px;
+    height: 28px;
+    -webkit-appearance: none;
+    cursor: default;
+    background: none repeat scroll 0 0 $g-color-primary;
+    border-radius: 15px;
+    box-shadow: 0 -1px 1px $g-color-primary-darkest inset;
+    transform: translateY(-4px);
   }
 }

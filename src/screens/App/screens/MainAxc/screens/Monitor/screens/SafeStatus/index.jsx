@@ -7,7 +7,7 @@ import { fromJS } from 'immutable';
 
 // components
 import {
-  Table, EchartReact,
+  Table, EchartReact, Button,
 } from 'shared/components';
 
 import * as actions from './actions';
@@ -45,27 +45,28 @@ export const Status = React.createClass({
   getClientsListOption() {
     const ret = fromJS([
       {
-        id: 'hostname',
-        text: _('Name'),
+        id: 'macaddress',
+        text: _('攻击者MAC'),
         transform(val, item) {
           return val || item.get('macaddress');
         },
       }, {
-        id: 'ipaddress',
-        text: _('IP Address'),
+        id: 'type',
+        text: _('攻击设备类型'),
       }, {
-        id: 'macaddress',
-        text: _('MAC Address'),
+        id: 'time',
+        text: _('攻击出现时间'),
       }, {
-        id: 'softversion',
-        text: _('UP/Down'),
-        transform(val, item) {
-          return flowRateKbFilter.transform(item.get('upstream')) +
-            ' / ' + flowRateKbFilter.transform(item.get('downstream'));
-        },
+        id: 'upstream',
+        text: _('攻击详情'),
       }, {
         id: 'connecttime',
-        text: _('Connect Time'),
+        text: _('防护措施'),
+        filter: 'connectTime',
+        width: '160',
+      }, {
+        id: 'connecttime',
+        text: _('跳到安全事件'),
         filter: 'connectTime',
         width: '160',
       },
@@ -119,7 +120,7 @@ export const Status = React.createClass({
 
     return (
       <div className="Stats">
-        <h2>{ _('Statistics') }</h2>
+        <h2>{ _('安全状态') }</h2>
         <div className="stats-group clearfix" >
           <div className="stats-group-large" >
             <div className="stats-group-cell">
@@ -148,7 +149,17 @@ export const Status = React.createClass({
 
           <div className="stats-group-large">
             <div className="stats-group-header">
-              <h3>{ _('最近安全事件列表') }</h3>
+              <h3>
+                { _('最近安全事件列表') }
+                <Button
+                  icon="download"
+                  theme="primary"
+                  text={_('导出报表')}
+                  style={{
+                    marginLeft: '12px',
+                  }}
+                />
+              </h3>
             </div>
             <div className="stats-group-cell">
               <Table

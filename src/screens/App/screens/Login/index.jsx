@@ -6,9 +6,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/utils/lib/validator';
 import * as appActions from 'shared/actions/app';
-import Navbar from 'shared/components/Navbar';
-import { FormGroup } from 'shared/components/Form';
-import Button from 'shared/components/Button';
+import {
+  Navbar, Button, FormGroup,
+} from 'shared/components';
+
 import * as actions from './actions';
 import reducer from './reducer';
 
@@ -54,16 +55,16 @@ export const Login = React.createClass({
   },
 
   onLogin() {
-    this.props.validateAll(function (invalid) {
+    this.props.validateAll((invalid) => {
       if (invalid.isEmpty()) {
-        this.props.login(function (status) {
+        this.props.login((status) => {
           let currClass = document.getElementsByTagName('body')[0].className;
 
           document.getElementsByTagName('body')[0].className = currClass.replace(' sign-body', '');
           this.props.changeLoginStatus(status);
-        }.bind(this));
+        });
       }
-    }.bind(this));
+    });
 
     // // 如果有验证错误信息
     // if (checkRusult) {
@@ -162,7 +163,7 @@ export const Login = React.createClass({
             }
             <Button
               size="lg"
-              role="primary"
+              theme="primary"
               text={_('Login')}
               onClick={this.onLogin}
             />

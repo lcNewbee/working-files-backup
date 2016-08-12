@@ -1,15 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { fromJS } from 'immutable';
 import utils from 'shared/utils';
 
 // components
-import { Table } from 'shared/components';
-import Button from 'shared/components/Button';
-import { Search } from 'shared/components/Form';
-import Select from 'shared/components/Select';
-import Switchs from 'shared/components/Switchs';
+import {
+  PureComponent,
+  Table, Button, Search, Select, Switchs,
+} from 'shared/components';
 
 // custom
 import * as actions from './actions';
@@ -20,8 +18,8 @@ const flowRateFilter = utils.filter('flowRate:["KB"]');
 const clientsTableOptions = fromJS([
   {
     id: 'devicename',
-    text: _('MAC Address') + '/' + _('Name'),
-    transform (val, item) {
+    text: `${_('MAC Address')}/${_('Name')}`,
+    transform(val, item) {
       return item.get('devicename') || item.get('mac');
     },
   }, {
@@ -31,31 +29,37 @@ const clientsTableOptions = fromJS([
     id: 'vendor',
     text: _('Manufacturer'),
   }, {
+    id: 'ssid',
+    text: _('终端类型'),
+  }, {
     id: 'type',
     text: _('User Type'),
   }, {
     id: 'ssid',
     text: 'SSID',
   }, {
+    id: 'ssid',
+    text: _('认证类型'),
+  }, {
     id: 'connectap',
     text: _('Associated AP'),
-    transform (val, item) {
+    transform(val, item) {
       return item.get('connectap') || item.get('apmac');
     },
   }, {
     id: 'bandwidth',
     text: _('Up/Down Speed'),
-    transform (val, item) {
-      let upRate = flowRateFilter.transform(item.get('upstream'));
-      let downRate = flowRateFilter.transform(item.get('downstream'));
+    transform(val, item) {
+      const upRate = flowRateFilter.transform(item.get('upstream'));
+      const downRate = flowRateFilter.transform(item.get('downstream'));
 
-      return upRate + '/' + downRate;
+      return `${upRate}/${downRate}`;
     },
   }, {
     id: 'rssi',
     text: _('RSSI'),
-    transform (val, item) {
-      let intVal = parseInt(val, 10);
+    transform(val, item) {
+      const intVal = parseInt(val, 10);
       let classNames = 'Icon Icon-block Icon-wifi';
 
       // 判断加密范式
@@ -75,8 +79,8 @@ const clientsTableOptions = fromJS([
         classNames += '-3';
       }
 
-      // return <span className={classNames}></span>;
-      return val;
+      return <span className={classNames} />;
+      // return val;
     },
   }, {
     id: 'operationhours',
@@ -92,23 +96,23 @@ const clientsTableOptions = fromJS([
 const msg = {
   TITLE: _('User List'),
   reconnect: _('Reconnect'),
+  wireless: _('WIRELESS'),
   lock: _('Lock'),
   unlock: _('Unlock'),
   perPage: _('Items per page: '),
 };
 
 const selectOptions = [
-  { value: 20, label: msg.perPage + '20' },
-  { value: 50, label: msg.perPage + '50' },
-  { value: 100, label: msg.perPage + '100' },
+  { value: 20, label: `${msg.perPage}20` },
+  { value: 50, label: `${msg.perPage}50` },
+  { value: 100, label: `${msg.perPage}100` },
 ];
 
 const typeArr = [
   _('ALL'),
-  _('WIRELESS'),
+  `${msg.wireless}(5G)`,
+  `${msg.wireless}(2.4G)`,
   _('WIRED'),
-  _('GUEST'),
-  _('BLOCKED/LAST APPEARED'),
 ];
 
 const styles = {
@@ -118,26 +122,30 @@ const styles = {
 };
 
 // 原生的 react 页面
-export const Clients = React.createClass({
-  mixins: [PureRenderMixin],
+class Clients extends PureComponent {
+  constructor(props) {
+    super(props);
 
+    this.binds('handleSearch', 'handleChangeQuery', 'handleActions', 'onPageChange',
+        'onAction', 'onChangeSearchText', 'onChangeType', 'onChangeTableSize');
+  }
   componentWillMount() {
     this.handleSearch();
-  },
+  }
 
   componentDidUpdate(prevProps) {
     if (prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
       this.handleSearch();
     }
-  },
+  }
 
   componentWillUnmount() {
     this.props.leaveClientsScreen();
-  },
+  }
 
   handleSearch() {
     this.props.fetchClients();
-  },
+  }
 
   handleChangeQuery(data, needSearch) {
     this.props.changeClientsQuery(data);
@@ -145,7 +153,7 @@ export const Clients = React.createClass({
     if (needSearch) {
       this.handleSearch();
     }
-  },
+  }
 
   handleActions(actionQuery, needSave) {
     this.props.changeClientActionQuery(actionQuery);
@@ -153,10 +161,10 @@ export const Clients = React.createClass({
     if (needSave) {
       this.props.saveClientsAction();
     }
-  },
+  }
 
   onAction(mac, action, wirelessType) {
-    let subData = {
+    const subData = {
       action,
       macs: [
         mac,
@@ -168,41 +176,45 @@ export const Clients = React.createClass({
     }
 
     this.handleActions(subData, true);
-  },
+  }
 
-  onChangeSearchText(val, e) {
+  onChangeSearchText(val) {
     this.handleChangeQuery({
       search: val,
     });
-  },
+  }
 
   onChangeType(data) {
     this.handleChangeQuery({
       type: data.value,
     }, true);
-  },
+  }
 
   onChangeTableSize(data) {
     this.handleChangeQuery({
       size: data.value,
       page: 1,
     }, true);
-  },
+  }
 
   onPageChange(i) {
     this.handleChangeQuery({
       page: i,
     }, true);
-  },
+  }
 
   render() {
+    const { store } = this.props;
+    const query = store.get('query').toJS();
+    const thisData = store.get('data');
     const noControl = this.props.app.get('noControl');
+
     // 添加操作项
-    let options = clientsTableOptions.setIn([-1, 'transform'],
-      function (val, item) {
-        let mac = item.get('mac');
-        let status = item.get('status');
-        let isLock = item.get('islock') === 'lock' ? true : false;
+    const options = clientsTableOptions.setIn([-1, 'transform'],
+      (val, item) => {
+        const mac = item.get('mac');
+        const status = item.get('status');
+        const isLock = item.get('islock') === 'lock';
 
         if (status === 'disable' || noControl) {
           return null;
@@ -217,7 +229,7 @@ export const Clients = React.createClass({
                   size="sm"
                   text={msg.unlock}
                   style={styles.actionButton}
-                  onClick={this.onAction.bind(this, mac, 'unlock')}
+                  onClick={() => this.onAction(mac, 'unlock')}
                 />
               ) : (
                 <Button
@@ -225,7 +237,7 @@ export const Clients = React.createClass({
                   size="sm"
                   text={msg.lock}
                   style={styles.actionButton}
-                  onClick={this.onAction.bind(this, mac, 'lock')}
+                  onClick={() => this.onAction(mac, 'lock')}
                 />
               )
             }
@@ -235,73 +247,15 @@ export const Clients = React.createClass({
               size="sm"
               text={msg.reconnect}
               style={styles.actionButton}
-              onClick={this.onAction.bind(this, mac, 'reconnect')}
+              onClick={() => this.onAction(mac, 'reconnect')}
             />
           </div>
         );
-      }.bind(this)
+      }
     );
-
-    const blockOption = fromJS([
-      {
-        id: 'devicename',
-        text: _('MAC Address') + '/' + _('Name'),
-        transform (val, item) {
-          return item.get('devicename') || item.get('mac');
-        },
-      }, {
-        id: 'vendor',
-        text: _('Manufacturer'),
-      }, {
-        id: 'wirelessType',
-        text: _('Type'),
-        transform (val, item) {
-          let typeMap = {
-            main: _('Main SSID'),
-            guest: _('Guest SSID'),
-          };
-
-          return typeMap[val] || _('Main Wireless');
-        },
-      }, {
-        id: 'bandwidth',
-        text: _('Up/Down Speed'),
-        transform (val, item) {
-          let upRate = flowRateFilter.transform(item.get('upstream'));
-          let downRate = flowRateFilter.transform(item.get('downstream'));
-
-          return upRate + '/' + downRate;
-        },
-      }, {
-        id: 'lasttime',
-        text: _('Last Seen'),
-      }, {
-        id: 'op',
-        text: _('Actions'),
-        transform: function (val, item) {
-          let deviceMac = item.get('mac');
-          let isLock = item.get('islock') === 'lock' ? true : false;
-
-          return (
-            <Button
-              icon="unlock"
-              size="sm"
-              text={msg.unlock}
-              style={styles.actionButton}
-              onClick={this.onAction.bind(this, deviceMac, 'unlock', item.get('wirelessType'))}
-            />
-          );
-        }.bind(this),
-      },
-    ]);
     let tableOptions = options;
 
-    if (this.props.query.get('type') == '4') {
-      tableOptions = blockOption;
-    }
-
     if (noControl) {
-      options = options.delete(-1);
       tableOptions = tableOptions.delete(-1);
     }
 
@@ -309,53 +263,45 @@ export const Clients = React.createClass({
       <div className="page-device">
         <h2>{msg.TITLE}</h2>
         <div className="m-action-bar clearfix">
-
           <Search
-            value={this.props.query.get('text')}
+            value={query.search}
             onChange={this.onChangeSearchText}
             onSearch={this.handleSearch}
             placeholder={_('IP or MAC Address')}
           />
           <Switchs
-            value={this.props.query.get('type')}
+            value={query.type}
             options={typeArr}
             onChange={this.onChangeType}
           />
           <Select
             className="fr"
             clearable={false}
-            value={this.props.query.get('size')}
+            searchable={false}
+            value={query.size}
             onChange={this.onChangeTableSize}
             options={selectOptions}
-            searchable={false}
           />
         </div>
 
         <Table
           className="table"
           options={tableOptions}
-          list={this.props.data.get('list')}
-          page={this.props.data.get('page')}
+          list={thisData.get('list')}
+          page={thisData.get('page')}
           onPageChange={this.onPageChange}
           loading={this.props.fetching}
         />
 
       </div>
     );
-  },
-});
+  }
+}
 
 function mapStateToProps(state) {
-  let myState = state.clients;
-
   return {
     app: state.app,
-    fetching: myState.get('fetching'),
-    query: myState.get('query'),
-    updateAt: myState.get('updateAt'),
-    data: myState.get('data'),
-    page: myState.get('page'),
-    edit: myState.get('edit'),
+    store: state.clients,
   };
 }
 

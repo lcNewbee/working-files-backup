@@ -1,19 +1,19 @@
-import {Map, List, fromJS} from 'immutable';
+import { Map, List, fromJS } from 'immutable';
 
 const defaultState = fromJS({
   fetching: false,
   data: {
-    list: []
+    list: [],
   },
   query: {
     type: '0',
     size: 20,
-    page: 1
+    page: 1,
   },
-  actionQuery: {}
+  actionQuery: {},
 });
 
-export default function(state = defaultState, action) {
+export default function (state = defaultState, action) {
   switch (action.type) {
     case 'REQEUST_FETCH_FlOW':
       return state.set('fetching', true);
@@ -24,17 +24,18 @@ export default function(state = defaultState, action) {
         .mergeIn(['data'], action.data);
 
     case 'CHANGE_FlOW_QUERY':
-      console.log(action)
       return state.mergeIn(['query'], action.query);
 
-    case "CHANGE_FlOW_ACTION_QUERY":
+    case 'CHANGE_FlOW_ACTION_QUERY':
       return state.mergeIn(['actionQuery'], action.actionQuery);
 
     case 'LEAVE_FlOW_SCREEN':
       return state.mergeIn(['query'], {
-        search: ''
+        search: '',
       });
+
+    default:
 
   }
   return state;
-};
+}

@@ -1,74 +1,71 @@
 @import "../../scss/variables";
 @import "../../scss/mixins";
-$tab-nav-height:    28px;
+$tab-nav-height: 28px;
 
 .o-tab {
   .o-tab__nav {
     position: absolute;
-    left: $g-distance;
     right: $g-distance;
+    left: $g-distance;
     z-index: 2;
+    padding-left: $g-distance;
+    border-bottom: 4px solid $g-main-color-light;
 
-    ul {
-      border-bottom: 4px solid $g-main-color-light;
-      padding-left: $g-distance;
-
-      @include clearfix;
-    }
+    @include clearfix;
 
     li {
       float: left;
       margin: 0 $g-distance-sm;
 
       a {
+        position: relative;
         display: block;
+        min-width: 80px;
+        height: $tab-nav-height;
         padding: 0 $g-distance;
         padding-top: 1px;
-        background-color: #fff;
-        color: $g-main-color-light;
-        position: relative;
-        height: $tab-nav-height;
-        line-height: $tab-nav-height;
-        text-align: center;
-        min-width: 80px;
         font-size: 13px;
+        line-height: $tab-nav-height;
+        color: $g-main-color-light;
+        text-align: center;
+        background-color: #fff;
         //transition: background .3s ease-in, color .1s ease-in;
 
         &::before {
-          content: '';
           position: absolute;
           top: 0;
           left: 0;
-          margin-left: -12px;
           height: 0;
-          border-width: ($tab-nav-height / 2) 6px;
-          border-color:transparent #fff #fff transparent;
-          border-style: solid;
+          margin-left: -12px;
+          content: '';
           filter: drop-shadow(-3px -2px 2px #ccc);
+          border-color: transparent #fff #fff transparent;
+          border-style: solid;
+          border-width: ($tab-nav-height / 2) 6px;
           //transition: border-color .3s ease-in;
         }
 
         &::after {
-          content: '';
           position: absolute;
           top: 0;
           right: 0;
-          margin-right: -12px;
           height: 0;
-          border-width: ($tab-nav-height / 2) 6px;
+          margin-right: -12px;
+          content: '';
+          filter: drop-shadow(3px -2px 2px #ccc);
           border-color: transparent transparent #fff #fff;
           border-style: solid;
-          filter: drop-shadow(3px -2px 2px #ccc);
+          border-width: ($tab-nav-height / 2) 6px;
           //transition: border .3s ease-in;
         }
 
         &:hover {
-          background: #e5e5e5;
           z-index: 1;
           color: $g-main-color-light;
+          background: #e5e5e5;
 
           &::before {
-            border-color:transparent #e5e5e5 #e5e5e5 transparent;
+            border-color: transparent #e5e5e5 #e5e5e5 transparent;
           }
 
           &::after {
@@ -77,18 +74,18 @@ $tab-nav-height:    28px;
         }
 
         &.active {
-          background: $g-main-color-light;
-          color: #fff;
           z-index: 2;
+          color: #fff;
+          background: $g-main-color-light;
 
           &::before {
-            border-color:transparent $g-main-color-light $g-main-color-light transparent;
             filter: none;
+            border-color: transparent $g-main-color-light $g-main-color-light transparent;
           }
 
           &::after {
-            border-color: transparent transparent $g-main-color-light $g-main-color-light;
             filter: none;
+            border-color: transparent transparent $g-main-color-light $g-main-color-light;
           }
         }
       }
@@ -96,16 +93,16 @@ $tab-nav-height:    28px;
   }
   .o-tab__content {
     position: absolute;
-    overflow-y: auto;
     top: 34px;
-    left: 10px;
     right: 10px;
     bottom: 0;
+    left: 10px;
     padding: 10px 40px;
+    overflow-y: auto;
 
     h3 {
-      margin-bottom: 15px;
       padding: 5px 10px;
+      margin-bottom: 15px;
       border-bottom: 1px solid #e5e5e5;
     }
   }

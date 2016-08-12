@@ -1,45 +1,40 @@
 import React, { Component } from 'react';
 import { fromJS } from 'immutable';
-import { bindActionCreators } from 'redux'
+import { bindActionCreators } from 'redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import utils from 'shared/utils';
 import validator from 'shared/utils/lib/validator';
-import * as actions from './actions';
+import {
+  FormGroup, Button, Table, Modal, Switchs,
+} from 'shared/components';
 import * as appActions from 'shared/actions/app';
+import * as actions from './actions';
 import myReducer from './reducer';
-
-// components
-import Table from 'shared/components/Table';
-import Button from 'shared/components/Button';
-import {Search, FormGroup, Checkbox} from 'shared/components/Form';
-import Select from 'shared/components/Select';
-import Modal from 'shared/components/Modal';
-import Switchs from 'shared/components/Switchs';
 
 const msg = {
   delete: _('Delete'),
   edit: _('Edit'),
   look: _('View'),
-  add: _('Add')
-}
+  add: _('Add'),
+};
 
 const validOptions = fromJS({
   mainIp: validator({
-    rules: 'ip'
+    rules: 'ip',
   }),
   mainMask: validator({
-    rules: 'mask'
+    rules: 'mask',
   }),
   secondIp: validator({
-    rules: 'url'
+    rules: 'url',
   }),
   secondMask: validator({
-    rules: 'required'
+    rules: 'required',
   }),
   ipv6: validator({
-    rules: 'required'
-  })
+    rules: 'required',
+  }),
 });
 
 let DhcpAddressPoolTableOption = fromJS([
@@ -76,19 +71,19 @@ let DhcpAddressPoolTableOption = fromJS([
   }, {
     id: 'op',
     text: _('Actions'),
-  }
+  },
 ]);
 
 
 export default class View extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onSelectDhcpAddressPool = this.onSelectDhcpAddressPool.bind(this);
-  };
+  }
 
   componentWillMount() {
-    this.props.fetchDhcpAddressPoolList()
+    this.props.fetchDhcpAddressPoolList();
   }
 
   onChangeEditData(key, data) {
@@ -96,13 +91,13 @@ export default class View extends Component {
 
     changeData[key] = data.value;
 
-    this.props.updateDhcpAddressPoolEdit(changeData)
+    this.props.updateDhcpAddressPoolEdit(changeData);
   }
 
   onDeleteDhcpAddressPool(item) {
     let msg_text = '';
 
-    if(item) {
+    if (item) {
       msg_text = _('Are you sure delete address pool: %s?', item.get('name'));
     } else {
       msg_text = _('Are you sure delete selected address pools?');
@@ -112,14 +107,14 @@ export default class View extends Component {
       id: 'interfaceSettings',
       role: 'comfirm',
       text: msg_text,
-      apply: function() {
+      apply: function () {
 
-      }.bind(this)
+      }.bind(this),
     });
   }
 
   onSelectDhcpAddressPool(data) {
-    this.props.selectDhcpAddressPool(data)
+    this.props.selectDhcpAddressPool(data);
   }
 
   render() {
@@ -138,7 +133,7 @@ export default class View extends Component {
               text="修改"
               size="sm"
               onClick={() => {
-                this.props.editDhcpAddressPool(item.get('name'))
+                this.props.editDhcpAddressPool(item.get('name'));
               }}
             />
             <Button
@@ -146,15 +141,15 @@ export default class View extends Component {
               size="sm"
               text="删除"
               onClick={() => {
-                this.onDeleteDhcpAddressPool(item)
+                this.onDeleteDhcpAddressPool(item);
               }}
             />
           </div>
-        )
-      }.bind(this)
+        );
+      }.bind(this),
     }));
 
-    if(this.props.store.get('actionType') === 'add') {
+    if (this.props.store.get('actionType') === 'add') {
       modalTitle = msg.add;
     } else if (this.props.store.get('actionType') === 'edit') {
       modalTitle = msg.edit + ' ' + modalTitle;
@@ -168,7 +163,7 @@ export default class View extends Component {
           <div className="m-action-bar__left action-btns">
             <Button
               icon="plus"
-              role="primary"
+              theme="primary"
               onClick={this.props.addDhcpAddressPool}
               text="添加"
             />
@@ -176,7 +171,7 @@ export default class View extends Component {
               icon="trash"
               text="删除"
               onClick={() => {
-                this.onDeleteDhcpAddressPool()
+                this.onDeleteDhcpAddressPool();
               }}
             />
           </div>
@@ -207,18 +202,18 @@ export default class View extends Component {
           />
           <FormGroup
             type="checkbox"
-            label={_('Address Pool Type') }
+            label={_('Address Pool Type')}
           >
             <Switchs
               value={editData.get('type')}
               options={[
                 {
                   value: 'ipv4',
-                  label: 'IPV4'
+                  label: 'IPV4',
                 }, {
                   value: 'ipv6',
-                  label: 'IPV6'
-                }
+                  label: 'IPV6',
+                },
               ]}
               onChange={(data) => {
                 this.onChangeEditData('type', data);
@@ -291,7 +286,7 @@ export default class View extends Component {
           />
         </Modal>
       </div>
-    )
+    );
   }
 }
 
@@ -306,7 +301,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
     actions
-  ), dispatch)
+  ), dispatch);
 }
 
 export const Screen = connect(

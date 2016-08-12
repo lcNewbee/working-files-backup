@@ -303,7 +303,7 @@ export const GroupSettings = React.createClass({
               <Button
                 icon="plus"
                 className="fr"
-                role="primary"
+                theme="primary"
                 onClick={this.onAddGroup}
                 text={msg.add}
               />

@@ -1,0 +1,49 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "policyName": "Policy1",
+        "opObject": "WLAN",
+        "operation": "关闭",
+        "dateType": "week",
+        "month": "8",
+        "days": "0",
+        "weeks": "0",
+        "isAllDay": "23",
+        "startTime": "8:00",
+        "endTime": "22:00",
+        "remark": "20"
+      },
+      {
+        "policyName": "Policy2",
+        "opObject": "WLAN",
+        "operation": "开启",
+        "dateType": "week",
+        "month": "2",
+        "days": "0",
+        "weeks": "0",
+        "isAllDay": "23",
+        "startTime": "8:00",
+        "endTime": "22:00",
+        "remark": "20"
+      },
+      {
+        "policyName": "Policy3",
+        "opObject": "WLAN",
+        "operation": "关闭",
+        "dateType": "week",
+        "month": "12",
+        "days": "0",
+        "weeks": "0",
+        "isAllDay": "23",
+        "startTime": "8:00",
+        "endTime": "22:00",
+        "remark": "20"
+      }
+    ]
+  }
+}

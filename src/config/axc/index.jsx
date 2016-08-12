@@ -1,6 +1,9 @@
 import { combineReducers } from 'redux';
 import NotFound from 'shared/components/NotFound';
 import remoteActionMiddleware from 'shared/utils/lib/remote_action_middleware';
+import listInfoReducer from 'shared/reducers/list';
+import settingsReducer from 'shared/reducers/settings';
+import moment from 'moment';
 
 // 公用 样式
 import 'shared/scss/styles.scss';
@@ -26,6 +29,12 @@ window.CB = b28n.init({
   supportLang: ['en', 'cn'],
 });
 window.guiConfig = guiConfig;
+
+if (b28n.getLang() === 'cn') {
+  moment.locale('zh-cn');
+} else {
+  moment.locale('en');
+}
 
 bodyElem.className = `${bodyElem.className} ${b28n.getLang()}`;
 
@@ -61,8 +70,23 @@ const sRoutes = require('../../screens/App/screens/MainAxc/screens/Routes');
  */
 const sClients = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Clients');
 const sFlowStatus = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/FlowStatus');
-const sWlanStatus = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/WlanStatus');
+const sSsidStatus = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/SsidStatus');
+const sApList = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/ApList');
 const sSafeStatus = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/SafeStatus');
+
+const sBlacklist = require('../../screens/App/screens/MainAxc/screens/WLAN/screens/Blacklist');
+const sSsidSettings =
+    require('../../screens/App/screens/MainAxc/screens/WLAN/screens/SsidSettings');
+const sSmartRf =
+    require('../../screens/App/screens/MainAxc/screens/WLAN/screens/SmartRf');
+const sTimerPolicy =
+    require('../../screens/App/screens/MainAxc/screens/WLAN/screens/TimerPolicy');
+const sSafePolicy =
+    require('../../screens/App/screens/MainAxc/screens/WLAN/screens/SafePolicy');
+const sFlowReport =
+    require('../../screens/App/screens/MainAxc/screens/Report/screens/FlowReport');
+const sBusinessReport =
+    require('../../screens/App/screens/MainAxc/screens/Report/screens/BusinessReport');
 
 /**
  * 系统管理
@@ -71,6 +95,8 @@ const sSystemStatus =
     require('../../screens/App/screens/MainAxc/screens/System/screens/SystemStatus');
 const sSystemAdmin =
     require('../../screens/App/screens/MainAxc/screens/System/screens/SystemAdmin');
+const sAlarmEvents =
+    require('../../screens/App/screens/MainAxc/screens/System/screens/AlarmEvents');
 
 const routes = [
   {
@@ -112,7 +138,7 @@ const routes = [
               }, {
                 id: 'vlanAcl',
                 path: '/main/network/vlan/acl',
-                text: _('ACL Settings'),
+                text: _('Access Control'),
                 component: sVlanAcl.Screen,
               }, {
                 id: 'vlanAaa',
@@ -166,13 +192,21 @@ const routes = [
               }, {
                 id: 'flow',
                 path: '/main/group/monitor/flow',
+                formUrl: '/goform/getFlowList',
                 text: _('Flow'),
                 component: sFlowStatus.Screen,
               }, {
-                id: 'wirelessStatus',
-                path: '/main/group/monitor/wireless',
-                text: _('Wireless Status'),
-                component: sWlanStatus.Screen,
+                id: 'ssidStatus',
+                path: '/main/group/monitor/ssid',
+                formUrl: '/goform/getSsidList',
+                text: _('SSID Status'),
+                component: sSsidStatus.Screen,
+              }, {
+                id: 'apList',
+                path: '/main/group/monitor/aps',
+                formUrl: '/goform/getApDevInfo',
+                text: _('Access Point Status'),
+                component: sApList.Screen,
               }, {
                 id: 'safeStatus',
                 path: '/main/group/monitor/safe',
@@ -212,24 +246,38 @@ const routes = [
             path: '/main/group/wireless',
             icon: 'wifi',
             text: _('Wireless'),
-            indexRoute: { onEnter: (nextState, replace) => replace('/main/group/wireless/acl') },
+            indexRoute: { onEnter: (nextState, replace) => replace('/main/group/wireless/ssid') },
             childRoutes: [
               {
-                id: 'acl',
-                path: '/main/group/wireless/acl',
-                text: _('ACL Policy'),
+                id: 'ssidSettings',
+                path: '/main/group/wireless/ssid',
+                formUrl: '/goform/ssidSettingList',
+                text: _('SSID Settings'),
+                component: sSsidSettings.Screen,
               }, {
-                id: 'smart',
+                id: 'blacklist',
+                path: '/main/group/wireless/acl',
+                formUrl: '/goform/getClientInfo',
+                text: _('Blacklist'),
+                component: sBlacklist.Screen,
+              }, {
+                id: 'smartRf',
                 path: '/main/group/wireless/smart',
+                formUrl: '/goform/smartRf',
                 text: _('Smart RF'),
+                component: sSmartRf.Screen,
               }, {
                 id: 'timerPolicy',
                 path: '/main/group/wireless/timer',
+                formUrl: '/goform/timerPolicy',
                 text: _('Timer Policy'),
+                component: sTimerPolicy.Screen,
               }, {
-                id: 'wirelessSafe',
+                id: 'wirelessSafePolicy',
                 path: '/main/group/wireless/safe',
+                formUrl: '/goform/timerPolicy',
                 text: _('Wireless Safe Policy'),
+                component: sSafePolicy.Screen,
               },
             ],
           }, {
@@ -244,7 +292,9 @@ const routes = [
                 id: 'flowReport',
                 isIndex: true,
                 path: '/main/group/report/flow',
+                formUrl: '/goform/timerPolicy',
                 text: _('Flow Report'),
+                component: sFlowReport.Screen,
               }, {
                 id: 'businessReport',
                 isIndex: true,
@@ -339,6 +389,7 @@ const routes = [
             icon: 'exclamation-circle',
             path: '/main/system/alarm',
             text: _('Alarm Events'),
+            component: sAlarmEvents.Screen,
           },
         ],
       }, {
@@ -358,7 +409,12 @@ const routes = [
 
 // 配置模块页面 store
 const reducers = {
+  // shared reducers
   app: App.app,
+  list: listInfoReducer,
+  settings: settingsReducer,
+
+  // product comstom reducers
   login: sLogin.login,
   mainAxc: sMainAxc.reducer,
   interfaces: sInterfaces.reducer,
@@ -366,11 +422,11 @@ const reducers = {
 
   // ap组管理
   clients: sClients.reducer,
-  flow: sFlowStatus.reducer,
-  wlanStatus: sWlanStatus.reducer,
   safeStatus: sSafeStatus.reducer,
   system: sSystemStatus.reducer,
   admin: sSystemAdmin.reducer,
+  events: sAlarmEvents.reducer,
+  apList: sApList.reducer,
 };
 
 // Store

@@ -6,9 +6,10 @@ export default class Setings extends Component {
     return (
       <Tab
         menus={this.props.route.childRoutes}
+        role="tab"
       >
         {this.props.children}
       </Tab>
-    )
+    );
   }
 }

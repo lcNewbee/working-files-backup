@@ -634,7 +634,7 @@ export default class Main extends Component {
         <div className={mainClassName}>
           <Nav
             className="t-main__nav"
-            role="nav"
+            role="tree"
             menus={this.props.route.childRoutes}
             location={this.props.location}
             onChange={this.onClickNav}

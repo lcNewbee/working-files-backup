@@ -36,6 +36,7 @@ class Input extends React.Component {
     delete inputProps.onValidError;
     delete inputProps.options;
     delete inputProps.isFocus;
+    delete inputProps.help;
 
     return (
       <input

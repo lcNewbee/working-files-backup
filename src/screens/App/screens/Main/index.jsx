@@ -71,7 +71,7 @@ export default class Main extends Component {
         </Navbar>
 
         <div className="t-main main--open">
-          <Nav className="t-main__nav" role="nav" menus={this.props.route.childRoutes} />
+          <Nav className="t-main__nav" role="menu" menus={this.props.route.childRoutes} />
           <div className='t-main__content'>
             {
               this.props.children

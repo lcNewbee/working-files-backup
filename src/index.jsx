@@ -20,9 +20,8 @@ const prodConfig = require('./config/ap');
 
 if (module.hot) {
   // Enable Webpack hot module replacement for reducers
-
-  module.hot.accept('./config/ap', () => {
-    const newConfig = require('./config/ap');
+  module.hot.accept('./config/axc', () => {
+    const newConfig = require('./config/axc');
     const nextRootReducer = combineReducers(newConfig.reducers);
 
     prodConfig.stores.replaceReducer(nextRootReducer);
