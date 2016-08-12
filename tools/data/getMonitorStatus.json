@@ -1,0 +1,38 @@
+{
+	"state":	{
+		"code":	2000,
+		"msg":	"ok"
+	},
+	"fetching": false,
+  "remoteApInfo": [
+    {
+      "devicename": "1111 AP",
+      "devicemodel": "2222 model",
+      "softwareversion": "V1.1.1.1"
+    }
+  ],
+  "remoteStaInfo": [
+    {
+      "mac": "11:22:33:44:55:66",
+      "devicename": "mx4",
+      "txstrength": "10",
+      "rxstrength": "10",
+      "noise": "-90"
+    }
+  ],
+  "interfaceInfo": [
+    {
+      "interface": "Bridge0",
+      "mac": "11:22:33:44:55:66",
+      "mtu": "11",
+      "ip": "192.168.0.1",
+      "txflow": "11",
+      "txerror": "11",
+      "rxflow": "11",
+      "rxerror": "11"
+    }
+  ],
+  "logInfo": [
+
+  ]
+}

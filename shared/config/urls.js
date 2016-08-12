@@ -2,6 +2,12 @@ const urls = {
   login: '/goform/login',
   regist: '/goform/regist',
 
+  // 系统状态
+  fetchSystemStatus: '/goform/get_system_info',
+
+  // 网络监控
+  fetchMonitorStatus: '/goform/getMonitorStatus',
+
   // 客户端
   fetchClientInfo: '/goform/getClientInfo',
   setClientAction: '/goform/setClientAction',

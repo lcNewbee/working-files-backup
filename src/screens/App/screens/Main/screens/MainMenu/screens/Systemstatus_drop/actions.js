@@ -1,0 +1,24 @@
+import utils from 'shared/utils';
+import * as appActions from 'shared/actions/app';
+import urls from 'shared/config/urls';
+
+
+export function receiveSystemStatus(data) {
+  return {
+    type: 'RECEIVE_SYSTEM_STATUS',
+    data,
+  };
+}
+
+export function fetchSystemStatus() {
+  return (dispatch, getState) => {
+    console.log('in action');
+    dispatch(appActions.fetch(urls.fetchSystemStatus)).then((json) => {
+      // console.log(json);
+      dispatch(receiveSystemStatus(json.data));
+    });
+  };
+}
+
+
+

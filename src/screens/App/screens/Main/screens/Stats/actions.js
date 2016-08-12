@@ -6,14 +6,14 @@ let refreshTimeout = null;
 
 function reqeustStats() {
   return {
-    type: 'REQEUST_STATS'
+    type: 'REQEUST_STATS',
   };
 }
 
 export function reveviceStats(data) {
   return {
     type: 'REVEVICE_STATS',
-    data
+    data,
   };
 }
 
@@ -21,7 +21,7 @@ export function leaveStatusScreen() {
   window.clearTimeout(refreshTimeout);
 
   return {
-    type: 'LEAVE_STATUS_SCREEN'
+    type: 'LEAVE_STATUS_SCREEN',
   };
 }
 
@@ -51,7 +51,7 @@ export function fetchStatus() {
 export function changeStatsQuery(data) {
   return {
     type: 'CHANGE_STATS_QUERY',
-    data
+    data,
   };
 }
 
