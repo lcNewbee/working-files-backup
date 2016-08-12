@@ -11,16 +11,10 @@ import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/settings';
 
 const channelsList = List(channels);
-
-const channelBandwidthOptions = fromJS([
-  {
-    value: '20',
-    label: '20',
-  }, {
-    value: '40',
-    label: '40',
-  },
-]);
+const countryOptions = channelsList.map((item) => ({
+  value: item.country,
+  label: b28n.getLang() === 'cn' ? _(item.cn) : _(item.en),
+})).toJS();
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
@@ -62,12 +56,6 @@ export default class View extends React.Component {
   onSave() {
     this.props.saveSettings();
   }
-  getCountryOptions() {
-    return channelsList.map((item) => ({
-      value: item.country,
-      label: b28n.getLang() === 'cn' ? _(item.cn) : _(item.en),
-    })).toJS();
-  }
 
   getChannelsOptions(currCountry) {
     let i;
@@ -105,7 +93,6 @@ export default class View extends React.Component {
   render() {
     const { route, updateItemSettings } = this.props;
     const curData = this.props.store.getIn(['curData']).toJS();
-    const countryOptions = this.getCountryOptions();
     const channelsOptions = this.getChannelsOptions(curData.country);
 
     return (
@@ -249,5 +236,3 @@ export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps
 )(View);
-
-export reducer from './reducer';
