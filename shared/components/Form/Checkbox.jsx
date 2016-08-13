@@ -37,7 +37,7 @@ class Checkbox extends React.Component {
     }
 
     return (
-      <span className={classNames}>
+      <span className={classNames} style={this.props.style}>
         <Input
           {...this.props}
           className="a-checkbox__input"

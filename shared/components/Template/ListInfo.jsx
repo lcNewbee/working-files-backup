@@ -143,8 +143,12 @@ class ListInfo extends React.Component {
     const list = store.getIn([myListId, 'data', 'list']);
     const query = store.getIn([myListId, 'query']);
     let myListTableOptions = tableOptions;
-
     let pageSelectClassName = 'fr';
+
+    // 数据未初始化不渲染
+    if (myListId === 'base') {
+      return null;
+    }
 
     if (!hasSearch && !typeOption && !actionBarChildren &&
         (controlAbled && !addAbled)) {

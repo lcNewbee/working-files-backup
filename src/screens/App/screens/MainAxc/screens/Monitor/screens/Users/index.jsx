@@ -301,7 +301,7 @@ class Clients extends PureComponent {
 function mapStateToProps(state) {
   return {
     app: state.app,
-    store: state.clients,
+    store: state.users,
   };
 }
 

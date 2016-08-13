@@ -68,7 +68,7 @@ const sRoutes = require('../../screens/App/screens/MainAxc/screens/Routes');
 /**
  * AP组管理
  */
-const sClients = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Clients');
+const sUsers = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Users');
 const sFlowStatus = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/FlowStatus');
 const sSsidStatus = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/SsidStatus');
 const sApList = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/ApList');
@@ -188,17 +188,17 @@ const routes = [
                 id: 'user',
                 path: '/main/group/monitor/user',
                 text: _('User'),
-                component: sClients.Screen,
+                component: sUsers.Screen,
               }, {
                 id: 'flow',
                 path: '/main/group/monitor/flow',
-                formUrl: '/goform/getFlowList',
+                formUrl: '/goform/flowList',
                 text: _('Flow'),
                 component: sFlowStatus.Screen,
               }, {
                 id: 'ssidStatus',
                 path: '/main/group/monitor/ssid',
-                formUrl: '/goform/getSsidList',
+                formUrl: '/goform/ssidList',
                 text: _('SSID Status'),
                 component: sSsidStatus.Screen,
               }, {
@@ -277,7 +277,29 @@ const routes = [
                 path: '/main/group/wireless/safe',
                 formUrl: '/goform/timerPolicy',
                 text: _('Wireless Safe Policy'),
-                component: sSafePolicy.Screen,
+                component: sSafePolicy,
+                indexRoute: {
+                  onEnter: (nextState, replace) => replace('/main/group/wireless/safe/wips'),
+                },
+                childRoutes: [
+                  {
+                    id: 'wirelessWips',
+                    path: '/main/group/wireless/safe/wips',
+                    formUrl: '/goform/timerPolicy',
+                    text: _('WIPS'),
+                    component: sFlowReport.Screen,
+                  }, {
+                    id: 'wirelessEndpointProtection',
+                    path: '/main/group/wireless/safe/endpointProtection',
+                    text: _('Endpoint Protection'),
+                    component: sFlowReport.Screen,
+                  }, {
+                    id: 'wirelessIsolationPolicy',
+                    path: '/main/group/wireless/safe/isolation',
+                    text: _('Isolation Policy'),
+                    component: sFlowReport.Screen,
+                  },
+                ],
               },
             ],
           }, {
@@ -290,14 +312,12 @@ const routes = [
             childRoutes: [
               {
                 id: 'flowReport',
-                isIndex: true,
                 path: '/main/group/report/flow',
                 formUrl: '/goform/timerPolicy',
                 text: _('Flow Report'),
                 component: sFlowReport.Screen,
               }, {
                 id: 'businessReport',
-                isIndex: true,
                 path: '/main/group/report/business',
                 text: _('Business Report'),
               },
@@ -312,17 +332,14 @@ const routes = [
             childRoutes: [
               {
                 id: 'upgrade',
-                isIndex: true,
                 path: '/main/group/system/upgrade',
                 text: _('System Upgrade'),
               }, {
                 id: 'apCorrelation',
-                isIndex: true,
                 path: '/main/group/system/correlation',
                 text: _('AP Correlation'),
               }, {
                 id: 'apLogs',
-                isIndex: true,
                 path: '/main/group/system/logs',
                 text: _('AP Logs'),
               },
@@ -421,12 +438,11 @@ const reducers = {
   dhcpAdressPool: sVlanDhcp.reducer,
 
   // ap组管理
-  clients: sClients.reducer,
+  users: sUsers.reducer,
   safeStatus: sSafeStatus.reducer,
   system: sSystemStatus.reducer,
   admin: sSystemAdmin.reducer,
   events: sAlarmEvents.reducer,
-  apList: sApList.reducer,
 };
 
 // Store

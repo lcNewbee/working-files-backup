@@ -47,7 +47,6 @@ export default class View extends React.Component {
   constructor(props) {
     super(props);
 
-    props.initList(props.route.id);
     this.onAction = this.onAction.bind(this);
   }
 

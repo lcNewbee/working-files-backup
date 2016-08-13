@@ -84,7 +84,8 @@
   "Base Settings": "基本设置",
   "Timer Policy": "定时策略",
   "Wireless Safe Policy": "无线安全检测策略",
-
+  "Isolation Policy": "隔离策略",
+  "Endpoint Protection": "终端防护",
 
   "Report": "报表",
   "Flow Report": "流量报表",

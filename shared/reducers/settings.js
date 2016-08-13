@@ -26,7 +26,8 @@ function initSettingsItem(state, action) {
 
   return ret.set('curSettingId', settingId)
       .set('curQuery', fromJS(curQuery))
-      .set('curSaveQuery', fromJS(curSaveQuery));
+      .set('curSaveQuery', fromJS(curSaveQuery))
+      .set('curData', fromJS(action.option.data));
 }
 
 export default function (state = defaultState, action) {

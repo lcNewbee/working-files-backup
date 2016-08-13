@@ -8,8 +8,6 @@ import {
 
 // custom
 import * as listActions from 'shared/actions/list';
-import * as actions from './actions';
-import myReducer from './reducer';
 
 const flowRateFilter = utils.filter('flowRate:["KB"]');
 const apTableOptions = fromJS([
@@ -59,15 +57,9 @@ export default class View extends React.Component {
 
     this.onAction = this.onAction.bind(this);
   }
-
-  componentWillMount() {
-    this.props.initList(this.props.route.id);
-  }
-
   onAction() {
 
   }
-
   render() {
     return (
       <ListInfo
@@ -93,6 +85,3 @@ export const Screen = connect(
   mapStateToProps,
   listActions
 )(View);
-
-export const reducer = myReducer;
-

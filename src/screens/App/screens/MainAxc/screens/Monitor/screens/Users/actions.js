@@ -1,5 +1,5 @@
-import * as appActions from 'shared/actions/app';
 import urls from 'shared/config/urls_axc';
+import * as appActions from 'shared/actions/app';
 
 let refreshTimeout = null;
 
@@ -42,7 +42,7 @@ export function leaveClientsScreen() {
 export function fetchClients() {
   return (dispatch, getState) => {
     const refreshTime = getState().app.get('rateInterval');
-    const query = getState().clients.get('query').toJS();
+    const query = getState().users.get('query').toJS();
 
     window.clearTimeout(refreshTimeout);
     dispatch(reqeustFetchClients());
@@ -64,11 +64,10 @@ export function fetchClients() {
 
 export function saveClientsAction() {
   return (dispatch, getState) => {
-    const query = getState().clients.get('actionQuery').toJS();
+    const query = getState().users.get('actionQuery').toJS();
 
     dispatch(reqeustFetchClients());
-
-    query.type = getState().clients.getIn(['query', 'type']);
+    query.type = getState().users.getIn(['query', 'type']);
 
     dispatch(appActions.save(urls.setClientAction, query))
       .then((json) => {

@@ -21,3 +21,4 @@ export Search from './Form/Search';
 export Password from './Form/Password';
 export ListInfo from './Template/ListInfo';
 export DatePicker from './DatePicker';
+export DatePicker from './TimePicker';

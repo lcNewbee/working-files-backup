@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
-import { fromJS, Map, List } from 'immutable';
+import { Map, List } from 'immutable';
 import { bindActionCreators } from 'redux';
 import {
   FormGroup, SaveButton, FormInput,
@@ -33,7 +33,6 @@ const defaultProps = {};
 export default class View extends React.Component {
   constructor(props) {
     super(props);
-
     this.onSave = this.onSave.bind(this);
   }
   componentWillMount() {
@@ -43,13 +42,26 @@ export default class View extends React.Component {
     props.initSettings({
       settingId: props.route.id,
       formUrl: props.route.formUrl,
+      data: {
+        '5gFrist': '1',
+        '11nFrist': '1',
+        terminalRelease: '1',
+        terminalReleaseVal: '75',
+        autoPower: '1',
+        autoChannel: '1',
+        wirelessPower: '20',
+        country: 'CN',
+        channel: '6',
+      },
       query: {
         groupId,
       },
       saveQuery: {},
     });
+
     props.fetchSettings();
   }
+
   componentWillUnmount() {
     this.props.leaveSettingsScreen();
   }
@@ -95,6 +107,10 @@ export default class View extends React.Component {
     const curData = this.props.store.getIn(['curData']).toJS();
     const channelsOptions = this.getChannelsOptions(curData.country);
 
+    if (this.props.store.get('curSettingId') === 'base') {
+      return null;
+    }
+
     return (
       <form className="o-form">
         <h2 className="o-form__title">{route.text}</h2>
@@ -120,6 +136,7 @@ export default class View extends React.Component {
               })}
             />
             <FormInput
+              type="text"
               value={curData.terminalReleaseVal}
               maxLength="3"
               size="sm"
