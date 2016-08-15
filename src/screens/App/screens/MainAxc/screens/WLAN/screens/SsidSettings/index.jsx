@@ -153,9 +153,6 @@ export default class View extends React.Component {
       }, {
         value: 'centralized-802.11',
         label: _('Centralized Forward-%s Tunnel', '802.11'),
-      }, {
-        value: 'local-syd',
-        label: _('LOCAL-SYD'),
       },
     ];
 
@@ -216,14 +213,9 @@ export default class View extends React.Component {
             checked={getCurrData('loadBalancing') === '1'}
             onChange={this.onUpdateSettings('loadBalancing')}
           />
+
           <FormGroup
-            label={_('802.1X Auth')}
-            type="checkbox"
-            checked={getCurrData('compulsoryAuth') === '1'}
-            onChange={this.onUpdateSettings('compulsoryAuth')}
-          />
-          <FormGroup
-            label={_('Max BSS Number')}
+            label={_('Max Users')}
             type="number"
             value={getCurrData('maxBssUsers')}
             onChange={this.onUpdateSettings('maxBssUsers')}

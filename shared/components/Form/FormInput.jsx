@@ -4,9 +4,10 @@ import moment from 'moment';
 import Select from '../Select';
 import Checkbox from './Checkbox';
 import Password from './Password';
+import Radios from './Radios';
+import Input from './atom/Input';
 import TimePicker from '../TimePicker';
 import DatePicker from '../DatePicker';
-import Input from './atom/Input';
 import utils from '../../utils';
 
 const propTypes = {
@@ -186,12 +187,15 @@ class FormInput extends React.Component {
         MyComponent = Password;
       } else if (inpputType === 'checkbox') {
         MyComponent = Checkbox;
+      } else if (inpputType === 'radio') {
+        MyComponent = Radios;
       } else {
         MyComponent = Input;
       }
     }
 
-    if (inpputType !== 'checkbox' && inpputType !== 'radio') {
+    if (inpputType !== 'checkbox' && inpputType !== 'radio' &&
+        inpputType !== 'range') {
       classNames = `${classNames} text`;
     }
 

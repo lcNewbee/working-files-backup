@@ -2,15 +2,49 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import utils from 'shared/utils';
-import { List } from 'immutable';
+import { fromJS, List } from 'immutable';
 import moment from 'moment';
 import {
-  PureComponent, EchartReact, Button, FormGroup,
+  PureComponent, EchartReact, Button, Table, Switchs,
   FormInput,
 } from 'shared/components';
 import * as appActions from 'shared/actions/app';
 import * as actions from './actions';
 import myReducer from './reducer';
+
+const tableOptions = fromJS([
+  {
+    id: 'Name',
+    text: _('时间'),
+  }, {
+    id: 'Ip',
+    text: _('累积到店'),
+  }, {
+    id: 'MTU',
+    text: _('首次到店'),
+  }, {
+    id: 'TxBytes',
+    text: _('新登记用户'),
+  }, {
+    id: 'RxBytes',
+    text: _('未入店用户'),
+  }, {
+    id: 'TxErrorPackets',
+    text: _('接入用户数'),
+  }, {
+    id: 'RxErrorPackets',
+    text: _('非首次到店'),
+  }, {
+    id: 'RxErrorPackets',
+    text: _('进店率'),
+  }, {
+    id: 'RxErrorPackets',
+    text: _('返店率'),
+  }, {
+    id: 'RxErrorPackets',
+    text: _('平均停留时间'),
+  },
+]);
 
 export default class View extends PureComponent {
   constructor(props) {
@@ -194,44 +228,64 @@ export default class View extends PureComponent {
   render() {
     const usersStatusOption = this.getUsersOption();
     const cpuStatusOption = this.getCpuOption();
-    const systemOption = this.getSystemOption();
 
     return (
       <div>
-        <h3 className="t-main__content-title">{_('Flow Report') }</h3>
-        <div className="m-action-bar">
-          <div className="cols col-6">
-            <label style={{ marginRight: '20px' }}>{_('日期范围')}</label>
-            <FormInput
-              type="date"
-              dateFormat="YYYY-MM-DD"
-              todayButton={_('Today')}
-              selected={moment()}
-              style={{ marginRight: '.5em' }}
-            />
-            <span style={{ margin: '0 .5em' }}>{_('To')}</span>
-            <FormInput
-              type="date"
-              dateFormat="YYYY-MM-DD"
-              todayButton={_('Today')}
-              selected={moment()}
-              label={_('日期')}
-              style={{ marginLeft: '.5em' }}
-            />
-          </div>
-          <div className="cols col-6">
-            <Button
-              theme="primary"
-              icon="download"
-              text={`${_('Download Report')}(PDF)`}
-            />
-          </div>
-        </div>
         <div className="stats-group clearfix" >
-          <div className="cols col-6" >
-            <div className="stats-group-cell">
-              <h3>{ _('用户数') }</h3>
+          <div className="m-action-bar stats-group-cell">
+            <div className="cols col-6">
+              <label style={{ marginRight: '20px' }}>{_('日期范围')}</label>
+              <FormInput
+                type="date"
+                dateFormat="YYYY-MM-DD"
+                todayButton={_('Today')}
+                selected={moment()}
+                style={{ marginRight: '.5em' }}
+              />
+              <span style={{ margin: '0 .5em' }}>{_('To')}</span>
+              <FormInput
+                type="date"
+                dateFormat="YYYY-MM-DD"
+                todayButton={_('Today')}
+                selected={moment()}
+                label={_('日期')}
+                style={{ marginLeft: '.5em' }}
+              />
             </div>
+            <div className="cols col-6">
+              <Button
+                theme="primary"
+                icon="download"
+                text={`${_('Download Report')}(PDF)`}
+              />
+            </div>
+          </div>
+          <Table
+            className="table"
+            options={tableOptions}
+            list={[]}
+          />
+          <div
+            className="stats-group-cell"
+            style={{
+              marginTop: '10px',
+            }}
+          >
+            <Switchs
+              options={[
+                _('累积到店'),
+                _('首次到店'),
+                _('新登记用户'),
+                _('未入店用户'),
+                _('进店率'),
+                _('返店率'),
+                _('平均停留时间'),
+                _('驻留时间分别'),
+              ]}
+              value="1"
+            />
+          </div>
+          <div className="cols col-6" >
             <div className="stats-group-cell">
               <EchartReact
                 option={usersStatusOption}
@@ -244,9 +298,6 @@ export default class View extends PureComponent {
           </div>
           <div className="cols col-6" >
             <div className="stats-group-cell">
-              <h3>{ _('应用流量') }</h3>
-            </div>
-            <div className="stats-group-cell">
               <EchartReact
                 option={cpuStatusOption}
                 className="stats-group-canvas"
@@ -256,21 +307,6 @@ export default class View extends PureComponent {
               />
             </div>
           </div>
-          <div className="stats-group-large">
-            <div className="stats-group-header">
-              <h3>{ _('流量趋势') }</h3>
-            </div>
-            <div className="stats-group-cell">
-              <EchartReact
-                option={systemOption}
-                className="stats-group-canvas"
-                style={{
-                  width: '100%',
-                }}
-              />
-            </div>
-          </div>
-
         </div>
       </div>
     );

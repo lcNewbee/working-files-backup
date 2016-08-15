@@ -4,6 +4,11 @@ $boder-color:         #ccc;
   margin-bottom: 12px;
   @include clearfix;
 
+  label[for] {
+    user-select: none;
+    cursor: pointer;
+  }
+
   &.form-group--save {
     padding-top: 12px;
     border-top: 1px solid $boder-color;
@@ -23,7 +28,7 @@ $boder-color:         #ccc;
     min-width: 150px;
     color: #666;
     text-align: right;
-    line-height: 29px;
+    line-height: 30px;
 
     .a-btn {
       line-height: 14px;
@@ -47,10 +52,11 @@ $boder-color:         #ccc;
   .form-control {
     margin-left: 165px;
     color: #666;
-    line-height: 29px;
+    line-height: 30px;
 
     .a-checkbox {
-      padding-top: 3px;
+      float: left;
+      margin-top: 8px;
     }
     .m-switch {
       margin-left: 0;
@@ -61,9 +67,8 @@ $boder-color:         #ccc;
     display: inline-block;
     margin-left: 10px;
     color: #999;
-    vertical-align: middle;
     font-size: 12px;
-    line-height: 29px;
+    line-height: 30px;
   }
   .error {
     display: inline-block;
@@ -71,13 +76,13 @@ $boder-color:         #ccc;
     color: $g-brand-danger;
     vertical-align: middle;
     font-size: 12px;
-    line-height: 29px;
+    line-height: 30px;
   }
   .checkbox {
     margin-right: 6px;
     color: #999;
     font-size: 12px;
-    line-height: 29px;
+    line-height: 30px;
   }
 }
 

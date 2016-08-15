@@ -5,40 +5,47 @@ import { connect } from 'react-redux';
 import { fromJS, Map, List } from 'immutable';
 import { bindActionCreators } from 'redux';
 import {
-  ListInfo, FormGroup, Modal, SaveButton, Switchs, Checkbox,
-  FormInput, TimePicker,
+  ListInfo, FormGroup, Modal, SaveButton, Checkbox, FormInput,
 } from 'shared/components';
 import * as listActions from 'shared/actions/list';
 import * as appActions from 'shared/actions/app';
 import channels from 'shared/config/channels.json';
-import moment from 'moment';
 
 const channelsList = List(channels);
-const weekDayStyle = {
-  marginLeft: '12px',
-  marginRight: '4px',
+const msg = {
+  apMode24g: `${_('Access Point Mode')}(2.4G)`,
+  apMode5g: `${_('Access Point Mode')}(5G)`,
+  protectChannel24g: `${_('Protect Channel')}(2.4G)`,
+  protectChannel5g: `${_('Protect Channel')}(5G)`,
 };
+
 const blcklistTableOptions = fromJS([
   {
-    id: 'timerRange',
-    text: _('时段'),
+    id: 'policyName',
+    text: _('Policy Name'),
     width: '120',
-    transform(val, item) {
-      return `${item.get('startTime')} - ${item.get('endTime')}`;
-    },
   }, {
     id: 'opObject',
     width: '120',
-    text: _('Operate Object'),
+    text: _('Access Point'),
   }, {
-    id: 'repeat',
-    text: _('重复'),
+    id: 'protectMode',
+    text: _('Protect Mode'),
   }, {
-    id: 'remark',
-    text: _('Remark'),
+    id: 'ap24gMode',
+    text: msg.apMode24g,
+  }, {
+    id: 'ap5gMode',
+    text: msg.apMode5g,
+  }, {
+    id: 'protect24gMode',
+    text: msg.protectChannel24g,
+  }, {
+    id: 'protect5gMode',
+    text: msg.protectChannel5g,
   },
 ]);
-const repeatOptions = [
+const apOptions = [
   {
     value: '0',
     label: _('只执行一次'),
@@ -59,12 +66,6 @@ const repeatOptions = [
     label: _('自定义'),
   },
 ];
-
-const msg = {
-  upSpeed: _('Up Speed'),
-  downSpeed: _('Down Speed'),
-  selectGroup: _('Select Group'),
-};
 const channelBandwidthOptions = fromJS([
   {
     value: 'date',
@@ -198,8 +199,8 @@ export default class View extends React.Component {
 
     const tableOptions = blcklistTableOptions.push(fromJS({
       id: 'enabled',
-      width: '80',
-      text: _('启用状态'),
+      width: '60',
+      text: _('Status'),
       transform(val) {
         return (
           <Checkbox
@@ -226,115 +227,114 @@ export default class View extends React.Component {
           title={editData.get('myTitle')}
           onOk={() => this.props.closeListItemModal(route.id)}
           onClose={() => this.props.closeListItemModal(route.id)}
-          cancelButton={false}
-          okButton={false}
+          hiddenFooter
         >
-
-          <FormGroup
-            type="select"
-            label={_('操作SSID')}
-            options={[
-              {
-                value: 1,
-                label: _('SSID1'),
-              }, {
-                value: 1,
-                label: _('SSID2'),
-              },
-            ]}
-            value={getCurrData('opObject')}
-            onChange={this.onUpdateSettings('opObject')}
-          />
-          <FormGroup
-            type="select"
-            label={_('Repeat')}
-            options={repeatOptions}
-            value={getCurrData('repeat')}
-            onChange={this.onUpdateSettings('repeat')}
-          />
-          {
-            getCurrData('repeat') === '0' ? (
+          <div className="o-form">
+            <FormGroup
+              label={_('Enable The Policy')}
+              type="checkbox"
+              className="o-form__switch-bar"
+            />
+            <FormGroup
+              type="text"
+              label={_('Policy Name')}
+              value={getCurrData('policyName')}
+              onChange={this.onUpdateSettings('policyName')}
+            />
+            <FormGroup
+              type="select"
+              label={_('Access Point')}
+              options={apOptions}
+              value={getCurrData('aps')}
+              onChange={this.onUpdateSettings('aps')}
+            />
+            <FormGroup
+              type="select"
+              label={_('Protect Mode')}
+              options={apOptions}
+              value={getCurrData('protectMode')}
+              onChange={this.onUpdateSettings('protectMode')}
+            />
+            <fieldset className="o-form__fieldset">
+              <legend className="o-form__legend">{_('Protect Settings')}</legend>
               <FormGroup
-                type="date"
-                label={_('日期')}
-                dateFormat="YYYY-MM-DD"
-                selected={moment(getCurrData('customDate'))}
-                onChange={(data) => this.props.updateEditListItem({
-                  customDate: data.value,
-                })}
+                type="select"
+                label={msg.apMode24g}
+                options={apOptions}
+                value={getCurrData('ap24gMode')}
+                onChange={this.onUpdateSettings('ap24gMode')}
               />
-            ) : null
-          }
-
-          {
-            getCurrData('repeat') === '5' ? (
               <FormGroup
-                label={_('自定义周期')}
-              >
-                <label><input type="checkbox" style={{ marginRight: '4px' }} />周一</label>
-                <input type="checkbox" style={weekDayStyle} />周二
-                <input type="checkbox" style={weekDayStyle} />周三
-                <input type="checkbox" style={weekDayStyle} />周四
-                <input type="checkbox" style={weekDayStyle} />周五
-                <input type="checkbox" style={weekDayStyle} />周六
-                <input type="checkbox" style={weekDayStyle} />周天
+                type="select"
+                label={msg.apMode5g}
+                options={apOptions}
+                value={getCurrData('ap5gMode')}
+                onChange={this.onUpdateSettings('ap5gMode')}
+              />
+              <FormGroup
+                type="select"
+                label={msg.protectChannel24g}
+                options={apOptions}
+                value={getCurrData('protect24gMode')}
+                onChange={this.onUpdateSettings('protect24gMode')}
+              />
+              <FormGroup
+                type="select"
+                label={msg.protectChannel5g}
+                options={apOptions}
+                value={getCurrData('protect5gMode')}
+                onChange={this.onUpdateSettings('protect5gMode')}
+              />
+            </fieldset>
+
+            <fieldset className="o-form__fieldset">
+              <legend className="o-form__legend">{_('Rogue Access Ooint Detection')}</legend>
+              <FormGroup>
+                <div className="row">
+                  <FormInput
+                    type="checkbox"
+                    theme="square"
+                    text={_('钓鱼接入点及随身WIFI检测')}
+                  />
+                </div>
+                <div className="row">
+                  <FormInput
+                    type="checkbox"
+                    theme="square"
+                    text={_('将来在本NAC上激活的的接入点视为非法接入点')}
+                    style={{
+                      marginLeft: '2em',
+                    }}
+                  />
+                </div>
+                <div className="row">
+                  <FormInput
+                    type="checkbox"
+                    theme="square"
+                    text={_('将隐藏SSID的接入点视为非法接入点')}
+                    style={{
+                      marginLeft: '2em',
+                    }}
+                  />
+                </div>
               </FormGroup>
-            ) : null
-          }
+              <FormGroup>
+                <FormInput
+                  type="checkbox"
+                  theme="square"
+                  text={_('AD-Hot检测')}
+                />
+              </FormGroup>
+            </fieldset>
 
-          <FormGroup
-            label={_('Time Range')}
-            value={getCurrData('startTime')}
-          >
-            <FormInput
-              type="time"
-              className="text"
-              value={moment(getCurrData('startTime').replace(':', ''), 'hmm')}
-              onChange={(data) => this.props.updateEditListItem({
-                startTime: data.value,
-              })}
-              format="HH:mm"
-              showSecond={false}
-              style={{
-                width: '120px',
-              }}
-            />
-            -
-            <FormInput
-              type="time"
-              className="text"
-              value={moment(getCurrData('endTime').replace(':', ''), 'hmm')}
-              format="HH:mm"
-              showSecond={false}
-              style={{
-                width: '120px',
-              }}
-              onChange={(data) => this.props.updateEditListItem({
-                endTime: data.value,
-              })}
-            />
-          </FormGroup>
-
-          <FormGroup
-            type="text"
-            label={_('Description')}
-            options={channelsOptions}
-            value={getCurrData('remark')}
-            onChange={this.onUpdateSettings('remark')}
-          />
-
-          <FormGroup
-            label={_('Enable The Policy')}
-            type="checkbox"
-          />
-
-          <div className="form-group form-group-save">
-            <div className="form-control">
-              <SaveButton
-                type="button"
-                loading={this.props.app.get('saving')}
-                onClick={this.onSave}
-              />
+            <div className="o-form__actions-bar form-group form-group--save">
+              <div className="form-control">
+                <SaveButton
+                  type="button"
+                  loading={this.props.app.get('saving')}
+                  onClick={this.onSave}
+                />
+              </div>
             </div>
           </div>
         </Modal>

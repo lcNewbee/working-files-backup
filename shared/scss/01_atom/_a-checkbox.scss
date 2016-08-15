@@ -1,3 +1,6 @@
+// Theme 'toggle' 'square' 'check' 'circle'
+// default is 'toggle'
+
 .a-checkbox {
   display: inline-block;
   margin-right: 6px;
@@ -9,7 +12,7 @@
     display: none;
 
     & + label {
-      display: inline-block;
+      float: left;
       width: 30px;
       height: 16px;
       padding: 2px 3px;
@@ -47,6 +50,12 @@
     }
   }
 
+  .a-checkbox__text {
+    float: left;
+    line-height: 16px;
+    margin-left: .3em;
+  }
+
   &.a-checkbox--lg {
     input[type=checkbox] {
       & + label {
@@ -69,6 +78,42 @@
 
           &::before {
             color: #fff;
+          }
+        }
+      }
+    }
+  }
+
+  &.a-checkbox--square {
+
+    input[type=checkbox] {
+      & + label {
+        text-align: center;
+        width: 16px;
+        height: 16px;
+        padding: 0;
+        overflow: hidden;
+        border: 2px solid #cccccc;
+        background-color: transparent;
+        border-radius: 2px;
+
+        &::before {
+          font-size: 12px;
+          line-height: 12px;
+          color: transparent;
+          content: "\2713";
+          background-color: transparent;
+          border-radius: 8px;
+          transition: color .3s ease-in-out;
+        }
+      }
+
+      &:checked {
+        & + label {
+          border-color: $g-brand-success;
+
+          &::before {
+            color: $g-brand-success;
           }
         }
       }

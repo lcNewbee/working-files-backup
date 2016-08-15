@@ -1,49 +1,60 @@
+$a-radio-height: 16px;
+$a-radio-main-color: $g-brand-success;
+$a-radio-disabled-color: #ddd;
+$a-radio-border-width: 2px;
+$a-radio-center-size: 6px;
+
 .a-radio {
   display: inline-block;
   margin-right: 6px;
-  overflow: auto;
-  vertical-align: middle;
+  overflow: hidden;
+  height: $a-radio-height;
+  vertical-align: text-bottom;
   user-select: none;
+  line-height: 0;
 
   input[type=radio] {
     display: none;
 
     & + label {
-      display: inline-block;
-      width: 30px;
-      height: 16px;
-      padding: 2px 3px;
+      float: left;
+      padding: ($a-radio-height - $a-radio-center-size - $a-radio-border-width * 2) / 2;
+      line-height: 0;
       overflow: hidden;
-      line-height: 12px;
-      background-color: #c5c5c5;
-      border-radius: 12px;
       cursor: pointer;
-      transition: background-color .3s ease-in-out,
-                  padding-left .2s ease-in-out;
+      border: $a-radio-border-width solid #ccc;
+      border-radius: $a-radio-height / 2;
+      transition: border-color .3s ease-in-out;
 
       &::before {
         display: inline-block;
-        width: 12px;
-        height: 12px;
-        font-size: 12px;
-        line-height: 12px;
-        color: transparent;
+        width: $a-radio-center-size;
+        height: $a-radio-center-size;
         content: "";
-        background-color: #fff;
-        border-radius: 8px;
-        transition: float .6s ease-in-out;
+        background-color: transparent;
+        border-radius: $a-radio-center-size / 2;
+        transition: background-color .3s ease-in-out;
       }
     }
 
     &:checked {
       & + label {
-        padding-left: 15px;
-        background-color: $g-brand-success;
-
+        border-color: $a-radio-main-color;
         &::before {
-          color: #fff;
+          background-color: $a-radio-main-color;
         }
       }
     }
+    &[disabled] {
+       & + label {
+         border-color: $a-radio-disabled-color;
+       }
+    }
+  }
+
+  .a-radio__text {
+    float: left;
+    line-height: 16px;
+    margin-left: .3em;
   }
 }

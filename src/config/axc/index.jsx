@@ -83,10 +83,22 @@ const sTimerPolicy =
     require('../../screens/App/screens/MainAxc/screens/WLAN/screens/TimerPolicy');
 const sSafePolicy =
     require('../../screens/App/screens/MainAxc/screens/WLAN/screens/SafePolicy');
+const sWips =
+    require('../../screens/App/screens/MainAxc/screens/WLAN/screens/SafePolicy/screens/Wips');
+const sEndpointProtection =
+  require('../../screens/App/screens/MainAxc/screens/WLAN/screens/SafePolicy/screens/EndpointProtection');
+const sIsolationPolicy =
+  require('../../screens/App/screens/MainAxc/screens/WLAN/screens/SafePolicy/screens/IsolationPolicy');
 const sFlowReport =
     require('../../screens/App/screens/MainAxc/screens/Report/screens/FlowReport');
 const sBusinessReport =
     require('../../screens/App/screens/MainAxc/screens/Report/screens/BusinessReport');
+const sUsersAnalysis =
+    require('../../screens/App/screens/MainAxc/screens/Report/screens/BusinessReport/screens/UsersAnalysis');
+const sPreferencesAnalysis =
+    require('../../screens/App/screens/MainAxc/screens/Report/screens/BusinessReport/screens/PreferencesAnalysis');
+const sInformationPush =
+    require('../../screens/App/screens/MainAxc/screens/Report/screens/BusinessReport/screens/InformationPush');
 
 /**
  * 系统管理
@@ -285,19 +297,21 @@ const routes = [
                   {
                     id: 'wirelessWips',
                     path: '/main/group/wireless/safe/wips',
-                    formUrl: '/goform/timerPolicy',
+                    formUrl: '/goform/wips',
                     text: _('WIPS'),
-                    component: sFlowReport.Screen,
+                    component: sWips.Screen,
                   }, {
                     id: 'wirelessEndpointProtection',
                     path: '/main/group/wireless/safe/endpointProtection',
+                    formUrl: '/goform/wirelessEndpointProtection',
                     text: _('Endpoint Protection'),
-                    component: sFlowReport.Screen,
+                    component: sEndpointProtection.Screen,
                   }, {
                     id: 'wirelessIsolationPolicy',
                     path: '/main/group/wireless/safe/isolation',
+                    formUrl: '/goform/wirelessIsolationPolicy',
                     text: _('Isolation Policy'),
-                    component: sFlowReport.Screen,
+                    component: sIsolationPolicy.Screen,
                   },
                 ],
               },
@@ -320,6 +334,31 @@ const routes = [
                 id: 'businessReport',
                 path: '/main/group/report/business',
                 text: _('Business Report'),
+                component: sBusinessReport,
+                indexRoute: {
+                  onEnter: (nextState, replace) => replace('/main/group/report/business/usersFlow'),
+                },
+                childRoutes: [
+                  {
+                    id: 'usersFlowAnalysis',
+                    path: '/main/group/report/business/usersFlow',
+                    formUrl: '/goform/usersFlowAnalysis',
+                    text: _('Users Flow Analysis'),
+                    component: sUsersAnalysis.Screen,
+                  }, {
+                    id: 'informationPush',
+                    path: '/main/group/report/business/informationPush',
+                    formUrl: '/goform/informationPush',
+                    text: _('Information Push'),
+                    component: sInformationPush.Screen,
+                  }, {
+                    id: 'preferencesAnalysis',
+                    path: '/main/group/report/business/preferencesAnalysis',
+                    formUrl: '/goform/PreferencesAnalysis',
+                    text: _('Analysis of Preferences'),
+                    component: sPreferencesAnalysis.Screen,
+                  },
+                ],
               },
             ],
           }, {

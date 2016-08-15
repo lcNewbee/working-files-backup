@@ -14,10 +14,10 @@ const propTypes = {
 };
 
 const defaultProps = {
-  type: 'checkbox',
+  type: 'radio',
 };
 
-class Checkbox extends React.Component {
+class Radios extends React.Component {
   constructor(props) {
     super(props);
 
@@ -26,40 +26,40 @@ class Checkbox extends React.Component {
   render() {
     const { options, size, theme, className, style, text } = this.props;
     let { value, id } = this.props;
-    let classNames = 'a-checkbox';
+    let classNames = 'a-radio';
 
     let label = options && options.label;
 
     value = value === undefined ? '1' : value;
 
     if (!id) {
-      id = `checkbox_${Math.random()}`;
+      id = `radio_${Math.random()}`;
     }
 
     if (size) {
-      classNames = `${classNames} a-checkbox--${size}`;
+      classNames = `${classNames} a-radio--${size}`;
     }
 
     if (theme) {
-      classNames = `${classNames} a-checkbox--${theme}`;
+      classNames = `${classNames} a-radio--${theme}`;
     }
 
     if (className) {
-      classNames = `${classNames} a-checkbox--${className}`;
+      classNames = `${classNames} a-radio--${className}`;
     }
 
     return (
       <label htmlFor={id} className={classNames} style={style}>
         <Input
           {...this.props}
-          className="a-checkbox__input"
+          className="a-radio__input"
           id={id}
           value={value}
         />
         <label htmlFor={id} />
         {
           text ? (
-            <span className="a-checkbox__text">{text}</span>
+            <span className="a-radio__text">{text}</span>
           ) : null
         }
       </label>
@@ -67,7 +67,7 @@ class Checkbox extends React.Component {
   }
 }
 
-Checkbox.propTypes = propTypes;
-Checkbox.defaultProps = defaultProps;
+Radios.propTypes = propTypes;
+Radios.defaultProps = defaultProps;
 
-export default Checkbox;
+export default Radios;

@@ -15,6 +15,7 @@ const propTypes = {
   name: PropTypes.string,
   validator: PropTypes.object,
   role: PropTypes.string,
+  className: PropTypes.string,
   children: PropTypes.node,
   'data-label': PropTypes.string,
 };
@@ -91,8 +92,10 @@ class FormGroup extends React.Component {
   }
 
   render() {
-    const { help, errMsg, required, children, role, id, label,
-      } = this.props;
+    const {
+      help, errMsg, required, children, role, id, label,
+      className,
+    } = this.props;
     const { check, checkClear } = this;
     let groupClassName = 'form-group';
 
@@ -102,6 +105,10 @@ class FormGroup extends React.Component {
 
     if (errMsg) {
       groupClassName = `${groupClassName} form-group--error`;
+    }
+
+    if (className) {
+      groupClassName = `${groupClassName} ${className}`;
     }
 
     return (

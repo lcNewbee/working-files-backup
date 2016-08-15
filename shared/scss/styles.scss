@@ -16,6 +16,8 @@
 @import "./01_atom/a-input";
 @import "./01_atom/a-password";
 @import "./01_atom/a-checkbox";
+@import "./01_atom/a-radio";
+@import "./01_atom/a-range";
 
 /* 02: 分子(molecule) 由原子组件组合而成*/
 @import "./02_molecule/m-action-bar";
@@ -34,6 +36,7 @@
 @import "./03_organism/o-modal";
 @import "./03_organism/o-list";
 @import "./03_organism/o-pop-over";
+@import "./03_organism/o-stats-group";
 
 /* 04：模板(Template)，能搭建一个页面或Screen的布局 */
 @import './04_template/t-sign';

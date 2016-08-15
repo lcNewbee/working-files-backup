@@ -30,11 +30,19 @@ body {
       width: $sidebar-width + 20px;
     }
     .t-main__content {
-      top: $g-navbar-height + $g-main-bar-height + 20px;
+      top: $g-navbar-height + $g-main-bar-height;
       left: $sidebar-width + 30px;
+      bottom: 0;
+      padding: 20px 0;
+      overflow: auto;
     }
     .t-main__asider-left {
       top: $g-navbar-height + $g-main-bar-height;
+    }
+    .o-tab__content {
+      padding: 10px 0;
+      right: 0;
+      top: 50px;
     }
   }
 

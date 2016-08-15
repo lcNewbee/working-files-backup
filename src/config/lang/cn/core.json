@@ -74,6 +74,9 @@
   "Remark": "备注",
   "Enabled": "已启用",
   "Disabled": "已关闭",
+  "To": "至",
+
+  "Download Report": "下载报表",
 
   "Main DNS": "主DNS",
   "Second DNS": "备用DNS",
