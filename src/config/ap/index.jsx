@@ -1,4 +1,5 @@
 import NotFound from 'shared/components/NotFound';
+import settingsReducer from 'shared/reducers/settings';
 import remoteActionMiddleware from 'shared/utils/lib/remote_action_middleware';
 import { combineReducers } from 'redux';
 
@@ -139,6 +140,7 @@ const routes = [{
           id: 'basic',
           path: '/main/wirelessconfig/basic',
           text: _('Basic'),
+          formUrl: 'goform/get_wl_info',
           component: sBasic.Screen,
         }, {
           id: 'advance',
@@ -269,6 +271,8 @@ const routes = [{
 // 配置模块页面 store
 const reducers = {
   app: App.app,
+  settings: settingsReducer,
+
   status: pStatus.status,
   login: pLogin.login,
   clients: pClients.clients,

@@ -1,36 +1,38 @@
 import React, { PropTypes } from 'react';
 import Select from 'react-select';
+import utils from 'shared/utils';
 import { connect } from 'react-redux';
+import { fromJS, Map, List } from 'immutable';
+import { bindActionCreators } from 'redux';
 import { FormGroup, FormInput } from 'shared/components';
-import Switchs from 'shared/components/Switchs';
 import Button from 'shared/components/Button';
-import * as actions from './actions.js';
+import * as appActions from 'shared/actions/app';
+import * as actions from 'shared/actions/settings';
 import reducer from './reducer.js';
 
 const propTypes = {
-  data: PropTypes.object,
+  app: PropTypes.instanceOf(Map),
+  store: PropTypes.instanceOf(Map),
+
+  route: PropTypes.object,
+  initSettings: PropTypes.func,
+  fetchSettings: PropTypes.func,
+  saveSettings: PropTypes.func,
+  updateItemSettings: PropTypes.func,
+  leaveSettingsScreen: PropTypes.func,
 };
 
 const defaultProps = {};
 
-const typeArr = [
-  {
-    value: 'ap',
-    label: _('AP'),
-  },
-  {
-    value: 'station',
-    label: _('Station'),
-  },
-  {
-    value: 'repeater',
-    label: _('Repeater'),
-  },
+const devicemodeOptions = [
+  { value: 'AP', label: _('AP') },
+  { value: 'sta', label: _('Station') },
+  { value: 'Repeater', label: _('Repeater') },
 ];
 
 const countryOptions = [
-  { value: 'China', label: 'China' },
-  { value: 'America', label: 'America' },
+  { value: 'CN', label: 'China' },
+  { value: 'US', label: 'America' },
 ];
 
 const rateOptions = [
@@ -44,21 +46,25 @@ const rateOptions = [
   { value: 'MCS7', label: 'MCS7' },
 ];
 
-const securityOptions = [
-  { value: 'None', label: 'None' },
-  { value: 'WPA-AES', label: 'WPA-AES' },
-  { value: 'WPA2-AES', label: 'WPA2-AES' },
-  { value: 'WEP', label: 'WEP' },
+const staAndApSecurityOptions = [
+  { value: 'none', label: 'None' },
+  { value: 'wpa-aes', label: 'WPA-AES' },
+  { value: 'wpa2-aes', label: 'WPA2-AES' },
 ];
 
+const repeaterSecurityOptions = [
+  { value: 'none', label: 'None' },
+  { value: 'wep', label: 'WEP' },
+]
+
 const wepAuthenOptions = [
-  { value: 'Open', label: 'Open' },
-  { value: 'Shared', label: 'Shared' },
+  { value: 'open', label: 'Open' },
+  { value: 'shared', label: 'Shared' },
 ];
 
 const wepKeyLengthOptions = [
-  { value: '64bit', label: '64bit' },
-  { value: '128bit', label: '128bit' },
+  { value: '64', label: '64bit' },
+  { value: '128', label: '128bit' },
 ];
 
 const keyIndexOptions = [
@@ -73,176 +79,245 @@ const keyTypeOptions = [
   { value: 'ASCII', label: 'ASCII' },
 ];
 
+const ieeeModeOptions = [
+  { value: 'A/N mixed', label: 'A/N mixed' },
+  { value: 'B/G/N/AC mixed', label: 'B/G/N/AC mixed' },
+];
+
+const channelWidthOptions = [
+  { value: '20', label: '20MHz' },
+  { value: '40', label: '40MHz' },
+  { value: '80', label: '80MHz' },
+];
+
 export default class Basic extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.onSave = this.onSave.bind(this);
+  }
+
+  componentWillMount() {
+    const props = this.props;
+    const groupId = props.groupId || -1;
+
+    props.initSettings({
+      settingId: props.route.id,
+      formUrl: props.route.formUrl,
+      query: {
+        groupId,
+      },
+      saveQuery: {},
+    });
+
+    props.fetchSettings();
+  }
+
+  componentWillUnmount() {
+    this.props.leaveSettingsScreen();
+  }
+
+  onSave() {
+    this.props.saveSettings();
+  }
+
   render() {
+    const {
+      WirelessMode, SSID, ApMac, CountryCode, RadioMode, ChannelWidth,
+    } = this.props.store.get('curData').toJS();
+    const { security } = this.props.store.getIn(['curData']).toJS();
+    // console.log(security);
+    const Mode = this.props.store.getIn(['curData', 'security', 'Mode']);
+    const Key = this.props.store.getIn(['curData', 'security', 'Key']);
+    // console.log('dd=', this.props.store.toJS())
+
+    if (this.props.store.get('curSettingId') === 'base') {
+      return null;
+    }
     return (
       <div>
-        <FormGroup
-          label={_('Wireless Mode')}
-        >
-          <Switchs
-            size="lg"
-            options={typeArr}
-            value={this.props.data.get('WirelessMode')}
+        <div>
+          <h3>{_('Basic Wireless Settings')}</h3>
+          <FormGroup
+            label={_('Wireless Mode')}
+          >
+            <Select
+              name="devicemode"
+              options={devicemodeOptions}
+              value={WirelessMode}
+            />
+          </FormGroup>
+          <FormGroup
+            label="SSID"
+          >
+            <FormInput
+              type="text"
+              value={SSID}
+            />
+            <span>&nbsp;&nbsp;</span>
+            <Button
+              text={_('Scan')}
+            />
+          </FormGroup>
+          <FormGroup
+            label={_('Lock To AP')}
+            value={ApMac}
           />
-        </FormGroup>
-        <FormGroup
-          label="SSID"
-        />
-        <FormGroup
-          label={_('Scan')}
-        >
-          <Button
-            text={_('Start Scan')}
+          <FormGroup
+            label={_('Hide SSID')}
+            type="checkbox"
           />
-        </FormGroup>
-        <FormGroup
-          label={_('Lock To AP')}
-        />
-        <FormGroup
-          label={_('Hide SSID')}
-          type="checkbox"
-        />
-        <FormGroup
-          label={_('Country Code')}
-        >
-          <Select
-            name="countryCode"
-            value="China"
-            options={countryOptions}
-          />
-        </FormGroup>
-        <FormGroup
-          label={_('IEEE 802.11 Mode')}
-        >
-          B/G/N/AC
-        </FormGroup>
-        <FormGroup
-          label={_('Channel Bandwidth')}
-        >
-          40MHz
-        </FormGroup>
-        <FormGroup
-          label={_('Outpower Power')}
-        >
-          <FormInput
-            type="number"
-          />
-        </FormGroup>
-        <FormGroup
-          label={_('Max TX Rate')}
-        >
-          <Select
-            name="maxtxrate"
-            value="MCS7"
-            options={rateOptions}
-          />
-        </FormGroup>
-        <FormGroup
-          label={_('Security')}
-        >
-          <Select
-            name="securityMode"
-            value="WEP"
-            options={securityOptions}
-          />
-        </FormGroup>
-        <FormGroup
-          label={_('Keys')}
-        >
-          <FormInput
-            type="password"
-          />
-        </FormGroup>
-        <FormGroup
-          label={_('Authentication Type')}
-        >
-          <Select
-            name="authenticationType"
-            options={wepAuthenOptions}
-          />
-        </FormGroup>
-        <FormGroup
-          label={_('WEP Key Length')}
-        >
-          <Select
-            name="wepKeyLength"
-            options={wepKeyLengthOptions}
-          />
-        </FormGroup>
-        <FormGroup
-          label={_('WEP Key Length')}
-        >
-          <Select
-            name="wepKeyLength"
-            options={wepKeyLengthOptions}
-          />
-        </FormGroup>
-        <FormGroup
-          label={_('Key Index')}
-        >
-          <Select
-            name="keyIndex"
-            options={keyIndexOptions}
-          />
-        </FormGroup>
-        <FormGroup
-          label={_('Key 1')}
-        >
-          <span className="fl">{_('Type')}</span>
-          <Select
-            className="fl"
-            name="keyType"
-            options={keyTypeOptions}
-          />
-          <span>{_('Keys')}</span>
-          <FormInput
-            type="password"
-          />
-        </FormGroup>
-        <FormGroup
-          label={_('Key 2')}
-        >
-          <span className="fl">{_('Type')}</span>
-          <Select
-            className="fl"
-            name="keyType"
-            options={keyTypeOptions}
-          />
-          <span>{_('Keys')}</span>
-          <FormInput
-            type="password"
-          />
-        </FormGroup>
-        <FormGroup
-          label={_('Key 3')}
-        >
-          <span className="fl">{_('Type')}</span>
-          <Select
-            className="fl"
-            name="keyType"
-            options={keyTypeOptions}
-          />
-          <span>{_('Keys')}</span>
-          <FormInput
-            type="password"
-          />
-        </FormGroup>
-        <FormGroup
-          label={_('Key 4')}
-        >
-          <span className="fl">{_('Type')}</span>
-          <Select
-            className="fl"
-            name="keyType"
-            options={keyTypeOptions}
-          />
-          <span>{_('Keys')}</span>
-          <FormInput
-            type="password"
-          />
-        </FormGroup>
+          <FormGroup
+            label={_('Country Code')}
+          >
+            <Select
+              name="countryCode"
+              options={countryOptions}
+              value={CountryCode}
+            />
+          </FormGroup>
+          <FormGroup
+            label={_('IEEE 802.11 Mode')}
+          >
+            <Select
+              name="ieeeMode"
+              options={ieeeModeOptions}
+              value={RadioMode}
+            />
+          </FormGroup>
+          <FormGroup
+            label={_('Channel Bandwidth')}
+          >
+            <Select
+              name="channelWidth"
+              options={channelWidthOptions}
+              value={ChannelWidth}
+            />
+          </FormGroup>
+          <FormGroup
+            label={_('Outpower Power')}
+          >
+            <FormInput
+              type="number"
+            />
+          </FormGroup>
+          <FormGroup
+            label={_('Max TX Rate')}
+          >
+            <Select
+              name="maxtxrate"
+              value="MCS7"
+              options={rateOptions}
+            />
+          </FormGroup>
+
+          <FormGroup
+            label={_('Authentication Type')}
+          >
+            <Select
+              name="authenticationType"
+              options={wepAuthenOptions}
+              value={security.Auth}
+            />
+          </FormGroup>
+          <FormGroup
+            label={_('WEP Key Length')}
+          >
+            <Select
+              name="wepKeyLength"
+              options={wepKeyLengthOptions}
+              value={security.KeyLength}
+            />
+          </FormGroup>
+          <FormGroup
+            label={_('Key Index')}
+          >
+            <Select
+              name="keyIndex"
+              options={keyIndexOptions}
+            />
+          </FormGroup>
+          <FormGroup
+            label={_('Key 1')}
+          >
+            <span className="fl">{_('Type')}</span>
+            <Select
+              className="fl"
+              name="keyType"
+              options={keyTypeOptions}
+            />
+            <span>{_('Keys')}</span>
+            <FormInput
+              type="password"
+            />
+          </FormGroup>
+          <FormGroup
+            label={_('Key 2')}
+          >
+            <span className="fl">{_('Type')}</span>
+            <Select
+              className="fl"
+              name="keyType"
+              options={keyTypeOptions}
+            />
+            <span>{_('Keys')}</span>
+            <FormInput
+              type="password"
+            />
+          </FormGroup>
+          <FormGroup
+            label={_('Key 3')}
+          >
+            <span className="fl">{_('Type')}</span>
+            <Select
+              className="fl"
+              name="keyType"
+              options={keyTypeOptions}
+            />
+            <span>{_('Keys')}</span>
+            <FormInput
+              type="password"
+            />
+          </FormGroup>
+          <FormGroup
+            label={_('Key 4')}
+          >
+            <span className="fl">{_('Type')}</span>
+            <Select
+              className="fl"
+              name="keyType"
+              options={keyTypeOptions}
+            />
+            <span>{_('Keys')}</span>
+            <FormInput
+              type="password"
+            />
+          </FormGroup>
+        </div>
+        <div>
+          <h3>{_('Wireless Security')}</h3>
+          {
+            (WirelessMode === 'sta' || WirelessMode === 'ap') ? (
+              <div>
+                <FormGroup
+                  label={_('Security')}
+                >
+                  <Select
+                    name="securityMode"
+                    options={staAndApSecurityOptions}
+                    value={Mode}
+                  />
+                </FormGroup>
+                <FormGroup
+                  label={_('Keys')}
+                  type="password"
+                  value={Key}
+                />
+              </div>
+            ):''
+          }
+
+        </div>
       </div>
     );
   }
@@ -252,17 +327,22 @@ Basic.propTypes = propTypes;
 Basic.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
-  const myState = state.basic;
-
   return {
-    fecthing: myState.get('fetching'),
-    data: myState.get('data'),
+    app: state.app,
+    store: state.settings,
   };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(utils.extend({},
+    appActions,
+    actions
+  ), dispatch);
 }
 
 export const Screen = connect(
   mapStateToProps,
-  actions
+  mapDispatchToProps
 )(Basic);
 
 export const basic = reducer;

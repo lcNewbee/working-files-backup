@@ -42,6 +42,7 @@ export default function (state = defaultState, action) {
       return state.setIn([curSettingName, 'fetching'], true);
 
     case 'RECIVE_FETCH_SETTINGS':
+
       return state.setIn([curSettingName, 'fetching'], false)
         .setIn([curSettingName, 'updateAt'], action.updateAt)
         .mergeIn([curSettingName, 'data'], action.data)

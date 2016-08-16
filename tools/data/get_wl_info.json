@@ -1,0 +1,22 @@
+{
+    "state": {
+        "code": 2000,
+        "msg": "ok"
+    },
+    "data": {
+      "WirelessMode":"sta",
+      "SSID":"test",
+      "ApMac":"11:22:33:44:55:66",
+      "CountryCode":"CN",
+      "RadioMode":"A/N mixed",
+      "ChannelWidth":"40",
+      "Frequency":"auto",
+      "TxPower":"14",
+      "MaxTxRate":"15",
+      "security":{
+        "Mode":"wpa-aes",
+        "Key":"12345678"
+    }
+    }
+
+}
