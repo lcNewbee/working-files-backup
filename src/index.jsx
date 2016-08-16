@@ -17,7 +17,7 @@ const Router = ReactRouter.Router;
 const hashHistory = ReactRouter.hashHistory;
 
 // 引入产品配置
-const prodConfig = require('./config/axc');
+const prodConfig = require('./config/ap');
 
 if (module.hot) {
   // Enable Webpack hot module replacement for reducers

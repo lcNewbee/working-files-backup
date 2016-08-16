@@ -55,7 +55,7 @@ const staAndApSecurityOptions = [
 const repeaterSecurityOptions = [
   { value: 'none', label: 'None' },
   { value: 'wep', label: 'WEP' },
-]
+];
 
 const wepAuthenOptions = [
   { value: 'open', label: 'Open' },
@@ -210,7 +210,6 @@ export default class Basic extends React.Component {
               options={rateOptions}
             />
           </FormGroup>
-
           <FormGroup
             label={_('Authentication Type')}
           >
@@ -314,7 +313,96 @@ export default class Basic extends React.Component {
                   value={Key}
                 />
               </div>
-            ):''
+            ) : null
+          };
+          {
+            (WirelessMode === 'repeater') ? (
+              <div>
+                <FormGroup
+                  label={_('Authentication Type')}
+                >
+                  <Select
+                    name="authenticationType"
+                    options={repeaterSecurityOptions}
+                    value={security.Auth}
+                  />
+                </FormGroup>
+                <FormGroup
+                  label={_('WEP Key Length')}
+                >
+                  <Select
+                    name="wepKeyLength"
+                    options={wepKeyLengthOptions}
+                    value={security.KeyLength}
+                  />
+                </FormGroup>
+                <FormGroup
+                  label={_('Key Index')}
+                >
+                  <Select
+                    name="keyIndex"
+                    options={keyIndexOptions}
+                  />
+                </FormGroup>
+                <FormGroup
+                  label={_('Key 1')}
+                >
+                  <span className="fl">{_('Type')}</span>
+                  <Select
+                    className="fl"
+                    name="keyType"
+                    options={keyTypeOptions}
+                  />
+                  <span>{_('Keys')}</span>
+                  <FormInput
+                    type="password"
+                  />
+                </FormGroup>
+                <FormGroup
+                  label={_('Key 2')}
+                >
+                  <span className="fl">{_('Type')}</span>
+                  <Select
+                    className="fl"
+                    name="keyType"
+                    options={keyTypeOptions}
+                  />
+                  <span>{_('Keys')}</span>
+                  <FormInput
+                    type="password"
+                  />
+                </FormGroup>
+                <FormGroup
+                  label={_('Key 3')}
+                >
+                  <span className="fl">{_('Type')}</span>
+                  <Select
+                    className="fl"
+                    name="keyType"
+                    options={keyTypeOptions}
+                  />
+                  <span>{_('Keys')}</span>
+                  <FormInput
+                    type="password"
+                  />
+                </FormGroup>
+                <FormGroup
+                  label={_('Key 4')}
+                >
+                  <span className="fl">{_('Type')}</span>
+                  <Select
+                    className="fl"
+                    name="keyType"
+                    options={keyTypeOptions}
+                  />
+                  <span>{_('Keys')}</span>
+                  <FormInput
+                    type="password"
+                  />
+                </FormGroup>
+              </div>
+            ) : null
+
           }
 
         </div>
