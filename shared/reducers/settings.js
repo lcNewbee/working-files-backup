@@ -1,8 +1,6 @@
 import { fromJS } from 'immutable';
 
 const defaultItem = fromJS({
-  updateAt: 11122,
-  savedAt: 222,
   data: {},
 });
 const defaultState = fromJS({
@@ -27,7 +25,7 @@ function initSettingsItem(state, action) {
   return ret.set('curSettingId', settingId)
       .set('curQuery', fromJS(curQuery))
       .set('curSaveQuery', fromJS(curSaveQuery))
-      .set('curData', fromJS(action.option.data));
+      .set('curData', fromJS(action.option.defaultData));
 }
 
 export default function (state = defaultState, action) {
@@ -43,7 +41,7 @@ export default function (state = defaultState, action) {
       return state.setIn([curSettingName, 'fetching'], false)
         .setIn([curSettingName, 'updateAt'], action.updateAt)
         .mergeIn([curSettingName, 'data'], action.data)
-        .set('curData', fromJS(action.data));
+        .mergeIn(['curData'], fromJS(action.data));
 
     case 'CHANGE_SETTINGS_QUERY':
       return state.mergeIn(['curQuery'], action.query);
@@ -56,10 +54,10 @@ export default function (state = defaultState, action) {
 
     case 'LEAVE_SETTINGS_SCREEN':
       return state.setIn(['curQuery'], fromJS({}))
-        .set('curSaveQuery', fromJS({}));
+        .set('curSaveQuery', fromJS({}))
+        .set('curData', fromJS({}));
 
     default:
-
   }
   return state;
 }
