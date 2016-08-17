@@ -3,6 +3,7 @@ import Icon from 'shared/components/Icon';
 import { Map } from 'immutable';
 import DevicesProperties from './DevicesProperties';
 
+
 const propTypes = {
   isShow: PropTypes.bool,
   onToggle: PropTypes.func,
@@ -15,6 +16,7 @@ const propTypes = {
 
   data: PropTypes.instanceOf(Map),
   app: PropTypes.instanceOf(Map),
+
 };
 
 const defaultProps = {
@@ -38,6 +40,7 @@ class PropertyPanel extends React.Component {
   render() {
     const { isShow, data } = this.props;
     const { activeIndex } = data.toJS();
+
     let propertyPanelClassName = 'o-property-panel';
 
     if (isShow) {
@@ -63,12 +66,14 @@ class PropertyPanel extends React.Component {
         <div className="o-property-panel__inner">
           <header className="m-action-bar o-property-panel__header">
             <div className="m-action-bar__left">{_('PROPERTIES')}</div>
+
             <div className="m-action-bar__right">
               <div className="action-icon-group">
                 <Icon
                   title={_('Remove All')}
                   name="trash"
                   onClick={() => this.props.removeFromPropertyPanel(-1)}
+
                 />
                 <Icon
                   title={_('Collapse All')}
@@ -104,7 +109,6 @@ class PropertyPanel extends React.Component {
                 />
               ))
             }
-
           </div>
         </div>
       </asider>
