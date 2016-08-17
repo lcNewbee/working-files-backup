@@ -4,19 +4,22 @@
         "msg": "ok"
     },
     "data": {
-      "WirelessMode":"sta",
-      "SSID":"test",
-      "ApMac":"11:22:33:44:55:66",
-      "CountryCode":"CN",
-      "RadioMode":"A/N mixed",
-      "ChannelWidth":"40",
-      "Frequency":"auto",
-      "TxPower":"14",
-      "MaxTxRate":"15",
+      "wirelessMode":"repeater",
+      "ssid":"test",
+      "peers":["14:ff:00:a0:c1:ff",
+              "14:ff:00:a0:c1:f0"],
+      "hideSsid": 0,
+      "autoRepeat": 1,
+      "apMac":"11:22:33:44:55:66",
+      "countryCode":"CN",
+      "radioMode":"A/N mixed",
+      "channelWidth":"40",
+      "frequency":"auto",
+      "txPower":"14",
+      "maxTxRate":"15",
       "security":{
-        "Mode":"wpa-aes",
-        "Key":"12345678"
-    }
+        "mode":"none"
+      }
     }
 
 }
