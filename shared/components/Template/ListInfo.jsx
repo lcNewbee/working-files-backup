@@ -39,6 +39,7 @@ const propTypes = {
   editAbled: PropTypes.bool,
   deleteAbled: PropTypes.bool,
   controlAbled: PropTypes.bool,
+  noTitle: PropTypes.bool,
 };
 const defaultProps = {
   controlAbled: false,
@@ -136,7 +137,7 @@ class ListInfo extends React.Component {
   render() {
     const {
       tableOptions, typeOption, store, route, hasSearch, actionBarChildren,
-      addAbled, editAbled, deleteAbled, controlAbled,
+      addAbled, editAbled, deleteAbled, controlAbled, noTitle,
     } = this.props;
     const myListId = store.get('curListId');
     const page = store.getIn([myListId, 'data', 'page']);
@@ -196,7 +197,11 @@ class ListInfo extends React.Component {
 
     return (
       <div className="t-list-info">
-        <h2 className="t-list-info__title">{route.text}</h2>
+        {
+          noTitle ? null : (
+            <h2 className="t-list-info__title">{route.text}</h2>
+          )
+        }
         <div className="m-action-bar clearfix">
           {
             hasSearch ? (

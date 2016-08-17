@@ -72,16 +72,15 @@ export default class View extends React.Component {
 
     return (
       <form className="o-form">
-        <h2 className="o-form__title">{route.text}</h2>
         <FormGroup
           value="1"
           type="checkbox"
-          label={_('AP内终端不能互访')}
+          text={_('接入点内用户不能互访')}
         />
         <FormGroup
           value="1"
           type="checkbox"
-          label={_('VLAN内终端不能互访')}
+          text={_('SSID内用户不能互访')}
         />
       </form>
     );

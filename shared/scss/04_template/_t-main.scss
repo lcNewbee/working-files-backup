@@ -34,15 +34,12 @@ body {
       left: $sidebar-width + 30px;
       bottom: 0;
       padding: 20px 0;
-      overflow: auto;
     }
     .t-main__asider-left {
       top: $g-navbar-height + $g-main-bar-height;
     }
     .o-tab__content {
       padding: 10px 0;
-      right: 0;
-      top: 50px;
     }
   }
 
@@ -73,7 +70,7 @@ body {
   .t-main__content {
     position: absolute;
     top: $top-distance;
-    right: 0;
+    right: $g-distance;
     bottom: $g-distance;
     left: $sidebar-width + 10px;
     min-width: 1024px - 200px;

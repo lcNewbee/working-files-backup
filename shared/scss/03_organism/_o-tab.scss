@@ -3,10 +3,14 @@
 $tab-nav-height: 28px;
 
 .o-tab {
+  position: relative;
+  width: 100%;
+  height: 100%;
+
   .o-tab__nav {
     position: absolute;
-    right: $g-distance;
     left: $g-distance;
+    right: $g-distance;
     z-index: 2;
     padding-left: $g-distance;
     border-bottom: 4px solid $g-main-color-light;
@@ -107,6 +111,39 @@ $tab-nav-height: 28px;
     }
     h2 {
       margin-top: 1em;
+    }
+  }
+
+  &.o-tab--compassed {
+    .o-tab__nav {
+      position: static;
+      border-bottom: 1px solid $g-main-color-light;
+
+      li {
+        margin: 0 ($g-distance-sm * 2) 0 0;
+        a {
+          position: relative;
+          display: block;
+          height: auto;
+          min-width: auto;
+          padding: 2px;
+          font-size: 13px;
+          line-height: 1em;
+          color: $g-main-color-light;
+          text-align: center;
+          background-color: transparent;
+
+          &::before,
+          &::after {
+            display: none;
+          }
+
+          &.active {
+            color: $g-brand-primary;
+            border-bottom: 3px solid $g-brand-primary;
+          }
+        }
+      }
     }
   }
 }

@@ -1,14 +1,9 @@
 @import "../variables";
 @import "../mixins";
 
-.modal--open {
+.o-modal--open {
   overflow: hidden;
 }
-.o-modal--open .o-modal {
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
 .o-modal {
   position: fixed;
   top: 0;
@@ -16,9 +11,10 @@
   bottom: 0;
   left: 0;
   z-index: 1050;
-  overflow: auto;
   -webkit-overflow-scrolling: touch;
   outline: 0;
+  overflow: auto;
+  padding-top: 10px;
 }
 .o-modal__backdrop {
   position: fixed;
@@ -43,17 +39,16 @@
 .o-modal__dialog {
   position: relative;
   z-index: 1050;
-  margin: 10px auto;
+  margin: 0 auto;
   width: auto;
+  overflow: auto;
 }
 
 .o-modal__comfirm,
 .o-modal__alert {
   width: 380px;
-  margin: 20px auto;
 }
 .o-modal__dialog {
-  margin: 30px auto;
   width: 600px;
 }
 
@@ -81,16 +76,15 @@
   position: relative;
   outline: 0;
   border: 1px solid #999;
-  border: 1px solid rgba(0, 0, 0, .2);
   border-radius: 6px;
   background-color: #fff;
   background-clip: padding-box;
-  box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+  box-shadow: 1px 3px 9px rgba(0, 0, 0, .8);
 }
 
 .o-modal__header {
   padding: 15px;
-  border-bottom: 1px solid #444;
+  border-bottom: 1px solid #999;
 
   .close {
     margin-top: -2px;
@@ -116,15 +110,17 @@
 .o-modal__body {
   position: relative;
   padding: 15px;
+  max-height: 70vh;
+  overflow: auto;
 }
 .o-modal__footer {
-  padding: 15px;
-  border-top: 1px solid #e5e5e5;
+  padding: 10px 15px;
+  border-top: 1px solid #999;
   text-align: right;
 
   .a-btn + .a-btn {
     margin-bottom: 0;
-    margin-left: 5px;
+    margin-left: 8px;
   }
 
   .btn-group .a-btn + .a-btn {
@@ -145,7 +141,6 @@
 }
 @media (min-width: $mw-md) {
   .o-modal__dialog {
-    margin: 30px auto;
     max-width: 900px;
   }
   .o-modal__content {

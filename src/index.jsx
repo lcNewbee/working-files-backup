@@ -1,5 +1,6 @@
 // 浏览器更好的支持es5, fetch,  promise等标准
 require('console-polyfill');
+require('classlist-polyfill');
 require('es5-shim');
 require('es5-shim/es5-sham');
 require('es6-promise');

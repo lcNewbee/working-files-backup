@@ -29,7 +29,7 @@ export default class View extends PureComponent {
         value: 2323,
       }, {
         name: 'Chrome',
-        value: 2323,
+        value: 232,
       }, {
         name: '爱奇艺',
         value: 2323,
@@ -87,7 +87,7 @@ export default class View extends PureComponent {
     const dataList = [
       {
         name: 'Xiaomi',
-        value: 2323,
+        value: 232,
       }, {
         name: 'Huaiwei',
         value: 2323,
@@ -184,7 +184,7 @@ export default class View extends PureComponent {
           name: '数量',
           type: 'bar',
           barWidth: '60%',
-          data: [100, 523, 23, 232, 323, 33, 323],
+          data: [100, 52, 23, 232, 323, 33, 323],
         },
       ],
     };
@@ -197,9 +197,9 @@ export default class View extends PureComponent {
     const systemOption = this.getSystemOption();
 
     return (
-      <div>
+      <div className="t-stats">
         <h3 className="t-main__content-title">{_('Flow Report') }</h3>
-        <div className="m-action-bar">
+        <div className="t-stats__cell">
           <div className="cols col-6">
             <label style={{ marginRight: '20px' }}>{_('日期范围')}</label>
             <FormInput
@@ -229,48 +229,36 @@ export default class View extends PureComponent {
         </div>
         <div className="stats-group clearfix" >
           <div className="cols col-6" >
-            <div className="stats-group-cell">
+            <div className="t-stats__cell">
               <h3>{ _('用户数') }</h3>
             </div>
-            <div className="stats-group-cell">
+            <div className="t-stats__cell">
               <EchartReact
                 option={usersStatusOption}
-                className="stats-group-canvas"
-                style={{
-                  width: '100%',
-                }}
+                className="t-stats__canvas"
               />
             </div>
           </div>
           <div className="cols col-6" >
-            <div className="stats-group-cell">
+            <div className="t-stats__cell">
               <h3>{ _('应用流量') }</h3>
             </div>
-            <div className="stats-group-cell">
+            <div className="t-stats__cell">
               <EchartReact
                 option={cpuStatusOption}
-                className="stats-group-canvas"
-                style={{
-                  width: '100%',
-                }}
+                className="t-stats__canvas"
               />
             </div>
           </div>
-          <div className="stats-group-large">
-            <div className="stats-group-header">
-              <h3>{ _('流量趋势') }</h3>
-            </div>
-            <div className="stats-group-cell">
-              <EchartReact
-                option={systemOption}
-                className="stats-group-canvas"
-                style={{
-                  width: '100%',
-                }}
-              />
-            </div>
+          <div className="t-stats__cell">
+            <h3>{ _('流量趋势') }</h3>
           </div>
-
+          <div className="t-stats__cell">
+            <EchartReact
+              option={systemOption}
+              className="t-stats__canvas"
+            />
+          </div>
         </div>
       </div>
     );

@@ -75,6 +75,9 @@
   "Enabled": "已启用",
   "Disabled": "已关闭",
   "To": "至",
+  "Repeat": "重复",
+  "Max Power": "最大功率",
+  "Min Power": "最小功率",
 
   "Download Report": "下载报表",
 

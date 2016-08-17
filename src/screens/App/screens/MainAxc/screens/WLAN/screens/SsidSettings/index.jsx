@@ -165,10 +165,8 @@ export default class View extends React.Component {
         <Modal
           isShow={!editData.isEmpty()}
           title={editData.get('myTitle')}
-          onOk={() => this.props.closeListItemModal(route.id)}
+          onOk={() => this.onSave()}
           onClose={() => this.props.closeListItemModal(route.id)}
-          cancelButton={false}
-          okButton={false}
         >
           <FormGroup
             label={_('SSID')}
@@ -295,16 +293,6 @@ export default class View extends React.Component {
                 {...password}
               /> : ''
           }
-
-          <div className="form-group form-group-save">
-            <div className="form-control">
-              <SaveButton
-                type="button"
-                loading={this.props.app.get('saving')}
-                onClick={this.onSave}
-              />
-            </div>
-          </div>
         </Modal>
       </ListInfo>
     );

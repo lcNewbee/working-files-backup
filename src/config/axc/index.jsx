@@ -3,6 +3,7 @@ import NotFound from 'shared/components/NotFound';
 import remoteActionMiddleware from 'shared/utils/lib/remote_action_middleware';
 import listInfoReducer from 'shared/reducers/list';
 import settingsReducer from 'shared/reducers/settings';
+import propertiesReducer from 'shared/reducers/properties';
 import moment from 'moment';
 
 // 公用 样式
@@ -216,8 +217,8 @@ const routes = [
               }, {
                 id: 'apList',
                 path: '/main/group/monitor/aps',
-                formUrl: '/goform/getApDevInfo',
-                text: _('Access Point Status'),
+                formUrl: '/goform/apList',
+                text: _('Access Point List'),
                 component: sApList.Screen,
               }, {
                 id: 'safeStatus',
@@ -469,6 +470,7 @@ const reducers = {
   app: App.app,
   list: listInfoReducer,
   settings: settingsReducer,
+  properties: propertiesReducer,
 
   // product comstom reducers
   login: sLogin.login,

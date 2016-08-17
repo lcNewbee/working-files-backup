@@ -19,6 +19,9 @@ export FormInput from './Form/FormInput';
 export Checkbox from './Form/Checkbox';
 export Search from './Form/Search';
 export Password from './Form/Password';
-export ListInfo from './Template/ListInfo';
 export DatePicker from './DatePicker';
 export DatePicker from './TimePicker';
+
+// Templates
+export PropertyPanel from './Template/PropertyPanel';
+export ListInfo from './Template/ListInfo';

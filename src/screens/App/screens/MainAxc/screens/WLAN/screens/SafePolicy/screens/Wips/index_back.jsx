@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { fromJS, Map, List } from 'immutable';
 import { bindActionCreators } from 'redux';
 import {
-  ListInfo, FormGroup, Modal, Checkbox,
+  ListInfo, FormGroup, Modal, SaveButton, Checkbox, FormInput,
 } from 'shared/components';
 import * as listActions from 'shared/actions/list';
 import * as appActions from 'shared/actions/app';
@@ -27,49 +27,54 @@ const blcklistTableOptions = fromJS([
   }, {
     id: 'opObject',
     width: '120',
-    text: _('Access Point Work Mode'),
+    text: _('Access Point'),
   }, {
     id: 'protectMode',
-    text: _('扫描类型'),
-  }, {
-    id: 'protectMode',
-    text: _('Max Power'),
-  }, {
-    id: 'protectMode',
-    text: _('Min Power'),
+    text: _('Protect Mode'),
   }, {
     id: 'ap24gMode',
-    text: _('2.4G校准间隔'),
+    text: msg.apMode24g,
   }, {
     id: 'ap5gMode',
-    text: _('2.4G邻居系数'),
+    text: msg.apMode5g,
   }, {
     id: 'protect24gMode',
-    text: _('2.4G timeid'),
+    text: msg.protectChannel24g,
   }, {
     id: 'protect5gMode',
-    text: _('5G校准间隔'),
+    text: msg.protectChannel5g,
   },
 ]);
-const apWorkModeOptions = [
+const apOptions = [
   {
     value: '0',
-    label: _('正常工作模式'),
+    label: _('只执行一次'),
   }, {
     value: '1',
-    label: _('扫描优先'),
+    label: _('每天'),
+  }, {
+    value: '2',
+    label: _('周一至周五'),
+  }, {
+    value: '3',
+    label: _('法定节假日'),
+  }, {
+    value: '4',
+    label: _('法定工作日'),
+  }, {
+    value: '5',
+    label: _('自定义'),
   },
 ];
-const scanTypeOptions = [
+const channelBandwidthOptions = fromJS([
   {
     value: 'date',
-    label: _('被动扫描'),
+    label: _('Date'),
   }, {
     value: 'week',
-    label: _('主动扫描'),
+    label: _('Week'),
   },
-];
-
+]);
 const validOptions = Map({
   password: validator({
     rules: 'remarkTxt:["\'\\\\"]|len:[8, 31]',
@@ -190,6 +195,11 @@ export default class View extends React.Component {
     const { route, store } = this.props;
     const editData = store.getIn([route.id, 'data', 'edit']) || Map({});
     const getCurrData = this.getCurrData;
+    const channelsOptions = this.getChannelsOptions(getCurrData('country'));
+    const {
+      password, vlanid, ssid, upstream, downstream,
+    } = this.props.validateOption;
+
     const tableOptions = blcklistTableOptions.push(fromJS({
       id: 'enabled',
       width: '60',
@@ -226,6 +236,7 @@ export default class View extends React.Component {
             <FormGroup
               label={_('Enable The Policy')}
               type="checkbox"
+              className="o-form__switch-bar"
             />
             <FormGroup
               type="text"
@@ -236,53 +247,88 @@ export default class View extends React.Component {
             <FormGroup
               type="select"
               label={_('Access Point Work Mode')}
-              options={apWorkModeOptions}
+              options={apOptions}
               value={getCurrData('aps')}
               onChange={this.onUpdateSettings('aps')}
             />
             <FormGroup
               type="select"
               label={_('扫描类型')}
-              options={scanTypeOptions}
+              options={apOptions}
               value={getCurrData('protectMode')}
               onChange={this.onUpdateSettings('protectMode')}
             />
-            <FormGroup
-              type="number"
-              label={_('Max Power')}
-              value={getCurrData('policyName')}
-              onChange={this.onUpdateSettings('policyName')}
-            />
-            <FormGroup
-              type="number"
-              label={_('Min Power')}
-              value={getCurrData('policyName')}
-              onChange={this.onUpdateSettings('policyName')}
-            />
-            <FormGroup
-              type="text"
-              label={_('2.4G校准间隔')}
-              value={getCurrData('policyName')}
-              onChange={this.onUpdateSettings('policyName')}
-            />
-            <FormGroup
-              type="text"
-              label={_('2.4G邻居系数')}
-              value={getCurrData('policyName')}
-              onChange={this.onUpdateSettings('policyName')}
-            />
-            <FormGroup
-              type="text"
-              label={_('2.4G频段timeid')}
-              value={getCurrData('policyName')}
-              onChange={this.onUpdateSettings('policyName')}
-            />
-            <FormGroup
-              type="text"
-              label={_('5G校准间隔')}
-              value={getCurrData('policyName')}
-              onChange={this.onUpdateSettings('policyName')}
-            />
+            <fieldset className="o-form__fieldset">
+              <legend className="o-form__legend">{_('Protect Settings')}</legend>
+              <FormGroup
+                type="select"
+                label={msg.apMode24g}
+                options={apOptions}
+                value={getCurrData('ap24gMode')}
+                onChange={this.onUpdateSettings('ap24gMode')}
+              />
+              <FormGroup
+                type="select"
+                label={msg.apMode5g}
+                options={apOptions}
+                value={getCurrData('ap5gMode')}
+                onChange={this.onUpdateSettings('ap5gMode')}
+              />
+              <FormGroup
+                type="select"
+                label={msg.protectChannel24g}
+                options={apOptions}
+                value={getCurrData('protect24gMode')}
+                onChange={this.onUpdateSettings('protect24gMode')}
+              />
+              <FormGroup
+                type="select"
+                label={msg.protectChannel5g}
+                options={apOptions}
+                value={getCurrData('protect5gMode')}
+                onChange={this.onUpdateSettings('protect5gMode')}
+              />
+            </fieldset>
+
+            <fieldset className="o-form__fieldset">
+              <legend className="o-form__legend">{_('Rogue Access Ooint Detection')}</legend>
+              <FormGroup>
+                <div className="row">
+                  <FormInput
+                    type="checkbox"
+                    theme="square"
+                    text={_('钓鱼接入点及随身WIFI检测')}
+                  />
+                </div>
+                <div className="row">
+                  <FormInput
+                    type="checkbox"
+                    theme="square"
+                    text={_('将来在本NAC上激活的的接入点视为非法接入点')}
+                    style={{
+                      marginLeft: '2em',
+                    }}
+                  />
+                </div>
+                <div className="row">
+                  <FormInput
+                    type="checkbox"
+                    theme="square"
+                    text={_('将隐藏SSID的接入点视为非法接入点')}
+                    style={{
+                      marginLeft: '2em',
+                    }}
+                  />
+                </div>
+              </FormGroup>
+              <FormGroup>
+                <FormInput
+                  type="checkbox"
+                  theme="square"
+                  text={_('AD-Hot检测')}
+                />
+              </FormGroup>
+            </fieldset>
           </div>
         </Modal>
       </ListInfo>

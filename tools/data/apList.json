@@ -1,0 +1,80 @@
+{
+    "state": {
+        "code": 2000,
+        "msg": "ok"
+    },
+    "data": {
+        "page": {
+            "start": 2,
+            "size": 2,
+            "currPage": 2,
+            "totalPage": 4,
+            "total": 4,
+            "nextPage": 3,
+            "lastPage": 4
+        },
+        "list": [
+            {
+                "devicetype": "point2point",
+                "devicename": "神器",
+                "ip": "192.168.5.53",
+                "mac": "12:33:44:55:66:78",
+                "status": "online",
+                "model": "V2.2",
+                "softversion": "V1.1",
+                "channel": "auto",
+                "operationhours": 3600,
+                "downstream": "256",
+                "upstream": "1232323",
+                "connectedNumbers": 2323,
+                "newest": "1"
+            },
+            {
+                "devicetype": "inside",
+                "devicename": "",
+                "ip": "192.168.5.54",
+                "mac": "12:33:44:55:66:78",
+                "status": "offline",
+                "model": "V2.2",
+                "softversion": "V1.1",
+                "channel": "1",
+                "operationhours": 6600,
+                "newest": "0",
+                "downstream": "256",
+                "upstream": "1232323",
+                "connectedNumbers": 2323,
+                "locatestatus": "location"
+            },
+            {
+                "devicetype": "inside",
+                "devicename": "",
+                "ip": "192.168.5.54",
+                "mac": "12:33:44:55:66:21",
+                "status": "unconfig",
+                "model": "V2.2",
+                "softversion": "V1.1",
+                "channel": "1",
+                "downstream": "256",
+                "upstream": "1232323",
+                "connectedNumbers": 2323,
+                "operationhours": 6600,
+                "hasNewSoft": "1"
+            },
+            {
+                "devicetype": "inside",
+                "devicename": "",
+                "ip": "192.168.5.54",
+                "mac": "12:33:44:55:66:21",
+                "status": "disable",
+                "model": "V2.2",
+                "softversion": "V1.1",
+                "channel": "1",
+                "downstream": "256",
+                "upstream": "1232323",
+                "connectedNumbers": 2323,
+                "operationhours": 6600,
+                "hasNewSoft": "1"
+            }
+        ]
+    }
+}

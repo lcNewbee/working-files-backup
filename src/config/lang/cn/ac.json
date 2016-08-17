@@ -53,6 +53,7 @@
   "802.1X Auth": "802.1X 认证",
 
   "Access Point Status": "接入点状态",
+  "Access Point List": "接入点列表",
   "Online Numbers": "在线数量",
   "AP Numbers": "AP数量",
   "Wireless Power": "无线功率",
@@ -95,6 +96,7 @@
   "Rogue Access Ooint Detection": "非法接入点检测",
   "Status": "状态",
   "Attack Detection": "攻击检测",
+  "Access Point Work Mode": "接入点工作模式",
 
   "Report": "报表",
   "Flow Report": "流量报表",

@@ -72,7 +72,6 @@ export default class View extends React.Component {
 
     return (
       <form className="o-form">
-        <h2 className="o-form__title">{route.text}</h2>
         <FormGroup
           type="checkbox"
           id="enabled"
@@ -127,16 +126,6 @@ export default class View extends React.Component {
 
           </FormGroup>
         </fieldset>
-        <fieldset className="o-form__fieldset">
-          <legend className="o-form__legend">{_('干扰检测')}</legend>
-          <FormGroup
-            value="1"
-            type="checkbox"
-            theme="square"
-            text={_('BSSID冲突检测')}
-          />
-        </fieldset>
-
         <div className="form-group o-form__actions-bar">
           <div className="form-control">
             <SaveButton

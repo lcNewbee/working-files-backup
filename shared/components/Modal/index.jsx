@@ -90,6 +90,12 @@ class Modal extends Component {
       cancelButton = false;
     }
 
+    if (isShow) {
+      document.body.classList.add('o-modal--open');
+    } else {
+      document.body.classList.remove('o-modal--open');
+    }
+
     return (
       <ReactCSSTransitionGroup
         component="div"

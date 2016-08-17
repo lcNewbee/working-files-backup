@@ -52,9 +52,11 @@ export function fetchSettings() {
     const name = globalState.settings.get('curSettingId');
     const query = globalState.settings.getIn(['curQuery']).toJS();
     const formUrl = globalState.settings.getIn([name, 'formUrl']);
+    const fetchUrl = globalState.settings.getIn([name, 'fetchUrl']);
 
     dispatch(reqeustFetchSettings());
-    dispatch(appActions.fetch(formUrl, query))
+
+    return dispatch(appActions.fetch(fetchUrl || formUrl, query))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(reciveFetchSettings(json.data));
@@ -70,12 +72,13 @@ export function saveSettings() {
     const curData = globalState.settings.getIn(['curData']);
     const oriData = globalState.settings.getIn([name, 'data']);
     const formUrl = globalState.settings.getIn([name, 'formUrl']);
+    const saveUrl = globalState.settings.getIn([name, 'saveUrl']);
 
     if (!curData.equals(oriData)) {
       console.log('hasChange');
     }
 
-    dispatch(appActions.save(formUrl, curData.toJS()))
+    return dispatch(appActions.save(saveUrl || formUrl, curData.toJS()))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(fetchSettings(formUrl));

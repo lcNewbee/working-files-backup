@@ -7,9 +7,10 @@ import { Link } from 'react-router';
 import utils from 'shared/utils';
 import {
   Nav, Icon, Modal, PopOver, Button, SaveButton, Navbar, FormGroup,
-  Table,
+  Table, PropertyPanel,
 } from 'shared/components';
 import * as appActions from 'shared/actions/app';
+import * as propertiesActions from 'shared/actions/properties';
 import * as actions from './actions';
 import myReducer from './reducer';
 
@@ -24,6 +25,7 @@ const propTypes = {
   selectAddApGroupDevice: PropTypes.func,
   showMainModal: PropTypes.func,
   showUserPopOver: PropTypes.func,
+  togglePropertyPanel: PropTypes.func,
   route: PropTypes.object,
   location: PropTypes.object,
   routes: PropTypes.array,
@@ -33,6 +35,7 @@ const propTypes = {
   // immutable data
   app: PropTypes.instanceOf(Map),
   mainAxc: PropTypes.instanceOf(Map),
+  properties: PropTypes.instanceOf(Map),
 };
 
 const defaultProps = {
@@ -576,6 +579,7 @@ export default class Main extends Component {
   render() {
     const { saving, version, guiName } = this.props.app.toJS();
     const { popOver, modal } = this.props.mainAxc.toJS();
+    const { isShowPanel } = this.props.properties.toJS();
 
     let curTopNavText = _('NETWORK');
     let mainClassName = 't-main t-main--ac';
@@ -670,6 +674,11 @@ export default class Main extends Component {
         {
           saving ? <div className="body-backdrop" /> : null
         }
+        <PropertyPanel
+          isShow={isShowPanel}
+          onToggle={this.props.togglePropertyPanel}
+          data={this.props.properties}
+        />
       </div>
     );
   }
@@ -682,13 +691,15 @@ function mapStateToProps(state) {
   return {
     app: state.app,
     mainAxc: state.mainAxc,
+    properties: state.properties,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    actions
+    actions,
+    propertiesActions,
   ), dispatch);
 }
 

@@ -2,20 +2,36 @@ import { fromJS } from 'immutable';
 
 const emptyMap = fromJS({});
 const defaultItem = fromJS({
-  data: {},
-  query: {},
-  actionQuery: {},
-  defaultData: {},
+  details: [
+    {
+      sectionKey: 'overview',
+      mac: '44:d9:e4:33:33:22',
+      model: 'AP512',
+      version: '3.7.344',
+    },
+  ],
+  configuration: [
+    {
+      nameKey: 'general',
+      alias: 'dsd',
+    }, {
+      nameKey: 'radios',
+      alias: 'dsd',
+    }, {
+      nameKey: 'system',
+      apRelateNum: 122,
+    },
+  ],
 });
 const defaultState = fromJS({
-  curSettingId: 'base',
-  curQuery: {},
-  curSaveQuery: {},
-  curData: {},
-  base: defaultItem,
+  isShowPanel: false,
+  activeIndex: -1,
+  list: [
+
+  ],
 });
 
-function initSettingsItem(state, action) {
+function initPROPERTYItem(state, action) {
   let ret = state;
   const settingId = action.option.settingId;
   const curQuery = action.option.query;
@@ -35,28 +51,31 @@ function initSettingsItem(state, action) {
 export default function (state = defaultState, action) {
   const curSettingName = state.get('curSettingId');
   switch (action.type) {
-    case 'INIT_SETTINGS':
-      return initSettingsItem(state, action);
+    case 'INIT_PROPERTY':
+      return initPROPERTYItem(state, action);
 
-    case 'REQEUST_FETCH_SETTINGS':
+    case 'REQEUST_FETCH_PROPERTY':
       return state.setIn([curSettingName, 'fetching'], true);
 
-    case 'RECIVE_FETCH_SETTINGS':
+    case 'RECIVE_FETCH_PROPERTY':
       return state.setIn([curSettingName, 'fetching'], false)
         .setIn([curSettingName, 'updateAt'], action.updateAt)
         .mergeIn([curSettingName, 'data'], action.data)
         .mergeIn(['curData'], fromJS(action.data));
 
-    case 'CHANGE_SETTINGS_QUERY':
+    case 'CHANGE_PROPERTY_QUERY':
       return state.mergeIn(['curQuery'], action.query);
 
-    case 'CHANGE_SETTINGS_ACTION_QUERY':
+    case 'CHANGE_PROPERTY_ACTION_QUERY':
       return state.mergeIn(['curSaveQuery'], action.query);
 
-    case 'UPDATE_ITEM_SETTINGS':
+    case 'UPDATE_ITEM_PROPERTY':
       return state.mergeIn(['curData'], action.data);
 
-    case 'LEAVE_SETTINGS_SCREEN':
+    case 'TOGGLE_PROPERTY_PANEL':
+      return state.update('isShowPanel', val => !val);
+
+    case 'LEAVE_PROPERTY_SCREEN':
       return state.setIn(['curQuery'], fromJS({}))
         .set('curSaveQuery', fromJS({}))
         .set('curData', fromJS({}));

@@ -1,5 +1,4 @@
 import * as appActions from './app';
-import utils from 'shared/utils';
 
 let refreshTimeout = null;
 
@@ -83,7 +82,7 @@ export function fetchList() {
     window.clearTimeout(refreshTimeout);
     dispatch(reqeustFetchList());
 
-    dispatch(appActions.fetch(formUrl, query))
+    return dispatch(appActions.fetch(formUrl, query))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(reciveFetchList(json.data));
@@ -97,30 +96,31 @@ export function fetchList() {
       });
   };
 }
-
 export function onListAction() {
   return (dispatch, getState) => {
     const globalState = getState();
     const name = globalState.list.get('curListId');
-    const editMap = globalState.list.getIn([name, 'edit']);
+    const editMap = globalState.list.getIn([name, 'data', 'edit']);
     const formUrl = globalState.list.getIn([name, 'formUrl']);
     let actionQuery = globalState.list.getIn([name, 'actionQuery']);
+    const actionType = actionQuery.get('action');
 
     window.clearTimeout(refreshTimeout);
 
-    if (actionQuery.get('action') === 'remove') {
-      actionQuery = actionQuery.merge(
-        globalState.list.getIn([name, 'data', 'list', actionQuery.get('index')])
-      );
-    } else {
+    // 需要把修改后数据合并到post参数里
+    if (actionType === 'add' || actionType === 'edit') {
       actionQuery = actionQuery.merge(editMap).toJS();
     }
 
-    dispatch(appActions.save(formUrl, actionQuery))
+    return dispatch(appActions.save(formUrl, actionQuery))
       .then((json) => {
+        let ret = 'Server Error';
+
         if (json.state && json.state.code === 2000) {
           dispatch(fetchList(formUrl));
+          ret = 'ok';
         }
+        return ret;
       });
   };
 }
