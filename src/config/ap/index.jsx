@@ -89,6 +89,9 @@ const pLogs = require('../../screens/App/screens/Main/screens/Logs');
 const pClients = require('../../screens/App/screens/Main/screens/Clients');
 // const pPreview = require('../../screens/App/screens/Main/screens/Preview');
 
+// 维护
+const pMaintenance=require('../../screens/App/screens/Main/screens/Maintenance');
+
 // 设置
 const pGroupSettings = require('../../screens/App/screens/Main/screens/Settings/screens/GroupSettings');
 const sWireless = require('../../screens/App/screens/Main/screens/Settings/screens/Wireless');
@@ -205,6 +208,12 @@ const routes = [{
       icon: 'file-pdf-o',
       text: _('REPORTS'),
       component: pStatistics.Screen,
+    }, {
+      id: 'pMaintenance',
+      path: '/main/maintenance',
+      icon: 'file-pdf-o',
+      text: _('Maintenance'),
+      component: pMaintenance,
     }, {
       id: 'settings',
       path: '/main/settings',
