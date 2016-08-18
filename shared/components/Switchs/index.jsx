@@ -55,7 +55,6 @@ class Switchs extends React.Component {
     return (
       <div
         className={classNames}
-        onClick={this.onClick}
         style={this.props.style}
         role={role}
       >

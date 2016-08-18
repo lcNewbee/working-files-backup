@@ -8,7 +8,7 @@ import Row from './Row';
 
 const propTypes = {
   options: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-  list: PropTypes.object,
+  list: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   page: PropTypes.object,
   loading: PropTypes.bool,
   className: PropTypes.string,

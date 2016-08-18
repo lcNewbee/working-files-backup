@@ -78,6 +78,14 @@
   "Repeat": "重复",
   "Max Power": "最大功率",
   "Min Power": "最小功率",
+  "Details": "详情",
+  "Configuration": "配置",
+  "General": "基本",
+  "PROPERTIES": "属性列表",
+  "Remove All": "删除所有",
+  "Collapse All": "收起所有",
+  "Hidde Property Panel": "隐藏属性面板",
+  "Show Property Panel": "显示属性面板",
 
   "Download Report": "下载报表",
 

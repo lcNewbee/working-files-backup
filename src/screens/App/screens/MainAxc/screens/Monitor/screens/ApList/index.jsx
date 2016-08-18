@@ -67,7 +67,7 @@ export default class View extends React.Component {
   }
   onAction(name, query) {
     if (name === 'edit') {
-      this.props.togglePropertyPanel();
+      this.props.addToPropertyPanel();
     }
   }
   render() {

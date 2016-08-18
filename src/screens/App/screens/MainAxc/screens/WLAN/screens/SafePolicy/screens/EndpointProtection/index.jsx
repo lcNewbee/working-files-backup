@@ -35,7 +35,7 @@ export default class View extends React.Component {
     props.initSettings({
       settingId: props.route.id,
       formUrl: props.route.formUrl,
-      data: {
+      defaultData: {
         '5gFrist': '1',
         '11nFrist': '1',
         terminalRelease: '1',
@@ -119,7 +119,7 @@ export default class View extends React.Component {
                   value="1"
                   type="radio"
                   name="alarmNoteType"
-                  text={_('告警通知并加入到动态黑名单')}
+                  text={_('告警通知并加入到黑名单')}
                 />
               </li>
             </ul>

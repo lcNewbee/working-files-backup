@@ -7,7 +7,7 @@ const propTypes = {
 };
 const defaultProps = {};
 
-function TabView(props) {
+function TabContainer(props) {
   return (
     <Tab
       menus={props.route.childRoutes}
@@ -18,7 +18,7 @@ function TabView(props) {
   );
 }
 
-TabView.propTypes = propTypes;
-TabView.defaultProps = defaultProps;
+TabContainer.propTypes = propTypes;
+TabContainer.defaultProps = defaultProps;
 
-export default TabView;
+export default TabContainer;

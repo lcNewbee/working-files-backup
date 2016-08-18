@@ -200,7 +200,7 @@ const b28n = (function _b28n(doc, _win) {
     currDict = dicts[localB28n.getLang()] = {};
   }
 
-  win._ = function _(str, ...rest) {
+  localB28n._ = win._ = function _(str, ...rest) {
     const translateStr = localB28n.translate(str);
     let ret;
 

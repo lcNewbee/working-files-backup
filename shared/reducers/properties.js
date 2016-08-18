@@ -1,84 +1,136 @@
 import { fromJS } from 'immutable';
 
-const emptyMap = fromJS({});
 const defaultItem = fromJS({
+  activeTab: 'details',
+  detailsActivePanelIndex: 0,
+  configurationActivePanelIndex: 0,
   details: [
     {
-      sectionKey: 'overview',
-      mac: '44:d9:e4:33:33:22',
-      model: 'AP512',
-      version: '3.7.344',
+      panelKey: 'overview',
+      text: 'Overview',
+      data: {
+        mac: '44:d9:e4:33:33:22',
+        model: 'AP512',
+        version: '3.7.344',
+      },
     },
   ],
   configuration: [
     {
-      nameKey: 'general',
-      alias: 'dsd',
+      panelKey: 'general',
+      text: 'General',
+      data: {
+        alias: 'dsd',
+        apRelateNum: 122,
+      },
     }, {
-      nameKey: 'radios',
-      alias: 'dsd',
+      panelKey: 'radios',
+      text: 'Radios',
+      data: {
+        channel: '6',
+      },
     }, {
-      nameKey: 'system',
-      apRelateNum: 122,
+      panelKey: 'system',
+      text: 'System',
+      data: {
+        alias: 'dsd',
+        apRelateNum: 122,
+      },
     },
   ],
+  data: {
+    mac: '44:d9:e4:33:33:22',
+    model: 'AP512',
+    version: '3.7.344',
+    alias: '我的别名',
+    apRelateNum: 122,
+  },
 });
+
 const defaultState = fromJS({
   isShowPanel: false,
-  activeIndex: -1,
+  activeIndex: 0,
   list: [
-
   ],
 });
 
-function initPROPERTYItem(state, action) {
-  let ret = state;
-  const settingId = action.option.settingId;
-  const curQuery = action.option.query;
-  const curSaveQuery = action.option.saveQuery;
-  const myItem = defaultItem.merge(action.option);
+function addToPropertyPanel(state, action) {
+  const ret = state;
+  const listSize = state.get('list').size;
 
-  if (!state.get(settingId) || state.get(settingId).isEmpty()) {
-    ret = state.mergeIn([settingId], myItem);
+  return ret.set('isShowPanel', true)
+      .update('list', val => val.push(defaultItem))
+      .set('activeIndex', listSize);
+}
+
+function removeFromPropertyPanel(state, action) {
+  let ret = state;
+
+  if (action.index < 0) {
+    ret = ret.set('list', fromJS([]));
+  } else {
+    ret = ret.deleteIn(['list', action.index]);
   }
 
-  return ret.set('curSettingId', settingId)
-      .set('curQuery', emptyMap.merge(curQuery))
-      .set('curSaveQuery', emptyMap.merge(curSaveQuery))
-      .set('curData', emptyMap.merge(action.option.defaultData));
+  return ret;
+}
+
+function updatePropertyPanelData(state, data) {
+  const activeTab = state.getIn([
+    'list', state.get('activeIndex'), 'activeTab',
+  ]);
+  const activePanelKey = `${activeTab}ActivePanelIndex`;
+  const activePanelIndex = state.getIn([
+    'list', state.get('activeIndex'), activePanelKey,
+  ]);
+  return state.mergeIn(
+    [
+      'list', state.get('activeIndex'),
+      activeTab, activePanelIndex, 'data',
+    ],
+    data
+  );
 }
 
 export default function (state = defaultState, action) {
-  const curSettingName = state.get('curSettingId');
   switch (action.type) {
-    case 'INIT_PROPERTY':
-      return initPROPERTYItem(state, action);
+    case 'ADD_TO_PROPERTY_PANEL':
+      return addToPropertyPanel(state, action);
 
-    case 'REQEUST_FETCH_PROPERTY':
-      return state.setIn([curSettingName, 'fetching'], true);
-
-    case 'RECIVE_FETCH_PROPERTY':
-      return state.setIn([curSettingName, 'fetching'], false)
-        .setIn([curSettingName, 'updateAt'], action.updateAt)
-        .mergeIn([curSettingName, 'data'], action.data)
-        .mergeIn(['curData'], fromJS(action.data));
-
-    case 'CHANGE_PROPERTY_QUERY':
-      return state.mergeIn(['curQuery'], action.query);
-
-    case 'CHANGE_PROPERTY_ACTION_QUERY':
-      return state.mergeIn(['curSaveQuery'], action.query);
-
-    case 'UPDATE_ITEM_PROPERTY':
-      return state.mergeIn(['curData'], action.data);
+    case 'REMOVE_FROM_PROPERTY_PANEL':
+      return removeFromPropertyPanel(state, action);
 
     case 'TOGGLE_PROPERTY_PANEL':
       return state.update('isShowPanel', val => !val);
 
-    case 'LEAVE_PROPERTY_SCREEN':
-      return state.setIn(['curQuery'], fromJS({}))
-        .set('curSaveQuery', fromJS({}))
-        .set('curData', fromJS({}));
+    // 切换属性列表body折叠状态
+    case 'COLLAPSE_PROPERTYS':
+      return state.update('activeIndex', i => {
+        let ret = action.index;
+
+        if (action.index === i) {
+          ret = -1;
+        }
+
+        return ret;
+      });
+
+    // 切换属性列表某项的Tab选择
+    case 'CHANGE_PROPERTYS_TAB':
+      return state.setIn(
+        ['list', state.get('activeIndex'), 'activeTab'],
+        action.name
+      );
+
+    // 更新合并属性列表某项的数据
+    case 'CHANGE_PROPERTYS_ITEM':
+      return state.mergeIn(
+        ['list', state.get('activeIndex')],
+        action.item
+      );
+
+    case 'UPDATE_PROPERTY_PANEL_DATA':
+      return updatePropertyPanelData(state, action.data);
 
     default:
   }

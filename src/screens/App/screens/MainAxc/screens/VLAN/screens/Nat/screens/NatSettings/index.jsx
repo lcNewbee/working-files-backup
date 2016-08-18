@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
-import { Map } from 'immutable';
+import { Map, List } from 'immutable';
 import { bindActionCreators } from 'redux';
 import {
-  FormGroup, SaveButton, FormInput,
+  FormGroup,
 } from 'shared/components';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/settings';
@@ -35,21 +35,12 @@ export default class View extends React.Component {
     props.initSettings({
       settingId: props.route.id,
       formUrl: props.route.formUrl,
-      defaultData: {
-        '5gFrist': '1',
-        '11nFrist': '1',
-        terminalRelease: '1',
-        terminalReleaseVal: '75',
-        autoPower: '1',
-        autoChannel: '1',
-        wirelessPower: '20',
-        country: 'CN',
-        channel: '6',
-      },
       query: {
         groupId,
       },
-      saveQuery: {},
+      defaultData: {
+        enable: '1',
+      },
     });
 
     props.fetchSettings();
@@ -73,14 +64,16 @@ export default class View extends React.Component {
     return (
       <form className="o-form">
         <FormGroup
-          value="1"
           type="checkbox"
-          text={_('AP隔离')}
-        />
-        <FormGroup
+          text={_('Enable')}
           value="1"
-          type="checkbox"
-          text={_('SSID隔离')}
+          label={_('NAT Service')}
+          checked={curData.enable === '1'}
+          onChange={
+            (data) => updateItemSettings({
+              enable: data.value,
+            })
+          }
         />
       </form>
     );

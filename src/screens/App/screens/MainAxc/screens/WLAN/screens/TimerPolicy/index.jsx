@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import { fromJS, Map, List } from 'immutable';
 import { bindActionCreators } from 'redux';
 import {
-  ListInfo, FormGroup, Modal, SaveButton, Switchs, Checkbox,
-  FormInput, TimePicker,
+  ListInfo, FormGroup, Modal, SaveButton, Checkbox,
+  FormInput,
 } from 'shared/components';
 import * as listActions from 'shared/actions/list';
 import * as appActions from 'shared/actions/app';
@@ -49,31 +49,11 @@ const repeatOptions = [
     value: '2',
     label: _('周一至周五'),
   }, {
-    value: '3',
-    label: _('法定节假日'),
-  }, {
-    value: '4',
-    label: _('法定工作日'),
-  }, {
     value: '5',
-    label: _('自定义'),
+    label: _('自定义周期'),
   },
 ];
 
-const msg = {
-  upSpeed: _('Up Speed'),
-  downSpeed: _('Down Speed'),
-  selectGroup: _('Select Group'),
-};
-const channelBandwidthOptions = fromJS([
-  {
-    value: 'date',
-    label: _('Date'),
-  }, {
-    value: 'week',
-    label: _('Week'),
-  },
-]);
 const validOptions = Map({
   password: validator({
     rules: 'remarkTxt:["\'\\\\"]|len:[8, 31]',
@@ -126,11 +106,7 @@ export default class View extends React.Component {
     };
 
     this.props.save('/goform/blacklist', query)
-      .then((json) => {
-        if (json.state && json.state.code === 2000) {
-          console.log(11);
-        }
-      });
+      .then((json) => {});
   }
   onUpdateSettings(name) {
     return (item) => {
@@ -140,8 +116,8 @@ export default class View extends React.Component {
       this.props.updateEditListItem(data);
     };
   }
-  onUpdateTime(moment, ddd) {
-    console.log(moment.format('HH:mm'), ddd);
+  onUpdateTime(momentObj, ddd) {
+    console.log(momentObj.format('HH:mm'), ddd);
   }
 
   getCurrData(name) {
@@ -164,9 +140,9 @@ export default class View extends React.Component {
         label: _('auto'),
       },
     ];
-    const channelsOption = channelsList.find((item) => {
-      return item.country === currCountry;
-    });
+    const channelsOption = channelsList.find(
+      (item) => item.country === currCountry
+    );
 
     if (channelsOption) {
       channelsRange = channelsOption['2.4g'].split('-');
@@ -192,9 +168,6 @@ export default class View extends React.Component {
     const editData = store.getIn([route.id, 'data', 'edit']) || Map({});
     const getCurrData = this.getCurrData;
     const channelsOptions = this.getChannelsOptions(getCurrData('country'));
-    const {
-      password, vlanid, ssid, upstream, downstream,
-    } = this.props.validateOption;
 
     const tableOptions = blcklistTableOptions.push(fromJS({
       id: 'enabled',
@@ -271,13 +244,41 @@ export default class View extends React.Component {
               <FormGroup
                 label={_('自定义周期')}
               >
-                <label><input type="checkbox" style={{ marginRight: '4px' }} />周一</label>
-                <input type="checkbox" style={weekDayStyle} />周二
-                <input type="checkbox" style={weekDayStyle} />周三
-                <input type="checkbox" style={weekDayStyle} />周四
-                <input type="checkbox" style={weekDayStyle} />周五
-                <input type="checkbox" style={weekDayStyle} />周六
-                <input type="checkbox" style={weekDayStyle} />周天
+                <FormInput
+                  type="checkbox"
+                  theme="square"
+                  text={_('Mo')}
+                />
+                <FormInput
+                  type="checkbox"
+                  theme="square"
+                  text={_('Tu')}
+                />
+                <FormInput
+                  type="checkbox"
+                  theme="square"
+                  text={_('We')}
+                />
+                <FormInput
+                  type="checkbox"
+                  theme="square"
+                  text={_('Th')}
+                />
+                <FormInput
+                  type="checkbox"
+                  theme="square"
+                  text={_('Fr')}
+                />
+                <FormInput
+                  type="checkbox"
+                  theme="square"
+                  text={_('Sa')}
+                />
+                <FormInput
+                  type="checkbox"
+                  theme="square"
+                  text={_('Su')}
+                />
               </FormGroup>
             ) : null
           }

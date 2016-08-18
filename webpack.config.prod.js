@@ -1,9 +1,9 @@
-let webpack = require('webpack');
-let path = require('path');
-let ExtractTextPlugin = require('extract-text-webpack-plugin');
-let autoprefixer = require('autoprefixer');
+var webpack = require('webpack');
+var path = require('path');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var autoprefixer = require('autoprefixer');
 
-let GLOBALS = {
+var GLOBALS = {
   DEFINE_OBJ: {
     'process.env.NODE_ENV': JSON.stringify('production'),
     __DEV__: true,
@@ -32,7 +32,7 @@ let GLOBALS = {
 };
 
 // 自动添加兼容性css
-let autoprefixerHandle = autoprefixer(GLOBALS.autoprefixer);
+var autoprefixerHandle = autoprefixer(GLOBALS.autoprefixer);
 
 module.exports = {
   entry: [

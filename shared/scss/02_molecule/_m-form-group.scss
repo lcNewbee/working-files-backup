@@ -22,6 +22,10 @@ $boder-color:         #ccc;
     }
   }
 
+  &.form-group--inline {
+    display: inline-block;
+  }
+
   > label {
     float: left;
     margin-right: 15px;

@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
 import validator from 'shared/utils/lib/validator';
 import { connect } from 'react-redux';
-import { fromJS, Map, List } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import {
   ListInfo, FormGroup, Modal, SaveButton, FormInput, Switchs,
@@ -211,7 +211,6 @@ export default class View extends React.Component {
             checked={getCurrData('loadBalancing') === '1'}
             onChange={this.onUpdateSettings('loadBalancing')}
           />
-
           <FormGroup
             label={_('Max Users')}
             type="number"

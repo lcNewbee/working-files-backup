@@ -18,10 +18,10 @@ const tableOptions = fromJS([
     text: _('时间'),
   }, {
     id: 'Ip',
-    text: _('累积到店'),
+    text: _('累积来访'),
   }, {
     id: 'MTU',
-    text: _('首次到店'),
+    text: _('首次来访'),
   }, {
     id: 'TxBytes',
     text: _('新登记用户'),
@@ -33,7 +33,7 @@ const tableOptions = fromJS([
     text: _('接入用户数'),
   }, {
     id: 'RxErrorPackets',
-    text: _('非首次到店'),
+    text: _('非首次来访'),
   }, {
     id: 'RxErrorPackets',
     text: _('进店率'),
@@ -228,6 +228,10 @@ export default class View extends PureComponent {
   render() {
     const usersStatusOption = this.getUsersOption();
     const cpuStatusOption = this.getCpuOption();
+    const switchOptions = tableOptions.delete(0).map((item) => ({
+      label: item.get('text'),
+      value: item.get('id'),
+    })).toJS();
 
     return (
       <div>
@@ -272,16 +276,7 @@ export default class View extends PureComponent {
             }}
           >
             <Switchs
-              options={[
-                _('累积到店'),
-                _('首次到店'),
-                _('新登记用户'),
-                _('未入店用户'),
-                _('进店率'),
-                _('返店率'),
-                _('平均停留时间'),
-                _('驻留时间分别'),
-              ]}
+              options={switchOptions}
               value="1"
             />
           </div>

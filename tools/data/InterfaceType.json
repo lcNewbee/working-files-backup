@@ -1,0 +1,28 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "no": "1",
+        "noInfo": "128",
+        "interfaceType": "0",
+        "rulesAssociated": "dsdsd"
+      },
+      {
+        "no": "2",
+        "noInfo": "128",
+        "interfaceType": "1",
+        "rulesAssociated": "dsdsd"
+      },
+      {
+        "no": "3",
+        "noInfo": "128",
+        "interfaceType": "2",
+        "rulesAssociated": "ddd"
+      }
+    ]
+  }
+}

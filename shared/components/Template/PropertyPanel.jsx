@@ -1,11 +1,20 @@
 import React, { PropTypes } from 'react';
-
-// import { fromJS } from 'immutable';
 import Icon from 'shared/components/Icon';
+import { Map } from 'immutable';
+import DevicesProperties from './DevicesProperties';
 
 const propTypes = {
   isShow: PropTypes.bool,
   onToggle: PropTypes.func,
+  collapsePropertys: PropTypes.func,
+  changePropertysTab: PropTypes.func,
+  changePropertysItem: PropTypes.func,
+  removeFromPropertyPanel: PropTypes.func,
+  updatePropertyPanelData: PropTypes.func,
+  save: PropTypes.func,
+
+  data: PropTypes.instanceOf(Map),
+  app: PropTypes.instanceOf(Map),
 };
 
 const defaultProps = {
@@ -16,19 +25,27 @@ class PropertyPanel extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onToggleShow = this.onToggleShow.bind(this);
+    this.onChangePropertysTab = this.onChangePropertysTab.bind(this);
   }
 
-  onToggleShow() {
-
+  onChangePropertysTab(e, name) {
+    e.preventDefault();
+    this.props.changePropertysItem({
+      activeTab: name,
+    });
   }
 
   render() {
     const { isShow, data } = this.props;
+    const { activeIndex } = data.toJS();
     let propertyPanelClassName = 'o-property-panel';
 
     if (isShow) {
       propertyPanelClassName = `${propertyPanelClassName} active`;
+    }
+
+    if (data.get('list').size < 1) {
+      return null;
     }
 
     return (
@@ -38,23 +55,25 @@ class PropertyPanel extends React.Component {
           onClick={this.props.onToggle}
         >
           <Icon
-            title={_('Remove All')}
+            title={_('Show Property Panel')}
             name="angle-double-left"
             size="2x"
           />
         </div>
         <div className="o-property-panel__inner">
           <header className="m-action-bar o-property-panel__header">
-            <div className="m-action-bar__left">PROPERTIES</div>
+            <div className="m-action-bar__left">{_('PROPERTIES')}</div>
             <div className="m-action-bar__right">
               <div className="action-icon-group">
                 <Icon
                   title={_('Remove All')}
                   name="trash"
+                  onClick={() => this.props.removeFromPropertyPanel(-1)}
                 />
                 <Icon
                   title={_('Collapse All')}
                   name="navicon"
+                  onClick={() => this.props.collapsePropertys(-1)}
                 />
                 <Icon
                   title={_('Hidde Property Panel')}
@@ -65,40 +84,27 @@ class PropertyPanel extends React.Component {
             </div>
           </header>
           <div className="o-property-panel__container">
-            <div className="o-properties-item">
-              <div className="o-properties-header">
-                <div className="o-properties-header__collspse-toggle">
-                  <Icon
-                    name="angle-right"
-                  />
-                </div>
-                <div className="o-properties-header__avatar">
-                  <Icon
-                    name="bullseye"
-                  />
-                </div>
-                <div className="o-properties-header__title">
-                  44:213:3213:32131:
-                </div>
-                <div className="o-properties-header__actions">
-                  <Icon
-                    name="remove"
-                  />
-                </div>
-              </div>
-              <div className="o-properties-body">
-                <div className="o-tab o-tab--compassed">
-                  <ul className="o-tab__nav">
-                    <li>
-                      <a href="" className="active">Details</a>
-                    </li>
-                    <li>
-                      <a href="">configuration</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
+            {
+              data.get('list').map((item, index) => (
+                <DevicesProperties
+                  key={`properties_${index}`}
+                  app={this.props.app}
+                  item={item}
+                  isCollapsed={index !== activeIndex}
+                  onCollapse={
+                    () => this.props.collapsePropertys(index)
+                  }
+                  onChangeData={this.props.updatePropertyPanelData}
+                  onChangeTab={this.onChangePropertysTab}
+                  onChangeItem={this.props.changePropertysItem}
+                  onRemove={
+                    () => this.props.removeFromPropertyPanel(index)
+                  }
+                  onSave={this.props.save}
+                />
+              ))
+            }
+
           </div>
         </div>
       </asider>

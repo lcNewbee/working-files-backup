@@ -534,6 +534,7 @@ export default class Main extends Component {
 
   renderBreadcrumb() {
     const groupData = this.props.mainAxc.get('group');
+    const vlanData = this.props.mainAxc.get('vlan');
     const curRoutes = this.props.routes;
     let breadcrumbList = fromJS([]);
     const len = curRoutes.length;
@@ -556,6 +557,14 @@ export default class Main extends Component {
         path: curRoutes[i].path,
         text: curRoutes[i].text,
       });
+
+       // 如果是 VLAN
+      if (curRoutes[2].path === '/main/network/vlan' && i === 2) {
+        breadcrumbList = breadcrumbList.unshift({
+          path: '/main/network/vlan',
+          text: `${vlanData.getIn(['selected', 'id'])}(${vlanData.getIn(['selected', 'remark'])})`,
+        });
+      }
     }
 
     return (
@@ -566,6 +575,7 @@ export default class Main extends Component {
               <Link
                 className="m-breadcrumb__link"
                 to={item.path}
+                onClick={() => this.onClickNav(item.path)}
               >
                 {item.text}
               </Link>
@@ -678,6 +688,7 @@ export default class Main extends Component {
           isShow={isShowPanel}
           onToggle={this.props.togglePropertyPanel}
           data={this.props.properties}
+          {...this.props}
         />
       </div>
     );

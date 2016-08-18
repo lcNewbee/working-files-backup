@@ -33,6 +33,7 @@ $tab-nav-height: 28px;
         color: $g-main-color-light;
         text-align: center;
         background-color: #fff;
+        cursor: pointer;
         //transition: background .3s ease-in, color .1s ease-in;
 
         &::before {
@@ -117,16 +118,17 @@ $tab-nav-height: 28px;
   &.o-tab--compassed {
     .o-tab__nav {
       position: static;
-      border-bottom: 1px solid $g-main-color-light;
+      padding-left: 0;
+      border-bottom: 1px solid $g-main-color-lighter;
 
       li {
-        margin: 0 ($g-distance-sm * 2) 0 0;
+        margin: 0 ($g-distance-sm * 2.2) 0 0;
         a {
           position: relative;
           display: block;
           height: auto;
           min-width: auto;
-          padding: 2px;
+          padding: .28571em 0;
           font-size: 13px;
           line-height: 1em;
           color: $g-main-color-light;

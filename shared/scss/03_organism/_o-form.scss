@@ -41,6 +41,39 @@ $o-form-content-margin: 1em 0 0;
         margin-left: 12px;
       }
     }
+  }
 
+  &.o-form--compassed {
+    padding: 0;
+
+    .form-group {
+      label {
+        display: block;
+        text-align: left;
+        line-height: 24px;
+      }
+      .form-control {
+        margin-left: 0;
+
+        .text {
+          width: 100%;
+          padding-top: .21429rem;
+          padding-bottom: .21429rem;
+          padding-left: .42857rem;
+          padding-right: .42857rem;
+        }
+        .Select {
+          width: 100%;
+          max-width: 100%;
+        }
+        .Select-placeholder,
+        .Select--single > .Select-control .Select-value,
+        .Select-input, .Select-control {
+          height: 24px;
+          line-height: 24px;
+          width: 100%;
+        }
+      }
+    }
   }
 }

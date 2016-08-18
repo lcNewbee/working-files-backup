@@ -42,7 +42,7 @@ export default class View extends React.Component {
     props.initSettings({
       settingId: props.route.id,
       formUrl: props.route.formUrl,
-      data: {
+      defaultData: {
         '5gFrist': '1',
         '11nFrist': '1',
         terminalRelease: '1',

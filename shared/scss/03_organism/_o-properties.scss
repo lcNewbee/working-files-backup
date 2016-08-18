@@ -1,21 +1,52 @@
-.o-properties-item {
-  @include clearfix;
-  border-bottom: 1px solid #ddd;
+.o-properties {
   position: relative;
+  border-bottom: 1px solid #ccc;
+  background-color: #fff;
+
+  @include clearfix;
+
+  .o-properties__body {
+    max-height: 2000px;
+    padding: 0 10px;
+    background-color: #fff;
+
+    transition: max-height .3s ease-in-out;
+
+    .o-tab {
+      margin-top: 10px;
+    }
+  }
+
+  &.is-collapsed {
+    border-bottom: none;
+    .o-properties__body {
+      max-height: 0;
+      overflow: hidden;
+    }
+  }
+
+  &.is-undocked {
+    position: fixed;
+    width: 400px;
+    top: 100px;
+    left: 300px;
+  }
 }
 
 .o-properties-header {
+  width: 100%;
   padding: .85em 1em;
   overflow: hidden;
   line-height: 20px;
-  width: 100%;
   border-bottom: 1px solid #ddd;
 
   .o-properties-header__collspse-toggle {
     float: left;
+    margin-top: 2px;
 
     .icon {
       font-size: 18px;
+      width: 16px;
       cursor: pointer;
 
       &:hover {
@@ -34,14 +65,98 @@
   }
   .o-properties-header__title {
     float: left;
-    margin-left: 8px;
     width: 200px;
+    margin-left: 8px;
   }
+  .o-properties-header__status {
+     margin: 7px 0 0 20px;
+  }
+
   .o-properties-header__actions {
     float: right;
+    .icon {
+      font-size: 16px;
+      line-height: 20px;
+      cursor: pointer;
+
+      &:hover {
+        color: $g-brand-primary;
+      }
+    }
   }
 }
 
-.o-properties-body {
-  padding: 10px;
+.o-properties-content {
+  position: relative;
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+.o-panel {
+  position: relative;
+  padding: 7px 10px;
+  margin-bottom: 5px;
+  background-color: #f6f6f6;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+
+  .o-panel__header {
+    font-weight: bold;
+    user-select: none;
+    cursor: pointer;
+
+    .icon {
+      font-size: 18px;
+      width: 16px;
+      cursor: pointer;
+      float: left;
+
+      &:hover {
+        color: $g-brand-primary;
+      }
+    }
+  }
+  .o-panel__body {
+    max-height: 2000px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+
+  }
+
+  &.is-panel-hide {
+    .o-panel__body {
+      overflow: hidden;
+      max-height: 0;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }
+}
+.m-description-list {
+  display: table;
+  width: 100%;
+
+  .m-description-list-row {
+    display: table-row;
+    width: 100%;
+    line-height: 18px;
+
+    dt,
+    dd {
+      display: table-cell;
+      width: 50%;
+    }
+
+    dt {
+      width: 35%;
+      font-size: 10px;
+      font-weight: bold;
+      color: #969ba3;
+    }
+
+    dd {
+      width: 65%;
+      font-size: 11px;
+    }
+  }
 }

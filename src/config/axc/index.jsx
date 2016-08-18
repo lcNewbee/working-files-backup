@@ -1,3 +1,4 @@
+import b28n from 'shared/b28n';
 import { combineReducers } from 'redux';
 import NotFound from 'shared/components/NotFound';
 import remoteActionMiddleware from 'shared/utils/lib/remote_action_middleware';
@@ -9,11 +10,15 @@ import moment from 'moment';
 // 公用 样式
 import 'shared/scss/styles.scss';
 
+// 公用组件
+import {
+  TabContainer,
+} from 'shared/components';
+
 // 产品配置
 import guiConfig from './config.json';
 
-// 多语言工具
-const b28n = require('shared/b28n');
+// 多语言处理
 const cnCore = require('../lang/cn/core.json');
 const cnAc = require('../lang/cn/ac.json');
 const validateCn = require('../lang/cn/validate.json');
@@ -25,7 +30,6 @@ b28n.addDict(cnCore, 'cn');
 b28n.addDict(cnAc, 'cn');
 b28n.addDict(validateCn, 'cn');
 b28n.addDict(langEn, 'en');
-
 window.CB = b28n.init({
   supportLang: ['en', 'cn'],
 });
@@ -62,9 +66,22 @@ const sMainAxc = require('../../screens/App/screens/MainAxc');
 const sInterfaces = require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Interfaces');
 const sVlanAaa = require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Aaa');
 const sVlanAcl = require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Acl');
-const sVlanNat = require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Nat');
 const sVlanDhcp = require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Dhcp');
 const sRoutes = require('../../screens/App/screens/MainAxc/screens/Routes');
+const sNatSettings =
+    require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Nat/screens/NatSettings');
+const sAddressObjects =
+    require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Nat/screens/AddressObjects');
+const sInterfaceType =
+    require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Nat/screens/InterfaceType');
+const sAddressPool =
+    require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Nat/screens/AddressPool');
+const sServiceObjects =
+    require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Nat/screens/ServiceObjects');
+const sDetailedRules =
+    require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Nat/screens/DetailedRules');
+const sNatLogs =
+    require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Nat/screens/NatLogs');
 
 /**
  * AP组管理
@@ -82,8 +99,6 @@ const sSmartRf =
     require('../../screens/App/screens/MainAxc/screens/WLAN/screens/SmartRf');
 const sTimerPolicy =
     require('../../screens/App/screens/MainAxc/screens/WLAN/screens/TimerPolicy');
-const sSafePolicy =
-    require('../../screens/App/screens/MainAxc/screens/WLAN/screens/SafePolicy');
 const sWips =
     require('../../screens/App/screens/MainAxc/screens/WLAN/screens/SafePolicy/screens/Wips');
 const sEndpointProtection =
@@ -92,8 +107,6 @@ const sIsolationPolicy =
   require('../../screens/App/screens/MainAxc/screens/WLAN/screens/SafePolicy/screens/IsolationPolicy');
 const sFlowReport =
     require('../../screens/App/screens/MainAxc/screens/Report/screens/FlowReport');
-const sBusinessReport =
-    require('../../screens/App/screens/MainAxc/screens/Report/screens/BusinessReport');
 const sUsersAnalysis =
     require('../../screens/App/screens/MainAxc/screens/Report/screens/BusinessReport/screens/UsersAnalysis');
 const sPreferencesAnalysis =
@@ -147,7 +160,55 @@ const routes = [
                 id: 'vlanNat',
                 path: '/main/network/vlan/nat',
                 text: _('NAT Settings'),
-                component: sVlanNat.Screen,
+                component: TabContainer,
+                indexRoute: {
+                  onEnter: (nextState, replace) => replace('/main/network/vlan/nat/settings'),
+                },
+                childRoutes: [
+                  {
+                    id: 'natSettings',
+                    path: '/main/network/vlan/nat/settings',
+                    formUrl: '/goform/natSettings',
+                    text: _('Nat Settings'),
+                    component: sNatSettings.Screen,
+                  }, {
+                    id: 'interfaceType',
+                    path: '/main/network/vlan/nat/interface_type',
+                    formUrl: '/goform/interfaceType',
+                    text: _('Interface Type'),
+                    component: sInterfaceType.Screen,
+                  }, {
+                    id: 'addressPool',
+                    path: '/main/network/vlan/nat/address_pool',
+                    formUrl: '/goform/addressPool',
+                    text: _('Address Pool'),
+                    component: sAddressPool.Screen,
+                  }, {
+                    id: 'addressObjects',
+                    path: '/main/network/vlan/nat/address_objects',
+                    formUrl: '/goform/addressObjects',
+                    text: _('Address Objects'),
+                    component: sAddressObjects.Screen,
+                  }, {
+                    id: 'serviceObjects',
+                    path: '/main/network/vlan/nat/service_objects',
+                    formUrl: '/goform/serviceObjects',
+                    text: _('Service Objects'),
+                    component: sServiceObjects.Screen,
+                  }, {
+                    id: 'detailedRules',
+                    path: '/main/network/vlan/nat/detailed_rules',
+                    formUrl: '/goform/detailedRules',
+                    text: _('Detailed Rules'),
+                    component: sDetailedRules.Screen,
+                  }, {
+                    id: 'natLogs',
+                    path: '/main/network/vlan/nat/nat_logs',
+                    formUrl: '/goform/natLogs',
+                    text: _('Nat Logs'),
+                    component: sNatLogs.Screen,
+                  },
+                ],
               }, {
                 id: 'vlanAcl',
                 path: '/main/network/vlan/acl',
@@ -290,7 +351,7 @@ const routes = [
                 path: '/main/group/wireless/safe',
                 formUrl: '/goform/timerPolicy',
                 text: _('Wireless Safe Policy'),
-                component: sSafePolicy,
+                component: TabContainer,
                 indexRoute: {
                   onEnter: (nextState, replace) => replace('/main/group/wireless/safe/wips'),
                 },
@@ -335,7 +396,7 @@ const routes = [
                 id: 'businessReport',
                 path: '/main/group/report/business',
                 text: _('Business Report'),
-                component: sBusinessReport,
+                component: TabContainer,
                 indexRoute: {
                   onEnter: (nextState, replace) => replace('/main/group/report/business/usersFlow'),
                 },
@@ -360,28 +421,6 @@ const routes = [
                     component: sPreferencesAnalysis.Screen,
                   },
                 ],
-              },
-            ],
-          }, {
-            id: 'system',
-            isIndex: true,
-            path: '/main/group/system',
-            icon: 'cogs',
-            text: _('System'),
-            indexRoute: { onEnter: (nextState, replace) => replace('/main/group/system/upgrade') },
-            childRoutes: [
-              {
-                id: 'upgrade',
-                path: '/main/group/system/upgrade',
-                text: _('System Upgrade'),
-              }, {
-                id: 'apCorrelation',
-                path: '/main/group/system/correlation',
-                text: _('AP Correlation'),
-              }, {
-                id: 'apLogs',
-                path: '/main/group/system/logs',
-                text: _('AP Logs'),
               },
             ],
           },
