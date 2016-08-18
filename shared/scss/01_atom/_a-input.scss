@@ -1,4 +1,4 @@
-$boder-color:         #e5e5e5;
+$boder-color: #e5e5e5;
 
 .a-text,
 textarea,
@@ -8,11 +8,11 @@ input[type=file],
 input[type=number] {
   box-sizing: border-box;
   padding: 6px 8px 5px 8px;
-  outline: 0;
+  font-size: 11px;
+  background: #fff;
   border: 1px solid #ccc;
   border-radius: 2px;
-  background: #fff;
-  font-size: 11px;
+  outline: 0;
 
   &:disabled {
     background-color: $boder-color;
@@ -21,3 +21,4 @@ input[type=number] {
     border: 1px solid #333;
   }
 }
+

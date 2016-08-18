@@ -1,0 +1,61 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "ssid": "市场部",
+        "remark": "市场部会议室1",
+        "nasId": "ds",
+        "enabled": "0",
+        "hiddenSsid": "1",
+        "compulsoryAuth": "1",
+        "maxSsidUsers": "4095",
+        "maxBssUsers": "",
+        "storeForwardPattern": "local",
+        "encryption": "psk-mixed",
+        "password": "124567786",
+        "qosType": "ssid",
+        "vlanId": "23",
+        "downstream": "128",
+        "upstream": "64"
+      },
+      {
+        "ssid": "测试",
+        "remark": "测试-会议室1",
+        "vlanId": "223",
+        "nasId": "ds",
+        "enabled": "0",
+        "hiddenSsid": "1",
+        "compulsoryAuth": "1",
+        "maxSsidUsers": "4095",
+        "maxBssUsers": "",
+        "storeForwardPattern": "local",
+        "encryption": "psk-mixed",
+        "password": "124567786",
+        "qosType": "ssid",
+        "downstream": "128",
+        "upstream": "64"
+      },
+      {
+        "ssid": "研发",
+        "remark": "研发AP组",
+        "vlanId": "22",
+        "nasId": "ds",
+        "enabled": "0",
+        "hiddenSsid": "1",
+        "compulsoryAuth": "1",
+        "maxSsidUsers": "4095",
+        "maxBssUsers": "",
+        "storeForwardPattern": "local",
+        "encryption": "psk-mixed",
+        "password": "124567786",
+        "qosType": "user",
+        "downstream": "128",
+        "upstream": "64"
+      }
+    ]
+  }
+}

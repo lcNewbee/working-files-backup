@@ -351,7 +351,7 @@ export const Portal = React.createClass({
                   text={_('Upload Image') + ' 1'}
                   icon="upload"
                   loading={this.state.imageStatus1 === 'loading'}
-                  role={this.state.imageStatus1 === 'selected' ? 'info' : undefined}
+                  theme={this.state.imageStatus1 === 'selected' ? 'info' : undefined}
                   style={uploadStyles}
                   onClick={this.onUploadImage(1)}
                 />
@@ -388,7 +388,7 @@ export const Portal = React.createClass({
                   icon="upload"
                   style={uploadStyles}
                   loading={this.state.imageStatus2 === 'loading'}
-                  role={this.state.imageStatus2 === 'selected' ? 'info' : undefined}
+                  theme={this.state.imageStatus2 === 'selected' ? 'info' : undefined}
                   onClick={this.onUploadImage(2)}
                 />
               )
@@ -423,7 +423,7 @@ export const Portal = React.createClass({
                   icon="upload"
                   style={uploadStyles}
                   loading={this.state.imageStatus3 === 'loading'}
-                  role={this.state.imageStatus3 === 'selected' ? 'info' : undefined}
+                  theme={this.state.imageStatus3 === 'selected' ? 'info' : undefined}
                   onClick={this.onUploadImage(3)}
                 />
               )

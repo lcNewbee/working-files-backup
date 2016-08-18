@@ -69,7 +69,7 @@ class Row extends Component {
         } else {
           tdDom = (
             <td key={thisKey}>
-              {option.get('transform')(currVal, props.item)}
+              {option.get('transform')(currVal, props.item, props.index)}
             </td>
           );
         }

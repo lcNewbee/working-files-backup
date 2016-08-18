@@ -119,12 +119,17 @@ export function rcFetch() {
 export function fetch(url, query) {
   return (dispatch) => {
     dispatch(rqFetch());
+
     return utils.fetch(url, query)
       .then((json) => {
+        if (json === undefined) {
+          return {};
+        }
         if (!json.state || (json.state && json.state.code !== 2000)) {
           dispatch(receiveServerError(json.state));
         }
-        dispatch(rqFetch());
+        dispatch(rcFetch());
+
         return json;
       })
       .catch(() => {
@@ -142,6 +147,9 @@ export function save(url, query) {
 
     return utils.save(url, query)
       .then((json) => {
+        if (json === undefined) {
+          return {};
+        }
         if (!json.state || (json.state && json.state.code !== 2000)) {
           dispatch(receiveServerError(json.state));
         }

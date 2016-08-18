@@ -4,11 +4,6 @@
     "es2015",
     "stage-0"
   ],
-  "env": {
-    "development": {
-      "presets": ["react-hmre"]
-    }
-  },
   "plugins": [
     "add-module-exports",
     "transform-es5-property-mutators",
@@ -22,4 +17,5 @@
       ]
     ]
   ]
+
 }

@@ -108,10 +108,17 @@ class ReactEchart extends React.Component {
   }
 
   render() {
+    const className = this.props.className;
+    let classNames = 'm-echart';
+
+    if (className) {
+      classNames = `${classNames} ${className}`;
+    }
+
     return (
       <div
         ref={(elem) => (this.myRef = elem)}
-        className="m-echart stats-group-canvas"
+        className={classNames}
         style={this.props.style}
       />
     );

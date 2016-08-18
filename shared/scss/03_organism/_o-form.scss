@@ -1,106 +1,46 @@
-$boder-color:         #e5e5e5;
+$o-form-content-margin: 1em 0 0;
 
-.form-group {
-  margin-bottom: 12px;
-  @include clearfix;
+.o-form {
+  padding: 0 1em;
 
-  &.form-group--save {
-    padding-top: 12px;
-    border-top: 1px solid $boder-color;
+  .o-form__switch-bar {
+    border-bottom: 1px solid #d2d2d2;
+    padding: 1em 0;
+    margin-bottom: 1.5em;
+  }
+  .o-form__title {
+    margin-bottom: 1em;
+  }
+  .o-form__fieldset {
+    margin: $o-form-content-margin;
+    border: none;
+    padding: .5em 0 0;
+  }
+  .o-form__legend {
+    margin-left: .5em;
+    padding: .5em .5em;
+    font-size: 1.214em;
+  }
+  .o-form__actions-bar {
+    padding: 1em .625em;
+    margin: $o-form-content-margin;
+    border-top: 1px solid #d2d2d2;
   }
 
-  &.form-group--error {
-    .form-control {
-      .text {
-        border: 1px solid $g-brand-danger;
+  &.o-form--inline {
+    padding: 0;
+
+    @include clearfix;
+
+    .form-group {
+      display: inline-block;
+      label {
+        min-width: 100px;
+      }
+      .form-control {
+        margin-left: 12px;
       }
     }
-  }
 
-  > label {
-    float: left;
-    margin-right: 15px;
-    min-width: 150px;
-    color: #666;
-    text-align: right;
-    line-height: 29px;
-
-    .a-btn {
-      line-height: 14px;
-    }
-  }
-
-  .text {
-    width: 200px;
-    line-height: 20px;
-
-    &:focus {
-      border: 1px solid $g-brand-info;
-    }
-  }
-
-
-  .input-sm {
-    width: 80px;
-  }
-
-  .form-control {
-    margin-left: 165px;
-    color: #666;
-    line-height: 29px;
-
-    .a-checkbox {
-      padding-top: 3px;
-    }
-    .m-switch {
-      margin-left: 0;
-    }
-  }
-
-  .help {
-    display: inline-block;
-    margin-left: 10px;
-    color: #999;
-    vertical-align: middle;
-    font-size: 12px;
-    line-height: 29px;
-  }
-  .error {
-    display: inline-block;
-    margin-left: 5px;
-    color: $g-brand-danger;
-    vertical-align: middle;
-    font-size: 12px;
-    line-height: 29px;
-  }
-  .checkbox {
-    margin-right: 6px;
-    color: #999;
-    font-size: 12px;
-    line-height: 29px;
-  }
-}
-
-.msg-error {
-  color: $g-brand-danger;
-}
-
-.form-footer {
-  margin-top: 20px;
-}
-
-.input-search {
-  position: relative;
-  display: inline-block;
-
-  .icon-search {
-    position: absolute;
-    top: 50%;
-    left: 6px;
-    margin-top: -.5em;
-  }
-
-  input[type=text] {
-    padding-left: 25px;
   }
 }

@@ -2,7 +2,9 @@ import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import {connect} from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {Input, FormGroup} from 'shared/components/Form';
+import {
+  FormGroup,
+} from 'shared/components';
 import {fromJS, Map, List} from 'immutable';
 import validator from 'shared/utils/lib/validator';
 import utils from 'shared/utils';

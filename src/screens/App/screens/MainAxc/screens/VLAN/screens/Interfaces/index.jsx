@@ -1,38 +1,36 @@
 import React, { Component } from 'react';
 import { fromJS } from 'immutable';
-import { bindActionCreators } from 'redux'
+import { bindActionCreators } from 'redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import utils from 'shared/utils';
 import validator from 'shared/utils/lib/validator';
-import * as actions from './actions';
 import * as appActions from 'shared/actions/app';
+import {
+  FormGroup, Button, Table, Modal,
+} from 'shared/components';
+import * as actions from './actions';
 import myReducer from './reducer';
 
 // components
-import Table from 'shared/components/Table';
-import Button from 'shared/components/Button';
-import {Search, FormGroup, Checkbox} from 'shared/components/Form';
-import Select from 'shared/components/Select';
-import Modal from 'shared/components/Modal';
-import Switchs from 'shared/components/Switchs';
+
 
 const validOptions = fromJS({
   mainIp: validator({
-    rules: 'ip'
+    rules: 'ip',
   }),
   mainMask: validator({
-    rules: 'mask'
+    rules: 'mask',
   }),
   secondIp: validator({
-    rules: 'url'
+    rules: 'url',
   }),
   secondMask: validator({
-    rules: 'required'
+    rules: 'required',
   }),
   ipv6: validator({
-    rules: 'required'
-  })
+    rules: 'required',
+  }),
 });
 
 let InterfaceTableOption = fromJS([
@@ -63,34 +61,31 @@ let InterfaceTableOption = fromJS([
   }, {
     id: 'op',
     text: _('Actions'),
-  }
+  },
 ]);
 
 
 export default class View extends Component {
   constructor(props) {
-    super(props)
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this)
-  };
+    super(props);
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+  }
 
   onChangeEditData(key, data) {
     const changeData = {};
 
     changeData[key] = data.value;
 
-    this.props.updateInterfaceEdit(changeData)
+    this.props.updateInterfaceEdit(changeData);
   }
 
   onDeleteInterface(item) {
-    var msg_text = _('Are you sure delete interface: %s?', item.get('id'));
+    let msg_text = _('Are you sure delete interface: %s?', item.get('id'));
 
     this.props.createModal({
       id: 'interfaceSettings',
       role: 'comfirm',
       text: msg_text,
-      apply: function() {
-
-      }.bind(this)
     });
   }
 
@@ -108,7 +103,7 @@ export default class View extends Component {
               text="修改"
               size="sm"
               onClick={() => {
-                this.props.editInterface(item.get('id'))
+                this.props.editInterface(item.get('id'));
               }}
             />
             <Button
@@ -116,12 +111,12 @@ export default class View extends Component {
               size="sm"
               text="删除"
               onClick={() => {
-                this.onDeleteInterface(item)
+                this.onDeleteInterface(item);
               }}
             />
           </div>
-        )
-      }.bind(this)
+        );
+      }.bind(this),
     }));
 
     return (
@@ -132,7 +127,7 @@ export default class View extends Component {
           <div className="m-action-bar__left action-btns">
             <Button
               icon="plus"
-              role="primary"
+              theme="primary"
               onClick={this.props.addInterface}
               text="添加"
             />
@@ -164,7 +159,7 @@ export default class View extends Component {
           />
           <FormGroup
             type="checkbox"
-            label={_('Interface Status') }
+            label={_('Interface Status')}
           />
           <FormGroup
             type="checkbox"
@@ -228,7 +223,7 @@ export default class View extends Component {
           />
         </Modal>
       </div>
-    )
+    );
   }
 }
 
@@ -243,7 +238,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
     actions
-  ), dispatch)
+  ), dispatch);
 }
 
 export const Screen = connect(

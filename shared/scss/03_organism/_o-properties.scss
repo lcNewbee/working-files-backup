@@ -1,0 +1,47 @@
+.o-properties-item {
+  @include clearfix;
+  border-bottom: 1px solid #ddd;
+  position: relative;
+}
+
+.o-properties-header {
+  padding: .85em 1em;
+  overflow: hidden;
+  line-height: 20px;
+  width: 100%;
+  border-bottom: 1px solid #ddd;
+
+  .o-properties-header__collspse-toggle {
+    float: left;
+
+    .icon {
+      font-size: 18px;
+      cursor: pointer;
+
+      &:hover {
+        color: $g-brand-primary;
+      }
+    }
+  }
+  .o-properties-header__avatar {
+    float: left;
+    margin-left: 8px;
+    .icon {
+      font-size: 20px;
+      line-height: 20px;
+      cursor: pointer;
+    }
+  }
+  .o-properties-header__title {
+    float: left;
+    margin-left: 8px;
+    width: 200px;
+  }
+  .o-properties-header__actions {
+    float: right;
+  }
+}
+
+.o-properties-body {
+  padding: 10px;
+}

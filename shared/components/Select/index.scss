@@ -1,11 +1,12 @@
 .Select {
   min-width: 150px;
   max-width: 200px;
-  font-size: 12px; 
+  font-size: 12px;
 }
 
 .Select-placeholder, .Select--single > .Select-control .Select-value {
   line-height: 30px;
+  color: #333;
 }
 
 .Select-placeholder, :not(.Select--multi) > .Select-control .Select-value  {

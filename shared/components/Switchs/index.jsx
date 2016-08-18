@@ -9,10 +9,11 @@ const propTypes = {
   onChange: PropTypes.func,
   options: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   style: PropTypes.object,
+  role: PropTypes.oneOf(['switch']),
 };
 
 const defaultProps = {
-  role: 'button',
+  role: 'switch',
 };
 
 class Switchs extends React.Component {
@@ -35,7 +36,7 @@ class Switchs extends React.Component {
   }
 
   render() {
-    const { size, className, options, value } = this.props;
+    const { size, className, options, value, role } = this.props;
     let optionsList;
     let classNames = 'm-switch';
 
@@ -56,6 +57,7 @@ class Switchs extends React.Component {
         className={classNames}
         onClick={this.onClick}
         style={this.props.style}
+        role={role}
       >
         {
           options ? optionsList.map((item, i) => {

@@ -1,0 +1,43 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "policyName": "Policy1",
+        "opObject": "SSID1",
+        "repeat": "0",
+        "customDate": "2014-2-1",
+        "weeks": "1101010",
+        "enabled": "1",
+        "startTime": "8:00",
+        "endTime": "22:00",
+        "remark": "20"
+      },
+      {
+        "policyName": "Policy1",
+        "opObject": "SSID1",
+        "repeat": "2",
+        "customDate": "2014-2-1",
+        "weeks": "1101010",
+        "enabled": "1",
+        "startTime": "8:00",
+        "endTime": "22:00",
+        "remark": "20"
+      },
+      {
+        "policyName": "Policy1",
+        "opObject": "SSID1",
+        "repeat": "3",
+        "customDate": "2014-2-1",
+        "weeks": "1101010",
+        "enabled": "1",
+        "startTime": "8:00",
+        "endTime": "22:00",
+        "remark": "20"
+      }
+    ]
+  }
+}

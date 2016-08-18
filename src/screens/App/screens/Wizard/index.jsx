@@ -1,14 +1,15 @@
 import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
-import { FormGroup } from 'shared/components/Form';
 import { Map, List } from 'immutable';
 import validator from 'shared/utils/lib/validator';
 import utils from 'shared/utils';
 import TIME_ZONE from 'shared/config/timeZone';
 import countries from 'shared/config/country.json';
-import Navbar from 'shared/components/Navbar';
-import Button from 'shared/components/Button';
+import {
+  Button, Navbar, FormGroup,
+} from 'shared/components';
+
 import urls from 'shared/config/urls';
 
 const _ = window._;
@@ -409,7 +410,7 @@ export const SignUp = React.createClass({
             }
 
             <Button
-              role={btnInfoRole}
+              theme={btnInfoRole}
               onClick={this.onNext}
               text={this.state.currStep !== 3 ? _('Next Step') : _('Completed')}
             />

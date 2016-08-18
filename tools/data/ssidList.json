@@ -1,0 +1,32 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "ssid": "Chrome",
+        "onlineNumber": "2323",
+        "apNumber": "2323",
+        "upstream": "23132",
+        "downstream": "1233"
+      },
+      {
+        "ssid": "Chrome2",
+        "onlineNumber": "2323",
+        "apNumber": "2323",
+        "upstream": "23132",
+        "downstream": "1233"
+      },
+
+      {
+        "ssid": "Chrome3",
+        "onlineNumber": "2323",
+        "apNumber": "2323",
+        "upstream": "23132",
+        "downstream": "1233"
+      }
+    ]
+  }
+}

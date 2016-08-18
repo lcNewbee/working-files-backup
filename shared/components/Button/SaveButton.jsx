@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import Button from './index';
+import Button from './Button';
 
 let timeOut = null;
 
@@ -10,10 +10,9 @@ const propTypes = {
 
 const defaultProps = {
   text: _('Save'),
-  role: 'primary',
+  theme: 'primary',
   icon: 'save',
 };
-
 class SaveButton extends React.Component {
   constructor(props) {
     super(props);

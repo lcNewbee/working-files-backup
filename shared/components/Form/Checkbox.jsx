@@ -5,9 +5,12 @@ import Input from './atom/Input';
 const propTypes = {
   className: PropTypes.string,
   size: PropTypes.oneOf(['md', 'lg']),
+  theme: PropTypes.oneOf(['square']),
   value: PropTypes.string,
   id: PropTypes.string,
   options: PropTypes.object,
+  style: PropTypes.object,
+  text: PropTypes.string,
 };
 
 const defaultProps = {
@@ -21,7 +24,7 @@ class Checkbox extends React.Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   render() {
-    const { options, size } = this.props;
+    const { options, size, theme, className, style, text } = this.props;
     let { value, id } = this.props;
     let classNames = 'a-checkbox';
 
@@ -32,12 +35,21 @@ class Checkbox extends React.Component {
     if (!id) {
       id = `checkbox_${Math.random()}`;
     }
+
     if (size) {
       classNames = `${classNames} a-checkbox--${size}`;
     }
 
+    if (theme) {
+      classNames = `${classNames} a-checkbox--${theme}`;
+    }
+
+    if (className) {
+      classNames = `${classNames} a-checkbox--${className}`;
+    }
+
     return (
-      <span className={classNames}>
+      <label htmlFor={id} className={classNames} style={style}>
         <Input
           {...this.props}
           className="a-checkbox__input"
@@ -45,7 +57,12 @@ class Checkbox extends React.Component {
           value={value}
         />
         <label htmlFor={id} />
-      </span>
+        {
+          text ? (
+            <span className="a-checkbox__text">{text}</span>
+          ) : null
+        }
+      </label>
     );
   }
 }

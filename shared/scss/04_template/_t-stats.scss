@@ -1,0 +1,20 @@
+$border-style: 1px solid #dedede;
+
+.t-stats {
+  border-right: $border-style;
+  border-bottom: $border-style;
+  .t-stats__canvas {
+    width: 100%;
+    height: 240px;
+    margin: 10px auto;
+    float: left;
+  }
+
+  .t-stats__cell {
+    padding: 8px 13px;
+    border-left: $border-style;
+    border-top: $border-style;
+    border-collapse: collapse;
+    overflow: auto;
+  }
+}

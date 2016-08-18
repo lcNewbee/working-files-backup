@@ -1,0 +1,63 @@
+.o-property-panel {
+  position: fixed;
+  top: 60px;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+
+  .o-property-panel__toggle-button {
+    position: absolute;
+    top: 8px;
+    right: 0;
+    background-color: #333;
+    text-align: center;
+    color: #fff;
+    width: 24px;
+    height: 24px;
+    border-radius: 16px 0 16px 16px;
+    box-shadow: -2px 2px 0px 0px rgba(0,0,0,0.2);
+    margin-right: 4px;
+    transition: top .4s ease-in-out;
+
+    .icon {
+      line-height: 24px;
+      font-size: 18px;
+    }
+  }
+
+  .o-property-panel__header {
+    background-color: #333;
+    color: #fff;
+    padding: .85em 1em;
+    line-height: 20px;
+    user-select: none;
+
+    .icon {
+      font-size: 18px;
+      margin-left: 8px;
+      cursor: pointer;
+    }
+  }
+  .o-property-panel__inner {
+     width: 0;
+     height: 100%;
+     background-color: #f2f2f2;
+     overflow: hidden;
+     transition: width .3s ease-in-out;
+  }
+
+  &.active {
+    .o-property-panel__inner {
+      width: 380px;
+      border-left: 1px solid #333;
+    }
+    .o-property-panel__toggle-button {
+      top: -30px;
+    }
+  }
+
+  .o-property__container {
+    background-color: #fff;
+    padding: 0;
+  }
+}

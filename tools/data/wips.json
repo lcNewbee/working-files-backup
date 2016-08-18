@@ -1,0 +1,37 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "policyName": "Policy1",
+        "aps": "SSID1",
+        "protectMode": "0",
+        "ap24gMode": "2014-2-1",
+        "ap5gMode": "2014-2-1",
+        "protect24gChannel": "12",
+        "protect5gChannel": "12"
+      },
+      {
+        "policyName": "Policy1",
+        "aps": "SSID1",
+        "protectMode": "0",
+        "ap24gMode": "2014-2-1",
+        "ap5gMode": "2014-2-1",
+        "protect24gChannel": "12",
+        "protect5gChannel": "12"
+      },
+      {
+        "policyName": "Policy1",
+        "aps": "SSID1",
+        "protectMode": "0",
+        "ap24gMode": "2014-2-1",
+        "ap5gMode": "2014-2-1",
+        "protect24gChannel": "12",
+        "protect5gChannel": "12"
+      }
+    ]
+  }
+}
