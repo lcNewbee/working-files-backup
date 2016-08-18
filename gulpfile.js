@@ -18,6 +18,7 @@ paths = gulp.paths = {
   release: 'release',
   src: 'src',
   pubNew: '../win_ac/software/web/',
+  pubAp: '../qsdk/package/comlanos/goahead/files/web',
   webpack: 'webpack.config.dev.js',
   pubWebpack: 'webpack.config.prop.js',
 };
@@ -72,7 +73,6 @@ gulp.task('build', function (callback) {
 gulp.task('open:dist', ['build'], shell.task(['npm run open:dist']));
 
 gulp.task('clean:pubac', function (callback) {
-
   return del([paths.pubNew], { force: true });
 });
 
@@ -89,6 +89,18 @@ gulp.task('pub:ac', function (callback) {
 // 发布 Access Manager 测试版本
 gulp.task('dev:ac', function (callback) {
   runSequence('bump:dev', ['clean:pubac', 'build'], 'pub:copy', callback);
+});
+
+// 发布 Access Pointer 版本
+gulp.task('clean:pubap', function (callback) {
+  return del([paths.pubAp], { force: true });
+});
+gulp.task('pub:copyap', function () {
+  return gulp.src(paths.build + '/**/*')
+    .pipe(gulp.dest(paths.pubAp));
+});
+gulp.task('pub:ap', function (callback) {
+  runSequence(['clean:pubap', 'build'], 'pub:copyap', callback);
 });
 
 /**
