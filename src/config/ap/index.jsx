@@ -129,7 +129,7 @@ const routes = [{
     }, {
       id: 'wirelessconfig',
       path: '/main/wirelessconfig',
-      icon: 'cog',
+      icon: 'wifi',
       text: _('Wireless Configuration'),
       component: pWirelessConfig,
       indexRoute: {
@@ -141,6 +141,7 @@ const routes = [{
           path: '/main/wirelessconfig/basic',
           text: _('Basic'),
           formUrl: 'goform/get_wl_info',
+          saveUrl: 'goform/set_wireless',
           component: sBasic.Screen,
         }, {
           id: 'advance',

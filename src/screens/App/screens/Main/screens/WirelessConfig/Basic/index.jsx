@@ -129,6 +129,7 @@ export default class Basic extends React.Component {
     props.initSettings({
       settingId: props.route.id,
       formUrl: props.route.formUrl,
+      saveUrl: props.route.saveUrl,
       query: {
         groupId,
       },
@@ -581,7 +582,7 @@ export default class Basic extends React.Component {
             icon="save"
             theme="primary"
             text={_('Save')}
-            onClick={this.onSaveBasicConfig}
+            onClick={this.props.saveSettings}
           />
         </div>
       </div>
