@@ -45,7 +45,7 @@ class Switchs extends React.Component {
     }
 
     if (size) {
-      classNames = `${classNames} m-switch-${size}`;
+      classNames = `${classNames} m-switch--${size}`;
     }
 
     if (className) {

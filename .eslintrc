@@ -45,8 +45,14 @@
         ]
       }
     ],
-
     // 避免在局部修改全局变量
-    "no-global-assign": ["error", {"exceptions": ["Object"]}]
+    "no-global-assign": [
+      "error",
+      {
+        "exceptions": [
+          "Object"
+        ]
+      }
+    ]
   }
 }

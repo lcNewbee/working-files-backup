@@ -4,24 +4,30 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import {
-  ListInfo, Button, Modal, FormGroup, FormInput,
+  ListInfo, Switchs,
 } from 'shared/components';
 import * as listActions from 'shared/actions/list';
 import * as appActions from 'shared/actions/app';
 
-const blcklistTableOptions = fromJS([
+const tableOptions = fromJS([
   {
-    id: 'mac',
-    text: _('MAC Address'),
+    id: 'no',
+    width: '50',
+    text: _('No'),
   }, {
-    id: 'vendor',
-    text: _('Manufacturer'),
+    id: 'addressPoolName',
+    width: '200',
+    text: _('Address Pool Name'),
   }, {
-    id: 'ssid',
-    text: _('终端类型'),
+    id: 'startAddress',
+    width: '160',
+    text: _('Start IP'),
   }, {
-    id: 'ssid',
-    text: _('封锁原因'),
+    id: 'endAddress',
+    text: _('End IP'),
+  }, {
+    id: 'description',
+    text: _('Description'),
   },
 ]);
 
@@ -43,66 +49,32 @@ export default class View extends React.Component {
     this.onAction = this.onAction.bind(this);
   }
 
-  onAction(mac, action) {
+  componentWillMount() {
+    this.tableOptions = tableOptions;
+  }
+
+  onAction(no, type) {
     const query = {
-      mac,
-      action,
+      no,
+      type,
     };
 
-    this.props.save('/goform/blacklist', query)
+    this.props.save(this.props.route.formUrl, query)
       .then((json) => {
         if (json.state && json.state.code === 2000) {
-          alert('ds');
+          console.log(json)
         }
       });
   }
 
   render() {
-    const { route, store } = this.props;
-    const tableOptions = blcklistTableOptions;
-    const editData = store.getIn([route.id, 'data', 'edit']) || Map({});
-    const actionBarChildren = (
-      <FormGroup
-        dispaly="inline"
-        label={_('动态黑名单老化时间')}
-      >
-        <FormInput
-          type="text"
-          style={{
-            marginRight: '8px',
-          }}
-        />
-        <Button
-          text={_('Save')}
-          theme="info"
-        />
-      </FormGroup>
-    );
-
     return (
       <ListInfo
         {...this.props}
-        actionBarChildren={actionBarChildren}
-        tableOptions={tableOptions}
+        tableOptions={this.tableOptions}
         controlAbled
-        editAbled={false}
-      >
-        <Modal
-          isShow={!editData.isEmpty()}
-          title={editData.get('myTitle')}
-          onOk={() => this.props.closeListItemModal(route.id)}
-          onClose={() => this.props.closeListItemModal(route.id)}
-        >
-          <FormGroup
-            type="text"
-            label={_('MAC Address')}
-          />
-          <FormGroup
-            type="text"
-            label={_('Block Reason')}
-          />
-        </Modal>
-      </ListInfo>
+        noTitle
+      />
     );
   }
 }

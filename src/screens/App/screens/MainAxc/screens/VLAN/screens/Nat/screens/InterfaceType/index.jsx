@@ -24,7 +24,7 @@ const tableOptions = fromJS([
     text: _('Switch Interface Type'),
   }, {
     id: 'rulesAssociated',
-    text: _('Rules Associated'),
+    text: `${_('Rules Associated')} (${_('Rule ID')} [ ${_('Rule Type')} ])`,
   },
 ]);
 
@@ -60,6 +60,7 @@ export default class View extends React.Component {
               '外部',
               '正常',
             ]}
+            size="sm"
             value={val}
             onChange={
               (data) => this.onAction(no, data.value)
@@ -71,7 +72,6 @@ export default class View extends React.Component {
   }
 
   onAction(no, type) {
-    console.log('dddd')
     const query = {
       no,
       type,
@@ -86,12 +86,10 @@ export default class View extends React.Component {
   }
 
   render() {
-    console.log()
     return (
       <ListInfo
         {...this.props}
         tableOptions={this.tableOptions}
-        controlAbled={false}
         noTitle
       />
     );

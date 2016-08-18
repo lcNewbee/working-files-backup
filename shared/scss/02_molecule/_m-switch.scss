@@ -1,7 +1,6 @@
 .m-switch {
   display: inline-block;
   margin: 0 5px;
-  line-height: 20px;
   border: 1px solid #666;
   border-radius: 3px;
 
@@ -27,6 +26,15 @@
     &.active {
       color: #fff;
       background-color: #666;
+    }
+  }
+
+  &.m-switch--sm {
+    border-radius: 2px;
+
+    .m-switch__item {
+      padding: 2px 9px;
+      font-size: 10px;
     }
   }
 }

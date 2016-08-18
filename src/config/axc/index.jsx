@@ -169,7 +169,7 @@ const routes = [
                     id: 'natSettings',
                     path: '/main/network/vlan/nat/settings',
                     formUrl: '/goform/natSettings',
-                    text: _('Nat Settings'),
+                    text: _('NAT Settings'),
                     component: sNatSettings.Screen,
                   }, {
                     id: 'interfaceType',
@@ -205,7 +205,7 @@ const routes = [
                     id: 'natLogs',
                     path: '/main/network/vlan/nat/nat_logs',
                     formUrl: '/goform/natLogs',
-                    text: _('Nat Logs'),
+                    text: _('NAT Logs'),
                     component: sNatLogs.Screen,
                   },
                 ],

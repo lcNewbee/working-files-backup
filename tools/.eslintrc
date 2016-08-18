@@ -1,0 +1,31 @@
+{
+  "rules": {
+    "new-cap": [
+      2,
+      {
+        // for Immutable
+        "capIsNewExceptions": [
+          "List",
+          "OrderedSet",
+          "Range",
+          "Map"
+        ]
+      }
+    ],
+    // 避免在局部修改全局变量
+    "no-global-assign": [
+      "error",
+      {
+        "exceptions": [
+          "Object"
+        ]
+      }
+    ],
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": true
+      }
+    ]
+  }
+}
