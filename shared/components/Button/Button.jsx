@@ -9,6 +9,7 @@ const propTypes = {
   className: PropTypes.string,
   theme: PropTypes.oneOf(['default', 'primary', 'success', 'info', 'warning', 'danger']),
   size: PropTypes.oneOf(['sm', 'lg']),
+  type: PropTypes.oneOf(['button', 'reset', 'submit']),
   inverse: PropTypes.bool,
   Component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
   loading: PropTypes.bool,
@@ -19,6 +20,7 @@ const defaultProps = {
   Component: 'button',
   theme: 'default',
   role: 'button',
+  type: 'button',
 };
 
 class Button extends React.Component {
@@ -29,7 +31,7 @@ class Button extends React.Component {
   }
 
   render() {
-    const { Component, icon, size, theme, className, loading, text } = this.props;
+    const { Component, icon, size, theme, className, loading, text, type, } = this.props;
     const componentProps = utils.extend({}, this.props);
     const myIcon = icon ? <Icon name={icon} /> : null;
 
@@ -57,7 +59,7 @@ class Button extends React.Component {
       delete componentProps.loading;
       delete componentProps.theme;
 
-      componentProps.type = 'button';
+      componentProps.type = type;
     }
 
     return (
