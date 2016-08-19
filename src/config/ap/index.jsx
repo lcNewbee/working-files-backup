@@ -41,6 +41,7 @@ const pQuickSetup = require('../../screens/App/screens/Main/screens/QuickSetup')
 
 // System Settings
 const pSystemSettings = require('../../screens/App/screens/Main/screens/SystemSettings');
+const sNetworkSettings = require('../../screens/App/screens/Main/screens/SystemSettings/NetworkSettings');
 
 // 无线设置
 const pWirelessConfig = require('../../screens/App/screens/Main/screens/WirelessConfig');
@@ -58,8 +59,6 @@ const sACL = require('../../screens/App/screens/Main/screens/WirelessConfig/ACL'
 // const sNetworkmonitor = require('../../screens/App/screens/Main/screens/MainMenu/screens/Networkmonitor');
 
 
-// 高级设置
-const pAdvance = require('../../screens/App/screens/Main/screens/Advance');
 
 // 网络服务
 const pNetworkService = require('../../screens/App/screens/Main/screens/NetworkService');
@@ -75,7 +74,7 @@ const sWizard = require('../../screens/App/screens/Wizard');
 
 // 布局
 const Main = require('../../screens/App/screens/Main').Screen;
-const Settings = require('../../screens/App/screens/Main/screens/Settings');
+// const Settings = require('../../screens/App/screens/Main/screens/Settings');
 
 // 热点统计
 const pStatus = require('../../screens/App/screens/Main/screens/Stats');
@@ -85,21 +84,23 @@ const pStatus = require('../../screens/App/screens/Main/screens/Stats');
 
 // 设备地图
 // const pDeviceMap = require('../../screens/App/screens/Main/screens/DeviceMap');
-const pStatistics = require('../../screens/App/screens/Main/screens/Statistics');
-const pLogs = require('../../screens/App/screens/Main/screens/Logs');
-const pClients = require('../../screens/App/screens/Main/screens/Clients');
 // const pPreview = require('../../screens/App/screens/Main/screens/Preview');
 
 // 维护
-const pMaintenance=require('../../screens/App/screens/Main/screens/Maintenance');
+const pMaintenance = require('../../screens/App/screens/Main/screens/Maintenance');
+
+// 工具
+const pTools = require('../../screens/App/screens/Main/screens/Tools');
+const sSpeedTest = require('../../screens/App/screens/Main/screens/Tools/SpeedTest');
+
 
 // 设置
-const pGroupSettings = require('../../screens/App/screens/Main/screens/Settings/screens/GroupSettings');
-const sWireless = require('../../screens/App/screens/Main/screens/Settings/screens/Wireless');
-const sPortal = require('../../screens/App/screens/Main/screens/Settings/screens/Portal');
-const sGuest = require('../../screens/App/screens/Main/screens/Settings/screens/Guest');
-const sVoip = require('../../screens/App/screens/Main/screens/Settings/screens/Voip');
-const sAdmin = require('../../screens/App/screens/Main/screens/Settings/screens/Admin');
+// const pGroupSettings = require('../../screens/App/screens/Main/screens/Settings/screens/GroupSettings');
+// const sWireless = require('../../screens/App/screens/Main/screens/Settings/screens/Wireless');
+// const sPortal = require('../../screens/App/screens/Main/screens/Settings/screens/Portal');
+// const sGuest = require('../../screens/App/screens/Main/screens/Settings/screens/Guest');
+// const sVoip = require('../../screens/App/screens/Main/screens/Settings/screens/Voip');
+// const sAdmin = require('../../screens/App/screens/Main/screens/Settings/screens/Admin');
 
 const routes = [{
   path: '/',
@@ -113,6 +114,7 @@ const routes = [{
       path: '/main/systemstatus',
       icon: 'cog',
       text: _('Device Status'),
+      isIndex: true,
       component: pSystemStatus.Screen,
     }, {
       id: 'quicksetup',
@@ -126,6 +128,19 @@ const routes = [{
       icon: 'cog',
       text: _('System Settings'),
       component: pSystemSettings,
+      indexRoute: {
+        onEnter: (nextState, replace) => replace('main/systemsettings/networksettings'),
+      },
+      childRoutes: [
+        {
+          id: 'networksettings',
+          formUrl: 'goform/get_network_info',
+          saveUrl: 'goform/set_network',
+          path: '/main/systemsettings/networksettings',
+          text: _('Network Settings'),
+          component: sNetworkSettings.Screen,
+        },
+      ],
     }, {
       id: 'wirelessconfig',
       path: '/main/wirelessconfig',
@@ -160,12 +175,6 @@ const routes = [{
           component: sACL.Screen,
         }],
     }, {
-      id: 'advance',
-      path: '/main/advance',
-      icon: 'cog',
-      text: _('ADVANCE'),
-      component: pAdvance.Screen,
-    }, {
       id: 'networkservice',
       path: '/main/networkservice',
       icon: 'cog',
@@ -187,82 +196,36 @@ const routes = [{
           component: sSystemLog.Screen,
         }],
     }, {
-      id: 'status',
-      isIndex: true,
-      path: '/main/status',
-      icon: 'bar-chart',
-      text: _('STATISTICS'),
-      component: pStatus.Screen,
-    }, {
-      id: 'clients',
-      path: '/main/clients',
-      icon: 'desktop',
-      text: _('CLIENTS'),
-      component: pClients.Screen,
-    }, {
-      id: 'logs',
-      path: '/main/logs',
-      icon: 'file-text-o',
-      text: _('LOGS'),
-      component: pLogs.Screen,
-    }, {
-      id: 'statistics',
-      path: '/main/statistics',
-      icon: 'file-pdf-o',
-      text: _('REPORTS'),
-      component: pStatistics.Screen,
-    }, {
       id: 'pMaintenance',
       path: '/main/maintenance',
       icon: 'file-pdf-o',
       text: _('Maintenance'),
       component: pMaintenance,
     }, {
-      id: 'settings',
-      path: '/main/settings',
+      id: 'tools',
+      path: '/main/tools',
       icon: 'cog',
-      text: _('SETTINGS'),
-      component: Settings,
-      indexRoute: {
-        onEnter: (nextState, replace) => replace('/main/settings/group'),
-      },
+      text: _('Tools'),
+      component: pTools,
+      indexRoute: { onEnter: (nextState, replace) => replace('/main/tools/speedtest') },
       childRoutes: [
         {
-          path: '/main/settings/group',
-          text: _('Groups'),
-          component: pGroupSettings.Screen,
-        }, {
-          id: 'wireless',
-          path: '/main/settings/wireless',
-          text: _('Wireless'),
-          component: sWireless.Screen,
-        }, {
-          id: 'portal',
-          path: '/main/settings/portal',
-          text: _(_('Portal Settings')),
-          component: sPortal.Screen,
-        }, {
-          id: 'guest',
-          path: '/main/settings/guest',
-          text: _('Guest Settings'),
-          component: sGuest.Screen,
-        }, {
-          id: 'voip',
-          path: '/main/settings/voip',
-          text: _('VoIP'),
-          component: sVoip.Screen,
-        }, {
-          id: 'password',
-          path: '/main/settings/admin',
-          text: _('Admin'),
-          component: sAdmin.Screen,
-        }],
+          id: 'speedtest',
+          path: '/main/tools/speedtest',
+          text: _('Speed Test'),
+          saveUrl: '/goform/bandwidth_test',
+          component: sSpeedTest.Screen,
+        },
+      ],
     }],
   }, {
     path: '/wizard',
     component: sWizard.Screen,
   },
   ],
+}, {
+  path: '/main/status',
+  indexRoute: { onEnter: (nextState, replace) => replace('/main/systemstatus') },
 }, {
   path: '*',
   component: NotFound,
@@ -276,15 +239,12 @@ const reducers = {
 
   status: pStatus.status,
   login: pLogin.login,
-  clients: pClients.clients,
-  logs: pLogs.logs,
-  statistics: pStatistics.statistics,
-  groupSettings: pGroupSettings.settings,
-  wireless: sWireless.reducer,
-  portal: sPortal.reducer,
-  guest: sGuest.reducer,
-  voip: sVoip.reducer,
-  admin: sAdmin.reducer,
+  // groupSettings: pGroupSettings.settings,
+  // wireless: sWireless.reducer,
+  // portal: sPortal.reducer,
+  // guest: sGuest.reducer,
+  // voip: sVoip.reducer,
+  // admin: sAdmin.reducer,
   // networkmonitor: sNetworkmonitor.networkmonitor,
   wirelessconfig: pWirelessConfig.wirelessconfig,
   // advance: pAdvance.advance,
@@ -297,6 +257,7 @@ const reducers = {
   quicksetup: pQuickSetup.quicksetup,
   // 系统设置
   systemsettings: pSystemSettings.systemsettings,
+  networksettings: sNetworkSettings.networksettings,
   // 无线配置
   basic: sBasic.basic,
   advance: sAdvance.advance,

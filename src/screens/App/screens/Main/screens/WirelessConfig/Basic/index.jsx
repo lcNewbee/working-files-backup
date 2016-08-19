@@ -49,8 +49,9 @@ const rateOptions = [
 
 const staAndApSecurityOptions = [
   { value: 'none', label: 'None' },
-  { value: 'wpa-aes', label: 'WPA-AES' },
-  { value: 'wpa2-aes', label: 'WPA2-AES' },
+  { value: 'wpa', label: 'WPA-AES' },
+  { value: 'wpa2', label: 'WPA2-AES' },
+  { value: 'wpa-mixed', label: 'WPA-Mixed-AES' },
 ];
 
 const repeaterSecurityOptions = [

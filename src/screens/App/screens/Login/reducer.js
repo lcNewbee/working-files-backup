@@ -4,7 +4,7 @@ export default function (
   state = fromJS({
     fetching: false,
     data: {
-      username: '',
+      username: 'admin',
       password: '',
     },
   }), action) {
