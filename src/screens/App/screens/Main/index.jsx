@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import utils from 'shared/utils';
-import { bindActionCreators } from 'redux'
+import { bindActionCreators } from 'redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import Nav from 'shared/components/Nav';
 import Icon from 'shared/components/Icon';
 import Modal from 'shared/components/Modal';
@@ -13,35 +13,35 @@ import * as appActions from 'shared/actions/app';
 
 export default class Main extends Component {
   constructor(props) {
-    super(props)
+    super(props);
 
-    this.state = {isShow: false};
+    this.state = { isShow: false };
 
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.showUserPopOver = this.showUserPopOver.bind(this);
     this.onRefresh = this.onRefresh.bind(this);
     this.onLogout = this.onLogout.bind(this);
 
-    document.onkeydown = function(e) {
-      if(e.keyCode == 116){
+    document.onkeydown = function (e) {
+      if (e.keyCode == 116) {
         this.onRefresh(e);
       }
     }.bind(this);
-  };
+  }
 
   showUserPopOver() {
-    this.setState({isShow: !this.state.isShow});
-  };
+    this.setState({ isShow: !this.state.isShow });
+  }
 
   onRefresh(e) {
     e.preventDefault();
     this.props.refreshAll();
-  };
+  }
 
   onLogout(e) {
     e.preventDefault();
     this.props.changeLoginStatus('0');
-    window.location.hash = "#";
+    window.location.hash = '#';
   }
 
   render() {
@@ -71,7 +71,7 @@ export default class Main extends Component {
 
         <div className="t-main main--open">
           <Nav className="t-main__nav" role="menu" menus={this.props.route.childRoutes} />
-          <div className='t-main__content'>
+          <div className="t-main__content">
             {
               this.props.children
             }
@@ -108,15 +108,15 @@ export default class Main extends Component {
             saving ? <div className="body-backdrop"></div> : null
           }
       </div>
-    )
+    );
   }
 }
 
 function mapStateToProps(state) {
-  var myState = state.app;
+  let myState = state.app;
 
   return {
-    app: myState
+    app: myState,
   };
 }
 
@@ -124,7 +124,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
     actions
-  ), dispatch)
+  ), dispatch);
 }
 
 export const Screen = connect(

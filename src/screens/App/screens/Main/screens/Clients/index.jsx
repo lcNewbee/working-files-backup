@@ -38,7 +38,7 @@ const clientsTableOptions = fromJS([
     }
   }, {
     id: 'bandwidth',
-    text: _('Up/Down Speed'),
+    text: _('Up/Down Flow'),
     transform: function(val, item) {
       var upRate = flowRateFilter.transform(item.get('upstream'));
       var downRate = flowRateFilter.transform(item.get('downstream'));

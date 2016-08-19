@@ -19,7 +19,6 @@
     width: 240px;
     height: 240px;
     margin: 10px auto;
-    float: left;
   }
 
   .stats-group-cell {
@@ -27,7 +26,7 @@
     border: 1px solid #dedede;
     border-bottom: none;
     border-collapse: collapse;
-    overflow: auto;
+    overflow: hidden;
   }
   .stats-group-header {
     padding: 8px 13px;

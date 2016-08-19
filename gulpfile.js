@@ -163,7 +163,8 @@ gulp.task('bump:dev', function () {
 var configReg = /\'\.\/config\/(\w+)\'/g;
 
 gulp.task('config', function() {
-  var name = 'accessManager';
+  var name = 'ac';
+
   if(argv.n) {
     name = argv.n;
   }
