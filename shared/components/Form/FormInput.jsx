@@ -69,7 +69,6 @@ class FormInput extends React.Component {
     };
 
     data.value = momentObj.format(formatOption);
-    console.log(data)
 
     // 数据更新
     if (typeof this.props.onChange === 'function') {

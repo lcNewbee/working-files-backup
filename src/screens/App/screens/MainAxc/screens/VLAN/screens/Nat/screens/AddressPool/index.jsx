@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import {
-  ListInfo, Modal, FormGroup,
+  ListInfo,
 } from 'shared/components';
 import * as listActions from 'shared/actions/list';
 import * as appActions from 'shared/actions/app';
@@ -14,6 +14,7 @@ const tableOptions = fromJS([
     id: 'no',
     width: '50',
     text: _('No'),
+    disabled: true,
   }, {
     id: 'addressPoolName',
     width: '200',
@@ -38,6 +39,7 @@ const propTypes = {
   route: PropTypes.object,
   initList: PropTypes.func,
   closeListItemModal: PropTypes.func,
+  updateEditListItem: PropTypes.func,
   save: PropTypes.func,
 };
 const defaultProps = {};
@@ -68,46 +70,14 @@ export default class View extends React.Component {
   }
 
   render() {
-    const { route, store } = this.props;
-    const editData = store.getIn([route.id, 'data', 'edit']) || Map({});
-
     return (
       <ListInfo
         {...this.props}
         tableOptions={this.tableOptions}
         controlAbled
+        autoEditModel
         noTitle
-      >
-        <Modal
-          isShow={!editData.isEmpty()}
-          title={editData.get('myTitle')}
-          onOk={() => this.onSave()}
-          onClose={() => this.props.closeListItemModal(route.id)}
-        >
-          {
-            tableOptions.map((item) => {
-              let id = item.get('id');
-
-              return (
-                <FormGroup
-                  type="text"
-                  key={id}
-                  label={item.get('text')}
-                  value={editData.get(id)}
-                  onChange={
-                    (data) => {
-                      const upDate = {};
-
-                      upDate[id] = data.value;
-                      this.props.updateEditListItem(upDate);
-                    }
-                  }
-                />
-              );
-            })
-          }
-        </Modal>
-      </ListInfo>
+      />
     );
   }
 }

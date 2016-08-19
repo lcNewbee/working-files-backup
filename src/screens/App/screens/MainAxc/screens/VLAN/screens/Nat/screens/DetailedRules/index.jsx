@@ -61,31 +61,13 @@ export default class View extends React.Component {
     const { route, store } = this.props;
     const tableOptions = blcklistTableOptions;
     const editData = store.getIn([route.id, 'data', 'edit']) || Map({});
-    const actionBarChildren = (
-      <FormGroup
-        dispaly="inline"
-        label={_('动态黑名单老化时间')}
-      >
-        <FormInput
-          type="text"
-          style={{
-            marginRight: '8px',
-          }}
-        />
-        <Button
-          text={_('Save')}
-          theme="info"
-        />
-      </FormGroup>
-    );
 
     return (
       <ListInfo
         {...this.props}
-        actionBarChildren={actionBarChildren}
         tableOptions={tableOptions}
         controlAbled
-        editAbled={false}
+        noTitle
       >
         <Modal
           isShow={!editData.isEmpty()}

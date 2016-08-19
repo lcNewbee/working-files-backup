@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { Map, List } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import {
-  Table, Select, Search, Switchs, Button,
+  Table, Select, Search, Switchs, Button, FormGroup, Modal,
 } from 'shared/components';
 
 const msg = {
@@ -30,6 +30,8 @@ const propTypes = {
   leaveListScreen: PropTypes.func,
   addListItem: PropTypes.func,
   editListItemByIndex: PropTypes.func,
+  closeListItemModal: PropTypes.func,
+  updateEditListItem: PropTypes.func,
   initList: PropTypes.func,
 
   children: PropTypes.node,
@@ -40,6 +42,7 @@ const propTypes = {
   deleteAbled: PropTypes.bool,
   controlAbled: PropTypes.bool,
   noTitle: PropTypes.bool,
+  autoEditModel: PropTypes.bool,
 };
 const defaultProps = {
   controlAbled: false,
@@ -59,7 +62,7 @@ class ListInfo extends React.Component {
       listId: props.route.id,
     });
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    this.binds('handleChangeQuery', 'onPageChange',
+    this.binds('handleChangeQuery', 'onPageChange', 'onSave',
         'onChangeSearchText', 'onChangeType', 'onChangeTableSize');
   }
 
@@ -97,6 +100,9 @@ class ListInfo extends React.Component {
       size: data.value,
       page: 1,
     }, true);
+  }
+  onSave() {
+
   }
 
   onPageChange(i) {
@@ -137,14 +143,16 @@ class ListInfo extends React.Component {
   render() {
     const {
       tableOptions, typeOption, store, route, hasSearch, actionBarChildren,
-      addAbled, editAbled, deleteAbled, controlAbled, noTitle,
+      addAbled, editAbled, deleteAbled, controlAbled, noTitle, autoEditModel,
     } = this.props;
     const myListId = store.get('curListId');
     const page = store.getIn([myListId, 'data', 'page']);
     const list = store.getIn([myListId, 'data', 'list']);
+    const editData = store.getIn([myListId, 'data', 'edit']);
     const query = store.getIn([myListId, 'query']);
     let myListTableOptions = tableOptions;
     let pageSelectClassName = 'fr';
+    const needEditModel = autoEditModel && controlAbled && (addAbled || editAbled);
 
     // 数据未初始化不渲染
     if (myListId === 'base') {
@@ -262,7 +270,42 @@ class ListInfo extends React.Component {
           onPageChange={this.onPageChange}
           loading={store.get('fetching')}
         />
+        {
+          needEditModel ? (
+            <Modal
+              isShow={!editData.isEmpty()}
+              title={editData.get('myTitle')}
+              onOk={() => this.onSave()}
+              onClose={
+                () => this.props.closeListItemModal(route.id)
+              }
+            >
+              {
+                tableOptions.map((item) => {
+                  let id = item.get('id');
 
+                  return (
+                    <FormGroup
+                      key={id}
+                      type={item.get('type')}
+                      label={item.get('text')}
+                      value={editData.get(id)}
+                      disabled={item.get('disabled')}
+                      onChange={
+                        (data) => {
+                          const upDate = {};
+
+                          upDate[id] = data.value;
+                          this.props.updateEditListItem(upDate);
+                        }
+                      }
+                    />
+                  );
+                })
+              }
+            </Modal>
+          ) : null
+        }
         {
           this.props.children
         }
