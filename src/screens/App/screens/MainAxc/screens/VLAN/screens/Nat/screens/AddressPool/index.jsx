@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import {
-  ListInfo, Switchs,
+  ListInfo, Modal, FormGroup,
 } from 'shared/components';
 import * as listActions from 'shared/actions/list';
 import * as appActions from 'shared/actions/app';
@@ -62,19 +62,52 @@ export default class View extends React.Component {
     this.props.save(this.props.route.formUrl, query)
       .then((json) => {
         if (json.state && json.state.code === 2000) {
-          console.log(json)
+          console.log(json);
         }
       });
   }
 
   render() {
+    const { route, store } = this.props;
+    const editData = store.getIn([route.id, 'data', 'edit']) || Map({});
+
     return (
       <ListInfo
         {...this.props}
         tableOptions={this.tableOptions}
         controlAbled
         noTitle
-      />
+      >
+        <Modal
+          isShow={!editData.isEmpty()}
+          title={editData.get('myTitle')}
+          onOk={() => this.onSave()}
+          onClose={() => this.props.closeListItemModal(route.id)}
+        >
+          {
+            tableOptions.map((item) => {
+              let id = item.get('id');
+
+              return (
+                <FormGroup
+                  type="text"
+                  key={id}
+                  label={item.get('text')}
+                  value={editData.get(id)}
+                  onChange={
+                    (data) => {
+                      const upDate = {};
+
+                      upDate[id] = data.value;
+                      this.props.updateEditListItem(upDate);
+                    }
+                  }
+                />
+              );
+            })
+          }
+        </Modal>
+      </ListInfo>
     );
   }
 }

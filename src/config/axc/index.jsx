@@ -11,9 +11,6 @@ import moment from 'moment';
 import 'shared/scss/styles.scss';
 
 // 公用组件
-import {
-  TabContainer,
-} from 'shared/components';
 
 // 产品配置
 import guiConfig from './config.json';
@@ -51,6 +48,7 @@ bodyElem.className = `${bodyElem.className} ${b28n.getLang()}`;
 
 // 主APP
 const App = require('../../screens/App');
+const SharedComponents = require('shared/components');
 
 //
 const sLogin = require('../../screens/App/screens/Login');
@@ -160,7 +158,7 @@ const routes = [
                 id: 'vlanNat',
                 path: '/main/network/vlan/nat',
                 text: _('NAT Settings'),
-                component: TabContainer,
+                component: SharedComponents.TabContainer,
                 indexRoute: {
                   onEnter: (nextState, replace) => replace('/main/network/vlan/nat/settings'),
                 },
@@ -351,7 +349,7 @@ const routes = [
                 path: '/main/group/wireless/safe',
                 formUrl: '/goform/timerPolicy',
                 text: _('Wireless Safe Policy'),
-                component: TabContainer,
+                component: SharedComponents.TabContainer,
                 indexRoute: {
                   onEnter: (nextState, replace) => replace('/main/group/wireless/safe/wips'),
                 },
@@ -396,7 +394,7 @@ const routes = [
                 id: 'businessReport',
                 path: '/main/group/report/business',
                 text: _('Business Report'),
-                component: TabContainer,
+                component: SharedComponents.TabContainer,
                 indexRoute: {
                   onEnter: (nextState, replace) => replace('/main/group/report/business/usersFlow'),
                 },
