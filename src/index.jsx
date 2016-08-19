@@ -17,12 +17,12 @@ const Router = ReactRouter.Router;
 const hashHistory = ReactRouter.hashHistory;
 
 // 引入产品配置
-const prodConfig = require('./config/axc');
+const prodConfig = require('./config/ac');
 
 if (module.hot) {
   // Enable Webpack hot module replacement for reducers
-  module.hot.accept('./config/axc', () => {
-    const newConfig = require('./config/axc');
+  module.hot.accept('./config/ac', () => {
+    const newConfig = require('./config/ac');
     const nextRootReducer = combineReducers(newConfig.reducers);
 
     prodConfig.stores.replaceReducer(nextRootReducer);

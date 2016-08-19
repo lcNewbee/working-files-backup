@@ -47,7 +47,9 @@ class ReactEchart extends React.Component {
     const echartObj = this.renderEchartDom();
 
     if (onEvents) {
-      Object.keys(onEvents).forEach((eventFunc, eventName) => {
+      Object.keys(onEvents).forEach((eventName) => {
+        const eventFunc = onEvents[eventName];
+
         if (typeof eventFunc === 'function') {
           echartObj.on(eventName, (param) => eventFunc(param, echartObj));
         }
@@ -90,7 +92,9 @@ class ReactEchart extends React.Component {
     // get the option
     const { option } = this.props;
 
-    echartObj.setOption(option);
+    if (option) {
+      echartObj.setOption(option);
+    }
 
     if (this.offsetWidth !== this.myRef.offsetWidth ||
         this.offsetHeight !== this.myRef.offsetHeight) {
