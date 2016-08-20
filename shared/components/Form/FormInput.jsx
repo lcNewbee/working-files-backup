@@ -15,8 +15,18 @@ const propTypes = {
   className: PropTypes.string,
   Component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
   size: PropTypes.oneOf(['min', 'sm', 'md', 'lg', 'xl']),
-  type: PropTypes.oneOf([undefined, '', 'text', 'password', 'radio', 'checkbox',
-    'date', 'email', 'number', 'color', 'select', 'range', 'time']),
+  type: PropTypes.oneOf([
+    // html4
+    '', 'text', 'file', 'password', 'textarea', 'radio', 'checkbox',
+    'select', 'reset', 'submit', 'hidden', 'search',
+
+    // html5
+    'date', 'datetime', 'datetime-local', 'month', 'week', 'time',
+    'email', 'number', 'color', 'range', 'tel', 'url',
+
+    // custom
+    'ip', 'mac',
+  ]),
   check: PropTypes.func,
   checkClear: PropTypes.func,
   checkClearValue: PropTypes.func,
@@ -154,7 +164,6 @@ class FormInput extends React.Component {
         searchable={searchable || false}
       />);
     } else if (inpputType === 'time') {
-
       if (!showSecond) {
         timeFormat = 'hmm';
       }

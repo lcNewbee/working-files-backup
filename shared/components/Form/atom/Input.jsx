@@ -25,6 +25,8 @@ class Input extends React.Component {
   }
   render() {
     const inputProps = utils.extend({}, this.props);
+    let ThisComponent = 'input';
+
     delete inputProps.seeAble;
     delete inputProps.Component;
     delete inputProps.loading;
@@ -39,8 +41,12 @@ class Input extends React.Component {
     delete inputProps.help;
     delete inputProps.text;
 
+    if (inputProps.type === 'textarea') {
+      ThisComponent = 'textarea';
+    }
+
     return (
-      <input
+      <ThisComponent
         {...inputProps}
         ref={(ref) => (this.myRef = ref)}
       />

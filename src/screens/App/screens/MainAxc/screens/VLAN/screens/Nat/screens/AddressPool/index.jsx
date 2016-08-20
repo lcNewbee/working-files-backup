@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import utils from 'shared/utils';
+import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
@@ -9,12 +9,14 @@ import {
 import * as listActions from 'shared/actions/list';
 import * as appActions from 'shared/actions/app';
 
-const tableOptions = fromJS([
+const screenOptions = fromJS([
   {
     id: 'no',
     width: '50',
     text: _('No'),
-    disabled: true,
+    formProps: {
+      disabled: true,
+    },
   }, {
     id: 'addressPoolName',
     width: '200',
@@ -29,8 +31,17 @@ const tableOptions = fromJS([
   }, {
     id: 'description',
     text: _('Description'),
+    formProps: {
+      type: 'textarea',
+    },
   },
 ]);
+
+const tableOptions = screenOptions.map(
+  (item) => item.delete('formProps')
+);
+
+const editFormOptions = immutableUtils.getFormOptions(screenOptions);
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
@@ -74,8 +85,8 @@ export default class View extends React.Component {
       <ListInfo
         {...this.props}
         tableOptions={this.tableOptions}
+        editFormOptions={editFormOptions}
         controlAbled
-        autoEditModel
         noTitle
       />
     );

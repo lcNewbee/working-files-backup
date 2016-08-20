@@ -21,8 +21,15 @@ const propTypes = {
   route: PropTypes.object,
   defaultItem: PropTypes.object,
 
-  tableOptions: PropTypes.instanceOf(List),
-  typeOption: PropTypes.instanceOf(List),
+  tableOptions: PropTypes.oneOfType([
+    PropTypes.instanceOf(List), PropTypes.array,
+  ]),
+  typeOptions: PropTypes.oneOfType([
+    PropTypes.instanceOf(List), PropTypes.array,
+  ]),
+  editFormOptions: PropTypes.oneOfType([
+    PropTypes.instanceOf(List), PropTypes.array,
+  ]),
   hasSearch: PropTypes.bool,
 
   changeListQuery: PropTypes.func,
@@ -32,6 +39,8 @@ const propTypes = {
   editListItemByIndex: PropTypes.func,
   closeListItemModal: PropTypes.func,
   updateEditListItem: PropTypes.func,
+  changeListActionQuery: PropTypes.func,
+  onListAction: PropTypes.func,
   initList: PropTypes.func,
 
   children: PropTypes.node,
@@ -67,6 +76,48 @@ class ListInfo extends React.Component {
   }
 
   componentWillMount() {
+    const { controlAbled, editAbled, deleteAbled, tableOptions } = this.props;
+
+    // 初始配置，添加操作项
+    if (controlAbled && (editAbled || deleteAbled)) {
+      this.ListTableOptions = tableOptions.push(Map({
+        id: 'actions',
+        text: _('Actions'),
+        width: '180',
+        transform: (val, item, index) => (
+          <div className="action-btns">
+            {
+              editAbled ? (
+                <Button
+                  icon="edit"
+                  text={_('Edit')}
+                  size="sm"
+                  onClick={() => {
+                    this.props.editListItemByIndex(index);
+                  }}
+                />
+              ) : null
+            }
+
+            {
+              deleteAbled ? (
+                <Button
+                  icon="trash"
+                  text={_('Delete')}
+                  size="sm"
+                  onClick={() => {
+                    this.onRemoveItem(index);
+                  }}
+                />
+              ) : null
+            }
+          </div>
+        ),
+      }));
+    } else {
+      this.ListTableOptions = tableOptions;
+    }
+
     if (this.props.fetchList) {
       this.props.fetchList(this.listId);
     }
@@ -142,65 +193,24 @@ class ListInfo extends React.Component {
 
   render() {
     const {
-      tableOptions, typeOption, store, route, hasSearch, actionBarChildren,
-      addAbled, editAbled, deleteAbled, controlAbled, noTitle, autoEditModel,
+      typeOptions, store, route, hasSearch, actionBarChildren,
+      addAbled, editFormOptions, controlAbled, noTitle,
     } = this.props;
     const myListId = store.get('curListId');
     const page = store.getIn([myListId, 'data', 'page']);
     const list = store.getIn([myListId, 'data', 'list']);
     const editData = store.getIn([myListId, 'data', 'edit']);
     const query = store.getIn([myListId, 'query']);
-    let myListTableOptions = tableOptions;
     let pageSelectClassName = 'fr';
-    const needEditModel = autoEditModel && controlAbled && (addAbled || editAbled);
 
     // 数据未初始化不渲染
     if (myListId === 'base') {
       return null;
     }
 
-    if (!hasSearch && !typeOption && !actionBarChildren &&
+    if (!hasSearch && !typeOptions && !actionBarChildren &&
         (controlAbled && !addAbled)) {
       pageSelectClassName = 'fl';
-    }
-
-    if (controlAbled && (editAbled || deleteAbled)) {
-      myListTableOptions = tableOptions.push(Map({
-        id: 'actions',
-        text: _('Actions'),
-        width: '180',
-        transform: (val, item, index) => {
-          return (
-            <div className="action-btns">
-              {
-                editAbled ? (
-                  <Button
-                    icon="edit"
-                    text={_('Edit')}
-                    size="sm"
-                    onClick={() => {
-                      this.props.editListItemByIndex(index);
-                    }}
-                  />
-                ) : null
-              }
-
-              {
-                deleteAbled ? (
-                  <Button
-                    icon="trash"
-                    text={_('Delete')}
-                    size="sm"
-                    onClick={() => {
-                      this.onRemoveItem(index);
-                    }}
-                  />
-                ) : null
-              }
-            </div>
-          );
-        },
-      }));
     }
 
     return (
@@ -223,10 +233,10 @@ class ListInfo extends React.Component {
           }
 
           {
-            typeOption ? (
+            typeOptions ? (
               <Switchs
                 value={query.get('type')}
-                options={typeOption}
+                options={typeOptions}
                 onChange={this.onChangeType}
               />
             ) : null
@@ -264,14 +274,14 @@ class ListInfo extends React.Component {
 
         <Table
           className="table"
-          options={myListTableOptions}
+          options={this.ListTableOptions}
           list={list}
           page={page}
           onPageChange={this.onPageChange}
           loading={store.get('fetching')}
         />
         {
-          needEditModel ? (
+          editFormOptions ? (
             <Modal
               isShow={!editData.isEmpty()}
               title={editData.get('myTitle')}
@@ -281,16 +291,15 @@ class ListInfo extends React.Component {
               }
             >
               {
-                tableOptions.map((item) => {
-                  let id = item.get('id');
+                editFormOptions.map((item) => {
+                  const myProps = item.toJS();
+                  const id = myProps.id;
 
                   return (
                     <FormGroup
+                      {...myProps}
                       key={id}
-                      type={item.get('type')}
-                      label={item.get('text')}
                       value={editData.get(id)}
-                      disabled={item.get('disabled')}
                       onChange={
                         (data) => {
                           const upDate = {};

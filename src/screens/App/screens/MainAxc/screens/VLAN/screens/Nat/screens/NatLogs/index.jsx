@@ -14,7 +14,6 @@ const tableOptions = fromJS([
     id: 'no',
     width: '50',
     text: _('时间'),
-    disabled: true,
   }, {
     id: 'serviceName',
     width: '200',
@@ -24,6 +23,11 @@ const tableOptions = fromJS([
     width: '160',
     text: _('目的IP'),
   },
+]);
+const listTypeOption = fromJS([
+  'TCP',
+  'UDP',
+  'ICMP',
 ]);
 
 const propTypes = {
@@ -68,6 +72,7 @@ export default class View extends React.Component {
       <ListInfo
         {...this.props}
         tableOptions={this.tableOptions}
+        typeOptions={listTypeOption}
         noTitle
       />
     );

@@ -12,6 +12,7 @@ utils.extend(require('./lib/sync'));
 utils.extend({
   storage: require('./lib/storage'),
   filter: require('./lib/filter'),
+  immutableUtils: require('./lib/immutable'),
 });
 
 // exports
