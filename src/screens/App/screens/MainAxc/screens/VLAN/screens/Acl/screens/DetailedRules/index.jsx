@@ -25,108 +25,68 @@ function getInterfaceTypeOptions() {
 }
 const screenOptions = fromJS([
   {
-    id: 'ispDomain',
-    text: _('ISP Domain Name'),
+    id: 'no',
+    text: _('No'),
     formProps: {
-      type: 'url',
+      type: 'plain-text',
     },
   }, {
-    id: 'authAccessType',
-    width: '200',
-    text: _('Access Type'),
-    defaultValue: '0',
-    formProps: {
-      type: 'select',
-      placeholder: _('Please Select ') + _('Rules Group'),
-      options: [
-        {
-          value: '0',
-          label: `${_('Local')} (${_('802.1X')})`,
-        },
-        {
-          value: '1',
-          label: `${_('Remotely')}(${_('Radius Service')})` ,
-        },
-      ],
-    },
+    id: 'ruleName',
+    text: _('Rule Name'),
   }, {
-    id: 'authType',
-    text: _('Auth Type'),
+    id: 'actionType',
+    text: _('The Action'),
     defaultValue: '0',
     formProps: {
       type: 'switch',
-      placeholder: _('Please Select ') + _('Rules Group'),
       options: [
         {
           value: '0',
-          label: `${_('Local')} (${_('802.1X')})`,
-        },
-        {
+          label: _('Accept'),
+        }, {
           value: '1',
-          label: `${_('Remotely')}(${_('Radius Service')})` ,
+          label: _('Throw Away'),
         },
       ],
     },
   }, {
-    id: 'authRadiusModel',
-    text: _('Radius Model'),
-    formProps: {
-      type: 'select',
-      placeholder: _('Please Select ') + _('Radius Model'),
-      loadOptions: getInterfaceTypeOptions,
-      isAsync: true,
-      multi: true,
-    },
-  }, {
-    id: 'billingAccessType',
-    width: '200',
-    text: _('Access Type'),
-    defaultValue: '0',
-    formProps: {
-      type: 'select',
-      placeholder: _('Please Select ') + _('Rules Group'),
-      options: [
-        {
-          value: '0',
-          label: `${_('Local')} (${_('802.1X')})`,
-        },
-        {
-          value: '1',
-          label: `${_('Remotely')}(${_('Radius Service')})` ,
-        },
-      ],
-    },
-  }, {
-    id: 'billingType',
-    text: _('Auth Type'),
+    id: 'addressType',
+    text: _('Address Type'),
     defaultValue: '0',
     formProps: {
       type: 'switch',
-      placeholder: _('Please Select ') + _('Rules Group'),
       options: [
         {
           value: '0',
-          label: `${_('Local')} (${_('802.1X')})`,
-        },
-        {
+          label: _('Source Address'),
+        }, {
           value: '1',
-          label: `${_('Remotely')}(${_('Radius Service')})` ,
+          label: _('Target Address'),
         },
       ],
     },
   }, {
-    id: 'billingRadiusModel',
-    text: _('Radius Model'),
+    id: 'ipType',
+    text: _('IP Type'),
+    defaultValue: '0',
     formProps: {
-      type: 'select',
-      placeholder: _('Please Select ') + _('Radius Model'),
-      loadOptions: getInterfaceTypeOptions,
-      isAsync: true,
-      multi: true,
+      type: 'switch',
+      options: [
+        {
+          value: '0',
+          label: _('IPV4'),
+        }, {
+          value: '1',
+          label: _('IPV6'),
+        },
+      ],
     },
+  }, {
+    id: 'ipAddress',
+    text: _('IP Address'),
+
   },
 ]);
-
 const tableOptions = screenOptions.map(
   (item) => item.delete('formProps')
 );
@@ -139,7 +99,6 @@ const propTypes = {
   route: PropTypes.object,
   initList: PropTypes.func,
   closeListItemModal: PropTypes.func,
-  updateEditListItem: PropTypes.func,
   save: PropTypes.func,
 };
 const defaultProps = {};
@@ -152,30 +111,26 @@ export default class View extends React.Component {
   }
 
   componentWillMount() {
-    this.tableOptions = tableOptions;
   }
 
-  onAction(no, type) {
+  onAction(mac, action) {
     const query = {
-      no,
-      type,
+      mac,
+      action,
     };
 
-    this.props.save(this.props.route.formUrl, query)
-      .then((json) => {
-        if (json.state && json.state.code === 2000) {
-          console.log(json);
-        }
-      });
+    this.props.save('/goform/blacklist', query)
+      .then(() => {});
   }
 
   render() {
     return (
       <ListInfo
         {...this.props}
-        tableOptions={this.tableOptions}
+        tableOptions={tableOptions}
         editFormOptions={editFormOptions}
         controlAbled
+        noTitle
       />
     );
   }

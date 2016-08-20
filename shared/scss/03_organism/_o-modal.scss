@@ -13,8 +13,8 @@
   z-index: 1650;
   -webkit-overflow-scrolling: touch;
   outline: 0;
-  overflow: auto;
   padding-top: 10px;
+  overflow: auto;
 }
 .o-modal__backdrop {
   position: fixed;
@@ -41,7 +41,6 @@
   z-index: 1050;
   margin: 0 auto;
   width: auto;
-  overflow: auto;
 }
 
 .o-modal__comfirm,
@@ -110,8 +109,6 @@
 .o-modal__body {
   position: relative;
   padding: 15px;
-  max-height: 70vh;
-  overflow: auto;
 }
 .o-modal__footer {
   padding: 10px 15px;

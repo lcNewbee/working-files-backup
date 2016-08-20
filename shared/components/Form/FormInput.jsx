@@ -6,6 +6,7 @@ import Checkbox from './Checkbox';
 import Password from './Password';
 import Radios from './Radios';
 import Input from './atom/Input';
+import Switchs from '../Switchs';
 import TimePicker from '../TimePicker';
 import DatePicker from '../DatePicker';
 import utils from '../../utils';
@@ -25,7 +26,7 @@ const propTypes = {
     'email', 'number', 'color', 'range', 'tel', 'url',
 
     // custom
-    'ip', 'mac',
+    'ip', 'mac', 'switch', 'plain-text',
   ]),
   check: PropTypes.func,
   checkClear: PropTypes.func,
@@ -156,13 +157,21 @@ class FormInput extends React.Component {
       classNames = `${classNames} input-${size}`;
     }
 
-    if (inpputType === 'select') {
+    if (inpputType === 'plain-text') {
+      return <span className="plain-text">{value}</span>;
+    } else if (inpputType === 'select') {
       return (<Select
         {...inputProps}
         className={classNames}
         clearable={clearable || false}
         searchable={searchable || false}
       />);
+    } else if (inpputType === 'switch') {
+      return (
+        <Switchs
+          {...inputProps}
+        />
+      );
     } else if (inpputType === 'time') {
       if (!showSecond) {
         timeFormat = 'hmm';

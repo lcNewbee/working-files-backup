@@ -9,68 +9,37 @@ import {
 import * as listActions from 'shared/actions/list';
 import * as appActions from 'shared/actions/app';
 
-function getInterfaceTypeOptions() {
-  return utils.fetch('/goform/interfaceType')
-    .then((json) => (
-      {
-        options: json.data.list.map(
-          (item) => ({
-            value: item.no,
-            label: `${item.no}(${item.noInfo})`,
-          })
-        ),
-      }
-    )
-  );
-}
 const screenOptions = fromJS([
   {
     id: 'no',
+    width: '50',
     text: _('No'),
     formProps: {
       disabled: true,
     },
   }, {
-    id: 'ipType',
-    text: _('Rule Type'),
-    defaultValue: '0',
+    id: 'addressPoolName',
+    width: '200',
+    text: _('Address Objects Name'),
+  }, {
+    id: 'startAddress',
+    width: '160',
+    text: _('IP'),
+  }, {
+    id: 'endAddress',
+    text: _('Mask'),
+  }, {
+    id: 'description',
+    text: _('Description'),
     formProps: {
-      type: 'switch',
-      label: _('NAT Rule Type'),
-      placeholder: _('Please Select ') + _('NAT Rule Type'),
-      options: [
-        {
-          value: '0',
-          label: _('IPV4'),
-        }, {
-          value: '1',
-          label: _('IPV6'),
-        },
-      ],
-    },
-  }, {
-    id: 'targetAddress',
-    text: _('Target Address'),
-  }, {
-    id: 'targetMask',
-    text: _('Target Mask'),
-  }, {
-    id: 'nextHopIp',
-    text: _('Next Hop IP'),
-  }, {
-    id: 'interface',
-    text: _('Interface'),
-    formProps: {
-      type: 'select',
-      placeholder: _('Please Select ') + _('Interface'),
-      loadOptions: getInterfaceTypeOptions,
-      isAsync: true,
+      type: 'textarea',
     },
   },
 ]);
 const tableOptions = screenOptions.map(
   (item) => item.delete('formProps')
 );
+
 const editFormOptions = immutableUtils.getFormOptions(screenOptions);
 
 const propTypes = {
@@ -80,6 +49,7 @@ const propTypes = {
   route: PropTypes.object,
   initList: PropTypes.func,
   closeListItemModal: PropTypes.func,
+  updateEditListItem: PropTypes.func,
   save: PropTypes.func,
 };
 const defaultProps = {};
@@ -92,25 +62,31 @@ export default class View extends React.Component {
   }
 
   componentWillMount() {
+    this.tableOptions = tableOptions;
   }
 
-  onAction(mac, action) {
+  onAction(no, type) {
     const query = {
-      mac,
-      action,
+      no,
+      type,
     };
 
-    this.props.save('/goform/blacklist', query)
-      .then(() => {});
+    this.props.save(this.props.route.formUrl, query)
+      .then((json) => {
+        if (json.state && json.state.code === 2000) {
+          console.log(json);
+        }
+      });
   }
 
   render() {
     return (
       <ListInfo
         {...this.props}
-        tableOptions={tableOptions}
+        tableOptions={this.tableOptions}
         editFormOptions={editFormOptions}
         controlAbled
+        noTitle
       />
     );
   }

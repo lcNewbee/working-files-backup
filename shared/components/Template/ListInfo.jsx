@@ -20,6 +20,7 @@ const propTypes = {
   store: PropTypes.instanceOf(Map),
   route: PropTypes.object,
   defaultItem: PropTypes.object,
+  defaultEditData: PropTypes.object,
 
   tableOptions: PropTypes.oneOfType([
     PropTypes.instanceOf(List), PropTypes.array,
@@ -64,11 +65,12 @@ const defaultProps = {
 class ListInfo extends React.Component {
   constructor(props) {
     super(props);
+    this.defaultFormData = {};
 
-    this.listId = props.route.id;
     this.props.initList({
       formUrl: this.props.route.formUrl,
       listId: props.route.id,
+      defaultEditData: props.defaultEditData,
     });
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.binds('handleChangeQuery', 'onPageChange', 'onSave',
@@ -117,6 +119,14 @@ class ListInfo extends React.Component {
     } else {
       this.ListTableOptions = tableOptions;
     }
+
+    // 初始化默认值对象
+    tableOptions.forEach((item) => {
+      const defaultVal = item.get('defaultValue');
+      if (defaultVal) {
+        this.defaultFormData[item.get('id')] = defaultVal;
+      }
+    });
 
     if (this.props.fetchList) {
       this.props.fetchList(this.listId);
@@ -196,6 +206,7 @@ class ListInfo extends React.Component {
       typeOptions, store, route, hasSearch, actionBarChildren,
       addAbled, editFormOptions, controlAbled, noTitle,
     } = this.props;
+    const { defaultFormData } = this;
     const myListId = store.get('curListId');
     const page = store.getIn([myListId, 'data', 'page']);
     const list = store.getIn([myListId, 'data', 'list']);
@@ -249,7 +260,7 @@ class ListInfo extends React.Component {
                 theme="primary"
                 text={_('Add')}
                 onClick={() => {
-                  this.props.addListItem(this.props.defaultItem);
+                  this.props.addListItem(defaultFormData);
                 }}
               />
             ) : null
@@ -303,7 +314,6 @@ class ListInfo extends React.Component {
                       onChange={
                         (data) => {
                           const upDate = {};
-
                           upDate[id] = data.value;
                           this.props.updateEditListItem(upDate);
                         }

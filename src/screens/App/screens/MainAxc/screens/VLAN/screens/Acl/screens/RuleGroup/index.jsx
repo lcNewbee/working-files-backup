@@ -9,69 +9,54 @@ import {
 import * as listActions from 'shared/actions/list';
 import * as appActions from 'shared/actions/app';
 
-function getInterfaceTypeOptions() {
-  return utils.fetch('/goform/interfaceType')
-    .then((json) => (
-      {
-        options: json.data.list.map(
-          (item) => ({
-            value: item.no,
-            label: `${item.no}(${item.noInfo})`,
-          })
-        ),
-      }
-    )
-  );
-}
 const screenOptions = fromJS([
   {
     id: 'no',
+    width: '50',
     text: _('No'),
     formProps: {
-      disabled: true,
+      type: 'plain-text',
     },
   }, {
-    id: 'ipType',
-    text: _('Rule Type'),
+    id: 'groupName',
+    width: '200',
+    text: _('Group Name'),
+  }, {
+    id: 'defaultAction',
+    width: '160',
+    text: _('The Default Action'),
     defaultValue: '0',
     formProps: {
       type: 'switch',
-      label: _('NAT Rule Type'),
-      placeholder: _('Please Select ') + _('NAT Rule Type'),
       options: [
-        {
-          value: '0',
-          label: _('IPV4'),
-        }, {
-          value: '1',
-          label: _('IPV6'),
-        },
+        _('Accept'),
+        _('Throw Away'),
+        _('Redirect'),
       ],
     },
   }, {
-    id: 'targetAddress',
-    text: _('Target Address'),
-  }, {
-    id: 'targetMask',
-    text: _('Target Mask'),
-  }, {
-    id: 'nextHopIp',
-    text: _('Next Hop IP'),
-  }, {
-    id: 'interface',
-    text: _('Interface'),
+    id: 'description',
+    text: _('Description'),
     formProps: {
-      type: 'select',
-      placeholder: _('Please Select ') + _('Interface'),
-      loadOptions: getInterfaceTypeOptions,
-      isAsync: true,
+      type: 'textarea',
     },
   },
 ]);
+
 const tableOptions = screenOptions.map(
   (item) => item.delete('formProps')
 );
+
 const editFormOptions = immutableUtils.getFormOptions(screenOptions);
+const defaultFormData = {};
+
+// 初始化默认值对象
+screenOptions.forEach((item) => {
+  const defaultVal = item.get('defaultValue');
+  if (defaultVal) {
+    defaultFormData[item.get('id')] = defaultVal;
+  }
+});
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
@@ -80,6 +65,7 @@ const propTypes = {
   route: PropTypes.object,
   initList: PropTypes.func,
   closeListItemModal: PropTypes.func,
+  updateEditListItem: PropTypes.func,
   save: PropTypes.func,
 };
 const defaultProps = {};
@@ -92,25 +78,33 @@ export default class View extends React.Component {
   }
 
   componentWillMount() {
+    this.tableOptions = tableOptions;
   }
 
-  onAction(mac, action) {
+  onAction(no, type) {
     const query = {
-      mac,
-      action,
+      no,
+      type,
     };
 
-    this.props.save('/goform/blacklist', query)
-      .then(() => {});
+    this.props.save(this.props.route.formUrl, query)
+      .then((json) => {
+        if (json.state && json.state.code === 2000) {
+          console.log(json);
+        }
+      });
   }
 
   render() {
+    console.log(defaultFormData)
     return (
       <ListInfo
         {...this.props}
-        tableOptions={tableOptions}
+        tableOptions={this.tableOptions}
         editFormOptions={editFormOptions}
+        defaultEditData={defaultFormData}
         controlAbled
+        noTitle
       />
     );
   }

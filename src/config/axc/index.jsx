@@ -17,14 +17,14 @@ import guiConfig from './config.json';
 
 // 多语言处理
 const cnCore = require('../lang/cn/core.json');
-const cnAc = require('../lang/cn/ac.json');
+const cnAxc = require('../lang/cn/axc.json');
 const validateCn = require('../lang/cn/validate.json');
 const langEn = require('../lang/en/core.json');
 
 const bodyElem = document.getElementsByTagName('body')[0];
 
 b28n.addDict(cnCore, 'cn');
-b28n.addDict(cnAc, 'cn');
+b28n.addDict(cnAxc, 'cn');
 b28n.addDict(validateCn, 'cn');
 b28n.addDict(langEn, 'en');
 window.CB = b28n.init({
@@ -63,7 +63,6 @@ const sMainAxc = require('../../screens/App/screens/MainAxc');
 // VLAN 设置
 const sInterfaces = require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Interfaces');
 const sVlanAaa = require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Aaa');
-const sVlanAcl = require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Acl');
 const sVlanDhcp = require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Dhcp');
 const sRoutes = require('../../screens/App/screens/MainAxc/screens/Routes');
 const sNatSettings =
@@ -80,6 +79,16 @@ const sDetailedRules =
     require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Nat/screens/DetailedRules');
 const sNatLogs =
     require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Nat/screens/NatLogs');
+const sAclSettings =
+    require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Acl/screens/AclSettings');
+const sAclWlan =
+    require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Acl/screens/Wlan');
+const sAclRuleGroup =
+    require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Acl/screens/RuleGroup');
+const sAclDetailedRules =
+    require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Acl/screens/DetailedRules');
+const sAclRuleGroupBind =
+    require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Acl/screens/RuleGroupBind');
 
 /**
  * AP组管理
@@ -194,9 +203,9 @@ const routes = [
                     text: _('Service Objects'),
                     component: sServiceObjects.Screen,
                   }, {
-                    id: 'detailedRules',
+                    id: 'natDetailedRules',
                     path: '/main/network/vlan/nat/detailed_rules',
-                    formUrl: '/goform/detailedRules',
+                    formUrl: '/goform/natDetailedRules',
                     text: _('Detailed Rules'),
                     component: sDetailedRules.Screen,
                   }, {
@@ -211,7 +220,43 @@ const routes = [
                 id: 'vlanAcl',
                 path: '/main/network/vlan/acl',
                 text: _('Access Control'),
-                component: sVlanAcl.Screen,
+                component: SharedComponents.TabContainer,
+                indexRoute: {
+                  onEnter: (nextState, replace) => replace('/main/network/vlan/acl/settings'),
+                },
+                childRoutes: [
+                  {
+                    id: 'aclSettings',
+                    path: '/main/network/vlan/acl/settings',
+                    formUrl: '/goform/aclSettings',
+                    text: _('Access Control Settings'),
+                    component: sAclSettings.Screen,
+                  }, {
+                    id: 'aclWlan',
+                    path: '/main/network/vlan/acl/wlan',
+                    formUrl: '/goform/aclWlan',
+                    text: _('WLAN'),
+                    component: sAclWlan.Screen,
+                  }, {
+                    id: 'rulesGroup',
+                    path: '/main/network/vlan/acl/rules_group',
+                    formUrl: '/goform/rulesGroup',
+                    text: _('Rules Group'),
+                    component: sAclRuleGroup.Screen,
+                  }, {
+                    id: 'aclDetailedRules',
+                    path: '/main/network/vlan/acl/detailed_rules',
+                    formUrl: '/goform/aclDetailedRules',
+                    text: _('Detailed Rules'),
+                    component: sAclDetailedRules.Screen,
+                  }, {
+                    id: 'rulesGroupBind',
+                    path: '/main/network/vlan/acl/rules_group_bind',
+                    formUrl: '/goform/rulesGroupBind',
+                    text: _('Rules Group Bind'),
+                    component: sAclRuleGroupBind.Screen,
+                  },
+                ],
               }, {
                 id: 'vlanAaa',
                 path: '/main/network/vlan/aaa',

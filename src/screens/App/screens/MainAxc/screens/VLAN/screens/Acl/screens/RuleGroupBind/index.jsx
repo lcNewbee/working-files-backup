@@ -25,101 +25,28 @@ function getInterfaceTypeOptions() {
 }
 const screenOptions = fromJS([
   {
-    id: 'ispDomain',
-    text: _('ISP Domain Name'),
+    id: 'no',
+    width: '50',
+    text: _('No'),
     formProps: {
-      type: 'url',
+      type: 'plain-text',
     },
   }, {
-    id: 'authAccessType',
+    id: 'rulesGroup',
     width: '200',
-    text: _('Access Type'),
-    defaultValue: '0',
+    text: _('Rules Group'),
     formProps: {
       type: 'select',
       placeholder: _('Please Select ') + _('Rules Group'),
-      options: [
-        {
-          value: '0',
-          label: `${_('Local')} (${_('802.1X')})`,
-        },
-        {
-          value: '1',
-          label: `${_('Remotely')}(${_('Radius Service')})` ,
-        },
-      ],
-    },
-  }, {
-    id: 'authType',
-    text: _('Auth Type'),
-    defaultValue: '0',
-    formProps: {
-      type: 'switch',
-      placeholder: _('Please Select ') + _('Rules Group'),
-      options: [
-        {
-          value: '0',
-          label: `${_('Local')} (${_('802.1X')})`,
-        },
-        {
-          value: '1',
-          label: `${_('Remotely')}(${_('Radius Service')})` ,
-        },
-      ],
-    },
-  }, {
-    id: 'authRadiusModel',
-    text: _('Radius Model'),
-    formProps: {
-      type: 'select',
-      placeholder: _('Please Select ') + _('Radius Model'),
       loadOptions: getInterfaceTypeOptions,
       isAsync: true,
-      multi: true,
     },
   }, {
-    id: 'billingAccessType',
-    width: '200',
-    text: _('Access Type'),
-    defaultValue: '0',
+    id: 'rules',
+    text: _('Rules'),
     formProps: {
       type: 'select',
-      placeholder: _('Please Select ') + _('Rules Group'),
-      options: [
-        {
-          value: '0',
-          label: `${_('Local')} (${_('802.1X')})`,
-        },
-        {
-          value: '1',
-          label: `${_('Remotely')}(${_('Radius Service')})` ,
-        },
-      ],
-    },
-  }, {
-    id: 'billingType',
-    text: _('Auth Type'),
-    defaultValue: '0',
-    formProps: {
-      type: 'switch',
-      placeholder: _('Please Select ') + _('Rules Group'),
-      options: [
-        {
-          value: '0',
-          label: `${_('Local')} (${_('802.1X')})`,
-        },
-        {
-          value: '1',
-          label: `${_('Remotely')}(${_('Radius Service')})` ,
-        },
-      ],
-    },
-  }, {
-    id: 'billingRadiusModel',
-    text: _('Radius Model'),
-    formProps: {
-      type: 'select',
-      placeholder: _('Please Select ') + _('Radius Model'),
+      placeholder: _('Please Select ') + _('Rules'),
       loadOptions: getInterfaceTypeOptions,
       isAsync: true,
       multi: true,
@@ -130,6 +57,7 @@ const screenOptions = fromJS([
 const tableOptions = screenOptions.map(
   (item) => item.delete('formProps')
 );
+
 const editFormOptions = immutableUtils.getFormOptions(screenOptions);
 
 const propTypes = {
@@ -176,6 +104,7 @@ export default class View extends React.Component {
         tableOptions={this.tableOptions}
         editFormOptions={editFormOptions}
         controlAbled
+        noTitle
       />
     );
   }
