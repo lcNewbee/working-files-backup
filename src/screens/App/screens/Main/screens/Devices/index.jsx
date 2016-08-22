@@ -211,36 +211,38 @@ export const Device = React.createClass({
   },
 
   onSaveDeviceNetWork() {
-    this.props.validateAll(function (invalid) {
-      const combineValidResult = this.combineValid();
-      const { ip, mask, gateway, connect_type } = this.props.store.get('edit').toJS();
-      const oriMask = this.props.store.getIn(['oriEdit', 'mask']);
-      const oriGateway = this.props.store.getIn(['oriEdit', 'gateway']);
+    this.props.validateAll()
+      .then( (invalid) => {
+        const combineValidResult = this.combineValid();
+        const { ip, mask, gateway, connect_type } = this.props.store.get('edit').toJS();
+        const oriMask = this.props.store.getIn(['oriEdit', 'mask']);
+        const oriGateway = this.props.store.getIn(['oriEdit', 'gateway']);
 
-      if (invalid.isEmpty()) {
-        if (combineValidResult) {
-          this.props.createModal({
-            title: _('DEVICES'),
-            role: 'alert',
-            text: combineValidResult,
-          });
-        } else {
-          if (validator.combineValid.staticIP(ip, oriMask, oriGateway) || oriMask !== mask) {
+        if (invalid.isEmpty()) {
+          if (combineValidResult) {
             this.props.createModal({
               title: _('DEVICES'),
-              role: 'comfirm',
-              text: _('You might be unable to control the device after modifying its network segment, are you sure you want to modify it?'),
-              apply: function () {
-                this.props.saveDeviceNetwork();
-              }.bind(this),
+              role: 'alert',
+              text: combineValidResult,
             });
           } else {
-            this.props.saveDeviceNetwork();
+            if (validator.combineValid.staticIP(ip, oriMask, oriGateway) || oriMask !== mask) {
+              this.props.createModal({
+                title: _('DEVICES'),
+                role: 'comfirm',
+                text: _('You might be unable to control the device after modifying its network segment, are you sure you want to modify it?'),
+                apply: function () {
+                  this.props.saveDeviceNetwork();
+                }.bind(this),
+              });
+            } else {
+              this.props.saveDeviceNetwork();
+            }
           }
         }
-      } else {
-      }
-    }.bind(this));
+
+        return invalid;
+    });
   },
 
   getDevicesTableOptions() {

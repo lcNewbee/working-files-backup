@@ -132,11 +132,12 @@ export const Wireless = React.createClass({
   },
 
   onSave() {
-    this.props.validateAll(function (invalid) {
-      if (invalid.isEmpty()) {
-        this.props.setWifi();
-      }
-    }.bind(this));
+    this.props.validateAll()
+      .then((invalid) => {
+        if (invalid.isEmpty()) {
+          this.props.setWifi();
+        }
+      });
   },
 
   getCurrData(name, defaultVal) {

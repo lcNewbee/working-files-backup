@@ -84,11 +84,12 @@ export const Portal = React.createClass({
   },
 
   onSave() {
-    this.props.validateAll((invalid) => {
-      if (invalid.isEmpty()) {
-        this.props.setPortal();
-      }
-    });
+    this.props.validateAll()
+      .then((invalid) => {
+        if (invalid.isEmpty()) {
+          this.props.setPortal();
+        }
+      });
   },
 
   onChangeImage(i) {

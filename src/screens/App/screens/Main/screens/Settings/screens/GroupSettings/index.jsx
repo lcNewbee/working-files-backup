@@ -111,36 +111,37 @@ export const GroupSettings = React.createClass({
       this.onCloseEditDialog();
       return;
     }
-    this.props.validateAll(function (invalid) {
-      let editData = this.props.edit.toJS();
-      let groupList = this.props.data.get('list');
-      let hasSameName = false;
+    this.props.validateAll()
+      .then((invalid) => {
+        let editData = this.props.edit.toJS();
+        let groupList = this.props.data.get('list');
+        let hasSameName = false;
 
-      if (invalid.isEmpty()) {
-        // 验证组名是否与其它组相同
-        if (editData.groupname !== editData.orignName) {
-          hasSameName = !!groupList.find(function (group) {
-            return group.get('groupname').trim() === editData.groupname.trim();
-          });
-        }
+        if (invalid.isEmpty()) {
+          // 验证组名是否与其它组相同
+          if (editData.groupname !== editData.orignName) {
+            hasSameName = !!groupList.find(function (group) {
+              return group.get('groupname').trim() === editData.groupname.trim();
+            });
+          }
 
-        if (hasSameName) {
-          this.props.createModal({
-            id: 'groupSettings',
-            role: 'alert',
-            text: _("Group name '%s' is already in use", editData.groupname),
-          });
-        } else {
-          this.props.saveDeviceGroup();
+          if (hasSameName) {
+            this.props.createModal({
+              id: 'groupSettings',
+              role: 'alert',
+              text: _("Group name '%s' is already in use", editData.groupname),
+            });
+          } else {
+            this.props.saveDeviceGroup();
+          }
         }
-      }
-    }.bind(this));
+      });
   },
 
   createLookFunc(groupname) {
-    return function () {
+    return () => {
       this.props.lookGroupDevices(groupname);
-    }.bind(this);
+    };
   },
 
   onCloseEditDialog() {
