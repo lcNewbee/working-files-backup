@@ -78,11 +78,12 @@ export const Voip = React.createClass({
   },
 
   onSave() {
-    this.props.validateAll(function (invalid) {
-      if (invalid.isEmpty()) {
-        this.props.setVoip();
-      }
-    }.bind(this));
+    this.props.validateAll()
+      .then((invalid) => {
+        if (invalid.isEmpty()) {
+          this.props.setVoip();
+        }
+      });
   },
 
   getCurrData(name) {

@@ -54,9 +54,7 @@ const screenOptions = fromJS([
   },
 ]);
 
-const tableOptions = screenOptions.map(
-  (item) => item.delete('formProps')
-);
+const tableOptions = immutableUtils.getTableOptions(screenOptions);
 
 const editFormOptions = immutableUtils.getFormOptions(screenOptions);
 

@@ -212,6 +212,7 @@ class ListInfo extends React.Component {
     const list = store.getIn([myListId, 'data', 'list']);
     const editData = store.getIn([myListId, 'data', 'edit']);
     const query = store.getIn([myListId, 'query']);
+    const saveUrl = route.saveUrl || route.formUrl;
     let pageSelectClassName = 'fr';
 
     // 数据未初始化不渲染
@@ -301,27 +302,67 @@ class ListInfo extends React.Component {
                 () => this.props.closeListItemModal(route.id)
               }
             >
+              <form action={saveUrl}>
               {
-                editFormOptions.map((item) => {
-                  const myProps = item.toJS();
-                  const id = myProps.id;
+                editFormOptions.map((item, index) => {
+                  const legendText = item.getIn([0, 'legend']);
+
+                  if (legendText) {
+                    return (
+                      <fieldset key={index}>
+                        <legend>{legendText}</legend>
+                        {
+                          item.map((subItem) => {
+                            const myProps = subItem.toJS();
+                            const id = myProps.id;
+
+                            delete myProps.fieldset;
+                            delete myProps.legend;
+
+                            return (
+                              <FormGroup
+                                {...myProps}
+                                key={id}
+                                value={editData.get(id)}
+                                onChange={
+                                  (data) => {
+                                    const upDate = {};
+                                    upDate[id] = data.value;
+                                    this.props.updateEditListItem(upDate);
+                                  }
+                                }
+                              />
+                            );
+                          })
+                        }
+                      </fieldset>
+                    );
+                  }
 
                   return (
-                    <FormGroup
-                      {...myProps}
-                      key={id}
-                      value={editData.get(id)}
-                      onChange={
-                        (data) => {
-                          const upDate = {};
-                          upDate[id] = data.value;
-                          this.props.updateEditListItem(upDate);
-                        }
-                      }
-                    />
+                    item.map((subItem) => {
+                      const myProps = subItem.toJS();
+                      const id = myProps.id;
+
+                      return (
+                        <FormGroup
+                          {...myProps}
+                          key={id}
+                          value={editData.get(id)}
+                          onChange={
+                            (data) => {
+                              const upDate = {};
+                              upDate[id] = data.value;
+                              this.props.updateEditListItem(upDate);
+                            }
+                          }
+                        />
+                      );
+                    })
                   );
                 })
               }
+              </form>
             </Modal>
           ) : null
         }

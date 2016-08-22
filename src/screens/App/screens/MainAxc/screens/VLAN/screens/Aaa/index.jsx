@@ -32,9 +32,10 @@ const screenOptions = fromJS([
     },
   }, {
     id: 'authAccessType',
-    width: '200',
     text: _('Access Type'),
     defaultValue: '0',
+    fieldset: 'auth',
+    legend: _('Auth Service'),
     formProps: {
       type: 'select',
       placeholder: _('Please Select ') + _('Rules Group'),
@@ -45,7 +46,7 @@ const screenOptions = fromJS([
         },
         {
           value: '1',
-          label: `${_('Remotely')}(${_('Radius Service')})` ,
+          label: `${_('Remotely')}(${_('Radius Service')})`,
         },
       ],
     },
@@ -53,6 +54,7 @@ const screenOptions = fromJS([
     id: 'authType',
     text: _('Auth Type'),
     defaultValue: '0',
+    fieldset: 'auth',
     formProps: {
       type: 'switch',
       placeholder: _('Please Select ') + _('Rules Group'),
@@ -63,25 +65,27 @@ const screenOptions = fromJS([
         },
         {
           value: '1',
-          label: `${_('Remotely')}(${_('Radius Service')})` ,
+          label: `${_('Remotely')}(${_('Radius Service')})`,
         },
       ],
     },
   }, {
-    id: 'authRadiusModel',
-    text: _('Radius Model'),
+    id: 'authRadiusTemplate',
+    text: _('Radius Template'),
+    fieldset: 'auth',
     formProps: {
       type: 'select',
-      placeholder: _('Please Select ') + _('Radius Model'),
+      placeholder: _('Please Select ') + _('Radius Template'),
       loadOptions: getInterfaceTypeOptions,
       isAsync: true,
       multi: true,
     },
   }, {
     id: 'billingAccessType',
-    width: '200',
     text: _('Access Type'),
     defaultValue: '0',
+    fieldset: 'billing',
+    legend: _('Billing Service'),
     formProps: {
       type: 'select',
       placeholder: _('Please Select ') + _('Rules Group'),
@@ -92,13 +96,14 @@ const screenOptions = fromJS([
         },
         {
           value: '1',
-          label: `${_('Remotely')}(${_('Radius Service')})` ,
+          label: `${_('Remotely')}(${_('Radius Service')})`,
         },
       ],
     },
   }, {
     id: 'billingType',
-    text: _('Auth Type'),
+    text: _('Billing Type'),
+    fieldset: 'billing',
     defaultValue: '0',
     formProps: {
       type: 'switch',
@@ -110,26 +115,24 @@ const screenOptions = fromJS([
         },
         {
           value: '1',
-          label: `${_('Remotely')}(${_('Radius Service')})` ,
+          label: `${_('Remotely')}(${_('Radius Service')})`,
         },
       ],
     },
   }, {
-    id: 'billingRadiusModel',
-    text: _('Radius Model'),
+    id: 'billingRadiusTemplate',
+    text: _('Radius Template'),
+    fieldset: 'billing',
     formProps: {
       type: 'select',
-      placeholder: _('Please Select ') + _('Radius Model'),
+      placeholder: _('Please Select ') + _('Radius Template'),
       loadOptions: getInterfaceTypeOptions,
       isAsync: true,
       multi: true,
     },
   },
 ]);
-
-const tableOptions = screenOptions.map(
-  (item) => item.delete('formProps')
-);
+const tableOptions = immutableUtils.getTableOptions(screenOptions);
 const editFormOptions = immutableUtils.getFormOptions(screenOptions);
 
 const propTypes = {
@@ -151,10 +154,6 @@ export default class View extends React.Component {
     this.onAction = this.onAction.bind(this);
   }
 
-  componentWillMount() {
-    this.tableOptions = tableOptions;
-  }
-
   onAction(no, type) {
     const query = {
       no,
@@ -173,7 +172,7 @@ export default class View extends React.Component {
     return (
       <ListInfo
         {...this.props}
-        tableOptions={this.tableOptions}
+        tableOptions={tableOptions}
         editFormOptions={editFormOptions}
         controlAbled
       />

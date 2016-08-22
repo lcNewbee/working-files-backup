@@ -15,6 +15,7 @@ const propTypes = {
   disabled: PropTypes.bool,
   className: PropTypes.string,
   Component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+  theme: PropTypes.string,
   size: PropTypes.oneOf(['min', 'sm', 'md', 'lg', 'xl']),
   type: PropTypes.oneOf([
     // html4
@@ -33,8 +34,10 @@ const propTypes = {
   checkClearValue: PropTypes.func,
   onChange: PropTypes.func,
   label: PropTypes.any,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number,
-    PropTypes.instanceOf(moment)]),
+  value: PropTypes.oneOfType([
+    PropTypes.string, PropTypes.number,
+    PropTypes.instanceOf(moment)
+  ]),
 
   // Select Option
   clearable: PropTypes.bool,

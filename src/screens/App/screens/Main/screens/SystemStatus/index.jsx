@@ -15,31 +15,33 @@ const propTypes = {
   route: PropTypes.object,
   initSettings: PropTypes.func,
   fetchSettings: PropTypes.func,
+
+  updateItemSettings: PropTypes.func,
 };
 
 const defaultProps = {};
 
 const interfaceOptions = fromJS([
   {
-    id: 'Name',
+    id: 'name',
     text: _('Name'),
   }, {
-    id: 'Ip',
+    id: 'ip',
     text: 'IP',
   }, {
-    id: 'MTU',
+    id: 'mtu',
     text: 'MTU',
   }, {
-    id: 'TxBytes',
+    id: 'txBytes',
     text: 'Tx Bytes',
   }, {
-    id: 'RxBytes',
+    id: 'rxBytes',
     text: _('Rx Bytes'),
   }, {
-    id: 'TxErrorPackets',
+    id: 'txErrorPackets',
     text: _('TX Error'),
   }, {
-    id: 'RxErrorPackets',
+    id: 'rxErrorPackets',
     text: _('RX Error'),
   },
 ]);
@@ -139,6 +141,13 @@ const remoteApOption = fromJS([
 
 export default class SystemStatus extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.changeSystemTimeToReadable = this.changeSystemTimeToReadable.bind(this);
+    this.changeUptimeToReadable = this.changeUptimeToReadable.bind(this);
+  }
+
+
   componentWillMount() {
     // 必须要有初始化，因为要在settings中插入一个由该页面id命名的对象
     this.props.initSettings({
@@ -147,6 +156,56 @@ export default class SystemStatus extends React.Component {
       defaultData: {},
     });
     this.props.fetchSettings();
+  }
+
+  // componentDidMount() {
+  //   const systemTime = this.props.store.getIn(['curData', 'status', 'systemTime']);
+  //   const uptime = this.props.store.getIn(['curData', 'status', 'uptime']);
+  //   let status;
+  //   if (status !== undefined) {
+  //     status = this.props.store.getIn(['curData', 'status']).toJS();
+  //   }
+
+  //   const newSystemTime = (parseInt(systemTime, 10) + 5000).toString();
+  //   const newUptime = (parseInt(uptime, 10) + 5).toString();
+  //   console.log({ ...status });
+  //   // setInterval(this.props.updateItemSettings({
+  //   //   status: utils.extend({}, { ...status }, {
+  //   //     systemTime: (parseInt(systemTime, 10) + 5000).toString(),
+  //   //     uptime: (parseInt(uptime, 10) + 5).toString(),
+  //   //   }),
+  //   // }), 5000);
+  //   this.props.updateItemSettings({
+  //     status: utils.extend({}, { ...status }, {
+  //       systemTime: newSystemTime,
+  //       uptime: newUptime,
+  //     })
+  //   });
+  // }
+
+
+  changeSystemTimeToReadable(time) {
+    return new Date(parseInt(time) * 1000)
+            .toLocaleString()
+            .replace(/年|月/g, '-')
+            .replace(/日/g, ' ');
+  }
+
+  changeUptimeToReadable(time) {
+    let timeStr = '';
+    const t = parseInt(time, 10);
+    const days = Math.floor(t / (24 * 3600));
+    const hours = Math.floor((t - (days * 24 * 3600)) / 3600);
+    const minutes = Math.floor((t - (days * 24 * 3600) - (hours * 3600)) / 60);
+    const seconds = Math.floor((t - (days * 24 * 3600) - (hours * 3600) - (minutes * 60)) % 60);
+    if (days > 0) {
+      timeStr = days + 'd ' + hours + 'h ' + minutes + 'm ' + seconds + 's ';
+    } else if (hours > 0) {
+      timeStr = hours + 'd ' + minutes + 'm ' + seconds + 's ';
+    } else if (minutes > 0) {
+      timeStr = minutes + 'm ' + seconds + 's ';
+    }
+    return timeStr;
   }
 
   render() {
@@ -161,13 +220,17 @@ export default class SystemStatus extends React.Component {
       systemTime, channel, channelWidth, distance, uptime, ap,
       interfaces, station,
      } = status;
-    let apMac;
-    let clientNum;
-    let staList;
+    let apMac; let clientNum; let staList; let signal;
+    let apInfo = [];
     if (ap !== undefined) {
       apMac = ap.apMac;
       clientNum = ap.clientNum;
       staList = ap.staList;
+    }
+    if (station !== undefined) {
+      signal = station.singal;
+      const item = station.apInfo;
+      apInfo.push(item);
     }
     // console.log(status, deviceModel);
     // curData = this.props.store.getIn(['curData']);
@@ -215,8 +278,9 @@ export default class SystemStatus extends React.Component {
           <div className="cols col-6">
             <FormGroup
               label={_('System Time:')}
+              id="systemtime"
               type="plain-text"
-              value={systemTime}
+              value={this.changeSystemTimeToReadable(systemTime)}
             />
             <FormGroup
               label={_('Channel/Frequency:')}
@@ -235,8 +299,9 @@ export default class SystemStatus extends React.Component {
             />
             <FormGroup
               label={_('System Uptime:')}
+              id="uptime"
               type="plain-text"
-              value={uptime}
+              value={this.changeUptimeToReadable(uptime)}
             />
           </div>
         </div>
@@ -312,7 +377,7 @@ export default class SystemStatus extends React.Component {
         </div>
         <br /><br />
         {
-          ap !== undefined ? null : (
+          ap === undefined ? null : (
             <div className="clientListTable">
               <h3>{_('Client Info')}</h3>
               <Table
@@ -324,14 +389,18 @@ export default class SystemStatus extends React.Component {
           )
         }
         <br /><br />
-        <div className="remoteApTable">
-          <h3>{_('Remote AP Info')}</h3>
-          <Table
-            className="table"
-            options={remoteApOption}
-
-          />
-        </div>
+        {
+          station === undefined ? null : (
+            <div className="remoteApTable">
+              <h3>{_('Remote AP Info')}</h3>
+              <Table
+                className="table"
+                options={remoteApOption}
+                list={apInfo}
+              />
+            </div>
+          )
+        }
       </div>
     );
   }

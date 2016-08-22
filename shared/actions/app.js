@@ -174,15 +174,20 @@ export function startValidateAll() {
 }
 export function validateAll(func) {
   return (dispatch, getState) => {
+    const validatePromise = new Promise((resolve) => {
+      setTimeout(() => {
+        const invalid = getState().app.get('invalid');
+
+        if (typeof func === 'function') {
+          func(invalid);
+        }
+        resolve(invalid);
+      }, 20);
+    });
+
     dispatch(startValidateAll());
 
-    setTimeout(() => {
-      const invalid = getState().app.get('invalid');
-
-      if (typeof func === 'function') {
-        func(invalid);
-      }
-    }, 20);
+    return validatePromise;
   };
 }
 

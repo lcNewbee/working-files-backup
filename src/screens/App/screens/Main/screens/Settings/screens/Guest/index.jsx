@@ -95,11 +95,12 @@ export const Guest = React.createClass({
   },
 
   onSave() {
-    this.props.validateAll(function (invalid) {
-      if (invalid.isEmpty()) {
-        this.props.setGuest();
-      }
-    }.bind(this));
+    this.props.validateAll()
+      .then((invalid) => {
+        if (invalid.isEmpty()) {
+          this.props.setGuest();
+        }
+      });
   },
 
   getCurrData(name, defaultVal) {

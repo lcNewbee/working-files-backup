@@ -55,16 +55,18 @@ export const Login = React.createClass({
   },
 
   onLogin() {
-    this.props.validateAll((invalid) => {
-      if (invalid.isEmpty()) {
-        this.props.login((status) => {
-          let currClass = document.getElementsByTagName('body')[0].className;
+    this.props
+      .validateAll()
+      .then((invalid) => {
+        if (invalid.isEmpty()) {
+          this.props.login((status) => {
+            let currClass = document.getElementsByTagName('body')[0].className;
 
-          document.getElementsByTagName('body')[0].className = currClass.replace(' sign-body', '');
-          this.props.changeLoginStatus(status);
-        });
-      }
-    });
+            document.body.className = currClass.replace(' sign-body', '');
+            this.props.changeLoginStatus(status);
+          });
+        }
+      });
 
     // // 如果有验证错误信息
     // if (checkRusult) {

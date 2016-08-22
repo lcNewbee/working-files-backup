@@ -78,7 +78,7 @@
         "rxErrorPackets":"1"
       },
       {
-        "mame":"Bridge0",
+        "name":"Bridge0",
         "ip":"192.168.1.10",
         "mtu":"1500",
         "txBytes":"1300",

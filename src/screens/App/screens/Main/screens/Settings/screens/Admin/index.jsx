@@ -55,14 +55,15 @@ export default class Admin extends PureComponent {
   }
 
   onSave() {
-    this.props.validateAll((invalid) => {
-      if (invalid.isEmpty() && !this.combineValid()) {
-        this.props.savePassword(() => {
-          this.props.changeLoginStatus('0');
-          window.location.hash = '#';
-        });
-      }
-    });
+    this.props.validateAll()
+      .then((invalid) => {
+        if (invalid.isEmpty() && !this.combineValid()) {
+          this.props.savePassword(() => {
+            this.props.changeLoginStatus('0');
+            window.location.hash = '#';
+          });
+        }
+      });
   }
 
   onUpdate(name, data) {
