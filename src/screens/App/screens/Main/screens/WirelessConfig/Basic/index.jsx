@@ -82,14 +82,13 @@ const keyTypeOptions = [
 ];
 
 const ieeeModeOptions = [
-  { value: 'A/N mixed', label: 'A/N mixed' },
-  { value: 'B/G/N/AC mixed', label: 'B/G/N/AC mixed' },
+  { value: '11AC', label: '11AC' },
 ];
 
 const channelWidthOptions = [
-  { value: '20', label: '20MHz' },
-  { value: '40', label: '40MHz' },
-  { value: '80', label: '80MHz' },
+  { value: 'ht20', label: '20MHz' },
+  { value: 'ht40', label: '40MHz' },
+  { value: 'ht80', label: '80MHz' },
 ];
 
 const frequencyWith13Options = [

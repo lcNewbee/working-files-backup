@@ -8,6 +8,8 @@ import {
 import { bindActionCreators } from 'redux';
 import * as appActions from 'shared/actions/app';
 import * as sharedActions from 'shared/actions/settings';
+import * as selfActions from './actions';
+import selfReducer from './reducer';
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
@@ -19,6 +21,11 @@ const propTypes = {
   saveSettings: PropTypes.func,
   updateItemSettings: PropTypes.func,
   leaveSettingsScreen: PropTypes.func,
+
+  selfState: PropTypes.object,
+  initSelfState: PropTypes.func,
+  clickSpeedTestRunBtn: PropTypes.func,
+  toggleShowAdvanceBtn: PropTypes.func,
 };
 
 const defaultProps = {};
@@ -27,8 +34,6 @@ export default class SpeedTest extends React.Component {
 
   constructor(props) {
     super(props);
-    this.onToggleShowAdvanceBtn = this.onToggleShowAdvanceBtn.bind(this);
-    this.onSpeedTestRun = this.onSpeedTestRun.bind(this);
   }
 
   componentWillMount() {
@@ -38,8 +43,6 @@ export default class SpeedTest extends React.Component {
       settingId: props.route.id,
       fetchUrl: props.route.formUrl,
       saveUrl: props.route.saveUrl,
-      showResult: false,
-      showAdvance: false,
       defaultData: {
         ip: '192.168.1.10',
         username: 'root',
@@ -49,25 +52,15 @@ export default class SpeedTest extends React.Component {
         direction: 'duplex',
       },
     });
+    props.initSelfState();
   }
 
-  onToggleShowAdvanceBtn() {
-    const routeId = this.props.store.get('curSettingId');
-    const showAdvance = this.props.store.getIn([routeId, 'showAdvance']);
-    this.props.store.setIn([routeId, 'showAdvance'], !showAdvance);
-  }
-
-  onSpeedTestRun() {
-
-  }
 
   render() {
     const {
       ip, username, password, port, time, direction,
     } = this.props.store.get('curData').toJS();
-    const routeId = this.props.store.get('curSettingId');
-    const { showResult, showAdvance } = this.props.store.get(routeId);
-
+    const { showResults, showAdvance, bandwidth, rx, tx, total } = this.props.selfState.toJS();
     return (
       <div>
         <div className="clearfix">
@@ -76,6 +69,9 @@ export default class SpeedTest extends React.Component {
             type="text"
             label={_('Destination IP')}
             value={ip}
+            onChange={(data) => this.props.updateItemSettings({
+              ip: data.value,
+            })}
           />
           <Button
             className="fl"
@@ -87,54 +83,74 @@ export default class SpeedTest extends React.Component {
           type="text"
           label={_('User')}
           value={username}
+          onChange={(data) => this.props.updateItemSettings({
+            username: data.value,
+          })}
         />
         <FormGroup
           type="text"
           label={_('Password')}
           value={password}
+          onChange={(data) => this.props.updateItemSettings({
+            password: data.value,
+          })}
         />
         <FormGroup
           type="text"
           label={_('Remote WEB Port')}
           value={port}
+          onChange={(data) => this.props.updateItemSettings({
+            port: data.value,
+          })}
         />
         <FormGroup
           type="checkbox"
           label={_('Show Advanced Options')}
-          checked={showAdvance}
-          onClick={this.onToggleShowAdvanceBtn}
+          value={showAdvance === '1'}
+          onClick={this.props.toggleShowAdvanceBtn}
         />
         {
-          showAdvance ? (
+          (showAdvance === '1') ? (
             <div>
               <FormGroup
                 type="radio"
                 label={_('Direction')}
-                text={_('duplex')}
               >
                 <FormInput
                   type="radio"
                   name="directionSelect"
                   text={_('duplex')}
-                  checked={direction === 'duplex'}
+                  checked={direction === '0'}
+                  onChange={() => this.props.updateItemSettings({
+                    direction: '0',
+                  })}
                 />
                 <FormInput
                   type="radio"
                   name="directionSelect"
                   text={_('receive')}
-                  checked={direction === 'receive'}
+                  checked={direction === '1'}
+                  onChange={() => this.props.updateItemSettings({
+                    direction: '1',
+                  })}
                 />
                 <FormInput
                   type="radio"
                   name="directionSelect"
                   text={_('transmit')}
-                  checked={direction === 'transmit'}
+                  checked={direction === '2'}
+                  onChange={() => this.props.updateItemSettings({
+                    direction: '2',
+                  })}
                 />
               </FormGroup>
               <FormGroup
                 type="number"
                 label={_('Duration')}
                 value={time}
+                onChange={(data) => this.props.updateItemSettings({
+                  time: data.value,
+                })}
               />
             </div>
           ) : null
@@ -143,9 +159,30 @@ export default class SpeedTest extends React.Component {
           <Button
             theme="primary"
             text={_('Run')}
-            onClick={this.onSpeedTestRun}
+            onClick={this.props.clickSpeedTestRunBtn}
           />
         </FormGroup>
+        {
+          (showResults === '1') ? (
+            <div className="result">
+              <FormGroup
+                type="text"
+                label={_('rx')}
+                value={rx}
+              />
+              <FormGroup
+                type="text"
+                label={_('tx')}
+                value={tx}
+              />
+              <FormGroup
+                type="text"
+                label={_('total')}
+                value={total}
+              />
+            </div>
+          ) : null
+        }
       </div>
     );
   }
@@ -158,12 +195,13 @@ function mapStateToProps(state) {
   return {
     app: state.app,
     store: state.settings,
+    selfState: state.speedtest,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
-    utils.extend({}, appActions, sharedActions),
+    utils.extend({}, appActions, sharedActions, selfActions),
     dispatch
   );
 }
@@ -172,3 +210,6 @@ export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
 )(SpeedTest);
+
+
+export const speedtest = selfReducer;

@@ -111,10 +111,10 @@ const routes = [{
     component: Main,
     childRoutes: [{
       id: 'systemstatus',
+      fetchUrl: 'goform/get_system_info',
       path: '/main/systemstatus',
       icon: 'cog',
       text: _('Device Status'),
-      isIndex: true,
       component: pSystemStatus.Screen,
     }, {
       id: 'quicksetup',
@@ -263,6 +263,8 @@ const reducers = {
   advance: sAdvance.advance,
   qos: sQoS.qos,
   acl: sACL.acl,
+  // tools -> speedtest
+  speedtest: sSpeedTest.speedtest,
 };
 
 // Store

@@ -1,0 +1,12 @@
+{
+"state":{
+	"code":2000,
+	"msg":"success"
+  },
+"data":{
+  "bandwidth":"512",
+  "rx":"1000",
+  "tx":"1000",
+  "total":"1024"
+}
+}

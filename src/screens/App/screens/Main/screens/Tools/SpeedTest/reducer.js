@@ -1,18 +1,26 @@
+import { fromJS } from 'immutable';
 
-
-const defaultState = {
+const defaultState = fromJS({
+  showAdvance: '0',
+  showResults: '0',
   bandwidth: '512',
   rX: '1000',
   tX: '1000',
   total: '1024',
-};
+});
 
 export default function (state = defaultState, action) {
   switch (action.type) {
     case 'TOGGLE_SHOW_ADVANCE_BTN':
-      return
-    case 'CLICK_SPEED_TEST_RUN_BTN':
-      return;
+      return state.set('showAdvance', (state.get('showAdvance') === '1' ? '0' : '1'));
+    case 'TOGGLE_SHOW_RESULT_BTN':
+      console.log('toggle');
+      return state.set('showResults', '1');
+    case 'INIT_SELF_STATE':
+      return state.set('showAdvance', '0')
+                  .set('showResults', '0');
+    case 'RECEIVE_TEST_RESULT':
+      return state.merge(action.data);
     default:
   }
   return state;

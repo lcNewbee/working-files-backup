@@ -48,7 +48,9 @@ export function login(callBack) {
         if(json.state) {
           if(json.state.code === 2000) {
             result = 'ok';
-            callBack(json.data.a_165F8BA5ABE1A5DA);
+            if(json.data) {
+              callBack(json.data.a_165F8BA5ABE1A5DA);
+            }
           } else {
             // result = json.state.msg;
           }
