@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import {fromJS} from 'immutable';
+import { fromJS } from 'immutable';
 import utils from 'shared/utils';
 
 // components
 import Table from 'shared/components/Table';
 import Button from 'shared/components/Button';
-import {Search} from 'shared/components/Form';
+import { Search } from 'shared/components/Form';
 import Select from 'shared/components/Select';
 import Switchs from 'shared/components/Switchs';
 
@@ -21,57 +21,57 @@ const clientsTableOptions = fromJS([
   {
     id: 'devicename',
     text: _('MAC Address') + '/' + _('Name'),
-    transform: function(val, item) {
+    transform (val, item) {
       return item.get('devicename') || item.get('mac');
-    }
+    },
   }, {
     id: 'ip',
-    text: _('IP Address')
+    text: _('IP Address'),
   }, {
     id: 'ssid',
-    text: 'SSID'
+    text: 'SSID',
   }, {
     id: 'connectap',
     text: _('Associated AP'),
-    transform: function(val, item) {
+    transform (val, item) {
       return item.get('connectap') || item.get('apmac');
-    }
+    },
   }, {
     id: 'bandwidth',
     text: _('Up/Down Flow'),
-    transform: function(val, item) {
-      var upRate = flowRateFilter.transform(item.get('upstream'));
-      var downRate = flowRateFilter.transform(item.get('downstream'));
+    transform (val, item) {
+      let upRate = flowRateFilter.transform(item.get('upstream'));
+      let downRate = flowRateFilter.transform(item.get('downstream'));
 
       return upRate + '/' + downRate;
-    }
+    },
   }, {
     id: 'rssi',
     text: _('RSSI'),
-    transform: function(val, item) {
-      var intVal = parseInt(val, 10);
-      var classNames = 'Icon Icon-block Icon-wifi';
+    transform (val, item) {
+      let intVal = parseInt(val, 10);
+      let classNames = 'Icon Icon-block Icon-wifi';
 
       // 判断加密范式
-      if(item.get('encryption') === 'none') {
+      if (item.get('encryption') === 'none') {
         classNames += '-nopass';
       } else {
         classNames += '-pass';
       }
 
-      if(intVal > 85) {
+      if (intVal > 85) {
         classNames += '-0';
-      } else if(intVal > 75) {
+      } else if (intVal > 75) {
         classNames += '-1';
-      } else if(intVal > 65) {
+      } else if (intVal > 65) {
         classNames += '-2';
       } else {
         classNames += '-3';
       }
 
-      //return <span className={classNames}></span>;
+      // return <span className={classNames}></span>;
       return val;
-    }
+    },
   },
   // {
   //   id: 'authtype',
@@ -89,15 +89,15 @@ const clientsTableOptions = fromJS([
   //     return ret;
   //   }
   // },
-   {
+  {
     id: 'operationhours',
     text: _('Connect Time'),
-    filter: 'connectTime'
+    filter: 'connectTime',
   }, {
     id: 'op',
     width: '220',
-    text: _('Actions')
-  }
+    text: _('Actions'),
+  },
 ]);
 
 const msg = {
@@ -105,7 +105,7 @@ const msg = {
   reconnect: _('Reconnect'),
   lock: _('Lock'),
   unlock: _('Unlock'),
-  perPage: _('Items per page: ')
+  perPage: _('Items per page: '),
 };
 
 const selectOptions = [
@@ -124,20 +124,20 @@ const typeArr = [
 
 const styles = {
   actionButton: {
-    minWidth: "90px"
-  }
-}
+    minWidth: '90px',
+  },
+};
 
 // 原生的 react 页面
 export const Clients = React.createClass({
   mixins: [PureRenderMixin],
 
   componentWillMount() {
-    this.handleSearch()
+    this.handleSearch();
   },
 
   componentDidUpdate(prevProps) {
-    if(prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
+    if (prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
       this.handleSearch();
     }
   },
@@ -153,7 +153,7 @@ export const Clients = React.createClass({
   handleChangeQuery(data, needSearch) {
     this.props.changeClientsQuery(data);
 
-    if(needSearch) {
+    if (needSearch) {
       this.handleSearch();
     }
   },
@@ -161,20 +161,20 @@ export const Clients = React.createClass({
   handleActions(actionQuery, needSave) {
     this.props.changeClientActionQuery(actionQuery);
 
-    if(needSave) {
+    if (needSave) {
       this.props.saveClientsAction();
     }
   },
 
   onAction(mac, action, wirelessType) {
-    var subData = {
+    let subData = {
       action,
       macs: [
-        mac
-      ]
+        mac,
+      ],
     };
 
-    if(typeof wirelessType === 'string') {
+    if (typeof wirelessType === 'string') {
       subData.wirelessType = wirelessType;
     }
 
@@ -183,26 +183,26 @@ export const Clients = React.createClass({
 
   onChangeSearchText(val, e) {
     this.handleChangeQuery({
-      search: val
+      search: val,
     });
   },
 
   onChangeType(data) {
     this.handleChangeQuery({
-      type: data.value
+      type: data.value,
     }, true);
   },
 
   onChangeTableSize(data) {
     this.handleChangeQuery({
       size: data.value,
-      page: 1
+      page: 1,
     }, true);
   },
 
   onPageChange(i) {
     this.handleChangeQuery({
-      page: i
+      page: i,
     }, true);
   },
 
@@ -210,10 +210,10 @@ export const Clients = React.createClass({
     const noControl = this.props.app.get('noControl');
     // 添加操作项
     let options = clientsTableOptions.setIn([-1, 'transform'],
-      function(val, item) {
-        var mac = item.get('mac');
-        var status = item.get('status');
-        var isLock = item.get('islock') === 'lock' ? true : false;
+      function (val, item) {
+        let mac = item.get('mac');
+        let status = item.get('status');
+        let isLock = item.get('islock') === 'lock' ? true : false;
 
         if (status === 'disable' || noControl) {
           return null;
@@ -249,7 +249,7 @@ export const Clients = React.createClass({
               onClick={this.onAction.bind(this, mac, 'reconnect')}
             />
           </div>
-        )
+        );
       }.bind(this)
     );
 
@@ -257,42 +257,46 @@ export const Clients = React.createClass({
       {
         id: 'devicename',
         text: _('MAC Address') + '/' + _('Name'),
-        transform: function(val, item) {
+        transform (val, item) {
           return item.get('devicename') || item.get('mac');
-        }
+        },
       }, {
         id: 'vendor',
-        text: _('Manufacturer')
+        text: _('Manufacturer'),
       }, {
         id: 'wirelessType',
         text: _('Type'),
-        transform: function(val, item) {
-          var typeMap = {
+        transform (val, item) {
+          let typeMap = {
             main: _('Main SSID'),
-            guest: _('Guest SSID')
+            guest: _('Guest SSID'),
           };
 
           return typeMap[val] || _('Main Wireless');
-        }
+        },
       }, {
         id: 'bandwidth',
         text: _('Up/Down Speed'),
-        transform: function(val, item) {
-          var upRate = flowRateFilter.transform(item.get('upstream'));
-          var downRate = flowRateFilter.transform(item.get('downstream'));
+        transform (val, item) {
+          let upRate = flowRateFilter.transform(item.get('upstream'));
+          let downRate = flowRateFilter.transform(item.get('downstream'));
 
           return upRate + '/' + downRate;
-        }
+        },
       }, {
-        id: "lasttime",
-        text: _('Last Seen')
+        id: 'lasttime',
+        text: _('Last Seen'),
       }, {
         id: 'op',
         text: _('Actions'),
-        transform: function(val, item) {
-          var deviceMac = item.get('mac');
-          var isLock = item.get('islock') === 'lock' ? true : false;
+        transform: function (val, item) {
+          const deviceMac = item.get('mac');
+          const status = item.get('status');
+          const isLock = item.get('islock') === 'lock' ? true : false;
 
+          if (status === 'disable' || noControl) {
+            return null;
+          }
           return (
             <Button
               icon="unlock"
@@ -302,16 +306,16 @@ export const Clients = React.createClass({
               onClick={this.onAction.bind(this, deviceMac, 'unlock', item.get('wirelessType'))}
             />
           );
-        }.bind(this)
-      }
+        }.bind(this),
+      },
     ]);
     let tableOptions = options;
 
-    if(this.props.query.get('type') == '4') {
+    if (this.props.query.get('type') == '4') {
       tableOptions = blockOption;
     }
 
-    if(noControl) {
+    if (noControl) {
       options = options.delete(-1);
       tableOptions = tableOptions.delete(-1);
     }
@@ -352,11 +356,11 @@ export const Clients = React.createClass({
 
       </div>
     );
-  }
+  },
 });
 
 function mapStateToProps(state) {
-  var myState = state.clients;
+  let myState = state.clients;
 
   return {
     app: state.app,
