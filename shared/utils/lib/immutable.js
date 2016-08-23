@@ -14,6 +14,7 @@ var immutableUtils = {
           label: item.get('text'),
           fieldset: item.get('fieldset'),
           legend: item.get('legend'),
+          options: item.get('options'),
         };
         var retVal = item.clear()
           .merge(commonOption)
@@ -30,6 +31,39 @@ var immutableUtils = {
       })
       .groupBy((item) => item.get('fieldset'))
       .toList();
+
+    // 如果只有一组,则直接获取第一组List
+    if (ret.size === 1) {
+      ret = ret.get(0);
+    }
+    return ret;
+  },
+
+  getDefaultData: function(screenOptions, key) {
+    const defaultKey = key || 'defaultValue';
+    const ret = {};
+
+    // 初始化默认值对象
+    screenOptions.forEach((item) => {
+      const defaultVal = item.get(defaultKey);
+      if (defaultVal !== undefined) {
+        ret[item.get('id')] = defaultVal;
+      }
+    });
+
+    return ret;
+  },
+
+  getValidatorOptions: function(screenOptions) {
+    var ret = screenOptions;
+
+    if(!ret) {
+      return null;
+    }
+
+    ret = ret.map(
+      (item) => item.delete('formProps')
+    ).filterNot((item) => item.get('noTable'));
 
     return ret;
   },

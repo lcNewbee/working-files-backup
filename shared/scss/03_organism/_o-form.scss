@@ -27,19 +27,37 @@ $o-form-content-margin: 1em 0 0;
     border-top: 1px solid #d2d2d2;
   }
 
-  &.o-form--inline {
-    padding: 0;
-
-    @include clearfix;
-
+  &.o-form--block {
     .form-group {
-      display: inline-block;
       label {
-        min-width: 100px;
+        display: block;
+        float: none;
+        text-align: left;
       }
       .form-control {
-        margin-left: 12px;
+        margin-left: 0;
+
+        textarea,
+        .text {
+          width: 100%;
+        }
+        .Select {
+          width: 100%;
+          max-width: 100%;
+        }
       }
+    }
+
+    .row {
+      margin: 0 -12px;
+      .cols {
+        padding: 0 12px;
+      }
+    }
+    .m-description-list {
+      margin-top: -12px;
+      margin-bottom: 20px;
+      padding: 0 4px;
     }
   }
 
@@ -73,6 +91,30 @@ $o-form-content-margin: 1em 0 0;
           line-height: 24px;
           width: 100%;
         }
+      }
+    }
+  }
+
+  &.o-form--cols-2 {
+    @include clearfix;
+    margin: 0 -10px;
+
+    .form-group {
+      float: left;
+      width: 50%;
+      padding: 10px;
+
+      label {
+        display: block;
+        float: none;
+        text-align: left;
+      }
+      .form-control {
+        margin-left: 0;
+      }
+
+      &.form-group--save {
+        width: 100%;
       }
     }
   }

@@ -31,7 +31,6 @@ const screenOptions = fromJS([
       options: [
         _('Accept'),
         _('Throw Away'),
-        _('Redirect'),
       ],
     },
   }, {

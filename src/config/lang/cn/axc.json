@@ -77,6 +77,14 @@
   "IP Address": "IP 地址",
 
   "AAA Settings": "AAA配置",
+  "ISP Domain Name": "ISP域名",
+  "Access Type": "接入类型",
+  "Auth Type": "认证类型",
+  "Billing Type": "计费类型",
+  "(Auth)": "（认证）",
+  "(Billing)": "（计费）",
+  "Auth Service": "认证服务",
+  "Billing Service": "计费服务",
 
   "Routes Settings": "路由配置",
   "Target Mask": "目的掩码",
@@ -161,14 +169,41 @@
 
   "System": "系统",
   "System Upgrade": "系统升级",
+  "Version Uses To": "版本用途",
+  "Select Version File": "选择版本文件",
   "AP Correlation": "AP关联量",
   "AP Logs": "AP日志设置",
 
   "AC Upgrade": "AC升级",
+  "Version Maintenance": "版本维护",
+  "Upload AC Version": "上传AC版本",
+  "Upgrading Version": "升级版本(5分钟)",
+  "Backup Version": "备份版本(3分钟)",
+
+  "System Maintenance": "系统维护",
+  "Backup Configuration": "备份配置",
+  "Restore Configuration": "恢复配置",
+  "Backup your current configuration": "备份当前配置",
+  "Reboot Device": "重启设备",
+  "Reboot Now": "开始重启",
+  "Restore From File": "从文件中恢复",
+  "Restore To Factory": "恢复出厂配置",
+  "Restore Now": "开始恢复",
+
   "Admin Settings": "管理员配置",
-  "License": "License管理",
-  "System Monitor": "系统监控",
+  "Admin": "超级管理员",
+  "Manager(Read-only)": "只读管理员",
+  "Manager(Branch)": "分支管理员",
+  "Purview": "权限",
+
+  "License": "License",
+  "Manage License": "License管理",
+  "Device License": "设备序列号",
+  "Softe Upgrade License": "软件升级序列号",
+
   "Active-Standby": "主备设置",
+  "Enable Active-Standby": "启用主备",
+
   "Custer Settings": "集群设置",
   "Signatures": "特征库维护"
 }

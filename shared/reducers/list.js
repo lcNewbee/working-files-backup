@@ -12,6 +12,7 @@ const defaultItem = fromJS({
     list: [],
   },
   actionQuery: {},
+  defaultEditData: {},
 });
 const defaultState = fromJS({
   curListId: 'base',
@@ -32,6 +33,8 @@ function initListItem(state, action) {
 
 export default function (state = defaultState, action) {
   const curListName = state.get('curListId');
+  const defaultEditData = state.getIn([curListName, 'defaultEditData']);
+
   switch (action.type) {
     case 'INIT_LIST':
       return initListItem(state, action);
@@ -54,17 +57,20 @@ export default function (state = defaultState, action) {
       return state.mergeIn([curListName, 'data', 'edit'], action.data);
 
     case 'EDIT_LIST_ITEM_BY_INDEX':
-      return state.setIn([curListName, 'data', 'edit'],
-        state.getIn([curListName, 'data', 'list', action.index]).merge({
-          myTitle: `${_('Edit')}: ${action.index}`,
-        })).setIn([curListName, 'actionQuery', 'action'], 'edit');
+      return state.setIn(
+          [curListName, 'data', 'edit'],
+          defaultEditData.merge(state.getIn([curListName, 'data', 'list', action.index])).merge({
+            myTitle: `${_('Edit')}: ${action.index}`,
+          })
+        )
+        .setIn([curListName, 'actionQuery', 'action'], 'edit');
 
     case 'ADD_LIST_ITEM':
       return state.setIn(
         [curListName, 'data', 'edit'],
         fromJS({
           myTitle: _('Add'),
-        }).merge(action.defaultItem)
+        }).merge(defaultEditData)
       )
       .setIn([curListName, 'actionQuery', 'action'], 'add');
 

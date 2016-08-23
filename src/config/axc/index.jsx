@@ -130,7 +130,18 @@ const sSystemAdmin =
     require('../../screens/App/screens/MainAxc/screens/System/screens/SystemAdmin');
 const sAlarmEvents =
     require('../../screens/App/screens/MainAxc/screens/System/screens/AlarmEvents');
-
+const sLicense =
+    require('../../screens/App/screens/MainAxc/screens/System/screens/License');
+const sCluster =
+    require('../../screens/App/screens/MainAxc/screens/System/screens/Cluster');
+const sActiveStandby =
+    require('../../screens/App/screens/MainAxc/screens/System/screens/ActiveStandby');
+const sSignatures =
+    require('../../screens/App/screens/MainAxc/screens/System/screens/Signatures');
+const sVersionMaintenance =
+    require('../../screens/App/screens/MainAxc/screens/System/screens/VersionMaintenance');
+const sSystemMaintenance =
+    require('../../screens/App/screens/MainAxc/screens/System/screens/SystemMaintenance');
 const routes = [
   {
     path: '/',
@@ -260,6 +271,8 @@ const routes = [
               }, {
                 id: 'vlanAaa',
                 path: '/main/network/vlan/aaa',
+                fetchUrl: '/goform/vlanAaa',
+                saveUrl: '/goform/vlanAaa',
                 text: _('AAA Settings'),
                 component: sVlanAaa.Screen,
               },
@@ -485,11 +498,21 @@ const routes = [
             isIndex: true,
             path: '/main/system/upgrade',
             icon: 'level-up',
-            text: _('AC Upgrade'),
+            text: _('Version Maintenance'),
+            component: sVersionMaintenance.Screen,
+          }, {
+            id: 'maintenance',
+            isIndex: true,
+            path: '/main/system/maintenance',
+            icon: 'cog',
+            text: _('System Maintenance'),
+            component: sSystemMaintenance.Screen,
           }, {
             id: 'admin',
             isIndex: true,
             path: '/main/system/admin',
+            fetchUrl: '/goform/admins',
+            saveUrl: '/goform/admins',
             icon: 'user',
             text: _('Admin Settings'),
             component: sSystemAdmin.Screen,
@@ -498,31 +521,29 @@ const routes = [
             isIndex: true,
             path: '/main/system/license',
             icon: 'file-text',
-            text: _('License'),
-          }, {
-            id: 'systemMonitor',
-            isIndex: true,
-            path: '/main/system/monitor',
-            icon: 'video-camera',
-            text: _('System Monitor'),
+            text: _('Manage License'),
+            component: sLicense.Screen,
           }, {
             id: 'activeStandby',
             isIndex: true,
             path: '/main/system/activeStandby',
             icon: 'refresh',
             text: _('Active-Standby'),
+            component: sActiveStandby.Screen,
           }, {
             id: 'cluster',
             isIndex: true,
             path: '/main/system/cluster',
             icon: 'server',
             text: _('Custer Settings'),
+            component: sCluster.Screen,
           }, {
             id: 'signatures',
             isIndex: true,
             path: '/main/system/signatures',
             icon: 'tasks',
             text: _('Signatures'),
+            component: sSignatures.Screen,
           }, {
             id: 'alarmStatus',
             icon: 'exclamation-circle',

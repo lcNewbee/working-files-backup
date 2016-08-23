@@ -1,0 +1,34 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "userType": "0",
+        "userName": "神器",
+        "userPassword": "",
+        "purview": "192.168.5.53"
+      },
+      {
+        "userType": "2",
+        "userName": "神器",
+        "userPassword": "",
+        "purview": "192.168.5.53"
+      },
+      {
+        "userType": "1",
+        "userName": "神器",
+        "userPassword": "",
+        "purview": "192.168.5.53"
+      },
+      {
+        "userType": "1",
+        "userName": "神器",
+        "userPassword": "",
+        "purview": "192.168.5.53"
+      }
+    ]
+  }
+}

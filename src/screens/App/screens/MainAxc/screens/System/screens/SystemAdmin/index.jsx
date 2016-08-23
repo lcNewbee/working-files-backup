@@ -1,200 +1,169 @@
 import React, { PropTypes } from 'react';
-import { bindActionCreators } from 'redux';
-import { Map, List } from 'immutable';
+import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
-import { SaveButton, PureComponent, FormGroup } from 'shared/components';
-
-import utils from 'shared/utils';
+import { fromJS, Map } from 'immutable';
+import { bindActionCreators } from 'redux';
 import validator from 'shared/utils/lib/validator';
+import {
+  ListInfo, FormGroup,
+} from 'shared/components';
+import * as listActions from 'shared/actions/list';
 import * as appActions from 'shared/actions/app';
-import * as myActions from './actions';
-import myReducer from './reducer';
 
-const languageOptions = List(b28n.getOptions().supportLang).map((item) => (
+const screenOptions = fromJS([
   {
-    value: item,
-    label: b28n.langMap[item] || 'English',
-  }
-)).toJS();
+    id: 'userType',
+    width: '160',
+    text: _('User Type'),
+    defaultValue: '0',
+    options: [
+      _('Admin'),
+      _('Manager(Branch)'),
+      _('Manager(Read-only)'),
+    ],
+    formProps: {
+      type: 'switch',
+    },
+  }, {
+    id: 'purview',
+    width: '160',
+    text: _('Purview'),
+    defaultValue: '0',
+    options: [
+      {
+        value: '0',
+        label: 'Portal',
+      }, {
+        value: '1',
+        label: 'AP',
+      }, {
+        value: '3',
+        label: 'Network',
+      }, {
+        value: '4',
+        label: 'System',
+      }, {
+        value: '5',
+        label: 'System2',
+      },
+    ],
 
-const validOptions = Map({
-  oldpasswd: validator({}),
-  newpasswd: validator({
-    rules: 'len:[8, 32]',
-  }),
+    formProps: {
+      component(option, ...rest) {
+        const myProps = option;
 
-  confirmpasswd: validator({
-    rules: 'len:[8, 32]',
-  }),
-});
+        if (rest[0].get('userType') !== '1') {
+          return null;
+        }
+
+        return (
+          <FormGroup
+            {...myProps}
+            type="select"
+            multi
+          />
+        );
+      },
+    },
+  }, {
+    id: 'userName',
+    width: '200',
+    text: _('User Name'),
+    defaultValue: '',
+    formProps: {
+      required: true,
+      validator: validator({
+        rules: 'len:[1,32]',
+      }),
+    },
+  }, {
+    id: 'userPassword',
+    text: _('Password'),
+    noTable: true,
+    defaultValue: '',
+    formProps: {
+      type: 'password',
+      required: true,
+      validator: validator({
+        rules: 'len:[8,32]',
+      }),
+    },
+  },
+]);
+const tableOptions = immutableUtils.getTableOptions(screenOptions);
+const editFormOptions = immutableUtils.getFormOptions(screenOptions);
+const defaultFormData = immutableUtils.getDefaultData(screenOptions);
 
 const propTypes = {
-  resetVaildateMsg: PropTypes.func,
-  resetPassword: PropTypes.func,
-  validateAll: PropTypes.func,
-  savePassword: PropTypes.func,
-  changeLoginStatus: PropTypes.func,
-  changePasswordSettings: PropTypes.func,
-  createModal: PropTypes.func,
-  validateOption: PropTypes.object,
-  store: PropTypes.instanceOf(Map),
   app: PropTypes.instanceOf(Map),
+  store: PropTypes.instanceOf(Map),
+
+  route: PropTypes.object,
+  initList: PropTypes.func,
+  closeListItemModal: PropTypes.func,
+  updateEditListItem: PropTypes.func,
+  save: PropTypes.func,
 };
 const defaultProps = {};
 
-export default class Admin extends PureComponent {
+export default class View extends React.Component {
   constructor(props) {
     super(props);
 
-    this.binds('onSave', 'onUpdate',
-      'onChangeLang', 'onChangeLang', 'getSetting', 'combineValid');
+    this.onAction = this.onAction.bind(this);
   }
 
-  componentWillUnmount() {
-    this.props.resetVaildateMsg();
-    this.props.resetPassword();
+  componentWillMount() {
+    this.tableOptions = tableOptions;
   }
 
-  onSave() {
-    this.props.validateAll((invalid) => {
-      if (invalid.isEmpty() && !this.combineValid()) {
-        this.props.savePassword(() => {
-          this.props.changeLoginStatus('0');
-          window.location.hash = '#';
-        });
-      }
-    });
-  }
+  onAction(no, type) {
+    const query = {
+      no,
+      type,
+    };
 
-  onUpdate(name, data) {
-    const settings = {};
-
-    settings[name] = data.value;
-    this.props.changePasswordSettings(settings);
-  }
-
-  onChangeLang(data) {
-    if (b28n.getLang() !== data.value) {
-      b28n.setLang(data.value);
-      window.location.reload();
-    }
-  }
-
-  getSetting(name) {
-    return this.props.store.getIn(['data', name]);
-  }
-  combineValid() {
-    const { newpasswd, confirmpasswd } = this.props.store.get('data').toJS();
-    let ret;
-
-    if (newpasswd !== confirmpasswd) {
-      ret = _('New password and confirm password must match');
-
-      this.props.createModal({
-        id: 'admin',
-        role: 'alert',
-        text: ret,
+    this.props.save(this.props.route.formUrl, query)
+      .then((json) => {
+        if (json.state && json.state.code === 2000) {
+          console.log(json);
+        }
       });
-    }
-
-    return ret;
   }
 
   render() {
-    const { oldpasswd, newpasswd, confirmpasswd } = this.props.validateOption;
-    const noControl = this.props.app.get('noControl');
-
     return (
-      <form>
-        <h3>{_('Change Password') }</h3>
-
-        <FormGroup
-          type="password"
-          label={_('Old Password')}
-          name="oldpasswd"
-          value={this.getSetting('oldpasswd')}
-          onChange={(data) => this.onUpdate('oldpasswd', data)}
-          {...oldpasswd}
-          required
-        />
-
-        <FormGroup
-          type="password"
-          label={_('New Password')}
-          name="newpasswd"
-          value={this.getSetting('newpasswd')}
-          onChange={(data) => this.onUpdate('newpasswd', data)}
-          {...newpasswd}
-          required
-        />
-
-        <FormGroup
-          type="password"
-          label={_('Confirm Password')}
-          name="confirmpasswd"
-          value={this.getSetting('confirmpasswd')}
-          onChange={(data) => this.onUpdate('confirmpasswd', data)}
-          {...confirmpasswd}
-          required
-        />
-
-        <div className="form-group form-group-save">
-          <div className="form-control">
-            {
-              this.props.store.getIn(['state', 'code']) === 4000 ? (
-                <div>
-                  <p className="error">{_('Old password error!') }</p>
-                </div>
-              ) : null
-            }
-            {
-              noControl ? null : (
-                <SaveButton
-                  type="button"
-                  loading={this.props.app.get('saving')}
-                  onClick={this.onSave}
-                />
-              )
-            }
-          </div>
-        </div>
-
-        <h3>{_('System Settings') }</h3>
-
-        <FormGroup
-          label={_('Select Language')}
-          type="select"
-          options={languageOptions}
-          value={b28n.getLang()}
-          onChange={this.onChangeLang}
-        />
-
-      </form>
+      <ListInfo
+        {...this.props}
+        tableOptions={this.tableOptions}
+        editFormOptions={editFormOptions}
+        defaultEditData={defaultFormData}
+        controlAbled
+      />
     );
   }
 }
 
-Admin.propTypes = propTypes;
-Admin.defaultProps = defaultProps;
+View.propTypes = propTypes;
+View.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
-    store: state.admin,
     app: state.app,
+    store: state.list,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    myActions
+    listActions
   ), dispatch);
 }
 
+
+// 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps,
-  validator.mergeProps(validOptions)
-)(Admin);
-
-export const reducer = myReducer;
+  mapDispatchToProps
+)(View);

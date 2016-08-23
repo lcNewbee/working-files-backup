@@ -25,6 +25,7 @@ class Switchs extends React.Component {
   }
 
   onClick(e, labelVal) {
+    e.preventDefault();
     if (e.target.value !== this.props.value) {
       if (this.props.onChange) {
         this.props.onChange({

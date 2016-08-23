@@ -71,18 +71,19 @@ export function initList(option) {
   };
 }
 
-export function fetchList() {
+export function fetchList(url) {
   return (dispatch, getState) => {
     const globalState = getState();
     const refreshTime = globalState.app.get('rateInterval');
     const name = globalState.list.get('curListId');
     const query = globalState.list.getIn([name, 'query']).toJS();
     const formUrl = globalState.list.getIn([name, 'formUrl']);
+    const fetchUrl = globalState.list.getIn([name, 'fetchUrl']) || formUrl;
 
     window.clearTimeout(refreshTimeout);
     dispatch(reqeustFetchList());
 
-    return dispatch(appActions.fetch(formUrl, query))
+    return dispatch(appActions.fetch(url || fetchUrl, query))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(reciveFetchList(json.data));
@@ -96,12 +97,13 @@ export function fetchList() {
       });
   };
 }
-export function onListAction() {
+export function onListAction(url) {
   return (dispatch, getState) => {
     const globalState = getState();
     const name = globalState.list.get('curListId');
     const editMap = globalState.list.getIn([name, 'data', 'edit']);
     const formUrl = globalState.list.getIn([name, 'formUrl']);
+    const saveUrl = globalState.list.getIn([name, 'saveUrl']) || formUrl;
     let actionQuery = globalState.list.getIn([name, 'actionQuery']);
     const actionType = actionQuery.get('action');
 
@@ -112,12 +114,12 @@ export function onListAction() {
       actionQuery = actionQuery.merge(editMap).toJS();
     }
 
-    return dispatch(appActions.save(formUrl, actionQuery))
+    return dispatch(appActions.save(url || saveUrl, actionQuery))
       .then((json) => {
         let ret = 'Server Error';
 
         if (json.state && json.state.code === 2000) {
-          dispatch(fetchList(formUrl));
+          dispatch(fetchList(saveUrl));
           ret = 'ok';
         }
         return ret;

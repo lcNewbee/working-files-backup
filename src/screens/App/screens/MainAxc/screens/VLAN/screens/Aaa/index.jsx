@@ -23,6 +23,31 @@ function getInterfaceTypeOptions() {
     )
   );
 }
+const accessTypeSeletOptions = [
+  {
+    value: '0',
+    label: _('LAN'),
+  }, {
+    value: '1',
+    label: _('PPP'),
+  }, {
+    value: '2',
+    label: _('Portal'),
+  }, {
+    value: '3',
+    label: _('MAC'),
+  },
+];
+const authTypeSeletOptions = [
+  {
+    value: '0',
+    label: `${_('Local')} (${_('802.1X')})`,
+  },
+  {
+    value: '1',
+    label: `${_('Remotely')}(${_('Radius Service')})`,
+  },
+];
 const screenOptions = fromJS([
   {
     id: 'ispDomain',
@@ -32,46 +57,28 @@ const screenOptions = fromJS([
     },
   }, {
     id: 'authAccessType',
-    text: _('Access Type'),
+    text: _('Access Type') + _('(Auth)'),
     defaultValue: '0',
     fieldset: 'auth',
     legend: _('Auth Service'),
     formProps: {
       type: 'select',
       placeholder: _('Please Select ') + _('Rules Group'),
-      options: [
-        {
-          value: '0',
-          label: `${_('Local')} (${_('802.1X')})`,
-        },
-        {
-          value: '1',
-          label: `${_('Remotely')}(${_('Radius Service')})`,
-        },
-      ],
+      options: accessTypeSeletOptions,
     },
   }, {
     id: 'authType',
-    text: _('Auth Type'),
+    text: _('Auth Type') + _('(Auth)'),
     defaultValue: '0',
     fieldset: 'auth',
     formProps: {
       type: 'switch',
       placeholder: _('Please Select ') + _('Rules Group'),
-      options: [
-        {
-          value: '0',
-          label: `${_('Local')} (${_('802.1X')})`,
-        },
-        {
-          value: '1',
-          label: `${_('Remotely')}(${_('Radius Service')})`,
-        },
-      ],
+      options: authTypeSeletOptions,
     },
   }, {
     id: 'authRadiusTemplate',
-    text: _('Radius Template'),
+    text: _('Radius Template') + _('(Auth)'),
     fieldset: 'auth',
     formProps: {
       type: 'select',
@@ -82,46 +89,28 @@ const screenOptions = fromJS([
     },
   }, {
     id: 'billingAccessType',
-    text: _('Access Type'),
+    text: _('Access Type') + _('(Billing)'),
     defaultValue: '0',
     fieldset: 'billing',
     legend: _('Billing Service'),
     formProps: {
       type: 'select',
       placeholder: _('Please Select ') + _('Rules Group'),
-      options: [
-        {
-          value: '0',
-          label: `${_('Local')} (${_('802.1X')})`,
-        },
-        {
-          value: '1',
-          label: `${_('Remotely')}(${_('Radius Service')})`,
-        },
-      ],
+      options: accessTypeSeletOptions,
     },
   }, {
     id: 'billingType',
-    text: _('Billing Type'),
+    text: _('Billing Type') + _('(Billing)'),
     fieldset: 'billing',
     defaultValue: '0',
     formProps: {
       type: 'switch',
       placeholder: _('Please Select ') + _('Rules Group'),
-      options: [
-        {
-          value: '0',
-          label: `${_('Local')} (${_('802.1X')})`,
-        },
-        {
-          value: '1',
-          label: `${_('Remotely')}(${_('Radius Service')})`,
-        },
-      ],
+      options: authTypeSeletOptions,
     },
   }, {
     id: 'billingRadiusTemplate',
-    text: _('Radius Template'),
+    text: _('Radius Template') + _('(Billing)'),
     fieldset: 'billing',
     formProps: {
       type: 'select',

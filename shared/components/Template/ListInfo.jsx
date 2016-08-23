@@ -2,7 +2,8 @@ import React, { PropTypes } from 'react';
 import { Map, List } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import {
-  Table, Select, Search, Switchs, Button, FormGroup, Modal,
+  Table, Select, Search, Switchs, Button, Modal,
+  FormContainer,
 } from 'shared/components';
 
 const msg = {
@@ -38,10 +39,13 @@ const propTypes = {
   leaveListScreen: PropTypes.func,
   addListItem: PropTypes.func,
   editListItemByIndex: PropTypes.func,
+  reportValidError: PropTypes.func,
   closeListItemModal: PropTypes.func,
   updateEditListItem: PropTypes.func,
   changeListActionQuery: PropTypes.func,
   onListAction: PropTypes.func,
+  validateAll: PropTypes.func,
+  resetVaildateMsg: PropTypes.func,
   initList: PropTypes.func,
 
   children: PropTypes.node,
@@ -65,15 +69,16 @@ const defaultProps = {
 class ListInfo extends React.Component {
   constructor(props) {
     super(props);
-    this.defaultFormData = {};
 
     this.props.initList({
-      formUrl: this.props.route.formUrl,
+      formUrl: props.route.formUrl,
+      fetchUrl: props.route.fetchUrl,
+      saveUrl: props.route.saveUrl,
       listId: props.route.id,
       defaultEditData: props.defaultEditData,
     });
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    this.binds('handleChangeQuery', 'onPageChange', 'onSave',
+    this.binds('handleChangeQuery', 'onPageChange', 'onSave', 'onCloseEditModal',
         'onChangeSearchText', 'onChangeType', 'onChangeTableSize');
   }
 
@@ -120,14 +125,6 @@ class ListInfo extends React.Component {
       this.ListTableOptions = tableOptions;
     }
 
-    // 初始化默认值对象
-    tableOptions.forEach((item) => {
-      const defaultVal = item.get('defaultValue');
-      if (defaultVal) {
-        this.defaultFormData[item.get('id')] = defaultVal;
-      }
-    });
-
     if (this.props.fetchList) {
       this.props.fetchList(this.listId);
     }
@@ -163,7 +160,16 @@ class ListInfo extends React.Component {
     }, true);
   }
   onSave() {
-
+    this.props.validateAll()
+      .then((errMsg) => {
+        if (errMsg.isEmpty()) {
+          this.props.onListAction();
+        }
+      });
+  }
+  onCloseEditModal() {
+    this.props.closeListItemModal();
+    this.props.resetVaildateMsg();
   }
 
   onPageChange(i) {
@@ -204,14 +210,15 @@ class ListInfo extends React.Component {
   render() {
     const {
       typeOptions, store, route, hasSearch, actionBarChildren,
-      addAbled, editFormOptions, controlAbled, noTitle,
+      addAbled, editFormOptions, controlAbled, noTitle, app,
+      defaultEditData,
     } = this.props;
-    const { defaultFormData } = this;
     const myListId = store.get('curListId');
     const page = store.getIn([myListId, 'data', 'page']);
     const list = store.getIn([myListId, 'data', 'list']);
     const editData = store.getIn([myListId, 'data', 'edit']);
     const query = store.getIn([myListId, 'query']);
+    const actionQuery = store.getIn([myListId, 'query']);
     const saveUrl = route.saveUrl || route.formUrl;
     let pageSelectClassName = 'fr';
 
@@ -261,7 +268,7 @@ class ListInfo extends React.Component {
                 theme="primary"
                 text={_('Add')}
                 onClick={() => {
-                  this.props.addListItem(defaultFormData);
+                  this.props.addListItem(defaultEditData);
                 }}
               />
             ) : null
@@ -297,72 +304,23 @@ class ListInfo extends React.Component {
             <Modal
               isShow={!editData.isEmpty()}
               title={editData.get('myTitle')}
-              onOk={() => this.onSave()}
-              onClose={
-                () => this.props.closeListItemModal(route.id)
-              }
+              onOk={this.onSave}
+              onClose={this.onCloseEditModal}
+              noFooter
             >
-              <form action={saveUrl}>
-              {
-                editFormOptions.map((item, index) => {
-                  const legendText = item.getIn([0, 'legend']);
-
-                  if (legendText) {
-                    return (
-                      <fieldset key={index}>
-                        <legend>{legendText}</legend>
-                        {
-                          item.map((subItem) => {
-                            const myProps = subItem.toJS();
-                            const id = myProps.id;
-
-                            delete myProps.fieldset;
-                            delete myProps.legend;
-
-                            return (
-                              <FormGroup
-                                {...myProps}
-                                key={id}
-                                value={editData.get(id)}
-                                onChange={
-                                  (data) => {
-                                    const upDate = {};
-                                    upDate[id] = data.value;
-                                    this.props.updateEditListItem(upDate);
-                                  }
-                                }
-                              />
-                            );
-                          })
-                        }
-                      </fieldset>
-                    );
-                  }
-
-                  return (
-                    item.map((subItem) => {
-                      const myProps = subItem.toJS();
-                      const id = myProps.id;
-
-                      return (
-                        <FormGroup
-                          {...myProps}
-                          key={id}
-                          value={editData.get(id)}
-                          onChange={
-                            (data) => {
-                              const upDate = {};
-                              upDate[id] = data.value;
-                              this.props.updateEditListItem(upDate);
-                            }
-                          }
-                        />
-                      );
-                    })
-                  );
-                })
-              }
-              </form>
+              <FormContainer
+                action={saveUrl}
+                isSaving={app.get('saving')}
+                data={editData}
+                actionQuery={actionQuery}
+                invalidMsg={app.get('invalid')}
+                validateAt={app.get('validateAt')}
+                options={editFormOptions}
+                onSave={this.onSave}
+                onChangeData={this.props.updateEditListItem}
+                onValidError={this.props.reportValidError}
+                hasSaveButton
+              />
             </Modal>
           ) : null
         }

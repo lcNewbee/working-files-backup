@@ -29,6 +29,7 @@ export DatePicker from './TimePicker';
 export Modal from './Modal';
 export Table from './Table';
 export TabContainer from './Organism/TabContainer';
+export FormContainer from './Organism/FormContainer';
 
 // Templates
 export PropertyPanel from './Template/PropertyPanel';

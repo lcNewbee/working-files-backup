@@ -14,7 +14,7 @@ const propTypes = {
   transitionEnter: PropTypes.bool,
   okButton: PropTypes.bool,
   cancelButton: PropTypes.bool,
-  hiddenFooter: PropTypes.bool,
+  noFooter: PropTypes.bool,
   onClose: PropTypes.func,
   onOk: PropTypes.func,
   children: PropTypes.any,
@@ -29,7 +29,7 @@ const defaultProps = {
   transitionLeave: true,
   okButton: true,
   cancelButton: true,
-  hiddenFooter: false,
+  noFooter: false,
 };
 
 class Modal extends Component {
@@ -57,7 +57,7 @@ class Modal extends Component {
     const { size, role, id, transitionLeave, transitionEnter,
       isShow, title, cancelText, okButton, okText,
     } = this.props;
-    let hiddenFooter = this.props.hiddenFooter;
+    let noFooter = this.props.noFooter;
     let classNames;
     let keyVal = 'onlyModal';
     let hasCloseBtn = true;
@@ -81,7 +81,7 @@ class Modal extends Component {
 
     // No top close button
     if (role === 'message') {
-      hiddenFooter = true;
+      noFooter = true;
     } else if (role === 'comfirm') {
       hasCloseBtn = false;
 
@@ -140,7 +140,7 @@ class Modal extends Component {
                     {this.props.children}
                   </div>
                   {
-                    !hiddenFooter ? (
+                    !noFooter ? (
                       <div className="o-modal__footer">
                         {
                           cancelButton ? (
