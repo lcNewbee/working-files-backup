@@ -70,7 +70,8 @@ gulp.task('build', function (callback) {
   runSequence('clean', ['build:assets', 'webpack'], 'build:header', 'build:html', callback);
 });
 
-gulp.task('open:dist', ['build'], shell.task(['npm run open:dist']));
+
+gulp.task('open:dist', ['build'], shell.task(['babel-node tools/distServer.js']));
 
 gulp.task('clean:pubac', function (callback) {
   return del([paths.pubNew], { force: true });
