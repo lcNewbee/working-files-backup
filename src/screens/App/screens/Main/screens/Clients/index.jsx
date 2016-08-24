@@ -21,7 +21,7 @@ const clientsTableOptions = fromJS([
   {
     id: 'devicename',
     text: _('MAC Address') + '/' + _('Name'),
-    transform (val, item) {
+    transform(val, item) {
       return item.get('devicename') || item.get('mac');
     },
   }, {
@@ -33,23 +33,23 @@ const clientsTableOptions = fromJS([
   }, {
     id: 'connectap',
     text: _('Associated AP'),
-    transform (val, item) {
+    transform(val, item) {
       return item.get('connectap') || item.get('apmac');
     },
   }, {
     id: 'bandwidth',
     text: _('Up/Down Flow'),
-    transform (val, item) {
-      let upRate = flowRateFilter.transform(item.get('upstream'));
-      let downRate = flowRateFilter.transform(item.get('downstream'));
+    transform(val, item) {
+      const upRate = flowRateFilter.transform(item.get('upstream'));
+      const downRate = flowRateFilter.transform(item.get('downstream'));
 
       return upRate + '/' + downRate;
     },
   }, {
     id: 'rssi',
     text: _('RSSI'),
-    transform (val, item) {
-      let intVal = parseInt(val, 10);
+    transform(val, item) {
+      const intVal = parseInt(val, 10);
       let classNames = 'Icon Icon-block Icon-wifi';
 
       // 判断加密范式
@@ -167,7 +167,7 @@ export const Clients = React.createClass({
   },
 
   onAction(mac, action, wirelessType) {
-    let subData = {
+    const subData = {
       action,
       macs: [
         mac,
@@ -211,9 +211,9 @@ export const Clients = React.createClass({
     // 添加操作项
     let options = clientsTableOptions.setIn([-1, 'transform'],
       function (val, item) {
-        let mac = item.get('mac');
-        let status = item.get('status');
-        let isLock = item.get('islock') === 'lock' ? true : false;
+        const mac = item.get('mac');
+        const status = item.get('status');
+        const isLock = item.get('islock') === 'lock' ? true : false;
 
         if (status === 'disable' || noControl) {
           return null;
@@ -257,7 +257,7 @@ export const Clients = React.createClass({
       {
         id: 'devicename',
         text: _('MAC Address') + '/' + _('Name'),
-        transform (val, item) {
+        transform(val, item) {
           return item.get('devicename') || item.get('mac');
         },
       }, {
@@ -266,8 +266,8 @@ export const Clients = React.createClass({
       }, {
         id: 'wirelessType',
         text: _('Type'),
-        transform (val, item) {
-          let typeMap = {
+        transform(val, item) {
+          const typeMap = {
             main: _('Main SSID'),
             guest: _('Guest SSID'),
           };
@@ -275,11 +275,14 @@ export const Clients = React.createClass({
           return typeMap[val] || _('Main Wireless');
         },
       }, {
+        id: 'apmac',
+        text: _('Associated AP'),
+      }, {
         id: 'bandwidth',
         text: _('Up/Down Speed'),
-        transform (val, item) {
-          let upRate = flowRateFilter.transform(item.get('upstream'));
-          let downRate = flowRateFilter.transform(item.get('downstream'));
+        transform(val, item) {
+          const upRate = flowRateFilter.transform(item.get('upstream'));
+          const downRate = flowRateFilter.transform(item.get('downstream'));
 
           return upRate + '/' + downRate;
         },
@@ -360,7 +363,7 @@ export const Clients = React.createClass({
 });
 
 function mapStateToProps(state) {
-  let myState = state.clients;
+  const myState = state.clients;
 
   return {
     app: state.app,

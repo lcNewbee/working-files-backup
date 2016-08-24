@@ -9,12 +9,10 @@ import * as appActions from 'shared/actions/app';
 import { FormGroup, FormInput } from 'shared/components/Form';
 import { SaveButton } from 'shared/components';
 import Switchs from 'shared/components/Switchs';
+import channels from 'shared/config/channels.json';
 import * as myActions from './actions';
 import { fetchDeviceGroups } from '../GroupSettings/actions';
 import myReducer from './reducer';
-
-
-import channels from './channels.json';
 
 
 const msg = {

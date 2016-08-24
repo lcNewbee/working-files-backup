@@ -445,11 +445,10 @@ export const Status = React.createClass({
     ret.xAxis[0].name = xAxisName;
 
     ret.series[0].data = clientStatisticsList[0].data;
-    ret.series[1].data = clientStatisticsList[0].data;
+    ret.series[1].data = clientStatisticsList[1].data;
     ret.series[2].data = totalClientStatisticsList;
 
     return ret;
-
   },
 
   onDeleteOfflineDev(mac) {
