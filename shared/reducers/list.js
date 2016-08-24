@@ -33,7 +33,7 @@ function initListItem(state, action) {
 
 export default function (state = defaultState, action) {
   const curListName = state.get('curListId');
-  const defaultEditData = state.getIn([curListName, 'defaultEditData']);
+  const defaultEditData = state.getIn([curListName, 'defaultEditData']) || fromJS({});
 
   switch (action.type) {
     case 'INIT_LIST':

@@ -12,9 +12,11 @@ import {
 const propTypes = {
   action: PropTypes.string,
   className: PropTypes.string,
-  validateAt: PropTypes.number,
   hasSaveButton: PropTypes.bool,
   isSaving: PropTypes.bool,
+
+  // 数据验证相关
+  validateAt: PropTypes.number,
   onChangeData: PropTypes.func,
   onValidError: PropTypes.func,
   onSave: PropTypes.func,
@@ -22,6 +24,7 @@ const propTypes = {
   data: PropTypes.instanceOf(Map),
   actionQuery: PropTypes.instanceOf(Map),
   invalidMsg: PropTypes.instanceOf(Map),
+
   hasFile: PropTypes.bool,
   method: PropTypes.oneOf(['POST', 'GET']),
 };

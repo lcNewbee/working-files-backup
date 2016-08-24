@@ -645,6 +645,29 @@ export default class Main extends Component {
             this.renderBreadcrumb()
           }
         </div>
+        <div className="o-menu-bar">
+          <nav
+            onClick={() =>
+              this.onClickTopMenuTitle()
+            }
+            className="o-menu-bar__nav"
+          >
+            <h3>
+              <Icon
+                name="navicon"
+                onMouseOver={() =>
+                  this.onToggleMainPopOver({
+                    name: 'topMenu',
+                  })
+                }
+              />
+              {curTopNavText}
+            </h3>
+          </nav>
+          {
+            this.renderBreadcrumb()
+          }
+        </div>
         <div className={mainClassName}>
           <Nav
             className="t-main__nav"
