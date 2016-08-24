@@ -56,6 +56,147 @@ const clientTypeSwitchs = fromJS([
     label: _('Connect Time'),
   },
 ]);
+const clientNetworkChartOption = {
+  tooltip: {
+    trigger: 'item',
+    formatter: '{a} <br/>{b} : {c} ' + _('clientUnit') + ' ({d}%)',
+  },
+
+  title: {
+    text: _('Clients Frequency Diagram'),
+    subtext: msg.total,
+    x: 'center',
+  },
+
+  series: [
+    {
+      name: _('Frequency'),
+      type: 'pie',
+      radius: ['10%', '45%'],
+      center: ['50%', '58%'],
+
+      itemStyle: {
+        emphasis: {
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.5)',
+        },
+      },
+    },
+  ],
+};
+const clientProducerOption = {
+  tooltip: {
+    trigger: 'item',
+    formatter: '{a} <br/>{b} : {c} ' + _('clientUnit') + ' ({d}%)',
+  },
+
+  title: {
+    text: _('Terminal Type'),
+    subtext: msg.total,
+    x: 'center',
+  },
+
+  series: [
+    {
+      name: _('Producer'),
+      type: 'pie',
+      radius: ['10%', '45%'],
+      center: ['50%', '58%'],
+
+      itemStyle: {
+        emphasis: {
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.5)',
+        },
+      },
+    },
+  ],
+};
+const apChartOption = {
+  tooltip: {
+    trigger: 'item',
+    formatter: '{a} <br/>{b} : {c} ' + _('apUnit') + ' ({d}%)',
+  },
+  title: {
+    text: msg.apStatus,
+    subtext: msg.total,
+    x: 'center',
+  },
+  series: [
+    {
+      name: _('Status'),
+      type: 'pie',
+      radius: ['10%', '45%'],
+      center: ['50%', '58%'],
+
+      itemStyle: {
+        emphasis: {
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.5)',
+        },
+      },
+    },
+  ],
+};
+const colors = ['#c23531', '#2f4554', '#0093dd', '#d48265', '#91c7ae'];
+const clientsStatsOption = fromJS({
+  color: colors,
+  tooltip: {
+    trigger: 'axis',
+  },
+  legend: {
+    data: ['2.4G', '5G', _('Total')],
+  },
+  xAxis: [{
+    type: 'category',
+    interval: 1,
+    splitLine: {
+      interval: 0,
+    },
+    axisLabel: {
+      interval: 0,
+    },
+  }],
+  yAxis: [{
+    type: 'value',
+    name: _('Number'),
+    minInterval: 1,
+    splitNumber: 5,
+    color: colors[0],
+    axisLabel: {
+      formatter: '{value}',
+    },
+    axisLine: {
+      lineStyle: {
+        color: colors[1],
+      },
+    },
+  }],
+  series: [
+    {
+      name: '2.4G',
+      type: 'bar',
+    },
+    {
+      name: '5G',
+      type: 'bar',
+    },
+    {
+      name: _('Total'),
+      type: 'line',
+    },
+  ],
+});
+const clientsDayStatsOption = clientsStatsOption.toJS();
+const clientsWeekStatsOption = clientsStatsOption.toJS();
+const clients15DayStatsOption = clientsStatsOption.toJS();
+const clients30DayStatsOption = clientsStatsOption.toJS();
+const statisticsChartStyle = {
+  width: '100%',
+};
 
 // 原生的 react 页面
 export const Status = React.createClass({
@@ -216,65 +357,7 @@ export const Status = React.createClass({
   },
   getClientNumberChartOption(type) {
     const clientInfo = this.props.data.get('clientInfo');
-    const clientNetworkOption = {
-      tooltip: {
-        trigger: 'item',
-        formatter: '{a} <br/>{b} : {c} ' + _('clientUnit') + ' ({d}%)',
-      },
-
-      title: {
-        text: _('Clients Frequency Diagram'),
-        subtext: _('Total:') + clientInfo.get('total'),
-        x: 'center',
-      },
-
-      series: [
-        {
-          name: _('Frequency'),
-          type: 'pie',
-          radius: ['10%', '45%'],
-          center: ['50%', '58%'],
-
-          itemStyle: {
-            emphasis: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)',
-            },
-          },
-        },
-      ],
-    };
-    const clientProducerOption = {
-      tooltip: {
-        trigger: 'item',
-        formatter: '{a} <br/>{b} : {c} ' + _('clientUnit') + ' ({d}%)',
-      },
-
-      title: {
-        text: _('Terminal Type'),
-        subtext: _('Total:') + clientInfo.get('total'),
-        x: 'center',
-      },
-
-      series: [
-        {
-          name: _('Producer'),
-          type: 'pie',
-          radius: ['10%', '45%'],
-          center: ['50%', '58%'],
-
-          itemStyle: {
-            emphasis: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)',
-            },
-          },
-        },
-      ],
-    };
-    let ret = clientNetworkOption;
+    let ret = clientNetworkChartOption;
 
     if (clientInfo.get('producerlist')) {
       clientProducerOption.series[0].data = clientInfo.get('producerlist')
@@ -284,8 +367,7 @@ export const Status = React.createClass({
         })).toArray();
     }
 
-
-    clientNetworkOption.series[0].data = clientInfo.delete('total').delete('producerlist')
+    clientNetworkChartOption.series[0].data = clientInfo.delete('total').delete('producerlist')
       .map((val, key) => ({
         value: val,
         name: _(key),
@@ -294,40 +376,13 @@ export const Status = React.createClass({
     if (type === 'producer') {
       ret = clientProducerOption;
     }
+    ret.title.subtext = msg.total + clientInfo.get('total');
 
     return ret;
   },
 
   getApNumberChartOption() {
     const apInfo = this.props.data.get('apInfo');
-
-    const apOption = {
-      tooltip: {
-        trigger: 'item',
-        formatter: '{a} <br/>{b} : {c} ' + _('apUnit') + ' ({d}%)',
-      },
-      title: {
-        text: msg.apStatus,
-        subtext: msg.total + apInfo.get('total'),
-        x: 'center',
-      },
-      series: [
-        {
-          name: _('Status'),
-          type: 'pie',
-          radius: ['10%', '45%'],
-          center: ['50%', '58%'],
-
-          itemStyle: {
-            emphasis: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)',
-            },
-          },
-        },
-      ],
-    };
     const data = apInfo.delete('total').delete('default').map(function (val, key) {
       return {
         value: val,
@@ -335,28 +390,19 @@ export const Status = React.createClass({
       };
     }).toArray();
 
-    apOption.series[0].data = data;
+    apChartOption.series[0].data = data;
+    apChartOption.title.subtext = msg.total + apInfo.get('total');
 
-    // apChart.setOption(apOption);
-
-    // apChart.on('click', function (params) {
-    //   if (params.dataIndex === 0) {
-    //     this.showOfflineAp();
-    //   } else {
-    //     window.location.hash = '#/main/devices';
-    //   }
-    // }.bind(this));
-
-    return apOption;
+    return apChartOption;
   },
   getClientStatisticsChartOption() {
     const dayText = _('D');
-    const colors = ['#c23531', '#2f4554', '#0093dd', '#d48265', '#91c7ae'];
     let clientStatisticsList = this.props.data.get('clientStatisticsList');
     let totalClientStatisticsList = null;
     let xAxisData;
     let xAxisName = _('Days');
     let maxData = 200;
+    var ret = clientsDayStatsOption;
 
     if (!clientStatisticsList) {
       return;
@@ -377,75 +423,33 @@ export const Status = React.createClass({
         return (i) + ':00';
       }).toJS();
       xAxisName = _('Hours');
+      ret = clientsDayStatsOption;
     } else if (this.props.query.get('time_type') === 'week') {
       xAxisData = List(new Array(7)).map(function (val, i) {
         return i + 1;
       }).toJS();
+      ret = clientsWeekStatsOption;
     } else if (this.props.query.get('time_type') === 'half_month') {
       xAxisData = List(new Array(15)).map(function (val, i) {
         return i + 1;
       }).toJS();
+      ret = clients15DayStatsOption;
     } else {
       xAxisData = List(new Array(30)).map(function (val, i) {
         return i + 1;
       }).toJS();
+      ret = clients30DayStatsOption;
     }
-    const clientsStatsOption = {
-      color: colors,
-      tooltip: {
-        trigger: 'axis',
-      },
-      legend: {
-        data: ['2.4G', '5G', _('Total')],
-      },
-      xAxis: [{
-        type: 'category',
-        data: xAxisData,
-        name: xAxisName,
-        interval: 1,
-        splitLine: {
-          interval: 0,
-        },
-        axisLabel: {
-          interval: 0,
-        },
-      }],
-      yAxis: [{
-        type: 'value',
-        name: _('Number'),
-        minInterval: 1,
-        splitNumber: 5,
-        color: colors[0],
-        axisLabel: {
-          formatter: '{value}',
-        },
-        axisLine: {
-          lineStyle: {
-            color: colors[1],
-          },
-        },
-      }],
 
-      series: [
-        {
-          name: '2.4G',
-          type: 'bar',
-          data: clientStatisticsList[0].data,
-        },
-        {
-          name: '5G',
-          type: 'bar',
-          data: clientStatisticsList[1].data,
-        },
-        {
-          name: _('Total'),
-          type: 'line',
-          data: totalClientStatisticsList,
-        },
-      ],
-    };
+    ret.xAxis[0].data = xAxisData;
+    ret.xAxis[0].name = xAxisName;
 
-    return clientsStatsOption;
+    ret.series[0].data = clientStatisticsList[0].data;
+    ret.series[1].data = clientStatisticsList[0].data;
+    ret.series[2].data = totalClientStatisticsList;
+
+    return ret;
+
   },
 
   onDeleteOfflineDev(mac) {
@@ -458,7 +462,7 @@ export const Status = React.createClass({
     const offlineApOption = this.getOfflineApListOption();
     const apNumberChartOption = this.getApNumberChartOption();
     const statisticsChartOption = this.getClientStatisticsChartOption();
-    const clientNetworkOption = this.getClientNumberChartOption();
+    const clientNetworkChartOption = this.getClientNumberChartOption();
     const clientsProducerChart = this.getClientNumberChartOption('producer');
 
     return (
@@ -475,7 +479,6 @@ export const Status = React.createClass({
                 option={apNumberChartOption}
                 onEvents={{
                   click: (params) => {
-                    console.log();
                     if (params.dataIndex === 0) {
                       this.showOfflineAp();
                     } else {
@@ -494,7 +497,7 @@ export const Status = React.createClass({
             <div className="stats-group-cell">
               <div className="cols col-6">
                 <EchartReact
-                  option={clientNetworkOption}
+                  option={clientNetworkChartOption}
                   className="stats-group-canvas"
                 />
               </div>
@@ -521,9 +524,8 @@ export const Status = React.createClass({
               <EchartReact
                 className="stats-group-canvas"
                 option={statisticsChartOption}
-                style={{
-                  width: '100%',
-                }}
+                style={statisticsChartStyle}
+                needClear
               />
             </div>
           </div>

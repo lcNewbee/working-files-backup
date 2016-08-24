@@ -1,23 +1,24 @@
 import React, { PropTypes } from 'react';
-import echarts from 'echarts/lib/echarts';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
+import echarts from 'echarts';
 
-/**
- * echarts图标按需引入
- */
-// 引入柱状图
-require('echarts/lib/chart/bar');
+// /**
+//  * echarts图标按需引入
+//  */
+// // 引入柱状图
+// require('echarts/lib/chart/bar');
 
-// 引入折线图
-require('echarts/lib/chart/line');
-require('echarts/lib/chart/lines');
+// // 引入折线图
+// require('echarts/lib/chart/line');
+// require('echarts/lib/chart/lines');
 
-// 引入折饼图
-require('echarts/lib/chart/pie');
+// // 引入折饼图
+// require('echarts/lib/chart/pie');
 
-// 引入提示框和标题组件
-require('echarts/lib/component/tooltip');
-require('echarts/lib/component/legend');
-require('echarts/lib/component/title');
+// // 引入提示框和标题组件
+// require('echarts/lib/component/tooltip');
+// require('echarts/lib/component/legend');
+// require('echarts/lib/component/title');
 
 const propTypes = {
   option: PropTypes.object,
@@ -27,6 +28,9 @@ const propTypes = {
   theme: PropTypes.string,
   onChartReady: PropTypes.func,
   showLoading: PropTypes.bool,
+
+  // 每次跟新数据前是否 clear
+  needClear: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -69,8 +73,12 @@ class ReactEchart extends React.Component {
   }
 
   // update
-  componentDidUpdate() {
-    this.renderEchartDom();
+  componentDidUpdate(prevProps) {
+    if (this.props.option !== prevProps.option) {
+      this.renderEchartDom(true);
+    } else {
+      this.renderEchartDom();
+    }
   }
 
   // remove
@@ -78,19 +86,26 @@ class ReactEchart extends React.Component {
     echarts.dispose(this.myRef);
   }
 
-  getEchartsInstance() {
-    // return the echart object
+  getEchartsInstance(nneed) {
+    if (nneed) {
+      echarts.dispose(this.myRef);
+    }
     return echarts.getInstanceByDom(this.myRef) ||
-      echarts.init(this.myRef, this.props.theme);
+        echarts.init(this.myRef, this.props.theme);
   }
 
   // render dom
-  renderEchartDom() {
-    // init the echart object
-    const echartObj = this.getEchartsInstance();
-
+  renderEchartDom(shouldInit) {
     // get the option
-    const { option } = this.props;
+    const { option, needClear } = this.props;
+
+    // init the echart object
+    const echartObj = this.getEchartsInstance(needClear || shouldInit);
+
+    // 必要时清除图表缓存
+    if (needClear || shouldInit) {
+      echartObj.clear();
+    }
 
     if (option) {
       echartObj.setOption(option);
@@ -118,10 +133,13 @@ class ReactEchart extends React.Component {
     if (className) {
       classNames = `${classNames} ${className}`;
     }
-
     return (
       <div
-        ref={(elem) => (this.myRef = elem)}
+        ref={(elem) => {
+          if (elem !== null) {
+            this.myRef = elem;
+          }
+        }}
         className={classNames}
         style={this.props.style}
       />
