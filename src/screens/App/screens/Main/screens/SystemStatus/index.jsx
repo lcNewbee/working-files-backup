@@ -18,6 +18,7 @@ const propTypes = {
 
   updateItemSettings: PropTypes.func,
 };
+let a;
 
 const defaultProps = {};
 
@@ -149,6 +150,7 @@ export default class SystemStatus extends React.Component {
 
 
   componentWillMount() {
+    window.clearInterval(a);
     // 必须要有初始化，因为要在settings中插入一个由该页面id命名的对象
     this.props.initSettings({
       settingId: this.props.route.id,
@@ -156,36 +158,44 @@ export default class SystemStatus extends React.Component {
       defaultData: {},
     });
     this.props.fetchSettings();
+    a = setInterval(this.props.fetchSettings, 5000);
   }
 
-  // componentDidMount() {
-  //   const systemTime = this.props.store.getIn(['curData', 'status', 'systemTime']);
-  //   const uptime = this.props.store.getIn(['curData', 'status', 'uptime']);
-  //   let status;
-  //   if (status !== undefined) {
-  //     status = this.props.store.getIn(['curData', 'status']).toJS();
-  //   }
+  componentWillUnmount() {
+    window.clearInterval(a);
+  }
 
-  //   const newSystemTime = (parseInt(systemTime, 10) + 5000).toString();
-  //   const newUptime = (parseInt(uptime, 10) + 5).toString();
-  //   console.log({ ...status });
-  //   // setInterval(this.props.updateItemSettings({
-  //   //   status: utils.extend({}, { ...status }, {
-  //   //     systemTime: (parseInt(systemTime, 10) + 5000).toString(),
-  //   //     uptime: (parseInt(uptime, 10) + 5).toString(),
-  //   //   }),
-  //   // }), 5000);
-  //   this.props.updateItemSettings({
-  //     status: utils.extend({}, { ...status }, {
-  //       systemTime: newSystemTime,
-  //       uptime: newUptime,
-  //     })
-  //   });
-  // }
+/*
+  componentDidMount() {
+    window.clearInterval(a);
+    const that = this;
+    // const oldProps = this.props;
 
+    a = setInterval(() => {
+      let status = that.props.store.getIn(['curData', 'status']);
+      // console.log(oldProps === that.props);
+      // console.log(this === that);
+      if (status === undefined) { return; }
+      // console.log('old = ', status);
+      status = status.toJS();
+      const systemTime = status.systemTime;
+      const uptime = status.uptime;
+      const newSystemTime = (parseInt(systemTime, 10) + 5000).toString();
+      const newUptime = (parseInt(uptime, 10) + 5).toString();
+      const newStatus = utils.extend(
+                            {},
+                            { ...status },
+                            { 'systemTime': newSystemTime, 'uptime': newUptime }
+                        );
+      that.props.updateItemSettings({
+        status: newStatus,
+      });
+    }, 5000);
+  }
+*/
 
   changeSystemTimeToReadable(time) {
-    return new Date(parseInt(time) * 1000)
+    return new Date(parseInt(time))
             .toLocaleString()
             .replace(/年|月/g, '-')
             .replace(/日/g, ' ');

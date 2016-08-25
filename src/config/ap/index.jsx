@@ -42,7 +42,7 @@ const pQuickSetup = require('../../screens/App/screens/Main/screens/QuickSetup')
 // System Settings
 const pSystemSettings = require('../../screens/App/screens/Main/screens/SystemSettings');
 const sNetworkSettings = require('../../screens/App/screens/Main/screens/SystemSettings/NetworkSettings');
-
+const sCommonSettings = require('../../screens/App/screens/Main/screens/SystemSettings/CommonSettings');
 // 无线设置
 const pWirelessConfig = require('../../screens/App/screens/Main/screens/WirelessConfig');
 // 子菜单
@@ -139,6 +139,11 @@ const routes = [{
           path: '/main/systemsettings/networksettings',
           text: _('Network Settings'),
           component: sNetworkSettings.Screen,
+        }, {
+          id: 'commonsettings',
+          path: '/main/systemsettings/commonsettings',
+          text: _('Common Settings'),
+          component: sCommonSettings,
         },
       ],
     }, {
@@ -170,6 +175,7 @@ const routes = [{
           component: sQoS.Screen,
         }, {
           id: 'acl',
+          fetchUrl: 'goform/get_acl_info',
           path: '/main/wirelessconfig/acl',
           text: 'ACL',
           component: sACL.Screen,
