@@ -18,25 +18,28 @@ const screenOptions = fromJS([
       disabled: true,
     },
   }, {
-    id: 'addressPoolName',
+    id: 'serviceName',
     width: '200',
-    text: _('Address Pool Name'),
+    text: _('Service Name'),
   }, {
     id: 'startAddress',
     width: '160',
-    text: _('Start IP'),
+    text: _('Policy Type'),
   }, {
     id: 'endAddress',
-    text: _('End IP'),
+    text: _('源端口范围'),
+  }, {
+    id: 'distan',
+    text: _('目的端口范围'),
   }, {
     id: 'description',
+    type: 'textarea',
     text: _('Description'),
     formProps: {
       type: 'textarea',
     },
   },
 ]);
-
 const tableOptions = immutableUtils.getTableOptions(screenOptions);
 
 const editFormOptions = immutableUtils.getFormOptions(screenOptions);
@@ -82,9 +85,9 @@ export default class View extends React.Component {
     return (
       <ListInfo
         {...this.props}
-        tableOptions={this.tableOptions}
+        tableOptions={tableOptions}
         editFormOptions={editFormOptions}
-        controlAbled
+        actionable
         noTitle
       />
     );

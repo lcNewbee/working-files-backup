@@ -1,6 +1,6 @@
 import * as appActions from './app';
 
-let refreshTimeout = null;
+const refreshTimeout = null;
 
 export function reqeustFetchList() {
   return {
@@ -49,6 +49,12 @@ export function addListItem(defaultItem) {
     defaultItem,
   };
 }
+export function selectListItem(data) {
+  return {
+    type: 'SELECT_LIST_ITEM',
+    data,
+  };
+}
 
 export function closeListItemModal() {
   return {
@@ -89,11 +95,11 @@ export function fetchList(url) {
           dispatch(reciveFetchList(json.data));
         }
 
-        if (refreshTime && refreshTime > 0) {
-          refreshTimeout = window.setTimeout(() => {
-            dispatch(fetchList(formUrl));
-          }, refreshTime);
-        }
+        // if (refreshTime && refreshTime > 0) {
+        //   refreshTimeout = window.setTimeout(() => {
+        //     dispatch(fetchList(formUrl));
+        //   }, refreshTime);
+        // }
       });
   };
 }

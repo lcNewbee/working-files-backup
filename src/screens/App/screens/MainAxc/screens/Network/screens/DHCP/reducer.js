@@ -18,10 +18,10 @@ const defaultState = fromJS({
 function selectedListItem(list, data) {
   let ret = list;
 
-  if(data.index !== -1) {
+  if (data.index !== -1) {
     ret = ret.setIn([data.index, 'selected'], data.selected);
   } else {
-    ret = ret.map(function(item) {
+    ret = ret.map(item => {
       return item.set('selected', data.selected);
     });
   }

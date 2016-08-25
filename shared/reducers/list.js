@@ -30,6 +30,19 @@ function initListItem(state, action) {
 
   return ret.set('curListId', listId);
 }
+function selectedListItem(list, data) {
+  let ret = list;
+
+  if (data.index !== -1) {
+    ret = ret.setIn([data.index, 'selected'], data.selected);
+  } else {
+    ret = ret.map(item => {
+      return item.set('selected', data.selected);
+    });
+  }
+
+  return ret;
+}
 
 export default function (state = defaultState, action) {
   const curListName = state.get('curListId');
@@ -73,6 +86,10 @@ export default function (state = defaultState, action) {
         }).merge(defaultEditData)
       )
       .setIn([curListName, 'actionQuery', 'action'], 'add');
+
+    case 'SELECT_LIST_ITEM':
+      return state.setIn([curListName, 'data', 'list'],
+          selectedListItem(state.getIn([curListName, 'data', 'list']), action.data));
 
     case 'CLOSE_LIST_ITEM_MODAL':
       return state.setIn([curListName, 'data', 'edit'], fromJS({}));

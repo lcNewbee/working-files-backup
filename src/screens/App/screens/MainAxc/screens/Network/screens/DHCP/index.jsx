@@ -181,7 +181,7 @@ export default class View extends Component {
           className="table"
           options={DhcpAddressPoolTableOption}
           list={this.props.store.getIn(['data', 'list'])}
-          selectAble
+          selectable
           onSelectRow={this.onSelectDhcpAddressPool}
         />
 

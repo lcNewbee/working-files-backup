@@ -3,6 +3,7 @@ $top-distance: $g-navbar-height + $g-distance * 2;
 $sidebar-width: 170px;
 $nav-text-color: #ababab;
 $main-blue: #0093dd;
+$t-main-top-menu-height: $g-top-menu-height;
 
 html,
 body {
@@ -24,22 +25,25 @@ body {
   padding-left: 0;
   overflow: auto;
 
-  &.t-main--ac {
+  &.t-main--axc {
     .t-main__nav {
-      top: $g-navbar-height + $g-main-bar-height;
+      top: $g-navbar-height + $g-main-bar-height + $t-main-top-menu-height;
       width: $sidebar-width + 20px;
     }
     .t-main__content {
-      top: $g-navbar-height + $g-main-bar-height;
+      top: $g-navbar-height + $g-main-bar-height + $t-main-top-menu-height;
       left: $sidebar-width + 30px;
       bottom: 0;
       padding: 20px 0;
     }
     .t-main__asider-left {
-      top: $g-navbar-height + $g-main-bar-height;
+      top: $g-navbar-height + $g-main-bar-height + $t-main-top-menu-height;
     }
     .o-tab__content {
       padding: 10px 0;
+    }
+    .o-property-panel {
+      top: $g-navbar-height + $t-main-top-menu-height;
     }
   }
 
@@ -87,7 +91,7 @@ body {
 
 .t-main__asider-left {
   position: absolute;
-  top: $g-navbar-height + $g-main-bar-height;
+  top: $g-navbar-height + $g-main-bar-height + $t-main-top-menu-height;
   bottom: 0;
   left: 0;
   z-index: 999;

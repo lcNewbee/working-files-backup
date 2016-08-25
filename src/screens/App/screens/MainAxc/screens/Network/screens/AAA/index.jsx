@@ -23,100 +23,105 @@ function getInterfaceTypeOptions() {
     )
   );
 }
+const accessTypeSeletOptions = [
+  {
+    value: '0',
+    label: _('LAN'),
+  }, {
+    value: '1',
+    label: _('PPP'),
+  }, {
+    value: '2',
+    label: _('Portal'),
+  }, {
+    value: '3',
+    label: _('MAC'),
+  },
+];
+const authTypeSeletOptions = [
+  {
+    value: '0',
+    label: `${_('Local')} (${_('802.1X')})`,
+  },
+  {
+    value: '1',
+    label: `${_('Remotely')}(${_('Radius Service')})`,
+  },
+];
 const screenOptions = fromJS([
   {
-    id: 'no',
-    text: _('No'),
+    id: 'ispDomain',
+    text: _('ISP Domain Name'),
     formProps: {
-      disabled: true,
+      type: 'url',
     },
   }, {
-    id: 'ruleType',
-    text: _('Rule Type'),
+    id: 'authAccessType',
+    text: _('Access Type') + _('(Auth)'),
+    defaultValue: '0',
+    fieldset: 'auth',
+    legend: _('Auth Service'),
     formProps: {
       type: 'select',
-      label: _('NAT Rule Type'),
-      placeholder: _('Please Select ') + _('NAT Rule Type'),
-      options: [
-        {
-          value: '0',
-          label: _('Static Address Transform'),
-        }, {
-          value: '1',
-          label: _('Static Address Transform'),
-        }, {
-          value: '2',
-          label: _('Target Address Transform'),
-        }, {
-          value: '3',
-          label: _('Public IP Transparent Transmission'),
-        },
-      ],
+      placeholder: _('Please Select ') + _('Rules Group'),
+      options: accessTypeSeletOptions,
     },
   }, {
-    id: 'sourceAddress',
-    text: _('Source Address'),
+    id: 'authType',
+    text: _('Auth Type') + _('(Auth)'),
+    defaultValue: '0',
+    fieldset: 'auth',
+    formProps: {
+      type: 'switch',
+      placeholder: _('Please Select ') + _('Rules Group'),
+      options: authTypeSeletOptions,
+    },
+  }, {
+    id: 'authRadiusTemplate',
+    text: _('Radius Template') + _('(Auth)'),
+    fieldset: 'auth',
     formProps: {
       type: 'select',
-      placeholder: _('Please Select ') + _('Source Address'),
+      placeholder: _('Please Select ') + _('Radius Template'),
       loadOptions: getInterfaceTypeOptions,
       isAsync: true,
+      multi: true,
     },
   }, {
-    id: 'targetAddress',
-    text: _('Target Address'),
+    id: 'billingAccessType',
+    text: _('Access Type') + _('(Billing)'),
+    defaultValue: '0',
+    fieldset: 'billing',
+    legend: _('Billing Service'),
     formProps: {
       type: 'select',
-      placeholder: _('Please Select ') + _('Target Address'),
-      loadOptions: getInterfaceTypeOptions,
-      isAsync: true,
+      placeholder: _('Please Select ') + _('Rules Group'),
+      options: accessTypeSeletOptions,
     },
   }, {
-    id: 'serviceObject',
-    text: _('Service Object'),
+    id: 'billingType',
+    text: _('Billing Type') + _('(Billing)'),
+    fieldset: 'billing',
+    defaultValue: '0',
+    formProps: {
+      type: 'switch',
+      placeholder: _('Please Select ') + _('Rules Group'),
+      options: authTypeSeletOptions,
+    },
+  }, {
+    id: 'billingRadiusTemplate',
+    text: _('Radius Template') + _('(Billing)'),
+    fieldset: 'billing',
     formProps: {
       type: 'select',
-      placeholder: _('Please Select ') + _('Service Object'),
+      placeholder: _('Please Select ') + _('Radius Template'),
       loadOptions: getInterfaceTypeOptions,
       isAsync: true,
-    },
-  }, {
-    id: 'outgoingInterface',
-    text: _('Outgoing Interface'),
-    formProps: {
-      type: 'select',
-      placeholder: _('Please Select ') + _('Outgoing Interface'),
-      loadOptions: getInterfaceTypeOptions,
-      isAsync: true,
-    },
-  }, {
-    id: 'convertedSourceAddress',
-    text: _('Converted Source Address'),
-    formProps: {
-      type: 'select',
-      placeholder: _('Please Select ') + _('Converted Source Address'),
-      loadOptions: getInterfaceTypeOptions,
-      isAsync: true,
-    },
-  }, {
-    id: 'enableLogging',
-    text: _('Enable Logging'),
-    formProps: {
-      type: 'checkbox',
-      text: _('Enable'),
-    },
-  }, {
-    id: 'description',
-    text: _('Description'),
-
-    formProps: {
-      type: 'textarea',
+      multi: true,
     },
   },
 ]);
-const tableOptions = screenOptions.map(
-  (item) => item.delete('formProps')
-);
+const tableOptions = immutableUtils.getTableOptions(screenOptions);
 const editFormOptions = immutableUtils.getFormOptions(screenOptions);
 
 const propTypes = {
@@ -126,6 +131,7 @@ const propTypes = {
   route: PropTypes.object,
   initList: PropTypes.func,
   closeListItemModal: PropTypes.func,
+  updateEditListItem: PropTypes.func,
   save: PropTypes.func,
 };
 const defaultProps = {};
@@ -137,17 +143,18 @@ export default class View extends React.Component {
     this.onAction = this.onAction.bind(this);
   }
 
-  componentWillMount() {
-  }
-
-  onAction(mac, action) {
+  onAction(no, type) {
     const query = {
-      mac,
-      action,
+      no,
+      type,
     };
 
-    this.props.save('/goform/blacklist', query)
-      .then(() => {});
+    this.props.save(this.props.route.formUrl, query)
+      .then((json) => {
+        if (json.state && json.state.code === 2000) {
+          console.log(json);
+        }
+      });
   }
 
   render() {
@@ -156,8 +163,7 @@ export default class View extends React.Component {
         {...this.props}
         tableOptions={tableOptions}
         editFormOptions={editFormOptions}
-        controlAbled
-        noTitle
+        actionable
       />
     );
   }

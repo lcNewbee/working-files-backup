@@ -160,7 +160,7 @@ export default class View extends React.Component {
       <ListInfo
         {...this.props}
         tableOptions={blcklistTableOptions}
-        controlAbled
+        actionable
       >
         <Modal
           isShow={!editData.isEmpty()}

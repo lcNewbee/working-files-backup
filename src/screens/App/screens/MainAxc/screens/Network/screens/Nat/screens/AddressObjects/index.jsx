@@ -9,51 +9,33 @@ import {
 import * as listActions from 'shared/actions/list';
 import * as appActions from 'shared/actions/app';
 
-function getInterfaceTypeOptions() {
-  return utils.fetch('/goform/interfaceType')
-    .then((json) => (
-      {
-        options: json.data.list.map(
-          (item) => ({
-            value: item.no,
-            label: `${item.no}(${item.noInfo})`,
-          })
-        ),
-      }
-    )
-  );
-}
 const screenOptions = fromJS([
   {
     id: 'no',
     width: '50',
     text: _('No'),
     formProps: {
-      type: 'plain-text',
+      disabled: true,
     },
   }, {
-    id: 'rulesGroup',
+    id: 'addressPoolName',
     width: '200',
-    text: _('Rules Group'),
-    formProps: {
-      type: 'select',
-      placeholder: _('Please Select ') + _('Rules Group'),
-      loadOptions: getInterfaceTypeOptions,
-      isAsync: true,
-    },
+    text: _('Address Objects Name'),
   }, {
-    id: 'rules',
-    text: _('Rules'),
+    id: 'startAddress',
+    width: '160',
+    text: _('IP'),
+  }, {
+    id: 'endAddress',
+    text: _('Mask'),
+  }, {
+    id: 'description',
+    text: _('Description'),
     formProps: {
-      type: 'select',
-      placeholder: _('Please Select ') + _('Rules'),
-      loadOptions: getInterfaceTypeOptions,
-      isAsync: true,
-      multi: true,
+      type: 'textarea',
     },
   },
 ]);
-
 const tableOptions = immutableUtils.getTableOptions(screenOptions);
 
 const editFormOptions = immutableUtils.getFormOptions(screenOptions);
@@ -101,7 +83,7 @@ export default class View extends React.Component {
         {...this.props}
         tableOptions={this.tableOptions}
         editFormOptions={editFormOptions}
-        controlAbled
+        actionable
         noTitle
       />
     );

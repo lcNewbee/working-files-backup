@@ -16,6 +16,7 @@
   "Second IPV4": "次 IPV4 地址",
   "Second IPV4 Mask": "次 IPV4 子网掩码",
   "IPV6 Mask": "IPV6 子网掩码",
+  "VLAN Remark": "VLAN标识",
 
   "Port Settings": "端口配置",
 

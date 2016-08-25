@@ -192,7 +192,7 @@ export default class View extends React.Component {
         defaultItem={{
           dataType: 'date',
         }}
-        controlAbled
+        actionable
       >
         <Modal
           isShow={!editData.isEmpty()}

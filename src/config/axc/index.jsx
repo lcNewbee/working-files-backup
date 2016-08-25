@@ -60,36 +60,13 @@ const sMainAxc = require('../../screens/App/screens/MainAxc');
 /**
  * 网络设置
  */
-// VLAN 设置
-const sInterfaces = require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Interfaces');
-const sVlanAaa = require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Aaa');
-const sVlanDhcp = require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Dhcp');
+const sNetworkVlan = require('../../screens/App/screens/MainAxc/screens/Network/screens/VLAN');
+const sInterfaces = require('../../screens/App/screens/MainAxc/screens/Network/screens/Interfaces');
+const sNetworkAaa = require('../../screens/App/screens/MainAxc/screens/Network/screens/AAA');
+const sNetworkDhcp = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP');
 const sRoutes = require('../../screens/App/screens/MainAxc/screens/Routes');
-const sNatSettings =
-    require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Nat/screens/NatSettings');
-const sAddressObjects =
-    require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Nat/screens/AddressObjects');
-const sInterfaceType =
-    require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Nat/screens/InterfaceType');
-const sAddressPool =
-    require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Nat/screens/AddressPool');
-const sServiceObjects =
-    require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Nat/screens/ServiceObjects');
-const sDetailedRules =
-    require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Nat/screens/DetailedRules');
-const sNatLogs =
-    require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Nat/screens/NatLogs');
-const sAclSettings =
-    require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Acl/screens/AclSettings');
-const sAclWlan =
-    require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Acl/screens/Wlan');
-const sAclRuleGroup =
-    require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Acl/screens/RuleGroup');
-const sAclDetailedRules =
-    require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Acl/screens/DetailedRules');
-const sAclRuleGroupBind =
-    require('../../screens/App/screens/MainAxc/screens/VLAN/screens/Acl/screens/RuleGroupBind');
-
+const sNetworkNat = require('../../screens/App/screens/MainAxc/screens/Network/screens/Nat');
+const sNetworkAcl = require('../../screens/App/screens/MainAxc/screens/Network/screens/ACL');
 /**
  * AP组管理
  */
@@ -155,128 +132,46 @@ const routes = [
         indexRoute: { onEnter: (nextState, replace) => replace('/main/network/vlan') },
         childRoutes: [
           {
-            id: 'status',
+            id: 'networkVlan',
             isIndex: true,
             path: '/main/network/vlan',
-            icon: 'list',
+            formUrl: '/goform/networkVlan',
+            icon: 'road',
             text: _('VLAN'),
-            indexRoute: {
-              onEnter: (nextState, replace) => replace('/main/network/vlan/interface'),
-            },
-            childRoutes: [
-              {
-                id: 'interface',
-                path: '/main/network/vlan/interface',
-                text: _('Interface Settings'),
-                component: sInterfaces.Screen,
-              }, {
-                id: 'vlanDhcp',
-                path: '/main/network/vlan/dhcp',
-                text: _('DHCP Settings'),
-                component: sVlanDhcp.Screen,
-              }, {
-                id: 'vlanNat',
-                path: '/main/network/vlan/nat',
-                text: _('NAT Settings'),
-                component: SharedComponents.TabContainer,
-                indexRoute: {
-                  onEnter: (nextState, replace) => replace('/main/network/vlan/nat/settings'),
-                },
-                childRoutes: [
-                  {
-                    id: 'natSettings',
-                    path: '/main/network/vlan/nat/settings',
-                    formUrl: '/goform/natSettings',
-                    text: _('NAT Settings'),
-                    component: sNatSettings.Screen,
-                  }, {
-                    id: 'interfaceType',
-                    path: '/main/network/vlan/nat/interface_type',
-                    formUrl: '/goform/interfaceType',
-                    text: _('Interface Type'),
-                    component: sInterfaceType.Screen,
-                  }, {
-                    id: 'addressPool',
-                    path: '/main/network/vlan/nat/address_pool',
-                    formUrl: '/goform/addressPool',
-                    text: _('Address Pool'),
-                    component: sAddressPool.Screen,
-                  }, {
-                    id: 'addressObjects',
-                    path: '/main/network/vlan/nat/address_objects',
-                    formUrl: '/goform/addressObjects',
-                    text: _('Address Objects'),
-                    component: sAddressObjects.Screen,
-                  }, {
-                    id: 'serviceObjects',
-                    path: '/main/network/vlan/nat/service_objects',
-                    formUrl: '/goform/serviceObjects',
-                    text: _('Service Objects'),
-                    component: sServiceObjects.Screen,
-                  }, {
-                    id: 'natDetailedRules',
-                    path: '/main/network/vlan/nat/detailed_rules',
-                    formUrl: '/goform/natDetailedRules',
-                    text: _('Detailed Rules'),
-                    component: sDetailedRules.Screen,
-                  }, {
-                    id: 'natLogs',
-                    path: '/main/network/vlan/nat/nat_logs',
-                    formUrl: '/goform/natLogs',
-                    text: _('NAT Logs'),
-                    component: sNatLogs.Screen,
-                  },
-                ],
-              }, {
-                id: 'vlanAcl',
-                path: '/main/network/vlan/acl',
-                text: _('Access Control'),
-                component: SharedComponents.TabContainer,
-                indexRoute: {
-                  onEnter: (nextState, replace) => replace('/main/network/vlan/acl/settings'),
-                },
-                childRoutes: [
-                  {
-                    id: 'aclSettings',
-                    path: '/main/network/vlan/acl/settings',
-                    formUrl: '/goform/aclSettings',
-                    text: _('Access Control Settings'),
-                    component: sAclSettings.Screen,
-                  }, {
-                    id: 'aclWlan',
-                    path: '/main/network/vlan/acl/wlan',
-                    formUrl: '/goform/aclWlan',
-                    text: _('WLAN'),
-                    component: sAclWlan.Screen,
-                  }, {
-                    id: 'rulesGroup',
-                    path: '/main/network/vlan/acl/rules_group',
-                    formUrl: '/goform/rulesGroup',
-                    text: _('Rules Group'),
-                    component: sAclRuleGroup.Screen,
-                  }, {
-                    id: 'aclDetailedRules',
-                    path: '/main/network/vlan/acl/detailed_rules',
-                    formUrl: '/goform/aclDetailedRules',
-                    text: _('Detailed Rules'),
-                    component: sAclDetailedRules.Screen,
-                  }, {
-                    id: 'rulesGroupBind',
-                    path: '/main/network/vlan/acl/rules_group_bind',
-                    formUrl: '/goform/rulesGroupBind',
-                    text: _('Rules Group Bind'),
-                    component: sAclRuleGroupBind.Screen,
-                  },
-                ],
-              }, {
-                id: 'vlanAaa',
-                path: '/main/network/vlan/aaa',
-                fetchUrl: '/goform/vlanAaa',
-                saveUrl: '/goform/vlanAaa',
-                text: _('AAA Settings'),
-                component: sVlanAaa.Screen,
-              },
-            ],
+            component: sNetworkVlan.Screen,
+          }, {
+            id: 'interface',
+            icon: 'th-large',
+            path: '/main/network/vlan/interface',
+            text: _('Interface Settings'),
+            component: sInterfaces.Screen,
+          }, {
+            id: 'networkDhcp',
+            icon: 'random',
+            path: '/main/network/vlan/dhcp',
+            text: _('DHCP Settings'),
+            component: sNetworkDhcp.Screen,
+          }, {
+            id: 'networkNat',
+            icon: 'exchange',
+            path: '/main/network/vlan/nat',
+            text: _('NAT Settings'),
+            formUrl: '/goform/natSettings',
+            component: sNetworkNat.Screen,
+          }, {
+            id: 'networkAcl',
+            icon: 'ban',
+            path: '/main/network/vlan/acl',
+            text: _('Access Control'),
+            component: sNetworkAcl.Screen,
+          }, {
+            id: 'networkAaa',
+            icon: 'lock',
+            path: '/main/network/vlan/aaa',
+            fetchUrl: '/goform/vlanAaa',
+            saveUrl: '/goform/vlanAaa',
+            text: _('AAA Settings'),
+            component: sNetworkAaa.Screen,
           }, {
             id: 'routes',
             path: '/main/network/routes',
@@ -295,7 +190,7 @@ const routes = [
             text: _('Portal Policy'),
           }, {
             id: 'radius',
-            icon: 'files-o',
+            icon: 'clone',
             path: '/main/network/radius',
             text: _('Radius Template'),
           },
@@ -579,7 +474,7 @@ const reducers = {
   login: sLogin.login,
   mainAxc: sMainAxc.reducer,
   interfaces: sInterfaces.reducer,
-  dhcpAdressPool: sVlanDhcp.reducer,
+  dhcpAdressPool: sNetworkDhcp.reducer,
 
   // ap组管理
   users: sUsers.reducer,

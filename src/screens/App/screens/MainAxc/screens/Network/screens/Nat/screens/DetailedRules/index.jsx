@@ -28,63 +28,90 @@ const screenOptions = fromJS([
     id: 'no',
     text: _('No'),
     formProps: {
-      type: 'plain-text',
+      disabled: true,
     },
   }, {
-    id: 'ruleName',
-    text: _('Rule Name'),
-  }, {
-    id: 'actionType',
-    text: _('The Action'),
-    defaultValue: '0',
+    id: 'ruleType',
+    text: _('Rule Type'),
     formProps: {
-      type: 'switch',
+      type: 'select',
+      label: _('NAT Rule Type'),
+      placeholder: _('Please Select ') + _('NAT Rule Type'),
       options: [
         {
           value: '0',
-          label: _('Accept'),
+          label: _('Static Address Transform'),
         }, {
           value: '1',
-          label: _('Throw Away'),
+          label: _('Static Address Transform'),
+        }, {
+          value: '2',
+          label: _('Target Address Transform'),
+        }, {
+          value: '3',
+          label: _('Public IP Transparent Transmission'),
         },
       ],
     },
   }, {
-    id: 'addressType',
-    text: _('Address Type'),
-    defaultValue: '0',
+    id: 'sourceAddress',
+    text: _('Source Address'),
     formProps: {
-      type: 'switch',
-      options: [
-        {
-          value: '0',
-          label: _('Source Address'),
-        }, {
-          value: '1',
-          label: _('Target Address'),
-        },
-      ],
+      type: 'select',
+      placeholder: _('Please Select ') + _('Source Address'),
+      loadOptions: getInterfaceTypeOptions,
+      isAsync: true,
     },
   }, {
-    id: 'ipType',
-    text: _('IP Type'),
-    defaultValue: '0',
+    id: 'targetAddress',
+    text: _('Target Address'),
     formProps: {
-      type: 'switch',
-      options: [
-        {
-          value: '0',
-          label: _('IPV4'),
-        }, {
-          value: '1',
-          label: _('IPV6'),
-        },
-      ],
+      type: 'select',
+      placeholder: _('Please Select ') + _('Target Address'),
+      loadOptions: getInterfaceTypeOptions,
+      isAsync: true,
     },
   }, {
-    id: 'ipAddress',
-    text: _('IP Address'),
+    id: 'serviceObject',
+    text: _('Service Object'),
+    formProps: {
+      type: 'select',
+      placeholder: _('Please Select ') + _('Service Object'),
+      loadOptions: getInterfaceTypeOptions,
+      isAsync: true,
+    },
+  }, {
+    id: 'outgoingInterface',
+    text: _('Outgoing Interface'),
+    formProps: {
+      type: 'select',
+      placeholder: _('Please Select ') + _('Outgoing Interface'),
+      loadOptions: getInterfaceTypeOptions,
+      isAsync: true,
+    },
+  }, {
+    id: 'convertedSourceAddress',
+    text: _('Converted Source Address'),
+    formProps: {
+      type: 'select',
+      placeholder: _('Please Select ') + _('Converted Source Address'),
+      loadOptions: getInterfaceTypeOptions,
+      isAsync: true,
+    },
+  }, {
+    id: 'enableLogging',
+    text: _('Enable Logging'),
+    formProps: {
+      type: 'checkbox',
+      text: _('Enable'),
+    },
+  }, {
+    id: 'description',
+    text: _('Description'),
 
+    formProps: {
+      type: 'textarea',
+    },
   },
 ]);
 const tableOptions = screenOptions.map(
@@ -129,7 +156,7 @@ export default class View extends React.Component {
         {...this.props}
         tableOptions={tableOptions}
         editFormOptions={editFormOptions}
-        controlAbled
+        actionable
         noTitle
       />
     );

@@ -15,24 +15,19 @@ const screenOptions = fromJS([
     width: '50',
     text: _('No'),
     formProps: {
-      type: 'plain-text',
+      disabled: true,
     },
   }, {
-    id: 'groupName',
+    id: 'addressPoolName',
     width: '200',
-    text: _('Group Name'),
+    text: _('Address Objects Name'),
   }, {
-    id: 'defaultAction',
+    id: 'startAddress',
     width: '160',
-    text: _('The Default Action'),
-    defaultValue: '0',
-    formProps: {
-      type: 'switch',
-      options: [
-        _('Accept'),
-        _('Throw Away'),
-      ],
-    },
+    text: _('IP'),
+  }, {
+    id: 'endAddress',
+    text: _('Mask'),
   }, {
     id: 'description',
     text: _('Description'),
@@ -44,15 +39,6 @@ const screenOptions = fromJS([
 const tableOptions = immutableUtils.getTableOptions(screenOptions);
 
 const editFormOptions = immutableUtils.getFormOptions(screenOptions);
-const defaultFormData = {};
-
-// 初始化默认值对象
-screenOptions.forEach((item) => {
-  const defaultVal = item.get('defaultValue');
-  if (defaultVal) {
-    defaultFormData[item.get('id')] = defaultVal;
-  }
-});
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
@@ -92,14 +78,12 @@ export default class View extends React.Component {
   }
 
   render() {
-    console.log(defaultFormData)
     return (
       <ListInfo
         {...this.props}
         tableOptions={this.tableOptions}
         editFormOptions={editFormOptions}
-        defaultEditData={defaultFormData}
-        controlAbled
+        actionable
         noTitle
       />
     );

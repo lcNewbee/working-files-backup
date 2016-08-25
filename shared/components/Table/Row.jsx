@@ -5,7 +5,7 @@ const propTypes = {
   options: PropTypes.object,
   isTh: PropTypes.bool,
   item: PropTypes.object,
-  selectAble: PropTypes.bool,
+  selectable: PropTypes.bool,
   onSelect: PropTypes.func,
 };
 
@@ -39,7 +39,7 @@ class Row extends Component {
         </th>
       );
 
-      if (props.selectAble) {
+      if (props.selectable) {
         tds = tds.unshift((
           <th width="15" key="tableRow_select">
             <input
@@ -77,7 +77,7 @@ class Row extends Component {
         return tdDom;
       });
 
-      if (props.selectAble) {
+      if (props.selectable) {
         tds = tds.unshift((
           <td width="15" key="tableRow_select">
             <input

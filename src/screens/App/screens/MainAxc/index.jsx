@@ -96,18 +96,18 @@ export default class Main extends Component {
 
   onClickNav(path) {
     if (path === '/main/network/vlan') {
-      this.onToggleMainPopOver({
-        name: 'vlanAsider',
-      });
+      // this.onToggleMainPopOver({
+      //   name: 'vlanAsider',
+      // });
     }
   }
 
   onClickTopMenu(path) {
     if (path === '/main/group') {
-      this.onToggleMainPopOver({
-        name: 'groupAsider',
-        isShow: true,
-      });
+      // this.onToggleMainPopOver({
+      //   name: 'groupAsider',
+      //   isShow: true,
+      // });
     } else {
       this.onToggleMainPopOver({
         isShow: false,
@@ -169,37 +169,6 @@ export default class Main extends Component {
               </a>
             </div>
           </div>
-        );
-      case 'topMenu':
-        return (
-          <ul
-            className="o-pop-over__content m-menu m-menu--open"
-            style={{
-              top: '93px',
-              left: '20px',
-              width: '140px',
-              backgroundColor: '#222',
-            }}
-          >
-            {
-              fromJS(this.props.routes[0].childRoutes).map((item) => {
-                const keyVal = `${item.get('path')}`;
-
-                return item.get('text') ? (<li key={keyVal}>
-                  <Link
-                    to={item.get('path')}
-                    className="m-menu__link"
-                    activeClassName="active"
-                    onClick={() => {
-                      this.onClickTopMenu(item.get('path'));
-                    }}
-                  >
-                    {item.get('text')}
-                  </Link>
-                </li>) : null;
-              })
-            }
-          </ul>
         );
       case 'vlanAsider':
         return (
@@ -382,7 +351,7 @@ export default class Main extends Component {
             <Table
               className="table"
               options={tableOption}
-              selectAble
+              selectable
               list={this.props.mainAxc.get('devices')}
               onSelectRow={(data) => {
                 this.props.selectAddApGroupDevice(data);
@@ -443,7 +412,7 @@ export default class Main extends Component {
               <Table
                 className="table"
                 options={tableOption}
-                selectAble
+                selectable
                 list={this.props.mainAxc.get('devices')}
                 onSelectRow={(data) => {
                   this.props.selectAddApGroupDevice(data);
@@ -590,12 +559,13 @@ export default class Main extends Component {
     const { saving, version, guiName } = this.props.app.toJS();
     const { popOver, modal } = this.props.mainAxc.toJS();
     const { isShowPanel } = this.props.properties.toJS();
-
+    let isGroupMenu = false;
     let curTopNavText = _('NETWORK');
-    let mainClassName = 't-main t-main--ac';
+    let mainClassName = 't-main t-main--axc';
 
     if (this.props.location.pathname.indexOf('/main/group') === 0) {
       curTopNavText = _('AP GROUP');
+      isGroupMenu = true;
     } else if (this.props.location.pathname.indexOf('/main/system') === 0) {
       curTopNavText = _('SYSTEM');
     }
@@ -606,7 +576,7 @@ export default class Main extends Component {
     }
 
     return (
-      <div>
+      <div className={mainClassName}>
         <Navbar title={_(guiName)} version={version}>
           <div className="aside">
             <button className="as-control" onClick={this.onRefresh}>
@@ -621,6 +591,30 @@ export default class Main extends Component {
               />
             </div>
           </div>
+          <div className="o-top-menu-bar">
+            <ul
+              className="m-menu m-menu--inline m-menu--open"
+            >
+              {
+                fromJS(this.props.routes[0].childRoutes).map((item) => {
+                  const keyVal = `${item.get('path')}`;
+
+                  return item.get('text') ? (<li key={keyVal}>
+                    <Link
+                      to={item.get('path')}
+                      className="m-menu__link"
+                      activeClassName="active"
+                      onClick={() => {
+                        this.onClickTopMenu(item.get('path'));
+                      }}
+                    >
+                      {item.get('text')}
+                    </Link>
+                  </li>) : null;
+                })
+              }
+            </ul>
+          </div>
         </Navbar>
         <div className="o-menu-bar">
           <nav
@@ -630,14 +624,13 @@ export default class Main extends Component {
             className="o-menu-bar__nav"
           >
             <h3>
-              <Icon
-                name="navicon"
-                onMouseOver={() =>
-                  this.onToggleMainPopOver({
-                    name: 'topMenu',
-                  })
-                }
-              />
+              {
+                isGroupMenu ? (
+                  <Icon
+                    name="navicon"
+                  />
+                ) : null
+              }
               {curTopNavText}
             </h3>
           </nav>
@@ -645,43 +638,18 @@ export default class Main extends Component {
             this.renderBreadcrumb()
           }
         </div>
-        <div className="o-menu-bar">
-          <nav
-            onClick={() =>
-              this.onClickTopMenuTitle()
-            }
-            className="o-menu-bar__nav"
-          >
-            <h3>
-              <Icon
-                name="navicon"
-                onMouseOver={() =>
-                  this.onToggleMainPopOver({
-                    name: 'topMenu',
-                  })
-                }
-              />
-              {curTopNavText}
-            </h3>
-          </nav>
+        <Nav
+          className="t-main__nav"
+          role="tree"
+          menus={this.props.route.childRoutes}
+          location={this.props.location}
+          onChange={this.onClickNav}
+          isTree
+        />
+        <div className="t-main__content">
           {
-            this.renderBreadcrumb()
+            this.props.children
           }
-        </div>
-        <div className={mainClassName}>
-          <Nav
-            className="t-main__nav"
-            role="tree"
-            menus={this.props.route.childRoutes}
-            location={this.props.location}
-            onChange={this.onClickNav}
-            isTree
-          />
-          <div className="t-main__content">
-            {
-              this.props.children
-            }
-          </div>
         </div>
 
         <PopOver onClose={this.onHiddenPopOver} {...popOver}>

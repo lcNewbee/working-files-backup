@@ -214,7 +214,7 @@ export default class View extends React.Component {
           dataType: 'date',
         }}
         noTitle
-        controlAbled
+        actionable
       >
         <Modal
           isShow={!editData.isEmpty()}

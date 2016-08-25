@@ -9,39 +9,87 @@ import {
 import * as listActions from 'shared/actions/list';
 import * as appActions from 'shared/actions/app';
 
+function getInterfaceTypeOptions() {
+  return utils.fetch('/goform/interfaceType')
+    .then((json) => (
+      {
+        options: json.data.list.map(
+          (item) => ({
+            value: item.no,
+            label: `${item.no}(${item.noInfo})`,
+          })
+        ),
+      }
+    )
+  );
+}
 const screenOptions = fromJS([
   {
     id: 'no',
-    width: '50',
     text: _('No'),
     formProps: {
-      disabled: true,
+      type: 'plain-text',
     },
   }, {
-    id: 'serviceName',
-    width: '200',
-    text: _('Service Name'),
+    id: 'ruleName',
+    text: _('Rule Name'),
   }, {
-    id: 'startAddress',
-    width: '160',
-    text: _('Policy Type'),
-  }, {
-    id: 'endAddress',
-    text: _('源端口范围'),
-  }, {
-    id: 'distan',
-    text: _('目的端口范围'),
-  }, {
-    id: 'description',
-    type: 'textarea',
-    text: _('Description'),
+    id: 'actionType',
+    text: _('The Action'),
+    defaultValue: '0',
     formProps: {
-      type: 'textarea',
+      type: 'switch',
+      options: [
+        {
+          value: '0',
+          label: _('Accept'),
+        }, {
+          value: '1',
+          label: _('Throw Away'),
+        },
+      ],
     },
+  }, {
+    id: 'addressType',
+    text: _('Address Type'),
+    defaultValue: '0',
+    formProps: {
+      type: 'switch',
+      options: [
+        {
+          value: '0',
+          label: _('Source Address'),
+        }, {
+          value: '1',
+          label: _('Target Address'),
+        },
+      ],
+    },
+  }, {
+    id: 'ipType',
+    text: _('IP Type'),
+    defaultValue: '0',
+    formProps: {
+      type: 'switch',
+      options: [
+        {
+          value: '0',
+          label: _('IPV4'),
+        }, {
+          value: '1',
+          label: _('IPV6'),
+        },
+      ],
+    },
+  }, {
+    id: 'ipAddress',
+    text: _('IP Address'),
+
   },
 ]);
-const tableOptions = immutableUtils.getTableOptions(screenOptions);
-
+const tableOptions = screenOptions.map(
+  (item) => item.delete('formProps')
+);
 const editFormOptions = immutableUtils.getFormOptions(screenOptions);
 
 const propTypes = {
@@ -51,7 +99,6 @@ const propTypes = {
   route: PropTypes.object,
   initList: PropTypes.func,
   closeListItemModal: PropTypes.func,
-  updateEditListItem: PropTypes.func,
   save: PropTypes.func,
 };
 const defaultProps = {};
@@ -64,21 +111,16 @@ export default class View extends React.Component {
   }
 
   componentWillMount() {
-    this.tableOptions = tableOptions;
   }
 
-  onAction(no, type) {
+  onAction(mac, action) {
     const query = {
-      no,
-      type,
+      mac,
+      action,
     };
 
-    this.props.save(this.props.route.formUrl, query)
-      .then((json) => {
-        if (json.state && json.state.code === 2000) {
-          console.log(json);
-        }
-      });
+    this.props.save('/goform/blacklist', query)
+      .then(() => {});
   }
 
   render() {
@@ -87,7 +129,7 @@ export default class View extends React.Component {
         {...this.props}
         tableOptions={tableOptions}
         editFormOptions={editFormOptions}
-        controlAbled
+        actionable
         noTitle
       />
     );

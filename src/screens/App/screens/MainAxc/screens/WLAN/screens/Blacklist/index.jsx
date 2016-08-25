@@ -84,7 +84,7 @@ export default class View extends React.Component {
         {...this.props}
         actionBarChildren={actionBarChildren}
         tableOptions={tableOptions}
-        controlAbled
+        actionable
         editAbled={false}
       >
         <Modal

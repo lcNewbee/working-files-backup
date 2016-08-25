@@ -1,0 +1,22 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "vlanId": "1",
+        "vlanRemark": "128"
+      },
+      {
+        "vlanId": "1",
+        "vlanRemark": "128"
+      },
+      {
+        "vlanId": "1",
+        "vlanRemark": "128"
+      }
+    ]
+  }
+}

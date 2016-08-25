@@ -33,7 +33,7 @@ $main-blue: #0093dd;
   .o-nav__sub-menus {
     .o-nav__link {
       padding: $g-distance-md 0;
-      padding-left: $g-size;
+      padding-left: $g-size + 12px;
       background-color: #555;
 
       &.active {

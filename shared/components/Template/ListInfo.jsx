@@ -33,6 +33,7 @@ const propTypes = {
     PropTypes.instanceOf(List), PropTypes.array,
   ]),
   hasSearch: PropTypes.bool,
+  selectable: PropTypes.bool,
 
   changeListQuery: PropTypes.func,
   fetchList: PropTypes.func,
@@ -47,20 +48,21 @@ const propTypes = {
   validateAll: PropTypes.func,
   resetVaildateMsg: PropTypes.func,
   initList: PropTypes.func,
+  selectListItem: PropTypes.func,
 
   children: PropTypes.node,
   actionBarChildren: PropTypes.node,
 
-  addAbled: PropTypes.bool,
+  addable: PropTypes.bool,
   editAbled: PropTypes.bool,
   deleteAbled: PropTypes.bool,
-  controlAbled: PropTypes.bool,
+  actionable: PropTypes.bool,
   noTitle: PropTypes.bool,
   autoEditModel: PropTypes.bool,
 };
 const defaultProps = {
-  controlAbled: false,
-  addAbled: true,
+  actionable: false,
+  addable: true,
   editAbled: true,
   deleteAbled: true,
 };
@@ -83,10 +85,10 @@ class ListInfo extends React.Component {
   }
 
   componentWillMount() {
-    const { controlAbled, editAbled, deleteAbled, tableOptions } = this.props;
+    const { actionable, editAbled, deleteAbled, tableOptions } = this.props;
 
     // 初始配置，添加操作项
-    if (controlAbled && (editAbled || deleteAbled)) {
+    if (actionable && (editAbled || deleteAbled)) {
       this.ListTableOptions = tableOptions.push(Map({
         id: 'actions',
         text: _('Actions'),
@@ -210,8 +212,8 @@ class ListInfo extends React.Component {
   render() {
     const {
       typeOptions, store, route, hasSearch, actionBarChildren,
-      addAbled, editFormOptions, controlAbled, noTitle, app,
-      defaultEditData,
+      addable, editFormOptions, actionable, noTitle, app,
+      defaultEditData, selectable,
     } = this.props;
     const myListId = store.get('curListId');
     const page = store.getIn([myListId, 'data', 'page']);
@@ -228,7 +230,7 @@ class ListInfo extends React.Component {
     }
 
     if (!hasSearch && !typeOptions && !actionBarChildren &&
-        (controlAbled && !addAbled)) {
+        (actionable && !addable)) {
       pageSelectClassName = 'fl';
     }
 
@@ -262,7 +264,7 @@ class ListInfo extends React.Component {
           }
 
           {
-            controlAbled && addAbled ? (
+            actionable && addable ? (
               <Button
                 icon="plus"
                 theme="primary"
@@ -298,6 +300,8 @@ class ListInfo extends React.Component {
           page={page}
           onPageChange={this.onPageChange}
           loading={store.get('fetching')}
+          selectable={selectable}
+          onSelectRow={this.props.selectListItem}
         />
         {
           editFormOptions ? (

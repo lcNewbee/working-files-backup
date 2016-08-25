@@ -13,7 +13,7 @@ const propTypes = {
   loading: PropTypes.bool,
   className: PropTypes.string,
   onPageChange: PropTypes.func,
-  selectAble: PropTypes.bool,
+  selectable: PropTypes.bool,
   onSelectRow: PropTypes.func,
 };
 
@@ -34,7 +34,7 @@ class Table extends Component {
     }
   }
   render() {
-    const { className, options, list, page, loading, selectAble } = this.props;
+    const { className, options, list, page, loading, selectable } = this.props;
     const myList = fromJS(list);
 
     let filterOptions = options.map((item) => {
@@ -54,7 +54,7 @@ class Table extends Component {
             <Row
               options={filterOptions}
               isTh
-              selectAble={selectAble}
+              selectable={selectable}
               onSelect={this.onSelectRow}
             />
           </thead>
@@ -66,13 +66,13 @@ class Table extends Component {
                   options={filterOptions}
                   item={item}
                   index={i}
-                  selectAble={selectAble}
+                  selectable={selectable}
                   onSelect={this.onSelectRow}
                 />
               ) : (
                 <tr>
                   <td
-                    colSpan={options.size + (selectAble ? 1 : 0)}
+                    colSpan={options.size + (selectable ? 1 : 0)}
                     className="empty"
                   >
                     {_('No Data')}
