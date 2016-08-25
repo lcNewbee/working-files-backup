@@ -36,7 +36,7 @@ const propTypes = {
   label: PropTypes.any,
   value: PropTypes.oneOfType([
     PropTypes.string, PropTypes.number,
-    PropTypes.instanceOf(moment)
+    PropTypes.instanceOf(moment),
   ]),
 
   // Select Option
