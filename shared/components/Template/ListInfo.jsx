@@ -20,7 +20,6 @@ const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
   route: PropTypes.object,
-  defaultItem: PropTypes.object,
   defaultEditData: PropTypes.object,
 
   tableOptions: PropTypes.oneOfType([
@@ -81,14 +80,14 @@ class ListInfo extends React.Component {
     });
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.binds('handleChangeQuery', 'onPageChange', 'onSave', 'onCloseEditModal',
-        'onChangeSearchText', 'onChangeType', 'onChangeTableSize');
+        'onChangeSearchText', 'onChangeType', 'onChangeTableSize', 'removeSelectItems');
   }
 
   componentWillMount() {
     const { actionable, editAbled, deleteAbled, tableOptions } = this.props;
 
     // 初始配置，添加操作项
-    if (actionable && (editAbled || deleteAbled)) {
+    if (actionable && (editAbled || deleteAbled) && tableOptions) {
       this.ListTableOptions = tableOptions.push(Map({
         id: 'actions',
         text: _('Actions'),
@@ -208,12 +207,15 @@ class ListInfo extends React.Component {
       this.props.fetchList();
     }
   }
+  removeSelectItems() {
+
+  }
 
   render() {
     const {
       typeOptions, store, route, hasSearch, actionBarChildren,
       addable, editFormOptions, actionable, noTitle, app,
-      defaultEditData, selectable,
+      defaultEditData, selectable, title,
     } = this.props;
     const myListId = store.get('curListId');
     const page = store.getIn([myListId, 'data', 'page']);
@@ -238,7 +240,7 @@ class ListInfo extends React.Component {
       <div className="t-list-info">
         {
           noTitle ? null : (
-            <h2 className="t-list-info__title">{route.text}</h2>
+            <h2 className="t-list-info__title">{title || route.text}</h2>
           )
         }
         <div className="m-action-bar clearfix">
@@ -276,6 +278,17 @@ class ListInfo extends React.Component {
             ) : null
           }
           {
+            actionable && selectable ? (
+              <Button
+                icon="trash-o"
+                text={_('Remove Selected')}
+                onClick={() => {
+                  this.removeSelectItems();
+                }}
+              />
+            ) : null
+          }
+          {
             actionBarChildren
           }
           {
@@ -290,19 +303,21 @@ class ListInfo extends React.Component {
               />
             ) : null
           }
-
         </div>
-
-        <Table
-          className="table"
-          options={this.ListTableOptions}
-          list={list}
-          page={page}
-          onPageChange={this.onPageChange}
-          loading={store.get('fetching')}
-          selectable={selectable}
-          onSelectRow={this.props.selectListItem}
-        />
+        {
+          this.ListTableOptions ? (
+            <Table
+              className="table"
+              options={this.ListTableOptions}
+              list={list}
+              page={page}
+              onPageChange={this.onPageChange}
+              loading={store.get('fetching')}
+              selectable={selectable}
+              onSelectRow={this.props.selectListItem}
+            />
+          ) : null
+        }
         {
           editFormOptions ? (
             <Modal

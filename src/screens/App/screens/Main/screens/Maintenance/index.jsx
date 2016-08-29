@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FormGroup, FormInput } from 'shared/components';
-import Button from 'shared/components/Button';
+import Button from 'shared/components/Button/Button';
 import utils from 'shared/utils';
 import './index.scss';
 

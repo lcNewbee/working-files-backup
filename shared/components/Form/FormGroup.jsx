@@ -37,8 +37,9 @@ class FormGroup extends React.Component {
   componentDidUpdate(prevProps) {
     const { value } = this.props;
 
-    // 数据验证
-    if (this.props.validator) {
+    // 数据为空或有数据验证对象，需进行数据验证
+    if (this.props.validator || value === '' || value === undefined) {
+      
       // 如果组是可用的
       if (!this.props.disabled) {
         if (prevProps.value !== value) {
@@ -59,13 +60,18 @@ class FormGroup extends React.Component {
     const { name, label, value, required } = this.props;
     let checkResult;
 
+    // 空字符串验证
     if (value === '' || value === undefined) {
       if (required) {
         checkResult = _('%s is required', label || this.props['data-label']);
       }
+
+    // 不为空，validator验证对象验证
     } else if (this.props.validator) {
       checkResult = this.props.validator.check(value);
     }
+
+    // 只有onValidError函数存在时才上报错误数据
     if (this.props.onValidError) {
       this.props.onValidError({ name, checkResult });
     }

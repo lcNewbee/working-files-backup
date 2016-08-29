@@ -69,6 +69,9 @@ export default function (state = defaultState, action) {
     case 'UPDATE_EDIT_LIST_ITEM':
       return state.mergeIn([curListName, 'data', 'edit'], action.data);
 
+    case 'UPDATE_LIST_SETTINGS':
+      return state.mergeIn([curListName, 'data', 'settings'], action.data);
+
     case 'EDIT_LIST_ITEM_BY_INDEX':
       return state.setIn(
           [curListName, 'data', 'edit'],

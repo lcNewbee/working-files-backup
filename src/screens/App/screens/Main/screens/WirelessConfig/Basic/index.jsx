@@ -5,7 +5,7 @@ import { Map } from 'immutable';
 import validator from 'shared/utils/lib/validator';
 import { bindActionCreators } from 'redux';
 import { FormGroup, FormInput } from 'shared/components';
-import Button from 'shared/components/Button';
+import Button from 'shared/components/Button/Button';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/settings';
 import reducer from './reducer.js';

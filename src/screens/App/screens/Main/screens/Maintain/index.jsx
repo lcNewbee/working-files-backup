@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FormGroup } from 'shared/components';
-import Button from 'shared/components/Button';
+import Button from 'shared/components/Button/Button';
 
 var MaintenanceSetting=React.createClass({
   render:function(){

@@ -35,7 +35,7 @@ class Row extends Component {
     if (props.isTh) {
       tds = props.options.map((option, i) =>
         <th key={`tableRow${i}`} width={option.get('width')}>
-          {option.get('text')}
+          {option.get('text') || option.get('label')}
         </th>
       );
 

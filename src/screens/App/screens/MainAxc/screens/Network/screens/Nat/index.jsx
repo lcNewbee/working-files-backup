@@ -1,17 +1,87 @@
 import React, { PropTypes } from 'react';
-import utils from 'shared/utils';
+import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
-import { Map, List } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import {
-  FormGroup,
+  FormContainer, ListInfo,
 } from 'shared/components';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/settings';
+import * as listActions from 'shared/actions/list';
 
+function getInterfaceTypeOptions() {
+  return utils.fetch('/goform/interfaceType')
+    .then((json) => (
+      {
+        options: json.data.list.map(
+          (item) => ({
+            value: item.no,
+            label: `${item.no}(${item.noInfo})`,
+          })
+        ),
+      }
+    )
+  );
+}
+const commonFormOptions = fromJS([
+  {
+    id: 'enable',
+    label: _('NAT Service'),
+    type: 'checkbox',
+    text: _('Enable'),
+    value: '1',
+  },
+]);
+const screenOptions = fromJS([
+  {
+    id: 'ruleType',
+    label: _('NAT Rule Type'),
+    formProps: {
+      type: 'select',
+      label: _('NAT Rule Type'),
+      placeholder: _('Please Select ') + _('NAT Rule Type'),
+      options: [
+        {
+          value: '0',
+          label: _('Static Address Transform'),
+        }, {
+          value: '1',
+          label: _('Static Address Transform'),
+        }, {
+          value: '2',
+          label: _('Target Address Transform'),
+        }, {
+          value: '3',
+          label: _('Public IP Transparent Transmission'),
+        },
+      ],
+    },
+
+  }, {
+    id: 'sourceAddress',
+    label: _('Source Address'),
+  }, {
+    id: 'targetAddress',
+    label: _('Target Address'),
+  }, {
+    id: 'outgoingInterface',
+    label: _('Outgoing Interface'),
+    formProps: {
+      type: 'select',
+      placeholder: _('Please Select ') + _('Outgoing Interface'),
+      loadOptions: getInterfaceTypeOptions,
+      isAsync: true,
+    },
+  },
+]);
+
+const formOptions = immutableUtils.getFormOptions(screenOptions);
+const tableOptions = immutableUtils.getTableOptions(screenOptions);
 const propTypes = {
   app: PropTypes.instanceOf(Map),
-  store: PropTypes.instanceOf(Map),
+  settings: PropTypes.instanceOf(Map),
+  list: PropTypes.instanceOf(Map),
   groupId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 
   route: PropTypes.object,
@@ -54,28 +124,36 @@ export default class View extends React.Component {
   }
 
   render() {
-    const { route, updateItemSettings } = this.props;
-    const curData = this.props.store.getIn(['curData']).toJS();
+    const { app, route, updateItemSettings, saveSettings } = this.props;
+    const curData = this.props.settings.getIn(['curData']);
 
-    if (this.props.store.get('curSettingId') === 'base') {
+    if (this.props.settings.get('curSettingId') === 'base') {
       return null;
     }
-
     return (
-      <form className="o-form">
-        <FormGroup
-          type="checkbox"
-          text={_('Enable')}
-          value="1"
-          label={_('NAT Service')}
-          checked={curData.enable === '1'}
-          onChange={
-            (data) => updateItemSettings({
-              enable: data.value,
-            })
-          }
+      <div>
+        <h2>{route.text}</h2>
+        <FormContainer
+          options={commonFormOptions}
+          data={curData}
+          onChangeData={updateItemSettings}
+          onSave={saveSettings}
+          invalidMsg={app.get('invalid')}
+          validateAt={app.get('validateAt')}
+          isSaving={app.get('saving')}
+          hasSaveButton
         />
-      </form>
+
+        <ListInfo
+          {...this.props}
+          title={_('NAT Rules List')}
+          store={this.props.list}
+          tableOptions={tableOptions}
+          editFormOptions={formOptions}
+          actionable
+          selectable
+        />
+      </div>
     );
   }
 }
@@ -86,15 +164,16 @@ View.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
-    groupId: state.mainAxc.getIn(['group', 'selected', 'id']),
-    store: state.settings,
+    settings: state.settings,
+    list: state.list,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    actions
+    actions,
+    listActions
   ), dispatch);
 }
 

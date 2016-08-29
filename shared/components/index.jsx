@@ -4,7 +4,7 @@ export PureComponent from './Base/PureComponent';
 
 // Atom
 export Icon from './Icon';
-export Button from './Button';
+export Button from './Button/Button';
 export SaveButton from './Button/SaveButton';
 export Checkbox from './Form/Checkbox';
 export Radios from './Form/Radios';
@@ -35,4 +35,3 @@ export FormContainer from './Organism/FormContainer';
 export PropertyPanel from './Template/PropertyPanel';
 export ListInfo from './Template/ListInfo';
 export NotFound from './NotFound';
-

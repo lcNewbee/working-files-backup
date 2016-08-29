@@ -1,14 +1,14 @@
 import React from 'react';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux'
+import { bindActionCreators } from 'redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import {fromJS} from 'immutable';
+import { fromJS } from 'immutable';
 
 // components
 import Table from 'shared/components/Table';
-import Button from 'shared/components/Button';
-import {Search} from 'shared/components/Form';
+import Button from 'shared/components/Button/Button';
+import { Search } from 'shared/components/Form';
 import Select from 'shared/components/Select';
 import Switchs from 'shared/components/Switchs';
 
@@ -21,12 +21,12 @@ const logsTableOptions = fromJS([
   {
     id: 'time',
     text: _('Time'),
-    width: '200'
+    width: '200',
   }, {
     id: 'type',
     text: _('Type'),
     width: '180',
-    transform: function(val, item) {
+    transform (val, item) {
       const typeMap = {
         ap: _('DEVICES'),
         client: _('CLIENTS'),
@@ -34,40 +34,39 @@ const logsTableOptions = fromJS([
         wireless: _('Wireless'),
         portal: _('Portal Settings'),
         guest: _('Guest Settings'),
-        admin: _('Admin')
+        admin: _('Admin'),
       };
 
       return typeMap[val] || val;
-    }
+    },
   }, {
     id: 'loginfo',
     text: _('Describe'),
-    transform: function(val, item) {
-      var ret = _(utils.toCamel(item.get('logaction')));
-      var logType = item.get('type');
-      var groupname;
-      var statusMap = {
+    transform (val, item) {
+      let ret = _(utils.toCamel(item.get('logaction')));
+      let logType = item.get('type');
+      let groupname;
+      let statusMap = {
         0: _('start'),
         1: _('success'),
-        2: _('failed')
-      }
+        2: _('failed'),
+      };
 
-      if(val && val.get) {
-
-        if(val.get('groupname') === 'Default') {
+      if (val && val.get) {
+        if (val.get('groupname') === 'Default') {
           groupname = _('Ungrouped Devices');
         }
 
         ret += ': ' + (val.get('name') || groupname || val.get('mac') || '');
 
-        if(val.get('status') !== undefined) {
+        if (val.get('status') !== undefined) {
           ret += ' ' + statusMap[val.get('status')];
         }
       }
 
       return ret;
-    }
-  }
+    },
+  },
 ]);
 
 const msg = {
@@ -75,7 +74,7 @@ const msg = {
   reconnect: _('Reconnect'),
   lock: _('Lock'),
   unlock: _('Unlock'),
-  perPage: _('Items per page: ')
+  perPage: _('Items per page: '),
 };
 
 const selectOptions = [
@@ -88,25 +87,25 @@ const typeArr = fromJS([
   _('ALL'),
   _('DEVICES'),
   _('CLIENTS'),
-  _('SETTINGS')
+  _('SETTINGS'),
 ]);
 
 const styles = {
   actionButton: {
-    minWidth: "90px"
-  }
-}
+    minWidth: '90px',
+  },
+};
 
 // 原生的 react 页面
 export const Logs = React.createClass({
   mixins: [PureRenderMixin],
 
   componentWillMount() {
-    this.handleSearch()
+    this.handleSearch();
   },
 
   componentDidUpdate(prevProps) {
-    if(prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
+    if (prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
       this.handleSearch();
     }
   },
@@ -123,54 +122,53 @@ export const Logs = React.createClass({
   handleChangeQuery(data, needSearch) {
     this.props.changeLogsQuery(data);
 
-    if(needSearch) {
+    if (needSearch) {
       this.handleSearch();
     }
   },
 
   cleanAllLog() {
-    var msg_text = _('Are you sure to clean all logs?');
+    let msg_text = _('Are you sure to clean all logs?');
 
     this.props.createModal({
       id: 'Logs',
       role: 'comfirm',
       title: _('CONFIRM'),
       text: msg_text,
-      apply: function() {
+      apply: function () {
         this.props.cleanAllLog();
-      }.bind(this)
+      }.bind(this),
     });
   },
 
   onChangeSearchText(val, e) {
     this.handleChangeQuery({
-      search: val
+      search: val,
     });
   },
 
   onChangeType(data) {
     this.handleChangeQuery({
-      type: data.value
+      type: data.value,
     }, true);
   },
 
   onChangeTableSize(option) {
-    var val = '';
+    let val = '';
 
-    if(option) {
+    if (option) {
       val = option.value;
     }
 
     this.handleChangeQuery({
       size: val,
-      page: 1
+      page: 1,
     }, true);
   },
 
   onPageChange(i) {
-
     this.handleChangeQuery({
-      page: i
+      page: i,
     }, true);
   },
 
@@ -183,7 +181,7 @@ export const Logs = React.createClass({
       handleSearch,
       onChangeType,
       onChangeTableSize,
-      onPageChange
+      onPageChange,
     } = this;
 
     return (
@@ -199,7 +197,7 @@ export const Logs = React.createClass({
 
           <Button
             className="fl"
-            text={_("Clean All Logs")}
+            text={_('Clean All Logs')}
             icon="trash"
             theme="danger"
             onClick={this.cleanAllLog}
@@ -226,11 +224,11 @@ export const Logs = React.createClass({
 
       </div>
     );
-  }
+  },
 });
 
 function mapStateToProps(state) {
-  var myState = state.logs;
+  let myState = state.logs;
 
   return {
     app: state.app,
@@ -238,7 +236,7 @@ function mapStateToProps(state) {
     query: myState.get('query'),
     updateAt: myState.get('updateAt'),
     data: myState.get('data'),
-    page: myState.get('page')
+    page: myState.get('page'),
   };
 }
 
@@ -246,7 +244,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
     actions
-  ), dispatch)
+  ), dispatch);
 }
 
 // 添加 redux 属性的 react 页面

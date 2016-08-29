@@ -5,13 +5,13 @@ import { fromJS, Map } from 'immutable';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import validator from 'shared/utils/lib/validator';
-import * as appActions from 'shared/actions/app';
-import * as actions from './actions';
-import reducer from './reducer';
 import { FormGroup } from 'shared/components/Form';
 import Table from 'shared/components/Table';
 import Modal from 'shared/components/Modal';
-import Button from 'shared/components/Button';
+import Button from 'shared/components/Button/Button';
+import * as appActions from 'shared/actions/app';
+import * as actions from './actions';
+import reducer from './reducer';
 
 const msg = {
   delete: _('Delete'),

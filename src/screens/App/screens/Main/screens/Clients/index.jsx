@@ -6,7 +6,7 @@ import utils from 'shared/utils';
 
 // components
 import Table from 'shared/components/Table';
-import Button from 'shared/components/Button';
+import Button from 'shared/components/Button/Button';
 import { Search } from 'shared/components/Form';
 import Select from 'shared/components/Select';
 import Switchs from 'shared/components/Switchs';

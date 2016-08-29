@@ -92,7 +92,8 @@ function DevicesProperties(props) {
                 activeTabPanels.map((panel, panelIndex) => {
                   const panelKey = panel.get('panelKey');
                   const isActive = item.get(activePanelKey) === panelIndex;
-                  let MyComponent = panelsComponentMap[panelKey];
+                  const MyComponent = panelsComponentMap[panelKey];
+
                   return (
                     <div
                       key={panelKey}

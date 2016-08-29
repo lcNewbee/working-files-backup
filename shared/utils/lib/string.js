@@ -12,9 +12,8 @@ function getText(val) {
     } else {
       ret = val;
     }
-    
-  }
 
+  }
   return ret;
 }
 
@@ -105,16 +104,16 @@ coreUtils.extend(str, {
     return (Array(length).join('0') + num).slice(-length);
   },
 
-  toDecimal: function(x, len) { 
+  toDecimal: function(x, len) {
     var f = parseFloat(x);
     var UNIT = Math.pow(10, len)
-    
-    if (isNaN(f)) { 
+
+    if (isNaN(f)) {
       return;
     }
     f = Math.round(x * UNIT) / UNIT;
-    
-    return f; 
+
+    return f;
   },
 
   toCamel: function(str) {
@@ -149,11 +148,11 @@ coreUtils.extend(str, {
     var pathName = coreUtils.toString(path, 'str.getExtension')
     var startIndex = path.lastIndexOf(".");
     var ret = '';
-    
+
     if(startIndex !== -1) {
       ret = path.substring(startIndex + 1).toLowerCase();
     }
-    
+
     return ret;
   }
 });

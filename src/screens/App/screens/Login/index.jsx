@@ -6,10 +6,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/utils/lib/validator';
 import * as appActions from 'shared/actions/app';
-import {
-  Navbar, Button, FormGroup,
-} from 'shared/components';
-
+import Navbar from 'shared/components/Navbar';
+import Button from 'shared/components/Button/Button';
+import FormGroup from 'shared/components/Form/FormGroup';
 import * as actions from './actions';
 import reducer from './reducer';
 

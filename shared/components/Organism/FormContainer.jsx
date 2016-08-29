@@ -70,9 +70,16 @@ class FormContainer extends React.Component {
 
     myProps.name = id;
     myProps.key = id;
-    myProps.errMsg = invalidMsg.get(id);
+
+    if (invalidMsg && typeof invalidMsg.get === 'function') {
+      myProps.errMsg = invalidMsg.get(id);
+    }
+
+    if (data && typeof data.get === 'function') {
+      myProps.value = data.get(id);
+    }
+    console.log('FormGroup ' + myProps.label, validateAt)
     myProps.validateAt = validateAt;
-    myProps.value = data.get(id);
     myProps.onChange = myData => this.onChangeData(id, myData);
     myProps.onValidError = onValidError;
 

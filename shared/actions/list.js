@@ -22,6 +22,7 @@ export function changeListQuery(query) {
     query,
   };
 }
+
 export function changeListActionQuery(query) {
   return {
     type: 'CHANGE_LIST_ACTION_QUERY',
@@ -43,12 +44,20 @@ export function updateEditListItem(data) {
   };
 }
 
+export function updateListSettings(data) {
+  return {
+    type: 'UPDATE_LIST_SETTINGS',
+    data,
+  };
+}
+
 export function addListItem(defaultItem) {
   return {
     type: 'ADD_LIST_ITEM',
     defaultItem,
   };
 }
+
 export function selectListItem(data) {
   return {
     type: 'SELECT_LIST_ITEM',
@@ -80,7 +89,7 @@ export function initList(option) {
 export function fetchList(url) {
   return (dispatch, getState) => {
     const globalState = getState();
-    const refreshTime = globalState.app.get('rateInterval');
+    // const refreshTime = globalState.app.get('rateInterval');
     const name = globalState.list.get('curListId');
     const query = globalState.list.getIn([name, 'query']).toJS();
     const formUrl = globalState.list.getIn([name, 'formUrl']);
@@ -103,6 +112,7 @@ export function fetchList(url) {
       });
   };
 }
+
 export function onListAction(url) {
   return (dispatch, getState) => {
     const globalState = getState();

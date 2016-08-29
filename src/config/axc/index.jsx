@@ -75,7 +75,6 @@ const sFlowStatus = require('../../screens/App/screens/MainAxc/screens/Monitor/s
 const sSsidStatus = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/SsidStatus');
 const sApList = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/ApList');
 const sSafeStatus = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/SafeStatus');
-
 const sBlacklist = require('../../screens/App/screens/MainAxc/screens/WLAN/screens/Blacklist');
 const sSsidSettings =
     require('../../screens/App/screens/MainAxc/screens/WLAN/screens/SsidSettings');
@@ -97,7 +96,7 @@ const sPreferencesAnalysis =
     require('../../screens/App/screens/MainAxc/screens/Report/screens/BusinessReport/screens/PreferencesAnalysis');
 const sInformationPush =
     require('../../screens/App/screens/MainAxc/screens/Report/screens/BusinessReport/screens/InformationPush');
-
+const sLiveMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/LiveMap');
 /**
  * 系统管理
  */
@@ -119,6 +118,7 @@ const sVersionMaintenance =
     require('../../screens/App/screens/MainAxc/screens/System/screens/VersionMaintenance');
 const sSystemMaintenance =
     require('../../screens/App/screens/MainAxc/screens/System/screens/SystemMaintenance');
+
 const routes = [
   {
     path: '/',
@@ -251,17 +251,22 @@ const routes = [
                 id: 'live',
                 path: '/main/group/map/live',
                 text: _('Live Map'),
+                formUrl: '/goform/liveMap',
+                component: sLiveMap.Screen,
               }, {
-                id: 'rf',
-                path: '/main/group/map/rf',
-                text: _('RF'),
+                id: 'rfPlan',
+                path: '/main/group/map/rf_plan',
+                formUrl: '/goform/rfPlan',
+                text: _('RF Plan'),
               }, {
-                id: 'heat',
-                path: '/main/group/map/heat',
+                id: 'heatMap',
+                path: '/main/group/map/heat_map',
+                formUrl: '/goform/heatMap',
                 text: _('Heat Map'),
               }, {
                 id: 'cientsTrace',
-                path: '/main/group/map/trace',
+                path: '/main/group/map/cients_trace',
+                formUrl: '/goform/cientsTrace',
                 text: _('Cients Trace'),
               },
             ],
@@ -452,7 +457,10 @@ const routes = [
         component: sWizard.Screen,
       },
     ],
-  }, {
+  },
+
+  // 兼容登录跳转
+  {
     path: '/main/status',
     indexRoute: { onEnter: (nextState, replace) => replace('/main/network') },
   }, {

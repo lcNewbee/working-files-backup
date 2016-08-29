@@ -1,313 +1,179 @@
-import React, { Component } from 'react';
-import { fromJS } from 'immutable';
-import { bindActionCreators } from 'redux';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import React, { PropTypes } from 'react';
+import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
-import utils from 'shared/utils';
+import { fromJS, Map } from 'immutable';
+import { bindActionCreators } from 'redux';
 import validator from 'shared/utils/lib/validator';
 import {
-  FormGroup, Button, Table, Modal, Switchs,
+  ListInfo,
 } from 'shared/components';
+import * as listActions from 'shared/actions/list';
 import * as appActions from 'shared/actions/app';
-import * as actions from './actions';
-import myReducer from './reducer';
 
-const msg = {
-  delete: _('Delete'),
-  edit: _('Edit'),
-  look: _('View'),
-  add: _('Add'),
-};
-
-const validOptions = fromJS({
-  mainIp: validator({
-    rules: 'ip',
-  }),
-  mainMask: validator({
-    rules: 'mask',
-  }),
-  secondIp: validator({
-    rules: 'url',
-  }),
-  secondMask: validator({
-    rules: 'required',
-  }),
-  ipv6: validator({
-    rules: 'required',
-  }),
-});
-
-let DhcpAddressPoolTableOption = fromJS([
+const screenOptions = fromJS([
   {
     id: 'name',
     text: _('Name'),
+    formProps: {
+      maxLength: '24',
+    },
   }, {
     id: 'type',
     text: _('Type'),
+    defaultValue: 'ipv4',
+    formProps: {
+      type: 'switch',
+      options: [
+        {
+          value: 'ipv4',
+          label: 'IPV4',
+        }, {
+          value: 'ipv6',
+          label: 'IPV6',
+        },
+      ],
+    },
   }, {
     id: 'domain',
     text: _('Domain'),
+    formProps: {
+      type: 'text',
+    },
   }, {
     id: 'startIp',
     text: _('Start IP'),
+    formProps: {
+      maxLength: '13',
+      validator: validator({
+        rules: 'ip',
+      }),
+    },
   }, {
     id: 'endIp',
     text: _('End IP'),
+    formProps: {
+      maxLength: '13',
+      validator: validator({
+        rules: 'ip',
+      }),
+    },
   }, {
     id: 'mask',
     text: _('Mask'),
+    formProps: {
+      maxLength: '13',
+      validator: validator({
+        rules: 'mask',
+      }),
+    },
   }, {
     id: 'gateway',
     text: _('Gateway'),
+    formProps: {
+      maxLength: '13',
+      validator: validator({
+        rules: 'ip',
+      }),
+    },
   }, {
     id: 'mainDns',
     text: _('Main DNS'),
+    formProps: {
+      maxLength: '13',
+      validator: validator({
+        rules: 'ip',
+      }),
+    },
   }, {
     id: 'secondDns',
     text: _('Second DNS'),
+    formProps: {
+      maxLength: '13',
+      validator: validator({
+        rules: 'ip',
+      }),
+    },
   }, {
     id: 'releaseTime',
     text: _('Release Time'),
-  }, {
-    id: 'op',
-    text: _('Actions'),
+    formProps: {
+      maxLength: '13',
+      validator: validator({
+        rules: 'time',
+      }),
+    },
   },
 ]);
+const tableOptions = immutableUtils.getTableOptions(screenOptions);
+const editFormOptions = immutableUtils.getFormOptions(screenOptions);
+const defaultEditData = immutableUtils.getDefaultData(screenOptions);
+const propTypes = {
+  app: PropTypes.instanceOf(Map),
+  store: PropTypes.instanceOf(Map),
 
+  route: PropTypes.object,
+  initList: PropTypes.func,
+  closeListItemModal: PropTypes.func,
+  updateEditListItem: PropTypes.func,
+  save: PropTypes.func,
+};
+const defaultProps = {};
 
-export default class View extends Component {
+export default class View extends React.Component {
   constructor(props) {
     super(props);
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    this.onSelectDhcpAddressPool = this.onSelectDhcpAddressPool.bind(this);
+
+    this.onAction = this.onAction.bind(this);
   }
 
-  componentWillMount() {
-    this.props.fetchDhcpAddressPoolList();
-  }
+  onAction(no, type) {
+    const query = {
+      no,
+      type,
+    };
 
-  onChangeEditData(key, data) {
-    const changeData = {};
-
-    changeData[key] = data.value;
-
-    this.props.updateDhcpAddressPoolEdit(changeData);
-  }
-
-  onDeleteDhcpAddressPool(item) {
-    let msg_text = '';
-
-    if (item) {
-      msg_text = _('Are you sure delete address pool: %s?', item.get('name'));
-    } else {
-      msg_text = _('Are you sure delete selected address pools?');
-    }
-
-    this.props.createModal({
-      id: 'interfaceSettings',
-      role: 'comfirm',
-      text: msg_text,
-      apply: function () {
-
-      }.bind(this),
-    });
-  }
-
-  onSelectDhcpAddressPool(data) {
-    this.props.selectDhcpAddressPool(data);
+    this.props.save(this.props.route.formUrl, query)
+      .then((json) => {
+        if (json.state && json.state.code === 2000) {
+          console.log(json);
+        }
+      });
   }
 
   render() {
-    const editData = this.props.store.get('edit');
-    let modalTitle = editData.get('name');
-
-    DhcpAddressPoolTableOption = DhcpAddressPoolTableOption.set(-1, fromJS({
-      id: 'op',
-      text: _('Actions'),
-      width: '180',
-      transform: function (val, item) {
-        return (
-          <div className="action-btns">
-            <Button
-              icon="edit"
-              text="修改"
-              size="sm"
-              onClick={() => {
-                this.props.editDhcpAddressPool(item.get('name'));
-              }}
-            />
-            <Button
-              icon="trash"
-              size="sm"
-              text="删除"
-              onClick={() => {
-                this.onDeleteDhcpAddressPool(item);
-              }}
-            />
-          </div>
-        );
-      }.bind(this),
-    }));
-
-    if (this.props.store.get('actionType') === 'add') {
-      modalTitle = msg.add;
-    } else if (this.props.store.get('actionType') === 'edit') {
-      modalTitle = msg.edit + ' ' + modalTitle;
-    }
-
     return (
-      <div>
-        <h3 className="t-main__content-title">{_('DHCP Settings')}</h3>
-        <div className="m-action-bar">
-
-          <div className="m-action-bar__left action-btns">
-            <Button
-              icon="plus"
-              theme="primary"
-              onClick={this.props.addDhcpAddressPool}
-              text="添加"
-            />
-            <Button
-              icon="trash"
-              text="删除"
-              onClick={() => {
-                this.onDeleteDhcpAddressPool();
-              }}
-            />
-          </div>
-        </div>
-
-        <Table
-          className="table"
-          options={DhcpAddressPoolTableOption}
-          list={this.props.store.getIn(['data', 'list'])}
-          selectable
-          onSelectRow={this.onSelectDhcpAddressPool}
-        />
-
-        <Modal
-          isShow={editData.isEmpty() ? false : true}
-          title={modalTitle}
-          onClose={this.props.closeDhcpAddressPoolEdit}
-          onOk={this.onSaveDhcpAddressPool}
-        >
-          <FormGroup
-            type="text"
-            value={editData.get('name')}
-            label={_('Address Pool Name')}
-            maxLength="24"
-            onChange={(data) => {
-              this.onChangeEditData('name', data);
-            }}
-          />
-          <FormGroup
-            type="checkbox"
-            label={_('Address Pool Type')}
-          >
-            <Switchs
-              value={editData.get('type')}
-              options={[
-                {
-                  value: 'ipv4',
-                  label: 'IPV4',
-                }, {
-                  value: 'ipv6',
-                  label: 'IPV6',
-                },
-              ]}
-              onChange={(data) => {
-                this.onChangeEditData('type', data);
-              }}
-            />
-          </FormGroup>
-          <FormGroup
-            type="text"
-            value={editData.get('domain')}
-            label={_('Domain')}
-            onChange={(data) => {
-              this.onChangeEditData('domain', data);
-            }}
-          />
-          <FormGroup
-            type="text"
-            value={editData.get('startIp')}
-            label={_('Start IP')}
-            onChange={(data) => {
-              this.onChangeEditData('startIp', data);
-            }}
-          />
-          <FormGroup
-            type="text"
-            value={editData.get('endIp')}
-            label={_('End IP')}
-            onChange={(data) => {
-              this.onChangeEditData('endIp', data);
-            }}
-          />
-          <FormGroup
-            type="text"
-            value={editData.get('mask')}
-            label={_('Mask')}
-            onChange={(data) => {
-              this.onChangeEditData('mask', data);
-            }}
-          />
-          <FormGroup
-            type="text"
-            value={editData.get('gateway')}
-            label={_('Gateway')}
-            onChange={(data) => {
-              this.onChangeEditData('gateway', data);
-            }}
-          />
-          <FormGroup
-            type="text"
-            value={editData.get('mainDns')}
-            label={_('Main DNS')}
-            onChange={(data) => {
-              this.onChangeEditData('mainDns', data);
-            }}
-          />
-          <FormGroup
-            type="text"
-            value={editData.get('secondDns')}
-            label={_('Second DNS')}
-            onChange={(data) => {
-              this.onChangeEditData('secondDns', data);
-            }}
-          />
-          <FormGroup
-            type="text"
-            value={editData.get('releaseTime')}
-            label={_('Release Time')}
-            onChange={(data) => {
-              this.onChangeEditData('releaseTime', data);
-            }}
-          />
-        </Modal>
-      </div>
+      <ListInfo
+        {...this.props}
+        tableOptions={tableOptions}
+        editFormOptions={editFormOptions}
+        defaultEditData={defaultEditData}
+        actionable
+        selectable
+      />
     );
   }
 }
 
+View.propTypes = propTypes;
+View.defaultProps = defaultProps;
+
 function mapStateToProps(state) {
   return {
     app: state.app,
-    store: state.dhcpAdressPool,
+    store: state.list,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    actions
+    listActions
   ), dispatch);
 }
 
+
+// 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps,
-  validator.mergeProps(validOptions)
+  mapDispatchToProps
 )(View);
-
-export const reducer = myReducer;

@@ -1,19 +1,16 @@
 import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import {connect} from 'react-redux';
-import { bindActionCreators } from 'redux';
-import {
-  FormGroup,
-} from 'shared/components';
-import {fromJS, Map, List} from 'immutable';
+import { connect } from 'react-redux';
+import FormGroup from 'shared/components/Form/FormGroup';
+import { List } from 'immutable';
 import validator from 'shared/utils/lib/validator';
 import utils from 'shared/utils';
 import urls from 'shared/config/urls';
 
 const msg = {
-  password:  _('Password'),
-  confirmpasswd: _('Confirm Password')
-}
+  password: _('Password'),
+  confirmpasswd: _('Confirm Password'),
+};
 
 const formGroups = List([
   {
@@ -26,8 +23,8 @@ const formGroups = List([
     },
     validator: validator({
       label: msg.password,
-      rules: 'required'
-    })
+      rules: 'required',
+    }),
   }, {
     input: {
       label: msg.confirmpasswd,
@@ -38,21 +35,21 @@ const formGroups = List([
     },
     validator: validator({
       label: msg.confirmpasswd,
-      rules: 'required'
-    })
-  }
+      rules: 'required',
+    }),
+  },
 ]);
 
 function createList(item) {
-  var input = item.input;
+  const input = item.input;
 
   return (
     <FormGroup
       {...input}
       key={input.name}
       id={input.name}
-      value={this.getDataValue(input.name) }
-      onChange={this.onChangeData(input.name) }
+      value={this.getDataValue(input.name)}
+      onChange={this.onChangeData(input.name)}
       onKeyUp={this.onInputKeyUp}
     />
   );
@@ -65,8 +62,8 @@ export const SignUp = React.createClass({
   getInitialState() {
     return {
       password: '',
-      confirmpasswd: ''
-    }
+      confirmpasswd: '',
+    };
   },
 
   componentWillMount() {
@@ -74,7 +71,7 @@ export const SignUp = React.createClass({
   },
 
   componentWillUnmount() {
-    var currClass = document.getElementsByTagName('body')[0].className;
+    const currClass = document.getElementsByTagName('body')[0].className;
 
     document.getElementsByTagName('body')[0].className = currClass.replace(' sign-body', '');
   },
@@ -83,19 +80,19 @@ export const SignUp = React.createClass({
     const data = this.state;
     let checkResult;
 
-    formGroups.forEach(function(item) {
-      var key = item.input.name;
+    formGroups.forEach(function (item) {
+      const key = item.input.name;
 
       checkResult = item.validator.check(data[key]);
 
-      if(checkResult) {
+      if (checkResult) {
         return false;
       }
     });
 
-    if(!checkResult) {
-      if(this.state.password !== this.state.confirmpasswd) {
-        checkResult = _('Password and confirm password must match')
+    if (!checkResult) {
+      if (this.state.password !== this.state.confirmpasswd) {
+        checkResult = _('Password and confirm password must match');
       }
     }
 
@@ -105,29 +102,28 @@ export const SignUp = React.createClass({
   signUp() {
     utils.save(urls.regist, {
       password: this.state.password,
-      confirmpasswd: this.state.confirmpasswd
+      confirmpasswd: this.state.confirmpasswd,
     })
-    .then(function(json) {
-      if(json.state && json.state.code === 2000) {
+    .then(function (json) {
+      if (json.state && json.state.code === 2000) {
         window.location.hash = '';
       }
-    }.bind(this))
+    }.bind(this));
   },
 
   onSignUp() {
-    var checkResult = this.checkData();
+    const checkResult = this.checkData();
 
     // 如果有验证错误信息
-    if(checkResult) {
+    if (checkResult) {
       this.updateState({
-        status: checkResult
-      })
+        status: checkResult,
+      });
 
     //
     } else {
       this.signUp();
     }
-
   },
 
   updateState(data) {
@@ -135,12 +131,12 @@ export const SignUp = React.createClass({
   },
 
   onChangeData(name) {
-    return function(options) {
-      let data = {};
+    return function (options) {
+      const data = {};
 
       data[name] = options.value;
       this.updateState(data);
-    }.bind(this)
+    }.bind(this);
   },
 
   getDataValue(name) {
@@ -148,9 +144,8 @@ export const SignUp = React.createClass({
   },
 
   onInputKeyUp(e) {
-
-    if(e.which === 13) {
-      if(e.target.id === 'password') {
+    if (e.which === 13) {
+      if (e.target.id === 'password') {
         document.getElementById('confirmpasswd').focus();
       } else {
         this.onSignUp();
@@ -160,9 +155,9 @@ export const SignUp = React.createClass({
 
   render() {
     const { version } = this.props.app.toJS();
-    var FormGroupList;
-    var that = this;
-    var myMsg = this.props.status;
+    let FormGroupList;
+    const that = this;
+    const myMsg = this.props.status;
 
     FormGroupList = formGroups.map(createList.bind(this));
 
@@ -185,19 +180,20 @@ export const SignUp = React.createClass({
                 ''
             }
             <button className="btn btn-info btn-lg"
-              onClick={this.onSignUp}>
+              onClick={this.onSignUp}
+            >
               {_('Sign Up')}
             </button>
           </div>
         </div>
       </div>
     );
-  }
+  },
 });
 
 function mapStateToProps(state) {
   return {
-    app: state.app
+    app: state.app,
   };
 }
 

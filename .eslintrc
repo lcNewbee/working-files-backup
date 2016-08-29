@@ -30,7 +30,8 @@
     "GUI_CONFIG": true,
     "guiConfig": true,
     "sessionStorage": true,
-    "b28n": true
+    "b28n": true,
+    "google": true
   },
   "rules": {
     "new-cap": [

@@ -6,9 +6,9 @@ import validator from 'shared/utils/lib/validator';
 import utils from 'shared/utils';
 import TIME_ZONE from 'shared/config/timeZone';
 import countries from 'shared/config/country.json';
-import {
-  Button, Navbar, FormGroup,
-} from 'shared/components';
+import Navbar from 'shared/components/Navbar';
+import Button from 'shared/components/Button/Button';
+import FormGroup from 'shared/components/Form/FormGroup';
 
 import urls from 'shared/config/urls';
 

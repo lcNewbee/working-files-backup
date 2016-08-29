@@ -11,7 +11,7 @@ var immutableUtils = {
     ret = ret.map(function(item) {
         var commonOption = {
           id: item.get('id'),
-          label: item.get('text'),
+          label: item.get('text') || item.get('label'),
           fieldset: item.get('fieldset'),
           legend: item.get('legend'),
           options: item.get('options'),

@@ -19,7 +19,6 @@
   "VLAN Remark": "VLAN标识",
 
   "Port Settings": "端口配置",
-
   "DHCP Settings": "DHCP配置",
   "Domain": "域名",
   "Start IP": "起始IP",
@@ -30,6 +29,8 @@
   "Are you sure delete address pool: %s?": "你确定要删除地址池条目：%s？",
 
   "NAT Settings": "NAT配置",
+  "NAT Service": "NAT服务",
+  "NAT Rules List": "NAT规则列表",
 
   "Interface Type": "接口类型",
   "Interface No Information": "接口索引信息",
@@ -135,7 +136,14 @@
 
   "Map": "地图",
   "Live Map": "实时地图",
-  "RF": "RF规划",
+  "Unlock Map": "解锁",
+  "Lock Map": "锁定",
+  "Marker Type": "标记类型",
+  "Marker Title": "标记标题",
+  "Building": "建筑物",
+  "Marker Address": "标记地址",
+
+  "RF Plan": "RF规划",
   "Heat Map": "热力图",
   "Cients Trace": "终端行动轨迹",
 

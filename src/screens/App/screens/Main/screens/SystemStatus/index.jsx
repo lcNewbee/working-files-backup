@@ -4,7 +4,7 @@ import { fromJS, Map } from 'immutable';
 import { connect } from 'react-redux';
 import { FormGroup } from 'shared/components';
 import Table from 'shared/components/Table';
-import Button from 'shared/components/Button';
+import Button from 'shared/components/Button/Button';
 import utils from 'shared/utils';
 import * as sharedActions from 'shared/actions/settings';
 import * as appActions from 'shared/actions/app';

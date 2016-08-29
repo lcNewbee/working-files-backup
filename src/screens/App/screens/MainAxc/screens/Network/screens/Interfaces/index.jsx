@@ -1,250 +1,152 @@
-import React, { Component } from 'react';
-import { fromJS } from 'immutable';
-import { bindActionCreators } from 'redux';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import React, { PropTypes } from 'react';
+import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
-import utils from 'shared/utils';
+import { fromJS, Map } from 'immutable';
+import { bindActionCreators } from 'redux';
 import validator from 'shared/utils/lib/validator';
-import * as appActions from 'shared/actions/app';
 import {
-  FormGroup, Button, Table, Modal,
+  ListInfo,
 } from 'shared/components';
-import * as actions from './actions';
-import myReducer from './reducer';
+import * as listActions from 'shared/actions/list';
+import * as appActions from 'shared/actions/app';
 
-// components
-
-
-const validOptions = fromJS({
-  mainIp: validator({
-    rules: 'ip',
-  }),
-  mainMask: validator({
-    rules: 'mask',
-  }),
-  secondIp: validator({
-    rules: 'url',
-  }),
-  secondMask: validator({
-    rules: 'required',
-  }),
-  ipv6: validator({
-    rules: 'required',
-  }),
-});
-
-let InterfaceTableOption = fromJS([
+const screenOptions = fromJS([
   {
     id: 'id',
     text: _('No'),
+    formProps: {
+      type: 'plain-text',
+    },
   }, {
     id: 'status',
     text: _('Status'),
+    formProps: {
+      label: _('Interface Status'),
+      type: 'checkbox',
+    },
   }, {
     id: 'arpProxy',
     text: _('ARP Proxy'),
+    formProps: {
+      type: 'checkbox',
+      label: _('Enable ARP Proxy'),
+    },
   }, {
     id: 'mainIp',
     text: _('Main IPV4'),
+    formProps: {
+      validator: validator({
+        rules: 'ip',
+      }),
+    },
   }, {
     id: 'mainMask',
     text: _('Main IPV4 Mask'),
+    formProps: {
+      validator: validator({
+        rules: 'mask',
+      }),
+    },
   }, {
     id: 'secondIp',
     text: _('Second IPV4'),
+    formProps: {
+      validator: validator({
+        rules: 'ip',
+      }),
+    },
   }, {
     id: 'secondMask',
     text: _('Second IPV4 Mask'),
+    formProps: {
+      validator: validator({
+        rules: 'mask',
+      }),
+    },
+  }, {
+    id: 'ipv6',
+    text: _('IPV6'),
+  }, {
+    id: 'ipv6Mask',
+    text: _('IPV6 Mask'),
   }, {
     id: 'description',
     text: _('Description'),
-  }, {
-    id: 'op',
-    text: _('Actions'),
+    formProps: {
+      type: 'texterae',
+    },
   },
 ]);
+const tableOptions = immutableUtils.getTableOptions(screenOptions);
+const editFormOptions = immutableUtils.getFormOptions(screenOptions);
+const defaultEditData = immutableUtils.getDefaultData(screenOptions);
+const propTypes = {
+  app: PropTypes.instanceOf(Map),
+  store: PropTypes.instanceOf(Map),
 
+  route: PropTypes.object,
+  initList: PropTypes.func,
+  closeListItemModal: PropTypes.func,
+  updateEditListItem: PropTypes.func,
+  save: PropTypes.func,
+};
+const defaultProps = {};
 
-export default class View extends Component {
+export default class View extends React.Component {
   constructor(props) {
     super(props);
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+
+    this.onAction = this.onAction.bind(this);
   }
 
-  onChangeEditData(key, data) {
-    const changeData = {};
+  onAction(no, type) {
+    const query = {
+      no,
+      type,
+    };
 
-    changeData[key] = data.value;
-
-    this.props.updateInterfaceEdit(changeData);
-  }
-
-  onDeleteInterface(item) {
-    let msg_text = _('Are you sure delete interface: %s?', item.get('id'));
-
-    this.props.createModal({
-      id: 'interfaceSettings',
-      role: 'comfirm',
-      text: msg_text,
-    });
+    this.props.save(this.props.route.formUrl, query)
+      .then((json) => {
+        if (json.state && json.state.code === 2000) {
+          console.log(json);
+        }
+      });
   }
 
   render() {
-    const editData = this.props.interfaces.get('edit');
-    InterfaceTableOption = InterfaceTableOption.set(-1, fromJS({
-      id: 'op',
-      text: _('Actions'),
-      width: '180',
-      transform: function (val, item) {
-        return (
-          <div className="action-btns">
-            <Button
-              icon="edit"
-              text="修改"
-              size="sm"
-              onClick={() => {
-                this.props.editInterface(item.get('id'));
-              }}
-            />
-            <Button
-              icon="trash"
-              size="sm"
-              text="删除"
-              onClick={() => {
-                this.onDeleteInterface(item);
-              }}
-            />
-          </div>
-        );
-      }.bind(this),
-    }));
-
     return (
-      <div>
-        <h3 className="t-main__content-title">{_('Interface Settings')}</h3>
-        <div className="m-action-bar">
-
-          <div className="m-action-bar__left action-btns">
-            <Button
-              icon="plus"
-              theme="primary"
-              onClick={this.props.addInterface}
-              text="添加"
-            />
-            <Button
-              icon="trash"
-              text="删除"
-            />
-          </div>
-        </div>
-
-        <Table
-          className="table"
-          options={InterfaceTableOption}
-          list={this.props.interfaces.get('list')}
-        />
-
-        <Modal
-          isShow={editData.isEmpty() ? false : true}
-          title={editData.get('id')}
-          onClose={this.props.closeInterfacesEdit}
-          onOk={this.onSaveInterfaces}
-        >
-          <FormGroup
-            type="text"
-            value={editData.get('id')}
-            label={_('Interface No')}
-            maxLength="24"
-            disabled
-          />
-          <FormGroup
-            type="checkbox"
-            label={_('Interface Status')}
-          />
-          <FormGroup
-            type="checkbox"
-            label={_('Enable ARP Proxy')}
-          />
-          <FormGroup
-            type="text"
-            value={editData.get('mainIp')}
-            label={_('Main IPV4')}
-            onChange={(data) => {
-              this.onChangeEditData('mainIp', data);
-            }}
-          />
-          <FormGroup
-            type="text"
-            value={editData.get('mainMask')}
-            label={_('Main IPV4 Mask')}
-            onChange={(data) => {
-              this.onChangeEditData('mainMask', data);
-            }}
-          />
-          <FormGroup
-            type="text"
-            value={editData.get('secondIp')}
-            label={_('Second IPV4')}
-            onChange={(data) => {
-              this.onChangeEditData('mainMask', data);
-            }}
-          />
-          <FormGroup
-            type="text"
-            value={editData.get('secondMask')}
-            label={_('Second IPV4 Mask')}
-            onChange={(data) => {
-              this.onChangeEditData('secondMask', data);
-            }}
-          />
-          <FormGroup
-            type="text"
-            value={editData.get('ipv6')}
-            label={_('IPV6')}
-            onChange={(data) => {
-              this.onChangeEditData('ipv6', data);
-            }}
-          />
-          <FormGroup
-            type="text"
-            value={editData.get('ipv6Mask')}
-            label={_('IPV6 Mask')}
-            onChange={(data) => {
-              this.onChangeEditData('ipv6Mask', data);
-            }}
-          />
-          <FormGroup
-            type="text"
-            value={editData.get('description')}
-            label={_('Description')}
-            onChange={(data) => {
-              this.onChangeEditData('description', data);
-            }}
-          />
-        </Modal>
-      </div>
+      <ListInfo
+        {...this.props}
+        tableOptions={tableOptions}
+        editFormOptions={editFormOptions}
+        defaultEditData={defaultEditData}
+        actionable
+        selectable
+      />
     );
   }
 }
 
+View.propTypes = propTypes;
+View.defaultProps = defaultProps;
+
 function mapStateToProps(state) {
   return {
     app: state.app,
-    interfaces: state.interfaces,
+    store: state.list,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    actions
+    listActions
   ), dispatch);
 }
 
+
+// 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps,
-  validator.mergeProps(validOptions)
+  mapDispatchToProps
 )(View);
-
-export const reducer = myReducer;

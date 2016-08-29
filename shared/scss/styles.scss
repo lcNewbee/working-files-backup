@@ -18,6 +18,7 @@
 @import "./01_atom/a-checkbox";
 @import "./01_atom/a-radio";
 @import "./01_atom/a-range";
+@import "./01_atom/a-help";
 
 /* 02: 分子(molecule) 由原子组件组合而成*/
 @import "./02_molecule/m-action-bar";
@@ -45,6 +46,7 @@
 @import './04_template/t-wizard';
 @import './04_template/t-main';
 @import './04_template/t-stats';
+@import './04_template/t-list-info';
 
 /* Theme css */
 @import "./05_theme/colors";

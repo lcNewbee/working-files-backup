@@ -6,11 +6,9 @@ import { bindActionCreators } from 'redux';
 import { fromJS, Map } from 'immutable';
 import validator from 'shared/utils/lib/validator';
 import Table from 'shared/components/Table';
-import { Search, FormGroup } from 'shared/components';
-import Button from 'shared/components/Button';
-import Select from 'shared/components/Select';
-import Modal from 'shared/components/Modal';
-import Switchs from 'shared/components/Switchs';
+import {
+  Search, FormGroup, Button, Select, Modal, Switchs,
+} from 'shared/components';
 import * as appActions from 'shared/actions/app';
 import * as actions from './actions';
 import reducer from './reducer';
