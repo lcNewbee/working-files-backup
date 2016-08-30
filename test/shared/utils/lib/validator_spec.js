@@ -1,6 +1,6 @@
 import { expect, assert } from 'chai';
 import { describe, it } from 'mocha';
-import validator from '../../lib/validator';
+import validator from 'shared/utils/lib/validator';
 
 describe('utils validator', () => {
   const myValidator = validator();

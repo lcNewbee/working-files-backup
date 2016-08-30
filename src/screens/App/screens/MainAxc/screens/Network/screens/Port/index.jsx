@@ -12,62 +12,108 @@ import * as appActions from 'shared/actions/app';
 
 const screenOptions = fromJS([
   {
-    id: 'id',
-    text: _('No'),
+    id: 'name',
+    text: _('Name'),
     formProps: {
       type: 'plain-text',
     },
   }, {
+    id: 'exchangeModel',
+    text: _('Exchange Model'),
+    defaultValue: 'access',
+    options: [
+      {
+        value: 'access',
+        label: 'access',
+      }, {
+        value: 'trunk',
+        label: 'trunk',
+      }, {
+        value: 'QINQ_tunnel',
+        label: 'QINQ(tunnel)',
+      }, {
+        value: 'QINQ_uplink',
+        label: 'QINQ(tunnel)',
+      },
+    ],
+    formProps: {
+      type: 'select',
+    },
+  }, {
     id: 'status',
-    text: _('Status'),
-    formProps: {
-      label: _('Interface Status'),
-      type: 'checkbox',
-    },
-  }, {
-    id: 'arpProxy',
-    text: _('ARP Proxy'),
+    text: _('Port Status'),
     formProps: {
       type: 'checkbox',
-      label: _('Enable ARP Proxy'),
+      value: '1',
     },
   }, {
-    id: 'mainIp',
-    text: _('Main IPV4'),
+    id: 'speed',
+    text: _('Port Speed'),
+    options: [
+      {
+        value: '1G',
+        label: '1G',
+      }, {
+        value: '10G',
+        label: '10G',
+      }, {
+        value: 'Auto',
+        label: _('Auto'),
+      },
+    ],
     formProps: {
+      type: 'switch',
+    },
+  }, {
+    id: 'workModel',
+    text: _('Work Model'),
+    options: [
+      {
+        value: 'simplex',
+        label: _('Simplex'),
+      }, {
+        value: 'duplex',
+        label: _('Duplex'),
+      }, {
+        value: 'Auto',
+        label: _('Auto'),
+      },
+    ],
+    formProps: {
+      type: 'switch',
+    },
+  }, {
+    id: 'mtu',
+    text: _('MTU'),
+    defaultValue: '1500',
+    formProps: {
+      type: 'number',
+      required: true,
+      maxLength: '4',
       validator: validator({
-        rules: 'ip',
+        rules: 'range:[1,1500]',
       }),
     },
   }, {
-    id: 'mainMask',
-    text: _('Main IPV4 Mask'),
+    id: 'nativeVLAN',
+    text: _('Native VLAN'),
+    defaultValue: '1',
     formProps: {
+      type: 'number',
+      required: true,
+      maxLength: '4',
       validator: validator({
-        rules: 'mask',
+        rules: 'range:[1,4095]',
       }),
     },
   }, {
-    id: 'secondIp',
-    text: _('Second IPV4'),
-    formProps: {
-      validator: validator({
-        rules: 'ip',
-      }),
-    },
-  }, {
-    id: 'secondMask',
-    text: _('Second IPV4 Mask'),
-    formProps: {
-      validator: validator({
-        rules: 'mask',
-      }),
-    },
+    id: 'acceptVlans',
+    text: _('Accept VLAN List'),
   }, {
     id: 'description',
     text: _('Description'),
     formProps: {
-      type: 'texterae',
+      type: 'textarea',
     },
   },
 ]);
@@ -114,6 +160,8 @@ export default class View extends React.Component {
         tableOptions={tableOptions}
         editFormOptions={editFormOptions}
         defaultEditData={defaultEditData}
+        addable={false}
+        deleteable={false}
         actionable
         selectable
       />

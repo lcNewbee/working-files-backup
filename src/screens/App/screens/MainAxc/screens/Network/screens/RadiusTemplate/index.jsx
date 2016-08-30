@@ -12,62 +12,95 @@ import * as appActions from 'shared/actions/app';
 
 const screenOptions = fromJS([
   {
-    id: 'id',
-    text: _('No'),
+    id: 'name',
+    text: _('Name'),
     formProps: {
-      type: 'plain-text',
+      maxLength: '24',
     },
   }, {
-    id: 'status',
-    text: _('Status'),
+    id: 'type',
+    text: _('Type'),
+    defaultValue: 'ipv4',
     formProps: {
-      label: _('Interface Status'),
-      type: 'checkbox',
+      type: 'switch',
+      options: [
+        {
+          value: 'ipv4',
+          label: 'IPV4',
+        }, {
+          value: 'ipv6',
+          label: 'IPV6',
+        },
+      ],
     },
   }, {
-    id: 'arpProxy',
-    text: _('ARP Proxy'),
+    id: 'domain',
+    text: _('Domain'),
     formProps: {
-      type: 'checkbox',
-      label: _('Enable ARP Proxy'),
+      type: 'text',
     },
   }, {
-    id: 'mainIp',
-    text: _('Main IPV4'),
+    id: 'startIp',
+    text: _('Start IP'),
     formProps: {
+      maxLength: '13',
       validator: validator({
         rules: 'ip',
       }),
     },
   }, {
-    id: 'mainMask',
-    text: _('Main IPV4 Mask'),
+    id: 'endIp',
+    text: _('End IP'),
     formProps: {
-      validator: validator({
-        rules: 'mask',
-      }),
-    },
-  }, {
-    id: 'secondIp',
-    text: _('Second IPV4'),
-    formProps: {
+      maxLength: '13',
       validator: validator({
         rules: 'ip',
       }),
     },
   }, {
-    id: 'secondMask',
-    text: _('Second IPV4 Mask'),
+    id: 'mask',
+    text: _('Mask'),
     formProps: {
+      maxLength: '13',
       validator: validator({
         rules: 'mask',
       }),
     },
   }, {
-    id: 'description',
-    text: _('Description'),
+    id: 'gateway',
+    text: _('Gateway'),
     formProps: {
-      type: 'texterae',
+      maxLength: '13',
+      validator: validator({
+        rules: 'ip',
+      }),
+    },
+  }, {
+    id: 'mainDns',
+    text: _('Main DNS'),
+    formProps: {
+      maxLength: '13',
+      validator: validator({
+        rules: 'ip',
+      }),
+    },
+  }, {
+    id: 'secondDns',
+    text: _('Second DNS'),
+    formProps: {
+      maxLength: '13',
+      validator: validator({
+        rules: 'ip',
+      }),
+    },
+  }, {
+    id: 'releaseTime',
+    text: _('Release Time'),
+    formProps: {
+      maxLength: '13',
+      validator: validator({
+        rules: 'time',
+      }),
     },
   },
 ]);
@@ -111,7 +144,7 @@ export default class View extends React.Component {
     return (
       <ListInfo
         {...this.props}
-        tableOptions={tableOptions}
+        // tableOptions={tableOptions}
         editFormOptions={editFormOptions}
         defaultEditData={defaultEditData}
         actionable

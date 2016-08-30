@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
-import string from '../../lib/string';
+import string from 'shared/utils/lib/string';
 
 describe('utils string', () => {
   describe('#prefixInteger()', () => {

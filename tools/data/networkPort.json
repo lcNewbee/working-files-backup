@@ -1,0 +1,46 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "settings": {
+      "isLocked": "1"
+    },
+    "list": [
+      {
+        "name": "G23",
+        "exchangeModel": "QINQ_tunnel",
+        "status": "1",
+        "speed": "1G",
+        "workModel": "simplex",
+        "mtu": "1480",
+        "nativeVLAN": "2",
+        "acceptVlans": "2-33,35-46",
+        "description": "dsdsd"
+      },
+      {
+        "name": "G23",
+        "exchangeModel": "QINQ_tunnel",
+        "status": "1",
+        "speed": "1G",
+        "workModel": "simplex",
+        "mtu": "1480",
+        "nativeVLAN": "2",
+        "acceptVlans": "2-33,35-46",
+        "description": "dsdsd"
+      },
+      {
+        "name": "G23",
+        "exchangeModel": "QINQ_tunnel",
+        "status": "1",
+        "speed": "1G",
+        "workModel": "simplex",
+        "mtu": "1480",
+        "nativeVLAN": "2",
+        "acceptVlans": "2-33,35-46",
+        "description": "dsdsd"
+      }
+    ]
+  }
+}

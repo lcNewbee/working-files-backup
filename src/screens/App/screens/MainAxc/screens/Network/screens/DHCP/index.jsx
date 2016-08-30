@@ -18,22 +18,6 @@ const screenOptions = fromJS([
       maxLength: '24',
     },
   }, {
-    id: 'type',
-    text: _('Type'),
-    defaultValue: 'ipv4',
-    formProps: {
-      type: 'switch',
-      options: [
-        {
-          value: 'ipv4',
-          label: 'IPV4',
-        }, {
-          value: 'ipv6',
-          label: 'IPV6',
-        },
-      ],
-    },
-  }, {
     id: 'domain',
     text: _('Domain'),
     formProps: {

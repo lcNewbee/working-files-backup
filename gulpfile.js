@@ -33,11 +33,11 @@ gulp.task('open:src', shell.task([
 ]));
 
 gulp.task('test', shell.task([
-  mochaShellprefix + ' \"./src/**/*spec.@(js|jsx)\" --watch --watch-extensions jsx',
+  mochaShellprefix + ' \"./test/**/*spec.@(js|jsx)\" --watch --watch-extensions jsx',
 ]));
 
 gulp.task('test:shared', shell.task([
-  mochaShellprefix + ' \"./shared/**/*spec.@(js|jsx)\" --watch --watch-extensions jsx',
+  mochaShellprefix + ' \"./test/shared/**/*spec.@(js|jsx)\" --watch --watch-extensions jsx',
 ]));
 
 gulp.task('webpack', shell.task([

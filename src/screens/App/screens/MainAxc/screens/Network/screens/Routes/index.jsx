@@ -28,25 +28,7 @@ const screenOptions = fromJS([
     id: 'no',
     text: _('No'),
     formProps: {
-      disabled: true,
-    },
-  }, {
-    id: 'ipType',
-    text: _('Rule Type'),
-    defaultValue: '0',
-    formProps: {
-      type: 'switch',
-      label: _('NAT Rule Type'),
-      placeholder: _('Please Select ') + _('NAT Rule Type'),
-      options: [
-        {
-          value: '0',
-          label: _('IPV4'),
-        }, {
-          value: '1',
-          label: _('IPV6'),
-        },
-      ],
+      type: 'plain-text',
     },
   }, {
     id: 'targetAddress',
@@ -57,15 +39,6 @@ const screenOptions = fromJS([
   }, {
     id: 'nextHopIp',
     text: _('Next Hop IP'),
-  }, {
-    id: 'interface',
-    text: _('Interface'),
-    formProps: {
-      type: 'select',
-      placeholder: _('Please Select ') + _('Interface'),
-      loadOptions: getInterfaceTypeOptions,
-      isAsync: true,
-    },
   },
 ]);
 const tableOptions = screenOptions.map(

@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
 
-import filter from '../../lib/filter';
+import filter from 'shared/utils/lib/filter';
 
 describe('utils', () => {
   describe('#filter()', () => {

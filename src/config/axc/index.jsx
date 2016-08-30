@@ -64,9 +64,12 @@ const sNetworkVlan = require('../../screens/App/screens/MainAxc/screens/Network/
 const sInterfaces = require('../../screens/App/screens/MainAxc/screens/Network/screens/Interfaces');
 const sNetworkAaa = require('../../screens/App/screens/MainAxc/screens/Network/screens/AAA');
 const sNetworkDhcp = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP');
-const sRoutes = require('../../screens/App/screens/MainAxc/screens/Routes');
+const sNetworkRoutes = require('../../screens/App/screens/MainAxc/screens/Network/screens/Routes');
 const sNetworkNat = require('../../screens/App/screens/MainAxc/screens/Network/screens/Nat');
 const sNetworkAcl = require('../../screens/App/screens/MainAxc/screens/Network/screens/ACL');
+const sNetworkPort = require('../../screens/App/screens/MainAxc/screens/Network/screens/Port');
+const sNetworkPortal = require('../../screens/App/screens/MainAxc/screens/Network/screens/PortalPolicy');
+const sRaduisTemplate = require('../../screens/App/screens/MainAxc/screens/Network/screens/RadiusTemplate');
 /**
  * AP组管理
  */
@@ -140,59 +143,69 @@ const routes = [
             text: _('VLAN'),
             component: sNetworkVlan.Screen,
           }, {
-            id: 'interface',
+            id: 'networkInterface',
             icon: 'th-large',
-            path: '/main/network/vlan/interface',
+            path: '/main/network/interface',
+            formUrl: '/goform/networkInterface',
             text: _('Interface Settings'),
             component: sInterfaces.Screen,
           }, {
             id: 'networkDhcp',
             icon: 'random',
-            path: '/main/network/vlan/dhcp',
+            path: '/main/network/dhcp',
+            formUrl: '/goform/networkDhcp',
             text: _('DHCP Settings'),
             component: sNetworkDhcp.Screen,
           }, {
             id: 'networkNat',
             icon: 'exchange',
-            path: '/main/network/vlan/nat',
+            path: '/main/network/nat',
             text: _('NAT Settings'),
-            formUrl: '/goform/natSettings',
+            formUrl: '/goform/networkNat',
             component: sNetworkNat.Screen,
           }, {
             id: 'networkAcl',
             icon: 'ban',
-            path: '/main/network/vlan/acl',
+            path: '/main/network/acl',
             text: _('Access Control'),
+            formUrl: '/goform/networkAcl',
             component: sNetworkAcl.Screen,
+          }, {
+            id: 'staticRoutes',
+            path: '/main/network/static_routes',
+            text: _('Routes Settings'),
+            icon: 'map-signs',
+            formUrl: '/goform/staticRoutes',
+            component: sNetworkRoutes.Screen,
+          }, {
+            id: 'networkPort',
+            path: '/main/network/port',
+            icon: 'th',
+            formUrl: '/goform/networkPort',
+            text: _('Port Settings'),
+            component: sNetworkPort.Screen,
+          }, {
+            id: 'radiusTemplate',
+            icon: 'clone',
+            path: '/main/network/radius_template',
+            formUrl: '/goform/radiusTemplate',
+            text: _('Radius Template'),
+            component: sRaduisTemplate.Screen,
           }, {
             id: 'networkAaa',
             icon: 'lock',
-            path: '/main/network/vlan/aaa',
+            path: '/main/network/aaa',
             fetchUrl: '/goform/vlanAaa',
             saveUrl: '/goform/vlanAaa',
             text: _('AAA Settings'),
             component: sNetworkAaa.Screen,
           }, {
-            id: 'routes',
-            path: '/main/network/routes',
-            text: _('Routes Settings'),
-            icon: 'map-signs',
-            component: sRoutes.Screen,
-          }, {
-            id: 'port',
-            path: '/main/network/port',
-            icon: 'th',
-            text: _('Port Settings'),
-          }, {
-            id: 'portal',
+            id: 'networkPortal',
             icon: 'copy',
             path: '/main/network/portal',
+            formUrl: '/goform/networkPortal',
             text: _('Portal Policy'),
-          }, {
-            id: 'radius',
-            icon: 'clone',
-            path: '/main/network/radius',
-            text: _('Radius Template'),
+            component: sNetworkPortal.Screen,
           },
         ],
       }, {
@@ -394,6 +407,52 @@ const routes = [
             text: _('System Status'),
             component: sSystemStatus.Screen,
           }, {
+            id: 'alarmStatus',
+            icon: 'exclamation-circle',
+            path: '/main/system/alarm',
+            text: _('Alarm Events'),
+            component: sAlarmEvents.Screen,
+          }, {
+            id: 'systemLog',
+            icon: 'file-o',
+            path: '/main/system/log',
+            text: _('Log Management'),
+            component: sAlarmEvents.Screen,
+          }, {
+            id: 'alarmStatus',
+            icon: 'exclamation-circle',
+            path: '/main/system/alarm',
+            text: _('SNPM'),
+            component: sAlarmEvents.Screen,
+          }, {
+            id: 'activeStandby',
+            isIndex: true,
+            path: '/main/system/activeStandby',
+            icon: 'refresh',
+            text: _('Active-Standby'),
+            component: sActiveStandby.Screen,
+          // }, {
+          //   id: 'cluster',
+          //   isIndex: true,
+          //   path: '/main/system/cluster',
+          //   icon: 'server',
+          //   text: _('Custer Settings'),
+          //   component: sCluster.Screen,
+          }, {
+            id: 'signatures',
+            isIndex: true,
+            path: '/main/system/signatures',
+            icon: 'tasks',
+            text: _('Signatures'),
+            component: sSignatures.Screen,
+          }, {
+            id: 'License',
+            isIndex: true,
+            path: '/main/system/license',
+            icon: 'file-text',
+            text: _('Manage License'),
+            component: sLicense.Screen,
+          }, {
             id: 'acUpgrade',
             isIndex: true,
             path: '/main/system/upgrade',
@@ -416,40 +475,6 @@ const routes = [
             icon: 'user',
             text: _('Admin Settings'),
             component: sSystemAdmin.Screen,
-          }, {
-            id: 'License',
-            isIndex: true,
-            path: '/main/system/license',
-            icon: 'file-text',
-            text: _('Manage License'),
-            component: sLicense.Screen,
-          }, {
-            id: 'activeStandby',
-            isIndex: true,
-            path: '/main/system/activeStandby',
-            icon: 'refresh',
-            text: _('Active-Standby'),
-            component: sActiveStandby.Screen,
-          }, {
-            id: 'cluster',
-            isIndex: true,
-            path: '/main/system/cluster',
-            icon: 'server',
-            text: _('Custer Settings'),
-            component: sCluster.Screen,
-          }, {
-            id: 'signatures',
-            isIndex: true,
-            path: '/main/system/signatures',
-            icon: 'tasks',
-            text: _('Signatures'),
-            component: sSignatures.Screen,
-          }, {
-            id: 'alarmStatus',
-            icon: 'exclamation-circle',
-            path: '/main/system/alarm',
-            text: _('Alarm Events'),
-            component: sAlarmEvents.Screen,
           },
         ],
       }, {

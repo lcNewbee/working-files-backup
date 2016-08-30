@@ -37,42 +37,33 @@ const screenOptions = fromJS([
   {
     id: 'ruleType',
     label: _('NAT Rule Type'),
+    options: [
+      {
+        value: '0',
+        label: _('Static Address Transform'),
+      }, {
+        value: '1',
+        label: _('Source Address Transform'),
+      }, {
+        value: '2',
+        label: _('Target Address Transform'),
+      }, {
+        value: '3',
+        label: _('Public IP Transparent Transmission'),
+      },
+    ],
     formProps: {
       type: 'select',
       label: _('NAT Rule Type'),
       placeholder: _('Please Select ') + _('NAT Rule Type'),
-      options: [
-        {
-          value: '0',
-          label: _('Static Address Transform'),
-        }, {
-          value: '1',
-          label: _('Static Address Transform'),
-        }, {
-          value: '2',
-          label: _('Target Address Transform'),
-        }, {
-          value: '3',
-          label: _('Public IP Transparent Transmission'),
-        },
-      ],
     },
 
   }, {
-    id: 'sourceAddress',
-    label: _('Source Address'),
+    id: 'originalAddress',
+    label: _('Original Address'),
   }, {
-    id: 'targetAddress',
-    label: _('Target Address'),
-  }, {
-    id: 'outgoingInterface',
-    label: _('Outgoing Interface'),
-    formProps: {
-      type: 'select',
-      placeholder: _('Please Select ') + _('Outgoing Interface'),
-      loadOptions: getInterfaceTypeOptions,
-      isAsync: true,
-    },
+    id: 'conversionAddress',
+    label: _('Conversion Address'),
   },
 ]);
 
@@ -141,7 +132,7 @@ export default class View extends React.Component {
           invalidMsg={app.get('invalid')}
           validateAt={app.get('validateAt')}
           isSaving={app.get('saving')}
-          hasSaveButton
+          // hasSaveButton
         />
 
         <ListInfo

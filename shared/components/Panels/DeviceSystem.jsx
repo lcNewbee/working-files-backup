@@ -36,11 +36,9 @@ class DeviceSystem extends React.Component {
 
     this.props.onSave('/goform/asd', subData)
       .then((json) => {
-        console.log(json);
       });
   }
   onChangeData(data) {
-    console.log(data);
   }
   getCurData() {
     return this.props.store.getIn(['data', 'apRelateNum'])

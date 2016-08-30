@@ -57,7 +57,7 @@ class Row extends Component {
         const filterObj = option.get('filterObj');
         const thisKey = `tableRow${i}`;
         let currVal = props.item.get(id);
-
+        let currItem = null;
         let tdDom = null;
 
         if (filterObj && typeof filterObj.transform === 'function') {
@@ -65,6 +65,27 @@ class Row extends Component {
         }
 
         if (!option.get('transform')) {
+          if (option.get('options') && option.get('options').size > 0) {
+            currItem = option.get('options').find((myMap) => {
+              let ret = false;
+
+              if (myMap && typeof myMap.get === 'function') {
+                ret = myMap.get('value') === currVal;
+              } else {
+                ret = myMap === currVal;
+              }
+              return ret;
+            });
+
+            if (currItem) {
+              if (typeof currItem.get === 'function') {
+                currVal = currItem.get('label');
+              } else {
+                currVal = currItem;
+              }
+            }
+          }
+
           tdDom = <td key={thisKey}>{currVal}</td>;
         } else {
           tdDom = (

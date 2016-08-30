@@ -1,32 +1,30 @@
-import {List, Map, fromJS} from 'immutable';
-import chai, {expect} from 'chai';
-import reducer from '../reducer';
+import { fromJS } from 'immutable';
+import { expect } from 'chai';
 
-const should = chai.should();
+import reducer from '../../../../src/screens/App/screens/Login/reducer';
 
 describe('Login reducer', () => {
-
   it('handles UPDATE_DATA', () => {
     const initialState = fromJS({
       data: {
         username: '',
-        password: ''
-      }
+        password: '',
+      },
     });
     const action = {
       type: 'UPDATE_DATA',
       data: {
         username: 'ewe',
-        password: 'ewe'
-      }
+        password: 'ewe',
+      },
     };
     const nextState = reducer(initialState, action);
 
-    nextState.should.equal(fromJS({
+    expect(nextState).to.be.equal(fromJS({
       data: {
         username: 'ewe',
-        password: 'ewe'
-      }
+        password: 'ewe',
+      },
     }));
   });
 
@@ -35,22 +33,22 @@ describe('Login reducer', () => {
       fetching: false,
       data: {
         username: 'ewe',
-        password: 'ewe'
-      }
+        password: 'ewe',
+      },
     });
 
     const action = {
-      type: 'REQEUST_LOGIN'
+      type: 'REQEUST_LOGIN',
     };
     const nextState = reducer(initialState, action);
 
-    nextState.should.equal(fromJS({
+    expect(nextState).to.be.equal(fromJS({
       fetching: true,
       data: {
         username: 'ewe',
-        password: 'ewe'
+        password: 'ewe',
       },
-      status: ''
+      status: '',
     }));
   });
 
@@ -60,26 +58,25 @@ describe('Login reducer', () => {
       status: 'init',
       data: {
         username: 'ewe',
-        password: 'ewe'
-      }
+        password: 'ewe',
+      },
     });
     const time = Date.now();
     const action = {
       type: 'RESPONSE_LOGIN',
       result: 'fail',
-      loginedAt: time
+      loginedAt: time,
     };
     const nextState = reducer(initialState, action);
 
-    nextState.should.equal(fromJS({
+    expect(nextState).to.be.equal(fromJS({
       fetching: false,
       status: 'fail',
       loginedAt: time,
       data: {
         username: 'ewe',
-        password: 'ewe'
-      }
+        password: 'ewe',
+      },
     }));
   });
-
 });

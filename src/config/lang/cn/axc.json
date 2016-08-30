@@ -60,6 +60,8 @@
   "Target Address Transform": "目标地址转换",
   "Public IP Transparent Transmission": "公网IP透传",
   "Please Select Outgoing Interface": "请选择出接口",
+  "Original Address": "原地址",
+  "Conversion Address": "转换后地址",
   "NAT Logs": "NAT日志",
   "Logging": "记录日志",
 
@@ -92,9 +94,20 @@
   "Target Mask": "目的掩码",
   "Next Hop IP": "下一跳IP",
 
+  "Exchange Model": "交换模式",
+  "Accept VLAN List": "允许VLAN列表",
+  "Port Status": "端口状态",
+  "Port Speed": "端口速率",
+  "Native VLAN": "默认VLAN",
+  "Work Model": "工作模式",
+  "Simplex": "单工",
+  "Duplex": "双工",
+  "Auto": "自动",
+
   "Portal Policy": "Portal策略",
   "Radius Template": "Radius模板",
   "Connected Numbers": "连接数量",
+
 
   "All Group": "所有组",
   "Monitor": "监控",

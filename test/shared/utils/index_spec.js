@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
 
-import utils from '../index';
+import utils from 'shared/utils/index';
 
 describe('utils', () => {
   it('version not empty', () => {

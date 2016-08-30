@@ -1,7 +1,7 @@
 import { expect, assert } from 'chai';
 import { describe, it } from 'mocha';
 
-import core from '../../lib/core';
+import core from 'shared/utils/lib/core';
 
 describe('utils core', () => {
   describe('#extend()', () => {

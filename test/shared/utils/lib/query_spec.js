@@ -2,7 +2,7 @@
 
 import { expect, assert } from 'chai';
 import { describe, it } from 'mocha';
-import query from '../../lib/query';
+import query from 'shared/utils/lib/query';
 
 describe('utils query', () => {
   describe('#getQuery()', () => {

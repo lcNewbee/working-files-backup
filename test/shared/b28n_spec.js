@@ -2,7 +2,7 @@
 
 import { describe, it } from 'mocha';
 import { expect } from 'chai';
-import b28n from '../index';
+import b28n from 'shared/b28n';
 
 describe('b28n', () => {
   it('version not empty', () => {

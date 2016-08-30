@@ -53,8 +53,8 @@ const propTypes = {
   actionBarChildren: PropTypes.node,
 
   addable: PropTypes.bool,
-  editAbled: PropTypes.bool,
-  deleteAbled: PropTypes.bool,
+  editable: PropTypes.bool,
+  deleteable: PropTypes.bool,
   actionable: PropTypes.bool,
   noTitle: PropTypes.bool,
   autoEditModel: PropTypes.bool,
@@ -62,8 +62,8 @@ const propTypes = {
 const defaultProps = {
   actionable: false,
   addable: true,
-  editAbled: true,
-  deleteAbled: true,
+  editable: true,
+  deleteable: true,
 };
 
 // 原生的 react 页面
@@ -84,10 +84,10 @@ class ListInfo extends React.Component {
   }
 
   componentWillMount() {
-    const { actionable, editAbled, deleteAbled, tableOptions } = this.props;
+    const { actionable, editable, deleteable, tableOptions } = this.props;
 
     // 初始配置，添加操作项
-    if (actionable && (editAbled || deleteAbled) && tableOptions) {
+    if (actionable && (editable || deleteable) && tableOptions) {
       this.ListTableOptions = tableOptions.push(Map({
         id: 'actions',
         text: _('Actions'),
@@ -95,7 +95,7 @@ class ListInfo extends React.Component {
         transform: (val, item, index) => (
           <div className="action-btns">
             {
-              editAbled ? (
+              editable ? (
                 <Button
                   icon="edit"
                   text={_('Edit')}
@@ -108,7 +108,7 @@ class ListInfo extends React.Component {
             }
 
             {
-              deleteAbled ? (
+              deleteable ? (
                 <Button
                   icon="trash"
                   text={_('Delete')}
@@ -214,8 +214,8 @@ class ListInfo extends React.Component {
   render() {
     const {
       typeOptions, store, route, hasSearch, actionBarChildren,
-      addable, editFormOptions, actionable, noTitle, app,
-      defaultEditData, selectable, title,
+      addable, editFormOptions, actionable, noTitle, app, editable,
+      defaultEditData, selectable, title, deleteable,
     } = this.props;
     const myListId = store.get('curListId');
     const page = store.getIn([myListId, 'data', 'page']);
@@ -278,7 +278,7 @@ class ListInfo extends React.Component {
             ) : null
           }
           {
-            actionable && selectable ? (
+            actionable && selectable && deleteable ? (
               <Button
                 icon="trash-o"
                 text={_('Remove Selected')}

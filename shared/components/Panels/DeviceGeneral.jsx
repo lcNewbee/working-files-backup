@@ -35,11 +35,9 @@ class Panel extends React.Component {
       a: 1,
     })
     .then((json) => {
-      console.log(json);
     });
   }
   onChangeData(data) {
-    console.log(data);
   }
   render() {
     const { store, app } = this.props;
