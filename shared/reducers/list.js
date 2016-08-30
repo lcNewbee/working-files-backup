@@ -8,6 +8,7 @@ const defaultItem = fromJS({
     page: 1,
   },
   data: {
+    settings: {},
     edit: {},
     list: [],
   },
@@ -22,7 +23,7 @@ const defaultState = fromJS({
 function initListItem(state, action) {
   let ret = state;
   const listId = action.option.listId;
-  const myItem = defaultItem.merge(action.option);
+  const myItem = defaultItem.mergeDeep(action.option);
 
   if (!state.get(listId) || state.get(listId).isEmpty()) {
     ret = state.mergeIn([listId], myItem);
@@ -36,9 +37,7 @@ function selectedListItem(list, data) {
   if (data.index !== -1) {
     ret = ret.setIn([data.index, 'selected'], data.selected);
   } else {
-    ret = ret.map(item => {
-      return item.set('selected', data.selected);
-    });
+    ret = ret.map(item => item.set('selected', data.selected));
   }
 
   return ret;
@@ -58,6 +57,7 @@ export default function (state = defaultState, action) {
     case 'RECIVE_FETCH_LIST':
       return state.setIn([curListName, 'fetching'], false)
         .setIn([curListName, 'updateAt'], action.updateAt)
+        .mergeIn([curListName, 'curSettings'], (action.data && action.data.settings))
         .mergeIn([curListName, 'data'], action.data);
 
     case 'CHANGE_LIST_QUERY':
@@ -70,7 +70,7 @@ export default function (state = defaultState, action) {
       return state.mergeIn([curListName, 'data', 'edit'], action.data);
 
     case 'UPDATE_LIST_SETTINGS':
-      return state.mergeIn([curListName, 'data', 'settings'], action.data);
+      return state.mergeIn([curListName, 'curSettings'], action.data);
 
     case 'EDIT_LIST_ITEM_BY_INDEX':
       return state.setIn(

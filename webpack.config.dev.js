@@ -45,7 +45,7 @@ let config = {
        // necessary for hot reloading with IE:
       'eventsource-polyfill',
 
-      'webpack-hot-middleware/client?reload=true',
+      'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
 
       './src/index.jsx',
     ],

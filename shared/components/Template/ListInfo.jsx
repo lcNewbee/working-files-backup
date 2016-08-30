@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { Map, List } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import {
-  Table, Select, Search, Switchs, Button, Modal,
+  Table, Select, Search, Button, Modal, FormGroup,
   FormContainer,
 } from 'shared/components';
 
@@ -21,17 +21,17 @@ const propTypes = {
   store: PropTypes.instanceOf(Map),
   route: PropTypes.object,
   defaultEditData: PropTypes.object,
-
+  defaultQueryData: PropTypes.object,
   tableOptions: PropTypes.oneOfType([
     PropTypes.instanceOf(List), PropTypes.array,
   ]),
-  typeOptions: PropTypes.oneOfType([
+  queryFormOptions: PropTypes.oneOfType([
     PropTypes.instanceOf(List), PropTypes.array,
   ]),
   editFormOptions: PropTypes.oneOfType([
     PropTypes.instanceOf(List), PropTypes.array,
   ]),
-  hasSearch: PropTypes.bool,
+  searchable: PropTypes.bool,
   selectable: PropTypes.bool,
 
   changeListQuery: PropTypes.func,
@@ -69,15 +69,22 @@ const defaultProps = {
 // 原生的 react 页面
 class ListInfo extends React.Component {
   constructor(props) {
-    super(props);
-
-    this.props.initList({
+    const initOption = {
+      listId: props.route.id,
       formUrl: props.route.formUrl,
       fetchUrl: props.route.fetchUrl,
       saveUrl: props.route.saveUrl,
-      listId: props.route.id,
-      defaultEditData: props.defaultEditData,
-    });
+    };
+    super(props);
+
+    if (props.defaultEditData) {
+      initOption.defaultEditData = props.defaultEditData;
+    }
+
+    if (props.defaultQueryData) {
+      initOption.query = props.defaultQueryData;
+    }
+    this.props.initList(initOption);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.binds('handleChangeQuery', 'onPageChange', 'onSave', 'onCloseEditModal',
         'onChangeSearchText', 'onChangeType', 'onChangeTableSize', 'removeSelectItems');
@@ -161,12 +168,15 @@ class ListInfo extends React.Component {
     }, true);
   }
   onSave() {
-    this.props.validateAll()
-      .then((errMsg) => {
-        if (errMsg.isEmpty()) {
-          this.props.onListAction();
-        }
-      });
+    console.log(this.props.validateAll)
+    if (this.props.validateAll) {
+      this.props.validateAll()
+        .then((errMsg) => {
+          if (errMsg.isEmpty()) {
+            this.props.onListAction();
+          }
+        });
+    }
   }
   onCloseEditModal() {
     this.props.closeListItemModal();
@@ -213,9 +223,9 @@ class ListInfo extends React.Component {
 
   render() {
     const {
-      typeOptions, store, route, hasSearch, actionBarChildren,
+      store, route, searchable, actionBarChildren,
       addable, editFormOptions, actionable, noTitle, app, editable,
-      defaultEditData, selectable, title, deleteable,
+      defaultEditData, selectable, title, deleteable, queryFormOptions,
     } = this.props;
     const myListId = store.get('curListId');
     const page = store.getIn([myListId, 'data', 'page']);
@@ -224,14 +234,20 @@ class ListInfo extends React.Component {
     const query = store.getIn([myListId, 'query']);
     const actionQuery = store.getIn([myListId, 'query']);
     const saveUrl = route.saveUrl || route.formUrl;
+    const fetchUrl = route.fetchUrl || route.formUrl;
     let pageSelectClassName = 'fr';
+    let actionBarClassNames = 'm-action-bar clearfix';
+
+    if (false) {
+      actionBarClassNames = `${actionBarClassNames} none`;
+    }
 
     // 数据未初始化不渲染
     if (myListId === 'base') {
       return null;
     }
 
-    if (!hasSearch && !typeOptions && !actionBarChildren &&
+    if (!searchable && !queryFormOptions && !actionBarChildren &&
         (actionable && !addable)) {
       pageSelectClassName = 'fl';
     }
@@ -243,28 +259,7 @@ class ListInfo extends React.Component {
             <h2 className="t-list-info__title">{title || route.text}</h2>
           )
         }
-        <div className="m-action-bar clearfix">
-          {
-            hasSearch ? (
-              <Search
-                value={query.get('text')}
-                onChange={this.onChangeSearchText}
-                onSearch={this.handleSearch}
-                placeholder={_('IP or MAC Address')}
-              />
-            ) : null
-          }
-
-          {
-            typeOptions ? (
-              <Switchs
-                value={query.get('type')}
-                options={typeOptions}
-                onChange={this.onChangeType}
-              />
-            ) : null
-          }
-
+        <div className={actionBarClassNames}>
           {
             actionable && addable ? (
               <Button
@@ -291,19 +286,43 @@ class ListInfo extends React.Component {
           {
             actionBarChildren
           }
-          {
-            page ? (
-              <Select
-                className={pageSelectClassName}
-                value={query.get('size')}
-                onChange={this.onChangeTableSize}
-                options={selectOptions}
-                searchable={false}
-                clearable={false}
+        </div>
+        <FormContainer
+          action={fetchUrl}
+          method="GET"
+          className="o-form--flow"
+          data={query}
+          options={queryFormOptions}
+          isSaving={app.get('fetching')}
+          invalidMsg={app.get('invalid')}
+          validateAt={app.get('validateAt')}
+          onSave={this.onSave}
+          onChangeData={this.props.changeListQuery}
+          onValidError={this.props.reportValidError}
+          childrenLeft={
+            searchable ? (
+              <Search
+                value={query.get('text')}
+                onChange={this.onChangeSearchText}
+                onSearch={this.handleSearch}
               />
             ) : null
           }
-        </div>
+          childrenRight={
+              page ? (
+                <FormGroup className="fr">
+                  <Select
+                    className={pageSelectClassName}
+                    value={query.get('size')}
+                    onChange={this.onChangeTableSize}
+                    options={selectOptions}
+                    searchable={false}
+                    clearable={false}
+                  />
+                </FormGroup>
+            ) : null
+          }
+        />
         {
           this.ListTableOptions ? (
             <Table
@@ -312,7 +331,7 @@ class ListInfo extends React.Component {
               list={list}
               page={page}
               onPageChange={this.onPageChange}
-              loading={store.get('fetching')}
+              loading={app.get('fetching')}
               selectable={selectable}
               onSelectRow={this.props.selectListItem}
             />

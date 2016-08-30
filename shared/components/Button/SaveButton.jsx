@@ -5,11 +5,15 @@ let timeOut = null;
 
 const propTypes = {
   text: PropTypes.string,
+  savingText: PropTypes.string,
+  savedText: PropTypes.string,
   loading: PropTypes.bool,
 };
 
 const defaultProps = {
   text: _('Save'),
+  savingText: _('Saving'),
+  savedText: _('Saved'),
   theme: 'primary',
   icon: 'save',
 };
@@ -45,18 +49,19 @@ class SaveButton extends React.Component {
   }
 
   render() {
-    let { text } = this.props;
+    const { text, savingText, savedText } = this.props;
+    let showText = text;
 
     if (this.state.status === 'saving') {
-      text = _('Saving');
+      showText = savingText;
     } else if (this.state.status === 'ok') {
-      text = _('Saved');
+      showText = savedText;
     }
 
     return (
       <Button
         {...this.props}
-        text={text}
+        text={showText}
       />
     );
   }

@@ -14,7 +14,7 @@ const propTypes = {
   validateAt: PropTypes.number,
   name: PropTypes.string,
   validator: PropTypes.object,
-  dispaly: PropTypes.string,
+  display: PropTypes.string,
   role: PropTypes.string,
   className: PropTypes.string,
   children: PropTypes.node,
@@ -39,7 +39,7 @@ class FormGroup extends React.Component {
 
     // 数据为空或有数据验证对象，需进行数据验证
     if (this.props.validator || value === '' || value === undefined) {
-      
+
       // 如果组是可用的
       if (!this.props.disabled) {
         if (prevProps.value !== value) {
@@ -101,7 +101,7 @@ class FormGroup extends React.Component {
   render() {
     const {
       help, errMsg, required, children, role, id, label,
-      className, dispaly,
+      className, display,
     } = this.props;
     const { check, checkClear } = this;
     let groupClassName = 'form-group';
@@ -118,8 +118,8 @@ class FormGroup extends React.Component {
       groupClassName = `${groupClassName} ${className}`;
     }
 
-    if (dispaly) {
-      groupClassName = `${groupClassName} form-group--${dispaly}`;
+    if (display) {
+      groupClassName = `${groupClassName} form-group--${display}`;
     }
 
     return (

@@ -29,7 +29,9 @@ var immutableUtils = {
       .filterNot(function(x) {
         return x === 'noForm'
       })
-      .groupBy((item) => item.get('fieldset'))
+      .groupBy(function(item) {
+        return item.get('fieldset')
+      })
       .toList();
 
     // 如果只有一组,则直接获取第一组List
@@ -39,13 +41,41 @@ var immutableUtils = {
     return ret;
   },
 
+  getQueryFormOptions: function(screenOptions) {
+    var ret = screenOptions;
+
+    if(!ret) {
+      return null;
+    }
+
+    ret = ret.filter(function(x) {
+        return x.get('queryable');
+      }).map(function(item) {
+        var commonOption = {
+          id: item.get('id'),
+          label: item.get('text') || item.get('label'),
+          fieldset: item.get('fieldset'),
+          legend: item.get('legend'),
+          options: item.get('options'),
+        };
+        var retVal = item.clear()
+          .merge(commonOption)
+          .merge(item.get('formProps'));
+
+        return retVal;
+      })
+      .toList();
+
+    return ret;
+  },
+
   getDefaultData: function(screenOptions, key) {
-    const defaultKey = key || 'defaultValue';
-    const ret = {};
+    var defaultKey = key || 'defaultValue';
+    var ret = {};
 
     // 初始化默认值对象
     screenOptions.forEach((item) => {
-      const defaultVal = item.get(defaultKey);
+      var defaultVal = item.get(defaultKey);
       if (defaultVal !== undefined) {
         ret[item.get('id')] = defaultVal;
       }

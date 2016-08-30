@@ -91,12 +91,16 @@ export function fetchList(url) {
     const globalState = getState();
     // const refreshTime = globalState.app.get('rateInterval');
     const name = globalState.list.get('curListId');
-    const query = globalState.list.getIn([name, 'query']).toJS();
     const formUrl = globalState.list.getIn([name, 'formUrl']);
     const fetchUrl = globalState.list.getIn([name, 'fetchUrl']) || formUrl;
+    let query = globalState.list.getIn([name, 'query']) || {};
 
     window.clearTimeout(refreshTimeout);
     dispatch(reqeustFetchList());
+
+    if (query && query.toJS) {
+      query = query.toJS();
+    }
 
     return dispatch(appActions.fetch(url || fetchUrl, query))
       .then((json) => {

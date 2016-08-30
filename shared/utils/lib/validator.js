@@ -154,7 +154,7 @@ var vaildate = {
 
   ascii: function(str, min, max) {
 
-    if (!isAscii(str)) {
+    if (!string.isAscii(str)) {
       return _("Must be ASCII.");
     }
     if (min || max) {
@@ -223,9 +223,9 @@ var vaildate = {
  * @param  {[type]} rules [description]
  * @return {[type]}       [description]
  */
-function checkClear(str, rules, label) {
+function checkClear(str, rules) {
   var len = rules.length;
-  var ret, args, rulesArr, i, ruleObj;
+  var ret, args, i, ruleObj;
 
   if(str === undefined) {
     return ;
@@ -253,9 +253,9 @@ function checkClear(str, rules, label) {
   }
 }
 
-function check(str, rules, label) {
+function check(str, rules) {
   var len = rules.length;
-  var ret, args, rulesArr, i, ruleObj;
+  var ret, args, i, ruleObj;
 
   if(str === undefined) {
     return ;
@@ -322,7 +322,9 @@ validator.fn = validator.prototype = {
   },
 
   addVaildate: function(ruleName, funs) {
-
+    if(ruleName && typeof vaildate === 'function') {
+      vaildate[ruleName] = funs;
+    }
   }
 }
 
@@ -369,14 +371,14 @@ validator.combineValid = {
   },
 
   //不能一样
-  notequal: function (str1, str2, msg) {
+  notequal: function (str1, str2) {
     if (str1 == str2) {
       return msg;
     }
   },
 
   //ip mask gateway 组合验证
-  staticIP: function (ip, mask, gateway, msg) {
+  staticIP: function (ip, mask, gateway) {
     if (ip == gateway) {
       return _("Static IP cannot be the same as default gateway.");
     }
@@ -395,8 +397,8 @@ validator.combineValid = {
       maskArry2 = [],
       netIndex = 0,
       netIndex1 = 0,
-      broadIndex = 0,
-      i = 0;
+      i = 0,
+      k;
 
 
     ip = ipElem;
@@ -410,14 +412,14 @@ validator.combineValid = {
       maskArry2[i] = 255 - Number(maskArry[i]);
     }
 
-    for (var k = 0; k < 4; k++) { // ip & mask
+    for (k = 0; k < 4; k++) { // ip & mask
       if ((ipArry[k] & maskArry[k]) == 0) {
         netIndex1 += 0;
       } else {
         netIndex1 += 1;
       }
     }
-    for (var k = 0; k < 4; k++) { // ip & 255 - mask
+    for (k = 0; k < 4; k++) { // ip & 255 - mask
       if ((ipArry[k] & maskArry2[k]) == 0) {
         netIndex += 0;
       } else {
@@ -443,10 +445,10 @@ validator.mergeProps = function(validOptions) {
         var ret = {};
 
         // 验证单独框
-        validOptions.forEach((validate, name) => {
+        validOptions.forEach(function(validates, name) {
           ret[name] = {
-            name,
-            validator: validate,
+            name: name,
+            validator: validates,
             errMsg: stateProps.app.getIn(['invalid', name]),
             validateAt: stateProps.app.get('validateAt'),
             onValidError: dispatchProps.reportValidError
@@ -463,7 +465,7 @@ validator.checkClear = function(str, rules) {
   if(!rules) {
     return ;
   }
-  rules = getRulesObj(rules)
+  rules = utils.getRulesObj(rules)
 
   return checkClear(str, rules);
 }
@@ -472,15 +474,13 @@ validator.check = function(str, rules) {
   if(!rules) {
     return ;
   }
-  rules = getRulesObj(rules);
+  rules = utils.getRulesObj(rules);
 
   return check(str, rules);
 }
 
-validator.addVaildate = function(str, rules) {
-
-  return this;
+// exports
+if (typeof module === "object" &&
+  typeof module.exports === "object") {
+  module.exports = validator;
 }
-
-export default validator;
-

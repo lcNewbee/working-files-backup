@@ -24,6 +24,15 @@ $boder-color:         #ccc;
 
   &.form-group--inline {
     display: inline-block;
+    margin-left: 24px;
+    > label {
+      min-width: auto;
+      margin-right: 12px;
+    }
+    .form-control {
+      float: left;
+      margin-left: 0;
+    }
   }
 
   > label {

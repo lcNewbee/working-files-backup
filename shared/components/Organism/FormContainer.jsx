@@ -14,6 +14,8 @@ const propTypes = {
   className: PropTypes.string,
   hasSaveButton: PropTypes.bool,
   isSaving: PropTypes.bool,
+  childrenLeft: PropTypes.node,
+  childrenRight: PropTypes.node,
 
   // 数据验证相关
   validateAt: PropTypes.number,
@@ -100,9 +102,7 @@ class FormContainer extends React.Component {
     // List 则需要循环渲染
     if (List.isList(options)) {
       return options.map((item, index) => {
-        let legendText;
-
-        legendText = item.getIn([0, 'legend']);
+        const legendText = item.getIn([0, 'legend']);
 
         // 如果是带有标题 List，需添加legend
         if (legendText) {
@@ -126,7 +126,7 @@ class FormContainer extends React.Component {
   render() {
     const {
       isSaving, action, options, hasSaveButton,
-      className, hasFile, method,
+      className, hasFile, method, childrenLeft, childrenRight,
     } = this.props;
     let classNames = 'o-form';
     let encType = 'application/x-www-form-urlencoded';
@@ -146,9 +146,9 @@ class FormContainer extends React.Component {
         method={method}
         encType={encType}
       >
-      {
-        this.renderFormGroupTree(options)
-      }
+      { childrenLeft }
+      { this.renderFormGroupTree(options) }
+      { childrenRight }
       {
         hasSaveButton ? (
           <div className="form-group form-group--save">

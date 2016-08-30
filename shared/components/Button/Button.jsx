@@ -55,6 +55,8 @@ class Button extends React.Component {
 
     if (Component === 'button' || Component === 'input') {
       delete componentProps.text;
+      delete componentProps.savedText;
+      delete componentProps.savingText;
       delete componentProps.Component;
       delete componentProps.loading;
       delete componentProps.theme;

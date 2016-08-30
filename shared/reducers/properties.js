@@ -54,7 +54,7 @@ const defaultState = fromJS({
   ],
 });
 
-function addToPropertyPanel(state, action) {
+function addToPropertyPanel(state) {
   const ret = state;
   const listSize = state.get('list').size;
 

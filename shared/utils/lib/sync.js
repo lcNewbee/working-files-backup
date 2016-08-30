@@ -12,7 +12,17 @@ function checkStatus(response) {
 }
 
 function parseJSON(response) {
-  return response.json();
+  var ret = {};
+
+  try {
+    ret = response.json();
+  } catch(err) {
+    err.response = response
+
+    throw err
+  }
+
+  return ret;
 }
 
 function handleServerError(json) {
@@ -26,7 +36,6 @@ var sync = {
 
   // 默认使用 JSON 格式数据传递
   save: function (url, data) {
-    var queryStr = '';
 
     if (data !== undefined) {
       data = JSON.stringify(data);

@@ -65,16 +65,16 @@ function isNumber(str) {
   return false;
 }
 
-function addClass(oldClass, addClass) {
+function addClass(oldClass) {
   var ret = oldClass;
 
-  return oldClass;
+  return ret;
 }
 
-function removeClass(oldClass, removeClass) {
+function removeClass(oldClass) {
   var ret = oldClass;
 
-  return oldClass;
+  return ret;
 }
 
 coreUtils.extend(str, {
@@ -145,7 +145,6 @@ coreUtils.extend(str, {
   } : __format,
 
   getExtension: function(path) {
-    var pathName = coreUtils.toString(path, 'str.getExtension')
     var startIndex = path.lastIndexOf(".");
     var ret = '';
 
