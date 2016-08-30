@@ -1,6 +1,5 @@
 node_modules/*
 **/vendor/*.js
 bulid/*
-shared/utils/*
 gulpfile.js
 wepack.config*.js
