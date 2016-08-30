@@ -196,6 +196,12 @@
   "AP Correlation": "AP关联量",
   "AP Logs": "AP日志设置",
 
+  "Log Management": "日志管理",
+  "Operator": "操作者",
+  "Operation Type": "操作类型",
+  "Operation Command": "操作命令",
+  "Operation Result": "操作结果",
+
   "AC Upgrade": "AC升级",
   "Version Maintenance": "版本维护",
   "Upload AC Version": "上传AC版本",

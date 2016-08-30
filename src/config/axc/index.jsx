@@ -111,8 +111,9 @@ const sAlarmEvents =
     require('../../screens/App/screens/MainAxc/screens/System/screens/AlarmEvents');
 const sLicense =
     require('../../screens/App/screens/MainAxc/screens/System/screens/License');
-const sCluster =
-    require('../../screens/App/screens/MainAxc/screens/System/screens/Cluster');
+const sSystemLog =
+    require('../../screens/App/screens/MainAxc/screens/System/screens/SystemLog');
+const sSNMP = require('../../screens/App/screens/MainAxc/screens/System/screens/SystemLog');
 const sActiveStandby =
     require('../../screens/App/screens/MainAxc/screens/System/screens/ActiveStandby');
 const sSignatures =
@@ -414,15 +415,17 @@ const routes = [
             component: sAlarmEvents.Screen,
           }, {
             id: 'systemLog',
-            icon: 'file-o',
+            icon: 'file-text-o',
             path: '/main/system/log',
+            fetchUrl: '/goform/getSystemLog',
+            formUrl: '/goform/saveSystemLog',
             text: _('Log Management'),
-            component: sAlarmEvents.Screen,
+            component: sSystemLog.Screen,
           }, {
-            id: 'alarmStatus',
+            id: 'SNPM',
             icon: 'exclamation-circle',
-            path: '/main/system/alarm',
-            text: _('SNPM'),
+            path: '/main/system/SNPM',
+            text: _('SNMP'),
             component: sAlarmEvents.Screen,
           }, {
             id: 'activeStandby',

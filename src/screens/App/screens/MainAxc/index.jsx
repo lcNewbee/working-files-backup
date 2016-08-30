@@ -70,7 +70,6 @@ export default class Main extends Component {
 
   componentWillMount() {
     this.props.fetchApGroup();
-    this.props.fetchGroupAps();
   }
 
   onRefresh(e) {
