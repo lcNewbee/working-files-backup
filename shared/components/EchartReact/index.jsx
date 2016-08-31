@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import echarts from 'echarts';
 
 // /**
@@ -43,6 +42,9 @@ class ReactEchart extends React.Component {
 
     this.renderEchartDom = this.renderEchartDom.bind(this);
     this.getEchartsInstance = this.getEchartsInstance.bind(this);
+    this.state = {
+      needDispose: false,
+    };
   }
 
   // first add
@@ -64,6 +66,13 @@ class ReactEchart extends React.Component {
     if (typeof this.props.onChartReady === 'function') {
       this.props.onChartReady(echartObj);
     }
+
+    // 清除实例，用于释放缓存
+    this.disposeInterval = setInterval(() => {
+      this.setState({
+        needDispose: true,
+      });
+    }, 60000);
   }
 
   // cache size
@@ -84,11 +93,18 @@ class ReactEchart extends React.Component {
   // remove
   componentWillUnmount() {
     echarts.dispose(this.myRef);
+    clearInterval(this.disposeInterval);
   }
 
-  getEchartsInstance(nneed) {
-    if (nneed) {
+  getEchartsInstance() {
+    const needDispose = this.state.needDispose;
+
+    // 清除echart实例，否则内存会一直增加
+    if (needDispose) {
       echarts.dispose(this.myRef);
+      this.setState({
+        needDispose: false,
+      });
     }
     return echarts.getInstanceByDom(this.myRef) ||
         echarts.init(this.myRef, this.props.theme);
