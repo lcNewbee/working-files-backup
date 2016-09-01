@@ -20,7 +20,6 @@ const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
   route: PropTypes.object,
-  defaultEditData: PropTypes.object,
   defaultQueryData: PropTypes.object,
   defaultSettingsData: PropTypes.object,
   tableOptions: PropTypes.oneOfType([
@@ -29,12 +28,18 @@ const propTypes = {
   queryFormOptions: PropTypes.oneOfType([
     PropTypes.instanceOf(List), PropTypes.array,
   ]),
-  editFormOptions: PropTypes.oneOfType([
-    PropTypes.instanceOf(List), PropTypes.array,
-  ]),
+
+  // 控制开关
+  addable: PropTypes.bool,
+  editable: PropTypes.bool,
+  deleteable: PropTypes.bool,
+  actionable: PropTypes.bool,
+  noTitle: PropTypes.bool,
+  autoEditModel: PropTypes.bool,
   searchable: PropTypes.bool,
   selectable: PropTypes.bool,
 
+  // 操作函数
   changeListQuery: PropTypes.func,
   fetchList: PropTypes.func,
   leaveListScreen: PropTypes.func,
@@ -50,15 +55,16 @@ const propTypes = {
   initList: PropTypes.func,
   selectListItem: PropTypes.func,
 
+  // 添加，编辑表单相关 参数
+  editFormLayout: PropTypes.string,
+  defaultEditData: PropTypes.object,
+  editFormOptions: PropTypes.oneOfType([
+    PropTypes.instanceOf(List), PropTypes.array,
+  ]),
+  modalSize: PropTypes.string,
+
   children: PropTypes.node,
   actionBarChildren: PropTypes.node,
-
-  addable: PropTypes.bool,
-  editable: PropTypes.bool,
-  deleteable: PropTypes.bool,
-  actionable: PropTypes.bool,
-  noTitle: PropTypes.bool,
-  autoEditModel: PropTypes.bool,
 };
 const defaultProps = {
   actionable: false,
@@ -227,7 +233,7 @@ class ListInfo extends React.Component {
 
   render() {
     const {
-      store, route, searchable, actionBarChildren,
+      store, route, searchable, actionBarChildren, editFormLayout, modalSize,
       addable, editFormOptions, actionable, noTitle, app, editable,
       defaultEditData, selectable, title, deleteable, queryFormOptions,
     } = this.props;
@@ -279,6 +285,7 @@ class ListInfo extends React.Component {
             actionable && addable ? (
               <Button
                 icon="plus"
+                key="add"
                 theme="primary"
                 text={_('Add')}
                 onClick={() => {
@@ -289,6 +296,7 @@ class ListInfo extends React.Component {
             searchable ? (
               <Search
                 value={query.get('text')}
+                key="search"
                 onChange={this.onChangeSearchText}
                 onSearch={this.handleSearch}
               />
@@ -296,6 +304,7 @@ class ListInfo extends React.Component {
             actionable && selectable && deleteable ? (
               <Button
                 icon="trash-o"
+                key="delete"
                 text={_('Remove Selected')}
                 onClick={() => {
                   this.removeSelectItems();
@@ -340,10 +349,12 @@ class ListInfo extends React.Component {
               title={editData.get('myTitle')}
               onOk={this.onSave}
               onClose={this.onCloseEditModal}
+              size={modalSize}
               noFooter
             >
               <FormContainer
                 action={saveUrl}
+                layout={editFormLayout}
                 isSaving={app.get('saving')}
                 data={editData}
                 actionQuery={actionQuery}

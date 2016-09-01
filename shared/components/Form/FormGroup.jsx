@@ -156,6 +156,7 @@ class FormGroup extends React.Component {
                 isFocus={!!errMsg}
                 check={this.check}
                 checkClear={this.checkClear}
+                className=""
               />
             )
           }

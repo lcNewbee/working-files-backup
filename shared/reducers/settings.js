@@ -33,7 +33,8 @@ function initSettingsItem(state, action) {
 }
 
 export default function (state = defaultState, action) {
-  const curSettingName = state.get('curSettingId');
+  const curSettingName = action.name || state.get('curSettingId');
+
   switch (action.type) {
     case 'INIT_SETTINGS':
       return initSettingsItem(state, action);

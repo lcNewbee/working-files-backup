@@ -8,11 +8,12 @@ export function reqeustFetchList() {
   };
 }
 
-export function reciveFetchList(data) {
+export function reciveFetchList(data, name) {
   return {
     type: 'RECIVE_FETCH_LIST',
     updateAt: Date.now(),
     data,
+    name,
   };
 }
 
@@ -105,7 +106,7 @@ export function fetchList(url) {
     return dispatch(appActions.fetch(url || fetchUrl, query))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
-          dispatch(reciveFetchList(json.data));
+          dispatch(reciveFetchList(json.data, name));
         }
 
         // if (refreshTime && refreshTime > 0) {
@@ -124,6 +125,7 @@ export function onListAction(url) {
     const editMap = globalState.list.getIn([name, 'data', 'edit']);
     const formUrl = globalState.list.getIn([name, 'formUrl']);
     const saveUrl = globalState.list.getIn([name, 'saveUrl']) || formUrl;
+    const fetchUrl = globalState.list.getIn([name, 'fetchUrl']) || formUrl;
     let actionQuery = globalState.list.getIn([name, 'actionQuery']);
     const actionType = actionQuery.get('action');
 
@@ -139,7 +141,7 @@ export function onListAction(url) {
         let ret = 'Server Error';
 
         if (json.state && json.state.code === 2000) {
-          dispatch(fetchList(saveUrl));
+          dispatch(fetchList(fetchUrl));
           ret = 'ok';
         }
         return ret;

@@ -54,7 +54,7 @@ function selectedListItem(list, data) {
 }
 
 export default function (state = defaultState, action) {
-  const curListName = state.get('curListId');
+  const curListName = action.name || state.get('curListId');
   const defaultEditData = state.getIn([curListName, 'defaultEditData']) || fromJS({});
 
   switch (action.type) {
