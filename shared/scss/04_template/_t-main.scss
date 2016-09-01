@@ -45,6 +45,11 @@ body {
     .o-property-panel {
       top: $g-navbar-height + $t-main-top-menu-height;
     }
+    .o-top-menu-bar {
+      position: absolute;
+      width: 100%;
+      top: $g-navbar-height;
+    }
   }
 
   &.main--open-left {
@@ -85,6 +90,9 @@ body {
     .t-main__content-title {
       font-size: 1.5em;
       margin-bottom: .3em;
+    }
+    .t-list-info__title {
+      margin-bottom: .6em;
     }
   }
 }

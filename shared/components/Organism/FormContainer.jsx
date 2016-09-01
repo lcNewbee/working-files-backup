@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Map, List } from 'immutable';
+import { Map, List, fromJS } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import {
   FormGroup,
@@ -12,10 +12,13 @@ import {
 const propTypes = {
   action: PropTypes.string,
   className: PropTypes.string,
+  layout: PropTypes.oneOf(['flow', 'block']),
+  size: PropTypes.oneOf(['compassed']),
+
   hasSaveButton: PropTypes.bool,
   isSaving: PropTypes.bool,
-  childrenLeft: PropTypes.node,
-  childrenRight: PropTypes.node,
+  leftChildren: PropTypes.node,
+  rightChildren: PropTypes.node,
 
   // 数据验证相关
   validateAt: PropTypes.number,
@@ -23,7 +26,9 @@ const propTypes = {
   onValidError: PropTypes.func,
   onSave: PropTypes.func,
   options: PropTypes.instanceOf(List),
-  data: PropTypes.instanceOf(Map),
+  data: PropTypes.oneOfType([
+    PropTypes.instanceOf(Map), PropTypes.object,
+  ]),
   actionQuery: PropTypes.instanceOf(Map),
   invalidMsg: PropTypes.instanceOf(Map),
 
@@ -60,11 +65,13 @@ class FormContainer extends React.Component {
   }
   renderFormGroup(option) {
     const {
-      data, invalidMsg, validateAt, onValidError, actionQuery,
+      invalidMsg, validateAt, onValidError, actionQuery,
     } = this.props;
     const myProps = option.toJS();
     const id = myProps.id;
     const myComponent = myProps.component;
+    const checkboxValue = myProps.checkedValue || '1';
+    let data = this.props.data;
 
     delete myProps.fieldset;
     delete myProps.legend;
@@ -77,9 +84,14 @@ class FormContainer extends React.Component {
       myProps.errMsg = invalidMsg.get(id);
     }
 
-    if (data && typeof data.get === 'function') {
+    // 同时支持 Map 或 object 数据
+    if (data) {
+      if (!Map.isMap(data)) {
+        data = fromJS(data);
+      }
       myProps.value = data.get(id);
     }
+
     myProps.validateAt = validateAt;
     myProps.onChange = myData => this.onChangeData(id, myData);
     myProps.onValidError = onValidError;
@@ -87,6 +99,12 @@ class FormContainer extends React.Component {
     if (myComponent) {
       return myComponent(myProps, data, actionQuery);
     }
+
+    if (myProps.type === 'checkbox') {
+      myProps.checked = checkboxValue === myProps.value;
+      myProps.value = checkboxValue;
+    }
+
     return (
       <FormGroup
         {...myProps}
@@ -125,11 +143,19 @@ class FormContainer extends React.Component {
   }
   render() {
     const {
-      isSaving, action, options, hasSaveButton,
-      className, hasFile, method, childrenLeft, childrenRight,
+      isSaving, action, options, hasSaveButton, layout, size,
+      className, hasFile, method, leftChildren, rightChildren,
     } = this.props;
     let classNames = 'o-form';
     let encType = 'application/x-www-form-urlencoded';
+
+    if (layout) {
+      classNames = `${classNames} o-form--${layout}`;
+    }
+
+    if (size) {
+      classNames = `${classNames} o-form--${size}`;
+    }
 
     if (className) {
       classNames = `${classNames} ${className}`;
@@ -146,9 +172,21 @@ class FormContainer extends React.Component {
         method={method}
         encType={encType}
       >
-      { childrenLeft }
+      {
+        leftChildren ? (
+          <div className="form-group">
+            { leftChildren }
+          </div>
+        ) : null
+      }
       { this.renderFormGroupTree(options) }
-      { childrenRight }
+      {
+        rightChildren ? (
+          <div className="form-group fr">
+            { rightChildren }
+          </div>
+        ) : null
+      }
       {
         hasSaveButton ? (
           <div className="form-group form-group--save">

@@ -22,6 +22,7 @@ const propTypes = {
   route: PropTypes.object,
   defaultEditData: PropTypes.object,
   defaultQueryData: PropTypes.object,
+  defaultSettingsData: PropTypes.object,
   tableOptions: PropTypes.oneOfType([
     PropTypes.instanceOf(List), PropTypes.array,
   ]),
@@ -84,6 +85,10 @@ class ListInfo extends React.Component {
     if (props.defaultQueryData) {
       initOption.query = props.defaultQueryData;
     }
+    if (props.defaultSettingsData) {
+      initOption.defaultSettingsData = props.defaultSettingsData;
+    }
+
     this.props.initList(initOption);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.binds('handleChangeQuery', 'onPageChange', 'onSave', 'onCloseEditModal',
@@ -168,7 +173,6 @@ class ListInfo extends React.Component {
     }, true);
   }
   onSave() {
-    console.log(this.props.validateAll)
     if (this.props.validateAll) {
       this.props.validateAll()
         .then((errMsg) => {
@@ -238,7 +242,7 @@ class ListInfo extends React.Component {
     let pageSelectClassName = 'fr';
     let actionBarClassNames = 'm-action-bar clearfix';
 
-    if (false) {
+    if (!actionable && !actionBarChildren) {
       actionBarClassNames = `${actionBarClassNames} none`;
     }
 
@@ -259,8 +263,19 @@ class ListInfo extends React.Component {
             <h2 className="t-list-info__title">{title || route.text}</h2>
           )
         }
-        <div className={actionBarClassNames}>
-          {
+        <FormContainer
+          action={fetchUrl}
+          method="GET"
+          layout="flow"
+          data={query}
+          options={queryFormOptions}
+          isSaving={app.get('fetching')}
+          invalidMsg={app.get('invalid')}
+          validateAt={app.get('validateAt')}
+          onSave={this.onSave}
+          onChangeData={this.props.changeListQuery}
+          onValidError={this.props.reportValidError}
+          leftChildren={[
             actionable && addable ? (
               <Button
                 icon="plus"
@@ -270,9 +285,14 @@ class ListInfo extends React.Component {
                   this.props.addListItem(defaultEditData);
                 }}
               />
-            ) : null
-          }
-          {
+            ) : null,
+            searchable ? (
+              <Search
+                value={query.get('text')}
+                onChange={this.onChangeSearchText}
+                onSearch={this.handleSearch}
+              />
+            ) : null,
             actionable && selectable && deleteable ? (
               <Button
                 icon="trash-o"
@@ -281,34 +301,10 @@ class ListInfo extends React.Component {
                   this.removeSelectItems();
                 }}
               />
-            ) : null
-          }
-          {
-            actionBarChildren
-          }
-        </div>
-        <FormContainer
-          action={fetchUrl}
-          method="GET"
-          className="o-form--flow"
-          data={query}
-          options={queryFormOptions}
-          isSaving={app.get('fetching')}
-          invalidMsg={app.get('invalid')}
-          validateAt={app.get('validateAt')}
-          onSave={this.onSave}
-          onChangeData={this.props.changeListQuery}
-          onValidError={this.props.reportValidError}
-          childrenLeft={
-            searchable ? (
-              <Search
-                value={query.get('text')}
-                onChange={this.onChangeSearchText}
-                onSearch={this.handleSearch}
-              />
-            ) : null
-          }
-          childrenRight={
+            ) : null,
+            actionBarChildren,
+          ]}
+          rightChildren={
               page ? (
                 <FormGroup className="fr">
                   <Select

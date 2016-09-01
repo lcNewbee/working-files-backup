@@ -1,7 +1,8 @@
 .t-list-info {
   min-height: 100%;
+  overflow-x: hidden;
 
   .t-list-info__title {
-
+    margin-bottom: 1em;
   }
 }

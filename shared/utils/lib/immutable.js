@@ -27,7 +27,7 @@ var immutableUtils = {
         return retVal;
       })
       .filterNot(function(x) {
-        return x === 'noForm'
+        return x === 'noForm';
       })
       .groupBy(function(item) {
         return item.get('fieldset')
@@ -35,9 +35,9 @@ var immutableUtils = {
       .toList();
 
     // 如果只有一组,则直接获取第一组List
-    if (ret.size === 1) {
-      ret = ret.get(0);
-    }
+    // if (ret.size === 1) {
+    //   ret = ret.get(0);
+    // }
     return ret;
   },
 

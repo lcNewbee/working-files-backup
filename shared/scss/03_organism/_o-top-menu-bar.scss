@@ -1,8 +1,10 @@
+$active-color: #333;
+
 .o-top-menu-bar {
   height: $g-top-menu-height;
-  background-color: #999;
+  background-color: $active-color;
 
-  .m-menu__link {
+  .m-menu__links {
     position: relative;
     padding: 0 30px;
     color: #f1f1f1;
@@ -40,6 +42,33 @@
         border-right: none;
         border-color: #999;
         border-left-color: transparent;
+      }
+    }
+  }
+  &.o-tab {
+    height: $g-top-menu-height;
+    background: transparent;
+    background-color: #f2f2f2;
+
+    .o-tab__nav {
+      border-bottom: 2px solid $active-color;
+      top: 6px;
+      left: 0;
+      right: 0;
+
+      li {
+        a {
+          &.active {
+            background-color: $active-color;
+
+            &::before {
+              border-color: transparent $active-color $active-color transparent;
+            }
+            &::after {
+              border-color: transparent transparent $active-color $active-color;
+            }
+          }
+        }
       }
     }
   }

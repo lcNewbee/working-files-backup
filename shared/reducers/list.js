@@ -20,16 +20,26 @@ const defaultState = fromJS({
   base: defaultItem,
 });
 
-function initListItem(state, action) {
+function initListItem(state, action, curListName) {
   let ret = state;
   const listId = action.option.listId;
-  const myItem = defaultItem.mergeDeep(action.option);
+  const myItem = state.get(curListName).mergeDeep(action.option);
+  let settingsData = fromJS({});
 
-  if (!state.get(listId) || state.get(listId).isEmpty()) {
-    ret = state.mergeIn([listId], myItem);
+  if (action.option.defaultSettingsData) {
+    settingsData = settingsData
+        .merge(action.option.defaultSettingsData);
   }
 
-  return ret.set('curListId', listId);
+  if (!state.get(listId) || state.get(listId).isEmpty()) {
+    ret = state.mergeIn(
+      [listId],
+      myItem.set('curSettings', settingsData)
+    );
+  }
+
+  return ret
+    .set('curListId', listId);
 }
 function selectedListItem(list, data) {
   let ret = list;
@@ -49,7 +59,7 @@ export default function (state = defaultState, action) {
 
   switch (action.type) {
     case 'INIT_LIST':
-      return initListItem(state, action);
+      return initListItem(state, action, curListName);
 
     case 'REQEUST_FETCH_LIST':
       return state.setIn([curListName, 'fetching'], true);
