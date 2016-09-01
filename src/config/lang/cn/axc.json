@@ -38,6 +38,7 @@
   "Rules Associated": "关联的规则",
   "Rule ID": "规则ID",
   "Rule Type": "规则类型",
+  "Rule Action": "规则动作",
   "Rule": "规则类型",
   "Source Address": "源地址",
   "Target Address": "目地地址",
@@ -66,6 +67,8 @@
   "Logging": "记录日志",
 
   "ACL Settings": "ACL配置",
+  "Enable ACL": "启用访问控制",
+  "ACL Rules List": "访问控制规则列表",
   "Access Control Settings": "访问控制配置",
   "Rules Group": "规则组",
   "Rules Group Bind": "规则组绑定",
@@ -194,6 +197,8 @@
   "Version Uses To": "版本用途",
   "Select Version File": "选择版本文件",
   "AP Correlation": "AP关联量",
+  "Log Retain Days": "日志保存天数",
+  "Retain Days": "保存天数",
   "AP Logs": "AP日志设置",
 
   "Log Management": "日志管理",
@@ -201,8 +206,12 @@
   "Operation Type": "操作类型",
   "Operation Command": "操作命令",
   "Operation Result": "操作结果",
+  "Log List": "日志列表",
+  "Log Settings": "日志设置",
 
   "AC Upgrade": "AC升级",
+  "AC Version": "AC版本",
+  "Access Point Version": "接入点版本",
   "Version Maintenance": "版本维护",
   "Upload AC Version": "上传AC版本",
   "Upgrading Version": "升级版本(5分钟)",
@@ -218,6 +227,12 @@
   "Restore To Factory": "恢复出厂配置",
   "Restore Now": "开始恢复",
 
+  "Read Password": "读口令",
+  "Write Password": "写口令",
+  "Version": "版本",
+  "Trap Server": "Trap服务器",
+  "Trap Password": "Trap口令",
+
   "Admin Settings": "管理员配置",
   "Admin": "超级管理员",
   "Manager(Read-only)": "只读管理员",
@@ -232,6 +247,17 @@
   "Active-Standby": "主备设置",
   "Enable Active-Standby": "启用主备",
 
-  "Custer Settings": "集群设置",
-  "Signatures": "特征库维护"
+  "Signatures": "特征库维护",
+  "Signatures Status": "特征库状态",
+  "The Way": "方式",
+  "Signatures Upgrade": "特征库神经",
+  "Upgrade Type": "特征库维护",
+  "Import Time": "导入时间",
+  "Last Upgrade Time": "上次升级时间",
+  "Expire Time": "过期时间",
+  "Local Import": "本地导入",
+  "Upgrade Online": "在线升级",
+  "Auto Upgrade": "自动升级",
+
+  "Custer Settings": "集群设置"
 }

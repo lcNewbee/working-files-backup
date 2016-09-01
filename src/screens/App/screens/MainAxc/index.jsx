@@ -590,31 +590,31 @@ export default class Main extends Component {
               />
             </div>
           </div>
-          <div className="o-top-menu-bar">
-            <ul
-              className="m-menu m-menu--inline m-menu--open"
-            >
-              {
-                fromJS(this.props.routes[0].childRoutes).map((item) => {
-                  const keyVal = `${item.get('path')}`;
-
-                  return item.get('text') ? (<li key={keyVal}>
-                    <Link
-                      to={item.get('path')}
-                      className="m-menu__link"
-                      activeClassName="active"
-                      onClick={() => {
-                        this.onClickTopMenu(item.get('path'));
-                      }}
-                    >
-                      {item.get('text')}
-                    </Link>
-                  </li>) : null;
-                })
-              }
-            </ul>
-          </div>
         </Navbar>
+        <div className="o-top-menu-bar o-tab">
+          <ul
+            className="o-tab__nav"
+          >
+            {
+              fromJS(this.props.routes[0].childRoutes).map((item) => {
+                const keyVal = `${item.get('path')}`;
+
+                return item.get('text') ? (<li key={keyVal}>
+                  <Link
+                    to={item.get('path')}
+                    className="m-menu__link"
+                    activeClassName="active"
+                    onClick={() => {
+                      this.onClickTopMenu(item.get('path'));
+                    }}
+                  >
+                    {item.get('text')}
+                  </Link>
+                </li>) : null;
+              })
+            }
+          </ul>
+        </div>
         <div className="o-menu-bar">
           <nav
             onClick={() =>

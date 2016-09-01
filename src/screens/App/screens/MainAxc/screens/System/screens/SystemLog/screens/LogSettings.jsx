@@ -5,7 +5,7 @@ import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/utils/lib/validator';
 import {
-  ListInfo,
+  FormContainer,
 } from 'shared/components';
 import * as listActions from 'shared/actions/list';
 import * as appActions from 'shared/actions/app';
@@ -13,46 +13,46 @@ import * as appActions from 'shared/actions/app';
 const screenOptions = fromJS([
   {
     id: 'time',
-    text: _('Time'),
-  }, {
-    id: 'operator',
-    text: _('Operator'),
-    queryable: true,
-    defaultQuery: '',
+    text: _('Retain Days'),
+    fieldset: 'retainDays',
+    legend: _('Log Retain Days'),
+    defaultValue: '7',
     formProps: {
-      display: 'inline',
+      type: 'number',
+      help: _('Days'),
     },
-  }, {
-    id: 'type',
-    text: _('Operation Type'),
-  }, {
-    id: 'operationCommand',
-    text: _('Operation Command'),
-  }, {
-    id: 'operationResult',
-    text: _('Operation Result'),
   },
 ]);
-const tableOptions = immutableUtils.getTableOptions(screenOptions);
-const queryFormOptions = immutableUtils.getQueryFormOptions(screenOptions);
-const defaultQueryData = immutableUtils.getDefaultData(screenOptions, 'defaultQuery');
+const formOptions = immutableUtils.getFormOptions(screenOptions);
+const defaultFormData = immutableUtils.getDefaultData(screenOptions);
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
 
   route: PropTypes.object,
   initList: PropTypes.func,
-  closeListItemModal: PropTypes.func,
-  updateEditListItem: PropTypes.func,
+  updateListSettings: PropTypes.func,
+  reportValidError: PropTypes.func,
   save: PropTypes.func,
 };
 const defaultProps = {};
 
 export default class View extends React.Component {
   constructor(props) {
+    const initOption = {
+      listId: props.route.id,
+      formUrl: props.route.formUrl,
+      fetchUrl: props.route.fetchUrl,
+      saveUrl: props.route.saveUrl,
+    };
     super(props);
-
+    this.saveUrl = props.route.saveUrl || props.route.formUrl;
     this.onAction = this.onAction.bind(this);
+
+    if (defaultFormData) {
+      initOption.defaultSettingsData = defaultFormData;
+    }
+    this.props.initList(initOption);
   }
 
   onAction(no, type) {
@@ -70,14 +70,27 @@ export default class View extends React.Component {
   }
 
   render() {
+    const { store, app } = this.props;
+    const myListId = store.get('curListId');
+    const settingsData = store.getIn([myListId, 'curSettings']);
+
+    if (myListId === 'base') {
+      return null;
+    }
+
     return (
-      <ListInfo
-        {...this.props}
-        tableOptions={tableOptions}
-        queryFormOptions={queryFormOptions}
-        defaultQueryData={defaultQueryData}
-        actionable
-        selectable
+      <FormContainer
+        action={this.saveUrl}
+        method="POST"
+        data={settingsData}
+        options={formOptions}
+        isSaving={app.get('saving')}
+        invalidMsg={app.get('invalid')}
+        validateAt={app.get('validateAt')}
+        onSave={this.onSave}
+        onChangeData={this.props.updateListSettings}
+        onValidError={this.props.reportValidError}
+        hasSaveButton
       />
     );
   }

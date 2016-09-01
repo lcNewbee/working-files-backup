@@ -3,6 +3,7 @@ import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
+import validator from 'shared/utils/lib/validator';
 import {
   ListInfo,
 } from 'shared/components';
@@ -11,23 +12,30 @@ import * as appActions from 'shared/actions/app';
 
 const screenOptions = fromJS([
   {
-    id: 'vlanId',
-    text: _('VLAN ID'),
+    id: 'time',
+    text: _('Time'),
+  }, {
+    id: 'operator',
+    text: _('Operator'),
+    queryable: true,
+    defaultQuery: '',
     formProps: {
-      type: 'number',
+      display: 'inline',
     },
   }, {
-    id: 'vlanRemark',
-    text: _('VLAN Remark'),
-    formProps: {
-      type: 'textarea',
-    },
+    id: 'type',
+    text: _('Operation Type'),
+  }, {
+    id: 'operationCommand',
+    text: _('Operation Command'),
+  }, {
+    id: 'operationResult',
+    text: _('Operation Result'),
   },
 ]);
 const tableOptions = immutableUtils.getTableOptions(screenOptions);
-const editFormOptions = immutableUtils.getFormOptions(screenOptions);
-const defaultEditData = immutableUtils.getFormOptions(screenOptions);
-
+const queryFormOptions = immutableUtils.getQueryFormOptions(screenOptions);
+const defaultQueryData = immutableUtils.getDefaultData(screenOptions, 'defaultQuery');
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
@@ -66,9 +74,10 @@ export default class View extends React.Component {
       <ListInfo
         {...this.props}
         tableOptions={tableOptions}
-        editFormOptions={editFormOptions}
-        defaultEditData={defaultEditData}
-        actionable
+        queryFormOptions={queryFormOptions}
+        defaultQueryData={defaultQueryData}
+        actionable={false}
+        noTitle
         selectable
       />
     );

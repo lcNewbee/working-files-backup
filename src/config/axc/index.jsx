@@ -111,9 +111,12 @@ const sAlarmEvents =
     require('../../screens/App/screens/MainAxc/screens/System/screens/AlarmEvents');
 const sLicense =
     require('../../screens/App/screens/MainAxc/screens/System/screens/License');
-const sSystemLog =
-    require('../../screens/App/screens/MainAxc/screens/System/screens/SystemLog');
-const sSNMP = require('../../screens/App/screens/MainAxc/screens/System/screens/SystemLog');
+const sSystemLogList =
+    require('../../screens/App/screens/MainAxc/screens/System/screens/SystemLog/screens/LogList');
+const sSystemLogSettings =
+    require('../../screens/App/screens/MainAxc/screens/System/screens/SystemLog/screens/LogSettings');
+const sSNMP =
+    require('../../screens/App/screens/MainAxc/screens/System/screens/SNMP');
 const sActiveStandby =
     require('../../screens/App/screens/MainAxc/screens/System/screens/ActiveStandby');
 const sSignatures =
@@ -417,16 +420,35 @@ const routes = [
             id: 'systemLog',
             icon: 'file-text-o',
             path: '/main/system/log',
-            fetchUrl: '/goform/getSystemLog',
-            formUrl: '/goform/saveSystemLog',
             text: _('Log Management'),
-            component: sSystemLog.Screen,
+            noTree: true,
+            component: SharedComponents.TabContainer,
+            indexRoute: {
+              onEnter: (nextState, replace) => replace('/main/system/log/list'),
+            },
+            childRoutes: [
+              {
+                id: 'systemLog',
+                path: '/main/system/log/list',
+                fetchUrl: '/goform/getSystemLog',
+                formUrl: '/goform/saveSystemLog',
+                text: _('Log List'),
+                component: sSystemLogList.Screen,
+              }, {
+                id: 'systemLog',
+                path: '/main/system/log/settings',
+                fetchUrl: '/goform/getSystemLog',
+                formUrl: '/goform/saveSystemLog',
+                text: _('Log Settings'),
+                component: sSystemLogSettings.Screen,
+              },
+            ],
           }, {
             id: 'SNPM',
             icon: 'exclamation-circle',
             path: '/main/system/SNPM',
             text: _('SNMP'),
-            component: sAlarmEvents.Screen,
+            component: sSNMP.Screen,
           }, {
             id: 'activeStandby',
             isIndex: true,
@@ -445,6 +467,8 @@ const routes = [
             id: 'signatures',
             isIndex: true,
             path: '/main/system/signatures',
+            fetchUrl: '/goform/signatures',
+            saveUrl: '/goform/signatures',
             icon: 'tasks',
             text: _('Signatures'),
             component: sSignatures.Screen,
@@ -461,7 +485,28 @@ const routes = [
             path: '/main/system/upgrade',
             icon: 'level-up',
             text: _('Version Maintenance'),
-            component: sVersionMaintenance.Screen,
+            noTree: true,
+            component: SharedComponents.TabContainer,
+            indexRoute: {
+              onEnter: (nextState, replace) => replace('/main/system/upgrade/axc'),
+            },
+            childRoutes: [
+              {
+                id: 'axcVersion',
+                path: '/main/system/upgrade/axc',
+                fetchUrl: '/goform/axcVersion',
+                formUrl: '/goform/axcVersion',
+                text: _('AC Version'),
+                component: sVersionMaintenance.Screen,
+              }, {
+                id: 'apsVersion',
+                path: '/main/system/upgrade/aps',
+                fetchUrl: '/goform/apsVersion',
+                formUrl: '/goform/apsVersion',
+                text: _('Access Point Version'),
+                component: sSystemLogSettings.Screen,
+              },
+            ],
           }, {
             id: 'maintenance',
             isIndex: true,

@@ -39,7 +39,7 @@ function NavLink(props) {
       {
         icon ? <Icon name={icon} /> : null
       }
-      {text}
+    {text}
     </Link>
   );
 }
@@ -86,7 +86,7 @@ class Nav extends Component {
           {
             fromJS(menus).map((item, i) => {
               const myKey = `nav${i}`;
-              const hasSubmenus = isTree && item.get('childRoutes');
+              const hasSubmenus = isTree && item.get('childRoutes') && !item.get('noTree');
               let subMenuClassName = 'o-nav__sub-menus m-menu';
               let isActive = false;
 

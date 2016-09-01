@@ -13,6 +13,10 @@ $g-navbar-height: 60px;
   background-color: #fff;
   box-shadow: 0 2px 8px 0 rgba(50, 50, 50, .48);
 
+  &.navbar--metro {
+    box-shadow: none;
+  }
+
   > h1 {
     float: left;
     font-family: $g-font-family-base-en;

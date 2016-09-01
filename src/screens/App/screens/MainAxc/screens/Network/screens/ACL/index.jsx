@@ -1,17 +1,84 @@
 import React, { PropTypes } from 'react';
-import utils from 'shared/utils';
+import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
-import { Map, List } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import {
-  FormGroup, SaveButton,
+  FormContainer, ListInfo,
 } from 'shared/components';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/settings';
+import * as listActions from 'shared/actions/list';
 
+const commonFormOptions = fromJS([
+  {
+    id: 'enable',
+    label: _('Enable ACL'),
+    type: 'checkbox',
+    text: _('Enable'),
+    value: '1',
+  },
+]);
+const screenOptions = fromJS([
+  {
+    id: 'ruleName',
+    label: _('Rule Name'),
+    formProps: {
+      type: 'text',
+      maxLength: '32',
+      required: true,
+    },
+  }, {
+    id: 'ruleAction',
+    label: _('Rule Action'),
+    defaultValue: '0',
+    options: [
+      {
+        value: '0',
+        label: _('Allow'),
+      }, {
+        value: '1',
+        label: _('Prevent'),
+      },
+    ],
+    formProps: {
+      type: 'switch',
+    },
+
+  }, {
+    id: 'addressType',
+    label: _('Address Type'),
+    options: [
+      {
+        value: '1',
+        label: _('Source Address'),
+      }, {
+        value: '2',
+        label: _('Target Address'),
+      },
+    ],
+    formProps: {
+      type: 'select',
+      label: _('Rule Type'),
+      placeholder: _('Please Select ') + _('NAT Rule Type'),
+    },
+
+  }, {
+    id: 'ipAddress',
+    label: _('IP Address'),
+    formProps: {
+      required: true,
+    },
+  },
+]);
+
+const formOptions = immutableUtils.getFormOptions(screenOptions);
+const tableOptions = immutableUtils.getTableOptions(screenOptions);
+const defaultEditData = immutableUtils.getDefaultData(screenOptions)
 const propTypes = {
   app: PropTypes.instanceOf(Map),
-  store: PropTypes.instanceOf(Map),
+  settings: PropTypes.instanceOf(Map),
+  list: PropTypes.instanceOf(Map),
   groupId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 
   route: PropTypes.object,
@@ -54,41 +121,36 @@ export default class View extends React.Component {
   }
 
   render() {
-    const { route, updateItemSettings } = this.props;
-    const curData = this.props.store.getIn(['curData']).toJS();
+    const { app, route, updateItemSettings, saveSettings } = this.props;
+    const curData = this.props.settings.getIn(['curData']);
 
-    if (this.props.store.get('curSettingId') === 'base') {
+    if (this.props.settings.get('curSettingId') === 'base') {
       return null;
     }
-
     return (
-      <form className="o-form">
-        <FormGroup
-          type="checkbox"
-          text={_('Enable')}
-          value="1"
-          label={_('Access Control')}
-          checked={curData.enable === '1'}
-          onChange={
-            (data) => updateItemSettings({
-              enable: data.value,
-            })
-          }
+      <div>
+        <FormContainer
+          options={commonFormOptions}
+          data={curData}
+          onChangeData={updateItemSettings}
+          onSave={saveSettings}
+          invalidMsg={app.get('invalid')}
+          validateAt={app.get('validateAt')}
+          isSaving={app.get('saving')}
+          // hasSaveButton
         />
-        <FormGroup
-          type="select"
-          label={_('Rules Group')}
+
+        <ListInfo
+          {...this.props}
+          title={_('ACL Rules List')}
+          store={this.props.list}
+          tableOptions={tableOptions}
+          editFormOptions={formOptions}
+          defaultEditData={defaultEditData}
+          actionable
+          selectable
         />
-        <div className="form-group form-group--save">
-          <div className="form-control">
-            <SaveButton
-              type="button"
-              loading={this.props.app.get('saving')}
-              onClick={this.onSave}
-            />
-          </div>
-        </div>
-      </form>
+      </div>
     );
   }
 }
@@ -99,15 +161,16 @@ View.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
-    groupId: state.mainAxc.getIn(['group', 'selected', 'id']),
-    store: state.settings,
+    settings: state.settings,
+    list: state.list,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    actions
+    actions,
+    listActions
   ), dispatch);
 }
 

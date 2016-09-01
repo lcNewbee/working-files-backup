@@ -10,49 +10,48 @@ import * as actions from 'shared/actions/settings';
 
 const screenOptions = fromJS([
   {
-    id: 'importTime',
-    label: _('Import Time'),
-    fieldset: 'status',
-    legend: _('Signatures Status'),
+    id: 'readPassword',
+    label: _('Read Password'),
     formProps: {
-      type: 'plain-text',
+      type: 'textarea',
     },
   }, {
-    id: 'lastUpgradeTime',
-    label: _('Last Upgrade Time'),
-    fieldset: 'status',
+    id: 'writePassword',
+    label: _('Write Password'),
     formProps: {
-      type: 'plain-text',
+      type: 'textarea',
     },
   }, {
-    id: 'expire',
-    label: _('Expire Time'),
-    fieldset: 'status',
+    id: 'version',
+    label: _('Version'),
+    defaultValue: 'V1',
+    options: [
+      {
+        value: 'V1',
+        label: 'V1',
+      }, {
+        value: 'V2C',
+        label: 'V2C',
+      }, {
+        value: 'V3',
+        label: 'V3',
+      },
+    ],
     formProps: {
-      type: 'plain-text',
+      type: 'switch',
     },
   }, {
-    id: 'importUpgradeFile',
-    label: _('Local Import'),
-    fieldset: 'upgrade',
-    legend: _('Upgrade'),
+    id: 'trapServer',
+    label: _('Trap Server'),
     formProps: {
       required: true,
-      type: 'file',
+      type: 'text',
     },
   }, {
-    id: 'upgradeOnline',
-    label: _('Upgrade Online'),
-    fieldset: 'upgrade',
+    id: 'trapPassword',
+    label: _('Trap Password'),
     formProps: {
-      type: 'checkbox',
-    },
-  }, {
-    id: 'autoUpgrade',
-    label: _('Auto Upgrade'),
-    fieldset: 'upgrade',
-    formProps: {
-      type: 'checkbox',
+      type: 'password',
     },
   },
 ]);
@@ -76,7 +75,7 @@ export default class View extends React.Component {
       <AppSettings
         {...this.props}
         formOptions={formOptions}
-        defaultFormData={defaultFormData}
+        defaultSettingsData={defaultFormData}
         defaultQuery={defaultFormData}
         hasSaveButton
       />

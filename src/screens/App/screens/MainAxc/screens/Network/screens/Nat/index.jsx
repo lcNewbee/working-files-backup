@@ -69,6 +69,7 @@ const screenOptions = fromJS([
 
 const formOptions = immutableUtils.getFormOptions(screenOptions);
 const tableOptions = immutableUtils.getTableOptions(screenOptions);
+const defaultEditData = immutableUtils.getDefaultData(screenOptions);
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   settings: PropTypes.instanceOf(Map),
@@ -123,7 +124,6 @@ export default class View extends React.Component {
     }
     return (
       <div>
-        <h2>{route.text}</h2>
         <FormContainer
           options={commonFormOptions}
           data={curData}
@@ -141,6 +141,7 @@ export default class View extends React.Component {
           store={this.props.list}
           tableOptions={tableOptions}
           editFormOptions={formOptions}
+          defaultEditData={defaultEditData}
           actionable
           selectable
         />
