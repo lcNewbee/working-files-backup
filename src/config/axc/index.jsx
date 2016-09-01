@@ -136,7 +136,7 @@ const routes = [
         path: '/main/network',
         component: sMainAxc.Screen,
         text: _('NETWORK'),
-        indexRoute: { onEnter: (nextState, replace) => replace('/main/network/vlan') },
+        indexRoute: { onEnter: (nextState, replace) => replace('/main/network/interface') },
         childRoutes: [
           // {
           //   id: 'networkVlan',

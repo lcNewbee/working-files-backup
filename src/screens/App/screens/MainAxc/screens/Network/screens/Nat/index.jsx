@@ -116,7 +116,7 @@ export default class View extends React.Component {
   }
 
   render() {
-    const { app, route, updateItemSettings, saveSettings } = this.props;
+    const { app, updateItemSettings, saveSettings } = this.props;
     const curData = this.props.settings.getIn(['curData']);
 
     if (this.props.settings.get('curSettingId') === 'base') {

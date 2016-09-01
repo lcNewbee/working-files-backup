@@ -48,6 +48,7 @@ const authTypeSeletOptions = [
     label: `${_('Remotely')}(${_('Radius Service')})`,
   },
 ];
+
 const screenOptions = fromJS([
   {
     id: 'ispDomain',
@@ -85,14 +86,13 @@ const screenOptions = fromJS([
       placeholder: _('Please Select ') + _('Radius Template'),
       loadOptions: getInterfaceTypeOptions,
       isAsync: true,
-      multi: true,
     },
   }, {
     id: 'billingAccessType',
-    text: _('Access Type') + _('(Billing)'),
+    text: _('Access Type') + _('(Accounting)'),
     defaultValue: '0',
     fieldset: 'billing',
-    legend: _('Billing Service'),
+    legend: _('Accounting Service'),
     formProps: {
       type: 'select',
       placeholder: _('Please Select ') + _('Rules Group'),
@@ -100,7 +100,7 @@ const screenOptions = fromJS([
     },
   }, {
     id: 'billingType',
-    text: _('Billing Type') + _('(Billing)'),
+    text: _('Accounting Type') + _('(Accounting)'),
     fieldset: 'billing',
     defaultValue: '0',
     formProps: {
@@ -110,20 +110,19 @@ const screenOptions = fromJS([
     },
   }, {
     id: 'billingRadiusTemplate',
-    text: _('Radius Template') + _('(Billing)'),
+    text: _('Radius Template') + _('(Accounting)'),
     fieldset: 'billing',
     formProps: {
       type: 'select',
       placeholder: _('Please Select ') + _('Radius Template'),
       loadOptions: getInterfaceTypeOptions,
       isAsync: true,
-      multi: true,
     },
   },
 ]);
 const tableOptions = immutableUtils.getTableOptions(screenOptions);
 const editFormOptions = immutableUtils.getFormOptions(screenOptions);
-
+const defaultEditData = immutableUtils.getDefaultData(screenOptions);
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
@@ -163,6 +162,7 @@ export default class View extends React.Component {
         {...this.props}
         tableOptions={tableOptions}
         editFormOptions={editFormOptions}
+        defaultEditData={defaultEditData}
         actionable
       />
     );
