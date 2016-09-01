@@ -138,15 +138,16 @@ const routes = [
         text: _('NETWORK'),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/network/vlan') },
         childRoutes: [
+          // {
+          //   id: 'networkVlan',
+          //   isIndex: true,
+          //   path: '/main/network/vlan',
+          //   formUrl: '/goform/networkVlan',
+          //   icon: 'road',
+          //   text: _('VLAN'),
+          //   component: sNetworkVlan.Screen,
+          // },
           {
-            id: 'networkVlan',
-            isIndex: true,
-            path: '/main/network/vlan',
-            formUrl: '/goform/networkVlan',
-            icon: 'road',
-            text: _('VLAN'),
-            component: sNetworkVlan.Screen,
-          }, {
             id: 'networkInterface',
             icon: 'th-large',
             path: '/main/network/interface',

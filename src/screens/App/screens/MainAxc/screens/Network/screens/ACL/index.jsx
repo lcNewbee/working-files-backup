@@ -74,7 +74,7 @@ const screenOptions = fromJS([
 
 const formOptions = immutableUtils.getFormOptions(screenOptions);
 const tableOptions = immutableUtils.getTableOptions(screenOptions);
-const defaultEditData = immutableUtils.getDefaultData(screenOptions)
+const defaultEditData = immutableUtils.getDefaultData(screenOptions);
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   settings: PropTypes.instanceOf(Map),
