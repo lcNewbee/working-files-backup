@@ -118,6 +118,28 @@ export function fetchList(url) {
   };
 }
 
+export function saveListSettings(url) {
+  return (dispatch, getState) => {
+    const globalState = getState();
+    const name = globalState.list.get('curListId');
+    const curData = globalState.list.getIn([name, 'curSettings']);
+    const oriData = globalState.list.getIn([name, 'data', 'settings']);
+    const formUrl = globalState.list.getIn([name, 'formUrl']);
+    const fetchUrl = globalState.list.getIn([name, 'fetchUrl']) || formUrl;
+
+    if (!curData.equals(oriData)) {
+      console.log('hasChange');
+    }
+
+    return dispatch(appActions.save(url || formUrl, curData.toJS()))
+      .then((json) => {
+        if (json.state && json.state.code === 2000) {
+          dispatch(fetchList(fetchUrl));
+        }
+      });
+  };
+}
+
 export function onListAction(url) {
   return (dispatch, getState) => {
     const globalState = getState();

@@ -17,6 +17,7 @@ const selectOptions = [
 
 const propTypes = {
   title: PropTypes.string,
+  listTitle: PropTypes.string,
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
   route: PropTypes.object,
@@ -26,6 +27,9 @@ const propTypes = {
     PropTypes.instanceOf(List), PropTypes.array,
   ]),
   queryFormOptions: PropTypes.oneOfType([
+    PropTypes.instanceOf(List), PropTypes.array,
+  ]),
+  settingsFormOption: PropTypes.oneOfType([
     PropTypes.instanceOf(List), PropTypes.array,
   ]),
 
@@ -54,6 +58,8 @@ const propTypes = {
   resetVaildateMsg: PropTypes.func,
   initList: PropTypes.func,
   selectListItem: PropTypes.func,
+  updateListSettings: PropTypes.func,
+  saveListSettings: PropTypes.func,
 
   // 添加，编辑表单相关 参数
   editFormLayout: PropTypes.string,
@@ -98,7 +104,8 @@ class ListInfo extends React.Component {
     this.props.initList(initOption);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.binds('handleChangeQuery', 'onPageChange', 'onSave', 'onCloseEditModal',
-        'onChangeSearchText', 'onChangeType', 'onChangeTableSize', 'removeSelectItems');
+        'onChangeSearchText', 'onChangeType', 'onChangeTableSize', 'removeSelectItems',
+        'onSaveSettings');
   }
 
   componentWillMount() {
@@ -227,30 +234,35 @@ class ListInfo extends React.Component {
       this.props.fetchList();
     }
   }
-  removeSelectItems() {
-
+  onSaveSettings() {
+    if (this.props.validateAll) {
+      this.props.validateAll()
+        .then((errMsg) => {
+          if (errMsg.isEmpty()) {
+            this.props.saveListSettings();
+          }
+        });
+    }
   }
 
   render() {
     const {
       store, route, searchable, actionBarChildren, editFormLayout, modalSize,
-      addable, editFormOptions, actionable, noTitle, app, editable,
+      addable, editFormOptions, actionable, noTitle, app, listTitle,
+      settingsFormOption, updateListSettings,
       defaultEditData, selectable, title, deleteable, queryFormOptions,
     } = this.props;
     const myListId = store.get('curListId');
     const page = store.getIn([myListId, 'data', 'page']);
     const list = store.getIn([myListId, 'data', 'list']);
+    const curSettings = store.getIn([myListId, 'curSettings']);
     const editData = store.getIn([myListId, 'data', 'edit']);
     const query = store.getIn([myListId, 'query']);
     const actionQuery = store.getIn([myListId, 'query']);
     const saveUrl = route.saveUrl || route.formUrl;
     const fetchUrl = route.fetchUrl || route.formUrl;
+    const leftChildrenNode = [];
     let pageSelectClassName = 'fr';
-    let actionBarClassNames = 'm-action-bar clearfix';
-
-    if (!actionable && !actionBarChildren) {
-      actionBarClassNames = `${actionBarClassNames} none`;
-    }
 
     // 数据未初始化不渲染
     if (myListId === 'base') {
@@ -262,6 +274,47 @@ class ListInfo extends React.Component {
       pageSelectClassName = 'fl';
     }
 
+    //
+    if (actionable && addable) {
+      leftChildrenNode.push(
+        <Button
+          icon="plus"
+          key="add"
+          theme="primary"
+          text={_('Add')}
+          onClick={() => {
+            this.props.addListItem(defaultEditData);
+          }}
+        />
+      );
+    }
+    if (searchable) {
+      leftChildrenNode.push(
+        <Search
+          value={query.get('text')}
+          key="search"
+          onChange={this.onChangeSearchText}
+          onSearch={this.handleSearch}
+        />
+      );
+    }
+
+    if (actionable && selectable && deleteable) {
+      leftChildrenNode.push(
+        <Button
+          icon="trash-o"
+          key="delete"
+          text={_('Remove Selected')}
+          onClick={() => {
+            this.removeSelectItems();
+          }}
+        />
+      );
+    }
+    if (actionBarChildren) {
+      leftChildrenNode.push(actionBarChildren);
+    }
+
     return (
       <div className="t-list-info">
         {
@@ -269,6 +322,27 @@ class ListInfo extends React.Component {
             <h2 className="t-list-info__title">{title || route.text}</h2>
           )
         }
+        {
+          settingsFormOption ? (
+            <FormContainer
+              options={settingsFormOption}
+              data={curSettings}
+              onChangeData={updateListSettings}
+              onSave={this.onSaveSettings}
+              invalidMsg={app.get('invalid')}
+              validateAt={app.get('validateAt')}
+              isSaving={app.get('saving')}
+              // hasSaveButton
+            />
+          ) : null
+        }
+
+        {
+          listTitle ? (
+            <h2 className="t-list-info__title">{listTitle}</h2>
+          ) : null
+        }
+
         <FormContainer
           action={fetchUrl}
           method="GET"
@@ -281,38 +355,7 @@ class ListInfo extends React.Component {
           onSave={this.onSave}
           onChangeData={this.props.changeListQuery}
           onValidError={this.props.reportValidError}
-          leftChildren={[
-            actionable && addable ? (
-              <Button
-                icon="plus"
-                key="add"
-                theme="primary"
-                text={_('Add')}
-                onClick={() => {
-                  this.props.addListItem(defaultEditData);
-                }}
-              />
-            ) : null,
-            searchable ? (
-              <Search
-                value={query.get('text')}
-                key="search"
-                onChange={this.onChangeSearchText}
-                onSearch={this.handleSearch}
-              />
-            ) : null,
-            actionable && selectable && deleteable ? (
-              <Button
-                icon="trash-o"
-                key="delete"
-                text={_('Remove Selected')}
-                onClick={() => {
-                  this.removeSelectItems();
-                }}
-              />
-            ) : null,
-            actionBarChildren,
-          ]}
+          leftChildren={leftChildrenNode}
           rightChildren={
               page ? (
                 <FormGroup className="fr">

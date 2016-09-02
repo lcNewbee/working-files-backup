@@ -20,11 +20,17 @@ const defaultState = fromJS({
   base: defaultItem,
 });
 
-function initListItem(state, action, curListName) {
-  let ret = state;
+function initListItem(state, action) {
   const listId = action.option.listId;
-  const myItem = state.get(curListName).mergeDeep(action.option);
+  let ret = state;
   let settingsData = fromJS({});
+  let myItem = state.get(listId);
+
+  if (!myItem) {
+    myItem = defaultItem.mergeDeep(action.option);
+  } else {
+    myItem = myItem.mergeDeep(action.option);
+  }
 
   if (action.option.defaultSettingsData) {
     settingsData = settingsData
@@ -65,10 +71,10 @@ export default function (state = defaultState, action) {
       return state.setIn([curListName, 'fetching'], true);
 
     case 'RECIVE_FETCH_LIST':
-      return state.setIn([curListName, 'fetching'], false)
-        .setIn([curListName, 'updateAt'], action.updateAt)
-        .mergeIn([curListName, 'curSettings'], (action.data && action.data.settings))
-        .mergeIn([curListName, 'data'], action.data);
+      return state.setIn([action.name, 'fetching'], false)
+        .setIn([action.name, 'updateAt'], action.updateAt)
+        .mergeIn([action.name, 'curSettings'], (action.data && action.data.settings))
+        .mergeIn([action.name, 'data'], action.data);
 
     case 'CHANGE_LIST_QUERY':
       return state.mergeIn([curListName, 'query'], action.query);

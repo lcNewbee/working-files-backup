@@ -1,4 +1,4 @@
-$active-color: #333;
+$active-color: #555;
 
 .o-top-menu-bar {
   height: $g-top-menu-height;
@@ -51,8 +51,8 @@ $active-color: #333;
     background-color: #f2f2f2;
 
     .o-tab__nav {
-      border-bottom: 2px solid $active-color;
-      top: 6px;
+      border-bottom: 3px solid $active-color;
+      top: 7px;
       left: 0;
       right: 0;
 

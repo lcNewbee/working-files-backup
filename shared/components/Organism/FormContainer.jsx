@@ -105,6 +105,13 @@ class FormContainer extends React.Component {
       myProps.value = checkboxValue;
     }
 
+    if (myProps.saveOnChange) {
+      myProps.onChange = (myData => {
+        this.onChangeData(id, myData);
+        this.onSave();
+      });
+    }
+
     return (
       <FormGroup
         {...myProps}
@@ -173,8 +180,8 @@ class FormContainer extends React.Component {
         encType={encType}
       >
       {
-        leftChildren ? (
-          <div className="form-group">
+        leftChildren && leftChildren.length > 0 ? (
+          <div className="form-group ss">
             { leftChildren }
           </div>
         ) : null

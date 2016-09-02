@@ -44,9 +44,9 @@ export default function (state = defaultState, action) {
 
     case 'RECIVE_FETCH_SETTINGS':
 
-      return state.setIn([curSettingName, 'fetching'], false)
-        .setIn([curSettingName, 'updateAt'], action.updateAt)
-        .mergeIn([curSettingName, 'data'], action.data)
+      return state.setIn([action.name, 'fetching'], false)
+        .setIn([action.name, 'updateAt'], action.updateAt)
+        .mergeIn([action.name, 'data'], action.data)
         .mergeIn(['curData'], fromJS(action.data));
 
     case 'CHANGE_SETTINGS_QUERY':
