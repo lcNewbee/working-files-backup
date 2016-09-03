@@ -137,6 +137,8 @@
   "Axilspot Access Manager": "Axilspot Access Manager",
   "apUnit": "台",
   "clientUnit": "台",
+  "Please select a upload file": "请选择你要上传的文件",
+  "Select file extension range: ": "你选择的文件的后缀范围：",
 
   "DEVICES": "设备",
   "Devices Info": "设备信息",

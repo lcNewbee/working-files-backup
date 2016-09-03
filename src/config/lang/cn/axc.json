@@ -97,8 +97,6 @@
   "Duplex": "双工",
   "Auto": "自动",
 
-  "Portal Policy": "Portal策略",
-
   "Radius Template": "Radius模板",
   "Radius Template Name": "Radius模板名称",
   "Parameter Settings": "参数设置",
@@ -132,8 +130,21 @@
   "Local": "本地",
   "Remotely": "远程",
   "Radius Service": "Radius服务器",
-
   "Connected Numbers": "连接数量",
+
+  "Portal Policy": "Portal策略",
+  "Portal Server": "Portal服务器",
+  "Portal Rules": "Portal规则",
+  "Portal Template": "Portal模板",
+  "Server Name": "服务器名称",
+  "Server Domain": "服务器域名",
+  "Server Port": "服务端口",
+  "Shared Key": "共享密钥",
+  "Redirect URL": "重定向URL",
+  "Force Auth Domain": "强制认证域",
+  "Idle Detection": "闲置检测",
+  "Auth Segment Ip": "认证网段IP",
+  "Auth Segment Mask": "认证网段子网掩码",
 
   "All Group": "所有组",
   "Monitor": "监控",

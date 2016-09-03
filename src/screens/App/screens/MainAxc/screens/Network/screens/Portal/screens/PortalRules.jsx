@@ -10,12 +10,56 @@ import * as listActions from 'shared/actions/list';
 
 const commonFormOptions = fromJS([
   {
-    id: 'enable',
-    label: _('Enable ACL'),
+    id: 'serverName',
+    label: _('Server Name'),
+    type: 'select',
+    legend: _('Base Settings'),
+    options: [
+      {
+
+      },
+    ],
+  }, {
+    id: 'maxUser',
+    label: _('Max Users'),
+    type: 'text',
+  }, {
+    id: 'authType',
+    label: _('Auth Type'),
+    type: 'switch',
+    defaultValue: '0',
+    options: [
+      {
+        value: '0',
+        label: _('Direct'),
+      },
+      {
+        value: '1',
+        label: _('Layer3'),
+      },
+    ],
+  }, {
+    id: 'authSegmentIp',
+    label: _('Auth Segment Ip'),
+    type: 'text',
+    showPrecondition(data) {
+      return data.get('authType') === '1';
+    },
+  }, {
+    id: 'authSegmentMask',
+    label: _('Auth Segment Mask'),
+    type: 'text',
+    showPrecondition(data) {
+      return data.get('authType') === '1';
+    },
+  }, {
+    id: 'forceAuthDomain',
+    label: _('Force Auth Domain'),
+    type: 'text',
+  }, {
+    id: 'idleDetection',
+    label: _('Idle Detection'),
     type: 'checkbox',
-    text: _('Enable'),
-    value: '1',
-    saveOnChange: true,
   },
 ]);
 const screenOptions = fromJS([
@@ -106,12 +150,13 @@ export default class View extends React.Component {
     return (
       <ListInfo
         {...this.props}
-        listTitle={_('ACL Rules List')}
+        listTitle={_('Portal Rules List')}
         store={this.props.list}
         tableOptions={tableOptions}
         settingsFormOption={commonFormOptions}
         editFormOptions={formOptions}
         defaultEditData={defaultEditData}
+        hasSettingsSaveButton
         actionable
         selectable
         noTitle

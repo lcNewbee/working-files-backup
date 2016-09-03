@@ -1,5 +1,7 @@
+
 import React, { PropTypes } from 'react';
 import utils, { immutableUtils } from 'shared/utils';
+import validator from 'shared/utils/lib/validator';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
@@ -8,64 +10,74 @@ import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/settings';
 import * as listActions from 'shared/actions/list';
 
-const commonFormOptions = fromJS([
-  {
-    id: 'enable',
-    label: _('Enable ACL'),
-    type: 'checkbox',
-    text: _('Enable'),
-    value: '1',
-    saveOnChange: true,
-  },
-]);
 const screenOptions = fromJS([
   {
-    id: 'ruleName',
-    label: _('Rule Name'),
+    id: 'serverName',
+    label: _('Server Name'),
     formProps: {
       type: 'text',
       maxLength: '32',
       required: true,
     },
   }, {
-    id: 'ruleAction',
-    label: _('Rule Action'),
+    id: 'addressType',
+    label: _('Address Type'),
     defaultValue: '0',
     options: [
       {
         value: '0',
-        label: _('Allow'),
+        label: _('IP'),
       }, {
         value: '1',
-        label: _('Prevent'),
+        label: _('Domain'),
       },
     ],
     formProps: {
       type: 'switch',
     },
-
   }, {
-    id: 'addressType',
-    label: _('Address Type'),
-    options: [
-      {
-        value: '1',
-        label: _('Source Address'),
-      }, {
-        value: '2',
-        label: _('Target Address'),
-      },
-    ],
+    id: 'serverIp',
+    label: _('Server IP'),
     formProps: {
-      type: 'select',
-      label: _('Rule Type'),
-      placeholder: _('Please Select ') + _('NAT Rule Type'),
+      type: 'text',
+      required: true,
+      validator: validator({
+        rules: 'ip',
+      }),
+      showPrecondition(data) {
+        return data.get('addressType') === '0';
+      },
     },
 
   }, {
-    id: 'ipAddress',
-    label: _('IP Address'),
+    id: 'serverDomain',
+    label: _('Server Domain'),
     formProps: {
+      type: 'text',
+      required: true,
+      showPrecondition(data) {
+        return data.get('addressType') === '1';
+      },
+    },
+  }, {
+    id: 'serverPort',
+    label: _('Server Port'),
+    formProps: {
+      type: 'number',
+      required: true,
+    },
+  }, {
+    id: 'sharedKey',
+    label: _('Shared Key'),
+    formProps: {
+      type: 'password',
+      required: true,
+    },
+  }, {
+    id: 'redirectUrl',
+    label: _('Redirect URL'),
+    formProps: {
+      type: 'text',
       required: true,
     },
   },
@@ -106,10 +118,8 @@ export default class View extends React.Component {
     return (
       <ListInfo
         {...this.props}
-        listTitle={_('ACL Rules List')}
         store={this.props.list}
         tableOptions={tableOptions}
-        settingsFormOption={commonFormOptions}
         editFormOptions={formOptions}
         defaultEditData={defaultEditData}
         actionable

@@ -60,16 +60,23 @@ const sMainAxc = require('../../screens/App/screens/MainAxc');
 /**
  * 网络设置
  */
-const sNetworkVlan = require('../../screens/App/screens/MainAxc/screens/Network/screens/VLAN');
+// const sNetworkVlan = require('../../screens/App/screens/MainAxc/screens/Network/screens/VLAN');
 const sInterfaces = require('../../screens/App/screens/MainAxc/screens/Network/screens/Interfaces');
-const sNetworkAaa = require('../../screens/App/screens/MainAxc/screens/Network/screens/AAA');
 const sNetworkDhcp = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP');
 const sNetworkRoutes = require('../../screens/App/screens/MainAxc/screens/Network/screens/Routes');
 const sNetworkNat = require('../../screens/App/screens/MainAxc/screens/Network/screens/Nat');
 const sNetworkAcl = require('../../screens/App/screens/MainAxc/screens/Network/screens/ACL');
 const sNetworkPort = require('../../screens/App/screens/MainAxc/screens/Network/screens/Port');
-const sNetworkPortal = require('../../screens/App/screens/MainAxc/screens/Network/screens/PortalPolicy');
-const sRaduisTemplate = require('../../screens/App/screens/MainAxc/screens/Network/screens/RadiusTemplate');
+const sRaduisTemplate =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/RadiusTemplate');
+const sNetworkAaa = require('../../screens/App/screens/MainAxc/screens/Network/screens/AAA');
+const sPortalServer =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalServer');
+const sPortalRules =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalRules');
+const sPortalTemplate =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalTemplate');
+
 /**
  * AP组管理
  */
@@ -174,6 +181,8 @@ const routes = [
             path: '/main/network/acl',
             text: _('Access Control'),
             formUrl: '/goform/networkAcl',
+            fetchUrl: '/goform/aclList',
+            saveUrl: '/goform/saveAclItem',
             component: sNetworkAcl.Screen,
           }, {
             id: 'staticRoutes',
@@ -207,10 +216,33 @@ const routes = [
           }, {
             id: 'networkPortal',
             icon: 'copy',
+            noTree: true,
+            component: SharedComponents.TabContainer,
             path: '/main/network/portal',
             formUrl: '/goform/networkPortal',
             text: _('Portal Policy'),
-            component: sNetworkPortal.Screen,
+            indexRoute: { onEnter: (nextState, replace) => replace('/main/network/portal/server') },
+            childRoutes: [
+              {
+                id: 'portalServer',
+                path: '/main/network/portal/server',
+                formUrl: '/goform/portalServer',
+                text: _('Portal Server'),
+                component: sPortalServer.Screen,
+              }, {
+                id: 'portalRules',
+                path: '/main/network/portal/rules',
+                formUrl: '/goform/portalRules',
+                text: _('Portal Rules'),
+                component: sPortalRules.Screen,
+              }, {
+                id: 'portalTemplate',
+                path: '/main/network/portal/template',
+                formUrl: '/goform/portalTemplate',
+                text: _('Portal Template'),
+                component: sPortalTemplate.Screen,
+              },
+            ],
           },
         ],
       }, {

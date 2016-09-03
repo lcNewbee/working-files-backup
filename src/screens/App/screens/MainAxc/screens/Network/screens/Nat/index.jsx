@@ -31,6 +31,7 @@ const commonFormOptions = fromJS([
     type: 'checkbox',
     text: _('Enable'),
     value: '1',
+    saveOnChange: true,
   },
 ]);
 const screenOptions = fromJS([
@@ -116,36 +117,19 @@ export default class View extends React.Component {
   }
 
   render() {
-    const { app, updateItemSettings, saveSettings } = this.props;
-    const curData = this.props.settings.getIn(['curData']);
-
-    if (this.props.settings.get('curSettingId') === 'base') {
-      return null;
-    }
     return (
-      <div>
-        <FormContainer
-          options={commonFormOptions}
-          data={curData}
-          onChangeData={updateItemSettings}
-          onSave={saveSettings}
-          invalidMsg={app.get('invalid')}
-          validateAt={app.get('validateAt')}
-          isSaving={app.get('saving')}
-          // hasSaveButton
-        />
-
-        <ListInfo
-          {...this.props}
-          title={_('NAT Rules List')}
-          store={this.props.list}
-          tableOptions={tableOptions}
-          editFormOptions={formOptions}
-          defaultEditData={defaultEditData}
-          actionable
-          selectable
-        />
-      </div>
+      <ListInfo
+        {...this.props}
+        listTitle={_('NAT Rules List')}
+        store={this.props.list}
+        settingsFormOption={commonFormOptions}
+        tableOptions={tableOptions}
+        editFormOptions={formOptions}
+        defaultEditData={defaultEditData}
+        actionable
+        selectable
+        noTitle
+      />
     );
   }
 }
