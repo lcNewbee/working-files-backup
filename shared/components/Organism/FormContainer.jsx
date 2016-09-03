@@ -71,14 +71,17 @@ class FormContainer extends React.Component {
     const id = myProps.id;
     const myComponent = myProps.component;
     const checkboxValue = myProps.checkedValue || '1';
+    let isShow = true;
     let data = this.props.data;
 
     delete myProps.fieldset;
     delete myProps.legend;
     delete myProps.id;
 
-    myProps.name = id;
-    myProps.key = id;
+    if (id) {
+      myProps.name = id;
+      myProps.key = id;
+    }
 
     if (invalidMsg && typeof invalidMsg.get === 'function') {
       myProps.errMsg = invalidMsg.get(id);
@@ -89,12 +92,18 @@ class FormContainer extends React.Component {
       if (!Map.isMap(data)) {
         data = fromJS(data);
       }
-      myProps.value = data.get(id);
+      myProps.value = data.get(id) || '';
     }
 
-    myProps.validateAt = validateAt;
+    if (validateAt) {
+      myProps.validateAt = validateAt;
+    }
+
+    if (onValidError) {
+      myProps.onValidError = onValidError;
+    }
+
     myProps.onChange = myData => this.onChangeData(id, myData);
-    myProps.onValidError = onValidError;
 
     if (myComponent) {
       return myComponent(myProps, data, actionQuery);
@@ -112,11 +121,16 @@ class FormContainer extends React.Component {
       });
     }
 
-    return (
+    // 处理显示前提条件
+    if (typeof myProps.showPrecondition === 'function') {
+      isShow = myProps.showPrecondition(data);
+    }
+
+    return isShow ? (
       <FormGroup
         {...myProps}
       />
-    );
+    ) : null;
   }
   renderFormGroupTree(options) {
     // Map直接渲染FormGroup

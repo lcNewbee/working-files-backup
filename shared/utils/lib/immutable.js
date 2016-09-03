@@ -18,7 +18,10 @@ var immutableUtils = {
         };
         var retVal = item.clear()
           .merge(commonOption)
-          .merge(item.get('formProps'));
+          .merge(item.get('formProps'))
+          .filterNot(function(val) {
+            return typeof val === 'undefined';
+          });
 
         if (item.get('noForm')) {
           retVal = 'noForm';

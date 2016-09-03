@@ -16,6 +16,7 @@ const selectOptions = [
 ];
 
 const propTypes = {
+  // 组件通用选项
   title: PropTypes.string,
   listTitle: PropTypes.string,
   app: PropTypes.instanceOf(Map),
@@ -29,46 +30,51 @@ const propTypes = {
   queryFormOptions: PropTypes.oneOfType([
     PropTypes.instanceOf(List), PropTypes.array,
   ]),
-  settingsFormOption: PropTypes.oneOfType([
-    PropTypes.instanceOf(List), PropTypes.array,
-  ]),
 
-  // 控制开关
+  // 通用控制开关选项
+  actionable: PropTypes.bool,
   addable: PropTypes.bool,
   editable: PropTypes.bool,
   deleteable: PropTypes.bool,
-  actionable: PropTypes.bool,
-  noTitle: PropTypes.bool,
-  autoEditModel: PropTypes.bool,
   searchable: PropTypes.bool,
   selectable: PropTypes.bool,
+  noTitle: PropTypes.bool,
 
-  // 操作函数
-  changeListQuery: PropTypes.func,
-  fetchList: PropTypes.func,
-  leaveListScreen: PropTypes.func,
-  addListItem: PropTypes.func,
-  editListItemByIndex: PropTypes.func,
-  reportValidError: PropTypes.func,
-  closeListItemModal: PropTypes.func,
-  updateEditListItem: PropTypes.func,
-  changeListActionQuery: PropTypes.func,
-  onListAction: PropTypes.func,
-  validateAll: PropTypes.func,
-  resetVaildateMsg: PropTypes.func,
+  // 通用操作函数
   initList: PropTypes.func,
+  fetchList: PropTypes.func,
+  changeListQuery: PropTypes.func,
+  changeListActionQuery: PropTypes.func,
+  leaveListScreen: PropTypes.func,
   selectListItem: PropTypes.func,
+  onListAction: PropTypes.func,
+
+  // List 全局 Settings 相关
+  hasSettingsSaveButton: PropTypes.bool,
+  settingsFormOption: PropTypes.oneOfType([
+    PropTypes.instanceOf(List), PropTypes.array,
+  ]),
   updateListSettings: PropTypes.func,
   saveListSettings: PropTypes.func,
 
-  // 添加，编辑表单相关 参数
+  // 数据验证
+  validateAll: PropTypes.func,
+  reportValidError: PropTypes.func,
+  resetVaildateMsg: PropTypes.func,
+
+  // 添加，编辑具体列表项相关
+  modalSize: PropTypes.string,
   editFormLayout: PropTypes.string,
   defaultEditData: PropTypes.object,
   editFormOptions: PropTypes.oneOfType([
     PropTypes.instanceOf(List), PropTypes.array,
   ]),
-  modalSize: PropTypes.string,
+  addListItem: PropTypes.func,
+  editListItemByIndex: PropTypes.func,
+  closeListItemModal: PropTypes.func,
+  updateEditListItem: PropTypes.func,
 
+  // React node 元素
   children: PropTypes.node,
   actionBarChildren: PropTypes.node,
 };
@@ -103,15 +109,15 @@ class ListInfo extends React.Component {
 
     this.props.initList(initOption);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    this.binds('handleChangeQuery', 'onPageChange', 'onSave', 'onCloseEditModal',
-        'onChangeSearchText', 'onChangeType', 'onChangeTableSize', 'removeSelectItems',
+    this.binds('onChangeQuery', 'onPageChange', 'onSave', 'onCloseEditModal',
+        'onChangeSearchText', 'onChangeType', 'onChangeTableSize', 'onRemoveSelectItems',
         'onSaveSettings');
   }
 
   componentWillMount() {
     const { actionable, editable, deleteable, tableOptions } = this.props;
 
-    // 初始配置，添加操作项
+    // 初始选项，添加操作项
     if (actionable && (editable || deleteable) && tableOptions) {
       this.ListTableOptions = tableOptions.push(Map({
         id: 'actions',
@@ -151,17 +157,14 @@ class ListInfo extends React.Component {
       this.ListTableOptions = tableOptions;
     }
 
-    if (this.props.fetchList) {
-      this.props.fetchList(this.listId);
-    }
+    this.onFetchList();
   }
   componentWillUpdate(nextProps) {
     this.formUrl = nextProps.route.formUrl;
   }
   componentDidUpdate(prevProps) {
-    if (prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt') &&
-        this.props.fetchList) {
-      this.fetchList();
+    if (prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
+      this.onFetchList();
     }
   }
   componentWillUnmount() {
@@ -170,17 +173,17 @@ class ListInfo extends React.Component {
     }
   }
   onChangeSearchText(val) {
-    this.handleChangeQuery({
+    this.onChangeQuery({
       search: val,
     }, true);
   }
   onChangeType(data) {
-    this.handleChangeQuery({
+    this.onChangeQuery({
       type: data.value,
     }, true);
   }
   onChangeTableSize(data) {
-    this.handleChangeQuery({
+    this.onChangeQuery({
       size: data.value,
       page: 1,
     }, true);
@@ -196,12 +199,16 @@ class ListInfo extends React.Component {
     }
   }
   onCloseEditModal() {
-    this.props.closeListItemModal();
-    this.props.resetVaildateMsg();
+    if (this.props.closeListItemModal) {
+      this.props.closeListItemModal();
+    }
+    if (this.props.resetVaildateMsg) {
+      this.props.resetVaildateMsg();
+    }
   }
 
   onPageChange(i) {
-    this.handleChangeQuery({
+    this.onChangeQuery({
       page: i,
     }, true);
   }
@@ -212,26 +219,14 @@ class ListInfo extends React.Component {
     });
     this.props.onListAction();
   }
-  fetchList() {
-    if (this.props.fetchList) {
-      this.props.fetchList();
-    }
-  }
-  binds(...methods) {
-    methods.forEach((method) => {
-      if (typeof this[method] === 'function') {
-        this[method] = this[method].bind(this);
-      }
-    });
-  }
 
-  handleChangeQuery(data, needRefresh) {
+  onChangeQuery(data, needRefresh) {
     if (this.props.changeListQuery) {
       this.props.changeListQuery(data);
     }
 
-    if (needRefresh && this.props.fetchList) {
-      this.props.fetchList();
+    if (needRefresh) {
+      this.onFetchList();
     }
   }
   onSaveSettings() {
@@ -244,13 +239,31 @@ class ListInfo extends React.Component {
         });
     }
   }
+  onRemoveSelectItems() {
+
+  }
+  onFetchList() {
+    if (this.props.fetchList) {
+      this.props.fetchList();
+    }
+  }
+
+  binds(...methods) {
+    methods.forEach((method) => {
+      if (typeof this[method] === 'function') {
+        this[method] = this[method].bind(this);
+      }
+    });
+  }
 
   render() {
     const {
-      store, route, searchable, actionBarChildren, editFormLayout, modalSize,
-      addable, editFormOptions, actionable, noTitle, app, listTitle,
-      settingsFormOption, updateListSettings,
-      defaultEditData, selectable, title, deleteable, queryFormOptions,
+      store, route, app, modalSize, title, listTitle,
+      selectable, deleteable, searchable, addable, actionable, noTitle,
+      editFormLayout, editFormOptions, defaultEditData,
+      settingsFormOption, updateListSettings, hasSettingsSaveButton,
+      queryFormOptions,
+      actionBarChildren,
     } = this.props;
     const myListId = store.get('curListId');
     const page = store.getIn([myListId, 'data', 'page']);
@@ -306,7 +319,7 @@ class ListInfo extends React.Component {
           key="delete"
           text={_('Remove Selected')}
           onClick={() => {
-            this.removeSelectItems();
+            this.onRemoveSelectItems();
           }}
         />
       );
@@ -332,7 +345,7 @@ class ListInfo extends React.Component {
               invalidMsg={app.get('invalid')}
               validateAt={app.get('validateAt')}
               isSaving={app.get('saving')}
-              // hasSaveButton
+              hasSaveButton={hasSettingsSaveButton}
             />
           ) : null
         }

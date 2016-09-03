@@ -21,6 +21,10 @@ $o-form-content-margin: 1em 0 0;
     padding: .5em .5em;
     font-size: 1.214em;
   }
+  .o-form__p {
+    padding: 0 1.214em;
+    margin-bottom: 1em;
+  }
   .o-form__actions-bar {
     padding: 1em .625em;
     margin: $o-form-content-margin;
