@@ -1,6 +1,3 @@
-import { expect, assert } from 'chai';
-import { describe, it } from 'mocha';
-
 import core from 'shared/utils/lib/core';
 
 describe('utils core', () => {
@@ -8,7 +5,7 @@ describe('utils core', () => {
     const objectAssign = core.extend;
 
     it('should have the correct length', () => {
-      assert.equal(objectAssign.length, 2);
+      assert.equal(objectAssign.length, 1);
     });
 
     it('should throw when target is not an object', () => {
@@ -80,6 +77,7 @@ describe('utils core', () => {
       assert.deepEqual(objectAssign({}, obj), { foo: true });
     });
 
+
     // it('should preserve property order', () => {
     //   var letters = 'abcdefghijklmnopqrst';
     //   var source = {};
@@ -89,5 +87,67 @@ describe('utils core', () => {
     //   var target = objectAssign({}, source);
     //   assert.equal(Object.keys(target).join(''), letters);
     // });
+  });
+  describe('#isArray()', () => {
+    it('should return true when call with array', () => {
+      expect(core.isArray([])).to.be.equal(true);
+    });
+    it('should return false when call with string, number, null, undefined', () => {
+      expect(core.isArray(null)).to.be.equal(false);
+      expect(core.isArray(122)).to.be.equal(false);
+      expect(core.isArray('232')).to.be.equal(false);
+    });
+  });
+
+  describe('#binds()', () => {
+    let sandbox;
+
+    beforeEach(() => {
+      // create a sandbox
+      sandbox = sinon.sandbox.create();
+
+      // stub some console methods
+      sandbox.stub(console, 'log');
+      sandbox.stub(console, 'error');
+    });
+
+    afterEach(() => {
+      // restore the environment as it was before
+      sandbox.restore();
+    });
+
+    it('should have the correct length', () => {
+      assert.equal(core.binds.length, 2);
+    });
+
+    it('should bind when param target and keys array', (done) => {
+      const targetObj = {
+        a: '22',
+        click() {
+          expect(this).to.be.equal(targetObj);
+          done();
+        },
+      };
+      // targetObj.click = targetObj.click.bind(targetObj);
+      core.binds(targetObj, ['click']);
+      setTimeout(targetObj.click, 0);
+    });
+
+    it('should call console.error when no param', () => {
+      const errorMsg = 'utils.binds should call with object target and array keys';
+      core.binds();
+      sinon.assert.calledOnce(console.error);
+      sinon.assert.calledWithExactly(console.error, errorMsg);
+    });
+    it('should console.error when param keys is not array', () => {
+      const errorMsg = 'utils.binds should call with object target and array keys';
+
+      core.binds({});
+      core.binds({}, null);
+      core.binds({}, 1222);
+      core.binds({}, 'ds');
+      sinon.assert.callCount(console.error, 4);
+      sinon.assert.calledWithExactly(console.error, errorMsg);
+    });
   });
 });

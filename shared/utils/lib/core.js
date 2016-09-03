@@ -17,7 +17,7 @@ function toObject(val) {
  * @param  {[type]} source [description]
  * @return {[type]}        [description]
  */
-utils.objectAssign = Object.assign || function (target, source) {
+utils.objectAssign = Object.assign || function (target) {
   var fromObj;
   var ret = toObject(target);
   var len = arguments.length;
@@ -35,7 +35,7 @@ utils.objectAssign = Object.assign || function (target, source) {
   return ret;
 };
 
-utils.extend = function (target, source) {
+utils.extend = function (target) {
   var len = arguments.length;
   var ret;
 
@@ -48,12 +48,16 @@ utils.extend = function (target, source) {
 
   return ret;
 };
+utils.isArray = Array.isArray ? Array.isArray :
+  function isArray(arr) {
+    return Object.prototype.toString.call(arr) === '[object Array]';
+  }
 
 function property(key) {
   return function (obj) {
     return obj == null ? void 0 : obj[key];
   };
-};
+}
 
 // Helper for collection methods to determine whether a collection
 // should be iterated as an array or as an object.
@@ -171,6 +175,27 @@ utils.extend({
     }
 
     return val;
+  },
+  binds: function(target, keys) {
+    var len;
+    var i;
+    var key;
+    var func;
+
+    if (typeof target !== 'object' || !utils.isArray(keys)) {
+
+      console.error('utils.binds should call with object target and array keys');
+      return ;
+    }
+
+    for (i = 0, len = keys.length; i < len; i++) {
+      key = keys[i];
+      func = target[key];
+
+      if (typeof func === 'function') {
+        target[key] = func.bind(target);
+      }
+    }
   }
 })
 

@@ -2,19 +2,28 @@ import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
 import Button from '../Button/Button';
 
+const MSG = {
+  shouldSelectFile: _('Please select a upload file'),
+  extensionRange: _('Select file extension range: '),
+};
+
 const propTypes = {
   target: PropTypes.string,
   name: PropTypes.string,
   url: PropTypes.string,
   buttonText: PropTypes.string,
+  acceptExt: PropTypes.string,
   onChange: PropTypes.func,
+  onBeforeUpload: PropTypes.func,
   onUploaded: PropTypes.func,
+
+  // 弹出提示宽
   createModal: PropTypes.func,
 };
-
 const defaultProps = {
   name: 'filename',
 };
+
 class FileUpload extends React.Component {
   constructor(props) {
     super(props);
@@ -22,36 +31,49 @@ class FileUpload extends React.Component {
     this.state = {
       imageStatus: 'default',
     };
-    this.onChangeImage = this.onChangeImage.bind(this);
-    this.onUploadImage = this.onUploadImage.bind(this);
-    this.restImageStatus = this.restImageStatus.bind(this);
-    this.imageUploading = this.imageUploading.bind(this);
-  }
 
+    utils.binds(this, [
+      'onChangeImage', 'onUploadImage', 'restImageStatus',
+      'imageUploading', 'onAlert',
+    ]);
+  }
+  onAlert(msg) {
+    const createModal = this.props.createModal;
+
+    if (createModal) {
+      createModal({
+        id: 'admin',
+        role: 'alert',
+        text: msg,
+      });
+    } else {
+      alert(msg);
+    }
+  }
   onChangeImage(e) {
     const data = {};
-    const { acceptExt } = this.props;
+    const { acceptExt, onChange } = this.props;
     const thisElem = e.target;
     const filePath = thisElem.value;
     const extension = utils.getExtension(filePath);
 
+    this.ext = extension;
+
+    if (onChange) {
+      onChange({
+        value: filePath,
+        ext: extension,
+      }, e);
+    }
+
     if (!filePath) {
-      this.props.createModal({
-        id: 'admin',
-        role: 'alert',
-        text: _('Please select a upload file'),
-      });
+      this.onAlert(MSG.shouldSelectFile);
       return;
     }
 
     // 验证可接受的文件类型
     if (acceptExt && acceptExt.indexOf(extension) === -1) {
-      this.props.createModal({
-        id: 'admin',
-        role: 'alert',
-        text: _('Select file extension range: ') + acceptExt,
-      });
-
+      this.onAlert(_('Select file extension range: %s', acceptExt));
       thisElem.value = '';
       this.restImageStatus();
       return;
@@ -62,25 +84,17 @@ class FileUpload extends React.Component {
   }
 
   onUploadImage() {
-    const that = this;
-    const url = this.props.url;
+    const { url } = this.props;
     const input = this.fileElem;
     const formElem = this.formElem;
-    let extension = '';
     let data;
 
     if (!input.value) {
-      that.props.createModal({
-        id: 'admin',
-        role: 'alert',
-        text: _('Please select a upload image'),
-      });
+      this.onAlert(MSG.shouldSelectFile);
       return;
     }
 
-    extension = utils.getExtension(input.value);
-
-    if (that.state.imageStatus !== 'selected') {
+    if (this.state.imageStatus !== 'selected') {
       return;
     }
 
@@ -88,20 +102,20 @@ class FileUpload extends React.Component {
     if (typeof FormData === 'function') {
       data = new FormData();
       data.append('filename', input.files[0]);
-      data.append('suffix', extension);
-      that.imageUploading();
+      data.append('suffix', this.ext);
+      this.imageUploading();
 
       fetch(url, {
         method: 'POST',
         body: data,
       })
       .then(() => {
-        that.restImageStatus();
+        this.restImageStatus();
       });
     } else {
-      that.imageUploading();
+      this.imageUploading();
       formElem.submit();
-      that.restImageStatus();
+      this.restImageStatus();
     }
   }
 

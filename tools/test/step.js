@@ -3,15 +3,22 @@ var jsdom = require('jsdom');
 var chai = require('chai');
 var chaiImmutable = require('chai-immutable');
 var path = require('path');
+var sinon = require('sinon');
 var doc = jsdom.jsdom('<!doctype html><html><body></body></html>');
 var win = doc.defaultView;
 
 // Register babel so that it will transpile ES6 to ES5
 // before our tests run.
 babelRegister();
-
+chai.use(chaiImmutable);
+chai.config.includeStack = true;
 global.document = doc;
 global.window = win;
+global.sinon = sinon;
+global.expect = chai.expect;
+global.AssertionError = chai.AssertionError;
+global.Assertion = chai.Assertion;
+global.assert = chai.assert;
 
 Object.keys(window).forEach(function(key) {
   if (!(key in global)) {
@@ -40,5 +47,3 @@ require.extensions['.css'] = noop;
 require.extensions['.scss'] = noop;
 require.extensions['.png'] = noop;
 require.extensions['.jpg'] = noop;
-
-chai.use(chaiImmutable);

@@ -1,0 +1,26 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "settings": {
+      "portalName": "zhangsan",
+      "authRedirectUrl": "www.baidu.com",
+      "portalTitle": "comlanos",
+      "imagesSlideInterval": "2",
+      "expiration": "180",
+      "images": [
+        {
+          "count": "1",
+          "url": "images/4.jpg"
+        },
+        {
+          "count": "2",
+          "url": "images/logo.png"
+        }
+      ]
+    }
+    }
+
+}
