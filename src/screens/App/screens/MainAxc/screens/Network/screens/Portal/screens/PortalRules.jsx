@@ -4,8 +4,10 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import ListInfo from 'shared/components/Template/ListInfo';
+import Modal from 'shared/components/Modal';
+import Table from 'shared/components/Table';
+import WizardContainer from 'shared/components/Organism/WizardContainer';
 import * as appActions from 'shared/actions/app';
-import * as actions from 'shared/actions/settings';
 import * as listActions from 'shared/actions/list';
 
 const commonFormOptions = fromJS([
@@ -115,21 +117,33 @@ const screenOptions = fromJS([
   },
 ]);
 
+const objectTableOptions = fromJS([
+  {
+    id: 'nickName',
+    label: _('Nick Name'),
+  }, {
+    id: 'occurrenceTime',
+    label: _('Occurrence Time'),
+  }, {
+    id: 'recentlyAppeared',
+    label: _('Recently Appeared'),
+  }, {
+    id: 'createtime',
+    label: _('Createtime'),
+  },
+]);
+
 const formOptions = immutableUtils.getFormOptions(screenOptions);
 const tableOptions = immutableUtils.getTableOptions(screenOptions);
 const defaultEditData = immutableUtils.getDefaultData(screenOptions);
 const propTypes = {
   app: PropTypes.instanceOf(Map),
-  settings: PropTypes.instanceOf(Map),
-  list: PropTypes.instanceOf(Map),
+  store: PropTypes.instanceOf(Map),
   groupId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 
   route: PropTypes.object,
-  initSettings: PropTypes.func,
-  fetchSettings: PropTypes.func,
-  saveSettings: PropTypes.func,
+  closeListItemModal: PropTypes.func,
   updateItemSettings: PropTypes.func,
-  leaveSettingsScreen: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -137,30 +151,95 @@ export default class View extends React.Component {
   constructor(props) {
     super(props);
     this.onSave = this.onSave.bind(this);
+    this.renderStepOne = this.renderStepOne.bind(this);
   }
 
-  componentWillUnmount() {
-    this.props.leaveSettingsScreen();
-  }
   onSave() {
     this.props.saveSettings();
   }
 
+  onBeforeStep(data) {
+    // next
+    if (data.targetStep > data.currStep) {
+
+    } else {
+      console.log('prev');
+    }
+  }
+
+  onAfterStep(data) {
+    // next
+    if (data.currStep) {
+      console.log(data.currStep);
+    }
+  }
+
+  renderStepOne() {
+    return (
+      <Table
+        className="table"
+        options={objectTableOptions}
+        list={[]}
+      />
+    );
+  }
+
   render() {
+    const { store } = this.props;
+    const myListId = store.get('curListId');
+    const editData = store.getIn([myListId, 'data', 'edit']);
     return (
       <ListInfo
         {...this.props}
         listTitle={_('Portal Rules List')}
-        store={this.props.list}
+        store={store}
         tableOptions={tableOptions}
         settingsFormOption={commonFormOptions}
-        editFormOptions={formOptions}
-        defaultEditData={defaultEditData}
         hasSettingsSaveButton
         actionable
         selectable
         noTitle
-      />
+      >
+        <Modal
+          isShow={!editData.isEmpty()}
+          title={editData.get('myTitle')}
+          onOk={this.onSave}
+          onClose={this.props.closeListItemModal}
+          size="lg"
+          noFooter
+        >
+          <WizardContainer
+            title={_('Portal Rule Setup Wizard')}
+            options={
+              fromJS([
+                {
+                  title: _('Select Rule Object'),
+                  render: this.renderStepOne,
+                }, {
+                  title: _('Set Rule Trigger Condition'),
+                  render() {
+                    return 'dsds';
+                  },
+                }, {
+                  title: _('Set Rule Trigger Action Condition'),
+                  render() {
+                    return 'dsds';
+                  },
+                }, {
+                  title: _('Completed'),
+                  render() {
+                    return 'dsds';
+                  },
+                },
+              ])
+            }
+            size="sm"
+            onBeforeStep={this.onBeforeStep}
+            onAfterStep={this.onAfterStep}
+            onCompleted={(data) => console.log('onCompleted', data)}
+          />
+        </Modal>
+      </ListInfo>
     );
   }
 }
@@ -171,15 +250,13 @@ View.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
-    settings: state.settings,
-    list: state.list,
+    store: state.list,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    actions,
     listActions
   ), dispatch);
 }

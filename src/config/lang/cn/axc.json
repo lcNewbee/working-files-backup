@@ -145,6 +145,10 @@
   "Idle Detection": "闲置检测",
   "Auth Segment Ip": "认证网段IP",
   "Auth Segment Mask": "认证网段子网掩码",
+  "Portal Rule Setup Wizard": "Portal规则设置向导",
+  "Select Rule Object": "选择规则对象",
+  "Set Rule Trigger Condition": "设置触发条件",
+  "Set Rule Trigger Action Condition": "设置触发动作",
 
   "All Group": "所有组",
   "Monitor": "监控",
