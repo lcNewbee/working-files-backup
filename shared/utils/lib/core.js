@@ -53,6 +53,11 @@ utils.isArray = Array.isArray ? Array.isArray :
     return Object.prototype.toString.call(arr) === '[object Array]';
   }
 
+utils.isPromise = function(obj) {
+  return obj.then && 'function' === typeof obj.then;
+}
+
+
 function property(key) {
   return function (obj) {
     return obj == null ? void 0 : obj[key];

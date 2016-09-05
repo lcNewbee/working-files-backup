@@ -28,7 +28,6 @@ $main-blue: #0093dd;
 
   .t-wizard__header {
     margin-top: 60px;
-    border-top: 4px solid #ccc;
 
     ul {
       @include clearfix;
@@ -42,6 +41,9 @@ $main-blue: #0093dd;
       text-align: center;
       font-size: 1.4em;
       padding-top: 50px;
+      border-top: 4px solid #ccc;
+      transition: border-top .3s ease-in-out,
+                  color .3s ease-in-out;
 
       &:first-child {
         .icon {
@@ -55,7 +57,6 @@ $main-blue: #0093dd;
         .icon {
           right: 0;
           padding-right: 50%;
-          margin-right: -42px;
         }
       }
 
@@ -78,18 +79,19 @@ $main-blue: #0093dd;
           content: "\F111";
           width: 80px;
           height: 80px;
-          border: 4px solid #fff;
+          border: 4px solid transparent;
           border-radius: 50px;
           padding-top: 10px;
           font-size: 50px;
+          transition: border .3s ease-in-out;
         }
-
 
       }
 
       &.completed {
         color: $g-brand-success;
         @include opacity(1);
+        border-top-color: $g-brand-success;
 
         .icon {
           &::before {
@@ -100,6 +102,7 @@ $main-blue: #0093dd;
       }
       &.active {
         color: $g-main-color;
+        border-top-color: $g-main-color;
         @include opacity(1);
 
         .icon {

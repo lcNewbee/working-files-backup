@@ -6,6 +6,7 @@ const propTypes = {
   isShow: PropTypes.bool,
   title: PropTypes.any,
   id: PropTypes.string,
+  style: PropTypes.object,
   size: PropTypes.oneOf(['min', 'md', 'lg', 'xlg', 'max']),
   role: PropTypes.oneOf(['dialog', 'alert', 'comfirm', 'message']),
   okText: PropTypes.string,
@@ -113,7 +114,7 @@ class Modal extends Component {
               role={role}
             >
               <div className="o-modal__backdrop" />
-              <div className={classNames}>
+              <div className={classNames} style={this.props.style}>
                 <div className="o-modal__content">
                   {
                     title ? (
