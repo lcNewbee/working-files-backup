@@ -1,0 +1,11 @@
+{
+  "state":{
+    "code":2000,
+    "msg":"success"
+  },
+  "data":{
+    "ntpEnable":"1",
+    "ntpServer":"0.openwrt.pool.ntp.org",
+    "zoneName":"Africa/Accra"
+  }
+}

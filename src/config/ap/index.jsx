@@ -43,6 +43,9 @@ const pQuickSetup = require('../../screens/App/screens/Main/screens/QuickSetup')
 const pSystemSettings = require('../../screens/App/screens/Main/screens/SystemSettings');
 const sNetworkSettings = require('../../screens/App/screens/Main/screens/SystemSettings/NetworkSettings');
 const sCommonSettings = require('../../screens/App/screens/Main/screens/SystemSettings/CommonSettings');
+const sTimeSettings = require('../../screens/App/screens/Main/screens/SystemSettings/TimeSettings');
+const sAccountSettings = require('../../screens/App/screens/Main/screens/SystemSettings/AccountSettings');
+
 // 无线设置
 const pWirelessConfig = require('../../screens/App/screens/Main/screens/WirelessConfig');
 // 子菜单
@@ -63,7 +66,6 @@ const sACL = require('../../screens/App/screens/Main/screens/WirelessConfig/ACL'
 const pNetworkService = require('../../screens/App/screens/Main/screens/NetworkService');
 // 子菜单
 const sNTPClient = require('../../screens/App/screens/Main/screens/NetworkService/NTPClient');
-const sSystemLog = require('../../screens/App/screens/Main/screens/NetworkService/SystemLog');
 
 
 // 登录界面
@@ -93,6 +95,7 @@ const pTools = require('../../screens/App/screens/Main/screens/Tools');
 const sSpeedTest = require('../../screens/App/screens/Main/screens/Tools/SpeedTest');
 const sAntenna = require('../../screens/App/screens/Main/screens/Tools/Antenna');
 const sSiteSurvey = require('../../screens/App/screens/Main/screens/Tools/SiteSurvey');
+const sSystemLogs = require('../../screens/App/screens/Main/screens/Tools/SystemLogs');
 
 // 设置
 // const pGroupSettings = require('../../screens/App/screens/Main/screens/Settings/screens/GroupSettings');
@@ -121,7 +124,7 @@ const routes = [{
       path: '/main/quicksetup',
       icon: 'cog',
       text: _('Quick Setup'),
-      component: pQuickSetup,
+      component: pQuickSetup.Screen,
     }, {
       id: 'systemsettings',
       path: '/main/systemsettings',
@@ -140,10 +143,15 @@ const routes = [{
           text: _('Network Settings'),
           component: sNetworkSettings.Screen,
         }, {
-          id: 'commonsettings',
-          path: '/main/systemsettings/commonsettings',
-          text: _('Common Settings'),
-          component: sCommonSettings,
+          id: 'accountsettings',
+          path: '/main/systemsettings/accountsettings',
+          text: _('Account Settings'),
+          component: sAccountSettings.Screen,
+        }, {
+          id: 'timesettings',
+          path: '/main/systemsettings/timesettings',
+          text: _('Time Settings'),
+          component: sTimeSettings.Screen,
         },
       ],
     }, {
@@ -183,32 +191,11 @@ const routes = [{
           component: sACL.Screen,
         }],
     }, {
-      id: 'networkservice',
-      path: '/main/networkservice',
-      icon: 'cog',
-      text: _('NETWORK SERVICE'),
-      component: pNetworkService,
-      indexRoute: {
-        onEnter: (nextState, replace) => replace('/main/networkservice/ntpclient'),
-      },
-      childRoutes: [
-        {
-          id: 'ntpclient',
-          path: '/main/networkservice/ntpclient',
-          text: _('NTP Client'),
-          component: sNTPClient.Screen,
-        }, {
-          id: 'systemlog',
-          path: '/main/settings/systemlog',
-          text: _('System Log'),
-          component: sSystemLog.Screen,
-        }],
-    }, {
       id: 'pMaintenance',
       path: '/main/maintenance',
       icon: 'wrench',
       text: _('Maintenance'),
-      component: pMaintenance,
+      component: pMaintenance.Screen,
     }, {
       id: 'tools',
       path: '/main/tools',
@@ -231,8 +218,15 @@ const routes = [{
         }, {
           id: 'sitesurvey',
           path: '/main/tools/sitesurvey',
+          fetchUrl: 'goform/get_site_survey',
           text: _('Site Survey'),
           component: sSiteSurvey.Screen,
+        }, {
+          id: 'systemlogs',
+          formUrl: 'goform/get_log_list',
+          path: '/main/tools/systemlogs',
+          text: _('System Logs'),
+          component: sSystemLogs.Screen,
         },
       ],
     }],
@@ -266,9 +260,9 @@ const reducers = {
   // networkmonitor: sNetworkmonitor.networkmonitor,
   wirelessconfig: pWirelessConfig.wirelessconfig,
   // advance: pAdvance.advance,
-  networkservice: pNetworkService.networkservice,
-  ntpclient: sNTPClient.ntpclient,
-  systemlog: sSystemLog.systemlog,
+  // networkservice: pNetworkService.networkservice,
+  // ntpclient: sNTPClient.ntpclient,
+  // systemlog: sSystemLog.systemlog,
   // 系统状态
   systemstatus: pSystemStatus.systemstatus,
   // 快速设置
@@ -276,6 +270,8 @@ const reducers = {
   // 系统设置
   systemsettings: pSystemSettings.systemsettings,
   networksettings: sNetworkSettings.networksettings,
+  accountsettings: sAccountSettings.accountsettings,
+  timesettings: sTimeSettings.timesettings,
   // 无线配置
   basic: sBasic.basic,
   advance: sAdvance.advance,
@@ -284,6 +280,7 @@ const reducers = {
   // tools -> speedtest
   speedtest: sSpeedTest.speedtest,
   sitesurvey: sSiteSurvey.sitesurvey,
+  systemlogs: sSystemLogs.systemlogs,
 };
 
 // Store
@@ -303,3 +300,26 @@ const ac5000 = {
 
 export default ac5000;
 
+/* {
+      id: 'networkservice',
+      path: '/main/networkservice',
+      icon: 'cog',
+      text: _('NETWORK SERVICE'),
+      component: pNetworkService,
+      indexRoute: {
+        onEnter: (nextState, replace) => replace('/main/networkservice/ntpclient'),
+      },
+      childRoutes: [
+        {
+          id: 'ntpclient',
+          path: '/main/networkservice/ntpclient',
+          text: _('NTP Client'),
+          component: sNTPClient.Screen,
+        }, {
+          id: 'systemlog',
+          path: '/main/settings/systemlog',
+          text: _('System Log'),
+          component: sSystemLog.Screen,
+        }],
+}
+*/

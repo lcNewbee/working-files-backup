@@ -1,0 +1,9 @@
+{
+  "state":{
+    "code":2000,
+    "msg":"success"
+  },
+  "data":{
+    "logEnable":"1"
+  }
+}

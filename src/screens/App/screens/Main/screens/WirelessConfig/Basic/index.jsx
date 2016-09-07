@@ -99,19 +99,25 @@ const ieeeModeOptions = [
 ];
 
 const channelWidthOptions = [
-  { value: 'ht20', label: '20MHz' },
-  { value: 'ht40', label: '40MHz' },
-  { value: 'ht80', label: '80MHz' },
+  { value: 'HT20', label: '20MHz' },
+  { value: 'HT40', label: '40MHz' },
+  { value: 'HT80', label: '80MHz' },
 ];
 
-const frequencyWith13Options = [
-  { value: 'auto', label: 'Auto' }, { value: '1', label: 'CH1' },
-  { value: '2', label: 'CH2' }, { value: '3', label: 'CH3' },
-  { value: '4', label: 'CH4' }, { value: '5', label: 'CH5' },
-  { value: '6', label: 'CH6' }, { value: '7', label: 'CH7' },
-  { value: '8', label: 'CH8' }, { value: '9', label: 'CH9' },
-  { value: '10', label: 'CH10' }, { value: '11', label: 'CH11' },
-  { value: '12', label: 'CH12' }, { value: '13', label: 'CH13' },
+const frequencyOptions = [
+  { value: 'auto', label: 'Auto' }, { value: '36', label: '36' },
+  { value: '40', label: '40' }, { value: '44', label: '44' },
+  { value: '48', label: '48' }, { value: '52', label: '52' },
+  { value: '56', label: '56' }, { value: '60', label: '60' },
+  { value: '64', label: '64' }, { value: '100', label: '100' },
+  { value: '104', label: '104' }, { value: '108', label: '108' },
+  { value: '112', label: '112' }, { value: '116', label: '116' },
+  { value: '120', label: '120' }, { value: '124', label: '124' },
+  { value: '128', label: '128' }, { value: '132', label: '132' },
+  { value: '136', label: '136' }, { value: '140', label: '140' },
+  { value: '149', label: '149' }, { value: '153', label: '153' },
+  { value: '157', label: '157' }, { value: '161', label: '161' },
+  { value: '165', label: '165' },
 ];
 
 
@@ -135,7 +141,7 @@ const apDefaultData = {
   security: {
     mode: 'none',
   },
-  channelWidth: 'ht40',
+  channelWidth: 'HT40',
   txPower: '14',
   maxTxRate: '15',
   radioMode: '11AC',
@@ -150,7 +156,7 @@ const staDefaultData = {
   security: {
     mode: 'none',
   },
-  channelWidth: 'ht40',
+  channelWidth: 'HT40',
   txPower: '14',
   maxTxRate: '15',
   radioMode: '11AC',
@@ -166,7 +172,7 @@ const repeaterDefaultData = {
   security: {
     mode: 'none',
   },
-  channelWidth: 'ht40',
+  channelWidth: 'HT40',
   txPower: '14',
   maxTxRate: '15',
   radioMode: '11AC',
@@ -278,7 +284,6 @@ export default class Basic extends React.Component {
       this.props.changeSelectedResult(fromJS({}));
     }
   }
-
   onModalCloseBtnClick() {
     this.props.changeShowScanResultStatus(false);
     this.props.changeSelectedResult(fromJS({}));
@@ -460,7 +465,7 @@ export default class Basic extends React.Component {
                       <Table
                         className="table"
                         options={modalOptions}
-                        list={this.props.store.getIn(['curData', 'scanResult'])}
+                        list={this.props.store.getIn(['curData', 'scanResult', 'siteList'])}
                       />
                     </Modal>
                   </div>
@@ -615,7 +620,7 @@ export default class Basic extends React.Component {
           <FormGroup
             label={_('Channel')}
             type="select"
-            options={frequencyWith13Options}
+            options={frequencyOptions}
             value={frequency}
             onChange={(data) => this.props.updateItemSettings({
               frequency: data.value,

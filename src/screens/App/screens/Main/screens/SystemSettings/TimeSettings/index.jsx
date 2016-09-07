@@ -9,6 +9,8 @@ import * as appActions from 'shared/actions/app';
 import * as settingsActions from 'shared/actions/settings';
 import utils from 'shared/utils';
 import * as selfActions from './actions';
+import reducer from './reducer';
+import { timezone } from './TimeZone.js';
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
@@ -18,12 +20,28 @@ const propTypes = {
   fetch: PropTypes.func,
   updateItemSettings: PropTypes.func,
   initSettings: PropTypes.func,
+  changeTimeZone: PropTypes.func,
+  selfState: PropTypes.instanceOf(Map),
+  save: PropTypes.func,
 };
 
+function createTimezoneOption(zone) {
+  const options = [];
+  for (const key of zone.keys()) {
+    const option = {
+      value: key,
+      label: key,
+    };
+    options.push(option);
+  }
+  return options;
+}
 
-export default class CommonSettings extends Component {
+export default class TimeSettings extends Component {
   constructor(props) {
     super(props);
+    this.onTimeZoneChange = this.onTimeZoneChange.bind(this);
+    this.onSaveTimeSettings = this.onSaveTimeSettings.bind(this);
   }
 
   componentWillMount() {
@@ -39,38 +57,45 @@ export default class CommonSettings extends Component {
                   this.props.updateItemSettings({
                     ntpEnable: json.data.ntpEnable,
                     ntpServer: json.data.ntpServer,
+                    zoneName: json.data.zoneName,
+                  });
+                  this.props.changeTimeZone({
+                    zoneName: json.data.zoneName,
+                    timeZone: timezone.get(json.data.zoneName),
                   });
                 }
               });
   }
 
+  onTimeZoneChange(data) {
+    const zoneName = data.value;
+    const timeZone = timezone.get(zoneName);
+    this.props.updateItemSettings({
+      zoneName,
+    });
+    this.props.changeTimeZone({
+      zoneName,
+      timeZone,
+    });
+  }
+
+  onSaveTimeSettings() {
+    const ntpEnable = this.props.store.getIn(['curData', 'ntpEnable']);
+    const ntpServer = this.props.store.getIn(['curData', 'ntpServer']);
+    const zoneName = this.props.store.getIn(['curData', 'zoneName']);
+    const timeZone = this.props.selfState.get('timeZone');
+    const saveData = {
+      ntpEnable, ntpServer, zoneName, timeZone,
+    };
+    this.props.save('goform/set_ntp', saveData);
+  }
+
   render() {
+    const timezoneOptions = createTimezoneOption(timezone);
+    // console.log('timezone', timezone);
     const { ntpEnable, ntpServer } = this.props.store.get('curData').toJS();
     return (
       <div>
-        <div>
-          <h3>{_('Accounts Settings')}</h3>
-          <FormGroup
-            type="text"
-            label={_('Old User Name')}
-          />
-          <FormGroup
-            type="password"
-            label={_('Old Password')}
-          />
-          <FormGroup
-            type="text"
-            label={_('New User Name')}
-          />
-          <FormGroup
-            type="password"
-            label={_('New Password')}
-          />
-          <FormGroup
-            type="password"
-            label={_('Confirm Password')}
-          />
-        </div>
         <div>
           <h3>{_('Time Settings')}</h3>
           <FormGroup
@@ -90,19 +115,36 @@ export default class CommonSettings extends Component {
               ntpServer: data.value,
             })}
           />
+          <FormGroup
+            type="select"
+            label={_('Time Zone')}
+            options={timezoneOptions}
+            value={this.props.store.getIn(['curData', 'zoneName'])}
+            onChange={(data) => this.onTimeZoneChange(data)}
+            style={{
+              width: '200px',
+            }}
+          />
         </div>
+        <FormGroup>
+          <SaveButton
+            loading={this.props.app.get('saving')}
+            onClick={this.onSaveTimeSettings}
+          />
+        </FormGroup>
+
       </div>
     );
   }
 }
 
-CommonSettings.propTypes = propTypes;
+TimeSettings.propTypes = propTypes;
 
 function mapStateToProps(state) {
   return {
     app: state.app,
     store: state.settings,
-    selfState: state.commonsettings,
+    selfState: state.timesettings,
   };
 }
 
@@ -116,5 +158,6 @@ function mapDispatchToProps(dispatch) {
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps
-)(CommonSettings);
+)(TimeSettings);
 
+export const timesettings = reducer;

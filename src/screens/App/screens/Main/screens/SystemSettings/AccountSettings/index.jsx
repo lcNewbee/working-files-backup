@@ -9,6 +9,7 @@ import * as appActions from 'shared/actions/app';
 import * as settingsActions from 'shared/actions/settings';
 import utils from 'shared/utils';
 import * as selfActions from './actions';
+import reducer from './reducer';
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
@@ -21,31 +22,12 @@ const propTypes = {
 };
 
 
-export default class CommonSettings extends Component {
+export default class AccountSettings extends Component {
   constructor(props) {
     super(props);
   }
 
-  componentWillMount() {
-    this.props.initSettings({
-      settingId: this.props.route.id,
-      defaultData: {
-        ntpEnable: '0',
-      },
-    });
-    this.props.fetch('goform/get_ntp_info')
-              .then((json) => {
-                if (json.state && json.state.code === 2000) {
-                  this.props.updateItemSettings({
-                    ntpEnable: json.data.ntpEnable,
-                    ntpServer: json.data.ntpServer,
-                  });
-                }
-              });
-  }
-
   render() {
-    const { ntpEnable, ntpServer } = this.props.store.get('curData').toJS();
     return (
       <div>
         <div>
@@ -71,38 +53,23 @@ export default class CommonSettings extends Component {
             label={_('Confirm Password')}
           />
         </div>
-        <div>
-          <h3>{_('Time Settings')}</h3>
-          <FormGroup
-            type="checkbox"
-            label={_('NTP Client')}
-            checked={ntpEnable === '1'}
-            onChange={(data) => this.props.updateItemSettings({
-              ntpEnable: data.value,
-            })}
+        <FormGroup>
+          <SaveButton
+            
           />
-          <FormGroup
-            type="text"
-            label={_('NTP Server')}
-            value={ntpServer}
-            disabled={ntpEnable === '0'}
-            onChange={(data) => this.props.updateItemSettings({
-              ntpServer: data.value,
-            })}
-          />
-        </div>
+        </FormGroup>
+
       </div>
     );
   }
 }
 
-CommonSettings.propTypes = propTypes;
+AccountSettings.propTypes = propTypes;
 
 function mapStateToProps(state) {
   return {
     app: state.app,
     store: state.settings,
-    selfState: state.commonsettings,
   };
 }
 
@@ -116,5 +83,7 @@ function mapDispatchToProps(dispatch) {
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps
-)(CommonSettings);
+)(AccountSettings);
+
+export const accountsettings = reducer;
 

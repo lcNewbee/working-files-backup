@@ -1,0 +1,19 @@
+{
+  "state":{
+    "code":2000,
+    "msg":"success"
+  },
+  "data":{
+    "rts":"10",
+    "rtsEnable": "0",
+    "distance":"0.6",
+    "autoAdjust":"1",
+    "isolation":"1",
+    "sensThreshold":"-90",
+    "sensEnable":"1",
+    "led1Threshold":"-60",
+    "led2Threshold":"-70",
+    "led3Threshold":"-80",
+    "led4Threshold":"-90"
+  }
+}

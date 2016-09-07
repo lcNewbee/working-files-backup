@@ -1,0 +1,30 @@
+{
+"state":{
+	"code":2000,
+	"msg":"success"
+},
+"data":{
+  "siteList":[
+    {
+      "mac":"22:22:33:44:55:66",
+      "ssid":"axilspot",
+      "security":"wpa2",
+      "signal":"-75",
+      "noise":"-95",
+      "protocol":"802.11ac",
+      "channel":"36",
+      "channelWidth":"ht20"
+    },
+    {
+      "mac":"12:00:33:44:55:67",
+      "ssid":"axilspot2",
+      "security":"wpa-mixed",
+      "signal":"-75",
+      "noise":"-95",
+      "protocol":"802.11ac",
+      "channel":"36",
+      "channelWidth":"ht40"
+    }
+  ]
+}
+}

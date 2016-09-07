@@ -1,13 +1,15 @@
 import { fromJS } from 'immutable';
 
 const defaultState = fromJS({
-  showTable: false,
+  zoneName: '',
+  timeZone: '',
 });
 
 export default function (state = defaultState, action) {
   switch (action.type) {
-    case 'CHANGE_SHOW_TABLE_STATUS':
-      return state.set('showTable', action.data);
+    case 'CHANGE_TIME_ZONE':
+      return state.set('zoneName', action.data.zoneName)
+                  .set('timeZone', action.data.timeZone);
     default:
   }
   return state;

@@ -17,6 +17,7 @@ const propTypes = {
   fetchSettings: PropTypes.func,
 
   updateItemSettings: PropTypes.func,
+  leaveSettingsScreen: PropTypes.func,
 };
 let a;
 
@@ -163,6 +164,7 @@ export default class SystemStatus extends React.Component {
 
   componentWillUnmount() {
     window.clearInterval(a);
+    this.props.leaveSettingsScreen();
   }
 
 /*

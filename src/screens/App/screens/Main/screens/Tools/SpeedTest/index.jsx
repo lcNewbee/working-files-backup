@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
-import { Map } from 'immutable';
+import { Map, fromJS } from 'immutable';
 import {
-  Button, FormGroup, FormInput,
+  Button, FormGroup, FormInput, Modal, Table,
 } from 'shared/components';
 import { bindActionCreators } from 'redux';
 import * as appActions from 'shared/actions/app';
@@ -17,6 +17,7 @@ const propTypes = {
 
   route: PropTypes.object,
   initSettings: PropTypes.func,
+  fetch: PropTypes.func,
   fetchSettings: PropTypes.func,
   saveSettings: PropTypes.func,
   updateItemSettings: PropTypes.func,
@@ -26,6 +27,8 @@ const propTypes = {
   initSelfState: PropTypes.func,
   clickSpeedTestRunBtn: PropTypes.func,
   toggleShowAdvanceBtn: PropTypes.func,
+  changeShowScanResults: PropTypes.func,
+  changeSelectedIp: PropTypes.func,
 };
 
 const defaultProps = {};
@@ -34,6 +37,11 @@ export default class SpeedTest extends React.Component {
 
   constructor(props) {
     super(props);
+    this.onSelectBtnClick = this.onSelectBtnClick.bind(this);
+    this.onModalOkClick = this.onModalOkClick.bind(this);
+    this.onModalCancelClick = this.onModalCancelClick.bind(this);
+    this.onSelectScanResultItem = this.onSelectScanResultItem.bind(this);
+    this.ceateIpTableList = this.ceateIpTableList.bind(this);
   }
 
   componentWillMount() {
@@ -45,22 +53,79 @@ export default class SpeedTest extends React.Component {
       saveUrl: props.route.saveUrl,
       defaultData: {
         ip: '192.168.1.10',
-        username: 'root',
-        password: '123',
-        port: '5001',
         time: '30',
         direction: 'duplex',
       },
     });
     props.initSelfState();
+    props.changeShowScanResults(false);
+  }
+  onSelectBtnClick() {
+    this.props.fetch('goform/get_ip_list')
+              .then((json) => {
+                if (json.state && json.state.code === 2000) {
+                  this.props.updateItemSettings({
+                    ipList: fromJS(json.data.ipList),
+                  });
+                }
+              });
+    this.props.changeShowScanResults(true);
+  }
+  onModalOkClick() {
+    this.props.updateItemSettings({
+      ip: this.props.selfState.get('selectedIp'),
+      ipList: fromJS([]),
+    });
+    this.props.changeShowScanResults(false);
   }
 
+  onModalCancelClick() {
+    this.props.changeShowScanResults(false);
+    this.props.updateItemSettings({
+      ipList: fromJS([]),
+    });
+  }
 
+  onSelectScanResultItem(val, item) {
+    const ip = item.get('ip');
+    this.props.changeSelectedIp(ip);
+  }
+  ceateIpTableList() {
+    const immutList = this.props.store.getIn(['curData', 'ipList']);
+    const list = [];
+    if (immutList !== undefined) {
+      const ipList = immutList.toJS();
+      for (const val of ipList) {
+        list.push({ ip: val });
+      }
+    }
+    return list;
+  }
   render() {
     const {
       ip, username, password, port, time, direction,
     } = this.props.store.get('curData').toJS();
     const { showResults, showAdvance, bandwidth, rx, tx, total } = this.props.selfState.toJS();
+    const scanIpOptions = fromJS([
+      {
+        id: 'action',
+        text: _('Select'),
+        width: '50',
+        transform: function(val, item) {
+          return (
+            <FormInput
+              type="radio"
+              name="ipselection"
+              onChange={() => this.onSelectScanResultItem(val, item)}
+            />
+          );
+        }.bind(this),
+      },
+      {
+        id: 'ip',
+        text: _('IP'),
+      },
+    ]);
     return (
       <div>
         <div className="clearfix">
@@ -77,32 +142,32 @@ export default class SpeedTest extends React.Component {
             className="fl"
             theme="default"
             text={_('Select')}
+            onClick={this.onSelectBtnClick}
+            style={{
+              marginLeft: '4px',
+              marginTop: '3px',
+            }}
           />
         </div>
-        <FormGroup
-          type="text"
-          label={_('User')}
-          value={username}
-          onChange={(data) => this.props.updateItemSettings({
-            username: data.value,
-          })}
-        />
-        <FormGroup
-          type="text"
-          label={_('Password')}
-          value={password}
-          onChange={(data) => this.props.updateItemSettings({
-            password: data.value,
-          })}
-        />
-        <FormGroup
-          type="text"
-          label={_('Remote WEB Port')}
-          value={port}
-          onChange={(data) => this.props.updateItemSettings({
-            port: data.value,
-          })}
-        />
+        {
+          this.props.selfState.get('showScanResults') ? (
+            <Modal
+              cancelText={_('Cancel')}
+              okText={_('OK')}
+              onOk={this.onModalOkClick}
+              onClose={this.onModalCancelClick}
+              cancelButton
+              okButton
+              isShow
+            >
+              <Table
+                className="table"
+                options={scanIpOptions}
+                list={this.ceateIpTableList()}
+              />
+            </Modal>
+          ) : null
+        }
         <FormGroup
           type="checkbox"
           label={_('Show Advanced Options')}

@@ -1,8 +1,19 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { FormGroup, FormInput } from 'shared/components';
+<<<<<<< 0fc38d91b0d4a7adaff11e7ddd4d262013acfd77
 import Button from 'shared/components/Button/Button';
+=======
+import Button from 'shared/components/Button';
+import * as appActions from 'shared/actions/app';
+>>>>>>> 完成日志页面的主体功能
 import utils from 'shared/utils';
 // import './index.scss';
+
+const maintenanceSettingPropTypes = {
+  save: PropTypes.func,
+};
 
 class MaintenanceSetting extends Component {
 
@@ -115,6 +126,7 @@ class MaintenanceSetting extends Component {
           <FormGroup label={_('Backup configuration:')}>
             <Button
               text="Backup"
+              onClick={() => this.props.save()}
             />
           </FormGroup>
 
@@ -151,6 +163,8 @@ class MaintenanceSetting extends Component {
   }
 }
 
+MaintenanceSetting.propTypes = maintenanceSettingPropTypes;
+
 const ActiveFirmware = React.createClass({
   render() {
     return (
@@ -170,18 +184,43 @@ const ActiveFirmware = React.createClass({
   },
 });
 
-const Maintenance = React.createClass({
+const maintenancePropTypes = {
+  save: PropTypes.func,
+};
+
+export default class Maintenance extends Component {
   render() {
     return (
       <div className="Maintenance">
         <h3>{_('MAINTENANCE')}</h3>
-        <MaintenanceSetting />
+        <MaintenanceSetting
+          save={() => this.props.save('goform/saveconfig')}
+        />
         <h4>Dual boot firmware images</h4>
         <ActiveFirmware />
         <p>Note: updating firmware image always replaces backup firmware image and activates it automatically after reboot!</p>
       </div>
     );
-  },
-});
+  }
+}
 
-export default Maintenance;
+Maintenance.propTypes = maintenancePropTypes;
+
+function mapStateToProps(state) {
+  return {
+    app: state.app,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    appActions,
+    dispatch
+  );
+}
+
+export const Screen = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Maintenance);
+

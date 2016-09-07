@@ -26,6 +26,20 @@ export function receiveTestResult(data) {
   };
 }
 
+export function changeShowScanResults(data) {
+  return {
+    type: 'CHANGE_SHOW_SCAN_RESULTS',
+    data,
+  };
+}
+
+export function changeSelectedIp(data) {
+  return {
+    type: 'CHANGE_SELECTED_IP',
+    data,
+  };
+}
+
 export function clickSpeedTestRunBtn() {
   return (dispatch, getState) => {
     const showAdvance = getState().speedtest.get('showAdvance');

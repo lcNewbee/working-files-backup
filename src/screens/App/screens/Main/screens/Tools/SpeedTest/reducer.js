@@ -3,7 +3,9 @@ import { fromJS } from 'immutable';
 const defaultState = fromJS({
   showAdvance: '0',
   showResults: '0',
+  showScanResults: false,
   bandwidth: '512',
+  selectedIp: '',
   rX: '1000',
   tX: '1000',
   total: '1024',
@@ -21,6 +23,10 @@ export default function (state = defaultState, action) {
                   .set('showResults', '0');
     case 'RECEIVE_TEST_RESULT':
       return state.merge(action.data);
+    case 'CHANGE_SHOW_SCAN_RESULTS':
+      return state.set('showScanResults', action.data);
+    case 'CHANGE_SELECTED_IP':
+      return state.set('selectedIp', action.data);
     default:
   }
   return state;
