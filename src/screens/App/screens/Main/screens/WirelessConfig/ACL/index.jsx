@@ -72,43 +72,6 @@ export default class ACL extends React.Component {
         });
     this.props.changeMacInput('');
   }
-/*
-  onMacInputChange(value) {
-    let val = value;
-    const lastChar = value.charAt(value.length - 1);
-    const preLen = this.props.macInput.get('preLen');
-    const afterLen = val.length;
-    if (val === '') {  // 该情况只会出现在删除最后一个字符的情况下
-      this.props.changeMacInput(val);
-    } else if (lastChar.match(/[0-9a-fA-F]/) !== null) {
-      console.log('match', value.charAt(value.length - 1).match(/[0-9a-fA-F]/));
-      // console.log('value', value);
-      const macArr = val.split(':');
-      const len = macArr.length;
-      // console.log('macArr', macArr);
-      if (macArr[len - 1].length <= 2) {
-        console.log(preLen, afterLen);
-        if (macArr[len - 1].length === 2 && len < 6) {
-          if (preLen < afterLen) {
-            val += ':';
-          } else if (preLen > afterLen) {
-            val = val.slice(0, -3);
-          }
-        }
-      } else if (macArr[len - 1].length === 3 && len < 6) {
-        // 处理添加过程中删除冒号后又继续添加的情况
-        val = val.slice(0, -1) + ':' + macArr[len - 1].slice(2);
-      } else { // 删除超过MAC地址长度限制的字符，不在输入框显示
-        val = val.slice(0, -1);
-      }
-      this.props.changePreLenInMacInput(afterLen);
-      this.props.changeMacInput(val);
-    } else if (lastChar.match(/[:]/) !== null) {
-      val = value.slice(0, -1);
-      this.props.changeMacInput(val);
-    }
-  }
-*/
 
   onMacInputChange(value) {
     // 还可以再智能一些，处理在用户复制字符串到输入框时，只截取合法部分，舍去多余部分（正则）
@@ -145,7 +108,8 @@ export default class ACL extends React.Component {
         this.props.changePreLenInMacInput(val.length);
         this.props.changeMacInput(val);
       } else {
-        this.props.changePreLenInMacInput(val.length);
+        const length = (val.length === 1) ? 0 : val.length;
+        this.props.changePreLenInMacInput(length);
         this.props.changeMacInput(val);
       }
     }

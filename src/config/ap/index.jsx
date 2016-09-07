@@ -59,7 +59,6 @@ const sACL = require('../../screens/App/screens/Main/screens/WirelessConfig/ACL'
 // const sNetworkmonitor = require('../../screens/App/screens/Main/screens/MainMenu/screens/Networkmonitor');
 
 
-
 // 网络服务
 const pNetworkService = require('../../screens/App/screens/Main/screens/NetworkService');
 // 子菜单
@@ -92,7 +91,8 @@ const pMaintenance = require('../../screens/App/screens/Main/screens/Maintenance
 // 工具
 const pTools = require('../../screens/App/screens/Main/screens/Tools');
 const sSpeedTest = require('../../screens/App/screens/Main/screens/Tools/SpeedTest');
-
+const sAntenna = require('../../screens/App/screens/Main/screens/Tools/Antenna');
+const sSiteSurvey = require('../../screens/App/screens/Main/screens/Tools/SiteSurvey');
 
 // 设置
 // const pGroupSettings = require('../../screens/App/screens/Main/screens/Settings/screens/GroupSettings');
@@ -113,7 +113,7 @@ const routes = [{
       id: 'systemstatus',
       fetchUrl: 'goform/get_system_info',
       path: '/main/systemstatus',
-      icon: 'cog',
+      icon: 'info',
       text: _('Device Status'),
       component: pSystemStatus.Screen,
     }, {
@@ -166,6 +166,8 @@ const routes = [{
         }, {
           id: 'advance',
           path: '/main/wirelessconfig/advance',
+          fetchUrl: 'goform/get_adv_wl_info',
+          saveUrl: 'goform/set_adv_wl_info',
           text: _('Advance'),
           component: sAdvance.Screen,
         }, {
@@ -204,7 +206,7 @@ const routes = [{
     }, {
       id: 'pMaintenance',
       path: '/main/maintenance',
-      icon: 'file-pdf-o',
+      icon: 'wrench',
       text: _('Maintenance'),
       component: pMaintenance,
     }, {
@@ -221,6 +223,16 @@ const routes = [{
           text: _('Speed Test'),
           saveUrl: '/goform/bandwidth_test',
           component: sSpeedTest.Screen,
+        }, {
+          id: 'antenna',
+          path: '/main/tools/antenna',
+          text: _('Antenna Adjust'),
+          component: sAntenna,
+        }, {
+          id: 'sitesurvey',
+          path: '/main/tools/sitesurvey',
+          text: _('Site Survey'),
+          component: sSiteSurvey.Screen,
         },
       ],
     }],
@@ -271,6 +283,7 @@ const reducers = {
   acl: sACL.acl,
   // tools -> speedtest
   speedtest: sSpeedTest.speedtest,
+  sitesurvey: sSiteSurvey.sitesurvey,
 };
 
 // Store

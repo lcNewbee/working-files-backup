@@ -8,6 +8,8 @@ export default class Mac extends React.Component {
         style={{
           textDecoration: this.props.selected ? 'line-through' : 'none',
           cursor: this.props.selected ? 'default' : 'pointer',
+          fontSize: '13px',
+          paddingLeft: '5px',
         }}
       >
         {this.props.text}
@@ -19,5 +21,5 @@ export default class Mac extends React.Component {
 Mac.propTypes = {
   onClick: PropTypes.func.isRequired,
   text: PropTypes.string.isRequired,
-  selected: PropTypes.bool.isRequired,
+  selected: PropTypes.bool,
 };

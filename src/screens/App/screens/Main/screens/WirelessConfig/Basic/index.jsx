@@ -1,26 +1,39 @@
 import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
-import { Map } from 'immutable';
+import { Map, fromJS } from 'immutable';
 import validator from 'shared/utils/lib/validator';
 import { bindActionCreators } from 'redux';
+<<<<<<< 44f21262ac11bf47c1123904ac54dfb52b231d55
 import { FormGroup, FormInput } from 'shared/components';
 import Button from 'shared/components/Button/Button';
+=======
+import { FormGroup, FormInput, Modal, Table } from 'shared/components';
+import Button from 'shared/components/Button';
+>>>>>>> 添加工具栏下的天线校准和信号扫描页面（无交互），完成无线配置页面的高级设置部分
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/settings';
+import * as selfActions from './actions';
 import reducer from './reducer.js';
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
+  selfState: PropTypes.instanceOf(Map),
 
   route: PropTypes.object,
   initSettings: PropTypes.func,
   fetchSettings: PropTypes.func,
+  fetch: PropTypes.func,
   saveSettings: PropTypes.func,
   updateItemSettings: PropTypes.func,
   leaveSettingsScreen: PropTypes.func,
   validateOption: PropTypes.object,
+
+  changeScanStatus: PropTypes.func,
+  changeShowScanResultStatus: PropTypes.func,
+  changeSelectedResult: PropTypes.func,
+  leaveScreen: PropTypes.func,
 };
 
 const defaultProps = {};
@@ -101,6 +114,7 @@ const frequencyWith13Options = [
   { value: '12', label: 'CH12' }, { value: '13', label: 'CH13' },
 ];
 
+
 const validOptions = Map({
   ssid: validator({
     rules: 'remarkTxt:["\'\\\\"]|len:[1, 31]',
@@ -113,6 +127,52 @@ const validOptions = Map({
   }),
 });
 
+const apDefaultData = {
+  wirelessMode: 'ap',
+  ssid: 'axilspot',
+  hideSsid: '0',
+  frequency: 'auto',
+  security: {
+    mode: 'none',
+  },
+  channelWidth: 'ht40',
+  txPower: '14',
+  maxTxRate: '15',
+  radioMode: '11AC',
+};
+
+const staDefaultData = {
+  wirelessMode: 'sta',
+  ssid: 'axilspot',
+  hideSsid: '0',
+  frequency: 'auto',
+  apMac: '',
+  security: {
+    mode: 'none',
+  },
+  channelWidth: 'ht40',
+  txPower: '14',
+  maxTxRate: '15',
+  radioMode: '11AC',
+};
+
+const repeaterDefaultData = {
+  wirelessMode: 'repeater',
+  ssid: 'axilspot',
+  hideSsid: '0',
+  frequency: 'auto',
+  peers: [],
+  autoRepeat: '0',
+  security: {
+    mode: 'none',
+  },
+  channelWidth: 'ht40',
+  txPower: '14',
+  maxTxRate: '15',
+  radioMode: '11AC',
+};
+
+
 export default class Basic extends React.Component {
 
   constructor(props) {
@@ -120,6 +180,12 @@ export default class Basic extends React.Component {
     this.onSave = this.onSave.bind(this);
     this.onHideSsidboxClick = this.onHideSsidboxClick.bind(this);
     this.onAutoRepeatBoxClick = this.onAutoRepeatBoxClick.bind(this);
+    this.onStopScanClick = this.onStopScanClick.bind(this);
+    this.onScanBtnClick = this.onScanBtnClick.bind(this);
+    this.onModalOkBtnClick = this.onModalOkBtnClick.bind(this);
+    this.onModalCloseBtnClick = this.onModalCloseBtnClick.bind(this);
+    this.onSelectScanResultItem = this.onSelectScanResultItem.bind(this);
+    this.onChengeWirelessMode = this.onChengeWirelessMode.bind(this);
   }
 
   componentWillMount() {
@@ -137,7 +203,7 @@ export default class Basic extends React.Component {
       defaultData: {
         wirelessMode: 'ap',
         ssid: 'test',
-        hideSsid: 0,
+        hideSsid: '0',
         countryCode: 'CN',
         radioMode: 'A/N mixed',
         channelWidth: '40',
@@ -152,10 +218,13 @@ export default class Basic extends React.Component {
     });
 
     props.fetchSettings();
+    props.changeShowScanResultStatus(false);
+    props.changeScanStatus(false);
   }
 
   componentWillUnmount() {
     this.props.leaveSettingsScreen();
+    this.props.leaveScreen();
   }
 
   onSave() {
@@ -163,19 +232,126 @@ export default class Basic extends React.Component {
   }
 
   onHideSsidboxClick() {
-    const val = (this.props.store.getIn(['curData', 'hideSsid'])) ? 0 : 1;
+    const val = (this.props.store.getIn(['curData', 'hideSsid']) === '1') ? '0' : '1';
     this.props.updateItemSettings({
       hideSsid: val,
     });
   }
   onAutoRepeatBoxClick() {
-    const val = (this.props.store.getIn(['curData', 'autoRepeat'])) ? 0 : 1;
+    const val = (this.props.store.getIn(['curData', 'autoRepeat']) === '1') ? '0' : '1';
     this.props.updateItemSettings({
       autoRepeat: val,
     });
   }
 
+  onStopScanClick() {
+    this.props.changeScanStatus(false);
+    this.props.changeShowScanResultStatus(false);
+  }
+  onScanBtnClick() {
+    this.props.changeScanStatus(true);
+    this.props.fetch('goform/get_site_survey')
+              .then((json) => {
+                if (json.state && json.state.code === 2000) {
+                  this.props.updateItemSettings({
+                    scanResult: fromJS(json.data),
+                  });
+                  this.props.changeShowScanResultStatus(true);
+                  this.props.changeScanStatus(false);
+                }
+              });
+  }
+  onModalOkBtnClick() {
+    const {
+      mac, ssid, security, channel, channelWidth,
+    } = this.props.selfState.get('selectedResult').toJS();
+    if (!this.props.selfState.get('selectedResult').isEmpty()) {
+      this.props.updateItemSettings({
+        apMac: mac,
+        ssid,
+        security,
+        channel,
+        channelWidth,
+        scanResult: fromJS({}),
+      });
+      this.props.changeShowScanResultStatus(false);
+      this.props.changeSelectedResult(fromJS({}));
+    }
+  }
+
+  onModalCloseBtnClick() {
+    this.props.changeShowScanResultStatus(false);
+    this.props.changeSelectedResult(fromJS({}));
+  }
+  onSelectScanResultItem(item) {
+    const { ssid, mac, security, channel, channelWidth } = item.toJS();
+    const result = fromJS({}).set('ssid', ssid).set('mac', mac)
+                             .set('frequency', channel)
+                             .set('channelWidth', channelWidth)
+                             .set('security', fromJS({
+                               mode: security,
+                               key: '',
+                             }));
+    this.props.changeSelectedResult(result);
+  }
+  onChengeWirelessMode(data) {
+    if (data.value === 'ap') {
+      this.props.updateItemSettings({ ...apDefaultData });
+    } else if (data.value === 'sta') {
+      this.props.updateItemSettings({ ...staDefaultData });
+    } else if (data.value === 'repeater') {
+      this.props.updateItemSettings({ ...repeaterDefaultData });
+    }
+  }
+
   render() {
+    const modalOptions = fromJS([
+      {
+        id: 'operate',
+        text: _('Select'),
+        transform: function(val, item) {
+          return (
+            <FormInput
+              type="radio"
+              name="selectScanItem"
+              onChange={() => this.onSelectScanResultItem(item)}
+            />
+          );
+        }.bind(this),
+      },
+      {
+        id: 'mac',
+        text: _('MAC'),
+      },
+      {
+        id: 'ssid',
+        text: _('SSID'),
+      },
+      {
+        id: 'security',
+        text: _('Security Mode'),
+      },
+      {
+        id: 'signal',
+        text: _('Signal'),
+      },
+      {
+        id: 'noise',
+        text: _('Noise'),
+      },
+      {
+        id: 'protocol',
+        text: _('Protocol'),
+      },
+      {
+        id: 'channel',
+        text: _('Channel'),
+      },
+      {
+        id: 'channelWidth',
+        text: _('Channel Width'),
+      },
+    ]);
     const {
       wirelessMode, ssid, apMac, countryCode, radioMode, channelWidth,
       hideSsid, txPower, frequency, maxTxRate, peers, autoRepeat,
@@ -204,9 +380,7 @@ export default class Basic extends React.Component {
               type="select"
               options={devicemodeOptions}
               value={wirelessMode}
-              onChange={(data) => this.props.updateItemSettings({
-                wirelessMode: data.value,
-              })}
+              onChange={(data) => this.onChengeWirelessMode(data)}
               label={_('Wireless Mode')}
             />
             <span className="fl">
@@ -223,7 +397,7 @@ export default class Basic extends React.Component {
                         paddingBottom: '-2px',
                       }}
                       type="checkbox"
-                      checked={autoRepeat}
+                      checked={autoRepeat === '1'}
                       onClick={this.onAutoRepeatBoxClick}
                     />&nbsp;
                     {_('Auto')}
@@ -233,29 +407,63 @@ export default class Basic extends React.Component {
             </span>
           </div>
           <div className="clearfix">
-            <FormGroup
-              label="SSID"
-              className="fl"
-              type="text"
-              required
-              value={ssid}
-              onChange={(data) => this.props.updateItemSettings({
-                ssid: data.value,
-              })}
-              {...this.props.validateOption.ssid}
-            />
+            <div
+              style={{
+                width: '205px',
+              }}
+            >
+              <FormGroup
+                label="SSID"
+                className="fl"
+                type="text"
+                required
+                value={ssid}
+                onChange={(data) => this.props.updateItemSettings({
+                  ssid: data.value,
+                })}
+                {...this.props.validateOption.ssid}
+              />
+            </div>
             <span className="fl">
               {
                 (wirelessMode === 'sta') ? (
-                  <span
-                    style={{
-                      paddingTop: '2px',
-                    }}
-                  >&nbsp;&nbsp;
-                    <Button
-                      text={_('Scan')}
-                    />
-                  </span>
+                  <div>
+                    <span
+                      style={{
+                        paddingTop: '2px',
+                      }}
+                    >&nbsp;&nbsp;
+                    {
+                      this.props.selfState.get('scaning') ? (
+                        <Button
+                          text={_('Stop Scan')}
+                          onClick={this.onStopScanClick}
+                          loading
+                        />
+                      ) : (
+                        <Button
+                          text={_('Scan')}
+                          onClick={this.onScanBtnClick}
+                        />
+                      )
+                    }
+                    </span>
+                    <Modal
+                      isShow={this.props.selfState.get('showScanResult')}
+                      onOk={this.onModalOkBtnClick}
+                      onClose={this.onModalCloseBtnClick}
+                      okText={_('Select')}
+                      cancelText={_('Cancel')}
+                      okButton
+                      cancelButton
+                    >
+                      <Table
+                        className="table"
+                        options={modalOptions}
+                        list={this.props.store.getIn(['curData', 'scanResult'])}
+                      />
+                    </Modal>
+                  </div>
                 ) : (
                   <span
                     style={{
@@ -268,7 +476,7 @@ export default class Basic extends React.Component {
                         paddingBottom: '-2px',
                       }}
                       type="checkbox"
-                      checked={hideSsid}
+                      checked={hideSsid === '1'}
                       onClick={this.onHideSsidboxClick}
                     />&nbsp;
                     {_('Hide SSID')}
@@ -281,18 +489,26 @@ export default class Basic extends React.Component {
               (wirelessMode === 'repeater') ? (
                 <div>
                   <div className="clearfix">
-                    <FormGroup
-                      className="fl"
-                      label="WDS Peers"
-                      type="text"
-                      value={peers[0]}
-                      onChange={(data) => this.props.updateItemSettings({
-                        peers: [
-                          data.value, peers[1], peers[2],
-                          peers[3], peers[4], peers[5],
-                        ],
-                      })}
-                    />
+                    <div
+                      style={{
+                        width: '205px',
+                      }}
+                    >
+                      <FormGroup
+                        className="fl"
+                        label="WDS Peers"
+                        type="text"
+                        value={peers[0]}
+                        onChange={(data) => this.props.updateItemSettings({
+                          peers: [
+                            data.value, peers[1], peers[2],
+                            peers[3], peers[4], peers[5],
+                          ],
+                        })}
+                        {...apmac}
+                      />
+                    </div>
+
                     <FormGroup
                       type="text"
                       className="fl"
@@ -594,9 +810,11 @@ Basic.propTypes = propTypes;
 Basic.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
+  // console.log('state.basic', state.basic);
   return {
     app: state.app,
     store: state.settings,
+    selfState: state.basic,
   };
 }
 
@@ -604,6 +822,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
     actions,
+    selfActions,
   ), dispatch);
 }
 
