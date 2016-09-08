@@ -107,6 +107,7 @@ const sPreferencesAnalysis =
 const sInformationPush =
     require('../../screens/App/screens/MainAxc/screens/Report/screens/BusinessReport/screens/InformationPush');
 const sLiveMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/LiveMap');
+const sRfMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/Rf');
 /**
  * 系统管理
  */
@@ -306,8 +307,9 @@ const routes = [
               }, {
                 id: 'rfPlan',
                 path: '/main/group/map/rf_plan',
-                formUrl: '/goform/rfPlan',
+                formUrl: '/goform/getDeviceList',
                 text: _('RF Plan'),
+                component: sRfMap.Screen,
               }, {
                 id: 'heatMap',
                 path: '/main/group/map/heat_map',

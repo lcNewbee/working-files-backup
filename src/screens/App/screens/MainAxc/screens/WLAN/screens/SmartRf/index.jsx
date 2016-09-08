@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import {
   FormGroup, SaveButton, FormInput,
 } from 'shared/components';
-import channels from 'shared/config/channels.json';
+import channels from 'shared/config/country.json';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/settings';
 

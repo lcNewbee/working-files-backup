@@ -120,7 +120,7 @@ const screenOptions = fromJS([
 const objectTableOptions = fromJS([
   {
     id: 'nickName',
-    label: _('Nick Name'),
+    label: _('Nickname'),
   }, {
     id: 'occurrenceTime',
     label: _('Occurrence Time'),

@@ -149,6 +149,9 @@
   "Select Rule Object": "选择规则对象",
   "Set Rule Trigger Condition": "设置触发条件",
   "Set Rule Trigger Action Condition": "设置触发动作",
+  "Occurrence Time": "出现时间",
+  "Recently Appeared": "最近出现时间",
+  "Createtime": "创建时间",
 
   "All Group": "所有组",
   "Monitor": "监控",

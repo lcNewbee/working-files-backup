@@ -1,0 +1,150 @@
+.m-device {
+  display: inline-block;
+  width: 100%;
+  line-height: 20px;
+  cursor: pointer;
+  border-bottom: 1px solid #ddd;
+
+  .m-device__avatar {
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+    cursor: move;
+    background: url(images/success.png) center no-repeat;
+    background-size: 30px;
+
+    &.danger {
+      background-image: url(images/danger.png);
+      background-size: 30px;
+    }
+    // 锁定状态样式
+    &.locked {
+      cursor: pointer;
+      &::before {
+        position: absolute;
+        top: -2px;
+        right: -2px;
+        display: inline-block;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
+        font-size: 14px;
+        color: #777;
+        content: "\F023";
+        background-color: #fff;
+        border-radius: 20px;
+        padding: 4px;
+
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+    }
+  }
+  .m-device__name {
+    margin-left: 6px;
+    line-height: 26px;
+    user-select: none;
+  }
+  .m-device__btn {
+    position: absolute;
+    z-index: -1;
+    color: #444;
+    cursor: pointer;
+    transition: all .3s ease-in-out;
+
+    &.close {
+      color: #c23934;
+    }
+    &.lock {
+      color: #0093dd;
+    }
+  }
+  .icon {
+    font-size: 16px;
+  }
+
+  &.m-device--open {
+    .m-device__btn {
+      z-index: 1;
+    }
+  }
+
+  .m-device__coverage {
+    position: absolute;
+    top: -35px;
+    left: -33px;
+    padding: 50px;
+    background: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 80, from(green), to(#fff));
+    background: -moz-radial-gradient(50% 50%, closest-corner, green,#fff);
+    background: -webkit-radial-gradient(50% 50%, closest-corner, green,#fff);
+    border-radius: 50px;
+    //background: #ccc;
+    opacity: .8;
+  }
+}
+.o-map-warp {
+  position: absolute;
+  top: 100px;
+  right: 160px;
+  bottom: 10px;
+  left: 0;
+  min-height: 400px;
+  overflow: hidden;
+  border: 1px solid #d2d2d2;
+}
+.o-map-rf {
+  position: absolute;
+  cursor: url("images/openhand_8_8.cur") 8 8, default;
+  background: url('images/map_bk.jpg');
+  background-size: 100%;
+  > img {
+    width: 100%;
+    visibility: hidden;
+  }
+  .m-device {
+    position: absolute;
+    width: auto;
+    border: none;
+  }
+}
+.o-map-zoom-bar {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  z-index: 3;
+  text-align: center;
+
+  .o-map-zoom-bar__thmp {
+    width: 40px;
+    height: 27px;
+    display: inline-block;
+    line-height: 27px;
+    vertical-align: middle;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    user-select: none;
+  }
+  .icon {
+    line-height: 26px;
+    width: 28px;
+    cursor: pointer;
+    font-size: 14px;
+    vertical-align: middle;
+    color: #444;
+  }
+}
+.o-devices-list {
+  position: absolute;
+  top: 100px;
+  right: 0;
+  width: 140px;
+  border: 1px solid #ccc;
+
+  .m-device {
+    padding: .85em 1em;
+  }
+}

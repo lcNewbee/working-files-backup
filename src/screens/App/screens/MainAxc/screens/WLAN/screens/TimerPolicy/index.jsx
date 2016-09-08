@@ -10,7 +10,7 @@ import {
 } from 'shared/components';
 import * as listActions from 'shared/actions/list';
 import * as appActions from 'shared/actions/app';
-import channels from 'shared/config/channels.json';
+import channels from 'shared/config/country.json';
 import moment from 'moment';
 
 const channelsList = List(channels);
