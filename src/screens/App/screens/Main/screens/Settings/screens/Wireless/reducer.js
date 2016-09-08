@@ -1,5 +1,5 @@
-import Immutable, {Map, List, fromJS} from 'immutable';
-import channels from './channels.json';
+import Immutable, { Map, List, fromJS } from 'immutable';
+import channels from 'shared/config/country.json';
 
 const channelsList = List(channels);
 const defaultSettings = Map({
@@ -17,14 +17,14 @@ const defaultSettings = Map({
 const defaultState = fromJS({
   data: {
     list: [],
-    curr: {}
-  }
+    curr: {},
+  },
 });
 
 function getCountry(country) {
-  var initLang = country;
-  var ret = '';
-  var navigator = window.navigator;
+  let initLang = country;
+  let ret = '';
+  let navigator = window.navigator;
 
   if (!initLang) {
     initLang = (navigator.language || navigator.userLanguage ||
@@ -42,12 +42,11 @@ function getCountry(country) {
 }
 
 function transformCountryData(settingData) {
-  var ret;
+  let ret;
 
   ret = settingData.set('country', getCountry(settingData.get('country')));
 
   channelsList.forEach(function (item) {
-
     if (item.country === ret.get('country')) {
       if (parseInt(ret.get('channel'), 10) > parseInt(item['2.4g'].substr(-2), 10)) {
         ret = ret.set('channel', '0');
@@ -59,17 +58,16 @@ function transformCountryData(settingData) {
 }
 
 function receiveSettings(state, settingData) {
-  let ret = state.update('data', data => data.merge(settingData));
+  const ret = state.update('data', data => data.merge(settingData));
   const currData = state.getIn(['data', 'curr']) || Map({});
   let listCurr;
 
   if (!currData.isEmpty()) {
     listCurr = currData.merge(defaultSettings).merge(ret.getIn(['data', 'list']).find(function (item) {
       return currData.get('groupname') === item.get('groupname');
-    }))
-
+    }));
   } else {
-    listCurr = currData.merge(defaultSettings).merge(ret.getIn(['data', 'list', 0]))
+    listCurr = currData.merge(defaultSettings).merge(ret.getIn(['data', 'list', 0]));
   }
 
   listCurr = transformCountryData(listCurr);
@@ -79,11 +77,11 @@ function receiveSettings(state, settingData) {
 }
 
 function changeGroup(state, groupname) {
-  let ret = state.mergeIn(['data', 'curr'], defaultSettings);
+  const ret = state.mergeIn(['data', 'curr'], defaultSettings);
   let selectGroup = state.getIn(['data', 'list'])
     .find(function (item) {
       return item.get('groupname') === groupname;
-    })
+    });
 
   selectGroup = transformCountryData(selectGroup);
 
@@ -98,14 +96,14 @@ export default function (state = defaultState, action) {
     case 'RECEIVE_WIFI':
       return receiveSettings(state, action.data);
 
-    case "CHANGE_WIFI_GROUP":
+    case 'CHANGE_WIFI_GROUP':
       return changeGroup(state, action.name);
 
-    case "CHANGE_WIFI_SETTINGS":
-      return state.mergeIn(['data', 'curr'], action.data)
+    case 'CHANGE_WIFI_SETTINGS':
+      return state.mergeIn(['data', 'curr'], action.data);
 
     default:
 
   }
   return state;
-};
+}

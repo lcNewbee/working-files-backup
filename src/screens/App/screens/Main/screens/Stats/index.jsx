@@ -6,12 +6,12 @@ import { List, fromJS } from 'immutable';
 
 // components
 import {
-  Table, Switchs, Button, Icon, Modal, EchartReact,
+  Table, Switchs, Icon, Modal, EchartReact,
 } from 'shared/components';
 
 import * as actions from './actions';
 import reducer from './reducer';
-import './index.scss';
+import './_index.scss';
 
 const flowRateFilter = utils.filter('flowRate');
 const flowRateKbFilter = utils.filter('flowRate:["KB"]');
@@ -115,6 +115,7 @@ const clientProducerOption = {
   ],
 };
 const apChartOption = {
+  color: ['#c23531', '#4BC076', '#2f4554', '#61a0a8', '#d48265'],
   tooltip: {
     trigger: 'item',
     formatter: '{a} <br/>{b} : {c} ' + _('apUnit') + ' ({d}%)',
@@ -130,7 +131,6 @@ const apChartOption = {
       type: 'pie',
       radius: ['10%', '45%'],
       center: ['50%', '58%'],
-
       itemStyle: {
         emphasis: {
           shadowBlur: 10,
@@ -364,14 +364,16 @@ export const Status = React.createClass({
         .map((val, key) => ({
           value: val,
           name: _(key),
-        })).toArray();
+        })).toArray()
+      .sort((prev, next) => prev.value <= next.value);
     }
 
     clientNetworkChartOption.series[0].data = clientInfo.delete('total').delete('producerlist')
       .map((val, key) => ({
         value: val,
         name: _(key),
-      })).toArray();
+      })).toArray()
+      .sort((prev, next) => prev.value <= next.value);
 
     if (type === 'producer') {
       ret = clientProducerOption;
