@@ -1,0 +1,59 @@
+.Stats {
+  padding-bottom: 10px;
+}
+.stats-group {
+  border-bottom: 1px solid #dedede;
+  header {
+    border-bottom: 1px solid #ccc;
+
+    &.stats-group-cell {
+      border-bottom: none;
+    }
+  }
+
+  .link-more {
+    line-height: 26px;
+  }
+
+  .stats-group-canvas {
+    min-width: 240px;
+    min-height: 240px;
+    margin: 10px auto;
+  }
+
+  .stats-group-cell {
+    padding: 8px 13px;
+    border: 1px solid #dedede;
+    border-bottom: none;
+    border-collapse: collapse;
+    overflow: hidden;
+  }
+  .stats-group-header {
+    padding: 8px 13px;
+    border-left: 1px solid #dedede;
+    border-right: 1px solid #dedede;
+    overflow: hidden;
+  }
+
+  .stats-group-small {
+    width: 33.3%;
+    float: left;
+
+    .stats-group-canvas {
+      float: none;
+    }
+  }
+  .stats-group-medium {
+    width: 66.66%;
+    float: left;
+  }
+  .stats-group-large {
+    width: 100%;
+    float: left;
+  }
+
+  .btn-group {
+    margin-left: 13px;
+  }
+
+}

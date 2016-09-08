@@ -5,6 +5,7 @@ export function togglePropertyPanel() {
     type: 'TOGGLE_PROPERTY_PANEL',
   };
 }
+
 export function collapsePropertys(index) {
   return {
     type: 'COLLAPSE_PROPERTYS',
@@ -36,5 +37,6 @@ export function updatePropertyPanelData(data) {
   return {
     type: 'UPDATE_PROPERTY_PANEL_DATA',
     data,
+
   };
 }
