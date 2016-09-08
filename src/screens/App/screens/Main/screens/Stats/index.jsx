@@ -118,7 +118,7 @@ const apChartOption = {
   color: ['#c23531', '#4BC076', '#2f4554', '#61a0a8', '#d48265'],
   tooltip: {
     trigger: 'item',
-    formatter: '{a} <br/>{b} : {c} ' + _('apUnit') + ' ({d}%)',
+    formatter: `{a} <br/>{b} : {c} ${_('apUnit')} ({d}%)`,
   },
   title: {
     text: msg.apStatus,
@@ -218,22 +218,18 @@ export const Status = React.createClass({
   },
 
   hideOfflineApp() {
-    this.setState({
-      showOfflineAp: false,
-    });
+    this.props.hideOfflineAp()
   },
 
   showOfflineAp() {
+    this.props.showOfflineAp();
     this.props.fetchOfflineAp();
-    this.setState({
-      showOfflineAp: true,
-    });
   },
 
   onChangeTime(data) {
     if (data.value) {
       this.props.changeStatsQuery({
-        'time_type': data.value,
+        time_type: data.value,
       });
 
       this.props.fetchStatus();
@@ -574,7 +570,7 @@ export const Status = React.createClass({
         </div>
 
         <Modal
-          isShow={this.state.showOfflineAp}
+          isShow={this.props.isOfflineApShow}
           title={_('Offline Ap List')}
           onClose={this.hideOfflineApp}
           onOk={this.hideOfflineApp}
@@ -600,6 +596,7 @@ function mapStateToProps(state) {
     fetching: myState.get('fetching'),
     data: myState.get('data'),
     offlineAp: myState.get('offlineAp'),
+    isOfflineApShow: myState.get('isOfflineApShow'),
     query: myState.get('query'),
   };
 }

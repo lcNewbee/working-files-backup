@@ -202,7 +202,7 @@ export const Device = React.createClass({
     let ret;
 
     if (connect_type === 'static') {
-      if (!ret) {
+      if (!ret && gateway) {
         ret = validator.combineValid.staticIP(ip, mask, gateway);
       }
     }
@@ -225,20 +225,17 @@ export const Device = React.createClass({
             text: combineValidResult,
           });
         } else {
-          if (validator.combineValid.staticIP(ip, oriMask, oriGateway) || oriMask !== mask) {
+          if ((oriGateway && validator.combineValid.staticIP(ip, oriMask, oriGateway)) || oriMask !== mask) {
             this.props.createModal({
               title: _('DEVICES'),
               role: 'comfirm',
               text: _('You might be unable to control the device after modifying its network segment, are you sure you want to modify it?'),
-              apply: function () {
-                this.props.saveDeviceNetwork();
-              }.bind(this),
+              apply: () => this.props.saveDeviceNetwork(),
             });
           } else {
             this.props.saveDeviceNetwork();
           }
         }
-      } else {
       }
     }.bind(this));
   },
@@ -496,7 +493,6 @@ export const Device = React.createClass({
 
                 <FormGroup
                   label={_('Default Gateway')}
-                  required
                   maxLength="15"
                   value={currData.get('gateway')}
                   onChange={this.onChangeDeviceNetwork('gateway')}

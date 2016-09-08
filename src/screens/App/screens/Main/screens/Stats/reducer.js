@@ -1,15 +1,12 @@
-import {Map, List, fromJS} from 'immutable';
+import { Map, List, fromJS } from 'immutable';
 
 function setFetching(state) {
   return state.update('fetching', val => true);
 }
 
-function updateData(state, name, value) {
-  return state.updateIn(['data', name], val => value);
-}
-
-let defaultState = fromJS({
+const defaultState = fromJS({
   fetching: false,
+  isOfflineApShow: false,
   query: {
     sort_type: '1',
     time_type: 'today',
@@ -20,18 +17,18 @@ let defaultState = fromJS({
 
     },
     aplist: [],
-    clientlist: []
+    clientlist: [],
   },
   offlineAp: {
     query: {
-     page: 1,
-     size: 50
+      page: 1,
+      size: 50,
     },
-    list: []
-  }
+    list: [],
+  },
 });
 
-export default function(state = defaultState, action) {
+export default function (state = defaultState, action) {
   switch (action.type) {
     case 'REQEUST_STATS':
       return setFetching(state);
@@ -47,6 +44,14 @@ export default function(state = defaultState, action) {
 
     case 'CHANGE_OFFLINE_AP_QUERY':
       return state.mergeIn(['offlineAp', 'query'], action.data);
+
+    case 'SHOW_OFFLINE_AP':
+      return state.set('isOfflineApShow', true);
+
+    case 'HIDE_OFFLINE_AP':
+      return state.set('isOfflineApShow', false);
+
+    default:
   }
   return state;
-};
+}
