@@ -272,6 +272,7 @@ const reducers = {
   networksettings: sNetworkSettings.networksettings,
   accountsettings: sAccountSettings.accountsettings,
   timesettings: sTimeSettings.timesettings,
+
   // 无线配置
   basic: sBasic.basic,
   advance: sAdvance.advance,
@@ -281,6 +282,8 @@ const reducers = {
   speedtest: sSpeedTest.speedtest,
   sitesurvey: sSiteSurvey.sitesurvey,
   systemlogs: sSystemLogs.systemlogs,
+
+  maintenance: pMaintenance.maintenance,
 };
 
 // Store

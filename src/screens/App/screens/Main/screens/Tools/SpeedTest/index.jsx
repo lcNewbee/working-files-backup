@@ -72,11 +72,15 @@ export default class SpeedTest extends React.Component {
     this.props.changeShowScanResults(true);
   }
   onModalOkClick() {
-    this.props.updateItemSettings({
-      ip: this.props.selfState.get('selectedIp'),
-      ipList: fromJS([]),
-    });
-    this.props.changeShowScanResults(false);
+    const selectedIp = this.props.selfState.get('selectedIp');
+    if (selectedIp !== '') {
+      this.props.updateItemSettings({
+        ip: this.props.selfState.get('selectedIp'),
+        ipList: fromJS([]),
+      });
+      this.props.changeShowScanResults(false);
+    }
+    this.props.changeSelectedIp('');
   }
 
   onModalCancelClick() {
@@ -84,6 +88,7 @@ export default class SpeedTest extends React.Component {
     this.props.updateItemSettings({
       ipList: fromJS([]),
     });
+    this.props.changeSelectedIp('');
   }
 
   onSelectScanResultItem(val, item) {

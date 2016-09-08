@@ -4,13 +4,8 @@ import { connect } from 'react-redux';
 import { Map, fromJS } from 'immutable';
 import validator from 'shared/utils/lib/validator';
 import { bindActionCreators } from 'redux';
-<<<<<<< 44f21262ac11bf47c1123904ac54dfb52b231d55
-import { FormGroup, FormInput } from 'shared/components';
-import Button from 'shared/components/Button/Button';
-=======
 import { FormGroup, FormInput, Modal, Table } from 'shared/components';
-import Button from 'shared/components/Button';
->>>>>>> 添加工具栏下的天线校准和信号扫描页面（无交互），完成无线配置页面的高级设置部分
+import { Button } from 'shared/components/Button';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/settings';
 import * as selfActions from './actions';

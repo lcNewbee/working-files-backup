@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import Button from 'shared/components/Button';
+import { Button } from 'shared/components/Button';
 import { fromJS, Map, List } from 'immutable';
 import { FormInput, FormGroup } from 'shared/components/Form';
 import validator from 'shared/utils/lib/validator';

@@ -89,12 +89,12 @@ const clientOptions = fromJS([
     id: 'ipAddr',
     text: _('IP'),
   },
+  /*
   {
     id: 'operate',
     text: _('Action'),
     transform(val, item) {
       const curMac = item.get('Mac');
-
       return (
         <Button
           icon="remove"
@@ -105,6 +105,7 @@ const clientOptions = fromJS([
       );
     },
   },
+  */
 ]);
 
 const remoteApOption = fromJS([
@@ -197,7 +198,7 @@ export default class SystemStatus extends React.Component {
 */
 
   changeSystemTimeToReadable(time) {
-    return new Date(parseInt(time))
+    return new Date(parseInt(time, 10))
             .toLocaleString()
             .replace(/年|月/g, '-')
             .replace(/日/g, ' ');
@@ -229,7 +230,7 @@ export default class SystemStatus extends React.Component {
     }
     const {
       deviceModel, deviceName, networkMode, security, version,
-      systemTime, channel, channelWidth, distance, uptime, ap,
+      systemTime, frequency, channelWidth, distance, uptime, ap,
       interfaces, station,
      } = status;
     let apMac; let clientNum; let staList; let signal;
@@ -253,8 +254,8 @@ export default class SystemStatus extends React.Component {
     // const wirelessMode = this.props.store.getIn(['curData', 'wirelessMode']);
     return (
       <div>
+        <h3>{_('System Status')}</h3>
         <div className="row">
-          <h3>System Status</h3>
           <div className="cols col-6">
             <FormGroup
               type="plain-text"
@@ -265,21 +266,6 @@ export default class SystemStatus extends React.Component {
               label={_('Device Name:')}
               type="plain-text"
               value={deviceName}
-            />
-            <FormGroup
-              label={_('Network Mode:')}
-              type="plain-text"
-              value={networkMode}
-            />
-            <FormGroup
-              label={_('Wireless Mode:')}
-              type="plain-text"
-              value={wirelessMode}
-            />
-            <FormGroup
-              label={_('Security Mode:')}
-              type="plain-text"
-              value={security}
             />
             <FormGroup
               label={_('Firmware Version:')}
@@ -295,9 +281,47 @@ export default class SystemStatus extends React.Component {
               value={this.changeSystemTimeToReadable(systemTime)}
             />
             <FormGroup
+              label={_('System Uptime:')}
+              id="uptime"
+              type="plain-text"
+              value={this.changeUptimeToReadable(uptime)}
+            />
+            {
+              ap === undefined ? null : (
+                <FormGroup
+                  label={_('Client Number:')}
+                  id="userNumber"
+                  type="plain-text"
+                  value={this.props.store.getIn(['curData', 'status', 'ap', 'clientNum'])}
+                />
+              )
+            }
+          </div>
+        </div>
+        <h3>{_('Radio')}</h3>
+        <div className="row">
+          <div className="cols col-6">
+            <FormGroup
+              label={_('Network Mode:')}
+              type="plain-text"
+              value={networkMode}
+            />
+            <FormGroup
+              label={_('Wireless Mode:')}
+              type="plain-text"
+              value={wirelessMode}
+            />
+            <FormGroup
+              label={_('Security Mode:')}
+              type="plain-text"
+              value={security}
+            />
+          </div>
+          <div className="cols col-6">
+            <FormGroup
               label={_('Channel/Frequency:')}
               type="plain-text"
-              value={channel}
+              value={frequency}
             />
             <FormGroup
               label={_('Channel Width:')}
@@ -309,74 +333,6 @@ export default class SystemStatus extends React.Component {
               type="plain-text"
               value={distance}
             />
-            <FormGroup
-              label={_('System Uptime:')}
-              id="uptime"
-              type="plain-text"
-              value={this.changeUptimeToReadable(uptime)}
-            />
-          </div>
-        </div>
-        <div className="row">
-          <h3>{_('Radio')}</h3>
-          <div className="cols col-6">
-            <FormGroup
-              label={_('Device Model:')}
-            >
-              sda
-            </FormGroup>
-            <FormGroup
-              label={_('Device Name:')}
-            >
-              sda
-            </FormGroup>
-            <FormGroup
-              label={_('Network Mode:')}
-            >
-              sda
-            </FormGroup>
-            <FormGroup
-              label={_('Wireless Mode:')}
-            >
-              sda
-            </FormGroup>
-            <FormGroup
-              label={_('Security Mode:')}
-            >
-              sda
-            </FormGroup>
-            <FormGroup
-              label={_('Firmware Version:')}
-            >
-              sda
-            </FormGroup>
-          </div>
-          <div className="cols col-6">
-            <FormGroup
-              label={_('System Time:')}
-            >
-              sda
-            </FormGroup>
-            <FormGroup
-              label={_('Channel/Frequency:')}
-            >
-              sda
-            </FormGroup>
-            <FormGroup
-              label={_('Channel Width:')}
-            >
-              sda
-            </FormGroup>
-            <FormGroup
-              label={_('Distance:')}
-            >
-              sda
-            </FormGroup>
-            <FormGroup
-              label={_('System Uptime:')}
-            >
-              sda
-            </FormGroup>
           </div>
         </div>
         <div className="interfaceTable">
@@ -391,7 +347,7 @@ export default class SystemStatus extends React.Component {
         {
           ap === undefined ? null : (
             <div className="clientListTable">
-              <h3>{_('Client Info')}</h3>
+              <h3>{_('Clients')}</h3>
               <Table
                 className="table"
                 options={clientOptions}

@@ -3,7 +3,7 @@ import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
-  SaveButton, FormGroup, FormInput,
+  SaveButton, FormGroup,
 } from 'shared/components';
 import * as appActions from 'shared/actions/app';
 import * as settingsActions from 'shared/actions/settings';

@@ -1,0 +1,38 @@
+.bar-background {
+  margin: 0 auto;
+  width: 400px;
+  height: 100px;
+  background-color: #999;
+  opacity: 0.5;
+  color: red;
+}
+.bar-title {
+  margin-left: 80px;
+}
+
+.bar-wrap {
+  position: relative;
+  margin: 0px auto;
+  border: 1px solid black;
+  height: 30px;
+  width: 360px;
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+.bar-body1 {
+  height: 28px;
+  background-color: red;
+}
+
+.bar-title {
+  padding-top: 15px;
+  padding-left: 20px;
+  font-size: 14px;
+}
+
+.percentage {
+  position: absolute;
+  margin-left: 175px;
+  margin-top: 8px;
+}
