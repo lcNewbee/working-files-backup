@@ -24,6 +24,39 @@ body {
   padding-left: 0;
   overflow: auto;
 
+  .t-main__nav {
+    position: fixed;
+    top: $g-navbar-height;
+    left: 0;
+    bottom: 0;
+    z-index: 1000;
+    width: $sidebar-width;
+    background: #333;
+    transition: left .3s ease-in;
+
+    &.o-nav--tree {
+      width: $sidebar-width + 20px;
+    }
+  }
+  .t-main__content {
+    position: absolute;
+    top: $g-navbar-height + 5px;
+    right: 0;
+    bottom: 0;
+    left: $sidebar-width;
+    min-width: 1024px - $sidebar-width;
+    padding: $g-distance;
+    padding-left: $g-distance * 1.5;
+    transition: left .3s ease-in;
+    overflow: auto;
+
+    h2,
+    .t-main__content-title {
+      font-size: 1.5em;
+      margin-bottom: .3em;
+    }
+  }
+
   &.t-main--ac {
     .t-main__nav {
       top: $g-navbar-height + $g-main-bar-height;
@@ -50,37 +83,6 @@ body {
 
     .t-main__content {
       left: $sidebar-width + 200px;
-    }
-  }
-
-  .t-main__nav {
-    position: fixed;
-    top: $g-navbar-height;
-    left: 0;
-    bottom: 0;
-    z-index: 1000;
-    width: $sidebar-width;
-    background: #333;
-    transition: left .3s ease-in;
-
-    &.o-nav--tree {
-      width: $sidebar-width + 20px;
-    }
-  }
-  .t-main__content {
-    position: absolute;
-    top: $top-distance;
-    right: $g-distance;
-    bottom: $g-distance;
-    left: $sidebar-width + 10px;
-    min-width: 1024px - 200px;
-    padding: 0 $g-distance;
-    transition: left .3s ease-in;
-
-    h2,
-    .t-main__content-title {
-      font-size: 1.5em;
-      margin-bottom: .3em;
     }
   }
 }

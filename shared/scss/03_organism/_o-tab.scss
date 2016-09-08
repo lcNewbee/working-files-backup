@@ -9,8 +9,8 @@ $tab-nav-height: 28px;
 
   .o-tab__nav {
     position: absolute;
-    left: $g-distance;
-    right: $g-distance;
+    right: 0;
+    left: 0;
     z-index: 2;
     padding-left: $g-distance;
     border-bottom: 4px solid $g-main-color-light;
@@ -32,8 +32,8 @@ $tab-nav-height: 28px;
         line-height: $tab-nav-height;
         color: $g-main-color-light;
         text-align: center;
-        background-color: #fff;
         cursor: pointer;
+        background-color: #fff;
         //transition: background .3s ease-in, color .1s ease-in;
 
         &::before {
@@ -99,10 +99,10 @@ $tab-nav-height: 28px;
   .o-tab__content {
     position: absolute;
     top: 34px;
-    right: 10px;
+    right: 0;
     bottom: 0;
-    left: 10px;
-    padding: 10px 40px;
+    left: 0;
+    padding: 10px 15px;
     overflow-y: auto;
 
     h3 {
@@ -126,8 +126,8 @@ $tab-nav-height: 28px;
         a {
           position: relative;
           display: block;
-          height: auto;
           min-width: auto;
+          height: auto;
           padding: .28571em 0;
           font-size: 13px;
           line-height: 1em;

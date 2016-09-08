@@ -42,6 +42,7 @@ class ReactEchart extends React.Component {
 
     this.renderEchartDom = this.renderEchartDom.bind(this);
     this.getEchartsInstance = this.getEchartsInstance.bind(this);
+    this.initEvents = this.initEvents.bind(this);
     this.state = {
       needDispose: false,
     };
@@ -49,23 +50,14 @@ class ReactEchart extends React.Component {
 
   // first add
   componentDidMount() {
-    const { onEvents } = this.props;
     const echartObj = this.renderEchartDom();
-
-    if (onEvents) {
-      Object.keys(onEvents).forEach((eventName) => {
-        const eventFunc = onEvents[eventName];
-
-        if (typeof eventFunc === 'function') {
-          echartObj.on(eventName, (param) => eventFunc(param, echartObj));
-        }
-      });
-    }
 
     // on chart ready
     if (typeof this.props.onChartReady === 'function') {
       this.props.onChartReady(echartObj);
     }
+
+    this.initEvents(echartObj);
 
     // 清除实例，用于释放缓存
     this.disposeInterval = setInterval(() => {
@@ -98,16 +90,38 @@ class ReactEchart extends React.Component {
 
   getEchartsInstance() {
     const needDispose = this.state.needDispose;
+    let ret = null;
 
     // 清除echart实例，否则内存会一直增加
     if (needDispose) {
       echarts.dispose(this.myRef);
+
+      ret = echarts.init(this.myRef, this.props.theme);
+
+      this.initEvents(ret);
       this.setState({
         needDispose: false,
       });
+    } else {
+      ret = echarts.getInstanceByDom(this.myRef) ||
+        echarts.init(this.myRef, this.props.theme)
     }
-    return echarts.getInstanceByDom(this.myRef) ||
-        echarts.init(this.myRef, this.props.theme);
+
+    return ret;
+  }
+
+  initEvents(echartObj) {
+    const { onEvents } = this.props;
+
+    if (onEvents) {
+      Object.keys(onEvents).forEach((eventName) => {
+        const eventFunc = onEvents[eventName];
+
+        if (typeof eventFunc === 'function') {
+          echartObj.on(eventName, (param) => eventFunc(param, echartObj));
+        }
+      });
+    }
   }
 
   // render dom
