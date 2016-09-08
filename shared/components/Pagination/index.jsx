@@ -89,9 +89,9 @@ class Pagination extends Component {
   }
   render() {
     const { currPage, nextPage, totalPage } = this.getPageOptions();
-    let prevClassName = +currPage === 1 ? 'disabled' : '';
-    let nextClassName = +nextPage === -1 ? 'disabled' : '';
-    let list = [];
+    const prevClassName = +currPage === 1 ? 'disabled' : '';
+    const nextClassName = +nextPage === -1 ? 'disabled' : '';
+    const list = [];
     let key;
     let i;
 

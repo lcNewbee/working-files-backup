@@ -38,10 +38,18 @@ export function editListItemByIndex(index) {
   };
 }
 
-export function updateEditListItem(data) {
+export function updateEditListItem(data, sync) {
   return {
     type: 'UPDATE_EDIT_LIST_ITEM',
     data,
+    sync,
+  };
+}
+export function updateListItemByIndex(index, data) {
+  return {
+    type: 'UPDATE_LIST_ITEM_BY_INDEX',
+    data,
+    index,
   };
 }
 

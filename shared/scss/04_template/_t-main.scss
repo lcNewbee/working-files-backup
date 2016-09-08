@@ -52,7 +52,7 @@ body {
       top: $g-navbar-height + $t-main-top-menu-height;
     }
     .o-top-menu-bar {
-      position: absolute;
+      position: fixed;
       width: 100%;
       top: $g-navbar-height;
     }

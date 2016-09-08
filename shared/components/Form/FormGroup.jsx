@@ -17,6 +17,7 @@ const propTypes = {
   display: PropTypes.string,
   role: PropTypes.string,
   className: PropTypes.string,
+  inputStyle: PropTypes.object,
   children: PropTypes.node,
   'data-label': PropTypes.string,
 };
@@ -156,6 +157,7 @@ class FormGroup extends React.Component {
                 isFocus={!!errMsg}
                 check={this.check}
                 checkClear={this.checkClear}
+                style={this.props.inputStyle}
                 className=""
               />
             )

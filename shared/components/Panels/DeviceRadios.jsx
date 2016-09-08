@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Map, List } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import channels from 'shared/config/channels.json';
+import channels from 'shared/config/country.json';
 
 import {
   FormGroup,

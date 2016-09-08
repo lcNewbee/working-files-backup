@@ -105,6 +105,8 @@ $tab-nav-height: 28px;
     padding: 10px 40px;
     overflow-y: auto;
 
+    @include scrollbar();
+
     h2 {
       margin-top: 1em;
     }

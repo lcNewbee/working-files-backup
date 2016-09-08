@@ -7,23 +7,25 @@
 
   .o-property-panel__toggle-button {
     position: absolute;
-    top: 8px;
+    top: 5px;
     right: 0;
-    background-color: #333;
-    text-align: center;
-    color: #fff;
     width: 24px;
     height: 24px;
-    border-radius: 16px 0 16px 16px;
-    box-shadow: -2px
-     2px 0px 0px rgba(0,0,0,0.2);
+    max-height: 200px;
     margin-right: 4px;
-    transition: top .4s ease-in-out;
+    overflow: hidden;
+    color: #fff;
+    text-align: center;
     cursor: pointer;
+    background-color: #333;
+    border-radius: 16px 0 16px 16px;
+    box-shadow: -2px 2px 0 0 rgba(0,0,0,.2);
+    transition: top .4s ease-in-out, opacity .4s ease-in-out;
+    opacity: 1;
 
     .icon {
-      line-height: 24px;
       font-size: 18px;
+      line-height: 24px;
       color: #ababab;
 
       &:hover {
@@ -33,17 +35,17 @@
   }
 
   .o-property-panel__header {
-    background-color: #333;
-    color: #fff;
     padding: .85em 1em;
     line-height: 20px;
+    color: #fff;
     user-select: none;
+    background-color: #333;
 
     .icon {
-      font-size: 18px;
       margin-left: 8px;
-      cursor: pointer;
+      font-size: 18px;
       color: #ababab;
+      cursor: pointer;
 
       &:hover {
         color: #fff;
@@ -51,11 +53,11 @@
     }
   }
   .o-property-panel__inner {
-     width: 0;
-     height: 100%;
-     background-color: #fff;
-     overflow: hidden;
-     transition: width .3s ease-in-out;
+    width: 0;
+    height: 100%;
+    overflow: hidden;
+    background-color: #fff;
+    transition: width .3s ease-in-out;
   }
 
   &.active {
@@ -64,12 +66,13 @@
       border-left: 1px solid #333;
     }
     .o-property-panel__toggle-button {
-      top: -30px;
+      top: -70px;
+      opacity: 0;
     }
   }
 
   .o-property__container {
-    background-color: #fff;
     padding: 0;
+    background-color: #fff;
   }
 }

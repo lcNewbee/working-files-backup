@@ -3,7 +3,7 @@ import Select from 'react-select';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 import 'react-select/scss/default.scss';
-import './index.scss';
+import './_index.scss';
 
 const propTypes = {
   isAsync: PropTypes.bool,

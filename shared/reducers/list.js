@@ -58,6 +58,16 @@ function selectedListItem(list, data) {
 
   return ret;
 }
+function updateEditListItem(curListName, state, action) {
+  const curIndex = state.getIn([curListName, 'data', 'edit', 'index']);
+  let ret = state.mergeIn([curListName, 'data', 'edit'], action.data);
+
+  if (action.sync) {
+    ret = ret.mergeIn([curListName, 'data', 'list', curIndex], action.data);
+  }
+
+  return ret;
+}
 
 export default function (state = defaultState, action) {
   const curListName = action.name || state.get('curListId');
@@ -83,16 +93,20 @@ export default function (state = defaultState, action) {
       return state.mergeIn([curListName, 'actionQuery'], action.query);
 
     case 'UPDATE_EDIT_LIST_ITEM':
-      return state.mergeIn([curListName, 'data', 'edit'], action.data);
+      return updateEditListItem(curListName, state, action);
 
     case 'UPDATE_LIST_SETTINGS':
       return state.mergeIn([curListName, 'curSettings'], action.data);
+
+    case 'UPDATE_LIST_ITEM_BY_INDEX':
+      return state.mergeIn([curListName, 'data', 'list', action.index], action.data);
 
     case 'EDIT_LIST_ITEM_BY_INDEX':
       return state.setIn(
           [curListName, 'data', 'edit'],
           defaultEditData.merge(state.getIn([curListName, 'data', 'list', action.index])).merge({
             myTitle: `${_('Edit')}: ${action.index}`,
+            index: action.index,
           })
         )
         .setIn([curListName, 'actionQuery', 'action'], 'edit');
