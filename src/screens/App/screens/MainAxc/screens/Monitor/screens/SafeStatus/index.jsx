@@ -12,7 +12,6 @@ import {
 
 import * as actions from './actions';
 import myReducer from './reducer';
-import './index.scss';
 
 const flowRateFilter = utils.filter('flowRate');
 const flowRateKbFilter = utils.filter('flowRate:["KB"]');
@@ -46,27 +45,26 @@ export const Status = React.createClass({
     const ret = fromJS([
       {
         id: 'macaddress',
-        text: _('攻击者MAC'),
+        text: _('Attacker MAC'),
         transform(val, item) {
           return val || item.get('macaddress');
         },
       }, {
         id: 'type',
-        text: _('攻击设备类型'),
+        text: _('Attack Type'),
       }, {
         id: 'time',
-        text: _('攻击出现时间'),
+        text: _('Attack Time'),
       }, {
-        id: 'upstream',
-        text: _('攻击详情'),
+        id: 'attackDetails',
+        text: _('Attack Details'),
       }, {
-        id: 'connecttime',
-        text: _('防护措施'),
-        filter: 'connectTime',
+        id: 'protectionMeasures',
+        text: _('Protection Measures'),
         width: '160',
       }, {
-        id: 'connecttime',
-        text: _('跳到安全事件'),
+        id: 'jumpSecurityEvents',
+        text: _('Jump Security Events'),
         filter: 'connectTime',
         width: '160',
       },
@@ -76,16 +74,26 @@ export const Status = React.createClass({
   },
   getSafeTypeChartOtion() {
     const apInfo = this.props.data.get('apInfo');
-    const clientInfo = this.props.data.get('clientInfo');
+    const safeTypeList = this.props.data.getIn(['clientInfo', 'producerlist'])
+        .map((val, key) => ({
+          value: val,
+          name: _(key),
+        }))
+        .toList()
+        .sort((prev, next) => prev.value <= next.value);
 
     const apOption = {
       tooltip: {
         trigger: 'item',
         formatter: '{a} <br/>{b} : {c} ' + _('apUnit') + ' ({d}%)',
       },
+      legend: {
+        orient: 'vertical',
+        x: 'left',
+      },
       title: {
-        text: _('攻击类型分布图'),
-        subtext: _('攻击总数：') + apInfo.get('total'),
+        text: _('Attack Type Diagram'),
+        subtext: _('Attack Number: ') + apInfo.get('total'),
         x: 'center',
       },
       series: [
@@ -105,11 +113,11 @@ export const Status = React.createClass({
         },
       ],
     };
-    const data = clientInfo.get('producerlist')
-        .map((val, key) => ({
-          value: val,
-          name: _(key),
-        })).toArray();
+    const data = safeTypeList.toArray()
+
+    apOption.legend.data = safeTypeList
+        .map((item) => item.name)
+        .toArray();
 
     apOption.series[0].data = data;
     return apOption;
@@ -120,14 +128,13 @@ export const Status = React.createClass({
 
     return (
       <div className="Stats">
-        <h2>{ _('安全状态') }</h2>
+        <h2>{ _('Safe Status') }</h2>
         <div className="stats-group clearfix" >
           <div className="stats-group-large" >
             <div className="stats-group-cell">
-              <h3>{ _('攻击类型') }</h3>
+              <h3>{ _('Attack Type') }</h3>
             </div>
             <div className="stats-group-cell">
-
               <EchartReact
                 option={this.getSafeTypeChartOtion()}
                 className="stats-group-canvas"
@@ -146,15 +153,14 @@ export const Status = React.createClass({
               />
             </div>
           </div>
-
           <div className="stats-group-large">
-            <div className="stats-group-header">
+            <div className="stats-group-cell">
               <h3>
-                { _('最近安全事件列表') }
+                { _('List Of Recent Security Incidents') }
                 <Button
                   icon="download"
                   theme="primary"
-                  text={_('导出报表')}
+                  text={_('Export Report')}
                   style={{
                     marginLeft: '12px',
                   }}

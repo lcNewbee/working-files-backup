@@ -189,6 +189,17 @@
   "Enable The Policy": "启用策略",
 
   "Safe Status": "安全状态",
+  "Attack Type": "攻击类型",
+  "Attack Number: ": "攻击总数：",
+  "Attack Type Diagram": "攻击类型分布图",
+  "List Of Recent Security Incidents": "最近安全事件列表",
+  "Export Report": "导出报表",
+  "Attacker MAC": "攻击者MAC",
+  "Attack Time": "攻击时间",
+  "Attack Details": "攻击详情",
+  "Protection Measures": "防护措施",
+  "Jump Security Events": "跳的安全事件",
+
   "Alarm Events": "告警事件",
 
   "Map": "地图",
@@ -252,6 +263,7 @@
 
   "AC Upgrade": "AC升级",
   "AC Version": "AC版本",
+  "AC Version Setup Wizard": "AC版本设置向导",
   "Access Point Version": "接入点版本",
   "Version Maintenance": "版本维护",
   "Upload AC Version": "上传AC版本",
@@ -261,7 +273,7 @@
   "System Maintenance": "系统维护",
   "Backup Configuration": "备份配置",
   "Restore Configuration": "恢复配置",
-  "Backup your current configuration": "备份当前配置",
+  "Backup Your Current Configuration": "备份当前配置",
   "Reboot Device": "重启设备",
   "Reboot Now": "开始重启",
   "Restore From File": "从文件中恢复",

@@ -63,7 +63,7 @@ export default class View extends React.Component {
 
     return (
       <form className="o-form">
-        <h3 className="o-form__title">{route.text}</h3>
+        <legend className="o-form__legend">{route.text}</legend>
         <FormGroup label={_('Reboot Device')}>
           <Button
             type="button"
@@ -77,13 +77,13 @@ export default class View extends React.Component {
           <Button
             type="button"
             icon="copy"
-            text={_('Backup your current configuration')}
+            text={_('Backup Your Current Configuration')}
             loading={this.props.app.get('saving')}
             onClick={this.onSave}
           />
         </FormGroup>
         <fileset>
-          <legend>{_('Restore Configuration')}</legend>
+          <legend className="o-form__legend">{_('Restore Configuration')}</legend>
           <FormGroup label={_('Restore From File')}>
             <input
               type="file"

@@ -223,13 +223,13 @@ export const SignUp = React.createClass({
 
     return (
       <div
-        className="t-wizard"
+        className="o-wizard"
         style={{
-          marginTop: '0',
+          width: '80%',
         }}
       >
-        <h2>{route.text}</h2>
-        <div className="t-wizard__header">
+        <h3 className="o-wizard__title">{_('AC Version Setup Wizard')}</h3>
+        <div className="o-wizard__nav">
           <ul>
             <li className={stepOneClass}>
               <span className="icon" />
@@ -245,8 +245,7 @@ export const SignUp = React.createClass({
             </li>
           </ul>
         </div>
-        <div className="t-wizard__content">
-
+        <div className="o-wizard__content">
           {
             this.state.currStep === 1 ? (
               <div className="step-0 row">
@@ -288,7 +287,7 @@ export const SignUp = React.createClass({
           }
 
         </div>
-        <div className="t-wizard__footer">
+        <div className="o-wizard__footer">
           {
             currStep > 1 ? (
               <Button

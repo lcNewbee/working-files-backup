@@ -26,11 +26,11 @@ const clientsTableOptions = fromJS([
     id: 'ip',
     text: _('IP Address'),
   }, {
-    id: 'vendor',
+    id: 'manufacturer',
     text: _('Manufacturer'),
   }, {
-    id: 'ssid',
-    text: _('终端类型'),
+    id: 'terminalType',
+    text: _('Terminal Type'),
   }, {
     id: 'type',
     text: _('User Type'),
@@ -38,8 +38,8 @@ const clientsTableOptions = fromJS([
     id: 'ssid',
     text: 'SSID',
   }, {
-    id: 'ssid',
-    text: _('认证类型'),
+    id: 'authType',
+    text: _('Auth Type'),
   }, {
     id: 'connectap',
     text: _('Associated AP'),

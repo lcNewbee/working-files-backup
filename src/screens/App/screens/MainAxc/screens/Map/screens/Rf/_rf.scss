@@ -12,11 +12,11 @@
     height: 30px;
     vertical-align: middle;
     cursor: move;
-    background: url(images/success.png) center no-repeat;
+    background: url(../../images/success.png) center no-repeat;
     background-size: 30px;
 
     &.danger {
-      background-image: url(images/danger.png);
+      background-image: url(../../images/danger.png);
       background-size: 30px;
     }
     // 锁定状态样式
@@ -86,18 +86,18 @@
 }
 .o-map-warp {
   position: absolute;
-  top: 100px;
+  top: 80px;
   right: 160px;
   bottom: 10px;
-  left: 0;
+  left: 15px;
   min-height: 400px;
   overflow: hidden;
   border: 1px solid #d2d2d2;
 }
 .o-map-rf {
   position: absolute;
-  cursor: url("images/openhand_8_8.cur") 8 8, default;
-  background: url('images/map_bk.jpg');
+  cursor: url("../../images/openhand_8_8.cur") 8 8, default;
+  background: url('../../images/map_bk.jpg');
   background-size: 100%;
   > img {
     width: 100%;
@@ -106,7 +106,7 @@
   .m-device {
     position: absolute;
     width: auto;
-    border: none;
+    border: 0;
   }
 }
 .o-map-zoom-bar {
@@ -139,8 +139,8 @@
 }
 .o-devices-list {
   position: absolute;
-  top: 100px;
-  right: 0;
+  top: 80px;
+  right: 10px;
   width: 140px;
   border: 1px solid #ccc;
 

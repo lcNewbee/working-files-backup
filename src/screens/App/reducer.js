@@ -17,6 +17,10 @@ const defaultState = fromJS({
   },
   noControl: false,
 });
+const ajaxTypeMap = {
+  save: 'saving',
+  fetch: 'fetching',
+};
 
 guiVersion = `.${guiVersion}`;
 
@@ -67,9 +71,9 @@ export default function (state = defaultState, action) {
         .set('state', action.state);
 
     case 'RECEIVE_AJAX_ERROR':
-      return state.set('ajaxError', {
-        url: action.url,
-      });
+      return state
+        .mergeIn(['ajaxError'], action.payload)
+        .state.set(ajaxTypeMap[action.payload.type], false);
 
     case 'RECEIVE_SERVER_ERROR':
       return state.set('state', action.state);

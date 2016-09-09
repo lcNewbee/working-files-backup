@@ -17,9 +17,16 @@ const screenOptions = fromJS([
     text: _('User Type'),
     defaultValue: '0',
     options: [
-      _('Admin'),
-      _('Manager(Branch)'),
-      _('Manager(Read-only)'),
+      {
+        value: '0',
+        label: _('Admin'),
+      }, {
+        value: '1',
+        label: _('Manager(Branch)'),
+      }, {
+        value: '2',
+        label: _('Manager(Read-only)'),
+      },
     ],
     formProps: {
       type: 'switch',

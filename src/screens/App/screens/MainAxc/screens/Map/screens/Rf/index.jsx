@@ -94,7 +94,7 @@ export default class View extends React.Component {
         'onMapMouseDown',
         'onMapMouseMove',
       ]
-    );
+   );
   }
 
   onSave() {
@@ -113,16 +113,20 @@ export default class View extends React.Component {
     ev.preventDefault();
 
     this.props.updateEditListItem({
-      xpos: (offsetX * 100) / this.mapContent.offsetWidth,
-      ypos: (offsetY * 100) / this.mapContent.offsetHeight,
+      map: {
+        xpos: (offsetX * 100) / this.mapContent.offsetWidth,
+        ypos: (offsetY * 100) / this.mapContent.offsetHeight,
+      },
     }, true);
   }
   onUndeloyDevice(index) {
     this.updateListItemByIndex(index, {
-      xpos: -99,
-      ypos: -99,
-      isOpen: false,
-      locked: false,
+      map: {
+        xpos: -99,
+        ypos: -99,
+        isOpen: false,
+        locked: false,
+      },
     });
   }
   onMapMouseUp(e) {
@@ -164,16 +168,18 @@ export default class View extends React.Component {
   }
 
   renderDeployedDevice(device, i) {
-    const xpos = device.get('xpos');
-    const ypos = device.get('ypos');
-    const isLocked = device.get('locked') === '1';
-    const isOpen = device.get('isOpen');
+    const xpos = device.getIn(['map', 'xpos']);
+    const ypos = device.getIn(['map', 'ypos']);
+    const isLocked = device.getIn(['map', 'locked']) === '1';
+    const isOpen = device.getIn(['map', 'isOpen']);
     const btnsList = [
       {
         id: 'lock',
         icon: isLocked ? 'unlock' : 'lock',
         onClick: () => this.props.updateListItemByIndex(i, {
-          locked: isLocked ? '0' : '1',
+          map: {
+            locked: isLocked ? '0' : '1',
+          },
         }),
       }, {
         id: 'config',
@@ -183,8 +189,10 @@ export default class View extends React.Component {
         icon: 'times',
         id: 'close',
         onClick: () => this.props.updateListItemByIndex(i, {
-          xpos: -99,
-          ypos: -99,
+          map: {
+            xpos: -99,
+            ypos: -99,
+          },
         }),
       },
     ];
@@ -216,7 +224,7 @@ export default class View extends React.Component {
             top: `${ypos}%`,
           }}
         >
-          <div className="m-device__coverage"></div>
+          <div className="m-device__coverage" />
           <div
             className={avatarClass}
             draggable={!isLocked}
@@ -259,8 +267,8 @@ export default class View extends React.Component {
     return ret;
   }
   renderUndeployDevice(device, i) {
-    const xpos = device.get('xpos');
-    const ypos = device.get('ypos');
+    const xpos = device.getIn(['map', 'xpos']);
+    const ypos = device.getIn(['map', 'ypos']);
     const deviceClassName = 'm-device';
     let avatarClass = 'm-device__avatar';
     let ret = null;
@@ -269,15 +277,11 @@ export default class View extends React.Component {
       avatarClass = `${avatarClass} danger`;
     }
 
-    if (xpos < -50 || xpos < -50) {
+    if (xpos < -50 || ypos < -50) {
       ret = (
         <div
           id={`deivce_${i}`}
           className={deviceClassName}
-          style={{
-            left: `${xpos}%`,
-            top: `${ypos}%`,
-          }}
         >
           <div
             className={avatarClass}
@@ -334,6 +338,7 @@ export default class View extends React.Component {
         actionBarChildren={actionBarChildren}
         actionable={false}
       >
+
         <div className="o-map-warp">
           <div className="o-map-zoom-bar">
             <Icon
@@ -341,7 +346,7 @@ export default class View extends React.Component {
               className="o-map-zoom-bar__minus"
               onClick={() => {
                 this.props.updateListSettings({
-                  zoom: myZoom - 10,
+                  zoom: (myZoom - 10) < 0 ? 0 : (myZoom - 10),
                 });
               }}
             />
@@ -351,7 +356,7 @@ export default class View extends React.Component {
               className="o-map-zoom-bar__plus"
               onClick={() => {
                 this.props.updateListSettings({
-                  zoom: myZoom + 10,
+                  zoom: (myZoom + 10) > 200 ? 200 : (myZoom + 10),
                 });
               }}
             />
