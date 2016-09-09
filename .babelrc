@@ -18,6 +18,9 @@
         {
           "src": "./shared",
           "expose": "shared"
+        }, {
+          "src": "./src",
+          "expose": "src"
         }
       ]
     ]

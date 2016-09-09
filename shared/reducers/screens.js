@@ -82,15 +82,15 @@ export default function (state = defaultState, action) {
 
     case 'RECIVE_FETCH_LIST':
       return state.setIn([action.name, 'fetching'], false)
-        .setIn([action.name, 'updateAt'], action.updateAt)
-        .mergeDeepIn([action.name, 'curSettings'], (action.data && action.data.settings))
-        .mergeIn([action.name, 'data'], action.data);
+        .mergeDeepIn([action.name, 'curSettings'], (action.payload && action.payload.settings))
+        .mergeIn([action.name, 'data'], action.payload)
+        .setIn([action.name, 'data', 'updateAt'], action.meta.updateAt);
 
     case 'CHANGE_LIST_QUERY':
-      return state.mergeIn([curListName, 'query'], action.query);
+      return state.mergeIn([curListName, 'query'], action.payload);
 
     case 'CHANGE_LIST_ACTION_QUERY':
-      return state.mergeIn([curListName, 'actionQuery'], action.query);
+      return state.mergeIn([curListName, 'actionQuery'], action.payload);
 
     case 'UPDATE_EDIT_LIST_ITEM':
       return updateEditListItem(curListName, state, action);
@@ -105,8 +105,8 @@ export default function (state = defaultState, action) {
       return state.setIn(
           [curListName, 'data', 'edit'],
           defaultEditData.merge(state.getIn([curListName, 'data', 'list', action.index])).merge({
-            myTitle: `${_('Edit')}: ${action.index}`,
-            index: action.index,
+            myTitle: `${_('Edit')}: ${action.payload.index}`,
+            index: action.payload.index,
           })
         )
         .setIn([curListName, 'actionQuery', 'action'], 'edit');

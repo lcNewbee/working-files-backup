@@ -11,30 +11,34 @@ export function reqeustFetchList() {
 export function reciveFetchList(data, name) {
   return {
     type: 'RECIVE_FETCH_LIST',
-    updateAt: Date.now(),
-    data,
-    name,
+    payload: data,
+    meta: {
+      name,
+      updateAt: Date.now(),
+    },
   };
 }
 
-export function changeListQuery(query) {
+export function changeListQuery(payload) {
   return {
     type: 'CHANGE_LIST_QUERY',
-    query,
+    payload,
   };
 }
 
-export function changeListActionQuery(query) {
+export function changeListActionQuery(payload) {
   return {
     type: 'CHANGE_LIST_ACTION_QUERY',
-    query,
+    payload,
   };
 }
 
 export function editListItemByIndex(index) {
   return {
     type: 'EDIT_LIST_ITEM_BY_INDEX',
-    index,
+    payload: {
+      index,
+    },
   };
 }
 

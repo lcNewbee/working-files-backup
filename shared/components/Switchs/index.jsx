@@ -10,6 +10,7 @@ const propTypes = {
   options: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   style: PropTypes.object,
   role: PropTypes.oneOf(['switch']),
+  minWidth: PropTypes.string,
 };
 
 const defaultProps = {
@@ -37,7 +38,7 @@ class Switchs extends React.Component {
   }
 
   render() {
-    const { size, className, options, value, role } = this.props;
+    const { size, className, options, value, role, minWidth } = this.props;
     let optionsList;
     let classNames = 'm-switch';
 
@@ -84,6 +85,9 @@ class Switchs extends React.Component {
                 value={val}
                 onClick={(e) => {
                   this.onClick(e, label);
+                }}
+                style={{
+                  minWidth,
                 }}
               >
                 {label}
