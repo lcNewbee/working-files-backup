@@ -65,6 +65,9 @@ export function fetchAcInfo() {
         if (json.state && json.state.code === 2000) {
           dispatch(receiveFetchAcInfo(json.data));
         }
+      })
+      .catch(() => {
+        dispatch(receiveAjaxError(url, 'fetch'));
       });
   };
 }
@@ -87,11 +90,14 @@ export function receiveSave(state) {
   };
 }
 
-export function receiveAjaxError(url) {
+export function receiveAjaxError(url, ajaxType) {
   return {
     type: 'RECEIVE_AJAX_ERROR',
-    errorAt: Date.now(),
-    url,
+    payload: {
+      url,
+      type: ajaxType,
+      errorAt: Date.now(),
+    },
   };
 }
 
@@ -116,11 +122,27 @@ export function rcFetch() {
     type: 'RC_FETCH',
   };
 }
+
+function ajaxErrorCallback(dispatch, type, url) {
+  return (error) => {
+    dispatch(receiveAjaxError({
+      type,
+      url,
+      error,
+    }));
+  };
+}
+
 export function fetch(url, query) {
   return (dispatch) => {
+    const errorFunc = ajaxErrorCallback(
+      dispatch,
+      'fetch',
+      url
+    );
     dispatch(rqFetch());
 
-    return utils.fetch(url, query)
+    return utils.fetch(url, query, errorFunc)
       .then((json) => {
         if (json === undefined) {
           return {};
@@ -131,9 +153,6 @@ export function fetch(url, query) {
         dispatch(rcFetch());
 
         return json;
-      })
-      .catch(() => {
-        dispatch(receiveAjaxError(url));
       });
   };
 }
@@ -143,9 +162,14 @@ export function fetch(url, query) {
  */
 export function save(url, query) {
   return (dispatch) => {
+    const errorFunc = ajaxErrorCallback(
+      dispatch,
+      'save',
+      url
+    );
     dispatch(requestSave());
 
-    return utils.save(url, query)
+    return utils.save(url, query, errorFunc)
       .then((json) => {
         if (json === undefined) {
           return {};
@@ -155,9 +179,6 @@ export function save(url, query) {
         }
         dispatch(receiveSave());
         return json;
-      })
-      .catch(() => {
-        dispatch(receiveAjaxError(url));
       });
   };
 }

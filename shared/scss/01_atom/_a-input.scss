@@ -7,8 +7,9 @@ input[type=password],
 input[type=file],
 input[type=number] {
   box-sizing: border-box;
-  padding: 6px 8px 5px 8px;
-  font-size: 11px;
+  padding: .5em .75em;
+  font-size: 12px;
+  line-height: 14px;
   background: #fff;
   border: 1px solid #ccc;
   border-radius: 2px;

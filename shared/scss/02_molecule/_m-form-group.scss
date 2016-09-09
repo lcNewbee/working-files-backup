@@ -45,15 +45,16 @@ $boder-color:         #ccc;
     color: #666;
     text-align: right;
     line-height: 30px;
+  }
 
-    .a-btn {
-      line-height: 14px;
-    }
+  .a-btn {
+    line-height: 16px;
   }
 
   .text {
     width: 200px;
-    line-height: 20px;
+    line-height: 16px;
+    vertical-align: middle;
 
     &:focus {
       border: 1px solid $g-brand-info;

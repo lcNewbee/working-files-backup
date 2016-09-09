@@ -1,3 +1,5 @@
+$_height: 28px;
+
 .Select {
   display: inline-block;
   min-width: 180px;
@@ -7,28 +9,29 @@
 
   .Select-input,
   .Select-control {
-    height: 30px;
+    height: $_height;
   }
 
   .Select-placeholder {
-    line-height: 30px;
+    line-height: $_height + 2px;
     color: #999;
   }
 
   &.Select--single {
     .Select-value {
-      line-height: 30px;
+      line-height: $_height;
       color: #333;
     }
   }
 
   &.Select--multi {
     .Select-value {
-      line-height: 20px;
+      margin-top: 6px;
+      line-height: 14px;
     }
     .Select-value-icon,
     .Select-value-label {
-      line-height: 1em;
+      line-height: 1.2em;
     }
   }
   .Select-aria-only {

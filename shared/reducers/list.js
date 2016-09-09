@@ -60,10 +60,10 @@ function selectedListItem(list, data) {
 }
 function updateEditListItem(curListName, state, action) {
   const curIndex = state.getIn([curListName, 'data', 'edit', 'index']);
-  let ret = state.mergeIn([curListName, 'data', 'edit'], action.data);
+  let ret = state.mergeDeepIn([curListName, 'data', 'edit'], action.data);
 
   if (action.sync) {
-    ret = ret.mergeIn([curListName, 'data', 'list', curIndex], action.data);
+    ret = ret.mergeDeepIn([curListName, 'data', 'list', curIndex], action.data);
   }
 
   return ret;
@@ -83,7 +83,7 @@ export default function (state = defaultState, action) {
     case 'RECIVE_FETCH_LIST':
       return state.setIn([action.name, 'fetching'], false)
         .setIn([action.name, 'updateAt'], action.updateAt)
-        .mergeIn([action.name, 'curSettings'], (action.data && action.data.settings))
+        .mergeDeepIn([action.name, 'curSettings'], (action.data && action.data.settings))
         .mergeIn([action.name, 'data'], action.data);
 
     case 'CHANGE_LIST_QUERY':
@@ -96,10 +96,10 @@ export default function (state = defaultState, action) {
       return updateEditListItem(curListName, state, action);
 
     case 'UPDATE_LIST_SETTINGS':
-      return state.mergeIn([curListName, 'curSettings'], action.data);
+      return state.mergeDeepIn([curListName, 'curSettings'], action.data);
 
     case 'UPDATE_LIST_ITEM_BY_INDEX':
-      return state.mergeIn([curListName, 'data', 'list', action.index], action.data);
+      return state.mergeDeepIn([curListName, 'data', 'list', action.index], action.data);
 
     case 'EDIT_LIST_ITEM_BY_INDEX':
       return state.setIn(

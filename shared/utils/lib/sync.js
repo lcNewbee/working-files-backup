@@ -27,7 +27,7 @@ function parseJSON(response) {
 
 function handleServerError(json) {
   if (!json.state || (json.state && json.state.code !== 2000)) {
-    console.log('State code not 2000', json.state);
+    console.error('State code not 2000', json.state);
   }
   return json;
 }
@@ -35,7 +35,7 @@ function handleServerError(json) {
 var sync = {
 
   // 默认使用 JSON 格式数据传递
-  save: function (url, data) {
+  save: function (url, data, errorCallback) {
 
     if (data !== undefined) {
       data = JSON.stringify(data);
@@ -55,7 +55,10 @@ var sync = {
       .then(parseJSON)
       .then(handleServerError)
       .catch(function (error) {
-        console.log('request failed', error)
+        if (typeof errorCallback === 'function') {
+          errorCallback(error)
+        }
+        console.error('request failed', error)
       });
   },
 
@@ -67,7 +70,7 @@ var sync = {
   },
 
   //
-  fetch: function (url, data) {
+  fetch: function (url, data, errorCallback) {
     var queryStr = '';
 
     if (typeof data === 'object') {
@@ -89,6 +92,9 @@ var sync = {
       .then(parseJSON)
       .then(handleServerError)
       .catch(function (error) {
+        if (typeof errorCallback === 'function') {
+          errorCallback(error)
+        }
         console.error('request failed', error)
       });
   },

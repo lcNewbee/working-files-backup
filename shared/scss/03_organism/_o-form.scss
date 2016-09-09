@@ -10,16 +10,19 @@ $o-form-content-margin: 1em 0 0;
   }
   .o-form__title {
     margin-bottom: 1em;
+    font-weight: bold;
+    font-size: 1.5em;
   }
   .o-form__fieldset {
     margin: $o-form-content-margin;
-    border: none;
+    border: 0;
     padding: .5em 0 0;
   }
   .o-form__legend {
     margin-left: .5em;
     padding: .5em .5em;
     font-size: 1.214em;
+    font-weight: bold;
   }
   .o-form__p {
     padding: 0 1.214em;

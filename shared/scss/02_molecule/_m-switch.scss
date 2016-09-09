@@ -1,19 +1,19 @@
 .m-switch {
   display: inline-block;
   margin: 0 5px;
+  line-height: 1;
   border: 1px solid #666;
   border-radius: 3px;
-  line-height: $g-line-height;
 
   .m-switch__item {
-    padding: 4px 12px;
+    padding: 6px 12px;
     font-size: 12px;
-    line-height: $g-line-height;
+    line-height: 14px;;
     color: #666;
-    background-color: transparent;
-    border: none;
-    border-right: 1px solid #666;
     cursor: pointer;
+    background-color: transparent;
+    border: 0;
+    border-right: 1px solid #666;
 
     &:hover,
     &:focus,

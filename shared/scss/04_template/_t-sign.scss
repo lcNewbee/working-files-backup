@@ -52,7 +52,7 @@
 
     &.form-group--error {
       .text {
-        border: none;
+        border: 0;
         border-left: 4px solid #f0f0ef;
       }
     }
@@ -80,12 +80,12 @@
       transition: border-bottom-color ease-in-out .15s, box-shadow ease-in-out .15s;
       width: 100%;
       font-size: 1.23077em;
-      border: none;
+      border: 0;
       border-left: 4px solid #f0f0ef;
       border-radius: 0;
 
       &:focus {
-        border: none;
+        border: 0;
         border-left: 4px solid #0093dd;
       }
     }
