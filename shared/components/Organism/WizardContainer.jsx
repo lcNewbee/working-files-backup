@@ -10,7 +10,7 @@ import {
 const propTypes = {
   className: PropTypes.string,
   layout: PropTypes.oneOf(['flow', 'block']),
-  size: PropTypes.oneOf(['compassed']),
+  size: PropTypes.oneOf(['sm']),
   title: PropTypes.string,
   initStep: PropTypes.number,
   options: PropTypes.oneOfType([

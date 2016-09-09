@@ -103,10 +103,10 @@ export function fetchList(url) {
   return (dispatch, getState) => {
     const globalState = getState();
     // const refreshTime = globalState.app.get('rateInterval');
-    const name = globalState.list.get('curListId');
-    const formUrl = globalState.list.getIn([name, 'formUrl']);
-    const fetchUrl = globalState.list.getIn([name, 'fetchUrl']) || formUrl;
-    let query = globalState.list.getIn([name, 'query']) || {};
+    const name = globalState.screens.get('curListId');
+    const formUrl = globalState.screens.getIn([name, 'formUrl']);
+    const fetchUrl = globalState.screens.getIn([name, 'fetchUrl']) || formUrl;
+    let query = globalState.screens.getIn([name, 'query']) || {};
 
     window.clearTimeout(refreshTimeout);
     dispatch(reqeustFetchList());
@@ -133,11 +133,11 @@ export function fetchList(url) {
 export function saveListSettings(url) {
   return (dispatch, getState) => {
     const globalState = getState();
-    const name = globalState.list.get('curListId');
-    const curData = globalState.list.getIn([name, 'curSettings']);
-    const oriData = globalState.list.getIn([name, 'data', 'settings']);
-    const formUrl = globalState.list.getIn([name, 'formUrl']);
-    const fetchUrl = globalState.list.getIn([name, 'fetchUrl']) || formUrl;
+    const name = globalState.screens.get('curListId');
+    const curData = globalState.screens.getIn([name, 'curSettings']);
+    const oriData = globalState.screens.getIn([name, 'data', 'settings']);
+    const formUrl = globalState.screens.getIn([name, 'formUrl']);
+    const fetchUrl = globalState.screens.getIn([name, 'fetchUrl']) || formUrl;
 
     if (!curData.equals(oriData)) {
       console.log('hasChange');
@@ -155,12 +155,12 @@ export function saveListSettings(url) {
 export function onListAction(url) {
   return (dispatch, getState) => {
     const globalState = getState();
-    const name = globalState.list.get('curListId');
-    const editMap = globalState.list.getIn([name, 'data', 'edit']);
-    const formUrl = globalState.list.getIn([name, 'formUrl']);
-    const saveUrl = globalState.list.getIn([name, 'saveUrl']) || formUrl;
-    const fetchUrl = globalState.list.getIn([name, 'fetchUrl']) || formUrl;
-    let actionQuery = globalState.list.getIn([name, 'actionQuery']);
+    const name = globalState.screens.get('curListId');
+    const editMap = globalState.screens.getIn([name, 'data', 'edit']);
+    const formUrl = globalState.screens.getIn([name, 'formUrl']);
+    const saveUrl = globalState.screens.getIn([name, 'saveUrl']) || formUrl;
+    const fetchUrl = globalState.screens.getIn([name, 'fetchUrl']) || formUrl;
+    let actionQuery = globalState.screens.getIn([name, 'actionQuery']);
     const actionType = actionQuery.get('action');
 
     window.clearTimeout(refreshTimeout);
