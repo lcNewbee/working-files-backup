@@ -7,15 +7,18 @@ import { combineReducers } from 'redux';
 import 'shared/scss/styles.scss';
 import guiConfig from './package.json';
 
+
 // 多语言工具
 const b28n = require('shared/b28n');
 const langCn = require('../lang/cn/core.json');
 const validateCn = require('../lang/cn/validate.json');
 const langEn = require('../lang/en/core.json');
+const apCn = require('../lang/cn/ap.json');
 
 b28n.addDict(langCn, 'cn');
 b28n.addDict(validateCn, 'cn');
 b28n.addDict(langEn, 'en');
+b28n.addDict(apCn, 'cn');
 
 window.CB = b28n.init({
   supportLang: ['en', 'cn'],

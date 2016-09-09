@@ -623,7 +623,7 @@ export default class Basic extends React.Component {
           />
           <FormGroup
             label={_('Channel Bandwidth')}
-            type="select"
+            type="switch"
             options={channelWidthOptions}
             value={channelWidth}
             onChange={(data) => this.props.updateItemSettings({
@@ -632,7 +632,10 @@ export default class Basic extends React.Component {
           />
           <FormGroup
             label={_('Outpower Power')}
-            type="number"
+            type="range"
+            min="-4"
+            max="27"
+            help={txPower}
             value={txPower}
             onChange={(data) => this.props.updateItemSettings({
               txPower: data.value,

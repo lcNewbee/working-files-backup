@@ -1,0 +1,26 @@
+{
+  "Device Model :": "设备型号：",
+  "Device Name :": "设备名称：",
+  "Network Mode :": "网络模式：",
+  "Firmware Version :": "软件版本：",
+  "System Uptime :": "运行时间：",
+  "System Time :": "系统时间：",
+  "Client Number :": "连接数：",
+  "Channel :": "信道：",
+  "Frequency :": "频段：",
+  "Channel Width :": "频宽：",
+  "Protocol :": "协议：",
+  "Security Mode :": "加密方式：",
+  "Tx Packets": "发送数据包数",
+  "Rx Packets": "接收数据包数",
+  "Tx Bytes": "发送数据量(Bytes)",
+  "Rx Bytes": "接收数据量(Bytes)",
+  "Tx Error": "发送错误包数",
+  "Rx Error": "接收错误包数",
+  "Tx Rate": "发送速率",
+  "Rx Rate": "接收速率",
+  "Noise": "噪声",
+  "Signal": "信号强度",
+  "Soft Version": "软件版本"
+
+}

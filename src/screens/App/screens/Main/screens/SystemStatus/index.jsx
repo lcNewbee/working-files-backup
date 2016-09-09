@@ -35,16 +35,22 @@ const interfaceOptions = fromJS([
     text: 'MTU',
   }, {
     id: 'txBytes',
-    text: 'Tx Bytes',
+    text: _('Tx Bytes'),
   }, {
     id: 'rxBytes',
     text: _('Rx Bytes'),
   }, {
+    id: 'txPackets',
+    text: _('Tx Packets'),
+  }, {
+    id: 'rxPackets',
+    text: _('Rx Packets'),
+  }, {
     id: 'txErrorPackets',
-    text: _('TX Error'),
+    text: _('Tx Error'),
   }, {
     id: 'rxErrorPackets',
-    text: _('RX Error'),
+    text: _('Rx Error'),
   },
 ]);
 
@@ -58,12 +64,8 @@ const clientOptions = fromJS([
     text: _('Device Name'),
   },
   {
-    id: 'txSignal',
-    text: _('TX Singal'),
-  },
-  {
-    id: 'rxSignal',
-    text: _('RX Signal'),
+    id: 'Signal',
+    text: _('Signal'),
   },
   {
     id: 'noise',
@@ -71,15 +73,27 @@ const clientOptions = fromJS([
   },
   {
     id: 'txRate',
-    text: _('TX Rate'),
+    text: _('Tx Rate'),
   },
   {
     id: 'rxRate',
-    text: _('RX Rate'),
+    text: _('Rx Rate'),
   },
   {
-    id: 'ccq',
-    text: _('CCQ'),
+    id: 'txBytes',
+    text: _('Tx Bytes'),
+  },
+  {
+    id: 'rxBytes',
+    text: _('Rx Bytes'),
+  },
+  {
+    id: 'txPackets',
+    text: _('Tx Packets'),
+  },
+  {
+    id: 'rxPackets',
+    text: _('Rx Packets'),
   },
   {
     id: 'connectTime',
@@ -110,35 +124,38 @@ const clientOptions = fromJS([
 
 const remoteApOption = fromJS([
   {
-    id: 'DeviceName',
+    id: 'deviceName',
     text: _('Device Name'),
   }, {
-    id: 'DeviceMode',
-    text: 'Device Mode',
-  }, {
-    id: 'SoftVersion',
+    id: 'softVersion',
     text: _('Soft Version'),
   }, {
-    id: 'ConnectTime',
+    id: 'connectTime',
     text: _('Connect Time'),
   }, {
-    id: 'RxSignal',
-    text: _('Rx Signal'),
+    id: 'signal',
+    text: _('Signal'),
   }, {
-    id: 'TxSignal',
-    text: _('Tx Signal'),
+    id: 'txBytes',
+    text: _('Tx Bytes'),
   }, {
-    id: 'Tx Rate',
+    id: 'rxBytes',
+    text: _('Rx Bytes'),
+  }, {
+    id: 'txRate',
     text: _('Tx Rate'),
   }, {
-    id: 'RxRate',
+    id: 'rxRate',
     text: _('Rx Rate'),
   }, {
-    id: 'TxPackets',
+    id: 'txPackets',
     text: _('Tx Packets'),
   }, {
-    id: 'RxPackets',
+    id: 'rxPackets',
     text: _('Rx Packets'),
+  }, {
+    id: 'ccq',
+    text: _('CCQ'),
   },
 ]);
 
@@ -230,8 +247,8 @@ export default class SystemStatus extends React.Component {
     }
     const {
       deviceModel, deviceName, networkMode, security, version,
-      systemTime, frequency, channelWidth, distance, uptime, ap,
-      interfaces, station,
+      systemTime, frequency, channelWidth, uptime, ap, channel,
+      interfaces, station, wlan0Mac, protocol, lan0Mac, lan1Mac,
      } = status;
     let apMac; let clientNum; let staList; let signal;
     let apInfo = [];
@@ -259,37 +276,58 @@ export default class SystemStatus extends React.Component {
           <div className="cols col-6">
             <FormGroup
               type="plain-text"
-              label={_('Device Model:')}
+              label={_('Device Model :')}
               value={deviceModel}
             />
             <FormGroup
-              label={_('Device Name:')}
+              label={_('Network Mode :')}
+              type="plain-text"
+              value={networkMode}
+            />
+            <FormGroup
+              label={_('System Uptime :')}
+              id="uptime"
+              type="plain-text"
+              value={this.changeUptimeToReadable(uptime)}
+            />
+            <FormGroup
+              label={_('WLAN0 MAC')}
+              type="plain-text"
+              value={wlan0Mac}
+            />
+            <FormGroup
+              label={_('LAN1 MAC')}
+              type="plain-text"
+              value={lan1Mac}
+            />
+
+          </div>
+          <div className="cols col-6">
+            <FormGroup
+              label={_('Device Name :')}
               type="plain-text"
               value={deviceName}
             />
             <FormGroup
-              label={_('Firmware Version:')}
+              label={_('Firmware Version :')}
               type="plain-text"
               value={version}
             />
-          </div>
-          <div className="cols col-6">
             <FormGroup
-              label={_('System Time:')}
+              label={_('System Time :')}
               id="systemtime"
               type="plain-text"
               value={this.changeSystemTimeToReadable(systemTime)}
             />
             <FormGroup
-              label={_('System Uptime:')}
-              id="uptime"
+              label={_('LAN0 MAC')}
               type="plain-text"
-              value={this.changeUptimeToReadable(uptime)}
+              value={lan0Mac}
             />
             {
               ap === undefined ? null : (
                 <FormGroup
-                  label={_('Client Number:')}
+                  label={_('Client Number :')}
                   id="userNumber"
                   type="plain-text"
                   value={this.props.store.getIn(['curData', 'status', 'ap', 'clientNum'])}
@@ -302,57 +340,75 @@ export default class SystemStatus extends React.Component {
         <div className="row">
           <div className="cols col-6">
             <FormGroup
-              label={_('Network Mode:')}
-              type="plain-text"
-              value={networkMode}
-            />
-            <FormGroup
-              label={_('Wireless Mode:')}
+              label={_('SSID :')}
               type="plain-text"
               value={wirelessMode}
             />
             <FormGroup
-              label={_('Security Mode:')}
-              type="plain-text"
-              value={security}
-            />
-          </div>
-          <div className="cols col-6">
-            <FormGroup
-              label={_('Channel/Frequency:')}
+              label={_('Frequency :')}
               type="plain-text"
               value={frequency}
             />
             <FormGroup
-              label={_('Channel Width:')}
+              label={_('Protocol :')}
+              type="plain-text"
+              value={protocol}
+            />
+          </div>
+          <div className="cols col-6">
+            <FormGroup
+              label={_('Channel :')}
+              type="plain-text"
+              value={channel}
+            />
+            <FormGroup
+              label={_('Channel Width :')}
               type="plain-text"
               value={channelWidth}
             />
             <FormGroup
-              label={_('Distance:')}
+              label={_('Security Mode :')}
               type="plain-text"
-              value={distance}
+              value={security}
             />
           </div>
         </div>
         <div className="interfaceTable">
           <h3>{_('Interfaces')}</h3>
-          <Table
-            className="table"
-            options={interfaceOptions}
-            list={interfaces}
-          />
+          <FormGroup>
+            <div
+              style={{
+                marginLeft: '-70px',
+                width: '1200px',
+              }}
+            >
+              <Table
+                className="table"
+                options={interfaceOptions}
+                list={interfaces}
+              />
+            </div>
+          </FormGroup>
         </div>
         <br /><br />
         {
           ap === undefined ? null : (
             <div className="clientListTable">
               <h3>{_('Clients')}</h3>
-              <Table
-                className="table"
-                options={clientOptions}
-                list={staList}
-              />
+              <FormGroup>
+                <div
+                  style={{
+                    marginLeft: '-70px',
+                    width: '1200px',
+                  }}
+                >
+                  <Table
+                    className="table"
+                    options={clientOptions}
+                    list={staList}
+                  />
+                </div>
+              </FormGroup>
             </div>
           )
         }
@@ -361,11 +417,20 @@ export default class SystemStatus extends React.Component {
           station === undefined ? null : (
             <div className="remoteApTable">
               <h3>{_('Remote AP Info')}</h3>
-              <Table
-                className="table"
-                options={remoteApOption}
-                list={apInfo}
-              />
+              <FormGroup>
+                <div
+                  style={{
+                    marginLeft: '-70px',
+                    width: '1200px',
+                  }}
+                >
+                  <Table
+                    className="table"
+                    options={remoteApOption}
+                    list={apInfo}
+                  />
+                </div>
+              </FormGroup>
             </div>
           )
         }
