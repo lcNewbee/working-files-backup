@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import {
   ListInfo,
 } from 'shared/components';
-import * as listActions from 'shared/actions/list';
+import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
 function getInterfaceTypeOptions() {
@@ -175,14 +175,14 @@ View.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
-    store: state.list,
+    store: state.screens,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    listActions
+    screenActions
   ), dispatch);
 }
 

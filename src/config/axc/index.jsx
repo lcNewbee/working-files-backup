@@ -2,7 +2,7 @@ import b28n from 'shared/b28n';
 import { combineReducers } from 'redux';
 import NotFound from 'shared/components/NotFound';
 import remoteActionMiddleware from 'shared/utils/lib/remote_action_middleware';
-import listInfoReducer from 'shared/reducers/list';
+import screensReducer from 'shared/reducers/screens';
 import settingsReducer from 'shared/reducers/settings';
 import propertiesReducer from 'shared/reducers/properties';
 import moment from 'moment';
@@ -582,7 +582,7 @@ const routes = [
 const reducers = {
   // shared reducers
   app: App.app,
-  list: listInfoReducer,
+  screens: screensReducer,
   settings: settingsReducer,
   properties: propertiesReducer,
 

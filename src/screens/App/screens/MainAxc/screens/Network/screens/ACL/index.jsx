@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import ListInfo from 'shared/components/Template/ListInfo';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/settings';
-import * as listActions from 'shared/actions/list';
+import * as screenActions from 'shared/actions/screens';
 
 const commonFormOptions = fromJS([
   {
@@ -77,7 +77,7 @@ const defaultEditData = immutableUtils.getDefaultData(screenOptions);
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   settings: PropTypes.instanceOf(Map),
-  list: PropTypes.instanceOf(Map),
+  store: PropTypes.instanceOf(Map),
   groupId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 
   route: PropTypes.object,
@@ -107,7 +107,7 @@ export default class View extends React.Component {
       <ListInfo
         {...this.props}
         listTitle={_('ACL Rules List')}
-        store={this.props.list}
+        store={this.props.store}
         tableOptions={tableOptions}
         settingsFormOption={commonFormOptions}
         editFormOptions={formOptions}
@@ -126,8 +126,8 @@ View.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
+    store: state.screens,
     settings: state.settings,
-    list: state.list,
   };
 }
 
@@ -135,7 +135,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
     actions,
-    listActions
+    screenActions
   ), dispatch);
 }
 

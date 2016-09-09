@@ -7,7 +7,7 @@ import {
   ListInfo,
 } from 'shared/components';
 import * as appActions from 'shared/actions/app';
-import * as listActions from 'shared/actions/list';
+import * as screenActions from 'shared/actions/screens';
 
 const screenOptions = fromJS([
   {
@@ -246,13 +246,10 @@ const tableOptions = immutableUtils.getTableOptions(screenOptions);
 const defaultEditData = immutableUtils.getDefaultData(screenOptions);
 const propTypes = {
   app: PropTypes.instanceOf(Map),
-  settings: PropTypes.instanceOf(Map),
-  list: PropTypes.instanceOf(Map),
+  store: PropTypes.instanceOf(Map),
   groupId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 
   route: PropTypes.object,
-  initSettings: PropTypes.func,
-  fetchSettings: PropTypes.func,
   saveSettings: PropTypes.func,
   updateItemSettings: PropTypes.func,
   leaveSettingsScreen: PropTypes.func,
@@ -262,25 +259,19 @@ const defaultProps = {};
 export default class View extends React.Component {
   constructor(props) {
     super(props);
-    this.onSave = this.onSave.bind(this);
-  }
-  onSave() {
-    this.props.saveSettings();
   }
   render() {
     return (
-      <div>
-        <ListInfo
-          {...this.props}
-          store={this.props.list}
-          tableOptions={tableOptions}
-          modalSize="lg"
-          editFormOptions={formOptions}
-          defaultEditData={defaultEditData}
-          actionable
-          selectable
-        />
-      </div>
+      <ListInfo
+        {...this.props}
+        store={this.props.store}
+        tableOptions={tableOptions}
+        modalSize="lg"
+        editFormOptions={formOptions}
+        defaultEditData={defaultEditData}
+        actionable
+        selectable
+      />
     );
   }
 }
@@ -291,14 +282,14 @@ View.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
-    list: state.list,
+    store: state.screens,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    listActions
+    screenActions
   ), dispatch);
 }
 

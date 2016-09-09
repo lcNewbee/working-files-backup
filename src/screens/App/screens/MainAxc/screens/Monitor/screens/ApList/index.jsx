@@ -8,7 +8,7 @@ import {
 } from 'shared/components';
 
 // custom
-import * as listActions from 'shared/actions/list';
+import * as screenActions from 'shared/actions/screens';
 import * as propertiesActions from 'shared/actions/properties';
 
 const flowRateFilter = utils.filter('flowRate:["KB"]');
@@ -132,13 +132,13 @@ View.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
-    store: state.list,
+    store: state.screens,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
-    listActions,
+    screenActions,
     propertiesActions
   ), dispatch);
 }

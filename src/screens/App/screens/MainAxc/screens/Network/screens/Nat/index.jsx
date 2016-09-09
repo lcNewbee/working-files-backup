@@ -8,7 +8,7 @@ import {
 } from 'shared/components';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/settings';
-import * as listActions from 'shared/actions/list';
+import * as screenActions from 'shared/actions/screens';
 
 function getInterfaceTypeOptions() {
   return utils.fetch('/goform/interfaceType')
@@ -141,7 +141,7 @@ function mapStateToProps(state) {
   return {
     app: state.app,
     settings: state.settings,
-    list: state.list,
+    list: state.screens,
   };
 }
 
@@ -149,7 +149,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
     actions,
-    listActions
+    screenActions
   ), dispatch);
 }
 

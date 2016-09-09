@@ -8,7 +8,7 @@ import {
   Button, ListInfo, Icon, FormContainer,
 } from 'shared/components';
 import * as appActions from 'shared/actions/app';
-import * as listActions from 'shared/actions/list';
+import * as screenActions from 'shared/actions/screens';
 import * as propertiesActions from 'shared/actions/properties';
 
 import './_map.scss';
@@ -392,14 +392,14 @@ View.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
-    store: state.list,
+    store: state.screens,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    listActions,
+    screenActions,
     propertiesActions
   ), dispatch);
 }

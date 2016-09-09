@@ -8,7 +8,7 @@ import { bindActionCreators } from 'redux';
 import ListInfo from 'shared/components/Template/ListInfo';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/settings';
-import * as listActions from 'shared/actions/list';
+import * as screenActions from 'shared/actions/screens';
 
 const screenOptions = fromJS([
   {
@@ -137,7 +137,7 @@ function mapStateToProps(state) {
   return {
     app: state.app,
     settings: state.settings,
-    list: state.list,
+    list: state.screens,
   };
 }
 
@@ -145,7 +145,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
     actions,
-    listActions
+    screenActions
   ), dispatch);
 }
 

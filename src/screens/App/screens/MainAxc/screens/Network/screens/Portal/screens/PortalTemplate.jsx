@@ -8,7 +8,7 @@ import FileUploads from 'shared/components/FileUpload';
 import FormGroup from 'shared/components/Form/FormGroup';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/settings';
-import * as listActions from 'shared/actions/list';
+import * as screenActions from 'shared/actions/screens';
 
 import './index.scss';
 
@@ -220,7 +220,7 @@ View.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
-    store: state.list,
+    store: state.screens,
   };
 }
 
@@ -228,7 +228,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
     actions,
-    listActions
+    screenActions
   ), dispatch);
 }
 

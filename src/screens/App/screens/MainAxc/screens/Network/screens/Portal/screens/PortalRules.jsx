@@ -8,7 +8,7 @@ import Modal from 'shared/components/Modal';
 import Table from 'shared/components/Table';
 import WizardContainer from 'shared/components/Organism/WizardContainer';
 import * as appActions from 'shared/actions/app';
-import * as listActions from 'shared/actions/list';
+import * as screenActions from 'shared/actions/screens';
 
 const commonFormOptions = fromJS([
   {
@@ -250,14 +250,14 @@ View.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
-    store: state.list,
+    store: state.screens,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    listActions
+    screenActions
   ), dispatch);
 }
 

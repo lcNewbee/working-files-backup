@@ -1,6 +1,6 @@
-import { List, Map, fromJS } from 'immutable';
-import chai, { expect } from 'chai';
-import reducer from '../reducer';
+import { fromJS } from 'immutable';
+
+import reducer from 'src/screens/App/screens/MainAxc/reducer';
 
 describe('MainAxc reducer', () => {
   it('Should toggle isShow porp when TOGGLE_MAIN_POP_OVER with undefined option', () => {
@@ -18,7 +18,7 @@ describe('MainAxc reducer', () => {
     };
     const nextState = reducer(initialState, action);
 
-    nextState.should.equal(fromJS({
+    expect(nextState).equal(fromJS({
       popOver: {
         isShow: true,
         transitionName: 'fade-up',
@@ -49,7 +49,7 @@ describe('MainAxc reducer', () => {
     };
     const nextState = reducer(initialState, action);
 
-    nextState.should.equal(fromJS({
+    expect(nextState).equal(fromJS({
       popOver: {
         isShow: true,
         transitionName: 'fade-ok',
@@ -73,7 +73,7 @@ describe('MainAxc reducer', () => {
     };
     const nextState = reducer(initialState, action);
 
-    nextState.should.equal(fromJS({
+    expect(nextState).equal(fromJS({
       modal: {
         isShow: true,
         size: 'md',
@@ -101,7 +101,7 @@ describe('MainAxc reducer', () => {
     };
     let nextState = reducer(initialState, action);
 
-    nextState.should.equal(fromJS({
+    expect(nextState).equal(fromJS({
       modal: {
         isShow: true,
         size: 'md',
@@ -123,154 +123,13 @@ describe('MainAxc reducer', () => {
     };
     nextState = reducer(nextState, action);
 
-    nextState.should.equal(fromJS({
+    expect(nextState).equal(fromJS({
       modal: {
         isShow: false,
         size: 'lg',
         name: 'vlan',
         okButton: false,
         cancelButton: false,
-      },
-    }));
-  });
-
-  it('Should change select vlan when SELECT_VLAN with id', () => {
-    const initialState = fromJS({
-      vlan: {
-        selected: {
-          id: '2',
-          remark: '研发',
-        },
-        list: [
-          {
-            id: '1',
-            remark: '测试',
-          }, {
-            id: '2',
-            remark: '研发',
-          },
-        ],
-      },
-    });
-    const action = {
-      type: 'SELECT_VLAN',
-      id: '1',
-    };
-    const nextState = reducer(initialState, action);
-
-    nextState.should.equal(fromJS({
-      popOver: {
-        isShow: false,
-        name: 'vlanAsider',
-      },
-      vlan: {
-        selected: {
-          id: '1',
-          remark: '测试',
-        },
-        list: [
-          {
-            id: '1',
-            remark: '测试',
-          }, {
-            id: '2',
-            remark: '研发',
-          },
-        ],
-      },
-    }));
-  });
-
-  it('Should no change selected when SELECT_VLAN with not found id', () => {
-    const initialState = fromJS({
-      vlan: {
-        selected: {
-          id: '2',
-          remark: '研发',
-        },
-        list: [
-          {
-            id: '1',
-            remark: '测试',
-          }, {
-            id: '2',
-            remark: '研发',
-          },
-        ],
-      },
-    });
-    const action = {
-      type: 'SELECT_VLAN',
-      id: '3',
-    };
-    const nextState = reducer(initialState, action);
-
-    nextState.should.equal(fromJS({
-      popOver: {
-        isShow: false,
-        name: 'vlanAsider',
-      },
-      vlan: {
-        selected: {
-          id: '2',
-          remark: '研发',
-        },
-        list: [
-          {
-            id: '1',
-            remark: '测试',
-          }, {
-            id: '2',
-            remark: '研发',
-          },
-        ],
-      },
-    }));
-  });
-
-  it('Should change select vlan when SELECT_VLAN with id', () => {
-    const initialState = fromJS({
-      vlan: {
-        selected: {
-          id: '2',
-          remark: '研发',
-        },
-        list: [
-          {
-            id: '1',
-            remark: '测试',
-          }, {
-            id: '2',
-            remark: '研发',
-          },
-        ],
-      },
-    });
-    const action = {
-      type: 'SELECT_VLAN',
-      id: '1',
-    };
-    const nextState = reducer(initialState, action);
-
-    nextState.should.equal(fromJS({
-      popOver: {
-        isShow: false,
-        name: 'vlanAsider',
-      },
-      vlan: {
-        selected: {
-          id: '1',
-          remark: '测试',
-        },
-        list: [
-          {
-            id: '1',
-            remark: '测试',
-          }, {
-            id: '2',
-            remark: '研发',
-          },
-        ],
       },
     }));
   });
@@ -299,7 +158,7 @@ describe('MainAxc reducer', () => {
     };
     const nextState = reducer(initialState, action);
 
-    nextState.should.equal(fromJS({
+    expect(nextState).equal(fromJS({
       popOver: {
         isShow: false,
         name: 'groupAsider',
@@ -345,5 +204,27 @@ describe('MainAxc reducer', () => {
       id: '1',
     };
     const nextState = reducer(initialState, action);
+
+    expect(nextState).equal(fromJS({
+      popOver: {
+        isShow: false,
+        name: 'vlanAsider',
+      },
+      vlan: {
+        selected: {
+          id: '1',
+          remark: '测试',
+        },
+        list: [
+          {
+            id: '1',
+            remark: '测试',
+          }, {
+            id: '2',
+            remark: '研发',
+          },
+        ],
+      },
+    }));
   });
 });
