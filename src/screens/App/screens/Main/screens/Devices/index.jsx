@@ -200,7 +200,7 @@ export const Device = React.createClass({
     let ret;
 
     if (connect_type === 'static') {
-      if (!ret) {
+      if (!ret && gateway) {
         ret = validator.combineValid.staticIP(ip, mask, gateway);
       }
     }
@@ -209,19 +209,27 @@ export const Device = React.createClass({
   },
 
   onSaveDeviceNetWork() {
-    this.props.validateAll()
-      .then( (invalid) => {
-        const combineValidResult = this.combineValid();
-        const { ip, mask, gateway, connect_type } = this.props.store.get('edit').toJS();
-        const oriMask = this.props.store.getIn(['oriEdit', 'mask']);
-        const oriGateway = this.props.store.getIn(['oriEdit', 'gateway']);
 
-        if (invalid.isEmpty()) {
-          if (combineValidResult) {
+    this.props.validateAll((invalid) => {
+      const combineValidResult = this.combineValid();
+      const { ip, mask, gateway, connect_type } = this.props.store.get('edit').toJS();
+      const oriMask = this.props.store.getIn(['oriEdit', 'mask']);
+      const oriGateway = this.props.store.getIn(['oriEdit', 'gateway']);
+
+      if (invalid.isEmpty()) {
+        if (combineValidResult) {
+          this.props.createModal({
+            title: _('DEVICES'),
+            role: 'alert',
+            text: combineValidResult,
+          });
+        } else {
+          if ((oriGateway && validator.combineValid.staticIP(ip, oriMask, oriGateway)) || oriMask !== mask) {
             this.props.createModal({
               title: _('DEVICES'),
-              role: 'alert',
-              text: combineValidResult,
+              role: 'comfirm',
+              text: _('You might be unable to control the device after modifying its network segment, are you sure you want to modify it?'),
+              apply: () => this.props.saveDeviceNetwork(),
             });
           } else {
             if (validator.combineValid.staticIP(ip, oriMask, oriGateway) || oriMask !== mask) {
@@ -238,8 +246,7 @@ export const Device = React.createClass({
             }
           }
         }
-
-        return invalid;
+      }
     });
   },
 
@@ -496,7 +503,6 @@ export const Device = React.createClass({
 
                 <FormGroup
                   label={_('Default Gateway')}
-                  required
                   maxLength="15"
                   value={currData.get('gateway')}
                   onChange={this.onChangeDeviceNetwork('gateway')}

@@ -25,6 +25,18 @@ export function leaveStatusScreen() {
   };
 }
 
+export function showOfflineAp() {
+  return {
+    type: 'SHOW_OFFLINE_AP',
+  };
+}
+
+export function hideOfflineAp() {
+  return {
+    type: 'HIDE_OFFLINE_AP',
+  };
+}
+
 export function fetchStatus() {
   return (dispatch, getState) => {
     var query = getState().status.get('query').toJS();
@@ -34,13 +46,13 @@ export function fetchStatus() {
     dispatch(reqeustStats());
 
     dispatch(appActions.fetch(urls.fetchStatsInfo, query))
-      .then(function(json) {
-        if(json.state && json.state.code === 2000) {
+      .then(function (json) {
+        if (json.state && json.state.code === 2000) {
           dispatch(reveviceStats(json.data))
         }
 
-        if(refreshTime > 0) {
-          refreshTimeout = window.setTimeout(function() {
+        if (refreshTime > 0) {
+          refreshTimeout = window.setTimeout(function () {
             dispatch(fetchStatus())
           }, refreshTime)
         }
@@ -82,8 +94,8 @@ export function fetchOfflineAp() {
     dispatch(reqeustFetchOfflineAp());
 
     dispatch(appActions.fetch(urls.fetchOfflineAp, query))
-      .then(function(json) {
-        if(json.state && json.state.code === 2000) {
+      .then(function (json) {
+        if (json.state && json.state.code === 2000) {
           dispatch(reveviceFetchOfflineAp(json.data))
         }
       })
@@ -97,8 +109,8 @@ export function deleteOfflineAp(mac) {
     };
 
     dispatch(appActions.save(urls.deleteOfflineAp, subData))
-      .then(function(json) {
-        if(json.state && json.state.code === 2000) {
+      .then(function (json) {
+        if (json.state && json.state.code === 2000) {
           dispatch(fetchOfflineAp(5000))
         }
       });
