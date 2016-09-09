@@ -1,8 +1,8 @@
-$_height: 28px;
+$_height: 30px;
 
 .Select {
   display: inline-block;
-  min-width: 180px;
+  min-width: 200px;
   max-width: 100%;
   font-size: 12px;
   vertical-align: middle;
@@ -13,7 +13,7 @@ $_height: 28px;
   }
 
   .Select-placeholder {
-    line-height: $_height + 2px;
+    line-height: $_height;
     color: #999;
   }
 
@@ -43,6 +43,10 @@ $_height: 28px;
     .Select-control {
       border-color: #0093dd;
     }
+    .Select-menu-outer {
+      line-height: 20px;
+    }
+
     .Select-menu-outer {
       border-top-color: #ccc;
     }

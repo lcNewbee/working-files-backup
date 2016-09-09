@@ -6,9 +6,10 @@
 
 $track-color: #666 !default;
 $thumb-color: $g-brand-success !default;
+$_range-border-width: 0px !default;
 
-$thumb-radius: 8px !default;
-$thumb-height: 30px !default;
+$thumb-radius: 5px !default;
+$thumb-height: 28px !default;
 $thumb-width: 12px !default;
 $thumb-shadow-size: 1px !default;
 $thumb-shadow-blur: 1px !default;
@@ -16,15 +17,14 @@ $thumb-shadow-color: #333 !default;
 $thumb-border-width: 1px !default;
 $thumb-border-color: #fff !default;
 
-$track-width: 300px !default;
-$track-height: 10px !default;
+$track-width: 200px !default;
+$track-height: 12px !default;
 $track-shadow-size: 0px !default;
 $track-shadow-blur: 0px !default;
 $track-shadow-color: #222 !default;
 $track-border-width: 1px !default;
 $track-border-color: #000 !default;
-
-$track-radius: 5px !default;
+$track-radius: 4px !default;
 $contrast: 5% !default;
 
 @mixin shadow($shadow-size, $shadow-blur, $shadow-color) {
@@ -56,7 +56,7 @@ input[type=range] {
   border-radius: $track-radius;
 
   /* fix for FF unable to apply focus style bug  */
-  border: 1px solid transparent;
+  border: $_range-border-width solid transparent;
 
   &:focus {
     outline: none;
@@ -123,5 +123,13 @@ input[type=range] {
   }
   &:focus::-ms-fill-upper {
     background: lighten($track-color, $contrast);
+  }
+}
+.a-input-range {
+  display: inline-block;
+  vertical-align: middle;
+
+  input[type=range] {
+    margin-right: .4em;
   }
 }

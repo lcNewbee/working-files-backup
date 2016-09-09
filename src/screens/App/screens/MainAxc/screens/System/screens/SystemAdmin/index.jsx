@@ -30,6 +30,7 @@ const screenOptions = fromJS([
     ],
     formProps: {
       type: 'switch',
+      minWidth: '100px',
     },
   }, {
     id: 'purview',

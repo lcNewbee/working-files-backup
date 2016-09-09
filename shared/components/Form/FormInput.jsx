@@ -4,6 +4,7 @@ import moment from 'moment';
 import Select from '../Select';
 import Checkbox from './Checkbox';
 import Password from './Password';
+import Range from './Range';
 import Radios from './Radios';
 import Input from './atom/Input';
 import Switchs from '../Switchs';
@@ -209,6 +210,8 @@ class FormInput extends React.Component {
         MyComponent = Checkbox;
       } else if (inpputType === 'radio') {
         MyComponent = Radios;
+      } else if (inpputType === 'range') {
+        MyComponent = Range;
       } else {
         MyComponent = Input;
       }
