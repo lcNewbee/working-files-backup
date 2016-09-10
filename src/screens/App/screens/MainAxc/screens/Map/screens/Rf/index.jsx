@@ -93,6 +93,8 @@ export default class View extends React.Component {
         'onMapMouseUp',
         'onMapMouseDown',
         'onMapMouseMove',
+        'renderMapList',
+        'renderCurMap',
       ]
    );
   }
@@ -167,9 +169,10 @@ export default class View extends React.Component {
     this.props.editListItemByIndex(i);
   }
 
-  renderDeployedDevice(device, i) {
+  renderDeployedDevice(device, i, curMapName) {
     const xpos = device.getIn(['map', 'xpos']);
     const ypos = device.getIn(['map', 'ypos']);
+    const coverage = device.getIn(['map', 'coverage']);
     const isLocked = device.getIn(['map', 'locked']) === '1';
     const isOpen = device.getIn(['map', 'isOpen']);
     const btnsList = [
@@ -199,12 +202,13 @@ export default class View extends React.Component {
     const radius = 28;
     const avd = 220 / btnsList.length;
     const ahd = (avd * Math.PI) / 180;
+    const isCur = !curMapName || (curMapName === device.getIn(['map', 'mapName']));
 
     let ret = null;
     let deviceClassName = 'm-device';
     let avatarClass = 'm-device__avatar';
 
-    if (xpos > -50 && xpos > -50) {
+    if (xpos > -50 && xpos > -50 && isCur) {
       if (isLocked) {
         avatarClass = `${avatarClass} locked`;
       }
@@ -215,7 +219,7 @@ export default class View extends React.Component {
       if (isOpen) {
         deviceClassName = `${deviceClassName} m-device--open`;
       }
-      ret = (
+      ret = [
         <div
           id={`deivce${i}`}
           className={deviceClassName}
@@ -224,7 +228,6 @@ export default class View extends React.Component {
             top: `${ypos}%`,
           }}
         >
-          <div className="m-device__coverage" />
           <div
             className={avatarClass}
             draggable={!isLocked}
@@ -260,8 +263,17 @@ export default class View extends React.Component {
               );
             })
           }
-        </div>
-      );
+        </div>,
+        <div
+          className="m-device-coverage"
+          style={{
+            left: `${xpos}%`,
+            top: `${ypos}%`,
+            width: coverage,
+            height: coverage,
+          }}
+        />,
+      ];
     }
 
     return ret;
@@ -297,6 +309,99 @@ export default class View extends React.Component {
 
     return ret;
   }
+
+  renderMapList(mapList) {
+    return (
+      <div className="row">
+        {
+          mapList.map(maps => {
+            const mapName = maps.getIn([0, 'map', 'mapName']);
+
+            return (
+              <div className="cols col-3">
+                <div className="m-thumbnail">
+                  <div
+                    className="m-thumbnail__content"
+                    onClick={() => this.props.updateListSettings({
+                      curMapName: mapName,
+                      curList: maps,
+                    })}
+                  >
+                    <img
+                      src={bkImg}
+                      draggable="false"
+                      alt="d"
+
+                    />
+                    {
+                      maps ?
+                        maps.map(
+                          (item, i) => this.renderDeployedDevice(item, i)
+                        ) :
+                        null
+                    }
+                  </div>
+                  <div className="m-thumbnail__caption">
+                    <h3>{mapName}</h3>
+                    <p>
+                      <Button
+                        icon="edit"
+                        text={_('Edit')}
+                        style={{
+                          marginRight: '1em',
+                        }}
+                      />
+                      <Button
+                        icon="trash"
+                        text={_('Remove')}
+                      />
+                    </p>
+                  </div>
+                </div>
+              </div>
+            );
+          })
+        }
+      </div>
+    );
+  }
+  renderCurMap(list, curMapName, myZoom) {
+    return (
+      <div
+        className="o-map-rf"
+        onDrop={this.onDrop}
+        onDragOver={this.allowDrop}
+        ref={(mapContent) => {
+          if (mapContent) {
+            this.mapContent = mapContent;
+            this.mapWidth = mapContent.offsetWidth;
+            this.mapHeight = mapContent.offsetHeight;
+          }
+        }}
+        style={{
+          left: this.state.mapOffsetX,
+          top: this.state.mapOffsetY,
+          width: `${myZoom}%`,
+        }}
+        onMouseDown={this.onMapMouseDown}
+        onMouseUp={this.onMapMouseUp}
+        onMouseMove={this.onMapMouseMove}
+      >
+        <img
+          src={bkImg}
+          draggable="false"
+          alt="d"
+        />
+        {
+          list ?
+            list.map(
+              (device, i) => this.renderDeployedDevice(device, i, curMapName)
+            ) :
+            null
+        }
+      </div>
+    );
+  }
   render() {
     const { store } = this.props;
     const myListId = store.get('curListId');
@@ -304,7 +409,21 @@ export default class View extends React.Component {
     const settings = store.getIn([myListId, 'curSettings']);
     const isLocked = store.getIn([myListId, 'curSettings', 'isLocked']);
     const myZoom = store.getIn([myListId, 'curSettings', 'zoom']);
+    let curList = store.getIn([myListId, 'curSettings', 'curList']);
+    let curMapName = store.getIn([myListId, 'curSettings', 'curMapName']);
     const actionBarChildren = [
+      curMapName ? (
+        <Button
+          icon="back"
+          theme="primary"
+          text={_('Back')}
+          onClick={() => {
+            this.props.updateListSettings({
+              curMapName: '',
+            });
+          }}
+        />
+      ) : null,
       isLocked === '1' ? (<Button
         icon="lock"
         key="0"
@@ -330,6 +449,14 @@ export default class View extends React.Component {
         data-help-text="这是帮助文本"
       />,
     ];
+    const mapList = list
+        .groupBy(item => item.getIn(['map', 'mapName']))
+        .toList();
+
+    if (mapList.size === 1) {
+      curMapName = mapList.getIn([0, 'map', 'mapName']);
+      curList = mapList.get(0);
+    }
 
     return (
       <ListInfo
@@ -338,63 +465,37 @@ export default class View extends React.Component {
         actionBarChildren={actionBarChildren}
         actionable={false}
       >
-
         <div className="o-map-warp">
-          <div className="o-map-zoom-bar">
-            <Icon
-              name="minus"
-              className="o-map-zoom-bar__minus"
-              onClick={() => {
-                this.props.updateListSettings({
-                  zoom: (myZoom - 10) < 0 ? 0 : (myZoom - 10),
-                });
-              }}
-            />
-            <div className="o-map-zoom-bar__thmp" >{myZoom}%</div>
-            <Icon
-              name="plus"
-              className="o-map-zoom-bar__plus"
-              onClick={() => {
-                this.props.updateListSettings({
-                  zoom: (myZoom + 10) > 200 ? 200 : (myZoom + 10),
-                });
-              }}
-            />
-          </div>
-          <div
-            className="o-map-rf"
-            onDrop={this.onDrop}
-            onDragOver={this.allowDrop}
-            ref={(mapContent) => {
-              if (mapContent) {
-                this.mapContent = mapContent;
-                this.mapWidth = mapContent.offsetWidth;
-                this.mapHeight = mapContent.offsetHeight;
-              }
-            }}
-            style={{
-              left: this.state.mapOffsetX,
-              top: this.state.mapOffsetY,
-              width: `${myZoom}%`,
-            }}
-            onMouseDown={this.onMapMouseDown}
-            onMouseUp={this.onMapMouseUp}
-            onMouseMove={this.onMapMouseMove}
-          >
-            <img
-              src={bkImg}
-              draggable="false"
-              alt="d"
+          {
+            curMapName ? this.renderCurMap(list, curMapName, myZoom) : this.renderMapList(mapList)
+          }
+          {
+            curMapName ? (
+              <div className="o-map-zoom-bar">
+                <Icon
+                  name="minus"
+                  className="o-map-zoom-bar__minus"
+                  onClick={() => {
+                    this.props.updateListSettings({
+                      zoom: (myZoom - 10) < 0 ? 0 : (myZoom - 10),
+                    });
+                  }}
+                />
+                <div className="o-map-zoom-bar__thmp" >{myZoom}%</div>
+                <Icon
+                  name="plus"
+                  className="o-map-zoom-bar__plus"
+                  onClick={() => {
+                    this.props.updateListSettings({
+                      zoom: (myZoom + 10) > 200 ? 200 : (myZoom + 10),
+                    });
+                  }}
+                />
+              </div>
+            ) : null
+          }
 
-            />
-            {
-              list ?
-                list.map(this.renderDeployedDevice) :
-                null
-            }
-          </div>
         </div>
-
         <div className="o-devices-list" >
           {
             list ?

@@ -39,6 +39,7 @@ const screenOptions = fromJS([
     ],
     formProps: {
       type: 'switch',
+      minWidth: '60px',
     },
   }, {
     id: 'trapServer',

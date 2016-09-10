@@ -15,7 +15,7 @@
           "xpos": 20,
           "ypos": 12,
           "locked": "0",
-          "coverage": "15%"
+          "coverage": 100
         },
         "devicename": "ap1",
         "mac": "00:12:22:33:11:33",
@@ -33,7 +33,7 @@
           "xpos": -99,
           "ypos": -99,
           "locked": "0",
-          "coverage": "15%"
+          "coverage": 100
         },
         "devicename": "ap1",
         "mac": "00:12:22:33:11:33",
@@ -51,7 +51,7 @@
           "xpos": 21,
           "ypos": 22,
           "locked": "0",
-          "coverage": "15%"
+          "coverage": 100
         },
         "devicename": "ap1",
         "mac": "00:12:22:33:11:33",

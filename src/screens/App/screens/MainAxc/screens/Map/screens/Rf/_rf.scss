@@ -70,19 +70,19 @@
       z-index: 1;
     }
   }
+}
 
-  .m-device__coverage {
-    position: absolute;
-    top: -35px;
-    left: -33px;
-    padding: 50px;
-    background: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 80, from(green), to(#fff));
-    background: -moz-radial-gradient(50% 50%, closest-corner, green,#fff);
-    background: -webkit-radial-gradient(50% 50%, closest-corner, green,#fff);
-    border-radius: 50px;
-    //background: #ccc;
-    opacity: .8;
-  }
+.m-device-coverage {
+  position: absolute;
+  margin-top: -35px;
+  margin-left: -35px;
+  // padding: 50px;
+  background: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 80, from(green), to(#fff));
+  background: -moz-radial-gradient(50% 50%, closest-corner, green,#fff);
+  background: -webkit-radial-gradient(50% 50%, closest-corner, green,#fff);
+  border-radius: 50px;
+  //background: #ccc;
+  opacity: .8;
 }
 .o-map-warp {
   position: absolute;
@@ -93,6 +93,20 @@
   min-height: 400px;
   overflow: hidden;
   border: 1px solid #d2d2d2;
+  z-index: 100;
+}
+.m-thumbnail__content {
+  position: relative;
+  height: 160px;
+  overflow: hidden;
+  cursor: pointer;
+
+  .m-device {
+    position: absolute;
+    z-index: 99;
+    width: auto;
+    border: 0;
+  }
 }
 .o-map-rf {
   position: absolute;
@@ -107,12 +121,13 @@
     position: absolute;
     width: auto;
     border: 0;
+    z-index: 3;
   }
 }
 .o-map-zoom-bar {
   position: absolute;
-  bottom: 20px;
-  right: 20px;
+  top: 20px;
+  left: 20px;
   background-color: #fff;
   border: 1px solid #ccc;
   z-index: 3;
