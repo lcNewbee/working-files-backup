@@ -56,22 +56,6 @@ export function receiveFetchAcInfo(data) {
   };
 }
 
-export function fetchAcInfo() {
-  return (dispatch) => {
-    dispatch(requestFetchAcInfo());
-
-    utils.fetch(APP_CONFIG.fetchInfo)
-      .then((json) => {
-        if (json.state && json.state.code === 2000) {
-          dispatch(receiveFetchAcInfo(json.data));
-        }
-      })
-      .catch(() => {
-        dispatch(receiveAjaxError(url, 'fetch'));
-      });
-  };
-}
-
 
 /**
  * Ajax
@@ -90,14 +74,10 @@ export function receiveSave(state) {
   };
 }
 
-export function receiveAjaxError(url, ajaxType) {
+export function receiveAjaxError(payload) {
   return {
     type: 'RECEIVE_AJAX_ERROR',
-    payload: {
-      url,
-      type: ajaxType,
-      errorAt: Date.now(),
-    },
+    payload,
   };
 }
 
@@ -179,6 +159,19 @@ export function save(url, query) {
         }
         dispatch(receiveSave());
         return json;
+      });
+  };
+}
+
+export function fetchAcInfo() {
+  return (dispatch) => {
+    dispatch(requestFetchAcInfo());
+
+    dispatch(fetch(APP_CONFIG.fetchInfo))
+      .then((json) => {
+        if (json.state && json.state.code === 2000) {
+          dispatch(receiveFetchAcInfo(json.data));
+        }
       });
   };
 }

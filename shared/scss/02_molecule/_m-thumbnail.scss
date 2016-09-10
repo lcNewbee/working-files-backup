@@ -1,0 +1,23 @@
+.m-thumbnail {
+  display: block;
+  padding: 4px;
+  margin-bottom: 20px;
+  line-height: 1.42857143;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition: border .2s ease-in-out;
+
+  .m-thumbnail__content {
+    margin-right: auto;
+    margin-left: auto;
+
+    img {
+      width: 100%;
+    }
+  }
+  .m-thumbnail__caption {
+    padding: 9px;
+    color: #333
+  }
+}

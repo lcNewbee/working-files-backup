@@ -42,6 +42,16 @@ export function editListItemByIndex(index) {
   };
 }
 
+export function editListItemByKey(keyName, val) {
+  return {
+    type: 'EDIT_LIST_ITEM_BY_KEY',
+    payload: {
+      keyName,
+      val,
+    },
+  };
+}
+
 export function updateEditListItem(data, sync) {
   return {
     type: 'UPDATE_EDIT_LIST_ITEM',

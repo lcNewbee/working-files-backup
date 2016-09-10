@@ -13,9 +13,11 @@ $mw-xl:  1382px;
 }
 .row {
   @include clearfix;
+  margin: 0 -10px;
 }
 .cols {
   float: left;
+  padding: 10px;
 }
 
 @include make-grid();
