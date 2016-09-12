@@ -12,6 +12,8 @@ const defaultItem = fromJS({
     edit: {},
     list: [],
   },
+  curList: [],
+  curSettings: {},
   actionQuery: {},
   defaultEditData: {},
 });
@@ -55,7 +57,6 @@ function selectedListItem(list, data) {
   } else {
     ret = ret.map(item => item.set('selected', data.selected));
   }
-
   return ret;
 }
 function updateEditListItem(curScreenName, state, action) {
@@ -70,7 +71,6 @@ function updateEditListItem(curScreenName, state, action) {
 }
 
 function findListItemByKey(list, option){
-
   return list.find((item) => {
     return item.get(option.keyName) === option.val;
   });
@@ -119,7 +119,7 @@ export default function (state = defaultState, action) {
       return updateEditListItem(curScreenName, state, action);
 
     case 'UPDATE_LIST_SETTINGS':
-      return state.mergeDeepIn([curScreenName, 'curSettings'], action.data);
+      return state.mergeDeepIn([curScreenName, 'curSettings'], action.payload);
 
     case 'UPDATE_LIST_ITEM_BY_INDEX':
       return state.mergeDeepIn([curScreenName, 'data', 'list', action.index], action.data);

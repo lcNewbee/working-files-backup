@@ -36,18 +36,25 @@
       line-height:  $g-main-bar-height;
       font-size: 12px;
       font-weight: 300;
+
+      @include clearfix;
+
+      span {
+        float: left;
+      }
     }
 
     .icon {
       font-size: 18px;
-      line-height: 24px;
-      width: 30px;
-      margin-top: 6px;
+      line-height: 18px;
       text-align: center;
-      background-color: #222;
-      margin-right: 6px;
+      background-color: #000;
+      margin-top: 5px;
+      margin-left: 6px;
+      padding: 4px 8px;
       float: left;
       cursor: pointer;
+      vertical-align: middle;
     }
   }
 

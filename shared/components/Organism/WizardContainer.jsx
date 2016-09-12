@@ -9,7 +9,6 @@ import {
 
 const propTypes = {
   className: PropTypes.string,
-  layout: PropTypes.oneOf(['flow', 'block']),
   size: PropTypes.oneOf(['sm']),
   title: PropTypes.string,
   initStep: PropTypes.number,
@@ -18,7 +17,11 @@ const propTypes = {
     PropTypes.instanceOf(List),
   ]),
 
-  onBeforeStep: PropTypes.func,
+  // 可以是函数或Promise对象
+  onBeforeStep: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.object,
+  ]),
   onAfterStep: PropTypes.func,
   onCompleted: PropTypes.func,
 };

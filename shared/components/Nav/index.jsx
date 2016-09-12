@@ -66,12 +66,10 @@ class Nav extends Component {
   render() {
     const { className, menus, location, role } = this.props;
     let navClassName = className || '';
-    let linkClassName = 'm-menu__link';
+
     let isTree = false;
 
     navClassName = `${navClassName} o-nav`;
-    linkClassName = `${linkClassName} o-nav__link`;
-
     if (role === 'tree') {
       navClassName = `${navClassName} o-nav--tree`;
       isTree = true;
@@ -88,6 +86,7 @@ class Nav extends Component {
               const myKey = `nav${i}`;
               const hasSubmenus = isTree && item.get('childRoutes') && !item.get('noTree');
               let subMenuClassName = 'o-nav__sub-menus m-menu';
+              let linkClassName = 'm-menu__link o-nav__link';
               let isActive = false;
 
               if (location && location.pathname) {
@@ -101,6 +100,8 @@ class Nav extends Component {
 
               if (!hasSubmenus) {
                 linkClassName = `${linkClassName} a-leaf-link`;
+              } else {
+                linkClassName = `${linkClassName} a-branch-link`;
               }
 
               return (
@@ -116,7 +117,7 @@ class Nav extends Component {
                         {
                           item.get('childRoutes').map((subItem, n) => {
                             const thisKey = `${myKey}.${n}`;
-                            const mylinkClassName = `${linkClassName} a-leaf-link`;
+                            const mylinkClassName = 'm-menu__link o-nav__link a-leaf-link';
                             return (
                               <li key={thisKey}>
                                 <NavLink

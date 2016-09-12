@@ -1,0 +1,30 @@
+.o-tree {
+  .o-tree__root {
+    &::before {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      margin-top: -6px;
+      display: inline-block;
+      font: normal normal normal 14px/1 FontAwesome;
+      font-size: inherit;
+      content: "\f0da";
+      font-size: 12px;
+      text-rendering: auto;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    &.active {
+      &::before {
+        transform: rotate(90deg);
+      }
+    }
+  }
+  .o-tree__leaf {
+
+  }
+  .o-tree__subtree {
+
+  }
+}

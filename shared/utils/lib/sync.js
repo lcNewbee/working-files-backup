@@ -99,9 +99,21 @@ var sync = {
       });
   },
 
-  loadScript: function (url, callback, isAsync){
+  loadScript: function (url, callback, timeout, isAsync){
     var script = document.createElement("script");
     var myCallback = callback;
+    var thisTimeout = null;
+    var myTimeout = timeout || 6000;
+    var scriptElems = document.getElementsByTagName('script');
+    var len = scriptElems.length;
+    var i;
+
+    // 判断是否已加载了相同的 域名和端口的文件
+    for (i = 0; i < len; i++) {
+      if (url.split('?')[0] === scriptElems[i].src.split('?')[0]) {
+        return null;
+      }
+    }
 
     // 防止重复加载同一URL
     if(loadedScripts.indexOf(url) !== -1) {
@@ -124,6 +136,7 @@ var sync = {
         if (script.readyState == "loaded" || script.readyState == "complete") {
           script.onreadystatechange = null;
           myCallback();
+          clearTimeout(thisTimeout);
         }
       };
 
@@ -131,11 +144,18 @@ var sync = {
     } else {
       script.onload = function () {
         myCallback();
+        clearTimeout(thisTimeout);
       };
     }
 
+
+    thisTimeout = setTimeout(function() {
+      myCallback('load error');
+    }, myTimeout)
+
     script.src = url;
     document.body.appendChild(script);
+
   },
 }
 

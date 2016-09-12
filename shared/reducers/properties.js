@@ -105,7 +105,7 @@ export default function (state = defaultState, action) {
 
     // 切换属性列表body折叠状态
     case 'COLLAPSE_PROPERTYS':
-      return state.update('activeIndex', i => {
+      return state.update('activeIndex', (i) => {
         let ret = action.index;
 
         if (action.index === i) {

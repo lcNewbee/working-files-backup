@@ -67,10 +67,10 @@ export function updateListItemByIndex(index, data) {
   };
 }
 
-export function updateListSettings(data) {
+export function updateListSettings(payload) {
   return {
     type: 'UPDATE_LIST_SETTINGS',
-    data,
+    payload,
   };
 }
 
