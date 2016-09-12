@@ -87,10 +87,12 @@ export default class View extends React.Component {
 
   componentDidMount() {
     utils.loadScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyBGOC8axWomvnetRPnTdcuNW-a558l-JAU&libraries=places',
-      () => {
-        this.renderGoogleMap();
-      }
-    );
+      (error) => {
+        if (!error) {
+          this.renderGoogleMap();
+        }
+      },
+    6000);
   }
 
   componentDidUpdate(prevProps) {
@@ -298,7 +300,8 @@ export default class View extends React.Component {
 
   render() {
     const { app, store } = this.props;
-    const settings = this.getCurListInfoState(store, 'settings');
+    const myListId = store.get('curListId');
+    const settings = store.getIn([myListId, 'curSettings']);
     const editData = this.getCurListInfoState(store, 'edit');
     const actionBarChildren = [
       settings.get('isLocked') === '1' ? (<Button
@@ -344,7 +347,6 @@ export default class View extends React.Component {
           <div className="o-map__header">
             <Icon
               name="arrow-circle-up"
-              size="1x"
               className="o-map__header-close"
               onClick={() => this.props.closeListItemModal()}
             />

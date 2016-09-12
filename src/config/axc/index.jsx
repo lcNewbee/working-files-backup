@@ -592,14 +592,11 @@ const reducers = {
   // product comstom reducers
   login: sLogin.login,
   mainAxc: sMainAxc.reducer,
-  interfaces: sInterfaces.reducer,
-  dhcpAdressPool: sNetworkDhcp.reducer,
 
   // ap组管理
   users: sUsers.reducer,
   safeStatus: sSafeStatus.reducer,
   system: sSystemStatus.reducer,
-  admin: sSystemAdmin.reducer,
   events: sAlarmEvents.reducer,
 };
 

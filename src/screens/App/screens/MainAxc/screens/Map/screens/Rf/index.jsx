@@ -54,21 +54,15 @@ const screenOptions = fromJS({
 });
 
 const defaultEditData = immutableUtils.getDefaultData(screenOptions.get('list'));
-const formOptions = immutableUtils.getFormOptions(screenOptions.get('list'));
 
 const propTypes = {
-  groupId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
-  route: PropTypes.object,
   updateListSettings: PropTypes.func,
   addToPropertyPanel: PropTypes.func,
   updateEditListItem: PropTypes.func,
   validateAll: PropTypes.func,
   editListItemByIndex: PropTypes.func,
   onListAction: PropTypes.func,
-  reportValidError: PropTypes.func,
-  closeListItemModal: PropTypes.func,
   updateListItemByIndex: PropTypes.func,
 };
 const defaultProps = {};
@@ -86,7 +80,6 @@ export default class View extends React.Component {
     utils.binds(this,
       [
         'onSave',
-        'getCurListInfoState',
         'onDrop',
         'renderUndeployDevice',
         'renderDeployedDevice',
@@ -107,7 +100,7 @@ export default class View extends React.Component {
         }
       });
   }
-  onDrop(ev) {
+  onDrop(ev, curMapName) {
     const mapOffset = dom.getAbsPoint(this.mapContent);
     const offsetX = (ev.clientX - mapOffset.x - 13);
     const offsetY = (ev.clientY - mapOffset.y - 13);
@@ -116,6 +109,7 @@ export default class View extends React.Component {
 
     this.props.updateEditListItem({
       map: {
+        mapName: curMapName,
         xpos: (offsetX * 100) / this.mapContent.offsetWidth,
         ypos: (offsetY * 100) / this.mapContent.offsetHeight,
       },
@@ -131,7 +125,7 @@ export default class View extends React.Component {
       },
     });
   }
-  onMapMouseUp(e) {
+  onMapMouseUp() {
     this.mapMouseDown = false;
   }
   onMapMouseDown(e) {
@@ -144,25 +138,12 @@ export default class View extends React.Component {
   onMapMouseMove(e) {
     if (this.mapMouseDown) {
       this.setState({
-        mapOffsetX: this.state.mapOffsetX + e.clientX - this.mapClientX,
-        mapOffsetY: this.state.mapOffsetY + e.clientY - this.mapClientY,
+        mapOffsetX: (this.state.mapOffsetX + e.clientX) - this.mapClientX,
+        mapOffsetY: (this.state.mapOffsetY + e.clientY) - this.mapClientY,
       });
       this.mapClientX = e.clientX;
       this.mapClientY = e.clientY;
     }
-  }
-  getCurListInfoState(listStore, name) {
-    const myStore = listStore || Map({});
-    const myListId = myStore.get('curListId');
-    let ret = myStore.getIn([myListId, 'data']);
-
-    if (name) {
-      ret = myStore.getIn([myListId, 'data', name]);
-    }
-    return ret || Map({});
-  }
-  allowDrop(e) {
-    e.preventDefault();
   }
   startDrag(ev, i) {
     ev.dataTransfer.setData('Text', ev.target.id);
@@ -231,15 +212,19 @@ export default class View extends React.Component {
           <div
             className={avatarClass}
             draggable={!isLocked}
-            onDragStart={(ev) => this.startDrag(ev, i)}
+            onDragStart={ev => this.startDrag(ev, i)}
             onClick={() => this.props.updateListItemByIndex(i, {
-              isOpen: !isOpen,
+              map: {
+                isOpen: !isOpen,
+              },
             })}
           />
           <span
             className="m-device__name"
             onClick={() => this.props.updateListItemByIndex(i, {
-              isOpen: !isOpen,
+              map: {
+                isOpen: !isOpen,
+              },
             })}
           >
             {device.get('devicename') || device.get('mac')}
@@ -253,8 +238,8 @@ export default class View extends React.Component {
                   className={btnClassName}
                   key={info.id}
                   style={{
-                    left: isOpen ? (Math.sin((ahd * index)) * radius + 7) : 13,
-                    top: isOpen ? (Math.cos((ahd * index)) * radius + 6) : 13,
+                    left: isOpen ? (Math.sin((ahd * index)) * radius) + 7 : 13,
+                    top: isOpen ? (Math.cos((ahd * index)) * radius) + 6 : 13,
                   }}
                   onClick={info.onClick}
                 >
@@ -298,7 +283,7 @@ export default class View extends React.Component {
           <div
             className={avatarClass}
             draggable="true"
-            onDragStart={(ev) => this.startDrag(ev, i)}
+            onDragStart={ev => this.startDrag(ev, i)}
           />
           <span className="m-device__name">
             {device.get('devicename') || device.get('mac')}
@@ -314,7 +299,7 @@ export default class View extends React.Component {
     return (
       <div className="row">
         {
-          mapList.map(maps => {
+          mapList.map((maps) => {
             const mapName = maps.getIn([0, 'map', 'mapName']);
 
             return (
@@ -322,21 +307,20 @@ export default class View extends React.Component {
                 <div className="m-thumbnail">
                   <div
                     className="m-thumbnail__content"
-                    onClick={() => this.props.updateListSettings({
-                      curMapName: mapName,
-                      curList: maps,
-                    })}
                   >
                     <img
                       src={bkImg}
                       draggable="false"
                       alt="d"
-
+                      onClick={() => this.props.updateListSettings({
+                        curMapName: mapName,
+                        curList: maps,
+                      })}
                     />
                     {
                       maps ?
                         maps.map(
-                          (item, i) => this.renderDeployedDevice(item, i)
+                          item => this.renderDeployedDevice(item, item.get('_index'))
                         ) :
                         null
                     }
@@ -347,6 +331,10 @@ export default class View extends React.Component {
                       <Button
                         icon="edit"
                         text={_('Edit')}
+                        onClick={() => this.props.updateListSettings({
+                          curMapName: mapName,
+                          curList: maps,
+                        })}
                         style={{
                           marginRight: '1em',
                         }}
@@ -369,8 +357,8 @@ export default class View extends React.Component {
     return (
       <div
         className="o-map-rf"
-        onDrop={this.onDrop}
-        onDragOver={this.allowDrop}
+        onDrop={e => this.onDrop(e, curMapName)}
+        onDragOver={e => e.preventDefault()}
         ref={(mapContent) => {
           if (mapContent) {
             this.mapContent = mapContent;
@@ -406,15 +394,13 @@ export default class View extends React.Component {
     const { store } = this.props;
     const myListId = store.get('curListId');
     const list = store.getIn([myListId, 'data', 'list']);
-    const settings = store.getIn([myListId, 'curSettings']);
     const isLocked = store.getIn([myListId, 'curSettings', 'isLocked']);
     const myZoom = store.getIn([myListId, 'curSettings', 'zoom']);
-    let curList = store.getIn([myListId, 'curSettings', 'curList']);
     let curMapName = store.getIn([myListId, 'curSettings', 'curMapName']);
     const actionBarChildren = [
       curMapName ? (
         <Button
-          icon="back"
+          icon="arrow-left"
           theme="primary"
           text={_('Back')}
           onClick={() => {
@@ -450,12 +436,14 @@ export default class View extends React.Component {
       />,
     ];
     const mapList = list
+        .map((item, i) => item.merge({
+          _index: i,
+        }))
         .groupBy(item => item.getIn(['map', 'mapName']))
         .toList();
 
     if (mapList.size === 1) {
       curMapName = mapList.getIn([0, 'map', 'mapName']);
-      curList = mapList.get(0);
     }
 
     return (

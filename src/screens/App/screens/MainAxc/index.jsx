@@ -624,7 +624,7 @@ export default class Main extends Component {
             className="o-menu-bar__nav"
           >
             <h3>
-              {curTopNavText}
+              <span>{curTopNavText}</span>
               {
                 isGroupMenu ? (
                   <Icon
