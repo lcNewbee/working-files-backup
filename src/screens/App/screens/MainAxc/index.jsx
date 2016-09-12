@@ -591,9 +591,9 @@ export default class Main extends Component {
             </div>
           </div>
         </Navbar>
-        <div className="o-top-menu-bar o-tab">
+        <div className="o-top-menu-bar">
           <ul
-            className="o-tab__nav"
+            className="m-menu m-menu--open"
           >
             {
               fromJS(this.props.routes[0].childRoutes).map((item) => {
@@ -602,13 +602,14 @@ export default class Main extends Component {
                 return item.get('text') ? (<li key={keyVal}>
                   <Link
                     to={item.get('path')}
-                    className="m-menu__link"
+                    className=""
                     activeClassName="active"
+                    data-title={item.get('text')}
                     onClick={() => {
                       this.onClickTopMenu(item.get('path'));
                     }}
                   >
-                    {item.get('text')}
+                    <Icon name={item.get('icon')} />
                   </Link>
                 </li>) : null;
               })
@@ -623,6 +624,7 @@ export default class Main extends Component {
             className="o-menu-bar__nav"
           >
             <h3>
+              {curTopNavText}
               {
                 isGroupMenu ? (
                   <Icon
@@ -630,7 +632,6 @@ export default class Main extends Component {
                   />
                 ) : null
               }
-              {curTopNavText}
             </h3>
           </nav>
           {

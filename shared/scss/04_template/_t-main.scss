@@ -3,7 +3,7 @@ $top-distance: $g-navbar-height + $g-distance * 2;
 $sidebar-width: 170px;
 $nav-text-color: #ababab;
 $main-blue: #0093dd;
-$t-main-top-menu-height: $g-top-menu-height;
+$t-main-top-menu-height: $g-top-menu-size;
 
 html,
 body {
@@ -28,8 +28,8 @@ body {
   .t-main__nav {
     position: fixed;
     top: $g-navbar-height;
-    left: 0;
     bottom: 0;
+    left: 0;
     z-index: 1000;
     width: $sidebar-width;
     background: #333;
@@ -48,42 +48,117 @@ body {
     min-width: 1024px - $sidebar-width;
     padding: $g-distance;
     padding-left: $g-distance * 1.5;
-    transition: left .3s ease-in;
     overflow: auto;
+    transition: left .3s ease-in;
 
     h2,
     .t-main__content-title {
-      font-size: 1.5em;
       margin-bottom: .3em;
+      font-size: 1.5em;
     }
   }
 
   &.t-main--axc {
     .t-main__nav {
-      top: $g-navbar-height + $g-main-bar-height + $t-main-top-menu-height;
+      top: $g-navbar-height + $g-main-bar-height;
+      left: $g-top-menu-size;
       width: $sidebar-width + 20px;
+      background-color: #252526;
+      .m-menu__link {
+        background-color: #444;
+      }
+      .o-nav__link {
+        padding: 12px 0;
+        padding-left: 20px;
+        font-size: 12px;
+        .icon {
+          font-size: 15px;
+          line-height: 20px;
+        }
+        &.active {
+          .icon {
+            color: #fff;
+          }
+        }
+      }
+      .a-leaf-link {
+        &.active {
+          background-color: $g-color-primary;
+        }
+      }
+      .o-nav__sub-menus {
+        .o-nav__link {
+          padding-left: 36px;
+        }
+      }
     }
     .t-main__content {
-      top: $g-navbar-height + $g-main-bar-height + $t-main-top-menu-height;
-      left: $sidebar-width + 20px;
+      top: $g-navbar-height + $g-main-bar-height;
       bottom: 0;
+      left: $sidebar-width + $g-top-menu-size + 20px;
     }
     .t-main__asider-left {
-      top: $g-navbar-height + $g-main-bar-height + $t-main-top-menu-height;
+      top: $g-navbar-height + $g-main-bar-height;
+      left: $g-top-menu-size;
     }
     .o-property-panel {
-      top: $g-navbar-height + $t-main-top-menu-height;
+      top: $g-navbar-height;
     }
     .o-top-menu-bar {
       position: fixed;
-      width: 100%;
       top: $g-navbar-height;
+      z-index: 1501;
+      width: $t-main-top-menu-height;
+      height: 100%;
+      a {
+        position: relative;
+        display: block;
+        padding: 11px 0;
+        color: #999;
+        text-align: center;
+        border-top: 1px solid transparent;
+        border-bottom: 1px solid transparent;
+
+        .icon {
+          font-size: 20px;
+        }
+        &::after {
+          position: absolute;
+          top: 50%;
+          left: 100%;
+          display: none;
+          min-width: 100px;
+          padding-left: 1em;
+          margin-top: -22px;
+          overflow: hidden;
+          font-size: 12px;
+          line-height: 44px;
+          color: #fff;
+          text-align: left;
+          content: attr(data-title);
+          background: #333;
+          border-left: 0;
+        }
+        &:hover {
+          color: #fff;
+          border-color: #444;
+          &::after {
+            display: block;
+          }
+        }
+        &.active {
+          color: #fff;
+        }
+      }
+    }
+    .o-menu-bar {
+      left: $g-top-menu-size;
     }
   }
 
   &.main--open-left {
     .t-main__nav {
-      left: 170px;
+      left: 170px + $g-top-menu-size;;
     }
 
     .t-main__content {
@@ -99,9 +174,9 @@ body {
   left: 0;
   z-index: 999;
   width: 170px;
+  overflow-y: auto;
   color: #fff;
   background: #222;
-  overflow-y: auto;
 }
 
 .t-main__asider-header {
@@ -109,14 +184,15 @@ body {
   line-height: 20px;
 
   &::before {
-    content: '';
     position: absolute;
     top: 0;
     right: 0;
+    display: none;
     height: 0;
-    border-width: 26px 16px;
+    content: '';
     border-color: transparent #444 transparent transparent ;
     border-style: solid;
+    border-width: 26px 16px;
   }
 }
 

@@ -143,6 +143,7 @@ const routes = [
       {
         path: '/main/network',
         component: sMainAxc.Screen,
+        icon: 'plug',
         text: _('NETWORK'),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/network/interface') },
         childRoutes: [
@@ -249,6 +250,7 @@ const routes = [
       }, {
         path: '/main/group',
         component: sMainAxc.Screen,
+        icon: 'group',
         text: _('AP GROUP'),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/group/monitor') },
         childRoutes: [
@@ -436,6 +438,7 @@ const routes = [
       }, {
         path: '/main/system',
         component: sMainAxc.Screen,
+        icon: 'cogs',
         text: _('SYSTEM'),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/system/status') },
         childRoutes: [

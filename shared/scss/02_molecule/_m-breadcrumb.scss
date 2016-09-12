@@ -1,17 +1,4 @@
 .m-breadcrumb {
-  li {
-    float: right;
-
-    &:nth-child(odd) {
-      .m-breadcrumb__link {
-        background-color: #888;
-
-        &::after {
-          border-color: transparent transparent transparent #888;
-        }
-      }
-    }
-  }
   .m-breadcrumb__link {
     display: block;
     padding: 0 5px;
@@ -31,6 +18,25 @@
       border-color: transparent transparent transparent #777;
       border-style: solid;
       border-right: none;
+    }
+  }
+
+  li {
+    float: right;
+
+    &:nth-child(odd) {
+      .m-breadcrumb__link {
+        background-color: #888;
+
+        &::after {
+          border-color: transparent transparent transparent #888;
+        }
+      }
+    }
+    &:last-child {
+      .m-breadcrumb__link {
+        padding-left: 15px;
+      }
     }
   }
 }

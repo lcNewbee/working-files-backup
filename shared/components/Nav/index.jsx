@@ -99,6 +99,10 @@ class Nav extends Component {
                 subMenuClassName = `${subMenuClassName} m-menu--open`;
               }
 
+              if (!hasSubmenus) {
+                linkClassName = `${linkClassName} a-leaf-link`;
+              }
+
               return (
                 <li key={myKey}>
                   <NavLink
@@ -112,11 +116,12 @@ class Nav extends Component {
                         {
                           item.get('childRoutes').map((subItem, n) => {
                             const thisKey = `${myKey}.${n}`;
+                            const mylinkClassName = `${linkClassName} a-leaf-link`;
                             return (
                               <li key={thisKey}>
                                 <NavLink
                                   item={subItem}
-                                  className={linkClassName}
+                                  className={mylinkClassName}
                                   onClick={this.onSelectItem}
                                 />
                               </li>
