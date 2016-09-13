@@ -15,6 +15,12 @@
   outline: 0;
   padding-top: 10px;
   overflow: auto;
+
+  &.o-modal--draggable {
+    .o-modal__header {
+      cursor: move;
+    }
+  }
 }
 .o-modal__backdrop {
   position: fixed;

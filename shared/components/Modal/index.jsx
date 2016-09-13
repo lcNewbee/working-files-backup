@@ -14,6 +14,7 @@ const propTypes = {
   transitionLeave: PropTypes.bool,
   transitionEnter: PropTypes.bool,
   okButton: PropTypes.bool,
+  draggable: PropTypes.bool,
   cancelButton: PropTypes.bool,
   noFooter: PropTypes.bool,
   onClose: PropTypes.func,
@@ -56,7 +57,7 @@ class Modal extends Component {
 
   render() {
     const { size, role, id, transitionLeave, transitionEnter,
-      isShow, title, cancelText, okButton, okText,
+      isShow, title, cancelText, okButton, okText, draggable,
     } = this.props;
     let noFooter = this.props.noFooter;
     let classNames;
@@ -68,6 +69,10 @@ class Modal extends Component {
     // role is shown in classNames
     if (role) {
       classNames = `o-modal__${role}`;
+    }
+
+    if (draggable) {
+      modalClassName = `${modalClassName} o-modal--draggable`;
     }
 
     // ReactCSSTransitionGroup need key value
@@ -113,8 +118,8 @@ class Modal extends Component {
               className={modalClassName}
               role={role}
             >
-              <div className="o-modal__backdrop" />
-              <div className={classNames} style={this.props.style}>
+              <div className="o-modal__backdrop" onDrop={e => e.preventDefault()} />
+              <div className={classNames} draggable={draggable} style={this.props.style}>
                 <div className="o-modal__content">
                   {
                     title ? (
