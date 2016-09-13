@@ -3,7 +3,7 @@ import { fromJS, Map } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import utils from 'shared/utils';
-import { FormGroup, FormInput, SaveButton, Button } from 'shared/components';
+import { FormGroup, FormInput, SaveButton, Button, Modal } from 'shared/components';
 import * as appActions from 'shared/actions/app';
 import * as settingActions from 'shared/actions/settings';
 import * as selfActions from './actions.js';
@@ -23,7 +23,9 @@ export default class QuickSetup extends React.Component {
   }
 
   componentWillMount() {
-    this.props.changePage('1');
+    const props = this.props;
+    props.changePage('1');
+    props.fetchSettings();
   }
 
   render() {
@@ -250,44 +252,88 @@ export default class QuickSetup extends React.Component {
               deviceMode === 'ap' ? (
                 <div className="thirdForAp">
                   <h2>{_('Scene: Access Point')}</h2>
-                  <h3>{_('Current Settings')}</h3>
+                  <h3>{_('Wireless Settings')}</h3>
                   <FormGroup
-                    type="plain-text"
-                    label={_('Device IP Address')}
-                    value="192.168.1.1"
-                  />
-                  <FormGroup
-                    type="plain-text"
-                    label={_('Device Mode')}
-                    value="Access Point"
-                  />
-                  <FormGroup
-                    type="plain-text"
-                    label={_('Frequency')}
-                    value="5GHz"
-                  />
-                  <FormGroup
-                    type="plain-text"
-                    label={_('Country')}
-                    value="CN(China)"
-                  />
-                  <FormGroup
-                    type="plain-text"
+                    type="text"
                     label={_('SSID')}
-                    value="axilspot"
                   />
                   <FormGroup
-                    type="plain-text"
-                    label={_('Security')}
-                    value="wpa"
+                    label={_('Country Code')}
+                  >
+                    <FormInput
+                      type="text"
+                      disabled
+                      style={{
+                        width: '127px',
+                        marginTop: '-3px',
+                      }}
+                    />
+                    <Button
+                      text={_('Change')}
+                      style={{
+                        marginLeft: '3px',
+                        width: '70px',
+                      }}
+                    />
+                  </FormGroup>
+                  {
+                    this.props.selfState.get('showCtyModal') ? (
+                      <Modal
+                        title={_('Country Code')}
+                        style={{
+                          top: '200px',
+                        }}
+                        isShow
+                      >
+                        <h3>{_('User Protocol')}</h3>
+                        <span>
+                          使用本设备之前，请务必选择正确的国家代码以满足当地法规对于可用信道、信道带宽、输出功率、自动频宽选择和自动发射功率控制等的要求。安装方或本设备拥有方是保证依照法规规定正确使用本设备的完全责任人。设备提供商/分销商对于违规使用无线设备的行为和后果不承担任何责任。
+                        </span>
+                        <FormGroup
+                          type="radio"
+                          text={_('I have read and agree')}
+                        />
+                        <FormGroup
+                          label={_('Country')}
+                          type="select"
+                        />
+                      </Modal>
+                    ) : null
+                  }
+                  <FormGroup
+                    type="text"
+                    label={_('Mode')}
                   />
+                  <FormGroup
+                    type="text"
+                    label={_('Channel Width')}
+                  />
+                  <FormGroup
+                    type="text"
+                    label={_('Channel')}
+                  />
+                  <FormGroup
+                    type="select"
+                    label={_('Security')}
+                  />
+                  <FormGroup
+                    type="password"
+                    label={_('Password')}
+                  />
+                  <FormGroup
+                    type="text"
+                    label={_('Distance')}
+                  />
+
                   <FormGroup>
                     <Button
                       text={_('<- Previous')}
                       onClick={() => { this.props.changePage('2'); }}
                     />&nbsp;&nbsp;&nbsp;
-                    <SaveButton
-                      text={_('Complete')}
+                    <Button
+                      text={_('Next ->')}
+                      theme="primary"
+                      onClick={() => { this.props.changePage('4'); }}
                     />
                   </FormGroup>
                 </div>
@@ -372,10 +418,19 @@ export default class QuickSetup extends React.Component {
                     label={_('Password')}
                     type="password"
                   />
-                  <FormGroup
-                    label={_('Lock To')}
-                    type="checkbox"
-                  />
+                  <div
+                    className="clearfix"
+                  >
+                    <FormGroup
+                      label={_('Lock To')}
+                      type="checkbox"
+                      className="fl"
+                    />
+                    <FormInput
+                      type="text"
+                      className="fl"
+                    />
+                  </div>
                   <FormGroup>
                     <Button
                       text={_('<- Previous')}
@@ -396,54 +451,122 @@ export default class QuickSetup extends React.Component {
 
         {
           page === '4' ? (
-            <div className="fourthScreenForRepeater">
-              <h2>{_('Scene: Repeater')}</h2>
-              <h3>{_('Current Settings')}</h3>
-              <FormGroup
-                type="plain-text"
-                label={_('Device IP Address')}
-                value="192.168.1.1"
-              />
-              <FormGroup
-                type="plain-text"
-                label={_('Device Mode')}
-                value="Station"
-              />
-              <FormGroup
-                type="plain-text"
-                label={_('Frequency')}
-                value="5GHz"
-              />
-              <FormGroup
-                type="plain-text"
-                label={_('Country')}
-                value="CN(China)"
-              />
-              <FormGroup
-                type="plain-text"
-                label={_('SSID')}
-                value="axilspot"
-              />
-              <FormGroup
-                type="plain-text"
-                label={_('Security')}
-                value="wpa"
-              />
-              <FormGroup
-                type="plain-text"
-                label={_('Lock To')}
-                value="11:11:11:11:11:11"
-              />
+            <div className="fourthScreen">
+            {
+              deviceMode === 'ap' ? (
+                <div className="fourthForAp">
+                  <h2>{_('Scene: Access Point')}</h2>
+                  <h3>{_('Current Settings')}</h3>
 
-              <FormGroup>
-                <Button
-                  text={_('<- Previous')}
-                  onClick={() => { this.props.changePage('3'); }}
-                />&nbsp;&nbsp;&nbsp;
-                <SaveButton
-                  text={_('Complete')}
-                />
-              </FormGroup>
+                  <FormGroup
+                    type="plain-text"
+                    label={_('Current Mode')}
+                  /><br />
+                  <FormGroup
+                    type="plain-text"
+                    label={_('LAN IP')}
+                  />
+                  <FormGroup
+                    type="plain-text"
+                    label={_('Subnet Mask')}
+                  /><br />
+
+                  <FormGroup
+                    type="plain-text"
+                    label={_('SSID')}
+                    value="axilspot"
+                  />
+                  <FormGroup
+                    type="plain-text"
+                    label={_('Country')}
+                    value="CN(China)"
+                  />
+                  <FormGroup
+                    type="plain-text"
+                    label={_('Mode')}
+                  />
+                  <FormGroup
+                    type="plain-text"
+                    label={_('Channel Width')}
+                  />
+                  <FormGroup
+                    type="plain-text"
+                    label={_('Channel')}
+                  />
+                  <FormGroup
+                    type="plain-text"
+                    label={_('Security')}
+                    value="wpa"
+                  />
+                  <FormGroup
+                    type="plain-text"
+                    label={_('Distance')}
+                  />
+                  <FormGroup>
+                    <Button
+                      text={_('<- Previous')}
+                      onClick={() => { this.props.changePage('3'); }}
+                    />&nbsp;&nbsp;&nbsp;
+                    <SaveButton
+                      text={_('Complete')}
+                    />
+                  </FormGroup>
+                </div>
+              ) : null
+            }
+
+            {
+              deviceMode === 'repeater' ? (
+                <div className="fourthForRepeater">
+                  <h2>{_('Scene: Repeater')}</h2>
+                  <h3>{_('Current Settings')}</h3>
+                  <FormGroup
+                    type="plain-text"
+                    label={_('Device IP Address')}
+                    value="192.168.1.1"
+                  />
+                  <FormGroup
+                    type="plain-text"
+                    label={_('Device Mode')}
+                    value="Station"
+                  />
+                  <FormGroup
+                    type="plain-text"
+                    label={_('Frequency')}
+                    value="5GHz"
+                  />
+                  <FormGroup
+                    type="plain-text"
+                    label={_('Country')}
+                  />
+                  <FormGroup
+                    type="plain-text"
+                    label={_('SSID')}
+                    value="axilspot"
+                  />
+                  <FormGroup
+                    type="plain-text"
+                    label={_('Security')}
+                    value="wpa"
+                  />
+                  <FormGroup
+                    type="plain-text"
+                    label={_('Lock To')}
+                    value="11:11:11:11:11:11"
+                  />
+
+                  <FormGroup>
+                    <Button
+                      text={_('<- Previous')}
+                      onClick={() => { this.props.changePage('3'); }}
+                    />&nbsp;&nbsp;&nbsp;
+                    <SaveButton
+                      text={_('Complete')}
+                    />
+                  </FormGroup>
+                </div>
+              ) : null
+            }
             </div>
           ) : null
         }

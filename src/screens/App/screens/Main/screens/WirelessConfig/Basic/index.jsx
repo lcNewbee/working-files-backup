@@ -10,6 +10,7 @@ import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/settings';
 import * as selfActions from './actions';
 import reducer from './reducer.js';
+import countryMap from './country.js';
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
@@ -29,6 +30,13 @@ const propTypes = {
   changeShowScanResultStatus: PropTypes.func,
   changeSelectedResult: PropTypes.func,
   leaveScreen: PropTypes.func,
+
+  changeCtyModal: PropTypes.func,
+  changeAgreeProtocol: PropTypes.func,
+  changeCountryCode: PropTypes.func,
+  closeCountrySelectModal: PropTypes.func,
+  saveCountrySelectModal: PropTypes.func,
+  receiveCountryInfo: PropTypes.func,
 };
 
 const defaultProps = {};
@@ -37,11 +45,6 @@ const devicemodeOptions = [
   { value: 'ap', label: _('AP') },
   { value: 'sta', label: _('Station') },
   { value: 'repeater', label: _('Repeater') },
-];
-
-const countryOptions = [
-  { value: 'CN', label: 'China' },
-  { value: 'US', label: 'America' },
 ];
 
 const rateOptions = [
@@ -99,32 +102,30 @@ const channelWidthOptions = [
   { value: 'HT80', label: '80MHz' },
 ];
 
-const frequencyOptions = [
-  { value: 'auto', label: 'Auto' }, { value: '36', label: '36' },
-  { value: '40', label: '40' }, { value: '44', label: '44' },
-  { value: '48', label: '48' }, { value: '52', label: '52' },
-  { value: '56', label: '56' }, { value: '60', label: '60' },
-  { value: '64', label: '64' }, { value: '100', label: '100' },
-  { value: '104', label: '104' }, { value: '108', label: '108' },
-  { value: '112', label: '112' }, { value: '116', label: '116' },
-  { value: '120', label: '120' }, { value: '124', label: '124' },
-  { value: '128', label: '128' }, { value: '132', label: '132' },
-  { value: '136', label: '136' }, { value: '140', label: '140' },
-  { value: '149', label: '149' }, { value: '153', label: '153' },
-  { value: '157', label: '157' }, { value: '161', label: '161' },
-  { value: '165', label: '165' },
-];
-
-
 const validOptions = Map({
   ssid: validator({
     rules: 'remarkTxt:["\'\\\\"]|len:[1, 31]',
   }),
-  apmac: validator({
+  staApmac: validator({
     rules: 'mac',
   }),
-  outpower: validator({
-    rules: 'num:[-4, 27]',
+  apmac1: validator({
+    rules: 'mac',
+  }),
+  apmac2: validator({
+    rules: 'mac',
+  }),
+  apmac3: validator({
+    rules: 'mac',
+  }),
+  apmac4: validator({
+    rules: 'mac',
+  }),
+  apmac5: validator({
+    rules: 'mac',
+  }),
+  apmac6: validator({
+    rules: 'mac',
   }),
 });
 
@@ -187,6 +188,10 @@ export default class Basic extends React.Component {
     this.onModalCloseBtnClick = this.onModalCloseBtnClick.bind(this);
     this.onSelectScanResultItem = this.onSelectScanResultItem.bind(this);
     this.onChengeWirelessMode = this.onChengeWirelessMode.bind(this);
+    this.noErrorThisPage = this.noErrorThisPage.bind(this);
+    this.makeCountryOptions = this.makeCountryOptions.bind(this);
+    this.getCountryNameFromCode = this.getCountryNameFromCode.bind(this);
+    this.onCloseCountrySelectModal = this.onCloseCountrySelectModal.bind(this);
   }
 
   componentWillMount() {
@@ -202,25 +207,32 @@ export default class Basic extends React.Component {
       },
       saveQuery: {},
       defaultData: {
-        wirelessMode: 'ap',
-        ssid: 'test',
-        hideSsid: '0',
-        countryCode: 'CN',
-        radioMode: 'A/N mixed',
-        channelWidth: '40',
-        frequency: 'auto',
-        txPower: '14',
-        maxTxRate: '15',
-        security: {
-          mode: 'wpa-aes',
-          Key: '12345678',
-        },
+
       },
     });
-
     props.fetchSettings();
     props.changeShowScanResultStatus(false);
     props.changeScanStatus(false);
+    utils.fetch(this.props.route.formUrl)
+      .then((json) => {
+        if (json.state && json.state.code === 2000) {
+          const country = json.data.countryCode;
+          this.props.changeCountryCode(country);
+          const channelWidth = json.data.channelWidth;
+          const saveInfo = {
+            radio: '5G',
+            country,
+            channelWidth,
+          };
+          utils.fetch('goform/get_country_info', saveInfo)
+              .then((json2) => {
+                console.log('json2', json2.data);
+                if (json2.state && json2.state.code === 2000) {
+                  this.props.receiveCountryInfo(json2.data);
+                }
+              });
+        }
+      });
   }
 
   componentWillUnmount() {
@@ -229,7 +241,12 @@ export default class Basic extends React.Component {
   }
 
   onSave() {
-    this.props.saveSettings();
+    if (this.noErrorThisPage()) {
+      console.log('saved');
+      this.props.saveSettings();
+    } else {
+      console.log('not saved');
+    }
   }
 
   onHideSsidboxClick() {
@@ -303,13 +320,62 @@ export default class Basic extends React.Component {
       this.props.updateItemSettings({ ...repeaterDefaultData });
     }
   }
+  onCloseCountrySelectModal() {
+    const code = this.props.store.getIn(['curData', 'countryCode']);
+    console.log(code);
+    this.props.closeCountrySelectModal(code);
+  }
+
+  getCountryNameFromCode(code, map) {
+    for (const name of Object.keys(map)) {
+      if (map[name] === code) {
+        return name;
+      }
+    }
+    return '';
+  }
+
+  // countryMap为ES6的Map模式
+  makeCountryOptions(map) {
+    console.log(map);
+    const countryList = [];
+    for (const key of Object.keys(map)) {
+      const entry = {
+        label: _(key),
+        value: map[key],
+      };
+      countryList.push(entry);
+    }
+    return countryList;
+  }
+
+  noErrorThisPage() {
+    const errorMsg = this.props.app.get('invalid');
+    if (errorMsg.isEmpty()) {
+      return true;
+    }
+    return false;
+  }
+
+  makeChannelOptions() {
+    const channelList = this.props.selfState.get('channels');
+    const channelOptions = [{ value: 'auto', label: 'auto' }];
+    for (const elem of channelList.toJS().values()) {
+      const item = {
+        value: elem,
+        label: elem,
+      };
+      channelOptions.push(item);
+    }
+    return channelOptions;
+  }
 
   render() {
     const modalOptions = fromJS([
       {
         id: 'operate',
         text: _('Select'),
-        transform: function(val, item) {
+        transform: function (val, item) {
           return (
             <FormInput
               type="radio"
@@ -356,7 +422,7 @@ export default class Basic extends React.Component {
       wirelessMode, ssid, apMac, countryCode, radioMode, channelWidth,
       hideSsid, txPower, frequency, maxTxRate, peers, autoRepeat,
     } = this.props.store.get('curData').toJS();
-    const { apmac, outpower } = this.props.validateOption;
+    const { staApmac, apmac1, apmac2, apmac3, apmac4, apmac5, apmac6 } = this.props.validateOption;
     const mode = this.props.store.getIn(['curData', 'security', 'mode']);
     const key = this.props.store.getIn(['curData', 'security', 'key']);
     const Auth = this.props.store.getIn(['curData', 'security', 'Auth']);
@@ -492,6 +558,7 @@ export default class Basic extends React.Component {
                     <div
                       style={{
                         width: '205px',
+                        zIndex: '99',
                       }}
                     >
                       <FormGroup
@@ -505,78 +572,108 @@ export default class Basic extends React.Component {
                             peers[3], peers[4], peers[5],
                           ],
                         })}
-                        {...apmac}
+                        {... apmac1}
                       />
                     </div>
-
-                    <FormGroup
-                      type="text"
+                    <div
                       className="fl"
-                      value={peers[1]}
-                      onChange={(data) => this.props.updateItemSettings({
-                        peers: [
-                          peers[0], data.value, peers[2],
-                          peers[3], peers[4], peers[5],
-                        ],
-                      })}
                       style={{
+                        width: '305px',
                         marginLeft: '-160px',
                       }}
-                    />
+                    >
+                      <FormGroup
+                        type="text"
+                        value={peers[1]}
+                        onChange={(data) => this.props.updateItemSettings({
+                          peers: [
+                            peers[0], data.value, peers[2],
+                            peers[3], peers[4], peers[5],
+                          ],
+                        })}
+                        {... apmac2}
+                      />
+                    </div>
                   </div>
                   <div className="clearfix">
-                    <FormGroup
-                      className="fl"
-                      type="text"
-                      value={peers[2]}
-                      onChange={(data) => this.props.updateItemSettings({
-                        peers: [
-                          peers[0], peers[1], data.value,
-                          peers[3], peers[4], peers[5],
-                        ],
-                      })}
-                    />
-                    <FormGroup
-                      type="text"
-                      className="fl"
-                      value={peers[3]}
-                      onChange={(data) => this.props.updateItemSettings({
-                        peers: [
-                          peers[0], peers[1], peers[2],
-                          data.value, peers[4], peers[5],
-                        ],
-                      })}
+                    <div
                       style={{
+                        width: '205px',
+                        zIndex: '99',
+                      }}
+                    >
+                      <FormGroup
+                        className="fl"
+                        type="text"
+                        value={peers[2]}
+                        onChange={(data) => this.props.updateItemSettings({
+                          peers: [
+                            peers[0], peers[1], data.value,
+                            peers[3], peers[4], peers[5],
+                          ],
+                        })}
+                        {... apmac3}
+                      />
+                    </div>
+                    <div
+                      className="fl"
+                      style={{
+                        width: '305px',
                         marginLeft: '-160px',
                       }}
-                    />
+                    >
+                      <FormGroup
+                        type="text"
+                        value={peers[3]}
+                        onChange={(data) => this.props.updateItemSettings({
+                          peers: [
+                            peers[0], peers[1], peers[2],
+                            data.value, peers[4], peers[5],
+                          ],
+                        })}
+                        {... apmac4}
+                      />
+                    </div>
                   </div>
                   <div className="clearfix">
-                    <FormGroup
-                      className="fl"
-                      type="text"
-                      value={peers[4]}
-                      onChange={(data) => this.props.updateItemSettings({
-                        peers: [
-                          peers[0], peers[1], peers[2],
-                          peers[3], data.value, peers[5],
-                        ],
-                      })}
-                    />
-                    <FormGroup
-                      type="text"
-                      className="fl"
-                      value={peers[5]}
-                      onChange={(data) => this.props.updateItemSettings({
-                        peers: [
-                          peers[0], peers[1], peers[2],
-                          peers[3], peers[4], data.value,
-                        ],
-                      })}
+                    <div
                       style={{
+                        width: '205px',
+                        zIndex: '99',
+                      }}
+                    >
+                      <FormGroup
+                        className="fl"
+                        type="text"
+                        value={peers[4]}
+                        onChange={(data) => this.props.updateItemSettings({
+                          peers: [
+                            peers[0], peers[1], peers[2],
+                            peers[3], data.value, peers[5],
+                          ],
+                        })}
+                        {... apmac5}
+                      />
+                    </div>
+                    <div
+                      className="fl"
+                      style={{
+                        width: '305px',
                         marginLeft: '-160px',
                       }}
-                    />
+                    >
+                      <FormGroup
+                        type="text"
+                        value={peers[5]}
+                        onChange={(data) => this.props.updateItemSettings({
+                          peers: [
+                            peers[0], peers[1], peers[2],
+                            peers[3], peers[4], data.value,
+                          ],
+                        })}
+                        {... apmac6}
+                      />
+                    </div>
                   </div>
                 </div>
               ) : null
@@ -590,20 +687,71 @@ export default class Basic extends React.Component {
                   apMac: data.value,
                 })}
                 required
-                {...apmac}
+                {...staApmac}
               />
             ) : null
           }
           <FormGroup
-            label={_('Country Code')}
-            type="select"
-            options={countryOptions}
-            value={countryCode}
-            onChange={(data) => this.props.updateItemSettings({
-              countryCode: data.value,
-            })}
-          />
+            label={_('Country')}
+          >
+            <FormInput
+              type="text"
+              value={this.getCountryNameFromCode(
+                  this.props.selfState.get('selectedCountry'),
+                  countryMap
+                )}
+
+              disabled
+              style={{
+                width: '127px',
+                marginTop: '-3px',
+              }}
+            />
+            <Button
+              text={_('Change')}
+              style={{
+                marginLeft: '3px',
+                width: '70px',
+              }}
+              onClick={() => { this.props.changeCtyModal(true); }}
+            />
+          </FormGroup>
+          {
+            this.props.selfState.get('showCtyModal') ? (
+              <Modal
+                title={_('Country Code')}
+                onClose={this.onCloseCountrySelectModal}
+                onOk={this.props.saveCountrySelectModal}
+                style={{
+                  top: '200px',
+                }}
+                isShow
+              >
+                <h3>{_('User Protocol')}</h3>
+                <span>
+                  使用本设备之前，请务必选择正确的国家代码以满足当地法规对于可用信道、信道带宽、输出功率、自动频宽选择和自动发射功率控制等的要求。安装方或本设备拥有方是保证依照法规规定正确使用本设备的完全责任人。设备提供商/分销商对于违规使用无线设备的行为和后果不承担任何责任。
+                </span>
+                <FormGroup
+                  type="radio"
+                  text={_('I have read and agree')}
+                  checked={this.props.selfState.get('agreeProtocol')}
+                  onClick={() => { this.props.changeAgreeProtocol(true); }}
+                />
+                <FormGroup
+                  label={_('Country')}
+                  type="select"
+                  options={this.makeCountryOptions(countryMap)}
+                  value={this.props.selfState.get('selectedCountry')}
+                  onChange={(data) => this.props.changeCountryCode(data.value)}
+                  disabled={!this.props.selfState.get('agreeProtocol')}
+                />
+              </Modal>
+            ) : null
+          }
           <FormGroup
+            style={{
+              display: 'none',
+            }}
             label={_('IEEE 802.11 Mode')}
             type="select"
             options={ieeeModeOptions}
@@ -615,8 +763,8 @@ export default class Basic extends React.Component {
           <FormGroup
             label={_('Channel')}
             type="select"
-            options={frequencyOptions}
-            value={frequency}
+            options={this.makeChannelOptions()}
+            value={this.props.store.getIn(['curData', 'frequency'])}
             onChange={(data) => this.props.updateItemSettings({
               frequency: data.value,
             })}
@@ -634,13 +782,12 @@ export default class Basic extends React.Component {
             label={_('Outpower Power')}
             type="range"
             min="-4"
-            max="27"
+            max={this.props.selfState.get('maxTxpower')}
             help={txPower}
             value={txPower}
             onChange={(data) => this.props.updateItemSettings({
               txPower: data.value,
             })}
-            {...outpower}
           />
           <FormGroup
             label={_('Max TX Rate')}
@@ -801,7 +948,7 @@ export default class Basic extends React.Component {
             icon="save"
             theme="primary"
             text={_('Save')}
-            onClick={this.props.saveSettings}
+            onClick={this.onSave}
           />
         </div>
       </div>

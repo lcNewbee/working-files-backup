@@ -148,6 +148,9 @@ export default class Maintenance extends Component {
       <div className="Maintenance">
         <Modal
           isShow={this.props.selfState.getIn(['progressBarInfo', 'isShow'])}
+          style={{
+            top: '200px',
+          }}
           noFooter
         >
           <ProgressBar

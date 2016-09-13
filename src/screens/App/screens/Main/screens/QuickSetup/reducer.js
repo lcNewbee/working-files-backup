@@ -3,15 +3,16 @@ import { fromJS } from 'immutable';
 const defaultState = fromJS({
   page: '1',
   deviceMode: 'station',
-  repeaterCfg: {
-
+  configToSave: {
+    networkSetting: {},
+    wirelessSetting: {
+      wirelessMode: '',
+      ssid: '',
+      frequency: '',
+      
+    },
   },
-  apCfg: {
 
-  },
-  stationCfg: {
-
-  },
 });
 
 export default function (state = defaultState, action) {
