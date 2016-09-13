@@ -17,7 +17,9 @@ paths = gulp.paths = {
   build: 'build',
   release: 'release',
   src: 'src',
+  php: 'php',
   pubNew: '../win_ac/software/web/',
+  pubAxc: '../Sites/',
   pubAp: '../qsdk/package/comlanos/goahead/files/web',
   webpack: 'webpack.config.dev.js',
   pubWebpack: 'webpack.config.prop.js',
@@ -101,8 +103,25 @@ gulp.task('pub:copyap', function () {
     .pipe(gulp.dest(paths.pubAp));
 });
 gulp.task('pub:ap', function (callback) {
-  runSequence(['clean:pubap', 'build'], 'pub:copyap', callback);
+  runSequence(['clean:pubap', 'build'], 'pub:copyaxc', callback);
 });
+
+// 发布硬AC版本
+gulp.task('pub:copyaxc', function () {
+  var distPath = paths.pubAxc;
+
+  if(argv.d) {
+    distPath = argv.d;
+  }
+
+  return gulp.src([paths.build + '/**/*', paths.php + '/**/*'])
+    .pipe(gulp.dest(distPath));
+});
+
+gulp.task('pub:axc', function (callback) {
+  runSequence(['build'], 'pub:copyaxc', callback);
+});
+
 
 /**
  * 更新前端开发平台主版本号

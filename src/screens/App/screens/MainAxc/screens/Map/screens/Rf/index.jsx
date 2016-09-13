@@ -350,6 +350,25 @@ export default class View extends React.Component {
             );
           })
         }
+
+        <div
+          className="cols col-3"
+          style={{
+            height: '236px',
+            textAlign: 'center',
+            border: '1px solid #ccc',
+            marginTop: '10px',
+            lineHeight: '236px',
+            color: '#666',
+            borderRadius: '4px',
+            cursor: 'pointer',
+          }}
+        >
+          <Icon
+            name="plus"
+            size="3x"
+          />
+        </div>
       </div>
     );
   }
