@@ -10,7 +10,11 @@ const defaultState = fromJS({
   selectedCountry: '',
   channels: [],
   maxTxpower: '27',
-
+  security: {
+    mode: 'wpa',
+    cipher: 'aes',
+    key: '12345678',
+  },
 });
 
 export default function (state = defaultState, action) {
@@ -46,5 +50,4 @@ export default function (state = defaultState, action) {
   }
   return state;
 }
-
 

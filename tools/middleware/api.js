@@ -15,9 +15,14 @@ export default function serverApi(options) {
     const rootUrl = 'tools/data';
     const reqFilename = `${path.basename(req.url).split('?')[0]}.json`;
     const fileMime = mime.lookup(reqFilename);
+    let isDone = false;
 
     function readDone(resText, url) {
       let msg = resText;
+
+      if (isDone) {
+        return null;
+      }
 
       if (!resText) {
         msg = JSON.stringify({
@@ -28,6 +33,7 @@ export default function serverApi(options) {
         });
       }
 
+      isDone = true;
       // res.setHeader("Content-Range", "bytes");
       res.setHeader('Access-Control-Allow-Origin', '*');
       res.setHeader('Content-Type', `${fileMime}; charset=UTF-8`);
@@ -60,15 +66,15 @@ export default function serverApi(options) {
               // 如果是正在请求的文件
               if (reqFilename === filename) {
                 resText = fs.readFileSync(thisUrlName);
-                done(resText, thisUrlName);
+                done(resText, thisUrlName, true);
               } else if (!--pending) {
                 done(null, path.join(readurl, reqFilename));
               }
 
               // 是子目录
             } else if (stats.isDirectory()) {
-              readFile(thisUrlName, (res, urls) => {
-                if (!--pending) done(res, urls);
+              readFile(thisUrlName, (reT, urls, isDoneOk) => {
+                if (!--pending || isDoneOk) done(reT, urls);
               });
             }
           });

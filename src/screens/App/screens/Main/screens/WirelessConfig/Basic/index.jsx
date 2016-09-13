@@ -815,6 +815,14 @@ export default class Basic extends React.Component {
                     },
                   })}
                 />
+                <FormGroup
+                  label={_('Algorithm')}
+                  value={this.props.selfState.getIn(['security', 'cipher'])}
+                  options={[
+                    { label: 'AES', value: 'aes' },
+                    { label: 'TKIP', value: 'tkip' },
+                  ]}
+                />
                 {
                   (mode === 'none') ? null : (
                     <FormGroup
