@@ -1,0 +1,46 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "settings": {
+      "isLocked": "1"
+    },
+    "list": [
+      {
+        "name": "ds",
+        "startIp": "192.168.0.1",
+        "endIp": "192.168.0.78",
+        "gateway": "192.168.0.1",
+        "mask": "255.255.255.0",
+        "mainDns": "8.8.8.8",
+        "secondDns": "1",
+        "releaseTime": "3000",
+        "domain": "ww.baidu.com"
+      },
+      {
+        "name": "ds",
+        "startIp": "192.168.0.1",
+        "endIp": "192.168.0.78",
+        "gateway": "192.168.0.1",
+        "mask": "255.255.255.0",
+        "mainDns": "8.8.8.8",
+        "secondDns": "1",
+        "releaseTime": "3000",
+        "domain": "ww.baidu.com"
+      },
+      {
+        "name": "ds",
+        "startIp": "192.168.0.1",
+        "endIp": "192.168.0.78",
+        "gateway": "192.168.0.1",
+        "mask": "255.255.255.0",
+        "mainDns": "8.8.8.8",
+        "secondDns": "1",
+        "releaseTime": "3000",
+        "domain": "ww.baidu.com"
+      }
+    ]
+  }
+}
