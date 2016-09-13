@@ -13,7 +13,7 @@
       "apMac":"11:22:33:44:55:66",
       "countryCode":"CN",
       "radioMode":"A/N mixed",
-      "channelWidth":"40",
+      "channelWidth":"HT40",
       "frequency":"auto",
       "txPower":"14",
       "maxTxRate":"15",
