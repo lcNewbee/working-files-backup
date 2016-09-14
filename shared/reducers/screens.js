@@ -70,10 +70,10 @@ function updateEditListItem(curScreenName, state, action) {
   return ret;
 }
 
-function findListItemByKey(list, option){
-  return list.find((item) => {
-    return item.get(option.keyName) === option.val;
-  });
+function findListItemByKey(list, option) {
+  return list.find(
+    item => item.get(option.keyName) === option.val
+  );
 }
 
 function editListItemByKey(state, curScreenName, action) {

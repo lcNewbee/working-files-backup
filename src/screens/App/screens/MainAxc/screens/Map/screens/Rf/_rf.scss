@@ -94,24 +94,40 @@
   overflow: hidden;
   border: 1px solid #d2d2d2;
   z-index: 100;
-}
-.m-thumbnail__content {
-  position: relative;
-  height: 160px;
-  overflow: hidden;
-  cursor: pointer;
 
-  .m-device {
-    position: absolute;
-    z-index: 99;
-    width: auto;
-    border: 0;
+  .o-map-list__add {
+    height: 208px;
+    text-align: center;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+    line-height: 208px;
+    color: #666;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .m-thumbnail__content {
+    position: relative;
+    height: 160px;
+    overflow: hidden;
+    cursor: pointer;
+
+    .m-device {
+      position: absolute;
+      z-index: 99;
+      width: auto;
+      border: 0;
+    }
+  }
+  .m-thumbnail {
+
   }
 }
+
+
 .o-map-rf {
   position: absolute;
-  cursor: url("../../images/openhand_8_8.cur") 8 8, default;
-  background: url('../../images/map_bk.jpg');
+  cursor: url(../../images/openhand_8_8.cur) 8 8, default;
+  background: url(../../images/map_bk.jpg);
   background-size: 100%;
   > img {
     width: 100%;

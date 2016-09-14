@@ -56,10 +56,8 @@ const defaultEditData = immutableUtils.getDefaultData(screenOptions.get('list'))
 const formOptions = immutableUtils.getFormOptions(screenOptions.get('list'));
 
 const propTypes = {
-  groupId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
-  route: PropTypes.object,
   updateListSettings: PropTypes.func,
   addToPropertyPanel: PropTypes.func,
   updateEditListItem: PropTypes.func,

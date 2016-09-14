@@ -5,7 +5,7 @@ import { fromJS, Map } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { bindActionCreators } from 'redux';
 import {
-  Button, ListInfo, Icon, FormContainer,
+  Button, ListInfo, Icon, FormGroup, Modal,
 } from 'shared/components';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
@@ -327,23 +327,6 @@ export default class View extends React.Component {
                   </div>
                   <div className="m-thumbnail__caption">
                     <h3>{mapName}</h3>
-                    <p>
-                      <Button
-                        icon="edit"
-                        text={_('Edit')}
-                        onClick={() => this.props.updateListSettings({
-                          curMapName: mapName,
-                          curList: maps,
-                        })}
-                        style={{
-                          marginRight: '1em',
-                        }}
-                      />
-                      <Button
-                        icon="trash"
-                        text={_('Remove')}
-                      />
-                    </p>
                   </div>
                 </div>
               </div>
@@ -352,17 +335,7 @@ export default class View extends React.Component {
         }
 
         <div
-          className="cols col-3"
-          style={{
-            height: '236px',
-            textAlign: 'center',
-            border: '1px solid #ccc',
-            marginTop: '10px',
-            lineHeight: '236px',
-            color: '#666',
-            borderRadius: '4px',
-            cursor: 'pointer',
-          }}
+          className="cols col-3 o-map-list__add"
         >
           <Icon
             name="plus"
@@ -510,6 +483,15 @@ export default class View extends React.Component {
               null
           }
         </div>
+
+        <Modal
+          title={_('Add')}
+          isShow
+        >
+          <FormGroup
+            label={_('Map Name')}
+          />
+        </Modal>
       </ListInfo>
     );
   }

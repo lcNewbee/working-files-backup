@@ -76,12 +76,23 @@ gulp.task('build', function (callback) {
 gulp.task('open:dist', ['build'], shell.task(['babel-node tools/distServer.js']));
 
 gulp.task('clean:pubac', function (callback) {
-  return del([paths.pubNew], { force: true });
+  var distPath = paths.pubNew;
+
+  if(argv.d) {
+    distPath = argv.d;
+  }
+  return del([distPath], { force: true });
 });
 
 gulp.task('pub:copy', function () {
+  var distPath = paths.pubNew;
+
+  if(argv.d) {
+    distPath = argv.d;
+  }
+
   return gulp.src(paths.build + '/**/*')
-    .pipe(gulp.dest(paths.pubNew));
+    .pipe(gulp.dest(distPath));
 });
 
 // 发布 Access Manager 正式版
@@ -99,8 +110,14 @@ gulp.task('clean:pubap', function (callback) {
   return del([paths.pubAp], { force: true });
 });
 gulp.task('pub:copyap', function () {
+  var distPath = paths.pubAp;
+
+  if(argv.d) {
+    distPath = argv.d;
+  }
+
   return gulp.src(paths.build + '/**/*')
-    .pipe(gulp.dest(paths.pubAp));
+    .pipe(gulp.dest(distPath));
 });
 gulp.task('pub:ap', function (callback) {
   runSequence(['clean:pubap', 'build'], 'pub:copyaxc', callback);
