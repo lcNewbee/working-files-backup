@@ -1,28 +1,37 @@
 <?php
-// 定义一个类
- class Response{
+ class Responsestate{
+    public static function json($state= array()){
+        $result=array(
+            'state'=>$state
+        );
+        echo json_encode($result);
+        exit;
+    }
+ }
 
-	/**
-	* 按json方式输出通信数据
-		* @param integer $code 状态码
-		* @param string $message 提示信息
-		* @param array $data 数据
-		* return string
-		*/
-		public static function json($code, $message = '', $data = array()) {
+ class Responsestatedata{
+    public static function json($state= array(), $data = array()){
 
-		if(!is_numeric($code)) {
-			return '';
-		}
+        // 把两个参数组装成新的数组数据然后输出
+        $result=array(
+            'state'=>$state,
+            'data'=>$data
+        );
+        echo json_encode($result);
+        exit;
+    }
+ }
 
-		$result = array(
-					'code' => $code,
-					'message' => $message,
-					'data' => $data
-				);
+  class Responsestatedatalist{
+    public static function json($state= array(), $data = array()){
 
-		echo json_encode($result);
-		exit;
-	}
-}
+        // 把两个参数组装成新的数组数据然后输出
+        $result=array(
+            'state'=>$state,
+            'data'=>$data
+        );
+        echo json_encode($result);
+        exit;
+    }
+ }
 ?>
