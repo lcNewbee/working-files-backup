@@ -91,6 +91,16 @@ $o-form-content-margin: 1em 0 0;
         margin-left: 0;
       }
     }
+
+    .form-group--save,
+    .o-form__actions-bar {
+      margin-top: 0;
+      margin-left: 0;
+      padding: 0;
+      padding-left: 1em;
+      border: 0;
+      border-left: 1px solid #d2d2d2;
+    }
   }
 
   &.o-form--compassed {

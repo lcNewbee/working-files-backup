@@ -1,7 +1,6 @@
 /* Sass utils */
 @import "../../scss/variables";
 @import "../../scss/mixins";
-$g-navbar-height: 60px;
 
 .navbar {
   position: fixed;
@@ -56,8 +55,8 @@ $g-navbar-height: 60px;
     float: right;
   }
   .icon-user {
-    padding: 6px 20px;
-    font-size: 28px;
+    padding: ($g-navbar-height / 8) ($g-navbar-height / 3);
+    font-size: $g-navbar-height / 2;
     color: #999;
     vertical-align: middle;
     background-color: #333;
@@ -68,30 +67,32 @@ $g-navbar-height: 60px;
     float: right;
     margin-left: 8px;
     font-size: 20px;
-    line-height: 40px;
+    line-height: $g-navbar-height * 0.75;
     transition: transform .3s ease;
   }
 
   .as-control {
-    display: inline-block;
-    padding: $g-distance $g-distance-md;
+    padding: ($g-navbar-height / 4) ($g-navbar-height / 4);;
     font-size: 12px;
+    line-height: 0;
     font-style: italic;
+    float: left;
     color: #333;
-    vertical-align: middle;
     background-color: transparent;
     border: 0;
     transition: background .3s ease,color .3s ease;
     cursor: pointer;
 
-    .icon {
-      display: block;
-      width: 18px;
-      height: 18px;
-      margin: 0 auto;
-      margin-bottom: 5px;
+
+    > span {
+      float: left;
+      line-height: $g-navbar-height / 2;
+    }
+
+    > .icon {
+      float: left;
+      margin-right: 4px;
       font-size: 20px;
-      font-weight: 300;
       transition: transform .3s ease;
     }
 
@@ -110,7 +111,8 @@ $g-navbar-height: 60px;
   }
   .user {
     display: inline-block;
-    padding: $g-distance $g-distance-md;
+    padding: ($g-navbar-height / 8) ($g-navbar-height / 4);
+
     //border-left: 1px solid $g-main-color-light;
     color: #333;
     vertical-align: middle;

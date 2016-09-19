@@ -124,7 +124,8 @@ $mw-xl:                       1382px !default;
 
 
 //== navbar
-$g-navbar-height:             50px !default;
+// 值需为 4 的整数倍
+$g-navbar-height:             52px !default;
 
 
 

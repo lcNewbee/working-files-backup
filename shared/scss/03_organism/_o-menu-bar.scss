@@ -3,7 +3,7 @@
   background-color: #666;
   color: #ababab;
   position: fixed;
-  top: 60px;
+  top: $g-navbar-height;
   width: 100%;
   z-index: 2;
   @include clearfix;
@@ -34,8 +34,9 @@
 
     h3 {
       line-height:  $g-main-bar-height;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 300;
+      color: #fff;
 
       @include clearfix;
 
