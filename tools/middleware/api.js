@@ -44,42 +44,43 @@ export default function serverApi(options) {
     }
 
     function readFile(readurl, done) {
-      fs.readdir(readurl, (err, files) => {
-        if (err) {
-          return done(null);
-        }
-        let pending = files.length;
+      if (!isDone) {
+        fs.readdir(readurl, (err, files) => {
+          let pending = files && files.length;
 
-        if (!pending) {
-          return done(null, readurl);
-        }
+          if (!err && pending) {
+            files.forEach((filename) => {
+              let resText = null;
+              const thisUrlName = path.join(readurl, filename);
 
-        files.forEach((filename) => {
-          let resText = null;
-          const thisUrlName = path.join(readurl, filename);
+              fs.stat(thisUrlName, (errs, stats) => {
+                if (errs) throw errs;
 
-          fs.stat(thisUrlName, (errs, stats) => {
-            if (errs) throw errs;
+                // 是文件
+                if (stats.isFile()) {
+                  // 如果是正在请求的文件
+                  if (reqFilename === filename) {
+                    resText = fs.readFileSync(thisUrlName);
+                    done(resText, thisUrlName, true);
+                  } else if (!--pending) {
+                    done(null, path.join(readurl, reqFilename));
+                  }
 
-            // 是文件
-            if (stats.isFile()) {
-              // 如果是正在请求的文件
-              if (reqFilename === filename) {
-                resText = fs.readFileSync(thisUrlName);
-                done(resText, thisUrlName, true);
-              } else if (!--pending) {
-                done(null, path.join(readurl, reqFilename));
-              }
-
-              // 是子目录
-            } else if (stats.isDirectory()) {
-              readFile(thisUrlName, (reT, urls, isDoneOk) => {
-                if (!--pending || isDoneOk) done(reT, urls);
+                  // 是子目录
+                } else if (stats.isDirectory()) {
+                  readFile(thisUrlName, (reT, urls, isDoneOk) => {
+                    if (!--pending || isDoneOk) done(reT, urls);
+                  });
+                }
               });
-            }
-          });
+            });
+          } else {
+            done(null, readurl);
+          }
+
+          return null;
         });
-      });
+      }
     }
 
     readFile(rootUrl, readDone);

@@ -5,7 +5,7 @@ import { fromJS, Map } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { bindActionCreators } from 'redux';
 import {
-  Button, ListInfo, Icon, FormContainer,
+  Button, ListInfo, Icon, FormContainer, Switchs, Table,
 } from 'shared/components';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
@@ -20,6 +20,7 @@ const screenOptions = fromJS({
       id: 'markerType',
       label: _('Marker Type'),
       defaultValue: 'building',
+      noForm: true,
       formProps: {
         type: 'switch',
         options: [
@@ -52,13 +53,24 @@ const screenOptions = fromJS({
   ],
 });
 
+const listTableOptions = immutableUtils.getTableOptions(screenOptions.get('list'));
 const defaultEditData = immutableUtils.getDefaultData(screenOptions.get('list'));
 const formOptions = immutableUtils.getFormOptions(screenOptions.get('list'));
 
+function getCurListInfoState(listStore, name) {
+  const myStore = listStore || Map({});
+  const myListId = myStore.get('curListId');
+  let ret = myStore.getIn([myListId, 'data']);
+
+  if (name) {
+    ret = myStore.getIn([myListId, 'data', name]);
+  }
+  return ret || Map({});
+}
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
-  updateListSettings: PropTypes.func,
+  updateScreenSettings: PropTypes.func,
   addToPropertyPanel: PropTypes.func,
   updateEditListItem: PropTypes.func,
   validateAll: PropTypes.func,
@@ -94,17 +106,26 @@ export default class View extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const thisList = this.getCurListInfoState(this.props.store, 'list');
-    const prevList = this.getCurListInfoState(prevProps.store, 'list');
-    const thisSettings = this.getCurListInfoState(this.props.store, 'settings');
-    const prevSettings = this.getCurListInfoState(prevProps.store, 'settings');
+    const myListId = this.props.store.get('curListId');
+    const thisList = getCurListInfoState(this.props.store, 'list');
+    const prevList = getCurListInfoState(prevProps.store, 'list');
+    const thisSettings = this.props.store.getIn([myListId, 'curSettings']);
+    const prevSettings = prevProps.store.getIn([myListId, 'curSettings']);
+
 
     if (typeof window.google !== 'undefined' && this.mapContent) {
+      console.log(thisSettings.get('type'), this.mapContent, this.map)
       if (!this.map) {
+        console.log('ddd=', this.map)
         this.renderGoogleMap();
       } else if (!prevSettings.equals(thisSettings) || !prevList.equals(thisList)) {
         this.renderGoogleMap();
       }
+    }
+
+    // 如果切换类型清空地图
+    if (thisSettings.get('type') !== '0') {
+      this.map = null;
     }
   }
 
@@ -117,16 +138,6 @@ export default class View extends React.Component {
       });
   }
 
-  getCurListInfoState(listStore, name) {
-    const myStore = listStore || Map({});
-    const myListId = myStore.get('curListId');
-    let ret = myStore.getIn([myListId, 'data']);
-
-    if (name) {
-      ret = myStore.getIn([myListId, 'data', name]);
-    }
-    return ret || Map({});
-  }
   setMapOnAll(map) {
     const markers = this.markers;
 
@@ -194,8 +205,8 @@ export default class View extends React.Component {
 
   renderGoogleMap() {
     const store = this.props.store;
-    const list = this.getCurListInfoState(store, 'list');
-    const settings = this.getCurListInfoState(store, 'settings');
+    const list = getCurListInfoState(store, 'list');
+    const settings = getCurListInfoState(store, 'settings');
     const google = window.google;
     const geocoder = new google.maps.Geocoder();
     const markers = [];
@@ -300,14 +311,34 @@ export default class View extends React.Component {
     const { app, store } = this.props;
     const myListId = store.get('curListId');
     const settings = store.getIn([myListId, 'curSettings']);
-    const editData = this.getCurListInfoState(store, 'edit');
+    const list = store.getIn([myListId, 'data', 'list']);
+    const page = store.getIn([myListId, 'data', 'page']);
+    const editData = getCurListInfoState(store, 'edit');
     const actionBarChildren = [
+      <Switchs
+        options={[
+          {
+            value: '0',
+            label: _('Live Map'),
+          }, {
+            value: '1',
+            label: _('Local Map'),
+          },
+        ]}
+        key="list"
+        value={settings.get('type')}
+        onChange={(data) => {
+          this.props.updateScreenSettings({
+            type: data.value,
+          });
+        }}
+      />,
       settings.get('isLocked') === '1' ? (<Button
         icon="lock"
         key="0"
         text={_('Unlock Map')}
         onClick={() => {
-          this.props.updateListSettings({
+          this.props.updateScreenSettings({
             isLocked: '0',
           });
         }}
@@ -316,7 +347,7 @@ export default class View extends React.Component {
         key="0"
         text={_('Lock Map')}
         onClick={() => {
-          this.props.updateListSettings({
+          this.props.updateScreenSettings({
             isLocked: '1',
           });
         }}
@@ -339,48 +370,64 @@ export default class View extends React.Component {
         {...this.props}
         defaultEditData={defaultEditData}
         actionBarChildren={actionBarChildren}
+        defaultSettingsData={{
+          type: '0',
+        }}
         actionable
       >
-        <div className={mapClassName}>
-          <div className="o-map__header">
-            <Icon
-              name="arrow-circle-up"
-              className="o-map__header-close"
-              onClick={() => this.props.closeListItemModal()}
-            />
-            {
-              !editData.isEmpty() ? (
-                <FormContainer
-                  data={editData}
-                  options={formOptions}
-                  onSave={this.onSave}
-                  onChangeData={this.props.updateEditListItem}
-                  onValidError={this.props.reportValidError}
-                  invalidMsg={app.get('invalid')}
-                  validateAt={app.get('validateAt')}
-                  isSaving={app.get('saving')}
-                  className="o-form--block"
-                  hasSaveButton
+        {
+          settings.get('type') === '0' ? (
+            <div className={mapClassName}>
+              <div className="o-map__header">
+                <Icon
+                  name="arrow-circle-up"
+                  className="o-map__header-close"
+                  onClick={() => this.props.closeListItemModal()}
                 />
-              ) : null
-            }
-          </div>
-          <div className="o-map__content">
-            <div
-              className="o-map__body"
-              id="liveMapContainer"
-              ref={(elem) => {
-                if (elem) {
-                  this.mapContent = elem;
+                {
+                  !editData.isEmpty() ? (
+                    <FormContainer
+                      data={editData}
+                      options={formOptions}
+                      onSave={this.onSave}
+                      onChangeData={this.props.updateEditListItem}
+                      onValidError={this.props.reportValidError}
+                      invalidMsg={app.get('invalid')}
+                      validateAt={app.get('validateAt')}
+                      isSaving={app.get('saving')}
+                      className="o-form--flow"
+                      hasSaveButton
+                    />
+                  ) : null
                 }
-              }}
-            >
-              <div className="o-map__body-loading">
-                <Icon name="spinner" size="2x" spin />
+              </div>
+              <div className="o-map__content">
+                <div
+                  className="o-map__body"
+                  id="liveMapContainer"
+                  ref={(elem) => {
+                    if (elem) {
+                      this.mapContent = elem;
+                    }
+                  }}
+                >
+                  <div className="o-map__body-loading">
+                    <Icon name="spinner" size="2x" spin />
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
+          ) : (
+            <Table
+              className="table"
+              options={listTableOptions}
+              list={list}
+              page={page}
+              onPageChange={this.onPageChange}
+              loading={app.get('fetching')}
+            />
+          )
+        }
       </ListInfo>
     );
   }

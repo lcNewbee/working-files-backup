@@ -1,25 +1,16 @@
 import React, { PropTypes } from 'react';
-import utils from 'shared/utils';
+import utils, { immutableUtils } from 'shared/utils';
 import validator from 'shared/utils/lib/validator';
 import { connect } from 'react-redux';
-import { fromJS, Map, List } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import {
-  ListInfo, FormGroup, Modal, Checkbox,
+  ListInfo, FormInput,
 } from 'shared/components';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
-import channels from 'shared/config/country.json';
 
-const channelsList = List(channels);
-const msg = {
-  apMode24g: `${_('Access Point Mode')}(2.4G)`,
-  apMode5g: `${_('Access Point Mode')}(5G)`,
-  protectChannel24g: `${_('Protect Channel')}(2.4G)`,
-  protectChannel5g: `${_('Protect Channel')}(5G)`,
-};
-
-const blcklistTableOptions = fromJS([
+const screenOptions = fromJS([
   {
     id: 'policyName',
     text: _('Policy Name'),
@@ -28,47 +19,77 @@ const blcklistTableOptions = fromJS([
     id: 'opObject',
     width: '120',
     text: _('Access Point Work Mode'),
+    options: [
+      {
+        value: '0',
+        label: _('Normal'),
+      }, {
+        value: '1',
+        label: _('Scan First'),
+      },
+    ],
+    defaultValue: '1',
+    formProps: {
+      type: 'switch',
+    },
   }, {
-    id: 'protectMode',
-    text: _('扫描类型'),
+    id: 'scanType',
+    text: _('Scan Type'),
+    defaultValue: '0',
+    options: [
+      {
+        value: '0',
+        label: _('Passive'),
+      }, {
+        value: '1',
+        label: _('Initiative'),
+      },
+    ],
+    formProps: {
+      type: 'switch',
+    },
   }, {
-    id: 'protectMode',
+    id: 'maxPower',
     text: _('Max Power'),
+    formProps: {
+      type: 'range',
+      min: 12,
+      max: 2333,
+    },
   }, {
-    id: 'protectMode',
+    id: 'minPower',
     text: _('Min Power'),
+
+    formProps: {
+      type: 'range',
+      min: 12,
+      max: 2333,
+    },
   }, {
-    id: 'ap24gMode',
-    text: _('2.4G校准间隔'),
+    id: '5gCalibrationInterval',
+    text: _('5G Calibration Interval'),
   }, {
-    id: 'ap5gMode',
-    text: _('2.4G邻居系数'),
+    id: '24gCalibrationInterval',
+    text: _('2.4G Calibration Interval'),
+  }, {
+    id: '24gNeighborcoefficient',
+    text: _('2.4G Neighbor coefficient'),
   }, {
     id: 'protect24gMode',
     text: _('2.4G timeid'),
   }, {
-    id: 'protect5gMode',
-    text: _('5G校准间隔'),
+    id: 'enabled',
+    width: '60',
+    text: _('Status'),
+    formProps: {
+      type: 'checkbox',
+    },
   },
 ]);
-const apWorkModeOptions = [
-  {
-    value: '0',
-    label: _('正常工作模式'),
-  }, {
-    value: '1',
-    label: _('扫描优先'),
-  },
-];
-const scanTypeOptions = [
-  {
-    value: 'date',
-    label: _('被动扫描'),
-  }, {
-    value: 'week',
-    label: _('主动扫描'),
-  },
-];
+
+const blcklistTableOptions = immutableUtils.getTableOptions(screenOptions);
+const editFormOptions = immutableUtils.getFormOptions(screenOptions);
+const defaultData = immutableUtils.getDefaultData(screenOptions);
 
 const validOptions = Map({
   password: validator({
@@ -89,16 +110,8 @@ const validOptions = Map({
 });
 
 const propTypes = {
-  app: PropTypes.instanceOf(Map),
-  store: PropTypes.instanceOf(Map),
-  validateOption: PropTypes.object,
-  route: PropTypes.object,
-  initList: PropTypes.func,
   save: PropTypes.func,
-  addListItem: PropTypes.func,
   closeListItemModal: PropTypes.func,
-  editListItemByIndex: PropTypes.func,
-  updateEditListItem: PropTypes.func,
   onListAction: PropTypes.func,
 };
 const defaultProps = {};
@@ -107,10 +120,9 @@ export default class View extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onAction = this.onAction.bind(this);
-    this.getCurrData = this.getCurrData.bind(this);
-    this.onUpdateSettings = this.onUpdateSettings.bind(this);
-    this.onSave = this.onSave.bind(this);
+    utils.binds(this, [
+      'onAction', 'onSave',
+    ]);
   }
   onSave() {
     this.props.onListAction()
@@ -118,174 +130,38 @@ export default class View extends React.Component {
         this.props.closeListItemModal();
       });
   }
-  onAction(action, mac) {
-    const query = {
-      mac,
-      action,
-    };
-
-    this.props.save('/goform/blacklist', query)
+  onAction(action, data) {
+    console.log(data)
+    this.props.save('/goform/blacklist', data)
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           console.log(11);
         }
       });
   }
-  onUpdateSettings(name) {
-    return (item) => {
-      const data = {};
-
-      data[name] = item.value;
-      this.props.updateEditListItem(data);
-    };
-  }
-  onUpdateTime(moment, ddd) {
-    console.log(moment.format('HH:mm'), ddd);
-  }
-
-  getCurrData(name) {
-    return this.props.store.getIn([this.props.route.id, 'data', 'edit', name]) || '';
-  }
-  getCountryOptions() {
-    return channelsList.map((item) => ({
-      value: item.country,
-      label: b28n.getLang() === 'cn' ? _(item.cn) : _(item.en),
-    })).toJS();
-  }
-
-  getChannelsOptions(currCountry) {
-    let i;
-    let len;
-    let channelsRange;
-    const channelsOptions = [
-      {
-        value: '0',
-        label: _('auto'),
-      },
-    ];
-    const channelsOption = channelsList.find((item) => {
-      return item.country === currCountry;
-    });
-
-    if (channelsOption) {
-      channelsRange = channelsOption['2.4g'].split('-');
-      i = parseInt(channelsRange[0], 10);
-      len = parseInt(channelsRange[1], 10);
-    } else {
-      i = 1;
-      len = 13;
-    }
-
-    for (i; i <= len; i++) {
-      channelsOptions.push({
-        value: `${i}`,
-        label: `${i}`,
-      });
-    }
-
-    return channelsOptions;
-  }
 
   render() {
-    const { route, store } = this.props;
-    const editData = store.getIn([route.id, 'data', 'edit']) || Map({});
-    const getCurrData = this.getCurrData;
-    const tableOptions = blcklistTableOptions.push(fromJS({
-      id: 'enabled',
-      width: '60',
-      text: _('Status'),
-      transform(val) {
-        return (
-          <Checkbox
-            checked={val === '1'}
-            style={{
-              marginTop: '3px',
-            }}
-          />
-        );
-      },
-    }));
+    const tableOptions = blcklistTableOptions.mergeIn([-1], {
+      transform: val => (
+        <FormInput
+          type="checkbox"
+          style={{
+            marginTop: '3px',
+          }}
+          onChange={data => this.onAction('switch', data)}
+        />
+      ),
+    });
 
     return (
       <ListInfo
         {...this.props}
         tableOptions={tableOptions}
-        defaultItem={{
-          dataType: 'date',
-        }}
+        editFormOptions={editFormOptions}
+        defaultEditData={defaultData}
         noTitle
         actionable
-      >
-        <Modal
-          isShow={!editData.isEmpty()}
-          title={editData.get('myTitle')}
-          onOk={() => this.onSave()}
-          onClose={() => this.props.closeListItemModal()}
-        >
-          <div className="o-form">
-            <FormGroup
-              label={_('Enable The Policy')}
-              type="checkbox"
-            />
-            <FormGroup
-              type="text"
-              label={_('Policy Name')}
-              value={getCurrData('policyName')}
-              onChange={this.onUpdateSettings('policyName')}
-            />
-            <FormGroup
-              type="select"
-              label={_('Access Point Work Mode')}
-              options={apWorkModeOptions}
-              value={getCurrData('aps')}
-              onChange={this.onUpdateSettings('aps')}
-            />
-            <FormGroup
-              type="select"
-              label={_('扫描类型')}
-              options={scanTypeOptions}
-              value={getCurrData('protectMode')}
-              onChange={this.onUpdateSettings('protectMode')}
-            />
-            <FormGroup
-              type="number"
-              label={_('Max Power')}
-              value={getCurrData('policyName')}
-              onChange={this.onUpdateSettings('policyName')}
-            />
-            <FormGroup
-              type="number"
-              label={_('Min Power')}
-              value={getCurrData('policyName')}
-              onChange={this.onUpdateSettings('policyName')}
-            />
-            <FormGroup
-              type="text"
-              label={_('2.4G校准间隔')}
-              value={getCurrData('policyName')}
-              onChange={this.onUpdateSettings('policyName')}
-            />
-            <FormGroup
-              type="text"
-              label={_('2.4G邻居系数')}
-              value={getCurrData('policyName')}
-              onChange={this.onUpdateSettings('policyName')}
-            />
-            <FormGroup
-              type="text"
-              label={_('2.4G频段timeid')}
-              value={getCurrData('policyName')}
-              onChange={this.onUpdateSettings('policyName')}
-            />
-            <FormGroup
-              type="text"
-              label={_('5G校准间隔')}
-              value={getCurrData('policyName')}
-              onChange={this.onUpdateSettings('policyName')}
-            />
-          </div>
-        </Modal>
-      </ListInfo>
+      />
     );
   }
 }

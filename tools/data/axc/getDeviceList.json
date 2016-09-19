@@ -1,0 +1,140 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "settings": {
+      "zoom": 100
+    },
+    "list": [
+      {
+        "map": {
+          "mapName": "11",
+          "mapType": "plan",
+          "xpos": 20,
+          "ypos": 12,
+          "locked": "0",
+          "coverage": 100
+        },
+        "devicename": "ap1",
+        "mac": "00:12:22:33:11:33",
+        "usernum2.4G": "10",
+        "usernum5G": "10",
+        "guestnum2.4G": "10",
+        "guestnum5G": "10",
+        "rules24G": "",
+        "rules5G": "",
+        "status": "0"
+      }, {
+        "map": {
+          "mapName": "11",
+          "mapType": "plan",
+          "xpos": -99,
+          "ypos": -99,
+          "locked": "0",
+          "coverage": 100
+        },
+        "devicename": "ap1",
+        "mac": "00:12:22:33:11:33",
+        "usernum2.4G": "10",
+        "usernum5G": "10",
+        "guestnum2.4G": "10",
+        "guestnum5G": "10",
+        "rules24G": "",
+        "rules5G": "",
+        "status": "1"
+      }, {
+        "map": {
+          "mapName": "22",
+          "mapType": "plan",
+          "xpos": 21,
+          "ypos": 22,
+          "locked": "0",
+          "coverage": 100
+        },
+        "devicename": "ap1",
+        "mac": "00:12:22:33:11:33",
+        "usernum2.4G": "10",
+        "usernum5G": "10",
+        "guestnum2.4G": "10",
+        "guestnum5G": "10",
+        "rules24G": "",
+        "rules5G": "",
+        "status": "1"
+      }, {
+        "map": {
+          "mapName": "11",
+          "mapType": "plan",
+          "xpos": -99,
+          "ypos": -99,
+          "locked": "0",
+          "coverage": 100
+        },
+        "devicename": "ap_2",
+        "mac": "00:12:22:33:11:33",
+        "usernum2.4G": "10",
+        "usernum5G": "10",
+        "guestnum2.4G": "10",
+        "guestnum5G": "10",
+        "rules24G": "",
+        "rules5G": "",
+        "status": "1"
+      }, {
+        "map": {
+          "mapName": "11",
+          "mapType": "plan",
+          "xpos": -99,
+          "ypos": -99,
+          "locked": "0",
+          "coverage": 100
+        },
+        "devicename": "ap_3",
+        "mac": "00:12:22:33:11:33",
+        "usernum2.4G": "10",
+        "usernum5G": "10",
+        "guestnum2.4G": "10",
+        "guestnum5G": "10",
+        "rules24G": "",
+        "rules5G": "",
+        "status": "0"
+      }, {
+        "map": {
+          "mapName": "11",
+          "mapType": "plan",
+          "xpos": -99,
+          "ypos": -99,
+          "locked": "0",
+          "coverage": 100
+        },
+        "devicename": "ap_4",
+        "mac": "00:12:22:33:11:33",
+        "usernum2.4G": "10",
+        "usernum5G": "10",
+        "guestnum2.4G": "10",
+        "guestnum5G": "10",
+        "rules24G": "",
+        "rules5G": "",
+        "status": "1"
+      }, {
+        "map": {
+          "mapName": "11",
+          "mapType": "plan",
+          "xpos": -99,
+          "ypos": -99,
+          "locked": "0",
+          "coverage": 100
+        },
+        "devicename": "ap_5",
+        "mac": "00:12:22:33:11:33",
+        "usernum2.4G": "10",
+        "usernum5G": "10",
+        "guestnum2.4G": "10",
+        "guestnum5G": "10",
+        "rules24G": "",
+        "rules5G": "",
+        "status": "1"
+      }
+    ]
+  }
+}

@@ -71,20 +71,11 @@ export default class View extends React.Component {
           label={_('Enable Active-Standby')}
           checked={curData.enable === '1'}
           onChange={
-            (data) => updateItemSettings({
+            data => updateItemSettings({
               enable: data.value,
             })
           }
         />
-        <div className="form-group form-group--save">
-          <div className="form-control">
-            <SaveButton
-              type="button"
-              loading={this.props.app.get('saving')}
-              onClick={this.onSave}
-            />
-          </div>
-        </div>
       </form>
     );
   }

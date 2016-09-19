@@ -75,12 +75,12 @@ export default class View extends React.Component {
         <FormGroup
           value="1"
           type="checkbox"
-          text={_('AP隔离')}
+          text={_('AP Isolation')}
         />
         <FormGroup
           value="1"
           type="checkbox"
-          text={_('SSID隔离')}
+          text={_('SSID Isolation')}
         />
       </form>
     );

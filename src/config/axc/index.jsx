@@ -108,6 +108,9 @@ const sInformationPush =
     require('../../screens/App/screens/MainAxc/screens/Report/screens/BusinessReport/screens/InformationPush');
 const sLiveMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/LiveMap');
 const sRfMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/Rf');
+const sHeatMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/HeatMap');
+const sClientsTrace = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace');
+
 /**
  * 系统管理
  */
@@ -143,7 +146,7 @@ const routes = [
       {
         path: '/main/network',
         component: sMainAxc.Screen,
-        icon: 'plug',
+        icon: 'sphere',
         text: _('NETWORK'),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/network/interface') },
         childRoutes: [
@@ -309,19 +312,24 @@ const routes = [
               }, {
                 id: 'rfPlan',
                 path: '/main/group/map/rf_plan',
-                formUrl: '/goform/getDeviceList',
+                formUrl: '/goform/rfPlan',
+                fetchUrl: '/goform/getDeviceList',
                 text: _('RF Plan'),
                 component: sRfMap.Screen,
               }, {
                 id: 'heatMap',
                 path: '/main/group/map/heat_map',
                 formUrl: '/goform/heatMap',
+                fetchUrl: '/goform/getDeviceList',
                 text: _('Heat Map'),
+                component: sHeatMap.Screen,
               }, {
                 id: 'cientsTrace',
                 path: '/main/group/map/cients_trace',
                 formUrl: '/goform/cientsTrace',
+                fetchUrl: '/goform/getDeviceList',
                 text: _('Cients Trace'),
+                component: sClientsTrace.Screen,
               },
             ],
           }, {
@@ -341,7 +349,7 @@ const routes = [
               }, {
                 id: 'blacklist',
                 path: '/main/group/wireless/acl',
-                formUrl: '/goform/getClientInfo',
+                formUrl: '/goform/blacklist',
                 text: _('Blacklist'),
                 component: sBlacklist.Screen,
               }, {

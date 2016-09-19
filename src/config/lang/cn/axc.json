@@ -6,6 +6,7 @@
   "Flow": "流量",
   "System Status": "系统状态",
 
+  "Group List": "组列表",
   "Interface Settings": "接口配置",
   "Interface No": "接口序号",
   "Interface Status": "接口状态",
@@ -216,13 +217,40 @@
   "Cients Trace": "终端行动轨迹",
 
   "Blacklist": "黑名单列表",
+  "Dynamic Blacklists Release Time": "动态黑名单老化时间",
+  "Manufacturer": "生产商",
+  "Clients Type": "终端类型",
+  "Reason": "原因",
+
   "SSID Settings": "SSID配置",
   "Access Control": "访问控制",
 
   "Smart RF": "智能RF",
+  "5G Frist": "5G优先",
+  "11n Frist": "11n优先",
   "Base Settings": "基本设置",
   "Timer Policy": "定时策略",
   "Max Users": "最大用户数",
+  "Power Auto": "自动功率",
+  "Channel Auto": "自动信道",
+  "Terminal release": "终端防粘",
+
+  "Access Point Work Mode": "接入点工作模式",
+  "Scan Type": "扫描类型",
+  "Normal": "正常",
+  "Passive": "被动",
+  "Initiative": "主动",
+  "Scan First": "扫描优先",
+  "%s Calibration Interval": "%s校准间隔",
+  "2.4G Neighbor coefficient": "2.4G邻居系数",
+
+  "Timer Range": "时段",
+  "Repeat": "重复",
+  "Exactly-once": "只执行一次",
+  "Everyday": "每天",
+  "Workday": "工作日",
+  "Custom": "自定义",
+  "Custom Cycle": "自定义周期",
 
   "Wireless Safe Policy": "无线安全检测策略",
   "Isolation Policy": "隔离策略",
@@ -235,7 +263,13 @@
   "Rogue Access Ooint Detection": "非法接入点检测",
   "Status": "状态",
   "Attack Detection": "攻击检测",
-  "Access Point Work Mode": "接入点工作模式",
+  "AP Isolation": "AP隔离",
+  "SSID Isolation": "SSID隔离",
+  "Wireless Flood Attack": "无线防洪攻击检测",
+  "Wireless Anti-spoofing Detection": "无线防欺骗攻击检测",
+  "After an attack is detected": "检测到攻击后",
+  "Alarm notification": "告警通知",
+  "Alarm notification and add to blacklist": "告警通知并加入到黑名单",
 
   "Report": "报表",
   "Flow Report": "流量报表",
@@ -243,6 +277,14 @@
   "Users Flow Analysis": "客流分析",
   "Information Push": "信息推送",
   "Analysis of Preferences": "喜好分析",
+
+  "Memory": "内存",
+  "Used": "已使用",
+  "Unused": "未使用",
+  "Memory Activity Monitor": "内存使用状态",
+  "CPU Activity Monitor": "CPU使用状态",
+
+  "Export": "导出",
 
   "System": "系统",
   "System Upgrade": "系统升级",

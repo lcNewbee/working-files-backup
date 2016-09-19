@@ -1,0 +1,46 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "settings": {
+      "isLocked": "1"
+    },
+    "list": [
+      {
+        "no": "0",
+        "lat": -34,
+        "lng": 151.23,
+        "address": "shenzhen china",
+        "markerTitle": "0",
+        "markerType": "building",
+        "floorList": [
+          {
+            "id": "1",
+            "mapName": "11",
+            "locked": "0"
+          }, {
+            "id": "2",
+            "mapName": "11",
+            "locked": "0"
+          }
+        ]
+      },
+      {
+        "no": "1",
+        "lat": -34,
+        "lng": 151.56,
+        "markerTitle": "1",
+        "markerType": "ap"
+      },
+      {
+        "no": "2",
+        "lat": -34,
+        "lng": 151.78,
+        "markerTitle": "2",
+        "markerType": "building"
+      }
+    ]
+  }
+}

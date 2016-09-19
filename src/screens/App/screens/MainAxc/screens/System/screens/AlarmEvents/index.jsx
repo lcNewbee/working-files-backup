@@ -151,7 +151,7 @@ class View extends React.Component {
         <div className="m-action-bar clearfix">
           <Button
             icon="download"
-            text={_('导出列表')}
+            text={_('Export')}
           />
           <Select
             className="fr"

@@ -178,8 +178,8 @@ export default class Main extends Component {
             >
               {
                 this.props.mainAxc.getIn(['vlan', 'list']).map((item) => {
-                  let curId = item.get('id');
-                  let remark = item.get('remark');
+                  const curId = item.get('id');
+                  const remark = item.get('remark');
                   let classNames = 'm-menu__link';
 
                   if (curId === selectVlanId) {
@@ -190,7 +190,7 @@ export default class Main extends Component {
                     <li key={curId}>
                       <a
                         className={classNames}
-                        onClick={(e) => this.onSelectVlan(curId, e)}
+                        onClick={e => this.onSelectVlan(curId, e)}
                       >
                         {curId}({remark})
                       </a>
@@ -238,7 +238,7 @@ export default class Main extends Component {
       case 'groupAsider':
         return (
           <asider className="t-main__asider-left">
-            <h3 className="t-main__asider-header">{_('组列表')}</h3>
+            <h3 className="t-main__asider-header">{_('Group List')}</h3>
             <ul
               className="m-menu m-menu--open"
             >
@@ -312,7 +312,7 @@ export default class Main extends Component {
   renderModalContent(option) {
     const selectVlanId = this.props.mainAxc.getIn(['vlan', 'selected', 'id']);
     const selectGroupId = this.props.mainAxc.getIn(['group', 'selected', 'id']);
-    let tableOption = fromJS([
+    const tableOption = fromJS([
       {
         id: 'devicename',
         text: `${_('MAC Address')}/${_('Name')}`,
@@ -367,7 +367,7 @@ export default class Main extends Component {
               <ul className="m-menu m-menu--open">
                 {
                   this.props.mainAxc.getIn(['group', 'list']).map((item) => {
-                    let curId = item.get('id');
+                    const curId = item.get('id');
                     let classNames = 'm-menu__link';
 
                     if (curId === selectGroupId) {
@@ -378,7 +378,7 @@ export default class Main extends Component {
                       <li key={curId}>
                         <a
                           className={classNames}
-                          onClick={(e) => this.onSelectGroup(curId, e)}
+                          onClick={e => this.onSelectGroup(curId, e)}
                         >
                           {item.get('groupname')} ({item.get('num')})
                         </a>
@@ -437,8 +437,8 @@ export default class Main extends Component {
               >
               {
                 this.props.mainAxc.getIn(['vlan', 'list']).map((item) => {
-                  let curId = item.get('id');
-                  let remark = item.get('remark');
+                  const curId = item.get('id');
+                  const remark = item.get('remark');
                   let classNames = 'm-menu__link';
 
                   if (curId === selectVlanId) {
@@ -449,7 +449,7 @@ export default class Main extends Component {
                     <li key={curId}>
                       <a
                         className={classNames}
-                        onClick={(e) => this.onSelectVlan(curId, e)}
+                        onClick={e => this.onSelectVlan(curId, e)}
                       >
                         {curId}({remark})
                       </a>
@@ -578,9 +578,9 @@ export default class Main extends Component {
       <div className={mainClassName}>
         <Navbar title={_(guiName)} version={version}>
           <div className="aside">
-            <button className="as-control" onClick={this.onRefresh}>
+            <button className="as-control" onClick={this.onRefresh} >
               <Icon name="refresh" className="icon" />
-              {_('REFRESH')}
+              <span>{_('REFRESH')}</span>
             </button>
             <div className="user" onClick={this.showUserPopOver}>
               <Icon name="user-secret" className="icon-user" />
