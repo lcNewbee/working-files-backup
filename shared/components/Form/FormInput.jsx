@@ -117,7 +117,7 @@ class FormInput extends React.Component {
     }
   }
 
-  handleChange(e) {
+  handleChange(e, rawValue) {
     const elem = e.target;
     let val = elem.value;
     let checkedValue = '1';
@@ -132,7 +132,7 @@ class FormInput extends React.Component {
       val = elem.checked ? checkedValue : '0';
     }
 
-    data.value = val;
+    data.value = rawValue || val;
 
     // 数据更新
     if (typeof this.props.onChange === 'function') {

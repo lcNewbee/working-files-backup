@@ -7,23 +7,48 @@
   "siteList":[
     {
       "mac":"22:22:33:44:55:66",
-      "ssid":"axilspot",
-      "security":"wpa2",
+      "ssid":"axilspotasdasdfafasdfasdfasf",
+      "security":{
+        "mode":"wep",
+        "auth":"open",
+        "keyLength":"64",
+        "keyType":"Hex",
+        "keyIndex":"1"
+      },
       "signal":"-75",
       "noise":"-95",
       "protocol":"802.11ac",
-      "channel":"36",
-      "channelWidth":"ht20"
+      "frequency":"40",
+      "channelWidth":"HT20"
     },
     {
       "mac":"12:00:33:44:55:67",
-      "ssid":"axilspot2",
-      "security":"wpa-mixed",
+      "ssid":"axilspot2asdfasdfewfwsdf",
+      "security":{
+        "mode":"wep",
+        "auth":"open",
+        "keyLength":"64",
+        "keyType":"Hex",
+        "keyIndex":"2"
+      },
       "signal":"-75",
       "noise":"-95",
       "protocol":"802.11ac",
-      "channel":"36",
-      "channelWidth":"ht40"
+      "frequency":"36",
+      "channelWidth":"HT40"
+    },
+    {
+      "mac":"32:22:33:44:55:67",
+      "ssid":"axilspot2",
+      "security":{
+        "mode":"wpa",
+        "cipher":"aes"
+      },
+      "signal":"-75",
+      "noise":"-95",
+      "protocol":"802.11ac",
+      "frequency":"36",
+      "channelWidth":"HT40"
     }
   ]
 }

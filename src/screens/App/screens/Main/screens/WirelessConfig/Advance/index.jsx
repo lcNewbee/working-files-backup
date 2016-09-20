@@ -18,6 +18,10 @@ const propTypes = {
   save: PropTypes.func,
   route: PropTypes.object,
   app: PropTypes.instanceOf(Map),
+
+  leaveSettingsScreen: PropTypes.func,
+  leaveScreen: PropTypes.func,
+  resetVaildateMsg: PropTypes.func,
 };
 
 export default class Advance extends React.Component {
@@ -44,10 +48,15 @@ export default class Advance extends React.Component {
     this.props.fetchSettings();
   }
 
+  componentWillUnmount() {
+    this.props.leaveSettingsScreen();
+    this.props.resetVaildateMsg();
+  }
+
   render() {
     const {
-      autoAdjust, sensEnable, distance, sensThreshold, rtsEnable, rts,
-      isolation, led1Threshold, led2Threshold, led3Threshold, led4Threshold,
+      sensEnable, distance, sensThreshold, rtsEnable, rts, isolation,
+      led1Threshold, led2Threshold, led3Threshold, led4Threshold,
     } = this.props.store.get('curData').toJS();
     return (
       <div className="advanceWrap">
@@ -76,61 +85,22 @@ export default class Advance extends React.Component {
             ) : null
           }
         </div>
-        <div className="disConfg">
-          <FormGroup
-            label={_('Distance Adjust Mode')}
-            type="checkbox"
-          >
-            <label htmlFor="autoDis">
-              <FormInput
-                name="distanceConfg"
-                type="radio"
-                id="autoDis"
-                checked={autoAdjust === '1'}
-                onClick={() => this.props.updateItemSettings({
-                  autoAdjust: '1',
-                })}
-              />
-              <span
-                style={{ paddingRight: '15px',
-                         paddingLeft: '5px',
-                  }}
-              >
-                Auto Adjust
-              </span>
-            </label>
-            <label htmlFor="manuDis">
-              <FormInput
-                name="distanceConfg"
-                type="radio"
-                id="manuDis"
-                checked={autoAdjust === '0'}
-                onClick={() => this.props.updateItemSettings({
-                  autoAdjust: '0',
-                })}
-              />
-              <span
-                style={{ paddingRight: '15px',
-                         paddingLeft: '5px',
-                  }}
-              >
-                Manu Adjust
-              </span>
-            </label>
-          </FormGroup>
-        </div>
-        {
-          autoAdjust === '0' ? (
-            <div className="disValue">
-              <FormGroup
-                type="number"
-                label={_('Distance Value')}
-                help="km"
-                value={parseInt(distance, 10)}
-              />
-            </div>
-          ) : null
-        }
+        <FormGroup
+          type="range"
+          label={_('Distance Value')}
+          min="0"
+          max="10"
+          step="0.1"
+          help="km"
+          value={distance}
+          hasTextInput
+          onChange={(data) => {
+            console.log(data.value)
+            this.props.updateItemSettings({
+              distance: data.value,
+            });
+          }}
+        />
         <div className="clientIsoConfg">
           <FormGroup
             label={_('Client Isolation')}
@@ -203,9 +173,9 @@ export default class Advance extends React.Component {
             >
               <FormGroup
                 className="threshdForLed"
-                id="threshdForLed1"
+                id="threshdForLed2"
                 type="number"
-                label="LED1"
+                label="LED2"
                 help="dbm"
                 value={led2Threshold}
                 onChange={(data) => this.props.updateItemSettings({
@@ -226,9 +196,9 @@ export default class Advance extends React.Component {
             >
               <FormGroup
                 className="threshdForLed"
-                id="threshdForLed1"
+                id="threshdForLed3"
                 type="number"
-                label="LED1"
+                label="LED3"
                 help="dbm"
                 value={led3Threshold}
                 onChange={(data) => this.props.updateItemSettings({
@@ -249,9 +219,9 @@ export default class Advance extends React.Component {
             >
               <FormGroup
                 className="threshdForLed"
-                id="threshdForLed1"
+                id="threshdForLed4"
                 type="number"
-                label="LED1"
+                label="LED4"
                 help="dbm"
                 value={led4Threshold}
                 onChange={(data) => this.props.updateItemSettings({

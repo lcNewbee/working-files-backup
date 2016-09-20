@@ -126,6 +126,8 @@ const routes = [{
       id: 'quicksetup',
       path: '/main/quicksetup',
       icon: 'cog',
+      fetchUrl: 'goform/get_quicksetup_info',
+      saveUrl: 'goform/set_quicksetup',
       text: _('Quick Setup'),
       component: pQuickSetup.Screen,
     }, {

@@ -2,14 +2,14 @@ import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { fromJS, Map } from 'immutable';
 import { connect } from 'react-redux';
-import { FormGroup } from 'shared/components';
+import { FormGroup, Button } from 'shared/components';
 import Table from 'shared/components/Table';
-import Button from 'shared/components/Button/Button';
 import utils from 'shared/utils';
 import * as sharedActions from 'shared/actions/settings';
 import * as appActions from 'shared/actions/app';
 import reducer from './reducer.js';
 
+const flowRateFilter = utils.filter('flowRate');
 const propTypes = {
   store: PropTypes.instanceOf(Map),
   route: PropTypes.object,
@@ -36,9 +36,15 @@ const interfaceOptions = fromJS([
   }, {
     id: 'txBytes',
     text: _('Tx Bytes'),
+    transform(val) {
+      return flowRateFilter.transform(val);
+    },
   }, {
     id: 'rxBytes',
     text: _('Rx Bytes'),
+    transform(val) {
+      return flowRateFilter.transform(val);
+    },
   }, {
     id: 'txPackets',
     text: _('Tx Packets'),
@@ -65,27 +71,39 @@ const clientOptions = fromJS([
   },
   {
     id: 'Signal',
-    text: _('Signal'),
+    text: _('Signal(dBm)'),
   },
   {
     id: 'noise',
-    text: _('Noise'),
+    text: _('Noise(dBm)'),
   },
   {
     id: 'txRate',
     text: _('Tx Rate'),
+    transform(val) {
+      return flowRateFilter.transform(val) + '/s';
+    },
   },
   {
     id: 'rxRate',
     text: _('Rx Rate'),
+    transform(val) {
+      return flowRateFilter.transform(val) + '/s';
+    },
   },
   {
     id: 'txBytes',
     text: _('Tx Bytes'),
+    transform(val) {
+      return flowRateFilter.transform(val);
+    },
   },
   {
     id: 'rxBytes',
     text: _('Rx Bytes'),
+    transform(val) {
+      return flowRateFilter.transform(val);
+    },
   },
   {
     id: 'txPackets',
@@ -103,23 +121,6 @@ const clientOptions = fromJS([
     id: 'ipAddr',
     text: _('IP'),
   },
-  /*
-  {
-    id: 'operate',
-    text: _('Action'),
-    transform(val, item) {
-      const curMac = item.get('Mac');
-      return (
-        <Button
-          icon="remove"
-          title="kick out"
-          size="sm"
-          onClick={() => this.onKickUser(curMac)}
-        />
-      );
-    },
-  },
-  */
 ]);
 
 const remoteApOption = fromJS([
@@ -134,19 +135,31 @@ const remoteApOption = fromJS([
     text: _('Connect Time'),
   }, {
     id: 'signal',
-    text: _('Signal'),
+    text: _('Signal(dBm)'),
   }, {
     id: 'txBytes',
     text: _('Tx Bytes'),
+    transform(val) {
+      return flowRateFilter.transform(val);
+    },
   }, {
     id: 'rxBytes',
     text: _('Rx Bytes'),
+    transform(val) {
+      return flowRateFilter.transform(val);
+    },
   }, {
     id: 'txRate',
     text: _('Tx Rate'),
+    transform(val) {
+      return flowRateFilter.transform(val) + '/s';
+    },
   }, {
     id: 'rxRate',
     text: _('Rx Rate'),
+    transform(val) {
+      return flowRateFilter.transform(val) + '/s';
+    },
   }, {
     id: 'txPackets',
     text: _('Tx Packets'),
@@ -169,7 +182,8 @@ export default class SystemStatus extends React.Component {
 
 
   componentWillMount() {
-    window.clearInterval(a);
+    console.log('interval', a);
+    clearInterval(a);
     // 必须要有初始化，因为要在settings中插入一个由该页面id命名的对象
     this.props.initSettings({
       settingId: this.props.route.id,
@@ -181,38 +195,10 @@ export default class SystemStatus extends React.Component {
   }
 
   componentWillUnmount() {
-    window.clearInterval(a);
+    console.log('interval', a);
+    clearInterval(a);
     this.props.leaveSettingsScreen();
   }
-
-/*
-  componentDidMount() {
-    window.clearInterval(a);
-    const that = this;
-    // const oldProps = this.props;
-
-    a = setInterval(() => {
-      let status = that.props.store.getIn(['curData', 'status']);
-      // console.log(oldProps === that.props);
-      // console.log(this === that);
-      if (status === undefined) { return; }
-      // console.log('old = ', status);
-      status = status.toJS();
-      const systemTime = status.systemTime;
-      const uptime = status.uptime;
-      const newSystemTime = (parseInt(systemTime, 10) + 5000).toString();
-      const newUptime = (parseInt(uptime, 10) + 5).toString();
-      const newStatus = utils.extend(
-                            {},
-                            { ...status },
-                            { 'systemTime': newSystemTime, 'uptime': newUptime }
-                        );
-      that.props.updateItemSettings({
-        status: newStatus,
-      });
-    }, 5000);
-  }
-*/
 
   changeSystemTimeToReadable(time) {
     return new Date(parseInt(time, 10))
@@ -231,7 +217,7 @@ export default class SystemStatus extends React.Component {
     if (days > 0) {
       timeStr = days + 'd ' + hours + 'h ' + minutes + 'm ' + seconds + 's ';
     } else if (hours > 0) {
-      timeStr = hours + 'd ' + minutes + 'm ' + seconds + 's ';
+      timeStr = hours + 'h ' + minutes + 'm ' + seconds + 's ';
     } else if (minutes > 0) {
       timeStr = minutes + 'm ' + seconds + 's ';
     }
@@ -249,6 +235,7 @@ export default class SystemStatus extends React.Component {
       deviceModel, deviceName, networkMode, security, version,
       systemTime, frequency, channelWidth, uptime, ap, channel,
       interfaces, station, wlan0Mac, protocol, lan0Mac, lan1Mac,
+      ssid, distance, txPower, noise, ccq,
      } = status;
     let apMac; let clientNum; let staList; let signal;
     let apInfo = [];
@@ -340,26 +327,24 @@ export default class SystemStatus extends React.Component {
         <div className="row">
           <div className="cols col-6">
             <FormGroup
-              label={_('SSID :')}
+              label={_('Wireless Model :')}
               type="plain-text"
               value={wirelessMode}
             />
             <FormGroup
-              label={_('Frequency :')}
+              label={_('SSID :')}
               type="plain-text"
-              value={frequency}
+              value={ssid}
             />
             <FormGroup
               label={_('Protocol :')}
               type="plain-text"
               value={protocol}
             />
-          </div>
-          <div className="cols col-6">
             <FormGroup
-              label={_('Channel :')}
+              label={_('Channel/Frequency :')}
               type="plain-text"
-              value={channel}
+              value={frequency}
             />
             <FormGroup
               label={_('Channel Width :')}
@@ -370,6 +355,37 @@ export default class SystemStatus extends React.Component {
               label={_('Security Mode :')}
               type="plain-text"
               value={security}
+            />
+          </div>
+          <div className="cols col-6">
+            <FormGroup
+              label={_('Distance :')}
+              type="plain-text"
+              value={distance}
+              help="km"
+            />
+            <FormGroup
+              label={_('Tx Power :')}
+              type="plain-text"
+              value={txPower}
+              help="dBm"
+            />
+            <FormGroup
+              label={_('Signal :')}
+              type="plain-text"
+              value={status.signal}
+              help="dBm"
+            />
+            <FormGroup
+              label={_('Noise :')}
+              type="plain-text"
+              value={noise}
+              help="dBm"
+            />
+            <FormGroup
+              label={_('CCQ :')}
+              type="plain-text"
+              value={ccq}
             />
           </div>
         </div>

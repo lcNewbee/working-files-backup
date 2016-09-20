@@ -13,14 +13,16 @@
   "Security Mode :": "加密方式：",
   "Tx Packets": "发送数据包数",
   "Rx Packets": "接收数据包数",
-  "Tx Bytes": "发送数据量(Bytes)",
-  "Rx Bytes": "接收数据量(Bytes)",
+  "Tx Bytes": "发送数据量",
+  "Rx Bytes": "接收数据量",
   "Tx Error": "发送错误包数",
   "Rx Error": "接收错误包数",
   "Tx Rate": "发送速率",
   "Rx Rate": "接收速率",
-  "Noise": "噪声",
-  "Signal": "信号强度",
+  "Noise(dBm)": "噪声(dBm)",
+  "Signal(dBm)": "信号强度(dBm)",
   "Soft Version": "软件版本",
-  "Change": "修改"
+  "Change": "修改",
+
+  "Chain": "中国"
 }

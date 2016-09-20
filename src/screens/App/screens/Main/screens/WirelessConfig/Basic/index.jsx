@@ -37,6 +37,7 @@ const propTypes = {
   closeCountrySelectModal: PropTypes.func,
   saveCountrySelectModal: PropTypes.func,
   receiveCountryInfo: PropTypes.func,
+  resetVaildateMsg: PropTypes.func,
 };
 
 const defaultProps = {};
@@ -60,9 +61,9 @@ const rateOptions = [
 
 const staAndApSecurityOptions = [
   { value: 'none', label: 'None' },
-  { value: 'wpa', label: 'WPA-AES' },
-  { value: 'wpa2', label: 'WPA2-AES' },
-  { value: 'wpa-mixed', label: 'WPA-Mixed-AES' },
+  { value: 'wpa', label: 'WPA-PSK' },
+  { value: 'wpa2', label: 'WPA2-PSK' },
+  { value: 'wpa-mixed', label: 'WPA-PSK/WPA2-PSK' },
 ];
 
 const repeaterSecurityOptions = [
@@ -81,10 +82,10 @@ const wepKeyLengthOptions = [
 ];
 
 const keyIndexOptions = [
-  { value: 'key1', label: 'key 1' },
-  { value: 'key2', label: 'key 2' },
-  { value: 'key3', label: 'key 3' },
-  { value: 'key4', label: 'key 4' },
+  { value: '1', label: 'key 1' },
+  { value: '2', label: 'key 2' },
+  { value: '3', label: 'key 3' },
+  { value: '4', label: 'key 4' },
 ];
 
 const keyTypeOptions = [
@@ -118,62 +119,7 @@ const validOptions = Map({
   apmac3: validator({
     rules: 'mac',
   }),
-  apmac4: validator({
-    rules: 'mac',
-  }),
-  apmac5: validator({
-    rules: 'mac',
-  }),
-  apmac6: validator({
-    rules: 'mac',
-  }),
 });
-
-const apDefaultData = {
-  wirelessMode: 'ap',
-  ssid: 'axilspot',
-  hideSsid: '0',
-  frequency: 'auto',
-  security: {
-    mode: 'none',
-  },
-  channelWidth: 'HT40',
-  txPower: '14',
-  maxTxRate: '15',
-  radioMode: '11AC',
-};
-
-const staDefaultData = {
-  wirelessMode: 'sta',
-  ssid: 'axilspot',
-  hideSsid: '0',
-  frequency: 'auto',
-  apMac: '',
-  security: {
-    mode: 'none',
-  },
-  channelWidth: 'HT40',
-  txPower: '14',
-  maxTxRate: '15',
-  radioMode: '11AC',
-};
-
-const repeaterDefaultData = {
-  wirelessMode: 'repeater',
-  ssid: 'axilspot',
-  hideSsid: '0',
-  frequency: 'auto',
-  peers: [],
-  autoRepeat: '0',
-  security: {
-    mode: 'none',
-  },
-  channelWidth: 'HT40',
-  txPower: '14',
-  maxTxRate: '15',
-  radioMode: '11AC',
-};
-
 
 export default class Basic extends React.Component {
 
@@ -192,6 +138,7 @@ export default class Basic extends React.Component {
     this.makeCountryOptions = this.makeCountryOptions.bind(this);
     this.getCountryNameFromCode = this.getCountryNameFromCode.bind(this);
     this.onCloseCountrySelectModal = this.onCloseCountrySelectModal.bind(this);
+    this.makeChannelOptions = this.makeChannelOptions.bind(this);
   }
 
   componentWillMount() {
@@ -238,6 +185,7 @@ export default class Basic extends React.Component {
   componentWillUnmount() {
     this.props.leaveSettingsScreen();
     this.props.leaveScreen();
+    this.props.resetVaildateMsg();
   }
 
   onSave() {
@@ -281,14 +229,15 @@ export default class Basic extends React.Component {
   }
   onModalOkBtnClick() {
     const {
-      mac, ssid, security, channel, channelWidth,
+      mac, ssid, security, frequency, channelWidth,
     } = this.props.selfState.get('selectedResult').toJS();
     if (!this.props.selfState.get('selectedResult').isEmpty()) {
       this.props.updateItemSettings({
         apMac: mac,
+        peers: [mac],
         ssid,
         security,
-        channel,
+        frequency,
         channelWidth,
         scanResult: fromJS({}),
       });
@@ -301,24 +250,34 @@ export default class Basic extends React.Component {
     this.props.changeSelectedResult(fromJS({}));
   }
   onSelectScanResultItem(item) {
-    const { ssid, mac, security, channel, channelWidth } = item.toJS();
+    const { ssid, mac, security, frequency, channelWidth } = item.toJS();
     const result = fromJS({}).set('ssid', ssid).set('mac', mac)
-                             .set('frequency', channel)
+                             .set('frequency', frequency)
                              .set('channelWidth', channelWidth)
-                             .set('security', fromJS({
-                               mode: security,
-                               key: '',
-                             }));
+                             .set('security', security);
     this.props.changeSelectedResult(result);
   }
   onChengeWirelessMode(data) {
-    if (data.value === 'ap') {
-      this.props.updateItemSettings({ ...apDefaultData });
-    } else if (data.value === 'sta') {
-      this.props.updateItemSettings({ ...staDefaultData });
-    } else if (data.value === 'repeater') {
-      this.props.updateItemSettings({ ...repeaterDefaultData });
-    }
+    this.props.fetch('goform/get_wl_info')
+        .then((json) => {
+          // 首先更新curData中的数据，防止之前修改模式但未保存时加密方式发生变化，目的是切换回去后显示原来的数据
+          this.props.updateItemSettings({ ...json.data });
+          if (json.state && json.state.code === 2000) {
+            const curMode = json.data.wirelessMode;
+            if (data.value !== curMode) {
+              this.props.updateItemSettings({
+                wirelessMode: data.value,
+              });
+              if (data.value === 'repeater' || curMode === 'repeater') {
+                this.props.updateItemSettings({
+                  security: {
+                    mode: 'none',
+                  },
+                });
+              }
+            }
+          }
+        });
   }
   onCloseCountrySelectModal() {
     const code = this.props.store.getIn(['curData', 'countryCode']);
@@ -335,7 +294,7 @@ export default class Basic extends React.Component {
     return '';
   }
 
-  // countryMap为ES6的Map模式
+  // countryMap为Object
   makeCountryOptions(map) {
     console.log(map);
     const countryList = [];
@@ -359,14 +318,24 @@ export default class Basic extends React.Component {
 
   makeChannelOptions() {
     const channelList = this.props.selfState.get('channels');
-    const channelOptions = [{ value: 'auto', label: 'auto' }];
-    for (const elem of channelList.toJS().values()) {
-      const item = {
-        value: elem,
-        label: elem,
+    // const channelOptions = [{ value: 'auto', label: 'auto' }];
+
+    const channelOptions = channelList.map((val) => {
+      return {
+        value: val,
+        label: val,
       };
-      channelOptions.push(item);
-    }
+    })
+    .unshift({ value: 'auto', label: 'auto' })
+    .toJS();
+
+    // for (const elem of channelList.toJS().values()) {
+    //   const item = {
+    //     value: elem,
+    //     label: elem,
+    //   };
+    //   channelOptions.push(item);
+    // }
     return channelOptions;
   }
 
@@ -396,6 +365,9 @@ export default class Basic extends React.Component {
       {
         id: 'security',
         text: _('Security Mode'),
+        transform: function (val) {
+          return val.toJS().mode;
+        }.bind(this),
       },
       {
         id: 'signal',
@@ -422,14 +394,30 @@ export default class Basic extends React.Component {
       wirelessMode, ssid, apMac, countryCode, radioMode, channelWidth,
       hideSsid, txPower, frequency, maxTxRate, peers, autoRepeat,
     } = this.props.store.get('curData').toJS();
-    const { staApmac, apmac1, apmac2, apmac3, apmac4, apmac5, apmac6 } = this.props.validateOption;
+    const { staApmac, apmac1, apmac2, apmac3 } = this.props.validateOption;
     const mode = this.props.store.getIn(['curData', 'security', 'mode']);
     const key = this.props.store.getIn(['curData', 'security', 'key']);
-    const Auth = this.props.store.getIn(['curData', 'security', 'Auth']);
+    const auth = this.props.store.getIn(['curData', 'security', 'auth']);
     const keyLength = this.props.store.getIn(['curData', 'security', 'keyLength']);
     const keyType = this.props.store.getIn(['curData', 'security', 'keyType']);
     const keyIndex = this.props.store.getIn(['curData', 'security', 'keyIndex']);
-    // const peers = this.props.store.getIn(['curData', 'security', 'peers']);
+    const cipher = this.props.store.getIn(['curData', 'security', 'cipher']);
+    let peer1 = '';
+    let peer2 = '';
+    let peer3 = '';
+    if (peers !== undefined) {
+      if (peers.length >= 3) {
+        peer1 = peers[0] || '';
+        peer2 = peers[1] || '';
+        peer3 = peers[2] || '';
+      } else if (peers.length === 2) {
+        peer1 = peers[0] || '';
+        peer2 = peers[1] || '';
+      } else if (peers.length === 1) {
+        peer1 = peers[0] || '';
+      }
+    }
+    // const peers = this.props.stosre.getIn(['curData', 'security', 'peers']);
     // console.log('dd=', this.props.store.toJS())
 
     if (this.props.store.get('curSettingId') === 'base') {
@@ -438,6 +426,21 @@ export default class Basic extends React.Component {
 
     return (
       <div>
+        <Modal
+          isShow={this.props.selfState.get('showScanResult')}
+          onOk={this.onModalOkBtnClick}
+          onClose={this.onModalCloseBtnClick}
+          okText={_('Select')}
+          cancelText={_('Cancel')}
+          okButton
+          cancelButton
+        >
+          <Table
+            className="table"
+            options={modalOptions}
+            list={this.props.store.getIn(['curData', 'scanResult', 'siteList'])}
+          />
+        </Modal>
         <div>
           <h3>{_('Basic Wireless Settings')}</h3>
           <div className="clearfix">
@@ -472,17 +475,17 @@ export default class Basic extends React.Component {
               }
             </span>
           </div>
+
           <div className="clearfix">
             <div
               style={{
-                width: '205px',
+                width: '127px',
               }}
             >
               <FormGroup
                 label="SSID"
                 className="fl"
                 type="text"
-                required
                 value={ssid}
                 onChange={(data) => this.props.updateItemSettings({
                   ssid: data.value,
@@ -514,39 +517,37 @@ export default class Basic extends React.Component {
                       )
                     }
                     </span>
-                    <Modal
-                      isShow={this.props.selfState.get('showScanResult')}
-                      onOk={this.onModalOkBtnClick}
-                      onClose={this.onModalCloseBtnClick}
-                      okText={_('Select')}
-                      cancelText={_('Cancel')}
-                      okButton
-                      cancelButton
-                    >
-                      <Table
-                        className="table"
-                        options={modalOptions}
-                        list={this.props.store.getIn(['curData', 'scanResult', 'siteList'])}
-                      />
-                    </Modal>
                   </div>
                 ) : (
-                  <span
-                    style={{
-                      display: 'inline-block',
-                      marginTop: '11px',
-                    }}
-                  >&nbsp;&nbsp;
-                    <input
+                  <div>
+                  {
+                     wirelessMode === 'repeater' ? (
+                       <Button
+                         text={_('Scan')}
+                         style={{
+                           marginLeft: '3px',
+                         }}
+                         onClick={this.onScanBtnClick}
+                       />
+                     ) : null
+                  }
+                    <span
                       style={{
-                        paddingBottom: '-2px',
+                        display: 'inline-block',
+                        marginTop: '11px',
                       }}
-                      type="checkbox"
-                      checked={hideSsid === '1'}
-                      onClick={this.onHideSsidboxClick}
-                    />&nbsp;
-                    {_('Hide SSID')}
-                  </span>
+                    >&nbsp;&nbsp;
+                      <input
+                        style={{
+                          paddingBottom: '-2px',
+                        }}
+                        type="checkbox"
+                        checked={hideSsid === '1'}
+                        onClick={this.onHideSsidboxClick}
+                      />&nbsp;
+                      {_('Hide SSID')}
+                    </span>
+                  </div>
                 )
               }
             </span>
@@ -554,127 +555,37 @@ export default class Basic extends React.Component {
           {
               (wirelessMode === 'repeater') ? (
                 <div>
-                  <div className="clearfix">
-                    <div
-                      style={{
-                        width: '205px',
-                        zIndex: '99',
-                      }}
-                    >
-                      <FormGroup
-                        className="fl"
-                        label="WDS Peers"
-                        type="text"
-                        value={peers[0]}
-                        onChange={(data) => this.props.updateItemSettings({
-                          peers: [
-                            data.value, peers[1], peers[2],
-                            peers[3], peers[4], peers[5],
-                          ],
-                        })}
-                        {... apmac1}
-                      />
-                    </div>
-                    <div
-                      className="fl"
-                      style={{
-                        width: '305px',
-                        marginLeft: '-160px',
-                      }}
-                    >
-                      <FormGroup
-                        type="text"
-                        value={peers[1]}
-                        onChange={(data) => this.props.updateItemSettings({
-                          peers: [
-                            peers[0], data.value, peers[2],
-                            peers[3], peers[4], peers[5],
-                          ],
-                        })}
-                        {... apmac2}
-                      />
-                    </div>
-                  </div>
-                  <div className="clearfix">
-                    <div
-                      style={{
-                        width: '205px',
-                        zIndex: '99',
-                      }}
-                    >
-                      <FormGroup
-                        className="fl"
-                        type="text"
-                        value={peers[2]}
-                        onChange={(data) => this.props.updateItemSettings({
-                          peers: [
-                            peers[0], peers[1], data.value,
-                            peers[3], peers[4], peers[5],
-                          ],
-                        })}
-                        {... apmac3}
-                      />
-                    </div>
-                    <div
-                      className="fl"
-                      style={{
-                        width: '305px',
-                        marginLeft: '-160px',
-                      }}
-                    >
-                      <FormGroup
-                        type="text"
-                        value={peers[3]}
-                        onChange={(data) => this.props.updateItemSettings({
-                          peers: [
-                            peers[0], peers[1], peers[2],
-                            data.value, peers[4], peers[5],
-                          ],
-                        })}
-                        {... apmac4}
-                      />
-                    </div>
-                  </div>
-                  <div className="clearfix">
-                    <div
-                      style={{
-                        width: '205px',
-                        zIndex: '99',
-                      }}
-                    >
-                      <FormGroup
-                        className="fl"
-                        type="text"
-                        value={peers[4]}
-                        onChange={(data) => this.props.updateItemSettings({
-                          peers: [
-                            peers[0], peers[1], peers[2],
-                            peers[3], data.value, peers[5],
-                          ],
-                        })}
-                        {... apmac5}
-                      />
-                    </div>
-                    <div
-                      className="fl"
-                      style={{
-                        width: '305px',
-                        marginLeft: '-160px',
-                      }}
-                    >
-                      <FormGroup
-                        type="text"
-                        value={peers[5]}
-                        onChange={(data) => this.props.updateItemSettings({
-                          peers: [
-                            peers[0], peers[1], peers[2],
-                            peers[3], peers[4], data.value,
-                          ],
-                        })}
-                        {... apmac6}
-                      />
-                    </div>
-                  </div>
+                  <FormGroup
+                    label="WDS Peers"
+                    type="text"
+                    value={peer1}
+                    onChange={(data) => this.props.updateItemSettings({
+                      peers: [
+                        data.value, peer2, peer3,
+                      ],
+                    })}
+                    {... apmac1}
+                  />
+                  <FormGroup
+                    type="text"
+                    value={peer2}
+                    onChange={(data) => this.props.updateItemSettings({
+                      peers: [
+                        peer1, data.value, peer3,
+                      ],
+                    })}
+                    {... apmac2}
+                  />
+                  <FormGroup
+                    type="text"
+                    value={peer3}
+                    onChange={(data) => this.props.updateItemSettings({
+                      peers: [
+                        peer1, peer2, data.value,
+                      ],
+                    })}
+                    {... apmac3}
+                  />
                 </div>
               ) : null
           }
@@ -686,7 +597,7 @@ export default class Basic extends React.Component {
                 onChange={(data) => this.props.updateItemSettings({
                   apMac: data.value,
                 })}
-                required
+                placeholder={_('not necessary')}
                 {...staApmac}
               />
             ) : null
@@ -700,7 +611,6 @@ export default class Basic extends React.Component {
                   this.props.selfState.get('selectedCountry'),
                   countryMap
                 )}
-
               disabled
               style={{
                 width: '127px',
@@ -749,24 +659,12 @@ export default class Basic extends React.Component {
             ) : null
           }
           <FormGroup
-            style={{
-              display: 'none',
-            }}
-            label={_('IEEE 802.11 Mode')}
-            type="select"
-            options={ieeeModeOptions}
-            value={radioMode}
-            onChange={(data) => this.props.updateItemSettings({
-              radioMode: data.value,
-            })}
-          />
-          <FormGroup
             label={_('Channel')}
             type="select"
             options={this.makeChannelOptions()}
             value={this.props.store.getIn(['curData', 'frequency'])}
             onChange={(data) => this.props.updateItemSettings({
-              frequency: data.value,
+              frequency: data.value || 'auto',
             })}
           />
           <FormGroup
@@ -779,7 +677,7 @@ export default class Basic extends React.Component {
             })}
           />
           <FormGroup
-            label={_('Outpower Power')}
+            label={_('Output Power')}
             type="range"
             min="-4"
             max={this.props.selfState.get('maxTxpower')}
@@ -811,31 +709,45 @@ export default class Basic extends React.Component {
                   value={mode}
                   onChange={(data) => this.props.updateItemSettings({
                     security: {
+                      cipher: cipher || 'aes',
                       mode: data.value,
                     },
                   })}
                 />
-                <FormGroup
-                  label={_('Algorithm')}
-                  value={this.props.selfState.getIn(['security', 'cipher'])}
-                  options={[
-                    { label: 'AES', value: 'aes' },
-                    { label: 'TKIP', value: 'tkip' },
-                  ]}
-                />
+
                 {
                   (mode === 'none') ? null : (
-                    <FormGroup
-                      label={_('Keys')}
-                      type="password"
-                      value={key}
-                      onChange={(data) => this.props.updateItemSettings({
-                        security: {
-                          mode,
-                          key: data.value,
-                        },
-                      })}
-                    />
+                    <div>
+                      <FormGroup
+                        label={_('Algorithm')}
+                        type="switch"
+                        value={this.props.store.getIn(['curData', 'security', 'cipher'])}
+                        onChange={(data) => this.props.updateItemSettings({
+                          security: {
+                            mode,
+                            key,
+                            cipher: data.value,
+                          },
+                        })}
+                        options={[
+                          { label: 'AES', value: 'aes' },
+                          { label: 'TKIP', value: 'tkip' },
+                          { label: 'AES/TKIP', value: 'aes&tkip' },
+                        ]}
+                      />
+                      <FormGroup
+                        label={_('Keys')}
+                        type="password"
+                        value={key}
+                        onChange={(data) => this.props.updateItemSettings({
+                          security: {
+                            mode,
+                            key: data.value,
+                            cipher,
+                          },
+                        })}
+                      />
+                    </div>
                   )
                 }
               </div>
@@ -852,6 +764,11 @@ export default class Basic extends React.Component {
                   onChange={(data) => this.props.updateItemSettings({
                     security: {
                       mode: data.value,
+                      auth: auth || 'shared',
+                      keyLength: keyLength || '128',
+                      keyType: keyType || 'Hex',
+                      key,
+                      keyIndex: keyIndex || '1',
                     },
                   })}
                 />
@@ -863,11 +780,11 @@ export default class Basic extends React.Component {
                         type="select"
                         name="authenticationType"
                         options={wepAuthenOptions}
-                        value={Auth}
+                        value={auth}
                         onChange={(data) => this.props.updateItemSettings({
                           security: {
                             mode,
-                            Auth: data.value,
+                            auth: data.value,
                             keyLength,
                             keyType,
                             key,
@@ -884,7 +801,7 @@ export default class Basic extends React.Component {
                         onChange={(data) => this.props.updateItemSettings({
                           security: {
                             mode,
-                            Auth,
+                            auth,
                             keyLength: data.value,
                             keyType,
                             key,
@@ -901,7 +818,7 @@ export default class Basic extends React.Component {
                         onChange={(data) => this.props.updateItemSettings({
                           security: {
                             mode,
-                            Auth,
+                            auth,
                             keyLength,
                             keyType,
                             key,
@@ -918,7 +835,7 @@ export default class Basic extends React.Component {
                         onChange={(data) => this.props.updateItemSettings({
                           security: {
                             mode,
-                            Auth,
+                            auth,
                             keyLength,
                             keyType: data.value,
                             key,
@@ -933,7 +850,7 @@ export default class Basic extends React.Component {
                         onChange={(data) => this.props.updateItemSettings({
                           security: {
                             mode,
-                            Auth,
+                            auth,
                             keyLength,
                             keyType,
                             key: data.value,

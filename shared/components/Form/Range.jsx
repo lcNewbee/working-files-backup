@@ -4,6 +4,11 @@ import Input from './atom/Input';
 
 const propTypes = {
   hasTextInput: PropTypes.bool,
+  unit: PropTypes.number,
+  value: PropTypes.string,
+  label: PropTypes.string,
+
+  onChange: PropTypes.func,
 };
 
 const defaultProps = {
@@ -15,6 +20,12 @@ class Checkbox extends React.Component {
     super(props);
 
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    this.onRangeChange = this.onRangeChange.bind(this);
+  }
+  onRangeChange(e, value) {
+    if (this.props.onChange) {
+      this.props.onChange(e, value);
+    }
   }
   render() {
     const { hasTextInput } = this.props;
@@ -23,7 +34,9 @@ class Checkbox extends React.Component {
     if (hasTextInput) {
       ret = (
         <div className="a-input-range">
-          <Input {...this.props} />
+          <Input
+            {...this.props}
+          />
           <Input
             {...this.props}
             type="number"
