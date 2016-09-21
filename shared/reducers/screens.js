@@ -128,9 +128,10 @@ export default function (state = defaultState, action) {
       return editListItemByKey(state, curScreenName, action);
 
     case 'EDIT_LIST_ITEM_BY_INDEX':
+      console.log(state.getIn([curScreenName, 'data', 'list', action.payload.index]).toJS())
       return state.setIn(
           [curScreenName, 'data', 'edit'],
-          defaultEditData.merge(state.getIn([curScreenName, 'data', 'list', action.index])).merge({
+          defaultEditData.merge(state.getIn([curScreenName, 'data', 'list', action.payload.index])).merge({
             myTitle: `${_('Edit')}: ${action.payload.index}`,
             index: action.payload.index,
           })

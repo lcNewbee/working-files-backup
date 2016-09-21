@@ -74,7 +74,6 @@ $o-form-content-margin: 1em 0 0;
   &.o-form--flow {
     @include clearfix;
     padding: 0;
-    margin: 0 -12px;
 
     .form-group {
       display: inline-block;
@@ -89,6 +88,14 @@ $o-form-content-margin: 1em 0 0;
       .form-control {
         float: left;
         margin-left: 0;
+      }
+
+      &:first-child {
+        margin-left: 0px;
+
+        > label {
+          padding-left: 12px;
+        }
       }
     }
 

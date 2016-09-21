@@ -130,9 +130,9 @@ body {
     .o-top-menu-bar {
       position: fixed;
       top: $g-navbar-height;
+      bottom: 0;
       z-index: 1501;
       width: $t-main-top-menu-height;
-      height: 100%;
       a {
         position: relative;
         display: block;

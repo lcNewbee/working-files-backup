@@ -2,6 +2,8 @@ import b28n from 'shared/b28n';
 import { combineReducers } from 'redux';
 import NotFound from 'shared/components/NotFound';
 import remoteActionMiddleware from 'shared/utils/lib/remote_action_middleware';
+import * as appActions from 'shared/actions/app';
+import appReducer from 'shared/reducers/app';
 import screensReducer from 'shared/reducers/screens';
 import settingsReducer from 'shared/reducers/settings';
 import propertiesReducer from 'shared/reducers/properties';
@@ -192,7 +194,7 @@ const routes = [
           }, {
             id: 'staticRoutes',
             path: '/main/network/static_routes',
-            text: _('Routes Settings'),
+            text: _('Routes'),
             icon: 'map-signs',
             formUrl: '/goform/staticRoutes',
             component: sNetworkRoutes.Screen,
@@ -201,7 +203,7 @@ const routes = [
             path: '/main/network/port',
             icon: 'th',
             formUrl: '/goform/networkPort',
-            text: _('Port Settings'),
+            text: _('Port'),
             component: sNetworkPort.Screen,
           }, {
             id: 'radiusTemplate',
@@ -216,7 +218,7 @@ const routes = [
             path: '/main/network/aaa',
             fetchUrl: '/goform/vlanAaa',
             saveUrl: '/goform/vlanAaa',
-            text: _('AAA Settings'),
+            text: _('AAA'),
             component: sNetworkAaa.Screen,
           }, {
             id: 'networkPortal',
@@ -592,16 +594,16 @@ const routes = [
 // 配置模块页面 store
 const reducers = {
   // shared reducers
-  app: App.app,
+  app: appReducer,
   screens: screensReducer,
   settings: settingsReducer,
   properties: propertiesReducer,
+  login: sLogin.login,
 
   // product comstom reducers
-  login: sLogin.login,
-  mainAxc: sMainAxc.reducer,
+  product: sMainAxc.reducer,
 
-  // ap组管理
+  // screen custom reducers
   users: sUsers.reducer,
   safeStatus: sSafeStatus.reducer,
   system: sSystemStatus.reducer,
@@ -621,6 +623,9 @@ const app = {
   routes,
   stores,
 };
+
+// 初始化app Config
+stores.dispatch(appActions.initAppConfig(guiConfig));
 
 
 export default app;

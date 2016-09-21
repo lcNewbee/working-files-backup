@@ -49,16 +49,28 @@ function isAscii(str) {
   return false;
 }
 
+/**
+ * To determine whether an integer
+ *
+ * @param {string} str
+ * @returns
+ */
 function isInteger(str) {
-  if (/^[0-9]{1,}$/.test(str)) {
+  if (/^(-?)[0-9]{1,}$/.test(str)) {
     return true;
   }
 
   return false;
 }
 
+/**
+ * To determine whether an Number
+ *
+ * @param {string} str
+ * @returns
+ */
 function isNumber(str) {
-  if (/^[0-9]+(.[0-9]{1,})?$/.test(str)) {
+  if (/^(-?)[0-9]+(.[0-9]{1,})?$/.test(str)) {
     return true;
   }
 
