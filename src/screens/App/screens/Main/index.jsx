@@ -28,10 +28,6 @@ export default class Main extends Component {
     }.bind(this);
   }
 
-  showUserPopOver() {
-    this.setState({ isShow: !this.state.isShow });
-  }
-
   onRefresh(e) {
     e.preventDefault();
     this.props.refreshAll();
@@ -41,6 +37,10 @@ export default class Main extends Component {
     e.preventDefault();
     this.props.changeLoginStatus('0');
     window.location.hash = '#';
+  }
+
+  showUserPopOver() {
+    this.setState({ isShow: !this.state.isShow });
   }
 
   render() {

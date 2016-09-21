@@ -1,25 +1,2 @@
-{
-    "state": {
-        "code": 2000,
-        "msg": "ok"
-    },
-    "data": {
-      "wirelessMode":"repeater",
-      "ssid":"test",
-      "peers":["14:ff:00:a0:c1:ff",
-              "14:ff:00:a0:c1:f0"],
-      "hideSsid": "0",
-      "autoRepeat": "0",
-      "apMac":"11:22:33:44:55:66",
-      "countryCode":"CN",
-      "radioMode":"A/N mixed",
-      "channelWidth":"HT40",
-      "frequency":"auto",
-      "txPower":"14",
-      "maxTxRate":"15",
-      "security":{
-        "mode":"none"
-      }
-    }
 
-}
+{"data":{"wirelessMode":"ap","ssid":"Axilspot2","countryCode":"CN","radioMode":"802.11ac","channelWidth":"HT40","frequency":"autoCN","txPower":"14","maxTxRate":"","hideSsid":"","security":{"mode":"none","key":""}},"state":{"code":2000,"msg":"ok"}}

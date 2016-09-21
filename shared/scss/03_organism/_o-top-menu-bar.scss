@@ -71,4 +71,14 @@ $active-color: #333;
       }
     }
   }
+
+  .o-top-menu-bar__footer {
+    position: absolute;
+    bottom: 12px;
+    width: 100%;
+
+    .icon {
+      cursor: pointer;
+    }
+  }
 }

@@ -3,3 +3,4 @@ node_modules/*
 bulid/*
 gulpfile.js
 wepack.config*.js
+**/*.json

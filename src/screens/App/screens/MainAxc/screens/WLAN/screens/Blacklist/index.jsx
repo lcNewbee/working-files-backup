@@ -17,20 +17,18 @@ const blcklistTableOptions = fromJS([
     id: 'vendor',
     text: _('Manufacturer'),
   }, {
-    id: 'ssid',
-    text: _('终端类型'),
+    id: 'clientType',
+    text: _('Client Type'),
   }, {
-    id: 'ssid',
-    text: _('封锁原因'),
+    id: 'reason',
+    text: _('Reason'),
   },
 ]);
 
 const propTypes = {
-  app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
 
   route: PropTypes.object,
-  initList: PropTypes.func,
   closeListItemModal: PropTypes.func,
   save: PropTypes.func,
 };
@@ -64,7 +62,7 @@ export default class View extends React.Component {
     const actionBarChildren = (
       <FormGroup
         dispaly="inline"
-        label={_('动态黑名单老化时间')}
+        label={_('Dynamic Blacklists Release Time')}
       >
         <FormInput
           type="text"

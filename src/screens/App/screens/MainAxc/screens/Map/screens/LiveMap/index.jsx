@@ -5,45 +5,39 @@ import { fromJS, Map } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { bindActionCreators } from 'redux';
 import {
-  Button, ListInfo, Icon, FormContainer,
+  Button, ListInfo, Icon, FormContainer, Switchs, Table,
 } from 'shared/components';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 import * as propertiesActions from 'shared/actions/properties';
 
 import './_map.scss';
+import buildingIconImg from '../../shared/images/building_3d.png';
+
 
 const screenOptions = fromJS({
   settings: [],
   list: [
     {
-      id: 'markerType',
-      label: _('Marker Type'),
+      id: 'name',
+      label: _('Name'),
       defaultValue: 'building',
       formProps: {
-        type: 'switch',
-        options: [
-          {
-            value: 'building',
-            label: _('Building'),
-          }, {
-            value: 'ap',
-            label: _('Access Point'),
-          },
-        ],
-        dispaly: 'inline',
-      },
-    }, {
-      id: 'markerTitle',
-      label: _('Marker Title'),
-      formProps: {
-        required: true,
         type: 'text',
         dispaly: 'inline',
       },
     }, {
-      id: 'markerAddress',
-      label: _('Marker Address'),
+      id: 'floorNumber',
+      label: _('Floor Number'),
+      noForm: true,
+      formProps: {
+        required: true,
+        type: 'number',
+        dispaly: 'inline',
+      },
+    }, {
+      id: 'address',
+      label: _('Address'),
       formProps: {
         type: 'text',
         dispaly: 'inline',
@@ -52,13 +46,24 @@ const screenOptions = fromJS({
   ],
 });
 
+const listTableOptions = immutableUtils.getTableOptions(screenOptions.get('list'));
 const defaultEditData = immutableUtils.getDefaultData(screenOptions.get('list'));
 const formOptions = immutableUtils.getFormOptions(screenOptions.get('list'));
 
+function getCurListInfoState(listStore, name) {
+  const myStore = listStore || Map({});
+  const myListId = myStore.get('curListId');
+  let ret = myStore.getIn([myListId, 'data']);
+
+  if (name) {
+    ret = myStore.getIn([myListId, 'data', name]);
+  }
+  return ret || Map({});
+}
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
-  updateListSettings: PropTypes.func,
+  updateScreenSettings: PropTypes.func,
   addToPropertyPanel: PropTypes.func,
   updateEditListItem: PropTypes.func,
   validateAll: PropTypes.func,
@@ -87,17 +92,21 @@ export default class View extends React.Component {
     utils.loadScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyBGOC8axWomvnetRPnTdcuNW-a558l-JAU&libraries=places',
       (error) => {
         if (!error) {
-          this.renderGoogleMap();
+          utils.loadScript('//rawgit.com/googlemaps/v3-utility-library/master/infobox/src/infobox.js', () => {
+            this.renderGoogleMap();
+          });
         }
       },
     6000);
   }
 
   componentDidUpdate(prevProps) {
-    const thisList = this.getCurListInfoState(this.props.store, 'list');
-    const prevList = this.getCurListInfoState(prevProps.store, 'list');
-    const thisSettings = this.getCurListInfoState(this.props.store, 'settings');
-    const prevSettings = this.getCurListInfoState(prevProps.store, 'settings');
+    const myListId = this.props.store.get('curListId');
+    const thisList = getCurListInfoState(this.props.store, 'list');
+    const prevList = getCurListInfoState(prevProps.store, 'list');
+    const thisSettings = this.props.store.getIn([myListId, 'curSettings']);
+    const prevSettings = prevProps.store.getIn([myListId, 'curSettings']);
+
 
     if (typeof window.google !== 'undefined' && this.mapContent) {
       if (!this.map) {
@@ -105,6 +114,11 @@ export default class View extends React.Component {
       } else if (!prevSettings.equals(thisSettings) || !prevList.equals(thisList)) {
         this.renderGoogleMap();
       }
+    }
+
+    // 如果切换类型清空地图
+    if (thisSettings.get('type') !== '0') {
+      this.map = null;
     }
   }
 
@@ -117,16 +131,6 @@ export default class View extends React.Component {
       });
   }
 
-  getCurListInfoState(listStore, name) {
-    const myStore = listStore || Map({});
-    const myListId = myStore.get('curListId');
-    let ret = myStore.getIn([myListId, 'data']);
-
-    if (name) {
-      ret = myStore.getIn([myListId, 'data', name]);
-    }
-    return ret || Map({});
-  }
   setMapOnAll(map) {
     const markers = this.markers;
 
@@ -142,10 +146,10 @@ export default class View extends React.Component {
       strokeColor: '#0093ff',
     };
     const buildingIcon = {
-      path: google.maps.SymbolPath.CIRCLE,
-      scale: 12,
-      fillColor: '#333',
-      strokeColor: 'green',
+      url: buildingIconImg, // url
+      scaledSize: new google.maps.Size(50, 50), // scaled size
+      origin: new google.maps.Point(0, 0), // origin
+      anchor: new google.maps.Point(0, 0), // anchor
     };
     const marker = new google.maps.Marker({
       position: {
@@ -159,9 +163,9 @@ export default class View extends React.Component {
         text: item.get('markerTitle'),
       },
       draggable: item.get('isLocked') !== '1',
-      // animation: google.maps.Animation.DROP,
+      animation: google.maps.Animation.DROP,
     });
-    const contentString = '<div id="content">' +
+    const contentString = '<div class="m-map-marker">' +
                             '<h4>测试</h4>' +
                             '<dl><dt>当前流量</dt>' +
                             '<dd>15.23Mbps</dd></dl>' +
@@ -171,14 +175,38 @@ export default class View extends React.Component {
       content: contentString,
       maxWidth: 500,
     });
+    const actionsWindow = new google.maps.InfoWindow({
+      content: '<div id="m-map-marker-actions">ddd</div>',
+      maxWidth: 500,
+      disableAutoPan: true,
+      pixelOffset: new google.maps.Size(2, 32),
+      zIndex: 2,
+    });
+    const infobox = new InfoBox({
+      content: '<div>dsds</div>',
+      disableAutoPan: false,
+      maxWidth: 150,
+      pixelOffset: new google.maps.Size(-140, 24),
+      zIndex: null,
+      boxStyle: {
+        background: '#ccc no-repeat',
+        opacity: 0.75,
+        width: '280px',
+      },
+      closeBoxMargin: '12px 4px 2px 2px',
+      closeBoxURL: 'http://www.google.com/intl/en_us/mapfiles/close.gif',
+      infoBoxClearance: new google.maps.Size(1, 1),
+    });
 
     marker.addListener('click', () => {
-      infowindow.open(map, marker);
+      // infowindow.open(map, marker);
+      actionsWindow.open(map, marker);
+      infobox.open(map, marker);
 
       if (item.get('markerType') === 'ap') {
         this.props.addToPropertyPanel();
       } else {
-        this.props.editListItemByIndex(index);
+        // this.props.editListItemByIndex(index);
       }
     });
     marker.addListener('mouseup', () => {
@@ -194,8 +222,8 @@ export default class View extends React.Component {
 
   renderGoogleMap() {
     const store = this.props.store;
-    const list = this.getCurListInfoState(store, 'list');
-    const settings = this.getCurListInfoState(store, 'settings');
+    const list = getCurListInfoState(store, 'list');
+    const settings = getCurListInfoState(store, 'settings');
     const google = window.google;
     const geocoder = new google.maps.Geocoder();
     const markers = [];
@@ -217,7 +245,7 @@ export default class View extends React.Component {
     if (!this.map) {
       this.map = new google.maps.Map(this.mapContent, {
         center,
-        zoom: 8,
+        zoom: 13,
       });
      // console.log('init Map = ', this.map)
     }
@@ -300,27 +328,48 @@ export default class View extends React.Component {
     const { app, store } = this.props;
     const myListId = store.get('curListId');
     const settings = store.getIn([myListId, 'curSettings']);
-    const editData = this.getCurListInfoState(store, 'edit');
+    const list = store.getIn([myListId, 'data', 'list']);
+    const page = store.getIn([myListId, 'data', 'page']);
+    const editData = getCurListInfoState(store, 'edit');
+    const lockButton = settings.get('isLocked') === '1' ? (<Button
+      icon="lock"
+      key="0"
+      text={_('Unlock Map')}
+      onClick={() => {
+        this.props.updateScreenSettings({
+          isLocked: '0',
+        });
+      }}
+    />) : (<Button
+      icon="unlock-alt"
+      key="0"
+      text={_('Lock Map')}
+      onClick={() => {
+        this.props.updateScreenSettings({
+          isLocked: '1',
+        });
+      }}
+    />);
     const actionBarChildren = [
-      settings.get('isLocked') === '1' ? (<Button
-        icon="lock"
-        key="0"
-        text={_('Unlock Map')}
-        onClick={() => {
-          this.props.updateListSettings({
-            isLocked: '0',
+      <Switchs
+        options={[
+          {
+            value: '0',
+            label: _('Live Map'),
+          }, {
+            value: '1',
+            label: _('Local Map'),
+          },
+        ]}
+        key="list"
+        value={settings.get('type')}
+        onChange={(data) => {
+          this.props.updateScreenSettings({
+            type: data.value,
           });
         }}
-      />) : (<Button
-        icon="unlock-alt"
-        key="0"
-        text={_('Lock Map')}
-        onClick={() => {
-          this.props.updateListSettings({
-            isLocked: '1',
-          });
-        }}
-      />),
+      />,
+      settings.get('type') === '0' ? lockButton : null,
       <span
         className="a-help"
         data-help={_('Help')}
@@ -339,48 +388,64 @@ export default class View extends React.Component {
         {...this.props}
         defaultEditData={defaultEditData}
         actionBarChildren={actionBarChildren}
+        defaultSettingsData={{
+          type: '0',
+        }}
         actionable
       >
-        <div className={mapClassName}>
-          <div className="o-map__header">
-            <Icon
-              name="arrow-circle-up"
-              className="o-map__header-close"
-              onClick={() => this.props.closeListItemModal()}
-            />
-            {
-              !editData.isEmpty() ? (
-                <FormContainer
-                  data={editData}
-                  options={formOptions}
-                  onSave={this.onSave}
-                  onChangeData={this.props.updateEditListItem}
-                  onValidError={this.props.reportValidError}
-                  invalidMsg={app.get('invalid')}
-                  validateAt={app.get('validateAt')}
-                  isSaving={app.get('saving')}
-                  className="o-form--block"
-                  hasSaveButton
+        {
+          settings.get('type') === '0' ? (
+            <div className={mapClassName}>
+              <div className="o-map__header">
+                <Icon
+                  name="arrow-circle-up"
+                  className="o-map__header-close"
+                  onClick={() => this.props.closeListItemModal()}
                 />
-              ) : null
-            }
-          </div>
-          <div className="o-map__content">
-            <div
-              className="o-map__body"
-              id="liveMapContainer"
-              ref={(elem) => {
-                if (elem) {
-                  this.mapContent = elem;
+                {
+                  !editData.isEmpty() ? (
+                    <FormContainer
+                      data={editData}
+                      options={formOptions}
+                      onSave={this.onSave}
+                      onChangeData={this.props.updateEditListItem}
+                      onValidError={this.props.reportValidError}
+                      invalidMsg={app.get('invalid')}
+                      validateAt={app.get('validateAt')}
+                      isSaving={app.get('saving')}
+                      className="o-form--flow container"
+                      hasSaveButton
+                    />
+                  ) : null
                 }
-              }}
-            >
-              <div className="o-map__body-loading">
-                <Icon name="spinner" size="2x" spin />
+              </div>
+              <div className="o-map__content">
+                <div
+                  className="o-map__body"
+                  id="liveMapContainer"
+                  ref={(elem) => {
+                    if (elem) {
+                      this.mapContent = elem;
+                    }
+                  }}
+                >
+                  <div className="o-map__body-loading">
+                    <Icon name="spinner" size="2x" spin />
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
+          ) : (
+            <Table
+              className="table"
+              options={listTableOptions}
+              list={list}
+              page={page}
+              onPageChange={this.onPageChange}
+              loading={app.get('fetching')}
+            />
+          )
+        }
       </ListInfo>
     );
   }

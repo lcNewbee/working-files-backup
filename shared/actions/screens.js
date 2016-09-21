@@ -2,6 +2,7 @@ import * as appActions from './app';
 
 const refreshTimeout = null;
 
+// SCREEN LIST
 export function reqeustFetchList() {
   return {
     type: 'REQEUST_FETCH_LIST',
@@ -32,26 +33,6 @@ export function changeListActionQuery(payload) {
     payload,
   };
 }
-
-export function editListItemByIndex(index) {
-  return {
-    type: 'EDIT_LIST_ITEM_BY_INDEX',
-    payload: {
-      index,
-    },
-  };
-}
-
-export function editListItemByKey(keyName, val) {
-  return {
-    type: 'EDIT_LIST_ITEM_BY_KEY',
-    payload: {
-      keyName,
-      val,
-    },
-  };
-}
-
 export function updateEditListItem(data, sync) {
   return {
     type: 'UPDATE_EDIT_LIST_ITEM',
@@ -66,11 +47,23 @@ export function updateListItemByIndex(index, data) {
     index,
   };
 }
-
-export function updateListSettings(payload) {
+export function editListItemByIndex(index, action) {
   return {
-    type: 'UPDATE_LIST_SETTINGS',
-    payload,
+    type: 'EDIT_LIST_ITEM_BY_INDEX',
+    payload: {
+      index,
+      action,
+    },
+  };
+}
+
+export function editListItemByKey(keyName, val) {
+  return {
+    type: 'EDIT_LIST_ITEM_BY_KEY',
+    payload: {
+      keyName,
+      val,
+    },
   };
 }
 
@@ -140,28 +133,6 @@ export function fetchList(url) {
   };
 }
 
-export function saveListSettings(url) {
-  return (dispatch, getState) => {
-    const globalState = getState();
-    const name = globalState.screens.get('curListId');
-    const curData = globalState.screens.getIn([name, 'curSettings']);
-    const oriData = globalState.screens.getIn([name, 'data', 'settings']);
-    const formUrl = globalState.screens.getIn([name, 'formUrl']);
-    const fetchUrl = globalState.screens.getIn([name, 'fetchUrl']) || formUrl;
-
-    if (!curData.equals(oriData)) {
-      console.log('hasChange');
-    }
-
-    return dispatch(appActions.save(url || formUrl, curData.toJS()))
-      .then((json) => {
-        if (json.state && json.state.code === 2000) {
-          dispatch(fetchList(fetchUrl));
-        }
-      });
-  };
-}
-
 export function onListAction(url) {
   return (dispatch, getState) => {
     const globalState = getState();
@@ -189,6 +160,35 @@ export function onListAction(url) {
           ret = 'ok';
         }
         return ret;
+      });
+  };
+}
+
+// SCREEN SETTINGS
+export function updateScreenSettings(payload) {
+  return {
+    type: 'UPDATE_LIST_SETTINGS',
+    payload,
+  };
+}
+export function saveScreenSettings(url) {
+  return (dispatch, getState) => {
+    const globalState = getState();
+    const name = globalState.screens.get('curListId');
+    const curData = globalState.screens.getIn([name, 'curSettings']);
+    const oriData = globalState.screens.getIn([name, 'data', 'settings']);
+    const formUrl = globalState.screens.getIn([name, 'formUrl']);
+    const fetchUrl = globalState.screens.getIn([name, 'fetchUrl']) || formUrl;
+
+    if (!curData.equals(oriData)) {
+      console.log('hasChange');
+    }
+
+    return dispatch(appActions.save(url || formUrl, curData.toJS()))
+      .then((json) => {
+        if (json.state && json.state.code === 2000) {
+          dispatch(fetchList(fetchUrl));
+        }
       });
   };
 }

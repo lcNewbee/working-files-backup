@@ -4,7 +4,6 @@
   "description": "comlanos 前端开发平台",
   "main": "src/index.jsx",
   "repository": "none",
-  "scripts": {},
   "keywords": [
     "webpack",
     "fetch",
@@ -73,6 +72,7 @@
     "redux-mock-store": "^1.1.4",
     "run-sequence": "^1.2.1",
     "sass-loader": "^4.0.0",
+    "script-loader": "^0.7.0",
     "sinon": "^1.17.5",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",

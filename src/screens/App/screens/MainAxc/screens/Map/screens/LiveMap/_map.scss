@@ -21,6 +21,7 @@
       top: 5px;
       right: 12px;
       cursor: pointer;
+      font-size: 16px;
     }
   }
   .o-map__content {
@@ -45,11 +46,11 @@
 
   &.o-map--open {
     .o-map__content {
-      top: 114px;
+      top: 47px;
     }
     .o-map__header {
       max-height: 2000px;
-      padding-top: 1em;
+      padding-top: 8px;
     }
   }
 }

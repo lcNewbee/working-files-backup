@@ -7,12 +7,13 @@ import { bindActionCreators } from 'redux';
 import {
   Button, ListInfo, Icon, FormGroup, Modal,
 } from 'shared/components';
+import FileUploads from 'shared/components/FileUpload';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 import * as propertiesActions from 'shared/actions/properties';
 
-import bkImg from './images/map_bk.jpg';
-import './_rf.scss';
+import bkImg from '../../shared/images/map_bg.jpg';
+import '../../shared/_map.scss';
 
 const screenOptions = fromJS({
   settings: [],
@@ -57,13 +58,15 @@ const defaultEditData = immutableUtils.getDefaultData(screenOptions.get('list'))
 
 const propTypes = {
   store: PropTypes.instanceOf(Map),
-  updateListSettings: PropTypes.func,
+  updateScreenSettings: PropTypes.func,
   addToPropertyPanel: PropTypes.func,
   updateEditListItem: PropTypes.func,
   validateAll: PropTypes.func,
   editListItemByIndex: PropTypes.func,
   onListAction: PropTypes.func,
   updateListItemByIndex: PropTypes.func,
+  closeListItemModal: PropTypes.func,
+  addListItem: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -88,8 +91,9 @@ export default class View extends React.Component {
         'onMapMouseMove',
         'renderMapList',
         'renderCurMap',
+        'updateState',
       ]
-   );
+    );
   }
 
   onSave() {
@@ -129,7 +133,7 @@ export default class View extends React.Component {
     this.mapMouseDown = false;
   }
   onMapMouseDown(e) {
-    if (e.target.className.indexOf('o-map-rf') !== -1) {
+    if (e.target.className.indexOf('o-map-container') !== -1) {
       this.mapMouseDown = true;
       this.mapClientX = e.clientX;
       this.mapClientY = e.clientY;
@@ -137,7 +141,7 @@ export default class View extends React.Component {
   }
   onMapMouseMove(e) {
     if (this.mapMouseDown) {
-      this.setState({
+      this.updateState({
         mapOffsetX: (this.state.mapOffsetX + e.clientX) - this.mapClientX,
         mapOffsetY: (this.state.mapOffsetY + e.clientY) - this.mapClientY,
       });
@@ -145,11 +149,13 @@ export default class View extends React.Component {
       this.mapClientY = e.clientY;
     }
   }
+  updateState(data) {
+    this.setState(utils.extend({}, data));
+  }
   startDrag(ev, i) {
     ev.dataTransfer.setData('Text', ev.target.id);
-    this.props.editListItemByIndex(i);
+    this.props.editListItemByIndex(i, 'move');
   }
-
   renderDeployedDevice(device, i, curMapName) {
     const xpos = device.getIn(['map', 'xpos']);
     const ypos = device.getIn(['map', 'ypos']);
@@ -180,7 +186,7 @@ export default class View extends React.Component {
         }),
       },
     ];
-    const radius = 28;
+    const radius = 38;
     const avd = 220 / btnsList.length;
     const ahd = (avd * Math.PI) / 180;
     const isCur = !curMapName || (curMapName === device.getIn(['map', 'mapName']));
@@ -239,7 +245,7 @@ export default class View extends React.Component {
                   key={info.id}
                   style={{
                     left: isOpen ? (Math.sin((ahd * index)) * radius) + 7 : 13,
-                    top: isOpen ? (Math.cos((ahd * index)) * radius) + 6 : 13,
+                    top: isOpen ? (Math.cos((ahd * index)) * radius) : 13,
                   }}
                   onClick={info.onClick}
                 >
@@ -312,7 +318,7 @@ export default class View extends React.Component {
                       src={bkImg}
                       draggable="false"
                       alt="d"
-                      onClick={() => this.props.updateListSettings({
+                      onClick={() => this.props.updateScreenSettings({
                         curMapName: mapName,
                         curList: maps,
                       })}
@@ -336,6 +342,7 @@ export default class View extends React.Component {
 
         <div
           className="cols col-3 o-map-list__add"
+          onClick={this.props.addListItem}
         >
           <Icon
             name="plus"
@@ -348,7 +355,7 @@ export default class View extends React.Component {
   renderCurMap(list, curMapName, myZoom) {
     return (
       <div
-        className="o-map-rf"
+        className="o-map-container"
         onDrop={e => this.onDrop(e, curMapName)}
         onDragOver={e => e.preventDefault()}
         ref={(mapContent) => {
@@ -388,6 +395,8 @@ export default class View extends React.Component {
     const list = store.getIn([myListId, 'data', 'list']);
     const isLocked = store.getIn([myListId, 'curSettings', 'isLocked']);
     const myZoom = store.getIn([myListId, 'curSettings', 'zoom']);
+    const editData = store.getIn([myListId, 'data', 'edit']);
+    const actionQuery = store.getIn([myListId, 'actionQuery']);
     let curMapName = store.getIn([myListId, 'curSettings', 'curMapName']);
     const actionBarChildren = [
       curMapName ? (
@@ -396,7 +405,7 @@ export default class View extends React.Component {
           theme="primary"
           text={_('Back')}
           onClick={() => {
-            this.props.updateListSettings({
+            this.props.updateScreenSettings({
               curMapName: '',
             });
           }}
@@ -407,7 +416,7 @@ export default class View extends React.Component {
         key="0"
         text={_('Unlock All Devices')}
         onClick={() => {
-          this.props.updateListSettings({
+          this.props.updateScreenSettings({
             isLocked: '0',
           });
         }}
@@ -416,7 +425,7 @@ export default class View extends React.Component {
         key="0"
         text={_('Lock All Devices')}
         onClick={() => {
-          this.props.updateListSettings({
+          this.props.updateScreenSettings({
             isLocked: '1',
           });
         }}
@@ -424,7 +433,7 @@ export default class View extends React.Component {
       <span
         className="a-help"
         data-help={_('Help')}
-        data-help-text="这是帮助文本"
+        data-help-text={_('Help text')}
       />,
     ];
     const mapList = list
@@ -433,6 +442,8 @@ export default class View extends React.Component {
         }))
         .groupBy(item => item.getIn(['map', 'mapName']))
         .toList();
+
+    const isModalShow = actionQuery.get('action') === 'add' || actionQuery.get('action') === 'edit';
 
     if (mapList.size === 1) {
       curMapName = mapList.getIn([0, 'map', 'mapName']);
@@ -456,7 +467,7 @@ export default class View extends React.Component {
                   name="minus"
                   className="o-map-zoom-bar__minus"
                   onClick={() => {
-                    this.props.updateListSettings({
+                    this.props.updateScreenSettings({
                       zoom: (myZoom - 10) < 0 ? 0 : (myZoom - 10),
                     });
                   }}
@@ -466,7 +477,7 @@ export default class View extends React.Component {
                   name="plus"
                   className="o-map-zoom-bar__plus"
                   onClick={() => {
-                    this.props.updateListSettings({
+                    this.props.updateScreenSettings({
                       zoom: (myZoom + 10) > 200 ? 200 : (myZoom + 10),
                     });
                   }}
@@ -486,11 +497,24 @@ export default class View extends React.Component {
 
         <Modal
           title={_('Add')}
-          isShow
+          isShow={isModalShow}
+          onClose={() => this.props.closeListItemModal()}
         >
           <FormGroup
             label={_('Map Name')}
           />
+          <FormGroup label=" ">
+            <FileUploads
+              url="/goform/uploadPortalImage"
+              name="image2"
+              acceptExt="png,gif,jpg,bmp"
+              createModal={this.props.createModal}
+              buttonText={_('Upload Image')}
+            />
+          </FormGroup>
+          <p>
+            <img src="" alt="" />
+          </p>
         </Modal>
       </ListInfo>
     );

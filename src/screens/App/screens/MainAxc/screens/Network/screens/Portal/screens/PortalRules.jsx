@@ -199,6 +199,7 @@ export default class View extends React.Component {
         actionable
         selectable
         noTitle
+
       >
         <Modal
           isShow={!editData.isEmpty()}

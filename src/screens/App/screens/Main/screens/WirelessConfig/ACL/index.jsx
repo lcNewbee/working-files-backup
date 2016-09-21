@@ -30,6 +30,10 @@ const propTypes = {
   changeMacInput: PropTypes.func,
   macInput: PropTypes.instanceOf(Map),
   changePreLenInMacInput: PropTypes.func,
+
+  leaveSettingsScreen: PropTypes.func,
+  leaveScreen: PropTypes.func,
+  resetVaildateMsg: PropTypes.func,
 };
 const macValidator = validator({
   rules: 'mac',
@@ -72,6 +76,12 @@ export default class ACL extends React.Component {
         });
     this.props.changeMacInput('');
   }
+
+  componentWillUnmount() {
+    this.props.leaveSettingsScreen();
+    this.props.resetVaildateMsg();
+  }
+
 
   onMacInputChange(value) {
     // 还可以再智能一些，处理在用户复制字符串到输入框时，只截取合法部分，舍去多余部分（正则）

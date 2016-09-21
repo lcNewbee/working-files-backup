@@ -31,7 +31,7 @@ const propTypes = {
 
   route: PropTypes.object,
   initList: PropTypes.func,
-  updateListSettings: PropTypes.func,
+  updateScreenSettings: PropTypes.func,
   reportValidError: PropTypes.func,
   save: PropTypes.func,
 };
@@ -88,7 +88,7 @@ export default class View extends React.Component {
         invalidMsg={app.get('invalid')}
         validateAt={app.get('validateAt')}
         onSave={this.onSave}
-        onChangeData={this.props.updateListSettings}
+        onChangeData={this.props.updateScreenSettings}
         onValidError={this.props.reportValidError}
         hasSaveButton
       />

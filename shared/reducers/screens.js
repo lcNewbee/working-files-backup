@@ -128,14 +128,18 @@ export default function (state = defaultState, action) {
       return editListItemByKey(state, curScreenName, action);
 
     case 'EDIT_LIST_ITEM_BY_INDEX':
+      console.log(state.getIn([curScreenName, 'data', 'list', action.payload.index]).toJS())
       return state.setIn(
           [curScreenName, 'data', 'edit'],
-          defaultEditData.merge(state.getIn([curScreenName, 'data', 'list', action.index])).merge({
+          defaultEditData.merge(state.getIn([curScreenName, 'data', 'list', action.payload.index])).merge({
             myTitle: `${_('Edit')}: ${action.payload.index}`,
             index: action.payload.index,
           })
         )
-        .setIn([curScreenName, 'actionQuery', 'action'], 'edit');
+        .setIn(
+          [curScreenName, 'actionQuery', 'action'],
+          action.payload.action || 'edit'
+        );
 
     case 'ADD_LIST_ITEM':
       return state.setIn(
@@ -151,7 +155,8 @@ export default function (state = defaultState, action) {
           selectedListItem(state.getIn([curScreenName, 'data', 'list']), action.data));
 
     case 'CLOSE_LIST_ITEM_MODAL':
-      return state.setIn([curScreenName, 'data', 'edit'], fromJS({}));
+      return state.setIn([curScreenName, 'data', 'edit'], fromJS({}))
+        .setIn([curScreenName, 'actionQuery', 'action'], '');
 
     case 'LEAVE_LIST_SCREEN':
       return state.mergeIn([curScreenName, 'query'], {

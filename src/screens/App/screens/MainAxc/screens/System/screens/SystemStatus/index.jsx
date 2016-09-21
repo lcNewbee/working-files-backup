@@ -25,15 +25,15 @@ export default class View extends PureComponent {
       legend: {
         orient: 'vertical',
         x: 'left',
-        data: ['已使用', '未使用'],
+        data: [_('Used'), _('Unused')],
       },
       title: {
-        text: _('CPU 使用情况'),
+        text: _('CPU Activity Monitor'),
         x: 'center',
       },
       series: [
         {
-          name: 'CPU使用率',
+          name: _('CPU Activity Monitor'),
           type: 'pie',
           radius: ['40%', '70%'],
           avoidLabelOverlap: false,
@@ -61,8 +61,8 @@ export default class View extends PureComponent {
     };
 
     ret.series[0].data = [
-      { value: 335, name: '已使用' },
-      { value: 310, name: '未使用' },
+      { value: 335, name: _('Used') },
+      { value: 310, name: _('Unused') },
     ];
 
     return ret;
@@ -75,17 +75,17 @@ export default class View extends PureComponent {
         formatter: '{a} <br/>{b}: {c} ({d}%)',
       },
       title: {
-        text: _('存储状态'),
+        text: _('Memory Activity Monitor'),
         x: 'center',
       },
       legend: {
         orient: 'vertical',
         x: 'left',
-        data: ['已使用', '未使用'],
+        data: [_('Used'), _('Unused')],
       },
       series: [
         {
-          name: '存储状态',
+          name: _('Memory Activity Monitor'),
           type: 'pie',
           radius: ['40%', '70%'],
           avoidLabelOverlap: false,
@@ -113,8 +113,8 @@ export default class View extends PureComponent {
     };
 
     ret.series[0].data = [
-      { value: 335, name: '已使用' },
-      { value: 310, name: '未使用' },
+      { value: 335, name: _('Used') },
+      { value: 310, name: _('Unused') },
     ];
 
     return ret;
@@ -130,7 +130,7 @@ export default class View extends PureComponent {
         <div className="stats-group clearfix" >
           <div className="cols col-6" >
             <div className="stats-group-cell">
-              <h3>{ _(' 存储空间') }</h3>
+              <h3>{ _('Memory') }</h3>
             </div>
             <div className="stats-group-cell">
               <EchartReact
@@ -144,7 +144,7 @@ export default class View extends PureComponent {
           </div>
           <div className="cols col-6" >
             <div className="stats-group-cell">
-              <h3>{ _('设备资源') }</h3>
+              <h3>{ _('CPU') }</h3>
             </div>
             <div className="stats-group-cell">
               <EchartReact

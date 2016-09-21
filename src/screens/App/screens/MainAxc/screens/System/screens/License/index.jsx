@@ -74,20 +74,16 @@ export default class View extends React.Component {
             />
             <div className="m-description-list">
               <dl className="m-description-list-row">
-                <dt style={dtStyle}>{_('序列号状态')}</dt>
-                <dd>已授权</dd>
+                <dt style={dtStyle}>{_('License Status')}</dt>
+                <dd>{_('Licensed')}</dd>
               </dl>
               <dl className="m-description-list-row">
-                <dt style={dtStyle}>{_('AP数')}</dt>
+                <dt style={dtStyle}>{_('AP Number')}</dt>
                 <dd>1000</dd>
               </dl>
               <dl className="m-description-list-row">
-                <dt style={dtStyle}>{_('DPI')}</dt>
-                <dd>sss</dd>
-              </dl>
-              <dl className="m-description-list-row">
-                <dt style={dtStyle}>{_('报表')}</dt>
-                <dd>sss</dd>
+                <dt style={dtStyle}>{_('Expiration Time')}</dt>
+                <dd>2018-02-23</dd>
               </dl>
             </div>
           </div>
@@ -98,11 +94,11 @@ export default class View extends React.Component {
             />
             <div className="m-description-list">
               <dl className="m-description-list-row">
-                <dt style={dtStyle}>{_('序列号状态')}</dt>
-                <dd>已授权</dd>
+                <dt style={dtStyle}>{_('License Status')}</dt>
+                <dd>{_('Unlicense')}</dd>
               </dl>
               <dl className="m-description-list-row">
-                <dt style={dtStyle}>{_('过期时间')}</dt>
+                <dt style={dtStyle}>{_('Expiration Time')}</dt>
                 <dd>2018-02-23</dd>
               </dl>
             </div>
@@ -128,7 +124,7 @@ View.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
-    groupId: state.mainAxc.getIn(['group', 'selected', 'id']),
+    groupId: state.product.getIn(['group', 'selected', 'id']),
     store: state.settings,
   };
 }

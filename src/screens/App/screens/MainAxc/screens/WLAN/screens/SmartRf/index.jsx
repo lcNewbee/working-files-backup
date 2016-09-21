@@ -11,7 +11,7 @@ import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/settings';
 
 const channelsList = List(channels);
-const countryOptions = channelsList.map((item) => ({
+const countryOptions = channelsList.map(item => ({
   value: item.country,
   label: b28n.getLang() === 'cn' ? _(item.cn) : _(item.en),
 })).toJS();
@@ -19,11 +19,8 @@ const countryOptions = channelsList.map((item) => ({
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
-  groupId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 
   route: PropTypes.object,
-  initSettings: PropTypes.func,
-  fetchSettings: PropTypes.func,
   saveSettings: PropTypes.func,
   updateItemSettings: PropTypes.func,
   leaveSettingsScreen: PropTypes.func,
@@ -118,20 +115,20 @@ export default class View extends React.Component {
           <legend className="o-form__legend">{_('Base Settings')}</legend>
           <FormGroup
             type="checkbox"
-            label={_('5G优先')}
+            label={_('5G Frist')}
             checked={curData['5gFrist'] === '1'}
-            onChange={(item) => updateItemSettings({
+            onChange={item => updateItemSettings({
               '5gFrist': item.value,
             })}
           />
           <FormGroup
-            label={_('终端防粘')}
+            label={_('Terminal Release')}
             value={curData.terminalReleaseVal}
           >
             <FormInput
               type="checkbox"
               checked={curData.terminalRelease === '1'}
-              onChange={(item) => updateItemSettings({
+              onChange={item => updateItemSettings({
                 terminalRelease: item.value,
               })}
             />
@@ -141,16 +138,16 @@ export default class View extends React.Component {
               maxLength="3"
               size="sm"
               disabled={curData.terminalRelease !== '1'}
-              onChange={(item) => updateItemSettings({
+              onChange={item => updateItemSettings({
                 terminalReleaseVal: item.value,
               })}
             />
           </FormGroup>
           <FormGroup
             type="checkbox"
-            label={_('11n优先')}
+            label={_('11n Frist')}
             checked={curData['11nFrist'] === '1'}
-            onChange={(item) => updateItemSettings({
+            onChange={item => updateItemSettings({
               '11nFrist': item.value,
             })}
           />
@@ -159,9 +156,9 @@ export default class View extends React.Component {
           <legend className="o-form__legend">{_('Wireless Power')}</legend>
           <FormGroup
             type="checkbox"
-            label={_('自动功率')}
+            label={_('Power Auto')}
             checked={curData.autoBandwidth === '1'}
-            onChange={(item) => updateItemSettings({
+            onChange={item => updateItemSettings({
               autoBandwidth: item.value,
             })}
           />
@@ -174,7 +171,7 @@ export default class View extends React.Component {
                 label={_('Wireless Power')}
                 help={`${curData.wirelessPower}%`}
                 value={parseInt(curData.wirelessPower, 10)}
-                onChange={(item) => updateItemSettings({
+                onChange={item => updateItemSettings({
                   wirelessPower: item.value,
                 })}
               />
@@ -188,16 +185,16 @@ export default class View extends React.Component {
             label={_('Country')}
             options={countryOptions}
             value={curData.country}
-            onChange={(item) => updateItemSettings({
+            onChange={item => updateItemSettings({
               country: item.value,
             })}
           />
           <FormGroup
             type="checkbox"
-            label={_('自动信道')}
+            label={_('Channel Auto')}
             value="1"
             checked={curData.autoChannel === '1'}
-            onChange={(item) => updateItemSettings({
+            onChange={item => updateItemSettings({
               autoChannel: item.value,
             })}
           />
@@ -208,7 +205,7 @@ export default class View extends React.Component {
                 label={_('Channel')}
                 options={channelsOptions}
                 value={curData.channel}
-                onChange={(item) => updateItemSettings({
+                onChange={item => updateItemSettings({
                   channel: item.value,
                 })}
               />
@@ -236,7 +233,7 @@ View.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
-    groupId: state.mainAxc.getIn(['group', 'selected', 'id']),
+    groupId: state.product.getIn(['group', 'selected', 'id']),
     store: state.settings,
   };
 }

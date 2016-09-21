@@ -77,7 +77,7 @@ export default class View extends React.Component {
           id="enabled"
           label={_('Enable')}
           checked={curData.terminalRelease === '1'}
-          onChange={(item) => updateItemSettings({
+          onChange={item => updateItemSettings({
             terminalRelease: item.value,
 
           })}
@@ -91,9 +91,9 @@ export default class View extends React.Component {
             value="1"
             type="checkbox"
             theme="square"
-            text={_('无线防洪攻击检测')}
+            text={_('Wireless Flood Attack')}
             checked={curData.terminalRelease === '1'}
-            onChange={(item) => updateItemSettings({
+            onChange={item => updateItemSettings({
               terminalRelease: item.value,
             })}
           />
@@ -101,17 +101,17 @@ export default class View extends React.Component {
             value="1"
             type="checkbox"
             theme="square"
-            text={_('无线欺骗攻击检测')}
+            text={_('Wireless Anti-spoofing Detection')}
           />
           <FormGroup>
-            <p>{_('检测到攻击后')}</p>
+            <p>{_('After an attack is detected')}</p>
             <ul style={{ marginLeft: '24px' }}>
               <li className="row">
                 <FormInput
                   value="0"
                   type="radio"
                   name="alarmNoteType"
-                  text={_('告警通知')}
+                  text={_('Alarm notification')}
                 />
               </li>
               <li className="row">
@@ -119,7 +119,7 @@ export default class View extends React.Component {
                   value="1"
                   type="radio"
                   name="alarmNoteType"
-                  text={_('告警通知并加入到黑名单')}
+                  text={_('Alarm notification and add to blacklist')}
                 />
               </li>
             </ul>
@@ -146,7 +146,7 @@ View.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
-    groupId: state.mainAxc.getIn(['group', 'selected', 'id']),
+    groupId: state.product.getIn(['group', 'selected', 'id']),
     store: state.settings,
   };
 }

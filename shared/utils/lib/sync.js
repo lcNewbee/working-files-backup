@@ -155,7 +155,6 @@ var sync = {
 
     script.src = url;
     document.body.appendChild(script);
-
   },
 }
 

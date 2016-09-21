@@ -21,7 +21,7 @@ const weekDayStyle = {
 const blcklistTableOptions = fromJS([
   {
     id: 'timerRange',
-    text: _('时段'),
+    text: _('Timer Range'),
     width: '120',
     transform(val, item) {
       return `${item.get('startTime')} - ${item.get('endTime')}`;
@@ -32,7 +32,7 @@ const blcklistTableOptions = fromJS([
     text: _('Operate Object'),
   }, {
     id: 'repeat',
-    text: _('重复'),
+    text: _('Repeat'),
   }, {
     id: 'remark',
     text: _('Remark'),
@@ -41,16 +41,16 @@ const blcklistTableOptions = fromJS([
 const repeatOptions = [
   {
     value: '0',
-    label: _('只执行一次'),
+    label: _('Exactly-once'),
   }, {
     value: '1',
-    label: _('每天'),
+    label: _('Everyday'),
   }, {
     value: '2',
-    label: _('周一至周五'),
+    label: _('Workday'),
   }, {
     value: '5',
-    label: _('自定义周期'),
+    label: _('Custom'),
   },
 ];
 
@@ -172,11 +172,10 @@ export default class View extends React.Component {
     const tableOptions = blcklistTableOptions.push(fromJS({
       id: 'enabled',
       width: '80',
-      text: _('启用状态'),
+      text: _('Status'),
       transform(val) {
         return (
           <Checkbox
-            checked={val === '1'}
             style={{
               marginTop: '3px',
             }}
@@ -205,7 +204,7 @@ export default class View extends React.Component {
 
           <FormGroup
             type="select"
-            label={_('操作SSID')}
+            label={_('SSID')}
             options={[
               {
                 value: 1,
@@ -229,7 +228,7 @@ export default class View extends React.Component {
             getCurrData('repeat') === '0' ? (
               <FormGroup
                 type="date"
-                label={_('日期')}
+                label={_('Date')}
                 dateFormat="YYYY-MM-DD"
                 selected={moment(getCurrData('customDate'))}
                 onChange={(data) => this.props.updateEditListItem({
@@ -242,7 +241,7 @@ export default class View extends React.Component {
           {
             getCurrData('repeat') === '5' ? (
               <FormGroup
-                label={_('自定义周期')}
+                label={_('Custom Cycle')}
               >
                 <FormInput
                   type="checkbox"

@@ -2,6 +2,8 @@ import b28n from 'shared/b28n';
 import { combineReducers } from 'redux';
 import NotFound from 'shared/components/NotFound';
 import remoteActionMiddleware from 'shared/utils/lib/remote_action_middleware';
+import * as appActions from 'shared/actions/app';
+import appReducer from 'shared/reducers/app';
 import screensReducer from 'shared/reducers/screens';
 import settingsReducer from 'shared/reducers/settings';
 import propertiesReducer from 'shared/reducers/properties';
@@ -108,6 +110,9 @@ const sInformationPush =
     require('../../screens/App/screens/MainAxc/screens/Report/screens/BusinessReport/screens/InformationPush');
 const sLiveMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/LiveMap');
 const sRfMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/Rf');
+const sHeatMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/HeatMap');
+const sClientsTrace = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace');
+
 /**
  * 系统管理
  */
@@ -143,7 +148,7 @@ const routes = [
       {
         path: '/main/network',
         component: sMainAxc.Screen,
-        icon: 'plug',
+        icon: 'sphere',
         text: _('NETWORK'),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/network/interface') },
         childRoutes: [
@@ -189,7 +194,7 @@ const routes = [
           }, {
             id: 'staticRoutes',
             path: '/main/network/static_routes',
-            text: _('Routes Settings'),
+            text: _('Routes'),
             icon: 'map-signs',
             formUrl: 'goform/staticRoutes',
             component: sNetworkRoutes.Screen,
@@ -197,8 +202,13 @@ const routes = [
             id: 'networkPort',
             path: '/main/network/port',
             icon: 'th',
+<<<<<<< HEAD
             formUrl: 'goform/networkPort',
             text: _('Port Settings'),
+=======
+            formUrl: '/goform/networkPort',
+            text: _('Port'),
+>>>>>>> origin/develop
             component: sNetworkPort.Screen,
           }, {
             id: 'radiusTemplate',
@@ -211,9 +221,15 @@ const routes = [
             id: 'networkAaa',
             icon: 'lock',
             path: '/main/network/aaa',
+<<<<<<< HEAD
             fetchUrl: 'goform/vlanAaa',
             saveUrl: 'goform/vlanAaa',
             text: _('AAA Settings'),
+=======
+            fetchUrl: '/goform/vlanAaa',
+            saveUrl: '/goform/vlanAaa',
+            text: _('AAA'),
+>>>>>>> origin/develop
             component: sNetworkAaa.Screen,
           }, {
             id: 'networkPortal',
@@ -309,19 +325,36 @@ const routes = [
               }, {
                 id: 'rfPlan',
                 path: '/main/group/map/rf_plan',
+<<<<<<< HEAD
                 formUrl: 'goform/getDeviceList',
+=======
+                formUrl: '/goform/rfPlan',
+                fetchUrl: '/goform/getDeviceList',
+>>>>>>> origin/develop
                 text: _('RF Plan'),
                 component: sRfMap.Screen,
               }, {
                 id: 'heatMap',
                 path: '/main/group/map/heat_map',
+<<<<<<< HEAD
                 formUrl: 'goform/heatMap',
+=======
+                formUrl: '/goform/heatMap',
+                fetchUrl: '/goform/getDeviceList',
+>>>>>>> origin/develop
                 text: _('Heat Map'),
+                component: sHeatMap.Screen,
               }, {
                 id: 'cientsTrace',
                 path: '/main/group/map/cients_trace',
+<<<<<<< HEAD
                 formUrl: 'goform/cientsTrace',
+=======
+                formUrl: '/goform/cientsTrace',
+                fetchUrl: '/goform/getDeviceList',
+>>>>>>> origin/develop
                 text: _('Cients Trace'),
+                component: sClientsTrace.Screen,
               },
             ],
           }, {
@@ -341,7 +374,11 @@ const routes = [
               }, {
                 id: 'blacklist',
                 path: '/main/group/wireless/acl',
+<<<<<<< HEAD
                 formUrl: 'goform/getClientInfo',
+=======
+                formUrl: '/goform/blacklist',
+>>>>>>> origin/develop
                 text: _('Blacklist'),
                 component: sBlacklist.Screen,
               }, {
@@ -584,16 +621,16 @@ const routes = [
 // 配置模块页面 store
 const reducers = {
   // shared reducers
-  app: App.app,
+  app: appReducer,
   screens: screensReducer,
   settings: settingsReducer,
   properties: propertiesReducer,
+  login: sLogin.login,
 
   // product comstom reducers
-  login: sLogin.login,
-  mainAxc: sMainAxc.reducer,
+  product: sMainAxc.reducer,
 
-  // ap组管理
+  // screen custom reducers
   users: sUsers.reducer,
   safeStatus: sSafeStatus.reducer,
   system: sSystemStatus.reducer,
@@ -613,6 +650,9 @@ const app = {
   routes,
   stores,
 };
+
+// 初始化app Config
+stores.dispatch(appActions.initAppConfig(guiConfig));
 
 
 export default app;

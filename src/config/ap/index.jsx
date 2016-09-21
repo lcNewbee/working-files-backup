@@ -2,10 +2,12 @@ import NotFound from 'shared/components/NotFound';
 import settingsReducer from 'shared/reducers/settings';
 import remoteActionMiddleware from 'shared/utils/lib/remote_action_middleware';
 import { combineReducers } from 'redux';
+import * as appActions from 'shared/actions/app';
+import appReducer from 'shared/reducers/app';
 
 //
 import 'shared/scss/styles.scss';
-import guiConfig from './package.json';
+import guiConfig from './config.json';
 
 
 // 多语言工具
@@ -126,6 +128,8 @@ const routes = [{
       id: 'quicksetup',
       path: '/main/quicksetup',
       icon: 'cog',
+      fetchUrl: 'goform/get_quicksetup_info',
+      saveUrl: 'goform/set_quicksetup',
       text: _('Quick Setup'),
       component: pQuickSetup.Screen,
     }, {
@@ -198,6 +202,7 @@ const routes = [{
       path: '/main/maintenance',
       icon: 'wrench',
       text: _('Maintenance'),
+      fetchUrl: 'goform/save_config',
       component: pMaintenance.Screen,
     }, {
       id: 'tools',
@@ -249,7 +254,7 @@ const routes = [{
 
 // 配置模块页面 store
 const reducers = {
-  app: App.app,
+  app: appReducer,
   settings: settingsReducer,
 
   status: pStatus.status,
@@ -303,6 +308,8 @@ const ac5000 = {
   stores,
 };
 
+// 初始化app Config
+stores.dispatch(appActions.initAppConfig(guiConfig));
 
 export default ac5000;
 

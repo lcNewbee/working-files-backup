@@ -5,7 +5,7 @@ import { Modal } from 'shared/components';
 
 const propTypes = {
   closeModal: PropTypes.func,
-  fetchAcInfo: PropTypes.func,
+  fetchProductInfo: PropTypes.func,
   app: PropTypes.object,
   children: PropTypes.node,
 };
@@ -22,7 +22,9 @@ class App extends Component {
     this.onModalApply = this.onModalApply.bind(this);
   }
   componentWillMount() {
-    this.props.fetchAcInfo();
+    if (this.props.fetchProductInfo) {
+      this.props.fetchProductInfo();
+    }
   }
 
   onModalClose() {

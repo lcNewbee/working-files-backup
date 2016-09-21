@@ -65,8 +65,13 @@ function rcFetchGroupAps(data) {
 }
 
 export function fetchGroupAps() {
-  return (dispatch) => {
-    dispatch(appActions.fetch(urls.fetchGroupDevs))
+  return (dispatch, getState) => {
+    const productState = getState().product;
+    const query = {
+      groupId: productState.getIn(['group', 'selected', 'id']),
+    };
+
+    dispatch(appActions.fetch(urls.fetchGroupDevs, query))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(rcFetchGroupAps(json.data));

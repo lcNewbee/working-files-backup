@@ -54,8 +54,8 @@ const propTypes = {
   settingsFormOption: PropTypes.oneOfType([
     PropTypes.instanceOf(List), PropTypes.array,
   ]),
-  updateListSettings: PropTypes.func,
-  saveListSettings: PropTypes.func,
+  updateScreenSettings: PropTypes.func,
+  saveScreenSettings: PropTypes.func,
 
   // 数据验证
   validateAll: PropTypes.func,
@@ -119,7 +119,7 @@ class ListInfo extends React.Component {
 
     // 初始选项，添加操作项
     if (actionable && (editable || deleteable) && tableOptions) {
-      this.ListTableOptions = tableOptions.push(Map({
+      this.listTableOptions = tableOptions.push(Map({
         id: 'actions',
         text: _('Actions'),
         width: '180',
@@ -154,7 +154,7 @@ class ListInfo extends React.Component {
         ),
       }));
     } else {
-      this.ListTableOptions = tableOptions;
+      this.listTableOptions = tableOptions;
     }
 
     this.onFetchList();
@@ -234,7 +234,7 @@ class ListInfo extends React.Component {
       this.props.validateAll()
         .then((errMsg) => {
           if (errMsg.isEmpty()) {
-            this.props.saveListSettings();
+            this.props.saveScreenSettings();
           }
         });
     }
@@ -261,7 +261,7 @@ class ListInfo extends React.Component {
       store, route, app, modalSize, title, listTitle,
       selectable, deleteable, searchable, addable, actionable, noTitle,
       editFormLayout, editFormOptions, defaultEditData,
-      settingsFormOption, updateListSettings, hasSettingsSaveButton,
+      settingsFormOption, updateScreenSettings, hasSettingsSaveButton,
       queryFormOptions,
       actionBarChildren,
     } = this.props;
@@ -340,7 +340,7 @@ class ListInfo extends React.Component {
             <FormContainer
               options={settingsFormOption}
               data={curSettings}
-              onChangeData={updateListSettings}
+              onChangeData={updateScreenSettings}
               onSave={this.onSaveSettings}
               invalidMsg={app.get('invalid')}
               validateAt={app.get('validateAt')}
@@ -385,10 +385,10 @@ class ListInfo extends React.Component {
           }
         />
         {
-          this.ListTableOptions ? (
+          this.listTableOptions ? (
             <Table
               className="table"
-              options={this.ListTableOptions}
+              options={this.listTableOptions}
               list={list}
               page={page}
               onPageChange={this.onPageChange}

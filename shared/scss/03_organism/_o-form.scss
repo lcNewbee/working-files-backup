@@ -74,7 +74,6 @@ $o-form-content-margin: 1em 0 0;
   &.o-form--flow {
     @include clearfix;
     padding: 0;
-    margin: 0 -12px;
 
     .form-group {
       display: inline-block;
@@ -90,6 +89,24 @@ $o-form-content-margin: 1em 0 0;
         float: left;
         margin-left: 0;
       }
+
+      &:first-child {
+        margin-left: 0px;
+
+        > label {
+          padding-left: 12px;
+        }
+      }
+    }
+
+    .form-group--save,
+    .o-form__actions-bar {
+      margin-top: 0;
+      margin-left: 0;
+      padding: 0;
+      padding-left: 1em;
+      border: 0;
+      border-left: 1px solid #d2d2d2;
     }
   }
 

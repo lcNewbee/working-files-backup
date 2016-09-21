@@ -75,12 +75,12 @@ export default class View extends React.Component {
         <FormGroup
           value="1"
           type="checkbox"
-          text={_('AP隔离')}
+          text={_('AP Isolation')}
         />
         <FormGroup
           value="1"
           type="checkbox"
-          text={_('SSID隔离')}
+          text={_('SSID Isolation')}
         />
       </form>
     );
@@ -93,7 +93,7 @@ View.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
-    groupId: state.mainAxc.getIn(['group', 'selected', 'id']),
+    groupId: state.product.getIn(['group', 'selected', 'id']),
     store: state.settings,
   };
 }

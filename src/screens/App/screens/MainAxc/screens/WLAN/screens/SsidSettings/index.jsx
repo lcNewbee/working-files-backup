@@ -16,24 +16,24 @@ const blcklistTableOptions = fromJS([
     text: _('SSID'),
   }, {
     id: 'hiddenSsid',
-    text: _('是否隐藏SSID'),
+    text: _('Hidden SSID'),
     filter: 'checkbox',
   }, {
     id: 'vlanId',
     text: _('VLAN ID'),
   }, {
     id: 'storeForwardPattern',
-    text: _('数据转发模式'),
+    text: _('Store-Forward Pattern'),
   }, {
     id: 'encryption',
     text: _('Encryption'),
   }, {
     id: 'compulsoryAuth',
-    text: _('802.1X认证'),
+    text: _('802.1X Auth'),
     filter: 'checkbox',
   }, {
     id: 'enabled',
-    text: _('射频开关'),
+    text: _('Status'),
     filter: 'checkbox',
   },
 ]);
@@ -304,7 +304,7 @@ View.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
-    vlan: state.mainAxc.get('vlan'),
+    vlan: state.product.get('vlan'),
     store: state.screens,
   };
 }

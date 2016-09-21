@@ -12,11 +12,11 @@
     height: 30px;
     vertical-align: middle;
     cursor: move;
-    background: url(../../images/success.png) center no-repeat;
+    background: url(images/online.png) center no-repeat;
     background-size: 30px;
 
     &.danger {
-      background-image: url(../../images/danger.png);
+      background-image: url(images/offline.png);
       background-size: 30px;
     }
     // 锁定状态样式
@@ -28,13 +28,12 @@
         right: -2px;
         display: inline-block;
         font: normal normal normal 14px/1 FontAwesome;
-        font-size: inherit;
         font-size: 14px;
         color: #777;
         content: "\F023";
         background-color: #fff;
         border-radius: 20px;
-        padding: 4px;
+        padding: 2px 4px;
 
         text-rendering: auto;
         -webkit-font-smoothing: antialiased;
@@ -53,6 +52,7 @@
     color: #444;
     cursor: pointer;
     transition: all .3s ease-in-out;
+    opacity: 0;
 
     &.close {
       color: #c23934;
@@ -62,12 +62,13 @@
     }
   }
   .icon {
-    font-size: 16px;
+    font-size: 28px;
   }
 
   &.m-device--open {
     .m-device__btn {
       z-index: 1;
+      opacity: 1;
     }
   }
 }
@@ -100,10 +101,14 @@
     text-align: center;
     border: 1px solid #ccc;
     margin-top: 10px;
+    margin-left: 5px;
     line-height: 208px;
     color: #666;
     border-radius: 4px;
     cursor: pointer;
+  }
+  .m-thumbnail {
+    margin: 10px 5px;
   }
   .m-thumbnail__content {
     position: relative;
@@ -118,16 +123,13 @@
       border: 0;
     }
   }
-  .m-thumbnail {
-
-  }
 }
 
 
-.o-map-rf {
+.o-map-container {
   position: absolute;
-  cursor: url(../../images/openhand_8_8.cur) 8 8, default;
-  background: url(../../images/map_bk.jpg);
+  cursor: url(images/openhand_8_8.cur) 8 8, default;
+  background: url(images/map_bg.jpg);
   background-size: 100%;
   > img {
     width: 100%;
@@ -171,6 +173,7 @@
 .o-devices-list {
   position: absolute;
   top: 80px;
+  bottom: 10px;
   right: 10px;
   width: 140px;
   border: 1px solid #ccc;

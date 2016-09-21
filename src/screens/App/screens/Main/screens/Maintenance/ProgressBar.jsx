@@ -7,6 +7,7 @@ const propTypes = {
   time: PropTypes.number,
   isShow: PropTypes.bool,
   toUrl: PropTypes.string,
+  style: PropTypes.object,
 };
 
 export default class ProgressBar extends React.Component {
@@ -53,16 +54,37 @@ export default class ProgressBar extends React.Component {
               this.myBodyWrap = elem;
             }
           }}
+          style={{
+            borderRadius: '10px',
+            overflow: 'hidden',
+          }}
         >
           <span
             className="percentage"
           >
-            {parseInt((this.state.n / this.props.time) * 100, 10) + '% ...'}
+             {
+            // (() => {
+            //   let bodyWidth; let wrapWidth;
+            //   if (this.myBody1 && this.myBodyWrap) {
+            //     bodyWidth = this.myBody1.clientWidth;
+            //     wrapWidth = this.myBodyWrap.clientWidth;
+            //   }
+            //   console.log('mybody', bodyWidth);
+            //   return parseInt((bodyWidth / wrapWidth) * 100, 10) + '% ...';
+            // })()
+              (() => {
+                if (this.state.n <= this.props.time) {
+                  return parseInt((this.state.n / this.props.time) * 100, 10) + '% ...';
+                }
+                return '100%';
+              })()
+            }
           </span>
           <div
             className="bar-body1 fl"
             style={{
               width: this.state.width,
+              borderRadius: '10px',
             }}
             ref={(elem) => {
               if (elem !== null) {

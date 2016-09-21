@@ -71,20 +71,11 @@ export default class View extends React.Component {
           label={_('Enable Active-Standby')}
           checked={curData.enable === '1'}
           onChange={
-            (data) => updateItemSettings({
+            data => updateItemSettings({
               enable: data.value,
             })
           }
         />
-        <div className="form-group form-group--save">
-          <div className="form-control">
-            <SaveButton
-              type="button"
-              loading={this.props.app.get('saving')}
-              onClick={this.onSave}
-            />
-          </div>
-        </div>
       </form>
     );
   }
@@ -96,7 +87,7 @@ View.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
-    groupId: state.mainAxc.getIn(['group', 'selected', 'id']),
+    groupId: state.product.getIn(['group', 'selected', 'id']),
     store: state.settings,
   };
 }

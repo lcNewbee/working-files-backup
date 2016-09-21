@@ -44,12 +44,12 @@ export function closeModal(data) {
   };
 }
 
-export function requestFetchAcInfo() {
+export function requestFetchProductInfo() {
   return {
     type: 'REQUEST_FETCH_AC_INFO',
   };
 }
-export function receiveFetchAcInfo(data) {
+export function receiveFetchProductInfo(data) {
   return {
     type: 'RECIVECE_FETCH_AC_INFO',
     data,
@@ -163,14 +163,14 @@ export function save(url, query) {
   };
 }
 
-export function fetchAcInfo() {
+export function fetchProductInfo() {
   return (dispatch) => {
-    dispatch(requestFetchAcInfo());
+    dispatch(requestFetchProductInfo());
 
     dispatch(fetch(APP_CONFIG.fetchInfo))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
-          dispatch(receiveFetchAcInfo(json.data));
+          dispatch(receiveFetchProductInfo(json.data));
         }
       });
   };
@@ -215,5 +215,12 @@ export function reportValidError(data) {
   return {
     type: 'REPORT_VALID_ERROR',
     data,
+  };
+}
+
+export function initAppConfig(payload) {
+  return {
+    type: 'INIT_APP_CONFIG',
+    payload,
   };
 }

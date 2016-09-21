@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
 import NotFound from 'shared/components/NotFound';
 import remoteActionMiddleware from 'shared/utils/lib/remote_action_middleware';
+import * as appActions from 'shared/actions/app';
+import appReducer from 'shared/reducers/app';
 
 //
 import 'shared/scss/styles.scss';
@@ -154,7 +156,8 @@ const routes = [{
 
 // 配置模块页面 store
 const reducers = {
-  app: App.app,
+  app: appReducer,
+
   status: pStatus.status,
   devices: pDevices.devices,
   login: pLogin.login,
@@ -182,6 +185,9 @@ const ac5000 = {
   routes,
   stores,
 };
+
+// 初始化app Config
+stores.dispatch(appActions.initAppConfig(guiConfig));
 
 
 export default ac5000;

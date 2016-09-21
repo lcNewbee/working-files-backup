@@ -24,7 +24,6 @@ const propTypes = {
   selectGroup: PropTypes.func,
   selectAddApGroupDevice: PropTypes.func,
   showMainModal: PropTypes.func,
-  showUserPopOver: PropTypes.func,
   togglePropertyPanel: PropTypes.func,
   route: PropTypes.object,
   location: PropTypes.object,
@@ -34,7 +33,7 @@ const propTypes = {
 
   // immutable data
   app: PropTypes.instanceOf(Map),
-  mainAxc: PropTypes.instanceOf(Map),
+  product: PropTypes.instanceOf(Map),
   properties: PropTypes.instanceOf(Map),
 };
 
@@ -134,6 +133,7 @@ export default class Main extends Component {
   onSelectGroup(id, e) {
     e.preventDefault();
     this.props.selectGroup(id);
+    this.props.fetchGroupAps();
   }
 
   showUserPopOver() {
@@ -143,8 +143,8 @@ export default class Main extends Component {
   }
 
   renderPopOverContent(popOver) {
-    const selectVlanId = this.props.mainAxc.getIn(['vlan', 'selected', 'id']);
-    const selectGroupId = this.props.mainAxc.getIn(['group', 'selected', 'id']);
+    const selectVlanId = this.props.product.getIn(['vlan', 'selected', 'id']);
+    const selectGroupId = this.props.product.getIn(['group', 'selected', 'id']);
 
     switch (popOver.name) {
       case 'userOverview':
@@ -177,9 +177,9 @@ export default class Main extends Component {
               className="m-menu m-menu--open"
             >
               {
-                this.props.mainAxc.getIn(['vlan', 'list']).map((item) => {
-                  let curId = item.get('id');
-                  let remark = item.get('remark');
+                this.props.product.getIn(['vlan', 'list']).map((item) => {
+                  const curId = item.get('id');
+                  const remark = item.get('remark');
                   let classNames = 'm-menu__link';
 
                   if (curId === selectVlanId) {
@@ -190,7 +190,7 @@ export default class Main extends Component {
                     <li key={curId}>
                       <a
                         className={classNames}
-                        onClick={(e) => this.onSelectVlan(curId, e)}
+                        onClick={e => this.onSelectVlan(curId, e)}
                       >
                         {curId}({remark})
                       </a>
@@ -238,12 +238,12 @@ export default class Main extends Component {
       case 'groupAsider':
         return (
           <asider className="t-main__asider-left">
-            <h3 className="t-main__asider-header">{_('组列表')}</h3>
+            <h3 className="t-main__asider-header">{_('Group List')}</h3>
             <ul
               className="m-menu m-menu--open"
             >
               {
-                this.props.mainAxc.getIn(['group', 'list']).map((item) => {
+                this.props.product.getIn(['group', 'list']).map((item) => {
                   const curId = item.get('id');
                   let classNames = 'm-menu__link';
 
@@ -310,9 +310,9 @@ export default class Main extends Component {
   }
 
   renderModalContent(option) {
-    const selectVlanId = this.props.mainAxc.getIn(['vlan', 'selected', 'id']);
-    const selectGroupId = this.props.mainAxc.getIn(['group', 'selected', 'id']);
-    let tableOption = fromJS([
+    const selectVlanId = this.props.product.getIn(['vlan', 'selected', 'id']);
+    const selectGroupId = this.props.product.getIn(['group', 'selected', 'id']);
+    const tableOption = fromJS([
       {
         id: 'devicename',
         text: `${_('MAC Address')}/${_('Name')}`,
@@ -351,7 +351,7 @@ export default class Main extends Component {
               className="table"
               options={tableOption}
               selectable
-              list={this.props.mainAxc.get('devices')}
+              list={this.props.product.get('devices')}
               onSelectRow={(data) => {
                 this.props.selectAddApGroupDevice(data);
               }}
@@ -366,8 +366,8 @@ export default class Main extends Component {
               <h3 className="o-list__header">{_('组列表')}</h3>
               <ul className="m-menu m-menu--open">
                 {
-                  this.props.mainAxc.getIn(['group', 'list']).map((item) => {
-                    let curId = item.get('id');
+                  this.props.product.getIn(['group', 'list']).map((item) => {
+                    const curId = item.get('id');
                     let classNames = 'm-menu__link';
 
                     if (curId === selectGroupId) {
@@ -378,7 +378,7 @@ export default class Main extends Component {
                       <li key={curId}>
                         <a
                           className={classNames}
-                          onClick={(e) => this.onSelectGroup(curId, e)}
+                          onClick={e => this.onSelectGroup(curId, e)}
                         >
                           {item.get('groupname')} ({item.get('num')})
                         </a>
@@ -412,7 +412,7 @@ export default class Main extends Component {
                 className="table"
                 options={tableOption}
                 selectable
-                list={this.props.mainAxc.get('devices')}
+                list={this.props.product.get('devices')}
                 onSelectRow={(data) => {
                   this.props.selectAddApGroupDevice(data);
                 }}
@@ -436,9 +436,9 @@ export default class Main extends Component {
                 className="m-menu m-menu--open"
               >
               {
-                this.props.mainAxc.getIn(['vlan', 'list']).map((item) => {
-                  let curId = item.get('id');
-                  let remark = item.get('remark');
+                this.props.product.getIn(['vlan', 'list']).map((item) => {
+                  const curId = item.get('id');
+                  const remark = item.get('remark');
                   let classNames = 'm-menu__link';
 
                   if (curId === selectVlanId) {
@@ -449,7 +449,7 @@ export default class Main extends Component {
                     <li key={curId}>
                       <a
                         className={classNames}
-                        onClick={(e) => this.onSelectVlan(curId, e)}
+                        onClick={e => this.onSelectVlan(curId, e)}
                       >
                         {curId}({remark})
                       </a>
@@ -501,8 +501,8 @@ export default class Main extends Component {
   }
 
   renderBreadcrumb() {
-    const groupData = this.props.mainAxc.get('group');
-    const vlanData = this.props.mainAxc.get('vlan');
+    const groupData = this.props.product.get('group');
+    const vlanData = this.props.product.get('vlan');
     const curRoutes = this.props.routes;
     let breadcrumbList = fromJS([]);
     const len = curRoutes.length;
@@ -556,7 +556,7 @@ export default class Main extends Component {
 
   render() {
     const { saving, version, guiName } = this.props.app.toJS();
-    const { popOver, modal } = this.props.mainAxc.toJS();
+    const { popOver, modal } = this.props.product.toJS();
     const { isShowPanel } = this.props.properties.toJS();
     let isGroupMenu = false;
     let curTopNavText = _('NETWORK');
@@ -578,9 +578,9 @@ export default class Main extends Component {
       <div className={mainClassName}>
         <Navbar title={_(guiName)} version={version}>
           <div className="aside">
-            <button className="as-control" onClick={this.onRefresh}>
+            <button className="as-control" onClick={this.onRefresh} >
               <Icon name="refresh" className="icon" />
-              {_('REFRESH')}
+              <span>{_('REFRESH')}</span>
             </button>
             <div className="user" onClick={this.showUserPopOver}>
               <Icon name="user-secret" className="icon-user" />
@@ -614,6 +614,18 @@ export default class Main extends Component {
                 </li>) : null;
               })
             }
+          </ul>
+
+          <ul
+            className="m-menu m-menu--open o-top-menu-bar__footer"
+          >
+            <li>
+              <a
+                className=""
+              >
+                <Icon name="comment" />
+              </a>
+            </li>
           </ul>
         </div>
         <div className="o-menu-bar">
@@ -660,7 +672,6 @@ export default class Main extends Component {
 
         <Modal
           {...modal}
-          onClose={this.onHiddenPopOver}
           onClose={() => {
             this.props.showMainModal({
               isShow: false,
@@ -692,7 +703,7 @@ Main.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
-    mainAxc: state.mainAxc,
+    product: state.product,
     properties: state.properties,
   };
 }
