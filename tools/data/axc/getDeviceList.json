@@ -19,13 +19,22 @@
         },
         "devicename": "ap1",
         "mac": "00:12:22:33:11:33",
+        "status": "0",
+        "devicetype": "inside",
+        "ip": "192.168.5.54",
+        "model": "V2.2",
+        "softversion": "V1.1",
+        "channel": "1",
+        "operationhours": 6600,
+        "newest": "0",
+        "downstream": "256",
+        "upstream": "1232323",
+        "connectedNumbers": 2323,
         "usernum2.4G": "10",
         "usernum5G": "10",
         "guestnum2.4G": "10",
         "guestnum5G": "10",
-        "rules24G": "",
-        "rules5G": "",
-        "status": "0"
+        "locatestatus": "location"
       }, {
         "map": {
           "mapName": "11",
@@ -37,13 +46,22 @@
         },
         "devicename": "ap1",
         "mac": "00:12:22:33:11:33",
+        "status": "0",
+        "devicetype": "inside",
+        "ip": "192.168.5.54",
+        "model": "V2.2",
+        "softversion": "V1.1",
+        "channel": "1",
+        "operationhours": 6600,
+        "newest": "0",
+        "downstream": "256",
+        "upstream": "1232323",
+        "connectedNumbers": 2323,
         "usernum2.4G": "10",
         "usernum5G": "10",
         "guestnum2.4G": "10",
         "guestnum5G": "10",
-        "rules24G": "",
-        "rules5G": "",
-        "status": "1"
+        "locatestatus": "location"
       }, {
         "map": {
           "mapName": "22",
@@ -55,13 +73,22 @@
         },
         "devicename": "ap1",
         "mac": "00:12:22:33:11:33",
+        "status": "0",
+        "devicetype": "inside",
+        "ip": "192.168.5.54",
+        "model": "V2.2",
+        "softversion": "V1.1",
+        "channel": "1",
+        "operationhours": 6600,
+        "newest": "0",
+        "downstream": "256",
+        "upstream": "1232323",
+        "connectedNumbers": 2323,
         "usernum2.4G": "10",
         "usernum5G": "10",
         "guestnum2.4G": "10",
         "guestnum5G": "10",
-        "rules24G": "",
-        "rules5G": "",
-        "status": "1"
+        "locatestatus": "location"
       }, {
         "map": {
           "mapName": "11",
@@ -71,15 +98,24 @@
           "locked": "0",
           "coverage": 100
         },
-        "devicename": "ap_2",
+        "devicename": "ap1",
         "mac": "00:12:22:33:11:33",
+        "status": "0",
+        "devicetype": "inside",
+        "ip": "192.168.5.54",
+        "model": "V2.2",
+        "softversion": "V1.1",
+        "channel": "1",
+        "operationhours": 6600,
+        "newest": "0",
+        "downstream": "256",
+        "upstream": "1232323",
+        "connectedNumbers": 2323,
         "usernum2.4G": "10",
         "usernum5G": "10",
         "guestnum2.4G": "10",
         "guestnum5G": "10",
-        "rules24G": "",
-        "rules5G": "",
-        "status": "1"
+        "locatestatus": "location"
       }, {
         "map": {
           "mapName": "11",
@@ -89,15 +125,24 @@
           "locked": "0",
           "coverage": 100
         },
-        "devicename": "ap_3",
+        "devicename": "ap1",
         "mac": "00:12:22:33:11:33",
+        "status": "0",
+        "devicetype": "inside",
+        "ip": "192.168.5.54",
+        "model": "V2.2",
+        "softversion": "V1.1",
+        "channel": "1",
+        "operationhours": 6600,
+        "newest": "0",
+        "downstream": "256",
+        "upstream": "1232323",
+        "connectedNumbers": 2323,
         "usernum2.4G": "10",
         "usernum5G": "10",
         "guestnum2.4G": "10",
         "guestnum5G": "10",
-        "rules24G": "",
-        "rules5G": "",
-        "status": "0"
+        "locatestatus": "location"
       }, {
         "map": {
           "mapName": "11",
@@ -107,15 +152,24 @@
           "locked": "0",
           "coverage": 100
         },
-        "devicename": "ap_4",
+        "devicename": "ap1",
         "mac": "00:12:22:33:11:33",
+        "status": "0",
+        "devicetype": "inside",
+        "ip": "192.168.5.54",
+        "model": "V2.2",
+        "softversion": "V1.1",
+        "channel": "1",
+        "operationhours": 6600,
+        "newest": "0",
+        "downstream": "256",
+        "upstream": "1232323",
+        "connectedNumbers": 2323,
         "usernum2.4G": "10",
         "usernum5G": "10",
         "guestnum2.4G": "10",
         "guestnum5G": "10",
-        "rules24G": "",
-        "rules5G": "",
-        "status": "1"
+        "locatestatus": "location"
       }, {
         "map": {
           "mapName": "11",
@@ -125,15 +179,24 @@
           "locked": "0",
           "coverage": 100
         },
-        "devicename": "ap_5",
+        "devicename": "ap1",
         "mac": "00:12:22:33:11:33",
+        "status": "0",
+        "devicetype": "inside",
+        "ip": "192.168.5.54",
+        "model": "V2.2",
+        "softversion": "V1.1",
+        "channel": "1",
+        "operationhours": 6600,
+        "newest": "0",
+        "downstream": "256",
+        "upstream": "1232323",
+        "connectedNumbers": 2323,
         "usernum2.4G": "10",
         "usernum5G": "10",
         "guestnum2.4G": "10",
         "guestnum5G": "10",
-        "rules24G": "",
-        "rules5G": "",
-        "status": "1"
+        "locatestatus": "location"
       }
     ]
   }

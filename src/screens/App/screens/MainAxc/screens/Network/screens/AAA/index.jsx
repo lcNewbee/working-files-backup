@@ -51,12 +51,6 @@ const authTypeSeletOptions = [
 
 const screenOptions = fromJS([
   {
-    id: 'ispDomain',
-    text: _('ISP Domain Name'),
-    formProps: {
-      type: 'url',
-    },
-  }, {
     id: 'authAccessType',
     text: _('Access Type') + _('(Auth)'),
     defaultValue: '0',

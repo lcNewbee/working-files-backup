@@ -24,7 +24,6 @@ const propTypes = {
   selectGroup: PropTypes.func,
   selectAddApGroupDevice: PropTypes.func,
   showMainModal: PropTypes.func,
-  showUserPopOver: PropTypes.func,
   togglePropertyPanel: PropTypes.func,
   route: PropTypes.object,
   location: PropTypes.object,
@@ -34,7 +33,7 @@ const propTypes = {
 
   // immutable data
   app: PropTypes.instanceOf(Map),
-  mainAxc: PropTypes.instanceOf(Map),
+  product: PropTypes.instanceOf(Map),
   properties: PropTypes.instanceOf(Map),
 };
 
@@ -134,6 +133,7 @@ export default class Main extends Component {
   onSelectGroup(id, e) {
     e.preventDefault();
     this.props.selectGroup(id);
+    this.props.fetchGroupAps();
   }
 
   showUserPopOver() {
@@ -143,8 +143,8 @@ export default class Main extends Component {
   }
 
   renderPopOverContent(popOver) {
-    const selectVlanId = this.props.mainAxc.getIn(['vlan', 'selected', 'id']);
-    const selectGroupId = this.props.mainAxc.getIn(['group', 'selected', 'id']);
+    const selectVlanId = this.props.product.getIn(['vlan', 'selected', 'id']);
+    const selectGroupId = this.props.product.getIn(['group', 'selected', 'id']);
 
     switch (popOver.name) {
       case 'userOverview':
@@ -177,7 +177,7 @@ export default class Main extends Component {
               className="m-menu m-menu--open"
             >
               {
-                this.props.mainAxc.getIn(['vlan', 'list']).map((item) => {
+                this.props.product.getIn(['vlan', 'list']).map((item) => {
                   const curId = item.get('id');
                   const remark = item.get('remark');
                   let classNames = 'm-menu__link';
@@ -243,7 +243,7 @@ export default class Main extends Component {
               className="m-menu m-menu--open"
             >
               {
-                this.props.mainAxc.getIn(['group', 'list']).map((item) => {
+                this.props.product.getIn(['group', 'list']).map((item) => {
                   const curId = item.get('id');
                   let classNames = 'm-menu__link';
 
@@ -310,8 +310,8 @@ export default class Main extends Component {
   }
 
   renderModalContent(option) {
-    const selectVlanId = this.props.mainAxc.getIn(['vlan', 'selected', 'id']);
-    const selectGroupId = this.props.mainAxc.getIn(['group', 'selected', 'id']);
+    const selectVlanId = this.props.product.getIn(['vlan', 'selected', 'id']);
+    const selectGroupId = this.props.product.getIn(['group', 'selected', 'id']);
     const tableOption = fromJS([
       {
         id: 'devicename',
@@ -351,7 +351,7 @@ export default class Main extends Component {
               className="table"
               options={tableOption}
               selectable
-              list={this.props.mainAxc.get('devices')}
+              list={this.props.product.get('devices')}
               onSelectRow={(data) => {
                 this.props.selectAddApGroupDevice(data);
               }}
@@ -366,7 +366,7 @@ export default class Main extends Component {
               <h3 className="o-list__header">{_('组列表')}</h3>
               <ul className="m-menu m-menu--open">
                 {
-                  this.props.mainAxc.getIn(['group', 'list']).map((item) => {
+                  this.props.product.getIn(['group', 'list']).map((item) => {
                     const curId = item.get('id');
                     let classNames = 'm-menu__link';
 
@@ -412,7 +412,7 @@ export default class Main extends Component {
                 className="table"
                 options={tableOption}
                 selectable
-                list={this.props.mainAxc.get('devices')}
+                list={this.props.product.get('devices')}
                 onSelectRow={(data) => {
                   this.props.selectAddApGroupDevice(data);
                 }}
@@ -436,7 +436,7 @@ export default class Main extends Component {
                 className="m-menu m-menu--open"
               >
               {
-                this.props.mainAxc.getIn(['vlan', 'list']).map((item) => {
+                this.props.product.getIn(['vlan', 'list']).map((item) => {
                   const curId = item.get('id');
                   const remark = item.get('remark');
                   let classNames = 'm-menu__link';
@@ -501,8 +501,8 @@ export default class Main extends Component {
   }
 
   renderBreadcrumb() {
-    const groupData = this.props.mainAxc.get('group');
-    const vlanData = this.props.mainAxc.get('vlan');
+    const groupData = this.props.product.get('group');
+    const vlanData = this.props.product.get('vlan');
     const curRoutes = this.props.routes;
     let breadcrumbList = fromJS([]);
     const len = curRoutes.length;
@@ -556,7 +556,7 @@ export default class Main extends Component {
 
   render() {
     const { saving, version, guiName } = this.props.app.toJS();
-    const { popOver, modal } = this.props.mainAxc.toJS();
+    const { popOver, modal } = this.props.product.toJS();
     const { isShowPanel } = this.props.properties.toJS();
     let isGroupMenu = false;
     let curTopNavText = _('NETWORK');
@@ -615,6 +615,18 @@ export default class Main extends Component {
               })
             }
           </ul>
+
+          <ul
+            className="m-menu m-menu--open o-top-menu-bar__footer"
+          >
+            <li>
+              <a
+                className=""
+              >
+                <Icon name="comment" />
+              </a>
+            </li>
+          </ul>
         </div>
         <div className="o-menu-bar">
           <nav
@@ -660,7 +672,6 @@ export default class Main extends Component {
 
         <Modal
           {...modal}
-          onClose={this.onHiddenPopOver}
           onClose={() => {
             this.props.showMainModal({
               isShow: false,
@@ -692,7 +703,7 @@ Main.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
-    mainAxc: state.mainAxc,
+    product: state.product,
     properties: state.properties,
   };
 }

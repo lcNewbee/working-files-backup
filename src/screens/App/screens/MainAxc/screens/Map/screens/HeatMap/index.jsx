@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { bindActionCreators } from 'redux';
+import h337 from 'heatmap.js';
 import {
   Button, ListInfo, Icon, FormGroup, Modal,
 } from 'shared/components';
@@ -14,6 +15,8 @@ import * as propertiesActions from 'shared/actions/properties';
 
 import bkImg from '../../shared/images/map_bg.jpg';
 import '../../shared/_map.scss';
+
+let heatmapInstance;
 
 const screenOptions = fromJS({
   settings: [],
@@ -90,10 +93,24 @@ export default class View extends React.Component {
         'onMapMouseDown',
         'onMapMouseMove',
         'renderMapList',
+        'removeHeatMap',
         'renderCurMap',
         'updateState',
+        'renderHeatMap',
       ]
     );
+  }
+
+  componentDidUpdate() {
+    const { store } = this.props;
+    const myListId = store.get('curListId');
+    const curMapName = store.getIn([myListId, 'curSettings', 'curMapName']);
+
+    if (curMapName) {
+      this.renderHeatMap();
+    } else {
+      this.removeHeatMap();
+    }
   }
 
   onSave() {
@@ -133,7 +150,7 @@ export default class View extends React.Component {
     this.mapMouseDown = false;
   }
   onMapMouseDown(e) {
-    if (e.target.className.indexOf('o-map-rf') !== -1) {
+    if (e.target.className.indexOf('o-map-container') !== -1) {
       this.mapMouseDown = true;
       this.mapClientX = e.clientX;
       this.mapClientY = e.clientY;
@@ -155,6 +172,55 @@ export default class View extends React.Component {
   startDrag(ev, i) {
     ev.dataTransfer.setData('Text', ev.target.id);
     this.props.editListItemByIndex(i, 'move');
+  }
+  renderHeatMap() {
+    // now generate some random data
+    let points = [];
+    let max = 0;
+    let width = 840;
+    let height = 400;
+    let len = 300;
+
+    while (len--) {
+      let val = Math.floor(Math.random() * 100);
+      // now also with custom radius
+      let radius = Math.floor(Math.random() * 70);
+
+      max = Math.max(max, val);
+      let point = {
+        x: Math.floor(Math.random() * width),
+        y: Math.floor(Math.random() * height),
+        value: val,
+        // radius configuration on point basis
+        radius,
+      };
+      points.push(point);
+    }
+    // heatmap data format
+    let data = {
+      max,
+      data: points,
+    };
+
+    if (!heatmapInstance) {
+      heatmapInstance = h337.create({
+        // only container is required, the rest will be defaults
+        container: this.mapContent,
+      });
+      heatmapInstance.setData(data);
+    } else {
+      heatmapInstance.repaint();
+    }
+  }
+  removeHeatMap() {
+    const heatCanvas = document.querySelectorAll('.heatmap-canvas');
+    const len = heatCanvas.length;
+    let i = 0;
+
+    for (i = 0; i < len; i++) {
+      this.mapContent.removeChild(heatCanvas[i]);
+    }
+    heatmapInstance = null;
   }
   renderDeployedDevice(device, i, curMapName) {
     const xpos = device.getIn(['map', 'xpos']);
@@ -323,13 +389,6 @@ export default class View extends React.Component {
                         curList: maps,
                       })}
                     />
-                    {
-                      maps ?
-                        maps.map(
-                          item => this.renderDeployedDevice(item, item.get('_index'))
-                        ) :
-                        null
-                    }
                   </div>
                   <div className="m-thumbnail__caption">
                     <h3>{mapName}</h3>
@@ -355,7 +414,7 @@ export default class View extends React.Component {
   renderCurMap(list, curMapName, myZoom) {
     return (
       <div
-        className="o-map-rf"
+        className="o-map-container"
         onDrop={e => this.onDrop(e, curMapName)}
         onDragOver={e => e.preventDefault()}
         ref={(mapContent) => {
@@ -460,62 +519,7 @@ export default class View extends React.Component {
           {
             curMapName ? this.renderCurMap(list, curMapName, myZoom) : this.renderMapList(mapList)
           }
-          {
-            curMapName ? (
-              <div className="o-map-zoom-bar">
-                <Icon
-                  name="minus"
-                  className="o-map-zoom-bar__minus"
-                  onClick={() => {
-                    this.props.updateScreenSettings({
-                      zoom: (myZoom - 10) < 0 ? 0 : (myZoom - 10),
-                    });
-                  }}
-                />
-                <div className="o-map-zoom-bar__thmp" >{myZoom}%</div>
-                <Icon
-                  name="plus"
-                  className="o-map-zoom-bar__plus"
-                  onClick={() => {
-                    this.props.updateScreenSettings({
-                      zoom: (myZoom + 10) > 200 ? 200 : (myZoom + 10),
-                    });
-                  }}
-                />
-              </div>
-            ) : null
-          }
-
         </div>
-        <div className="o-devices-list" >
-          {
-            list ?
-              list.map(this.renderUndeployDevice) :
-              null
-          }
-        </div>
-
-        <Modal
-          title={_('Add')}
-          isShow={isModalShow}
-          onClose={() => this.props.closeListItemModal()}
-        >
-          <FormGroup
-            label={_('Map Name')}
-          />
-          <FormGroup label=" ">
-            <FileUploads
-              url="/goform/uploadPortalImage"
-              name="image2"
-              acceptExt="png,gif,jpg,bmp"
-              createModal={this.props.createModal}
-              buttonText={_('Upload Image')}
-            />
-          </FormGroup>
-          <p>
-            <img src="" alt="" />
-          </p>
-        </Modal>
       </ListInfo>
     );
   }

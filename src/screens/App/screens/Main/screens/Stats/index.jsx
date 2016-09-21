@@ -22,7 +22,6 @@ const msg = {
   apStatus: _('AP Status'),
   total: _('Total:'),
   apNumber: _('AP Number'),
-
 };
 const timeTypeSwitchs = fromJS([
   {

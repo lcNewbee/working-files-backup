@@ -12,39 +12,32 @@ import * as screenActions from 'shared/actions/screens';
 import * as propertiesActions from 'shared/actions/properties';
 
 import './_map.scss';
+import buildingIconImg from '../../shared/images/building_3d.png';
+
 
 const screenOptions = fromJS({
   settings: [],
   list: [
     {
-      id: 'markerType',
-      label: _('Marker Type'),
+      id: 'name',
+      label: _('Name'),
       defaultValue: 'building',
-      noForm: true,
       formProps: {
-        type: 'switch',
-        options: [
-          {
-            value: 'building',
-            label: _('Building'),
-          }, {
-            value: 'ap',
-            label: _('Access Point'),
-          },
-        ],
-        dispaly: 'inline',
-      },
-    }, {
-      id: 'markerTitle',
-      label: _('Marker Title'),
-      formProps: {
-        required: true,
         type: 'text',
         dispaly: 'inline',
       },
     }, {
-      id: 'markerAddress',
-      label: _('Marker Address'),
+      id: 'floorNumber',
+      label: _('Floor Number'),
+      noForm: true,
+      formProps: {
+        required: true,
+        type: 'number',
+        dispaly: 'inline',
+      },
+    }, {
+      id: 'address',
+      label: _('Address'),
       formProps: {
         type: 'text',
         dispaly: 'inline',
@@ -99,7 +92,9 @@ export default class View extends React.Component {
     utils.loadScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyBGOC8axWomvnetRPnTdcuNW-a558l-JAU&libraries=places',
       (error) => {
         if (!error) {
-          this.renderGoogleMap();
+          utils.loadScript('//rawgit.com/googlemaps/v3-utility-library/master/infobox/src/infobox.js', () => {
+            this.renderGoogleMap();
+          });
         }
       },
     6000);
@@ -114,9 +109,7 @@ export default class View extends React.Component {
 
 
     if (typeof window.google !== 'undefined' && this.mapContent) {
-      console.log(thisSettings.get('type'), this.mapContent, this.map)
       if (!this.map) {
-        console.log('ddd=', this.map)
         this.renderGoogleMap();
       } else if (!prevSettings.equals(thisSettings) || !prevList.equals(thisList)) {
         this.renderGoogleMap();
@@ -153,10 +146,10 @@ export default class View extends React.Component {
       strokeColor: '#0093ff',
     };
     const buildingIcon = {
-      path: google.maps.SymbolPath.CIRCLE,
-      scale: 12,
-      fillColor: '#333',
-      strokeColor: 'green',
+      url: buildingIconImg, // url
+      scaledSize: new google.maps.Size(50, 50), // scaled size
+      origin: new google.maps.Point(0, 0), // origin
+      anchor: new google.maps.Point(0, 0), // anchor
     };
     const marker = new google.maps.Marker({
       position: {
@@ -170,9 +163,9 @@ export default class View extends React.Component {
         text: item.get('markerTitle'),
       },
       draggable: item.get('isLocked') !== '1',
-      // animation: google.maps.Animation.DROP,
+      animation: google.maps.Animation.DROP,
     });
-    const contentString = '<div id="content">' +
+    const contentString = '<div class="m-map-marker">' +
                             '<h4>测试</h4>' +
                             '<dl><dt>当前流量</dt>' +
                             '<dd>15.23Mbps</dd></dl>' +
@@ -182,14 +175,38 @@ export default class View extends React.Component {
       content: contentString,
       maxWidth: 500,
     });
+    const actionsWindow = new google.maps.InfoWindow({
+      content: '<div id="m-map-marker-actions">ddd</div>',
+      maxWidth: 500,
+      disableAutoPan: true,
+      pixelOffset: new google.maps.Size(2, 32),
+      zIndex: 2,
+    });
+    const infobox = new InfoBox({
+      content: '<div>dsds</div>',
+      disableAutoPan: false,
+      maxWidth: 150,
+      pixelOffset: new google.maps.Size(-140, 24),
+      zIndex: null,
+      boxStyle: {
+        background: '#ccc no-repeat',
+        opacity: 0.75,
+        width: '280px',
+      },
+      closeBoxMargin: '12px 4px 2px 2px',
+      closeBoxURL: 'http://www.google.com/intl/en_us/mapfiles/close.gif',
+      infoBoxClearance: new google.maps.Size(1, 1),
+    });
 
     marker.addListener('click', () => {
-      infowindow.open(map, marker);
+      // infowindow.open(map, marker);
+      actionsWindow.open(map, marker);
+      infobox.open(map, marker);
 
       if (item.get('markerType') === 'ap') {
         this.props.addToPropertyPanel();
       } else {
-        this.props.editListItemByIndex(index);
+        // this.props.editListItemByIndex(index);
       }
     });
     marker.addListener('mouseup', () => {
@@ -228,7 +245,7 @@ export default class View extends React.Component {
     if (!this.map) {
       this.map = new google.maps.Map(this.mapContent, {
         center,
-        zoom: 8,
+        zoom: 13,
       });
      // console.log('init Map = ', this.map)
     }
@@ -314,6 +331,25 @@ export default class View extends React.Component {
     const list = store.getIn([myListId, 'data', 'list']);
     const page = store.getIn([myListId, 'data', 'page']);
     const editData = getCurListInfoState(store, 'edit');
+    const lockButton = settings.get('isLocked') === '1' ? (<Button
+      icon="lock"
+      key="0"
+      text={_('Unlock Map')}
+      onClick={() => {
+        this.props.updateScreenSettings({
+          isLocked: '0',
+        });
+      }}
+    />) : (<Button
+      icon="unlock-alt"
+      key="0"
+      text={_('Lock Map')}
+      onClick={() => {
+        this.props.updateScreenSettings({
+          isLocked: '1',
+        });
+      }}
+    />);
     const actionBarChildren = [
       <Switchs
         options={[
@@ -333,25 +369,7 @@ export default class View extends React.Component {
           });
         }}
       />,
-      settings.get('isLocked') === '1' ? (<Button
-        icon="lock"
-        key="0"
-        text={_('Unlock Map')}
-        onClick={() => {
-          this.props.updateScreenSettings({
-            isLocked: '0',
-          });
-        }}
-      />) : (<Button
-        icon="unlock-alt"
-        key="0"
-        text={_('Lock Map')}
-        onClick={() => {
-          this.props.updateScreenSettings({
-            isLocked: '1',
-          });
-        }}
-      />),
+      settings.get('type') === '0' ? lockButton : null,
       <span
         className="a-help"
         data-help={_('Help')}
@@ -395,7 +413,7 @@ export default class View extends React.Component {
                       invalidMsg={app.get('invalid')}
                       validateAt={app.get('validateAt')}
                       isSaving={app.get('saving')}
-                      className="o-form--flow"
+                      className="o-form--flow container"
                       hasSaveButton
                     />
                   ) : null

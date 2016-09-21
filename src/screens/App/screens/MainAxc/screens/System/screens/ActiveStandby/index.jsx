@@ -87,7 +87,7 @@ View.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
-    groupId: state.mainAxc.getIn(['group', 'selected', 'id']),
+    groupId: state.product.getIn(['group', 'selected', 'id']),
     store: state.settings,
   };
 }

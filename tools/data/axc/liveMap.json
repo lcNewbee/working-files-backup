@@ -9,25 +9,65 @@
     },
     "list": [
       {
-        "no": "1",
+        "no": "0",
         "lat": -34,
         "lng": 151.23,
+        "address": "shenzhen china",
         "markerTitle": "0",
-        "markerType": "building"
+        "name": "Beijing",
+        "floorNumber": 12,
+        "markerType": "building",
+        "floorList": [
+          {
+            "id": "1",
+            "mapName": "11",
+            "locked": "0"
+          }, {
+            "id": "2",
+            "mapName": "11",
+            "locked": "0"
+          }
+        ]
       },
       {
         "no": "1",
         "lat": -34,
         "lng": 151.56,
         "markerTitle": "1",
-        "markerType": "ap"
+        "name": "Beijing",
+        "floorNumber": 12,
+        "markerType": "building",
+        "floorList": [
+          {
+            "id": "1",
+            "mapName": "11",
+            "locked": "0"
+          }, {
+            "id": "2",
+            "mapName": "11",
+            "locked": "0"
+          }
+        ]
       },
       {
-        "no": "1",
+        "no": "2",
         "lat": -34,
         "lng": 151.78,
         "markerTitle": "2",
-        "markerType": "building"
+        "name": "Beijing",
+        "floorNumber": 12,
+        "markerType": "building",
+        "floorList": [
+          {
+            "id": "1",
+            "mapName": "11",
+            "locked": "0"
+          }, {
+            "id": "2",
+            "mapName": "11",
+            "locked": "0"
+          }
+        ]
       }
     ]
   }

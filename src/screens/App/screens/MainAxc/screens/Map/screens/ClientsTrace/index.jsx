@@ -133,7 +133,7 @@ export default class View extends React.Component {
     this.mapMouseDown = false;
   }
   onMapMouseDown(e) {
-    if (e.target.className.indexOf('o-map-rf') !== -1) {
+    if (e.target.className.indexOf('o-map-container') !== -1) {
       this.mapMouseDown = true;
       this.mapClientX = e.clientX;
       this.mapClientY = e.clientY;
@@ -355,7 +355,7 @@ export default class View extends React.Component {
   renderCurMap(list, curMapName, myZoom) {
     return (
       <div
-        className="o-map-rf"
+        className="o-map-container"
         onDrop={e => this.onDrop(e, curMapName)}
         onDragOver={e => e.preventDefault()}
         ref={(mapContent) => {

@@ -12,14 +12,14 @@ export function loginResult(result) {
     type: 'RESPONSE_LOGIN',
     loginedAt: Date.now(),
     result,
-  }
+  };
 }
 
 export function checkResult(result) {
   return {
-    type: "checkResult",
-    result
-  }
+    type: 'checkResult',
+    result,
+  };
 }
 
 export function updateData(data) {
@@ -31,24 +31,23 @@ export function updateData(data) {
 
 export function resetData() {
   return {
-    type: 'RESET_DATA'
+    type: 'RESET_DATA',
   };
 }
 
 export function login(callBack) {
-
   return (dispatch, getState) => {
     const data = getState().login.get('data');
 
     dispatch(reqeustLogin());
 
     utils.save(urls.login, data)
-      .then(function(json) {
+      .then((json) => {
         let result = _('Password Error');
-        if(json.state) {
-          if(json.state.code === 2000) {
+        if (json.state) {
+          if (json.state.code === 2000) {
             result = 'ok';
-            if(json.data) {
+            if (json.data) {
               callBack(json.data.a_165F8BA5ABE1A5DA);
             }
           } else {
@@ -57,7 +56,6 @@ export function login(callBack) {
         }
         dispatch(loginResult(result));
       });
-
   };
 }
 

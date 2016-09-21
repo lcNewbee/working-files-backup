@@ -304,7 +304,7 @@ View.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
-    vlan: state.mainAxc.get('vlan'),
+    vlan: state.product.get('vlan'),
     store: state.screens,
   };
 }

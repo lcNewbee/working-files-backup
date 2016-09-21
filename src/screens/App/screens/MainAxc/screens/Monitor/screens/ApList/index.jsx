@@ -132,6 +132,7 @@ View.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
+    apList: state.product.get('devices'),
     store: state.screens,
   };
 }

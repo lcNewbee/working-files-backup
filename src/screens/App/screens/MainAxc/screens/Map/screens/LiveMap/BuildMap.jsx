@@ -186,7 +186,7 @@ export default class View extends React.Component {
         }),
       },
     ];
-    const radius = 38;
+    const radius = 28;
     const avd = 220 / btnsList.length;
     const ahd = (avd * Math.PI) / 180;
     const isCur = !curMapName || (curMapName === device.getIn(['map', 'mapName']));
@@ -245,7 +245,7 @@ export default class View extends React.Component {
                   key={info.id}
                   style={{
                     left: isOpen ? (Math.sin((ahd * index)) * radius) + 7 : 13,
-                    top: isOpen ? (Math.cos((ahd * index)) * radius) : 13,
+                    top: isOpen ? (Math.cos((ahd * index)) * radius) + 6 : 13,
                   }}
                   onClick={info.onClick}
                 >
@@ -395,7 +395,6 @@ export default class View extends React.Component {
     const list = store.getIn([myListId, 'data', 'list']);
     const isLocked = store.getIn([myListId, 'curSettings', 'isLocked']);
     const myZoom = store.getIn([myListId, 'curSettings', 'zoom']);
-    const editData = store.getIn([myListId, 'data', 'edit']);
     const actionQuery = store.getIn([myListId, 'actionQuery']);
     let curMapName = store.getIn([myListId, 'curSettings', 'curMapName']);
     const actionBarChildren = [
