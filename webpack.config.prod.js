@@ -95,7 +95,7 @@ module.exports = {
   },
   output: {
     path: GLOBALS.folders.BUILD,
-    publicPath: '/~zhangfang/',
+    publicPath: '/~zhangfang/axc/',
     filename: '/scripts/bundle.js',
   },
   devServer: {

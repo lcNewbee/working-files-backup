@@ -49,7 +49,7 @@ export default class View extends React.Component {
       action,
     };
 
-    this.props.save('/goform/blacklist', query)
+    this.props.save('goform/blacklist', query)
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           alert('ds');

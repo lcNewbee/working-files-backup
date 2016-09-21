@@ -177,7 +177,7 @@ export default class View extends React.Component {
             </div>
             <FormGroup label=" ">
               <FileUploads
-                url="/goform/uploadPortalImage"
+                url="goform/uploadPortalImage"
                 name="image1"
                 target="imagesIf"
                 formData={{
@@ -190,7 +190,7 @@ export default class View extends React.Component {
             </FormGroup>
             <FormGroup label=" ">
               <FileUploads
-                url="/goform/uploadPortalImage"
+                url="goform/uploadPortalImage"
                 name="image2"
                 acceptExt="png,gif,jpg,bmp"
                 createModal={this.props.createModal}
@@ -199,7 +199,7 @@ export default class View extends React.Component {
             </FormGroup>
             <FormGroup label=" ">
               <FileUploads
-                url="/goform/uploadPortalImage"
+                url="goform/uploadPortalImage"
                 name="image3"
                 target="imagesIf"
                 acceptExt="png,gif,jpg,bmp"

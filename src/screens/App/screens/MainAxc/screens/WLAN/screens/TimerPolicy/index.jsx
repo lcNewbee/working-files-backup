@@ -105,7 +105,7 @@ export default class View extends React.Component {
       action,
     };
 
-    this.props.save('/goform/blacklist', query)
+    this.props.save('goform/blacklist', query)
       .then((json) => {});
   }
   onUpdateSettings(name) {

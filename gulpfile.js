@@ -17,9 +17,9 @@ paths = gulp.paths = {
   build: 'build',
   release: 'release',
   src: 'src',
-  php: 'php',
+  php: 'php/web',
   pubNew: '../win_ac/software/web/',
-  pubAxc: '../Sites/',
+  pubAxc: '../../Sites/axc',
   pubAp: '../qsdk/package/comlanos/goahead/files/web',
   webpack: 'webpack.config.dev.js',
   pubWebpack: 'webpack.config.prop.js',
@@ -124,6 +124,16 @@ gulp.task('pub:ap', function (callback) {
 });
 
 // 发布硬AC版本
+// 发布 Access Pointer 版本
+gulp.task('clean:pubaxc', function (callback) {
+  var distPath = paths.pubAxc;
+
+  if(argv.d) {
+    distPath = argv.d;
+  }
+
+  return del([distPath], { force: true });
+});
 gulp.task('pub:copyaxc', function () {
   var distPath = paths.pubAxc;
 

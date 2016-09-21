@@ -251,7 +251,7 @@ export const SignUp = React.createClass({
               <div className="step-0 row">
                 <FormContainer
                   className="o-form--cols-2"
-                  action="/goform/ss"
+                  action="goform/ss"
                   data={fromJS(this.state)}
                   invalidMsg={app.get('invalid')}
                   validateAt={app.get('validateAt')}

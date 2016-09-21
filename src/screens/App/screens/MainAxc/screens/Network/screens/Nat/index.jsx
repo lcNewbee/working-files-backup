@@ -11,7 +11,7 @@ import * as actions from 'shared/actions/settings';
 import * as screenActions from 'shared/actions/screens';
 
 function getInterfaceTypeOptions() {
-  return utils.fetch('/goform/interfaceType')
+  return utils.fetch('goform/interfaceType')
     .then((json) => (
       {
         options: json.data.list.map(
