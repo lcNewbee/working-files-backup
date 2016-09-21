@@ -9,6 +9,7 @@
     },
     "list": [
       {
+        "id": "1",
         "name": "ds",
         "startIp": "192.168.0.1",
         "endIp": "192.168.0.78",
@@ -20,6 +21,7 @@
         "domain": "ww.baidu.com"
       },
       {
+        "id": "2",
         "name": "ds",
         "startIp": "192.168.0.1",
         "endIp": "192.168.0.78",
@@ -31,6 +33,7 @@
         "domain": "ww.baidu.com"
       },
       {
+        "id": "3",
         "name": "ds",
         "startIp": "192.168.0.1",
         "endIp": "192.168.0.78",

@@ -130,6 +130,7 @@ export default class View extends React.Component {
         this.props.closeListItemModal();
       });
   }
+
   onAction(action, data) {
     this.props.save('/goform/blacklist', data)
       .then((json) => {

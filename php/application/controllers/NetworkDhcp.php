@@ -2,31 +2,21 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class NetworkDhcp extends CI_Controller {
-
-	public function view($page = 'home')
-	    {
-
-	}
 	public function __construct() {
-    parent::__construct();
+		parent::__construct();
 		$this->load->database();
+	}
+	public function network() {
+    $data=$this->db->select('pool_id,pool_name,attr_name,attr_value')
+    ->from('pool_params')
+    ->join('pool_attr','pool_attr.id=pool_params.attr_id')
+    ->join('pool_list','pool_list.id=pool_params.pool_id')
+    ->get()->result_array();
+    $state=array(
+        "code"=>2000,
+        "msg"=>"OK"
+    );
+    echo json_encode($data);
   }
-	public function index()
- {
-        $data=array(
-          array('name'=>'张三','年龄'=>23),
-          array('name'=>'李四','年龄'=>24),
-          array('name'=>'王五','年龄'=>25)
-        );
-        echo json_encode($data);
-	}
-	public function network()
-	    {
-
-        $query = $this->db->get('ap_list');
-        $data=$query->result_array();
-         echo json_encode($data);
-
-	}
 }
 ?>
