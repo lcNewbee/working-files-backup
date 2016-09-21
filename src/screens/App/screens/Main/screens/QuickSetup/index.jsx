@@ -32,6 +32,7 @@ const propTypes = {
   closeCountrySelectModal: PropTypes.func,
   receiveCountryInfo: PropTypes.func,
   validateOption: PropTypes.object,
+  saveSettings: PropTypes.func,
 };
 
 const defaultState = {
@@ -94,7 +95,7 @@ const validOptions = Map({
     rules: 'num:[1, 10]',
   }),
   validPassword: validator({
-    rules: 'pwd:[8, 32]',
+    rules: 'pwd|len:[8, 32]',
   }),
   apmac2: validator({
     rules: 'mac',
@@ -126,6 +127,7 @@ export default class QuickSetup extends React.Component {
       defaultData: defaultState,
     });
     props.changePage('1');
+    props.changeAgreeProtocol(false);
     props.fetchSettings();
     window.setTimeout(() => {
       const country = this.props.store.getIn(['curData', 'countryCode']);
@@ -487,11 +489,12 @@ export default class QuickSetup extends React.Component {
                   theme="primary"
                   text={_('Next ->')}
                   onClick={() => {
-                    if (this.noErrorThisPage('lanIp', 'lanMask')) {
-                      this.props.changePage('3');
-                    } else {
-                      throw new Error('There are something wrong in this page');
-                    }
+                    this.props.validateAll()
+                        .then((msg) => {
+                          if (msg.isEmpty()) {
+                            this.props.changePage('3');
+                          }
+                        });
                   }}
                 />
               </FormGroup>
@@ -547,9 +550,6 @@ export default class QuickSetup extends React.Component {
                       title={_('Country Code')}
                       onClose={this.onCloseCountrySelectModal}
                       onOk={this.props.saveCountrySelectModal}
-                      style={{
-                        top: '200px',
-                      }}
                       isShow
                     >
                       <h3>{_('User Protocol')}</h3>
@@ -668,9 +668,12 @@ export default class QuickSetup extends React.Component {
                       text={_('Next ->')}
                       theme="primary"
                       onClick={() => {
-                        if (this.noErrorThisPage()) {
-                          this.props.changePage('4');
-                        }
+                        this.props.validateAll()
+                        .then((msg) => {
+                          if (msg.isEmpty()) {
+                            this.props.changePage('4');
+                          }
+                        });
                       }}
                     />
                   </FormGroup>
@@ -729,6 +732,7 @@ export default class QuickSetup extends React.Component {
                           onClose={this.onModalCloseBtnClick}
                           okText={_('Select')}
                           cancelText={_('Cancel')}
+                          size="lg"
                           okButton
                           cancelButton
                         >
@@ -779,9 +783,6 @@ export default class QuickSetup extends React.Component {
                       title={_('Country Code')}
                       onClose={this.onCloseCountrySelectModal}
                       onOk={this.props.saveCountrySelectModal}
-                      style={{
-                        top: '200px',
-                      }}
                       isShow
                     >
                       <h3>{_('User Protocol')}</h3>
@@ -830,7 +831,7 @@ export default class QuickSetup extends React.Component {
                     value={mode || 'none'}
                     onChange={(data) => this.props.updateItemSettings({
                       security: {
-                        mode: data.value,
+                        mode: data.value || 'none',
                         cipher: this.props.store.getIn(['curData', 'security', 'cipher']) || 'aes',
                         key: '',
                       },
@@ -867,6 +868,8 @@ export default class QuickSetup extends React.Component {
                               cipher: this.props.store.getIn(['curData', 'security', 'cipher']) || 'aes',
                             },
                           })}
+                          required
+                          {...validPassword}
                         />
                       </div>
                     )
@@ -896,9 +899,12 @@ export default class QuickSetup extends React.Component {
                       text={_('Next ->')}
                       theme="primary"
                       onClick={() => {
-                        if (this.noErrorThisPage()) {
-                          this.props.changePage('4');
-                        }
+                        this.props.validateAll()
+                        .then((msg) => {
+                          if (msg.isEmpty()) {
+                            this.props.changePage('4');
+                          }
+                        });
                       }}
                     />
                   </FormGroup>
@@ -1006,9 +1012,6 @@ export default class QuickSetup extends React.Component {
                       title={_('Country Code')}
                       onClose={this.onCloseCountrySelectModal}
                       onOk={this.props.saveCountrySelectModal}
-                      style={{
-                        top: '200px',
-                      }}
                       isShow
                     >
                       <h3>{_('User Protocol')}</h3>
@@ -1053,6 +1056,9 @@ export default class QuickSetup extends React.Component {
                   <FormGroup
                     type="select"
                     label={_('Security')}
+                    value={
+                      mode === 'wep' ? mode : 'none'
+                    }
                     options={repeaterSecurityOptions}
                     onChange={(data) => this.props.updateItemSettings({
                       security: {
@@ -1064,7 +1070,6 @@ export default class QuickSetup extends React.Component {
                         key: '',
                       },
                     })}
-                    value={mode || 'none'}
                   />
                   {
                     this.props.store.getIn(['curData', 'security', 'mode']) === 'none' ? null : (
@@ -1183,9 +1188,12 @@ export default class QuickSetup extends React.Component {
                       text={_('Next ->')}
                       theme="primary"
                       onClick={() => {
-                        if (this.noErrorThisPage()) {
-                          this.props.changePage('4');
-                        }
+                        this.props.validateAll()
+                        .then((msg) => {
+                          if (msg.isEmpty()) {
+                            this.props.changePage('4');
+                          }
+                        });
                       }}
                     />
                   </FormGroup>
@@ -1272,7 +1280,9 @@ export default class QuickSetup extends React.Component {
                       }}
                     />&nbsp;&nbsp;&nbsp;
                     <SaveButton
-                      text={_('Complete')}
+                      text={_('Save')}
+                      loading={this.props.app.get('saving')}
+                      onClick={this.props.saveSettings}
                     />
                   </FormGroup>
                 </div>
@@ -1358,7 +1368,9 @@ export default class QuickSetup extends React.Component {
                       }}
                     />&nbsp;&nbsp;&nbsp;
                     <SaveButton
-                      text={_('Complete')}
+                      text={_('Save')}
+                      loading={this.props.app.get('saving')}
+                      onClick={this.props.saveSettings}
                     />
                   </FormGroup>
                 </div>
@@ -1438,7 +1450,9 @@ export default class QuickSetup extends React.Component {
                       }}
                     />&nbsp;&nbsp;&nbsp;
                     <SaveButton
-                      text={_('Complete')}
+                      text={_('Save')}
+                      loading={this.props.app.get('saving')}
+                      onClick={this.props.saveSettings}
                     />
                   </FormGroup>
                 </div>

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Map, fromJS } from 'immutable';
 import validator from 'shared/utils/lib/validator';
 import { bindActionCreators } from 'redux';
-import { FormGroup, FormInput, Modal, Table } from 'shared/components';
+import { FormGroup, FormInput, Modal, Table, SaveButton } from 'shared/components';
 import { Button } from 'shared/components/Button';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/settings';
@@ -16,6 +16,7 @@ const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
   selfState: PropTypes.instanceOf(Map),
+  validateAll: PropTypes.func,
 
   route: PropTypes.object,
   initSettings: PropTypes.func,
@@ -104,7 +105,7 @@ const channelWidthOptions = [
 ];
 
 const validOptions = Map({
-  ssid: validator({
+  validSsid: validator({
     rules: 'remarkTxt:["\'\\\\"]|len:[1, 31]',
   }),
   staApmac: validator({
@@ -118,6 +119,9 @@ const validOptions = Map({
   }),
   apmac3: validator({
     rules: 'mac',
+  }),
+  validPwd: validator({
+    rules: 'pwd|len:[8, 32]',
   }),
 });
 
@@ -189,12 +193,12 @@ export default class Basic extends React.Component {
   }
 
   onSave() {
-    if (this.noErrorThisPage()) {
-      console.log('saved');
-      this.props.saveSettings();
-    } else {
-      console.log('not saved');
-    }
+    this.props.validateAll()
+      .then(msg => {
+        if (msg.isEmpty()) {
+          this.props.saveSettings();
+        }
+      });
   }
 
   onHideSsidboxClick() {
@@ -394,7 +398,7 @@ export default class Basic extends React.Component {
       wirelessMode, ssid, apMac, countryCode, radioMode, channelWidth,
       hideSsid, txPower, frequency, maxTxRate, peers, autoRepeat,
     } = this.props.store.get('curData').toJS();
-    const { staApmac, apmac1, apmac2, apmac3 } = this.props.validateOption;
+    const { staApmac, apmac1, apmac2, apmac3, validSsid, validPwd } = this.props.validateOption;
     const mode = this.props.store.getIn(['curData', 'security', 'mode']);
     const key = this.props.store.getIn(['curData', 'security', 'key']);
     const auth = this.props.store.getIn(['curData', 'security', 'auth']);
@@ -432,6 +436,7 @@ export default class Basic extends React.Component {
           onClose={this.onModalCloseBtnClick}
           okText={_('Select')}
           cancelText={_('Cancel')}
+          size="lg"
           okButton
           cancelButton
         >
@@ -490,7 +495,8 @@ export default class Basic extends React.Component {
                 onChange={(data) => this.props.updateItemSettings({
                   ssid: data.value,
                 })}
-                {...this.props.validateOption.ssid}
+                required
+                {...validSsid}
               />
             </div>
             <span className="fl">
@@ -564,7 +570,7 @@ export default class Basic extends React.Component {
                         data.value, peer2, peer3,
                       ],
                     })}
-                    {... apmac1}
+                    {...apmac1}
                   />
                   <FormGroup
                     type="text"
@@ -632,9 +638,6 @@ export default class Basic extends React.Component {
                 title={_('Country Code')}
                 onClose={this.onCloseCountrySelectModal}
                 onOk={this.props.saveCountrySelectModal}
-                style={{
-                  top: '200px',
-                }}
                 isShow
               >
                 <h3>{_('User Protocol')}</h3>
@@ -662,7 +665,7 @@ export default class Basic extends React.Component {
             label={_('Channel')}
             type="select"
             options={this.makeChannelOptions()}
-            value={this.props.store.getIn(['curData', 'frequency'])}
+            value={this.props.store.getIn(['curData', 'frequency']) || 'auto'}
             onChange={(data) => this.props.updateItemSettings({
               frequency: data.value || 'auto',
             })}
@@ -746,6 +749,8 @@ export default class Basic extends React.Component {
                             cipher,
                           },
                         })}
+                        required
+                        {...validPwd}
                       />
                     </div>
                   )
@@ -867,14 +872,14 @@ export default class Basic extends React.Component {
           }
 
         </div>
-        <div>
-          <hr />
-          <Button
-            icon="save"
-            theme="primary"
-            text={_('Save')}
-            onClick={this.onSave}
-          />
+        <div className="form-group form-group--save">
+          <div className="form-control">
+            <SaveButton
+              type="button"
+              loading={this.props.app.get('saving')}
+              onClick={this.onSave}
+            />
+          </div>
         </div>
       </div>
     );

@@ -51,7 +51,7 @@ export default class TimeSettings extends Component {
         ntpEnable: '0',
       },
     });
-    this.props.fetch('goform/get_ntp_info')
+    utils.fetch('goform/get_ntp_info')
               .then((json) => {
                 if (json.state && json.state.code === 2000) {
                   this.props.updateItemSettings({

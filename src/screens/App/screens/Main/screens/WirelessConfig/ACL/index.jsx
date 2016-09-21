@@ -79,7 +79,6 @@ export default class ACL extends React.Component {
 
   componentWillUnmount() {
     this.props.leaveSettingsScreen();
-    this.props.leaveScreen();
     this.props.resetVaildateMsg();
   }
 

@@ -1,5 +1,6 @@
 import urls from 'shared/config/urls';
 import * as appActions from 'shared/actions/app';
+import * as settingActions from 'shared/actions/settings';
 
 export function toggleShowAdvanceBtn() {
   return {
@@ -7,9 +8,10 @@ export function toggleShowAdvanceBtn() {
   };
 }
 
-export function toggleShowResultBtn() {
+export function toggleShowResultBtn(data) {
   return {
     type: 'TOGGLE_SHOW_RESULT_BTN',
+    data,
   };
 }
 
@@ -40,6 +42,13 @@ export function changeSelectedIp(data) {
   };
 }
 
+export function changeTimeClock(data) {
+  return {
+    type: 'CHANGE_TIME_CLOCK',
+    data,
+  };
+}
+
 export function clickSpeedTestRunBtn() {
   return (dispatch, getState) => {
     const showAdvance = getState().speedtest.get('showAdvance');
@@ -54,7 +63,7 @@ export function clickSpeedTestRunBtn() {
             .then((json) => {
               if (json.state && json.state.code === 2000) {
                 dispatch(receiveTestResult(json.data));
-                dispatch(toggleShowResultBtn());
+                // dispatch(toggleShowResultBtn());
               }
             });
   };

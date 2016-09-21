@@ -200,6 +200,7 @@ const routes = [{
       path: '/main/maintenance',
       icon: 'wrench',
       text: _('Maintenance'),
+      fetchUrl: 'goform/save_config',
       component: pMaintenance.Screen,
     }, {
       id: 'tools',

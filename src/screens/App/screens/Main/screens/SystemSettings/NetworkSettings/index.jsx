@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 import {
   SaveButton, FormGroup, FormInput,
 } from 'shared/components';
+import validator from 'shared/utils/lib/validator';
 import * as appActions from 'shared/actions/app';
 import * as sharedActions from 'shared/actions/settings';
 // import * as sharedReducer from 'shared/reducers/settings';
@@ -23,9 +24,45 @@ const propTypes = {
   updateItemSettings: PropTypes.func,
   leaveSettingsScreen: PropTypes.func,
   validateOption: PropTypes.object,
+  validateAll: PropTypes.func,
 };
 
 const defaultProps = {};
+
+const validOptions = Map({
+  lanIp: validator({
+    rules: 'ip',
+  }),
+  lanMask: validator({
+    rules: 'mask',
+  }),
+  firstDNS: validator({
+    rules: 'ip',
+  }),
+  secondDNS: validator({
+    rules: 'ip',
+  }),
+  validGateway: validator({
+    rules: 'ip',
+  }),
+  validSsid: validator({
+    rules: 'remarkTxt:["\'\\\\"]|len:[1, 31]',
+  }),
+  validDistance: validator({
+    rules: 'num:[1, 10]',
+  }),
+  validPassword: validator({
+    rules: 'pwd|len:[8, 32]',
+  }),
+  apmac2: validator({
+    rules: 'mac',
+  }),
+  apmac3: validator({
+    rules: 'mac',
+  }),
+});
+
+
 
 export default class NetworkSettings extends React.Component {
 
@@ -35,6 +72,7 @@ export default class NetworkSettings extends React.Component {
     this.onDhcpClick = this.onDhcpClick.bind(this);
     this.onStaticClick = this.onStaticClick.bind(this);
     this.onVlanBtnClick = this.onVlanBtnClick.bind(this);
+    this.noErrorThisPage = this.noErrorThisPage.bind(this);
   }
 
   componentWillMount() {
@@ -67,7 +105,12 @@ export default class NetworkSettings extends React.Component {
   }
 
   onSave() {
-    this.props.saveSettings();
+    this.props.validateAll()
+      .then(msg => {
+        if (msg.isEmpty()) {
+          this.props.saveSettings();
+        }
+      });
   }
 
   onDhcpClick() {
@@ -101,12 +144,26 @@ export default class NetworkSettings extends React.Component {
     }
   }
 
+  noErrorThisPage(...args) {
+    const errorMsg = this.props.app.get('invalid');
+    let flag = true;
+    if (errorMsg.isEmpty()) {
+      return true;
+    }
+    for (const name of args) {
+      if (errorMsg.has(name)) {
+        flag = false;
+      }
+    }
+    return flag;
+  }
+
   render() {
     const {
-      proto, fallbackIp, ip, mask, gateway, dns1, dns2, mtu,
+      proto, fallbackIp, ip, mask, gateway, dns1, dns2,
       vlanEnable, vlanId, fallbackMask,
     } = this.props.store.get('curData').toJS();
-
+    const { lanIp, lanMask, firstDNS, secondDNS, validGateway } = this.props.validateOption;
     return (
       <div>
         <FormGroup
@@ -137,6 +194,7 @@ export default class NetworkSettings extends React.Component {
                 onChange={(data) => this.props.updateItemSettings({
                   fallbackIp: data.value,
                 })}
+                {...lanIp}
               />
               <FormGroup
                 type="text"
@@ -145,6 +203,7 @@ export default class NetworkSettings extends React.Component {
                 onChange={(data) => this.props.updateItemSettings({
                   fallbackMask: data.value,
                 })}
+                {...lanMask}
               />
             </div>
           ) : (
@@ -156,6 +215,8 @@ export default class NetworkSettings extends React.Component {
                 onChange={(data) => this.props.updateItemSettings({
                   ip: data.value,
                 })}
+                required
+                {...lanIp}
               />
               <FormGroup
                 type="text"
@@ -164,6 +225,8 @@ export default class NetworkSettings extends React.Component {
                 onChange={(data) => this.props.updateItemSettings({
                   mask: data.value,
                 })}
+                required
+                {...lanMask}
               />
               <FormGroup
                 type="text"
@@ -172,6 +235,8 @@ export default class NetworkSettings extends React.Component {
                 onChange={(data) => this.props.updateItemSettings({
                   gateway: data.value,
                 })}
+                required
+                {...validGateway}
               />
               <FormGroup
                 type="text"
@@ -180,6 +245,8 @@ export default class NetworkSettings extends React.Component {
                 onChange={(data) => this.props.updateItemSettings({
                   dns1: data.value,
                 })}
+                required
+                {...firstDNS}
               />
               <FormGroup
                 type="text"
@@ -188,18 +255,11 @@ export default class NetworkSettings extends React.Component {
                 onChange={(data) => this.props.updateItemSettings({
                   dns2: data.value,
                 })}
+                {...secondDNS}
               />
             </div>
           )
         }
-        <FormGroup
-          type="text"
-          label={_('MTU')}
-          value={mtu}
-          onChange={(data) => this.props.updateItemSettings({
-            mtu: data.value,
-          })}
-        />
         <h3>Vlan Settings</h3>
         <FormGroup
           type="checkbox"
@@ -253,6 +313,7 @@ function mapDispatchToProps(dispatch) {
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
+  validator.mergeProps(validOptions)
 )(NetworkSettings);
 
 export const networksettings = reducer;

@@ -3,6 +3,7 @@ import { fromJS, Map } from 'immutable';
 import { connect } from 'react-redux';
 import utils from 'shared/utils';
 import { bindActionCreators } from 'redux';
+import validator from 'shared/utils/lib/validator';
 import { FormInput, FormGroup } from 'shared/components/Form';
 import { SaveButton } from 'shared/components/Button';
 import * as sharedActions from 'shared/actions/settings';
@@ -18,13 +19,38 @@ const propTypes = {
   save: PropTypes.func,
   route: PropTypes.object,
   app: PropTypes.instanceOf(Map),
+  validateOption: PropTypes.object,
+  validateAll: PropTypes.func,
+  saveSettings: PropTypes.func,
 
   leaveSettingsScreen: PropTypes.func,
   leaveScreen: PropTypes.func,
   resetVaildateMsg: PropTypes.func,
 };
 
+const validOptions = Map({
+  validLed1: validator({
+    rules: 'num:[-98, -10]',
+  }),
+  validLed2: validator({
+    rules: 'num:[-98, -10]',
+  }),
+  validLed3: validator({
+    rules: 'num:[-98, -10]',
+  }),
+  validLed4: validator({
+    rules: 'num:[-98, -10]',
+  }),
+  validSens: validator({
+    rules: 'num:[-98, -10]',
+  }),
+});
+
 export default class Advance extends React.Component {
+  constructor(prop) {
+    super(prop);
+    this.onSave = this.onSave.bind(this);
+  }
 
   componentDidMount() {
     const props = this.props;
@@ -53,11 +79,21 @@ export default class Advance extends React.Component {
     this.props.resetVaildateMsg();
   }
 
+  onSave() {
+    this.props.validateAll()
+      .then(msg => {
+        if (msg.isEmpty()) {
+          this.props.saveSettings();
+        }
+      });
+  }
+
   render() {
     const {
       sensEnable, distance, sensThreshold, rtsEnable, rts, isolation,
       led1Threshold, led2Threshold, led3Threshold, led4Threshold,
     } = this.props.store.get('curData').toJS();
+    const { validLed1, validLed2, validLed3, validLed4, validSens } = this.props.validateOption;
     return (
       <div className="advanceWrap">
         <div className="rtsConfg">
@@ -85,22 +121,6 @@ export default class Advance extends React.Component {
             ) : null
           }
         </div>
-        <FormGroup
-          type="range"
-          label={_('Distance Value')}
-          min="0"
-          max="10"
-          step="0.1"
-          help="km"
-          value={distance}
-          hasTextInput
-          onChange={(data) => {
-            console.log(data.value)
-            this.props.updateItemSettings({
-              distance: data.value,
-            });
-          }}
-        />
         <div className="clientIsoConfg">
           <FormGroup
             label={_('Client Isolation')}
@@ -132,11 +152,26 @@ export default class Advance extends React.Component {
                   sensThreshold: data.value,
                 })}
                 required
+                {...validSens}
               />
             ) : null
           }
         </div>
-
+        <FormGroup
+          type="range"
+          label={_('Distance Value')}
+          min="0"
+          max="10"
+          step="0.1"
+          help="km"
+          value={distance}
+          hasTextInput
+          onChange={(data) => {
+            this.props.updateItemSettings({
+              distance: data.value,
+            });
+          }}
+        />
         <div className="signalLedConfg">
           <FormGroup
             label={_('Signal LED Thresholds')}
@@ -153,14 +188,14 @@ export default class Advance extends React.Component {
                 id="threshdForLed1"
                 type="number"
                 label="LED1"
-                help="dbm"
+                help={"dbm " + _('range:') + " -98 ~ -10"}
                 value={led1Threshold}
                 onChange={(data) => this.props.updateItemSettings({
                   led1Threshold: data.value,
                 })}
-                style={{
-                  width: '165px',
-                }}
+                size="sm"
+                required
+                {...validLed1}
               />
             </div>
             <br /><br />
@@ -176,14 +211,14 @@ export default class Advance extends React.Component {
                 id="threshdForLed2"
                 type="number"
                 label="LED2"
-                help="dbm"
+                help={"dbm " + _('range:') + " -98 ~ -10"}
                 value={led2Threshold}
                 onChange={(data) => this.props.updateItemSettings({
                   led2Threshold: data.value,
                 })}
-                style={{
-                  width: '165px',
-                }}
+                size="sm"
+                required
+                {...validLed2}
               />
             </div>
             <br /><br />
@@ -199,14 +234,14 @@ export default class Advance extends React.Component {
                 id="threshdForLed3"
                 type="number"
                 label="LED3"
-                help="dbm"
+                help={"dbm " + _('range:') + " -98 ~ -10"}
                 value={led3Threshold}
                 onChange={(data) => this.props.updateItemSettings({
                   led3Threshold: data.value,
                 })}
-                style={{
-                  width: '165px',
-                }}
+                size="sm"
+                required
+                {...validLed3}
               />
             </div>
             <br /><br />
@@ -222,14 +257,14 @@ export default class Advance extends React.Component {
                 id="threshdForLed4"
                 type="number"
                 label="LED4"
-                help="dbm"
+                help={"dbm " + _('range:') + " -98 ~ -10"}
                 value={led4Threshold}
                 onChange={(data) => this.props.updateItemSettings({
                   led4Threshold: data.value,
                 })}
-                style={{
-                  width: '165px',
-                }}
+                size="sm"
+                required
+                {...validLed4}
               />
             </div>
           </FormGroup>
@@ -238,9 +273,7 @@ export default class Advance extends React.Component {
           <FormGroup>
             <SaveButton
               loading={this.props.app.get('saving')}
-              onClick={() => {
-                this.props.save(this.props.route.saveUrl, this.props.store.get('curData').toJS());
-              }}
+              onClick={this.onSave}
             />
           </FormGroup>
         </div>
@@ -270,6 +303,7 @@ function mapDispatchToProps(dispatch) {
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
+  validator.mergeProps(validOptions)
 )(Advance);
 
 export const advance = reducer;

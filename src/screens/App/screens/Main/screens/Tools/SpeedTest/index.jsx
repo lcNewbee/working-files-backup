@@ -3,17 +3,21 @@ import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { Map, fromJS } from 'immutable';
 import {
-  Button, FormGroup, FormInput, Modal, Table,
+  Button, FormGroup, FormInput, Modal, Table, SaveButton,
 } from 'shared/components';
+import validator from 'shared/utils/lib/validator';
 import { bindActionCreators } from 'redux';
 import * as appActions from 'shared/actions/app';
 import * as sharedActions from 'shared/actions/settings';
 import * as selfActions from './actions';
 import selfReducer from './reducer';
 
+let a;
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
+  validateAll: PropTypes.func,
+  validateOption: PropTypes.object,
 
   route: PropTypes.object,
   initSettings: PropTypes.func,
@@ -29,10 +33,19 @@ const propTypes = {
   toggleShowAdvanceBtn: PropTypes.func,
   changeShowScanResults: PropTypes.func,
   changeSelectedIp: PropTypes.func,
+  changeTimeClock: PropTypes.func,
 };
 
 const defaultProps = {};
 
+const validOptions = Map({
+  validIp: validator({
+    rules: 'ip',
+  }),
+  validTime: validator({
+    rules: 'num:[10, 300]',
+  }),
+});
 export default class SpeedTest extends React.Component {
 
   constructor(props) {
@@ -42,11 +55,12 @@ export default class SpeedTest extends React.Component {
     this.onModalCancelClick = this.onModalCancelClick.bind(this);
     this.onSelectScanResultItem = this.onSelectScanResultItem.bind(this);
     this.ceateIpTableList = this.ceateIpTableList.bind(this);
+    this.onRunTest = this.onRunTest.bind(this);
   }
 
   componentWillMount() {
     const props = this.props;
-
+    clearInterval(a);
     props.initSettings({
       settingId: props.route.id,
       fetchUrl: props.route.formUrl,
@@ -54,11 +68,17 @@ export default class SpeedTest extends React.Component {
       defaultData: {
         ip: '192.168.1.10',
         time: '30',
-        direction: 'duplex',
+        direction: '0',
       },
     });
     props.initSelfState();
     props.changeShowScanResults(false);
+  }
+
+  componentWillUnmount() {
+    this.props.resetVaildateMsg();
+    this.props.changeTimeClock('');
+    clearInterval(a);
   }
   onSelectBtnClick() {
     this.props.fetch('goform/get_ip_list')
@@ -106,17 +126,38 @@ export default class SpeedTest extends React.Component {
     }
     return list;
   }
+  onRunTest() {
+    this.props.toggleShowResultBtn('0');
+    this.props.validateAll()
+        .then(msg => {
+          if (msg.isEmpty()) {
+            this.props.clickSpeedTestRunBtn();
+            let clock = parseInt(this.props.store.getIn(['curData', 'time']), 10);
+            this.props.changeTimeClock(clock);
+            a = setInterval(() => {
+              const timeStr = (clock--).toString();
+              this.props.changeTimeClock(timeStr);
+              if (clock === 0) {
+                this.props.changeTimeClock('');
+                this.props.toggleShowResultBtn('1');
+                clearInterval(a);
+              }
+            }, 1000);
+          }
+        });
+  }
   render() {
     const {
       ip, username, password, port, time, direction,
     } = this.props.store.get('curData').toJS();
     const { showResults, showAdvance, bandwidth, rx, tx, total } = this.props.selfState.toJS();
+    const { validIp, validTime } = this.props.validateOption;
     const scanIpOptions = fromJS([
       {
         id: 'action',
         text: _('Select'),
         width: '50',
-        transform: function(val, item) {
+        transform: function (val, item) {
           return (
             <FormInput
               type="radio"
@@ -142,6 +183,8 @@ export default class SpeedTest extends React.Component {
             onChange={(data) => this.props.updateItemSettings({
               ip: data.value,
             })}
+            required
+            {...validIp}
           />
           <Button
             className="fl"
@@ -175,7 +218,7 @@ export default class SpeedTest extends React.Component {
         }
         <FormGroup
           type="checkbox"
-          label={_('Show Advanced Options')}
+          label={_('Advanced Options')}
           value={showAdvance === '1'}
           onClick={this.props.toggleShowAdvanceBtn}
         />
@@ -184,12 +227,12 @@ export default class SpeedTest extends React.Component {
             <div>
               <FormGroup
                 type="radio"
-                label={_('Direction')}
+                label={_('Flow Direction')}
               >
                 <FormInput
                   type="radio"
                   name="directionSelect"
-                  text={_('duplex')}
+                  text={_('Duplex')}
                   checked={direction === '0'}
                   onChange={() => this.props.updateItemSettings({
                     direction: '0',
@@ -198,7 +241,7 @@ export default class SpeedTest extends React.Component {
                 <FormInput
                   type="radio"
                   name="directionSelect"
-                  text={_('receive')}
+                  text={_('Receive')}
                   checked={direction === '1'}
                   onChange={() => this.props.updateItemSettings({
                     direction: '1',
@@ -207,7 +250,7 @@ export default class SpeedTest extends React.Component {
                 <FormInput
                   type="radio"
                   name="directionSelect"
-                  text={_('transmit')}
+                  text={_('Transmit')}
                   checked={direction === '2'}
                   onChange={() => this.props.updateItemSettings({
                     direction: '2',
@@ -216,11 +259,13 @@ export default class SpeedTest extends React.Component {
               </FormGroup>
               <FormGroup
                 type="number"
-                label={_('Duration')}
+                label={_('Test Duration')}
                 value={time}
                 onChange={(data) => this.props.updateItemSettings({
                   time: data.value,
                 })}
+                required
+                {...validTime}
               />
             </div>
           ) : null
@@ -228,8 +273,10 @@ export default class SpeedTest extends React.Component {
         <FormGroup>
           <Button
             theme="primary"
-            text={_('Run')}
-            onClick={this.props.clickSpeedTestRunBtn}
+            text={this.props.selfState.get('time') + _('   run')}
+            loading={this.props.selfState.get('time') !== ''}
+            disabled={this.props.selfState.get('time').length !== 0}
+            onClick={this.onRunTest}
           />
         </FormGroup>
         {
@@ -279,6 +326,7 @@ function mapDispatchToProps(dispatch) {
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
+  validator.mergeProps(validOptions)
 )(SpeedTest);
 
 

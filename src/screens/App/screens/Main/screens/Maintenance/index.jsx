@@ -5,6 +5,7 @@ import { fromJS, Map } from 'immutable';
 import { FormGroup, FormInput, Modal } from 'shared/components';
 import { Button } from 'shared/components/Button';
 import * as appActions from 'shared/actions/app';
+import * as settingActions from 'shared/actions/settings';
 import utils from 'shared/utils';
 import ProgressBar from './ProgressBar';
 import * as selfActions from './actions';
@@ -13,11 +14,14 @@ import reducer from './reducer';
 
 const propTypes = {
   save: PropTypes.func,
+  route: PropTypes.object,
   changeProgressBarInfo: PropTypes.func,
   changeShowProgessBar: PropTypes.func,
   selfState: PropTypes.instanceOf(Map),
   showProgessBar: PropTypes.bool,
   isShow: PropTypes.bool,
+  initSettings: PropTypes.func,
+  fetchSettings: PropTypes.func,
 };
 
 export default class Maintenance extends Component {
@@ -28,6 +32,15 @@ export default class Maintenance extends Component {
     this.onConfigurationRestore = this.onConfigurationRestore.bind(this);
     this.onRebootDevice = this.onRebootDevice.bind(this);
     this.onResetDevice = this.onResetDevice.bind(this);
+    this.onBackupConfig = this.onBackupConfig.bind(this);
+  }
+
+  componentWillMount() {
+    const props = this.props;
+    this.props.initSettings({
+      settingId: props.route.id,
+      fetchUrl: props.route.fetchUrl,
+    });
   }
 
   componentWillUnmount() {
@@ -112,7 +125,7 @@ export default class Maintenance extends Component {
 
     this.props.changeProgressBarInfo(fromJS({
       title: _('The configuration is restoring now, please wait ...'),
-      time: 12,
+      time: 60,
       isShow: true,
     }));
   }
@@ -143,6 +156,17 @@ export default class Maintenance extends Component {
         });
   }
 
+  onBackupConfig() {
+    utils.fetch('goform/save_config')
+        .then((json) => {
+          if (json.state && json.state.code === 2000) {
+            window.location = json.data.config_url;
+          } else if (json.state && json.state.code === 4000) {
+            window.alert('Backup failed! Please try again.');
+          }
+        });
+  }
+
   render() {
     return (
       <div className="Maintenance">
@@ -150,6 +174,7 @@ export default class Maintenance extends Component {
           isShow={this.props.selfState.getIn(['progressBarInfo', 'isShow'])}
           style={{
             top: '200px',
+            borderRadius: '20px',
           }}
           noFooter
         >
@@ -164,7 +189,7 @@ export default class Maintenance extends Component {
           <div className="cols col-6">
             <form
               className="form-group"
-              action="/cgi-bin/upload.cgi"
+              action="/cgi-bin/back_config"
               method="POST"
               encType="multipart/form-data"
               id="upgradeForm"
@@ -193,7 +218,7 @@ export default class Maintenance extends Component {
             <FormGroup label={_('Backup configuration:')}>
               <Button
                 text="Backup"
-                onClick={() => this.props.save()}
+                onClick={this.onBackupConfig}
               />
             </FormGroup>
 
@@ -259,7 +284,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
-    utils.extend({}, appActions, selfActions),
+    utils.extend({}, appActions, settingActions, selfActions),
     dispatch
   );
 }

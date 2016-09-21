@@ -9,6 +9,7 @@ const defaultState = fromJS({
   rX: '1000',
   tX: '1000',
   total: '1024',
+  time: '',
 });
 
 export default function (state = defaultState, action) {
@@ -17,7 +18,7 @@ export default function (state = defaultState, action) {
       return state.set('showAdvance', (state.get('showAdvance') === '1' ? '0' : '1'));
     case 'TOGGLE_SHOW_RESULT_BTN':
       console.log('toggle');
-      return state.set('showResults', '1');
+      return state.set('showResults', action.data);
     case 'INIT_SELF_STATE':
       return state.set('showAdvance', '0')
                   .set('showResults', '0');
@@ -27,6 +28,8 @@ export default function (state = defaultState, action) {
       return state.set('showScanResults', action.data);
     case 'CHANGE_SELECTED_IP':
       return state.set('selectedIp', action.data);
+    case 'CHANGE_TIME_CLOCK':
+      return state.set('time', action.data);
     default:
   }
   return state;
