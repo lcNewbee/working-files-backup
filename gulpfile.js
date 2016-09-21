@@ -142,6 +142,7 @@ gulp.task('pub:copyaxc', function () {
   }
 
   return gulp.src([paths.build + '/**/*', paths.php + '/**/*'])
+    .pipe($.replace('goform/', 'index.php/goform/'))
     .pipe(gulp.dest(distPath));
 });
 

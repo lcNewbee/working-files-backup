@@ -202,13 +202,8 @@ const routes = [
             id: 'networkPort',
             path: '/main/network/port',
             icon: 'th',
-<<<<<<< HEAD
-            formUrl: 'goform/networkPort',
-            text: _('Port Settings'),
-=======
             formUrl: '/goform/networkPort',
             text: _('Port'),
->>>>>>> origin/develop
             component: sNetworkPort.Screen,
           }, {
             id: 'radiusTemplate',
@@ -221,15 +216,9 @@ const routes = [
             id: 'networkAaa',
             icon: 'lock',
             path: '/main/network/aaa',
-<<<<<<< HEAD
-            fetchUrl: 'goform/vlanAaa',
-            saveUrl: 'goform/vlanAaa',
-            text: _('AAA Settings'),
-=======
             fetchUrl: '/goform/vlanAaa',
             saveUrl: '/goform/vlanAaa',
             text: _('AAA'),
->>>>>>> origin/develop
             component: sNetworkAaa.Screen,
           }, {
             id: 'networkPortal',
@@ -325,34 +314,22 @@ const routes = [
               }, {
                 id: 'rfPlan',
                 path: '/main/group/map/rf_plan',
-<<<<<<< HEAD
-                formUrl: 'goform/getDeviceList',
-=======
                 formUrl: '/goform/rfPlan',
                 fetchUrl: '/goform/getDeviceList',
->>>>>>> origin/develop
                 text: _('RF Plan'),
                 component: sRfMap.Screen,
               }, {
                 id: 'heatMap',
                 path: '/main/group/map/heat_map',
-<<<<<<< HEAD
-                formUrl: 'goform/heatMap',
-=======
                 formUrl: '/goform/heatMap',
                 fetchUrl: '/goform/getDeviceList',
->>>>>>> origin/develop
                 text: _('Heat Map'),
                 component: sHeatMap.Screen,
               }, {
                 id: 'cientsTrace',
                 path: '/main/group/map/cients_trace',
-<<<<<<< HEAD
-                formUrl: 'goform/cientsTrace',
-=======
                 formUrl: '/goform/cientsTrace',
                 fetchUrl: '/goform/getDeviceList',
->>>>>>> origin/develop
                 text: _('Cients Trace'),
                 component: sClientsTrace.Screen,
               },
@@ -374,11 +351,7 @@ const routes = [
               }, {
                 id: 'blacklist',
                 path: '/main/group/wireless/acl',
-<<<<<<< HEAD
-                formUrl: 'goform/getClientInfo',
-=======
                 formUrl: '/goform/blacklist',
->>>>>>> origin/develop
                 text: _('Blacklist'),
                 component: sBlacklist.Screen,
               }, {

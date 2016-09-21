@@ -130,19 +130,8 @@ export default class View extends React.Component {
         this.props.closeListItemModal();
       });
   }
-<<<<<<< HEAD
-  onAction(action, mac) {
-    const query = {
-      mac,
-      action,
-    };
-
-    this.props.save('goform/blacklist', query)
-=======
   onAction(action, data) {
-    console.log(data)
     this.props.save('/goform/blacklist', data)
->>>>>>> origin/develop
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           console.log(11);
