@@ -121,7 +121,7 @@ const validOptions = Map({
     rules: 'mac',
   }),
   validPwd: validator({
-    rules: 'pwd|len:[8, 32]',
+    rules: 'pwd|len:[6, 32]',
   }),
 });
 
@@ -770,7 +770,7 @@ export default class Basic extends React.Component {
                     security: {
                       mode: data.value,
                       auth: auth || 'shared',
-                      keyLength: keyLength || '128',
+                      keyLength: keyLength || '64',
                       keyType: keyType || 'Hex',
                       key,
                       keyIndex: keyIndex || '1',

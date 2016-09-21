@@ -2,12 +2,10 @@ import React, { Component, PropTypes } from 'react';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {
-  SaveButton, FormGroup,
-} from 'shared/components';
+import { SaveButton, FormGroup } from 'shared/components';
+import utils from 'shared/utils';
 import * as appActions from 'shared/actions/app';
 import * as settingsActions from 'shared/actions/settings';
-import utils from 'shared/utils';
 import * as selfActions from './actions';
 import reducer from './reducer';
 import { timezone } from './TimeZone.js';

@@ -63,6 +63,9 @@ export default class ProgressBar extends React.Component {
             className="percentage"
           >
              {
+                parseInt((this.state.n / this.props.time) * 100, 10) > 100 ? '100% ...' : (
+                 parseInt((this.state.n / this.props.time) * 100, 10) + '% ...'
+                )
             // (() => {
             //   let bodyWidth; let wrapWidth;
             //   if (this.myBody1 && this.myBodyWrap) {
@@ -72,12 +75,12 @@ export default class ProgressBar extends React.Component {
             //   console.log('mybody', bodyWidth);
             //   return parseInt((bodyWidth / wrapWidth) * 100, 10) + '% ...';
             // })()
-              (() => {
-                if (this.state.n <= this.props.time) {
-                  return parseInt((this.state.n / this.props.time) * 100, 10) + '% ...';
-                }
-                return '100%';
-              })()
+              // (() => {
+              //   if (this.state.n <= this.props.time) {
+              //     return parseInt((this.state.n / this.props.time) * 100, 10) + '% ...';
+              //   }
+              //   return '100%';
+              // })()
             }
           </span>
           <div

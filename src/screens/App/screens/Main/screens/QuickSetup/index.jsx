@@ -18,6 +18,7 @@ const propTypes = {
   changePage: PropTypes.func,
   fetchSettings: PropTypes.func,
   changeDeviceMode: PropTypes.func,
+  validateAll: PropTypes.func,
 
   store: PropTypes.instanceOf(Map),
   updateItemSettings: PropTypes.func,
@@ -286,7 +287,7 @@ export default class QuickSetup extends React.Component {
       {
         id: 'security',
         text: _('Security Mode'),
-        transform: function (val, item) {
+        transform: function (val) {
           return val.get('mode');
         }.bind(this),
       },
@@ -311,15 +312,16 @@ export default class QuickSetup extends React.Component {
         text: _('Channel Width'),
       },
     ]);
+    const store = this.props.store;
     const { page, deviceMode } = this.props.selfState.toJS();
-    const { ip, mask, ssid, countryCode, frequency, channelWidth, distance, wirelessMode } = this.props.store.get('curData').toJS();
-    const mode = this.props.store.getIn(['curData', 'security', 'mode']);
-    const key = this.props.store.getIn(['curData', 'security', 'key']);
-    const auth = this.props.store.getIn(['curData', 'security', 'auth']);
-    const keyLength = this.props.store.getIn(['curData', 'security', 'keyLength']);
-    const keyType = this.props.store.getIn(['curData', 'security', 'keyType']);
-    const keyIndex = this.props.store.getIn(['curData', 'security', 'keyIndex']);
-    const cipher = this.props.store.getIn(['curData', 'security', 'cipher']);
+    const { ip, mask, ssid, countryCode, frequency, channelWidth, distance, wirelessMode } = store.get('curData').toJS();
+    const mode = store.getIn(['curData', 'security', 'mode']);
+    const key = store.getIn(['curData', 'security', 'key']);
+    const auth = store.getIn(['curData', 'security', 'auth']);
+    const keyLength = store.getIn(['curData', 'security', 'keyLength']);
+    const keyType = store.getIn(['curData', 'security', 'keyType']);
+    const keyIndex = store.getIn(['curData', 'security', 'keyIndex']);
+    const cipher = store.getIn(['curData', 'security', 'cipher']);
     const { lanIp, lanMask, validSsid, validDistance, validPassword } = this.props.validateOption;
     return (
       <div className="wrapall">
@@ -526,7 +528,7 @@ export default class QuickSetup extends React.Component {
                     <FormInput
                       type="text"
                       value={this.getCountryNameFromCode(
-                        this.props.store.getIn(['curData', 'countryCode']),
+                        store.getIn(['curData', 'countryCode']),
                         countryMap
                       )}
                       disabled
@@ -567,7 +569,7 @@ export default class QuickSetup extends React.Component {
                         type="select"
                         options={this.makeCountryOptions(countryMap)}
                         value={this.props.selfState.get('selectedCountry') ||
-                              this.props.store.getIn(['curData', 'countryCode'])}
+                              store.getIn(['curData', 'countryCode'])}
                         onChange={(data) => this.props.changeCountryCode(data.value)}
                         disabled={!this.props.selfState.get('agreeProtocol')}
                       />
@@ -600,18 +602,18 @@ export default class QuickSetup extends React.Component {
                     onChange={(data) => this.props.updateItemSettings({
                       security: {
                         mode: data.value,
-                        cipher: this.props.store.getIn(['curData', 'security', 'cipher']) || 'aes',
+                        cipher: store.getIn(['curData', 'security', 'cipher']) || 'aes',
                         key: '',
                       },
                     })}
                   />
                   {
-                    this.props.store.getIn(['curData', 'security', 'mode']) === 'none' ? null : (
+                    store.getIn(['curData', 'security', 'mode']) === 'none' ? null : (
                       <div>
                         <FormGroup
                           label={_('Algorithm')}
                           type="switch"
-                          value={this.props.store.getIn(['curData', 'security', 'cipher'])}
+                          value={store.getIn(['curData', 'security', 'cipher'])}
                           onChange={(data) => this.props.updateItemSettings({
                             security: {
                               mode,
@@ -634,7 +636,7 @@ export default class QuickSetup extends React.Component {
                             security: {
                               mode,
                               key: data.value,
-                              cipher: this.props.store.getIn(['curData', 'security', 'cipher']) || 'aes',
+                              cipher: store.getIn(['curData', 'security', 'cipher']) || 'aes',
                             },
                           })}
                           required
@@ -739,7 +741,7 @@ export default class QuickSetup extends React.Component {
                           <Table
                             className="table"
                             options={modalOptions}
-                            list={this.props.store.getIn(['curData', 'scanResult', 'siteList'])}
+                            list={store.getIn(['curData', 'scanResult', 'siteList'])}
                           />
                         </Modal>
                       </span>
@@ -748,7 +750,7 @@ export default class QuickSetup extends React.Component {
                   <FormGroup
                     label={_('Peer')}
                     type="text"
-                    value={this.props.store.getIn(['curData', 'apMac'])}
+                    value={store.getIn(['curData', 'apMac'])}
                     onChange={(data) => this.props.updateItemSettings({
                       apMac: data.value,
                     })}
@@ -759,7 +761,7 @@ export default class QuickSetup extends React.Component {
                     <FormInput
                       type="text"
                       value={this.getCountryNameFromCode(
-                        this.props.store.getIn(['curData', 'countryCode']),
+                        store.getIn(['curData', 'countryCode']),
                         countryMap
                       )}
                       disabled
@@ -832,18 +834,18 @@ export default class QuickSetup extends React.Component {
                     onChange={(data) => this.props.updateItemSettings({
                       security: {
                         mode: data.value || 'none',
-                        cipher: this.props.store.getIn(['curData', 'security', 'cipher']) || 'aes',
+                        cipher: store.getIn(['curData', 'security', 'cipher']) || 'aes',
                         key: '',
                       },
                     })}
                   />
                   {
-                    this.props.store.getIn(['curData', 'security', 'mode']) === 'none' ? null : (
+                    store.getIn(['curData', 'security', 'mode']) === 'none' ? null : (
                       <div>
                         <FormGroup
                           label={_('Algorithm')}
                           type="switch"
-                          value={this.props.store.getIn(['curData', 'security', 'cipher'])}
+                          value={store.getIn(['curData', 'security', 'cipher'])}
                           onChange={(data) => this.props.updateItemSettings({
                             security: {
                               mode,
@@ -865,7 +867,7 @@ export default class QuickSetup extends React.Component {
                             security: {
                               mode,
                               key: data.value,
-                              cipher: this.props.store.getIn(['curData', 'security', 'cipher']) || 'aes',
+                              cipher: store.getIn(['curData', 'security', 'cipher']) || 'aes',
                             },
                           })}
                           required
@@ -970,7 +972,7 @@ export default class QuickSetup extends React.Component {
                           <Table
                             className="table"
                             options={modalOptions}
-                            list={this.props.store.getIn(['curData', 'scanResult', 'siteList'])}
+                            list={store.getIn(['curData', 'scanResult', 'siteList'])}
                           />
                         </Modal>
                       </span>
@@ -988,7 +990,7 @@ export default class QuickSetup extends React.Component {
                     <FormInput
                       type="text"
                       value={this.getCountryNameFromCode(
-                        this.props.store.getIn(['curData', 'countryCode']),
+                        store.getIn(['curData', 'countryCode']),
                         countryMap
                       )}
                       disabled
@@ -1063,16 +1065,16 @@ export default class QuickSetup extends React.Component {
                     onChange={(data) => this.props.updateItemSettings({
                       security: {
                         mode: data.value,
-                        auth: this.props.store.getIn(['curData', 'security', 'auth']) || 'open',
-                        keyLength: this.props.store.getIn(['curData', 'security', 'keyLength']) || '64',
-                        keyIndex: this.props.store.getIn(['curData', 'security', 'keyIndex']) || '1',
-                        keyType: this.props.store.getIn(['curData', 'security', 'keyType']) || 'Hex',
+                        auth: store.getIn(['curData', 'security', 'auth']) || 'open',
+                        keyLength: store.getIn(['curData', 'security', 'keyLength']) || '64',
+                        keyIndex: store.getIn(['curData', 'security', 'keyIndex']) || '1',
+                        keyType: store.getIn(['curData', 'security', 'keyType']) || 'Hex',
                         key: '',
                       },
                     })}
                   />
                   {
-                    this.props.store.getIn(['curData', 'security', 'mode']) === 'none' ? null : (
+                    store.getIn(['curData', 'security', 'mode']) === 'none' ? null : (
                       <div>
                         <FormGroup
                           label={_('Authentication Type')}
@@ -1092,24 +1094,27 @@ export default class QuickSetup extends React.Component {
                           })}
                           minWidth="65px"
                         />
-                        <FormGroup
-                          label={_('WEP Key Length')}
-                          type="switch"
-                          name="wepKeyLength"
-                          options={wepKeyLengthOptions}
-                          value={keyLength}
-                          onChange={(data) => this.props.updateItemSettings({
-                            security: {
-                              mode,
-                              auth,
-                              keyLength: data.value,
-                              keyType,
-                              key,
-                              keyIndex,
-                            },
-                          })}
-                          minWidth="65px"
-                        />
+                        {/*
+                          <FormGroup
+                            label={_('WEP Key Length')}
+                            type="switch"
+                            name="wepKeyLength"
+                            options={wepKeyLengthOptions}
+                            value={keyLength}
+                            onChange={(data) => this.props.updateItemSettings({
+                              security: {
+                                mode,
+                                auth,
+                                keyLength: data.value,
+                                keyType,
+                                key,
+                                keyIndex,
+                              },
+                            })}
+                            minWidth="65px"
+                          />
+                        */}
+
                         <FormGroup
                           label={_('Key Type')}
                           type="switch"
@@ -1282,7 +1287,7 @@ export default class QuickSetup extends React.Component {
                     <SaveButton
                       text={_('Save')}
                       loading={this.props.app.get('saving')}
-                      onClick={this.props.saveSettings}
+                      onClick={() => this.props.saveSettings('goform/set_quicksetup')}
                     />
                   </FormGroup>
                 </div>
@@ -1324,7 +1329,7 @@ export default class QuickSetup extends React.Component {
                   <FormGroup
                     type="plain-text"
                     label={_('Peer')}
-                    value={this.props.store.getIn(['curData', 'apMac'])}
+                    value={store.getIn(['curData', 'apMac'])}
                   />
                   <FormGroup
                     type="plain-text"
@@ -1370,7 +1375,7 @@ export default class QuickSetup extends React.Component {
                     <SaveButton
                       text={_('Save')}
                       loading={this.props.app.get('saving')}
-                      onClick={this.props.saveSettings}
+                      onClick={() => this.props.saveSettings('goform/set_quicksetup')}
                     />
                   </FormGroup>
                 </div>
@@ -1452,7 +1457,7 @@ export default class QuickSetup extends React.Component {
                     <SaveButton
                       text={_('Save')}
                       loading={this.props.app.get('saving')}
-                      onClick={this.props.saveSettings}
+                      onClick={() => this.props.saveSettings('goform/set_quicksetup')}
                     />
                   </FormGroup>
                 </div>
