@@ -449,9 +449,9 @@ export default class View extends React.Component {
     );
   }
   render() {
-    const { store } = this.props;
+    const { store, product } = this.props;
     const myListId = store.get('curListId');
-    const list = store.getIn([myListId, 'data', 'list']);
+    const list = product.getIn(['devices']);
     const isLocked = store.getIn([myListId, 'curSettings', 'isLocked']);
     const myZoom = store.getIn([myListId, 'curSettings', 'zoom']);
     const editData = store.getIn([myListId, 'data', 'edit']);
@@ -532,6 +532,7 @@ function mapStateToProps(state) {
   return {
     app: state.app,
     store: state.screens,
+    product: state.product,
   };
 }
 
