@@ -33,15 +33,6 @@ const screenOptions = fromJS([
       }),
     },
   }, {
-    id: 'endIp',
-    text: _('End IP'),
-    formProps: {
-      maxLength: '13',
-      validator: validator({
-        rules: 'ip',
-      }),
-    },
-  }, {
     id: 'mask',
     text: _('Mask'),
     formProps: {

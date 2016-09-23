@@ -36,7 +36,7 @@ const screenOptions = fromJS({
             label: _('Access Point'),
           },
         ],
-        dispaly: 'inline',
+        display: 'inline',
       },
     }, {
       id: 'markerTitle',
@@ -44,14 +44,14 @@ const screenOptions = fromJS({
       formProps: {
         required: true,
         type: 'text',
-        dispaly: 'inline',
+        display: 'inline',
       },
     }, {
       id: 'markerAddress',
       label: _('Marker Address'),
       formProps: {
         type: 'text',
-        dispaly: 'inline',
+        display: 'inline',
       },
     },
   ],

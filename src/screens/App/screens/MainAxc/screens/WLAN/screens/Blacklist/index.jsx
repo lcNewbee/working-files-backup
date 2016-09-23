@@ -61,7 +61,7 @@ export default class View extends React.Component {
     const editData = store.getIn([route.id, 'data', 'edit']) || Map({});
     const actionBarChildren = (
       <FormGroup
-        dispaly="inline"
+        display="inline"
         label={_('Dynamic Blacklists Release Time')}
       >
         <FormInput

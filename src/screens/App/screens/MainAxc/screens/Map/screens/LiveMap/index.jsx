@@ -24,7 +24,7 @@ const screenOptions = fromJS({
       defaultValue: 'building',
       formProps: {
         type: 'text',
-        dispaly: 'inline',
+        display: 'inline',
       },
     }, {
       id: 'floorNumber',
@@ -33,14 +33,14 @@ const screenOptions = fromJS({
       formProps: {
         required: true,
         type: 'number',
-        dispaly: 'inline',
+        display: 'inline',
       },
     }, {
       id: 'address',
       label: _('Address'),
       formProps: {
         type: 'text',
-        dispaly: 'inline',
+        display: 'inline',
       },
     },
   ],
