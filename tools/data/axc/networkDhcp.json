@@ -9,6 +9,18 @@
     },
     "list": [
       {
+        "pool_id": "1",
+        "pool_name": "appool",
+        "ipaddr": "192.168.118.1",
+        "gateway": "192.168.0.1",
+        "netmask": "255.255.255.0",
+        "mainDns": "8.8.8.8",
+        "secondDns": "1",
+        "releaseTime": "3000",
+        "domain": "ww.baidu.com"
+      },
+      {
+        "id": "2",
         "name": "ds",
         "startIp": "192.168.0.1",
         "endIp": "192.168.0.78",
@@ -20,17 +32,7 @@
         "domain": "ww.baidu.com"
       },
       {
-        "name": "ds",
-        "startIp": "192.168.0.1",
-        "endIp": "192.168.0.78",
-        "gateway": "192.168.0.1",
-        "mask": "255.255.255.0",
-        "mainDns": "8.8.8.8",
-        "secondDns": "1",
-        "releaseTime": "3000",
-        "domain": "ww.baidu.com"
-      },
-      {
+        "id": "3",
         "name": "ds",
         "startIp": "192.168.0.1",
         "endIp": "192.168.0.78",

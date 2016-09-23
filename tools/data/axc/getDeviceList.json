@@ -10,6 +10,8 @@
     "list": [
       {
         "map": {
+          "id": "1",
+          "buildId": "1",
           "mapName": "11",
           "mapType": "plan",
           "xpos": 20,
@@ -37,6 +39,8 @@
         "locatestatus": "location"
       }, {
         "map": {
+          "id": "2",
+          "buildId": "1",
           "mapName": "11",
           "mapType": "plan",
           "xpos": -99,
@@ -46,7 +50,7 @@
         },
         "devicename": "ap1",
         "mac": "00:12:22:33:11:33",
-        "status": "0",
+        "status": "1",
         "devicetype": "inside",
         "ip": "192.168.5.54",
         "model": "V2.2",
@@ -64,6 +68,8 @@
         "locatestatus": "location"
       }, {
         "map": {
+          "id": "3",
+          "buildId": "2",
           "mapName": "22",
           "mapType": "plan",
           "xpos": 21,
@@ -91,6 +97,8 @@
         "locatestatus": "location"
       }, {
         "map": {
+          "id": "4",
+          "buildId": "3",
           "mapName": "11",
           "mapType": "plan",
           "xpos": -99,
@@ -118,6 +126,8 @@
         "locatestatus": "location"
       }, {
         "map": {
+          "id": "5",
+          "buildId": "2",
           "mapName": "11",
           "mapType": "plan",
           "xpos": -99,
@@ -145,6 +155,8 @@
         "locatestatus": "location"
       }, {
         "map": {
+          "id": "6",
+          "buildId": "3",
           "mapName": "11",
           "mapType": "plan",
           "xpos": -99,
@@ -154,7 +166,7 @@
         },
         "devicename": "ap1",
         "mac": "00:12:22:33:11:33",
-        "status": "0",
+        "status": "1",
         "devicetype": "inside",
         "ip": "192.168.5.54",
         "model": "V2.2",
@@ -172,6 +184,8 @@
         "locatestatus": "location"
       }, {
         "map": {
+          "id": "7",
+          "buildId": "3",
           "mapName": "11",
           "mapType": "plan",
           "xpos": -99,

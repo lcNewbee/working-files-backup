@@ -17,9 +17,9 @@ paths = gulp.paths = {
   build: 'build',
   release: 'release',
   src: 'src',
-  php: 'php/web',
+  php: 'php/',
   pubNew: '../win_ac/software/web/',
-  pubAxc: '../../Sites/axc',
+  pubAxc: 'dist',
   pubAp: '../qsdk/package/comlanos/goahead/files/web',
   webpack: 'webpack.config.dev.js',
   pubWebpack: 'webpack.config.prop.js',
@@ -118,7 +118,7 @@ gulp.task('pub:copyap', function () {
 
   return gulp.src(paths.build + '/**/*')
     .pipe(gulp.dest(distPath));
-});
+  });
 gulp.task('pub:ap', function (callback) {
   runSequence(['clean:pubap', 'build'], 'pub:copyap', callback);
 });
@@ -142,12 +142,17 @@ gulp.task('pub:copyaxc', function () {
   }
 
   return gulp.src([paths.build + '/**/*', paths.php + '/**/*'])
-    .pipe($.replace('goform/', 'index.php/goform/'))
     .pipe(gulp.dest(distPath));
+});
+gulp.task('build:axc', function () {
+  return gulp.src([paths.build + '/scripts/**/*'])
+    .pipe($.replace('goform/', 'index.php/goform/'))
+    .pipe($.replace('/~zhangfang/axc/', ''))
+    .pipe(gulp.dest(paths.build + '/scripts/'));
 });
 
 gulp.task('pub:axc', function (callback) {
-  runSequence(['build'], 'pub:copyaxc', callback);
+  runSequence(['build'], 'build:axc', 'pub:copyaxc', callback);
 });
 
 

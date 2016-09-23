@@ -306,10 +306,10 @@ const routes = [
             indexRoute: { onEnter: (nextState, replace) => replace('/main/group/map/live') },
             childRoutes: [
               {
-                id: 'live',
+                id: 'liveMap',
                 path: '/main/group/map/live',
                 text: _('Live Map'),
-                formUrl: 'goform/liveMap',
+                formUrl: 'goform/mapList',
                 component: sLiveMap.Screen,
               }, {
                 id: 'rfPlan',

@@ -5,7 +5,7 @@ import { fromJS, Map } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { bindActionCreators } from 'redux';
 import {
-  Button, ListInfo, Icon, FormContainer, Switchs, Table,
+  Button, ListInfo, Icon, FormContainer, Switchs, Table, Modal,
 } from 'shared/components';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
@@ -24,7 +24,7 @@ const screenOptions = fromJS({
       defaultValue: 'building',
       formProps: {
         type: 'text',
-        dispaly: 'inline',
+        display: 'inline',
       },
     }, {
       id: 'floorNumber',
@@ -33,14 +33,14 @@ const screenOptions = fromJS({
       formProps: {
         required: true,
         type: 'number',
-        dispaly: 'inline',
+        display: 'inline',
       },
     }, {
       id: 'address',
       label: _('Address'),
       formProps: {
         type: 'text',
-        dispaly: 'inline',
+        display: 'inline',
       },
     },
   ],
@@ -68,6 +68,7 @@ const propTypes = {
   updateEditListItem: PropTypes.func,
   validateAll: PropTypes.func,
   editListItemByIndex: PropTypes.func,
+  resetVaildateMsg: PropTypes.func,
   onListAction: PropTypes.func,
   reportValidError: PropTypes.func,
   closeListItemModal: PropTypes.func,
@@ -82,13 +83,17 @@ export default class View extends React.Component {
     this.state = {
       isOpenHeader: true,
     };
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    this.onSave = this.onSave.bind(this);
-    this.renderGoogleMap = this.renderGoogleMap.bind(this);
-    this.addMarkerToMap = this.addMarkerToMap.bind(this);
-  }
 
-  componentDidMount() {
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+
+    utils.binds(this, [
+      'onSave',
+      'onCloseEditModal',
+      'onRemoveItem',
+      'renderGoogleMap',
+      'addMarkerToMap',
+    ]);
+
     utils.loadScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyBGOC8axWomvnetRPnTdcuNW-a558l-JAU&libraries=places',
       (error) => {
         if (!error) {
@@ -98,6 +103,33 @@ export default class View extends React.Component {
         }
       },
     6000);
+
+
+    this.listTableOptions = listTableOptions.push(fromJS({
+      id: 'actions',
+      text: _('Actions'),
+      width: '180',
+      transform: (val, item, index) => (
+        <div className="action-btns">
+          <Button
+            icon="edit"
+            text={_('Edit')}
+            size="sm"
+            onClick={() => {
+              this.props.editListItemByIndex(index);
+            }}
+          />
+          <Button
+            icon="trash"
+            text={_('Delete')}
+            size="sm"
+            onClick={() => {
+              this.onRemoveItem(index);
+            }}
+          />
+        </div>
+      ),
+    }));
   }
 
   componentDidUpdate(prevProps) {
@@ -129,6 +161,22 @@ export default class View extends React.Component {
           this.props.onListAction();
         }
       });
+  }
+
+  onRemoveItem(i) {
+    this.props.changeListActionQuery({
+      action: 'remove',
+      index: i,
+    });
+    this.props.onListAction();
+  }
+  onCloseEditModal() {
+    if (this.props.closeListItemModal) {
+      this.props.closeListItemModal();
+    }
+    if (this.props.resetVaildateMsg) {
+      this.props.resetVaildateMsg();
+    }
   }
 
   setMapOnAll(map) {
@@ -355,15 +403,16 @@ export default class View extends React.Component {
         options={[
           {
             value: '0',
-            label: _('Live Map'),
+            label: _('Google Map'),
           }, {
             value: '1',
-            label: _('Local Map'),
+            label: _('Local List'),
           },
         ]}
         key="list"
         value={settings.get('type')}
         onChange={(data) => {
+          this.onCloseEditModal();
           this.props.updateScreenSettings({
             type: data.value,
           });
@@ -438,13 +487,37 @@ export default class View extends React.Component {
           ) : (
             <Table
               className="table"
-              options={listTableOptions}
+              options={this.listTableOptions}
               list={list}
               page={page}
               onPageChange={this.onPageChange}
               loading={app.get('fetching')}
             />
           )
+        }
+        {
+          settings.get('type') !== '0' ? (
+            <Modal
+              isShow={!editData.isEmpty()}
+              title={editData.get('myTitle')}
+              onOk={this.onSave}
+              onClose={this.onCloseEditModal}
+              size="md"
+              noFooter
+            >
+              <FormContainer
+                data={editData}
+                options={formOptions}
+                onSave={this.onSave}
+                onChangeData={this.props.updateEditListItem}
+                onValidError={this.props.reportValidError}
+                invalidMsg={app.get('invalid')}
+                validateAt={app.get('validateAt')}
+                isSaving={app.get('saving')}
+                hasSaveButton
+              />
+            </Modal>
+          ) : null
         }
       </ListInfo>
     );
