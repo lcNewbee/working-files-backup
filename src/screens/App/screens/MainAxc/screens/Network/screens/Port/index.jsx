@@ -40,25 +40,18 @@ const screenOptions = fromJS([
       type: 'select',
     },
   }, {
-    id: 'status',
-    text: _('Port Status'),
-    formProps: {
-      type: 'checkbox',
-      value: '1',
-    },
-  }, {
     id: 'speed',
     text: _('Port Speed'),
     options: [
       {
-        value: '1G',
-        label: '1G',
+        value: '10',
+        label: '10',
       }, {
-        value: '10G',
-        label: '10G',
+        value: '100',
+        label: '100',
       }, {
-        value: 'Auto',
-        label: _('Auto'),
+        value: '1000',
+        label: _('1000'),
       },
     ],
     formProps: {
@@ -69,13 +62,13 @@ const screenOptions = fromJS([
     text: _('Work Model'),
     options: [
       {
-        value: 'simplex',
+        value: 'half',
         label: _('Simplex'),
       }, {
-        value: 'duplex',
+        value: 'full',
         label: _('Duplex'),
       }, {
-        value: 'Auto',
+        value: 'auto',
         label: _('Auto'),
       },
     ],
@@ -83,37 +76,55 @@ const screenOptions = fromJS([
       type: 'switch',
     },
   }, {
-    id: 'mtu',
-    text: _('MTU'),
-    defaultValue: '1500',
+    id: 'ip1',
+    text: _('IP') + '_1',
     formProps: {
-      type: 'number',
-      required: true,
-      maxLength: '4',
+      type: 'text',
       validator: validator({
-        rules: 'range:[1,1500]',
+        rules: 'ip',
       }),
     },
   }, {
-    id: 'nativeVLAN',
-    text: _('Native VLAN'),
-    defaultValue: '1',
+    id: 'mask1',
+    text: _('Mask') + '_1',
     formProps: {
-      type: 'number',
-      required: true,
-      maxLength: '4',
+      type: 'text',
       validator: validator({
-        rules: 'range:[1,4095]',
+        rules: 'mask',
       }),
     },
   }, {
-    id: 'acceptVlans',
-    text: _('Accept VLAN List'),
+    id: 'ip2',
+    text: _('IP') + '_2',
+    noTable: true,
+    formProps: {
+      type: 'text',
+      validator: validator({
+        rules: 'ip',
+      }),
+    },
+  }, {
+    id: 'mask2',
+    text: _('Mask') + '_2',
+    noTable: true,
+    formProps: {
+      type: 'text',
+      validator: validator({
+        rules: 'mask',
+      }),
+    },
   }, {
     id: 'description',
     text: _('Description'),
     formProps: {
       type: 'textarea',
+    },
+  }, {
+    id: 'status',
+    text: _('Port Status'),
+    formProps: {
+      type: 'checkbox',
+      value: '1',
     },
   },
 ]);
@@ -163,7 +174,6 @@ export default class View extends React.Component {
         addable={false}
         deleteable={false}
         actionable
-        selectable
       />
     );
   }

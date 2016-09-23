@@ -17,7 +17,7 @@ class NetworkDhcp extends CI_Controller {
 		        "msg"=>"OK"
 
 
-		    echo json_encode($data);
+		echo json_encode($data);
 	}
 }
 ?>

@@ -55,6 +55,7 @@ $boder-color:         #ccc;
     width: 200px;
     line-height: 16px;
     vertical-align: middle;
+    margin-right: 5px;
 
     &:focus {
       border: 1px solid $g-brand-info;
@@ -82,18 +83,19 @@ $boder-color:         #ccc;
 
   .help {
     display: inline-block;
-    margin-left: 10px;
+    margin-left: 5px;
+    margin-top: 7px;
     color: #999;
     font-size: 12px;
     line-height: 30px;
   }
   .error {
     display: inline-block;
-    margin-left: 5px;
     color: $g-brand-danger;
+    margin-top: 7px;
     vertical-align: top;
     font-size: 12px;
-    line-height: 30px;
+    line-height: 16px;
   }
   .checkbox {
     margin-right: 6px;
