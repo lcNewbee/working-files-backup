@@ -189,12 +189,12 @@ export default class Maintenance extends Component {
           <div className="cols col-6">
             <form
               className="form-group"
-              action="/cgi-bin/back_config"
+              action="/cgi-bin/upload.cgi"
               method="POST"
               encType="multipart/form-data"
               id="upgradeForm"
             >
-              <FormGroup label={_('Firmware Upgrade:')}>
+              <FormGroup label={_('Firmware Upgrade')}>
                 <FormInput
                   type="file"
                   name="filename"
@@ -202,72 +202,55 @@ export default class Maintenance extends Component {
                 />
                 <Button
                   type="button"
-                  text="Upgrade"
+                  text={_('Upgrade')}
                   onClick={this.onFarewellUpgrade}
                 />
               </FormGroup>
             </form>
-            <FormGroup label={_('Reboot device:')}>
+            <FormGroup label={_('Reboot device')}>
               <Button
-                text="Reboot"
+                text={_('Reboot')}
                 onClick={this.onRebootDevice}
               />
             </FormGroup>
           </div>
           <div className="cols col-6">
-            <FormGroup label={_('Backup configuration:')}>
+            <FormGroup label={_('Backup configuration')}>
               <Button
-                text="Backup"
+                text={_('Backup')}
                 onClick={this.onBackupConfig}
               />
             </FormGroup>
 
             <form
               id="restoreForm"
-              action="/cgi-bin/restore.cgi"
+              action="/cgi-bin/back_config"
               method="POST"
               encType="multipart/form-data"
             >
               <FormGroup
-                label={_('Restore configuration:')}
+                label={_('Restore configuration')}
               >
                 <FormInput
                   type="file"
                   id="restoreFile"
                 />
                 <Button
-                  text="Restore"
+                  text={_('Restore')}
                   onClick={this.onConfigurationRestore}
                 />
               </FormGroup>
             </form>
             <FormGroup
-              label={_('Reset configuration:')}
+              label={_('Reset configuration')}
             >
               <Button
-                text="Reset"
+                text={_('Reset')}
                 onClick={this.onResetDevice}
               />
             </FormGroup>
           </div>
         </div>
-        <h4>Dual boot firmware images</h4>
-        <div className="row">
-          <div className="cols col-6">
-            <FormGroup label={_('Active Firmware:')}>
-              PTP MA-1.v7.51.10362
-            </FormGroup>
-          </div>
-          <div className="cols col-6">
-            <FormGroup label={_('Backup firmware:')}>
-              PTP MA-1.v7.51.9456(Activate)
-            </FormGroup>
-          </div>
-        </div>
-        <p>
-          Note: updating firmware image always replaces backup firmware image and activates it automatically after reboot!
-        </p>
-
       </div>
     );
   }

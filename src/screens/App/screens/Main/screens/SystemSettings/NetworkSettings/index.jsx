@@ -166,6 +166,7 @@ export default class NetworkSettings extends React.Component {
     const { lanIp, lanMask, firstDNS, secondDNS, validGateway } = this.props.validateOption;
     return (
       <div>
+        <h3>{_('Lan IP Settings')}</h3>
         <FormGroup
           label={_('IP Mode')}
         >
@@ -220,7 +221,7 @@ export default class NetworkSettings extends React.Component {
               />
               <FormGroup
                 type="text"
-                label={_('Netamsk')}
+                label={_('Mask')}
                 value={mask}
                 onChange={(data) => this.props.updateItemSettings({
                   mask: data.value,
@@ -260,7 +261,7 @@ export default class NetworkSettings extends React.Component {
             </div>
           )
         }
-        <h3>Vlan Settings</h3>
+        <h3>{_('Vlan Settings')}</h3>
         <FormGroup
           type="checkbox"
           label={_('Enabled')}

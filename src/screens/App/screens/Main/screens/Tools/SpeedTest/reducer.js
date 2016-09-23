@@ -6,8 +6,8 @@ const defaultState = fromJS({
   showScanResults: false,
   bandwidth: '512',
   selectedIp: '',
-  rX: '1000',
-  tX: '1000',
+  rx: '1000',
+  tx: '1000',
   total: '1024',
   time: '',
 });
@@ -23,7 +23,9 @@ export default function (state = defaultState, action) {
       return state.set('showAdvance', '0')
                   .set('showResults', '0');
     case 'RECEIVE_TEST_RESULT':
-      return state.merge(action.data);
+      return state.set('rx', action.data.rx)
+                  .set('tx', action.data.tx)
+                  .set('total', action.data.total);
     case 'CHANGE_SHOW_SCAN_RESULTS':
       return state.set('showScanResults', action.data);
     case 'CHANGE_SELECTED_IP':

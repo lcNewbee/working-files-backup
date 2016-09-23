@@ -1,0 +1,35 @@
+{
+
+"state":{
+	"code":2000,
+	"msg":"success"
+},
+"data":{
+  "chutilList":[
+      {
+        "channel":"36",
+        "utilization":"10"
+      },
+      {
+        "channel":"40",
+        "utilization":"2"
+      },
+      {
+        "channel":"44",
+        "utilization":"0"
+      },
+      {
+        "channel":"48",
+        "utilization":"2"
+      },
+      {
+        "channel":"52",
+        "utilization":"10"
+      },
+      {
+        "channel":"56",
+        "utilization":"2"
+      }
+    ]
+}
+}

@@ -120,7 +120,7 @@ gulp.task('pub:copyap', function () {
     .pipe(gulp.dest(distPath));
 });
 gulp.task('pub:ap', function (callback) {
-  runSequence(['clean:pubap', 'build'], 'pub:copyaxc', callback);
+  runSequence(['clean:pubap', 'build'], 'pub:copyap', callback);
 });
 
 // 发布硬AC版本

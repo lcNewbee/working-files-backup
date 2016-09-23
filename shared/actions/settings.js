@@ -54,7 +54,6 @@ export function fetchSettings(url) {
     const query = globalState.settings.getIn(['curQuery']).toJS();
     const formUrl = globalState.settings.getIn([name, 'formUrl']);
     const fetchUrl = globalState.settings.getIn([name, 'fetchUrl']) || formUrl;
-
     dispatch(reqeustFetchSettings());
 
     return dispatch(appActions.fetch(url || fetchUrl, query))

@@ -273,11 +273,16 @@ export default class SpeedTest extends React.Component {
         <FormGroup>
           <Button
             theme="primary"
-            text={this.props.selfState.get('time') + _('   run')}
+            text={_('Run Test')}
             loading={this.props.selfState.get('time') !== ''}
             disabled={this.props.selfState.get('time').length !== 0}
             onClick={this.onRunTest}
           />
+          {
+            this.props.selfState.get('time') === '' ? null : (
+              <span>{_('Time Remain: ') + this.props.selfState.get('time') + 's'}</span>
+            )
+          }
         </FormGroup>
         {
           (showResults === '1') ? (

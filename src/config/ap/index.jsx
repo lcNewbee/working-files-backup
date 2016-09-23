@@ -47,7 +47,7 @@ const pQuickSetup = require('../../screens/App/screens/Main/screens/QuickSetup')
 // System Settings
 const pSystemSettings = require('../../screens/App/screens/Main/screens/SystemSettings');
 const sNetworkSettings = require('../../screens/App/screens/Main/screens/SystemSettings/NetworkSettings');
-const sCommonSettings = require('../../screens/App/screens/Main/screens/SystemSettings/CommonSettings');
+// const sCommonSettings = require('../../screens/App/screens/Main/screens/SystemSettings/CommonSettings');
 const sTimeSettings = require('../../screens/App/screens/Main/screens/SystemSettings/TimeSettings');
 const sAccountSettings = require('../../screens/App/screens/Main/screens/SystemSettings/AccountSettings');
 
@@ -56,7 +56,7 @@ const pWirelessConfig = require('../../screens/App/screens/Main/screens/Wireless
 // 子菜单
 const sBasic = require('../../screens/App/screens/Main/screens/WirelessConfig/Basic');
 const sAdvance = require('../../screens/App/screens/Main/screens/WirelessConfig/Advance');
-const sQoS = require('../../screens/App/screens/Main/screens/WirelessConfig/QoS');
+// const sQoS = require('../../screens/App/screens/Main/screens/WirelessConfig/QoS');
 const sACL = require('../../screens/App/screens/Main/screens/WirelessConfig/ACL');
 
 
@@ -68,9 +68,9 @@ const sACL = require('../../screens/App/screens/Main/screens/WirelessConfig/ACL'
 
 
 // 网络服务
-const pNetworkService = require('../../screens/App/screens/Main/screens/NetworkService');
+// const pNetworkService = require('../../screens/App/screens/Main/screens/NetworkService');
 // 子菜单
-const sNTPClient = require('../../screens/App/screens/Main/screens/NetworkService/NTPClient');
+// const sNTPClient = require('../../screens/App/screens/Main/screens/NetworkService/NTPClient');
 
 
 // 登录界面
@@ -98,10 +98,10 @@ const pMaintenance = require('../../screens/App/screens/Main/screens/Maintenance
 // 工具
 const pTools = require('../../screens/App/screens/Main/screens/Tools');
 const sSpeedTest = require('../../screens/App/screens/Main/screens/Tools/SpeedTest');
-const sAntenna = require('../../screens/App/screens/Main/screens/Tools/Antenna');
+// const sAntenna = require('../../screens/App/screens/Main/screens/Tools/Antenna');
 const sSiteSurvey = require('../../screens/App/screens/Main/screens/Tools/SiteSurvey');
 const sSystemLogs = require('../../screens/App/screens/Main/screens/Tools/SystemLogs');
-
+const sChannelUtilization = require('../../screens/App/screens/Main/screens/Tools/ChannelUtilization');
 // 设置
 // const pGroupSettings = require('../../screens/App/screens/Main/screens/Settings/screens/GroupSettings');
 // const sWireless = require('../../screens/App/screens/Main/screens/Settings/screens/Wireless');
@@ -186,11 +186,6 @@ const routes = [{
           text: _('Advance'),
           component: sAdvance.Screen,
         }, {
-          id: 'qos',
-          path: '/main/wirelessconfig/qos',
-          text: 'QoS',
-          component: sQoS.Screen,
-        }, {
           id: 'acl',
           fetchUrl: 'goform/get_acl_info',
           path: '/main/wirelessconfig/acl',
@@ -219,11 +214,6 @@ const routes = [{
           saveUrl: '/goform/bandwidth_test',
           component: sSpeedTest.Screen,
         }, {
-          id: 'antenna',
-          path: '/main/tools/antenna',
-          text: _('Antenna Adjust'),
-          component: sAntenna,
-        }, {
           id: 'sitesurvey',
           path: '/main/tools/sitesurvey',
           fetchUrl: 'goform/get_site_survey',
@@ -235,6 +225,12 @@ const routes = [{
           path: '/main/tools/systemlogs',
           text: _('System Logs'),
           component: sSystemLogs.Screen,
+        }, {
+          id: 'channelutilization',
+          path: '/main/tools/channelutilization',
+          text: _('Channel Utilization'),
+          fetchUrl: 'goform/get_chanutil',
+          component: sChannelUtilization.Screen,
         },
       ],
     }],
@@ -284,12 +280,13 @@ const reducers = {
   // 无线配置
   basic: sBasic.basic,
   advance: sAdvance.advance,
-  qos: sQoS.qos,
+  // qos: sQoS.qos,
   acl: sACL.acl,
   // tools -> speedtest
   speedtest: sSpeedTest.speedtest,
   sitesurvey: sSiteSurvey.sitesurvey,
   systemlogs: sSystemLogs.systemlogs,
+  channelutilization: sChannelUtilization.channelutilization,
 
   maintenance: pMaintenance.maintenance,
 };

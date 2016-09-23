@@ -179,12 +179,15 @@ export default class ACL extends React.Component {
           <FormInput
             name="filtermode"
             type="radio"
-            text="Allow only stations in list"
+            text={_('Allow Only')}
+            style={{
+              marginRight: '40px',
+            }}
           />
           <FormInput
             name="filtermode"
             type="radio"
-            text="Block all stations in list"
+            text={_('Block Only')}
           />
         </FormGroup>
         <FormGroup
@@ -194,10 +197,11 @@ export default class ACL extends React.Component {
           <div
             className="fl"
             style={{
-              width: '318px',
+              width: '200px',
               height: '222px',
               border: '1px solid #000',
               overflow: 'auto',
+              marginRight: '20px',
             }}
           >
             <MacList
@@ -225,6 +229,10 @@ export default class ACL extends React.Component {
             theme="primary"
             text={_('Add')}
             onClick={this.onAddMacToLocalList}
+            style={{
+              marginTop: '2px',
+              marginLeft: '20px',
+            }}
           />
         </div>
         <FormGroup>

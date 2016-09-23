@@ -96,7 +96,7 @@ const validOptions = Map({
     rules: 'num:[1, 10]',
   }),
   validPassword: validator({
-    rules: 'pwd|len:[8, 32]',
+    rules: 'pwd|len:[6, 32]',
   }),
   apmac2: validator({
     rules: 'mac',
@@ -329,102 +329,118 @@ export default class QuickSetup extends React.Component {
           page === '1' ? (
             <div className="firstScreen">
               <h3>{_('Operation Mode')}</h3>
-              <div
-                className="clearfix"
-                style={{
-                  paddingTop: '10px',
-                }}
-              >
-                <div className="cols">
-                  <FormGroup
-                    className="cols col-4"
-                    type="radio"
-                    text="AP"
-                    value="ap"
-                    checked={this.props.selfState.get('deviceMode') === 'ap'}
-                    name="modeSelect"
-                    onChange={(data) => {
-                      this.props.changeDeviceMode(data.value);
-                      this.props.updateItemSettings({
-                        wirelessMode: data.value,
-                      });
-                      this.props.resetVaildateMsg();
-                      this.props.fetchSettings();
-                    }}
-                  />
+              <div className="clearfix">
+                <div
+                  className="cols"
+                  style={{
+                    width: '80%',
+                    marginTop: '20px',
+                  }}
+                >
                   <div
-                    className="cols col-7"
+                    className="cols cols-5"
                     style={{
-                      marginLeft: '-60px',
+                      marginRight: '65px',
                     }}
                   >
-                    type="plain-text"value="tthis is the info of stationthis is the info of stationthis is the info of stationthis is the in fo of stationthis is the info of stationthis is the info of stationthis is the info o
+                    <FormGroup
+                      type="radio"
+                      text="AP"
+                      value="ap"
+                      checked={this.props.selfState.get('deviceMode') === 'ap'}
+                      name="modeSelect"
+                      onChange={(data) => {
+                        this.props.changeDeviceMode(data.value);
+                        this.props.updateItemSettings({
+                          wirelessMode: data.value,
+                        });
+                        this.props.resetVaildateMsg();
+                        this.props.fetchSettings();
+                      }}
+                    />
+                  </div>
+                  <div
+                    className="cols col-7"
+                  >
+                    In this mode, the AP will act as a central hub for different wireless LAN clients.
                   </div>
                 </div>
               </div>
               <div
                 className="clearfix"
-                style={{
-                  paddingTop: '10px',
-                }}
               >
-                <div className="cols">
-                  <FormGroup
-                    className="cols col-4"
-                    type="radio"
-                    value="sta"
-                    text="Station"
-                    name="modeSelect"
-                    checked={this.props.selfState.get('deviceMode') === 'sta'}
-                    onChange={(data) => {
-                      this.props.changeDeviceMode(data.value);
-                      this.props.updateItemSettings({
-                        wirelessMode: data.value,
-                      });
-                      this.props.resetVaildateMsg();
-                      this.props.fetchSettings();
-                    }}
-                  />
+                <div
+                  className="cols"
+                  style={{
+                    width: '80%',
+                    marginTop: '20px',
+                  }}
+                >
                   <div
-                    className="cols col-7"
+                    className="cols cols-5"
                     style={{
-                      marginLeft: '-60px',
+                      marginRight: '40px',
                     }}
                   >
-                    type="plain-text"value="tthis is the info of stationthis is the infoof stationthis is the info of stationthis is the info of stationthis is the info of stationthis is the
+                    <FormGroup
+                      type="radio"
+                      value="sta"
+                      text="Station"
+                      name="modeSelect"
+                      checked={this.props.selfState.get('deviceMode') === 'sta'}
+                      onChange={(data) => {
+                        this.props.changeDeviceMode(data.value);
+                        this.props.updateItemSettings({
+                          wirelessMode: data.value,
+                        });
+                        this.props.resetVaildateMsg();
+                        this.props.fetchSettings();
+                      }}
+                    />
+                  </div>
+                  <div
+                    className="cols col-7"
+                  >
+                    In this mode, the device can copy and reinforce the existing wireless signal to extend the coverage of the signal, especially for a large space to eliminate signal-blind corners.
                   </div>
                 </div>
               </div>
               <div
                 className="clearfix"
-                style={{
-                  paddingTop: '10px',
-                }}
               >
-                <div className="cols">
-                  <FormGroup
-                    className="cols col-4"
-                    type="radio"
-                    value="repeater"
-                    text="Repeater"
-                    name="modeSelect"
-                    checked={this.props.selfState.get('deviceMode') === 'repeater'}
-                    onChange={(data) => {
-                      this.props.changeDeviceMode(data.value);
-                      this.props.updateItemSettings({
-                        wirelessMode: data.value,
-                      });
-                      this.props.resetVaildateMsg();
-                      this.props.fetchSettings();
-                    }}
-                  />
+                <div
+                  className="cols"
+                  style={{
+                    width: '80%',
+                    marginTop: '20px',
+                  }}
+                >
                   <div
-                    className="cols col-7"
+                    className="cols cols-5"
                     style={{
-                      marginLeft: '-60px',
+                      marginRight: '28px',
                     }}
                   >
-                    type="plain-text" value="tthis is the info of stationthis is the info of stationthis is the info of stationthis is the in fo of stationthis is the info of stationthis is the
+                    <FormGroup
+                      type="radio"
+                      value="repeater"
+                      text="Repeater"
+                      name="modeSelect"
+                      checked={this.props.selfState.get('deviceMode') === 'repeater'}
+                      onChange={(data) => {
+                        this.props.changeDeviceMode(data.value);
+                        this.props.updateItemSettings({
+                          wirelessMode: data.value,
+                        });
+                        this.props.resetVaildateMsg();
+                        this.props.fetchSettings();
+                      }}
+                    />
+                  </div>
+                  <div
+                    className="cols col-7"
+                  >
+                    With client mode, the device can connect to a wired device and works as a wireless adapter to receive wireless signal from your wireless network.
                   </div>
                 </div>
               </div>
@@ -523,7 +539,7 @@ export default class QuickSetup extends React.Component {
                     {...validSsid}
                   />
                   <FormGroup
-                    label={_('Country Code')}
+                    label={_('Country')}
                   >
                     <FormInput
                       type="text"
@@ -549,7 +565,7 @@ export default class QuickSetup extends React.Component {
                   {
                   this.props.selfState.get('showCtyModal') ? (
                     <Modal
-                      title={_('Country Code')}
+                      title={_('Country')}
                       onClose={this.onCloseCountrySelectModal}
                       onOk={this.props.saveCountrySelectModal}
                       isShow
@@ -657,6 +673,7 @@ export default class QuickSetup extends React.Component {
                     onChange={(data) => this.props.updateItemSettings({
                       distance: data.value,
                     })}
+                    {...validDistance}
                   />
 
                   <FormGroup>
@@ -750,13 +767,14 @@ export default class QuickSetup extends React.Component {
                   <FormGroup
                     label={_('Peer')}
                     type="text"
+                    placeholder={_('Input Mac Address')}
                     value={store.getIn(['curData', 'apMac'])}
                     onChange={(data) => this.props.updateItemSettings({
                       apMac: data.value,
                     })}
                   />
                   <FormGroup
-                    label={_('Country Code')}
+                    label={_('Country')}
                   >
                     <FormInput
                       type="text"
@@ -782,7 +800,7 @@ export default class QuickSetup extends React.Component {
                   {
                   this.props.selfState.get('showCtyModal') ? (
                     <Modal
-                      title={_('Country Code')}
+                      title={_('Country')}
                       onClose={this.onCloseCountrySelectModal}
                       onOk={this.props.saveCountrySelectModal}
                       isShow
@@ -889,6 +907,7 @@ export default class QuickSetup extends React.Component {
                     onChange={(data) => this.props.updateItemSettings({
                       distance: data.value,
                     })}
+                    {...validDistance}
                   />
                   <FormGroup>
                     <Button
@@ -985,7 +1004,7 @@ export default class QuickSetup extends React.Component {
                     placeholder="非必填项"
                   />
                   <FormGroup
-                    label={_('Country Code')}
+                    label={_('Country')}
                   >
                     <FormInput
                       type="text"
@@ -1011,7 +1030,7 @@ export default class QuickSetup extends React.Component {
                   {
                   this.props.selfState.get('showCtyModal') ? (
                     <Modal
-                      title={_('Country Code')}
+                      title={_('Country')}
                       onClose={this.onCloseCountrySelectModal}
                       onOk={this.props.saveCountrySelectModal}
                       isShow
@@ -1181,6 +1200,7 @@ export default class QuickSetup extends React.Component {
                     onChange={(data) => this.props.updateItemSettings({
                       distance: data.value,
                     })}
+                    {...validDistance}
                   />
                   <FormGroup>
                     <Button
@@ -1222,7 +1242,7 @@ export default class QuickSetup extends React.Component {
                     type="plain-text"
                     label={_('Current Mode')}
                     value="AP"
-                  /><br />
+                  />
                   <FormGroup
                     type="plain-text"
                     label={_('LAN IP')}
@@ -1232,7 +1252,7 @@ export default class QuickSetup extends React.Component {
                     type="plain-text"
                     label={_('Subnet Mask')}
                     value={mask}
-                  /><br />
+                  />
 
                   <FormGroup
                     type="plain-text"
@@ -1304,7 +1324,7 @@ export default class QuickSetup extends React.Component {
                     type="plain-text"
                     label={_('Current Mode')}
                     value="Station"
-                  /><br />
+                  />
 
                   <FormGroup
                     type="plain-text"
@@ -1315,7 +1335,7 @@ export default class QuickSetup extends React.Component {
                     type="plain-text"
                     label={_('Subnet Mask')}
                     value={mask}
-                  /><br />
+                  />
                   <FormGroup
                     type="plain-text"
                     label={_('SSID')}
@@ -1391,7 +1411,7 @@ export default class QuickSetup extends React.Component {
                     type="plain-text"
                     label={_('Current Mode')}
                     value="Repeater"
-                  /><br />
+                  />
                   <FormGroup
                     type="plain-text"
                     label={_('LAN IP')}
@@ -1401,7 +1421,7 @@ export default class QuickSetup extends React.Component {
                     type="plain-text"
                     label={_('Subnet Mask')}
                     value={mask}
-                  /><br />
+                  />
 
                   <FormGroup
                     type="plain-text"
