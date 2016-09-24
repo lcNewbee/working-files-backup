@@ -17,29 +17,31 @@ const screenOptions = fromJS([
     formProps: {
       type: 'plain-text',
     },
-  }, {
-    id: 'exchangeModel',
-    text: _('Exchange Model'),
-    defaultValue: 'access',
-    options: [
-      {
-        value: 'access',
-        label: 'access',
-      }, {
-        value: 'trunk',
-        label: 'trunk',
-      }, {
-        value: 'QINQ_tunnel',
-        label: 'QINQ(tunnel)',
-      }, {
-        value: 'QINQ_uplink',
-        label: 'QINQ(tunnel)',
-      },
-    ],
-    formProps: {
-      type: 'select',
-    },
-  }, {
+  },
+  // {
+  //   id: 'exchangeModel',
+  //   text: _('Exchange Model'),
+  //   defaultValue: 'access',
+  //   options: [
+  //     {
+  //       value: 'access',
+  //       label: 'access',
+  //     }, {
+  //       value: 'trunk',
+  //       label: 'trunk',
+  //     }, {
+  //       value: 'QINQ_tunnel',
+  //       label: 'QINQ(tunnel)',
+  //     }, {
+  //       value: 'QINQ_uplink',
+  //       label: 'QINQ(tunnel)',
+  //     },
+  //   ],
+  //   formProps: {
+  //     type: 'select',
+  //   },
+  // },
+  {
     id: 'speed',
     text: _('Port Speed'),
     options: [
@@ -74,44 +76,6 @@ const screenOptions = fromJS([
     ],
     formProps: {
       type: 'switch',
-    },
-  }, {
-    id: 'ip1',
-    text: _('IP') + '_1',
-    formProps: {
-      type: 'text',
-      validator: validator({
-        rules: 'ip',
-      }),
-    },
-  }, {
-    id: 'mask1',
-    text: _('Mask') + '_1',
-    formProps: {
-      type: 'text',
-      validator: validator({
-        rules: 'mask',
-      }),
-    },
-  }, {
-    id: 'ip2',
-    text: _('IP') + '_2',
-    noTable: true,
-    formProps: {
-      type: 'text',
-      validator: validator({
-        rules: 'ip',
-      }),
-    },
-  }, {
-    id: 'mask2',
-    text: _('Mask') + '_2',
-    noTable: true,
-    formProps: {
-      type: 'text',
-      validator: validator({
-        rules: 'mask',
-      }),
     },
   }, {
     id: 'description',

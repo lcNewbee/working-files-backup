@@ -198,19 +198,6 @@ export default class View extends React.Component {
               autoChannel: item.value,
             })}
           />
-          {
-            curData.autoChannel !== '1' ? (
-              <FormGroup
-                type="select"
-                label={_('Channel')}
-                options={channelsOptions}
-                value={curData.channel}
-                onChange={item => updateItemSettings({
-                  channel: item.value,
-                })}
-              />
-            ) : null
-          }
 
           <div className="form-group form-group--save">
             <div className="form-control">

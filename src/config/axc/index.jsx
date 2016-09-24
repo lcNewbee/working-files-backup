@@ -202,7 +202,7 @@ const routes = [
             id: 'networkPort',
             path: '/main/network/port',
             icon: 'th',
-            formUrl: '/goform/networkPort',
+            formUrl: '/goform/network/port',
             text: _('Port'),
             component: sNetworkPort.Screen,
           }, {
@@ -226,7 +226,7 @@ const routes = [
             noTree: true,
             component: SharedComponents.TabContainer,
             path: '/main/network/portal',
-            formUrl: 'goform/networkPortal',
+            formUrl: 'goform/network/portal',
             text: _('Portal Policy'),
             indexRoute: { onEnter: (nextState, replace) => replace('/main/network/portal/server') },
             childRoutes: [

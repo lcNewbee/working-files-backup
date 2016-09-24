@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
-import { fromJS, Map } from 'immutable';
+import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/utils/lib/validator';
 import {
@@ -10,64 +10,50 @@ import {
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
+function getPortList() {
+  return utils.fetch('goform/network/port')
+    .then(json => (
+      {
+        options: json.data.list.map(
+          item => ({
+            value: item.name,
+            label: item.name,
+          })
+        ),
+      }
+    )
+  );
+}
+
 const screenOptions = fromJS([
   {
-    id: 'id',
-    text: _('No'),
+    id: 'name',
+    text: _('Port Name'),
     formProps: {
-      type: 'plain-text',
+      type: 'select',
+      required: true,
+      loadOptions: getPortList,
+      isAsync: true,
     },
   }, {
-    id: 'status',
-    text: _('Status'),
+    id: 'ip',
+    text: _('IP'),
     formProps: {
-      label: _('Interface Status'),
-      type: 'checkbox',
-    },
-  }, {
-    id: 'arpProxy',
-    text: _('ARP Proxy'),
-    formProps: {
-      type: 'checkbox',
-      label: _('Enable ARP Proxy'),
-    },
-  }, {
-    id: 'mainIp',
-    text: _('Main IPV4'),
-    formProps: {
+      type: 'text',
+      required: true,
       validator: validator({
         rules: 'ip',
       }),
     },
   }, {
-    id: 'mainMask',
-    text: _('Main IPV4 Mask'),
+    id: 'mask',
+    text: _('Mask'),
     formProps: {
+      type: 'text',
+      required: true,
       validator: validator({
         rules: 'mask',
       }),
-    },
-  }, {
-    id: 'secondIp',
-    text: _('Second IPV4'),
-    formProps: {
-      validator: validator({
-        rules: 'ip',
-      }),
-    },
-  }, {
-    id: 'secondMask',
-    text: _('Second IPV4 Mask'),
-    formProps: {
-      validator: validator({
-        rules: 'mask',
-      }),
-    },
-  }, {
-    id: 'description',
-    text: _('Description'),
-    formProps: {
-      type: 'texterae',
     },
   },
 ]);
@@ -75,13 +61,7 @@ const tableOptions = immutableUtils.getTableOptions(screenOptions);
 const editFormOptions = immutableUtils.getFormOptions(screenOptions);
 const defaultEditData = immutableUtils.getDefaultData(screenOptions);
 const propTypes = {
-  app: PropTypes.instanceOf(Map),
-  store: PropTypes.instanceOf(Map),
-
   route: PropTypes.object,
-  initList: PropTypes.func,
-  closeListItemModal: PropTypes.func,
-  updateEditListItem: PropTypes.func,
   save: PropTypes.func,
 };
 const defaultProps = {};

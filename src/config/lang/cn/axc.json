@@ -5,6 +5,7 @@
   "SYSTEM": "系统管理",
   "Flow": "流量",
   "System Status": "系统状态",
+  "Please select delete rows": "请选择你要删除的项",
 
   "Group List": "组列表",
   "Interface Settings": "接口配置",
@@ -20,6 +21,8 @@
   "VLAN Remark": "VLAN标识",
 
   "Port Settings": "端口配置",
+  "Port": "端口",
+  "Port Name": "端口名称",
   "DHCP Settings": "DHCP配置",
   "Domain": "域名",
   "Start IP": "起始IP",
@@ -30,6 +33,7 @@
   "Are you sure delete address pool: %s?": "你确定要删除地址池条目：%s？",
 
   "NAT Settings": "NAT配置",
+  "NAT": "NAT配置",
   "NAT Service": "NAT服务",
   "NAT Rules List": "NAT规则列表",
 
@@ -85,6 +89,7 @@
   "IP Address": "IP 地址",
 
   "Routes Settings": "路由配置",
+  "Routes": "路由",
   "Target Mask": "目的掩码",
   "Next Hop IP": "下一跳IP",
 

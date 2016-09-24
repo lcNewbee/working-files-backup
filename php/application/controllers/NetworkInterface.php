@@ -7,7 +7,7 @@ class NetworkPort extends CI_Controller {
 	}
 
 	public function index() {
-		$query=$this->db->select('port_name,speed,duplex,ip1,mask1,ip2,mask2,ip3,mask3,ip4,mask4,ip5,mask5,desc,adminstate,mgifname')
+		$query=$this->db->select('portid,port_name,speed,duplex,ip1,mask1,ip2,mask2,ip3,mask3,ip4,mask4,ip5,mask5,desc,adminstate,mgifname')
 				    ->from('port_table')
 				    ->get()->result_array();
     $state=array(
@@ -18,7 +18,6 @@ class NetworkPort extends CI_Controller {
     function myfunction($v) {
       $ret = array();
       $keysMap = array(
-        'portid'=>'id',
         'port_name'=>'name',
         'duplex'=>'workModel',
         'port_desc'=>'description',
