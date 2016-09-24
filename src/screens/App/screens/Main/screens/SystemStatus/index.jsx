@@ -235,7 +235,7 @@ export default class SystemStatus extends React.Component {
       deviceModel, deviceName, networkMode, security, version,
       systemTime, frequency, channelWidth, uptime, ap, channel,
       interfaces, station, wlan0Mac, protocol, lan0Mac, lan1Mac,
-      ssid, distance, txPower, noise, ccq,
+      ssid, distance, txPower, noise, ccq, chutil,
      } = status;
     let apMac; let clientNum; let staList; let signal;
     let apInfo = [];
@@ -386,6 +386,11 @@ export default class SystemStatus extends React.Component {
               label={_('CCQ :')}
               type="plain-text"
               value={ccq}
+            />
+            <FormGroup
+              label={_('Channel Usage :')}
+              type="plain-text"
+              value={chutil}
             />
           </div>
         </div>

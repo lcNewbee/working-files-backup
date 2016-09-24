@@ -545,13 +545,13 @@ export default class Basic extends React.Component {
                     >&nbsp;&nbsp;
                       <input
                         style={{
-                          paddingBottom: '-2px',
+                          marginBottom: '-2px',
                         }}
                         type="checkbox"
                         checked={hideSsid === '1'}
                         onClick={this.onHideSsidboxClick}
                       />&nbsp;
-                      {_('Hide SSID')}
+                      {_('Hide')}
                     </span>
                   </div>
                 )

@@ -102,5 +102,7 @@
   "Speed Test": "网速测试",
   "Site Survey": "信号扫描",
   "System Logs": "系统日志",
-  "Channel Utilization": "信道利用率扫描"
+  "Channel Utilization": "信道利用率扫描",
+  "Maintenance":"设备维护",
+  "Hide": "隐藏"
 }

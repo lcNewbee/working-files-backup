@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Tab from 'shared/components/Tab';
 
-export default class SystemSettings extends Component {
+export default class NetworkSettings extends Component {
   render() {
     return (
       <Tab

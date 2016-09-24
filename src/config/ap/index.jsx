@@ -45,11 +45,11 @@ const pSystemStatus = require('../../screens/App/screens/Main/screens/SystemStat
 const pQuickSetup = require('../../screens/App/screens/Main/screens/QuickSetup');
 
 // System Settings
-const pSystemSettings = require('../../screens/App/screens/Main/screens/SystemSettings');
-const sNetworkSettings = require('../../screens/App/screens/Main/screens/SystemSettings/NetworkSettings');
+const pNetworkSettings = require('../../screens/App/screens/Main/screens/NetworkSettings');
+const sNetworkSettings = require('../../screens/App/screens/Main/screens/NetworkSettings/NetworkSettings');
 // const sCommonSettings = require('../../screens/App/screens/Main/screens/SystemSettings/CommonSettings');
-const sTimeSettings = require('../../screens/App/screens/Main/screens/SystemSettings/TimeSettings');
-const sAccountSettings = require('../../screens/App/screens/Main/screens/SystemSettings/AccountSettings');
+const sTimeSettings = require('../../screens/App/screens/Main/screens/Maintenance/TimeSettings');
+const sAccountSettings = require('../../screens/App/screens/Main/screens/Maintenance/AccountSettings');
 
 // 无线设置
 const pWirelessConfig = require('../../screens/App/screens/Main/screens/WirelessConfig');
@@ -94,7 +94,7 @@ const pStatus = require('../../screens/App/screens/Main/screens/Stats');
 
 // 维护
 const pMaintenance = require('../../screens/App/screens/Main/screens/Maintenance');
-
+const sSystemMaintenance = require('../../screens/App/screens/Main/screens/Maintenance/SystemMaintenance');
 // 工具
 const pTools = require('../../screens/App/screens/Main/screens/Tools');
 const sSpeedTest = require('../../screens/App/screens/Main/screens/Tools/SpeedTest');
@@ -133,32 +133,22 @@ const routes = [{
       text: _('Quick Setup'),
       component: pQuickSetup.Screen,
     }, {
-      id: 'systemsettings',
-      path: '/main/systemsettings',
+      id: 'networksettings',
+      path: '/main/networksettings',
       icon: 'cog',
-      text: _('System Settings'),
-      component: pSystemSettings,
+      text: _('Network Settings'),
+      component: pNetworkSettings,
       indexRoute: {
-        onEnter: (nextState, replace) => replace('main/systemsettings/networksettings'),
+        onEnter: (nextState, replace) => replace('main/networksettings/networksettings'),
       },
       childRoutes: [
         {
           id: 'networksettings',
           formUrl: 'goform/get_network_info',
           saveUrl: 'goform/set_network',
-          path: '/main/systemsettings/networksettings',
+          path: '/main/networksettings/networksettings',
           text: _('Network Settings'),
           component: sNetworkSettings.Screen,
-        }, {
-          id: 'accountsettings',
-          path: '/main/systemsettings/accountsettings',
-          text: _('Account Settings'),
-          component: sAccountSettings.Screen,
-        }, {
-          id: 'timesettings',
-          path: '/main/systemsettings/timesettings',
-          text: _('Time Settings'),
-          component: sTimeSettings.Screen,
         },
       ],
     }, {
@@ -197,8 +187,29 @@ const routes = [{
       path: '/main/maintenance',
       icon: 'wrench',
       text: _('Maintenance'),
-      fetchUrl: 'goform/save_config',
-      component: pMaintenance.Screen,
+      component: pMaintenance,
+      indexRoute: {
+        onEnter: (nextState, replace) => replace('/main/maintenance/systemmaintenance'),
+      },
+      childRoutes: [
+        {
+          id: 'systemmaintenance',
+          fetchUrl: 'goform/save_config',
+          path: '/main/maintenance/systemmaintenance',
+          text: _('System Maintenance'),
+          component: sSystemMaintenance.Screen,
+        }, {
+          id: 'accountsettings',
+          path: '/main/maintenance/accountsettings',
+          text: _('Account Settings'),
+          component: sAccountSettings.Screen,
+        }, {
+          id: 'timesettings',
+          path: '/main/maintenance/timesettings',
+          text: _('Time Settings'),
+          component: sTimeSettings.Screen,
+        },
+      ],
     }, {
       id: 'tools',
       path: '/main/tools',
@@ -272,8 +283,7 @@ const reducers = {
   // 快速设置
   quicksetup: pQuickSetup.quicksetup,
   // 系统设置
-  systemsettings: pSystemSettings.systemsettings,
-  networksettings: sNetworkSettings.networksettings,
+  networksettings: pNetworkSettings.networksettings,
   accountsettings: sAccountSettings.accountsettings,
   timesettings: sTimeSettings.timesettings,
 
@@ -288,7 +298,7 @@ const reducers = {
   systemlogs: sSystemLogs.systemlogs,
   channelutilization: sChannelUtilization.channelutilization,
 
-  maintenance: pMaintenance.maintenance,
+  systemmaintenance: sSystemMaintenance.systemmaintenance,
 };
 
 // Store
