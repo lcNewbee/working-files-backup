@@ -49,15 +49,32 @@ function initListItem(state, action) {
   return ret
     .set('curListId', listId);
 }
-function selectedListItem(list, data) {
-  let ret = list;
+function selectedListItem(state, data, curScreenName) {
+  let list = state.getIn([curScreenName, 'data', 'list']);
+  let selectedList = state.getIn([curScreenName, 'actionQuery', 'selected']) || fromJS([]);
 
   if (data.index !== -1) {
-    ret = ret.setIn([data.index, 'selected'], data.selected);
+    list = list.setIn([data.index, '_selected'], data.selected);
+    if (data.selected) {
+      selectedList = selectedList.push(data.index);
+    } else {
+      selectedList = selectedList = selectedList.delete(selectedList.indexOf(data.index));
+    }
   } else {
-    ret = ret.map(item => item.set('selected', data.selected));
+    selectedList = fromJS([]);
+    if (data.selected) {
+      list = list.map((item, index) => {
+        selectedList = selectedList.push(index);
+
+        return item.set('_selected', true);
+      });
+    } else {
+      list = list.map(item => item.set('_selected', false));
+    }
   }
-  return ret;
+
+  return state.setIn([curScreenName, 'data', 'list'], list)
+      .setIn([curScreenName, 'actionQuery', 'selectedList'], selectedList);
 }
 function updateEditListItem(curScreenName, state, action) {
   const curIndex = state.getIn([curScreenName, 'data', 'edit', 'index']);
@@ -128,7 +145,6 @@ export default function (state = defaultState, action) {
       return editListItemByKey(state, curScreenName, action);
 
     case 'EDIT_LIST_ITEM_BY_INDEX':
-      console.log(state.getIn([curScreenName, 'data', 'list', action.payload.index]).toJS())
       return state.setIn(
           [curScreenName, 'data', 'edit'],
           defaultEditData.merge(state.getIn([curScreenName, 'data', 'list', action.payload.index])).merge({
@@ -151,8 +167,11 @@ export default function (state = defaultState, action) {
       .setIn([curScreenName, 'actionQuery', 'action'], 'add');
 
     case 'SELECT_LIST_ITEM':
-      return state.setIn([curScreenName, 'data', 'list'],
-          selectedListItem(state.getIn([curScreenName, 'data', 'list']), action.data));
+      return selectedListItem(state, action.data, curScreenName);
+
+        // state.setIn([curScreenName, 'data', 'list'],
+        //   selectedListItem(state.getIn([curScreenName, 'data', 'list']), action.data))
+        //   .setIn(['curScreenName', 'actionQuery', 'selected'], action.data.index);
 
     case 'CLOSE_LIST_ITEM_MODAL':
       return state.setIn([curScreenName, 'data', 'edit'], fromJS({}))

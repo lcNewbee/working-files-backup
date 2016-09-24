@@ -1,0 +1,31 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "settings": {
+      "isLocked": "1"
+    },
+    "list": [
+      {
+        "name": "eth0",
+        "portId": 1,
+        "ip": "android-1213",
+        "mask": "192.168.5.123"
+      },
+      {
+        "name": "eth1",
+        "portId": 2,
+        "ip": "android-1213",
+        "mask": "192.168.5.123"
+      },
+      {
+        "name": "eth2",
+        "portId": 3,
+        "ip": "android-1213",
+        "mask": "192.168.5.123"
+      }
+    ]
+  }
+}

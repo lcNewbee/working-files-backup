@@ -5,7 +5,9 @@ const propTypes = {
   options: PropTypes.object,
   isTh: PropTypes.bool,
   item: PropTypes.object,
+  index: PropTypes.number,
   selectable: PropTypes.bool,
+  isSelectAll: PropTypes.bool,
   onSelect: PropTypes.func,
 };
 
@@ -29,21 +31,22 @@ class Row extends Component {
     }
   }
   render() {
-    const props = this.props;
+    const { isTh, options, isSelectAll, selectable, item, index } = this.props;
     let tds;
 
-    if (props.isTh) {
-      tds = props.options.map((option, i) =>
+    if (isTh) {
+      tds = options.map((option, i) =>
         <th key={`tableRow${i}`} width={option.get('width')}>
           {option.get('text') || option.get('label')}
         </th>
       );
 
-      if (props.selectable) {
+      if (selectable) {
         tds = tds.unshift((
           <th width="15" key="tableRow_select">
             <input
               type="checkbox"
+              checked={isSelectAll}
               onChange={(e) => {
                 this.onSelect(-1, e);
               }}
@@ -52,11 +55,11 @@ class Row extends Component {
         ));
       }
     } else {
-      tds = props.options.map((option, i) => {
+      tds = options.map((option, i) => {
         const id = option.get('id');
         const filterObj = option.get('filterObj');
         const thisKey = `tableRow${i}`;
-        let currVal = props.item.get(id);
+        let currVal = item.get(id);
         let currItem = null;
         let tdDom = null;
 
@@ -90,7 +93,7 @@ class Row extends Component {
         } else {
           tdDom = (
             <td key={thisKey}>
-              {option.get('transform')(currVal, props.item, props.index)}
+              {option.get('transform')(currVal, item, index)}
             </td>
           );
         }
@@ -98,14 +101,14 @@ class Row extends Component {
         return tdDom;
       });
 
-      if (props.selectable) {
+      if (selectable) {
         tds = tds.unshift((
           <td width="15" key="tableRow_select">
             <input
               type="checkbox"
-              checked={!!props.item.get('selected')}
+              checked={!!item.get('_selected')}
               onChange={(e) => {
-                this.onSelect(props.index, e);
+                this.onSelect(index, e);
               }}
             />
           </td>

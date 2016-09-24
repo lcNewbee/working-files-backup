@@ -33,6 +33,7 @@
     "browser-sync": "^2.12.3",
     "chai": "^3.5.0",
     "chai-immutable": "^1.5.3",
+    "change-case": "^3.0.0",
     "cheerio": "^0.22.0",
     "colors": "^1.1.2",
     "connect-history-api-fallback": "^1.2.0",

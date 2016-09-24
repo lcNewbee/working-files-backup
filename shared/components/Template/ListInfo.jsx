@@ -19,6 +19,9 @@ const propTypes = {
   // 组件通用选项
   title: PropTypes.string,
   listTitle: PropTypes.string,
+
+  // 用于配置 list表格主键，用于Ajax保存
+  listKey: PropTypes.string,
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
   route: PropTypes.object,
@@ -48,6 +51,7 @@ const propTypes = {
   leaveListScreen: PropTypes.func,
   selectListItem: PropTypes.func,
   onListAction: PropTypes.func,
+  createModal: PropTypes.func,
 
   // List 全局 Settings 相关
   hasSettingsSaveButton: PropTypes.bool,
@@ -80,6 +84,7 @@ const propTypes = {
 };
 const defaultProps = {
   actionable: false,
+  listKey: 'id',
   addable: true,
   editable: true,
   deleteable: true,
@@ -108,10 +113,11 @@ class ListInfo extends React.Component {
     }
 
     this.props.initList(initOption);
+    this.selectedList = [];
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.binds('onChangeQuery', 'onPageChange', 'onSave', 'onCloseEditModal',
         'onChangeSearchText', 'onChangeType', 'onChangeTableSize', 'onRemoveSelectItems',
-        'onSaveSettings');
+        'onSaveSettings', 'onRemoveSelectedItems');
   }
 
   componentWillMount() {
@@ -213,9 +219,14 @@ class ListInfo extends React.Component {
     }, true);
   }
   onRemoveItem(i) {
+    const store = this.props.store;
+    const myListId = store.get('curListId');
+    const list = store.getIn([myListId, 'data', 'list']);
+    const listKey = this.props.listKey;
+
     this.props.changeListActionQuery({
       action: 'remove',
-      index: i,
+      selectedList: [list.getIn([i, listKey])],
     });
     this.props.onListAction();
   }
@@ -239,8 +250,24 @@ class ListInfo extends React.Component {
         });
     }
   }
-  onRemoveSelectItems() {
+  onRemoveSelectedItems(selectedList, list) {
+    const listKey = this.props.listKey;
+    let mySelectedList = selectedList;
 
+    if (selectedList && selectedList.size > 0) {
+      mySelectedList = mySelectedList.map(val => list.getIn([val, listKey]));
+
+      this.props.changeListActionQuery({
+        action: 'remove',
+        selectedList: mySelectedList,
+      });
+      this.props.onListAction();
+    } else {
+      this.props.createModal({
+        role: 'alert',
+        text: _('Please select delete rows'),
+      });
+    }
   }
   onFetchList() {
     if (this.props.fetchList) {
@@ -271,7 +298,7 @@ class ListInfo extends React.Component {
     const curSettings = store.getIn([myListId, 'curSettings']);
     const editData = store.getIn([myListId, 'data', 'edit']);
     const query = store.getIn([myListId, 'query']);
-    const actionQuery = store.getIn([myListId, 'query']);
+    const actionQuery = store.getIn([myListId, 'actionQuery']);
     const saveUrl = route.saveUrl || route.formUrl;
     const fetchUrl = route.fetchUrl || route.formUrl;
     const leftChildrenNode = [];
@@ -319,7 +346,7 @@ class ListInfo extends React.Component {
           key="delete"
           text={_('Remove Selected')}
           onClick={() => {
-            this.onRemoveSelectItems();
+            this.onRemoveSelectedItems(actionQuery.get('selectedList'), list);
           }}
         />
       );

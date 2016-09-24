@@ -1,6 +1,15 @@
 import fs from 'fs';
 import path from 'path';
 import mime from 'mime';
+import changeCase from 'change-case';
+
+function tansformPath(url) {
+  let ret = url.split('?')[0];
+
+  ret = changeCase.camelCase(ret.split('/').join(' '));
+
+  return path.normalize(`${ret}.json`);
+}
 
 /**
  * 简单的 http api connect 中间件请求处理,
@@ -13,7 +22,7 @@ export default function serverApi(options) {
   return (req, res) => {
     // handle any requests at /api
     const rootUrl = 'tools/data';
-    const reqFilename = `${path.basename(req.url).split('?')[0]}.json`;
+    const reqFilename = tansformPath(req.url);
     const fileMime = mime.lookup(reqFilename);
     let isDone = false;
 

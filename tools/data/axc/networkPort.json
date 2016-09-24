@@ -9,7 +9,8 @@
     },
     "list": [
       {
-        "name": "G23",
+        "id": 1,
+        "name": "eth0",
         "exchangeModel": "QINQ_tunnel",
         "status": "1",
         "speed": "1000",
@@ -22,7 +23,8 @@
         "description": "dsdsd"
       },
       {
-        "name": "G23",
+        "id": 2,
+        "name": "eth1",
         "exchangeModel": "QINQ_tunnel",
         "status": "1",
         "speed": "10",
@@ -35,7 +37,8 @@
         "description": "dsdsd"
       },
       {
-        "name": "G23",
+        "id": 3,
+        "name": "eth0",
         "exchangeModel": "QINQ_tunnel",
         "status": "1",
         "speed": "100",

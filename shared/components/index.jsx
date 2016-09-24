@@ -23,7 +23,7 @@ export FormInput from './Form/FormInput';
 export Search from './Form/Search';
 export Password from './Form/Password';
 export DatePicker from './DatePicker';
-export DatePicker from './TimePicker';
+export TimePicker from './TimePicker';
 
 // Organism
 export Modal from './Modal';
