@@ -1,0 +1,28 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "id": "0",
+        "targetAddress": "0",
+        "targetMask": "android-1213",
+        "nextHopIp": "192.168.5.123"
+      },
+      {
+        "id": "2",
+        "targetAddress": "0",
+        "targetMask": "android-1213",
+        "nextHopIp": "192.168.5.123"
+      },
+      {
+        "id": "3",
+        "targetAddress": "0",
+        "targetMask": "android-1213",
+        "nextHopIp": "192.168.5.123"
+      }
+    ]
+  }
+}

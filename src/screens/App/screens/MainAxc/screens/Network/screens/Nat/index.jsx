@@ -60,8 +60,8 @@ const screenOptions = fromJS([
     },
 
   }, {
-    id: 'originalAddress',
-    label: _('Original Address'),
+    id: 'sourceAddress',
+    label: _('Source Address'),
   }, {
     id: 'conversionAddress',
     label: _('Conversion Address'),

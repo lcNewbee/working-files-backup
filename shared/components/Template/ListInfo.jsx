@@ -122,13 +122,20 @@ class ListInfo extends React.Component {
 
   componentWillMount() {
     const { actionable, editable, deleteable, tableOptions } = this.props;
+    let btnsNum = 0;
 
     // 初始选项，添加操作项
     if (actionable && (editable || deleteable) && tableOptions) {
+      if (editable) {
+        btnsNum += 1;
+      }
+      if (deleteable) {
+        btnsNum += 1;
+      }
       this.listTableOptions = tableOptions.push(Map({
         id: 'actions',
         text: _('Actions'),
-        width: '180',
+        width: btnsNum * 90,
         transform: (val, item, index) => (
           <div className="action-btns">
             {
@@ -225,7 +232,7 @@ class ListInfo extends React.Component {
     const listKey = this.props.listKey;
 
     this.props.changeListActionQuery({
-      action: 'remove',
+      action: 'delete',
       selectedList: [list.getIn([i, listKey])],
     });
     this.props.onListAction();
@@ -258,7 +265,7 @@ class ListInfo extends React.Component {
       mySelectedList = mySelectedList.map(val => list.getIn([val, listKey]));
 
       this.props.changeListActionQuery({
-        action: 'remove',
+        action: 'delete',
         selectedList: mySelectedList,
       });
       this.props.onListAction();

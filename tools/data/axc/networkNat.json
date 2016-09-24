@@ -1,0 +1,31 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "settings": {
+      "isLocked": "1"
+    },
+    "list": [
+      {
+        "id": "0",
+        "ruleType": "0",
+        "sourceAddress": "android-1213",
+        "conversionAddress": "192.168.5.123"
+      },
+      {
+        "id": "1",
+        "ruleType": "2",
+        "sourceAddress": "android-1213",
+        "conversionAddress": "192.168.5.123"
+      },
+      {
+        "id": "2",
+        "ruleType": "3",
+        "sourceAddress": "android-1213",
+        "conversionAddress": "192.168.5.123"
+      }
+    ]
+  }
+}
