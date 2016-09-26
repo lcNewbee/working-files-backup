@@ -11,10 +11,10 @@ import * as appActions from 'shared/actions/app';
 
 function getInterfaceTypeOptions() {
   return utils.fetch('goform/interfaceType')
-    .then((json) => (
+    .then(json => (
       {
         options: json.data.list.map(
-          (item) => ({
+          item => ({
             value: item.no,
             label: `${item.no}(${item.noInfo})`,
           })
@@ -42,17 +42,11 @@ const screenOptions = fromJS([
   },
 ]);
 const tableOptions = screenOptions.map(
-  (item) => item.delete('formProps')
+  item => item.delete('formProps')
 );
 const editFormOptions = immutableUtils.getFormOptions(screenOptions);
 
 const propTypes = {
-  app: PropTypes.instanceOf(Map),
-  store: PropTypes.instanceOf(Map),
-
-  route: PropTypes.object,
-  initList: PropTypes.func,
-  closeListItemModal: PropTypes.func,
   save: PropTypes.func,
 };
 const defaultProps = {};
@@ -62,9 +56,6 @@ export default class View extends React.Component {
     super(props);
 
     this.onAction = this.onAction.bind(this);
-  }
-
-  componentWillMount() {
   }
 
   onAction(mac, action) {
