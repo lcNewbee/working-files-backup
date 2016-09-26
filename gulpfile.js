@@ -18,11 +18,12 @@ paths = gulp.paths = {
   release: 'release',
   src: 'src',
   php: 'php/',
+  pubWebPath: '/',
   pubNew: '../win_ac/software/web/',
   pubAxc: 'dist',
   pubAp: '../qsdk/package/comlanos/goahead/files/web',
   webpack: 'webpack.config.dev.js',
-  pubWebpack: 'webpack.config.prop.js',
+  pubWebpack: 'webpack.config.production.js',
 };
 
 // 删除
@@ -43,7 +44,7 @@ gulp.task('test:shared', shell.task([
 ]));
 
 gulp.task('webpack', shell.task([
-  'webpack --config webpack.config.prod.js',
+  'webpack --config webpack.config.production.js',
   'babel-node tools/buildHtml.js',
 ]));
 
@@ -84,6 +85,19 @@ gulp.task('clean:pubac', function (callback) {
   return del([distPath], { force: true });
 });
 
+gulp.task('pub:path', function () {
+  var distPath = paths.pubWebPath;
+  var publicPathReg = /publicPath: \'(\w+)\'/g;
+
+  if(argv.p) {
+    distPath = argv.p;
+  }
+
+  return gulp.src(paths.pubWebpack)
+    .pipe($.replace(publicPathReg, "publicPath: '" + distPath + "'"))
+    .pipe(gulp.dest('./'));
+});
+
 gulp.task('pub:copy', function () {
   var distPath = paths.pubNew;
 
@@ -97,7 +111,7 @@ gulp.task('pub:copy', function () {
 
 // 发布 Access Manager 正式版
 gulp.task('pub:ac', function (callback) {
-  runSequence(['clean:pubac', 'build'], 'pub:copy', callback);
+  runSequence('pub:path', ['clean:pubac', 'build'], 'pub:copy', callback);
 });
 
 // 发布 Access Manager 测试版本
@@ -120,7 +134,7 @@ gulp.task('pub:copyap', function () {
     .pipe(gulp.dest(distPath));
   });
 gulp.task('pub:ap', function (callback) {
-  runSequence(['clean:pubap', 'build'], 'pub:copyap', callback);
+  runSequence('pub:path', ['clean:pubap', 'build'], 'pub:copyap', callback);
 });
 
 // 发布硬AC版本
@@ -146,13 +160,13 @@ gulp.task('pub:copyaxc', function () {
 });
 gulp.task('build:axc', function () {
   return gulp.src([paths.build + '/scripts/**/*'])
-    .pipe($.replace('goform/', 'index.php/goform/'))
+    .pipe($.replace(/(\/?)goform/g, 'index.php/goform/'))
     .pipe($.replace('/~zhangfang/axc/', ''))
     .pipe(gulp.dest(paths.build + '/scripts/'));
 });
 
 gulp.task('pub:axc', function (callback) {
-  runSequence(['build'], 'build:axc', 'pub:copyaxc', callback);
+  runSequence('pub:path', ['build'], 'build:axc', 'pub:copyaxc', callback);
 });
 
 
