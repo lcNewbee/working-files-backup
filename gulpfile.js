@@ -22,8 +22,8 @@ paths = gulp.paths = {
   pubNew: '../win_ac/software/web/',
   pubAxc: 'dist',
   pubAp: '../qsdk/package/comlanos/goahead/files/web',
-  webpack: 'webpack.config.dev.js',
-  pubWebpack: 'webpack.config.production.js',
+  webpack: './webpack.config.dev.js',
+  pubWebpack: './webpack.config.production.js',
 };
 
 // 删除
@@ -87,7 +87,7 @@ gulp.task('clean:pubac', function (callback) {
 
 gulp.task('pub:path', function () {
   var distPath = paths.pubWebPath;
-  var publicPathReg = /publicPath: \'(\w+)\'/g;
+  var publicPathReg = /publicPath: '(.*)'/g;
 
   if(argv.p) {
     distPath = argv.p;
@@ -95,6 +95,9 @@ gulp.task('pub:path', function () {
 
   return gulp.src(paths.pubWebpack)
     .pipe($.replace(publicPathReg, "publicPath: '" + distPath + "'"))
+    .on('end', function(){
+      gutil.log('切换发布web根目录：', gutil.colors.magenta(distPath));
+    })
     .pipe(gulp.dest('./'));
 });
 
