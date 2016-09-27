@@ -60,6 +60,7 @@
     "gulp-shell": "^0.5.2",
     "gulp-static-hash": "^0.1.4",
     "gulp-util": "^3.0.7",
+    "heatmap.js": "^2.0.5",
     "html-webpack-plugin": "^2.15.0",
     "imports-loader": "^0.6.5",
     "jsdom": ">8.1.0",

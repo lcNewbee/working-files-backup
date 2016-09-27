@@ -54,3 +54,4 @@ $route['404_override'] = '';
 $route['goform/login'] = 'login';
 $route['goform/network/port'] = 'networkPort';
 $route['goform/network/interface'] = 'networkInterface';
+$route['goform/network/dhcp'] = 'networkDhcp';
