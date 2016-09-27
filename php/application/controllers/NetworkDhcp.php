@@ -68,7 +68,7 @@ class NetworkDhcp extends CI_Controller {
         );
     $result = null;
     $actionType = element('action', $data);
-    if ($actionType === 'delete') {
+    if ($actionType === 'add') {
      $arr = array();
 
       // $this->db->where(字段名，字段值)
