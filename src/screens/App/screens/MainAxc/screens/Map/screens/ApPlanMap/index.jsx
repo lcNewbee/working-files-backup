@@ -58,6 +58,7 @@ const defaultEditData = immutableUtils.getDefaultData(screenOptions.get('list'))
 
 const propTypes = {
   store: PropTypes.instanceOf(Map),
+  history: PropTypes.object,
   updateScreenSettings: PropTypes.func,
   addToPropertyPanel: PropTypes.func,
   updateEditListItem: PropTypes.func,
@@ -186,7 +187,7 @@ export default class View extends React.Component {
         }),
       },
     ];
-    const radius = 28;
+    const radius = 38;
     const avd = 220 / btnsList.length;
     const ahd = (avd * Math.PI) / 180;
     const isCur = !curMapName || (curMapName === device.getIn(['map', 'mapName']));
@@ -245,7 +246,7 @@ export default class View extends React.Component {
                   key={info.id}
                   style={{
                     left: isOpen ? (Math.sin((ahd * index)) * radius) + 7 : 13,
-                    top: isOpen ? (Math.cos((ahd * index)) * radius) + 6 : 13,
+                    top: isOpen ? (Math.cos((ahd * index)) * radius) : 13,
                   }}
                   onClick={info.onClick}
                 >
@@ -398,18 +399,21 @@ export default class View extends React.Component {
     const actionQuery = store.getIn([myListId, 'actionQuery']);
     let curMapName = store.getIn([myListId, 'curSettings', 'curMapName']);
     const actionBarChildren = [
-      curMapName ? (
-        <Button
-          icon="arrow-left"
-          theme="primary"
-          text={_('Back')}
-          onClick={() => {
+      <Button
+        icon="arrow-left"
+        theme="primary"
+        text={_('Back')}
+        key="back"
+        onClick={() => {
+          if (curMapName) {
             this.props.updateScreenSettings({
               curMapName: '',
             });
-          }}
-        />
-      ) : null,
+          } else {
+            this.props.history.push('/main/group/map/live/list')
+          }
+        }}
+      />,
       isLocked === '1' ? (<Button
         icon="lock"
         key="0"
@@ -439,10 +443,11 @@ export default class View extends React.Component {
         .map((item, i) => item.merge({
           _index: i,
         }))
-        .groupBy(item => item.getIn(['map', 'mapName']))
+        .groupBy(item => item.getIn(['map', 'buildId']))
         .toList();
 
     const isModalShow = actionQuery.get('action') === 'add' || actionQuery.get('action') === 'edit';
+    const buildId = this.props.params.id;
 
     if (mapList.size === 1) {
       curMapName = mapList.getIn([0, 'map', 'mapName']);

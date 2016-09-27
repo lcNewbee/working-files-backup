@@ -6,8 +6,8 @@
   "data": {
     "list": [
       {
-        "ssid": "市场部",
-        "remark": "市场部会议室1",
+        "ssid": "Market",
+        "remark": "Market 1",
         "nasId": "ds",
         "enabled": "0",
         "hiddenSsid": "1",
@@ -23,8 +23,8 @@
         "upstream": "64"
       },
       {
-        "ssid": "测试",
-        "remark": "测试-会议室1",
+        "ssid": "Market",
+        "remark": "Market_2",
         "vlanId": "223",
         "nasId": "ds",
         "enabled": "0",
@@ -40,8 +40,8 @@
         "upstream": "64"
       },
       {
-        "ssid": "研发",
-        "remark": "研发AP组",
+        "ssid": "Market",
+        "remark": "Market floor three",
         "vlanId": "22",
         "nasId": "ds",
         "enabled": "0",

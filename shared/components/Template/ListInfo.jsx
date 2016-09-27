@@ -428,7 +428,7 @@ class ListInfo extends React.Component {
               onPageChange={this.onPageChange}
               loading={app.get('fetching')}
               selectable={selectable}
-              onSelectRow={this.props.selectListItem}
+              onRowSelect={this.props.selectListItem}
             />
           ) : null
         }

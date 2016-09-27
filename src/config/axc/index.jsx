@@ -109,6 +109,8 @@ const sPreferencesAnalysis =
 const sInformationPush =
     require('../../screens/App/screens/MainAxc/screens/Report/screens/BusinessReport/screens/InformationPush');
 const sLiveMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/LiveMap');
+const sApPlanMap =
+    require('../../screens/App/screens/MainAxc/screens/Map/screens/ApPlanMap');
 const sRfMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/Rf');
 const sHeatMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/HeatMap');
 const sClientsTrace = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace');
@@ -134,8 +136,12 @@ const sActiveStandby =
     require('../../screens/App/screens/MainAxc/screens/System/screens/ActiveStandby');
 const sSignatures =
     require('../../screens/App/screens/MainAxc/screens/System/screens/Signatures');
-const sVersionMaintenance =
-    require('../../screens/App/screens/MainAxc/screens/System/screens/VersionMaintenance');
+const sAcVersion =
+    require('../../screens/App/screens/MainAxc/screens/System/screens/AcVersion');
+const sApVersion =
+    require('../../screens/App/screens/MainAxc/screens/System/screens/ApVersion');
+const sApModel =
+    require('../../screens/App/screens/MainAxc/screens/System/screens/ApModel');
 const sSystemMaintenance =
     require('../../screens/App/screens/MainAxc/screens/System/screens/SystemMaintenance');
 
@@ -309,27 +315,46 @@ const routes = [
                 id: 'liveMap',
                 path: '/main/group/map/live',
                 text: _('Live Map'),
-                formUrl: 'goform/mapList',
-                component: sLiveMap.Screen,
-              }, {
-                id: 'rfPlan',
-                path: '/main/group/map/rf_plan',
-                formUrl: '/goform/rfPlan',
-                fetchUrl: '/goform/getDeviceList',
-                text: _('RF Plan'),
-                component: sRfMap.Screen,
-              }, {
+                indexRoute: { onEnter: (nextState, replace) => replace('/main/group/map/live/list') },
+                childRoutes: [
+                  {
+                    id: 'liveMap',
+                    path: '/main/group/map/live/list',
+                    text: _('Live Map'),
+                    formUrl: 'goform/mapList',
+                    isIndex: true,
+                    component: sLiveMap.Screen,
+                  }, {
+
+                    id: 'buildMap',
+                    path: '/main/group/map/live/(:id)',
+                    text: _('Build Floor Map'),
+                    formUrl: 'goform/getDeviceList',
+                    component: sApPlanMap.Screen,
+                    noNav: true,
+                  },
+                ],
+              },
+              // {
+              //   id: 'rfPlan',
+              //   path: '/main/group/map/rf_plan',
+              //   formUrl: '/goform/rfPlan',
+              //   fetchUrl: '/goform/getDeviceList',
+              //   text: _('RF Plan'),
+              //   component: sRfMap.Screen,
+              // },
+              {
                 id: 'heatMap',
                 path: '/main/group/map/heat_map',
                 formUrl: '/goform/heatMap',
-                fetchUrl: '/goform/getDeviceList',
+                fetchUrl: '/goform/mapList',
                 text: _('Heat Map'),
                 component: sHeatMap.Screen,
               }, {
                 id: 'cientsTrace',
                 path: '/main/group/map/cients_trace',
                 formUrl: '/goform/cientsTrace',
-                fetchUrl: '/goform/getDeviceList',
+                fetchUrl: '/goform/mapList',
                 text: _('Cients Trace'),
                 component: sClientsTrace.Screen,
               },
@@ -532,7 +557,7 @@ const routes = [
             isIndex: true,
             path: '/main/system/upgrade',
             icon: 'level-up',
-            text: _('Version Maintenance'),
+            text: _('Version & Model'),
             noTree: true,
             component: SharedComponents.TabContainer,
             indexRoute: {
@@ -545,14 +570,21 @@ const routes = [
                 fetchUrl: 'goform/axcVersion',
                 formUrl: 'goform/axcVersion',
                 text: _('AC Version'),
-                component: sVersionMaintenance.Screen,
+                component: sAcVersion.Screen,
               }, {
                 id: 'apsVersion',
                 path: '/main/system/upgrade/aps',
                 fetchUrl: 'goform/apsVersion',
                 formUrl: 'goform/apsVersion',
                 text: _('Access Point Version'),
-                component: sSystemLogSettings.Screen,
+                component: sApVersion.Screen,
+              }, {
+                id: 'apModel',
+                path: '/main/system/upgrade/apModel',
+                fetchUrl: 'goform/apsVersion',
+                formUrl: 'goform/apModel',
+                text: _('Access Point Model'),
+                component: sApModel.Screen,
               },
             ],
           }, {

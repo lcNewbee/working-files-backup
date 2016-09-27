@@ -24,6 +24,12 @@
     padding: $g-distance;
     color: $g-gray-light;
   }
+
+  &.table--pionter {
+    tr {
+      cursor: pointer;
+    }
+  }
 }
 .table-wrap {
   position: relative;

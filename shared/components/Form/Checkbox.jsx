@@ -6,7 +6,7 @@ const propTypes = {
   className: PropTypes.string,
   size: PropTypes.oneOf(['md', 'lg']),
   theme: PropTypes.oneOf(['square']),
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   id: PropTypes.string,
   options: PropTypes.object,
   style: PropTypes.object,

@@ -64,6 +64,7 @@ class FormInput extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.onTimeChange = this.onTimeChange.bind(this);
     this.onDateChange = this.onDateChange.bind(this);
+    this.renderCustomInput = this.renderCustomInput.bind(this);
   }
 
   onBlur(e) {
@@ -142,6 +143,61 @@ class FormInput extends React.Component {
     // 数据验证
     if (typeof this.props.checkClearValue === 'function' && !e.target.disabled) {
       this.props.checkClearValue(val);
+    }
+  }
+
+  renderCustomInput() {
+    const {
+      Component, type, clearable, className, searchable,
+      size, value, showSecond,
+    } = this.props;
+    const inpputType = this.props.type;
+    const inputProps = utils.extend({}, this.props);
+    let MyComponent = Component;
+    let classNames = className || '';
+    let timeValue = value;
+    let timeFormat = 'hmmss';
+
+    if (inpputType === 'plain-text') {
+      return <span className="plain-text">{value}</span>;
+    } else if (inpputType === 'select') {
+      return (<Select
+        {...inputProps}
+        className={classNames}
+        clearable={clearable || false}
+        searchable={searchable || false}
+      />);
+    } else if (inpputType === 'switch') {
+      return (
+        <Switchs
+          {...inputProps}
+        />
+      );
+    } else if (inpputType === 'time') {
+      if (!showSecond) {
+        timeFormat = 'hmm';
+      }
+      if (!moment.isMoment(timeValue)) {
+        timeValue = moment(timeValue, timeFormat);
+      }
+      return (
+        <TimePicker
+          {...inputProps}
+          onChange={this.onTimeChange}
+        />
+      );
+    } else if (inpputType === 'date') {
+      if (!moment.isMoment(timeValue)) {
+        timeValue = moment(timeValue);
+      }
+
+      return (
+        <DatePicker
+          {...inputProps}
+          onChange={this.onDateChange}
+          selected={timeValue}
+        />
+      );
     }
   }
 

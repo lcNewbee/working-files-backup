@@ -9,62 +9,85 @@
     },
     "list": [
       {
-        "no": "0",
+        "id": "0",
         "lat": -34,
         "lng": 151.23,
         "address": "shenzhen china",
         "markerTitle": "0",
-        "name": "Beijing",
+        "name": "Head Office",
         "floorNumber": 12,
         "markerType": "building",
         "floorList": [
           {
             "id": "1",
-            "mapName": "11",
+            "mapName": "Floor One",
             "locked": "0"
           }, {
             "id": "2",
-            "mapName": "11",
+            "mapName": "Floor Two",
             "locked": "0"
           }
         ]
       },
       {
-        "no": "1",
+        "id": "1",
         "lat": -34,
         "lng": 151.56,
         "markerTitle": "1",
-        "name": "Beijing",
+        "name": "Branch",
         "floorNumber": 12,
         "markerType": "building",
         "floorList": [
           {
             "id": "1",
-            "mapName": "11",
+            "mapName": "Floor one",
             "locked": "0"
           }, {
             "id": "2",
-            "mapName": "11",
+            "mapName": "Floor Two",
+            "locked": "0"
+          }, {
+            "id": "2",
+            "mapName": "Floor Three",
             "locked": "0"
           }
         ]
       },
       {
-        "no": "2",
+        "id": "2",
         "lat": -34,
         "lng": 151.78,
         "markerTitle": "2",
-        "name": "Beijing",
+        "name": "Market",
         "floorNumber": 12,
         "markerType": "building",
         "floorList": [
           {
             "id": "1",
-            "mapName": "11",
+            "mapName": "Floor One",
             "locked": "0"
           }, {
             "id": "2",
-            "mapName": "11",
+            "mapName": "Floor Two",
+            "locked": "0"
+          }
+        ]
+      }, {
+        "id": "3",
+        "lat": -34,
+        "lng": 151.78,
+        "markerTitle": "2",
+        "name": "Market",
+        "floorNumber": 12,
+        "markerType": "building",
+        "floorList": [
+          {
+            "id": "1",
+            "mapName": "Floor One",
+            "locked": "0"
+          }, {
+            "id": "2",
+            "mapName": "Floor Two",
             "locked": "0"
           }
         ]

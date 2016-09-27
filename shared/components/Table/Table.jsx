@@ -14,7 +14,8 @@ const propTypes = {
   className: PropTypes.string,
   onPageChange: PropTypes.func,
   selectable: PropTypes.bool,
-  onSelectRow: PropTypes.func,
+  onRowSelect: PropTypes.func,
+  onRowClick: PropTypes.func,
 };
 
 const defaultProps = {
@@ -26,12 +27,18 @@ class Table extends Component {
     super(props);
 
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    this.onSelectRow = this.onSelectRow.bind(this);
+    this.onRowSelect = this.onRowSelect.bind(this);
+    this.onRowClick = this.onRowClick.bind(this);
   }
-  onSelectRow(data) {
+  onRowSelect(data) {
     const actionData = data;
-    if (this.props.onSelectRow) {
-      this.props.onSelectRow(actionData);
+    if (this.props.onRowSelect) {
+      this.props.onRowSelect(actionData);
+    }
+  }
+  onRowClick(e, i) {
+    if (this.props.onRowClick) {
+      this.props.onRowClick(e, i);
     }
   }
 
@@ -54,7 +61,8 @@ class Table extends Component {
             item={item}
             index={i}
             selectable={selectable}
-            onSelect={this.onSelectRow}
+            onSelect={this.onRowSelect}
+            onClick={e => this.onRowClick(e, i)}
           />
         );
       }
@@ -75,7 +83,10 @@ class Table extends Component {
     return ret;
   }
   render() {
-    const { className, options, list, page, loading, selectable } = this.props;
+    const {
+      className, options, list, page, loading, selectable,
+      onRowClick,
+    } = this.props;
     const myList = fromJS(list);
     const filterOptions = options.map((item) => {
       let ret = item;
@@ -87,20 +98,24 @@ class Table extends Component {
       return ret;
     });
     const bodyRow = this.renderBodyRow(myList, filterOptions);
+    let myTableClassName = className;
     let isSelectAll = false;
 
     if (myList.size > 0 && (this.selectedList.length === myList.size)) {
       isSelectAll = true;
     }
+    if (onRowClick) {
+      myTableClassName = `${myTableClassName} table--pionter`;
+    }
 
     return (
       <div className="table-wrap">
-        <table className={className}>
+        <table className={myTableClassName}>
           <thead>
             <Row
               options={filterOptions}
               selectable={selectable}
-              onSelect={this.onSelectRow}
+              onSelect={this.onRowSelect}
               isSelectAll={isSelectAll}
               isTh
             />

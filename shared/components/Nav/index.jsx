@@ -89,6 +89,10 @@ class Nav extends Component {
               let linkClassName = 'm-menu__link o-nav__link';
               let isActive = false;
 
+              if (item.get('noNav')) {
+                return null;
+              }
+
               if (location && location.pathname) {
                 isActive = location.pathname.indexOf(`${item.get('path')}/`) === 0
                   || location.pathname === item.get('path');
@@ -118,6 +122,10 @@ class Nav extends Component {
                           item.get('childRoutes').map((subItem, n) => {
                             const thisKey = `${myKey}.${n}`;
                             const mylinkClassName = 'm-menu__link o-nav__link a-leaf-link';
+
+                            if (subItem.get('noNav')) {
+                              return null;
+                            }
                             return (
                               <li key={thisKey}>
                                 <NavLink

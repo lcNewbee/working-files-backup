@@ -2,6 +2,7 @@
 class NetworkInterface extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
+
 		$this->load->database();
     $this->load->helper('array');
 	}
@@ -52,7 +53,7 @@ class NetworkInterface extends CI_Controller {
     if ($actionType === 'delete') {
       $result=array(
         'state'=>$state,
-        'data'=>element('action', $data, '')
+        'data'=>element('selectedList', $data, '')
       );
     } else {
       $result=array(
@@ -77,4 +78,4 @@ class NetworkInterface extends CI_Controller {
 		echo json_encode($result);
 	}
 }
-?>
+

@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
-import { fromJS, Map } from 'immutable';
+import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/utils/lib/validator';
 import {
@@ -10,72 +10,28 @@ import {
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
+function getPortList() {
+  return utils.fetch('goform/network/port')
+    .then(json => (
+      {
+        options: json.data.list.map(
+          item => ({
+            value: item.name,
+            label: item.name,
+          })
+        ),
+      }
+    )
+  );
+}
+
 const screenOptions = fromJS([
   {
-    id: 'name',
-    text: _('Name'),
-    formProps: {
-      maxLength: '24',
-    },
-  }, {
-    id: 'domain',
-    text: _('Domain'),
+    id: 'model',
+    text: _('AP Model'),
     formProps: {
       type: 'text',
-    },
-  }, {
-    id: 'startIp',
-    text: _('Start IP'),
-    formProps: {
-      maxLength: '13',
-      validator: validator({
-        rules: 'ip',
-      }),
-    },
-  }, {
-    id: 'mask',
-    text: _('Mask'),
-    formProps: {
-      maxLength: '13',
-      validator: validator({
-        rules: 'mask',
-      }),
-    },
-  }, {
-    id: 'gateway',
-    text: _('Gateway'),
-    formProps: {
-      maxLength: '13',
-      validator: validator({
-        rules: 'ip',
-      }),
-    },
-  }, {
-    id: 'mainDns',
-    text: _('Main DNS'),
-    formProps: {
-      maxLength: '13',
-      validator: validator({
-        rules: 'ip',
-      }),
-    },
-  }, {
-    id: 'secondDns',
-    text: _('Second DNS'),
-    formProps: {
-      maxLength: '13',
-      validator: validator({
-        rules: 'ip',
-      }),
-    },
-  }, {
-    id: 'releaseTime',
-    text: _('Release Time'),
-    formProps: {
-      maxLength: '13',
-      validator: validator({
-        rules: 'time',
-      }),
+      required: true,
     },
   },
 ]);
@@ -83,13 +39,7 @@ const tableOptions = immutableUtils.getTableOptions(screenOptions);
 const editFormOptions = immutableUtils.getFormOptions(screenOptions);
 const defaultEditData = immutableUtils.getDefaultData(screenOptions);
 const propTypes = {
-  app: PropTypes.instanceOf(Map),
-  store: PropTypes.instanceOf(Map),
-
   route: PropTypes.object,
-  initList: PropTypes.func,
-  closeListItemModal: PropTypes.func,
-  updateEditListItem: PropTypes.func,
   save: PropTypes.func,
 };
 const defaultProps = {};
@@ -122,7 +72,7 @@ export default class View extends React.Component {
         tableOptions={tableOptions}
         editFormOptions={editFormOptions}
         defaultEditData={defaultEditData}
-        listKey="name"
+        noTitle
         actionable
         selectable
       />

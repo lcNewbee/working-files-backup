@@ -9,6 +9,7 @@ const propTypes = {
   selectable: PropTypes.bool,
   isSelectAll: PropTypes.bool,
   onSelect: PropTypes.func,
+  onClick: PropTypes.func,
 };
 
 const defaultProps = {
@@ -117,7 +118,7 @@ class Row extends Component {
     }
 
     return (
-      <tr>
+      <tr onClick={this.props.onClick}>
         {tds}
       </tr>
     );

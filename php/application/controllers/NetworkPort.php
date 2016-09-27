@@ -16,7 +16,7 @@ class NetworkPort extends CI_Controller {
       'msg'=>'OK'
     );
 
-    function myfunction($v) {
+    function transformKeys($v) {
       $ret = array();
       $keysMap = array(
         'portid'=>'id',
@@ -36,7 +36,7 @@ class NetworkPort extends CI_Controller {
       return $ret;
     }
 
-    $list = array_map('myfunction', $query);
+    $list = array_map('transformKeys', $query);
     $result=array(
       'state'=>$state,
       'data'=>array(
@@ -83,4 +83,4 @@ class NetworkPort extends CI_Controller {
 		echo json_encode($result);
 	}
 }
-?>
+

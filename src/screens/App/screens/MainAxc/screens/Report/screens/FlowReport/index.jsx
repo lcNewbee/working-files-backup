@@ -152,7 +152,7 @@ export default class View extends PureComponent {
       tooltip: {
         trigger: 'axis',
         axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-          type: 'shadow',        // 默认为直线，可选为：'line' | 'shadow'
+          type: 'line',        // 默认为直线，可选为：'line' | 'shadow'
         },
       },
       grid: {
@@ -161,28 +161,31 @@ export default class View extends PureComponent {
         bottom: '3%',
         containLabel: true,
       },
-      legend: {
-        x: 'center',
-        data: ['在线用户数', '会话数'],
-      },
       xAxis: [
         {
           type: 'category',
           data: ['2016-2-3', '2016-2-4', '2016-2-5', '2016-2-6', '2016-2-7', '2016-2-8', '2016-2-9'],
           axisTick: {
             alignWithLabel: true,
+            length: 2,
           },
         },
       ],
       yAxis: [
         {
           type: 'value',
+
+          splitNumber: 3,
+          splitLine: {
+            show: false,
+          },
         },
+
       ],
       series: [
         {
           name: '数量',
-          type: 'bar',
+          type: 'line',
           barWidth: '60%',
           data: [100, 52, 23, 232, 323, 33, 323],
         },

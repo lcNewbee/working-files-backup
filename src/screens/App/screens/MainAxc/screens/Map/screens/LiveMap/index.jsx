@@ -82,6 +82,7 @@ export default class View extends React.Component {
 
     this.state = {
       isOpenHeader: true,
+      buildingIndex: -1,
     };
 
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
@@ -92,6 +93,7 @@ export default class View extends React.Component {
       'onRemoveItem',
       'renderGoogleMap',
       'addMarkerToMap',
+      'onRowClick',
     ]);
 
     utils.loadScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyBGOC8axWomvnetRPnTdcuNW-a558l-JAU&libraries=places',
@@ -153,7 +155,13 @@ export default class View extends React.Component {
       this.map = null;
     }
   }
-
+  onRowClick(e, i) {
+    // 过滤Button元素的点击
+    if (e.target.nodeName.toLowerCase() !== 'button' &&
+        e.target.parentNode.nodeName.toLowerCase() !== 'button') {
+      this.props.history.push(`/main/group/map/live/${i}`);
+    }
+  }
   onSave() {
     this.props.validateAll()
       .then((errMsg) => {
@@ -214,8 +222,8 @@ export default class View extends React.Component {
       animation: google.maps.Animation.DROP,
     });
     const contentString = '<div class="m-map-marker">' +
-                            '<h4>测试</h4>' +
-                            '<dl><dt>当前流量</dt>' +
+                            '<h4>' + _('Test') + '</h4>' +
+                            '<dl><dt>' + _('Flow') + '</dt>' +
                             '<dd>15.23Mbps</dd></dl>' +
                           '</div>';
 
@@ -247,14 +255,14 @@ export default class View extends React.Component {
     });
 
     marker.addListener('click', () => {
-      // infowindow.open(map, marker);
-      actionsWindow.open(map, marker);
-      infobox.open(map, marker);
+      infowindow.open(map, marker);
+      // actionsWindow.open(map, marker);
+      // infobox.open(map, marker);
 
       if (item.get('markerType') === 'ap') {
         this.props.addToPropertyPanel();
       } else {
-        // this.props.editListItemByIndex(index);
+        this.props.editListItemByIndex(index);
       }
     });
     marker.addListener('mouseup', () => {
@@ -420,6 +428,7 @@ export default class View extends React.Component {
       />,
       settings.get('type') === '0' ? lockButton : null,
       <span
+        key="help"
         className="a-help"
         data-help={_('Help')}
         data-help-text="这是帮助文本"
@@ -491,6 +500,7 @@ export default class View extends React.Component {
               list={list}
               page={page}
               onPageChange={this.onPageChange}
+              onRowClick={this.onRowClick}
               loading={app.get('fetching')}
             />
           )

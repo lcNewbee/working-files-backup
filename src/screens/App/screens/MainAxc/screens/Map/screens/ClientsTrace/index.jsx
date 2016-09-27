@@ -1,13 +1,13 @@
 import React, { PropTypes } from 'react';
-import utils, { immutableUtils, dom } from 'shared/utils';
+import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { bindActionCreators } from 'redux';
+import h337 from 'heatmap.js';
 import {
-  Button, ListInfo, Icon, FormGroup, Modal,
+  Button, ListInfo, Icon, Table,
 } from 'shared/components';
-import FileUploads from 'shared/components/FileUpload';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 import * as propertiesActions from 'shared/actions/properties';
@@ -15,12 +15,14 @@ import * as propertiesActions from 'shared/actions/properties';
 import bkImg from '../../shared/images/map_bg.jpg';
 import '../../shared/_map.scss';
 
+let heatmapInstance;
+
 const screenOptions = fromJS({
   settings: [],
   list: [
     {
-      id: 'markerType',
-      label: _('Marker Type'),
+      id: 'name',
+      label: _('Name'),
       defaultValue: 'building',
       formProps: {
         type: 'switch',
@@ -36,16 +38,16 @@ const screenOptions = fromJS({
         display: 'inline',
       },
     }, {
-      id: 'markerTitle',
-      label: _('Marker Title'),
+      id: 'floorNumber',
+      label: _('Floor Number'),
       formProps: {
         required: true,
         type: 'text',
         display: 'inline',
       },
     }, {
-      id: 'markerAddress',
-      label: _('Marker Address'),
+      id: 'address',
+      label: _('Address'),
       formProps: {
         type: 'text',
         display: 'inline',
@@ -55,17 +57,14 @@ const screenOptions = fromJS({
 });
 
 const defaultEditData = immutableUtils.getDefaultData(screenOptions.get('list'));
+const tableOptions = immutableUtils.getTableOptions(screenOptions.get('list'));
 
 const propTypes = {
+  app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
   updateScreenSettings: PropTypes.func,
-  addToPropertyPanel: PropTypes.func,
-  updateEditListItem: PropTypes.func,
   validateAll: PropTypes.func,
-  editListItemByIndex: PropTypes.func,
   onListAction: PropTypes.func,
-  updateListItemByIndex: PropTypes.func,
-  closeListItemModal: PropTypes.func,
   addListItem: PropTypes.func,
 };
 const defaultProps = {};
@@ -85,15 +84,31 @@ export default class View extends React.Component {
         'onSave',
         'onDrop',
         'renderUndeployDevice',
-        'renderDeployedDevice',
         'onMapMouseUp',
         'onMapMouseDown',
         'onMapMouseMove',
         'renderMapList',
+        'removeHeatMap',
         'renderCurMap',
         'updateState',
+        'renderHeatMap',
+        'renderBulidList',
+        'renderBulidMapList',
+        'onViewBuild',
       ]
     );
+  }
+
+  componentDidUpdate() {
+    const { store } = this.props;
+    const myListId = store.get('curListId');
+    const curMapName = store.getIn([myListId, 'curSettings', 'curMapName']);
+
+    if (curMapName) {
+      this.renderHeatMap();
+    } else {
+      this.removeHeatMap();
+    }
   }
 
   onSave() {
@@ -104,209 +119,31 @@ export default class View extends React.Component {
         }
       });
   }
-  onDrop(ev, curMapName) {
-    const mapOffset = dom.getAbsPoint(this.mapContent);
-    const offsetX = (ev.clientX - mapOffset.x - 13);
-    const offsetY = (ev.clientY - mapOffset.y - 13);
-
-    ev.preventDefault();
-
-    this.props.updateEditListItem({
-      map: {
-        mapName: curMapName,
-        xpos: (offsetX * 100) / this.mapContent.offsetWidth,
-        ypos: (offsetY * 100) / this.mapContent.offsetHeight,
-      },
-    }, true);
-  }
-  onUndeloyDevice(index) {
-    this.updateListItemByIndex(index, {
-      map: {
-        xpos: -99,
-        ypos: -99,
-        isOpen: false,
-        locked: false,
-      },
-    });
-  }
-  onMapMouseUp() {
-    this.mapMouseDown = false;
-  }
-  onMapMouseDown(e) {
-    if (e.target.className.indexOf('o-map-container') !== -1) {
-      this.mapMouseDown = true;
-      this.mapClientX = e.clientX;
-      this.mapClientY = e.clientY;
-    }
-  }
-  onMapMouseMove(e) {
-    if (this.mapMouseDown) {
-      this.updateState({
-        mapOffsetX: (this.state.mapOffsetX + e.clientX) - this.mapClientX,
-        mapOffsetY: (this.state.mapOffsetY + e.clientY) - this.mapClientY,
-      });
-      this.mapClientX = e.clientX;
-      this.mapClientY = e.clientY;
-    }
-  }
   updateState(data) {
     this.setState(utils.extend({}, data));
   }
-  startDrag(ev, i) {
-    ev.dataTransfer.setData('Text', ev.target.id);
-    this.props.editListItemByIndex(i, 'move');
+  onViewBuild(i) {
+    this.updateState({
+      buildIndex: i,
+    });
   }
-  renderDeployedDevice(device, i, curMapName) {
-    const xpos = device.getIn(['map', 'xpos']);
-    const ypos = device.getIn(['map', 'ypos']);
-    const coverage = device.getIn(['map', 'coverage']);
-    const isLocked = device.getIn(['map', 'locked']) === '1';
-    const isOpen = device.getIn(['map', 'isOpen']);
-    const btnsList = [
-      {
-        id: 'lock',
-        icon: isLocked ? 'unlock' : 'lock',
-        onClick: () => this.props.updateListItemByIndex(i, {
-          map: {
-            locked: isLocked ? '0' : '1',
-          },
-        }),
-      }, {
-        id: 'config',
-        icon: 'cog',
-        onClick: () => this.props.addToPropertyPanel(),
-      }, {
-        icon: 'times',
-        id: 'close',
-        onClick: () => this.props.updateListItemByIndex(i, {
-          map: {
-            xpos: -99,
-            ypos: -99,
-          },
-        }),
-      },
-    ];
-    const radius = 28;
-    const avd = 220 / btnsList.length;
-    const ahd = (avd * Math.PI) / 180;
-    const isCur = !curMapName || (curMapName === device.getIn(['map', 'mapName']));
+  removeHeatMap() {
+    const heatCanvas = document.querySelectorAll('.heatmap-canvas');
+    const len = heatCanvas.length;
+    let i = 0;
 
-    let ret = null;
-    let deviceClassName = 'm-device';
-    let avatarClass = 'm-device__avatar';
-
-    if (xpos > -50 && xpos > -50 && isCur) {
-      if (isLocked) {
-        avatarClass = `${avatarClass} locked`;
-      }
-      if (device.get('status') === '0') {
-        avatarClass = `${avatarClass} danger`;
-      }
-
-      if (isOpen) {
-        deviceClassName = `${deviceClassName} m-device--open`;
-      }
-      ret = [
-        <div
-          id={`deivce${i}`}
-          className={deviceClassName}
-          style={{
-            left: `${xpos}%`,
-            top: `${ypos}%`,
-          }}
-        >
-          <div
-            className={avatarClass}
-            draggable={!isLocked}
-            onDragStart={ev => this.startDrag(ev, i)}
-            onClick={() => this.props.updateListItemByIndex(i, {
-              map: {
-                isOpen: !isOpen,
-              },
-            })}
-          />
-          <span
-            className="m-device__name"
-            onClick={() => this.props.updateListItemByIndex(i, {
-              map: {
-                isOpen: !isOpen,
-              },
-            })}
-          >
-            {device.get('devicename') || device.get('mac')}
-          </span>
-
-          {
-            btnsList.map((info, index) => {
-              const btnClassName = `m-device__btn ${info.id}`;
-              return (
-                <div
-                  className={btnClassName}
-                  key={info.id}
-                  style={{
-                    left: isOpen ? (Math.sin((ahd * index)) * radius) + 7 : 13,
-                    top: isOpen ? (Math.cos((ahd * index)) * radius) + 6 : 13,
-                  }}
-                  onClick={info.onClick}
-                >
-                  <Icon name={info.icon} />
-                </div>
-              );
-            })
-          }
-        </div>,
-        <div
-          className="m-device-coverage"
-          style={{
-            left: `${xpos}%`,
-            top: `${ypos}%`,
-            width: coverage,
-            height: coverage,
-          }}
-        />,
-      ];
+    for (i = 0; i < len; i++) {
+      this.mapContent.removeChild(heatCanvas[i]);
     }
-
-    return ret;
-  }
-  renderUndeployDevice(device, i) {
-    const xpos = device.getIn(['map', 'xpos']);
-    const ypos = device.getIn(['map', 'ypos']);
-    const deviceClassName = 'm-device';
-    let avatarClass = 'm-device__avatar';
-    let ret = null;
-
-    if (device.get('status') === '0') {
-      avatarClass = `${avatarClass} danger`;
-    }
-
-    if (xpos < -50 || ypos < -50) {
-      ret = (
-        <div
-          id={`deivce_${i}`}
-          className={deviceClassName}
-        >
-          <div
-            className={avatarClass}
-            draggable="true"
-            onDragStart={ev => this.startDrag(ev, i)}
-          />
-          <span className="m-device__name">
-            {device.get('devicename') || device.get('mac')}
-          </span>
-        </div>
-      );
-    }
-
-    return ret;
+    heatmapInstance = null;
   }
 
-  renderMapList(mapList) {
+  renderFloorList(mapList) {
     return (
       <div className="row">
         {
           mapList.map((maps) => {
-            const mapName = maps.getIn([0, 'map', 'mapName']);
+            const mapName = maps.getIn(['mapName']);
 
             return (
               <div className="cols col-3">
@@ -323,13 +160,6 @@ export default class View extends React.Component {
                         curList: maps,
                       })}
                     />
-                    {
-                      maps ?
-                        maps.map(
-                          item => this.renderDeployedDevice(item, item.get('_index'))
-                        ) :
-                        null
-                    }
                   </div>
                   <div className="m-thumbnail__caption">
                     <h3>{mapName}</h3>
@@ -339,16 +169,6 @@ export default class View extends React.Component {
             );
           })
         }
-
-        <div
-          className="cols col-3 o-map-list__add"
-          onClick={this.props.addListItem}
-        >
-          <Icon
-            name="plus"
-            size="3x"
-          />
-        </div>
       </div>
     );
   }
@@ -379,12 +199,77 @@ export default class View extends React.Component {
           draggable="false"
           alt="d"
         />
+      </div>
+    );
+  }
+  renderHeatMap() {
+    // now generate some random data
+    const points = [];
+    let max = 0;
+    const width = this.mapWidth;
+    const height = this.mapHeight;
+    let len = 300;
+
+    while (len--) {
+      const val = Math.floor(Math.random() * 100);
+      // now also with custom radius
+      const radius = Math.floor(Math.random() * 70);
+
+      max = Math.max(max, val);
+      const point = {
+        x: Math.floor(Math.random() * width),
+        y: Math.floor(Math.random() * height),
+        value: val,
+        // radius configuration on point basis
+        radius,
+      };
+      points.push(point);
+    }
+    // heatmap data format
+    const data = {
+      max,
+      data: points,
+    };
+
+    if (!heatmapInstance) {
+      heatmapInstance = h337.create({
+        // only container is required, the rest will be defaults
+        container: this.mapContent,
+      });
+      heatmapInstance.setData(data);
+    } else {
+      heatmapInstance.repaint();
+    }
+  }
+  renderBulidList() {
+    const { store, app } = this.props;
+    const myListId = store.get('curListId');
+    const list = store.getIn([myListId, 'data', 'list']);
+    const page = store.getIn([myListId, 'data', 'page']);
+
+    return (
+      <Table
+        className="table"
+        options={tableOptions}
+        list={list}
+        page={page}
+        onPageChange={this.onPageChange}
+        loading={app.get('fetching')}
+        onRowClick={(e, i) => this.onViewBuild(i, e)}
+      />
+    );
+  }
+  renderBulidMapList() {
+    const { store } = this.props;
+    const myListId = store.get('curListId');
+    const list = store.getIn([myListId, 'data', 'list', this.state.buildIndex, 'floorList']);
+    const curMapName = store.getIn([myListId, 'curSettings', 'curMapName']);
+    return (
+      <div className="o-map-warp">
         {
-          list ?
-            list.map(
-              (device, i) => this.renderDeployedDevice(device, i, curMapName)
-            ) :
-            null
+          curMapName ?
+            this.renderCurMap(list, curMapName, '100%') :
+            this.renderFloorList(list)
         }
       </div>
     );
@@ -392,62 +277,32 @@ export default class View extends React.Component {
   render() {
     const { store } = this.props;
     const myListId = store.get('curListId');
-    const list = store.getIn([myListId, 'data', 'list']);
-    const isLocked = store.getIn([myListId, 'curSettings', 'isLocked']);
-    const myZoom = store.getIn([myListId, 'curSettings', 'zoom']);
-    const editData = store.getIn([myListId, 'data', 'edit']);
-    const actionQuery = store.getIn([myListId, 'actionQuery']);
-    let curMapName = store.getIn([myListId, 'curSettings', 'curMapName']);
+    const curMapName = store.getIn([myListId, 'curSettings', 'curMapName']);
     const actionBarChildren = [
-      curMapName ? (
+      curMapName || this.state.buildIndex >= 0 ? (
         <Button
           icon="arrow-left"
           theme="primary"
           text={_('Back')}
           onClick={() => {
-            this.props.updateScreenSettings({
-              curMapName: '',
-            });
+            if (curMapName) {
+              this.props.updateScreenSettings({
+                curMapName: '',
+              });
+            } else {
+              this.updateState({
+                buildIndex: -1,
+              });
+            }
           }}
         />
       ) : null,
-      isLocked === '1' ? (<Button
-        icon="lock"
-        key="0"
-        text={_('Unlock All Devices')}
-        onClick={() => {
-          this.props.updateScreenSettings({
-            isLocked: '0',
-          });
-        }}
-      />) : (<Button
-        icon="unlock-alt"
-        key="0"
-        text={_('Lock All Devices')}
-        onClick={() => {
-          this.props.updateScreenSettings({
-            isLocked: '1',
-          });
-        }}
-      />),
       <span
         className="a-help"
         data-help={_('Help')}
         data-help-text={_('Help text')}
       />,
     ];
-    const mapList = list
-        .map((item, i) => item.merge({
-          _index: i,
-        }))
-        .groupBy(item => item.getIn(['map', 'mapName']))
-        .toList();
-
-    const isModalShow = actionQuery.get('action') === 'add' || actionQuery.get('action') === 'edit';
-
-    if (mapList.size === 1) {
-      curMapName = mapList.getIn([0, 'map', 'mapName']);
-    }
 
     return (
       <ListInfo
@@ -456,66 +311,11 @@ export default class View extends React.Component {
         actionBarChildren={actionBarChildren}
         actionable={false}
       >
-        <div className="o-map-warp">
-          {
-            curMapName ? this.renderCurMap(list, curMapName, myZoom) : this.renderMapList(mapList)
-          }
-          {
-            curMapName ? (
-              <div className="o-map-zoom-bar">
-                <Icon
-                  name="minus"
-                  className="o-map-zoom-bar__minus"
-                  onClick={() => {
-                    this.props.updateScreenSettings({
-                      zoom: (myZoom - 10) < 0 ? 0 : (myZoom - 10),
-                    });
-                  }}
-                />
-                <div className="o-map-zoom-bar__thmp" >{myZoom}%</div>
-                <Icon
-                  name="plus"
-                  className="o-map-zoom-bar__plus"
-                  onClick={() => {
-                    this.props.updateScreenSettings({
-                      zoom: (myZoom + 10) > 200 ? 200 : (myZoom + 10),
-                    });
-                  }}
-                />
-              </div>
-            ) : null
-          }
-
-        </div>
-        <div className="o-devices-list" >
-          {
-            list ?
-              list.map(this.renderUndeployDevice) :
-              null
-          }
-        </div>
-
-        <Modal
-          title={_('Add')}
-          isShow={isModalShow}
-          onClose={() => this.props.closeListItemModal()}
-        >
-          <FormGroup
-            label={_('Map Name')}
-          />
-          <FormGroup label=" ">
-            <FileUploads
-              url="/goform/uploadPortalImage"
-              name="image2"
-              acceptExt="png,gif,jpg,bmp"
-              createModal={this.props.createModal}
-              buttonText={_('Upload Image')}
-            />
-          </FormGroup>
-          <p>
-            <img src="" alt="" />
-          </p>
-        </Modal>
+        {
+          this.state.buildIndex >= 0 ?
+            this.renderBulidMapList() :
+            this.renderBulidList()
+        }
       </ListInfo>
     );
   }
@@ -528,6 +328,7 @@ function mapStateToProps(state) {
   return {
     app: state.app,
     store: state.screens,
+    product: state.product,
   };
 }
 
