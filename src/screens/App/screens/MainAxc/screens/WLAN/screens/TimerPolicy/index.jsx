@@ -123,57 +123,16 @@ export default class View extends React.Component {
   getCurrData(name) {
     return this.props.store.getIn([this.props.route.id, 'data', 'edit', name]) || '';
   }
-  getCountryOptions() {
-    return channelsList.map((item) => ({
-      value: item.country,
-      label: b28n.getLang() === 'cn' ? _(item.cn) : _(item.en),
-    })).toJS();
-  }
-
-  getChannelsOptions(currCountry) {
-    let i;
-    let len;
-    let channelsRange;
-    const channelsOptions = [
-      {
-        value: '0',
-        label: _('auto'),
-      },
-    ];
-    const channelsOption = channelsList.find(
-      (item) => item.country === currCountry
-    );
-
-    if (channelsOption) {
-      channelsRange = channelsOption['2.4g'].split('-');
-      i = parseInt(channelsRange[0], 10);
-      len = parseInt(channelsRange[1], 10);
-    } else {
-      i = 1;
-      len = 13;
-    }
-
-    for (i; i <= len; i++) {
-      channelsOptions.push({
-        value: `${i}`,
-        label: `${i}`,
-      });
-    }
-
-    return channelsOptions;
-  }
 
   render() {
     const { route, store } = this.props;
     const editData = store.getIn([route.id, 'data', 'edit']) || Map({});
     const getCurrData = this.getCurrData;
-    const channelsOptions = this.getChannelsOptions(getCurrData('country'));
-
     const tableOptions = blcklistTableOptions.push(fromJS({
       id: 'enabled',
       width: '80',
       text: _('Status'),
-      transform(val) {
+      transform() {
         return (
           <Checkbox
             style={{
@@ -229,9 +188,9 @@ export default class View extends React.Component {
               <FormGroup
                 type="date"
                 label={_('Date')}
-                dateFormat="YYYY-MM-DD"
-                selected={moment(getCurrData('customDate'))}
-                onChange={(data) => this.props.updateEditListItem({
+                displayFormat="YYYY-MM-DD"
+                value={getCurrData('customDate')}
+                onChange={data => this.props.updateEditListItem({
                   customDate: data.value,
                 })}
               />
@@ -290,7 +249,7 @@ export default class View extends React.Component {
               type="time"
               className="text"
               value={moment(getCurrData('startTime').replace(':', ''), 'hmm')}
-              onChange={(data) => this.props.updateEditListItem({
+              onChange={data => this.props.updateEditListItem({
                 startTime: data.value,
               })}
               format="HH:mm"
@@ -309,7 +268,7 @@ export default class View extends React.Component {
               style={{
                 width: '120px',
               }}
-              onChange={(data) => this.props.updateEditListItem({
+              onChange={data => this.props.updateEditListItem({
                 endTime: data.value,
               })}
             />
@@ -318,7 +277,6 @@ export default class View extends React.Component {
           <FormGroup
             type="text"
             label={_('Description')}
-            options={channelsOptions}
             value={getCurrData('remark')}
             onChange={this.onUpdateSettings('remark')}
           />

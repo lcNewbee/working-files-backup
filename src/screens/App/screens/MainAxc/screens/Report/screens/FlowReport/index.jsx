@@ -12,26 +12,35 @@ import * as appActions from 'shared/actions/app';
 import * as actions from './actions';
 import myReducer from './reducer';
 
-export default class View extends PureComponent {
+export default class View extends React.Component {
   constructor(props) {
     super(props);
 
-    this.binds('getCpuOption');
-  }
+    this.state = {
+      focusedInput: null,
+      startDate: null,
+      endDate: null,
+    };
 
+    utils.binds(this, [
+      'getCpuOption',
+      'onDatesChange',
+      'onFocusChange',
+    ]);
+  }
   getCpuOption() {
     const dataList = [
       {
-        name: 'QQ',
+        name: 'Facebook',
         value: 232,
       }, {
-        name: 'Weixin',
+        name: 'Google',
         value: 2323,
       }, {
-        name: 'Chrome',
+        name: 'Google Map',
         value: 232,
       }, {
-        name: '爱奇艺',
+        name: 'Youtube',
         value: 2323,
       },
     ];
@@ -46,12 +55,12 @@ export default class View extends PureComponent {
         data: List(dataList).map(item => item.name).toJS(),
       },
       title: {
-        text: _('应用流量占比'),
+        text: _('App Flow'),
         x: 'center',
       },
       series: [
         {
-          name: 'CPU使用率',
+          name: _('App Flow'),
           type: 'pie',
           radius: ['40%', '70%'],
           avoidLabelOverlap: false,
@@ -86,16 +95,16 @@ export default class View extends PureComponent {
   getUsersOption() {
     const dataList = [
       {
-        name: 'Xiaomi',
+        name: 'iPhone',
         value: 232,
       }, {
-        name: 'Huaiwei',
-        value: 2323,
-      }, {
-        name: 'Apple',
+        name: 'Mac',
         value: 2323,
       }, {
         name: 'Google',
+        value: 2323,
+      }, {
+        name: 'Huaiwei',
         value: 2323,
       },
     ];
@@ -105,7 +114,7 @@ export default class View extends PureComponent {
         formatter: '{a} <br/>{b}: {c} ({d}%)',
       },
       title: {
-        text: _('终端类型分布'),
+        text: _('Vender'),
         x: 'center',
       },
       legend: {
@@ -115,7 +124,7 @@ export default class View extends PureComponent {
       },
       series: [
         {
-          name: '终端类型',
+          name: 'Vender',
           type: 'pie',
           radius: ['40%', '70%'],
           avoidLabelOverlap: false,
@@ -194,32 +203,29 @@ export default class View extends PureComponent {
 
     return ret;
   }
+  onDatesChange(data) {
+    this.setState(data);
+  }
   render() {
     const usersStatusOption = this.getUsersOption();
     const cpuStatusOption = this.getCpuOption();
     const systemOption = this.getSystemOption();
-
+    const { focusedInput, startDate, endDate } = this.state;
     return (
       <div className="t-stats">
         <h3 className="t-main__content-title">{_('Flow Report') }</h3>
-        <div className="t-stats__cell">
+        <div className="t-stats__cell clearfix">
           <div className="cols col-6">
-            <label style={{ marginRight: '20px' }}>{_('日期范围')}</label>
+            <label style={{ marginRight: '20px' }}>{_('Date Range')}</label>
             <FormInput
-              type="date"
-              dateFormat="YYYY-MM-DD"
-              todayButton={_('Today')}
-              selected={moment()}
-              style={{ marginRight: '.5em' }}
-            />
-            <span style={{ margin: '0 .5em' }}>{_('To')}</span>
-            <FormInput
-              type="date"
-              dateFormat="YYYY-MM-DD"
-              todayButton={_('Today')}
-              selected={moment()}
-              label={_('日期')}
-              style={{ marginLeft: '.5em' }}
+              type="date-range"
+              monthFormat="YYYY-MM-DD"
+              onDatesChange={this.onDatesChange}
+              onFocusChange={this.onFocusChange}
+              isOutsideRange={() => false}
+              focusedInput={focusedInput}
+              startDate={startDate}
+              endDate={endDate}
             />
           </div>
           <div className="cols col-6">
@@ -233,7 +239,7 @@ export default class View extends PureComponent {
         <div className="stats-group clearfix" >
           <div className="cols col-6" >
             <div className="t-stats__cell">
-              <h3>{ _('用户数') }</h3>
+              <h3>{ _('Users Number') }</h3>
             </div>
             <div className="t-stats__cell">
               <EchartReact
@@ -254,7 +260,7 @@ export default class View extends PureComponent {
             </div>
           </div>
           <div className="t-stats__cell">
-            <h3>{ _('流量趋势') }</h3>
+            <h3>{ _('Flow Trend') }</h3>
           </div>
           <div className="t-stats__cell">
             <EchartReact
