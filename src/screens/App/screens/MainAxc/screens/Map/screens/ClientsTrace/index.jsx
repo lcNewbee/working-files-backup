@@ -12,7 +12,7 @@ import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 import * as propertiesActions from 'shared/actions/properties';
 
-import bkImg from '../../shared/images/map_bg.jpg';
+import bkImg from '../../shared/images/map_trace.png';
 import '../../shared/_map.scss';
 
 let heatmapInstance;
@@ -91,7 +91,7 @@ export default class View extends React.Component {
         'removeHeatMap',
         'renderCurMap',
         'updateState',
-        'renderHeatMap',
+        'renderTraceMap',
         'renderBulidList',
         'renderBulidMapList',
         'onViewBuild',
@@ -105,7 +105,7 @@ export default class View extends React.Component {
     const curMapName = store.getIn([myListId, 'curSettings', 'curMapName']);
 
     if (curMapName) {
-      this.renderHeatMap();
+      this.renderTraceMap();
     } else {
       this.removeHeatMap();
     }
@@ -189,6 +189,8 @@ export default class View extends React.Component {
           left: this.state.mapOffsetX,
           top: this.state.mapOffsetY,
           width: `${myZoom}%`,
+          backgroundImage: `url(${bkImg})`,
+          backgroundSize: '100%',
         }}
         onMouseDown={this.onMapMouseDown}
         onMouseUp={this.onMapMouseUp}
@@ -202,44 +204,8 @@ export default class View extends React.Component {
       </div>
     );
   }
-  renderHeatMap() {
-    // now generate some random data
-    const points = [];
-    let max = 0;
-    const width = this.mapWidth;
-    const height = this.mapHeight;
-    let len = 300;
+  renderTraceMap() {
 
-    while (len--) {
-      const val = Math.floor(Math.random() * 100);
-      // now also with custom radius
-      const radius = Math.floor(Math.random() * 70);
-
-      max = Math.max(max, val);
-      const point = {
-        x: Math.floor(Math.random() * width),
-        y: Math.floor(Math.random() * height),
-        value: val,
-        // radius configuration on point basis
-        radius,
-      };
-      points.push(point);
-    }
-    // heatmap data format
-    const data = {
-      max,
-      data: points,
-    };
-
-    if (!heatmapInstance) {
-      heatmapInstance = h337.create({
-        // only container is required, the rest will be defaults
-        container: this.mapContent,
-      });
-      heatmapInstance.setData(data);
-    } else {
-      heatmapInstance.repaint();
-    }
   }
   renderBulidList() {
     const { store, app } = this.props;
@@ -264,12 +230,39 @@ export default class View extends React.Component {
     const myListId = store.get('curListId');
     const list = store.getIn([myListId, 'data', 'list', this.state.buildIndex, 'floorList']);
     const curMapName = store.getIn([myListId, 'curSettings', 'curMapName']);
+    const myZoom = store.getIn([myListId, 'curSettings', 'zoom']) || 100;
+
     return (
       <div className="o-map-warp">
         {
           curMapName ?
-            this.renderCurMap(list, curMapName, '100%') :
+            this.renderCurMap(list, curMapName, myZoom) :
             this.renderFloorList(list)
+        }
+        {
+          curMapName ? (
+            <div className="o-map-zoom-bar">
+              <Icon
+                name="minus"
+                className="o-map-zoom-bar__minus"
+                onClick={() => {
+                  this.props.updateScreenSettings({
+                    zoom: (myZoom - 10) < 0 ? 0 : (myZoom - 10),
+                  });
+                }}
+              />
+              <div className="o-map-zoom-bar__thmp" >{myZoom}%</div>
+              <Icon
+                name="plus"
+                className="o-map-zoom-bar__plus"
+                onClick={() => {
+                  this.props.updateScreenSettings({
+                    zoom: (myZoom + 10) > 200 ? 200 : (myZoom + 10),
+                  });
+                }}
+              />
+            </div>
+          ) : null
         }
       </div>
     );
