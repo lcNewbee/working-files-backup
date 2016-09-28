@@ -28,7 +28,7 @@ const propTypes = {
     'email', 'number', 'color', 'range', 'tel', 'url',
 
     // custom
-    'ip', 'mac', 'switch', 'plain-text',
+    'ip', 'mac', 'switch', 'plain-text', 'date-range',
   ]),
   check: PropTypes.func,
   checkClear: PropTypes.func,
@@ -47,6 +47,7 @@ const propTypes = {
 
   // Time or Date
   format: PropTypes.string,
+  displayFormat: PropTypes.string,
 };
 
 const defaultProps = {
@@ -57,14 +58,21 @@ const defaultProps = {
 class FormInput extends React.Component {
   constructor(props) {
     super(props);
-
+    this.state = {
+      focusedInput: null,
+    };
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    this.onBlur = this.onBlur.bind(this);
-    this.onFoucs = this.onFoucs.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.onTimeChange = this.onTimeChange.bind(this);
-    this.onDateChange = this.onDateChange.bind(this);
-    this.renderCustomInput = this.renderCustomInput.bind(this);
+
+    utils.binds(this, [
+      'onBlur',
+      'onFoucs',
+      'handleChange',
+      'onDateChange',
+      'onDatesChange',
+      'onTimeChange',
+      'renderCustomInput',
+      'onDateFocusChange',
+    ]);
   }
 
   onBlur(e) {
@@ -78,23 +86,62 @@ class FormInput extends React.Component {
       this.props.checkClear(e);
     }
   }
+  onDateFocusChange(focusedInput) {
+    if (typeof focusedInput === 'object' &&
+        focusedInput !== null) {
+      this.setState({
+        focusedInput: focusedInput.focused,
+      });
+    } else {
+      this.setState({ focusedInput });
+    }
+  }
   onDateChange(momentObj) {
-    const formatOption = this.props.format || 'YYYY-MM-DD';
+    const formatOption = this.props.displayFormat || 'YYYY-MM-DD';
     const data = {
       label: this.props.label,
+      value: momentObj.format(formatOption),
+      momentObj,
     };
-
-    data.value = momentObj.format(formatOption);
 
     // 数据更新
     if (typeof this.props.onChange === 'function') {
-      this.props.onChange(data, momentObj);
+      this.props.onChange(data);
     }
 
     // 值为空是进行数据验证
     if (typeof this.props.checkClearValue === 'function' && this.props.disabled &&
         data.value === '') {
       this.props.checkClearValue(data.value);
+    }
+  }
+
+  onDatesChange(data) {
+    const formatOption = this.props.displayFormat || 'YYYY-MM-DD';
+    const newData = data;
+
+    if (moment.isMoment(data.startDate)) {
+      newData.startValue = data.startDate.format(formatOption);
+    } else {
+      newData.startValue = data.startDate;
+    }
+
+    if (moment.isMoment(data.endDate)) {
+      newData.endValue = data.endDate.format(formatOption);
+    } else {
+      newData.endValue = data.endDate;
+    }
+
+    // 数据更新
+    if (typeof this.props.onChange === 'function') {
+      this.props.onChange(data);
+    }
+
+    // 值为空是进行数据验证
+    if (typeof this.props.checkClearValue === 'function' && this.props.disabled &&
+        (!data.startValue || !data.endValue)) {
+      this.props.checkClearValue(data.startValue);
+      this.props.checkClearValue(data.endValue);
     }
   }
 
@@ -145,118 +192,117 @@ class FormInput extends React.Component {
       this.props.checkClearValue(val);
     }
   }
-
-  renderCustomInput() {
+  renderCustomInput(classNames) {
     const {
-      Component, type, clearable, className, searchable,
-      size, value, showSecond,
+      clearable, searchable, value, showSecond,
     } = this.props;
     const inpputType = this.props.type;
     const inputProps = utils.extend({}, this.props);
-    let MyComponent = Component;
-    let classNames = className || '';
     let timeValue = value;
     let timeFormat = 'hmmss';
+    const monthFormat = inputProps.monthFormat;
+    const displayFormat = inputProps.displayFormat || 'YYYY-MM-DD';
 
-    if (inpputType === 'plain-text') {
-      return <span className="plain-text">{value}</span>;
-    } else if (inpputType === 'select') {
-      return (<Select
-        {...inputProps}
-        className={classNames}
-        clearable={clearable || false}
-        searchable={searchable || false}
-      />);
-    } else if (inpputType === 'switch') {
-      return (
-        <Switchs
-          {...inputProps}
-        />
-      );
-    } else if (inpputType === 'time') {
-      if (!showSecond) {
-        timeFormat = 'hmm';
-      }
-      if (!moment.isMoment(timeValue)) {
-        timeValue = moment(timeValue, timeFormat);
-      }
-      return (
-        <TimePicker
-          {...inputProps}
-          onChange={this.onTimeChange}
-        />
-      );
-    } else if (inpputType === 'date') {
-      if (!moment.isMoment(timeValue)) {
-        timeValue = moment(timeValue);
-      }
+    switch (inpputType) {
+      case 'plain-text':
+        return (
+          <span className="plain-text">
+            {value}
+          </span>
+        );
 
-      return (
-        <DatePicker
+      case 'select':
+        return (<Select
           {...inputProps}
-          onChange={this.onDateChange}
-          selected={timeValue}
-        />
-      );
+          className={classNames}
+          clearable={clearable || false}
+          searchable={searchable || false}
+        />);
+      case 'switch':
+        return (
+          <Switchs
+            {...inputProps}
+          />
+        );
+
+      case 'time':
+        if (!showSecond) {
+          timeFormat = 'hmm';
+        }
+        if (!moment.isMoment(timeValue)) {
+          timeValue = moment(timeValue, timeFormat);
+        }
+
+        return (
+          <TimePicker
+            {...inputProps}
+            onChange={this.onTimeChange}
+          />
+        );
+
+      case 'date':
+        if (!moment.isMoment(timeValue)) {
+          timeValue = moment(timeValue);
+        }
+        if (!inputProps.id) {
+          inputProps.id = `data${Math.random()}`;
+        }
+        return (
+          <DatePicker.SingleDatePicker
+            {...inputProps}
+            numberOfMonths={inputProps.numberOfMonths || 1}
+            date={timeValue}
+            displayFormat={displayFormat}
+            monthFormat={monthFormat}
+            onFocusChange={this.onDateFocusChange}
+            onDateChange={this.onDateChange}
+            focused={!!this.state.focusedInput}
+          />
+        );
+
+      case 'date-range':
+        if (!moment.isMoment(timeValue)) {
+          timeValue = moment(timeValue);
+        }
+
+        if (!inputProps.id) {
+          inputProps.id = `data${Math.random()}`;
+        }
+
+        return (
+          <DatePicker.DateRangePicker
+            {...inputProps}
+            displayFormat={displayFormat}
+            monthFormat={monthFormat}
+            onFocusChange={this.onDateFocusChange}
+            onDatesChange={this.onDatesChange}
+            focusedInput={this.state.focusedInput}
+          />
+        );
+
+      default:
+        return null;
     }
   }
 
   render() {
     const {
-      Component, type, clearable, className, searchable,
-      size, value, showSecond,
+      Component, type, className, size, value,
     } = this.props;
     const inpputType = this.props.type;
     const inputProps = utils.extend({}, this.props);
     let MyComponent = Component;
     let classNames = className || '';
-    let timeValue = value;
-    let timeFormat = 'hmmss';
+    let customRender = null;
 
     if (size) {
       classNames = `${classNames} input-${size}`;
     }
 
-    if (inpputType === 'plain-text') {
-      return <span className="plain-text">{value}</span>;
-    } else if (inpputType === 'select') {
-      return (<Select
-        {...inputProps}
-        className={classNames}
-        clearable={clearable || false}
-        searchable={searchable || false}
-      />);
-    } else if (inpputType === 'switch') {
-      return (
-        <Switchs
-          {...inputProps}
-        />
-      );
-    } else if (inpputType === 'time') {
-      if (!showSecond) {
-        timeFormat = 'hmm';
-      }
-      if (!moment.isMoment(timeValue)) {
-        timeValue = moment(timeValue, timeFormat);
-      }
-      return (
-        <TimePicker
-          {...inputProps}
-          onChange={this.onTimeChange}
-        />
-      );
-    } else if (inpputType === 'date') {
-      if (!moment.isMoment(timeValue)) {
-        timeValue = moment(timeValue);
-      }
+    customRender = this.renderCustomInput(classNames);
 
-      return (
-        <DatePicker
-          {...inputProps}
-          onChange={this.onDateChange}
-          selected={timeValue}
-        />
-      );
+    if (customRender) {
+      return customRender;
     }
 
     if (Component === 'input') {

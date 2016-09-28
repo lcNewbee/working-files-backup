@@ -1,5 +1,6 @@
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import './index.scss';
+import DatePicker from 'react-dates';
+import 'react-dates/css/variables.scss';
+import 'react-dates/css/styles.scss';
+import './_index.scss';
 
 export default DatePicker;
