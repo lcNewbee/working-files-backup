@@ -9,27 +9,27 @@ class NetworkDhcp extends CI_Controller {
 	}
 	function fetch(){
 		$query=$this->db->select('pool_id,pool_name,attr_name,attr_value')
-														    ->from('pool_params')
-														    ->join('pool_attr','pool_attr.id=pool_params.attr_id')
-														    ->join('pool_list','pool_list.id=pool_params.pool_id')
-														    ->get()->result_array();
+																		    ->from('pool_params')
+																		    ->join('pool_attr','pool_attr.id=pool_params.attr_id')
+																		    ->join('pool_list','pool_list.id=pool_params.pool_id')
+																		    ->get()->result_array();
 		$state=array(
-      'code'=>2000,
-      'msg'=>'OK'
-    );
+				      'code'=>2000,
+				      'msg'=>'OK'
+				    );
 
 		$keyname=array(
-      "domain"=>"domain",
-      "ipaddr"=>"startIp",
-      "netmask"=>"netmask",
-      "route"=>"gateway",
-      "dns1"=>"mainDns",
-      "dns2"=>"secondDns",
-      "lease"=>"releaseTime",
-      "opt43"=>"opt43",
-      "opt60"=>"opt60",
-      "vlan"=>"vlan"
-    );
+				      "domain"=>"domain",
+				      "ipaddr"=>"startIp",
+				      "netmask"=>"netmask",
+				      "route"=>"gateway",
+				      "dns1"=>"mainDns",
+				      "dns2"=>"secondDns",
+				      "lease"=>"releaseTime",
+				      "opt43"=>"opt43",
+				      "opt60"=>"opt60",
+				      "vlan"=>"vlan"
+				    );
 		// 		定义一个临时接口数组
 		$interfaces  = array();
 		foreach($query as $v){
@@ -37,9 +37,9 @@ class NetworkDhcp extends CI_Controller {
 			$interfaces[$v['pool_id']]['name'] = $v['pool_name'];
 			$interfaces[$v['pool_id']][$v['attr_name']]= $v['attr_value'];
 			foreach($keyname as $k1=>$v1)
-			        {
+									        {
 				if($k1==$v['attr_name'])
-				         {
+												         {
 					unset($interfaces[$v['pool_id']][$v['attr_name']]);
 					$interfaces[$v['pool_id']][$v1]=$v['attr_value'];
 				}
@@ -51,54 +51,97 @@ class NetworkDhcp extends CI_Controller {
 		}
 		;
 		//array_values是为了让pool_id也成为数组属性,重新赋值给接口数组
-		$interfaces_data=array_values($interfaces);
+						$interfaces_data=array_values($interfaces);
 		$result=array(
-		      'state'=>$state,
-		      'data'=>array(
-		        'list'=>$interfaces_data
-		      )
-		    );
+						      'state'=>$state,
+						      'data'=>array(
+						        'list'=>$interfaces_data
+						      )
+						    );
 		return $result;
 	}
 
-  function onAction($data) {
-    $state=array(
-          'code'=>4000,
-          'msg'=>'OK'
-        );
-    $result = null;
-    $actionType = element('action', $data);
-    if ($actionType === 'add') {
-     $arr = array();
-
-      // $this->db->where(字段名，字段值)
-      // $this->db->delete(表名)
-      $state = dhcpd_del_pool_name(s);
-      $result=array(
-          'state'=>$state
-      );
+	function onAction($data) {
+		$result = null;
+		$actionType = element('action', $data);
+		if ($actionType === 'add') {
+			$temp_data=array(
+			  pool_name=>test,
+			  pool_ipaddr=>test,
+			  pool_mask => test,
+			  pool_lease=>test,
+			  pool_route=>test,
+			  pool_domain=>test,
+			  pool_dns1=>test,
+			  pool_dns2=>test
+			        );
+      foreach( $data as $v){
+       $temp_data['pool_name']=$v['name'];
+       $temp_data['pool_ipaddr']=$v['startIp'];
+       $temp_data['pool_mask']=$v['netmask'];
+       $temp_data['pool_lease']=$v['releaseTime'];
+       $temp_data['pool_route']=$v['gateway'];
+       $temp_data['pool_domain']=$v['domain'];
+       $temp_data['pool_dns1']=$v['mainDns'];
+       $temp_data['pool_dns2']=$v['secondDns'];
+      }
+			$state=dhcpd_add_pool_name(json_encode($temp_data));
+			$result=array(
+						          'state'=>$state
+						      );
+		}
+		elseif($actionType === 'edit') {
+    		$temp_data=array(
+			  pool_name=>test,
+			  pool_ipaddr=>test,
+			  pool_mask => test,
+			  pool_lease=>test,
+			  pool_route=>test,
+			  pool_domain=>test,
+			  pool_dns1=>test,
+			  pool_dns2=>test
+			        );
+      foreach( $data as $v){
+       $temp_data['pool_name']=$v['name'];
+       $temp_data['pool_ipaddr']=$v['startIp'];
+       $temp_data['pool_mask']=$v['netmask'];
+       $temp_data['pool_lease']=$v['releaseTime'];
+       $temp_data['pool_route']=$v['gateway'];
+       $temp_data['pool_domain']=$v['domain'];
+       $temp_data['pool_dns1']=$v['mainDns'];
+       $temp_data['pool_dns2']=$v['secondDns'];
+      }
+			$state=dhcpd_edit_pool_name(json_encode($temp_data));
+			$result=array(
+						          'state'=>$state
+						      );
+		}
+    elseif($actionType === 'delete'){
+      $arr=$data['selectedList'];
+      $pool_list_arr=str_replace("dhcp_name_","pool_name",$arr);
+       $temp_data=array(
+        'pool_list'=>$pool_list_arr
+       );
+      $state=dhcpd_del_pool_name(json_encode($temp_data));
+			$result=array(
+						          'state'=>$state
+						      );
     }
-    else {
-      $result=array(
-              'state'=>$state,
-              'data'=>element('action', $data, '')
-            );
-    }
 
-    return $result;
-  }
+		return $result;
+	}
 
-  public function index() {
-    $result = null;
+	public function index() {
+		$result = null;
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-      $data = json_decode(file_get_contents("php://input"), true);
-      $result = $this->onAction($data);
-    }
-    else if($_SERVER['REQUEST_METHOD'] == 'GET') {
-      $result = $this->fetch();
-    }
+		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+			$data = json_decode(file_get_contents("php://input"), true);
+			$result = $this->onAction($data);
+		}
+		else if($_SERVER['REQUEST_METHOD'] == 'GET') {
+			$result = $this->fetch();
+		}
 
-    echo json_encode($result);
-  }
+		echo json_encode($result);
+	}
 }
