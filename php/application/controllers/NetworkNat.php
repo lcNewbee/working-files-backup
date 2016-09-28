@@ -8,10 +8,8 @@ class NetworkDhcp extends CI_Controller {
 		$this->load->helper('array');
 	}
 	function fetch(){
-		$query=$this->db->select('pool_id,pool_name,attr_name,attr_value')
-																		    ->from('pool_params')
-																		    ->join('pool_attr','pool_attr.id=pool_params.attr_id')
-																		    ->join('pool_list','pool_list.id=pool_params.pool_id')
+		$query=$this->db->select('id,type,addr,nataddr')
+																		    ->from('nat_table')
 																		    ->get()->result_array();
 		$state=array(
 				      'code'=>2000,
@@ -55,7 +53,7 @@ class NetworkDhcp extends CI_Controller {
 		$result=array(
 						      'state'=>$state,
 						      'data'=>array(
-						      'list'=>$interfaces_data
+						        'list'=>$interfaces_data
 						      )
 						    );
 		return $result;
@@ -65,51 +63,25 @@ class NetworkDhcp extends CI_Controller {
 		$result = null;
 		$actionType = element('action', $data);
 		if ($actionType === 'add') {
-			$temp_data=array(
-			  'pool_name'=>'test',
-			  'pool_ipaddr'=>'test',
-			  'pool_mask '=>' test',
-			  'pool_lease'=>'test',
-			  'pool_route'=>'test',
-			  'pool_domain'=>'test',
-			 ' pool_dns1'=>'test',
-			  'pool_dns2'=>'test'
-			        );
-       $temp_data['pool_name']=$data['name'];
-       $temp_data['pool_ipaddr']=$data['startIp'];
-       $temp_data['pool_mask']=$data['netmask'];
-       $temp_data['pool_lease']=$data['releaseTime'];
-       $temp_data['pool_route']=$data['gateway'];
-       $temp_data['pool_domain']=$data['domain'];
-       $temp_data['pool_dns1']=$data['mainDns'];
-       $temp_data['pool_dns2']=$data['secondDns'];
-
-			$state=dhcpd_add_pool_name(json_encode($temp_data));
+		$keys=array("id","type","addr","nataddr");
+    $a1=array_fill_keys($keys,$data['id']);
+    $a1['id']=$data['id'];
+    $a1['type']=$data['ruleType'];
+    $a1['addr']=$data['sourceAddress'];
+    $a1['nataddr']=$data['conversionAddress'];
+			$state=dhcpd_add_pool_name(json_encode($a1));
 			$result=array(
 						          'state'=>$state
 						      );
 		}
 		elseif($actionType === 'edit') {
-    		$temp_data=array(
-			  'pool_name'=>'test',
-			  'pool_ipaddr'=>'test',
-			  'pool_mask '=>' test',
-			  'pool_lease'=>'test',
-			  'pool_route'=>'test',
-			  'pool_domain'=>'test',
-			 ' pool_dns1'=>'test',
-			  'pool_dns2'=>'test'
-			        );
-       $temp_data['pool_name']=$data['name'];
-       $temp_data['pool_ipaddr']=$data['startIp'];
-       $temp_data['pool_mask']=$data['netmask'];
-       $temp_data['pool_lease']=$data['releaseTime'];
-       $temp_data['pool_route']=$data['gateway'];
-       $temp_data['pool_domain']=$data['domain'];
-       $temp_data['pool_dns1']=$data['mainDns'];
-       $temp_data['pool_dns2']=$data['secondDns'];
-
-			$state=dhcpd_edit_pool_name(json_encode($temp_data));
+    $keys=array("id","type","addr","nataddr");
+    $a1=array_fill_keys($keys,$data['id']);
+    $a1['id']=$data['id'];
+    $a1['type']=$data['ruleType'];
+    $a1['addr']=$data['sourceAddress'];
+    $a1['nataddr']=$data['conversionAddress'];
+			$state=dhcpd_edit_pool_name(json_encode($a1));
 			$result=array(
 						          'state'=>$state
 						      );
