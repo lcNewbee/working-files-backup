@@ -56,7 +56,7 @@ export default class Main extends Component {
           <div className="aside">
             <a href="#" className="as-control" onClick={this.onRefresh}>
               <Icon name="refresh" className="icon" />
-              {_('REFRESH')}
+              <span>{_('REFRESH')}</span>
             </a>
             <div className="user" onClick={this.showUserPopOver}>
               <Icon name="user-secret" className="icon-user" />
