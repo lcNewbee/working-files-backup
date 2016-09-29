@@ -14,10 +14,15 @@ require('echarts/lib/chart/lines');
 // 引入折饼图
 require('echarts/lib/chart/pie');
 
+// 仪表盘
+require('echarts/lib/chart/gauge');
+
 // 引入提示框和标题组件
 require('echarts/lib/component/tooltip');
 require('echarts/lib/component/legend');
 require('echarts/lib/component/title');
+
+
 
 const propTypes = {
   option: PropTypes.object,
@@ -76,7 +81,7 @@ class ReactEchart extends React.Component {
   // update
   componentDidUpdate(prevProps) {
     if (this.props.option !== prevProps.option) {
-      this.renderEchartDom(true);
+      this.renderEchartDom();
     } else {
       this.renderEchartDom();
     }

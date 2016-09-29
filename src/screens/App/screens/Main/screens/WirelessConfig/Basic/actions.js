@@ -94,3 +94,37 @@ export function saveCountrySelectModal() {
   };
 }
 
+
+
+
+
+
+// 需求改变后的代码
+
+export function changeShowRadioSetting(data) {
+  return {
+    type: 'CHANGE_SHOW_RADIO_SETTING',
+    data,
+  };
+}
+
+export function changeShowSsidSetting(data) {
+  return {
+    type: 'CHANGE_SHOW_SSID_SETTING',
+    data,
+  };
+}
+
+export function changeShowMultiSsid(data) {
+  return {
+    type: 'CHANGE_SHOW_MULTI_SSID',
+    data,
+  };
+}
+
+export function changeTableItemForSsid(data) {
+  return {
+    type: 'CHANGE_TABLE_ITEM_FOR_SSID',
+    data,
+  };
+}

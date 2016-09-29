@@ -1,2 +1,28 @@
-
-{"data":{"wirelessMode":"ap","ssid":"Axilspot2","countryCode":"CN","radioMode":"802.11ac","channelWidth":"HT40","frequency":"autoCN","txPower":"14","maxTxRate":"","hideSsid":"","security":{"mode":"none","key":""}},"state":{"code":2000,"msg":"ok"}}
+{
+"state":{
+	"code":2000,
+	"msg":"success"
+},
+"data":{
+	"wirelessMode":"repeater",
+	"vapList":[
+			{
+			"ssid":"axilspot2",
+			"hideSsid": "0",
+      "vlanId": "1",
+      "enable": "1",
+			"peers":
+			["14:ff:00:a0:c1:ff",
+			 "14:ff:00:a0:c1:f0"],
+			"security":{
+				"mode":"wep",
+				"key":"12345678",
+				"auth":"open",
+				"keyLength":"64",
+				"keyType":"Hex",
+				"keyIndex":"1"
+			}
+		}
+	]
+}
+}

@@ -5,6 +5,7 @@ import { Map, fromJS } from 'immutable';
 import {
   Button, FormGroup, FormInput, Modal, Table, SaveButton,
 } from 'shared/components';
+import ReactEchart from 'shared/components/EchartReact';
 import validator from 'shared/utils/lib/validator';
 import { bindActionCreators } from 'redux';
 import * as appActions from 'shared/actions/app';
@@ -34,6 +35,7 @@ const propTypes = {
   changeShowScanResults: PropTypes.func,
   changeSelectedIp: PropTypes.func,
   changeTimeClock: PropTypes.func,
+  changeChartData: PropTypes.func,
 };
 
 const defaultProps = {};
@@ -46,6 +48,13 @@ const validOptions = Map({
     rules: 'num:[10, 300]',
   }),
 });
+
+const initDefaultData = {
+  ip: '192.168.1.10',
+  time: '30',
+  direction: '0',
+};
+
 export default class SpeedTest extends React.Component {
 
   constructor(props) {
@@ -55,7 +64,8 @@ export default class SpeedTest extends React.Component {
     this.onModalCancelClick = this.onModalCancelClick.bind(this);
     this.onSelectScanResultItem = this.onSelectScanResultItem.bind(this);
     this.ceateIpTableList = this.ceateIpTableList.bind(this);
-    this.onRunTest = this.onRunTest.bind(this);
+    this.makeXAxisData = this.makeXAxisData.bind(this);
+    // this.onRunTest = this.onRunTest.bind(this);
   }
 
   componentWillMount() {
@@ -65,14 +75,16 @@ export default class SpeedTest extends React.Component {
       settingId: props.route.id,
       fetchUrl: props.route.formUrl,
       saveUrl: props.route.saveUrl,
-      defaultData: {
-        ip: '192.168.1.10',
-        time: '30',
-        direction: '0',
-      },
+      defaultData: initDefaultData,
     });
     props.initSelfState();
     props.changeShowScanResults(false);
+
+    this.props.changeChartData({
+      txdata: 0,
+      rxdata: 0,
+      totaldata: 0,
+    });
   }
 
   componentWillUnmount() {
@@ -126,6 +138,19 @@ export default class SpeedTest extends React.Component {
     }
     return list;
   }
+  makeXAxisData(n) {
+    const data = [];
+    for (let i = 1; i <= 2 * n; i++) {
+      if (i % 60 === 0) {
+        data.push((i / 120).toFixed(1) + 'm');
+      } else {
+        data.push('');
+      }
+    }
+    console.log('data', data.length);
+    return data;
+  }
+  /*
   onRunTest() {
     this.props.toggleShowResultBtn('0');
     this.props.validateAll()
@@ -146,6 +171,8 @@ export default class SpeedTest extends React.Component {
           }
         });
   }
+  */
+
   render() {
     const {
       ip, username, password, port, time, direction,
@@ -172,6 +199,227 @@ export default class SpeedTest extends React.Component {
         text: _('IP'),
       },
     ]);
+    const chartOption = {
+      backgroundColor: '#1b1b1b',
+      tooltip: {
+        formatter: '{a} <br/>{c} {b}',
+      },
+      toolbox: {
+        show: true,
+        feature: {
+          mark: { show: true },
+          restore: { show: true },
+          saveAsImage: { show: true },
+        },
+      },
+      series: [
+        {
+          name: '速度',
+          type: 'gauge',
+          min: 0,
+          max: 10,
+          splitNumber: 2,
+          radius: '50%',
+          axisLine: {            // 坐标轴线
+            lineStyle: {       // 属性lineStyle控制线条样式
+              color: [[0.09, 'lime'], [0.82, '#1e90ff'], [1, '#ff4500']],
+              width: 3,
+              shadowColor: '#fff', // 默认透明
+              shadowBlur: 10,
+            },
+          },
+          axisLabel: {            // 坐标轴小标记
+            textStyle: {       // 属性lineStyle控制线条样式
+              fontWeight: 'bolder',
+              color: '#fff',
+              shadowColor: '#fff', // 默认透明
+              shadowBlur: 10,
+            },
+          },
+          axisTick: {            // 坐标轴小标记
+            length: 15,        // 属性length控制线长
+            lineStyle: {       // 属性lineStyle控制线条样式
+              color: 'auto',
+              shadowColor: '#fff', // 默认透明
+              shadowBlur: 10,
+            },
+          },
+          splitLine: {           // 分隔线
+            length: 25,         // 属性length控制线长
+            lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+              width: 3,
+              color: '#fff',
+              shadowColor: '#fff', // 默认透明
+              shadowBlur: 10,
+            },
+          },
+          pointer: {           // 分隔线
+            shadowColor: '#fff', // 默认透明
+            shadowBlur: 5,
+          },
+          title: {
+            textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+              fontWeight: 'bolder',
+              fontSize: 20,
+              fontStyle: 'italic',
+              color: '#fff',
+              shadowColor: '#fff', // 默认透明
+              shadowBlur: 10,
+            },
+          },
+          detail: {
+            backgroundColor: 'rgba(30,144,255,0.8)',
+            borderWidth: 1,
+            borderColor: '#fff',
+            shadowColor: '#fff', // 默认透明
+            shadowBlur: 5,
+            offsetCenter: [0, '50%'],       // x, y，单位px
+            textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+              fontWeight: 'bolder',
+              color: '#fff',
+            },
+          },
+          data: [{ value: 0, name: '(TOTAL) Mb/s' }],
+        },
+        {
+          name: '速度',
+          type: 'gauge',
+          center: ['25%', '55%'],    // 默认全局居中
+          radius: '30%',
+          min: 0,
+          max: 8,
+          endAngle: 45,
+          splitNumber: 4,
+          axisLine: {            // 坐标轴线
+            lineStyle: {       // 属性lineStyle控制线条样式
+              color: [[0.29, 'lime'], [0.86, '#1e90ff'], [1, '#ff4500']],
+              width: 2,
+              shadowColor: '#fff', // 默认透明
+              shadowBlur: 10,
+            },
+          },
+          axisLabel: {            // 坐标轴小标记
+            textStyle: {       // 属性lineStyle控制线条样式
+              fontWeight: 'bolder',
+              color: '#fff',
+              shadowColor: '#fff', // 默认透明
+              shadowBlur: 10,
+            },
+          },
+          axisTick: {            // 坐标轴小标记
+            length: 12,        // 属性length控制线长
+            lineStyle: {       // 属性lineStyle控制线条样式
+              color: 'auto',
+              shadowColor: '#fff', // 默认透明
+              shadowBlur: 10,
+            },
+          },
+          splitLine: {           // 分隔线
+            length: 20,         // 属性length控制线长
+            lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+              width: 3,
+              color: '#fff',
+              shadowColor: '#fff', // 默认透明
+              shadowBlur: 10,
+            },
+          },
+          pointer: {
+            width: 5,
+            shadowColor: '#fff', // 默认透明
+            shadowBlur: 5,
+          },
+          title: {
+            offsetCenter: [0, '-30%'],       // x, y，单位px
+            textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+              fontWeight: 'bolder',
+              fontStyle: 'italic',
+              color: '#fff',
+              shadowColor: '#fff', // 默认透明
+              shadowBlur: 10,
+            },
+          },
+          detail: {
+                // backgroundColor: 'rgba(30,144,255,0.8)',
+               // borderWidth: 1,
+            borderColor: '#fff',
+            shadowColor: '#fff', // 默认透明
+            shadowBlur: 5,
+            width: 80,
+            height: 30,
+            offsetCenter: [25, '20%'],       // x, y，单位px
+            textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+              fontWeight: 'bolder',
+              color: '#fff',
+            },
+          },
+          data: [{ value: 0, name: '(TX) Mb/s' }],
+        },
+        {
+          name: '速度',
+          type: 'gauge',
+          center: ['75%', '55%'],    // 默认全局居中
+          radius: '30%',
+          min: 0,
+          max: 8,
+          startAngle: 135,
+          endAngle: -45,
+          splitNumber: 4,
+          axisLine: {            // 坐标轴线
+            lineStyle: {       // 属性lineStyle控制线条样式
+              color: [[0.2, 'lime'], [0.8, '#1e90ff'], [1, '#ff4500']],
+              width: 2,
+              shadowColor: '#fff', // 默认透明
+              shadowBlur: 10,
+            },
+          },
+          axisTick: {            // 坐标轴小标记
+            length: 12,        // 属性length控制线长
+            lineStyle: {       // 属性lineStyle控制线条样式
+              color: 'auto',
+              shadowColor: '#fff', // 默认透明
+              shadowBlur: 10,
+            },
+          },
+          axisLabel: {
+            textStyle: {       // 属性lineStyle控制线条样式
+              fontWeight: 'bolder',
+              color: '#fff',
+              shadowColor: '#fff', // 默认透明
+              shadowBlur: 10,
+            },
+          },
+          splitLine: {           // 分隔线
+            length: 15,         // 属性length控制线长
+            lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+              width: 3,
+              color: '#fff',
+              shadowColor: '#fff', // 默认透明
+              shadowBlur: 10,
+            },
+          },
+          pointer: {
+            width: 2,
+            shadowColor: '#fff', // 默认透明
+            shadowBlur: 5,
+          },
+          title: {
+            show: true,
+            offsetCenter: [0, '-30%'],       // x, y，单位px
+            textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+              fontWeight: 'bolder',
+              fontStyle: 'italic',
+              color: '#fff',
+              shadowColor: '#fff', // 默认透明
+              shadowBlur: 10,
+            },
+          },
+          detail: {
+            show: true,
+          },
+          data: [{ value: 0, name: '(RX) Mb/s' }],
+        },
+      ],
+    };
     return (
       <div>
         <div className="clearfix">
@@ -261,9 +509,11 @@ export default class SpeedTest extends React.Component {
                 type="number"
                 label={_('Test Duration')}
                 value={time}
-                onChange={(data) => this.props.updateItemSettings({
-                  time: data.value,
-                })}
+                onChange={(data) => {
+                  this.props.updateItemSettings({
+                    time: data.value,
+                  });
+                }}
                 required
                 {...validTime}
               />
@@ -276,7 +526,7 @@ export default class SpeedTest extends React.Component {
             text={_('Run Test')}
             loading={this.props.selfState.get('time') !== ''}
             disabled={this.props.selfState.get('time').length !== 0}
-            onClick={this.onRunTest}
+            onClick={() => this.props.clickSpeedTestRunBtn()}
           />
           {
             this.props.selfState.get('time') === '' ? null : (
@@ -305,6 +555,14 @@ export default class SpeedTest extends React.Component {
             </div>
           ) : null
         }
+        <ReactEchart
+          option={chartOption}
+          needClear={false}
+          style={{
+            width: '900px',
+            height: '600px',
+          }}
+        />
       </div>
     );
   }

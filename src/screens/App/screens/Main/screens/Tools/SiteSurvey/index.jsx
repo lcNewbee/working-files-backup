@@ -21,6 +21,7 @@ const propTypes = {
   changeShowTableStatus: PropTypes.func,
   leaveSettingsScreen: PropTypes.func,
   reciveFetchSettings: PropTypes.func,
+  fetchSettings: PropTypes.func,
   fetch: PropTypes.func,
 };
 
@@ -82,6 +83,7 @@ export default class SiteSurvey extends React.Component {
   }
   onScanBtnClick() {
     this.props.changeShowTableStatus(false);
+    /**
     const fetchUrl = this.props.route.fetchUrl;
     this.props.fetch(fetchUrl)
               .then((json) => {
@@ -90,6 +92,9 @@ export default class SiteSurvey extends React.Component {
                   this.props.changeShowTableStatus(true);
                 }
               });
+    */
+    this.props.fetchSettings();
+    this.props.changeShowTableStatus(true);
   }
 
   render() {
@@ -101,22 +106,13 @@ export default class SiteSurvey extends React.Component {
           type="plain-text"
           value={_('Note: Site survey scan may temporary disable wireless link(s)')}
         /> <br /><br />
-        {
-          fetching ? (
-            <Button
-              theme="primary"
-              loading
-              text={_('Stop Scan')}
-            />
-          ) : (
-            <Button
-              theme="primary"
-              text={_('Start Scan')}
-              onClick={this.onScanBtnClick}
-            />
-          )
-        }
-        <br /><br />
+        <Button
+          theme="primary"
+          loading={fetching}
+          disabled={fetching}
+          text={_('Start Scan')}
+          onClick={this.onScanBtnClick}
+        /><br /><br />
         {
           this.props.selfState.get('showTable') ? (
             <Table

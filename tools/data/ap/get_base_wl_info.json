@@ -1,0 +1,15 @@
+{
+"data":{
+	"enable":"1",
+	"countryCode":"CN",
+	"radioMode":"ac",
+	"channelWidth":"HT40",
+	"frequency":"auto",
+	"txPower":"14",
+	"maxTxRate":"15"
+},
+"state":{
+	"code":2000,
+	"msg":"success"
+}
+}

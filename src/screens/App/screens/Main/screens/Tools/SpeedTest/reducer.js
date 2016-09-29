@@ -12,6 +12,7 @@ const defaultState = fromJS({
   time: '',
 });
 
+
 export default function (state = defaultState, action) {
   switch (action.type) {
     case 'TOGGLE_SHOW_ADVANCE_BTN':
@@ -32,6 +33,10 @@ export default function (state = defaultState, action) {
       return state.set('selectedIp', action.data);
     case 'CHANGE_TIME_CLOCK':
       return state.set('time', action.data);
+    case 'CHANGE_CHART_DATA':
+      return state.set('tx', action.data.txdata)
+                  .set('rx', action.data.rxdata)
+                  .set('total', action.data.totaldata);
     default:
   }
   return state;
