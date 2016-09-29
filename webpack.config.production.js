@@ -38,6 +38,7 @@ module.exports = {
   entry: [
     './src/index.jsx',
   ],
+  devtool: 'cheap-source-map',
   cache: true,
   module: {
     loaders: [
@@ -83,7 +84,7 @@ module.exports = {
       {
         test: /\.(jsx|js)?$/,
         exclude: /node_modules/,
-        loader: 'es3ify!babel?cacheDirectory=true',
+        loader: 'babel?cacheDirectory=true',
       }],
   },
   postcss () {

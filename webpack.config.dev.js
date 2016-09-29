@@ -35,7 +35,7 @@ let config = {
   debug: true,
 
   // more info:https://webpack.github.io/docs/build-performance.html#sourcemaps and https://webpack.github.io/docs/configuration.html#devtool
-  devtool: 'cheap-module-eval-source-map',
+  devtool: 'eval-source-map',
 
   // set to false to see a list of every file being bundled.
   noInfo: true,
@@ -43,9 +43,9 @@ let config = {
   entry: {
     index: [
        // necessary for hot reloading with IE:
-      'eventsource-polyfill',
+      // 'eventsource-polyfill',
 
-      'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
+      'webpack-hot-middleware/client?path=/__webpack_hot&timeout=200000',
 
       './src/index.jsx',
     ],
