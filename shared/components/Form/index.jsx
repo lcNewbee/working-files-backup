@@ -1,5 +1,5 @@
-export FormGroup from './FormGroup';
-export FormInput from './FormInput';
-export Checkbox from './Checkbox';
-export Search from './Search';
-export Password from './Password';
+export { default as FormGroup } from './FormGroup';
+export { default as FormInput } from './FormInput';
+export { default as Checkbox } from './Checkbox';
+export { default as Search } from './Search';
+export { default as Password } from './Password';

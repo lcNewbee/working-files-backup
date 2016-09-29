@@ -43,9 +43,9 @@ let config = {
   entry: {
     index: [
        // necessary for hot reloading with IE:
-      // 'eventsource-polyfill',
+      'eventsource-polyfill',
 
-      'webpack-hot-middleware/client?path=/__webpack_hot&timeout=200000',
+      'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
 
       './src/index.jsx',
     ],

@@ -1,4 +1,4 @@
-export DeviceGeneral from './DeviceGeneral';
-export DeviceOverview from './DeviceOverview';
-export DeviceSystem from './DeviceSystem';
-export DeviceRadios from './DeviceRadios';
+export { default as DeviceGeneral } from './DeviceGeneral';
+export { default as DeviceOverview } from './DeviceOverview';
+export { default as DeviceSystem } from './DeviceSystem';
+export { default as DeviceRadios } from './DeviceRadios';

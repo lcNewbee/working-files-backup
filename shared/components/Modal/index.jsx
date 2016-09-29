@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import classNames from 'classnames';
 
 const propTypes = {
   isShow: PropTypes.bool,
@@ -60,15 +61,15 @@ class Modal extends Component {
       isShow, title, cancelText, okButton, okText, draggable,
     } = this.props;
     let noFooter = this.props.noFooter;
-    let classNames;
+    let contentClassNames;
     let keyVal = 'onlyModal';
     let hasCloseBtn = true;
     let { cancelButton } = this.props;
     let modalClassName = 'o-modal';
 
-    // role is shown in classNames
+    // role is shown in contentClassNames
     if (role) {
-      classNames = `o-modal__${role}`;
+      contentClassNames = `o-modal__${role}`;
     }
 
     if (draggable) {
@@ -96,11 +97,12 @@ class Modal extends Component {
       cancelButton = false;
     }
 
-    if (isShow) {
-      document.body.classList.add('o-modal--open');
-    } else {
-      document.body.classList.remove('o-modal--open');
-    }
+    document.body.className = classNames(
+      document.body.className,
+      {
+        'o-modal--open': isShow,
+      },
+    );
 
     return (
       <ReactCSSTransitionGroup
@@ -119,7 +121,7 @@ class Modal extends Component {
               role={role}
             >
               <div className="o-modal__backdrop" onDrop={e => e.preventDefault()} />
-              <div className={classNames} draggable={draggable} style={this.props.style}>
+              <div className={contentClassNames} draggable={draggable} style={this.props.style}>
                 <div className="o-modal__content">
                   {
                     title ? (

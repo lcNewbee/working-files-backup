@@ -65,7 +65,6 @@ const propTypes = {
   updateScreenSettings: PropTypes.func,
   validateAll: PropTypes.func,
   onListAction: PropTypes.func,
-  addListItem: PropTypes.func,
 };
 const defaultProps = {};
 
