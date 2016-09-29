@@ -1,4 +1,4 @@
-@@ -1,86 +0,0 @@
+
 <?php
 class NetworkPort extends CI_Controller {
 	public function __construct() {
@@ -8,7 +8,6 @@ class NetworkPort extends CI_Controller {
 	}
 
   function fetch() {
-
     $query=$this->db->select('portid,port_name,port_desc,speed,duplex,ip1,mask1,ip2,mask2,ip3,mask3,ip4,mask4,ip5,mask5,adminstate,mgifname')
 				    ->from('port_table')
 				    ->get()->result_array();
@@ -16,7 +15,6 @@ class NetworkPort extends CI_Controller {
       'code'=>2000,
       'msg'=>'OK'
     );
-
     function transformKeys($v) {
       $ret = array();
       $keysMap = array(
@@ -56,18 +54,24 @@ class NetworkPort extends CI_Controller {
     $result = null;
     $actionType = element('action', $data);
 
-    if ($actionType === 'delete') {
-      $result=array(
-        'state'=>$state,
-        'data'=>element('action', $data, '')
-      );
-    } else {
+    if ($actionType === 'add') {
       $result=array(
         'state'=>$state,
         'data'=>element('action', $data, '')
       );
     }
-
+    elseif($actionType === 'edit'){
+      $result=array(
+        'state'=>$state,
+        'data'=>element('action', $data, '')
+      );
+    }
+    elseif($actionType === 'delete'){
+      $result=array(
+        'state'=>$state,
+        'data'=>element('action', $data, '')
+      );
+    }
     return $result;
   }
 
@@ -80,7 +84,6 @@ class NetworkPort extends CI_Controller {
     } else if($_SERVER['REQUEST_METHOD'] == 'GET') {
       $result = $this->fetch();
     }
-
 		echo json_encode($result);
 	}
 }

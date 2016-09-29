@@ -1,21 +1,21 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 // require_once('/libraries/Response.php');
-class NetworkNat extends CI_Controller {
+class NetworkAci extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this->load->database();
 		$this->load->helper('array');
 	}
 	function fetch(){
-		$query=$this->db->select('id,type,addr,nataddr')
-																				    ->from('nat_table')
+		$query=$this->db->select('id,destnet,netmask,gateway')
+																				    ->from('route_table')
 																				    ->get()->result_array();
 		$keys = array(
       'id'=>'id',
-      'type'=> 'ruleType',
-       'addr'=>'sourceAddress',
-       'nataddr'=>'conversionAddress');
+      'destnet'=> 'targetAddress',
+      'netmask'=>'targetMask',
+      'gateway'=>'nextHopIp');
     foreach($query as $key=>$val)
    {
     $newArray[$key] = array();
@@ -24,13 +24,11 @@ class NetworkNat extends CI_Controller {
         $newArray[$key][$keys[$k]] = $v;
     }
 }
-
 		$state=array(
 						      'code'=>2000,
 						      'msg'=>'OK'
 						    );
 		$data=array(
-		    "settings"=>array("enable"=> "1"),
 		    'list'=> $newArray
 		    );
 		$result=array(
@@ -39,55 +37,44 @@ class NetworkNat extends CI_Controller {
 		    );
 		return 	$result;
 	}
-
 	function onAction($data) {
 		$result = null;
 		$actionType = element('action', $data);
 		if ($actionType === 'add') {
-			$keys=array("type","addr","nataddr");
+			$keys=array("destnet","gateway","mask");
 			$a1=array_fill_keys($keys,'0');
-			$a1['type']=$data['ruleType'];
-			$a1['ipaddr']=$data['sourceAddress'];
-			$a1['natipaddr']=$data['conversionAddress'];
-			$state=acnetmg_add_nat(json_encode($a1));
+			$a1['destnet']=$data['targetAddress'];
+			$a1['gateway']=$data['nextHopIp'];
+			$a1['mask']=$data['targetMask'];
+			$state=acnetmg_add_route(json_encode($a1));
 			$result=array(
 									          'state'=>$state
 									      );
 		}
 		elseif($actionType === 'edit') {
-			$keys=array("id","type","ipaddr","natipaddr");
+			$keys=array("id","destnet","gateway","mask");
 			$a1=array_fill_keys($keys,'0');
       $a1['id']=$data['id'];
-			$a1['type']=$data['ruleType'];
-			$a1['ipaddr']=$data['sourceAddress'];
-			$a1['natipaddr']=$data['conversionAddress'];
-			$state=acnetmg_update_nat(json_encode($a1));
+			$a1['destnet']=$data['targetAddress'];
+			$a1['gateway']=$data['nextHopIp'];
+			$a1['mask']=$data['targetMask'];
+			$state=acnetmg_update_route(json_encode($a1));
 			$result=array(
 									          'state'=>$state
 									      );
 		}
 		elseif($actionType === 'delete'){
-      $keys=array("id","type","ipaddr","natipaddr");
+      $keys=array("id","destnet","gateway","mask");
 			$a1=array_fill_keys($keys,'0');
       $a1['id']=$data['id'];
-			$a1['type']=$data['ruleType'];
-			$a1['ipaddr']=$data['sourceAddress'];
-			$a1['natipaddr']=$data['conversionAddress'];
-			$state=acnetmg_del_nat(json_encode($a1));
+			$a1['destnet']=$data['targetAddress'];
+			$a1['gateway']=$data['nextHopIp'];
+			$a1['mask']=$data['targetMask'];
+			$state=acnetmg_del_route(json_encode($a1));
 			$result=array(
 									          'state'=>$state
 									      );
 		}
-    	elseif($actionType === 'setting'){
-      $keys = array( 'enable');
-      $a1=array_fill_keys($keys,'0');
-      $a1['enable']=$data['enable'];
-			$state=acnetmg_del_nat(json_encode($a1));
-			$result=array(
-									          'state'=>$state
-									      );
-		}
-		;
 		return 	$result;
 	}
 
