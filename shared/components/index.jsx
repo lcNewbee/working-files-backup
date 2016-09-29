@@ -30,6 +30,7 @@ export Modal from './Modal';
 export Table from './Table';
 export TabContainer from './Organism/TabContainer';
 export FormContainer from './Organism/FormContainer';
+export WizardContainer from './Organism/WizardContainer';
 
 // Templates
 export PropertyPanel from './Template/PropertyPanel';

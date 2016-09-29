@@ -85,23 +85,26 @@ class WizardContainer extends React.Component {
       this.onBeforeSteping = false;
     };
     let msg;
+    let handleResult = null;
 
     // 如果正在切换中则不响应切换事件
     if (!this.onBeforeSteping) {
+
+      if (onBeforeStep) {
+        handleResult = onBeforeStep(stepObj);
+      }
+
       // 如果 onBeforeNext 为 Promise 对象
-      if (onBeforeStep && utilsCore.isPromise(onBeforeStep)) {
+      if (handleResult && utilsCore.isPromise(handleResult)) {
         this.onBeforeSteping = true;
-        onBeforeStep(stepObj)
-          .then((result) => {
-            handleChange(result);
-          });
+
+        handleResult.then((result) => {
+          handleChange(result);
+        });
 
       // 如果 onBeforeNext 回调函数
       } else {
-        if (onBeforeStep) {
-          this.onBeforeSteping = true;
-          msg = onBeforeStep(stepObj);
-        }
+        msg = handleResult;
 
         handleChange(msg);
       }
