@@ -220,8 +220,7 @@ export default class View extends React.Component {
             <FormInput
               type="date-range"
               monthFormat="YYYY-MM-DD"
-              onDatesChange={this.onDatesChange}
-              onFocusChange={this.onFocusChange}
+              onChange={this.onDatesChange}
               isOutsideRange={() => false}
               focusedInput={focusedInput}
               startDate={startDate}

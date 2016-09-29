@@ -257,204 +257,189 @@ export default class SystemStatus extends React.Component {
 
     // const wirelessMode = this.props.store.getIn(['curData', 'wirelessMode']);
     return (
-      <div>
-        <h3>{_('System Status')}</h3>
-        <div className="row">
-          <div className="cols col-6">
-            <FormGroup
-              type="plain-text"
-              label={_('Device Model :')}
-              value={deviceModel}
-            />
-            <FormGroup
-              label={_('Network Mode :')}
-              type="plain-text"
-              value={networkMode}
-            />
-            <FormGroup
-              label={_('System Uptime :')}
-              id="uptime"
-              type="plain-text"
-              value={this.changeUptimeToReadable(uptime)}
-            />
-            <FormGroup
-              label={_('WLAN0 MAC')}
-              type="plain-text"
-              value={wlan0Mac}
-            />
-            <FormGroup
-              label={_('LAN1 MAC')}
-              type="plain-text"
-              value={lan1Mac}
-            />
-
+      <div className="">
+        <div className="stats-group">
+          <div className="stats-group-cell">
+            <h3>{_('System Status')}</h3>
           </div>
-          <div className="cols col-6">
-            <FormGroup
-              label={_('Device Name :')}
-              type="plain-text"
-              value={deviceName}
-            />
-            <FormGroup
-              label={_('Firmware Version :')}
-              type="plain-text"
-              value={version}
-            />
-            <FormGroup
-              label={_('System Time :')}
-              id="systemtime"
-              type="plain-text"
-              value={this.changeSystemTimeToReadable(systemTime)}
-            />
-            <FormGroup
-              label={_('LAN0 MAC')}
-              type="plain-text"
-              value={lan0Mac}
-            />
-            {
-              ap === undefined ? null : (
+          <div className="stats-group-cell">
+            <div className="row">
+              <div className="cols col-5">
                 <FormGroup
-                  label={_('Client Number :')}
-                  id="userNumber"
                   type="plain-text"
-                  value={this.props.store.getIn(['curData', 'status', 'ap', 'clientNum'])}
+                  label={_('Device Model :')}
+                  value={deviceModel}
                 />
-              )
-            }
-          </div>
-        </div>
-        <h3>{_('Radio')}</h3>
-        <div className="row">
-          <div className="cols col-6">
-            <FormGroup
-              label={_('Wireless Model :')}
-              type="plain-text"
-              value={wirelessMode}
-            />
-            <FormGroup
-              label={_('SSID :')}
-              type="plain-text"
-              value={ssid}
-            />
-            <FormGroup
-              label={_('Protocol :')}
-              type="plain-text"
-              value={protocol}
-            />
-            <FormGroup
-              label={_('Channel/Frequency :')}
-              type="plain-text"
-              value={frequency}
-            />
-            <FormGroup
-              label={_('Channel Width :')}
-              type="plain-text"
-              value={channelWidth}
-            />
-            <FormGroup
-              label={_('Security Mode :')}
-              type="plain-text"
-              value={security}
-            />
-          </div>
-          <div className="cols col-6">
-            <FormGroup
-              label={_('Distance :')}
-              type="plain-text"
-              value={distance}
-              help="km"
-            />
-            <FormGroup
-              label={_('Tx Power :')}
-              type="plain-text"
-              value={txPower}
-              help="dBm"
-            />
-            <FormGroup
-              label={_('Signal :')}
-              type="plain-text"
-              value={status.signal}
-              help="dBm"
-            />
-            <FormGroup
-              label={_('Noise :')}
-              type="plain-text"
-              value={noise}
-              help="dBm"
-            />
-            <FormGroup
-              label={_('CCQ :')}
-              type="plain-text"
-              value={ccq}
-            />
-            <FormGroup
-              label={_('Channel Usage :')}
-              type="plain-text"
-              value={chutil}
-            />
-          </div>
-        </div>
-        <div className="interfaceTable">
-          <h3>{_('Interfaces')}</h3>
-          <FormGroup>
-            <div
-              style={{
-                marginLeft: '-70px',
-                width: '1200px',
-              }}
-            >
-              <Table
-                className="table"
-                options={interfaceOptions}
-                list={interfaces}
-              />
+                <FormGroup
+                  label={_('Network Mode :')}
+                  type="plain-text"
+                  value={networkMode}
+                />
+                <FormGroup
+                  label={_('System Uptime :')}
+                  id="uptime"
+                  type="plain-text"
+                  value={this.changeUptimeToReadable(uptime)}
+                />
+                <FormGroup
+                  label={`${_('WLAN0 MAC')} :`}
+                  type="plain-text"
+                  value={wlan0Mac}
+                />
+                <FormGroup
+                  label={`${_('LAN1 MAC')} :`}
+                  type="plain-text"
+                  value={lan1Mac}
+                />
+
+              </div>
+              <div className="cols col-6">
+                <FormGroup
+                  label={_('Device Name :')}
+                  type="plain-text"
+                  value={deviceName}
+                />
+                <FormGroup
+                  label={_('Firmware Version :')}
+                  type="plain-text"
+                  value={version}
+                />
+                <FormGroup
+                  label={_('System Time :')}
+                  id="systemtime"
+                  type="plain-text"
+                  value={this.changeSystemTimeToReadable(systemTime)}
+                />
+                <FormGroup
+                  label={`${_('LAN0 MAC')} :`}
+                  type="plain-text"
+                  value={lan0Mac}
+                />
+                {
+                  ap === undefined ? null : (
+                    <FormGroup
+                      label={_('Client Number :')}
+                      id="userNumber"
+                      type="plain-text"
+                      value={this.props.store.getIn(['curData', 'status', 'ap', 'clientNum'])}
+                    />
+                  )
+                }
+              </div>
             </div>
-          </FormGroup>
-        </div>
-        <br /><br />
-        {
-          ap === undefined ? null : (
-            <div className="clientListTable">
-              <h3>{_('Clients')}</h3>
-              <FormGroup>
-                <div
-                  style={{
-                    marginLeft: '-70px',
-                    width: '1200px',
-                  }}
-                >
+          </div>
+          <div className="stats-group-cell">
+            <h3>{_('Radio')}</h3>
+          </div>
+          <div className="stats-group-cell">
+            <div className="row">
+              <div className="cols col-5">
+                <FormGroup
+                  label={_('Wireless Model :')}
+                  type="plain-text"
+                  value={wirelessMode}
+                />
+                <FormGroup
+                  label={_('SSID :')}
+                  type="plain-text"
+                  value={ssid}
+                />
+                <FormGroup
+                  label={_('Protocol :')}
+                  type="plain-text"
+                  value={protocol}
+                />
+                <FormGroup
+                  label={_('Channel/Frequency :')}
+                  type="plain-text"
+                  value={frequency}
+                />
+                <FormGroup
+                  label={_('Channel Width :')}
+                  type="plain-text"
+                  value={channelWidth}
+                />
+                <FormGroup
+                  label={_('Security Mode :')}
+                  type="plain-text"
+                  value={security}
+                />
+              </div>
+              <div className="cols col-6">
+                <FormGroup
+                  label={_('Distance :')}
+                  type="plain-text"
+                  value={distance}
+                  help="km"
+                />
+                <FormGroup
+                  label={_('Tx Power :')}
+                  type="plain-text"
+                  value={txPower}
+                  help="dBm"
+                />
+                <FormGroup
+                  label={_('Signal :')}
+                  type="plain-text"
+                  value={status.signal}
+                  help="dBm"
+                />
+                <FormGroup
+                  label={_('Noise :')}
+                  type="plain-text"
+                  value={noise}
+                  help="dBm"
+                />
+                <FormGroup
+                  label={_('CCQ :')}
+                  type="plain-text"
+                  value={ccq}
+                />
+                <FormGroup
+                  label={_('Channel Usage :')}
+                  type="plain-text"
+                  value={chutil}
+                />
+              </div>
+            </div>
+          </div>
+          <h3 className="stats-group-cell">{_('Interfaces')}</h3>
+          <div className="stats-group-cell">
+            <Table
+              className="table"
+              options={interfaceOptions}
+              list={interfaces}
+            />
+          </div>
+          {
+            ap === undefined ? null : (
+              <div className="clientListTable">
+                <h3 className="stats-group-cell">{_('Clients')}</h3>
+                <div className="stats-group-cell">
                   <Table
                     className="table"
                     options={clientOptions}
                     list={staList}
                   />
                 </div>
-              </FormGroup>
-            </div>
-          )
-        }
-        <br /><br />
-        {
-          station === undefined ? null : (
-            <div className="remoteApTable">
-              <h3>{_('Remote AP Info')}</h3>
-              <FormGroup>
-                <div
-                  style={{
-                    marginLeft: '-70px',
-                    width: '1200px',
-                  }}
-                >
+              </div>
+            )
+          }
+          {
+            station === undefined ? null : (
+              <div className="remoteApTable">
+                <h3 className="stats-group-cell">{_('Remote AP Info')}</h3>
+                <div className="stats-group-cell">
                   <Table
                     className="table"
                     options={remoteApOption}
                     list={apInfo}
                   />
                 </div>
-              </FormGroup>
-            </div>
-          )
-        }
+              </div>
+            )
+          }
+        </div>
       </div>
     );
   }

@@ -4,7 +4,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/utils/lib/validator';
 import utils from 'shared/utils';
-import { FormGroup, FormInput, SaveButton, Button, Modal, Table } from 'shared/components';
+import {
+  FormGroup, FormInput, SaveButton, Button, Modal, Table,
+  WizardContainer,
+} from 'shared/components';
 import * as appActions from 'shared/actions/app';
 import * as settingActions from 'shared/actions/settings';
 import * as selfActions from './actions.js';
@@ -15,7 +18,6 @@ const propTypes = {
   app: PropTypes.instanceOf(Map),
   fetch: PropTypes.func,
   selfState: PropTypes.instanceOf(Map),
-  changePage: PropTypes.func,
   fetchSettings: PropTypes.func,
   changeDeviceMode: PropTypes.func,
   validateAll: PropTypes.func,
@@ -109,14 +111,23 @@ const validOptions = Map({
 export default class QuickSetup extends React.Component {
   constructor(props) {
     super(props);
-    this.makeCountryOptions = this.makeCountryOptions.bind(this);
-    this.getCountryNameFromCode = this.getCountryNameFromCode.bind(this);
-    this.onScanBtnClick = this.onScanBtnClick.bind(this);
-    this.onStopScanClick = this.onStopScanClick.bind(this);
-    this.onSelectScanResultItem = this.onSelectScanResultItem.bind(this);
-    this.onModalCloseBtnClick = this.onModalCloseBtnClick.bind(this);
-    this.onModalOkBtnClick = this.onModalOkBtnClick.bind(this);
-    this.onCloseCountrySelectModal = this.onCloseCountrySelectModal.bind(this);
+
+    utils.binds(this, [
+      'makeCountryOptions',
+      'getCountryNameFromCode',
+      'onScanBtnClick',
+      'onStopScanClick',
+      'onSelectScanResultItem',
+      'onModalCloseBtnClick',
+      'onModalOkBtnClick',
+      'onCloseCountrySelectModal',
+      'renderOperationMode',
+      'renderStepTwo',
+      'renderStepThree',
+      'renderStepFour',
+      'onCompleted',
+      'onBeforeStep',
+    ]);
   }
 
   componentWillMount() {
@@ -209,6 +220,25 @@ export default class QuickSetup extends React.Component {
     }
   }
 
+  // 当准备改变步骤时
+  onBeforeStep(data) {
+
+    // 下一页
+    if (data.currStep < data.targetStep) {
+      return this.props.validateAll()
+        .then((msg) => {
+          if (!msg.isEmpty()) {
+            return ' ';
+          }
+        });
+    }
+  }
+
+  // 当点完成时处理函数
+  onCompleted() {
+    this.props.saveSettings();
+  }
+
   getCountryNameFromCode(code, map) {
     for (const name of Object.keys(map)) {
       if (map[name] === code) {
@@ -261,7 +291,161 @@ export default class QuickSetup extends React.Component {
     return channelOptions;
   }
 
-  render() {
+  renderOperationMode() {
+    return (
+      <div className="firstScreen">
+        <div className="clearfix">
+          <div
+            className="cols"
+            style={{
+              width: '80%',
+              marginTop: '20px',
+            }}
+          >
+            <div
+              className="cols cols-5"
+              style={{
+                marginRight: '65px',
+              }}
+            >
+              <FormGroup
+                type="radio"
+                text="AP"
+                value="ap"
+                checked={this.props.selfState.get('deviceMode') === 'ap'}
+                name="modeSelect"
+                onChange={(data) => {
+                  this.props.changeDeviceMode(data.value);
+                  this.props.updateItemSettings({
+                    wirelessMode: data.value,
+                  });
+                  this.props.resetVaildateMsg();
+                  this.props.fetchSettings();
+                }}
+              />
+            </div>
+            <div
+              className="cols col-7"
+            >
+              In this mode, the AP will act as a central hub for different wireless LAN clients.
+            </div>
+          </div>
+        </div>
+        <div
+          className="clearfix"
+        >
+          <div
+            className="cols"
+            style={{
+              width: '80%',
+              marginTop: '20px',
+            }}
+          >
+            <div
+              className="cols cols-5"
+              style={{
+                marginRight: '40px',
+              }}
+            >
+              <FormGroup
+                type="radio"
+                value="sta"
+                text="Station"
+                name="modeSelect"
+                checked={this.props.selfState.get('deviceMode') === 'sta'}
+                onChange={(data) => {
+                  this.props.changeDeviceMode(data.value);
+                  this.props.updateItemSettings({
+                    wirelessMode: data.value,
+                  });
+                  this.props.resetVaildateMsg();
+                  this.props.fetchSettings();
+                }}
+              />
+            </div>
+            <div
+              className="cols col-7"
+            >
+              In this mode, the device can copy and reinforce the existing wireless signal to extend the coverage of the signal, especially for a large space to eliminate signal-blind corners.
+            </div>
+          </div>
+        </div>
+        <div
+          className="clearfix"
+        >
+          <div
+            className="cols"
+            style={{
+              width: '80%',
+              marginTop: '20px',
+            }}
+          >
+            <div
+              className="cols cols-5"
+              style={{
+                marginRight: '28px',
+              }}
+            >
+              <FormGroup
+                type="radio"
+                value="repeater"
+                text="Repeater"
+                name="modeSelect"
+                checked={this.props.selfState.get('deviceMode') === 'repeater'}
+                onChange={(data) => {
+                  this.props.changeDeviceMode(data.value);
+                  this.props.updateItemSettings({
+                    wirelessMode: data.value,
+                  });
+                  this.props.resetVaildateMsg();
+                  this.props.fetchSettings();
+                }}
+              />
+            </div>
+            <div
+              className="cols col-7"
+            >
+              With client mode, the device can connect to a wired device and works as a wireless adapter to receive wireless signal from your wireless network.
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  renderStepTwo() {
+    const store = this.props.store;
+    const { deviceMode } = this.props.selfState.toJS();
+    const { ip, mask } = store.get('curData').toJS();
+    const { lanIp, lanMask } = this.props.validateOption;
+
+    return (
+      <div className="secondScreen">
+        <FormGroup
+          label={_('IP Address')}
+          type="text"
+          value={ip}
+          onChange={data => this.props.updateItemSettings({
+            ip: data.value,
+          })}
+          {...lanIp}
+          required
+        />
+        <FormGroup
+          label={_('Subnet Mask')}
+          type="text"
+          value={mask}
+          onChange={data => this.props.updateItemSettings({
+            mask: data.value,
+          })}
+          {...lanMask}
+          required
+        />
+      </div>
+    );
+  }
+
+  renderStepThree() {
     const modalOptions = fromJS([
       {
         id: 'operate',
@@ -323,1169 +507,913 @@ export default class QuickSetup extends React.Component {
     const keyIndex = store.getIn(['curData', 'security', 'keyIndex']);
     const cipher = store.getIn(['curData', 'security', 'cipher']);
     const { lanIp, lanMask, validSsid, validDistance, validPassword } = this.props.validateOption;
+
+    return (
+      <div className="thirdScreen">
+        {
+          deviceMode === 'ap' ? (
+            <div className="thirdForAp">
+              <FormGroup
+                type="text"
+                label={_('SSID')}
+                value={ssid}
+                onChange={data => this.props.updateItemSettings({
+                  ssid: data.value,
+                })}
+                required
+                {...validSsid}
+              />
+              <FormGroup
+                label={_('Country')}
+              >
+                <FormInput
+                  type="text"
+                  value={this.getCountryNameFromCode(
+                    store.getIn(['curData', 'countryCode']),
+                    countryMap
+                  )}
+                  disabled
+                  style={{
+                    width: '127px',
+                    marginTop: '-3px',
+                  }}
+                />
+                <Button
+                  text={_('Change')}
+                  style={{
+                    marginLeft: '3px',
+                    width: '70px',
+                  }}
+                  onClick={() => { this.props.changeCtyModal(true); }}
+                />
+              </FormGroup>
+              {
+              this.props.selfState.get('showCtyModal') ? (
+                <Modal
+                  title={_('Country')}
+                  onClose={this.onCloseCountrySelectModal}
+                  onOk={this.props.saveCountrySelectModal}
+                  isShow
+                >
+                  <h3>{_('User Protocol')}</h3>
+                  <span>
+                    使用本设备之前，请务必选择正确的国家代码以满足当地法规对于可用信道、信道带宽、输出功率、自动频宽选择和自动发射功率控制等的要求。安装方或本设备拥有方是保证依照法规规定正确使用本设备的完全责任人。设备提供商/分销商对于违规使用无线设备的行为和后果不承担任何责任。
+                  </span>
+                  <FormGroup
+                    type="radio"
+                    text={_('I have read and agree')}
+                    checked={this.props.selfState.get('agreeProtocol')}
+                    onClick={() => { this.props.changeAgreeProtocol(true); }}
+                  />
+                  <FormGroup
+                    label={_('Country')}
+                    type="select"
+                    options={this.makeCountryOptions(countryMap)}
+                    value={this.props.selfState.get('selectedCountry') ||
+                          store.getIn(['curData', 'countryCode'])}
+                    onChange={data => this.props.changeCountryCode(data.value)}
+                    disabled={!this.props.selfState.get('agreeProtocol')}
+                  />
+                </Modal>
+              ) : null
+            }
+              <FormGroup
+                type="switch"
+                label={_('Channel Width')}
+                options={channelWidthOptions}
+                value={channelWidth}
+                onChange={data => this.props.updateItemSettings({
+                  channelWidth: data.value,
+                })}
+              />
+              <FormGroup
+                type="select"
+                label={_('Channel')}
+                options={this.makeChannelOptions()}
+                value={frequency}
+                onChange={data => this.props.updateItemSettings({
+                  frequency: data.value,
+                })}
+              />
+              <FormGroup
+                type="select"
+                label={_('Security')}
+                options={staAndApSecurityOptions}
+                value={mode || 'none'}
+                onChange={data => this.props.updateItemSettings({
+                  security: {
+                    mode: data.value,
+                    cipher: store.getIn(['curData', 'security', 'cipher']) || 'aes',
+                    key: '',
+                  },
+                })}
+              />
+              {
+                store.getIn(['curData', 'security', 'mode']) === 'none' ? null : (
+                  <div>
+                    <FormGroup
+                      label={_('Algorithm')}
+                      type="switch"
+                      value={store.getIn(['curData', 'security', 'cipher'])}
+                      onChange={data => this.props.updateItemSettings({
+                        security: {
+                          mode,
+                          key,
+                          cipher: data.value,
+                        },
+                      })}
+                      options={[
+                        { label: 'AES', value: 'aes' },
+                        { label: 'TKIP', value: 'tkip' },
+                        { label: 'AES/TKIP', value: 'aes&tkip' },
+                      ]}
+                      minWidth="60px"
+                    />
+                    <FormGroup
+                      type="password"
+                      label={_('Password')}
+                      value={key}
+                      onChange={data => this.props.updateItemSettings({
+                        security: {
+                          mode,
+                          key: data.value,
+                          cipher: store.getIn(['curData', 'security', 'cipher']) || 'aes',
+                        },
+                      })}
+                      required
+                      {...validPassword}
+                    />
+                  </div>
+                )
+              }
+              <FormGroup
+                type="range"
+                label={_('Distance')}
+                value={distance}
+                min="0"
+                max="10"
+                step="0.1"
+                hasTextInput
+                help="km"
+                onChange={data => this.props.updateItemSettings({
+                  distance: data.value,
+                })}
+                {...validDistance}
+              />
+            </div>
+          ) : null
+        }
+
+        {
+          deviceMode === 'sta' ? (
+            <div className="thirdForSta">
+              <div className="clearfix">
+                <div className="clearfix">
+                  <div
+                    style={{
+                      width: '205px',
+                    }}
+                  >
+                    <FormGroup
+                      label="SSID"
+                      className="fl"
+                      type="text"
+                      required
+                      value={ssid}
+                      onChange={data => this.props.updateItemSettings({
+                        ssid: data.value,
+                      })}
+                      {...validSsid}
+                    />
+                  </div>
+                  <span className="fl">
+                    <span
+                      style={{
+                        paddingTop: '2px',
+                      }}
+                    >&nbsp;&nbsp;
+                    {
+                      this.props.selfState.get('scaning') ? (
+                        <Button
+                          text={_('Stop Scan')}
+                          onClick={this.onStopScanClick}
+                          loading
+                        />
+                      ) : (
+                        <Button
+                          text={_('Scan')}
+                          onClick={this.onScanBtnClick}
+                        />
+                      )
+                    }
+                    </span>
+                    <Modal
+                      isShow={this.props.selfState.get('showScanResult')}
+                      onOk={this.onModalOkBtnClick}
+                      onClose={this.onModalCloseBtnClick}
+                      okText={_('Select')}
+                      cancelText={_('Cancel')}
+                      size="lg"
+                      okButton
+                      cancelButton
+                    >
+                      <Table
+                        className="table"
+                        options={modalOptions}
+                        list={store.getIn(['curData', 'scanResult', 'siteList'])}
+                      />
+                    </Modal>
+                  </span>
+                </div>
+              </div>
+              <FormGroup
+                label={_('Peer')}
+                type="text"
+                placeholder={_('Input Mac Address')}
+                value={store.getIn(['curData', 'apMac'])}
+                onChange={data => this.props.updateItemSettings({
+                  apMac: data.value,
+                })}
+              />
+              <FormGroup
+                label={_('Country')}
+              >
+                <FormInput
+                  type="text"
+                  value={this.getCountryNameFromCode(
+                    store.getIn(['curData', 'countryCode']),
+                    countryMap
+                  )}
+                  disabled
+                  style={{
+                    width: '127px',
+                    marginTop: '-3px',
+                  }}
+                />
+                <Button
+                  text={_('Change')}
+                  style={{
+                    marginLeft: '3px',
+                    width: '70px',
+                  }}
+                  onClick={() => { this.props.changeCtyModal(true); }}
+                />
+              </FormGroup>
+              {
+              this.props.selfState.get('showCtyModal') ? (
+                <Modal
+                  title={_('Country')}
+                  onClose={this.onCloseCountrySelectModal}
+                  onOk={this.props.saveCountrySelectModal}
+                  isShow
+                >
+                  <h3>{_('User Protocol')}</h3>
+                  <span>
+                    使用本设备之前，请务必选择正确的国家代码以满足当地法规对于可用信道、信道带宽、输出功率、自动频宽选择和自动发射功率控制等的要求。安装方或本设备拥有方是保证依照法规规定正确使用本设备的完全责任人。设备提供商/分销商对于违规使用无线设备的行为和后果不承担任何责任。
+                  </span>
+                  <FormGroup
+                    type="radio"
+                    text={_('I have read and agree')}
+                    checked={this.props.selfState.get('agreeProtocol')}
+                    onClick={() => { this.props.changeAgreeProtocol(true); }}
+                  />
+                  <FormGroup
+                    label={_('Country')}
+                    type="select"
+                    options={this.makeCountryOptions(countryMap)}
+                    value={this.props.selfState.get('selectedCountry')}
+                    onChange={data => this.props.changeCountryCode(data.value)}
+                    disabled={!this.props.selfState.get('agreeProtocol')}
+                  />
+                </Modal>
+              ) : null
+            }
+              <FormGroup
+                type="switch"
+                label={_('Channel Width')}
+                options={channelWidthOptions}
+                value={channelWidth}
+                onChange={data => this.props.updateItemSettings({
+                  channelWidth: data.value,
+                })}
+              />
+              <FormGroup
+                type="select"
+                label={_('Channel')}
+                options={this.makeChannelOptions()}
+                value={frequency}
+                onChange={data => this.props.updateItemSettings({
+                  frequency: data.value,
+                })}
+              />
+              <FormGroup
+                type="select"
+                label={_('Security')}
+                options={staAndApSecurityOptions}
+                value={mode || 'none'}
+                onChange={data => this.props.updateItemSettings({
+                  security: {
+                    mode: data.value || 'none',
+                    cipher: store.getIn(['curData', 'security', 'cipher']) || 'aes',
+                    key: '',
+                  },
+                })}
+              />
+              {
+                store.getIn(['curData', 'security', 'mode']) === 'none' ? null : (
+                  <div>
+                    <FormGroup
+                      label={_('Algorithm')}
+                      type="switch"
+                      value={store.getIn(['curData', 'security', 'cipher'])}
+                      onChange={data => this.props.updateItemSettings({
+                        security: {
+                          mode,
+                          key,
+                          cipher: data.value,
+                        },
+                      })}
+                      options={[
+                        { label: 'AES', value: 'aes' },
+                        { label: 'TKIP', value: 'tkip' },
+                        { label: 'AES/TKIP', value: 'aes&tkip' },
+                      ]}
+                    />
+                    <FormGroup
+                      type="password"
+                      label={_('Password')}
+                      value={key}
+                      onChange={data => this.props.updateItemSettings({
+                        security: {
+                          mode,
+                          key: data.value,
+                          cipher: store.getIn(['curData', 'security', 'cipher']) || 'aes',
+                        },
+                      })}
+                      required
+                      {...validPassword}
+                    />
+                  </div>
+                )
+              }
+
+              <FormGroup
+                type="range"
+                label={_('Distance')}
+                value={distance}
+                min="1"
+                max="10"
+                step="0.1"
+                hasTextInput
+                help="km"
+                onChange={data => this.props.updateItemSettings({
+                  distance: data.value,
+                })}
+                {...validDistance}
+              />
+            </div>
+          ) : null
+        }
+
+        {
+          deviceMode === 'repeater' ? (
+            <div className="thirdForRepeater">
+              <div className="clearfix">
+                <div className="clearfix">
+                  <div
+                    style={{
+                      width: '205px',
+                    }}
+                  >
+                    <FormGroup
+                      label="SSID"
+                      className="fl"
+                      type="text"
+                      required
+                      value={ssid}
+                      onChange={data => this.props.updateItemSettings({
+                        ssid: data.value,
+                      })}
+                      {...validSsid}
+                    />
+                  </div>
+                  <span className="fl">
+                    <span
+                      style={{
+                        paddingTop: '2px',
+                      }}
+                    >&nbsp;&nbsp;
+                    {
+                      this.props.selfState.get('scaning') ? (
+                        <Button
+                          text={_('Stop Scan')}
+                          onClick={this.onStopScanClick}
+                          loading
+                        />
+                      ) : (
+                        <Button
+                          text={_('Scan')}
+                          onClick={this.onScanBtnClick}
+                        />
+                      )
+                    }
+                    </span>
+                    <Modal
+                      isShow={this.props.selfState.get('showScanResult')}
+                      onOk={this.onModalOkBtnClick}
+                      onClose={this.onModalCloseBtnClick}
+                      okText={_('Select')}
+                      cancelText={_('Cancel')}
+                      okButton
+                      cancelButton
+                    >
+                      <Table
+                        className="table"
+                        options={modalOptions}
+                        list={store.getIn(['curData', 'scanResult', 'siteList'])}
+                      />
+                    </Modal>
+                  </span>
+                </div>
+              </div>
+
+              <FormGroup
+                label={_('Lock To AP')}
+                type="text"
+                placeholder="非必填项"
+              />
+              <FormGroup
+                label={_('Country')}
+              >
+                <FormInput
+                  type="text"
+                  value={this.getCountryNameFromCode(
+                    store.getIn(['curData', 'countryCode']),
+                    countryMap
+                  )}
+                  disabled
+                  style={{
+                    width: '127px',
+                    marginTop: '-3px',
+                  }}
+                />
+                <Button
+                  text={_('Change')}
+                  style={{
+                    marginLeft: '3px',
+                    width: '70px',
+                  }}
+                  onClick={() => { this.props.changeCtyModal(true); }}
+                />
+              </FormGroup>
+              {
+              this.props.selfState.get('showCtyModal') ? (
+                <Modal
+                  title={_('Country')}
+                  onClose={this.onCloseCountrySelectModal}
+                  onOk={this.props.saveCountrySelectModal}
+                  isShow
+                >
+                  <h3>{_('User Protocol')}</h3>
+                  <span>
+                    使用本设备之前，请务必选择正确的国家代码以满足当地法规对于可用信道、信道带宽、输出功率、自动频宽选择和自动发射功率控制等的要求。安装方或本设备拥有方是保证依照法规规定正确使用本设备的完全责任人。设备提供商/分销商对于违规使用无线设备的行为和后果不承担任何责任。
+                  </span>
+                  <FormGroup
+                    type="radio"
+                    text={_('I have read and agree')}
+                    checked={this.props.selfState.get('agreeProtocol')}
+                    onClick={() => { this.props.changeAgreeProtocol(true); }}
+                  />
+                  <FormGroup
+                    label={_('Country')}
+                    type="select"
+                    options={this.makeCountryOptions(countryMap)}
+                    value={this.props.selfState.get('selectedCountry')}
+                    onChange={data => this.props.changeCountryCode(data.value)}
+                    disabled={!this.props.selfState.get('agreeProtocol')}
+                  />
+                </Modal>
+              ) : null
+            }
+              <FormGroup
+                type="switch"
+                label={_('Channel Width')}
+                options={channelWidthOptions}
+                value={channelWidth}
+                onChange={data => this.props.updateItemSettings({
+                  channelWidth: data.value,
+                })}
+              />
+              <FormGroup
+                type="select"
+                label={_('Channel')}
+                options={this.makeChannelOptions()}
+                value={frequency}
+                onChange={data => this.props.updateItemSettings({
+                  frequency: data.value,
+                })}
+              />
+              <FormGroup
+                type="select"
+                label={_('Security')}
+                value={
+                  mode === 'wep' ? mode : 'none'
+                }
+                options={repeaterSecurityOptions}
+                onChange={data => this.props.updateItemSettings({
+                  security: {
+                    mode: data.value,
+                    auth: store.getIn(['curData', 'security', 'auth']) || 'open',
+                    keyLength: store.getIn(['curData', 'security', 'keyLength']) || '64',
+                    keyIndex: store.getIn(['curData', 'security', 'keyIndex']) || '1',
+                    keyType: store.getIn(['curData', 'security', 'keyType']) || 'Hex',
+                    key: '',
+                  },
+                })}
+              />
+              {
+                store.getIn(['curData', 'security', 'mode']) === 'none' ? null : (
+                  <div>
+                    <FormGroup
+                      label={_('Authentication Type')}
+                      type="switch"
+                      name="authenticationType"
+                      options={wepAuthenOptions}
+                      value={auth}
+                      onChange={data => this.props.updateItemSettings({
+                        security: {
+                          mode,
+                          auth: data.value,
+                          keyLength,
+                          keyType,
+                          key,
+                          keyIndex,
+                        },
+                      })}
+                      minWidth="65px"
+                    />
+                    {/*
+                      <FormGroup
+                        label={_('WEP Key Length')}
+                        type="switch"
+                        name="wepKeyLength"
+                        options={wepKeyLengthOptions}
+                        value={keyLength}
+                        onChange={(data) => this.props.updateItemSettings({
+                          security: {
+                            mode,
+                            auth,
+                            keyLength: data.value,
+                            keyType,
+                            key,
+                            keyIndex,
+                          },
+                        })}
+                        minWidth="65px"
+                      />
+                    */}
+
+                    <FormGroup
+                      label={_('Key Type')}
+                      type="switch"
+                      name="keyType"
+                      options={keyTypeOptions}
+                      value={keyType}
+                      onChange={data => this.props.updateItemSettings({
+                        security: {
+                          mode,
+                          auth,
+                          keyLength,
+                          keyType: data.value,
+                          key,
+                          keyIndex,
+                        },
+                      })}
+                      minWidth="65px"
+                    />
+                    <FormGroup
+                      label={_('Key Index')}
+                      type="select"
+                      name="keyIndex"
+                      options={keyIndexOptions}
+                      value={keyIndex}
+                      onChange={data => this.props.updateItemSettings({
+                        security: {
+                          mode,
+                          auth,
+                          keyLength,
+                          keyType,
+                          key,
+                          keyIndex: data.value,
+                        },
+                      })}
+                    />
+                    <FormGroup
+                      type="password"
+                      label={_('Password')}
+                      value={key || ''}
+                      onChange={data => this.props.updateItemSettings({
+                        security: {
+                          mode,
+                          auth,
+                          keyLength,
+                          keyType,
+                          key: data.value,
+                          keyIndex,
+                        },
+                      })}
+                    />
+                  </div>
+                )
+              }
+
+              <FormGroup
+                type="range"
+                label={_('Distance')}
+                value={distance}
+                min="1"
+                max="10"
+                step="0.1"
+                hasTextInput
+                help="km"
+                onChange={data => this.props.updateItemSettings({
+                  distance: data.value,
+                })}
+                {...validDistance}
+              />
+            </div>
+          ) : null
+        }
+      </div>
+    );
+  }
+
+  renderStepFour() {
+    const store = this.props.store;
+    const { deviceMode } = this.props.selfState.toJS();
+    const { ip, mask, ssid, countryCode, frequency, channelWidth, distance, wirelessMode } = store.get('curData').toJS();
+    const mode = store.getIn(['curData', 'security', 'mode']);
+    const cipher = store.getIn(['curData', 'security', 'cipher']);
+
+    return (
+      <div className="fourthScreen">
+        {
+          deviceMode === 'ap' ? (
+            <div className="fourthForAp row">
+              <div className="cols col-5">
+                <FormGroup
+                  type="plain-text"
+                  label={_('Current Mode')}
+                  value="AP"
+                />
+                <FormGroup
+                  type="plain-text"
+                  label={_('LAN IP')}
+                  value={ip}
+                />
+                <FormGroup
+                  type="plain-text"
+                  label={_('Subnet Mask')}
+                  value={mask}
+                />
+
+                <FormGroup
+                  type="plain-text"
+                  label={_('SSID')}
+                  value={ssid}
+                />
+                <FormGroup
+                  type="plain-text"
+                  label={_('Country')}
+                  value={this.getCountryNameFromCode(countryCode, countryMap)}
+                />
+              </div>
+              <div className="cols col-7">
+                <FormGroup
+                  type="plain-text"
+                  label={_('Channel Width')}
+                  value={(() => {
+                    if (channelWidth) {
+                      return channelWidth.slice(2).concat('MHz');
+                    }
+                    return '';
+                  })()
+                  }
+                />
+                <FormGroup
+                  type="plain-text"
+                  label={_('Channel')}
+                  value={frequency}
+                />
+                <FormGroup
+                  type="plain-text"
+                  label={_('Security')}
+                  value={(() => {
+                    if (mode !== undefined) {
+                      if (mode === 'none') return mode;
+                      return mode.concat('/').concat(cipher);
+                    }
+                    return '';
+                  })()
+                  }
+                />
+                <FormGroup
+                  type="plain-text"
+                  label={_('Distance')}
+                  value={distance}
+                />
+              </div>
+            </div>
+          ) : null
+        }
+
+        {
+          deviceMode === 'sta' ? (
+            <div className="fourthForSta">
+              <div className="cols col-5">
+                <FormGroup
+                  type="plain-text"
+                  label={_('Current Mode')}
+                  value="Station"
+                />
+
+                <FormGroup
+                  type="plain-text"
+                  label={_('LAN IP')}
+                  value={ip}
+                />
+                <FormGroup
+                  type="plain-text"
+                  label={_('Subnet Mask')}
+                  value={mask}
+                />
+                <FormGroup
+                  type="plain-text"
+                  label={_('SSID')}
+                  value={ssid}
+                />
+                <FormGroup
+                  type="plain-text"
+                  label={_('Country')}
+                  value={this.getCountryNameFromCode(countryCode, countryMap)}
+                />
+              </div>
+              <div className="cols col-7">
+                <FormGroup
+                  type="plain-text"
+                  label={_('Peer')}
+                  value={store.getIn(['curData', 'apMac'])}
+                />
+                <FormGroup
+                  type="plain-text"
+                  label={_('Channel Width')}
+                  value={(() => {
+                    if (channelWidth) {
+                      return channelWidth.slice(2).concat('MHz');
+                    }
+                    return '';
+                  })()
+                  }
+                />
+                <FormGroup
+                  type="plain-text"
+                  label={_('Channel')}
+                  value={frequency}
+                />
+                <FormGroup
+                  type="plain-text"
+                  label={_('Security')}
+                  value={(() => {
+                    if (mode !== undefined) {
+                      if (mode === 'none') return mode;
+                      return mode.concat('/').concat(cipher);
+                    }
+                    return '';
+                  })()
+                  }
+                />
+                <FormGroup
+                  type="plain-text"
+                  label={_('Distance')}
+                  value={distance}
+                />
+              </div>
+            </div>
+          ) : null
+        }
+
+        {
+          deviceMode === 'repeater' ? (
+            <div className="fourthForRepeater">
+              <div className="cols col-5">
+                <FormGroup
+                  type="plain-text"
+                  label={_('Current Mode')}
+                  value="Repeater"
+                />
+                <FormGroup
+                  type="plain-text"
+                  label={_('LAN IP')}
+                  value={ip}
+                />
+                <FormGroup
+                  type="plain-text"
+                  label={_('Subnet Mask')}
+                  value={mask}
+                />
+
+                <FormGroup
+                  type="plain-text"
+                  label={_('SSID')}
+                  value={ssid}
+                />
+                <FormGroup
+                  type="plain-text"
+                  label={_('Country')}
+                  value={this.getCountryNameFromCode(countryCode, countryMap)}
+                />
+              </div>
+              <div className="cols col-7">
+                <FormGroup
+                  type="plain-text"
+                  label={_('Channel Width')}
+                  value={(() => {
+                    if (channelWidth) {
+                      return channelWidth.slice(2).concat('MHz');
+                    }
+                    return '';
+                  })()
+                  }
+                />
+                <FormGroup
+                  type="plain-text"
+                  label={_('Channel')}
+                  value={frequency}
+                />
+                <FormGroup
+                  type="plain-text"
+                  label={_('Security')}
+                  value={(() => {
+                    if (mode !== undefined) {
+                      if (mode === 'none') return mode;
+                      return mode.concat('/').concat(cipher);
+                    }
+                    return '';
+                  })()
+                  }
+                />
+                <FormGroup
+                  type="plain-text"
+                  label={_('Distance')}
+                  value={distance}
+                />
+              </div>
+            </div>
+          ) : null
+        }
+      </div>
+    );
+  }
+
+  render() {
+    const store = this.props.store;
+    const { deviceMode } = this.props.selfState.toJS();
+    let wizardOptions = fromJS([
+      {
+        title: _('Operation Mode'),
+        render: this.renderOperationMode,
+      }, {
+        title: _('LAN Settings'),
+        render: this.renderStepTwo,
+      }, {
+        title: _('Wireless Settings'),
+        render: this.renderStepThree,
+      }, {
+        title: _('Confirm Settings'),
+        render: this.renderStepFour,
+      },
+    ]);
+    const titleMap = {
+      ap: _('Scene: Access Point'),
+      sta: _('Scene: Station'),
+      repeater: _('Scene: Repeater'),
+    };
+    if (deviceMode) {
+      wizardOptions = wizardOptions.setIn(
+        [0, 'title'],
+        titleMap[deviceMode]
+      );
+    }
+
     return (
       <div className="wrapall">
-        {
-          page === '1' ? (
-            <div className="firstScreen">
-              <h3>{_('Operation Mode')}</h3>
-              <div className="clearfix">
-                <div
-                  className="cols"
-                  style={{
-                    width: '80%',
-                    marginTop: '20px',
-                  }}
-                >
-                  <div
-                    className="cols cols-5"
-                    style={{
-                      marginRight: '65px',
-                    }}
-                  >
-                    <FormGroup
-                      type="radio"
-                      text="AP"
-                      value="ap"
-                      checked={this.props.selfState.get('deviceMode') === 'ap'}
-                      name="modeSelect"
-                      onChange={(data) => {
-                        this.props.changeDeviceMode(data.value);
-                        this.props.updateItemSettings({
-                          wirelessMode: data.value,
-                        });
-                        this.props.resetVaildateMsg();
-                        this.props.fetchSettings();
-                      }}
-                    />
-                  </div>
-                  <div
-                    className="cols col-7"
-                  >
-                    In this mode, the AP will act as a central hub for different wireless LAN clients.
-                  </div>
-                </div>
-              </div>
-              <div
-                className="clearfix"
-              >
-                <div
-                  className="cols"
-                  style={{
-                    width: '80%',
-                    marginTop: '20px',
-                  }}
-                >
-                  <div
-                    className="cols cols-5"
-                    style={{
-                      marginRight: '40px',
-                    }}
-                  >
-                    <FormGroup
-                      type="radio"
-                      value="sta"
-                      text="Station"
-                      name="modeSelect"
-                      checked={this.props.selfState.get('deviceMode') === 'sta'}
-                      onChange={(data) => {
-                        this.props.changeDeviceMode(data.value);
-                        this.props.updateItemSettings({
-                          wirelessMode: data.value,
-                        });
-                        this.props.resetVaildateMsg();
-                        this.props.fetchSettings();
-                      }}
-                    />
-                  </div>
-                  <div
-                    className="cols col-7"
-                  >
-                    In this mode, the device can copy and reinforce the existing wireless signal to extend the coverage of the signal, especially for a large space to eliminate signal-blind corners.
-                  </div>
-                </div>
-              </div>
-              <div
-                className="clearfix"
-              >
-                <div
-                  className="cols"
-                  style={{
-                    width: '80%',
-                    marginTop: '20px',
-                  }}
-                >
-                  <div
-                    className="cols cols-5"
-                    style={{
-                      marginRight: '28px',
-                    }}
-                  >
-                    <FormGroup
-                      type="radio"
-                      value="repeater"
-                      text="Repeater"
-                      name="modeSelect"
-                      checked={this.props.selfState.get('deviceMode') === 'repeater'}
-                      onChange={(data) => {
-                        this.props.changeDeviceMode(data.value);
-                        this.props.updateItemSettings({
-                          wirelessMode: data.value,
-                        });
-                        this.props.resetVaildateMsg();
-                        this.props.fetchSettings();
-                      }}
-                    />
-                  </div>
-                  <div
-                    className="cols col-7"
-                  >
-                    With client mode, the device can connect to a wired device and works as a wireless adapter to receive wireless signal from your wireless network.
-                  </div>
-                </div>
-              </div>
-              <FormGroup>
-                <Button
-                  theme="primary"
-                  text={_('Next ->')}
-                  onClick={() => { this.props.changePage('2'); }}
-                />
-              </FormGroup>
-            </div>
-          ) : null
-        }
-
-        {
-          page === '2' ? (
-            <div className="secondScreen">
-            {
-              deviceMode === 'ap' ? (
-                <h2>{_('Scene: Access Point')}</h2>
-              ) : null
-            }
-
-            {
-              deviceMode === 'station' ? (
-                <h2>{_('Scene: Station')}</h2>
-              ) : null
-            }
-
-            {
-              deviceMode === 'repeater' ? (
-                <h2>{_('Scene: Repeater')}</h2>
-              ) : null
-            }
-              <h3>{_('LAN Settings')}</h3>
-              <FormGroup
-                label={_('IP Address')}
-                type="text"
-                value={ip}
-                onChange={(data) => this.props.updateItemSettings({
-                  ip: data.value,
-                })}
-                {...lanIp}
-                required
-              />
-              <FormGroup
-                label={_('Subnet Mask')}
-                type="text"
-                value={mask}
-                onChange={(data) => this.props.updateItemSettings({
-                  mask: data.value,
-                })}
-                {...lanMask}
-                required
-              />
-              <FormGroup>
-                <Button
-                  text={_('<- Back')}
-                  onClick={() => {
-                    this.props.changePage('1');
-                  }}
-                />&nbsp;&nbsp;&nbsp;
-                <Button
-                  theme="primary"
-                  text={_('Next ->')}
-                  onClick={() => {
-                    this.props.validateAll()
-                        .then((msg) => {
-                          if (msg.isEmpty()) {
-                            this.props.changePage('3');
-                          }
-                        });
-                  }}
-                />
-              </FormGroup>
-            </div>
-          ) : null
-        }
-
-        {
-          page === '3' ? (
-            <div className="thirdScreen">
-            {
-              deviceMode === 'ap' ? (
-                <div className="thirdForAp">
-                  <h2>{_('Scene: Access Point')}</h2>
-                  <h3>{_('Wireless Settings')}</h3>
-                  <FormGroup
-                    type="text"
-                    label={_('SSID')}
-                    value={ssid}
-                    onChange={(data) => this.props.updateItemSettings({
-                      ssid: data.value,
-                    })}
-                    required
-                    {...validSsid}
-                  />
-                  <FormGroup
-                    label={_('Country')}
-                  >
-                    <FormInput
-                      type="text"
-                      value={this.getCountryNameFromCode(
-                        store.getIn(['curData', 'countryCode']),
-                        countryMap
-                      )}
-                      disabled
-                      style={{
-                        width: '127px',
-                        marginTop: '-3px',
-                      }}
-                    />
-                    <Button
-                      text={_('Change')}
-                      style={{
-                        marginLeft: '3px',
-                        width: '70px',
-                      }}
-                      onClick={() => { this.props.changeCtyModal(true); }}
-                    />
-                  </FormGroup>
-                  {
-                  this.props.selfState.get('showCtyModal') ? (
-                    <Modal
-                      title={_('Country')}
-                      onClose={this.onCloseCountrySelectModal}
-                      onOk={this.props.saveCountrySelectModal}
-                      isShow
-                    >
-                      <h3>{_('User Protocol')}</h3>
-                      <span>
-                        使用本设备之前，请务必选择正确的国家代码以满足当地法规对于可用信道、信道带宽、输出功率、自动频宽选择和自动发射功率控制等的要求。安装方或本设备拥有方是保证依照法规规定正确使用本设备的完全责任人。设备提供商/分销商对于违规使用无线设备的行为和后果不承担任何责任。
-                      </span>
-                      <FormGroup
-                        type="radio"
-                        text={_('I have read and agree')}
-                        checked={this.props.selfState.get('agreeProtocol')}
-                        onClick={() => { this.props.changeAgreeProtocol(true); }}
-                      />
-                      <FormGroup
-                        label={_('Country')}
-                        type="select"
-                        options={this.makeCountryOptions(countryMap)}
-                        value={this.props.selfState.get('selectedCountry') ||
-                              store.getIn(['curData', 'countryCode'])}
-                        onChange={(data) => this.props.changeCountryCode(data.value)}
-                        disabled={!this.props.selfState.get('agreeProtocol')}
-                      />
-                    </Modal>
-                  ) : null
-                }
-                  <FormGroup
-                    type="switch"
-                    label={_('Channel Width')}
-                    options={channelWidthOptions}
-                    value={channelWidth}
-                    onChange={(data) => this.props.updateItemSettings({
-                      channelWidth: data.value,
-                    })}
-                  />
-                  <FormGroup
-                    type="select"
-                    label={_('Channel')}
-                    options={this.makeChannelOptions()}
-                    value={frequency}
-                    onChange={(data) => this.props.updateItemSettings({
-                      frequency: data.value,
-                    })}
-                  />
-                  <FormGroup
-                    type="select"
-                    label={_('Security')}
-                    options={staAndApSecurityOptions}
-                    value={mode || 'none'}
-                    onChange={(data) => this.props.updateItemSettings({
-                      security: {
-                        mode: data.value,
-                        cipher: store.getIn(['curData', 'security', 'cipher']) || 'aes',
-                        key: '',
-                      },
-                    })}
-                  />
-                  {
-                    store.getIn(['curData', 'security', 'mode']) === 'none' ? null : (
-                      <div>
-                        <FormGroup
-                          label={_('Algorithm')}
-                          type="switch"
-                          value={store.getIn(['curData', 'security', 'cipher'])}
-                          onChange={(data) => this.props.updateItemSettings({
-                            security: {
-                              mode,
-                              key,
-                              cipher: data.value,
-                            },
-                          })}
-                          options={[
-                            { label: 'AES', value: 'aes' },
-                            { label: 'TKIP', value: 'tkip' },
-                            { label: 'AES/TKIP', value: 'aes&tkip' },
-                          ]}
-                          minWidth="60px"
-                        />
-                        <FormGroup
-                          type="password"
-                          label={_('Password')}
-                          value={key}
-                          onChange={(data) => this.props.updateItemSettings({
-                            security: {
-                              mode,
-                              key: data.value,
-                              cipher: store.getIn(['curData', 'security', 'cipher']) || 'aes',
-                            },
-                          })}
-                          required
-                          {...validPassword}
-                        />
-                      </div>
-                    )
-                  }
-                  <FormGroup
-                    type="range"
-                    label={_('Distance')}
-                    value={distance}
-                    min="0"
-                    max="10"
-                    step="0.1"
-                    hasTextInput
-                    help="km"
-                    onChange={(data) => this.props.updateItemSettings({
-                      distance: data.value,
-                    })}
-                    {...validDistance}
-                  />
-
-                  <FormGroup>
-                    <Button
-                      text={_('<- Back')}
-                      onClick={() => {
-                        this.props.changePage('2');
-                      }}
-                    />&nbsp;&nbsp;&nbsp;
-                    <Button
-                      text={_('Next ->')}
-                      theme="primary"
-                      onClick={() => {
-                        this.props.validateAll()
-                        .then((msg) => {
-                          if (msg.isEmpty()) {
-                            this.props.changePage('4');
-                          }
-                        });
-                      }}
-                    />
-                  </FormGroup>
-                </div>
-              ) : null
-            }
-
-            {
-              deviceMode === 'sta' ? (
-                <div className="thirdForSta">
-                  <h2>{_('Scene: Station')}</h2>
-                  <h3>{_('Wireless Settings')}</h3>
-                  <div className="clearfix">
-                    <div className="clearfix">
-                      <div
-                        style={{
-                          width: '205px',
-                        }}
-                      >
-                        <FormGroup
-                          label="SSID"
-                          className="fl"
-                          type="text"
-                          required
-                          value={ssid}
-                          onChange={(data) => this.props.updateItemSettings({
-                            ssid: data.value,
-                          })}
-                          {...validSsid}
-                        />
-                      </div>
-                      <span className="fl">
-                        <span
-                          style={{
-                            paddingTop: '2px',
-                          }}
-                        >&nbsp;&nbsp;
-                        {
-                          this.props.selfState.get('scaning') ? (
-                            <Button
-                              text={_('Stop Scan')}
-                              onClick={this.onStopScanClick}
-                              loading
-                            />
-                          ) : (
-                            <Button
-                              text={_('Scan')}
-                              onClick={this.onScanBtnClick}
-                            />
-                          )
-                        }
-                        </span>
-                        <Modal
-                          isShow={this.props.selfState.get('showScanResult')}
-                          onOk={this.onModalOkBtnClick}
-                          onClose={this.onModalCloseBtnClick}
-                          okText={_('Select')}
-                          cancelText={_('Cancel')}
-                          size="lg"
-                          okButton
-                          cancelButton
-                        >
-                          <Table
-                            className="table"
-                            options={modalOptions}
-                            list={store.getIn(['curData', 'scanResult', 'siteList'])}
-                          />
-                        </Modal>
-                      </span>
-                    </div>
-                  </div>
-                  <FormGroup
-                    label={_('Peer')}
-                    type="text"
-                    placeholder={_('Input Mac Address')}
-                    value={store.getIn(['curData', 'apMac'])}
-                    onChange={(data) => this.props.updateItemSettings({
-                      apMac: data.value,
-                    })}
-                  />
-                  <FormGroup
-                    label={_('Country')}
-                  >
-                    <FormInput
-                      type="text"
-                      value={this.getCountryNameFromCode(
-                        store.getIn(['curData', 'countryCode']),
-                        countryMap
-                      )}
-                      disabled
-                      style={{
-                        width: '127px',
-                        marginTop: '-3px',
-                      }}
-                    />
-                    <Button
-                      text={_('Change')}
-                      style={{
-                        marginLeft: '3px',
-                        width: '70px',
-                      }}
-                      onClick={() => { this.props.changeCtyModal(true); }}
-                    />
-                  </FormGroup>
-                  {
-                  this.props.selfState.get('showCtyModal') ? (
-                    <Modal
-                      title={_('Country')}
-                      onClose={this.onCloseCountrySelectModal}
-                      onOk={this.props.saveCountrySelectModal}
-                      isShow
-                    >
-                      <h3>{_('User Protocol')}</h3>
-                      <span>
-                        使用本设备之前，请务必选择正确的国家代码以满足当地法规对于可用信道、信道带宽、输出功率、自动频宽选择和自动发射功率控制等的要求。安装方或本设备拥有方是保证依照法规规定正确使用本设备的完全责任人。设备提供商/分销商对于违规使用无线设备的行为和后果不承担任何责任。
-                      </span>
-                      <FormGroup
-                        type="radio"
-                        text={_('I have read and agree')}
-                        checked={this.props.selfState.get('agreeProtocol')}
-                        onClick={() => { this.props.changeAgreeProtocol(true); }}
-                      />
-                      <FormGroup
-                        label={_('Country')}
-                        type="select"
-                        options={this.makeCountryOptions(countryMap)}
-                        value={this.props.selfState.get('selectedCountry')}
-                        onChange={(data) => this.props.changeCountryCode(data.value)}
-                        disabled={!this.props.selfState.get('agreeProtocol')}
-                      />
-                    </Modal>
-                  ) : null
-                }
-                  <FormGroup
-                    type="switch"
-                    label={_('Channel Width')}
-                    options={channelWidthOptions}
-                    value={channelWidth}
-                    onChange={(data) => this.props.updateItemSettings({
-                      channelWidth: data.value,
-                    })}
-                  />
-                  <FormGroup
-                    type="select"
-                    label={_('Channel')}
-                    options={this.makeChannelOptions()}
-                    value={frequency}
-                    onChange={(data) => this.props.updateItemSettings({
-                      frequency: data.value,
-                    })}
-                  />
-                  <FormGroup
-                    type="select"
-                    label={_('Security')}
-                    options={staAndApSecurityOptions}
-                    value={mode || 'none'}
-                    onChange={(data) => this.props.updateItemSettings({
-                      security: {
-                        mode: data.value || 'none',
-                        cipher: store.getIn(['curData', 'security', 'cipher']) || 'aes',
-                        key: '',
-                      },
-                    })}
-                  />
-                  {
-                    store.getIn(['curData', 'security', 'mode']) === 'none' ? null : (
-                      <div>
-                        <FormGroup
-                          label={_('Algorithm')}
-                          type="switch"
-                          value={store.getIn(['curData', 'security', 'cipher'])}
-                          onChange={(data) => this.props.updateItemSettings({
-                            security: {
-                              mode,
-                              key,
-                              cipher: data.value,
-                            },
-                          })}
-                          options={[
-                            { label: 'AES', value: 'aes' },
-                            { label: 'TKIP', value: 'tkip' },
-                            { label: 'AES/TKIP', value: 'aes&tkip' },
-                          ]}
-                        />
-                        <FormGroup
-                          type="password"
-                          label={_('Password')}
-                          value={key}
-                          onChange={(data) => this.props.updateItemSettings({
-                            security: {
-                              mode,
-                              key: data.value,
-                              cipher: store.getIn(['curData', 'security', 'cipher']) || 'aes',
-                            },
-                          })}
-                          required
-                          {...validPassword}
-                        />
-                      </div>
-                    )
-                  }
-
-                  <FormGroup
-                    type="range"
-                    label={_('Distance')}
-                    value={distance}
-                    min="1"
-                    max="10"
-                    step="0.1"
-                    hasTextInput
-                    help="km"
-                    onChange={(data) => this.props.updateItemSettings({
-                      distance: data.value,
-                    })}
-                    {...validDistance}
-                  />
-                  <FormGroup>
-                    <Button
-                      text={_('<- Back')}
-                      onClick={() => {
-                        this.props.changePage('2');
-                      }}
-                    />&nbsp;&nbsp;&nbsp;
-                    <Button
-                      text={_('Next ->')}
-                      theme="primary"
-                      onClick={() => {
-                        this.props.validateAll()
-                        .then((msg) => {
-                          if (msg.isEmpty()) {
-                            this.props.changePage('4');
-                          }
-                        });
-                      }}
-                    />
-                  </FormGroup>
-                </div>
-              ) : null
-            }
-
-
-            {
-              deviceMode === 'repeater' ? (
-                <div className="thirdForRepeater">
-                  <h2>{_('Scene: Repeater')}</h2>
-                  <h3>{_('Wireless Settings')}</h3>
-                  <div className="clearfix">
-                    <div className="clearfix">
-                      <div
-                        style={{
-                          width: '205px',
-                        }}
-                      >
-                        <FormGroup
-                          label="SSID"
-                          className="fl"
-                          type="text"
-                          required
-                          value={ssid}
-                          onChange={(data) => this.props.updateItemSettings({
-                            ssid: data.value,
-                          })}
-                          {...validSsid}
-                        />
-                      </div>
-                      <span className="fl">
-                        <span
-                          style={{
-                            paddingTop: '2px',
-                          }}
-                        >&nbsp;&nbsp;
-                        {
-                          this.props.selfState.get('scaning') ? (
-                            <Button
-                              text={_('Stop Scan')}
-                              onClick={this.onStopScanClick}
-                              loading
-                            />
-                          ) : (
-                            <Button
-                              text={_('Scan')}
-                              onClick={this.onScanBtnClick}
-                            />
-                          )
-                        }
-                        </span>
-                        <Modal
-                          isShow={this.props.selfState.get('showScanResult')}
-                          onOk={this.onModalOkBtnClick}
-                          onClose={this.onModalCloseBtnClick}
-                          okText={_('Select')}
-                          cancelText={_('Cancel')}
-                          okButton
-                          cancelButton
-                        >
-                          <Table
-                            className="table"
-                            options={modalOptions}
-                            list={store.getIn(['curData', 'scanResult', 'siteList'])}
-                          />
-                        </Modal>
-                      </span>
-                    </div>
-                  </div>
-
-                  <FormGroup
-                    label={_('Lock To AP')}
-                    type="text"
-                    placeholder="非必填项"
-                  />
-                  <FormGroup
-                    label={_('Country')}
-                  >
-                    <FormInput
-                      type="text"
-                      value={this.getCountryNameFromCode(
-                        store.getIn(['curData', 'countryCode']),
-                        countryMap
-                      )}
-                      disabled
-                      style={{
-                        width: '127px',
-                        marginTop: '-3px',
-                      }}
-                    />
-                    <Button
-                      text={_('Change')}
-                      style={{
-                        marginLeft: '3px',
-                        width: '70px',
-                      }}
-                      onClick={() => { this.props.changeCtyModal(true); }}
-                    />
-                  </FormGroup>
-                  {
-                  this.props.selfState.get('showCtyModal') ? (
-                    <Modal
-                      title={_('Country')}
-                      onClose={this.onCloseCountrySelectModal}
-                      onOk={this.props.saveCountrySelectModal}
-                      isShow
-                    >
-                      <h3>{_('User Protocol')}</h3>
-                      <span>
-                        使用本设备之前，请务必选择正确的国家代码以满足当地法规对于可用信道、信道带宽、输出功率、自动频宽选择和自动发射功率控制等的要求。安装方或本设备拥有方是保证依照法规规定正确使用本设备的完全责任人。设备提供商/分销商对于违规使用无线设备的行为和后果不承担任何责任。
-                      </span>
-                      <FormGroup
-                        type="radio"
-                        text={_('I have read and agree')}
-                        checked={this.props.selfState.get('agreeProtocol')}
-                        onClick={() => { this.props.changeAgreeProtocol(true); }}
-                      />
-                      <FormGroup
-                        label={_('Country')}
-                        type="select"
-                        options={this.makeCountryOptions(countryMap)}
-                        value={this.props.selfState.get('selectedCountry')}
-                        onChange={(data) => this.props.changeCountryCode(data.value)}
-                        disabled={!this.props.selfState.get('agreeProtocol')}
-                      />
-                    </Modal>
-                  ) : null
-                }
-                  <FormGroup
-                    type="switch"
-                    label={_('Channel Width')}
-                    options={channelWidthOptions}
-                    value={channelWidth}
-                    onChange={(data) => this.props.updateItemSettings({
-                      channelWidth: data.value,
-                    })}
-                  />
-                  <FormGroup
-                    type="select"
-                    label={_('Channel')}
-                    options={this.makeChannelOptions()}
-                    value={frequency}
-                    onChange={(data) => this.props.updateItemSettings({
-                      frequency: data.value,
-                    })}
-                  />
-                  <FormGroup
-                    type="select"
-                    label={_('Security')}
-                    value={
-                      mode === 'wep' ? mode : 'none'
-                    }
-                    options={repeaterSecurityOptions}
-                    onChange={(data) => this.props.updateItemSettings({
-                      security: {
-                        mode: data.value,
-                        auth: store.getIn(['curData', 'security', 'auth']) || 'open',
-                        keyLength: store.getIn(['curData', 'security', 'keyLength']) || '64',
-                        keyIndex: store.getIn(['curData', 'security', 'keyIndex']) || '1',
-                        keyType: store.getIn(['curData', 'security', 'keyType']) || 'Hex',
-                        key: '',
-                      },
-                    })}
-                  />
-                  {
-                    store.getIn(['curData', 'security', 'mode']) === 'none' ? null : (
-                      <div>
-                        <FormGroup
-                          label={_('Authentication Type')}
-                          type="switch"
-                          name="authenticationType"
-                          options={wepAuthenOptions}
-                          value={auth}
-                          onChange={(data) => this.props.updateItemSettings({
-                            security: {
-                              mode,
-                              auth: data.value,
-                              keyLength,
-                              keyType,
-                              key,
-                              keyIndex,
-                            },
-                          })}
-                          minWidth="65px"
-                        />
-                        {/*
-                          <FormGroup
-                            label={_('WEP Key Length')}
-                            type="switch"
-                            name="wepKeyLength"
-                            options={wepKeyLengthOptions}
-                            value={keyLength}
-                            onChange={(data) => this.props.updateItemSettings({
-                              security: {
-                                mode,
-                                auth,
-                                keyLength: data.value,
-                                keyType,
-                                key,
-                                keyIndex,
-                              },
-                            })}
-                            minWidth="65px"
-                          />
-                        */}
-
-                        <FormGroup
-                          label={_('Key Type')}
-                          type="switch"
-                          name="keyType"
-                          options={keyTypeOptions}
-                          value={keyType}
-                          onChange={(data) => this.props.updateItemSettings({
-                            security: {
-                              mode,
-                              auth,
-                              keyLength,
-                              keyType: data.value,
-                              key,
-                              keyIndex,
-                            },
-                          })}
-                          minWidth="65px"
-                        />
-                        <FormGroup
-                          label={_('Key Index')}
-                          type="select"
-                          name="keyIndex"
-                          options={keyIndexOptions}
-                          value={keyIndex}
-                          onChange={(data) => this.props.updateItemSettings({
-                            security: {
-                              mode,
-                              auth,
-                              keyLength,
-                              keyType,
-                              key,
-                              keyIndex: data.value,
-                            },
-                          })}
-                        />
-                        <FormGroup
-                          type="password"
-                          label={_('Password')}
-                          value={key || ''}
-                          onChange={(data) => this.props.updateItemSettings({
-                            security: {
-                              mode,
-                              auth,
-                              keyLength,
-                              keyType,
-                              key: data.value,
-                              keyIndex,
-                            },
-                          })}
-                        />
-                      </div>
-                    )
-                  }
-
-                  <FormGroup
-                    type="range"
-                    label={_('Distance')}
-                    value={distance}
-                    min="1"
-                    max="10"
-                    step="0.1"
-                    hasTextInput
-                    help="km"
-                    onChange={(data) => this.props.updateItemSettings({
-                      distance: data.value,
-                    })}
-                    {...validDistance}
-                  />
-                  <FormGroup>
-                    <Button
-                      text={_('<- Back')}
-                      onClick={() => {
-                        this.props.changePage('2');
-                      }}
-                    />&nbsp;&nbsp;&nbsp;
-                    <Button
-                      text={_('Next ->')}
-                      theme="primary"
-                      onClick={() => {
-                        this.props.validateAll()
-                        .then((msg) => {
-                          if (msg.isEmpty()) {
-                            this.props.changePage('4');
-                          }
-                        });
-                      }}
-                    />
-                  </FormGroup>
-                </div>
-              ) : null
-            }
-            </div>
-          ) : null
-        }
-
-        {
-          page === '4' ? (
-            <div className="fourthScreen">
-            {
-              deviceMode === 'ap' ? (
-                <div className="fourthForAp">
-                  <h2>{_('Scene: Access Point')}</h2>
-                  <h3>{_('Current Settings')}</h3>
-
-                  <FormGroup
-                    type="plain-text"
-                    label={_('Current Mode')}
-                    value="AP"
-                  />
-                  <FormGroup
-                    type="plain-text"
-                    label={_('LAN IP')}
-                    value={ip}
-                  />
-                  <FormGroup
-                    type="plain-text"
-                    label={_('Subnet Mask')}
-                    value={mask}
-                  />
-
-                  <FormGroup
-                    type="plain-text"
-                    label={_('SSID')}
-                    value={ssid}
-                  />
-                  <FormGroup
-                    type="plain-text"
-                    label={_('Country')}
-                    value={this.getCountryNameFromCode(countryCode, countryMap)}
-                  />
-                  <FormGroup
-                    type="plain-text"
-                    label={_('Channel Width')}
-                    value={(() => {
-                      if (channelWidth) {
-                        return channelWidth.slice(2).concat('MHz');
-                      }
-                      return '';
-                    })()
-                    }
-                  />
-                  <FormGroup
-                    type="plain-text"
-                    label={_('Channel')}
-                    value={frequency}
-                  />
-                  <FormGroup
-                    type="plain-text"
-                    label={_('Security')}
-                    value={(() => {
-                      if (mode !== undefined) {
-                        if (mode === 'none') return mode;
-                        return mode.concat('/').concat(cipher);
-                      }
-                      return '';
-                    })()
-                    }
-                  />
-                  <FormGroup
-                    type="plain-text"
-                    label={_('Distance')}
-                    value={distance}
-                  />
-                  <FormGroup>
-                    <Button
-                      text={_('<- Back')}
-                      onClick={() => {
-                        this.props.changePage('3');
-                      }}
-                    />&nbsp;&nbsp;&nbsp;
-                    <SaveButton
-                      text={_('Save')}
-                      loading={this.props.app.get('saving')}
-                      onClick={() => this.props.saveSettings('goform/set_quicksetup')}
-                    />
-                  </FormGroup>
-                </div>
-              ) : null
-            }
-
-            {
-              deviceMode === 'sta' ? (
-                <div className="fourthForSta">
-                  <h2>{_('Scene: Station')}</h2>
-                  <h3>{_('Current Settings')}</h3>
-
-                  <FormGroup
-                    type="plain-text"
-                    label={_('Current Mode')}
-                    value="Station"
-                  />
-
-                  <FormGroup
-                    type="plain-text"
-                    label={_('LAN IP')}
-                    value={ip}
-                  />
-                  <FormGroup
-                    type="plain-text"
-                    label={_('Subnet Mask')}
-                    value={mask}
-                  />
-                  <FormGroup
-                    type="plain-text"
-                    label={_('SSID')}
-                    value={ssid}
-                  />
-                  <FormGroup
-                    type="plain-text"
-                    label={_('Country')}
-                    value={this.getCountryNameFromCode(countryCode, countryMap)}
-                  />
-                  <FormGroup
-                    type="plain-text"
-                    label={_('Peer')}
-                    value={store.getIn(['curData', 'apMac'])}
-                  />
-                  <FormGroup
-                    type="plain-text"
-                    label={_('Channel Width')}
-                    value={(() => {
-                      if (channelWidth) {
-                        return channelWidth.slice(2).concat('MHz');
-                      }
-                      return '';
-                    })()
-                    }
-                  />
-                  <FormGroup
-                    type="plain-text"
-                    label={_('Channel')}
-                    value={frequency}
-                  />
-                  <FormGroup
-                    type="plain-text"
-                    label={_('Security')}
-                    value={(() => {
-                      if (mode !== undefined) {
-                        if (mode === 'none') return mode;
-                        return mode.concat('/').concat(cipher);
-                      }
-                      return '';
-                    })()
-                    }
-                  />
-                  <FormGroup
-                    type="plain-text"
-                    label={_('Distance')}
-                    value={distance}
-                  />
-
-                  <FormGroup>
-                    <Button
-                      text={_('<- Back')}
-                      onClick={() => {
-                        this.props.changePage('3');
-                      }}
-                    />&nbsp;&nbsp;&nbsp;
-                    <SaveButton
-                      text={_('Save')}
-                      loading={this.props.app.get('saving')}
-                      onClick={() => this.props.saveSettings('goform/set_quicksetup')}
-                    />
-                  </FormGroup>
-                </div>
-              ) : null
-            }
-
-            {
-              deviceMode === 'repeater' ? (
-                <div className="fourthForRepeater">
-                  <h2>{_('Scene: Repeater')}</h2>
-                  <h3>{_('Current Settings')}</h3>
-                  <FormGroup
-                    type="plain-text"
-                    label={_('Current Mode')}
-                    value="Repeater"
-                  />
-                  <FormGroup
-                    type="plain-text"
-                    label={_('LAN IP')}
-                    value={ip}
-                  />
-                  <FormGroup
-                    type="plain-text"
-                    label={_('Subnet Mask')}
-                    value={mask}
-                  />
-
-                  <FormGroup
-                    type="plain-text"
-                    label={_('SSID')}
-                    value={ssid}
-                  />
-                  <FormGroup
-                    type="plain-text"
-                    label={_('Country')}
-                    value={this.getCountryNameFromCode(countryCode, countryMap)}
-                  />
-                  <FormGroup
-                    type="plain-text"
-                    label={_('Channel Width')}
-                    value={(() => {
-                      if (channelWidth) {
-                        return channelWidth.slice(2).concat('MHz');
-                      }
-                      return '';
-                    })()
-                    }
-                  />
-                  <FormGroup
-                    type="plain-text"
-                    label={_('Channel')}
-                    value={frequency}
-                  />
-                  <FormGroup
-                    type="plain-text"
-                    label={_('Security')}
-                    value={(() => {
-                      if (mode !== undefined) {
-                        if (mode === 'none') return mode;
-                        return mode.concat('/').concat(cipher);
-                      }
-                      return '';
-                    })()
-                    }
-                  />
-                  <FormGroup
-                    type="plain-text"
-                    label={_('Distance')}
-                    value={distance}
-                  />
-
-                  <FormGroup>
-                    <Button
-                      text={_('<- Back')}
-                      onClick={() => {
-                        this.props.changePage('3');
-                      }}
-                    />&nbsp;&nbsp;&nbsp;
-                    <SaveButton
-                      text={_('Save')}
-                      loading={this.props.app.get('saving')}
-                      onClick={() => this.props.saveSettings('goform/set_quicksetup')}
-                    />
-                  </FormGroup>
-                </div>
-              ) : null
-            }
-            </div>
-          ) : null
-        }
+        <WizardContainer
+          size="sm"
+          title={_('Quick Setup')}
+          options={wizardOptions}
+          onBeforeStep={this.onBeforeStep}
+          onCompleted={this.onCompleted}
+        />
       </div>
     );
   }

@@ -169,7 +169,77 @@ export default class SystemMaintenance extends Component {
 
   render() {
     return (
-      <div className="Maintenance">
+      <div className="o-form">
+        <div className="o-form__legend">
+          {_('Upgrade')}
+        </div>
+        <form
+          action="/cgi-bin/upload.cgi"
+          method="POST"
+          encType="multipart/form-data"
+          id="upgradeForm"
+        >
+          <FormGroup label={_('Firmware Upgrade')}>
+            <FormInput
+              type="file"
+              name="filename"
+              id="upgradeFile"
+            />
+            <Button
+              type="button"
+              text={_('Upgrade')}
+              onClick={this.onFarewellUpgrade}
+            />
+          </FormGroup>
+        </form>
+        <div className="o-form__legend">
+          {_('Reboot')}
+        </div>
+        <FormGroup label={_('Reboot device')}>
+          <Button
+            text={_('Reboot')}
+            onClick={this.onRebootDevice}
+          />
+        </FormGroup>
+
+        <div className="o-form__legend">
+          {_('Configuration')}
+        </div>
+        <FormGroup label={_('Backup configuration')}>
+          <Button
+            text={_('Backup')}
+            onClick={this.onBackupConfig}
+          />
+        </FormGroup>
+
+        <form
+          id="restoreForm"
+          action="/cgi-bin/back_config"
+          method="POST"
+          encType="multipart/form-data"
+        >
+          <FormGroup
+            label={_('Restore configuration')}
+          >
+            <FormInput
+              type="file"
+              id="restoreFile"
+            />
+            <Button
+              text={_('Restore')}
+              onClick={this.onConfigurationRestore}
+            />
+          </FormGroup>
+        </form>
+        <FormGroup
+          label={_('Reset configuration')}
+        >
+          <Button
+            text={_('Reset')}
+            onClick={this.onResetDevice}
+          />
+        </FormGroup>
+
         <Modal
           isShow={this.props.selfState.getIn(['progressBarInfo', 'isShow'])}
           style={{
@@ -184,73 +254,6 @@ export default class SystemMaintenance extends Component {
             toUrl="#"
           />
         </Modal>
-        <h3>{_('SYSTEM MAINTENANCE')}</h3>
-        <div className="row">
-          <div className="cols col-6">
-            <form
-              className="form-group"
-              action="/cgi-bin/upload.cgi"
-              method="POST"
-              encType="multipart/form-data"
-              id="upgradeForm"
-            >
-              <FormGroup label={_('Firmware Upgrade')}>
-                <FormInput
-                  type="file"
-                  name="filename"
-                  id="upgradeFile"
-                />
-                <Button
-                  type="button"
-                  text={_('Upgrade')}
-                  onClick={this.onFarewellUpgrade}
-                />
-              </FormGroup>
-            </form>
-            <FormGroup label={_('Reboot device')}>
-              <Button
-                text={_('Reboot')}
-                onClick={this.onRebootDevice}
-              />
-            </FormGroup>
-          </div>
-          <div className="cols col-6">
-            <FormGroup label={_('Backup configuration')}>
-              <Button
-                text={_('Backup')}
-                onClick={this.onBackupConfig}
-              />
-            </FormGroup>
-
-            <form
-              id="restoreForm"
-              action="/cgi-bin/back_config"
-              method="POST"
-              encType="multipart/form-data"
-            >
-              <FormGroup
-                label={_('Restore configuration')}
-              >
-                <FormInput
-                  type="file"
-                  id="restoreFile"
-                />
-                <Button
-                  text={_('Restore')}
-                  onClick={this.onConfigurationRestore}
-                />
-              </FormGroup>
-            </form>
-            <FormGroup
-              label={_('Reset configuration')}
-            >
-              <Button
-                text={_('Reset')}
-                onClick={this.onResetDevice}
-              />
-            </FormGroup>
-          </div>
-        </div>
       </div>
     );
   }

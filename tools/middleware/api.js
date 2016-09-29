@@ -5,8 +5,19 @@ import changeCase from 'change-case';
 
 function tansformPath(url) {
   let ret = url.split('?')[0];
+  const pathArr = ret.split('/');
 
-  ret = changeCase.camelCase(ret.split('/').join(' '));
+  pathArr.forEach((item, i) => {
+    let pathRet = item;
+
+    if (i > 0) {
+      pathRet = changeCase.upperCaseFirst(pathRet);
+    }
+
+    return pathRet;
+  });
+
+  ret = pathArr.join('');
 
   return path.normalize(`${ret}.json`);
 }
