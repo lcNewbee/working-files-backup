@@ -30,7 +30,7 @@ const propTypes = {
   store: PropTypes.instanceOf(Map),
 
   route: PropTypes.object,
-  initList: PropTypes.func,
+  initScreen: PropTypes.func,
   updateScreenSettings: PropTypes.func,
   reportValidError: PropTypes.func,
   save: PropTypes.func,
@@ -39,20 +39,20 @@ const defaultProps = {};
 
 export default class View extends React.Component {
   constructor(props) {
+    const { id, formUrl, fetchUrl, saveUrl } = props.route;
     const initOption = {
-      listId: props.route.id,
-      formUrl: props.route.formUrl,
-      fetchUrl: props.route.fetchUrl,
-      saveUrl: props.route.saveUrl,
+      id,
+      formUrl,
+      fetchUrl,
+      saveUrl,
     };
     super(props);
-    this.saveUrl = props.route.saveUrl || props.route.formUrl;
     this.onAction = this.onAction.bind(this);
 
     if (defaultFormData) {
       initOption.defaultSettingsData = defaultFormData;
     }
-    this.props.initList(initOption);
+    this.props.initScreen(initOption);
   }
 
   onAction(no, type) {
@@ -71,10 +71,10 @@ export default class View extends React.Component {
 
   render() {
     const { store, app } = this.props;
-    const myListId = store.get('curListId');
-    const settingsData = store.getIn([myListId, 'curSettings']);
+    const myScreenId = store.get('curScreenId');
+    const settingsData = store.getIn([myScreenId, 'curSettings']);
 
-    if (myListId === 'base') {
+    if (myScreenId === 'base') {
       return null;
     }
 

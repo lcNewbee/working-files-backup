@@ -151,8 +151,8 @@ export default class View extends React.Component {
   render() {
     const { store } = this.props;
     const myFormOptions = formOptions;
-    const myListId = store.get('curListId');
-    const images = store.getIn([myListId, 'curSettings', 'images']);
+    const myScreenId = store.get('curScreenId');
+    const images = store.getIn([myScreenId, 'curSettings', 'images']);
 
     return (
       <ListInfo

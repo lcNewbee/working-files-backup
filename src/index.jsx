@@ -2,7 +2,6 @@
 require('es5-shim');
 require('es5-shim/es5-sham');
 require('console-polyfill');
-require('classlist-polyfill');
 require('es6-promise').polyfill();
 require('whatwg-fetch');
 // end 支持

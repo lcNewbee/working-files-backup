@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import utils from 'shared/utils';
@@ -6,18 +6,33 @@ import {
   PureComponent, EchartReact,
 } from 'shared/components';
 import * as appActions from 'shared/actions/app';
-import * as actions from './actions';
-import myReducer from './reducer';
+import * as actions from 'shared/actions/screens';
+
+const propTypes = {
+  route: PropTypes.object,
+  initScreen: PropTypes.func,
+};
+const defaultProps = {};
 
 export default class View extends PureComponent {
   constructor(props) {
     super(props);
 
     this.binds('getCpuOption');
+
+    props.initScreen({
+      id: props.route.id,
+      formUrl: props.route.formUrl,
+      path: props.route.path,
+    });
   }
+
+  componentWillMount() {
+    this.props.fetchScreenData();
+  }
+
   getCpuOption() {
     const ret = {
-      color: ['#27BCF7', '#fff'],
       tooltip: {
         trigger: 'item',
         formatter: '{a} <br/>{b}: {c} ({d}%)',
@@ -68,9 +83,8 @@ export default class View extends PureComponent {
     return ret;
   }
 
-  getApOption() {
+  getMemoryOption() {
     const ret = {
-      color: ['#27BCF7', '#fff'],
       tooltip: {
         trigger: 'item',
         formatter: '{a} <br/>{b}: {c} ({d}%)',
@@ -122,7 +136,6 @@ export default class View extends PureComponent {
 
   getStoreOption() {
     const option = {
-      color: ['#27BCF7', '#fff'],
       tooltip: {
         trigger: 'axis',
         axisPointer: {            // 坐标轴指示器，坐标轴触发有效
@@ -171,7 +184,7 @@ export default class View extends PureComponent {
   }
 
   render() {
-    const apStatusOption = this.getApOption();
+    const memoryStatusOption = this.getMemoryOption();
     const cpuStatusOption = this.getCpuOption();
     const storeStatusOption = this.getStoreOption();
 
@@ -185,10 +198,11 @@ export default class View extends PureComponent {
             </div>
             <div className="stats-group-cell">
               <EchartReact
-                option={apStatusOption}
+                option={memoryStatusOption}
                 className="stats-group-canvas"
                 style={{
-                  width: '100%',
+                  width: '80%',
+                  minHeight: '180px',
                 }}
               />
             </div>
@@ -202,7 +216,8 @@ export default class View extends PureComponent {
                 option={cpuStatusOption}
                 className="stats-group-canvas"
                 style={{
-                  width: '100%',
+                  width: '80%',
+                  minHeight: '180px',
                 }}
               />
             </div>
@@ -228,10 +243,13 @@ export default class View extends PureComponent {
   }
 }
 
+View.propTypes = propTypes;
+View.defaultProps = defaultProps;
+
 function mapStateToProps(state) {
   return {
     app: state.app,
-    store: state.system,
+    store: state.screen,
   };
 }
 
@@ -246,5 +264,3 @@ export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps
 )(View);
-
-export const reducer = myReducer;

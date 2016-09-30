@@ -52,11 +52,11 @@ const formOptions = immutableUtils.getFormOptions(screenOptions.get('list'));
 
 function getCurListInfoState(listStore, name) {
   const myStore = listStore || Map({});
-  const myListId = myStore.get('curListId');
-  let ret = myStore.getIn([myListId, 'data']);
+  const myScreenId = myStore.get('curScreenId');
+  let ret = myStore.getIn([myScreenId, 'data']);
 
   if (name) {
-    ret = myStore.getIn([myListId, 'data', name]);
+    ret = myStore.getIn([myScreenId, 'data', name]);
   }
   return ret || Map({});
 }
@@ -135,11 +135,11 @@ export default class View extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const myListId = this.props.store.get('curListId');
+    const myScreenId = this.props.store.get('curScreenId');
     const thisList = getCurListInfoState(this.props.store, 'list');
     const prevList = getCurListInfoState(prevProps.store, 'list');
-    const thisSettings = this.props.store.getIn([myListId, 'curSettings']);
-    const prevSettings = prevProps.store.getIn([myListId, 'curSettings']);
+    const thisSettings = this.props.store.getIn([myScreenId, 'curSettings']);
+    const prevSettings = prevProps.store.getIn([myScreenId, 'curSettings']);
 
 
     if (typeof window.google !== 'undefined' && this.mapContent) {
@@ -382,10 +382,10 @@ export default class View extends React.Component {
 
   render() {
     const { app, store } = this.props;
-    const myListId = store.get('curListId');
-    const settings = store.getIn([myListId, 'curSettings']);
-    const list = store.getIn([myListId, 'data', 'list']);
-    const page = store.getIn([myListId, 'data', 'page']);
+    const myScreenId = store.get('curScreenId');
+    const settings = store.getIn([myScreenId, 'curSettings']);
+    const list = store.getIn([myScreenId, 'data', 'list']);
+    const page = store.getIn([myScreenId, 'data', 'page']);
     const editData = getCurListInfoState(store, 'edit');
     const lockButton = settings.get('isLocked') === '1' ? (<Button
       icon="lock"

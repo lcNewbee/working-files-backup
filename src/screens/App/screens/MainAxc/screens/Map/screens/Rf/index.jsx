@@ -391,13 +391,13 @@ export default class View extends React.Component {
   }
   render() {
     const { store } = this.props;
-    const myListId = store.get('curListId');
-    const list = store.getIn([myListId, 'data', 'list']);
-    const isLocked = store.getIn([myListId, 'curSettings', 'isLocked']);
-    const myZoom = store.getIn([myListId, 'curSettings', 'zoom']);
-    const editData = store.getIn([myListId, 'data', 'edit']);
-    const actionQuery = store.getIn([myListId, 'actionQuery']);
-    let curMapName = store.getIn([myListId, 'curSettings', 'curMapName']);
+    const myScreenId = store.get('curScreenId');
+    const list = store.getIn([myScreenId, 'data', 'list']);
+    const isLocked = store.getIn([myScreenId, 'curSettings', 'isLocked']);
+    const myZoom = store.getIn([myScreenId, 'curSettings', 'zoom']);
+    const editData = store.getIn([myScreenId, 'data', 'edit']);
+    const actionQuery = store.getIn([myScreenId, 'actionQuery']);
+    let curMapName = store.getIn([myScreenId, 'curSettings', 'curMapName']);
     const actionBarChildren = [
       curMapName ? (
         <Button

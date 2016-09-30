@@ -104,14 +104,14 @@ const sFlowReport =
     require('../../screens/App/screens/MainAxc/screens/Report/screens/FlowReport');
 const sUsersAnalysis =
     require('../../screens/App/screens/MainAxc/screens/Report/screens/BusinessReport/screens/UsersAnalysis');
-const sPreferencesAnalysis =
-    require('../../screens/App/screens/MainAxc/screens/Report/screens/BusinessReport/screens/PreferencesAnalysis');
-const sInformationPush =
-    require('../../screens/App/screens/MainAxc/screens/Report/screens/BusinessReport/screens/InformationPush');
+// const sPreferencesAnalysis =
+//    require('../../screens/App/screens/MainAxc/screens/Report/screens/BusinessReport/screens/PreferencesAnalysis');
+// const sInformationPush =
+//    require('../../screens/App/screens/MainAxc/screens/Report/screens/BusinessReport/screens/InformationPush');
 const sLiveMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/LiveMap');
 const sApPlanMap =
     require('../../screens/App/screens/MainAxc/screens/Map/screens/ApPlanMap');
-const sRfMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/Rf');
+// const sRfMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/Rf');
 const sHeatMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/HeatMap');
 const sClientsTrace = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace');
 
@@ -481,12 +481,14 @@ const routes = [
             id: 'systemStatus',
             icon: 'area-chart',
             path: '/main/system/status',
+            formUrl: '/goform/system/status',
             text: _('System Status'),
             component: sSystemStatus.Screen,
           }, {
             id: 'alarmStatus',
             icon: 'exclamation-circle',
             path: '/main/system/alarm',
+            formUrl: '/goform/system/alarm',
             text: _('Alarm Events'),
             component: sAlarmEvents.Screen,
           }, {
@@ -503,15 +505,15 @@ const routes = [
               {
                 id: 'systemLog',
                 path: '/main/system/log/list',
-                fetchUrl: 'goform/getSystemLog',
-                formUrl: 'goform/saveSystemLog',
+                fetchUrl: 'goform/system/log',
+                formUrl: 'goform/system/log',
                 text: _('Log List'),
                 component: sSystemLogList.Screen,
               }, {
                 id: 'systemLog',
                 path: '/main/system/log/settings',
-                fetchUrl: 'goform/getSystemLog',
-                formUrl: 'goform/saveSystemLog',
+                fetchUrl: 'goform/system/log',
+                formUrl: 'goform/system/log',
                 text: _('Log Settings'),
                 component: sSystemLogSettings.Screen,
               },

@@ -54,7 +54,7 @@ const propTypes = {
   store: PropTypes.instanceOf(Map),
 
   route: PropTypes.object,
-  initList: PropTypes.func,
+  initScreen: PropTypes.func,
   togglePropertyPanel: PropTypes.func,
 };
 const defaultProps = {};

@@ -107,7 +107,7 @@ const propTypes = {
   store: PropTypes.instanceOf(Map),
 
   route: PropTypes.object,
-  initList: PropTypes.func,
+  initScreen: PropTypes.func,
   closeListItemModal: PropTypes.func,
   updateEditListItem: PropTypes.func,
   save: PropTypes.func,

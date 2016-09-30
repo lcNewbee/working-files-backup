@@ -101,8 +101,8 @@ export default class View extends React.Component {
 
   componentDidUpdate() {
     const { store } = this.props;
-    const myListId = store.get('curListId');
-    const curMapName = store.getIn([myListId, 'curSettings', 'curMapName']);
+    const myScreenId = store.get('curScreenId');
+    const curMapName = store.getIn([myScreenId, 'curSettings', 'curMapName']);
 
     if (curMapName) {
       this.renderTraceMap();
@@ -209,9 +209,9 @@ export default class View extends React.Component {
   }
   renderBulidList() {
     const { store, app } = this.props;
-    const myListId = store.get('curListId');
-    const list = store.getIn([myListId, 'data', 'list']);
-    const page = store.getIn([myListId, 'data', 'page']);
+    const myScreenId = store.get('curScreenId');
+    const list = store.getIn([myScreenId, 'data', 'list']);
+    const page = store.getIn([myScreenId, 'data', 'page']);
 
     return (
       <Table
@@ -227,10 +227,10 @@ export default class View extends React.Component {
   }
   renderBulidMapList() {
     const { store } = this.props;
-    const myListId = store.get('curListId');
-    const list = store.getIn([myListId, 'data', 'list', this.state.buildIndex, 'floorList']);
-    const curMapName = store.getIn([myListId, 'curSettings', 'curMapName']);
-    const myZoom = store.getIn([myListId, 'curSettings', 'zoom']) || 100;
+    const myScreenId = store.get('curScreenId');
+    const list = store.getIn([myScreenId, 'data', 'list', this.state.buildIndex, 'floorList']);
+    const curMapName = store.getIn([myScreenId, 'curSettings', 'curMapName']);
+    const myZoom = store.getIn([myScreenId, 'curSettings', 'zoom']) || 100;
 
     return (
       <div className="o-map-warp">
@@ -269,8 +269,8 @@ export default class View extends React.Component {
   }
   render() {
     const { store } = this.props;
-    const myListId = store.get('curListId');
-    const curMapName = store.getIn([myListId, 'curSettings', 'curMapName']);
+    const myScreenId = store.get('curScreenId');
+    const curMapName = store.getIn([myScreenId, 'curSettings', 'curMapName']);
     const actionBarChildren = [
       curMapName || this.state.buildIndex >= 0 ? (
         <Button
