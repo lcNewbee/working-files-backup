@@ -282,7 +282,7 @@ export default class Basic extends React.Component {
     this.props.fetch('goform/get_wl_info')
         .then((json) => {
           // 首先更新curData中的数据，防止之前修改模式但未保存时加密方式发生变化，目的是切换回去后显示原来的数据
-          this.props.updateItemSettings({ ...json.data });
+          this.props.updateItemSettings(fromJS(json.data));
           if (json.state && json.state.code === 2000) {
             // const curMode = json.data.wirelessMode;
             // if (data.value !== curMode) {
@@ -363,20 +363,22 @@ export default class Basic extends React.Component {
 
   // 需求修改以后的代码
   onShowIconClick(flag, url) {
-    switch (flag) {
-      case 'SsidSetting':
-        this.props.changeShowSsidSetting(true);
-        break;
-      case 'RadioSetting':
-        this.props.changeShowRadioSetting(true);
-        break;
-      case 'MultiSsid':
-        this.props.changeShowMultiSsid(true);
-        break;
-      default:
-    }
     this.props.leaveSettingsScreen();
-    this.props.fetchSettings(url);
+    this.props.fetchSettings(url)
+        .then(() => {
+          switch (flag) {
+            case 'SsidSetting':
+              this.props.changeShowSsidSetting(true);
+              break;
+            case 'RadioSetting':
+              this.props.changeShowRadioSetting(true);
+              break;
+            case 'MultiSsid':
+              this.props.changeShowMultiSsid(true);
+              break;
+            default:
+          }
+        });
   }
 
   onSecurityModeChange(data) {
@@ -569,9 +571,9 @@ export default class Basic extends React.Component {
                 size="sm"
                 disabled={pos === 0}
                 onClick={() => {
-                  const pos = this.props.store.getIn(['curData', 'vapList']).keyOf(item);
                   const tableItemForSsid = fromJS({}).set('val', val)
-                        .set('item', item).set('isShow', '1').set('pos', pos);
+                        .set('item', item).set('isShow', '1')
+                        .set('pos', pos);
                   this.props.changeTableItemForSsid(tableItemForSsid);
                 }}
               />
@@ -605,7 +607,7 @@ export default class Basic extends React.Component {
     }
 
     return (
-      <div>
+      <div className="stats-group">
         <Modal
           isShow={this.props.selfState.get('showScanResult')}
           onOk={this.onModalOkBtnClick}
@@ -622,34 +624,35 @@ export default class Basic extends React.Component {
             list={this.props.store.getIn(['curData', 'scanResult', 'siteList'])}
           />
         </Modal>{ /* SSID 扫描弹出框 */ }
-        <h3>
+        <div className="stats-group-cell">
+          <h3>
+          {
+            this.props.selfState.get('showRadioSetting') ? (
+              <icon
+                className="fa fa-minus-square-o"
+                size="lg"
+                style={{
+                  marginRight: '4px',
+                }}
+                onClick={() => this.props.changeShowRadioSetting(false)}
+              />
+            ) : (
+              <icon
+                className="fa fa-plus-square"
+                size="lg"
+                style={{
+                  marginRight: '4px',
+                }}
+                onClick={() => this.onShowIconClick('RadioSetting', 'goform/get_base_wl_info')}
+              />
+            )
+          }
+            {_('Radio Settings')}
+          </h3>
+        </div>
         {
           this.props.selfState.get('showRadioSetting') ? (
-            <icon
-              className="fa fa-minus-square-o"
-              size="lg"
-              style={{
-                marginRight: '4px',
-              }}
-              onClick={() => this.props.changeShowRadioSetting(false)}
-            />
-          ) : (
-            <icon
-              className="fa fa-plus-square"
-              size="lg"
-              style={{
-                marginRight: '4px',
-              }}
-              onClick={() => this.onShowIconClick('RadioSetting', 'goform/get_base_wl_info')}
-            />
-          )
-        }
-          {_('Radio Settings')}
-        </h3>
-        <hr />
-        {
-          this.props.selfState.get('showRadioSetting') ? (
-            <div>
+            <div className="stats-group-cell">
               <FormGroup
                 type="checkbox"
                 label={_('Radio')}
@@ -715,7 +718,7 @@ export default class Basic extends React.Component {
                 label={_('Radio Mode')}
                 type="select"
                 options={radioModeOptions}
-                value={this.props.store.getIn('curData', 'radioMode')}
+                value={this.props.store.getIn(['curData', 'radioMode'])}
                 onChange={(data) => {
                   this.props.updateItemSettings({
                     radioMode: data.value,
@@ -774,35 +777,35 @@ export default class Basic extends React.Component {
             </div>
           ) : null
         }
-
-        <h3>
+        <div className="stats-group-cell">
+          <h3>
+          {
+            this.props.selfState.get('showSsidSetting') ? (
+              <icon
+                className="fa fa-minus-square-o"
+                size="lg"
+                style={{
+                  marginRight: '4px',
+                }}
+                onClick={() => this.props.changeShowSsidSetting(false)}
+              />
+            ) : (
+              <icon
+                className="fa fa-plus-square"
+                size="lg"
+                style={{
+                  marginRight: '4px',
+                }}
+                onClick={() => this.onShowIconClick('SsidSetting', 'goform/get_wl_info')}
+              />
+            )
+          }
+          {_('SSID Settings')}
+          </h3>
+        </div>
         {
           this.props.selfState.get('showSsidSetting') ? (
-            <icon
-              className="fa fa-minus-square-o"
-              size="lg"
-              style={{
-                marginRight: '4px',
-              }}
-              onClick={() => this.props.changeShowSsidSetting(false)}
-            />
-          ) : (
-            <icon
-              className="fa fa-plus-square"
-              size="lg"
-              style={{
-                marginRight: '4px',
-              }}
-              onClick={() => this.onShowIconClick('SsidSetting', 'goform/get_wl_info')}
-            />
-          )
-        }
-        {_('SSID Settings')}
-        </h3>
-        <hr />
-        {
-          this.props.selfState.get('showSsidSetting') ? (
-            <div>
+            <div className="stats-group-cell">
               <div className="clearfix">
                 <FormGroup
                   type="select"
@@ -1197,41 +1200,49 @@ export default class Basic extends React.Component {
             </div>
           ) : null
         }
-
-        <h3>
+        <div className="stats-group-cell">
+          <h3>
+          {
+            this.props.selfState.get('showMultiSsid') ? (
+              <icon
+                className="fa fa-minus-square-o"
+                size="lg"
+                style={{
+                  marginRight: '4px',
+                }}
+                onClick={() => this.props.changeShowMultiSsid(false)}
+              />
+            ) : (
+              <icon
+                className="fa fa-plus-square"
+                size="lg"
+                style={{
+                  marginRight: '4px',
+                }}
+                onClick={() => this.onShowIconClick('MultiSsid', 'goform/get_wl_info')}
+              />
+            )
+          }
+            {_('Multiple SSID')}
+          </h3>
+        </div>
         {
           this.props.selfState.get('showMultiSsid') ? (
-            <icon
-              className="fa fa-minus-square-o"
-              size="lg"
-              style={{
-                marginRight: '4px',
-              }}
-              onClick={() => this.props.changeShowMultiSsid(false)}
-            />
-          ) : (
-            <icon
-              className="fa fa-plus-square"
-              size="lg"
-              style={{
-                marginRight: '4px',
-              }}
-              onClick={() => this.onShowIconClick('MultiSsid', 'goform/get_wl_info')}
-            />
-          )
-        }
-          {_('Multiple SSID')}
-        </h3>
-        <hr />
-        {
-          this.props.selfState.get('showMultiSsid') ? (
-            <div>
+            <div className="stats-group-cell">
               <Table
                 className="table"
                 options={ssidTableOptions}
-                list={curData.get('vapList')}
+                list={(() => {
+                  const list = fromJS([]);
+                  if (curData.has('vapList')) {
+                    return curData.get('vapList');
+                  }
+                  return list;
+                })()
+                }
               />
               <div
+                className="stats-group-cell"
                 style={{
                   marginTop: '10px',
                 }}
@@ -1243,10 +1254,12 @@ export default class Basic extends React.Component {
                   style={{
                     marginRight: '10px',
                   }}
+                  disabled={curData.get('wirelessMode') === 'sta'}
                 />
                 <SaveButton
                   type="button"
                   loading={this.props.app.get('saving')}
+                  disabled={curData.get('wirelessMode') === 'sta'}
                   onClick={() => {
                     let error = '';
                     const vapList = curData.get('vapList').toJS();

@@ -4,7 +4,7 @@
 	"msg":"success"
 },
 "data":{
-	"wirelessMode":"repeater",
+	"wirelessMode":"sta",
 	"vapList":[
 			{
 			"ssid":"axilspot2",

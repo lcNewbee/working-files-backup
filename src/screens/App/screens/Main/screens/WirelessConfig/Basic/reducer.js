@@ -47,9 +47,9 @@ function onShowSsidSettingChange(state, action) {
 
 function onShowMultiSsidChange(state, action) {
   if (action.data === true) {
-    return state.set('showMultiSsid', true)
-                .set('showRadioSetting', false)
-                .set('showSsidSetting', false);
+    return state.set('showRadioSetting', false)
+                .set('showSsidSetting', false)
+                .set('showMultiSsid', true);
   }
   return state.set('showMultiSsid', false);
 }

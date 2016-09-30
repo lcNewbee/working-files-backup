@@ -174,6 +174,15 @@ export default class ACL extends React.Component {
     return (
       <div>
         <FormGroup
+          label={_('Enabled')}
+          type="checkbox"
+        />
+        <FormGroup
+          label={_('SSID')}
+          type="select"
+          size="min"
+        />
+        <FormGroup
           label={_('Filter Mode')}
         >
           <FormInput

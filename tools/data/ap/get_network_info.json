@@ -13,7 +13,8 @@
     "dns1": "192.168.1.1",
     "dns2": "8.8.8.8",
     "mtu": "1500",
-    "vlanEnable": "1",
-    "vlanId": "2"
+	  "mngVlanId":"1",
+    "utgVlanId":"1",
+    "vlanTagging": "untagged"
   }
 }

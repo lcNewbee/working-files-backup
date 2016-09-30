@@ -60,6 +60,12 @@ const validOptions = Map({
   apmac3: validator({
     rules: 'mac',
   }),
+  validVlanId1: validator({
+    rules: 'num:[1, 4094]',
+  }),
+  validVlanId2: validator({
+    rules: 'num:[1, 4094]',
+  }),
 });
 
 
@@ -161,9 +167,10 @@ export default class NetworkSettings extends React.Component {
   render() {
     const {
       proto, fallbackIp, ip, mask, gateway, dns1, dns2,
-      vlanEnable, vlanId, fallbackMask,
+      mngVlanId, utgVlanId, fallbackMask, vlanTagging,
     } = this.props.store.get('curData').toJS();
-    const { lanIp, lanMask, firstDNS, secondDNS, validGateway } = this.props.validateOption;
+    const { lanIp, lanMask, firstDNS, secondDNS,
+            validGateway, validVlanId1, validVlanId2} = this.props.validateOption;
     return (
       <div>
         <h3>{_('Lan IP Settings')}</h3>
@@ -263,23 +270,54 @@ export default class NetworkSettings extends React.Component {
         }
         <h3>{_('Vlan Settings')}</h3>
         <FormGroup
-          type="checkbox"
-          label={_('Enabled')}
-          checked={vlanEnable === '1'}
-          onChange={this.onVlanBtnClick}
+          type="number"
+          label={_('Management VLAN ID')}
+          help={_('Range: 1 - 4094, Default: 1')}
+          value={mngVlanId}
+          onChange={(data) => this.props.updateItemSettings({
+            mngVlanId: data.value,
+          })}
+          required
+          {...validVlanId1}
         />
-        {
-          (vlanEnable === '1') ? (
-            <FormGroup
-              type="text"
-              label={_('Vlan ID')}
-              value={vlanId}
-              onChange={(data) => this.props.updateItemSettings({
-                vlanId: data.value,
-              })}
-            />
-          ) : null
-        }
+        <FormGroup
+          label={_('VLAN Tagging')}
+        >
+          <FormInput
+            type="radio"
+            text="Untagged"
+            name="vlantagging"
+            checked={vlanTagging === 'untagged'}
+            onClick={() => {
+              this.props.updateItemSettings({
+                vlanTagging: 'untagged',
+              });
+            }}
+          />
+          <FormInput
+            type="radio"
+            text="Tagged"
+            name="vlantagging"
+            checked={vlanTagging === 'tagged'}
+            onClick={() => {
+              this.props.updateItemSettings({
+                vlanTagging: 'tagged',
+              });
+            }}
+          />
+        </FormGroup>
+        <FormGroup
+          type="number"
+          label={_('Untagged VLAN ID')}
+          help={_('Range: 1 - 4094, Default: 1')}
+          value={utgVlanId}
+          disabled={vlanTagging === 'tagged'}
+          onChange={(data) => this.props.updateItemSettings({
+            utgVlanId: data.value,
+          })}
+          required
+          {...validVlanId2}
+        />
         <div className="form-group form-group--save">
           <div className="form-control">
             <SaveButton

@@ -22,6 +22,8 @@ const propTypes = {
   isShow: PropTypes.bool,
   initSettings: PropTypes.func,
   fetchSettings: PropTypes.func,
+
+  createModal: PropTypes.func,
 };
 
 export default class SystemMaintenance extends Component {
@@ -52,6 +54,7 @@ export default class SystemMaintenance extends Component {
   }
 
   onFarewellUpgrade(e) {
+    const that = this;
     const input = document.getElementById('upgradeFile');
     const formElem = document.getElementById('upgradeForm');
     let data;
@@ -59,38 +62,54 @@ export default class SystemMaintenance extends Component {
     e.preventDefault();
 
     if (!input.value) {
-      // this.props.createModal({
-      //   id: 'admin',
-      //   role: 'alert',
-      //   text: _('Please select a upload image'),
-      // });
       return;
     }
     const extension = utils.getExtension(input.value);
 
-    if (typeof FormData === 'function') {
-      data = new FormData();
-      data.append('filename', input.files[0]);
-      data.append('suffix', extension);
+    function upgradeDevice() {
+      if (typeof FormData === 'function') {
+        data = new FormData();
+        data.append('filename', input.files[0]);
+        data.append('suffix', extension);
 
-      fetch(formElem.action, {
-        method: 'POST',
-        body: data,
-      })
-      .then((rq) => {
-      });
-    } else {
-      formElem.submit();
+        fetch(formElem.action, {
+          method: 'POST',
+          body: data,
+        })
+        .then((rq) => {
+          if (rq.state && rq.state.code === 2000) {
+            that.props.changeProgressBarInfo(fromJS({
+              title: _('The device is upgrading now, please wait for a while...'),
+              time: 120,
+              isShow: true,
+            }));
+          } else {
+            let msg = _('Upgrade failed !');
+            if (rq.has('state')) {
+              msg = rq.state.msg;
+            }
+            that.props.createModal({
+              id: 'settings',
+              role: 'alert',
+              text: msg,
+            });
+          }
+        });
+      } else {
+        formElem.submit();
+      }
     }
 
-    this.props.changeProgressBarInfo(fromJS({
-      title: _('The device is updating now, please wait for a while...'),
-      time: 120,
-      isShow: true,
-    }));
+    this.props.createModal({
+      id: 'settings',
+      role: 'comfirm',
+      text: _('Sure you want to UPGRADE the software and REBOOT ?'),
+      apply: upgradeDevice,
+    });
   }
 
   onConfigurationRestore(e) {
+    const that = this;
     const input = document.getElementById('restoreFile');
     const formElem = document.getElementById('restoreForm');
     let data;
@@ -98,62 +117,112 @@ export default class SystemMaintenance extends Component {
     e.preventDefault();
 
     if (!input.value) {
-      // this.props.createModal({
-      //   id: 'admin',
-      //   role: 'alert',
-      //   text: _('Please select a upload image'),
-      // });
       return;
     }
-
     const extension = utils.getExtension(input.value);
+    function saveConfig() {
+      if (typeof FormData === 'function') {
+        data = new FormData();
+        data.append('filename', input.files[0]);
+        data.append('suffix', extension);
 
-    if (typeof FormData === 'function') {
-      data = new FormData();
-      data.append('filename', input.files[0]);
-      data.append('suffix', extension);
-
-      fetch(formElem.action, {
-        method: 'POST',
-        body: data,
-      })
-      .then((rq) => {
-      });
-    } else {
-      formElem.submit();
+        fetch(formElem.action, {
+          method: 'POST',
+          body: data,
+        })
+        .then((rq) => {
+          if (rq.state && rq.state.code === 2000) {
+            that.props.changeProgressBarInfo(fromJS({
+              title: _('The configuration is restoring now, please wait ...'),
+              time: 120,
+              isShow: true,
+            }));
+          } else {
+            let msg = _('Save configuration failed !');
+            if (rq.has('state')) {
+              msg = rq.state.msg;
+            }
+            that.props.createModal({
+              id: 'settings',
+              role: 'alert',
+              text: msg,
+            });
+          }
+        });
+      } else {
+        formElem.submit();
+      }
+      that.props.changeProgressBarInfo(fromJS({
+        title: _(''),
+        time: 60,
+        isShow: true,
+      }));
     }
 
-    this.props.changeProgressBarInfo(fromJS({
-      title: _('The configuration is restoring now, please wait ...'),
-      time: 60,
-      isShow: true,
-    }));
+    this.props.createModal({
+      id: 'settings',
+      role: 'comfirm',
+      text: _('Sure you want to RESTORE the configuration and REBOOT ?'),
+      apply: saveConfig,
+    });
   }
 
   onRebootDevice() {
-    utils.save('goform/reboot')
-        .then((json) => {
-          if (json.state && json.state.code === 2000) {
-            this.props.changeProgressBarInfo(fromJS({
-              title: _('The device is rebooting now, please wait ...'),
-              time: 90,
-              isShow: true,
-            }));
-          }
-        });
+    const that = this;
+    function rebootDevice() {
+      utils.save('goform/reboot')
+          .then((json) => {
+            if (json.state && json.state.code === 2000) {
+              that.props.changeProgressBarInfo(fromJS({
+                title: _('The device is rebooting now, please wait ...'),
+                time: 90,
+                isShow: true,
+              }));
+            } else {
+              that.props.createModal({
+                id: 'settings',
+                role: 'alert',
+                text: json.state.msg,
+              });
+            }
+          });
+    }
+
+    this.props.createModal({
+      id: 'settings',
+      role: 'comfirm',
+      text: _('Sure you want to REBOOT the device ?'),
+      apply: rebootDevice,
+    });
   }
 
   onResetDevice() {
-    utils.save('goform/reset')
+    const that = this;
+    function resetDevice() {
+      utils.save('goform/reset')
         .then((json) => {
           if (json.state && json.state.code === 2000) {
-            this.props.changeProgressBarInfo(fromJS({
+            that.props.changeProgressBarInfo(fromJS({
               title: _('The device is reseting now, please wait ...'),
               time: 90,
               isShow: true,
             }));
+          } else {
+            that.props.createModal({
+              id: 'settings',
+              role: 'alert',
+              text: json.state.msg,
+            });
           }
         });
+    }
+
+    this.props.createModal({
+      id: 'settings',
+      role: 'comfirm',
+      text: _('Sure you want to restore the device into factory default ?'),
+      apply: resetDevice,
+    });
   }
 
   onBackupConfig() {
@@ -162,7 +231,11 @@ export default class SystemMaintenance extends Component {
           if (json.state && json.state.code === 2000) {
             window.location = json.data.config_url;
           } else if (json.state && json.state.code === 4000) {
-            window.alert('Backup failed! Please try again.');
+            this.props.createModal({
+              id: 'settings',
+              role: 'alert',
+              text: 'Backup failed! Please try again.',
+            });
           }
         });
   }

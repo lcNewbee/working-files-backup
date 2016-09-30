@@ -30,7 +30,7 @@ export default class ProgressBar extends React.Component {
           width: (n / time) * length,
           n: n + 1,
         });
-        console.log(n);
+        // console.log(n);
       } else {
         window.location.href = this.props.toUrl;
       }
