@@ -87,7 +87,7 @@ module.exports = {
         loader: 'babel?cacheDirectory=true',
       }],
   },
-  postcss () {
+  postcss() {
     return [autoprefixerHandle];
   },
   resolve: {

@@ -1,6 +1,7 @@
 node_modules/*
 **/vendor/*.js
-bulid/*
+build/
+dist/
 gulpfile.js
-wepack.config*.js
+webpack.config.*.js
 **/*.json

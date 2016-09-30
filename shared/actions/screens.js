@@ -1,6 +1,6 @@
 import * as appActions from './app';
 
-const refreshTimeout = null;
+let refreshTimeout = null;
 
 // Screen common actions
 export function initScreen(option) {
@@ -37,10 +37,12 @@ export function reciveScreenData(data, name) {
 export function fetchScreenData(url) {
   return (dispatch, getState) => {
     const globalState = getState();
-    // const refreshTime = globalState.app.get('rateInterval');
+    const refreshTime = globalState.app.get('rateInterval');
     const name = globalState.screens.get('curScreenId');
+    const isFetchInfinite = globalState.screens.getIn([name, 'isFetchInfinite']);
     const formUrl = globalState.screens.getIn([name, 'formUrl']);
     const fetchUrl = globalState.screens.getIn([name, 'fetchUrl']) || formUrl;
+    const curFetchIntervalTime = globalState.screens.getIn([name, 'fetchIntervalTime']) || refreshTime;
     let query = globalState.screens.getIn([name, 'query']) || {};
 
     window.clearTimeout(refreshTimeout);
@@ -56,11 +58,11 @@ export function fetchScreenData(url) {
           dispatch(reciveScreenData(json.data, name));
         }
 
-        // if (refreshTime && refreshTime > 0) {
-        //   refreshTimeout = window.setTimeout(() => {
-        //     dispatch(fetchScreenData(formUrl));
-        //   }, refreshTime);
-        // }
+        if (isFetchInfinite && curFetchIntervalTime > 0) {
+          refreshTimeout = window.setTimeout(() => {
+            dispatch(fetchScreenData(formUrl));
+          }, refreshTime);
+        }
       });
   };
 }

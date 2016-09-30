@@ -14,6 +14,7 @@ const propTypes = {
   className: PropTypes.string,
   layout: PropTypes.oneOf(['flow', 'block']),
   size: PropTypes.oneOf(['compassed']),
+  componentType: PropTypes.oneOf(['form', 'div']),
 
   hasSaveButton: PropTypes.bool,
   isSaving: PropTypes.bool,
@@ -38,6 +39,7 @@ const propTypes = {
 const defaultProps = {
   hasSaveButton: false,
   method: 'POST',
+  componentType: 'div',
 };
 
 class FormContainer extends React.Component {
@@ -115,7 +117,7 @@ class FormContainer extends React.Component {
     }
 
     if (myProps.saveOnChange) {
-      myProps.onChange = (myData => {
+      myProps.onChange = ((myData) => {
         this.onChangeData(id, myData);
         this.onSave();
       });
@@ -166,7 +168,9 @@ class FormContainer extends React.Component {
     const {
       isSaving, action, options, hasSaveButton, layout, size,
       className, hasFile, method, leftChildren, rightChildren,
+      componentType,
     } = this.props;
+    let formProps = null;
     let classNames = 'o-form';
     let encType = 'application/x-www-form-urlencoded';
 
@@ -186,42 +190,48 @@ class FormContainer extends React.Component {
       encType = 'multipart/form-data';
     }
 
+    if (componentType === 'form') {
+      formProps = {
+        action,
+        method,
+        encType,
+      };
+    }
+
     return (
-      <form
+      <componentType
         className={classNames}
-        action={action}
-        method={method}
-        encType={encType}
+        {...formProps}
       >
-      {
-        leftChildren && leftChildren.length > 0 ? (
-          <div className="form-group ss">
-            { leftChildren }
-          </div>
-        ) : null
-      }
-      { this.renderFormGroupTree(options) }
-      {
-        rightChildren ? (
-          <div className="form-group fr">
-            { rightChildren }
-          </div>
-        ) : null
-      }
-      {
-        hasSaveButton ? (
-          <div className="form-group form-group--save">
-            <div className="form-control">
-              <SaveButton
-                type="button"
-                loading={isSaving}
-                onClick={this.onSave}
-              />
+        {
+          leftChildren && leftChildren.length > 0 ? (
+            <div className="fl">
+              { leftChildren }
             </div>
-          </div>
-        ) : null
-      }
-      </form>
+          ) : null
+        }
+        { this.renderFormGroupTree(options) }
+        {
+          rightChildren ? (
+            <div className="fr">
+              { rightChildren }
+            </div>
+          ) : null
+        }
+        {
+          hasSaveButton ? (
+            <div className="form-group form-group--save">
+              <div className="form-control">
+                <SaveButton
+                  type="button"
+                  loading={isSaving}
+                  onClick={this.onSave}
+                />
+              </div>
+            </div>
+          ) : null
+        }
+      </componentType>
     );
   }
 }
