@@ -44,11 +44,11 @@ const propTypes = {
   noTitle: PropTypes.bool,
 
   // 通用操作函数
-  initList: PropTypes.func,
-  fetchList: PropTypes.func,
+  initScreen: PropTypes.func,
+  fetchScreenData: PropTypes.func,
   changeListQuery: PropTypes.func,
   changeListActionQuery: PropTypes.func,
-  leaveListScreen: PropTypes.func,
+  leaveScreen: PropTypes.func,
   selectListItem: PropTypes.func,
   onListAction: PropTypes.func,
   createModal: PropTypes.func,
@@ -94,7 +94,7 @@ const defaultProps = {
 class ListInfo extends React.Component {
   constructor(props) {
     const initOption = {
-      listId: props.route.id,
+      id: props.route.id,
       formUrl: props.route.formUrl,
       fetchUrl: props.route.fetchUrl,
       saveUrl: props.route.saveUrl,
@@ -112,7 +112,7 @@ class ListInfo extends React.Component {
       initOption.defaultSettingsData = props.defaultSettingsData;
     }
 
-    this.props.initList(initOption);
+    this.props.initScreen(initOption);
     this.selectedList = [];
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.binds('onChangeQuery', 'onPageChange', 'onSave', 'onCloseEditModal',
@@ -181,8 +181,8 @@ class ListInfo extends React.Component {
     }
   }
   componentWillUnmount() {
-    if (this.props.leaveListScreen) {
-      this.props.leaveListScreen();
+    if (this.props.leaveScreen) {
+      this.props.leaveScreen();
     }
   }
   onChangeSearchText(val) {
@@ -227,7 +227,7 @@ class ListInfo extends React.Component {
   }
   onRemoveItem(i) {
     const store = this.props.store;
-    const myListId = store.get('curListId');
+    const myListId = store.get('curScreenId');
     const list = store.getIn([myListId, 'data', 'list']);
     const listKey = this.props.listKey;
 
@@ -277,8 +277,8 @@ class ListInfo extends React.Component {
     }
   }
   onFetchList() {
-    if (this.props.fetchList) {
-      this.props.fetchList();
+    if (this.props.fetchScreenData) {
+      this.props.fetchScreenData();
     }
   }
 
@@ -299,7 +299,7 @@ class ListInfo extends React.Component {
       queryFormOptions,
       actionBarChildren,
     } = this.props;
-    const myListId = store.get('curListId');
+    const myListId = store.get('curScreenId');
     const page = store.getIn([myListId, 'data', 'page']);
     const list = store.getIn([myListId, 'data', 'list']);
     const curSettings = store.getIn([myListId, 'curSettings']);

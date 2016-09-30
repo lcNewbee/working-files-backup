@@ -38,7 +38,7 @@ const defaultProps = {
 };
 
 // 原生的 react 页面
-class ListInfo extends React.Component {
+class AppSettings extends React.Component {
   constructor(props) {
     const initOption = {
       settingId: props.route.id,
@@ -165,8 +165,8 @@ class ListInfo extends React.Component {
   }
 }
 
-ListInfo.propTypes = propTypes;
-ListInfo.defaultProps = defaultProps;
+AppSettings.propTypes = propTypes;
+AppSettings.defaultProps = defaultProps;
 
-export default ListInfo;
+export default AppSettings;
 

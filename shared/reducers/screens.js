@@ -18,38 +18,55 @@ const defaultItem = fromJS({
   defaultEditData: {},
 });
 const defaultState = fromJS({
-  curListId: 'base',
+  curScreenId: 'base',
   base: defaultItem,
 });
 
-function initListItem(state, action) {
-  const listId = action.option.listId;
+/**
+ * Init screen state
+ *
+ * @param {immutable} state
+ * @param {object} action
+ * @returns New immutable state
+ */
+function initScreenState(state, action) {
+  const screenId = action.payload.id;
   let ret = state;
   let settingsData = fromJS({});
-  let myItem = state.get(listId);
+  let myItem = state.get(screenId);
 
   if (!myItem) {
-    myItem = defaultItem.mergeDeep(action.option);
+    myItem = defaultItem.mergeDeep(action.payload);
   } else {
-    myItem = myItem.mergeDeep(action.option);
+    myItem = myItem.mergeDeep(action.payload);
   }
 
-  if (action.option.defaultSettingsData) {
+  if (action.payload.defaultSettingsData) {
     settingsData = settingsData
-        .merge(action.option.defaultSettingsData);
+        .merge(action.payload.defaultSettingsData);
   }
 
-  if (!state.get(listId) || state.get(listId).isEmpty()) {
+  if (!state.get(screenId) || state.get(screenId).isEmpty()) {
     ret = state.mergeIn(
-      [listId],
+      [screenId],
       myItem.set('curSettings', settingsData)
     );
   }
 
   return ret
-    .set('curListId', listId);
+    .set('curScreenId', screenId);
 }
-function selectedListItem(state, data, curScreenName) {
+
+/**
+ * Change the selected list data, save the selected
+ *
+ * @param {immutable} state
+ * @param {any} data
+ * @param {string} curScreenName
+ * @returns New immutable state
+ */
+function selectedListItem(state, action, curScreenName) {
+  const data = action.payload;
   let list = state.getIn([curScreenName, 'data', 'list']);
   let selectedList = state.getIn([curScreenName, 'actionQuery', 'selected']) || fromJS([]);
 
@@ -76,12 +93,14 @@ function selectedListItem(state, data, curScreenName) {
   return state.setIn([curScreenName, 'data', 'list'], list)
       .setIn([curScreenName, 'actionQuery', 'selectedList'], selectedList);
 }
+
+
 function updateEditListItem(curScreenName, state, action) {
   const curIndex = state.getIn([curScreenName, 'data', 'edit', 'index']);
-  let ret = state.mergeDeepIn([curScreenName, 'data', 'edit'], action.data);
+  let ret = state.mergeDeepIn([curScreenName, 'data', 'edit'], action.payload);
 
-  if (action.sync) {
-    ret = ret.mergeDeepIn([curScreenName, 'data', 'list', curIndex], action.data);
+  if (action.meta.sync) {
+    ret = ret.mergeDeepIn([curScreenName, 'data', 'list', curIndex], action.payload);
   }
 
   return ret;
@@ -110,36 +129,60 @@ function editListItemByKey(state, curScreenName, action) {
 }
 
 export default function (state = defaultState, action) {
-  const curScreenName = (action.meta && action.meta.name) || state.get('curListId');
+  const curScreenName = (action.meta && action.meta.name) || state.get('curScreenId');
   const defaultEditData = state.getIn([curScreenName, 'defaultEditData']) || fromJS({});
 
   switch (action.type) {
-    case 'INIT_LIST':
-      return initListItem(state, action, curScreenName);
 
-    case 'REQEUST_FETCH_LIST':
+    // Screen 全局action
+    case 'INIT_SCREEN':
+      return initScreenState(state, action, curScreenName);
+
+    case 'LEAVE_SCREEN':
+      return state.mergeIn([curScreenName, 'query'], {
+        search: '',
+      });
+
+    case 'REQEUST_FETCH_SCREEN_DATA':
       return state.setIn([curScreenName, 'fetching'], true);
 
-    case 'RECIVE_FETCH_LIST':
+    case 'RECIVE_SCREEN_DATA':
       return state.setIn([curScreenName, 'fetching'], false)
         .mergeDeepIn([curScreenName, 'curSettings'], (action.payload && action.payload.settings))
         .mergeIn([curScreenName, 'data'], action.payload)
         .setIn([curScreenName, 'data', 'updateAt'], action.meta.updateAt);
 
+    // Screen Setting相关
+    case 'UPDATE_SCREEN_SETTINGS':
+      return state.mergeDeepIn([curScreenName, 'curSettings'], action.payload);
+
+    // Screen 列表操作
     case 'CHANGE_LIST_QUERY':
       return state.mergeIn([curScreenName, 'query'], action.payload);
 
     case 'CHANGE_LIST_ACTION_QUERY':
       return state.mergeIn([curScreenName, 'actionQuery'], action.payload);
 
+    case 'ADD_LIST_ITEM':
+      return state.setIn(
+        [curScreenName, 'data', 'edit'],
+        fromJS({
+          myTitle: _('Add'),
+        }).merge(action.payload || defaultEditData)
+      )
+      .setIn([curScreenName, 'actionQuery', 'action'], 'add');
+
+    case 'SELECT_LIST_ITEM':
+      return selectedListItem(state, action, curScreenName);
+
     case 'UPDATE_EDIT_LIST_ITEM':
       return updateEditListItem(curScreenName, state, action);
 
-    case 'UPDATE_LIST_SETTINGS':
-      return state.mergeDeepIn([curScreenName, 'curSettings'], action.payload);
-
     case 'UPDATE_LIST_ITEM_BY_INDEX':
-      return state.mergeDeepIn([curScreenName, 'data', 'list', action.index], action.data);
+      return state.mergeDeepIn(
+        [curScreenName, 'data', 'list', action.meta.index],
+        action.payload,
+      );
 
     case 'EDIT_LIST_ITEM_BY_KEY':
       return editListItemByKey(state, curScreenName, action);
@@ -157,30 +200,9 @@ export default function (state = defaultState, action) {
           action.payload.action || 'edit'
         );
 
-    case 'ADD_LIST_ITEM':
-      return state.setIn(
-        [curScreenName, 'data', 'edit'],
-        fromJS({
-          myTitle: _('Add'),
-        }).merge(defaultEditData)
-      )
-      .setIn([curScreenName, 'actionQuery', 'action'], 'add');
-
-    case 'SELECT_LIST_ITEM':
-      return selectedListItem(state, action.data, curScreenName);
-
-        // state.setIn([curScreenName, 'data', 'list'],
-        //   selectedListItem(state.getIn([curScreenName, 'data', 'list']), action.data))
-        //   .setIn(['curScreenName', 'actionQuery', 'selected'], action.data.index);
-
     case 'CLOSE_LIST_ITEM_MODAL':
       return state.setIn([curScreenName, 'data', 'edit'], fromJS({}))
         .setIn([curScreenName, 'actionQuery', 'action'], '');
-
-    case 'LEAVE_LIST_SCREEN':
-      return state.mergeIn([curScreenName, 'query'], {
-        search: '',
-      });
 
     default:
 
