@@ -205,7 +205,7 @@ class FormContainer extends React.Component {
       >
         {
           leftChildren && leftChildren.length > 0 ? (
-            <div className="fl">
+            <div className="form-group fl">
               { leftChildren }
             </div>
           ) : null
@@ -213,7 +213,7 @@ class FormContainer extends React.Component {
         { this.renderFormGroupTree(options) }
         {
           rightChildren ? (
-            <div className="fr">
+            <div className="form-group fr">
               { rightChildren }
             </div>
           ) : null

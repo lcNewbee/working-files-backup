@@ -1,0 +1,29 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "id": "1",
+        "time": "2016-9-29",
+        "type": "NAT",
+        "info": "NAT Events Describe"
+      },
+      {
+        "id": "2",
+        "time": "2016-10-1",
+        "type": "DHCP",
+        "info": "DHCP Events Describe"
+      },
+
+      {
+        "id": "3",
+        "time": "2016-10-3",
+        "type": "WLAN",
+        "info": "WLAN Events Describe"
+      }
+    ]
+  }
+}

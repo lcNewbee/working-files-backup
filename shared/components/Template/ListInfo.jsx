@@ -405,16 +405,14 @@ class ListInfo extends React.Component {
           leftChildren={leftChildrenNode}
           rightChildren={
               page ? (
-                <FormGroup className="fr">
-                  <Select
-                    className={pageSelectClassName}
-                    value={query.get('size')}
-                    onChange={this.onChangeTableSize}
-                    options={selectOptions}
-                    searchable={false}
-                    clearable={false}
-                  />
-                </FormGroup>
+                <Select
+                  className={pageSelectClassName}
+                  value={query.get('size')}
+                  onChange={this.onChangeTableSize}
+                  options={selectOptions}
+                  searchable={false}
+                  clearable={false}
+                />
             ) : null
           }
         />

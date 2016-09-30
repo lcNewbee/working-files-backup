@@ -1,0 +1,25 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "attackType": {
+      "dns": 100,
+      "ddos": 222,
+      "attackType2": 222,
+      "attackType4": 222
+    },
+    "list": [
+      {
+        "id": "1",
+        "mac": "00:11:22:33:33:44:55",
+        "attackType": "dos",
+        "attackTime": "2015-2-5 12:34",
+        "attackDetails": "attackDetails",
+        "protectionMeasures": "protectionMeasures",
+        "jumpSecurityEvents": "jump Security Events"
+      }
+    ]
+  }
+}

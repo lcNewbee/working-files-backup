@@ -4,8 +4,11 @@
     "msg": "ok"
   },
   "data": {
-    "cpuUsed": "20",
-    "memoryUsed": "40",
-    "storeUsed": "40"
+    "cpuUsed": 20,
+    "cpuTotal": 100,
+    "memoryUsed": 40,
+    "memoryTotal": 100,
+    "storeUsed": 10,
+    "storeTotal": 100
   }
 }

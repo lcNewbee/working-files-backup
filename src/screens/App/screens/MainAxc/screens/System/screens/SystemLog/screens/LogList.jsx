@@ -17,7 +17,6 @@ const screenOptions = fromJS([
   }, {
     id: 'operator',
     text: _('Operator'),
-    queryable: true,
     defaultQuery: '',
     formProps: {
       display: 'inline',
@@ -76,7 +75,9 @@ export default class View extends React.Component {
         tableOptions={tableOptions}
         queryFormOptions={queryFormOptions}
         defaultQueryData={defaultQueryData}
-        actionable={false}
+        editable={false}
+        addable={false}
+        actionable
         noTitle
         selectable
       />

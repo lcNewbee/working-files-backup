@@ -276,6 +276,7 @@ const routes = [
               {
                 id: 'user',
                 path: '/main/group/monitor/user',
+                formUrl: 'goform/getClientInfo',
                 text: _('User'),
                 component: sUsers.Screen,
               }, {
@@ -299,6 +300,7 @@ const routes = [
               }, {
                 id: 'safeStatus',
                 path: '/main/group/monitor/safe',
+                formUrl: 'goform/group/safeStatus',
                 text: _('Safe Status'),
                 component: sSafeStatus.Screen,
               },
@@ -636,12 +638,6 @@ const reducers = {
 
   // product comstom reducers
   product: sMainAxc.reducer,
-
-  // screen custom reducers
-  users: sUsers.reducer,
-  safeStatus: sSafeStatus.reducer,
-  system: sSystemStatus.reducer,
-  events: sAlarmEvents.reducer,
 };
 
 // Store

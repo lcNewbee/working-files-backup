@@ -1,3 +1,4 @@
+import b28n from 'shared/b28n';
 import { combineReducers } from 'redux';
 import NotFound from 'shared/components/NotFound';
 import remoteActionMiddleware from 'shared/utils/lib/remote_action_middleware';

@@ -5,13 +5,11 @@ import utils from 'shared/utils';
 
 // components
 import {
-  PureComponent,
-  Table, Button, Search, Select, Switchs,
+  PureComponent, ListInfo, Button, Switchs,
 } from 'shared/components';
 
 // custom
-import * as actions from './actions';
-import myReducer from './reducer';
+import * as screenActions from 'shared/actions/screens';
 
 const flowRateFilter = utils.filter('flowRate:["KB"]');
 
@@ -79,7 +77,13 @@ const clientsTableOptions = fromJS([
         classNames += '-3';
       }
 
-      return <span className={classNames} />;
+      return (
+        <span
+          title={`-${intVal}db`}
+          style={{ cursor: 'pointer' }}
+          className={classNames}
+        />
+      );
       // return val;
     },
   }, {
@@ -126,99 +130,25 @@ class Clients extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.binds('handleSearch', 'handleChangeQuery', 'handleActions', 'onPageChange',
-        'onAction', 'onChangeSearchText', 'onChangeType', 'onChangeTableSize');
-  }
-  componentWillMount() {
-    this.handleSearch();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
-      this.handleSearch();
-    }
-  }
-
-  componentWillUnmount() {
-    this.props.leaveClientsScreen();
-  }
-
-  handleSearch() {
-    this.props.fetchClients();
-  }
-
-  handleChangeQuery(data, needSearch) {
-    this.props.changeClientsQuery(data);
-
-    if (needSearch) {
-      this.handleSearch();
-    }
-  }
-
-  handleActions(actionQuery, needSave) {
-    this.props.changeClientActionQuery(actionQuery);
-
-    if (needSave) {
-      this.props.saveClientsAction();
-    }
-  }
-
-  onAction(mac, action, wirelessType) {
-    const subData = {
-      action,
-      macs: [
-        mac,
+    utils.binds(
+      this,
+      [
+        'handleSearch', 'handleChangeQuery', 'handleActions', 'onPageChange',
+        'onAction', 'onChangeSearchText', 'onChangeType', 'onChangeTableSize',
       ],
-    };
-
-    if (typeof wirelessType === 'string') {
-      subData.wirelessType = wirelessType;
-    }
-
-    this.handleActions(subData, true);
-  }
-
-  onChangeSearchText(val) {
-    this.handleChangeQuery({
-      search: val,
-    });
-  }
-
-  onChangeType(data) {
-    this.handleChangeQuery({
-      type: data.value,
-    }, true);
-  }
-
-  onChangeTableSize(data) {
-    this.handleChangeQuery({
-      size: data.value,
-      page: 1,
-    }, true);
-  }
-
-  onPageChange(i) {
-    this.handleChangeQuery({
-      page: i,
-    }, true);
+    );
   }
 
   render() {
     const { store } = this.props;
-    const query = store.get('query').toJS();
-    const thisData = store.get('data');
-    const noControl = this.props.app.get('noControl');
-
+    const curScreenId = store.get('curScreenId');
+    const query = store.getIn([curScreenId, 'data', 'query']);
     // 添加操作项
     const options = clientsTableOptions.setIn([-1, 'transform'],
       (val, item) => {
         const mac = item.get('mac');
         const status = item.get('status');
         const isLock = item.get('islock') === 'lock';
-
-        if (status === 'disable' || noControl) {
-          return null;
-        }
 
         return (
           <div className="action-btns">
@@ -253,47 +183,20 @@ class Clients extends PureComponent {
         );
       }
     );
-    let tableOptions = options;
-
-    if (noControl) {
-      tableOptions = tableOptions.delete(-1);
-    }
+    const tableOptions = options;
+    const typeSwitch = (
+      <Switchs
+        value={query && query.type}
+        options={typeArr}
+      />
+    );
 
     return (
-      <div className="page-device">
-        <h2>{msg.TITLE}</h2>
-        <div className="m-action-bar clearfix">
-          <Search
-            value={query.search}
-            onChange={this.onChangeSearchText}
-            onSearch={this.handleSearch}
-            placeholder={_('IP or MAC Address')}
-          />
-          <Switchs
-            value={query.type}
-            options={typeArr}
-            onChange={this.onChangeType}
-          />
-          <Select
-            className="fr"
-            clearable={false}
-            searchable={false}
-            value={query.size}
-            onChange={this.onChangeTableSize}
-            options={selectOptions}
-          />
-        </div>
-
-        <Table
-          className="table"
-          options={tableOptions}
-          list={thisData.get('list')}
-          page={thisData.get('page')}
-          onPageChange={this.onPageChange}
-          loading={this.props.fetching}
-        />
-
-      </div>
+      <ListInfo
+        {...this.props}
+        tableOptions={tableOptions}
+        searchable
+      />
     );
   }
 }
@@ -301,15 +204,13 @@ class Clients extends PureComponent {
 function mapStateToProps(state) {
   return {
     app: state.app,
-    store: state.users,
+    store: state.screens,
   };
 }
 
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  actions
+  screenActions
 )(Clients);
-
-export const reducer = myReducer;
 

@@ -1,130 +1,139 @@
-import React from 'react';
-import utils from 'shared/utils';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { fromJS } from 'immutable';
 
 // components
 import {
   Table, EchartReact, Button,
 } from 'shared/components';
+import * as screenActions from 'shared/actions/screens';
 
-import * as actions from './actions';
-import myReducer from './reducer';
-
-const flowRateFilter = utils.filter('flowRate');
-const flowRateKbFilter = utils.filter('flowRate:["KB"]');
-const msg = {
-  ip: _('IP Address'),
-  mac: _('MAC Address'),
-  days: _('Days'),
-  apStatus: _('AP Status'),
-  total: _('Total:'),
-  apNumber: _('AP Number'),
-};
-
-// 原生的 react 页面
-export const Status = React.createClass({
-  mixins: [PureRenderMixin],
-
-  getInitialState() {
-    return {
-      showOfflineAp: false,
-    };
+const tableOptions = fromJS([
+  {
+    id: 'mac',
+    text: _('Attacker MAC'),
+    transform(val, item) {
+      return val || item.get('macaddress');
+    },
+  }, {
+    id: 'attackType',
+    text: _('Attack Type'),
+  }, {
+    id: 'attackTime',
+    text: _('Attack Time'),
+  }, {
+    id: 'attackDetails',
+    text: _('Attack Details'),
+  }, {
+    id: 'protectionMeasures',
+    text: _('Protection Measures'),
+    width: '160',
+  }, {
+    id: 'jumpSecurityEvents',
+    text: _('Jump Security Events'),
+    width: '160',
   },
+]);
 
-  componentWillMount() {
-    this.props.fetchStatus();
-  },
+function getSafeTypeChartOtion(attackTypeMap) {
+  let safeTypeList = fromJS(
+    [{
+      value: 0,
+      name: 's',
+    }]
+  );
+  let totalNum = 0;
 
-  componentWillUnmount() {
-    this.props.leaveStatusScreen();
-  },
-  getClientsListOption() {
-    const ret = fromJS([
+  const apOption = {
+    tooltip: {
+      trigger: 'item',
+      formatter: '{a} <br/>{b} : {c} ({d}%)',
+    },
+    legend: {
+      orient: 'vertical',
+      x: 'left',
+    },
+    title: {
+      text: _('Attack Type Diagram'),
+      x: 'center',
+    },
+    series: [
       {
-        id: 'macaddress',
-        text: _('Attacker MAC'),
-        transform(val, item) {
-          return val || item.get('macaddress');
-        },
-      }, {
-        id: 'type',
-        text: _('Attack Type'),
-      }, {
-        id: 'time',
-        text: _('Attack Time'),
-      }, {
-        id: 'attackDetails',
-        text: _('Attack Details'),
-      }, {
-        id: 'protectionMeasures',
-        text: _('Protection Measures'),
-        width: '160',
-      }, {
-        id: 'jumpSecurityEvents',
-        text: _('Jump Security Events'),
-        filter: 'connectTime',
-        width: '160',
-      },
-    ]);
+        name: _('Status'),
+        type: 'pie',
+        radius: ['10%', '45%'],
+        center: ['50%', '58%'],
 
-    return ret;
-  },
-  getSafeTypeChartOtion() {
-    const apInfo = this.props.data.get('apInfo');
-    const safeTypeList = this.props.data.getIn(['clientInfo', 'producerlist'])
-        .map((val, key) => ({
-          value: val,
-          name: _(key),
-        }))
-        .toList()
-        .sort((prev, next) => prev.value <= next.value);
-
-    const apOption = {
-      tooltip: {
-        trigger: 'item',
-        formatter: '{a} <br/>{b} : {c} ' + _('apUnit') + ' ({d}%)',
-      },
-      legend: {
-        orient: 'vertical',
-        x: 'left',
-      },
-      title: {
-        text: _('Attack Type Diagram'),
-        subtext: _('Attack Number: ') + apInfo.get('total'),
-        x: 'center',
-      },
-      series: [
-        {
-          name: _('Status'),
-          type: 'pie',
-          radius: ['10%', '45%'],
-          center: ['50%', '58%'],
-
-          itemStyle: {
-            emphasis: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)',
-            },
+        itemStyle: {
+          emphasis: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)',
           },
         },
-      ],
-    };
-    const data = safeTypeList.toArray()
+      },
+    ],
+  };
 
-    apOption.legend.data = safeTypeList
-        .map((item) => item.name)
-        .toArray();
+  if (attackTypeMap) {
+    safeTypeList = attackTypeMap
+      .map((val, key) => ({
+        value: val,
+        name: _(key),
+      }))
+      .toList()
+      .sort((prev, next) => prev.value <= next.value);
+  }
+  apOption.legend.data = safeTypeList
+      .map((item) => {
+        totalNum += item.value;
+        return item.name;
+      })
+      .toArray();
 
-    apOption.series[0].data = data;
-    return apOption;
-  },
+  apOption.title.subtext = _('Attack Number: ') + totalNum;
 
+  apOption.series[0].data = safeTypeList.toArray();
+
+  return apOption;
+}
+
+const propTypes = {
+  screens: PropTypes.instanceOf(Map),
+  route: PropTypes.object,
+  initScreen: PropTypes.func,
+  leaveScreen: PropTypes.func,
+  fetchScreenData: PropTypes.func,
+
+};
+const defaultProps = {};
+
+// 原生的 react 页面
+export default class View extends React.Component {
+  constructor(props) {
+    super(props);
+    props.initScreen({
+      id: props.route.id,
+      formUrl: props.route.formUrl,
+      path: props.route.path,
+      isFetchInfinite: true,
+      fetchIntervalTime: 5000,
+    });
+  }
+
+  componentWillMount() {
+    this.props.fetchScreenData();
+  }
+
+  componentWillUnmount() {
+    this.props.leaveScreen();
+  }
   render() {
-    const clientsListOption = this.getClientsListOption();
+    const { screens } = this.props;
+    const curScreenId = screens.get('curScreenId');
+    const serverList = screens.getIn([curScreenId, 'data', 'list']);
+    const attackTypeMap = screens.getIn([curScreenId, 'data', 'attackType']);
+    const safeTypeChartOtion = getSafeTypeChartOtion(attackTypeMap);
 
     return (
       <div className="Stats">
@@ -136,19 +145,10 @@ export const Status = React.createClass({
             </div>
             <div className="stats-group-cell">
               <EchartReact
-                option={this.getSafeTypeChartOtion()}
+                option={safeTypeChartOtion}
                 className="stats-group-canvas"
                 style={{
                   width: '100%',
-                }}
-                onEvents={{
-                  click: (params) => {
-                    if (params.dataIndex === 0) {
-                      this.showOfflineAp();
-                    } else {
-                      window.location.hash = '#/main/devices';
-                    }
-                  },
                 }}
               />
             </div>
@@ -170,33 +170,29 @@ export const Status = React.createClass({
             <div className="stats-group-cell">
               <Table
                 className="table"
-                options={clientsListOption}
-                list={this.props.data.get('aplist')}
+                options={tableOptions}
+                list={serverList}
               />
             </div>
           </div>
-
         </div>
       </div>
     );
-  },
-});
+  }
+}
+
+View.propTypes = propTypes;
+View.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
-  const myState = state.safeStatus;
   return {
     app: state.app,
-    fetching: myState.get('fetching'),
-    data: myState.get('data'),
-    offlineAp: myState.get('offlineAp'),
-    query: myState.get('query'),
+    screens: state.screens,
   };
 }
 
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  actions
-)(Status);
-
-export const reducer = myReducer;
+  screenActions
+)(View);

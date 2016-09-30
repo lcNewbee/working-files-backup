@@ -2,6 +2,7 @@ import NotFound from 'shared/components/NotFound';
 import settingsReducer from 'shared/reducers/settings';
 import remoteActionMiddleware from 'shared/utils/lib/remote_action_middleware';
 import { combineReducers } from 'redux';
+import b28n from 'shared/b28n';
 import * as appActions from 'shared/actions/app';
 import appReducer from 'shared/reducers/app';
 
@@ -11,7 +12,6 @@ import guiConfig from './config.json';
 
 
 // 多语言工具
-const b28n = require('shared/b28n');
 const langCn = require('../lang/cn/core.json');
 const validateCn = require('../lang/cn/validate.json');
 const langEn = require('../lang/en/core.json');
