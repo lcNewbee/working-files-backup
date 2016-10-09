@@ -658,7 +658,6 @@ export default class QuickSetup extends React.Component {
                 onChange={data => this.props.updateItemSettings({
                   distance: data.value,
                 })}
-                {...validDistance}
               />
             </div>
           ) : null
@@ -869,7 +868,6 @@ export default class QuickSetup extends React.Component {
                 onChange={data => this.props.updateItemSettings({
                   distance: data.value,
                 })}
-                {...validDistance}
               />
             </div>
           ) : null
@@ -1139,7 +1137,6 @@ export default class QuickSetup extends React.Component {
                 onChange={data => this.props.updateItemSettings({
                   distance: data.value,
                 })}
-                {...validDistance}
               />
             </div>
           ) : null

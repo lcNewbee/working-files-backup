@@ -48,8 +48,10 @@ export default class ChannelUtilization extends React.Component {
   }
 
   componentWillUnmount() {
+    clearInterval(a);
     this.props.changePerChannelScanTime(3);
     this.props.changeChannelLen(0);
+    this.props.changeRemainTime(-1);
     this.props.changeUtiTableShowStatus(false);
   }
 

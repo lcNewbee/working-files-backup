@@ -35,7 +35,6 @@ const propTypes = {
   changeShowScanResults: PropTypes.func,
   changeSelectedIp: PropTypes.func,
   changeTimeClock: PropTypes.func,
-  changeChartData: PropTypes.func,
 };
 
 const defaultProps = {};
@@ -79,12 +78,6 @@ export default class SpeedTest extends React.Component {
     });
     props.initSelfState();
     props.changeShowScanResults(false);
-
-    this.props.changeChartData({
-      txdata: 0,
-      rxdata: 0,
-      totaldata: 0,
-    });
   }
 
   componentWillUnmount() {

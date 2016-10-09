@@ -79,6 +79,7 @@ export default class SiteSurvey extends React.Component {
     this.props.changeShowTableStatus(false);
   }
   componentWillUnmount() {
+    this.props.changeShowTableStatus(false);
     this.props.leaveSettingsScreen();
   }
   onScanBtnClick() {

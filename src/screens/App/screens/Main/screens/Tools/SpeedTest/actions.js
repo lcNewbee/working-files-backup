@@ -49,43 +49,22 @@ export function changeTimeClock(data) {
   };
 }
 
-export function changeChartData(data) {
-  return {
-    type: 'CHANGE_CHART_DATA',
-    data,
-  };
-}
-
 export function clickSpeedTestRunBtn() {
   return (dispatch, getState) => {
     const showAdvance = getState().speedtest.get('showAdvance');
     let query = getState().settings.get('curData');
     if (showAdvance === '1') {
       query = query.toJS();
+    } else {
+      query = query.delete('direction').delete('time').toJS();
     }
-    let n = 0;
-    const a = window.setInterval(() => {
-      if (n < query.time * 2) {
-        dispatch(appActions.save('goform/bandwidth_test', query))
+
+    dispatch(appActions.save('goform/bandwidth_test', query))
             .then((json) => {
               if (json.state && json.state.code === 2000) {
-                const txdata = json.data.tx === '' ? 0 : json.data.tx;
-                const rxdata = json.data.tx === '' ? 0 : json.data.rx;
-                const totaldata = json.data.total === '' ? 0 : json.data.total;
-                dispatch(changeChartData({
-                  txdata,
-                  rxdata,
-                  totaldata,
-                }));
-              } else if (json.state && json.state.code === 4000) {
-                window.alert(json.state.msg);
-                window.clearInterval(a);
+                dispatch(receiveTestResult(json.data));
+                // dispatch(toggleShowResultBtn());
               }
             });
-        n++;
-      } else {
-        window.clearInterval(a);
-      }
-    }, 500);
   };
 }
