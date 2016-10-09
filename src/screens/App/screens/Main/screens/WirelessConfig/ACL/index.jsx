@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Button } from 'shared/components/Button';
+import { Button, SaveButton } from 'shared/components/Button';
 import { fromJS, Map, List } from 'immutable';
 import { FormInput, FormGroup } from 'shared/components/Form';
 import validator from 'shared/utils/lib/validator';
@@ -17,6 +17,8 @@ const propTypes = {
   route: PropTypes.object,
   initSettings: PropTypes.func,
   fetchSettings: PropTypes.func,
+  saveSettings: PropTypes.func,
+  app: PropTypes.instanceOf(Map),
 
   updateItemSettings: PropTypes.func,
 
@@ -34,6 +36,9 @@ const propTypes = {
   leaveSettingsScreen: PropTypes.func,
   leaveScreen: PropTypes.func,
   resetVaildateMsg: PropTypes.func,
+  createModal: PropTypes.func,
+  changeSelectedSsid: PropTypes.func,
+  selectedSsid: PropTypes.number,
 };
 const macValidator = validator({
   rules: 'mac',
@@ -46,6 +51,7 @@ const defaultProps = fromJS({
   ],
 });
 
+const ssidSelectOptions = [];
 export default class ACL extends React.Component {
 
   constructor(props) {
@@ -68,11 +74,19 @@ export default class ACL extends React.Component {
     });
     this.props.fetchSettings()
         .then(() => {
-          const maclist = this.props.store.getIn(['curData', 'maclist']);
-          if (maclist !== undefined) {
-            console.log('len2', maclist.toJS().length);
-            this.props.initMacstatus(maclist.size);
+          const aclConfList = this.props.store.getIn(['curData', 'aclConfList']);
+          for (let i = 0; i < aclConfList.size; i++) {
+            const optionItem = {
+              value: i,
+              label: aclConfList.getIn([i, 'ssid']),
+            };
+            ssidSelectOptions.push(optionItem);
           }
+          console.log('ssidSelectOptions', ssidSelectOptions);
+          this.props.changeSelectedSsid({
+            selectedSsid: 0,
+            macListLen: aclConfList.getIn([0, 'macList']).size,
+          });
         });
     this.props.changeMacInput('');
   }
@@ -89,16 +103,16 @@ export default class ACL extends React.Component {
     const lastChar = value.charAt(value.length - 1);
     const preLen = this.props.macInput.get('preLen');
     const afterLen = val.length;
-    console.log(preLen, afterLen);
+    // console.log(preLen, afterLen);
     if (preLen < afterLen) { // 添加
       if (lastChar.match(/[0-9a-fA-F]/) !== null) {
-        console.log('match', value.charAt(value.length - 1).match(/[0-9a-fA-F]/));
+        // console.log('match', value.charAt(value.length - 1).match(/[0-9a-fA-F]/));
         // console.log('value', value);
         const macArr = val.split(':');
         const len = macArr.length;
         // console.log('macArr', macArr);
         if (macArr[len - 1].length <= 2) {
-          console.log(preLen, afterLen);
+          // console.log(preLen, afterLen);
           if (macArr[len - 1].length === 2 && len < 6) {
             val += ':';
           }
@@ -128,29 +142,41 @@ export default class ACL extends React.Component {
   onAddMacToLocalList() {
     const macInputVal = this.props.macInput.get('macValue');
     const str = macValidator.check(macInputVal);
-    const preList = this.props.store.getIn(['curData', 'maclist']);
+    const selectedSsid = this.props.selectedSsid;
+    const preList = this.props.store.getIn(['curData', 'aclConfList', selectedSsid, 'macList']);
     let afterList;
     if (preList.includes(macInputVal)) {
-      window.alert('该MAC地址已经在列表中存在！');
+      this.props.createModal({
+        id: 'settings',
+        role: 'alert',
+        text: '该MAC地址已经在列表中存在！',
+      });
     } else {
       afterList = preList.push(macInputVal);
       const listLen = afterList.size;
       if (str === undefined) {
+        const aclConfList = this.props.store.getIn(['curData', 'aclConfList'])
+                            .setIn([selectedSsid, 'macList'], afterList);
         this.props.updateItemSettings({
-          maclist: afterList,
+          aclConfList,
         });
         this.props.changePreLenInMacInput(0);
         this.props.changeMacInput('');
         this.props.initMacstatus(listLen);
       } else {
-        window.alert(str);
+        this.props.createModal({
+          id: 'settings',
+          role: 'alert',
+          text: str,
+        });
       }
     }
   }
 
   updateAclMacList() {
     const macStatusList = this.props.macStatus;
-    const macList = this.props.store.getIn(['curData', 'maclist']);
+    const selectedSsid = this.props.selectedSsid;
+    const macList = this.props.store.getIn(['curData', 'aclConfList', selectedSsid, 'macList']);
     let newList = fromJS([]);
     // let i = 0;
     macStatusList.forEach((val, index) => {
@@ -158,29 +184,48 @@ export default class ACL extends React.Component {
         newList = newList.push(macList.get(index));
       }
     });
+    const aclConfList = this.props.store.getIn(['curData', 'aclConfList'])
+                            .setIn([selectedSsid, 'macList'], newList);
     this.props.updateItemSettings({
-      maclist: newList,
+      aclConfList,
     });
     this.props.initMacstatus(newList.size);
   }
 
   render() {
     const store = this.props.store;
-    const maclist = store.getIn(['curData', 'maclist']);
+    const selectedSsid = this.props.selectedSsid;
+    console.log('selectedSsid', selectedSsid);
+    let maclist = store.getIn(['curData', 'aclConfList', selectedSsid, 'macList']);
+    console.log('maclist', maclist);
     if (maclist === undefined) {
       return null;
     }
+    maclist = maclist.toJS();
     const macStatus = this.props.macStatus.toJS();
     return (
       <div>
         <FormGroup
           label={_('Enabled')}
           type="checkbox"
+          checked={store.getIn(['curData', 'aclEnable']) === '1'}
+          onChange={() => {
+            const curState = store.getIn(['curData', 'aclEnable']);
+            this.props.updateItemSettings({
+              aclEnable: curState === '1' ? '0' : '1',
+            });
+          }}
         />
         <FormGroup
           label={_('SSID')}
           type="select"
           size="min"
+          options={ssidSelectOptions}
+          value={selectedSsid}
+          onChange={(data) => this.props.changeSelectedSsid({
+            selectedSsid: data.value,
+            macListLen: store.getIn(['curData', 'aclConfList', data.value, 'macList']).size,
+          })}
         />
         <FormGroup
           label={_('Filter Mode')}
@@ -189,6 +234,14 @@ export default class ACL extends React.Component {
             name="filtermode"
             type="radio"
             text={_('Allow Only')}
+            checked={store.getIn(['curData', 'aclConfList', selectedSsid, 'aclMode']) === 'allow'}
+            onClick={() => {
+              const aclConfList = store.getIn(['curData', 'aclConfList'])
+                                      .setIn([selectedSsid, 'aclMode'], 'allow');
+              this.props.updateItemSettings({
+                aclConfList,
+              });
+            }}
             style={{
               marginRight: '40px',
             }}
@@ -197,6 +250,14 @@ export default class ACL extends React.Component {
             name="filtermode"
             type="radio"
             text={_('Block Only')}
+            checked={store.getIn(['curData', 'aclConfList', selectedSsid, 'aclMode']) === 'deny'}
+            onClick={() => {
+              const aclConfList = store.getIn(['curData', 'aclConfList'])
+                                      .setIn([selectedSsid, 'aclMode'], 'deny');
+              this.props.updateItemSettings({
+                aclConfList,
+              });
+            }}
           />
         </FormGroup>
         <FormGroup
@@ -245,9 +306,11 @@ export default class ACL extends React.Component {
           />
         </div>
         <FormGroup>
-          <Button
+          <SaveButton
             theme="primary"
             text={_('Save')}
+            loading={this.props.app.get('saving')}
+            onClick={() => this.props.saveSettings('goform/set_acl')}
           />
         </FormGroup>
       </div>
@@ -261,12 +324,13 @@ ACL.defaultProps = defaultProps;
 function mapStateToProps(state) {
   // console.log(state);
   const myState = state.acl;
-  console.log('myState', myState);
+  // console.log('myState', myState);
   return {
     app: state.app,
     store: state.settings,
     macStatus: myState.get('macstatus'),
     macInput: myState.get('macInput'),
+    selectedSsid: myState.get('selectedSsid'),
   };
 }
 

@@ -187,7 +187,7 @@ export default class Basic extends React.Component {
           };
           utils.fetch('goform/get_country_info', saveInfo)
               .then((json2) => {
-                console.log('json2', json2.data);
+                // console.log('json2', json2.data);
                 if (json2.state && json2.state.code === 2000) {
                   this.props.receiveCountryInfo(json2.data);
                 }
@@ -247,7 +247,7 @@ export default class Basic extends React.Component {
     const {
       mac, ssid, security, frequency, channelWidth,
     } = this.props.selfState.get('selectedResult').toJS();
-    console.log(this.props.selfState.get('selectedResult').toJS());
+    // console.log(this.props.selfState.get('selectedResult').toJS());
     if (!this.props.selfState.get('selectedResult').isEmpty()) {
       let peers = this.props.store.getIn(['curData', 'vapList', '0', 'peers']);
       if (peers !== undefined) { peers = peers.set('0', mac); }
@@ -302,7 +302,7 @@ export default class Basic extends React.Component {
   }
   onCloseCountrySelectModal() {
     const code = this.props.store.getIn(['curData', 'countryCode']);
-    console.log(code);
+    // console.log(code);
     this.props.closeCountrySelectModal(code);
   }
 
@@ -317,7 +317,7 @@ export default class Basic extends React.Component {
 
   // countryMap为Object
   makeCountryOptions(map) {
-    console.log(map);
+    // console.log(map);
     const countryList = [];
     for (const key of Object.keys(map)) {
       const entry = {
@@ -625,17 +625,25 @@ export default class Basic extends React.Component {
           />
         </Modal>{ /* SSID 扫描弹出框 */ }
         <div className="stats-group-cell">
-          <h3>
           {
             this.props.selfState.get('showRadioSetting') ? (
               <icon
                 className="fa fa-minus-square-o"
                 size="lg"
-                style={{
-                  marginRight: '4px',
-                }}
                 onClick={() => this.props.changeShowRadioSetting(false)}
-              />
+              >
+                <span
+                  style={{
+                    fontSize: '1.17em',
+                    fontFamily: 'Microsoft YaHei',
+                    fontWeight: 'bold',
+                    paddingLeft: '4px',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {_('Radio Settings')}
+                </span>
+              </icon>
             ) : (
               <icon
                 className="fa fa-plus-square"
@@ -644,11 +652,21 @@ export default class Basic extends React.Component {
                   marginRight: '4px',
                 }}
                 onClick={() => this.onShowIconClick('RadioSetting', 'goform/get_base_wl_info')}
-              />
+              >
+                <span
+                  style={{
+                    fontSize: '1.17em',
+                    fontFamily: 'Microsoft YaHei',
+                    fontWeight: 'bold',
+                    paddingLeft: '4px',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {_('Radio Settings')}
+                </span>
+              </icon>
             )
           }
-            {_('Radio Settings')}
-          </h3>
         </div>
         {
           this.props.selfState.get('showRadioSetting') ? (
@@ -778,7 +796,6 @@ export default class Basic extends React.Component {
           ) : null
         }
         <div className="stats-group-cell">
-          <h3>
           {
             this.props.selfState.get('showSsidSetting') ? (
               <icon
@@ -788,7 +805,19 @@ export default class Basic extends React.Component {
                   marginRight: '4px',
                 }}
                 onClick={() => this.props.changeShowSsidSetting(false)}
-              />
+              >
+                <span
+                  style={{
+                    fontSize: '1.17em',
+                    fontFamily: 'Microsoft YaHei',
+                    fontWeight: 'bold',
+                    paddingLeft: '4px',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {_('SSID Settings')}
+                </span>
+              </icon>
             ) : (
               <icon
                 className="fa fa-plus-square"
@@ -797,11 +826,21 @@ export default class Basic extends React.Component {
                   marginRight: '4px',
                 }}
                 onClick={() => this.onShowIconClick('SsidSetting', 'goform/get_wl_info')}
-              />
+              >
+                <span
+                  style={{
+                    fontSize: '1.17em',
+                    fontFamily: 'Microsoft YaHei',
+                    fontWeight: 'bold',
+                    paddingLeft: '4px',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {_('SSID Settings')}
+                </span>
+              </icon>
             )
           }
-          {_('SSID Settings')}
-          </h3>
         </div>
         {
           this.props.selfState.get('showSsidSetting') ? (
@@ -1201,7 +1240,6 @@ export default class Basic extends React.Component {
           ) : null
         }
         <div className="stats-group-cell">
-          <h3>
           {
             this.props.selfState.get('showMultiSsid') ? (
               <icon
@@ -1211,7 +1249,19 @@ export default class Basic extends React.Component {
                   marginRight: '4px',
                 }}
                 onClick={() => this.props.changeShowMultiSsid(false)}
-              />
+              >
+                <span
+                  style={{
+                    fontSize: '1.17em',
+                    fontFamily: 'Microsoft YaHei',
+                    fontWeight: 'bold',
+                    paddingLeft: '4px',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {_('Multiple SSID')}
+                </span>
+              </icon>
             ) : (
               <icon
                 className="fa fa-plus-square"
@@ -1220,11 +1270,21 @@ export default class Basic extends React.Component {
                   marginRight: '4px',
                 }}
                 onClick={() => this.onShowIconClick('MultiSsid', 'goform/get_wl_info')}
-              />
+              >
+                <span
+                  style={{
+                    fontSize: '1.17em',
+                    fontFamily: 'Microsoft YaHei',
+                    fontWeight: 'bold',
+                    paddingLeft: '4px',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {_('Multiple SSID')}
+                </span>
+              </icon>
             )
           }
-            {_('Multiple SSID')}
-          </h3>
         </div>
         {
           this.props.selfState.get('showMultiSsid') ? (
@@ -1235,7 +1295,10 @@ export default class Basic extends React.Component {
                 list={(() => {
                   const list = fromJS([]);
                   if (curData.has('vapList')) {
-                    return curData.get('vapList');
+                    if (curData.get('wirelessMode') !== 'sta') {
+                      return curData.get('vapList');
+                    }
+                    return curData.get('vapList').setSize(1);
                   }
                   return list;
                 })()

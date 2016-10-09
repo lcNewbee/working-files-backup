@@ -180,14 +180,14 @@ export default class NetworkSettings extends React.Component {
           <FormInput
             type="radio"
             name="networkmode"
-            text="DHCP"
+            text={_('DHCP')}
             checked={proto === 'dhcp'}
             onChange={this.onDhcpClick}
           />&nbsp;&nbsp;&nbsp;&nbsp;
           <FormInput
             type="radio"
             name="networkmode"
-            text="Static"
+            text={_('Static')}
             checked={proto === 'static'}
             onChange={this.onStaticClick}
           />
@@ -285,7 +285,7 @@ export default class NetworkSettings extends React.Component {
         >
           <FormInput
             type="radio"
-            text="Untagged"
+            text={_('Untagged')}
             name="vlantagging"
             checked={vlanTagging === 'untagged'}
             onClick={() => {
@@ -293,10 +293,10 @@ export default class NetworkSettings extends React.Component {
                 vlanTagging: 'untagged',
               });
             }}
-          />
+          />&nbsp;&nbsp;&nbsp;&nbsp;
           <FormInput
             type="radio"
-            text="Tagged"
+            text={_('Tagged')}
             name="vlantagging"
             checked={vlanTagging === 'tagged'}
             onClick={() => {

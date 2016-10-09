@@ -1,4 +1,5 @@
 {
+
 "state":{
 	"code":2000,
 	"msg":"success"
@@ -6,16 +7,25 @@
 "data":{
 	"wirelessMode":"sta",
 	"vapList":[
-			{
-			"ssid":"axilspot2",
-			"hideSsid": "0",
-      "vlanId": "1",
-      "enable": "1",
-			"peers":
-			["14:ff:00:a0:c1:ff",
-			 "14:ff:00:a0:c1:f0"],
+		{
+			"ssid":"axilspot1",
+			"apMac":"11:22:33:44:55:66",
 			"security":{
-				"mode":"wep",
+				"cipher":"aes",
+				"key":"12345678",
+				"mode":"none",
+				"auth":"open",
+				"keyLength":"64",
+				"keyType":"Hex",
+				"keyIndex":"1"
+			}
+		},
+		{
+			"ssid":"axilspot2",
+			"apMac":"11:22:33:44:55:66",
+			"security":{
+				"mode":"wpa",
+				"cipher":"aes",
 				"key":"12345678",
 				"auth":"open",
 				"keyLength":"64",

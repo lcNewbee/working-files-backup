@@ -83,22 +83,14 @@ export default class SiteSurvey extends React.Component {
   }
   onScanBtnClick() {
     this.props.changeShowTableStatus(false);
-    /**
-    const fetchUrl = this.props.route.fetchUrl;
-    this.props.fetch(fetchUrl)
-              .then((json) => {
-                if (json.state && json.state.code === 2000) {
-                  this.props.reciveFetchSettings(json.data);
-                  this.props.changeShowTableStatus(true);
-                }
-              });
-    */
-    this.props.fetchSettings();
-    this.props.changeShowTableStatus(true);
+    this.props.fetchSettings()
+        .then(() => {
+          this.props.changeShowTableStatus(true);
+        });
   }
 
   render() {
-    const { siteList } = this.props.store.get('curData', 'siteList').toJS();
+    const { siteList } = this.props.store.get('curData').toJS();
     const fetching = this.props.store.getIn([this.props.route.id, 'fetching']);
     return (
       <div>

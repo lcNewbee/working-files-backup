@@ -106,6 +106,12 @@
   "Maintenance":"设备维护",
   "Hide": "隐藏",
   "Management VLAN ID": "管理VLAN ID",
-  "VLAN Tagging": "Tag方式",
-  "Untagged VLAN ID": "不标记VLAN ID"
+  "VLAN Tagging": "VLAN启用",
+  "Untagged VLAN ID": "直通VLAN ID",
+  "Untagged": "启用",
+  "Tagged": "禁用",
+  "Static": "静态IP",
+  "DHCP": "动态获取",
+
+  "System Maintenance": "系统维护"
 }

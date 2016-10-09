@@ -32,6 +32,6 @@ export default class MacList extends React.Component {
 
 MacList.propTypes = {
   onMacClick: PropTypes.func,
-  macStatusList: PropTypes.Array,
-  maclist: PropTypes.Array,
+  macStatusList: PropTypes.instanceOf(Array),
+  maclist: PropTypes.instanceOf(Array),
 };
