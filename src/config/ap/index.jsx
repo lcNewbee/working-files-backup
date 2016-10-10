@@ -172,7 +172,7 @@ const routes = [{
           id: 'advance',
           path: '/main/wirelessconfig/advance',
           fetchUrl: 'goform/get_adv_wl_info',
-          saveUrl: 'goform/set_adv_wl_info',
+          saveUrl: 'goform/set_adv_wireless',
           text: _('Advance'),
           component: sAdvance.Screen,
         }, {

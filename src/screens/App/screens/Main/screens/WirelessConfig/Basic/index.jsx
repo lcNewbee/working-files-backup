@@ -91,9 +91,10 @@ const keyTypeOptions = [
 ];
 
 const radioModeOptions = [
-  { value: 'ac', label: '802.11ac' },
-  { value: 'ng', label: '802.11ng' },
-  { value: 'a', label: '802.11a' },
+  { value: 'auto', label: 'auto' },
+  { value: '11ac', label: '802.11ac' },
+  { value: '11na', label: '802.11a+n' },
+  { value: '11a', label: '802.11a' },
 ];
 
 const channelWidthOptions = [
@@ -309,7 +310,7 @@ export default class Basic extends React.Component {
   getCountryNameFromCode(code, map) {
     for (const name of Object.keys(map)) {
       if (map[name] === code) {
-        return name;
+        return _(name);
       }
     }
     return '';

@@ -3,7 +3,7 @@ import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { Map, fromJS } from 'immutable';
 import {
-  Button, FormGroup, FormInput, Modal, Table, SaveButton,
+  Button, FormGroup, FormInput, Modal, Table,
 } from 'shared/components';
 import validator from 'shared/utils/lib/validator';
 import { bindActionCreators } from 'redux';
@@ -34,6 +34,12 @@ const propTypes = {
   changeShowScanResults: PropTypes.func,
   changeSelectedIp: PropTypes.func,
   changeTimeClock: PropTypes.func,
+  changeQueryData: PropTypes.func,
+  resetVaildateMsg: PropTypes.func,
+  toggleShowResultBtn: PropTypes.func,
+  changeStopWait: PropTypes.func,
+  save: PropTypes.func,
+  receiveTestResult: PropTypes.func,
 };
 
 const defaultProps = {};
@@ -59,19 +65,21 @@ export default class SpeedTest extends React.Component {
   }
 
   componentWillMount() {
+    const defaultData = {
+      ip: '192.168.1.10',
+      time: '30',
+      direction: '0',
+      pocketSize: '64',
+    };
     const props = this.props;
     clearInterval(a);
     props.initSettings({
       settingId: props.route.id,
       fetchUrl: props.route.formUrl,
       saveUrl: props.route.saveUrl,
-      defaultData: {
-        ip: '192.168.1.10',
-        time: '30',
-        direction: '0',
-      },
+      defaultData,
     });
-    props.initSelfState();
+    props.initSelfState(defaultData);
     props.changeShowScanResults(false);
   }
 
@@ -115,6 +123,42 @@ export default class SpeedTest extends React.Component {
     const ip = item.get('ip');
     this.props.changeSelectedIp(ip);
   }
+
+  onRunTest() {
+    this.props.toggleShowResultBtn('0');
+    this.props.changeStopWait(false);
+    this.props.validateAll()
+        .then(msg => {
+          if (msg.isEmpty()) {
+            // this.props.clickSpeedTestRunBtn();
+            const query = this.props.store.get('curData').toJS();
+            this.props.save('goform/bandwidth_test', query)
+                .then((json) => {
+                  if (json.state && json.state.code === 2000) {
+                    this.props.receiveTestResult(json.data);
+                    this.props.changeStopWait(true);
+                    this.props.toggleShowResultBtn('1');
+                    clearInterval(a);
+                  } else if (json.state && json.state.code !== 2000) {
+                    clearInterval(a);
+                    this.props.changeTimeClock('Test failed !' + json.state.msg);
+                  }
+                });
+            let clock = parseInt(this.props.store.getIn(['curData', 'time']), 10);
+            this.props.changeTimeClock(clock);
+            a = setInterval(() => {
+              const timeStr = (clock--).toString();
+              this.props.changeTimeClock(timeStr);
+              if (clock === 0) {
+                const txt = _('The test is not complete, please keep waiting...');
+                this.props.changeTimeClock(txt);
+                clearInterval(a);
+              }
+            }, 1000);
+          }
+        });
+  }
+
   ceateIpTableList() {
     const immutList = this.props.store.getIn(['curData', 'ipList']);
     const list = [];
@@ -126,31 +170,13 @@ export default class SpeedTest extends React.Component {
     }
     return list;
   }
-  onRunTest() {
-    this.props.toggleShowResultBtn('0');
-    this.props.validateAll()
-        .then(msg => {
-          if (msg.isEmpty()) {
-            this.props.clickSpeedTestRunBtn();
-            let clock = parseInt(this.props.store.getIn(['curData', 'time']), 10);
-            this.props.changeTimeClock(clock);
-            a = setInterval(() => {
-              const timeStr = (clock--).toString();
-              this.props.changeTimeClock(timeStr);
-              if (clock === 0) {
-                this.props.changeTimeClock('');
-                this.props.toggleShowResultBtn('1');
-                clearInterval(a);
-              }
-            }, 1000);
-          }
-        });
-  }
   render() {
     const {
-      ip, username, password, port, time, direction,
+      ip, time, direction, pocketSize,
     } = this.props.store.get('curData').toJS();
-    const { showResults, showAdvance, bandwidth, rx, tx, total } = this.props.selfState.toJS();
+    const {
+      showResults, showAdvance, stopWait, rx, tx, total, query,
+    } = this.props.selfState.toJS();
     const { validIp, validTime } = this.props.validateOption;
     const scanIpOptions = fromJS([
       {
@@ -173,7 +199,8 @@ export default class SpeedTest extends React.Component {
       },
     ]);
     return (
-      <div>
+      <div className="o-form">
+        <div className="o-form__legend">{_('Speed Test')}</div>
         <div className="clearfix">
           <FormGroup
             className="fl"
@@ -217,93 +244,146 @@ export default class SpeedTest extends React.Component {
           ) : null
         }
         <FormGroup
-          type="checkbox"
-          label={_('Advanced Options')}
-          value={showAdvance === '1'}
-          onClick={this.props.toggleShowAdvanceBtn}
-        />
-        {
+          type="radio"
+          label={_('Flow Direction')}
+        >
+          <FormInput
+            type="radio"
+            name="directionSelect"
+            text={_('Duplex')}
+            checked={direction === '0'}
+            onChange={() => this.props.updateItemSettings({
+              direction: '0',
+            })}
+          />
+          <FormInput
+            type="radio"
+            name="directionSelect"
+            text={_('Receive')}
+            checked={direction === '1'}
+            onChange={() => this.props.updateItemSettings({
+              direction: '1',
+            })}
+          />
+          <FormInput
+            type="radio"
+            name="directionSelect"
+            text={_('Transmit')}
+            checked={direction === '2'}
+            onChange={() => this.props.updateItemSettings({
+              direction: '2',
+            })}
+          />
+        </FormGroup>
+        <div className="o-form__legend">{_('Bandwidth Status')}</div>
+        <FormGroup>
+          <div
+            className="stats-group clearfix"
+            style={{
+              width: '180px',
+            }}
+          >
+            <div className="stats-group-cell fl">
+              <div>{rx + 'Mbps'}</div>
+              <div>{_('Download')}</div>
+            </div>
+            <div className="stats-group-cell fr">
+              <div>{tx + 'Mbps'}</div>
+              <div>{_('Upload')}</div>
+            </div>
+          </div>
+          <div>
+            <Button
+              theme="primary"
+              text={_('Run Test')}
+              // loading={this.props.selfState.get('time') !== ''}
+              // disabled={stopWait}
+              onClick={this.onRunTest}
+            />
+            <Button
+              theme="primary"
+              text={_('Advanced Options')}
+              onClick={() => {
+                const pQuery = {
+                  time,
+                  pocketSize,
+                };
+                this.props.changeQueryData(pQuery);
+                this.props.toggleShowAdvanceBtn();
+              }}
+            />
+          </div>
+        </FormGroup>
+        {// 测速高级配置弹出页面
           (showAdvance === '1') ? (
-            <div>
+            <Modal
+              isShow
+              title={_('Advanced Settings')}
+              onClose={() => {
+                const pQuery = {
+                  time,
+                  pocketSize,
+                };
+                this.props.changeQueryData(pQuery);
+                this.props.toggleShowAdvanceBtn();
+              }}
+              onOk={() => {
+                this.props.validateAll()
+                    .then(() => {
+                      this.props.updateItemSettings(query);
+                      this.props.toggleShowAdvanceBtn();
+                    });
+              }}
+            >
               <FormGroup
-                type="radio"
-                label={_('Flow Direction')}
-              >
-                <FormInput
-                  type="radio"
-                  name="directionSelect"
-                  text={_('Duplex')}
-                  checked={direction === '0'}
-                  onChange={() => this.props.updateItemSettings({
-                    direction: '0',
-                  })}
-                />
-                <FormInput
-                  type="radio"
-                  name="directionSelect"
-                  text={_('Receive')}
-                  checked={direction === '1'}
-                  onChange={() => this.props.updateItemSettings({
-                    direction: '1',
-                  })}
-                />
-                <FormInput
-                  type="radio"
-                  name="directionSelect"
-                  text={_('Transmit')}
-                  checked={direction === '2'}
-                  onChange={() => this.props.updateItemSettings({
-                    direction: '2',
-                  })}
-                />
-              </FormGroup>
+                type="number"
+                label={_('Pocket Size')}
+                value={this.props.selfState.getIn(['query', 'pocketSize'])}
+                onChange={(data) => {
+                  const pQuery = this.props.selfState.get('query').set('pocketSize', data.value);
+                  this.props.changeQueryData(pQuery);
+                }}
+              />
               <FormGroup
                 type="number"
                 label={_('Test Duration')}
-                value={time}
-                onChange={(data) => this.props.updateItemSettings({
-                  time: data.value,
-                })}
+                value={this.props.selfState.getIn(['query', 'time'])}
+                onChange={(data) => {
+                  const pQuery = this.props.selfState.get('query').set('time', data.value);
+                  this.props.changeQueryData(pQuery);
+                }}
                 required
                 {...validTime}
               />
-            </div>
+            </Modal>
           ) : null
         }
-        <FormGroup>
-          <Button
-            theme="primary"
-            text={_('Run Test')}
-            loading={this.props.selfState.get('time') !== ''}
-            disabled={this.props.selfState.get('time').length !== 0}
-            onClick={this.onRunTest}
-          />
-          {
-            this.props.selfState.get('time') === '' ? null : (
-              <span>{_('Time Remain: ') + this.props.selfState.get('time') + 's'}</span>
-            )
-          }
-        </FormGroup>
-        {
-          (showResults === '1') ? (
-            <div className="result">
-              <FormGroup
-                type="text"
-                label={_('rx')}
-                value={rx}
-              />
-              <FormGroup
-                type="text"
-                label={_('tx')}
-                value={tx}
-              />
-              <FormGroup
-                type="text"
-                label={_('total')}
-                value={total}
-              />
-            </div>
-          ) : null
+        {// 测试过程中提示用户等待的弹出页面
+          !stopWait ? (
+            <Modal
+              size="lg"
+              title="ceshi"
+              noFooter
+              isShow
+              onClose={() => {
+                this.props.save('goform/stop_bandwidth_test')
+                    .then((json) => {
+                      if (json.state && json.state.code === 2000) {
+                        this.props.changeStopWait(true);
+                        clearInterval(a);
+                      }
+                    });
+              }}
+            >
+              {
+                /[0-9]+/.test(this.props.selfState.get('time')) ? (
+                  <span>{_('Time Remain: ') + this.props.selfState.get('time') + 's'}</span>
+                ) : (
+                  <span>{this.props.selfState.get('time')}</span>
+                )
+              }
+            </Modal>
+            ) : null
         }
       </div>
     );

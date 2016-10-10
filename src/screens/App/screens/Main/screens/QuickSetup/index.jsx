@@ -242,7 +242,7 @@ export default class QuickSetup extends React.Component {
   getCountryNameFromCode(code, map) {
     for (const name of Object.keys(map)) {
       if (map[name] === code) {
-        return name;
+        return _(name);
       }
     }
     return '';
@@ -264,7 +264,6 @@ export default class QuickSetup extends React.Component {
 
   // countryMap为Object
   makeCountryOptions(map) {
-    console.log(map);
     const countryList = [];
     for (const key of Object.keys(map)) {
       const entry = {

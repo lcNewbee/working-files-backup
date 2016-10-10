@@ -49,22 +49,39 @@ export function changeTimeClock(data) {
   };
 }
 
-export function clickSpeedTestRunBtn() {
-  return (dispatch, getState) => {
-    const showAdvance = getState().speedtest.get('showAdvance');
-    let query = getState().settings.get('curData');
-    if (showAdvance === '1') {
-      query = query.toJS();
-    } else {
-      query = query.delete('direction').delete('time').toJS();
-    }
-
-    dispatch(appActions.save('goform/bandwidth_test', query))
-            .then((json) => {
-              if (json.state && json.state.code === 2000) {
-                dispatch(receiveTestResult(json.data));
-                // dispatch(toggleShowResultBtn());
-              }
-            });
+export function changeQueryData(data) {
+  return {
+    type: 'CHANGE_QUERY_DATA',
+    data,
   };
 }
+
+export function changeShowWaitingModal(data) {
+  return {
+    type: 'CHANGE_SHOW_WAITING_MODAL',
+    data,
+  };
+}
+
+export function changeStopWait(data) {
+  return {
+    type: 'CHANGE_STOP_WAIT',
+    data,
+  };
+}
+
+// export function clickSpeedTestRunBtn() {
+//   return (dispatch, getState) => {
+//     // const showAdvance = getState().speedtest.get('showAdvance');
+//     const query = getState().settings.get('curData').toJS();
+
+//     dispatch(appActions.save('goform/bandwidth_test', query))
+//             .then((json) => {
+//               if (json.state && json.state.code === 2000) {
+//                 dispatch(receiveTestResult(json.data));
+//                 dispatch(changeStopWait(true));
+//               }
+//             });
+//   };
+// }
+
