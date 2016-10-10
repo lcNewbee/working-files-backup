@@ -76,7 +76,7 @@ const propTypes = {
   addListItem: PropTypes.func,
   editListItemByIndex: PropTypes.func,
   closeListItemModal: PropTypes.func,
-  updateEditListItem: PropTypes.func,
+  updateCurEditListItem: PropTypes.func,
 
   // React node 元素
   children: PropTypes.node,
@@ -303,25 +303,32 @@ class ListInfo extends React.Component {
     const page = store.getIn([myListId, 'data', 'page']);
     const list = store.getIn([myListId, 'data', 'list']);
     const curSettings = store.getIn([myListId, 'curSettings']);
-    const editData = store.getIn([myListId, 'data', 'edit']);
+    const editData = store.getIn([myListId, 'curListItem']);
     const query = store.getIn([myListId, 'query']);
     const actionQuery = store.getIn([myListId, 'actionQuery']);
+    const actionType = actionQuery.get('action');
     const saveUrl = route.saveUrl || route.formUrl;
     const fetchUrl = route.fetchUrl || route.formUrl;
     const leftChildrenNode = [];
     let pageSelectClassName = 'fr';
+    let isEditModelshow = false;
 
     // 数据未初始化不渲染
     if (myListId === 'base') {
       return null;
     }
 
+    // 判断是否显示修改或添加 model
+    if (actionType === 'edit' || actionType === 'add') {
+      isEditModelshow = true;
+    }
+
+    // 处理每页显示下拉框的位置
     if (!searchable && !queryFormOptions && !actionBarChildren &&
         (actionable && !addable)) {
       pageSelectClassName = 'fl';
     }
 
-    //
     if (actionable && addable) {
       leftChildrenNode.push(
         <Button
@@ -345,7 +352,6 @@ class ListInfo extends React.Component {
         />
       );
     }
-
     if (actionable && selectable && deleteable) {
       leftChildrenNode.push(
         <Button
@@ -433,8 +439,8 @@ class ListInfo extends React.Component {
         {
           editFormOptions ? (
             <Modal
-              isShow={!editData.isEmpty()}
-              title={editData.get('myTitle')}
+              isShow={isEditModelshow}
+              title={actionQuery.get('myTitle')}
               onOk={this.onSave}
               onClose={this.onCloseEditModal}
               size={modalSize}
@@ -450,7 +456,7 @@ class ListInfo extends React.Component {
                 validateAt={app.get('validateAt')}
                 options={editFormOptions}
                 onSave={this.onSave}
-                onChangeData={this.props.updateEditListItem}
+                onChangeData={this.props.updateCurEditListItem}
                 onValidError={this.props.reportValidError}
                 hasSaveButton
               />

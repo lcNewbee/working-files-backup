@@ -81,9 +81,9 @@ export function changeListActionQuery(payload) {
     payload,
   };
 }
-export function updateEditListItem(data, sync) {
+export function updateCurEditListItem(data, sync) {
   return {
-    type: 'UPDATE_EDIT_LIST_ITEM',
+    type: 'UPDATE_CUR_EDIT_LIST_ITEM',
     payload: data,
     meta: {
       sync,
@@ -101,20 +101,26 @@ export function updateListItemByIndex(index, data) {
 }
 export function editListItemByIndex(index, action) {
   return {
-    type: 'EDIT_LIST_ITEM_BY_INDEX',
+    type: 'ACTIVE_LIST_ITEM',
     payload: {
-      index,
+      keyName: 'index',
+      val: index,
+    },
+    meta: {
       action,
     },
   };
 }
 
-export function editListItemByKey(keyName, val) {
+export function activeListItem(keyName, val, action) {
   return {
-    type: 'EDIT_LIST_ITEM_BY_KEY',
+    type: 'ACTIVE_LIST_ITEM',
     payload: {
       keyName,
       val,
+    },
+    meta: {
+      action,
     },
   };
 }
@@ -156,6 +162,10 @@ export function onListAction(url) {
     if (actionType === 'add' || actionType === 'edit') {
       actionQuery = actionQuery.merge(editMap).toJS();
     }
+
+    // 删除不需要传到后台的属性属性
+    delete actionQuery.myTitle;
+    delete actionQuery.index;
 
     return dispatch(appActions.save(url || saveUrl, actionQuery))
       .then((json) => {

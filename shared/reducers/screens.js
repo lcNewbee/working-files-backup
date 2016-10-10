@@ -9,12 +9,20 @@ const defaultItem = fromJS({
   },
   data: {
     settings: {},
-    edit: {},
     list: [],
   },
   curList: [],
+
+  // 页面全局配置
   curSettings: {},
+
+  // 当前正在操作的列表项
+  curListItem: {},
+
+  // 操作相关查询对象
   actionQuery: {},
+
+  // 列表某项添加或修改时默认数据
   defaultEditData: {},
 });
 const defaultState = fromJS({
@@ -95,9 +103,9 @@ function selectedListItem(state, action, curScreenName) {
 }
 
 
-function updateEditListItem(curScreenName, state, action) {
-  const curIndex = state.getIn([curScreenName, 'data', 'edit', 'index']);
-  let ret = state.mergeDeepIn([curScreenName, 'data', 'edit'], action.payload);
+function updateCurEditListItem(curScreenName, state, action) {
+  const curIndex = state.getIn([curScreenName, 'actionQuery', 'index']);
+  let ret = state.mergeDeepIn([curScreenName, 'curListItem'], action.payload);
 
   if (action.meta.sync) {
     ret = ret.mergeDeepIn([curScreenName, 'data', 'list', curIndex], action.payload);
@@ -106,26 +114,31 @@ function updateEditListItem(curScreenName, state, action) {
   return ret;
 }
 
-function findListItemByKey(list, option) {
-  return list.find(
-    item => item.get(option.keyName) === option.val
-  );
-}
-
-function editListItemByKey(state, curScreenName, action) {
+function activeListItem(state, curScreenName, action) {
   const curList = state.getIn([curScreenName, 'data', 'list']);
-  const myItem = findListItemByKey(curList, action.payload);
   const defaultEditData = state.getIn([curScreenName, 'defaultEditData']) || fromJS({});
+  let listItemIndex = 0;
+  let myItem = fromJS({});
+
+  if (action.payload.keyName === 'index') {
+    listItemIndex = action.payload.val;
+  } else {
+    listItemIndex = curList.findIndex(
+      item => item.get(action.payload.keyName) === action.payload.val
+    );
+  }
+
+  myItem = curList.get(listItemIndex);
 
   return state.setIn(
-    [curScreenName, 'data', 'edit'],
-    defaultEditData
-      .merge(myItem)
-      .merge({
-        myTitle: `${_('Edit')}: ${action.payload.val}`,
-      })
-  )
-  .setIn([curScreenName, 'actionQuery', 'action'], 'edit');
+      [curScreenName, 'curListItem'],
+      defaultEditData.merge(myItem)
+    )
+    .mergeIn([curScreenName, 'actionQuery'], {
+      action: action.meta.action || 'edit',
+      myTitle: `${_('Edit')}: ${action.payload.val}`,
+      index: listItemIndex,
+    });
 }
 
 export default function (state = defaultState, action) {
@@ -165,18 +178,19 @@ export default function (state = defaultState, action) {
 
     case 'ADD_LIST_ITEM':
       return state.setIn(
-        [curScreenName, 'data', 'edit'],
-        fromJS({
-          myTitle: _('Add'),
-        }).merge(action.payload || defaultEditData)
+        [curScreenName, 'curListItem'],
+        fromJS({}).merge(action.payload || defaultEditData)
       )
-      .setIn([curScreenName, 'actionQuery', 'action'], 'add');
+      .mergeIn([curScreenName, 'actionQuery'], {
+        action: 'add',
+        myTitle: _('Add'),
+      });
 
     case 'SELECT_LIST_ITEM':
       return selectedListItem(state, action, curScreenName);
 
-    case 'UPDATE_EDIT_LIST_ITEM':
-      return updateEditListItem(curScreenName, state, action);
+    case 'UPDATE_CUR_EDIT_LIST_ITEM':
+      return updateCurEditListItem(curScreenName, state, action);
 
     case 'UPDATE_LIST_ITEM_BY_INDEX':
       return state.mergeDeepIn(
@@ -184,24 +198,11 @@ export default function (state = defaultState, action) {
         action.payload,
       );
 
-    case 'EDIT_LIST_ITEM_BY_KEY':
-      return editListItemByKey(state, curScreenName, action);
-
-    case 'EDIT_LIST_ITEM_BY_INDEX':
-      return state.setIn(
-          [curScreenName, 'data', 'edit'],
-          defaultEditData.merge(state.getIn([curScreenName, 'data', 'list', action.payload.index])).merge({
-            myTitle: `${_('Edit')}: ${action.payload.index}`,
-            index: action.payload.index,
-          })
-        )
-        .setIn(
-          [curScreenName, 'actionQuery', 'action'],
-          action.payload.action || 'edit'
-        );
+    case 'ACTIVE_LIST_ITEM':
+      return activeListItem(state, curScreenName, action);
 
     case 'CLOSE_LIST_ITEM_MODAL':
-      return state.setIn([curScreenName, 'data', 'edit'], fromJS({}))
+      return state.setIn([curScreenName, 'curListItem'], fromJS({}))
         .setIn([curScreenName, 'actionQuery', 'action'], '');
 
     default:
