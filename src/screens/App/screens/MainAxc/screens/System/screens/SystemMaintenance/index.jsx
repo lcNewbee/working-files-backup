@@ -1,13 +1,27 @@
 import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
-import { Map } from 'immutable';
+import { Map, List } from 'immutable';
 import { bindActionCreators } from 'redux';
 import {
   FormGroup, Button,
 } from 'shared/components';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/settings';
+
+const languageOptions = List(b28n.getOptions().supportLang).map((item) => (
+  {
+    value: item,
+    label: b28n.langMap[item] || 'English',
+  }
+)).toJS();
+
+function onChangeLang(data) {
+  if (b28n.getLang() !== data.value) {
+    b28n.setLang(data.value);
+    window.location.reload();
+  }
+}
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
@@ -109,6 +123,17 @@ export default class View extends React.Component {
               onClick={this.onSave}
             />
           </FormGroup>
+        </fileset>
+
+        <fileset>
+          <legend className="o-form__legend">{_('Language')}</legend>
+          <FormGroup
+            label={_('Select Language')}
+            type="select"
+            options={languageOptions}
+            value={b28n.getLang()}
+            onChange={onChangeLang}
+          />
         </fileset>
       </form>
     );
