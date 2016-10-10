@@ -26,6 +26,8 @@ paths = gulp.paths = {
   pubWebpack: './webpack.config.production.js',
 };
 
+require('./tools/gulp/demo');
+
 // 删除
 gulp.task('clean', function (callback) {
   return del([paths.build, paths.release]);
