@@ -82,7 +82,7 @@ const propTypes = {
   addListItem: PropTypes.func,
   closeListItemModal: PropTypes.func,
   editListItemByIndex: PropTypes.func,
-  updateEditListItem: PropTypes.func,
+  updateCurEditListItem: PropTypes.func,
   onListAction: PropTypes.func,
 };
 const defaultProps = {};
@@ -113,7 +113,7 @@ export default class View extends React.Component {
       const data = {};
 
       data[name] = item.value;
-      this.props.updateEditListItem(data);
+      this.props.updateCurEditListItem(data);
     };
   }
   onUpdateTime(momentObj, ddd) {
@@ -121,12 +121,12 @@ export default class View extends React.Component {
   }
 
   getCurrData(name) {
-    return this.props.store.getIn([this.props.route.id, 'data', 'edit', name]) || '';
+    return this.props.store.getIn([this.props.route.id, curListItem, name]) || '';
   }
 
   render() {
     const { route, store } = this.props;
-    const editData = store.getIn([route.id, 'data', 'edit']) || Map({});
+    const editData = store.getIn([route.id, curListItem]) || Map({});
     const getCurrData = this.getCurrData;
     const tableOptions = blcklistTableOptions.push(fromJS({
       id: 'enabled',
@@ -190,7 +190,7 @@ export default class View extends React.Component {
                 label={_('Date')}
                 displayFormat="YYYY-MM-DD"
                 value={getCurrData('customDate')}
-                onChange={data => this.props.updateEditListItem({
+                onChange={data => this.props.updateCurEditListItem({
                   customDate: data.value,
                 })}
               />
@@ -249,7 +249,7 @@ export default class View extends React.Component {
               type="time"
               className="text"
               value={moment(getCurrData('startTime').replace(':', ''), 'hmm')}
-              onChange={data => this.props.updateEditListItem({
+              onChange={data => this.props.updateCurEditListItem({
                 startTime: data.value,
               })}
               format="HH:mm"
@@ -268,7 +268,7 @@ export default class View extends React.Component {
               style={{
                 width: '120px',
               }}
-              onChange={data => this.props.updateEditListItem({
+              onChange={data => this.props.updateCurEditListItem({
                 endTime: data.value,
               })}
             />

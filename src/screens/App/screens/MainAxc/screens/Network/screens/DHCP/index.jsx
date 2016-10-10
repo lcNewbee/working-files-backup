@@ -74,7 +74,7 @@ const screenOptions = fromJS([
     formProps: {
       maxLength: '13',
       validator: validator({
-        rules: 'time',
+        rules: 'number',
       }),
     },
   },
@@ -89,7 +89,7 @@ const propTypes = {
   route: PropTypes.object,
   initScreen: PropTypes.func,
   closeListItemModal: PropTypes.func,
-  updateEditListItem: PropTypes.func,
+  updateCurEditListItem: PropTypes.func,
   save: PropTypes.func,
 };
 const defaultProps = {};

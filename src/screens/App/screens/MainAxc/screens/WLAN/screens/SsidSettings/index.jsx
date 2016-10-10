@@ -89,7 +89,7 @@ const propTypes = {
   addListItem: PropTypes.func,
   closeListItemModal: PropTypes.func,
   editListItemByIndex: PropTypes.func,
-  updateEditListItem: PropTypes.func,
+  updateCurEditListItem: PropTypes.func,
   onListAction: PropTypes.func,
 };
 const defaultProps = {};
@@ -124,17 +124,17 @@ export default class View extends React.Component {
       const data = {};
 
       data[name] = item.value;
-      this.props.updateEditListItem(data);
+      this.props.updateCurEditListItem(data);
     };
   }
 
   getCurrData(name) {
-    return this.props.store.getIn([this.props.route.id, 'data', 'edit', name]);
+    return this.props.store.getIn([this.props.route.id, curListItem, name]);
   }
 
   render() {
     const { route, store, vlan } = this.props;
-    const editData = store.getIn([route.id, 'data', 'edit']) || Map({});
+    const editData = store.getIn([route.id, curListItem]) || Map({});
     const getCurrData = this.getCurrData;
     const {
       password, ssid, upstream, downstream,

@@ -65,7 +65,7 @@ const propTypes = {
   store: PropTypes.instanceOf(Map),
   updateScreenSettings: PropTypes.func,
   addToPropertyPanel: PropTypes.func,
-  updateEditListItem: PropTypes.func,
+  updateCurEditListItem: PropTypes.func,
   validateAll: PropTypes.func,
   editListItemByIndex: PropTypes.func,
   resetVaildateMsg: PropTypes.func,
@@ -359,7 +359,7 @@ export default class View extends React.Component {
           if (status === google.maps.GeocoderStatus.OK) {
             if (results[1]) {
               infowindow.setContent(results[1].formatted_address);
-              this.props.updateEditListItem({
+              this.props.updateCurEditListItem({
                 markerAddress: results[1].formatted_address,
               });
             } else {
@@ -466,7 +466,7 @@ export default class View extends React.Component {
                       data={editData}
                       options={formOptions}
                       onSave={this.onSave}
-                      onChangeData={this.props.updateEditListItem}
+                      onChangeData={this.props.updateCurEditListItem}
                       onValidError={this.props.reportValidError}
                       invalidMsg={app.get('invalid')}
                       validateAt={app.get('validateAt')}
@@ -519,7 +519,7 @@ export default class View extends React.Component {
                 data={editData}
                 options={formOptions}
                 onSave={this.onSave}
-                onChangeData={this.props.updateEditListItem}
+                onChangeData={this.props.updateCurEditListItem}
                 onValidError={this.props.reportValidError}
                 invalidMsg={app.get('invalid')}
                 validateAt={app.get('validateAt')}

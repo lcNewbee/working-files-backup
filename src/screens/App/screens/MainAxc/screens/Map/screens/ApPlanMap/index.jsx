@@ -61,7 +61,7 @@ const propTypes = {
   history: PropTypes.object,
   updateScreenSettings: PropTypes.func,
   addToPropertyPanel: PropTypes.func,
-  updateEditListItem: PropTypes.func,
+  updateCurEditListItem: PropTypes.func,
   validateAll: PropTypes.func,
   editListItemByIndex: PropTypes.func,
   onListAction: PropTypes.func,
@@ -112,7 +112,7 @@ export default class View extends React.Component {
 
     ev.preventDefault();
 
-    this.props.updateEditListItem({
+    this.props.updateCurEditListItem({
       map: {
         mapName: curMapName,
         xpos: (offsetX * 100) / this.mapContent.offsetWidth,

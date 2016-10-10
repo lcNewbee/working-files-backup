@@ -60,7 +60,7 @@ const propTypes = {
   store: PropTypes.instanceOf(Map),
   updateScreenSettings: PropTypes.func,
   addToPropertyPanel: PropTypes.func,
-  updateEditListItem: PropTypes.func,
+  updateCurEditListItem: PropTypes.func,
   validateAll: PropTypes.func,
   editListItemByIndex: PropTypes.func,
   onListAction: PropTypes.func,
@@ -111,7 +111,7 @@ export default class View extends React.Component {
 
     ev.preventDefault();
 
-    this.props.updateEditListItem({
+    this.props.updateCurEditListItem({
       map: {
         mapName: curMapName,
         xpos: (offsetX * 100) / this.mapContent.offsetWidth,
@@ -395,7 +395,6 @@ export default class View extends React.Component {
     const list = store.getIn([myScreenId, 'data', 'list']);
     const isLocked = store.getIn([myScreenId, 'curSettings', 'isLocked']);
     const myZoom = store.getIn([myScreenId, 'curSettings', 'zoom']);
-    const editData = store.getIn([myScreenId, 'data', 'edit']);
     const actionQuery = store.getIn([myScreenId, 'actionQuery']);
     let curMapName = store.getIn([myScreenId, 'curSettings', 'curMapName']);
     const actionBarChildren = [
