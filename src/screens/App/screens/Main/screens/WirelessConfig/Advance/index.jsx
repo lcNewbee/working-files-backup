@@ -89,77 +89,132 @@ export default class Advance extends React.Component {
 
   render() {
     const {
-      sensEnable, distance, sensThreshold, rtsEnable, rts,
+      sensEnable, distance, sensThreshold, rtsEnable, rts, autoAdjust,
       led1Threshold, led2Threshold, led3Threshold, led4Threshold,
     } = this.props.store.get('curData').toJS();
     const { validLed1, validLed2, validLed3, validLed4, validSens } = this.props.validateOption;
     return (
       <div className="advanceWrap">
-        <div className="rtsConfg">
-          <FormGroup
-            label={_('RTS Switch')}
-            type="checkbox"
-            checked={rtsEnable === '1'}
-            onChange={(data) => this.props.updateItemSettings({
-              rtsEnable: data.value,
-            })}
-          />
-          {
-            rtsEnable === '1' ? (
-              <FormGroup
-                className="rtsThresholdValue"
-                label={_('RTS Threshold')}
-                type="number"
-                help={_('Range: ')}
-                value={rts}
-                onChange={(data) => this.props.updateItemSettings({
-                  rts: data.value,
-                })}
-                required
+        <h3>{_('Advance')}</h3>
+        <div className="clearfix">
+          <div style={{ width: '300px' }} >
+            <FormGroup
+              className="rtsThresholdValue fl"
+              label={_('RTS Threshold')}
+              type="number"
+              placeholder={_('Range: ')}
+              disabled={rtsEnable === '0'}
+              value={rts}
+              onChange={(data) => this.props.updateItemSettings({
+                rts: data.value,
+              })}
+              required
+            />
+          </div>
+          <span
+            className="fl"
+            style={{
+              marginTop: '12px',
+              marginLeft: '4px',
+            }}
+          >
+            <label htmlFor="threshold">
+              <input
+                id="threshold"
+                type="checkbox"
+                checked={rtsEnable === '0'}
+                onClick={() => {
+                  this.props.updateItemSettings({
+                    rtsEnable: rtsEnable === '1' ? '0' : '1',
+                  });
+                }}
+                style={{ marginRight: '3px' }}
               />
-            ) : null
-          }
+              {_('Default')}
+            </label>
+          </span>
         </div>
-        <div className="sensitivityConfg">
-          <FormGroup
-            label={_('Sensitivity Threshold')}
-            type="checkbox"
-            checked={sensEnable === '1'}
-            onChange={(data) => this.props.updateItemSettings({
-              sensEnable: data.value,
-            })}
-          />
-          {
-            sensEnable === '1' ? (
-              <FormGroup
-                className="sensThresholdValue"
-                label={_('Threshold Value')}
-                type="number"
-                value={sensThreshold}
-                onChange={(data) => this.props.updateItemSettings({
-                  sensThreshold: data.value,
-                })}
-                required
-                {...validSens}
+
+        <div className="sensitivityConfg clearfix">
+          <div style={{ width: '300px' }} >
+            <FormGroup
+              className="sensThresholdValue fl"
+              label={_('Threshold Value')}
+              type="number"
+              disabled={sensEnable === '0'}
+              placeholder={_('Range: -90 ~ -50')}
+              value={sensThreshold}
+              onChange={(data) => this.props.updateItemSettings({
+                sensThreshold: data.value,
+              })}
+              required
+              {...validSens}
+            />
+          </div>
+          <span
+            className="fl"
+            style={{
+              marginTop: '12px',
+              marginLeft: '4px',
+            }}
+          >
+            <label htmlFor="sensThreshold">
+              <input
+                id="sensThreshold"
+                type="checkbox"
+                checked={sensEnable === '0'}
+                onClick={() => {
+                  this.props.updateItemSettings({
+                    sensEnable: sensEnable === '1' ? '0' : '1',
+                  });
+                }}
+                style={{ marginRight: '3px' }}
               />
-            ) : null
-          }
+              {_('Default')}
+            </label>
+          </span>
         </div>
-        <FormGroup
-          type="range"
-          label={_('Distance Value')}
-          min="0"
-          max="10"
-          step="0.1"
-          help="km"
-          value={distance}
-          hasTextInput
-          onChange={(data) => {
-            this.props.updateItemSettings({
-              distance: data.value,
-            });
-          }}
-        />
+        <div className="clearfix">
+          <FormGroup
+            className="fl"
+            type="range"
+            label={_('Distance Value')}
+            min="0"
+            max="10"
+            step="0.1"
+            help="km"
+            value={distance}
+            hasTextInput
+            disabled={autoAdjust === '1'}
+            onChange={(data) => {
+              this.props.updateItemSettings({
+                distance: data.value,
+              });
+            }}
+          />
+          <span
+            className="fl"
+            style={{
+              marginTop: '12px',
+              marginLeft: '4px',
+            }}
+          >
+            <label htmlFor="distance">
+              <input
+                id="distance"
+                type="checkbox"
+                checked={autoAdjust === '1'}
+                onClick={() => {
+                  this.props.updateItemSettings({
+                    autoAdjust: autoAdjust === '1' ? '0' : '1',
+                  });
+                }}
+                style={{ marginRight: '3px' }}
+              />
+              {_('auto')}
+            </label>
+          </span>
+        </div>
         <div className="signalLedConfg">
           <FormGroup
             label={_('Signal LED Thresholds')}
