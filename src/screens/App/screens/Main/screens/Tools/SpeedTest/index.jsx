@@ -3,7 +3,7 @@ import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { Map, fromJS } from 'immutable';
 import {
-  Button, FormGroup, FormInput, Modal, Table,
+  Button, FormGroup, FormInput, Modal, Table, Icon,
 } from 'shared/components';
 import validator from 'shared/utils/lib/validator';
 import { bindActionCreators } from 'redux';
@@ -11,6 +11,7 @@ import * as appActions from 'shared/actions/app';
 import * as sharedActions from 'shared/actions/settings';
 import * as selfActions from './actions';
 import selfReducer from './reducer';
+
 
 let a;
 const propTypes = {
@@ -125,19 +126,20 @@ export default class SpeedTest extends React.Component {
   }
 
   onRunTest() {
-    this.props.toggleShowResultBtn('0');
-    this.props.changeStopWait(false);
+    // this.props.toggleShowResultBtn('0');
     this.props.validateAll()
         .then(msg => {
           if (msg.isEmpty()) {
             // this.props.clickSpeedTestRunBtn();
+            this.props.receiveTestResult({ tx: 0, rx: 0 });
+            this.props.changeStopWait(false);
             const query = this.props.store.get('curData').toJS();
             this.props.save('goform/bandwidth_test', query)
                 .then((json) => {
                   if (json.state && json.state.code === 2000) {
                     this.props.receiveTestResult(json.data);
                     this.props.changeStopWait(true);
-                    this.props.toggleShowResultBtn('1');
+                    // this.props.toggleShowResultBtn('1');
                     clearInterval(a);
                   } else if (json.state && json.state.code !== 2000) {
                     clearInterval(a);
@@ -276,29 +278,104 @@ export default class SpeedTest extends React.Component {
           />
         </FormGroup>
         <div className="o-form__legend">{_('Bandwidth Status')}</div>
-        <FormGroup>
+        <div
+          style={{
+            width: '400px',
+            marginLeft: '100px',
+            padding: '5px',
+          }}
+        >
           <div
-            className="stats-group clearfix"
+            className="clearfix"
             style={{
-              width: '180px',
+              width: '100%',
+              padding: '10px 10px',
+              border: '1px solid #aaa',
+              boxShadow: '0px 1px 3px rgba(34, 25, 25, 0.2)',
             }}
           >
-            <div className="stats-group-cell fl">
-              <div>{rx + 'Mbps'}</div>
-              <div>{_('Download')}</div>
+            <div
+              className="fl"
+              style={{
+                border: '1px solid #CCC',
+                padding: '10px',
+                margin: '5px 10px',
+                width: '160px',
+                boxShadow: '0px 1px 5px rgba(34, 25, 25, 0.5)',
+              }}
+            >
+                        <div
+                          style={{
+                            fontSize: '20px',
+                            fontWeight: 'bold',
+                            marginBottom: '5px',
+                            textAlign: 'center',
+                          }}
+                        >
+                          {rx + ' Mbps'}
+                        </div>
+                        <div
+                          style={{
+                            textAlign: 'center',
+                            fontSize: '15px',
+                            fontWeight: 'bold',
+                            color: '#CCC',
+                          }}
+                        >
+                          {_('Download')}
+                        </div>
             </div>
-            <div className="stats-group-cell fr">
-              <div>{tx + 'Mbps'}</div>
-              <div>{_('Upload')}</div>
+            <div
+              className="fr"
+              style={{
+                border: '1px solid #CCC',
+                padding: '10px',
+                margin: '5px 10px',
+                width: '160px',
+                boxShadow: '0px 1px 3px rgba(34, 25, 25, 0.5)',
+              }}
+            >
+                        <div
+                          style={{
+                            fontSize: '20px',
+                            fontWeight: 'bold',
+                            marginBottom: '5px',
+                            textAlign: 'center',
+                          }}
+                        >
+                          {tx + ' Mbps'}
+                        </div>
+                        <div
+                          style={{
+                            textAlign: 'center',
+                            fontSize: '15px',
+                            fontWeight: 'bold',
+                            color: '#CCC',
+                          }}
+                        >
+                          {_('Upload')}
+                        </div>
             </div>
           </div>
-          <div>
+          <div
+            style={{
+              width: '100%',
+              marginTop: '15px',
+              textAlign: 'center',
+            }}
+          >
             <Button
               theme="primary"
               text={_('Run Test')}
               // loading={this.props.selfState.get('time') !== ''}
               // disabled={stopWait}
               onClick={this.onRunTest}
+            />
+            <span
+              style={{
+                display: 'inline-block',
+                width: '20px',
+              }}
             />
             <Button
               theme="primary"
@@ -313,7 +390,7 @@ export default class SpeedTest extends React.Component {
               }}
             />
           </div>
-        </FormGroup>
+        </div>
         {// 测速高级配置弹出页面
           (showAdvance === '1') ? (
             <Modal
@@ -361,8 +438,8 @@ export default class SpeedTest extends React.Component {
         {// 测试过程中提示用户等待的弹出页面
           !stopWait ? (
             <Modal
-              size="lg"
-              title="ceshi"
+              size="sm"
+              title="Notice"
               noFooter
               isShow
               onClose={() => {
@@ -375,13 +452,29 @@ export default class SpeedTest extends React.Component {
                     });
               }}
             >
-              {
-                /[0-9]+/.test(this.props.selfState.get('time')) ? (
-                  <span>{_('Time Remain: ') + this.props.selfState.get('time') + 's'}</span>
-                ) : (
-                  <span>{this.props.selfState.get('time')}</span>
-                )
-              }
+              <div
+                style={{
+                  textAlign: 'center',
+                  margin: '10px 0',
+                }}
+              >
+                <Icon name="spinner" className="spinner" spin size="lg" />
+              </div>
+              <div
+                style={{
+                  textAlign: 'center',
+                  fontSize: '15px',
+                }}
+              >
+                {
+                  /[0-9]+/.test(this.props.selfState.get('time')) ? (
+                    _('Time Remain: ') + this.props.selfState.get('time') + 's'
+                  ) : (
+                    this.props.selfState.get('time')
+                  )
+                }
+              </div>
+
             </Modal>
             ) : null
         }

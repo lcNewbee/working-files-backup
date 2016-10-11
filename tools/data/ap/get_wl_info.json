@@ -5,11 +5,15 @@
 	"msg":"success"
 },
 "data":{
-	"wirelessMode":"sta",
+	"wirelessMode":"ap",
 	"vapList":[
 		{
+      "enable": "1",
 			"ssid":"axilspot1",
 			"apMac":"11:22:33:44:55:66",
+      "isolation": "1",
+      "vlanId": "1",
+			"hideSsid": 0,
 			"security":{
 				"cipher":"aes",
 				"key":"12345678",
@@ -21,8 +25,12 @@
 			}
 		},
 		{
+      "enable": "0",
 			"ssid":"axilspot2",
 			"apMac":"11:22:33:44:55:66",
+      "isolation": "1",
+      "vlanId": "1",
+			"hideSsid": 0,
 			"security":{
 				"mode":"wpa",
 				"cipher":"aes",

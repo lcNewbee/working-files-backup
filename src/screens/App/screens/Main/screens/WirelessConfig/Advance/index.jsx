@@ -62,7 +62,6 @@ export default class Advance extends React.Component {
         rts: '100',
         distance: '0.7',
         autoAdjust: '1',
-        isolation: '1',
         sensThreshold: '-90',
         sensEnable: '1',
         led1Threshold: '-30',
@@ -90,7 +89,7 @@ export default class Advance extends React.Component {
 
   render() {
     const {
-      sensEnable, distance, sensThreshold, rtsEnable, rts, isolation,
+      sensEnable, distance, sensThreshold, rtsEnable, rts,
       led1Threshold, led2Threshold, led3Threshold, led4Threshold,
     } = this.props.store.get('curData').toJS();
     const { validLed1, validLed2, validLed3, validLed4, validSens } = this.props.validateOption;
@@ -121,17 +120,6 @@ export default class Advance extends React.Component {
             ) : null
           }
         </div>
-        <div className="clientIsoConfg">
-          <FormGroup
-            label={_('Client Isolation')}
-            type="checkbox"
-            checked={isolation === '1'}
-            onChange={(data) => this.props.updateItemSettings({
-              isolation: data.value,
-            })}
-          />
-        </div>
-
         <div className="sensitivityConfg">
           <FormGroup
             label={_('Sensitivity Threshold')}

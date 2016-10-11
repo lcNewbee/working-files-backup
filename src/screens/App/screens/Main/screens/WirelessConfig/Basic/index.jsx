@@ -554,7 +554,26 @@ export default class Basic extends React.Component {
               type="checkbox"
               checked={val === '1'}
               disabled={pos === 0}
-              onChange={() => this.onSsidItemChange(val, item, 'hideSsid', (val === '1' ? '0' : '1'))}
+              onChange={
+                () => this.onSsidItemChange(val, item, 'hideSsid', (val === '1' ? '0' : '1'))
+              }
+            />
+          );
+        }.bind(this),
+      },
+      {
+        id: 'isolation',
+        label: _('Client Isolation'),
+        transform: function (val, item) {
+          const pos = this.props.store.getIn(['curData', 'vapList']).keyOf(item);
+          return (
+            <input
+              type="checkbox"
+              checked={val === '1'}
+              disabled={pos === 0}
+              onChange={
+                () => this.onSsidItemChange(val, item, 'isolation', (val === '1' ? '0' : '1'))
+              }
             />
           );
         }.bind(this),
@@ -1006,6 +1025,23 @@ export default class Basic extends React.Component {
                   }
                 </div>
               </div>
+              {
+                curData.get('wirelessMode') === 'repeater' ||
+                curData.get('wirelessMode') === 'ap' ? (
+                  <FormGroup
+                    label={_('Client Isolation')}
+                    type="checkbox"
+                    checked={curData.getIn(['vapList', '0', 'isolation']) === '1'}
+                    onChange={(data) => {
+                      const vapList = this.props.store.getIn(['curData', 'vapList'])
+                                      .setIn(['0', 'isolation'], data.value);
+                      this.props.updateItemSettings({
+                        vapList,
+                      });
+                    }}
+                  />
+                ) : null
+              }
 
               { // repeater模式下，对端AP的mac地址输入框
                 (curData.get('wirelessMode') === 'repeater') ? (
