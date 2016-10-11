@@ -9,21 +9,21 @@ import serverApiMiddleware from './middleware/api';
 browserSync({
   port: 3000,
   ui: {
-    port: 3001
+    port: 3001,
   },
   server: {
-    baseDir: 'build'
+    baseDir: 'build',
   },
 
   files: [
-    'build/*.html'
+    'build/*.html',
   ],
 
   middleware: [
     {
-      route: "/goform",
-      handle: serverApiMiddleware()
+      route: '/goform',
+      handle: serverApiMiddleware(),
     },
-    historyApiFallback()
-  ]
+    historyApiFallback(),
+  ],
 });

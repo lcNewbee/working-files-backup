@@ -75,7 +75,7 @@ export default class View extends React.Component {
       id: 'mac',
       text: _('Actions'),
       width: '290',
-      transform: (mac) => (
+      transform: mac => (
         <div className="action-btns">
           <Button
             onClick={() => this.onAction('reboot', mac)}
@@ -95,12 +95,6 @@ export default class View extends React.Component {
             size="sm"
             icon="reply-all"
           />
-          <Button
-            onClick={() => this.onAction('upgrade', mac)}
-            text={_('Upgrade')}
-            size="sm"
-            icon="reply-all"
-          />
         </div>
       ),
     }))
@@ -112,15 +106,24 @@ export default class View extends React.Component {
           onClick={() => this.onAction('edit', mac)}
           className="link-text"
         >
-           { item.get('devicename') || mac }
+          { item.get('devicename') || mac }
         </span>
       );
     });
+    const actionBarChildren = (
+      <Button
+        onClick={() => this.onAction('upgrade')}
+        text={_('Upgrade')}
+        icon="arrow-circle-o-up"
+      />
+    );
 
     return (
       <ListInfo
         {...this.props}
         tableOptions={myTableOptions}
+        actionBarChildren={actionBarChildren}
+        selectable
       />
     );
   }

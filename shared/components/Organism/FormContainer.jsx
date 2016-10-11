@@ -199,7 +199,7 @@ class FormContainer extends React.Component {
     }
 
     return (
-      <componentType
+      <div
         className={classNames}
         {...formProps}
       >
@@ -231,7 +231,7 @@ class FormContainer extends React.Component {
             </div>
           ) : null
         }
-      </componentType>
+      </div>
     );
   }
 }
