@@ -243,7 +243,6 @@ export default class NetworkSettings extends React.Component {
                 onChange={(data) => this.props.updateItemSettings({
                   gateway: data.value,
                 })}
-                required
                 {...validGateway}
               />
               <FormGroup
@@ -253,7 +252,6 @@ export default class NetworkSettings extends React.Component {
                 onChange={(data) => this.props.updateItemSettings({
                   dns1: data.value,
                 })}
-                required
                 {...firstDNS}
               />
               <FormGroup

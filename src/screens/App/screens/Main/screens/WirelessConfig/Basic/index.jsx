@@ -694,7 +694,7 @@ export default class Basic extends React.Component {
             <div
               className="stats-group-cell"
               style={{
-                overflow: 'scroll',
+                overflow: 'visible',
               }}
             >
               <FormGroup

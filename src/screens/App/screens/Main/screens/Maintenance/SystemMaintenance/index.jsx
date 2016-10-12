@@ -77,24 +77,22 @@ export default class SystemMaintenance extends Component {
           body: data,
         })
         .then((rq) => {
-          if (rq.state && rq.state.code === 2000) {
+          if (rq.state && rq.state.code === 4000) {
             that.props.changeProgressBarInfo(fromJS({
-              title: _('The device is upgrading now, please wait for a while...'),
-              time: 120,
-              isShow: true,
+              isShow: false,
             }));
-          } else {
-            let msg = _('Upgrade failed !');
-            if (rq.state) {
-              msg = rq.state.msg;
-            }
             that.props.createModal({
               id: 'settings',
               role: 'alert',
-              text: msg,
+              text: _('File verification failed! Please upload the right upgrading file.'),
             });
           }
         });
+        that.props.changeProgressBarInfo(fromJS({
+          title: _('The device is upgrading now, please wait for a while...'),
+          time: 120,
+          isShow: true,
+        }));
       } else {
         formElem.submit();
       }
@@ -131,24 +129,22 @@ export default class SystemMaintenance extends Component {
           body: data,
         })
         .then((rq) => {
-          if (rq.state && rq.state.code === 2000) {
+          if (rq.state && rq.state.code === 4000) {
             that.props.changeProgressBarInfo(fromJS({
-              title: _('The configuration is restoring now, please wait ...'),
-              time: 120,
-              isShow: true,
+              isShow: false,
             }));
-          } else {
-            let msg = _('Save configuration failed !');
-            if (rq.has('state')) {
-              msg = rq.state.msg;
-            }
             that.props.createModal({
               id: 'settings',
               role: 'alert',
-              text: msg,
+              text: _('Save configuration failed !'),
             });
           }
         });
+        that.props.changeProgressBarInfo(fromJS({
+          title: _('The configuration is restoring now, please wait ...'),
+          time: 120,
+          isShow: true,
+        }));
       } else {
         formElem.submit();
       }
