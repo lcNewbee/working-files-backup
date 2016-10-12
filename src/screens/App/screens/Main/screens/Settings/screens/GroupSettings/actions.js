@@ -1,4 +1,3 @@
-import utils from 'shared/utils';
 import * as appActions from 'shared/actions/app';
 import urls from 'shared/config/urls';
 
@@ -10,35 +9,28 @@ export function removeEditDeviceGroup() {
 
 export function addDeviceGroup() {
   return {
-    type: 'ADD_GROUP'
+    type: 'ADD_GROUP',
   };
 }
 
 export function changeEditGroup(data) {
   return {
     type: 'CHANGE_EDIT_GROUP',
-    data
-  };
-}
-
-export function deleteDeviceGroup(groupname) {
-  return {
-    type: 'DELETE_DEVICE_GROUP',
-    groupname
+    data,
   };
 }
 
 export function editDeviceGroup(groupname) {
   return {
     type: 'EDIT_GROUP',
-    groupname
+    groupname,
   };
 }
 
 export function lookGroupDevices(groupname) {
   return {
     type: 'LOOK_GROUP_DEVICES',
-    groupname
+    groupname,
   };
 }
 
@@ -47,25 +39,25 @@ export function selectDevice(mac, unselect) {
   return {
     type: 'SELECT_DEVICE',
     mac,
-    unselect
-  }
+    unselect,
+  };
 }
 
 // 获取组列表
 export function reqeustFetchDeviceGroups() {
   return {
-    type: 'REQEUST_FETCH_DEVICE_GROUPS'
+    type: 'REQEUST_FETCH_DEVICE_GROUPS',
   };
 }
 export function receiveDeviceGroups(data) {
   return {
     type: 'RECEIVE_DEVICE_GROUPS',
-    data: data,
-    updateAt: Date.now()
+    data,
+    updateAt: Date.now(),
   };
 }
 export function fetchDeviceGroups() {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(reqeustFetchDeviceGroups());
 
     dispatch(appActions.fetch(urls.fetchGroups))
@@ -80,19 +72,19 @@ export function fetchDeviceGroups() {
 // 获取可配置的AP列表
 export function reqeustFetchGroupDevices() {
   return {
-    type: 'REQEUST_FETCH_GROUP_DEVICES'
+    type: 'REQEUST_FETCH_GROUP_DEVICES',
   };
 }
 export function receiveGroupDevices(data) {
   return {
     type: 'RECEIVE_GROUP_DEVICES',
-    data: data,
-    updateAt: Date.now()
+    data,
+    updateAt: Date.now(),
   };
 }
 
 export function fetchGroupDevices() {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(reqeustFetchGroupDevices());
 
     dispatch(appActions.fetch(urls.fetchGroupDevs))
@@ -112,7 +104,7 @@ export function saveDeviceGroup() {
     let saveUrl = urls.addGroup;
 
 
-    if(actionType === 'edit') {
+    if (actionType === 'edit') {
       saveUrl = urls.editGroup;
     }
 
@@ -128,9 +120,9 @@ export function saveDeviceGroup() {
 }
 
 export function deleteDeviceGroup(groupname) {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     const data = {
-      groupname
+      groupname,
     };
 
     dispatch(reqeustFetchDeviceGroups());

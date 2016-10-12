@@ -10,7 +10,6 @@ import 'shared/scss/styles.scss';
 import guiConfig from './config.json';
 
 // 多语言工具
-const b28n = require('shared/b28n');
 const langCn = require('../lang/cn/core.json');
 const validateCn = require('../lang/cn/validate.json');
 const langEn = require('../lang/en/core.json');

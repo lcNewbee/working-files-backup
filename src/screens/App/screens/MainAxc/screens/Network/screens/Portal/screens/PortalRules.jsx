@@ -187,7 +187,7 @@ export default class View extends React.Component {
   render() {
     const { store } = this.props;
     const myScreenId = store.get('curScreenId');
-    const editData = store.getIn([myScreenId, curListItem]);
+    const editData = store.getIn([myScreenId, 'curListItem']);
     return (
       <ListInfo
         {...this.props}

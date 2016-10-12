@@ -58,7 +58,7 @@ export default class View extends React.Component {
   render() {
     const { route, store } = this.props;
     const tableOptions = blcklistTableOptions;
-    const editData = store.getIn([route.id, curListItem]) || Map({});
+    const editData = store.getIn([route.id, 'curListItem']) || Map({});
     const actionBarChildren = (
       <FormGroup
         display="inline"

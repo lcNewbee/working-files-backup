@@ -68,7 +68,7 @@ export default class Main extends Component {
   }
 
   componentWillMount() {
-    // this.props.fetchApGroup();
+    this.props.fetchApGroup();
   }
 
   onRefresh(e) {
@@ -262,7 +262,7 @@ export default class Main extends Component {
                           });
                         }}
                       >
-                        {item.get('groupname')} ({item.get('num')})
+                        {item.get('groupname')} ({item.get('apNum')})
                       </a>
                     </li>
                   );

@@ -202,7 +202,7 @@ const routes = [
             path: '/main/network/static_routes',
             text: _('Routes'),
             icon: 'map-signs',
-            formUrl: 'goform/network/route',
+            formUrl: 'goform/staticRoutes',
             component: sNetworkRoutes.Screen,
           }, {
             id: 'networkPort',

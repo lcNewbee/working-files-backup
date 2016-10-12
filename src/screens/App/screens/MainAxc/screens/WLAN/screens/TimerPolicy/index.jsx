@@ -121,12 +121,12 @@ export default class View extends React.Component {
   }
 
   getCurrData(name) {
-    return this.props.store.getIn([this.props.route.id, curListItem, name]) || '';
+    return this.props.store.getIn([this.props.route.id, 'curListItem', name]) || '';
   }
 
   render() {
     const { route, store } = this.props;
-    const editData = store.getIn([route.id, curListItem]) || Map({});
+    const editData = store.getIn([route.id, 'curListItem']) || Map({});
     const getCurrData = this.getCurrData;
     const tableOptions = blcklistTableOptions.push(fromJS({
       id: 'enabled',

@@ -48,7 +48,7 @@ export function rcFetchApGroup(data) {
 
 export function fetchApGroup() {
   return (dispatch) => {
-    dispatch(appActions.fetch(urls.fetchGroups))
+    dispatch(appActions.fetch('goform/group'))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(rcFetchApGroup(json.data));
