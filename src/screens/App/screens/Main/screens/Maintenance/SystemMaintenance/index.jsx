@@ -71,14 +71,24 @@ export default class SystemMaintenance extends Component {
         data = new FormData();
         data.append('filename', input.files[0]);
         data.append('suffix', extension);
+        const timeClock = setTimeout(() => {
+          that.props.changeProgressBarInfo(fromJS({
+            title: _('The device is upgrading now, please wait for a while...'),
+            time: 120,
+            isShow: true,
+          }));
+        }, 1500);
 
-        fetch(formElem.action, {
+        that.props.fetch(formElem.action, {
           method: 'POST',
           body: data,
         })
         .then((rq) => {
           if (rq.state && rq.state.code === 4000) {
+            clearTimeout(timeClock);
             that.props.changeProgressBarInfo(fromJS({
+              title: '',
+              time: 0,
               isShow: false,
             }));
             that.props.createModal({
@@ -88,11 +98,6 @@ export default class SystemMaintenance extends Component {
             });
           }
         });
-        that.props.changeProgressBarInfo(fromJS({
-          title: _('The device is upgrading now, please wait for a while...'),
-          time: 120,
-          isShow: true,
-        }));
       } else {
         formElem.submit();
       }
@@ -111,7 +116,6 @@ export default class SystemMaintenance extends Component {
     const input = document.getElementById('restoreFile');
     const formElem = document.getElementById('restoreForm');
     let data;
-
     e.preventDefault();
 
     if (!input.value) {
@@ -123,14 +127,24 @@ export default class SystemMaintenance extends Component {
         data = new FormData();
         data.append('filename', input.files[0]);
         data.append('suffix', extension);
+        const timeClock = setTimeout(() => {
+          that.props.changeProgressBarInfo(fromJS({
+            title: _('The configuration is restoring now, please wait ...'),
+            time: 120,
+            isShow: true,
+          }));
+        }, 1500);
 
-        fetch(formElem.action, {
+        that.props.fetch(formElem.action, {
           method: 'POST',
           body: data,
         })
         .then((rq) => {
           if (rq.state && rq.state.code === 4000) {
+            clearTimeout(timeClock);
             that.props.changeProgressBarInfo(fromJS({
+              title: '',
+              time: 0,
               isShow: false,
             }));
             that.props.createModal({
@@ -140,19 +154,9 @@ export default class SystemMaintenance extends Component {
             });
           }
         });
-        that.props.changeProgressBarInfo(fromJS({
-          title: _('The configuration is restoring now, please wait ...'),
-          time: 120,
-          isShow: true,
-        }));
       } else {
         formElem.submit();
       }
-      that.props.changeProgressBarInfo(fromJS({
-        title: _(''),
-        time: 60,
-        isShow: true,
-      }));
     }
 
     this.props.createModal({

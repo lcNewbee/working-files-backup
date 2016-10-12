@@ -344,7 +344,7 @@ export default class Basic extends React.Component {
 
     const channelOptions = channelList.map((val) => {
       return {
-        value: val,
+        value: parseInt(val, 10).toString(),
         label: val,
       };
     })
