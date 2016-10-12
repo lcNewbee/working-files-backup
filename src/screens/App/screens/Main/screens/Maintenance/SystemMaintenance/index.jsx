@@ -85,7 +85,7 @@ export default class SystemMaintenance extends Component {
             }));
           } else {
             let msg = _('Upgrade failed !');
-            if (rq.has('state')) {
+            if (rq.state) {
               msg = rq.state.msg;
             }
             that.props.createModal({

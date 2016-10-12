@@ -82,7 +82,7 @@ export default class ACL extends React.Component {
             };
             ssidSelectOptions.push(optionItem);
           }
-          console.log('ssidSelectOptions', ssidSelectOptions);
+          // console.log('ssidSelectOptions', ssidSelectOptions);
           this.props.changeSelectedSsid({
             selectedSsid: 0,
             macListLen: aclConfList.getIn([0, 'macList']).size,
@@ -195,9 +195,9 @@ export default class ACL extends React.Component {
   render() {
     const store = this.props.store;
     const selectedSsid = this.props.selectedSsid;
-    console.log('selectedSsid', selectedSsid);
+    // console.log('selectedSsid', selectedSsid);
     let maclist = store.getIn(['curData', 'aclConfList', selectedSsid, 'macList']);
-    console.log('maclist', maclist);
+    // console.log('maclist', maclist);
     if (maclist === undefined) {
       return null;
     }
@@ -222,6 +222,7 @@ export default class ACL extends React.Component {
           size="min"
           options={ssidSelectOptions}
           value={selectedSsid}
+          disabled={store.getIn(['curData', 'aclEnable']) === '0'}
           onChange={(data) => this.props.changeSelectedSsid({
             selectedSsid: data.value,
             macListLen: store.getIn(['curData', 'aclConfList', data.value, 'macList']).size,
@@ -234,6 +235,7 @@ export default class ACL extends React.Component {
             name="filtermode"
             type="radio"
             text={_('Allow Only')}
+            disabled={store.getIn(['curData', 'aclEnable']) === '0'}
             checked={store.getIn(['curData', 'aclConfList', selectedSsid, 'aclMode']) === 'allow'}
             onClick={() => {
               const aclConfList = store.getIn(['curData', 'aclConfList'])
@@ -250,6 +252,7 @@ export default class ACL extends React.Component {
             name="filtermode"
             type="radio"
             text={_('Block Only')}
+            disabled={store.getIn(['curData', 'aclEnable']) === '0'}
             checked={store.getIn(['curData', 'aclConfList', selectedSsid, 'aclMode']) === 'deny'}
             onClick={() => {
               const aclConfList = store.getIn(['curData', 'aclConfList'])
@@ -269,21 +272,24 @@ export default class ACL extends React.Component {
             style={{
               width: '200px',
               height: '222px',
-              border: '1px solid #000',
+              border: '1px solid #ccc',
               overflow: 'auto',
               marginRight: '20px',
+
             }}
           >
             <MacList
               maclist={maclist}
               onMacClick={this.props.updateMacStatus}
               macStatusList={macStatus}
+
             />
           </div>
           <Button
             className="fl"
             theme="primary"
             text={_('Remove')}
+            disabled={store.getIn(['curData', 'aclEnable']) === '0'}
             onClick={this.updateAclMacList}
           />
         </FormGroup>
@@ -291,6 +297,7 @@ export default class ACL extends React.Component {
           <FormGroup
             type="text"
             className="fl"
+            disabled={store.getIn(['curData', 'aclEnable']) === '0'}
             value={this.props.macInput.get('macValue')}
             onChange={(data, e) => this.onMacInputChange(data.value, e)}
           />
@@ -298,6 +305,7 @@ export default class ACL extends React.Component {
             className="fl"
             theme="primary"
             text={_('Add')}
+            disabled={store.getIn(['curData', 'aclEnable']) === '0'}
             onClick={this.onAddMacToLocalList}
             style={{
               marginTop: '2px',
@@ -309,6 +317,7 @@ export default class ACL extends React.Component {
           <SaveButton
             theme="primary"
             text={_('Save')}
+            disabled={store.getIn(['curData', 'aclEnable']) === '0'}
             loading={this.props.app.get('saving')}
             onClick={() => this.props.saveSettings('goform/set_acl')}
           />

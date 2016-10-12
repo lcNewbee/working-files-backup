@@ -10,7 +10,6 @@ export default class MacList extends React.Component {
 
   getMacStatusFromList(index) {
     const list = this.props.macStatusList;
-    console.log(list);
     return list[index];
   }
 
@@ -23,6 +22,7 @@ export default class MacList extends React.Component {
             onClick={() => this.props.onMacClick(index)}
             text={mac}
             selected={this.getMacStatusFromList(index)}
+            disabled={this.props.disabled}
           />
         )}
       </ul>
@@ -34,4 +34,5 @@ MacList.propTypes = {
   onMacClick: PropTypes.func,
   macStatusList: PropTypes.instanceOf(Array),
   maclist: PropTypes.instanceOf(Array),
+  disabled: PropTypes.bool,
 };

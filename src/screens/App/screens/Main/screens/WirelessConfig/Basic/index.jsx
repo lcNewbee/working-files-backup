@@ -418,6 +418,7 @@ export default class Basic extends React.Component {
         keyLength: '64',
         keyType: 'Hex',
         keyIndex: '1',
+        key: '',
       },
     });
     const vapList = this.props.store.getIn(['curData', 'vapList']).push(newSsid);
@@ -690,7 +691,12 @@ export default class Basic extends React.Component {
         </div>
         {
           this.props.selfState.get('showRadioSetting') ? (
-            <div className="stats-group-cell">
+            <div
+              className="stats-group-cell"
+              style={{
+                overflow: 'scroll',
+              }}
+            >
               <FormGroup
                 type="checkbox"
                 label={_('Radio')}
@@ -739,7 +745,7 @@ export default class Basic extends React.Component {
                       type="radio"
                       text={_('I have read and agree')}
                       checked={this.props.selfState.get('agreeProtocol')}
-                      onClick={() => { this.props.changeAgreeProtocol(true); }}
+                      onChange={() => { this.props.changeAgreeProtocol(true); }}
                     />
                     <FormGroup
                       label={_('Country')}
@@ -864,7 +870,12 @@ export default class Basic extends React.Component {
         </div>
         {
           this.props.selfState.get('showSsidSetting') ? (
-            <div className="stats-group-cell">
+            <div
+              className="stats-group-cell"
+              style={{
+                overflow: 'visible',
+              }}
+            >
               <div className="clearfix">
                 <FormGroup
                   type="select"
@@ -1444,7 +1455,6 @@ export default class Basic extends React.Component {
               pos: '',
             }));
           }}
-          draggable
           okButton
           cancelButton
         >
@@ -1502,7 +1512,6 @@ export default class Basic extends React.Component {
                 <FormGroup
                   label={_('Authentication Type')}
                   type="select"
-                  name="authenticationType"
                   options={wepAuthenOptions}
                   value={tableItemForSsid.getIn(['item', 'security', 'auth'])}
                   onChange={(data) => {
@@ -1515,7 +1524,6 @@ export default class Basic extends React.Component {
                 <FormGroup
                   label={_('WEP Key Length')}
                   type="select"
-                  name="wepKeyLength"
                   options={wepKeyLengthOptions}
                   value={tableItemForSsid.getIn(['item', 'security', 'keyLength'])}
                   onChange={(data) => {
@@ -1528,7 +1536,6 @@ export default class Basic extends React.Component {
                 <FormGroup
                   label={_('Key Index')}
                   type="select"
-                  name="keyIndex"
                   options={keyIndexOptions}
                   value={tableItemForSsid.getIn(['item', 'security', 'keyIndex'])}
                   onChange={(data) => {
@@ -1541,7 +1548,6 @@ export default class Basic extends React.Component {
                 <FormGroup
                   label={_('Key Type')}
                   type="select"
-                  name="keyType"
                   options={keyTypeOptions}
                   value={tableItemForSsid.getIn(['item', 'security', 'keyType'])}
                   onChange={(data) => {

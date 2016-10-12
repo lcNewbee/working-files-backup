@@ -11,6 +11,7 @@ export default class Mac extends React.Component {
           fontSize: '13px',
           paddingLeft: '5px',
         }}
+        disabled={this.props.disabled}
       >
         {this.props.text}
       </li>
@@ -22,4 +23,5 @@ Mac.propTypes = {
   onClick: PropTypes.func.isRequired,
   text: PropTypes.string.isRequired,
   selected: PropTypes.bool,
+  disabled: PropTypes.bool,
 };
