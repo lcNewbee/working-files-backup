@@ -22,7 +22,8 @@ class NetworkPort extends CI_Controller {
         'port_name'=>'name',
         'duplex'=>'workModel',
         'port_desc'=>'description',
-        'adminstate'=>'status'
+        'adminstate'=>'status',
+        'mgifname'=>'mgifname'
       );
       foreach($v as $key => $value) {
         $realKey = element($key, $keysMap);
@@ -53,24 +54,24 @@ class NetworkPort extends CI_Controller {
     );
     $result = null;
     $actionType = element('action', $data);
-
-    if ($actionType === 'add') {
-      $result=array(
-        'state'=>$state,
-        'data'=>element('action', $data, '')
-      );
-    }
-    elseif($actionType === 'edit'){
-      $result=array(
-        'state'=>$state,
-        'data'=>element('action', $data, '')
-      );
+    if($actionType === 'edit'){
+      $keys=array("portname","speed","duplex","desc","adminstate","mgifname");
+			$a1=array_fill_keys($keys,'0');
+			$a1['portname']=$data['name'];
+			$a1['speed']=$data['workModel'];
+			$a1['duplex']=$data['description'];
+      $a1['desc']=$data['targetMask'];
+      $a1['adminstate']=$data['status'];
+      $a1['mgifname']=$data['mgifname'];
+      $state=acnetmg_add_port(json_encode($temp_data));
+      $result=$state;
     }
     elseif($actionType === 'delete'){
-      $result=array(
-        'state'=>$state,
-        'data'=>element('action', $data, '')
-      );
+      $keys=array("portname");
+			$a1=array_fill_keys($keys,'0');
+			$a1['portname']=$data['name'];
+      $state=acnetmg_del_port(json_encode($temp_data));
+      $result=$state;
     }
     return $result;
   }
@@ -81,10 +82,12 @@ class NetworkPort extends CI_Controller {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       $data = json_decode(file_get_contents("php://input"), true);
       $result = $this->onAction($data);
+      echo $result;
     } else if($_SERVER['REQUEST_METHOD'] == 'GET') {
       $result = $this->fetch();
+      echo json_encode($result);
     }
-		echo json_encode($result);
+
 	}
 }
 

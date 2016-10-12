@@ -78,7 +78,6 @@ class NetworkRoute extends CI_Controller {
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$data = json_decode(file_get_contents("php://input"), true);
 			$result = $this->onAction($data);
-
       echo $result;
 		}
 		elseif($_SERVER['REQUEST_METHOD'] == 'GET') {

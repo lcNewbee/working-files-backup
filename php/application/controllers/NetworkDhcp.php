@@ -85,9 +85,7 @@ class NetworkDhcp extends CI_Controller {
        $temp_data['pool_dns2']=$data['secondDns'];
 
 			$state=dhcpd_add_pool_name(json_encode($temp_data));
-			$result=array(
-						          'state'=>$state
-						      );
+      $result=$state;
 		}
 		elseif($actionType === 'edit') {
     		$temp_data=array(
@@ -110,9 +108,7 @@ class NetworkDhcp extends CI_Controller {
        $temp_data['pool_dns2']=$data['secondDns'];
 
 			$state=dhcpd_edit_pool_name(json_encode($temp_data));
-			$result=array(
-						          'state'=>$state
-						      );
+       $result=$state;
 		}
     elseif($actionType === 'delete'){
       $arr=$data['selectedList'];
@@ -121,9 +117,7 @@ class NetworkDhcp extends CI_Controller {
         'pool_list'=>$pool_list_arr
        );
       $state=dhcpd_del_pool_name(json_encode($temp_data));
-			$result=array(
-						          'state'=>$state
-						      );
+       $result=$state;
     }
 
 		return $result;
@@ -135,11 +129,11 @@ class NetworkDhcp extends CI_Controller {
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$data = json_decode(file_get_contents("php://input"), true);
 			$result = $this->onAction($data);
+      echo $result ;
 		}
 		else if($_SERVER['REQUEST_METHOD'] == 'GET') {
 			$result = $this->fetch();
+      echo json_encode($result);
 		}
-
-		echo json_encode($result);
 	}
 }

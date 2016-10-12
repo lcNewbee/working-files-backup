@@ -24,7 +24,6 @@ class NetworkNat extends CI_Controller {
         $newArray[$key][$keys[$k]] = $v;
     }
 }
-
 		$state=array(
       'code'=>2000,
       'msg'=>'OK'
@@ -50,9 +49,7 @@ class NetworkNat extends CI_Controller {
 			$a1['ipaddr']=$data['sourceAddress'];
 			$a1['natipaddr']=$data['conversionAddress'];
 			$state=acnetmg_add_nat(json_encode($a1));
-			$result=array(
-									          'state'=>$state
-									      );
+      $result=$state;
 		}
 		elseif($actionType === 'edit') {
 			$keys=array("id","type","ipaddr","natipaddr");
@@ -62,9 +59,7 @@ class NetworkNat extends CI_Controller {
 			$a1['ipaddr']=$data['sourceAddress'];
 			$a1['natipaddr']=$data['conversionAddress'];
 			$state=acnetmg_update_nat(json_encode($a1));
-			$result=array(
-									          'state'=>$state
-									      );
+      $result=$state;
 		}
 		elseif($actionType === 'delete'){
       $keys=array("id","type","ipaddr","natipaddr");
@@ -74,18 +69,14 @@ class NetworkNat extends CI_Controller {
 			$a1['ipaddr']=$data['sourceAddress'];
 			$a1['natipaddr']=$data['conversionAddress'];
 			$state=acnetmg_del_nat(json_encode($a1));
-			$result=array(
-									          'state'=>$state
-									      );
+      $result=$state;
 		}
     	elseif($actionType === 'setting'){
       $keys = array( 'enable');
       $a1=array_fill_keys($keys,'0');
       $a1['enable']=$data['enable'];
 			$state=acnetmg_del_nat(json_encode($a1));
-			$result=array(
-									          'state'=>$state
-									      );
+      $result=$state;
 		}
 		;
 		return 	$result;
@@ -96,11 +87,14 @@ class NetworkNat extends CI_Controller {
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$data = json_decode(file_get_contents("php://input"), true);
 			$result = $this->onAction($data);
+      echo $result;
+
 		}
 		else if($_SERVER['REQUEST_METHOD'] == 'GET') {
-			$result = $this->fetch();
+		 	$result = $this->fetch();
+      echo json_encode($result);
 		}
 
-		echo json_encode($result);
+
 	}
 }
