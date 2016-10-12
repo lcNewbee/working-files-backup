@@ -1,7 +1,7 @@
 {
   "state": {
-    "code": 2000,
-    "msg": "ok"
+      "code": 2000,
+      "msg": "ok"
   },
   "data": {
     "list": [
@@ -9,19 +9,19 @@
         "id": 1,
         "groupname": "Default",
         "remark": "description1",
-        "num": 23
+        "apNum": 23
       },
       {
         "id": 2,
         "groupname": "group1",
         "remark": "description1",
-        "num": 23
+        "apNum": 23
       },
       {
         "id": 3,
         "groupname": "group2",
         "remark": "description2",
-        "num": 2
+        "apNum": 2
       }
     ]
   }
