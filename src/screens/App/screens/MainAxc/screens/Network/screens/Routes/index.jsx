@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
-import { fromJS, Map } from 'immutable';
+import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import {
   ListInfo,
@@ -9,28 +9,8 @@ import {
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
-function getInterfaceTypeOptions() {
-  return utils.fetch('goform/interfaceType')
-    .then(json => (
-      {
-        options: json.data.list.map(
-          item => ({
-            value: item.no,
-            label: `${item.no}(${item.noInfo})`,
-          })
-        ),
-      }
-    )
-  );
-}
 const screenOptions = fromJS([
   {
-    id: 'no',
-    text: _('No'),
-    formProps: {
-      type: 'plain-text',
-    },
-  }, {
     id: 'targetAddress',
     text: _('Target Address'),
   }, {
@@ -75,6 +55,7 @@ export default class View extends React.Component {
         tableOptions={tableOptions}
         editFormOptions={editFormOptions}
         actionable
+        selectable
       />
     );
   }

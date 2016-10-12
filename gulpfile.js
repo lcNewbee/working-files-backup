@@ -143,7 +143,7 @@ gulp.task('pub:ap', function (callback) {
 });
 
 // 发布硬AC版本
-// 发布 Access Pointer 版本
+// 发布 AXC版本
 gulp.task('clean:pubaxc', function (callback) {
   var distPath = paths.pubAxc;
 

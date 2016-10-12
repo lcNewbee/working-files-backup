@@ -94,7 +94,7 @@ export default class View extends React.Component {
         tableOptions={tableOptions}
         editFormOptions={editFormOptions}
         defaultEditData={defaultEditData}
-        listKey="ip"
+        listKey="allKeys"
         actionable
         selectable
       />

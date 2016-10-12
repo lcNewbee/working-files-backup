@@ -76,14 +76,14 @@ function initScreenState(state, action) {
 function selectedListItem(state, action, curScreenName) {
   const data = action.payload;
   let list = state.getIn([curScreenName, 'data', 'list']);
-  let selectedList = state.getIn([curScreenName, 'actionQuery', 'selected']) || fromJS([]);
+  let selectedList = state.getIn([curScreenName, 'actionQuery', 'selectedList']) || fromJS([]);
 
   if (data.index !== -1) {
     list = list.setIn([data.index, '_selected'], data.selected);
     if (data.selected) {
       selectedList = selectedList.push(data.index);
     } else {
-      selectedList = selectedList = selectedList.delete(selectedList.indexOf(data.index));
+      selectedList = selectedList.delete(data.index);
     }
   } else {
     selectedList = fromJS([]);
@@ -163,7 +163,8 @@ export default function (state = defaultState, action) {
       return state.setIn([curScreenName, 'fetching'], false)
         .mergeDeepIn([curScreenName, 'curSettings'], (action.payload && action.payload.settings))
         .mergeIn([curScreenName, 'data'], action.payload)
-        .setIn([curScreenName, 'data', 'updateAt'], action.meta.updateAt);
+        .setIn([curScreenName, 'data', 'updateAt'], action.meta.updateAt)
+        .setIn([curScreenName, 'actionQuery', 'selectedList'], fromJS([]));
 
     // Screen Setting相关
     case 'UPDATE_SCREEN_SETTINGS':

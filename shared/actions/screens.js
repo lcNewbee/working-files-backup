@@ -149,7 +149,7 @@ export function onListAction(url) {
   return (dispatch, getState) => {
     const globalState = getState();
     const name = globalState.screens.get('curScreenId');
-    const editMap = globalState.screens.getIn([name, 'data', 'edit']);
+    const editMap = globalState.screens.getIn([name, 'curListItem']);
     const formUrl = globalState.screens.getIn([name, 'formUrl']);
     const saveUrl = globalState.screens.getIn([name, 'saveUrl']) || formUrl;
     const fetchUrl = globalState.screens.getIn([name, 'fetchUrl']) || formUrl;
@@ -175,6 +175,7 @@ export function onListAction(url) {
           dispatch(fetchScreenData(fetchUrl));
           ret = 'ok';
         }
+        dispatch(closeListItemModal());
         return ret;
       });
   };

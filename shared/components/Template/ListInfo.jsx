@@ -230,10 +230,17 @@ class ListInfo extends React.Component {
     const myListId = store.get('curScreenId');
     const list = store.getIn([myListId, 'data', 'list']);
     const listKey = this.props.listKey;
+    let selectedList = [];
+
+    if (listKey === 'allKeys') {
+      selectedList = [list.get(i)];
+    } else {
+      selectedList = [list.getIn([i, listKey])];
+    }
 
     this.props.changeListActionQuery({
       action: 'delete',
-      selectedList: [list.getIn([i, listKey])],
+      selectedList,
     });
     this.props.onListAction();
   }
@@ -262,7 +269,17 @@ class ListInfo extends React.Component {
     let mySelectedList = selectedList;
 
     if (selectedList && selectedList.size > 0) {
-      mySelectedList = mySelectedList.map(val => list.getIn([val, listKey]));
+      mySelectedList = mySelectedList.map((val) => {
+        let ret = [];
+
+        if (listKey === 'allKeys') {
+          ret = list.get(val);
+        } else {
+          ret = list.getIn([val, listKey]);
+        }
+
+        return ret;
+      });
 
       this.props.changeListActionQuery({
         action: 'delete',

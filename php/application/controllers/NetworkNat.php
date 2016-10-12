@@ -26,13 +26,13 @@ class NetworkNat extends CI_Controller {
 }
 
 		$state=array(
-						      'code'=>2000,
-						      'msg'=>'OK'
-						    );
+      'code'=>2000,
+      'msg'=>'OK'
+    );
 		$data=array(
-		    "settings"=>array("enable"=> "1"),
-		    'list'=> $newArray
-		    );
+      "settings"=>array("enable"=> "1"),
+      'list'=> $newArray
+    );
 		$result=array(
 		      'state'=>$state,
 		      'data'=>$data

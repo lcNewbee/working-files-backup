@@ -38,7 +38,7 @@ class NetworkRoute extends CI_Controller {
 		return 	$result;
 	}
 	function onAction($data) {
-		$result = null;
+		$result = '';
 		$actionType = element('action', $data);
 		if ($actionType === 'add') {
 			$keys=array("destnet","gateway","mask");
@@ -47,9 +47,7 @@ class NetworkRoute extends CI_Controller {
 			$a1['gateway']=$data['nextHopIp'];
 			$a1['mask']=$data['targetMask'];
 			$state=acnetmg_add_route(json_encode($a1));
-			$result=array(
-									          'state'=>$state
-									      );
+			$result=$state;
 		}
 		elseif($actionType === 'edit') {
 			$keys=array("id","destnet","gateway","mask");
@@ -59,9 +57,7 @@ class NetworkRoute extends CI_Controller {
 			$a1['gateway']=$data['nextHopIp'];
 			$a1['mask']=$data['targetMask'];
 			$state=acnetmg_update_route(json_encode($a1));
-			$result=array(
-									          'state'=>$state
-									      );
+			$result=$state;
 		}
 		elseif($actionType === 'delete'){
       $keys=array("id","destnet","gateway","mask");
@@ -71,11 +67,10 @@ class NetworkRoute extends CI_Controller {
 			$a1['gateway']=$data['nextHopIp'];
 			$a1['mask']=$data['targetMask'];
 			$state=acnetmg_del_route(json_encode($a1));
-			$result=array(
-									          'state'=>$state
-									      );
+			$result=$state;
 		}
-		return 	$result;
+
+		return $result;
 	}
 
 	public function index() {
@@ -83,11 +78,12 @@ class NetworkRoute extends CI_Controller {
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$data = json_decode(file_get_contents("php://input"), true);
 			$result = $this->onAction($data);
-		}
-		else if($_SERVER['REQUEST_METHOD'] == 'GET') {
-			$result = $this->fetch();
-		}
 
-		echo json_encode($result);
+      echo $result;
+		}
+		elseif($_SERVER['REQUEST_METHOD'] == 'GET') {
+			$result = $this->fetch();
+      echo json_encode($result);
+		}
 	}
 }
