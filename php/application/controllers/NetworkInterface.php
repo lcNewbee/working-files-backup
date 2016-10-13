@@ -51,6 +51,16 @@ class NetworkInterface extends CI_Controller {
 		$actionType = element('action', $data);
 		$selectList = element('selectedList', $data);
 
+    function getItem($oriData) {
+      $retData = array(
+        'portname'=>element('name', $oriData),
+        'ip'=>element('ip', $oriData),
+        'mask'=>element('mask', $oriData)
+      );
+
+      return $retData;
+    }
+
 		if ($actionType === 'delete') {
 			foreach($selectList as $item) {
 				$deleteItem=array(
@@ -70,6 +80,16 @@ class NetworkInterface extends CI_Controller {
       $itemStr = json_encode($addItem);
 			$result=acnetmg_add_portip($itemStr);
 		}
+    elseif($actionType === 'edit') {
+      $oldData = element('originalData', $data);
+      $deleteItem = getItem($oldData);
+      $addItem=getItem($data);
+      $result=acnetmg_del_portip(json_encode($deleteItem));
+
+      if (element('code', json_decode($result)) === 2000) {
+        $result=acnetmg_add_portip(json_encode($addItem));
+      }
+    }
 
 		return $result;
 	}

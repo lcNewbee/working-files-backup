@@ -153,28 +153,39 @@ export function onListAction(url) {
     const formUrl = globalState.screens.getIn([name, 'formUrl']);
     const saveUrl = globalState.screens.getIn([name, 'saveUrl']) || formUrl;
     const fetchUrl = globalState.screens.getIn([name, 'fetchUrl']) || formUrl;
-    let actionQuery = globalState.screens.getIn([name, 'actionQuery']);
+    const actionQuery = globalState.screens.getIn([name, 'actionQuery']);
     const actionType = actionQuery.get('action');
+    let subData = {};
+    let originalData = globalState.screens.getIn([name, 'data', 'list', actionQuery.get('index')]);
+
+    if (originalData && originalData.get) {
+      originalData = originalData.toJS();
+    }
 
     window.clearTimeout(refreshTimeout);
 
     // 需要把修改后数据合并到post参数里
-    if (actionType === 'add' || actionType === 'edit') {
-      actionQuery = actionQuery.merge(editMap).toJS();
+    if (actionType === 'add') {
+      subData = actionQuery.merge(editMap).toJS();
+    } else if (actionType === 'edit') {
+      subData = actionQuery.merge(editMap).merge({
+        originalData,
+      }).toJS();
     }
 
     // 删除不需要传到后台的属性属性
-    delete actionQuery.myTitle;
-    delete actionQuery.index;
+    delete subData.myTitle;
+    delete subData.index;
 
-    return dispatch(appActions.save(url || saveUrl, actionQuery))
+    return dispatch(appActions.save(url || saveUrl, subData))
       .then((json) => {
         let ret = 'Server Error';
 
         if (json.state && json.state.code === 2000) {
-          dispatch(fetchScreenData(fetchUrl));
+          // dispatch(fetchScreenData(fetchUrl));
           ret = 'ok';
         }
+        dispatch(fetchScreenData(fetchUrl));
         dispatch(closeListItemModal());
         return ret;
       });
