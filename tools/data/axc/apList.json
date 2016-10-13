@@ -16,7 +16,7 @@
         "list": [
             {
                 "devicetype": "point2point",
-                "devicename": "神器",
+                "devicename": "Marketing",
                 "ip": "192.168.5.53",
                 "mac": "12:33:44:55:66:78",
                 "status": "online",

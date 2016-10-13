@@ -10,44 +10,59 @@ class NetworkRoute extends CI_Controller {
 	function fetch(){
 		$query=$this->db->select('id,destnet,netmask,gateway')
 																				    ->from('route_table')
-																				    ->get()->result_array();
-		$keys = array(
+																			    ->get()->result_array();
+
+    $newArray=null;
+    $keys = array(
       'id'=>'id',
       'destnet'=> 'targetAddress',
       'netmask'=>'targetMask',
       'gateway'=>'nextHopIp');
-    foreach($query as $key=>$val)
-   {
-    $newArray[$key] = array();
-    foreach($val as $k=>$v)
-    {
-        $newArray[$key][$keys[$k]] = $v;
+
+
+    if ($query !== null) {
+      foreach($query as $key=>$val)
+      {
+        $newArray[$key] = array();
+        foreach($val as $k=>$v)
+        {
+            $newArray[$key][$keys[$k]] = $v;
+        }
+      }
+      $state=array(
+        'code'=>2000,
+        'msg'=>'OK'
+      );
+
+      $result=array(
+        'state'=>$state,
+        'data'=>array(
+          'list'=>$newArray
+        )
+      );
+    } else {
+      $result=array(
+        'state'=>$state,
+        'data'=>array(
+          'list'=>'[]'
+        )
+      );
     }
-}
-		$state=array(
-						      'code'=>2000,
-						      'msg'=>'OK'
-						    );
-		$data=array(
-		    'list'=> $newArray
-		    );
-		$result=array(
-		      'state'=>$state,
-		      'data'=>$data
-		    );
-		return 	$result;
+
+		return $result;
 	}
 	function onAction($data) {
 		$result = '';
 		$actionType = element('action', $data);
+    $selectList = element('selectedList', $data);
+
 		if ($actionType === 'add') {
 			$keys=array("destnet","gateway","mask");
 			$a1=array_fill_keys($keys,'0');
 			$a1['destnet']=$data['targetAddress'];
 			$a1['gateway']=$data['nextHopIp'];
 			$a1['mask']=$data['targetMask'];
-			$state=acnetmg_add_route(json_encode($a1));
-			$result=$state;
+			$result=acnetmg_add_route(json_encode($a1));
 		}
 		elseif($actionType === 'edit') {
 			$keys=array("id","destnet","gateway","mask");
@@ -56,18 +71,18 @@ class NetworkRoute extends CI_Controller {
 			$a1['destnet']=$data['targetAddress'];
 			$a1['gateway']=$data['nextHopIp'];
 			$a1['mask']=$data['targetMask'];
-			$state=acnetmg_update_route(json_encode($a1));
-			$result=$state;
+			$result=acnetmg_update_route(json_encode($a1));
 		}
 		elseif($actionType === 'delete'){
-      $keys=array("id","destnet","gateway","mask");
-			$a1=array_fill_keys($keys,'0');
-      $a1['id']=$data['id'];
-			$a1['destnet']=$data['targetAddress'];
-			$a1['gateway']=$data['nextHopIp'];
-			$a1['mask']=$data['targetMask'];
-			$state=acnetmg_del_route(json_encode($a1));
-			$result=$state;
+      foreach($selectList as $item) {
+        $deleteItem=array(
+          'id'=>element('id', $item),
+          'destnet'=>element('targetAddress', $item),
+          'gateway'=>element('nextHopIp', $item),
+          'mask'=>element('targetMask', $item)
+        );
+        $result=acnetmg_del_route(json_encode($deleteItem));
+      }
 		}
 
 		return $result;
@@ -82,7 +97,7 @@ class NetworkRoute extends CI_Controller {
 		}
 		elseif($_SERVER['REQUEST_METHOD'] == 'GET') {
 			$result = $this->fetch();
-      echo json_encode($result);
+      echo json_encode($result, true);
 		}
 	}
 }

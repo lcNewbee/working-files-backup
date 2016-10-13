@@ -51,7 +51,7 @@ class DeviceSystem extends React.Component {
       <div className="o-form o-form--compassed">
         <FormGroup
           type="text"
-          label={_('AP关联量')}
+          label={_('AP Associated Content')}
           value={getCurData('apRelateNum')}
           onChange={(option) => this.props.onChangeData({
             apRelateNum: option.value,

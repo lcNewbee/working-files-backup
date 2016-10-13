@@ -42,7 +42,7 @@ const defaultItem = fromJS({
     mac: '44:d9:e4:33:33:22',
     model: 'AP512',
     version: '3.7.344',
-    alias: '我的别名',
+    alias: 'Ap Name',
     apRelateNum: 122,
   },
 });

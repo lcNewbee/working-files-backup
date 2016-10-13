@@ -3,9 +3,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import utils from 'shared/utils';
 import { List } from 'immutable';
-import moment from 'moment';
 import {
-  PureComponent, EchartReact, Button, FormGroup,
+  EchartReact, Button,
   FormInput,
 } from 'shared/components';
 import * as appActions from 'shared/actions/app';
@@ -249,7 +248,7 @@ export default class View extends React.Component {
           </div>
           <div className="cols col-6" >
             <div className="t-stats__cell">
-              <h3>{ _('应用流量') }</h3>
+              <h3>{ _('App Flow') }</h3>
             </div>
             <div className="t-stats__cell">
               <EchartReact

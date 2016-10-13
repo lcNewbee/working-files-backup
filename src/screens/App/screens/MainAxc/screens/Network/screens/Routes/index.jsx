@@ -54,6 +54,7 @@ export default class View extends React.Component {
         {...this.props}
         tableOptions={tableOptions}
         editFormOptions={editFormOptions}
+        listKey="allKeys"
         actionable
         selectable
       />

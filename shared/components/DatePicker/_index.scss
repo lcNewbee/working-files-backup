@@ -2,9 +2,16 @@
   padding: 0 2px;
   font-size: 14px;
   width: 110px;
+  color: #333;
+  text-align: center;
 
   .DateInput__display-text {
-    padding: 3px 4px;
+    padding: 2px 4px;
     padding-left: 8px;
+  }
+}
+.en {
+  .DateInput {
+    font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
   }
 }
