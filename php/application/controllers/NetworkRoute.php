@@ -57,21 +57,21 @@ class NetworkRoute extends CI_Controller {
     $selectList = element('selectedList', $data);
 
 		if ($actionType === 'add') {
-			$keys=array("destnet","gateway","mask");
-			$a1=array_fill_keys($keys,'0');
-			$a1['destnet']=$data['targetAddress'];
-			$a1['gateway']=$data['nextHopIp'];
-			$a1['mask']=$data['targetMask'];
-			$result=acnetmg_add_route(json_encode($a1));
+      $retData = array(
+        'destnet'=>element('targetAddress', $data),
+        'gateway'=>element('nextHopIp', $data),
+        'mask'=>element('targetMask', $data),
+      );
+			$result=acnetmg_add_route(json_encode($retData));
 		}
 		elseif($actionType === 'edit') {
-			$keys=array("id","destnet","gateway","mask");
-			$a1=array_fill_keys($keys,'0');
-      $a1['id']=$data['id'];
-			$a1['destnet']=$data['targetAddress'];
-			$a1['gateway']=$data['nextHopIp'];
-			$a1['mask']=$data['targetMask'];
-			$result=acnetmg_update_route(json_encode($a1));
+      $retData = array(
+        'id'=>element('id', $data),
+        'destnet'=>element('targetAddress', $data),
+        'gateway'=>element('nextHopIp', $data),
+        'mask'=>element('targetMask', $data),
+      );
+			$result=acnetmg_update_route(json_encode($retData));
 		}
 		elseif($actionType === 'delete'){
       foreach($selectList as $item) {

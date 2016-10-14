@@ -58,7 +58,6 @@ class NetworkInterface extends CI_Controller {
         'ip'=>element('ip', $oriData),
         'mask'=>element('mask', $oriData)
       );
-
       return $retData;
     }
 

@@ -63,13 +63,11 @@ class NetworkNat extends CI_Controller {
 
 		if ($actionType === 'add') {
 			$cgiParams=getCgiParams($data);
-			$state=acnetmg_add_nat(json_encode($cgiParams));
-      $result=$state;
+      $result=acnetmg_add_nat(json_encode($cgiParams));
 		}
 		elseif($actionType === 'edit') {
 			$cgiParams=getCgiParams($data);
-			$state=acnetmg_update_nat(json_encode($cgiParams));
-      $result=$state;
+      $result=acnetmg_update_nat(json_encode($cgiParams));
 		}
 		elseif($actionType === 'delete') {
 
@@ -82,8 +80,7 @@ class NetworkNat extends CI_Controller {
       $cgiParams = array(
         'enable'=>(int)element('enable', $data)
       );
-			$state=acnetmg_nat_enable(json_encode($cgiParams));
-      $result=$state;
+      $result=acnetmg_nat_enable(json_encode($cgiParams));
 		}
 		return 	$result;
 	}

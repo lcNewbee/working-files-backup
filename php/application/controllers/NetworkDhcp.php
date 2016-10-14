@@ -21,7 +21,7 @@ class NetworkDhcp extends CI_Controller {
 		$keyname=array(
 				      "domain"=>"domain",
 				      "ipaddr"=>"startIp",
-				      "netmask"=>"netmask",
+				      "netmask"=>"mask",
 				      "route"=>"gateway",
 				      "dns1"=>"mainDns",
 				      "dns2"=>"secondDns",
@@ -51,7 +51,7 @@ class NetworkDhcp extends CI_Controller {
 		}
 		;
 		//array_values是为了让pool_id也成为数组属性,重新赋值给接口数组
-						$interfaces_data=array_values($interfaces);
+		$interfaces_data=array_values($interfaces);
 		$result=array(
 						      'state'=>$state,
 						      'data'=>array(
@@ -64,50 +64,30 @@ class NetworkDhcp extends CI_Controller {
 	function onAction($data) {
 		$result = null;
 		$actionType = element('action', $data);
+
+    function getCgiParam($oriData) {
+      $retData = array(
+        'pool_name'=>element('name', $oriData),
+        'pool_ipaddr'=>element('startIp', $oriData),
+        'pool_mask'=>element('mask', $oriData),
+        'pool_lease'=>element('releaseTime', $oriData),
+        'pool_route'=>element('gateway', $oriData),
+        'pool_domain'=>element('domain', $oriData),
+        'pool_dns1'=>element('mainDns', $oriData),
+        'pool_dns2'=>element('secondDns', $oriData)
+      );
+
+      return $retData;
+    }
+
 		if ($actionType === 'add') {
-			$temp_data=array(
-			  'pool_name'=>'test',
-			  'pool_ipaddr'=>'test',
-			  'pool_mask '=>' test',
-			  'pool_lease'=>'test',
-			  'pool_route'=>'test',
-			  'pool_domain'=>'test',
-			 ' pool_dns1'=>'test',
-			  'pool_dns2'=>'test'
-			        );
-       $temp_data['pool_name']=$data['name'];
-       $temp_data['pool_ipaddr']=$data['startIp'];
-       $temp_data['pool_mask']=$data['netmask'];
-       $temp_data['pool_lease']=$data['releaseTime'];
-       $temp_data['pool_route']=$data['gateway'];
-       $temp_data['pool_domain']=$data['domain'];
-       $temp_data['pool_dns1']=$data['mainDns'];
-       $temp_data['pool_dns2']=$data['secondDns'];
-			$state=dhcpd_add_pool_name(json_encode($temp_data));
-      $result=$state;
+			$temp_data=getCgiParam($data);
+      //$result=json_encode($temp_data);
+      $result=dhcpd_add_pool_name(json_encode($temp_data));
 		}
 		elseif($actionType === 'edit') {
-    		$temp_data=array(
-			  'pool_name'=>'test',
-			  'pool_ipaddr'=>'test',
-			  'pool_mask '=>' test',
-			  'pool_lease'=>'test',
-			  'pool_route'=>'test',
-			  'pool_domain'=>'test',
-			 ' pool_dns1'=>'test',
-			  'pool_dns2'=>'test'
-			        );
-       $temp_data['pool_name']=$data['name'];
-       $temp_data['pool_ipaddr']=$data['startIp'];
-       $temp_data['pool_mask']=$data['netmask'];
-       $temp_data['pool_lease']=$data['releaseTime'];
-       $temp_data['pool_route']=$data['gateway'];
-       $temp_data['pool_domain']=$data['domain'];
-       $temp_data['pool_dns1']=$data['mainDns'];
-       $temp_data['pool_dns2']=$data['secondDns'];
-
-			$state=dhcpd_edit_pool_name(json_encode($temp_data));
-       $result=$state;
+    	$temp_data=getCgiParam($data);
+      $result=dhcpd_edit_pool_name(json_encode($temp_data));
 		}
     elseif($actionType === 'delete'){
       $arr=$data['selectedList'];

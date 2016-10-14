@@ -69,16 +69,13 @@ class NetworkPort extends CI_Controller {
     $actionType = element('action', $data);
     if($actionType === 'edit'){
       $cgiParam = getCgiParams($data);
-      $state=acnetmg_add_port(json_encode($cgiParam));
-      $result=$state;
+      $result=acnetmg_add_port(json_encode($cgiParam));
     }
     elseif($actionType === 'delete'){
       $keys=array("portname");
 			$a1=array_fill_keys($keys,'0');
 			$a1['portname']=$data['name'];
-      $state=acnetmg_del_port(json_encode($temp_data));
-
-      $result=$state;
+      $result=acnetmg_del_port(json_encode($temp_data));
     }
     return $result;
   }
