@@ -29,10 +29,11 @@
 @import "./02_molecule/m-thumbnail";
 @import "./02_molecule/m-switch";
 
-/* 03: 组织(organism), 把分子与原子组件按一定的结构组合起来 */
+/* 03: 组织(organism), 把分子组件按一定的结构组合起来 */
 @import "./03_organism/o-table";
 @import "./03_organism/o-form";
 @import "./03_organism/o-wizard";
+@import "./03_organism/o-box";
 @import "./03_organism/o-top-menu-bar";
 @import "./03_organism/o-menu-bar";
 @import "./03_organism/o-nav";
@@ -48,7 +49,6 @@
 @import './04_template/t-sign';
 @import './04_template/t-wizard';
 @import './04_template/t-main';
-@import './04_template/t-stats';
 @import './04_template/t-list-info';
 
 /* Theme css */

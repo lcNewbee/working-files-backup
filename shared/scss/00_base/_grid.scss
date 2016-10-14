@@ -14,10 +14,10 @@ $mw-xl:  1382px;
 .row {
   @include clearfix;
 }
-.cols {
+.cols,
+[class='col-*'] {
   float: left;
 }
-
 .container {
   > .row {
     margin: 0 -10px;
@@ -30,13 +30,8 @@ $mw-xl:  1382px;
 
 @include make-grid();
 
-// Mobile
-@media screen and (min-width: $mw-sm) {
-
-}
-
-// Tablets
-@media screen and (min-width: $mw-md) {
+// Powerbooks
+@media screen and (min-width: $mw-xl) {
 
 }
 
@@ -45,7 +40,12 @@ $mw-xl:  1382px;
 
 }
 
-// Powerbooks
-@media screen and (min-width: $mw-xl) {
+// Tablets
+@media screen and (min-width: $mw-md) {
+
+}
+
+// Mobile
+@media screen and (min-width: $mw-sm) {
 
 }

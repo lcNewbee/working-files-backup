@@ -68,6 +68,7 @@ const propTypes = {
 
   // 添加，编辑具体列表项相关
   modalSize: PropTypes.string,
+  editFormId: PropTypes.string,
   editFormLayout: PropTypes.string,
   defaultEditData: PropTypes.object,
   editFormOptions: PropTypes.oneOfType([
@@ -203,7 +204,7 @@ class ListInfo extends React.Component {
   }
   onSave() {
     if (this.props.validateAll) {
-      this.props.validateAll()
+      this.props.validateAll(this.props.editFormId)
         .then((errMsg) => {
           if (errMsg.isEmpty()) {
             this.props.onListAction();
@@ -311,7 +312,7 @@ class ListInfo extends React.Component {
     const {
       store, route, app, modalSize, title, listTitle,
       selectable, deleteable, searchable, addable, actionable, noTitle,
-      editFormLayout, editFormOptions, defaultEditData,
+      editFormLayout, editFormOptions, defaultEditData, editFormId,
       settingsFormOption, updateScreenSettings, hasSettingsSaveButton,
       queryFormOptions,
       actionBarChildren,
@@ -419,6 +420,7 @@ class ListInfo extends React.Component {
           layout="flow"
           data={query}
           options={queryFormOptions}
+          id={editFormId}
           isSaving={app.get('fetching')}
           invalidMsg={app.get('invalid')}
           validateAt={app.get('validateAt')}

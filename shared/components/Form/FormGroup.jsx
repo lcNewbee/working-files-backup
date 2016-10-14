@@ -2,6 +2,17 @@ import React, { PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import FormInput from './FormInput';
 
+function isValidateMyForm(validateAt, myForm) {
+  let validateForm = '__all__';
+  if (typeof validateAt === 'string') {
+    validateForm = validateAt.split('.')[0];
+  }
+
+  return (
+    validateForm === '__all__' || myForm === validateForm
+  );
+}
+
 const propTypes = {
   onValidError: PropTypes.func,
   errMsg: PropTypes.string,
@@ -11,7 +22,7 @@ const propTypes = {
   id: PropTypes.string,
   disabled: PropTypes.bool,
   required: PropTypes.bool,
-  validateAt: PropTypes.number,
+  validateAt: PropTypes.string,
   name: PropTypes.string,
   validator: PropTypes.object,
   display: PropTypes.string,
@@ -20,6 +31,7 @@ const propTypes = {
   inputStyle: PropTypes.object,
   children: PropTypes.node,
   'data-label': PropTypes.string,
+  form: PropTypes.string,
 };
 
 const defaultProps = {
@@ -36,7 +48,7 @@ class FormGroup extends React.Component {
     this.clearValidError = this.clearValidError.bind(this);
   }
   componentDidUpdate(prevProps) {
-    const { value } = this.props;
+    const { value, validateAt, form } = this.props;
 
     // 数据为空或有数据验证对象，需进行数据验证
     if (this.props.validator || value === '' || value === undefined) {
@@ -44,8 +56,9 @@ class FormGroup extends React.Component {
       if (!this.props.disabled) {
         if (prevProps.value !== value) {
           this.checkClear();
-        } else if (prevProps.validateAt !== this.props.validateAt) {
-          if (this.myRef.offsetWidth > 0) {
+        } else if (prevProps.validateAt !== validateAt) {
+          if (this.myRef.offsetWidth > 0 &&
+              isValidateMyForm(validateAt, form)) {
             this.check();
           }
         }

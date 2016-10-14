@@ -10,6 +10,7 @@ import {
 } from '../Button';
 
 const propTypes = {
+  id: PropTypes.string,
   action: PropTypes.string,
   className: PropTypes.string,
   layout: PropTypes.oneOf(['flow', 'block']),
@@ -22,7 +23,7 @@ const propTypes = {
   rightChildren: PropTypes.node,
 
   // 数据验证相关
-  validateAt: PropTypes.number,
+  validateAt: PropTypes.string,
   onChangeData: PropTypes.func,
   onValidError: PropTypes.func,
   onSave: PropTypes.func,
@@ -67,10 +68,10 @@ class FormContainer extends React.Component {
   }
   renderFormGroup(option) {
     const {
-      invalidMsg, validateAt, onValidError, actionQuery,
+      invalidMsg, validateAt, onValidError, actionQuery, id,
     } = this.props;
     const myProps = option.toJS();
-    const id = myProps.id;
+    const groupId = myProps.id;
     const myComponent = myProps.component;
     const checkboxValue = myProps.checkedValue || '1';
     let isShow = true;
@@ -81,12 +82,16 @@ class FormContainer extends React.Component {
     delete myProps.id;
 
     if (id) {
-      myProps.name = id;
-      myProps.key = id;
+      myProps.form = id;
+    }
+
+    if (groupId) {
+      myProps.name = groupId;
+      myProps.key = groupId;
     }
 
     if (invalidMsg && typeof invalidMsg.get === 'function') {
-      myProps.errMsg = invalidMsg.get(id);
+      myProps.errMsg = invalidMsg.get(groupId);
     }
 
     // 同时支持 Map 或 object 数据
@@ -94,7 +99,7 @@ class FormContainer extends React.Component {
       if (!Map.isMap(data)) {
         data = fromJS(data);
       }
-      myProps.value = data.get(id) || '';
+      myProps.value = data.get(groupId) || '';
     }
 
     if (validateAt) {
@@ -118,7 +123,7 @@ class FormContainer extends React.Component {
 
     if (myProps.saveOnChange) {
       myProps.onChange = ((myData) => {
-        this.onChangeData(id, myData);
+        this.onChangeData(groupId, myData);
         this.onSave();
       });
     }
@@ -201,6 +206,7 @@ class FormContainer extends React.Component {
     return (
       <div
         className={classNames}
+        id={this.props.id}
         {...formProps}
       >
         {

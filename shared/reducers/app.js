@@ -48,6 +48,14 @@ function receiveAcInfo(state, action) {
   return state.set('fetching', false).merge(myData);
 }
 
+function handleValidateAll(state, action) {
+  const time = action.payload.validateAt;
+  const formId = action.payload.formId || '__all__';
+
+  return state.set('invalid', fromJS({}))
+    .set('validateAt', `${formId}.${time}`);
+}
+
 export default function (state = defaultState, action) {
   switch (action.type) {
     case 'INIT_APP_CONFIG':
@@ -57,8 +65,7 @@ export default function (state = defaultState, action) {
      * 全局数据验证
      */
     case 'START_VALIDATE_ALL':
-      return state.set('validateAt', action.validateAt)
-          .set('invalid', fromJS({}));
+      return handleValidateAll(state, action);
 
     case 'RESET_VAILDATE_MSG':
       return state.set('invalid', fromJS({}));

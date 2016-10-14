@@ -58,7 +58,9 @@ export function receiveFetchProductInfo(data) {
 
 
 /**
- * Ajax
+ * 保存Ajax请求开始
+ * @export
+ * @returns Action 对象
  */
 export function requestSave() {
   return {
@@ -139,6 +141,10 @@ export function fetch(url, query) {
 
 /**
  * 全局Ajax save action
+ * @export
+ * @param {String} url
+ * @param {Object} query
+ * @returns Fetch Promise 对象
  */
 export function save(url, query) {
   return (dispatch) => {
@@ -180,13 +186,25 @@ export function fetchProductInfo() {
 /**
  * Validate data
  */
-export function startValidateAll() {
+export function startValidateAll(formId) {
   return {
     type: 'START_VALIDATE_ALL',
-    validateAt: Date.now(),
+    payload: {
+      validateAt: Date.now(),
+      formId,
+    },
   };
 }
-export function validateAll(func) {
+
+/**
+ *
+ *
+ * @export
+ * @param {function} func 验证完成后的回调函数
+ * @param {Sting} formId 具体的表单ID（没有则验证界面所有可视元素）
+ * @returns
+ */
+export function validateAll(formId, func) {
   return (dispatch, getState) => {
     const validatePromise = new Promise((resolve) => {
       setTimeout(() => {
@@ -199,8 +217,7 @@ export function validateAll(func) {
       }, 20);
     });
 
-    dispatch(startValidateAll());
-
+    dispatch(startValidateAll(formId));
     return validatePromise;
   };
 }

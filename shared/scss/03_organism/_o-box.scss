@@ -1,20 +1,16 @@
 $border-style: 1px solid #dedede;
 
-.t-box {
+.o-box {
   border-right: $border-style;
   border-bottom: $border-style;
+  @include clearfix;
 
-  .t-box__canvas {
-    width: 100%;
-    min-height: 240px;
-    margin: 10px auto;
-  }
-
-  .t-box__cell {
+  .o-box__cell {
     padding: 8px 13px;
     border-left: $border-style;
     border-top: $border-style;
     border-collapse: collapse;
+
     @include clearfix;
   }
 }
