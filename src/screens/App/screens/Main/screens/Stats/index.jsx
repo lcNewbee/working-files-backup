@@ -11,7 +11,6 @@ import {
 
 import * as actions from './actions';
 import reducer from './reducer';
-import './_index.scss';
 
 const flowRateFilter = utils.filter('flowRate');
 const flowRateKbFilter = utils.filter('flowRate:["KB"]');

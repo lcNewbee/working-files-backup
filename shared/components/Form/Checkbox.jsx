@@ -7,6 +7,8 @@ const propTypes = {
   size: PropTypes.oneOf(['md', 'lg']),
   theme: PropTypes.oneOf(['square']),
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  onValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  offValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   id: PropTypes.string,
   options: PropTypes.object,
   style: PropTypes.object,
@@ -15,6 +17,8 @@ const propTypes = {
 
 const defaultProps = {
   type: 'checkbox',
+  onValue: 1,
+  offValue: 0,
 };
 
 class Checkbox extends React.Component {
@@ -25,10 +29,9 @@ class Checkbox extends React.Component {
   }
   render() {
     const { options, size, theme, className, style, text } = this.props;
+    const label = options && options.label;
     let { value, id } = this.props;
     let classNames = 'a-checkbox';
-
-    let label = options && options.label;
 
     value = value === undefined ? '1' : value;
 

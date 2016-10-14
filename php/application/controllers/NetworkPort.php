@@ -52,18 +52,24 @@ class NetworkPort extends CI_Controller {
       'code'=>4000,
       'msg'=>'OK'
     );
+    function getCgiParams($oriData) {
+      $ret = array(
+        'portid'=>element('id', $oriData),
+        'portname'=>element('name', $oriData),
+        'speed'=>element('speed', $oriData),
+        'duplex'=>element('workModel', $oriData),
+        'desc'=>element('description', $oriData),
+        'adminstate'=>(int)element('status', $oriData),
+        'mgifname'=>(int)element('mgifname', $oriData)
+      );
+      return $ret;
+    }
+
     $result = null;
     $actionType = element('action', $data);
     if($actionType === 'edit'){
-      $keys=array("portname","speed","duplex","desc","adminstate","mgifname");
-			$a1=array_fill_keys($keys,'0');
-			$a1['portname']=$data['name'];
-			$a1['speed']=$data['workModel'];
-			$a1['duplex']=$data['description'];
-      $a1['desc']=$data['targetMask'];
-      $a1['adminstate']=$data['status'];
-      $a1['mgifname']=$data['mgifname'];
-      $state=acnetmg_add_port(json_encode($temp_data));
+      $cgiParam = getCgiParams($data);
+      $state=acnetmg_add_port(json_encode($cgiParam));
       $result=$state;
     }
     elseif($actionType === 'delete'){
@@ -71,6 +77,7 @@ class NetworkPort extends CI_Controller {
 			$a1=array_fill_keys($keys,'0');
 			$a1['portname']=$data['name'];
       $state=acnetmg_del_port(json_encode($temp_data));
+
       $result=$state;
     }
     return $result;

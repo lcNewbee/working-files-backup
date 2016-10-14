@@ -82,6 +82,7 @@ const sPortalTemplate =
 /**
  * AP组管理
  */
+const sOverview = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Overview');
 const sUsers = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Users');
 const sFlowStatus = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/FlowStatus');
 const sSsidStatus = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/SsidStatus');
@@ -271,9 +272,15 @@ const routes = [
             path: '/main/group/monitor',
             icon: 'pie-chart',
             text: _('Monitor'),
-            indexRoute: { onEnter: (nextState, replace) => replace('/main/group/monitor/user') },
+            indexRoute: { onEnter: (nextState, replace) => replace('/main/group/monitor/overview') },
             childRoutes: [
               {
+                id: 'overview',
+                path: '/main/group/monitor/overview',
+                formUrl: 'goform/group/overview',
+                text: _('Overview'),
+                component: sOverview.Screen,
+              }, {
                 id: 'user',
                 path: '/main/group/monitor/user',
                 formUrl: 'goform/getClientInfo',

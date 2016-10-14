@@ -86,6 +86,15 @@ const screenOptions = fromJS([
   }, {
     id: 'status',
     text: _('Port Status'),
+    options: [
+      {
+        value: 1,
+        label: _('On'),
+      }, {
+        value: 0,
+        label: _('Off'),
+      },
+    ],
     formProps: {
       type: 'checkbox',
       value: '1',

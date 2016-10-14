@@ -23,12 +23,13 @@ class NetworkInterface extends CI_Controller {
 				$mask = element('mask'.$x, $value);
 
 				if($ip !== '0.0.0.0' && $mask !== '0.0.0.0') {
-					$interfaces[$index] = array(
-					            'portid'=>element('portid', $value),
-					            'name'=>element('port_name', $value),
-					            'ip'=>$ip,
-					            'mask'=>$mask
-					          );
+          array_push($interfaces, array(
+            'portid'=>element('portid', $value),
+            'name'=>element('port_name', $value),
+            'ip'=>$ip,
+            'mask'=>$mask
+          ));
+					// $interfaces[$index] = ;
 				}
 			}
 		}
@@ -51,7 +52,7 @@ class NetworkInterface extends CI_Controller {
 		$actionType = element('action', $data);
 		$selectList = element('selectedList', $data);
 
-    function getItem($oriData) {
+    function getCgiParam($oriData) {
       $retData = array(
         'portname'=>element('name', $oriData),
         'ip'=>element('ip', $oriData),
@@ -63,30 +64,22 @@ class NetworkInterface extends CI_Controller {
 
 		if ($actionType === 'delete') {
 			foreach($selectList as $item) {
-				$deleteItem=array(
-				          'portname'=>element('name', $item),
-				          'ip'=>element('ip', $item),
-				          'mask'=>element('mask', $item)
-				        );
+        $deleteItem = getCgiParam($item);
 				$result=acnetmg_del_portip(json_encode($deleteItem));
 			}
 		}
 		elseif($actionType === 'add') {
-			$addItem=array(
-        'portname'=>element('name', $data),
-        'ip'=>element('ip', $data),
-        'mask'=>element('mask', $data)
-      );
+			$addItem=getCgiParam($data);
       $itemStr = json_encode($addItem);
 			$result=acnetmg_add_portip($itemStr);
 		}
     elseif($actionType === 'edit') {
       $oldData = element('originalData', $data);
-      $deleteItem = getItem($oldData);
-      $addItem=getItem($data);
+      $deleteItem = getCgiParam($oldData);
+      $addItem=getCgiParam($data);
       $result=acnetmg_del_portip(json_encode($deleteItem));
 
-      if (element('code', json_decode($result)) === 2000) {
+      if (strpos($result, '2000') !== false) {
         $result=acnetmg_add_portip(json_encode($addItem));
       }
     }

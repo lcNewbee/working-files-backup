@@ -40,7 +40,6 @@ class FormGroup extends React.Component {
 
     // 数据为空或有数据验证对象，需进行数据验证
     if (this.props.validator || value === '' || value === undefined) {
-
       // 如果组是可用的
       if (!this.props.disabled) {
         if (prevProps.value !== value) {
@@ -126,7 +125,7 @@ class FormGroup extends React.Component {
     return (
       <div
         className={groupClassName}
-        ref={(ref) => (this.myRef = ref)}
+        ref={ref => (this.myRef = ref)}
       >
         {
           label ? (

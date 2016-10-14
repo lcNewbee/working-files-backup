@@ -9,10 +9,10 @@ class NetworkDhcp extends CI_Controller {
 	}
 	function fetch(){
 		$query=$this->db->select('pool_id,pool_name,attr_name,attr_value')
-																		    ->from('pool_params')
-																		    ->join('pool_attr','pool_attr.id=pool_params.attr_id')
-																		    ->join('pool_list','pool_list.id=pool_params.pool_id')
-																		    ->get()->result_array();
+              ->from('pool_params')
+              ->join('pool_attr','pool_attr.id=pool_params.attr_id')
+              ->join('pool_list','pool_list.id=pool_params.pool_id')
+              ->get()->result_array();
 		$state=array(
 				      'code'=>2000,
 				      'msg'=>'OK'

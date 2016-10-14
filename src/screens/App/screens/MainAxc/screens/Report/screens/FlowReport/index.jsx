@@ -234,7 +234,7 @@ export default class View extends React.Component {
             />
           </div>
         </div>
-        <div className="stats-group clearfix" >
+        <div className="row" >
           <div className="cols col-6" >
             <div className="t-stats__cell">
               <h3>{ _('Users Number') }</h3>
@@ -257,16 +257,17 @@ export default class View extends React.Component {
               />
             </div>
           </div>
-          <div className="t-stats__cell">
+          <div className="cols col-12 t-stats__cell">
             <h3>{ _('Flow Trend') }</h3>
           </div>
-          <div className="t-stats__cell">
+          <div className="cols col-12 t-stats__cell">
             <EchartReact
               option={systemOption}
               className="t-stats__canvas"
             />
           </div>
         </div>
+
       </div>
     );
   }

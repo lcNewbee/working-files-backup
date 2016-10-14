@@ -1,0 +1,14 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "cpuUsed": 20,
+    "cpuTotal": 100,
+    "memoryUsed": 40,
+    "memoryTotal": 100,
+    "storeUsed": 10,
+    "storeTotal": 100
+  }
+}

@@ -155,7 +155,7 @@ export function onListAction(url) {
     const fetchUrl = globalState.screens.getIn([name, 'fetchUrl']) || formUrl;
     const actionQuery = globalState.screens.getIn([name, 'actionQuery']);
     const actionType = actionQuery.get('action');
-    let subData = {};
+    let subData = actionQuery;
     let originalData = globalState.screens.getIn([name, 'data', 'list', actionQuery.get('index')]);
 
     if (originalData && originalData.get) {
@@ -209,12 +209,14 @@ export function saveScreenSettings(url) {
     const oriData = globalState.screens.getIn([name, 'data', 'settings']);
     const formUrl = globalState.screens.getIn([name, 'formUrl']);
     const fetchUrl = globalState.screens.getIn([name, 'fetchUrl']) || formUrl;
+    const subData = curData.toJS();
 
     if (!curData.equals(oriData)) {
       console.log('hasChange');
     }
 
-    return dispatch(appActions.save(url || formUrl, curData.toJS()))
+    subData.action = 'setting';
+    return dispatch(appActions.save(url || formUrl, subData))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(fetchScreenData(fetchUrl));

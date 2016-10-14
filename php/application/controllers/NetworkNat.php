@@ -8,77 +8,83 @@ class NetworkNat extends CI_Controller {
 		$this->load->helper('array');
 	}
 	function fetch(){
-		$query=$this->db->select('id,type,addr,nataddr')
-																				    ->from('nat_table')
-																				    ->get()->result_array();
+		$query=$this->db
+      ->select('id,type,addr,nataddr')
+      ->from('nat_table')
+      ->get()->result_array();
+
+    $settings=$this->db
+      ->select('enable')
+      ->from('natenable')
+      ->get()->result_array();
+
 		$keys = array(
       'id'=>'id',
       'type'=> 'ruleType',
-       'addr'=>'sourceAddress',
-       'nataddr'=>'conversionAddress');
-    foreach($query as $key=>$val)
-   {
-    $newArray[$key] = array();
-    foreach($val as $k=>$v)
-    {
+      'addr'=>'sourceAddress',
+      'nataddr'=>'conversionAddress'
+    );
+    $newArray = array();
+    foreach($query as $key=>$val) {
+      $newArray[$key] = array();
+      foreach($val as $k=>$v) {
         $newArray[$key][$keys[$k]] = $v;
+      }
     }
-}
 		$state=array(
       'code'=>2000,
       'msg'=>'OK'
     );
 		$data=array(
-      "settings"=>array("enable"=> "1"),
+      "settings"=>element(0, $settings),
       'list'=> $newArray
     );
 		$result=array(
-		      'state'=>$state,
-		      'data'=>$data
-		    );
+      'state'=>$state,
+      'data'=>$data
+    );
 		return 	$result;
 	}
 
 	function onAction($data) {
 		$result = null;
 		$actionType = element('action', $data);
+    $selectList = element('selectedList', $data);
+
+    function getCgiParams($oriData) {
+      $ret = array(
+        'id'=>element('id', $oriData),
+        'type'=>element('ruleType', $oriData),
+        'ipaddr'=>element('sourceAddress', $oriData),
+        'natipaddr'=>element('conversionAddress', $oriData),
+      );
+      return $ret;
+    }
+
 		if ($actionType === 'add') {
-			$keys=array("type","addr","nataddr");
-			$a1=array_fill_keys($keys,'0');
-			$a1['type']=$data['ruleType'];
-			$a1['ipaddr']=$data['sourceAddress'];
-			$a1['natipaddr']=$data['conversionAddress'];
-			$state=acnetmg_add_nat(json_encode($a1));
+			$cgiParams=getCgiParams($data);
+			$state=acnetmg_add_nat(json_encode($cgiParams));
       $result=$state;
 		}
 		elseif($actionType === 'edit') {
-			$keys=array("id","type","ipaddr","natipaddr");
-			$a1=array_fill_keys($keys,'0');
-      $a1['id']=$data['id'];
-			$a1['type']=$data['ruleType'];
-			$a1['ipaddr']=$data['sourceAddress'];
-			$a1['natipaddr']=$data['conversionAddress'];
-			$state=acnetmg_update_nat(json_encode($a1));
+			$cgiParams=getCgiParams($data);
+			$state=acnetmg_update_nat(json_encode($cgiParams));
       $result=$state;
 		}
-		elseif($actionType === 'delete'){
-      $keys=array("id","type","ipaddr","natipaddr");
-			$a1=array_fill_keys($keys,'0');
-      $a1['id']=$data['id'];
-			$a1['type']=$data['ruleType'];
-			$a1['ipaddr']=$data['sourceAddress'];
-			$a1['natipaddr']=$data['conversionAddress'];
-			$state=acnetmg_del_nat(json_encode($a1));
+		elseif($actionType === 'delete') {
+
+      foreach($selectList as $item) {
+        $deleteItem = getCgiParams($item);
+				$result=acnetmg_del_nat(json_encode($deleteItem));
+			}
+		}
+    elseif($actionType === 'setting'){
+      $cgiParams = array(
+        'enable'=>(int)element('enable', $data)
+      );
+			$state=acnetmg_nat_enable(json_encode($cgiParams));
       $result=$state;
 		}
-    	elseif($actionType === 'setting'){
-      $keys = array( 'enable');
-      $a1=array_fill_keys($keys,'0');
-      $a1['enable']=$data['enable'];
-			$state=acnetmg_del_nat(json_encode($a1));
-      $result=$state;
-		}
-		;
 		return 	$result;
 	}
 

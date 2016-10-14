@@ -9,7 +9,7 @@ import {
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/screens';
 
-function getCpuOption(serverData) {
+function getTerminalTypeOption(serverData) {
   const ret = {
     tooltip: {
       trigger: 'item',
@@ -18,15 +18,16 @@ function getCpuOption(serverData) {
     legend: {
       orient: 'vertical',
       x: 'left',
-      data: [_('Used'), _('Free')],
+      y: 'bottom',
+      data: [_('Offline'), _('Online')],
     },
     title: {
-      text: _('CPU Activity Monitor'),
+      text: _('Terminal Type'),
       x: 'center',
     },
     series: [
       {
-        name: _('CPU Activity Monitor'),
+        name: _('Producer'),
         type: 'pie',
         radius: ['40%', '70%'],
         avoidLabelOverlap: false,
@@ -54,8 +55,8 @@ function getCpuOption(serverData) {
   };
 
   ret.series[0].data = [
-    { value: serverData.get('cpuUsed'), name: _('Used') },
-    { value: serverData.get('cpuTotal') - serverData.get('cpuUsed'), name: _('Free') },
+    { value: serverData.get('cpuUsed'), name: _('Offline') },
+    { value: serverData.get('cpuTotal') - serverData.get('cpuUsed'), name: _('Online') },
   ];
 
   return ret;
@@ -67,17 +68,18 @@ function getMemoryOption(serverData) {
       formatter: '{a} <br/>{b}: {c} ({d}%)',
     },
     title: {
-      text: _('Memory Activity Monitor'),
+      text: _('AP Status'),
       x: 'center',
     },
     legend: {
       orient: 'vertical',
       x: 'left',
-      data: [_('Used'), _('Free')],
+      y: 'bottom',
+      data: [_('Offline'), _('Online')],
     },
     series: [
       {
-        name: _('Memory Activity Monitor'),
+        name: _('Status'),
         type: 'pie',
         radius: ['40%', '70%'],
         avoidLabelOverlap: false,
@@ -104,8 +106,8 @@ function getMemoryOption(serverData) {
   };
 
   ret.series[0].data = [
-    { value: serverData.get('memoryUsed'), name: _('Used') },
-    { value: serverData.get('memoryTotal') - serverData.get('memoryUsed'), name: _('Free') },
+    { value: serverData.get('memoryUsed'), name: _('Offline') },
+    { value: serverData.get('memoryTotal') - serverData.get('memoryUsed'), name: _('Online') },
   ];
 
   return ret;
@@ -193,61 +195,67 @@ export default class View extends PureComponent {
   }
 
   render() {
-    const { screens } = this.props;
+    const { screens, route } = this.props;
     const curScreenId = screens.get('curScreenId');
     const serverData = screens.getIn([curScreenId, 'data']);
     const memoryStatusOption = getMemoryOption(serverData);
-    const cpuStatusOption = getCpuOption(serverData);
+    const terminalTypeStatusOption = getTerminalTypeOption(serverData);
     const storeStatusOption = getStoreOption(serverData);
 
     return (
       <div>
-        <h3 className="t-main__content-title">{_('System Status') }</h3>
-        <div className="t-stats row">
-          <div className="cols col-6" >
-            <div className="t-stats__cell">
-              <h3>{ _('Memory') }</h3>
+        <h3 className="t-main__content-title">{route.text}</h3>
+        <div className="stats-group clearfix" >
+          <div className="cols col-4" >
+            <div className="stats-group-cell">
+              <h3>{ _('AP') }</h3>
             </div>
-            <div className="t-stats__cell">
+            <div className="stats-group-cell">
               <EchartReact
                 option={memoryStatusOption}
-                className="t-stats__canvas"
-                style={{
-                  width: '80%',
-                  minHeight: '180px',
-                }}
-              />
-            </div>
-          </div>
-          <div className="cols col-6" >
-            <div className="t-stats__cell">
-              <h3>{ _('CPU') }</h3>
-            </div>
-            <div className="t-stats__cell">
-              <EchartReact
-                option={cpuStatusOption}
-                className="t-stats__canvas"
-                style={{
-                  width: '80%',
-                  minHeight: '180px',
-                }}
-              />
-            </div>
-          </div>
-          <div className="cols col-12" >
-            <div className="t-stats__cell">
-              <h3>{ _('Store') }</h3>
-            </div>
-            <div className="t-stats__cell">
-              <EchartReact
-                option={storeStatusOption}
-                className="t-stats__canvas"
+                className="stats-group-canvas"
                 style={{
                   width: '100%',
-                  minHeight: '120px',
+                  minHeight: '200px',
                 }}
               />
             </div>
+          </div>
+          <div className="cols col-8">
+            <div className="stats-group-cell">
+              <h3>{ _('Clients') }</h3>
+            </div>
+            <div className="stats-group-cell row">
+              <EchartReact
+                option={terminalTypeStatusOption}
+                className="stats-group-canvas cols col-6"
+                style={{
+                  minHeight: '200px',
+                }}
+              />
+              <EchartReact
+                option={terminalTypeStatusOption}
+                className="stats-group-canvas cols col-6"
+                style={{
+                  minHeight: '200px',
+                }}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="stats-group clearfix" >
+          <div className="stats-group-cell">
+            <h3>{ _('Flow') }</h3>
+          </div>
+          <div className="stats-group-cell">
+            <EchartReact
+              option={storeStatusOption}
+              className="stats-group-canvas"
+              style={{
+                width: '100%',
+                minHeight: '120px',
+              }}
+            />
           </div>
         </div>
       </div>
