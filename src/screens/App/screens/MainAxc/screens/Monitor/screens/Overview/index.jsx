@@ -2,14 +2,65 @@ import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import utils from 'shared/utils';
-import { Map } from 'immutable';
-import {
-  PureComponent, EchartReact,
-} from 'shared/components';
+import { Map, List } from 'immutable';
+import PureComponent from 'shared/components/Base/PureComponent';
+import EchartReact from 'shared/components/EchartReact';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/screens';
 
 function getTerminalTypeOption(serverData) {
+  const dataList = serverData.get('terminalType');
+  const ret = {
+    tooltip: {
+      trigger: 'item',
+      formatter: '{a} <br/>{b}: {c} ({d}%)',
+    },
+    title: {
+      text: _('Terminal Type'),
+      x: 'center',
+    },
+    legend: {
+      orient: 'vertical',
+      x: 'left',
+      y: 'bottom',
+    },
+    series: [
+      {
+        name: 'Type',
+        type: 'pie',
+        radius: ['30%', '60%'],
+        avoidLabelOverlap: false,
+        label: {
+          normal: {
+            show: false,
+            position: 'center',
+          },
+          emphasis: {
+            show: true,
+            textStyle: {
+              fontSize: '12',
+              fontWeight: 'bold',
+            },
+          },
+        },
+        labelLine: {
+          normal: {
+            show: false,
+          },
+        },
+
+      },
+    ],
+  };
+
+  if (List.isList(dataList)) {
+    ret.legend.data = dataList.map(item => item.get('name')).toJS();
+    ret.series[0].data = dataList.toJS();
+  }
+
+  return ret;
+}
+function getClientsStatusOption(serverData) {
   const ret = {
     tooltip: {
       trigger: 'item',
@@ -22,14 +73,14 @@ function getTerminalTypeOption(serverData) {
       data: [_('Offline'), _('Online')],
     },
     title: {
-      text: _('Terminal Type'),
+      text: _('Clients Status'),
       x: 'center',
     },
     series: [
       {
-        name: _('Producer'),
+        name: _('Status'),
         type: 'pie',
-        radius: ['40%', '70%'],
+        radius: ['30%', '60%'],
         avoidLabelOverlap: false,
         label: {
           normal: {
@@ -39,7 +90,7 @@ function getTerminalTypeOption(serverData) {
           emphasis: {
             show: true,
             textStyle: {
-              fontSize: '20',
+              fontSize: '12',
               fontWeight: 'bold',
             },
           },
@@ -61,7 +112,7 @@ function getTerminalTypeOption(serverData) {
 
   return ret;
 }
-function getMemoryOption(serverData) {
+function getApStatusOption(serverData) {
   const ret = {
     tooltip: {
       trigger: 'item',
@@ -81,7 +132,7 @@ function getMemoryOption(serverData) {
       {
         name: _('Status'),
         type: 'pie',
-        radius: ['40%', '70%'],
+        radius: ['30%', '60%'],
         avoidLabelOverlap: false,
         label: {
           normal: {
@@ -91,7 +142,7 @@ function getMemoryOption(serverData) {
           emphasis: {
             show: true,
             textStyle: {
-              fontSize: '20',
+              fontSize: '12',
               fontWeight: 'bold',
             },
           },
@@ -112,8 +163,8 @@ function getMemoryOption(serverData) {
 
   return ret;
 }
-
-function getStoreOption(serverData) {
+function getFlowOption(serverData) {
+  const dataList = serverData.get('flowList');
   const option = {
     tooltip: {
       trigger: 'axis',
@@ -121,44 +172,35 @@ function getStoreOption(serverData) {
         type: 'line',        // 默认为直线，可选为：'line' | 'shadow'
       },
     },
-    legend: {
-      data: [_('Used'), _('Free')],
-    },
+    legend: {},
     grid: {
       left: '3%',
       right: '4%',
       bottom: '0',
       containLabel: true,
     },
-    xAxis: {
-      type: 'value',
-      max: serverData.get('storeTotal'),
-      position: 'bottom',
-    },
-
-    yAxis: [
+    xAxis: [
       {
         type: 'category',
-        data: [_('Store')],
       },
     ],
+    yAxis: {
+      type: 'value',
+      position: 'bottom',
+    },
     series: [
       {
-        name: _('Used'),
+        name: '直接访问',
         type: 'bar',
-        barWidth: 20,
-        stack: _('Store'),
-        data: [serverData.get('storeUsed')],
-      },
-      {
-        name: _('Free'),
-        type: 'bar',
-        stack: _('Store'),
-        data: [serverData.get('storeTotal') - serverData.get('storeUsed')],
+        barWidth: '60%',
       },
     ],
   };
 
+  if (List.isList(dataList)) {
+    option.xAxis[0].data = dataList.map(item => item.get('name')).toJS();
+    option.series[0].data = dataList.map(item => item.get('value')).toJS();
+  }
   return option;
 }
 
@@ -198,22 +240,23 @@ export default class View extends PureComponent {
     const { screens, route } = this.props;
     const curScreenId = screens.get('curScreenId');
     const serverData = screens.getIn([curScreenId, 'data']);
-    const memoryStatusOption = getMemoryOption(serverData);
-    const terminalTypeStatusOption = getTerminalTypeOption(serverData);
-    const storeStatusOption = getStoreOption(serverData);
+    const apStatusOption = getApStatusOption(serverData);
+    const clientStatusOption = getClientsStatusOption(serverData);
+    const terminalTypeOption = getTerminalTypeOption(serverData);
+    const flowOption = getFlowOption(serverData);
 
     return (
       <div>
         <h3 className="t-main__content-title">{route.text}</h3>
-        <div className="stats-group clearfix" >
+        <div className="o-box row">
           <div className="cols col-4" >
-            <div className="stats-group-cell">
+            <div className="o-box__cell">
               <h3>{ _('AP') }</h3>
             </div>
-            <div className="stats-group-cell">
+            <div className="o-box__cell">
               <EchartReact
-                option={memoryStatusOption}
-                className="stats-group-canvas"
+                option={apStatusOption}
+                className="o-box__canvas"
                 style={{
                   width: '100%',
                   minHeight: '200px',
@@ -222,40 +265,40 @@ export default class View extends PureComponent {
             </div>
           </div>
           <div className="cols col-8">
-            <div className="stats-group-cell">
+            <div className="o-box__cell">
               <h3>{ _('Clients') }</h3>
             </div>
-            <div className="stats-group-cell row">
+            <div className="o-box__cell row">
               <EchartReact
-                option={terminalTypeStatusOption}
-                className="stats-group-canvas cols col-6"
+                option={clientStatusOption}
+                className="o-box__canvas cols col-6"
                 style={{
                   minHeight: '200px',
                 }}
               />
               <EchartReact
-                option={terminalTypeStatusOption}
-                className="stats-group-canvas cols col-6"
+                option={terminalTypeOption}
+                className="o-box__canvas cols col-6"
                 style={{
                   minHeight: '200px',
                 }}
               />
             </div>
           </div>
-        </div>
-        <div className="stats-group clearfix" >
-          <div className="stats-group-cell">
-            <h3>{ _('Flow') }</h3>
-          </div>
-          <div className="stats-group-cell">
-            <EchartReact
-              option={storeStatusOption}
-              className="stats-group-canvas"
-              style={{
-                width: '100%',
-                minHeight: '120px',
-              }}
-            />
+          <div className="cols col-12">
+            <div className="o-box__cell">
+              <h3>{ _('Flow') }</h3>
+            </div>
+            <div className="o-box__cell">
+              <EchartReact
+                option={flowOption}
+                className="o-box__canvas"
+                style={{
+                  width: '100%',
+                  minHeight: '200px',
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>

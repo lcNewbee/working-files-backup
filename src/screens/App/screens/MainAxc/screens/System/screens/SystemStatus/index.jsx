@@ -203,15 +203,15 @@ export default class View extends PureComponent {
     return (
       <div>
         <h3 className="t-main__content-title">{_('System Status') }</h3>
-        <div className="t-stats row">
+        <div className="o-box row">
           <div className="cols col-6" >
-            <div className="t-stats__cell">
+            <div className="o-box__cell">
               <h3>{ _('Memory') }</h3>
             </div>
-            <div className="t-stats__cell">
+            <div className="o-box__cell">
               <EchartReact
                 option={memoryStatusOption}
-                className="t-stats__canvas"
+                className="o-box__canvas"
                 style={{
                   width: '80%',
                   minHeight: '180px',
@@ -220,13 +220,13 @@ export default class View extends PureComponent {
             </div>
           </div>
           <div className="cols col-6" >
-            <div className="t-stats__cell">
+            <div className="o-box__cell">
               <h3>{ _('CPU') }</h3>
             </div>
-            <div className="t-stats__cell">
+            <div className="o-box__cell">
               <EchartReact
                 option={cpuStatusOption}
-                className="t-stats__canvas"
+                className="o-box__canvas"
                 style={{
                   width: '80%',
                   minHeight: '180px',
@@ -235,13 +235,13 @@ export default class View extends PureComponent {
             </div>
           </div>
           <div className="cols col-12" >
-            <div className="t-stats__cell">
+            <div className="o-box__cell">
               <h3>{ _('Store') }</h3>
             </div>
-            <div className="t-stats__cell">
+            <div className="o-box__cell">
               <EchartReact
                 option={storeStatusOption}
-                className="t-stats__canvas"
+                className="o-box__canvas"
                 style={{
                   width: '100%',
                   minHeight: '120px',

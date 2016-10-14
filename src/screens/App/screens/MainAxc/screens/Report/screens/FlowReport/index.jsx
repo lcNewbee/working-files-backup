@@ -11,6 +11,10 @@ import * as appActions from 'shared/actions/app';
 import * as actions from './actions';
 import myReducer from './reducer';
 
+const canvasStyle = {
+  minHeight: '210px',
+};
+
 export default class View extends React.Component {
   constructor(props) {
     super(props);
@@ -26,6 +30,9 @@ export default class View extends React.Component {
       'onDatesChange',
       'onFocusChange',
     ]);
+  }
+  onDatesChange(data) {
+    this.setState(data);
   }
   getCpuOption() {
     const dataList = [
@@ -90,7 +97,6 @@ export default class View extends React.Component {
 
     return ret;
   }
-
   getUsersOption() {
     const dataList = [
       {
@@ -154,7 +160,6 @@ export default class View extends React.Component {
 
     return ret;
   }
-
   getSystemOption() {
     const ret = {
       tooltip: {
@@ -202,23 +207,26 @@ export default class View extends React.Component {
 
     return ret;
   }
-  onDatesChange(data) {
-    this.setState(data);
-  }
   render() {
     const usersStatusOption = this.getUsersOption();
     const cpuStatusOption = this.getCpuOption();
     const systemOption = this.getSystemOption();
     const { focusedInput, startDate, endDate } = this.state;
     return (
-      <div className="t-stats">
+      <div className="o-box">
         <h3 className="t-main__content-title">{_('Flow Report') }</h3>
-        <div className="t-stats__cell clearfix">
+        <div className="o-box__cell clearfix">
           <div className="cols col-6">
-            <label style={{ marginRight: '20px' }}>{_('Date Range')}</label>
+            <label
+              style={{ marginRight: '20px' }}
+              htmlFor="dateRange"
+            >
+              {_('Date Range')}
+            </label>
             <FormInput
               type="date-range"
               monthFormat="YYYY-MM-DD"
+              id="dateRange"
               onChange={this.onDatesChange}
               isOutsideRange={() => false}
               focusedInput={focusedInput}
@@ -236,34 +244,34 @@ export default class View extends React.Component {
         </div>
         <div className="row" >
           <div className="cols col-6" >
-            <div className="t-stats__cell">
+            <div className="o-box__cell">
               <h3>{ _('Users Number') }</h3>
             </div>
-            <div className="t-stats__cell">
+            <div className="o-box__cell">
               <EchartReact
                 option={usersStatusOption}
-                className="t-stats__canvas"
+                style={canvasStyle}
               />
             </div>
           </div>
           <div className="cols col-6" >
-            <div className="t-stats__cell">
+            <div className="o-box__cell">
               <h3>{ _('App Flow') }</h3>
             </div>
-            <div className="t-stats__cell">
+            <div className="o-box__cell">
               <EchartReact
                 option={cpuStatusOption}
-                className="t-stats__canvas"
+                style={canvasStyle}
               />
             </div>
           </div>
-          <div className="cols col-12 t-stats__cell">
+          <div className="cols col-12 o-box__cell">
             <h3>{ _('Flow Trend') }</h3>
           </div>
-          <div className="cols col-12 t-stats__cell">
+          <div className="cols col-12 o-box__cell">
             <EchartReact
               option={systemOption}
-              className="t-stats__canvas"
+              style={canvasStyle}
             />
           </div>
         </div>

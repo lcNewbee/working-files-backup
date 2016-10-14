@@ -4,6 +4,42 @@
     "msg": "ok"
   },
   "data": {
+    "terminalType": [
+      {
+        "name": "iPhone",
+        "value": 232
+      }, {
+        "name": "Mac",
+        "value": 2323
+      }, {
+        "name": "Google",
+        "value": 2323
+      }, {
+        "name": "Huaiwei",
+        "value": 2323
+      }
+    ],
+    "flowList": [
+      {
+        "name": "http",
+        "value": 232
+      }, {
+        "name": "cifs",
+        "value": 222
+      }, {
+        "name": "smtp",
+        "value": 180
+      }, {
+        "name": "ftp",
+        "value": 120
+      }, {
+        "name": "ssl",
+        "value": 80
+      }, {
+        "name": "https",
+        "value": 20
+      }
+    ],
     "cpuUsed": 20,
     "cpuTotal": 100,
     "memoryUsed": 40,

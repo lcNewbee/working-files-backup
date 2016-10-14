@@ -30,6 +30,7 @@ const screenOptions = fromJS([
     id: 'name',
     text: _('Port Name'),
     formProps: {
+      form: 'port',
       type: 'select',
       required: true,
       loadOptions: getPortList,
@@ -39,6 +40,7 @@ const screenOptions = fromJS([
     id: 'ip',
     text: _('IP'),
     formProps: {
+      form: 'port',
       type: 'text',
       required: true,
       validator: validator({
@@ -49,6 +51,7 @@ const screenOptions = fromJS([
     id: 'mask',
     text: _('Mask'),
     formProps: {
+      form: 'port',
       type: 'text',
       required: true,
       validator: validator({
@@ -93,6 +96,7 @@ export default class View extends React.Component {
         {...this.props}
         tableOptions={tableOptions}
         editFormOptions={editFormOptions}
+        editFormId="port"
         defaultEditData={defaultEditData}
         listKey="allKeys"
         actionable
