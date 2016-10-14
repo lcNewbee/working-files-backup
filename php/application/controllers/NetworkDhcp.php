@@ -83,7 +83,6 @@ class NetworkDhcp extends CI_Controller {
        $temp_data['pool_domain']=$data['domain'];
        $temp_data['pool_dns1']=$data['mainDns'];
        $temp_data['pool_dns2']=$data['secondDns'];
-
 			$state=dhcpd_add_pool_name(json_encode($temp_data));
       $result=$state;
 		}
@@ -129,7 +128,7 @@ class NetworkDhcp extends CI_Controller {
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$data = json_decode(file_get_contents("php://input"), true);
 			$result = $this->onAction($data);
-      echo $result ;
+      echo $result;
 		}
 		else if($_SERVER['REQUEST_METHOD'] == 'GET') {
 			$result = $this->fetch();
