@@ -204,17 +204,21 @@ export default class SpeedTest extends React.Component {
       <div className="o-form">
         <div className="o-form__legend">{_('Speed Test')}</div>
         <div className="clearfix">
-          <FormGroup
+          <div
             className="fl"
-            type="text"
-            label={_('Destination IP')}
-            value={ip}
-            onChange={(data) => this.props.updateItemSettings({
-              ip: data.value,
-            })}
-            required
-            {...validIp}
-          />
+            style={{ width: '370px' }}
+          >
+            <FormGroup
+              type="text"
+              label={_('Destination IP')}
+              value={ip}
+              onChange={(data) => this.props.updateItemSettings({
+                ip: data.value,
+              })}
+              required
+              {...validIp}
+            />
+          </div>
           <Button
             className="fl"
             theme="default"
@@ -304,26 +308,26 @@ export default class SpeedTest extends React.Component {
                 boxShadow: '0px 1px 5px rgba(34, 25, 25, 0.5)',
               }}
             >
-                        <div
-                          style={{
-                            fontSize: '20px',
-                            fontWeight: 'bold',
-                            marginBottom: '5px',
-                            textAlign: 'center',
-                          }}
-                        >
-                          {rx + ' Mbps'}
-                        </div>
-                        <div
-                          style={{
-                            textAlign: 'center',
-                            fontSize: '15px',
-                            fontWeight: 'bold',
-                            color: '#CCC',
-                          }}
-                        >
-                          {_('Download')}
-                        </div>
+              <div
+                style={{
+                  fontSize: '20px',
+                  fontWeight: 'bold',
+                  marginBottom: '5px',
+                  textAlign: 'center',
+                }}
+              >
+                {rx + ' Mbps'}
+              </div>
+              <div
+                style={{
+                  textAlign: 'center',
+                  fontSize: '15px',
+                  fontWeight: 'bold',
+                  color: '#CCC',
+                }}
+              >
+                {_('Download')}
+              </div>
             </div>
             <div
               className="fr"
@@ -335,26 +339,26 @@ export default class SpeedTest extends React.Component {
                 boxShadow: '0px 1px 3px rgba(34, 25, 25, 0.5)',
               }}
             >
-                        <div
-                          style={{
-                            fontSize: '20px',
-                            fontWeight: 'bold',
-                            marginBottom: '5px',
-                            textAlign: 'center',
-                          }}
-                        >
-                          {tx + ' Mbps'}
-                        </div>
-                        <div
-                          style={{
-                            textAlign: 'center',
-                            fontSize: '15px',
-                            fontWeight: 'bold',
-                            color: '#CCC',
-                          }}
-                        >
-                          {_('Upload')}
-                        </div>
+              <div
+                style={{
+                  fontSize: '20px',
+                  fontWeight: 'bold',
+                  marginBottom: '5px',
+                  textAlign: 'center',
+                }}
+              >
+                {tx + ' Mbps'}
+              </div>
+              <div
+                style={{
+                  textAlign: 'center',
+                  fontSize: '15px',
+                  fontWeight: 'bold',
+                  color: '#CCC',
+                }}
+              >
+                {_('Upload')}
+              </div>
             </div>
           </div>
           <div
@@ -367,8 +371,6 @@ export default class SpeedTest extends React.Component {
             <Button
               theme="primary"
               text={_('Run Test')}
-              // loading={this.props.selfState.get('time') !== ''}
-              // disabled={stopWait}
               onClick={this.onRunTest}
             />
             <span
@@ -379,7 +381,7 @@ export default class SpeedTest extends React.Component {
             />
             <Button
               theme="primary"
-              text={_('Advanced Options')}
+              text={_('Advanced')}
               onClick={() => {
                 const pQuery = {
                   time,
@@ -406,9 +408,11 @@ export default class SpeedTest extends React.Component {
               }}
               onOk={() => {
                 this.props.validateAll()
-                    .then(() => {
-                      this.props.updateItemSettings(query);
-                      this.props.toggleShowAdvanceBtn();
+                    .then((msg) => {
+                      if (msg.isEmpty()) {
+                        this.props.updateItemSettings(query);
+                        this.props.toggleShowAdvanceBtn();
+                      }
                     });
               }}
             >
@@ -425,6 +429,7 @@ export default class SpeedTest extends React.Component {
                 type="number"
                 label={_('Test Duration')}
                 value={this.props.selfState.getIn(['query', 'time'])}
+                help="s"
                 onChange={(data) => {
                   const pQuery = this.props.selfState.get('query').set('time', data.value);
                   this.props.changeQueryData(pQuery);
@@ -438,8 +443,8 @@ export default class SpeedTest extends React.Component {
         {// 测试过程中提示用户等待的弹出页面
           !stopWait ? (
             <Modal
-              size="sm"
-              title="Notice"
+              size="min"
+              title={_('Notice')}
               noFooter
               isShow
               onClose={() => {
@@ -468,7 +473,7 @@ export default class SpeedTest extends React.Component {
               >
                 {
                   /[0-9]+/.test(this.props.selfState.get('time')) ? (
-                    _('Time Remain: ') + this.props.selfState.get('time') + 's'
+                    _('Time Remaining: ') + this.props.selfState.get('time') + 's'
                   ) : (
                     this.props.selfState.get('time')
                   )

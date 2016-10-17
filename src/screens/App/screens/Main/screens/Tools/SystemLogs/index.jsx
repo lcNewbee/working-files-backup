@@ -220,7 +220,8 @@ export default class SystemLogs extends Component {
     ];
 
     return (
-      <div>
+      <div className="stats-group">
+        <h3>{_('System Logs')}</h3>
         <FormGroup
           type="checkbox"
           label={_('System Log')}
@@ -235,7 +236,7 @@ export default class SystemLogs extends Component {
                 margin: 'auto',
               }}
             >
-              <div className="m-action-bar">
+              <div>
                 <Search
                   value={this.props.selfState.get('searchItem')}
                   onChange={(val, e) => {
@@ -253,13 +254,15 @@ export default class SystemLogs extends Component {
                   onChange={(data) => this.onChangeNumOfPerPage(data)}
                 />
               </div>
-              <Table
-                className="table"
-                options={systemLogOptions}
-                list={this.props.selfState.get('tableList')}
-                page={this.props.selfState.get('logPage')}
-                onPageChange={(data) => this.onChangePage(data)}
-              />
+              <div className="stats-group-cell">
+                <Table
+                  className="table"
+                  options={systemLogOptions}
+                  list={this.props.selfState.get('tableList')}
+                  page={this.props.selfState.get('logPage')}
+                  onPageChange={(data) => this.onChangePage(data)}
+                />
+              </div>
             </div>
           ) : null
         }

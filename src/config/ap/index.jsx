@@ -127,7 +127,7 @@ const routes = [{
     }, {
       id: 'quicksetup',
       path: '/main/quicksetup',
-      icon: 'cog',
+      icon: 'map-signs',
       fetchUrl: 'goform/get_quicksetup_info',
       saveUrl: 'goform/set_quicksetup',
       text: _('Quick Setup'),
@@ -135,8 +135,8 @@ const routes = [{
     }, {
       id: 'networksettings',
       path: '/main/networksettings',
-      icon: 'cog',
-      text: _('Network Settings'),
+      icon: 'cogs',
+      text: _('Network'),
       component: pNetworkSettings,
       indexRoute: {
         onEnter: (nextState, replace) => replace('main/networksettings/networksettings'),
@@ -147,7 +147,7 @@ const routes = [{
           formUrl: 'goform/get_network_info',
           saveUrl: 'goform/set_network',
           path: '/main/networksettings/networksettings',
-          text: _('Network Settings'),
+          text: _('LAN Settings'),
           component: sNetworkSettings.Screen,
         },
       ],
@@ -155,7 +155,7 @@ const routes = [{
       id: 'wirelessconfig',
       path: '/main/wirelessconfig',
       icon: 'wifi',
-      text: _('Wireless Configuration'),
+      text: _('Wireless'),
       component: pWirelessConfig,
       indexRoute: {
         onEnter: (nextState, replace) => replace('/main/wirelessconfig/basic'),
@@ -213,7 +213,7 @@ const routes = [{
     }, {
       id: 'tools',
       path: '/main/tools',
-      icon: 'cog',
+      icon: 'scissors',
       text: _('Tools'),
       component: pTools,
       indexRoute: { onEnter: (nextState, replace) => replace('/main/tools/speedtest') },

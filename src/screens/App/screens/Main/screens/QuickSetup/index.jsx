@@ -98,13 +98,19 @@ const validOptions = Map({
     rules: 'num:[1, 10]',
   }),
   validPassword: validator({
-    rules: 'pwd|len:[6, 32]',
+    rules: 'pwd|len:[8, 32]',
   }),
   apmac2: validator({
     rules: 'mac',
   }),
   apmac3: validator({
     rules: 'mac',
+  }),
+  Hex: validator({
+    rules: 'hex|len:[10, 10]',
+  }),
+  ASCII: validator({
+    rules: 'ascii|len:[5, 5]',
   }),
 });
 
@@ -298,7 +304,7 @@ export default class QuickSetup extends React.Component {
             className="cols"
             style={{
               width: '80%',
-              marginTop: '20px',
+              marginTop: '15px',
             }}
           >
             <div
@@ -326,7 +332,7 @@ export default class QuickSetup extends React.Component {
             <div
               className="cols col-7"
             >
-              In this mode, the AP will act as a central hub for different wireless LAN clients.
+              {_('This device connected to a router on ethernet port and allow other devices to connect to it wirelessly.')}
             </div>
           </div>
         </div>
@@ -365,7 +371,7 @@ export default class QuickSetup extends React.Component {
             <div
               className="cols col-7"
             >
-              In this mode, the device can copy and reinforce the existing wireless signal to extend the coverage of the signal, especially for a large space to eliminate signal-blind corners.
+              {_('This device is wirelessly connected to a AP or a wireless router, and allows another device  to connect to it via wire.')}
             </div>
           </div>
         </div>
@@ -404,7 +410,7 @@ export default class QuickSetup extends React.Component {
             <div
               className="cols col-7"
             >
-              With client mode, the device can connect to a wired device and works as a wireless adapter to receive wireless signal from your wireless network.
+              {_('This device is wirelessly connected to  AP or a wireless router, and allows other wireless clients to connect to it. It extends the reach of your wireless network.')}
             </div>
           </div>
         </div>
@@ -497,7 +503,7 @@ export default class QuickSetup extends React.Component {
     ]);
     const store = this.props.store;
     const { page, deviceMode } = this.props.selfState.toJS();
-    const { ip, mask, ssid, countryCode, frequency, channelWidth, distance, wirelessMode } = store.get('curData').toJS();
+    const { ip, mask, ssid, countryCode, frequency, channelWidth, distance, wirelessMode, autoAdjust } = store.get('curData').toJS();
     const mode = store.getIn(['curData', 'security', 'mode']);
     const key = store.getIn(['curData', 'security', 'key']);
     const auth = store.getIn(['curData', 'security', 'auth']);
@@ -645,19 +651,45 @@ export default class QuickSetup extends React.Component {
                   </div>
                 )
               }
-              <FormGroup
-                type="range"
-                label={_('Distance')}
-                value={distance}
-                min="0"
-                max="10"
-                step="0.1"
-                hasTextInput
-                help="km"
-                onChange={data => this.props.updateItemSettings({
-                  distance: data.value,
-                })}
-              />
+              <div className="clearfix">
+                <FormGroup
+                  type="range"
+                  className="fl"
+                  label={_('Distance')}
+                  value={distance}
+                  min="1"
+                  max="10"
+                  step="0.1"
+                  hasTextInput
+                  help="km"
+                  disabled={autoAdjust === '1'}
+                  onChange={data => this.props.updateItemSettings({
+                    distance: data.value,
+                  })}
+                />
+                <span
+                  className="fl"
+                  style={{
+                    marginTop: '12px',
+                    marginLeft: '4px',
+                  }}
+                >
+                  <label htmlFor="distance">
+                    <input
+                      id="distance"
+                      type="checkbox"
+                      checked={autoAdjust === '1'}
+                      onClick={() => {
+                        this.props.updateItemSettings({
+                          autoAdjust: autoAdjust === '1' ? '0' : '1',
+                        });
+                      }}
+                      style={{ marginRight: '3px' }}
+                    />
+                    {_('auto')}
+                  </label>
+                </span>
+              </div>
             </div>
           ) : null
         }
@@ -854,20 +886,45 @@ export default class QuickSetup extends React.Component {
                   </div>
                 )
               }
-
-              <FormGroup
-                type="range"
-                label={_('Distance')}
-                value={distance}
-                min="1"
-                max="10"
-                step="0.1"
-                hasTextInput
-                help="km"
-                onChange={data => this.props.updateItemSettings({
-                  distance: data.value,
-                })}
-              />
+              <div className="clearfix">
+                <FormGroup
+                  type="range"
+                  className="fl"
+                  label={_('Distance')}
+                  value={distance}
+                  min="1"
+                  max="10"
+                  step="0.1"
+                  hasTextInput
+                  help="km"
+                  disabled={autoAdjust === '1'}
+                  onChange={data => this.props.updateItemSettings({
+                    distance: data.value,
+                  })}
+                />
+                <span
+                  className="fl"
+                  style={{
+                    marginTop: '12px',
+                    marginLeft: '4px',
+                  }}
+                >
+                  <label htmlFor="distance">
+                    <input
+                      id="distance"
+                      type="checkbox"
+                      checked={autoAdjust === '1'}
+                      onClick={() => {
+                        this.props.updateItemSettings({
+                          autoAdjust: autoAdjust === '1' ? '0' : '1',
+                        });
+                      }}
+                      style={{ marginRight: '3px' }}
+                    />
+                    {_('auto')}
+                  </label>
+                </span>
+              </div>
             </div>
           ) : null
         }
@@ -1032,9 +1089,8 @@ export default class QuickSetup extends React.Component {
                 store.getIn(['curData', 'security', 'mode']) === 'none' ? null : (
                   <div>
                     <FormGroup
-                      label={_('Authentication Type')}
+                      label={_('Auth Type')}
                       type="switch"
-                      name="authenticationType"
                       options={wepAuthenOptions}
                       value={auth}
                       onChange={data => this.props.updateItemSettings({
@@ -1053,7 +1109,6 @@ export default class QuickSetup extends React.Component {
                       <FormGroup
                         label={_('WEP Key Length')}
                         type="switch"
-                        name="wepKeyLength"
                         options={wepKeyLengthOptions}
                         value={keyLength}
                         onChange={(data) => this.props.updateItemSettings({
@@ -1073,7 +1128,6 @@ export default class QuickSetup extends React.Component {
                     <FormGroup
                       label={_('Key Type')}
                       type="switch"
-                      name="keyType"
                       options={keyTypeOptions}
                       value={keyType}
                       onChange={data => this.props.updateItemSettings({
@@ -1091,7 +1145,6 @@ export default class QuickSetup extends React.Component {
                     <FormGroup
                       label={_('Key Index')}
                       type="select"
-                      name="keyIndex"
                       options={keyIndexOptions}
                       value={keyIndex}
                       onChange={data => this.props.updateItemSettings({
@@ -1109,6 +1162,7 @@ export default class QuickSetup extends React.Component {
                       type="password"
                       label={_('Password')}
                       value={key || ''}
+                      required
                       onChange={data => this.props.updateItemSettings({
                         security: {
                           mode,
@@ -1119,24 +1173,50 @@ export default class QuickSetup extends React.Component {
                           keyIndex,
                         },
                       })}
+                      {...this.props.validateOption[keyType]}
                     />
                   </div>
                 )
               }
-
-              <FormGroup
-                type="range"
-                label={_('Distance')}
-                value={distance}
-                min="1"
-                max="10"
-                step="0.1"
-                hasTextInput
-                help="km"
-                onChange={data => this.props.updateItemSettings({
-                  distance: data.value,
-                })}
-              />
+              <div className="clearfix">
+                <FormGroup
+                  type="range"
+                  className="fl"
+                  label={_('Distance')}
+                  value={distance}
+                  min="1"
+                  max="10"
+                  step="0.1"
+                  hasTextInput
+                  help="km"
+                  disabled={autoAdjust === '1'}
+                  onChange={data => this.props.updateItemSettings({
+                    distance: data.value,
+                  })}
+                />
+                <span
+                  className="fl"
+                  style={{
+                    marginTop: '12px',
+                    marginLeft: '4px',
+                  }}
+                >
+                  <label htmlFor="distance">
+                    <input
+                      id="distance"
+                      type="checkbox"
+                      checked={autoAdjust === '1'}
+                      onClick={() => {
+                        this.props.updateItemSettings({
+                          autoAdjust: autoAdjust === '1' ? '0' : '1',
+                        });
+                      }}
+                      style={{ marginRight: '3px' }}
+                    />
+                    {_('auto')}
+                  </label>
+                </span>
+              </div>
             </div>
           ) : null
         }
@@ -1225,7 +1305,7 @@ export default class QuickSetup extends React.Component {
 
         {
           deviceMode === 'sta' ? (
-            <div className="fourthForSta">
+            <div className="fourthForSta clearfix">
               <div className="cols col-5">
                 <FormGroup
                   type="plain-text"
@@ -1300,7 +1380,7 @@ export default class QuickSetup extends React.Component {
 
         {
           deviceMode === 'repeater' ? (
-            <div className="fourthForRepeater">
+            <div className="fourthForRepeater clearfix">
               <div className="cols col-5">
                 <FormGroup
                   type="plain-text"
@@ -1351,7 +1431,7 @@ export default class QuickSetup extends React.Component {
                   label={_('Security')}
                   value={(() => {
                     if (mode !== undefined) {
-                      if (mode === 'none') return mode;
+                      if (mode === 'none' || mode === 'wep') return mode;
                       return mode.concat('/').concat(cipher);
                     }
                     return '';

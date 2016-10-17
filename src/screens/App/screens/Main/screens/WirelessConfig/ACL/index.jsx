@@ -51,7 +51,7 @@ const defaultProps = fromJS({
   ],
 });
 
-const ssidSelectOptions = [];
+let ssidSelectOptions = [];
 export default class ACL extends React.Component {
 
   constructor(props) {
@@ -75,6 +75,7 @@ export default class ACL extends React.Component {
     this.props.fetchSettings()
         .then(() => {
           const aclConfList = this.props.store.getIn(['curData', 'aclConfList']);
+          ssidSelectOptions = [];
           for (let i = 0; i < aclConfList.size; i++) {
             const optionItem = {
               value: i,
@@ -82,7 +83,6 @@ export default class ACL extends React.Component {
             };
             ssidSelectOptions.push(optionItem);
           }
-          // console.log('ssidSelectOptions', ssidSelectOptions);
           this.props.changeSelectedSsid({
             selectedSsid: 0,
             macListLen: aclConfList.getIn([0, 'macList']).size,
@@ -317,7 +317,6 @@ export default class ACL extends React.Component {
           <SaveButton
             theme="primary"
             text={_('Save')}
-            disabled={store.getIn(['curData', 'aclEnable']) === '0'}
             loading={this.props.app.get('saving')}
             onClick={() => this.props.saveSettings('goform/set_acl')}
           />

@@ -18,8 +18,9 @@ var msg = {
 var vaildate = {
   len: function(str, min, max) {
     var len = str.length;
-
-    if (len < min || len > max) {
+    if (min === max && len !== min) {
+      return _('String length must be: %s bit', min);
+    }else if (len < min || len > max) {
       return _('String length range is: %s - %s bit', min, max);
     }
   },

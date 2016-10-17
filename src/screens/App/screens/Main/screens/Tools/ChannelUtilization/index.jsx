@@ -106,7 +106,9 @@ export default class ChannelUtilization extends React.Component {
     return (
       <div>
         <h3>{_('Channel Utilization Survey')}</h3><br />
-        <FormGroup>{_('Note: something you should know...')}</FormGroup>
+        <FormGroup>
+          {_('Notice: Channel utilization scan may temporary disable wireless link(s)')}
+        </FormGroup>
         <FormGroup
           label={_('Per Channel Scan Time')}
           help="s"
@@ -124,12 +126,13 @@ export default class ChannelUtilization extends React.Component {
             theme="primary"
             text={_('Run Test')}
             loading={remainTime !== -1}
+            disabled={remainTime !== -1}
             onClick={() => this.onRunScanBtnClick()}
           />
           {
             remainTime === -1 ? null : (
               <span>
-                {_('Time Remain: ') + remainTime }
+                {_('Time Remaining: ') + remainTime }
               </span>
             )
           }

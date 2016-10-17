@@ -170,22 +170,12 @@ export default class SystemMaintenance extends Component {
   onRebootDevice() {
     const that = this;
     function rebootDevice() {
-      utils.save('goform/reboot')
-          .then((json) => {
-            if (json.state && json.state.code === 2000) {
-              that.props.changeProgressBarInfo(fromJS({
-                title: _('The device is rebooting now, please wait ...'),
-                time: 90,
-                isShow: true,
-              }));
-            } else {
-              that.props.createModal({
-                id: 'settings',
-                role: 'alert',
-                text: json.state.msg,
-              });
-            }
-          });
+      utils.save('goform/reboot');
+      that.props.changeProgressBarInfo(fromJS({
+        title: _('The device is rebooting now, please wait ...'),
+        time: 90,
+        isShow: true,
+      }));
     }
 
     this.props.createModal({
@@ -199,22 +189,12 @@ export default class SystemMaintenance extends Component {
   onResetDevice() {
     const that = this;
     function resetDevice() {
-      utils.save('goform/reset')
-        .then((json) => {
-          if (json.state && json.state.code === 2000) {
-            that.props.changeProgressBarInfo(fromJS({
-              title: _('The device is reseting now, please wait ...'),
-              time: 90,
-              isShow: true,
-            }));
-          } else {
-            that.props.createModal({
-              id: 'settings',
-              role: 'alert',
-              text: json.state.msg,
-            });
-          }
-        });
+      utils.save('goform/reset');
+      that.props.changeProgressBarInfo(fromJS({
+        title: _('The device is reseting now, please wait ...'),
+        time: 90,
+        isShow: true,
+      }));
     }
 
     this.props.createModal({
@@ -234,7 +214,7 @@ export default class SystemMaintenance extends Component {
             this.props.createModal({
               id: 'settings',
               role: 'alert',
-              text: 'Backup failed! Please try again.',
+              text: _('Backup failed! Please try again.'),
             });
           }
         });

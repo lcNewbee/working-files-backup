@@ -40,11 +40,14 @@ const propTypes = {
   receiveCountryInfo: PropTypes.func,
   resetVaildateMsg: PropTypes.func,
 
-  changeShowSsidSetting: PropTypes.func,
-  changeShowRadioSetting: PropTypes.func,
-  changeShowMultiSsid: PropTypes.func,
+  toggleShowSsidSetting: PropTypes.func,
+  toggleShowRadioSetting: PropTypes.func,
+  toggleShowMultiSsid: PropTypes.func,
   changeTableItemForSsid: PropTypes.func,
   createModal: PropTypes.func,
+  updateSelfItemSettings: PropTypes.func,
+  updateBasicSettings: PropTypes.func,
+  updateMultiSsidItem: PropTypes.func,
 };
 
 const defaultProps = {};
@@ -120,7 +123,13 @@ const validOptions = Map({
     rules: 'mac',
   }),
   validPwd: validator({
-    rules: 'pwd|len:[6, 32]',
+    rules: 'pwd|len:[8, 32]',
+  }),
+  Hex: validator({
+    rules: 'hex|len:[10, 10]',
+  }),
+  ASCII: validator({
+    rules: 'ascii|len:[5, 5]',
   }),
 });
 
@@ -130,7 +139,7 @@ export default class Basic extends React.Component {
     super(props);
     this.onSave = this.onSave.bind(this);
     this.onHideSsidboxClick = this.onHideSsidboxClick.bind(this);
-    this.onAutoRepeatBoxClick = this.onAutoRepeatBoxClick.bind(this);
+    // this.onAutoRepeatBoxClick = this.onAutoRepeatBoxClick.bind(this);
     this.onStopScanClick = this.onStopScanClick.bind(this);
     this.onScanBtnClick = this.onScanBtnClick.bind(this);
     this.onModalOkBtnClick = this.onModalOkBtnClick.bind(this);
@@ -148,6 +157,7 @@ export default class Basic extends React.Component {
     this.onAddNewSsidItem = this.onAddNewSsidItem.bind(this);
     this.onDeleteBtnClick = this.onDeleteBtnClick.bind(this);
     this.onSsidItemChange = this.onSsidItemChange.bind(this);
+    this.fetchFullPageData = this.fetchFullPageData.bind(this);
   }
 
   componentWillMount() {
@@ -166,7 +176,7 @@ export default class Basic extends React.Component {
 
       },
     });
-    props.fetchSettings('goform/get_base_wl_info');
+    this.fetchFullPageData();
     props.changeShowScanResultStatus(false);
     props.changeScanStatus(false);
     props.changeTableItemForSsid(fromJS({
@@ -174,6 +184,7 @@ export default class Basic extends React.Component {
       val: '',
       item: fromJS({}),
     }));
+    /*
     props.changeShowRadioSetting(true);
     utils.fetch('goform/get_base_wl_info')
       .then((json) => {
@@ -195,6 +206,7 @@ export default class Basic extends React.Component {
               });
         }
       });
+      */
   }
 
   componentWillUnmount() {
@@ -203,29 +215,34 @@ export default class Basic extends React.Component {
     this.props.resetVaildateMsg();
   }
 
-  onSave(url) {
-    this.props.validateAll()
+  onSave(url, module, validID) {
+    // module指selfState中的radioSettings,multiSsid,basicSettings
+    this.props.validateAll(validID)
       .then(msg => {
         if (msg.isEmpty()) {
-          this.props.saveSettings(url);
+          const dataToSave = this.props.selfState.get(module).toJS();
+          this.props.save(url, dataToSave)
+              .then(() => {
+                this.fetchFullPageData();
+              });
         }
       });
   }
 
   onHideSsidboxClick() {
-    const store = this.props.store;
-    const hideSsid = store.getIn(['curData', 'vapList', '0', 'hideSsid']) === '1' ? '0' : '1';
-    const vapList = store.getIn(['curData', 'vapList']).setIn(['0', 'hideSsid'], hideSsid);
-    this.props.updateItemSettings({
-      vapList,
-    });
+    const basicSettings = this.props.selfState.get('basicSettings');
+    const hideSsid = basicSettings.getIn(['vapList', '0', 'hideSsid']) === '1' ? '0' : '1';
+    const vapList = basicSettings.get('vapList').setIn(['0', 'hideSsid'], hideSsid);
+    this.props.updateBasicSettings({ vapList });
   }
+  /*
   onAutoRepeatBoxClick() {
     const val = (this.props.store.getIn(['curData', 'autoRepeat']) === '1') ? '0' : '1';
     this.props.updateItemSettings({
       autoRepeat: val,
     });
   }
+  */
 
   onStopScanClick() {
     this.props.changeScanStatus(false);
@@ -248,21 +265,19 @@ export default class Basic extends React.Component {
     const {
       mac, ssid, security, frequency, channelWidth,
     } = this.props.selfState.get('selectedResult').toJS();
+    const basicSettings = this.props.selfState.get('basicSettings');
     // console.log(this.props.selfState.get('selectedResult').toJS());
     if (!this.props.selfState.get('selectedResult').isEmpty()) {
-      let peers = this.props.store.getIn(['curData', 'vapList', '0', 'peers']);
+      let peers = basicSettings.getIn(['vapList', '0', 'peers']);
       if (peers !== undefined) { peers = peers.set('0', mac); }
-      const firstSsid = this.props.store.getIn(['curData', 'vapList', '0'])
+      const firstSsid = basicSettings.getIn(['vapList', '0'])
                         .set('peers', peers).set('ssid', ssid).set('apMac', mac)
                         .set('security', fromJS(security))
                         .set('frequency', frequency)
                         .set('channelWidth', channelWidth);
-      const vapList = this.props.store.getIn(['curData', 'vapList'])
-                      .set('0', firstSsid);
-      this.props.updateItemSettings({
-        vapList,
-        scanResult: fromJS({}),
-      });
+      const vapList = basicSettings.get('vapList').set('0', firstSsid);
+      this.props.updateBasicSettings({ vapList });
+      this.props.updateItemSettings({ scanResult: fromJS({}) });
       this.props.changeShowScanResultStatus(false);
       this.props.changeSelectedResult(fromJS({}));
     }
@@ -283,21 +298,19 @@ export default class Basic extends React.Component {
     this.props.fetch('goform/get_wl_info')
         .then((json) => {
           // 首先更新curData中的数据，防止之前修改模式但未保存时加密方式发生变化，目的是切换回去后显示原来的数据
-          this.props.updateItemSettings(fromJS(json.data));
+          this.props.updateBasicSettings(fromJS(json.data));
           if (json.state && json.state.code === 2000) {
             // const curMode = json.data.wirelessMode;
             // if (data.value !== curMode) {
-            this.props.updateItemSettings({
+            this.props.updateBasicSettings({
               wirelessMode: data.value,
             });
-              // if (data.value === 'repeater' || curMode === 'repeater') {
-              //   this.props.updateItemSettings({
-              //     security: {
-              //       mode: 'none',
-              //     },
-              //   });
-              // }
-            // }
+            // 处理切换成repeater后，加密方式为空的问题
+            if (data.value === 'repeater' && json.data.vapList[0].security.mode !== 'wep') {
+              const vapList = this.props.selfState.getIn(['basicSettings', 'vapList'])
+                                        .setIn([0, 'security', 'mode'], 'none');
+              this.props.updateBasicSettings({ vapList });
+            }
           }
         });
   }
@@ -307,6 +320,21 @@ export default class Basic extends React.Component {
     this.props.closeCountrySelectModal(code);
   }
 
+  onShowIconClick(flag) {
+    switch (flag) {
+      case 'showSsidSetting':
+        this.props.toggleShowSsidSetting();
+        break;
+      case 'showRadioSetting':
+        this.props.toggleShowRadioSetting();
+        break;
+      case 'showMultiSsid':
+        this.props.toggleShowMultiSsid();
+        break;
+      default:
+    }
+  }
+
   getCountryNameFromCode(code, map) {
     for (const name of Object.keys(map)) {
       if (map[name] === code) {
@@ -314,6 +342,49 @@ export default class Basic extends React.Component {
       }
     }
     return '';
+  }
+
+  fetchFullPageData() {
+    this.props.fetch('goform/get_base_wl_info')
+        .then((json) => {
+          if (json.state && json.state.code === 2000) {
+            const radioInfo = {
+              curModule: 'radioSettings',
+              data: fromJS(json.data),
+            };
+            const country = json.data.countryCode;
+            this.props.changeCountryCode(country);
+            const channelWidth = json.data.channelWidth;
+            const saveInfo = {
+              radio: '5G',
+              country,
+              channelWidth,
+            };
+            this.props.updateSelfItemSettings(radioInfo);
+            this.props.fetch('goform/get_country_info', saveInfo)
+                .then((json2) => {
+                  if (json2.state && json2.state.code === 2000) {
+                    this.props.receiveCountryInfo(json2.data);
+                  }
+                });
+          } })
+        .then(() => {
+          this.props.fetch('goform/get_wl_info')
+              .then((json) => {
+                if (json.state && json.state.code === 2000) {
+                  const basicInfo = {
+                    curModule: 'basicSettings',
+                    data: fromJS(json.data),
+                  };
+                  const multiSsidInfo = {
+                    curModule: 'multiSsid',
+                    data: fromJS(json.data),
+                  };
+                  this.props.updateSelfItemSettings(basicInfo);
+                  this.props.updateSelfItemSettings(multiSsidInfo);
+                }
+              });
+        });
   }
 
   // countryMap为Object
@@ -361,30 +432,9 @@ export default class Basic extends React.Component {
     return channelOptions;
   }
 
-
-  // 需求修改以后的代码
-  onShowIconClick(flag, url) {
-    this.props.leaveSettingsScreen();
-    this.props.fetchSettings(url)
-        .then(() => {
-          switch (flag) {
-            case 'SsidSetting':
-              this.props.changeShowSsidSetting(true);
-              break;
-            case 'RadioSetting':
-              this.props.changeShowRadioSetting(true);
-              break;
-            case 'MultiSsid':
-              this.props.changeShowMultiSsid(true);
-              break;
-            default:
-          }
-        });
-  }
-
   onSecurityModeChange(data) {
-    const curData = this.props.store.get('curData');
-    const preSecurity = curData.getIn(['vapList', '0', 'security']);
+    const basicSettings = this.props.selfState.get('basicSettings');
+    const preSecurity = basicSettings.getIn(['vapList', '0', 'security']);
     const mode = data.value;
     const auth = preSecurity.get('auth') || 'shared';
     const keyLength = preSecurity.get('keyLength') || '64';
@@ -397,11 +447,9 @@ export default class Basic extends React.Component {
                           .set('keyIndex', keyIndex)
                           .set('cipher', cipher)
                           .set('key', key);
-    const vapList = this.props.store.getIn(['curData', 'vapList'])
+    const vapList = basicSettings.getIn(['vapList'])
                         .setIn(['0', 'security'], afterSecurity);
-    this.props.updateItemSettings({
-      vapList,
-    });
+    this.props.updateBasicSettings({ vapList });
   }
 
   onAddNewSsidItem() {
@@ -421,30 +469,25 @@ export default class Basic extends React.Component {
         key: '',
       },
     });
-    const vapList = this.props.store.getIn(['curData', 'vapList']).push(newSsid);
+    const vapList = this.props.selfState.getIn(['multiSsid', 'vapList']).push(newSsid);
     if (vapList.size <= 16) { // 最大支持16个SSID
-      this.props.updateItemSettings({
-        vapList,
-      });
+      this.props.updateMultiSsidItem({ vapList });
     }
   }
 
   onDeleteBtnClick(item) {
-    const num = this.props.store.getIn(['curData', 'vapList']).keyOf(item);
-    const vapList = this.props.store.getIn(['curData', 'vapList']).delete(num);
-    this.props.updateItemSettings({
-      vapList,
-    });
+    const multiSsid = this.props.selfState.get('multiSsid');
+    const num = multiSsid.getIn(['vapList']).keyOf(item);
+    const vapList = multiSsid.getIn(['vapList']).delete(num);
+    this.props.updateMultiSsidItem({ vapList });
   }
 
   onSsidItemChange(val, item, valId, newVal) {
-    const itemNum = this.props.store.getIn(['curData', 'vapList']).keyOf(item);
+    const multiSsid = this.props.selfState.get('multiSsid');
+    const itemNum = multiSsid.getIn(['vapList']).keyOf(item);
     const newItem = item.set(valId, newVal);
-    const vapList = this.props.store.getIn(['curData', 'vapList'])
-                    .set(itemNum, newItem);
-    this.props.updateItemSettings({
-      vapList,
-    });
+    const vapList = multiSsid.getIn(['vapList']).set(itemNum, newItem);
+    this.props.updateMultiSsidItem({ vapList });
   }
 
 
@@ -503,14 +546,16 @@ export default class Basic extends React.Component {
       {
         id: 'enable',
         label: _('Enable'),
+        width: '200px',
         transform: function (val, item) {
-          const pos = this.props.store.getIn(['curData', 'vapList']).keyOf(item);
+          const pos = this.props.selfState.getIn(['multiSsid', 'vapList']).keyOf(item);
           return (
             <input
               type="checkbox"
               checked={val === '1'}
               disabled={pos === 0}
               onClick={() => this.onSsidItemChange(val, item, 'enable', (val === '1' ? '0' : '1'))}
+              style={{ marginLeft: '3px' }}
             />
           );
         }.bind(this),
@@ -518,14 +563,16 @@ export default class Basic extends React.Component {
       {
         id: 'ssid',
         label: _('SSID'),
+        width: '250px',
         transform: function (val, item) {
-          const pos = this.props.store.getIn(['curData', 'vapList']).keyOf(item);
+          const pos = this.props.selfState.getIn(['multiSsid', 'vapList']).keyOf(item);
           return (
             <FormInput
               type="text"
               value={val}
               disabled={pos === 0}
               onChange={(data) => this.onSsidItemChange(val, item, 'ssid', data.value)}
+              style={{ marginLeft: '-60px' }}
             />
           );
         }.bind(this),
@@ -533,14 +580,16 @@ export default class Basic extends React.Component {
       {
         id: 'vlanId',
         label: _('Vlan ID'),
+        width: '250px',
         transform: function (val, item) {
-          const pos = this.props.store.getIn(['curData', 'vapList']).keyOf(item);
+          const pos = this.props.selfState.getIn(['multiSsid', 'vapList']).keyOf(item);
           return (
             <FormInput
               type="number"
               value={val}
               disabled={pos === 0}
               onChange={(data) => this.onSsidItemChange(val, item, 'vlanId', data.value)}
+              style={{ marginLeft: '-60px' }}
             />
           );
         }.bind(this),
@@ -548,8 +597,9 @@ export default class Basic extends React.Component {
       {
         id: 'hideSsid',
         label: _('Hide'),
+        width: '200px',
         transform: function (val, item) {
-          const pos = this.props.store.getIn(['curData', 'vapList']).keyOf(item);
+          const pos = this.props.selfState.getIn(['multiSsid', 'vapList']).keyOf(item);
           return (
             <input
               type="checkbox"
@@ -558,6 +608,7 @@ export default class Basic extends React.Component {
               onChange={
                 () => this.onSsidItemChange(val, item, 'hideSsid', (val === '1' ? '0' : '1'))
               }
+              style={{ marginLeft: '3px' }}
             />
           );
         }.bind(this),
@@ -565,8 +616,9 @@ export default class Basic extends React.Component {
       {
         id: 'isolation',
         label: _('Client Isolation'),
+        width: '200px',
         transform: function (val, item) {
-          const pos = this.props.store.getIn(['curData', 'vapList']).keyOf(item);
+          const pos = this.props.selfState.getIn(['multiSsid', 'vapList']).keyOf(item);
           return (
             <input
               type="checkbox"
@@ -575,6 +627,7 @@ export default class Basic extends React.Component {
               onChange={
                 () => this.onSsidItemChange(val, item, 'isolation', (val === '1' ? '0' : '1'))
               }
+              style={{ marginLeft: '20px' }}
             />
           );
         }.bind(this),
@@ -582,10 +635,11 @@ export default class Basic extends React.Component {
       {
         id: 'security',
         label: _('Security Edit'),
+        width: '200px',
         transform: function (val, item) {
-          const pos = this.props.store.getIn(['curData', 'vapList']).keyOf(item);
+          const pos = this.props.selfState.getIn(['multiSsid', 'vapList']).keyOf(item);
           return (
-            <div>
+            <div style={{ marginLeft: '-3px' }}>
               <Button
                 text={_('Edit')}
                 icon="pencil-square"
@@ -605,22 +659,28 @@ export default class Basic extends React.Component {
       {
         id: 'delete',
         label: _('Delete'),
+        width: '200px',
         transform: function (val, item) {
-          const pos = this.props.store.getIn(['curData', 'vapList']).keyOf(item);
+          const pos = this.props.selfState.getIn(['multiSsid', 'vapList']).keyOf(item);
           return (
-            <Button
-              text={_('Delete')}
-              icon="times"
-              size="sm"
-              disabled={pos === 0}
-              onClick={() => this.onDeleteBtnClick(item)}
-            />
+            <div style={{ marginLeft: '-12px' }}>
+              <Button
+                text={_('Delete')}
+                icon="times"
+                size="sm"
+                disabled={pos === 0}
+                onClick={() => this.onDeleteBtnClick(item)}
+              />
+            </div>
           );
         }.bind(this),
       },
     ]);
 
-    const curData = this.props.store.get('curData');
+    // const curData = this.props.store.get('curData');
+    const radioSettings = this.props.selfState.get('radioSettings');
+    const multiSsid = this.props.selfState.get('multiSsid');
+    const basicSettings = this.props.selfState.get('basicSettings');
     const { staApmac, apmac1, apmac2, apmac3, validSsid, validPwd } = this.props.validateOption;
     const tableItemForSsid = this.props.selfState.get('tableItemForSsid');
     if (this.props.store.get('curSettingId') === 'base') {
@@ -645,13 +705,463 @@ export default class Basic extends React.Component {
             list={this.props.store.getIn(['curData', 'scanResult', 'siteList'])}
           />
         </Modal>{ /* SSID 扫描弹出框 */ }
+
+        <div className="stats-group-cell">
+          {
+            this.props.selfState.get('showSsidSetting') ? (
+              <icon
+                className="fa fa-minus-square-o"
+                size="lg"
+                style={{
+                  marginRight: '4px',
+                }}
+                onClick={() => this.onShowIconClick('showSsidSetting')}
+              >
+                <span
+                  style={{
+                    fontSize: '1.17em',
+                    fontFamily: 'Microsoft YaHei',
+                    fontWeight: 'bold',
+                    paddingLeft: '4px',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {_('Basic Settings')}
+                </span>
+              </icon>
+            ) : (
+              <icon
+                className="fa fa-plus-square"
+                size="lg"
+                style={{
+                  marginRight: '4px',
+                }}
+                onClick={() => this.onShowIconClick('showSsidSetting')}
+              >
+                <span
+                  style={{
+                    fontSize: '1.17em',
+                    fontFamily: 'Microsoft YaHei',
+                    fontWeight: 'bold',
+                    paddingLeft: '4px',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {_('Basic Settings')}
+                </span>
+              </icon>
+            )
+          }
+        </div>
+        {
+          this.props.selfState.get('showSsidSetting') ? (
+            <div
+              className="stats-group-cell"
+              style={{
+                overflow: 'visible',
+              }}
+            >
+              <div className="clearfix">
+                <FormGroup
+                  type="select"
+                  // className="fl"
+                  options={devicemodeOptions}
+                  value={basicSettings.get('wirelessMode')}
+                  onChange={(data) => this.onChengeWirelessMode(data)}
+                  label={_('Device Mode')}
+                /> { /* 模式选择下拉框 */}
+                {/*
+                <div className="fl">
+                  { // repeater独有的自动选框
+                    (basicSettings.get('wirelessMode') === 'repeater') ? (
+                      <span
+                        style={{
+                          display: 'inline-block',
+                          marginTop: '11px',
+                        }}
+                      >&nbsp;&nbsp;
+                        <input
+                          style={{
+                            paddingBottom: '-2px',
+                          }}
+                          type="checkbox"
+                          checked={basicSettings.get('autoRepeat') === '1'}
+                          onClick={this.onAutoRepeatBoxClick}
+                        />&nbsp;
+                        {_('Auto')}
+                      </span>
+                    ) : null
+                  }
+                </div>
+                */}
+              </div>
+
+              <div className="clearfix">
+                { // SSID输入框
+                  basicSettings.get('wirelessMode') === 'ap' ? (
+                    <div
+                      style={{
+                        width: '127px',
+                      }}
+                    >
+                      <FormGroup
+                        label={_('SSID')}
+                        className="fl"
+                        form="basicSettings"
+                        type="text"
+                        value={basicSettings.getIn(['vapList', '0', 'ssid'])}
+                        onChange={(data) => {
+                          const vapList = basicSettings.get('vapList')
+                                          .setIn(['0', 'ssid'], data.value);
+                          this.props.updateBasicSettings({ vapList });
+                        }}
+                        required
+                        {...validSsid}
+                      />
+                    </div>
+                  ) : null
+                }
+                <div>
+                  {
+                    (basicSettings.get('wirelessMode') === 'sta') ? (
+                      <div>
+                        <div
+                          style={{
+                            width: '127px',
+                          }}
+                        >
+                          <FormGroup
+                            label={_('Remote SSID')}
+                            className="fl"
+                            type="text"
+                            value={basicSettings.getIn(['vapList', '0', 'ssid'])}
+                            onChange={(data) => {
+                              const vapList = basicSettings.get('vapList')
+                                              .setIn(['0', 'ssid'], data.value);
+                              this.props.updateBasicSettings({ vapList });
+                            }}
+                            required
+                            {...validSsid}
+                          />
+                        </div>
+                        <span
+                          style={{
+                            paddingTop: '2px',
+                          }}
+                        >&nbsp;&nbsp;
+                        {
+                          this.props.selfState.get('scaning') ? (
+                            <Button
+                              text={_('Stop Scan')}
+                              onClick={this.onStopScanClick}
+                              loading
+                            />
+                          ) : (
+                            <Button
+                              text={_('Scan')}
+                              onClick={this.onScanBtnClick}
+                            />
+                          )
+                        }
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="clearfix">
+                        {
+                          basicSettings.get('wirelessMode') === 'repeater' ? (
+                            <div
+                              className="fl"
+                            >
+                              <FormGroup
+                                label={_('Remote SSID')}
+                                className="fl"
+                                type="text"
+                                value={basicSettings.getIn(['vapList', '0', 'ssid'])}
+                                onChange={(data) => {
+                                  const vapList = basicSettings.get('vapList')
+                                                  .setIn(['0', 'ssid'], data.value);
+                                  this.props.updateBasicSettings({ vapList });
+                                }}
+                                required
+                                {...validSsid}
+                              />
+                              <Button
+                                text={_('Scan')}
+                                style={{
+                                  marginLeft: '3px',
+                                }}
+                                onClick={this.onScanBtnClick}
+                              />
+                            </div>
+                          ) : null
+                        }
+                        <div className="fl">
+                          <span
+                            style={{
+                              display: 'inline-block',
+                              marginTop: '11px',
+                            }}
+                          >&nbsp;&nbsp;
+                            <input
+                              style={{
+                                marginBottom: '-2px',
+                              }}
+                              type="checkbox"
+                              checked={basicSettings.getIn(['vapList', '0', 'hideSsid']) === '1'}
+                              onClick={(data) => this.onHideSsidboxClick(data)}
+                            />&nbsp;
+                            {_('Hide')}
+                          </span>
+                        </div>
+                      </div>
+                    )
+                  }
+                </div>
+              </div>
+              {
+                basicSettings.get('wirelessMode') === 'repeater' ||
+                basicSettings.get('wirelessMode') === 'ap' ? (
+                  <FormGroup
+                    label={_('Client Isolation')}
+                    type="checkbox"
+                    checked={basicSettings.getIn(['vapList', '0', 'isolation']) === '1'}
+                    onChange={(data) => {
+                      const vapList = basicSettings.getIn(['vapList'])
+                                      .setIn(['0', 'isolation'], data.value);
+                      this.props.updateBasicSettings({ vapList });
+                    }}
+                  />
+                ) : null
+              }
+
+              { // repeater模式下，对端AP的mac地址输入框
+                (basicSettings.get('wirelessMode') === 'repeater') ? (
+                  <div>
+                    <FormGroup
+                      label="WDS Peers"
+                      type="text"
+                      value={basicSettings.getIn(['vapList', '0', 'peers', '0']) || ''}
+                      onChange={(data) => {
+                        const peer1 = basicSettings.getIn(['vapList', '0', 'peers', '1']) || '';
+                        const peer2 = basicSettings.getIn(['vapList', '0', 'peers', '2']) || '';
+                        const vapList = basicSettings.get('vapList')
+                                        .setIn(['0', 'peers', '0'], data.value)
+                                        .setIn(['0', 'peers', '1'], peer1)
+                                        .setIn(['0', 'peers', '2'], peer2);
+                        this.props.updateBasicSettings({ vapList });
+                      }}
+                      {...apmac1}
+                    />
+                    <FormGroup
+                      type="text"
+                      value={basicSettings.getIn(['vapList', '0', 'peers', '1']) || ''}
+                      onChange={(data) => {
+                        const peer0 = basicSettings.getIn(['vapList', '0', 'peers', '0']) || '';
+                        const peer2 = basicSettings.getIn(['vapList', '0', 'peers', '2']) || '';
+                        const vapList = basicSettings.get('vapList')
+                                        .setIn(['0', 'peers', '0'], peer0)
+                                        .setIn(['0', 'peers', '1'], data.value)
+                                        .setIn(['0', 'peers', '2'], peer2);
+                        this.props.updateBasicSettings({ vapList });
+                      }}
+                      {... apmac2}
+                    />
+                    <FormGroup
+                      type="text"
+                      value={basicSettings.getIn(['vapList', '0', 'peers', '2']) || ''}
+                      onChange={(data) => {
+                        const peer0 = basicSettings.getIn(['vapList', '0', 'peers', '0']) || '';
+                        const peer1 = basicSettings.getIn(['vapList', '0', 'peers', '1']) || '';
+                        const vapList = basicSettings.get('vapList')
+                                        .setIn(['0', 'peers', '0'], peer0)
+                                        .setIn(['0', 'peers', '1'], peer1)
+                                        .setIn(['0', 'peers', '2'], data.value);
+                        this.props.updateBasicSettings({ vapList });
+                      }}
+                      {... apmac3}
+                    />
+                  </div>
+                ) : null
+              }
+              { // station模式下，对端AP的mac地址输入框
+                (basicSettings.get('wirelessMode') === 'sta') ? (
+                  <FormGroup
+                    label={_('Lock To AP')}
+                    form="basicSettings"
+                    value={basicSettings.getIn(['vapList', '0', 'apMac'])}
+                    onChange={(data) => {
+                      const vapList = basicSettings.get('vapList')
+                                                  .setIn(['0', 'apMac'], data.value);
+                      this.props.updateBasicSettings({ vapList });
+                    }}
+                    placeholder={_('not necessary')}
+                    {...staApmac}
+                  />
+                ) : null
+              }
+
+              <div>
+                { // 加密方式选择框
+                  (basicSettings.get('wirelessMode') === 'sta' ||
+                    basicSettings.get('wirelessMode') === 'ap') ? (
+                    <div>
+                      <FormGroup
+                        label={_('Security')}
+                        type="select"
+                        options={staAndApSecurityOptions}
+                        value={basicSettings.getIn(['vapList', '0', 'security', 'mode']) || 'none'}
+                        onChange={(data) => this.onSecurityModeChange(data)}
+                      />
+                    </div>
+                  ) : null
+                }
+                {
+                  (basicSettings.get('wirelessMode') === 'repeater') ? (
+                    <div>
+                      <FormGroup
+                        label={_('Security')}
+                        type="select"
+                        options={repeaterSecurityOptions}
+                        value={basicSettings.getIn(['vapList', '0', 'security', 'mode'])}
+                        onChange={(data) => this.onSecurityModeChange(data)}
+                      />
+                    </div>
+                  ) : null
+                }
+                {
+                  (basicSettings.getIn(['vapList', '0', 'security', 'mode']) === 'none' ||
+                  basicSettings.getIn(['vapList', '0', 'security', 'mode']) === 'wep') ? null : (
+                    <div>
+                      <FormGroup
+                        label={_('Algorithm')}
+                        type="switch"
+                        value={basicSettings.getIn(['vapList', '0', 'security', 'cipher'])}
+                        onChange={(data) => {
+                          const security = basicSettings.getIn(['vapList', '0', 'security'])
+                                                  .set('cipher', data.value);
+                          const vapList = basicSettings.get('vapList')
+                                                  .setIn(['0', 'security'], security);
+                          this.props.updateBasicSettings({ vapList });
+                        }}
+                        options={[
+                          { label: 'AES', value: 'aes' },
+                          { label: 'TKIP', value: 'tkip' },
+                          { label: 'AES/TKIP', value: 'aes&tkip' },
+                        ]}
+                      />
+                      <FormGroup
+                        label={_('Password')}
+                        type="password"
+                        form="basicSettings"
+                        required
+                        value={basicSettings.getIn(['vapList', '0', 'security', 'key'])}
+                        onChange={(data) => {
+                          const security = basicSettings.getIn(['vapList', '0', 'security'])
+                                                        .set('key', data.value);
+                          const vapList = basicSettings.get('vapList')
+                                                      .setIn(['0', 'security'], security);
+                          this.props.updateBasicSettings({ vapList });
+                        }}
+                        required
+                        {...validPwd}
+                      />
+                    </div>
+                  )
+                }
+                {
+                  (basicSettings.getIn(['vapList', '0', 'security', 'mode']) === 'wep') ? (
+                    <div>
+                      <FormGroup
+                        label={_('Auth Type')}
+                        type="select"
+                        options={wepAuthenOptions}
+                        value={basicSettings.getIn(['vapList', '0', 'security', 'auth'])}
+                        onChange={(data) => {
+                          const security = basicSettings.getIn(['vapList', '0', 'security'])
+                                          .set('auth', data.value);
+                          const vapList = basicSettings.get('vapList')
+                                          .setIn(['0', 'security'], security);
+                          this.props.updateBasicSettings({ vapList });
+                        }}
+                      />
+                      {/*
+                        <FormGroup
+                          label={_('Key Length')}
+                          type="select"
+                          options={wepKeyLengthOptions}
+                          value={curData.getIn(['vapList', '0', 'security', 'keyLength'])}
+                          onChange={(data) => {
+                            const security = curData.getIn(['vapList', '0', 'security'])
+                                            .set('keyLength', data.value);
+                            const vapList = curData.get('vapList')
+                                            .setIn(['0', 'security'], security);
+                            this.props.updateItemSettings({ vapList });
+                          }}
+                        />
+                      */}
+                      <FormGroup
+                        label={_('Key Index')}
+                        type="select"
+                        options={keyIndexOptions}
+                        value={basicSettings.getIn(['vapList', '0', 'security', 'keyIndex'])}
+                        onChange={(data) => {
+                          const security = basicSettings.getIn(['vapList', '0', 'security'])
+                                          .set('keyIndex', data.value);
+                          const vapList = basicSettings.get('vapList')
+                                          .setIn(['0', 'security'], security);
+                          this.props.updateBasicSettings({ vapList });
+                        }}
+                      />
+                      <FormGroup
+                        label={_('Key Type')}
+                        type="select"
+                        options={keyTypeOptions}
+                        value={basicSettings.getIn(['vapList', '0', 'security', 'keyType'])}
+                        onChange={(data) => {
+                          const security = basicSettings.getIn(['vapList', '0', 'security'])
+                                                  .set('keyType', data.value);
+                          const vapList = basicSettings.get('vapList')
+                                .setIn(['0', 'security'], security);
+                          this.props.updateBasicSettings({ vapList });
+                        }}
+                      />
+                      <FormGroup
+                        type="password"
+                        required
+                        label={_('Password')}
+                        form="basicSettings"
+                        value={basicSettings.getIn(['vapList', '0', 'security', 'key'])}
+                        onChange={(data) => {
+                          const security = basicSettings.getIn(['vapList', '0', 'security'])
+                                                  .set('key', data.value);
+                          const vapList = basicSettings.get('vapList')
+                                          .setIn(['0', 'security'], security);
+                          this.props.updateBasicSettings({ vapList });
+                        }}
+                        {...this.props.validateOption[basicSettings.getIn(['vapList', '0', 'security', 'keyType'])]}
+                      />
+                    </div>
+                  ) : null
+                }
+              </div>
+              <FormGroup>
+                <SaveButton
+                  type="button"
+                  loading={this.props.app.get('saving')}
+                  onClick={() => this.onSave('goform/set_wireless', 'basicSettings', 'basicSettings')}
+                />
+              </FormGroup>
+            </div>
+          ) : null
+        }
+
         <div className="stats-group-cell">
           {
             this.props.selfState.get('showRadioSetting') ? (
               <icon
                 className="fa fa-minus-square-o"
                 size="lg"
-                onClick={() => this.props.changeShowRadioSetting(false)}
+                onClick={() => this.onShowIconClick('showRadioSetting')}
               >
                 <span
                   style={{
@@ -672,7 +1182,7 @@ export default class Basic extends React.Component {
                 style={{
                   marginRight: '4px',
                 }}
-                onClick={() => this.onShowIconClick('RadioSetting', 'goform/get_base_wl_info')}
+                onClick={() => this.onShowIconClick('showRadioSetting')}
               >
                 <span
                   style={{
@@ -700,8 +1210,8 @@ export default class Basic extends React.Component {
               <FormGroup
                 type="checkbox"
                 label={_('Radio')}
-                checked={this.props.store.getIn(['curData', 'enable']) === '1'}
-                onChange={(data) => this.props.updateItemSettings({
+                checked={this.props.selfState.getIn(['radioSettings', 'enable']) === '1'}
+                onChange={(data) => this.props.updateRadioSettingsItem({
                   enable: data.value,
                 })}
               />
@@ -762,9 +1272,9 @@ export default class Basic extends React.Component {
                 label={_('Radio Mode')}
                 type="select"
                 options={radioModeOptions}
-                value={this.props.store.getIn(['curData', 'radioMode'])}
+                value={this.props.selfState.getIn(['radioSettings', 'radioMode'])}
                 onChange={(data) => {
-                  this.props.updateItemSettings({
+                  this.props.updateRadioSettingsItem({
                     radioMode: data.value,
                   });
                 }}
@@ -773,8 +1283,8 @@ export default class Basic extends React.Component {
                 label={_('Channel')}
                 type="select"
                 options={this.makeChannelOptions()}
-                value={this.props.store.getIn(['curData', 'frequency']) || 'auto'}
-                onChange={(data) => this.props.updateItemSettings({
+                value={this.props.selfState.getIn(['radioSettings', 'frequency']) || 'auto'}
+                onChange={(data) => this.props.updateRadioSettingsItem({
                   frequency: data.value || 'auto',
                 })}
               />
@@ -782,19 +1292,19 @@ export default class Basic extends React.Component {
                 label={_('Channel Bandwidth')}
                 type="switch"
                 options={channelWidthOptions}
-                value={this.props.store.getIn(['curData', 'channelWidth'])}
-                onChange={(data) => this.props.updateItemSettings({
+                value={this.props.selfState.getIn(['radioSettings', 'channelWidth'])}
+                onChange={(data) => this.props.updateRadioSettingsItem({
                   channelWidth: data.value,
                 })}
               />
               <FormGroup
                 label={_('Output Power')}
                 type="range"
-                min="-4"
+                min="1"
                 max={this.props.selfState.get('maxTxpower')}
-                help={this.props.store.getIn(['curData', 'txPower'])}
-                value={this.props.store.getIn(['curData', 'txPower'])}
-                onChange={(data) => this.props.updateItemSettings({
+                help={this.props.selfState.getIn(['radioSettings', 'txPower'])}
+                value={this.props.selfState.getIn(['radioSettings', 'txPower'])}
+                onChange={(data) => this.props.updateRadioSettingsItem({
                   txPower: data.value,
                 })}
               />
@@ -802,7 +1312,7 @@ export default class Basic extends React.Component {
                 <SaveButton
                   type="button"
                   loading={this.props.app.get('saving')}
-                  onClick={() => this.onSave('goform/set_base_wl')}
+                  onClick={() => this.onSave('goform/set_base_wl', 'radioSettings', 'radioSettings')}
                 />
               </FormGroup>
               {
@@ -821,482 +1331,15 @@ export default class Basic extends React.Component {
             </div>
           ) : null
         }
-        <div className="stats-group-cell">
-          {
-            this.props.selfState.get('showSsidSetting') ? (
-              <icon
-                className="fa fa-minus-square-o"
-                size="lg"
-                style={{
-                  marginRight: '4px',
-                }}
-                onClick={() => this.props.changeShowSsidSetting(false)}
-              >
-                <span
-                  style={{
-                    fontSize: '1.17em',
-                    fontFamily: 'Microsoft YaHei',
-                    fontWeight: 'bold',
-                    paddingLeft: '4px',
-                    cursor: 'pointer',
-                  }}
-                >
-                  {_('SSID Settings')}
-                </span>
-              </icon>
-            ) : (
-              <icon
-                className="fa fa-plus-square"
-                size="lg"
-                style={{
-                  marginRight: '4px',
-                }}
-                onClick={() => this.onShowIconClick('SsidSetting', 'goform/get_wl_info')}
-              >
-                <span
-                  style={{
-                    fontSize: '1.17em',
-                    fontFamily: 'Microsoft YaHei',
-                    fontWeight: 'bold',
-                    paddingLeft: '4px',
-                    cursor: 'pointer',
-                  }}
-                >
-                  {_('SSID Settings')}
-                </span>
-              </icon>
-            )
-          }
-        </div>
-        {
-          this.props.selfState.get('showSsidSetting') ? (
-            <div
-              className="stats-group-cell"
-              style={{
-                overflow: 'visible',
-              }}
-            >
-              <div className="clearfix">
-                <FormGroup
-                  type="select"
-                  className="fl"
-                  options={devicemodeOptions}
-                  value={curData.get('wirelessMode')}
-                  onChange={(data) => this.onChengeWirelessMode(data)}
-                  label={_('Wireless Mode')}
-                /> { /* 模式选择下拉框 */}
-                <div className="fl">
-                  { /* repeater独有的自动选框 */
-                    (curData.get('wirelessMode') === 'repeater') ? (
-                      <span
-                        style={{
-                          display: 'inline-block',
-                          marginTop: '11px',
-                        }}
-                      >&nbsp;&nbsp;
-                        <input
-                          style={{
-                            paddingBottom: '-2px',
-                          }}
-                          type="checkbox"
-                          checked={curData.get('autoRepeat') === '1'}
-                          onClick={this.onAutoRepeatBoxClick}
-                        />&nbsp;
-                        {_('Auto')}
-                      </span>
-                    ) : null
-                  }
-                </div>
-              </div>
 
-              <div className="clearfix">
-                { // SSID输入框
-                  this.props.store.getIn(['curData', 'wirelessMode']) === 'ap' ? (
-                    <div
-                      style={{
-                        width: '127px',
-                      }}
-                    >
-                      <FormGroup
-                        label={_('SSID')}
-                        className="fl"
-                        type="text"
-                        value={this.props.store.getIn(['curData', 'vapList', '0', 'ssid'])}
-                        onChange={(data) => {
-                          const vapList = this.props.store.getIn(['curData', 'vapList'])
-                                          .setIn(['0', 'ssid'], data.value);
-                          this.props.updateItemSettings({
-                            vapList,
-                          });
-                        }}
-                        required
-                        {...validSsid}
-                      />
-                    </div>
-                  ) : null
-                }
-                <div>
-                  {
-                    (this.props.store.getIn(['curData', 'wirelessMode']) === 'sta') ? (
-                      <div>
-                        <div
-                          style={{
-                            width: '127px',
-                          }}
-                        >
-                          <FormGroup
-                            label={_('Remote SSID')}
-                            className="fl"
-                            type="text"
-                            value={this.props.store.getIn(['curData', 'vapList', '0', 'ssid'])}
-                            onChange={(data) => {
-                              const vapList = this.props.store.getIn(['curData', 'vapList'])
-                                              .setIn(['0', 'ssid'], data.value);
-                              this.props.updateItemSettings({
-                                vapList,
-                              });
-                            }}
-                            required
-                            {...validSsid}
-                          />
-                        </div>
-                        <span
-                          style={{
-                            paddingTop: '2px',
-                          }}
-                        >&nbsp;&nbsp;
-                        {
-                          this.props.selfState.get('scaning') ? (
-                            <Button
-                              text={_('Stop Scan')}
-                              onClick={this.onStopScanClick}
-                              loading
-                            />
-                          ) : (
-                            <Button
-                              text={_('Scan')}
-                              onClick={this.onScanBtnClick}
-                            />
-                          )
-                        }
-                        </span>
-                      </div>
-                    ) : (
-                      <div className="clearfix">
-                        {
-                          this.props.store.getIn(['curData', 'wirelessMode']) === 'repeater' ? (
-                            <div
-                              className="fl"
-                            >
-                              <FormGroup
-                                label={_('Remote SSID')}
-                                className="fl"
-                                type="text"
-                                value={this.props.store.getIn(['curData', 'vapList', '0', 'ssid'])}
-                                onChange={(data) => {
-                                  const vapList = this.props.store.getIn(['curData', 'vapList'])
-                                                  .setIn(['0', 'ssid'], data.value);
-                                  this.props.updateItemSettings({
-                                    vapList,
-                                  });
-                                }}
-                                required
-                                {...validSsid}
-                              />
-                              <Button
-                                text={_('Scan')}
-                                style={{
-                                  marginLeft: '3px',
-                                }}
-                                onClick={this.onScanBtnClick}
-                              />
-                            </div>
-                          ) : null
-                        }
-                        <div className="fl">
-                          <span
-                            style={{
-                              display: 'inline-block',
-                              marginTop: '11px',
-                            }}
-                          >&nbsp;&nbsp;
-                            <input
-                              style={{
-                                marginBottom: '-2px',
-                              }}
-                              type="checkbox"
-                              checked={curData.getIn(['vapList', '0', 'hideSsid']) === '1'}
-                              onClick={(data) => this.onHideSsidboxClick(data)}
-                            />&nbsp;
-                            {_('Hide')}
-                          </span>
-                        </div>
-                      </div>
-                    )
-                  }
-                </div>
-              </div>
-              {
-                curData.get('wirelessMode') === 'repeater' ||
-                curData.get('wirelessMode') === 'ap' ? (
-                  <FormGroup
-                    label={_('Client Isolation')}
-                    type="checkbox"
-                    checked={curData.getIn(['vapList', '0', 'isolation']) === '1'}
-                    onChange={(data) => {
-                      const vapList = this.props.store.getIn(['curData', 'vapList'])
-                                      .setIn(['0', 'isolation'], data.value);
-                      this.props.updateItemSettings({
-                        vapList,
-                      });
-                    }}
-                  />
-                ) : null
-              }
-
-              { // repeater模式下，对端AP的mac地址输入框
-                (curData.get('wirelessMode') === 'repeater') ? (
-                  <div>
-                    <FormGroup
-                      label="WDS Peers"
-                      type="text"
-                      value={curData.getIn(['vapList', '0', 'peers', '0']) || ''}
-                      onChange={(data) => {
-                        const peer1 = curData.getIn(['vapList', '0', 'peers', '1']) || '';
-                        const peer2 = curData.getIn(['vapList', '0', 'peers', '2']) || '';
-                        const vapList = curData.get('vapList')
-                                        .setIn(['0', 'peers', '0'], data.value)
-                                        .setIn(['0', 'peers', '1'], peer1)
-                                        .setIn(['0', 'peers', '2'], peer2);
-                        this.props.updateItemSettings({
-                          vapList,
-                        });
-                      }}
-                      {...apmac1}
-                    />
-                    <FormGroup
-                      type="text"
-                      value={curData.getIn(['vapList', '0', 'peers', '1']) || ''}
-                      onChange={(data) => {
-                        const peer0 = curData.getIn(['vapList', '0', 'peers', '0']) || '';
-                        const peer2 = curData.getIn(['vapList', '0', 'peers', '2']) || '';
-                        const vapList = curData.get('vapList').setIn(['0', 'peers', '0'], peer0)
-                                        .setIn(['0', 'peers', '1'], data.value)
-                                        .setIn(['0', 'peers', '2'], peer2);
-                        this.props.updateItemSettings({
-                          vapList,
-                        });
-                      }}
-                      {... apmac2}
-                    />
-                    <FormGroup
-                      type="text"
-                      value={curData.getIn(['vapList', '0', 'peers', '2']) || ''}
-                      onChange={(data) => {
-                        const peer0 = curData.getIn(['vapList', '0', 'peers', '0']) || '';
-                        const peer1 = curData.getIn(['vapList', '0', 'peers', '1']) || '';
-                        const vapList = curData.get('vapList')
-                                        .setIn(['0', 'peers', '0'], peer0).setIn(['0', 'peers', '1'], peer1)
-                                        .setIn(['0', 'peers', '2'], data.value);
-                        this.props.updateItemSettings({
-                          vapList,
-                        });
-                      }}
-                      {... apmac3}
-                    />
-                  </div>
-                ) : null
-              }
-              { // station模式下，对端AP的mac地址输入框
-                (curData.get('wirelessMode') === 'sta') ? (
-                  <FormGroup
-                    label={_('Lock To AP')}
-                    value={curData.getIn(['vapList', 'apMac'])}
-                    onChange={(data) => {
-                      const vapList = curData.get('vapList').set('apMac', data.value);
-                      this.props.updateItemSettings({
-                        vapList,
-                      });
-                    }}
-                    placeholder={_('not necessary')}
-                    {...staApmac}
-                  />
-                ) : null
-              }
-
-              <div>
-                { // 加密方式选择框
-                  (curData.get('wirelessMode') === 'sta' ||
-                    curData.get('wirelessMode') === 'ap') ? (
-                    <div>
-                      <FormGroup
-                        label={_('Security')}
-                        type="select"
-                        options={staAndApSecurityOptions}
-                        value={curData.getIn(['vapList', '0', 'security', 'mode']) || 'none'}
-                        onChange={(data) => this.onSecurityModeChange(data)}
-                      />
-                    </div>
-                  ) : null
-                }
-                {
-                  (curData.get('wirelessMode') === 'repeater') ? (
-                    <div>
-                      <FormGroup
-                        label={_('Security')}
-                        type="select"
-                        options={repeaterSecurityOptions}
-                        value={curData.getIn(['vapList', '0', 'security', 'mode'])}
-                        onChange={(data) => this.onSecurityModeChange(data)}
-                      />
-                    </div>
-                  ) : null
-                }
-                {
-                  (curData.getIn(['vapList', '0', 'security', 'mode']) === 'none' ||
-                  curData.getIn(['vapList', '0', 'security', 'mode']) === 'wep') ? null : (
-                    <div>
-                      <FormGroup
-                        label={_('Algorithm')}
-                        type="switch"
-                        value={curData.getIn(['vapList', '0', 'security', 'cipher'])}
-                        onChange={(data) => {
-                          const security = curData.getIn(['vapList', '0', 'security']).set('cipher', data.value);
-                          const vapList = curData.get('vapList')
-                                .setIn(['0', 'security'], security);
-                          this.props.updateItemSettings({
-                            vapList,
-                          });
-                        }}
-                        options={[
-                          { label: 'AES', value: 'aes' },
-                          { label: 'TKIP', value: 'tkip' },
-                          { label: 'AES/TKIP', value: 'aes&tkip' },
-                        ]}
-                      />
-                      <FormGroup
-                        label={_('Keys')}
-                        type="password"
-                        value={curData.getIn(['vapList', '0', 'security', 'key'])}
-                        onChange={(data) => {
-                          const security = curData.getIn(['vapList', '0', 'security']).set('key', data.value);
-                          const vapList = curData.get('vapList')
-                                .setIn(['0', 'security'], security);
-                          this.props.updateItemSettings({
-                            vapList,
-                          });
-                        }}
-                        required
-                        {...validPwd}
-                      />
-                    </div>
-                  )
-                }
-                {
-                  (curData.getIn(['vapList', '0', 'security', 'mode']) === 'wep') ? (
-                    <div>
-                      <FormGroup
-                        label={_('Authentication Type')}
-                        type="select"
-                        name="authenticationType"
-                        options={wepAuthenOptions}
-                        value={curData.getIn(['vapList', '0', 'security', 'auth'])}
-                        onChange={(data) => {
-                          const security = curData.getIn(['vapList', '0', 'security'])
-                                          .set('auth', data.value);
-                          const vapList = curData.get('vapList')
-                                          .setIn(['0', 'security'], security);
-                          this.props.updateItemSettings({
-                            vapList,
-                          });
-                        }}
-                      />
-                      <FormGroup
-                        label={_('WEP Key Length')}
-                        type="select"
-                        name="wepKeyLength"
-                        options={wepKeyLengthOptions}
-                        value={curData.getIn(['vapList', '0', 'security', 'keyLength'])}
-                        onChange={(data) => {
-                          const security = curData.getIn(['vapList', '0', 'security'])
-                                          .set('keyLength', data.value);
-                          const vapList = curData.get('vapList')
-                                          .setIn(['0', 'security'], security);
-                          this.props.updateItemSettings({
-                            vapList,
-                          });
-                        }}
-                      />
-                      <FormGroup
-                        label={_('Key Index')}
-                        type="select"
-                        name="keyIndex"
-                        options={keyIndexOptions}
-                        value={curData.getIn(['vapList', '0', 'security', 'keyIndex'])}
-                        onChange={(data) => {
-                          const security = curData.getIn(['vapList', '0', 'security'])
-                                          .set('keyIndex', data.value);
-                          const vapList = curData.get('vapList')
-                                          .setIn(['0', 'security'], security);
-                          this.props.updateItemSettings({
-                            vapList,
-                          });
-                        }}
-                      />
-                      <FormGroup
-                        label={_('Key Type')}
-                        type="select"
-                        name="keyType"
-                        options={keyTypeOptions}
-                        value={curData.getIn(['vapList', '0', 'security', 'keyType'])}
-                        onChange={(data) => {
-                          const security = curData.getIn(['vapList', '0', 'security'])
-                                                  .set('keyType', data.value);
-                          const vapList = curData.get('vapList')
-                                .setIn(['0', 'security'], security);
-                          this.props.updateItemSettings({
-                            vapList,
-                          });
-                        }}
-                      />
-                      <FormGroup
-                        type="password"
-                        label={_('Password')}
-                        value={curData.getIn(['vapList', '0', 'security', 'key'])}
-                        onChange={(data) => {
-                          const security = curData.getIn(['vapList', '0', 'security'])
-                                                  .set('key', data.value);
-                          const vapList = curData.get('vapList')
-                                          .setIn(['0', 'security'], security);
-                          this.props.updateItemSettings({
-                            vapList,
-                          });
-                        }}
-                      />
-                    </div>
-                  ) : null
-                }
-              </div>
-              <FormGroup>
-                <SaveButton
-                  type="button"
-                  loading={this.props.app.get('saving')}
-                  onClick={() => this.onSave('goform/set_wireless')}
-                />
-              </FormGroup>
-            </div>
-          ) : null
-        }
         <div className="stats-group-cell">
           {
             this.props.selfState.get('showMultiSsid') ? (
               <icon
                 className="fa fa-minus-square-o"
                 size="lg"
-                style={{
-                  marginRight: '4px',
-                }}
-                onClick={() => this.props.changeShowMultiSsid(false)}
+                style={{ marginRight: '4px' }}
+                onClick={() => this.onShowIconClick('showMultiSsid')}
               >
                 <span
                   style={{
@@ -1314,10 +1357,8 @@ export default class Basic extends React.Component {
               <icon
                 className="fa fa-plus-square"
                 size="lg"
-                style={{
-                  marginRight: '4px',
-                }}
-                onClick={() => this.onShowIconClick('MultiSsid', 'goform/get_wl_info')}
+                style={{ marginRight: '4px' }}
+                onClick={() => this.onShowIconClick('showMultiSsid')}
               >
                 <span
                   style={{
@@ -1337,16 +1378,17 @@ export default class Basic extends React.Component {
         {
           this.props.selfState.get('showMultiSsid') ? (
             <div className="stats-group-cell">
+              <span>{_('Notice: The first SSID can\'t be modefied here !')}</span>
               <Table
                 className="table"
                 options={ssidTableOptions}
                 list={(() => {
                   const list = fromJS([]);
-                  if (curData.has('vapList')) {
-                    if (curData.get('wirelessMode') !== 'sta') {
-                      return curData.get('vapList');
+                  if (multiSsid.has('vapList')) {
+                    if (multiSsid.get('wirelessMode') !== 'sta') {
+                      return multiSsid.get('vapList');
                     }
-                    return curData.get('vapList').setSize(1);
+                    return multiSsid.get('vapList').setSize(1);
                   }
                   return list;
                 })()
@@ -1354,26 +1396,22 @@ export default class Basic extends React.Component {
               />
               <div
                 className="stats-group-cell"
-                style={{
-                  marginTop: '10px',
-                }}
+                style={{ marginTop: '10px' }}
               >
                 <Button
                   text={_('Add')}
                   icon="plus"
                   onClick={() => this.onAddNewSsidItem()}
-                  style={{
-                    marginRight: '10px',
-                  }}
-                  disabled={curData.get('wirelessMode') === 'sta'}
+                  style={{ marginRight: '10px' }}
+                  disabled={multiSsid.get('wirelessMode') === 'sta'}
                 />
                 <SaveButton
                   type="button"
                   loading={this.props.app.get('saving')}
-                  disabled={curData.get('wirelessMode') === 'sta'}
+                  disabled={multiSsid.get('wirelessMode') === 'sta'}
                   onClick={() => {
                     let error = '';
-                    const vapList = curData.get('vapList').toJS();
+                    const vapList = multiSsid.get('vapList').toJS();
                     const len = vapList.length;
                     const re = /^[0-9]*[1-9][0-9]*$/;
                     for (let i = 0; i < len; i++) {
@@ -1397,7 +1435,7 @@ export default class Basic extends React.Component {
                       }
                     }
                     if (error === '') {
-                      this.onSave('goform/set_wireless');
+                      this.onSave('goform/set_wireless', 'multiSsid', 'multiSsid');
                     } else {
                       this.props.createModal({
                         id: 'settings',
@@ -1426,18 +1464,16 @@ export default class Basic extends React.Component {
         */
         }
         <Modal
-          title={_('Security Settings For SSID:')}
+          title={_('Security Settings For SSID')}
           isShow={tableItemForSsid.get('isShow') === '1'}
           onOk={() => {
-            this.props.validateAll()
+            this.props.validateAll('ssidSecurityModal')
                 .then(msg => {
                   if (msg.isEmpty()) {
                     const pos = tableItemForSsid.get('pos');
-                    const vapList = this.props.store.getIn(['curData', 'vapList'])
+                    const vapList = multiSsid.getIn(['vapList'])
                                     .set(pos, tableItemForSsid.get('item'));
-                    this.props.updateItemSettings({
-                      vapList,
-                    });
+                    this.props.updateMultiSsidItem({ vapList });
                     this.props.changeTableItemForSsid(fromJS({
                       isShow: '0',
                       val: '',
@@ -1491,8 +1527,10 @@ export default class Basic extends React.Component {
                   }}
                 />
                 <FormGroup
-                  label={_('Keys')}
+                  label={_('Password')}
                   type="password"
+                  required
+                  form="ssidSecurityModal"
                   value={tableItemForSsid.getIn(['item', 'security', 'key'])}
                   onChange={(data) => {
                     const newItem = tableItemForSsid.get('item')
@@ -1510,7 +1548,7 @@ export default class Basic extends React.Component {
             (tableItemForSsid.getIn(['item', 'security', 'mode']) === 'wep') ? (
               <div>
                 <FormGroup
-                  label={_('Authentication Type')}
+                  label={_('Auth Type')}
                   type="select"
                   options={wepAuthenOptions}
                   value={tableItemForSsid.getIn(['item', 'security', 'auth'])}
@@ -1521,18 +1559,22 @@ export default class Basic extends React.Component {
                     this.props.changeTableItemForSsid(newItemForSsid);
                   }}
                 />
-                <FormGroup
-                  label={_('WEP Key Length')}
-                  type="select"
-                  options={wepKeyLengthOptions}
-                  value={tableItemForSsid.getIn(['item', 'security', 'keyLength'])}
-                  onChange={(data) => {
-                    const newItem = tableItemForSsid.get('item')
-                                    .setIn(['security', 'keyLength'], data.value);
-                    const newItemForSsid = tableItemForSsid.set('item', newItem);
-                    this.props.changeTableItemForSsid(newItemForSsid);
-                  }}
-                />
+                {
+                  /**
+                  <FormGroup
+                    label={_('Key Length')}
+                    type="select"
+                    options={wepKeyLengthOptions}
+                    value={tableItemForSsid.getIn(['item', 'security', 'keyLength'])}
+                    onChange={(data) => {
+                      const newItem = tableItemForSsid.get('item')
+                                      .setIn(['security', 'keyLength'], data.value);
+                      const newItemForSsid = tableItemForSsid.set('item', newItem);
+                      this.props.changeTableItemForSsid(newItemForSsid);
+                    }}
+                  />
+                   */
+                }
                 <FormGroup
                   label={_('Key Index')}
                   type="select"
@@ -1559,7 +1601,9 @@ export default class Basic extends React.Component {
                 />
                 <FormGroup
                   type="password"
+                  required
                   label={_('Password')}
+                  form="ssidSecurityModal"
                   value={tableItemForSsid.getIn(['item', 'security', 'key'])}
                   onChange={(data) => {
                     const newItem = tableItemForSsid.get('item')
@@ -1567,6 +1611,7 @@ export default class Basic extends React.Component {
                     const newItemForSsid = tableItemForSsid.set('item', newItem);
                     this.props.changeTableItemForSsid(newItemForSsid);
                   }}
+                  {...this.props.validateOption[tableItemForSsid.getIn(['item', 'security', 'keyType'])]}
                 />
               </div>
             ) : null

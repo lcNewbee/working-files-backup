@@ -74,10 +74,10 @@ export function receiveCountryInfo(data) {
 export function saveCountrySelectModal() {
   return (dispatch, getState) => {
     const selectedCode = getState().basic.get('selectedCountry');
-    dispatch(updateItemSettings({
+    dispatch(updateRadioSettingsItem({
       countryCode: selectedCode,
     }));
-    const channelWidth = getState().settings.getIn(['curData', 'channelWidth']);
+    const channelWidth = getState().basic.getIn(['radioSettings', 'channelWidth']);
     const saveInfo = {
       radio: '5G',
       country: selectedCode,
@@ -101,30 +101,55 @@ export function saveCountrySelectModal() {
 
 // 需求改变后的代码
 
-export function changeShowRadioSetting(data) {
+export function toggleShowRadioSetting() {
   return {
-    type: 'CHANGE_SHOW_RADIO_SETTING',
-    data,
+    type: 'TOGGLE_SHOW_RADIO_SETTING',
   };
 }
 
-export function changeShowSsidSetting(data) {
+export function toggleShowSsidSetting() {
   return {
-    type: 'CHANGE_SHOW_SSID_SETTING',
-    data,
+    type: 'TOGGLE_SHOW_SSID_SETTING',
   };
 }
 
-export function changeShowMultiSsid(data) {
+export function toggleShowMultiSsid() {
   return {
-    type: 'CHANGE_SHOW_MULTI_SSID',
-    data,
+    type: 'TOGGLE_SHOW_MULTI_SSID',
   };
 }
 
 export function changeTableItemForSsid(data) {
   return {
     type: 'CHANGE_TABLE_ITEM_FOR_SSID',
+    data,
+  };
+}
+
+export function updateSelfItemSettings(data) {
+  return {
+    type: 'UPDATE_SELF_ITEM_SETTINGS',
+    data,
+  };
+}
+
+export function updateRadioSettingsItem(data) {
+  return {
+    type: 'UPDATE_RADIO_SETTINGS_ITEM',
+    data,
+  };
+}
+
+export function updateMultiSsidItem(data) {
+  return {
+    type: 'UPDATE_MULTI_SSID_ITEM',
+    data,
+  };
+}
+
+export function updateBasicSettings(data) {
+  return {
+    type: 'UPDATE_BASIC_SETTINGS',
     data,
   };
 }

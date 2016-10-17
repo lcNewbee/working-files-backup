@@ -5,7 +5,7 @@ const defaultState = fromJS({
   scaning: true,
   showScanResult: false,
   showRadioSetting: true,
-  showSsidSetting: false,
+  showSsidSetting: true,
   showMultiSsid: false,
 
   selectedResult: {},
@@ -25,8 +25,11 @@ const defaultState = fromJS({
     item: {},
     pos: '',
   },
+  radioSettings: {},
+  multiSsid: {},
+  basicSettings: {},
 });
-
+/** *
 function onShowRadioSettingChange(state, action) {
   if (action.data === true) {
     return state.set('showRadioSetting', true)
@@ -53,6 +56,20 @@ function onShowMultiSsidChange(state, action) {
   }
   return state.set('showMultiSsid', false);
 }
+
+
+
+ action.data:{
+   curModule: '', //radioSettings,multiSsid,basicSettings
+   data: , //从后台请求的数据，immutable类型
+ }
+ */
+function onUpdateSelfItemSettings(state, action) {
+  const curModule = action.data.curModule;
+  const data = action.data.data;
+  return state.mergeIn([curModule], data);
+}
+
 
 export default function (state = defaultState, action) {
   switch (action.type) {
@@ -85,14 +102,22 @@ export default function (state = defaultState, action) {
                   .set('maxTxpower', '27');
 
 
-    case 'CHANGE_SHOW_RADIO_SETTING':
-      return onShowRadioSettingChange(state, action);
-    case 'CHANGE_SHOW_SSID_SETTING':
-      return onShowSsidSettingChange(state, action);
-    case 'CHANGE_SHOW_MULTI_SSID':
-      return onShowMultiSsidChange(state, action);
+    case 'TOGGLE_SHOW_RADIO_SETTING':
+      return state.set('showRadioSetting', !state.get('showRadioSetting'));
+    case 'TOGGLE_SHOW_SSID_SETTING':
+      return state.set('showSsidSetting', !state.get('showSsidSetting'));
+    case 'TOGGLE_SHOW_MULTI_SSID':
+      return state.set('showMultiSsid', !state.get('showMultiSsid'));
     case 'CHANGE_TABLE_ITEM_FOR_SSID':
       return state.set('tableItemForSsid', action.data);
+    case 'UPDATE_SELF_ITEM_SETTINGS':
+      return onUpdateSelfItemSettings(state, action);
+    case 'UPDATE_RADIO_SETTINGS_ITEM':
+      return state.mergeIn(['radioSettings'], action.data);
+    case 'UPDATE_MULTI_SSID_ITEM':
+      return state.mergeIn(['multiSsid'], action.data);
+    case 'UPDATE_BASIC_SETTINGS':
+      return state.mergeIn(['basicSettings'], action.data);
     default:
   }
   return state;

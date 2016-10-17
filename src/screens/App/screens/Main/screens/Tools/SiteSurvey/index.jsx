@@ -42,7 +42,7 @@ const siteScanResultOptions = fromJS([
   },
   {
     id: 'signal',
-    text: _('Signal, dBm'),
+    text: _('Signal,dBm'),
   },
   {
     id: 'noise',
@@ -97,22 +97,26 @@ export default class SiteSurvey extends React.Component {
       <div>
         <FormInput
           type="plain-text"
-          value={_('Note: Site survey scan may temporary disable wireless link(s)')}
+          value={_('Notice: Site survey scan may temporary disable wireless link(s)')}
         /> <br /><br />
         <Button
           theme="primary"
           loading={fetching}
           disabled={fetching}
-          text={_('Start Scan')}
+          text={_('Scan')}
           onClick={this.onScanBtnClick}
         /><br /><br />
         {
           this.props.selfState.get('showTable') ? (
-            <Table
-              className="table"
-              options={siteScanResultOptions}
-              list={siteList}
-            />
+            <div className="stats-group">
+              <div className="stats-group-cell">
+                <Table
+                  className="table"
+                  options={siteScanResultOptions}
+                  list={siteList}
+                />
+              </div>
+            </div>
           ) : null
         }
       </div>
