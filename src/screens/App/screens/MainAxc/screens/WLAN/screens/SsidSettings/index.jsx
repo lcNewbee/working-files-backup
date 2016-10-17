@@ -135,6 +135,7 @@ export default class View extends React.Component {
   render() {
     const { route, store, vlan } = this.props;
     const editData = store.getIn([route.id, 'curListItem']) || Map({});
+    const actionQuery = store.getIn([route.id, 'actionQuery']);
     const getCurrData = this.getCurrData;
     const {
       password, ssid, upstream, downstream,
@@ -155,6 +156,7 @@ export default class View extends React.Component {
         label: _('Centralized Forward-%s Tunnel', '802.11'),
       },
     ];
+    const isModelShow = actionQuery.get('action') === 'edit' || actionQuery.get('action') === 'add';
 
     return (
       <ListInfo
@@ -163,8 +165,8 @@ export default class View extends React.Component {
         actionable
       >
         <Modal
-          isShow={!editData.isEmpty()}
-          title={editData.get('myTitle')}
+          isShow={isModelShow}
+          title={actionQuery.get('myTitle')}
           onOk={() => this.onSave()}
           onClose={() => this.props.closeListItemModal(route.id)}
         >

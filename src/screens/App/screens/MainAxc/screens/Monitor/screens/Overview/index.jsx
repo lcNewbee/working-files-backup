@@ -174,14 +174,15 @@ function getFlowOption(serverData) {
     },
     legend: {},
     grid: {
-      left: '3%',
-      right: '4%',
-      bottom: '0',
+      left: '6%',
+      right: '6%',
+      bottom: '4%',
       containLabel: true,
     },
     xAxis: [
       {
         type: 'category',
+        data: [],
       },
     ],
     yAxis: {
@@ -193,6 +194,7 @@ function getFlowOption(serverData) {
         name: '直接访问',
         type: 'bar',
         barWidth: '60%',
+        data: [],
       },
     ],
   };
@@ -280,7 +282,7 @@ export default class View extends PureComponent {
                 option={terminalTypeOption}
                 className="o-box__canvas cols col-6"
                 style={{
-                  minHeight: '200px',
+                  minHeight: '160px',
                 }}
               />
             </div>
@@ -296,6 +298,21 @@ export default class View extends PureComponent {
                 style={{
                   width: '100%',
                   minHeight: '200px',
+                }}
+              />
+            </div>
+          </div>
+          <div className="cols col-12">
+            <div className="o-box__cell">
+              <h3>{ _('Safe Alarm Events') }</h3>
+            </div>
+            <div className="o-box__cell">
+              <EchartReact
+                option={flowOption}
+                className="o-box__canvas"
+                style={{
+                  width: '100%',
+                  minHeight: '180px',
                 }}
               />
             </div>

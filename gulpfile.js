@@ -19,8 +19,8 @@ paths = gulp.paths = {
   src: 'src',
   php: 'php/',
   pubWebPath: '/',
-  pubNew: '../win_ac/software/web/',
-  pubAxc: 'dist',
+  pubAc: '../win_ac/software/web/',
+  pubAxc: '../axc/apps/web/web',
   pubAp: '../qsdk/package/comlanos/goahead/files/web',
   webpack: './webpack.config.dev.js',
   pubWebpack: './webpack.config.production.js',
@@ -79,7 +79,7 @@ gulp.task('build', function (callback) {
 gulp.task('open:dist', ['build'], shell.task(['babel-node tools/distServer.js']));
 
 gulp.task('clean:pubac', function (callback) {
-  var distPath = paths.pubNew;
+  var distPath = paths.pubAc;
 
   if(argv.d) {
     distPath = argv.d;
@@ -104,7 +104,7 @@ gulp.task('pub:path', function () {
 });
 
 gulp.task('pub:copy', function () {
-  var distPath = paths.pubNew;
+  var distPath = paths.pubAc;
 
   if(argv.d) {
     distPath = argv.d;
@@ -171,6 +171,7 @@ gulp.task('build:axc', function () {
 });
 
 gulp.task('pub:axc', function (callback) {
+  gutil.log('切换到配置文件：', gutil.colors.magenta(paths.pubAxc));
   runSequence('pub:path', ['build'], 'build:axc', 'pub:copyaxc', callback);
 });
 
