@@ -1,0 +1,31 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "username": "Windy",
+        "curApp": "youtube",
+        "upstream": "1888",
+        "downstream": "1233",
+        "percentage": "18%"
+      },
+      {
+        "username": "Bruce",
+        "curApp": "Google",
+        "upstream": "992",
+        "downstream": "1233",
+        "percentage": "8%"
+      },
+      {
+        "username": "Fogo",
+        "curApp": "Facebook",
+        "upstream": "500",
+        "downstream": "1233",
+        "percentage": "5%"
+      }
+    ]
+  }
+}

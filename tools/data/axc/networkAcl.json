@@ -7,19 +7,19 @@
     "list": [
       {
         "id": "0",
-        "targetAddress": "192.168.4.12",
+        "targetAddress": "0",
         "targetMask": "192.168.5.12",
         "nextHopIp": "192.168.5.123"
       },
       {
         "id": "2",
-        "targetAddress": "192.168.2.1",
+        "targetAddress": "0",
         "targetMask": "192.168.5.1",
         "nextHopIp": "192.168.5.123"
       },
       {
         "id": "3",
-        "targetAddress": "192.168.3.2",
+        "targetAddress": "0",
         "targetMask": "192.168.5.13",
         "nextHopIp": "192.168.5.123"
       }

@@ -241,19 +241,19 @@ const routes = [
               {
                 id: 'portalServer',
                 path: '/main/network/portal/server',
-                formUrl: 'goform/portalServer',
+                formUrl: 'goform/network/portalServer',
                 text: _('Portal Server'),
                 component: sPortalServer.Screen,
               }, {
                 id: 'portalRules',
                 path: '/main/network/portal/rules',
-                formUrl: 'goform/portalRules',
+                formUrl: 'goform/network/portalRules',
                 text: _('Portal Rules'),
                 component: sPortalRules.Screen,
               }, {
                 id: 'portalTemplate',
                 path: '/main/network/portal/template',
-                formUrl: 'goform/portalTemplate',
+                formUrl: 'goform/network/portalTemplate',
                 text: _('Portal Template'),
                 component: sPortalTemplate.Screen,
               },
@@ -284,7 +284,7 @@ const routes = [
               }, {
                 id: 'user',
                 path: '/main/group/monitor/user',
-                formUrl: 'goform/getClientInfo',
+                formUrl: 'goform/group/client',
                 text: _('User'),
                 component: sUsers.Screen,
               }, {
@@ -300,13 +300,13 @@ const routes = [
                   {
                     id: 'userFlow',
                     path: '/main/group/monitor/flow/user',
-                    formUrl: 'goform/flow/user',
+                    formUrl: 'goform/group/flow/user',
                     text: _('User'),
                     component: sFlowUser.Screen,
                   }, {
                     id: 'appFlow',
                     path: '/main/group/monitor/flow/app',
-                    formUrl: 'goform/flow/app',
+                    formUrl: 'goform/group/flow/app',
                     text: _('App'),
                     component: sFlowApp.Screen,
                   },
@@ -314,13 +314,13 @@ const routes = [
               }, {
                 id: 'ssidStatus',
                 path: '/main/group/monitor/ssid',
-                formUrl: 'goform/ssidList',
+                formUrl: 'goform/group/ssid',
                 text: _('SSID Status'),
                 component: sSsidStatus.Screen,
               }, {
                 id: 'apList',
                 path: '/main/group/monitor/aps',
-                formUrl: 'goform/apList',
+                formUrl: 'goform/group/aps',
                 text: _('Access Point List'),
                 component: sApList.Screen,
               }, {
@@ -349,7 +349,7 @@ const routes = [
                     id: 'liveMap',
                     path: '/main/group/map/live/list',
                     text: _('Live Map'),
-                    formUrl: 'goform/mapList',
+                    formUrl: 'goform/group/mapList',
                     isIndex: true,
                     component: sLiveMap.Screen,
                   }, {
@@ -375,14 +375,14 @@ const routes = [
                 id: 'heatMap',
                 path: '/main/group/map/heat_map',
                 formUrl: '/goform/heatMap',
-                fetchUrl: '/goform/mapList',
+                fetchUrl: '/goform/group/mapList',
                 text: _('Heat Map'),
                 component: sHeatMap.Screen,
               }, {
                 id: 'cientsTrace',
                 path: '/main/group/map/cients_trace',
                 formUrl: '/goform/cientsTrace',
-                fetchUrl: '/goform/mapList',
+                fetchUrl: '/goform/group/mapList',
                 text: _('Cients Trace'),
                 component: sClientsTrace.Screen,
               },
@@ -398,31 +398,31 @@ const routes = [
               {
                 id: 'ssidSettings',
                 path: '/main/group/wireless/ssid',
-                formUrl: 'goform/ssidSettingList',
+                formUrl: 'goform/group/ssidSettingList',
                 text: _('SSID Settings'),
                 component: sSsidSettings.Screen,
               }, {
                 id: 'blacklist',
                 path: '/main/group/wireless/acl',
-                formUrl: '/goform/blacklist',
+                formUrl: '/goform/group/blacklist',
                 text: _('Blacklist'),
                 component: sBlacklist.Screen,
               }, {
                 id: 'smartRf',
                 path: '/main/group/wireless/smart',
-                formUrl: 'goform/smartRf',
+                formUrl: 'goform/group/smartRf',
                 text: _('Smart RF'),
                 component: sSmartRf.Screen,
               }, {
                 id: 'timerPolicy',
                 path: '/main/group/wireless/timer',
-                formUrl: 'goform/timerPolicy',
+                formUrl: 'goform/group/timerPolicy',
                 text: _('Timer Policy'),
                 component: sTimerPolicy.Screen,
               }, {
                 id: 'wirelessSafePolicy',
                 path: '/main/group/wireless/safe',
-                formUrl: 'goform/timerPolicy',
+                formUrl: 'goform/group/timerPolicy',
                 text: _('Wireless Safe Policy'),
                 component: SharedComponents.TabContainer,
                 indexRoute: {

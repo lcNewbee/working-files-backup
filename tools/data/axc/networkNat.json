@@ -16,13 +16,13 @@
       },
       {
         "id": "1",
-        "ruleType": "2",
+        "ruleType": "snat",
         "sourceAddress": "android-1213",
         "conversionAddress": "192.168.5.123"
       },
       {
         "id": "2",
-        "ruleType": "3",
+        "ruleType": "dnat",
         "sourceAddress": "android-1213",
         "conversionAddress": "192.168.5.123"
       }

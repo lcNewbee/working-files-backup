@@ -12,11 +12,11 @@ import * as screenActions from 'shared/actions/screens';
 const flowRateFilter = utils.filter('flowRate:["KB"]');
 const flowTableOptions = fromJS([
   {
-    id: 'appName',
+    id: 'username',
     text: _('User Name'),
     width: '200',
   }, {
-    id: 'number',
+    id: 'curApp',
     text: _('Current App'),
   }, {
     id: 'bandwidth',

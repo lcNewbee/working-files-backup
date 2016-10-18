@@ -16,13 +16,13 @@ const flowRateFilter = utils.filter('flowRate:["KB"]');
 const clientsTableOptions = fromJS([
   {
     id: 'devicename',
-    text: `${_('MAC Address')}/${_('Name')}`,
+    text: `${_('MAC')}/${_('Name')}`,
     transform(val, item) {
       return item.get('devicename') || item.get('mac');
     },
   }, {
     id: 'ip',
-    text: _('IP Address'),
+    text: _('IP'),
   }, {
     id: 'manufacturer',
     text: _('Manufacturer'),
