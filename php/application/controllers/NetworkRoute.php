@@ -52,35 +52,7 @@ class NetworkRoute extends CI_Controller {
 		return $result;
 	}
 	function onAction($data) {
-		$result = '';
-		$actionType = element('action', $data);
-    $selectList = element('selectedList', $data);
 
-		if ($actionType === 'add') {
-      $retData = array(
-        'destnet'=>element('targetAddress', $data),
-        'gateway'=>element('nextHopIp', $data),
-        'mask'=>element('targetMask', $data),
-      );
-			$result=acnetmg_add_route(json_encode($retData));
-		}
-		elseif($actionType === 'edit') {
-      $retData = array(
-        'id'=>element('id', $data),
-        'destnet'=>element('targetAddress', $data),
-        'gateway'=>element('nextHopIp', $data),
-        'mask'=>element('targetMask', $data),
-      );
-			$result=acnetmg_update_route(json_encode($retData));
-		}
-		elseif($actionType === 'delete'){
-      foreach($selectList as $item) {
-        $deleteItem=array(
-          'id'=>element('id', $item),
-          'destnet'=>element('targetAddress', $item),
-          'gateway'=>element('nextHopIp', $item),
-          'mask'=>element('targetMask', $item)
-        );
         $result=acnetmg_del_route(json_encode($deleteItem));
       }
 		}

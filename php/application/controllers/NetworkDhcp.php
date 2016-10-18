@@ -64,7 +64,6 @@ class NetworkDhcp extends CI_Controller {
 	function onAction($data) {
 		$result = null;
 		$actionType = element('action', $data);
-
     function getCgiParam($oriData) {
       $retData = array(
         'pool_name'=>element('name', $oriData),
@@ -74,9 +73,10 @@ class NetworkDhcp extends CI_Controller {
         'pool_route'=>element('gateway', $oriData),
         'pool_domain'=>element('domain', $oriData),
         'pool_dns1'=>element('mainDns', $oriData),
-        'pool_dns2'=>element('secondDns', $oriData)
+        'pool_dns2'=>element('secondDns', $oriData),
+        'opt43'=>element('opt43', $oriData),
+        'opt60'=>element('opt60', $oriData)
       );
-
       return $retData;
     }
 

@@ -59,3 +59,5 @@ $route['goform/network/nat'] = 'networkNat';
 $route['goform/network/route'] = 'networkRoute';
 $route['goform/network/aci'] = 'networkAci';
 $route['goform/group'] = 'group';
+$route['/goform/group/users'] = 'apgroupUser';
+$route['/goform/group/flow'] = 'apgroupFlow';
