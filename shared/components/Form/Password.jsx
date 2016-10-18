@@ -4,16 +4,14 @@ import Icon from '../Icon';
 import Input from './atom/Input';
 
 const propTypes = {
-  className: PropTypes.string,
   seeAble: PropTypes.bool,
   autoFocus: PropTypes.bool,
   onChange: PropTypes.func,
   type: PropTypes.oneOf(['text', 'password']),
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  role: PropTypes.oneOf(['block']),
+  display: PropTypes.oneOf(['block', 'inline', 'inline-block']),
   style: PropTypes.object,
   isFocus: PropTypes.bool,
-  canSee: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -50,8 +48,8 @@ class Password extends React.Component {
 
   render() {
     const { isSee, isFocus } = this.state;
-    const { role, style, seeAble } = this.props;
-    let myIsFocus = isFocus || this.props.isFocus;
+    const { display, style, seeAble } = this.props;
+    const myIsFocus = isFocus || this.props.isFocus;
     let passwordClassName = 'a-password';
     let iconClassName = 'a-password__icon';
     let { type } = this.props;
@@ -70,8 +68,8 @@ class Password extends React.Component {
 
     showIcon = seeAble && showIcon;
 
-    if (role) {
-      passwordClassName = `${passwordClassName} a-password--${role}`;
+    if (display) {
+      passwordClassName = `${passwordClassName} a-password--${display}`;
     }
 
     return (

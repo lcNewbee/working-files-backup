@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import utils from 'shared/utils';
 import { Map } from 'immutable';
@@ -21,13 +21,38 @@ const validOptions = Map({
   }),
 });
 
-// 原生的 react 页面
-export const Login = React.createClass({
-  mixins: [PureRenderMixin],
+const propTypes = {
+  status: PropTypes.string,
+  loginedAt: PropTypes.number,
+  resetData: PropTypes.func,
+  updateData: PropTypes.func,
+  validateAll: PropTypes.func,
+  login: PropTypes.func,
+  changeLoginStatus: PropTypes.func,
+  data: PropTypes.object,
+  app: PropTypes.object,
+  validateOption: PropTypes.object,
+};
 
+const defaultProps = {
+  closeModal: () => true,
+};
+
+export default class Login extends Component {
+  constructor(props) {
+    super(props);
+
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    utils.binds(this, [
+      'onLogin',
+      'onChangeData',
+      'onInputKeyUp',
+      'getDataValue',
+    ]);
+  }
   componentWillMount() {
     document.getElementsByTagName('body')[0].className += ' sign-body';
-  },
+  }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.status === 'ok') {
@@ -37,83 +62,50 @@ export const Login = React.createClass({
         window.location.hash = '#/main/status';
       }
     }
-  },
+  }
 
   componentWillUnmount() {
-    let currClass = document.getElementsByTagName('body')[0].className;
+    const currClass = document.getElementsByTagName('body')[0].className;
 
     document.getElementsByTagName('body')[0].className = currClass.replace(' sign-body', '');
     this.props.resetData();
-  },
+  }
 
-  checkData() {
-    let data = this.props.data.toJS();
-    let ret = formGroups.password.validator.check(data.password);
+  onChangeData(name) {
+    return (data) => {
+      const subData = {};
 
-    return ret;
-  },
-
+      subData[name] = data.value;
+      this.props.updateData(subData);
+    };
+  }
   onLogin() {
     this.props
       .validateAll()
       .then((invalid) => {
         if (invalid.isEmpty()) {
           this.props.login((status) => {
-            let currClass = document.getElementsByTagName('body')[0].className;
+            const currClass = document.getElementsByTagName('body')[0].className;
 
             document.body.className = currClass.replace(' sign-body', '');
             this.props.changeLoginStatus(status);
           });
         }
       });
-
-    // // 如果有验证错误信息
-    // if (checkRusult) {
-    //   this.props.loginResult(checkRusult);
-
-    // //
-    // } else {
-    //   this.props.login(function (status) {
-    //     var currClass = document.getElementsByTagName('body')[0].className;
-
-    //     document.getElementsByTagName('body')[0].className = currClass.replace(' sign-body', '');
-    //     this.props.changeLoginStatus(status);
-    //   }.bind(this));
-    // }
-  },
-
-  onChangeData(name) {
-    return function (data) {
-      const subData = {};
-
-      subData[name] = data.value;
-      this.props.updateData(subData);
-    }.bind(this);
-  },
-
-  getDataValue(name) {
-    return typeof this.props.data.get === 'function' ?
-      this.props.data.get(name) : this.props.data[name];
-  },
-
+  }
   onInputKeyUp(e) {
     if (e.which === 13) {
       this.onLogin();
     }
-  },
-
-  onUsernameKeyUp(e) {
-    if (e.which === 13) {
-      // 聚焦到 密码输入框
-      // this.onLogin();
-    }
-  },
+  }
+  getDataValue(name) {
+    return typeof this.props.data.get === 'function' ?
+      this.props.data.get(name) : this.props.data[name];
+  }
 
   render() {
     const { version, guiName } = this.props.app.toJS();
     const { username, password } = this.props.validateOption;
-    let that = this;
-    let myMsg = this.props.status;
 
     return (
       <div>
@@ -123,21 +115,21 @@ export const Login = React.createClass({
         />
 
         <div className="sign">
-          <div className="sign-backdrop"></div>
+          <div className="sign-backdrop" />
           <div className="sign-content">
             <h1 className="title">{_('Please Login')}</h1>
             {
               guiConfig.hasUsername ? (
                 <FormGroup
-                  required
+                  display="block"
                   name="username"
-                  role="block"
                   maxLength="21"
                   data-label={_('Username')}
                   placeholder={_('Username')}
                   value={this.getDataValue('username')}
                   onChange={this.onChangeData('username')}
                   onKeyUp={this.onUsernameKeyUp}
+                  required
                   {...username}
                 />
               ) : null
@@ -145,15 +137,14 @@ export const Login = React.createClass({
             <FormGroup
               type="password"
               name="password"
-              role="block"
-              seeAble={false}
-              required
+              display="block"
               maxLength="21"
               data-label={_('Password')}
               placeholder={_('Password')}
               value={this.getDataValue('password')}
               onChange={this.onChangeData('password')}
               onKeyUp={this.onInputKeyUp}
+              required
               {...password}
             />
 
@@ -172,8 +163,10 @@ export const Login = React.createClass({
         </div>
       </div>
     );
-  },
-});
+  }
+}
+Login.propTypes = propTypes;
+Login.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   const myState = state.login;
