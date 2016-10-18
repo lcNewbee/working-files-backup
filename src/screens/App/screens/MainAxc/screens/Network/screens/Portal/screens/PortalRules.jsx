@@ -187,7 +187,9 @@ export default class View extends React.Component {
   render() {
     const { store } = this.props;
     const myScreenId = store.get('curScreenId');
-    const editData = store.getIn([myScreenId, 'curListItem']);
+    const actionQuery = store.getIn([myScreenId, 'actionQuery']);
+    const actionType = store.getIn([myScreenId, 'actionQuery', 'action']);
+    const showModel = actionType === 'add' || actionType === 'edit';
     return (
       <ListInfo
         {...this.props}
@@ -202,8 +204,8 @@ export default class View extends React.Component {
 
       >
         <Modal
-          isShow={!editData.isEmpty()}
-          title={editData.get('myTitle')}
+          isShow={showModel}
+          title={actionQuery.get('myTitle')}
           onOk={this.onSave}
           onClose={this.props.closeListItemModal}
           size="lg"

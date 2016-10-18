@@ -22,7 +22,7 @@ const screenOptions = fromJS([
     },
   }, {
     id: 'info',
-    text: _('ODescribe'),
+    text: _('Describe'),
   },
 ]);
 const tableOptions = immutableUtils.getTableOptions(screenOptions);
