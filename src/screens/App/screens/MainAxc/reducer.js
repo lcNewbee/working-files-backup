@@ -8,6 +8,7 @@ const defaultState = fromJS({
     // 'vlanAsider' 'groupAsider' 'topMenu'
     name: 'topMenu',
   },
+
   modal: {
     isShow: false,
     size: 'lg',
@@ -105,10 +106,18 @@ function rcApGroup(state, list) {
 
 function selectList(state, name, id) {
   const selectedItem = state.getIn([name, 'list'])
-      .find((item) => item.get('id') === id) ||
+      .find(item => item.get('id') === id) ||
       state.getIn([name, 'selected']);
 
   return state.setIn([name, 'selected'], selectedItem);
+}
+
+function selectManageList(state, name, id) {
+  const selectedItem = state.getIn([name, 'list'])
+      .find(item => item.get('id') === id) ||
+      state.getIn([name, 'manageSelected']);
+
+  return state.setIn([name, 'manageSelected'], selectedItem);
 }
 
 function selectedListItem(list, data) {
@@ -136,6 +145,9 @@ export default function (state = defaultState, action) {
 
     case 'SELECT_GROUP':
       return selectList(state, 'group', action.id);
+
+    case 'SELECT_MANAGE_GROUP':
+      return selectManageList(state, 'group', action.id);
 
     case 'RC_DELETE_AP_GROUP':
       return rcApGroup(state, action.data.list);

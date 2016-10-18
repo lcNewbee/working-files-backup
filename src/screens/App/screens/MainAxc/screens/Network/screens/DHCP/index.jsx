@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
-import { fromJS, Map } from 'immutable';
+import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/utils/lib/validator';
 import {
@@ -84,19 +84,34 @@ const screenOptions = fromJS([
         rules: 'number',
       }),
     },
+  }, {
+    id: 'opt43',
+    text: _('AC Address'),
+    noTable: true,
+    formProps: {
+      maxLength: '13',
+      validator: validator({
+        rules: 'ip',
+      }),
+    },
+  }, {
+    id: 'opt60',
+    text: _('Vendor ID'),
+    noTable: true,
+    formProps: {
+      type: 'number',
+      maxLength: '13',
+      validator: validator({
+        rules: 'num',
+      }),
+    },
   },
 ]);
 const tableOptions = immutableUtils.getTableOptions(screenOptions);
 const editFormOptions = immutableUtils.getFormOptions(screenOptions);
 const defaultEditData = immutableUtils.getDefaultData(screenOptions);
 const propTypes = {
-  app: PropTypes.instanceOf(Map),
-  store: PropTypes.instanceOf(Map),
-
   route: PropTypes.object,
-  initScreen: PropTypes.func,
-  closeListItemModal: PropTypes.func,
-  updateCurEditListItem: PropTypes.func,
   save: PropTypes.func,
 };
 const defaultProps = {};

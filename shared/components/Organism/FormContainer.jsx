@@ -110,7 +110,7 @@ class FormContainer extends React.Component {
       myProps.onValidError = onValidError;
     }
 
-    myProps.onChange = myData => this.onChangeData(id, myData);
+    myProps.onChange = myData => this.onChangeData(groupId, myData);
 
     if (myComponent) {
       return myComponent(myProps, data, actionQuery);

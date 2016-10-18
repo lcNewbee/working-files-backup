@@ -384,6 +384,7 @@ export default class View extends React.Component {
     const { app, store } = this.props;
     const myScreenId = store.get('curScreenId');
     const settings = store.getIn([myScreenId, 'curSettings']);
+    const actionQuery = store.getIn([myScreenId, 'actionQuery']);
     const list = store.getIn([myScreenId, 'data', 'list']);
     const page = store.getIn([myScreenId, 'data', 'page']);
     const editData = getCurListInfoState(store, 'edit');
@@ -434,7 +435,7 @@ export default class View extends React.Component {
         data-help-text="这是帮助文本"
       />,
     ];
-    const isOpenHeader = !editData.isEmpty();
+    const isOpenHeader = actionQuery.get('action') === 'add';
     let mapClassName = 'o-map';
 
     if (isOpenHeader) {
@@ -461,7 +462,7 @@ export default class View extends React.Component {
                   onClick={() => this.props.closeListItemModal()}
                 />
                 {
-                  !editData.isEmpty() ? (
+                  isOpenHeader ? (
                     <FormContainer
                       data={editData}
                       options={formOptions}
@@ -508,8 +509,11 @@ export default class View extends React.Component {
         {
           settings.get('type') !== '0' ? (
             <Modal
-              isShow={!editData.isEmpty()}
-              title={editData.get('myTitle')}
+              isShow={
+                actionQuery.get('action') === 'edit' ||
+                actionQuery.get('action') === 'add'
+              }
+              title={actionQuery.get('myTitle')}
               onOk={this.onSave}
               onClose={this.onCloseEditModal}
               size="md"

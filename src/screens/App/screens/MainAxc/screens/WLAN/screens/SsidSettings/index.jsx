@@ -134,8 +134,7 @@ export default class View extends React.Component {
 
   render() {
     const { route, store, vlan } = this.props;
-    const editData = store.getIn([route.id, 'curListItem']) || Map({});
-    const actionQuery = store.getIn([route.id, 'actionQuery']);
+    const actionQuery = store.getIn([route.id, 'actionQuery']) || Map({});
     const getCurrData = this.getCurrData;
     const {
       password, ssid, upstream, downstream,

@@ -84,7 +84,8 @@ const sPortalTemplate =
  */
 const sOverview = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Overview');
 const sUsers = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Users');
-const sFlowStatus = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/FlowStatus');
+const sFlowUser = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Flow/User');
+const sFlowApp = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Flow/App');
 const sSsidStatus = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/SsidStatus');
 const sApList = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/ApList');
 const sSafeStatus = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/SafeStatus');
@@ -291,7 +292,25 @@ const routes = [
                 path: '/main/group/monitor/flow',
                 formUrl: 'goform/flowList',
                 text: _('Flow'),
-                component: sFlowStatus.Screen,
+                component: SharedComponents.TabContainer,
+                indexRoute: {
+                  onEnter: (nextState, replace) => replace('/main/group/monitor/flow/user'),
+                },
+                childRoutes: [
+                  {
+                    id: 'userFlow',
+                    path: '/main/group/monitor/flow/user',
+                    formUrl: 'goform/flow/user',
+                    text: _('User'),
+                    component: sFlowUser.Screen,
+                  }, {
+                    id: 'appFlow',
+                    path: '/main/group/monitor/flow/app',
+                    formUrl: 'goform/flow/app',
+                    text: _('App'),
+                    component: sFlowApp.Screen,
+                  },
+                ],
               }, {
                 id: 'ssidStatus',
                 path: '/main/group/monitor/ssid',
@@ -609,8 +628,7 @@ const routes = [
             id: 'admin',
             isIndex: true,
             path: '/main/system/admin',
-            fetchUrl: 'goform/admins',
-            saveUrl: 'goform/admins',
+            formUrl: 'goform/system/admins',
             icon: 'user',
             text: _('Admin Settings'),
             component: sSystemAdmin.Screen,

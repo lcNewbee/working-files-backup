@@ -121,6 +121,7 @@ body {
       left: $sidebar-width + $g-top-menu-size + 20px;
     }
     .t-main__asider-left {
+      width: $sidebar-width + 20px;
       top: $g-navbar-height + $g-main-bar-height;
       left: $g-top-menu-size;
     }
@@ -181,11 +182,11 @@ body {
 
   &.main--open-left {
     .t-main__nav {
-      left: 170px + $g-top-menu-size;;
+      left: $sidebar-width + 20px + $g-top-menu-size;;
     }
 
     .t-main__content {
-      left: $sidebar-width + 200px;
+      left: ($sidebar-width + 20px) * 2 + $g-top-menu-size;
     }
   }
 }
@@ -203,8 +204,9 @@ body {
 }
 
 .t-main__asider-header {
-  padding: 16px;
+  padding: 12px 18px;
   line-height: 20px;
+  border-top: 1px solid #000;
 
   &::before {
     position: absolute;
@@ -223,5 +225,9 @@ body {
   position: absolute;
   bottom: 0;
   width: 100%;
-  padding: 12px;
+  padding: 12px 18px;
+
+  .icon {
+    cursor: pointer;
+  }
 }

@@ -119,7 +119,7 @@ export default class View extends React.Component {
         formatter: '{a} <br/>{b}: {c} ({d}%)',
       },
       title: {
-        text: _('Vender'),
+        text: _('Vendor'),
         x: 'center',
       },
       legend: {
@@ -129,7 +129,7 @@ export default class View extends React.Component {
       },
       series: [
         {
-          name: 'Vender',
+          name: 'Vendor',
           type: 'pie',
           radius: ['40%', '70%'],
           avoidLabelOverlap: false,

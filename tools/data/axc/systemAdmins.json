@@ -7,27 +7,27 @@
     "list": [
       {
         "userType": "0",
-        "userName": "神器",
+        "userName": "admin",
         "userPassword": "",
-        "purview": "192.168.5.53"
+        "purview": "all"
       },
       {
         "userType": "2",
-        "userName": "神器",
+        "userName": "Guest",
         "userPassword": "",
-        "purview": "192.168.5.53"
+        "purview": "Readonly"
       },
       {
         "userType": "1",
-        "userName": "神器",
+        "userName": "Network admin",
         "userPassword": "",
-        "purview": "192.168.5.53"
+        "purview": "network"
       },
       {
         "userType": "1",
-        "userName": "神器",
+        "userName": "Ap Group admin",
         "userPassword": "",
-        "purview": "192.168.5.53"
+        "purview": "ap group,network"
       }
     ]
   }

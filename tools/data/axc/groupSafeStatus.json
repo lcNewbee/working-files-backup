@@ -5,10 +5,10 @@
   },
   "data": {
     "attackType": {
-      "dns": 100,
-      "ddos": 222,
-      "attackType2": 222,
-      "attackType4": 222
+      "DNS Hijacking": 100,
+      "DNS Redirect": 222,
+      "DNS Cache Snoop": 222,
+      "DDOS": 222
     },
     "list": [
       {

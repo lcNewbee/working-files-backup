@@ -32,6 +32,12 @@ export function selectGroup(id) {
     id,
   };
 }
+export function selectManageGroup(id) {
+  return {
+    type: 'SELECT_MANAGE_GROUP',
+    id,
+  };
+}
 
 export function rqFetchApGroup() {
   return {
@@ -64,14 +70,14 @@ function rcFetchGroupAps(data) {
   };
 }
 
-export function fetchGroupAps() {
+export function fetchGroupAps(id) {
   return (dispatch, getState) => {
     const productState = getState().product;
     const query = {
-      groupId: productState.getIn(['group', 'selected', 'id']),
+      groupid: id || productState.getIn(['group', 'selected', 'id']),
     };
 
-    dispatch(appActions.fetch(urls.fetchGroupDevs, query))
+    dispatch(appActions.fetch('goform/group/aps', query))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(rcFetchGroupAps(json.data));

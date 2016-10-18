@@ -22,6 +22,7 @@ const propTypes = {
   toggleMainPopOver: PropTypes.func,
   selectVlan: PropTypes.func,
   selectGroup: PropTypes.func,
+  selectManageGroup: PropTypes.func,
   selectAddApGroupDevice: PropTypes.func,
   showMainModal: PropTypes.func,
   togglePropertyPanel: PropTypes.func,
@@ -59,6 +60,10 @@ export default class Main extends Component {
     this.onToggleMainPopOver = this.onToggleMainPopOver.bind(this);
     this.renderBreadcrumb = this.renderBreadcrumb.bind(this);
     this.onClickTopMenuTitle = this.onClickTopMenuTitle.bind(this);
+
+    utils.binds(this, [
+      'onSelectManageGroup',
+    ]);
 
     document.onkeydown = (e) => {
       if (e.keyCode === 116) {
@@ -134,6 +139,11 @@ export default class Main extends Component {
     e.preventDefault();
     this.props.selectGroup(id);
     this.props.fetchGroupAps();
+  }
+  onSelectManageGroup(id, e) {
+    e.preventDefault();
+    this.props.selectManageGroup(id);
+    this.props.fetchGroupAps(id);
   }
 
   showUserPopOver() {
@@ -310,8 +320,7 @@ export default class Main extends Component {
   }
 
   renderModalContent(option) {
-    const selectVlanId = this.props.product.getIn(['vlan', 'selected', 'id']);
-    const selectGroupId = this.props.product.getIn(['group', 'selected', 'id']);
+    const selectGroupId = this.props.product.getIn(['group', 'manageSelected', 'id']);
     const tableOption = fromJS([
       {
         id: 'devicename',
@@ -330,10 +339,6 @@ export default class Main extends Component {
     ]);
 
     switch (option.name) {
-      case 'vlan':
-        return (
-          <p>我是valn</p>
-        );
       case 'group':
         return (
           <div>
@@ -362,8 +367,8 @@ export default class Main extends Component {
       case 'groupManage':
         return (
           <div className="row">
-            <div className="o-list cols col-6">
-              <h3 className="o-list__header">{_('组列表')}</h3>
+            <div className="o-list cols col-4">
+              <h3 className="o-list__header">{_('Group List')}</h3>
               <ul className="m-menu m-menu--open">
                 {
                   this.props.product.getIn(['group', 'list']).map((item) => {
@@ -378,9 +383,9 @@ export default class Main extends Component {
                       <li key={curId}>
                         <a
                           className={classNames}
-                          onClick={e => this.onSelectGroup(curId, e)}
+                          onClick={e => this.onSelectManageGroup(curId, e)}
                         >
-                          {item.get('groupname')} ({item.get('num')})
+                          {item.get('groupname')} ({item.get('apNum')})
                         </a>
                       </li>
                     );
@@ -390,7 +395,7 @@ export default class Main extends Component {
               <div className="o-list__footer action-btns">
                 <Button
                   icon="plus"
-                  text={_('添加组')}
+                  text={_('Add')}
                   onClick={() => {
                     this.props.fetchGroupAps();
                     this.props.showMainModal({
@@ -401,13 +406,17 @@ export default class Main extends Component {
                   }}
                 />
                 <Button
+                  icon="edit"
+                  text={_('Edit')}
+                />
+                <Button
                   icon="trash"
-                  text={_('删除组')}
+                  text={_('Delete')}
                 />
               </div>
             </div>
-            <div className="o-list cols col-6">
-              <h3 className="o-list__header">{_('组内AP')}</h3>
+            <div className="o-list cols col-8">
+              <h3 className="o-list__header">{_('Group AP')}</h3>
               <Table
                 className="table"
                 options={tableOption}
@@ -417,83 +426,25 @@ export default class Main extends Component {
                   this.props.selectAddApGroupDevice(data);
                 }}
               />
-              <div className="o-list__footer">
-                <Button
-                  icon="move"
-                  text={_('移动到其他组')}
-                />
-              </div>
-            </div>
-          </div>
-        );
-
-      case 'vlanManage':
-        return (
-          <div className="row">
-            <div className="cols col-6">
-              <h3>{_('VLAN 列表')}</h3>
-              <ul
-                className="m-menu m-menu--open"
-              >
-              {
-                this.props.product.getIn(['vlan', 'list']).map((item) => {
-                  const curId = item.get('id');
-                  const remark = item.get('remark');
-                  let classNames = 'm-menu__link';
-
-                  if (curId === selectVlanId) {
-                    classNames = `${classNames} active`;
-                  }
-
-                  return (
-                    <li key={curId}>
-                      <a
-                        className={classNames}
-                        onClick={e => this.onSelectVlan(curId, e)}
-                      >
-                        {curId}({remark})
-                      </a>
-                    </li>
-                  );
-                })
-              }
-              </ul>
-              <div className="action-btns">
+              <div className="o-list__footer action-btns">
                 <Button
                   icon="plus"
-                  text={_('添加VLAN')}
+                  text={_('Add')}
+                />
+                <Button
+                  icon="share"
+                  text={_('Move to Other Group')}
                 />
                 <Button
                   icon="trash"
-                  text={_('删除VLAN')}
+                  text={_('Delete')}
                 />
-              </div>
-            </div>
-            <div className="cols col-6">
-              <h3>{_('VLAN 列表')}</h3>
-              <FormGroup
-                type="number"
-                label={_('Group No')}
-                disabled
-              />
-              <FormGroup
-                type="text"
-                label={_('Group Name')}
-              />
-              <FormGroup
-                type="text"
-                label={_('Remarks')}
-              />
-              <div className="form-group form-group-save">
-                <div className="form-control">
-                  <SaveButton
-                    type="button"
-                  />
-                </div>
               </div>
             </div>
           </div>
         );
+
+
 
       default:
         return null;

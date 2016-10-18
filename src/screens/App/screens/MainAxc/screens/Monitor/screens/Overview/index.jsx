@@ -164,7 +164,7 @@ function getApStatusOption(serverData) {
   return ret;
 }
 function getFlowOption(serverData) {
-  const dataList = serverData.get('flowList');
+  let dataList = serverData.get('flowList');
   const option = {
     tooltip: {
       trigger: 'axis',
@@ -200,6 +200,54 @@ function getFlowOption(serverData) {
   };
 
   if (List.isList(dataList)) {
+    dataList = dataList.sort((prev, next) => {
+      return prev.get('value') < next.get('value');
+    });
+    option.xAxis[0].data = dataList.map(item => item.get('name')).toJS();
+    option.series[0].data = dataList.map(item => item.get('value')).toJS();
+  }
+  return option;
+}
+function getSafeAlarmOption(serverData) {
+  let dataList = serverData.get('safeAlarmEvents');
+  const option = {
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+        type: 'line',        // 默认为直线，可选为：'line' | 'shadow'
+      },
+    },
+    legend: {},
+    grid: {
+      left: '6%',
+      right: '6%',
+      bottom: '4%',
+      containLabel: true,
+    },
+    xAxis: [
+      {
+        type: 'category',
+        data: [],
+      },
+    ],
+    yAxis: {
+      type: 'value',
+      position: 'bottom',
+    },
+    series: [
+      {
+        name: '直接访问',
+        type: 'bar',
+        barWidth: '60%',
+        data: [],
+      },
+    ],
+  };
+
+  if (List.isList(dataList)) {
+    dataList = dataList.sort((prev, next) => {
+      return prev.get('value') < next.get('value');
+    });
     option.xAxis[0].data = dataList.map(item => item.get('name')).toJS();
     option.series[0].data = dataList.map(item => item.get('value')).toJS();
   }
@@ -246,6 +294,7 @@ export default class View extends PureComponent {
     const clientStatusOption = getClientsStatusOption(serverData);
     const terminalTypeOption = getTerminalTypeOption(serverData);
     const flowOption = getFlowOption(serverData);
+    const safeAlarmOption = getSafeAlarmOption(serverData);
 
     return (
       <div>
@@ -282,7 +331,7 @@ export default class View extends PureComponent {
                 option={terminalTypeOption}
                 className="o-box__canvas cols col-6"
                 style={{
-                  minHeight: '160px',
+                  minHeight: '200px',
                 }}
               />
             </div>
@@ -308,7 +357,7 @@ export default class View extends PureComponent {
             </div>
             <div className="o-box__cell">
               <EchartReact
-                option={flowOption}
+                option={safeAlarmOption}
                 className="o-box__canvas"
                 style={{
                   width: '100%',

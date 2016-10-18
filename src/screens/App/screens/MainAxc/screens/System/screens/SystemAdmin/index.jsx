@@ -103,13 +103,9 @@ const editFormOptions = immutableUtils.getFormOptions(screenOptions);
 const defaultFormData = immutableUtils.getDefaultData(screenOptions);
 
 const propTypes = {
-  app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
 
   route: PropTypes.object,
-  initScreen: PropTypes.func,
-  closeListItemModal: PropTypes.func,
-  updateCurEditListItem: PropTypes.func,
   save: PropTypes.func,
 };
 const defaultProps = {};
@@ -140,9 +136,15 @@ export default class View extends React.Component {
   }
 
   render() {
+    const { store, route } = this.props;
+    const myStore = store.setIn(
+      [route.id, 'data', 'list', 0, 'noDelete'],
+      true,
+    );
     return (
       <ListInfo
         {...this.props}
+        store={myStore}
         tableOptions={this.tableOptions}
         editFormOptions={editFormOptions}
         defaultEditData={defaultFormData}

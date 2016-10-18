@@ -40,6 +40,21 @@
         "value": 20
       }
     ],
+    "safeAlarmEvents": [
+      {
+        "name": "DDOS",
+        "value": 232
+      }, {
+        "name": "DNS Cache Snoop",
+        "value": 345
+      }, {
+        "name": "DNS Redirect",
+        "value": 555
+      }, {
+        "name": "DNS Hijacking",
+        "value": 888
+      }
+    ],
     "cpuUsed": 20,
     "cpuTotal": 100,
     "memoryUsed": 40,

@@ -17,7 +17,9 @@
         "mainDns": "8.8.8.8",
         "secondDns": "1",
         "releaseTime": "3000",
-        "domain": "ww.baidu.com"
+        "domain": "ww.baidu.com",
+        "opt43": "192.168.0.1",
+        "opt60": "22221"
       },
       {
         "id": "2",
@@ -29,6 +31,8 @@
         "mainDns": "8.8.8.8",
         "secondDns": "1",
         "releaseTime": "3000",
+        "opt43": "192.168.0.1",
+        "opt60": "22221",
         "domain": "ww.baidu.com"
       },
       {
@@ -41,6 +45,8 @@
         "mainDns": "8.8.8.8",
         "secondDns": "1",
         "releaseTime": "3000",
+        "opt43": "192.168.0.1",
+        "opt60": "22221",
         "domain": "ww.baidu.com"
       }
     ]
