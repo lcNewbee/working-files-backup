@@ -23,8 +23,8 @@ export default function (state = defaultState, action) {
   switch (action.type) {
     case 'TOGGLE_SHOW_ADVANCE_BTN':
       return state.set('showAdvance', (state.get('showAdvance') === '1' ? '0' : '1'));
-    case 'TOGGLE_SHOW_RESULT_BTN':
-      return state.set('showResults', action.data);
+    // case 'TOGGLE_SHOW_RESULT_BTN':
+    //   return state.set('showResults', action.data);
     case 'INIT_SELF_STATE':
       return defaultState;
     case 'RECEIVE_TEST_RESULT':

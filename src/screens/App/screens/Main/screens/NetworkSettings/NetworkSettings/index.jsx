@@ -77,7 +77,7 @@ export default class NetworkSettings extends React.Component {
     this.onSave = this.onSave.bind(this);
     this.onDhcpClick = this.onDhcpClick.bind(this);
     this.onStaticClick = this.onStaticClick.bind(this);
-    this.onVlanBtnClick = this.onVlanBtnClick.bind(this);
+    // this.onVlanBtnClick = this.onVlanBtnClick.bind(this);
     this.noErrorThisPage = this.noErrorThisPage.bind(this);
   }
 
@@ -103,7 +103,7 @@ export default class NetworkSettings extends React.Component {
         dns2: '8.8.8.8', // 次dns
         mtu: '1500',
         vlanEnable: '1',  // 管理vlan开关,默认关
-        vlanId: '2', // 2-4094 // vlan id
+        vlanId: '1', // 2-4094 // vlan id
       },
     });
 
@@ -137,18 +137,18 @@ export default class NetworkSettings extends React.Component {
     }
   }
 
-  onVlanBtnClick() {
-    const val = this.props.store.getIn(['curData', 'vlanEnable']);
-    if (val === '0') {
-      this.props.updateItemSettings({
-        vlanEnable: '1',
-      });
-    } else {
-      this.props.updateItemSettings({
-        vlanEnable: '0',
-      });
-    }
-  }
+  // onVlanBtnClick() {
+  //   const val = this.props.store.getIn(['curData', 'vlanEnable']);
+  //   if (val === '0') {
+  //     this.props.updateItemSettings({
+  //       vlanEnable: '1',
+  //     });
+  //   } else {
+  //     this.props.updateItemSettings({
+  //       vlanEnable: '0',
+  //     });
+  //   }
+  // }
 
   noErrorThisPage(...args) {
     const errorMsg = this.props.app.get('invalid');
@@ -167,7 +167,7 @@ export default class NetworkSettings extends React.Component {
   render() {
     const {
       proto, fallbackIp, ip, mask, gateway, dns1, dns2,
-      mngVlanId, utgVlanId, fallbackMask, vlanTagging,
+      mngVlanId, utgVlanId, fallbackMask, vlanEnable,
     } = this.props.store.get('curData').toJS();
     const { lanIp, lanMask, firstDNS, secondDNS,
             validGateway, validVlanId1, validVlanId2} = this.props.validateOption;
@@ -268,8 +268,19 @@ export default class NetworkSettings extends React.Component {
         }
         <h3>{_('Vlan Settings')}</h3>
         <FormGroup
+          label={_('VLAN Enable')}
+          type="checkbox"
+          checked={vlanEnable === '1'}
+          onClick={() => {
+            this.props.updateItemSettings({
+              vlanEnable: vlanEnable === '1' ? '0' : '1',
+            });
+          }}
+        />
+        <FormGroup
           type="number"
           label={_('Management VLAN ID')}
+          disabled={vlanEnable === '0'}
           help={_('Range: 1 - 4094, Default: 1')}
           value={mngVlanId}
           onChange={(data) => this.props.updateItemSettings({
@@ -279,37 +290,11 @@ export default class NetworkSettings extends React.Component {
           {...validVlanId1}
         />
         <FormGroup
-          label={_('VLAN Tagging')}
-        >
-          <FormInput
-            type="radio"
-            text={_('Untagged')}
-            name="vlantagging"
-            checked={vlanTagging === 'untagged'}
-            onClick={() => {
-              this.props.updateItemSettings({
-                vlanTagging: 'untagged',
-              });
-            }}
-          />&nbsp;&nbsp;&nbsp;&nbsp;
-          <FormInput
-            type="radio"
-            text={_('Tagged')}
-            name="vlantagging"
-            checked={vlanTagging === 'tagged'}
-            onClick={() => {
-              this.props.updateItemSettings({
-                vlanTagging: 'tagged',
-              });
-            }}
-          />
-        </FormGroup>
-        <FormGroup
           type="number"
           label={_('Untagged VLAN ID')}
           help={_('Range: 1 - 4094, Default: 1')}
           value={utgVlanId}
-          disabled={vlanTagging === 'tagged'}
+          disabled={vlanEnable === '0'}
           onChange={(data) => this.props.updateItemSettings({
             utgVlanId: data.value,
           })}

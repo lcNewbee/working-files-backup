@@ -84,7 +84,7 @@ export default class Main extends Component {
                   <Icon name="user-secret" className="icon-user" />
                 </div>
                 <div className="m-user-overview__controls">
-                  <a className="change-pas" href="#/main/settings/admin">
+                  <a className="change-pas" href="#/main/maintenance/accountsettings">
                     <Icon
                       name="key"
                     />

@@ -25,6 +25,7 @@ const defaultState = fromJS({
     item: {},
     pos: '',
   },
+  whichButton: '',
   radioSettings: {},
   multiSsid: {},
   basicSettings: {},
@@ -101,13 +102,8 @@ export default function (state = defaultState, action) {
                   .set('channels', fromJS([]))
                   .set('maxTxpower', '27');
 
-
-    case 'TOGGLE_SHOW_RADIO_SETTING':
-      return state.set('showRadioSetting', !state.get('showRadioSetting'));
-    case 'TOGGLE_SHOW_SSID_SETTING':
-      return state.set('showSsidSetting', !state.get('showSsidSetting'));
-    case 'TOGGLE_SHOW_MULTI_SSID':
-      return state.set('showMultiSsid', !state.get('showMultiSsid'));
+    case 'CHANGE_TITLE_SHOW_ICON':
+      return state.set(action.data.name, action.data.value);
     case 'CHANGE_TABLE_ITEM_FOR_SSID':
       return state.set('tableItemForSsid', action.data);
     case 'UPDATE_SELF_ITEM_SETTINGS':
@@ -118,6 +114,8 @@ export default function (state = defaultState, action) {
       return state.mergeIn(['multiSsid'], action.data);
     case 'UPDATE_BASIC_SETTINGS':
       return state.mergeIn(['basicSettings'], action.data);
+    case 'CHANGE_WHICH_BUTTON':
+      return state.set('whichButton', action.data);
     default:
   }
   return state;

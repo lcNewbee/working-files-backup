@@ -195,7 +195,7 @@ export default class SystemStatus extends React.Component {
   }
 
   componentWillUnmount() {
-    console.log('interval', a);
+    // console.log('interval', a);
     clearInterval(a);
     this.props.leaveSettingsScreen();
   }
@@ -245,7 +245,7 @@ export default class SystemStatus extends React.Component {
       staList = ap.staList;
     }
     if (station !== undefined) {
-      signal = station.singal;
+      signal = station.signal;
       const item = station.apInfo;
       apInfo.push(item);
     }
@@ -396,7 +396,7 @@ export default class SystemStatus extends React.Component {
                   value={ccq}
                 />
                 <FormGroup
-                  label={_('Channel Usage :')}
+                  label={_('Channel Utilization :')}
                   type="plain-text"
                   value={chutil}
                 />

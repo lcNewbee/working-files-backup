@@ -1,6 +1,6 @@
-import urls from 'shared/config/urls';
-import * as appActions from 'shared/actions/app';
-import * as settingActions from 'shared/actions/settings';
+// import urls from 'shared/config/urls';
+// import * as appActions from 'shared/actions/app';
+// import * as settingActions from 'shared/actions/settings';
 
 export function toggleShowAdvanceBtn() {
   return {
@@ -8,12 +8,12 @@ export function toggleShowAdvanceBtn() {
   };
 }
 
-export function toggleShowResultBtn(data) {
-  return {
-    type: 'TOGGLE_SHOW_RESULT_BTN',
-    data,
-  };
-}
+// export function toggleShowResultBtn(data) {
+//   return {
+//     type: 'TOGGLE_SHOW_RESULT_BTN',
+//     data,
+//   };
+// }
 
 export function initSelfState() {
   return {

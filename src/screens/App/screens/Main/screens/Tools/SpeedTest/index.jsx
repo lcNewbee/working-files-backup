@@ -13,7 +13,7 @@ import * as selfActions from './actions';
 import selfReducer from './reducer';
 
 
-let a;
+let a; let b;
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
@@ -30,14 +30,12 @@ const propTypes = {
 
   selfState: PropTypes.object,
   initSelfState: PropTypes.func,
-  clickSpeedTestRunBtn: PropTypes.func,
   toggleShowAdvanceBtn: PropTypes.func,
   changeShowScanResults: PropTypes.func,
   changeSelectedIp: PropTypes.func,
   changeTimeClock: PropTypes.func,
   changeQueryData: PropTypes.func,
   resetVaildateMsg: PropTypes.func,
-  toggleShowResultBtn: PropTypes.func,
   changeStopWait: PropTypes.func,
   save: PropTypes.func,
   receiveTestResult: PropTypes.func,
@@ -61,7 +59,7 @@ export default class SpeedTest extends React.Component {
     this.onModalOkClick = this.onModalOkClick.bind(this);
     this.onModalCancelClick = this.onModalCancelClick.bind(this);
     this.onSelectScanResultItem = this.onSelectScanResultItem.bind(this);
-    this.ceateIpTableList = this.ceateIpTableList.bind(this);
+    this.createIpTableList = this.createIpTableList.bind(this);
     this.onRunTest = this.onRunTest.bind(this);
   }
 
@@ -74,6 +72,7 @@ export default class SpeedTest extends React.Component {
     };
     const props = this.props;
     clearInterval(a);
+    clearTimeout(b);
     props.initSettings({
       settingId: props.route.id,
       fetchUrl: props.route.formUrl,
@@ -88,6 +87,7 @@ export default class SpeedTest extends React.Component {
     this.props.resetVaildateMsg();
     this.props.changeTimeClock('');
     clearInterval(a);
+    clearTimeout(b);
   }
   onSelectBtnClick() {
     this.props.fetch('goform/get_ip_list')
@@ -137,13 +137,20 @@ export default class SpeedTest extends React.Component {
             this.props.save('goform/bandwidth_test', query)
                 .then((json) => {
                   if (json.state && json.state.code === 2000) {
-                    this.props.receiveTestResult(json.data);
-                    this.props.changeStopWait(true);
-                    // this.props.toggleShowResultBtn('1');
-                    clearInterval(a);
-                  } else if (json.state && json.state.code !== 2000) {
-                    clearInterval(a);
-                    this.props.changeTimeClock('Test failed !' + json.state.msg);
+                    b = setTimeout(() => {
+                      this.props.fetch('goform/get_bandwidth')
+                          .then((json2) => {
+                            if (json2.state && json2.state.code === 2000) {
+                              this.props.receiveTestResult(json2.data);
+                              this.props.changeStopWait(true);
+                              clearInterval(a);
+                            } else if (json2.state && json2.state.code !== 2000) {
+                              clearInterval(a);
+                              clearTimeout(b);
+                              this.props.changeTimeClock('Test failed !' + json2.state.msg);
+                            }
+                          });
+                    }, (parseInt(query.time, 10) + 2) * 1000);
                   }
                 });
             let clock = parseInt(this.props.store.getIn(['curData', 'time']), 10);
@@ -161,7 +168,7 @@ export default class SpeedTest extends React.Component {
         });
   }
 
-  ceateIpTableList() {
+  createIpTableList() {
     const immutList = this.props.store.getIn(['curData', 'ipList']);
     const list = [];
     if (immutList !== undefined) {
@@ -244,7 +251,7 @@ export default class SpeedTest extends React.Component {
               <Table
                 className="table"
                 options={scanIpOptions}
-                list={this.ceateIpTableList()}
+                list={this.createIpTableList()}
               />
             </Modal>
           ) : null
@@ -453,6 +460,7 @@ export default class SpeedTest extends React.Component {
                       if (json.state && json.state.code === 2000) {
                         this.props.changeStopWait(true);
                         clearInterval(a);
+                        clearTimeout(b);
                       }
                     });
               }}

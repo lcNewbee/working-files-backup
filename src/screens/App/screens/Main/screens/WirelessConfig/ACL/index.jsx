@@ -39,9 +39,13 @@ const propTypes = {
   createModal: PropTypes.func,
   changeSelectedSsid: PropTypes.func,
   selectedSsid: PropTypes.number,
+  validateOption: PropTypes.object,
+  validateAll: PropTypes.func,
 };
-const macValidator = validator({
-  rules: 'mac',
+const validOptions = Map({
+  inputMac: validator({
+    rules: 'mac',
+  }),
 });
 
 const defaultProps = fromJS({
@@ -141,36 +145,31 @@ export default class ACL extends React.Component {
 
   onAddMacToLocalList() {
     const macInputVal = this.props.macInput.get('macValue');
-    const str = macValidator.check(macInputVal);
+    // const str = macValidator.check(macInputVal);
     const selectedSsid = this.props.selectedSsid;
     const preList = this.props.store.getIn(['curData', 'aclConfList', selectedSsid, 'macList']);
     let afterList;
-    if (preList.includes(macInputVal)) {
-      this.props.createModal({
-        id: 'settings',
-        role: 'alert',
-        text: '该MAC地址已经在列表中存在！',
-      });
-    } else {
-      afterList = preList.push(macInputVal);
-      const listLen = afterList.size;
-      if (str === undefined) {
-        const aclConfList = this.props.store.getIn(['curData', 'aclConfList'])
-                            .setIn([selectedSsid, 'macList'], afterList);
-        this.props.updateItemSettings({
-          aclConfList,
+    this.props.validateAll()
+        .then(() => {
+          if (preList.includes(macInputVal)) {
+            this.props.createModal({
+              id: 'settings',
+              role: 'alert',
+              text: '该MAC地址已经在列表中存在！',
+            });
+          } else {
+            afterList = preList.push(macInputVal);
+            const listLen = afterList.size;
+            const aclConfList = this.props.store.getIn(['curData', 'aclConfList'])
+                                .setIn([selectedSsid, 'macList'], afterList);
+            this.props.updateItemSettings({
+              aclConfList,
+            });
+            this.props.changePreLenInMacInput(0);
+            this.props.changeMacInput('');
+            this.props.initMacstatus(listLen);
+          }
         });
-        this.props.changePreLenInMacInput(0);
-        this.props.changeMacInput('');
-        this.props.initMacstatus(listLen);
-      } else {
-        this.props.createModal({
-          id: 'settings',
-          role: 'alert',
-          text: str,
-        });
-      }
-    }
   }
 
   updateAclMacList() {
@@ -300,6 +299,7 @@ export default class ACL extends React.Component {
             disabled={store.getIn(['curData', 'aclEnable']) === '0'}
             value={this.props.macInput.get('macValue')}
             onChange={(data, e) => this.onMacInputChange(data.value, e)}
+            {...this.props.validateOption.inputMac}
           />
           <Button
             className="fl"
@@ -351,7 +351,8 @@ function mapDispatchToProps(dispatch) {
 
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  validator.mergeProps(validOptions)
 )(ACL);
 
 export const acl = reducer;

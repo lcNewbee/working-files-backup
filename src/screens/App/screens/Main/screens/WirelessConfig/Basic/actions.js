@@ -100,22 +100,11 @@ export function saveCountrySelectModal() {
 
 
 // 需求改变后的代码
-
-export function toggleShowRadioSetting() {
+// data: {name: 'showMultiSsid/showSsidSetting/showRadioSetting', value: true}
+export function changeTitleShowIcon(data) {
   return {
-    type: 'TOGGLE_SHOW_RADIO_SETTING',
-  };
-}
-
-export function toggleShowSsidSetting() {
-  return {
-    type: 'TOGGLE_SHOW_SSID_SETTING',
-  };
-}
-
-export function toggleShowMultiSsid() {
-  return {
-    type: 'TOGGLE_SHOW_MULTI_SSID',
+    type: 'CHANGE_TITLE_SHOW_ICON',
+    data,
   };
 }
 
@@ -150,6 +139,13 @@ export function updateMultiSsidItem(data) {
 export function updateBasicSettings(data) {
   return {
     type: 'UPDATE_BASIC_SETTINGS',
+    data,
+  };
+}
+
+export function changeWhichButton(data) {
+  return {
+    type: 'CHANGE_WHICH_BUTTON',
     data,
   };
 }

@@ -14,6 +14,7 @@ import countryMap from './country.js';
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
+  save: PropTypes.func,
   store: PropTypes.instanceOf(Map),
   selfState: PropTypes.instanceOf(Map),
   validateAll: PropTypes.func,
@@ -40,17 +41,18 @@ const propTypes = {
   receiveCountryInfo: PropTypes.func,
   resetVaildateMsg: PropTypes.func,
 
-  toggleShowSsidSetting: PropTypes.func,
-  toggleShowRadioSetting: PropTypes.func,
-  toggleShowMultiSsid: PropTypes.func,
+  changeTitleShowIcon: PropTypes.func,
   changeTableItemForSsid: PropTypes.func,
   createModal: PropTypes.func,
   updateSelfItemSettings: PropTypes.func,
   updateBasicSettings: PropTypes.func,
   updateMultiSsidItem: PropTypes.func,
+  updateRadioSettingsItem: PropTypes.func,
+  changeWhichButton: PropTypes.func,
 };
 
 const defaultProps = {};
+let vlanEnable = '0';
 
 const devicemodeOptions = [
   { value: 'ap', label: _('AP') },
@@ -76,10 +78,12 @@ const wepAuthenOptions = [
   { value: 'shared', label: 'Shared' },
 ];
 
+/*
 const wepKeyLengthOptions = [
   { value: '64', label: '64bit' },
   { value: '128', label: '128bit' },
 ];
+*/
 
 const keyIndexOptions = [
   { value: '1', label: 'key 1' },
@@ -131,6 +135,9 @@ const validOptions = Map({
   ASCII: validator({
     rules: 'ascii|len:[5, 5]',
   }),
+  validVlanId: validator({
+    rules: 'num:[1, 4094]',
+  }),
 });
 
 export default class Basic extends React.Component {
@@ -152,7 +159,7 @@ export default class Basic extends React.Component {
     this.onCloseCountrySelectModal = this.onCloseCountrySelectModal.bind(this);
     this.makeChannelOptions = this.makeChannelOptions.bind(this);
 
-    this.onShowIconClick = this.onShowIconClick.bind(this);
+    // this.onShowIconClick = this.onShowIconClick.bind(this);
     this.onSecurityModeChange = this.onSecurityModeChange.bind(this);
     this.onAddNewSsidItem = this.onAddNewSsidItem.bind(this);
     this.onDeleteBtnClick = this.onDeleteBtnClick.bind(this);
@@ -173,10 +180,11 @@ export default class Basic extends React.Component {
       },
       saveQuery: {},
       defaultData: {
-
       },
     });
     this.fetchFullPageData();
+    props.changeTitleShowIcon({ name: 'showRadioSetting', value: true });
+    props.changeTitleShowIcon({ name: 'showSsidSetting', value: true });
     props.changeShowScanResultStatus(false);
     props.changeScanStatus(false);
     props.changeTableItemForSsid(fromJS({
@@ -184,6 +192,12 @@ export default class Basic extends React.Component {
       val: '',
       item: fromJS({}),
     }));
+    props.fetch('goform/get_network_info')
+        .then((json) => {
+          if (json.state && json.state.code === 2000) {
+            vlanEnable = json.data.vlanEnable;
+          }
+        });
     /*
     props.changeShowRadioSetting(true);
     utils.fetch('goform/get_base_wl_info')
@@ -222,8 +236,10 @@ export default class Basic extends React.Component {
         if (msg.isEmpty()) {
           const dataToSave = this.props.selfState.get(module).toJS();
           this.props.save(url, dataToSave)
-              .then(() => {
-                this.fetchFullPageData();
+              .then((json) => {
+                if (json.state && json.state.code === 2000) {
+                  this.fetchFullPageData();
+                }
               });
         }
       });
@@ -320,19 +336,78 @@ export default class Basic extends React.Component {
     this.props.closeCountrySelectModal(code);
   }
 
-  onShowIconClick(flag) {
+/*
+  onShowIconClick(flag, data) {
     switch (flag) {
       case 'showSsidSetting':
-        this.props.toggleShowSsidSetting();
+        this.props.toggleShowSsidSetting(data);
         break;
       case 'showRadioSetting':
-        this.props.toggleShowRadioSetting();
+        this.props.toggleShowRadioSetting(data);
         break;
       case 'showMultiSsid':
-        this.props.toggleShowMultiSsid();
+        this.props.toggleShowMultiSsid(data);
         break;
       default:
     }
+  }
+*/
+  onSecurityModeChange(data) {
+    const basicSettings = this.props.selfState.get('basicSettings');
+    const preSecurity = basicSettings.getIn(['vapList', '0', 'security']);
+    const mode = data.value;
+    const auth = preSecurity.get('auth') || 'shared';
+    const keyLength = preSecurity.get('keyLength') || '64';
+    const keyType = preSecurity.get('keyType') || 'Hex';
+    const key = preSecurity.get('key') || '';
+    const keyIndex = preSecurity.get('keyIndex') || '1';
+    const cipher = preSecurity.get('cipher') || 'aes';
+    const afterSecurity = preSecurity.set('mode', mode).set('auth', auth)
+                          .set('keyType', keyType).set('keyLength', keyLength)
+                          .set('keyIndex', keyIndex)
+                          .set('cipher', cipher)
+                          .set('key', key);
+    const vapList = basicSettings.getIn(['vapList'])
+                        .setIn(['0', 'security'], afterSecurity);
+    this.props.updateBasicSettings({ vapList });
+  }
+
+  onAddNewSsidItem() {
+    const newSsid = fromJS({
+      flag: Symbol(),
+      ssid: '',
+      vlanId: '1',
+      hideSsid: '0',
+      enable: '1',
+      security: {
+        mode: 'none',
+        cipher: 'aes',
+        auth: 'open',
+        keyLength: '64',
+        keyType: 'Hex',
+        keyIndex: '1',
+        key: '',
+      },
+    });
+    const vapList = this.props.selfState.getIn(['multiSsid', 'vapList']).push(newSsid);
+    if (vapList.size <= 16) { // 最大支持16个SSID
+      this.props.updateMultiSsidItem({ vapList });
+    }
+  }
+
+  onDeleteBtnClick(item) {
+    const multiSsid = this.props.selfState.get('multiSsid');
+    const num = multiSsid.getIn(['vapList']).keyOf(item);
+    const vapList = multiSsid.getIn(['vapList']).delete(num);
+    this.props.updateMultiSsidItem({ vapList });
+  }
+
+  onSsidItemChange(val, item, valId, newVal) {
+    const multiSsid = this.props.selfState.get('multiSsid');
+    const itemNum = multiSsid.getIn(['vapList']).keyOf(item);
+    const newItem = item.set(valId, newVal);
+    const vapList = multiSsid.getIn(['vapList']).set(itemNum, newItem);
+    this.props.updateMultiSsidItem({ vapList });
   }
 
   getCountryNameFromCode(code, map) {
@@ -412,7 +487,6 @@ export default class Basic extends React.Component {
   makeChannelOptions() {
     const channelList = this.props.selfState.get('channels');
     // const channelOptions = [{ value: 'auto', label: 'auto' }];
-
     const channelOptions = channelList.map((val) => {
       return {
         value: parseInt(val, 10).toString(),
@@ -431,65 +505,6 @@ export default class Basic extends React.Component {
     // }
     return channelOptions;
   }
-
-  onSecurityModeChange(data) {
-    const basicSettings = this.props.selfState.get('basicSettings');
-    const preSecurity = basicSettings.getIn(['vapList', '0', 'security']);
-    const mode = data.value;
-    const auth = preSecurity.get('auth') || 'shared';
-    const keyLength = preSecurity.get('keyLength') || '64';
-    const keyType = preSecurity.get('keyType') || 'Hex';
-    const key = preSecurity.get('key') || '';
-    const keyIndex = preSecurity.get('keyIndex') || '1';
-    const cipher = preSecurity.get('cipher') || 'aes';
-    const afterSecurity = preSecurity.set('mode', mode).set('auth', auth)
-                          .set('keyType', keyType).set('keyLength', keyLength)
-                          .set('keyIndex', keyIndex)
-                          .set('cipher', cipher)
-                          .set('key', key);
-    const vapList = basicSettings.getIn(['vapList'])
-                        .setIn(['0', 'security'], afterSecurity);
-    this.props.updateBasicSettings({ vapList });
-  }
-
-  onAddNewSsidItem() {
-    const newSsid = fromJS({
-      flag: Symbol(),
-      ssid: '',
-      vlanId: '1',
-      hideSsid: '0',
-      enable: '1',
-      security: {
-        mode: 'none',
-        cipher: 'aes',
-        auth: 'open',
-        keyLength: '64',
-        keyType: 'Hex',
-        keyIndex: '1',
-        key: '',
-      },
-    });
-    const vapList = this.props.selfState.getIn(['multiSsid', 'vapList']).push(newSsid);
-    if (vapList.size <= 16) { // 最大支持16个SSID
-      this.props.updateMultiSsidItem({ vapList });
-    }
-  }
-
-  onDeleteBtnClick(item) {
-    const multiSsid = this.props.selfState.get('multiSsid');
-    const num = multiSsid.getIn(['vapList']).keyOf(item);
-    const vapList = multiSsid.getIn(['vapList']).delete(num);
-    this.props.updateMultiSsidItem({ vapList });
-  }
-
-  onSsidItemChange(val, item, valId, newVal) {
-    const multiSsid = this.props.selfState.get('multiSsid');
-    const itemNum = multiSsid.getIn(['vapList']).keyOf(item);
-    const newItem = item.set(valId, newVal);
-    const vapList = multiSsid.getIn(['vapList']).set(itemNum, newItem);
-    this.props.updateMultiSsidItem({ vapList });
-  }
-
 
   render() {
     const modalOptions = fromJS([
@@ -587,7 +602,7 @@ export default class Basic extends React.Component {
             <FormInput
               type="number"
               value={val}
-              disabled={pos === 0}
+              disabled={pos === 0 || vlanEnable === '0'}
               onChange={(data) => this.onSsidItemChange(val, item, 'vlanId', data.value)}
               style={{ marginLeft: '-60px' }}
             />
@@ -715,7 +730,10 @@ export default class Basic extends React.Component {
                 style={{
                   marginRight: '4px',
                 }}
-                onClick={() => this.onShowIconClick('showSsidSetting')}
+                onClick={() => this.props.changeTitleShowIcon({
+                  name: 'showSsidSetting',
+                  value: false,
+                })}
               >
                 <span
                   style={{
@@ -736,7 +754,10 @@ export default class Basic extends React.Component {
                 style={{
                   marginRight: '4px',
                 }}
-                onClick={() => this.onShowIconClick('showSsidSetting')}
+                onClick={() => this.props.changeTitleShowIcon({
+                  name: 'showSsidSetting',
+                  value: true,
+                })}
               >
                 <span
                   style={{
@@ -761,10 +782,9 @@ export default class Basic extends React.Component {
                 overflow: 'visible',
               }}
             >
-              <div className="clearfix">
+              <div>
                 <FormGroup
                   type="select"
-                  // className="fl"
                   options={devicemodeOptions}
                   value={basicSettings.get('wirelessMode')}
                   onChange={(data) => this.onChengeWirelessMode(data)}
@@ -918,6 +938,20 @@ export default class Basic extends React.Component {
                   }
                 </div>
               </div>
+              <FormGroup
+                type="number"
+                label={_('Vlan ID')}
+                value={basicSettings.getIn(['vapList', '0', 'vlanId'])}
+                help={_('Range: 1~4094')}
+                form="basicSettings"
+                disabled={vlanEnable === '0'}
+                onChange={(data) => {
+                  const vapList = basicSettings.get('vapList').setIn([0, 'vlanId'], data.value);
+                  this.props.updateBasicSettings({ vapList });
+                }}
+                required
+                {...this.props.validateOption.validVlanId}
+              />
               {
                 basicSettings.get('wirelessMode') === 'repeater' ||
                 basicSettings.get('wirelessMode') === 'ap' ? (
@@ -1147,8 +1181,12 @@ export default class Basic extends React.Component {
               <FormGroup>
                 <SaveButton
                   type="button"
-                  loading={this.props.app.get('saving')}
-                  onClick={() => this.onSave('goform/set_wireless', 'basicSettings', 'basicSettings')}
+                  loading={this.props.app.get('saving') &&
+                          this.props.selfState.get('whichButton') === 'basicSettings'}
+                  onClick={() => {
+                    this.props.changeWhichButton('basicSettings');
+                    this.onSave('goform/set_wireless', 'basicSettings', 'basicSettings');
+                  }}
                 />
               </FormGroup>
             </div>
@@ -1161,7 +1199,10 @@ export default class Basic extends React.Component {
               <icon
                 className="fa fa-minus-square-o"
                 size="lg"
-                onClick={() => this.onShowIconClick('showRadioSetting')}
+                onClick={() => this.props.changeTitleShowIcon({
+                  name: 'showRadioSetting',
+                  value: false,
+                })}
               >
                 <span
                   style={{
@@ -1182,7 +1223,10 @@ export default class Basic extends React.Component {
                 style={{
                   marginRight: '4px',
                 }}
-                onClick={() => this.onShowIconClick('showRadioSetting')}
+                onClick={() => this.props.changeTitleShowIcon({
+                  name: 'showRadioSetting',
+                  value: true,
+                })}
               >
                 <span
                   style={{
@@ -1210,7 +1254,7 @@ export default class Basic extends React.Component {
               <FormGroup
                 type="checkbox"
                 label={_('Radio')}
-                checked={this.props.selfState.getIn(['radioSettings', 'enable']) === '1'}
+                checked={radioSettings.get('enable') === '1'}
                 onChange={(data) => this.props.updateRadioSettingsItem({
                   enable: data.value,
                 })}
@@ -1272,7 +1316,7 @@ export default class Basic extends React.Component {
                 label={_('Radio Mode')}
                 type="select"
                 options={radioModeOptions}
-                value={this.props.selfState.getIn(['radioSettings', 'radioMode'])}
+                value={radioSettings.get('radioMode')}
                 onChange={(data) => {
                   this.props.updateRadioSettingsItem({
                     radioMode: data.value,
@@ -1283,7 +1327,7 @@ export default class Basic extends React.Component {
                 label={_('Channel')}
                 type="select"
                 options={this.makeChannelOptions()}
-                value={this.props.selfState.getIn(['radioSettings', 'frequency']) || 'auto'}
+                value={radioSettings.get('frequency') || 'auto'}
                 onChange={(data) => this.props.updateRadioSettingsItem({
                   frequency: data.value || 'auto',
                 })}
@@ -1292,7 +1336,7 @@ export default class Basic extends React.Component {
                 label={_('Channel Bandwidth')}
                 type="switch"
                 options={channelWidthOptions}
-                value={this.props.selfState.getIn(['radioSettings', 'channelWidth'])}
+                value={radioSettings.get('channelWidth')}
                 onChange={(data) => this.props.updateRadioSettingsItem({
                   channelWidth: data.value,
                 })}
@@ -1302,8 +1346,8 @@ export default class Basic extends React.Component {
                 type="range"
                 min="1"
                 max={this.props.selfState.get('maxTxpower')}
-                help={this.props.selfState.getIn(['radioSettings', 'txPower'])}
-                value={this.props.selfState.getIn(['radioSettings', 'txPower'])}
+                help={radioSettings.get('txPower')}
+                value={radioSettings.get('txPower')}
                 onChange={(data) => this.props.updateRadioSettingsItem({
                   txPower: data.value,
                 })}
@@ -1311,8 +1355,12 @@ export default class Basic extends React.Component {
               <FormGroup>
                 <SaveButton
                   type="button"
-                  loading={this.props.app.get('saving')}
-                  onClick={() => this.onSave('goform/set_base_wl', 'radioSettings', 'radioSettings')}
+                  loading={this.props.app.get('saving') &&
+                          this.props.selfState.get('whichButton') === 'radioSettings'}
+                  onClick={() => {
+                    this.props.changeWhichButton('radioSettings');
+                    this.onSave('goform/set_base_wl', 'radioSettings', 'radioSettings');
+                  }}
                 />
               </FormGroup>
               {
@@ -1339,7 +1387,10 @@ export default class Basic extends React.Component {
                 className="fa fa-minus-square-o"
                 size="lg"
                 style={{ marginRight: '4px' }}
-                onClick={() => this.onShowIconClick('showMultiSsid')}
+                onClick={() => this.props.changeTitleShowIcon({
+                  name: 'showMultiSsid',
+                  value: false,
+                })}
               >
                 <span
                   style={{
@@ -1358,7 +1409,10 @@ export default class Basic extends React.Component {
                 className="fa fa-plus-square"
                 size="lg"
                 style={{ marginRight: '4px' }}
-                onClick={() => this.onShowIconClick('showMultiSsid')}
+                onClick={() => this.props.changeTitleShowIcon({
+                  name: 'showMultiSsid',
+                  value: true,
+                })}
               >
                 <span
                   style={{
@@ -1407,7 +1461,8 @@ export default class Basic extends React.Component {
                 />
                 <SaveButton
                   type="button"
-                  loading={this.props.app.get('saving')}
+                  loading={this.props.app.get('saving') &&
+                          this.props.selfState.get('whichButton') === 'multiSsid'}
                   disabled={multiSsid.get('wirelessMode') === 'sta'}
                   onClick={() => {
                     let error = '';
@@ -1435,6 +1490,7 @@ export default class Basic extends React.Component {
                       }
                     }
                     if (error === '') {
+                      this.props.changeWhichButton('multiSsid');
                       this.onSave('goform/set_wireless', 'multiSsid', 'multiSsid');
                     } else {
                       this.props.createModal({

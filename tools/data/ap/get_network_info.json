@@ -15,6 +15,6 @@
     "mtu": "1500",
 	  "mngVlanId":"1",
     "utgVlanId":"1",
-    "vlanTagging": "untagged"
+    "vlanEnable":"1"
   }
 }
