@@ -155,7 +155,7 @@ export function onListAction(url) {
     const fetchUrl = globalState.screens.getIn([name, 'fetchUrl']) || formUrl;
     const actionQuery = globalState.screens.getIn([name, 'actionQuery']);
     const actionType = actionQuery.get('action');
-    let subData = actionQuery;
+    let subData = actionQuery.toJS();
     let originalData = globalState.screens.getIn([name, 'data', 'list', actionQuery.get('index')]);
 
     if (originalData && originalData.get) {

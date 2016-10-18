@@ -10,6 +10,18 @@ import {
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
+const storeForwardOption = [
+  {
+    value: 'local',
+    label: _('Local Forward'),
+  }, {
+    value: 'centralized-802.3',
+    label: _('Centralized Forward-%s Tunnel', '802.3'),
+  }, {
+    value: 'centralized-802.11',
+    label: _('Centralized Forward-%s Tunnel', '802.11'),
+  },
+];
 const blcklistTableOptions = fromJS([
   {
     id: 'ssid',
@@ -19,10 +31,8 @@ const blcklistTableOptions = fromJS([
     text: _('Hidden SSID'),
     filter: 'checkbox',
   }, {
-    id: 'vlanId',
-    text: _('VLAN ID'),
-  }, {
     id: 'storeForwardPattern',
+    options: storeForwardOption,
     text: _('Store-Forward Pattern'),
   }, {
     id: 'encryption',
@@ -80,15 +90,13 @@ const validOptions = Map({
 });
 
 const propTypes = {
-  app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
   validateOption: PropTypes.object,
   route: PropTypes.object,
-  initScreen: PropTypes.func,
   save: PropTypes.func,
-  addListItem: PropTypes.func,
+  groupid: PropTypes.string,
   closeListItemModal: PropTypes.func,
-  editListItemByIndex: PropTypes.func,
+  changeListActionQuery: PropTypes.func,
   updateCurEditListItem: PropTypes.func,
   onListAction: PropTypes.func,
 };
@@ -102,6 +110,18 @@ export default class View extends React.Component {
     this.getCurrData = this.getCurrData.bind(this);
     this.onUpdateSettings = this.onUpdateSettings.bind(this);
     this.onSave = this.onSave.bind(this);
+  }
+  componentWillMount() {
+    this.props.changeListActionQuery({
+      groupid: this.props.groupid,
+    });
+  }
+  componentWillReceiveProps(nextProps) {
+    if (this.props.groupid !== nextProps.groupid) {
+      this.props.changeListActionQuery({
+        groupid: nextProps.groupid,
+      });
+    }
   }
   onSave() {
     this.props.onListAction();
@@ -133,34 +153,19 @@ export default class View extends React.Component {
   }
 
   render() {
-    const { route, store, vlan } = this.props;
+    const { route, store, } = this.props;
     const actionQuery = store.getIn([route.id, 'actionQuery']) || Map({});
     const getCurrData = this.getCurrData;
     const {
       password, ssid, upstream, downstream,
     } = this.props.validateOption;
-    const vlanOption = vlan.get('list').map((item) => ({
-      value: item.get('id'),
-      label: item.get('id'),
-    })).toJS();
-    const storeForwardOption = [
-      {
-        value: 'local',
-        label: _('Local Forward'),
-      }, {
-        value: 'centralized-802.3',
-        label: _('Centralized Forward-%s Tunnel', '802.3'),
-      }, {
-        value: 'centralized-802.11',
-        label: _('Centralized Forward-%s Tunnel', '802.11'),
-      },
-    ];
     const isModelShow = actionQuery.get('action') === 'edit' || actionQuery.get('action') === 'add';
 
     return (
       <ListInfo
         {...this.props}
         tableOptions={blcklistTableOptions}
+        listKey="allKeys"
         actionable
       >
         <Modal
@@ -183,15 +188,6 @@ export default class View extends React.Component {
             value={getCurrData('remark')}
             maxLength="64"
             onChange={this.onUpdateSettings('remark')}
-            required
-          />
-          <FormGroup
-            label={_('VLAN ID')}
-            type="select"
-            options={vlanOption}
-            value={getCurrData('vlanid')}
-            maxLength="4"
-            onChange={this.onUpdateSettings('vlanid')}
             required
           />
           <FormGroup
@@ -305,7 +301,7 @@ View.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
-    vlan: state.product.get('vlan'),
+    groupid: state.product.getIn(['group', 'selected', 'id']),
     store: state.screens,
   };
 }

@@ -207,7 +207,7 @@ export default class View extends React.Component {
     let max = 0;
     const width = this.mapWidth;
     const height = this.mapHeight;
-    let len = 300;
+    let len = 200;
 
     while (len--) {
       const val = Math.floor(Math.random() * 100);

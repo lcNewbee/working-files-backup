@@ -4,19 +4,24 @@
     "msg": "ok"
   },
   "data": {
+    "cpuUsed": 20,
+    "cpuTotal": 100,
+    "memoryUsed": 40,
+    "memoryTotal": 100,
+    "clientsNumber": 693,
     "terminalType": [
       {
         "name": "iPhone",
-        "value": 232
+        "value": 286
       }, {
         "name": "Mac",
-        "value": 2323
+        "value": 164
       }, {
         "name": "Google",
-        "value": 2323
+        "value": 126
       }, {
         "name": "Huaiwei",
-        "value": 2323
+        "value": 117
       }
     ],
     "flowList": [
@@ -54,12 +59,6 @@
         "name": "DNS Hijacking",
         "value": 888
       }
-    ],
-    "cpuUsed": 20,
-    "cpuTotal": 100,
-    "memoryUsed": 40,
-    "memoryTotal": 100,
-    "storeUsed": 10,
-    "storeTotal": 100
+    ]
   }
 }

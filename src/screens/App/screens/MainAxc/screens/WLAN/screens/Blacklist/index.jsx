@@ -40,7 +40,18 @@ export default class View extends React.Component {
 
     this.onAction = this.onAction.bind(this);
   }
-
+  componentWillMount() {
+    this.props.changeListActionQuery({
+      groupid: this.props.groupid,
+    });
+  }
+  componentWillReceiveProps(nextProps) {
+    if (this.props.groupid !== nextProps.groupid) {
+      this.props.changeListActionQuery({
+        groupid: nextProps.groupid,
+      });
+    }
+  }
   onAction(mac, action) {
     const query = {
       mac,
@@ -82,6 +93,7 @@ export default class View extends React.Component {
         {...this.props}
         actionBarChildren={actionBarChildren}
         tableOptions={tableOptions}
+        listKey="allKeys"
         actionable
         editAbled={false}
       >
@@ -111,6 +123,7 @@ View.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
+    groupid: state.product.getIn(['group', 'selected', 'id']),
     store: state.screens,
   };
 }

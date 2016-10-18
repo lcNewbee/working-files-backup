@@ -18,6 +18,9 @@ function getTerminalTypeOption(serverData) {
     title: {
       text: _('Terminal Type'),
       x: 'center',
+      textStyle: {
+        fontSize: '18',
+      },
     },
     legend: {
       orient: 'vertical',
@@ -291,7 +294,6 @@ export default class View extends PureComponent {
     const curScreenId = screens.get('curScreenId');
     const serverData = screens.getIn([curScreenId, 'data']);
     const apStatusOption = getApStatusOption(serverData);
-    const clientStatusOption = getClientsStatusOption(serverData);
     const terminalTypeOption = getTerminalTypeOption(serverData);
     const flowOption = getFlowOption(serverData);
     const safeAlarmOption = getSafeAlarmOption(serverData);
@@ -320,16 +322,37 @@ export default class View extends PureComponent {
               <h3>{ _('Clients') }</h3>
             </div>
             <div className="o-box__cell row">
-              <EchartReact
-                option={clientStatusOption}
-                className="o-box__canvas cols col-6"
+              <div
+                className="cols col-4"
                 style={{
-                  minHeight: '200px',
+                  paddingRight: '6px',
                 }}
-              />
+              >
+                <h3
+                  style={{
+                    fontSize: '18px',
+                    lineHeight: '30px',
+                    textAlign: 'center',
+                    fontWeight: '400',
+                  }}
+                >{_('Online Number')}</h3>
+
+                <p
+                  style={{
+                    fontSize: '30px',
+                    marginTop: '10px',
+                    padding: '56px 0',
+                    textAlign: 'center',
+                    color: 'green',
+                    border: '1px solid #e5e5e5',
+                  }}
+                >
+                  {serverData.get('clientsNumber') || 0}
+                </p>
+              </div>
               <EchartReact
                 option={terminalTypeOption}
-                className="o-box__canvas cols col-6"
+                className="o-box__canvas cols col-8"
                 style={{
                   minHeight: '200px',
                 }}

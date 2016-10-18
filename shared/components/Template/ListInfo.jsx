@@ -85,7 +85,7 @@ const propTypes = {
 };
 const defaultProps = {
   actionable: false,
-  listKey: 'id',
+  listKey: 'allKeys',
   addable: true,
   editable: true,
   deleteable: true,
