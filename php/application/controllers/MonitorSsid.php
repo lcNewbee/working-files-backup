@@ -7,12 +7,14 @@ class MonitorSsid extends CI_Controller {
 		$this->load->database();
 		$this->load->helper('array');
 	}
-	function fetch($data){
-      $data_array=json_decode($data);
-      unset($data_array[' size']);
-      unset($data_array[' page']);
-      unset($data_array[' search']);
-      $result=axc_get_ssidState(json_encode($data_array));
+	function fetch(){
+     $data = array(
+        'groupid'=>$_GET['groupid'],
+      );
+       $retdata = array(
+        'groupid'=>element('groupid', $data),
+      );
+      $result=axc_get_flow(json_encode($retdata));
       return $result;
   }
 
@@ -39,8 +41,8 @@ class MonitorSsid extends CI_Controller {
       echo $result;
 		}
 		elseif($_SERVER['REQUEST_METHOD'] == 'GET') {
-       $data = json_decode(file_get_contents("php://input"), true);
-			$result = $this->fetch($data);
+
+			$result = $this->fetch();
       echo $result;
 		}
 	}

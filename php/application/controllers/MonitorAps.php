@@ -7,14 +7,18 @@ class MonitorAps extends CI_Controller {
 		$this->load->database();
 		$this->load->helper('array');
 	}
-	function fetch($data){
-      $data_array=json_decode($data);
-      unset($data_array[' type']);
-      unset($data_array[' search']);
-      $retdata=array(
-        'groupid'=>element('groupid', $data_array),
-        'page'=>element('page', $data_array),
-        'pagesize'=>element('size', $data_array),
+	function fetch(){
+      $data = array(
+        'groupid'=>$_GET['groupid'],
+        'page'=>$_GET['page'],
+        'size'=>$_GET['size']
+
+      );
+       $retdata = array(
+        'groupid'=>element('groupid', $data),
+        'page'=>element('page', $data),
+        'pagesize'=>element('size', $data)
+
       );
       $result=axc_get_aps(json_encode($retdata));
       return $result;
@@ -43,8 +47,8 @@ class MonitorAps extends CI_Controller {
       echo $result;
 		}
 		elseif($_SERVER['REQUEST_METHOD'] == 'GET') {
-      $data = json_decode(file_get_contents("php://input"), true);
-			$result = $this->fetch($data);
+
+			$result = $this->fetch();
       echo json_encode($result, true);
 		}
 	}

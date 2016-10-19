@@ -7,8 +7,15 @@ class MonitorUser extends CI_Controller {
 		$this->load->database();
 		$this->load->helper('array');
 	}
-	function fetch($data){
-      $retData = array(
+	function fetch(){
+      $data = array(
+        'groupid'=>$_GET['groupid'],
+        'type'=>$_GET['type'],
+        'page'=>$_GET['page'],
+        'size'=>$_GET['size'],
+        'search'=>$_GET['search'],
+      );
+       $retdata = array(
         'groupid'=>element('groupid', $data),
         'type'=>element('type', $data),
         'page'=>element('page', $data),
@@ -41,8 +48,8 @@ class MonitorUser extends CI_Controller {
       echo $result;
 		}
 		elseif($_SERVER['REQUEST_METHOD'] == 'GET') {
-       $data = json_decode(file_get_contents("php://input"), true);
-			$result = $this->fetch($data);
+
+			$result = $this->fetch();
       echo $result;
 		}
 	}

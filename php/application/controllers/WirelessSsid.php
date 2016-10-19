@@ -7,7 +7,10 @@ class WirelessSsid extends CI_Controller {
 		$this->load->database();
 		$this->load->helper('array');
 	}
-	function fetch($data){
+	function fetch(){
+      $data=array(
+        'groupid'=>$_GET["groupid"]
+      );
       $result=axc_get_wireless_ssid(json_encode($data));
       return $result;
   }
@@ -52,8 +55,8 @@ class WirelessSsid extends CI_Controller {
       echo $result;
 		}
 		else if($_SERVER['REQUEST_METHOD'] == 'GET') {
-       $data = json_decode(file_get_contents("php://input"), true);
-			$result = $this->fetch($data);
+
+			$result = $this->fetch();
       echo json_encode($result);
 		}
 	}
