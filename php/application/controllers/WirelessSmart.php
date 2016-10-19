@@ -30,6 +30,7 @@ class WirelessSmart extends CI_Controller {
       echo $result;
 		}
 		else if($_SERVER['REQUEST_METHOD'] == 'GET') {
+       $data = json_decode(file_get_contents("php://input"), true);
 			$result = $this->fetch($data);
       echo json_encode($result);
 		}
