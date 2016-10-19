@@ -68,7 +68,7 @@ export default class SpeedTest extends React.Component {
       ip: '192.168.1.10',
       time: '30',
       direction: '0',
-      pocketSize: '64',
+      packagelen: '64',
     };
     const props = this.props;
     clearInterval(a);
@@ -91,13 +91,13 @@ export default class SpeedTest extends React.Component {
   }
   onSelectBtnClick() {
     this.props.fetch('goform/get_ip_list')
-              .then((json) => {
-                if (json.state && json.state.code === 2000) {
-                  this.props.updateItemSettings({
-                    ipList: fromJS(json.data.ipList),
-                  });
-                }
-              });
+        .then((json) => {
+          if (json.state && json.state.code === 2000) {
+            this.props.updateItemSettings({
+              ipList: fromJS(json.data.ipList),
+            });
+          }
+        });
     this.props.changeShowScanResults(true);
   }
   onModalOkClick() {
@@ -147,7 +147,7 @@ export default class SpeedTest extends React.Component {
                             } else if (json2.state && json2.state.code !== 2000) {
                               clearInterval(a);
                               clearTimeout(b);
-                              this.props.changeTimeClock('Test failed !' + json2.state.msg);
+                              this.props.changeTimeClock('Test failed ! ' + json2.state.msg);
                             }
                           });
                     }, (parseInt(query.time, 10) + 2) * 1000);
@@ -181,10 +181,10 @@ export default class SpeedTest extends React.Component {
   }
   render() {
     const {
-      ip, time, direction, pocketSize,
+      ip, time, direction, packagelen,
     } = this.props.store.get('curData').toJS();
     const {
-      showResults, showAdvance, stopWait, rx, tx, total, query,
+      showAdvance, stopWait, rx, tx, query,
     } = this.props.selfState.toJS();
     const { validIp, validTime } = this.props.validateOption;
     const scanIpOptions = fromJS([
@@ -392,7 +392,7 @@ export default class SpeedTest extends React.Component {
               onClick={() => {
                 const pQuery = {
                   time,
-                  pocketSize,
+                  packagelen,
                 };
                 this.props.changeQueryData(pQuery);
                 this.props.toggleShowAdvanceBtn();
@@ -408,7 +408,7 @@ export default class SpeedTest extends React.Component {
               onClose={() => {
                 const pQuery = {
                   time,
-                  pocketSize,
+                  packagelen,
                 };
                 this.props.changeQueryData(pQuery);
                 this.props.toggleShowAdvanceBtn();
@@ -425,10 +425,10 @@ export default class SpeedTest extends React.Component {
             >
               <FormGroup
                 type="number"
-                label={_('Pocket Size')}
-                value={this.props.selfState.getIn(['query', 'pocketSize'])}
+                label={_('Package Length')}
+                value={this.props.selfState.getIn(['query', 'packagelen'])}
                 onChange={(data) => {
-                  const pQuery = this.props.selfState.get('query').set('pocketSize', data.value);
+                  const pQuery = this.props.selfState.get('query').set('packagelen', data.value);
                   this.props.changeQueryData(pQuery);
                 }}
               />

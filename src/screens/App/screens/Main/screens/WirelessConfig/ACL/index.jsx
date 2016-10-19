@@ -60,8 +60,6 @@ export default class ACL extends React.Component {
 
   constructor(props) {
     super(props);
-    // this.showListToPage = this.showListToPage.bind(this);
-    // this.getMacStatusValue = this.getMacStatusValue.bind(this);
     this.updateAclMacList = this.updateAclMacList.bind(this);
     this.onMacInputChange = this.onMacInputChange.bind(this);
     this.onAddMacToLocalList = this.onAddMacToLocalList.bind(this);
@@ -102,21 +100,15 @@ export default class ACL extends React.Component {
 
 
   onMacInputChange(value) {
-    // 还可以再智能一些，处理在用户复制字符串到输入框时，只截取合法部分，舍去多余部分（正则）
     let val = value;
     const lastChar = value.charAt(value.length - 1);
     const preLen = this.props.macInput.get('preLen');
     const afterLen = val.length;
-    // console.log(preLen, afterLen);
     if (preLen < afterLen) { // 添加
       if (lastChar.match(/[0-9a-fA-F]/) !== null) {
-        // console.log('match', value.charAt(value.length - 1).match(/[0-9a-fA-F]/));
-        // console.log('value', value);
         const macArr = val.split(':');
         const len = macArr.length;
-        // console.log('macArr', macArr);
         if (macArr[len - 1].length <= 2) {
-          // console.log(preLen, afterLen);
           if (macArr[len - 1].length === 2 && len < 6) {
             val += ':';
           }
@@ -145,7 +137,6 @@ export default class ACL extends React.Component {
 
   onAddMacToLocalList() {
     const macInputVal = this.props.macInput.get('macValue');
-    // const str = macValidator.check(macInputVal);
     const selectedSsid = this.props.selectedSsid;
     const preList = this.props.store.getIn(['curData', 'aclConfList', selectedSsid, 'macList']);
     let afterList;
@@ -177,7 +168,6 @@ export default class ACL extends React.Component {
     const selectedSsid = this.props.selectedSsid;
     const macList = this.props.store.getIn(['curData', 'aclConfList', selectedSsid, 'macList']);
     let newList = fromJS([]);
-    // let i = 0;
     macStatusList.forEach((val, index) => {
       if (!val) {
         newList = newList.push(macList.get(index));
@@ -194,9 +184,7 @@ export default class ACL extends React.Component {
   render() {
     const store = this.props.store;
     const selectedSsid = this.props.selectedSsid;
-    // console.log('selectedSsid', selectedSsid);
     let maclist = store.getIn(['curData', 'aclConfList', selectedSsid, 'macList']);
-    // console.log('maclist', maclist);
     if (maclist === undefined) {
       return null;
     }
@@ -205,7 +193,7 @@ export default class ACL extends React.Component {
     return (
       <div>
         <FormGroup
-          label={_('Enabled')}
+          label={_('Enable')}
           type="checkbox"
           checked={store.getIn(['curData', 'aclEnable']) === '1'}
           onChange={() => {

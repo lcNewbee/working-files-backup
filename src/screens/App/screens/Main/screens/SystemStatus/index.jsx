@@ -81,14 +81,14 @@ const clientOptions = fromJS([
     id: 'txRate',
     text: _('Tx Rate'),
     transform(val) {
-      return flowRateFilter.transform(val) + '/s';
+      return val + 'Mbps';
     },
   },
   {
     id: 'rxRate',
     text: _('Rx Rate'),
     transform(val) {
-      return flowRateFilter.transform(val) + '/s';
+      return val + 'Mbps';
     },
   },
   {
@@ -152,13 +152,13 @@ const remoteApOption = fromJS([
     id: 'txRate',
     text: _('Tx Rate'),
     transform(val) {
-      return flowRateFilter.transform(val) + '/s';
+      return val + 'Mbps';
     },
   }, {
     id: 'rxRate',
     text: _('Rx Rate'),
     transform(val) {
-      return flowRateFilter.transform(val) + '/s';
+      return val + 'Mbps';
     },
   }, {
     id: 'txPackets',

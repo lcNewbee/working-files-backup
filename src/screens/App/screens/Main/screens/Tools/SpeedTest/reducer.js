@@ -15,7 +15,7 @@ const defaultState = fromJS({
   query: {
     ip: '',
     time: '',
-    pocketSize: '',
+    packagelen: '',
   },
 });
 

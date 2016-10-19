@@ -129,11 +129,12 @@ export function fetch(url, query) {
         if (json === undefined) {
           return {};
         }
-        if (!json.state || (json.state && json.state.code !== 2000)) {
+        if (json.state && json.state.code === 4040) {
+          window.location.href = '#/login';
+        } else if (!json.state || (json.state && json.state.code !== 2000)) {
           dispatch(receiveServerError(json.state));
         }
         dispatch(rcFetch());
-
         return json;
       });
   };
@@ -160,9 +161,17 @@ export function save(url, query) {
         if (json === undefined) {
           return {};
         }
-        if (!json.state || (json.state && json.state.code !== 2000)) {
+        if (json.state && json.state.code === 4040) {
+          window.location.href = '#/login';
+        } else if (!json.state || (json.state && json.state.code !== 2000)) {
           dispatch(receiveServerError(json.state));
         }
+        // if (!json.state || (json.state && json.state.code !== 2000)) {
+        //   dispatch(receiveServerError(json.state));
+        // } else if (json.state && json.state.code === 4040) {
+        //   console.log('relocation');
+        //   window.location.hash = '#';
+        // }
         dispatch(receiveSave());
         return json;
       });

@@ -132,7 +132,6 @@
   "Signal,dBm": "信号强度(dBm)",
   "Advanced": "高级配置",
   "Advanced Settings": "高级配置",
-  "Pocket Size": "数据包大小",
   "Notice": "提示",
   "Scan": "扫描",
   "Items Per Page": "每页条数",
@@ -142,6 +141,7 @@
   "Network": "网络设置",
   "Basic Settings": "基础设置",
   "Channel Utilization :": "信道利用率：",
+  "Package Length": "数据包大小",
 
   "System Maintenance": "系统维护",
   "Argentina": "阿根廷",
