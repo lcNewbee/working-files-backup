@@ -17,6 +17,20 @@ export function leaveScreen() {
   };
 }
 
+export function changeScreenQuery(payload) {
+  return {
+    type: 'CHANGE_SCREEN_QUERY',
+    payload,
+  };
+}
+
+export function changeScreenActionQuery(payload) {
+  return {
+    type: 'CHANGE_SCREEN_ACTION_QUERY',
+    payload,
+  };
+}
+
 export function reqeustFetchScreenData() {
   return {
     type: 'REQEUST_FETCH_SCREEN_DATA',
@@ -67,20 +81,7 @@ export function fetchScreenData(url) {
   };
 }
 
-// SCREEN LIST action
-export function changeListQuery(payload) {
-  return {
-    type: 'CHANGE_LIST_QUERY',
-    payload,
-  };
-}
-
-export function changeListActionQuery(payload) {
-  return {
-    type: 'CHANGE_LIST_ACTION_QUERY',
-    payload,
-  };
-}
+// SCREEN list actions
 export function updateCurEditListItem(data, sync) {
   return {
     type: 'UPDATE_CUR_EDIT_LIST_ITEM',
@@ -195,6 +196,7 @@ export function onListAction(url) {
 /**
  * SCREEN SETTINGS action
  */
+
 export function updateScreenSettings(payload) {
   return {
     type: 'UPDATE_SCREEN_SETTINGS',

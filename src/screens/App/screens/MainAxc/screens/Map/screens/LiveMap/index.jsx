@@ -172,7 +172,7 @@ export default class View extends React.Component {
   }
 
   onRemoveItem(i) {
-    this.props.changeListActionQuery({
+    this.props.changeScreenActionQuery({
       action: 'remove',
       index: i,
     });

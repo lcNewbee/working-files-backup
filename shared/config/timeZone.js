@@ -1,4 +1,4 @@
-let TIME_ZONE = [{
+const TIME_ZONE = [{
   value: 'Pacific/Wake',
   title: '-12',
   label: '(UTC-12:00) International Date Line West',
@@ -302,7 +302,4 @@ let TIME_ZONE = [{
   label: '(UTC+13:00) Nuku',
 }];
 
-// exports
-if (typeof module === 'object' && typeof module.exports === 'object') {
-  module.exports = TIME_ZONE;
-}
+export default TIME_ZONE;

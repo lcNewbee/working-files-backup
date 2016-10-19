@@ -41,13 +41,13 @@ export default class View extends React.Component {
     this.onAction = this.onAction.bind(this);
   }
   componentWillMount() {
-    this.props.changeListActionQuery({
+    this.props.changeScreenActionQuery({
       groupid: this.props.groupid,
     });
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.groupid !== nextProps.groupid) {
-      this.props.changeListActionQuery({
+      this.props.changeScreenActionQuery({
         groupid: nextProps.groupid,
       });
     }

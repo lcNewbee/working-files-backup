@@ -1,5 +1,4 @@
 import * as appActions from 'shared/actions/app';
-import urls from 'shared/config/urls_axc';
 
 export function toggleMainPopOver(option) {
   return {

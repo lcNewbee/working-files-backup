@@ -171,10 +171,10 @@ export default function (state = defaultState, action) {
       return state.mergeDeepIn([curScreenName, 'curSettings'], action.payload);
 
     // Screen 列表操作
-    case 'CHANGE_LIST_QUERY':
+    case 'CHANGE_SCREEN_QUERY':
       return state.mergeIn([curScreenName, 'query'], action.payload);
 
-    case 'CHANGE_LIST_ACTION_QUERY':
+    case 'CHANGE_SCREEN_ACTION_QUERY':
       return state.mergeIn([curScreenName, 'actionQuery'], action.payload);
 
     case 'ADD_LIST_ITEM':

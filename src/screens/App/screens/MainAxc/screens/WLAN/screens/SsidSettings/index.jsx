@@ -96,7 +96,7 @@ const propTypes = {
   save: PropTypes.func,
   groupid: PropTypes.string,
   closeListItemModal: PropTypes.func,
-  changeListActionQuery: PropTypes.func,
+  changeScreenActionQuery: PropTypes.func,
   updateCurEditListItem: PropTypes.func,
   onListAction: PropTypes.func,
 };
@@ -112,13 +112,13 @@ export default class View extends React.Component {
     this.onSave = this.onSave.bind(this);
   }
   componentWillMount() {
-    this.props.changeListActionQuery({
+    this.props.changeScreenActionQuery({
       groupid: this.props.groupid,
     });
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.groupid !== nextProps.groupid) {
-      this.props.changeListActionQuery({
+      this.props.changeScreenActionQuery({
         groupid: nextProps.groupid,
       });
     }

@@ -46,8 +46,8 @@ const propTypes = {
   // 通用操作函数
   initScreen: PropTypes.func,
   fetchScreenData: PropTypes.func,
-  changeListQuery: PropTypes.func,
-  changeListActionQuery: PropTypes.func,
+  changeScreenQuery: PropTypes.func,
+  changeScreenActionQuery: PropTypes.func,
   leaveScreen: PropTypes.func,
   selectListItem: PropTypes.func,
   onListAction: PropTypes.func,
@@ -239,7 +239,7 @@ class ListInfo extends React.Component {
       selectedList = [list.getIn([i, listKey])];
     }
 
-    this.props.changeListActionQuery({
+    this.props.changeScreenActionQuery({
       action: 'delete',
       selectedList,
     });
@@ -247,8 +247,8 @@ class ListInfo extends React.Component {
   }
 
   onChangeQuery(data, needRefresh) {
-    if (this.props.changeListQuery) {
-      this.props.changeListQuery(data);
+    if (this.props.changeScreenQuery) {
+      this.props.changeScreenQuery(data);
     }
 
     if (needRefresh) {
@@ -282,7 +282,7 @@ class ListInfo extends React.Component {
         return ret;
       });
 
-      this.props.changeListActionQuery({
+      this.props.changeScreenActionQuery({
         action: 'delete',
         selectedList: mySelectedList,
       });
@@ -425,7 +425,7 @@ class ListInfo extends React.Component {
           invalidMsg={app.get('invalid')}
           validateAt={app.get('validateAt')}
           onSave={this.onSave}
-          onChangeData={this.props.changeListQuery}
+          onChangeData={this.props.changeScreenQuery}
           onValidError={this.props.reportValidError}
           leftChildren={leftChildrenNode}
           rightChildren={
