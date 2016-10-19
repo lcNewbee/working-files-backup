@@ -127,6 +127,7 @@ export default class View extends React.Component {
   render() {
     const { route, store } = this.props;
     const editData = store.getIn([route.id, 'curListItem']) || Map({});
+    const actionQuery = store.getIn([route.id, 'actionQuery']) || Map({});
     const getCurrData = this.getCurrData;
     const tableOptions = blcklistTableOptions.push(fromJS({
       id: 'enabled',
@@ -153,8 +154,8 @@ export default class View extends React.Component {
         actionable
       >
         <Modal
-          isShow={!editData.isEmpty()}
-          title={editData.get('myTitle')}
+          isShow={actionQuery.get('action') === 'add' || actionQuery.get('action') === 'edit'}
+          title={actionQuery.get('myTitle')}
           onOk={() => this.props.closeListItemModal(route.id)}
           onClose={() => this.props.closeListItemModal(route.id)}
           cancelButton={false}

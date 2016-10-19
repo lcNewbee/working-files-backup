@@ -54,7 +54,7 @@ const propTypes = {
   store: PropTypes.instanceOf(Map),
 
   route: PropTypes.object,
-  initScreen: PropTypes.func,
+  groupid: PropTypes.any,
   togglePropertyPanel: PropTypes.func,
 };
 const defaultProps = {};
@@ -123,6 +123,9 @@ export default class View extends React.Component {
         {...this.props}
         tableOptions={myTableOptions}
         actionBarChildren={actionBarChildren}
+        defaultQueryData={{
+          grouid: this.props.groupid,
+        }}
         selectable
       />
     );
@@ -135,6 +138,7 @@ View.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
+    groupid: state.product.getIn(['group', 'selected', 'id']),
     apList: state.product.get('devices'),
     store: state.screens,
   };

@@ -2,17 +2,17 @@ import { describe, it } from 'mocha';
 import { expect } from 'chai';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import * as listActions from 'shared/actions/list';
+import * as screenActions from 'shared/actions/screens';
 
 const middlewares = [thunk]; // add your middlewares like `redux-thunk`
 const mockStore = configureStore(middlewares);
 
 
-describe('shared/actions/list.js', () => {
+describe('shared/actions/screens.js', () => {
   // Test example with mocha and expect
   it('should dispatch action', () => {
     const initialState = {};
-    const updateListSettingsAction = listActions.updateListSettings({
+    const updateListSettingsAction = screenActions.updateScreenSettings({
       a: 1,
     });
 
@@ -37,6 +37,6 @@ describe('shared/actions/list.js', () => {
     const expectedActions = [expectedAction];
 
     const store = mockStore(getState, expectedActions);
-    store.dispatch(listActions.updateListSettings());
+    store.dispatch(screenActions.updateScreenSettings());
   });
 });

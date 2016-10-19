@@ -1,9 +1,13 @@
-/**
- * 更新主版本号
- */
-var packageFiles = ['./package.json', '**/app.json'];
+import gulp from 'gulp';
+import minimist from 'minimist';
+import bump from 'gulp-bump';
 
-gulp.task('bump:major', function() {
+/**
+ * 更新前端开发平台主版本号
+ */
+const packageFiles = ['./package.json'];
+
+gulp.task('bump:major', () => {
   gulp.src(packageFiles)
     .pipe(bump({
       type: 'major',
@@ -14,7 +18,7 @@ gulp.task('bump:major', function() {
 /**
  * 更新次版本号
  */
-gulp.task('bump:minor', function() {
+gulp.task('bump:minor', () => {
   gulp.src(packageFiles)
     .pipe(bump({
       type: 'minor',
@@ -25,7 +29,7 @@ gulp.task('bump:minor', function() {
 /**
  * 更新Patch布版本号
  */
-gulp.task('bump', function() {
+gulp.task('bump', () => {
   gulp.src(packageFiles)
     .pipe(bump())
     .pipe(gulp.dest('./'));
@@ -34,11 +38,11 @@ gulp.task('bump', function() {
 /**
  * 更新预发布版本号
  */
-gulp.task('bump:pre', function() {
+gulp.task('bump:pre', () => {
   gulp.src(packageFiles)
     .pipe(bump({
       type: 'prerelease',
-      preid: 'alpha'
+      preid: 'alpha',
     }))
     .pipe(gulp.dest('./'));
 });
@@ -46,11 +50,11 @@ gulp.task('bump:pre', function() {
 /**
  * 更新开发调试版本号
  */
-gulp.task('bump:dev', function() {
+gulp.task('bump:dev', () => {
   gulp.src(packageFiles)
     .pipe(bump({
       type: 'prerelease',
-      preid: 'dev'
+      preid: 'dev',
     }))
     .pipe(gulp.dest('./'));
 });

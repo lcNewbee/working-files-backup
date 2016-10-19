@@ -72,6 +72,7 @@ export default class View extends React.Component {
     const editData = store.getIn([route.id, 'curListItem']) || Map({});
     const actionBarChildren = (
       <FormGroup
+        key="blacklistD"
         display="inline"
         label={_('Dynamic Blacklists Release Time')}
       >
@@ -87,6 +88,8 @@ export default class View extends React.Component {
         />
       </FormGroup>
     );
+    const actionQuery = store.getIn([route.id, 'actionQuery']) || Map({});
+    const isModelShow = actionQuery.get('action') === 'add' || actionQuery.get('action') === 'edit';
 
     return (
       <ListInfo
@@ -98,8 +101,8 @@ export default class View extends React.Component {
         editAbled={false}
       >
         <Modal
-          isShow={!editData.isEmpty()}
-          title={editData.get('myTitle')}
+          isShow={isModelShow}
+          title={actionQuery.get('myTitle')}
           onOk={() => this.props.closeListItemModal(route.id)}
           onClose={() => this.props.closeListItemModal(route.id)}
         >

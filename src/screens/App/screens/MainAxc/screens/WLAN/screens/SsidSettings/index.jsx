@@ -94,7 +94,7 @@ const propTypes = {
   validateOption: PropTypes.object,
   route: PropTypes.object,
   save: PropTypes.func,
-  groupid: PropTypes.string,
+  groupid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   closeListItemModal: PropTypes.func,
   changeScreenActionQuery: PropTypes.func,
   updateCurEditListItem: PropTypes.func,

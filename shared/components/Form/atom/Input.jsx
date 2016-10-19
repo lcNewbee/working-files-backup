@@ -3,7 +3,6 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import utils from '../../../utils';
 
 const propTypes = {
-  className: PropTypes.string,
   isFocus: PropTypes.bool,
 };
 
@@ -27,6 +26,7 @@ class Input extends React.Component {
     const inputProps = utils.extend({}, this.props);
     let ThisComponent = 'input';
 
+    // 删除多余属性
     delete inputProps.seeAble;
     delete inputProps.Component;
     delete inputProps.loading;
@@ -44,6 +44,7 @@ class Input extends React.Component {
     delete inputProps.showPrecondition;
     delete inputProps.display;
     delete inputProps.hasTextInput;
+    delete inputProps.theme;
 
     if (inputProps.type === 'textarea') {
       ThisComponent = 'textarea';
@@ -52,7 +53,7 @@ class Input extends React.Component {
     return (
       <ThisComponent
         {...inputProps}
-        ref={(ref) => (this.myRef = ref)}
+        ref={ref => (this.myRef = ref)}
       />
     );
   }

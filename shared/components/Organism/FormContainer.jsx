@@ -133,6 +133,8 @@ class FormContainer extends React.Component {
       isShow = myProps.showPrecondition(data);
     }
 
+    console.log(myProps);
+
     return isShow ? (
       <FormGroup
         {...myProps}
@@ -153,7 +155,10 @@ class FormContainer extends React.Component {
         // 如果是带有标题 List，需添加legend
         if (legendText) {
           return (
-            <fieldset key={index} className="o-form__fieldset">
+            <fieldset
+              key={index}
+              className="o-form__fieldset"
+            >
               <legend className="o-form__legend">{legendText}</legend>
               {
                 this.renderFormGroupTree(item)

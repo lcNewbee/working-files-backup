@@ -18,6 +18,14 @@ const hashHistory = ReactRouter.hashHistory;
 // 引入产品配置
 const prodConfig = require('./config/ap');
 
+// 主渲染入口
+ReactDOM.render(
+  <Provider store={prodConfig.stores}>
+    <Router history={hashHistory} routes={prodConfig.routes} />
+  </Provider>,
+  document.getElementById('app')
+);
+
 if (module.hot) {
   // Enable Webpack hot module replacement for reducers
   module.hot.accept('./config/ap', () => {
@@ -28,11 +36,3 @@ if (module.hot) {
     prodConfig.stores.replaceReducer(nextRootReducer);
   });
 }
-
-// 主渲染入口
-ReactDOM.render(
-  <Provider store={prodConfig.stores}>
-    <Router history={hashHistory} routes={prodConfig.routes} />
-  </Provider>,
-  document.getElementById('app')
-);

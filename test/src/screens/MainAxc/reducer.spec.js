@@ -2,7 +2,7 @@ import { fromJS } from 'immutable';
 
 import reducer from 'src/screens/App/screens/MainAxc/reducer';
 
-describe('MainAxc reducer', () => {
+describe('MainAxc index reducer', () => {
   it('Should toggle isShow porp when TOGGLE_MAIN_POP_OVER with undefined option', () => {
     const initialState = fromJS({
       popOver: {
@@ -154,15 +154,10 @@ describe('MainAxc reducer', () => {
     });
     const action = {
       type: 'SELECT_GROUP',
-      id: '3',
     };
     const nextState = reducer(initialState, action);
 
     expect(nextState).equal(fromJS({
-      popOver: {
-        isShow: false,
-        name: 'groupAsider',
-      },
       group: {
         selected: {
           id: '1',
@@ -175,53 +170,6 @@ describe('MainAxc reducer', () => {
           }, {
             id: '2',
             groupName: '研发',
-          },
-        ],
-      },
-    }));
-  });
-
-  it('Should delete group when DELETE_AP_GROUP with id', () => {
-    const initialState = fromJS({
-      group: {
-        selected: {
-          id: '1',
-          groupName: '测试',
-        },
-        list: [
-          {
-            id: '1',
-            groupName: '测试',
-          }, {
-            id: '2',
-            groupName: '研发',
-          },
-        ],
-      },
-    });
-    const action = {
-      type: 'DELETE_AP_GROUP',
-      id: '1',
-    };
-    const nextState = reducer(initialState, action);
-
-    expect(nextState).equal(fromJS({
-      popOver: {
-        isShow: false,
-        name: 'vlanAsider',
-      },
-      vlan: {
-        selected: {
-          id: '1',
-          remark: '测试',
-        },
-        list: [
-          {
-            id: '1',
-            remark: '测试',
-          }, {
-            id: '2',
-            remark: '研发',
           },
         ],
       },
