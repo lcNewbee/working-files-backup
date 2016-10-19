@@ -8,7 +8,7 @@ class WirelessSmart extends CI_Controller {
 		$this->load->helper('array');
 	}
 	function fetch($data){
-      $result=axc_get_wireless_ssid(json_encode($data));
+      $result=axc_get_wireless_smart(json_encode($data));
       return $result;
   }
 

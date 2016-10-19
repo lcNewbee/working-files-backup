@@ -63,3 +63,9 @@ $route['/goform/group/users'] = 'monitorUser';
 $route['/goform/group/flow'] = 'monitorFlow';
 $route['/goform/group/ssid'] = 'monitorSsid';
 $route['/goform/group/aps'] = 'monitorAps';
+$route['/goform/group/ssidSettingList'] = 'wirelessSSid';
+$route['/goform/group/blacklist'] = 'wirelessAcl';
+$route['/goform/group/smartRf'] = 'wirelessSmart';
+$route['/goform/group/timerPolicy'] = 'wirelessTimer';
+$route['/goform/group/wips'] = 'wirelessSafe';
+

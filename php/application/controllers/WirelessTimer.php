@@ -16,7 +16,7 @@ class WirelessTimer extends CI_Controller {
 		$result = null;
 		$actionType = element('action', $data);
 		if ($actionType === 'add') {
-      $result=axc_add_wireless_ssid(json_encode($data));
+      $result=axc_add_wireless_timer_policy(json_encode($data));
 		}
 		elseif($actionType === 'edit') {
       $result=axc_modify_wireless_timer_policy(json_encode($data));

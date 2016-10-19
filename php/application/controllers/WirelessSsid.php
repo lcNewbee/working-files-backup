@@ -8,7 +8,7 @@ class WirelessSsid extends CI_Controller {
 		$this->load->helper('array');
 	}
 	function fetch($data){
-      $result=axc_get_wireless_smart(json_encode($data));
+      $result=axc_get_wireless_ssid(json_encode($data));
       return $result;
   }
 
@@ -36,7 +36,7 @@ class WirelessSsid extends CI_Controller {
         'groupid'=>element('groupid',$data),
         'ssid'=>element('ssid',$data['selectedList']),
        );
-      $state=axc_del_wireless_sside(json_encode($temp_data));
+      $state=axc_del_wireless_ssid(json_encode($temp_data));
        $result=$state;
     }
 
