@@ -6,19 +6,19 @@
   "data": {
     "list": [
       {
-        "id": 1,
+        "id": "1",
         "groupname": "Default",
         "remark": "description1",
         "apNum": 23
       },
       {
-        "id": 2,
+        "id": "2",
         "groupname": "group1",
         "remark": "description1",
         "apNum": 23
       },
       {
-        "id": 3,
+        "id": "3",
         "groupname": "group2",
         "remark": "description2",
         "apNum": 2

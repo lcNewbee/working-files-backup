@@ -35,11 +35,7 @@ const flowTableOptions = fromJS([
 
 
 const propTypes = {
-  app: PropTypes.instanceOf(Map),
-  store: PropTypes.instanceOf(Map),
-
-  route: PropTypes.object,
-  initScreen: PropTypes.func,
+  groupid: PropTypes.any,
 };
 const defaultProps = {};
 
@@ -59,6 +55,9 @@ export default class View extends React.Component {
       <ListInfo
         {...this.props}
         tableOptions={flowTableOptions}
+        defaultQueryData={{
+          grouid: this.props.groupid,
+        }}
         noTitle
       />
     );
@@ -71,6 +70,7 @@ View.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
+    groupid: state.product.getIn(['group', 'selected', 'id']),
     store: state.screens,
   };
 }

@@ -116,13 +116,6 @@ export default class View extends React.Component {
       groupid: this.props.groupid,
     });
   }
-  componentWillReceiveProps(nextProps) {
-    if (this.props.groupid !== nextProps.groupid) {
-      this.props.changeScreenActionQuery({
-        groupid: nextProps.groupid,
-      });
-    }
-  }
   onSave() {
     this.props.onListAction();
   }

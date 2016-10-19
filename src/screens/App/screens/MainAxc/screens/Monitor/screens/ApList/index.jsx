@@ -50,12 +50,7 @@ const apTableOptions = fromJS([
 ]);
 
 const propTypes = {
-  app: PropTypes.instanceOf(Map),
-  store: PropTypes.instanceOf(Map),
-
-  route: PropTypes.object,
-  groupid: PropTypes.any,
-  togglePropertyPanel: PropTypes.func,
+  addToPropertyPanel: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -123,9 +118,6 @@ export default class View extends React.Component {
         {...this.props}
         tableOptions={myTableOptions}
         actionBarChildren={actionBarChildren}
-        defaultQueryData={{
-          grouid: this.props.groupid,
-        }}
         selectable
       />
     );

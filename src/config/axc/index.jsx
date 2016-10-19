@@ -398,7 +398,7 @@ const routes = [
               {
                 id: 'ssidSettings',
                 path: '/main/group/wireless/ssid',
-                formUrl: 'goform/group/ssidSettingList',
+                formUrl: 'goform/group/ssidSetting',
                 text: _('SSID Settings'),
                 component: sSsidSettings.Screen,
               }, {

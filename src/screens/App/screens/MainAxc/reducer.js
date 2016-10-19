@@ -31,7 +31,9 @@ const defaultState = fromJS({
     ],
   },
   group: {
-    selected: {},
+    selected: {
+      id: '1',
+    },
     list: [
       {
         id: '1',

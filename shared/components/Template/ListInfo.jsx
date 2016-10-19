@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react';
 import { Map, List } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import utils from 'shared/utils';
 import {
-  Table, Select, Search, Button, Modal, FormGroup,
+  Table, Select, Search, Button, Modal,
   FormContainer,
 } from 'shared/components';
 
@@ -19,6 +20,7 @@ const propTypes = {
   // 组件通用选项
   title: PropTypes.string,
   listTitle: PropTypes.string,
+  groupid: PropTypes.any,
 
   // 用于配置 list表格主键，用于Ajax保存
   listKey: PropTypes.string,
@@ -109,6 +111,13 @@ class ListInfo extends React.Component {
     if (props.defaultQueryData) {
       initOption.query = props.defaultQueryData;
     }
+
+    if (typeof props.groupid !== 'undefined') {
+      initOption.query = utils.extend({}, initOption.query, {
+        groupid: props.groupid,
+      });
+    }
+
     if (props.defaultSettingsData) {
       initOption.defaultSettingsData = props.defaultSettingsData;
     }
@@ -178,6 +187,16 @@ class ListInfo extends React.Component {
   }
   componentDidUpdate(prevProps) {
     if (prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
+      this.onFetchList();
+    }
+
+    if (this.props.groupid !== prevProps.groupid) {
+      this.props.changeScreenActionQuery({
+        groupid: this.props.groupid,
+      });
+      this.props.changeScreenQuery({
+        groupid: this.props.groupid,
+      });
       this.onFetchList();
     }
   }

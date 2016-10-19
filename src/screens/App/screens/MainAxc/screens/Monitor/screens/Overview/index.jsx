@@ -260,10 +260,11 @@ function getSafeAlarmOption(serverData) {
 const propTypes = {
   screens: PropTypes.instanceOf(Map),
   route: PropTypes.object,
+  groupid: PropTypes.any,
   initScreen: PropTypes.func,
   leaveScreen: PropTypes.func,
   fetchScreenData: PropTypes.func,
-
+  changeScreenQuery: PropTypes.func,
 };
 const defaultProps = {};
 export default class View extends PureComponent {
@@ -278,11 +279,23 @@ export default class View extends PureComponent {
       path: props.route.path,
       isFetchInfinite: true,
       fetchIntervalTime: 5000,
+      query: {
+        groupid: props.groupid,
+      },
     });
   }
 
   componentWillMount() {
     this.props.fetchScreenData();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.groupid !== prevProps.groupid) {
+      this.props.changeScreenQuery({
+        groupid: this.props.groupid,
+      });
+      this.props.fetchScreenData();
+    }
   }
 
   componentWillUnmount() {
@@ -401,6 +414,7 @@ View.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
+    groupid: state.product.getIn(['group', 'selected', 'id']),
     screens: state.screens,
   };
 }
