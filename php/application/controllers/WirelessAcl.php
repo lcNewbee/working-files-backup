@@ -16,13 +16,17 @@ class WirelessAcl extends CI_Controller {
 		$result = null;
 		$actionType = element('action', $data);
 		if ($actionType === 'add') {
-      $result=axc_add_wireless_ssid(json_encode($data));
+      $result=axc_set_wireless_acl(json_encode($data));
 		}
 		elseif($actionType === 'edit') {
-      $result=axc_modify_wireless_timer_policy(json_encode($data));
+      $result=axc_set_wireless_acl(json_encode($data));
 		}
     elseif($actionType === 'delete'){
-       $result=axc_del_wireless_acl(json_encode($data));
+    $temp_data=array(
+    'groupid'=>element('groupid', $data),
+    'mac'=>element('mac',$data['selectedList'])
+    );
+       $result=axc_del_wireless_acl(json_encode($temp_data));
     }
 		return $result;
 	}

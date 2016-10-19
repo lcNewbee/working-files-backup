@@ -33,8 +33,8 @@ class WirelessSsid extends CI_Controller {
 		}
     elseif($actionType === 'delete'){
        $temp_data=array(
-        'groupid'=>$data['groupid'],
-        'ssid'=>$data['selectedList'],
+        'groupid'=>element('groupid',$data),
+        'ssid'=>element('ssid',$data['selectedList']),
        );
       $state=axc_del_wireless_sside(json_encode($temp_data));
        $result=$state;

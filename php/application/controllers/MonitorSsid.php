@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 // require_once('/libraries/Response.php');
-class ApgroupFlow extends CI_Controller {
+class MonitorSsid extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this->load->database();
@@ -12,7 +12,7 @@ class ApgroupFlow extends CI_Controller {
       unset($data_array[' size']);
       unset($data_array[' page']);
       unset($data_array[' search']);
-      $result=axc_get_flow(json_encode($data_array));
+      $result=axc_get_ssidState(json_encode($data_array));
       return $result;
   }
 

@@ -1,25 +1,23 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 // require_once('/libraries/Response.php');
-class ApgroupAps extends CI_Controller {
+class MonitorUser extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this->load->database();
 		$this->load->helper('array');
 	}
 	function fetch($data){
-      $data_array=json_decode($data);
-      unset($data_array[' type']);
-      unset($data_array[' search']);
-      $retdata=array(
-        'groupid'=>element('groupid', $data_array),
-        'page'=>element('page', $data_array),
-        'pagesize'=>element('size', $data_array),
+      $retData = array(
+        'groupid'=>element('groupid', $data),
+        'type'=>element('type', $data),
+        'page'=>element('page', $data),
+        'pagesize'=>element('size', $data),
+        'search'=>element('search', $data),
       );
-      $result=axc_get_flow(json_encode($retdata));
+      $result=axc_get_clientList((json_encode($retData)));
       return $result;
   }
-
 
 	function onAction($data) {
    	// $result = null;
@@ -44,7 +42,7 @@ class ApgroupAps extends CI_Controller {
 		}
 		elseif($_SERVER['REQUEST_METHOD'] == 'GET') {
 			$result = $this->fetch($data);
-      echo json_encode($result, true);
+      echo $result;
 		}
 	}
 }

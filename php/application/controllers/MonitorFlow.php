@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 // require_once('/libraries/Response.php');
-class ApgroupSsid extends CI_Controller {
+class MonitorFlow extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this->load->database();
