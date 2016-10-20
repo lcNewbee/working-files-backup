@@ -24,6 +24,7 @@ const propTypes = {
   ]),
   onAfterStep: PropTypes.func,
   onCompleted: PropTypes.func,
+  reinitAt: PropTypes.any,
 };
 const defaultProps = {
   initStep: 0,
@@ -46,7 +47,8 @@ class WizardContainer extends React.Component {
     );
   }
   componentWillReceiveProps(nextProps) {
-    if (this.props.initStep !== nextProps.initStep) {
+    if (this.props.initStep !== nextProps.initStep ||
+        this.props.reinitAt !== nextProps.reinitAt) {
       this.updateState({
         currStep: nextProps.initStep,
         maxStep: nextProps.options.size,
@@ -89,7 +91,6 @@ class WizardContainer extends React.Component {
 
     // 如果正在切换中则不响应切换事件
     if (!this.onBeforeSteping) {
-
       if (onBeforeStep) {
         handleResult = onBeforeStep(stepObj);
       }

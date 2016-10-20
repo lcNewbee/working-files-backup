@@ -10,6 +10,8 @@ export default function (state = defaultState, action) {
     case 'CHANGE_TIME_ZONE':
       return state.set('zoneName', action.data.zoneName)
                   .set('timeZone', action.data.timeZone);
+    case 'RESTORE_SELF_STATE':
+      return defaultState;
     default:
   }
   return state;

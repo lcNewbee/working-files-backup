@@ -18,6 +18,7 @@ const propTypes = {
 
   updateItemSettings: PropTypes.func,
   leaveSettingsScreen: PropTypes.func,
+  app: PropTypes.instanceOf(Map),
 };
 let a;
 
@@ -182,7 +183,7 @@ export default class SystemStatus extends React.Component {
 
 
   componentWillMount() {
-    console.log('interval', a);
+    console.log('in will mount');
     clearInterval(a);
     // 必须要有初始化，因为要在settings中插入一个由该页面id命名的对象
     this.props.initSettings({
@@ -192,6 +193,17 @@ export default class SystemStatus extends React.Component {
     });
     this.props.fetchSettings();
     a = setInterval(this.props.fetchSettings, 5000);
+  }
+
+  componentDidUpdate(prevProps) {
+    // console.log('app.refreshAt', this.props.app.get('refreshAt'));
+    // console.log('prevProps.app.refreshAt', prevProps.app.get('refreshAt'));
+    if (this.props.app.get('refreshAt') !== prevProps.app.get('refreshAt')) {
+      console.log('refresh');
+      clearInterval(a);
+      this.props.fetchSettings();
+      a = setInterval(this.props.fetchSettings, 5000);
+    }
   }
 
   componentWillUnmount() {

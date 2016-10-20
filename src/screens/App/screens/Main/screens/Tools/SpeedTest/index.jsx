@@ -39,6 +39,7 @@ const propTypes = {
   changeStopWait: PropTypes.func,
   save: PropTypes.func,
   receiveTestResult: PropTypes.func,
+  restoreSelfState: PropTypes.func,
 };
 
 const defaultProps = {};
@@ -61,26 +62,20 @@ export default class SpeedTest extends React.Component {
     this.onSelectScanResultItem = this.onSelectScanResultItem.bind(this);
     this.createIpTableList = this.createIpTableList.bind(this);
     this.onRunTest = this.onRunTest.bind(this);
+    this.firstInAndRefresh = this.firstInAndRefresh.bind(this);
   }
 
   componentWillMount() {
-    const defaultData = {
-      ip: '192.168.1.10',
-      time: '30',
-      direction: '0',
-      packagelen: '64',
-    };
-    const props = this.props;
-    clearInterval(a);
-    clearTimeout(b);
-    props.initSettings({
-      settingId: props.route.id,
-      fetchUrl: props.route.formUrl,
-      saveUrl: props.route.saveUrl,
-      defaultData,
-    });
-    props.initSelfState(defaultData);
-    props.changeShowScanResults(false);
+    this.firstInAndRefresh();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.app.get('refreshAt') !== prevProps.app.get('refreshAt')) {
+      const asyncStep = Promise.resolve(this.props.restoreSelfState());
+      asyncStep.then(() => {
+        this.firstInAndRefresh();
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -179,6 +174,27 @@ export default class SpeedTest extends React.Component {
     }
     return list;
   }
+
+  firstInAndRefresh() {
+    const defaultData = {
+      ip: '192.168.1.10',
+      time: '30',
+      direction: '0',
+      packagelen: '64',
+    };
+    const props = this.props;
+    clearInterval(a);
+    clearTimeout(b);
+    props.initSettings({
+      settingId: props.route.id,
+      fetchUrl: props.route.formUrl,
+      saveUrl: props.route.saveUrl,
+      defaultData,
+    });
+    props.initSelfState(defaultData);
+    props.changeShowScanResults(false);
+  }
+
   render() {
     const {
       ip, time, direction, packagelen,

@@ -105,10 +105,12 @@ class FormGroup extends React.Component {
 
   // clearError
   clearValidError() {
-    this.props.onValidError({
-      name: this.props.name,
-      checkResult: undefined,
-    });
+    if (this.props.onValidError) {
+      this.props.onValidError({
+        name: this.props.name,
+        checkResult: undefined,
+      });
+    }
   }
 
   render() {

@@ -39,6 +39,9 @@ const siteScanResultOptions = fromJS([
   {
     id: 'security',
     text: _('Security'),
+    transform(val) {
+      return val.get('mode');
+    },
   },
   {
     id: 'signal',
@@ -53,7 +56,7 @@ const siteScanResultOptions = fromJS([
     text: _('Protocol'),
   },
   {
-    id: 'channel',
+    id: 'frequency',
     text: _('Channel'),
   },
   {

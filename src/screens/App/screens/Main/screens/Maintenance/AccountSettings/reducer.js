@@ -11,6 +11,8 @@ export default function (state = defaultState, action) {
     case 'SHOW_VALID_MSG':
       return state.set('showErrorMsg', action.show)
                   .set('errorMsg', action.msg);
+    case 'RESTORE_SELF_STATE':
+      return defaultState;
     default:
   }
   return state;

@@ -101,3 +101,15 @@ export function changeSelectedResult(data) {
     data,
   };
 }
+
+export function restoreSelfState() {
+  return {
+    type: 'RESTORE_SELF_STATE',
+  };
+}
+
+export function changeReinitAt() {
+  return {
+    type: 'CHANGE_REINIT_AT',
+  };
+}

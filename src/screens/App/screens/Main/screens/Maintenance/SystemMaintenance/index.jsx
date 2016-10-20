@@ -24,6 +24,7 @@ const propTypes = {
   fetchSettings: PropTypes.func,
 
   createModal: PropTypes.func,
+  restoreSelfState: PropTypes.func,
 };
 
 export default class SystemMaintenance extends Component {
@@ -43,6 +44,10 @@ export default class SystemMaintenance extends Component {
       settingId: props.route.id,
       fetchUrl: props.route.fetchUrl,
     });
+  }
+
+  componentDidUpdate() {
+    this.props.restoreSelfState();
   }
 
   componentWillUnmount() {

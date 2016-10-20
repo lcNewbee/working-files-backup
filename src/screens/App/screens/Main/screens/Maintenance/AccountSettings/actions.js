@@ -5,3 +5,9 @@ export function showValidMsg(show, msg) {
     msg,
   };
 }
+
+export function restoreSelfState() {
+  return {
+    type: 'RESTORE_SELF_STATE',
+  };
+}

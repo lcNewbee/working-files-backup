@@ -149,3 +149,9 @@ export function changeWhichButton(data) {
     data,
   };
 }
+
+export function restoreSelfState() {
+  return {
+    type: 'RESTORE_SELF_STATE',
+  };
+}

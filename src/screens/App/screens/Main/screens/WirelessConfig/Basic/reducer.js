@@ -93,14 +93,9 @@ export default function (state = defaultState, action) {
       return state.set('channels', fromJS(action.data.channels))
                   .set('maxTxpower', action.data.maxTxpower);
     case 'LEAVE_SCREEN':
-      return state.set('scaning', false)
-                  .set('showScanResult', false)
-                  .set('selectedResult', fromJS())
-                  .set('showCtyModal', false)
-                  .set('agreeProtocol', false)
-                  .set('selectedCountry', '')
-                  .set('channels', fromJS([]))
-                  .set('maxTxpower', '27');
+      return defaultState;
+    case 'RESTORE_SELF_STATE':
+      return defaultState;
 
     case 'CHANGE_TITLE_SHOW_ICON':
       return state.set(action.data.name, action.data.value);

@@ -50,9 +50,34 @@ export default class Advance extends React.Component {
   constructor(prop) {
     super(prop);
     this.onSave = this.onSave.bind(this);
+    this.firstInAndRefresh = this.firstInAndRefresh.bind(this);
   }
 
   componentDidMount() {
+    this.firstInAndRefresh();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.app.get('refreshAt') !== prevProps.app.get('refreshAt')) {
+      this.firstInAndRefresh();
+    }
+  }
+
+  componentWillUnmount() {
+    this.props.leaveSettingsScreen();
+    this.props.resetVaildateMsg();
+  }
+
+  onSave() {
+    this.props.validateAll()
+      .then(msg => {
+        if (msg.isEmpty()) {
+          this.props.saveSettings();
+        }
+      });
+  }
+
+  firstInAndRefresh() {
     const props = this.props;
     this.props.initSettings({
       settingId: props.route.id,
@@ -71,20 +96,6 @@ export default class Advance extends React.Component {
       },
     });
     this.props.fetchSettings();
-  }
-
-  componentWillUnmount() {
-    this.props.leaveSettingsScreen();
-    this.props.resetVaildateMsg();
-  }
-
-  onSave() {
-    this.props.validateAll()
-      .then(msg => {
-        if (msg.isEmpty()) {
-          this.props.saveSettings();
-        }
-      });
   }
 
   render() {

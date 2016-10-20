@@ -41,6 +41,7 @@ const propTypes = {
   selectedSsid: PropTypes.number,
   validateOption: PropTypes.object,
   validateAll: PropTypes.func,
+  restoreSelfState: PropTypes.func,
 };
 const validOptions = Map({
   inputMac: validator({
@@ -63,34 +64,20 @@ export default class ACL extends React.Component {
     this.updateAclMacList = this.updateAclMacList.bind(this);
     this.onMacInputChange = this.onMacInputChange.bind(this);
     this.onAddMacToLocalList = this.onAddMacToLocalList.bind(this);
+    this.firstInAndRefresh = this.firstInAndRefresh.bind(this);
   }
 
   componentWillMount() {
-    this.props.initSettings({
-      settingId: this.props.route.id,
-      fetchUrl: this.props.route.fetchUrl,
-      defaultData: {
-        maclist: [
-        ],
-      },
-    });
-    this.props.fetchSettings()
-        .then(() => {
-          const aclConfList = this.props.store.getIn(['curData', 'aclConfList']);
-          ssidSelectOptions = [];
-          for (let i = 0; i < aclConfList.size; i++) {
-            const optionItem = {
-              value: i,
-              label: aclConfList.getIn([i, 'ssid']),
-            };
-            ssidSelectOptions.push(optionItem);
-          }
-          this.props.changeSelectedSsid({
-            selectedSsid: 0,
-            macListLen: aclConfList.getIn([0, 'macList']).size,
-          });
-        });
-    this.props.changeMacInput('');
+    this.firstInAndRefresh();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.app.get('refreshAt') !== prevProps.app.get('refreshAt')) {
+      const asyncStep = Promise.resolve(this.props.restoreSelfState());
+      asyncStep.then(() => {
+        this.firstInAndRefresh();
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -179,6 +166,34 @@ export default class ACL extends React.Component {
       aclConfList,
     });
     this.props.initMacstatus(newList.size);
+  }
+
+  firstInAndRefresh() {
+    this.props.initSettings({
+      settingId: this.props.route.id,
+      fetchUrl: this.props.route.fetchUrl,
+      defaultData: {
+        maclist: [
+        ],
+      },
+    });
+    this.props.fetchSettings()
+        .then(() => {
+          const aclConfList = this.props.store.getIn(['curData', 'aclConfList']);
+          ssidSelectOptions = [];
+          for (let i = 0; i < aclConfList.size; i++) {
+            const optionItem = {
+              value: i,
+              label: aclConfList.getIn([i, 'ssid']),
+            };
+            ssidSelectOptions.push(optionItem);
+          }
+          this.props.changeSelectedSsid({
+            selectedSsid: 0,
+            macListLen: aclConfList.getIn([0, 'macList']).size,
+          });
+        });
+    this.props.changeMacInput('');
   }
 
   render() {

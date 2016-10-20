@@ -79,12 +79,22 @@ export default class NetworkSettings extends React.Component {
     this.onStaticClick = this.onStaticClick.bind(this);
     // this.onVlanBtnClick = this.onVlanBtnClick.bind(this);
     this.noErrorThisPage = this.noErrorThisPage.bind(this);
+    this.firstInAndRefresh = this.firstInAndRefresh.bind(this);
   }
 
   componentWillMount() {
+    this.firstInAndRefresh();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.app.get('refreshAt') !== prevProps.app.get('refreshAt')) {
+      this.firstInAndRefresh();
+    }
+  }
+
+  firstInAndRefresh() {
     const props = this.props;
     const groupId = props.groupId || -1;
-
     props.initSettings({
       settingId: props.route.id,
       formUrl: props.route.formUrl,
@@ -106,7 +116,6 @@ export default class NetworkSettings extends React.Component {
         vlanId: '1', // 2-4094 // vlan id
       },
     });
-
     props.fetchSettings();
   }
 

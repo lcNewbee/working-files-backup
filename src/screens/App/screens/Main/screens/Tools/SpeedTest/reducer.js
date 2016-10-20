@@ -8,9 +8,9 @@ const defaultState = fromJS({
   stopWait: true,
   bandwidth: '512',
   selectedIp: '',
-  rx: '1000',
-  tx: '1000',
-  total: '1024',
+  rx: '0',
+  tx: '0',
+  total: '0',
   time: '30',
   query: {
     ip: '',
@@ -47,6 +47,8 @@ export default function (state = defaultState, action) {
       return state.set('stopWait', action.data);
     case 'CHANGE_SHOW_WAITING_MODAL':
       return state.set('showWaitingModal', action.data);
+    case 'RESTORE_SELF_STATE':
+      return defaultState;
     default:
   }
   return state;

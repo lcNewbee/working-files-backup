@@ -21,6 +21,7 @@ const propTypes = {
   fetchSettings: PropTypes.func,
   changeDeviceMode: PropTypes.func,
   validateAll: PropTypes.func,
+  changePage: PropTypes.func,
 
   store: PropTypes.instanceOf(Map),
   updateItemSettings: PropTypes.func,
@@ -36,6 +37,8 @@ const propTypes = {
   receiveCountryInfo: PropTypes.func,
   validateOption: PropTypes.object,
   saveSettings: PropTypes.func,
+  restoreSelfState: PropTypes.func,
+  changeReinitAt: PropTypes.func,
 };
 
 const defaultState = {
@@ -55,6 +58,7 @@ const staAndApSecurityOptions = [
   { value: 'wpa', label: 'WPA-PSK' },
   { value: 'wpa2', label: 'WPA2-PSK' },
   { value: 'wpa-mixed', label: 'WPA-PSK/WPA2-PSK' },
+  { value: 'wep', label: 'WEP' },
 ];
 
 const repeaterSecurityOptions = [
@@ -67,10 +71,10 @@ const wepAuthenOptions = [
   { value: 'shared', label: 'Shared' },
 ];
 
-const wepKeyLengthOptions = [
-  { value: '64', label: '64bit' },
-  { value: '128', label: '128bit' },
-];
+// const wepKeyLengthOptions = [
+//   { value: '64', label: '64bit' },
+//   { value: '128', label: '128bit' },
+// ];
 
 const keyIndexOptions = [
   { value: '1', label: 'key 1' },
@@ -133,36 +137,22 @@ export default class QuickSetup extends React.Component {
       'renderStepFour',
       'onCompleted',
       'onBeforeStep',
+      'firstInAndRefresh',
     ]);
   }
 
   componentWillMount() {
-    const props = this.props;
-    props.initSettings({
-      settingId: props.route.id,
-      fetchUrl: props.route.fetchUrl,
-      saveUrl: props.route.saveUrl,
-      defaultData: defaultState,
-    });
-    props.changePage('1');
-    props.changeAgreeProtocol(false);
-    props.fetchSettings();
-    window.setTimeout(() => {
-      const country = this.props.store.getIn(['curData', 'countryCode']);
-      const channelWidth = this.props.store.getIn(['curData', 'channelWidth']);
-      const requestInfo = {
-        radio: '5G',
-        country,
-        channelWidth,
-      };
-      utils.fetch('goform/get_country_info', requestInfo)
-            .then((json) => {
-              if (json.state && json.state.code === 2000) {
-                this.props.receiveCountryInfo(json.data);
-              }
-            });
-    }, 0);
-    props.resetVaildateMsg();
+    this.firstInAndRefresh();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.app.get('refreshAt') !== prevProps.app.get('refreshAt')) {
+      const asyncStep = Promise.resolve(this.props.restoreSelfState());
+      asyncStep.then(() => {
+        this.firstInAndRefresh();
+        this.props.changeReinitAt();
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -172,23 +162,23 @@ export default class QuickSetup extends React.Component {
   onScanBtnClick() {
     this.props.changeScanStatus(true);
     this.props.fetch('goform/get_site_survey')
-              .then((json) => {
-                if (json.state && json.state.code === 2000) {
-                  this.props.updateItemSettings({
-                    scanResult: fromJS(json.data),
-                  });
-                  this.props.changeShowScanResultStatus(true);
-                  this.props.changeScanStatus(false);
-                }
-              });
+        .then((json) => {
+          if (json.state && json.state.code === 2000) {
+            this.props.updateItemSettings({
+              scanResult: fromJS(json.data),
+            });
+            this.props.changeShowScanResultStatus(true);
+            this.props.changeScanStatus(false);
+          }
+        });
   }
 
   onSelectScanResultItem(item) {
     const { ssid, mac, security, frequency, channelWidth } = item.toJS();
     const result = fromJS({}).set('ssid', ssid).set('mac', mac)
-                             .set('frequency', frequency)
-                             .set('channelWidth', channelWidth)
-                             .set('security', security);
+                              .set('frequency', frequency)
+                              .set('channelWidth', channelWidth)
+                              .set('security', security);
     this.props.changeSelectedResult(result);
   }
 
@@ -212,9 +202,14 @@ export default class QuickSetup extends React.Component {
     const {
       mac, ssid, security, frequency, channelWidth,
     } = this.props.selfState.get('selectedResult').toJS();
+    let peers = this.props.store.getIn(['curData', 'peers']);
     if (!this.props.selfState.get('selectedResult').isEmpty()) {
+      if (this.props.store.getIn(['curData', 'wirelessMode']) === 'repeater') {
+        peers = peers.set(0, mac);
+      }
       this.props.updateItemSettings({
         apMac: mac,
+        peers,
         ssid,
         security,
         frequency,
@@ -228,7 +223,6 @@ export default class QuickSetup extends React.Component {
 
   // 当准备改变步骤时
   onBeforeStep(data) {
-
     // 下一页
     if (data.currStep < data.targetStep) {
       return this.props.validateAll()
@@ -254,19 +248,48 @@ export default class QuickSetup extends React.Component {
     return '';
   }
 
-  noErrorThisPage(...args) {
-    const errorMsg = this.props.app.get('invalid');
-    let flag = true;
-    if (errorMsg.isEmpty()) {
-      return true;
-    }
-    for (const name of args) {
-      if (errorMsg.has(name)) {
-        flag = false;
-      }
-    }
-    return flag;
+  firstInAndRefresh() {
+    const props = this.props;
+    props.initSettings({
+      settingId: props.route.id,
+      fetchUrl: props.route.fetchUrl,
+      saveUrl: props.route.saveUrl,
+      defaultData: defaultState,
+    });
+    props.changePage('1');
+    props.changeAgreeProtocol(false);
+    props.fetchSettings()
+        .then(() => {
+          const country = this.props.store.getIn(['curData', 'countryCode']);
+          const channelWidth = this.props.store.getIn(['curData', 'channelWidth']);
+          const requestInfo = {
+            radio: '5G',
+            country,
+            channelWidth,
+          };
+          utils.fetch('goform/get_country_info', requestInfo)
+              .then((json) => {
+                if (json.state && json.state.code === 2000) {
+                  this.props.receiveCountryInfo(json.data);
+                }
+              });
+        });
+    props.resetVaildateMsg();
   }
+
+  // noErrorThisPage(...args) {
+  //   const errorMsg = this.props.app.get('invalid');
+  //   let flag = true;
+  //   if (errorMsg.isEmpty()) {
+  //     return true;
+  //   }
+  //   for (const name of args) {
+  //     if (errorMsg.has(name)) {
+  //       flag = false;
+  //     }
+  //   }
+  //   return flag;
+  // }
 
   // countryMap为Object
   makeCountryOptions(map) {
@@ -320,12 +343,13 @@ export default class QuickSetup extends React.Component {
                 checked={this.props.selfState.get('deviceMode') === 'ap'}
                 name="modeSelect"
                 onChange={(data) => {
-                  this.props.changeDeviceMode(data.value);
-                  this.props.updateItemSettings({
-                    wirelessMode: data.value,
-                  });
-                  this.props.resetVaildateMsg();
-                  this.props.fetchSettings();
+                  this.props.fetchSettings()
+                      .then(() => {
+                        this.props.changeDeviceMode(data.value);
+                        this.props.updateItemSettings({
+                          wirelessMode: data.value,
+                        });
+                      });
                 }}
               />
             </div>
@@ -359,12 +383,13 @@ export default class QuickSetup extends React.Component {
                 name="modeSelect"
                 checked={this.props.selfState.get('deviceMode') === 'sta'}
                 onChange={(data) => {
-                  this.props.changeDeviceMode(data.value);
-                  this.props.updateItemSettings({
-                    wirelessMode: data.value,
-                  });
-                  this.props.resetVaildateMsg();
-                  this.props.fetchSettings();
+                  this.props.fetchSettings()
+                      .then(() => {
+                        this.props.changeDeviceMode(data.value);
+                        this.props.updateItemSettings({
+                          wirelessMode: data.value,
+                        });
+                      });
                 }}
               />
             </div>
@@ -398,12 +423,14 @@ export default class QuickSetup extends React.Component {
                 name="modeSelect"
                 checked={this.props.selfState.get('deviceMode') === 'repeater'}
                 onChange={(data) => {
-                  this.props.changeDeviceMode(data.value);
-                  this.props.updateItemSettings({
-                    wirelessMode: data.value,
-                  });
-                  this.props.resetVaildateMsg();
-                  this.props.fetchSettings();
+                  this.props.fetchSettings()
+                      .then(() => {
+                        console.log(data.value);
+                        this.props.changeDeviceMode(data.value);
+                        this.props.updateItemSettings({
+                          wirelessMode: data.value,
+                        });
+                      });
                 }}
               />
             </div>
@@ -511,7 +538,7 @@ export default class QuickSetup extends React.Component {
     const keyType = store.getIn(['curData', 'security', 'keyType']);
     const keyIndex = store.getIn(['curData', 'security', 'keyIndex']);
     const cipher = store.getIn(['curData', 'security', 'cipher']);
-    const { lanIp, lanMask, validSsid, validDistance, validPassword } = this.props.validateOption;
+    const { lanIp, lanMask, validSsid, validDistance, validPassword, apmac3 } = this.props.validateOption;
 
     return (
       <div className="thirdScreen">
@@ -609,12 +636,16 @@ export default class QuickSetup extends React.Component {
                   security: {
                     mode: data.value,
                     cipher: store.getIn(['curData', 'security', 'cipher']) || 'aes',
+                    auth: store.getIn(['curData', 'security', 'auth']) || 'open',
+                    keyIndex: store.getIn(['curData', 'security', 'keyIndex']) || '1',
+                    keyLength: store.getIn(['curData', 'security', 'keyLength']) || '64',
+                    keyType: store.getIn(['curData', 'security', 'keyType']) || 'Hex',
                     key: '',
                   },
                 })}
               />
               {
-                store.getIn(['curData', 'security', 'mode']) === 'none' ? null : (
+                /wpa/.test(store.getIn(['curData', 'security', 'mode'])) ? (
                   <div>
                     <FormGroup
                       label={_('Algorithm')}
@@ -649,7 +680,75 @@ export default class QuickSetup extends React.Component {
                       {...validPassword}
                     />
                   </div>
-                )
+                ) : null
+              }
+              {
+                  (store.getIn(['curData', 'security', 'mode']) === 'wep') ? (
+                    <div>
+                      <FormGroup
+                        label={_('Auth Type')}
+                        type="switch"
+                        options={wepAuthenOptions}
+                        value={store.getIn(['curData', 'security', 'auth'])}
+                        onChange={(data) => {
+                          const security = store.getIn(['curData', 'security'])
+                                          .set('auth', data.value);
+                          this.props.updateItemSettings({ security });
+                        }}
+                        minWidth="65px"
+                      />
+                      {/*
+                        <FormGroup
+                          label={_('Key Length')}
+                          type="select"
+                          options={wepKeyLengthOptions}
+                          value={curData.getIn(['vapList', '0', 'security', 'keyLength'])}
+                          onChange={(data) => {
+                            const security = curData.getIn(['vapList', '0', 'security'])
+                                            .set('keyLength', data.value);
+                            const vapList = curData.get('vapList')
+                                            .setIn(['0', 'security'], security);
+                            this.props.updateItemSettings({ vapList });
+                          }}
+                        />
+                      */}
+                      <FormGroup
+                        label={_('Key Type')}
+                        type="switch"
+                        options={keyTypeOptions}
+                        value={store.getIn(['curData', 'security', 'keyType'])}
+                        onChange={(data) => {
+                          const security = store.getIn(['curData', 'security'])
+                                                  .set('keyType', data.value);
+                          this.props.updateItemSettings({ security });
+                        }}
+                        minWidth="65px"
+                      />
+                      <FormGroup
+                        label={_('Key Index')}
+                        type="select"
+                        options={keyIndexOptions}
+                        value={store.getIn(['curData', 'security', 'keyIndex'])}
+                        onChange={(data) => {
+                          const security = store.getIn(['curData', 'security'])
+                                          .set('keyIndex', data.value);
+                          this.props.updateItemSettings({ security });
+                        }}
+                      />
+                      <FormGroup
+                        type="password"
+                        required
+                        label={_('Password')}
+                        value={store.getIn(['curData', 'security', 'key'])}
+                        onChange={(data) => {
+                          const security = store.getIn(['curData', 'security'])
+                                                  .set('key', data.value);
+                          this.props.updateItemSettings({ security });
+                        }}
+                        {...this.props.validateOption[store.getIn(['curData', 'security', 'keyType'])]}
+                      />
+                    </div>
+                  ) : null
               }
               <div className="clearfix">
                 <FormGroup
@@ -757,7 +856,7 @@ export default class QuickSetup extends React.Component {
                 </div>
               </div>
               <FormGroup
-                label={_('Peer')}
+                label={_('Lock To Ap')}
                 type="text"
                 placeholder={_('Input Mac Address')}
                 value={store.getIn(['curData', 'apMac'])}
@@ -843,14 +942,18 @@ export default class QuickSetup extends React.Component {
                 value={mode || 'none'}
                 onChange={data => this.props.updateItemSettings({
                   security: {
-                    mode: data.value || 'none',
+                    mode: data.value,
                     cipher: store.getIn(['curData', 'security', 'cipher']) || 'aes',
+                    auth: store.getIn(['curData', 'security', 'auth']) || 'open',
+                    keyIndex: store.getIn(['curData', 'security', 'keyIndex']) || '1',
+                    keyLength: store.getIn(['curData', 'security', 'keyLength']) || '64',
+                    keyType: store.getIn(['curData', 'security', 'keyType']) || 'Hex',
                     key: '',
                   },
                 })}
               />
               {
-                store.getIn(['curData', 'security', 'mode']) === 'none' ? null : (
+                /wpa/.test(store.getIn(['curData', 'security', 'mode'])) ? (
                   <div>
                     <FormGroup
                       label={_('Algorithm')}
@@ -868,6 +971,7 @@ export default class QuickSetup extends React.Component {
                         { label: 'TKIP', value: 'tkip' },
                         { label: 'AES/TKIP', value: 'aes&tkip' },
                       ]}
+                      minWidth="60px"
                     />
                     <FormGroup
                       type="password"
@@ -884,7 +988,75 @@ export default class QuickSetup extends React.Component {
                       {...validPassword}
                     />
                   </div>
-                )
+                ) : null
+              }
+              {
+                  (store.getIn(['curData', 'security', 'mode']) === 'wep') ? (
+                    <div>
+                      <FormGroup
+                        label={_('Auth Type')}
+                        type="switch"
+                        options={wepAuthenOptions}
+                        value={store.getIn(['curData', 'security', 'auth'])}
+                        onChange={(data) => {
+                          const security = store.getIn(['curData', 'security'])
+                                          .set('auth', data.value);
+                          this.props.updateItemSettings({ security });
+                        }}
+                        minWidth="65px"
+                      />
+                      {/*
+                        <FormGroup
+                          label={_('Key Length')}
+                          type="select"
+                          options={wepKeyLengthOptions}
+                          value={curData.getIn(['vapList', '0', 'security', 'keyLength'])}
+                          onChange={(data) => {
+                            const security = curData.getIn(['vapList', '0', 'security'])
+                                            .set('keyLength', data.value);
+                            const vapList = curData.get('vapList')
+                                            .setIn(['0', 'security'], security);
+                            this.props.updateItemSettings({ vapList });
+                          }}
+                        />
+                      */}
+                      <FormGroup
+                        label={_('Key Type')}
+                        type="switch"
+                        options={keyTypeOptions}
+                        value={store.getIn(['curData', 'security', 'keyType'])}
+                        onChange={(data) => {
+                          const security = store.getIn(['curData', 'security'])
+                                                  .set('keyType', data.value);
+                          this.props.updateItemSettings({ security });
+                        }}
+                        minWidth="65px"
+                      />
+                      <FormGroup
+                        label={_('Key Index')}
+                        type="select"
+                        options={keyIndexOptions}
+                        value={store.getIn(['curData', 'security', 'keyIndex'])}
+                        onChange={(data) => {
+                          const security = store.getIn(['curData', 'security'])
+                                          .set('keyIndex', data.value);
+                          this.props.updateItemSettings({ security });
+                        }}
+                      />
+                      <FormGroup
+                        type="password"
+                        required
+                        label={_('Password')}
+                        value={store.getIn(['curData', 'security', 'key'])}
+                        onChange={(data) => {
+                          const security = store.getIn(['curData', 'security'])
+                                                  .set('key', data.value);
+                          this.props.updateItemSettings({ security });
+                        }}
+                        {...this.props.validateOption[store.getIn(['curData', 'security', 'keyType'])]}
+                      />
+                    </div>
+                  ) : null
               }
               <div className="clearfix">
                 <FormGroup
@@ -978,6 +1150,7 @@ export default class QuickSetup extends React.Component {
                       onClose={this.onModalCloseBtnClick}
                       okText={_('Select')}
                       cancelText={_('Cancel')}
+                      size="lg"
                       okButton
                       cancelButton
                     >
@@ -992,9 +1165,15 @@ export default class QuickSetup extends React.Component {
               </div>
 
               <FormGroup
-                label={_('Lock To AP')}
+                label={_('Peer')}
                 type="text"
-                placeholder="非必填项"
+                required
+                value={store.getIn(['curData', 'peers', 0])}
+                onChange={(data) => {
+                  const peers = store.getIn(['curData', 'peers']).set(0, data.value);
+                  this.props.updateItemSettings({ peers });
+                }}
+                {...apmac3}
               />
               <FormGroup
                 label={_('Country')}
@@ -1489,6 +1668,7 @@ export default class QuickSetup extends React.Component {
           options={wizardOptions}
           onBeforeStep={this.onBeforeStep}
           onCompleted={this.onCompleted}
+          reinitAt={this.props.selfState.get('reinitAt')}
         />
       </div>
     );

@@ -27,6 +27,7 @@ const propTypes = {
 
   validateOption: PropTypes.object,
   resetVaildateMsg: PropTypes.func,
+  restoreSelfState: PropTypes.func,
 };
 
 const validOptions = Map({
@@ -49,17 +50,16 @@ export default class AccountSettings extends Component {
   }
 
   componentWillMount() {
-    const props = this.props;
-    props.initSettings({
-      settingId: props.route.id,
-      saveUrl: props.route.saveUrl,
-      defaultData: {
-        oldPassword: '',
-        newPassword: '',
-        confirmPassword: '',
-      },
-    });
-    props.showValidMsg('0', '');
+    this.firstInAndRefresh();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.app.get('refreshAt') !== prevProps.app.get('refreshAt')) {
+      const asyncStep = Promise.resolve(this.props.restoreSelfState());
+      asyncStep.then(() => {
+        this.firstInAndRefresh();
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -80,7 +80,7 @@ export default class AccountSettings extends Component {
               const text = _('Please make sure that the new passwords you input twice are the same!');
               props.showValidMsg('1', text);
               noError = false;
-              console.log(text);
+              // console.log(text);
             } else if (oldPassword === newPassword) {
               const text = _('Please make sure that the new password is different from the old one!');
               props.showValidMsg('1', text);
@@ -106,6 +106,20 @@ export default class AccountSettings extends Component {
 
   onModalOkBtnClick() {
     this.props.showValidMsg('0', '');
+  }
+
+  firstInAndRefresh() {
+    const props = this.props;
+    props.initSettings({
+      settingId: props.route.id,
+      saveUrl: props.route.saveUrl,
+      defaultData: {
+        oldPassword: '',
+        newPassword: '',
+        confirmPassword: '',
+      },
+    });
+    props.showValidMsg('0', '');
   }
 
   render() {

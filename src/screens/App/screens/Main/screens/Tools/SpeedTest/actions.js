@@ -70,6 +70,12 @@ export function changeStopWait(data) {
   };
 }
 
+export function restoreSelfState() {
+  return {
+    type: 'RESTORE_SELF_STATE',
+  };
+}
+
 // export function clickSpeedTestRunBtn() {
 //   return (dispatch, getState) => {
 //     // const showAdvance = getState().speedtest.get('showAdvance');

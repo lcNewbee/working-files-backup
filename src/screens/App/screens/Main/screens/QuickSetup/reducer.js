@@ -3,6 +3,7 @@ import { fromJS } from 'immutable';
 const defaultState = fromJS({
   page: '1',
   deviceMode: 'sta',
+  reinitAt: new Date().getTime(),
   showCtyModal: false,
   agreeProtocol: false,
   selectedCountry: '',
@@ -36,11 +37,12 @@ export default function (state = defaultState, action) {
       return state.set('showScanResult', action.data);
     case 'CHANGE_SELECTED_RESULT':
       return state.set('selectedResult', action.data);
+    case 'CHANGE_REINIT_AT':
+      return state.set('reinitAt', new Date().getTime());
     case 'LEAVE_SCREEN':
-      return state.set('showCtyModal', false)
-                  .set('agreeProtocol', false)
-                  .set('selectedCountry', '')
-                  .set('channels', fromJS([]));
+      return defaultState;
+    case 'RESTORE_SELF_STATE':
+      return defaultState;
     default:
   }
   return state;

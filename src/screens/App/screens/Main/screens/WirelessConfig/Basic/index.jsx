@@ -49,6 +49,7 @@ const propTypes = {
   updateMultiSsidItem: PropTypes.func,
   updateRadioSettingsItem: PropTypes.func,
   changeWhichButton: PropTypes.func,
+  restoreSelfState: PropTypes.func,
 };
 
 const defaultProps = {};
@@ -165,62 +166,20 @@ export default class Basic extends React.Component {
     this.onDeleteBtnClick = this.onDeleteBtnClick.bind(this);
     this.onSsidItemChange = this.onSsidItemChange.bind(this);
     this.fetchFullPageData = this.fetchFullPageData.bind(this);
+    this.firstInAndRefresh = this.firstInAndRefresh.bind(this);
   }
 
   componentWillMount() {
-    const props = this.props;
-    const groupId = props.groupId || -1;
+    this.firstInAndRefresh();
+  }
 
-    props.initSettings({
-      settingId: props.route.id,
-      formUrl: props.route.formUrl,
-      saveUrl: props.route.saveUrl,
-      query: {
-        groupId,
-      },
-      saveQuery: {},
-      defaultData: {
-      },
-    });
-    this.fetchFullPageData();
-    props.changeTitleShowIcon({ name: 'showRadioSetting', value: true });
-    props.changeTitleShowIcon({ name: 'showSsidSetting', value: true });
-    props.changeShowScanResultStatus(false);
-    props.changeScanStatus(false);
-    props.changeTableItemForSsid(fromJS({
-      isShow: '0',
-      val: '',
-      item: fromJS({}),
-    }));
-    props.fetch('goform/get_network_info')
-        .then((json) => {
-          if (json.state && json.state.code === 2000) {
-            vlanEnable = json.data.vlanEnable;
-          }
-        });
-    /*
-    props.changeShowRadioSetting(true);
-    utils.fetch('goform/get_base_wl_info')
-      .then((json) => {
-        if (json.state && json.state.code === 2000) {
-          const country = json.data.countryCode;
-          this.props.changeCountryCode(country);
-          const channelWidth = json.data.channelWidth;
-          const saveInfo = {
-            radio: '5G',
-            country,
-            channelWidth,
-          };
-          utils.fetch('goform/get_country_info', saveInfo)
-              .then((json2) => {
-                // console.log('json2', json2.data);
-                if (json2.state && json2.state.code === 2000) {
-                  this.props.receiveCountryInfo(json2.data);
-                }
-              });
-        }
+  componentDidUpdate(prevProps) {
+    if (this.props.app.get('refreshAt') !== prevProps.app.get('refreshAt')) {
+      const asyncStep = Promise.resolve(this.props.restoreSelfState());
+      asyncStep.then(() => {
+        this.firstInAndRefresh();
       });
-      */
+    }
   }
 
   componentWillUnmount() {
@@ -506,6 +465,39 @@ export default class Basic extends React.Component {
     return channelOptions;
   }
 
+  firstInAndRefresh() {
+    const props = this.props;
+    const groupId = props.groupId || -1;
+
+    props.initSettings({
+      settingId: props.route.id,
+      formUrl: props.route.formUrl,
+      saveUrl: props.route.saveUrl,
+      query: {
+        groupId,
+      },
+      saveQuery: {},
+      defaultData: {
+      },
+    });
+    this.fetchFullPageData();
+    props.changeTitleShowIcon({ name: 'showRadioSetting', value: true });
+    props.changeTitleShowIcon({ name: 'showSsidSetting', value: true });
+    props.changeShowScanResultStatus(false);
+    props.changeScanStatus(false);
+    props.changeTableItemForSsid(fromJS({
+      isShow: '0',
+      val: '',
+      item: fromJS({}),
+    }));
+    props.fetch('goform/get_network_info')
+        .then((json) => {
+          if (json.state && json.state.code === 2000) {
+            vlanEnable = json.data.vlanEnable;
+          }
+        });
+  }
+
   render() {
     const modalOptions = fromJS([
       {
@@ -533,7 +525,7 @@ export default class Basic extends React.Component {
         id: 'security',
         text: _('Security Mode'),
         transform: function (val) {
-          return val.toJS().mode;
+          return val.get('mode');
         }.bind(this),
       },
       {
@@ -549,7 +541,7 @@ export default class Basic extends React.Component {
         text: _('Protocol'),
       },
       {
-        id: 'channel',
+        id: 'frequency',
         text: _('Channel'),
       },
       {

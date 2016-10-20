@@ -52,6 +52,8 @@ export default function (state = defaultState, action) {
       return state.setIn(['macInput', 'preLen'], action.data);
     case 'CHANGE_SELECTED_SSID':
       return onChangeSelectedSsid(state, action);
+    case 'RESTORE_SELF_STATE':
+      return defaultState;
     default:
   }
   return state;

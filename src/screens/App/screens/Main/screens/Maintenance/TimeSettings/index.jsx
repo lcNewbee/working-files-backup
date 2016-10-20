@@ -21,6 +21,7 @@ const propTypes = {
   changeTimeZone: PropTypes.func,
   selfState: PropTypes.instanceOf(Map),
   save: PropTypes.func,
+  restoreSelfState: PropTypes.func,
 };
 
 function createTimezoneOption(zone) {
@@ -40,29 +41,20 @@ export default class TimeSettings extends Component {
     super(props);
     this.onTimeZoneChange = this.onTimeZoneChange.bind(this);
     this.onSaveTimeSettings = this.onSaveTimeSettings.bind(this);
+    this.firstInAndRefresh = this.firstInAndRefresh.bind(this);
   }
 
   componentWillMount() {
-    this.props.initSettings({
-      settingId: this.props.route.id,
-      defaultData: {
-        ntpEnable: '0',
-      },
-    });
-    utils.fetch('goform/get_ntp_info')
-              .then((json) => {
-                if (json.state && json.state.code === 2000) {
-                  this.props.updateItemSettings({
-                    ntpEnable: json.data.ntpEnable,
-                    ntpServer: json.data.ntpServer,
-                    zoneName: json.data.zoneName,
-                  });
-                  this.props.changeTimeZone({
-                    zoneName: json.data.zoneName,
-                    timeZone: timezone.get(json.data.zoneName),
-                  });
-                }
-              });
+    this.firstInAndRefresh();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.app.get('refreshAt') !== prevProps.app.get('refreshAt')) {
+      const asyncStep = Promise.resolve(this.props.restoreSelfState());
+      asyncStep.then(() => {
+        this.firstInAndRefresh();
+      });
+    }
   }
 
   onTimeZoneChange(data) {
@@ -86,6 +78,29 @@ export default class TimeSettings extends Component {
       ntpEnable, ntpServer, zoneName, timeZone,
     };
     this.props.save('goform/set_ntp', saveData);
+  }
+
+  firstInAndRefresh() {
+    this.props.initSettings({
+      settingId: this.props.route.id,
+      defaultData: {
+        ntpEnable: '0',
+      },
+    });
+    utils.fetch('goform/get_ntp_info')
+        .then((json) => {
+          if (json.state && json.state.code === 2000) {
+            this.props.updateItemSettings({
+              ntpEnable: json.data.ntpEnable,
+              ntpServer: json.data.ntpServer,
+              zoneName: json.data.zoneName,
+            });
+            this.props.changeTimeZone({
+              zoneName: json.data.zoneName,
+              timeZone: timezone.get(json.data.zoneName),
+            });
+          }
+        });
   }
 
   render() {
@@ -117,6 +132,7 @@ export default class TimeSettings extends Component {
             type="select"
             label={_('Time Zone')}
             options={timezoneOptions}
+            disabled={ntpEnable === '0'}
             value={this.props.store.getIn(['curData', 'zoneName'])}
             onChange={(data) => this.onTimeZoneChange(data)}
             style={{
@@ -130,7 +146,6 @@ export default class TimeSettings extends Component {
             onClick={this.onSaveTimeSettings}
           />
         </FormGroup>
-
       </div>
     );
   }

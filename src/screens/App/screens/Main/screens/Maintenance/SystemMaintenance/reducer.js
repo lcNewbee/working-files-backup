@@ -15,6 +15,8 @@ export default function (state = defaultState, action) {
       return state.set('showProgessBar', action.data);
     case 'CHANGE_PROGRESS_BAR_INFO':
       return state.set('progressBarInfo', action.data);
+    case 'RESTORE_SELF_STATE':
+      return defaultState;
     default:
   }
   return state;
