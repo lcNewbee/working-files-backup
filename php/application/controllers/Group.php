@@ -10,6 +10,7 @@ class Group extends CI_Controller {
 	function fetch(){
 		$apGroups=$this->db->select('id,group_name,remark')
             ->from('ap_group')
+            ->where('id > 1')
             ->get()->result_array();
     $retList=array();
 

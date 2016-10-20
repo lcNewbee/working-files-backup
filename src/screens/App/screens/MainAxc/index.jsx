@@ -146,6 +146,12 @@ export default class Main extends Component {
     this.props.fetchGroupAps(id);
   }
 
+  onSelectGroupAp(data) {
+    console.log(data);
+    this.props.selectAddApGroupDevice(data);
+  }
+
+
   showUserPopOver() {
     this.onToggleMainPopOver({
       name: 'userOverview',
@@ -357,9 +363,7 @@ export default class Main extends Component {
               options={tableOption}
               selectable
               list={this.props.product.get('devices')}
-              onSelectRow={(data) => {
-                this.props.selectAddApGroupDevice(data);
-              }}
+              onRowSelect={data => this.onSelectGroupAp(data)}
             />
           </div>
         );
@@ -422,7 +426,7 @@ export default class Main extends Component {
                 options={tableOption}
                 selectable
                 list={this.props.product.get('devices')}
-                onSelectRow={(data) => {
+                onRowSelect={(data) => {
                   this.props.selectAddApGroupDevice(data);
                 }}
               />
@@ -437,14 +441,12 @@ export default class Main extends Component {
                 />
                 <Button
                   icon="trash"
-                  text={_('Delete')}
+                  text={_('Delete Selected')}
                 />
               </div>
             </div>
           </div>
         );
-
-
 
       default:
         return null;

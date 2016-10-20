@@ -9,12 +9,12 @@ class MonitorSsid extends CI_Controller {
 	}
 	function fetch(){
      $data = array(
-        'groupid'=>$_GET['groupid'],
+        'groupid'=>(int)$_GET['groupid'],
       );
        $retdata = array(
         'groupid'=>element('groupid', $data),
       );
-      $result=axc_get_flow(json_encode($retdata));
+      $result=axc_get_ssidState(json_encode($retdata));
       return $result;
   }
 

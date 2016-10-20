@@ -160,7 +160,7 @@ gulp.task('build:axc', () =>
 );
 
 gulp.task('pub:axc', (callback) => {
-  gutil.log('切换到配置文件：', gutil.colors.magenta(paths.pubAxc));
+  gutil.log('切换发布目标目录：', gutil.colors.magenta(paths.pubAxc));
   runSequence('pub:path', ['build'], 'build:axc', 'pub:copyaxc', callback);
 });
 

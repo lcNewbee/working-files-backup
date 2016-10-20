@@ -12,18 +12,24 @@ class MonitorAps extends CI_Controller {
         'groupid'=>$_GET['groupid'],
         'page'=>$_GET['page'],
         'size'=>$_GET['size']
-
       );
-       $retdata = array(
+      $retdata = array(
         'groupid'=>element('groupid', $data),
         'page'=>element('page', $data),
         'pagesize'=>element('size', $data)
-
       );
-      $result=axc_get_aps(json_encode($retdata));
+
+      // 如果groupid不存在或值为-1则返回默认设备
+      if (element('groupid', $data, -1) === -1) {
+        $result = axc_get_default_aps();
+
+      // 非默认组
+      } else {
+        $result=axc_get_aps(json_encode($retdata));
+      }
+
       return $result;
   }
-
 
 	function onAction($data) {
    	// $result = null;

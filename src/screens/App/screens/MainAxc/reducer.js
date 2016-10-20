@@ -9,59 +9,26 @@ const defaultState = fromJS({
     name: 'topMenu',
   },
 
+  // 弹出框配置，
   modal: {
     isShow: false,
     size: 'lg',
     name: 'group',
   },
 
-  vlan: {
-    selected: {
-      id: '2',
-      remark: '市场部',
-    },
-    list: [
-      {
-        id: '1',
-        remark: '测试',
-      }, {
-        id: '2',
-        remark: '市场部',
-      },
-    ],
-  },
+  // Ap组相关
   group: {
     selected: {
-      id: '1',
+      id: 1,
     },
-    list: [
-      {
-        id: '1',
-        groupName: '测试',
-        remark: '测试',
-        devices: [
-          {
-            name: '23',
-            ip: '32',
-          },
-        ],
-      }, {
-        id: '2',
-        groupName: '研发',
-        remark: '研发',
-        devices: [
-          {
-            name: '23',
-            ip: '32',
-          },
-        ],
-      },
-    ],
+    list: [],
+
+    // 当前管理组内设备列表
+    devices: [],
   },
 
-  devices: {
-
-  },
+  // 未分组设备列表
+  defaultDevices: [],
 });
 
 function togglePopOverState(state, option) {
@@ -95,7 +62,8 @@ function changeModalState(state, option) {
   return state.mergeIn(['modal'], myOption);
 }
 
-function rcApGroup(state, list) {
+function receiveApGroup(state, action) {
+  const list = action.payload.list;
   let selectedItem = state.getIn(['group', 'selected']);
 
   if (selectedItem.isEmpty() && list[0]) {
@@ -128,7 +96,7 @@ function selectedListItem(list, data) {
   if (data.index !== -1) {
     ret = ret.setIn([data.index, 'selected'], data.selected);
   } else {
-    ret = ret.map((item) => item.set('selected', data.selected));
+    ret = ret.map(item => item.set('selected', data.selected));
   }
 
   return ret;
@@ -152,7 +120,7 @@ export default function (state = defaultState, action) {
       return selectManageList(state, 'group', action.id);
 
     case 'RC_DELETE_AP_GROUP':
-      return rcApGroup(state, action.data.list);
+      return receiveApGroup(state, action);
 
     case 'RC_FETCH_GROUP_APS':
       return state.setIn(['devices'], fromJS(action.data.list));

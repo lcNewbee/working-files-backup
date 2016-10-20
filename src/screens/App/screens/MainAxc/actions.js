@@ -38,19 +38,13 @@ export function selectManageGroup(id) {
   };
 }
 
-export function rqFetchApGroup() {
-  return {
-    type: 'RQ_DELETE_AP_GROUP',
-  };
-}
-
+// 获取
 export function rcFetchApGroup(data) {
   return {
     type: 'RC_DELETE_AP_GROUP',
     data,
   };
 }
-
 export function fetchApGroup() {
   return (dispatch) => {
     dispatch(appActions.fetch('goform/group'))
@@ -62,24 +56,28 @@ export function fetchApGroup() {
   };
 }
 
-function rcFetchGroupAps(data) {
+// 获取组内 AP
+function rcFetchGroupAps(json, isDefault) {
   return {
     type: 'RC_FETCH_GROUP_APS',
-    data,
+    payload: json.data,
+    meta: isDefault,
   };
 }
 
 export function fetchGroupAps(id) {
   return (dispatch, getState) => {
     const productState = getState().product;
+    const groupid = id || productState.getIn(['group', 'selected', 'id']);
     const query = {
-      groupid: id || productState.getIn(['group', 'selected', 'id']),
+      groupid,
     };
+    const isDefault = groupid === -1;
 
     dispatch(appActions.fetch('goform/group/aps', query))
       .then((json) => {
-        if (json.state && json.state.code === 2000) {
-          dispatch(rcFetchGroupAps(json.data));
+        if (json) {
+          dispatch(rcFetchGroupAps(json, isDefault));
         }
       });
   };
