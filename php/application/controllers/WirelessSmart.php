@@ -7,8 +7,14 @@ class WirelessSmart extends CI_Controller {
 		$this->load->database();
 		$this->load->helper('array');
 	}
-	function fetch($data){
-      $result=axc_get_wireless_smart(json_encode($data));
+	function fetch(){
+     $data = array(
+        'groupid'=>(int)$_GET['groupid'],
+      );
+       $retdata = array(
+        'groupid'=>element('groupid', $data),
+      );
+      $result=axc_get_wireless_smart(json_encode($retdata));
       return $result;
   }
 
@@ -23,7 +29,6 @@ class WirelessSmart extends CI_Controller {
 
 	public function index() {
 		$result = null;
-
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$data = json_decode(file_get_contents("php://input"), true);
 			$result = $this->onAction($data);

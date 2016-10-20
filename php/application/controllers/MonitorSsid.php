@@ -41,7 +41,6 @@ class MonitorSsid extends CI_Controller {
       echo $result;
 		}
 		elseif($_SERVER['REQUEST_METHOD'] == 'GET') {
-
 			$result = $this->fetch();
       echo $result;
 		}

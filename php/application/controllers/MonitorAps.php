@@ -9,7 +9,7 @@ class MonitorAps extends CI_Controller {
 	}
 	function fetch(){
       $data = array(
-        'groupid'=>$_GET['groupid'],
+        'groupid'=>(int)$_GET['groupid'],
         'page'=>$_GET['page'],
         'size'=>$_GET['size']
       );

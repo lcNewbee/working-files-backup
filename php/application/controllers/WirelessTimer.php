@@ -7,8 +7,14 @@ class WirelessTimer extends CI_Controller {
 		$this->load->database();
 		$this->load->helper('array');
 	}
-	function fetch($data){
-      $result=axc_get_wireless_timer_policy(json_encode($data));
+	function fetch(){
+     $data = array(
+        'groupid'=>(int)$_GET['groupid'],
+      );
+       $retdata = array(
+        'groupid'=>element('groupid', $data),
+      );
+      $result=axc_get_wireless_timer_policy(json_encode($retdata));
       return $result;
   }
 

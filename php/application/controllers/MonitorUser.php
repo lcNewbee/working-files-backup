@@ -9,7 +9,7 @@ class MonitorUser extends CI_Controller {
 	}
 	function fetch(){
       $data = array(
-        'groupid'=>$_GET['groupid'],
+        'groupid'=>(int)$_GET['groupid'],
         'type'=>$_GET['type'],
         'page'=>$_GET['page'],
         'size'=>$_GET['size'],
@@ -22,7 +22,7 @@ class MonitorUser extends CI_Controller {
         'pagesize'=>element('size', $data),
         'search'=>element('search', $data),
       );
-      $result=axc_get_clientList((json_encode($retData)));
+      $result=axc_get_clientList((json_encode($retdata)));
       return $result;
   }
 

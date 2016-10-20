@@ -9,7 +9,7 @@ class MonitorFlow extends CI_Controller {
 	}
 	function fetch(){
      $data = array(
-        'groupid'=>$_GET['groupid'],
+        'groupid'=>(int)$_GET['groupid'],
       );
        $retdata = array(
         'groupid'=>element('groupid', $data),
@@ -33,7 +33,7 @@ class MonitorFlow extends CI_Controller {
     // }
     // return $result;
 	}
-	public function index() {
+	public function index($type) {
 		$result = null;
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$data = json_decode(file_get_contents("php://input"), true);

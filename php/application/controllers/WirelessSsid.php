@@ -8,10 +8,10 @@ class WirelessSsid extends CI_Controller {
 		$this->load->helper('array');
 	}
 	function fetch(){
-      $data=array(
-        'groupid'=>(int)$_GET["groupid"]
+      $retdata = array(
+        'groupid'=>element('groupid', $_GET, 1),
       );
-      $result=axc_get_ssidState(json_encode($data));
+      $result=axc_get_wireless_ssid(json_encode($retdata));
       return $result;
   }
 
@@ -19,11 +19,22 @@ class WirelessSsid extends CI_Controller {
 		$result = null;
 		$actionType = element('action', $data);
     function getCgiParam($oriData) {
-      unset ($oriData['nasId']);
-      unset ($oriData['compulsoryAuth']);
-      unset ($oriData['maxSsidUsers']);
-      unset ($oriData['qosType']);
-      return $oriData;
+      $ret = array(
+        'groupid'=>(int)element('groupid', $oriData),
+        'ssid'=>element('ssid', $oriData),
+        'remark'=>element('remark', $oriData),
+        'vlanid'=>(int)element('vlanid', $oriData,0),
+        'enabled'=>(int)element('enabled', $oriData),
+        'maxBssUsers'=>element('maxBssUsers', $oriData),
+        'loadBalanceType'=>element('loadBalanceType', $oriData),
+        'hiddenSsid'=>element('hiddenSsid', $oriData),
+        'storeForwardPattern'=>element('storeForwardPattern', $oriData),
+        'upstream'=>element('upstream', $oriData),
+        'downstream'=>element('downstream', $oriData),
+        'encryption'=>element('encryption', $oriData),
+        'password'=>element('password', $oriData)
+      );
+      return $ret;
     }
 
 		if ($actionType === 'add') {
