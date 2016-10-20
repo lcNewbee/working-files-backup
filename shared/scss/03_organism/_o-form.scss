@@ -43,9 +43,11 @@ $o-form-content-margin: 1em 0 0;
         display: block;
         float: none;
         text-align: left;
+        line-height: 20px;
       }
       .form-control {
         margin-left: 0;
+        line-height: 20px;
 
         textarea,
         .text {

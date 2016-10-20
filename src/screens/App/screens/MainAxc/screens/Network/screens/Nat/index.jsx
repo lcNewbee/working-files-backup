@@ -3,9 +3,8 @@ import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
-import {
-  ListInfo,
-} from 'shared/components';
+import validator from 'shared/utils/lib/validator';
+import ListInfo from 'shared/components/Template/ListInfo';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/settings';
 import * as screenActions from 'shared/actions/screens';
@@ -27,18 +26,22 @@ const screenOptions = fromJS([
     options: [
       {
         value: '0',
+        disabled: true,
         label: _('Static Address Transform'),
       }, {
         value: 'snat',
         label: _('Source Address Transform'),
       }, {
         value: 'dnat',
+        disabled: true,
         label: _('Target Address Transform'),
       }, {
         value: 'masquerade',
+        disabled: true,
         label: _('Public IP Transparent Transmission'),
       },
     ],
+    defaultValue: 'snat',
     formProps: {
       type: 'select',
       label: _('NAT Rule Type'),
@@ -48,9 +51,21 @@ const screenOptions = fromJS([
   }, {
     id: 'sourceAddress',
     label: _('Source Address'),
+    formProps: {
+      required: true,
+      validator: validator({
+        rules: 'ip',
+      }),
+    },
   }, {
     id: 'conversionAddress',
     label: _('Conversion Address'),
+    formProps: {
+      required: true,
+      validator: validator({
+        rules: 'ip',
+      }),
+    },
   },
 ]);
 

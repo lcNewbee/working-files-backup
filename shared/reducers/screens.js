@@ -79,7 +79,7 @@ function selectedListItem(state, action, curScreenName) {
   let selectedList = state.getIn([curScreenName, 'actionQuery', 'selectedList']) || fromJS([]);
 
   if (data.index !== -1) {
-    list = list.setIn([data.index, '_selected'], data.selected);
+    list = list.setIn([data.index, '__selected__'], data.selected);
     if (data.selected) {
       selectedList = selectedList.push(data.index);
     } else {
@@ -91,10 +91,10 @@ function selectedListItem(state, action, curScreenName) {
       list = list.map((item, index) => {
         selectedList = selectedList.push(index);
 
-        return item.set('_selected', true);
+        return item.set('__selected__', true);
       });
     } else {
-      list = list.map(item => item.set('_selected', false));
+      list = list.map(item => item.set('__selected__', false));
     }
   }
 

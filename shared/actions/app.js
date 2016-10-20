@@ -218,7 +218,6 @@ export function validateAll(formId, func) {
     const validatePromise = new Promise((resolve) => {
       setTimeout(() => {
         const invalid = getState().app.get('invalid');
-
         if (typeof func === 'function') {
           func(invalid);
         }

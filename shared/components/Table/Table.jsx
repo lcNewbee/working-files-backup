@@ -50,7 +50,7 @@ class Table extends Component {
 
     if (myList && myList.size > 0) {
       ret = myList.map((item, i) => {
-        if (item.get('_selected')) {
+        if (item.get('__selected__')) {
           this.selectedList.push(i);
         }
 

@@ -1,14 +1,19 @@
 import React, { Component, PropTypes } from 'react';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import utils from 'shared/utils';
-import {
-  Nav, Icon, Modal, PopOver, Button, SaveButton, Navbar, FormGroup,
-  Table, PropertyPanel,
-} from 'shared/components';
+import { Button, SaveButton } from 'shared/components/Button';
+import validator from 'shared/utils/lib/validator';
+import Nav from 'shared/components/Nav';
+import Modal from 'shared/components/Modal';
+import Icon from 'shared/components/Icon';
+import PopOver from 'shared/components/PopOver';
+import Navbar from 'shared/components/Navbar';
+import { FormGroup } from 'shared/components/Form';
+import Table from 'shared/components/Table';
+import PropertyPanel from 'shared/components/Template/PropertyPanel';
 import * as appActions from 'shared/actions/app';
 import * as propertiesActions from 'shared/actions/properties';
 import * as actions from './actions';
@@ -20,23 +25,32 @@ const propTypes = {
   refreshAll: PropTypes.func,
   changeLoginStatus: PropTypes.func,
   toggleMainPopOver: PropTypes.func,
-  selectVlan: PropTypes.func,
+  validateAll: PropTypes.func,
   selectGroup: PropTypes.func,
   selectManageGroup: PropTypes.func,
   selectAddApGroupDevice: PropTypes.func,
   showMainModal: PropTypes.func,
   togglePropertyPanel: PropTypes.func,
+  updateAddApGroupDevice: PropTypes.func,
   route: PropTypes.object,
   location: PropTypes.object,
   routes: PropTypes.array,
 
   children: PropTypes.node,
+  validateOption: PropTypes.object,
 
   // immutable data
   app: PropTypes.instanceOf(Map),
   product: PropTypes.instanceOf(Map),
   properties: PropTypes.instanceOf(Map),
 };
+
+const validOptions = fromJS({
+  groupname: validator({
+    rules: 'len:[1, 64]',
+  }),
+  groupRemark: validator({}),
+});
 
 const defaultProps = {
   Component: 'button',
@@ -49,20 +63,20 @@ export default class Main extends Component {
 
     this.state = { isShowUserPop: false };
 
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    this.showUserPopOver = this.showUserPopOver.bind(this);
-    this.onRefresh = this.onRefresh.bind(this);
-    this.onLogout = this.onLogout.bind(this);
-    this.onClickNav = this.onClickNav.bind(this);
-    this.onSelectVlan = this.onSelectVlan.bind(this);
-    this.renderPopOverContent = this.renderPopOverContent.bind(this);
-    this.onHiddenPopOver = this.onHiddenPopOver.bind(this);
-    this.onToggleMainPopOver = this.onToggleMainPopOver.bind(this);
-    this.renderBreadcrumb = this.renderBreadcrumb.bind(this);
-    this.onClickTopMenuTitle = this.onClickTopMenuTitle.bind(this);
-
     utils.binds(this, [
       'onSelectManageGroup',
+      'showUserPopOver',
+      'onRefresh',
+      'onLogout',
+      'onClickNav',
+      'onHiddenPopOver',
+      'onToggleMainPopOver',
+      'onClickTopMenuTitle',
+      'onSaveAddGroup',
+      'saveAddGroup',
+
+      'renderPopOverContent',
+      'renderBreadcrumb',
     ]);
 
     document.onkeydown = (e) => {
@@ -73,7 +87,11 @@ export default class Main extends Component {
   }
 
   componentWillMount() {
+    // 获取当前组AP
     this.props.fetchApGroup();
+
+    // 获取未分组设备
+    this.props.fetchGroupAps(-1);
   }
 
   onRefresh(e) {
@@ -97,13 +115,7 @@ export default class Main extends Component {
     });
   }
 
-  onClickNav(path) {
-    if (path === '/main/network/vlan') {
-      // this.onToggleMainPopOver({
-      //   name: 'vlanAsider',
-      // });
-    }
-  }
+  onClickNav(path) {}
 
   onClickTopMenu(path) {
     if (path === '/main/group') {
@@ -130,15 +142,9 @@ export default class Main extends Component {
     }
   }
 
-  onSelectVlan(id, e) {
-    e.preventDefault();
-    this.props.selectVlan(id);
-  }
-
   onSelectGroup(id, e) {
     e.preventDefault();
     this.props.selectGroup(id);
-    this.props.fetchGroupAps();
   }
   onSelectManageGroup(id, e) {
     e.preventDefault();
@@ -147,11 +153,40 @@ export default class Main extends Component {
   }
 
   onSelectGroupAp(data) {
-    console.log(data);
     this.props.selectAddApGroupDevice(data);
   }
 
+  onSaveAddGroup() {
+    this.props.validateAll()
+      .then((msg) => {
+        if (msg.isEmpty()) {
+          this.saveAddGroup();
+        }
+      });
+  }
+  saveAddGroup() {
+    const $$addData = this.props.product.getIn(['group', 'addData']);
+    const $$selectMacList = this.props.product
+      .get('defaultDevices')
+      .filter(item => item.get('__selected__'))
+      .map(item1 => item1.get('mac'));
+    const subData = $$addData.merge({
+      aplist: $$selectMacList.toJS(),
+    });
 
+    this.props.save('/goform/group', subData)
+      .then((json) => {
+        const data = json && json.data;
+
+        if (data && json.state.code === 2000) {
+          this.props.fetchGroupAps(-1);
+        }
+
+        // this.props.showMainModal({
+        //   isShow: false,
+        // });
+      });
+  }
   showUserPopOver() {
     this.onToggleMainPopOver({
       name: 'userOverview',
@@ -159,8 +194,8 @@ export default class Main extends Component {
   }
 
   renderPopOverContent(popOver) {
-    const selectVlanId = this.props.product.getIn(['vlan', 'selected', 'id']);
     const selectGroupId = this.props.product.getIn(['group', 'selected', 'id']);
+    const $$groupList = this.props.product.getIn(['group', 'list']);
 
     switch (popOver.name) {
       case 'userOverview':
@@ -185,71 +220,6 @@ export default class Main extends Component {
             </div>
           </div>
         );
-      case 'vlanAsider':
-        return (
-          <asider className="t-main__asider-left">
-            <h3 className="t-main__asider-header">{_('VLAN列表')}</h3>
-            <ul
-              className="m-menu m-menu--open"
-            >
-              {
-                this.props.product.getIn(['vlan', 'list']).map((item) => {
-                  const curId = item.get('id');
-                  const remark = item.get('remark');
-                  let classNames = 'm-menu__link';
-
-                  if (curId === selectVlanId) {
-                    classNames = `${classNames} active`;
-                  }
-
-                  return (
-                    <li key={curId}>
-                      <a
-                        className={classNames}
-                        onClick={e => this.onSelectVlan(curId, e)}
-                      >
-                        {curId}({remark})
-                      </a>
-                    </li>
-                  );
-                })
-              }
-            </ul>
-            <footer className="t-main__asider-footer">
-              <div className="m-action-bar">
-                <div className="m-action-bar__left">
-                  <Icon
-                    name="cog"
-                    size="2x"
-                    onClick={() => {
-                      this.props.showMainModal({
-                        title: _('Manage VLAN'),
-                        isShow: true,
-                        size: 'lg',
-                        cancelButton: false,
-                        okButton: false,
-                        name: 'vlanManage',
-                      });
-                    }}
-                  />
-                </div>
-                <div className="m-action-bar__right">
-                  <Icon
-                    name="plus"
-                    size="2x"
-                    onClick={() => {
-                      this.props.showMainModal({
-                        title: _('Add VLAN'),
-                        isShow: true,
-                        name: 'vlan',
-                      });
-                    }}
-                  />
-                </div>
-              </div>
-            </footer>
-          </asider>
-        );
 
       case 'groupAsider':
         return (
@@ -259,7 +229,7 @@ export default class Main extends Component {
               className="m-menu m-menu--open"
             >
               {
-                this.props.product.getIn(['group', 'list']).map((item) => {
+                $$groupList.map((item) => {
                   const curId = item.get('id');
                   let classNames = 'm-menu__link';
 
@@ -310,6 +280,7 @@ export default class Main extends Component {
                       this.props.showMainModal({
                         title: _('Add Ap Group'),
                         isShow: true,
+                        size: 'lg',
                         name: 'group',
                       });
                     }}
@@ -327,6 +298,14 @@ export default class Main extends Component {
 
   renderModalContent(option) {
     const selectGroupId = this.props.product.getIn(['group', 'manageSelected', 'id']);
+    const isSaving = this.props.app.get('saving');
+    const { product } = this.props;
+
+     // validate const
+    const {
+      groupname, groupRemark,
+    } = this.props.validateOption;
+
     const tableOption = fromJS([
       {
         id: 'devicename',
@@ -347,24 +326,54 @@ export default class Main extends Component {
     switch (option.name) {
       case 'group':
         return (
-          <div>
-            <FormGroup
-              type="text"
-              label={_('Group Name')}
-              required
-            />
-            <FormGroup
-              type="text"
-              label={_('Remarks')}
-              required
-            />
-            <Table
-              className="table"
-              options={tableOption}
-              selectable
-              list={this.props.product.get('devices')}
-              onRowSelect={data => this.onSelectGroupAp(data)}
-            />
+          <div className="o-form o-form--block">
+            <div className="row">
+              <div className="o-list cols col-4">
+                <FormGroup
+                  type="text"
+                  label={_('Group Name')}
+                  name="groupname"
+                  value={product.getIn(['group', 'addData', 'groupname'])}
+                  onChange={data => this.props.updateAddApGroupDevice({
+                    groupname: data.value,
+                  })}
+                  required
+                  {...groupname}
+                />
+                <FormGroup
+                  type="text"
+                  label={_('Remarks')}
+                  name="groupRemark"
+                  value={product.getIn(['group', 'addData', 'groupRemark'])}
+                  onChange={data => this.props.updateAddApGroupDevice({
+                    groupRemark: data.value,
+                  })}
+                  required
+                  {...groupRemark}
+                />
+                <div
+                  className="form-group"
+                >
+                  <div className="form-control">
+                    <SaveButton
+                      type="button"
+                      loading={isSaving}
+                      onClick={this.onSaveAddGroup}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="o-list cols col-8">
+                <h3>{_('Select Group Devices')}</h3>
+                <Table
+                  className="table"
+                  options={tableOption}
+                  list={product.getIn(['defaultDevices'])}
+                  onRowSelect={data => this.onSelectGroupAp(data)}
+                  selectable
+                />
+              </div>
+            </div>
           </div>
         );
 
@@ -375,7 +384,7 @@ export default class Main extends Component {
               <h3 className="o-list__header">{_('Group List')}</h3>
               <ul className="m-menu m-menu--open">
                 {
-                  this.props.product.getIn(['group', 'list']).map((item) => {
+                  product.getIn(['group', 'list']).map((item) => {
                     const curId = item.get('id');
                     let classNames = 'm-menu__link';
 
@@ -425,7 +434,7 @@ export default class Main extends Component {
                 className="table"
                 options={tableOption}
                 selectable
-                list={this.props.product.get('devices')}
+                list={product.get(['group', 'devices'])}
                 onRowSelect={(data) => {
                   this.props.selectAddApGroupDevice(data);
                 }}
@@ -630,6 +639,7 @@ export default class Main extends Component {
               isShow: false,
             });
           }}
+          noFooter
         >
           {
             this.renderModalContent(modal)
@@ -671,7 +681,8 @@ function mapDispatchToProps(dispatch) {
 
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  validator.mergeProps(validOptions)
 )(Main);
 
 export const reducer = myReducer;

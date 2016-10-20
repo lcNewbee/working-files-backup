@@ -107,7 +107,7 @@ class Row extends Component {
           <td width="15" key="tableRow_select">
             <input
               type="checkbox"
-              checked={!!item.get('_selected')}
+              checked={!!item.get('__selected__')}
               onChange={(e) => {
                 this.onSelect(index, e);
               }}

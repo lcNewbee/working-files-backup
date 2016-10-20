@@ -3,9 +3,8 @@ import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
-import {
-  ListInfo,
-} from 'shared/components';
+import validator from 'shared/utils/lib/validator';
+import ListInfo from 'shared/components/Template/ListInfo';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
@@ -13,12 +12,30 @@ const screenOptions = fromJS([
   {
     id: 'targetAddress',
     text: _('Target Address'),
+    formProps: {
+      required: true,
+      validator: validator({
+        rules: 'ip',
+      }),
+    },
   }, {
     id: 'targetMask',
     text: _('Target Mask'),
+    formProps: {
+      required: true,
+      validator: validator({
+        rules: 'ip',
+      }),
+    },
   }, {
     id: 'nextHopIp',
     text: _('Next Hop IP'),
+    formProps: {
+      required: true,
+      validator: validator({
+        rules: 'ip',
+      }),
+    },
   },
 ]);
 const tableOptions = screenOptions.map(

@@ -41,8 +41,8 @@ export function selectManageGroup(id) {
 // 获取
 export function rcFetchApGroup(data) {
   return {
-    type: 'RC_DELETE_AP_GROUP',
-    data,
+    type: 'RC_FETCH_AP_GROUP',
+    payload: data,
   };
 }
 export function fetchApGroup() {
@@ -86,6 +86,13 @@ export function fetchGroupAps(id) {
 export function selectAddApGroupDevice(data) {
   return {
     type: 'SELECT_ADD_AP_GROUP_DEVICE',
-    data,
+    payload: data,
+  };
+}
+
+export function updateAddApGroupDevice(data) {
+  return {
+    type: 'UPDATE_ADD_AP_GROUP_DEVICE',
+    payload: data,
   };
 }

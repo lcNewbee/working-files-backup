@@ -3,9 +3,7 @@ import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
-import {
-  ListInfo,
-} from 'shared/components';
+import ListInfo from 'shared/components/Template/ListInfo';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 

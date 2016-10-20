@@ -83,14 +83,15 @@ gulp.task('clean:pubac', () => {
 
 gulp.task('pub:path', () => {
   const publicPathReg = /publicPath: '(.*)'/g;
-  let distPath = paths.pubWebPath;
+  let pubWebPath = paths.pubWebPath;
 
   if (argv.p) {
-    distPath = argv.p;
+    pubWebPath = argv.p;
   }
-  gutil.log('切换web发布根目录：', gutil.colors.magenta(distPath));
+
+  gutil.log('切换web发布根目录：', gutil.colors.magenta(pubWebPath));
   return gulp.src(paths.pubWebpack)
-    .pipe($.replace(publicPathReg, `publicPath: '${distPath}'`))
+    .pipe($.replace(publicPathReg, `publicPath: '${pubWebPath}'`))
     .pipe(gulp.dest('./'));
 });
 
@@ -101,12 +102,21 @@ gulp.task('pub:copy', () => {
     distPath = argv.d;
   }
 
+  gutil.log('切换 AC 发布目标目录：', gutil.colors.magenta(distPath));
+
   return gulp.src(`${paths.build}/**/*`)
     .pipe(gulp.dest(distPath));
 });
 
 // 发布 Access Manager 正式版
 gulp.task('pub:ac', (callback) => {
+  let distPath = paths.pubAc;
+
+  if (argv.d) {
+    distPath = argv.d;
+  }
+
+  gutil.log('切换发布目标目录：', gutil.colors.magenta(distPath));
   runSequence('pub:path', ['clean:pubac', 'build'], 'pub:copy', callback);
 });
 
@@ -128,6 +138,13 @@ gulp.task('pub:copyap', () => {
     .pipe(gulp.dest(distPath));
 });
 gulp.task('pub:ap', (callback) => {
+  let distPath = paths.pubAp;
+
+  if (argv.d) {
+    distPath = argv.d;
+  }
+
+  gutil.log('切换 AP 发布目标目录：', gutil.colors.magenta(distPath));
   runSequence('pub:path', ['clean:pubap', 'build'], 'pub:copyap', callback);
 });
 
@@ -160,7 +177,13 @@ gulp.task('build:axc', () =>
 );
 
 gulp.task('pub:axc', (callback) => {
-  gutil.log('切换发布目标目录：', gutil.colors.magenta(paths.pubAxc));
+  let distPath = paths.pubAxc;
+
+  if (argv.d) {
+    distPath = argv.d;
+  }
+
+  gutil.log('切换 AXC 发布目标目录：', gutil.colors.magenta(distPath));
   runSequence('pub:path', ['build'], 'build:axc', 'pub:copyaxc', callback);
 });
 

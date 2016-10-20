@@ -2,11 +2,14 @@ import React, { PropTypes } from 'react';
 import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { bindActionCreators } from 'redux';
-import {
-  Button, ListInfo, Icon, FormContainer, Switchs, Table, Modal,
-} from 'shared/components';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
+import Button from 'shared/components/Button/Button';
+import Icon from 'shared/components/Icon';
+import FormContainer from 'shared/components/Organism/FormContainer';
+import Table from 'shared/components/Table';
+import Modal from 'shared/components/Modal';
+import ListInfo from 'shared/components/Template/ListInfo';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 import * as propertiesActions from 'shared/actions/properties';

@@ -18,8 +18,10 @@ const defaultState = fromJS({
 
   // Ap组相关
   group: {
-    selected: {
-      id: 1,
+    selected: {},
+    addData: {
+      groupname: '',
+      groupRemark: '',
     },
     list: [],
 
@@ -74,6 +76,20 @@ function receiveApGroup(state, action) {
     .setIn(['group', 'list'], fromJS(list));
 }
 
+function receiveDevices(state, action) {
+  const rcList = action.payload.list || [];
+  let ret = state;
+
+  // 如果是默认ap
+  if (action.meta) {
+    ret = ret.set('defaultDevices', fromJS(rcList));
+  } else {
+    ret = ret.setIn(['group', 'devices'], fromJS(rcList));
+  }
+
+  return ret;
+}
+
 function selectList(state, name, id) {
   const selectedItem = state.getIn([name, 'list'])
       .find(item => item.get('id') === id) ||
@@ -90,16 +106,16 @@ function selectManageList(state, name, id) {
   return state.setIn([name, 'manageSelected'], selectedItem);
 }
 
-function selectedListItem(list, data) {
-  let ret = list;
+function selectAddGroupDevices(state, action) {
+  const data = action.payload;
+  let defaultDevices = state.get('defaultDevices');
 
   if (data.index !== -1) {
-    ret = ret.setIn([data.index, 'selected'], data.selected);
+    defaultDevices = defaultDevices.setIn([data.index, '__selected__'], data.selected);
   } else {
-    ret = ret.map(item => item.set('selected', data.selected));
+    defaultDevices = defaultDevices.map(item => item.set('__selected__', data.selected));
   }
-
-  return ret;
+  return state.set('defaultDevices', defaultDevices);
 }
 
 export default function (state = defaultState, action) {
@@ -119,14 +135,17 @@ export default function (state = defaultState, action) {
     case 'SELECT_MANAGE_GROUP':
       return selectManageList(state, 'group', action.id);
 
-    case 'RC_DELETE_AP_GROUP':
+    case 'RC_FETCH_AP_GROUP':
       return receiveApGroup(state, action);
 
     case 'RC_FETCH_GROUP_APS':
-      return state.setIn(['devices'], fromJS(action.data.list));
+      return receiveDevices(state, action);
 
     case 'SELECT_ADD_AP_GROUP_DEVICE':
-      return state.set('devices', selectedListItem(state.get('devices'), action.data));
+      return selectAddGroupDevices(state, action);
+
+    case 'UPDATE_ADD_AP_GROUP_DEVICE':
+      return state.mergeIn(['group', 'addData'], action.payload);
 
     default:
   }
