@@ -323,6 +323,8 @@ export default class Main extends Component {
       },
     ]);
 
+    //console.log(product.get(['group', 'devices']).toJS())
+
     switch (option.name) {
       case 'group':
         return (
@@ -434,7 +436,7 @@ export default class Main extends Component {
                 className="table"
                 options={tableOption}
                 selectable
-                list={product.get(['group', 'devices'])}
+                list={product.getIn(['group', 'devices'])}
                 onRowSelect={(data) => {
                   this.props.selectAddApGroupDevice(data);
                 }}

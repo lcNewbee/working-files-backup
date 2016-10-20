@@ -8,15 +8,10 @@ class MonitorAps extends CI_Controller {
 		$this->load->helper('array');
 	}
 	function fetch(){
-      $data = array(
-        'groupid'=>(int)$_GET['groupid'],
-        'page'=>$_GET['page'],
-        'size'=>$_GET['size']
-      );
       $retdata = array(
-        'groupid'=>element('groupid', $data),
-        'page'=>element('page', $data),
-        'pagesize'=>element('size', $data)
+        'groupid'=>element('groupid', $_GET),
+        'page'=>element('page', $_GET, 1),
+        'pagesize'=>element('size', $_GET, 20)
       );
 
       // 如果groupid不存在或值为-1则返回默认设备
