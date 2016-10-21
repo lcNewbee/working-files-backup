@@ -74,6 +74,11 @@ export function fetchGroupAps(id) {
     };
     const isDefault = groupid === -1;
 
+    // 如果没有 groupid 不请求数据
+    if (!groupid) {
+      return null;
+    }
+
     dispatch(appActions.fetch('goform/group/aps', query))
       .then((json) => {
         if (json) {

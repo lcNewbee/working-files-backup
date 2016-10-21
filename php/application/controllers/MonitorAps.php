@@ -8,22 +8,23 @@ class MonitorAps extends CI_Controller {
 		$this->load->helper('array');
 	}
 	function fetch(){
-      $retdata = array(
-        'groupid'=>element('groupid', $_GET),
-        'page'=>element('page', $_GET, 1),
-        'pagesize'=>element('size', $_GET, 20)
-      );
+    $groupid = (int)element('groupid', $_GET, -1);
+    $rqdata = array(
+      'groupid'=>$groupid,
+      'page'=>(int)element('page', $_GET, 1),
+      'pagesize'=>(int)element('size', $_GET, 20)
+    );
 
-      // 如果groupid不存在或值为-1则返回默认设备
-      if (element('groupid', $data, -1) === -1) {
-        $result = axc_get_default_aps();
+    // 如果groupid不存在或值为-1则返回默认设备
+    if ($groupid === -1) {
+      $result = axc_get_default_aps();
 
-      // 非默认组
-      } else {
-        $result=axc_get_aps(json_encode($retdata));
-      }
+    // 非默认组
+    } else {
+      $result=axc_get_aps(json_encode($rqdata));
+    }
 
-      return $result;
+    return $result;
   }
 
 	function onAction($data) {
@@ -50,7 +51,7 @@ class MonitorAps extends CI_Controller {
 		elseif($_SERVER['REQUEST_METHOD'] == 'GET') {
 
 			$result = $this->fetch();
-      echo json_encode($result, true);
+      echo $result;
 		}
 	}
 }

@@ -9,6 +9,7 @@ import Icon from 'shared/components/Icon';
 import FormContainer from 'shared/components/Organism/FormContainer';
 import Table from 'shared/components/Table';
 import Modal from 'shared/components/Modal';
+import Switchs from 'shared/components/Switchs';
 import ListInfo from 'shared/components/Template/ListInfo';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
