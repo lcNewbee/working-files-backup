@@ -194,6 +194,7 @@ export default class View extends React.Component {
                 onChange={data => this.props.updateCurEditListItem({
                   customDate: data.value,
                 })}
+                withPortal
               />
             ) : null
           }

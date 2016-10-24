@@ -46,7 +46,7 @@ class Group extends CI_Controller {
       $retData = array(
         'groupname'=>element('groupname', $oriData),
         'remark'=>element('remark', $oriData),
-        'groupid'=>element('id', $oriData)
+        'groupid'=>(int)element('id', $oriData, -1)
       );
 
       return $retData;

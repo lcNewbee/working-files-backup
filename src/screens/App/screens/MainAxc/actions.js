@@ -46,14 +46,12 @@ export function rcFetchApGroup(data) {
   };
 }
 export function fetchApGroup() {
-  return (dispatch) => {
-    dispatch(appActions.fetch('goform/group'))
-      .then((json) => {
-        if (json.state && json.state.code === 2000) {
-          dispatch(rcFetchApGroup(json.data));
-        }
-      });
-  };
+  return dispatch => dispatch(appActions.fetch('goform/group'))
+    .then((json) => {
+      if (json.state && json.state.code === 2000) {
+        dispatch(rcFetchApGroup(json.data));
+      }
+    });
 }
 
 // 获取组内 AP
@@ -75,11 +73,11 @@ export function fetchGroupAps(id) {
     const isDefault = groupid === -1;
 
     // 如果没有 groupid 不请求数据
-    if (!groupid) {
+    if (!groupid && groupid !== 0) {
       return null;
     }
 
-    dispatch(appActions.fetch('goform/group/aps', query))
+    return dispatch(appActions.fetch('goform/group/aps', query))
       .then((json) => {
         if (json) {
           dispatch(rcFetchGroupAps(json, isDefault));

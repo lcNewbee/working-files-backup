@@ -4,9 +4,9 @@ import { fromJS } from 'immutable';
 import utils from 'shared/utils';
 
 // components
-import {
-  PureComponent, ListInfo, Button, Switchs,
-} from 'shared/components';
+import PureComponent from 'shared/components/Base/PureComponent';
+import ListInfo from 'shared/components/Template/ListInfo';
+import Button from 'shared/components/Button/Button';
 
 // custom
 import * as screenActions from 'shared/actions/screens';
@@ -106,19 +106,6 @@ const msg = {
   perPage: _('Items per page: '),
 };
 
-const selectOptions = [
-  { value: 20, label: `${msg.perPage}20` },
-  { value: 50, label: `${msg.perPage}50` },
-  { value: 100, label: `${msg.perPage}100` },
-];
-
-const typeArr = [
-  _('ALL'),
-  `${msg.wireless}(5G)`,
-  `${msg.wireless}(2.4G)`,
-  _('WIRED'),
-];
-
 const styles = {
   actionButton: {
     minWidth: '90px',
@@ -126,7 +113,7 @@ const styles = {
 };
 
 // 原生的 react 页面
-class Clients extends PureComponent {
+export default class Clients extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -140,14 +127,10 @@ class Clients extends PureComponent {
   }
 
   render() {
-    const { store } = this.props;
-    const curScreenId = store.get('curScreenId');
-    const query = store.getIn([curScreenId, 'data', 'query']);
     // 添加操作项
     const options = clientsTableOptions.setIn([-1, 'transform'],
       (val, item) => {
         const mac = item.get('mac');
-        const status = item.get('status');
         const isLock = item.get('islock') === 'lock';
 
         return (
@@ -171,7 +154,6 @@ class Clients extends PureComponent {
                 />
               )
             }
-
             <Button
               icon="repeat"
               size="sm"
@@ -184,12 +166,6 @@ class Clients extends PureComponent {
       }
     );
     const tableOptions = options;
-    const typeSwitch = (
-      <Switchs
-        value={query && query.type}
-        options={typeArr}
-      />
-    );
 
     return (
       <ListInfo

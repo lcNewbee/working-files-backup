@@ -1,11 +1,10 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { fromJS, Map } from 'immutable';
+import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import utils from 'shared/utils';
-import {
-  ListInfo, Button,
-} from 'shared/components';
+import Button from 'shared/components/Button/Button';
+import ListInfo from 'shared/components/Template/ListInfo';
 
 // custom
 import * as screenActions from 'shared/actions/screens';

@@ -11,7 +11,7 @@
 import fs from 'fs';
 import cheerio from 'cheerio';
 
-const styleLink = '  <link rel="stylesheet" href="styles/comlanos.css">\n';
+const styleLink = '  <link rel="stylesheet" href="styles/axilspot.css">\n';
 
 fs.readFile('src/index.html', 'utf8', (err, markup) => {
   if (err) {

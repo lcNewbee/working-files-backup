@@ -63,58 +63,6 @@ function getTerminalTypeOption(serverData) {
 
   return ret;
 }
-function getClientsStatusOption(serverData) {
-  const ret = {
-    tooltip: {
-      trigger: 'item',
-      formatter: '{a} <br/>{b}: {c} ({d}%)',
-    },
-    legend: {
-      orient: 'vertical',
-      x: 'left',
-      y: 'bottom',
-      data: [_('Offline'), _('Online')],
-    },
-    title: {
-      text: _('Clients Status'),
-      x: 'center',
-    },
-    series: [
-      {
-        name: _('Status'),
-        type: 'pie',
-        radius: ['30%', '60%'],
-        avoidLabelOverlap: false,
-        label: {
-          normal: {
-            show: false,
-            position: 'center',
-          },
-          emphasis: {
-            show: true,
-            textStyle: {
-              fontSize: '12',
-              fontWeight: 'bold',
-            },
-          },
-        },
-        labelLine: {
-          normal: {
-            show: false,
-          },
-        },
-
-      },
-    ],
-  };
-
-  ret.series[0].data = [
-    { value: serverData.get('cpuUsed'), name: _('Offline') },
-    { value: serverData.get('cpuTotal') - serverData.get('cpuUsed'), name: _('Online') },
-  ];
-
-  return ret;
-}
 function getApStatusOption(serverData) {
   const ret = {
     tooltip: {
@@ -203,9 +151,9 @@ function getFlowOption(serverData) {
   };
 
   if (List.isList(dataList)) {
-    dataList = dataList.sort((prev, next) => {
-      return prev.get('value') < next.get('value');
-    });
+    dataList = dataList.sort(
+      (prev, next) => prev.get('value') < next.get('value')
+    );
     option.xAxis[0].data = dataList.map(item => item.get('name')).toJS();
     option.series[0].data = dataList.map(item => item.get('value')).toJS();
   }
@@ -248,9 +196,9 @@ function getSafeAlarmOption(serverData) {
   };
 
   if (List.isList(dataList)) {
-    dataList = dataList.sort((prev, next) => {
-      return prev.get('value') < next.get('value');
-    });
+    dataList = dataList.sort(
+      (prev, next) => prev.get('value') < next.get('value')
+    );
     option.xAxis[0].data = dataList.map(item => item.get('name')).toJS();
     option.series[0].data = dataList.map(item => item.get('value')).toJS();
   }

@@ -1,10 +1,8 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { fromJS, Map } from 'immutable';
+import { fromJS } from 'immutable';
 import utils from 'shared/utils';
-import {
-  ListInfo,
-} from 'shared/components';
+import ListInfo from 'shared/components/Template/ListInfo';
 
 // custom
 import * as screenActions from 'shared/actions/screens';
@@ -33,35 +31,17 @@ const flowTableOptions = fromJS([
   },
 ]);
 
-
-const propTypes = {
-  groupid: PropTypes.any,
-};
+const propTypes = {};
 const defaultProps = {};
 
-export default class View extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.onAction = this.onAction.bind(this);
-  }
-
-  onAction() {
-
-  }
-
-  render() {
-    return (
-      <ListInfo
-        {...this.props}
-        tableOptions={flowTableOptions}
-        defaultQueryData={{
-          grouid: this.props.groupid,
-        }}
-        noTitle
-      />
-    );
-  }
+export default function View(props) {
+  return (
+    <ListInfo
+      {...props}
+      tableOptions={flowTableOptions}
+      noTitle
+    />
+  );
 }
 
 View.propTypes = propTypes;

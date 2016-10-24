@@ -5,8 +5,11 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import {
-  ListInfo, FormGroup, Modal, SaveButton, FormInput, Switchs,
-} from 'shared/components';
+  FormGroup, FormInput,
+} from 'shared/components/Form';
+import Modal from 'shared/components/Modal';
+import ListInfo from 'shared/components/Template/ListInfo';
+import SaveButton from 'shared/components/Button/SaveButton';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 

@@ -28,6 +28,7 @@ const propTypes = {
   display: PropTypes.string,
   role: PropTypes.string,
   className: PropTypes.string,
+  style: PropTypes.object,
   inputStyle: PropTypes.object,
   children: PropTypes.node,
   'data-label': PropTypes.string,
@@ -116,7 +117,7 @@ class FormGroup extends React.Component {
   render() {
     const {
       help, errMsg, required, children, role, id, label,
-      className, display,
+      className, display, style,
     } = this.props;
     const { check, checkClear } = this;
     let groupClassName = 'form-group';
@@ -140,6 +141,7 @@ class FormGroup extends React.Component {
     return (
       <div
         className={groupClassName}
+        style={style}
         ref={ref => (this.myRef = ref)}
       >
         {

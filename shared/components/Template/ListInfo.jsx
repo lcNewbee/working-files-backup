@@ -247,8 +247,8 @@ class ListInfo extends React.Component {
   }
   onRemoveItem(i) {
     const store = this.props.store;
-    const myListId = store.get('curScreenId');
-    const list = store.getIn([myListId, 'data', 'list']);
+    const myListScreenId = store.get('curScreenId');
+    const list = store.getIn([myListScreenId, 'data', 'list']);
     const listKey = this.props.listKey;
     let selectedList = [];
 
@@ -336,13 +336,13 @@ class ListInfo extends React.Component {
       queryFormOptions,
       actionBarChildren,
     } = this.props;
-    const myListId = store.get('curScreenId');
-    const page = store.getIn([myListId, 'data', 'page']);
-    const list = store.getIn([myListId, 'data', 'list']);
-    const curSettings = store.getIn([myListId, 'curSettings']);
-    const editData = store.getIn([myListId, 'curListItem']);
-    const query = store.getIn([myListId, 'query']);
-    const actionQuery = store.getIn([myListId, 'actionQuery']);
+    const myListScreenId = store.get('curScreenId');
+    const page = store.getIn([myListScreenId, 'data', 'page']);
+    const list = store.getIn([myListScreenId, 'data', 'list']);
+    const curSettings = store.getIn([myListScreenId, 'curSettings']);
+    const editData = store.getIn([myListScreenId, 'curListItem']);
+    const query = store.getIn([myListScreenId, 'query']);
+    const actionQuery = store.getIn([myListScreenId, 'actionQuery']);
     const actionType = actionQuery.get('action');
     const saveUrl = route.saveUrl || route.formUrl;
     const fetchUrl = route.fetchUrl || route.formUrl;
@@ -351,7 +351,7 @@ class ListInfo extends React.Component {
     let isEditModelshow = false;
 
     // 数据未初始化不渲染
-    if (myListId === 'base') {
+    if (myListScreenId === 'base') {
       return null;
     }
 

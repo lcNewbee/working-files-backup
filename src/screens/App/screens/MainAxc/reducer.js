@@ -19,6 +19,7 @@ const defaultState = fromJS({
   // Ap组相关
   group: {
     selected: {},
+    manageSelected: {},
     addData: {
       groupname: '',
       groupRemark: '',
@@ -67,12 +68,18 @@ function changeModalState(state, option) {
 function receiveApGroup(state, action) {
   const list = action.payload.list;
   let selectedItem = state.getIn(['group', 'selected']);
+  let manageSelectedItem = state.getIn(['group', 'manageSelected']);
 
   if (selectedItem.isEmpty() && list[0]) {
     selectedItem = fromJS(list[0]);
   }
 
+  if (manageSelectedItem.isEmpty() && list[0]) {
+    manageSelectedItem = fromJS(list[0]);
+  }
+
   return state.setIn(['group', 'selected'], selectedItem)
+    .setIn(['group', 'manageSelected'], manageSelectedItem)
     .setIn(['group', 'list'], fromJS(list));
 }
 

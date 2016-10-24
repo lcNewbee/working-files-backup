@@ -10,6 +10,24 @@
     padding-left: 8px;
   }
 }
+.SingleDatePicker {
+  .DateInput {
+    text-align: left;
+  }
+}
+.DateInput--with-caret::before,
+.DateInput--with-caret::after {
+  top: 43px;
+  z-index: 3001;
+}
+.SingleDatePicker__tether--show,
+.DateRangePicker__tether--show {
+  z-index: 3000;
+}
+.DateRangePicker__picker--portal,
+.SingleDatePicker__picker--portal {
+  z-index: 2999;
+}
 .en {
   .DateInput {
     font-family: Helvetica Neue,Helvetica,Arial,sans-serif;

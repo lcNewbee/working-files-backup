@@ -4,8 +4,11 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import {
-  ListInfo, Button, Modal, FormGroup, FormInput,
-} from 'shared/components';
+  FormGroup, FormInput,
+} from 'shared/components/Form';
+import Modal from 'shared/components/Modal';
+import ListInfo from 'shared/components/Template/ListInfo';
+import { Button, SaveButton } from 'shared/components/Button';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
@@ -27,6 +30,7 @@ const blcklistTableOptions = fromJS([
 
 const propTypes = {
   store: PropTypes.instanceOf(Map),
+  app: PropTypes.instanceOf(Map),
 
   route: PropTypes.object,
   closeListItemModal: PropTypes.func,
@@ -39,18 +43,6 @@ export default class View extends React.Component {
     super(props);
 
     this.onAction = this.onAction.bind(this);
-  }
-  componentWillMount() {
-    this.props.changeScreenActionQuery({
-      groupid: this.props.groupid,
-    });
-  }
-  componentWillReceiveProps(nextProps) {
-    if (this.props.groupid !== nextProps.groupid) {
-      this.props.changeScreenActionQuery({
-        groupid: nextProps.groupid,
-      });
-    }
   }
   onAction(mac, action) {
     const query = {
@@ -67,7 +59,7 @@ export default class View extends React.Component {
   }
 
   render() {
-    const { route, store } = this.props;
+    const { app, route, store } = this.props;
     const tableOptions = blcklistTableOptions;
     const editData = store.getIn([route.id, 'curListItem']) || Map({});
     const actionBarChildren = (
@@ -75,6 +67,9 @@ export default class View extends React.Component {
         key="blacklistD"
         display="inline"
         label={_('Dynamic Blacklists Release Time')}
+        style={{
+          marginBottom: '0',
+        }}
       >
         <FormInput
           type="text"
@@ -98,22 +93,34 @@ export default class View extends React.Component {
         tableOptions={tableOptions}
         listKey="allKeys"
         actionable
-        editAbled={false}
+        editable={false}
       >
         <Modal
           isShow={isModelShow}
           title={actionQuery.get('myTitle')}
           onOk={() => this.props.closeListItemModal(route.id)}
           onClose={() => this.props.closeListItemModal(route.id)}
+          noFooter
         >
           <FormGroup
             type="text"
             label={_('MAC Address')}
+            value={editData.get('mac')}
           />
           <FormGroup
             type="text"
             label={_('Block Reason')}
+            value={editData.get('reason')}
           />
+          <div className="form-group form-group--save">
+            <div className="form-control">
+              <SaveButton
+                type="button"
+                loading={app.get('saving')}
+                onClick={this.onSave}
+              />
+            </div>
+          </div>
         </Modal>
       </ListInfo>
     );

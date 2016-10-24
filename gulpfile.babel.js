@@ -32,6 +32,13 @@ require('./tools/gulp/bump');
 require('./tools/gulp/config');
 require('./tools/gulp/test');
 
+// 任务开始时全局提示信息
+let pubWebPath = paths.pubWebPath;
+if (argv.p) {
+  pubWebPath = argv.p;
+}
+gutil.log(gutil.colors.red('切换web发布根目录：'), gutil.colors.magenta(pubWebPath));
+
 // 删除
 gulp.task('clean', () => del([paths.build, paths.release]));
 
@@ -83,13 +90,6 @@ gulp.task('clean:pubac', () => {
 
 gulp.task('pub:path', () => {
   const publicPathReg = /publicPath: '(.*)'/g;
-  let pubWebPath = paths.pubWebPath;
-
-  if (argv.p) {
-    pubWebPath = argv.p;
-  }
-
-  gutil.log('切换web发布根目录：', gutil.colors.magenta(pubWebPath));
   return gulp.src(paths.pubWebpack)
     .pipe($.replace(publicPathReg, `publicPath: '${pubWebPath}'`))
     .pipe(gulp.dest('./'));

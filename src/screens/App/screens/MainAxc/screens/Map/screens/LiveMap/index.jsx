@@ -446,6 +446,11 @@ export default class View extends React.Component {
       mapClassName = 'o-map o-map--open';
     }
 
+    // 数据未初始化不渲染
+    if (myScreenId === 'base') {
+      return null;
+    }
+
     return (
       <ListInfo
         {...this.props}
