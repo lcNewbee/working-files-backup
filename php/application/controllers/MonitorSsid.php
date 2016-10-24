@@ -8,11 +8,8 @@ class MonitorSsid extends CI_Controller {
 		$this->load->helper('array');
 	}
 	function fetch(){
-     $data = array(
-        'groupid'=>(int)$_GET['groupid'],
-      );
        $retdata = array(
-        'groupid'=>element('groupid', $data),
+        'groupid'=>(int)element('groupid', $_GET,1),
       );
       $result=axc_get_ssidState(json_encode($retdata));
       return $result;

@@ -25,6 +25,23 @@ class MonitorAps extends CI_Controller {
     }
 
     return $result;
+      $retdata = array(
+        'groupid'=>(int)element('groupid', $_GET),
+        'page'=>element('page', $_GET),
+        'pagesize'=>element('size', $_GET)
+      );
+
+      // 如果groupid不存在或值为-1则返回默认设备
+      if ((int)element('groupid', $data, -1) === -1) {
+        $result = axc_get_default_aps();
+
+      // 非默认组
+      } else {
+        $result=axc_get_aps(json_encode($retdata));
+      }
+
+      return $result;
+>>>>>>> AXC: PHP monitor更改
   }
 
 	function onAction($data) {
