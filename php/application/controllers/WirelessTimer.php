@@ -11,7 +11,7 @@ class WirelessTimer extends CI_Controller {
          $retdata = array(
         'groupid'=>(int)element('groupid', $_GET,-1),
       );
-      if(groupid===-1){
+      if($retdata['groupid']===-1){
         $result=axc_get_wireless_timer_policy(json_encode($retdata));
       }
       else{
@@ -46,7 +46,7 @@ class WirelessTimer extends CI_Controller {
 		else if($_SERVER['REQUEST_METHOD'] == 'GET') {
 
 			$result = $this->fetch();
-      echo json_encode($result);
+      echo $result;
 		}
 	}
 }

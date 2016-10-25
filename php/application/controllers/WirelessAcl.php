@@ -10,7 +10,7 @@ class WirelessAcl extends CI_Controller {
      $retdata = array(
         'groupid'=>(int)element('groupid', $_GET,-1),
       );
-      if(groupid===-1){
+      if($retdata['groupid']===-1){
         $result=axc_get_default_wireless__acl();
       }
       else{
@@ -49,7 +49,7 @@ class WirelessAcl extends CI_Controller {
 		else if($_SERVER['REQUEST_METHOD'] == 'GET') {
 
 			$result = $this->fetch();
-      echo json_encode($result);
+      echo $result;
 		}
 	}
 }

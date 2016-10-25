@@ -9,13 +9,13 @@ class MonitorUser extends CI_Controller {
 	}
 	function fetch(){
        $retdata = array(
-        'groupid'=>element('groupid', $_GET,-1),
-        'type'=>element('type', $_GET,1),
-        'page'=>element('page', $_GET,1),
-        'pagesize'=>element('size', $_GET,30),
+        'groupid'=>(int)element('groupid', $_GET,-1),
+        'type'=>(int)element('type', $_GET,1),
+        'page'=>(int)element('page', $_GET,1),
+        'pagesize'=>(int)element('size', $_GET,30),
         'search'=>element('search', $_GET,222),
       );
-      if ($groupid === -1){
+      if ($retdata['groupid']=== -1){
          $result=axc_get_default_clientList();
       }
       else{

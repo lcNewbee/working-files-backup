@@ -12,7 +12,7 @@ class MonitorFlow extends CI_Controller {
 		$retdata = array(
 		        'groupid'=>(int)element('groupid', $_GET,-1),
 		      );
-		if(group===-1){
+		if($retdata['groupid']===-1){
 			$result=axc_get_default_flow(json_encode($retdata));
 		}
 		else{
@@ -43,12 +43,11 @@ class MonitorFlow extends CI_Controller {
       $result = null;
 			if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$data = json_decode(file_get_contents("php://input"), true);
-				$result = $this->onAction1($data);
+				$result = $this->onAction($data);
 				echo $result;
 			}
 			elseif($_SERVER['REQUEST_METHOD'] == 'GET') {
-
-				$result = $this->fetch1();
+				$result = $this->fetch();
 				echo $result;
 			}
   }
@@ -56,12 +55,12 @@ class MonitorFlow extends CI_Controller {
           $result = null;
 			if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$data = json_decode(file_get_contents("php://input"), true);
-				$result = $this->onAction1($data);
+				$result = $this->onAction($data);
 				echo $result;
 			}
 			elseif($_SERVER['REQUEST_METHOD'] == 'GET') {
 
-				$result = $this->fetch1();
+				$result = $this->fetch();
 				echo $result;
 			}
   }

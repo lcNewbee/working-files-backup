@@ -12,7 +12,7 @@ class MonitorSsid extends CI_Controller {
         'groupid'=>(int)element('groupid', $_GET,-1),
       );
     // 如果groupid不存在或值为-1则返回默认设备
-    if ($groupid === -1) {
+    if ($retdata['groupid'] === -1) {
       $result = axc_get_default_ssidState(json_encode());
     // 非默认组
     } else {
