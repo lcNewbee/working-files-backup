@@ -31,9 +31,10 @@ const propTypes = {
   selectAddApGroupDevice: PropTypes.func,
   showMainModal: PropTypes.func,
   togglePropertyPanel: PropTypes.func,
-  updateAddApGroupDevice: PropTypes.func,
-  updateEditApGroupDevice: PropTypes.func,
+  updateAddApGroup: PropTypes.func,
+  updateEditApGroup: PropTypes.func,
   updateGroupMoveDevice: PropTypes.func,
+  updateGroupAddDevice: PropTypes.func,
   selectManageGroupAp: PropTypes.func,
   route: PropTypes.object,
   location: PropTypes.object,
@@ -56,6 +57,9 @@ const validOptions = fromJS({
     rules: 'len:[1, 64]',
   }),
   remark: validator({}),
+  apmac: validator({
+    rules: 'mac',
+  }),
 });
 
 const defaultProps = {
@@ -80,6 +84,7 @@ export default class Main extends Component {
       'onClickTopMenuTitle',
       'onSaveGroup',
       'onSaveMoveGroup',
+      'onRemoveGroupAps',
       'saveGroup',
       'onRemoveGroup',
       'removeGroup',
@@ -177,19 +182,6 @@ export default class Main extends Component {
         }
       });
   }
-  onRemoveGroup() {
-    const manageSelected = this.props.product.getIn(['group', 'manageSelected']);
-    const msgText = _('Are you sure delete group: %s ?', manageSelected.get('groupname'));
-
-    this.props.createModal({
-      id: 'settings',
-      role: 'comfirm',
-      text: msgText,
-      apply: () => {
-        this.removeGroup(manageSelected.get('id'), 'upgrade');
-      },
-    });
-  }
   onSaveMoveGroup() {
     const { product } = this.props;
     const $$moveData = this.props.product.getIn(['group', 'apMoveData']);
@@ -213,29 +205,69 @@ export default class Main extends Component {
         if (data && json.state.code === 2000) {
           this.props.fetchGroupAps(groupId);
         }
-
+        this.props.fetchApGroup();
         this.props.showMainModal({
           isShow: false,
         });
       });
   }
+  onRemoveGroup() {
+    const manageSelected = this.props.product.getIn(['group', 'manageSelected']);
+    const msgText = _('Are you sure delete group: %s ?', manageSelected.get('groupname'));
+
+    this.props.createModal({
+      id: 'settings',
+      role: 'comfirm',
+      text: msgText,
+      apply: () => {
+        this.removeGroup(manageSelected.get('id'), 'upgrade');
+      },
+    });
+  }
+  onRemoveGroupAps() {
+    const $$selectMacList = this.props.product
+      .getIn(['group', 'devices'])
+      .filter(item => item.get('__selected__'))
+      .map(item1 => item1.get('mac')) || fromJS([]);
+    const selectedStr = $$selectMacList.join(', ');
+    const groupid = this.props.product
+      .getIn(['group', 'manageSelected', 'id']);
+    const msgText = _('Are you sure delete selected aps: %s ?', selectedStr);
+
+    this.props.createModal({
+      id: 'settings',
+      role: 'comfirm',
+      text: msgText,
+      apply: () => {
+        this.props.save('/goform/group', {
+          action: 'deleteGroupAps',
+          aplist: $$selectMacList.toJS(),
+          groupid,
+        }).then(() => {
+          this.props.fetchGroupAps(groupid);
+        });
+      },
+    });
+  }
   removeGroup(id) {
-    this.props.save('/goform/group', { id })
-      .then(() => {
-        this.props.fetchApGroup();
-      });
+    this.props.save('/goform/group', {
+      action: 'deleteGroup',
+      groupid: id,
+    }).then(() => {
+      this.props.fetchApGroup();
+    });
   }
   saveGroup() {
     const { product } = this.props;
     const $$addData = this.props.product.getIn(['group', 'addData']);
     const $$editData = product.getIn(['group', 'manageSelected']);
+    const $$apAddData = product.getIn(['group', 'apAddData']);
     const $$selectMacList = this.props.product
       .get('defaultDevices')
       .filter(item => item.get('__selected__'))
       .map(item1 => item1.get('mac'));
     let subData;
     const curModalName = product.getIn(['modal', 'name']);
-    let groupId = -1;
 
     if (curModalName === 'groupAdd') {
       subData = $$addData.merge({
@@ -243,9 +275,14 @@ export default class Main extends Component {
         aplist: $$selectMacList.toJS(),
       });
     } else if (curModalName === 'groupEdit') {
-      groupId = $$editData.get('groupid');
       subData = $$editData.merge({
         action: 'edit',
+      });
+    } else if (curModalName === 'groupApAdd') {
+      subData = $$apAddData.merge({
+        action: 'groupApAdd',
+        groupid: $$editData.get('id'),
+        aplist: $$selectMacList.toJS(),
       });
     }
 
@@ -254,9 +291,11 @@ export default class Main extends Component {
         const data = json && json.data;
 
         if (data && json.state.code === 2000) {
-          this.props.fetchGroupAps(groupId);
+          this.props.fetchGroupAps(-1);
+          this.props.fetchGroupAps($$editData.get('id'));
         }
 
+        this.props.fetchApGroup();
         this.props.showMainModal({
           isShow: false,
         });
@@ -270,6 +309,7 @@ export default class Main extends Component {
 
   renderPopOverContent(popOver) {
     const selectGroupId = this.props.product.getIn(['group', 'selected', 'id']);
+    const manageGroupId = this.props.product.getIn(['group', 'manageSelected', 'id']);
     const $$groupList = this.props.product.getIn(['group', 'list']);
 
     switch (popOver.name) {
@@ -337,6 +377,7 @@ export default class Main extends Component {
                     name="cog"
                     size="2x"
                     onClick={() => {
+                      this.props.fetchGroupAps(manageGroupId);
                       this.props.showMainModal({
                         title: _('Manage Ap Groups'),
                         isShow: true,
@@ -352,6 +393,10 @@ export default class Main extends Component {
                     size="2x"
                     onClick={() => {
                       this.props.fetchGroupAps();
+                      this.props.updateAddApGroup({
+                        groupname: '',
+                        remark: '',
+                      });
                       this.props.showMainModal({
                         title: _('Add Ap Group'),
                         isShow: true,
@@ -376,11 +421,11 @@ export default class Main extends Component {
     const moveTargetGroupId = this.props.product.getIn(['group', 'apMoveData', 'targetGroupId']);
     const isSaving = this.props.app.get('saving');
     const { product } = this.props;
-    const groupAddApData = product.getIn(['group', 'apAddData']);
+    const groupApAddData = product.getIn(['group', 'apAddData']);
 
      // validate const
     const {
-      groupname, remark,
+      groupname, remark, apmac,
     } = this.props.validateOption;
 
     const tableOption = fromJS([
@@ -403,13 +448,13 @@ export default class Main extends Component {
     // console.log(product.get(['group', 'devices']).toJS())
 
     switch (option.name) {
-      case 'groupAddAp':
+      case 'groupApAdd':
         return (
           <div className="o-form">
             <FormGroup
               type="switch"
               label={_('Add From')}
-              value={groupAddApData.get('type')}
+              value={groupApAddData.get('type')}
               options={[
                 {
                   value: 'auto',
@@ -424,7 +469,7 @@ export default class Main extends Component {
               })}
             />
             {
-              groupAddApData.get('type') === 'auto' ? (
+              groupApAddData.get('type') === 'auto' ? (
                 <div className="o-form__fileset">
                   <legend className="o-form__legend">
                     { _('Auto AP List') }
@@ -445,14 +490,30 @@ export default class Main extends Component {
                   <FormGroup
                     type="text"
                     label={_('MAC')}
+                    name="apmac"
+                    value={groupApAddData.get('apmac')}
+                    onChange={data => this.props.updateGroupAddDevice({
+                      apmac: data.value,
+                    })}
+                    { ...apmac }
                   />
                   <FormGroup
                     type="text"
+                    name="name"
                     label={_('Name')}
+                    value={groupApAddData.get('name')}
+                    onChange={data => this.props.updateGroupAddDevice({
+                      name: data.value,
+                    })}
                   />
                   <FormGroup
                     type="text"
+                    name="model"
                     label={_('Model')}
+                    value={groupApAddData.get('model')}
+                    onChange={data => this.props.updateGroupAddDevice({
+                      model: data.value,
+                    })}
                   />
                 </div>
               )
@@ -544,7 +605,7 @@ export default class Main extends Component {
                   label={_('Group Name')}
                   name="groupname"
                   value={product.getIn(['group', 'addData', 'groupname'])}
-                  onChange={data => this.props.updateAddApGroupDevice({
+                  onChange={data => this.props.updateAddApGroup({
                     groupname: data.value,
                   })}
                   required
@@ -555,7 +616,7 @@ export default class Main extends Component {
                   label={_('Remarks')}
                   name="remark"
                   value={product.getIn(['group', 'addData', 'remark'])}
-                  onChange={data => this.props.updateAddApGroupDevice({
+                  onChange={data => this.props.updateAddApGroup({
                     remark: data.value,
                   })}
                   required
@@ -595,7 +656,7 @@ export default class Main extends Component {
               label={_('Group Name')}
               name="groupname"
               value={product.getIn(['group', 'manageSelected', 'groupname'])}
-              onChange={data => this.props.updateEditApGroupDevice({
+              onChange={data => this.props.updateEditApGroup({
                 groupname: data.value,
               })}
               required
@@ -606,7 +667,7 @@ export default class Main extends Component {
               label={_('Remarks')}
               name="remark"
               value={product.getIn(['group', 'manageSelected', 'remark'])}
-              onChange={data => this.props.updateEditApGroupDevice({
+              onChange={data => this.props.updateEditApGroup({
                 remark: data.value,
               })}
               required
@@ -660,6 +721,10 @@ export default class Main extends Component {
                   text={_('Add')}
                   onClick={() => {
                     this.props.fetchGroupAps();
+                    this.props.updateAddApGroup({
+                      groupname: '',
+                      remark: '',
+                    });
                     this.props.showMainModal({
                       title: _('Add Ap Group'),
                       size: 'lg',
@@ -709,7 +774,7 @@ export default class Main extends Component {
                       title: _('Add AP to Group'),
                       size: 'md',
                       isShow: true,
-                      name: 'groupAddAp',
+                      name: 'groupApAdd',
                     });
                   }}
                 />
@@ -728,6 +793,9 @@ export default class Main extends Component {
                 <Button
                   icon="trash"
                   text={_('Delete Selected')}
+                  onClick={() => {
+                    this.onRemoveGroupAps();
+                  }}
                 />
               </div>
             </div>

@@ -101,16 +101,16 @@ export function selectAddApGroupDevice(data) {
   };
 }
 
-export function updateAddApGroupDevice(data) {
+export function updateAddApGroup(data) {
   return {
-    type: 'UPDATE_ADD_AP_GROUP_DEVICE',
+    type: 'UPDATE_ADD_AP_GROUP',
     payload: data,
   };
 }
 
-export function updateEditApGroupDevice(data) {
+export function updateEditApGroup(data) {
   return {
-    type: 'UPDATE_EDIT_AP_GROUP_DEVICE',
+    type: 'UPDATE_EDIT_AP_GROUP',
     payload: data,
   };
 }

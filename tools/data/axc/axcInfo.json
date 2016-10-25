@@ -4,52 +4,6 @@
     "msg": "ok"
   },
   "data": {
-    "list": [
-      {
-        "groupname": "Default"
-      },
-      {
-        "groupname": "group231",
-        "ssid": "128",
-        "wifienable": "0/1",
-        "encryption": "none",
-        "password": "124567786",
-        "vlanenable": "0",
-        "vlanid": "23",
-        "country": "",
-        "channel": "12",
-        "channelsBandwidth": "20",
-        "downstream": "128",
-        "upstream": "64"
-      },
-      {
-        "groupname": "group33333",
-        "ssid": "128",
-        "wifienable": "0/1",
-        "encryption": "psk-mixed",
-        "password": "124567786",
-        "vlanenable": "1",
-        "vlanid": "32",
-        "country": "AR",
-        "channel": "12",
-        "channelsBandwidth": "20",
-        "downstream": "128",
-        "upstream": "64"
-      },
-      {
-        "groupname": "group33547",
-        "ssid": "128",
-        "wifienable": "0/1",
-        "encryption": "psk-mixed",
-        "password": "124567786",
-        "vlanenable": "1",
-        "vlanid": "33",
-        "country": "AM",
-        "channel": "12",
-        "channelsBandwidth": "20",
-        "downstream": "128",
-        "upstream": "64"
-      }
-    ]
+    "version":"1.0.1"
   }
 }

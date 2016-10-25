@@ -23,7 +23,7 @@ const defaultState = fromJS({
     manageSelected: {},
     addData: {
       groupname: '',
-      groupRemark: '',
+      remark: '',
     },
     apAddData: {
       // 类型：custom（自定义），auto（为分组ap列表）
@@ -100,21 +100,36 @@ function showPrevModel(state) {
 
 function receiveApGroup(state, action) {
   const payload = action.payload || {};
-  const list = payload.list;
+  const $$list = fromJS(payload.list);
   let selectedItem = state.getIn(['group', 'selected']);
   let manageSelectedItem = state.getIn(['group', 'manageSelected']);
+  let isDeleted = false;
 
-  if (selectedItem.isEmpty() && list[0]) {
-    selectedItem = fromJS(list[0]);
+  if (selectedItem.isEmpty() && $$list.get(0)) {
+    selectedItem = $$list.get(0);
+
+  // 判断选择的是否被删除
+  } else {
+    isDeleted = !!$$list.find(item => item.get('id') === selectedItem);
+    if (isDeleted) {
+      selectedItem = $$list.get(0);
+    }
   }
 
-  if (manageSelectedItem.isEmpty() && list[0]) {
-    manageSelectedItem = fromJS(list[0]);
+  if (manageSelectedItem.isEmpty() && $$list.get(0)) {
+    manageSelectedItem = $$list.get(0);
+
+  // 判断选择的是否被删除
+  } else {
+    isDeleted = !!$$list.find(item => item.get('id') === manageSelectedItem);
+    if (isDeleted) {
+      manageSelectedItem = $$list.get(0);
+    }
   }
 
   return state.setIn(['group', 'selected'], selectedItem)
     .setIn(['group', 'manageSelected'], manageSelectedItem)
-    .setIn(['group', 'list'], fromJS(list));
+    .setIn(['group', 'list'], $$list);
 }
 
 function receiveDevices(state, action) {
@@ -203,10 +218,10 @@ export default function (state = defaultState, action) {
     case 'UPDATE_GROUP_ADD_DEVICE':
       return state.mergeIn(['group', 'apAddData'], action.payload);
 
-    case 'UPDATE_ADD_AP_GROUP_DEVICE':
+    case 'UPDATE_ADD_AP_GROUP':
       return state.mergeIn(['group', 'addData'], action.payload);
 
-    case 'UPDATE_EDIT_AP_GROUP_DEVICE':
+    case 'UPDATE_EDIT_AP_GROUP':
       return state.mergeIn(['group', 'manageSelected'], action.payload);
 
     case 'UPDATE_GROUP_MOVE_DEVICE':
