@@ -1,6 +1,5 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-// require_once('/libraries/Response.php');
 class WirelessAcl extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
@@ -8,13 +7,15 @@ class WirelessAcl extends CI_Controller {
 		$this->load->helper('array');
 	}
 	function fetch(){
-     $data = array(
-        'groupid'=>(int)$_GET['groupid'],
+     $retdata = array(
+        'groupid'=>(int)element('groupid', $_GET,-1),
       );
-       $retdata = array(
-        'groupid'=>element('groupid', $data),
-      );
-      $result=axc_get_wireless_acl(json_encode($retdata));
+      if(groupid===-1){
+        $result=axc_get_default_wireless__acl();
+      }
+      else{
+         $result=axc_get_wireless_acl(json_encode($retdata));
+      }
       return $result;
   }
 
