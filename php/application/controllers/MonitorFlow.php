@@ -7,47 +7,62 @@ class MonitorFlow extends CI_Controller {
 		$this->load->database();
 		$this->load->helper('array');
 	}
-	function fetch(){
-     $data = array(
-        'groupid'=>(int)$_GET['groupid'],
-      );
-       $retdata = array(
-        'groupid'=>element('groupid', $data),
-      );
-      $result=axc_get_flow(json_encode($retdata));
-      return $result;
-  }
 
+	function fetch(){
+		$retdata = array(
+		        'groupid'=>(int)element('groupid', $_GET,-1),
+		      );
+		if(group===-1){
+			$result=axc_get_default_flow(json_encode($retdata));
+		}
+		else{
+			$result=axc_get_flow(json_encode($retdata));
+		}
+		return $result;
+	}
 
 	function onAction($data) {
-   	// $result = null;
-   // $actionType = element('action', $data);
-    // if($actionType === 'lock'){
+		// 		$result = null;
+		// 		$actionType = element('action', $data);
+		// 		if($actionType === 'lock'){
 
-    // }
-    // elseif($actionType === 'unlock'){
-
-    // }
-    // elseif($actionType === 'reconnect'){
-
-    // }
-    // return $result;
-	}
-	public function index($type) {
-    echo $type;
-		// $result = null;
-		// if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-		// 	$data = json_decode(file_get_contents("php://input"), true);
-		// 	$result = $this->onAction($data);
-    //   echo $result;
+			//
 		// }
-		// elseif($_SERVER['REQUEST_METHOD'] == 'GET') {
+		// 		elseif($actionType === 'unlock'){
 
-		// 	$result = $this->fetch();
-    //   echo $result;
+			//
 		// }
+		// 		elseif($actionType === 'reconnect'){
+
+			//
+		// }
+		// 		return $result;
 	}
-  public function test($type) {
-    echo $type;
+
+  public function user() {
+      $result = null;
+			if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+				$data = json_decode(file_get_contents("php://input"), true);
+				$result = $this->onAction1($data);
+				echo $result;
+			}
+			elseif($_SERVER['REQUEST_METHOD'] == 'GET') {
+
+				$result = $this->fetch1();
+				echo $result;
+			}
+  }
+  public function app() {
+          $result = null;
+			if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+				$data = json_decode(file_get_contents("php://input"), true);
+				$result = $this->onAction1($data);
+				echo $result;
+			}
+			elseif($_SERVER['REQUEST_METHOD'] == 'GET') {
+
+				$result = $this->fetch1();
+				echo $result;
+			}
   }
 }

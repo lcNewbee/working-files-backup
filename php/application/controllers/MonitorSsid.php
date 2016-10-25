@@ -9,9 +9,15 @@ class MonitorSsid extends CI_Controller {
 	}
 	function fetch(){
        $retdata = array(
-        'groupid'=>(int)element('groupid', $_GET,1),
+        'groupid'=>(int)element('groupid', $_GET,-1),
       );
+    // 如果groupid不存在或值为-1则返回默认设备
+    if ($groupid === -1) {
+      $result = axc_get_default_ssidState(json_encode());
+    // 非默认组
+    } else {
       $result=axc_get_ssidState(json_encode($retdata));
+    }
       return $result;
   }
 
