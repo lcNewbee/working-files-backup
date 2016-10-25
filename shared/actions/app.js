@@ -178,11 +178,12 @@ export function save(url, query) {
   };
 }
 
-export function fetchProductInfo() {
+export function fetchProductInfo(url) {
   return (dispatch) => {
+    const fetchUrl = url || APP_CONFIG.fetchInfo;
     dispatch(requestFetchProductInfo());
 
-    dispatch(fetch(APP_CONFIG.fetchInfo))
+    dispatch(fetch(fetchUrl))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(receiveFetchProductInfo(json.data));

@@ -79,6 +79,7 @@ export default class Main extends Component {
       'onToggleMainPopOver',
       'onClickTopMenuTitle',
       'onSaveGroup',
+      'onSaveMoveGroup',
       'saveGroup',
       'onRemoveGroup',
       'removeGroup',
@@ -101,12 +102,10 @@ export default class Main extends Component {
     // 获取未分组设备
     this.props.fetchGroupAps(-1);
   }
-
   onRefresh(e) {
     e.preventDefault();
     this.props.refreshAll();
   }
-
   onLogout(e) {
     e.preventDefault();
     this.props.changeLoginStatus('0');
@@ -160,10 +159,16 @@ export default class Main extends Component {
     this.props.fetchGroupAps(id);
   }
 
+  /**
+   * 添加组时选择AutoAp
+   *
+   * @param {object} data
+   *
+   * @memberOf Main
+   */
   onSelectGroupAp(data) {
     this.props.selectAddApGroupDevice(data);
   }
-
   onSaveGroup() {
     this.props.validateAll()
       .then((msg) => {
@@ -184,6 +189,35 @@ export default class Main extends Component {
         this.removeGroup(manageSelected.get('id'), 'upgrade');
       },
     });
+  }
+  onSaveMoveGroup() {
+    const { product } = this.props;
+    const $$moveData = this.props.product.getIn(['group', 'apMoveData']);
+    const $$editData = product.getIn(['group', 'manageSelected']);
+    const groupId = $$editData.get('id');
+    const $$selectMacList = this.props.product
+      .getIn(['group', 'devices'])
+      .filter(item => item.get('__selected__'))
+      .map(item1 => item1.get('mac')) || fromJS([]);
+    const subData = {
+      action: 'move',
+      groupid: groupId,
+      targetid: $$moveData.get('targetGroupId'),
+      aplist: $$selectMacList.toJS(),
+    };
+
+    this.props.save('/goform/group', subData)
+      .then((json) => {
+        const data = json && json.data;
+
+        if (data && json.state.code === 2000) {
+          this.props.fetchGroupAps(groupId);
+        }
+
+        this.props.showMainModal({
+          isShow: false,
+        });
+      });
   }
   removeGroup(id) {
     this.props.save('/goform/group', { id })
@@ -366,7 +400,7 @@ export default class Main extends Component {
       },
     ]);
 
-    //console.log(product.get(['group', 'devices']).toJS())
+    // console.log(product.get(['group', 'devices']).toJS())
 
     switch (option.name) {
       case 'groupAddAp':
@@ -464,6 +498,10 @@ export default class Main extends Component {
                     const curId = item.get('id');
                     let classNames = 'm-menu__link';
 
+                    // 目标组，不包含本组
+                    if (curId === selectGroupId) {
+                      return null;
+                    }
                     if (curId === moveTargetGroupId) {
                       classNames = `${classNames} active`;
                     }
@@ -490,7 +528,7 @@ export default class Main extends Component {
                 <SaveButton
                   type="button"
                   loading={isSaving}
-                  onClick={this.onSaveGroup}
+                  onClick={this.onSaveMoveGroup}
                 />
               </div>
             </div>

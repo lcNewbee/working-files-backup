@@ -7,6 +7,7 @@ const propTypes = {
   closeModal: PropTypes.func,
   fetchProductInfo: PropTypes.func,
   app: PropTypes.object,
+  route: PropTypes.object,
   children: PropTypes.node,
 };
 
@@ -23,7 +24,7 @@ class App extends Component {
   }
   componentWillMount() {
     if (this.props.fetchProductInfo) {
-      this.props.fetchProductInfo();
+      this.props.fetchProductInfo(this.props.route.formUrl);
     }
   }
 

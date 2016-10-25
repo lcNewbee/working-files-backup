@@ -151,6 +151,7 @@ const routes = [
   {
     path: '/',
     component: App.Screen,
+    formUrl: 'goform/axcInfo',
     indexRoute: { component: sLogin.Screen },
     childRoutes: [
       {

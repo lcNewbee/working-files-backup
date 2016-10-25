@@ -71,6 +71,7 @@ const sAdmin = require('../../screens/App/screens/Main/screens/Settings/screens/
 const routes = [{
   path: '/',
   component: App.Screen,
+  formUrl: '/goform/getAcInfo',
   indexRoute: { component: pLogin.Screen },
   childRoutes: [{
     path: '/main',

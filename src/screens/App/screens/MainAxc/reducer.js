@@ -99,7 +99,8 @@ function showPrevModel(state) {
 }
 
 function receiveApGroup(state, action) {
-  const list = action.payload.list;
+  const payload = action.payload || {};
+  const list = payload.list;
   let selectedItem = state.getIn(['group', 'selected']);
   let manageSelectedItem = state.getIn(['group', 'manageSelected']);
 
@@ -117,7 +118,8 @@ function receiveApGroup(state, action) {
 }
 
 function receiveDevices(state, action) {
-  const rcList = action.payload.list || [];
+  const payload = action.payload || {};
+  const rcList = payload.list || [];
   let ret = state;
 
   // 如果是默认ap
