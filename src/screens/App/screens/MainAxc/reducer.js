@@ -101,29 +101,34 @@ function showPrevModel(state) {
 function receiveApGroup(state, action) {
   const payload = action.payload || {};
   const $$list = fromJS(payload.list);
+  const $$defaultItem = $$list.get(0) || fromJS({});
   let selectedItem = state.getIn(['group', 'selected']);
   let manageSelectedItem = state.getIn(['group', 'manageSelected']);
   let isDeleted = false;
 
-  if (selectedItem.isEmpty() && $$list.get(0)) {
-    selectedItem = $$list.get(0);
+  if (selectedItem.isEmpty()) {
+    selectedItem = $$defaultItem;
 
   // 判断选择的是否被删除
   } else {
-    isDeleted = !!$$list.find(item => item.get('id') === selectedItem);
+    isDeleted = $$list.findIndex(
+      item => item.get('id') === selectedItem.get('id')
+    ) === -1;
     if (isDeleted) {
-      selectedItem = $$list.get(0);
+      selectedItem = $$defaultItem;
     }
   }
 
-  if (manageSelectedItem.isEmpty() && $$list.get(0)) {
-    manageSelectedItem = $$list.get(0);
+  if (manageSelectedItem.isEmpty()) {
+    manageSelectedItem = $$defaultItem;
 
   // 判断选择的是否被删除
   } else {
-    isDeleted = !!$$list.find(item => item.get('id') === manageSelectedItem);
+    isDeleted = $$list.findIndex(
+      item => item.get('id') === manageSelectedItem.get('id')
+    ) === -1;
     if (isDeleted) {
-      manageSelectedItem = $$list.get(0);
+      manageSelectedItem = $$defaultItem;
     }
   }
 

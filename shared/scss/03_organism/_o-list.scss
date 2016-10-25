@@ -7,7 +7,11 @@
     color: #fff;
   }
   .m-menu {
-    background-color: #333;
+    margin-top: 1px;
+    background-color: #666;
+    .m-menu__link.active {
+      background-color: #999;
+    }
   }
   .o-list__footer {
     padding: 8px 0;

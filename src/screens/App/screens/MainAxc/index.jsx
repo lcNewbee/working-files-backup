@@ -540,7 +540,7 @@ export default class Main extends Component {
         return (
           <div className="row">
             <div className="o-list cols col-8">
-              <h3 className="o-list__header">{_('Select AP List')}</h3>
+              <h3 className="o-list__header">{_('Select AP')}</h3>
               <Table
                 className="table"
                 options={tableOption}
@@ -552,7 +552,7 @@ export default class Main extends Component {
               />
             </div>
             <div className="o-list cols col-4">
-              <h3 className="o-list__header">{_('Target Group List')}</h3>
+              <h3 className="o-list__header">{_('Target Group')}</h3>
               <ul className="m-menu m-menu--open">
                 {
                   product.getIn(['group', 'list']).map((item) => {
