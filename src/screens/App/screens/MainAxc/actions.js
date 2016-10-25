@@ -14,8 +14,10 @@ export function showMainModal(option) {
   };
 }
 
-export function saveMainModal() {
-
+export function showPrevMainModal() {
+  return {
+    type: 'SHOW_PREV_MAIN_MODAL',
+  };
 }
 
 export function selectVlan(id) {
@@ -35,6 +37,12 @@ export function selectManageGroup(id) {
   return {
     type: 'SELECT_MANAGE_GROUP',
     id,
+  };
+}
+export function selectManageGroupAp(data) {
+  return {
+    type: 'SELECT_MANAGE_GROUP_AP',
+    payload: data,
   };
 }
 
@@ -96,6 +104,26 @@ export function selectAddApGroupDevice(data) {
 export function updateAddApGroupDevice(data) {
   return {
     type: 'UPDATE_ADD_AP_GROUP_DEVICE',
+    payload: data,
+  };
+}
+
+export function updateEditApGroupDevice(data) {
+  return {
+    type: 'UPDATE_EDIT_AP_GROUP_DEVICE',
+    payload: data,
+  };
+}
+export function updateGroupAddDevice(data) {
+  return {
+    type: 'UPDATE_GROUP_ADD_DEVICE',
+    payload: data,
+  };
+}
+
+export function updateGroupMoveDevice(data) {
+  return {
+    type: 'UPDATE_GROUP_MOVE_DEVICE',
     payload: data,
   };
 }

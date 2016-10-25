@@ -34,16 +34,20 @@ class MonitorFlow extends CI_Controller {
     // return $result;
 	}
 	public function index($type) {
-		$result = null;
-		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-			$data = json_decode(file_get_contents("php://input"), true);
-			$result = $this->onAction($data);
-      echo $result;
-		}
-		elseif($_SERVER['REQUEST_METHOD'] == 'GET') {
+    echo $type;
+		// $result = null;
+		// if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+		// 	$data = json_decode(file_get_contents("php://input"), true);
+		// 	$result = $this->onAction($data);
+    //   echo $result;
+		// }
+		// elseif($_SERVER['REQUEST_METHOD'] == 'GET') {
 
-			$result = $this->fetch();
-      echo $result;
-		}
+		// 	$result = $this->fetch();
+    //   echo $result;
+		// }
 	}
+  public function test($type) {
+    echo $type;
+  }
 }

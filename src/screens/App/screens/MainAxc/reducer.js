@@ -15,6 +15,7 @@ const defaultState = fromJS({
     size: 'lg',
     name: 'group',
   },
+  modalList: [],
 
   // Ap组相关
   group: {
@@ -23,6 +24,13 @@ const defaultState = fromJS({
     addData: {
       groupname: '',
       groupRemark: '',
+    },
+    apAddData: {
+      // 类型：custom（自定义），auto（为分组ap列表）
+      type: 'custom',
+    },
+    apMoveData: {
+      targetGroupId: 1,
     },
     list: [],
 
@@ -46,6 +54,8 @@ function togglePopOverState(state, option) {
 
 function changeModalState(state, option) {
   const myOption = option || {};
+  let modalList = state.get('modalList');
+  let targetModal = state.get('modal');
 
   if (myOption.isShow === undefined) {
     myOption.isShow = !state.getIn(['modal', 'isShow']);
@@ -62,7 +72,30 @@ function changeModalState(state, option) {
     myOption.size = 'md';
   }
 
-  return state.mergeIn(['modal'], myOption);
+  targetModal = targetModal.merge(myOption);
+
+  // 如果是打开窗口
+  if (targetModal.get('isShow')) {
+    modalList = modalList.push(targetModal);
+  } else {
+    modalList = modalList.pop();
+    if (modalList.size > 0) {
+      targetModal = modalList.last();
+    }
+  }
+
+  return state.set('modal', targetModal)
+    .set('modalList', modalList);
+}
+function showPrevModel(state) {
+  const prevModal = state.get('prevModal');
+  let ret = state;
+
+  if (prevModal && prevModal.get('isShow')) {
+    ret = state.set('modal', prevModal);
+  }
+
+  return ret;
 }
 
 function receiveApGroup(state, action) {
@@ -125,22 +158,36 @@ function selectAddGroupDevices(state, action) {
   return state.set('defaultDevices', defaultDevices);
 }
 
+function selectManageGroupDevices(state, action) {
+  const data = action.payload;
+  let $$devices = state.getIn(['group', 'devices']);
+
+  if (data.index !== -1) {
+    $$devices = $$devices.setIn([data.index, '__selected__'], data.selected);
+  } else {
+    $$devices = $$devices.map(item => item.set('__selected__', data.selected));
+  }
+  return state.setIn(['group', 'devices'], $$devices);
+}
+
 export default function (state = defaultState, action) {
   switch (action.type) {
     case 'TOGGLE_MAIN_POP_OVER':
       return togglePopOverState(state, action.option);
 
+    // Modal 操作相关
     case 'SHOW_MAIN_MODAL':
       return changeModalState(state, action.option);
+    case 'SHOW_PREV_MAIN_MODAL':
+      return showPrevModel(state);
 
-    case 'SELECT_VLAN':
-      return selectList(state, 'vlan', action.id);
-
+    // 组操作
     case 'SELECT_GROUP':
       return selectList(state, 'group', action.id);
-
     case 'SELECT_MANAGE_GROUP':
       return selectManageList(state, 'group', action.id);
+    case 'SELECT_MANAGE_GROUP_AP':
+      return selectManageGroupDevices(state, action);
 
     case 'RC_FETCH_AP_GROUP':
       return receiveApGroup(state, action);
@@ -151,8 +198,17 @@ export default function (state = defaultState, action) {
     case 'SELECT_ADD_AP_GROUP_DEVICE':
       return selectAddGroupDevices(state, action);
 
+    case 'UPDATE_GROUP_ADD_DEVICE':
+      return state.mergeIn(['group', 'apAddData'], action.payload);
+
     case 'UPDATE_ADD_AP_GROUP_DEVICE':
       return state.mergeIn(['group', 'addData'], action.payload);
+
+    case 'UPDATE_EDIT_AP_GROUP_DEVICE':
+      return state.mergeIn(['group', 'manageSelected'], action.payload);
+
+    case 'UPDATE_GROUP_MOVE_DEVICE':
+      return state.mergeIn(['group', 'apMoveData'], action.payload);
 
     default:
   }

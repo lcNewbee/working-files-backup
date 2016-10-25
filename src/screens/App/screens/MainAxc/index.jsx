@@ -32,9 +32,15 @@ const propTypes = {
   showMainModal: PropTypes.func,
   togglePropertyPanel: PropTypes.func,
   updateAddApGroupDevice: PropTypes.func,
+  updateEditApGroupDevice: PropTypes.func,
+  updateGroupMoveDevice: PropTypes.func,
+  selectManageGroupAp: PropTypes.func,
   route: PropTypes.object,
   location: PropTypes.object,
   routes: PropTypes.array,
+  createModal: PropTypes.func,
+  save: PropTypes.func,
+  resetVaildateMsg: PropTypes.func,
 
   children: PropTypes.node,
   validateOption: PropTypes.object,
@@ -49,7 +55,7 @@ const validOptions = fromJS({
   groupname: validator({
     rules: 'len:[1, 64]',
   }),
-  groupRemark: validator({}),
+  remark: validator({}),
 });
 
 const defaultProps = {
@@ -72,8 +78,10 @@ export default class Main extends Component {
       'onHiddenPopOver',
       'onToggleMainPopOver',
       'onClickTopMenuTitle',
-      'onSaveAddGroup',
-      'saveAddGroup',
+      'onSaveGroup',
+      'saveGroup',
+      'onRemoveGroup',
+      'removeGroup',
 
       'renderPopOverContent',
       'renderBreadcrumb',
@@ -156,35 +164,68 @@ export default class Main extends Component {
     this.props.selectAddApGroupDevice(data);
   }
 
-  onSaveAddGroup() {
+  onSaveGroup() {
     this.props.validateAll()
       .then((msg) => {
         if (msg.isEmpty()) {
-          this.saveAddGroup();
+          this.saveGroup();
         }
       });
   }
-  saveAddGroup() {
+  onRemoveGroup() {
+    const manageSelected = this.props.product.getIn(['group', 'manageSelected']);
+    const msgText = _('Are you sure delete group: %s ?', manageSelected.get('groupname'));
+
+    this.props.createModal({
+      id: 'settings',
+      role: 'comfirm',
+      text: msgText,
+      apply: () => {
+        this.removeGroup(manageSelected.get('id'), 'upgrade');
+      },
+    });
+  }
+  removeGroup(id) {
+    this.props.save('/goform/group', { id })
+      .then(() => {
+        this.props.fetchApGroup();
+      });
+  }
+  saveGroup() {
+    const { product } = this.props;
     const $$addData = this.props.product.getIn(['group', 'addData']);
+    const $$editData = product.getIn(['group', 'manageSelected']);
     const $$selectMacList = this.props.product
       .get('defaultDevices')
       .filter(item => item.get('__selected__'))
       .map(item1 => item1.get('mac'));
-    const subData = $$addData.merge({
-      aplist: $$selectMacList.toJS(),
-    });
+    let subData;
+    const curModalName = product.getIn(['modal', 'name']);
+    let groupId = -1;
+
+    if (curModalName === 'groupAdd') {
+      subData = $$addData.merge({
+        action: 'add',
+        aplist: $$selectMacList.toJS(),
+      });
+    } else if (curModalName === 'groupEdit') {
+      groupId = $$editData.get('groupid');
+      subData = $$editData.merge({
+        action: 'edit',
+      });
+    }
 
     this.props.save('/goform/group', subData)
       .then((json) => {
         const data = json && json.data;
 
         if (data && json.state.code === 2000) {
-          this.props.fetchGroupAps(-1);
+          this.props.fetchGroupAps(groupId);
         }
 
-        // this.props.showMainModal({
-        //   isShow: false,
-        // });
+        this.props.showMainModal({
+          isShow: false,
+        });
       });
   }
   showUserPopOver() {
@@ -281,7 +322,7 @@ export default class Main extends Component {
                         title: _('Add Ap Group'),
                         isShow: true,
                         size: 'lg',
-                        name: 'group',
+                        name: 'groupAdd',
                       });
                     }}
                   />
@@ -298,12 +339,14 @@ export default class Main extends Component {
 
   renderModalContent(option) {
     const selectGroupId = this.props.product.getIn(['group', 'manageSelected', 'id']);
+    const moveTargetGroupId = this.props.product.getIn(['group', 'apMoveData', 'targetGroupId']);
     const isSaving = this.props.app.get('saving');
     const { product } = this.props;
+    const groupAddApData = product.getIn(['group', 'apAddData']);
 
      // validate const
     const {
-      groupname, groupRemark,
+      groupname, remark,
     } = this.props.validateOption;
 
     const tableOption = fromJS([
@@ -326,7 +369,134 @@ export default class Main extends Component {
     //console.log(product.get(['group', 'devices']).toJS())
 
     switch (option.name) {
-      case 'group':
+      case 'groupAddAp':
+        return (
+          <div className="o-form">
+            <FormGroup
+              type="switch"
+              label={_('Add From')}
+              value={groupAddApData.get('type')}
+              options={[
+                {
+                  value: 'auto',
+                  label: _('Auto Ap'),
+                }, {
+                  value: 'custom',
+                  label: _('Custom'),
+                },
+              ]}
+              onChange={data => this.props.updateGroupAddDevice({
+                type: data.value,
+              })}
+            />
+            {
+              groupAddApData.get('type') === 'auto' ? (
+                <div className="o-form__fileset">
+                  <legend className="o-form__legend">
+                    { _('Auto AP List') }
+                  </legend>
+                  <Table
+                    className="table"
+                    options={tableOption}
+                    list={product.getIn(['defaultDevices'])}
+                    onRowSelect={data => this.onSelectGroupAp(data)}
+                    selectable
+                  />
+                </div>
+              ) : (
+                <div className="o-form__fileset">
+                  <legend className="o-form__legend">
+                    { _('Custom AP') }
+                  </legend>
+                  <FormGroup
+                    type="text"
+                    label={_('MAC')}
+                  />
+                  <FormGroup
+                    type="text"
+                    label={_('Name')}
+                  />
+                  <FormGroup
+                    type="text"
+                    label={_('Model')}
+                  />
+                </div>
+              )
+            }
+
+            <div
+              className="form-group"
+              style={{
+                marginTop: '12px',
+              }}
+            >
+              <div className="form-control">
+                <SaveButton
+                  type="button"
+                  loading={isSaving}
+                  onClick={this.onSaveGroup}
+                />
+              </div>
+            </div>
+
+          </div>
+        );
+      case 'groupMoveAp':
+        return (
+          <div className="row">
+            <div className="o-list cols col-8">
+              <h3 className="o-list__header">{_('Select AP List')}</h3>
+              <Table
+                className="table"
+                options={tableOption}
+                selectable
+                list={product.getIn(['group', 'devices'])}
+                onRowSelect={(data) => {
+                  this.props.selectManageGroupAp(data);
+                }}
+              />
+            </div>
+            <div className="o-list cols col-4">
+              <h3 className="o-list__header">{_('Target Group List')}</h3>
+              <ul className="m-menu m-menu--open">
+                {
+                  product.getIn(['group', 'list']).map((item) => {
+                    const curId = item.get('id');
+                    let classNames = 'm-menu__link';
+
+                    if (curId === moveTargetGroupId) {
+                      classNames = `${classNames} active`;
+                    }
+
+                    return (
+                      <li key={curId}>
+                        <a
+                          className={classNames}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            this.props.updateGroupMoveDevice({
+                              targetGroupId: curId,
+                            });
+                          }}
+                        >
+                          {item.get('groupname')} ({item.get('apNum')})
+                        </a>
+                      </li>
+                    );
+                  })
+                }
+              </ul>
+              <div className="o-list__footer">
+                <SaveButton
+                  type="button"
+                  loading={isSaving}
+                  onClick={this.onSaveGroup}
+                />
+              </div>
+            </div>
+          </div>
+        );
+      case 'groupAdd':
         return (
           <div className="o-form o-form--block">
             <div className="row">
@@ -343,15 +513,15 @@ export default class Main extends Component {
                   {...groupname}
                 />
                 <FormGroup
-                  type="text"
+                  type="textarea"
                   label={_('Remarks')}
-                  name="groupRemark"
-                  value={product.getIn(['group', 'addData', 'groupRemark'])}
+                  name="remark"
+                  value={product.getIn(['group', 'addData', 'remark'])}
                   onChange={data => this.props.updateAddApGroupDevice({
-                    groupRemark: data.value,
+                    remark: data.value,
                   })}
                   required
-                  {...groupRemark}
+                  {...remark}
                 />
                 <div
                   className="form-group"
@@ -360,19 +530,58 @@ export default class Main extends Component {
                     <SaveButton
                       type="button"
                       loading={isSaving}
-                      onClick={this.onSaveAddGroup}
+                      onClick={this.onSaveGroup}
                     />
                   </div>
                 </div>
               </div>
               <div className="o-list cols col-8">
-                <h3>{_('Select Group Devices')}</h3>
+                <h3>{_('Select AP to group')}</h3>
                 <Table
                   className="table"
                   options={tableOption}
                   list={product.getIn(['defaultDevices'])}
                   onRowSelect={data => this.onSelectGroupAp(data)}
                   selectable
+                />
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'groupEdit':
+        return (
+          <div className="o-form o-form--block">
+            <FormGroup
+              type="text"
+              label={_('Group Name')}
+              name="groupname"
+              value={product.getIn(['group', 'manageSelected', 'groupname'])}
+              onChange={data => this.props.updateEditApGroupDevice({
+                groupname: data.value,
+              })}
+              required
+              {...groupname}
+            />
+            <FormGroup
+              type="textarea"
+              label={_('Remarks')}
+              name="remark"
+              value={product.getIn(['group', 'manageSelected', 'remark'])}
+              onChange={data => this.props.updateEditApGroupDevice({
+                remark: data.value,
+              })}
+              required
+              {...remark}
+            />
+            <div
+              className="form-group"
+            >
+              <div className="form-control">
+                <SaveButton
+                  type="button"
+                  loading={isSaving}
+                  onClick={this.onSaveGroup}
                 />
               </div>
             </div>
@@ -415,18 +624,30 @@ export default class Main extends Component {
                     this.props.fetchGroupAps();
                     this.props.showMainModal({
                       title: _('Add Ap Group'),
+                      size: 'lg',
                       isShow: true,
-                      name: 'group',
+                      name: 'groupAdd',
                     });
                   }}
                 />
                 <Button
                   icon="edit"
                   text={_('Edit')}
+                  onClick={() => {
+                    this.props.showMainModal({
+                      title: _('Edit Ap Group'),
+                      size: 'md',
+                      isShow: true,
+                      name: 'groupEdit',
+                    });
+                  }}
                 />
                 <Button
                   icon="trash"
                   text={_('Delete')}
+                  onClick={(e) => {
+                    this.onRemoveGroup(e);
+                  }}
                 />
               </div>
             </div>
@@ -438,17 +659,33 @@ export default class Main extends Component {
                 selectable
                 list={product.getIn(['group', 'devices'])}
                 onRowSelect={(data) => {
-                  this.props.selectAddApGroupDevice(data);
+                  this.props.selectManageGroupAp(data);
                 }}
               />
               <div className="o-list__footer action-btns">
                 <Button
                   icon="plus"
-                  text={_('Add')}
+                  text={_('Add AP')}
+                  onClick={() => {
+                    this.props.showMainModal({
+                      title: _('Add AP to Group'),
+                      size: 'md',
+                      isShow: true,
+                      name: 'groupAddAp',
+                    });
+                  }}
                 />
                 <Button
                   icon="share"
                   text={_('Move to Other Group')}
+                  onClick={() => {
+                    this.props.showMainModal({
+                      title: _('Move Ap Other Group'),
+                      size: 'lg',
+                      isShow: true,
+                      name: 'groupMoveAp',
+                    });
+                  }}
                 />
                 <Button
                   icon="trash"
@@ -458,6 +695,7 @@ export default class Main extends Component {
             </div>
           </div>
         );
+
 
       default:
         return null;
@@ -640,6 +878,7 @@ export default class Main extends Component {
             this.props.showMainModal({
               isShow: false,
             });
+            this.props.resetVaildateMsg();
           }}
           noFooter
         >

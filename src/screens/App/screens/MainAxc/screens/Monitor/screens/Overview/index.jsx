@@ -9,11 +9,11 @@ import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/screens';
 
 function getTerminalTypeOption(serverData) {
-  const dataList = serverData.get('terminalType');
+  let dataList = serverData.get('terminalType');
   const ret = {
     tooltip: {
       trigger: 'item',
-      formatter: '{a} <br/>{b}: {c} ({d}%)',
+      formatter: '{a} <br/>{b} ({d}%)',
     },
     title: {
       text: _('Terminal Type'),
@@ -31,15 +31,15 @@ function getTerminalTypeOption(serverData) {
       {
         name: 'Type',
         type: 'pie',
-        radius: ['30%', '60%'],
+        radius: ['0%', '60%'],
         avoidLabelOverlap: false,
         label: {
           normal: {
             show: false,
-            position: 'center',
+            //position: 'center',
           },
           emphasis: {
-            show: true,
+            show: false,
             textStyle: {
               fontSize: '12',
               fontWeight: 'bold',
@@ -57,6 +57,7 @@ function getTerminalTypeOption(serverData) {
   };
 
   if (List.isList(dataList)) {
+    dataList = dataList.map(item => item.set('name', `${item.get('name')}: ${item.get('value')}`));
     ret.legend.data = dataList.map(item => item.get('name')).toJS();
     ret.series[0].data = dataList.toJS();
   }
@@ -74,6 +75,7 @@ function getApStatusOption(serverData) {
       x: 'center',
     },
     legend: {
+      show: true,
       orient: 'vertical',
       x: 'left',
       y: 'bottom',
@@ -83,12 +85,13 @@ function getApStatusOption(serverData) {
       {
         name: _('Status'),
         type: 'pie',
-        radius: ['30%', '60%'],
+        radius: ['0%', '60%'],
         avoidLabelOverlap: false,
         label: {
+          formatter: '{b}: {c}',
           normal: {
-            show: false,
-            position: 'center',
+            show: true,
+            //position: 'center',
           },
           emphasis: {
             show: true,
@@ -100,7 +103,7 @@ function getApStatusOption(serverData) {
         },
         labelLine: {
           normal: {
-            show: false,
+            show: true,
           },
         },
       },
