@@ -8,19 +8,21 @@ class MonitorUser extends CI_Controller {
 		$this->load->helper('array');
 	}
 	function fetch(){
-       $retdata = array(
-        'groupid'=>element('groupid', $_GET,-1),
-        'type'=>element('type', $_GET,1),
-        'page'=>element('page', $_GET,1),
-        'pagesize'=>element('size', $_GET,30),
-        'search'=>element('search', $_GET,222),
+      $data = array(
+        'groupid'=>(int)$_GET['groupid'],
+        'type'=>$_GET['type'],
+        'page'=>$_GET['page'],
+        'size'=>$_GET['size'],
+        'search'=>$_GET['search'],
       );
-      if ($groupid === -1){
-         $result=axc_get_default_clientList();
-      }
-      else{
-        $result=axc_get_clientList(json_encode($retdata));
-      }
+       $retdata = array(
+        'groupid'=>element('groupid', $data),
+        'type'=>element('type', $data),
+        'page'=>element('page', $data),
+        'pagesize'=>element('size', $data),
+        'search'=>element('search', $data),
+      );
+      $result=axc_get_clientList((json_encode($retdata)));
       return $result;
   }
 

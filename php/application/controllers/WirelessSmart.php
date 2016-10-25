@@ -8,15 +8,13 @@ class WirelessSmart extends CI_Controller {
 		$this->load->helper('array');
 	}
 	function fetch(){
-     $retdata = array(
-        'groupid'=>(int)element('groupid', $_GET,-1),
+     $data = array(
+        'groupid'=>(int)$_GET['groupid'],
       );
-      if(groupid===-1){
-         $result=axc_get__default_wireless_smart();
-      }
-      else{
-          $result=axc_get_wireless_smart(json_encode($retdata));
-      }
+       $retdata = array(
+        'groupid'=>element('groupid', $data),
+      );
+      $result=axc_get_wireless_smart(json_encode($retdata));
       return $result;
   }
 

@@ -9,14 +9,9 @@ class WirelessSsid extends CI_Controller {
 	}
 	function fetch(){
       $retdata = array(
-        'groupid'=>element('groupid', $_GET, -1),
+        'groupid'=>element('groupid', $_GET, 1),
       );
-      if(groupid===-1){
-       $result=axc_get_default_wireless_ssid();
-      }
-      else{
-        $result=axc_get_wireless_ssid(json_encode($retdata));
-      }
+      $result=axc_get_wireless_ssid(json_encode($retdata));
       return $result;
   }
 
