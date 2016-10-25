@@ -25,6 +25,8 @@ const propTypes = {
 
   createModal: PropTypes.func,
   restoreSelfState: PropTypes.func,
+  changeUpgradeBarInfo: PropTypes.func,
+  resetSelfState: PropTypes.func,
 };
 
 export default class SystemMaintenance extends Component {
@@ -46,9 +48,9 @@ export default class SystemMaintenance extends Component {
     });
   }
 
-  componentDidUpdate() {
-    this.props.restoreSelfState();
-  }
+  // componentDidUpdate() {
+  //   this.props.restoreSelfState();
+  // }
 
   componentWillUnmount() {
     this.props.changeProgressBarInfo(fromJS({
@@ -76,26 +78,29 @@ export default class SystemMaintenance extends Component {
         data = new FormData();
         data.append('filename', input.files[0]);
         data.append('suffix', extension);
-        const timeClock = setTimeout(() => {
-          that.props.changeProgressBarInfo(fromJS({
-            title: _('The device is upgrading now, please wait for a while...'),
-            time: 120,
-            isShow: true,
-          }));
-        }, 1500);
+        const step = Promise.resolve();
+        step.then(() => {
+          const upgradeBarInfo = that.props.selfState.get('upgradeBarInfo')
+                                    .set('isShow', true);
+          that.props.changeUpgradeBarInfo(upgradeBarInfo);
+        }).then(() => {
+          const upgradeBarInfo = that.props.selfState.get('upgradeBarInfo')
+                                    .setIn(['firstBar', 'start'], true);
+          that.props.changeUpgradeBarInfo(upgradeBarInfo);
+        });
 
         that.props.fetch(formElem.action, {
           method: 'POST',
           body: data,
-        })
-        .then((rq) => {
+        }).then((rq) => {
           if (rq.state && rq.state.code === 4000) {
-            clearTimeout(timeClock);
-            that.props.changeProgressBarInfo(fromJS({
-              title: '',
-              time: 0,
-              isShow: false,
-            }));
+            // console.log('here?');
+            // clearTimeout(timeClock);
+            // const BarInfo = that.props.selfState.get('upgradeBarInfo')
+            //                       .setIn(['firstBar', 'start'], false)
+            //                       .set('isShow', false);
+            // that.props.changeUpgradeBarInfo(BarInfo);
+            that.props.resetSelfState();
             that.props.createModal({
               id: 'settings',
               role: 'alert',
@@ -132,26 +137,24 @@ export default class SystemMaintenance extends Component {
         data = new FormData();
         data.append('filename', input.files[0]);
         data.append('suffix', extension);
-        const timeClock = setTimeout(() => {
-          that.props.changeProgressBarInfo(fromJS({
-            title: _('The configuration is restoring now, please wait ...'),
-            time: 120,
-            isShow: true,
-          }));
-        }, 1500);
+        const step = Promise.resolve();
+        step.then(() => {
+          const barInfo = that.props.selfState.get('progressBarInfo')
+                          .set('title', _('The configuration is restoring now, please wait ...'))
+                          .set('time', 120).set('isShow', true).set('start', false);
+          that.props.changeProgressBarInfo(barInfo);
+        }).then(() => {
+          const barInfo = that.props.selfState.get('progressBarInfo').set('start', true);
+          that.props.changeProgressBarInfo(barInfo);
+        });
 
         that.props.fetch(formElem.action, {
           method: 'POST',
           body: data,
-        })
-        .then((rq) => {
+        }).then((rq) => {
           if (rq.state && rq.state.code === 4000) {
-            clearTimeout(timeClock);
-            that.props.changeProgressBarInfo(fromJS({
-              title: '',
-              time: 0,
-              isShow: false,
-            }));
+            // clearTimeout(timeClock);
+            that.props.resetSelfState();
             that.props.createModal({
               id: 'settings',
               role: 'alert',
@@ -176,11 +179,17 @@ export default class SystemMaintenance extends Component {
     const that = this;
     function rebootDevice() {
       utils.save('goform/reboot');
-      that.props.changeProgressBarInfo(fromJS({
-        title: _('The device is rebooting now, please wait ...'),
-        time: 90,
-        isShow: true,
-      }));
+      const step = Promise.resolve();
+      step.then(() => {
+        that.props.changeProgressBarInfo(fromJS({
+          title: _('The device is rebooting now, please wait ...'),
+          time: 90,
+          isShow: true,
+        }));
+      }).then(() => {
+        const barInfo = that.props.selfState.get('progressBarInfo').set('start', true);
+        that.props.changeProgressBarInfo(barInfo);
+      });
     }
 
     this.props.createModal({
@@ -195,11 +204,17 @@ export default class SystemMaintenance extends Component {
     const that = this;
     function resetDevice() {
       utils.save('goform/reset');
-      that.props.changeProgressBarInfo(fromJS({
-        title: _('The device is reseting now, please wait ...'),
-        time: 90,
-        isShow: true,
-      }));
+      const step = Promise.resolve();
+      step.then(() => {
+        that.props.changeProgressBarInfo(fromJS({
+          title: _('The device is reseting now, please wait ...'),
+          time: 90,
+          isShow: true,
+        }));
+      }).then(() => {
+        const barInfo = that.props.selfState.get('progressBarInfo').set('start', true);
+        that.props.changeProgressBarInfo(barInfo);
+      });
     }
 
     this.props.createModal({
@@ -299,6 +314,38 @@ export default class SystemMaintenance extends Component {
         </FormGroup>
 
         <Modal
+          className="upgradeBar"
+          isShow={this.props.selfState.getIn(['upgradeBarInfo', 'isShow'])}
+          style={{
+            top: '200px',
+            borderRadius: '20px',
+          }}
+          noFooter
+        >
+          <ProgressBar
+            title={this.props.selfState.getIn(['upgradeBarInfo', 'firstBar', 'title'])}
+            time={this.props.selfState.getIn(['upgradeBarInfo', 'firstBar', 'time'])}
+            callback={() => {
+              const txt = 'Upgrading, please DO NOT cut the power !';
+              const upgradeBarInfo = this.props.selfState.get('upgradeBarInfo')
+                                        .setIn(['secondBar', 'start'], true)
+                                        .setIn(['firstBar', 'title'], txt);
+              this.props.changeUpgradeBarInfo(upgradeBarInfo);
+            }}
+            start={this.props.selfState.getIn(['upgradeBarInfo', 'firstBar', 'start'])}
+          />
+          <ProgressBar
+            title={this.props.selfState.getIn(['upgradeBarInfo', 'secondBar', 'title'])}
+            time={this.props.selfState.getIn(['upgradeBarInfo', 'secondBar', 'time'])}
+            callback={() => {
+              window.location.href = '#';
+              this.props.resetSelfState();
+            }}
+            start={this.props.selfState.getIn(['upgradeBarInfo', 'secondBar', 'start'])}
+          />
+        </Modal>
+        <Modal
+          className="excUpgradeBar"
           isShow={this.props.selfState.getIn(['progressBarInfo', 'isShow'])}
           style={{
             top: '200px',
@@ -309,7 +356,11 @@ export default class SystemMaintenance extends Component {
           <ProgressBar
             title={this.props.selfState.getIn(['progressBarInfo', 'title'])}
             time={this.props.selfState.getIn(['progressBarInfo', 'time'])}
-            toUrl="#"
+            callback={() => {
+              window.location.href = '#';
+              this.props.resetSelfState();
+            }}
+            start={this.props.selfState.getIn(['progressBarInfo', 'start'])}
           />
         </Modal>
       </div>

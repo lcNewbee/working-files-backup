@@ -194,7 +194,7 @@ export default class QuickSetup extends React.Component {
 
   onCloseCountrySelectModal() {
     const code = this.props.store.getIn(['curData', 'countryCode']);
-    console.log(code);
+    // console.log(code);
     this.props.closeCountrySelectModal(code);
   }
 
@@ -211,7 +211,7 @@ export default class QuickSetup extends React.Component {
         apMac: mac,
         peers,
         ssid,
-        security,
+        security: fromJS(security).set('key', ''),
         frequency,
         channelWidth,
         scanResult: fromJS({}),

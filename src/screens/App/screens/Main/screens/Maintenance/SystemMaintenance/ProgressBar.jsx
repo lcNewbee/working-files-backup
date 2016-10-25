@@ -2,12 +2,22 @@ import React, { PropTypes } from 'react';
 import './ProgressBar.scss';
 // import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
+// isShow属性控制组件是否显示
+// start属性控制进度条是否开始显示进度，为true表示开始移动，默认为false
 const propTypes = {
   title: PropTypes.string,
   time: PropTypes.number,
   isShow: PropTypes.bool,
   toUrl: PropTypes.string,
+  start: PropTypes.bool,
   style: PropTypes.object,
+  callback: PropTypes.func, //进度条走完后执行的函数
+};
+
+// isShow 和 start 需异步修改，即先显示，在置start为true，否则进度条不会动。
+const defaultProps = {
+  isShow: false,
+  start: false,
 };
 
 export default class ProgressBar extends React.Component {
@@ -20,21 +30,25 @@ export default class ProgressBar extends React.Component {
   }
 
   componentDidMount() {
-    this.bodyWrapOffsetWidth = this.myBodyWrap.offsetWidth - 2;
-    const time = this.props.time;
-    const length = this.bodyWrapOffsetWidth;
-    this.barChangeInterval = setInterval(() => {
-      const n = this.state.n;
-      if (n <= time) {
-        this.setState({
-          width: (n / time) * length,
-          n: n + 1,
-        });
-        // console.log(n);
-      } else {
-        window.location.href = this.props.toUrl;
-      }
-    }, 1000);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.start === false && this.props.start === true) {
+      this.bodyWrapOffsetWidth = this.myBodyWrap.offsetWidth - 2;
+      const time = this.props.time;
+      const length = this.bodyWrapOffsetWidth;
+      this.barChangeInterval = setInterval(() => {
+        const n = this.state.n;
+        if (n <= time) {
+          this.setState({
+            width: (n / time) * length,
+            n: n + 1,
+          });
+        } else if (this.props.callback && typeof (this.props.callback) === 'function') {
+          this.props.callback();
+        }
+      }, 1000);
+    }
   }
 
   componentWillUnmount() {
@@ -66,21 +80,6 @@ export default class ProgressBar extends React.Component {
                 parseInt((this.state.n / this.props.time) * 100, 10) > 100 ? '100% ...' : (
                  parseInt((this.state.n / this.props.time) * 100, 10) + '% ...'
                 )
-            // (() => {
-            //   let bodyWidth; let wrapWidth;
-            //   if (this.myBody1 && this.myBodyWrap) {
-            //     bodyWidth = this.myBody1.clientWidth;
-            //     wrapWidth = this.myBodyWrap.clientWidth;
-            //   }
-            //   console.log('mybody', bodyWidth);
-            //   return parseInt((bodyWidth / wrapWidth) * 100, 10) + '% ...';
-            // })()
-              // (() => {
-              //   if (this.state.n <= this.props.time) {
-              //     return parseInt((this.state.n / this.props.time) * 100, 10) + '% ...';
-              //   }
-              //   return '100%';
-              // })()
             }
           </span>
           <div
@@ -101,3 +100,4 @@ export default class ProgressBar extends React.Component {
   }
 }
 ProgressBar.propTypes = propTypes;
+ProgressBar.defaultProps = defaultProps;

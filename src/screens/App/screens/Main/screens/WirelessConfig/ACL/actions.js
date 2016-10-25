@@ -46,3 +46,9 @@ export function changeSelectedSsid(data) {
   };
 }
 
+export function restoreSelfState() {
+  return {
+    type: 'RESTORE_SELF_STATE',
+  };
+}
+

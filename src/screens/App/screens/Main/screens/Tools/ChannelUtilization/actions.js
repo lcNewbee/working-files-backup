@@ -1,27 +1,13 @@
-export function changeRemainTime(data) {
+export function changeChannelUtiOptions(data) {
   return {
-    type: 'CHANGE_REMAIN_TIME',
+    type: 'CHANGE_CHANNEL_UTI_OPTIONS',
     data,
   };
 }
 
-export function changePerChannelScanTime(data) {
+export function changeChannelUtiList(data) {
   return {
-    type: 'CHANGE_PER_CHANNEL_SCAN_TIME',
-    data,
-  };
-}
-
-export function changeChannelLen(data) {
-  return {
-    type: 'CHANGE_CHANNEL_LEN',
-    data,
-  };
-}
-
-export function changeUtiTableShowStatus(data) {
-  return {
-    type: 'CHANGE_UTI_TABLE_SHOW_STATUS',
+    type: 'CHANGE_CHANNEL_UTI_LIST',
     data,
   };
 }

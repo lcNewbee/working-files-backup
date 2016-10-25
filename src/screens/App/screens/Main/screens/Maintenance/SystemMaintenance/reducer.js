@@ -6,6 +6,19 @@ const defaultState = fromJS({
     title: 'rebooting , please wait...',
     time: 60,
     isShow: false,
+    start: false,
+  },
+  upgradeBarInfo: {
+    isShow: false,
+    firstBar: {
+      title: 'Uploading file...',
+      time: 30,
+      start: false,
+    },
+    secondBar: {
+      time: 100,
+      start: false,
+    },
   },
 });
 
@@ -16,6 +29,10 @@ export default function (state = defaultState, action) {
     case 'CHANGE_PROGRESS_BAR_INFO':
       return state.set('progressBarInfo', action.data);
     case 'RESTORE_SELF_STATE':
+      return defaultState;
+    case 'CHANGE_UPGRADE_BAR_INFO':
+      return state.set('upgradeBarInfo', action.data);
+    case 'RESET_SELF_STATE':
       return defaultState;
     default:
   }

@@ -247,7 +247,7 @@ export default class Basic extends React.Component {
       if (peers !== undefined) { peers = peers.set('0', mac); }
       const firstSsid = basicSettings.getIn(['vapList', '0'])
                         .set('peers', peers).set('ssid', ssid).set('apMac', mac)
-                        .set('security', fromJS(security))
+                        .set('security', fromJS(security).set('key', ''))
                         .set('frequency', frequency)
                         .set('channelWidth', channelWidth);
       const vapList = basicSettings.get('vapList').set('0', firstSsid);

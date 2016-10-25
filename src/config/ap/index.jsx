@@ -251,9 +251,6 @@ const routes = [{
   },
   ],
 }, {
-  path: '/login',
-  indexRoute: { onEnter: (nextState, replace) => replace('/') },
-}, {
   path: '/main/status',
   indexRoute: { onEnter: (nextState, replace) => replace('/main/systemstatus') },
 }, {
