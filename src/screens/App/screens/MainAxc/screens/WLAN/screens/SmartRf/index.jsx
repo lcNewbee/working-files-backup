@@ -40,6 +40,7 @@ export default class View extends React.Component {
       settingId: props.route.id,
       formUrl: props.route.formUrl,
       defaultData: {
+        groupid: groupId,
         '5gFrist': '1',
         '11nFrist': '1',
         terminalRelease: '1',

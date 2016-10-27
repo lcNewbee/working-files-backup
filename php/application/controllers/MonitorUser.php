@@ -25,18 +25,18 @@ class MonitorUser extends CI_Controller {
   }
 
 	function onAction($data) {
-   	// $result = null;
-   // $actionType = element('action', $data);
-    // if($actionType === 'lock'){
-
-    // }
-    // elseif($actionType === 'unlock'){
-
-    // }
-    // elseif($actionType === 'reconnect'){
-
-    // }
-    // return $result;
+   	$result = null;
+   $actionType = element('action', $data);
+    if($actionType === 'lock'){
+      $result=axc_set_clientoperate(json_encode($data));
+    }
+    elseif($actionType === 'unlock'){
+      $result=axc_set_clientoperate(json_encode($data));
+    }
+    elseif($actionType === 'reconnect'){
+      $result=axc_set_clientoperate(json_encode($data));
+    }
+    return $result;
 	}
 	public function index() {
 		$result = null;

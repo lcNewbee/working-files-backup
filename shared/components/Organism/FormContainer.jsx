@@ -133,8 +133,6 @@ class FormContainer extends React.Component {
       isShow = myProps.showPrecondition(data);
     }
 
-    console.log(myProps);
-
     return isShow ? (
       <FormGroup
         {...myProps}

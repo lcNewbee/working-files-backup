@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
+import { bindActionCreators } from 'redux';
 import utils from 'shared/utils';
 
 // components
@@ -10,6 +11,7 @@ import Button from 'shared/components/Button/Button';
 
 // custom
 import * as screenActions from 'shared/actions/screens';
+import * as appActions from 'shared/actions/app';
 
 const flowRateFilter = utils.filter('flowRate:["KB"]');
 
@@ -124,6 +126,20 @@ export default class Clients extends PureComponent {
       ],
     );
   }
+  onAction(mac, operate) {
+    const subData = {
+      groupid: this.props.groupid,
+      operate,
+      mac,
+    };
+
+    this.props.save('goform/group/client', subData)
+      .then((json) => {
+        if (json.state && json.state.code === 2000) {
+          this.props.fetchScreenData();
+        }
+      });
+  }
   render() {
     // 添加操作项
     const options = clientsTableOptions.setIn([-1, 'transform'],
@@ -183,9 +199,16 @@ function mapStateToProps(state) {
   };
 }
 
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(utils.extend({},
+    appActions,
+    screenActions
+  ), dispatch);
+}
+
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  screenActions
+  mapDispatchToProps
 )(Clients);
 

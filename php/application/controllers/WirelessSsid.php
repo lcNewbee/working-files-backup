@@ -48,12 +48,19 @@ class WirelessSsid extends CI_Controller {
     elseif($actionType === 'delete'){
        $temp_data=array(
         'groupid'=>element('groupid',$data),
-        'ssid'=>element('ssid',$data['selectedList']),
+        'ssid'=>element('selectedList',$data),
        );
       $state=axc_del_wireless_ssid(json_encode($temp_data));
        $result=$state;
     }
-
+    elseif($actionType === 'bind'){
+			$temp_data=getCgiParam($data);
+      $result=axc_bind_wireless_ssid(json_encode($temp_data));
+    }
+    elseif($actionType === 'unbind'){
+			$temp_data=getCgiParam($data);
+      $result=axc_unbind_wireless_ssid(json_encode($temp_data));
+    }
 		return $result;
 	}
 
@@ -66,7 +73,6 @@ class WirelessSsid extends CI_Controller {
       echo $result;
 		}
 		else if($_SERVER['REQUEST_METHOD'] == 'GET') {
-
 			$result = $this->fetch();
       echo $result;
 		}

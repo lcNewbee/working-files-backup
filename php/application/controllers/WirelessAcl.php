@@ -31,7 +31,7 @@ class WirelessAcl extends CI_Controller {
     elseif($actionType === 'delete'){
     $temp_data=array(
     'groupid'=>element('groupid', $data),
-    'mac'=>element('mac',$data['selectedList'])
+    'mac'=>element('selectedList',$data)
     );
        $result=axc_del_wireless_acl(json_encode($temp_data));
     }
@@ -40,7 +40,6 @@ class WirelessAcl extends CI_Controller {
 
 	public function index() {
 		$result = null;
-
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$data = json_decode(file_get_contents("php://input"), true);
 			$result = $this->onAction($data);

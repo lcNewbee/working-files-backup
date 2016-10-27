@@ -37,7 +37,6 @@ class WirelessTimer extends CI_Controller {
 
 	public function index() {
 		$result = null;
-
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$data = json_decode(file_get_contents("php://input"), true);
 			$result = $this->onAction($data);
