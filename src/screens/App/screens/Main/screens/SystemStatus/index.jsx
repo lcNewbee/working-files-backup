@@ -101,7 +101,6 @@ export default class SystemStatus extends React.Component {
 
 
   componentWillMount() {
-    // console.log('in will mount');
     clearInterval(a);
     // 必须要有初始化，因为要在settings中插入一个由该页面id命名的对象
     this.props.initSettings({
@@ -110,7 +109,7 @@ export default class SystemStatus extends React.Component {
       defaultData: {},
     });
     this.props.fetchSettings();
-    a = setInterval(this.props.fetchSettings, 5000);
+    a = setInterval(this.props.fetchSettings, 10000);
   }
 
   componentDidUpdate(prevProps) {
@@ -120,7 +119,7 @@ export default class SystemStatus extends React.Component {
       // console.log('refresh');
       clearInterval(a);
       this.props.fetchSettings();
-      a = setInterval(this.props.fetchSettings, 5000);
+      a = setInterval(this.props.fetchSettings, 10000);
     }
   }
 
@@ -404,6 +403,21 @@ export default class SystemStatus extends React.Component {
     // const wirelessMode = this.props.store.getIn(['curData', 'wirelessMode']);
     return (
       <div className="">
+      {
+        this.props.app.get('fetching') ? (
+          <div className="o-modal" role="message">
+            <div className="o-modal__backdrop"></div>
+            <div className="o-modal__message">
+              <div className="o-modal__content">
+                <div className="o-modal__clarbody">
+                  <h3>Axilspot</h3>
+                  <span className="fa fa-spinner fa-spin" style={{color: '#0093dd', marginLeft: '5px'}}></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : null
+      }
         <div className="stats-group">
           <div className="stats-group-cell">
             <h3>{_('System Status')}</h3>
@@ -483,7 +497,7 @@ export default class SystemStatus extends React.Component {
                 <FormGroup
                   label={_('Wireless Model :')}
                   type="plain-text"
-                  value={wirelessMode}
+                  value={wirelessMode === 'sta' ? 'station' : wirelessMode}
                 />
                 <FormGroup
                   label={_('SSID :')}

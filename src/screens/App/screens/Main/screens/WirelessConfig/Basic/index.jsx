@@ -867,13 +867,20 @@ export default class Basic extends React.Component {
                                 required
                                 {...validSsid}
                               />
-                              <Button
-                                text={_('Scan')}
-                                style={{
-                                  marginLeft: '3px',
-                                }}
-                                onClick={this.onScanBtnClick}
-                              />
+                              {
+                                this.props.selfState.get('scaning') ? (
+                                  <Button
+                                    text={_('Stop Scan')}
+                                    onClick={this.onStopScanClick}
+                                    loading
+                                  />
+                                ) : (
+                                  <Button
+                                    text={_('Scan')}
+                                    onClick={this.onScanBtnClick}
+                                  />
+                                )
+                              }
                             </div>
                           ) : null
                         }
@@ -1030,6 +1037,7 @@ export default class Basic extends React.Component {
                     <div>
                       <FormGroup
                         label={_('Algorithm')}
+                        minWidth="66px"
                         type="switch"
                         value={basicSettings.getIn(['vapList', '0', 'security', 'cipher'])}
                         onChange={(data) => {
@@ -1042,7 +1050,7 @@ export default class Basic extends React.Component {
                         options={[
                           { label: 'AES', value: 'aes' },
                           { label: 'TKIP', value: 'tkip' },
-                          { label: 'AES/TKIP', value: 'aes&tkip' },
+                          { label: 'MIXED', value: 'aes&tkip' },
                         ]}
                       />
                       <FormGroup
@@ -1239,7 +1247,7 @@ export default class Basic extends React.Component {
                 <Button
                   text={_('Change')}
                   style={{
-                    marginLeft: '3px',
+                    marginLeft: '-1px',
                     width: '70px',
                   }}
                   onClick={() => { this.props.changeCtyModal(true); }}
@@ -1297,6 +1305,7 @@ export default class Basic extends React.Component {
               <FormGroup
                 label={_('Channel Bandwidth')}
                 type="switch"
+                minWidth="66px"
                 options={channelWidthOptions}
                 value={radioSettings.get('channelWidth')}
                 onChange={(data) => this.props.updateRadioSettingsItem({
@@ -1530,12 +1539,13 @@ export default class Basic extends React.Component {
               <div>
                 <FormGroup
                   label={_('Algorithm')}
+                  minWidth="66px"
                   type="switch"
                   value={tableItemForSsid.getIn(['item', 'security', 'cipher'])}
                   options={[
                     { label: 'AES', value: 'aes' },
                     { label: 'TKIP', value: 'tkip' },
-                    { label: 'AES/TKIP', value: 'aes&tkip' },
+                    { label: 'MIXED', value: 'aes&tkip' },
                   ]}
                   onChange={(data) => {
                     const newItem = tableItemForSsid.get('item')

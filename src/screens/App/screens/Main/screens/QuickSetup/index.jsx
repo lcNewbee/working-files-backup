@@ -600,6 +600,7 @@ export default class QuickSetup extends React.Component {
               <FormGroup
                 type="switch"
                 label={_('Channel Width')}
+                minWidth="66px"
                 options={channelWidthOptions}
                 value={channelWidth}
                 onChange={data => this.props.updateItemSettings({
@@ -637,6 +638,7 @@ export default class QuickSetup extends React.Component {
                   <div>
                     <FormGroup
                       label={_('Algorithm')}
+                      minWidth="66px"
                       type="switch"
                       value={store.getIn(['curData', 'security', 'cipher'])}
                       onChange={data => this.props.updateItemSettings({
@@ -649,7 +651,7 @@ export default class QuickSetup extends React.Component {
                       options={[
                         { label: 'AES', value: 'aes' },
                         { label: 'TKIP', value: 'tkip' },
-                        { label: 'AES/TKIP', value: 'aes&tkip' },
+                        { label: 'MIXED', value: 'aes&tkip' },
                       ]}
                       minWidth="60px"
                     />
@@ -870,7 +872,7 @@ export default class QuickSetup extends React.Component {
                 <Button
                   text={_('Change')}
                   style={{
-                    marginLeft: '3px',
+                    marginLeft: '-1px',
                     width: '70px',
                   }}
                   onClick={() => { this.props.changeCtyModal(true); }}
@@ -908,6 +910,7 @@ export default class QuickSetup extends React.Component {
               <FormGroup
                 type="switch"
                 label={_('Channel Width')}
+                minWidth="66px"
                 options={channelWidthOptions}
                 value={channelWidth}
                 onChange={data => this.props.updateItemSettings({
@@ -945,6 +948,7 @@ export default class QuickSetup extends React.Component {
                   <div>
                     <FormGroup
                       label={_('Algorithm')}
+                      minWidth="66px"
                       type="switch"
                       value={store.getIn(['curData', 'security', 'cipher'])}
                       onChange={data => this.props.updateItemSettings({
@@ -957,7 +961,7 @@ export default class QuickSetup extends React.Component {
                       options={[
                         { label: 'AES', value: 'aes' },
                         { label: 'TKIP', value: 'tkip' },
-                        { label: 'AES/TKIP', value: 'aes&tkip' },
+                        { label: 'MIXED', value: 'aes&tkip' },
                       ]}
                       minWidth="60px"
                     />
@@ -1219,6 +1223,7 @@ export default class QuickSetup extends React.Component {
               <FormGroup
                 type="switch"
                 label={_('Channel Width')}
+                minWidth="66px"
                 options={channelWidthOptions}
                 value={channelWidth}
                 onChange={data => this.props.updateItemSettings({

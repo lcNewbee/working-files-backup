@@ -4,7 +4,7 @@
     "msg": "ok"
   },
   "data": {
-      "wirelessMode":"station",
+      "wirelessMode":"ap",
       "status": {
       "deviceModel":"NS300",
       "deviceName":"NS300",
