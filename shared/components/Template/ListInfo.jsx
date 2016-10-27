@@ -251,6 +251,7 @@ class ListInfo extends React.Component {
     const list = store.getIn([myListScreenId, 'data', 'list']);
     const listKey = this.props.listKey;
     let selectedList = [];
+    const msgText = _('Are you sure to delete selected index: %s ?', i);
 
     if (listKey === 'allKeys') {
       selectedList = [list.get(i)];
@@ -258,11 +259,18 @@ class ListInfo extends React.Component {
       selectedList = [list.getIn([i, listKey])];
     }
 
-    this.props.changeScreenActionQuery({
-      action: 'delete',
-      selectedList,
+    this.props.createModal({
+      id: 'settings',
+      role: 'comfirm',
+      text: msgText,
+      apply: () => {
+        this.props.changeScreenActionQuery({
+          action: 'delete',
+          selectedList,
+        });
+        this.props.onListAction();
+      },
     });
-    this.props.onListAction();
   }
 
   onChangeQuery(data, needRefresh) {
@@ -286,7 +294,10 @@ class ListInfo extends React.Component {
   }
   onRemoveSelectedItems(selectedList, list) {
     const listKey = this.props.listKey;
+    let selectStr = '';
     let mySelectedList = selectedList;
+    let msgText = '';
+
 
     if (selectedList && selectedList.size > 0) {
       mySelectedList = mySelectedList.map((val) => {
@@ -300,12 +311,21 @@ class ListInfo extends React.Component {
 
         return ret;
       });
+      selectStr = mySelectedList.map((item, i) => i).join(', ');
+      msgText = _('Are you sure to delete selected index: %s ?', selectStr);
 
-      this.props.changeScreenActionQuery({
-        action: 'delete',
-        selectedList: mySelectedList,
+      this.props.createModal({
+        id: 'settings',
+        role: 'comfirm',
+        text: msgText,
+        apply: () => {
+          this.props.changeScreenActionQuery({
+            action: 'delete',
+            selectedList: mySelectedList,
+          });
+          this.props.onListAction();
+        },
       });
-      this.props.onListAction();
     } else {
       this.props.createModal({
         role: 'alert',
@@ -370,7 +390,7 @@ class ListInfo extends React.Component {
       leftChildrenNode.push(
         <Button
           icon="plus"
-          key="add"
+          key="addBtn"
           theme="primary"
           text={_('Add')}
           onClick={() => {
@@ -383,7 +403,7 @@ class ListInfo extends React.Component {
       leftChildrenNode.push(
         <Search
           value={query.get('text')}
-          key="search"
+          key="searchInput"
           onChange={this.onChangeSearchText}
           onSearch={this.handleSearch}
         />

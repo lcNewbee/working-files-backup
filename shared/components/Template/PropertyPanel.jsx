@@ -28,6 +28,7 @@ class PropertyPanel extends React.Component {
     super(props);
 
     this.onChangePropertysTab = this.onChangePropertysTab.bind(this);
+    this.onSave = this.onSave.bind(this);
   }
 
   onChangePropertysTab(e, name) {
@@ -35,6 +36,35 @@ class PropertyPanel extends React.Component {
     this.props.changePropertysItem({
       activeTab: name,
     });
+  }
+
+  onSave() {
+    const { properties } = this.props;
+    const activeIndex = properties.get('activeIndex');
+    const activePanelState = properties.getIn([
+      'list', activeIndex,
+    ]);
+    const activePanelconfigIndex = activePanelState.get('configurationActivePanelIndex');
+    const $$activeListData = activePanelState.get('data');
+    const $$configData = activePanelState.getIn([
+      'configuration', activePanelconfigIndex
+    ]);
+    const query = activePanelState.get('query').toJS();
+    let formUrl = 'goform/group/ap/radio';
+    let subData = $$configData.get('data').toJS();
+
+    if($$configData.get('module') === 'radio') {
+      formUrl = 'goform/group/ap/radio';
+      subData = $$activeListData.get('radio')
+          .merge(subData).toJS();
+    }
+
+    this.props.save(formUrl, subData)
+      .then((json) => {
+        if(json.state && json.state.code === 2000) {
+          this.props.fetchPropertyPanelData(query);
+        }
+      })
   }
 
   render() {
@@ -105,7 +135,7 @@ class PropertyPanel extends React.Component {
                   onRemove={
                     () => this.props.removeFromPropertyPanel(index)
                   }
-                  onSave={this.props.save}
+                  onSave={this.onSave}
                 />
               ))
             }

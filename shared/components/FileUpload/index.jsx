@@ -4,7 +4,7 @@ import Button from '../Button/Button';
 
 const MSG = {
   shouldSelectFile: _('Please select a upload file'),
-  extensionRange: _('Select file extension range: '),
+  extensionRange: _('Select file extension range: %s'),
 };
 
 const propTypes = {
@@ -33,8 +33,11 @@ class FileUpload extends React.Component {
     };
 
     utils.binds(this, [
-      'onChangeImage', 'onUploadImage', 'restImageStatus',
-      'imageUploading', 'onAlert',
+      'onChangeImage',
+      'onUploadImage',
+      'restImageStatus',
+      'imageUploading',
+      'onAlert',
     ]);
   }
   onAlert(msg) {
@@ -73,7 +76,7 @@ class FileUpload extends React.Component {
 
     // 验证可接受的文件类型
     if (acceptExt && acceptExt.indexOf(extension) === -1) {
-      this.onAlert(_('Select file extension range: %s', acceptExt));
+      this.onAlert(_(MSG.extensionRange, acceptExt));
       thisElem.value = '';
       this.restImageStatus();
       return;
@@ -84,7 +87,7 @@ class FileUpload extends React.Component {
   }
 
   onUploadImage() {
-    const { url } = this.props;
+    const { url, onBeforeUpload, onUploaded } = this.props;
     const input = this.fileElem;
     const formElem = this.formElem;
     let data;
@@ -98,24 +101,37 @@ class FileUpload extends React.Component {
       return;
     }
 
+    if (onBeforeUpload) {
+      onBeforeUpload();
+    }
+
     //
     if (typeof FormData === 'function') {
       data = new FormData();
       data.append('filename', input.files[0]);
       data.append('suffix', this.ext);
       this.imageUploading();
-
       fetch(url, {
         method: 'POST',
         body: data,
       })
       .then(() => {
         this.restImageStatus();
+
+        // 完成时的回调函数
+        if (onUploaded) {
+          onUploaded();
+        }
       });
     } else {
       this.imageUploading();
       formElem.submit();
       this.restImageStatus();
+
+      // 完成时的回调函数
+      if (onUploaded) {
+        onUploaded();
+      }
     }
   }
 
@@ -145,7 +161,7 @@ class FileUpload extends React.Component {
         method="POST"
         target={target}
         encType="multipart/form-data"
-        ref={formElem => {
+        ref={(formElem) => {
           if (formElem) {
             this.formElem = formElem;
           }
@@ -159,7 +175,7 @@ class FileUpload extends React.Component {
           style={{
             marginRight: '8px',
           }}
-          ref={fileElem => {
+          ref={(fileElem) => {
             if (fileElem) {
               this.fileElem = fileElem;
             }

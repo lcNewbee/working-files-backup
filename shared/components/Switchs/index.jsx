@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
-import { fromJS } from 'immutable';
+import { List, fromJS } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import utils from 'shared/utils';
 
 const propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -25,14 +26,11 @@ class Switchs extends React.Component {
     this.onClick = this.onClick.bind(this);
   }
 
-  onClick(e, labelVal) {
+  onClick(e, data) {
     e.preventDefault();
-    if (e.target.value !== this.props.value) {
+    if (data.value !== this.props.value) {
       if (this.props.onChange) {
-        this.props.onChange({
-          value: e.target.value,
-          label: labelVal,
-        });
+        this.props.onChange(data);
       }
     }
   }
@@ -41,10 +39,15 @@ class Switchs extends React.Component {
     const { size, className, options, value, role, minWidth } = this.props;
     let optionsList;
     let classNames = 'm-switch';
+    let width = 50;
 
-    if (options) {
+    if (!List.isList(options)) {
       optionsList = fromJS(options);
+    } else {
+      optionsList = options;
     }
+
+    width = utils.toDecimal(100 / optionsList.size, 3);
 
     if (size) {
       classNames = `${classNames} m-switch--${size}`;
@@ -74,7 +77,7 @@ class Switchs extends React.Component {
               label = item;
             }
 
-            if (val === `${value}`) {
+            if (val === `${value}` || val === value) {
               myClassName += ' active';
             }
 
@@ -84,9 +87,13 @@ class Switchs extends React.Component {
                 className={myClassName}
                 value={val}
                 onClick={(e) => {
-                  this.onClick(e, label);
+                  this.onClick(e, {
+                    value: val,
+                    label,
+                  });
                 }}
                 style={{
+                  width: `${width}%`,
                   minWidth,
                 }}
               >

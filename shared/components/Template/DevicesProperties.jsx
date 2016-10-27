@@ -2,15 +2,15 @@ import React, { PropTypes } from 'react';
 import { Map } from 'immutable';
 import Icon from 'shared/components/Icon';
 import {
-  DeviceOverview, DeviceGeneral, DeviceSystem,
-  DeviceRadios,
+  DeviceOverview, DeviceGeneral, DeviceRadioAdvance,
+  DeviceRadioBase,
 } from '../Panels';
 
 const panelsComponentMap = {
   overview: DeviceOverview,
   general: DeviceGeneral,
-  system: DeviceSystem,
-  radios: DeviceRadios,
+  radioAdvance: DeviceRadioAdvance,
+  radioBase: DeviceRadioBase,
 };
 const propTypes = {
   onCollapse: PropTypes.func,
@@ -34,6 +34,11 @@ function DevicesProperties(props) {
   const activeTab = item.get('activeTab');
   const activeTabPanels = item.get(activeTab);
   const activePanelKey = `${activeTab}ActivePanelIndex`;
+  const apIconStyle = {
+    width: '18px',
+    height: '18px',
+    backgroundSize: '100%',
+  }
 
   return (
     <div
@@ -47,14 +52,17 @@ function DevicesProperties(props) {
           />
         </div>
         <div className="o-properties-header__avatar">
-          <Icon
-            name="bullseye"
-          />
+          {
+            item.getIn(['data', 'info', 'status']) === '1' ? (
+              <span style={apIconStyle} className="Icon Icon-ap-online" />
+            ) : <span style={apIconStyle} className="Icon Icon-ap-offline" />
+          }
+
         </div>
         <div className="o-properties-header__title">
           {
-            item.getIn(['data', 'alias']) ||
-            item.getIn(['data', 'mac'])
+            item.getIn(['data', 'info', 'devicename']) ||
+            item.getIn(['data', 'info', 'mac'])
           }
         </div>
         <div className="o-properties-header__actions">

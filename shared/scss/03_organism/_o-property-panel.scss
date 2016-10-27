@@ -71,8 +71,12 @@
     }
   }
 
-  .o-property__container {
+  .o-property-panel__container {
     padding: 0;
     background-color: #fff;
+    height: 100%;
+    padding-bottom: 35px;
+    overflow-y: auto;
+    @include scrollbar();
   }
 }

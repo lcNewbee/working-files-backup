@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import 'font-awesome/css/font-awesome.css';
 import utils from '../../utils';
-import './index.scss';
+import './_index.scss';
 
 const propTypes = {
   name: PropTypes.string.isRequired,

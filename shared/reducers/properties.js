@@ -1,6 +1,7 @@
 import { fromJS } from 'immutable';
 
 const defaultItem = fromJS({
+  id: '-1',
   activeTab: 'details',
   detailsActivePanelIndex: 0,
   configurationActivePanelIndex: 0,
@@ -8,61 +9,108 @@ const defaultItem = fromJS({
     {
       panelKey: 'overview',
       text: 'Overview',
-      data: {
-        mac: '44:d9:e4:33:33:22',
-        model: 'AP512',
-        version: '3.7.344',
-      },
+      data: {},
     },
   ],
   configuration: [
     {
       panelKey: 'general',
       text: 'General',
+      module: 'info',
       data: {
-        alias: 'dsd',
-        apRelateNum: 122,
+        devicename: ''
       },
     }, {
-      panelKey: 'radios',
-      text: 'Radios',
+      panelKey: 'radioBase',
+      text: 'Radio Base',
+      module: 'radio',
       data: {
-        channel: '6',
+        countrycode: "CN",
+        phymode: '11n',
+        channelwidth: 40,
+        channel: 7,
+        txpower: 13,
       },
     }, {
-      panelKey: 'system',
-      text: 'System',
+      panelKey: 'radioAdvance',
+      module: 'radio',
+      text: 'Radio Advance',
       data: {
-        alias: 'dsd',
-        apRelateNum: 122,
+        maxclientcount: 64,
+        beaconinterval: 1,
+        dtim: 40,
+        rtsthreshold: 7,
+        preamble: 0,
       },
     },
   ],
+  query: {},
   data: {
-    mac: '44:d9:e4:33:33:22',
-    model: 'AP512',
-    version: '3.7.344',
-    alias: 'Ap Name',
-    apRelateNum: 122,
+    info: {},
+    radio: {},
   },
 });
 
 const defaultState = fromJS({
   isShowPanel: false,
   activeIndex: 0,
-  list: [
-  ],
+
+  // 属性面板列表
+  list: [],
 });
 
-function addToPropertyPanel(state) {
+function initAddPropertyPanel(state, action) {
   const ret = state;
   const listSize = state.get('list').size;
+  const myItem = defaultItem
+    .mergeIn(['query'], action.payload.query)
+    .mergeIn(['data', 'info'], action.payload.info)
+    .mergeIn(['details', 0, 'data'], action.payload.info)
+    .set('id', action.payload.query.mac);
+  let activeIndex = state.get('list')
+    .findIndex(item => item.get('id') === action.payload.query.mac);
+  let $$retList = state.get('list');
+
+  // 列表中无此项
+  if(activeIndex === -1) {
+    activeIndex = listSize;
+    $$retList = $$retList.push(myItem);
+  }
 
   return ret.set('isShowPanel', true)
-      .update('list', val => val.push(defaultItem))
-      .set('activeIndex', listSize);
+      .set('list', $$retList)
+      .set('activeIndex', activeIndex);
 }
+function rcPropertyPanelData(state, action) {
+  const rcData = action.payload.data || {};
+  const mac = action.payload.mac;
+  const dataIndex = state.get('list')
+    .findIndex(item => item.get('id') === mac);
+  let $$ret = state;
+  let $$newData = state.getIn(['list', dataIndex, 'data']);
 
+  console.log(dataIndex)
+  if (dataIndex !== -1) {
+    $$newData = $$newData.merge(rcData);
+    $$ret = $$ret
+      .setIn(['list', dataIndex, 'data'], $$newData)
+      .updateIn(
+        ['list', dataIndex, 'configuration'],
+        (item) => {
+          return item.map((subItem) => {
+            const module = subItem.get('module');
+            const $$moduleData = $$newData.get(module);
+            const customData = subItem.get('data')
+              .mapEntries(([key, val]) => [key, $$moduleData.get(key)]);
+
+            return subItem.mergeIn(['data'], customData);
+          });
+        }
+      );
+  }
+
+  return $$ret;
+}
 function removeFromPropertyPanel(state, action) {
   let ret = state;
 
@@ -94,8 +142,11 @@ function updatePropertyPanelData(state, data) {
 
 export default function (state = defaultState, action) {
   switch (action.type) {
-    case 'ADD_TO_PROPERTY_PANEL':
-      return addToPropertyPanel(state, action);
+    case 'INIT_ADD_PROPERTY_PANEL':
+      return initAddPropertyPanel(state, action);
+
+    case 'RC_PROPERTY_PANEL_DATA':
+      return rcPropertyPanelData(state, action);
 
     case 'REMOVE_FROM_PROPERTY_PANEL':
       return removeFromPropertyPanel(state, action);

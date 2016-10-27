@@ -31,11 +31,9 @@ class Panel extends React.Component {
     this.onSave = this.onSave.bind(this);
   }
   onSave() {
-    this.props.onSave('/goform/asd', {
-      a: 1,
-    })
-    .then((json) => {
-    });
+    if (this.props.onSave) {
+      this.props.onSave();
+    }
   }
   onChangeData(data) {
   }

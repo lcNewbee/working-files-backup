@@ -115,21 +115,41 @@ $o-form-content-margin: 1em 0 0;
   &.o-form--compassed {
     padding: 0;
 
+    .cols {
+      padding: 0 5px;
+    }
+    .row {
+      margin: 0 -5px;
+    }
+
     .form-group {
-      label {
+      margin-bottom: 8px;
+      > label {
         display: block;
         text-align: left;
-        line-height: 24px;
+        line-height: 18px;
+        float: none;
+        margin-right: 0;
       }
       .form-control {
         margin-left: 0;
-
+        line-height: 24px;
+        .m-switch {
+          margin: 0;
+          display: block;
+          .m-switch__item {
+            padding: 5px 10px;
+          }
+        }
         .text {
           width: 100%;
-          padding-top: .21429rem;
-          padding-bottom: .21429rem;
+          padding-top: .31429rem;
+          padding-bottom: .31429rem;
           padding-left: .42857rem;
           padding-right: .42857rem;
+        }
+        .a-checkbox {
+          margin-top: 2px;
         }
         .Select {
           width: 100%;
@@ -143,6 +163,9 @@ $o-form-content-margin: 1em 0 0;
           width: 100%;
         }
       }
+    }
+    .form-group--save {
+      margin-top: 10px;
     }
   }
 }
