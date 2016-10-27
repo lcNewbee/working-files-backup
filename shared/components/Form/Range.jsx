@@ -5,7 +5,7 @@ import Input from './atom/Input';
 const propTypes = {
   hasTextInput: PropTypes.bool,
   unit: PropTypes.number,
-  value: PropTypes.string,
+  value: PropTypes.any,
   label: PropTypes.string,
 
   onChange: PropTypes.func,
