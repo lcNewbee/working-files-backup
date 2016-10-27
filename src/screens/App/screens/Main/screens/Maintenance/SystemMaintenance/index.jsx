@@ -81,25 +81,19 @@ export default class SystemMaintenance extends Component {
         const step = Promise.resolve();
         step.then(() => {
           const upgradeBarInfo = that.props.selfState.get('upgradeBarInfo')
-                                    .set('isShow', true);
+                                  .set('isShow', true);
           that.props.changeUpgradeBarInfo(upgradeBarInfo);
         }).then(() => {
           const upgradeBarInfo = that.props.selfState.get('upgradeBarInfo')
-                                    .setIn(['firstBar', 'start'], true);
+                                  .setIn(['firstBar', 'start'], true);
           that.props.changeUpgradeBarInfo(upgradeBarInfo);
         });
 
-        that.props.fetch(formElem.action, {
+        fetch(formElem.action, {
           method: 'POST',
           body: data,
         }).then((rq) => {
           if (rq.state && rq.state.code === 4000) {
-            // console.log('here?');
-            // clearTimeout(timeClock);
-            // const BarInfo = that.props.selfState.get('upgradeBarInfo')
-            //                       .setIn(['firstBar', 'start'], false)
-            //                       .set('isShow', false);
-            // that.props.changeUpgradeBarInfo(BarInfo);
             that.props.resetSelfState();
             that.props.createModal({
               id: 'settings',
@@ -148,7 +142,7 @@ export default class SystemMaintenance extends Component {
           that.props.changeProgressBarInfo(barInfo);
         });
 
-        that.props.fetch(formElem.action, {
+        fetch(formElem.action, {
           method: 'POST',
           body: data,
         }).then((rq) => {
@@ -229,7 +223,7 @@ export default class SystemMaintenance extends Component {
     utils.fetch('goform/save_config')
         .then((json) => {
           if (json.state && json.state.code === 2000) {
-            window.location = json.data.config_url;
+            window.location.href = json.data.config_url;
           } else if (json.state && json.state.code === 4000) {
             this.props.createModal({
               id: 'settings',

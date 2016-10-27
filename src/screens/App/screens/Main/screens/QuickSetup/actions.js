@@ -1,14 +1,6 @@
 import { updateItemSettings } from 'shared/actions/settings';
 import { fetch } from 'shared/actions/app';
 
-
-export function changePage(data) {
-  return {
-    type: 'CHANGE_PAGE',
-    data,
-  };
-}
-
 export function changeDeviceMode(data) {
   return {
     type: 'CHANGE_DEVICE_MODE',

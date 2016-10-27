@@ -226,22 +226,21 @@ export default class Basic extends React.Component {
   onScanBtnClick() {
     this.props.changeScanStatus(true);
     this.props.fetch('goform/get_site_survey')
-              .then((json) => {
-                if (json.state && json.state.code === 2000) {
-                  this.props.updateItemSettings({
-                    scanResult: fromJS(json.data),
-                  });
-                  this.props.changeShowScanResultStatus(true);
-                  this.props.changeScanStatus(false);
-                }
-              });
+        .then((json) => {
+          if (json.state && json.state.code === 2000) {
+            this.props.updateItemSettings({
+              scanResult: fromJS(json.data),
+            });
+            this.props.changeShowScanResultStatus(true);
+            this.props.changeScanStatus(false);
+          }
+        });
   }
   onModalOkBtnClick() {
     const {
       mac, ssid, security, frequency, channelWidth,
     } = this.props.selfState.get('selectedResult').toJS();
     const basicSettings = this.props.selfState.get('basicSettings');
-    // console.log(this.props.selfState.get('selectedResult').toJS());
     if (!this.props.selfState.get('selectedResult').isEmpty()) {
       let peers = basicSettings.getIn(['vapList', '0', 'peers']);
       if (peers !== undefined) { peers = peers.set('0', mac); }
@@ -264,9 +263,9 @@ export default class Basic extends React.Component {
   onSelectScanResultItem(item) {
     const { ssid, mac, security, frequency, channelWidth } = item.toJS();
     const result = fromJS({}).set('ssid', ssid).set('mac', mac)
-                             .set('frequency', frequency)
-                             .set('channelWidth', channelWidth)
-                             .set('security', security);
+                  .set('frequency', frequency)
+                  .set('channelWidth', channelWidth)
+                  .set('security', security);
     this.props.changeSelectedResult(result);
   }
   onChengeWirelessMode(data) {
@@ -275,15 +274,13 @@ export default class Basic extends React.Component {
           // 首先更新curData中的数据，防止之前修改模式但未保存时加密方式发生变化，目的是切换回去后显示原来的数据
           this.props.updateBasicSettings(fromJS(json.data));
           if (json.state && json.state.code === 2000) {
-            // const curMode = json.data.wirelessMode;
-            // if (data.value !== curMode) {
             this.props.updateBasicSettings({
               wirelessMode: data.value,
             });
             // 处理切换成repeater后，加密方式为空的问题
             if (data.value === 'repeater' && json.data.vapList[0].security.mode !== 'wep') {
               const vapList = this.props.selfState.getIn(['basicSettings', 'vapList'])
-                                        .setIn([0, 'security', 'mode'], 'none');
+                                  .setIn([0, 'security', 'mode'], 'none');
               this.props.updateBasicSettings({ vapList });
             }
           }
@@ -291,26 +288,9 @@ export default class Basic extends React.Component {
   }
   onCloseCountrySelectModal() {
     const code = this.props.store.getIn(['curData', 'countryCode']);
-    // console.log(code);
     this.props.closeCountrySelectModal(code);
   }
 
-/*
-  onShowIconClick(flag, data) {
-    switch (flag) {
-      case 'showSsidSetting':
-        this.props.toggleShowSsidSetting(data);
-        break;
-      case 'showRadioSetting':
-        this.props.toggleShowRadioSetting(data);
-        break;
-      case 'showMultiSsid':
-        this.props.toggleShowMultiSsid(data);
-        break;
-      default:
-    }
-  }
-*/
   onSecurityModeChange(data) {
     const basicSettings = this.props.selfState.get('basicSettings');
     const preSecurity = basicSettings.getIn(['vapList', '0', 'security']);
@@ -327,7 +307,7 @@ export default class Basic extends React.Component {
                           .set('cipher', cipher)
                           .set('key', key);
     const vapList = basicSettings.getIn(['vapList'])
-                        .setIn(['0', 'security'], afterSecurity);
+                    .setIn(['0', 'security'], afterSecurity);
     this.props.updateBasicSettings({ vapList });
   }
 
@@ -401,29 +381,27 @@ export default class Basic extends React.Component {
                     this.props.receiveCountryInfo(json2.data);
                   }
                 });
-          } })
-        .then(() => {
-          this.props.fetch('goform/get_wl_info')
-              .then((json) => {
-                if (json.state && json.state.code === 2000) {
-                  const basicInfo = {
-                    curModule: 'basicSettings',
-                    data: fromJS(json.data),
-                  };
-                  const multiSsidInfo = {
-                    curModule: 'multiSsid',
-                    data: fromJS(json.data),
-                  };
-                  this.props.updateSelfItemSettings(basicInfo);
-                  this.props.updateSelfItemSettings(multiSsidInfo);
-                }
-              });
-        });
+          } }).then(() => {
+            this.props.fetch('goform/get_wl_info')
+                .then((json) => {
+                  if (json.state && json.state.code === 2000) {
+                    const basicInfo = {
+                      curModule: 'basicSettings',
+                      data: fromJS(json.data),
+                    };
+                    const multiSsidInfo = {
+                      curModule: 'multiSsid',
+                      data: fromJS(json.data),
+                    };
+                    this.props.updateSelfItemSettings(basicInfo);
+                    this.props.updateSelfItemSettings(multiSsidInfo);
+                  }
+                });
+          });
   }
 
   // countryMap为Object
   makeCountryOptions(map) {
-    // console.log(map);
     const countryList = [];
     for (const key of Object.keys(map)) {
       const entry = {
@@ -454,14 +432,6 @@ export default class Basic extends React.Component {
     })
     .unshift({ value: 'auto', label: 'auto' })
     .toJS();
-
-    // for (const elem of channelList.toJS().values()) {
-    //   const item = {
-    //     value: elem,
-    //     label: elem,
-    //   };
-    //   channelOptions.push(item);
-    // }
     return channelOptions;
   }
 

@@ -256,10 +256,11 @@ export default class QuickSetup extends React.Component {
       saveUrl: props.route.saveUrl,
       defaultData: defaultState,
     });
-    props.changePage('1');
     props.changeAgreeProtocol(false);
     props.fetchSettings()
         .then(() => {
+          const wirelessMode = this.props.store.getIn(['curData', 'wirelessMode']);
+          this.props.changeDeviceMode(wirelessMode);
           const country = this.props.store.getIn(['curData', 'countryCode']);
           const channelWidth = this.props.store.getIn(['curData', 'channelWidth']);
           const requestInfo = {
@@ -277,19 +278,6 @@ export default class QuickSetup extends React.Component {
     props.resetVaildateMsg();
   }
 
-  // noErrorThisPage(...args) {
-  //   const errorMsg = this.props.app.get('invalid');
-  //   let flag = true;
-  //   if (errorMsg.isEmpty()) {
-  //     return true;
-  //   }
-  //   for (const name of args) {
-  //     if (errorMsg.has(name)) {
-  //       flag = false;
-  //     }
-  //   }
-  //   return flag;
-  // }
 
   // countryMap为Object
   makeCountryOptions(map) {

@@ -28,148 +28,66 @@ const interfaceOptions = fromJS([
   {
     id: 'name',
     text: _('Name'),
-  }, {
-    id: 'ip',
-    text: 'IP',
-  }, {
-    id: 'mtu',
-    text: 'MTU',
+    transform(val) {
+      if (val === '') {
+        return '--';
+      }
+      return val;
+    },
   }, {
     id: 'txBytes',
     text: _('Tx Bytes'),
     transform(val) {
+      if (val === '') {
+        return '--';
+      }
       return flowRateFilter.transform(val);
     },
   }, {
     id: 'rxBytes',
     text: _('Rx Bytes'),
     transform(val) {
+      if (val === '') {
+        return '--';
+      }
       return flowRateFilter.transform(val);
     },
   }, {
     id: 'txPackets',
     text: _('Tx Packets'),
+    transform(val) {
+      if (val === '') {
+        return '--';
+      }
+      return val;
+    },
   }, {
     id: 'rxPackets',
     text: _('Rx Packets'),
+    transform(val) {
+      if (val === '') {
+        return '--';
+      }
+      return val;
+    },
   }, {
     id: 'txErrorPackets',
     text: _('Tx Error'),
+    transform(val) {
+      if (val === '') {
+        return '--';
+      }
+      return val;
+    },
   }, {
     id: 'rxErrorPackets',
     text: _('Rx Error'),
-  },
-]);
-
-const clientOptions = fromJS([
-  {
-    id: 'mac',
-    text: 'Mac',
-  },
-  {
-    id: 'deviceName',
-    text: _('Device Name'),
-  },
-  {
-    id: 'Signal',
-    text: _('Signal(dBm)'),
-  },
-  {
-    id: 'noise',
-    text: _('Noise(dBm)'),
-  },
-  {
-    id: 'txRate',
-    text: _('Tx Rate'),
     transform(val) {
-      return val + 'Mbps';
+      if (val === '') {
+        return '--';
+      }
+      return val;
     },
-  },
-  {
-    id: 'rxRate',
-    text: _('Rx Rate'),
-    transform(val) {
-      return val + 'Mbps';
-    },
-  },
-  {
-    id: 'txBytes',
-    text: _('Tx Bytes'),
-    transform(val) {
-      return flowRateFilter.transform(val);
-    },
-  },
-  {
-    id: 'rxBytes',
-    text: _('Rx Bytes'),
-    transform(val) {
-      return flowRateFilter.transform(val);
-    },
-  },
-  {
-    id: 'txPackets',
-    text: _('Tx Packets'),
-  },
-  {
-    id: 'rxPackets',
-    text: _('Rx Packets'),
-  },
-  {
-    id: 'connectTime',
-    text: _('Connect Time'),
-  },
-  {
-    id: 'ipAddr',
-    text: _('IP'),
-  },
-]);
-
-const remoteApOption = fromJS([
-  {
-    id: 'deviceName',
-    text: _('Device Name'),
-  }, {
-    id: 'softVersion',
-    text: _('Soft Version'),
-  }, {
-    id: 'connectTime',
-    text: _('Connect Time'),
-  }, {
-    id: 'signal',
-    text: _('Signal(dBm)'),
-  }, {
-    id: 'txBytes',
-    text: _('Tx Bytes'),
-    transform(val) {
-      return flowRateFilter.transform(val);
-    },
-  }, {
-    id: 'rxBytes',
-    text: _('Rx Bytes'),
-    transform(val) {
-      return flowRateFilter.transform(val);
-    },
-  }, {
-    id: 'txRate',
-    text: _('Tx Rate'),
-    transform(val) {
-      return val + 'Mbps';
-    },
-  }, {
-    id: 'rxRate',
-    text: _('Rx Rate'),
-    transform(val) {
-      return val + 'Mbps';
-    },
-  }, {
-    id: 'txPackets',
-    text: _('Tx Packets'),
-  }, {
-    id: 'rxPackets',
-    text: _('Rx Packets'),
-  }, {
-    id: 'ccq',
-    text: _('CCQ'),
   },
 ]);
 
@@ -183,7 +101,7 @@ export default class SystemStatus extends React.Component {
 
 
   componentWillMount() {
-    console.log('in will mount');
+    // console.log('in will mount');
     clearInterval(a);
     // 必须要有初始化，因为要在settings中插入一个由该页面id命名的对象
     this.props.initSettings({
@@ -199,7 +117,7 @@ export default class SystemStatus extends React.Component {
     // console.log('app.refreshAt', this.props.app.get('refreshAt'));
     // console.log('prevProps.app.refreshAt', prevProps.app.get('refreshAt'));
     if (this.props.app.get('refreshAt') !== prevProps.app.get('refreshAt')) {
-      console.log('refresh');
+      // console.log('refresh');
       clearInterval(a);
       this.props.fetchSettings();
       a = setInterval(this.props.fetchSettings, 5000);
@@ -237,6 +155,222 @@ export default class SystemStatus extends React.Component {
   }
 
   render() {
+    const that = this;
+    const clientOptions = fromJS([
+      {
+        id: 'mac',
+        text: 'Mac',
+      },
+      {
+        id: 'deviceName',
+        text: _('Device Name'),
+        transform(val) {
+          if (val === '') {
+            return '--';
+          }
+          return val;
+        },
+      },
+      {
+        id: 'signal',
+        text: _('Signal(dBm)'),
+        transform(val) {
+          if (val === '') {
+            return '--';
+          }
+          return val;
+        },
+      },
+      {
+        id: 'noise',
+        text: _('Noise(dBm)'),
+        transform(val) {
+          if (val === '') {
+            return '--';
+          }
+          return val;
+        },
+      },
+      {
+        id: 'txRate',
+        text: _('Tx Rate'),
+        transform(val) {
+          if (val === '') {
+            return '--';
+          }
+          return val + 'Mbps';
+        },
+      },
+      {
+        id: 'rxRate',
+        text: _('Rx Rate'),
+        transform(val) {
+          if (val === '') {
+            return '--';
+          }
+          return val + 'Mbps';
+        },
+      },
+      {
+        id: 'txBytes',
+        text: _('Tx Bytes'),
+        transform(val) {
+          if (val === '') {
+            return '--';
+          }
+          return flowRateFilter.transform(val);
+        },
+      },
+      {
+        id: 'rxBytes',
+        text: _('Rx Bytes'),
+        transform(val) {
+          if (val === '') {
+            return '--';
+          }
+          return flowRateFilter.transform(val);
+        },
+      },
+      {
+        id: 'txPackets',
+        text: _('Tx Packets'),
+        transform(val) {
+          if (val === '') {
+            return '--';
+          }
+          return val;
+        },
+      },
+      {
+        id: 'rxPackets',
+        text: _('Rx Packets'),
+        transform(val) {
+          if (val === '') {
+            return '--';
+          }
+          return val;
+        },
+      },
+      {
+        id: 'connectTime',
+        text: _('Connect Time'),
+        transform(val) {
+          if (val === '') {
+            return '--';
+          }
+          return that.changeUptimeToReadable(val);
+        },
+      },
+      {
+        id: 'ipAddr',
+        text: _('IP'),
+        transform(val) {
+          if (val === '') {
+            return '--';
+          }
+          return val;
+        },
+      },
+    ]);
+    const remoteApOption = fromJS([
+      {
+        id: 'deviceName',
+        text: _('Device Name'),
+        transform(val) {
+          if (val === '') {
+            return '--';
+          }
+          return val;
+        },
+      }, {
+        id: 'softVersion',
+        text: _('Soft Version'),
+        transform(val) {
+          if (val === '') {
+            return '--';
+          }
+          return val;
+        },
+      }, {
+        id: 'connectTime',
+        text: _('Connect Time'),
+        transform(val) {
+          return that.changeUptimeToReadable(val);
+        },
+      }, {
+        id: 'signal',
+        text: _('Signal(dBm)'),
+        transform(val) {
+          if (val === '') {
+            return '--';
+          }
+          return val;
+        },
+      }, {
+        id: 'txBytes',
+        text: _('Tx Bytes'),
+        transform(val) {
+          if (val === '') {
+            return '--';
+          }
+          return flowRateFilter.transform(val);
+        },
+      }, {
+        id: 'rxBytes',
+        text: _('Rx Bytes'),
+        transform(val) {
+          if (val === '') {
+            return '--';
+          }
+          return flowRateFilter.transform(val);
+        },
+      }, {
+        id: 'txRate',
+        text: _('Tx Rate'),
+        transform(val) {
+          if (val === '') {
+            return '--';
+          }
+          return val + 'Mbps';
+        },
+      }, {
+        id: 'rxRate',
+        text: _('Rx Rate'),
+        transform(val) {
+          if (val === '') {
+            return '--';
+          }
+          return val + 'Mbps';
+        },
+      }, {
+        id: 'txPackets',
+        text: _('Tx Packets'),
+        transform(val) {
+          if (val === '') {
+            return '--';
+          }
+          return val;
+        },
+      }, {
+        id: 'rxPackets',
+        text: _('Rx Packets'),
+        transform(val) {
+          if (val === '') {
+            return '--';
+          }
+          return val;
+        },
+      }, {
+        id: 'ccq',
+        text: _('CCQ'),
+        transform(val) {
+          if (val === '') {
+            return '--';
+          }
+          return val;
+        },
+      },
+    ]);
     const {
       status, wirelessMode,
     } = this.props.store.get('curData').toJS();

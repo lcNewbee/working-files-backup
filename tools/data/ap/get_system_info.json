@@ -31,39 +31,39 @@
       "signal":"-50",
       "apInfo":
         {
-          "deviceName":"NS300",
-          "deviceMode":"NS300",
+          "deviceName":"",
+          "deviceMode":"",
           "softVersion":"Ap1.0.0.1",
-          "connectTime":"1000",
-          "signal":"-80",
-          "txBytes":"100",
-          "rxBytes":"100",
-          "txRate":"100",
-          "rxRate":"100",
-          "txPackets":"1899",
-          "rxPackets":"1000",
-          "ccq":"0.9"
+          "connectTime":"",
+          "signal":"",
+          "txBytes":"",
+          "rxBytes":"",
+          "txRate":"",
+          "rxRate":"",
+          "txPackets":"",
+          "rxPackets":"",
+          "ccq":""
         }
     },
 
       "interfaces":[
         {
-          "name":"LAN0",
+          "name":"",
           "ip":"0.0.0.0",
-          "mtu":"1500",
-          "txBytes":"1300",
-          "rxBytes":"1800",
-          "rxErrorPackets":"5",
-          "txErrorPackets":"1"
+          "mtu":"",
+          "txBytes":"",
+          "rxBytes":"",
+          "rxErrorPackets":"",
+          "txErrorPackets":""
         },
         {
-          "name":"LAN1",
+          "name":"",
           "ip":"0.0.0.0",
-          "mtu":"1500",
-          "txBytes":"1300",
-          "rxBytes":"1800",
-          "txErrorPackets":"5",
-          "rxErrorPackets":"1"
+          "mtu":"",
+          "txBytes":"",
+          "rxBytes":"",
+          "txErrorPackets":"",
+          "rxErrorPackets":""
         },
         {
           "name":"Bridge0",

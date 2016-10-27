@@ -130,7 +130,7 @@ export function fetch(url, query) {
           return {};
         }
         if (json.state && json.state.code === 4040) {
-          window.location.href = '#/login';
+          window.location.href = '#';
         } else if (!json.state || (json.state && json.state.code !== 2000)) {
           dispatch(receiveServerError(json.state));
         }
@@ -162,16 +162,10 @@ export function save(url, query) {
           return {};
         }
         if (json.state && json.state.code === 4040) {
-          window.location.href = '#/login';
+          window.location.href = '#';
         } else if (!json.state || (json.state && json.state.code !== 2000)) {
           dispatch(receiveServerError(json.state));
         }
-        // if (!json.state || (json.state && json.state.code !== 2000)) {
-        //   dispatch(receiveServerError(json.state));
-        // } else if (json.state && json.state.code === 4040) {
-        //   console.log('relocation');
-        //   window.location.hash = '#';
-        // }
         dispatch(receiveSave());
         return json;
       });

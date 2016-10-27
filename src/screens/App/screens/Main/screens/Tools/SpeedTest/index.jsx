@@ -51,6 +51,9 @@ const validOptions = Map({
   validTime: validator({
     rules: 'num:[10, 300]',
   }),
+  validPkgLen: validator({
+    rules: 'num:[64, 1500]',
+  }),
 });
 export default class SpeedTest extends React.Component {
 
@@ -177,7 +180,7 @@ export default class SpeedTest extends React.Component {
 
   firstInAndRefresh() {
     const defaultData = {
-      ip: '192.168.1.10',
+      ip: '',
       time: '30',
       direction: '0',
       packagelen: '64',
@@ -202,7 +205,7 @@ export default class SpeedTest extends React.Component {
     const {
       showAdvance, stopWait, rx, tx, query,
     } = this.props.selfState.toJS();
-    const { validIp, validTime } = this.props.validateOption;
+    const { validIp, validTime, validPkgLen } = this.props.validateOption;
     const scanIpOptions = fromJS([
       {
         id: 'action',
@@ -430,7 +433,7 @@ export default class SpeedTest extends React.Component {
                 this.props.toggleShowAdvanceBtn();
               }}
               onOk={() => {
-                this.props.validateAll()
+                this.props.validateAll('advancedOptions')
                     .then((msg) => {
                       if (msg.isEmpty()) {
                         this.props.updateItemSettings(query);
@@ -442,15 +445,19 @@ export default class SpeedTest extends React.Component {
               <FormGroup
                 type="number"
                 label={_('Package Length')}
+                form="advancedOptions"
                 value={this.props.selfState.getIn(['query', 'packagelen'])}
                 onChange={(data) => {
                   const pQuery = this.props.selfState.get('query').set('packagelen', data.value);
                   this.props.changeQueryData(pQuery);
                 }}
+                required
+                {...validPkgLen}
               />
               <FormGroup
                 type="number"
                 label={_('Test Duration')}
+                form="advancedOptions"
                 value={this.props.selfState.getIn(['query', 'time'])}
                 help="s"
                 onChange={(data) => {
