@@ -41,7 +41,6 @@ export default function View(props) {
     <ListInfo
       {...props}
       tableOptions={ssidTableOptions}
-      noTitle
     />
   );
 }

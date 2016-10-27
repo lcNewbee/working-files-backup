@@ -120,12 +120,10 @@ export default class Clients extends PureComponent {
     utils.binds(
       this,
       [
-        'handleSearch', 'handleChangeQuery', 'handleActions', 'onPageChange',
-        'onAction', 'onChangeSearchText', 'onChangeType', 'onChangeTableSize',
+        'onAction',
       ],
     );
   }
-
   render() {
     // 添加操作项
     const options = clientsTableOptions.setIn([-1, 'transform'],

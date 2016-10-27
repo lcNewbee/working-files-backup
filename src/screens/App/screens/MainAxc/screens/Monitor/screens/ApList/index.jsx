@@ -59,9 +59,16 @@ export default class View extends React.Component {
 
     this.onAction = this.onAction.bind(this);
   }
-  onAction(name, query) {
-    if (name === 'edit') {
-      this.props.addToPropertyPanel();
+  onAction(type, item) {
+    const actionQuery = {
+      groupid: this.props.groupid,
+    }
+    if (type === 'edit') {
+      actionQuery.mac = item.get('mac');
+      this.props.addToPropertyPanel(actionQuery, item.toJS());
+    } else {
+      actionQuery.mac = item;
+      actionQuery.operate = type;
     }
   }
   render() {
@@ -97,7 +104,7 @@ export default class View extends React.Component {
 
       return (
         <span
-          onClick={() => this.onAction('edit', mac)}
+          onClick={() => this.onAction('edit', item)}
           className="link-text"
         >
           { item.get('devicename') || mac }
@@ -106,6 +113,7 @@ export default class View extends React.Component {
     });
     const actionBarChildren = (
       <Button
+        key="upgradeAp"
         onClick={() => this.onAction('upgrade')}
         text={_('Upgrade')}
         icon="arrow-circle-o-up"

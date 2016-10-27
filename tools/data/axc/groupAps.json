@@ -30,7 +30,7 @@
       }, {
         "devicename": "",
         "mac": "f4:12:22:33:11:33",
-        "status": "0",
+        "status": "1",
         "devicetype": "inside",
         "ip": "192.168.5.54",
         "model": "V2.2",
@@ -49,7 +49,7 @@
       }, {
         "devicename": "Market 1",
         "mac": "00:12:32:33:11:33",
-        "status": "0",
+        "status": "1",
         "devicetype": "inside",
         "ip": "192.168.5.54",
         "model": "V2.2",

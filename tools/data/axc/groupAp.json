@@ -1,0 +1,42 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "groupid": 1,
+    "mac": "11:22:33:44:55:66",
+    "radio": {
+      "beaconinterval": 100,
+      "fragthreshold": 1024,
+      "longretrythreshold": 11,
+      "maxrxduration": 11,
+      "rtsthreshold": 11,
+      "shortretrythreshold": 11,
+      "maxclientcount": 64,
+      "dtim": 11,
+      "wmmenable": 1,
+      "cwmin": 11,
+      "cwmax": 11,
+      "aifs": 11,
+      "txop": 11,
+      "admctrmandatory": 11,
+      "countrycode": "CN",
+      "phymode": 1,
+      "txchain": "10kb/s",
+      "rxchain": "10kb/s",
+      "shortgi": 1,
+      "preamble": 1,
+      "ampdu": 100,
+      "amsdu": 100,
+      "channelwidth": 40,
+      "channel": 7,
+      "rate": "xxx",
+      "txpower": "20db",
+      "rateset": "xxx",
+      "spatialstreams": 1,
+      "switch11n": 1,
+      "first5g": 1
+    }
+  }
+}

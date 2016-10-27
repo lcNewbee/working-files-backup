@@ -53,7 +53,7 @@ export default class View extends React.Component {
     this.props.save('goform/blacklist', query)
       .then((json) => {
         if (json.state && json.state.code === 2000) {
-          alert('ds');
+          // alert('ds');
         }
       });
   }
@@ -94,6 +94,7 @@ export default class View extends React.Component {
         listKey="allKeys"
         actionable
         editable={false}
+        selectable
       >
         <Modal
           isShow={isModelShow}

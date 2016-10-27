@@ -163,6 +163,7 @@ export default class View extends React.Component {
         tableOptions={blcklistTableOptions}
         listKey="allKeys"
         actionable
+        selectable
       >
         <Modal
           isShow={isModelShow}

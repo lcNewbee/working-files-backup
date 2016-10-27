@@ -127,7 +127,7 @@ export default class Main extends Component {
     });
   }
 
-  onClickNav(path) {}
+  onClickNav() {}
 
   onClickTopMenu(path) {
     if (path === '/main/group') {
@@ -495,7 +495,7 @@ export default class Main extends Component {
                     onChange={data => this.props.updateGroupAddDevice({
                       apmac: data.value,
                     })}
-                    { ...apmac }
+                    {...apmac}
                   />
                   <FormGroup
                     type="text"
@@ -828,7 +828,7 @@ export default class Main extends Component {
       });
     }
 
-    for (i; i < len; i++) {
+    for (i; i < len; i += 1) {
       breadcrumbList = breadcrumbList.unshift({
         path: curRoutes[i].path,
         text: curRoutes[i].text,

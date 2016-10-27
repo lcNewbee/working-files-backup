@@ -152,6 +152,7 @@ export default class View extends React.Component {
           dataType: 'date',
         }}
         actionable
+        selectable
       >
         <Modal
           isShow={actionQuery.get('action') === 'add' || actionQuery.get('action') === 'edit'}
