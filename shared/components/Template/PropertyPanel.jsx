@@ -1,22 +1,22 @@
 import React, { PropTypes } from 'react';
 import Icon from 'shared/components/Icon';
 import { Map } from 'immutable';
-import DevicesProperties from './DevicesProperties';
-
+import DevicePanel from '../Panels/Device';
 
 const propTypes = {
   isShow: PropTypes.bool,
   onToggle: PropTypes.func,
   collapsePropertys: PropTypes.func,
-  changePropertysTab: PropTypes.func,
   changePropertysItem: PropTypes.func,
   removeFromPropertyPanel: PropTypes.func,
   updatePropertyPanelData: PropTypes.func,
+  fetchPropertyPanelData: PropTypes.func,
+  reportValidError: PropTypes.func,
   save: PropTypes.func,
 
   data: PropTypes.instanceOf(Map),
   app: PropTypes.instanceOf(Map),
-
+  properties: PropTypes.instanceOf(Map),
 };
 
 const defaultProps = {
@@ -47,13 +47,13 @@ class PropertyPanel extends React.Component {
     const activePanelconfigIndex = activePanelState.get('configurationActivePanelIndex');
     const $$activeListData = activePanelState.get('data');
     const $$configData = activePanelState.getIn([
-      'configuration', activePanelconfigIndex
+      'configuration', activePanelconfigIndex,
     ]);
     const query = activePanelState.get('query').toJS();
     let formUrl = 'goform/group/ap/radio';
     let subData = $$configData.get('data').toJS();
 
-    if($$configData.get('module') === 'radio') {
+    if ($$configData.get('module') === 'radio') {
       formUrl = 'goform/group/ap/radio';
       subData = $$activeListData.get('radio')
           .merge(subData).toJS();
@@ -61,14 +61,14 @@ class PropertyPanel extends React.Component {
 
     this.props.save(formUrl, subData)
       .then((json) => {
-        if(json.state && json.state.code === 2000) {
+        if (json.state && json.state.code === 2000) {
           this.props.fetchPropertyPanelData(query);
         }
-      })
+      });
   }
 
   render() {
-    const { isShow, data } = this.props;
+    const { isShow, data, app, reportValidError } = this.props;
     const { activeIndex } = data.toJS();
 
     let propertyPanelClassName = 'o-property-panel';
@@ -121,11 +121,13 @@ class PropertyPanel extends React.Component {
           <div className="o-property-panel__container">
             {
               data.get('list').map((item, index) => (
-                <DevicesProperties
+                <DevicePanel
                   key={`properties_${index}`}
                   app={this.props.app}
                   item={item}
                   isCollapsed={index !== activeIndex}
+
+                  // Actions Props
                   onCollapse={
                     () => this.props.collapsePropertys(index)
                   }
@@ -136,6 +138,11 @@ class PropertyPanel extends React.Component {
                     () => this.props.removeFromPropertyPanel(index)
                   }
                   onSave={this.onSave}
+
+                  // Validate Props
+                  invalidMsg={app.get('invalid')}
+                  validateAt={app.get('validateAt')}
+                  onValidError={reportValidError}
                 />
               ))
             }

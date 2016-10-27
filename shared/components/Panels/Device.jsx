@@ -1,10 +1,11 @@
 import React, { PropTypes } from 'react';
 import { Map } from 'immutable';
 import Icon from 'shared/components/Icon';
-import {
-  DeviceOverview, DeviceGeneral, DeviceRadioAdvance,
-  DeviceRadioBase,
-} from '../Panels';
+
+import DeviceOverview from './DeviceOverview';
+import DeviceGeneral from './DeviceGeneral';
+import DeviceRadioAdvance from './DeviceRadioAdvance';
+import DeviceRadioBase from './DeviceRadioBase';
 
 const panelsComponentMap = {
   overview: DeviceOverview,
@@ -38,7 +39,7 @@ function DevicesProperties(props) {
     width: '18px',
     height: '18px',
     backgroundSize: '100%',
-  }
+  };
 
   return (
     <div
@@ -78,7 +79,7 @@ function DevicesProperties(props) {
             <li>
               <a
                 className={activeTab === 'details' ? 'active' : ''}
-                onClick={(e) => onChangeTab(e, 'details')}
+                onClick={e => onChangeTab(e, 'details')}
               >
                 {_('Details')}
               </a>
@@ -87,7 +88,7 @@ function DevicesProperties(props) {
               <a
                 className={activeTab === 'configuration' ? 'active' : ''}
                 onClick={
-                  (e) => onChangeTab(e, 'configuration')
+                  e => onChangeTab(e, 'configuration')
                 }
               >
                 {_('Configuration')}

@@ -36,10 +36,13 @@ class Switchs extends React.Component {
   }
 
   render() {
-    const { size, className, options, value, role, minWidth } = this.props;
-    let optionsList;
+    const { size, className, options, value, role, minWidth, style } = this.props;
+    const itemStyle = {
+      minWidth,
+    };
     let classNames = 'm-switch';
     let width = 50;
+    let optionsList;
 
     if (!List.isList(options)) {
       optionsList = fromJS(options);
@@ -47,7 +50,12 @@ class Switchs extends React.Component {
       optionsList = options;
     }
 
-    width = utils.toDecimal(100 / optionsList.size, 3);
+    // 如果 switch 样式为block或者 设置了固定宽度
+    // item将平分器宽度
+    if (style && (style.display === 'block' || style.width)) {
+      width = utils.toDecimal(100 / optionsList.size, 3);
+      itemStyle.width = `${width}%`;
+    }
 
     if (size) {
       classNames = `${classNames} m-switch--${size}`;
@@ -92,10 +100,7 @@ class Switchs extends React.Component {
                     label,
                   });
                 }}
-                style={{
-                  width: `${width}%`,
-                  minWidth,
-                }}
+                style={itemStyle}
               >
                 {label}
               </button>

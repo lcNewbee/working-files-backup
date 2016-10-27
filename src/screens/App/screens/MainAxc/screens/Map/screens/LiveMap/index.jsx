@@ -163,7 +163,7 @@ export default class View extends React.Component {
     // 过滤Button元素的点击
     if (e.target.nodeName.toLowerCase() !== 'button' &&
         e.target.parentNode.nodeName.toLowerCase() !== 'button') {
-      this.props.history.push(`/main/group/map/live/${i}`);
+      this.props.router.push(`/main/group/map/live/${i}`);
     }
   }
   onSave() {

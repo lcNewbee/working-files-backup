@@ -58,7 +58,7 @@ const defaultEditData = immutableUtils.getDefaultData(screenOptions.get('list'))
 
 const propTypes = {
   store: PropTypes.instanceOf(Map),
-  history: PropTypes.object,
+  router: PropTypes.object,
   updateScreenSettings: PropTypes.func,
   addToPropertyPanel: PropTypes.func,
   updateCurEditListItem: PropTypes.func,
@@ -410,7 +410,7 @@ export default class View extends React.Component {
               curMapName: '',
             });
           } else {
-            this.props.history.push('/main/group/map/live/list')
+            this.props.router.push('/main/group/map/live/list')
           }
         }}
       />,

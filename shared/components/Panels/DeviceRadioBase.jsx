@@ -21,7 +21,7 @@ const channelBandwidthOptions = fromJS([
   },
 ]);
 const channelsList = List(channels);
-const countryOptions = channelsList.map(function (item) {
+const countryOptions = channelsList.map((item) => {
   return {
     value: item.country,
     label: b28n.getLang() === 'cn' ? _(item.cn) : _(item.en),
@@ -48,7 +48,7 @@ class DeviceSystem extends React.Component {
 
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onSave = this.onSave.bind(this);
-    this.getCurData = this.getCurData.bind(this)
+    this.getCurData = this.getCurData.bind(this);
   }
   onSave() {
     if (this.props.onSave) {
@@ -58,7 +58,7 @@ class DeviceSystem extends React.Component {
   onChangeData(data) {
   }
   getCurData(name) {
-    return this.props.store.getIn(['data', name])
+    return this.props.store.getIn(['data', name]);
   }
   getChannelsOptions(currCountry) {
     let i;
@@ -102,15 +102,18 @@ class DeviceSystem extends React.Component {
         <FormGroup
           type="checkbox"
           text="Switch Radio"
-          value='1'
+          value="1"
           checked={getCurData('enable') == 1}
-          onChange={(option) => this.props.onChangeData({
+          onChange={option => this.props.onChangeData({
             enable: option.value,
           })}
         />
         <FormGroup
           type="switch"
           label={_('Work Mode')}
+          inputStyle={{
+            display: 'block',
+          }}
           options={[
             {
               value: 1,
@@ -124,10 +127,10 @@ class DeviceSystem extends React.Component {
             }, {
               value: 4,
               label: '11ac',
-            }
+            },
           ]}
           value={getCurData('phymode')}
-          onChange={(option) => this.props.onChangeData({
+          onChange={option => this.props.onChangeData({
             phymode: option.value,
           })}
         />
@@ -136,7 +139,7 @@ class DeviceSystem extends React.Component {
           label={_('Country')}
           options={countryOptions}
           value={getCurData('countrycode')}
-          onChange={(option) => this.props.onChangeData({
+          onChange={option => this.props.onChangeData({
             countrycode: option.value,
           })}
         />
@@ -148,7 +151,7 @@ class DeviceSystem extends React.Component {
               label={_('Channel')}
               options={channelsOptions}
               value={getCurData('channel')}
-              onChange={(option) => this.props.onChangeData({
+              onChange={option => this.props.onChangeData({
                 channel: option.value,
               })}
             />
@@ -157,9 +160,12 @@ class DeviceSystem extends React.Component {
             <FormGroup
               type="switch"
               label={_('Channel Width')}
+              inputStyle={{
+                display: 'block',
+              }}
               options={channelBandwidthOptions}
               value={getCurData('channelwidth')}
-              onChange={(option) => this.props.onChangeData({
+              onChange={option => this.props.onChangeData({
                 channelwidth: option.value,
               })}
             />
@@ -171,12 +177,12 @@ class DeviceSystem extends React.Component {
           max="35"
           label={_('Tx Power')}
           inputStyle={{
-            width: '88%'
+            width: '88%',
           }}
           help={getCurData('txpower')}
           options={channelsOptions}
-          value={parseInt(getCurData('txpower'))}
-          onChange={(option) => this.props.onChangeData({
+          value={parseInt(getCurData('txpower'), 10)}
+          onChange={option => this.props.onChangeData({
             txpower: `${option.value}db`,
           })}
         />

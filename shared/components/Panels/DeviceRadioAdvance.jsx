@@ -29,7 +29,7 @@ class DeviceSystem extends React.Component {
 
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onSave = this.onSave.bind(this);
-    this.getCurData = this.getCurData.bind(this)
+    this.getCurData = this.getCurData.bind(this);
   }
   onSave() {
     if (this.props.onSave) {
@@ -39,7 +39,7 @@ class DeviceSystem extends React.Component {
   onChangeData(data) {
   }
   getCurData(name) {
-    return this.props.store.getIn(['data', name])
+    return this.props.store.getIn(['data', name]);
   }
   render() {
     const { app } = this.props;
@@ -51,7 +51,7 @@ class DeviceSystem extends React.Component {
           type="number"
           label={_('Max User')}
           value={getCurData('maxclientcount')}
-          onChange={(option) => this.props.onChangeData({
+          onChange={option => this.props.onChangeData({
             maxclientcount: option.value,
           })}
         />
@@ -61,7 +61,7 @@ class DeviceSystem extends React.Component {
               type="number"
               label={_('Beacon Interval')}
               value={getCurData('beaconinterval')}
-              onChange={(option) => this.props.onChangeData({
+              onChange={option => this.props.onChangeData({
                 beaconinterval: option.value,
               })}
             />
@@ -71,7 +71,7 @@ class DeviceSystem extends React.Component {
               type="number"
               label={_('Beacon Interval Number')}
               value={getCurData('dtim')}
-              onChange={(option) => this.props.onChangeData({
+              onChange={option => this.props.onChangeData({
                 dtim: option.value,
               })}
             />
@@ -81,12 +81,15 @@ class DeviceSystem extends React.Component {
           type="number"
           label={_('RTS Threshold')}
           value={getCurData('rtsthreshold')}
-          onChange={(option) => this.props.onChangeData({
+          onChange={option => this.props.onChangeData({
             rtsthreshold: option.value,
           })}
         />
         <FormGroup
           type="switch"
+          inputStyle={{
+            display: 'block',
+          }}
           options={[
             {
               value: '-1',
@@ -97,11 +100,11 @@ class DeviceSystem extends React.Component {
             }, {
               value: '1',
               label: 'Short',
-            }
+            },
           ]}
           label={_('Preamble')}
           value={getCurData('preamble')}
-          onChange={(option) => this.props.onChangeData({
+          onChange={option => this.props.onChangeData({
             preamble: option.value,
           })}
         />
