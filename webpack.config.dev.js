@@ -35,7 +35,7 @@ let config = {
   debug: true,
 
   // more info:https://webpack.github.io/docs/build-performance.html#sourcemaps and https://webpack.github.io/docs/configuration.html#devtool
-  devtool: 'eval-source-map',
+  devtool: 'cheap-eval-source-map',
 
   // set to false to see a list of every file being bundled.
   noInfo: true,
