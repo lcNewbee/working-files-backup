@@ -251,7 +251,7 @@ class ListInfo extends React.Component {
     const list = store.getIn([myListScreenId, 'data', 'list']);
     const listKey = this.props.listKey;
     let selectedList = [];
-    const msgText = _('Are you sure to delete selected index: %s ?', i);
+    const msgText = _('Are you sure to delete selected row: %s', i);
 
     if (listKey === 'allKeys') {
       selectedList = [list.get(i)];
@@ -312,7 +312,7 @@ class ListInfo extends React.Component {
         return ret;
       });
       selectStr = mySelectedList.map((item, i) => i).join(', ');
-      msgText = _('Are you sure to delete selected index: %s ?', selectStr);
+      msgText = _('Are you sure to delete selected rows: %s', selectStr);
 
       this.props.createModal({
         id: 'settings',

@@ -107,7 +107,7 @@ class Modal extends Component {
     return (
       <ReactCSSTransitionGroup
         component="div"
-        transitionName="fade-up"
+        transitionName="fade-down"
         transitionEnter={transitionEnter}
         transitionLeave={transitionLeave}
         transitionEnterTimeout={500}
