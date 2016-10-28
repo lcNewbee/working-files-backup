@@ -85,11 +85,18 @@ gulp.task('clean:pubac', () => {
 
 gulp.task('pub:path', () => {
   const publicPathReg = /publicPath: '(.*)'/g;
+  const utilIndexPath = 'shared/utils/index.js';
   let pubWebPath = paths.pubWebPath;
 
   if (argv.p) {
     pubWebPath = argv.p;
   }
+
+  // 处理 demo发布时修改的 sync的链接
+  gulp.src(utilIndexPath)
+    .pipe($.replace("require('./lib/sync_demo')", "require('./lib/sync')"))
+    .pipe(gulp.dest('shared/utils/'));
+
   gutil.log(gutil.colors.red('切换web发布根目录：'), gutil.colors.magenta(pubWebPath));
   return gulp.src(paths.pubWebpack)
     .pipe($.replace(publicPathReg, `publicPath: '${pubWebPath}'`))
