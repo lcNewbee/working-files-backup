@@ -1,5 +1,4 @@
 import gulp from 'gulp';
-import minimist from 'minimist';
 import bump from 'gulp-bump';
 
 /**

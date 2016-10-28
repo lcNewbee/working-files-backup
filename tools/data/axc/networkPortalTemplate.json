@@ -5,22 +5,23 @@
   },
   "data": {
     "settings": {
-      "portalName": "zhangsan",
+      "template_name":"zhangsan",
+      "server_ipaddr":"test",
+      "server_port":"test",
+      "server_key":"test",
+      "server_url":"test",
+      "ac_ip":"test",
       "authRedirectUrl": "www.baidu.com",
       "portalTitle": "comlanos",
       "imagesSlideInterval": "2",
-      "expiration": "180",
-      "images": [
-        {
-          "count": "1",
-          "url": "images/4.jpg"
-        },
-        {
-          "count": "2",
-          "url": "images/logo.png"
-        }
-      ]
+      "expiration": "3600",
+      "images": [{
+        "count": "1",
+        "url": "images/4.jpg"
+      }, {
+        "count": "2",
+        "url": "images/logo.png"
+      }]
     }
-    }
-
+  }
 }

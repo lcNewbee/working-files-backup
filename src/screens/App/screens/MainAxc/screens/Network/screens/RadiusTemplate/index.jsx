@@ -9,8 +9,8 @@ import * as screenActions from 'shared/actions/screens';
 
 const screenOptions = fromJS([
   {
-    id: 'radiusTemplateName',
-    label: _('Radius Template Name'),
+    id: 'template_name',
+    label: _('Name'),
     formProps: {
       type: 'text',
       className: 'cols col-12',
@@ -18,7 +18,7 @@ const screenOptions = fromJS([
       required: true,
     },
   }, {
-    id: 'mainIp',
+    id: 'authpri_ipaddr',
     label: _('Main IP'),
     fieldset: 'auth',
     legend: _('Auth Server Settings'),
@@ -29,7 +29,7 @@ const screenOptions = fromJS([
     },
 
   }, {
-    id: 'secondIp',
+    id: 'authsecond_ipaddr',
     label: _('Second IP'),
     fieldset: 'auth',
     formProps: {
@@ -37,7 +37,7 @@ const screenOptions = fromJS([
       className: 'cols col-6',
     },
   }, {
-    id: 'mainPort',
+    id: 'authpri_port',
     label: _('Main Port'),
     fieldset: 'auth',
     defaultValue: '0',
@@ -47,7 +47,7 @@ const screenOptions = fromJS([
     },
 
   }, {
-    id: 'secondPort',
+    id: 'authsecond_port',
     label: _('Second Port'),
     fieldset: 'auth',
     formProps: {
@@ -55,7 +55,7 @@ const screenOptions = fromJS([
       className: 'cols col-6',
     },
   }, {
-    id: 'mainPassword',
+    id: 'authpri_key',
     label: _('Main Password'),
     fieldset: 'auth',
     defaultValue: '0',
@@ -65,7 +65,7 @@ const screenOptions = fromJS([
       className: 'cols col-6',
     },
   }, {
-    id: 'secondPassword',
+    id: 'authsecond_key',
     label: _('Second Password'),
     fieldset: 'auth',
     noTable: true,
@@ -74,7 +74,7 @@ const screenOptions = fromJS([
       className: 'cols col-6',
     },
   }, {
-    id: 'mainAccountingIp',
+    id: 'acctpri_ipaddr',
     label: _('Main IP'),
     fieldset: 'Accounting',
     legend: _('Accounting Server Settings'),
@@ -85,7 +85,7 @@ const screenOptions = fromJS([
     },
 
   }, {
-    id: 'secondAccountingIp',
+    id: 'acctsecond_ipaddr',
     label: _('Second IP'),
     fieldset: 'Accounting',
     formProps: {
@@ -93,7 +93,7 @@ const screenOptions = fromJS([
       className: 'cols col-6',
     },
   }, {
-    id: 'mainAccountingPort',
+    id: 'acctpri_port',
     label: _('Main Port'),
     fieldset: 'Accounting',
     defaultValue: '0',
@@ -103,7 +103,7 @@ const screenOptions = fromJS([
     },
 
   }, {
-    id: 'secondAccountingPort',
+    id: 'acctsecond_port',
     label: _('Second Port'),
     fieldset: 'Accounting',
     formProps: {
@@ -111,7 +111,7 @@ const screenOptions = fromJS([
       className: 'cols col-6',
     },
   }, {
-    id: 'mainAccountingPassword',
+    id: 'acctpri_key',
     label: _('Main Password'),
     fieldset: 'Accounting',
     defaultValue: '0',
@@ -122,7 +122,7 @@ const screenOptions = fromJS([
     },
 
   }, {
-    id: 'secondAccountingPassword',
+    id: 'acctsecond_key',
     label: _('Second Password'),
     fieldset: 'Accounting',
     noTable: true,
@@ -131,7 +131,7 @@ const screenOptions = fromJS([
       className: 'cols col-6',
     },
   }, {
-    id: 'accountingOnStatus',
+    id: 'accton_enable',
     label: _('Accounting-on'),
     fieldset: 'parameter',
     legend: _('Parameter Settings'),
@@ -141,7 +141,7 @@ const screenOptions = fromJS([
       className: 'cols col-6',
     },
   }, {
-    id: 'userFormat',
+    id: 'username_format',
     label: _('User Format'),
     fieldset: 'parameter',
     noTable: true,
@@ -163,7 +163,7 @@ const screenOptions = fromJS([
       placeholder: _('Please Select ') + _('User Format'),
     },
   }, {
-    id: 'accountingOnSendInterval',
+    id: 'accton_sendinterval',
     label: _('Accounting-on Send Interval'),
     fieldset: 'parameter',
     defaultValue: '0',
@@ -175,7 +175,7 @@ const screenOptions = fromJS([
     },
 
   }, {
-    id: 'accountingOnResendTimes',
+    id: 'realretrytimes',
     label: _('Accounting-on Resend Times'),
     fieldset: 'parameter',
     noTable: true,
@@ -184,7 +184,7 @@ const screenOptions = fromJS([
       className: 'cols col-6',
     },
   }, {
-    id: 'packetsMaxSendTimes',
+    id: 'accton_sendtimes',
     label: _('Packets Max Send Times'),
     fieldset: 'parameter',
     noTable: true,
@@ -193,8 +193,8 @@ const screenOptions = fromJS([
       className: 'cols col-12',
     },
   }, {
-    id: 'accountingPacketsSendInterval',
-    label: _('Accounting Packets Send Interval'),
+    id: 'acct_interim_interval',
+    label: _('Accounting Send Interval'),
     fieldset: 'parameter',
     defaultValue: '0',
     noTable: true,
@@ -205,7 +205,7 @@ const screenOptions = fromJS([
     },
 
   }, {
-    id: 'silentTime',
+    id: 'quiet_time',
     label: _('Silent Time'),
     fieldset: 'parameter',
     defaultValue: '0',
@@ -217,8 +217,8 @@ const screenOptions = fromJS([
     },
 
   }, {
-    id: 'accountingPacketsResendTimes',
-    label: _('Accounting Packets Resend Times'),
+    id: 'resp_time',
+    label: _('Accounting Resend Times'),
     fieldset: 'parameter',
     noTable: true,
     formProps: {
@@ -226,7 +226,7 @@ const screenOptions = fromJS([
       className: 'cols col-6',
     },
   }, {
-    id: 'responseTimeoutTime',
+    id: 'retry_times',
     label: _('Response Timeout Time'),
     fieldset: 'parameter',
     noTable: true,
@@ -242,16 +242,7 @@ const screenOptions = fromJS([
 const formOptions = immutableUtils.getFormOptions(screenOptions);
 const tableOptions = immutableUtils.getTableOptions(screenOptions);
 const defaultEditData = immutableUtils.getDefaultData(screenOptions);
-const propTypes = {
-  app: PropTypes.instanceOf(Map),
-  store: PropTypes.instanceOf(Map),
-  groupId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-
-  route: PropTypes.object,
-  saveSettings: PropTypes.func,
-  updateItemSettings: PropTypes.func,
-  leaveSettingsScreen: PropTypes.func,
-};
+const propTypes = {};
 const defaultProps = {};
 
 export default class View extends React.Component {

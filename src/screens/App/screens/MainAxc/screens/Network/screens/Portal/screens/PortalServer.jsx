@@ -12,7 +12,7 @@ import * as screenActions from 'shared/actions/screens';
 
 const screenOptions = fromJS([
   {
-    id: 'serverName',
+    id: 'template_name',
     label: _('Server Name'),
     formProps: {
       type: 'text',
@@ -20,15 +20,15 @@ const screenOptions = fromJS([
       required: true,
     },
   }, {
-    id: 'addressType',
+    id: 'auth_mode',
     label: _('Address Type'),
     defaultValue: '0',
     options: [
       {
-        value: '0',
+        value: '1',
         label: _('IP'),
       }, {
-        value: '1',
+        value: '2',
         label: _('Domain'),
       },
     ],
@@ -36,7 +36,15 @@ const screenOptions = fromJS([
       type: 'switch',
     },
   }, {
-    id: 'serverIp',
+    id: 'max_usernum',
+    label: _('Max Users'),
+    formProps: {
+      type: 'number',
+      maxLength: '32',
+      required: true,
+    },
+  }, {
+    id: 'auth_ip',
     label: _('Server IP'),
     formProps: {
       type: 'text',
@@ -45,30 +53,31 @@ const screenOptions = fromJS([
         rules: 'ip',
       }),
       showPrecondition(data) {
-        return data.get('addressType') === '0';
+        return data.get('addressType') === '1';
       },
     },
 
   }, {
-    id: 'serverDomain',
+    id: 'auth_domain',
     label: _('Server Domain'),
     formProps: {
       type: 'text',
       required: true,
       showPrecondition(data) {
-        return data.get('addressType') === '1';
+        return data.get('addressType') === '2';
       },
     },
   }, {
-    id: 'serverPort',
+    id: 'interface_bind',
     label: _('Server Port'),
     formProps: {
       type: 'number',
       required: true,
     },
   }, {
-    id: 'sharedKey',
+    id: 'idle_test',
     label: _('Shared Key'),
+    noTable: true,
     formProps: {
       type: 'password',
       required: true,

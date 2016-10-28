@@ -1,0 +1,28 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "template_name":"test1",
+        "auth_accesstype": "0",
+        "auth_schemetype": "1",
+        "radius_template": "test"
+      },
+      {
+        "template_name":"test2",
+        "auth_accesstype": "1",
+        "auth_schemetype": "0",
+        "radius_template": "test22"
+      },
+      {
+        "template_name":"test3",
+        "auth_accesstype":"2",
+        "auth_schemetype":"1",
+        "radius_template": "test"
+      }
+    ]
+  }
+}

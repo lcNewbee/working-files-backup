@@ -14,9 +14,9 @@ gulp.task('config', () => {
     name = argv.n;
   }
   return gulp.src(mainPath)
-    .pipe($.replace(configReg, "'./config/" + name + "'"))
+    .pipe($.replace(configReg, `'./config/${name}'`))
     .on('end', () => {
-      gutil.log('切换到配置文件：', gutil.colors.magenta(name));
+      gutil.log('切换到产品：', gutil.colors.magenta(name));
     })
     .pipe(gulp.dest(paths.src));
 });

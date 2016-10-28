@@ -8,13 +8,13 @@ import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
 function getInterfaceTypeOptions() {
-  return utils.fetch('goform/interfaceType')
-    .then((json) => (
+  return utils.fetch('goform/network/radius/template')
+    .then(json => (
       {
         options: json.data.list.map(
-          (item) => ({
-            value: item.no,
-            label: `${item.no}(${item.noInfo})`,
+          item => ({
+            value: item.template_name,
+            label: `${item.id}(${item.template_name})`,
           })
         ),
       }
@@ -46,38 +46,44 @@ const authTypeSeletOptions = [
     label: `${_('Remotely')}(${_('Radius Service')})`,
   },
 ];
-
 const screenOptions = fromJS([
   {
-    id: 'authAccessType',
+    id: 'auth_accesstype',
     text: _('Access Type') + _('(Auth)'),
     defaultValue: '0',
     fieldset: 'auth',
     legend: _('Auth Service'),
+    options: accessTypeSeletOptions,
     formProps: {
-      type: 'select',
-      placeholder: _('Please Select ') + _('Rules Group'),
-      options: accessTypeSeletOptions,
-    },
-  }, {
-    id: 'authType',
-    text: _('Auth Type') + _('(Auth)'),
-    defaultValue: '0',
-    fieldset: 'auth',
-    formProps: {
+      label: _('Access Type'),
+      required: true,
       type: 'switch',
       placeholder: _('Please Select ') + _('Rules Group'),
-      options: authTypeSeletOptions,
     },
   }, {
-    id: 'authRadiusTemplate',
+    id: 'auth_schemetype',
+    text: _('Type') + _('(Auth)'),
+    defaultValue: '0',
+    fieldset: 'auth',
+    options: authTypeSeletOptions,
+    formProps: {
+      label: _('Type'),
+      required: true,
+      type: 'switch',
+      placeholder: _('Please Select ') + _('Rules Group'),
+    },
+  }, {
+    id: 'radius_template',
     text: _('Radius Template') + _('(Auth)'),
     fieldset: 'auth',
     formProps: {
+      label: _('Radius Template'),
+      required: true,
       type: 'select',
       placeholder: _('Please Select ') + _('Radius Template'),
       loadOptions: getInterfaceTypeOptions,
       isAsync: true,
+      showPrecondition: data => data.get('auth_schemetype') === '1',
     },
   }, {
     id: 'billingAccessType',
@@ -86,16 +92,20 @@ const screenOptions = fromJS([
     fieldset: 'billing',
     legend: _('Accounting Service'),
     formProps: {
-      type: 'select',
+      label: _('Access Type'),
+      required: true,
+      type: 'switch',
       placeholder: _('Please Select ') + _('Rules Group'),
       options: accessTypeSeletOptions,
     },
   }, {
     id: 'billingType',
-    text: _('Accounting Type') + _('(Accounting)'),
+    text: _('Type') + _('(Accounting)'),
     fieldset: 'billing',
     defaultValue: '0',
     formProps: {
+      label: _('Type'),
+      required: true,
       type: 'switch',
       placeholder: _('Please Select ') + _('Rules Group'),
       options: authTypeSeletOptions,
@@ -105,10 +115,13 @@ const screenOptions = fromJS([
     text: _('Radius Template') + _('(Accounting)'),
     fieldset: 'billing',
     formProps: {
+      label: _('Radius Template'),
+      required: true,
       type: 'select',
       placeholder: _('Please Select ') + _('Radius Template'),
       loadOptions: getInterfaceTypeOptions,
       isAsync: true,
+      showPrecondition: data => data.get('billingType') === '1',
     },
   },
 ]);
@@ -116,13 +129,6 @@ const tableOptions = immutableUtils.getTableOptions(screenOptions);
 const editFormOptions = immutableUtils.getFormOptions(screenOptions);
 const defaultEditData = immutableUtils.getDefaultData(screenOptions);
 const propTypes = {
-  app: PropTypes.instanceOf(Map),
-  store: PropTypes.instanceOf(Map),
-
-  route: PropTypes.object,
-  initScreen: PropTypes.func,
-  closeListItemModal: PropTypes.func,
-  updateCurEditListItem: PropTypes.func,
   save: PropTypes.func,
 };
 const defaultProps = {};
@@ -156,6 +162,7 @@ export default class View extends React.Component {
         editFormOptions={editFormOptions}
         defaultEditData={defaultEditData}
         actionable
+        selectable
       />
     );
   }

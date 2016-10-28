@@ -79,7 +79,7 @@ const expirationOptions = [
 ];
 const screenOptions = fromJS([
   {
-    id: 'portalName',
+    id: 'template_name',
     label: _('Portal Name'),
     legend: _('Base Settings'),
     formProps: {
