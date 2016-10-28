@@ -61,6 +61,7 @@ $route['goform/network/aci'] = 'networkAci';
 $route['goform/group'] = 'group';
 $route['goform/group/ap'] = 'apradio/ap';
 $route['goform/group/ap/radio'] = 'apradio/radio';
+$route['goform/group/ap/base'] = 'apradio/base';
 $route['goform/group/client'] = 'monitorUser';
 $route['goform/group/flow/app'] = 'monitorFlow/app';
 $route['goform/group/flow/user'] = 'monitorFlow/user';

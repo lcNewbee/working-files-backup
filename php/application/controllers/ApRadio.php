@@ -35,10 +35,29 @@ class ApRadio extends CI_Controller {
     return $result;
 	}
 	public function Radio() {
-      $result = null;
+		$result = null;
+		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$data = json_decode(file_get_contents("php://input"), true);
 			$result = $this->onAction($data);
       echo $result;
+		}
+		else if($_SERVER['REQUEST_METHOD'] == 'GET') {
+			$result = $this->fetch();
+      echo json_encode($result);
+		}
+		}
+
+  public function Base() {
+		$result = null;
+		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+			$data = json_decode(file_get_contents("php://input"), true);
+			$result = $this->onAction($data);
+      echo $result;
+		}
+		else if($_SERVER['REQUEST_METHOD'] == 'GET') {
+			$result = $this->fetch();
+      echo json_encode($result);
+		}
 		}
   public function Ap(){
       $result = null;
