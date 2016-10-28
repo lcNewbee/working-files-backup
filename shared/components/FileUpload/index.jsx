@@ -174,6 +174,7 @@ class FileUpload extends React.Component {
           onChange={this.onChangeImage}
           style={{
             marginRight: '8px',
+            marginBottom: '4px',
           }}
           ref={(fileElem) => {
             if (fileElem) {

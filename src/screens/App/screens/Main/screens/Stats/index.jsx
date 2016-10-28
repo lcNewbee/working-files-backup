@@ -192,8 +192,9 @@ const clientsDayStatsOption = clientsStatsOption.toJS();
 const clientsWeekStatsOption = clientsStatsOption.toJS();
 const clients15DayStatsOption = clientsStatsOption.toJS();
 const clients30DayStatsOption = clientsStatsOption.toJS();
-const statisticsChartStyle = {
+const eChartStyle = {
   width: '100%',
+  height: '240px',
 };
 
 // 原生的 react 页面
@@ -463,14 +464,14 @@ export const Status = React.createClass({
     return (
       <div className="Stats">
         <h2>{ _('Statistics') }</h2>
-        <div className="stats-group clearfix" >
-          <div className="stats-group-small" >
-            <div className="stats-group-cell">
+        <div className="o-box row" >
+          <div className="cols col-4" >
+            <div className="o-box__cell">
               <h3>{ msg.apNumber }</h3>
             </div>
-            <div className="stats-group-cell">
+            <div className="o-box__cell">
               <EchartReact
-                className="stats-group-canvas"
+                style={eChartStyle}
                 option={apNumberChartOption}
                 onEvents={{
                   click: (params) => {
@@ -485,28 +486,28 @@ export const Status = React.createClass({
               />
             </div>
           </div>
-          <div className="stats-group-medium" >
-            <div className="stats-group-cell">
+          <div className="cols col-8" >
+            <div className="o-box__cell">
               <h3>{ _('Clients Number') }</h3>
             </div>
-            <div className="stats-group-cell">
+            <div className="o-box__cell row">
               <div className="cols col-6">
                 <EchartReact
                   option={clientNetworkChartOption}
-                  className="stats-group-canvas"
+                  style={eChartStyle}
                 />
               </div>
               <div className="cols col-6">
                 <EchartReact
                   option={clientsProducerChart}
-                  className="stats-group-canvas"
+                  style={eChartStyle}
                 />
               </div>
 
             </div>
           </div>
-          <div className="stats-group-large" >
-            <div className="stats-group-cell">
+          <div className="cols col-12" >
+            <div className="o-box__cell">
               <h3>{ _('Clients Statistics') }
                 <Switchs
                   options={timeTypeSwitchs}
@@ -515,18 +516,18 @@ export const Status = React.createClass({
                 />
               </h3>
             </div>
-            <div className="stats-group-cell">
+            <div className="o-box__cell">
               <EchartReact
                 className="stats-group-canvas"
                 option={statisticsChartOption}
-                style={statisticsChartStyle}
+                style={eChartStyle}
                 needClear
               />
             </div>
           </div>
 
-          <div className="stats-group-large">
-            <div className="stats-group-header">
+          <div className="cols col-12">
+            <div className="o-box__cell">
               <h3>{_('Clients Ranklist')}
                 <Switchs
                   options={clientTypeSwitchs}
@@ -539,7 +540,7 @@ export const Status = React.createClass({
                 </a>
               </h3>
             </div>
-            <div className="stats-group-cell">
+            <div className="o-box__cell">
               <Table
                 className="table"
                 options={clientsListOption}
@@ -548,15 +549,15 @@ export const Status = React.createClass({
             </div>
           </div>
 
-          <div className="stats-group-large">
-            <div className="stats-group-header">
+          <div className="cols col-12">
+            <div className="o-box__cell">
               <h3>{ _('AP Activity Ranklist') }
                 <a className="link-more" href="#/main/devices">{_('See More')}
                   <Icon name="arrow-circle-o-right" className="icon" />
                 </a>
               </h3>
             </div>
-            <div className="stats-group-cell">
+            <div className="o-box__cell">
               <Table
                 className="table"
                 options={apListOption}

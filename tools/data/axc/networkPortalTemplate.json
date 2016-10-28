@@ -12,15 +12,18 @@
       "server_url":"test",
       "ac_ip":"test",
       "authRedirectUrl": "www.baidu.com",
-      "portalTitle": "comlanos",
+      "portalTitle": "Axilspot Portal",
       "imagesSlideInterval": "2",
       "expiration": "3600",
       "images": [{
         "count": "1",
-        "url": "images/4.jpg"
+        "url": "images/banner1.png"
       }, {
         "count": "2",
-        "url": "images/logo.png"
+        "url": "images/banner2.png"
+      }, {
+        "count": "3",
+        "url": "images/banner3.png"
       }]
     }
   }

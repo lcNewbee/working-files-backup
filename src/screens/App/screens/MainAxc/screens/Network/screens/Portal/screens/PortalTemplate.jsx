@@ -6,11 +6,13 @@ import { bindActionCreators } from 'redux';
 import ListInfo from 'shared/components/Template/ListInfo';
 import FileUploads from 'shared/components/FileUpload';
 import FormGroup from 'shared/components/Form/FormGroup';
+import { Button, SaveButton } from 'shared/components/Button';
+import FormContainer from 'shared/components/Organism/FormContainer';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/settings';
 import * as screenActions from 'shared/actions/screens';
 
-import './index.scss';
+import '../style.scss';
 
 const MSG = {
   Seconds: _('Seconds'),
@@ -81,7 +83,6 @@ const screenOptions = fromJS([
   {
     id: 'template_name',
     label: _('Portal Name'),
-    legend: _('Base Settings'),
     formProps: {
       type: 'text',
       maxLength: '32',
@@ -128,7 +129,7 @@ const propTypes = {
   initSettings: PropTypes.func,
   fetchSettings: PropTypes.func,
   saveSettings: PropTypes.func,
-  updateItemSettings: PropTypes.func,
+  updateScreenSettings: PropTypes.func,
   leaveSettingsScreen: PropTypes.func,
   createModal: PropTypes.func,
 };
@@ -138,6 +139,10 @@ export default class View extends React.Component {
   constructor(props) {
     super(props);
     this.onSave = this.onSave.bind(this);
+    utils.binds(this, ['onSave', 'selectShowImage']);
+    this.state = {
+      activeImageIndex: 1,
+    };
   }
 
   componentWillUnmount() {
@@ -148,67 +153,139 @@ export default class View extends React.Component {
     this.props.saveSettings();
   }
 
+  selectShowImage(i) {
+    this.setState({
+      activeImageIndex: i,
+    });
+  }
+
   render() {
-    const { store } = this.props;
+    const { store, app, updateScreenSettings } = this.props;
     const myFormOptions = formOptions;
     const myScreenId = store.get('curScreenId');
-    const images = store.getIn([myScreenId, 'curSettings', 'images']);
+    const curSettings = store.getIn([myScreenId, 'curSettings']);
+    const activeIndex = this.state.activeImageIndex;
+    const curImgUrl = store.getIn(
+      [myScreenId, 'curSettings', 'images', activeIndex - 1, 'url']
+    ) || '';
 
     return (
       <ListInfo
         {...this.props}
-        settingsFormOption={myFormOptions}
         defaultSettingData={defaultSettingData}
         actionable={false}
-        hasSettingsSaveButton
         noTitle
       >
-        <iframe id="imagesIf" name="imagesIf" className="none" />
-        <div className="o-form">
-          <fieldset className="o-form__fieldset">
-            <legend className="o-form__legend">{_('Upload Image')}</legend>
-            <p className="o-form__p">{MSG.imageDes}</p>
-            <div className="images-list">
-              {
-                images ? images.map(
-                  (item, i) => <img alt={`image ${i + 1}`} src={item.get('url')} key={item.get('count')} />
-                ) : null
-              }
+        <div className="row">
+          <div className="cols col-7">
+            <FormContainer
+              options={myFormOptions}
+              data={curSettings}
+              onChangeData={updateScreenSettings}
+              onSave={this.onSaveSettings}
+              invalidMsg={app.get('invalid')}
+              validateAt={app.get('validateAt')}
+              isSaving={app.get('saving')}
+              hasSaveButton={false}
+            />
+            <div className="o-form">
+              <p className="o-form__p">{MSG.imageDes}</p>
+              <FormGroup label=" ">
+                <FileUploads
+                  url="goform/uploadPortalImage"
+                  name="image1"
+                  target="imagesIf"
+                  acceptExt="png,gif,jpg,bmp"
+                  createModal={this.props.createModal}
+                  buttonText={`${_('Upload Image')} 1`}
+                  onUploaded={
+                    () => this.selectShowImage(1)
+                  }
+                />
+              </FormGroup>
+              <FormGroup label=" ">
+                <FileUploads
+                  url="goform/uploadPortalImage"
+                  name="image2"
+                  acceptExt="png,gif,jpg,bmp"
+                  createModal={this.props.createModal}
+                  buttonText={`${_('Upload Image')} 2`}
+                  onUploaded={
+                    () => this.selectShowImage(2)
+                  }
+                />
+              </FormGroup>
+              <FormGroup label=" ">
+                <FileUploads
+                  url="goform/uploadPortalImage"
+                  name="image3"
+                  target="imagesIf"
+                  acceptExt="png,gif,jpg,bmp"
+                  createModal={this.props.createModal}
+                  buttonText={`${_('Upload Image')} 3`}
+                  onUploaded={
+                    () => this.selectShowImage(3)
+                  }
+                />
+              </FormGroup>
+              <div className="form-group form-group--save">
+                <div className="form-control">
+                  <SaveButton
+                    text={_('Save')}
+                    id="online"
+                  />
+                </div>
+              </div>
             </div>
-            <FormGroup label=" ">
-              <FileUploads
-                url="goform/uploadPortalImage"
-                name="image1"
-                target="imagesIf"
-                formData={{
+          </div>
+          <div className="cols col-5">
+            <div className="o-preview-iphone">
+              <div className="o-preview-iphone__body">
+                <div className="carousel">
+                  {
+                    curImgUrl ? (
+                      <img
+                        src={curImgUrl}
+                        alt={activeIndex}
+                      />
+                    ) : null
+                  }
+                  <ul className="carousel-indicators">
+                    {
+                      [1, 2, 3].map(
+                        (val) => {
+                          let myClassName = '';
 
-                }}
-                acceptExt="png,gif,jpg,bmp"
-                createModal={this.props.createModal}
-                buttonText={_('Upload Image') + ' 1'}
-              />
-            </FormGroup>
-            <FormGroup label=" ">
-              <FileUploads
-                url="goform/uploadPortalImage"
-                name="image2"
-                acceptExt="png,gif,jpg,bmp"
-                createModal={this.props.createModal}
-                buttonText={_('Upload Image') + ' 2'}
-              />
-            </FormGroup>
-            <FormGroup label=" ">
-              <FileUploads
-                url="goform/uploadPortalImage"
-                name="image3"
-                target="imagesIf"
-                acceptExt="png,gif,jpg,bmp"
-                createModal={this.props.createModal}
-                buttonText={_('Upload Image') + ' 3'}
-              />
-            </FormGroup>
-          </fieldset>
+                          if (val === activeIndex) {
+                            myClassName = 'active';
+                          }
+
+                          return (
+                            <li
+                              className={myClassName}
+                              onClick={() => this.selectShowImage(val)}
+                            >
+                              {val}
+                            </li>
+                          );
+                        }
+                      )
+                    }
+                  </ul>
+                </div>
+                <h4 className="o-preview-iphone__body-title">{curSettings.get('portalTitle')}</h4>
+                <Button
+                  type="button"
+                  icon="sphere"
+                  theme="primary"
+                  text={_('Click on Internet')}
+                  id="online"
+                />
+              </div>
+            </div>
+          </div>
         </div>
+        <iframe id="imagesIf" name="imagesIf" className="none" />
       </ListInfo>
     );
   }

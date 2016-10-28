@@ -21,6 +21,9 @@ const bundler = webpack(config);
 browserSync({
   server: {
     baseDir: 'src',
+    routes: {
+      '/': 'src/assets',
+    },
     index: 'index.html',
     middleware: [
       {
