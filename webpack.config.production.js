@@ -96,7 +96,7 @@ module.exports = {
   },
   output: {
     path: GLOBALS.folders.BUILD,
-    publicPath: '/webapp/intercept/axc/',
+    publicPath: '/',
     filename: '/scripts/bundle.js',
   },
   devServer: {
