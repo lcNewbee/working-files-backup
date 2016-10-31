@@ -4,7 +4,7 @@
 - [new] 新特性
 - [fix] Bug 修复
 
-1.1.0 / 2016-06-05
+1.0.10 / 2016-10-10
 ==================
 - [new] 开发：使用babel支持ES6,react。使用webpack支持打包
 - [new] 调试: browser-sync，react-hot-loader，
