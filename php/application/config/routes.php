@@ -52,6 +52,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'login';
 $route['404_override'] = '';
 $route['goform/login'] = 'login';
+$route['goform/axcInfo'] = 'axcInfo';
 $route['goform/network/port'] = 'networkPort';
 $route['goform/network/interface'] = 'networkInterface';
 $route['goform/network/dhcp'] = 'networkDhcp';
@@ -72,4 +73,8 @@ $route['goform/group/blacklist'] = 'wirelessAcl';
 $route['goform/group/smartRf'] = 'wirelessSmart';
 $route['goform/group/timerPolicy'] = 'wirelessTimer';
 $route['goform/group/wips'] = 'wirelessSafe';
+$route['goform/system/version/upload'] = 'systemVersion/upload';
+$route['goform/system/version/upgrade'] = 'systemVersion/upgrade';
+$route['goform/system/version/backup'] = 'systemVersion/backup';
+
 

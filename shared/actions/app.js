@@ -35,12 +35,13 @@ export function changeModalState(data) {
 export function closeModal(data) {
   return (dispatch, getState) => {
     const handleOk = getState().app.getIn(['modal', 'apply']);
+    const myData = data || { status: 'hide' };
 
-    if (data.status === 'ok' && typeof handleOk === 'function') {
+    if (myData.status === 'ok' && typeof handleOk === 'function') {
       handleOk();
     }
 
-    dispatch(changeModalState(data));
+    dispatch(changeModalState(myData));
   };
 }
 
@@ -177,11 +178,13 @@ export function fetchProductInfo(url) {
     const fetchUrl = url || APP_CONFIG.fetchInfo;
     dispatch(requestFetchProductInfo());
 
-    dispatch(fetch(fetchUrl))
+    return dispatch(fetch(fetchUrl))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(receiveFetchProductInfo(json.data));
         }
+
+        return json;
       });
   };
 }

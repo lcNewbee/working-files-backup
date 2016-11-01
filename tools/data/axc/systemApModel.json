@@ -1,0 +1,36 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "page": {
+      "start": 1,
+      "size": 20,
+      "currPage": 1,
+      "totalPage": 1,
+      "total": 11,
+      "pageCount": 11,
+      "nextPage": -1,
+      "lastPage": 1
+    },
+    "list": [
+      {
+        "id": 1,
+        "name": "client",
+        "radionum": "v1.2.3",
+        "vendor": "hed34"
+      }, {
+        "id": 2,
+        "name": "client",
+        "radionum": "v1.2.3",
+        "vendor": "hed34"
+      }, {
+        "id": 3,
+        "name": "client",
+        "radionum": "v1.2.3",
+        "vendor": "hed34"
+      }
+    ]
+  }
+}

@@ -1,16 +1,22 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/utils/lib/validator';
 import utils from 'shared/utils';
-import {
-  Button, FormContainer,
-} from 'shared/components';
+import FormContainer from 'shared/components/Organism/FormContainer';
+import WizardContainer from 'shared/components/Organism/WizardContainer';
+import DropzoneComponent from 'react-dropzone-component';
+import PureComponent from 'shared/components/Base/PureComponent';
+import FormGroup from 'shared/components/Form/FormGroup';
+import FileUpload from 'shared/components/FileUpload';
 import * as appActions from 'shared/actions/app';
-
 import urls from 'shared/config/urls';
+import 'dropzone/dist/min/dropzone.min.css';
+
+import './_style.scss';
+
 
 const _ = window._;
 const msg = {
@@ -25,6 +31,7 @@ const msg = {
     ' Click back to modify the configuration or click finish to activate the configuration.' +
     ' After finish you will skip to management interface.'),
 };
+let checkUpgradOkTimeout = null;
 
 const versionUsesOptions = [
   {
@@ -56,257 +63,231 @@ const stepOneFormGroupList = fromJS([
   },
 ]);
 
-// 原生的 react 页面
-export const SignUp = React.createClass({
-  mixins: [PureRenderMixin],
 
-  getInitialState() {
-    return {
-      password: '',
-      confirmpasswd: '',
-      currStep: 1,
+const propTypes = {
+  app: PropTypes.instanceOf(Map),
+  save: PropTypes.func,
+  createModal: PropTypes.func,
+  fetchProductInfo: PropTypes.func,
+  closeModal: PropTypes.func,
+};
+const defaultProps = {};
+export default class View extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    utils.binds(this,
+      [
+        'updateState', 'renderStepOne', 'onBeforeStep', 'upgradeAc',
+        'acUploading', 'checkUpgradOk', 'renderStepThree',
+      ]
+    );
+    this.state = {
       versionUses: '0',
+      filename: '',
+      fileUploaded: false,
+      initStep: 0,
     };
-  },
+  }
 
-  onNext() {
-    const MAX_STEP = 3;
-    let currStep = this.state.currStep;
-    let checkResult;
+  componentWillMount() {
+    // this.props.fetchScreenData();
+  }
 
-    if (currStep < MAX_STEP) {
-      currStep += 1;
+  componentWillUnmount() {
+    // this.props.leaveScreen();
+  }
 
-      if (this.state.currStep === 2) {
-        checkResult = this.checkStepTwo();
+  onBeforeStep(data) {
+    const { targetStep, currStep } = data;
+    const ret = '';
 
-        if (!checkResult) {
-          this.updateState({
-            currStep,
-            status: 'ok',
-          });
-        } else {
-          this.updateState({
-            status: checkResult,
-          });
-        }
-      } else if (this.state.currStep === 1) {
-        checkResult = this.checkStepOne();
+    // next
+    if (targetStep > currStep) {
+      if (currStep === 0) {
+        this.upgradeAc();
+      }
+    }
 
-        this.props.validateAll()
-          .then((msgObj) => {
-            if (msgObj.isEmpty()) {
-              this.updateState({
-                currStep,
-                status: 'ok',
-              });
-            }
-          });
-      } else {
-        this.updateState({
-          currStep,
+    return ret;
+  }
+
+  checkUpgradOk(isFirst) {
+    if (!isFirst) {
+      this.props.fetchProductInfo('goform/axcInfo')
+        .then((json) => {
+          if (json && json.state && json.state.code === 2000) {
+            clearTimeout(checkUpgradOkTimeout);
+            this.props.closeModal();
+            this.setState({
+              initStep: 2,
+            });
+          }
         });
-      }
-    } else {
-      this.signUp();
     }
-  },
+    checkUpgradOkTimeout = setTimeout(() => {
+      this.checkUpgradOk();
+    }, 5000);
+  }
 
-  onPrev() {
-    let currStep = this.state.currStep;
+  upgradeAc() {
+    const { filename } = this.state;
+    const url = 'goform/system/version/upgrade';
 
-    if (currStep > 1) {
-      currStep -= 1;
-      this.updateState({
-        currStep,
-        status: '',
-      });
-    }
-  },
-
-  onChangeData(name) {
-    return function changeData(options) {
-      const data = {};
-
-      data[name] = options.value;
-
-      if (options.label) {
-        data[`${name}Label`] = options.label;
-      }
-
-      this.updateState(data);
-    }.bind(this);
-  },
-
-  onInputKeyUp(e) {
-    if (e.which === 13) {
-      if (e.target.id === 'password') {
-        document.getElementById('confirmpasswd').focus();
-      } else {
-        this.onNext();
-      }
-    }
-  },
-  onSignUp() {
-    const checkResult = this.checkData();
-
-    // 如果有验证错误信息
-    if (checkResult) {
-      this.updateState({
-        status: checkResult,
-      });
-
-    //
-    } else {
-      this.signUp();
-    }
-  },
-
-  getDataValue(name) {
-    return this.state[name] || '';
-  },
-
-  checkStepTwo() {
-    const data = this.state;
-    let checkResult;
-
-    return checkResult;
-  },
-
-  checkStepOne() {
-    const data = this.state;
-    let checkResult;
-
-    return checkResult;
-  },
-
-  signUp() {
-    utils.save(urls.regist, {
-      country: this.state.country,
-      timeZone: this.state.timeZone,
-      password: this.state.password,
-      confirmpasswd: this.state.confirmpasswd,
-    })
-    .then((json) => {
-      if (json.state && json.state.code === 2000) {
-        window.location.hash = '';
-      }
+    this.props.createModal({
+      role: 'loading',
+      title: _('Upgrade AC Version'),
+      text: _('Upgrading AC version, Please do not shut down device.'),
     });
-  },
+
+    this.props.save(url, { filename })
+      .then(() => {
+        this.checkUpgradOk(true);
+      });
+  }
 
   updateState(data) {
-    this.setState(utils.extend({}, this.state, data));
-  },
+    this.setState(data);
+  }
+
+  renderStepOne() {
+    const componentConfig = {
+      postUrl: 'goform/system/version/upload',
+    };
+    const eventHandlers = {
+      // This one receives the dropzone object as the first parameter
+      // and can be used to additional work with the dropzone.js
+      // object
+      init: null,
+      // All of these receive the event as first parameter:
+      drop: null,
+      dragstart: null,
+      dragend: null,
+      dragenter: null,
+      dragover: null,
+      dragleave: null,
+      // All of these receive the file as first parameter:
+      addedfile: null,
+      removedfile: null,
+      thumbnail: null,
+      error: (file) => {
+        console.log(file);
+      },
+      processing: null,
+      uploadprogress: null,
+      sending: null,
+      success: (file) => {
+        this.updateState({
+          fileUploaded: true,
+          filename: file.name,
+        });
+      },
+      complete() {
+
+      },
+      canceled: null,
+      maxfilesreached: null,
+      maxfilesexceeded: null,
+      // All of these receive a list of files as first parameter
+      // and are only called if the uploadMultiple option
+      // in djsConfig is true:
+      processingmultiple: null,
+      sendingmultiple: null,
+      successmultiple: null,
+      completemultiple: null,
+      canceledmultiple: null,
+      // Special Events
+      totaluploadprogress: null,
+      reset: null,
+      queuecomplete: null,
+    };
+    const djsConfig = {
+      paramName: 'versionFile',
+      maxFiles: 1,
+      addRemoveLinks: 'dictCancelUploadConfirmation',
+      dictDefaultMessage: _('Drop or click to select file'),
+    };
+
+    return (
+      <div className="ac-version">
+        <FormGroup
+          label={msg.versionUses}
+          type="switch"
+          name="versionUses"
+          options={versionUsesOptions}
+          value={this.state.versionUses}
+          onChange={data => this.updateState({
+            versionUses: data.value,
+          })}
+        />
+        <FormGroup
+          label={msg.selectFile}
+        >
+          <DropzoneComponent
+            config={componentConfig}
+            eventHandlers={eventHandlers}
+            djsConfig={djsConfig}
+          />
+        </FormGroup>
+      </div>
+    );
+  }
+  renderStepTwo() {
+    return (
+      <div className="step-1">
+        <p>{msg.passwordDes}</p>
+      </div>
+    );
+  }
+
+  renderStepThree() {
+    const { app } = this.props;
+    return (
+      <div className="step-1">
+        <FormGroup
+          type="plain-text"
+          label={_('currVersion')}
+          value={app.getIn(['version'])}
+        />
+      </div>
+    );
+  }
 
   render() {
-    const { currStep, versionUses } = this.state;
-    const btnInfoRole = 'info';
-    const { route, app } = this.props;
+    const { versionUses, initStep } = this.state;
     const stepTwoTitleArr = [
       _('Upgrading Version'),
       _('Backup Version'),
     ];
-    let stepOneClass = '';
-    let stepTwoClass = '';
-    let stepThreeClass = '';
-
-    if (currStep === 1) {
-      stepOneClass = 'active';
-    } else if (currStep === 2) {
-      stepOneClass = 'completed';
-      stepTwoClass = 'active';
-    } else if (currStep === 3) {
-      stepOneClass = 'completed';
-      stepTwoClass = 'completed';
-      stepThreeClass = 'active';
-    }
+    const options = fromJS([
+      {
+        title: _('Upload AC Version'),
+        render: this.renderStepOne,
+      }, {
+        title: stepTwoTitleArr[versionUses],
+        render: this.renderStepTwo,
+      }, {
+        title: _('Completed'),
+        render: this.renderStepThree,
+      },
+    ]);
 
     return (
-      <div
-        className="o-wizard"
-        style={{
-          width: '80%',
-        }}
-      >
-        <h3 className="o-wizard__title">{_('AC Version Setup Wizard')}</h3>
-        <div className="o-wizard__nav">
-          <ul>
-            <li className={stepOneClass}>
-              <span className="icon" />
-              <h3>1. {_('Upload AC Version')}</h3>
-            </li>
-            <li className={stepTwoClass}>
-              <span className="icon" />
-              <h3>2. {stepTwoTitleArr[versionUses]}</h3>
-            </li>
-            <li className={stepThreeClass}>
-              <span className="icon" />
-              <h3>3. {_('Completed')}</h3>
-            </li>
-          </ul>
-        </div>
-        <div className="o-wizard__content">
-          {
-            this.state.currStep === 1 ? (
-              <div className="step-0 row">
-                <FormContainer
-                  className="o-form--cols-2"
-                  action="goform/ss"
-                  data={fromJS(this.state)}
-                  invalidMsg={app.get('invalid')}
-                  validateAt={app.get('validateAt')}
-                  options={stepOneFormGroupList}
-                  onSave={this.onSave}
-                  onChangeData={this.updateState}
-                  onValidError={this.props.reportValidError}
-                />
-              </div>
-            ) : null
-          }
-
-          {
-            this.state.currStep === 2 ? (
-              <div className="step-1">
-                <p>{msg.passwordDes}</p>
-
-                {
-                  this.state.status !== 'ok' ?
-                    <p className="msg-error ">{this.state.status}</p> :
-                    null
-                }
-              </div>
-            ) : null
-          }
-
-          {
-            this.state.currStep === 3 ? (
-              <div className="step-1">
-                <p>{msg.completeDes}</p>
-              </div>
-            ) : null
-          }
-
-        </div>
-        <div className="o-wizard__footer">
-          {
-            currStep > 1 ? (
-              <Button
-                onClick={this.onPrev}
-                text={_('Back')}
-              />
-            ) : null
-          }
-
-          <Button
-            theme={btnInfoRole}
-            onClick={this.onNext}
-            text={this.state.currStep !== 3 ? _('Next Step') : _('Completed')}
-          />
-        </div>
-      </div>
+      <WizardContainer
+        title={_('AC Version Setup Wizard')}
+        options={options}
+        onBeforeStep={this.onBeforeStep}
+        size="sm"
+        nextDisabled={!this.state.fileUploaded}
+        initStep={initStep}
+      />
     );
-  },
-});
+  }
+}
+
+View.propTypes = propTypes;
+View.defaultProps = defaultProps;
+
 
 function mapStateToProps(state) {
   return {
@@ -324,4 +305,4 @@ function mapDispatchToProps(dispatch) {
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps
-)(SignUp);
+)(View);

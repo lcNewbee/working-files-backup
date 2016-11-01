@@ -10,27 +10,37 @@ import {
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
-function getPortList() {
-  return utils.fetch('goform/network/port')
-    .then(json => (
-      {
-        options: json.data.list.map(
-          item => ({
-            value: item.name,
-            label: item.name,
-          })
-        ),
-      }
-    )
-  );
-}
-
 const screenOptions = fromJS([
   {
-    id: 'model',
-    text: _('AP Model'),
+    id: 'name',
+    text: _('Model Name'),
     formProps: {
       type: 'text',
+      required: true,
+    },
+  }, {
+    id: 'radionum',
+    text: _('Radio Number'),
+    defaultVlaue: 1,
+    options: [
+      {
+        value: 1,
+        label: 1,
+      }, {
+        value: 2,
+        label: 2,
+      }, {
+        value: 3,
+        label: 3,
+      }, {
+        value: 4,
+        label: 4,
+      },
+    ],
+    formProps: {
+      type: 'switch',
+      min: '1',
+      max: '2',
       required: true,
     },
   },

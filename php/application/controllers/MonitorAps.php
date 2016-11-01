@@ -16,7 +16,7 @@ class MonitorAps extends CI_Controller {
 
     // 如果groupid不存在或值为-1则返回默认设备
     if ($rqdata['groupid'] === -1) {
-      $result = axc_get_default_aps();
+      $result = axc_get_auto_aps();
 
     // 非默认组
     } else {

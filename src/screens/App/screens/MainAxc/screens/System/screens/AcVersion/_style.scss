@@ -1,0 +1,28 @@
+.ac-version {
+  .dropzone {
+    padding: 5px 20px;
+    padding-top: 20px;
+    .dz-preview {
+      margin: 0;
+      width: 100%;
+
+      .dz-image {
+        width: 100%;
+        height: 80px;
+        img {
+          width: 100%;
+          height: 80px;
+        }
+      }
+      .dz-details {
+        padding: 1em;
+        width: 100%;
+
+        .dz-size {
+          margin-bottom: 13px;
+        }
+      }
+    }
+  }
+}
+

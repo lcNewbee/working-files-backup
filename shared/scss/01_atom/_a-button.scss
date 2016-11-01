@@ -28,6 +28,10 @@
       margin-right: 0;
     }
   }
+  &[disabled] {
+    opacity: .6;
+    cursor: not-allowed;
+  }
 }
 
 a.a-btn {

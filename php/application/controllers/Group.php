@@ -50,17 +50,13 @@ class Group extends CI_Controller {
         'aplist'=>element('aplist', $oriData, -1)
       );
 
-      if (element('groupname', $oriData)) {
-
-      }
-
       return $retData;
     }
 
 		if ($actionType === 'add') {
 			$temp_data=getCgiParam($data);
       //$result=json_encode($temp_data);
-      $result=acwlan_add_apgroup(json_encode($temp_data));
+      $result=axc_add_apgroup(json_encode($temp_data));
 		}
 		elseif($actionType === 'edit') {
     	$temp_data=getCgiParam($data);
@@ -72,12 +68,12 @@ class Group extends CI_Controller {
     elseif($actionType === 'move') {
       $result=axc_aps_move_to_apgroup(json_encode($deleteItem));
     }
-    elseif($actionType === 'deleteGroupAps'){
+    elseif($actionType === 'deleteGroupAps') {
       $temp_data = array(
         'aplist'=>element('aplist', $data),
         'groupid'=>(int)element('groupid', $data, -1),
       );
-      $result=acwlan_del_aptogroup($temp_data);
+      $result=axc_del_aptogroup($temp_data);
     }
     elseif($actionType === 'groupApAdd'){
       $temp_data = array(
@@ -92,7 +88,8 @@ class Group extends CI_Controller {
           'autoaplist'=>element('aplist', $data),
         );
       }
-      $result=acwlan_add_aptogroup(json_encode($temp_data));
+      // $result = json_encode($temp_data);
+      $result=axc_add_aptogroup(json_encode($temp_data));
     }
 
 		return $result;

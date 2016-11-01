@@ -1,0 +1,32 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "page": {
+      "start": 1,
+      "size": 20,
+      "currPage": 1,
+      "totalPage": 1,
+      "total": 11,
+      "pageCount": 11,
+      "nextPage": -1,
+      "lastPage": 1
+    },
+    "list": [
+      {
+        "id": "2016-6-16d",
+        "model": "client",
+        "softVersion": "v1.2.3",
+        "hardVersion": "hed34"
+      },
+      {
+        "id": "2016-6-16ddd",
+        "model": "client",
+        "softVersion": "v1.2.3",
+        "hardVersion": "hed34"
+      }
+    ]
+  }
+}

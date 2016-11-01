@@ -15,7 +15,7 @@ const propTypes = {
   className: PropTypes.string,
   layout: PropTypes.oneOf(['flow', 'block']),
   size: PropTypes.oneOf(['compassed']),
-  componentType: PropTypes.oneOf(['form', 'div']),
+  component: PropTypes.oneOf(['form', 'div']),
 
   hasSaveButton: PropTypes.bool,
   isSaving: PropTypes.bool,
@@ -40,7 +40,7 @@ const propTypes = {
 const defaultProps = {
   hasSaveButton: false,
   method: 'POST',
-  componentType: 'div',
+  component: 'div',
 };
 
 class FormContainer extends React.Component {
@@ -79,7 +79,7 @@ class FormContainer extends React.Component {
 
     delete myProps.fieldset;
     delete myProps.legend;
-    delete myProps.id;
+    //delete myProps.id;
 
     if (id) {
       myProps.form = id;
@@ -176,11 +176,13 @@ class FormContainer extends React.Component {
     const {
       isSaving, action, options, hasSaveButton, layout, size,
       className, hasFile, method, leftChildren, rightChildren,
-      componentType,
+      component,
     } = this.props;
+    const Component = component;
     let formProps = null;
     let classNames = 'o-form';
     let encType = 'application/x-www-form-urlencoded';
+
 
     if (layout) {
       classNames = `${classNames} o-form--${layout}`;
@@ -198,7 +200,7 @@ class FormContainer extends React.Component {
       encType = 'multipart/form-data';
     }
 
-    if (componentType === 'form') {
+    if (component === 'form') {
       formProps = {
         action,
         method,
@@ -207,7 +209,7 @@ class FormContainer extends React.Component {
     }
 
     return (
-      <div
+      <Component
         className={classNames}
         id={this.props.id}
         {...formProps}
@@ -240,7 +242,7 @@ class FormContainer extends React.Component {
             </div>
           ) : null
         }
-      </div>
+      </Component>
     );
   }
 }

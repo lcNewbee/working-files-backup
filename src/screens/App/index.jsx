@@ -1,7 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from 'shared/actions/app';
-import { Modal } from 'shared/components';
+import Modal from 'shared/components/Modal';
+import Icon from 'shared/components/Icon';
 
 const propTypes = {
   closeModal: PropTypes.func,
@@ -42,6 +43,8 @@ class App extends Component {
 
   render() {
     const { modal } = this.props.app.toJS();
+    const modelRole = modal.role;
+    const isLoadingModal = modelRole === 'loading';
 
     return (
       <div>
@@ -49,12 +52,25 @@ class App extends Component {
         <Modal
           isShow={modal.status === 'show'}
           title={modal.title}
-          role={modal.role}
+          role={modelRole}
           transitionEnter={false}
           transitionLeave={false}
           onClose={this.onModalClose}
           onOk={this.onModalApply}
+          noFooter={isLoadingModal}
+          noClose={isLoadingModal}
         >
+          {
+            modelRole === 'loading' ? (
+              <div className="o-modal__body-icon">
+                <Icon
+                  name="spinner"
+                  size="2x"
+                  spin
+                />
+              </div>
+            ) : null
+          }
           {modal.text}
         </Modal>
       </div>

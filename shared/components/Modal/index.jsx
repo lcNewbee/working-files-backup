@@ -9,7 +9,7 @@ const propTypes = {
   id: PropTypes.string,
   style: PropTypes.object,
   size: PropTypes.oneOf(['min', 'md', 'lg', 'xlg', 'max']),
-  role: PropTypes.oneOf(['dialog', 'alert', 'comfirm', 'message']),
+  role: PropTypes.oneOf(['dialog', 'alert', 'comfirm', 'message', 'loading']),
   okText: PropTypes.string,
   cancelText: PropTypes.string,
   transitionLeave: PropTypes.bool,

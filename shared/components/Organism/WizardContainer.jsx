@@ -11,6 +11,7 @@ const propTypes = {
   className: PropTypes.string,
   size: PropTypes.oneOf(['sm']),
   title: PropTypes.string,
+  nextDisabled: PropTypes.bool,
   initStep: PropTypes.number,
   options: PropTypes.oneOfType([
     PropTypes.array,
@@ -29,6 +30,7 @@ const propTypes = {
 const defaultProps = {
   initStep: 0,
   options: List([]),
+  nextDisabled: false,
 };
 
 class WizardContainer extends React.Component {
@@ -113,10 +115,14 @@ class WizardContainer extends React.Component {
   }
 
   onNext() {
-    const { onCompleted, options } = this.props;
+    const { onCompleted, options, nextDisabled } = this.props;
     const MAX_STEP = options.size;
     let currStep = this.state.currStep;
     let stepObj;
+
+    if (nextDisabled) {
+      return null;
+    }
 
     if (currStep < MAX_STEP - 1) {
       currStep += 1;
@@ -153,7 +159,7 @@ class WizardContainer extends React.Component {
   }
 
   render() {
-    const { options, title, size, className } = this.props;
+    const { options, title, size, className, nextDisabled } = this.props;
     const { currStep, maxStep, status } = this.state;
     const styleWidth = (100 / options.size);
     const navStyle = {
@@ -220,6 +226,7 @@ class WizardContainer extends React.Component {
           <Button
             theme="info"
             onClick={this.onNext}
+            disabled={nextDisabled}
             text={currStep !== (maxStep - 1) ? _('Next Step') : _('Completed')}
           />
         </div>
