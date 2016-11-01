@@ -9,8 +9,8 @@ class AxcInfo extends CI_Controller {
 	public function index() {
     $result=array(
       'state'=>array(
-        'code' => 4000,
-        'msg' => 'Username or Password Error',
+        'code' => 2000,
+        'msg' => 'ok',
       ),
       'data'=>array(
         'version'=>'1.0.1',

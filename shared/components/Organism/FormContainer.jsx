@@ -27,6 +27,8 @@ const propTypes = {
   onChangeData: PropTypes.func,
   onValidError: PropTypes.func,
   onSave: PropTypes.func,
+
+  // f
   options: PropTypes.instanceOf(List),
   data: PropTypes.oneOfType([
     PropTypes.instanceOf(Map), PropTypes.object,
@@ -178,7 +180,7 @@ class FormContainer extends React.Component {
       className, hasFile, method, leftChildren, rightChildren,
       component,
     } = this.props;
-    const Component = component;
+    let Component = component;
     let formProps = null;
     let classNames = 'o-form';
     let encType = 'application/x-www-form-urlencoded';
@@ -198,9 +200,10 @@ class FormContainer extends React.Component {
 
     if (hasFile) {
       encType = 'multipart/form-data';
+      Component = 'form';
     }
 
-    if (component === 'form') {
+    if (Component === 'form') {
       formProps = {
         action,
         method,
