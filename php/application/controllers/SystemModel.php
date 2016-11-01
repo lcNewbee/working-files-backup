@@ -8,14 +8,14 @@ class SystemModel extends CI_Controller {
 		$this->load->helper('array');
 	}
 	function fetch(){
-		$query=$this->db->select('id,name,radio_num,vendor')
+		$query=$this->db->select('id,name,radio_num,vender')
               ->from('ap_model')
               ->get()->result_array();
     $keys = array(
       'id'=>'id',
       'name'=> 'name',
       'radio_num'=>'radionum',
-      'vendor'=>'vendor'
+      'vender'=>'vendor'
     );
     $newArray = array();
     foreach($query as $key=>$val) {
@@ -52,6 +52,7 @@ class SystemModel extends CI_Controller {
 	function onAction($data) {
 		$result = null;
 		$actionType = element('action', $data);
+    $selectList = element('selectedList', $data);
     function getCgiParam($oriData) {
       $retData = array(
         'name'=>element('name', $oriData),
@@ -61,18 +62,18 @@ class SystemModel extends CI_Controller {
       );
       return $retData;
     }
-
 		if ($actionType === 'add') {
 			$temp_data=getCgiParam($data);
       // $result=json_encode($temp_data);
       $result=axc_add_apmodel(json_encode($temp_data));
 		}
     elseif($actionType === 'delete'){
-      $temp_data=array(
-        'name'=>element('name',$data['selectedList']),
-       );
-      $state=axc_del_apmodel(json_encode($temp_data));
-       $result=$state;
+       foreach($selectList as $item) {
+        $deleteItem = array(
+          'name'=>element('name', $item)
+        );
+				$result=axc_del_apmodel(json_encode($deleteItem));
+			}
     }
 
 		return $result;
