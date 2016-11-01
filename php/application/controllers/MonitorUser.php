@@ -15,13 +15,8 @@ class MonitorUser extends CI_Controller {
         'pagesize'=>(int)element('size', $_GET,30),
         'search'=>element('search', $_GET,222),
       );
-      if ($retdata['groupid']=== -1){
-         $result=axc_get_default_clientList();
-      }
-      else{
         $result=axc_get_clientList(json_encode($retdata));
-      }
-      return $result;
+         return $result;
   }
 
 	function onAction($data) {

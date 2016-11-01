@@ -10,12 +10,8 @@ class WirelessAcl extends CI_Controller {
      $retdata = array(
         'groupid'=>(int)element('groupid', $_GET,-1),
       );
-      if($retdata['groupid']===-1){
-        $result=axc_get_default_wireless__acl();
-      }
-      else{
          $result=axc_get_wireless_acl(json_encode($retdata));
-      }
+
       return $result;
   }
 
