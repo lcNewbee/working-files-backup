@@ -592,13 +592,13 @@ const routes = [
               }, {
                 id: 'apsVersion',
                 path: '/main/system/upgrade/aps',
-                formUrl: 'goform/system/apVersion',
+                formUrl: 'goform/system/ap/version',
                 text: _('Access Point Version'),
                 component: sApVersion.Screen,
               }, {
                 id: 'apModel',
                 path: '/main/system/upgrade/apModel',
-                formUrl: 'goform/system/apModel',
+                formUrl: 'goform/system/ap/model',
                 text: _('Access Point Model'),
                 component: sApModel.Screen,
               },
