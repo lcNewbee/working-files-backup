@@ -73,8 +73,12 @@ $route['goform/group/blacklist'] = 'wirelessAcl';
 $route['goform/group/smartRf'] = 'wirelessSmart';
 $route['goform/group/timerPolicy'] = 'wirelessTimer';
 $route['goform/group/wips'] = 'wirelessSafe';
+<<<<<<< 7bf70735fd0cbf2d2c1fbe2aba78de98890fbd4b
 $route['goform/system/version/upload'] = 'systemVersion/upload';
 $route['goform/system/version/upgrade'] = 'systemVersion/upgrade';
 $route['goform/system/version/backup'] = 'systemVersion/backup';
+=======
+$route['goform/system/ap/model'] = 'SystemModel';
+>>>>>>> AXC: Sytem 型号维护
 
 
