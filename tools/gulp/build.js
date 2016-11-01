@@ -8,7 +8,6 @@ const paths = gulp.paths;
 
 gulp.task('webpack', shell.task([
   'webpack --config webpack.config.production.js',
-  'babel-node tools/buildHtml.js',
 ]));
 
 gulp.task('build:assets', () =>
@@ -35,6 +34,10 @@ gulp.task('build:complete', () => {
     .pipe(gulp.dest('./'));
 });
 gulp.task('build', (callback) => {
-  runSequence('clean', ['build:assets', 'webpack'],
-  ['build:header', 'build:html'], 'build:complete', callback);
+  runSequence(
+    'clean',
+    ['build:assets', 'webpack'],
+    'build:complete',
+    callback
+  );
 });

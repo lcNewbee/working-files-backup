@@ -12,11 +12,11 @@ browserSync({
     port: 3001,
   },
   server: {
-    baseDir: 'dist',
+    baseDir: 'build',
   },
 
   files: [
-    'dist/*.html',
+    'build/*.html',
   ],
 
   middleware: [
