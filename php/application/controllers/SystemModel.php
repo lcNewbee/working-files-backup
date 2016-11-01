@@ -11,12 +11,19 @@ class SystemModel extends CI_Controller {
 		$query=$this->db->select('id,name,radio_num,vendor')
               ->from('ap_model')
               ->get()->result_array();
-    $query_array=array(
-      'id'=>element('id',$query),
-      'name'=>element('name',$query),
-      'radionum'=>element('radio_num',$query),
-      'vendor'=>element('vendor',$query),
+    $keys = array(
+      'id'=>'id',
+      'name'=> 'name',
+      'radio_num'=>'radionum',
+      'vendor'=>'vendor'
     );
+    $newArray = array();
+    foreach($query as $key=>$val) {
+      $newArray[$key] = array();
+      foreach($val as $k=>$v) {
+        $newArray[$key][$keys[$k]] = $v;
+      }
+    }
 		$state=array(
 				      'code'=>2000,
 				      'msg'=>'OK'
@@ -36,7 +43,7 @@ class SystemModel extends CI_Controller {
 						      'state'=>$state,
 						      'data'=>array(
                   'page'=>$page,
-						      'list'=>$query_array
+						      'list'=>$newArray
 						      )
 						    );
 		return $result;
