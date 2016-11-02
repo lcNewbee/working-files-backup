@@ -7,15 +7,21 @@ class SystemApVersion extends CI_Controller {
 		$this->load->helper('array');
 	}
 	function fetch(){
-		$query=$this->db->select('id,name,hw_ver,sf_ver')
-              ->from('ap_model')
+		$query=$this->db->select('id,name,subversion')
+              ->from('ap_firmware')
               ->get()->result_array();
-    $query_array=array(
-      'id'=>element('id',$query),
-      'model'=>element('name',$query),
-      'softVersion'=>element('sf_ver',$query),
-      'hardVersion'=>element('hw_ver',$query),
+   $keys = array(
+      'id'=>'id',
+      'name'=> 'model',
+      'subversion'=>'softVersion'
     );
+    $newArray = array();
+    foreach($query as $key=>$val) {
+      $newArray[$key] = array();
+      foreach($val as $k=>$v) {
+        $newArray[$key][$keys[$k]] = $v;
+      }
+    }
 		$state=array(
 				      'code'=>2000,
 				      'msg'=>'OK'
@@ -35,7 +41,7 @@ class SystemApVersion extends CI_Controller {
 						      'state'=>$state,
 						      'data'=>array(
                   'page'=>$page,
-						      'list'=>$query_array
+						      'list'=>$newArray
 						      )
 						    );
 		return $result;
@@ -46,7 +52,8 @@ class SystemApVersion extends CI_Controller {
 		$actionType = element('action', $data);
     function getCgiParam($oriData) {
       $retData = array(
-        'name'=>element('name', $oriData),
+        'vendor'=>element('vendor',$oriData,48208),
+        'model'=>element('model', $oriData),
         'hardware'=>element('hardware', $oriData,''),
         'radionum'=>element('radionum', $oriData),
         'vendor'=>element('vendor', $oriData),

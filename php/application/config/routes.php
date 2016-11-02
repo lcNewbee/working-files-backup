@@ -76,6 +76,7 @@ $route['goform/group/wips'] = 'wirelessSafe';
 $route['goform/system/version/upload'] = 'systemVersion/upload';
 $route['goform/system/version/upgrade'] = 'systemVersion/upgrade';
 $route['goform/system/version/backup'] = 'systemVersion/backup';
-$route['goform/system/ap/model'] = 'SystemModel';
+$route['goform/system/ap/model'] = 'systemModel';
+$route['goform/system/ap/version'] = 'systemApVersion';
 
 
