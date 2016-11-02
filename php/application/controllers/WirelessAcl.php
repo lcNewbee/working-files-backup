@@ -7,12 +7,20 @@ class WirelessAcl extends CI_Controller {
 		$this->load->helper('array');
 	}
 	function fetch(){
-     $retdata = array(
-        'groupid'=>(int)element('groupid', $_GET,-1),
-      );
-         $result=axc_get_wireless_acl(json_encode($retdata));
+    $retdata = array(
+      'groupid'=>(int)element('groupid', $_GET,-1),
+    );
+    $result=axc_get_wireless_acl(json_encode($retdata));
 
-      return $result;
+    $result=json_decode($result);
+
+    $result->data->settings = array(
+      'dyaging'=>10,
+      "attacttime"=>1,
+      "attactcnt"=>5,
+    );
+
+    return json_encode($result);
   }
 
 	function onAction($data) {
@@ -25,11 +33,14 @@ class WirelessAcl extends CI_Controller {
       $result=axc_set_wireless_acl(json_encode($data));
 		}
     elseif($actionType === 'delete'){
-    $temp_data=array(
-    'groupid'=>element('groupid', $data),
-    'mac'=>element('selectedList',$data)
-    );
+      $temp_data=array(
+        'groupid'=>element('groupid', $data),
+        'mac'=>element('selectedList',$data)
+      );
        $result=axc_del_wireless_acl(json_encode($temp_data));
+    }
+    elseif($actionType === 'setting'){
+      $result = '{"state":{"code": 2000}}';
     }
 		return $result;
 	}

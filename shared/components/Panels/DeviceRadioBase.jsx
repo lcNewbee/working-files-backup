@@ -125,16 +125,16 @@ class DeviceSystem extends React.Component {
           }}
           options={[
             {
-              value: 1,
+              value: 0,
               label: '11n',
             }, {
-              value: 2,
+              value: 1,
               label: '11g',
             }, {
-              value: 3,
+              value: 2,
               label: '11b',
             }, {
-              value: 4,
+              value: 3,
               label: '11ac',
             },
           ]}

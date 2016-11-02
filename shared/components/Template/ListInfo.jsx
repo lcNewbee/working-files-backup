@@ -115,14 +115,19 @@ class ListInfo extends React.Component {
       initOption.query = props.defaultQueryData;
     }
 
-    if (typeof props.groupid !== 'undefined') {
-      initOption.query = utils.extend({}, initOption.query, {
+    if (props.defaultSettingsData) {
+      initOption.defaultSettingsData = utils.extend({}, props.defaultSettingsData, {
         groupid: props.groupid,
       });
     }
 
-    if (props.defaultSettingsData) {
-      initOption.defaultSettingsData = props.defaultSettingsData;
+    if (typeof props.groupid !== 'undefined') {
+      initOption.query = utils.extend({}, initOption.query, {
+        groupid: props.groupid,
+      });
+      initOption.defaultSettingsData = utils.extend({}, props.defaultSettingsData, {
+        groupid: props.groupid,
+      });
     }
 
     this.props.initScreen(initOption);
