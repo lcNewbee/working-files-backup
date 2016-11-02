@@ -226,7 +226,6 @@ class ListInfo extends React.Component {
   }
   onSaveEditForm(formElem, hasFile) {
     const formUrl = formElem.action;
-    console.log(formUrl);
 
     if (this.props.validateAll) {
       this.props.validateAll(this.props.editFormId)

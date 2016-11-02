@@ -354,8 +354,11 @@
   "Upgrading Version": "升级版本(5分钟)",
   "Backup Version": "备份版本(3分钟)",
   "AP Model": "AP型号",
+  "Model Name": "型号名称",
+  "Radio Number": "射频数量",
   "Hardware Version": "硬件版本",
   "Soft Version": "软件版本",
+  "Version File": "版本文件",
 
   "System Maintenance": "系统维护",
   "Backup Configuration": "备份配置",

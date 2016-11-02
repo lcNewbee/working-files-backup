@@ -41,14 +41,6 @@ const screenOptions = fromJS([
       isAsync: true,
     },
   }, {
-    id: 'hardwareVersion',
-    text: _('Hardware Version'),
-    formProps: {
-      type: 'text',
-      required: true,
-      validator: validator({}),
-    },
-  }, {
     id: 'softVersion',
     text: _('Soft Version'),
     formProps: {

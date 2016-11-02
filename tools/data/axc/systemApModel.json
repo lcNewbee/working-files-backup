@@ -18,17 +18,17 @@
       {
         "id": 1,
         "name": "ASW200",
-        "radionum": "v1.2.3",
+        "radionum": 2,
         "vendor": "hed34"
       }, {
         "id": 2,
         "name": "AS200",
-        "radionum": "v1.2.3",
+        "radionum": 1,
         "vendor": "hed34"
       }, {
         "id": 3,
         "name": "p2p2000",
-        "radionum": "v1.2.3",
+        "radionum": 2,
         "vendor": "hed34"
       }
     ]

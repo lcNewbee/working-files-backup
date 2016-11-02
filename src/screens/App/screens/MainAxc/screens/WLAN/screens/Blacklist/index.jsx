@@ -11,6 +11,14 @@ import { SaveButton } from 'shared/components/Button';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
+const commonFormOptions = fromJS([
+  {
+    id: 'dyaging',
+    label: _('Dynamic Blacklists Release Time'),
+    type: 'number',
+    saveOnChange: true,
+  },
+]);
 const screenOptions = fromJS([
   {
     id: 'mac',
@@ -70,42 +78,24 @@ export default class View extends React.Component {
   }
 
   render() {
-    const { app, route, store } = this.props;
-    const editData = store.getIn([route.id, 'curListItem']) || Map({});
-    const actionBarChildren = (
-      <FormGroup
-        key="blacklistD"
-        display="inline"
-        label={_('Dynamic Blacklists Release Time')}
-        style={{
-          marginBottom: '0',
-        }}
-      >
-        <FormInput
-          type="text"
-          style={{
-            marginRight: '8px',
-          }}
-        />
-        <SaveButton
-          theme="info"
-        />
-      </FormGroup>
-    );
-    const actionQuery = store.getIn([route.id, 'actionQuery']) || Map({});
-    const isModelShow = actionQuery.get('action') === 'add' || actionQuery.get('action') === 'edit';
+    const { route } = this.props;
 
     return (
       <ListInfo
         {...this.props}
-        actionBarChildren={actionBarChildren}
+        title={_('Blacklist Settings')}
+        listTitle={route.text}
         tableOptions={tableOptions}
         editFormOptions={editFormOptions}
         defaultEditData={defaultEditData}
+
+        settingsFormOption={commonFormOptions}
+
         listKey="allKeys"
         actionable
         editable={false}
         selectable
+        noTitle
       />
     );
   }

@@ -233,11 +233,7 @@ export default class View extends PureComponent {
     );
   }
   renderStepTwo() {
-    return (
-      <div className="step-1">
-        <p>{msg.passwordDes}</p>
-      </div>
-    );
+    return null;
   }
 
   renderStepThree() {

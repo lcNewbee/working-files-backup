@@ -66,6 +66,7 @@ class FormContainer extends React.Component {
     const upDate = {};
 
     upDate[id] = data.value;
+
     if (this.props.onChangeData) {
       this.props.onChangeData(upDate);
     }
@@ -128,7 +129,10 @@ class FormContainer extends React.Component {
     if (myProps.saveOnChange) {
       myProps.onChange = ((myData) => {
         this.onChangeData(groupId, myData);
-        this.onSave();
+        clearTimeout(this.saveOnChangeTimeout);
+        this.saveOnChangeTimeout = setTimeout(() => {
+          this.onSave();
+        }, 250);
       });
     }
 

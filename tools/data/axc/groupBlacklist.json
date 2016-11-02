@@ -4,6 +4,12 @@
     "msg": "ok"
   },
   "data": {
+    "settings": {
+      "groupid": 1,
+      "attacttime" : 1,
+      "attactcnt": 5,
+      "dyaging": 10
+    },
     "list": [
       {
         "mac": "22:11:22:14:22:22",
