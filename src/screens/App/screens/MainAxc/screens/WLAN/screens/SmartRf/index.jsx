@@ -170,7 +170,7 @@ export default class View extends React.Component {
                 min="1"
                 max="100"
                 label={_('Wireless Power')}
-                help={`${curData.wirelessPower}%`}
+                unit="%"
                 value={parseInt(curData.wirelessPower, 10)}
                 onChange={item => updateItemSettings({
                   wirelessPower: item.value,

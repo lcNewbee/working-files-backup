@@ -21,21 +21,18 @@ const channelBandwidthOptions = fromJS([
   },
 ]);
 const channelsList = List(channels);
-const countryOptions = channelsList.map((item) => {
-  return {
+const countryOptions = channelsList.map((item) =>
+  ({
     value: item.country,
     label: b28n.getLang() === 'cn' ? _(item.cn) : _(item.en),
-  };
-}).toJS();
+  })
+).toJS();
 
 const propTypes = {
-  onCollapse: PropTypes.func,
   onChangeData: PropTypes.func,
   onChangeItem: PropTypes.func,
-  onRemove: PropTypes.func,
   onSave: PropTypes.func,
 
-  isCollapsed: PropTypes.bool,
   store: PropTypes.instanceOf(Map),
   app: PropTypes.instanceOf(Map),
 };
@@ -70,9 +67,9 @@ class DeviceSystem extends React.Component {
         label: _('auto'),
       },
     ];
-    const channelsOption = channelsList.find((item) => {
-      return item.country === currCountry;
-    });
+    const channelsOption = channelsList.find((item) =>
+       item.country === currCountry
+    );
 
     if (channelsOption) {
       channelsRange = channelsOption['2.4g'].split('-');
@@ -100,8 +97,20 @@ class DeviceSystem extends React.Component {
     return (
       <div className="o-form o-form--compassed">
         <FormGroup
+          type="switch"
+          inputStyle={{
+            display: 'block',
+          }}
+          label={_('Select Network Adapter')}
+          value={getCurData('activeIndex')}
+          options={getCurData('radiosOptions')}
+          onChange={option => this.props.onChangeItem({
+            configurationRadioIndex: option.value,
+          })}
+        />
+        <FormGroup
           type="checkbox"
-          text="Switch Radio"
+          text={_('Switch Radio')}
           value="1"
           checked={getCurData('enable') == 1}
           onChange={option => this.props.onChangeData({
@@ -176,10 +185,10 @@ class DeviceSystem extends React.Component {
           min="1"
           max="35"
           label={_('Tx Power')}
+          unit="db"
           inputStyle={{
-            width: '88%',
+            width: '87%',
           }}
-          help={getCurData('txpower')}
           options={channelsOptions}
           value={parseInt(getCurData('txpower'), 10)}
           onChange={option => this.props.onChangeData({

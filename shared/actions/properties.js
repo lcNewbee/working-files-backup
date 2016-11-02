@@ -16,7 +16,7 @@ export function collapsePropertys(index) {
 export function changePropertysItem(item) {
   return {
     type: 'CHANGE_PROPERTYS_ITEM',
-    item,
+    payload: item,
   };
 }
 
@@ -25,7 +25,7 @@ export function initAddPropertyPanel(query, info) {
     type: 'INIT_ADD_PROPERTY_PANEL',
     payload: {
       query,
-      info
+      info,
     },
   };
 }
@@ -34,25 +34,24 @@ export function rcPropertyPanelData(mac, data) {
     type: 'RC_PROPERTY_PANEL_DATA',
     payload: {
       mac,
-      data
+      data,
     },
   };
 }
 
 export function fetchPropertyPanelData(query) {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     const mac = query.mac;
     dispatch(appActions.fetch('goform/group/ap', query))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(rcPropertyPanelData(mac, json.data));
         }
-      })
+      });
   };
 }
 export function addToPropertyPanel(query, info) {
-  return (dispatch, getState) => {
-    const mac = query.mac;
+  return (dispatch) => {
     dispatch(initAddPropertyPanel(query, info));
     dispatch(fetchPropertyPanelData(query));
   };

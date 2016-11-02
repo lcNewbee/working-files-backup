@@ -10,13 +10,10 @@ import {
 } from '../Button';
 
 const propTypes = {
-  onCollapse: PropTypes.func,
   onChangeData: PropTypes.func,
   onChangeItem: PropTypes.func,
-  onRemove: PropTypes.func,
   onSave: PropTypes.func,
 
-  isCollapsed: PropTypes.bool,
   store: PropTypes.instanceOf(Map),
   app: PropTypes.instanceOf(Map),
 };
@@ -36,8 +33,6 @@ class DeviceSystem extends React.Component {
       this.props.onSave();
     }
   }
-  onChangeData(data) {
-  }
   getCurData(name) {
     return this.props.store.getIn(['data', name]);
   }
@@ -48,8 +43,20 @@ class DeviceSystem extends React.Component {
     return (
       <div className="o-form o-form--compassed">
         <FormGroup
+          type="switch"
+          inputStyle={{
+            display: 'block',
+          }}
+          label={_('Select Network Adapter')}
+          value={getCurData('activeIndex')}
+          options={getCurData('radiosOptions')}
+          onChange={option => this.props.onChangeItem({
+            configurationRadioIndex: option.value,
+          })}
+        />
+        <FormGroup
           type="number"
-          label={_('Max User')}
+          label={_('Max Users')}
           value={getCurData('maxclientcount')}
           onChange={option => this.props.onChangeData({
             maxclientcount: option.value,

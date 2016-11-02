@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import utils from 'shared/utils';
+import utils, { immutableUtils } from 'shared/utils';
 import validator from 'shared/utils/lib/validator';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
@@ -13,43 +13,11 @@ import SaveButton from 'shared/components/Button/SaveButton';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
-const storeForwardOption = [
-  {
-    value: 'local',
-    label: _('Local Forward'),
-  }, {
-    value: 'centralized-802.3',
-    label: _('Centralized Forward-%s Tunnel', '802.3'),
-  }, {
-    value: 'centralized-802.11',
-    label: _('Centralized Forward-%s Tunnel', '802.11'),
-  },
-];
-const blcklistTableOptions = fromJS([
-  {
-    id: 'ssid',
-    text: _('SSID'),
-  }, {
-    id: 'hiddenSsid',
-    text: _('Hidden SSID'),
-    filter: 'checkbox',
-  }, {
-    id: 'storeForwardPattern',
-    options: storeForwardOption,
-    text: _('Store-Forward Pattern'),
-  }, {
-    id: 'encryption',
-    text: _('Encryption'),
-  }, {
-    id: 'compulsoryAuth',
-    text: _('802.1X Auth'),
-    filter: 'checkbox',
-  }, {
-    id: 'enabled',
-    text: _('Status'),
-    filter: 'checkbox',
-  },
-]);
+const msg = {
+  upSpeed: _('Up Speed'),
+  downSpeed: _('Down Speed'),
+  selectGroup: _('Select Group'),
+};
 const encryptionOptions = [
   {
     value: 'none',
@@ -60,20 +28,6 @@ const encryptionOptions = [
     label: _('STRONG'),
   },
 ];
-const msg = {
-  upSpeed: _('Up Speed'),
-  downSpeed: _('Down Speed'),
-  selectGroup: _('Select Group'),
-};
-const qosType = fromJS([
-  {
-    value: 'ssid',
-    label: _('Base On SSID'),
-  }, {
-    value: 'user',
-    label: _('Base On Users'),
-  },
-]);
 const validOptions = Map({
   password: validator({
     rules: 'remarkTxt:["\'\\\\"]|len:[8, 31]',
@@ -91,6 +45,61 @@ const validOptions = Map({
     rules: 'num:[32, 102400, 0]',
   }),
 });
+const storeForwardOption = [
+  {
+    value: 'local',
+    label: _('Local Forward'),
+  }, {
+    value: 'centralized-802.3',
+    label: _('Centralized Forward-%s Tunnel', '802.3'),
+  }, {
+    value: 'centralized-802.11',
+    label: _('Centralized Forward-%s Tunnel', '802.11'),
+  },
+];
+const screenOptions = fromJS([
+  {
+    id: 'ssid',
+    text: _('SSID'),
+  }, {
+    id: 'hiddenSsid',
+    text: _('Hidden SSID'),
+    filter: 'checkbox',
+  }, {
+    id: 'storeForwardPattern',
+    options: storeForwardOption,
+    text: _('Store-Forward Pattern'),
+    defaultValue: 'local',
+  }, {
+    id: 'encryption',
+    text: _('Encryption'),
+    defaultValue: 'psk-mixed',
+  }, {
+    id: 'compulsoryAuth',
+    text: _('802.1X Auth'),
+    filter: 'checkbox',
+  }, {
+    id: 'enabled',
+    text: _('Status'),
+    filter: 'checkbox',
+    defaultValue: '1',
+  }, {
+    id: 'maxBssUsers',
+    defaultValue: 32,
+  }, {
+    id: 'loadBalancing',
+    defaultValue: '1',
+  }, {
+    id: 'upstream',
+    defaultValue: '0',
+  }, {
+    id: 'downstream',
+    defaultValue: '0',
+  },
+]);
+const tableOptions = immutableUtils.getTableOptions(screenOptions);
+// const editFormOptions = immutableUtils.getFormOptions(screenOptions);
+const defaultEditData = immutableUtils.getDefaultData(screenOptions);
 
 const propTypes = {
   store: PropTypes.instanceOf(Map),
@@ -149,7 +158,7 @@ export default class View extends React.Component {
   }
 
   render() {
-    const { route, store, } = this.props;
+    const { route, store } = this.props;
     const actionQuery = store.getIn([route.id, 'actionQuery']) || Map({});
     const getCurrData = this.getCurrData;
     const {
@@ -160,7 +169,8 @@ export default class View extends React.Component {
     return (
       <ListInfo
         {...this.props}
-        tableOptions={blcklistTableOptions}
+        tableOptions={tableOptions}
+        defaultEditData={defaultEditData}
         listKey="allKeys"
         actionable
         selectable
@@ -185,7 +195,6 @@ export default class View extends React.Component {
             value={getCurrData('remark')}
             maxLength="64"
             onChange={this.onUpdateSettings('remark')}
-            required
           />
           <FormGroup
             label={_('Enable SSID')}
@@ -210,6 +219,7 @@ export default class View extends React.Component {
             type="number"
             value={getCurrData('maxBssUsers')}
             onChange={this.onUpdateSettings('maxBssUsers')}
+            required
           />
           <FormGroup
             label={_('Store-Forward Pattern')}
@@ -257,7 +267,7 @@ export default class View extends React.Component {
               checked={getCurrData('downstream') === '' || getCurrData('downstream') > 0}
               onChange={this.onUpdateSettings('downstream')}
             />
-            {_('limited to') + ' '}
+            {`${_('limited to')  } `}
             <FormInput
               type="number"
               maxLength="6"

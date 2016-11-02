@@ -11,6 +11,7 @@ const propTypes = {
   removeFromPropertyPanel: PropTypes.func,
   updatePropertyPanelData: PropTypes.func,
   fetchPropertyPanelData: PropTypes.func,
+  changePropertyPanelRadioIndex: PropTypes.func,
   reportValidError: PropTypes.func,
   save: PropTypes.func,
 
@@ -134,6 +135,7 @@ class PropertyPanel extends React.Component {
                   onChangeData={this.props.updatePropertyPanelData}
                   onChangeTab={this.onChangePropertysTab}
                   onChangeItem={this.props.changePropertysItem}
+                  onChangeRadioIndex={this.props.changePropertyPanelRadioIndex}
                   onRemove={
                     () => this.props.removeFromPropertyPanel(index)
                   }

@@ -5,6 +5,7 @@ const defaultItem = fromJS({
   activeTab: 'details',
   detailsActivePanelIndex: 0,
   configurationActivePanelIndex: 0,
+  configurationRadioIndex: 0,
   details: [
     {
       panelKey: 'overview',
@@ -18,14 +19,16 @@ const defaultItem = fromJS({
       text: 'General',
       module: 'info',
       data: {
-        devicename: ''
+        devicename: '',
       },
     }, {
       panelKey: 'radioBase',
       text: 'Radio Base',
       module: 'radio',
       data: {
-        countrycode: "CN",
+        activeIndex: 0,
+        radiosOptions: [],
+        countrycode: 'CN',
         phymode: '11n',
         channelwidth: 40,
         channel: 7,
@@ -36,6 +39,8 @@ const defaultItem = fromJS({
       module: 'radio',
       text: 'Radio Advance',
       data: {
+        activeIndex: 0,
+        radiosOptions: [],
         maxclientcount: 64,
         beaconinterval: 1,
         dtim: 40,
@@ -46,8 +51,11 @@ const defaultItem = fromJS({
   ],
   query: {},
   data: {
+    radios: [],
     info: {},
-    radio: {},
+    radio: {
+      radiosOptions: [],
+    },
   },
 });
 
@@ -72,7 +80,7 @@ function initAddPropertyPanel(state, action) {
   let $$retList = state.get('list');
 
   // 列表中无此项
-  if(activeIndex === -1) {
+  if (activeIndex === -1) {
     activeIndex = listSize;
     $$retList = $$retList.push(myItem);
   }
@@ -81,31 +89,49 @@ function initAddPropertyPanel(state, action) {
       .set('list', $$retList)
       .set('activeIndex', activeIndex);
 }
+
 function rcPropertyPanelData(state, action) {
   const rcData = action.payload.data || {};
   const mac = action.payload.mac;
   const dataIndex = state.get('list')
     .findIndex(item => item.get('id') === mac);
+  const $$curList = state.getIn(['list', dataIndex]);
+  const radioActiveIndex = $$curList.getIn(['configurationRadioIndex']);
   let $$ret = state;
-  let $$newData = state.getIn(['list', dataIndex, 'data']);
+  let $$newData = $$curList.get('data');
+  let $$radiosOptions = fromJS([]);
 
-  console.log(dataIndex)
   if (dataIndex !== -1) {
     $$newData = $$newData.merge(rcData);
+
+    // 设置已选中的网卡radio参数
+    if (rcData.radios) {
+      $$radiosOptions = $$radiosOptions.merge(
+        rcData.radios.map((item, index) => {
+          return {
+            value: index,
+            label: item.radioID,
+          };
+        })
+      );
+      $$newData = $$newData
+        .mergeIn(['radio'], rcData.radios[radioActiveIndex])
+        .setIn(['radio', 'radiosOptions'], $$radiosOptions)
+        .setIn(['radio', 'activeIndex'], radioActiveIndex);
+    }
+
     $$ret = $$ret
       .setIn(['list', dataIndex, 'data'], $$newData)
       .updateIn(
         ['list', dataIndex, 'configuration'],
-        (item) => {
-          return item.map((subItem) => {
-            const module = subItem.get('module');
-            const $$moduleData = $$newData.get(module);
-            const customData = subItem.get('data')
-              .mapEntries(([key, val]) => [key, $$moduleData.get(key)]);
+        item => item.map((subItem) => {
+          const module = subItem.get('module');
+          const $$moduleData = $$newData.get(module);
+          const customData = subItem.get('data')
+            .mapEntries(([key]) => [key, $$moduleData.get(key)]);
 
-            return subItem.mergeIn(['data'], customData);
-          });
-        }
+          return subItem.mergeIn(['data'], customData);
+        })
       );
   }
 
@@ -137,6 +163,59 @@ function updatePropertyPanelData(state, data) {
       activeTab, activePanelIndex, 'data',
     ],
     data
+  );
+}
+
+function changePropertyPanelRadioIndex(state, index) {
+  const $$ret = state;
+  const activeIndex = $$ret.get('activeIndex');
+  const radioIndex = index;
+  let $$curListItem = $$ret.getIn(['list', activeIndex]);
+  let $$curRadioData = $$curListItem.getIn(['data', 'radio'])
+
+
+  $$curRadioData = $$curRadioData.merge(
+      $$curListItem.getIn(
+        ['data', 'radios', radioIndex]
+      )
+    ).set('activeIndex', radioIndex);
+
+  $$curListItem = $$curListItem
+    .set('configurationRadioIndex', radioIndex)
+    .updateIn(
+      ['configuration'],
+      item => item.map((subItem) => {
+        let $$subRet = subItem;
+
+        if (subItem.get('module') === 'radio') {
+          $$subRet = $$subRet.mergeIn(
+            ['data'],
+            subItem.get('data')
+              .mapEntries(
+                ([key]) => [key, $$curRadioData.get(key)]
+              )
+          );
+        }
+
+        return $$subRet;
+      })
+    )
+    .setIn(['data', 'radio'], $$curRadioData);
+
+  return $$ret.setIn(['list', activeIndex], $$curListItem);
+}
+
+function changePropertysItem(state, action) {
+  const changeData = action.payload;
+  let $$ret = state;
+
+  if (typeof changeData.configurationRadioIndex !== 'undefined') {
+    $$ret = changePropertyPanelRadioIndex(state, changeData.configurationRadioIndex);
+  }
+
+  return $$ret.mergeIn(
+    ['list', state.get('activeIndex')],
+    action.payload
   );
 }
 
@@ -175,10 +254,7 @@ export default function (state = defaultState, action) {
 
     // 更新合并属性列表某项的数据
     case 'CHANGE_PROPERTYS_ITEM':
-      return state.mergeIn(
-        ['list', state.get('activeIndex')],
-        action.item
-      );
+      return changePropertysItem(state, action);
 
     case 'UPDATE_PROPERTY_PANEL_DATA':
       return updatePropertyPanelData(state, action.data);

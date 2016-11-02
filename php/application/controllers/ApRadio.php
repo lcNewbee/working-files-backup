@@ -19,7 +19,7 @@ class ApRadio extends CI_Controller {
          'data'=>array(
             'groupid'=>(int)element('groupid', $_GET,-1),
             'mac'=>element('mac',$_GET),
-            'radio'=>element('data',$temp_result_array)
+            'radios'=>element('data',$temp_result_array)
          )
       );
        echo json_encode($result);

@@ -8,6 +8,16 @@
   "System Status": "系统状态",
   "Please select delete rows": "请选择你要删除的项",
 
+  "Work Mode": "工作模式",
+  "Radio Base": "Radio基本配置",
+  "Radio Advance": "Radio高级配置",
+  "Tx Power": "发射功率",
+  "Switch Radio": "射频开关",
+  "Beacon Interval": "Beacon信标帧间隔",
+  "Beacon Interval Number": "信标帧间隔数量",
+  "Preamble": "短前导码",
+  "Select Network Adapter": "选择网卡",
+
   "Group List": "组列表",
   "Interface Settings": "接口配置",
   "Interface No": "接口序号",
@@ -235,6 +245,7 @@
   "Manufacturer": "生产商",
   "Clients Type": "终端类型",
   "Reason": "原因",
+  "Block Reason": "阻止原因",
 
   "SSID Settings": "SSID配置",
   "Access Control": "访问控制",
@@ -247,7 +258,7 @@
   "Max Users": "最大用户数",
   "Power Auto": "自动功率",
   "Channel Auto": "自动信道",
-  "Terminal release": "终端防粘",
+  "Terminal Release": "终端防粘",
 
   "Access Point Work Mode": "接入点工作模式",
   "Scan Type": "扫描类型",

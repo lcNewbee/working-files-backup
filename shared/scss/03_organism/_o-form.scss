@@ -127,7 +127,7 @@ $o-form-content-margin: 1em 0 0;
       > label {
         display: block;
         text-align: left;
-        line-height: 18px;
+        line-height: 20px;
         float: none;
         margin-right: 0;
       }
@@ -148,6 +148,9 @@ $o-form-content-margin: 1em 0 0;
           padding-left: .42857rem;
           padding-right: .42857rem;
         }
+        .a-input-range {
+          width: 100%;
+        }
         .a-checkbox {
           margin-top: 2px;
         }
@@ -165,7 +168,7 @@ $o-form-content-margin: 1em 0 0;
       }
     }
     .form-group--save {
-      margin-top: 10px;
+      margin-top: 12px;
     }
   }
 }

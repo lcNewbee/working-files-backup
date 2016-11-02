@@ -48,6 +48,7 @@ class Input extends React.Component {
     delete inputProps.inputStyle;
     delete inputProps.onValue;
     delete inputProps.offValue;
+    delete inputProps.unit;
 
     if (inputProps.type === 'textarea') {
       ThisComponent = 'textarea';

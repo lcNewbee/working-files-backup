@@ -1,32 +1,43 @@
 import React, { PropTypes } from 'react';
-import utils from 'shared/utils';
+import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import {
   FormGroup, FormInput,
 } from 'shared/components/Form';
-import Modal from 'shared/components/Modal';
 import ListInfo from 'shared/components/Template/ListInfo';
-import { Button, SaveButton } from 'shared/components/Button';
+import { SaveButton } from 'shared/components/Button';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
-const blcklistTableOptions = fromJS([
+const screenOptions = fromJS([
   {
     id: 'mac',
     text: _('MAC Address'),
+    formProps: {
+      required: true,
+    },
   }, {
     id: 'vendor',
     text: _('Manufacturer'),
+    noForm: true,
   }, {
     id: 'clientType',
     text: _('Client Type'),
+    noForm: true,
   }, {
     id: 'reason',
     text: _('Reason'),
+    formProps: {
+      type: 'textarea',
+      maxLenght: 128,
+    },
   },
 ]);
+const tableOptions = immutableUtils.getTableOptions(screenOptions);
+const editFormOptions = immutableUtils.getFormOptions(screenOptions);
+const defaultEditData = immutableUtils.getDefaultData(screenOptions);
 
 const propTypes = {
   store: PropTypes.instanceOf(Map),
@@ -60,7 +71,6 @@ export default class View extends React.Component {
 
   render() {
     const { app, route, store } = this.props;
-    const tableOptions = blcklistTableOptions;
     const editData = store.getIn([route.id, 'curListItem']) || Map({});
     const actionBarChildren = (
       <FormGroup
@@ -77,8 +87,7 @@ export default class View extends React.Component {
             marginRight: '8px',
           }}
         />
-        <Button
-          text={_('Save')}
+        <SaveButton
           theme="info"
         />
       </FormGroup>
@@ -91,39 +100,13 @@ export default class View extends React.Component {
         {...this.props}
         actionBarChildren={actionBarChildren}
         tableOptions={tableOptions}
+        editFormOptions={editFormOptions}
+        defaultEditData={defaultEditData}
         listKey="allKeys"
         actionable
         editable={false}
         selectable
-      >
-        <Modal
-          isShow={isModelShow}
-          title={actionQuery.get('myTitle')}
-          onOk={() => this.props.closeListItemModal(route.id)}
-          onClose={() => this.props.closeListItemModal(route.id)}
-          noFooter
-        >
-          <FormGroup
-            type="text"
-            label={_('MAC Address')}
-            value={editData.get('mac')}
-          />
-          <FormGroup
-            type="text"
-            label={_('Block Reason')}
-            value={editData.get('reason')}
-          />
-          <div className="form-group form-group--save">
-            <div className="form-control">
-              <SaveButton
-                type="button"
-                loading={app.get('saving')}
-                onClick={this.onSave}
-              />
-            </div>
-          </div>
-        </Modal>
-      </ListInfo>
+      />
     );
   }
 }
