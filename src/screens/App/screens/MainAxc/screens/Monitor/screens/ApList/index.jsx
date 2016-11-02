@@ -33,6 +33,7 @@ const apTableOptions = fromJS([
     text: _('Connected Numbers'),
   }, {
     id: 'bandwidth',
+    width: '80',
     text: _('Up/Down Speed'),
     transform(val, item) {
       const upRate = flowRateFilter.transform(item.get('upstream'));
@@ -75,7 +76,7 @@ export default class View extends React.Component {
     const myTableOptions = apTableOptions.push(fromJS({
       id: 'mac',
       text: _('Actions'),
-      width: '290',
+      width: '260',
       transform: mac => (
         <div className="action-btns">
           <Button
