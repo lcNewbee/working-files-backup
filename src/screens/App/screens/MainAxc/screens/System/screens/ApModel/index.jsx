@@ -3,10 +3,7 @@ import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
-import validator from 'shared/utils/lib/validator';
-import {
-  ListInfo,
-} from 'shared/components';
+import ListInfo from 'shared/components/Template/ListInfo';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
@@ -16,12 +13,13 @@ const screenOptions = fromJS([
     text: _('Model Name'),
     formProps: {
       type: 'text',
+      maxLength: '32',
       required: true,
     },
   }, {
     id: 'radionum',
     text: _('Radio Number'),
-    defaultVlaue: 1,
+    defaultValue: 2,
     options: [
       {
         value: 1,
