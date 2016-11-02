@@ -13,7 +13,7 @@ class ApRadio extends CI_Controller {
         'mac'=>element('mac',$_GET)
       );
       $temp_result=axc_get_apradio(json_encode($retdata));
-      $temp_result_array=json_decode($result,true);
+      $temp_result_array=json_decode($temp_result,true);
       $result=array(
         'state'=>$temp_result_array['state'],
          'data'=>array(
@@ -22,16 +22,12 @@ class ApRadio extends CI_Controller {
             'radio'=>element('data',$temp_result_array)
          )
       );
-      return $result;
+       echo json_encode($result);
+
   }
-
-
 	function onAction($data) {
    	$result = null;
-    $actionType = element('action', $data);
-    if($actionType === 'set'){
-      $result=axc_set_apradio(json_encode($data));
-    }
+    $result=axc_set_apradio(json_encode($data));
     return $result;
 	}
 	public function Radio() {
@@ -59,9 +55,4 @@ class ApRadio extends CI_Controller {
   //     echo json_encode($result);
 	// 	}
 	// 	}
-  public function Ap(){
-      $result = null;
-      $result = $this->fetch();
-      echo json_encode($result);
-  }
 }

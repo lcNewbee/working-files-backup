@@ -10,7 +10,7 @@ class Group extends CI_Controller {
 	function fetch(){
 		$apGroups=$this->db->select('id,group_name,remark')
             ->from('ap_group')
-            // ->where('id > 1')
+            ->where('id > 1')
             ->get()->result_array();
     $retList=array();
 
@@ -20,8 +20,9 @@ class Group extends CI_Controller {
         'remark'=>element('remark', $group, ''),
         'id'=>element('id', $group)
       );
-      $aps = $this->db->select('group_id='.element('id', $group))
+      $aps = $this->db->select('group_id')
             ->from('ap_list')
+            ->where('group_id', $groupItem['id'])
             ->get()->result_array();
       $groupItem['apNum'] = sizeof($aps);
 

@@ -67,6 +67,10 @@ class SystemModel extends CI_Controller {
       // $result=json_encode($temp_data);
       $result=axc_add_apmodel(json_encode($temp_data));
 		}
+    elseif ($actionType === 'edit') {
+			$temp_data=getCgiParam($data);
+      $result=axc_modify_apmodel(json_encode($temp_data));
+		}
     elseif($actionType === 'delete'){
        foreach($selectList as $item) {
         $deleteItem = array(
