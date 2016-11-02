@@ -11,17 +11,22 @@ import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
 function getPortList() {
-  return utils.fetch('goform/network/port')
-    .then(json => (
-      {
-        options: json.data.list.map(
+  return utils.fetch('goform/system/ap/model')
+    .then((json) => {
+      const ret = {
+        options: [],
+      };
+
+      if (json && json.data && json.data.list) {
+        ret.options = json.data.list.map(
           item => ({
             value: item.name,
             label: item.name,
           })
-        ),
+        );
       }
-    )
+      return ret;
+    }
   );
 }
 
@@ -41,9 +46,7 @@ const screenOptions = fromJS([
     formProps: {
       type: 'text',
       required: true,
-      validator: validator({
-        rules: 'ip',
-      }),
+      validator: validator({}),
     },
   }, {
     id: 'softVersion',
@@ -51,9 +54,16 @@ const screenOptions = fromJS([
     formProps: {
       type: 'text',
       required: true,
-      validator: validator({
-        rules: 'mask',
-      }),
+      validator: validator({}),
+    },
+  }, {
+    id: 'versionFile',
+    text: _('Version File'),
+    noTable: true,
+    formProps: {
+      type: 'file',
+      required: true,
+      validator: validator({}),
     },
   },
 ]);
@@ -93,6 +103,9 @@ export default class View extends React.Component {
         {...this.props}
         tableOptions={tableOptions}
         editFormOptions={editFormOptions}
+        editFormOption={{
+          hasFile: true,
+        }}
         defaultEditData={defaultEditData}
         noTitle
         actionable

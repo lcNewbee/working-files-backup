@@ -17,17 +17,17 @@
     "list": [
       {
         "id": 1,
-        "name": "client",
+        "name": "ASW200",
         "radionum": "v1.2.3",
         "vendor": "hed34"
       }, {
         "id": 2,
-        "name": "client",
+        "name": "AS200",
         "radionum": "v1.2.3",
         "vendor": "hed34"
       }, {
         "id": 3,
-        "name": "client",
+        "name": "p2p2000",
         "radionum": "v1.2.3",
         "vendor": "hed34"
       }

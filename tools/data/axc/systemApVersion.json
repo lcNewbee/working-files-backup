@@ -17,13 +17,13 @@
     "list": [
       {
         "id": 1,
-        "model": "client",
+        "model": "ASW200",
         "softVersion": "v1.2.3",
         "hardVersion": "hed34"
       },
       {
         "id": 212,
-        "model": "client",
+        "model": "p2p2000",
         "softVersion": "v1.2.3",
         "hardVersion": "hed34"
       }
