@@ -56,8 +56,10 @@ class FormContainer extends React.Component {
     this.renderFormGroupTree = this.renderFormGroupTree.bind(this);
   }
   onSave() {
+    const hasFile = this.props.hasFile;
+
     if (this.props.onSave) {
-      this.props.onSave();
+      this.props.onSave(this.formElem, hasFile);
     }
   }
   onChangeData(id, data) {
@@ -213,9 +215,14 @@ class FormContainer extends React.Component {
 
     return (
       <Component
+        {...formProps}
         className={classNames}
         id={this.props.id}
-        {...formProps}
+        ref={(elem) => {
+          if (elem) {
+            this.formElem = elem;
+          }
+        }}
       >
         {
           leftChildren && leftChildren.length > 0 ? (

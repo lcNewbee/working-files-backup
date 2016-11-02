@@ -67,6 +67,15 @@ var sync = {
       method: 'POST',
       body: new FormData(form)
     })
+      .then(checkStatus)
+      .then(parseJSON)
+      .then(handleServerError)
+      .catch(function (error) {
+        if (typeof errorCallback === 'function') {
+          errorCallback(error)
+        }
+        console.error('request failed', error)
+      });
   },
 
   //

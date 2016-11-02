@@ -22,6 +22,7 @@ const propTypes = {
   listTitle: PropTypes.string,
   groupid: PropTypes.any,
 
+
   // 用于配置 list表格主键，用于Ajax保存
   listKey: PropTypes.string,
   app: PropTypes.instanceOf(Map),
@@ -35,6 +36,7 @@ const propTypes = {
   queryFormOptions: PropTypes.oneOfType([
     PropTypes.instanceOf(List), PropTypes.array,
   ]),
+  saveFile: PropTypes.func,
 
   // 通用控制开关选项
   actionable: PropTypes.bool,
@@ -80,6 +82,7 @@ const propTypes = {
   editListItemByIndex: PropTypes.func,
   closeListItemModal: PropTypes.func,
   updateCurEditListItem: PropTypes.func,
+  editFormOption: PropTypes.object,
 
   // React node 元素
   children: PropTypes.node,
@@ -125,7 +128,7 @@ class ListInfo extends React.Component {
     this.props.initScreen(initOption);
     this.selectedList = [];
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    this.binds('onChangeQuery', 'onPageChange', 'onSave', 'onCloseEditModal',
+    this.binds('onChangeQuery', 'onPageChange', 'onSaveEditForm', 'onCloseEditModal',
         'onChangeSearchText', 'onChangeType', 'onChangeTableSize', 'onRemoveSelectItems',
         'onSaveSettings', 'onRemoveSelectedItems');
   }
@@ -221,12 +224,24 @@ class ListInfo extends React.Component {
       page: 1,
     }, true);
   }
-  onSave() {
+  onSaveEditForm(formElem, hasFile) {
+    const formUrl = formElem.action;
+    console.log(formUrl);
+
     if (this.props.validateAll) {
       this.props.validateAll(this.props.editFormId)
         .then((errMsg) => {
           if (errMsg.isEmpty()) {
-            this.props.onListAction();
+            // 表单中无文件
+            if (!hasFile) {
+              this.props.onListAction();
+            } else {
+              this.props.saveFile(formUrl, formElem)
+                .then(() => {
+                  this.props.fetchScreenData(formUrl);
+                  this.props.closeListItemModal();
+                });
+            }
           }
         });
     }
@@ -353,7 +368,7 @@ class ListInfo extends React.Component {
       selectable, deleteable, searchable, addable, actionable, noTitle,
       editFormLayout, editFormOptions, defaultEditData, editFormId,
       settingsFormOption, updateScreenSettings, hasSettingsSaveButton,
-      queryFormOptions,
+      queryFormOptions, editFormOption,
       actionBarChildren,
     } = this.props;
     const myListScreenId = store.get('curScreenId');
@@ -513,10 +528,11 @@ class ListInfo extends React.Component {
                 invalidMsg={app.get('invalid')}
                 validateAt={app.get('validateAt')}
                 options={editFormOptions}
-                onSave={this.onSave}
+                onSave={this.onSaveEditForm}
                 onChangeData={this.props.updateCurEditListItem}
                 onValidError={this.props.reportValidError}
                 hasSaveButton
+                {...editFormOption}
               />
             </Modal>
           ) : null

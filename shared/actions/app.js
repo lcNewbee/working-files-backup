@@ -173,6 +173,43 @@ export function save(url, query) {
   };
 }
 
+/**
+ * 全局Ajax save 带文件的表单
+ * @export
+ * @param {String} url
+ * @param {Element} form表单元素
+ * @returns Fetch Promise 对象
+ */
+export function saveFile(url, formElem) {
+  return (dispatch) => {
+    const errorFunc = ajaxErrorCallback(
+      dispatch,
+      'save',
+      url
+    );
+    dispatch(requestSave());
+
+    return utils.postForm(url, formElem, errorFunc)
+      .then((json) => {
+        if (json === undefined) {
+          return {};
+        }
+
+        // 登录超时
+        if (json.state && json.state.code === 4040) {
+          window.location.href = '#';
+
+        // 数据返回不正常
+        } else if (!json.state || (json.state && json.state.code !== 2000)) {
+          dispatch(receiveServerError(json.state));
+        }
+
+        dispatch(receiveSave());
+        return json;
+      });
+  };
+}
+
 export function fetchProductInfo(url) {
   return (dispatch) => {
     const fetchUrl = url || APP_CONFIG.fetchInfo;

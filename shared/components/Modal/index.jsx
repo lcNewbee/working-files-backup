@@ -98,7 +98,7 @@ class Modal extends Component {
     }
 
     document.body.className = classNames(
-      document.body.className,
+      document.body.className.replace(/(^\s*)|(\s*)o-modal--open/g, ''),
       {
         'o-modal--open': isShow,
       },
