@@ -8,9 +8,12 @@
   .DateInput__display-text {
     padding: 2px 4px;
     padding-left: 8px;
+    font-size: 12px;
   }
 }
 .SingleDatePicker {
+  line-height: normal;
+
   .DateInput {
     text-align: left;
   }
@@ -22,6 +25,7 @@
 }
 .SingleDatePicker__tether--show,
 .DateRangePicker__tether--show {
+  top: -10px;
   z-index: 3000;
 }
 .DateRangePicker__picker--portal,

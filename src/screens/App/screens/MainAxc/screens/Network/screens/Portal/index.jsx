@@ -41,7 +41,7 @@ const screenOptions = fromJS([
     id: 'startIp',
     text: _('Start IP'),
     formProps: {
-      maxLength: '13',
+      maxLength: '15',
       validator: validator({
         rules: 'ip',
       }),
@@ -50,7 +50,7 @@ const screenOptions = fromJS([
     id: 'endIp',
     text: _('End IP'),
     formProps: {
-      maxLength: '13',
+      maxLength: '15',
       validator: validator({
         rules: 'ip',
       }),
@@ -59,7 +59,7 @@ const screenOptions = fromJS([
     id: 'mask',
     text: _('Mask'),
     formProps: {
-      maxLength: '13',
+      maxLength: '15',
       validator: validator({
         rules: 'mask',
       }),
@@ -68,7 +68,7 @@ const screenOptions = fromJS([
     id: 'gateway',
     text: _('Gateway'),
     formProps: {
-      maxLength: '13',
+      maxLength: '15',
       validator: validator({
         rules: 'ip',
       }),
@@ -77,7 +77,7 @@ const screenOptions = fromJS([
     id: 'mainDns',
     text: _('Main DNS'),
     formProps: {
-      maxLength: '13',
+      maxLength: '15',
       validator: validator({
         rules: 'ip',
       }),
@@ -86,7 +86,7 @@ const screenOptions = fromJS([
     id: 'secondDns',
     text: _('Second DNS'),
     formProps: {
-      maxLength: '13',
+      maxLength: '15',
       validator: validator({
         rules: 'ip',
       }),
@@ -95,7 +95,7 @@ const screenOptions = fromJS([
     id: 'releaseTime',
     text: _('Release Time'),
     formProps: {
-      maxLength: '13',
+      maxLength: '15',
       validator: validator({
         rules: 'time',
       }),

@@ -35,7 +35,7 @@ let config = {
   debug: true,
 
   // more info:https://webpack.github.io/docs/build-performance.html#sourcemaps and https://webpack.github.io/docs/configuration.html#devtool
-  devtool: 'cheap-eval-source-map',
+  devtool: 'eval-source-map',
 
   // set to false to see a list of every file being bundled.
   noInfo: true,
@@ -102,7 +102,13 @@ let config = {
 
       {
         test: /\.(js|jsx)?$/,
-        exclude: /node_modules/,
+        include: [
+          path.resolve(__dirname, "src"),
+          path.resolve(__dirname, "shared"),
+          path.resolve(__dirname, "test"),
+          path.resolve(__dirname, "tools")
+        ],
+        // exclude: /node_modules/,
         loader: 'react-hot!babel',
       },
     ],

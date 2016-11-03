@@ -1,43 +1,17 @@
 import React, { PropTypes } from 'react';
-import utils from 'shared/utils';
+import utils, { immutableUtils } from 'shared/utils';
 import validator from 'shared/utils/lib/validator';
 import { connect } from 'react-redux';
-import { fromJS, Map, List } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
-import {
-  ListInfo, FormGroup, Modal, SaveButton, Checkbox,
-  FormInput,
-} from 'shared/components';
+import moment from 'moment';
+import { FormGroup, FormInput, Checkbox } from 'shared/components/Form';
+import Modal from 'shared/components/Modal';
+import ListInfo from 'shared/components/Template/ListInfo';
+import SaveButton from 'shared/components/Button/SaveButton';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
-import channels from 'shared/config/country.json';
-import moment from 'moment';
 
-const channelsList = List(channels);
-const weekDayStyle = {
-  marginLeft: '12px',
-  marginRight: '4px',
-};
-const blcklistTableOptions = fromJS([
-  {
-    id: 'timerRange',
-    text: _('Timer Range'),
-    width: '120',
-    transform(val, item) {
-      return `${item.get('startTime')} - ${item.get('endTime')}`;
-    },
-  }, {
-    id: 'opObject',
-    width: '120',
-    text: _('Operate Object'),
-  }, {
-    id: 'repeat',
-    text: _('Repeat'),
-  }, {
-    id: 'remark',
-    text: _('Remark'),
-  },
-]);
 const repeatOptions = [
   {
     value: '0',
@@ -71,6 +45,38 @@ const validOptions = Map({
     rules: 'num:[32, 102400, 0]',
   }),
 });
+const screenOptions = fromJS([
+  {
+    id: 'timerRange',
+    text: _('Timer Range'),
+    width: '120',
+    transform(val, item) {
+      return `${item.get('startTime')} - ${item.get('endTime')}`;
+    },
+  }, {
+    id: 'opObject',
+    width: '120',
+    text: _('Operate Object'),
+  }, {
+    id: 'repeat',
+    text: _('Repeat'),
+    defaultValue: '1',
+  }, {
+    id: 'remark',
+    text: _('Remark'),
+  }, {
+    id: 'startTime',
+    text: _('Start Time'),
+    defaultValue: '8:00',
+  }, {
+    id: 'endTime',
+    text: _('End Time'),
+    defaultValue: '22:00',
+  },
+]);
+const tableOptions = immutableUtils.getTableOptions(screenOptions);
+// const editFormOptions = immutableUtils.getFormOptions(screenOptions);
+const defaultEditData = immutableUtils.getDefaultData(screenOptions);
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
@@ -126,10 +132,9 @@ export default class View extends React.Component {
 
   render() {
     const { route, store } = this.props;
-    const editData = store.getIn([route.id, 'curListItem']) || Map({});
     const actionQuery = store.getIn([route.id, 'actionQuery']) || Map({});
     const getCurrData = this.getCurrData;
-    const tableOptions = blcklistTableOptions.push(fromJS({
+    const myTableOptions = tableOptions.push(fromJS({
       id: 'enabled',
       width: '80',
       text: _('Status'),
@@ -147,10 +152,11 @@ export default class View extends React.Component {
     return (
       <ListInfo
         {...this.props}
-        tableOptions={tableOptions}
+        tableOptions={myTableOptions}
         defaultItem={{
           dataType: 'date',
         }}
+        defaultEditData={defaultEditData}
         actionable
         selectable
       >
@@ -161,8 +167,8 @@ export default class View extends React.Component {
           onClose={() => this.props.closeListItemModal(route.id)}
           cancelButton={false}
           okButton={false}
+          noFooter
         >
-
           <FormGroup
             type="select"
             label={_('SSID')}
