@@ -7,12 +7,12 @@ class SystemApVersion extends CI_Controller {
 		$this->load->helper('array');
 	}
 	function fetch(){
-		$query=$this->db->select('id,name,subversion')
+		$query=$this->db->select('id,model,subversion')
               ->from('ap_firmware')
               ->get()->result_array();
    $keys = array(
       'id'=>'id',
-      'name'=> 'model',
+      'model'=> 'model',
       'subversion'=>'softVersion'
     );
     $newArray = array();
@@ -160,7 +160,6 @@ class SystemApVersion extends CI_Controller {
       echo $result;
 		}
 		else if($_SERVER['REQUEST_METHOD'] == 'GET') {
-       $data = json_decode(file_get_contents("php://input"), true);
 			$result = $this->fetch();
       echo json_encode($result);
 		}
