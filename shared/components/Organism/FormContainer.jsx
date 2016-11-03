@@ -104,7 +104,7 @@ class FormContainer extends React.Component {
       if (!Map.isMap(data)) {
         data = fromJS(data);
       }
-      myProps.value = data.get(groupId) || '';
+      myProps.value = data.get(groupId) || myProps.value;
     }
 
     if (validateAt) {

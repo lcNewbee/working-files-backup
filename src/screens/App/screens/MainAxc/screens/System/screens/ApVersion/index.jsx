@@ -43,6 +43,7 @@ const screenOptions = fromJS([
   }, {
     id: 'softVersion',
     text: _('Soft Version'),
+    defaultValue: '',
     formProps: {
       type: 'text',
       required: true,
@@ -52,6 +53,7 @@ const screenOptions = fromJS([
     id: 'versionFile',
     text: _('Version File'),
     noTable: true,
+    defaultValue: '',
     formProps: {
       type: 'file',
       required: true,
@@ -89,7 +91,13 @@ export default class View extends React.Component {
       });
   }
 
+
   render() {
+    const { store } = this.props;
+    const name = store.get('curScreenId');
+    const actionQuery = store.getIn([name, 'actionQuery']);
+    const actionType = actionQuery.get('action');
+
     return (
       <ListInfo
         {...this.props}

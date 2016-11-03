@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Map, List } from 'immutable';
+import { Map, List, fromJS } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import utils from 'shared/utils';
 import {
@@ -230,7 +230,7 @@ class ListInfo extends React.Component {
     }, true);
   }
   onSaveEditForm(formElem, hasFile) {
-    const formUrl = formElem.action;
+    const formUrl = formElem.getAttribute('action');
 
     if (this.props.validateAll) {
       this.props.validateAll(this.props.editFormId)
@@ -388,6 +388,15 @@ class ListInfo extends React.Component {
     const leftChildrenNode = [];
     let pageSelectClassName = 'fr';
     let isEditModelshow = false;
+    let myEditFormOptions = editFormOptions;
+
+    if (editFormOption && editFormOption.hasFile) {
+      myEditFormOptions = myEditFormOptions.unshift(fromJS({
+        id: 'action',
+        type: 'hidden',
+        value: actionType,
+      }));
+    }
 
     // 数据未初始化不渲染
     if (myListScreenId === 'base') {
@@ -531,7 +540,7 @@ class ListInfo extends React.Component {
                 actionQuery={actionQuery}
                 invalidMsg={app.get('invalid')}
                 validateAt={app.get('validateAt')}
-                options={editFormOptions}
+                options={myEditFormOptions}
                 onSave={this.onSaveEditForm}
                 onChangeData={this.props.updateCurEditListItem}
                 onValidError={this.props.reportValidError}
