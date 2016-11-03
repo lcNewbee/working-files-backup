@@ -7,13 +7,16 @@ class SystemApVersion extends CI_Controller {
 		$this->load->helper('array');
 	}
 	function fetch(){
-		$query=$this->db->select('id,model,subversion')
+		$query=$this->db->select('id,model,subversion,fm_name,upd_path,active')
               ->from('ap_firmware')
               ->get()->result_array();
    $keys = array(
       'id'=>'id',
       'model'=> 'model',
-      'subversion'=>'softVersion'
+      'subversion'=>'softVersion',
+      'fm_name'=>'fileName',
+      'upd_path'=>'uploadPath',
+      'active'=>'active'
     );
     $newArray = array();
     foreach($query as $key=>$val) {
@@ -109,7 +112,7 @@ class SystemApVersion extends CI_Controller {
       $result=axc_add_apfirmware(json_encode($retData ));
 		}
     elseif($actionType === 'active'){
-    $upload_data=$this->do_upload();
+       $upload_data=$this->do_upload();
       if($upload_data['state']['code']==2000){
         $filename=$this->upload->data('file_name');
         $filepath=$this->upload->data('full_path');
