@@ -19,13 +19,17 @@
         "id": 1,
         "model": "ASW200",
         "softVersion": "v1.2.3",
-        "hardVersion": "hed34"
+        "fileName": "we.jpg",
+        "uploadPath": "/etc/ap_ver/we.jpg",
+        "active": 0
       },
       {
         "id": 212,
         "model": "p2p2000",
         "softVersion": "v1.2.3",
-        "hardVersion": "hed34"
+        "fileName": "we.jpg",
+        "uploadPath": "/etc/ap_ver/we.jpg",
+        "active": 1
       }
     ]
   }

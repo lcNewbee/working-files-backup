@@ -78,7 +78,7 @@ class FormContainer extends React.Component {
     const myProps = option.toJS();
     const groupId = myProps.id;
     const myComponent = myProps.component;
-    const checkboxValue = myProps.checkedValue || '1';
+    const checkboxValue = myProps.value || '1';
     let isShow = true;
     let data = this.props.data;
 
@@ -117,14 +117,10 @@ class FormContainer extends React.Component {
 
     myProps.onChange = myData => this.onChangeData(groupId, myData);
 
-    if (myComponent) {
-      return myComponent(myProps, data, actionQuery);
-    }
-
-    if (myProps.type === 'checkbox') {
-      myProps.checked = checkboxValue === myProps.value;
-      myProps.value = checkboxValue;
-    }
+    // if (myProps.type === 'checkbox') {
+    //   myProps.checked = checkboxValue === myProps.value;
+    //   myProps.value = checkboxValue;
+    // }
 
     if (myProps.saveOnChange) {
       myProps.onChange = ((myData) => {
@@ -139,6 +135,10 @@ class FormContainer extends React.Component {
     // 处理显示前提条件
     if (typeof myProps.showPrecondition === 'function') {
       isShow = myProps.showPrecondition(data);
+    }
+
+    if (myComponent) {
+      return myComponent(myProps, data, actionQuery);
     }
 
     return isShow ? (

@@ -34,6 +34,7 @@ const screenOptions = fromJS([
   {
     id: 'model',
     text: _('AP Model'),
+    width: '120px',
     formProps: {
       type: 'select',
       required: true,
@@ -59,6 +60,16 @@ const screenOptions = fromJS([
       required: true,
       validator: validator({}),
     },
+  }, {
+    id: 'active',
+    text: _('Active Status'),
+    actionType: 'active',
+    type: 'switch',
+    width: '100px',
+    formProps: {
+      type: 'checkbox',
+      value: '1',
+    },
   },
 ]);
 const tableOptions = immutableUtils.getTableOptions(screenOptions);
@@ -70,49 +81,21 @@ const propTypes = {
 };
 const defaultProps = {};
 
-export default class View extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.onAction = this.onAction.bind(this);
-  }
-
-  onAction(no, type) {
-    const query = {
-      no,
-      type,
-    };
-
-    this.props.save(this.props.route.formUrl, query)
-      .then((json) => {
-        if (json.state && json.state.code === 2000) {
-          console.log(json);
-        }
-      });
-  }
-
-
-  render() {
-    const { store } = this.props;
-    const name = store.get('curScreenId');
-    const actionQuery = store.getIn([name, 'actionQuery']);
-    const actionType = actionQuery.get('action');
-
-    return (
-      <ListInfo
-        {...this.props}
-        tableOptions={tableOptions}
-        editFormOptions={editFormOptions}
-        editFormOption={{
-          hasFile: true,
-        }}
-        defaultEditData={defaultEditData}
-        noTitle
-        actionable
-        selectable
-      />
-    );
-  }
+export default function View(props) {
+  return (
+    <ListInfo
+      {...props}
+      tableOptions={tableOptions}
+      editFormOptions={editFormOptions}
+      editFormOption={{
+        hasFile: true,
+      }}
+      defaultEditData={defaultEditData}
+      noTitle
+      actionable
+      selectable
+    />
+  );
 }
 
 View.propTypes = propTypes;

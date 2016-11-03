@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { Map, List, fromJS } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import utils from 'shared/utils';
+import { FormInput } from 'shared/components/Form';
 import {
   Table, Select, Search, Button, Modal,
   FormContainer,
@@ -133,14 +134,18 @@ class ListInfo extends React.Component {
     this.props.initScreen(initOption);
     this.selectedList = [];
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    this.binds('onChangeQuery', 'onPageChange', 'onSaveEditForm', 'onCloseEditModal',
-        'onChangeSearchText', 'onChangeType', 'onChangeTableSize', 'onRemoveSelectItems',
-        'onSaveSettings', 'onRemoveSelectedItems');
+    this.binds(
+      'onChangeQuery', 'onPageChange', 'onSaveEditForm', 'onCloseEditModal',
+      'onChangeSearchText', 'onChangeType', 'onChangeTableSize', 'onRemoveSelectItems',
+      'onSaveSettings', 'onRemoveSelectedItems', 'onItemAction'
+    );
   }
 
   componentWillMount() {
     const { actionable, editable, deleteable, tableOptions } = this.props;
+    const actionsOption = tableOptions.find(item => item.get('id') === '__actions__');
     let btnsNum = 0;
+    let btnList = List([]);
 
     // 初始选项，添加操作项
     if (actionable && (editable || deleteable) && tableOptions) {
@@ -150,8 +155,14 @@ class ListInfo extends React.Component {
       if (deleteable) {
         btnsNum += 1;
       }
+
+      if (actionsOption) {
+        btnList = actionsOption.get('actions');
+        btnsNum += btnList.size;
+      }
+
       this.listTableOptions = tableOptions.push(Map({
-        id: 'actions',
+        id: '__actions__',
         text: _('Actions'),
         width: btnsNum * 90,
         transform: (val, item, index) => (
@@ -168,7 +179,6 @@ class ListInfo extends React.Component {
                 />
               ) : null
             }
-
             {
               deleteable ? (
                 <Button
@@ -181,12 +191,57 @@ class ListInfo extends React.Component {
                 />
               ) : null
             }
+            {
+              btnList.map(btnItem => (
+                <Button
+                  icon={btnItem.get('icon')}
+                  text={btnItem.get('text')}
+                  size="sm"
+                  onClick={() => {
+                    this.onItemAction(
+                      index,
+                      btnItem.get('name')
+                    );
+                  }}
+                />
+              ))
+            }
           </div>
         ),
       }));
     } else {
       this.listTableOptions = tableOptions;
     }
+
+    this.listTableOptions = this.listTableOptions.map(
+      ($$item) => {
+        let $$retItem = $$item;
+
+        if ($$retItem.get('type') === 'switch') {
+          $$retItem = $$retItem.set('transform', (val, $$data, index) => {
+            return (
+              <FormInput
+                type="checkbox"
+                name={$$item.get('id')}
+                value="1"
+                checked={parseInt(val, 10) === 1}
+                onChange={(data) => {
+                  this.onItemAction(
+                    index,
+                    $$item.get('actionType'),
+                    {
+                      [$$item.get('id')]: data.value,
+                    }
+                  );
+                }}
+              />
+            );
+          });
+        }
+
+        return $$retItem;
+      }
+    )
 
     this.onFetchList();
   }
@@ -351,6 +406,30 @@ class ListInfo extends React.Component {
         text: _('Please select delete rows'),
       });
     }
+  }
+  onItemAction(index, actionName, data) {
+    const store = this.props.store;
+    const myListScreenId = store.get('curScreenId');
+    const list = store.getIn([myListScreenId, 'data', 'list']);
+    const listKey = this.props.listKey;
+    const $$actionItem = list.get(index);
+    let $$actionData = Map({
+      action: actionName,
+    });
+
+    if (listKey === 'allKeys') {
+      $$actionData = $$actionData.merge($$actionItem);
+    } else {
+      $$actionData = $$actionData.set(
+        listKey,
+        $$actionItem.get(listKey)
+      );
+    }
+
+    $$actionData = $$actionData.merge(data);
+
+    this.props.changeScreenActionQuery($$actionData.toJS());
+    this.props.onListAction();
   }
   onFetchList() {
     if (this.props.fetchScreenData) {
