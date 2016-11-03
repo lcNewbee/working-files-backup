@@ -190,18 +190,16 @@ export default class Basic extends React.Component {
 
   onSave(url, module, validID) {
     // module指selfState中的radioSettings,multiSsid,basicSettings
-    this.props.validateAll(validID)
-      .then(msg => {
-        if (msg.isEmpty()) {
-          const dataToSave = this.props.selfState.get(module).toJS();
-          this.props.save(url, dataToSave)
-              .then((json) => {
-                if (json.state && json.state.code === 2000) {
-                  this.fetchFullPageData();
-                }
-              });
-        }
-      });
+    this.props.validateAll(validID).then(msg => {
+      if (msg.isEmpty()) {
+        const dataToSave = this.props.selfState.get(module).toJS();
+        this.props.save(url, dataToSave).then((json) => {
+          if (json.state && json.state.code === 2000) {
+            this.fetchFullPageData();
+          }
+        });
+      }
+    });
   }
 
   onHideSsidboxClick() {
@@ -225,16 +223,16 @@ export default class Basic extends React.Component {
   }
   onScanBtnClick() {
     this.props.changeScanStatus(true);
-    this.props.fetch('goform/get_site_survey')
-        .then((json) => {
-          if (json.state && json.state.code === 2000) {
-            this.props.updateItemSettings({
-              scanResult: fromJS(json.data),
-            });
-            this.props.changeShowScanResultStatus(true);
-            this.props.changeScanStatus(false);
-          }
+    this.props.fetch('goform/get_site_survey').then((json) => {
+      if (json.state && json.state.code === 2000) {
+        this.props.updateItemSettings({
+          scanResult: fromJS(json.data),
         });
+        if (this.props.selfState.get('scaning') === true)
+          this.props.changeShowScanResultStatus(true);
+        this.props.changeScanStatus(false);
+      }
+    });
   }
   onModalOkBtnClick() {
     const {
@@ -269,26 +267,28 @@ export default class Basic extends React.Component {
     this.props.changeSelectedResult(result);
   }
   onChengeWirelessMode(data) {
-    this.props.fetch('goform/get_wl_info')
-        .then((json) => {
-          // 首先更新curData中的数据，防止之前修改模式但未保存时加密方式发生变化，目的是切换回去后显示原来的数据
-          this.props.updateBasicSettings(fromJS(json.data));
-          if (json.state && json.state.code === 2000) {
-            this.props.updateBasicSettings({
-              wirelessMode: data.value,
-            });
-            // 处理切换成repeater后，加密方式为空的问题
-            if (data.value === 'repeater' && json.data.vapList[0].security.mode !== 'wep') {
-              const vapList = this.props.selfState.getIn(['basicSettings', 'vapList'])
-                                  .setIn([0, 'security', 'mode'], 'none');
-              this.props.updateBasicSettings({ vapList });
-            }
-          }
+    this.props.fetch('goform/get_wl_info').then((json) => {
+      // 首先更新curData中的数据，防止之前修改模式但未保存时加密方式发生变化，目的是切换回去后显示原来的数据
+      this.props.updateBasicSettings(fromJS(json.data));
+      if (json.state && json.state.code === 2000) {
+        this.props.updateBasicSettings({
+          wirelessMode: data.value,
         });
+        // 处理切换成repeater后，加密方式为空的问题
+        if (data.value === 'repeater' && json.data.vapList[0].security.mode !== 'wep') {
+          const vapList = this.props.selfState.getIn(['basicSettings', 'vapList'])
+                              .setIn([0, 'security', 'mode'], 'none');
+          this.props.updateBasicSettings({ vapList });
+        }
+      }
+    });
   }
   onCloseCountrySelectModal() {
-    const code = this.props.store.getIn(['curData', 'countryCode']);
-    this.props.closeCountrySelectModal(code);
+    this.props.fetch('goform/get_base_wl_info').then((json) => {
+      if (json.state && json.state.code === 2000) {
+        this.props.closeCountrySelectModal(json.data.countryCode);
+      }
+    });
   }
 
   onSecurityModeChange(data) {
@@ -359,45 +359,42 @@ export default class Basic extends React.Component {
   }
 
   fetchFullPageData() {
-    this.props.fetch('goform/get_base_wl_info')
-        .then((json) => {
+    this.props.fetch('goform/get_base_wl_info').then((json) => {
+      if (json.state && json.state.code === 2000) {
+        const radioInfo = {
+          curModule: 'radioSettings',
+          data: fromJS(json.data),
+        };
+        const country = json.data.countryCode;
+        this.props.changeCountryCode(country);
+        const channelWidth = json.data.channelWidth;
+        const saveInfo = {
+          radio: '5G',
+          country,
+          channelWidth,
+        };
+        this.props.updateSelfItemSettings(radioInfo);
+        this.props.fetch('goform/get_country_info', saveInfo).then((json2) => {
+          if (json2.state && json2.state.code === 2000) {
+            this.props.receiveCountryInfo(json2.data);
+          }
+        });
+      } }).then(() => {
+        this.props.fetch('goform/get_wl_info').then((json) => {
           if (json.state && json.state.code === 2000) {
-            const radioInfo = {
-              curModule: 'radioSettings',
+            const basicInfo = {
+              curModule: 'basicSettings',
               data: fromJS(json.data),
             };
-            const country = json.data.countryCode;
-            this.props.changeCountryCode(country);
-            const channelWidth = json.data.channelWidth;
-            const saveInfo = {
-              radio: '5G',
-              country,
-              channelWidth,
+            const multiSsidInfo = {
+              curModule: 'multiSsid',
+              data: fromJS(json.data),
             };
-            this.props.updateSelfItemSettings(radioInfo);
-            this.props.fetch('goform/get_country_info', saveInfo)
-                .then((json2) => {
-                  if (json2.state && json2.state.code === 2000) {
-                    this.props.receiveCountryInfo(json2.data);
-                  }
-                });
-          } }).then(() => {
-            this.props.fetch('goform/get_wl_info')
-                .then((json) => {
-                  if (json.state && json.state.code === 2000) {
-                    const basicInfo = {
-                      curModule: 'basicSettings',
-                      data: fromJS(json.data),
-                    };
-                    const multiSsidInfo = {
-                      curModule: 'multiSsid',
-                      data: fromJS(json.data),
-                    };
-                    this.props.updateSelfItemSettings(basicInfo);
-                    this.props.updateSelfItemSettings(multiSsidInfo);
-                  }
-                });
-          });
+            this.props.updateSelfItemSettings(basicInfo);
+            this.props.updateSelfItemSettings(multiSsidInfo);
+          }
+        });
+      });
   }
 
   // countryMap为Object
@@ -460,12 +457,11 @@ export default class Basic extends React.Component {
       val: '',
       item: fromJS({}),
     }));
-    props.fetch('goform/get_network_info')
-        .then((json) => {
-          if (json.state && json.state.code === 2000) {
-            vlanEnable = json.data.vlanEnable;
-          }
-        });
+    props.fetch('goform/get_network_info').then((json) => {
+      if (json.state && json.state.code === 2000) {
+        vlanEnable = json.data.vlanEnable;
+      }
+    });
   }
 
   render() {
@@ -495,7 +491,12 @@ export default class Basic extends React.Component {
         id: 'security',
         text: _('Security Mode'),
         transform: function (val) {
-          return val.get('mode');
+          const mode = val.get('mode');
+          if (mode === 'wpa') return 'WPA-PSK';
+          else if (mode === 'wpa2') return 'WPA2-PSK';
+          else if (mode === 'wpa-mixed') return 'WPA/WPA2-PSK';
+          else if (mode === 'wep') return 'WEP';
+          return mode;
         }.bind(this),
       },
       {
@@ -834,7 +835,7 @@ export default class Basic extends React.Component {
                         {
                           this.props.selfState.get('scaning') ? (
                             <Button
-                              text={_('Stop Scan')}
+                              text={_('Stop')}
                               onClick={this.onStopScanClick}
                               loading
                             />
@@ -870,7 +871,7 @@ export default class Basic extends React.Component {
                               {
                                 this.props.selfState.get('scaning') ? (
                                   <Button
-                                    text={_('Stop Scan')}
+                                    text={_('Stop')}
                                     onClick={this.onStopScanClick}
                                     loading
                                   />
@@ -1263,7 +1264,7 @@ export default class Basic extends React.Component {
                   >
                     <h3>{_('User Protocol')}</h3>
                     <span>
-                      使用本设备之前，请务必选择正确的国家代码以满足当地法规对于可用信道、信道带宽、输出功率、自动频宽选择和自动发射功率控制等的要求。安装方或本设备拥有方是保证依照法规规定正确使用本设备的完全责任人。设备提供商/分销商对于违规使用无线设备的行为和后果不承担任何责任。
+                      {_('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
                     </span>
                     <FormGroup
                       type="radio"
@@ -1494,21 +1495,20 @@ export default class Basic extends React.Component {
           title={_('Security Settings For SSID')}
           isShow={tableItemForSsid.get('isShow') === '1'}
           onOk={() => {
-            this.props.validateAll('ssidSecurityModal')
-                .then(msg => {
-                  if (msg.isEmpty()) {
-                    const pos = tableItemForSsid.get('pos');
-                    const vapList = multiSsid.getIn(['vapList'])
-                                    .set(pos, tableItemForSsid.get('item'));
-                    this.props.updateMultiSsidItem({ vapList });
-                    this.props.changeTableItemForSsid(fromJS({
-                      isShow: '0',
-                      val: '',
-                      item: {},
-                      pos: '',
-                    }));
-                  }
-                });
+            this.props.validateAll('ssidSecurityModal').then(msg => {
+              if (msg.isEmpty()) {
+                const pos = tableItemForSsid.get('pos');
+                const vapList = multiSsid.getIn(['vapList'])
+                                .set(pos, tableItemForSsid.get('item'));
+                this.props.updateMultiSsidItem({ vapList });
+                this.props.changeTableItemForSsid(fromJS({
+                  isShow: '0',
+                  val: '',
+                  item: {},
+                  pos: '',
+                }));
+              }
+            });
           }}
           onClose={() => {
             this.props.changeTableItemForSsid(fromJS({

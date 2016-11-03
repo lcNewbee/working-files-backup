@@ -4,7 +4,7 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import utilsCore from 'shared/utils/lib/core';
 
 import {
-  Button,
+  Button, SaveButton
 } from '../Button';
 
 const propTypes = {
@@ -13,6 +13,7 @@ const propTypes = {
   title: PropTypes.string,
   nextDisabled: PropTypes.bool,
   initStep: PropTypes.number,
+  saving: PropTypes.bool,
   options: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.instanceOf(List),
@@ -222,13 +223,29 @@ class WizardContainer extends React.Component {
               />
             ) : null
           }
-
-          <Button
-            theme="info"
-            onClick={this.onNext}
-            disabled={nextDisabled}
-            text={currStep !== (maxStep - 1) ? _('Next Step') : _('Completed')}
-          />
+          {/**
+            <Button
+              theme="info"
+              onClick={this.onNext}
+              text={currStep !== (maxStep - 1) ? _('Next Step') : _('Completed')}
+            />
+         */}
+          {
+            currStep !== (maxStep - 1) ? (
+              <Button
+                theme="info"
+                onClick={this.onNext}
+                text={_('Next Step')}
+              />
+            ) : (
+              <SaveButton
+                theme="info"
+                loading={this.props.saving}
+                onClick={this.onNext}
+                text={_('Completed')}
+              />
+            )
+          }
         </div>
       </div>
     );

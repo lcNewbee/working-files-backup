@@ -2,12 +2,12 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fromJS, Map } from 'immutable';
-import { FormGroup, FormInput, Modal } from 'shared/components';
+import { FormGroup, FormInput, Modal, ProgressBar } from 'shared/components';
 import { Button } from 'shared/components/Button';
 import * as appActions from 'shared/actions/app';
 import * as settingActions from 'shared/actions/settings';
 import utils from 'shared/utils';
-import ProgressBar from './ProgressBar';
+// import ProgressBar from 'shared/components';
 import * as selfActions from './actions';
 import reducer from './reducer';
 // import './index.scss';
@@ -79,6 +79,10 @@ export default class SystemMaintenance extends Component {
         data.append('filename', input.files[0]);
         data.append('suffix', extension);
         const step = Promise.resolve();
+        // const upgradeBarInfo = that.props.selfState.get('upgradeBarInfo')
+        //                         .set('isShow', true)
+        //                         .setIn(['firstBar', 'start'], true);
+        // that.props.changeUpgradeBarInfo(upgradeBarInfo);
         step.then(() => {
           const upgradeBarInfo = that.props.selfState.get('upgradeBarInfo')
                                   .set('isShow', true);
@@ -172,7 +176,7 @@ export default class SystemMaintenance extends Component {
   onRebootDevice() {
     const that = this;
     function rebootDevice() {
-      utils.save('goform/reboot');
+      that.props.fetch('goform/reboot');
       const step = Promise.resolve();
       step.then(() => {
         that.props.changeProgressBarInfo(fromJS({
@@ -197,7 +201,7 @@ export default class SystemMaintenance extends Component {
   onResetDevice() {
     const that = this;
     function resetDevice() {
-      utils.save('goform/reset');
+      that.props.fetch('goform/reset');
       const step = Promise.resolve();
       step.then(() => {
         that.props.changeProgressBarInfo(fromJS({
@@ -220,18 +224,17 @@ export default class SystemMaintenance extends Component {
   }
 
   onBackupConfig() {
-    utils.fetch('goform/save_config')
-        .then((json) => {
-          if (json.state && json.state.code === 2000) {
-            window.location.href = json.data.config_url;
-          } else if (json.state && json.state.code === 4000) {
-            this.props.createModal({
-              id: 'settings',
-              role: 'alert',
-              text: _('Backup failed! Please try again.'),
-            });
-          }
+    this.props.fetch('goform/save_config').then((json) => {
+      if (json.state && json.state.code === 2000) {
+        window.location.href = json.data.config_url;
+      } else if (json.state && json.state.code === 4000) {
+        this.props.createModal({
+          id: 'settings',
+          role: 'alert',
+          text: _('Backup failed! Please try again.'),
         });
+      }
+    });
   }
 
   render() {
@@ -320,13 +323,17 @@ export default class SystemMaintenance extends Component {
             title={this.props.selfState.getIn(['upgradeBarInfo', 'firstBar', 'title'])}
             time={this.props.selfState.getIn(['upgradeBarInfo', 'firstBar', 'time'])}
             callback={() => {
-              const txt = 'Upgrading, please DO NOT cut the power !';
+              const txt = _('Upgrading, please DO NOT cut the power !');
               const upgradeBarInfo = this.props.selfState.get('upgradeBarInfo')
                                         .setIn(['secondBar', 'start'], true)
                                         .setIn(['firstBar', 'title'], txt);
               this.props.changeUpgradeBarInfo(upgradeBarInfo);
             }}
             start={this.props.selfState.getIn(['upgradeBarInfo', 'firstBar', 'start'])}
+            style={{
+              borderRadius: '10px',
+              overflow: 'hidden',
+            }}
           />
           <ProgressBar
             title={this.props.selfState.getIn(['upgradeBarInfo', 'secondBar', 'title'])}
@@ -336,6 +343,10 @@ export default class SystemMaintenance extends Component {
               this.props.resetSelfState();
             }}
             start={this.props.selfState.getIn(['upgradeBarInfo', 'secondBar', 'start'])}
+            style={{
+              borderRadius: '10px',
+              overflow: 'hidden',
+            }}
           />
         </Modal>
         <Modal
@@ -355,6 +366,10 @@ export default class SystemMaintenance extends Component {
               this.props.resetSelfState();
             }}
             start={this.props.selfState.getIn(['progressBarInfo', 'start'])}
+            style={{
+              borderRadius: '10px',
+              overflow: 'hidden',
+            }}
           />
         </Modal>
       </div>

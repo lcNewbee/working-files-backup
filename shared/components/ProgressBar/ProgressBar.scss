@@ -6,9 +6,6 @@
   opacity: 0.5;
   color: red;
 }
-.bar-title {
-  margin-left: 80px;
-}
 
 .bar-wrap {
   position: relative;
@@ -27,12 +24,7 @@
 
 .bar-title {
   padding-top: 15px;
-  padding-left: 20px;
   font-size: 14px;
+  text-align: center;
 }
 
-.percentage {
-  position: absolute;
-  margin-left: 175px;
-  margin-top: 8px;
-}

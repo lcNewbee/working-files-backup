@@ -87,10 +87,9 @@ export default class SiteSurvey extends React.Component {
   }
   onScanBtnClick() {
     this.props.changeShowTableStatus(false);
-    this.props.fetchSettings()
-        .then(() => {
-          this.props.changeShowTableStatus(true);
-        });
+    this.props.fetchSettings().then(() => {
+      this.props.changeShowTableStatus(true);
+    });
   }
 
   render() {

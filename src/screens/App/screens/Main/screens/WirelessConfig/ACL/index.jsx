@@ -86,40 +86,44 @@ export default class ACL extends React.Component {
   }
 
 
+  // onMacInputChange(value) {
+  //   let val = value;
+  //   const lastChar = value.charAt(value.length - 1);
+  //   const preLen = this.props.macInput.get('preLen');
+  //   const afterLen = val.length;
+  //   if (preLen < afterLen) { // 添加
+  //     if (lastChar.match(/[0-9a-fA-F]/) !== null) {
+  //       const macArr = val.split(':');
+  //       const len = macArr.length;
+  //       if (macArr[len - 1].length <= 2) {
+  //         if (macArr[len - 1].length === 2 && len < 6) {
+  //           val += ':';
+  //         }
+  //       } else { // 删除超过MAC地址长度限制的字符，不在输入框显示
+  //         val = val.slice(0, -1);
+  //       }
+  //       this.props.changePreLenInMacInput(val.length);
+  //       this.props.changeMacInput(val);
+  //     } else if (lastChar.match(/[:]/) !== null) {
+  //       val = value.slice(0, -1);
+  //       this.props.changePreLenInMacInput(val.length);
+  //       this.props.changeMacInput(val);
+  //     }
+  //   } else if (preLen >= afterLen) { // 删除
+  //     if (lastChar === ':') {
+  //       val = val.slice(0, -2);
+  //       this.props.changePreLenInMacInput(val.length);
+  //       this.props.changeMacInput(val);
+  //     } else {
+  //       const length = (val.length === 1) ? 0 : val.length;
+  //       this.props.changePreLenInMacInput(length);
+  //       this.props.changeMacInput(val);
+  //     }
+  //   }
+  // }
+
   onMacInputChange(value) {
-    let val = value;
-    const lastChar = value.charAt(value.length - 1);
-    const preLen = this.props.macInput.get('preLen');
-    const afterLen = val.length;
-    if (preLen < afterLen) { // 添加
-      if (lastChar.match(/[0-9a-fA-F]/) !== null) {
-        const macArr = val.split(':');
-        const len = macArr.length;
-        if (macArr[len - 1].length <= 2) {
-          if (macArr[len - 1].length === 2 && len < 6) {
-            val += ':';
-          }
-        } else { // 删除超过MAC地址长度限制的字符，不在输入框显示
-          val = val.slice(0, -1);
-        }
-        this.props.changePreLenInMacInput(val.length);
-        this.props.changeMacInput(val);
-      } else if (lastChar.match(/[:]/) !== null) {
-        val = value.slice(0, -1);
-        this.props.changePreLenInMacInput(val.length);
-        this.props.changeMacInput(val);
-      }
-    } else if (preLen >= afterLen) { // 删除
-      if (val.slice(val.length - 1) === ':') {
-        val = val.slice(0, -1);
-        this.props.changePreLenInMacInput(val.length);
-        this.props.changeMacInput(val);
-      } else {
-        const length = (val.length === 1) ? 0 : val.length;
-        this.props.changePreLenInMacInput(length);
-        this.props.changeMacInput(val);
-      }
-    }
+    this.props.changeMacInput(value);
   }
 
   onAddMacToLocalList() {
@@ -127,27 +131,26 @@ export default class ACL extends React.Component {
     const selectedSsid = this.props.selectedSsid;
     const preList = this.props.store.getIn(['curData', 'aclConfList', selectedSsid, 'macList']);
     let afterList;
-    this.props.validateAll()
-        .then(() => {
-          if (preList.includes(macInputVal)) {
-            this.props.createModal({
-              id: 'settings',
-              role: 'alert',
-              text: '该MAC地址已经在列表中存在！',
-            });
-          } else {
-            afterList = preList.push(macInputVal);
-            const listLen = afterList.size;
-            const aclConfList = this.props.store.getIn(['curData', 'aclConfList'])
-                                .setIn([selectedSsid, 'macList'], afterList);
-            this.props.updateItemSettings({
-              aclConfList,
-            });
-            this.props.changePreLenInMacInput(0);
-            this.props.changeMacInput('');
-            this.props.initMacstatus(listLen);
-          }
-        });
+    this.props.validateAll().then((msg) => {
+      if (msg.isEmpty()) {
+        if (preList.includes(macInputVal)) {
+          this.props.createModal({
+            id: 'settings',
+            role: 'alert',
+            text: '该MAC地址已经在列表中存在！',
+          });
+        } else {
+          afterList = preList.push(macInputVal);
+          const listLen = afterList.size;
+          const aclConfList = this.props.store.getIn(['curData', 'aclConfList'])
+                              .setIn([selectedSsid, 'macList'], afterList);
+          this.props.updateItemSettings({ aclConfList });
+          this.props.changePreLenInMacInput(0);
+          this.props.changeMacInput('');
+          this.props.initMacstatus(listLen);
+        }
+        }
+    });
   }
 
   updateAclMacList() {
@@ -177,22 +180,21 @@ export default class ACL extends React.Component {
         ],
       },
     });
-    this.props.fetchSettings()
-        .then(() => {
-          const aclConfList = this.props.store.getIn(['curData', 'aclConfList']);
-          ssidSelectOptions = [];
-          for (let i = 0; i < aclConfList.size; i++) {
-            const optionItem = {
-              value: i,
-              label: aclConfList.getIn([i, 'ssid']),
-            };
-            ssidSelectOptions.push(optionItem);
-          }
-          this.props.changeSelectedSsid({
-            selectedSsid: 0,
-            macListLen: aclConfList.getIn([0, 'macList']).size,
-          });
-        });
+    this.props.fetchSettings().then(() => {
+      const aclConfList = this.props.store.getIn(['curData', 'aclConfList']);
+      ssidSelectOptions = [];
+      for (let i = 0; i < aclConfList.size; i++) {
+        const optionItem = {
+          value: i,
+          label: aclConfList.getIn([i, 'ssid']),
+        };
+        ssidSelectOptions.push(optionItem);
+      }
+      this.props.changeSelectedSsid({
+        selectedSsid: 0,
+        macListLen: aclConfList.getIn([0, 'macList']).size,
+      });
+    });
     this.props.changeMacInput('');
   }
 
@@ -299,6 +301,7 @@ export default class ACL extends React.Component {
           <FormGroup
             type="text"
             className="fl"
+            form="macinput"
             disabled={store.getIn(['curData', 'aclEnable']) === '0'}
             value={this.props.macInput.get('macValue')}
             onChange={(data, e) => this.onMacInputChange(data.value, e)}

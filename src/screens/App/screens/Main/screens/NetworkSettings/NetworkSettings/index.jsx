@@ -120,12 +120,37 @@ export default class NetworkSettings extends React.Component {
   }
 
   onSave() {
+    const that = this;
+    const {ip, mask, gateway, dns1, dns2} = this.props.store.get('curData').toJS();
+    let msg;
+    if (msg = validator.combineValid.noBroadcastIp(ip, mask)){
+      showError(msg);
+      return;
+    }
+    if (msg = validator.combineValid.staticIP(ip, mask, gateway)) {
+      showError(msg);
+      return;
+    }
+    msg = _('Primary and Secondary DNS can not be the same !');
+    if (validator.combineValid.notequal(dns1, dns2, msg)) {
+      showError(msg);
+      return;
+    }
+
     this.props.validateAll()
       .then(msg => {
         if (msg.isEmpty()) {
           this.props.saveSettings();
         }
       });
+
+    function showError(msg) {
+      that.props.createModal({
+        id: 'settings',
+        role: 'alert',
+        text: msg,
+      });
+    }
   }
 
   onDhcpClick() {
@@ -208,19 +233,21 @@ export default class NetworkSettings extends React.Component {
                 type="text"
                 label={_('Fallback IP')}
                 value={fallbackIp}
-                onChange={(data) => this.props.updateItemSettings({
-                  fallbackIp: data.value,
-                })}
-                {...lanIp}
+                disabled
+                // onChange={(data) => this.props.updateItemSettings({
+                //   fallbackIp: data.value,
+                // })}
+                //{...lanIp}
               />
               <FormGroup
                 type="text"
                 label={_('Fallback Netmask')}
                 value={fallbackMask}
-                onChange={(data) => this.props.updateItemSettings({
-                  fallbackMask: data.value,
-                })}
-                {...lanMask}
+                disabled
+                // onChange={(data) => this.props.updateItemSettings({
+                //   fallbackMask: data.value,
+                // })}
+                //{...lanMask}
               />
             </div>
           ) : (

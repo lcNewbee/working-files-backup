@@ -13,6 +13,7 @@ import * as settingActions from 'shared/actions/settings';
 import * as selfActions from './actions.js';
 import reducer from './reducer.js';
 import countryMap from './country.js';
+import './index.scss';
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
@@ -167,7 +168,8 @@ export default class QuickSetup extends React.Component {
             this.props.updateItemSettings({
               scanResult: fromJS(json.data),
             });
-            this.props.changeShowScanResultStatus(true);
+            if (this.props.selfState.get('scaning') === true)
+              this.props.changeShowScanResultStatus(true);
             this.props.changeScanStatus(false);
           }
         });
@@ -224,6 +226,15 @@ export default class QuickSetup extends React.Component {
   // 当准备改变步骤时
   onBeforeStep(data) {
     // 下一页
+    if (data.currStep === 1 && data.targetStep === 2) {
+      const { ip , mask } = this.props.store.get('curData').toJS();
+      const msg = validator.combineValid.noBroadcastIp(ip, mask);
+      // console.log('ip&mask', ip + ',' + mask);
+      if (msg) {
+        return msg;
+      }
+    }
+
     if (data.currStep < data.targetStep) {
       return this.props.validateAll()
         .then((msg) => {
@@ -492,7 +503,12 @@ export default class QuickSetup extends React.Component {
         id: 'security',
         text: _('Security Mode'),
         transform: function (val) {
-          return val.get('mode');
+          const mode = val.get('mode');
+          if (mode === 'wpa') return 'WPA-PSK';
+          else if (mode === 'wpa2') return 'WPA2-PSK';
+          else if (mode === 'wpa-mixed') return 'WPA/WPA2-PSK';
+          else if (mode === 'wep') return 'WEP';
+          return mode;
         }.bind(this),
       },
       {
@@ -561,7 +577,7 @@ export default class QuickSetup extends React.Component {
                 <Button
                   text={_('Change')}
                   style={{
-                    marginLeft: '3px',
+                    marginLeft: '-1px',
                     width: '70px',
                   }}
                   onClick={() => { this.props.changeCtyModal(true); }}
@@ -577,7 +593,7 @@ export default class QuickSetup extends React.Component {
                 >
                   <h3>{_('User Protocol')}</h3>
                   <span>
-                    使用本设备之前，请务必选择正确的国家代码以满足当地法规对于可用信道、信道带宽、输出功率、自动频宽选择和自动发射功率控制等的要求。安装方或本设备拥有方是保证依照法规规定正确使用本设备的完全责任人。设备提供商/分销商对于违规使用无线设备的行为和后果不承担任何责任。
+                    {_('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
                   </span>
                   <FormGroup
                     type="radio"
@@ -806,15 +822,11 @@ export default class QuickSetup extends React.Component {
                     />
                   </div>
                   <span className="fl">
-                    <span
-                      style={{
-                        paddingTop: '2px',
-                      }}
-                    >&nbsp;&nbsp;
+                    <span>
                     {
                       this.props.selfState.get('scaning') ? (
                         <Button
-                          text={_('Stop Scan')}
+                          text={_('Stop')}
                           onClick={this.onStopScanClick}
                           loading
                         />
@@ -888,7 +900,7 @@ export default class QuickSetup extends React.Component {
                 >
                   <h3>{_('User Protocol')}</h3>
                   <span>
-                    使用本设备之前，请务必选择正确的国家代码以满足当地法规对于可用信道、信道带宽、输出功率、自动频宽选择和自动发射功率控制等的要求。安装方或本设备拥有方是保证依照法规规定正确使用本设备的完全责任人。设备提供商/分销商对于违规使用无线设备的行为和后果不承担任何责任。
+                    {_('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
                   </span>
                   <FormGroup
                     type="radio"
@@ -963,7 +975,7 @@ export default class QuickSetup extends React.Component {
                         { label: 'TKIP', value: 'tkip' },
                         { label: 'MIXED', value: 'aes&tkip' },
                       ]}
-                      minWidth="60px"
+                      minWidth="66px"
                     />
                     <FormGroup
                       type="password"
@@ -1116,15 +1128,11 @@ export default class QuickSetup extends React.Component {
                     />
                   </div>
                   <span className="fl">
-                    <span
-                      style={{
-                        paddingTop: '2px',
-                      }}
-                    >&nbsp;&nbsp;
+                    <span>
                     {
                       this.props.selfState.get('scaning') ? (
                         <Button
-                          text={_('Stop Scan')}
+                          text={_('Stop')}
                           onClick={this.onStopScanClick}
                           loading
                         />
@@ -1201,7 +1209,7 @@ export default class QuickSetup extends React.Component {
                 >
                   <h3>{_('User Protocol')}</h3>
                   <span>
-                    使用本设备之前，请务必选择正确的国家代码以满足当地法规对于可用信道、信道带宽、输出功率、自动频宽选择和自动发射功率控制等的要求。安装方或本设备拥有方是保证依照法规规定正确使用本设备的完全责任人。设备提供商/分销商对于违规使用无线设备的行为和后果不承担任何责任。
+                    {_('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
                   </span>
                   <FormGroup
                     type="radio"
@@ -1662,6 +1670,7 @@ export default class QuickSetup extends React.Component {
           onBeforeStep={this.onBeforeStep}
           onCompleted={this.onCompleted}
           reinitAt={this.props.selfState.get('reinitAt')}
+          saving={this.props.app.get('saving')}
         />
       </div>
     );

@@ -7,6 +7,7 @@ import Table from 'shared/components/Table';
 import utils from 'shared/utils';
 import * as sharedActions from 'shared/actions/settings';
 import * as appActions from 'shared/actions/app';
+import * as selfActions from './actions.js';
 import reducer from './reducer.js';
 
 const flowRateFilter = utils.filter('flowRate');
@@ -19,15 +20,27 @@ const propTypes = {
   updateItemSettings: PropTypes.func,
   leaveSettingsScreen: PropTypes.func,
   app: PropTypes.instanceOf(Map),
+  changeFirstRefresh: PropTypes.func,
 };
 let a;
 
-const defaultProps = {};
+const defaultProps = {
+  firstRefresh: true,
+};
 
 const interfaceOptions = fromJS([
   {
     id: 'name',
     text: _('Name'),
+    transform(val) {
+      if (val === '') {
+        return '--';
+      }
+      return val;
+    },
+  },{
+    id: 'mac',
+    text: _('MAC'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -108,7 +121,9 @@ export default class SystemStatus extends React.Component {
       fetchUrl: this.props.route.fetchUrl,
       defaultData: {},
     });
-    this.props.fetchSettings();
+    this.props.fetchSettings().then(() => {
+      this.props.changeFirstRefresh(false);
+    })
     a = setInterval(this.props.fetchSettings, 10000);
   }
 
@@ -127,6 +142,7 @@ export default class SystemStatus extends React.Component {
     // console.log('interval', a);
     clearInterval(a);
     this.props.leaveSettingsScreen();
+    this.props.changeFirstRefresh(true);
   }
 
   changeSystemTimeToReadable(time) {
@@ -404,7 +420,7 @@ export default class SystemStatus extends React.Component {
     return (
       <div className="">
       {
-        this.props.app.get('fetching') ? (
+        this.props.app.get('fetching') && this.props.selfState.get('firstRefresh') ? (
           <div className="o-modal" role="message">
             <div className="o-modal__backdrop"></div>
             <div className="o-modal__message">
@@ -610,6 +626,7 @@ SystemStatus.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
+    selfState: state.systemstatus,
     app: state.app,
     store: state.settings,
   };
@@ -617,7 +634,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
-    utils.extend({}, appActions, sharedActions),
+    utils.extend({}, appActions, sharedActions, selfActions),
     dispatch
   );
 }

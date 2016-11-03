@@ -32,13 +32,13 @@ const propTypes = {
 
 const validOptions = Map({
   validOld: validator({
-    rules: 'pwd|len:[6, 32]',
+    rules: 'pwd|len:[5, 32]',
   }),
   validNew: validator({
-    rules: 'pwd|len:[6, 32]',
+    rules: 'pwd|len:[5, 32]',
   }),
   validCfm: validator({
-    rules: 'pwd|len:[6, 32]',
+    rules: 'pwd|len:[5, 32]',
   }),
 });
 

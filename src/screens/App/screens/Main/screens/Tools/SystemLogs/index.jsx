@@ -46,41 +46,38 @@ export default class SystemLogs extends Component {
         logEnable: '0',
       },
     });
-    this.props.fetch('goform/get_log_info')
-        .then((json) => {
-          if (json.state && json.state.code === 2000) {
-            this.props.updateItemSettings({
-              logEnable: json.data.logEnable,
-            });
-          }
-          return json;
-        })
-        .then((json) => {
-          if (json.state && json.state.code === 2000) {
-            if (json.data.logEnable === '1') {
-              this.props.fetch('goform/get_log_list')
-                  .then((json2) => {
-                    this.props.updateItemSettings({
-                      logList: fromJS(json2.data.logList),
-                    });
-                    this.props.changeSearchItem('');
-                    this.props.changSearchList(fromJS(json2.data.logList));
-                    const totalLogs = json2.data.logList.length;
-                    const perPageNum = this.props.selfState.get('perPageNum');
-                    const totalPage = Math.ceil(totalLogs / perPageNum);
-                    let nextPage;
-                    if (totalPage < 2) { nextPage = -1; }
-                    this.props.changePageObject(fromJS({
-                      totalPage,
-                      currPage: 1,
-                      nextPage,
-                      lastPage: totalPage,
-                    }));
-                    this.onChangePage(1);
-                  });
-            }
-          }
+    this.props.fetch('goform/get_log_info').then((json) => {
+      if (json.state && json.state.code === 2000) {
+        this.props.updateItemSettings({
+          logEnable: json.data.logEnable,
         });
+      }
+      return json;
+    }).then((json) => {
+      if (json.state && json.state.code === 2000) {
+        if (json.data.logEnable === '1') {
+          this.props.fetch('goform/get_log_list').then((json2) => {
+            this.props.updateItemSettings({
+              logList: fromJS(json2.data.logList),
+            });
+            this.props.changeSearchItem('');
+            this.props.changSearchList(fromJS(json2.data.logList));
+            const totalLogs = json2.data.logList.length;
+            const perPageNum = this.props.selfState.get('perPageNum');
+            const totalPage = Math.ceil(totalLogs / perPageNum);
+            let nextPage;
+            if (totalPage < 2) { nextPage = -1; }
+            this.props.changePageObject(fromJS({
+              totalPage,
+              currPage: 1,
+              nextPage,
+              lastPage: totalPage,
+            }));
+            this.onChangePage(1);
+          });
+        }
+      }
+    });
   }
 
   onChangeLogSwitch(data) {
@@ -88,19 +85,17 @@ export default class SystemLogs extends Component {
       logEnable: data.value,
     });
     if (data.value === '1') {
-      this.props.save('goform/set_log', { logEnable: '1' })
-          .then((json) => {
+      this.props.save('goform/set_log', { logEnable: '1' }).then((json) => {
+        if (json.state && json.state.code === 2000) {
+          this.props.fetch('goform/get_log_list').then((json2) => {
             if (json.state && json.state.code === 2000) {
-              this.props.fetch('goform/get_log_list')
-                  .then((json2) => {
-                    if (json.state && json.state.code === 2000) {
-                      this.props.updateItemSettings({
-                        logList: fromJS(json2.data.logList),
-                      });
-                    }
-                  });
+              this.props.updateItemSettings({
+                logList: fromJS(json2.data.logList),
+              });
             }
           });
+        }
+      });
     } else {
       this.props.save('goform/set_log', { logEnable: '0' });
       this.props.updateItemSettings({

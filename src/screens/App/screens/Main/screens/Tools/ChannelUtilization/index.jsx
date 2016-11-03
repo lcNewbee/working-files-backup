@@ -3,9 +3,7 @@ import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { Map, fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
-import {
-  Button, FormGroup, Table,
-} from 'shared/components';
+import { Button, FormGroup, Table } from 'shared/components';
 import * as appActions from 'shared/actions/app';
 import * as sharedActions from 'shared/actions/settings';
 import * as selfActions from './actions';
@@ -49,15 +47,14 @@ export default class ChannelUtilization extends React.Component {
   }
 
   getDataAndRenderTable() {
-    this.props.fetch('goform/get_chanutil')
-        .then((json) => {
-          if (json.state && json.state.code === 2000) {
-            const chutilList = json.data.chutilList;
-            const list = this.makeChannelUtiOptionsAndList(chutilList);
-            this.props.changeChannelUtiOptions(list.get('channelUtiOptions'));
-            this.props.changeChannelUtiList(list.get('channelUtiList'));
-          }
-        });
+    this.props.fetch('goform/get_chanutil').then((json) => {
+      if (json.state && json.state.code === 2000) {
+        const chutilList = json.data.chutilList;
+        const list = this.makeChannelUtiOptionsAndList(chutilList);
+        this.props.changeChannelUtiOptions(list.get('channelUtiOptions'));
+        this.props.changeChannelUtiList(list.get('channelUtiList'));
+      }
+    });
   }
 
   makeChannelUtiOptionsAndList(utilList) {

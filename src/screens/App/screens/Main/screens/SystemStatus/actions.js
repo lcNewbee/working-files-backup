@@ -2,25 +2,13 @@ import * as appActions from 'shared/actions/app';
 import urls from 'shared/config/urls';
 
 
-export function receiveSystemStatus(data) {
+export function changeFirstRefresh(data) {
   return {
-    type: 'RECEIVE_SYSTEM_STATUS',
+    type: 'CHANGE_FIRST_REFRESH',
     data,
   };
 }
 
-export function kickUser(mac){
-}
 
-export function fetchSystemStatus() {
-  return dispatch => {
-    dispatch(appActions.fetch(urls.fetchSystemStatus))
-            .then((json) => {
-              if (json.state && json.state.code === 2000) {
-                console.log(json.data);
-                dispatch(receiveSystemStatus(json.data));
-              }
-            });
-  };
-}
+
 

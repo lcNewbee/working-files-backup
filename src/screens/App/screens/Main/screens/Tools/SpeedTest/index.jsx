@@ -88,14 +88,13 @@ export default class SpeedTest extends React.Component {
     clearTimeout(b);
   }
   onSelectBtnClick() {
-    this.props.fetch('goform/get_ip_list')
-        .then((json) => {
-          if (json.state && json.state.code === 2000) {
-            this.props.updateItemSettings({
-              ipList: fromJS(json.data.ipList),
-            });
-          }
+    this.props.fetch('goform/get_ip_list').then((json) => {
+      if (json.state && json.state.code === 2000) {
+        this.props.updateItemSettings({
+          ipList: fromJS(json.data.ipList),
         });
+      }
+    });
     this.props.changeShowScanResults(true);
   }
   onModalOkClick() {
@@ -125,32 +124,37 @@ export default class SpeedTest extends React.Component {
 
   onRunTest() {
     // this.props.toggleShowResultBtn('0');
-    this.props.validateAll()
-        .then(msg => {
-          if (msg.isEmpty()) {
-            // this.props.clickSpeedTestRunBtn();
-            this.props.receiveTestResult({ tx: 0, rx: 0 });
-            this.props.changeStopWait(false);
-            const query = this.props.store.get('curData').toJS();
-            this.props.save('goform/bandwidth_test', query)
-                .then((json) => {
-                  if (json.state && json.state.code === 2000) {
-                    b = setTimeout(() => {
-                      this.props.fetch('goform/get_bandwidth')
-                          .then((json2) => {
-                            if (json2.state && json2.state.code === 2000) {
-                              this.props.receiveTestResult(json2.data);
-                              this.props.changeStopWait(true);
-                              clearInterval(a);
-                            } else if (json2.state && json2.state.code !== 2000) {
-                              clearInterval(a);
-                              clearTimeout(b);
-                              this.props.changeTimeClock('Test failed ! ' + json2.state.msg);
-                            }
-                          });
-                    }, (parseInt(query.time, 10) + 2) * 1000);
-                  }
-                });
+    clearInterval(a);
+    this.props.validateAll().then(msg => {
+      if (msg.isEmpty()) {
+        // this.props.clickSpeedTestRunBtn();
+        this.props.receiveTestResult({ tx: 0, rx: 0 });
+        this.props.changeStopWait(false);
+        const query = this.props.store.get('curData').toJS();
+        this.props.save('goform/bandwidth_test', query).then((json) => {
+          if (json.state && json.state.code === 2000) {
+            b = setTimeout(() => {
+              this.props.fetch('goform/get_bandwidth').then((json2) => {
+                if (json2.state && json2.state.code === 2000) {
+                  this.props.receiveTestResult(json2.data);
+                  this.props.changeStopWait(true);
+                  clearInterval(a);
+                } else if (json2.state && json2.state.code !== 2000) {
+                  clearInterval(a);
+                  clearTimeout(b);
+                  this.props.changeTimeClock('Test failed ! ' + json2.state.msg);
+                }
+              });
+            }, (parseInt(query.time, 10) + 2) * 1000);
+          } else if (json.state && json.state.code === 4000) {
+            this.props.changeStopWait(true);
+            this.props.createModal({
+                id: 'settings',
+                role: 'alert',
+                text: _('Error: The destination can not be reached!'),
+              });
+          }
+        });
             let clock = parseInt(this.props.store.getIn(['curData', 'time']), 10);
             this.props.changeTimeClock(clock);
             a = setInterval(() => {
@@ -433,13 +437,12 @@ export default class SpeedTest extends React.Component {
                 this.props.toggleShowAdvanceBtn();
               }}
               onOk={() => {
-                this.props.validateAll('advancedOptions')
-                    .then((msg) => {
-                      if (msg.isEmpty()) {
-                        this.props.updateItemSettings(query);
-                        this.props.toggleShowAdvanceBtn();
-                      }
-                    });
+                this.props.validateAll('advancedOptions').then((msg) => {
+                  if (msg.isEmpty()) {
+                    this.props.updateItemSettings(query);
+                    this.props.toggleShowAdvanceBtn();
+                  }
+                });
               }}
             >
               <FormGroup
@@ -478,14 +481,13 @@ export default class SpeedTest extends React.Component {
               noFooter
               isShow
               onClose={() => {
-                this.props.save('goform/stop_bandwidth_test')
-                    .then((json) => {
-                      if (json.state && json.state.code === 2000) {
-                        this.props.changeStopWait(true);
-                        clearInterval(a);
-                        clearTimeout(b);
-                      }
-                    });
+                this.props.save('goform/stop_bandwidth_test').then((json) => {
+                  if (json.state && json.state.code === 2000) {
+                    this.props.changeStopWait(true);
+                    clearInterval(a);
+                    clearTimeout(b);
+                  }
+                });
               }}
             >
               <div

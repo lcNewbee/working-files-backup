@@ -433,6 +433,19 @@ validator.combineValid = {
     } else {
       return _("Please enter a valid IP segment");
     }
+  },
+
+  noBroadcastIp: function (ip, mask) {
+    var ipArry = ip.split(".");
+    var maskArry = mask.split(".");
+
+    for (var i = 0; i < 4; i++) {
+      var ipElem = parseInt(ipArry[i], 10);
+      var maskElem = parseInt(maskArry[i], 10);
+      if ((ipElem | maskElem) != 255) break;
+    }
+    if (i == 4) return "Broadcast IP address is not allowed !"
+    else return;
   }
 };
 

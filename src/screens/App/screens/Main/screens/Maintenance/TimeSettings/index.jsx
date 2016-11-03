@@ -135,9 +135,6 @@ export default class TimeSettings extends Component {
             disabled={ntpEnable === '0'}
             value={this.props.store.getIn(['curData', 'zoneName'])}
             onChange={(data) => this.onTimeZoneChange(data)}
-            style={{
-              width: '200px',
-            }}
           />
         </div>
         <FormGroup>

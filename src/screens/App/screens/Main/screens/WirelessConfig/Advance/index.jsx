@@ -69,12 +69,11 @@ export default class Advance extends React.Component {
   }
 
   onSave() {
-    this.props.validateAll()
-      .then(msg => {
-        if (msg.isEmpty()) {
-          this.props.saveSettings();
-        }
-      });
+    this.props.validateAll().then(msg => {
+      if (msg.isEmpty()) {
+        this.props.saveSettings();
+      }
+    });
   }
 
   firstInAndRefresh() {

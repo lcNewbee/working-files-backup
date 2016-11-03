@@ -36,3 +36,6 @@ export { default as WizardContainer } from './Organism/WizardContainer';
 export { default as PropertyPanel } from './Template/PropertyPanel';
 export { default as ListInfo } from './Template/ListInfo';
 export { default as NotFound } from './NotFound';
+
+// ProgressBar
+export {default as ProgressBar } from './ProgressBar';
