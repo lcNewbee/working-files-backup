@@ -106,7 +106,7 @@ class SystemApVersion extends CI_Controller {
         'sfver'=>element('softVersion', $data),
         'fmname'=>$filename,
         'filepath'=>$filepath,
-        'active'=>element('active', $data,0)
+        'active'=>(int)element('active', $data,0)
       );
       }
       $result=axc_add_apfirmware(json_encode($retData ));
@@ -122,7 +122,7 @@ class SystemApVersion extends CI_Controller {
         'sfver'=>element('softVersion', $data),
         'fmname'=>$filename,
         'filepath'=>$filepath,
-        'active'=>element('active', $data,0)
+        'active'=>(int)element('active', $data,0)
       );
       }
      $result=axc_active_apfirmware(json_encode($retData));
@@ -138,7 +138,7 @@ class SystemApVersion extends CI_Controller {
         'sfver'=>element('softVersion', $data),
         'fmname'=>$filename,
         'filepath'=>$filepath,
-        'active'=>element('active', $data,0)
+        'active'=>(int)element('active', $data,0)
       );
       }
       $result=axc_modify_apfirmware(json_encode($retData));
