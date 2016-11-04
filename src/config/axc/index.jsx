@@ -172,7 +172,7 @@ const routes = [
           // },
           {
             id: 'networkInterface',
-            icon: 'th-large',
+            icon: 'th',
             path: '/main/network/interface',
             formUrl: 'goform/network/interface',
             text: _('Interface Settings'),
@@ -208,7 +208,7 @@ const routes = [
           }, {
             id: 'networkPort',
             path: '/main/network/port',
-            icon: 'th',
+            icon: 'th-large',
             formUrl: '/goform/network/port',
             text: _('Port'),
             component: sNetworkPort.Screen,

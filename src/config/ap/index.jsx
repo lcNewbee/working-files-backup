@@ -121,7 +121,7 @@ const routes = [{
       id: 'systemstatus',
       fetchUrl: 'goform/get_system_info',
       path: '/main/systemstatus',
-      icon: 'info',
+      icon: 'pie-chart',
       text: _('Device Status'),
       component: pSystemStatus.Screen,
     }, {
@@ -135,7 +135,7 @@ const routes = [{
     }, {
       id: 'networksettings',
       path: '/main/networksettings',
-      icon: 'cogs',
+      icon: 'sphere',
       text: _('Network'),
       component: pNetworkSettings,
       indexRoute: {
@@ -213,7 +213,7 @@ const routes = [{
     }, {
       id: 'tools',
       path: '/main/tools',
-      icon: 'scissors',
+      icon: 'cogs',
       text: _('Tools'),
       component: pTools,
       indexRoute: { onEnter: (nextState, replace) => replace('/main/tools/speedtest') },
