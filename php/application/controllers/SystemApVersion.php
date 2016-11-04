@@ -112,19 +112,15 @@ class SystemApVersion extends CI_Controller {
       $result=axc_add_apfirmware(json_encode($retData ));
 		}
     elseif($actionType === 'active'){
-       $upload_data=$this->do_upload();
-      if($upload_data['state']['code']==2000){
-        $filename=$this->upload->data('file_name');
-        $filepath=$this->upload->data('full_path');
-         $retData = array(
+      $retData = array(
         'vendor'=>element('vendor',$data, 48208),
         'model'=>element('model', $data),
         'sfver'=>element('softVersion', $data),
-        'fmname'=>$filename,
-        'filepath'=>$filepath,
+        'fmname'=>element('fileName', $data),
+        'filepath'=>element('uploadPath', $data),
         'active'=>(int)element('active', $data,0)
       );
-      }
+
      $result=axc_active_apfirmware(json_encode($retData));
     }
     elseif($actionType === 'edit'){
