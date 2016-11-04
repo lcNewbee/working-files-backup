@@ -1,35 +1,29 @@
 import React, { PropTypes } from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
-import validator from 'shared/utils/lib/validator';
 import utils from 'shared/utils';
-import FormContainer from 'shared/components/Organism/FormContainer';
 import WizardContainer from 'shared/components/Organism/WizardContainer';
 import DropzoneComponent from 'react-dropzone-component';
 import PureComponent from 'shared/components/Base/PureComponent';
 import FormGroup from 'shared/components/Form/FormGroup';
-import FileUpload from 'shared/components/FileUpload';
 import * as appActions from 'shared/actions/app';
-import urls from 'shared/config/urls';
 import 'dropzone/dist/min/dropzone.min.css';
 
 import './_style.scss';
-
 
 const _ = window._;
 const msg = {
   password: _('Password'),
   versionUses: _('Version Uses To'),
   selectFile: _('Select Version File'),
-  confirmpasswd: _('Confirm Password'),
-  welcomeDes: _('Thank you for purchasing Axilspot enterprise-class products,' +
-    ' you will complete the configuration for management system in minutes'),
-  passwordDes: _('Please provide an administrator password to login to Axilspot management system'),
-  completeDes: _('Please confirm your configuration below.' +
-    ' Click back to modify the configuration or click finish to activate the configuration.' +
-    ' After finish you will skip to management interface.'),
+  dictDefaultMessage: _('Drop or click to select file'),
+  removefile: _('Remove File'),
+  currentVersion: _('Current Version'),
+  upAcVersionTitle: _('Upgrade AC Version'),
+  backupAcVersion: _('Backup AC Version'),
+  sureUpgradeAc: _('Are you sure to UPGRADE the software and REBOOT ?'),
+  uploadingAcVersion: _('Upgrading AC version, Please do not shut down device.'),
 };
 let checkUpgradOkTimeout = null;
 
@@ -43,27 +37,6 @@ const versionUsesOptions = [
   },
 ];
 
-const stepOneFormGroupList = fromJS([
-  {
-    id: 'versionUses',
-    type: 'switch',
-    required: true,
-    label: msg.versionUses,
-    options: versionUsesOptions,
-    placeholder: msg.country,
-    validator: validator({}),
-  }, {
-    id: 'filename',
-    type: 'file',
-    required: true,
-    label: msg.selectFile,
-    maxLength: 21,
-    placeholder: msg.selectFile,
-    validator: validator({}),
-  },
-]);
-
-
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   save: PropTypes.func,
@@ -72,14 +45,14 @@ const propTypes = {
   closeModal: PropTypes.func,
 };
 const defaultProps = {};
-export default class View extends PureComponent {
+export default class AcVersion extends PureComponent {
   constructor(props) {
     super(props);
 
     utils.binds(this,
       [
         'updateState', 'renderStepOne', 'onBeforeStep', 'upgradeAc',
-        'acUploading', 'checkUpgradOk', 'renderStepThree',
+        'acUploading', 'checkUpgradOk', 'renderStepThree', 'onComplete',
       ]
     );
     this.state = {
@@ -90,22 +63,22 @@ export default class View extends PureComponent {
     };
   }
 
-  componentWillMount() {
-    // this.props.fetchScreenData();
-  }
-
-  componentWillUnmount() {
-    // this.props.leaveScreen();
+  onComplete() {
+    console.log('onCompleted')
+    this.setState({
+      initStep: 0,
+      fileUploaded: false,
+    });
   }
 
   onBeforeStep(data) {
     const { targetStep, currStep } = data;
-    const ret = '';
+    let ret = '';
 
     // next
     if (targetStep > currStep) {
       if (currStep === 0) {
-        this.upgradeAc();
+        ret = this.upgradeAc();
       }
     }
 
@@ -133,17 +106,29 @@ export default class View extends PureComponent {
   upgradeAc() {
     const { filename } = this.state;
     const url = 'goform/system/version/upgrade';
+    const promise = new Promise((resolve, reject) => {
+      this.props.createModal({
+        role: 'confirm',
+        title: msg.upAcVersionTitle,
+        text: msg.sureUpgradeAc,
+        apply: () => {
+          this.props.createModal({
+            role: 'loading',
+            title: msg.upAcVersionTitle,
+            text: msg.uploadingAcVersion,
+          });
 
-    this.props.createModal({
-      role: 'loading',
-      title: _('Upgrade AC Version'),
-      text: _('Upgrading AC version, Please do not shut down device.'),
+          this.props.save(url, { filename })
+            .then(() => {
+              this.checkUpgradOk(true);
+            });
+          resolve();
+        },
+        cancel: () => reject(),
+      });
     });
 
-    this.props.save(url, { filename })
-      .then(() => {
-        this.checkUpgradOk(true);
-      });
+    return promise;
   }
 
   updateState(data) {
@@ -155,21 +140,12 @@ export default class View extends PureComponent {
       postUrl: 'goform/system/version/upload',
     };
     const eventHandlers = {
-      // This one receives the dropzone object as the first parameter
-      // and can be used to additional work with the dropzone.js
-      // object
-      init: null,
-      // All of these receive the event as first parameter:
-      drop: null,
-      dragstart: null,
-      dragend: null,
-      dragenter: null,
-      dragover: null,
-      dragleave: null,
-      // All of these receive the file as first parameter:
-      addedfile: null,
-      removedfile: null,
-      thumbnail: null,
+      removedfile: () => {
+        this.updateState({
+          fileUploaded: false,
+          filename: '',
+        });
+      },
       error: (file) => {
         console.log(file);
       },
@@ -205,7 +181,8 @@ export default class View extends PureComponent {
       paramName: 'versionFile',
       maxFiles: 1,
       addRemoveLinks: 'dictCancelUploadConfirmation',
-      dictDefaultMessage: _('Drop or click to select file'),
+      dictDefaultMessage: msg.dictDefaultMessage,
+      dictRemoveFile: msg.removefile,
     };
 
     return (
@@ -235,14 +212,13 @@ export default class View extends PureComponent {
   renderStepTwo() {
     return null;
   }
-
   renderStepThree() {
     const { app } = this.props;
     return (
       <div className="step-1">
         <FormGroup
           type="plain-text"
-          label={_('currVersion')}
+          label={msg.currentVersion}
           value={app.getIn(['version'])}
         />
       </div>
@@ -252,8 +228,8 @@ export default class View extends PureComponent {
   render() {
     const { versionUses, initStep } = this.state;
     const stepTwoTitleArr = [
-      _('Upgrading Version'),
-      _('Backup Version'),
+      msg.upAcVersionTitle,
+      msg.backupAcVersion,
     ];
     const options = fromJS([
       {
@@ -273,6 +249,7 @@ export default class View extends PureComponent {
         title={_('AC Version Setup Wizard')}
         options={options}
         onBeforeStep={this.onBeforeStep}
+        onCompleted={this.onComplete}
         size="sm"
         nextDisabled={!this.state.fileUploaded}
         initStep={initStep}
@@ -281,9 +258,8 @@ export default class View extends PureComponent {
   }
 }
 
-View.propTypes = propTypes;
-View.defaultProps = defaultProps;
-
+AcVersion.propTypes = propTypes;
+AcVersion.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
@@ -301,4 +277,4 @@ function mapDispatchToProps(dispatch) {
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps
-)(View);
+)(AcVersion);
