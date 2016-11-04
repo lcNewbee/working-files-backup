@@ -83,7 +83,11 @@ class Row extends Component {
 
             if (currItem) {
               if (typeof currItem.get === 'function') {
-                currVal = currItem.get('label');
+                if (typeof currItem.get('render') === 'function') {
+                  currVal = currItem.get('render')();
+                } else {
+                  currVal = currItem.get('label');
+                }
               } else {
                 currVal = currItem;
               }

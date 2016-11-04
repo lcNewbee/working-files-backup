@@ -90,9 +90,31 @@ const screenOptions = fromJS([
       {
         value: 1,
         label: _('On'),
+        render() {
+          return (
+            <span
+              style={{
+                color: 'green',
+              }}
+            >
+              {_('On')}
+            </span>
+          );
+        },
       }, {
         value: 0,
         label: _('Off'),
+        render() {
+          return (
+            <span
+              style={{
+                color: 'red',
+              }}
+            >
+              {_('Off')}
+            </span>
+          );
+        },
       },
     ],
     formProps: {
@@ -105,13 +127,7 @@ const tableOptions = immutableUtils.getTableOptions(screenOptions);
 const editFormOptions = immutableUtils.getFormOptions(screenOptions);
 const defaultEditData = immutableUtils.getDefaultData(screenOptions);
 const propTypes = {
-  app: PropTypes.instanceOf(Map),
-  store: PropTypes.instanceOf(Map),
-
   route: PropTypes.object,
-  initScreen: PropTypes.func,
-  closeListItemModal: PropTypes.func,
-  updateCurEditListItem: PropTypes.func,
   save: PropTypes.func,
 };
 const defaultProps = {};

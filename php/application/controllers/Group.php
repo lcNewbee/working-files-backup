@@ -67,14 +67,14 @@ class Group extends CI_Controller {
 			$result=axc_del_apgroup(json_encode($data));
     }
     elseif($actionType === 'move') {
-      $result=axc_aps_move_to_apgroup(json_encode($deleteItem));
+      $result=axc_aps_move_to_apgroup(json_encode($data));
     }
     elseif($actionType === 'deleteGroupAps') {
       $temp_data = array(
         'aplist'=>element('aplist', $data),
         'groupid'=>(int)element('groupid', $data, -1),
       );
-      $result=axc_del_aptogroup($temp_data);
+      $result=axc_del_aptogroup(json_encode($temp_data));
     }
     elseif($actionType === 'groupApAdd'){
       $temp_data = array(

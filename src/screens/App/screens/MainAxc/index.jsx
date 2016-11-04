@@ -89,6 +89,7 @@ export default class Main extends Component {
       'saveGroup',
       'onRemoveGroup',
       'removeGroup',
+      'fetchManageGroupAps',
 
       'renderPopOverContent',
       'renderBreadcrumb',
@@ -201,9 +202,9 @@ export default class Main extends Component {
 
     this.props.save('/goform/group', subData)
       .then((json) => {
-        const data = json && json.data;
+        const state = json && json.state;
 
-        if (data && json.state.code === 2000) {
+        if (state && state.code === 2000) {
           this.props.fetchGroupAps(groupId);
         }
         this.props.fetchApGroup();
@@ -245,10 +246,19 @@ export default class Main extends Component {
           aplist: $$selectMacList.toJS(),
           groupid,
         }).then(() => {
+          this.props.fetchGroupAps(-1);
           this.props.fetchGroupAps(groupid);
+          this.props.fetchApGroup();
         });
       },
     });
+  }
+
+  fetchManageGroupAps() {
+    const groupid = this.props.product
+      .getIn(['group', 'manageSelected', 'id']);
+
+    this.props.fetchGroupAps(groupid);
   }
   removeGroup(id) {
     this.props.save('/goform/group', {
@@ -256,6 +266,8 @@ export default class Main extends Component {
       groupid: id,
     }).then(() => {
       this.props.fetchApGroup();
+      this.fetchManageGroupAps();
+      this.props.fetchGroupAps(-1);
     });
   }
   saveGroup() {
@@ -289,11 +301,11 @@ export default class Main extends Component {
 
     this.props.save('/goform/group', subData)
       .then((json) => {
-        const data = json && json.data;
+        const state = json && json.state;
 
-        if (data && json.state.code === 2000) {
-          this.props.fetchGroupAps(-1);
+        if (state && state.code === 2000) {
           this.props.fetchGroupAps($$editData.get('id'));
+          this.props.fetchGroupAps(-1);
         }
 
         this.props.fetchApGroup();

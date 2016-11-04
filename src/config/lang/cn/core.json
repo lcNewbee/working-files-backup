@@ -98,9 +98,10 @@
   "Refuse": "拒绝",
   "On": "开启",
   "Off": "关闭",
+  "Used": "已使用",
+  "Free": "未使用",
 
   "Are you sure to delete selected index: %s ?": "你确定要删除选择的项：%s ?",
-
   "Download Report": "下载报表",
 
   "Main DNS": "主DNS",

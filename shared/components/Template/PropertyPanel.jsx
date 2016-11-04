@@ -57,7 +57,10 @@ class PropertyPanel extends React.Component {
     if ($$configData.get('module') === 'radio') {
       formUrl = 'goform/group/ap/radio';
       subData = $$activeListData.get('radio')
-          .merge(subData).toJS();
+          .merge(subData).merge({
+            groupid: $$activeListData.get('groupid'),
+            mac: $$activeListData.get('mac'),
+          }).toJS();
     }
 
     this.props.save(formUrl, subData)
