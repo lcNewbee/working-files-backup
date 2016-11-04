@@ -74,8 +74,12 @@
   "Transmit": "发送",
   "Test Duration": "测试时间",
   "Destination IP": "目标IP",
-
-
+  "SSID :": "SSID：",
+  "WLAN0 MAC :": "WLAN0 MAC：",
+  "LAN1 MAC :": "LAN1 MAC：",
+  "LAN0 MAC :": "LAN0 MAC：",
+  "Wired Interfaces": "有线接口信息",
+  "Wireless Interfaces": "无线接口信息",
 
   "Tools": "测试工具",
 
@@ -244,6 +248,11 @@
   "Vietnam": "越南",
   "Yemen": "也门",
   "Zimbabwe": "津巴布韦",
+
+  "Peer IP": "对端IP",
+  "Connection Status": "连接状态",
+  "Connect Time": "连接时长",
+  "Connection Info": "连接状态信息",
 
   "Utilization": "利用率",
   "Country Code": "国家代码",

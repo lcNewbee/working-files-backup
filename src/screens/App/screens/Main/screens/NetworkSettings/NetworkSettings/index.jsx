@@ -121,18 +121,18 @@ export default class NetworkSettings extends React.Component {
 
   onSave() {
     const that = this;
-    const {ip, mask, gateway, dns1, dns2} = this.props.store.get('curData').toJS();
+    const {ip, mask, gateway, dns1, dns2, proto} = this.props.store.get('curData').toJS();
     let msg;
-    if (msg = validator.combineValid.noBroadcastIp(ip, mask)){
+    if (proto === 'static' && (msg = validator.combineValid.noBroadcastIp(ip, mask))){
       showError(msg);
       return;
     }
-    if (msg = validator.combineValid.staticIP(ip, mask, gateway)) {
+    if (proto === 'static' && gateway !== '' && (msg = validator.combineValid.staticIP(ip, mask, gateway))) {
       showError(msg);
       return;
     }
     msg = _('Primary and Secondary DNS can not be the same !');
-    if (validator.combineValid.notequal(dns1, dns2, msg)) {
+    if (dns1 !== '' && validator.combineValid.notequal(dns1, dns2, msg)) {
       showError(msg);
       return;
     }
@@ -170,19 +170,6 @@ export default class NetworkSettings extends React.Component {
       });
     }
   }
-
-  // onVlanBtnClick() {
-  //   const val = this.props.store.getIn(['curData', 'vlanEnable']);
-  //   if (val === '0') {
-  //     this.props.updateItemSettings({
-  //       vlanEnable: '1',
-  //     });
-  //   } else {
-  //     this.props.updateItemSettings({
-  //       vlanEnable: '0',
-  //     });
-  //   }
-  // }
 
   noErrorThisPage(...args) {
     const errorMsg = this.props.app.get('invalid');

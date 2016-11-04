@@ -117,6 +117,9 @@ const validOptions = Map({
   ASCII: validator({
     rules: 'ascii|len:[5, 5]',
   }),
+  staApmac: validator({
+    rules: 'mac',
+  }),
 });
 
 export default class QuickSetup extends React.Component {
@@ -542,7 +545,7 @@ export default class QuickSetup extends React.Component {
     const keyType = store.getIn(['curData', 'security', 'keyType']);
     const keyIndex = store.getIn(['curData', 'security', 'keyIndex']);
     const cipher = store.getIn(['curData', 'security', 'cipher']);
-    const { lanIp, lanMask, validSsid, validDistance, validPassword, apmac3 } = this.props.validateOption;
+    const { lanIp, lanMask, validSsid, validDistance, validPassword, apmac3, staApmac } = this.props.validateOption;
 
     return (
       <div className="thirdScreen">
@@ -858,14 +861,25 @@ export default class QuickSetup extends React.Component {
                 </div>
               </div>
               <FormGroup
-                label={_('Lock To Ap')}
-                type="text"
-                placeholder={_('Input Mac Address')}
-                value={store.getIn(['curData', 'apMac'])}
-                onChange={data => this.props.updateItemSettings({
-                  apMac: data.value,
+                label={_('Lock To AP')}
+                type="checkbox"
+                checked={store.getIn(['curData', 'apMacEnable']) === '1'}
+                onChange={(data) => this.props.updateItemSettings({
+                  apMacEnable: data.value,
                 })}
               />
+              {
+                store.getIn(['curData', 'apMacEnable']) === '1' ? (
+                  <FormGroup
+                    label={_('Peer Mac')}
+                    value={store.getIn(['curData', 'apMac'])}
+                    onChange={(data) => this.props.updateItemSettings({
+                      apMac: data.value,
+                    })}
+                    {...staApmac}
+                  />
+                ) : null
+              }
               <FormGroup
                 label={_('Country')}
               >
@@ -995,72 +1009,72 @@ export default class QuickSetup extends React.Component {
                 ) : null
               }
               {
-                  (store.getIn(['curData', 'security', 'mode']) === 'wep') ? (
-                    <div>
+                (store.getIn(['curData', 'security', 'mode']) === 'wep') ? (
+                  <div>
+                    <FormGroup
+                      label={_('Auth Type')}
+                      type="switch"
+                      options={wepAuthenOptions}
+                      value={store.getIn(['curData', 'security', 'auth'])}
+                      onChange={(data) => {
+                        const security = store.getIn(['curData', 'security'])
+                                        .set('auth', data.value);
+                        this.props.updateItemSettings({ security });
+                      }}
+                      minWidth="65px"
+                    />
+                    {/*
                       <FormGroup
-                        label={_('Auth Type')}
-                        type="switch"
-                        options={wepAuthenOptions}
-                        value={store.getIn(['curData', 'security', 'auth'])}
-                        onChange={(data) => {
-                          const security = store.getIn(['curData', 'security'])
-                                          .set('auth', data.value);
-                          this.props.updateItemSettings({ security });
-                        }}
-                        minWidth="65px"
-                      />
-                      {/*
-                        <FormGroup
-                          label={_('Key Length')}
-                          type="select"
-                          options={wepKeyLengthOptions}
-                          value={curData.getIn(['vapList', '0', 'security', 'keyLength'])}
-                          onChange={(data) => {
-                            const security = curData.getIn(['vapList', '0', 'security'])
-                                            .set('keyLength', data.value);
-                            const vapList = curData.get('vapList')
-                                            .setIn(['0', 'security'], security);
-                            this.props.updateItemSettings({ vapList });
-                          }}
-                        />
-                      */}
-                      <FormGroup
-                        label={_('Key Type')}
-                        type="switch"
-                        options={keyTypeOptions}
-                        value={store.getIn(['curData', 'security', 'keyType'])}
-                        onChange={(data) => {
-                          const security = store.getIn(['curData', 'security'])
-                                                  .set('keyType', data.value);
-                          this.props.updateItemSettings({ security });
-                        }}
-                        minWidth="65px"
-                      />
-                      <FormGroup
-                        label={_('Key Index')}
+                        label={_('Key Length')}
                         type="select"
-                        options={keyIndexOptions}
-                        value={store.getIn(['curData', 'security', 'keyIndex'])}
+                        options={wepKeyLengthOptions}
+                        value={curData.getIn(['vapList', '0', 'security', 'keyLength'])}
                         onChange={(data) => {
-                          const security = store.getIn(['curData', 'security'])
-                                          .set('keyIndex', data.value);
-                          this.props.updateItemSettings({ security });
+                          const security = curData.getIn(['vapList', '0', 'security'])
+                                          .set('keyLength', data.value);
+                          const vapList = curData.get('vapList')
+                                          .setIn(['0', 'security'], security);
+                          this.props.updateItemSettings({ vapList });
                         }}
                       />
-                      <FormGroup
-                        type="password"
-                        required
-                        label={_('Password')}
-                        value={store.getIn(['curData', 'security', 'key'])}
-                        onChange={(data) => {
-                          const security = store.getIn(['curData', 'security'])
-                                                  .set('key', data.value);
-                          this.props.updateItemSettings({ security });
-                        }}
-                        {...this.props.validateOption[store.getIn(['curData', 'security', 'keyType'])]}
-                      />
-                    </div>
-                  ) : null
+                    */}
+                    <FormGroup
+                      label={_('Key Type')}
+                      type="switch"
+                      options={keyTypeOptions}
+                      value={store.getIn(['curData', 'security', 'keyType'])}
+                      onChange={(data) => {
+                        const security = store.getIn(['curData', 'security'])
+                                                .set('keyType', data.value);
+                        this.props.updateItemSettings({ security });
+                      }}
+                      minWidth="65px"
+                    />
+                    <FormGroup
+                      label={_('Key Index')}
+                      type="select"
+                      options={keyIndexOptions}
+                      value={store.getIn(['curData', 'security', 'keyIndex'])}
+                      onChange={(data) => {
+                        const security = store.getIn(['curData', 'security'])
+                                        .set('keyIndex', data.value);
+                        this.props.updateItemSettings({ security });
+                      }}
+                    />
+                    <FormGroup
+                      type="password"
+                      required
+                      label={_('Password')}
+                      value={store.getIn(['curData', 'security', 'key'])}
+                      onChange={(data) => {
+                        const security = store.getIn(['curData', 'security'])
+                                                .set('key', data.value);
+                        this.props.updateItemSettings({ security });
+                      }}
+                      {...this.props.validateOption[store.getIn(['curData', 'security', 'keyType'])]}
+                    />
+                  </div>
+                ) : null
               }
               <div className="clearfix">
                 <FormGroup

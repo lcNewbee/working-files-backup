@@ -989,18 +989,34 @@ export default class Basic extends React.Component {
               }
               { // station模式下，对端AP的mac地址输入框
                 (basicSettings.get('wirelessMode') === 'sta') ? (
-                  <FormGroup
-                    label={_('Lock To AP')}
-                    form="basicSettings"
-                    value={basicSettings.getIn(['vapList', '0', 'apMac'])}
-                    onChange={(data) => {
-                      const vapList = basicSettings.get('vapList')
-                                                  .setIn(['0', 'apMac'], data.value);
-                      this.props.updateBasicSettings({ vapList });
-                    }}
-                    placeholder={_('not necessary')}
-                    {...staApmac}
-                  />
+                  <div>
+                    <FormGroup
+                      label={_('Lock To AP')}
+                      type="checkbox"
+                      checked={basicSettings.getIn(['vapList', '0', 'apMacEnable']) === '1'}
+                      onChange={(data) => {
+                        const vapList = basicSettings.get('vapList')
+                                        .setIn(['0', 'apMacEnable'], data.value);
+                        this.props.updateBasicSettings({ vapList });
+                      }}
+                    />
+                    {
+                      basicSettings.getIn(['vapList', '0', 'apMacEnable']) === '1' ? (
+                        <FormGroup
+                          label={_('Peer Mac')}
+                          form="basicSettings"
+                          value={basicSettings.getIn(['vapList', '0', 'apMac'])}
+                          onChange={(data) => {
+                            const vapList = basicSettings.get('vapList')
+                                                        .setIn(['0', 'apMac'], data.value);
+                            this.props.updateBasicSettings({ vapList });
+                          }}
+                          placeholder={_('not necessary')}
+                          {...staApmac}
+                        />
+                      ) : null
+                    }
+                  </div>
                 ) : null
               }
 
@@ -1318,7 +1334,7 @@ export default class Basic extends React.Component {
                 type="range"
                 min="1"
                 max={this.props.selfState.get('maxTxpower')}
-                help={radioSettings.get('txPower')}
+                // help={radioSettings.get('txPower')}
                 value={radioSettings.get('txPower')}
                 onChange={(data) => this.props.updateRadioSettingsItem({
                   txPower: data.value,
@@ -1454,12 +1470,12 @@ export default class Basic extends React.Component {
                         error = 'SSID can not be empty string !';
                         break;
                       }
-                      for (let j = i + 1; j < len; j++) {
-                        if (vapList[i].ssid === vapList[j].ssid) {
-                          error = 'The same ssid are not allowed!';
-                          break;
-                        }
-                      }
+                      // for (let j = i + 1; j < len; j++) {
+                      //   if (vapList[i].ssid === vapList[j].ssid) {
+                      //     error = 'The same ssid are not allowed!';
+                      //     break;
+                      //   }
+                      // }
                     }
                     if (error === '') {
                       this.props.changeWhichButton('multiSsid');

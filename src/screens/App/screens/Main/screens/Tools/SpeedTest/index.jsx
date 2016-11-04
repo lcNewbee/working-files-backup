@@ -52,7 +52,7 @@ const validOptions = Map({
     rules: 'num:[10, 300]',
   }),
   validPkgLen: validator({
-    rules: 'num:[64, 1500]',
+    rules: 'num:[128, 1448]',
   }),
 });
 export default class SpeedTest extends React.Component {
@@ -187,7 +187,7 @@ export default class SpeedTest extends React.Component {
       ip: '',
       time: '30',
       direction: '0',
-      packagelen: '64',
+      packagelen: '128',
     };
     const props = this.props;
     clearInterval(a);
@@ -450,6 +450,7 @@ export default class SpeedTest extends React.Component {
                 label={_('Package Length')}
                 form="advancedOptions"
                 value={this.props.selfState.getIn(['query', 'packagelen'])}
+                help="B"
                 onChange={(data) => {
                   const pQuery = this.props.selfState.get('query').set('packagelen', data.value);
                   this.props.changeQueryData(pQuery);
@@ -481,7 +482,7 @@ export default class SpeedTest extends React.Component {
               noFooter
               isShow
               onClose={() => {
-                this.props.save('goform/stop_bandwidth_test').then((json) => {
+                this.props.fetch('goform/stop_bandwidth_test').then((json) => {
                   if (json.state && json.state.code === 2000) {
                     this.props.changeStopWait(true);
                     clearInterval(a);

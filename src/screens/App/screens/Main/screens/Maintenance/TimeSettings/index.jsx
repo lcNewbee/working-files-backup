@@ -2,12 +2,14 @@ import React, { Component, PropTypes } from 'react';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { SaveButton, FormGroup } from 'shared/components';
+import SaveButton from 'shared/components/Button/SaveButton';
+import FormGroup from 'shared/components/Form/FormGroup';
 import utils from 'shared/utils';
 import * as appActions from 'shared/actions/app';
 import * as settingsActions from 'shared/actions/settings';
 import * as selfActions from './actions';
 import reducer from './reducer';
+import moment from 'moment';
 import { timezone } from './TimeZone.js';
 
 const propTypes = {
@@ -87,19 +89,12 @@ export default class TimeSettings extends Component {
         ntpEnable: '0',
       },
     });
-    utils.fetch('goform/get_ntp_info')
-        .then((json) => {
-          if (json.state && json.state.code === 2000) {
-            this.props.updateItemSettings({
-              ntpEnable: json.data.ntpEnable,
-              ntpServer: json.data.ntpServer,
-              zoneName: json.data.zoneName,
-            });
-            this.props.changeTimeZone({
-              zoneName: json.data.zoneName,
-              timeZone: timezone.get(json.data.zoneName),
-            });
-          }
+    this.props.fetchSettings('goform/get_ntp_info')
+        .then(() => {
+          this.props.changeTimeZone({
+            zoneName: this.props.store.getIn(['curData', 'zoneName']),
+            timeZone: this.props.store.getIn(['curData', 'timeZone']),
+          });
         });
   }
 
@@ -107,6 +102,7 @@ export default class TimeSettings extends Component {
     const timezoneOptions = createTimezoneOption(timezone);
     // console.log('timezone', timezone);
     const { ntpEnable, ntpServer } = this.props.store.get('curData').toJS();
+    console.log(this.props.store.getIn(['curData', 'date']))
     return (
       <div>
         <div>
@@ -135,6 +131,37 @@ export default class TimeSettings extends Component {
             disabled={ntpEnable === '0'}
             value={this.props.store.getIn(['curData', 'zoneName'])}
             onChange={(data) => this.onTimeZoneChange(data)}
+          />
+        </div>
+        <div>
+          <FormGroup
+            type="date"
+            label={_('Date')}
+            displayFormat="YYYY-MM-DD"
+            disabled={ntpEnable === '1'}
+            value={this.props.store.getIn(['curData', 'date'])}
+            onChange={(data) => this.props.updateItemSettings({
+              date: data.value,
+            })}
+          />
+          <FormGroup
+            type="time"
+            label={_('Time')}
+            disabled={ntpEnable === '1'}
+            value={
+              moment(
+                (this.props.store.getIn(['curData', 'time']) || '00:00:00')
+                  .replace(':', ''),
+                'hms'
+              )
+            }
+            format="HH:mm:ss"
+            onChange={(data) => this.props.updateItemSettings({
+              time: data.value,
+            })}
+            inputStyle={{
+              width: '110px',
+            }}
           />
         </div>
         <FormGroup>

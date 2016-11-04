@@ -38,6 +38,7 @@ const interfaceOptions = fromJS([
       }
       return val;
     },
+    width: "100px",
   },{
     id: 'mac',
     text: _('MAC'),
@@ -47,6 +48,7 @@ const interfaceOptions = fromJS([
       }
       return val;
     },
+    width: "204px",
   }, {
     id: 'txBytes',
     text: _('Tx Bytes'),
@@ -56,6 +58,7 @@ const interfaceOptions = fromJS([
       }
       return flowRateFilter.transform(val);
     },
+    width: "144px",
   }, {
     id: 'rxBytes',
     text: _('Rx Bytes'),
@@ -65,6 +68,7 @@ const interfaceOptions = fromJS([
       }
       return flowRateFilter.transform(val);
     },
+    width: "144px",
   }, {
     id: 'txPackets',
     text: _('Tx Packets'),
@@ -74,6 +78,7 @@ const interfaceOptions = fromJS([
       }
       return val;
     },
+    width: "144px",
   }, {
     id: 'rxPackets',
     text: _('Rx Packets'),
@@ -83,6 +88,7 @@ const interfaceOptions = fromJS([
       }
       return val;
     },
+    width: "144px",
   }, {
     id: 'txErrorPackets',
     text: _('Tx Error'),
@@ -92,9 +98,113 @@ const interfaceOptions = fromJS([
       }
       return val;
     },
+    width: "144px",
   }, {
     id: 'rxErrorPackets',
     text: _('Rx Error'),
+    transform(val) {
+      if (val === '') {
+        return '--';
+      }
+      return val;
+    },
+    width: "144px",
+  }, {
+    id: 'status',
+    text: _('Status'),
+    transform(val) {
+      if (val === '') {
+        return '--';
+      }
+      return val;
+    },
+  },
+]);
+
+const vapInterfaceOptions = fromJS([
+  {
+    id: 'name',
+    text: _('Name'),
+    transform(val) {
+      if (val === '') {
+        return '--';
+      }
+      return val;
+    },
+    width: "100px",
+  }, {
+    id: 'mac',
+    text: _('MAC'),
+    transform(val) {
+      if (val === '') {
+        return '--';
+      }
+      return val;
+    },
+    width: "204px",
+  }, {
+    id: 'txBytes',
+    text: _('Tx Bytes'),
+    transform(val) {
+      if (val === '') {
+        return '--';
+      }
+      return flowRateFilter.transform(val);
+    },
+    width: "144px",
+  }, {
+    id: 'rxBytes',
+    text: _('Rx Bytes'),
+    transform(val) {
+      if (val === '') {
+        return '--';
+      }
+      return flowRateFilter.transform(val);
+    },
+    width: "144px",
+  }, {
+    id: 'txPackets',
+    text: _('Tx Packets'),
+    transform(val) {
+      if (val === '') {
+        return '--';
+      }
+      return val;
+    },
+    width: "144px",
+  }, {
+    id: 'rxPackets',
+    text: _('Rx Packets'),
+    transform(val) {
+      if (val === '') {
+        return '--';
+      }
+      return val;
+    },
+    width: "144px",
+  }, {
+    id: 'txErrorPackets',
+    text: _('Tx Error'),
+    transform(val) {
+      if (val === '') {
+        return '--';
+      }
+      return val;
+    },
+    width: "144px",
+  }, {
+    id: 'rxErrorPackets',
+    text: _('Rx Error'),
+    transform(val) {
+      if (val === '') {
+        return '--';
+      }
+      return val;
+    },
+    width: "144px",
+  }, {
+    id: 'ccq',
+    text: _('CCQ'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -108,7 +218,6 @@ export default class SystemStatus extends React.Component {
 
   constructor(props) {
     super(props);
-    this.changeSystemTimeToReadable = this.changeSystemTimeToReadable.bind(this);
     this.changeUptimeToReadable = this.changeUptimeToReadable.bind(this);
   }
 
@@ -143,13 +252,6 @@ export default class SystemStatus extends React.Component {
     clearInterval(a);
     this.props.leaveSettingsScreen();
     this.props.changeFirstRefresh(true);
-  }
-
-  changeSystemTimeToReadable(time) {
-    return new Date(parseInt(time, 10))
-            .toLocaleString()
-            .replace(/年|月/g, '-')
-            .replace(/日/g, ' ');
   }
 
   changeUptimeToReadable(time) {
@@ -287,60 +389,36 @@ export default class SystemStatus extends React.Component {
         },
       },
     ]);
-    const remoteApOption = fromJS([
+    const connectionInfoOption = fromJS([
       {
-        id: 'deviceName',
-        text: _('Device Name'),
+        id: 'ip',
+        text: _('Peer IP'),
         transform(val) {
           if (val === '') {
             return '--';
           }
           return val;
         },
+        width: '304px',
       }, {
-        id: 'softVersion',
-        text: _('Soft Version'),
+        id: 'status',
+        text: _('Connection Status'),
         transform(val) {
           if (val === '') {
             return '--';
           }
           return val;
         },
+        width: '288px',
       }, {
         id: 'connectTime',
         text: _('Connect Time'),
         transform(val) {
           return that.changeUptimeToReadable(val);
         },
+        width: '288px',
       }, {
-        id: 'signal',
-        text: _('Signal(dBm)'),
-        transform(val) {
-          if (val === '') {
-            return '--';
-          }
-          return val;
-        },
-      }, {
-        id: 'txBytes',
-        text: _('Tx Bytes'),
-        transform(val) {
-          if (val === '') {
-            return '--';
-          }
-          return flowRateFilter.transform(val);
-        },
-      }, {
-        id: 'rxBytes',
-        text: _('Rx Bytes'),
-        transform(val) {
-          if (val === '') {
-            return '--';
-          }
-          return flowRateFilter.transform(val);
-        },
-      }, {
-        id: 'txRate',
+        id: 'txrate',
         text: _('Tx Rate'),
         transform(val) {
           if (val === '') {
@@ -348,41 +426,15 @@ export default class SystemStatus extends React.Component {
           }
           return val + 'Mbps';
         },
+        width: '288px',
       }, {
-        id: 'rxRate',
+        id: 'rxrate',
         text: _('Rx Rate'),
         transform(val) {
           if (val === '') {
             return '--';
           }
           return val + 'Mbps';
-        },
-      }, {
-        id: 'txPackets',
-        text: _('Tx Packets'),
-        transform(val) {
-          if (val === '') {
-            return '--';
-          }
-          return val;
-        },
-      }, {
-        id: 'rxPackets',
-        text: _('Rx Packets'),
-        transform(val) {
-          if (val === '') {
-            return '--';
-          }
-          return val;
-        },
-      }, {
-        id: 'ccq',
-        text: _('CCQ'),
-        transform(val) {
-          if (val === '') {
-            return '--';
-          }
-          return val;
         },
       },
     ]);
@@ -395,20 +447,24 @@ export default class SystemStatus extends React.Component {
     const {
       deviceModel, deviceName, networkMode, security, version,
       systemTime, frequency, channelWidth, uptime, ap, channel,
-      interfaces, station, wlan0Mac, protocol, lan0Mac, lan1Mac,
-      ssid, distance, txPower, noise, ccq, chutil,
+      interfaces, vap_interfaces, station, wlan0Mac, protocol,
+      lan0Mac, lan1Mac, ssid, distance, txPower, noise, ccq, chutil,
      } = status;
+    const vapInterfacesList = (wirelessMode === 'sta') ? [vap_interfaces[0]] : vap_interfaces;
     let apMac; let clientNum; let staList; let signal;
-    let apInfo = [];
+    let connectInfo = [];
     if (ap !== undefined) {
       apMac = ap.apMac;
       clientNum = ap.clientNum;
       staList = ap.staList;
     }
     if (station !== undefined) {
-      signal = station.signal;
-      const item = station.apInfo;
-      apInfo.push(item);
+      console.log('station', station);
+      const obj = station;
+      obj['ip'] = station.apInfo.ip;
+      obj['apInfo'] = undefined;
+      connectInfo.push(obj);
+      console.log('connectInfo', connectInfo);
     }
     // console.log(status, deviceModel);
     // curData = this.props.store.getIn(['curData']);
@@ -458,12 +514,12 @@ export default class SystemStatus extends React.Component {
                   value={this.changeUptimeToReadable(uptime)}
                 />
                 <FormGroup
-                  label={`${_('WLAN0 MAC')} :`}
+                  label={_('WLAN0 MAC :')}
                   type="plain-text"
                   value={wlan0Mac}
                 />
                 <FormGroup
-                  label={`${_('LAN1 MAC')} :`}
+                  label={_('LAN1 MAC :')}
                   type="plain-text"
                   value={lan1Mac}
                 />
@@ -484,10 +540,10 @@ export default class SystemStatus extends React.Component {
                   label={_('System Time :')}
                   id="systemtime"
                   type="plain-text"
-                  value={this.changeSystemTimeToReadable(systemTime)}
+                  value={systemTime}
                 />
                 <FormGroup
-                  label={`${_('LAN0 MAC')} :`}
+                  label={_('LAN0 MAC :')}
                   type="plain-text"
                   value={lan0Mac}
                 />
@@ -567,11 +623,6 @@ export default class SystemStatus extends React.Component {
                   help="dBm"
                 />
                 <FormGroup
-                  label={_('CCQ :')}
-                  type="plain-text"
-                  value={ccq}
-                />
-                <FormGroup
                   label={_('Channel Utilization :')}
                   type="plain-text"
                   value={chutil}
@@ -579,12 +630,20 @@ export default class SystemStatus extends React.Component {
               </div>
             </div>
           </div>
-          <h3 className="stats-group-cell">{_('Interfaces')}</h3>
+          <h3 className="stats-group-cell">{_('Wired Interfaces')}</h3>
           <div className="stats-group-cell">
             <Table
               className="table"
               options={interfaceOptions}
               list={interfaces}
+            />
+          </div>
+          <h3 className="stats-group-cell">{_('Wireless Interfaces')}</h3>
+          <div className="stats-group-cell">
+            <Table
+              className="table"
+              options={vapInterfaceOptions}
+              list={vapInterfacesList}
             />
           </div>
           {
@@ -604,12 +663,12 @@ export default class SystemStatus extends React.Component {
           {
             station === undefined ? null : (
               <div className="remoteApTable">
-                <h3 className="stats-group-cell">{_('Remote AP Info')}</h3>
+                <h3 className="stats-group-cell">{_('Connection Info')}</h3>
                 <div className="stats-group-cell">
                   <Table
                     className="table"
-                    options={remoteApOption}
-                    list={apInfo}
+                    options={connectionInfoOption}
+                    list={connectInfo}
                   />
                 </div>
               </div>

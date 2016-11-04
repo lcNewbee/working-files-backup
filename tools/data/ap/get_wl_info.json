@@ -11,6 +11,7 @@
       "enable": "1",
 			"ssid":"axilspot1",
 			"apMac":"11:22:33:44:55:66",
+      "apMacEnable": "1",
       "isolation": "1",
       "vlanId": "1",
 			"hideSsid": 0,

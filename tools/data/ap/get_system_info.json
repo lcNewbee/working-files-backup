@@ -4,7 +4,7 @@
     "msg": "ok"
   },
   "data": {
-      "wirelessMode":"ap",
+      "wirelessMode":"repeater",
       "status": {
       "deviceModel":"NS300",
       "deviceName":"NS300",
@@ -28,62 +28,65 @@
       "ccq":"0.9",
       "signal":"90",
       "station": {
-      "signal":"-50",
-      "apInfo":
-        {
-          "deviceName":"",
-          "deviceMode":"",
-          "softVersion":"Ap1.0.0.1",
-          "connectTime":"",
-          "signal":"",
-          "txBytes":"",
-          "rxBytes":"",
-          "txRate":"",
-          "rxRate":"",
-          "txPackets":"",
-          "rxPackets":"",
-          "ccq":""
-        }
-    },
+          "txrate":"100",
+          "rxrate":"100",
+          "connectTime":"1009",
+          "status":"connected",
+          "apInfo":
+            {
+              "deviceName":"NS300",
+              "softVersion":"Ap1.0.0.1",
+              "connectTime":"1000",
+              "signal":"-80",
+              "txBytes":"100",
+              "rxBytes":"100",
+              "txRate":"100",
+              "rxRate":"100",
+              "txPackets":"1899",
+              "rxPackets":"1000",
+              "ccq":"0.9" ,
+              "ip":"192.168.1.10"
+            }
+        },
 
       "interfaces":[
-        {
-          "name":"",
-          "ip":"0.0.0.0",
-          "mtu":"",
-          "txBytes":"",
-          "rxBytes":"",
-          "rxErrorPackets":"",
-          "txErrorPackets":""
-        },
-        {
-          "name":"",
-          "ip":"0.0.0.0",
-          "mtu":"",
-          "txBytes":"",
-          "rxBytes":"",
-          "txErrorPackets":"",
-          "rxErrorPackets":""
-        },
-        {
-          "name":"Bridge0",
-          "ip":"192.168.1.10",
-          "mtu":"1500",
-          "txBytes":"1300",
-          "rxBytes":"1800",
-          "txErrorPackets":"5",
-          "rxErrorPackets":"1"
-        },
-        {
-          "name":"WLAN0",
-          "ip":"0.0.0.0",
-          "mtu":"1500",
-          "txBytes":"1300",
-          "rxBytes":"1800",
-          "txErrorPackets":"5",
-          "rxErrorPackets":"1"
-        }
-      ]
+          {
+            "name":"eth0",
+            "txBytes":"1300",
+            "rxBytes":"1800",
+            "mac": "14:FF:00:00:11:10",
+            "txPackets":"50",
+            "rxPackets":"53",
+            "txErrorPackets":"5",
+            "rxErrorPackets":"1",
+            "status":"1000baseT/full"
+          }
+        ],
+      "vap_interfaces":[
+          {
+            "name":"vap0",
+            "ssid":"axilspot",
+            "mac": "14:FF:00:00:11:10",
+            "txBytes":"1300",
+            "rxBytes":"1800",
+            "txPackets":"50",
+            "rxPackets":"53",
+            "txErrorPackets":"5",
+            "rxErrorPackets":"1",
+            "ccq":"90%"
+          },
+          {
+            "name":"vap1",
+            "ssid":"axilspot",
+            "txBytes":"1300",
+            "rxBytes":"1800",
+            "txPackets":"50",
+            "rxPackets":"53",
+            "txErrorPackets":"5",
+            "rxErrorPackets":"1",
+            "ccq":"90%"
+          }
+        ]
       }
     }
 }
