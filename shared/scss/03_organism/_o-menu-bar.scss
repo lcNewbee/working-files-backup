@@ -53,9 +53,33 @@
       margin-top: 5px;
       margin-left: 6px;
       padding: 4px 8px;
+      padding-right: 14px;
       float: left;
       cursor: pointer;
       vertical-align: middle;
+      position: relative;
+
+      &::after {
+        position: absolute;
+        right: 5px;
+        top: 50%;
+        margin-top: -6px;
+        display: inline-block;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
+        content: "\F0DA";
+        font-size: 12px;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        transition: .4s transform ease-in-out;
+      }
+
+      &.active {
+        &::after {
+          transform: rotate(90deg);
+        }
+      }
     }
   }
 

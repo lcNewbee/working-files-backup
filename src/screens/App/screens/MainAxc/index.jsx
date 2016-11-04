@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import utils from 'shared/utils';
+import classNamesUtils from 'classnames';
 import { Button, SaveButton } from 'shared/components/Button';
 import validator from 'shared/utils/lib/validator';
 import Nav from 'shared/components/Nav';
@@ -869,6 +870,8 @@ export default class Main extends Component {
     let isGroupMenu = false;
     let curTopNavText = _('NETWORK');
     let mainClassName = 't-main t-main--axc';
+    let isShowGroupAsider = false;
+    let groupTitleIconClassName = '';
 
     if (this.props.location.pathname.indexOf('/main/group') === 0) {
       curTopNavText = _('AP GROUP');
@@ -880,7 +883,13 @@ export default class Main extends Component {
     if (popOver.isShow && (popOver.name === 'vlanAsider' ||
         popOver.name === 'groupAsider')) {
       mainClassName = `${mainClassName} main--open-left`;
+
+      isShowGroupAsider = popOver.name === 'groupAsider';
     }
+
+    groupTitleIconClassName = classNamesUtils({
+      active: isShowGroupAsider,
+    });
 
     return (
       <div className={mainClassName}>
@@ -949,6 +958,7 @@ export default class Main extends Component {
                 isGroupMenu ? (
                   <Icon
                     name="navicon"
+                    className={groupTitleIconClassName}
                   />
                 ) : null
               }
