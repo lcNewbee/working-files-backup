@@ -90,25 +90,27 @@ class WizardContainer extends React.Component {
       this.onBeforeSteping = false;
     };
     let msg;
-    let handleResult = null;
+    let beforeStepResult = null;
 
     // 如果正在切换中则不响应切换事件
     if (!this.onBeforeSteping) {
       if (onBeforeStep) {
-        handleResult = onBeforeStep(stepObj);
+        beforeStepResult = onBeforeStep(stepObj);
       }
 
       // 如果 onBeforeNext 为 Promise 对象
-      if (handleResult && utilsCore.isPromise(handleResult)) {
+      if (beforeStepResult && utilsCore.isPromise(beforeStepResult)) {
         this.onBeforeSteping = true;
-
-        handleResult.then((result) => {
+        beforeStepResult.then((result) => {
           handleChange(result);
-        });
+        })
+        .catch(
+          () => (this.onBeforeSteping = false)
+        );
 
       // 如果 onBeforeNext 回调函数
       } else {
-        msg = handleResult;
+        msg = beforeStepResult;
 
         handleChange(msg);
       }
@@ -121,24 +123,28 @@ class WizardContainer extends React.Component {
     let currStep = this.state.currStep;
     let stepObj;
 
-    if (nextDisabled) {
-      return null;
+    // 没有禁用next按钮,执行切换
+    if (!nextDisabled) {
+      if (currStep < MAX_STEP - 1) {
+        currStep += 1;
+        stepObj = {
+          currStep: currStep - 1,
+          targetStep: currStep,
+        };
+
+        this.onChangeStep(stepObj);
+      }
     }
 
-    if (currStep < MAX_STEP - 1) {
-      currStep += 1;
-      stepObj = {
-        currStep: currStep - 1,
-        targetStep: currStep,
-      };
-
-      this.onChangeStep(stepObj);
-    } else if (onCompleted) {
+    // 执行完成
+    if (currStep === (MAX_STEP - 1) && onCompleted) {
       onCompleted({
         currStep,
         targetStep: currStep,
       });
     }
+
+    return nextDisabled;
   }
 
   onPrev() {
@@ -184,6 +190,7 @@ class WizardContainer extends React.Component {
           <ul>
             {
               options.size > 0 ? options.map((item, index) => {
+                const stepNavKey = `wizardNav${index}`;
                 let myClassName = '';
 
                 if (index < currStep) {
@@ -193,7 +200,7 @@ class WizardContainer extends React.Component {
                 }
 
                 return (
-                  <li className={myClassName} style={navStyle}>
+                  <li key={stepNavKey} className={myClassName} style={navStyle}>
                     <span className="icon" />
                     <h3>{index + 1}. {item.get('title')}</h3>
                   </li>
@@ -223,18 +230,12 @@ class WizardContainer extends React.Component {
               />
             ) : null
           }
-          {/**
-            <Button
-              theme="info"
-              onClick={this.onNext}
-              text={currStep !== (maxStep - 1) ? _('Next Step') : _('Completed')}
-            />
-         */}
           {
             currStep !== (maxStep - 1) ? (
               <Button
                 theme="info"
                 onClick={this.onNext}
+                disabled={nextDisabled}
                 text={_('Next Step')}
               />
             ) : (

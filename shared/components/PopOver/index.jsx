@@ -6,7 +6,7 @@ const propTypes = {
   isShow: PropTypes.bool,
   id: PropTypes.string,
   size: PropTypes.oneOf(['lg', '2x', '3x', '4x', '5x']),
-  role: PropTypes.oneOf(['dialog', 'alert', 'comfirm', 'message']),
+  role: PropTypes.oneOf(['dialog', 'alert', 'confirm', 'message']),
   transitionLeave: PropTypes.bool,
   transitionEnter: PropTypes.bool,
   children: PropTypes.any,

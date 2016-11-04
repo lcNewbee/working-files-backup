@@ -9,7 +9,7 @@ const propTypes = {
   id: PropTypes.string,
   style: PropTypes.object,
   size: PropTypes.oneOf(['min', 'md', 'lg', 'xlg', 'max']),
-  role: PropTypes.oneOf(['dialog', 'alert', 'comfirm', 'message', 'loading']),
+  role: PropTypes.oneOf(['dialog', 'alert', 'confirm', 'message', 'loading']),
   okText: PropTypes.string,
   cancelText: PropTypes.string,
   transitionLeave: PropTypes.bool,
@@ -89,7 +89,7 @@ class Modal extends Component {
     // No top close button
     if (role === 'message') {
       noFooter = true;
-    } else if (role === 'comfirm') {
+    } else if (role === 'confirm') {
       hasCloseBtn = false;
 
     // when role is "alert" no cancelButton

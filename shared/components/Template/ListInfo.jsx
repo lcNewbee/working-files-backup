@@ -339,7 +339,7 @@ class ListInfo extends React.Component {
 
     this.props.createModal({
       id: 'settings',
-      role: 'comfirm',
+      role: 'confirm',
       text: msgText,
       apply: () => {
         this.props.changeScreenActionQuery({
@@ -394,7 +394,7 @@ class ListInfo extends React.Component {
 
       this.props.createModal({
         id: 'settings',
-        role: 'comfirm',
+        role: 'confirm',
         text: msgText,
         apply: () => {
           this.props.changeScreenActionQuery({

@@ -217,7 +217,7 @@ export default class Main extends Component {
 
     this.props.createModal({
       id: 'settings',
-      role: 'comfirm',
+      role: 'confirm',
       text: msgText,
       apply: () => {
         this.removeGroup(manageSelected.get('id'), 'upgrade');
@@ -236,7 +236,7 @@ export default class Main extends Component {
 
     this.props.createModal({
       id: 'settings',
-      role: 'comfirm',
+      role: 'confirm',
       text: msgText,
       apply: () => {
         this.props.save('/goform/group', {

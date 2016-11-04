@@ -113,7 +113,7 @@ export default class SystemMaintenance extends Component {
 
     this.props.createModal({
       id: 'settings',
-      role: 'comfirm',
+      role: 'confirm',
       text: _('Sure you want to UPGRADE the software and REBOOT ?'),
       apply: upgradeDevice,
     });
@@ -167,7 +167,7 @@ export default class SystemMaintenance extends Component {
 
     this.props.createModal({
       id: 'settings',
-      role: 'comfirm',
+      role: 'confirm',
       text: _('Sure you want to RESTORE the configuration and REBOOT ?'),
       apply: saveConfig,
     });
@@ -192,7 +192,7 @@ export default class SystemMaintenance extends Component {
 
     this.props.createModal({
       id: 'settings',
-      role: 'comfirm',
+      role: 'confirm',
       text: _('Sure you want to REBOOT the device ?'),
       apply: rebootDevice,
     });
@@ -217,7 +217,7 @@ export default class SystemMaintenance extends Component {
 
     this.props.createModal({
       id: 'settings',
-      role: 'comfirm',
+      role: 'confirm',
       text: _('Sure you want to restore the device into factory default ?'),
       apply: resetDevice,
     });

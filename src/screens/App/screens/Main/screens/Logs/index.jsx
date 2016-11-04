@@ -132,7 +132,7 @@ export const Logs = React.createClass({
 
     this.props.createModal({
       id: 'Logs',
-      role: 'comfirm',
+      role: 'confirm',
       title: _('CONFIRM'),
       text: msg_text,
       apply: function () {

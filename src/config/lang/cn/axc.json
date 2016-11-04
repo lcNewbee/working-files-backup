@@ -175,6 +175,7 @@
 
   "All Group": "所有组",
   "Group AP": "组内AP",
+  "Add AP": "添加AP",
   "Move to Other Group": "移动到其他组",
   "Monitor": "监控",
   "Overview": "概览",
@@ -344,15 +345,20 @@
   "Log Settings": "日志设置",
 
   "AC Upgrade": "AC升级",
+  "Upgrade AC Version": "升级AC版本",
+  "Remove File": "删除文件",
+  "Drop or click to select file": "拖动文件或点击此区域选择文件",
   "AC Version": "AC版本",
+  "Current Version": "当前版本",
+  "Upgrading AC version, Please do not shut down device.": "正在升级AC版本，请勿关闭设备！",
   "AC Version Setup Wizard": "AC版本设置向导",
   "Access Point Version": "接入点版本",
   "Access Point Model": "接入点型号",
   "Version Maintenance": "版本维护",
   "Version & Model": "版本&型号维护",
   "Upload AC Version": "上传AC版本",
-  "Upgrading Version": "升级版本(5分钟)",
-  "Backup Version": "备份版本(3分钟)",
+  "Upgrading AC Version": "升级AC版本(4分钟)",
+  "Backup AC Version": "备份AC版本(3分钟)",
   "AP Model": "AP型号",
   "Model Name": "型号名称",
   "Radio Number": "射频数量",
@@ -403,5 +409,7 @@
   "Upgrade Online": "在线升级",
   "Auto Upgrade": "自动升级",
 
-  "Custer Settings": "集群设置"
+  "Custer Settings": "集群设置",
+
+  "Are you sure to UPGRADE the software and REBOOT ?": "你确定要升级设备软件并重启？"
 }

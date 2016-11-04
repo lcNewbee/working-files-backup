@@ -35,13 +35,19 @@ export function changeModalState(data) {
 export function closeModal(data) {
   return (dispatch, getState) => {
     const handleOk = getState().app.getIn(['modal', 'apply']);
+    const handleCancel = getState().app.getIn(['modal', 'cancel']);
     const myData = data || { status: 'hide' };
 
+    dispatch(changeModalState(myData));
+
+    // 处理 Apply
     if (myData.status === 'ok' && typeof handleOk === 'function') {
       handleOk();
-    }
 
-    dispatch(changeModalState(myData));
+    // 处理 Cancel
+    } else if (myData.status === 'cancel' && typeof handleCancel === 'function') {
+      handleCancel();
+    }
   };
 }
 
@@ -250,17 +256,18 @@ export function startValidateAll(formId) {
  */
 export function validateAll(formId, func) {
   return (dispatch, getState) => {
-    const validatePromise = new Promise((resolve) => {
+    let validatePromise = null;
+
+    dispatch(startValidateAll(formId));
+    validatePromise = new Promise((resolve) => {
       setTimeout(() => {
         const invalid = getState().app.get('invalid');
         if (typeof func === 'function') {
           func(invalid);
         }
         resolve(invalid);
-      }, 20);
+      }, 5);
     });
-
-    dispatch(startValidateAll(formId));
     return validatePromise;
   };
 }

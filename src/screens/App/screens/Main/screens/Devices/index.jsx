@@ -137,7 +137,7 @@ export const Device = React.createClass({
 
     this.props.createModal({
       id: 'settings',
-      role: 'comfirm',
+      role: 'confirm',
       text: msg_text,
       apply: function () {
         this.handleAction(mac, 'reset');
@@ -149,7 +149,7 @@ export const Device = React.createClass({
 
     this.props.createModal({
       id: 'settings',
-      role: 'comfirm',
+      role: 'confirm',
       text: msg_text,
       apply: function () {
         this.handleAction(mac, 'reboot');
@@ -169,7 +169,7 @@ export const Device = React.createClass({
 
     this.props.createModal({
       id: 'settings',
-      role: 'comfirm',
+      role: 'confirm',
       text: msg_text,
       apply: function () {
         this.handleAction(mac, 'upgrade');
@@ -228,7 +228,7 @@ export const Device = React.createClass({
             if ((oriGateway && validator.combineValid.staticIP(ip, oriMask, oriGateway)) || oriMask !== mask) {
               this.props.createModal({
                 title: _('DEVICES'),
-                role: 'comfirm',
+                role: 'confirm',
                 text: _('You might be unable to control the device after modifying its network segment, are you sure you want to modify it?'),
                 apply: () => this.props.saveDeviceNetwork(),
               });
@@ -236,7 +236,7 @@ export const Device = React.createClass({
               if (validator.combineValid.staticIP(ip, oriMask, oriGateway) || oriMask !== mask) {
                 this.props.createModal({
                   title: _('DEVICES'),
-                  role: 'comfirm',
+                  role: 'confirm',
                   text: _('You might be unable to control the device after modifying its network segment, are you sure you want to modify it?'),
                   apply: function () {
                     this.props.saveDeviceNetwork();

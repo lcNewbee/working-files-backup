@@ -89,7 +89,7 @@ export const GroupSettings = React.createClass({
     this.props.createModal({
       id: 'groupSettings',
       groupname,
-      role: 'comfirm',
+      role: 'confirm',
       text: comfri_text,
       apply: function () {
         this.props.deleteDeviceGroup(groupname);
