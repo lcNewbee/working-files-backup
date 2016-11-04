@@ -43,5 +43,5 @@ gulp.task('pub:axc', (callback) => {
   }
 
   gutil.log('切换 AXC 发布目标目录：', gutil.colors.magenta(distPath));
-  runSequence('clean:pubaxc', 'pub:path', ['build'], 'build:axc', 'pub:copyaxc', callback);
+  runSequence('clean:pubaxc', 'config:axc', 'pub:path', ['build'], 'build:axc', 'pub:copyaxc', callback);
 });

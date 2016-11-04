@@ -21,8 +21,20 @@ gulp.task('config', () => {
     .pipe(gulp.dest(paths.src));
 });
 
+gulp.task('config:axc', () => {
+  return gulp.src(mainPath)
+    .pipe($.replace(configReg, "'./config/axc'"))
+    .on('end', () => {
+      gutil.log('切换到产品：', gutil.colors.magenta('AXC'));
+    })
+    .pipe(gulp.dest(paths.src));
+});
+
 gulp.task('config:ap', () => {
-  gulp.src(mainPath)
+  return gulp.src(mainPath)
     .pipe($.replace(configReg, "'./config/ap'"))
+    .on('end', () => {
+      gutil.log('切换到产品：', gutil.colors.magenta('AP'));
+    })
     .pipe(gulp.dest(paths.src));
 });
