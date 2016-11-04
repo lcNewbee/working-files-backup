@@ -2,13 +2,11 @@ var query = require('./query');
 var loadedScripts = [];
 
 function checkStatus(response) {
-  if (response.status >= 200 && response.status < 300) {
-    return response
-  } else {
-    var error = new Error(response.statusText)
-    error.response = response
-    throw error
+  if (response.status < 200 || response.status >= 300) {
+    console.error('Response Status not ok: ', response.statusText);
   }
+
+  return response;
 }
 
 function parseJSON(response) {
@@ -17,9 +15,8 @@ function parseJSON(response) {
   try {
     ret = response.json();
   } catch(err) {
-    err.response = response
-
-    throw err
+    console.error('JSON parse error: ', err);
+    ret = err;
   }
 
   return ret;

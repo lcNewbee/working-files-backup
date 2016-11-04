@@ -143,12 +143,13 @@ class ListInfo extends React.Component {
 
   componentWillMount() {
     const { actionable, editable, deleteable, tableOptions } = this.props;
-    const actionsOption = tableOptions.find(item => item.get('id') === '__actions__');
+    let actionsOption = null;
     let btnsNum = 0;
     let btnList = List([]);
 
     // 初始选项，添加操作项
     if (actionable && (editable || deleteable) && tableOptions) {
+      actionsOption = tableOptions.find(item => item.get('id') === '__actions__');
       if (editable) {
         btnsNum += 1;
       }
@@ -213,35 +214,38 @@ class ListInfo extends React.Component {
       this.listTableOptions = tableOptions;
     }
 
-    this.listTableOptions = this.listTableOptions.map(
-      ($$item) => {
-        let $$retItem = $$item;
+    if (this.listTableOptions) {
+      this.listTableOptions = this.listTableOptions.map(
+        ($$item) => {
+          let $$retItem = $$item;
 
-        if ($$retItem.get('type') === 'switch') {
-          $$retItem = $$retItem.set('transform', (val, $$data, index) => {
-            return (
-              <FormInput
-                type="checkbox"
-                name={$$item.get('id')}
-                value="1"
-                checked={parseInt(val, 10) === 1}
-                onChange={(data) => {
-                  this.onItemAction(
-                    index,
-                    $$item.get('actionType'),
-                    {
-                      [$$item.get('id')]: data.value,
-                    }
-                  );
-                }}
-              />
-            );
-          });
+          if ($$retItem.get('type') === 'switch') {
+            $$retItem = $$retItem.set('transform', (val, $$data, index) => {
+              return (
+                <FormInput
+                  type="checkbox"
+                  name={$$item.get('id')}
+                  value="1"
+                  checked={parseInt(val, 10) === 1}
+                  onChange={(data) => {
+                    this.onItemAction(
+                      index,
+                      $$item.get('actionType'),
+                      {
+                        [$$item.get('id')]: data.value,
+                      }
+                    );
+                  }}
+                />
+              );
+            });
+          }
+
+          return $$retItem;
         }
+      );
+    }
 
-        return $$retItem;
-      }
-    )
 
     this.onFetchList();
   }
