@@ -113,10 +113,10 @@
 // loading not Close button
 .o-modal__loading {
   position: absolute;
-  top: 50%;
+  top: 0;
   left: 50%;
   margin-left: -190px;
-  margin-top: -75px;
+  margin-top: 10px;
   .o-modal__header {
     .close {
       display: none;

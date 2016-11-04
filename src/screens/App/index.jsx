@@ -66,6 +66,9 @@ class App extends Component {
                 <Icon
                   name="spinner"
                   size="2x"
+                  style={{
+                    color: '#0093DD',
+                  }}
                   spin
                 />
               </div>

@@ -23,7 +23,8 @@ const msg = {
   upAcVersionTitle: _('Upgrade AC Version'),
   backupAcVersion: _('Backup AC Version'),
   sureUpgradeAc: _('Are you sure to UPGRADE the software and REBOOT ?'),
-  uploadingAcVersion: _('Upgrading AC version, Please do not shut down device.'),
+  upgradingACversion: _('Upgrading AC version, Please do not shut down device.'),
+  backupingAcVersion: _('Backuping AC version'),
 };
 let checkUpgradOkTimeout = null;
 
@@ -115,7 +116,7 @@ export default class AcVersion extends PureComponent {
           this.props.createModal({
             role: 'loading',
             title: msg.upAcVersionTitle,
-            text: msg.uploadingAcVersion,
+            text: msg.upgradingACversion,
           });
 
           this.props.save(url, { filename })
@@ -209,9 +210,6 @@ export default class AcVersion extends PureComponent {
       </div>
     );
   }
-  renderStepTwo() {
-    return null;
-  }
   renderStepThree() {
     const { app } = this.props;
     return (
@@ -237,7 +235,15 @@ export default class AcVersion extends PureComponent {
         render: this.renderStepOne,
       }, {
         title: stepTwoTitleArr[versionUses],
-        render: this.renderStepTwo,
+        render: () => {
+          let ret = msg.upgradingACversion;
+
+          if (versionUses === '1') {
+            ret = msg.backupingAcVersion;
+          }
+
+          return ret;
+        },
       }, {
         title: _('Completed'),
         render: this.renderStepThree,
