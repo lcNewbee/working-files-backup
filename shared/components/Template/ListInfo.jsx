@@ -205,8 +205,8 @@ class ListInfo extends React.Component {
                   size="sm"
                   onClick={() => {
                     this.onItemAction(
-                      index,
-                      btnItem.get('name')
+                      btnItem.get('name'),
+                      index
                     );
                   }}
                 />
@@ -234,8 +234,8 @@ class ListInfo extends React.Component {
                   checked={parseInt(val, 10) === 1}
                   onChange={(data) => {
                     this.onItemAction(
-                      index,
                       $$item.get('actionType'),
+                      index,
                       {
                         [$$item.get('id')]: data.value,
                       }
@@ -459,29 +459,46 @@ class ListInfo extends React.Component {
       });
     }
   }
-  onItemAction(index, actionName, data) {
+  onItemAction(actionName, index, data) {
     const store = this.props.store;
     const myListScreenId = store.get('curScreenId');
     const list = store.getIn([myListScreenId, 'data', 'list']);
     const listKey = this.props.listKey;
     const $$actionItem = list.get(index);
+    const msgText = _('Are you sure to %s selected rows: %s', actionName, index);
+    let selectedList = [];
     let $$actionData = Map({
       action: actionName,
     });
 
     if (listKey === 'allKeys') {
       $$actionData = $$actionData.merge($$actionItem);
+      selectedList = [list.get(index)];
     } else {
       $$actionData = $$actionData.set(
         listKey,
         $$actionItem.get(listKey)
       );
+      selectedList = [list.getIn([index, listKey])];
     }
 
-    $$actionData = $$actionData.merge(data);
+    $$actionData = $$actionData.merge(data)
+      .merge({
+        selectedList,
+      });
 
-    this.props.changeScreenActionQuery($$actionData.toJS());
-    this.props.onListAction();
+    this.props.createModal({
+      id: 'settings',
+      role: 'confirm',
+      text: msgText,
+      apply: () => {
+        this.props.changeScreenActionQuery({
+          action: actionName,
+          selectedList,
+        });
+        this.props.onListAction();
+      },
+    });
   }
   onFetchList() {
     if (this.props.fetchScreenData) {
