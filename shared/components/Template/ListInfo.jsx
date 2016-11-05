@@ -225,25 +225,23 @@ class ListInfo extends React.Component {
           let $$retItem = $$item;
 
           if ($$retItem.get('type') === 'switch') {
-            $$retItem = $$retItem.set('transform', (val, $$data, index) => {
-              return (
-                <FormInput
-                  type="checkbox"
-                  name={$$item.get('id')}
-                  value="1"
-                  checked={parseInt(val, 10) === 1}
-                  onChange={(data) => {
-                    this.onItemAction(
-                      $$item.get('actionType'),
-                      index,
-                      {
-                        [$$item.get('id')]: data.value,
-                      }
-                    );
-                  }}
-                />
-              );
-            });
+            $$retItem = $$retItem.set('transform', (val, $$data, index) => (
+              <FormInput
+                type="checkbox"
+                name={$$item.get('id')}
+                value="1"
+                checked={parseInt(val, 10) === 1}
+                onChange={(data) => {
+                  this.onItemAction(
+                    $$item.get('actionType'),
+                    index,
+                    {
+                      [$$item.get('id')]: data.value,
+                    }
+                  );
+                }}
+              />
+            ));
           }
 
           return $$retItem;
@@ -492,10 +490,9 @@ class ListInfo extends React.Component {
       role: 'confirm',
       text: msgText,
       apply: () => {
-        this.props.changeScreenActionQuery({
-          action: actionName,
-          selectedList,
-        });
+        this.props.changeScreenActionQuery(
+          $$actionData.toJS()
+        );
         this.props.onListAction();
       },
     });

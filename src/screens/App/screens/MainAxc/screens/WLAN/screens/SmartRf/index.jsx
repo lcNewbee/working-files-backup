@@ -19,10 +19,13 @@ const countryOptions = channelsList.map(item => ({
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
+  groupid: PropTypes.any,
 
   route: PropTypes.object,
   saveSettings: PropTypes.func,
+  fetchSettings: PropTypes.func,
   updateItemSettings: PropTypes.func,
+  changeSettingsQuery: PropTypes.func,
   leaveSettingsScreen: PropTypes.func,
 };
 const defaultProps = {};
@@ -34,13 +37,12 @@ export default class View extends React.Component {
   }
   componentWillMount() {
     const props = this.props;
-    const groupId = props.groupId || -1;
+    const groupid = props.groupid || -1;
 
     props.initSettings({
       settingId: props.route.id,
       formUrl: props.route.formUrl,
       defaultData: {
-        groupid: groupId,
         '5gFrist': '1',
         '11nFrist': '1',
         terminalRelease: '1',
@@ -50,14 +52,26 @@ export default class View extends React.Component {
         wirelessPower: '20',
         country: 'CN',
         channel: '6',
+        groupid,
       },
       query: {
-        groupId,
+        groupid,
       },
       saveQuery: {},
     });
 
     props.fetchSettings();
+  }
+  componentDidUpdate(prevProps) {
+    if (this.props.groupid !== prevProps.groupid) {
+      this.props.updateItemSettings({
+        groupid: this.props.groupid,
+      });
+      this.props.changeSettingsQuery({
+        groupid: this.props.groupid,
+      });
+      this.props.fetchSettings();
+    }
   }
 
   componentWillUnmount() {
@@ -221,7 +235,7 @@ View.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
-    groupId: state.product.getIn(['group', 'selected', 'id']),
+    groupid: state.product.getIn(['group', 'selected', 'id']),
     store: state.settings,
   };
 }
