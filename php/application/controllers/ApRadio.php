@@ -22,7 +22,7 @@ class ApRadio extends CI_Controller {
             'radios'=>element('data',$temp_result_array)
          )
       );
-       echo json_encode($result);
+       return json_encode($result);
 
   }
 	function onAction($data) {
@@ -39,20 +39,20 @@ class ApRadio extends CI_Controller {
 		}
 		else if($_SERVER['REQUEST_METHOD'] == 'GET') {
 			$result = $this->fetch();
-      echo json_encode($result);
+      echo $result;
 		}
 		}
 
-  // public function Base() {
-	// 	$result = null;
-	// 	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-	// 		$data = json_decode(file_get_contents("php://input"), true);
-	// 		$result = $this->onAction($data);
-  //     echo $result;
-	// 	}
-	// 	else if($_SERVER['REQUEST_METHOD'] == 'GET') {
-	// 		$result = $this->fetch();
-  //     echo json_encode($result);
-	// 	}
-	// 	}
+  public function Base() {
+		$result = null;
+		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+			$data = json_decode(file_get_contents("php://input"), true);
+			$result = $this->onAction($data);
+      echo $result;
+		}
+		else if($_SERVER['REQUEST_METHOD'] == 'GET') {
+			$result = $this->fetch();
+      echo $result;
+		}
+		}
 }
