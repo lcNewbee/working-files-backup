@@ -27,18 +27,14 @@ class MonitorAps extends CI_Controller {
   }
 
 	function onAction($data) {
-   	// $result = null;
-   // $actionType = element('action', $data);
-    // if($actionType === 'lock'){
-
-    // }
-    // elseif($actionType === 'unlock'){
-
-    // }
-    // elseif($actionType === 'reconnect'){
-
-    // }
-    // return $result;
+   	$result = null;
+    $retdata=array(
+       "groupid"=>(int)element("groupid",$data),
+       "mac"=>element("groupid",$data),
+       "operate"=>element("action",$data)
+    );
+    $result= axc_set_apoperate(json_encode($retdata));
+    return $result;
 	}
 	public function index() {
 		$result = null;
@@ -48,7 +44,6 @@ class MonitorAps extends CI_Controller {
       echo $result;
 		}
 		elseif($_SERVER['REQUEST_METHOD'] == 'GET') {
-
 			$result = $this->fetch();
       echo $result;
 		}
