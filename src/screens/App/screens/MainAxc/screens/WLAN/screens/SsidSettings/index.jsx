@@ -64,6 +64,7 @@ const screenOptions = fromJS([
     id: 'hiddenSsid',
     text: _('Hidden SSID'),
     filter: 'checkbox',
+    defaultValue: '0',
   }, {
     id: 'storeForwardPattern',
     options: storeForwardOption,

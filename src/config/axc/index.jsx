@@ -279,6 +279,12 @@ const routes = [
                 text: _('Overview'),
                 component: sOverview.Screen,
               }, {
+                id: 'apList',
+                path: '/main/group/monitor/aps',
+                formUrl: 'goform/group/aps',
+                text: _('Access Point List'),
+                component: sApList.Screen,
+              }, {
                 id: 'user',
                 path: '/main/group/monitor/user',
                 formUrl: 'goform/group/client',
@@ -314,12 +320,6 @@ const routes = [
                 formUrl: 'goform/group/ssid',
                 text: _('SSID Status'),
                 component: sSsidStatus.Screen,
-              }, {
-                id: 'apList',
-                path: '/main/group/monitor/aps',
-                formUrl: 'goform/group/aps',
-                text: _('Access Point List'),
-                component: sApList.Screen,
               }, {
                 id: 'safeStatus',
                 path: '/main/group/monitor/safe',
