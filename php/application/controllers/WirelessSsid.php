@@ -9,7 +9,7 @@ class WirelessSsid extends CI_Controller {
 	}
 	function fetch(){
       $retdata = array(
-        'groupid'=>(int)element('groupid', $_GET, -1),
+        'groupid'=>(int)element('groupid', $_GET),
       );
         $result=axc_get_wireless_ssid(json_encode($retdata));
       return $result;
@@ -25,14 +25,14 @@ class WirelessSsid extends CI_Controller {
         'remark'=>element('remark', $oriData),
         'vlanid'=>(int)element('vlanid', $oriData,0),
         'enabled'=>(int)element('enabled', $oriData),
-        'maxBssUsers'=>element('maxBssUsers', $oriData),
+        'maxBssUsers'=>(int)element('maxBssUsers', $oriData),
         'loadBalanceType'=>element('loadBalanceType', $oriData),
-        'hiddenSsid'=>element('hiddenSsid', $oriData),
+        'hiddenSsid'=>(int)element('hiddenSsid', $oriData),
         'storeForwardPattern'=>element('storeForwardPattern', $oriData),
-        'upstream'=>element('upstream', $oriData),
-        'downstream'=>element('downstream', $oriData),
+        'upstream'=>(int)element('upstream', $oriData),
+        'downstream'=>(int)element('downstream', $oriData),
         'encryption'=>element('encryption', $oriData),
-        'password'=>element('password', $oriData)
+        'password'=>element('password', $oriData ,'')
       );
       return $ret;
     }
