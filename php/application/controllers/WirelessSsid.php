@@ -19,6 +19,7 @@ class WirelessSsid extends CI_Controller {
 	function onAction($data) {
 		$result = null;
 		$actionType = element('action', $data);
+    $selectList = element('selectedList', $data);
     function getCgiParam($oriData) {
       $ret = array(
         'groupid'=>(int)element('groupid', $oriData),
@@ -47,11 +48,13 @@ class WirelessSsid extends CI_Controller {
       $result=axc_modify_wireless_ssid(json_encode($temp_data));
 		}
     elseif($actionType === 'delete'){
-       $temp_data=array(
-        'groupid'=>element('groupid',$data),
-        'ssid'=>element('selectedList',$data),
-       );
-      $state=axc_del_wireless_ssid(json_encode($temp_data));
+     foreach($selectList as $item) {
+          $deleteItem = array(
+            'groupid'=>element('groupid', $data),
+            'ssid'=>element('ssid', $item)
+          );
+       $state=axc_del_wireless_ssid(json_encode($deleteItem));
+     }
        $result=$state;
     }
     elseif($actionType === 'bind'){
