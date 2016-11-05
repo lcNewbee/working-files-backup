@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import utils from 'shared/utils';
-import Button from 'shared/components/Button/Button';
 import ListInfo from 'shared/components/Template/ListInfo';
 
 // custom
+import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 import * as propertiesActions from 'shared/actions/properties';
 
@@ -46,11 +46,31 @@ const apTableOptions = fromJS([
     text: _('Uptime'),
     width: '80',
     filter: 'connectTime',
+  }, {
+    id: '__actions__',
+    actions: [
+      {
+        name: 'reboot',
+        text: _('Reboot'),
+        icon: 'recycle',
+      }, {
+        name: 'locate',
+        text: _('Locate'),
+        icon: 'location-arrow',
+      }, {
+        name: 'reset',
+        text: _('Reset'),
+        icon: 'reply-all',
+      },
+    ],
   },
 ]);
 
 const propTypes = {
   addToPropertyPanel: PropTypes.func,
+  changeScreenActionQuery: PropTypes.func,
+  onListAction: PropTypes.func,
+  groupid: PropTypes.any,
 };
 const defaultProps = {};
 
@@ -63,46 +83,21 @@ export default class View extends React.Component {
   onAction(type, item) {
     const actionQuery = {
       groupid: this.props.groupid,
-    }
+    };
     if (type === 'edit') {
       actionQuery.mac = item.get('mac');
       this.props.addToPropertyPanel(actionQuery, item.toJS());
     } else {
       actionQuery.mac = item;
+      actionQuery.action = type;
       actionQuery.operate = type;
+      this.props.changeScreenActionQuery(actionQuery);
+      this.props.onListAction();
     }
   }
   render() {
-    const myTableOptions = apTableOptions.push(fromJS({
-      id: 'mac',
-      text: _('Actions'),
-      width: '260',
-      transform: mac => (
-        <div className="action-btns">
-          <Button
-            onClick={() => this.onAction('reboot', mac)}
-            text={_('Reboot')}
-            size="sm"
-            icon="recycle"
-          />
-          <Button
-            onClick={() => this.onAction('locate', mac)}
-            text={_('Locate')}
-            size="sm"
-            icon="location-arrow"
-          />
-          <Button
-            onClick={() => this.onAction('reset', mac)}
-            text={_('Reset')}
-            size="sm"
-            icon="reply-all"
-          />
-        </div>
-      ),
-    }))
-    .setIn([0, 'transform'], (val, item) => {
+    const myTableOptions = apTableOptions.setIn([0, 'transform'], (val, item) => {
       const mac = item.get('mac');
-
       return (
         <span
           onClick={() => this.onAction('edit', item)}
@@ -112,20 +107,23 @@ export default class View extends React.Component {
         </span>
       );
     });
-    const actionBarChildren = (
-      <Button
-        key="upgradeAp"
-        onClick={() => this.onAction('upgrade')}
-        text={_('Upgrade')}
-        icon="arrow-circle-o-up"
-      />
-    );
 
     return (
       <ListInfo
         {...this.props}
         tableOptions={myTableOptions}
-        actionBarChildren={actionBarChildren}
+        actionBarButtons={[
+          {
+            name: 'upgrade',
+            text: _('Upgrade'),
+            icon: 'arrow-circle-o-up',
+          },
+        ]}
+        listKey="mac"
+        actionable
+        addable={false}
+        editable={false}
+        deleteable={false}
         selectable
       />
     );
@@ -146,6 +144,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
+    appActions,
     screenActions,
     propertiesActions
   ), dispatch);

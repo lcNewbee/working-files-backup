@@ -1,13 +1,9 @@
 import React, { PropTypes } from 'react';
 import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
-import { fromJS, Map } from 'immutable';
+import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
-import {
-  FormGroup, FormInput,
-} from 'shared/components/Form';
 import ListInfo from 'shared/components/Template/ListInfo';
-import { SaveButton } from 'shared/components/Button';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
@@ -48,11 +44,7 @@ const editFormOptions = immutableUtils.getFormOptions(screenOptions);
 const defaultEditData = immutableUtils.getDefaultData(screenOptions);
 
 const propTypes = {
-  store: PropTypes.instanceOf(Map),
-  app: PropTypes.instanceOf(Map),
-
   route: PropTypes.object,
-  closeListItemModal: PropTypes.func,
   save: PropTypes.func,
 };
 const defaultProps = {};

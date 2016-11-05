@@ -55,6 +55,7 @@ const storeForwardOption = [
     label: _('Centralized Forward-%s Tunnel', '802.11'),
   },
 ];
+const flowRateFilter = utils.filter('flowRate:["KB"]');
 const screenOptions = fromJS([
   {
     id: 'ssid',
@@ -73,9 +74,14 @@ const screenOptions = fromJS([
     text: _('Encryption'),
     defaultValue: 'psk-mixed',
   }, {
-    id: 'compulsoryAuth',
-    text: _('802.1X Auth'),
-    filter: 'checkbox',
+    id: 'upstream/downstream',
+    text: _('Up/Down Flow'),
+    transform(val, item) {
+      const upRate = flowRateFilter.transform(item.get('upstream'));
+      const downRate = flowRateFilter.transform(item.get('downstream'));
+
+      return `${upRate}/${downRate}`;
+    },
   }, {
     id: 'enabled',
     text: _('Status'),
@@ -90,9 +96,11 @@ const screenOptions = fromJS([
   }, {
     id: 'upstream',
     defaultValue: '0',
+    noTable: true,
   }, {
     id: 'downstream',
     defaultValue: '0',
+    noTable: true,
   },
 ]);
 const tableOptions = immutableUtils.getTableOptions(screenOptions);
@@ -103,7 +111,6 @@ const propTypes = {
   store: PropTypes.instanceOf(Map),
   validateOption: PropTypes.object,
   route: PropTypes.object,
-  save: PropTypes.func,
   groupid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   closeListItemModal: PropTypes.func,
   changeScreenActionQuery: PropTypes.func,
@@ -116,31 +123,17 @@ export default class View extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onAction = this.onAction.bind(this);
     this.getCurrData = this.getCurrData.bind(this);
     this.onUpdateSettings = this.onUpdateSettings.bind(this);
     this.onSave = this.onSave.bind(this);
   }
-  componentWillMount() {
+  componentDidMount() {
     this.props.changeScreenActionQuery({
       groupid: this.props.groupid,
     });
   }
   onSave() {
     this.props.onListAction();
-  }
-  onAction(action, mac) {
-    const query = {
-      mac,
-      action,
-    };
-
-    this.props.save('goform/blacklist', query)
-      .then((json) => {
-        if (json.state && json.state.code === 2000) {
-          console.log(11);
-        }
-      });
   }
   onUpdateSettings(name) {
     return (item) => {
@@ -265,7 +258,7 @@ export default class View extends React.Component {
               checked={getCurrData('downstream') === '' || getCurrData('downstream') > 0}
               onChange={this.onUpdateSettings('downstream')}
             />
-            {`${_('limited to')  } `}
+            {`${_('limited to')} `}
             <FormInput
               type="number"
               maxLength="6"
