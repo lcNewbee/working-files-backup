@@ -30,7 +30,7 @@ class MonitorAps extends CI_Controller {
    	$result = null;
     $retdata=array(
        "groupid"=>(int)element("groupid",$data),
-       "mac"=>element("groupid",$data),
+       "mac"=>element("selectedList",$data),
        "operate"=>element("action",$data)
     );
     $result= axc_set_apoperate(json_encode($retdata));

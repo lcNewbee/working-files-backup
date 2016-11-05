@@ -52,12 +52,9 @@ class NetworkRoute extends CI_Controller {
 		return $result;
 	}
 	function onAction($data) {
-
+      	$result = null;
         $result=acnetmg_del_route(json_encode($deleteItem));
-      }
-		}
-
-		return $result;
+		    return $result;
 	}
 
 	public function index() {
