@@ -96,10 +96,12 @@
   "Allow": "允许",
   "Prevent": "阻止",
   "Refuse": "拒绝",
-  "On": "开启",
-  "Off": "关闭",
+  "On": "已开启",
+  "Off": "已关闭",
   "Used": "已使用",
   "Free": "未使用",
+  "YES": "是",
+  "NO": "否",
 
   "Are you sure to delete selected index: %s ?": "你确定要删除选择的项：%s ?",
   "Download Report": "下载报表",
@@ -202,6 +204,7 @@
   "CLIENTS": "客户端",
   "Clients Info": "客户端信息",
   "LOCKED": "已封锁",
+  "Client Type": "客户端类型",
 
   "LOGS": "日志",
   "Logs": "日志",

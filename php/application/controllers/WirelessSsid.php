@@ -34,7 +34,7 @@ class WirelessSsid extends CI_Controller {
         'upstream'=>(int)element('upstream', $oriData),
         'downstream'=>(int)element('downstream', $oriData),
         'encryption'=>element('encryption', $oriData),
-        'password'=>element('password', $oriData ,'')
+        'password'=>element('password', $oriData, '')
       );
       return $ret;
     }

@@ -31,8 +31,8 @@
   "Key Length": "秘钥长度",
   "Key Index": "秘钥索引",
   "Key Type": "秘钥类型",
- "Remote SSID": "对端SSID",
- "Security Edit": "加密方式",
+  "Remote SSID": "对端SSID",
+  "Security Edit": "加密方式",
 
   "Wireless Model :": "无线模式：",
   "Device Mode": "设备模式",

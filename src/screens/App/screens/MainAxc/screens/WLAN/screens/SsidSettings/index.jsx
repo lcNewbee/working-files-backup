@@ -7,7 +7,6 @@ import { bindActionCreators } from 'redux';
 import { FormGroup, FormInput } from 'shared/components/Form';
 import Modal from 'shared/components/Modal';
 import ListInfo from 'shared/components/Template/ListInfo';
-import SaveButton from 'shared/components/Button/SaveButton';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
@@ -63,7 +62,37 @@ const screenOptions = fromJS([
   }, {
     id: 'hiddenSsid',
     text: _('Hidden SSID'),
-    filter: 'checkbox',
+    options: [
+      {
+        value: '1',
+        label: _('YES'),
+        render() {
+          return (
+            <span
+              style={{
+                color: 'red',
+              }}
+            >
+              {_('YES')}
+            </span>
+          );
+        },
+      }, {
+        value: '0',
+        label: _('NO'),
+        render() {
+          return (
+            <span
+              style={{
+                color: 'green',
+              }}
+            >
+              {_('NO')}
+            </span>
+          );
+        },
+      },
+    ],
     defaultValue: '0',
   }, {
     id: 'storeForwardPattern',
@@ -86,7 +115,37 @@ const screenOptions = fromJS([
   }, {
     id: 'enabled',
     text: _('Status'),
-    filter: 'checkbox',
+    options: [
+      {
+        value: '1',
+        label: _('On'),
+        render() {
+          return (
+            <span
+              style={{
+                color: 'green',
+              }}
+            >
+              {_('On')}
+            </span>
+          );
+        },
+      }, {
+        value: '0',
+        label: _('Off'),
+        render() {
+          return (
+            <span
+              style={{
+                color: 'red',
+              }}
+            >
+              {_('Off')}
+            </span>
+          );
+        },
+      },
+    ],
     defaultValue: '1',
   }, {
     id: 'maxBssUsers',
