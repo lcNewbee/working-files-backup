@@ -8,29 +8,6 @@ class WirelessSmart extends CI_Controller {
 		$this->load->helper('array');
 	}
 	function fetch(){
-    	$query=$this->db->select('pool_id,pool_name,attr_name,attr_value')
-              ->from('pool_params')
-              ->join('pool_attr','pool_attr.id=pool_params.attr_id')
-              ->join('pool_list','pool_list.id=pool_params.pool_id')
-              ->get()->result_array();
-		  $state=array(
-				      'code'=>2000,
-				      'msg'=>'OK'
-				    );
-
-		  $keyname=array(
-				      "domain"=>"domain",
-				      "ipaddr"=>"startIp",
-				      "netmask"=>"mask",
-				      "route"=>"gateway",
-				      "dns1"=>"mainDns",
-				      "dns2"=>"secondDns",
-				      "lease"=>"releaseTime",
-				      "opt43"=>"opt43",
-				      "opt60"=>"opt60",
-				      "vlan"=>"vlan"
-				    );
-
      $retdata = array(
         'groupid'=>(int)element('groupid', $_GET),
       );

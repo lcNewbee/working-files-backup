@@ -8,6 +8,7 @@ class WirelessSsid extends CI_Controller {
 		$this->load->helper('array');
 	}
 	function fetch(){
+
       $retdata = array(
         'groupid'=>(int)element('groupid', $_GET),
       );

@@ -47,7 +47,6 @@ class NetworkDhcp extends CI_Controller {
 			//删除多余元素
 			unset($interfaces[$v['pool_id']]['vlan']);
 		}
-		;
 		//array_values是为了让pool_id也成为数组属性,重新赋值给接口数组
 		$interfaces_data=array_values($interfaces);
 		$result=array(
