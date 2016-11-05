@@ -58,7 +58,7 @@ const propTypes = {
   onListAction: PropTypes.func,
   createModal: PropTypes.func,
 
-  // List 全局 Settings 相关
+  // 全局 Settings 相关
   hasSettingsSaveButton: PropTypes.bool,
   settingsFormOption: PropTypes.oneOfType([
     PropTypes.instanceOf(List), PropTypes.array,
@@ -71,7 +71,7 @@ const propTypes = {
   reportValidError: PropTypes.func,
   resetVaildateMsg: PropTypes.func,
 
-  // 添加，编辑具体列表项相关
+  // List Action 具体列表项操作相关
   modalSize: PropTypes.string,
   editFormId: PropTypes.string,
   editFormLayout: PropTypes.string,
@@ -84,6 +84,9 @@ const propTypes = {
   closeListItemModal: PropTypes.func,
   updateCurEditListItem: PropTypes.func,
   editFormOption: PropTypes.object,
+  actionBarButtons: PropTypes.oneOfType([
+    PropTypes.instanceOf(List), PropTypes.array,
+  ]),
 
   // React node 元素
   children: PropTypes.node,
@@ -117,16 +120,18 @@ class ListInfo extends React.Component {
     }
 
     if (props.defaultSettingsData) {
-      initOption.defaultSettingsData = utils.extend({}, props.defaultSettingsData, {
-        groupid: props.groupid,
-      });
+      initOption.defaultSettingsData = props.defaultSettingsData;
     }
 
+    // 需要对 groupid特处理
     if (typeof props.groupid !== 'undefined') {
       initOption.query = utils.extend({}, initOption.query, {
         groupid: props.groupid,
       });
       initOption.defaultSettingsData = utils.extend({}, props.defaultSettingsData, {
+        groupid: props.groupid,
+      });
+      initOption.defaultEditData = utils.extend({}, props.defaultEditData, {
         groupid: props.groupid,
       });
     }
@@ -137,7 +142,7 @@ class ListInfo extends React.Component {
     this.binds(
       'onChangeQuery', 'onPageChange', 'onSaveEditForm', 'onCloseEditModal',
       'onChangeSearchText', 'onChangeType', 'onChangeTableSize', 'onRemoveSelectItems',
-      'onSaveSettings', 'onRemoveSelectedItems', 'onItemAction'
+      'onSaveSettings', 'onRemoveSelectedItems', 'onItemAction', 'onListSelectedAction'
     );
   }
 
@@ -148,7 +153,7 @@ class ListInfo extends React.Component {
     let btnList = List([]);
 
     // 初始选项，添加操作项
-    if (actionable && (editable || deleteable) && tableOptions) {
+    if (actionable && tableOptions) {
       actionsOption = tableOptions.find(item => item.get('id') === '__actions__');
       if (editable) {
         btnsNum += 1;
@@ -376,7 +381,6 @@ class ListInfo extends React.Component {
     let mySelectedList = selectedList;
     let msgText = '';
 
-
     if (selectedList && selectedList.size > 0) {
       mySelectedList = mySelectedList.map((val) => {
         let ret = [];
@@ -408,6 +412,50 @@ class ListInfo extends React.Component {
       this.props.createModal({
         role: 'alert',
         text: _('Please select delete rows'),
+      });
+    }
+  }
+  onListSelectedAction(actionName) {
+    const store = this.props.store;
+    const myListScreenId = store.get('curScreenId');
+    const $$list = store.getIn([myListScreenId, 'data', 'list']);
+    const $$actionQuery = store.getIn([myListScreenId, 'actionQuery']);
+    const listKey = this.props.listKey;
+    let selectStr = '';
+    let msgText = '';
+    let $$selectedList = $$actionQuery.get('selectedList');
+
+    if ($$selectedList && $$selectedList.size > 0) {
+      $$selectedList = $$selectedList.map((val) => {
+        let ret = [];
+
+        if (listKey === 'allKeys') {
+          ret = $$list.get(val);
+        } else {
+          ret = $$list.getIn([val, listKey]);
+        }
+
+        return ret;
+      });
+      selectStr = $$selectedList.map((item, i) => i).join(', ');
+      msgText = _('Are you sure to %s selected rows: %s', actionName, selectStr);
+
+      this.props.createModal({
+        id: 'settings',
+        role: 'confirm',
+        text: msgText,
+        apply: () => {
+          this.props.changeScreenActionQuery({
+            action: actionName,
+            selectedList: $$selectedList,
+          });
+          this.props.onListAction();
+        },
+      });
+    } else {
+      this.props.createModal({
+        role: 'alert',
+        text: _('Please select %s rows', actionName),
       });
     }
   }
@@ -455,7 +503,7 @@ class ListInfo extends React.Component {
       selectable, deleteable, searchable, addable, actionable, noTitle,
       editFormLayout, editFormOptions, defaultEditData, editFormId,
       settingsFormOption, updateScreenSettings, hasSettingsSaveButton,
-      queryFormOptions, editFormOption,
+      queryFormOptions, editFormOption, actionBarButtons,
       actionBarChildren,
     } = this.props;
     const myListScreenId = store.get('curScreenId');
@@ -472,6 +520,7 @@ class ListInfo extends React.Component {
     let pageSelectClassName = 'fr';
     let isEditModelshow = false;
     let myEditFormOptions = editFormOptions;
+    let $$curActionBarButtons = actionBarButtons;
 
     if (editFormOption && editFormOption.hasFile) {
       myEditFormOptions = myEditFormOptions.unshift(fromJS({
@@ -497,18 +546,43 @@ class ListInfo extends React.Component {
       pageSelectClassName = 'fl';
     }
 
-    if (actionable && addable) {
-      leftChildrenNode.push(
-        <Button
-          icon="plus"
-          key="addBtn"
-          theme="primary"
-          text={_('Add')}
-          onClick={() => {
-            this.props.addListItem(defaultEditData);
-          }}
-        />
-      );
+    if (actionable) {
+      if (addable) {
+        leftChildrenNode.push(
+          <Button
+            icon="plus"
+            key="addBtn"
+            theme="primary"
+            text={_('Add')}
+            onClick={() => {
+              this.props.addListItem(defaultEditData);
+            }}
+          />
+        );
+      }
+      if (actionBarButtons) {
+        if (!List.isList(actionBarButtons)) {
+          $$curActionBarButtons = fromJS(actionBarButtons);
+        }
+
+        leftChildrenNode.push(
+          $$curActionBarButtons.map(
+            ($$subButton) => {
+              const butProps = $$subButton.toJS();
+              const actionName = $$subButton.get('name');
+              return (
+                <Button
+                  {...butProps}
+                  key={`${actionName}Btn`}
+                  onClick={() => {
+                    this.onListSelectedAction(actionName);
+                  }}
+                />
+              );
+            }
+          ).toJS()
+        );
+      }
     }
     if (searchable) {
       leftChildrenNode.push(
