@@ -10,26 +10,6 @@ import {
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
-function getPortList() {
-  return utils.fetch('goform/system/ap/model')
-    .then((json) => {
-      const ret = {
-        options: [],
-      };
-
-      if (json && json.data && json.data.list) {
-        ret.options = json.data.list.map(
-          item => ({
-            value: item.name,
-            label: item.name,
-          })
-        );
-      }
-      return ret;
-    }
-  );
-}
-
 const screenOptions = fromJS([
   {
     id: 'model',
@@ -38,8 +18,6 @@ const screenOptions = fromJS([
     formProps: {
       type: 'select',
       required: true,
-      loadOptions: getPortList,
-      isAsync: true,
     },
   }, {
     id: 'softVersion',
@@ -80,22 +58,67 @@ const propTypes = {
   save: PropTypes.func,
 };
 const defaultProps = {};
+export default class View extends React.Component {
+  constructor(props) {
+    super(props);
 
-export default function View(props) {
-  return (
-    <ListInfo
-      {...props}
-      tableOptions={tableOptions}
-      editFormOptions={editFormOptions}
-      editFormOption={{
-        hasFile: true,
-      }}
-      defaultEditData={defaultEditData}
-      noTitle
-      actionable
-      selectable
-    />
-  );
+    utils.binds(this, [
+      'getApModelList',
+    ]);
+    this.state = {
+      modelSelectPlaceholder: _('Loading'),
+      modelIsloading: true,
+      modelOptions: [],
+    };
+  }
+  componentWillMount() {
+    this.getApModelList();
+  }
+  getApModelList() {
+    utils.fetch('goform/system/ap/model')
+      .then((json) => {
+        let options = [];
+
+        if (json && json.data && json.data.list) {
+          options = json.data.list.map(
+            item => ({
+              value: item.name,
+              label: item.name,
+            })
+          );
+        }
+        this.setState({
+          modelSelectPlaceholder: undefined,
+          modelIsloading: false,
+          modelOptions: options,
+        });
+      }
+    );
+  }
+  render() {
+    const { modelIsloading, modelOptions, modelSelectPlaceholder } = this.state;
+    const myEditFormOptions = editFormOptions.mergeIn(
+      [0, 0], {
+        isLoading: modelIsloading,
+        options: modelOptions,
+        placeholder: modelSelectPlaceholder,
+      }
+    );
+    return (
+      <ListInfo
+        {...this.props}
+        tableOptions={tableOptions}
+        editFormOptions={myEditFormOptions}
+        editFormOption={{
+          hasFile: true,
+        }}
+        defaultEditData={defaultEditData}
+        noTitle
+        actionable
+        selectable
+      />
+    );
+  }
 }
 
 View.propTypes = propTypes;
