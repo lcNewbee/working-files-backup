@@ -16,7 +16,7 @@ const Router = ReactRouter.Router;
 const hashHistory = ReactRouter.hashHistory;
 
 // 引入产品配置
-const prodConfig = require('./config/axc');
+const prodConfig = require('./config/ap');
 
 // 主渲染入口
 ReactDOM.render(
@@ -28,8 +28,8 @@ ReactDOM.render(
 
 if (module.hot) {
   // Enable Webpack hot module replacement for reducers
-  module.hot.accept('./config/axc', () => {
-    const newConfig = require('./config/axc');
+  module.hot.accept('./config/ap', () => {
+    const newConfig = require('./config/ap');
 
     const nextRootReducer = combineReducers(newConfig.reducers);
 

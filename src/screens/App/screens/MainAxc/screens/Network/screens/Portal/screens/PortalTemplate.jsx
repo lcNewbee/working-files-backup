@@ -77,6 +77,12 @@ const expirationOptions = [
   }, {
     value: '604800',
     label: `7 ${MSG.days}`,
+  }, {
+    value: '1296000',
+    label: `15 ${MSG.days}`,
+  }, {
+    value: '2592000',
+    label: `30 ${MSG.days}`,
   },
 ];
 const screenOptions = fromJS([
