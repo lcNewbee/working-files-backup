@@ -38,8 +38,8 @@ const interfaceOptions = fromJS([
       }
       return val;
     },
-    width: "100px",
-  },{
+    width: '100px',
+  }, {
     id: 'mac',
     text: _('MAC'),
     transform(val) {
@@ -48,7 +48,7 @@ const interfaceOptions = fromJS([
       }
       return val;
     },
-    width: "204px",
+    width: '204px',
   }, {
     id: 'txBytes',
     text: _('Tx Bytes'),
@@ -58,7 +58,7 @@ const interfaceOptions = fromJS([
       }
       return flowRateFilter.transform(val);
     },
-    width: "144px",
+    width: '144px',
   }, {
     id: 'rxBytes',
     text: _('Rx Bytes'),
@@ -68,7 +68,7 @@ const interfaceOptions = fromJS([
       }
       return flowRateFilter.transform(val);
     },
-    width: "144px",
+    width: '144px',
   }, {
     id: 'txPackets',
     text: _('Tx Packets'),
@@ -78,7 +78,7 @@ const interfaceOptions = fromJS([
       }
       return val;
     },
-    width: "144px",
+    width: '144px',
   }, {
     id: 'rxPackets',
     text: _('Rx Packets'),
@@ -88,7 +88,7 @@ const interfaceOptions = fromJS([
       }
       return val;
     },
-    width: "144px",
+    width: '144px',
   }, {
     id: 'txErrorPackets',
     text: _('Tx Error'),
@@ -98,7 +98,7 @@ const interfaceOptions = fromJS([
       }
       return val;
     },
-    width: "144px",
+    width: '144px',
   }, {
     id: 'rxErrorPackets',
     text: _('Rx Error'),
@@ -108,7 +108,7 @@ const interfaceOptions = fromJS([
       }
       return val;
     },
-    width: "144px",
+    width: '144px',
   }, {
     id: 'status',
     text: _('Status'),
@@ -131,7 +131,7 @@ const vapInterfaceOptions = fromJS([
       }
       return val;
     },
-    width: "100px",
+    width: '100px',
   }, {
     id: 'mac',
     text: _('MAC'),
@@ -141,7 +141,7 @@ const vapInterfaceOptions = fromJS([
       }
       return val;
     },
-    width: "204px",
+    width: '204px',
   }, {
     id: 'txBytes',
     text: _('Tx Bytes'),
@@ -151,7 +151,7 @@ const vapInterfaceOptions = fromJS([
       }
       return flowRateFilter.transform(val);
     },
-    width: "144px",
+    width: '144px',
   }, {
     id: 'rxBytes',
     text: _('Rx Bytes'),
@@ -161,7 +161,7 @@ const vapInterfaceOptions = fromJS([
       }
       return flowRateFilter.transform(val);
     },
-    width: "144px",
+    width: '144px',
   }, {
     id: 'txPackets',
     text: _('Tx Packets'),
@@ -171,7 +171,7 @@ const vapInterfaceOptions = fromJS([
       }
       return val;
     },
-    width: "144px",
+    width: '144px',
   }, {
     id: 'rxPackets',
     text: _('Rx Packets'),
@@ -181,7 +181,7 @@ const vapInterfaceOptions = fromJS([
       }
       return val;
     },
-    width: "144px",
+    width: '144px',
   }, {
     id: 'txErrorPackets',
     text: _('Tx Error'),
@@ -191,7 +191,7 @@ const vapInterfaceOptions = fromJS([
       }
       return val;
     },
-    width: "144px",
+    width: '144px',
   }, {
     id: 'rxErrorPackets',
     text: _('Rx Error'),
@@ -201,7 +201,7 @@ const vapInterfaceOptions = fromJS([
       }
       return val;
     },
-    width: "144px",
+    width: '144px',
   }, {
     id: 'ccq',
     text: _('CCQ'),
@@ -391,16 +391,6 @@ export default class SystemStatus extends React.Component {
     ]);
     const connectionInfoOption = fromJS([
       {
-        id: 'ip',
-        text: _('Peer IP'),
-        transform(val) {
-          if (val === '') {
-            return '--';
-          }
-          return val;
-        },
-        width: '304px',
-      }, {
         id: 'status',
         text: _('Connection Status'),
         transform(val) {
@@ -436,6 +426,16 @@ export default class SystemStatus extends React.Component {
           }
           return val + 'Mbps';
         },
+      }, {
+        id: 'ip',
+        text: _('Peer IP'),
+        transform(val) {
+          if (val === '') {
+            return '--';
+          }
+          return val;
+        },
+        width: '304px',
       },
     ]);
     const {

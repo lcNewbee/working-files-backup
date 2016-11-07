@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import utils from 'shared/utils';
 import { bindActionCreators } from 'redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
@@ -9,20 +9,22 @@ import Navbar from 'shared/components/Navbar';
 import * as appActions from 'shared/actions/app';
 import * as actions from './actions';
 
+const propTypes = {
+  app: PropTypes.func,
+  refreshAll: PropTypes.func,
+  route: PropTypes.object,
+  changeLoginStatus: PropTypes.func,
+};
 
-export default class Main extends Component {
+export default class MainAP extends Component {
   constructor(props) {
     super(props);
 
     this.state = { isShow: false };
-
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    this.showUserPopOver = this.showUserPopOver.bind(this);
     this.onRefresh = this.onRefresh.bind(this);
-    this.onLogout = this.onLogout.bind(this);
-
     document.onkeydown = function (e) {
-      if (e.keyCode == 116) {
+      if (e.keyCode === 116) {
         this.onRefresh(e);
       }
     }.bind(this);
@@ -40,13 +42,14 @@ export default class Main extends Component {
   }
 
   showUserPopOver() {
-    this.setState({ isShow: !this.state.isShow });
+    this.setState({
+      isShow: !this.state.isShow,
+    });
   }
 
   render() {
-    const { saving, version, propertyData, guiName } = this.props.app.toJS();
+    const { version, guiName, saving } = this.props.app.toJS();
     const { isShow } = this.state;
-
     return (
       <div>
         <Navbar
@@ -71,48 +74,47 @@ export default class Main extends Component {
         <div className="t-main main--open">
           <Nav className="t-main__nav" role="menu" menus={this.props.route.childRoutes} />
           <div className="t-main__content">
-            {
-              this.props.children
-            }
+            { this.props.children }
           </div>
         </div>
         {
-            isShow ? (
-              <div className="o-pop-over" onClick={this.showUserPopOver}>
-                <div className="o-pop-over__content m-user-overview">
-                  <div className="m-user-overview__info">
-                    <Icon name="user-secret" className="icon-user" />
-                  </div>
-                  <div className="m-user-overview__controls">
-                    <a className="change-pas" href="#/main/maintenance/accountsettings">
-                      <Icon
-                        name="key"
-                      />
-                      {_('CHANGE PASSWORD')}
-                    </a>
-                    <a className="sign-out" href="#" onClick={this.onLogout}>
-                      <Icon
-                        name="sign-out"
-                      />
-                      {_('SIGN OUT')}
-                    </a>
-                  </div>
+          isShow ? (
+            <div className="o-pop-over" onClick={this.showUserPopOver}>
+              <div className="o-pop-over__content m-user-overview">
+                <div className="m-user-overview__info">
+                  <Icon name="user-secret" className="icon-user" />
                 </div>
-                <div className="o-pop-over__overlay"></div>
+                <div className="m-user-overview__controls">
+                  <a className="change-pas" href="#/main/maintenance/accountsettings">
+                    <Icon
+                      name="key"
+                    />
+                    {_('CHANGE PASSWORD')}
+                  </a>
+                  <a className="sign-out" href="#" onClick={this.onLogout}>
+                    <Icon
+                      name="sign-out"
+                    />
+                    {_('SIGN OUT')}
+                  </a>
+                </div>
               </div>
-            ) : null
-          }
-
+              <div className="o-pop-over__overlay"></div>
+            </div>
+          ) : null
+        }
         {
-            saving ? <div className="body-backdrop"></div> : null
-          }
+          saving ? <div className="body-backdrop"></div> : null
+        }
       </div>
     );
   }
 }
 
+MainAP.propTypes = propTypes;
+
 function mapStateToProps(state) {
-  let myState = state.app;
+  const myState = state.app;
 
   return {
     app: myState,
@@ -121,12 +123,12 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
-    appActions,
-    actions
+  appActions,
+  actions
   ), dispatch);
 }
 
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Main);
+)(MainAP);

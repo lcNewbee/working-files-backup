@@ -30,7 +30,7 @@ window.guiConfig = guiConfig;
 document.getElementsByTagName('body')[0].className += ' ' + b28n.getLang();
 
 /** ***********************************************************
- * 产品界面配置
+  产品界面配置
  */
 
 // 公用组件

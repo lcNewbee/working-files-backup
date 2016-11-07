@@ -279,8 +279,9 @@
   "This device is wirelessly connected to  AP or a wireless router, and allows other wireless clients to connect to it. It extends the reach of your wireless network.": "作为一个无线信号扩展设备， 设备无线连接远端的AP或无线路由器信号，并可让其它无线终端设备通过无线或有线接入网络。",
   "The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.": "初次配置本设备，请选择正确的国家代码以满足当地法规对于可用信道、信道带宽、输出功率、自动频宽选择和自动发射功率控制等的要求。 我们强烈建议安装者根据真实国家区域，合法安装。",
   "Upgrading, please DO NOT cut the power !": "升级中，请勿切断电源！",
+  "Test failed! Something wrong happened with the network!": "网络异常，测速失败！",
   "rebooting , please wait...": "正在重启，请稍后...",
   "Uploading file...": "正在上传文件...",
   "Error: The destination can not be reached!": "错误：目的地址不可达！",
-  "The test is not complete, please keep waiting...": "测试仍在继续，请稍后！"
+  "Running test, please wait ...": "正在测速，请稍后！"
 }

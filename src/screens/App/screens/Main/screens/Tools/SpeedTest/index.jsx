@@ -40,6 +40,7 @@ const propTypes = {
   save: PropTypes.func,
   receiveTestResult: PropTypes.func,
   restoreSelfState: PropTypes.func,
+  createModal: PropTypes.func,
 };
 
 const defaultProps = {};
@@ -125,7 +126,7 @@ export default class SpeedTest extends React.Component {
   onRunTest() {
     // this.props.toggleShowResultBtn('0');
     clearInterval(a);
-    this.props.validateAll().then(msg => {
+    this.props.validateAll().then((msg) => {
       if (msg.isEmpty()) {
         // this.props.clickSpeedTestRunBtn();
         this.props.receiveTestResult({ tx: 0, rx: 0 });
@@ -133,41 +134,43 @@ export default class SpeedTest extends React.Component {
         const query = this.props.store.get('curData').toJS();
         this.props.save('goform/bandwidth_test', query).then((json) => {
           if (json.state && json.state.code === 2000) {
-            b = setTimeout(() => {
+            b = setInterval(() => {
               this.props.fetch('goform/get_bandwidth').then((json2) => {
                 if (json2.state && json2.state.code === 2000) {
                   this.props.receiveTestResult(json2.data);
                   this.props.changeStopWait(true);
                   clearInterval(a);
-                } else if (json2.state && json2.state.code !== 2000) {
+                  clearInterval(b);
+                } else if (json2.state && json2.state.code === 4000) {
                   clearInterval(a);
-                  clearTimeout(b);
-                  this.props.changeTimeClock('Test failed ! ' + json2.state.msg);
+                  clearInterval(b);
+                  this.props.changeTimeClock(_('Test failed! Something wrong happened with the network!'));
                 }
               });
-            }, (parseInt(query.time, 10) + 2) * 1000);
+            }, 2000);
           } else if (json.state && json.state.code === 4000) {
             this.props.changeStopWait(true);
             this.props.createModal({
-                id: 'settings',
-                role: 'alert',
-                text: _('Error: The destination can not be reached!'),
-              });
+              id: 'settings',
+              role: 'alert',
+              text: _('Error: The destination can not be reached!'),
+            });
           }
         });
-            let clock = parseInt(this.props.store.getIn(['curData', 'time']), 10);
-            this.props.changeTimeClock(clock);
-            a = setInterval(() => {
-              const timeStr = (clock--).toString();
-              this.props.changeTimeClock(timeStr);
-              if (clock === 0) {
-                const txt = _('The test is not complete, please keep waiting...');
-                this.props.changeTimeClock(txt);
-                clearInterval(a);
-              }
-            }, 1000);
-          }
-        });
+        // let clock = parseInt(this.props.store.getIn(['curData', 'time']), 10);
+        // this.props.changeTimeClock(clock);
+        // a = setInterval(() => {
+        //   const timeStr = (clock--).toString();
+        //   this.props.changeTimeClock(timeStr);
+        //   if (clock === 0) {
+        // const txt = _('The test is not complete, please keep waiting...');
+        const txt = _('Running test, please wait ...');
+        this.props.changeTimeClock(txt);
+        //     clearInterval(a);
+        //   }
+        // }, 1000);
+      }
+    });
   }
 
   createIpTableList() {
