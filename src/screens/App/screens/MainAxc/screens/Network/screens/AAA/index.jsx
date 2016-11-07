@@ -48,11 +48,17 @@ const authTypeSeletOptions = [
 ];
 const screenOptions = fromJS([
   {
+    id: 'template_name',
+    text: _('Name'),
+    defaultValue: '',
+    formProps: {
+      type: 'text',
+      required: true,
+    },
+  }, {
     id: 'auth_accesstype',
-    text: _('Access Type') + _('(Auth)'),
+    text: _('Access Type'),
     defaultValue: '0',
-    fieldset: 'auth',
-    legend: _('Auth Service'),
     options: accessTypeSeletOptions,
     formProps: {
       label: _('Access Type'),
@@ -62,9 +68,8 @@ const screenOptions = fromJS([
     },
   }, {
     id: 'auth_schemetype',
-    text: _('Type') + _('(Auth)'),
+    text: _('Type'),
     defaultValue: '0',
-    fieldset: 'auth',
     options: authTypeSeletOptions,
     formProps: {
       label: _('Type'),
@@ -74,8 +79,7 @@ const screenOptions = fromJS([
     },
   }, {
     id: 'radius_template',
-    text: _('Radius Template') + _('(Auth)'),
-    fieldset: 'auth',
+    text: _('Radius Template'),
     formProps: {
       label: _('Radius Template'),
       required: true,
@@ -83,45 +87,6 @@ const screenOptions = fromJS([
       placeholder: _('Please Select ') + _('Radius Template'),
       loadOptions: getInterfaceTypeOptions,
       isAsync: true,
-      showPrecondition: data => data.get('auth_schemetype') === '1',
-    },
-  }, {
-    id: 'billingAccessType',
-    text: _('Access Type') + _('(Accounting)'),
-    defaultValue: '0',
-    fieldset: 'billing',
-    legend: _('Accounting Service'),
-    formProps: {
-      label: _('Access Type'),
-      required: true,
-      type: 'switch',
-      placeholder: _('Please Select ') + _('Rules Group'),
-      options: accessTypeSeletOptions,
-    },
-  }, {
-    id: 'billingType',
-    text: _('Type') + _('(Accounting)'),
-    fieldset: 'billing',
-    defaultValue: '0',
-    formProps: {
-      label: _('Type'),
-      required: true,
-      type: 'switch',
-      placeholder: _('Please Select ') + _('Rules Group'),
-      options: authTypeSeletOptions,
-    },
-  }, {
-    id: 'billingRadiusTemplate',
-    text: _('Radius Template') + _('(Accounting)'),
-    fieldset: 'billing',
-    formProps: {
-      label: _('Radius Template'),
-      required: true,
-      type: 'select',
-      placeholder: _('Please Select ') + _('Radius Template'),
-      loadOptions: getInterfaceTypeOptions,
-      isAsync: true,
-      showPrecondition: data => data.get('billingType') === '1',
     },
   },
 ]);
