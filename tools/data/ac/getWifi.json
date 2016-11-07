@@ -19,6 +19,8 @@
         "country": "",
         "channel": "12",
         "channelsBandwidth": "20",
+        "channel5g": "6",
+        "channelsBandwidth5g": "40",
         "downstream": "128",
         "upstream": "64"
       },
@@ -33,6 +35,8 @@
         "country": "AR",
         "channel": "12",
         "channelsBandwidth": "20",
+        "channel5g": "7",
+        "channelsBandwidth5g": "40",
         "downstream": "128",
         "upstream": "64"
       },
@@ -47,6 +51,8 @@
         "country": "AM",
         "channel": "12",
         "channelsBandwidth": "20",
+        "channel5g": "7",
+        "channelsBandwidth5g": "40",
         "downstream": "128",
         "upstream": "64"
       }

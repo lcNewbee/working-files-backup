@@ -57,6 +57,7 @@ export const Portal = React.createClass({
       imageStatus1: 'default',
       imageStatus2: 'default',
       imageStatus3: 'default',
+      activeIndex: 0,
     };
   },
 
@@ -143,10 +144,11 @@ export const Portal = React.createClass({
   onUploadImage(i) {
     const that = this;
 
-    return function () {
-      let input = document.getElementById('filename' + i);
-      let formElem = document.getElementById('imageForm' + i);
-      let data, extension;
+    return () => {
+      const input = document.getElementById(`filename${i}`);
+      const formElem = document.getElementById(`imageForm${i}`);
+      let extension = '';
+      let data;
 
       if (!input.value) {
         that.props.createModal({
@@ -159,7 +161,7 @@ export const Portal = React.createClass({
 
       extension = utils.getExtension(input.value);
 
-      if (that.state['imageStatus' + i] !== 'selected') {
+      if (that.state[`imageStatus${i}`] !== 'selected') {
         return;
       }
 
@@ -176,14 +178,20 @@ export const Portal = React.createClass({
           method: 'POST',
           body: data,
         })
-        .then(function (rq) {
+        .then(() => {
           that.restImageStatus(i);
+          this.setState({
+            activeIndex: i - 1,
+          });
           that.props.fetchPortalSettings();
         });
       } else {
         that.imageUploading(i);
         formElem.submit();
         that.restImageStatus(i);
+        this.setState({
+          activeIndex: i - 1,
+        });
         that.props.fetchPortalSettings();
       }
     };
@@ -198,7 +206,6 @@ export const Portal = React.createClass({
   render() {
     const { getCurrData } = this;
     const images = getCurrData('image');
-
     // validate const
     const {
       portalname, url, title, timeout, refreshtime,
@@ -263,190 +270,231 @@ export const Portal = React.createClass({
       marginLeft: '8px',
     };
     const noControl = this.props.app.get('noControl');
+    const activeIndex = this.state.activeIndex;
+    const curImgUrl = this.props.store.getIn([
+      'curr', 'image', activeIndex, 'url',
+    ]);
 
     return (
-
-      <div>
+      <div className="row">
         <h3>{_('Portal Settings')}</h3>
-        <FormGroup
-          label={_('Portal Name')}
-          name="portalname"
-          value={getCurrData('portalname')}
-          onChange={this.onUpdateSettings('portalname')}
-          required
-          {...portalname}
-        />
-        <FormGroup
-          label={_('Auth Redirect URL')}
-          name="url"
-          value={getCurrData('url')}
-          onChange={this.onUpdateSettings('url')}
-          {...url}
-        />
-        <FormGroup
-          label={_('Portal Title')}
-          name="title"
-          value={getCurrData('title')}
-          onChange={this.onUpdateSettings('title')}
-          required
-          {...title}
-        />
-
-        <FormGroup
-          label={_('Expiration')}
-          value={getCurrData('timeout')}
-          {...timeout}
-        >
-          <Select
-            name="timeout"
-            options={expirationOptions}
-            value={getCurrData('timeout')}
-            onChange={this.onUpdateSettings('timeout')}
-            clearable={false}
-            searchable={false}
+        <div className="cols col-7">
+          <FormGroup
+            label={_('Portal Name')}
+            name="portalname"
+            value={getCurrData('portalname')}
+            onChange={this.onUpdateSettings('portalname')}
+            required
+            {...portalname}
           />
-        </FormGroup>
+          <FormGroup
+            label={_('Auth Redirect URL')}
+            name="url"
+            value={getCurrData('url')}
+            onChange={this.onUpdateSettings('url')}
+            {...url}
+          />
+          <FormGroup
+            label={_('Portal Title')}
+            name="title"
+            value={getCurrData('title')}
+            onChange={this.onUpdateSettings('title')}
+            required
+            {...title}
+          />
+          <FormGroup
+            label={_('Expiration')}
+            value={getCurrData('timeout')}
+            {...timeout}
+          >
+            <Select
+              name="timeout"
+              options={expirationOptions}
+              value={getCurrData('timeout')}
+              onChange={this.onUpdateSettings('timeout')}
+              clearable={false}
+              searchable={false}
+            />
+          </FormGroup>
 
-        <FormGroup
-          label={_('Images Slide Interval')}
-          type="select"
-          options={refreshtimeOtions}
-          name="refreshtime"
-          value={getCurrData('refreshtime')}
-          onChange={this.onUpdateSettings('refreshtime')}
-          {...refreshtime}
-        />
+          <FormGroup
+            label={_('Images Slide Interval')}
+            type="select"
+            options={refreshtimeOtions}
+            name="refreshtime"
+            value={getCurrData('refreshtime')}
+            onChange={this.onUpdateSettings('refreshtime')}
+            {...refreshtime}
+          />
+          <iframe id="imagesIf" name="imagesIf" className="none" />
+          <p style={{ marginBottom: '4px' }}>{MSG.imageDes}</p>
+          <form
+            className="form-group"
+            action={urls.uploadPortalImage}
+            id="imageForm1"
+            method="POST"
+            target="imagesIf"
+            encType="multipart/form-data"
+          >
+            <div className="form-control">
+              <input type="hidden" name="count" value="1" />
+              <input type="hidden" name="pid" value={getCurrData('pid')} />
+              <input
+                type="file"
+                className="text"
+                id="filename1"
+                name="filename"
+                onChange={this.onChangeImage('1')}
+              />
+              {
+                noControl ? null : (
+                  <Button
+                    type="button"
+                    text={_('Upload Image') + ' 1'}
+                    icon="upload"
+                    loading={this.state.imageStatus1 === 'loading'}
+                    theme={this.state.imageStatus1 === 'selected' ? 'info' : undefined}
+                    style={uploadStyles}
+                    onClick={this.onUploadImage(1)}
+                  />
+                )
+              }
 
-        <div className="images-list">
-          <p className="form-group">{MSG.imageDes}</p>
-          {
-            images ? images.map(function (item) {
-              return <img src={item.get('url')} key={item.get('count')} />;
-            }) : null
-          }
+            </div>
+          </form>
+
+          <form
+            className="form-group"
+            action={urls.uploadPortalImage}
+            id="imageForm2"
+            method="POST"
+            target="imagesIf"
+            encType="multipart/form-data"
+          >
+            <div className="form-control">
+              <input type="hidden" name="count" value="2" />
+              <input type="hidden" name="pid" value={getCurrData('pid')} />
+              <input
+                type="file"
+                className="text"
+                id="filename2"
+                name="filename"
+                onChange={this.onChangeImage('2')}
+              />
+
+              {
+                noControl ? null : (
+                  <Button
+                    type="button"
+                    text={_('Upload Image') + ' 2'}
+                    icon="upload"
+                    style={uploadStyles}
+                    loading={this.state.imageStatus2 === 'loading'}
+                    theme={this.state.imageStatus2 === 'selected' ? 'info' : undefined}
+                    onClick={this.onUploadImage(2)}
+                  />
+                )
+              }
+            </div>
+          </form>
+
+          <form
+            className="form-group"
+            action={urls.uploadPortalImage}
+            id="imageForm3"
+            method="POST"
+            target="imagesIf"
+            encType="multipart/form-data"
+          >
+            <div className="form-control">
+              <input type="hidden" name="count" value="3" />
+              <input type="hidden" name="pid" value={getCurrData('pid')} />
+              <input
+                type="file"
+                className="text"
+                id="filename3"
+                name="filename"
+                onChange={this.onChangeImage('3')}
+              />
+
+              {
+                noControl ? null : (
+                  <Button
+                    type="button"
+                    text={_('Upload Image') + ' 3'}
+                    icon="upload"
+                    style={uploadStyles}
+                    loading={this.state.imageStatus3 === 'loading'}
+                    theme={this.state.imageStatus3 === 'selected' ? 'info' : undefined}
+                    onClick={this.onUploadImage(3)}
+                  />
+                )
+              }
+
+            </div>
+          </form>
+
+          <div className="form-group form-group--save">
+            <div className="form-control">
+              {
+                noControl ? null : (
+                  <SaveButton
+                    type="button"
+                    loading={this.props.app.get('saving')}
+                    onClick={this.onSave}
+                  />
+                )
+              }
+            </div>
+          </div>
         </div>
+        <div className="cols col-5">
+          <div className="o-preview-iphone">
+            <div className="o-preview-iphone__body">
+              <div className="carousel">
+                {
+                  curImgUrl ? (
+                    <img
+                      src={curImgUrl}
+                      alt={activeIndex}
+                    />
+                  ) : null
+                }
+                <ul className="carousel-indicators">
+                  {
+                    [1, 2, 3].map(
+                      (val) => {
+                        let myClassName = '';
 
-        <iframe id="imagesIf" name="imagesIf" className="none"></iframe>
-        <form
-          className="form-group"
-          action={urls.uploadPortalImage}
-          id="imageForm1"
-          method="POST"
-          target="imagesIf"
-          encType="multipart/form-data"
-        >
-          <div className="form-control">
-            <input type="hidden" name="count" value="1" />
-            <input type="hidden" name="pid" value={getCurrData('pid')} />
-            <input
-              type="file"
-              className="text"
-              id="filename1"
-              name="filename"
-              onChange={this.onChangeImage('1')}
-            />
-            {
-              noControl ? null : (
-                <Button
-                  type="button"
-                  text={_('Upload Image') + ' 1'}
-                  icon="upload"
-                  loading={this.state.imageStatus1 === 'loading'}
-                  theme={this.state.imageStatus1 === 'selected' ? 'info' : undefined}
-                  style={uploadStyles}
-                  onClick={this.onUploadImage(1)}
-                />
-              )
-            }
+                        if (val === activeIndex + 1) {
+                          myClassName = 'active';
+                        }
 
-          </div>
-        </form>
-
-        <form
-          className="form-group"
-          action={urls.uploadPortalImage}
-          id="imageForm2"
-          method="POST"
-          target="imagesIf"
-          encType="multipart/form-data"
-        >
-          <div className="form-control">
-            <input type="hidden" name="count" value="2" />
-            <input type="hidden" name="pid" value={getCurrData('pid')} />
-            <input
-              type="file"
-              className="text"
-              id="filename2"
-              name="filename"
-              onChange={this.onChangeImage('2')}
-            />
-
-            {
-              noControl ? null : (
-                <Button
-                  type="button"
-                  text={_('Upload Image') + ' 2'}
-                  icon="upload"
-                  style={uploadStyles}
-                  loading={this.state.imageStatus2 === 'loading'}
-                  theme={this.state.imageStatus2 === 'selected' ? 'info' : undefined}
-                  onClick={this.onUploadImage(2)}
-                />
-              )
-            }
-          </div>
-        </form>
-
-        <form
-          className="form-group"
-          action={urls.uploadPortalImage}
-          id="imageForm3"
-          method="POST"
-          target="imagesIf"
-          encType="multipart/form-data"
-        >
-          <div className="form-control">
-            <input type="hidden" name="count" value="3" />
-            <input type="hidden" name="pid" value={getCurrData('pid')} />
-            <input
-              type="file"
-              className="text"
-              id="filename3"
-              name="filename"
-              onChange={this.onChangeImage('3')}
-            />
-
-            {
-              noControl ? null : (
-                <Button
-                  type="button"
-                  text={_('Upload Image') + ' 3'}
-                  icon="upload"
-                  style={uploadStyles}
-                  loading={this.state.imageStatus3 === 'loading'}
-                  theme={this.state.imageStatus3 === 'selected' ? 'info' : undefined}
-                  onClick={this.onUploadImage(3)}
-                />
-              )
-            }
-
-          </div>
-        </form>
-
-        <div className="form-group form-group-save">
-          <div className="form-control">
-             {
-              noControl ? null : (
-                <SaveButton
-                  type="button"
-                  loading={this.props.app.get('saving')}
-                  onClick={this.onSave}
-                />
-              )
-            }
+                        return (
+                          <li
+                            className={myClassName}
+                            onClick={() => this.setState({
+                              activeIndex: val - 1,
+                            })}
+                          >
+                            {val}
+                          </li>
+                        );
+                      }
+                    )
+                  }
+                </ul>
+              </div>
+              <h4 className="o-preview-iphone__body-title">{getCurrData('title')}</h4>
+              <Button
+                type="button"
+                theme="primary"
+                text={_('Click on Internet')}
+                id="online"
+              />
+            </div>
           </div>
         </div>
-
       </div>
     );
   },

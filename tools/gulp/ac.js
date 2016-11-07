@@ -36,7 +36,7 @@ gulp.task('pub:ac', (callback) => {
   }
 
   gutil.log('切换发布目标目录：', gutil.colors.magenta(distPath));
-  runSequence('pub:path', ['clean:pubac', 'build'], 'pub:copy', callback);
+  runSequence('pub:path', 'config:ac', ['clean:pubac', 'build'], 'pub:copyac', callback);
 });
 
 // 发布 Access Manager 测试版本

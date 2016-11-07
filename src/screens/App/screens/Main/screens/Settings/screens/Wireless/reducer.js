@@ -2,24 +2,6 @@ import Immutable, { Map, List, fromJS } from 'immutable';
 import channels from 'shared/config/country.json';
 
 const channelsList = List(channels);
-const defaultSettings = Map({
-  encryption: 'none',
-  vlanenable: '0',
-  upstream: '0',
-  downstream: '0',
-  country: getCountry(),
-  channel: '6',
-  channelsBandwidth: '20',
-  ssid: '',
-  vlanid: '',
-});
-
-const defaultState = fromJS({
-  data: {
-    list: [],
-    curr: {},
-  },
-});
 
 function getCountry(country) {
   let initLang = country;
@@ -41,12 +23,33 @@ function getCountry(country) {
   return ret || 'CN';
 }
 
+const defaultSettings = Map({
+  encryption: 'none',
+  vlanenable: '0',
+  upstream: '0',
+  downstream: '0',
+  country: getCountry(),
+  channel: '6',
+  channelsBandwidth: '20',
+  channel5g: '6',
+  channelsBandwidth5g: '20',
+  ssid: '',
+  vlanid: '',
+});
+
+const defaultState = fromJS({
+  data: {
+    list: [],
+    curr: {},
+  },
+});
+
 function transformCountryData(settingData) {
   let ret;
 
   ret = settingData.set('country', getCountry(settingData.get('country')));
 
-  channelsList.forEach(function (item) {
+  channelsList.forEach((item) => {
     if (item.country === ret.get('country')) {
       if (parseInt(ret.get('channel'), 10) > parseInt(item['2.4g'].substr(-2), 10)) {
         ret = ret.set('channel', '0');
@@ -79,9 +82,7 @@ function receiveSettings(state, settingData) {
 function changeGroup(state, groupname) {
   const ret = state.mergeIn(['data', 'curr'], defaultSettings);
   let selectGroup = state.getIn(['data', 'list'])
-    .find(function (item) {
-      return item.get('groupname') === groupname;
-    });
+    .find(item => item.get('groupname') === groupname);
 
   selectGroup = transformCountryData(selectGroup);
 

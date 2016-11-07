@@ -7,34 +7,24 @@ const paths = gulp.paths;
 const configReg = /'\.\/config\/(\w+)'/g;
 const mainPath = `${paths.src}/index.jsx`;
 
-gulp.task('config', () => {
-  let name = 'ac';
-
-  if (argv.n) {
-    name = argv.n;
-  }
+function configProduct(name) {
   return gulp.src(mainPath)
     .pipe($.replace(configReg, `'./config/${name}'`))
     .on('end', () => {
       gutil.log('切换到产品：', gutil.colors.magenta(name));
     })
     .pipe(gulp.dest(paths.src));
-});
+}
 
-gulp.task('config:axc', () => {
-  return gulp.src(mainPath)
-    .pipe($.replace(configReg, "'./config/axc'"))
-    .on('end', () => {
-      gutil.log('切换到产品：', gutil.colors.magenta('AXC'));
-    })
-    .pipe(gulp.dest(paths.src));
+gulp.task('config', (callback) => {
+  let ret = callback;
+  if (argv.n) {
+    ret = configProduct(argv.n);
+  } else {
+    ret = callback();
+  }
+  return ret;
 });
-
-gulp.task('config:ap', () => {
-  return gulp.src(mainPath)
-    .pipe($.replace(configReg, "'./config/ap'"))
-    .on('end', () => {
-      gutil.log('切换到产品：', gutil.colors.magenta('AP'));
-    })
-    .pipe(gulp.dest(paths.src));
-});
+gulp.task('config:axc', () => configProduct('axc'));
+gulp.task('config:ap', () => configProduct('ap'));
+gulp.task('config:ac', () => configProduct('ac'));
