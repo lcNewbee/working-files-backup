@@ -7,12 +7,13 @@ class WirelessAcl extends CI_Controller {
 		$this->load->helper('array');
 	}
 	function fetch(){
-    $query_server=$this->db->select('id,template_name,server_type,server_pri,attr_name,attr_value')
+    $query_server=$this->db->select('id,template_name,server_type,server_pri,attr_id，attr_name,attr_value')
               ->from('radius_template')
               ->join('radius_server','radius_template.id=radius_server.template_id')
               ->join('server_params','radius_server.id=server_params.server_id')
               ->join('server_attr','server_attr.id=server_params.attr_id')
               ->get()->result_array();
+
     $query_template=$this->db->select('id,attr_name,attr_value')
               ->from('radius_template')
               ->join('template_params','radius_template.id=template_params.template_id')
@@ -20,8 +21,17 @@ class WirelessAcl extends CI_Controller {
               ->get()->result_array();
     $temp_query_server=array();
     foreach($query_server as $v){
+     if($v['server_type']==0&&$v['server_pri']==0&&$v['attr_id']==1){
+          $query_server['attr_name']=authpri_ipaddr;
+     }
+    elseif($v['server_type']==0&&$v['server_pri']==0&&$v['attr_id']==2){
+
+    }
+
 			$temp_query_template[$v['id']]['id'] = $v['id'];
       $temp_query_template[$v['id']]['template_name'] = $v['template_name'];
+      $temp_query_template[$v['id']]['server_type'] = $v['server_type'];
+      $temp_query_template[$v['id']]['server_pri'] = $v['server_pri'];
 		  $temp_query_template[$v['id']][$v['attr_name']] = $v['attr_value'];
 		}
     //array_values是为了让pool_id也成为数组属性,重新赋值给接口数组
@@ -63,7 +73,6 @@ class WirelessAcl extends CI_Controller {
       echo $result;
 		}
 		else if($_SERVER['REQUEST_METHOD'] == 'GET') {
-
 			$result = $this->fetch();
       echo $result;
 		}

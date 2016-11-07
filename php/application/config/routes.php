@@ -59,6 +59,7 @@ $route['goform/network/dhcp'] = 'networkDhcp';
 $route['goform/network/nat'] = 'networkNat';
 $route['goform/network/route'] = 'networkRoute';
 $route['goform/network/aci'] = 'networkAci';
+$route['goform/network/aaa'] = 'networkAaa';
 $route['goform/group'] = 'group';
 $route['goform/group/ap'] = 'apRadio/fetch';
 $route['goform/group/ap/radio'] = 'apRadio/radio';
@@ -78,5 +79,6 @@ $route['goform/system/version/upgrade'] = 'systemVersion/upgrade';
 $route['goform/system/version/backup'] = 'systemVersion/backup';
 $route['goform/system/ap/model'] = 'systemModel';
 $route['goform/system/ap/version'] = 'systemApVersion';
+
 
 
