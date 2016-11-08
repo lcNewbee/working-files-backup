@@ -7,7 +7,16 @@ const argv = require('minimist')(process.argv.slice(2));
 const paths = gulp.paths;
 
 // 发布 Access Pointer 版本
-gulp.task('clean:pubap', () => del([paths.pubAp], { force: true }));
+gulp.task('clean:pubap', () => {
+  let distPath = paths.pubAp;
+
+  if (argv.d) {
+    distPath = argv.d;
+  }
+
+  return del([distPath], { force: true });
+});
+
 gulp.task('pub:copyap', () => {
   let distPath = paths.pubAp;
 
@@ -15,7 +24,7 @@ gulp.task('pub:copyap', () => {
     distPath = argv.d;
   }
 
-  return gulp.src(`${paths.build}/**/*`)
+  return gulp.src([`${paths.build}/**/*`, `!${paths.build}/portal/`, `!${paths.build}/portal/**/*`])
     .pipe(gulp.dest(distPath));
 });
 gulp.task('pub:ap', (callback) => {

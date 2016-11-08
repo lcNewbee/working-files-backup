@@ -13,17 +13,16 @@ browserSync({
   },
   server: {
     baseDir: 'dist',
+    middleware: [
+      {
+        route: '/goform',
+        handle: serverApiMiddleware(),
+      },
+      historyApiFallback(),
+    ],
   },
 
   files: [
     'dist/*.html',
-  ],
-
-  middleware: [
-    {
-      route: '/goform',
-      handle: serverApiMiddleware(),
-    },
-    historyApiFallback(),
   ],
 });

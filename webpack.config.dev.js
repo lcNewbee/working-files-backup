@@ -66,7 +66,6 @@ let config = {
         loader: 'url-loader',
         query: {
           mimetype: 'image/png',
-          limit: 11000,
         },
       },
 
@@ -77,7 +76,7 @@ let config = {
 
       {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'url-loader?limit=10000&mimetype=application/font-woff',
+        loader: 'url-loader?mimetype=application/font-woff',
       },
 
       {
