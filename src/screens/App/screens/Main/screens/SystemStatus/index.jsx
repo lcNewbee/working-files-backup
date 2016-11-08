@@ -38,7 +38,7 @@ const interfaceOptions = fromJS([
       }
       return val;
     },
-    width: '100px',
+    width: '152px',
   }, {
     id: 'mac',
     text: _('MAC'),
@@ -48,7 +48,7 @@ const interfaceOptions = fromJS([
       }
       return val;
     },
-    width: '204px',
+    width: '152px',
   }, {
     id: 'txBytes',
     text: _('Tx Bytes'),
@@ -125,13 +125,14 @@ const vapInterfaceOptions = fromJS([
   {
     id: 'name',
     text: _('Name'),
-    transform(val) {
+    transform(val, item) {
+      const ssid = item.get('ssid');
       if (val === '') {
-        return '--';
+        return '--(' + ssid + ')';
       }
-      return val;
+      return val + '(' + ssid + ')';
     },
-    width: '100px',
+    width: '152px',
   }, {
     id: 'mac',
     text: _('MAC'),
@@ -141,7 +142,7 @@ const vapInterfaceOptions = fromJS([
       }
       return val;
     },
-    width: '204px',
+    width: '152px',
   }, {
     id: 'txBytes',
     text: _('Tx Bytes'),
@@ -282,7 +283,7 @@ export default class SystemStatus extends React.Component {
         id: 'deviceName',
         text: _('Device Name'),
         transform(val) {
-          if (val === '') {
+          if (val === '' || val === undefined) {
             return '--';
           }
           return val;
@@ -292,7 +293,7 @@ export default class SystemStatus extends React.Component {
         id: 'signal',
         text: _('Signal(dBm)'),
         transform(val) {
-          if (val === '') {
+          if (val === '' || val === undefined) {
             return '--';
           }
           return val;
@@ -302,7 +303,7 @@ export default class SystemStatus extends React.Component {
         id: 'noise',
         text: _('Noise(dBm)'),
         transform(val) {
-          if (val === '') {
+          if (val === '' || val === undefined) {
             return '--';
           }
           return val;
@@ -312,7 +313,7 @@ export default class SystemStatus extends React.Component {
         id: 'txRate',
         text: _('Tx Rate'),
         transform(val) {
-          if (val === '') {
+          if (val === '' || val === undefined) {
             return '--';
           }
           return val + 'Mbps';
@@ -322,7 +323,7 @@ export default class SystemStatus extends React.Component {
         id: 'rxRate',
         text: _('Rx Rate'),
         transform(val) {
-          if (val === '') {
+          if (val === '' || val === undefined) {
             return '--';
           }
           return val + 'Mbps';
@@ -332,7 +333,7 @@ export default class SystemStatus extends React.Component {
         id: 'txBytes',
         text: _('Tx Bytes'),
         transform(val) {
-          if (val === '') {
+          if (val === '' || val === undefined) {
             return '--';
           }
           return flowRateFilter.transform(val);
@@ -342,7 +343,7 @@ export default class SystemStatus extends React.Component {
         id: 'rxBytes',
         text: _('Rx Bytes'),
         transform(val) {
-          if (val === '') {
+          if (val === '' || val === undefined) {
             return '--';
           }
           return flowRateFilter.transform(val);
@@ -352,7 +353,7 @@ export default class SystemStatus extends React.Component {
         id: 'txPackets',
         text: _('Tx Packets'),
         transform(val) {
-          if (val === '') {
+          if (val === '' || val === undefined) {
             return '--';
           }
           return val;
@@ -362,7 +363,7 @@ export default class SystemStatus extends React.Component {
         id: 'rxPackets',
         text: _('Rx Packets'),
         transform(val) {
-          if (val === '') {
+          if (val === '' || val === undefined) {
             return '--';
           }
           return val;
@@ -372,7 +373,7 @@ export default class SystemStatus extends React.Component {
         id: 'connectTime',
         text: _('Connect Time'),
         transform(val) {
-          if (val === '') {
+          if (val === '' || val === undefined) {
             return '--';
           }
           return that.changeUptimeToReadable(val);
@@ -382,7 +383,7 @@ export default class SystemStatus extends React.Component {
         id: 'ipAddr',
         text: _('IP'),
         transform(val) {
-          if (val === '') {
+          if (val === '' || val === undefined) {
             return '--';
           }
           return val;
@@ -394,16 +395,19 @@ export default class SystemStatus extends React.Component {
         id: 'status',
         text: _('Connection Status'),
         transform(val) {
-          if (val === '') {
+          if (val === '' || val === undefined) {
             return '--';
           }
           return val;
         },
-        width: '288px',
+        width: '304px',
       }, {
         id: 'connectTime',
         text: _('Connect Time'),
         transform(val) {
+          if (val === '' || val === undefined) {
+            return '--';
+          }
           return that.changeUptimeToReadable(val);
         },
         width: '288px',
@@ -411,7 +415,7 @@ export default class SystemStatus extends React.Component {
         id: 'txrate',
         text: _('Tx Rate'),
         transform(val) {
-          if (val === '') {
+          if (val === '' || val === undefined) {
             return '--';
           }
           return val + 'Mbps';
@@ -421,21 +425,21 @@ export default class SystemStatus extends React.Component {
         id: 'rxrate',
         text: _('Rx Rate'),
         transform(val) {
-          if (val === '') {
+          if (val === '' || val === undefined) {
             return '--';
           }
           return val + 'Mbps';
         },
+        width: '288px',
       }, {
         id: 'ip',
         text: _('Peer IP'),
         transform(val) {
-          if (val === '') {
+          if (val === '' || val === undefined) {
             return '--';
           }
           return val;
         },
-        width: '304px',
       },
     ]);
     const {

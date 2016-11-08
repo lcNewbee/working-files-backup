@@ -113,6 +113,7 @@ const sChannelUtilization = require('../../screens/App/screens/Main/screens/Tool
 const routes = [{
   path: '/',
   component: App.Screen,
+  formUrl: '/goform/get_system_info',
   indexRoute: { component: pLogin.Screen },
   childRoutes: [{
     path: '/main',
@@ -120,7 +121,7 @@ const routes = [{
     childRoutes: [{
       id: 'systemstatus',
       fetchUrl: 'goform/get_system_info',
-      path: '/main/systemstatus',
+      path: '/main/status',
       icon: 'pie-chart',
       text: _('Device Status'),
       component: pSystemStatus.Screen,
@@ -250,9 +251,6 @@ const routes = [{
     component: sWizard.Screen,
   },
   ],
-}, {
-  path: '/main/status',
-  indexRoute: { onEnter: (nextState, replace) => replace('/main/systemstatus') },
 }, {
   path: '*',
   component: NotFound,

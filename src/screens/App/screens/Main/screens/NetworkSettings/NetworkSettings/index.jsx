@@ -10,8 +10,8 @@ import validator from 'shared/utils/lib/validator';
 import * as appActions from 'shared/actions/app';
 import * as sharedActions from 'shared/actions/settings';
 // import * as sharedReducer from 'shared/reducers/settings';
-import * as actions from './actions.js';
-import reducer from './reducer.js';
+import * as actions from './actions';
+import reducer from './reducer';
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
