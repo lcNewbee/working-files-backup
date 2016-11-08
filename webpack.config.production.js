@@ -36,6 +36,7 @@ var GLOBALS = {
 var autoprefixerHandle = autoprefixer(GLOBALS.autoprefixer);
 var vendorList = [
   "es5-shim",
+  "es5-shim/es5-sham",
   "es6-promise",
   "classnames",
   "whatwg-fetch",

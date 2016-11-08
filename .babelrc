@@ -16,7 +16,7 @@
     "add-module-exports",
     ["transform-runtime", {
       "helpers": true,
-      "polyfill": false, // defaults to true
+      "polyfill": true, // defaults to true
       "regenerator": true // defaults to true
     }],
     // "transform-es5-property-mutators",
