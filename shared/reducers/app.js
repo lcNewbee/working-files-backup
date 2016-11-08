@@ -26,7 +26,8 @@ function initConfig(state, payload) {
   guiVersion = `.${guiVersion}`;
 
   return state.set('config', payload)
-    .set('guiName', payload.title);
+    .set('guiName', payload.title)
+    .set('deviceCardInfo', payload.deviceCardInfo);
 }
 
 function receiveReport(state, data) {

@@ -400,7 +400,6 @@ export default class SystemStatus extends React.Component {
           }
           return val;
         },
-        width: '304px',
       }, {
         id: 'connectTime',
         text: _('Connect Time'),
@@ -410,7 +409,6 @@ export default class SystemStatus extends React.Component {
           }
           return that.changeUptimeToReadable(val);
         },
-        width: '288px',
       }, {
         id: 'txrate',
         text: _('Tx Rate'),
@@ -420,7 +418,6 @@ export default class SystemStatus extends React.Component {
           }
           return val + 'Mbps';
         },
-        width: '288px',
       }, {
         id: 'rxrate',
         text: _('Rx Rate'),
@@ -430,7 +427,6 @@ export default class SystemStatus extends React.Component {
           }
           return val + 'Mbps';
         },
-        width: '288px',
       }, {
         id: 'ip',
         text: _('Peer IP'),

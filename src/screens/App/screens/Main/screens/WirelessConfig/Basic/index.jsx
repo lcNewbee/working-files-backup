@@ -313,7 +313,7 @@ export default class Basic extends React.Component {
 
   onAddNewSsidItem() {
     const newSsid = fromJS({
-      flag: Symbol(),
+      flag: Math.random(),
       ssid: '',
       vlanId: '1',
       hideSsid: '0',
