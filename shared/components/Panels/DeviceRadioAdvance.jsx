@@ -57,6 +57,7 @@ class DeviceSystem extends React.Component {
         <FormGroup
           type="number"
           label={_('Max Users')}
+          min="1"
           value={getCurData('maxclientcount')}
           onChange={option => this.props.onChangeData({
             maxclientcount: option.value,
