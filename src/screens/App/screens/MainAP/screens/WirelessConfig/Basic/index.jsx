@@ -341,25 +341,33 @@ export default class Basic extends React.Component {
         key: '',
       },
     });
-    const vapList = this.props.selfState.getIn(['multiSsid', 'vapList']).push(newSsid);
+    const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
+    const vapList = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).push(newSsid);
+    const radioList = this.props.selfState.getIn(['multiSsid', 'radioList']).setIn([radioId, 'vapList'], vapList);
     if (vapList.size <= 16) { // 最大支持16个SSID
-      this.props.updateMultiSsidItem({ vapList });
+      this.props.updateMultiSsidItem({ radioList });
     }
   }
 
   onDeleteBtnClick(item) {
+    const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
     const multiSsid = this.props.selfState.get('multiSsid');
-    const num = multiSsid.getIn(['vapList']).keyOf(item);
-    const vapList = multiSsid.getIn(['vapList']).delete(num);
-    this.props.updateMultiSsidItem({ vapList });
+    const num = multiSsid.getIn(['radioList', radioId, 'vapList']).keyOf(item);
+    const vapList = multiSsid.getIn(['radioList', radioId, 'vapList']).delete(num);
+    const radioList = multiSsid.get('radioList').setIn([radioId, 'vapList'], vapList);
+    this.props.updateMultiSsidItem({ radioList });
   }
 
   onSsidItemChange(val, item, valId, newVal) {
+    const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
     const multiSsid = this.props.selfState.get('multiSsid');
-    const itemNum = multiSsid.getIn(['vapList']).keyOf(item);
+    const itemNum = multiSsid.getIn(['radioList', radioId, 'vapList']).keyOf(item);
     const newItem = item.set(valId, newVal);
-    const vapList = multiSsid.getIn(['vapList']).set(itemNum, newItem);
-    this.props.updateMultiSsidItem({ vapList });
+    // console.log('item', item, newItem);
+    const vapList = multiSsid.getIn(['radioList', radioId, 'vapList']).set(itemNum, newItem);
+    const radioList = this.props.selfState.getIn(['multiSsid', 'radioList'])
+                          .setIn([radioId, 'vapList'], vapList);
+    this.props.updateMultiSsidItem({ radioList });
   }
 
   getCountryNameFromCode(code, map) {
@@ -565,7 +573,8 @@ export default class Basic extends React.Component {
         label: _('Enable'),
         width: '200px',
         transform: function (val, item) {
-          const pos = this.props.selfState.getIn(['multiSsid', 'vapList']).keyOf(item);
+          const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
+          const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
           return (
             <input
               type="checkbox"
@@ -582,7 +591,8 @@ export default class Basic extends React.Component {
         label: _('SSID'),
         width: '250px',
         transform: function (val, item) {
-          const pos = this.props.selfState.getIn(['multiSsid', 'vapList']).keyOf(item);
+          const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
+          const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
           return (
             <FormInput
               type="text"
@@ -599,13 +609,16 @@ export default class Basic extends React.Component {
         label: _('Vlan ID'),
         width: '250px',
         transform: function (val, item) {
-          const pos = this.props.selfState.getIn(['multiSsid', 'vapList']).keyOf(item);
+          const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
+          const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
           return (
             <FormInput
               type="number"
               value={val}
               disabled={pos === 0 || vlanEnable === '0'}
-              onChange={data => this.onSsidItemChange(val, item, 'vlanId', data.value)}
+              onChange={(data) => {
+                this.onSsidItemChange(val, item, 'vlanId', data.value);
+              }}
               style={{ marginLeft: '-60px' }}
             />
           );
@@ -616,7 +629,8 @@ export default class Basic extends React.Component {
         label: _('Hide'),
         width: '200px',
         transform: function (val, item) {
-          const pos = this.props.selfState.getIn(['multiSsid', 'vapList']).keyOf(item);
+          const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
+          const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
           return (
             <input
               type="checkbox"
@@ -635,7 +649,8 @@ export default class Basic extends React.Component {
         label: _('Client Isolation'),
         width: '200px',
         transform: function (val, item) {
-          const pos = this.props.selfState.getIn(['multiSsid', 'vapList']).keyOf(item);
+          const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
+          const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
           return (
             <input
               type="checkbox"
@@ -654,7 +669,8 @@ export default class Basic extends React.Component {
         label: _('Security Edit'),
         width: '200px',
         transform: function (val, item) {
-          const pos = this.props.selfState.getIn(['multiSsid', 'vapList']).keyOf(item);
+          const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
+          const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
           return (
             <div style={{ marginLeft: '-3px' }}>
               <Button
@@ -678,7 +694,8 @@ export default class Basic extends React.Component {
         label: _('Delete'),
         width: '200px',
         transform: function (val, item) {
-          const pos = this.props.selfState.getIn(['multiSsid', 'vapList']).keyOf(item);
+          const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
+          const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
           return (
             <div style={{ marginLeft: '-12px' }}>
               <Button
@@ -1288,7 +1305,7 @@ export default class Basic extends React.Component {
               <FormGroup
                 type="checkbox"
                 label={_('Radio')}
-                checked={radioSettings.getIn(radioId, 'enable') === '1'}
+                checked={radioSettings.getIn(['radioList', radioId, 'enable']) === '1'}
                 onChange={(data) => {
                   const radioList = radioSettings.get('radioList').setIn([radioId, 'enable'], data.value);
                   this.props.updateRadioSettingsItem({ radioList });
@@ -1351,42 +1368,46 @@ export default class Basic extends React.Component {
                 label={_('Radio Mode')}
                 type="select"
                 options={radioModeOptions}
-                value={radioSettings.getIn(radioId, 'radioMode')}
+                value={radioSettings.getIn(['radioList', radioId, 'radioMode'])}
                 onChange={(data) => {
-                  this.props.updateRadioSettingsItem({
-                    radioMode: data.value,
-                  });
+                  const radioList = radioSettings.get('radioList').setIn([radioId, 'radioMode'], data.value);
+                  this.props.updateRadioSettingsItem({ radioList });
                 }}
               />
               <FormGroup
                 label={_('Channel')}
                 type="select"
                 options={this.makeChannelOptions()}
-                value={radioSettings.getIn(radioId, 'frequency') || 'auto'}
-                onChange={data => this.props.updateRadioSettingsItem({
-                  frequency: data.value || 'auto',
-                })}
+                value={radioSettings.getIn(['radioList', radioId, 'frequency']) || 'auto'}
+                onChange={(data) => {
+                  const radioList = radioSettings.get('radioList')
+                                    .setIn([radioId, 'frequency'], data.value || 'auto');
+                  this.props.updateRadioSettingsItem({ radioList });
+                }}
               />
               <FormGroup
                 label={_('Channel Bandwidth')}
                 type="switch"
                 minWidth="66px"
                 options={channelWidthOptions}
-                value={radioSettings.getIn(radioId, 'channelWidth')}
-                onChange={data => this.props.updateRadioSettingsItem({
-                  channelWidth: data.value,
-                })}
+                value={radioSettings.getIn(['radioList', radioId, 'channelWidth'])}
+                onChange={(data) => {
+                  const radioList = radioSettings.get('radioList')
+                                    .setIn([radioId, 'channelWidth'], data.value);
+                  this.props.updateRadioSettingsItem({ radioList });
+                }}
               />
               <FormGroup
                 label={_('Output Power')}
                 type="range"
                 min="1"
                 max={this.props.selfState.get('maxTxpower')}
-                // help={radioSettings.getIn(radioId, 'txPower')}
-                value={radioSettings.getIn(radioId, 'txPower')}
-                onChange={data => this.props.updateRadioSettingsItem({
-                  txPower: data.value,
-                })}
+                value={radioSettings.getIn(['radioList', radioId, 'txPower'])}
+                onChange={(data) => {
+                  const radioList = radioSettings.get('radioList')
+                                    .setIn([radioId, 'txPower'], data.value);
+                  this.props.updateRadioSettingsItem({ radioList });
+                }}
               />
               <FormGroup>
                 <SaveButton
@@ -1474,11 +1495,11 @@ export default class Basic extends React.Component {
                 options={ssidTableOptions}
                 list={(() => {
                   const list = fromJS([]);
-                  if (multiSsid.has('vapList')) {
-                    if (multiSsid.get('wirelessMode') !== 'sta') {
-                      return multiSsid.get('vapList');
+                  if (multiSsid.getIn(['radioList', radioId]).has('vapList')) {
+                    if (multiSsid.getIn(['radioList', radioId, 'wirelessMode']) !== 'sta') {
+                      return multiSsid.getIn(['radioList', radioId, 'vapList']);
                     }
-                    return multiSsid.get('vapList').setSize(1);
+                    return multiSsid.getIn(['radioList', radioId, 'vapList']).setSize(1);
                   }
                   return list;
                 })()
@@ -1493,7 +1514,7 @@ export default class Basic extends React.Component {
                   icon="plus"
                   onClick={() => this.onAddNewSsidItem()}
                   style={{ marginRight: '10px' }}
-                  disabled={multiSsid.get('wirelessMode') === 'sta'}
+                  disabled={multiSsid.getIn(['radioList', radioId, 'wirelessMode']) === 'sta'}
                 />
                 <SaveButton
                   type="button"
@@ -1502,7 +1523,7 @@ export default class Basic extends React.Component {
                   disabled={multiSsid.get('wirelessMode') === 'sta'}
                   onClick={() => {
                     let error = '';
-                    const vapList = multiSsid.get('vapList').toJS();
+                    const vapList = multiSsid.getIn(['radioList', radioId, 'vapList']).toJS();
                     const len = vapList.length;
                     const re = /^[0-9]*[1-9][0-9]*$/;
                     for (let i = 0; i < len; i++) {
@@ -1562,9 +1583,10 @@ export default class Basic extends React.Component {
             this.props.validateAll('ssidSecurityModal').then((msg) => {
               if (msg.isEmpty()) {
                 const pos = tableItemForSsid.get('pos');
-                const vapList = multiSsid.getIn(['vapList'])
+                const vapList = multiSsid.getIn(['radioList', radioId, 'vapList'])
                                 .set(pos, tableItemForSsid.get('item'));
-                this.props.updateMultiSsidItem({ vapList });
+                const radioList = multiSsid.get('radioList').setIn([radioId, 'vapList'], vapList);
+                this.props.updateMultiSsidItem({ radioList });
                 this.props.changeTableItemForSsid(fromJS({
                   isShow: '0',
                   val: '',

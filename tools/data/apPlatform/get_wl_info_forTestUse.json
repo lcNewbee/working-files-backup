@@ -14,6 +14,8 @@
 			{
 				"ssid":"axilspot1",
 				"apMac":"11:22:33:44:55:66",
+        "vlanId": "1",
+        "enable": "1",
 				"apMacEnable": "0",
         "isolation": "0",
 				"security":{
@@ -28,7 +30,9 @@
 			},
 			{
 				"ssid":"axilspot2",
+        "enable": "1",
 				"apMac":"11:22:33:44:55:66",
+        "vlanId": "2",
         "isolation": "0",
 				"security":{
 					"mode":"wpa",
@@ -73,6 +77,7 @@
 			{
 				"ssid":"axilspot2",
 				"hideSsid": 0,
+        "vlanId": "1",
 				"isolation":"0",
 				"peers":
 				["14:ff:00:a0:c1:ff",
