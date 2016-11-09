@@ -179,8 +179,6 @@ class FormInput extends React.Component {
 
     data.value = rawValue || val;
 
-    console.log(data)
-
     // 数据更新
     if (typeof this.props.onChange === 'function') {
       this.props.onChange(data, e);
