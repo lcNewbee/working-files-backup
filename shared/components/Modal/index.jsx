@@ -4,7 +4,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import classNames from 'classnames';
 import utils from '../../utils';
 
-const curModelShowList = [];
+const curModelShowNum = 0;
 const propTypes = {
   isShow: PropTypes.bool,
   title: PropTypes.any,
@@ -69,16 +69,16 @@ class Modal extends Component {
       },
     );
 
-    if (!modalBackdropElem) {
-      document.body.appendChild(utils.dom.fragment(modalBackdropHtml));
-      modalBackdropElem = document.getElementById('modalBackdrop')
-    }
+    // if (!modalBackdropElem) {
+    //   document.body.appendChild(utils.dom.fragment(modalBackdropHtml));
+    //   modalBackdropElem = document.getElementById('modalBackdrop')
+    // }
 
-    if (isShow) {
-
-    } else {
-
-    }
+    // if (isShow) {
+    //   curModelShowNum += 1;
+    // } else {
+    //   curModelShowNum += 1;
+    // }
   }
   render() {
     const { size, role, id, transitionLeave, transitionEnter,
