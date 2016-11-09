@@ -36,6 +36,7 @@ const propTypes = {
   updateEditApGroup: PropTypes.func,
   updateGroupMoveDevice: PropTypes.func,
   updateGroupAddDevice: PropTypes.func,
+  resetGroupAddDevice: PropTypes.func,
   selectManageGroupAp: PropTypes.func,
   route: PropTypes.object,
   location: PropTypes.object,
@@ -306,6 +307,10 @@ export default class Main extends Component {
         if (state && state.code === 2000) {
           this.props.fetchGroupAps($$editData.get('id'));
           this.props.fetchGroupAps(-1);
+        }
+
+        if (curModalName === 'groupApAdd') {
+          this.props.resetGroupAddDevice();
         }
 
         this.props.fetchApGroup();

@@ -121,6 +121,12 @@ export function updateGroupAddDevice(data) {
   };
 }
 
+export function resetGroupAddDevice() {
+  return {
+    type: 'RESET_GROUP_ADD_DEVICE',
+  };
+}
+
 export function updateGroupMoveDevice(data) {
   return {
     type: 'UPDATE_GROUP_MOVE_DEVICE',

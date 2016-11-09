@@ -28,6 +28,9 @@ const defaultState = fromJS({
     apAddData: {
       // 类型：custom（自定义），auto（为分组ap列表）
       type: 'custom',
+      apmac: '',
+      name: '',
+      model: '',
     },
     apMoveData: {
       targetGroupId: 1,
@@ -222,6 +225,13 @@ export default function (state = defaultState, action) {
 
     case 'UPDATE_GROUP_ADD_DEVICE':
       return state.mergeIn(['group', 'apAddData'], action.payload);
+    case 'RESET_GROUP_ADD_DEVICE':
+      return state.setIn(['group', 'apAddData'], fromJS({
+        type: 'custom',
+        apmac: '',
+        name: '',
+        model: '',
+      }));
 
     case 'UPDATE_ADD_AP_GROUP':
       return state.mergeIn(['group', 'addData'], action.payload);
