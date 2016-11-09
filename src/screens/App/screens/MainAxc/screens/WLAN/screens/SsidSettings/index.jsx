@@ -61,7 +61,7 @@ const screenOptions = fromJS([
     text: _('SSID'),
   }, {
     id: 'hiddenSsid',
-    text: _('Hidden SSID'),
+    text: _('Hidde SSID'),
     options: [
       {
         value: '1',
@@ -254,7 +254,7 @@ export default class View extends React.Component {
             onChange={this.onUpdateSettings('enabled')}
           />
           <FormGroup
-            label={_('Hidden SSID')}
+            label={_('Hidde SSID')}
             type="checkbox"
             checked={getCurrData('hiddenSsid') === '1'}
             onChange={this.onUpdateSettings('hiddenSsid')}
@@ -267,13 +267,14 @@ export default class View extends React.Component {
           />
           <FormGroup
             label={_('Max Users')}
+            min="1"
             type="number"
             value={getCurrData('maxBssUsers')}
             onChange={this.onUpdateSettings('maxBssUsers')}
             required
           />
           <FormGroup
-            label={_('Store-Forward Pattern')}
+            label={_('Forward Pattern')}
             type="select"
             options={storeForwardOption}
             value={getCurrData('storeForwardPattern')}

@@ -217,7 +217,7 @@ const routes = [
             icon: 'clone',
             path: '/main/network/radius_template',
             formUrl: 'goform/network/radius/template',
-            text: _('Radius Template'),
+            text: _('Radius Service'),
             component: sRaduisTemplate.Screen,
           }, {
             id: 'networkAaa',
@@ -239,19 +239,19 @@ const routes = [
                 id: 'portalServer',
                 path: '/main/network/portal/server',
                 formUrl: 'goform/network/portal/server',
-                text: _('Portal Server'),
+                text: _('Server'),
                 component: sPortalServer.Screen,
               }, {
                 id: 'portalRules',
                 path: '/main/network/portal/rules',
                 formUrl: 'goform/network/portal/rule',
-                text: _('Portal Rules'),
+                text: _('Rules'),
                 component: sPortalRules.Screen,
               }, {
                 id: 'portalTemplate',
                 path: '/main/network/portal/template',
                 formUrl: 'goform/network/portal/template',
-                text: _('Portal Template'),
+                text: _('Profile'),
                 component: sPortalTemplate.Screen,
               },
             ],
@@ -452,7 +452,7 @@ const routes = [
                 id: 'flowReport',
                 path: '/main/group/report/flow',
                 formUrl: 'goform/timerPolicy',
-                text: _('Flow Report'),
+                text: _('Traffic Report'),
                 component: sFlowReport.Screen,
               }, {
                 id: 'businessReport',
@@ -546,7 +546,7 @@ const routes = [
             isIndex: true,
             path: '/main/system/activeStandby',
             icon: 'refresh',
-            text: _('Active-Standby'),
+            text: _('Backup Settings'),
             component: sActiveStandby.Screen,
           // }, {
           //   id: 'cluster',
@@ -569,7 +569,7 @@ const routes = [
             isIndex: true,
             path: '/main/system/license',
             icon: 'file-text',
-            text: _('Manage License'),
+            text: _('License Management'),
             component: sLicense.Screen,
           }, {
             id: 'acUpgrade',

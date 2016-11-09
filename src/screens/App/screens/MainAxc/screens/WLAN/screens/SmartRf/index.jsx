@@ -130,7 +130,7 @@ export default class View extends React.Component {
           <legend className="o-form__legend">{_('Base Settings')}</legend>
           <FormGroup
             type="checkbox"
-            label={_('5G Frist')}
+            label={_('Band Steering')}
             checked={curData['5gFrist'] === '1'}
             onChange={item => updateItemSettings({
               '5gFrist': item.value,
@@ -168,10 +168,10 @@ export default class View extends React.Component {
           />
         </fieldset>
         <fieldset className="o-form__fieldset">
-          <legend className="o-form__legend">{_('Wireless Power')}</legend>
+          <legend className="o-form__legend">{_('Tx Power')}</legend>
           <FormGroup
             type="checkbox"
-            label={_('Power Auto')}
+            label={_('Automatic')}
             checked={curData.autoBandwidth === '1'}
             onChange={item => updateItemSettings({
               autoBandwidth: item.value,
@@ -183,7 +183,7 @@ export default class View extends React.Component {
                 type="range"
                 min="1"
                 max="100"
-                label={_('Wireless Power')}
+                label={_('Tx Power')}
                 unit="%"
                 value={parseInt(curData.wirelessPower, 10)}
                 onChange={item => updateItemSettings({
@@ -194,7 +194,7 @@ export default class View extends React.Component {
           }
         </fieldset>
         <fieldset className="o-form__fieldset">
-          <legend className="o-form__legend">{_('Wireless Channel')}</legend>
+          <legend className="o-form__legend">{_('Chanel')}</legend>
           <FormGroup
             type="select"
             label={_('Country')}
@@ -206,7 +206,7 @@ export default class View extends React.Component {
           />
           <FormGroup
             type="checkbox"
-            label={_('Channel Auto')}
+            label={_('Automatic')}
             value="1"
             checked={curData.autoChannel === '1'}
             onChange={item => updateItemSettings({

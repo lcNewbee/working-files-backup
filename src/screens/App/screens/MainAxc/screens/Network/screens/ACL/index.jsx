@@ -11,7 +11,7 @@ import * as screenActions from 'shared/actions/screens';
 const commonFormOptions = fromJS([
   {
     id: 'enable',
-    label: _('Enable ACL'),
+    label: _('ACL'),
     type: 'checkbox',
     text: _('Enable'),
     value: '1',
@@ -21,7 +21,7 @@ const commonFormOptions = fromJS([
 const screenOptions = fromJS([
   {
     id: 'ruleName',
-    label: _('Rule Name'),
+    label: _('Name'),
     formProps: {
       type: 'text',
       maxLength: '32',
@@ -29,7 +29,7 @@ const screenOptions = fromJS([
     },
   }, {
     id: 'ruleAction',
-    label: _('Rule Action'),
+    label: _('Rule'),
     defaultValue: '0',
     options: [
       {
@@ -58,13 +58,13 @@ const screenOptions = fromJS([
     ],
     formProps: {
       type: 'select',
-      label: _('Rule Type'),
+      label: _('Address Type'),
       placeholder: _('Please Select ') + _('NAT Rule Type'),
     },
 
   }, {
     id: 'ipAddress',
-    label: _('IP Address'),
+    label: _('IP'),
     formProps: {
       required: true,
     },
@@ -106,7 +106,7 @@ export default class View extends React.Component {
     return (
       <ListInfo
         {...this.props}
-        listTitle={_('ACL Rules List')}
+        listTitle={_('ACL List')}
         store={this.props.store}
         tableOptions={tableOptions}
         settingsFormOption={commonFormOptions}

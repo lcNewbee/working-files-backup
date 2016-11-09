@@ -54,7 +54,7 @@ function getSafeTypeChartOtion(attackTypeMap) {
       x: 'left',
     },
     title: {
-      text: _('Attack Type Diagram'),
+      text: _('Cyber Attack Diagram'),
       x: 'center',
     },
     series: [
@@ -91,7 +91,7 @@ function getSafeTypeChartOtion(attackTypeMap) {
       })
       .toArray();
 
-  apOption.title.subtext = _('Attack Number: ') + totalNum;
+  apOption.title.subtext = _('Attacks: ') + totalNum;
 
   apOption.series[0].data = safeTypeList.toArray();
 

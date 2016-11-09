@@ -32,16 +32,16 @@ const tableOptions = fromJS([
     text: _('Access Subscriber'),
   }, {
     id: 'nonFirstVisit',
-    text: _('Non - First Visit'),
+    text: _('Repeat Visit'),
   }, {
     id: 'accessRatio',
-    text: _('Visit Ratio'),
+    text: _('Capture Rate'),
   }, {
     id: 'reVisitingRatio',
-    text: _('Re-visiting Ratio'),
+    text: _('Repeat Visit Rate'),
   }, {
     id: 'averageDetentionTime',
-    text: _('Average Detention Time'),
+    text: _('Median visit length'),
   },
 ]);
 

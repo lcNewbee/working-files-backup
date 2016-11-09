@@ -27,18 +27,18 @@ const screenOptions = fromJS([
       {
         value: '0',
         disabled: true,
-        label: _('Static Address Transform'),
+        label: _('Static NAT'),
       }, {
         value: 'snat',
-        label: _('Source Address Transform'),
+        label: _('Source NAT'),
       }, {
         value: 'dnat',
         disabled: true,
-        label: _('Target Address Transform'),
+        label: _('Destination NAT'),
       }, {
         value: 'masquerade',
         disabled: true,
-        label: _('Public IP Transparent Transmission'),
+        label: _('Internet NAT'),
       },
     ],
     defaultValue: 'snat',
@@ -89,7 +89,7 @@ export default class View extends React.Component {
     return (
       <ListInfo
         {...this.props}
-        listTitle={_('NAT Rules List')}
+        listTitle={_('NAT List')}
         listKey="allKeys"
         settingsFormOption={commonFormOptions}
         tableOptions={tableOptions}

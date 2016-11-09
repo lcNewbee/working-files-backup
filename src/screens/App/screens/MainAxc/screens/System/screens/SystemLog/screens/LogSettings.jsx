@@ -15,7 +15,7 @@ const screenOptions = fromJS([
     id: 'time',
     text: _('Retain Days'),
     fieldset: 'retainDays',
-    legend: _('Log Retain Days'),
+    legend: _('Log Duration'),
     defaultValue: '7',
     formProps: {
       type: 'number',

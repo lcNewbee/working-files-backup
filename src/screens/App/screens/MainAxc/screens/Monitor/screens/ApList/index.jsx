@@ -34,7 +34,7 @@ const apTableOptions = fromJS([
   }, {
     id: 'bandwidth',
     width: '80',
-    text: _('Up/Down Speed'),
+    text: _('Data'),
     transform(val, item) {
       const upRate = flowRateFilter.transform(item.get('upstream'));
       const downRate = flowRateFilter.transform(item.get('downstream'));
@@ -117,6 +117,14 @@ export default class View extends React.Component {
             name: 'upgrade',
             text: _('Upgrade'),
             icon: 'arrow-circle-o-up',
+          }, {
+            name: 'reboot',
+            text: _('Reboot'),
+            icon: 'recycle',
+          }, {
+            name: 'reset',
+            text: _('Reset'),
+            icon: 'reply-all',
           },
         ]}
         listKey="mac"

@@ -75,7 +75,7 @@ const screenOptions = fromJS([
     },
   }, {
     id: 'mainDns',
-    text: _('Main DNS'),
+    text: _('Primary DNS'),
     formProps: {
       maxLength: '15',
       validator: validator({
@@ -84,7 +84,7 @@ const screenOptions = fromJS([
     },
   }, {
     id: 'secondDns',
-    text: _('Second DNS'),
+    text: _('Secondary DNS'),
     formProps: {
       maxLength: '15',
       validator: validator({

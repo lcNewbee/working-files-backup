@@ -103,12 +103,13 @@
   "YES": "是",
   "NO": "否",
   "Loading": "加载中",
+  "Data": "数据",
 
   "Are you sure to delete selected index: %s ?": "你确定要删除选择的项：%s ?",
   "Download Report": "下载报表",
 
-  "Main DNS": "主DNS",
-  "Second DNS": "备用DNS",
+  "Primary DNS": "主DNS",
+  "Secondary DNS": "备用DNS",
 
   "Management": "管理系统",
   "Setup Wizard": "设置向导",

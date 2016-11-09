@@ -23,13 +23,13 @@ const screenOptions = fromJS([
     },
   }, {
     id: 'type',
-    text: _('Operation Type'),
+    text: _('Type'),
   }, {
     id: 'operationCommand',
-    text: _('Operation Command'),
+    text: _('Operation'),
   }, {
     id: 'operationResult',
-    text: _('Operation Result'),
+    text: _('Result'),
   },
 ]);
 const tableOptions = immutableUtils.getTableOptions(screenOptions);

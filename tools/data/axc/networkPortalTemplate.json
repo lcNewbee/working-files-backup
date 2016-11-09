@@ -11,8 +11,8 @@
       "server_key":"test",
       "server_url":"test",
       "ac_ip":"test",
-      "authRedirectUrl": "www.baidu.com",
-      "portalTitle": "Axilspot Portal",
+      "authRedirectUrl": "www.google.com",
+      "portalTitle": "Axilspot",
       "imagesSlideInterval": "2",
       "expiration": "3600",
       "images": [{

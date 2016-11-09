@@ -137,6 +137,7 @@ export default class AcVersion extends PureComponent {
   }
 
   renderStepOne() {
+    const { app } = this.props;
     const componentConfig = {
       postUrl: 'goform/system/version/upload',
     };
@@ -188,6 +189,11 @@ export default class AcVersion extends PureComponent {
 
     return (
       <div className="ac-version">
+        <FormGroup
+          type="plain-text"
+          label={msg.currentVersion}
+          value={app.getIn(['version'])}
+        />
         <FormGroup
           label={msg.versionUses}
           type="switch"

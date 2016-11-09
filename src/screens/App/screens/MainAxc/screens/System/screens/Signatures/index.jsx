@@ -26,7 +26,7 @@ const screenOptions = fromJS([
     },
   }, {
     id: 'expire',
-    label: _('Expire Time'),
+    label: _('Expiration'),
     fieldset: 'status',
     formProps: {
       type: 'plain-text',

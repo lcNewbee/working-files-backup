@@ -19,7 +19,7 @@ const screenOptions = fromJS([
     },
   }, {
     id: 'authpri_ipaddr',
-    label: _('Main IP'),
+    label: _('Primary IP'),
     fieldset: 'auth',
     legend: _('Auth Server Settings'),
     defaultValue: '0',
@@ -30,7 +30,7 @@ const screenOptions = fromJS([
 
   }, {
     id: 'authsecond_ipaddr',
-    label: _('Second IP'),
+    label: _('Secondary IP'),
     fieldset: 'auth',
     formProps: {
       type: 'text',
@@ -38,7 +38,7 @@ const screenOptions = fromJS([
     },
   }, {
     id: 'authpri_port',
-    label: _('Main Port'),
+    label: _('Primary Port'),
     fieldset: 'auth',
     defaultValue: '0',
     formProps: {
@@ -48,7 +48,7 @@ const screenOptions = fromJS([
 
   }, {
     id: 'authsecond_port',
-    label: _('Second Port'),
+    label: _('Secondary Port'),
     fieldset: 'auth',
     formProps: {
       type: 'number',
@@ -56,7 +56,7 @@ const screenOptions = fromJS([
     },
   }, {
     id: 'authpri_key',
-    label: _('Main Password'),
+    label: _('Primary Password'),
     fieldset: 'auth',
     defaultValue: '0',
     noTable: true,
@@ -66,7 +66,7 @@ const screenOptions = fromJS([
     },
   }, {
     id: 'authsecond_key',
-    label: _('Second Password'),
+    label: _('Secondary Password'),
     fieldset: 'auth',
     noTable: true,
     formProps: {
@@ -75,7 +75,7 @@ const screenOptions = fromJS([
     },
   }, {
     id: 'acctpri_ipaddr',
-    label: _('Main IP'),
+    label: _('Primary IP'),
     fieldset: 'Accounting',
     legend: _('Accounting Server Settings'),
     defaultValue: '0',
@@ -86,7 +86,7 @@ const screenOptions = fromJS([
 
   }, {
     id: 'acctsecond_ipaddr',
-    label: _('Second IP'),
+    label: _('Secondary IP'),
     fieldset: 'Accounting',
     formProps: {
       type: 'text',
@@ -94,7 +94,7 @@ const screenOptions = fromJS([
     },
   }, {
     id: 'acctpri_port',
-    label: _('Main Port'),
+    label: _('Primary Port'),
     fieldset: 'Accounting',
     defaultValue: '0',
     formProps: {
@@ -104,7 +104,7 @@ const screenOptions = fromJS([
 
   }, {
     id: 'acctsecond_port',
-    label: _('Second Port'),
+    label: _('Secondary Port'),
     fieldset: 'Accounting',
     formProps: {
       type: 'number',
@@ -112,7 +112,7 @@ const screenOptions = fromJS([
     },
   }, {
     id: 'acctpri_key',
-    label: _('Main Password'),
+    label: _('Primary Password'),
     fieldset: 'Accounting',
     defaultValue: '0',
     noTable: true,
@@ -123,7 +123,7 @@ const screenOptions = fromJS([
 
   }, {
     id: 'acctsecond_key',
-    label: _('Second Password'),
+    label: _('Secondary Password'),
     fieldset: 'Accounting',
     noTable: true,
     formProps: {
@@ -134,7 +134,7 @@ const screenOptions = fromJS([
     id: 'accton_enable',
     label: _('Accounting-on'),
     fieldset: 'parameter',
-    legend: _('Parameter Settings'),
+    legend: _('Advanced Settings'),
     noTable: true,
     formProps: {
       type: 'checkbox',
@@ -236,7 +236,6 @@ const screenOptions = fromJS([
       help: _('Seconds'),
     },
   },
-
 ]);
 
 const formOptions = immutableUtils.getFormOptions(screenOptions);
@@ -253,6 +252,7 @@ export default class View extends React.Component {
     return (
       <ListInfo
         {...this.props}
+        title={_('Radius Porfile')}
         store={this.props.store}
         tableOptions={tableOptions}
         modalSize="lg"

@@ -8,7 +8,7 @@
       "DNS Hijacking": 100,
       "DNS Redirect": 222,
       "DNS Cache Snoop": 222,
-      "DDOS": 222
+      "DDoS": 222
     },
     "list": [
       {

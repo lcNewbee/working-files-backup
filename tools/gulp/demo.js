@@ -10,7 +10,7 @@ const argv = require('minimist')(process.argv.slice(2));
 
 gulp.task('pub:demopath', () => {
   const publicPathReg = /publicPath: '(.*)'/g;
-  let pubWebPath = '/webapp/intercept/';
+  let pubWebPath = 'http://www.axilspot.com/demo-static/';
   let productName = 'ac';
 
   if (argv.p) {

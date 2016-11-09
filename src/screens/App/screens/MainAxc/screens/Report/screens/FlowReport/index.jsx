@@ -100,11 +100,8 @@ export default class View extends React.Component {
   getUsersOption() {
     const dataList = [
       {
-        name: 'iPhone',
+        name: 'Apple',
         value: 232,
-      }, {
-        name: 'Mac',
-        value: 2323,
       }, {
         name: 'Google',
         value: 2323,
@@ -214,7 +211,7 @@ export default class View extends React.Component {
     const { focusedInput, startDate, endDate } = this.state;
     return (
       <div className="o-box">
-        <h3 className="t-main__content-title">{_('Flow Report') }</h3>
+        <h3 className="t-main__content-title">{this.props.route.text}</h3>
         <div className="o-box__cell clearfix">
           <div className="cols col-6">
             <label

@@ -18,7 +18,7 @@ const flowRateFilter = utils.filter('flowRate:["KB"]');
 const clientsTableOptions = fromJS([
   {
     id: 'devicename',
-    text: `${_('MAC')}/${_('Name')}`,
+    text: _('Client'),
     transform(val, item) {
       return item.get('devicename') || item.get('mac');
     },
@@ -27,7 +27,7 @@ const clientsTableOptions = fromJS([
     text: _('IP'),
   }, {
     id: 'manufacturer',
-    text: _('Manufacturer'),
+    text: _('Vendor'),
   }, {
     id: 'terminalType',
     text: _('Terminal Type'),
@@ -48,7 +48,7 @@ const clientsTableOptions = fromJS([
     },
   }, {
     id: 'bandwidth',
-    text: _('Up/Down Speed'),
+    text: _('Data'),
     transform(val, item) {
       const upRate = flowRateFilter.transform(item.get('upstream'));
       const downRate = flowRateFilter.transform(item.get('downstream'));
@@ -90,7 +90,7 @@ const clientsTableOptions = fromJS([
     },
   }, {
     id: 'operationhours',
-    text: _('Connect Time'),
+    text: _('Online Time'),
     filter: 'connectTime',
   }, {
     id: 'op',

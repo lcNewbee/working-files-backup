@@ -36,7 +36,7 @@ export default function serverApi(options) {
     const reqFilename = tansformPath(req.url);
     const fileMime = mime.lookup(reqFilename);
     let isDone = false;
-
+    console.log(options)
     function readDone(resText, url) {
       let msg = resText;
 

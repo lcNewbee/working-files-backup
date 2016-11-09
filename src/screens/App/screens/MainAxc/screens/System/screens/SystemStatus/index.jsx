@@ -21,12 +21,12 @@ function getCpuOption(serverData) {
       data: [_('Used'), _('Free')],
     },
     title: {
-      text: _('CPU Activity Monitor'),
+      text: _('CPU Usage'),
       x: 'center',
     },
     series: [
       {
-        name: _('CPU Activity Monitor'),
+        name: _('CPU Usage'),
         type: 'pie',
         radius: ['40%', '70%'],
         avoidLabelOverlap: false,
@@ -67,7 +67,7 @@ function getMemoryOption(serverData) {
       formatter: '{a} <br/>{b}: {c} ({d}%)',
     },
     title: {
-      text: _('Memory Activity Monitor'),
+      text: _('Memory Usage'),
       x: 'center',
     },
     legend: {
@@ -77,7 +77,7 @@ function getMemoryOption(serverData) {
     },
     series: [
       {
-        name: _('Memory Activity Monitor'),
+        name: _('Memory Usage'),
         type: 'pie',
         radius: ['40%', '70%'],
         avoidLabelOverlap: false,
@@ -236,7 +236,7 @@ export default class View extends PureComponent {
           </div>
           <div className="cols col-12" >
             <div className="o-box__cell">
-              <h3>{ _('Store') }</h3>
+              <h3>{ _('Storage') }</h3>
             </div>
             <div className="o-box__cell">
               <EchartReact

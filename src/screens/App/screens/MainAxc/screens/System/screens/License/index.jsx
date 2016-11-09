@@ -82,7 +82,7 @@ export default class View extends React.Component {
                 <dd>1000</dd>
               </dl>
               <dl className="m-description-list-row">
-                <dt style={dtStyle}>{_('Expiration Time')}</dt>
+                <dt style={dtStyle}>{_('Expiration Date')}</dt>
                 <dd>2018-02-23</dd>
               </dl>
             </div>
@@ -95,10 +95,10 @@ export default class View extends React.Component {
             <div className="m-description-list">
               <dl className="m-description-list-row">
                 <dt style={dtStyle}>{_('License Status')}</dt>
-                <dd>{_('Unlicense')}</dd>
+                <dd>{_('Unlicensed')}</dd>
               </dl>
               <dl className="m-description-list-row">
-                <dt style={dtStyle}>{_('Expiration Time')}</dt>
+                <dt style={dtStyle}>{_('Expiration Date')}</dt>
                 <dd>2018-02-23</dd>
               </dl>
             </div>

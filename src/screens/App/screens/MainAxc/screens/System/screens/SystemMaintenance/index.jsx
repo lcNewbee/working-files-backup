@@ -87,15 +87,6 @@ export default class View extends React.Component {
             onClick={this.onSave}
           />
         </FormGroup>
-        <FormGroup label={_('Backup Configuration')}>
-          <Button
-            type="button"
-            icon="copy"
-            text={_('Backup Your Current Configuration')}
-            loading={this.props.app.get('saving')}
-            onClick={this.onSave}
-          />
-        </FormGroup>
         <fileset>
           <legend className="o-form__legend">{_('Restore Configuration')}</legend>
           <FormGroup label={_('Restore From File')}>
@@ -114,21 +105,12 @@ export default class View extends React.Component {
               onClick={this.onSave}
             />
           </FormGroup>
-          <FormGroup label={_('Restore To Factory')}>
-            <Button
-              type="button"
-              icon="undo"
-              text={_('Restore To Factory')}
-              loading={this.props.app.get('saving')}
-              onClick={this.onSave}
-            />
-          </FormGroup>
         </fileset>
 
         <fileset>
           <legend className="o-form__legend">{_('Language')}</legend>
           <FormGroup
-            label={_('Select Language')}
+            label={_('Current')}
             type="select"
             options={languageOptions}
             value={b28n.getLang()}

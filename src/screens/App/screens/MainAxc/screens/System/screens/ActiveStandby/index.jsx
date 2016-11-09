@@ -68,7 +68,6 @@ export default class View extends React.Component {
           type="checkbox"
           text={_('Enable')}
           value="1"
-          label={_('Enable Active-Standby')}
           checked={curData.enable === '1'}
           onChange={
             data => updateItemSettings({
