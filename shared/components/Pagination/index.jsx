@@ -116,9 +116,9 @@ class Pagination extends Component {
     return (
       <ul className="pagination">
         <li className={prevClassName}><a href="#/" onClick={this.onGoFrist}>{_('First')}</a></li>
-        <li className={prevClassName}><a href="#/" onClick={this.onPrev}>{_('Prev')}</a></li>
+        <li className={prevClassName}><a href="#/" onClick={this.onPrev}>{_('<')}</a></li>
         {list}
-        <li className={nextClassName}><a href="#/" onClick={this.onNext}>{_('Next')}</a></li>
+        <li className={nextClassName}><a href="#/" onClick={this.onNext}>{_('>')}</a></li>
         <li className={nextClassName}><a href="#/" onClick={this.onGoEnd}>{_('Last')}</a></li>
       </ul>
     );

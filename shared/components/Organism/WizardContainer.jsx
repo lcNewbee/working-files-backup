@@ -137,9 +137,9 @@ class WizardContainer extends React.Component {
     }
 
     // 执行完成
-    if (currStep === (MAX_STEP - 1) && onCompleted) {
+    if (this.state.currStep === (MAX_STEP - 1) && onCompleted) {
       onCompleted({
-        currStep,
+        currStep: this.state.currStep,
         targetStep: currStep,
       });
     }

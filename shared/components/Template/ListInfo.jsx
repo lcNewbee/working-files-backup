@@ -12,9 +12,9 @@ const msg = {
   perPage: _('Items per page: '),
 };
 const selectOptions = [
-  { value: 20, label: `${msg.perPage}20` },
-  { value: 50, label: `${msg.perPage}50` },
-  { value: 100, label: `${msg.perPage}100` },
+  { value: 20, label: `20` },
+  { value: 50, label: `50` },
+  { value: 100, label: `100` },
 ];
 
 const propTypes = {
@@ -668,14 +668,26 @@ class ListInfo extends React.Component {
           leftChildren={leftChildrenNode}
           rightChildren={
               page ? (
-                <Select
-                  className={pageSelectClassName}
-                  value={query.get('size')}
-                  onChange={this.onChangeTableSize}
-                  options={selectOptions}
-                  searchable={false}
-                  clearable={false}
-                />
+                <div>
+                  <label htmlFor=""
+                    style={{
+                      display: 'inline-block',
+                      lineHeight: '30px',
+                      marginRight: '10px',
+                    }}
+                  >
+                    {_('View')}
+                  </label>
+                  <Select
+                    className={pageSelectClassName}
+                    value={query.get('size')}
+                    onChange={this.onChangeTableSize}
+                    options={selectOptions}
+                    searchable={false}
+                    clearable={false}
+                  />
+                </div>
+
             ) : null
           }
         />

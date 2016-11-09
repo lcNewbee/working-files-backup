@@ -58,6 +58,7 @@ class DeviceSystem extends React.Component {
           type="number"
           label={_('Max Users')}
           min="1"
+          help={_('Range: 1 - 22')}
           value={getCurData('maxclientcount')}
           onChange={option => this.props.onChangeData({
             maxclientcount: option.value,

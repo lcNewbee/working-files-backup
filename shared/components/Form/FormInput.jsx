@@ -4,9 +4,10 @@ import moment from 'moment';
 import Select from '../Select';
 import Checkbox from './Checkbox';
 import Password from './Password';
-import Range from './Range';
+import RangeInput from './Range';
 import Radios from './Radios';
 import Input from './atom/Input';
+import NumberInput from './NumberInput';
 import Switchs from '../Switchs';
 import TimePicker from '../TimePicker';
 import DatePicker from '../DatePicker';
@@ -178,6 +179,8 @@ class FormInput extends React.Component {
 
     data.value = rawValue || val;
 
+    console.log(data)
+
     // 数据更新
     if (typeof this.props.onChange === 'function') {
       this.props.onChange(data, e);
@@ -309,7 +312,9 @@ class FormInput extends React.Component {
       } else if (inpputType === 'radio') {
         MyComponent = Radios;
       } else if (inpputType === 'range') {
-        MyComponent = Range;
+        MyComponent = RangeInput;
+      } else if (inpputType === 'number') {
+        MyComponent = NumberInput;
       } else {
         MyComponent = Input;
       }

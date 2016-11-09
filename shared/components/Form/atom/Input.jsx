@@ -19,45 +19,11 @@ class Input extends React.Component {
     super(props);
 
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    this.onChange = this.onChange.bind(this);
   }
 
   componentDidUpdate() {
     if (this.props.isFocus) {
       this.myRef.focus();
-    }
-  }
-  onNumberChange(e, val) {
-    const { min, max } = this.props;
-
-    // 小于最小值，则返回最小值
-    if (min !== undefined) {
-      if (parseInt(val, 10) >= parseInt(min, 10)) {
-        this.props.onChange(e);
-      } else {
-        this.props.onChange(e, min);
-      }
-    }
-
-    // 大于最小值，则返回最小值
-    if (max !== undefined) {
-      if (parseInt(val, 10) <= parseInt(min, 10)) {
-        this.props.onChange(e);
-      } else {
-        this.props.onChange(e, max);
-      }
-    }
-  }
-  onChange(e) {
-    const { type, min, max } = this.props;
-    const val = e.target.value;
-
-    if (this.props.onChange) {
-      if (type === 'number' && val !== '' && val !== '-') {
-        this.onNumberChange(e, val);
-      } else {
-        this.props.onChange(e);
-      }
     }
   }
   render() {
@@ -96,7 +62,6 @@ class Input extends React.Component {
       <ThisComponent
         {...inputProps}
         ref={ref => (this.myRef = ref)}
-        onChange={this.onChange}
       />
     );
   }

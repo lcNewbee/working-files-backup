@@ -14,8 +14,21 @@ function getAbsPoint(e) {
   return { 'x': x, 'y': y };
 }
 
+function fragment(html) {
+  var elt = document.createElement('div');
+  var frag = document.createDocumentFragment();
+  elt.innerHTML = html;
+
+  while(elt.firstChild) {
+    frag.appendChild(elt.firstChild);
+  }
+
+  return frag;
+}
+
 dom = {
-  getAbsPoint: getAbsPoint
+  getAbsPoint: getAbsPoint,
+  fragment: fragment
 }
 // exports
 if (typeof module === "object" && typeof module.exports === "object") {

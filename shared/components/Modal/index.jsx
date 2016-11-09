@@ -2,7 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import classNames from 'classnames';
+import utils from '../../utils';
 
+const curModelShowList = [];
 const propTypes = {
   isShow: PropTypes.bool,
   title: PropTypes.any,
@@ -55,7 +57,29 @@ class Modal extends Component {
       this.props.onOk();
     }
   }
+  renderDom() {
+    const { isShow } = this.props;
+    const modalBackdropHtml = '<div id="modalBackdrop" class="o-modal__backdrop"></div>';
+    let modalBackdropElem = document.getElementById('modalBackdrop');
 
+    document.body.className = classNames(
+      document.body.className.replace(/(^\s*)|(\s*)o-modal--open/g, ''),
+      {
+        'o-modal--open': isShow,
+      },
+    );
+
+    if (!modalBackdropElem) {
+      document.body.appendChild(utils.dom.fragment(modalBackdropHtml));
+      modalBackdropElem = document.getElementById('modalBackdrop')
+    }
+
+    if (isShow) {
+
+    } else {
+
+    }
+  }
   render() {
     const { size, role, id, transitionLeave, transitionEnter,
       isShow, title, cancelText, okButton, okText, draggable,
@@ -96,13 +120,6 @@ class Modal extends Component {
     } else if (role === 'alert') {
       cancelButton = false;
     }
-
-    document.body.className = classNames(
-      document.body.className.replace(/(^\s*)|(\s*)o-modal--open/g, ''),
-      {
-        'o-modal--open': isShow,
-      },
-    );
 
     return (
       <ReactCSSTransitionGroup

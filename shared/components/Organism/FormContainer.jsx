@@ -228,34 +228,38 @@ class FormContainer extends React.Component {
           }
         }}
       >
-        {
-          leftChildren && leftChildren.length > 0 ? (
-            <div className="form-group fl">
-              { leftChildren }
-            </div>
-          ) : null
-        }
-        { this.renderFormGroupTree(options) }
-        {
-          rightChildren ? (
-            <div className="form-group fr">
-              { rightChildren }
-            </div>
-          ) : null
-        }
-        {
-          hasSaveButton ? (
-            <div className="form-group form-group--save">
-              <div className="form-control">
-                <SaveButton
-                  type="button"
-                  loading={isSaving}
-                  onClick={this.onSave}
-                />
+        <div className="o-form__body">
+          {
+            leftChildren && leftChildren.length > 0 ? (
+              <div className="form-group fl">
+                { leftChildren }
               </div>
-            </div>
-          ) : null
-        }
+            ) : null
+          }
+          { this.renderFormGroupTree(options) }
+          {
+            rightChildren ? (
+              <div className="form-group fr">
+                { rightChildren }
+              </div>
+            ) : null
+          }
+        </div>
+        <div className="o-form__footer">
+          {
+            hasSaveButton ? (
+              <div className="form-group form-group--save">
+                <div className="form-control">
+                  <SaveButton
+                    type="button"
+                    loading={isSaving}
+                    onClick={this.onSave}
+                  />
+                </div>
+              </div>
+            ) : null
+          }
+        </div>
       </Component>
     );
   }
