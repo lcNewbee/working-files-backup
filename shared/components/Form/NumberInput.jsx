@@ -3,9 +3,6 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Input from './atom/Input';
 
 const propTypes = {
-  unit: PropTypes.string,
-  value: PropTypes.any,
-
   min: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   max: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 
@@ -13,8 +10,8 @@ const propTypes = {
 };
 
 const defaultProps = {
-  min: -Number.MAX_VALUE,
-  max: Number.MAX_VALUE,
+  min: Number.MIN_SAFE_INTEGER,
+  max: Number.MAX_SAFE_INTEGER,
 };
 
 class NumberInput extends React.Component {
@@ -29,16 +26,14 @@ class NumberInput extends React.Component {
     const val = e.target.value;
 
     if (this.props.onChange) {
-
       // 为空，或 - 时不做处理
       if (val !== '' && val !== '-') {
-
         // 小于或等于最小值，则返回最小值
         if (parseInt(val, 10) <= parseInt(min, 10)) {
           this.props.onChange(e, min);
 
         // 大于或等于最大值，则返回最大值
-        } else if(parseInt(val, 10) >= parseInt(min, 10)) {
+        } else if (parseInt(val, 10) >= parseInt(max, 10)) {
           this.props.onChange(e, max);
 
         // 在范围内
@@ -49,10 +44,8 @@ class NumberInput extends React.Component {
         this.props.onChange(e);
       }
     }
-
   }
   render() {
-    const { hasTextInput, unit, min } = this.props;
     return (
       <div className="a-input-number">
         <Input
