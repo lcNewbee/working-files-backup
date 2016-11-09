@@ -1,0 +1,94 @@
+{
+"state":{
+	"code":2000,
+	"msg":"success"
+},
+"data":{
+"radioList":
+[
+	{
+		"radioType":"2.4G",
+		"radioId":"0",
+		"wirelessMode":"ap",
+		"vapList":[
+			{
+				"ssid":"axilspot1",
+				"apMac":"11:22:33:44:55:66",
+				"apMacEnable": "0",
+        "isolation": "0",
+				"security":{
+					"mode":"wpa",
+					"cipher":"aes",
+					"key":"12345678",
+					"auth":"open",
+					"keyLength":"64",
+					"keyType":"Hex",
+					"keyIndex":"1"
+				}
+			},
+			{
+				"ssid":"axilspot2",
+				"apMac":"11:22:33:44:55:66",
+        "isolation": "0",
+				"security":{
+					"mode":"wpa",
+					"cipher":"aes",
+					"key":"12345678",
+					"auth":"open",
+					"keyLength":"64",
+					"keyType":"Hex",
+					"keyIndex":"1"
+				}
+			}
+		]
+	},
+	{
+		"radioType":"5G",
+		"radioId":"1",
+		"wirelessMode":"sta",
+		"vapList":[
+			{
+				"ssid":"axilspot2",
+				"enable": "1",
+				"vlanId": "1",
+				"isolation":"0",
+				"hideSsid": 0,
+				"security":{
+					"cipher":"aes",
+					"key":"12345678",
+					"mode":"none",
+					"auth":"open",
+					"keyLength":"64",
+					"keyType":"Hex",
+					"keyIndex":"1"
+				}
+			}
+		]
+	},
+	{
+		"radioType":"5G",
+		"radioId":"2",
+		"wirelessMode":"repeater",
+		"vapList":[
+			{
+				"ssid":"axilspot2",
+				"hideSsid": 0,
+				"isolation":"0",
+				"peers":
+				["14:ff:00:a0:c1:ff",
+				 "14:ff:00:a0:c1:f0"],
+				"security":{
+					"mode":"wpa",
+					"cipher":"aes",
+					"key":"12345678",
+					"auth":"open",
+					"keyLength":"64",
+					"keyType":"Hex",
+					"keyIndex":"1"
+				}
+			}
+		]
+	}
+	]
+}
+}

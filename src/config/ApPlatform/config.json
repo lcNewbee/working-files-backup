@@ -3,14 +3,21 @@
   "name": "AP Platform",
   "title": "Axilsport AP Platform",
   "version": "V1.0.0",
-  "deviceCardInfo": [
+  "deviceRadioList": [
     {
-      "cardId": "0",
-      "radioType": "2.4g"
+      "radioId": "0",
+      "radioType": "2.4G",
+      "name": "radio_0"
     },
     {
-      "cardId": "1",
-      "radioType": "5g"
+      "radioId": "1",
+      "radioType": "5G",
+      "name": "radio_1"
+    },
+    {
+      "radioId": "2",
+      "radioType": "5G",
+      "name": "radio_2"
     }
   ]
 }

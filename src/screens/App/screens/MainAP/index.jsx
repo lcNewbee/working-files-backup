@@ -10,7 +10,7 @@ import * as appActions from 'shared/actions/app';
 import * as actions from './actions';
 
 const propTypes = {
-  app: PropTypes.func,
+  app: PropTypes.object,
   refreshAll: PropTypes.func,
   route: PropTypes.object,
   changeLoginStatus: PropTypes.func,

@@ -4,7 +4,7 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import utilsCore from 'shared/utils/lib/core';
 
 import {
-  Button, SaveButton
+  Button, SaveButton,
 } from '../Button';
 
 const propTypes = {

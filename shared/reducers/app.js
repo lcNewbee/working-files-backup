@@ -27,7 +27,7 @@ function initConfig(state, payload) {
 
   return state.set('config', payload)
     .set('guiName', payload.title)
-    .set('deviceCardInfo', payload.deviceCardInfo);
+    .set('deviceRadioList', payload.deviceRadioList);
 }
 
 function receiveReport(state, data) {
