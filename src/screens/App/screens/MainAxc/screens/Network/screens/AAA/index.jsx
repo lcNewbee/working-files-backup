@@ -23,32 +23,32 @@ function getInterfaceTypeOptions() {
 }
 const accessTypeSeletOptions = [
   {
-    value: '0',
+    value: 'lan-access',
     label: _('LAN'),
   }, {
-    value: '1',
+    value: 'ppp-access',
     label: _('PPP'),
   }, {
-    value: '2',
+    value: 'portal',
     label: _('Portal'),
   }, {
-    value: '3',
+    value: 'mac-access',
     label: _('MAC'),
   },
 ];
 const authTypeSeletOptions = [
   {
-    value: '0',
+    value: 'local',
     label: `${_('Local')} (${_('802.1X')})`,
   },
   {
-    value: '1',
+    value: 'radius-scheme',
     label: `${_('Remotely')}(${_('Radius Service')})`,
   },
 ];
 const screenOptions = fromJS([
   {
-    id: 'template_name',
+    id: 'domain_name',
     text: _('Name'),
     defaultValue: '',
     formProps: {
@@ -58,7 +58,7 @@ const screenOptions = fromJS([
   }, {
     id: 'auth_accesstype',
     text: _('Access Type'),
-    defaultValue: '0',
+    defaultValue: 'lan-access',
     options: accessTypeSeletOptions,
     formProps: {
       label: _('Access Type'),
@@ -69,7 +69,7 @@ const screenOptions = fromJS([
   }, {
     id: 'auth_schemetype',
     text: _('Type'),
-    defaultValue: '0',
+    defaultValue: 'radius-scheme',
     options: authTypeSeletOptions,
     formProps: {
       label: _('Type'),

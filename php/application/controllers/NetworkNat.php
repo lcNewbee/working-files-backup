@@ -36,7 +36,7 @@ class NetworkNat extends CI_Controller {
       'msg'=>'OK'
     );
 		$data=array(
-      "settings"=>element(0, $settings),
+      "settings"=>element('enable', $settings,0),
       'list'=> $newArray
     );
 		$result=array(

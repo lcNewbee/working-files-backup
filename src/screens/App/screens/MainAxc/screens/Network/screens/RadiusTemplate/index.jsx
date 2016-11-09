@@ -144,16 +144,17 @@ const screenOptions = fromJS([
     id: 'username_format',
     label: _('User Format'),
     fieldset: 'parameter',
+    defaultValue: 'WITH',
     noTable: true,
     options: [
       {
-        value: 'WITHOUT_DOMAIN',
+        value: 'WITHOUT',
         label: 'WITHOUT_DOMAIN',
       }, {
-        value: 'WITH_DOMAN ',
+        value: 'WITH',
         label: 'WITH_DOMAN',
       }, {
-        value: 'KEEP_ORIGINAL',
+        value: 'UNCHANGE',
         label: 'KEEP_ORIGINAL',
       },
     ],
@@ -175,7 +176,7 @@ const screenOptions = fromJS([
     },
 
   }, {
-    id: 'realretrytimes',
+    id: 'accton_sendtimes',
     label: _('Accounting-on Resend Times'),
     fieldset: 'parameter',
     noTable: true,
@@ -184,7 +185,7 @@ const screenOptions = fromJS([
       className: 'cols col-6',
     },
   }, {
-    id: 'accton_sendtimes',
+    id: 'retry_times',
     label: _('Packets Max Send Times'),
     fieldset: 'parameter',
     noTable: true,
@@ -217,7 +218,7 @@ const screenOptions = fromJS([
     },
 
   }, {
-    id: 'resp_time',
+    id: 'realretrytimes',
     label: _('Accounting Resend Times'),
     fieldset: 'parameter',
     noTable: true,
@@ -226,7 +227,7 @@ const screenOptions = fromJS([
       className: 'cols col-6',
     },
   }, {
-    id: 'retry_times',
+    id: 'resp_time',
     label: _('Response Timeout Time'),
     fieldset: 'parameter',
     noTable: true,
@@ -258,6 +259,7 @@ export default class View extends React.Component {
         modalSize="lg"
         editFormOptions={formOptions}
         defaultEditData={defaultEditData}
+        listKey="template_name"
         actionable
         selectable
       />
