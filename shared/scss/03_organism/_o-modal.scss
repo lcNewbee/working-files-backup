@@ -1,5 +1,6 @@
 @import "../variables";
 @import "../mixins";
+$model-z-index: 1650;
 
 .o-modal--open {
   overflow: hidden;
@@ -10,11 +11,11 @@
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 1650;
+  z-index: $model-z-index;
+  padding: 10px 0;
+  overflow: auto;
   -webkit-overflow-scrolling: touch;
   outline: 0;
-  padding-top: 10px;
-  overflow: auto;
 
   &.o-modal--draggable {
     .o-modal__header {
@@ -28,15 +29,15 @@
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 1040;
+  z-index: ($model-z-index - 1);
   background-color: #000;
-  @include opacity(0.5);
+  transition: opacity .49s ease-in-out;
 
   &.fade {
     @include opacity(0);
   }
   &.in {
-    @include opacity(5);
+    @include opacity(.5);
   }
 }
 
@@ -45,9 +46,9 @@
 .o-modal__loading,
 .o-modal__dialog {
   position: relative;
-  z-index: 1050;
-  margin: 0 auto;
+  z-index: $model-z-index;
   width: auto;
+  margin: 0 auto;
 }
 
 .o-modal__confirm,
@@ -69,9 +70,9 @@
   position: fixed;
   top: 40%;
   left: 50%;
-  z-index: 1050;
-  margin-left: -75px;
+  z-index: $model-z-index;
   width: 150px;
+  margin-left: -75px;
 
   .o-modal__content {
     padding: 10px 0;
@@ -81,11 +82,11 @@
 
 .o-modal__content {
   position: relative;
-  outline: 0;
-  border: 1px solid #999;
-  border-radius: 6px;
   background-color: #fff;
   background-clip: padding-box;
+  border: 1px solid #999;
+  border-radius: 6px;
+  outline: 0;
   box-shadow: 1px 3px 9px rgba(0, 0, 0, .8);
 }
 
@@ -94,15 +95,15 @@
   border-bottom: 1px solid #999;
 
   .close {
-    margin-top: -2px;
-    border: 0;
-    border-radius: 20px;
-    background: #333;
-    color: #fff;
-    cursor: pointer;
     width: 22px;
     height: 22px;
+    margin-top: -2px;
+    color: #fff;
     text-align: center;
+    cursor: pointer;
+    background: #333;
+    border: 0;
+    border-radius: 20px;
 
     &:hover {
       color: $g-brand-danger;
@@ -115,16 +116,16 @@
   position: absolute;
   top: 0;
   left: 50%;
-  margin-left: -190px;
   margin-top: 10px;
+  margin-left: -190px;
   .o-modal__header {
     .close {
       display: none;
     }
   }
   .o-modal__body {
-    text-align: center;
     height: 110px;
+    text-align: center;
   }
   .o-modal__body-icon {
     margin-bottom: 20px;
@@ -141,8 +142,8 @@
 }
 .o-modal__footer {
   padding: 10px 15px;
-  border-top: 1px solid #999;
   text-align: right;
+  border-top: 1px solid #999;
 
   .a-btn + .a-btn {
     margin-bottom: 0;
@@ -161,9 +162,9 @@
 .o-modal-scrollbar-measure {
   position: absolute;
   top: -9999px;
-  overflow: scroll;
   width: 50px;
   height: 50px;
+  overflow: scroll;
 }
 @media (min-width: $mw-md) {
   .o-modal__dialog {
@@ -174,5 +175,4 @@
   }
 }
 @media (min-width: $mw-lg) {
-
 }

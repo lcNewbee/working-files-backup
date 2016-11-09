@@ -4,7 +4,76 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import classNames from 'classnames';
 import utils from '../../utils';
 
-const curModelShowNum = 0;
+let curModelShowNum = 0;
+let backdropTimeout = null;
+
+function renderBackdrop(isShow, transitionEnter, transitionLeave) {
+  const modalBackdropElem = document.getElementById('modalBackdrop');
+  let modalBackdropHtml = '<div id="modalBackdrop" class="o-modal__backdrop fade"></div>';
+
+  if (isShow) {
+    curModelShowNum += 1;
+    if (!modalBackdropElem) {
+      document.body.appendChild(utils.dom.fragment(modalBackdropHtml));
+    }
+  } else if (curModelShowNum > 0) {
+    curModelShowNum -= 1;
+    modalBackdropHtml = '<div id="modalBackdrop" class="o-modal__backdrop in"></div>';
+  }
+
+  // 如果是显示
+  if (curModelShowNum > 0) {
+    if (transitionEnter) {
+      clearTimeout(backdropTimeout);
+      backdropTimeout = setTimeout(
+        () => {
+          document.getElementById('modalBackdrop').className = classNames(
+            'o-modal__backdrop',
+            {
+              in: isShow,
+              fade: !isShow,
+            },
+          );
+        }, 100);
+    } else {
+      document.getElementById('modalBackdrop').className = classNames(
+        'o-modal__backdrop',
+        {
+          in: isShow,
+          fade: !isShow,
+        },
+      );
+    }
+
+  // 隐藏Backdrop, 并显示动画
+  } else if (transitionLeave) {
+    setTimeout(
+      () => {
+        document.getElementById('modalBackdrop').className = classNames(
+          'o-modal__backdrop',
+          {
+            in: isShow,
+            fade: !isShow,
+          },
+        );
+      }, 10);
+
+    // 定时删除Backdrop元素
+    clearTimeout(backdropTimeout);
+    backdropTimeout = setTimeout(
+      () => {
+        const newElem = document.getElementById('modalBackdrop');
+        if (newElem) {
+          document.body.removeChild(newElem);
+        }
+      }, 500);
+
+  // 隐藏并无动画
+  } else {
+    document.body.removeChild(modalBackdropElem);
+  }
+}
+
 const propTypes = {
   isShow: PropTypes.bool,
   title: PropTypes.any,
@@ -45,6 +114,25 @@ class Modal extends Component {
     this.onClose = this.onClose.bind(this);
     this.onOk = this.onOk.bind(this);
   }
+  componentDidMount() {
+    if (this.props.isShow) {
+      renderBackdrop(
+        this.props.isShow,
+        this.props.transitionEnter,
+        this.props.transitionLeave,
+      );
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.isShow !== this.props.isShow) {
+      renderBackdrop(
+        this.props.isShow,
+        this.props.transitionEnter,
+        this.props.transitionLeave,
+      );
+    }
+  }
 
   onClose() {
     if (typeof this.props.onClose === 'function') {
@@ -59,8 +147,6 @@ class Modal extends Component {
   }
   renderDom() {
     const { isShow } = this.props;
-    const modalBackdropHtml = '<div id="modalBackdrop" class="o-modal__backdrop"></div>';
-    let modalBackdropElem = document.getElementById('modalBackdrop');
 
     document.body.className = classNames(
       document.body.className.replace(/(^\s*)|(\s*)o-modal--open/g, ''),
@@ -68,17 +154,6 @@ class Modal extends Component {
         'o-modal--open': isShow,
       },
     );
-
-    // if (!modalBackdropElem) {
-    //   document.body.appendChild(utils.dom.fragment(modalBackdropHtml));
-    //   modalBackdropElem = document.getElementById('modalBackdrop')
-    // }
-
-    // if (isShow) {
-    //   curModelShowNum += 1;
-    // } else {
-    //   curModelShowNum += 1;
-    // }
   }
   render() {
     const { size, role, id, transitionLeave, transitionEnter,
@@ -137,7 +212,6 @@ class Modal extends Component {
               className={modalClassName}
               role={role}
             >
-              <div className="o-modal__backdrop" onDrop={e => e.preventDefault()} />
               <div className={contentClassNames} draggable={draggable} style={this.props.style}>
                 <div className="o-modal__content">
                   {

@@ -29,14 +29,14 @@ function tansformPath(url) {
  * @param  {[object]} options   初始化选项
  * @return {[function]}         处理函数
  */
-export default function serverApi(options) {
+export default function serverApi() {
   return (req, res) => {
     // handle any requests at /api
     const rootUrl = 'tools/data';
     const reqFilename = tansformPath(req.url);
     const fileMime = mime.lookup(reqFilename);
     let isDone = false;
-    console.log(options)
+
     function readDone(resText, url) {
       let msg = resText;
 

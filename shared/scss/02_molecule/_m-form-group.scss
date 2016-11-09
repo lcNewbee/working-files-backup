@@ -70,7 +70,10 @@ $boder-color:         #ccc;
   .form-control {
     margin-left: 165px;
     color: #333;
-    line-height: 30px;
+
+    > .plain-text {
+      line-height: 30px;
+    }
 
     .a-checkbox {
       float: left;
@@ -84,7 +87,6 @@ $boder-color:         #ccc;
   .help {
     display: inline-block;
     margin-left: 5px;
-    margin-top: 5px;
     color: #999;
     font-size: 12px;
     line-height: 20px;
