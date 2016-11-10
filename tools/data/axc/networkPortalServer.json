@@ -8,33 +8,30 @@
       {
         "id": 1,
         "template_name":"test",
-        "max_usernum": 12,
-        "auth_mode":"1",
-        "auth_ip":"192.168.0.2",
-        "auth_mask":"255.255.0.0",
-        "auth_domain":"www.222.com",
-        "idle_test":"test",
-        "interface_bind": 233
+        "address_type": "1",
+        "server_ipaddr":"192.189.2.2",
+        "server_port":"324",
+        "server_key":"2334324432",
+        "server_url":"www.google.com",
+        "ac_ip":"192.189.2.2"
       }, {
         "id": 2,
-        "template_name":"test2",
-        "max_usernum": 22,
-        "auth_mode":"2",
-        "auth_ip":"192.168.0.2",
-        "auth_mask":"255.255.0.0",
-        "auth_domain":"www.222.com",
-        "idle_test":"test",
-        "interface_bind": "3232"
+        "template_name":"test",
+        "address_type": "2",
+        "server_ipaddr":"192.189.2.2",
+        "server_port":"324",
+        "server_key":"2334324432",
+        "server_url":"www.google.com",
+        "ac_ip":"192.189.2.2"
       }, {
         "id": 3,
-        "template_name":"test3",
-        "max_usernum": 56,
-        "auth_mode":"1",
-        "auth_ip":"192.168.0.2",
-        "auth_mask":"255.255.0.0",
-        "auth_domain":"www.222.com",
-        "idle_test":"test",
-        "interface_bind": 3232
+        "template_name":"test",
+         "address_type": "2",
+        "server_ipaddr":"192.189.2.2",
+        "server_port":"324",
+        "server_key":"2334324432",
+        "server_url":"www.google.com",
+        "ac_ip":"192.189.2.2"
       }
     ]
   }

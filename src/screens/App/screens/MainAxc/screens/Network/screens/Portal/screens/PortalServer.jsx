@@ -20,7 +20,7 @@ const screenOptions = fromJS([
       required: true,
     },
   }, {
-    id: 'auth_mode',
+    id: 'address_type',
     label: _('Address Type'),
     defaultValue: '0',
     options: [
@@ -36,15 +36,7 @@ const screenOptions = fromJS([
       type: 'switch',
     },
   }, {
-    id: 'max_usernum',
-    label: _('Max Users'),
-    formProps: {
-      type: 'number',
-      maxLength: '32',
-      required: true,
-    },
-  }, {
-    id: 'auth_ip',
+    id: 'server_ipaddr',
     label: _('Server IP'),
     formProps: {
       type: 'text',
@@ -53,29 +45,29 @@ const screenOptions = fromJS([
         rules: 'ip',
       }),
       showPrecondition(data) {
-        return data.get('addressType') === '1';
+        return data.get('address_type') === '1';
       },
     },
 
   }, {
-    id: 'auth_domain',
+    id: 'server_domain',
     label: _('Server Domain'),
     formProps: {
       type: 'text',
       required: true,
       showPrecondition(data) {
-        return data.get('addressType') === '2';
+        return data.get('address_type') === '2';
       },
     },
   }, {
-    id: 'interface_bind',
+    id: 'server_port',
     label: _('Server Port'),
     formProps: {
       type: 'number',
       required: true,
     },
   }, {
-    id: 'idle_test',
+    id: 'server_key',
     label: _('Shared Key'),
     noTable: true,
     formProps: {
@@ -83,11 +75,21 @@ const screenOptions = fromJS([
       required: true,
     },
   }, {
-    id: 'redirectUrl',
+    id: 'server_url',
     label: _('Redirect URL'),
     formProps: {
       type: 'text',
       required: true,
+    },
+  }, {
+    id: 'ac_ip',
+    label: _('AC IP'),
+    formProps: {
+      type: 'text',
+      required: true,
+      validator: validator({
+        rules: 'ip',
+      }),
     },
   },
 ]);
@@ -131,6 +133,7 @@ export default class View extends React.Component {
         tableOptions={tableOptions}
         editFormOptions={formOptions}
         defaultEditData={defaultEditData}
+        listKey="template_name"
         actionable
         selectable
         noTitle

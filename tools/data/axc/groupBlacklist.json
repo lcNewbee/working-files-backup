@@ -8,7 +8,7 @@
       "groupid": 1,
       "attacttime" : 1,
       "attactcnt": 5,
-      "dyaging": 10
+      "dynamic_blacklist_aging": 10
     },
     "list": [
       {

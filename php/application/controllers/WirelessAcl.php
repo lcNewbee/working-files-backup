@@ -11,15 +11,11 @@ class WirelessAcl extends CI_Controller {
       'groupid'=>(int)element('groupid', $_GET,-1),
     );
     $result=axc_get_wireless_acl(json_encode($retdata));
-
     $result=json_decode($result);
-
-    $result->data->settings = array(
-      'dyaging'=>10,
-      "attacttime"=>1,
-      "attactcnt"=>5,
-    );
-
+    $dyblk=$this->db->select('portal_id,attacttime,attactcnt，dynamic_blacklist_aging')
+              ->from('wids_template')
+              ->get()->result_array();
+    $result->data->settings =$dyblk;
     return json_encode($result);
   }
 
@@ -40,7 +36,13 @@ class WirelessAcl extends CI_Controller {
        $result=axc_del_wireless_acl(json_encode($temp_data));
     }
     elseif($actionType === 'setting'){
-      $result = '{"state":{"code": 2000}}';
+      $temp_data=array(
+        'groupid'=>element('groupid', $data),
+        'attacttime'=>element('attacttime',$data),
+        'attactcnt'=>element('attactcnt', $data),
+        'dyaging'=>element('dynamic_blacklist_aging',$data),
+      );
+      $result = axc_set_wireless_dyblk(json_encode($data));
     }
 		return $result;
 	}
