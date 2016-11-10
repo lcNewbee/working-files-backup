@@ -58,7 +58,9 @@ const validOptions = fromJS({
   groupname: validator({
     rules: 'len:[1, 64]',
   }),
-  remark: validator({}),
+  remark: validator({
+    rules: 'len:[1, 256]',
+  }),
   apmac: validator({
     rules: 'mac',
   }),
@@ -622,6 +624,7 @@ export default class Main extends Component {
                   type="text"
                   label={_('Group Name')}
                   name="groupname"
+                  maxLength="32"
                   value={product.getIn(['group', 'addData', 'groupname'])}
                   onChange={data => this.props.updateAddApGroup({
                     groupname: data.value,
@@ -633,6 +636,7 @@ export default class Main extends Component {
                   type="textarea"
                   label={_('Remarks')}
                   name="remark"
+                  maxLength="256"
                   value={product.getIn(['group', 'addData', 'remark'])}
                   onChange={data => this.props.updateAddApGroup({
                     remark: data.value,
@@ -673,6 +677,7 @@ export default class Main extends Component {
               type="text"
               label={_('Group Name')}
               name="groupname"
+              maxLength="32"
               value={product.getIn(['group', 'manageSelected', 'groupname'])}
               onChange={data => this.props.updateEditApGroup({
                 groupname: data.value,
@@ -688,6 +693,7 @@ export default class Main extends Component {
               onChange={data => this.props.updateEditApGroup({
                 remark: data.value,
               })}
+              maxLength="256"
               required
               {...remark}
             />

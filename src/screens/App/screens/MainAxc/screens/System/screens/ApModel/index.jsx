@@ -11,6 +11,7 @@ const screenOptions = fromJS([
   {
     id: 'name',
     text: _('Model Name'),
+    noEdit: true,
     formProps: {
       type: 'text',
       maxLength: '32',

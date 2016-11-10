@@ -10,8 +10,8 @@ const propTypes = {
 };
 
 const defaultProps = {
-  min: Number.MIN_SAFE_INTEGER,
-  max: Number.MAX_SAFE_INTEGER,
+  min: -9007199254740991,
+  max: 9007199254740991,
 };
 
 class NumberInput extends React.Component {

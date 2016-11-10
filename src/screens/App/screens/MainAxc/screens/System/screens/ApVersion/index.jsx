@@ -25,6 +25,7 @@ const screenOptions = fromJS([
     defaultValue: '',
     formProps: {
       type: 'text',
+      maxLength: '32',
       required: true,
       validator: validator({}),
     },

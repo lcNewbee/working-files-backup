@@ -32,6 +32,7 @@ $model-z-index: 1650;
   z-index: ($model-z-index - 1);
   background-color: #000;
   transition: opacity .49s ease-in-out;
+  @include opacity(.4);
 
   &.fade {
     @include opacity(0);
