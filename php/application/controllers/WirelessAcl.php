@@ -12,10 +12,24 @@ class WirelessAcl extends CI_Controller {
     );
     $result=axc_get_wireless_acl(json_encode($retdata));
     $result=json_decode($result);
-    $dyblk=$this->db->select('portal_id,attacttime,attactcnt，dynamic_blacklist_aging')
+    $dyblk=$this->db->select('id,attack_time,attack_cnt,age_time')
               ->from('wids_template')
+              ->where('id',$retdata['groupid'])
               ->get()->result_array();
-    $result->data->settings =$dyblk;
+  		$keys = array(
+      'id'=>'groupid',
+      'attack_time'=> 'attacttime',
+      'attack_cnt'=>'attactcnt',
+      'age_time'=>'dyaging'
+    );
+    $dyblk_data = array();
+    foreach($dyblk as $key=>$val) {
+     $dyblk_data[$key] = array();
+      foreach($val as $k=>$v) {
+        $dyblk_data[$key][$keys[$k]] = $v;
+      }
+    }
+    $result->data->settings=$dyblk_data['0'];
     return json_encode($result);
   }
 
@@ -36,12 +50,6 @@ class WirelessAcl extends CI_Controller {
        $result=axc_del_wireless_acl(json_encode($temp_data));
     }
     elseif($actionType === 'setting'){
-      $temp_data=array(
-        'groupid'=>element('groupid', $data),
-        'attacttime'=>element('attacttime',$data),
-        'attactcnt'=>element('attactcnt', $data),
-        'dyaging'=>element('dynamic_blacklist_aging',$data),
-      );
       $result = axc_set_wireless_dyblk(json_encode($data));
     }
 		return $result;

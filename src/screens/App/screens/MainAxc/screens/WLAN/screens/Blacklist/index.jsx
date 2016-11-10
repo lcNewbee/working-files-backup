@@ -9,7 +9,7 @@ import * as appActions from 'shared/actions/app';
 
 const commonFormOptions = fromJS([
   {
-    id: 'dynamic_blacklist_aging',
+    id: 'dyaging',
     label: _('Dynamic Blacklists Release Time'),
     type: 'number',
     saveOnChange: true,
