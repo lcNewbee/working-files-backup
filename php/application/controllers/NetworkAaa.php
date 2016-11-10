@@ -52,9 +52,9 @@ class NetworkAaa extends CI_Controller {
 		$actionType = element('action', $data);
     function getCgiParam($oriData) {
       $retData = array(
-        'template_name'=>element('template_name', $oriData),
+        'template_name'=>element('domain_name', $oriData),
         'auth_accesstype'=>element('auth_accesstype', $oriData),
-        'auth_schemetype'=>element('auth_scheme_type', $oriData),
+        'auth_schemetype'=>element('auth_schemetype', $oriData),
         'radius_template'=>element('radius_template', $oriData)
       );
       return $retData;
@@ -68,10 +68,8 @@ class NetworkAaa extends CI_Controller {
       $result=aaa_edit_template_name(json_encode($temp_data));
 		}
     elseif($actionType === 'delete'){
-      $arr=$data['selectedList'];
-      $pool_list_arr=str_replace("radius_name","template_name",$arr);
        $temp_data=array(
-        'aaa_list'=>$pool_list_arr
+        'aaa_list'=>$data['selectedList']
        );
       $state=aaa_del_template_name(json_encode($temp_data));
        $result=$state;

@@ -117,7 +117,7 @@ module.exports = {
   },
   output: {
     path: GLOBALS.folders.BUILD,
-    publicPath: 'http://www.axilspot.com/demo-static/axc/',
+    publicPath: '/',
     filename: 'scripts/[name].bundle.js',
     chunkFilename: 'scripts/[id].bundle.js' //dundle生成的配置
   },

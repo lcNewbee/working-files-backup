@@ -126,6 +126,7 @@ export default class View extends React.Component {
         tableOptions={tableOptions}
         editFormOptions={editFormOptions}
         defaultEditData={defaultEditData}
+        listKey="domain_name"
         actionable
         selectable
       />
