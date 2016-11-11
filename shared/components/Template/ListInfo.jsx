@@ -96,7 +96,7 @@ class ListInfo extends React.Component {
     utils.binds(this, [
       'onChangeQuery', 'onPageChange', 'onSaveEditForm', 'onCloseEditModal',
       'onChangeSearchText', 'onChangeType', 'onChangeTableSize', 'onRemoveSelectItems',
-      'onRemoveSelectedItems', 'onItemAction', 'onListSelectedAction',
+      'onItemAction', 'onSelectedItemsAction',
     ]);
   }
   componentWillMount() {
@@ -304,47 +304,7 @@ class ListInfo extends React.Component {
       this.onFetchList();
     }
   }
-  onRemoveSelectedItems(selectedList, list) {
-    const listKey = this.props.listKey;
-    let selectStr = '';
-    let mySelectedList = selectedList;
-    let msgText = '';
-
-    if (selectedList && selectedList.size > 0) {
-      mySelectedList = mySelectedList.map((val) => {
-        let ret = [];
-
-        if (listKey === 'allKeys') {
-          ret = list.get(val);
-        } else {
-          ret = list.getIn([val, listKey]);
-        }
-
-        return ret;
-      });
-      selectStr = mySelectedList.map((item, i) => i).join(', ');
-      msgText = _('Are you sure to delete selected rows: %s', selectStr);
-
-      this.props.createModal({
-        id: 'settings',
-        role: 'confirm',
-        text: msgText,
-        apply: () => {
-          this.props.changeScreenActionQuery({
-            action: 'delete',
-            selectedList: mySelectedList,
-          });
-          this.props.onListAction();
-        },
-      });
-    } else {
-      this.props.createModal({
-        role: 'alert',
-        text: _('Please select delete rows'),
-      });
-    }
-  }
-  onListSelectedAction(actionName) {
+  onSelectedItemsAction(actionName) {
     const store = this.props.store;
     const $$list = store.getIn(['data', 'list']);
     const $$actionQuery = store.getIn(['actionQuery']);
@@ -365,7 +325,7 @@ class ListInfo extends React.Component {
 
         return ret;
       });
-      selectStr = $$selectedList.map((item, i) => i).join(', ');
+      selectStr = $$actionQuery.get('selectedList').sort().join(', ');
       msgText = _('Are you sure to %s selected rows: %s', actionName, selectStr);
 
       this.props.createModal({
@@ -431,7 +391,6 @@ class ListInfo extends React.Component {
       this.props.fetchScreenData();
     }
   }
-
   renderHeader() {
     const {
       store, app, fetchUrl,
@@ -440,9 +399,7 @@ class ListInfo extends React.Component {
       actionBarChildren,
     } = this.props;
     const page = store.getIn(['data', 'page']);
-    const list = store.getIn(['data', 'list']);
     const query = store.getIn(['query']);
-    const actionQuery = store.getIn(['actionQuery']);
     const leftChildrenNode = [];
     let pageSelectClassName = 'fr';
     let $$curActionBarButtons = actionBarButtons;
@@ -477,12 +434,13 @@ class ListInfo extends React.Component {
             ($$subButton) => {
               const butProps = $$subButton.toJS();
               const actionName = $$subButton.get('name');
+              const needConfirm = $$subButton.get('needConfirm');
               return (
                 <Button
                   {...butProps}
                   key={`${actionName}Btn`}
                   onClick={() => {
-                    this.onListSelectedAction(actionName);
+                    this.onSelectedItemsAction(_(actionName, needConfirm));
                   }}
                 />
               );
@@ -508,7 +466,7 @@ class ListInfo extends React.Component {
           key="delete"
           text={_('Remove Selected')}
           onClick={() => {
-            this.onRemoveSelectedItems(actionQuery.get('selectedList'), list);
+            this.onSelectedItemsAction(_('delete'));
           }}
         />,
       );
