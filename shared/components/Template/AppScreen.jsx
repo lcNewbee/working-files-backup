@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import utils, { immutableUtils } from 'shared/utils';
-import { List, Map } from 'immutable';
+import immutable, { List, Map } from 'immutable';
 import ListInfo from 'shared/components/Template/ListInfo';
 import FormContainer from 'shared/components/Organism/FormContainer';
 
@@ -32,6 +32,7 @@ const propTypes = {
   saveScreenSettings: PropTypes.func,
   defaultSettingsData: PropTypes.object,
   hasSettingsSaveButton: PropTypes.bool,
+  customSettingForm: PropTypes.bool,
 };
 const defaultProps = {
 
@@ -86,6 +87,14 @@ export default class AppScreen extends React.Component {
 
     if (this.props.fetchScreenData) {
       this.props.fetchScreenData();
+    }
+  }
+  componentWillUpdate(nextProps) {
+    const nextListOptions = nextProps.listOptions;
+    if (!immutable.is(nextListOptions, this.props.listOptions)) {
+      this.tableOptions = immutableUtils.getTableOptions(nextListOptions);
+      this.editFormOptions = immutableUtils.getFormOptions(nextListOptions);
+      this.defaultEditData = immutableUtils.getDefaultData(nextListOptions);
     }
   }
   componentWillUnmount() {

@@ -80,6 +80,7 @@ export default class View extends React.Component {
             }),
           );
         }
+
         this.setState({
           modelSelectPlaceholder: undefined,
           modelIsloading: false,
@@ -104,7 +105,6 @@ export default class View extends React.Component {
         editFormOption={{
           hasFile: true,
         }}
-
         noTitle
         actionable
         selectable
