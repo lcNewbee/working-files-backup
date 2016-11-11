@@ -12,7 +12,7 @@ import * as screenActions from 'shared/actions/screens';
 
 const commonFormOptions = fromJS([
   {
-    id: 'serverName',
+    id: 'template_name',
     label: _('Server Name'),
     type: 'select',
     legend: _('Base Settings'),
@@ -22,11 +22,11 @@ const commonFormOptions = fromJS([
       },
     ],
   }, {
-    id: 'maxUser',
+    id: 'max_usernum',
     label: _('Max Users'),
     type: 'text',
   }, {
-    id: 'authType',
+    id: 'auth_mode',
     label: _('Auth Type'),
     type: 'switch',
     defaultValue: '0',
@@ -41,27 +41,37 @@ const commonFormOptions = fromJS([
       },
     ],
   }, {
-    id: 'authSegmentIp',
+    id: 'auth_ip',
     label: _('Auth Segment Ip'),
     type: 'text',
     showPrecondition(data) {
       return data.get('authType') === '1';
     },
   }, {
-    id: 'authSegmentMask',
+    id: 'auth_mask',
     label: _('Auth Segment Mask'),
     type: 'text',
     showPrecondition(data) {
       return data.get('authType') === '1';
     },
   }, {
-    id: 'forceAuthDomain',
+    id: 'auth_domain',
     label: _('Force Auth Domain'),
     type: 'text',
   }, {
-    id: 'idleDetection',
+    id: 'idle_test',
     label: _('Idle Detection'),
     type: 'checkbox',
+  }, {
+    id: 'interface_bind',
+    label: _('Interface Bind'),
+    type: 'select',
+    legend: _('Base Settings'),
+    options: [
+      {
+
+      },
+    ],
   },
 ]);
 const listOptions = fromJS([

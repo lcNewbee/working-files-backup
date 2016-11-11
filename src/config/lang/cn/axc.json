@@ -175,6 +175,7 @@
   "Redirect URL": "重定向URL",
   "Force Auth Domain": "强制认证域",
   "Idle Detection": "闲置检测",
+  "Interface Bind":"接口绑定",
   "Auth Segment Ip": "认证网段IP",
   "Auth Segment Mask": "认证网段子网掩码",
   "Portal Rule Setup Wizard": "Portal规则设置向导",

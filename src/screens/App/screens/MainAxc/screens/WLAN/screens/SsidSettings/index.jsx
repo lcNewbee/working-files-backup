@@ -33,7 +33,7 @@ const validOptions = Map({
     rules: 'num:[2, 4095]',
   }),
   ssid: validator({
-    rules: 'remarkTxt:["\'\\\\"]|len:[1, 31]',
+    rules: 'remarkTxt:["\'\\\\"]|len:[1, 32]',
   }),
   upstream: validator({
     rules: 'num:[32, 102400, 0]',
@@ -58,6 +58,7 @@ const flowRateFilter = utils.filter('flowRate:["KB"]');
 const listOptions = fromJS([
   {
     id: 'ssid',
+    noEdit: true,
     text: _('SSID'),
   }, {
     id: 'hiddenSsid',
