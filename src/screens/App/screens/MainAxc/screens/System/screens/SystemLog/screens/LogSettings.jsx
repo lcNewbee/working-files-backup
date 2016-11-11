@@ -10,7 +10,7 @@ import {
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
-const screenOptions = fromJS([
+const listOptions = fromJS([
   {
     id: 'time',
     text: _('Retain Days'),
@@ -19,12 +19,14 @@ const screenOptions = fromJS([
     defaultValue: '7',
     formProps: {
       type: 'number',
+      min: '1',
+      max: '365',
       help: _('Days'),
     },
   },
 ]);
-const formOptions = immutableUtils.getFormOptions(screenOptions);
-const defaultFormData = immutableUtils.getDefaultData(screenOptions);
+const formOptions = immutableUtils.getFormOptions(listOptions);
+const defaultFormData = immutableUtils.getDefaultData(listOptions);
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),

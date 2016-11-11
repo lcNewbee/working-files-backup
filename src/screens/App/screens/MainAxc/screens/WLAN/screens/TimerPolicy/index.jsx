@@ -7,7 +7,7 @@ import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import { FormGroup, FormInput, Checkbox } from 'shared/components/Form';
 import Modal from 'shared/components/Modal';
-import ListInfo from 'shared/components/Template/ListInfo';
+import AppScreen from 'shared/components/Template/AppScreen';
 import SaveButton from 'shared/components/Button/SaveButton';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
@@ -45,7 +45,7 @@ const validOptions = Map({
     rules: 'num:[32, 102400, 0]',
   }),
 });
-const screenOptions = fromJS([
+const listOptions = fromJS([
   {
     id: 'timerRange',
     text: _('Timer Range'),
@@ -74,22 +74,13 @@ const screenOptions = fromJS([
     defaultValue: '22:00',
   },
 ]);
-const tableOptions = immutableUtils.getTableOptions(screenOptions);
-// const editFormOptions = immutableUtils.getFormOptions(screenOptions);
-const defaultEditData = immutableUtils.getDefaultData(screenOptions);
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
-  validateOption: PropTypes.object,
   route: PropTypes.object,
-  initScreen: PropTypes.func,
-  save: PropTypes.func,
-  addListItem: PropTypes.func,
   closeListItemModal: PropTypes.func,
-  editListItemByIndex: PropTypes.func,
   updateCurEditListItem: PropTypes.func,
-  onListAction: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -97,22 +88,8 @@ export default class View extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onAction = this.onAction.bind(this);
     this.getCurrData = this.getCurrData.bind(this);
     this.onUpdateSettings = this.onUpdateSettings.bind(this);
-    this.onSave = this.onSave.bind(this);
-  }
-  onSave() {
-    this.props.onListAction();
-  }
-  onAction(action, mac) {
-    const query = {
-      mac,
-      action,
-    };
-
-    this.props.save('goform/blacklist', query)
-      .then((json) => {});
   }
   onUpdateSettings(name) {
     return (item) => {
@@ -122,10 +99,6 @@ export default class View extends React.Component {
       this.props.updateCurEditListItem(data);
     };
   }
-  onUpdateTime(momentObj, ddd) {
-    console.log(momentObj.format('HH:mm'), ddd);
-  }
-
   getCurrData(name) {
     return this.props.store.getIn([this.props.route.id, 'curListItem', name]) || '';
   }
@@ -134,7 +107,7 @@ export default class View extends React.Component {
     const { route, store } = this.props;
     const actionQuery = store.getIn([route.id, 'actionQuery']) || Map({});
     const getCurrData = this.getCurrData;
-    const myTableOptions = tableOptions.push(fromJS({
+    const myListOptions = listOptions.push(fromJS({
       id: 'enabled',
       width: '80',
       text: _('Status'),
@@ -150,15 +123,12 @@ export default class View extends React.Component {
     }));
 
     return (
-      <ListInfo
+      <AppScreen
         {...this.props}
-        tableOptions={myTableOptions}
-        defaultItem={{
-          dataType: 'date',
-        }}
-        defaultEditData={defaultEditData}
+        listOptions={myListOptions}
         actionable
         selectable
+        customModal
       >
         <Modal
           isShow={actionQuery.get('action') === 'add' || actionQuery.get('action') === 'edit'}
@@ -305,7 +275,7 @@ export default class View extends React.Component {
             </div>
           </div>
         </Modal>
-      </ListInfo>
+      </AppScreen>
     );
   }
 }
@@ -324,7 +294,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    screenActions
+    screenActions,
   ), dispatch);
 }
 
@@ -332,5 +302,5 @@ function mapDispatchToProps(dispatch) {
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
-  validator.mergeProps(validOptions)
+  validator.mergeProps(validOptions),
 )(View);

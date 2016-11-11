@@ -3,7 +3,7 @@ import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
-import ListInfo from 'shared/components/Template/ListInfo';
+import AppScreen from 'shared/components/Template/AppScreen';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/settings';
 import * as screenActions from 'shared/actions/screens';
@@ -18,7 +18,7 @@ const commonFormOptions = fromJS([
     saveOnChange: true,
   },
 ]);
-const screenOptions = fromJS([
+const listOptions = fromJS([
   {
     id: 'ruleName',
     label: _('Name'),
@@ -71,9 +71,9 @@ const screenOptions = fromJS([
   },
 ]);
 
-const formOptions = immutableUtils.getFormOptions(screenOptions);
-const tableOptions = immutableUtils.getTableOptions(screenOptions);
-const defaultEditData = immutableUtils.getDefaultData(screenOptions);
+const formOptions = immutableUtils.getFormOptions(listOptions);
+const tableOptions = immutableUtils.getTableOptions(listOptions);
+const defaultEditData = immutableUtils.getDefaultData(listOptions);
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   settings: PropTypes.instanceOf(Map),
@@ -104,14 +104,12 @@ export default class View extends React.Component {
 
   render() {
     return (
-      <ListInfo
+      <AppScreen
         {...this.props}
         listTitle={_('ACL List')}
         store={this.props.store}
-        tableOptions={tableOptions}
-        settingsFormOption={commonFormOptions}
-        editFormOptions={formOptions}
-        defaultEditData={defaultEditData}
+        listOptions={listOptions}
+        settingsFormOptions={commonFormOptions}
         actionable
         selectable
         noTitle
@@ -135,12 +133,12 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
     actions,
-    screenActions
+    screenActions,
   ), dispatch);
 }
 
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(View);

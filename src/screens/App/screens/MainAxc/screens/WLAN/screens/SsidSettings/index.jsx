@@ -6,7 +6,7 @@ import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { FormGroup, FormInput } from 'shared/components/Form';
 import Modal from 'shared/components/Modal';
-import ListInfo from 'shared/components/Template/ListInfo';
+import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
@@ -55,7 +55,7 @@ const storeForwardOption = [
   },
 ];
 const flowRateFilter = utils.filter('flowRate:["KB"]');
-const screenOptions = fromJS([
+const listOptions = fromJS([
   {
     id: 'ssid',
     text: _('SSID'),
@@ -163,9 +163,9 @@ const screenOptions = fromJS([
     noTable: true,
   },
 ]);
-const tableOptions = immutableUtils.getTableOptions(screenOptions);
-// const editFormOptions = immutableUtils.getFormOptions(screenOptions);
-const defaultEditData = immutableUtils.getDefaultData(screenOptions);
+const tableOptions = immutableUtils.getTableOptions(listOptions);
+// const editFormOptions = immutableUtils.getFormOptions(listOptions);
+const defaultEditData = immutableUtils.getDefaultData(listOptions);
 
 const propTypes = {
   store: PropTypes.instanceOf(Map),
@@ -218,10 +218,10 @@ export default class View extends React.Component {
     const isModelShow = actionQuery.get('action') === 'edit' || actionQuery.get('action') === 'add';
 
     return (
-      <ListInfo
+      <AppScreen
         {...this.props}
-        tableOptions={tableOptions}
-        defaultEditData={defaultEditData}
+        listOptions={listOptions}
+        
         listKey="allKeys"
         actionable
         selectable
@@ -349,7 +349,7 @@ export default class View extends React.Component {
               /> : ''
           }
         </Modal>
-      </ListInfo>
+      </AppScreen>
     );
   }
 }

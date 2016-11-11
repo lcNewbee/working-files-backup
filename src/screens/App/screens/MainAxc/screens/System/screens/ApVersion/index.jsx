@@ -4,13 +4,11 @@ import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/utils/lib/validator';
-import {
-  ListInfo,
-} from 'shared/components';
+import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
-const screenOptions = fromJS([
+const listOptions = fromJS([
   {
     id: 'model',
     text: _('AP Model'),
@@ -51,13 +49,7 @@ const screenOptions = fromJS([
     },
   },
 ]);
-const tableOptions = immutableUtils.getTableOptions(screenOptions);
-const editFormOptions = immutableUtils.getFormOptions(screenOptions);
-const defaultEditData = immutableUtils.getDefaultData(screenOptions);
-const propTypes = {
-  route: PropTypes.object,
-  save: PropTypes.func,
-};
+const propTypes = {};
 const defaultProps = {};
 export default class View extends React.Component {
   constructor(props) {
@@ -85,7 +77,7 @@ export default class View extends React.Component {
             item => ({
               value: item.name,
               label: item.name,
-            })
+            }),
           );
         }
         this.setState({
@@ -93,27 +85,26 @@ export default class View extends React.Component {
           modelIsloading: false,
           modelOptions: options,
         });
-      }
+      },
     );
   }
   render() {
     const { modelIsloading, modelOptions, modelSelectPlaceholder } = this.state;
-    const myEditFormOptions = editFormOptions.mergeIn(
-      [0, 0], {
+    const myEditFormOptions = listOptions.mergeIn(
+      [0, 'formProps'], {
         isLoading: modelIsloading,
         options: modelOptions,
         placeholder: modelSelectPlaceholder,
-      }
+      },
     );
     return (
-      <ListInfo
+      <AppScreen
         {...this.props}
-        tableOptions={tableOptions}
-        editFormOptions={myEditFormOptions}
+        listOptions={myEditFormOptions}
         editFormOption={{
           hasFile: true,
         }}
-        defaultEditData={defaultEditData}
+
         noTitle
         actionable
         selectable
@@ -135,7 +126,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    screenActions
+    screenActions,
   ), dispatch);
 }
 
@@ -143,5 +134,5 @@ function mapDispatchToProps(dispatch) {
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(View);

@@ -4,13 +4,12 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/utils/lib/validator';
-import {
-  ListInfo, FormGroup,
-} from 'shared/components';
+import AppScreen from 'shared/components/Template/AppScreen';
+import { FormGroup } from 'shared/components/Form';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
-const screenOptions = fromJS([
+const listOptions = fromJS([
   {
     id: 'userType',
     width: '160',
@@ -98,9 +97,6 @@ const screenOptions = fromJS([
     },
   },
 ]);
-const tableOptions = immutableUtils.getTableOptions(screenOptions);
-const editFormOptions = immutableUtils.getFormOptions(screenOptions);
-const defaultFormData = immutableUtils.getDefaultData(screenOptions);
 
 const propTypes = {
   store: PropTypes.instanceOf(Map),
@@ -115,10 +111,6 @@ export default class View extends React.Component {
     super(props);
 
     this.onAction = this.onAction.bind(this);
-  }
-
-  componentWillMount() {
-    this.tableOptions = tableOptions;
   }
 
   onAction(no, type) {
@@ -142,12 +134,10 @@ export default class View extends React.Component {
       true,
     );
     return (
-      <ListInfo
+      <AppScreen
         {...this.props}
         store={myStore}
-        tableOptions={this.tableOptions}
-        editFormOptions={editFormOptions}
-        defaultEditData={defaultFormData}
+        listOptions={listOptions}
         actionable
       />
     );
@@ -167,7 +157,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    screenActions
+    screenActions,
   ), dispatch);
 }
 
@@ -175,5 +165,5 @@ function mapDispatchToProps(dispatch) {
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(View);

@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { List } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import utilsCore from 'shared/utils/lib/core';
 
 import {
@@ -43,6 +44,7 @@ class WizardContainer extends React.Component {
       currStep: props.initStep,
       maxStep: props.options.size,
       status: 'ok',
+      direction: 'left',
     };
     utilsCore.binds(
       this,
@@ -74,13 +76,14 @@ class WizardContainer extends React.Component {
     }
   }
 
-  onChangeStep(stepObj) {
+  onChangeStep(stepObj, direction) {
     const { onBeforeStep } = this.props;
     const handleChange = (msg) => {
       if (!msg) {
         this.updateState({
           currStep: stepObj.targetStep,
           status: 'ok',
+          direction,
         });
       } else {
         this.updateState({
@@ -132,7 +135,7 @@ class WizardContainer extends React.Component {
           targetStep: currStep,
         };
 
-        this.onChangeStep(stepObj);
+        this.onChangeStep(stepObj, 'left');
       }
     }
 
@@ -157,7 +160,7 @@ class WizardContainer extends React.Component {
       this.onChangeStep({
         currStep,
         targetStep,
-      });
+      }, 'right');
     }
   }
 
@@ -167,7 +170,7 @@ class WizardContainer extends React.Component {
 
   render() {
     const { options, title, size, className, nextDisabled } = this.props;
-    const { currStep, maxStep, status } = this.state;
+    const { currStep, maxStep, status, direction } = this.state;
     const styleWidth = (100 / options.size);
     const navStyle = {
       width: `${styleWidth}%`,
@@ -209,18 +212,28 @@ class WizardContainer extends React.Component {
             }
           </ul>
         </div>
-        <div className="o-wizard__content" >
-          {
-             curRender ? curRender() : null
-          }
-          {
-            status !== 'ok' ? (
-              <p className="msg-error">
-                {status}
-              </p>
-            ) : null
-          }
-        </div>
+        <ReactCSSTransitionGroup
+          component="div"
+          transitionName={`slide-${direction}`}
+          transitionEnter
+          transitionLeave={false}
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={0}
+        >
+          <div key={`wizardStep${currStep}`} className="o-wizard__content" >
+            {
+              curRender ? curRender() : null
+            }
+
+            {
+              status !== 'ok' ? (
+                <p className="msg-error">
+                  {status}
+                </p>
+              ) : null
+            }
+          </div>
+        </ReactCSSTransitionGroup>
         <div className="o-wizard__footer">
           {
             currStep > 0 ? (

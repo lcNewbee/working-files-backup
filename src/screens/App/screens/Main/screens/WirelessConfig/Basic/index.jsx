@@ -1271,33 +1271,31 @@ export default class Basic extends React.Component {
                 />
               </FormGroup>
               { /* 国家代码弹出选择框 */
-                this.props.selfState.get('showCtyModal') ? (
-                  <Modal
-                    title={_('Country Code')}
-                    onClose={this.onCloseCountrySelectModal}
-                    onOk={this.props.saveCountrySelectModal}
-                    isShow
-                  >
-                    <h3>{_('User Protocol')}</h3>
-                    <span>
-                      {_('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
-                    </span>
-                    <FormGroup
-                      type="radio"
-                      text={_('I have read and agree')}
-                      checked={this.props.selfState.get('agreeProtocol')}
-                      onChange={() => { this.props.changeAgreeProtocol(true); }}
-                    />
-                    <FormGroup
-                      label={_('Country')}
-                      type="select"
-                      options={this.makeCountryOptions(countryMap)}
-                      value={this.props.selfState.get('selectedCountry')}
-                      onChange={(data) => this.props.changeCountryCode(data.value)}
-                      disabled={!this.props.selfState.get('agreeProtocol')}
-                    />
-                  </Modal>
-                ) : null
+                <Modal
+                  isShow={this.props.selfState.get('showCtyModal')}
+                  title={_('Country Code')}
+                  onClose={this.onCloseCountrySelectModal}
+                  onOk={this.props.saveCountrySelectModal}
+                >
+                  <h3>{_('User Protocol')}</h3>
+                  <span>
+                    {_('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
+                  </span>
+                  <FormGroup
+                    type="radio"
+                    text={_('I have read and agree')}
+                    checked={this.props.selfState.get('agreeProtocol')}
+                    onChange={() => { this.props.changeAgreeProtocol(true); }}
+                  />
+                  <FormGroup
+                    label={_('Country')}
+                    type="select"
+                    options={this.makeCountryOptions(countryMap)}
+                    value={this.props.selfState.get('selectedCountry')}
+                    onChange={(data) => this.props.changeCountryCode(data.value)}
+                    disabled={!this.props.selfState.get('agreeProtocol')}
+                  />
+                </Modal>
               }
               <FormGroup
                 label={_('Radio Mode')}

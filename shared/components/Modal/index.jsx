@@ -20,7 +20,6 @@ function renderBackdrop(isShow, transitionEnter, transitionLeave) {
     curModelShowNum -= 1;
     modalBackdropHtml = '<div id="modalBackdrop" class="o-modal__backdrop in"></div>';
   }
-
   // 如果是显示
   if (curModelShowNum > 0) {
     if (transitionEnter) {
@@ -34,7 +33,7 @@ function renderBackdrop(isShow, transitionEnter, transitionLeave) {
               fade: !isShow,
             },
           );
-        }, 100);
+        }, 10);
     } else {
       document.getElementById('modalBackdrop').className = classNames(
         'o-modal__backdrop',
@@ -49,13 +48,15 @@ function renderBackdrop(isShow, transitionEnter, transitionLeave) {
   } else if (transitionLeave) {
     setTimeout(
       () => {
-        document.getElementById('modalBackdrop').className = classNames(
-          'o-modal__backdrop',
-          {
-            in: isShow,
-            fade: !isShow,
-          },
-        );
+        if (document.getElementById('modalBackdrop')) {
+          document.getElementById('modalBackdrop').className = classNames(
+            'o-modal__backdrop',
+            {
+              in: isShow,
+              fade: !isShow,
+            },
+          );
+        }
       }, 10);
 
     // 定时删除Backdrop元素
@@ -89,6 +90,7 @@ const propTypes = {
   draggable: PropTypes.bool,
   cancelButton: PropTypes.bool,
   noFooter: PropTypes.bool,
+  customBackdrop: PropTypes.bool,
   onClose: PropTypes.func,
   onOk: PropTypes.func,
   children: PropTypes.any,
@@ -104,6 +106,7 @@ const defaultProps = {
   okButton: true,
   cancelButton: true,
   noFooter: false,
+  customBackdrop: false,
 };
 
 class Modal extends Component {
@@ -115,17 +118,18 @@ class Modal extends Component {
     this.onOk = this.onOk.bind(this);
   }
   componentDidMount() {
-    if (this.props.isShow) {
+    if (this.props.isShow && !this.props.customBackdrop) {
       renderBackdrop(
         this.props.isShow,
         this.props.transitionEnter,
         this.props.transitionLeave,
       );
     }
+    this.modalKey = `model${utils.uuid()}`;
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.isShow !== this.props.isShow) {
+    if (prevProps.isShow !== this.props.isShow && !this.props.customBackdrop) {
       renderBackdrop(
         this.props.isShow,
         this.props.transitionEnter,
@@ -133,7 +137,14 @@ class Modal extends Component {
       );
     }
   }
-
+  componentWillUnmount() {
+    const isShowModel = false;
+    renderBackdrop(
+      isShowModel,
+      this.props.transitionEnter,
+      this.props.transitionLeave,
+    );
+  }
   onClose() {
     if (typeof this.props.onClose === 'function') {
       this.props.onClose();
@@ -158,10 +169,11 @@ class Modal extends Component {
   render() {
     const { size, role, id, transitionLeave, transitionEnter,
       isShow, title, cancelText, okButton, okText, draggable,
+      customBackdrop,
     } = this.props;
     let noFooter = this.props.noFooter;
     let contentClassNames;
-    let keyVal = 'onlyModal';
+    let keyVal = this.modalKey;
     let hasCloseBtn = true;
     let { cancelButton } = this.props;
     let modalClassName = 'o-modal';
@@ -212,6 +224,11 @@ class Modal extends Component {
               className={modalClassName}
               role={role}
             >
+              {
+                customBackdrop ? (
+                  <div className="o-modal__backdrop in" />
+                ) : null
+              }
               <div className={contentClassNames} draggable={draggable} style={this.props.style}>
                 <div className="o-modal__content">
                   {

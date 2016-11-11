@@ -272,7 +272,7 @@ export const Portal = React.createClass({
     const noControl = this.props.app.get('noControl');
     const activeIndex = this.state.activeIndex;
     const curImgUrl = this.props.store.getIn([
-      'curr', 'image', activeIndex, 'url',
+      'data', 'curr', 'image', activeIndex, 'url',
     ]);
 
     return (

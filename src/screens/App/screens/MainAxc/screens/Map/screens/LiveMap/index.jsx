@@ -10,7 +10,7 @@ import FormContainer from 'shared/components/Organism/FormContainer';
 import Table from 'shared/components/Table';
 import Modal from 'shared/components/Modal';
 import Switchs from 'shared/components/Switchs';
-import ListInfo from 'shared/components/Template/ListInfo';
+import AppScreen from 'shared/components/Template/AppScreen';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 import * as propertiesActions from 'shared/actions/properties';
@@ -19,7 +19,7 @@ import './_map.scss';
 import buildingIconImg from '../../shared/images/building_3d.png';
 
 
-const screenOptions = fromJS({
+const listOptions = fromJS({
   settings: [],
   list: [
     {
@@ -50,11 +50,11 @@ const screenOptions = fromJS({
   ],
 });
 
-const listTableOptions = immutableUtils.getTableOptions(screenOptions.get('list'));
-const defaultEditData = immutableUtils.getDefaultData(screenOptions.get('list'));
-const formOptions = immutableUtils.getFormOptions(screenOptions.get('list'));
+const listTableOptions = immutableUtils.getTableOptions(listOptions.get('list'));
+const defaultEditData = immutableUtils.getDefaultData(listOptions.get('list'));
+const formOptions = immutableUtils.getFormOptions(listOptions.get('list'));
 
-function getCurListInfoState(listStore, name) {
+function getCurAppScreenState(listStore, name) {
   const myStore = listStore || Map({});
   const myScreenId = myStore.get('curScreenId');
   let ret = myStore.getIn([myScreenId, 'data']);
@@ -140,8 +140,8 @@ export default class View extends React.Component {
 
   componentDidUpdate(prevProps) {
     const myScreenId = this.props.store.get('curScreenId');
-    const thisList = getCurListInfoState(this.props.store, 'list');
-    const prevList = getCurListInfoState(prevProps.store, 'list');
+    const thisList = getCurAppScreenState(this.props.store, 'list');
+    const prevList = getCurAppScreenState(prevProps.store, 'list');
     const thisSettings = this.props.store.getIn([myScreenId, 'curSettings']);
     const prevSettings = prevProps.store.getIn([myScreenId, 'curSettings']);
 
@@ -225,11 +225,11 @@ export default class View extends React.Component {
       draggable: item.get('isLocked') !== '1',
       animation: google.maps.Animation.DROP,
     });
-    const contentString = '<div class="m-map-marker">' +
-                            '<h4>' + _('Test') + '</h4>' +
-                            '<dl><dt>' + _('Flow') + '</dt>' +
-                            '<dd>15.23Mbps</dd></dl>' +
-                          '</div>';
+    const contentString = `${'<div class="m-map-marker">' +
+                            '<h4>'}${  _('Test')  }</h4>` +
+                            `<dl><dt>${  _('Flow')  }</dt>` +
+                            `<dd>15.23Mbps</dd></dl>` +
+                          `</div>`;
 
     const infowindow = new google.maps.InfoWindow({
       content: contentString,
@@ -282,8 +282,8 @@ export default class View extends React.Component {
 
   renderGoogleMap() {
     const store = this.props.store;
-    const list = getCurListInfoState(store, 'list');
-    const settings = getCurListInfoState(store, 'settings');
+    const list = getCurAppScreenState(store, 'list');
+    const settings = getCurAppScreenState(store, 'settings');
     const google = window.google;
     const geocoder = new google.maps.Geocoder();
     const markers = [];
@@ -391,7 +391,7 @@ export default class View extends React.Component {
     const actionQuery = store.getIn([myScreenId, 'actionQuery']);
     const list = store.getIn([myScreenId, 'data', 'list']);
     const page = store.getIn([myScreenId, 'data', 'page']);
-    const editData = getCurListInfoState(store, 'edit');
+    const editData = getCurAppScreenState(store, 'edit');
     const lockButton = settings.get('isLocked') === '1' ? (<Button
       icon="lock"
       key="0"
@@ -452,15 +452,18 @@ export default class View extends React.Component {
     }
 
     return (
-      <ListInfo
+      <AppScreen
         {...this.props}
-        defaultEditData={defaultEditData}
-        actionBarChildren={actionBarChildren}
         defaultSettingsData={{
           type: '0',
         }}
         actionable
       >
+        <div className="m-action-bar">
+          {
+            actionBarChildren
+          }
+        </div>
         {
           settings.get('type') === '0' ? (
             <div className={mapClassName}>
@@ -542,7 +545,7 @@ export default class View extends React.Component {
             </Modal>
           ) : null
         }
-      </ListInfo>
+      </AppScreen>
     );
   }
 }
@@ -561,12 +564,12 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
     screenActions,
-    propertiesActions
+    propertiesActions,
   ), dispatch);
 }
 
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(View);

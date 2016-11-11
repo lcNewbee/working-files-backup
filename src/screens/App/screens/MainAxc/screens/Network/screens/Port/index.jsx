@@ -1,16 +1,14 @@
 import React, { PropTypes } from 'react';
-import utils, { immutableUtils } from 'shared/utils';
+import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/utils/lib/validator';
-import {
-  ListInfo,
-} from 'shared/components';
+import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
-const screenOptions = fromJS([
+const listOptions = fromJS([
   {
     id: 'name',
     text: _('Name'),
@@ -82,6 +80,7 @@ const screenOptions = fromJS([
     text: _('Description'),
     formProps: {
       type: 'textarea',
+      maxLength: '64',
     },
   }, {
     id: 'status',
@@ -89,7 +88,7 @@ const screenOptions = fromJS([
     options: [
       {
         value: 1,
-        label: _('On'),
+        label: _('ON'),
         render() {
           return (
             <span
@@ -97,13 +96,13 @@ const screenOptions = fromJS([
                 color: 'green',
               }}
             >
-              {_('On')}
+              {_('ON')}
             </span>
           );
         },
       }, {
         value: 0,
-        label: _('Off'),
+        label: _('OFF'),
         render() {
           return (
             <span
@@ -111,7 +110,7 @@ const screenOptions = fromJS([
                 color: 'red',
               }}
             >
-              {_('Off')}
+              {_('OFF')}
             </span>
           );
         },
@@ -123,16 +122,13 @@ const screenOptions = fromJS([
     },
   },
 ]);
-const tableOptions = immutableUtils.getTableOptions(screenOptions);
-const editFormOptions = immutableUtils.getFormOptions(screenOptions);
-const defaultEditData = immutableUtils.getDefaultData(screenOptions);
 const propTypes = {
   route: PropTypes.object,
   save: PropTypes.func,
 };
 const defaultProps = {};
 
-export default class View extends React.Component {
+export default class NetworkPort extends React.Component {
   constructor(props) {
     super(props);
 
@@ -155,11 +151,10 @@ export default class View extends React.Component {
 
   render() {
     return (
-      <ListInfo
+      <AppScreen
         {...this.props}
-        tableOptions={tableOptions}
-        editFormOptions={editFormOptions}
-        defaultEditData={defaultEditData}
+        listOptions={listOptions}
+
         addable={false}
         deleteable={false}
         actionable
@@ -168,8 +163,8 @@ export default class View extends React.Component {
   }
 }
 
-View.propTypes = propTypes;
-View.defaultProps = defaultProps;
+NetworkPort.propTypes = propTypes;
+NetworkPort.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
@@ -177,17 +172,15 @@ function mapStateToProps(state) {
     store: state.screens,
   };
 }
-
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    screenActions
+    screenActions,
   ), dispatch);
 }
-
 
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
-)(View);
+  mapDispatchToProps,
+)(NetworkPort);

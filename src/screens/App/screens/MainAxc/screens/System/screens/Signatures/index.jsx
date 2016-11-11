@@ -8,7 +8,7 @@ import AppSettings from 'shared/components/Template/AppSettings';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/settings';
 
-const screenOptions = fromJS([
+const listOptions = fromJS([
   {
     id: 'importTime',
     label: _('Import Time'),
@@ -57,8 +57,8 @@ const screenOptions = fromJS([
   },
 ]);
 
-const formOptions = immutableUtils.getFormOptions(screenOptions);
-const defaultFormData = immutableUtils.getDefaultData(screenOptions);
+const formOptions = immutableUtils.getFormOptions(listOptions);
+const defaultFormData = immutableUtils.getDefaultData(listOptions);
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),

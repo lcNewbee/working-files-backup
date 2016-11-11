@@ -4,9 +4,11 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { bindActionCreators } from 'redux';
-import {
-  Button, ListInfo, Icon, FormGroup, Modal,
-} from 'shared/components';
+import AppScreen from 'shared/components/Template/AppScreen';
+import Button from 'shared/components/Button/Button';
+import Icon from 'shared/components/Icon';
+import Modal from 'shared/components/Modal';
+import { FormGroup } from 'shared/components/Form';
 import FileUploads from 'shared/components/FileUpload';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
@@ -15,7 +17,7 @@ import * as propertiesActions from 'shared/actions/properties';
 import bkImg from '../../shared/images/map_bg.jpg';
 import '../../shared/_map.scss';
 
-const screenOptions = fromJS({
+const listOptions = fromJS({
   settings: [],
   list: [
     {
@@ -54,7 +56,7 @@ const screenOptions = fromJS({
   ],
 });
 
-const defaultEditData = immutableUtils.getDefaultData(screenOptions.get('list'));
+const defaultEditData = immutableUtils.getDefaultData(listOptions.get('list'));
 
 const propTypes = {
   store: PropTypes.instanceOf(Map),
@@ -454,12 +456,16 @@ export default class View extends React.Component {
     }
 
     return (
-      <ListInfo
+      <AppScreen
         {...this.props}
-        defaultEditData={defaultEditData}
-        actionBarChildren={actionBarChildren}
         actionable={false}
       >
+        <div className="m-action-bar">
+          {
+            actionBarChildren
+          }
+        </div>
+
         <div className="o-map-warp">
           {
             curMapName ? this.renderCurMap(list, curMapName, myZoom) : this.renderMapList(mapList)
@@ -520,7 +526,7 @@ export default class View extends React.Component {
             <img src="" alt="" />
           </p>
         </Modal>
-      </ListInfo>
+      </AppScreen>
     );
   }
 }

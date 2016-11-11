@@ -1,16 +1,13 @@
 import React, { PropTypes } from 'react';
-import utils, { immutableUtils } from 'shared/utils';
+import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
-import validator from 'shared/utils/lib/validator';
-import {
-  ListInfo,
-} from 'shared/components';
+import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
-const screenOptions = fromJS([
+const listOptions = fromJS([
   {
     id: 'time',
     text: _('Time'),
@@ -32,9 +29,6 @@ const screenOptions = fromJS([
     text: _('Result'),
   },
 ]);
-const tableOptions = immutableUtils.getTableOptions(screenOptions);
-const queryFormOptions = immutableUtils.getQueryFormOptions(screenOptions);
-const defaultQueryData = immutableUtils.getDefaultData(screenOptions, 'defaultQuery');
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
@@ -70,11 +64,9 @@ export default class View extends React.Component {
 
   render() {
     return (
-      <ListInfo
+      <AppScreen
         {...this.props}
-        tableOptions={tableOptions}
-        queryFormOptions={queryFormOptions}
-        defaultQueryData={defaultQueryData}
+        listOptions={listOptions}
         editable={false}
         addable={false}
         actionable

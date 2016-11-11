@@ -4,12 +4,12 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import {
-  ListInfo,
+  AppScreen,
 } from 'shared/components';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
-const screenOptions = fromJS([
+const listOptions = fromJS([
   {
     id: 'vlanId',
     text: _('VLAN ID'),
@@ -24,9 +24,9 @@ const screenOptions = fromJS([
     },
   },
 ]);
-const tableOptions = immutableUtils.getTableOptions(screenOptions);
-const editFormOptions = immutableUtils.getFormOptions(screenOptions);
-const defaultEditData = immutableUtils.getFormOptions(screenOptions);
+const tableOptions = immutableUtils.getTableOptions(listOptions);
+const editFormOptions = immutableUtils.getFormOptions(listOptions);
+const defaultEditData = immutableUtils.getFormOptions(listOptions);
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
@@ -63,11 +63,11 @@ export default class View extends React.Component {
 
   render() {
     return (
-      <ListInfo
+      <AppScreen
         {...this.props}
-        tableOptions={tableOptions}
+        listOptions={listOptions}
         editFormOptions={editFormOptions}
-        defaultEditData={defaultEditData}
+        
         actionable
         selectable
       />

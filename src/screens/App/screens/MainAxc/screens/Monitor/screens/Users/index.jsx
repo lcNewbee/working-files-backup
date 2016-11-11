@@ -6,7 +6,7 @@ import utils from 'shared/utils';
 
 // components
 import PureComponent from 'shared/components/Base/PureComponent';
-import ListInfo from 'shared/components/Template/ListInfo';
+import AppScreen from 'shared/components/Template/AppScreen';
 import Button from 'shared/components/Button/Button';
 
 // custom
@@ -15,7 +15,7 @@ import * as appActions from 'shared/actions/app';
 
 const flowRateFilter = utils.filter('flowRate:["KB"]');
 
-const clientsTableOptions = fromJS([
+const listOptions = fromJS([
   {
     id: 'devicename',
     text: _('Client'),
@@ -142,7 +142,7 @@ export default class Clients extends PureComponent {
   }
   render() {
     // 添加操作项
-    const options = clientsTableOptions.setIn([-1, 'transform'],
+    const myListOptions = listOptions.setIn([-1, 'transform'],
       (val, item) => {
         const mac = item.get('mac');
         const isLock = item.get('islock') === 'lock';
@@ -179,12 +179,11 @@ export default class Clients extends PureComponent {
         );
       }
     );
-    const tableOptions = options;
 
     return (
-      <ListInfo
+      <AppScreen
         {...this.props}
-        tableOptions={tableOptions}
+        listOptions={myListOptions}
         searchable
       />
     );

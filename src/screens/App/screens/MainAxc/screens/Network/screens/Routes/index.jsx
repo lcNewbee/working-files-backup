@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/utils/lib/validator';
-import ListInfo from 'shared/components/Template/ListInfo';
+import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
-const screenOptions = fromJS([
+const listOptions = fromJS([
   {
     id: 'targetAddress',
     text: _('Target Address'),
@@ -38,10 +38,10 @@ const screenOptions = fromJS([
     },
   },
 ]);
-const tableOptions = screenOptions.map(
+const tableOptions = listOptions.map(
   item => item.delete('formProps')
 );
-const editFormOptions = immutableUtils.getFormOptions(screenOptions);
+const editFormOptions = immutableUtils.getFormOptions(listOptions);
 
 const propTypes = {
   save: PropTypes.func,
@@ -67,9 +67,9 @@ export default class View extends React.Component {
 
   render() {
     return (
-      <ListInfo
+      <AppScreen
         {...this.props}
-        tableOptions={tableOptions}
+        listOptions={listOptions}
         editFormOptions={editFormOptions}
         listKey="allKeys"
         actionable

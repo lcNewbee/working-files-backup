@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/utils/lib/validator';
-import ListInfo from 'shared/components/Template/ListInfo';
+import AppScreen from 'shared/components/Template/AppScreen';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/settings';
 import * as screenActions from 'shared/actions/screens';
@@ -19,7 +19,7 @@ const commonFormOptions = fromJS([
     saveOnChange: true,
   },
 ]);
-const screenOptions = fromJS([
+const listOptions = fromJS([
   {
     id: 'ruleType',
     label: _('NAT Rule Type'),
@@ -69,9 +69,9 @@ const screenOptions = fromJS([
   },
 ]);
 
-const formOptions = immutableUtils.getFormOptions(screenOptions);
-const tableOptions = immutableUtils.getTableOptions(screenOptions);
-const defaultEditData = immutableUtils.getDefaultData(screenOptions);
+const formOptions = immutableUtils.getFormOptions(listOptions);
+const tableOptions = immutableUtils.getTableOptions(listOptions);
+const defaultEditData = immutableUtils.getDefaultData(listOptions);
 const propTypes = {
   save: PropTypes.func,
 };
@@ -87,14 +87,14 @@ export default class View extends React.Component {
   }
   render() {
     return (
-      <ListInfo
+      <AppScreen
         {...this.props}
         listTitle={_('NAT List')}
         listKey="allKeys"
-        settingsFormOption={commonFormOptions}
-        tableOptions={tableOptions}
-        editFormOptions={formOptions}
-        defaultEditData={defaultEditData}
+        settingsFormOptions={commonFormOptions}
+        listOptions={listOptions}
+        
+        
         actionable
         selectable
       />

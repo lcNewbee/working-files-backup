@@ -4,13 +4,12 @@ import validator from 'shared/utils/lib/validator';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
-import {
-  ListInfo, FormInput,
-} from 'shared/components';
+import AppScreen from 'shared/components/Template/AppScreen';
+import { FormInput } from 'shared/components/Form';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
-const screenOptions = fromJS([
+const listOptions = fromJS([
   {
     id: 'policyName',
     text: _('Policy Name'),
@@ -87,10 +86,6 @@ const screenOptions = fromJS([
   },
 ]);
 
-const blcklistTableOptions = immutableUtils.getTableOptions(screenOptions);
-const editFormOptions = immutableUtils.getFormOptions(screenOptions);
-const defaultData = immutableUtils.getDefaultData(screenOptions);
-
 const validOptions = Map({
   password: validator({
     rules: 'remarkTxt:["\'\\\\"]|len:[8, 31]',
@@ -141,8 +136,8 @@ export default class View extends React.Component {
   }
 
   render() {
-    const tableOptions = blcklistTableOptions.mergeIn([-1], {
-      transform: val => (
+    const myListOptions = listOptions.mergeIn([-1], {
+      transform: (val) => (
         <FormInput
           type="checkbox"
           style={{
@@ -154,11 +149,9 @@ export default class View extends React.Component {
     });
 
     return (
-      <ListInfo
+      <AppScreen
         {...this.props}
-        tableOptions={tableOptions}
-        editFormOptions={editFormOptions}
-        defaultEditData={defaultData}
+        listOptions={myListOptions}
         noTitle
         actionable
       />

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import utils from 'shared/utils';
-import ListInfo from 'shared/components/Template/ListInfo';
+import AppScreen from 'shared/components/Template/AppScreen';
 
 // custom
 import * as appActions from 'shared/actions/app';
@@ -11,7 +11,7 @@ import * as screenActions from 'shared/actions/screens';
 import * as propertiesActions from 'shared/actions/properties';
 
 const flowRateFilter = utils.filter('flowRate:["KB"]');
-const apTableOptions = fromJS([
+const listOptions = fromJS([
   {
     id: 'devicename',
     width: '180',
@@ -96,7 +96,7 @@ export default class View extends React.Component {
     }
   }
   render() {
-    const myTableOptions = apTableOptions.setIn([0, 'transform'], (val, item) => {
+    const myListOptions = listOptions.setIn([0, 'transform'], (val, item) => {
       const mac = item.get('mac');
       return (
         <span
@@ -109,9 +109,9 @@ export default class View extends React.Component {
     });
 
     return (
-      <ListInfo
+      <AppScreen
         {...this.props}
-        tableOptions={myTableOptions}
+        listOptions={myListOptions}
         actionBarButtons={[
           {
             name: 'upgrade',

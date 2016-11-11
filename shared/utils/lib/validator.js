@@ -42,10 +42,6 @@ var vaildate = {
         return _("Range: %s - %s", min, max);
       }
     }
-
-
-
-
   },
 
   mac: {
@@ -56,7 +52,7 @@ var vaildate = {
         return ret;
       }
 
-      if (!(/^([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}$/).test(str)) {
+      if (!(/^([0-9a-fA-F]{2}(:|-)){5}[0-9a-fA-F]{2}$/).test(str)) {
         return _("Please input a valid MAC address");
       }
     },

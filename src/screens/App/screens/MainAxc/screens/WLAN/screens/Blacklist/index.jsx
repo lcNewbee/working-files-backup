@@ -3,7 +3,7 @@ import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
-import ListInfo from 'shared/components/Template/ListInfo';
+import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
@@ -15,7 +15,7 @@ const commonFormOptions = fromJS([
     saveOnChange: true,
   },
 ]);
-const screenOptions = fromJS([
+const listOptions = fromJS([
   {
     id: 'mac',
     text: _('MAC Address'),
@@ -39,9 +39,6 @@ const screenOptions = fromJS([
     },
   },
 ]);
-const tableOptions = immutableUtils.getTableOptions(screenOptions);
-const editFormOptions = immutableUtils.getFormOptions(screenOptions);
-const defaultEditData = immutableUtils.getDefaultData(screenOptions);
 
 const propTypes = {
   route: PropTypes.object,
@@ -49,7 +46,7 @@ const propTypes = {
 };
 const defaultProps = {};
 
-export default class View extends React.Component {
+export default class Blacklist extends React.Component {
   constructor(props) {
     super(props);
 
@@ -73,19 +70,20 @@ export default class View extends React.Component {
     const { route } = this.props;
 
     return (
-      <ListInfo
+      <AppScreen
+        // Screen 全局属性
         {...this.props}
         title={_('Blacklist Settings')}
+
+        // Setting Props
+        settingsFormOptions={commonFormOptions}
+
+        // List Props
         listTitle={route.text}
-        tableOptions={tableOptions}
-        editFormOptions={editFormOptions}
-        defaultEditData={defaultEditData}
-
-        settingsFormOption={commonFormOptions}
-
+        listOptions={listOptions}
         listKey="allKeys"
-        actionable
         editable={false}
+        actionable
         selectable
         noTitle
       />
@@ -93,8 +91,8 @@ export default class View extends React.Component {
   }
 }
 
-View.propTypes = propTypes;
-View.defaultProps = defaultProps;
+Blacklist.propTypes = propTypes;
+Blacklist.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
@@ -107,7 +105,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    screenActions
+    screenActions,
   ), dispatch);
 }
 
@@ -115,5 +113,5 @@ function mapDispatchToProps(dispatch) {
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
-)(View);
+  mapDispatchToProps,
+)(Blacklist);

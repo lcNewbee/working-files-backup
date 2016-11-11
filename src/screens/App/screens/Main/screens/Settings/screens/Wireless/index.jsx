@@ -66,7 +66,7 @@ function getCountryOptions() {
      ({
        value: item.country,
        label: b28n.getLang() === 'cn' ? _(item.cn) : _(item.en),
-     })
+     }),
   ).toJS();
 }
 
@@ -81,7 +81,7 @@ function getChannelsOptions(currCountry) {
     },
   ];
   const channelsOption = channelsList.find(item =>
-     item.country === currCountry
+     item.country === currCountry,
   );
 
   if (channelsOption) {
@@ -119,7 +119,7 @@ export class Wireless extends PureComponent {
     this.binds(
       'onUpdate', 'onChangeGroup', 'onChangeEncryption', 'onUpdateSettings',
       'onSave', 'getCurrData', 'getGroupOptions', 'getChannelsOptions',
-      'getChannelsValue'
+      'getChannelsValue',
     );
     this.state = {
       frequency: '2.4G',
@@ -215,6 +215,19 @@ export class Wireless extends PureComponent {
       })
       .toJS();
   }
+  getChannelWidthOptions() {
+    const modeVal = this.state.frequency;
+    let $$ret = channelBandwidthOptions;
+
+    if (modeVal === '5G') {
+      $$ret = $$ret.push(fromJS({
+        value: '80',
+        label: '80',
+      }));
+    }
+
+    return $$ret;
+  }
 
   render() {
     const {
@@ -224,6 +237,7 @@ export class Wireless extends PureComponent {
     const countryOptions = getCountryOptions();
     const getCurrData = this.getCurrData;
     const channelsOptions = getChannelsOptions(getCurrData('country'));
+    const myChannelWidthOptions = this.getChannelWidthOptions();
     const noControl = this.props.app.get('noControl');
 
     return (
@@ -332,7 +346,7 @@ export class Wireless extends PureComponent {
               />
               <FormGroup label={_('Channel Bandwidth')} >
                 <Switchs
-                  options={channelBandwidthOptions}
+                  options={myChannelWidthOptions}
                   value={getCurrData('channelsBandwidth5g')}
                   onChange={this.onUpdateSettings('channelsBandwidth5g')}
                 />
@@ -357,7 +371,7 @@ export class Wireless extends PureComponent {
             </div>
             )
         }
-         <h3>{_('Bandwidth Control')}</h3>
+        <h3>{_('Bandwidth Control')}</h3>
         <FormGroup
           label={msg.upSpeed}
           help="KB/s"
@@ -442,7 +456,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     { fetchDeviceGroups },
     appActions,
-    myActions
+    myActions,
   ), dispatch);
 }
 
@@ -450,7 +464,7 @@ function mapDispatchToProps(dispatch) {
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
-  validator.mergeProps(validOptions)
+  validator.mergeProps(validOptions),
 )(Wireless);
 
 export const reducer = myReducer;

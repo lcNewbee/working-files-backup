@@ -59,6 +59,7 @@ class App extends Component {
           onOk={this.onModalApply}
           noFooter={isLoadingModal}
           noClose={isLoadingModal}
+          customBackdrop
         >
           {
             modelRole === 'loading' ? (

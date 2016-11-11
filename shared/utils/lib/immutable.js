@@ -1,8 +1,8 @@
 // 对 immutable 数据的操作
 
 var immutableUtils = {
-  getFormOptions: function(screenOptions) {
-    var ret = screenOptions;
+  getFormOptions: function(options) {
+    var ret = options;
 
     if(!ret) {
       return null;
@@ -44,8 +44,8 @@ var immutableUtils = {
     return ret;
   },
 
-  getQueryFormOptions: function(screenOptions) {
-    var ret = screenOptions;
+  getQueryFormOptions: function(options) {
+    var ret = options;
 
     if(!ret) {
       return null;
@@ -72,12 +72,16 @@ var immutableUtils = {
     return ret;
   },
 
-  getDefaultData: function(screenOptions, key) {
+  getDefaultData: function(options, key) {
     var defaultKey = key || 'defaultValue';
     var ret = {};
 
+    if(!options) {
+      return null;
+    }
+
     // 初始化默认值对象
-    screenOptions.forEach((item) => {
+    options.forEach((item) => {
       var defaultVal = item.get(defaultKey);
       if (defaultVal !== undefined) {
         ret[item.get('id')] = defaultVal;
@@ -87,8 +91,8 @@ var immutableUtils = {
     return ret;
   },
 
-  getValidatorOptions: function(screenOptions) {
-    var ret = screenOptions;
+  getValidatorOptions: function(options) {
+    var ret = options;
 
     if(!ret) {
       return null;
@@ -101,8 +105,8 @@ var immutableUtils = {
     return ret;
   },
 
-  getTableOptions: function(screenOptions) {
-    var ret = screenOptions;
+  getTableOptions: function(options) {
+    var ret = options;
 
     if(!ret) {
       return null;

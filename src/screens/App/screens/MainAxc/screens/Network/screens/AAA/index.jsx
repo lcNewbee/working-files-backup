@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react';
-import utils, { immutableUtils } from 'shared/utils';
+import utils from 'shared/utils';
 import { connect } from 'react-redux';
-import { fromJS, Map } from 'immutable';
+import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
-import ListInfo from 'shared/components/Template/ListInfo';
+import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
@@ -15,10 +15,10 @@ function getInterfaceTypeOptions() {
           item => ({
             value: item.template_name,
             label: `${item.id}(${item.template_name})`,
-          })
+          }),
         ),
       }
-    )
+    ),
   );
 }
 const accessTypeSeletOptions = [
@@ -43,10 +43,10 @@ const authTypeSeletOptions = [
   },
   {
     value: 'radius-scheme',
-    label: `${_('Remotely')}(${_('Radius Service')})`,
+    label: `${_('Remotely')}`,
   },
 ];
-const screenOptions = fromJS([
+const listOptions = fromJS([
   {
     id: 'domain_name',
     text: _('Name'),
@@ -84,15 +84,12 @@ const screenOptions = fromJS([
       label: _('Radius Template'),
       required: true,
       type: 'select',
-      placeholder: _('Please Select ') + _('Radius Template'),
+      placeholder: _('Please Select ') + _('Radius Service'),
       loadOptions: getInterfaceTypeOptions,
       isAsync: true,
     },
   },
 ]);
-const tableOptions = immutableUtils.getTableOptions(screenOptions);
-const editFormOptions = immutableUtils.getFormOptions(screenOptions);
-const defaultEditData = immutableUtils.getDefaultData(screenOptions);
 const propTypes = {
   save: PropTypes.func,
 };
@@ -121,12 +118,10 @@ export default class View extends React.Component {
 
   render() {
     return (
-      <ListInfo
+      <AppScreen
         {...this.props}
-        tableOptions={tableOptions}
-        editFormOptions={editFormOptions}
-        defaultEditData={defaultEditData}
         listKey="domain_name"
+        listOptions={listOptions}
         actionable
         selectable
       />
@@ -147,7 +142,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    screenActions
+    screenActions,
   ), dispatch);
 }
 
@@ -155,5 +150,5 @@ function mapDispatchToProps(dispatch) {
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(View);

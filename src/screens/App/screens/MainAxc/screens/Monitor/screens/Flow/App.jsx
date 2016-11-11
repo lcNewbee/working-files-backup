@@ -2,13 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import utils from 'shared/utils';
-import ListInfo from 'shared/components/Template/ListInfo';
+import AppScreen from 'shared/components/Template/AppScreen';
 
 // custom
 import * as screenActions from 'shared/actions/screens';
 
 const flowRateFilter = utils.filter('flowRate:["KB"]');
-const flowTableOptions = fromJS([
+const flowListOptions = fromJS([
   {
     id: 'appName',
     text: _('App Name'),
@@ -36,9 +36,9 @@ const defaultProps = {};
 
 export default function View(props) {
   return (
-    <ListInfo
+    <AppScreen
       {...props}
-      tableOptions={flowTableOptions}
+      listOptions={flowListOptions}
       noTitle
     />
   );

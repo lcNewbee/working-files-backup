@@ -3,7 +3,7 @@ import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
-import ListInfo from 'shared/components/Template/ListInfo';
+import AppScreen from 'shared/components/Template/AppScreen';
 import FileUploads from 'shared/components/FileUpload';
 import FormGroup from 'shared/components/Form/FormGroup';
 import { Button, SaveButton } from 'shared/components/Button';
@@ -107,7 +107,6 @@ const screenOptions = fromJS([
     formProps: {
       type: 'text',
     },
-
   }, {
     id: 'expiration',
     label: _('Expiration'),
@@ -124,16 +123,12 @@ const screenOptions = fromJS([
     },
   },
 ]);
-
 const formOptions = immutableUtils.getFormOptions(screenOptions);
 const defaultSettingData = immutableUtils.getDefaultData(screenOptions);
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
 
-  route: PropTypes.object,
-  initSettings: PropTypes.func,
-  fetchSettings: PropTypes.func,
   saveSettings: PropTypes.func,
   updateScreenSettings: PropTypes.func,
   leaveSettingsScreen: PropTypes.func,
@@ -141,7 +136,7 @@ const propTypes = {
 };
 const defaultProps = {};
 
-export default class View extends React.Component {
+export default class PortalProfile extends React.Component {
   constructor(props) {
     super(props);
     this.onSave = this.onSave.bind(this);
@@ -172,17 +167,19 @@ export default class View extends React.Component {
     const curSettings = store.getIn([myScreenId, 'curSettings']);
     const activeIndex = this.state.activeImageIndex;
     const curImgUrl = store.getIn(
-      [myScreenId, 'curSettings', 'images', activeIndex - 1, 'url']
+      [myScreenId, 'curSettings', 'images', activeIndex - 1, 'url'],
     ) || '';
 
     return (
-      <ListInfo
+      <AppScreen
         {...this.props}
         defaultSettingData={defaultSettingData}
         actionable={false}
+        customSettingForm
         noTitle
       >
         <div className="row">
+          <iframe id="imagesIf" name="imagesIf" className="none" />
           <div className="cols col-7">
             <FormContainer
               options={myFormOptions}
@@ -274,7 +271,7 @@ export default class View extends React.Component {
                               {val}
                             </li>
                           );
-                        }
+                        },
                       )
                     }
                   </ul>
@@ -291,14 +288,13 @@ export default class View extends React.Component {
             </div>
           </div>
         </div>
-        <iframe id="imagesIf" name="imagesIf" className="none" />
-      </ListInfo>
+      </AppScreen>
     );
   }
 }
 
-View.propTypes = propTypes;
-View.defaultProps = defaultProps;
+PortalProfile.propTypes = propTypes;
+PortalProfile.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
@@ -311,12 +307,12 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
     actions,
-    screenActions
+    screenActions,
   ), dispatch);
 }
 
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
-)(View);
+  mapDispatchToProps,
+)(PortalProfile);

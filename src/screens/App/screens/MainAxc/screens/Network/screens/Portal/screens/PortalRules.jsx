@@ -3,7 +3,7 @@ import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
-import ListInfo from 'shared/components/Template/ListInfo';
+import AppScreen from 'shared/components/Template/AppScreen';
 import Modal from 'shared/components/Modal';
 import Table from 'shared/components/Table';
 import WizardContainer from 'shared/components/Organism/WizardContainer';
@@ -64,7 +64,7 @@ const commonFormOptions = fromJS([
     type: 'checkbox',
   },
 ]);
-const screenOptions = fromJS([
+const listOptions = fromJS([
   {
     id: 'ruleName',
     label: _('Rule Name'),
@@ -133,9 +133,9 @@ const objectTableOptions = fromJS([
   },
 ]);
 
-const formOptions = immutableUtils.getFormOptions(screenOptions);
-const tableOptions = immutableUtils.getTableOptions(screenOptions);
-const defaultEditData = immutableUtils.getDefaultData(screenOptions);
+const formOptions = immutableUtils.getFormOptions(listOptions);
+const tableOptions = immutableUtils.getTableOptions(listOptions);
+const defaultEditData = immutableUtils.getDefaultData(listOptions);
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
@@ -191,12 +191,12 @@ export default class View extends React.Component {
     const actionType = store.getIn([myScreenId, 'actionQuery', 'action']);
     const showModel = actionType === 'add' || actionType === 'edit';
     return (
-      <ListInfo
+      <AppScreen
         {...this.props}
         listTitle={_('Portal Rules List')}
         store={store}
-        tableOptions={tableOptions}
-        settingsFormOption={commonFormOptions}
+        listOptions={listOptions}
+        settingsFormOptions={commonFormOptions}
         hasSettingsSaveButton
         actionable
         selectable
@@ -242,7 +242,7 @@ export default class View extends React.Component {
             onCompleted={(data) => console.log('onCompleted', data)}
           />
         </Modal>
-      </ListInfo>
+      </AppScreen>
     );
   }
 }

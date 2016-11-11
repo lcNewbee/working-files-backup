@@ -3,11 +3,11 @@ import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
-import ListInfo from 'shared/components/Template/ListInfo';
+import AppScreen from 'shared/components/Template/AppScreen';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 
-const screenOptions = fromJS([
+const listOptions = fromJS([
   {
     id: 'template_name',
     label: _('Name'),
@@ -239,9 +239,9 @@ const screenOptions = fromJS([
   },
 ]);
 
-const formOptions = immutableUtils.getFormOptions(screenOptions);
-const tableOptions = immutableUtils.getTableOptions(screenOptions);
-const defaultEditData = immutableUtils.getDefaultData(screenOptions);
+const formOptions = immutableUtils.getFormOptions(listOptions);
+const tableOptions = immutableUtils.getTableOptions(listOptions);
+const defaultEditData = immutableUtils.getDefaultData(listOptions);
 const propTypes = {};
 const defaultProps = {};
 
@@ -251,14 +251,14 @@ export default class View extends React.Component {
   }
   render() {
     return (
-      <ListInfo
+      <AppScreen
         {...this.props}
         title={_('Radius Porfile')}
         store={this.props.store}
-        tableOptions={tableOptions}
+        listOptions={listOptions}
         modalSize="lg"
-        editFormOptions={formOptions}
-        defaultEditData={defaultEditData}
+        
+        
         listKey="template_name"
         actionable
         selectable

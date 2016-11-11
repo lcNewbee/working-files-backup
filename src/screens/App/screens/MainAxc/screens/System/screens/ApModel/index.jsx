@@ -1,13 +1,13 @@
 import React, { PropTypes } from 'react';
-import utils, { immutableUtils } from 'shared/utils';
+import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
-import ListInfo from 'shared/components/Template/ListInfo';
+import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
-const screenOptions = fromJS([
+const listOptions = fromJS([
   {
     id: 'name',
     text: _('Model Name'),
@@ -16,6 +16,7 @@ const screenOptions = fromJS([
       type: 'text',
       maxLength: '32',
       required: true,
+      notEditable: true,
     },
   }, {
     id: 'radionum',
@@ -38,9 +39,6 @@ const screenOptions = fromJS([
     },
   },
 ]);
-const tableOptions = immutableUtils.getTableOptions(screenOptions);
-const editFormOptions = immutableUtils.getFormOptions(screenOptions);
-const defaultEditData = immutableUtils.getDefaultData(screenOptions);
 const propTypes = {
   route: PropTypes.object,
   save: PropTypes.func,
@@ -70,11 +68,10 @@ export default class View extends React.Component {
 
   render() {
     return (
-      <ListInfo
+      <AppScreen
         {...this.props}
-        tableOptions={tableOptions}
-        editFormOptions={editFormOptions}
-        defaultEditData={defaultEditData}
+        listOptions={listOptions}
+
         noTitle
         actionable
         selectable

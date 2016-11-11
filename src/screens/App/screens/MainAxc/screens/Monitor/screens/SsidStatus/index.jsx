@@ -2,13 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import utils from 'shared/utils';
-import ListInfo from 'shared/components/Template/ListInfo';
+import AppScreen from 'shared/components/Template/AppScreen';
 
 // custom
 import * as screenActions from 'shared/actions/screens';
 
 const flowRateFilter = utils.filter('flowRate:["KB"]');
-const ssidTableOptions = fromJS([
+const ssidListOptions = fromJS([
   {
     id: 'ssid',
     text: 'SSID',
@@ -38,9 +38,9 @@ const defaultProps = {};
 
 export default function View(props) {
   return (
-    <ListInfo
+    <AppScreen
       {...props}
-      tableOptions={ssidTableOptions}
+      listOptions={ssidListOptions}
     />
   );
 }

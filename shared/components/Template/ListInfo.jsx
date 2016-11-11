@@ -2,24 +2,24 @@ import React, { PropTypes } from 'react';
 import { Map, List, fromJS } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import utils from 'shared/utils';
-import { FormInput } from 'shared/components/Form';
-import {
-  Table, Select, Search, Button, Modal,
-  FormContainer,
-} from 'shared/components';
+import { FormInput, Search } from 'shared/components/Form';
+import Select from 'shared/components/Select';
+import Table from 'shared/components/Table';
+import Modal from 'shared/components/Modal';
+import { Button } from 'shared/components/Button';
+import FormContainer from 'shared/components/Organism/FormContainer';
 
-const msg = {
-  perPage: _('Items per page: '),
-};
+
 const selectOptions = [
-  { value: 20, label: `20` },
-  { value: 50, label: `50` },
-  { value: 100, label: `100` },
+  { value: 20, label: '20' },
+  { value: 50, label: '50' },
+  { value: 100, label: '100' },
 ];
 
 const propTypes = {
   // 组件通用选项
-  title: PropTypes.string,
+  fetchUrl: PropTypes.string,
+  saveUrl: PropTypes.string,
   listTitle: PropTypes.string,
   groupid: PropTypes.any,
 
@@ -28,9 +28,6 @@ const propTypes = {
   listKey: PropTypes.string,
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
-  route: PropTypes.object,
-  defaultQueryData: PropTypes.object,
-  defaultSettingsData: PropTypes.object,
   tableOptions: PropTypes.oneOfType([
     PropTypes.instanceOf(List), PropTypes.array,
   ]),
@@ -40,31 +37,22 @@ const propTypes = {
   saveFile: PropTypes.func,
 
   // 通用控制开关选项
+  customModal: PropTypes.bool,
+  customTable: PropTypes.bool,
   actionable: PropTypes.bool,
   addable: PropTypes.bool,
   editable: PropTypes.bool,
   deleteable: PropTypes.bool,
   searchable: PropTypes.bool,
   selectable: PropTypes.bool,
-  noTitle: PropTypes.bool,
 
   // 通用操作函数
-  initScreen: PropTypes.func,
   fetchScreenData: PropTypes.func,
   changeScreenQuery: PropTypes.func,
   changeScreenActionQuery: PropTypes.func,
-  leaveScreen: PropTypes.func,
   selectListItem: PropTypes.func,
   onListAction: PropTypes.func,
   createModal: PropTypes.func,
-
-  // 全局 Settings 相关
-  hasSettingsSaveButton: PropTypes.bool,
-  settingsFormOption: PropTypes.oneOfType([
-    PropTypes.instanceOf(List), PropTypes.array,
-  ]),
-  updateScreenSettings: PropTypes.func,
-  saveScreenSettings: PropTypes.func,
 
   // 数据验证
   validateAll: PropTypes.func,
@@ -89,7 +77,6 @@ const propTypes = {
   ]),
 
   // React node 元素
-  children: PropTypes.node,
   actionBarChildren: PropTypes.node,
 };
 const defaultProps = {
@@ -103,49 +90,15 @@ const defaultProps = {
 // 原生的 react 页面
 class ListInfo extends React.Component {
   constructor(props) {
-    const initOption = {
-      id: props.route.id,
-      formUrl: props.route.formUrl,
-      fetchUrl: props.route.fetchUrl,
-      saveUrl: props.route.saveUrl,
-    };
     super(props);
-
-    if (props.defaultEditData) {
-      initOption.defaultEditData = props.defaultEditData;
-    }
-
-    if (props.defaultQueryData) {
-      initOption.query = props.defaultQueryData;
-    }
-
-    if (props.defaultSettingsData) {
-      initOption.defaultSettingsData = props.defaultSettingsData;
-    }
-
-    // 需要对 groupid特处理
-    if (typeof props.groupid !== 'undefined') {
-      initOption.query = utils.extend({}, initOption.query, {
-        groupid: props.groupid,
-      });
-      initOption.defaultSettingsData = utils.extend({}, props.defaultSettingsData, {
-        groupid: props.groupid,
-      });
-      initOption.defaultEditData = utils.extend({}, props.defaultEditData, {
-        groupid: props.groupid,
-      });
-    }
-
-    this.props.initScreen(initOption);
     this.selectedList = [];
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    this.binds(
+    utils.binds(this, [
       'onChangeQuery', 'onPageChange', 'onSaveEditForm', 'onCloseEditModal',
       'onChangeSearchText', 'onChangeType', 'onChangeTableSize', 'onRemoveSelectItems',
-      'onSaveSettings', 'onRemoveSelectedItems', 'onItemAction', 'onListSelectedAction'
-    );
+      'onRemoveSelectedItems', 'onItemAction', 'onListSelectedAction',
+    ]);
   }
-
   componentWillMount() {
     const { actionable, editable, deleteable, tableOptions } = this.props;
     let actionsOption = null;
@@ -206,7 +159,7 @@ class ListInfo extends React.Component {
                   onClick={() => {
                     this.onItemAction(
                       btnItem.get('name'),
-                      index
+                      index,
                     );
                   }}
                 />
@@ -237,7 +190,7 @@ class ListInfo extends React.Component {
                     index,
                     {
                       [$$item.get('id')]: data.value,
-                    }
+                    },
                   );
                 }}
               />
@@ -245,15 +198,9 @@ class ListInfo extends React.Component {
           }
 
           return $$retItem;
-        }
+        },
       );
     }
-
-
-    this.onFetchList();
-  }
-  componentWillUpdate(nextProps) {
-    this.formUrl = nextProps.route.formUrl;
   }
   componentDidUpdate(prevProps) {
     if (prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
@@ -268,11 +215,6 @@ class ListInfo extends React.Component {
         groupid: this.props.groupid,
       });
       this.onFetchList();
-    }
-  }
-  componentWillUnmount() {
-    if (this.props.leaveScreen) {
-      this.props.leaveScreen();
     }
   }
   onChangeSearchText(val) {
@@ -328,8 +270,7 @@ class ListInfo extends React.Component {
   }
   onRemoveItem(i) {
     const store = this.props.store;
-    const myListScreenId = store.get('curScreenId');
-    const list = store.getIn([myListScreenId, 'data', 'list']);
+    const list = store.getIn(['data', 'list']);
     const listKey = this.props.listKey;
     let selectedList = [];
     const msgText = _('Are you sure to delete selected row: %s', i);
@@ -361,16 +302,6 @@ class ListInfo extends React.Component {
 
     if (needRefresh) {
       this.onFetchList();
-    }
-  }
-  onSaveSettings() {
-    if (this.props.validateAll) {
-      this.props.validateAll()
-        .then((errMsg) => {
-          if (errMsg.isEmpty()) {
-            this.props.saveScreenSettings();
-          }
-        });
     }
   }
   onRemoveSelectedItems(selectedList, list) {
@@ -415,9 +346,8 @@ class ListInfo extends React.Component {
   }
   onListSelectedAction(actionName) {
     const store = this.props.store;
-    const myListScreenId = store.get('curScreenId');
-    const $$list = store.getIn([myListScreenId, 'data', 'list']);
-    const $$actionQuery = store.getIn([myListScreenId, 'actionQuery']);
+    const $$list = store.getIn(['data', 'list']);
+    const $$actionQuery = store.getIn(['actionQuery']);
     const listKey = this.props.listKey;
     let selectStr = '';
     let msgText = '';
@@ -459,8 +389,7 @@ class ListInfo extends React.Component {
   }
   onItemAction(actionName, index, data) {
     const store = this.props.store;
-    const myListScreenId = store.get('curScreenId');
-    const list = store.getIn([myListScreenId, 'data', 'list']);
+    const list = store.getIn(['data', 'list']);
     const listKey = this.props.listKey;
     const $$actionItem = list.get(index);
     const msgText = _('Are you sure to %s selected rows: %s', actionName, index);
@@ -475,7 +404,7 @@ class ListInfo extends React.Component {
     } else {
       $$actionData = $$actionData.set(
         listKey,
-        $$actionItem.get(listKey)
+        $$actionItem.get(listKey),
       );
       selectedList = [list.getIn([index, listKey])];
     }
@@ -491,7 +420,7 @@ class ListInfo extends React.Component {
       text: msgText,
       apply: () => {
         this.props.changeScreenActionQuery(
-          $$actionData.toJS()
+          $$actionData.toJS(),
         );
         this.props.onListAction();
       },
@@ -503,56 +432,20 @@ class ListInfo extends React.Component {
     }
   }
 
-  binds(...methods) {
-    methods.forEach((method) => {
-      if (typeof this[method] === 'function') {
-        this[method] = this[method].bind(this);
-      }
-    });
-  }
-
-  render() {
+  renderHeader() {
     const {
-      store, route, app, modalSize, title, listTitle,
-      selectable, deleteable, searchable, addable, actionable, noTitle,
-      editFormLayout, editFormOptions, defaultEditData, editFormId,
-      settingsFormOption, updateScreenSettings, hasSettingsSaveButton,
-      queryFormOptions, editFormOption, actionBarButtons,
+      store, app, fetchUrl,
+      selectable, deleteable, searchable, addable, actionable,
+      defaultEditData, editFormId, queryFormOptions, actionBarButtons,
       actionBarChildren,
     } = this.props;
-    const myListScreenId = store.get('curScreenId');
-    const page = store.getIn([myListScreenId, 'data', 'page']);
-    const list = store.getIn([myListScreenId, 'data', 'list']);
-    const curSettings = store.getIn([myListScreenId, 'curSettings']);
-    const editData = store.getIn([myListScreenId, 'curListItem']);
-    const query = store.getIn([myListScreenId, 'query']);
-    const actionQuery = store.getIn([myListScreenId, 'actionQuery']);
-    const actionType = actionQuery.get('action');
-    const saveUrl = route.saveUrl || route.formUrl;
-    const fetchUrl = route.fetchUrl || route.formUrl;
+    const page = store.getIn(['data', 'page']);
+    const list = store.getIn(['data', 'list']);
+    const query = store.getIn(['query']);
+    const actionQuery = store.getIn(['actionQuery']);
     const leftChildrenNode = [];
     let pageSelectClassName = 'fr';
-    let isEditModelshow = false;
-    let myEditFormOptions = editFormOptions;
     let $$curActionBarButtons = actionBarButtons;
-
-    if (editFormOption && editFormOption.hasFile) {
-      myEditFormOptions = myEditFormOptions.unshift(fromJS({
-        id: 'action',
-        type: 'hidden',
-        value: actionType,
-      }));
-    }
-
-    // 数据未初始化不渲染
-    if (myListScreenId === 'base') {
-      return null;
-    }
-
-    // 判断是否显示修改或添加 model
-    if (actionType === 'edit' || actionType === 'add') {
-      isEditModelshow = true;
-    }
 
     // 处理每页显示下拉框的位置
     if (!searchable && !queryFormOptions && !actionBarChildren &&
@@ -571,7 +464,7 @@ class ListInfo extends React.Component {
             onClick={() => {
               this.props.addListItem(defaultEditData);
             }}
-          />
+          />,
         );
       }
       if (actionBarButtons) {
@@ -593,8 +486,8 @@ class ListInfo extends React.Component {
                   }}
                 />
               );
-            }
-          ).toJS()
+            },
+          ).toJS(),
         );
       }
     }
@@ -605,7 +498,7 @@ class ListInfo extends React.Component {
           key="searchInput"
           onChange={this.onChangeSearchText}
           onSearch={this.handleSearch}
-        />
+        />,
       );
     }
     if (actionable && selectable && deleteable) {
@@ -617,7 +510,7 @@ class ListInfo extends React.Component {
           onClick={() => {
             this.onRemoveSelectedItems(actionQuery.get('selectedList'), list);
           }}
-        />
+        />,
       );
     }
     if (actionBarChildren) {
@@ -625,74 +518,143 @@ class ListInfo extends React.Component {
     }
 
     return (
-      <div className="t-list-info">
-        {
-          noTitle ? null : (
-            <h2 className="t-list-info__title">{title || route.text}</h2>
-          )
-        }
-        {
-          settingsFormOption ? (
-            <FormContainer
-              options={settingsFormOption}
-              data={curSettings}
-              onChangeData={updateScreenSettings}
-              onSave={this.onSaveSettings}
-              invalidMsg={app.get('invalid')}
-              validateAt={app.get('validateAt')}
-              isSaving={app.get('saving')}
-              hasSaveButton={hasSettingsSaveButton}
-            />
+      <FormContainer
+        action={fetchUrl}
+        method="GET"
+        layout="flow"
+        data={query}
+        options={queryFormOptions}
+        id={editFormId}
+        isSaving={app.get('fetching')}
+        invalidMsg={app.get('invalid')}
+        validateAt={app.get('validateAt')}
+        onSave={this.onSave}
+        onChangeData={this.props.changeScreenQuery}
+        onValidError={this.props.reportValidError}
+        leftChildren={leftChildrenNode}
+        rightChildren={
+            page ? (
+              <div>
+                <span
+                  style={{
+                    display: 'inline-block',
+                    lineHeight: '30px',
+                    marginRight: '10px',
+                  }}
+                >
+                  {_('View')}
+                </span>
+                <Select
+                  className={pageSelectClassName}
+                  value={query.get('size')}
+                  onChange={this.onChangeTableSize}
+                  options={selectOptions}
+                  searchable={false}
+                  clearable={false}
+                />
+              </div>
+
           ) : null
         }
+      />
+    );
+  }
 
+  renderFooter() {
+    const {
+      store, app, modalSize, customModal,
+      editFormLayout, editFormOptions, editFormOption, saveUrl,
+    } = this.props;
+    const editData = store.getIn(['curListItem']);
+    const actionQuery = store.getIn(['actionQuery']);
+    const actionType = actionQuery.get('action');
+    let isEditModelshow = false;
+    let myEditFormOptions = editFormOptions;
+
+    if (editFormOption && editFormOption.hasFile) {
+      myEditFormOptions = myEditFormOptions.unshift(fromJS({
+        id: 'action',
+        type: 'hidden',
+        value: actionType,
+      }));
+    }
+
+    // 处理可添加不能编辑的表单项
+    if (actionType === 'edit') {
+      myEditFormOptions = myEditFormOptions.map(($$formList) => {
+        let $$newFormList = $$formList;
+
+        if (List.isList($$newFormList)) {
+          $$newFormList = $$newFormList.map(($$formGroup) => {
+            let $$newFormGroup = $$formGroup;
+
+            if ($$formGroup.get('notEditable')) {
+              $$newFormGroup = $$newFormGroup.set('disabled', true);
+            }
+            return $$newFormGroup;
+          });
+        } else if ($$formList.get('notEditable')) {
+          $$newFormList = $$formList.set('disabled', true);
+        }
+
+        return $$newFormList;
+      });
+    }
+
+    // 判断是否显示修改或添加 model
+    if (actionType === 'edit' || actionType === 'add') {
+      isEditModelshow = true;
+    }
+
+    return (
+      !customModal ? (
+        <Modal
+          isShow={isEditModelshow}
+          title={actionQuery.get('myTitle')}
+          onOk={this.onSave}
+          onClose={this.onCloseEditModal}
+          size={modalSize}
+          noFooter
+        >
+          <FormContainer
+            action={saveUrl}
+            layout={editFormLayout}
+            isSaving={app.get('saving')}
+            data={editData}
+            actionQuery={actionQuery}
+            invalidMsg={app.get('invalid')}
+            validateAt={app.get('validateAt')}
+            options={myEditFormOptions}
+            onSave={this.onSaveEditForm}
+            onChangeData={this.props.updateCurEditListItem}
+            onValidError={this.props.reportValidError}
+            hasSaveButton
+            {...editFormOption}
+          />
+        </Modal>
+      ) : null
+    );
+  }
+
+  render() {
+    const {
+      store, app, listTitle, selectable, customTable,
+    } = this.props;
+    const page = store.getIn(['data', 'page']);
+    const list = store.getIn(['data', 'list']);
+
+    return (
+      <div className="t-list-info">
         {
           listTitle ? (
             <h2 className="t-list-info__title">{listTitle}</h2>
           ) : null
         }
-
-        <FormContainer
-          action={fetchUrl}
-          method="GET"
-          layout="flow"
-          data={query}
-          options={queryFormOptions}
-          id={editFormId}
-          isSaving={app.get('fetching')}
-          invalidMsg={app.get('invalid')}
-          validateAt={app.get('validateAt')}
-          onSave={this.onSave}
-          onChangeData={this.props.changeScreenQuery}
-          onValidError={this.props.reportValidError}
-          leftChildren={leftChildrenNode}
-          rightChildren={
-              page ? (
-                <div>
-                  <label htmlFor=""
-                    style={{
-                      display: 'inline-block',
-                      lineHeight: '30px',
-                      marginRight: '10px',
-                    }}
-                  >
-                    {_('View')}
-                  </label>
-                  <Select
-                    className={pageSelectClassName}
-                    value={query.get('size')}
-                    onChange={this.onChangeTableSize}
-                    options={selectOptions}
-                    searchable={false}
-                    clearable={false}
-                  />
-                </div>
-
-            ) : null
-          }
-        />
         {
-          this.listTableOptions ? (
+          this.renderHeader()
+        }
+        {
+          this.listTableOptions && !customTable ? (
             <Table
               className="table"
               options={this.listTableOptions}
@@ -706,35 +668,7 @@ class ListInfo extends React.Component {
           ) : null
         }
         {
-          editFormOptions ? (
-            <Modal
-              isShow={isEditModelshow}
-              title={actionQuery.get('myTitle')}
-              onOk={this.onSave}
-              onClose={this.onCloseEditModal}
-              size={modalSize}
-              noFooter
-            >
-              <FormContainer
-                action={saveUrl}
-                layout={editFormLayout}
-                isSaving={app.get('saving')}
-                data={editData}
-                actionQuery={actionQuery}
-                invalidMsg={app.get('invalid')}
-                validateAt={app.get('validateAt')}
-                options={myEditFormOptions}
-                onSave={this.onSaveEditForm}
-                onChangeData={this.props.updateCurEditListItem}
-                onValidError={this.props.reportValidError}
-                hasSaveButton
-                {...editFormOption}
-              />
-            </Modal>
-          ) : null
-        }
-        {
-          this.props.children
+          this.renderFooter()
         }
       </div>
     );

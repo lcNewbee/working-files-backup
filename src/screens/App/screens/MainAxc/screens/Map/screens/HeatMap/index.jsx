@@ -5,8 +5,9 @@ import { fromJS, Map } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { bindActionCreators } from 'redux';
 import h337 from 'heatmap.js';
+import AppScreen from 'shared/components/Template/AppScreen';
 import {
-  Button, ListInfo, Table,
+  Button, Table,
 } from 'shared/components';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
@@ -17,7 +18,7 @@ import '../../shared/_map.scss';
 
 let heatmapInstance;
 
-const screenOptions = fromJS({
+const listOptions = fromJS({
   settings: [],
   list: [
     {
@@ -56,9 +57,7 @@ const screenOptions = fromJS({
   ],
 });
 
-const defaultEditData = immutableUtils.getDefaultData(screenOptions.get('list'));
-const tableOptions = immutableUtils.getTableOptions(screenOptions.get('list'));
-
+const tableOptions = immutableUtils.getTableOptions(listOptions.get('list'));
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
@@ -94,7 +93,7 @@ export default class View extends React.Component {
         'renderBulidList',
         'renderBulidMapList',
         'onViewBuild',
-      ]
+      ],
     );
   }
 
@@ -304,18 +303,20 @@ export default class View extends React.Component {
     ];
 
     return (
-      <ListInfo
+      <AppScreen
         {...this.props}
-        defaultEditData={defaultEditData}
-        actionBarChildren={actionBarChildren}
-        actionable={false}
       >
+        <div className="m-action-bar">
+          {
+            actionBarChildren
+          }
+        </div>
         {
           this.state.buildIndex >= 0 ?
             this.renderBulidMapList() :
             this.renderBulidList()
         }
-      </ListInfo>
+      </AppScreen>
     );
   }
 }
@@ -335,12 +336,12 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
     screenActions,
-    propertiesActions
+    propertiesActions,
   ), dispatch);
 }
 
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(View);
