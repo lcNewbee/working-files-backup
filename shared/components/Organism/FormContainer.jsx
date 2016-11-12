@@ -76,7 +76,7 @@ class FormContainer extends React.Component {
       invalidMsg, validateAt, onValidError, actionQuery, id,
     } = this.props;
     const myProps = option.toJS();
-    const groupId = myProps.id;
+    const formGroupId = myProps.id;
     const myComponent = myProps.component;
     const checkboxValue = myProps.value || '1';
     let isShow = true;
@@ -90,13 +90,13 @@ class FormContainer extends React.Component {
       myProps.form = id;
     }
 
-    if (groupId) {
-      myProps.name = groupId;
-      myProps.key = groupId;
+    if (formGroupId) {
+      myProps.name = formGroupId;
+      myProps.key = formGroupId;
     }
 
     if (invalidMsg && typeof invalidMsg.get === 'function') {
-      myProps.errMsg = invalidMsg.get(groupId);
+      myProps.errMsg = invalidMsg.get(formGroupId);
     }
 
     // 同时支持 Map 或 object 数据
@@ -104,7 +104,7 @@ class FormContainer extends React.Component {
       if (!Map.isMap(data)) {
         data = fromJS(data);
       }
-      myProps.value = data.get(groupId) || myProps.value;
+      myProps.value = data.get(formGroupId);
     }
 
     if (validateAt) {
@@ -115,16 +115,16 @@ class FormContainer extends React.Component {
       myProps.onValidError = onValidError;
     }
 
-    myProps.onChange = myData => this.onChangeData(groupId, myData);
+    myProps.onChange = myData => this.onChangeData(formGroupId, myData);
 
-    // if (myProps.type === 'checkbox') {
-    //   myProps.checked = checkboxValue === myProps.value;
-    //   myProps.value = checkboxValue;
-    // }
+    if (myProps.type === 'checkbox') {
+      myProps.value = checkboxValue;
+      myProps.checked = data.get(formGroupId) == checkboxValue;
+    }
 
     if (myProps.saveOnChange) {
       myProps.onChange = ((myData) => {
-        this.onChangeData(groupId, myData);
+        this.onChangeData(formGroupId, myData);
         clearTimeout(this.saveOnChangeTimeout);
         this.saveOnChangeTimeout = setTimeout(() => {
           this.onSave();

@@ -28,7 +28,7 @@ class WirelessSsid extends CI_Controller {
         'vlanid'=>(int)element('vlanid', $oriData,0),
         'enabled'=>(int)element('enabled', $oriData),
         'maxBssUsers'=>(int)element('maxBssUsers', $oriData),
-        'loadBalanceType'=>element('loadBalanceType', $oriData),
+        'loadBalanceType'=>(int)element('loadBalanceType', $oriData),
         'hiddenSsid'=>(int)element('hiddenSsid', $oriData),
         'storeForwardPattern'=>element('storeForwardPattern', $oriData),
         'upstream'=>(int)element('upstream', $oriData),

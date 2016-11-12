@@ -53,14 +53,23 @@ const listOptions = fromJS([
         name: 'reboot',
         text: _('Reboot'),
         icon: 'recycle',
+        transform(item) {
+          return item.get('devicename') || item.get('mac');
+        },
       }, {
         name: 'locate',
         text: _('Locate'),
         icon: 'location-arrow',
+        transform(item) {
+          return item.get('devicename') || item.get('mac');
+        },
       }, {
         name: 'reset',
         text: _('Reset'),
         icon: 'reply-all',
+        transform(item) {
+          return item.get('devicename') || item.get('mac');
+        },
       },
     ],
   },
@@ -128,11 +137,12 @@ export default class View extends React.Component {
           },
         ]}
         listKey="mac"
-        actionable
         addable={false}
         editable={false}
         deleteable={false}
         selectable
+        actionable
+        searchable
       />
     );
   }

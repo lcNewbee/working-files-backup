@@ -7,6 +7,15 @@
     "settings": {
       "zoom": 100
     },
+    "page": {
+      "start": 2,
+      "size": 2,
+      "currPage": 2,
+      "totalPage": 3,
+      "total": 4,
+      "nextPage": 2,
+      "lastPage": 4
+    },
     "list": [
       {
         "devicename": "ap1",

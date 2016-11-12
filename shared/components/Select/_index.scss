@@ -11,6 +11,11 @@ $_height: 28px;
   .Select-control {
     height: $_height;
   }
+  &.is-disabled{
+    > .Select-control {
+      background-color: #e5e5e5;
+    }
+  }
 
   .Select-placeholder {
     line-height: $_height;

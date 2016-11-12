@@ -87,9 +87,10 @@ const listOptions = fromJS([
     text: _('AC Address'),
     noTable: true,
     formProps: {
-      maxLength: '15',
+      type: 'text',
+      maxLength: '31',
       validator: validator({
-        rules: 'ip',
+        rules: 'iplist:[";"]',
       }),
     },
   }, {
@@ -105,9 +106,7 @@ const listOptions = fromJS([
     },
   },
 ]);
-const tableOptions = immutableUtils.getTableOptions(listOptions);
 const editFormOptions = immutableUtils.getFormOptions(listOptions);
-const defaultEditData = immutableUtils.getDefaultData(listOptions);
 const propTypes = {
   route: PropTypes.object,
   save: PropTypes.func,
@@ -141,7 +140,7 @@ export default class View extends React.Component {
         {...this.props}
         listOptions={listOptions}
         editFormOptions={editFormOptions}
-        
+
         listKey="name"
         actionable
         selectable

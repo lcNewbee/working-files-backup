@@ -93,6 +93,7 @@ export default class Main extends Component {
       'onRemoveGroup',
       'removeGroup',
       'fetchManageGroupAps',
+      'isDuplicateAp',
 
       'renderPopOverContent',
       'renderBreadcrumb',
@@ -202,19 +203,26 @@ export default class Main extends Component {
       targetid: $$moveData.get('targetGroupId'),
       aplist: $$selectMacList.toJS(),
     };
+    if ($$moveData.get('targetGroupId') > 0) {
+      this.props.save('/goform/group', subData)
+        .then((json) => {
+          const state = json && json.state;
 
-    this.props.save('/goform/group', subData)
-      .then((json) => {
-        const state = json && json.state;
-
-        if (state && state.code === 2000) {
-          this.props.fetchGroupAps(groupId);
-        }
-        this.props.fetchApGroup();
-        this.props.showMainModal({
-          isShow: false,
+          if (state && state.code === 2000) {
+            this.props.fetchGroupAps(groupId);
+          }
+          this.props.fetchApGroup();
+          this.props.showMainModal({
+            isShow: false,
+          });
         });
+    } else {
+      this.props.createModal({
+        role: 'alert',
+        customBackdrop: true,
+        text: _('Please select target group'),
       });
+    }
   }
   onRemoveGroup() {
     const manageSelected = this.props.product.getIn(['group', 'manageSelected']);
@@ -273,17 +281,39 @@ export default class Main extends Component {
       this.props.fetchGroupAps(-1);
     });
   }
+  isDuplicateAp($$subData) {
+    const { product } = this.props;
+    const $$curGroupDevices = product.getIn(['group', 'devices']);
+    let ret;
+
+    if ($$subData.get('type') === 'custom') {
+      if ($$curGroupDevices.find(
+        $$item => $$item.get('mac') === $$subData.get('apmac'),
+      )) {
+        ret = 'Has Same Mac';
+      }
+
+      if ($$curGroupDevices.find(
+        $$item => $$item.get('devicename') === $$subData.get('name'),
+      )) {
+        ret = 'Has Same Name';
+      }
+    }
+
+    return ret;
+  }
   saveGroup() {
     const { product } = this.props;
     const $$addData = this.props.product.getIn(['group', 'addData']);
     const $$editData = product.getIn(['group', 'manageSelected']);
     const $$apAddData = product.getIn(['group', 'apAddData']);
+    const curModalName = product.getIn(['modal', 'name']);
     const $$selectMacList = this.props.product
       .get('defaultDevices')
       .filter(item => item.get('__selected__'))
       .map(item1 => item1.get('mac'));
     let subData;
-    const curModalName = product.getIn(['modal', 'name']);
+    let customCheckResult;
 
     if (curModalName === 'groupAdd') {
       subData = $$addData.merge({
@@ -300,26 +330,34 @@ export default class Main extends Component {
         groupid: $$editData.get('id'),
         aplist: $$selectMacList.toJS(),
       });
+      customCheckResult = this.isDuplicateAp($$apAddData);
     }
+    if (!customCheckResult) {
+      this.props.save('/goform/group', subData)
+        .then((json) => {
+          const state = json && json.state;
 
-    this.props.save('/goform/group', subData)
-      .then((json) => {
-        const state = json && json.state;
+          if (state && state.code === 2000) {
+            this.props.fetchGroupAps($$editData.get('id'));
+            this.props.fetchGroupAps(-1);
+          }
 
-        if (state && state.code === 2000) {
-          this.props.fetchGroupAps($$editData.get('id'));
-          this.props.fetchGroupAps(-1);
-        }
+          if (curModalName === 'groupApAdd') {
+            this.props.resetGroupAddDevice();
+          }
 
-        if (curModalName === 'groupApAdd') {
-          this.props.resetGroupAddDevice();
-        }
-
-        this.props.fetchApGroup();
-        this.props.showMainModal({
-          isShow: false,
+          this.props.fetchApGroup();
+          this.props.showMainModal({
+            isShow: false,
+          });
         });
+    } else {
+      this.props.createModal({
+        id: 'settings',
+        role: 'alert',
+        text: customCheckResult,
       });
+    }
   }
   showUserPopOver() {
     this.onToggleMainPopOver({
@@ -473,12 +511,12 @@ export default class Main extends Component {
           <div className="o-form">
             <FormGroup
               type="switch"
-              label={_('Add From')}
+              label={_('Type')}
               value={groupApAddData.get('type')}
               options={[
                 {
                   value: 'auto',
-                  label: _('Auto Ap'),
+                  label: _('Auto AP'),
                 }, {
                   value: 'custom',
                   label: _('Custom'),
@@ -503,7 +541,7 @@ export default class Main extends Component {
                   />
                 </div>
               ) : (
-                <div className="o-form__fileset">
+              <div className="o-form__fileset">
                   <legend className="o-form__legend">
                     { _('Custom AP') }
                   </legend>
@@ -560,7 +598,7 @@ export default class Main extends Component {
         return (
           <div className="row">
             <div className="o-list cols col-8">
-              <h3 className="o-list__header">{_('Select AP')}</h3>
+              <h3 className="o-list__header">{_('Please Select AP')}</h3>
               <Table
                 className="table"
                 options={tableOption}
@@ -572,7 +610,7 @@ export default class Main extends Component {
               />
             </div>
             <div className="o-list cols col-4">
-              <h3 className="o-list__header">{_('Target Group')}</h3>
+              <h3 className="o-list__header">{_('Target Group List')}</h3>
               <ul className="m-menu m-menu--open">
                 {
                   product.getIn(['group', 'list']).map((item) => {
@@ -784,9 +822,13 @@ export default class Main extends Component {
                 className="table"
                 options={tableOption}
                 selectable
+                page={product.getIn(['group', 'devicesPage'])}
                 list={product.getIn(['group', 'devices'])}
                 onRowSelect={(data) => {
                   this.props.selectManageGroupAp(data);
+                }}
+                onPageChange={(data) => {
+                  console.log(data);
                 }}
               />
               <div className="o-list__footer action-btns">
@@ -794,6 +836,7 @@ export default class Main extends Component {
                   icon="plus"
                   text={_('Add AP')}
                   onClick={() => {
+                    this.props.fetchGroupAps(-1);
                     this.props.showMainModal({
                       title: _('Add AP to Group'),
                       size: 'md',
@@ -806,6 +849,9 @@ export default class Main extends Component {
                   icon="share"
                   text={_('Move to Other Group')}
                   onClick={() => {
+                    this.props.updateGroupMoveDevice({
+                      targetGroupId: -1,
+                    });
                     this.props.showMainModal({
                       title: _('Move Ap Other Group'),
                       size: 'lg',
@@ -1062,7 +1108,7 @@ function mapDispatchToProps(dispatch) {
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
-  validator.mergeProps(validOptions)
+  validator.mergeProps(validOptions),
 )(Main);
 
 export const reducer = myReducer;

@@ -120,7 +120,18 @@ var vaildate = {
       }
     }
   },
-
+  iplist: function(str, delimiter) {
+    var ipArr = str.split(delimiter);
+    var len = ipArr.length;
+    var i;
+    var ret;
+    for (i = 0; i < len; i++) {
+      ret = vaildate.ip.all(ipArr[i]);
+      if (ret) {
+        return ret;
+      }
+    }
+  },
   mask: function(str) {
     var rel = /^(254|252|248|240|224|192|128)\.0\.0\.0$|^(255\.(254|252|248|240|224|192|128|0)\.0\.0)$|^(255\.255\.(254|252|248|240|224|192|128|0)\.0)$|^(255\.255\.255\.(254|252|248|240|224|192|128|0))$/;
 

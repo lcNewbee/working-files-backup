@@ -1,5 +1,5 @@
-import React, { PropTypes } from 'react';
-import utils, { immutableUtils } from 'shared/utils';
+import React from 'react';
+import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
@@ -16,6 +16,7 @@ const listOptions = fromJS([
     formProps: {
       type: 'select',
       required: true,
+      notEditable: true,
     },
   }, {
     id: 'softVersion',
@@ -25,6 +26,7 @@ const listOptions = fromJS([
       type: 'text',
       maxLength: '32',
       required: true,
+      notEditable: true,
       validator: validator({}),
     },
   }, {
@@ -45,7 +47,7 @@ const listOptions = fromJS([
     width: '100px',
     formProps: {
       type: 'checkbox',
-      value: '1',
+      value: 1,
     },
   },
 ]);

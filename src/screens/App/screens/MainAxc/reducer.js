@@ -33,7 +33,7 @@ const defaultState = fromJS({
       model: '',
     },
     apMoveData: {
-      targetGroupId: 1,
+      targetGroupId: -1,
     },
     list: [],
 
@@ -142,14 +142,16 @@ function receiveApGroup(state, action) {
 
 function receiveDevices(state, action) {
   const payload = action.payload || {};
+  const page = payload.page || [];
   const rcList = payload.list || [];
   let ret = state;
-
   // 如果是默认ap
   if (action.meta) {
-    ret = ret.set('defaultDevices', fromJS(rcList));
+    ret = ret.set('defaultDevices', fromJS(rcList))
+      .set('defaultDevicesPage', fromJS(page));
   } else {
-    ret = ret.setIn(['group', 'devices'], fromJS(rcList));
+    ret = ret.setIn(['group', 'devices'], fromJS(rcList))
+      .set('devicesPage', fromJS(page));
   }
 
   return ret;

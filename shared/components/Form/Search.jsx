@@ -57,10 +57,11 @@ class Search extends React.Component {
     delete inputProps.searchOnChange;
 
     return (
-      <div className="input-search fl">
-        <Icon className="icon-search" name="search" />
+      <div className="m-search fl">
+        <Icon className="m-search__icon" name="search" />
         <Input
           {...inputProps}
+          className="m-search__input"
           type="text"
           onChange={this.onChange}
           onKeyUp={this.onKeyUp}

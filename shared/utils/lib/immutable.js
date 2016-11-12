@@ -15,6 +15,7 @@ var immutableUtils = {
           fieldset: item.get('fieldset'),
           legend: item.get('legend'),
           options: item.get('options'),
+          notEditable:  item.get('notEditable'),
         };
         var retVal = item.clear()
           .merge(commonOption)

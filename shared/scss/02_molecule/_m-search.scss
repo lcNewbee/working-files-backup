@@ -1,0 +1,14 @@
+.m-search {
+  position: relative;
+  display: inline-block;
+
+  .m-search__icon {
+    position: absolute;
+    top: 50%;
+    left: 6px;
+    margin-top: -.5em;
+  }
+  .m-search__input {
+    padding-left: 25px;
+  }
+}

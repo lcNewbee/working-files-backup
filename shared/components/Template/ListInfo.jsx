@@ -94,13 +94,214 @@ class ListInfo extends React.Component {
     this.selectedList = [];
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     utils.binds(this, [
+      'initListTableOptions',
       'onChangeQuery', 'onPageChange', 'onSaveEditForm', 'onCloseEditModal',
       'onChangeSearchText', 'onChangeType', 'onChangeTableSize', 'onRemoveSelectItems',
       'onItemAction', 'onSelectedItemsAction',
     ]);
   }
   componentWillMount() {
-    const { actionable, editable, deleteable, tableOptions } = this.props;
+    this.initListTableOptions(this.props);
+  }
+  componentWillUpdate(nextProps) {
+    if (this.props.tableOptions !== nextProps.tableOptions) {
+      this.initListTableOptions(nextProps);
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
+      this.onFetchList();
+    }
+
+    if (this.props.groupid !== prevProps.groupid) {
+      this.props.changeScreenActionQuery({
+        groupid: this.props.groupid,
+      });
+      this.props.changeScreenQuery({
+        groupid: this.props.groupid,
+      });
+      this.onFetchList();
+    }
+  }
+  onChangeSearchText(val) {
+    this.onChangeQuery({
+      search: val,
+    }, true);
+  }
+  onChangeType(data) {
+    this.onChangeQuery({
+      type: data.value,
+    }, true);
+  }
+  onChangeTableSize(data) {
+    this.onChangeQuery({
+      size: data.value,
+      page: 1,
+    }, true);
+  }
+  onSaveEditForm(formElem, hasFile) {
+    const formUrl = formElem.getAttribute('action');
+
+    if (this.props.validateAll) {
+      this.props.validateAll(this.props.editFormId)
+        .then((errMsg) => {
+          if (errMsg.isEmpty()) {
+            // 表单中无文件
+            if (!hasFile) {
+              this.props.onListAction();
+            } else {
+              this.props.saveFile(formUrl, formElem)
+                .then(() => {
+                  this.props.fetchScreenData(formUrl);
+                  this.props.closeListItemModal();
+                });
+            }
+          }
+        });
+    }
+  }
+  onCloseEditModal() {
+    if (this.props.closeListItemModal) {
+      this.props.closeListItemModal();
+    }
+    if (this.props.resetVaildateMsg) {
+      this.props.resetVaildateMsg();
+    }
+  }
+
+  onPageChange(i) {
+    this.onChangeQuery({
+      page: i,
+    }, true);
+  }
+  onRemoveItem(i) {
+    const store = this.props.store;
+    const list = store.getIn(['data', 'list']);
+    const listKey = this.props.listKey;
+    let selectedList = [];
+    const msgText = _('Are you sure to delete selected row: %s', i);
+
+    if (listKey === 'allKeys') {
+      selectedList = [list.get(i)];
+    } else {
+      selectedList = [list.getIn([i, listKey])];
+    }
+
+    this.props.createModal({
+      id: 'settings',
+      role: 'confirm',
+      text: msgText,
+      apply: () => {
+        this.props.changeScreenActionQuery({
+          action: 'delete',
+          selectedList,
+        });
+        this.props.onListAction();
+      },
+    });
+  }
+
+  onChangeQuery(data, needRefresh) {
+    if (this.props.changeScreenQuery) {
+      this.props.changeScreenQuery(data);
+    }
+
+    if (needRefresh) {
+      clearTimeout(this.querySaveTimeout);
+      this.querySaveTimeout = setTimeout(() => {
+        this.onFetchList();
+      }, 200);
+    }
+  }
+  onSelectedItemsAction(actionName) {
+    const store = this.props.store;
+    const $$list = store.getIn(['data', 'list']);
+    const $$actionQuery = store.getIn(['actionQuery']);
+    const listKey = this.props.listKey;
+    let selectStr = '';
+    let msgText = '';
+    let $$selectedList = $$actionQuery.get('selectedList');
+
+    if ($$selectedList && $$selectedList.size > 0) {
+      $$selectedList = $$selectedList.map((val) => {
+        let ret = [];
+
+        if (listKey === 'allKeys') {
+          ret = $$list.get(val);
+        } else {
+          ret = $$list.getIn([val, listKey]);
+        }
+
+        return ret;
+      });
+      selectStr = $$actionQuery.get('selectedList').sort().join(', ');
+      msgText = _('Are you sure to %s selected rows: %s', _(actionName), selectStr);
+      this.props.createModal({
+        id: 'settings',
+        role: 'confirm',
+        text: msgText,
+        apply: () => {
+          this.props.changeScreenActionQuery({
+            action: actionName,
+            selectedList: $$selectedList,
+          });
+          this.props.onListAction();
+        },
+      });
+    } else {
+      this.props.createModal({
+        role: 'alert',
+        text: _('Please select %s rows', _(actionName)),
+      });
+    }
+  }
+  onItemAction(actionName, index, data) {
+    const store = this.props.store;
+    const list = store.getIn(['data', 'list']);
+    const listKey = this.props.listKey;
+    const $$actionItem = list.get(index);
+    const msgText = _('Are you sure to %s selected: %s', _(actionName), index);
+    let selectedList = [];
+    let $$actionData = Map({
+      action: actionName,
+    });
+
+    if (listKey === 'allKeys') {
+      $$actionData = $$actionData.merge($$actionItem);
+      selectedList = [list.get(index)];
+    } else {
+      $$actionData = $$actionData.set(
+        listKey,
+        $$actionItem.get(listKey),
+      );
+      selectedList = [list.getIn([index, listKey])];
+    }
+
+    $$actionData = $$actionData.merge(data)
+      .merge({
+        selectedList,
+      });
+
+    this.props.createModal({
+      id: 'settings',
+      role: 'confirm',
+      text: msgText,
+      apply: () => {
+        this.props.changeScreenActionQuery(
+          $$actionData.toJS(),
+        );
+        this.props.onListAction();
+      },
+    });
+  }
+  onFetchList() {
+    if (this.props.fetchScreenData) {
+      this.props.fetchScreenData();
+    }
+  }
+  initListTableOptions(props) {
+    const { actionable, editable, deleteable, tableOptions } = props;
     let actionsOption = null;
     let btnsNum = 0;
     let btnList = List([]);
@@ -202,194 +403,6 @@ class ListInfo extends React.Component {
       );
     }
   }
-  componentDidUpdate(prevProps) {
-    if (prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
-      this.onFetchList();
-    }
-
-    if (this.props.groupid !== prevProps.groupid) {
-      this.props.changeScreenActionQuery({
-        groupid: this.props.groupid,
-      });
-      this.props.changeScreenQuery({
-        groupid: this.props.groupid,
-      });
-      this.onFetchList();
-    }
-  }
-  onChangeSearchText(val) {
-    this.onChangeQuery({
-      search: val,
-    }, true);
-  }
-  onChangeType(data) {
-    this.onChangeQuery({
-      type: data.value,
-    }, true);
-  }
-  onChangeTableSize(data) {
-    this.onChangeQuery({
-      size: data.value,
-      page: 1,
-    }, true);
-  }
-  onSaveEditForm(formElem, hasFile) {
-    const formUrl = formElem.getAttribute('action');
-
-    if (this.props.validateAll) {
-      this.props.validateAll(this.props.editFormId)
-        .then((errMsg) => {
-          if (errMsg.isEmpty()) {
-            // 表单中无文件
-            if (!hasFile) {
-              this.props.onListAction();
-            } else {
-              this.props.saveFile(formUrl, formElem)
-                .then(() => {
-                  this.props.fetchScreenData(formUrl);
-                  this.props.closeListItemModal();
-                });
-            }
-          }
-        });
-    }
-  }
-  onCloseEditModal() {
-    if (this.props.closeListItemModal) {
-      this.props.closeListItemModal();
-    }
-    if (this.props.resetVaildateMsg) {
-      this.props.resetVaildateMsg();
-    }
-  }
-
-  onPageChange(i) {
-    this.onChangeQuery({
-      page: i,
-    }, true);
-  }
-  onRemoveItem(i) {
-    const store = this.props.store;
-    const list = store.getIn(['data', 'list']);
-    const listKey = this.props.listKey;
-    let selectedList = [];
-    const msgText = _('Are you sure to delete selected row: %s', i);
-
-    if (listKey === 'allKeys') {
-      selectedList = [list.get(i)];
-    } else {
-      selectedList = [list.getIn([i, listKey])];
-    }
-
-    this.props.createModal({
-      id: 'settings',
-      role: 'confirm',
-      text: msgText,
-      apply: () => {
-        this.props.changeScreenActionQuery({
-          action: 'delete',
-          selectedList,
-        });
-        this.props.onListAction();
-      },
-    });
-  }
-
-  onChangeQuery(data, needRefresh) {
-    if (this.props.changeScreenQuery) {
-      this.props.changeScreenQuery(data);
-    }
-
-    if (needRefresh) {
-      this.onFetchList();
-    }
-  }
-  onSelectedItemsAction(actionName) {
-    const store = this.props.store;
-    const $$list = store.getIn(['data', 'list']);
-    const $$actionQuery = store.getIn(['actionQuery']);
-    const listKey = this.props.listKey;
-    let selectStr = '';
-    let msgText = '';
-    let $$selectedList = $$actionQuery.get('selectedList');
-
-    if ($$selectedList && $$selectedList.size > 0) {
-      $$selectedList = $$selectedList.map((val) => {
-        let ret = [];
-
-        if (listKey === 'allKeys') {
-          ret = $$list.get(val);
-        } else {
-          ret = $$list.getIn([val, listKey]);
-        }
-
-        return ret;
-      });
-      selectStr = $$actionQuery.get('selectedList').sort().join(', ');
-      msgText = _('Are you sure to %s selected rows: %s', _(actionName), selectStr);
-      this.props.createModal({
-        id: 'settings',
-        role: 'confirm',
-        text: msgText,
-        apply: () => {
-          this.props.changeScreenActionQuery({
-            action: actionName,
-            selectedList: $$selectedList,
-          });
-          this.props.onListAction();
-        },
-      });
-    } else {
-      this.props.createModal({
-        role: 'alert',
-        text: _('Please select %s rows', _(actionName)),
-      });
-    }
-  }
-  onItemAction(actionName, index, data) {
-    const store = this.props.store;
-    const list = store.getIn(['data', 'list']);
-    const listKey = this.props.listKey;
-    const $$actionItem = list.get(index);
-    const msgText = _('Are you sure to %s selected rows: %s', _(actionName), index);
-    let selectedList = [];
-    let $$actionData = Map({
-      action: actionName,
-    });
-
-    if (listKey === 'allKeys') {
-      $$actionData = $$actionData.merge($$actionItem);
-      selectedList = [list.get(index)];
-    } else {
-      $$actionData = $$actionData.set(
-        listKey,
-        $$actionItem.get(listKey),
-      );
-      selectedList = [list.getIn([index, listKey])];
-    }
-
-    $$actionData = $$actionData.merge(data)
-      .merge({
-        selectedList,
-      });
-
-    this.props.createModal({
-      id: 'settings',
-      role: 'confirm',
-      text: msgText,
-      apply: () => {
-        this.props.changeScreenActionQuery(
-          $$actionData.toJS(),
-        );
-        this.props.onListAction();
-      },
-    });
-  }
-  onFetchList() {
-    if (this.props.fetchScreenData) {
-      this.props.fetchScreenData();
-    }
-  }
   renderHeader() {
     const {
       store, app, fetchUrl,
@@ -453,8 +466,12 @@ class ListInfo extends React.Component {
         <Search
           value={query.get('text')}
           key="searchInput"
+          maxLength="265"
           onChange={this.onChangeSearchText}
           onSearch={this.handleSearch}
+          style={{
+            marginRight: '12px',
+          }}
         />,
       );
     }
@@ -480,6 +497,7 @@ class ListInfo extends React.Component {
         method="GET"
         layout="flow"
         data={query}
+        className="t-list-info__query"
         options={queryFormOptions}
         id={editFormId}
         isSaving={app.get('fetching')}
@@ -599,7 +617,6 @@ class ListInfo extends React.Component {
     } = this.props;
     const page = store.getIn(['data', 'page']);
     const list = store.getIn(['data', 'list']);
-
     return (
       <div className="t-list-info">
         {

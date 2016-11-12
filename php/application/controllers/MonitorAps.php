@@ -11,7 +11,8 @@ class MonitorAps extends CI_Controller {
     $rqdata = array(
       'groupid'=>(int)element('groupid', $_GET, -1),
       'page'=>(int)element('page', $_GET, 1),
-      'pagesize'=>(int)element('size', $_GET, 20)
+      'pagesize'=>(int)element('size', $_GET, 20),
+      'search'=>element('search', $_GET, '')
     );
 
     // 如果groupid不存在或值为-1则返回默认设备
@@ -28,12 +29,19 @@ class MonitorAps extends CI_Controller {
 
 	function onAction($data) {
    	$result = null;
-    $retdata=array(
-       "groupid"=>(int)element("groupid",$data),
-       "mac"=>element("selectedList",$data),
-       "operate"=>element("action",$data)
-    );
-    $result= axc_set_apoperate(json_encode($retdata));
+    $operate = element("action", $data);
+    $selectedList = element("selectedList",$data);
+    $groupid = (int)element("groupid", $data);
+
+    foreach($selectedList as $mac) {
+      $retdata=array(
+        "groupid"=>$groupid,
+        "operate"=>$operate,
+        "mac"=>$mac,
+      );
+      $result= axc_set_apoperate(json_encode($retdata));
+    }
+
     return $result;
 	}
 	public function index() {

@@ -25,6 +25,19 @@ const encryptionOptions = [
     label: _('STRONG'),
   },
 ];
+const loadBalanceTypeArr = [
+  {
+    value: 0,
+    label: _('Disable'),
+  }, {
+    value: 1,
+    label: _('Users'),
+  }, {
+    value: 2,
+    label: _('Flow'),
+  },
+];
+
 const validOptions = Map({
   password: validator({
     rules: 'remarkTxt:["\'\\\\"]|len:[8, 31]',
@@ -42,7 +55,7 @@ const validOptions = Map({
     rules: 'num:[32, 102400, 0]',
   }),
   maxUser: validator({
-    rules: 'num:[1, 365]',
+    rules: 'num:[1, 64]',
   }),
 });
 const storeForwardOption = [
@@ -61,7 +74,7 @@ const flowRateFilter = utils.filter('flowRate:["KB"]');
 const listOptions = fromJS([
   {
     id: 'ssid',
-    noEdit: true,
+    notEditable: true,
     text: _('SSID'),
   }, {
     id: 'hiddenSsid',
@@ -101,7 +114,7 @@ const listOptions = fromJS([
   }, {
     id: 'storeForwardPattern',
     options: storeForwardOption,
-    text: _('Store-Forward Pattern'),
+    text: _('Forward Pattern'),
     defaultValue: 'local',
   }, {
     id: 'encryption',
@@ -116,6 +129,10 @@ const listOptions = fromJS([
 
       return `${upRate}/${downRate}`;
     },
+  }, {
+    id: 'maxBssUsers',
+    text: _('Max Users'),
+    defaultValue: 32,
   }, {
     id: 'enabled',
     text: _('Status'),
@@ -152,11 +169,9 @@ const listOptions = fromJS([
     ],
     defaultValue: '1',
   }, {
-    id: 'maxBssUsers',
-    defaultValue: 32,
-  }, {
-    id: 'loadBalancing',
-    defaultValue: '1',
+    id: 'loadBalanceType',
+    defaultValue: 1,
+    options: loadBalanceTypeArr,
   }, {
     id: 'upstream',
     defaultValue: '0',
@@ -167,9 +182,6 @@ const listOptions = fromJS([
     noTable: true,
   },
 ]);
-const tableOptions = immutableUtils.getTableOptions(listOptions);
-// const editFormOptions = immutableUtils.getFormOptions(listOptions);
-const defaultEditData = immutableUtils.getDefaultData(listOptions);
 
 const propTypes = {
   store: PropTypes.instanceOf(Map),
@@ -232,6 +244,7 @@ export default class View extends React.Component {
         listOptions={listOptions}
 
         listKey="allKeys"
+        comstomModal
         actionable
         selectable
       >
@@ -244,8 +257,9 @@ export default class View extends React.Component {
           <FormGroup
             label={_('SSID')}
             value={getCurrData('ssid')}
-            maxLength="31"
+            maxLength="32"
             id="ssid"
+            disabled={actionQuery.get('action') === 'edit'}
             onChange={this.onUpdateSettings('ssid')}
             required
             {...ssid}
@@ -270,13 +284,15 @@ export default class View extends React.Component {
           />
           <FormGroup
             label={_('Load Balancing')}
-            type="checkbox"
-            checked={getCurrData('loadBalancing') === '1'}
-            onChange={this.onUpdateSettings('loadBalancing')}
+            type="switch"
+            options={loadBalanceTypeArr}
+            value={getCurrData('loadBalanceType')}
+            onChange={this.onUpdateSettings('loadBalanceType')}
           />
           <FormGroup
             label={_('Max Users')}
             min="1"
+            max="64"
             type="number"
             value={getCurrData('maxBssUsers')}
             onChange={this.onUpdateSettings('maxBssUsers')}
@@ -306,6 +322,8 @@ export default class View extends React.Component {
             {`${_('limited to')} `}
             <FormInput
               type="number"
+              min="0"
+              max="999999"
               maxLength="6"
               size="sm"
               disabled={getCurrData('upstream') === '0'}
@@ -332,6 +350,8 @@ export default class View extends React.Component {
             {`${_('limited to')} `}
             <FormInput
               type="number"
+              min="0"
+              max="999999"
               maxLength="6"
               size="sm"
               disabled={getCurrData('downstream') === '0'}
@@ -378,7 +398,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    screenActions
+    screenActions,
   ), dispatch);
 }
 
@@ -386,5 +406,5 @@ function mapDispatchToProps(dispatch) {
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
-  validator.mergeProps(validOptions)
+  validator.mergeProps(validOptions),
 )(View);

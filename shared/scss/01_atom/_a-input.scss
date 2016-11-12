@@ -12,14 +12,14 @@ input[type=number] {
   line-height: 14px;
   background: #fff;
   border: 1px solid #ccc;
-  border-radius: 2px;
+  border-radius: 4px;
   outline: 0;
 
   &:disabled {
     background-color: $boder-color;
   }
   &:focus {
-    border: 1px solid #333;
+    border: 1px solid $g-color-primary;
   }
 }
 
