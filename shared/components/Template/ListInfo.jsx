@@ -326,8 +326,7 @@ class ListInfo extends React.Component {
         return ret;
       });
       selectStr = $$actionQuery.get('selectedList').sort().join(', ');
-      msgText = _('Are you sure to %s selected rows: %s', actionName, selectStr);
-
+      msgText = _('Are you sure to %s selected rows: %s', _(actionName), selectStr);
       this.props.createModal({
         id: 'settings',
         role: 'confirm',
@@ -343,7 +342,7 @@ class ListInfo extends React.Component {
     } else {
       this.props.createModal({
         role: 'alert',
-        text: _('Please select %s rows', actionName),
+        text: _('Please select %s rows', _(actionName)),
       });
     }
   }
@@ -352,7 +351,7 @@ class ListInfo extends React.Component {
     const list = store.getIn(['data', 'list']);
     const listKey = this.props.listKey;
     const $$actionItem = list.get(index);
-    const msgText = _('Are you sure to %s selected rows: %s', actionName, index);
+    const msgText = _('Are you sure to %s selected rows: %s', _(actionName), index);
     let selectedList = [];
     let $$actionData = Map({
       action: actionName,
@@ -440,7 +439,7 @@ class ListInfo extends React.Component {
                   {...butProps}
                   key={`${actionName}Btn`}
                   onClick={() => {
-                    this.onSelectedItemsAction(_(actionName, needConfirm));
+                    this.onSelectedItemsAction(actionName, needConfirm);
                   }}
                 />
               );
@@ -466,7 +465,7 @@ class ListInfo extends React.Component {
           key="delete"
           text={_('Remove Selected')}
           onClick={() => {
-            this.onSelectedItemsAction(_('delete'));
+            this.onSelectedItemsAction('delete');
           }}
         />,
       );

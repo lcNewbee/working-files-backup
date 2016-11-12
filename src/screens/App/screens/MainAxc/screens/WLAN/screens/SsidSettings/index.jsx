@@ -41,6 +41,9 @@ const validOptions = Map({
   downstream: validator({
     rules: 'num:[32, 102400, 0]',
   }),
+  maxUser: validator({
+    rules: 'num:[1, 365]',
+  }),
 });
 const storeForwardOption = [
   {
@@ -194,7 +197,12 @@ export default class View extends React.Component {
     });
   }
   onSave() {
-    this.props.onListAction();
+    this.props.validateAll()
+      .then(($$msg) => {
+        if ($$msg.isEmpty()) {
+          this.props.onListAction();
+        }
+      });
   }
   onUpdateSettings(name) {
     return (item) => {
@@ -214,7 +222,7 @@ export default class View extends React.Component {
     const actionQuery = store.getIn([route.id, 'actionQuery']) || Map({});
     const getCurrData = this.getCurrData;
     const {
-      password, ssid, upstream, downstream,
+      password, ssid, upstream, downstream, maxUser,
     } = this.props.validateOption;
     const isModelShow = actionQuery.get('action') === 'edit' || actionQuery.get('action') === 'add';
 
@@ -222,7 +230,7 @@ export default class View extends React.Component {
       <AppScreen
         {...this.props}
         listOptions={listOptions}
-        
+
         listKey="allKeys"
         actionable
         selectable
@@ -273,6 +281,7 @@ export default class View extends React.Component {
             value={getCurrData('maxBssUsers')}
             onChange={this.onUpdateSettings('maxBssUsers')}
             required
+            {...maxUser}
           />
           <FormGroup
             label={_('Forward Pattern')}
