@@ -104,7 +104,7 @@ class FormContainer extends React.Component {
       if (!Map.isMap(data)) {
         data = fromJS(data);
       }
-      myProps.value = data.get(formGroupId);
+      myProps.value = data.get(formGroupId) || myProps.value;
     }
 
     if (validateAt) {
@@ -238,7 +238,7 @@ class FormContainer extends React.Component {
           }
           { this.renderFormGroupTree(options) }
           {
-            rightChildren ? (
+            rightChildren && leftChildren.length > 0 ? (
               <div className="form-group fr">
                 { rightChildren }
               </div>

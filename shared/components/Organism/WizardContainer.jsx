@@ -15,6 +15,7 @@ const propTypes = {
   nextDisabled: PropTypes.bool,
   initStep: PropTypes.number,
   saving: PropTypes.bool,
+  animation: PropTypes.bool,
   options: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.instanceOf(List),
@@ -33,6 +34,7 @@ const defaultProps = {
   initStep: 0,
   options: List([]),
   nextDisabled: false,
+  animation: false,
 };
 
 class WizardContainer extends React.Component {
@@ -215,7 +217,7 @@ class WizardContainer extends React.Component {
         <ReactCSSTransitionGroup
           component="div"
           transitionName={`slide-${direction}`}
-          transitionEnter
+          transitionEnter={this.props.animation}
           transitionLeave={false}
           transitionEnterTimeout={500}
           transitionLeaveTimeout={0}

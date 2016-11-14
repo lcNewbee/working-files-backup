@@ -413,16 +413,11 @@ class ListInfo extends React.Component {
     const page = store.getIn(['data', 'page']);
     const query = store.getIn(['query']);
     const leftChildrenNode = [];
-    let pageSelectClassName = 'fr';
     let $$curActionBarButtons = actionBarButtons;
 
-    // 处理每页显示下拉框的位置
-    if (!searchable && !queryFormOptions && !actionBarChildren &&
-        (actionable && !addable)) {
-      pageSelectClassName = 'fl';
-    }
-
+    // 处理列表操作相关按钮
     if (actionable) {
+      // 初始化添加按钮
       if (addable) {
         leftChildrenNode.push(
           <Button
@@ -436,31 +431,51 @@ class ListInfo extends React.Component {
           />,
         );
       }
-      if (actionBarButtons) {
-        if (!List.isList(actionBarButtons)) {
-          $$curActionBarButtons = fromJS(actionBarButtons);
+      // 只有在列表是可选择情况下，添加多行操作按钮
+      if (selectable) {
+        // 多行删除
+        if (deleteable) {
+          leftChildrenNode.push(
+            <Button
+              icon="trash-o"
+              key="delete"
+              text={_('Remove Selected')}
+              onClick={() => {
+                this.onSelectedItemsAction('delete');
+              }}
+            />,
+          );
         }
 
-        leftChildrenNode.push(
-          $$curActionBarButtons.map(
-            ($$subButton) => {
-              const butProps = $$subButton.toJS();
-              const actionName = $$subButton.get('name');
-              const needConfirm = $$subButton.get('needConfirm');
-              return (
-                <Button
-                  {...butProps}
-                  key={`${actionName}Btn`}
-                  onClick={() => {
-                    this.onSelectedItemsAction(actionName, needConfirm);
-                  }}
-                />
-              );
-            },
-          ).toJS(),
-        );
+        // 用户自定义多行操作
+        if (actionBarButtons) {
+          if (!List.isList(actionBarButtons)) {
+            $$curActionBarButtons = fromJS(actionBarButtons);
+          }
+
+          leftChildrenNode.push(
+            $$curActionBarButtons.map(
+              ($$subButton) => {
+                const butProps = $$subButton.toJS();
+                const actionName = $$subButton.get('name');
+                const needConfirm = $$subButton.get('needConfirm');
+                return (
+                  <Button
+                    {...butProps}
+                    key={`${actionName}Btn`}
+                    onClick={() => {
+                      this.onSelectedItemsAction(actionName, needConfirm);
+                    }}
+                  />
+                );
+              },
+            ).toJS(),
+          );
+        }
       }
     }
+
+    // 列表查询
     if (searchable) {
       leftChildrenNode.push(
         <Search
@@ -475,22 +490,9 @@ class ListInfo extends React.Component {
         />,
       );
     }
-    if (actionable && selectable && deleteable) {
-      leftChildrenNode.push(
-        <Button
-          icon="trash-o"
-          key="delete"
-          text={_('Remove Selected')}
-          onClick={() => {
-            this.onSelectedItemsAction('delete');
-          }}
-        />,
-      );
-    }
     if (actionBarChildren) {
       leftChildrenNode.push(actionBarChildren);
     }
-
     return (
       <FormContainer
         action={fetchUrl}
@@ -508,28 +510,22 @@ class ListInfo extends React.Component {
         onValidError={this.props.reportValidError}
         leftChildren={leftChildrenNode}
         rightChildren={
-            page ? (
-              <div>
-                <span
-                  style={{
-                    display: 'inline-block',
-                    lineHeight: '30px',
-                    marginRight: '10px',
-                  }}
-                >
-                  {_('View')}
-                </span>
-                <Select
-                  className={pageSelectClassName}
-                  value={query.get('size')}
-                  onChange={this.onChangeTableSize}
-                  options={selectOptions}
-                  searchable={false}
-                  clearable={false}
-                />
-              </div>
-
-          ) : null
+          page ? ([
+            <label
+              key="pageLabel"
+              htmlFor="pageSelect"
+            >
+              {_('View')}
+            </label>,
+            <Select
+              key="pageSelect"
+              value={query.get('size')}
+              onChange={this.onChangeTableSize}
+              options={selectOptions}
+              searchable={false}
+              clearable={false}
+            />,
+          ]) : null
         }
       />
     );
@@ -553,7 +549,6 @@ class ListInfo extends React.Component {
         value: actionType,
       }));
     }
-
     // 处理可添加不能编辑的表单项
     if (actionType === 'edit') {
       myEditFormOptions = myEditFormOptions.map(($$formList) => {
