@@ -1,11 +1,10 @@
 import React, { PropTypes } from 'react';
-import utils, { immutableUtils } from 'shared/utils';
+import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import AppScreen from 'shared/components/Template/AppScreen';
 import * as appActions from 'shared/actions/app';
-import * as actions from 'shared/actions/settings';
 import * as screenActions from 'shared/actions/screens';
 
 const commonFormOptions = fromJS([
@@ -71,35 +70,14 @@ const listOptions = fromJS([
   },
 ]);
 
-const formOptions = immutableUtils.getFormOptions(listOptions);
-const tableOptions = immutableUtils.getTableOptions(listOptions);
-const defaultEditData = immutableUtils.getDefaultData(listOptions);
 const propTypes = {
-  app: PropTypes.instanceOf(Map),
-  settings: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
-  groupId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-
-  route: PropTypes.object,
-  initSettings: PropTypes.func,
-  fetchSettings: PropTypes.func,
-  saveSettings: PropTypes.func,
-  updateItemSettings: PropTypes.func,
-  leaveSettingsScreen: PropTypes.func,
 };
 const defaultProps = {};
 
 export default class View extends React.Component {
   constructor(props) {
     super(props);
-    this.onSave = this.onSave.bind(this);
-  }
-
-  componentWillUnmount() {
-    this.props.leaveSettingsScreen();
-  }
-  onSave() {
-    this.props.saveSettings();
   }
 
   render() {
@@ -125,14 +103,12 @@ function mapStateToProps(state) {
   return {
     app: state.app,
     store: state.screens,
-    settings: state.settings,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    actions,
     screenActions,
   ), dispatch);
 }

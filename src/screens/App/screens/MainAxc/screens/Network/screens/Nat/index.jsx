@@ -1,12 +1,11 @@
 import React, { PropTypes } from 'react';
-import utils, { immutableUtils } from 'shared/utils';
+import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/utils/lib/validator';
 import AppScreen from 'shared/components/Template/AppScreen';
 import * as appActions from 'shared/actions/app';
-import * as actions from 'shared/actions/settings';
 import * as screenActions from 'shared/actions/screens';
 
 const commonFormOptions = fromJS([
@@ -69,9 +68,6 @@ const listOptions = fromJS([
   },
 ]);
 
-const formOptions = immutableUtils.getFormOptions(listOptions);
-const tableOptions = immutableUtils.getTableOptions(listOptions);
-const defaultEditData = immutableUtils.getDefaultData(listOptions);
 const propTypes = {
   save: PropTypes.func,
 };
@@ -93,8 +89,7 @@ export default class View extends React.Component {
         listKey="allKeys"
         settingsFormOptions={commonFormOptions}
         listOptions={listOptions}
-        
-        
+
         actionable
         selectable
       />
@@ -115,13 +110,12 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    actions,
-    screenActions
+    screenActions,
   ), dispatch);
 }
 
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(View);

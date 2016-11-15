@@ -117,7 +117,7 @@ class FormGroup extends React.Component {
   render() {
     const {
       help, errMsg, required, children, role, id, label,
-      className, display, style,
+      className, display, style, disabled, name, value,
     } = this.props;
     const { check, checkClear } = this;
     let groupClassName = 'form-group';
@@ -154,6 +154,15 @@ class FormGroup extends React.Component {
         }
 
         <div className="form-control">
+          {
+            disabled ? (
+              <input
+                type="hidden"
+                name={name}
+                value={value}
+              />
+            ) : null
+          }
           {
             children ? React.Children.map(children, (elem) => {
               let ret = elem;

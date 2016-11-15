@@ -262,7 +262,7 @@ export class Wireless extends PureComponent {
           {...ssid}
         />
         <FormGroup
-          type="select"
+          type="switch"
           label={_('Encryption')}
           options={encryptionOptions}
           value={getCurrData('encryption')}
@@ -278,7 +278,7 @@ export class Wireless extends PureComponent {
               maxLength="31"
               onChange={this.onUpdateSettings('password')}
               {...password}
-            /> : ''
+            /> : null
         }
         <FormGroup
           label={_('VLAN')}

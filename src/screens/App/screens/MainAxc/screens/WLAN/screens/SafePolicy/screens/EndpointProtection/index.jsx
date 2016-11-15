@@ -7,7 +7,6 @@ import {
   FormGroup, SaveButton, FormInput,
 } from 'shared/components';
 import * as appActions from 'shared/actions/app';
-import * as actions from 'shared/actions/settings';
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
@@ -154,12 +153,11 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    actions
   ), dispatch);
 }
 
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(View);

@@ -939,8 +939,10 @@ export default class Main extends Component {
     let isGroupMenu = false;
     let curTopNavText = _('NETWORK');
     let mainClassName = 't-main t-main--axc';
-    let isShowGroupAsider = false;
+    let isGroupAsiderShow = false;
     let groupTitleIconClassName = '';
+    let isMainLeftShow = false;
+    let isMainRightShow = isShowPanel;
 
     if (this.props.location.pathname.indexOf('/main/group') === 0) {
       curTopNavText = _('AP GROUP');
@@ -948,16 +950,16 @@ export default class Main extends Component {
     } else if (this.props.location.pathname.indexOf('/main/system') === 0) {
       curTopNavText = _('SYSTEM');
     }
-
-    if (popOver.isShow && (popOver.name === 'vlanAsider' ||
-        popOver.name === 'groupAsider')) {
-      mainClassName = `${mainClassName} main--open-left`;
-
-      isShowGroupAsider = popOver.name === 'groupAsider';
-    }
+    isMainLeftShow = popOver.isShow && (popOver.name === 'vlanAsider' || popOver.name === 'groupAsider');
+    isMainRightShow = isShowPanel;
+    mainClassName = classNamesUtils(mainClassName, {
+      'main--open-left': isMainLeftShow,
+      'is-main-right-open': isMainRightShow,
+    });
+    isGroupAsiderShow = isMainLeftShow && popOver.name === 'groupAsider';
 
     groupTitleIconClassName = classNamesUtils({
-      active: isShowGroupAsider,
+      active: isGroupAsiderShow,
     });
 
     return (
@@ -1072,15 +1074,15 @@ export default class Main extends Component {
           }
         </Modal>
 
-        {
-          saving ? <div className="body-backdrop" /> : null
-        }
         <PropertyPanel
           isShow={isShowPanel}
           onToggle={this.props.togglePropertyPanel}
           data={this.props.properties}
           {...this.props}
         />
+        {
+          saving ? <div className="body-backdrop" /> : null
+        }
       </div>
     );
   }

@@ -107,6 +107,7 @@
   "NO": "否",
   "Loading": "加载中",
   "Data": "数据",
+  "Restore To Factory": "恢复出厂设置",
 
   "Are you sure to delete selected index: %s ?": "你确定要删除选择的项：%s ?",
   "Download Report": "下载报表",

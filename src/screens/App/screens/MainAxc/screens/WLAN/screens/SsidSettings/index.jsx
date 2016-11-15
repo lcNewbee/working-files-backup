@@ -1,9 +1,10 @@
 import React, { PropTypes } from 'react';
-import utils, { immutableUtils } from 'shared/utils';
+import utils from 'shared/utils';
 import validator from 'shared/utils/lib/validator';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
+import SaveButton from 'shared/components/Button/SaveButton';
 import { FormGroup, FormInput } from 'shared/components/Form';
 import Modal from 'shared/components/Modal';
 import AppScreen from 'shared/components/Template/AppScreen';
@@ -184,6 +185,7 @@ const listOptions = fromJS([
 ]);
 
 const propTypes = {
+  app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
   validateOption: PropTypes.object,
   route: PropTypes.object,
@@ -192,6 +194,7 @@ const propTypes = {
   changeScreenActionQuery: PropTypes.func,
   updateCurEditListItem: PropTypes.func,
   onListAction: PropTypes.func,
+  validateAll: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -230,7 +233,7 @@ export default class View extends React.Component {
   }
 
   render() {
-    const { route, store } = this.props;
+    const { route, store, app } = this.props;
     const actionQuery = store.getIn([route.id, 'actionQuery']) || Map({});
     const getCurrData = this.getCurrData;
     const {
@@ -242,17 +245,16 @@ export default class View extends React.Component {
       <AppScreen
         {...this.props}
         listOptions={listOptions}
-
         listKey="allKeys"
-        comstomModal
+        customModal
         actionable
         selectable
       >
         <Modal
           isShow={isModelShow}
           title={actionQuery.get('myTitle')}
-          onOk={() => this.onSave()}
           onClose={() => this.props.closeListItemModal(route.id)}
+          noFooter
         >
           <FormGroup
             label={_('SSID')}
@@ -360,7 +362,7 @@ export default class View extends React.Component {
             />
           </FormGroup>
           <FormGroup
-            type="select"
+            type="switch"
             label={_('Encryption')}
             options={encryptionOptions}
             value={getCurrData('encryption')}
@@ -378,6 +380,15 @@ export default class View extends React.Component {
                 {...password}
               /> : ''
           }
+          <div className="form-group form-group--save">
+            <div className="form-control">
+              <SaveButton
+                type="button"
+                loading={app.get('isSaving')}
+                onClick={this.onSave}
+              />
+            </div>
+          </div>
         </Modal>
       </AppScreen>
     );
