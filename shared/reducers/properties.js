@@ -107,12 +107,10 @@ function rcPropertyPanelData(state, action) {
     // 设置已选中的网卡radio参数
     if (rcData.radios) {
       $$radiosOptions = $$radiosOptions.merge(
-        rcData.radios.map((item, index) => {
-          return {
+        rcData.radios.map((item, index) => ({
             value: index,
             label: item.radioID,
-          };
-        })
+          })),
       );
       $$newData = $$newData
         .mergeIn(['radio'], rcData.radios[radioActiveIndex])
@@ -131,7 +129,7 @@ function rcPropertyPanelData(state, action) {
             .mapEntries(([key]) => [key, $$moduleData.get(key)]);
 
           return subItem.mergeIn(['data'], customData);
-        })
+        }),
       );
   }
 
@@ -146,7 +144,7 @@ function removeFromPropertyPanel(state, action) {
     ret = ret.deleteIn(['list', action.index]);
   }
 
-  return ret;
+  return ret.set('isShowPanel', ret.get('list').size > 0);
 }
 
 function updatePropertyPanelData(state, data) {
@@ -162,7 +160,7 @@ function updatePropertyPanelData(state, data) {
       'list', state.get('activeIndex'),
       activeTab, activePanelIndex, 'data',
     ],
-    data
+    data,
   );
 }
 
@@ -171,13 +169,13 @@ function changePropertyPanelRadioIndex(state, index) {
   const activeIndex = $$ret.get('activeIndex');
   const radioIndex = index;
   let $$curListItem = $$ret.getIn(['list', activeIndex]);
-  let $$curRadioData = $$curListItem.getIn(['data', 'radio'])
+  let $$curRadioData = $$curListItem.getIn(['data', 'radio']);
 
 
   $$curRadioData = $$curRadioData.merge(
       $$curListItem.getIn(
-        ['data', 'radios', radioIndex]
-      )
+        ['data', 'radios', radioIndex],
+      ),
     ).set('activeIndex', radioIndex);
 
   $$curListItem = $$curListItem
@@ -192,13 +190,13 @@ function changePropertyPanelRadioIndex(state, index) {
             ['data'],
             subItem.get('data')
               .mapEntries(
-                ([key]) => [key, $$curRadioData.get(key)]
-              )
+                ([key]) => [key, $$curRadioData.get(key)],
+              ),
           );
         }
 
         return $$subRet;
-      })
+      }),
     )
     .setIn(['data', 'radio'], $$curRadioData);
 
@@ -215,7 +213,7 @@ function changePropertysItem(state, action) {
 
   return $$ret.mergeIn(
     ['list', state.get('activeIndex')],
-    action.payload
+    action.payload,
   );
 }
 
@@ -249,7 +247,7 @@ export default function (state = defaultState, action) {
     case 'CHANGE_PROPERTYS_TAB':
       return state.setIn(
         ['list', state.get('activeIndex'), 'activeTab'],
-        action.name
+        action.name,
       );
 
     // 更新合并属性列表某项的数据
