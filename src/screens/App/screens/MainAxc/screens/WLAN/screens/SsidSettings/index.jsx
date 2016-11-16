@@ -71,12 +71,18 @@ const storeForwardOption = [
     label: _('Centralized Forward-%s Tunnel', '802.11'),
   },
 ];
-const flowRateFilter = utils.filter('flowRate:["KB"]');
+const flowRateFilter = utils.filter('flowRate:["KB/s"]');
 const listOptions = fromJS([
   {
     id: 'ssid',
     notEditable: true,
     text: _('SSID'),
+    formProps: {
+      type: 'text',
+      maxLength: '32',
+      required: true,
+      notEditable: true,
+    },
   }, {
     id: 'hiddenSsid',
     text: _('Hidde SSID'),

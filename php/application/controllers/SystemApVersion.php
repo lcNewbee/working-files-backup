@@ -140,12 +140,23 @@ class SystemApVersion extends CI_Controller {
       $result=axc_modify_apfirmware(json_encode($retData));
     }
     elseif($actionType === 'delete'){
+
       foreach($selectList as $item) {
           $deleteItem = array(
             'model'=>element('model', $item),
             'sfver'=>element('softVersion', $item),
           );
-        $result=axc_del_apfirmware(json_encode($deleteItem));
+          $query_active=$this->db->select('id,active')
+            ->from('ap_firmware')
+            ->where('id',$item['id'])
+            ->get()->result_array();
+          if($query_active['active']==1){
+            return $result=json_encode('$query_active');
+          }
+          else{
+            $result=axc_del_apfirmware(json_encode($deleteItem));
+            unlink($item['fileName']);
+          }
       }
 	  }
 

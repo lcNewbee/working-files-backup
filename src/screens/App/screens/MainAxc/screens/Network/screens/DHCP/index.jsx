@@ -20,6 +20,7 @@ const listOptions = fromJS([
     id: 'domain',
     text: _('Domain'),
     formProps: {
+      required: true,
       type: 'text',
     },
   }, {
