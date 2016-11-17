@@ -83,5 +83,8 @@ $route['goform/system/version/backup'] = 'systemVersion/backup';
 $route['goform/system/ap/model'] = 'systemModel';
 $route['goform/system/ap/version'] = 'systemApVersion';
 
+$route['goform/system/log'] = 'systemLog';
+$route['goform/system/status'] = 'systemStatus';
+
 
 

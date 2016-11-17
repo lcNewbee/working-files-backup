@@ -36,21 +36,32 @@ class WirelessAcl extends CI_Controller {
 	function onAction($data) {
 		$result = null;
 		$actionType = element('action', $data);
-		if ($actionType === 'add') {
-      $result=axc_set_wireless_acl(json_encode($data));
+		if ($actionType === 'add') {        
+      $cgiary['groupid'] = $data['groupid'];
+      $cgiary['mac'] = $data['mac'];
+      $cgiary['reason'] = $data['reason'];
+      $result=axc_set_wireless_acl(json_encode($cgiary));                
 		}
 		elseif($actionType === 'edit') {
-      $result=axc_set_wireless_acl(json_encode($data));
+      //$result=axc_set_wireless_acl(json_encode($data));
 		}
-    elseif($actionType === 'delete'){
-      $temp_data=array(
-        'groupid'=>element('groupid', $data),
-        'mac'=>element('selectedList',$data)
-      );
-       $result=axc_del_wireless_acl(json_encode($temp_data));
+    elseif($actionType === 'delete'){       
+       $detary = array();
+       $detary['groupid'] = $data['groupid'];
+       
+       foreach( $data['selectedList'] as $ary){
+            $detary['mac'] = $ary['mac'];
+            axc_del_wireless_acl(json_encode($detary));
+       }   
+       return json_encode(array('state' => array('code' => 2000, 'msg' => 'ok')));
     }
-    elseif($actionType === 'setting'){
-      $result = axc_set_wireless_dyblk(json_encode($data));
+    elseif($actionType === 'setting'){      
+      $cgi_dyblk['groupid'] = (int)$data['groupid'];
+      $cgi_dyblk['attacttime'] = (int)$data['attacttime'];
+      $cgi_dyblk['attactcnt'] = (int)$data['attactcnt'];
+      $cgi_dyblk['dyaging'] = (int)$data['dyaging'];
+       
+      $result = axc_set_wireless_dyblk(json_encode($cgi_dyblk));
     }
 		return $result;
 	}
