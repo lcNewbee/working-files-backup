@@ -8,6 +8,7 @@ import './_index.scss';
 const propTypes = {
   isAsync: PropTypes.bool,
   onChange: PropTypes.func,
+  readOnly: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -41,14 +42,21 @@ class MySelect extends React.Component {
 
   render() {
     let ThisComponent = Select;
+    let myDisabled = this.props.disabled;
 
     if (this.props.isAsync) {
       ThisComponent = Select.Async;
     }
+
+    if (this.props.readOnly) {
+      myDisabled = true;
+    }
+
     return (
       <ThisComponent
         {...this.props}
         onChange={this.onChange}
+        disabled={myDisabled}
       />
     );
   }
