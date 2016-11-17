@@ -150,17 +150,37 @@ class SystemApVersion extends CI_Controller {
             ->from('ap_firmware')
             ->where('id',$item['id'])
             ->get()->result_array();
-          if($query_active['active']==1){
-            return $result=json_encode('$query_active');
+          if($query_active['0']['active']==1){
+            $state=array(
+				      'code'=>6000,
+				      'msg'=>"The current version is actived,you can't delete it. If you want to delete it,please active another version!"
+				    );
+            $result=$state;
           }
           else{
-            $result=axc_del_apfirmware(json_encode($deleteItem));
-            unlink($item['fileName']);
+            $del_result=axc_del_apfirmware(json_encode($deleteItem));
+            $del_result_array=json_decode($del_result,true);
+            if ($del_result_array['state']['code']==2000){
+               $file=$item['uploadPath'];
+                $delete_file=@unlink ($file);
+                if($delete_file == true){
+                 $result=$del_result;
+                }
+                else{
+                   $state=array(
+                      'code'=>6000,
+				              'msg'=>'fail to delete the file in the folder!'
+                   );
+                   $result=$state;
+                }
+            }
+            else{
+                $result=$del_result;
+                }
+            }
           }
       }
-	  }
-
-    return $result;
+    return json_encode($result);
   }
 	public function index(){
 		$result = null;
