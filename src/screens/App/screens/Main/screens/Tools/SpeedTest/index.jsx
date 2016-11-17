@@ -263,56 +263,58 @@ export default class SpeedTest extends React.Component {
             }}
           />
         </div>
-        {
-          this.props.selfState.get('showScanResults') ? (
-            <Modal
-              cancelText={_('Cancel')}
-              okText={_('OK')}
-              onOk={this.onModalOkClick}
-              onClose={this.onModalCancelClick}
-              cancelButton
-              okButton
-              isShow
-            >
-              <Table
-                className="table"
-                options={scanIpOptions}
-                list={this.createIpTableList()}
-              />
-            </Modal>
-          ) : null
-        }
+        <Modal
+          cancelText={_('Cancel')}
+          okText={_('OK')}
+          onOk={this.onModalOkClick}
+          onClose={this.onModalCancelClick}
+          cancelButton
+          okButton
+          isShow={this.props.selfState.get('showScanResults')}
+        >
+          <Table
+            className="table"
+            options={scanIpOptions}
+            list={this.createIpTableList()}
+          />
+        </Modal>
         <FormGroup
           type="radio"
           label={_('Flow Direction')}
         >
-          <FormInput
-            type="radio"
-            name="directionSelect"
-            text={_('Duplex')}
-            checked={direction === '0'}
-            onChange={() => this.props.updateItemSettings({
-              direction: '0',
-            })}
-          />
-          <FormInput
-            type="radio"
-            name="directionSelect"
-            text={_('Receive')}
-            checked={direction === '1'}
-            onChange={() => this.props.updateItemSettings({
-              direction: '1',
-            })}
-          />
-          <FormInput
-            type="radio"
-            name="directionSelect"
-            text={_('Transmit')}
-            checked={direction === '2'}
-            onChange={() => this.props.updateItemSettings({
-              direction: '2',
-            })}
-          />
+          <div
+            style={{
+              marginTop: '8px',
+            }}
+          >
+            <FormInput
+              type="radio"
+              name="directionSelect"
+              text={_('Duplex')}
+              checked={direction === '0'}
+              onChange={() => this.props.updateItemSettings({
+                direction: '0',
+              })}
+            />
+            <FormInput
+              type="radio"
+              name="directionSelect"
+              text={_('Receive')}
+              checked={direction === '1'}
+              onChange={() => this.props.updateItemSettings({
+                direction: '1',
+              })}
+            />
+            <FormInput
+              type="radio"
+              name="directionSelect"
+              text={_('Transmit')}
+              checked={direction === '2'}
+              onChange={() => this.props.updateItemSettings({
+                direction: '2',
+              })}
+            />
+          </div>
         </FormGroup>
         <div className="o-form__legend">{_('Bandwidth Status')}</div>
         <div
@@ -427,99 +429,94 @@ export default class SpeedTest extends React.Component {
           </div>
         </div>
         {// 测速高级配置弹出页面
-          (showAdvance === '1') ? (
-            <Modal
-              isShow
-              title={_('Advanced Settings')}
-              onClose={() => {
-                const pQuery = {
-                  time,
-                  packagelen,
-                };
-                this.props.changeQueryData(pQuery);
+        }
+        <Modal
+          isShow={showAdvance === '1'}
+          title={_('Advanced Settings')}
+          onClose={() => {
+            const pQuery = {
+              time,
+              packagelen,
+            };
+            this.props.changeQueryData(pQuery);
+            this.props.toggleShowAdvanceBtn();
+          }}
+          onOk={() => {
+            this.props.validateAll('advancedOptions').then((msg) => {
+              if (msg.isEmpty()) {
+                this.props.updateItemSettings(query);
                 this.props.toggleShowAdvanceBtn();
-              }}
-              onOk={() => {
-                this.props.validateAll('advancedOptions').then((msg) => {
-                  if (msg.isEmpty()) {
-                    this.props.updateItemSettings(query);
-                    this.props.toggleShowAdvanceBtn();
-                  }
-                });
-              }}
-            >
-              <FormGroup
-                type="number"
-                label={_('Package Length')}
-                form="advancedOptions"
-                value={this.props.selfState.getIn(['query', 'packagelen'])}
-                help="B"
-                onChange={(data) => {
-                  const pQuery = this.props.selfState.get('query').set('packagelen', data.value);
-                  this.props.changeQueryData(pQuery);
-                }}
-                required
-                {...validPkgLen}
-              />
-              <FormGroup
-                type="number"
-                label={_('Test Duration')}
-                form="advancedOptions"
-                value={this.props.selfState.getIn(['query', 'time'])}
-                help="s"
-                onChange={(data) => {
-                  const pQuery = this.props.selfState.get('query').set('time', data.value);
-                  this.props.changeQueryData(pQuery);
-                }}
-                required
-                {...validTime}
-              />
-            </Modal>
-          ) : null
-        }
+              }
+            });
+          }}
+        >
+          <FormGroup
+            type="number"
+            label={_('Package Length')}
+            form="advancedOptions"
+            value={this.props.selfState.getIn(['query', 'packagelen'])}
+            help={_('range:128B ~ 1448B')}
+            onChange={(data) => {
+              const pQuery = this.props.selfState.get('query').set('packagelen', data.value);
+              this.props.changeQueryData(pQuery);
+            }}
+            required
+            {...validPkgLen}
+          />
+          <FormGroup
+            type="number"
+            label={_('Test Duration')}
+            form="advancedOptions"
+            value={this.props.selfState.getIn(['query', 'time'])}
+            help={_('range:10s ~ 300s')}
+            onChange={(data) => {
+              const pQuery = this.props.selfState.get('query').set('time', data.value);
+              this.props.changeQueryData(pQuery);
+            }}
+            required
+            {...validTime}
+          />
+        </Modal>
         {// 测试过程中提示用户等待的弹出页面
-          !stopWait ? (
-            <Modal
-              size="min"
-              title={_('Notice')}
-              noFooter
-              isShow
-              onClose={() => {
-                this.props.fetch('goform/stop_bandwidth_test').then((json) => {
-                  if (json.state && json.state.code === 2000) {
-                    this.props.changeStopWait(true);
-                    clearInterval(a);
-                    clearTimeout(b);
-                  }
-                });
-              }}
-            >
-              <div
-                style={{
-                  textAlign: 'center',
-                  margin: '10px 0',
-                }}
-              >
-                <Icon name="spinner" className="spinner" spin size="lg" />
-              </div>
-              <div
-                style={{
-                  textAlign: 'center',
-                  fontSize: '15px',
-                }}
-              >
-                {
-                  /[0-9]+/.test(this.props.selfState.get('time')) ? (
-                    _('Time Remaining: ') + this.props.selfState.get('time') + 's'
-                  ) : (
-                    this.props.selfState.get('time')
-                  )
-                }
-              </div>
-
-            </Modal>
-            ) : null
         }
+        <Modal
+          size="min"
+          title={_('Notice')}
+          noFooter
+          isShow={!stopWait}
+          onClose={() => {
+            this.props.fetch('goform/stop_bandwidth_test').then((json) => {
+              if (json.state && json.state.code === 2000) {
+                this.props.changeStopWait(true);
+                clearInterval(a);
+                clearTimeout(b);
+              }
+            });
+          }}
+        >
+          <div
+            style={{
+              textAlign: 'center',
+              margin: '10px 0',
+            }}
+          >
+            <Icon name="spinner" className="spinner" spin size="lg" />
+          </div>
+          <div
+            style={{
+              textAlign: 'center',
+              fontSize: '15px',
+            }}
+          >
+            {
+              /[0-9]+/.test(this.props.selfState.get('time')) ? (
+                _('Time Remaining: ') + this.props.selfState.get('time') + 's'
+              ) : (
+                this.props.selfState.get('time')
+              )
+            }
+          </div>
+        </Modal>
       </div>
     );
   }

@@ -3,7 +3,7 @@ import { fromJS } from 'immutable';
 
 const defaultState = fromJS({
   currRadioConfig: {
-    radioId: '0',
+    radioId: '1',
     radioType: '2.4G',
   },
   scaning: true,

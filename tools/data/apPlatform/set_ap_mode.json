@@ -1,0 +1,11 @@
+{
+"state": {
+  "msg": "success",
+  "code": 2000
+},
+"data": {
+  "manageMode": "0",
+  "discoveryType": "option43",
+  "acIp": ""
+}
+}

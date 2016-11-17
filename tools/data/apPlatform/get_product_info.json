@@ -1,0 +1,25 @@
+{
+"state": {
+  "msg": "success",
+  "code": 2000
+},
+"data": {
+    "deviceRadioList": [
+      {
+        "radioId": "0",
+        "radioType": "2.4G",
+        "name": "radio_1"
+      },
+      {
+        "radioId": "1",
+        "radioType": "5G",
+        "name": "radio_2"
+      },
+      {
+        "radioId": "2",
+        "radioType": "2.4G",
+        "name": "radio_3"
+      }
+    ]
+}
+}

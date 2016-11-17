@@ -451,7 +451,7 @@ validator.combineValid = {
       var maskElem = parseInt(maskArry[i], 10);
       if ((ipElem | maskElem) != 255) break;
     }
-    if (i == 4) return "Broadcast IP address is not allowed !"
+    if (i == 4) return _('Broadcast IP address is not allowed !');
     else return;
   }
 };

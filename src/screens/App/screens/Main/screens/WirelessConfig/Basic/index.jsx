@@ -190,7 +190,7 @@ export default class Basic extends React.Component {
 
   onSave(url, module, validID) {
     // module指selfState中的radioSettings,multiSsid,basicSettings
-    this.props.validateAll(validID).then(msg => {
+    this.props.validateAll(validID).then((msg) => {
       if (msg.isEmpty()) {
         const dataToSave = this.props.selfState.get(module).toJS();
         this.props.save(url, dataToSave).then((json) => {
@@ -549,8 +549,11 @@ export default class Basic extends React.Component {
               type="text"
               value={val}
               disabled={pos === 0}
-              onChange={(data) => this.onSsidItemChange(val, item, 'ssid', data.value)}
-              style={{ marginLeft: '-60px' }}
+              onChange={data => this.onSsidItemChange(val, item, 'ssid', data.value)}
+              style={{
+                marginLeft: '-60px',
+                height: '29px',
+              }}
             />
           );
         }.bind(this),
@@ -566,8 +569,11 @@ export default class Basic extends React.Component {
               type="number"
               value={val}
               disabled={pos === 0 || vlanEnable === '0'}
-              onChange={(data) => this.onSsidItemChange(val, item, 'vlanId', data.value)}
-              style={{ marginLeft: '-60px' }}
+              onChange={data => this.onSsidItemChange(val, item, 'vlanId', data.value)}
+              style={{
+                marginLeft: '-60px',
+                height: '29px',
+              }}
             />
           );
         }.bind(this),
@@ -750,7 +756,7 @@ export default class Basic extends React.Component {
                   type="select"
                   options={devicemodeOptions}
                   value={basicSettings.get('wirelessMode')}
-                  onChange={(data) => this.onChengeWirelessMode(data)}
+                  onChange={data => this.onChengeWirelessMode(data)}
                   label={_('Device Mode')}
                 /> { /* 模式选择下拉框 */}
                 {/*
@@ -778,18 +784,19 @@ export default class Basic extends React.Component {
                 </div>
                 */}
               </div>
-
-              <div className="clearfix">
-                { // SSID输入框
-                  basicSettings.get('wirelessMode') === 'ap' ? (
+              { // SSID输入框**ap模式**
+                basicSettings.get('wirelessMode') === 'ap' ? (
+                  <div
+                    className="clearfix"
+                  >
                     <div
                       style={{
-                        width: '127px',
+                        width: '370px',
                       }}
+                      className="fl"
                     >
                       <FormGroup
                         label={_('SSID')}
-                        className="fl"
                         form="basicSettings"
                         type="text"
                         value={basicSettings.getIn(['vapList', '0', 'ssid'])}
@@ -802,112 +809,146 @@ export default class Basic extends React.Component {
                         {...validSsid}
                       />
                     </div>
-                  ) : null
-                }
-                <div>
-                  {
-                    (basicSettings.get('wirelessMode') === 'sta') ? (
-                      <div>
-                        <div
-                          style={{
-                            width: '127px',
+                    <div
+                      style={{
+                        display: 'inline-block',
+                        marginTop: '11px',
+                      }}
+                      className="fl"
+                    >
+                      <input
+                        style={{
+                          marginBottom: '-2px',
+                          marginRight: '4px',
+                        }}
+                        type="checkbox"
+                        checked={basicSettings.getIn(['vapList', '0', 'hideSsid']) === '1'}
+                        onClick={data => this.onHideSsidboxClick(data)}
+                      />
+                      {_('Hide')}
+                    </div>
+                  </div>
+                ) : null
+              }
+              { // SSID输入框**station模式**
+                basicSettings.get('wirelessMode') === 'sta' ? (
+                  <div className="clearfix">
+                    <div
+                      style={{
+                        width: '500px',
+                      }}
+                    >
+                      <div
+                        className="fl"
+                        style={{
+                          width: '370px',
+                        }}
+                      >
+                        <FormGroup
+                          label={_('Remote SSID')}
+                          type="text"
+                          value={basicSettings.getIn(['vapList', '0', 'ssid'])}
+                          onChange={(data) => {
+                            const vapList = basicSettings.get('vapList')
+                                            .setIn(['0', 'ssid'], data.value);
+                            this.props.updateBasicSettings({ vapList });
                           }}
-                        >
-                          <FormGroup
-                            label={_('Remote SSID')}
-                            className="fl"
-                            type="text"
-                            value={basicSettings.getIn(['vapList', '0', 'ssid'])}
-                            onChange={(data) => {
-                              const vapList = basicSettings.get('vapList')
-                                              .setIn(['0', 'ssid'], data.value);
-                              this.props.updateBasicSettings({ vapList });
-                            }}
-                            required
-                            {...validSsid}
+                          required
+                          {...validSsid}
+                        />
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        paddingTop: '2px',
+                      }}
+                      className="fl"
+                    >
+                      {
+                        this.props.selfState.get('scaning') ? (
+                          <Button
+                            text={_('Stop')}
+                            onClick={this.onStopScanClick}
+                            loading
                           />
-                        </div>
-                        <span
-                          style={{
-                            paddingTop: '2px',
+                        ) : (
+                          <Button
+                            text={_('Scan')}
+                            onClick={this.onScanBtnClick}
+                          />
+                        )
+                      }
+                    </div>
+                  </div>
+                ) : null
+              }
+              { // SSID输入框**repeater模式**
+                basicSettings.get('wirelessMode') === 'repeater' ? (
+                  <div className="clearfix">
+                    <div
+                      style={{
+                        width: '500px',
+                      }}
+                    >
+                      <div
+                        className="fl"
+                        style={{
+                          width: '370px',
+                        }}
+                      >
+                        <FormGroup
+                          label={_('Remote SSID')}
+                          className="fl"
+                          type="text"
+                          value={basicSettings.getIn(['vapList', '0', 'ssid'])}
+                          onChange={(data) => {
+                            const vapList = basicSettings.get('vapList')
+                                            .setIn(['0', 'ssid'], data.value);
+                            this.props.updateBasicSettings({ vapList });
                           }}
-                        >&nbsp;&nbsp;
-                        {
-                          this.props.selfState.get('scaning') ? (
-                            <Button
-                              text={_('Stop')}
-                              onClick={this.onStopScanClick}
-                              loading
-                            />
-                          ) : (
-                            <Button
-                              text={_('Scan')}
-                              onClick={this.onScanBtnClick}
-                            />
-                          )
-                        }
-                        </span>
+                          required
+                          {...validSsid}
+                        />
                       </div>
-                    ) : (
-                      <div className="clearfix">
-                        {
-                          basicSettings.get('wirelessMode') === 'repeater' ? (
-                            <div
-                              className="fl"
-                            >
-                              <FormGroup
-                                label={_('Remote SSID')}
-                                className="fl"
-                                type="text"
-                                value={basicSettings.getIn(['vapList', '0', 'ssid'])}
-                                onChange={(data) => {
-                                  const vapList = basicSettings.get('vapList')
-                                                  .setIn(['0', 'ssid'], data.value);
-                                  this.props.updateBasicSettings({ vapList });
-                                }}
-                                required
-                                {...validSsid}
-                              />
-                              {
-                                this.props.selfState.get('scaning') ? (
-                                  <Button
-                                    text={_('Stop')}
-                                    onClick={this.onStopScanClick}
-                                    loading
-                                  />
-                                ) : (
-                                  <Button
-                                    text={_('Scan')}
-                                    onClick={this.onScanBtnClick}
-                                  />
-                                )
-                              }
-                            </div>
-                          ) : null
-                        }
-                        <div className="fl">
-                          <span
-                            style={{
-                              display: 'inline-block',
-                              marginTop: '11px',
-                            }}
-                          >&nbsp;&nbsp;
-                            <input
-                              style={{
-                                marginBottom: '-2px',
-                              }}
-                              type="checkbox"
-                              checked={basicSettings.getIn(['vapList', '0', 'hideSsid']) === '1'}
-                              onClick={(data) => this.onHideSsidboxClick(data)}
-                            />&nbsp;
-                            {_('Hide')}
-                          </span>
-                        </div>
-                      </div>
-                    )
-                  }
-                </div>
-              </div>
+                    </div>
+                    <div
+                      style={{
+                        paddingTop: '2px',
+                      }}
+                      className="fl"
+                    >
+                      {
+                        this.props.selfState.get('scaning') ? (
+                          <Button
+                            text={_('Stop')}
+                            onClick={this.onStopScanClick}
+                            loading
+                          />
+                        ) : (
+                          <Button
+                            text={_('Scan')}
+                            onClick={this.onScanBtnClick}
+                          />
+                        )
+                      }
+                    </div>
+                    <div
+                      style={{
+                        marginTop: '11px',
+                        marginLeft: '4px',
+                      }}
+                      className="fl"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={basicSettings.getIn(['vapList', '0', 'hideSsid']) === '1'}
+                        onClick={data => this.onHideSsidboxClick(data)}
+                      />
+                      {_('Hide')}
+                    </div>
+                  </div>
+                ) : null
+              }
               <FormGroup
                 type="number"
                 label={_('Vlan ID')}
@@ -1024,15 +1065,15 @@ export default class Basic extends React.Component {
                 { // 加密方式选择框
                   (basicSettings.get('wirelessMode') === 'sta' ||
                     basicSettings.get('wirelessMode') === 'ap') ? (
-                    <div>
-                      <FormGroup
-                        label={_('Security')}
-                        type="select"
-                        options={staAndApSecurityOptions}
-                        value={basicSettings.getIn(['vapList', '0', 'security', 'mode']) || 'none'}
-                        onChange={(data) => this.onSecurityModeChange(data)}
-                      />
-                    </div>
+                      <div>
+                        <FormGroup
+                          label={_('Security')}
+                          type="select"
+                          options={staAndApSecurityOptions}
+                          value={basicSettings.getIn(['vapList', '0', 'security', 'mode']) || 'none'}
+                          onChange={data => this.onSecurityModeChange(data)}
+                        />
+                      </div>
                   ) : null
                 }
                 {
@@ -1043,7 +1084,7 @@ export default class Basic extends React.Component {
                         type="select"
                         options={repeaterSecurityOptions}
                         value={basicSettings.getIn(['vapList', '0', 'security', 'mode'])}
-                        onChange={(data) => this.onSecurityModeChange(data)}
+                        onChange={data => this.onSecurityModeChange(data)}
                       />
                     </div>
                   ) : null
@@ -1083,7 +1124,6 @@ export default class Basic extends React.Component {
                                                       .setIn(['0', 'security'], security);
                           this.props.updateBasicSettings({ vapList });
                         }}
-                        required
                         {...validPwd}
                       />
                     </div>
@@ -1242,7 +1282,7 @@ export default class Basic extends React.Component {
                 type="checkbox"
                 label={_('Radio')}
                 checked={radioSettings.get('enable') === '1'}
-                onChange={(data) => this.props.updateRadioSettingsItem({
+                onChange={data => this.props.updateRadioSettingsItem({
                   enable: data.value,
                 })}
               />
@@ -1270,33 +1310,31 @@ export default class Basic extends React.Component {
                   onClick={() => { this.props.changeCtyModal(true); }}
                 />
               </FormGroup>
-              { /* 国家代码弹出选择框 */
-                <Modal
-                  isShow={this.props.selfState.get('showCtyModal')}
-                  title={_('Country Code')}
-                  onClose={this.onCloseCountrySelectModal}
-                  onOk={this.props.saveCountrySelectModal}
-                >
-                  <h3>{_('User Protocol')}</h3>
-                  <span>
-                    {_('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
-                  </span>
-                  <FormGroup
-                    type="radio"
-                    text={_('I have read and agree')}
-                    checked={this.props.selfState.get('agreeProtocol')}
-                    onChange={() => { this.props.changeAgreeProtocol(true); }}
-                  />
-                  <FormGroup
-                    label={_('Country')}
-                    type="select"
-                    options={this.makeCountryOptions(countryMap)}
-                    value={this.props.selfState.get('selectedCountry')}
-                    onChange={(data) => this.props.changeCountryCode(data.value)}
-                    disabled={!this.props.selfState.get('agreeProtocol')}
-                  />
-                </Modal>
-              }
+              <Modal
+                title={_('Country Code')}
+                onClose={this.onCloseCountrySelectModal}
+                onOk={this.props.saveCountrySelectModal}
+                isShow={this.props.selfState.get('showCtyModal')}
+              >
+                <h3>{_('User Protocol')}</h3>
+                <span>
+                  {_('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
+                </span>
+                <FormGroup
+                  type="radio"
+                  text={_('I have read and agree')}
+                  checked={this.props.selfState.get('agreeProtocol')}
+                  onChange={() => { this.props.changeAgreeProtocol(true); }}
+                />
+                <FormGroup
+                  label={_('Country')}
+                  type="select"
+                  options={this.makeCountryOptions(countryMap)}
+                  value={this.props.selfState.get('selectedCountry')}
+                  onChange={data => this.props.changeCountryCode(data.value)}
+                  disabled={!this.props.selfState.get('agreeProtocol')}
+                />
+              </Modal>
               <FormGroup
                 label={_('Radio Mode')}
                 type="select"
@@ -1313,7 +1351,7 @@ export default class Basic extends React.Component {
                 type="select"
                 options={this.makeChannelOptions()}
                 value={radioSettings.get('frequency') || 'auto'}
-                onChange={(data) => this.props.updateRadioSettingsItem({
+                onChange={data => this.props.updateRadioSettingsItem({
                   frequency: data.value || 'auto',
                 })}
               />
@@ -1323,7 +1361,7 @@ export default class Basic extends React.Component {
                 minWidth="66px"
                 options={channelWidthOptions}
                 value={radioSettings.get('channelWidth')}
-                onChange={(data) => this.props.updateRadioSettingsItem({
+                onChange={data => this.props.updateRadioSettingsItem({
                   channelWidth: data.value,
                 })}
               />
@@ -1334,7 +1372,7 @@ export default class Basic extends React.Component {
                 max={this.props.selfState.get('maxTxpower')}
                 // help={radioSettings.get('txPower')}
                 value={radioSettings.get('txPower')}
-                onChange={(data) => this.props.updateRadioSettingsItem({
+                onChange={data => this.props.updateRadioSettingsItem({
                   txPower: data.value,
                 })}
               />
@@ -1509,7 +1547,7 @@ export default class Basic extends React.Component {
           title={_('Security Settings For SSID')}
           isShow={tableItemForSsid.get('isShow') === '1'}
           onOk={() => {
-            this.props.validateAll('ssidSecurityModal').then(msg => {
+            this.props.validateAll('ssidSecurityModal').then((msg) => {
               if (msg.isEmpty()) {
                 const pos = tableItemForSsid.get('pos');
                 const vapList = multiSsid.getIn(['vapList'])
@@ -1550,40 +1588,39 @@ export default class Basic extends React.Component {
           {
             (tableItemForSsid.getIn(['item', 'security', 'mode']) === 'none' ||
               tableItemForSsid.getIn(['item', 'security', 'mode']) === 'wep') ? null : (
-              <div>
-                <FormGroup
-                  label={_('Algorithm')}
-                  minWidth="66px"
-                  type="switch"
-                  value={tableItemForSsid.getIn(['item', 'security', 'cipher'])}
-                  options={[
-                    { label: 'AES', value: 'aes' },
-                    { label: 'TKIP', value: 'tkip' },
-                    { label: 'MIXED', value: 'aes&tkip' },
-                  ]}
-                  onChange={(data) => {
-                    const newItem = tableItemForSsid.get('item')
-                                    .setIn(['security', 'cipher'], data.value);
-                    const newItemForSsid = tableItemForSsid.set('item', newItem);
-                    this.props.changeTableItemForSsid(newItemForSsid);
-                  }}
-                />
-                <FormGroup
-                  label={_('Password')}
-                  type="password"
-                  required
-                  form="ssidSecurityModal"
-                  value={tableItemForSsid.getIn(['item', 'security', 'key'])}
-                  onChange={(data) => {
-                    const newItem = tableItemForSsid.get('item')
-                                    .setIn(['security', 'key'], data.value);
-                    const newItemForSsid = tableItemForSsid.set('item', newItem);
-                    this.props.changeTableItemForSsid(newItemForSsid);
-                  }}
-                  required
-                  {...validPwd}
-                />
-              </div>
+                <div>
+                  <FormGroup
+                    label={_('Algorithm')}
+                    minWidth="66px"
+                    type="switch"
+                    value={tableItemForSsid.getIn(['item', 'security', 'cipher'])}
+                    options={[
+                      { label: 'AES', value: 'aes' },
+                      { label: 'TKIP', value: 'tkip' },
+                      { label: 'MIXED', value: 'aes&tkip' },
+                    ]}
+                    onChange={(data) => {
+                      const newItem = tableItemForSsid.get('item')
+                                      .setIn(['security', 'cipher'], data.value);
+                      const newItemForSsid = tableItemForSsid.set('item', newItem);
+                      this.props.changeTableItemForSsid(newItemForSsid);
+                    }}
+                  />
+                  <FormGroup
+                    label={_('Password')}
+                    type="password"
+                    required
+                    form="ssidSecurityModal"
+                    value={tableItemForSsid.getIn(['item', 'security', 'key'])}
+                    onChange={(data) => {
+                      const newItem = tableItemForSsid.get('item')
+                                      .setIn(['security', 'key'], data.value);
+                      const newItemForSsid = tableItemForSsid.set('item', newItem);
+                      this.props.changeTableItemForSsid(newItemForSsid);
+                    }}
+                    {...validPwd}
+                  />
+                </div>
             )
           }
           {

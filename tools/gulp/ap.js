@@ -37,3 +37,14 @@ gulp.task('pub:ap', (callback) => {
   gutil.log('切换 AP 发布目标目录：', gutil.colors.magenta(distPath));
   runSequence('pub:path', 'config:ap', ['clean:pubap', 'build'], 'pub:copyap', callback);
 });
+
+gulp.task('pub:app', (callback) => {
+  let distPath = paths.pubAp;
+
+  if (argv.d) {
+    distPath = argv.d;
+  }
+
+  gutil.log('切换 AP 发布目标目录：', gutil.colors.magenta(distPath));
+  runSequence('pub:path', 'config', ['clean:pubap', 'build'], 'pub:copyap', callback);
+});

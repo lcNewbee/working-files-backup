@@ -586,36 +586,32 @@ export default class QuickSetup extends React.Component {
                   onClick={() => { this.props.changeCtyModal(true); }}
                 />
               </FormGroup>
-              {
-              this.props.selfState.get('showCtyModal') ? (
-                <Modal
-                  title={_('Country')}
-                  onClose={this.onCloseCountrySelectModal}
-                  onOk={this.props.saveCountrySelectModal}
-                  isShow
-                >
-                  <h3>{_('User Protocol')}</h3>
-                  <span>
-                    {_('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
-                  </span>
-                  <FormGroup
-                    type="radio"
-                    text={_('I have read and agree')}
-                    checked={this.props.selfState.get('agreeProtocol')}
-                    onClick={() => { this.props.changeAgreeProtocol(true); }}
-                  />
-                  <FormGroup
-                    label={_('Country')}
-                    type="select"
-                    options={this.makeCountryOptions(countryMap)}
-                    value={this.props.selfState.get('selectedCountry') ||
-                          store.getIn(['curData', 'countryCode'])}
-                    onChange={data => this.props.changeCountryCode(data.value)}
-                    disabled={!this.props.selfState.get('agreeProtocol')}
-                  />
-                </Modal>
-              ) : null
-            }
+              <Modal
+                title={_('Country')}
+                onClose={this.onCloseCountrySelectModal}
+                onOk={this.props.saveCountrySelectModal}
+                isShow={this.props.selfState.get('showCtyModal')}
+              >
+                <h3>{_('User Protocol')}</h3>
+                <span>
+                  {_('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
+                </span>
+                <FormGroup
+                  type="radio"
+                  text={_('I have read and agree')}
+                  checked={this.props.selfState.get('agreeProtocol')}
+                  onClick={() => { this.props.changeAgreeProtocol(true); }}
+                />
+                <FormGroup
+                  label={_('Country')}
+                  type="select"
+                  options={this.makeCountryOptions(countryMap)}
+                  value={this.props.selfState.get('selectedCountry') ||
+                        store.getIn(['curData', 'countryCode'])}
+                  onChange={data => this.props.changeCountryCode(data.value)}
+                  disabled={!this.props.selfState.get('agreeProtocol')}
+                />
+              </Modal>
               <FormGroup
                 type="switch"
                 label={_('Channel Width')}
@@ -904,35 +900,31 @@ export default class QuickSetup extends React.Component {
                   onClick={() => { this.props.changeCtyModal(true); }}
                 />
               </FormGroup>
-              {
-              this.props.selfState.get('showCtyModal') ? (
-                <Modal
-                  title={_('Country')}
-                  onClose={this.onCloseCountrySelectModal}
-                  onOk={this.props.saveCountrySelectModal}
-                  isShow
-                >
-                  <h3>{_('User Protocol')}</h3>
-                  <span>
-                    {_('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
-                  </span>
-                  <FormGroup
-                    type="radio"
-                    text={_('I have read and agree')}
-                    checked={this.props.selfState.get('agreeProtocol')}
-                    onClick={() => { this.props.changeAgreeProtocol(true); }}
-                  />
-                  <FormGroup
-                    label={_('Country')}
-                    type="select"
-                    options={this.makeCountryOptions(countryMap)}
-                    value={this.props.selfState.get('selectedCountry')}
-                    onChange={data => this.props.changeCountryCode(data.value)}
-                    disabled={!this.props.selfState.get('agreeProtocol')}
-                  />
-                </Modal>
-              ) : null
-            }
+              <Modal
+                title={_('Country')}
+                onClose={this.onCloseCountrySelectModal}
+                onOk={this.props.saveCountrySelectModal}
+                isShow={this.props.selfState.get('showCtyModal')}
+              >
+                <h3>{_('User Protocol')}</h3>
+                <span>
+                  {_('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
+                </span>
+                <FormGroup
+                  type="radio"
+                  text={_('I have read and agree')}
+                  checked={this.props.selfState.get('agreeProtocol')}
+                  onClick={() => { this.props.changeAgreeProtocol(true); }}
+                />
+                <FormGroup
+                  label={_('Country')}
+                  type="select"
+                  options={this.makeCountryOptions(countryMap)}
+                  value={this.props.selfState.get('selectedCountry')}
+                  onChange={data => this.props.changeCountryCode(data.value)}
+                  disabled={!this.props.selfState.get('agreeProtocol')}
+                />
+              </Modal>
               <FormGroup
                 type="switch"
                 label={_('Channel Width')}
@@ -1213,35 +1205,31 @@ export default class QuickSetup extends React.Component {
                   onClick={() => { this.props.changeCtyModal(true); }}
                 />
               </FormGroup>
-              {
-              this.props.selfState.get('showCtyModal') ? (
-                <Modal
-                  title={_('Country')}
-                  onClose={this.onCloseCountrySelectModal}
-                  onOk={this.props.saveCountrySelectModal}
-                  isShow
-                >
-                  <h3>{_('User Protocol')}</h3>
-                  <span>
-                    {_('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
-                  </span>
-                  <FormGroup
-                    type="radio"
-                    text={_('I have read and agree')}
-                    checked={this.props.selfState.get('agreeProtocol')}
-                    onClick={() => { this.props.changeAgreeProtocol(true); }}
-                  />
-                  <FormGroup
-                    label={_('Country')}
-                    type="select"
-                    options={this.makeCountryOptions(countryMap)}
-                    value={this.props.selfState.get('selectedCountry')}
-                    onChange={data => this.props.changeCountryCode(data.value)}
-                    disabled={!this.props.selfState.get('agreeProtocol')}
-                  />
-                </Modal>
-              ) : null
-            }
+              <Modal
+                title={_('Country')}
+                onClose={this.onCloseCountrySelectModal}
+                onOk={this.props.saveCountrySelectModal}
+                isShow={this.props.selfState.get('showCtyModal')}
+              >
+                <h3>{_('User Protocol')}</h3>
+                <span>
+                  {_('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
+                </span>
+                <FormGroup
+                  type="radio"
+                  text={_('I have read and agree')}
+                  checked={this.props.selfState.get('agreeProtocol')}
+                  onClick={() => { this.props.changeAgreeProtocol(true); }}
+                />
+                <FormGroup
+                  label={_('Country')}
+                  type="select"
+                  options={this.makeCountryOptions(countryMap)}
+                  value={this.props.selfState.get('selectedCountry')}
+                  onChange={data => this.props.changeCountryCode(data.value)}
+                  disabled={!this.props.selfState.get('agreeProtocol')}
+                />
+              </Modal>
               <FormGroup
                 type="switch"
                 label={_('Channel Width')}

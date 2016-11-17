@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import utils from 'shared/utils';
+import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
@@ -8,12 +9,18 @@ import Icon from 'shared/components/Icon';
 import Navbar from 'shared/components/Navbar';
 import * as appActions from 'shared/actions/app';
 import * as actions from './actions';
+import reducer from './reducer';
 
 const propTypes = {
   app: PropTypes.object,
+  fetch: PropTypes.func,
   refreshAll: PropTypes.func,
   route: PropTypes.object,
   changeLoginStatus: PropTypes.func,
+  setDeviceRadioList: PropTypes.func,
+  setRadioSelectOptions: PropTypes.func,
+  changeMenus: PropTypes.func,
+  selfState: PropTypes.instanceOf(Map),
 };
 
 export default class MainAP extends Component {
@@ -23,12 +30,41 @@ export default class MainAP extends Component {
     this.state = { isShow: false };
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onRefresh = this.onRefresh.bind(this);
+    this.makeRadioSelectOptions = this.makeRadioSelectOptions.bind(this);
     document.onkeydown = function (e) {
       if (e.keyCode === 116) {
         this.onRefresh(e);
       }
     }.bind(this);
   }
+
+  componentWillMount() {
+    this.props.fetch('goform/get_product_info').then((json) => {
+      if (json.state && json.state.code === 2000) {
+        this.props.setDeviceRadioList(fromJS(json.data.deviceRadioList));
+        const options = this.makeRadioSelectOptions(json.data.deviceRadioList);
+        this.props.setRadioSelectOptions(options);
+      }
+    });
+  }
+
+  componentDidMount() {
+    this.props.fetch('goform/get_firstLogin_info').then((json) => {
+      if (json.state && json.state.code === 2000) {
+        if (json.data.ifFirstLogin === '1') {
+          window.location.href = '#/wizard';
+        }
+        if (json.data.manageMode === '1') {
+          const menus = this.props.route.childRoutes.filter(val => val.id !== 'wirelessconfig' && val.id !== 'quicksetup');
+          this.props.changeMenus(fromJS(menus));
+        } else if (json.data.manageMode === '0') {
+          const menus = this.props.route.childRoutes;
+          this.props.changeMenus(fromJS(menus));
+        }
+      }
+    });
+  }
+
 
   onRefresh(e) {
     e.preventDefault();
@@ -45,6 +81,19 @@ export default class MainAP extends Component {
     this.setState({
       isShow: !this.state.isShow,
     });
+  }
+
+  makeRadioSelectOptions(list) {
+    const len = list.length;
+    let radioSelectOptions = fromJS([]);
+    for (let i = 0; i < len; i++) {
+      const item = fromJS({
+        label: list[i].name,
+        value: list[i].radioId,
+      });
+      radioSelectOptions = radioSelectOptions.push(item);
+    }
+    return radioSelectOptions;
   }
 
   render() {
@@ -72,7 +121,7 @@ export default class MainAP extends Component {
         </Navbar>
 
         <div className="t-main main--open">
-          <Nav className="t-main__nav" role="menu" menus={this.props.route.childRoutes} />
+          <Nav className="t-main__nav" role="menu" menus={this.props.selfState.get('menus').toJS()} />
           <div className="t-main__content">
             { this.props.children }
           </div>
@@ -118,6 +167,7 @@ function mapStateToProps(state) {
 
   return {
     app: myState,
+    selfState: state.product,
   };
 }
 
@@ -132,3 +182,5 @@ export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps
 )(MainAP);
+
+export const product = reducer;

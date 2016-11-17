@@ -1,0 +1,48 @@
+{
+"data":{
+	"radioList": [
+		{
+			"radioId": "0",
+			"radioType": "2.4",
+			"rts":"10",
+      "distance":"0.6",
+      "autoAdjust":"1",
+      "sensThreshold":"-90",
+      "sensEnable":"1",
+      "led1Threshold":"-60",
+      "led2Threshold":"-70",
+      "led3Threshold":"-80",
+      "led4Threshold":"-90"
+		},
+		{
+			"radioId": "1",
+			"radioType": "5G",
+			"rts":"10",
+      "distance":"0.6",
+      "autoAdjust":"1",
+      "sensThreshold":"-90",
+      "sensEnable":"1",
+      "led1Threshold":"-60",
+      "led2Threshold":"-70",
+      "led3Threshold":"-80",
+      "led4Threshold":"-90"
+		},
+		{
+			"radioId": "2",
+			"radioType": "5G",
+			"rts":"10",
+      "distance":"0.6",
+      "autoAdjust":"1",
+      "sensThreshold":"-90",
+      "sensEnable":"1",
+      "led1Threshold":"-60",
+      "led2Threshold":"-70",
+      "led3Threshold":"-80",
+      "led4Threshold":"-90"
+		}
+	]},
+  "state":{
+    "code":2000,
+    "msg":"success"
+  }
+}

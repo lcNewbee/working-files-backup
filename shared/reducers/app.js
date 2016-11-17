@@ -26,9 +26,9 @@ function initConfig(state, payload) {
   guiVersion = `.${guiVersion}`;
 
   return state.set('config', payload)
-    .set('guiName', payload.title)
-    .set('deviceRadioList', payload.deviceRadioList);
+    .set('guiName', payload.title);
 }
+
 
 function receiveReport(state, data) {
   let ret;

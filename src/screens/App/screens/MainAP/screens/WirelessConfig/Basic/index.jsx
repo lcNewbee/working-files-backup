@@ -53,6 +53,7 @@ const propTypes = {
 
   // 平台代码
   changeCurrRadioConfig: PropTypes.func,
+  productInfo: PropTypes.instanceOf(Map),
 };
 
 const defaultProps = {};
@@ -101,11 +102,18 @@ const keyTypeOptions = [
   { value: 'ASCII', label: 'ASCII' },
 ];
 
-const radioModeOptions = [
+const radioModeOptionsFor5g = [
   { value: 'auto', label: 'auto' },
   { value: '11ac', label: '802.11ac' },
   { value: '11na', label: '802.11a+n' },
   { value: '11a', label: '802.11a' },
+];
+
+const radioModeOptionsFor2g = [
+  { value: 'auto', label: 'auto' },
+  { value: '11b', label: '802.11b' },
+  { value: '11g', label: '802.11g' },
+  { value: '11n', label: '802.11n' },
 ];
 
 const channelWidthOptions = [
@@ -171,11 +179,12 @@ export default class Basic extends React.Component {
     this.fetchFullPageData = this.fetchFullPageData.bind(this);
     this.firstInAndRefresh = this.firstInAndRefresh.bind(this);
     // 平台代码
-    this.makeRadioSelectOptions = this.makeRadioSelectOptions.bind(this);
+    // this.makeRadioSelectOptions = this.makeRadioSelectOptions.bind(this);
     this.onChangeRadio = this.onChangeRadio.bind(this);
   }
 
   componentWillMount() {
+    // console.log(this.props.app.get('radioSelectOptions'));
     this.firstInAndRefresh();
   }
 
@@ -230,7 +239,7 @@ export default class Basic extends React.Component {
     this.props.changeShowScanResultStatus(false);
   }
   onScanBtnClick() {
-    const query = this.props.selfState.get('currRadioConfig');
+    const query = this.props.selfState.get('currRadioConfig').toJS();
     this.props.changeScanStatus(true);
     this.props.fetch('goform/get_site_survey', query).then((json) => {
       if (json.state && json.state.code === 2000) {
@@ -283,13 +292,9 @@ export default class Basic extends React.Component {
       if (json.state && json.state.code === 2000) {
         const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
         let newRadioList = fromJS(json.data).setIn(['radioList', radioId, 'wirelessMode'], data.value);
-      // if (json.state && json.state.code === 2000) {
-      //   this.props.updateBasicSettings({
-      //     wirelessMode: data.value,
-      //   });
         // 处理切换成repeater后，加密方式为空的问题
         if (data.value === 'repeater' && json.data.radioList[0].vapList[0].security.mode !== 'wep') {
-          newRadioList = newRadioList.setIn([radioId, 'vapList', 0, 'security', 'mode'], 'none');
+          newRadioList = newRadioList.setIn(['radioList', radioId, 'vapList', 0, 'security', 'mode'], 'none');
         }
         this.props.updateBasicSettings(newRadioList);
       }
@@ -386,20 +391,22 @@ export default class Basic extends React.Component {
           curModule: 'radioSettings',
           data: fromJS(json.data),
         };
-        // const country = json.data.radioList[0].countryCode;
-        // this.props.changeCountryCode(country);
-        // const channelWidth = json.data.channelWidth;
-        // const saveInfo = {
-        //   radio: '5G', // 拿的不仅仅是一个radio,所以这个请求应该放到radio切换的函数中
-        //   country,
-        //   channelWidth,
-        // };
+        // 根据国家和频段，获取信道列表信息
+        const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
+        const country = json.data.radioList[radioId].countryCode;
+        this.props.changeCountryCode(country);
+        const channelWidth = json.data.channelWidth;
+        const saveInfo = {
+          radio: this.props.selfState.getIn(['currRadioConfig', 'radioType']),
+          country,
+          channelWidth,
+        };
+        this.props.fetch('goform/get_country_info', saveInfo).then((json2) => {
+          if (json2.state && json2.state.code === 2000) {
+            this.props.receiveCountryInfo(json2.data);
+          }
+        });
         this.props.updateSelfItemSettings(radioInfo);
-        // this.props.fetch('goform/get_country_info', saveInfo).then((json2) => {
-        //   if (json2.state && json2.state.code === 2000) {
-        //     this.props.receiveCountryInfo(json2.data);
-        //   }
-        // });
       } }).then(() => {
         this.props.fetch('goform/get_wl_info_forTestUse').then((json) => {
           if (json.state && json.state.code === 2000) {
@@ -456,7 +463,9 @@ export default class Basic extends React.Component {
   firstInAndRefresh() {
     const props = this.props;
     const groupId = props.groupId || -1;
-
+    this.onChangeRadio({// 修改当前射频为第一个radio
+      value: '0',
+    });
     props.initSettings({
       settingId: props.route.id,
       formUrl: props.route.formUrl,
@@ -483,33 +492,36 @@ export default class Basic extends React.Component {
         vlanEnable = json.data.vlanEnable;
       }
     });
+    const config = fromJS({
+      radioId: '0',
+      radioType: this.props.productInfo.getIn(['deviceRadioList', 0, 'radioType']),
+    });
+    this.props.changeCurrRadioConfig(config);
   }
 
-  makeRadioSelectOptions() {
-    const deviceRadioList = this.props.app.get('deviceRadioList');
-    // console.log('deviceRadioList', deviceRadioList);
-    const len = deviceRadioList.length;
-    const radioSelectOptions = [];
-    for (let i = 0; i < len; i++) {
-      const item = {
-        label: deviceRadioList[i].name,
-        value: deviceRadioList[i].radioId,
-      };
-      radioSelectOptions.push(item);
-    }
-    radioSelectOptions.sort((a, b) => parseInt(a.value, 10) - parseInt(b.value, 10));
-    // console.log('radioSelectOptions', radioSelectOptions);
-    return radioSelectOptions;
-  }
+  // makeRadioSelectOptions() {
+  //   const deviceRadioList = this.props.app.get('deviceRadioList');
+  //   const len = deviceRadioList.size;
+  //   let radioSelectOptions = fromJS([]);
+  //   for (let i = 0; i < len; i++) {
+  //     const item = fromJS({
+  //       label: deviceRadioList.getIn([i, 'name']),
+  //       value: deviceRadioList.getIn([i, 'radioId']),
+  //     });
+  //     radioSelectOptions = radioSelectOptions.push(item);
+  //   }
+  //   return radioSelectOptions;
+  // }
 
-  onChangeRadio(data) {
-    const radioType = this.props.selfState.getIn(['basicSettings', 'radioList', data.value, 'radioType']);
+  onChangeRadio(data) { // 注意参数实际是data的value属性，这里表示radio序号
+    const radioType = this.props.productInfo.getIn(['deviceRadioList', data.value, 'radioType']);
     const config = fromJS({
       radioId: data.value,
       radioType,
     });
     this.props.changeCurrRadioConfig(config);
   }
+
 
   render() {
     const modalOptions = fromJS([
@@ -599,7 +611,10 @@ export default class Basic extends React.Component {
               value={val}
               disabled={pos === 0}
               onChange={data => this.onSsidItemChange(val, item, 'ssid', data.value)}
-              style={{ marginLeft: '-60px' }}
+              style={{
+                marginLeft: '-60px',
+                height: '29px',
+              }}
             />
           );
         }.bind(this),
@@ -619,7 +634,10 @@ export default class Basic extends React.Component {
               onChange={(data) => {
                 this.onSsidItemChange(val, item, 'vlanId', data.value);
               }}
-              style={{ marginLeft: '-60px' }}
+              style={{
+                marginLeft: '-60px',
+                height: '29px',
+              }}
             />
           );
         }.bind(this),
@@ -724,14 +742,18 @@ export default class Basic extends React.Component {
 
     return (
       <div className="stats-group">
-        <FormGroup
-          type="switch"
-          label={_('Radio Select')}
-          value={this.props.selfState.getIn(['currRadioConfig', 'radioId'])}
-          options={this.makeRadioSelectOptions()}
-          minWidth="100px"
-          onChange={(data) => { this.onChangeRadio(data); }}
-        />
+        {
+          this.props.productInfo.get('deviceRadioList').size > 1 ? (
+            <FormGroup
+              type="switch"
+              label={_('Radio Select')}
+              value={this.props.selfState.getIn(['currRadioConfig', 'radioId'])}
+              options={this.props.productInfo.get('radioSelectOptions')}
+              minWidth="100px"
+              onChange={(data) => { this.onChangeRadio(data); }}
+            />
+          ) : null
+        }
         <Modal
           isShow={this.props.selfState.get('showScanResult')}
           onOk={this.onModalOkBtnClick}
@@ -1336,38 +1358,36 @@ export default class Basic extends React.Component {
                 />
               </FormGroup>
               { /* 国家代码弹出选择框 */
-                this.props.selfState.get('showCtyModal') ? (
-                  <Modal
-                    title={_('Country Code')}
-                    onClose={this.onCloseCountrySelectModal}
-                    onOk={this.props.saveCountrySelectModal}
-                    isShow
-                  >
-                    <h3>{_('User Protocol')}</h3>
-                    <span>
-                      {_('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
-                    </span>
-                    <FormGroup
-                      type="radio"
-                      text={_('I have read and agree')}
-                      checked={this.props.selfState.get('agreeProtocol')}
-                      onChange={() => { this.props.changeAgreeProtocol(true); }}
-                    />
-                    <FormGroup
-                      label={_('Country')}
-                      type="select"
-                      options={this.makeCountryOptions(countryMap)}
-                      value={this.props.selfState.get('selectedCountry')}
-                      onChange={data => this.props.changeCountryCode(data.value)}
-                      disabled={!this.props.selfState.get('agreeProtocol')}
-                    />
-                  </Modal>
-                ) : null
               }
+              <Modal
+                title={_('Country Code')}
+                onClose={this.onCloseCountrySelectModal}
+                onOk={this.props.saveCountrySelectModal}
+                isShow={this.props.selfState.get('showCtyModal')}
+              >
+                <h3>{_('User Protocol')}</h3>
+                <span>
+                  {_('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
+                </span>
+                <FormGroup
+                  type="radio"
+                  text={_('I have read and agree')}
+                  checked={this.props.selfState.get('agreeProtocol')}
+                  onChange={() => { this.props.changeAgreeProtocol(true); }}
+                />
+                <FormGroup
+                  label={_('Country')}
+                  type="select"
+                  options={this.makeCountryOptions(countryMap)}
+                  value={this.props.selfState.get('selectedCountry')}
+                  onChange={data => this.props.changeCountryCode(data.value)}
+                  disabled={!this.props.selfState.get('agreeProtocol')}
+                />
+              </Modal>
               <FormGroup
                 label={_('Radio Mode')}
                 type="select"
-                options={radioModeOptions}
+                options={radioType === '5G' ? radioModeOptionsFor5g : radioModeOptionsFor2g}
                 value={radioSettings.getIn(['radioList', radioId, 'radioMode'])}
                 onChange={(data) => {
                   const radioList = radioSettings.get('radioList').setIn([radioId, 'radioMode'], data.value);
@@ -1745,6 +1765,7 @@ function mapStateToProps(state) {
     app: state.app,
     store: state.settings,
     selfState: state.basic,
+    productInfo: state.product,
   };
 }
 

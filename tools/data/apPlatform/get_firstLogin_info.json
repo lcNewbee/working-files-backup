@@ -1,0 +1,10 @@
+{
+  "state": {
+    "msg": "success",
+    "code": 2000
+  },
+  "data": {
+    "ifFirstLogin": "0",
+    "manageMode": "0"
+  }
+}

@@ -393,5 +393,12 @@
   "NETWORK SERVICE":"网络服务",
   "NTP Client":"NTP客户端",
   "System Log":"系统日志",
-  "NTP Server":"NTP服务器"
+  "NTP Server":"NTP服务器",
+  "Broadcast IP address is not allowed !": "IP地址不能为广播地址！",
+  "Static IP cannot be the same as default gateway.": "IP地址和网关不能相同。",
+  "Static IP and default gateway must be in the same network segment": "IP地址和网关必须在同一网段。",
+  "Please input a valid username.": "用户名错误。",
+  "Must be numbers, letters or an underscore": "密码只能由数字、英文字母及下划线组成。",
+  "Must be ASCII.": "密码必须由ASCII码组成。",
+  "Must be hex.": "密码必须由十六进制字符组成。"
 }

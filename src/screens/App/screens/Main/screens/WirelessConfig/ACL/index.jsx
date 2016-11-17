@@ -235,37 +235,43 @@ export default class ACL extends React.Component {
         <FormGroup
           label={_('Filter Mode')}
         >
-          <FormInput
-            name="filtermode"
-            type="radio"
-            text={_('Allow Only')}
-            disabled={store.getIn(['curData', 'aclEnable']) === '0'}
-            checked={store.getIn(['curData', 'aclConfList', selectedSsid, 'aclMode']) === 'allow'}
-            onClick={() => {
-              const aclConfList = store.getIn(['curData', 'aclConfList'])
-                                      .setIn([selectedSsid, 'aclMode'], 'allow');
-              this.props.updateItemSettings({
-                aclConfList,
-              });
-            }}
+          <div
             style={{
-              marginRight: '40px',
+              marginTop: '8px',
             }}
-          />
-          <FormInput
-            name="filtermode"
-            type="radio"
-            text={_('Block Only')}
-            disabled={store.getIn(['curData', 'aclEnable']) === '0'}
-            checked={store.getIn(['curData', 'aclConfList', selectedSsid, 'aclMode']) === 'deny'}
-            onClick={() => {
-              const aclConfList = store.getIn(['curData', 'aclConfList'])
-                                      .setIn([selectedSsid, 'aclMode'], 'deny');
-              this.props.updateItemSettings({
-                aclConfList,
-              });
-            }}
-          />
+          >
+            <FormInput
+              name="filtermode"
+              type="radio"
+              text={_('Allow Only')}
+              disabled={store.getIn(['curData', 'aclEnable']) === '0'}
+              checked={store.getIn(['curData', 'aclConfList', selectedSsid, 'aclMode']) === 'allow'}
+              onClick={() => {
+                const aclConfList = store.getIn(['curData', 'aclConfList'])
+                                        .setIn([selectedSsid, 'aclMode'], 'allow');
+                this.props.updateItemSettings({
+                  aclConfList,
+                });
+              }}
+              style={{
+                marginRight: '40px',
+              }}
+            />
+            <FormInput
+              name="filtermode"
+              type="radio"
+              text={_('Block Only')}
+              disabled={store.getIn(['curData', 'aclEnable']) === '0'}
+              checked={store.getIn(['curData', 'aclConfList', selectedSsid, 'aclMode']) === 'deny'}
+              onClick={() => {
+                const aclConfList = store.getIn(['curData', 'aclConfList'])
+                                        .setIn([selectedSsid, 'aclMode'], 'deny');
+                this.props.updateItemSettings({
+                  aclConfList,
+                });
+              }}
+            />
+          </div>
         </FormGroup>
         <FormGroup
           label={_('Station List')}

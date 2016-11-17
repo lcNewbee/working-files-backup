@@ -229,7 +229,7 @@ export default class Advance extends React.Component {
           <FormGroup
             label={_('Signal LED Thresholds')}
           >
-            <br />
+            <br /><br />
             <div
               style={{
                 marginLeft: '-130px',
@@ -256,7 +256,7 @@ export default class Advance extends React.Component {
               style={{
                 marginLeft: '-130px',
                 marginRight: '5px',
-                marginTop: '-50px',
+                marginTop: '-40px',
               }}
             >
               <FormGroup
@@ -279,7 +279,7 @@ export default class Advance extends React.Component {
               style={{
                 marginLeft: '-130px',
                 marginRight: '5px',
-                marginTop: '-50px',
+                marginTop: '-40px',
               }}
             >
               <FormGroup
@@ -302,7 +302,7 @@ export default class Advance extends React.Component {
               style={{
                 marginLeft: '-130px',
                 marginRight: '5px',
-                marginTop: '-50px',
+                marginTop: '-40px',
               }}
             >
               <FormGroup

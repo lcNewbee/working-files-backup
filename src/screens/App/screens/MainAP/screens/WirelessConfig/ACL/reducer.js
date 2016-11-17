@@ -1,6 +1,10 @@
 import { fromJS, List } from 'immutable';
 
 const defaultState = fromJS({
+  currRadioConfig: {
+    radioId: 0,
+    radioType: '2.4G',
+  },
   macstatus: [
   ],
   macInput: {
@@ -52,6 +56,8 @@ export default function (state = defaultState, action) {
       return state.setIn(['macInput', 'preLen'], action.data);
     case 'CHANGE_SELECTED_SSID':
       return onChangeSelectedSsid(state, action);
+    case 'CHANGE_CURR_RADIO_CONFIG':
+      return state.set('currRadioConfig', action.data);
     case 'RESTORE_SELF_STATE':
       return defaultState;
     default:

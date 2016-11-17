@@ -8,31 +8,30 @@ import validator from 'shared/utils/lib/validator';
 import * as sharedActions from 'shared/actions/settings';
 import * as appActions from 'shared/actions/app';
 import utils from 'shared/utils';
-import * as actions from './actions.js';
-import reducer from './reducer.js';
-import MacList from './MacList.jsx';
+import * as actions from './actions';
+import reducer from './reducer';
+import MacList from './MacList';
 
 const propTypes = {
   store: PropTypes.instanceOf(Map),
   route: PropTypes.object,
   initSettings: PropTypes.func,
+  save: PropTypes.func,
   fetchSettings: PropTypes.func,
   saveSettings: PropTypes.func,
   app: PropTypes.instanceOf(Map),
-
+  selfState: PropTypes.instanceOf(Map),
+  fetch: PropTypes.func,
   updateItemSettings: PropTypes.func,
-
   changeTextAreaValue: PropTypes.func,
   onMacClick: PropTypes.func,
   maclist: PropTypes.instanceOf(List),
   macStatus: PropTypes.instanceOf(List),
-
   initMacstatus: PropTypes.func,
   updateMacStatus: PropTypes.func,
   changeMacInput: PropTypes.func,
   macInput: PropTypes.instanceOf(Map),
   changePreLenInMacInput: PropTypes.func,
-
   leaveSettingsScreen: PropTypes.func,
   leaveScreen: PropTypes.func,
   resetVaildateMsg: PropTypes.func,
@@ -42,6 +41,8 @@ const propTypes = {
   validateOption: PropTypes.object,
   validateAll: PropTypes.func,
   restoreSelfState: PropTypes.func,
+  product: PropTypes.instanceOf(Map),
+  changeCurrRadioConfig: PropTypes.func,
 };
 const validOptions = Map({
   inputMac: validator({
@@ -65,6 +66,7 @@ export default class ACL extends React.Component {
     this.onMacInputChange = this.onMacInputChange.bind(this);
     this.onAddMacToLocalList = this.onAddMacToLocalList.bind(this);
     this.firstInAndRefresh = this.firstInAndRefresh.bind(this);
+    this.switchToNewRadioPage = this.switchToNewRadioPage.bind(this);
   }
 
   componentWillMount() {
@@ -129,7 +131,8 @@ export default class ACL extends React.Component {
   onAddMacToLocalList() {
     const macInputVal = this.props.macInput.get('macValue');
     const selectedSsid = this.props.selectedSsid;
-    const preList = this.props.store.getIn(['curData', 'aclConfList', selectedSsid, 'macList']);
+    const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
+    const preList = this.props.store.getIn(['curData', 'radioList', radioId, 'aclConfList', selectedSsid, 'macList']);
     let afterList;
     this.props.validateAll().then((msg) => {
       if (msg.isEmpty()) {
@@ -142,33 +145,44 @@ export default class ACL extends React.Component {
         } else {
           afterList = preList.push(macInputVal);
           const listLen = afterList.size;
-          const aclConfList = this.props.store.getIn(['curData', 'aclConfList'])
-                              .setIn([selectedSsid, 'macList'], afterList);
-          this.props.updateItemSettings({ aclConfList });
+          const aclConfList = this.props.store.getIn(['curData', 'radioList', radioId, 'aclConfList'])
+                            .setIn([selectedSsid, 'macList'], afterList);
+          const radioList = this.props.store.getIn(['curData', 'radioList'])
+                      .setIn([radioId, 'aclConfList'], aclConfList);
+          this.props.updateItemSettings({ radioList });
           this.props.changePreLenInMacInput(0);
           this.props.changeMacInput('');
           this.props.initMacstatus(listLen);
         }
-        }
+      }
     });
   }
 
   updateAclMacList() {
     const macStatusList = this.props.macStatus;
     const selectedSsid = this.props.selectedSsid;
-    const macList = this.props.store.getIn(['curData', 'aclConfList', selectedSsid, 'macList']);
+    const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
+    const macList = this.props.store.getIn(['curData', 'radioList', radioId, 'aclConfList', selectedSsid, 'macList']);
     let newList = fromJS([]);
     macStatusList.forEach((val, index) => {
       if (!val) {
         newList = newList.push(macList.get(index));
       }
     });
-    const aclConfList = this.props.store.getIn(['curData', 'aclConfList'])
+    const aclConfList = this.props.store.getIn(['curData', 'radioList', radioId, 'aclConfList'])
                             .setIn([selectedSsid, 'macList'], newList);
-    this.props.updateItemSettings({
-      aclConfList,
-    });
+    const radioList = this.props.store.getIn(['curData', 'radioList'])
+                      .setIn([radioId, 'aclConfList'], aclConfList);
+    this.props.updateItemSettings({ radioList });
     this.props.initMacstatus(newList.size);
+  }
+  onChangeRadio(data) {
+    const radioType = this.props.product.getIn(['deviceRadioList', data.value, 'radioType']);
+    const config = fromJS({
+      radioId: data.value,
+      radioType,
+    });
+    this.props.changeCurrRadioConfig(config);
   }
 
   firstInAndRefresh() {
@@ -180,44 +194,77 @@ export default class ACL extends React.Component {
         ],
       },
     });
-    this.props.fetchSettings().then(() => {
-      const aclConfList = this.props.store.getIn(['curData', 'aclConfList']);
-      ssidSelectOptions = [];
-      for (let i = 0; i < aclConfList.size; i++) {
-        const optionItem = {
-          value: i,
-          label: aclConfList.getIn([i, 'ssid']),
-        };
-        ssidSelectOptions.push(optionItem);
-      }
-      this.props.changeSelectedSsid({
-        selectedSsid: 0,
-        macListLen: aclConfList.getIn([0, 'macList']).size,
-      });
-    });
+    // 初始化页面为第一个radio
+    this.onChangeRadio({ value: '0' });
+    // 获取后台数据并跳转到第一个radio设置页面
+    this.switchToNewRadioPage('0');
     this.props.changeMacInput('');
+  }
+
+  // 获取后台数据并跳转到指定的radioID设置页面
+  switchToNewRadioPage(radioId) {
+    this.props.fetch('goform/get_acl_info_forTestUse').then((json) => {
+      if (json.state && json.state.code === 2000) {
+        this.props.updateItemSettings(fromJS(json.data));
+        const aclConfList = fromJS(json.data).getIn(['radioList', radioId, 'aclConfList']);
+        ssidSelectOptions = [];
+        for (let i = 0; i < aclConfList.size; i++) {
+          const optionItem = {
+            value: i,
+            label: aclConfList.getIn([i, 'ssid']),
+          };
+          ssidSelectOptions.push(optionItem);
+        }
+        this.props.changeSelectedSsid({
+          selectedSsid: 0,
+          macListLen: aclConfList.getIn([0, 'macList']).size,
+        });
+      }
+    });
+  }
+
+  onSave() {
+    const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
+    const saveData = this.props.store.getIn(['curData', 'radioList', radioId])
+                      .set('radioId', radioId).toJS();
+    this.props.save('goform/set_acl', saveData);
   }
 
   render() {
     const store = this.props.store;
     const selectedSsid = this.props.selectedSsid;
-    let maclist = store.getIn(['curData', 'aclConfList', selectedSsid, 'macList']);
-    if (maclist === undefined) {
-      return null;
-    }
+    const { radioId, radioType } = this.props.selfState.get('currRadioConfig').toJS();
+    let maclist = store.getIn(['curData', 'radioList', radioId, 'aclConfList', selectedSsid, 'macList']);
+    if (maclist === undefined) return null;
     maclist = maclist.toJS();
     const macStatus = this.props.macStatus.toJS();
+    const radioSelectOptions = this.props.product.get('radioSelectOptions');
     return (
       <div>
+        {
+          this.props.product.get('deviceRadioList').size > 1 ? (
+            <FormGroup
+              type="switch"
+              label={_('Radio Select')}
+              value={this.props.selfState.getIn(['currRadioConfig', 'radioId'])}
+              options={radioSelectOptions}
+              minWidth="100px"
+              onChange={(data) => {
+                this.onChangeRadio(data);
+                this.switchToNewRadioPage(data.value);
+              }}
+            />
+          ) : null
+        }
         <FormGroup
           label={_('Enable')}
           type="checkbox"
-          checked={store.getIn(['curData', 'aclEnable']) === '1'}
+          checked={store.getIn(['curData', 'radioList', radioId, 'aclEnable']) === '1'}
           onChange={() => {
-            const curState = store.getIn(['curData', 'aclEnable']);
-            this.props.updateItemSettings({
-              aclEnable: curState === '1' ? '0' : '1',
-            });
+            const curState = store.getIn(['curData', 'radioList', radioId, 'aclEnable']);
+            const radioList = store.getIn(['curData', 'radioList'])
+                              .setIn([radioId, 'aclEnable'], curState === '1' ? '0' : '1');
+            this.props.updateItemSettings({ radioList });
           }}
         />
         <FormGroup
@@ -226,46 +273,48 @@ export default class ACL extends React.Component {
           size="min"
           options={ssidSelectOptions}
           value={selectedSsid}
-          disabled={store.getIn(['curData', 'aclEnable']) === '0'}
+          disabled={store.getIn(['curData', 'radioList', radioId, 'aclEnable']) === '0'}
           onChange={(data) => this.props.changeSelectedSsid({
             selectedSsid: data.value,
-            macListLen: store.getIn(['curData', 'aclConfList', data.value, 'macList']).size,
+            macListLen: store.getIn(['curData', 'radioList', radioId, 'aclConfList', data.value, 'macList']).size,
           })}
         />
         <FormGroup
           label={_('Filter Mode')}
         >
-          <FormInput
-            name="filtermode"
-            type="radio"
-            text={_('Allow Only')}
-            disabled={store.getIn(['curData', 'aclEnable']) === '0'}
-            checked={store.getIn(['curData', 'aclConfList', selectedSsid, 'aclMode']) === 'allow'}
-            onClick={() => {
-              const aclConfList = store.getIn(['curData', 'aclConfList'])
-                                      .setIn([selectedSsid, 'aclMode'], 'allow');
-              this.props.updateItemSettings({
-                aclConfList,
-              });
-            }}
+          <div
             style={{
-              marginRight: '40px',
+              marginTop: '8px',
             }}
-          />
-          <FormInput
-            name="filtermode"
-            type="radio"
-            text={_('Block Only')}
-            disabled={store.getIn(['curData', 'aclEnable']) === '0'}
-            checked={store.getIn(['curData', 'aclConfList', selectedSsid, 'aclMode']) === 'deny'}
-            onClick={() => {
-              const aclConfList = store.getIn(['curData', 'aclConfList'])
-                                      .setIn([selectedSsid, 'aclMode'], 'deny');
-              this.props.updateItemSettings({
-                aclConfList,
-              });
-            }}
-          />
+          >
+            <FormInput
+              name="filtermode"
+              type="radio"
+              text={_('Allow Only')}
+              disabled={store.getIn(['curData', 'radioList', radioId, 'aclEnable']) === '0'}
+              checked={store.getIn(['curData', 'radioList', radioId, 'aclConfList', selectedSsid, 'aclMode']) === 'allow'}
+              onClick={() => {
+                const radioList = store.getIn(['curData', 'radioList'])
+                              .setIn([radioId, 'aclConfList', selectedSsid, 'aclMode'], 'allow');
+                this.props.updateItemSettings({ radioList });
+              }}
+              style={{
+                marginRight: '40px',
+              }}
+            />
+            <FormInput
+              name="filtermode"
+              type="radio"
+              text={_('Block Only')}
+              disabled={store.getIn(['curData', 'radioList', radioId, 'aclEnable']) === '0'}
+              checked={store.getIn(['curData', 'radioList', radioId, 'aclConfList', selectedSsid, 'aclMode']) === 'deny'}
+              onClick={() => {
+                const radioList = store.getIn(['curData', 'radioList'])
+                              .setIn([radioId, 'aclConfList', selectedSsid, 'aclMode'], 'deny');
+                this.props.updateItemSettings({ radioList });
+              }}
+            />
+          </div>
         </FormGroup>
         <FormGroup
           label={_('Station List')}
@@ -293,7 +342,7 @@ export default class ACL extends React.Component {
             className="fl"
             theme="primary"
             text={_('Remove')}
-            disabled={store.getIn(['curData', 'aclEnable']) === '0'}
+            disabled={store.getIn(['curData', 'radioList', radioId, 'aclEnable']) === '0'}
             onClick={this.updateAclMacList}
           />
         </FormGroup>
@@ -302,7 +351,7 @@ export default class ACL extends React.Component {
             type="text"
             className="fl"
             form="macinput"
-            disabled={store.getIn(['curData', 'aclEnable']) === '0'}
+            disabled={store.getIn(['curData', 'radioList', radioId, 'aclEnable']) === '0'}
             value={this.props.macInput.get('macValue')}
             onChange={(data, e) => this.onMacInputChange(data.value, e)}
             {...this.props.validateOption.inputMac}
@@ -311,7 +360,7 @@ export default class ACL extends React.Component {
             className="fl"
             theme="primary"
             text={_('Add')}
-            disabled={store.getIn(['curData', 'aclEnable']) === '0'}
+            disabled={store.getIn(['curData', 'radioList', radioId, 'aclEnable']) === '0'}
             onClick={this.onAddMacToLocalList}
             style={{
               marginTop: '2px',
@@ -324,7 +373,7 @@ export default class ACL extends React.Component {
             theme="primary"
             text={_('Save')}
             loading={this.props.app.get('saving')}
-            onClick={() => this.props.saveSettings('goform/set_acl')}
+            onClick={() => { this.onSave(); }}
           />
         </FormGroup>
       </div>
@@ -345,6 +394,8 @@ function mapStateToProps(state) {
     macStatus: myState.get('macstatus'),
     macInput: myState.get('macInput'),
     selectedSsid: myState.get('selectedSsid'),
+    selfState: myState,
+    product: state.product,
   };
 }
 

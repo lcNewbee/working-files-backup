@@ -1,0 +1,56 @@
+{
+
+"state": {
+  "msg": "success",
+  "code": 2000
+},
+"data": {
+  "radioList": [
+    {
+      "aclEnable": "0",
+      "aclConfList": [
+        {
+          "ssid": "axilspot11",
+          "aclMode": "deny",
+          "macList": ["00:11:22:33:44:55","00:11:22:33:44:56","00:11:22:33:44:57"]
+        },
+        {
+          "ssid": "axilspot12",
+          "aclMode": "allow",
+          "macList": ["02:11:22:33:44:55","02:11:22:33:44:56","02:11:22:33:44:57"]
+        }
+      ]
+    },
+    {
+      "aclEnable": "1",
+      "aclConfList": [
+        {
+          "ssid": "axilspot21",
+          "aclMode": "deny",
+          "macList": ["00:11:22:33:44:21","00:11:22:33:44:21","00:11:22:33:44:21"]
+        },
+        {
+          "ssid": "axilspot22",
+          "aclMode": "allow",
+          "macList": ["02:11:22:33:44:22","02:11:22:33:44:22","02:11:22:33:44:22"]
+        }
+      ]
+    },
+    {
+      "aclEnable": "0",
+      "aclConfList": [
+        {
+          "ssid": "axilspot31",
+          "aclMode": "deny",
+          "macList": ["00:11:22:33:44:31","00:11:22:33:44:31","00:11:22:33:44:31"]
+        },
+        {
+          "ssid": "axilspot32",
+          "aclMode": "allow",
+          "macList": ["02:11:22:33:44:32","02:11:22:33:44:32","02:11:22:33:44:32"]
+        }
+      ]
+    }
+  ]
+}
+}
