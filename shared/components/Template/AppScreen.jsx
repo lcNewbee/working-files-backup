@@ -33,6 +33,8 @@ const propTypes = {
   defaultSettingsData: PropTypes.object,
   hasSettingsSaveButton: PropTypes.bool,
   customSettingForm: PropTypes.bool,
+  changeScreenActionQuery: PropTypes.func,
+  changeScreenQuery: PropTypes.func,
 };
 const defaultProps = {
 
@@ -71,6 +73,9 @@ export default class AppScreen extends React.Component {
       initOption.query = utils.extend({}, initOption.query, {
         groupid: props.groupid,
       });
+      initOption.actionQuery = utils.extend({}, initOption.query, {
+        groupid: props.groupid,
+      });
       initOption.defaultEditData = utils.extend({}, initOption.defaultEditData, {
         groupid: props.groupid,
       });
@@ -81,6 +86,10 @@ export default class AppScreen extends React.Component {
 
     this.initOption = initOption;
     this.selectedList = [];
+
+    utils.binds(this, [
+      'onSaveSettings',
+    ]);
   }
   componentWillMount() {
     this.props.initScreen(this.initOption);
@@ -95,6 +104,21 @@ export default class AppScreen extends React.Component {
       this.tableOptions = immutableUtils.getTableOptions(nextListOptions);
       this.editFormOptions = immutableUtils.getFormOptions(nextListOptions);
       this.defaultEditData = immutableUtils.getDefaultData(nextListOptions);
+    }
+  }
+  componentDidUpdate(prevProps) {
+    if (prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
+      this.props.fetchScreenData();
+    }
+
+    if (this.props.groupid !== prevProps.groupid) {
+      this.props.changeScreenActionQuery({
+        groupid: this.props.groupid,
+      });
+      this.props.changeScreenQuery({
+        groupid: this.props.groupid,
+      });
+      this.props.fetchScreenData();
     }
   }
   componentWillUnmount() {
@@ -140,7 +164,7 @@ export default class AppScreen extends React.Component {
       <div className="t-app-screen">
         {
           noTitle ? null : (
-          <h2 className="t-app-screen__title">{myTitle}</h2>
+            <h2 className="t-app-screen__title">{myTitle}</h2>
           )
         }
         {

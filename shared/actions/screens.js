@@ -208,10 +208,8 @@ export function saveScreenSettings(url) {
 
     subData.action = 'setting';
     return dispatch(appActions.save(url || formUrl, subData))
-      .then((json) => {
-        if (json.state && json.state.code === 2000) {
-          dispatch(fetchScreenData(fetchUrl));
-        }
+      .then(() => {
+        dispatch(fetchScreenData(fetchUrl));
       });
   };
 }

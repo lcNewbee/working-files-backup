@@ -1,8 +1,8 @@
 // 对 immutable 数据的操作
 
 var immutableUtils = {
-  getFormOptions: function(options) {
-    var ret = options;
+  getFormOptions: function($$options) {
+    var ret = $$options;
 
     if(!ret) {
       return null;
@@ -14,7 +14,7 @@ var immutableUtils = {
           label: item.get('text') || item.get('label'),
           fieldset: item.get('fieldset'),
           legend: item.get('legend'),
-          options: item.get('options'),
+          $$options: item.get('$$options'),
           notEditable:  item.get('notEditable'),
         };
         var retVal = item.clear()
@@ -45,8 +45,8 @@ var immutableUtils = {
     return ret;
   },
 
-  getQueryFormOptions: function(options) {
-    var ret = options;
+  getQueryFormOptions: function($$options) {
+    var ret = $$options;
 
     if(!ret) {
       return null;
@@ -60,7 +60,7 @@ var immutableUtils = {
           label: item.get('text') || item.get('label'),
           fieldset: item.get('fieldset'),
           legend: item.get('legend'),
-          options: item.get('options'),
+          $$options: item.get('$$options'),
         };
         var retVal = item.clear()
           .merge(commonOption)
@@ -73,16 +73,16 @@ var immutableUtils = {
     return ret;
   },
 
-  getDefaultData: function(options, key) {
+  getDefaultData: function($$options, key) {
     var defaultKey = key || 'defaultValue';
     var ret = {};
 
-    if(!options) {
+    if(!$$options) {
       return null;
     }
 
     // 初始化默认值对象
-    options.forEach((item) => {
+    $$options.forEach((item) => {
       var defaultVal = item.get(defaultKey);
       if (defaultVal !== undefined) {
         ret[item.get('id')] = defaultVal;
@@ -92,8 +92,8 @@ var immutableUtils = {
     return ret;
   },
 
-  getValidatorOptions: function(options) {
-    var ret = options;
+  getValidatorOptions: function($$options) {
+    var ret = $$options;
 
     if(!ret) {
       return null;
@@ -106,8 +106,8 @@ var immutableUtils = {
     return ret;
   },
 
-  getTableOptions: function(options) {
-    var ret = options;
+  getTableOptions: function($$options) {
+    var ret = $$options;
 
     if(!ret) {
       return null;
@@ -118,7 +118,26 @@ var immutableUtils = {
     ).filterNot((item) => item.get('noTable'));
 
     return ret;
-  }
+  },
+
+  getChanged: function($$newData, $$oldData) {
+    var $$ret = $$newData;
+
+    $$ret = $$newData.filter(
+      (val, key) => {
+        let ret = false;
+        const oldVal = $$oldData.get(key);
+
+        if (oldVal !== undefined && oldVal !== val) {
+          ret = true;
+        }
+
+        return ret;
+      },
+    );
+
+    return $$ret;
+  },
 }
 
 // exports
