@@ -130,8 +130,8 @@ class SystemApVersion extends CI_Controller {
         $filepath=$this->upload->data('full_path');
          $retData = array(
         'vendor'=>element('vendor',$data, 48208),
-        'model'=>element('model', $data),
-        'sfver'=>element('softVersion', $data),
+        'model'=>element('model', $data,''),
+        'sfver'=>element('softVersion', $data,''),
         'fmname'=>$filename,
         'filepath'=>$filepath,
         'active'=>(int)element('active', $data,0)

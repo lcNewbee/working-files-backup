@@ -50,14 +50,12 @@ class Group extends CI_Controller {
         'groupid'=>(int)element('id', $oriData, -1),
         'aplist'=>element('aplist', $oriData, -1)
       );
-
       return $retData;
     }
-
 		if ($actionType === 'add') {
 			$temp_data=getCgiParam($data);
-      //$result=json_encode($temp_data);
       $result=axc_add_apgroup(json_encode($temp_data));
+
 		}
 		elseif($actionType === 'edit') {
     	$temp_data=getCgiParam($data);
@@ -89,8 +87,20 @@ class Group extends CI_Controller {
           'autoaplist'=>element('aplist', $data),
         );
       }
-      // $result = json_encode($temp_data);
-      $result=axc_add_aptogroup(json_encode($temp_data));
+      $q = $this->db->select('name')
+        ->from('ap_list')
+        ->where('name', $temp_data['name']);
+      if($q->num_rows > 0){
+      	$result=array(
+           'state'=>array(
+           'code'=>6000,
+           'msg'=>'the apname is not availble!'
+           )
+        );
+      }
+      else{
+       $result=axc_add_aptogroup(json_encode($temp_data));
+      }
     }
 
 		return $result;
