@@ -109,26 +109,28 @@ function receiveApGroup(state, action) {
   let manageSelectedItem = state.getIn(['group', 'manageSelected']);
   let isDeleted = false;
 
+  // 当前显示的组
   if (selectedItem.isEmpty()) {
     selectedItem = $$defaultItem;
 
   // 判断选择的是否被删除
   } else {
     isDeleted = $$list.findIndex(
-      item => item.get('id') === selectedItem.get('id')
+      item => item.get('id') === selectedItem.get('id'),
     ) === -1;
     if (isDeleted) {
       selectedItem = $$defaultItem;
     }
   }
 
+  // 当前正在管理的组
   if (manageSelectedItem.isEmpty()) {
     manageSelectedItem = $$defaultItem;
 
   // 判断选择的是否被删除
   } else {
     isDeleted = $$list.findIndex(
-      item => item.get('id') === manageSelectedItem.get('id')
+      item => item.get('id') === manageSelectedItem.get('id'),
     ) === -1;
     if (isDeleted) {
       manageSelectedItem = $$defaultItem;

@@ -5,8 +5,8 @@
   },
   "data": {
     "settings": {
-      "groupid": 1,
-      "attacttime" : 1,
+      "groupid": 0,
+      "attacttime" : 0,
       "attactcnt": 5,
       "dyaging": 10
     },

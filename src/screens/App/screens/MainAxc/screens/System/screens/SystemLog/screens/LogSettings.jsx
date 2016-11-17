@@ -12,7 +12,7 @@ import * as appActions from 'shared/actions/app';
 
 const listOptions = fromJS([
   {
-    id: 'time',
+    id: 'retainDays',
     text: _('Retain Days'),
     fieldset: 'retainDays',
     legend: _('Log Duration'),

@@ -8,29 +8,28 @@ class ApRadio extends CI_Controller {
 		$this->load->helper('array');
 	}
 	function fetch(){
-      $retdata = array(
-        'groupid'=>(int)element('groupid', $_GET,-1),
-        'mac'=>element('mac',$_GET)
-      );
-      $temp_result=axc_get_apradio(json_encode($retdata));
-      $temp_result_array=json_decode($temp_result,true);
-      $result=array(
-        'state'=>$temp_result_array['state'],
-         'data'=>array(
-            'groupid'=>(int)element('groupid', $_GET,-1),
-            'mac'=>element('mac',$_GET),
-            'radios'=>element('data',$temp_result_array)
-         )
-      );
-       return json_encode($result);
-
+    $retdata = array(
+      'groupid'=>(int)element('groupid', $_GET),
+      'mac'=>element('mac',$_GET)
+    );
+    $temp_result=axc_get_apradio(json_encode($retdata));
+    $temp_result_data=json_decode($temp_result);
+    $result=array(
+      'state'=>$temp_result_data->state,
+      'data'=>array(
+          'groupid'=>(int)element('groupid', $_GET),
+          'mac'=>element('mac',$_GET),
+          'radios'=>$temp_result_data->data
+       )
+    );
+    echo json_encode($result);
   }
 	function onAction($data) {
    	$result = null;
     $result=axc_set_apradio(json_encode($data));
     return $result;
 	}
-	public function Radio() {
+	public function radio() {
 		$result = null;
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$data = json_decode(file_get_contents("php://input"), true);
@@ -41,9 +40,9 @@ class ApRadio extends CI_Controller {
 			$result = $this->fetch();
       echo $result;
 		}
-		}
+	}
 
-  public function Base() {
+  public function base() {
 		$result = null;
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$data = json_decode(file_get_contents("php://input"), true);
@@ -52,7 +51,7 @@ class ApRadio extends CI_Controller {
 		}
 		else if($_SERVER['REQUEST_METHOD'] == 'GET') {
 			$result = $this->fetch();
-      echo $result;
+      //echo $result;
 		}
-		}
+	}
 }

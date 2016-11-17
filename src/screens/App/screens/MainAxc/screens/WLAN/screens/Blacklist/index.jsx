@@ -1,18 +1,26 @@
 import React, { PropTypes } from 'react';
-import utils, { immutableUtils } from 'shared/utils';
+import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
+import validator from 'shared/utils/lib/validator';
 import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
 const commonFormOptions = fromJS([
   {
+    id: 'attacttime',
+    label: _('Attact Time'),
+    type: 'number',
+  }, {
+    id: 'attactcnt',
+    label: _('Attact Number'),
+    type: 'number',
+  }, {
     id: 'dyaging',
     label: _('Dynamic Blacklists Release Time'),
     type: 'number',
-    saveOnChange: true,
   },
 ]);
 const listOptions = fromJS([
@@ -21,6 +29,9 @@ const listOptions = fromJS([
     text: _('MAC Address'),
     formProps: {
       required: true,
+      validator: validator({
+        rules: 'mac',
+      }),
     },
   }, {
     id: 'vendor',
@@ -77,6 +88,7 @@ export default class Blacklist extends React.Component {
 
         // Setting Props
         settingsFormOptions={commonFormOptions}
+        hasSettingsSaveButton
 
         // List Props
         listTitle={route.text}
@@ -97,8 +109,8 @@ Blacklist.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
-    groupid: state.product.getIn(['group', 'selected', 'id']),
     store: state.screens,
+    groupid: state.product.getIn(['group', 'selected', 'id']),
   };
 }
 

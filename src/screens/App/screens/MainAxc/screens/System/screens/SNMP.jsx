@@ -8,7 +8,7 @@ import AppScreen from 'shared/components/Template/AppScreen';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 
-const listOptions = fromJS([
+const formOptions = fromJS([
   {
     id: 'readPassword',
     label: _('Read Password'),
@@ -59,7 +59,7 @@ export default class View extends React.Component {
     return (
       <AppScreen
         {...this.props}
-        settingsFormOptions={listOptions}
+        settingsFormOptions={formOptions}
         hasSaveButton
       />
     );

@@ -94,6 +94,7 @@ export default class Main extends Component {
       'removeGroup',
       'fetchManageGroupAps',
       'isDuplicateAp',
+      'autoRefreshData',
 
       'renderPopOverContent',
       'renderBreadcrumb',
@@ -107,11 +108,7 @@ export default class Main extends Component {
   }
 
   componentWillMount() {
-    // 获取当前组AP
-    this.props.fetchApGroup();
-
-    // 获取未分组设备
-    this.props.fetchGroupAps(-1);
+    this.autoRefreshData();
   }
   onRefresh(e) {
     e.preventDefault();
@@ -265,6 +262,33 @@ export default class Main extends Component {
     });
   }
 
+  /**
+   * 自动刷新数据，有一些数据是需要定时更新的
+   * 不同模块需自动刷新的数据不一样
+   *
+   * @memberOf Main
+   */
+  autoRefreshData() {
+    const curRoutePath = this.props.route.path;
+    const rateInterval = this.props.app.get('rateInterval');
+    // 如是在AP组管理模块
+    if (curRoutePath === '/main/group') {
+      // 获取当前组AP
+      this.props.fetchApGroup();
+
+      // 获取未分组设备
+      this.props.fetchGroupAps(-1);
+
+      this.autoRefreshTimer = setTimeout(
+        () => this.autoRefreshData(),
+        rateInterval,
+      );
+    }
+  }
+  /**
+   * 获取正在管理的AP组内AP列表
+   * @memberOf Main
+   */
   fetchManageGroupAps() {
     const groupid = this.props.product
       .getIn(['group', 'manageSelected', 'id']);
@@ -281,6 +305,15 @@ export default class Main extends Component {
       this.props.fetchGroupAps(-1);
     });
   }
+
+  /**
+   * 验证是否有同名或同mac的AP
+   *
+   * @param {any} $$subData
+   * @returns
+   *
+   * @memberOf Main
+   */
   isDuplicateAp($$subData) {
     const { product } = this.props;
     const $$curGroupDevices = product.getIn(['group', 'devices']);
@@ -401,6 +434,19 @@ export default class Main extends Component {
             <ul
               className="m-menu m-menu--open"
             >
+              <li>
+                <a
+                  className={`m-menu__link ${selectGroupId === -1 ? 'active' : ''}`}
+                  onClick={(e) => {
+                    this.onSelectGroup(-1, e);
+                    this.onToggleMainPopOver({
+                      name: 'groupAsider',
+                    });
+                  }}
+                >
+                  {_('All Group')} ({12})
+                </a>
+              </li>
               {
                 $$groupList.map((item) => {
                   const curId = item.get('id');
@@ -541,7 +587,7 @@ export default class Main extends Component {
                   />
                 </div>
               ) : (
-              <div className="o-form__fileset">
+                <div className="o-form__fileset">
                   <legend className="o-form__legend">
                     { _('Custom AP') }
                   </legend>
@@ -553,6 +599,7 @@ export default class Main extends Component {
                     onChange={data => this.props.updateGroupAddDevice({
                       apmac: data.value,
                     })}
+                    required
                     {...apmac}
                   />
                   <FormGroup
@@ -563,6 +610,7 @@ export default class Main extends Component {
                     onChange={data => this.props.updateGroupAddDevice({
                       name: data.value,
                     })}
+                    required
                   />
                   <FormGroup
                     type="text"
@@ -572,6 +620,7 @@ export default class Main extends Component {
                     onChange={data => this.props.updateGroupAddDevice({
                       model: data.value,
                     })}
+                    required
                   />
                 </div>
               )
