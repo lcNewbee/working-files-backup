@@ -44,7 +44,7 @@ let config = {
     index: [
        // necessary for hot reloading with IE:
       'eventsource-polyfill',
-
+      'react-hot-loader/patch',
       'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
 
       './src/index.jsx',
@@ -108,7 +108,7 @@ let config = {
           path.resolve(__dirname, "tools")
         ],
         // exclude: /node_modules/,
-        loader: 'react-hot!babel',
+        loader: 'babel',
       },
     ],
   },
