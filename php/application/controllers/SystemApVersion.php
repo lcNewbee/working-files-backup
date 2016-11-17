@@ -120,8 +120,20 @@ class SystemApVersion extends CI_Controller {
         'filepath'=>element('uploadPath', $data),
         'active'=>(int)element('active', $data,0)
       );
-
-     $result=axc_active_apfirmware(json_encode($retData));
+      $query_active=$this->db->select('id,active')
+          ->from('ap_firmware')
+          ->where('id',$item['id'])
+          ->get()->result_array();
+        if($query_active['0']['active']==0){
+          $result=axc_active_apfirmware(json_encode($retData));
+        }
+        else{
+         $state=array(
+				      'code'=>6000,
+				      'msg'=>"The version of the related model you select is actived, cancellation  option doesn't work!you should active another version when you want to  cancel the current version!"
+				    );
+            $result=$state;
+        }
     }
     elseif($actionType === 'edit'){
       $upload_data=$this->do_upload();
