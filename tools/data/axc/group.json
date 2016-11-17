@@ -6,6 +6,11 @@
   "data": {
     "list": [
       {
+        "id": -100,
+        "groupname": "All Group",
+        "remark": "description1",
+        "apNum": 23
+      }, {
         "id": 1,
         "groupname": "Default",
         "remark": "description1",

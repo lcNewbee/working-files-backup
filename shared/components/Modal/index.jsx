@@ -70,7 +70,7 @@ function renderBackdrop(isShow, transitionEnter, transitionLeave) {
       }, 500);
 
   // 隐藏并无动画
-  } else {
+  } else if (modalBackdropElem) {
     document.body.removeChild(modalBackdropElem);
   }
 }

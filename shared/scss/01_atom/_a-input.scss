@@ -1,4 +1,4 @@
-$boder-color: #e5e5e5;
+$boder-color: #eee;
 
 .a-text,
 textarea,
@@ -16,6 +16,9 @@ input[type=number] {
   outline: 0;
 
   &:disabled {
+    background-color: $boder-color;
+  }
+  &:read-only {
     background-color: $boder-color;
   }
   &:focus {

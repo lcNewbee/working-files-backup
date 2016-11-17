@@ -105,6 +105,7 @@ function receiveApGroup(state, action) {
   const payload = action.payload || {};
   const $$list = fromJS(payload.list);
   const $$defaultItem = $$list.get(0) || fromJS({});
+  const $$defaultManageItem = $$list.get(1) || fromJS({});
   let selectedItem = state.getIn(['group', 'selected']);
   let manageSelectedItem = state.getIn(['group', 'manageSelected']);
   let isDeleted = false;
@@ -125,7 +126,7 @@ function receiveApGroup(state, action) {
 
   // 当前正在管理的组
   if (manageSelectedItem.isEmpty()) {
-    manageSelectedItem = $$defaultItem;
+    manageSelectedItem = $$defaultManageItem;
 
   // 判断选择的是否被删除
   } else {
@@ -133,7 +134,7 @@ function receiveApGroup(state, action) {
       item => item.get('id') === manageSelectedItem.get('id'),
     ) === -1;
     if (isDeleted) {
-      manageSelectedItem = $$defaultItem;
+      manageSelectedItem = $$defaultManageItem;
     }
   }
 

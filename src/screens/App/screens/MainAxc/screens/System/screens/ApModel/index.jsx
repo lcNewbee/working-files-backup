@@ -31,9 +31,9 @@ const listOptions = fromJS([
       },
     ],
     formProps: {
-      type: 'switch',
+      type: 'number',
       min: '1',
-      max: '2',
+      max: '64',
       required: true,
     },
   },

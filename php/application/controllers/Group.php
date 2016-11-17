@@ -12,7 +12,18 @@ class Group extends CI_Controller {
             ->from('ap_group')
             ->where('id >1')
             ->get()->result_array();
+    $allGroup = $this->db->select('id,group_name,remark')
+        ->from('ap_group')
+        ->get()->result_array();
     $retList=array();
+
+    // 所有组
+    array_push($retList, array(
+      'groupname'=>'All Group',
+      'remark'=>'',
+      'apNum'=>sizeof($allGroup),
+      'id'=>-100,
+    ));
 
     foreach($apGroups as $group) {
       $groupItem=array(
