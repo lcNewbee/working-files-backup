@@ -7,6 +7,7 @@
     "list": [
       {
         "interface_bind": 1,
+        "template_name": "aw",
         "max_usernum":50,
         "auth_mode":1,
         "auth_ip":"192.189.2.2",
@@ -15,6 +16,7 @@
         "idle_test":1
       }, {
         "interface_bind": 1,
+        "template_name": "aw",
         "max_usernum":50,
         "auth_mode":1,
         "auth_ip":"192.189.2.2",
@@ -23,6 +25,7 @@
         "idle_test":1
       }, {
         "interface_bind": 1,
+        "template_name": "aw",
         "max_usernum":50,
         "auth_mode":1,
         "auth_ip":"192.189.2.2",
