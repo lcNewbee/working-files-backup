@@ -25,102 +25,84 @@ function getPortList() {
     ),
   );
 }
-const commonFormOptions = fromJS([
+
+function getPortalServerList() {
+  return utils.fetch('/goform/network/portal/server')
+    .then(json => (
+      {
+        options: json.data.list.map(
+          item => ({
+            value: item.name,
+            label: item.name,
+          }),
+        ),
+      }
+    ),
+  );
+}
+const listOptions = fromJS([
   {
     id: 'interface_bind',
     label: _('Port'),
-    type: 'select',
-    legend: _('Base Settings'),
-    required: true,
-    loadOptions: getPortList,
-    isAsync: true,
+    formProps: {
+      type: 'select',
+      required: true,
+      notEditable: true,
+    },
   }, {
     id: 'template_name',
     label: _('Server Name'),
-    type: 'select',
-    legend: _('Base Settings'),
+    formProps: {
+      type: 'select',
+    },
   }, {
     id: 'max_usernum',
     label: _('Max Users'),
-    type: 'number',
-    min: '1',
-    max: '99999',
+    formProps: {
+      type: 'number',
+      min: '1',
+      max: '99999',
+    },
   }, {
     id: 'auth_mode',
     label: _('Auth Type'),
-    type: 'switch',
-    defaultValue: '0',
+    defaultValue: '1',
     options: [
       {
-        value: '0',
+        value: '1',
         label: _('Direct'),
       },
       {
-        value: '1',
+        value: '2',
         label: _('Layer3'),
-      },
-    ],
-  }, {
-    id: 'auth_domain',
-    label: _('Force Auth Domain'),
-    type: 'text',
-  }, {
-    id: 'idle_test',
-    label: _('Idle Detection'),
-    type: 'checkbox',
-    defaultValue: '0',
-    value: '1',
-  },
-]);
-const listOptions = fromJS([
-  {
-    id: 'ruleName',
-    label: _('Rule Name'),
-    formProps: {
-      type: 'text',
-      maxLength: '32',
-      required: true,
-    },
-  }, {
-    id: 'ruleAction',
-    label: _('Rule Action'),
-    defaultValue: '0',
-    options: [
-      {
-        value: '0',
-        label: _('Allow'),
-      }, {
-        value: '1',
-        label: _('Prevent'),
       },
     ],
     formProps: {
       type: 'switch',
+      options: [
+        {
+          value: '1',
+          label: _('Direct'),
+        },
+        {
+          value: '2',
+          label: _('Layer3'),
+        },
+      ],
     },
-
   }, {
-    id: 'addressType',
-    label: _('Address Type'),
-    options: [
-      {
-        value: '1',
-        label: _('Source Address'),
-      }, {
-        value: '2',
-        label: _('Target Address'),
-      },
-    ],
+    id: 'auth_domain',
+    label: _('Force Auth Domain'),
     formProps: {
-      type: 'select',
-      label: _('Rule Type'),
-      placeholder: _('Please Select ') + _('NAT Rule Type'),
+      type: 'text',
     },
-
   }, {
-    id: 'ipAddress',
-    label: _('IP Address'),
+    id: 'idle_test',
+    label: _('Idle Detection'),
+    defaultValue: '0',
     formProps: {
-      required: true,
+      type: 'checkbox',
+      value: '1',
     },
   },
 ]);
@@ -150,99 +132,42 @@ const defaultProps = {};
 export default class View extends React.Component {
   constructor(props) {
     super(props);
-    this.onSave = this.onSave.bind(this);
-    this.renderStepOne = this.renderStepOne.bind(this);
+    this.state = {
+      portOptions: fromJS([]),
+      portalServerOption: fromJS([]),
+    };
   }
+  componentWillMount() {
+    getPortList()
+      .then((options) => {
+        this.setState({
+          portOptions: fromJS(options),
+        });
+      });
 
-  onSave() {
-    this.props.saveSettings();
-  }
-
-  onBeforeStep(data) {
-    // next
-    if (data.targetStep > data.currStep) {
-
-    } else {
-      console.log('prev');
-    }
-  }
-
-  onAfterStep(data) {
-    // next
-    if (data.currStep) {
-      console.log(data.currStep);
-    }
-  }
-
-  renderStepOne() {
-    return (
-      <Table
-        className="table"
-        options={objectTableOptions}
-        list={[]}
-      />
-    );
+    getPortalServerList()
+      .then((options) => {
+        this.setState({
+          portalServerOption: fromJS(options),
+        });
+      });
   }
 
   render() {
     const { store } = this.props;
-    const myScreenId = store.get('curScreenId');
-    const actionQuery = store.getIn([myScreenId, 'actionQuery']);
-    const actionType = store.getIn([myScreenId, 'actionQuery', 'action']);
-    const showModel = actionType === 'add' || actionType === 'edit';
+    const curListOptions = listOptions
+      .setIn([0, 'formProps', 'options'], this.state.portOptions)
+      .setIn([1, 'formProps', 'options'], this.state.portalServerOption);
+
     return (
       <AppScreen
         {...this.props}
-        listTitle={_('Portal Rules List')}
         store={store}
-        // listOptions={listOptions}
-        settingsFormOptions={commonFormOptions}
-        hasSettingsSaveButton
+        listOptions={curListOptions}
         actionable
         selectable
         noTitle
-
-      >
-        <Modal
-          isShow={showModel}
-          title={actionQuery.get('myTitle')}
-          onOk={this.onSave}
-          onClose={this.props.closeListItemModal}
-          size="lg"
-          noFooter
-        >
-          <WizardContainer
-            title={_('Portal Rule Setup Wizard')}
-            options={
-              fromJS([
-                {
-                  title: _('Select Rule Object'),
-                  render: this.renderStepOne,
-                }, {
-                  title: _('Set Rule Trigger Condition'),
-                  render() {
-                    return 'dsds';
-                  },
-                }, {
-                  title: _('Set Rule Trigger Action Condition'),
-                  render() {
-                    return 'dsds';
-                  },
-                }, {
-                  title: _('Completed'),
-                  render() {
-                    return 'dsds';
-                  },
-                },
-              ])
-            }
-            size="sm"
-            onBeforeStep={this.onBeforeStep}
-            onAfterStep={this.onAfterStep}
-            onCompleted={(data) => console.log('onCompleted', data)}
-          />
-        </Modal>
-      </AppScreen>
+      />
     );
   }
 }

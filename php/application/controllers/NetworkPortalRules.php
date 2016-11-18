@@ -13,8 +13,8 @@ class NetworkPortalRules extends CI_Controller {
               ->join('portal_params','portal_auth.id=portal_params.portal_id')
               ->join('portal_attr','portal_attr.id=portal_params.attr_id')
               ->get()->result_array();
-    $interface=$this->db->select('portal_id,attr_name,attr_value')
-              ->from('portal_server')
+    $interface=$this->db->select('portd,port_name')
+              ->from('port_table')
               ->join('portalserver_params','portal_server.id=portalserver_params.portalserver_id')
               ->join('portalserver_attr','portalserver_attr.id=portalserver_params.attr_id')
               ->get()->result_array();
