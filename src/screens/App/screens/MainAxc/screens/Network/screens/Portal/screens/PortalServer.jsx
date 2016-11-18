@@ -6,7 +6,6 @@ import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import AppScreen from 'shared/components/Template/AppScreen';
 import * as appActions from 'shared/actions/app';
-import * as actions from 'shared/actions/settings';
 import * as screenActions from 'shared/actions/screens';
 
 const listOptions = fromJS([
@@ -128,7 +127,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    actions,
     screenActions,
   ), dispatch);
 }

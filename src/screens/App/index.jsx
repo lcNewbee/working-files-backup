@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react';
+import 'react-dom';
 import { connect } from 'react-redux';
 import * as actions from 'shared/actions/app';
 import Modal from 'shared/components/Modal';

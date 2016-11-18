@@ -1,118 +1,66 @@
 import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
-import { Map, List } from 'immutable';
+import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
-import {
-  FormGroup, SaveButton,
-} from 'shared/components';
+import AppScreen from 'shared/components/Template/AppScreen';
 import * as appActions from 'shared/actions/app';
-import * as actions from 'shared/actions/settings';
+import * as screenActions from 'shared/actions/screens';
 
-const propTypes = {
-  app: PropTypes.instanceOf(Map),
-  store: PropTypes.instanceOf(Map),
-  groupId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-
-  route: PropTypes.object,
-  initSettings: PropTypes.func,
-  fetchSettings: PropTypes.func,
-  saveSettings: PropTypes.func,
-  updateItemSettings: PropTypes.func,
-  leaveSettingsScreen: PropTypes.func,
-};
+const formOptions = fromJS([
+  {
+    id: 'enable',
+    label: _('Access Control'),
+    text: _('Enable'),
+    type: 'checkbox',
+  }, {
+    lable: _('Rules Group'),
+    type: 'select',
+  },
+]);
+const propTypes = {};
 const defaultProps = {};
 
-export default class View extends React.Component {
+export default class ActiveStandby extends React.Component {
   constructor(props) {
     super(props);
-    this.onSave = this.onSave.bind(this);
-  }
-  componentWillMount() {
-    const props = this.props;
-    const groupId = props.groupId || -1;
-
-    props.initSettings({
-      settingId: props.route.id,
-      formUrl: props.route.formUrl,
-      query: {
-        groupId,
-      },
+    this.state = {
       defaultData: {
         enable: '1',
       },
-    });
-
-    props.fetchSettings();
+    };
   }
-
-  componentWillUnmount() {
-    this.props.leaveSettingsScreen();
-  }
-  onSave() {
-    this.props.saveSettings();
-  }
-
   render() {
-    const { route, updateItemSettings } = this.props;
-    const curData = this.props.store.getIn(['curData']).toJS();
-
-    if (this.props.store.get('curSettingId') === 'base') {
-      return null;
-    }
-
     return (
-      <form className="o-form">
-        <FormGroup
-          type="checkbox"
-          text={_('Enable')}
-          value="1"
-          label={_('Access Control')}
-          checked={curData.enable === '1'}
-          onChange={
-            (data) => updateItemSettings({
-              enable: data.value,
-            })
-          }
-        />
-        <FormGroup
-          type="select"
-          label={_('Rules Group')}
-        />
-        <div className="form-group form-group--save">
-          <div className="form-control">
-            <SaveButton
-              type="button"
-              loading={this.props.app.get('saving')}
-              onClick={this.onSave}
-            />
-          </div>
-        </div>
-      </form>
+      <AppScreen
+        {...this.props}
+        settingsFormOptions={formOptions}
+        defaultSettingData={this.state.defaultData}
+      />
     );
   }
 }
 
-View.propTypes = propTypes;
-View.defaultProps = defaultProps;
+ActiveStandby.propTypes = propTypes;
+ActiveStandby.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
     app: state.app,
+    store: state.screens,
     groupId: state.product.getIn(['group', 'selected', 'id']),
-    store: state.settings,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    actions
+    screenActions,
   ), dispatch);
 }
 
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
-)(View);
+  mapDispatchToProps,
+)(ActiveStandby);

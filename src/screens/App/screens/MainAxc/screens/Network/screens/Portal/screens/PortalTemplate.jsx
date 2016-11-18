@@ -9,7 +9,6 @@ import FormGroup from 'shared/components/Form/FormGroup';
 import { Button, SaveButton } from 'shared/components/Button';
 import FormContainer from 'shared/components/Organism/FormContainer';
 import * as appActions from 'shared/actions/app';
-import * as actions from 'shared/actions/settings';
 import * as screenActions from 'shared/actions/screens';
 
 import '../style.scss';
@@ -306,7 +305,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    actions,
     screenActions,
   ), dispatch);
 }

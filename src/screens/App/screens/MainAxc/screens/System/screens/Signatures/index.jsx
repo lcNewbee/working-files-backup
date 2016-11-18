@@ -2,11 +2,11 @@ import React, { PropTypes } from 'react';
 import utils, { immutableUtils } from 'shared/utils';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
-import { Map, fromJS } from 'immutable';
+import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
-import AppSettings from 'shared/components/Template/AppSettings';
+import AppScreen from 'shared/components/Template/AppScreen';
 import * as appActions from 'shared/actions/app';
-import * as actions from 'shared/actions/settings';
+import * as screenActions from 'shared/actions/screens';
 
 const listOptions = fromJS([
   {
@@ -60,10 +60,7 @@ const listOptions = fromJS([
 const formOptions = immutableUtils.getFormOptions(listOptions);
 const defaultFormData = immutableUtils.getDefaultData(listOptions);
 
-const propTypes = {
-  app: PropTypes.instanceOf(Map),
-  store: PropTypes.instanceOf(Map),
-};
+const propTypes = {};
 const defaultProps = {};
 
 export default class View extends React.Component {
@@ -73,12 +70,10 @@ export default class View extends React.Component {
   }
   render() {
     return (
-      <AppSettings
+      <AppScreen
         {...this.props}
-        formOptions={formOptions}
-        defaultFormData={defaultFormData}
-        defaultQuery={defaultFormData}
-        hasSaveButton
+        settingsFormOptions={formOptions}
+        defaultSettingsData={defaultFormData}
       />
     );
   }
@@ -90,19 +85,19 @@ View.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
-    store: state.settings,
+    store: state.screens,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    actions
+    screenActions,
   ), dispatch);
 }
 
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(View);

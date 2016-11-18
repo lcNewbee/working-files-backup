@@ -75,6 +75,7 @@ const propTypes = {
   actionBarButtons: PropTypes.oneOfType([
     PropTypes.instanceOf(List), PropTypes.array,
   ]),
+  onBeforeAction: PropTypes.func,
 
   // React node 元素
   actionBarChildren: PropTypes.node,
@@ -94,7 +95,7 @@ class ListInfo extends React.Component {
     this.selectedList = [];
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     utils.binds(this, [
-      'initListTableOptions',
+      'initListTableOptions', 'doItemAction',
       'onChangeQuery', 'onPageChange', 'onSaveEditForm', 'onCloseEditModal',
       'onChangeSearchText', 'onChangeType', 'onChangeTableSize', 'onRemoveSelectItems',
       'onItemAction', 'onSelectedItemsAction',
@@ -109,21 +110,6 @@ class ListInfo extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.app.get('refreshAt') !== this.props.app.get('refreshAt')) {
-      this.onFetchList();
-    }
-
-    if (this.props.groupid !== prevProps.groupid) {
-      this.props.changeScreenActionQuery({
-        groupid: this.props.groupid,
-      });
-      this.props.changeScreenQuery({
-        groupid: this.props.groupid,
-      });
-      this.onFetchList();
-    }
-  }
   onChangeSearchText(val) {
     this.onChangeQuery({
       search: val,
@@ -256,7 +242,9 @@ class ListInfo extends React.Component {
       });
     }
   }
-  onItemAction(actionName, index, data) {
+  onItemAction(option, index, $$data) {
+    const actionName = option.actionName || option.actionType;
+    const { onBeforeAction } = this.props;
     const store = this.props.store;
     const list = store.getIn(['data', 'list']);
     const listKey = this.props.listKey;
@@ -266,6 +254,7 @@ class ListInfo extends React.Component {
     let $$actionData = Map({
       action: actionName,
     });
+    let onBeforeActionMsg;
 
     if (listKey === 'allKeys') {
       $$actionData = $$actionData.merge($$actionItem);
@@ -278,26 +267,61 @@ class ListInfo extends React.Component {
       selectedList = [list.getIn([index, listKey])];
     }
 
+    if ($$data) {
+
+    }
     $$actionData = $$actionData.merge(data)
       .merge({
         selectedList,
       });
 
-    this.props.createModal({
-      id: 'settings',
-      role: 'confirm',
-      text: msgText,
-      apply: () => {
-        this.props.changeScreenActionQuery(
-          $$actionData.toJS(),
-        );
-        this.props.onListAction();
-      },
-    });
+    // 处理自定义的 action 前验证
+    // 没有onBeforeAction，默认使用 confirm 询问用户
+    if (!onBeforeAction) {
+      this.props.createModal({
+        id: actionName,
+        role: 'confirm',
+        text: msgText,
+        apply: () => {
+          this.doItemAction($$actionData);
+        },
+      });
+
+    // 如果是 Promise 对象
+    } else if (utils.isPromise(onBeforeAction)) {
+      onBeforeAction().then(
+        msg => this.doItemAction($$actionData, msg),
+      );
+
+    // 如果是 function
+    } else {
+      onBeforeActionMsg = onBeforeAction();
+      this.doItemAction($$actionData, onBeforeActionMsg);
+    }
   }
   onFetchList() {
     if (this.props.fetchScreenData) {
       this.props.fetchScreenData();
+    }
+  }
+  doItemAction($$actionData, cancelMsg) {
+    if (cancelMsg) {
+      this.props.createModal({
+        id: 'listAction',
+        role: 'alert',
+        text: cancelMsg,
+        apply: () => {
+          this.props.changeScreenActionQuery(
+            $$actionData.toJS(),
+          );
+          this.props.onListAction();
+        },
+      });
+    } else {
+      this.props.changeScreenActionQuery(
+        $$actionData.toJS(),
+      );
+      this.props.onListAction();
     }
   }
   initListTableOptions(props) {
@@ -354,12 +378,13 @@ class ListInfo extends React.Component {
             {
               btnList.map(btnItem => (
                 <Button
+                  key={`${btnItem.get('name')}Btn`}
                   icon={btnItem.get('icon')}
                   text={btnItem.get('text')}
                   size="sm"
                   onClick={() => {
                     this.onItemAction(
-                      btnItem.get('name'),
+                      btnItem.toJS(),
                       index,
                     );
                   }}
@@ -387,11 +412,9 @@ class ListInfo extends React.Component {
                 checked={parseInt(val, 10) === 1}
                 onChange={(data) => {
                   this.onItemAction(
-                    $$item.get('actionType'),
+                    $$item.toJS(),
                     index,
-                    {
-                      [$$item.get('id')]: data.value,
-                    },
+                    $$data,
                   );
                 }}
               />
@@ -413,16 +436,11 @@ class ListInfo extends React.Component {
     const page = store.getIn(['data', 'page']);
     const query = store.getIn(['query']);
     const leftChildrenNode = [];
-    let pageSelectClassName = 'fr';
     let $$curActionBarButtons = actionBarButtons;
 
-    // 处理每页显示下拉框的位置
-    if (!searchable && !queryFormOptions && !actionBarChildren &&
-        (actionable && !addable)) {
-      pageSelectClassName = 'fl';
-    }
-
+    // 处理列表操作相关按钮
     if (actionable) {
+      // 初始化添加按钮
       if (addable) {
         leftChildrenNode.push(
           <Button
@@ -436,31 +454,51 @@ class ListInfo extends React.Component {
           />,
         );
       }
-      if (actionBarButtons) {
-        if (!List.isList(actionBarButtons)) {
-          $$curActionBarButtons = fromJS(actionBarButtons);
+      // 只有在列表是可选择情况下，添加多行操作按钮
+      if (selectable) {
+        // 多行删除
+        if (deleteable) {
+          leftChildrenNode.push(
+            <Button
+              icon="trash-o"
+              key="delete"
+              text={_('Remove Selected')}
+              onClick={() => {
+                this.onSelectedItemsAction('delete');
+              }}
+            />,
+          );
         }
 
-        leftChildrenNode.push(
-          $$curActionBarButtons.map(
-            ($$subButton) => {
-              const butProps = $$subButton.toJS();
-              const actionName = $$subButton.get('name');
-              const needConfirm = $$subButton.get('needConfirm');
-              return (
-                <Button
-                  {...butProps}
-                  key={`${actionName}Btn`}
-                  onClick={() => {
-                    this.onSelectedItemsAction(actionName, needConfirm);
-                  }}
-                />
-              );
-            },
-          ).toJS(),
-        );
+        // 用户自定义多行操作
+        if (actionBarButtons) {
+          if (!List.isList(actionBarButtons)) {
+            $$curActionBarButtons = fromJS(actionBarButtons);
+          }
+
+          leftChildrenNode.push(
+            $$curActionBarButtons.map(
+              ($$subButton) => {
+                const butProps = $$subButton.toJS();
+                const actionName = $$subButton.get('name');
+                const needConfirm = $$subButton.get('needConfirm');
+                return (
+                  <Button
+                    {...butProps}
+                    key={`${actionName}Btn`}
+                    onClick={() => {
+                      this.onSelectedItemsAction(actionName, needConfirm);
+                    }}
+                  />
+                );
+              },
+            ).toJS(),
+          );
+        }
       }
     }
+
+    // 列表查询
     if (searchable) {
       leftChildrenNode.push(
         <Search
@@ -475,22 +513,9 @@ class ListInfo extends React.Component {
         />,
       );
     }
-    if (actionable && selectable && deleteable) {
-      leftChildrenNode.push(
-        <Button
-          icon="trash-o"
-          key="delete"
-          text={_('Remove Selected')}
-          onClick={() => {
-            this.onSelectedItemsAction('delete');
-          }}
-        />,
-      );
-    }
     if (actionBarChildren) {
       leftChildrenNode.push(actionBarChildren);
     }
-
     return (
       <FormContainer
         action={fetchUrl}
@@ -508,28 +533,22 @@ class ListInfo extends React.Component {
         onValidError={this.props.reportValidError}
         leftChildren={leftChildrenNode}
         rightChildren={
-            page ? (
-              <div>
-                <span
-                  style={{
-                    display: 'inline-block',
-                    lineHeight: '30px',
-                    marginRight: '10px',
-                  }}
-                >
-                  {_('View')}
-                </span>
-                <Select
-                  className={pageSelectClassName}
-                  value={query.get('size')}
-                  onChange={this.onChangeTableSize}
-                  options={selectOptions}
-                  searchable={false}
-                  clearable={false}
-                />
-              </div>
-
-          ) : null
+          page ? ([
+            <label
+              key="pageLabel"
+              htmlFor="pageSelect"
+            >
+              {_('View')}
+            </label>,
+            <Select
+              key="pageSelect"
+              value={query.get('size')}
+              onChange={this.onChangeTableSize}
+              options={selectOptions}
+              searchable={false}
+              clearable={false}
+            />,
+          ]) : null
         }
       />
     );
@@ -553,7 +572,6 @@ class ListInfo extends React.Component {
         value: actionType,
       }));
     }
-
     // 处理可添加不能编辑的表单项
     if (actionType === 'edit') {
       myEditFormOptions = myEditFormOptions.map(($$formList) => {
@@ -564,12 +582,12 @@ class ListInfo extends React.Component {
             let $$newFormGroup = $$formGroup;
 
             if ($$formGroup.get('notEditable')) {
-              $$newFormGroup = $$newFormGroup.set('disabled', true);
+              $$newFormGroup = $$newFormGroup.set('readOnly', true);
             }
             return $$newFormGroup;
           });
         } else if ($$formList.get('notEditable')) {
-          $$newFormList = $$formList.set('disabled', true);
+          $$newFormList = $$formList.set('readOnly', true);
         }
 
         return $$newFormList;

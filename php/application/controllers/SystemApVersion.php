@@ -120,8 +120,20 @@ class SystemApVersion extends CI_Controller {
         'filepath'=>element('uploadPath', $data),
         'active'=>(int)element('active', $data,0)
       );
-
-     $result=axc_active_apfirmware(json_encode($retData));
+      $query_active=$this->db->select('id,active')
+          ->from('ap_firmware')
+          ->where('id',$item['id'])
+          ->get()->result_array();
+        if($query_active['0']['active']==0){
+          $result=axc_active_apfirmware(json_encode($retData));
+        }
+        else{
+         $state=array(
+				      'code'=>6000,
+				      'msg'=>"The version of the related model you select is actived, cancellation  option doesn't work!you should active another version when you want to  cancel the current version!"
+				    );
+            $result=$state;
+        }
     }
     elseif($actionType === 'edit'){
       $upload_data=$this->do_upload();
@@ -130,8 +142,8 @@ class SystemApVersion extends CI_Controller {
         $filepath=$this->upload->data('full_path');
          $retData = array(
         'vendor'=>element('vendor',$data, 48208),
-        'model'=>element('model', $data),
-        'sfver'=>element('softVersion', $data),
+        'model'=>element('model', $data,''),
+        'sfver'=>element('softVersion', $data,''),
         'fmname'=>$filename,
         'filepath'=>$filepath,
         'active'=>(int)element('active', $data,0)
@@ -140,16 +152,47 @@ class SystemApVersion extends CI_Controller {
       $result=axc_modify_apfirmware(json_encode($retData));
     }
     elseif($actionType === 'delete'){
+
       foreach($selectList as $item) {
           $deleteItem = array(
             'model'=>element('model', $item),
             'sfver'=>element('softVersion', $item),
           );
-        $result=axc_del_apfirmware(json_encode($deleteItem));
+          $query_active=$this->db->select('id,active')
+            ->from('ap_firmware')
+            ->where('id',$item['id'])
+            ->get()->result_array();
+          if($query_active['0']['active']==1){
+            $state=array(
+				      'code'=>6000,
+				      'msg'=>"The current version is actived,you can't delete it. If you want to delete it,please active another version!"
+				    );
+            $result=$state;
+          }
+          else{
+            $del_result=axc_del_apfirmware(json_encode($deleteItem));
+            $del_result_array=json_decode($del_result,true);
+            if ($del_result_array['state']['code']==2000){
+               $file=$item['uploadPath'];
+                $delete_file=@unlink ($file);
+                if($delete_file == true){
+                 $result=$del_result;
+                }
+                else{
+                   $state=array(
+                      'code'=>6000,
+				              'msg'=>'fail to delete the file in the folder!'
+                   );
+                   $result=$state;
+                }
+            }
+            else{
+                $result=$del_result;
+                }
+            }
+          }
       }
-	  }
-
-    return $result;
+    return json_encode($result);
   }
 	public function index(){
 		$result = null;

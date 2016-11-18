@@ -4,7 +4,14 @@
     "msg": "ok"
   },
   "data": {
-    "settings": {},
+    "settings": {
+      "terminalProtection": "1",
+      "floodAttact": "1",
+      "antiSpoofing": "1",
+      "alarmNoteType": "0",
+      "apIsolation": "1",
+      "ssidIsolation": "0"
+    },
     "list": [
       {
         "policyName": "Policy1",

@@ -1,26 +1,22 @@
-import React, { PropTypes } from 'react';
-import utils, { immutableUtils } from 'shared/utils';
+import React from 'react';
+import utils from 'shared/utils';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
-import { Map, fromJS } from 'immutable';
+import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
-import AppSettings from 'shared/components/Template/AppSettings';
+import AppScreen from 'shared/components/Template/AppScreen';
 import * as appActions from 'shared/actions/app';
-import * as actions from 'shared/actions/settings';
+import * as screenActions from 'shared/actions/screens';
 
-const listOptions = fromJS([
+const formOptions = fromJS([
   {
     id: 'readPassword',
     label: _('Read Password'),
-    formProps: {
-      type: 'textarea',
-    },
+    type: 'textarea',
   }, {
     id: 'writePassword',
     label: _('Write Password'),
-    formProps: {
-      type: 'textarea',
-    },
+    type: 'textarea',
   }, {
     id: 'version',
     label: _('Version'),
@@ -37,33 +33,21 @@ const listOptions = fromJS([
         label: 'V3',
       },
     ],
-    formProps: {
-      type: 'switch',
-      minWidth: '60px',
-    },
+    type: 'switch',
+    minWidth: '60px',
   }, {
     id: 'trapServer',
     label: _('Trap Server'),
-    formProps: {
-      required: true,
-      type: 'text',
-    },
+    required: true,
+    type: 'text',
   }, {
     id: 'trapPassword',
     label: _('Trap Password'),
-    formProps: {
-      type: 'password',
-    },
+    type: 'password',
   },
 ]);
 
-const formOptions = immutableUtils.getFormOptions(listOptions);
-const defaultFormData = immutableUtils.getDefaultData(listOptions);
-
-const propTypes = {
-  app: PropTypes.instanceOf(Map),
-  store: PropTypes.instanceOf(Map),
-};
+const propTypes = {};
 const defaultProps = {};
 
 export default class View extends React.Component {
@@ -73,11 +57,9 @@ export default class View extends React.Component {
   }
   render() {
     return (
-      <AppSettings
+      <AppScreen
         {...this.props}
-        formOptions={formOptions}
-        defaultSettingsData={defaultFormData}
-        defaultQuery={defaultFormData}
+        settingsFormOptions={formOptions}
         hasSaveButton
       />
     );
@@ -90,19 +72,19 @@ View.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
-    store: state.settings,
+    store: state.screens,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    actions
+    screenActions,
   ), dispatch);
 }
 
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(View);

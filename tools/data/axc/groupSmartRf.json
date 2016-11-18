@@ -4,14 +4,16 @@
     "msg": "ok"
   },
   "data": {
-    "5gFrist": "0",
-    "11nFrist": "0",
-    "terminalRelease": "0",
-    "terminalReleaseVal": "75",
-    "autoPower": "1",
-    "wirelessPower": "20",
-    "autoChannel": "1",
-    "country": "CN",
-    "channel": "12"
+    "settings": {
+      "5gFrist": "0",
+      "11nFrist": "0",
+      "terminalRelease": "0",
+      "terminalReleaseVal": "75",
+      "autoPower": "1",
+      "wirelessPower": "20",
+      "autoChannel": "1",
+      "country": "CN",
+      "channel": "12"
+    }
   }
 }

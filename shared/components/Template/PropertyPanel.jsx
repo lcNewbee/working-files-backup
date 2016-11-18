@@ -1,7 +1,9 @@
 import React, { PropTypes } from 'react';
 import Icon from 'shared/components/Icon';
 import { Map } from 'immutable';
+import { immutableUtils } from 'shared/utils';
 import DevicePanel from '../Panels/Device';
+
 
 const propTypes = {
   isShow: PropTypes.bool,
@@ -52,18 +54,22 @@ class PropertyPanel extends React.Component {
     ]);
     const query = activePanelState.get('query').toJS();
     let formUrl = 'goform/group/ap/radio';
-    let subData = $$configData.get('data').toJS();
+    let $$subData = $$configData.get('data');
 
     if ($$configData.get('module') === 'radio') {
       formUrl = 'goform/group/ap/radio';
-      subData = $$activeListData.get('radio')
-          .merge(subData).merge({
-            groupid: $$activeListData.get('groupid'),
-            mac: $$activeListData.get('mac'),
-          }).toJS();
+
+      $$subData = immutableUtils.getChanged(
+        $$subData,
+        $$activeListData.getIn(['radio']),
+      ).merge({
+        groupid: $$activeListData.get('groupid'),
+        mac: $$activeListData.get('mac'),
+        radioID: $$activeListData.getIn(['radio', 'radioID']),
+      });
     }
 
-    this.props.save(formUrl, subData)
+    this.props.save(formUrl, $$subData.toJS())
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           this.props.fetchPropertyPanelData(query);

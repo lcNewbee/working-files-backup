@@ -22,6 +22,7 @@ $nav-line-size: 4px;
     position: relative;
     padding-top: $nav-icon-size / 2;
     overflow: hidden;
+    border-bottom: 1px solid #ccc;
 
     ul {
       padding-bottom: 20px;
@@ -113,13 +114,14 @@ $nav-line-size: 4px;
   .o-wizard__content {
     padding: ($nav-icon-size * 0.375) 0;
     margin: 0 ($nav-icon-size / 4);
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
+
+
   }
   .o-wizard__footer {
     padding: ($nav-icon-size / 4);
     text-align: right;
     user-select: none;
+    border-top: 1px solid #ccc;
 
     .a-btn--info {
       margin-left: $nav-icon-size / 4;

@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import utils from 'shared/utils';
 import classNamesUtils from 'classnames';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
+
 import { Button, SaveButton } from 'shared/components/Button';
 import validator from 'shared/utils/lib/validator';
 import Nav from 'shared/components/Nav';
@@ -19,6 +21,8 @@ import * as appActions from 'shared/actions/app';
 import * as propertiesActions from 'shared/actions/properties';
 import * as actions from './actions';
 import myReducer from './reducer';
+
+const ALL_GROUP_ID = -100;
 
 const propTypes = {
   fetchApGroup: PropTypes.func,
@@ -76,7 +80,7 @@ export default class Main extends Component {
     super(props);
 
     this.state = { isShowUserPop: false };
-
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     utils.binds(this, [
       'onSelectManageGroup',
       'showUserPopOver',
@@ -94,6 +98,7 @@ export default class Main extends Component {
       'removeGroup',
       'fetchManageGroupAps',
       'isDuplicateAp',
+      'autoRefreshData',
 
       'renderPopOverContent',
       'renderBreadcrumb',
@@ -107,12 +112,13 @@ export default class Main extends Component {
   }
 
   componentWillMount() {
-    // 获取当前组AP
-    this.props.fetchApGroup();
-
-    // 获取未分组设备
-    this.props.fetchGroupAps(-1);
+    this.autoRefreshData();
   }
+
+  componentWillUnmount() {
+    clearTimeout(this.autoRefreshTimer);
+  }
+
   onRefresh(e) {
     e.preventDefault();
     this.props.refreshAll();
@@ -133,7 +139,11 @@ export default class Main extends Component {
     });
   }
 
-  onClickNav() {}
+  onClickNav(path) {
+    if (path === '/main/group') {
+      this.props.selectGroup(-100);
+    }
+  }
 
   onClickTopMenu(path) {
     if (path === '/main/group') {
@@ -265,6 +275,33 @@ export default class Main extends Component {
     });
   }
 
+  /**
+   * 自动刷新数据，有一些数据是需要定时更新的
+   * 不同模块需自动刷新的数据不一样
+   *
+   * @memberOf Main
+   */
+  autoRefreshData() {
+    const curRoutePath = this.props.route.path;
+    const rateInterval = this.props.app.get('rateInterval');
+    // 如是在AP组管理模块
+    if (curRoutePath === '/main/group') {
+      // 获取当前组AP
+      this.props.fetchApGroup();
+
+      // 获取未分组设备
+      this.props.fetchGroupAps(-1);
+      clearTimeout(this.autoRefreshTimer);
+      this.autoRefreshTimer = setTimeout(
+        () => this.autoRefreshData(),
+        rateInterval,
+      );
+    }
+  }
+  /**
+   * 获取正在管理的AP组内AP列表
+   * @memberOf Main
+   */
   fetchManageGroupAps() {
     const groupid = this.props.product
       .getIn(['group', 'manageSelected', 'id']);
@@ -281,6 +318,15 @@ export default class Main extends Component {
       this.props.fetchGroupAps(-1);
     });
   }
+
+  /**
+   * 验证是否有同名或同mac的AP
+   *
+   * @param {any} $$subData
+   * @returns
+   *
+   * @memberOf Main
+   */
   isDuplicateAp($$subData) {
     const { product } = this.props;
     const $$curGroupDevices = product.getIn(['group', 'devices']);
@@ -405,11 +451,17 @@ export default class Main extends Component {
                 $$groupList.map((item) => {
                   const curId = item.get('id');
                   let classNames = 'm-menu__link';
+                  let linkText = item.get('groupname');
+
+                  if (curId === ALL_GROUP_ID) {
+                    linkText = _(linkText);
+                  }
 
                   if (curId === selectGroupId) {
                     classNames = `${classNames} active`;
                   }
 
+                  linkText = `${linkText} (${item.get('apNum')})`;
                   return (
                     <li key={curId}>
                       <a
@@ -421,7 +473,7 @@ export default class Main extends Component {
                           });
                         }}
                       >
-                        {item.get('groupname')} ({item.get('apNum')})
+                        {linkText}
                       </a>
                     </li>
                   );
@@ -541,7 +593,7 @@ export default class Main extends Component {
                   />
                 </div>
               ) : (
-              <div className="o-form__fileset">
+                <div className="o-form__fileset">
                   <legend className="o-form__legend">
                     { _('Custom AP') }
                   </legend>
@@ -549,29 +601,35 @@ export default class Main extends Component {
                     type="text"
                     label={_('MAC')}
                     name="apmac"
+                    maxLength="18"
                     value={groupApAddData.get('apmac')}
                     onChange={data => this.props.updateGroupAddDevice({
                       apmac: data.value,
                     })}
+                    required
                     {...apmac}
                   />
                   <FormGroup
                     type="text"
                     name="name"
                     label={_('Name')}
+                    maxLength="32"
                     value={groupApAddData.get('name')}
                     onChange={data => this.props.updateGroupAddDevice({
                       name: data.value,
                     })}
+                    required
                   />
                   <FormGroup
                     type="text"
                     name="model"
+                    maxLength="32"
                     label={_('Model')}
                     value={groupApAddData.get('model')}
                     onChange={data => this.props.updateGroupAddDevice({
                       model: data.value,
                     })}
+                    required
                   />
                 </div>
               )
@@ -763,7 +821,10 @@ export default class Main extends Component {
                     if (curId === selectGroupId) {
                       classNames = `${classNames} active`;
                     }
-
+                    // 不能管理 All Group
+                    if (curId === ALL_GROUP_ID) {
+                      return null;
+                    }
                     return (
                       <li key={curId}>
                         <a
@@ -891,11 +952,14 @@ export default class Main extends Component {
       breadcrumbList = breadcrumbList.unshift({
         path: '/main/group',
         text: _('All Group'),
-      })
-      .unshift({
-        path: '/main/group',
-        text: groupData.getIn(['selected', 'groupname']) || '',
       });
+
+      if (groupData.getIn(['selected', 'id']) !== ALL_GROUP_ID) {
+        breadcrumbList = breadcrumbList.unshift({
+          path: '/main/group/',
+          text: groupData.getIn(['selected', 'groupname']) || '',
+        });
+      }
     }
 
     for (i; i < len; i += 1) {
@@ -933,32 +997,42 @@ export default class Main extends Component {
   }
 
   render() {
+    const selectGroupId = this.props.product.getIn(['group', 'selected', 'id']);
     const { saving, version, guiName } = this.props.app.toJS();
     const { popOver, modal } = this.props.product.toJS();
     const { isShowPanel } = this.props.properties.toJS();
     let isGroupMenu = false;
     let curTopNavText = _('NETWORK');
     let mainClassName = 't-main t-main--axc';
-    let isShowGroupAsider = false;
+    let isGroupAsiderShow = false;
     let groupTitleIconClassName = '';
+    let isMainLeftShow = false;
+    let isMainRightShow = isShowPanel;
+    let mainLeftMenus = this.props.route.childRoutes;
 
     if (this.props.location.pathname.indexOf('/main/group') === 0) {
       curTopNavText = _('AP GROUP');
       isGroupMenu = true;
+
+      // 如果当前是所有组，则隐藏组配置相关菜单
+      if (selectGroupId === ALL_GROUP_ID) {
+        mainLeftMenus = mainLeftMenus.slice(0, 1);
+      }
     } else if (this.props.location.pathname.indexOf('/main/system') === 0) {
       curTopNavText = _('SYSTEM');
     }
-
-    if (popOver.isShow && (popOver.name === 'vlanAsider' ||
-        popOver.name === 'groupAsider')) {
-      mainClassName = `${mainClassName} main--open-left`;
-
-      isShowGroupAsider = popOver.name === 'groupAsider';
-    }
+    isMainLeftShow = popOver.isShow && (popOver.name === 'vlanAsider' || popOver.name === 'groupAsider');
+    isMainRightShow = isShowPanel;
+    mainClassName = classNamesUtils(mainClassName, {
+      'main--open-left': isMainLeftShow,
+      'is-main-right-open': isMainRightShow,
+    });
+    isGroupAsiderShow = isMainLeftShow && popOver.name === 'groupAsider';
 
     groupTitleIconClassName = classNamesUtils({
-      active: isShowGroupAsider,
+      active: isGroupAsiderShow,
     });
+
 
     return (
       <div className={mainClassName}>
@@ -1040,7 +1114,7 @@ export default class Main extends Component {
         <Nav
           className="t-main__nav"
           role="tree"
-          menus={this.props.route.childRoutes}
+          menus={mainLeftMenus}
           location={this.props.location}
           onChange={this.onClickNav}
           isTree
@@ -1072,15 +1146,15 @@ export default class Main extends Component {
           }
         </Modal>
 
-        {
-          saving ? <div className="body-backdrop" /> : null
-        }
         <PropertyPanel
           isShow={isShowPanel}
           onToggle={this.props.togglePropertyPanel}
           data={this.props.properties}
           {...this.props}
         />
+        {
+          saving ? <div className="body-backdrop" /> : null
+        }
       </div>
     );
   }

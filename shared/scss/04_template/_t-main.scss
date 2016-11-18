@@ -41,19 +41,22 @@ body {
   .t-main__content {
     position: absolute;
     top: $g-navbar-height + 5px;
-    right: 0;
     bottom: 0;
     left: $sidebar-width;
-    min-width: 1024px - $sidebar-width;
+    max-width: calc(100vw - 180px);
     padding: $g-distance;
     padding-left: $g-distance * 1.5;
     overflow: auto;
-    transition: left .3s ease-in;
+    transition: left .4s ease-in-out, max-width .4s ease-in-out;
 
+    @include scrollbar();
     h2,
     .t-main__content-title {
-      margin-bottom: .3em;
-      font-size: 1.5em;
+      margin-bottom: .4em;
+      font-size: 1.214em;
+    }
+    .table-wrap {
+      min-width: 820px;
     }
   }
 
@@ -90,14 +93,15 @@ body {
 
         &::before {
           position: absolute;
-          left: 10px;
           top: 50%;
-          margin-top: -6px;
+          left: 10px;
           display: inline-block;
+          margin-top: -6px;
           font: normal normal normal 14px/1 FontAwesome;
           font-size: inherit;
-          content: "\f0da";
           font-size: 12px;
+          content: "\f0da";
+
           text-rendering: auto;
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
@@ -119,11 +123,13 @@ body {
       top: $g-navbar-height + $g-main-bar-height;
       bottom: 0;
       left: $sidebar-width + $g-top-menu-size + 20px;
+      max-width: calc(100vw - 236px);
+      width: calc(100vw - 236px);
     }
     .t-main__asider-left {
-      width: $sidebar-width + 20px;
       top: $g-navbar-height + $g-main-bar-height;
       left: $g-top-menu-size;
+      width: $sidebar-width + 20px;
     }
     .o-property-panel {
       top: $g-navbar-height;
@@ -177,6 +183,11 @@ body {
     }
     .o-menu-bar {
       left: $g-top-menu-size;
+    }
+    &.is-main-right-open {
+      .t-main__content {
+        max-width: calc(100vw - 617px);
+      }
     }
   }
 

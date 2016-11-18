@@ -161,7 +161,7 @@ export default function (state = defaultState, action) {
 
     case 'RECIVE_SCREEN_DATA':
       return state.setIn([curScreenName, 'fetching'], false)
-        .mergeDeepIn([curScreenName, 'curSettings'], (action.payload && action.payload.settings))
+        .mergeDeepIn([curScreenName, 'curSettings'], action.payload.settings)
         .mergeIn([curScreenName, 'data'], action.payload)
         .setIn([curScreenName, 'data', 'updateAt'], action.meta.updateAt)
         .setIn([curScreenName, 'actionQuery', 'selectedList'], fromJS([]));

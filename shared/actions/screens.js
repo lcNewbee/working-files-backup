@@ -16,27 +16,23 @@ export function leaveScreen() {
     type: 'LEAVE_SCREEN',
   };
 }
-
 export function changeScreenQuery(payload) {
   return {
     type: 'CHANGE_SCREEN_QUERY',
     payload,
   };
 }
-
 export function changeScreenActionQuery(payload) {
   return {
     type: 'CHANGE_SCREEN_ACTION_QUERY',
     payload,
   };
 }
-
 export function reqeustFetchScreenData() {
   return {
     type: 'REQEUST_FETCH_SCREEN_DATA',
   };
 }
-
 export function reciveScreenData(data, name) {
   return {
     type: 'RECIVE_SCREEN_DATA',
@@ -47,7 +43,6 @@ export function reciveScreenData(data, name) {
     },
   };
 }
-
 export function fetchScreenData(url) {
   return (dispatch, getState) => {
     const globalState = getState();
@@ -112,7 +107,6 @@ export function editListItemByIndex(index, action) {
     },
   };
 }
-
 export function activeListItem(keyName, val, action) {
   return {
     type: 'ACTIVE_LIST_ITEM',
@@ -125,27 +119,23 @@ export function activeListItem(keyName, val, action) {
     },
   };
 }
-
 export function addListItem(defaultItem) {
   return {
     type: 'ADD_LIST_ITEM',
     payload: defaultItem,
   };
 }
-
 export function selectListItem(payload) {
   return {
     type: 'SELECT_LIST_ITEM',
     payload,
   };
 }
-
 export function closeListItemModal() {
   return {
     type: 'CLOSE_LIST_ITEM_MODAL',
   };
 }
-
 export function onListAction(url) {
   return (dispatch, getState) => {
     const globalState = getState();
@@ -196,7 +186,6 @@ export function onListAction(url) {
 /**
  * SCREEN SETTINGS action
  */
-
 export function updateScreenSettings(payload) {
   return {
     type: 'UPDATE_SCREEN_SETTINGS',
@@ -219,10 +208,8 @@ export function saveScreenSettings(url) {
 
     subData.action = 'setting';
     return dispatch(appActions.save(url || formUrl, subData))
-      .then((json) => {
-        if (json.state && json.state.code === 2000) {
-          dispatch(fetchScreenData(fetchUrl));
-        }
+      .then(() => {
+        dispatch(fetchScreenData(fetchUrl));
       });
   };
 }

@@ -10,29 +10,44 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const ReactRouter = require('react-router');
 const Provider = require('react-redux').Provider;
-const combineReducers = require('redux').combineReducers;
+const AppContainer = require('react-hot-loader').AppContainer;
 
+const unmountComponentAtNode = ReactDOM.unmountComponentAtNode;
 const Router = ReactRouter.Router;
 const hashHistory = ReactRouter.hashHistory;
 
+const mountNode = document.getElementById('app');
+
 // 引入产品配置
-const prodConfig = require('./config/axc');
+const renderApp = () => {
+  const prodConfig = require('./config/axc');
 
-// 主渲染入口
-ReactDOM.render(
-  <Provider store={prodConfig.stores}>
-    <Router history={hashHistory} routes={prodConfig.routes} />
-  </Provider>,
-  document.getElementById('app')
-);
+  // 主渲染入口
+  ReactDOM.render(
+    <AppContainer>
+      <Provider store={prodConfig.stores}>
+        <Router history={hashHistory} routes={prodConfig.routes} />
+      </Provider>
+    </AppContainer>,
+    mountNode,
+  );
+};
 
+// Enable hot reload by react-hot-loader
 if (module.hot) {
-  // Enable Webpack hot module replacement for reducers
+  const reRenderApp = () => {
+    try {
+      renderApp();
+    } catch (error) {}
+  };
+
   module.hot.accept('./config/axc', () => {
-    const newConfig = require('./config/axc');
-
-    const nextRootReducer = combineReducers(newConfig.reducers);
-
-    prodConfig.stores.replaceReducer(nextRootReducer);
+    setImmediate(() => {
+      // Preventing the hot reloading error from react-router
+      unmountComponentAtNode(mountNode);
+      reRenderApp();
+    });
   });
 }
+
+renderApp();

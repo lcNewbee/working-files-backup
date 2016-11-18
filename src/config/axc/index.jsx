@@ -5,7 +5,6 @@ import remoteActionMiddleware from 'shared/utils/lib/remote_action_middleware';
 import * as appActions from 'shared/actions/app';
 import appReducer from 'shared/reducers/app';
 import screensReducer from 'shared/reducers/screens';
-import settingsReducer from 'shared/reducers/settings';
 import propertiesReducer from 'shared/reducers/properties';
 import moment from 'moment';
 
@@ -502,10 +501,10 @@ const routes = [
             text: _('System Status'),
             component: sSystemStatus.Screen,
           }, {
-            id: 'alarmStatus',
+            id: 'alarmEvents',
             icon: 'exclamation-circle',
             path: '/main/system/alarm',
-            formUrl: '/goform/system/alarm',
+            formUrl: '/goform/system/alarmEvents',
             text: _('Alarm Events'),
             component: sAlarmEvents.Screen,
           }, {
@@ -522,14 +521,12 @@ const routes = [
               {
                 id: 'systemLog',
                 path: '/main/system/log/list',
-                fetchUrl: 'goform/system/log',
                 formUrl: 'goform/system/log',
                 text: _('Log List'),
                 component: sSystemLogList.Screen,
               }, {
                 id: 'systemLog',
                 path: '/main/system/log/settings',
-                fetchUrl: 'goform/system/log',
                 formUrl: 'goform/system/log',
                 text: _('Log Settings'),
                 component: sSystemLogSettings.Screen,
@@ -538,12 +535,14 @@ const routes = [
           }, {
             id: 'SNPM',
             icon: 'exclamation-circle',
+            formUrl: 'goform/system/snpm',
             path: '/main/system/SNPM',
             text: _('SNMP'),
             component: sSNMP.Screen,
           }, {
             id: 'activeStandby',
             isIndex: true,
+            formUrl: 'goform/system/activeStandby',
             path: '/main/system/activeStandby',
             icon: 'refresh',
             text: _('Backup Settings'),
@@ -559,8 +558,7 @@ const routes = [
             id: 'signatures',
             isIndex: true,
             path: '/main/system/signatures',
-            fetchUrl: 'goform/signatures',
-            saveUrl: 'goform/signatures',
+            formUrl: 'goform/system/signatures',
             icon: 'tasks',
             text: _('Signatures'),
             component: sSignatures.Screen,
@@ -568,6 +566,7 @@ const routes = [
             id: 'License',
             isIndex: true,
             path: '/main/system/license',
+            formUrl: 'goform/system/license',
             icon: 'file-text',
             text: _('License Management'),
             component: sLicense.Screen,
@@ -606,6 +605,7 @@ const routes = [
           }, {
             id: 'maintenance',
             isIndex: true,
+            formUrl: 'goform/system/maintenance',
             path: '/main/system/maintenance',
             icon: 'cog',
             text: _('System Maintenance'),
@@ -643,7 +643,6 @@ const reducers = {
   // shared reducers
   app: appReducer,
   screens: screensReducer,
-  settings: settingsReducer,
   properties: propertiesReducer,
   login: sLogin.login,
 
@@ -656,7 +655,7 @@ const stores = remoteActionMiddleware(
   combineReducers(reducers),
 
   // 支持 chrome 插件 Redux DevTools
-  window.devToolsExtension ? window.devToolsExtension() : f => f
+  window.devToolsExtension ? window.devToolsExtension() : f => f,
 );
 
 const app = {

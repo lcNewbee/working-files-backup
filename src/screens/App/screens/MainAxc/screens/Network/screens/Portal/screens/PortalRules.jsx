@@ -1,7 +1,8 @@
 import React, { PropTypes } from 'react';
-import utils, { immutableUtils } from 'shared/utils';
+import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
+import validator from 'shared/utils/lib/validator';
 import { bindActionCreators } from 'redux';
 import AppScreen from 'shared/components/Template/AppScreen';
 import Modal from 'shared/components/Modal';
@@ -10,21 +11,40 @@ import WizardContainer from 'shared/components/Organism/WizardContainer';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 
+function getPortList() {
+  return utils.fetch('goform/network/port')
+    .then(json => (
+      {
+        options: json.data.list.map(
+          item => ({
+            value: item.name,
+            label: item.name,
+          }),
+        ),
+      }
+    ),
+  );
+}
 const commonFormOptions = fromJS([
   {
+    id: 'interface_bind',
+    label: _('Port'),
+    type: 'select',
+    legend: _('Base Settings'),
+    required: true,
+    loadOptions: getPortList,
+    isAsync: true,
+  }, {
     id: 'template_name',
     label: _('Server Name'),
     type: 'select',
     legend: _('Base Settings'),
-    options: [
-      {
-
-      },
-    ],
   }, {
     id: 'max_usernum',
     label: _('Max Users'),
-    type: 'text',
+    type: 'number',
+    min: '1',
+    max: '99999',
   }, {
     id: 'auth_mode',
     label: _('Auth Type'),
@@ -41,20 +61,6 @@ const commonFormOptions = fromJS([
       },
     ],
   }, {
-    id: 'auth_ip',
-    label: _('Auth Segment Ip'),
-    type: 'text',
-    showPrecondition(data) {
-      return data.get('authType') === '1';
-    },
-  }, {
-    id: 'auth_mask',
-    label: _('Auth Segment Mask'),
-    type: 'text',
-    showPrecondition(data) {
-      return data.get('authType') === '1';
-    },
-  }, {
     id: 'auth_domain',
     label: _('Force Auth Domain'),
     type: 'text',
@@ -62,16 +68,8 @@ const commonFormOptions = fromJS([
     id: 'idle_test',
     label: _('Idle Detection'),
     type: 'checkbox',
-  }, {
-    id: 'interface_bind',
-    label: _('Interface Bind'),
-    type: 'select',
-    legend: _('Base Settings'),
-    options: [
-      {
-
-      },
-    ],
+    defaultValue: '0',
+    value: '1',
   },
 ]);
 const listOptions = fromJS([
@@ -143,17 +141,9 @@ const objectTableOptions = fromJS([
   },
 ]);
 
-const formOptions = immutableUtils.getFormOptions(listOptions);
-const tableOptions = immutableUtils.getTableOptions(listOptions);
-const defaultEditData = immutableUtils.getDefaultData(listOptions);
 const propTypes = {
-  app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
-  groupId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-
-  route: PropTypes.object,
   closeListItemModal: PropTypes.func,
-  updateItemSettings: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -205,7 +195,7 @@ export default class View extends React.Component {
         {...this.props}
         listTitle={_('Portal Rules List')}
         store={store}
-        listOptions={listOptions}
+        // listOptions={listOptions}
         settingsFormOptions={commonFormOptions}
         hasSettingsSaveButton
         actionable

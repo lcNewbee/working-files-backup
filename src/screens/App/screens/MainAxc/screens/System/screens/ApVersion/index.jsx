@@ -107,6 +107,7 @@ export default class View extends React.Component {
         editFormOption={{
           hasFile: true,
         }}
+        listKey
         noTitle
         actionable
         selectable
