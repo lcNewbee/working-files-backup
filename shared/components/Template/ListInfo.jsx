@@ -251,16 +251,16 @@ class ListInfo extends React.Component {
     const $$actionItem = list.get(index);
     const msgText = _('Are you sure to %s selected: %s', _(actionName), index);
     let selectedList = [];
-    let $$actionData = Map({
+    let $$actionQuery = Map({
       action: actionName,
     });
     let onBeforeActionMsg;
 
     if (listKey === 'allKeys') {
-      $$actionData = $$actionData.merge($$actionItem);
+      $$actionQuery = $$actionQuery.merge($$actionItem);
       selectedList = [list.get(index)];
     } else {
-      $$actionData = $$actionData.set(
+      $$actionQuery = $$actionQuery.set(
         listKey,
         $$actionItem.get(listKey),
       );
@@ -268,7 +268,7 @@ class ListInfo extends React.Component {
     }
 
     if ($$data) {
-      $$actionData = $$actionData.merge($$data)
+      $$actionQuery = $$actionQuery.merge($$data)
         .merge({
           selectedList,
         });
@@ -282,20 +282,20 @@ class ListInfo extends React.Component {
         role: 'confirm',
         text: msgText,
         apply: () => {
-          this.doItemAction($$actionData);
+          this.doItemAction($$actionQuery);
         },
       });
 
     // 如果是 Promise 对象
     } else if (utils.isPromise(onBeforeAction)) {
-      onBeforeAction().then(
-        msg => this.doItemAction($$actionData, msg),
+      onBeforeAction($$actionItem).then(
+        msg => this.doItemAction($$actionQuery, msg),
       );
 
     // 如果是 function
     } else {
       onBeforeActionMsg = onBeforeAction();
-      this.doItemAction($$actionData, onBeforeActionMsg);
+      this.doItemAction($$actionQuery, onBeforeActionMsg);
     }
   }
   onFetchList() {
@@ -303,7 +303,7 @@ class ListInfo extends React.Component {
       this.props.fetchScreenData();
     }
   }
-  doItemAction($$actionData, cancelMsg) {
+  doItemAction($$actionQuery, cancelMsg) {
     if (cancelMsg) {
       this.props.createModal({
         id: 'listAction',
@@ -311,14 +311,14 @@ class ListInfo extends React.Component {
         text: cancelMsg,
         apply: () => {
           this.props.changeScreenActionQuery(
-            $$actionData.toJS(),
+            $$actionQuery.toJS(),
           );
           this.props.onListAction();
         },
       });
     } else {
       this.props.changeScreenActionQuery(
-        $$actionData.toJS(),
+        $$actionQuery.toJS(),
       );
       this.props.onListAction();
     }
