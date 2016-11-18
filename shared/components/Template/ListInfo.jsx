@@ -268,12 +268,11 @@ class ListInfo extends React.Component {
     }
 
     if ($$data) {
-
+      $$actionData = $$actionData.merge($$data)
+        .merge({
+          selectedList,
+        });
     }
-    $$actionData = $$actionData.merge(data)
-      .merge({
-        selectedList,
-      });
 
     // 处理自定义的 action 前验证
     // 没有onBeforeAction，默认使用 confirm 询问用户
