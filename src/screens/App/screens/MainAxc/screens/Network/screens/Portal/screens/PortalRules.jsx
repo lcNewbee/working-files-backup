@@ -156,8 +156,8 @@ export default class View extends React.Component {
   render() {
     const { store } = this.props;
     const curListOptions = listOptions
-      .setIn([0, 'formProps', 'options'], this.state.portOptions)
-      .setIn([1, 'formProps', 'options'], this.state.portalServerOption);
+      .setIn([0, 'options'], this.state.portOptions)
+      .setIn([1, 'options'], this.state.portalServerOption);
 
     return (
       <AppScreen
