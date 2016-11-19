@@ -78,9 +78,9 @@ class NetworkPortalServer extends CI_Controller {
       $result=portal_edit_template_name(json_encode($temp_data));
 		}
     elseif($actionType === 'delete'){
-       $temp_data=array(
+      $temp_data=array(
         'portal_list'=>$data['selectedList']
-       );
+      );
       $state=portal_del_template_name(json_encode($temp_data));
        $result=$state;
     }

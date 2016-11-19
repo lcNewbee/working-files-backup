@@ -32,8 +32,8 @@ function getPortalServerList() {
       {
         options: json.data.list.map(
           item => ({
-            value: item.name,
-            label: item.name,
+            value: item.template_name,
+            label: item.template_name,
           }),
         ),
       }
@@ -54,6 +54,7 @@ const listOptions = fromJS([
     label: _('Server Name'),
     formProps: {
       type: 'select',
+      notEditable: true,
     },
   }, {
     id: 'max_usernum',
@@ -79,16 +80,30 @@ const listOptions = fromJS([
     ],
     formProps: {
       type: 'switch',
-      options: [
-        {
-          value: '1',
-          label: _('Direct'),
-        },
-        {
-          value: '2',
-          label: _('Layer3'),
-        },
-      ],
+    },
+  }, {
+    id: 'auth_ip',
+    label: _('Authentication IP'),
+    formProps: {
+      type: 'text',
+      validator: validator({
+        rules: 'ip',
+      }),
+      showPrecondition(data) {
+        return data.get('auth_mode') === '2';
+      },
+    },
+  }, {
+    id: 'auth_mask',
+    label: _('Authentication Mask'),
+    formProps: {
+      type: 'text',
+      validator: validator({
+        rules: 'mask',
+      }),
+      showPrecondition(data) {
+        return data.get('auth_mode') === '2';
+      },
     },
   }, {
     id: 'auth_domain',
@@ -139,30 +154,41 @@ export default class View extends React.Component {
   }
   componentWillMount() {
     getPortList()
-      .then((options) => {
+      .then((data) => {
         this.setState({
-          portOptions: fromJS(options),
+          portOptions: fromJS(data.options),
         });
       });
 
     getPortalServerList()
-      .then((options) => {
+      .then((data) => {
         this.setState({
-          portalServerOption: fromJS(options),
+          portalServerOption: fromJS(data.options),
         });
       });
   }
 
   render() {
     const { store } = this.props;
+    const myScreenId = store.get('curScreenId');
+    const $$myScreenStore = store.get(myScreenId);
+    const $$curList = $$myScreenStore.getIn(['data', 'list']);
+    const mypPortOptions = this.state.portOptions
+      .filterNot(($$item) => {
+        const curPort = $$item.get('value');
+        const curPortIndex = $$curList.findIndex(($$listItem) => $$listItem.get('interface_bind') === curPort);
+
+        return curPortIndex !== -1;
+      });
     const curListOptions = listOptions
-      .setIn([0, 'options'], this.state.portOptions)
+      .setIn([0, 'options'], mypPortOptions)
       .setIn([1, 'options'], this.state.portalServerOption);
 
     return (
       <AppScreen
         {...this.props}
         store={store}
+        listKey="template_name"
         listOptions={curListOptions}
         actionable
         selectable
