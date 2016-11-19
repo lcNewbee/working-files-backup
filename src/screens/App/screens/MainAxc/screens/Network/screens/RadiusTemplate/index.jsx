@@ -135,6 +135,7 @@ const listOptions = fromJS([
     label: _('Accounting-on'),
     fieldset: 'parameter',
     legend: _('Advanced Settings'),
+    defaultValue: '0',
     noTable: true,
     formProps: {
       type: 'checkbox',
@@ -191,7 +192,16 @@ const listOptions = fromJS([
     noTable: true,
     formProps: {
       type: 'number',
-      className: 'cols col-12',
+      className: 'cols col-6',
+    },
+  }, {
+    id: 'nasip',
+    label: _('Nas IP'),
+    fieldset: 'parameter',
+    noTable: true,
+    formProps: {
+      type: 'text',
+      className: 'cols col-6',
     },
   }, {
     id: 'acct_interim_interval',
@@ -257,8 +267,6 @@ export default class View extends React.Component {
         store={this.props.store}
         listOptions={listOptions}
         modalSize="lg"
-        
-        
         listKey="template_name"
         actionable
         selectable

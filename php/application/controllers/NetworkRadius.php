@@ -96,6 +96,7 @@ class NetworkRadius extends CI_Controller {
         "retry_times"=>element("retrytimes",$list_data ,''),
         "acct_interim_interval"=>element("acct_interim_interval",$list_data ,''),
         "realretrytimes"=>element("acct_realretrytimes",$list_data ,''),
+        "nasip"=>element("nasip",$list_data ,''),
         "username_format"=>element("username_format",$list_data ,'')
       );
     if($temp_data['accton_enable']=="enable"){
@@ -147,14 +148,13 @@ class NetworkRadius extends CI_Controller {
         "retry_times"=>(string)element("retry_times",$oriData ,''),
         "acct_interim_interval"=>(string)element("acct_interim_interval",$oriData ,''),
         "realretrytimes"=>(string)element("realretrytimes",$oriData ,''),
+        "nasip"=>(string)element("nasip",$oriData ,''),
         "username_format"=>(string)element("username_format",$oriData ,'')
       );
-
-
-      return $ret;
     }
 		if ($actionType === 'add') {
       $temp=getCgiParams($data);
+      // $result=json_encode($temp);
 			$result=radius_add_template_name(json_encode($temp));
 		}
 		elseif($actionType === 'edit') {

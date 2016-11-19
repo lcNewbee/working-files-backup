@@ -177,7 +177,6 @@ export default class View extends React.Component {
       .filterNot(($$item) => {
         const curPort = $$item.get('value');
         const curPortIndex = $$curList.findIndex(($$listItem) => $$listItem.get('interface_bind') === curPort);
-
         return curPortIndex !== -1;
       });
     const curListOptions = listOptions
