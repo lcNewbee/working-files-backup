@@ -126,7 +126,6 @@ class NetworkRadius extends CI_Controller {
 		$actionType = element('action', $data);
     function getCgiParams($oriData) {
       $ret = array(
-        "id"=>(string)element('id',$oriData,'' ),
         "template_name"=>(string)element('template_name',$oriData,''),
         "authpri_ipaddr"=>(string)element("authpri_ipaddr",$oriData,'' ),
         "authpri_port"=>(string)element("authpri_port",$oriData,'' ),
@@ -151,6 +150,7 @@ class NetworkRadius extends CI_Controller {
         "nasip"=>(string)element("nasip",$oriData ,''),
         "username_format"=>(string)element("username_format",$oriData ,'')
       );
+      return $ret;
     }
 		if ($actionType === 'add') {
       $temp=getCgiParams($data);
