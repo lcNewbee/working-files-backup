@@ -329,6 +329,8 @@ class ListInfo extends React.Component {
     let btnsNum = 0;
     let btnList = List([]);
 
+    this.listTableOptions = tableOptions;
+
     // 初始选项，添加操作项
     if (actionable && tableOptions) {
       actionsOption = tableOptions.find(item => item.get('id') === '__actions__');
@@ -344,57 +346,58 @@ class ListInfo extends React.Component {
         btnsNum += btnList.size;
       }
 
-      this.listTableOptions = tableOptions.push(Map({
-        id: '__actions__',
-        text: _('Actions'),
-        width: btnsNum * 90,
-        transform: (val, item, index) => (
-          <div className="action-btns">
-            {
-              editable ? (
-                <Button
-                  icon="edit"
-                  text={_('Edit')}
-                  size="sm"
-                  onClick={() => {
-                    this.props.editListItemByIndex(index);
-                  }}
-                />
-              ) : null
-            }
-            {
-              deleteable ? (
-                <Button
-                  icon="trash"
-                  text={_('Delete')}
-                  size="sm"
-                  onClick={() => {
-                    this.onRemoveItem(index);
-                  }}
-                />
-              ) : null
-            }
-            {
-              btnList.map(btnItem => (
-                <Button
-                  key={`${btnItem.get('name')}Btn`}
-                  icon={btnItem.get('icon')}
-                  text={btnItem.get('text')}
-                  size="sm"
-                  onClick={() => {
-                    this.onItemAction(
-                      btnItem.toJS(),
-                      index,
-                    );
-                  }}
-                />
-              ))
-            }
-          </div>
-        ),
-      }));
-    } else {
-      this.listTableOptions = tableOptions;
+      // 有操作按钮时，添加操作列
+      if (btnsNum > 0) {
+        this.listTableOptions = tableOptions.push(Map({
+          id: '__actions__',
+          text: _('Actions'),
+          width: btnsNum * 90,
+          transform: (val, item, index) => (
+            <div className="action-btns">
+              {
+                editable ? (
+                  <Button
+                    icon="edit"
+                    text={_('Edit')}
+                    size="sm"
+                    onClick={() => {
+                      this.props.editListItemByIndex(index);
+                    }}
+                  />
+                ) : null
+              }
+              {
+                deleteable ? (
+                  <Button
+                    icon="trash"
+                    text={_('Delete')}
+                    size="sm"
+                    onClick={() => {
+                      this.onRemoveItem(index);
+                    }}
+                  />
+                ) : null
+              }
+              {
+                btnList.map(btnItem => (
+                  <Button
+                    key={`${btnItem.get('name')}Btn`}
+                    icon={btnItem.get('icon')}
+                    text={btnItem.get('text')}
+                    size="sm"
+                    onClick={() => {
+                      this.onItemAction(
+                        btnItem.toJS(),
+                        index,
+                      );
+                    }}
+                  />
+                ))
+              }
+            </div>
+          ),
+        }));
+      }
     }
 
     if (this.listTableOptions) {

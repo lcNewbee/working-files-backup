@@ -19,6 +19,7 @@ const propTypes = {
 
   hasSaveButton: PropTypes.bool,
   isSaving: PropTypes.bool,
+  header: PropTypes.node,
   leftChildren: PropTypes.node,
   rightChildren: PropTypes.node,
 
@@ -233,6 +234,9 @@ class FormContainer extends React.Component {
           }
         }}
       >
+        {
+          this.props.header
+        }
         <div className="o-form__body">
           {
             leftChildren && leftChildren.length > 0 ? (

@@ -46,32 +46,6 @@ const listOptions = fromJS([
     text: _('Uptime'),
     width: '80',
     filter: 'connectTime',
-  }, {
-    id: '__actions__',
-    actions: [
-      {
-        name: 'reboot',
-        text: _('Reboot'),
-        icon: 'recycle',
-        transform(item) {
-          return item.get('devicename') || item.get('mac');
-        },
-      }, {
-        name: 'locate',
-        text: _('Locate'),
-        icon: 'location-arrow',
-        transform(item) {
-          return item.get('devicename') || item.get('mac');
-        },
-      }, {
-        name: 'reset',
-        text: _('Reset'),
-        icon: 'reply-all',
-        transform(item) {
-          return item.get('devicename') || item.get('mac');
-        },
-      },
-    ],
   },
 ]);
 
