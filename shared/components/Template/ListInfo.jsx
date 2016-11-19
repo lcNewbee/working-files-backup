@@ -584,7 +584,12 @@ class ListInfo extends React.Component {
             let $$newFormGroup = $$formGroup;
 
             if ($$formGroup.get('notEditable')) {
-              $$newFormGroup = $$newFormGroup.set('readOnly', true);
+              $$newFormGroup = $$newFormGroup.set('readOnly', true)
+                .set('type', 'text');
+
+              if ($$newFormGroup.get('type') === 'select' || $$newFormGroup.get('type') === 'switch') {
+                $$newFormGroup = $$newFormGroup.set('type', 'text');
+              }
             }
             return $$newFormGroup;
           });

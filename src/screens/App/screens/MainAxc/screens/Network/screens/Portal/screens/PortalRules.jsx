@@ -45,7 +45,7 @@ const listOptions = fromJS([
     id: 'interface_bind',
     label: _('Port'),
     formProps: {
-      type: 'select',
+      type: 'switch',
       required: true,
       notEditable: true,
     },
