@@ -382,10 +382,20 @@ export default class Main extends Component {
       this.props.save('/goform/group', subData)
         .then((json) => {
           const state = json && json.state;
+          customCheckResult = '';
 
-          if (state && state.code === 2000) {
-            this.props.fetchGroupAps($$editData.get('id'));
-            this.props.fetchGroupAps(-1);
+          if (state) {
+            if (state.code === 2000) {
+              this.props.fetchGroupAps($$editData.get('id'));
+              this.props.fetchGroupAps(-1);
+
+            // apName 重复
+            } else if (state.code === 6000) {
+              customCheckResult = 'Add AP name repeat';
+            // Ap MAC 重复
+            } else if (state.code === 6001) {
+              customCheckResult = 'Add AP MAC repeat';
+            }
           }
 
           if (curModalName === 'groupApAdd') {
@@ -393,9 +403,18 @@ export default class Main extends Component {
           }
 
           this.props.fetchApGroup();
-          this.props.showMainModal({
-            isShow: false,
-          });
+
+          if (!customCheckResult) {
+            this.props.showMainModal({
+              isShow: false,
+            });
+          } else {
+            this.props.createModal({
+              id: 'settings',
+              role: 'alert',
+              text: customCheckResult,
+            });
+          }
         });
     } else {
       this.props.createModal({

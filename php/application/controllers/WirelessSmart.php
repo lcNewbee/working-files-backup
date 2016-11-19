@@ -13,9 +13,9 @@ class WirelessSmart extends CI_Controller {
     );
     $cgiResult = json_decode(axc_get_wireless_smart(json_encode($retdata)));
     $result=array(
-      state=>element('state', $cgiResult),
-      data=>array(
-        settings=>element('data', $cgiResult)
+      'state'=>$cgiResult->state,
+      'data'=>array(
+        'settings'=>$cgiResult->data
       )
     );
     return json_encode($result);

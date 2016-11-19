@@ -1,21 +1,41 @@
 import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
-import { Map, List } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
-import {
-  FormGroup, SaveButton, FormInput,
-} from 'shared/components';
 import AppScreen from 'shared/components/Template/AppScreen';
-import channels from 'shared/config/country.json';
+import { radioBase, radioAdvance } from 'shared/config/axcRadio';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
+import FormContainer from 'shared/components/Organism/FormContainer';
+import Icon from 'shared/components/Icon';
 
-const channelsList = List(channels);
-const countryOptions = channelsList.map(item => ({
-  value: item.country,
-  label: b28n.getLang() === 'cn' ? _(item.cn) : _(item.en),
-})).toJS();
+const settingsFormOptions = radioBase
+  // 添加自动功率
+  .updateIn(
+    [3, 'options'],
+    $$options => $$options.unshift(Map({
+      value: 'auto',
+      label: _('Automatic'),
+    })),
+  )
+
+  // 信道只支持自动
+  .setIn(
+    [5, 'options'],
+    fromJS([
+      {
+        value: 'auto',
+        label: _('Automatic'),
+      },
+    ]),
+  )
+  .rest()
+  .butLast()
+  .groupBy(
+    item => item.get('fieldset'),
+  )
+  .toList();
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
@@ -26,6 +46,7 @@ const propTypes = {
   fetchScreenData: PropTypes.func,
   updateScreenSettings: PropTypes.func,
   saveScreenSettings: PropTypes.func,
+  validateAll: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -36,18 +57,20 @@ export default class SmartRf extends React.Component {
     super(props);
     this.state = {
       defaultSettingsData: {
-        '5gFrist': '1',
-        '11nFrist': '1',
-        terminalRelease: '1',
-        terminalReleaseVal: '75',
-        autoPower: '1',
-        autoChannel: '1',
-        wirelessPower: '20',
-        country: 'CN',
-        channel: '6',
+        first5g: '1',
+        switch11n: '1',
+        txpower: 'auto',
+        countrycode: 'CN',
+        channel: 'auto',
+        channelwidth: '40',
         groupid,
       },
+      isBaseShow: true,
+      isAdvancedShow: true,
     };
+    utils.binds(this, [
+      'onSave',
+    ]);
   }
 
   componentDidUpdate(prevProps) {
@@ -61,120 +84,103 @@ export default class SmartRf extends React.Component {
       this.props.fetchScreenData();
     }
   }
-
+  onSave(formId) {
+    if (this.props.validateAll) {
+      this.props.validateAll(formId)
+        .then((errMsg) => {
+          if (errMsg.isEmpty()) {
+            this.props.saveScreenSettings({
+              onlyChanged: true,
+            });
+          }
+        });
+    }
+  }
+  toggleBox(moduleName) {
+    this.setState({
+      [moduleName]: !this.state[moduleName],
+    });
+  }
   render() {
     const { app, screenStore, updateScreenSettings } = this.props;
     const { defaultSettingsData } = this.state;
     const myScreenId = screenStore.get('curScreenId');
-    const curData = screenStore.getIn([myScreenId, 'curSettings']).toJS();
+    const $$curData = screenStore.getIn([myScreenId, 'curSettings']);
 
     return (
       <AppScreen
         {...this.props}
         store={screenStore}
         defaultSettingsData={defaultSettingsData}
-        noTitle
       >
-        <form className="o-form">
-          <fieldset className="o-form__fieldset">
-            <legend className="o-form__legend">{_('Base Settings')}</legend>
-            <FormGroup
-              type="checkbox"
-              label={_('Band Steering')}
-              checked={curData['5gFrist'] === '1'}
-              onChange={item => updateScreenSettings({
-                '5gFrist': item.value,
-              })}
-            />
-            <FormGroup
-              label={_('Terminal Release')}
-              value={curData.terminalReleaseVal}
+        <div className="o-box row">
+          <div className="o-box__cell">
+            <h3
+              style={{ cursor: 'pointer' }}
+              onClick={() => this.toggleBox('isBaseShow')}
             >
-              <FormInput
-                type="checkbox"
-                checked={curData.terminalRelease === '1'}
-                onChange={item => updateScreenSettings({
-                  terminalRelease: item.value,
-                })}
+              <Icon
+                name={this.state.isBaseShow ? 'minus-square' : 'plus-square'}
+                size="lg"
+                style={{
+                  marginRight: '5px',
+                }}
               />
-              <FormInput
-                type="text"
-                value={curData.terminalReleaseVal}
-                maxLength="3"
-                size="sm"
-                disabled={curData.terminalRelease !== '1'}
-                onChange={item => updateScreenSettings({
-                  terminalReleaseVal: item.value,
-                })}
-              />
-            </FormGroup>
-            <FormGroup
-              type="checkbox"
-              label={_('11n Frist')}
-              checked={curData['11nFrist'] === '1'}
-              onChange={item => updateScreenSettings({
-                '11nFrist': item.value,
-              })}
-            />
-          </fieldset>
-          <fieldset className="o-form__fieldset">
-            <legend className="o-form__legend">{_('Tx Power')}</legend>
-            <FormGroup
-              type="checkbox"
-              label={_('Automatic')}
-              checked={curData.autoBandwidth === '1'}
-              onChange={item => updateScreenSettings({
-                autoBandwidth: item.value,
-              })}
-            />
-            {
-              curData.autoBandwidth !== '1' ? (
-                <FormGroup
-                  type="range"
-                  min="1"
-                  max="100"
-                  label={_('Tx Power')}
-                  unit="%"
-                  value={parseInt(curData.wirelessPower, 10)}
-                  onChange={item => updateScreenSettings({
-                    wirelessPower: item.value,
-                  })}
-                />
-              ) : null
-            }
-          </fieldset>
-          <fieldset className="o-form__fieldset">
-            <legend className="o-form__legend">{_('Channel')}</legend>
-            <FormGroup
-              type="select"
-              label={_('Country')}
-              options={countryOptions}
-              value={curData.country}
-              onChange={item => updateScreenSettings({
-                country: item.value,
-              })}
-            />
-            <FormGroup
-              type="checkbox"
-              label={_('Automatic')}
-              value="1"
-              checked={curData.autoChannel === '1'}
-              onChange={item => updateScreenSettings({
-                autoChannel: item.value,
-              })}
-            />
-
-            <div className="form-group form-group--save">
-              <div className="form-control">
-                <SaveButton
-                  type="button"
-                  loading={app.get('saving')}
-                  onClick={this.props.saveScreenSettings}
+              {_('Base Settings')}
+            </h3>
+          </div>
+          {
+            this.state.isBaseShow ? (
+              <div className="o-box__cell">
+                <FormContainer
+                  id="radioBase"
+                  options={settingsFormOptions}
+                  data={$$curData}
+                  onChangeData={updateScreenSettings}
+                  onSave={() => this.onSave('radioBase')}
+                  invalidMsg={app.get('invalid')}
+                  validateAt={app.get('validateAt')}
+                  isSaving={app.get('saving')}
+                  hasSaveButton
                 />
               </div>
-            </div>
-          </fieldset>
-        </form>
+            ) : null
+          }
+
+          <div className="o-box__cell">
+            <h3
+              style={{ cursor: 'pointer' }}
+              onClick={() => this.toggleBox('isAdvancedShow')}
+            >
+              <Icon
+                name={this.state.isAdvancedShow ? 'minus-square' : 'plus-square'}
+                size="lg"
+                style={{
+                  marginRight: '5px',
+                }}
+                onClick={() => this.toggleBox('isAdvancedShow')}
+              />
+              {_('Advanced Settings')}
+            </h3>
+          </div>
+          {
+            this.state.isAdvancedShow ? (
+              <div className="o-box__cell">
+                <FormContainer
+                  id="radioAdvance"
+                  options={radioAdvance}
+                  data={$$curData}
+                  onChangeData={updateScreenSettings}
+                  onSave={() => this.onSave('radioAdvance')}
+                  invalidMsg={app.get('invalid')}
+                  validateAt={app.get('validateAt')}
+                  isSaving={app.get('saving')}
+                  hasSaveButton
+                />
+              </div>
+            ) : null
+          }
+        </div>
       </AppScreen>
     );
   }

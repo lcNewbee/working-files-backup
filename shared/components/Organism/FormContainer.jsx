@@ -138,6 +138,11 @@ class FormContainer extends React.Component {
       });
     }
 
+    // 处理 option需要依据表单值显示
+    if (typeof myProps.options === 'function') {
+      myProps.options = myProps.options(data);
+    }
+
     // 处理显示前提条件
     if (typeof myProps.showPrecondition === 'function') {
       isShow = myProps.showPrecondition(data);
