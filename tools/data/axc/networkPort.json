@@ -38,7 +38,47 @@
       },
       {
         "id": 3,
-        "name": "eth0",
+        "name": "eth2",
+        "exchangeModel": "QINQ_tunnel",
+        "status": 1,
+        "speed": "100",
+        "workModel": "auto",
+        "mtu": "1480",
+        "nativeVLAN": "2",
+        "ip1": "192.156.12.3",
+        "mask1": "255.255.255.0",
+        "acceptVlans": "2-33,35-46",
+        "description": "dsdsd"
+      }
+      ,{
+        "id": 4,
+        "name": "eth3",
+        "exchangeModel": "QINQ_tunnel",
+        "status": 1,
+        "speed": "100",
+        "workModel": "auto",
+        "mtu": "1480",
+        "nativeVLAN": "2",
+        "ip1": "192.156.12.3",
+        "mask1": "255.255.255.0",
+        "acceptVlans": "2-33,35-46",
+        "description": "dsdsd"
+      },{
+        "id": 5,
+        "name": "eth4",
+        "exchangeModel": "QINQ_tunnel",
+        "status": 1,
+        "speed": "100",
+        "workModel": "auto",
+        "mtu": "1480",
+        "nativeVLAN": "2",
+        "ip1": "192.156.12.3",
+        "mask1": "255.255.255.0",
+        "acceptVlans": "2-33,35-46",
+        "description": "dsdsd"
+      },{
+        "id": 6,
+        "name": "eth5",
         "exchangeModel": "QINQ_tunnel",
         "status": 1,
         "speed": "100",

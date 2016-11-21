@@ -42,7 +42,7 @@ const listOptions = fromJS([
   }, {
     id: 'active',
     text: _('Active Status'),
-    actionType: 'active',
+    actionName: 'active',
     type: 'switch',
     width: '100px',
     formProps: {
@@ -59,6 +59,7 @@ export default class View extends React.Component {
 
     utils.binds(this, [
       'getApModelList',
+      'onBeforeAction',
     ]);
     this.state = {
       modelSelectPlaceholder: _('Loading'),
@@ -68,6 +69,14 @@ export default class View extends React.Component {
   }
   componentWillMount() {
     this.getApModelList();
+  }
+  onBeforeAction(val) {
+    let ret = '';
+
+    if (!val) {
+      ret = 'Not Ok';
+    }
+    return ret;
   }
   getApModelList() {
     utils.fetch('goform/system/ap/model')
@@ -107,6 +116,7 @@ export default class View extends React.Component {
         editFormOption={{
           hasFile: true,
         }}
+        onBeforeAction={this.onBeforeAction}
         listKey
         noTitle
         actionable

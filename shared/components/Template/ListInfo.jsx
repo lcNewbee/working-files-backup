@@ -251,16 +251,16 @@ class ListInfo extends React.Component {
     const $$actionItem = list.get(index);
     const msgText = _('Are you sure to %s selected: %s', _(actionName), index);
     let selectedList = [];
-    let $$actionData = Map({
+    let $$actionQuery = Map({
       action: actionName,
     });
     let onBeforeActionMsg;
 
     if (listKey === 'allKeys') {
-      $$actionData = $$actionData.merge($$actionItem);
+      $$actionQuery = $$actionQuery.merge($$actionItem);
       selectedList = [list.get(index)];
     } else {
-      $$actionData = $$actionData.set(
+      $$actionQuery = $$actionQuery.set(
         listKey,
         $$actionItem.get(listKey),
       );
@@ -268,12 +268,11 @@ class ListInfo extends React.Component {
     }
 
     if ($$data) {
-
+      $$actionQuery = $$actionQuery.merge($$data)
+        .merge({
+          selectedList,
+        });
     }
-    $$actionData = $$actionData.merge(data)
-      .merge({
-        selectedList,
-      });
 
     // 处理自定义的 action 前验证
     // 没有onBeforeAction，默认使用 confirm 询问用户
@@ -283,20 +282,20 @@ class ListInfo extends React.Component {
         role: 'confirm',
         text: msgText,
         apply: () => {
-          this.doItemAction($$actionData);
+          this.doItemAction($$actionQuery);
         },
       });
 
     // 如果是 Promise 对象
     } else if (utils.isPromise(onBeforeAction)) {
-      onBeforeAction().then(
-        msg => this.doItemAction($$actionData, msg),
+      onBeforeAction($$actionItem).then(
+        msg => this.doItemAction($$actionQuery, msg),
       );
 
     // 如果是 function
     } else {
       onBeforeActionMsg = onBeforeAction();
-      this.doItemAction($$actionData, onBeforeActionMsg);
+      this.doItemAction($$actionQuery, onBeforeActionMsg);
     }
   }
   onFetchList() {
@@ -304,7 +303,7 @@ class ListInfo extends React.Component {
       this.props.fetchScreenData();
     }
   }
-  doItemAction($$actionData, cancelMsg) {
+  doItemAction($$actionQuery, cancelMsg) {
     if (cancelMsg) {
       this.props.createModal({
         id: 'listAction',
@@ -312,14 +311,14 @@ class ListInfo extends React.Component {
         text: cancelMsg,
         apply: () => {
           this.props.changeScreenActionQuery(
-            $$actionData.toJS(),
+            $$actionQuery.toJS(),
           );
           this.props.onListAction();
         },
       });
     } else {
       this.props.changeScreenActionQuery(
-        $$actionData.toJS(),
+        $$actionQuery.toJS(),
       );
       this.props.onListAction();
     }
@@ -329,6 +328,8 @@ class ListInfo extends React.Component {
     let actionsOption = null;
     let btnsNum = 0;
     let btnList = List([]);
+
+    this.listTableOptions = tableOptions;
 
     // 初始选项，添加操作项
     if (actionable && tableOptions) {
@@ -345,57 +346,58 @@ class ListInfo extends React.Component {
         btnsNum += btnList.size;
       }
 
-      this.listTableOptions = tableOptions.push(Map({
-        id: '__actions__',
-        text: _('Actions'),
-        width: btnsNum * 90,
-        transform: (val, item, index) => (
-          <div className="action-btns">
-            {
-              editable ? (
-                <Button
-                  icon="edit"
-                  text={_('Edit')}
-                  size="sm"
-                  onClick={() => {
-                    this.props.editListItemByIndex(index);
-                  }}
-                />
-              ) : null
-            }
-            {
-              deleteable ? (
-                <Button
-                  icon="trash"
-                  text={_('Delete')}
-                  size="sm"
-                  onClick={() => {
-                    this.onRemoveItem(index);
-                  }}
-                />
-              ) : null
-            }
-            {
-              btnList.map(btnItem => (
-                <Button
-                  key={`${btnItem.get('name')}Btn`}
-                  icon={btnItem.get('icon')}
-                  text={btnItem.get('text')}
-                  size="sm"
-                  onClick={() => {
-                    this.onItemAction(
-                      btnItem.toJS(),
-                      index,
-                    );
-                  }}
-                />
-              ))
-            }
-          </div>
-        ),
-      }));
-    } else {
-      this.listTableOptions = tableOptions;
+      // 有操作按钮时，添加操作列
+      if (btnsNum > 0) {
+        this.listTableOptions = tableOptions.push(Map({
+          id: '__actions__',
+          text: _('Actions'),
+          width: btnsNum * 90,
+          transform: (val, item, index) => (
+            <div className="action-btns">
+              {
+                editable ? (
+                  <Button
+                    icon="edit"
+                    text={_('Edit')}
+                    size="sm"
+                    onClick={() => {
+                      this.props.editListItemByIndex(index);
+                    }}
+                  />
+                ) : null
+              }
+              {
+                deleteable ? (
+                  <Button
+                    icon="trash"
+                    text={_('Delete')}
+                    size="sm"
+                    onClick={() => {
+                      this.onRemoveItem(index);
+                    }}
+                  />
+                ) : null
+              }
+              {
+                btnList.map(btnItem => (
+                  <Button
+                    key={`${btnItem.get('name')}Btn`}
+                    icon={btnItem.get('icon')}
+                    text={btnItem.get('text')}
+                    size="sm"
+                    onClick={() => {
+                      this.onItemAction(
+                        btnItem.toJS(),
+                        index,
+                      );
+                    }}
+                  />
+                ))
+              }
+            </div>
+          ),
+        }));
+      }
     }
 
     if (this.listTableOptions) {
@@ -582,7 +584,12 @@ class ListInfo extends React.Component {
             let $$newFormGroup = $$formGroup;
 
             if ($$formGroup.get('notEditable')) {
-              $$newFormGroup = $$newFormGroup.set('readOnly', true);
+              $$newFormGroup = $$newFormGroup.set('readOnly', true)
+                .set('type', 'text');
+
+              if ($$newFormGroup.get('type') === 'select' || $$newFormGroup.get('type') === 'switch') {
+                $$newFormGroup = $$newFormGroup.set('type', 'text');
+              }
             }
             return $$newFormGroup;
           });

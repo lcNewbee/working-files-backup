@@ -101,11 +101,22 @@ class Group extends CI_Controller {
       $q = $this->db->select('name')
         ->from('ap_list')
         ->where('name', $temp_data['name']);
+      $q_mac=$this->db->select('mac')
+        ->from('ap_list')
+        ->where('mac', $temp_data['apmac']);
       if($q->num_rows > 0){
       	$result=array(
            'state'=>array(
            'code'=>6000,
            'msg'=>'the apname is not availble!'
+           )
+        );
+      }
+      elseif($q_mac->num_rows > 0){
+        $result=array(
+           'state'=>array(
+           'code'=>6001,
+           'msg'=>'mac is not availble!'
            )
         );
       }

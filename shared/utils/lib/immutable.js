@@ -1,26 +1,26 @@
 // 对 immutable 数据的操作
 
 var immutableUtils = {
-  getFormOptions: function($$options) {
+  getFormOptions: function ($$options) {
     var ret = $$options;
 
-    if(!ret) {
+    if (!ret) {
       return null;
     }
 
-    ret = ret.map(function(item) {
+    ret = ret.map(function (item) {
         var commonOption = {
           id: item.get('id'),
           label: item.get('text') || item.get('label'),
           fieldset: item.get('fieldset'),
           legend: item.get('legend'),
-          $$options: item.get('$$options'),
-          notEditable:  item.get('notEditable'),
+          options: item.get('options'),
+          notEditable: item.get('notEditable'),
         };
         var retVal = item.clear()
           .merge(commonOption)
           .merge(item.get('formProps'))
-          .filterNot(function(val) {
+          .filterNot(function (val) {
             return typeof val === 'undefined';
           });
 
@@ -30,10 +30,10 @@ var immutableUtils = {
 
         return retVal;
       })
-      .filterNot(function(x) {
+      .filterNot(function (x) {
         return x === 'noForm';
       })
-      .groupBy(function(item) {
+      .groupBy(function (item) {
         return item.get('fieldset')
       })
       .toList();
@@ -45,22 +45,22 @@ var immutableUtils = {
     return ret;
   },
 
-  getQueryFormOptions: function($$options) {
+  getQueryFormOptions: function ($$options) {
     var ret = $$options;
 
-    if(!ret) {
+    if (!ret) {
       return null;
     }
 
-    ret = ret.filter(function(x) {
+    ret = ret.filter(function (x) {
         return x.get('queryable');
-      }).map(function(item) {
+      }).map(function (item) {
         var commonOption = {
           id: item.get('id'),
           label: item.get('text') || item.get('label'),
           fieldset: item.get('fieldset'),
           legend: item.get('legend'),
-          $$options: item.get('$$options'),
+          options: item.get('options'),
         };
         var retVal = item.clear()
           .merge(commonOption)
@@ -73,11 +73,11 @@ var immutableUtils = {
     return ret;
   },
 
-  getDefaultData: function($$options, key) {
+  getDefaultData: function ($$options, key) {
     var defaultKey = key || 'defaultValue';
     var ret = {};
 
-    if(!$$options) {
+    if (!$$options) {
       return null;
     }
 
@@ -92,10 +92,10 @@ var immutableUtils = {
     return ret;
   },
 
-  getValidatorOptions: function($$options) {
+  getValidatorOptions: function ($$options) {
     var ret = $$options;
 
-    if(!ret) {
+    if (!ret) {
       return null;
     }
 
@@ -106,10 +106,10 @@ var immutableUtils = {
     return ret;
   },
 
-  getTableOptions: function($$options) {
+  getTableOptions: function ($$options) {
     var ret = $$options;
 
-    if(!ret) {
+    if (!ret) {
       return null;
     }
 
@@ -120,7 +120,7 @@ var immutableUtils = {
     return ret;
   },
 
-  getChanged: function($$newData, $$oldData) {
+  getChanged: function ($$newData, $$oldData) {
     var $$ret = $$newData;
 
     $$ret = $$newData.filter(
@@ -141,6 +141,6 @@ var immutableUtils = {
 }
 
 // exports
-if (typeof module === "object" && typeof module.exports === "object" ) {
+if (typeof module === "object" && typeof module.exports === "object") {
   module.exports = immutableUtils;
 }

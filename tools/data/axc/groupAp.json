@@ -9,6 +9,7 @@
     "radios": [
       {
         "radioID":   1,
+        "enable": 1,
         "beaconinterval": 100,
         "fragthreshold": 1024,
         "longretrythreshold": 11,
@@ -29,18 +30,19 @@
         "rxchain": "10kb/s",
         "shortgi": 1,
         "preamble": 1,
-        "ampdu": 100,
-        "amsdu": 100,
+        "ampdu": 34,
+        "amsdu": 23,
         "channelwidth": 40,
         "channel": 7,
         "rate": "xxx",
-        "txpower": "20db",
-        "rateset": "xxx",
+        "txpower": "100%",
+        "rateset": "2x2",
         "spatialstreams": 1,
         "switch11n": 1,
         "first5g": 1
       }, {
         "radioID":   2,
+        "enable": 0,
         "beaconinterval": 100,
         "fragthreshold": 1024,
         "longretrythreshold": 11,
@@ -66,8 +68,8 @@
         "channelwidth": 40,
         "channel": 7,
         "rate": "xxx",
-        "txpower": "20db",
-        "rateset": "xxx",
+        "txpower": "100%",
+        "rateset": "1x1",
         "spatialstreams": 1,
         "switch11n": 1,
         "first5g": 1

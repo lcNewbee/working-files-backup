@@ -1,3 +1,4 @@
+import { immutableUtils } from 'shared/utils';
 import * as appActions from './app';
 
 let refreshTimeout = null;
@@ -192,22 +193,30 @@ export function updateScreenSettings(payload) {
     payload,
   };
 }
-export function saveScreenSettings(url) {
+export function saveScreenSettings(option) {
   return (dispatch, getState) => {
     const globalState = getState();
     const name = globalState.screens.get('curScreenId');
-    const curData = globalState.screens.getIn([name, 'curSettings']);
-    const oriData = globalState.screens.getIn([name, 'data', 'settings']);
+    const $$curData = globalState.screens.getIn([name, 'curSettings']);
+    const $$oriData = globalState.screens.getIn([name, 'data', 'settings']);
     const formUrl = globalState.screens.getIn([name, 'formUrl']);
     const fetchUrl = globalState.screens.getIn([name, 'fetchUrl']) || formUrl;
-    const subData = curData.toJS();
+    let $$subData = $$curData;
+    let saveUrl = formUrl;
 
-    if (!curData.equals(oriData)) {
-      console.log('hasChange');
+    // 处理配置
+    if (option) {
+      if (option.url) {
+        saveUrl = option.url;
+      }
+      if (option.onlyChanged) {
+        $$subData = immutableUtils.getChanged($$subData, $$oriData);
+      }
     }
 
-    subData.action = 'setting';
-    return dispatch(appActions.save(url || formUrl, subData))
+    $$subData = $$subData.set('action', 'setting');
+
+    return dispatch(appActions.save(saveUrl, $$subData.toJS()))
       .then(() => {
         dispatch(fetchScreenData(fetchUrl));
       });

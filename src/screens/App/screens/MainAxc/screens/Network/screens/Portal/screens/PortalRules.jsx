@@ -25,102 +25,99 @@ function getPortList() {
     ),
   );
 }
-const commonFormOptions = fromJS([
+
+function getPortalServerList() {
+  return utils.fetch('/goform/network/portal/server')
+    .then(json => (
+      {
+        options: json.data.list.map(
+          item => ({
+            value: item.template_name,
+            label: item.template_name,
+          }),
+        ),
+      }
+    ),
+  );
+}
+const listOptions = fromJS([
   {
     id: 'interface_bind',
     label: _('Port'),
-    type: 'select',
-    legend: _('Base Settings'),
-    required: true,
-    loadOptions: getPortList,
-    isAsync: true,
+    formProps: {
+      type: 'switch',
+      required: true,
+      notEditable: true,
+    },
   }, {
     id: 'template_name',
     label: _('Server Name'),
-    type: 'select',
-    legend: _('Base Settings'),
+    formProps: {
+      type: 'select',
+      notEditable: true,
+    },
   }, {
     id: 'max_usernum',
     label: _('Max Users'),
-    type: 'number',
-    min: '1',
-    max: '99999',
+    formProps: {
+      type: 'number',
+      min: '1',
+      max: '99999',
+    },
   }, {
     id: 'auth_mode',
     label: _('Auth Type'),
-    type: 'switch',
-    defaultValue: '0',
+    defaultValue: '1',
     options: [
       {
-        value: '0',
+        value: '1',
         label: _('Direct'),
       },
       {
-        value: '1',
+        value: '2',
         label: _('Layer3'),
-      },
-    ],
-  }, {
-    id: 'auth_domain',
-    label: _('Force Auth Domain'),
-    type: 'text',
-  }, {
-    id: 'idle_test',
-    label: _('Idle Detection'),
-    type: 'checkbox',
-    defaultValue: '0',
-    value: '1',
-  },
-]);
-const listOptions = fromJS([
-  {
-    id: 'ruleName',
-    label: _('Rule Name'),
-    formProps: {
-      type: 'text',
-      maxLength: '32',
-      required: true,
-    },
-  }, {
-    id: 'ruleAction',
-    label: _('Rule Action'),
-    defaultValue: '0',
-    options: [
-      {
-        value: '0',
-        label: _('Allow'),
-      }, {
-        value: '1',
-        label: _('Prevent'),
       },
     ],
     formProps: {
       type: 'switch',
     },
-
   }, {
-    id: 'addressType',
-    label: _('Address Type'),
-    options: [
-      {
-        value: '1',
-        label: _('Source Address'),
-      }, {
-        value: '2',
-        label: _('Target Address'),
+    id: 'auth_ip',
+    label: _('Authentication IP'),
+    formProps: {
+      type: 'text',
+      validator: validator({
+        rules: 'ip',
+      }),
+      showPrecondition(data) {
+        return data.get('auth_mode') === '2';
       },
-    ],
-    formProps: {
-      type: 'select',
-      label: _('Rule Type'),
-      placeholder: _('Please Select ') + _('NAT Rule Type'),
     },
-
   }, {
-    id: 'ipAddress',
-    label: _('IP Address'),
+    id: 'auth_mask',
+    label: _('Authentication Mask'),
     formProps: {
-      required: true,
+      type: 'text',
+      validator: validator({
+        rules: 'mask',
+      }),
+      showPrecondition(data) {
+        return data.get('auth_mode') === '2';
+      },
+    },
+  }, {
+    id: 'auth_domain',
+    label: _('Force Auth Domain'),
+    formProps: {
+      type: 'text',
+    },
+  }, {
+    id: 'idle_test',
+    label: _('Idle Detection'),
+    defaultValue: '0',
+    formProps: {
+      type: 'checkbox',
+      value: '1',
     },
   },
 ]);
@@ -150,99 +147,52 @@ const defaultProps = {};
 export default class View extends React.Component {
   constructor(props) {
     super(props);
-    this.onSave = this.onSave.bind(this);
-    this.renderStepOne = this.renderStepOne.bind(this);
+    this.state = {
+      portOptions: fromJS([]),
+      portalServerOption: fromJS([]),
+    };
   }
+  componentWillMount() {
+    getPortList()
+      .then((data) => {
+        this.setState({
+          portOptions: fromJS(data.options),
+        });
+      });
 
-  onSave() {
-    this.props.saveSettings();
-  }
-
-  onBeforeStep(data) {
-    // next
-    if (data.targetStep > data.currStep) {
-
-    } else {
-      console.log('prev');
-    }
-  }
-
-  onAfterStep(data) {
-    // next
-    if (data.currStep) {
-      console.log(data.currStep);
-    }
-  }
-
-  renderStepOne() {
-    return (
-      <Table
-        className="table"
-        options={objectTableOptions}
-        list={[]}
-      />
-    );
+    getPortalServerList()
+      .then((data) => {
+        this.setState({
+          portalServerOption: fromJS(data.options),
+        });
+      });
   }
 
   render() {
     const { store } = this.props;
     const myScreenId = store.get('curScreenId');
-    const actionQuery = store.getIn([myScreenId, 'actionQuery']);
-    const actionType = store.getIn([myScreenId, 'actionQuery', 'action']);
-    const showModel = actionType === 'add' || actionType === 'edit';
+    const $$myScreenStore = store.get(myScreenId);
+    const $$curList = $$myScreenStore.getIn(['data', 'list']);
+    const mypPortOptions = this.state.portOptions
+      .filterNot(($$item) => {
+        const curPort = $$item.get('value');
+        const curPortIndex = $$curList.findIndex(($$listItem) => $$listItem.get('interface_bind') === curPort);
+        return curPortIndex !== -1;
+      });
+    const curListOptions = listOptions
+      .setIn([0, 'options'], mypPortOptions)
+      .setIn([1, 'options'], this.state.portalServerOption);
+
     return (
       <AppScreen
         {...this.props}
-        listTitle={_('Portal Rules List')}
         store={store}
-        // listOptions={listOptions}
-        settingsFormOptions={commonFormOptions}
-        hasSettingsSaveButton
+        listKey="template_name"
+        listOptions={curListOptions}
         actionable
         selectable
         noTitle
-
-      >
-        <Modal
-          isShow={showModel}
-          title={actionQuery.get('myTitle')}
-          onOk={this.onSave}
-          onClose={this.props.closeListItemModal}
-          size="lg"
-          noFooter
-        >
-          <WizardContainer
-            title={_('Portal Rule Setup Wizard')}
-            options={
-              fromJS([
-                {
-                  title: _('Select Rule Object'),
-                  render: this.renderStepOne,
-                }, {
-                  title: _('Set Rule Trigger Condition'),
-                  render() {
-                    return 'dsds';
-                  },
-                }, {
-                  title: _('Set Rule Trigger Action Condition'),
-                  render() {
-                    return 'dsds';
-                  },
-                }, {
-                  title: _('Completed'),
-                  render() {
-                    return 'dsds';
-                  },
-                },
-              ])
-            }
-            size="sm"
-            onBeforeStep={this.onBeforeStep}
-            onAfterStep={this.onAfterStep}
-            onCompleted={(data) => console.log('onCompleted', data)}
-          />
-        </Modal>
-      </AppScreen>
+      />
     );
   }
 }
