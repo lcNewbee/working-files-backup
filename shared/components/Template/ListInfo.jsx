@@ -21,8 +21,6 @@ const propTypes = {
   fetchUrl: PropTypes.string,
   saveUrl: PropTypes.string,
   listTitle: PropTypes.string,
-  groupid: PropTypes.any,
-
 
   // 用于配置 list表格主键，用于Ajax保存
   listKey: PropTypes.string,
@@ -638,7 +636,7 @@ class ListInfo extends React.Component {
 
   render() {
     const {
-      store, app, listTitle, selectable, customTable,
+      store, listTitle, selectable, customTable,
     } = this.props;
     const page = store.getIn(['data', 'page']);
     const list = store.getIn(['data', 'list']);
@@ -660,7 +658,7 @@ class ListInfo extends React.Component {
               list={list}
               page={page}
               onPageChange={this.onPageChange}
-              loading={app.get('fetching')}
+              loading={store.get('fetching')}
               selectable={selectable}
               onRowSelect={this.props.selectListItem}
             />

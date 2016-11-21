@@ -29,6 +29,12 @@ export function changeScreenActionQuery(payload) {
     payload,
   };
 }
+export function updateCustomProps(payload) {
+  return {
+    type: 'UPDATE_CUSTOM_PROPS',
+    payload,
+  };
+}
 export function reqeustFetchScreenData() {
   return {
     type: 'REQEUST_FETCH_SCREEN_DATA',
@@ -215,6 +221,10 @@ export function saveScreenSettings(option) {
     }
 
     $$subData = $$subData.set('action', 'setting');
+
+    if ($$curData.get('groupid') !== undefined) {
+      $$subData = $$subData.set('groupid', $$curData.get('groupid'));
+    }
 
     return dispatch(appActions.save(saveUrl, $$subData.toJS()))
       .then(() => {

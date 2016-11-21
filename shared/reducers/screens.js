@@ -11,6 +11,11 @@ const defaultItem = fromJS({
     settings: {},
     list: [],
   },
+
+  // 用于保存Screen自定义属性
+  customProps: {},
+
+  //
   curList: [],
 
   // 页面全局配置
@@ -19,11 +24,11 @@ const defaultItem = fromJS({
   // 当前正在操作的列表项
   curListItem: {},
 
+  // 操作的列表项默认值
+  defaultEditData: {},
+
   // 操作相关查询对象
   actionQuery: {},
-
-  // 列表某项添加或修改时默认数据
-  defaultEditData: {},
 });
 const defaultState = fromJS({
   curScreenId: 'base',
@@ -102,7 +107,6 @@ function selectedListItem(state, action, curScreenName) {
       .setIn([curScreenName, 'actionQuery', 'selectedList'], selectedList);
 }
 
-
 function updateCurEditListItem(curScreenName, state, action) {
   const curIndex = state.getIn([curScreenName, 'actionQuery', 'index']);
   let ret = state.mergeDeepIn([curScreenName, 'curListItem'], action.payload);
@@ -158,7 +162,8 @@ export default function (state = defaultState, action) {
 
     case 'REQEUST_FETCH_SCREEN_DATA':
       return state.setIn([curScreenName, 'fetching'], true);
-
+    case 'UPDATE_CUSTOM_PROPS':
+      return state.mergeDeepIn([]);
     case 'RECIVE_SCREEN_DATA':
       return state.setIn([curScreenName, 'fetching'], false)
         .mergeDeepIn([curScreenName, 'curSettings'], action.payload.settings)
