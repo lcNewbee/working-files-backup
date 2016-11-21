@@ -104,11 +104,15 @@ function showPrevModel(state) {
 function receiveApGroup(state, action) {
   const payload = action.payload || {};
   const $$list = fromJS(payload.list);
-  const $$defaultItem = $$list.get(0) || fromJS({});
+  let $$defaultItem = $$list.get(0) || fromJS({});
   const $$defaultManageItem = $$list.get(1) || fromJS({});
   let selectedItem = state.getIn(['group', 'selected']);
   let manageSelectedItem = state.getIn(['group', 'manageSelected']);
   let isDeleted = false;
+
+  if ($$list.size > 1) {
+    $$defaultItem = $$list.get(1);
+  }
 
   // 当前显示的组
   if (selectedItem.isEmpty()) {

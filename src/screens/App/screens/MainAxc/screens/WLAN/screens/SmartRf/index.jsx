@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import AppScreen from 'shared/components/Template/AppScreen';
-import { radioBase, radioAdvance } from 'shared/config/axcRadio';
+import { radioBase, radioAdvance, numberKeys } from 'shared/config/axcRadio';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 import FormContainer from 'shared/components/Organism/FormContainer';
@@ -91,6 +91,7 @@ export default class SmartRf extends React.Component {
           if (errMsg.isEmpty()) {
             this.props.saveScreenSettings({
               onlyChanged: true,
+              numberKeys: fromJS(numberKeys),
             });
           }
         });

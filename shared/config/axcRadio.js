@@ -60,6 +60,36 @@ function getChannelsOptions(currCountry, bandwidth) {
   return fromJS(channelsOptions);
 }
 
+export const numberKeys = [
+  'groupid',
+  'terminalRelease',
+  'terminalReleaseVal',
+  'beaconinterval',
+  'fragthreshold',
+  'longretrythreshold',
+  'maxrxduration',
+  'rtsthreshold',
+  'shortretrythreshold',
+  'maxclientcount',
+  'dtim',
+  'wmmenable',
+  'cwmin',
+  'cwmax',
+  'aifs',
+  'txop',
+  'admctrmandatory',
+  'phymode',
+  'shortgi',
+  'preamble',
+  'ampdu',
+  'amsdu',
+  'channelwidth',
+  'channel',
+  'spatialstreams',
+  'switch11n',
+  'first5g',
+];
+
 export const radioBase = fromJS([
   {
     // 射频开关
@@ -291,19 +321,19 @@ export const radioAdvance = fromJS([
     },
     options: [
       {
-        value: '0',
+        value: 0,
         label: _('Custom'),
       }, {
-        value: '1x1',
+        value: 1,
         label: '1x1',
       }, {
-        value: '2x2',
+        value: 2,
         label: '2x2',
       }, {
-        value: '3x3',
+        value: 3,
         label: '3x3',
       }, {
-        value: '4x4',
+        value: 4,
         label: '4x4',
       },
     ],
