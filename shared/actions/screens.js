@@ -225,7 +225,9 @@ export function saveScreenSettings(option) {
     if ($$curData.get('groupid') !== undefined) {
       $$subData = $$subData.set('groupid', $$curData.get('groupid'));
     }
-
+    if (option && option.numberKeys) {
+      $$subData = immutableUtils.toNumberWithKeys($$subData, option.numberKeys);
+    }
     return dispatch(appActions.save(saveUrl, $$subData.toJS()))
       .then(() => {
         dispatch(fetchScreenData(fetchUrl));

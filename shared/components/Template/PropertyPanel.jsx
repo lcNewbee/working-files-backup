@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react';
 import Icon from 'shared/components/Icon';
-import { Map } from 'immutable';
+import { Map, List } from 'immutable';
 import { immutableUtils } from 'shared/utils';
+import { numberKeys } from 'shared/config/axcRadio';
 import DevicePanel from '../Panels/Device';
-
 
 const propTypes = {
   isShow: PropTypes.bool,
@@ -67,6 +67,8 @@ class PropertyPanel extends React.Component {
         mac: $$activeListData.get('mac'),
         radioID: $$activeListData.getIn(['radio', 'radioID']),
       });
+
+      $$subData = immutableUtils.toNumberWithKeys($$subData, List(numberKeys));
     }
 
     this.props.save(formUrl, $$subData.toJS())

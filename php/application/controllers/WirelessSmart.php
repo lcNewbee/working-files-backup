@@ -23,18 +23,8 @@ class WirelessSmart extends CI_Controller {
 
 	function onAction($data) {
 		$result = null;
-    $retdata=array(
-      'groupid'=>(int)element('groupid', $data),
-      '5gFrist'=>(int)element('5gFrist', $data),
-      '11nFrist'=>(int)element('11nFrist', $data),
-      'autoChannel'=>(int)element('autoChannel', $data),
-      'channel'=>(int)element('channel', $data),
-      'country'=>element('country', $data),
-      'terminalRelease'=>(int)element('terminalRelease', $data),
-      'terminalReleaseVal'=>(int)element('terminalReleaseVal', $data),
-      'wirelessPower'=>element('wirelessPower', $data),
-    );
     $result=axc_set_wireless_smart(json_encode($retdata));
+    $result=axc_set_wireless_smart(json_encode($data));
 		return $result;
 	}
 

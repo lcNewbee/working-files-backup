@@ -138,6 +138,27 @@ var immutableUtils = {
 
     return $$ret;
   },
+
+  /**
+   *
+   */
+  toNumberWithKeys: function($$data, $$keysArr) {
+    var $$ret = $$data;
+
+    if ($$ret) {
+      $$ret = $$ret.map(
+        (item, key) => {
+          let ret = item;
+          if ($$keysArr.includes(key)) {
+            ret = parseInt(ret, 10);
+          }
+          return ret;
+        }
+      )
+    }
+
+    return $$ret;
+  }
 }
 
 // exports
