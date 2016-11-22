@@ -462,7 +462,7 @@ class ListInfo extends React.Component {
             <Button
               icon="trash-o"
               key="delete"
-              text={_('Remove Selected')}
+              text={_('Delete Selected')}
               onClick={() => {
                 this.onSelectedItemsAction('delete');
               }}

@@ -117,7 +117,6 @@ export default class View extends React.Component {
           hasFile: true,
         }}
         onBeforeAction={this.onBeforeAction}
-        listKey
         noTitle
         actionable
         selectable

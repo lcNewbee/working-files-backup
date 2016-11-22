@@ -23,8 +23,8 @@
       "admctrmandatory": 11,
       "countrycode": "CN",
       "phymode": 2,
-      "txchain": "10kb/s",
-      "rxchain": "10kb/s",
+      "txchain": "1",
+      "rxchain": "2",
       "shortgi": 1,
       "preamble": 1,
       "ampdu": 34,
@@ -34,7 +34,7 @@
       "rate": "xxx",
       "txpower": "auto",
       "rateset": "2x2",
-      "spatialstreams": 1,
+      "spatialstreams": 0,
       "switch11n": 1,
       "first5g": 1
     }

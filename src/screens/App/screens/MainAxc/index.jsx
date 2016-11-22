@@ -112,7 +112,15 @@ export default class Main extends Component {
   }
 
   componentWillMount() {
-    this.autoRefreshData();
+    // 获取当前组AP
+    this.props.fetchApGroup();
+
+    // 获取未分组设备
+    this.props.fetchGroupAps(-1);
+
+    setTimeout(() => {
+      this.autoRefreshData();
+    }, 5000);
   }
 
   componentWillUnmount() {
@@ -284,6 +292,7 @@ export default class Main extends Component {
   autoRefreshData() {
     const curRoutePath = this.props.route.path;
     const rateInterval = this.props.app.get('rateInterval');
+
     // 如是在AP组管理模块
     if (curRoutePath === '/main/group') {
       // 获取当前组AP
@@ -336,13 +345,13 @@ export default class Main extends Component {
       if ($$curGroupDevices.find(
         $$item => $$item.get('mac') === $$subData.get('apmac'),
       )) {
-        ret = 'Has Same Mac';
+        ret = _('已经存在相同MAC的AP');
       }
 
       if ($$curGroupDevices.find(
         $$item => $$item.get('devicename') === $$subData.get('name'),
       )) {
-        ret = 'Has Same Name';
+        ret = '已经存在相同名字的AP';
       }
     }
 
@@ -391,10 +400,10 @@ export default class Main extends Component {
 
             // apName 重复
             } else if (state.code === 6000) {
-              customCheckResult = 'Add AP name repeat';
+              customCheckResult = '已经存在相同名字的AP';
             // Ap MAC 重复
             } else if (state.code === 6001) {
-              customCheckResult = 'Add AP MAC repeat';
+              customCheckResult = '已经存在相同MAC的AP';
             }
           }
 
@@ -920,6 +929,7 @@ export default class Main extends Component {
                   icon="plus"
                   text={_('Add AP')}
                   onClick={() => {
+                    this.props.resetGroupAddDevice();
                     this.props.fetchGroupAps(-1);
                     this.props.showMainModal({
                       title: _('Add AP to Group'),

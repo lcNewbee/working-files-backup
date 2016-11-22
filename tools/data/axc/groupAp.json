@@ -37,7 +37,7 @@
         "rate": "xxx",
         "txpower": "100%",
         "rateset": "2x2",
-        "spatialstreams": 1,
+        "spatialstreams": 0,
         "switch11n": 1,
         "first5g": 1
       }, {
@@ -59,8 +59,8 @@
         "admctrmandatory": 11,
         "countrycode": "CN",
         "phymode": 1,
-        "txchain": "10kb/s",
-        "rxchain": "10kb/s",
+        "txchain": "1x1",
+        "rxchain": "2x2",
         "shortgi": 1,
         "preamble": 1,
         "ampdu": 100,
@@ -70,7 +70,7 @@
         "rate": "xxx",
         "txpower": "100%",
         "rateset": "1x1",
-        "spatialstreams": 1,
+        "spatialstreams": 0,
         "switch11n": 1,
         "first5g": 1
       }

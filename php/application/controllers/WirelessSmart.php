@@ -23,7 +23,6 @@ class WirelessSmart extends CI_Controller {
 
 	function onAction($data) {
 		$result = null;
-    $result=axc_set_wireless_smart(json_encode($retdata));
     $result=axc_set_wireless_smart(json_encode($data));
 		return $result;
 	}

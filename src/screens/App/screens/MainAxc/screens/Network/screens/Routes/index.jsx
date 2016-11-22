@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import utils, { immutableUtils } from 'shared/utils';
+import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
@@ -10,8 +10,9 @@ import * as appActions from 'shared/actions/app';
 
 const listOptions = fromJS([
   {
-    id: 'targetAddress',
+    id: 'destnet',
     text: _('Target Address'),
+    defaultValue: '',
     formProps: {
       required: true,
       validator: validator({
@@ -19,8 +20,9 @@ const listOptions = fromJS([
       }),
     },
   }, {
-    id: 'targetMask',
+    id: 'mask',
     text: _('Target Mask'),
+    defaultValue: '',
     formProps: {
       required: true,
       validator: validator({
@@ -28,8 +30,9 @@ const listOptions = fromJS([
       }),
     },
   }, {
-    id: 'nextHopIp',
+    id: 'gateway',
     text: _('Next Hop IP'),
+    defaultValue: '',
     formProps: {
       required: true,
       validator: validator({
@@ -38,10 +41,6 @@ const listOptions = fromJS([
     },
   },
 ]);
-const tableOptions = listOptions.map(
-  item => item.delete('formProps')
-);
-const editFormOptions = immutableUtils.getFormOptions(listOptions);
 
 const propTypes = {
   save: PropTypes.func,
@@ -52,17 +51,6 @@ export default class View extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onAction = this.onAction.bind(this);
-  }
-
-  onAction(mac, action) {
-    const query = {
-      mac,
-      action,
-    };
-
-    this.props.save('goform/blacklist', query)
-      .then(() => {});
   }
 
   render() {
@@ -70,7 +58,6 @@ export default class View extends React.Component {
       <AppScreen
         {...this.props}
         listOptions={listOptions}
-        editFormOptions={editFormOptions}
         listKey="allKeys"
         actionable
         selectable

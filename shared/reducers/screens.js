@@ -162,8 +162,10 @@ export default function (state = defaultState, action) {
 
     case 'REQEUST_FETCH_SCREEN_DATA':
       return state.setIn([curScreenName, 'fetching'], true);
-    case 'UPDATE_CUSTOM_PROPS':
-      return state.mergeDeepIn([]);
+
+    case 'UPDATE_SCREEN_CUSTOM_PROPS':
+      return state.mergeDeepIn([curScreenName, 'customProps'], action.payload);
+
     case 'RECIVE_SCREEN_DATA':
       return state.setIn([curScreenName, 'fetching'], false)
         .mergeDeepIn([curScreenName, 'curSettings'], action.payload.settings)

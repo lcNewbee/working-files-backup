@@ -29,9 +29,9 @@ export function changeScreenActionQuery(payload) {
     payload,
   };
 }
-export function updateCustomProps(payload) {
+export function updateScreenCustomProps(payload) {
   return {
-    type: 'UPDATE_CUSTOM_PROPS',
+    type: 'UPDATE_SCREEN_CUSTOM_PROPS',
     payload,
   };
 }

@@ -27,14 +27,30 @@ const countryOptions = channelsList.map(item =>
   }),
 ).toJS();
 
+const spatialstreamsOptions = [
+  {
+    value: '1',
+    label: '1x1',
+  }, {
+    value: '2',
+    label: '2x2',
+  }, {
+    value: '3',
+    label: '3x3',
+  }, {
+    value: '4',
+    label: '4x4',
+  },
+];
+
 function getChannelsOptions(currCountry, bandwidth) {
   let i;
   let len;
   let channelsRange;
   const channelsOptions = [
     {
-      value: 'auto',
-      label: _('auto'),
+      value: 0,
+      label: _('Automatic'),
     },
   ];
   const channelsOption = channelsList.find(item =>
@@ -62,6 +78,7 @@ function getChannelsOptions(currCountry, bandwidth) {
 
 export const numberKeys = [
   'groupid',
+  'radioenable',
   'terminalRelease',
   'terminalReleaseVal',
   'beaconinterval',
@@ -93,7 +110,7 @@ export const numberKeys = [
 export const radioBase = fromJS([
   {
     // 射频开关
-    id: 'enable',
+    id: 'radioenable',
     type: 'checkbox',
     form: 'radioBase',
     value: '1',
@@ -107,12 +124,39 @@ export const radioBase = fromJS([
     defaultValue: '0',
     text: _('Band Steering'),
   }, {
+    id: 'phymode',
+    form: 'radioAdvance',
+    label: _('Work Mode'),
+    type: 'select',
+    defaultValue: 'B/G/N',
+    options: [
+      {
+        value: 1,
+        label: '802.11B',
+      }, {
+        value: 2,
+        label: '802.11A',
+      }, {
+        value: 4,
+        label: '802.11G',
+      }, {
+        value: 8,
+        label: '802.11N',
+      }, {
+        value: 16,
+        label: '802.11BG',
+      },
+    ],
+  }, {
     id: 'switch11n',
     form: 'radioBase',
     type: 'checkbox',
     value: '1',
     defaultValue: '0',
     text: _('11n Frist'),
+    showPrecondition(data) {
+      return parseInt(data.get('phymode'), 10) === 8;
+    },
   }, {
     id: 'txpower',
     form: 'radioBase',
@@ -155,7 +199,10 @@ export const radioBase = fromJS([
     type: 'select',
     label: _('Channel'),
     options:
-      $$data => getChannelsOptions($$data.get('countrycode'))
+      ($$data) => {
+        const $$ret = getChannelsOptions($$data.get('countrycode'));
+        return $$ret.toJS();
+      }
     ,
   }, {
     id: 'channelwidth',
@@ -163,44 +210,14 @@ export const radioBase = fromJS([
     type: 'select',
     label: _('Channel Bandwidth'),
     options: channelBandwidthOptions,
+    showPrecondition(data) {
+      return parseInt(data.get('phymode'), 10) === 8;
+    },
   },
 ]);
 
 export const radioAdvance = fromJS([
   {
-    id: 'phymode',
-    form: 'radioAdvance',
-    label: _('Work Mode'),
-    type: 'select',
-    defaultValue: 'B/G/N',
-    options: [
-      {
-        value: 'B/G/N',
-        label: 'B/G/N',
-      }, {
-        value: 'B/G',
-        label: 'B/G',
-      }, {
-        value: 'B/N',
-        label: 'B/N',
-      }, {
-        value: '802.11N',
-        label: '802.11N',
-      }, {
-        value: '802.11G',
-        label: '802.11G',
-      }, {
-        value: '802.11B',
-        label: '802.11B',
-      }, {
-        value: '802.11A',
-        label: '802.11A',
-      }, {
-        value: '802.11N58',
-        label: '802.11N58',
-      },
-    ],
-  }, {
     id: 'maxclientcount',
     form: 'radioAdvance',
     type: 'number',
@@ -312,54 +329,28 @@ export const radioAdvance = fromJS([
     max: 3600,
     defaultValue: 60,
   }, {
-    id: 'spatialstreams',
-    form: 'radioAdvance',
-    label: _('空间流'),
-    type: 'switch',
-    inputStyle: {
-      width: '100%',
-    },
-    options: [
-      {
-        value: 0,
-        label: _('Custom'),
-      }, {
-        value: 1,
-        label: '1x1',
-      }, {
-        value: 2,
-        label: '2x2',
-      }, {
-        value: 3,
-        label: '3x3',
-      }, {
-        value: 4,
-        label: '4x4',
-      },
-    ],
-    value: '1',
-    defaultValue: '1',
-  }, {
     id: 'txchain',
     form: 'radioAdvance',
     label: _('自定义发射空间流'),
-    type: 'text',
-    maxLength: 32,
-    defaultValue: '',
+    type: 'switch',
+    defaultValue: '1x1',
     required: true,
+    options: spatialstreamsOptions,
     showPrecondition(data) {
-      return data.get('spatialstreams') === '0';
+      return parseInt(data.get('spatialstreams'), 10) !== 1;
     },
   }, {
     id: 'rxchain',
     form: 'radioAdvance',
     label: _('自定义接收空间流'),
-    type: 'text',
-    maxLength: 32,
-    defaultValue: '',
+    type: 'switch',
+    defaultValue: '1x1',
+    required: true,
+    options: spatialstreamsOptions,
     showPrecondition(data) {
-      return data.get('spatialstreams') === '0';
+      return parseInt(data.get('spatialstreams'), 10) !== 1;
     },
+
   }, {
     id: 'shortgi',
     form: 'radioAdvance',
@@ -367,6 +358,9 @@ export const radioAdvance = fromJS([
     type: 'checkbox',
     value: '1',
     defaultValue: '1',
+    showPrecondition(data) {
+      return parseInt(data.get('phymode'), 10) === 8;
+    },
   }, {
     id: 'preamble',
     form: 'radioAdvance',
@@ -377,16 +371,17 @@ export const radioAdvance = fromJS([
     },
     options: [
       {
-        value: '1',
+        value: 1,
         label: _('Short'),
       }, {
-        value: '0',
+        value: 0,
         label: _('Long'),
       },
     ],
     defaultValue: '1',
     showPrecondition(data) {
-      return data.get('shortgi') === '1';
+      return parseInt(data.get('phymode'), 10) === 8 &&
+          parseInt(data.get('shortgi'), 10) === 1;
     },
   }, {
     id: 'ampdu',
@@ -395,6 +390,9 @@ export const radioAdvance = fromJS([
     type: 'checkbox',
     value: '1',
     defaultValue: '0',
+    showPrecondition(data) {
+      return parseInt(data.get('phymode'), 10) === 8;
+    },
   }, {
     id: 'amsdu',
     form: 'radioAdvance',
@@ -402,6 +400,9 @@ export const radioAdvance = fromJS([
     type: 'checkbox',
     value: '1',
     defaultValue: '0',
+    showPrecondition(data) {
+      return parseInt(data.get('phymode'), 10) === 8;
+    },
   }, {
     id: 'rateset',
     form: 'radioAdvance',

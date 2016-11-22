@@ -12,23 +12,47 @@ import Icon from 'shared/components/Icon';
 
 const settingsFormOptions = radioBase
   // 添加自动功率
-  .updateIn(
-    [3, 'options'],
-    $$options => $$options.unshift(Map({
-      value: 'auto',
-      label: _('Automatic'),
-    })),
-  )
+  .map(
+    ($$item) => {
+      const curId = $$item.get('id');
 
-  // 信道只支持自动
-  .setIn(
-    [5, 'options'],
-    fromJS([
-      {
-        value: 'auto',
-        label: _('Automatic'),
-      },
-    ]),
+      switch (curId) {
+
+        // 功率添加自动选项
+        case 'txpower':
+          return $$item.updateIn(
+            ['options'],
+            $$options => $$options.unshift(Map({
+              value: 'auto',
+              label: _('Automatic'),
+            })),
+          );
+
+        // 信道只支持自动
+        case 'channel':
+          return $$item.set(
+            'options',
+            fromJS([
+              {
+                value: 0,
+                label: _('Automatic'),
+              },
+            ]),
+          );
+
+        // 5G优先,  11n优先
+        case 'first5g':
+        case 'switch11n':
+          return $$item.set(
+              'label',
+              $$item.get('text'),
+            ).delete('text');
+
+        default:
+      }
+
+      return $$item;
+    },
   )
   .rest()
   .butLast()
@@ -57,12 +81,12 @@ export default class SmartRf extends React.Component {
     super(props);
     this.state = {
       defaultSettingsData: {
-        first5g: '1',
-        switch11n: '1',
+        first5g: 1,
+        switch11n: 1,
         txpower: 'auto',
         countrycode: 'CN',
-        channel: 'auto',
-        channelwidth: '40',
+        channel: 0,
+        channelwidth: 40,
         groupid,
       },
       isBaseShow: true,

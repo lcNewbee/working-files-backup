@@ -11,6 +11,46 @@ import * as screenActions from 'shared/actions/screens';
 import * as propertiesActions from 'shared/actions/properties';
 
 const flowRateFilter = utils.filter('flowRate:["KB"]');
+const apStatus = [
+  {
+    value: 'new',
+    label: _('New'),
+  }, {
+    value: 'no_up',
+    label: _('No Up'),
+  }, {
+    value: 'no_cfg',
+    label: _('No Config'),
+  }, {
+    value: 'quick_off',
+    label: _('Quick Off'),
+  }, {
+    value: 'down',
+    label: _('Down'),
+  }, {
+    value: 'update',
+    label: _('Update'),
+  }, {
+    value: 'jdle',
+    label: _('jdle'),
+  }, {
+    value: 'join',
+    label: _('Jion'),
+  }, {
+    value: 'conf',
+    label: _('Conf'),
+  }, {
+    value: 'restart',
+    label: _('Restart'),
+  }, {
+    value: 'build',
+    label: _('Build'),
+  }, {
+    value: 'unkown',
+    label: _('Unkown'),
+  },
+];
+
 const listOptions = fromJS([
   {
     id: 'devicename',

@@ -60,7 +60,6 @@ module.exports = {
     app: './src/index.jsx',
     vendors: vendorList,
   },
-  devtool: 'cheap-source-map',
   cache: true,
   module: {
     loaders: [{

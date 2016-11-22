@@ -123,9 +123,9 @@ function rcPropertyPanelData(state, action) {
     if (rcData.radios) {
       $$radiosOptions = $$radiosOptions.merge(
         rcData.radios.map((item, index) => ({
-            value: index,
-            label: item.radioID,
-          })),
+          value: index,
+          label: item.radioID,
+        })),
       );
       $$newData = $$newData
         .mergeIn(['radio'], rcData.radios[radioActiveIndex])
@@ -140,10 +140,8 @@ function rcPropertyPanelData(state, action) {
         item => item.map((subItem) => {
           const module = subItem.get('module');
           const $$moduleData = $$newData.get(module);
-          const customData = subItem.get('data')
-            .mapEntries(([key]) => [key, $$moduleData.get(key)]);
 
-          return subItem.mergeIn(['data'], customData);
+          return subItem.mergeIn(['data'], $$moduleData);
         }),
       );
   }

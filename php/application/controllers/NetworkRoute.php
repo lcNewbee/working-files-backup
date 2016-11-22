@@ -9,8 +9,8 @@ class NetworkRoute extends CI_Controller {
 	}
 	function fetch(){
 		$query=$this->db->select('id,destnet,netmask,gateway')
-																				    ->from('route_table')
-																			    ->get()->result_array();
+      ->from('route_table')
+      ->get()->result_array();
 
     $newArray=null;
     $keys = array(
@@ -52,15 +52,15 @@ class NetworkRoute extends CI_Controller {
 		return $result;
 	}
 	function onAction($data) {
-        $result = null;                
-        $actionType = element('action', $data);
-        if ($actionType === 'add') {            
-            $arr['destnet'] = element('targetAddress',$data);
-            $arr['gateway'] = element('nextHopIp',$data);
-            $arr['mask'] = element('targetMask',$data);            
-            $request = acnetmg_add_route(json_encode($arr));
-        } 
-        return $result;
+    $result = null;
+    $actionType = element('action', $data);
+    if ($actionType === 'add') {
+      $arr['destnet'] = element('destnet',$data);
+      $arr['gateway'] = element('gateway',$data);
+      $arr['mask'] = element('mask',$data);
+      $result = acnetmg_add_route(json_encode($arr));
+    }
+    return $result;
 	}
 
 	public function index() {
