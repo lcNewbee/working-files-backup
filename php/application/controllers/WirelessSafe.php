@@ -1,6 +1,6 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class WirelessAcl extends CI_Controller {
+class WirelessSafe extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this->load->database();
@@ -11,9 +11,22 @@ class WirelessAcl extends CI_Controller {
         'groupid'=>(int)element('groupid', $_GET,-1),
         'type'=>(int)element('type', $_GET,0),
       );
-         $result=axc_get_wireless_wips(json_encode($retdata));
+      //$result=axc_get_wireless_wips(json_encode($retdata));
+			 $queryd = $this->db->select('id,cycles,scantype,apopermode,rpttime,chlnum,enable2g4chl,enable2g4pwr,adjafactor2g4,maxtxpwr')
+                            ->from('wrrm_template')
+                            /*->where('id', 1)*/
+                            ->limit(2,1)
+                            ->get()                            
+                            ->result_array();
+        echo '<pre>';
+        print_r($queryd);
+        echo '</pre>'; 
 
-      return $result;
+				
+				$this->db->from('wrrm_template');
+				$this->db->where('id', 1);
+				echo $this->db->count_all_results(); 
+      //return $result;
   }
 
 	function onAction($data) {

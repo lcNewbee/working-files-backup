@@ -63,6 +63,7 @@ $route['goform/network/Aaa'] = 'networkAaa';
 $route['goform/network/portal/server'] = 'networkPortalServer';
 $route['goform/network/portal/rule'] = 'networkPortalRules';
 $route['goform/network/radius/template'] = 'networkRadius';
+
 $route['goform/group'] = 'group';
 $route['goform/group/ap'] = 'apRadio/fetch';
 $route['goform/group/ap/radio'] = 'apRadio/radio';
@@ -77,14 +78,18 @@ $route['goform/group/blacklist'] = 'wirelessAcl';
 $route['goform/group/smartRf'] = 'wirelessSmart';
 $route['goform/group/timerPolicy'] = 'wirelessTimer';
 $route['goform/group/wips'] = 'wirelessSafe';
+
 $route['goform/system/version/upload'] = 'systemVersion/upload';
 $route['goform/system/version/upgrade'] = 'systemVersion/upgrade';
 $route['goform/system/version/backup'] = 'systemVersion/backup';
 $route['goform/system/ap/model'] = 'systemModel';
 $route['goform/system/ap/version'] = 'systemApVersion';
-
-$route['goform/system/log'] = 'systemLog';
 $route['goform/system/status'] = 'systemStatus';
+$route['goform/system/alarmEvents'] = 'systemAlarm';
+$route['goform/system/log'] = 'systemLog';
 
+
+
+$route['goform/system/test'] = 'systemTest';
 
 

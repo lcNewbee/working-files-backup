@@ -52,9 +52,15 @@ class NetworkRoute extends CI_Controller {
 		return $result;
 	}
 	function onAction($data) {
-      	$result = null;
-        $result=acnetmg_del_route(json_encode($deleteItem));
-		    return $result;
+        $result = null;                
+        $actionType = element('action', $data);
+        if ($actionType === 'add') {            
+            $arr['destnet'] = element('targetAddress',$data);
+            $arr['gateway'] = element('nextHopIp',$data);
+            $arr['mask'] = element('targetMask',$data);            
+            $request = acnetmg_add_route(json_encode($arr));
+        } 
+        return $result;
 	}
 
 	public function index() {
@@ -62,11 +68,11 @@ class NetworkRoute extends CI_Controller {
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$data = json_decode(file_get_contents("php://input"), true);
 			$result = $this->onAction($data);
-      echo $result;
+            echo $result;
 		}
 		elseif($_SERVER['REQUEST_METHOD'] == 'GET') {
 			$result = $this->fetch();
-      echo json_encode($result, true);
+            echo json_encode($result, true);
 		}
 	}
 }

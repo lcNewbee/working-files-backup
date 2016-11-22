@@ -5,6 +5,7 @@ class WirelessAcl extends CI_Controller {
 		parent::__construct();
 		$this->load->database();
 		$this->load->helper('array');
+    $this->load->model('group/WirelessAcl_Model');       
 	}
 	function fetch(){
     $retdata = array(
