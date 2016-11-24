@@ -100,11 +100,13 @@ class Group extends CI_Controller {
       }
       $q = $this->db->select('name')
         ->from('ap_list')
-        ->where('name', $temp_data['name']);
+        ->where('name', $temp_data['name'])
+        ->get()->result_array();
       $q_mac=$this->db->select('mac')
         ->from('ap_list')
-        ->where('mac', $temp_data['apmac']);
-      if($q->num_rows > 0){
+        ->where('mac', $temp_data['apmac'])
+        ->get()->result_array();
+      if(sizeof($q )> 0){
       	$result=array(
            'state'=>array(
            'code'=>6000,
@@ -112,7 +114,7 @@ class Group extends CI_Controller {
            )
         );
       }
-      else if($q_mac->num_rows > 0){
+      elseif(sizeof($q_mac) > 0){
         $result=array(
            'state'=>array(
            'code'=>6001,
