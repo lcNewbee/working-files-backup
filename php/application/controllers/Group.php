@@ -112,7 +112,7 @@ class Group extends CI_Controller {
            )
         );
       }
-      elseif($q_mac->num_rows > 0){
+      else if($q_mac->num_rows > 0){
         $result=array(
            'state'=>array(
            'code'=>6001,

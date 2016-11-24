@@ -563,10 +563,10 @@ export default class Main extends Component {
     const tableOption = fromJS([
       {
         id: 'devicename',
-        text: `${_('MAC Address')}/${_('Name')}`,
-        transform(val, item) {
-          return item.get('devicename') || item.get('mac');
-        },
+        text: _('Name'),
+      }, {
+        id: 'mac',
+        text: _('MAC Address'),
       }, {
         id: 'ip',
         text: _('IP Address'),
@@ -625,6 +625,7 @@ export default class Main extends Component {
                     name="apmac"
                     maxLength="18"
                     value={groupApAddData.get('apmac')}
+                    help="Separate with ':'or '-';"
                     onChange={data => this.props.updateGroupAddDevice({
                       apmac: data.value,
                     })}
