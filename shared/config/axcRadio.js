@@ -168,9 +168,6 @@ export const radioBase = fromJS([
         value: '3%',
         label: '3%',
       }, {
-        value: '3%',
-        label: '3%',
-      }, {
         value: '6%',
         label: '6%',
       }, {

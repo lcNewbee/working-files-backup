@@ -4,10 +4,6 @@ import utils from '../../../utils';
 
 const propTypes = {
   isFocus: PropTypes.bool,
-  onChange: PropTypes.func,
-  min: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  max: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  type: PropTypes.string,
 };
 
 const defaultProps = {
@@ -54,10 +50,15 @@ class Input extends React.Component {
     delete inputProps.offValue;
     delete inputProps.unit;
     delete inputProps.notEditable;
+    delete inputProps.dataType;
+    delete inputProps.defaultValue;
 
     if (inputProps.type === 'textarea') {
       ThisComponent = 'textarea';
     }
+    // if () {
+
+    // }
 
     return (
       <ThisComponent

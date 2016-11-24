@@ -42,7 +42,9 @@ const defaultProps = {
 
 export default class AppScreen extends React.Component {
   constructor(props) {
-    const { listOptions } = props;
+    const {
+      listOptions, defaultSettingsData, settingsFormOptions
+    } = props;
     const initOption = {
       id: props.route.id,
       formUrl: props.route.formUrl,
@@ -52,9 +54,14 @@ export default class AppScreen extends React.Component {
 
     super(props);
 
+    // init listOptions
     this.tableOptions = immutableUtils.getTableOptions(listOptions);
     this.editFormOptions = immutableUtils.getFormOptions(listOptions);
     this.defaultEditData = immutableUtils.getDefaultData(listOptions);
+
+    // init Settings Form
+    this.defaultSettingsData = defaultSettingsData || immutableUtils.getDefaultData(settingsFormOptions);
+    this.settingsNumberKeys = immutableUtils.getNumberKeys(settingsFormOptions);
 
     if (this.defaultEditData) {
       initOption.defaultEditData = this.defaultEditData;
@@ -64,8 +71,8 @@ export default class AppScreen extends React.Component {
       initOption.query = this.defaultQueryData;
     }
 
-    if (props.defaultSettingsData) {
-      initOption.defaultSettingsData = props.defaultSettingsData;
+    if (this.defaultSettingsData) {
+      initOption.defaultSettingsData = this.defaultSettingsData;
     }
 
     // 需要对 groupid特处理
@@ -132,7 +139,9 @@ export default class AppScreen extends React.Component {
       this.props.validateAll()
         .then((errMsg) => {
           if (errMsg.isEmpty()) {
-            this.props.saveScreenSettings();
+            this.props.saveScreenSettings({
+              numberKeys: this.settingsNumberKeys,
+            });
           }
         });
     }

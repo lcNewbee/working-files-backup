@@ -55,7 +55,31 @@ class FormContainer extends React.Component {
     this.onChangeData = this.onChangeData.bind(this);
     this.renderFormGroup = this.renderFormGroup.bind(this);
     this.renderFormGroupTree = this.renderFormGroupTree.bind(this);
+
+    this.syncData = {};
+    this.inited = false;
   }
+
+  componentDidMount() {
+    if (!this.inited && Object.keys(this.syncData).length > 0) {
+      if (this.props.onChangeData) {
+        this.props.onChangeData(this.syncData);
+        this.syncData = {};
+        this.inited = true;
+      }
+    }
+  }
+
+  componentDidUpdate() {
+    if (!this.inited && Object.keys(this.syncData).length > 0) {
+      if (this.props.onChangeData) {
+        this.props.onChangeData(this.syncData);
+        this.syncData = {};
+      }
+    }
+  }
+
+
   onSave() {
     const hasFile = this.props.hasFile;
 
@@ -72,7 +96,7 @@ class FormContainer extends React.Component {
       this.props.onChangeData(upDate);
     }
   }
-  renderFormGroup(option) {
+  renderFormGroup(option, index) {
     const {
       invalidMsg, validateAt, onValidError, actionQuery, id,
     } = this.props;
@@ -81,11 +105,10 @@ class FormContainer extends React.Component {
     const myComponent = myProps.component;
     const checkboxValue = myProps.value || '1';
     let isShow = true;
-    let data = this.props.data;
+    let $$data = this.props.data;
 
     delete myProps.fieldset;
     delete myProps.legend;
-    //delete myProps.id;
 
     if (id) {
       myProps.form = id;
@@ -93,7 +116,7 @@ class FormContainer extends React.Component {
 
     if (formGroupId) {
       myProps.name = formGroupId;
-      myProps.key = formGroupId;
+      myProps.key = `${formGroupId}${index}`;
     }
 
     if (invalidMsg && typeof invalidMsg.get === 'function') {
@@ -101,15 +124,25 @@ class FormContainer extends React.Component {
     }
 
     // 同时支持 Map 或 object 数据
-    if (data) {
-      if (!Map.isMap(data)) {
-        data = fromJS(data);
+    if ($$data) {
+      if (!Map.isMap($$data)) {
+        $$data = fromJS($$data);
       }
 
-      if (data.get(formGroupId) === undefined) {
+      // 固定初始化值，如checkbox
+      if ($$data.get(formGroupId) === undefined) {
         myProps.value = myProps.value;
+
+      // 特殊初始化值函数
+      } else if (typeof myProps.initValue === 'function' && !this.inited) {
+        myProps.value = myProps.initValue($$data);
+        if (myProps.value !== $$data.get(formGroupId)) {
+          this.syncData[formGroupId] = myProps.value;
+        }
+
+      // 正常的切换
       } else {
-        myProps.value = data.get(formGroupId);
+        myProps.value = $$data.get(formGroupId);
       }
     }
 
@@ -125,7 +158,7 @@ class FormContainer extends React.Component {
 
     if (myProps.type === 'checkbox') {
       myProps.value = checkboxValue;
-      myProps.checked = data.get(formGroupId) == checkboxValue;
+      myProps.checked = $$data.get(formGroupId) == checkboxValue;
     }
 
     if (myProps.saveOnChange) {
@@ -140,16 +173,16 @@ class FormContainer extends React.Component {
 
     // 处理 option需要依据表单值显示
     if (typeof myProps.options === 'function') {
-      myProps.options = myProps.options(data);
+      myProps.options = myProps.options($$data);
     }
 
     // 处理显示前提条件
     if (typeof myProps.showPrecondition === 'function') {
-      isShow = myProps.showPrecondition(data);
+      isShow = myProps.showPrecondition($$data);
     }
 
     if (myComponent) {
-      return myComponent(myProps, data, actionQuery);
+      return myComponent(myProps, $$data, actionQuery);
     }
 
     return isShow ? (
@@ -178,7 +211,7 @@ class FormContainer extends React.Component {
             >
               <legend className="o-form__legend">{legendText}</legend>
               {
-                this.renderFormGroupTree(item)
+                this.renderFormGroupTree(item, index)
               }
             </fieldset>
           );

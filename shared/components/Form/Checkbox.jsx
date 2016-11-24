@@ -21,21 +21,25 @@ const defaultProps = {
 
 class Checkbox extends React.Component {
   constructor(props) {
+    const { id } = props;
     super(props);
 
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+
+    if (!id) {
+      this.id = `checkbox_${Math.random()}`;
+    } else {
+      this.id = id;
+    }
   }
   render() {
     const { options, size, theme, className, style, text } = this.props;
     const label = options && options.label;
-    let { value, id } = this.props;
+    const id = this.id;
+    let { value } = this.props;
     let classNames = 'a-checkbox';
 
     value = value === undefined ? '1' : value;
-
-    if (!id) {
-      id = `checkbox_${Math.random()}`;
-    }
 
     if (size) {
       classNames = `${classNames} a-checkbox--${size}`;
@@ -48,6 +52,7 @@ class Checkbox extends React.Component {
     if (className) {
       classNames = `${classNames} a-checkbox--${className}`;
     }
+
 
     return (
       <label htmlFor={id} className={classNames} style={style}>

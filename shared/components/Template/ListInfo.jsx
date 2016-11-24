@@ -74,6 +74,7 @@ const propTypes = {
     PropTypes.instanceOf(List), PropTypes.array,
   ]),
   onBeforeAction: PropTypes.func,
+  onBeforeSave: PropTypes.func,
 
   // React node 元素
   actionBarChildren: PropTypes.node,
@@ -93,7 +94,7 @@ class ListInfo extends React.Component {
     this.selectedList = [];
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     utils.binds(this, [
-      'initListTableOptions', 'doItemAction',
+      'initListTableOptions', 'doItemAction', 'doSaveEditForm',
       'onChangeQuery', 'onPageChange', 'onSaveEditForm', 'onCloseEditModal',
       'onChangeSearchText', 'onChangeType', 'onChangeTableSize', 'onRemoveSelectItems',
       'onItemAction', 'onSelectedItemsAction',
@@ -125,24 +126,28 @@ class ListInfo extends React.Component {
     }, true);
   }
   onSaveEditForm(formElem, hasFile) {
-    const formUrl = formElem.getAttribute('action');
+    const { onBeforeSave, store } = this.props;
+    const $$actionQuery = store.get('actionQuery');
+    const $$curListItem = store.get('curListItem');
+    const saveOption = {
+      formElem,
+      hasFile,
+    };
 
-    if (this.props.validateAll) {
-      this.props.validateAll(this.props.editFormId)
-        .then((errMsg) => {
-          if (errMsg.isEmpty()) {
-            // 表单中无文件
-            if (!hasFile) {
-              this.props.onListAction();
-            } else {
-              this.props.saveFile(formUrl, formElem)
-                .then(() => {
-                  this.props.fetchScreenData(formUrl);
-                  this.props.closeListItemModal();
-                });
-            }
-          }
-        });
+    if (utils.isPromise(onBeforeSave)) {
+      onBeforeSave($$actionQuery, $$curListItem)
+        .then(
+          (msg) => {
+            saveOption.msg = msg;
+            this.doSaveEditForm(saveOption);
+          },
+        );
+    } else if (utils.isFunc(onBeforeSave)) {
+      saveOption.msg = onBeforeSave($$actionQuery, $$curListItem);
+
+      this.doSaveEditForm(saveOption);
+    } else {
+      this.doSaveEditForm(saveOption);
     }
   }
   onCloseEditModal() {
@@ -153,7 +158,6 @@ class ListInfo extends React.Component {
       this.props.resetVaildateMsg();
     }
   }
-
   onPageChange(i) {
     this.onChangeQuery({
       page: i,
@@ -286,13 +290,13 @@ class ListInfo extends React.Component {
 
     // 如果是 Promise 对象
     } else if (utils.isPromise(onBeforeAction)) {
-      onBeforeAction($$actionItem).then(
+      onBeforeAction($$actionQuery).then(
         msg => this.doItemAction($$actionQuery, msg),
       );
 
     // 如果是 function
     } else {
-      onBeforeActionMsg = onBeforeAction();
+      onBeforeActionMsg = onBeforeAction($$actionQuery);
       this.doItemAction($$actionQuery, onBeforeActionMsg);
     }
   }
@@ -307,18 +311,42 @@ class ListInfo extends React.Component {
         id: 'listAction',
         role: 'alert',
         text: cancelMsg,
-        apply: () => {
-          this.props.changeScreenActionQuery(
-            $$actionQuery.toJS(),
-          );
-          this.props.onListAction();
-        },
       });
     } else {
-      this.props.changeScreenActionQuery(
-        $$actionQuery.toJS(),
-      );
+      if ($$actionQuery) {
+        this.props.changeScreenActionQuery(
+          $$actionQuery.toJS(),
+        );
+      }
       this.props.onListAction();
+    }
+  }
+  doSaveEditForm(option) {
+    const { formElem, hasFile } = option;
+    const formUrl = formElem.getAttribute('action');
+
+    if (option && option.msg) {
+      this.props.createModal({
+        id: 'saveEditForm',
+        role: 'alert',
+        text: option.msg,
+      });
+    } else if (this.props.validateAll) {
+      this.props.validateAll(this.props.editFormId)
+        .then((errMsg) => {
+          if (errMsg.isEmpty()) {
+            // 表单中无文件
+            if (!hasFile) {
+              this.props.onListAction();
+            } else {
+              this.props.saveFile(formUrl, formElem)
+                .then(() => {
+                  this.props.fetchScreenData(formUrl);
+                  this.props.closeListItemModal();
+                });
+            }
+          }
+        });
     }
   }
   initListTableOptions(props) {
@@ -414,7 +442,9 @@ class ListInfo extends React.Component {
                   this.onItemAction(
                     $$item.toJS(),
                     index,
-                    $$data,
+                    {
+                      [$$item.get('id')]: data.value,
+                    },
                   );
                 }}
               />

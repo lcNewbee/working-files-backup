@@ -54,7 +54,13 @@ utils.isArray = Array.isArray ? Array.isArray :
   }
 
 utils.isPromise = function(obj) {
-  return obj.then && 'function' === typeof obj.then;
+  return obj && obj.then && 'function' === typeof obj.then;
+}
+utils.isFunc = function(func) {
+  return 'function' === typeof func;
+}
+utils.isString = function(str) {
+  return 'string' === typeof str;
 }
 
 function property(key) {

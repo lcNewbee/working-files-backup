@@ -8,6 +8,7 @@ import RangeInput from './Range';
 import Radios from './Radios';
 import Input from './atom/Input';
 import NumberInput from './NumberInput';
+import Checkboxs from './Checkboxs';
 import Switchs from '../Switchs';
 import TimePicker from '../TimePicker';
 import DatePicker from '../DatePicker';
@@ -28,11 +29,12 @@ const propTypes = {
     'email', 'number', 'color', 'range', 'tel', 'url',
 
     // custom
-    'ip', 'mac', 'switch', 'plain-text', 'date-range',
+    'ip', 'mac', 'switch', 'plain-text', 'date-range', 'checkboxs',
   ]),
   check: PropTypes.func,
   checkClear: PropTypes.func,
   checkClearValue: PropTypes.func,
+  filter: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
   onChange: PropTypes.func,
   label: PropTypes.any,
   value: PropTypes.any,
@@ -40,10 +42,9 @@ const propTypes = {
   // Select Option
   clearable: PropTypes.bool,
   searchable: PropTypes.bool,
-  showSecond: PropTypes.bool,
 
   // Time or Date
-  format: PropTypes.string,
+  formatter: PropTypes.string,
   displayFormat: PropTypes.string,
 };
 
@@ -143,7 +144,7 @@ class FormInput extends React.Component {
   }
 
   onTimeChange(momentObj) {
-    const formatOption = this.props.format || 'HH:mm:ss';
+    const formatOption = this.props.formatter || 'HH:mm:ss';
     const data = {
       label: this.props.label,
     };
@@ -160,6 +161,20 @@ class FormInput extends React.Component {
         data.value === '') {
       this.props.checkClearValue(data.value);
     }
+  }
+
+  filterValue(val) {
+    const { filter } = this.props;
+    let ret = val;
+
+    if (utils.isFunc(filter)) {
+      ret = this.props.filter(val);
+
+    } else if (utils.isString(filter)) {
+
+    }
+
+    return ret;
   }
 
   handleChange(e, rawValue) {
@@ -191,14 +206,15 @@ class FormInput extends React.Component {
   }
   renderCustomInput(classNames) {
     const {
-      clearable, searchable, value, showSecond,
+      clearable, searchable, value,
     } = this.props;
     const inpputType = this.props.type;
     const inputProps = utils.extend({}, this.props);
     let timeValue = value;
-    let timeFormat = 'hmmss';
     const monthFormat = inputProps.monthFormat;
     const displayFormat = inputProps.displayFormat || 'YYYY-MM-DD';
+
+    inputProps.value = this.filterValue(value);
 
     switch (inpputType) {
       case 'plain-text':
@@ -222,14 +238,14 @@ class FormInput extends React.Component {
           />
         );
 
-      case 'time':
-        if (!showSecond) {
-          timeFormat = 'hmm';
-        }
-        if (!moment.isMoment(timeValue)) {
-          timeValue = moment(timeValue, timeFormat);
-        }
+      case 'checkboxs':
+        return (
+          <Checkboxs
+            {...inputProps}
+          />
+        );
 
+      case 'time':
         return (
           <TimePicker
             {...inputProps}
@@ -291,6 +307,8 @@ class FormInput extends React.Component {
     let MyComponent = Component;
     let classNames = className || '';
     let customRender = null;
+
+    inputProps.value = this.filterValue(value);
 
     if (size) {
       classNames = `${classNames} input-${size}`;

@@ -92,6 +92,26 @@ var immutableUtils = {
     return ret;
   },
 
+  getNumberKeys: function($$options) {
+    var $$ret = [];
+
+    if(!$$options || ($$options && !$$options.clear)) {
+      return $$ret;
+    }
+
+    $$ret = $$options.clear();
+
+    $$options.forEach((item) => {
+      var curId = item.get('id')
+      var dataType = item.get('dataType');
+      if (dataType === 'number') {
+        $$ret.push(curId);
+      }
+    });
+
+    return $$ret;
+  },
+
   getValidatorOptions: function ($$options) {
     var ret = $$options;
 
@@ -146,15 +166,14 @@ var immutableUtils = {
     var $$ret = $$data;
 
     if ($$ret) {
-      $$ret = $$ret.map(
-        (item, key) => {
-          let ret = item;
-          if ($$keysArr.includes(key)) {
-            ret = parseInt(ret, 10);
+      $$keysArr.forEach(
+        (key) => {
+          const curVal = $$ret.get(key);
+          if (curVal !== undefined) {
+            $$ret = $$ret.set(key, parseInt(curVal));
           }
-          return ret;
         }
-      )
+      );
     }
 
     return $$ret;
