@@ -5,35 +5,22 @@ class WirelessSafe extends CI_Controller {
 		parent::__construct();
 		$this->load->database();
 		$this->load->helper('array');
+		$this->load->model('group/WirelessSafe_Model');
 	}
 	function fetch(){
      $retdata = array(
         'groupid'=>(int)element('groupid', $_GET,-1),
         'type'=>(int)element('type', $_GET,0),
       );
-      //$result=axc_get_wireless_wips(json_encode($retdata));
-			 $queryd = $this->db->select('id,cycles,scantype,apopermode,rpttime,chlnum,enable2g4chl,enable2g4pwr,adjafactor2g4,maxtxpwr')
-                            ->from('wrrm_template')
-                            /*->where('id', 1)*/
-                            ->limit(2,1)
-                            ->get()                            
-                            ->result_array();
-        echo '<pre>';
-        print_r($queryd);
-        echo '</pre>'; 
-
-				
-				$this->db->from('wrrm_template');
-				$this->db->where('id', 1);
-				echo $this->db->count_all_results(); 
-      //return $result;
+			$result = $this->WirelessSafe_Model->get_wips_list($retdata);
+      return $result;
   }
 
 	function onAction($data) {
 		$result = null;
 		$actionType = element('action', $data);
-		if ($actionType === 'add') {
-
+		if ($actionType === 'setting') {
+			$result = $this->WirelessSafe_Model->add_wips_cfg($data);
 		}
 		elseif($actionType === 'edit') {
 

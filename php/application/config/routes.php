@@ -78,6 +78,7 @@ $route['goform/group/blacklist'] = 'wirelessAcl';
 $route['goform/group/smartRf'] = 'wirelessSmart';
 $route['goform/group/timerPolicy'] = 'wirelessTimer';
 $route['goform/group/wips'] = 'wirelessSafe';
+$route['goform/group/wireless/protection'] = 'WirelessProtection';
 
 $route['goform/system/version/upload'] = 'systemVersion/upload';
 $route['goform/system/version/upgrade'] = 'systemVersion/upgrade';
@@ -87,9 +88,3 @@ $route['goform/system/ap/version'] = 'systemApVersion';
 $route['goform/system/status'] = 'systemStatus';
 $route['goform/system/alarmEvents'] = 'systemAlarm';
 $route['goform/system/log'] = 'systemLog';
-
-
-
-$route['goform/system/test'] = 'systemTest';
-
-
