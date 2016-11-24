@@ -1,29 +1,39 @@
 import React, { PropTypes } from 'react';
-import utils, { immutableUtils } from 'shared/utils';
+import utils from 'shared/utils';
 import validator from 'shared/utils/lib/validator';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
-import { FormGroup, FormInput, Checkbox } from 'shared/components/Form';
-import Modal from 'shared/components/Modal';
 import AppScreen from 'shared/components/Template/AppScreen';
-import SaveButton from 'shared/components/Button/SaveButton';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
-const repeatOptions = [
+function getSsidList(data) {
+  return utils.fetch('goform/group/ssidSetting', data)
+    .then(json => (
+      json.data.list.map(
+        item => ({
+          value: item.ssid,
+          label: item.ssid,
+        }),
+      )
+    ),
+  );
+}
+
+const policyTypeOptions = [
   {
-    value: '0',
+    value: 'Once',
     label: _('Exactly-once'),
   }, {
-    value: '1',
+    value: 'Mon&Tue&Wed&Thu&Fri&Sat&Sun',
     label: _('Everyday'),
   }, {
-    value: '2',
-    label: _('Workday'),
+    value: 'Mon&Tue&Wed&Thu&Fri',
+    label: _('Weekdays'),
   }, {
-    value: '5',
+    value: 'custom',
     label: _('Custom'),
   },
 ];
@@ -45,41 +55,151 @@ const validOptions = Map({
     rules: 'num:[32, 102400, 0]',
   }),
 });
-const listOptions = fromJS([
+const daysOptions = fromJS([
   {
-    id: 'timerRange',
-    text: _('Timer Range'),
+    value: 'Mon',
+    label: _('Mon'),
+  }, {
+    value: 'Tue',
+    label: _('Tue'),
+  }, {
+    value: 'Wed',
+    label: _('Wed'),
+  }, {
+    value: 'Thu',
+    label: _('Thu'),
+  }, {
+    value: 'Fri',
+    label: _('Fri'),
+  }, {
+    value: 'Sat',
+    label: _('Sat'),
+  }, {
+    value: 'Sun',
+    label: _('Sun'),
+  },
+]);
+const screenOptions = fromJS([
+  {
+    id: 'policy_type',
+    label: _('Repeat'),
+    options: policyTypeOptions,
     width: '120',
-    transform(val, item) {
-      return `${item.get('startTime')} - ${item.get('endTime')}`;
+    defaultValue: 'Mon&Tue&Wed&Thu&Fri&Sat&Sun',
+    formProps: {
+      type: 'select',
     },
   }, {
-    id: 'opObject',
-    width: '120',
-    text: _('Operate Object'),
+    id: 'policy_custom_type',
+    label: _('Custom Cycle'),
+    noTable: true,
+    formProps: {
+      type: 'checkboxs',
+      splitStr: '&',
+      options: daysOptions,
+      showPrecondition($$data) {
+        const curRepaet = $$data.get('policy_type');
+
+        return curRepaet === 'custom';
+      },
+    },
   }, {
-    id: 'repeat',
-    text: _('Repeat'),
+    id: 'policy_times',
+    width: '130',
+    text: _('Time'),
+    noForm: true,
+  }, {
+    id: 'policy_date',
+    width: '130',
+    text: _('Time'),
+    noTable: true,
+    defaultValue: moment().format('YYYY-MM-DD'),
+    formProps: {
+      id: 'policy_date',
+      type: 'date',
+      showPrecondition($$data) {
+        const curRepaet = $$data.get('policy_type');
+
+        return curRepaet === 'Once';
+      },
+      initValue($$data) {
+        const oldVal = $$data.get('policy_times');
+        let timeStr = oldVal;
+
+        if (oldVal) {
+          timeStr = oldVal.split(' ');
+          timeStr = timeStr[0];
+        } else {
+          timeStr = $$data.get('policy_time');
+        }
+
+        return timeStr;
+      },
+    },
+  }, {
+    id: 'policy_time',
+    text: _('Time'),
+    noTable: true,
+    defaultValue: moment().format('HH:mm'),
+    formProps: {
+      type: 'time',
+      formatter: 'HH:mm',
+      showSecond: false,
+      initValue($$data) {
+        const oldVal = $$data.get('policy_times');
+        let timeStr = oldVal;
+
+        if (oldVal) {
+          timeStr = oldVal.split(' ')[1];
+        } else {
+          timeStr = $$data.get('policy_time');
+        }
+        return timeStr;
+      },
+    },
+  }, {
+    id: 'objects_templateswitch',
+    text: _('Operation'),
+    defaultValue: 1,
+    options: [
+      {
+        value: 1,
+        label: _('Enable'),
+      }, {
+        value: 0,
+        label: _('Disable'),
+      },
+    ],
+    formProps: {
+      type: 'switch',
+    },
+  }, {
+    id: 'objects_templatename',
+    text: _('Operation Object'),
+    formProps: {
+      type: 'select',
+      required: true,
+    },
+  }, {
+    id: 'policy_enbale',
+    label: _('Policy Switch'),
+    actionName: 'switch',
+    width: '90px',
+    type: 'switch',
     defaultValue: '1',
+    formProps: {
+      type: 'checkbox',
+    },
   }, {
-    id: 'remark',
-    text: _('Remark'),
-  }, {
-    id: 'startTime',
-    text: _('Start Time'),
-    defaultValue: '8:00',
-  }, {
-    id: 'endTime',
-    text: _('End Time'),
-    defaultValue: '22:00',
+    id: 'objects_name',
+    noTable: true,
+    noForm: true,
+    defaultValue: 'ssid',
   },
 ]);
 
 const propTypes = {
-  app: PropTypes.instanceOf(Map),
-  store: PropTypes.instanceOf(Map),
-  route: PropTypes.object,
-  closeListItemModal: PropTypes.func,
+  groupid: PropTypes.string,
   updateCurEditListItem: PropTypes.func,
 };
 const defaultProps = {};
@@ -88,197 +208,184 @@ export default class View extends React.Component {
   constructor(props) {
     super(props);
 
-    this.getCurrData = this.getCurrData.bind(this);
-    this.onUpdateSettings = this.onUpdateSettings.bind(this);
-  }
-  onUpdateSettings(name) {
-    return (item) => {
-      const data = {};
-
-      data[name] = item.value;
-      this.props.updateCurEditListItem(data);
+    this.state = {
+      ssidOptions: fromJS([]),
     };
+    utils.binds(this, [
+      'onBeforeSave',
+      'onBeforeAction',
+    ]);
   }
-  getCurrData(name) {
-    return this.props.store.getIn([this.props.route.id, 'curListItem', name]) || '';
+
+  componentWillMount() {
+    getSsidList({
+      groupid: this.props.groupid,
+      page: 1,
+      size: 100,
+    }).then(
+      (options) => {
+        this.setState({
+          ssidOptions: fromJS(options),
+        });
+      },
+    );
+  }
+
+  onBeforeAction($$actionQuery) {
+    const actionType = $$actionQuery.get('action');
+    let ret = '';
+
+    if (actionType === 'switch') {
+      ret = '';
+    }
+
+    return ret;
+  }
+
+  onBeforeSave($$actionQuery, $$curListItem) {
+    const actionType = $$actionQuery.get('action');
+    const subItem = {};
+
+    if (actionType === 'add' || actionType === 'edit') {
+      subItem.policy_times = `${$$curListItem.get('policy_date')} ${$$curListItem.get('policy_time')}`;
+
+      if ($$curListItem.get('policy_type') === 'custom') {
+        subItem.policy_type = $$curListItem.get('policy_custom_type');
+      }
+      this.props.updateCurEditListItem(subItem);
+    }
   }
 
   render() {
-    const { route, store } = this.props;
-    const actionQuery = store.getIn([route.id, 'actionQuery']) || Map({});
-    const getCurrData = this.getCurrData;
-    const myListOptions = listOptions.push(fromJS({
-      id: 'enabled',
-      width: '80',
-      text: _('Status'),
-      transform() {
-        return (
-          <Checkbox
-            style={{
-              marginTop: '3px',
-            }}
-          />
-        );
-      },
-    }));
+    const curListOptions = screenOptions.setIn(
+      [6, 'options'],
+      this.state.ssidOptions,
+    );
 
     return (
       <AppScreen
         {...this.props}
-        listOptions={myListOptions}
+        listOptions={curListOptions}
+        deleteable={false}
+        onBeforeSave={this.onBeforeSave}
+        onBeforeAction={this.onBeforeAction}
         actionable
         selectable
-        customModal
-      >
-        <Modal
-          isShow={actionQuery.get('action') === 'add' || actionQuery.get('action') === 'edit'}
-          title={actionQuery.get('myTitle')}
-          onOk={() => this.props.closeListItemModal(route.id)}
-          onClose={() => this.props.closeListItemModal(route.id)}
-          cancelButton={false}
-          okButton={false}
-          noFooter
-        >
-          <FormGroup
-            type="select"
-            label={_('SSID')}
-            options={[
-              {
-                value: 1,
-                label: _('SSID1'),
-              }, {
-                value: 1,
-                label: _('SSID2'),
-              },
-            ]}
-            value={getCurrData('opObject')}
-            onChange={this.onUpdateSettings('opObject')}
-          />
-          <FormGroup
-            type="select"
-            label={_('Repeat')}
-            options={repeatOptions}
-            value={getCurrData('repeat')}
-            onChange={this.onUpdateSettings('repeat')}
-          />
-          {
-            getCurrData('repeat') === '0' ? (
-              <FormGroup
-                type="date"
-                label={_('Date')}
-                displayFormat="YYYY-MM-DD"
-                value={getCurrData('customDate')}
-                onChange={data => this.props.updateCurEditListItem({
-                  customDate: data.value,
-                })}
-                // withPortal
-              />
-            ) : null
-          }
-
-          {
-            getCurrData('repeat') === '5' ? (
-              <FormGroup
-                label={_('Custom Cycle')}
-              >
-                <FormInput
-                  type="checkbox"
-                  theme="square"
-                  text={_('Mo')}
-                />
-                <FormInput
-                  type="checkbox"
-                  theme="square"
-                  text={_('Tu')}
-                />
-                <FormInput
-                  type="checkbox"
-                  theme="square"
-                  text={_('We')}
-                />
-                <FormInput
-                  type="checkbox"
-                  theme="square"
-                  text={_('Th')}
-                />
-                <FormInput
-                  type="checkbox"
-                  theme="square"
-                  text={_('Fr')}
-                />
-                <FormInput
-                  type="checkbox"
-                  theme="square"
-                  text={_('Sa')}
-                />
-                <FormInput
-                  type="checkbox"
-                  theme="square"
-                  text={_('Su')}
-                />
-              </FormGroup>
-            ) : null
-          }
-
-          <FormGroup
-            label={_('Time Range')}
-            value={getCurrData('startTime')}
-          >
-            <FormInput
-              type="time"
-              className="text"
-              value={moment(getCurrData('startTime').replace(':', ''), 'hmm')}
-              onChange={data => this.props.updateCurEditListItem({
-                startTime: data.value,
-              })}
-              format="HH:mm"
-              showSecond={false}
-              style={{
-                width: '120px',
-              }}
-            />
-            -
-            <FormInput
-              type="time"
-              className="text"
-              value={moment(getCurrData('endTime').replace(':', ''), 'hmm')}
-              format="HH:mm"
-              showSecond={false}
-              style={{
-                width: '120px',
-              }}
-              onChange={data => this.props.updateCurEditListItem({
-                endTime: data.value,
-              })}
-            />
-          </FormGroup>
-
-          <FormGroup
-            type="text"
-            label={_('Description')}
-            value={getCurrData('remark')}
-            onChange={this.onUpdateSettings('remark')}
-          />
-
-          <FormGroup
-            label={_('Enable The Policy')}
-            type="checkbox"
-          />
-
-          <div className="form-group form-group-save">
-            <div className="form-control">
-              <SaveButton
-                type="button"
-                loading={this.props.app.get('saving')}
-                onClick={this.onSave}
-              />
-            </div>
-          </div>
-        </Modal>
-      </AppScreen>
+      />
     );
   }
 }
+
+
+        // <Modal
+        //   isShow={actionQuery.get('action') === 'add' || actionQuery.get('action') === 'edit'}
+        //   title={actionQuery.get('myTitle')}
+        //   onOk={() => this.props.closeListItemModal(route.id)}
+        //   onClose={() => this.props.closeListItemModal(route.id)}
+        //   cancelButton={false}
+        //   okButton={false}
+        //   noFooter
+        // >
+        //   <FormGroup
+        //     type="select"
+        //     label={_('Repeat')}
+        //     options={repeatOptions}
+        //     value={getCurrData('repeat')}
+        //     onChange={this.onUpdateSettings('repeat')}
+        //   />
+        //   {
+        //     getCurrData('repeat') === 'once' ? (
+        //       <FormGroup
+        //         type="date"
+        //         label={_('Date')}
+        //         displayFormat="YYYY-MM-DD"
+        //         value={getCurrData('customDate')}
+        //         onChange={data => this.props.updateCurEditListItem({
+        //           customDate: data.value,
+        //         })}
+        //         // withPortal
+        //       />
+        //     ) : null
+        //   }
+
+        //   {
+        //     getCurrData('repeat') === 'custom' ? (
+        //       <FormGroup
+        //         type="checkboxs"
+        //         splitStr="&"
+        //         value={getCurrData('policy_type')}
+        //         label={_('Custom Cycle')}
+        //         options={daysOptions}
+        //         onChange={data => this.props.updateCurEditListItem({
+        //           policy_type: data.value,
+        //         })}
+        //       />
+        //     ) : null
+        //   }
+
+          // <FormGroup
+          //   label={_('Time')}
+          //   type="time"
+          //   value={moment(getCurrData('startTime').replace(':', ''), 'hmm')}
+          //   format="HH:mm"
+          //   showSecond={false}
+          //   onChange={data => this.props.updateCurEditListItem({
+          //     startTime: data.value,
+          //   })}
+          // />
+        //   <FormGroup
+        //     type="switch"
+        //     label={_('Operation')}
+        //     value={getCurrData('operation')}
+        //     onChange={this.onUpdateSettings('operation')}
+        //     options={[
+        //       {
+        //         value: 1,
+        //         label: _('Enable'),
+        //       }, {
+        //         value: 0,
+        //         label: _('Disable'),
+        //       },
+        //     ]}
+        //   />
+        //   <FormGroup
+        //     type="select"
+        //     label={_('Operation Object')}
+        //     options={[
+        //       {
+        //         value: 1,
+        //         label: _('SSID1'),
+        //       }, {
+        //         value: 1,
+        //         label: _('SSID2'),
+        //       },
+        //     ]}
+        //     value={getCurrData('opObject')}
+        //     onChange={this.onUpdateSettings('opObject')}
+        //   />
+
+        //   <FormGroup
+        //     type="text"
+        //     label={_('Description')}
+        //     value={getCurrData('remark')}
+        //     onChange={this.onUpdateSettings('remark')}
+        //   />
+
+        //   <FormGroup
+        //     label={_('Enable The Policy')}
+        //     type="checkbox"
+        //   />
+
+        //   <div className="form-group form-group--save">
+        //     <div className="form-control">
+        //       <SaveButton
+        //         type="button"
+        //         loading={this.props.app.get('saving')}
+        //         onClick={this.onSave}
+        //       />
+        //     </div>
+        //   </div>
+        // </Modal>
 
 View.propTypes = propTypes;
 View.defaultProps = defaultProps;

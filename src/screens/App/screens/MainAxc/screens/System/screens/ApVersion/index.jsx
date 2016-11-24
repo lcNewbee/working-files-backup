@@ -70,11 +70,13 @@ export default class View extends React.Component {
   componentWillMount() {
     this.getApModelList();
   }
-  onBeforeAction(val) {
+
+  onBeforeAction($$actionQuery) {
+    const actionType = $$actionQuery.get('action');
     let ret = '';
 
-    if (!val) {
-      ret = 'Not Ok';
+    if (actionType === 'active' && parseInt($$actionQuery.get('active'), 10) === 0) {
+      ret = _('You should active other version but disable this');
     }
     return ret;
   }

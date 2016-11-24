@@ -99,16 +99,11 @@ const sWips =
     require('../../screens/App/screens/MainAxc/screens/WLAN/screens/SafePolicy/screens/Wips');
 const sEndpointProtection =
   require('../../screens/App/screens/MainAxc/screens/WLAN/screens/SafePolicy/screens/EndpointProtection');
-const sIsolationPolicy =
-  require('../../screens/App/screens/MainAxc/screens/WLAN/screens/SafePolicy/screens/IsolationPolicy');
+
 const sFlowReport =
     require('../../screens/App/screens/MainAxc/screens/Report/screens/FlowReport');
 const sUsersAnalysis =
     require('../../screens/App/screens/MainAxc/screens/Report/screens/BusinessReport/screens/UsersAnalysis');
-// const sPreferencesAnalysis =
-//    require('../../screens/App/screens/MainAxc/screens/Report/screens/BusinessReport/screens/PreferencesAnalysis');
-// const sInformationPush =
-//    require('../../screens/App/screens/MainAxc/screens/Report/screens/BusinessReport/screens/InformationPush');
 const sLiveMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/LiveMap');
 const sApPlanMap =
     require('../../screens/App/screens/MainAxc/screens/Map/screens/ApPlanMap');
@@ -420,21 +415,15 @@ const routes = [
                   {
                     id: 'wirelessWips',
                     path: '/main/group/wireless/safe/wips',
-                    formUrl: 'goform/wips',
+                    formUrl: 'goform/group/wips',
                     text: _('WIPS'),
                     component: sWips.Screen,
                   }, {
                     id: 'wirelessEndpointProtection',
                     path: '/main/group/wireless/safe/endpointProtection',
-                    formUrl: 'goform/wirelessEndpointProtection',
+                    formUrl: 'goform/group/wireless/protection',
                     text: _('Endpoint Protection'),
                     component: sEndpointProtection.Screen,
-                  }, {
-                    id: 'wirelessIsolationPolicy',
-                    path: '/main/group/wireless/safe/isolation',
-                    formUrl: 'goform/wirelessIsolationPolicy',
-                    text: _('Isolation Policy'),
-                    component: sIsolationPolicy.Screen,
                   },
                 ],
               },

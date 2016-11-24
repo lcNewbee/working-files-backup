@@ -1,6 +1,5 @@
 'use strict';
 var hasOwnProperty = Object.prototype.hasOwnProperty;
-var propIsEnumerable = Object.prototype.propertyIsEnumerable;
 var utils = {};
 
 function toObject(val) {

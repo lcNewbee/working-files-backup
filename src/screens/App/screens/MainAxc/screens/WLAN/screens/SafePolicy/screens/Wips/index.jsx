@@ -1,43 +1,48 @@
 import React, { PropTypes } from 'react';
-import utils from 'shared/utils';
-import validator from 'shared/utils/lib/validator';
+import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
-import { fromJS, Map } from 'immutable';
+import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import AppScreen from 'shared/components/Template/AppScreen';
-import { FormInput } from 'shared/components/Form';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
 const listOptions = fromJS([
   {
-    id: 'policyName',
-    text: _('Policy Name'),
-    width: '120',
+    id: 'wrrmenable',
+    width: '60',
+    text: _('Enable'),
+    formProps: {
+      type: 'checkbox',
+      dataType: 'number',
+      defaultValue: '1',
+    },
   }, {
-    id: 'opObject',
+    id: 'apopermode',
     width: '120',
     text: _('Access Point Work Mode'),
     options: [
       {
-        value: '0',
+        value: '1',
         label: _('Normal'),
       }, {
-        value: '1',
+        value: '2',
         label: _('Scan First'),
       },
     ],
     defaultValue: '1',
     formProps: {
       type: 'switch',
+      dataType: 'number',
+      defaultValue: '1',
     },
   }, {
-    id: 'scanType',
+    id: 'scantype',
     text: _('Scan Type'),
     defaultValue: '0',
     options: [
       {
-        value: '0',
+        value: '2',
         label: _('Passive'),
       }, {
         value: '1',
@@ -46,112 +51,103 @@ const listOptions = fromJS([
     ],
     formProps: {
       type: 'switch',
+      dataType: 'number',
+      defaultValue: '1',
     },
   }, {
-    id: 'maxPower',
+    id: 'cycles',
+    label: _('Scan Cycles Times'),
+    formProps: {
+      type: 'number',
+      min: 1,
+      dataType: 'number',
+      defaultValue: '1',
+    },
+  }, {
+    id: 'maxtxpwr',
     text: _('Max Power'),
     formProps: {
-      type: 'range',
-      min: 12,
-      max: 2333,
+      type: 'select',
+      defaultValue: '100%',
+      options: [
+        {
+          value: '3%',
+          label: '3%',
+        }, {
+          value: '6%',
+          label: '6%',
+        }, {
+          value: '12%',
+          label: '12%',
+        }, {
+          value: '25%',
+          label: '25%',
+        }, {
+          value: '50%',
+          label: '50%',
+        }, {
+          value: '100%',
+          label: '100%',
+        },
+      ],
     },
   }, {
-    id: 'minPower',
-    text: _('Min Power'),
-
+    id: 'rpttime',
+    text: _('信道质量报告上报时间'),
     formProps: {
-      type: 'range',
-      min: 12,
-      max: 2333,
+      type: 'number',
+      min: 1,
+      dataType: 'number',
+      defaultValue: '1',
     },
   }, {
-    id: '5gCalibrationInterval',
-    text: _('5G Calibration Interval'),
+    id: 'chlnum',
+    text: _('信道集合'),
+    help: `${_('e.g. ')}1,5,8`,
+    defaultValue: '',
   }, {
-    id: '24gCalibrationInterval',
-    text: _('2.4G Calibration Interval'),
-  }, {
-    id: '24gNeighborcoefficient',
-    text: _('2.4G Neighbor coefficient'),
-  }, {
-    id: 'protect24gMode',
-    text: _('2.4G timeid'),
-  }, {
-    id: 'enabled',
-    width: '60',
-    text: _('Status'),
+    id: 'enable2g4chl',
+    text: _('2.4G自动信道扫描开关'),
     formProps: {
       type: 'checkbox',
+      dataType: 'number',
+      defaultValue: '1',
+    },
+  }, {
+    id: 'enable2g4pwr',
+    text: _('2.4G自动功率扫描开关'),
+    formProps: {
+      type: 'checkbox',
+      dataType: 'number',
+      defaultValue: '1',
+    },
+  }, {
+    id: 'adjafactor2g4',
+    text: _('2.4G频段邻居系数'),
+    formProps: {
+      min: 0,
+      type: 'number',
+      dataType: 'number',
+      defaultValue: '1',
     },
   },
 ]);
 
-const validOptions = Map({
-  password: validator({
-    rules: 'remarkTxt:["\'\\\\"]|len:[8, 31]',
-  }),
-  vlanid: validator({
-    rules: 'num:[2, 4095]',
-  }),
-  ssid: validator({
-    rules: 'remarkTxt:["\'\\\\"]|len:[1, 31]',
-  }),
-  upstream: validator({
-    rules: 'num:[32, 102400, 0]',
-  }),
-  downstream: validator({
-    rules: 'num:[32, 102400, 0]',
-  }),
-});
+const settingsFormOptions = immutableUtils.getFormOptions(listOptions);
 
-const propTypes = {
-  save: PropTypes.func,
-  closeListItemModal: PropTypes.func,
-  onListAction: PropTypes.func,
-};
+const propTypes = {};
 const defaultProps = {};
 
 export default class View extends React.Component {
   constructor(props) {
     super(props);
-
-    utils.binds(this, [
-      'onAction', 'onSave',
-    ]);
   }
-  onSave() {
-    this.props.onListAction()
-      .then(() => {
-        this.props.closeListItemModal();
-      });
-  }
-
-  onAction(action, data) {
-    this.props.save('/goform/blacklist', data)
-      .then((json) => {
-        if (json.state && json.state.code === 2000) {
-          console.log(11);
-        }
-      });
-  }
-
   render() {
-    const myListOptions = listOptions.mergeIn([-1], {
-      transform: (val) => (
-        <FormInput
-          type="checkbox"
-          style={{
-            marginTop: '3px',
-          }}
-          onChange={data => this.onAction('switch', data)}
-        />
-      ),
-    });
-
     return (
       <AppScreen
         {...this.props}
-        listOptions={myListOptions}
+        settingsFormOptions={settingsFormOptions}
+        hasSettingsSaveButton
         noTitle
         actionable
       />
@@ -166,13 +162,14 @@ function mapStateToProps(state) {
   return {
     app: state.app,
     store: state.screens,
+    groupid: state.product.getIn(['group', 'selected', 'id']),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    screenActions
+    screenActions,
   ), dispatch);
 }
 
@@ -180,5 +177,4 @@ function mapDispatchToProps(dispatch) {
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
-  validator.mergeProps(validOptions)
 )(View);

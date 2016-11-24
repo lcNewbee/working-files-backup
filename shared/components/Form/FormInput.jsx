@@ -169,9 +169,6 @@ class FormInput extends React.Component {
 
     if (utils.isFunc(filter)) {
       ret = this.props.filter(val);
-
-    } else if (utils.isString(filter)) {
-
     }
 
     return ret;

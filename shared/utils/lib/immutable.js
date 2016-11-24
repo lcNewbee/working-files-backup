@@ -82,12 +82,14 @@ var immutableUtils = {
     }
 
     // 初始化默认值对象
-    $$options.forEach((item) => {
-      var defaultVal = item.get(defaultKey);
-      if (defaultVal !== undefined) {
-        ret[item.get('id')] = defaultVal;
+    $$options.forEach(
+      function(item) {
+        var defaultVal = item.get(defaultKey);
+        if (defaultVal !== undefined) {
+          ret[item.get('id')] = defaultVal;
+        }
       }
-    });
+    );
 
     return ret;
   },
@@ -101,13 +103,15 @@ var immutableUtils = {
 
     $$ret = $$options.clear();
 
-    $$options.forEach((item) => {
-      var curId = item.get('id')
-      var dataType = item.get('dataType');
-      if (dataType === 'number') {
-        $$ret.push(curId);
+    $$options.forEach(
+      function(item) {
+        var curId = item.get('id')
+        var dataType = item.get('dataType');
+        if (dataType === 'number') {
+          $$ret.push(curId);
+        }
       }
-    });
+    );
 
     return $$ret;
   },
@@ -120,7 +124,9 @@ var immutableUtils = {
     }
 
     ret = ret.map(
-      (item) => item.delete('formProps')
+      function(item) {
+        return item.delete('formProps')
+      }
     ).filterNot((item) => item.get('noTable'));
 
     return ret;

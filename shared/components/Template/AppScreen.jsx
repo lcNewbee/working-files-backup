@@ -43,7 +43,7 @@ const defaultProps = {
 export default class AppScreen extends React.Component {
   constructor(props) {
     const {
-      listOptions, defaultSettingsData, settingsFormOptions
+      listOptions, defaultSettingsData, settingsFormOptions,
     } = props;
     const initOption = {
       id: props.route.id,
@@ -60,7 +60,8 @@ export default class AppScreen extends React.Component {
     this.defaultEditData = immutableUtils.getDefaultData(listOptions);
 
     // init Settings Form
-    this.defaultSettingsData = defaultSettingsData || immutableUtils.getDefaultData(settingsFormOptions);
+    this.defaultSettingsData = defaultSettingsData ||
+        immutableUtils.getDefaultData(settingsFormOptions);
     this.settingsNumberKeys = immutableUtils.getNumberKeys(settingsFormOptions);
 
     if (this.defaultEditData) {

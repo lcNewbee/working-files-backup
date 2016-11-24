@@ -8,21 +8,6 @@ import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
-const commonFormOptions = fromJS([
-  {
-    id: 'attacttime',
-    label: _('Attact Time'),
-    type: 'number',
-  }, {
-    id: 'attactcnt',
-    label: _('Attact Number'),
-    type: 'number',
-  }, {
-    id: 'dyaging',
-    label: _('Dynamic Blacklists Release Time'),
-    type: 'number',
-  },
-]);
 const listOptions = fromJS([
   {
     id: 'mac',
@@ -85,11 +70,6 @@ export default class Blacklist extends React.Component {
         // Screen 全局属性
         {...this.props}
         title={_('Blacklist Settings')}
-
-        // Setting Props
-        settingsFormOptions={commonFormOptions}
-        hasSettingsSaveButton
-
         // List Props
         listTitle={route.text}
         listOptions={listOptions}

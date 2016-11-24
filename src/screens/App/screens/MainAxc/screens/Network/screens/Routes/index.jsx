@@ -50,7 +50,6 @@ const defaultProps = {};
 export default class View extends React.Component {
   constructor(props) {
     super(props);
-
   }
 
   render() {

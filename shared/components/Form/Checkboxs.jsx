@@ -4,15 +4,10 @@ import { List, fromJS } from 'immutable';
 import Checkbox from './Checkbox';
 
 const propTypes = {
-  className: PropTypes.string,
-  size: PropTypes.oneOf(['md', 'lg']),
-  theme: PropTypes.oneOf(['square']),
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  id: PropTypes.string,
   options: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-  style: PropTypes.object,
   onChange: PropTypes.func,
   splitStr: PropTypes.string,
+  value: PropTypes.string,
 };
 
 const defaultProps = {

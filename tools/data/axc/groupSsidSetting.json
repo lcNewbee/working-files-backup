@@ -6,7 +6,7 @@
   "data": {
     "list": [
       {
-        "ssid": "Market",
+        "ssid": "Market1",
         "remark": "Market 1",
         "nasId": "ds",
         "enabled": "0",
@@ -24,7 +24,7 @@
         "upstream": "64"
       },
       {
-        "ssid": "Market",
+        "ssid": "Market2",
         "remark": "Market_2",
         "vlanId": "223",
         "nasId": "ds",
@@ -42,7 +42,7 @@
         "upstream": "64"
       },
       {
-        "ssid": "Market",
+        "ssid": "Market3",
         "remark": "Market floor three",
         "vlanId": "22",
         "nasId": "ds",

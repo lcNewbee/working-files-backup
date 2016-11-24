@@ -158,7 +158,8 @@ class FormContainer extends React.Component {
 
     if (myProps.type === 'checkbox') {
       myProps.value = checkboxValue;
-      myProps.checked = $$data.get(formGroupId) == checkboxValue;
+      myProps.checked = $$data.get(formGroupId) === checkboxValue ||
+        parseInt($$data.get(formGroupId), 10) === parseInt(checkboxValue, 10);
     }
 
     if (myProps.saveOnChange) {

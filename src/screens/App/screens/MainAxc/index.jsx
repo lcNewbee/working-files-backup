@@ -43,6 +43,7 @@ const propTypes = {
   resetGroupAddDevice: PropTypes.func,
   selectManageGroupAp: PropTypes.func,
   route: PropTypes.object,
+  router: PropTypes.object,
   location: PropTypes.object,
   routes: PropTypes.array,
   createModal: PropTypes.func,
@@ -118,9 +119,9 @@ export default class Main extends Component {
     // 获取未分组设备
     this.props.fetchGroupAps(-1);
 
-    setTimeout(() => {
-      this.autoRefreshData();
-    }, 5000);
+    // setTimeout(() => {
+    //   this.autoRefreshData();
+    // }, 5000);
   }
 
   componentWillUnmount() {

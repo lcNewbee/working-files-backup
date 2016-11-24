@@ -5,7 +5,11 @@
   },
   "data": {
     "settings": {
-
+      "widsenable" : 1,
+      "attacttime" : 0,
+      "attactcnt": 5,
+      "dyaging": 10
     }
   }
 }
+

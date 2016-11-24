@@ -28,13 +28,13 @@ const encryptionOptions = [
 ];
 const loadBalanceTypeArr = [
   {
-    value: 0,
+    value: '0',
     label: _('Disable'),
   }, {
-    value: 1,
+    value: '1',
     label: _('Users'),
   }, {
-    value: 2,
+    value: '2',
     label: _('Flow'),
   },
 ];
@@ -200,7 +200,7 @@ const propTypes = {
   closeListItemModal: PropTypes.func,
   changeScreenActionQuery: PropTypes.func,
   updateCurEditListItem: PropTypes.func,
-  updateCustomProps: PropTypes.func,
+  updateScreenCustomProps: PropTypes.func,
   onListAction: PropTypes.func,
   validateAll: PropTypes.func,
 };

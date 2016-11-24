@@ -4,7 +4,21 @@
     "msg": "ok"
   },
   "data": {
-    "settings": {},
+    "settings": {
+      "enable": 1,
+      "cycles": 0,
+      "scantype": 1,
+      "apopermode": 1,
+      "maxtxpwr": "100%",
+      "rpttime": 10,
+      "chlnum": "xxxxx",
+      "enable2g4chl": 0,
+      "enable2g4pwr": 0,
+      "adjafactor2g4": 0,
+      "attacttime" : 0,
+      "attactcnt": 5,
+      "dyaging": 10
+    },
     "list": [
       {
         "policyName": "Policy1",

@@ -127,7 +127,7 @@ export function fetch(url, query) {
     const errorFunc = ajaxErrorCallback(
       dispatch,
       'fetch',
-      url
+      url,
     );
     dispatch(rqFetch());
 
@@ -159,7 +159,7 @@ export function save(url, query) {
     const errorFunc = ajaxErrorCallback(
       dispatch,
       'save',
-      url
+      url,
     );
     dispatch(requestSave());
 
@@ -191,7 +191,7 @@ export function saveFile(url, formElem) {
     const errorFunc = ajaxErrorCallback(
       dispatch,
       'save',
-      url
+      url,
     );
     dispatch(requestSave());
 
