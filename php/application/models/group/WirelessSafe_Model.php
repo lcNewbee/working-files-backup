@@ -11,7 +11,7 @@ class WirelessSafe_Model extends CI_Model {
                             ->from('wrrm_template')
                             ->where('id', $retdata['groupid'])
                             ->get()                            
-                            ->result_array();      
+                            ->result_array();                            
         if(count($queryd) > 0) {                                
             $arr['data'] = array("settings"=>$queryd[0]);            
         }else{
@@ -22,9 +22,9 @@ class WirelessSafe_Model extends CI_Model {
 
     public function add_wips_cfg($data) {   
         $result = null;             
-        $arr['groupid'] = (int)element('groupid',$data,1);
-        $arr['wrrmenable'] = (int)element('wrrmenable',$data,0);         /*功能开关*/
-        $arr['cycles'] = 0;                                           /* 扫描原因，即哪些事件触发的扫描，目前未定义，值始终为0 */  
+        $arr['groupid'] = (int)element('groupid',$data,-1);
+        $arr['wrrmenable'] = (int)element('wrrmenable',$data,0);      /*功能开关*/
+        $arr['cycles'] = (int)element('cycles',$data,0);              /* 扫描循环次数。值255表示持续进行循环扫描，0-扫描停止 */
         $arr['scantype'] = (int)element('scantype',$data,1);          /* 扫描类型，1 主动扫描，2 被动扫描模式 */
         $arr['apopermode'] = (int)element('apopermode',$data,1);      /* AP操作模式，1 正常工作模式，2 纯监测模式 */
         $arr['maxtxpwr'] = element('maxtxpwr',$data,100);             /* 最大功率 */
@@ -33,7 +33,6 @@ class WirelessSafe_Model extends CI_Model {
         $arr['enable2g4chl'] = (int)element('enable2g4chl',$data,0);  /* 2.4G自动信道扫描开关 */
         $arr['enable2g4pwr'] = (int)element('enable2g4pwr',$data,0);  /* 2.4G自动功率扫描开关 */
         $arr['adjafactor2g4'] = (int)element('adjafactor2g4',$data,1); /* 2.4G频段邻居系数 > 0 */    
-    
         $result = wrrm_set_param(json_encode($arr));
         return $result;
     }

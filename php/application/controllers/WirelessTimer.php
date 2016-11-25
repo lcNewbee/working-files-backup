@@ -6,28 +6,29 @@ class WirelessTimer extends CI_Controller {
 		parent::__construct();
 		$this->load->database();
 		$this->load->helper('array');
+		$this->load->model('group/WirelessTimer_Model');
 	}
 	function fetch(){
-         $retdata = array(
-        'groupid'=>(int)element('groupid', $_GET,-1),
-      );
-          $result=axc_get_wireless_timer_policy(json_encode($retdata));
-
-      return $result;
-  }
+        $retdata = array(
+            'groupid'=>(int)element('groupid', $_GET,-1),
+			'size'=>(int)element('size', $_GET,-1)
+        );        
+		$result = $this->WirelessTimer_Model->get_timer_list($retdata);
+        return $result;               
+    }
 
 	function onAction($data) {
 		$result = null;
 		$actionType = element('action', $data);
 		if ($actionType === 'add') {
-      $result=axc_add_wireless_timer_policy(json_encode($data));
+			$result = $this->WirelessTimer_Model->add_timer_policy($data);
+		}elseif($actionType === 'edit') {
+      		$result = $this->WirelessTimer_Model->up_timer_policy($data);
+		}elseif($actionType === 'delete'){			
+			$result = $this->WirelessTimer_Model->del_timer_policy($data);
+    	}elseif($actionType === 'switch'){
+			$result = $this->WirelessTimer_Model->up_timer_policy($data);
 		}
-		elseif($actionType === 'edit') {
-      $result=axc_modify_wireless_timer_policy(json_encode($data));
-		}
-    elseif($actionType === 'delete'){
-       $result=axc_del_wireless_timer_policy(json_encode($data));
-    }
 		return $result;
 	}
 
@@ -36,12 +37,12 @@ class WirelessTimer extends CI_Controller {
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$data = json_decode(file_get_contents("php://input"), true);
 			$result = $this->onAction($data);
-      echo $result;
+      		echo $result;
 		}
 		else if($_SERVER['REQUEST_METHOD'] == 'GET') {
 
 			$result = $this->fetch();
-      echo $result;
+      		echo $result;
 		}
 	}
 }
