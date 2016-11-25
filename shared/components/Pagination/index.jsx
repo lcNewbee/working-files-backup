@@ -100,7 +100,6 @@ class Pagination extends Component {
 
     endPage = endPage > totalPage ? totalPage : endPage;
 
-
     for (i = startPage; i <= endPage; i++) {
       key = `pager_${i}`;
 

@@ -145,6 +145,19 @@ function activeListItem(state, curScreenName, action) {
     });
 }
 
+function reciveScreenData($$state, curScreenName, action) {
+  let $$ret = $$state;
+
+  if (action.payload && action.payload.settings) {
+    $$ret = $$ret.mergeDeepIn([curScreenName, 'curSettings'], action.payload.settings);
+  }
+
+  return $$ret.setIn([curScreenName, 'fetching'], false)
+    .mergeIn([curScreenName, 'data'], action.payload)
+    .setIn([curScreenName, 'data', 'updateAt'], action.meta.updateAt)
+    .setIn([curScreenName, 'actionQuery', 'selectedList'], fromJS([]));
+}
+
 export default function (state = defaultState, action) {
   const curScreenName = (action.meta && action.meta.name) || state.get('curScreenId');
   const defaultEditData = state.getIn([curScreenName, 'defaultEditData']) || fromJS({});
@@ -167,11 +180,7 @@ export default function (state = defaultState, action) {
       return state.mergeDeepIn([curScreenName, 'customProps'], action.payload);
 
     case 'RECIVE_SCREEN_DATA':
-      return state.setIn([curScreenName, 'fetching'], false)
-        .mergeDeepIn([curScreenName, 'curSettings'], action.payload.settings)
-        .mergeIn([curScreenName, 'data'], action.payload)
-        .setIn([curScreenName, 'data', 'updateAt'], action.meta.updateAt)
-        .setIn([curScreenName, 'actionQuery', 'selectedList'], fromJS([]));
+      return reciveScreenData(state, curScreenName, action);
 
     // Screen Setting相关
     case 'UPDATE_SCREEN_SETTINGS':

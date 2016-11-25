@@ -95,6 +95,10 @@ class Row extends Component {
             }
           }
 
+          if (currVal === undefined && option.get('defaultValue') !== undefined) {
+            currVal = option.get('defaultValue');
+          }
+
           tdDom = <td key={thisKey}>{currVal}</td>;
         } else {
           tdDom = (

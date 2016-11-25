@@ -203,11 +203,13 @@ class ListInfo extends React.Component {
       }, 200);
     }
   }
-  onSelectedItemsAction(actionName) {
+  onSelectedItemsAction(option) {
+    const actionName = option.actionName;
+    const needConfirm = option.needConfirm;
     const store = this.props.store;
     const $$list = store.getIn(['data', 'list']);
     const $$actionQuery = store.getIn(['actionQuery']);
-    const listKey = this.props.listKey;
+    const listKey = option.actionKey || this.props.listKey;
     let selectStr = '';
     let msgText = '';
     let $$selectedList = $$actionQuery.get('selectedList');
@@ -250,7 +252,7 @@ class ListInfo extends React.Component {
     const { onBeforeAction } = this.props;
     const store = this.props.store;
     const list = store.getIn(['data', 'list']);
-    const listKey = this.props.listKey;
+    const listKey = option.actionKey || this.props.listKey;
     const $$actionItem = list.get(index);
     const msgText = _('Are you sure to %s selected: %s', _(actionName), index);
     let selectedList = [];
@@ -495,7 +497,10 @@ class ListInfo extends React.Component {
               key="delete"
               text={_('Delete Selected')}
               onClick={() => {
-                this.onSelectedItemsAction('delete');
+                this.onSelectedItemsAction({
+                  actionName: 'delete',
+                  needConfirm: true,
+                });
               }}
             />,
           );
@@ -511,14 +516,13 @@ class ListInfo extends React.Component {
             $$curActionBarButtons.map(
               ($$subButton) => {
                 const butProps = $$subButton.toJS();
-                const actionName = $$subButton.get('name');
-                const needConfirm = $$subButton.get('needConfirm');
+                const actionName = $$subButton.get('actionName');
                 return (
                   <Button
                     {...butProps}
                     key={`${actionName}Btn`}
                     onClick={() => {
-                      this.onSelectedItemsAction(actionName, needConfirm);
+                      this.onSelectedItemsAction($$subButton.toJS());
                     }}
                   />
                 );

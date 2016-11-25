@@ -113,15 +113,17 @@ export default class Main extends Component {
   }
 
   componentWillMount() {
+    const rateInterval = this.props.app.get('rateInterval');
+
     // 获取当前组AP
     this.props.fetchApGroup();
 
     // 获取未分组设备
     this.props.fetchGroupAps(-1);
 
-    // setTimeout(() => {
-    //   this.autoRefreshData();
-    // }, 5000);
+    setTimeout(() => {
+      this.autoRefreshData();
+    }, rateInterval);
   }
 
   componentWillUnmount() {

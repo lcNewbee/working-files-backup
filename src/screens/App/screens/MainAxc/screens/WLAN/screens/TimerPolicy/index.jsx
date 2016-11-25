@@ -115,7 +115,6 @@ const screenOptions = fromJS([
     noTable: true,
     defaultValue: moment().format('YYYY-MM-DD'),
     formProps: {
-      id: 'policy_date',
       type: 'date',
       showPrecondition($$data) {
         const curRepaet = $$data.get('policy_type');
@@ -124,16 +123,15 @@ const screenOptions = fromJS([
       },
       initValue($$data) {
         const oldVal = $$data.get('policy_times');
-        let timeStr = oldVal;
+        let dateStr = oldVal;
 
         if (oldVal) {
-          timeStr = oldVal.split(' ');
-          timeStr = timeStr[0];
+          dateStr = oldVal.split(' ');
+          dateStr = dateStr[0];
         } else {
-          timeStr = $$data.get('policy_time');
+          dateStr = $$data.get('policy_date');
         }
-
-        return timeStr;
+        return dateStr;
       },
     },
   }, {
@@ -160,13 +158,13 @@ const screenOptions = fromJS([
   }, {
     id: 'objects_templateswitch',
     text: _('Operation'),
-    defaultValue: 1,
+    defaultValue: '1',
     options: [
       {
-        value: 1,
+        value: '1',
         label: _('Enable'),
       }, {
-        value: 0,
+        value: '0',
         label: _('Disable'),
       },
     ],
@@ -183,9 +181,10 @@ const screenOptions = fromJS([
   }, {
     id: 'policy_enbale',
     label: _('Policy Switch'),
-    actionName: 'switch',
     width: '90px',
     type: 'switch',
+    actionName: 'switch',
+    actionKey: 'allKeys',
     defaultValue: '1',
     formProps: {
       type: 'checkbox',
@@ -199,7 +198,9 @@ const screenOptions = fromJS([
 ]);
 
 const propTypes = {
-  groupid: PropTypes.string,
+  groupid: PropTypes.oneOfType([
+    PropTypes.number, PropTypes.string,
+  ]),
   updateCurEditListItem: PropTypes.func,
 };
 const defaultProps = {};
@@ -266,11 +267,12 @@ export default class View extends React.Component {
       <AppScreen
         {...this.props}
         listOptions={curListOptions}
-        deleteable={false}
         onBeforeSave={this.onBeforeSave}
         onBeforeAction={this.onBeforeAction}
+        listKey="policy_id"
         actionable
         selectable
+        deleteable
       />
     );
   }
