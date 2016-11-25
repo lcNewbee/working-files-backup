@@ -89,7 +89,7 @@ export default class View extends React.Component {
         listKey="allKeys"
         settingsFormOptions={commonFormOptions}
         listOptions={listOptions}
-
+        noTitle
         actionable
         selectable
       />

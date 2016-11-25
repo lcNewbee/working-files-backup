@@ -212,9 +212,9 @@ export default class View extends React.Component {
 
     this.getCurrData = this.getCurrData.bind(this);
     this.onUpdateSettings = this.onUpdateSettings.bind(this);
-    this.onSave = this.onSave.bind(this);
 
     utils.binds(this, [
+      'onSave',
       'renderActionBar',
       'onCopySsid',
       'onSelectCopyFromGroup',
@@ -254,6 +254,9 @@ export default class View extends React.Component {
     this.props.updateScreenCustomProps({
       copyFromGroupId: groupId,
     });
+    this.props.changeScreenActionQuery({
+      copyFromGroupId: groupId,
+    });
   }
 
   getCurrData(name) {
@@ -264,6 +267,7 @@ export default class View extends React.Component {
     return (
       <Button
         text="Copy Form Other Group"
+        key="cpoyActionButton"
         icon="copy"
         theme="primary"
         onClick={() => this.onCopySsid()}
@@ -469,7 +473,7 @@ export default class View extends React.Component {
           <div className="form-control">
             <SaveButton
               type="button"
-              loading={app.get('isSaving')}
+              loading={app.get('saving')}
               onClick={this.onSave}
             />
           </div>

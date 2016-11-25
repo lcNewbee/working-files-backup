@@ -111,7 +111,7 @@ const screenOptions = fromJS([
   }, {
     id: 'policy_date',
     width: '130',
-    text: _('Time'),
+    text: _('Date'),
     noTable: true,
     defaultValue: moment().format('YYYY-MM-DD'),
     formProps: {

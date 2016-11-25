@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import Checkbox from 'shared/components/Form/Checkbox';
 
 const propTypes = {
   options: PropTypes.object,
@@ -45,9 +46,9 @@ class Row extends Component {
       if (selectable) {
         tds = tds.unshift((
           <th width="15" key="tableRow_select">
-            <input
-              type="checkbox"
+            <Checkbox
               checked={isSelectAll}
+              theme="square"
               onChange={(e) => {
                 this.onSelect(-1, e);
               }}
@@ -109,8 +110,8 @@ class Row extends Component {
       if (selectable) {
         tds = tds.unshift((
           <td width="15" key="tableRow_select">
-            <input
-              type="checkbox"
+            <Checkbox
+              theme="square"
               checked={!!item.get('__selected__')}
               onChange={(e) => {
                 this.onSelect(index, e);

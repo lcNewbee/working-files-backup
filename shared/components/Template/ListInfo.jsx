@@ -78,6 +78,7 @@ const propTypes = {
 
   // React node 元素
   actionBarChildren: PropTypes.node,
+  modalChildren: PropTypes.node,
 };
 const defaultProps = {
   actionable: false,
@@ -586,7 +587,7 @@ class ListInfo extends React.Component {
 
   renderFooter() {
     const {
-      store, app, modalSize, customModal,
+      store, app, modalSize, customModal, modalChildren,
       editFormLayout, editFormOptions, editFormOption, saveUrl,
     } = this.props;
     const editData = store.getIn(['curListItem']);
@@ -637,28 +638,33 @@ class ListInfo extends React.Component {
     return (
       !customModal ? (
         <Modal
-          isShow={isEditModelshow}
+          isShow={isEditModelshow || !!modalChildren}
           title={actionQuery.get('myTitle')}
           onOk={this.onSave}
           onClose={this.onCloseEditModal}
           size={modalSize}
           noFooter
         >
-          <FormContainer
-            action={saveUrl}
-            layout={editFormLayout}
-            isSaving={app.get('saving')}
-            data={editData}
-            actionQuery={actionQuery}
-            invalidMsg={app.get('invalid')}
-            validateAt={app.get('validateAt')}
-            options={myEditFormOptions}
-            onSave={this.onSaveEditForm}
-            onChangeData={this.props.updateCurEditListItem}
-            onValidError={this.props.reportValidError}
-            hasSaveButton
-            {...editFormOption}
-          />
+          {
+            !modalChildren ? (
+              <FormContainer
+                action={saveUrl}
+                layout={editFormLayout}
+                isSaving={app.get('saving')}
+                data={editData}
+                actionQuery={actionQuery}
+                invalidMsg={app.get('invalid')}
+                validateAt={app.get('validateAt')}
+                options={myEditFormOptions}
+                onSave={this.onSaveEditForm}
+                onChangeData={this.props.updateCurEditListItem}
+                onValidError={this.props.reportValidError}
+                hasSaveButton
+                {...editFormOption}
+              />
+            ) : modalChildren
+          }
+
         </Modal>
       ) : null
     );
