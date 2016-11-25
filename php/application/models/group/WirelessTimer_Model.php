@@ -76,13 +76,14 @@ class WirelessTimer_Model extends CI_Model {
 
         return policy_add_profile_id(json_encode($arr));
     }
-    public function del_timer_policy($data) {        
-        $arr = array();
-        foreach($data['selectedList'] as $row) {
-            $arr[] = (string)$row['policy_id'];
+    public function del_timer_policy($data) {                
+        $arr['policy_list'] = null;
+        $bakary = array();
+        foreach($data['selectedList'] as $value) {
+            $bakary[] = (string)$value;
         }
-        $acary['policy_list'] = $arr;        
-        return policy_del_profile_id(json_encode($acary));
+        $arr['policy_list'] = $bakary;
+        return policy_del_profile_id(json_encode($arr));
     }
     public function up_timer_policy($data) {
         $arr['policy_id'] = (string)element('policy_id',$data,'-1');
