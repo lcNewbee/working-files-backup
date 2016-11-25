@@ -53,7 +53,7 @@ var vaildate = {
       }
 
       if (!(/^([0-9a-fA-F]{2}(:|-)){5}[0-9a-fA-F]{2}$/).test(str)) {
-        return _("Please input a valid MAC address");
+        return _("Please input a valid MAC address like 'AA:BB:CC:DD:EE:FF'or 'AA-BB-CC-DD-EE-FF'");
       }
     },
 

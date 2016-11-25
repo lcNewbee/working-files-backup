@@ -635,7 +635,6 @@ export default class Main extends Component {
                     name="apmac"
                     maxLength="18"
                     value={groupApAddData.get('apmac')}
-                    help="Separate with ':'or '-';"
                     onChange={data => this.props.updateGroupAddDevice({
                       apmac: data.value,
                     })}

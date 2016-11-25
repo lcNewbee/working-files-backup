@@ -20,8 +20,7 @@ const encryptionOptions = [
   {
     value: 'none',
     label: _('NONE'),
-  },
-  {
+  }, {
     value: 'psk-mixed',
     label: _('STRONG'),
   },
@@ -177,7 +176,8 @@ const listOptions = fromJS([
     defaultValue: '1',
   }, {
     id: 'loadBalanceType',
-    defaultValue: 1,
+    text: _('Load Balancing'),
+    defaultValue: '1',
     options: loadBalanceTypeArr,
   }, {
     id: 'upstream',

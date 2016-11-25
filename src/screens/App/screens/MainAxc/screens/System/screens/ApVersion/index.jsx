@@ -74,7 +74,6 @@ export default class View extends React.Component {
   onBeforeAction($$actionQuery) {
     const actionType = $$actionQuery.get('action');
     let ret = '';
-
     if (actionType === 'active' && parseInt($$actionQuery.get('active'), 10) === 0) {
       ret = _('You should active other version but disable this');
     }

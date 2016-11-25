@@ -15,6 +15,7 @@ const listOptions = fromJS([
     formProps: {
       required: true,
       maxLength: '24',
+      notEditable: true,
     },
   }, {
     id: 'domain',
@@ -29,6 +30,7 @@ const listOptions = fromJS([
     formProps: {
       required: true,
       maxLength: '15',
+      notEditable: true,
       validator: validator({
         rules: 'ip',
       }),
@@ -39,6 +41,7 @@ const listOptions = fromJS([
     formProps: {
       required: true,
       maxLength: '15',
+      notEditable: true,
       validator: validator({
         rules: 'mask',
       }),
