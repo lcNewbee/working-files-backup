@@ -77,23 +77,15 @@ export default class View extends React.Component {
     const store = this.props.store;
     const myScreenId = store.get('curScreenId');
     const $$myScreenStore = store.get(myScreenId);
-    const actionType = $$myScreenStore.getIn(['actionQuery', 'action']);
+    const actionType = $$actionQuery.getIn(['action']);
     let ret = '';
-<<<<<<< 3f3ac2eb5aa32d62587dace0d58e4167f1a2f5e4
 
     if (actionType === 'active' && parseInt($$actionQuery.get('active'), 10) === 0) {
-      ret = _('You should active other version but disable this');
+      ret = _('You should activate another version before deactivating this version');
 
     // 删除已激活版本
     } else if (actionType === 'delete' && parseInt($$actionQuery.get('active'), 10) === 1) {
       ret = _('You can not delete active version');
-=======
-    console.log(actionType)
-    if (actionType === 'active' && parseInt($$actionQuery.get('active'), 10) === 0) {
-      ret = _('You should activate another version before deactivating this version!');
-    } else if (actionType === 'delete') {
-      console.log('11')
->>>>>>> AXC: Port bug
     }
 
     return ret;

@@ -416,7 +416,7 @@
   "Soft Version": "软件版本号",
   "Version File": "版本文件",
   "Active Status": "激活状态",
-  "You should active other version but disable this": "你应该激活其他版本",
+  "You should activate another version before deactivating this version": "你应该先激活其他版本",
   "You can not delete active version": "不能删除已激活版本",
 
   "System Maintenance": "系统维护",
