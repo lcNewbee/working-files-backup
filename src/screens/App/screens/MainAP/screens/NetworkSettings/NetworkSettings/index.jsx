@@ -10,19 +10,19 @@ import validator from 'shared/utils/lib/validator';
 import * as appActions from 'shared/actions/app';
 import * as sharedActions from 'shared/actions/settings';
 // import * as sharedReducer from 'shared/reducers/settings';
-import * as actions from './actions';
+// import * as actions from './actions';
 import reducer from './reducer';
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
 
-  route: PropTypes.object,
-  initSettings: PropTypes.func,
-  fetchSettings: PropTypes.func,
+  // route: PropTypes.object,
+  // initSettings: PropTypes.func,
+  // fetchSettings: PropTypes.func,
   saveSettings: PropTypes.func,
   updateItemSettings: PropTypes.func,
-  leaveSettingsScreen: PropTypes.func,
+  // leaveSettingsScreen: PropTypes.func,
   validateOption: PropTypes.object,
   validateAll: PropTypes.func,
 };
@@ -92,6 +92,58 @@ export default class NetworkSettings extends React.Component {
     }
   }
 
+  onSave() {
+    const that = this;
+    const { ip, mask, gateway, dns1, dns2, proto } = this.props.store.get('curData').toJS();
+    let msg;
+    function showError(_msg) {
+      that.props.createModal({
+        id: 'settings',
+        role: 'alert',
+        text: _msg,
+      });
+    }
+    msg = validator.combineValid.noBroadcastIp(ip, mask);
+    if (proto === 'static' && msg) {
+      showError(msg);
+      return;
+    }
+    msg = validator.combineValid.staticIP(ip, mask, gateway);
+    if (proto === 'static' && gateway !== '' && msg) {
+      showError(msg);
+      return;
+    }
+    msg = _('Primary and Secondary DNS can not be the same !');
+    if (dns1 !== '' && validator.combineValid.notequal(dns1, dns2, msg)) {
+      showError(msg);
+      return;
+    }
+    this.props.validateAll()
+      .then((mg) => {
+        if (mg.isEmpty()) {
+          this.props.saveSettings();
+        }
+      });
+  }
+
+  onDhcpClick() {
+    const val = this.props.store.getIn(['curData', 'proto']);
+    if (val === 'static') {
+      this.props.updateItemSettings({
+        proto: 'dhcp',
+      });
+    }
+  }
+
+  onStaticClick() {
+    const val = this.props.store.getIn(['curData', 'proto']);
+    if (val === 'dhcp') {
+      this.props.updateItemSettings({
+        proto: 'static',
+      });
+    }
+  }
+
   firstInAndRefresh() {
     const props = this.props;
     const groupId = props.groupId || -1;
@@ -119,58 +171,6 @@ export default class NetworkSettings extends React.Component {
     props.fetchSettings();
   }
 
-  onSave() {
-    const that = this;
-    const {ip, mask, gateway, dns1, dns2, proto} = this.props.store.get('curData').toJS();
-    let msg;
-    if (proto === 'static' && (msg = validator.combineValid.noBroadcastIp(ip, mask))){
-      showError(msg);
-      return;
-    }
-    if (proto === 'static' && gateway !== '' && (msg = validator.combineValid.staticIP(ip, mask, gateway))) {
-      showError(msg);
-      return;
-    }
-    msg = _('Primary and Secondary DNS can not be the same !');
-    if (dns1 !== '' && validator.combineValid.notequal(dns1, dns2, msg)) {
-      showError(msg);
-      return;
-    }
-
-    this.props.validateAll()
-      .then(msg => {
-        if (msg.isEmpty()) {
-          this.props.saveSettings();
-        }
-      });
-
-    function showError(msg) {
-      that.props.createModal({
-        id: 'settings',
-        role: 'alert',
-        text: msg,
-      });
-    }
-  }
-
-  onDhcpClick() {
-    const val = this.props.store.getIn(['curData', 'proto']);
-    if (val === 'static') {
-      this.props.updateItemSettings({
-        proto: 'dhcp',
-      });
-    }
-  }
-
-  onStaticClick() {
-    const val = this.props.store.getIn(['curData', 'proto']);
-    if (val === 'dhcp') {
-      this.props.updateItemSettings({
-        proto: 'static',
-      });
-    }
-  }
-
   noErrorThisPage(...args) {
     const errorMsg = this.props.app.get('invalid');
     let flag = true;
@@ -191,7 +191,7 @@ export default class NetworkSettings extends React.Component {
       mngVlanId, utgVlanId, fallbackMask, vlanEnable,
     } = this.props.store.get('curData').toJS();
     const { lanIp, lanMask, firstDNS, secondDNS,
-            validGateway, validVlanId1, validVlanId2} = this.props.validateOption;
+            validGateway, validVlanId1, validVlanId2 } = this.props.validateOption;
     return (
       <div>
         <h3>{_('Lan IP Settings')}</h3>
@@ -227,20 +227,12 @@ export default class NetworkSettings extends React.Component {
                 label={_('Fallback IP')}
                 value={fallbackIp}
                 disabled
-                // onChange={(data) => this.props.updateItemSettings({
-                //   fallbackIp: data.value,
-                // })}
-                //{...lanIp}
               />
               <FormGroup
                 type="text"
                 label={_('Fallback Netmask')}
                 value={fallbackMask}
                 disabled
-                // onChange={(data) => this.props.updateItemSettings({
-                //   fallbackMask: data.value,
-                // })}
-                //{...lanMask}
               />
             </div>
           ) : (
@@ -249,7 +241,7 @@ export default class NetworkSettings extends React.Component {
                 type="text"
                 label={_('IP address')}
                 value={ip}
-                onChange={(data) => this.props.updateItemSettings({
+                onChange={data => this.props.updateItemSettings({
                   ip: data.value,
                 })}
                 required
@@ -259,7 +251,7 @@ export default class NetworkSettings extends React.Component {
                 type="text"
                 label={_('Mask')}
                 value={mask}
-                onChange={(data) => this.props.updateItemSettings({
+                onChange={data => this.props.updateItemSettings({
                   mask: data.value,
                 })}
                 required
@@ -269,7 +261,7 @@ export default class NetworkSettings extends React.Component {
                 type="text"
                 label={_('Gateway')}
                 value={gateway}
-                onChange={(data) => this.props.updateItemSettings({
+                onChange={data => this.props.updateItemSettings({
                   gateway: data.value,
                 })}
                 {...validGateway}
@@ -278,7 +270,7 @@ export default class NetworkSettings extends React.Component {
                 type="text"
                 label={_('Primary DNS')}
                 value={dns1}
-                onChange={(data) => this.props.updateItemSettings({
+                onChange={data => this.props.updateItemSettings({
                   dns1: data.value,
                 })}
                 {...firstDNS}
@@ -287,7 +279,7 @@ export default class NetworkSettings extends React.Component {
                 type="text"
                 label={_('Secondary DNS')}
                 value={dns2}
-                onChange={(data) => this.props.updateItemSettings({
+                onChange={data => this.props.updateItemSettings({
                   dns2: data.value,
                 })}
                 {...secondDNS}
@@ -312,7 +304,7 @@ export default class NetworkSettings extends React.Component {
           disabled={vlanEnable === '0'}
           help={_('Range: 1 - 4094, Default: 1')}
           value={mngVlanId}
-          onChange={(data) => this.props.updateItemSettings({
+          onChange={data => this.props.updateItemSettings({
             mngVlanId: data.value,
           })}
           required
@@ -324,7 +316,7 @@ export default class NetworkSettings extends React.Component {
           help={_('Range: 1 - 4094, Default: 1')}
           value={utgVlanId}
           disabled={vlanEnable === '0'}
-          onChange={(data) => this.props.updateItemSettings({
+          onChange={data => this.props.updateItemSettings({
             utgVlanId: data.value,
           })}
           required

@@ -7,10 +7,20 @@ const defaultState = fromJS({
     password: '',
     timeZone: (new Date()).getTimezoneOffset(),
   },
-  currMode: 'fat',
-  nextMode: '',
+  currMode: '0',
+  nextMode: '0',
   showProgressBar: false,
+  modeData: {
+    enable: '0',
+    discoveryType: 'dhcp',
+    acIp: '',
+  },
 });
+
+function onModeDataChange(state, action) {
+  const modeData = state.get('modeData').merge(action.data);
+  return state.set('modeData', modeData);
+}
 
 export default function (state = defaultState, action) {
   switch (action.type) {
@@ -35,6 +45,8 @@ export default function (state = defaultState, action) {
       return state.set('showProgressBar', action.data);
     case 'CHANGE_NEXT_MODE':
       return state.set('nextMode', action.data);
+    case 'CHANGE_MODE_DATA':
+      return onModeDataChange(state, action);
     default:
   }
   return state;

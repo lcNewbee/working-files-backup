@@ -3,7 +3,7 @@ import { fromJS } from 'immutable';
 
 const defaultState = fromJS({
   currRadioConfig: {
-    radioId: '1',
+    radioId: '0',
     radioType: '2.4G',
   },
   scaning: true,
@@ -11,7 +11,7 @@ const defaultState = fromJS({
   showRadioSetting: true,
   showSsidSetting: true,
   showMultiSsid: false,
-
+  ssidTableOptions: [],
   selectedResult: {},
   showCtyModal: false,
   agreeProtocol: false,
@@ -33,6 +33,7 @@ const defaultState = fromJS({
   radioSettings: {},
   multiSsid: {},
   basicSettings: {},
+  airTimeEnable: '0',
 });
 
 function onUpdateSelfItemSettings(state, action) {
@@ -81,9 +82,12 @@ export default function (state = defaultState, action) {
       return state.mergeIn(['basicSettings'], action.data);
     case 'CHANGE_WHICH_BUTTON':
       return state.set('whichButton', action.data);
-
+    case 'CHANGE_SSID_TABLE_OPTIONS':
+      return state.set('ssidTableOptions', action.data);
     case 'CHANGE_CURR_RADIO_CONFIG':
       return state.set('currRadioConfig', action.data);
+    case 'CHANGE_AIR_TIME_ENABLE':
+      return state.set('airTimeEnable', action.data);
     default:
   }
   return state;

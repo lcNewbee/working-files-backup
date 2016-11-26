@@ -36,6 +36,11 @@ const pNetworkSettings = require('../../screens/App/screens/MainAP/screens/Netwo
 const sNetworkSettings = require('../../screens/App/screens/MainAP/screens/NetworkSettings/NetworkSettings');
 
 const pSystemStatus = require('../../screens/App/screens/MainAP/screens/SystemStatus');
+const sSsidDetails = require('../../screens/App/screens/MainAP/screens/SystemStatus/SsidDetails');
+const sClientsDetails = require('../../screens/App/screens/MainAP/screens/SystemStatus/ClientsDetails');
+// 快速设置
+const pQuickSetup = require('../../screens/App/screens/MainAP/screens/QuickSetup/AIP5QuickSetup');
+
 // 无线设置
 const pWirelessConfig = require('../../screens/App/screens/MainAP/screens/WirelessConfig');
 // 子菜单
@@ -48,13 +53,44 @@ const pMaintenance = require('../../screens/App/screens/MainAP/screens/Maintenan
 const sSystemMaintenance = require('../../screens/App/screens/MainAP/screens/Maintenance/SystemMaintenance');
 const sTimeSettings = require('../../screens/App/screens/MainAP/screens/Maintenance/TimeSettings');
 const sAccountSettings = require('../../screens/App/screens/MainAP/screens/Maintenance/AccountSettings');
-const sModeModify = require('../../screens/App/screens/MainAP/screens/ModeModify');
+const pModeSettings = require('../../screens/App/screens/MainAP/screens/ModeSettings');
+const sModeSettings = require('../../screens/App/screens/MainAP/screens/ModeSettings/ModeSettings');
 // 工具
 const pTools = require('../../screens/App/screens/MainAP/screens/Tools');
 const sSpeedTest = require('../../screens/App/screens/MainAP/screens/Tools/SpeedTest');
 const sSiteSurvey = require('../../screens/App/screens/MainAP/screens/Tools/SiteSurvey');
 const sSystemLogs = require('../../screens/App/screens/MainAP/screens/Tools/SystemLogs');
 const sChannelUtilization = require('../../screens/App/screens/MainAP/screens/Tools/ChannelUtilization');
+
+
+// 页面功能项配置
+const funConfig = {
+  // 无线设置页面
+  basic: {
+    radioclientslimit: true, // 射频客户端限制
+    devicemodeOptions: [
+      { value: 'ap', label: _('AP') },
+      { value: 'sta', label: _('Station') },
+      { value: 'repeater', label: _('Repeater') },
+    ],
+    ssidTableKeys: [
+      'enable', 'ssid', 'vlanId', 'hideSsid', 'isolation', 'security', 'delete', 'maxClients',
+      'airTimeEnable',
+    ],
+  },
+  advance: {
+    ledThreshFun: false, // 信号强度控制LED灯功能
+    beaconIntervalFun: true, // Beacon帧间间隔
+    dtimIntervalFun: true, // DTIM间隔
+    segmentThreshFun: true, // 分片阈值
+    ampduFun: true, // ampdu值
+    rateSetFun: true, // 速率集
+    rssiLimitFun: true, // rssi限制
+    airTimeFairnessFun: true, // 时间公平性
+  },
+};
+
+
 
 const routes = [{
   path: '/',
@@ -66,11 +102,39 @@ const routes = [{
     component: MainAP.Screen,
     childRoutes: [{
       id: 'systemstatus',
-      fetchUrl: 'goform/get_system_info_forTestUse',
       path: '/main/status',
       icon: 'pie-chart',
       text: _('Device Status'),
-      component: pSystemStatus.Screen,
+      noTree: true,
+      indexRoute: {
+        onEnter: (nextState, replace) => replace('/main/status/overview'),
+      },
+      childRoutes: [
+        {
+          id: 'overview',
+          fetchUrl: 'goform/get_system_info_forTestUse',
+          path: '/main/status/overview',
+          component: pSystemStatus.Screen,
+        }, {
+          id: 'ssiddetails',
+          path: '/main/status/ssiddetails',
+          component: sSsidDetails.Screen,
+          fetchUrl: 'goform/get_system_info_forTestUse',
+        }, {
+          id: 'clientsdetails',
+          path: '/main/status/clientsdetails',
+          component: sClientsDetails.Screen,
+          fetchUrl: 'goform/get_system_info_forTestUse',
+        },
+      ],
+    }, {
+      id: 'quicksetup',
+      path: '/main/quicksetup',
+      text: _('Quick Setup'),
+      icon: 'map-signs',
+      fetchUrl: 'goform/get_quicksetup_info_forTestUse',
+      saveUrl: 'goform/set_quicksetup',
+      component: pQuickSetup.Screen,
     }, {
       id: 'networksettings',
       path: '/main/networksettings',
@@ -106,6 +170,7 @@ const routes = [{
           text: _('Basic'),
           formUrl: 'goform/get_wl_info_forTestUse',
           saveUrl: 'goform/set_wireless_forTestUse',
+          funConfig: funConfig.basic,
           component: sBasic.Screen,
         },
         {
@@ -113,6 +178,7 @@ const routes = [{
           path: '/main/wirelessconfig/advance',
           text: _('Advance'),
           fetchUrl: 'goform/get_adv_wl_info_forTestUse',
+          funConfig: funConfig.advance,
           component: sAdvance.Screen,
         },
         {
@@ -128,6 +194,7 @@ const routes = [{
       path: '/main/maintenance',
       icon: 'wrench',
       text: _('Maintenance'),
+      noNav: false,
       component: pMaintenance,
       indexRoute: {
         onEnter: (nextState, replace) => replace('/main/maintenance/systemmaintenance'),
@@ -143,6 +210,7 @@ const routes = [{
           id: 'accountsettings',
           path: '/main/maintenance/accountsettings',
           text: _('Account Settings'),
+          noNav: true,
           component: sAccountSettings.Screen,
         }, {
           id: 'timesettings',
@@ -186,10 +254,20 @@ const routes = [{
         },
       ],
     }, {
-      id: 'modemodify',
-      path: '/main/maintenance/modemodify',
-      text: _('Mode Setting'),
-      component: sModeModify.Screen,
+      id: 'modesettings',
+      path: '/main/modesettings',
+      text: _('Mode Settings'),
+      icon: 'exchange',
+      component: pModeSettings,
+      indexRoute: { onEnter: (nextState, replace) => replace('/main/modesettings/modesettings') },
+      childRoutes: [
+        {
+          id: 'modesettings',
+          path: '/main/modesettings/modesettings',
+          text: _('Mode Settings'),
+          component: sModeSettings.Screen,
+        },
+      ],
     },
     ],
   }, {
@@ -207,12 +285,13 @@ const routes = [{
 const reducers = {
   app: appReducer,
   settings: settingsReducer,
-
   login: pLogin.login,
-
   networksettings: sNetworkSettings.networksettings,
-
   systemstatus: pSystemStatus.systemstatus,
+  ssiddetails: sSsidDetails.ssiddetails,
+  clientsdetails: sClientsDetails.clientsdetails,
+
+  quicksetup: pQuickSetup.quicksetup,
   basic: sBasic.basic,
   advance: sAdvance.advance,
   acl: sACL.acl,

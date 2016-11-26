@@ -19,8 +19,12 @@ const hashHistory = ReactRouter.hashHistory;
 const mountNode = document.getElementById('app');
 
 // 引入产品配置
+<<<<<<< 97e60cfc383ff0cf81edc37b05b9d52ecddd4c74
 const renderApp = () => {
   const prodConfig = require('./config/axc');
+=======
+const prodConfig = require('./config/aip5');
+>>>>>>> 平台添加新功能，并修改部分bug
 
   // 主渲染入口
   ReactDOM.render(
@@ -35,11 +39,19 @@ const renderApp = () => {
 
 // Enable hot reload by react-hot-loader
 if (module.hot) {
+<<<<<<< 97e60cfc383ff0cf81edc37b05b9d52ecddd4c74
   const reRenderApp = () => {
     try {
       renderApp();
     } catch (error) {}
   };
+=======
+  // Enable Webpack hot module replacement for reducers
+  module.hot.accept('./config/aip5', () => {
+    const newConfig = require('./config/aip5');
+
+    const nextRootReducer = combineReducers(newConfig.reducers);
+>>>>>>> 平台添加新功能，并修改部分bug
 
   module.hot.accept('./config/axc', () => {
     setImmediate(() => {

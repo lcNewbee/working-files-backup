@@ -16,6 +16,7 @@
 				"apMac":"11:22:33:44:55:66",
         "vlanId": "1",
         "enable": "1",
+        "maxClients": "12",
 				"apMacEnable": "0",
         "isolation": "0",
 				"security":{
@@ -34,6 +35,7 @@
 				"apMac":"11:22:33:44:55:66",
         "vlanId": "2",
         "isolation": "0",
+        "maxClients": "12",
 				"security":{
 					"mode":"wpa",
 					"cipher":"aes",
@@ -55,6 +57,7 @@
 				"ssid":"axilspot2",
 				"enable": "1",
 				"vlanId": "1",
+        "maxClients": "12",
 				"isolation":"0",
 				"hideSsid": 0,
 				"security":{
@@ -78,6 +81,7 @@
 				"ssid":"axilspot2",
 				"hideSsid": 0,
         "vlanId": "1",
+        "maxClients": "12",
 				"isolation":"0",
 				"peers":
 				["14:ff:00:a0:c1:ff",

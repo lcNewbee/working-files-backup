@@ -18,3 +18,10 @@ export function changeCurrRadioConfig(data) {
     data,
   };
 }
+
+export function changesShowScanTable(data) {
+  return {
+    type: 'CHANGES_SHOW_SCAN_TABLE',
+    data,
+  };
+}

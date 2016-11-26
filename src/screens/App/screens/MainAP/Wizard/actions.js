@@ -73,3 +73,10 @@ export function changeNextMode(data) {
     data,
   };
 }
+
+export function changeModeData(data) {
+  return {
+    type: 'CHANGE_MODE_DATA',
+    data,
+  };
+}

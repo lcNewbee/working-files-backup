@@ -5,6 +5,7 @@ let guiVersion;
 const defaultState = fromJS({
   fetching: false,
   saving: false,
+  version: '',
   rateInterval: 15000,
   invalid: {},
   modal: {

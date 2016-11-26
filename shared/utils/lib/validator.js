@@ -19,9 +19,9 @@ var vaildate = {
   len: function(str, min, max) {
     var len = str.length;
     if (min === max && len !== min) {
-      return _('String length must be: %s bit', min);
+      return _('String length must be: ') + _('%s bit', min);
     }else if (len < min || len > max) {
-      return _('String length range is: %s - %s bit', min, max);
+      return _('String length range is: ') + _('%s - %s bit', min, max);
     }
   },
 
@@ -39,7 +39,7 @@ var vaildate = {
 
     if (min !== undefined && max !== undefined) {
       if (parseInt(str, 10) < min || parseInt(str, 10) > max) {
-        return _("Range: %s - %s", min, max);
+        return _("Range: ") + _("%s - %s", min, max);
       }
     }
   },

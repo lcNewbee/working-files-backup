@@ -4,3 +4,10 @@ export function changeCurrRadioConfig(data) {
     data,
   };
 }
+
+export function changeRateSetOptions(data) {
+  return {
+    type: 'CHANGE_RATE_SET_OPTIONS',
+    data,
+  };
+}

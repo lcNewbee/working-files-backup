@@ -11,8 +11,8 @@ const defaultState = fromJS({
     macValue: '',
     preLen: 0,
   },
-
   selectedSsid: 0,
+  ssidSelectOptions: [],
 
 });
 
@@ -60,6 +60,8 @@ export default function (state = defaultState, action) {
       return state.set('currRadioConfig', action.data);
     case 'RESTORE_SELF_STATE':
       return defaultState;
+    case 'CHANGE_SSID_SELECT_OPTIONS':
+      return state.set('ssidSelectOptions', action.data);
     default:
   }
   return state;

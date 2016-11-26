@@ -59,3 +59,10 @@ export function changeCurrRadioConfig(data) {
   };
 }
 
+export function changeSsidSelectOptions(data) {
+  return {
+    type: 'CHANGE_SSID_SELECT_OPTIONS',
+    data,
+  };
+}
+

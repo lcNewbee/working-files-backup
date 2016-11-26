@@ -43,6 +43,7 @@ const propTypes = {
   restoreSelfState: PropTypes.func,
   product: PropTypes.instanceOf(Map),
   changeCurrRadioConfig: PropTypes.func,
+  changeSsidSelectOptions: PropTypes.func,
 };
 const validOptions = Map({
   inputMac: validator({
@@ -215,6 +216,7 @@ export default class ACL extends React.Component {
           };
           ssidSelectOptions.push(optionItem);
         }
+        this.props.changeSsidSelectOptions(fromJS(ssidSelectOptions));
         this.props.changeSelectedSsid({
           selectedSsid: 0,
           macListLen: aclConfList.getIn([0, 'macList']).size,
@@ -271,10 +273,10 @@ export default class ACL extends React.Component {
           label={_('SSID')}
           type="select"
           size="min"
-          options={ssidSelectOptions}
+          options={this.props.selfState.get('ssidSelectOptions').toJS()}
           value={selectedSsid}
           disabled={store.getIn(['curData', 'radioList', radioId, 'aclEnable']) === '0'}
-          onChange={(data) => this.props.changeSelectedSsid({
+          onChange={data => this.props.changeSelectedSsid({
             selectedSsid: data.value,
             macListLen: store.getIn(['curData', 'radioList', radioId, 'aclConfList', data.value, 'macList']).size,
           })}

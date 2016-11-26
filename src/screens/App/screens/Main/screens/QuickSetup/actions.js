@@ -51,7 +51,7 @@ export function receiveCountryInfo(data) {
 
 export function saveCountrySelectModal() {
   return (dispatch, getState) => {
-    const selectedCode = getState().basic.get('selectedCountry');
+    const selectedCode = getState().quicksetup.get('selectedCountry');
     dispatch(updateItemSettings({
       countryCode: selectedCode,
     }));

@@ -233,7 +233,7 @@ export default class SystemStatus extends React.Component {
     });
     this.props.fetchSettings().then(() => {
       this.props.changeFirstRefresh(false);
-    })
+    });
     a = setInterval(this.props.fetchSettings, 10000);
   }
 

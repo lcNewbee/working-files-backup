@@ -94,7 +94,7 @@ export default class SiteSurvey extends React.Component {
   onScanBtnClick() {
     this.props.changeShowTableStatus(false);
     const query = this.props.selfState.get('currRadioConfig').toJS();
-    this.props.save('goform/get_site_survey', query).then((json) => {
+    this.props.fetch('goform/get_site_survey', query).then((json) => {
       if (json.state && json.state.code === 2000) {
         this.props.updateItemSettings(fromJS(json.data));
         this.props.changeShowTableStatus(true);

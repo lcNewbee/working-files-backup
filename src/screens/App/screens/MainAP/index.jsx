@@ -30,6 +30,8 @@ export default class MainAP extends Component {
     this.state = { isShow: false };
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onRefresh = this.onRefresh.bind(this);
+    this.onLogout = this.onLogout.bind(this);
+    this.showUserPopOver = this.showUserPopOver.bind(this);
     this.makeRadioSelectOptions = this.makeRadioSelectOptions.bind(this);
     document.onkeydown = function (e) {
       if (e.keyCode === 116) {
@@ -54,10 +56,10 @@ export default class MainAP extends Component {
         if (json.data.ifFirstLogin === '1') {
           window.location.href = '#/wizard';
         }
-        if (json.data.manageMode === '1') {
+        if (json.data.enable === '1') {
           const menus = this.props.route.childRoutes.filter(val => val.id !== 'wirelessconfig' && val.id !== 'quicksetup');
           this.props.changeMenus(fromJS(menus));
-        } else if (json.data.manageMode === '0') {
+        } else if (json.data.enable === '0') {
           const menus = this.props.route.childRoutes;
           this.props.changeMenus(fromJS(menus));
         }
@@ -97,13 +99,12 @@ export default class MainAP extends Component {
   }
 
   render() {
-    const { version, guiName, saving } = this.props.app.toJS();
+    const { guiName, saving } = this.props.app.toJS();
     const { isShow } = this.state;
     return (
       <div>
         <Navbar
           title={guiName}
-          version={version}
         >
           <div className="aside">
             <a href="#" className="as-control" onClick={this.onRefresh}>

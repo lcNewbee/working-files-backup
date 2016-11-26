@@ -284,7 +284,7 @@ export default class SystemMaintenance extends Component {
 
         <form
           id="restoreForm"
-          action="/cgi-bin/back_config"
+          action="/cgi-bin/upload_settings.cgi"
           method="POST"
           encType="multipart/form-data"
         >

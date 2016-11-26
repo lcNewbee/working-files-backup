@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
-import { Map, List } from 'immutable';
+import { Map, List, fromJS } from 'immutable';
 import validator from 'shared/utils/lib/validator';
 import utils from 'shared/utils';
 import TIME_ZONE from 'shared/config/timeZone';
@@ -118,6 +118,18 @@ const formGroups = Map({
   },
 });
 
+const propTypes = {
+  updateItemSettings: PropTypes.func,
+  fetch: PropTypes.func,
+  changeCurrentMode: PropTypes.func,
+};
+
+const validOptions = Map({
+  validateIp: validator({
+    rules: 'ip',
+  }),
+});
+
 // 原生的 react 页面
 export const SignUp = React.createClass({
   mixins: [PureRenderMixin],
@@ -135,207 +147,207 @@ export const SignUp = React.createClass({
   },
 
 
-  onNext() {
-    const MAX_STEP = 3;
-    let currStep = this.state.currStep;
-    let checkResult;
+  // onNext() {
+  //   const MAX_STEP = 3;
+  //   let currStep = this.state.currStep;
+  //   let checkResult;
 
-    if (currStep < MAX_STEP) {
-      currStep += 1;
+  //   if (currStep < MAX_STEP) {
+  //     currStep += 1;
 
-      if (this.state.currStep === 2) {
-        checkResult = this.checkStepTwo();
+  //     if (this.state.currStep === 2) {
+  //       checkResult = this.checkStepTwo();
 
-        if (!checkResult) {
-          this.updateState({
-            currStep,
-            status: 'ok',
-          });
-        } else {
-          this.updateState({
-            status: checkResult,
-          });
-        }
-      } else if (this.state.currStep === 1) {
-        checkResult = this.checkStepOne();
+  //       if (!checkResult) {
+  //         this.updateState({
+  //           currStep,
+  //           status: 'ok',
+  //         });
+  //       } else {
+  //         this.updateState({
+  //           status: checkResult,
+  //         });
+  //       }
+  //     } else if (this.state.currStep === 1) {
+  //       checkResult = this.checkStepOne();
 
-        if (!checkResult) {
-          this.updateState({
-            currStep,
-            status: 'ok',
-          });
-        } else {
-          this.updateState({
-            status: checkResult,
-          });
-        }
-      } else {
-        this.updateState({
-          currStep,
-        });
-      }
-    } else {
-      this.signUp();
-    }
-  },
+  //       if (!checkResult) {
+  //         this.updateState({
+  //           currStep,
+  //           status: 'ok',
+  //         });
+  //       } else {
+  //         this.updateState({
+  //           status: checkResult,
+  //         });
+  //       }
+  //     } else {
+  //       this.updateState({
+  //         currStep,
+  //       });
+  //     }
+  //   } else {
+  //     this.signUp();
+  //   }
+  // },
 
-  onPrev() {
-    let currStep = this.state.currStep;
+  // onPrev() {
+  //   let currStep = this.state.currStep;
 
-    if (currStep > 1) {
-      currStep -= 1;
-      this.updateState({
-        currStep,
-        status: '',
-      });
-    }
-  },
+  //   if (currStep > 1) {
+  //     currStep -= 1;
+  //     this.updateState({
+  //       currStep,
+  //       status: '',
+  //     });
+  //   }
+  // },
 
-  onChangeData(name) {
-    return function changeData(options) {
-      const data = {};
+  // onChangeData(name) {
+  //   return function changeData(options) {
+  //     const data = {};
 
-      data[name] = options.value;
+  //     data[name] = options.value;
 
-      if (options.label) {
-        data[`${name}Label`] = options.label;
-      }
+  //     if (options.label) {
+  //       data[`${name}Label`] = options.label;
+  //     }
 
-      this.updateState(data);
-    }.bind(this);
-  },
+  //     this.updateState(data);
+  //   }.bind(this);
+  // },
 
-  onInputKeyUp(e) {
-    if (e.which === 13) {
-      if (e.target.id === 'password') {
-        document.getElementById('confirmpasswd').focus();
-      } else {
-        this.onNext();
-      }
-    }
-  },
-  onSignUp() {
-    const checkResult = this.checkData();
+  // onInputKeyUp(e) {
+  //   if (e.which === 13) {
+  //     if (e.target.id === 'password') {
+  //       document.getElementById('confirmpasswd').focus();
+  //     } else {
+  //       this.onNext();
+  //     }
+  //   }
+  // },
+  // onSignUp() {
+  //   const checkResult = this.checkData();
 
-    // 如果有验证错误信息
-    if (checkResult) {
-      this.updateState({
-        status: checkResult,
-      });
+  //   // 如果有验证错误信息
+  //   if (checkResult) {
+  //     this.updateState({
+  //       status: checkResult,
+  //     });
 
-    //
-    } else {
-      this.signUp();
-    }
-  },
-  getDataValue(name) {
-    return this.state[name] || '';
-  },
+  //   //
+  //   } else {
+  //     this.signUp();
+  //   }
+  // },
+  // getDataValue(name) {
+  //   return this.state[name] || '';
+  // },
 
-  checkStepTwo() {
-    const data = this.state;
-    const groupPass = formGroups.get('password');
-    let checkResult;
+  // checkStepTwo() {
+  //   const data = this.state;
+  //   const groupPass = formGroups.get('password');
+  //   let checkResult;
 
-    checkResult = groupPass.validator.check(data.password);
+  //   checkResult = groupPass.validator.check(data.password);
 
-    if (!checkResult) {
-      if (data.password !== data.confirmpasswd) {
-        checkResult = _('Password and confirm password must match');
-      }
-    }
+  //   if (!checkResult) {
+  //     if (data.password !== data.confirmpasswd) {
+  //       checkResult = _('Password and confirm password must match');
+  //     }
+  //   }
 
-    return checkResult;
-  },
+  //   return checkResult;
+  // },
 
-  checkStepOne() {
-    const data = this.state;
-    let checkResult;
+  // checkStepOne() {
+  //   const data = this.state;
+  //   let checkResult;
 
-    if (!data.country || data.country.length < 1) {
-      return _('Please select a country');
-    }
+  //   if (!data.country || data.country.length < 1) {
+  //     return _('Please select a country');
+  //   }
 
-    if (!data.timeZone || data.timeZone.length < 1) {
-      return _('Please select time zone');
-    }
+  //   if (!data.timeZone || data.timeZone.length < 1) {
+  //     return _('Please select time zone');
+  //   }
 
-    return checkResult;
-  },
+  //   return checkResult;
+  // },
 
-  signUp() {
-    utils.save(urls.regist, {
-      country: this.state.country,
-      timeZone: this.state.timeZone,
-      password: this.state.password,
-      confirmpasswd: this.state.confirmpasswd,
-    })
-    .then((json) => {
-      if (json.state && json.state.code === 2000) {
-        window.location.hash = '';
-      }
-    });
-  },
+  // signUp() {
+  //   utils.save(urls.regist, {
+  //     country: this.state.country,
+  //     timeZone: this.state.timeZone,
+  //     password: this.state.password,
+  //     confirmpasswd: this.state.confirmpasswd,
+  //   })
+  //   .then((json) => {
+  //     if (json.state && json.state.code === 2000) {
+  //       window.location.hash = '';
+  //     }
+  //   });
+  // },
 
-  updateState(data) {
-    this.setState(utils.extend({}, this.state, data));
-  },
+  // updateState(data) {
+  //   this.setState(utils.extend({}, this.state, data));
+  // },
 
-  createFormGruop(name) {
-    const myGroup = formGroups.get(name);
-    const input = myGroup.input;
+  // createFormGruop(name) {
+  //   const myGroup = formGroups.get(name);
+  //   const input = myGroup.input;
 
-    return (
-      <FormGroup
-        {...input}
-        key={input.name}
-        id={input.name}
-        value={this.getDataValue(input.name)}
-        onChange={this.onChangeData(input.name)}
-        onKeyUp={this.onInputKeyUp}
-      />
-    );
-  },
+  //   return (
+  //     <FormGroup
+  //       {...input}
+  //       key={input.name}
+  //       id={input.name}
+  //       value={this.getDataValue(input.name)}
+  //       onChange={this.onChangeData(input.name)}
+  //       onKeyUp={this.onInputKeyUp}
+  //     />
+  //   );
+  // },
 
 // Mine
 
   componentDidMount() {
     this.props.fetch('goform/get_firstLogin_info').then((json) => {
       if (json.state && json.state.code === 2000) {
-        const currMode = json.data.manageMode;
+        const currMode = json.data.enable;
         this.props.changeCurrentMode(currMode);
         this.props.changeNextMode(currMode);
+        this.props.changeModeData(fromJS(json.data).delete('ifFirstLogin'));
       }
     });
   },
 
   onOkButtonClick() {
-    const currMode = this.props.selfState.get('currMode');
-    const nextMode = this.props.selfState.get('nextMode');
-    if (currMode === nextMode) {
-      window.location.href = '#/main/status';
-    } else if (currMode !== nextMode) {
-      this.props.createModal({
-        id: 'settings',
-        role: 'alert',
-        text: _('Mode Changed ! Reboot to take effect ?'),
-        apply: this.comfirmModeChange,
-      });
-    }
+    this.props.validateAll().then((wrgmsg) => {
+      if (wrgmsg.isEmpty()) {
+        const currMode = this.props.selfState.get('currMode');
+        const nextMode = this.props.selfState.get('nextMode');
+        if (currMode === nextMode) {
+          window.location.href = '#/main/status';
+        } else if (currMode !== nextMode) {
+          this.props.createModal({
+            id: 'settings',
+            role: 'alert',
+            text: _('Mode Changed ! Reboot to take effect ?'),
+            apply: this.comfirmModeChange,
+          });
+        }
+      }
+    });
   },
 
   onSkipButtonClick() {
-    const currMode = this.props.selfState.get('currMode');
-    if (currMode === '0') {
-      window.location.href = '#/main/status';
-    } else if (currMode === 'thin') {
-      window.location.href = '#/ThinModeNotice';
-    }
+    window.location.href = '#/main/status';
   },
 
   comfirmModeChange() {
-    const query = { manageMode: this.props.selfState.get('nextMode') };
-    this.props.save('goform/set_ap_mode', query);
+    const query = this.props.selfState.get('modeData').toJS();
+    this.props.save('goform/set_thin', query);
     this.props.changeShowProgressBar(true);
   },
 
@@ -344,6 +356,7 @@ export const SignUp = React.createClass({
     const { version, guiName } = this.props.app.toJS();
     const currMode = this.props.selfState.get('currMode');
     const nextMode = this.props.selfState.get('nextMode');
+    const { discoveryType, enable, acIp } = this.props.selfState.get('modeData').toJS();
     const imgWrapStyle = {
       width: '50%',
       height: '100px',
@@ -370,7 +383,6 @@ export const SignUp = React.createClass({
         />
         <div className="t-wizard">
           <h2>{_('Quick Mode Change')}</h2>
-
           <div
             className="t-wizard__content"
             style={{
@@ -386,63 +398,107 @@ export const SignUp = React.createClass({
               }}
             >
               {
-                'Notice: You see this page only when you first login. You can select the device operation mode(Fat/Thin) as you need. The current mode is '
-                + currMode + '. And it\'s ok if you skip this step.'
+                `Notice: You see this page only when you first login. You can select the device operation mode(Fat/Thin) as you need. The current mode is ${
+                 currMode === '1' ? 'thin' : 'fat'}. And it's ok if you skip this step.`
               }
             </div>
             <div className="row">
-              <label htmlFor="fatSelectRadio">
-                <div
-                  className="cols cols-6"
-                  style={nextMode === '0' ? selectedWrapStyle : radioWrapStyle}
-                >
-                  <img alt="img for fat AP" />
-                  <div>
-                    { 'Some introduction to fat AP.' }
-                  </div>
-                </div>
-              </label>
-              <label htmlFor="thinSelectRadio">
-                <div
-                  className="cols cols-6"
-                  style={nextMode === '1' ? selectedWrapStyle : radioWrapStyle}
-                >
-                  <img alt="img for thin AP" />
-                  <div>
-                    { 'Some introduction to thin AP.' }
-                  </div>
-                </div>
-              </label>
-            </div>
-            <div
-              className="row"
-              style={{
-                marginTop: '5px',
-              }}
-            >
               <div
-                className="cols cols-6"
+                className="cols cols-8"
                 style={radioWrapStyle}
               >
-                <FormInput
-                  type="radio"
-                  id="fatSelectRadio"
-                  checked={nextMode === '0'}
-                  onClick={() => { this.props.changeNextMode('0'); }}
+                <FormGroup
+                  type="select"
+                  label={_('AP Mode')}
+                  value={nextMode}
+                  options={[
+                    { value: '0', label: _('Fat AP Mode') },
+                    { value: '1', label: _('Thin AP Mode') },
+                  ]}
+                  onChange={(data) => {
+                    this.props.changeNextMode(data.value);
+                    this.props.changeModeData(fromJS({ enable: data.value }));
+                  }}
                 />
+                {
+                  nextMode === '1' ? (
+                    <FormGroup
+                      type="select"
+                      label={_('Discovery Type')}
+                      value={discoveryType}
+                      options={[
+                        { value: 'dhcp', label: _('DHCP') },
+                        { value: 'static', label: _('Static') },
+                      ]}
+                      onChange={(data) => {
+                        this.props.changeModeData(fromJS({ discoveryType: data.value }));
+                      }}
+                    />
+                  ) : null
+                }
+                {
+                  discoveryType === 'static' && nextMode === '1' ? (
+                    <FormGroup
+                      type="text"
+                      label={_('AC IP')}
+                      value={acIp}
+                      onChange={(data) => {
+                        this.props.changeModeData(fromJS({ acIp: data.value }));
+                      }}
+                      required
+                      {...this.props.validateOption.validateIp}
+                    />
+                  ) : null
+                }
               </div>
               <div
-                className="cols cols-6"
-                style={radioWrapStyle}
+                className="cols cols-4"
+                style={selectedWrapStyle}
               >
-                <FormInput
-                  type="radio"
-                  id="thinSelectRadio"
-                  checked={nextMode === '1'}
-                  onClick={() => { this.props.changeNextMode('1'); }}
-                />
+                {
+                  nextMode === '1' ? (
+                    <div>
+                      <img alt="img for thin AP" />
+                      <div>
+                        { 'Some introduction to thin AP.' }
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <img alt="img for fat AP" />
+                      <div>
+                        { 'Some introduction to fat AP.' }
+                      </div>
+                    </div>
+                  )
+                }
               </div>
             </div>
+            {/*
+              <div
+                className="row"
+                style={{
+                  marginTop: '5px',
+                }}
+              >
+                <div
+                  className="cols cols-6"
+                  style={radioWrapStyle}
+                >
+                </div>
+                <div
+                  className="cols cols-6"
+                  style={radioWrapStyle}
+                >
+                  <FormInput
+                    type="radio"
+                    id="thinSelectRadio"
+                    label={nextMode === '1' ? _('Thin') : _('Fat')}
+                    checked={nextMode === '1'}
+                  />
+                </div>
+              </div>
+            */}
           </div>
           <div className="t-wizard__footer">
             <Button
@@ -484,6 +540,8 @@ export const SignUp = React.createClass({
   },
 });
 
+SignUp.propTypes = propTypes;
+
 function mapStateToProps(state) {
   return {
     app: state.app,
@@ -501,7 +559,8 @@ function mapDispatchToProps(dispatch) {
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  validator.mergeProps(validOptions)
 )(SignUp);
 
 export const wizard = reducer;

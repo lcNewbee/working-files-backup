@@ -1,0 +1,42 @@
+{
+  "state":{
+    "code":2000,
+    "msg":"success"
+  },
+  "data":{
+    "ip": "192.168.1.1",
+    "mask": "255.255.255.0",
+      "radioList": [{
+        "radioId": "0",
+        "wirelessMode": "ap",
+        "ssid": "axilspot",
+        "countryCode": "US",
+        "frequency": "36",
+        "channelWidth": "HT20",
+        "distance": "1",
+        "apMac": "12:11:11:11:11:11",
+        "peers": ["12:11:11:11:11:11"]
+      }, {
+        "radioId": "1",
+        "wirelessMode": "repeater",
+        "ssid": "axilspot",
+        "countryCode": "US",
+        "frequency": "36",
+        "channelWidth": "HT20",
+        "distance": "1",
+        "apMac": "12:11:11:11:11:11",
+        "peers": ["12:11:11:11:11:11"]
+      }, {
+        "radioId": "2",
+        "wirelessMode": "sta",
+        "ssid": "axilspot",
+        "countryCode": "US",
+        "frequency": "36",
+        "channelWidth": "HT20",
+        "distance": "1",
+        "apMac": "12:11:11:11:11:11",
+        "peers": ["12:11:11:11:11:11"]
+      }
+    ]
+  }
+}

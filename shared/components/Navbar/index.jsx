@@ -23,7 +23,12 @@ function Navbar(props) {
     <header className={navbarClassName}>
       <div className="brand" />
       <h1>{title}</h1>
-      <span className="version">GUI {version}</span>
+      {
+        version ? (
+          <span className="version">GUI {version}</span>
+        ) : null
+      }
+
       {props.children}
     </header>
   );

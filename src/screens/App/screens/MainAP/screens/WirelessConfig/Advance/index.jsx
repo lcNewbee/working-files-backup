@@ -22,6 +22,8 @@ const propTypes = {
   validateOption: PropTypes.object,
   validateAll: PropTypes.func,
   saveSettings: PropTypes.func,
+  fetch: PropTypes.func,
+  createModal: PropTypes.func,
 
   leaveSettingsScreen: PropTypes.func,
   leaveScreen: PropTypes.func,
@@ -29,6 +31,7 @@ const propTypes = {
   productInfo: PropTypes.instanceOf(Map),
   selfState: PropTypes.instanceOf(Map),
   changeCurrRadioConfig: PropTypes.func,
+  changeRateSetOptions: PropTypes.func,
 };
 
 const validOptions = Map({
@@ -47,6 +50,18 @@ const validOptions = Map({
   validSens: validator({
     rules: 'num:[-98, -10]',
   }),
+  validBeacon: validator({
+    rules: 'num:[1, 100]',
+  }),
+  validDtim: validator({
+    rules: 'num:[1, 100]',
+  }),
+  validSegment: validator({
+    rules: 'num:[1, 100]',
+  }),
+  validAmpdu: validator({
+    rules: 'num:[1, 100]',
+  }),
 });
 
 export default class Advance extends React.Component {
@@ -55,6 +70,7 @@ export default class Advance extends React.Component {
     this.onSave = this.onSave.bind(this);
     this.firstInAndRefresh = this.firstInAndRefresh.bind(this);
     this.changeFormValue = this.changeFormValue.bind(this);
+    this.makeRateSetOptions = this.makeRateSetOptions.bind(this);
   }
 
   componentWillMount() {
@@ -77,8 +93,15 @@ export default class Advance extends React.Component {
     const saveData = this.props.store.getIn(['curData', 'radioList', radioId]).toJS();
     this.props.validateAll().then((msg) => {
       if (msg.isEmpty()) {
-        this.props.save('goform/set_adv_wireless', saveData);
-        console.log('saveData', saveData);
+        const rssi = this.props.store.getIn(['curData', 'radioList', radioId, 'rssi']);
+        if (rssi < -98 || rssi > -40 || !Number.isInteger(Number(rssi))) {
+          this.props.createModal({
+            role: 'alert',
+            text: _('Please input a valid rssi value.'),
+          });
+        } else {
+          this.props.save('goform/set_adv_wireless', saveData);
+        }
       }
     });
   }
@@ -89,7 +112,11 @@ export default class Advance extends React.Component {
       radioId: data.value,
       radioType,
     });
-    this.props.changeCurrRadioConfig(config);
+    Promise.resolve().then(() => {
+      this.props.changeCurrRadioConfig(config);
+    }).then(() => {
+      this.makeRateSetOptions();
+    });
   }
 
   firstInAndRefresh() {
@@ -101,6 +128,7 @@ export default class Advance extends React.Component {
     });
     this.props.fetchSettings();
     this.onChangeRadio({ value: '0' });
+    this.makeRateSetOptions();
   }
 
   changeFormValue(id, name, value) {
@@ -110,6 +138,30 @@ export default class Advance extends React.Component {
     this.props.updateItemSettings({ radioList });
   }
 
+  makeRateSetOptions() {
+    const { radioId, radioType } = this.props.selfState.get('currRadioConfig').toJS();
+    const radio = radioType;
+    let radioMode;
+    function converListToOptions(list) { // list为immutable模式
+      return list.map(item => ({
+        label: item,
+        value: item,
+      }));
+    }
+    this.props.fetch('goform/get_base_wl_info_forTestUse').then((json) => {
+      if (json.state && json.state.code === 2000) {
+        radioMode = json.data.radioList[radioId].radioMode;
+      }
+      return { radio, radioMode };
+    }).then(query => this.props.fetch('goform/get_rate_set', query)
+    ).then((data) => {
+      if (data.state && data.state.code === 2000) {
+        const rateSetOptions = converListToOptions(fromJS(data.data.rateSetList));
+        this.props.changeRateSetOptions(rateSetOptions);
+      }
+    });
+  }
+
   render() {
     const { radioId, radioType } = this.props.selfState.get('currRadioConfig').toJS();
     if (!this.props.store.getIn(['curData', 'radioList', radioId])) return null;
@@ -117,9 +169,11 @@ export default class Advance extends React.Component {
       sensEnable, distance, sensThreshold, rtsEnable, rts, autoAdjust,
       led1Threshold, led2Threshold, led3Threshold, led4Threshold, beaconInterval,
       dtimInterval, segmentThresh, ampdu, fiveFirst, multiToUnicast, tgmpSnoop,
-      multiMonitor, probeRqstForbid, timeFairness, beamforming,
+      multiMonitor, probeRqstForbid, timeFairness, beamforming, rateSet, rssiEnable,
+      rssi, airTimeEnable, fairAlgthm,
     } = this.props.store.getIn(['curData', 'radioList', radioId]).toJS();
-    const { validLed1, validLed2, validLed3, validLed4, validSens } = this.props.validateOption;
+    const { validLed1, validLed2, validLed3, validLed4, validSens, validBeacon, validDtim, validSegment, validAmpdu } = this.props.validateOption;
+    const funConfig = this.props.route.funConfig;
     return (
       <div className="advanceWrap">
         {
@@ -135,20 +189,54 @@ export default class Advance extends React.Component {
           ) : null
         }
         <h3>{_('Advance')}</h3>
-        {/*
-          <FormGroup
-            type="number"
-            label={_('Beacon Interval')}
-            value={beaconInterval}
-            onChange={(data) => { this.changeFormValue(radioId, 'beaconInterval', data.value); }}
-          />
-          <FormGroup
-            type="number"
-            label={_('DTIM Interval')}
-            value={dtimInterval}
-            onChange={(data) => { this.changeFormValue(radioId, 'dtimInterval', data.value); }}
-          />
-        */}
+        { // Beacon帧间间隔
+          funConfig.beaconIntervalFun ? (
+            <FormGroup
+              type="number"
+              label={_('Beacon Interval')}
+              value={beaconInterval}
+              onChange={(data) => { this.changeFormValue(radioId, 'beaconInterval', data.value); }}
+              required
+              {...validBeacon}
+            />
+          ) : null
+        }
+        { // DTIM间隔
+          funConfig.dtimIntervalFun ? (
+            <FormGroup
+              type="number"
+              label={_('DTIM Interval')}
+              value={dtimInterval}
+              onChange={(data) => { this.changeFormValue(radioId, 'dtimInterval', data.value); }}
+              required
+              {...validDtim}
+            />
+          ) : null
+        }
+        { // 分片阈值
+          funConfig.segmentThreshFun ? (
+            <FormGroup
+              type="number"
+              label={_('Segment Threshold')}
+              value={segmentThresh}
+              onChange={(data) => { this.changeFormValue(radioId, 'segmentThresh', data.value); }}
+              required
+              {...validSegment}
+            />
+          ) : null
+        }
+        { // ampdu值
+          funConfig.ampduFun ? (
+            <FormGroup
+              type="number"
+              label={_('AMPDU')}
+              value={ampdu}
+              onChange={(data) => { this.changeFormValue(radioId, 'ampdu', data.value); }}
+              required
+              {...validAmpdu}
+            />
+          ) : null
+        }
         <div className="clearfix">
           <div style={{ width: '300px' }} >
             <FormGroup
@@ -185,21 +273,6 @@ export default class Advance extends React.Component {
           </span>
         </div>
 
-        {/*
-          <FormGroup
-            type="number"
-            label={_('Segment Threshold')}
-            value={segmentThresh}
-            onChange={(data) => { this.changeFormValue(radioId, 'segmentThresh', data.value); }}
-          />
-
-          <FormGroup
-            type="number"
-            label={_('AMPDU')}
-            value={ampdu}
-            onChange={(data) => { this.changeFormValue(radioId, 'ampdu', data.value); }}
-          />
-        */}
         <div className="clearfix">
           <div style={{ width: '300px' }} >
             <FormGroup
@@ -236,6 +309,76 @@ export default class Advance extends React.Component {
             </label>
           </span>
         </div>
+        {
+          funConfig.rateSetFun ? (
+            <FormGroup
+              type="select"
+              label={_('Rate Set')}
+              value={rateSet}
+              options={this.props.selfState.get('rateSetOptions').toJS()}
+              onChange={(data) => {
+                this.changeFormValue(radioId, 'rateSet', data.value);
+              }}
+            />
+          ) : null
+        }
+        {
+          funConfig.rssiLimitFun ? (
+            <div className="clearfix">
+              <FormGroup
+                type="checkbox"
+                label={_('RSSI Limit')}
+                className="fl"
+                checked={rssiEnable === '1'}
+                onClick={() => {
+                  const val = rssiEnable === '1' ? '0' : '1';
+                  this.changeFormValue(radioId, 'rssiEnable', val);
+                }}
+              />
+              <FormInput
+                type="number"
+                value={rssi}
+                style={{ width: '164px' }}
+                disabled={rssiEnable === '0'}
+                className="fl"
+                onChange={(data) => {
+                  this.changeFormValue(radioId, 'rssi', data.value);
+                }}
+              />
+              <span>{_('  dbm Range: -98 ~ -40')}</span>
+            </div>
+          ) : null
+        }
+        {
+          funConfig.airTimeFairnessFun ? (
+            <div className="clearfix">
+              <FormGroup
+                type="checkbox"
+                label={_('Airtime Fairness')}
+                className="fl"
+                checked={airTimeEnable === '1'}
+                onClick={() => {
+                  const val = airTimeEnable === '1' ? '0' : '1';
+                  this.changeFormValue(radioId, 'airTimeEnable', val);
+                }}
+              />
+              <FormInput
+                type="select"
+                value={fairAlgthm}
+                className="fl"
+                disabled={airTimeEnable === '0'}
+                options={[
+                  { value: 'strict', label: _('Strict Schedule Algorithm') },
+                  { value: 'fairquen', label: _('Fair Quene Algorithm') },
+                ]}
+                onChange={(data) => {
+                  this.changeFormValue(radioId, 'fairAlgthm', data.value);
+                }}
+                style={{ width: '164px' }}
+              />
+            </div>
+          ) : null
+        }
         <div className="clearfix">
           <FormGroup
             className="fl"
@@ -341,95 +484,99 @@ export default class Advance extends React.Component {
             }}
           />
         */}
-        <div className="signalLedConfg">
-          <FormGroup
-            label={_('Signal LED Thresholds')}
-          >
-            <br /><br />
-            <div
-              style={{
-                marginLeft: '-130px',
-                marginRight: '5px',
-              }}
-            >
+        {
+          funConfig.ledThreshFun ? (
+            <div className="signalLedConfg">
               <FormGroup
-                className="threshdForLed"
-                id="threshdForLed1"
-                type="number"
-                label="LED1"
-                help={"dbm " + _('range:') + " -98 ~ -10"}
-                value={led1Threshold}
-                onChange={(data) => { this.changeFormValue(radioId, 'led1Threshold', data.value); }}
-                size="sm"
-                required
-                {...validLed1}
-              />
+                label={_('Signal LED Thresholds')}
+              >
+                <br /><br />
+                <div
+                  style={{
+                    marginLeft: '-130px',
+                    marginRight: '5px',
+                  }}
+                >
+                  <FormGroup
+                    className="threshdForLed"
+                    id="threshdForLed1"
+                    type="number"
+                    label="LED1"
+                    help={`dbm ${_('range:')} -98 ~ -10`}
+                    value={led1Threshold}
+                    onChange={(data) => { this.changeFormValue(radioId, 'led1Threshold', data.value); }}
+                    size="sm"
+                    required
+                    {...validLed1}
+                  />
+                </div>
+                <br /><br />
+                <div
+                  style={{
+                    marginLeft: '-130px',
+                    marginRight: '5px',
+                    marginTop: '-40px',
+                  }}
+                >
+                  <FormGroup
+                    className="threshdForLed"
+                    id="threshdForLed2"
+                    type="number"
+                    label="LED2"
+                    help={`dbm ${_('range:')} -98 ~ -10`}
+                    value={led2Threshold}
+                    onChange={(data) => { this.changeFormValue(radioId, 'led2Threshold', data.value); }}
+                    size="sm"
+                    required
+                    {...validLed2}
+                  />
+                </div>
+                <br /><br />
+                <div
+                  style={{
+                    marginLeft: '-130px',
+                    marginRight: '5px',
+                    marginTop: '-40px',
+                  }}
+                >
+                  <FormGroup
+                    className="threshdForLed"
+                    id="threshdForLed3"
+                    type="number"
+                    label="LED3"
+                    help={`dbm ${_('range:')} -98 ~ -10`}
+                    value={led3Threshold}
+                    onChange={(data) => { this.changeFormValue(radioId, 'led3Threshold', data.value); }}
+                    size="sm"
+                    required
+                    {...validLed3}
+                  />
+                </div>
+                <br /><br />
+                <div
+                  style={{
+                    marginLeft: '-130px',
+                    marginRight: '5px',
+                    marginTop: '-40px',
+                  }}
+                >
+                  <FormGroup
+                    className="threshdForLed"
+                    id="threshdForLed4"
+                    type="number"
+                    label="LED4"
+                    help={`dbm ${_('range:')} -98 ~ -10`}
+                    value={led4Threshold}
+                    onChange={(data) => { this.changeFormValue(radioId, 'led4Threshold', data.value); }}
+                    size="sm"
+                    required
+                    {...validLed4}
+                  />
+                </div>
+              </FormGroup>
             </div>
-            <br /><br />
-            <div
-              style={{
-                marginLeft: '-130px',
-                marginRight: '5px',
-                marginTop: '-40px',
-              }}
-            >
-              <FormGroup
-                className="threshdForLed"
-                id="threshdForLed2"
-                type="number"
-                label="LED2"
-                help={"dbm " + _('range:') + " -98 ~ -10"}
-                value={led2Threshold}
-                onChange={(data) => { this.changeFormValue(radioId, 'led2Threshold', data.value); }}
-                size="sm"
-                required
-                {...validLed2}
-              />
-            </div>
-            <br /><br />
-            <div
-              style={{
-                marginLeft: '-130px',
-                marginRight: '5px',
-                marginTop: '-40px',
-              }}
-            >
-              <FormGroup
-                className="threshdForLed"
-                id="threshdForLed3"
-                type="number"
-                label="LED3"
-                help={"dbm " + _('range:') + " -98 ~ -10"}
-                value={led3Threshold}
-                onChange={(data) => { this.changeFormValue(radioId, 'led3Threshold', data.value); }}
-                size="sm"
-                required
-                {...validLed3}
-              />
-            </div>
-            <br /><br />
-            <div
-              style={{
-                marginLeft: '-130px',
-                marginRight: '5px',
-                marginTop: '-40px',
-              }}
-            >
-              <FormGroup
-                className="threshdForLed"
-                id="threshdForLed4"
-                type="number"
-                label="LED4"
-                help={"dbm " + _('range:') + " -98 ~ -10"}
-                value={led4Threshold}
-                onChange={(data) => { this.changeFormValue(radioId, 'led4Threshold', data.value); }}
-                size="sm"
-                required
-                {...validLed4}
-              />
-            </div>
-          </FormGroup>
-        </div>
+          ) : null
+        }
         <div>
           <FormGroup>
             <SaveButton

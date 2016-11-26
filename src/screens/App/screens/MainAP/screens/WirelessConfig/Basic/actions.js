@@ -160,3 +160,17 @@ export function changeCurrRadioConfig(data) {
     data,
   };
 }
+
+export function changeSsidTableOptions(data) {
+  return {
+    type: 'CHANGE_SSID_TABLE_OPTIONS',
+    data,
+  };
+}
+
+// export function changeAirTimeEnable(data) {
+//   return {
+//     type: 'CHANGE_AIR_TIME_ENABLE',
+//     data,
+//   };
+// }

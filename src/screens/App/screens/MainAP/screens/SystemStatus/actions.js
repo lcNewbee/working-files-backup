@@ -16,6 +16,20 @@ export function changeCurrRadioConfig(data) {
   };
 }
 
+export function changeServerData(data) {
+  return {
+    type: 'CHANGE_SERVER_DATA',
+    data,
+  };
+}
+
+export function changeCustomSettingsForChart(data) {
+  return {
+    type: 'CHANGE_CUSTOM_SETTINGS_FOR_CHART',
+    data,
+  };
+}
+
 
 
 

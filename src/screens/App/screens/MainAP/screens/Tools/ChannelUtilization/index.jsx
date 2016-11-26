@@ -23,6 +23,7 @@ const propTypes = {
   changeUtiTableShowStatus: PropTypes.func,
   leaveSettingsScreen: PropTypes.func,
   changeCurrRadioConfig: PropTypes.func,
+  changesShowScanTable: PropTypes.func,
 };
 
 export default class ChannelUtilization extends React.Component {
@@ -39,8 +40,9 @@ export default class ChannelUtilization extends React.Component {
       settingId: this.props.route.id,
       fetchUrl: this.props.route.fetchUrl,
     });
+    this.props.changesShowScanTable(false);
     this.onChangeRadio({ value: '0' });
-    this.getDataAndRenderTable();
+    // this.getDataAndRenderTable();
   }
 
   componentWillUnmount() {
@@ -60,13 +62,15 @@ export default class ChannelUtilization extends React.Component {
   }
 
   getDataAndRenderTable() {
+    this.props.changesShowScanTable(false);
     const query = this.props.selfState.get('currRadioConfig').toJS();
-    this.props.save('goform/get_chanutil', query).then((json) => {
+    this.props.fetch('goform/get_chanutil', query).then((json) => {
       if (json.state && json.state.code === 2000) {
         const chutilList = json.data.chutilList;
         const list = this.makeChannelUtiOptionsAndList(chutilList);
         this.props.changeChannelUtiOptions(list.get('channelUtiOptions'));
         this.props.changeChannelUtiList(list.get('channelUtiList'));
+        this.props.changesShowScanTable(true);
       }
     });
   }
@@ -129,14 +133,18 @@ export default class ChannelUtilization extends React.Component {
             />
           </div>
         </div><br /><br />
-        <div className="stats-group-cell">
-          <Table
-            className="table"
-            title={_('Channel Utilization:')}
-            options={this.props.selfState.get('channelUtiOptions')}
-            list={this.props.selfState.get('channelUtiList')}
-          />
-        </div>
+        {
+          this.props.selfState.get('showScanTable') ? (
+            <div className="stats-group-cell">
+              <Table
+                className="table"
+                title={_('Channel Utilization:')}
+                options={this.props.selfState.get('channelUtiOptions')}
+                list={this.props.selfState.get('channelUtiList')}
+              />
+            </div>
+          ) : null
+        }
       </div>
     );
   }

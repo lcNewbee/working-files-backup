@@ -1,6 +1,7 @@
 import { fromJS } from 'immutable';
 
 const defaultState = fromJS({
+  showScanTable: false,
   channelUtiOptions: [],
   channelUtiList: [],
   currRadioConfig: {
@@ -17,6 +18,8 @@ export default function (state = defaultState, action) {
       return state.set('channelUtiList', action.data);
     case 'CHANGE_CURR_RADIO_CONFIG':
       return state.set('currRadioConfig', action.data);
+    case 'CHANGES_SHOW_SCAN_TABLE':
+      return state.set('showScanTable', action.data);
     default:
   }
   return state;

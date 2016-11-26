@@ -92,10 +92,11 @@ export default class AccountSettings extends Component {
               props.save('goform/set_password', query)
                   .then((json) => {
                     if (json.state && json.state.code === 4000) {
-                      const text = json.state.msg;
+                      // const text = json.state.msg;
+                      const text = _('old password error.');
                       props.showValidMsg('1', text);
-                    } else if (json.statem && json.state.code === 2000) {
-                      props.save('goform/set_password', query);
+                    } else if (json.state && json.state.code === 2000) {
+                      window.location.href = '#';
                     }
                   });
             }

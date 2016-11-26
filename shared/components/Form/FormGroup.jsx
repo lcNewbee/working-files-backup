@@ -77,7 +77,7 @@ class FormGroup extends React.Component {
     // 空字符串验证
     if (value === '' || value === undefined) {
       if (required) {
-        checkResult = _('%s is required', label || this.props['data-label']);
+        checkResult = _('%s', label || this.props['data-label']) + _(' is required');
       }
 
     // 不为空，validator验证对象验证

@@ -5,6 +5,8 @@
   },
   "data": {
     "ifFirstLogin": "0",
-    "manageMode": "0"
+    "enable": "0",
+    "discoveryType": "static",
+    "acIp": ""
   }
 }

@@ -1,0 +1,229 @@
+import React, { PropTypes } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import Table from 'shared/components/Table';
+import Button from 'shared/components/Button/Button';
+import FormGroup from 'shared/components/Form/FormGroup';
+import FormInput from 'shared/components/Form/FormInput';
+import { fromJS, Map, List } from 'immutable';
+import utils from 'shared/utils';
+import * as sharedActions from 'shared/actions/settings';
+import * as appActions from 'shared/actions/app';
+import * as selfActions from './actions';
+import reducer from './reducer';
+
+const flowRateFilter = utils.filter('flowRate');
+
+const propTypes = {
+  selfState: PropTypes.instanceOf(Map),
+  store: PropTypes.instanceOf(Map),
+  initSettings: PropTypes.func,
+  fetchSettings: PropTypes.func,
+  route: PropTypes.object,
+  product: PropTypes.instanceOf(Map),
+  changeCurrRadioConfig: PropTypes.func,
+};
+
+const defaultProps = {
+};
+
+const vapInterfaceOptions = fromJS([
+  {
+    id: 'name',
+    text: _('Name'),
+    transform(val, item) {
+      const ssid = item.get('ssid');
+      if (val === '') {
+        return `--(${ssid})`;
+      }
+      return `${val}(${ssid })`;
+    },
+    width: '152px',
+  }, {
+    id: 'mac',
+    text: _('MAC'),
+    transform(val) {
+      if (val === '') {
+        return '--';
+      }
+      return val;
+    },
+    width: '152px',
+  }, {
+    id: 'txBytes',
+    text: _('Tx Bytes'),
+    transform(val) {
+      if (val === '') {
+        return '--';
+      }
+      return flowRateFilter.transform(val);
+    },
+    width: '144px',
+  }, {
+    id: 'rxBytes',
+    text: _('Rx Bytes'),
+    transform(val) {
+      if (val === '') {
+        return '--';
+      }
+      return flowRateFilter.transform(val);
+    },
+    width: '144px',
+  }, {
+    id: 'txPackets',
+    text: _('Tx Packets'),
+    transform(val) {
+      if (val === '') {
+        return '--';
+      }
+      return val;
+    },
+    width: '144px',
+  }, {
+    id: 'rxPackets',
+    text: _('Rx Packets'),
+    transform(val) {
+      if (val === '') {
+        return '--';
+      }
+      return val;
+    },
+    width: '144px',
+  }, {
+    id: 'txErrorPackets',
+    text: _('Tx Error'),
+    transform(val) {
+      if (val === '') {
+        return '--';
+      }
+      return val;
+    },
+    width: '144px',
+  }, {
+    id: 'rxErrorPackets',
+    text: _('Rx Error'),
+    transform(val) {
+      if (val === '') {
+        return '--';
+      }
+      return val;
+    },
+    width: '144px',
+  }, {
+    id: 'ccq',
+    text: _('CCQ'),
+    transform(val) {
+      if (val === '') {
+        return '--';
+      }
+      return val;
+    },
+  },
+]);
+
+export default class SsidDetails extends React.Component {
+  constructor(props) {
+    super(props);
+    this.onChangeRadio = this.onChangeRadio.bind(this);
+  }
+
+  componentWillMount() {
+    this.props.initSettings({
+      settingId: this.props.route.id,
+      fetchUrl: this.props.route.fetchUrl,
+      defaultData: {},
+    });
+    this.props.fetchSettings();
+    this.onChangeRadio({ value: 0 });
+  }
+
+  onChangeRadio(data) { // 注意参数实际是data的value属性，这里表示radio序号
+    const radioType = this.props.product.getIn(['deviceRadioList', data.value, 'radioType']);
+    const config = fromJS({
+      radioId: data.value,
+      radioType,
+    });
+    this.props.changeCurrRadioConfig(config);
+  }
+
+  render() {
+    const { radioId, radioType } = this.props.selfState.get('currRadioConfig').toJS();
+    if (!this.props.store.getIn(['curData', 'radioList', radioId, 'vapList'])) return null;
+    const { wirelessMode, vapList } = this.props.store.getIn(['curData', 'radioList', radioId]).toJS();
+    const vapInterfacesList = (wirelessMode === 'sta') ? [vapList[0]] : vapList;
+    // console.log('vapInterfacesList', vapInterfacesList);
+    return (
+      <div className="o-box">
+        <Button
+          text={_('Back')}
+          theme="primary"
+          style={{
+            marginBottom: '15px',
+          }}
+          onClick={() => {
+            window.location.href = '#/main/status/overview';
+          }}
+        />
+
+        <div className="o-box__cell clearfix">
+          <h3
+            className="fl"
+            style={{
+              paddingTop: '3px',
+              marginRight: '15px',
+            }}
+          >
+            {_('Wireless Interfaces')}
+          </h3>
+          {
+            this.props.product.get('deviceRadioList').size > 1 ? (
+              <FormInput
+                type="switch"
+                label={_('Radio Select')}
+                minWidth="100px"
+                options={this.props.product.get('radioSelectOptions')}
+                value={this.props.selfState.getIn(['currRadioConfig', 'radioId'])}
+                onChange={(data) => {
+                  this.onChangeRadio(data);
+                }}
+              />
+            ) : null
+          }
+        </div>
+        <div className="o-box__cell">
+          <Table
+            className="table"
+            options={vapInterfaceOptions}
+            list={vapInterfacesList}
+          />
+        </div>
+      </div>
+    );
+  }
+}
+
+SsidDetails.propTypes = propTypes;
+SsidDetails.defaultProps = defaultProps;
+
+function mapStateToProps(state) {
+  return {
+    selfState: state.ssiddetails,
+    app: state.app,
+    store: state.settings,
+    product: state.product,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    utils.extend({}, appActions, sharedActions, selfActions),
+    dispatch
+  );
+}
+
+export const Screen = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SsidDetails);
+
+export const ssiddetails = reducer;
