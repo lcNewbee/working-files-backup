@@ -356,7 +356,7 @@ export default class View extends PureComponent {
                     text: _('Channel'),
                   }, {
                     id: 'rssi',
-                    text: _('Channel'),
+                    text: _('rssi'),
                   },
                 ])}
                 list={serverData.getIn(['neighborsAps', 'list']) || fromJS([])}

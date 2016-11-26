@@ -9,13 +9,13 @@ import * as appActions from 'shared/actions/app';
 
 const listOptions = fromJS([
   {
-    id: 'wrrmenable',
+    id: 'enable',
     width: '60',
     text: _('Enable'),
     formProps: {
       type: 'checkbox',
       dataType: 'number',
-      defaultValue: '1',
+      value: '1',
     },
   }, {
     id: 'apopermode',
@@ -23,10 +23,10 @@ const listOptions = fromJS([
     text: _('Access Point Work Mode'),
     options: [
       {
-        value: '1',
+        value: 1,
         label: _('Normal'),
       }, {
-        value: '2',
+        value: 2,
         label: _('Scan First'),
       },
     ],
@@ -34,7 +34,7 @@ const listOptions = fromJS([
     formProps: {
       type: 'switch',
       dataType: 'number',
-      defaultValue: '1',
+      value: '1',
     },
   }, {
     id: 'scantype',
@@ -42,10 +42,10 @@ const listOptions = fromJS([
     defaultValue: '0',
     options: [
       {
-        value: '2',
+        value: 2,
         label: _('Passive'),
       }, {
-        value: '1',
+        value: 1,
         label: _('Initiative'),
       },
     ],
@@ -112,6 +112,7 @@ const listOptions = fromJS([
       type: 'checkbox',
       dataType: 'number',
       defaultValue: '1',
+      value: '1',
     },
   }, {
     id: 'enable2g4pwr',
@@ -120,6 +121,7 @@ const listOptions = fromJS([
       type: 'checkbox',
       dataType: 'number',
       defaultValue: '1',
+      value: '1',
     },
   }, {
     id: 'adjafactor2g4',

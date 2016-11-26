@@ -5,7 +5,7 @@
   },
   "data": {
     "settings": {
-      "enable": 1,
+      "enable": 0,
       "cycles": 0,
       "scantype": 1,
       "apopermode": 1,
@@ -18,35 +18,6 @@
       "attacttime" : 0,
       "attactcnt": 5,
       "dyaging": 10
-    },
-    "list": [
-      {
-        "policyName": "Policy1",
-        "aps": "SSID1",
-        "protectMode": "0",
-        "ap24gMode": "2014-2-1",
-        "ap5gMode": "2014-2-1",
-        "protect24gChannel": "12",
-        "protect5gChannel": "12"
-      },
-      {
-        "policyName": "Policy1",
-        "aps": "SSID1",
-        "protectMode": "0",
-        "ap24gMode": "2014-2-1",
-        "ap5gMode": "2014-2-1",
-        "protect24gChannel": "12",
-        "protect5gChannel": "12"
-      },
-      {
-        "policyName": "Policy1",
-        "aps": "SSID1",
-        "protectMode": "0",
-        "ap24gMode": "2014-2-1",
-        "ap5gMode": "2014-2-1",
-        "protect24gChannel": "12",
-        "protect5gChannel": "12"
-      }
-    ]
+    }
   }
 }
