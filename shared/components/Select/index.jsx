@@ -41,6 +41,7 @@ class MySelect extends React.Component {
   }
 
   render() {
+    const { options } = this.props;
     let ThisComponent = Select;
     let myDisabled = this.props.disabled;
 

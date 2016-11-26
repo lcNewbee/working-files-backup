@@ -119,31 +119,31 @@ class FormContainer extends React.Component {
       myProps.key = `${formGroupId}${index}`;
     }
 
-    if (invalidMsg && typeof invalidMsg.get === 'function') {
-      myProps.errMsg = invalidMsg.get(formGroupId);
-    }
-
     // 同时支持 Map 或 object 数据
+    // 数据的填充
     if ($$data) {
       if (!Map.isMap($$data)) {
         $$data = fromJS($$data);
       }
 
-      // 固定初始化值，如checkbox
-      if ($$data.get(formGroupId) === undefined) {
-        myProps.value = myProps.value;
+      // 正常获取值
+      if ($$data.get(formGroupId) !== undefined) {
+        myProps.value = $$data.get(formGroupId);
+      }
 
-      // 特殊初始化值函数
-      } else if (typeof myProps.initValue === 'function' && !this.inited) {
+      // 有特殊初始化函数 initValue，只执行一次
+      if (typeof myProps.initValue === 'function' && !this.inited) {
         myProps.value = myProps.initValue($$data);
+
         if (myProps.value !== $$data.get(formGroupId)) {
           this.syncData[formGroupId] = myProps.value;
         }
-
-      // 正常的切换
-      } else {
-        myProps.value = $$data.get(formGroupId);
       }
+    }
+
+    // 数据验证相关属性
+    if (invalidMsg && typeof invalidMsg.get === 'function') {
+      myProps.errMsg = invalidMsg.get(formGroupId);
     }
 
     if (validateAt) {
@@ -154,14 +154,15 @@ class FormContainer extends React.Component {
       myProps.onValidError = onValidError;
     }
 
-    myProps.onChange = myData => this.onChangeData(formGroupId, myData);
-
+    // checkbox 的 value要特殊处理
     if (myProps.type === 'checkbox') {
       myProps.value = checkboxValue;
       myProps.checked = $$data.get(formGroupId) === checkboxValue ||
         parseInt($$data.get(formGroupId), 10) === parseInt(checkboxValue, 10);
     }
 
+    // change
+    myProps.onChange = myData => this.onChangeData(formGroupId, myData);
     if (myProps.saveOnChange) {
       myProps.onChange = ((myData) => {
         this.onChangeData(formGroupId, myData);
@@ -192,10 +193,10 @@ class FormContainer extends React.Component {
       />
     ) : null;
   }
-  renderFormGroupTree(options) {
+  renderFormGroupTree(options, i) {
     // Map直接渲染FormGroup
     if (Map.isMap(options)) {
-      return this.renderFormGroup(options);
+      return this.renderFormGroup(options, i);
     }
 
     // List 则需要循环渲染
@@ -219,7 +220,7 @@ class FormContainer extends React.Component {
         }
 
         // 如果是无标题 List
-        return this.renderFormGroupTree(item);
+        return this.renderFormGroupTree(item, index);
       });
     }
 

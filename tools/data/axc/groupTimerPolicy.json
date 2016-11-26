@@ -17,7 +17,7 @@
         "remark": "20"
       },
       {
-        "policy_id": "0",
+        "policy_id": "1",
         "policy_enbale": 0,
         "policy_type": "Mon&Tue&Wed&Thu&Fri&Sat&Sun",
         "policy_times": "2016-12-12 17:20",
@@ -28,9 +28,20 @@
         "remark": "20"
       },
       {
-        "policy_id": "0",
+        "policy_id": "2",
         "policy_enbale": 0,
         "policy_type": "Mon&Tue&Wed&Thu&Fri",
+        "policy_times": "2016-12-12 19:20",
+        "objects_name": "ssid",
+        "objects_templatename": "ssid1",
+        "objects_templateid": "2",
+        "objects_templateswitch": 1,
+        "remark": "20"
+      },
+      {
+        "policy_id": "3",
+        "policy_enbale": 0,
+        "policy_type": "Fri",
         "policy_times": "2016-12-12 19:20",
         "objects_name": "ssid",
         "objects_templatename": "ssid1",

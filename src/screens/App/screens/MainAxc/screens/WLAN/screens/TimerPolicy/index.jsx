@@ -88,6 +88,16 @@ const screenOptions = fromJS([
     defaultValue: 'Mon&Tue&Wed&Thu&Fri&Sat&Sun',
     formProps: {
       type: 'select',
+      initValue($$data) {
+        const oldVal = $$data.get('policy_type');
+        let ret = oldVal;
+
+        if (oldVal !== 'Mon&Tue&Wed&Thu&Fri&Sat&Sun' &&
+          oldVal !== 'Mon&Tue&Wed&Thu&Fri' && oldVal !== 'Once') {
+          ret = 'custom';
+        }
+        return ret;
+      },
     },
   }, {
     id: 'policy_custom_type',
@@ -97,6 +107,14 @@ const screenOptions = fromJS([
       type: 'checkboxs',
       splitStr: '&',
       options: daysOptions,
+      initValue($$data) {
+        const oldVal = $$data.get('policy_type');
+        const ret = oldVal;
+
+        console.log(oldVal)
+
+        return ret;
+      },
       showPrecondition($$data) {
         const curRepaet = $$data.get('policy_type');
 
