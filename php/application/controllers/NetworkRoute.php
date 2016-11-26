@@ -4,61 +4,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class NetworkRoute extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
-		$this->load->database();
 		$this->load->helper('array');
+    $this->load->model('network/NetworkRoute_Model');
 	}
 	function fetch(){
-		$query=$this->db->select('id,destnet,netmask,gateway')
-      ->from('route_table')
-      ->get()->result_array();
 
-    $newArray=null;
-    $keys = array(
-      'id'=>'id',
-      'destnet'=> 'targetAddress',
-      'netmask'=>'targetMask',
-      'gateway'=>'nextHopIp');
-
-
-    if ($query !== null) {
-      foreach($query as $key=>$val)
-      {
-        $newArray[$key] = array();
-        foreach($val as $k=>$v)
-        {
-            $newArray[$key][$keys[$k]] = $v;
-        }
-      }
-      $state=array(
-        'code'=>2000,
-        'msg'=>'OK'
-      );
-
-      $result=array(
-        'state'=>$state,
-        'data'=>array(
-          'list'=>$newArray
-        )
-      );
-    } else {
-      $result=array(
-        'state'=>$state,
-        'data'=>array(
-          'list'=>'[]'
-        )
-      );
-    }
-
+    $result = $this->NetworkRoute_Model->get_route_list($_GET);
 		return $result;
 	}
 	function onAction($data) {
     $result = null;
     $actionType = element('action', $data);
+
     if ($actionType === 'add') {
-      $arr['destnet'] = element('destnet',$data);
-      $arr['gateway'] = element('gateway',$data);
-      $arr['mask'] = element('mask',$data);
-      $result = acnetmg_add_route(json_encode($arr));
+      $result = $this->NetworkRoute_Model->add_route($data);
+    } elseif ($actionType === 'edit') {
+      $result = $this->NetworkRoute_Model->edit_route($data);
+    } elseif ($actionType === 'delete') {
+      $result = $this->NetworkRoute_Model->delete_route($data);
     }
     return $result;
 	}
@@ -68,11 +31,11 @@ class NetworkRoute extends CI_Controller {
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$data = json_decode(file_get_contents("php://input"), true);
 			$result = $this->onAction($data);
-            echo $result;
+      echo $result;
 		}
 		elseif($_SERVER['REQUEST_METHOD'] == 'GET') {
 			$result = $this->fetch();
-            echo json_encode($result, true);
+      echo json_encode($result, true);
 		}
 	}
 }
