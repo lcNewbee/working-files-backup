@@ -10,7 +10,6 @@ class NetworkRoute_Model extends CI_Model {
         ->from('route_table')
         ->get()->result_array();
 
-
 		$state=array(
       'code'=>2000,
       'msg'=>'OK'
