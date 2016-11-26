@@ -15,48 +15,6 @@ const listOptions = fromJS([
     formProps: {
       type: 'plain-text',
     },
-  },
-  // {
-  //   id: 'exchangeModel',
-  //   text: _('Exchange Model'),
-  //   defaultValue: 'access',
-  //   options: [
-  //     {
-  //       value: 'access',
-  //       label: 'access',
-  //     }, {
-  //       value: 'trunk',
-  //       label: 'trunk',
-  //     }, {
-  //       value: 'QINQ_tunnel',
-  //       label: 'QINQ(tunnel)',
-  //     }, {
-  //       value: 'QINQ_uplink',
-  //       label: 'QINQ(tunnel)',
-  //     },
-  //   ],
-  //   formProps: {
-  //     type: 'select',
-  //   },
-  // },
-  {
-    id: 'speed',
-    text: _('Port Speed'),
-    options: [
-      {
-        value: '10',
-        label: '10',
-      }, {
-        value: '100',
-        label: '100',
-      }, {
-        value: '1000',
-        label: _('1000'),
-      },
-    ],
-    formProps: {
-      type: 'switch',
-    },
   }, {
     id: 'workModel',
     text: _('Work Model'),
@@ -74,6 +32,28 @@ const listOptions = fromJS([
     ],
     formProps: {
       type: 'switch',
+    },
+  },
+  {
+    id: 'speed',
+    text: _('Port Speed'),
+    options: [
+      {
+        value: '10',
+        label: '10',
+      }, {
+        value: '100',
+        label: '100',
+      }, {
+        value: '1000',
+        label: _('1000'),
+      },
+    ],
+    formProps: {
+      type: 'switch',
+      showPrecondition(data) {
+        return data.get('workModel') !== 'auto';
+      },
     },
   }, {
     id: 'description',
