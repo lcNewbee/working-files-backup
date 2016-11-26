@@ -77,20 +77,25 @@ var immutableUtils = {
     var defaultKey = key || 'defaultValue';
     var ret = {};
 
+    function fillRet($$item) {
+      var defaultVal = $$item.get(defaultKey);
+
+      // 如果是列表继续循环
+      if (typeof $$item.findIndex === 'function') {
+        $$item.forEach(function($$subItem) {
+          fillRet($$subItem);
+        })
+      } else if (defaultVal !== undefined) {
+        ret[$$item.get('id')] = defaultVal;
+      }
+    }
+
     if (!$$options) {
       return null;
     }
 
     // 初始化默认值对象
-    $$options.forEach(
-      function(item) {
-        var defaultVal = item.get(defaultKey);
-        if (defaultVal !== undefined) {
-          ret[item.get('id')] = defaultVal;
-        }
-      }
-    );
-
+    $$options.forEach(fillRet);
     return ret;
   },
 

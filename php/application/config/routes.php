@@ -53,6 +53,8 @@ $route['default_controller'] = 'login';
 $route['404_override'] = '';
 $route['goform/login'] = 'login';
 $route['goform/axcInfo'] = 'axcInfo';
+
+// 网络设置
 $route['goform/network/port'] = 'networkPort';
 $route['goform/network/interface'] = 'networkInterface';
 $route['goform/network/dhcp'] = 'networkDhcp';
@@ -64,7 +66,9 @@ $route['goform/network/portal/server'] = 'networkPortalServer';
 $route['goform/network/portal/rule'] = 'networkPortalRules';
 $route['goform/network/radius/template'] = 'networkRadius';
 
+// AP组管理
 $route['goform/group'] = 'group';
+$route['goform/group/overview'] = 'groupOverview';
 $route['goform/group/ap'] = 'apRadio/fetch';
 $route['goform/group/ap/radio'] = 'apRadio/radio';
 $route['goform/group/ap/base'] = 'apradio/base';
@@ -80,6 +84,7 @@ $route['goform/group/timerPolicy'] = 'wirelessTimer';
 $route['goform/group/wips'] = 'wirelessSafe';
 $route['goform/group/wireless/protection'] = 'WirelessProtection';
 
+// 系统设置
 $route['goform/system/version/upload'] = 'systemVersion/upload';
 $route['goform/system/version/upgrade'] = 'systemVersion/upgrade';
 $route['goform/system/version/backup'] = 'systemVersion/backup';

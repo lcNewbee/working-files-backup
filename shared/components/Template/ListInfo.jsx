@@ -109,6 +109,11 @@ class ListInfo extends React.Component {
       this.initListTableOptions(nextProps);
     }
   }
+  onFetchList() {
+    if (this.props.fetchScreenData) {
+      this.props.fetchScreenData();
+    }
+  }
 
   onChangeSearchText(val) {
     this.onChangeQuery({
@@ -228,18 +233,27 @@ class ListInfo extends React.Component {
       });
       selectStr = $$actionQuery.get('selectedList').sort().join(', ');
       msgText = _('Are you sure to %s selected rows: %s', _(actionName), selectStr);
-      this.props.createModal({
-        id: 'settings',
-        role: 'confirm',
-        text: msgText,
-        apply: () => {
-          this.props.changeScreenActionQuery({
-            action: actionName,
-            selectedList: $$selectedList,
-          });
-          this.props.onListAction();
-        },
-      });
+
+      if (needConfirm) {
+        this.props.createModal({
+          id: 'settings',
+          role: 'confirm',
+          text: msgText,
+          apply: () => {
+            this.props.changeScreenActionQuery({
+              action: actionName,
+              selectedList: $$selectedList,
+            });
+            this.props.onListAction();
+          },
+        });
+      } else {
+        this.props.changeScreenActionQuery({
+          action: actionName,
+          selectedList: $$selectedList,
+        });
+        this.props.onListAction();
+      }
     } else {
       this.props.createModal({
         role: 'alert',
@@ -250,16 +264,17 @@ class ListInfo extends React.Component {
   onItemAction(option, index, $$data) {
     const actionName = option.actionName || option.actionType;
     const { onBeforeAction } = this.props;
+    const needConfirm = option.needConfirm;
     const store = this.props.store;
     const list = store.getIn(['data', 'list']);
     const listKey = option.actionKey || this.props.listKey;
     const $$actionItem = list.get(index);
-    const msgText = _('Are you sure to %s selected: %s', _(actionName), index);
+    const confirmText = _('Are you sure to %s selected: %s', _(actionName), index);
     let selectedList = [];
     let $$actionQuery = Map({
       action: actionName,
     });
-    let onBeforeActionMsg;
+    let cancelMsg = '';
 
     if (listKey === 'allKeys') {
       $$actionQuery = $$actionQuery.merge($$actionItem);
@@ -279,41 +294,52 @@ class ListInfo extends React.Component {
         });
     }
 
-    // 处理自定义的 action 前验证
-    // 没有onBeforeAction，默认使用 confirm 询问用户
-    if (!onBeforeAction) {
-      this.props.createModal({
-        id: actionName,
-        role: 'confirm',
-        text: msgText,
-        apply: () => {
-          this.doItemAction($$actionQuery);
-        },
-      });
+    // 异步处理，如果是 Promise 对象
+    if (utils.isPromise(onBeforeAction)) {
+      onBeforeAction($$actionQuery)
+        .then(
+          msg => this.doItemAction($$actionQuery, {
+            cancelMsg: msg,
+            confirmText,
+            needConfirm,
+          }),
+        );
 
-    // 如果是 Promise 对象
-    } else if (utils.isPromise(onBeforeAction)) {
-      onBeforeAction($$actionQuery).then(
-        msg => this.doItemAction($$actionQuery, msg),
-      );
-
-    // 如果是 function
+    // 同步处理
     } else {
-      onBeforeActionMsg = onBeforeAction($$actionQuery);
-      this.doItemAction($$actionQuery, onBeforeActionMsg);
+      if (onBeforeAction) {
+        cancelMsg = onBeforeAction($$actionQuery);
+      }
+      this.doItemAction($$actionQuery, {
+        cancelMsg,
+        needConfirm,
+        confirmText,
+      });
     }
   }
-  onFetchList() {
-    if (this.props.fetchScreenData) {
-      this.props.fetchScreenData();
-    }
-  }
-  doItemAction($$actionQuery, cancelMsg) {
+  doItemAction($$actionQuery, option) {
+    const { cancelMsg, needConfirm, confirmText } = option;
+    const modalId = 'listAction';
+
     if (cancelMsg) {
       this.props.createModal({
-        id: 'listAction',
+        id: modalId,
         role: 'alert',
         text: cancelMsg,
+      });
+    } else if (needConfirm) {
+      this.props.createModal({
+        id: modalId,
+        role: 'confirm',
+        text: confirmText,
+        apply: () => {
+          if ($$actionQuery) {
+            this.props.changeScreenActionQuery(
+              $$actionQuery.toJS(),
+            );
+          }
+          this.props.onListAction();
+        },
       });
     } else {
       if ($$actionQuery) {
@@ -402,7 +428,10 @@ class ListInfo extends React.Component {
                     text={_('Delete')}
                     size="sm"
                     onClick={() => {
-                      this.onRemoveItem(index);
+                      this.onItemAction({
+                        actionName: 'delete',
+                        needConfirm: true,
+                      }, index);
                     }}
                   />
                 ) : null

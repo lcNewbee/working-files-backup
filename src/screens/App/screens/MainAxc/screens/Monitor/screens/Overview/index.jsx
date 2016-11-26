@@ -2,9 +2,10 @@ import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import utils from 'shared/utils';
-import { Map, List } from 'immutable';
+import { Map, List, fromJS } from 'immutable';
 import PureComponent from 'shared/components/Base/PureComponent';
 import EchartReact from 'shared/components/EchartReact';
+import Table from 'shared/components/Table';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/screens';
 
@@ -117,6 +118,7 @@ function getApStatusOption(serverData) {
 
   return ret;
 }
+
 function getFlowOption(serverData) {
   let dataList = serverData.get('flowList');
   const option = {
@@ -340,16 +342,25 @@ export default class View extends PureComponent {
           </div>
           <div className="cols col-12">
             <div className="o-box__cell">
-              <h3>{ _('Safe Alarm Events') }</h3>
+              <h3>{ _('Dubious AP List') }</h3>
             </div>
             <div className="o-box__cell">
-              <EchartReact
-                option={safeAlarmOption}
-                className="o-box__canvas"
-                style={{
-                  width: '100%',
-                  minHeight: '180px',
-                }}
+              <Table
+                className="table"
+                options={fromJS([
+                  {
+                    id: 'mac',
+                    text: _('MAC'),
+                  }, {
+                    id: 'channel',
+                    text: _('Channel'),
+                  }, {
+                    id: 'rssi',
+                    text: _('Channel'),
+                  },
+                ])}
+                list={serverData.getIn(['neighborsAps', 'list']) || fromJS([])}
+                page={serverData.getIn(['neighborsAps', 'page'])}
               />
             </div>
           </div>

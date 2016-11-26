@@ -15,6 +15,7 @@ const screenOptions = fromJS([
       type: 'checkbox',
       dataType: 'number',
       defaultValue: '0',
+      value: '1',
     },
   }, {
     id: 'attacttime',

@@ -59,6 +59,29 @@
         "name": "DNS Hijacking",
         "value": 888
       }
-    ]
+    ],
+    "neighborsAps": {
+      "page": {
+          "start": 2,
+          "size": 2,
+          "currPage": 2,
+          "totalPage": 4,
+          "total": 4,
+          "nextPage": 3,
+          "lastPage": 4
+      },
+      "list": [
+          {
+              "mac": "12:33:44:55:66:78",
+              "channel": 7,
+              "rssi": -49
+          },
+          {
+              "mac": "12:33:44:55:66:79",
+              "channel": 7,
+              "rssi": -49
+          }
+      ]
+    }
   }
 }

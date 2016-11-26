@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/utils/lib/validator';
 import AppScreen from 'shared/components/Template/AppScreen';
@@ -51,7 +51,9 @@ const listOptions = fromJS([
     },
   },
 ]);
-const propTypes = {};
+const propTypes = {
+  store: PropTypes.instanceOf(Map),
+};
 const defaultProps = {};
 export default class View extends React.Component {
   constructor(props) {
@@ -72,11 +74,20 @@ export default class View extends React.Component {
   }
 
   onBeforeAction($$actionQuery) {
-    const actionType = $$actionQuery.get('action');
+    const store = this.props.store;
+    const myScreenId = store.get('curScreenId');
+    const $$myScreenStore = store.get(myScreenId);
+    const actionType = $$myScreenStore.getIn(['actionQuery', 'action']);
     let ret = '';
+
     if (actionType === 'active' && parseInt($$actionQuery.get('active'), 10) === 0) {
       ret = _('You should active other version but disable this');
+
+    // 删除已激活版本
+    } else if (actionType === 'delete' && parseInt($$actionQuery.get('active'), 10) === 1) {
+      ret = _('You can not delete active version');
     }
+
     return ret;
   }
   getApModelList() {
