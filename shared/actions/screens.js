@@ -203,6 +203,7 @@ export function saveScreenSettings(option) {
   return (dispatch, getState) => {
     const globalState = getState();
     const name = globalState.screens.get('curScreenId');
+    const $$curQuery = globalState.screens.getIn([name, 'query']);
     const $$curData = globalState.screens.getIn([name, 'curSettings']);
     const $$oriData = globalState.screens.getIn([name, 'data', 'settings']);
     const formUrl = globalState.screens.getIn([name, 'formUrl']);
@@ -222,12 +223,14 @@ export function saveScreenSettings(option) {
 
     $$subData = $$subData.set('action', 'setting');
 
-    if ($$curData.get('groupid') !== undefined) {
-      $$subData = $$subData.set('groupid', $$curData.get('groupid'));
-    }
     if (option && option.numberKeys) {
       $$subData = immutableUtils.toNumberWithKeys($$subData, option.numberKeys);
     }
+
+    if ($$curQuery.get('groupid') !== undefined) {
+      $$subData = $$subData.set('groupid', $$curQuery.get('groupid'));
+    }
+
     return dispatch(appActions.save(saveUrl, $$subData.toJS()))
       .then(() => {
         dispatch(fetchScreenData(fetchUrl));

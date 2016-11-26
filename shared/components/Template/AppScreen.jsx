@@ -44,6 +44,7 @@ export default class AppScreen extends React.Component {
   constructor(props) {
     const {
       listOptions, defaultSettingsData, settingsFormOptions,
+      groupid,
     } = props;
     const initOption = {
       id: props.route.id,
@@ -77,18 +78,18 @@ export default class AppScreen extends React.Component {
     }
 
     // 需要对 groupid特处理
-    if (typeof props.groupid !== 'undefined') {
+    if (typeof groupid !== 'undefined') {
       initOption.query = utils.extend({}, initOption.query, {
-        groupid: props.groupid,
+        groupid,
       });
-      initOption.actionQuery = utils.extend({}, initOption.query, {
-        groupid: props.groupid,
+      initOption.actionQuery = utils.extend({}, initOption.actionQuery, {
+        groupid,
       });
       initOption.defaultEditData = utils.extend({}, initOption.defaultEditData, {
-        groupid: props.groupid,
+        groupid,
       });
       initOption.defaultSettingsData = utils.extend({}, initOption.defaultSettingsData, {
-        groupid: props.groupid,
+        groupid,
       });
     }
 
@@ -108,10 +109,16 @@ export default class AppScreen extends React.Component {
   }
   componentWillUpdate(nextProps) {
     const nextListOptions = nextProps.listOptions;
+    const nextSettingOptions = nextProps.settingsFormOptions;
+
     if (!immutable.is(nextListOptions, this.props.listOptions)) {
       this.tableOptions = immutableUtils.getTableOptions(nextListOptions);
       this.editFormOptions = immutableUtils.getFormOptions(nextListOptions);
       this.defaultEditData = immutableUtils.getDefaultData(nextListOptions);
+    }
+
+    if (!immutable.is(nextSettingOptions, this.props.settingsFormOptions)) {
+      this.defaultSettingsData = immutableUtils.getDefaultData(nextSettingOptions);
     }
   }
   componentDidUpdate(prevProps) {
