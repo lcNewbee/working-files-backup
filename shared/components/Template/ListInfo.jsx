@@ -288,11 +288,12 @@ class ListInfo extends React.Component {
     }
 
     if ($$data) {
-      $$actionQuery = $$actionQuery.merge($$data)
-        .merge({
-          selectedList,
-        });
+      $$actionQuery = $$actionQuery.merge($$data);
     }
+
+    $$actionQuery = $$actionQuery.merge({
+      selectedList,
+    });
 
     // 异步处理，如果是 Promise 对象
     if (utils.isPromise(onBeforeAction)) {

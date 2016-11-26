@@ -110,9 +110,6 @@ const screenOptions = fromJS([
       initValue($$data) {
         const oldVal = $$data.get('policy_type');
         const ret = oldVal;
-
-        console.log(oldVal)
-
         return ret;
       },
       showPrecondition($$data) {

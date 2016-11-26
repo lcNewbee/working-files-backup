@@ -11,7 +11,7 @@ class MonitorAps extends CI_Controller {
     $rqdata = array(
       'groupid'=>(int)element('groupid', $_GET, -1),
       'page'=>(int)element('page', $_GET, 1),
-      'pagesize'=>(int)element('size', $_GET, 20),
+      'size'=>(int)element('size', $_GET, 20),
       'search'=>element('search', $_GET, '')
     );
 

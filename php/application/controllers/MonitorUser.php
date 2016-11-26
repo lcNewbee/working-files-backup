@@ -12,7 +12,7 @@ class MonitorUser extends CI_Controller {
         'groupid'=>(int)element('groupid', $_GET,-1),
         'type'=>(int)element('type', $_GET,1),
         'page'=>(int)element('page', $_GET,1),
-        'pagesize'=>(int)element('size', $_GET,30),
+        'size'=>(int)element('size', $_GET,30),
         'search'=>element('search', $_GET,222),
       );
         $result=axc_get_clientList(json_encode($retdata));
