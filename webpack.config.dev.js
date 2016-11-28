@@ -32,13 +32,9 @@ let GLOBALS = {
 let autoprefixerHandle = autoprefixer(GLOBALS.autoprefixer);
 
 let config = {
-  debug: true,
 
   // more info:https://webpack.github.io/docs/build-performance.html#sourcemaps and https://webpack.github.io/docs/configuration.html#devtool
   devtool: 'eval-source-map',
-
-  // set to false to see a list of every file being bundled.
-  noInfo: true,
 
   entry: {
     index: [
@@ -60,43 +56,80 @@ let config = {
   },
 
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.png$/,
-        loader: 'url-loader',
-        query: {
-          mimetype: 'image/png',
-        },
+        use: [
+          {
+            loader: 'url-loader',
+          }
+        ]
       },
 
       {
         test: /\.jpg$/,
-        loader: 'url-loader',
+        use: [
+          {
+            loader: 'url-loader',
+          }
+        ]
       },
 
       {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'url-loader?mimetype=application/font-woff',
+        use: [
+          {
+            loader: 'url-loader',
+          }
+        ]
       },
 
       {
         test: /\.(ttf|eot|svg|cur)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'file-loader',
+        use: [
+          {
+            loader: 'file-loader',
+          }
+        ]
       },
 
       {
         test: /\.json$/,
-        loader: 'json',
+        use: [
+          {
+            loader: 'json-loader',
+          }
+        ]
       },
 
       {
         test: /\.css$/,
-        loader: 'style-loader!css-loader',
+        use: [
+          {
+            loader: "style-loader"
+          },
+          {
+            loader: "css-loader"
+          }
+        ]
       },
 
       {
         test: /\.scss$/,
-        loader: 'style-loader!css-loader!postcss-loader!sass',
+        use: [
+          {
+            loader: "style-loader"
+          },
+          {
+            loader: "css-loader"
+          },
+          {
+            loader: "postcss-loader"
+          },
+          {
+            loader: "sass-loader"
+          }
+        ]
       },
 
       {
@@ -107,20 +140,37 @@ let config = {
           path.resolve(__dirname, "test"),
           path.resolve(__dirname, "tools"),
         ],
-        // exclude: /node_modules/,
-        loader: 'babel',
+        use: [
+          {
+            loader: "babel-loader",
+            options: {
+              "presets": [
+                ["es2015", { "modules": false }]
+              ]
+            }
+          },
+        ]
       },
     ],
   },
-  postcss() {
-    return [autoprefixerHandle];
-  },
   resolve: {
-    extensions: ['', '.js', '.jsx'],
-    modulesDirectories: ['node_modules', 'shared'],
+    extensions: ['.js', '.jsx'],
+    modules: ['node_modules', 'shared'],
   },
 
   plugins: [
+    new webpack.LoaderOptionsPlugin({
+      debug: true,
+
+      // set to false to see a list of every file being bundled.
+      noInfo: true,
+
+      options: {
+        postcss() {
+          return [autoprefixerHandle];
+        },
+      }
+    }),
     new webpack.DefinePlugin(GLOBALS.DEFINE_OBJ),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),

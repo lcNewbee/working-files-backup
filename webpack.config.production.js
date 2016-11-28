@@ -7,7 +7,7 @@ var autoprefixer = require('autoprefixer');
 var GLOBALS = {
   DEFINE_OBJ: {
     'process.env.NODE_ENV': JSON.stringify('production'),
-    __DEV__: true,
+    __DEV__: false,
   },
 
   folders: {
@@ -86,64 +86,119 @@ module.exports = {
     app: './src/index_pub.jsx',
     vendors: vendorList,
   },
-  cache: true,
   module: {
-    loaders: [{
+    rules: [
+      {
         test: /\.png$/,
-        loader: 'url-loader',
-        query: {
-          mimetype: 'image/png',
-          limit: 11000,
-          name: 'images/[hash].[ext]',
-        },
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              mimetype: 'image/png',
+              limit: 11000,
+              name: 'images/[hash].[ext]',
+            },
+          }
+        ]
       },
 
       {
+<<<<<<< HEAD
         test: /\.(jpg|gif)$/,
         loader: 'url-loader',
+=======
+        test: /\.jpg$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 11000,
+              name: 'images/[hash].[ext]',
+            },
+          }
+        ]
+>>>>>>> Common: 更新平台版本，升级webpack2
       },
 
       {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+<<<<<<< HEAD
         loader: 'url-loader?name=font/[hash].[ext]',
+=======
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              name: 'font/[hash].[ext]',
+              limit: 11000,
+              mimetype: 'mimetype=application/font-woff',
+            }
+          }
+        ]
+>>>>>>> Common: 更新平台版本，升级webpack2
       },
 
       {
         test: /\.(ttf|eot|svg|cur)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: 'file-loader?name=font/[hash].[ext]',
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: 'font/[hash].[ext]',
+            }
+          }
+        ]
       },
 
       {
         test: /\.json$/,
-        loader: 'json',
+        use: [
+          {
+            loader: 'json-loader',
+          }
+        ]
       },
 
       {
         test: /\.css$/,
-        loader: ExtractTextPlugin.extract('style-loader', 'css-loader'),
+        loader: ExtractTextPlugin.extract({
+          loader: "css-loader",
+        })
       },
 
       {
         test: /\.scss$/,
-        loader: ExtractTextPlugin.extract('css-loader?minimize!postcss-loader!sass'),
-      }, {
-        test: /\.(jsx|js)?$/,
+        loader: ExtractTextPlugin.extract({
+          publicPath: "styles",
+          loader: "css-loader?minimize!postcss-loader!sass-loader",
+        })
+      },
+
+      {
+        test: /\.(js|jsx)?$/,
         include: [
           path.resolve(__dirname, "src"),
           path.resolve(__dirname, "shared"),
           path.resolve(__dirname, "test"),
-          path.resolve(__dirname, "tools"),
+          path.resolve(__dirname, "tools")
         ],
-        loader: 'babel?cacheDirectory=true',
-      }
+        use: [
+          {
+            loader: "babel-loader",
+            options: {
+              "presets": [
+                ["es2015", { "modules": false }]
+              ],
+              cacheDirectory: true,
+            }
+          },
+        ]
+      },
     ],
   },
-  postcss() {
-    return [autoprefixerHandle];
-  },
   resolve: {
-    extensions: ['', '.js', '.jsx'],
-    modulesDirectories: ['node_modules', 'shared'],
+    extensions: ['.js', '.jsx'],
+    modules: ['node_modules', 'shared'],
   },
   output: {
     path: GLOBALS.folders.BUILD,
@@ -152,19 +207,28 @@ module.exports = {
     chunkFilename: 'scripts/[id].bundle.js' //dundle生成的配置
   },
   plugins: [
+    new webpack.LoaderOptionsPlugin({
+      cache: true,
+      options: {
+        context: __dirname,
+        postcss() {
+          return [autoprefixerHandle];
+        },
+      }
+    }),
     new webpack.DefinePlugin(GLOBALS.DEFINE_OBJ),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendors', // 将公共模块提取，生成名为`vendors`bundle
       chunks: ['vendors', 'app'], //提取哪些模块共有的部分,名字为上面的vendor
       minChunks: 2  // 提取至少*个模块共有的部分: Infinity
     }),
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new ExtractTextPlugin('styles/axilspot.css'),
-    new webpack.optimize.DedupePlugin(),
+    new ExtractTextPlugin({
+      filename: "styles/axilspot.css",
+      disable: false,
+      allChunks: true
+    }),
     new webpack.optimize.UglifyJsPlugin(),
-
-    //根据模板插入css/js等生成最终HTML
-    new HtmlWebpackPlugin({
+    new HtmlWebpackPlugin({ //根据模板插入css/js等生成最终HTML
       favicon: 'src/favicon.ico', //favicon存放路径
       filename: 'index.html', //生成的html存放路径，相对于 path
       template: 'src/index_pub.html', //html模板路径
