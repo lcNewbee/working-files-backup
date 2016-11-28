@@ -79,10 +79,8 @@ export default class View extends React.Component {
     const $$myScreenStore = store.get(myScreenId);
     const actionType = $$actionQuery.getIn(['action']);
     let ret = '';
-
     if (actionType === 'active' && parseInt($$actionQuery.get('active'), 10) === 0) {
       ret = _('You should activate another version before deactivating this version');
-
     // 删除已激活版本
     } else if (actionType === 'delete' && parseInt($$actionQuery.get('active'), 10) === 1) {
       ret = _('You can not delete active version');
@@ -112,22 +110,6 @@ export default class View extends React.Component {
       },
     );
   }
-  // disableCancel($$actionQuery, $$subData) {
-  //   const actionType = $$actionQuery.get('action');
-  //   let ret = '';
-  //   if (actionType === 'delete' && parseInt($$subData.get('active'), 10) === 1) {
-  //     ret = _("The current version is actived,you can't delete it. If you want to delete it,please active another version!");
-  //   }
-  //   return ret;
-  // }
-  // disableCancelActive($$actionQuery, $$subData) {
-  //   const actionType = $$actionQuery.get('action');
-  //   let ret = '';
-  //   if (actionType === 'edit' && parseInt($$subData.get('active'), 10) === 1) {
-  //     ret = _("Deactivating this version doesn't work!");
-  //   }
-  //   return ret;
-  // }
   render() {
     const { modelIsloading, modelOptions, modelSelectPlaceholder } = this.state;
     const myEditFormOptions = listOptions.mergeIn(
