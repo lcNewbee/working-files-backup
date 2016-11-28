@@ -48,6 +48,7 @@ const propTypes = {
   routes: PropTypes.array,
   createModal: PropTypes.func,
   save: PropTypes.func,
+  fetchModelList: PropTypes.func,
   resetVaildateMsg: PropTypes.func,
 
   children: PropTypes.node,
@@ -566,6 +567,7 @@ export default class Main extends Component {
     const isSaving = this.props.app.get('saving');
     const { product } = this.props;
     const groupApAddData = product.getIn(['group', 'apAddData']);
+    const modelListOptions = product.getIn(['model', 'options']);
 
      // validate const
     const {
@@ -633,18 +635,6 @@ export default class Main extends Component {
                   </legend>
                   <FormGroup
                     type="text"
-                    label={_('MAC')}
-                    name="apmac"
-                    maxLength="18"
-                    value={groupApAddData.get('apmac')}
-                    onChange={data => this.props.updateGroupAddDevice({
-                      apmac: data.value,
-                    })}
-                    required
-                    {...apmac}
-                  />
-                  <FormGroup
-                    type="text"
                     name="name"
                     label={_('Name')}
                     maxLength="32"
@@ -655,15 +645,27 @@ export default class Main extends Component {
                     required
                   />
                   <FormGroup
-                    type="text"
+                    type="select"
                     name="model"
-                    maxLength="32"
+                    options={modelListOptions}
                     label={_('Model')}
                     value={groupApAddData.get('model')}
                     onChange={data => this.props.updateGroupAddDevice({
                       model: data.value,
                     })}
                     required
+                  />
+                  <FormGroup
+                    type="text"
+                    label={_('MAC')}
+                    name="apmac"
+                    maxLength="18"
+                    value={groupApAddData.get('apmac')}
+                    onChange={data => this.props.updateGroupAddDevice({
+                      apmac: data.value,
+                    })}
+                    required
+                    {...apmac}
                   />
                 </div>
               )
@@ -931,6 +933,7 @@ export default class Main extends Component {
                   icon="plus"
                   text={_('Add AP')}
                   onClick={() => {
+                    this.props.fetchModelList();
                     this.props.resetGroupAddDevice();
                     this.props.fetchGroupAps(-1);
                     this.props.showMainModal({

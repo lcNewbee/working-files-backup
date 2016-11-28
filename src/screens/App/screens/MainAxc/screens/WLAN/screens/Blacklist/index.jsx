@@ -78,14 +78,14 @@ export default class Blacklist extends React.Component {
   renderActionBar() {
     return (
       <Button
-        text="Copy Form Other Group"
+        text={_('Copy From Other Group')}
         key="cpoyActionButton"
         icon="copy"
         theme="primary"
         onClick={() => {
           this.props.changeScreenActionQuery({
             action: 'copy',
-            myTitle: _('Copy Form Other Group'),
+            myTitle: _('Copy From Other Group'),
           });
         }}
       />

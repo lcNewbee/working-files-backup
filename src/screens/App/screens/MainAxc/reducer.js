@@ -41,6 +41,11 @@ const defaultState = fromJS({
     devices: [],
   },
 
+  // Model 相关
+  model: {
+    list: [],
+  },
+
   // 未分组设备列表
   defaultDevices: [],
 });
@@ -204,6 +209,17 @@ function selectManageGroupDevices(state, action) {
   return state.setIn(['group', 'devices'], $$devices);
 }
 
+function rcModelList(state, action) {
+  const modalOptions = action.payload.list.map(
+    item => ({
+      value: item.name,
+      label: item.name,
+    }),
+  );
+  return state.mergeIn(['model'], action.payload)
+    .setIn(['model', 'options'], modalOptions);
+}
+
 export default function (state = defaultState, action) {
   switch (action.type) {
     case 'TOGGLE_MAIN_POP_OVER':
@@ -214,6 +230,10 @@ export default function (state = defaultState, action) {
       return changeModalState(state, action.option);
     case 'SHOW_PREV_MAIN_MODAL':
       return showPrevModel(state);
+
+    // AP型号相关操作
+    case 'RC_FETCH_MODEL_LIST':
+      return rcModelList(state, action);
 
     // 组操作
     case 'SELECT_GROUP':

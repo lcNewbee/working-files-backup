@@ -53,6 +53,7 @@ const listOptions = fromJS([
 ]);
 const propTypes = {
   store: PropTypes.instanceOf(Map),
+  fetch: PropTypes.func,
 };
 const defaultProps = {};
 export default class View extends React.Component {
@@ -89,7 +90,10 @@ export default class View extends React.Component {
     return ret;
   }
   getApModelList() {
-    utils.fetch('goform/system/ap/model')
+    this.props.fetch('goform/system/ap/model', {
+      page: 1,
+      size: 500,
+    })
       .then((json) => {
         let options = [];
 

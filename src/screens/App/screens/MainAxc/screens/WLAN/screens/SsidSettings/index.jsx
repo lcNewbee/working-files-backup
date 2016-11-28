@@ -266,7 +266,7 @@ export default class View extends React.Component {
   renderActionBar() {
     return (
       <Button
-        text="Copy Form Other Group"
+        text={_('Copy From Other Group')}
         key="cpoyActionButton"
         icon="copy"
         theme="primary"

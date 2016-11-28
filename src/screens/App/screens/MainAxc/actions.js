@@ -46,7 +46,28 @@ export function selectManageGroupAp(data) {
   };
 }
 
-// 获取
+// 获取AP型号列表
+export function rcFetchModelList(data) {
+  return {
+    type: 'RC_FETCH_MODEL_LIST',
+    payload: data,
+  };
+}
+export function fetchModelList() {
+  return dispatch => dispatch(
+      appActions.fetch('goform/system/ap/model', {
+        page: 1,
+        size: 500,
+      }),
+    ).then((json) => {
+      console.log(json)
+      if (json.state && json.state.code === 2000) {
+        dispatch(rcFetchModelList(json.data));
+      }
+    });
+}
+
+// 获取AP组列表
 export function rcFetchApGroup(data) {
   return {
     type: 'RC_FETCH_AP_GROUP',
