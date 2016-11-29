@@ -34,6 +34,8 @@ var GLOBALS = {
 
 // 自动添加兼容性css
 var autoprefixerHandle = autoprefixer(GLOBALS.autoprefixer);
+
+// 配置公用模块
 var vendorList = [
   "es5-shim",
   "es5-shim/es5-sham",
@@ -50,14 +52,38 @@ var vendorList = [
   "react-redux",
   "react-router",
   "react-select",
+  "react-dates",
+  "rc-time-picker",
   "redux",
   "redux-thunk",
   "moment",
+
+  /**
+   * echarts图标按需引入
+   */
+  'echarts/lib/echarts',
+  // 引入柱状图
+  'echarts/lib/chart/bar',
+
+  // 引入折线图
+  'echarts/lib/chart/line',
+  'echarts/lib/chart/lines',
+
+  // 引入折饼图
+  'echarts/lib/chart/pie',
+
+  // 仪表盘
+  'echarts/lib/chart/gauge',
+
+  // 引入提示框和标题组件
+  'echarts/lib/component/tooltip',
+  'echarts/lib/component/legend',
+  'echarts/lib/component/title',
 ];
 
 module.exports = {
   entry: {
-    app: './src/index.jsx',
+    app: './src/index_pub.jsx',
     vendors: vendorList,
   },
   cache: true,
@@ -73,7 +99,7 @@ module.exports = {
       },
 
       {
-        test: /\.jpg$/,
+        test: /\.(jpg|gif)$/,
         loader: 'url-loader',
       },
 
@@ -120,22 +146,20 @@ module.exports = {
     filename: 'scripts/[name].bundle.js',
     chunkFilename: 'scripts/[id].bundle.js' //dundle生成的配置
   },
-  devServer: {
-    contentBase: GLOBALS.folders.BUILD,
-    hot: true,
-  },
   plugins: [
+    new webpack.DefinePlugin(GLOBALS.DEFINE_OBJ),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendors', // 将公共模块提取，生成名为`vendors`bundle
       chunks: ['vendors', 'app'], //提取哪些模块共有的部分,名字为上面的vendor
-      minChunks: Infinity // 提取至少*个模块共有的部分
+      minChunks: 2  // 提取至少*个模块共有的部分: Infinity
     }),
     new webpack.optimize.OccurenceOrderPlugin(),
     new ExtractTextPlugin('styles/axilspot.css'),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin(),
-    new webpack.DefinePlugin(GLOBALS.DEFINE_OBJ),
-    new HtmlWebpackPlugin({ //根据模板插入css/js等生成最终HTML
+
+    //根据模板插入css/js等生成最终HTML
+    new HtmlWebpackPlugin({
       favicon: 'src/favicon.ico', //favicon存放路径
       filename: 'index.html', //生成的html存放路径，相对于 path
       template: 'src/index_pub.html', //html模板路径

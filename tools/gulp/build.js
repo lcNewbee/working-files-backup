@@ -38,6 +38,6 @@ gulp.task('build', (callback) => {
     'clean',
     ['build:assets', 'webpack'],
     'build:complete',
-    callback
+    callback,
   );
 });
