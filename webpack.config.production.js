@@ -103,28 +103,19 @@ module.exports = {
       },
 
       {
-<<<<<<< HEAD
         test: /\.(jpg|gif)$/,
-        loader: 'url-loader',
-=======
-        test: /\.jpg$/,
         use: [
           {
             loader: 'url-loader',
             options: {
-              limit: 11000,
               name: 'images/[hash].[ext]',
             },
           }
         ]
->>>>>>> Common: 更新平台版本，升级webpack2
       },
 
       {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-<<<<<<< HEAD
-        loader: 'url-loader?name=font/[hash].[ext]',
-=======
         use: [
           {
             loader: 'url-loader',
@@ -135,7 +126,6 @@ module.exports = {
             }
           }
         ]
->>>>>>> Common: 更新平台版本，升级webpack2
       },
 
       {
@@ -170,7 +160,7 @@ module.exports = {
         test: /\.scss$/,
         loader: ExtractTextPlugin.extract({
           publicPath: "styles",
-          loader: "css-loader?minimize!postcss-loader!sass-loader",
+          loader: "css-loader!postcss-loader!sass-loader",
         })
       },
 
@@ -198,7 +188,11 @@ module.exports = {
   },
   resolve: {
     extensions: ['.js', '.jsx'],
-    modules: ['node_modules', 'shared'],
+    modules: [
+      path.join(__dirname, "src"),
+      'node_modules',
+      'shared'
+    ],
   },
   output: {
     path: GLOBALS.folders.BUILD,
@@ -218,9 +212,9 @@ module.exports = {
     }),
     new webpack.DefinePlugin(GLOBALS.DEFINE_OBJ),
     new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendors', // 将公共模块提取，生成名为`vendors`bundle
+      name: ['vendors'], // 将公共模块提取，生成名为`vendors`bundle
       chunks: ['vendors', 'app'], //提取哪些模块共有的部分,名字为上面的vendor
-      minChunks: 2  // 提取至少*个模块共有的部分: Infinity
+      minChunks: 2, // Infinity // 提取至少*个模块共有的部分
     }),
     new ExtractTextPlugin({
       filename: "styles/axilspot.css",
@@ -234,7 +228,7 @@ module.exports = {
       template: 'src/index_pub.html', //html模板路径
       inject: true, //允许插件修改哪些内容，包括head与body
       hash: true, //为静态资源生成hash值
-      chunks: ['vendors', 'app'], //需要引入的chunk，不配置就会引入所有页面的资源.名字来源于你的入口文件
+      //chunks: ['manifest', 'vendors', 'app'], //需要引入的chunk，不配置就会引入所有页面的资源.名字来源于你的入口文件
       minify: { //压缩HTML文件
         removeComments: false, //移除HTML中的注释
         collapseWhitespace: true //删除空白符与换行符
