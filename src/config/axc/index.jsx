@@ -66,7 +66,7 @@ const sInterfaces = require('../../screens/App/screens/MainAxc/screens/Network/s
 const sNetworkDhcp = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP');
 const sNetworkRoutes = require('../../screens/App/screens/MainAxc/screens/Network/screens/Routes');
 const sNetworkNat = require('../../screens/App/screens/MainAxc/screens/Network/screens/Nat');
-const sNetworkAcl = require('../../screens/App/screens/MainAxc/screens/Network/screens/ACL');
+// const sNetworkAcl = require('../../screens/App/screens/MainAxc/screens/Network/screens/ACL');
 const sNetworkPort = require('../../screens/App/screens/MainAxc/screens/Network/screens/Port');
 const sRaduisTemplate =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/RadiusTemplate');
@@ -185,14 +185,17 @@ const routes = [
             text: _('NAT Settings'),
             formUrl: 'goform/network/nat',
             component: sNetworkNat.Screen,
-          }, {
-            id: 'networkAcl',
-            icon: 'ban',
-            path: '/main/network/acl',
-            text: _('Access Control'),
-            formUrl: 'goform/network/acl',
-            component: sNetworkAcl.Screen,
-          }, {
+          },
+          // 先隐藏次项
+          // {
+          //   id: 'networkAcl',
+          //   icon: 'ban',
+          //   path: '/main/network/acl',
+          //   text: _('Access Control'),
+          //   formUrl: 'goform/network/acl',
+          //   component: sNetworkAcl.Screen,
+          // },
+          {
             id: 'staticRoutes',
             path: '/main/network/static_routes',
             text: _('Routes'),
