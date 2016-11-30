@@ -1,15 +1,17 @@
 import React, { PropTypes } from 'react';
-import utils from 'shared/utils';
+import utils, { immutableUtils } from 'shared/utils';
 import validator from 'shared/utils/lib/validator';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { SaveButton, Button } from 'shared/components/Button';
 import { FormGroup, FormInput } from 'shared/components/Form';
+import Table from 'shared/components/Table';
 import Modal from 'shared/components/Modal';
 import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
+import * as productActions from '../../../../reducer';
 
 const msg = {
   upSpeed: _('Up Speed'),
@@ -200,7 +202,9 @@ const propTypes = {
   closeListItemModal: PropTypes.func,
   changeScreenActionQuery: PropTypes.func,
   updateCurEditListItem: PropTypes.func,
-  updateScreenCustomProps: PropTypes.func,
+  fetch: PropTypes.func,
+  reciveScreenData: PropTypes.func,
+  createModal: PropTypes.func,
   onListAction: PropTypes.func,
   validateAll: PropTypes.func,
 };
@@ -215,11 +219,13 @@ export default class View extends React.Component {
 
     utils.binds(this, [
       'onSave',
+      'fetchCopyGroupSsids',
       'renderActionBar',
-      'onCopySsid',
+      'onOpenCopySsidModal',
       'onSelectCopyFromGroup',
       'renderUpdateSsid',
       'renderCopySsid',
+      'onSelectCopySsid',
     ]);
   }
   componentDidMount() {
@@ -227,13 +233,31 @@ export default class View extends React.Component {
       groupid: this.props.groupid,
     });
   }
-  onSave() {
-    this.props.validateAll()
-      .then(($$msg) => {
-        if ($$msg.isEmpty()) {
-          this.props.onListAction();
-        }
-      });
+  onSave(type) {
+    const { store } = this.props;
+    const myScreenId = store.get('curScreenId');
+    const $$myScreenStore = store.get(myScreenId);
+    const $$copySelectedList = $$myScreenStore.getIn(['actionQuery', 'copySelectedList']);
+
+    if (type === 'copy') {
+
+      // 没有选择要拷贝的 Ssids
+      if ($$copySelectedList.size < 1) {
+        this.props.createModal({
+          type: 'alert',
+          text: _('Please select ssid'),
+        });
+      } else {
+        this.props.onListAction();
+      }
+    } else {
+      this.props.validateAll()
+        .then(($$msg) => {
+          if ($$msg.isEmpty()) {
+            this.props.onListAction();
+          }
+        });
+    }
   }
   onUpdateSettings(name) {
     return (item) => {
@@ -243,24 +267,74 @@ export default class View extends React.Component {
       this.props.updateCurEditListItem(data);
     };
   }
-  onCopySsid() {
+  onOpenCopySsidModal() {
+    const { store } = this.props;
+    const myScreenId = store.get('curScreenId');
+    const $$myScreenStore = store.get(myScreenId);
+    const copyFromGroupId = $$myScreenStore.getIn(['actionQuery', 'copyFromGroupId']);
+
     this.props.changeScreenActionQuery({
       action: 'copy',
       myTitle: _('Copy Form Other Group'),
+      copySelectedList: fromJS([]),
     });
+    this.fetchCopyGroupSsids(copyFromGroupId);
   }
+
   onSelectCopyFromGroup(groupId, e) {
     e.preventDefault();
-    this.props.updateScreenCustomProps({
-      copyFromGroupId: groupId,
-    });
     this.props.changeScreenActionQuery({
       copyFromGroupId: groupId,
+      copySelectedList: fromJS([]),
+    });
+    this.fetchCopyGroupSsids(groupId);
+  }
+  onSelectCopySsid(data) {
+    const { store } = this.props;
+    const myScreenId = store.get('curScreenId');
+    const $$myScreenStore = store.get(myScreenId);
+    let $$copySelectedList = $$myScreenStore.getIn(['actionQuery', 'copySelectedList']);
+    let $$copyGroupSsid = $$myScreenStore.getIn(['data', 'copyGroupSsids']);
+
+    $$copyGroupSsid = $$copyGroupSsid.update('list',
+      ($$list) => {
+        const ret = immutableUtils.selectList(
+          $$list,
+          data,
+          $$copySelectedList,
+        );
+        $$copySelectedList = ret.selectedList;
+
+        return ret.$$list;
+      },
+    );
+
+    this.props.reciveScreenData({
+      copyGroupSsids: $$copyGroupSsid,
+    }, this.props.route.id);
+    this.props.changeScreenActionQuery({
+      copySelectedList: $$copySelectedList,
     });
   }
 
   getCurrData(name) {
     return this.props.store.getIn([this.props.route.id, 'curListItem', name]);
+  }
+
+  fetchCopyGroupSsids(groupid) {
+    const fetchUrl = this.props.route.fetchUrl || this.props.route.formUrl;
+
+    this.props.fetch(fetchUrl, {
+      groupid,
+    }).then(
+      (json) => {
+        if (json && json.state && json.state.code === 2000) {
+          this.props.reciveScreenData({
+            copyGroupSsids: json.data,
+          }, this.props.route.id);
+        }
+      },
+    );
   }
 
   renderActionBar() {
@@ -270,7 +344,7 @@ export default class View extends React.Component {
         key="cpoyActionButton"
         icon="copy"
         theme="primary"
-        onClick={() => this.onCopySsid()}
+        onClick={() => this.onOpenCopySsidModal()}
       />
     );
   }
@@ -434,47 +508,108 @@ export default class View extends React.Component {
     const $$myScreenStore = store.get(myScreenId);
     const $$group = this.props.group;
     const selectGroupId = $$group.getIn(['selected', 'id']);
-    const copyFromGroupId = $$myScreenStore.getIn(['customProps', 'copyFromGroupId']);
+    const copyFromGroupId = $$myScreenStore.getIn(['actionQuery', 'copyFromGroupId']);
 
     return (
-      <div className="o-list">
-        <h3 className="o-list__header">{_('Group List')}</h3>
-        <ul className="m-menu m-menu--open">
-          {
-            $$group.getIn(['list']).map((item) => {
-              const curId = item.get('id');
-              let classNames = 'm-menu__link';
+      <div className="row">
+        <div className="o-list cols col-4">
+          <h3 className="o-list__header">{_('Group List')}</h3>
+          <ul className="m-menu m-menu--open">
+            {
+              $$group.getIn(['list']).map((item) => {
+                const curId = item.get('id');
+                let classNames = 'm-menu__link';
 
-              // 不能管理 All Group
-              if (curId === selectGroupId || curId === -100) {
-                return null;
-              }
+                // 不能选择自己组
+                if (curId === selectGroupId) {
+                  return null;
+                }
 
-              if (curId === copyFromGroupId) {
-                classNames = `${classNames} active`;
-              }
+                if (curId === copyFromGroupId) {
+                  classNames = `${classNames} active`;
+                }
 
-              return (
-                <li key={curId}>
-                  <a
-                    className={classNames}
-                    onClick={
-                      e => this.onSelectCopyFromGroup(curId, e)
-                    }
-                  >
-                    {item.get('groupname')}
-                  </a>
-                </li>
-              );
-            })
-          }
-        </ul>
-        <div className="form-group form-group--save">
-          <div className="form-control">
+                return (
+                  <li key={curId}>
+                    <a
+                      className={classNames}
+                      onClick={
+                        e => this.onSelectCopyFromGroup(curId, e)
+                      }
+                    >
+                      {item.get('groupname')}
+                    </a>
+                  </li>
+                );
+              })
+            }
+          </ul>
+
+        </div>
+        <div className="o-list cols col-8">
+          <h3 className="o-list__header">{_('Group SSID List')}</h3>
+          <Table
+            options={[
+              {
+                id: 'ssid',
+                text: _('SSID'),
+              }, {
+                id: 'hiddenSsid',
+                text: _('Hidde SSID'),
+                options: [
+                  {
+                    value: '1',
+                    label: _('YES'),
+                    render() {
+                      return (
+                        <span
+                          style={{
+                            color: 'red',
+                          }}
+                        >
+                          {_('YES')}
+                        </span>
+                      );
+                    },
+                  }, {
+                    value: '0',
+                    label: _('NO'),
+                    render() {
+                      return (
+                        <span
+                          style={{
+                            color: 'green',
+                          }}
+                        >
+                          {_('NO')}
+                        </span>
+                      );
+                    },
+                  },
+                ],
+                defaultValue: '0',
+              }, {
+                id: 'storeForwardPattern',
+                options: storeForwardOption,
+                text: _('Forward Pattern'),
+                defaultValue: 'local',
+              }, {
+                id: 'encryption',
+                text: _('Encryption'),
+                defaultValue: 'psk-mixed',
+              },
+            ]}
+            list={$$myScreenStore.getIn(['data', 'copyGroupSsids', 'list'])}
+            psge={$$myScreenStore.getIn(['data', 'copyGroupSsids', 'page'])}
+            onRowSelect={this.onSelectCopySsid}
+            selectable
+          />
+          <div className="o-list__footer">
             <SaveButton
               type="button"
+              className="fr"
               loading={app.get('saving')}
-              onClick={this.onSave}
+              onClick={() => this.onSave('copy')}
             />
           </div>
         </div>
@@ -489,13 +624,17 @@ export default class View extends React.Component {
         actionQuery.get('action') === 'add';
     const isCopySsid = actionQuery.get('action') === 'copy';
     const actionBarChildren = this.renderActionBar();
-
     return (
       <AppScreen
         {...this.props}
         listOptions={listOptions}
         listKey="allKeys"
         actionBarChildren={actionBarChildren}
+        initOption={{
+          actionQuery: {
+            copyFromGroupId: -100,
+          },
+        }}
         customModal
         actionable
         selectable
@@ -506,6 +645,7 @@ export default class View extends React.Component {
           onClose={
             () => this.props.closeListItemModal(route.id)
           }
+          size={isCopySsid ? 'lg' : 'md'}
           noFooter
         >
           {
@@ -535,6 +675,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
     screenActions,
+    productActions,
   ), dispatch);
 }
 

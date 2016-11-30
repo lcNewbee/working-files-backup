@@ -40,7 +40,7 @@ class Row extends Component {
       tds = options.map((option, i) =>
         <th key={`tableRow${i}`} width={option.get('width')}>
           {option.get('text') || option.get('label')}
-        </th>
+        </th>,
       );
 
       if (selectable) {

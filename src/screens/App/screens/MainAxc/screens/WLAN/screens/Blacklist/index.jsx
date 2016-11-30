@@ -1,11 +1,12 @@
 import React, { PropTypes } from 'react';
-import utils from 'shared/utils';
+import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/utils/lib/validator';
 import { SaveButton, Button } from 'shared/components/Button';
 import AppScreen from 'shared/components/Template/AppScreen';
+import Table from 'shared/components/Table';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
@@ -41,7 +42,10 @@ const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
   group: PropTypes.instanceOf(Map),
+  route: PropTypes.object,
   changeScreenActionQuery: PropTypes.func,
+  fetch: PropTypes.func,
+  reciveScreenData: PropTypes.func,
   createModal: PropTypes.func,
   onListAction: PropTypes.func,
 };
@@ -53,19 +57,28 @@ export default class Blacklist extends React.Component {
     utils.binds(this, [
       'onSave',
       'onSelectCopyFromGroup',
+      'onOpenCopyBlacklistModal',
+      'onSelectCopyBlacklist',
+      'fetchCopyGroupBlacklist',
       'renderActionBar',
       'renderCopyFromOther',
     ]);
   }
-  onSave(actionType, copyFromGroupId) {
+  onSave(actionType) {
+    const { store } = this.props;
+    const myScreenId = store.get('curScreenId');
+    const $$myScreenStore = store.get(myScreenId);
+    const $$copySelectedList = $$myScreenStore.getIn(['actionQuery', 'copySelectedList']);
+
     if (actionType === 'copy') {
-      if (copyFromGroupId > 0) {
-        this.props.onListAction();
-      } else {
+      // 没有选择要拷贝的 Ssids
+      if ($$copySelectedList.size < 1) {
         this.props.createModal({
-          role: 'alert',
-          text: _('Please select copy from group'),
+          type: 'alert',
+          text: _('Please select ssid'),
         });
+      } else {
+        this.props.onListAction();
       }
     }
   }
@@ -73,7 +86,65 @@ export default class Blacklist extends React.Component {
     e.preventDefault();
     this.props.changeScreenActionQuery({
       copyFromGroupId: groupId,
+      copySelectedList: fromJS([]),
     });
+    this.fetchCopyGroupBlacklist(groupId);
+  }
+  onSelectCopyBlacklist(data) {
+    const { store } = this.props;
+    const myScreenId = store.get('curScreenId');
+    const $$myScreenStore = store.get(myScreenId);
+    let $$copySelectedList = $$myScreenStore.getIn(['actionQuery', 'copySelectedList']);
+    let $$copyGroupBlacklist = $$myScreenStore.getIn(['data', 'copyGroupBlacklist']);
+
+    $$copyGroupBlacklist = $$copyGroupBlacklist.update('list',
+      ($$list) => {
+        const ret = immutableUtils.selectList(
+          $$list,
+          data,
+          $$copySelectedList,
+        );
+        $$copySelectedList = ret.selectedList;
+
+        return ret.$$list;
+      },
+    );
+
+    this.props.reciveScreenData({
+      copyGroupBlacklist: $$copyGroupBlacklist,
+    }, this.props.route.id);
+    this.props.changeScreenActionQuery({
+      copySelectedList: $$copySelectedList,
+    });
+  }
+  onOpenCopyBlacklistModal() {
+    const { store } = this.props;
+    const myScreenId = store.get('curScreenId');
+    const $$myScreenStore = store.get(myScreenId);
+    const copyFromGroupId = $$myScreenStore.getIn(['actionQuery', 'copyFromGroupId']);
+
+    this.props.changeScreenActionQuery({
+      action: 'copy',
+      myTitle: _('Copy Form Other Group'),
+      copySelectedList: fromJS([]),
+    });
+    this.fetchCopyGroupBlacklist(copyFromGroupId);
+  }
+
+  fetchCopyGroupBlacklist(groupid) {
+    const fetchUrl = this.props.route.fetchUrl || this.props.route.formUrl;
+
+    this.props.fetch(fetchUrl, {
+      groupid,
+    }).then(
+      (json) => {
+        if (json && json.state && json.state.code === 2000) {
+          this.props.reciveScreenData({
+            copyGroupBlacklist: json.data,
+          }, this.props.route.id);
+        }
+      },
+    );
   }
   renderActionBar() {
     return (
@@ -82,16 +153,10 @@ export default class Blacklist extends React.Component {
         key="cpoyActionButton"
         icon="copy"
         theme="primary"
-        onClick={() => {
-          this.props.changeScreenActionQuery({
-            action: 'copy',
-            myTitle: _('Copy From Other Group'),
-          });
-        }}
+        onClick={() => this.onOpenCopyBlacklistModal()}
       />
     );
   }
-
   renderCopyFromOther() {
     const { store, app } = this.props;
     const myScreenId = store.get('curScreenId');
@@ -106,44 +171,56 @@ export default class Blacklist extends React.Component {
     }
 
     return (
-      <div className="o-list">
-        <h3 className="o-list__header">{_('Group List')}</h3>
-        <ul className="m-menu m-menu--open">
-          {
-            $$group.getIn(['list']).map((item) => {
-              const curId = item.get('id');
-              let classNames = 'm-menu__link';
+      <div className="row">
+        <div className="o-list cols col-4">
+          <h3 className="o-list__header">{_('Group List')}</h3>
+          <ul className="m-menu m-menu--open">
+            {
+              $$group.getIn(['list']).map((item) => {
+                const curId = item.get('id');
+                let classNames = 'm-menu__link';
 
-              // 不能管理 All Group
-              if (curId === selectGroupId || curId === -100) {
-                return null;
-              }
+                // 不能选择自己组
+                if (curId === selectGroupId) {
+                  return null;
+                }
 
-              if (curId === copyFromGroupId) {
-                classNames = `${classNames} active`;
-              }
+                if (curId === copyFromGroupId) {
+                  classNames = `${classNames} active`;
+                }
 
-              return (
-                <li key={curId}>
-                  <a
-                    className={classNames}
-                    onClick={
-                      e => this.onSelectCopyFromGroup(curId, e)
-                    }
-                  >
-                    {item.get('groupname')}
-                  </a>
-                </li>
-              );
-            })
-          }
-        </ul>
-        <div className="form-group form-group--save">
-          <div className="form-control">
+                return (
+                  <li key={curId}>
+                    <a
+                      className={classNames}
+                      onClick={
+                        e => this.onSelectCopyFromGroup(curId, e)
+                      }
+                    >
+                      {item.get('groupname')}
+                    </a>
+                  </li>
+                );
+              })
+            }
+          </ul>
+
+        </div>
+        <div className="o-list cols col-8">
+          <h3 className="o-list__header">{_('Group SSID List')}</h3>
+          <Table
+            options={listOptions}
+            list={$$myScreenStore.getIn(['data', 'copyGroupBlacklist', 'list'])}
+            psge={$$myScreenStore.getIn(['data', 'copyGroupBlacklist', 'page'])}
+            onRowSelect={this.onSelectCopyBlacklist}
+            selectable
+          />
+          <div className="o-list__footer">
             <SaveButton
               type="button"
+              className="fr"
               loading={app.get('saving')}
-              onClick={() => this.onSave('copy', copyFromGroupId)}
+              onClick={() => this.onSave('copy')}
             />
           </div>
         </div>
@@ -152,6 +229,10 @@ export default class Blacklist extends React.Component {
   }
 
   render() {
+    const { route, store } = this.props;
+    const actionQuery = store.getIn([route.id, 'actionQuery']) || Map({});
+    const isCopySsid = actionQuery.get('action') === 'copy';
+
     return (
       <AppScreen
         // Screen 全局属性
@@ -162,6 +243,12 @@ export default class Blacklist extends React.Component {
         modalChildren={this.renderCopyFromOther()}
         listKey="allKeys"
         editable={false}
+        initOption={{
+          actionQuery: {
+            copyFromGroupId: -100,
+          },
+        }}
+        modalSize={isCopySsid ? 'lg' : 'md'}
         actionable
         selectable
       />

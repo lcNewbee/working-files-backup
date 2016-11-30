@@ -151,6 +151,35 @@ var immutableUtils = {
     return ret;
   },
 
+  selectList: function($$list, data, $$selectedList) {
+    var $$retList = $$list;
+    var selectedList = $$selectedList || $$retList.clear();
+
+    if (data.index !== -1) {
+      $$retList = $$retList.setIn([data.index, '__selected__'], data.selected);
+      if (data.selected) {
+        selectedList = selectedList.push(data.index);
+      } else {
+        selectedList = selectedList.delete(data.index);
+      }
+    } else {
+      if (data.selected) {
+        $$retList = $$retList.map((item, index) => {
+          selectedList = selectedList.push(index);
+
+          return item.set('__selected__', true);
+        });
+      } else {
+        $$retList = $$retList.map(item => item.set('__selected__', false));
+      }
+    }
+
+    return {
+      $$list: $$retList,
+      selectedList,
+    }
+  },
+
   getChanged: function ($$newData, $$oldData) {
     var $$ret = $$newData;
 

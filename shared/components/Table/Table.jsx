@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { fromJS } from 'immutable';
+import { fromJS, List } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import utils from '../../utils';
 import Pagination from '../Pagination';
@@ -7,7 +7,7 @@ import Icon from '../Icon';
 import Row from './Row';
 
 const propTypes = {
-  options: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+  options: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
   list: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   page: PropTypes.object,
   loading: PropTypes.bool,
@@ -27,8 +27,20 @@ class Table extends Component {
     super(props);
 
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    this.onRowSelect = this.onRowSelect.bind(this);
-    this.onRowClick = this.onRowClick.bind(this);
+    utils.binds(this, [
+      'onRowSelect',
+      'onRowClick',
+      'transformOptions',
+    ]);
+  }
+
+  componentWillMount() {
+    this.transformOptions(this.props.options);
+  }
+  componentWillUpdate(nextProps) {
+    if (nextProps.options !== this.props.options) {
+      this.transformOptions(nextProps.options);
+    }
   }
   onRowSelect(data) {
     const actionData = data;
@@ -41,9 +53,26 @@ class Table extends Component {
       this.props.onRowClick(e, i);
     }
   }
+  transformOptions($$options) {
+    let $$retOptions = $$options;
 
-  renderBodyRow(myList, filterOptions) {
-    const { options, selectable } = this.props;
+    if (!List.isList($$retOptions)) {
+      $$retOptions = fromJS($$retOptions);
+    }
+
+    this.$$options = $$retOptions.map((item) => {
+      let ret = item;
+      const filterStr = item.get('filter');
+
+      if (filterStr) {
+        ret = item.set('filterObj', utils.filter(filterStr));
+      }
+      return ret;
+    });
+  }
+
+  renderBodyRow(myList) {
+    const { selectable } = this.props;
     let ret = null;
 
     this.selectedList = [];
@@ -57,7 +86,7 @@ class Table extends Component {
         return (
           <Row
             key={`tableRow${i}`}
-            options={filterOptions}
+            options={this.$$options}
             item={item}
             index={i}
             selectable={selectable}
@@ -65,13 +94,12 @@ class Table extends Component {
             onClick={e => this.onRowClick(e, i)}
           />
         );
-      }
-      );
+      });
     } else {
       ret = (
         <tr>
           <td
-            colSpan={options.size + (selectable ? 1 : 0)}
+            colSpan={this.$$options.size + (selectable ? 1 : 0)}
             className="empty"
           >
             {_('No Data')}
@@ -84,28 +112,24 @@ class Table extends Component {
   }
   render() {
     const {
-      className, options, list, page, loading, selectable,
+      className, list, page, loading, selectable,
       onRowClick,
     } = this.props;
     const myList = fromJS(list);
-    const filterOptions = options.map((item) => {
-      let ret = item;
-      const filterStr = item.get('filter');
-
-      if (filterStr) {
-        ret = item.set('filterObj', utils.filter(filterStr));
-      }
-      return ret;
-    });
-    const bodyRow = this.renderBodyRow(myList, filterOptions);
-    let myTableClassName = className;
+    const bodyRow = this.renderBodyRow(myList);
+    let myTableClassName = 'table';
     let isSelectAll = false;
 
     if (myList && myList.size > 0 && (this.selectedList.length === myList.size)) {
       isSelectAll = true;
     }
+
     if (onRowClick) {
       myTableClassName = `${myTableClassName} table--pionter`;
+    }
+
+    if (className) {
+      myTableClassName = `${myTableClassName} className`;
     }
 
     return (
@@ -113,7 +137,7 @@ class Table extends Component {
         <table className={myTableClassName}>
           <thead>
             <Row
-              options={filterOptions}
+              options={this.$$options}
               selectable={selectable}
               onSelect={this.onRowSelect}
               isSelectAll={isSelectAll}

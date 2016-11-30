@@ -23,7 +23,6 @@ require('echarts/lib/component/legend');
 require('echarts/lib/component/title');
 
 
-
 const propTypes = {
   option: PropTypes.object,
   onEvents: PropTypes.object,

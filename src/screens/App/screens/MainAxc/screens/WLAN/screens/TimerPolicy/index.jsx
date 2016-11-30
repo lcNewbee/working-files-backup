@@ -86,6 +86,26 @@ const screenOptions = fromJS([
     options: policyTypeOptions,
     width: '120',
     defaultValue: 'Mon&Tue&Wed&Thu&Fri&Sat&Sun',
+    transform(val) {
+      const oldVal = val;
+      let ret = oldVal || '';
+
+      if (oldVal !== 'Mon&Tue&Wed&Thu&Fri&Sat&Sun' &&
+        oldVal !== 'Mon&Tue&Wed&Thu&Fri' && oldVal !== 'Once') {
+        ret = ret.split('&').map(
+          day => _(day),
+        ).join(',');
+      } else {
+        policyTypeOptions.forEach(
+          (item) => {
+            if (item.value === ret) {
+              ret = item.label;
+            }
+          },
+        );
+      }
+      return ret;
+    },
     formProps: {
       type: 'select',
       initValue($$data) {
@@ -122,6 +142,16 @@ const screenOptions = fromJS([
     id: 'policy_times',
     width: '130',
     text: _('Time'),
+    transform(val, $$data) {
+      const type = $$data.get('policy_type');
+      let ret = val || ' ';
+
+      if (type !== 'Once') {
+        ret = ret.split(' ')[1];
+      }
+
+      return ret;
+    },
     noForm: true,
   }, {
     id: 'policy_date',

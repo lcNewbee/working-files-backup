@@ -11,6 +11,7 @@ const propTypes = {
   children: PropTypes.node,
   title: PropTypes.string,
   route: PropTypes.object,
+  initOption: PropTypes.object,
   initScreen: PropTypes.func,
   fetchScreenData: PropTypes.func,
   leaveScreen: PropTypes.func,
@@ -46,12 +47,12 @@ export default class AppScreen extends React.Component {
       listOptions, defaultSettingsData, settingsFormOptions,
       groupid,
     } = props;
-    const initOption = {
+    const initOption = utils.extend({
       id: props.route.id,
       formUrl: props.route.formUrl,
       fetchUrl: props.route.fetchUrl,
       saveUrl: props.route.saveUrl,
-    };
+    }, props.initOption);
 
     super(props);
 

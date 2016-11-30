@@ -187,7 +187,7 @@ class Modal extends Component {
       modalClassName = `${modalClassName} o-modal--draggable`;
     }
 
-    // ReactCSSTransitionGroup need key value
+    // size
     if (size) {
       modalClassName = `${modalClassName} o-modal--${size}`;
     }
