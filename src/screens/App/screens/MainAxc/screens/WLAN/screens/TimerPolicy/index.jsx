@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
 import validator from 'shared/utils/lib/validator';
 import { connect } from 'react-redux';
-import { fromJS, Map } from 'immutable';
+import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
 import AppScreen from 'shared/components/Template/AppScreen';
@@ -38,23 +38,6 @@ const policyTypeOptions = [
   },
 ];
 
-const validOptions = Map({
-  password: validator({
-    rules: 'remarkTxt:["\'\\\\"]|len:[8, 31]',
-  }),
-  vlanid: validator({
-    rules: 'num:[2, 4095]',
-  }),
-  ssid: validator({
-    rules: 'remarkTxt:["\'\\\\"]|len:[1, 31]',
-  }),
-  upstream: validator({
-    rules: 'num:[32, 102400, 0]',
-  }),
-  downstream: validator({
-    rules: 'num:[32, 102400, 0]',
-  }),
-});
 const daysOptions = fromJS([
   {
     value: 'Mon',
@@ -277,17 +260,6 @@ export default class View extends React.Component {
     );
   }
 
-  onBeforeAction($$actionQuery) {
-    const actionType = $$actionQuery.get('action');
-    let ret = '';
-
-    if (actionType === 'switch') {
-      ret = '';
-    }
-
-    return ret;
-  }
-
   onBeforeSave($$actionQuery, $$curListItem) {
     const actionType = $$actionQuery.get('action');
     const subItem = {};
@@ -313,7 +285,6 @@ export default class View extends React.Component {
         {...this.props}
         listOptions={curListOptions}
         onBeforeSave={this.onBeforeSave}
-        onBeforeAction={this.onBeforeAction}
         listKey="policy_id"
         actionable
         selectable
@@ -322,117 +293,6 @@ export default class View extends React.Component {
     );
   }
 }
-
-
-        // <Modal
-        //   isShow={actionQuery.get('action') === 'add' || actionQuery.get('action') === 'edit'}
-        //   title={actionQuery.get('myTitle')}
-        //   onOk={() => this.props.closeListItemModal(route.id)}
-        //   onClose={() => this.props.closeListItemModal(route.id)}
-        //   cancelButton={false}
-        //   okButton={false}
-        //   noFooter
-        // >
-        //   <FormGroup
-        //     type="select"
-        //     label={_('Repeat')}
-        //     options={repeatOptions}
-        //     value={getCurrData('repeat')}
-        //     onChange={this.onUpdateSettings('repeat')}
-        //   />
-        //   {
-        //     getCurrData('repeat') === 'once' ? (
-        //       <FormGroup
-        //         type="date"
-        //         label={_('Date')}
-        //         displayFormat="YYYY-MM-DD"
-        //         value={getCurrData('customDate')}
-        //         onChange={data => this.props.updateCurEditListItem({
-        //           customDate: data.value,
-        //         })}
-        //         // withPortal
-        //       />
-        //     ) : null
-        //   }
-
-        //   {
-        //     getCurrData('repeat') === 'custom' ? (
-        //       <FormGroup
-        //         type="checkboxs"
-        //         splitStr="&"
-        //         value={getCurrData('policy_type')}
-        //         label={_('Custom Cycle')}
-        //         options={daysOptions}
-        //         onChange={data => this.props.updateCurEditListItem({
-        //           policy_type: data.value,
-        //         })}
-        //       />
-        //     ) : null
-        //   }
-
-          // <FormGroup
-          //   label={_('Time')}
-          //   type="time"
-          //   value={moment(getCurrData('startTime').replace(':', ''), 'hmm')}
-          //   format="HH:mm"
-          //   showSecond={false}
-          //   onChange={data => this.props.updateCurEditListItem({
-          //     startTime: data.value,
-          //   })}
-          // />
-        //   <FormGroup
-        //     type="switch"
-        //     label={_('Operation')}
-        //     value={getCurrData('operation')}
-        //     onChange={this.onUpdateSettings('operation')}
-        //     options={[
-        //       {
-        //         value: 1,
-        //         label: _('Enable'),
-        //       }, {
-        //         value: 0,
-        //         label: _('Disable'),
-        //       },
-        //     ]}
-        //   />
-        //   <FormGroup
-        //     type="select"
-        //     label={_('Operation Object')}
-        //     options={[
-        //       {
-        //         value: 1,
-        //         label: _('SSID1'),
-        //       }, {
-        //         value: 1,
-        //         label: _('SSID2'),
-        //       },
-        //     ]}
-        //     value={getCurrData('opObject')}
-        //     onChange={this.onUpdateSettings('opObject')}
-        //   />
-
-        //   <FormGroup
-        //     type="text"
-        //     label={_('Description')}
-        //     value={getCurrData('remark')}
-        //     onChange={this.onUpdateSettings('remark')}
-        //   />
-
-        //   <FormGroup
-        //     label={_('Enable The Policy')}
-        //     type="checkbox"
-        //   />
-
-        //   <div className="form-group form-group--save">
-        //     <div className="form-control">
-        //       <SaveButton
-        //         type="button"
-        //         loading={this.props.app.get('saving')}
-        //         onClick={this.onSave}
-        //       />
-        //     </div>
-        //   </div>
-        // </Modal>
 
 View.propTypes = propTypes;
 View.defaultProps = defaultProps;
@@ -456,5 +316,4 @@ function mapDispatchToProps(dispatch) {
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
-  validator.mergeProps(validOptions),
 )(View);

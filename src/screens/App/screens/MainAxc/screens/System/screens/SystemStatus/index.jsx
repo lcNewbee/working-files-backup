@@ -201,10 +201,11 @@ export default class View extends PureComponent {
     const storeStatusOption = getStoreOption(serverData);
 
     return (
+
       <div>
         <h3 className="t-main__content-title">{_('System Status') }</h3>
         <div className="o-box row">
-          <div className="cols col-6" >
+          <div className="cols col-4" >
             <div className="o-box__cell">
               <h3>{ _('Memory') }</h3>
             </div>
@@ -213,13 +214,13 @@ export default class View extends PureComponent {
                 option={memoryStatusOption}
                 className="o-box__canvas"
                 style={{
-                  width: '80%',
-                  minHeight: '180px',
+                  width: '100%',
+                  minHeight: '185px',
                 }}
               />
             </div>
           </div>
-          <div className="cols col-6" >
+          <div className="cols col-4" >
             <div className="o-box__cell">
               <h3>{ _('CPU') }</h3>
             </div>
@@ -228,10 +229,33 @@ export default class View extends PureComponent {
                 option={cpuStatusOption}
                 className="o-box__canvas"
                 style={{
-                  width: '80%',
-                  minHeight: '180px',
+                  width: '100%',
+                  minHeight: '185px',
                 }}
               />
+            </div>
+          </div>
+          <div className="cols col-4" >
+            <div className="o-box__cell">
+              <h3>{ _('Details') }</h3>
+            </div>
+            <div
+              className="o-box__cell"
+              style={{
+                minHeight: '202px',
+              }}
+            >
+              <div className="m-description-list">
+                <dl className="m-description-list-row">
+                  <dt>{_('License Status')}</dt>
+                  <dd>{_('Unlicensed')}</dd>
+                </dl>
+                <dl className="m-description-list-row">
+                  <dt>{_('Expiration Date')}</dt>
+                  <dd>2018-02-23</dd>
+                </dl>
+              </div>
+
             </div>
           </div>
           <div className="cols col-12" >
