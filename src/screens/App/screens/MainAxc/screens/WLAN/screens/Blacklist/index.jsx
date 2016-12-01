@@ -104,7 +104,9 @@ export default class Blacklist extends React.Component {
           data,
           $$copySelectedList,
         );
-        $$copySelectedList = ret.selectedList;
+        $$copySelectedList = ret.selectedList.map(
+          index => $$copyGroupBlacklist.getIn(['list', index, 'mac']),
+        );
 
         return ret.$$list;
       },

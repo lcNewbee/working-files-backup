@@ -21,20 +21,6 @@ const cnCore = require('../lang/cn/core.json');
 const cnAxc = require('../lang/cn/axc.json');
 const validateCn = require('../lang/cn/validate.json');
 const langEn = require('../lang/en/core.json');
-const oldCnAXc = require('../lang/cn/axc_old.json');
-
-const item = {};
-
-
-Object.keys(cnAxc).forEach(
-  (key) => {
-    if (oldCnAXc[key] === undefined) {
-      item[key] = cnAxc[key];
-    }
-  },
-);
-
-console.log(JSON.stringify(item));
 
 const bodyElem = document.getElementsByTagName('body')[0];
 

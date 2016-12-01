@@ -303,7 +303,9 @@ export default class View extends React.Component {
           data,
           $$copySelectedList,
         );
-        $$copySelectedList = ret.selectedList;
+        $$copySelectedList = ret.selectedList.map(
+          index => $$copyGroupSsid.getIn(['list', index, 'ssid']),
+        );
 
         return ret.$$list;
       },
