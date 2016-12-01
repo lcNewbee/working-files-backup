@@ -10,21 +10,11 @@ class WirelessTimer_Model extends CI_Model {
         //时段	操作对象	重复	备注	开始时间	结束时间	状态
         $sqlpage = new SqlPage();
         $columns = '*';
-        $tablenames = 'objects_list';
-        $joins = array(
-            /*array('ssid_group','ssid_group.id = ssid_template.id','left')*/
-        );
-        $wheres = array(
-            /*
-            array('ssid_template.id >',0),
-            array('ssid_template.id <',5)
-            */
-        );
+
+        $tablenames = 'objects_list';      
         $pageindex = 1;
         $pagesize =20;
-
-        $datalist = $sqlpage->sql_data_page($columns,$tablenames,$joins,$wheres,$pageindex,$pagesize);
-
+        $datalist = $sqlpage->sql_data_page($columns,$tablenames,$pageindex,$pagesize);  
         $htmdata = array();
         foreach($datalist['data'] as $row) {
             $this->db->select('*');

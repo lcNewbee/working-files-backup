@@ -14,13 +14,13 @@ class SqlPage {
 	 *	data page
 	 *	@columns 列
 	 *	@tablenames 表名
-	 *	@joins 联合查询集合
-	 *	@wheres 条件集合
 	 *	@pageindex 页码
-	 *	@pagesize 页容量
+	 *	@pagesize 页容量	
+	 *	@wheres 条件集合	  
+	 *	@joins 联合查询集合
 	 *	return 总行、总页、结果集
 	 */
-	public function sql_data_page($columns, $tablenames, $joins, $wheres, $pageindex, $pagesize) {
+	public function sql_data_page($columns, $tablenames, $pageindex=1, $pagesize=20, $wheres=array(), $joins=array()) {
 		//得到总行
 		$total_row = 0;
 		$this->CI->db->select($columns);

@@ -3,7 +3,7 @@ class AlarmEvent_Model extends CI_Model {
 	public function __construct() {
 		parent::__construct();
         $this->load->database();
-        $this->load->helper('array');
+        $this->load->helper(array('array','my_customfun_helper'));
 	}
 	public function get_alarm_list($data) {      
         /*
@@ -20,8 +20,8 @@ class AlarmEvent_Model extends CI_Model {
             "lastPage"=> 1        // 最后一页
         );
         $arrlist = array(
-            array('id'=>'1','time'=>'2016-11-21','type'=>'NAT','info'=>'接口还没有先测试一把'),
-            array('id'=>'1','time'=>'2016-11-21','type'=>'NAT','info'=>'接口还没有先测试一把')
+            array('id'=>'1','time'=>'2016-11-21','type'=>'NAT','info'=>'test data 1'),
+            array('id'=>'1','time'=>'2016-11-21','type'=>'NAT','info'=>'test data 2')
         );
         $arr['state'] = array('code' => 2000, 'msg' => 'ok');
         $arr['data'] = array('page'=>$arypage,'list'=>$arrlist);    
@@ -49,6 +49,7 @@ class AlarmEvent_Model extends CI_Model {
             ]
         }
         */
-        return json_encode(array('state' => array('code' => 2000, 'msg' => 'ok')));
+        $arr = json_ok();
+        return json_encode($arr);
     }        
 }

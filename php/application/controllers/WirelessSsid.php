@@ -6,79 +6,39 @@ class WirelessSsid extends CI_Controller {
 		parent::__construct();
 		$this->load->database();
 		$this->load->helper('array');
+        $this->load->model('group/WirelessSsid_Model');
 	}
-	function fetch(){
-
-      $retdata = array(
-        'groupid'=>(int)element('groupid', $_GET),
-      );
-        $result=axc_get_wireless_ssid(json_encode($retdata));
-      return $result;
-  }
-
+	function fetch() {
+		$retdata = array('groupid' => (int)element('groupid', $_GET),);
+        return $this->WirelessSsid_Model->get_ssid_list($retdata);		
+	}
 	function onAction($data) {
 		$result = null;
-		$actionType = element('action', $data);
-    $selectList = element('selectedList', $data);
-    function getCgiParam($oriData) {
-      $ret = array(
-        'groupid'=>(int)element('groupid', $oriData),
-        'ssid'=>element('ssid', $oriData),
-        'remark'=>element('remark', $oriData),
-        'vlanid'=>(int)element('vlanid', $oriData,0),
-        'enabled'=>(int)element('enabled', $oriData),
-        'maxBssUsers'=>(int)element('maxBssUsers', $oriData),
-        'loadBalanceType'=>(int)element('loadBalanceType', $oriData),
-        'hiddenSsid'=>(int)element('hiddenSsid', $oriData),
-        'storeForwardPattern'=>element('storeForwardPattern', $oriData),
-        'upstream'=>(int)element('upstream', $oriData),
-        'downstream'=>(int)element('downstream', $oriData),
-        'encryption'=>element('encryption', $oriData),
-        'password'=>element('password', $oriData, '')
-      );
-      return $ret;
-    }
-
+		$actionType = element('action', $data);		
 		if ($actionType === 'add') {
-			$temp_data=getCgiParam($data);
-      $result=axc_add_wireless_ssid(json_encode($temp_data));
-		}
-		elseif($actionType === 'edit') {
-    	$temp_data=getCgiParam($data);
-      $result=axc_modify_wireless_ssid(json_encode($temp_data));
-		}
-    elseif($actionType === 'delete'){
-     foreach($selectList as $item) {
-          $deleteItem = array(
-            'groupid'=>element('groupid', $data),
-            'ssid'=>element('ssid', $item)
-          );
-       $state=axc_del_wireless_ssid(json_encode($deleteItem));
-     }
-       $result=$state;
-    }
-    elseif($actionType === 'bind'){
-			$temp_data=getCgiParam($data);
-      $result=axc_bind_wireless_ssid(json_encode($temp_data));
-    }
-    elseif($actionType === 'unbind'){
-			$temp_data=getCgiParam($data);
-      $result=axc_unbind_wireless_ssid(json_encode($temp_data));
-    }
+            $result = $this->WirelessSsid_Model->add_ssid($data);
+		} elseif ($actionType === 'edit') {
+			$result = $this->WirelessSsid_Model->update_ssid($data);
+		} elseif ($actionType === 'delete') {
+			$result = $this->WirelessSsid_Model->delete_ssid($data);
+		} elseif ($actionType === 'bind') {
+            $result = $this->WirelessSsid_Model->bind_ssid($data);
+		} elseif ($actionType === 'unbind') {
+            $result = $this->WirelessSsid_Model->bind_ssid($data);
+		} elseif ($actionType === 'copy') {
+            $result = $this->WirelessSsid_Model->copy_ssid($data);
+        }
 		return $result;
 	}
-
 	public function index() {
 		$result = null;
-
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$data = json_decode(file_get_contents("php://input"), true);
 			$result = $this->onAction($data);
-      echo $result;
-		}
-		else if($_SERVER['REQUEST_METHOD'] == 'GET') {
+			echo $result;
+		} else if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 			$result = $this->fetch();
-      echo $result;
+			echo $result;
 		}
 	}
 }

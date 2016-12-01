@@ -3,7 +3,7 @@ class Log_Model extends CI_Model {
 	public function __construct() {
 		parent::__construct();
         $this->load->database();
-        $this->load->helper('array');
+        $this->load->helper(array('array', 'my_customfun_helper'));
 	}
 	public function get_log_list($data) {
 		$arr['state'] = array('code' => 2000, 'msg' => 'OK');
@@ -17,9 +17,12 @@ class Log_Model extends CI_Model {
 		return json_encode($arr);
 	}
 	public function log_delete($data) {
-		return json_encode(array('state' => array('code' => 2000, 'msg' => 'ok')));
+		$result = null;
+		$result = json_ok();
+		return json_encode($result);
 	}
 	public function log_cfg($data) {
-		return json_encode(array('state' => array('code' => 2000, 'msg' => 'ok')));
-	}
+		$result = null;
+		$result = json_no();
+		return json_encode($result);
 }
