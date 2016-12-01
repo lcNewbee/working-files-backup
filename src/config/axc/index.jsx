@@ -140,7 +140,8 @@ const sApModel =
     require('../../screens/App/screens/MainAxc/screens/System/screens/ApModel');
 const sSystemMaintenance =
     require('../../screens/App/screens/MainAxc/screens/System/screens/SystemMaintenance');
-
+const sNetworkTimeProtocol =
+    require('../../screens/App/screens/MainAxc/screens/System/screens/NetworkTimeProtocol');
 const routes = [
   {
     path: '/',
@@ -602,6 +603,14 @@ const routes = [
             icon: 'cog',
             text: _('System Maintenance'),
             component: sSystemMaintenance.Screen,
+          }, {
+            id: 'ntp',
+            isIndex: true,
+            formUrl: 'goform/system/networktimeprotocol',
+            path: '/main/system/networktimeprotocol',
+            icon: 'cog',
+            text: _('Network Time Protocol'),
+            component: sNetworkTimeProtocol.Screen,
           }, {
             id: 'admin',
             isIndex: true,
