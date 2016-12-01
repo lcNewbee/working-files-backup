@@ -68,7 +68,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'secondDns',
-    text: _('Secondary DNS'),
+    text: _('Secondly DNS'),
     formProps: {
       maxLength: '15',
       validator: validator({

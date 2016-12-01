@@ -30,7 +30,7 @@ const listOptions = fromJS([
 
   }, {
     id: 'authsecond_ipaddr',
-    label: _('Secondary IP'),
+    label: _('Secondly IP'),
     fieldset: 'auth',
     formProps: {
       type: 'text',
@@ -48,7 +48,7 @@ const listOptions = fromJS([
 
   }, {
     id: 'authsecond_port',
-    label: _('Secondary Port'),
+    label: _('Secondly Port'),
     fieldset: 'auth',
     formProps: {
       type: 'number',
@@ -66,7 +66,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'authsecond_key',
-    label: _('Secondary Password'),
+    label: _('Secondly Password'),
     fieldset: 'auth',
     noTable: true,
     formProps: {
@@ -86,7 +86,7 @@ const listOptions = fromJS([
 
   }, {
     id: 'acctsecond_ipaddr',
-    label: _('Secondary IP'),
+    label: _('Secondly IP'),
     fieldset: 'Accounting',
     formProps: {
       type: 'text',
@@ -104,7 +104,7 @@ const listOptions = fromJS([
 
   }, {
     id: 'acctsecond_port',
-    label: _('Secondary Port'),
+    label: _('Secondly Port'),
     fieldset: 'Accounting',
     formProps: {
       type: 'number',
@@ -123,7 +123,7 @@ const listOptions = fromJS([
 
   }, {
     id: 'acctsecond_key',
-    label: _('Secondary Password'),
+    label: _('Secondly Password'),
     fieldset: 'Accounting',
     noTable: true,
     formProps: {
@@ -166,7 +166,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'accton_sendinterval',
-    label: _('Accounting-on Send Interval'),
+    label: _('Accounting-on Interval'),
     fieldset: 'parameter',
     defaultValue: '0',
     noTable: true,
@@ -187,7 +187,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'retry_times',
-    label: _('Packets Max Send Times'),
+    label: _('Max Messaging Times'),
     fieldset: 'parameter',
     noTable: true,
     formProps: {
@@ -263,7 +263,7 @@ export default class View extends React.Component {
     return (
       <AppScreen
         {...this.props}
-        title={_('Radius Porfile')}
+        title={_('Radius Profile')}
         store={this.props.store}
         listOptions={listOptions}
         modalSize="lg"

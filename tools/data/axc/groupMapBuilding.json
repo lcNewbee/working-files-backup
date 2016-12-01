@@ -1,0 +1,94 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "id": "0",
+        "lat": -34,
+        "lng": 151.23,
+        "address": "shenzhen china",
+        "markerTitle": "0",
+        "name": "Head Office",
+        "mapNumber": 12,
+        "markerType": "building",
+        "mapList": [
+          {
+            "id": "1",
+            "mapName": "Floor One",
+            "locked": "0"
+          }, {
+            "id": "2",
+            "mapName": "Floor Two",
+            "locked": "0"
+          }
+        ]
+      },
+      {
+        "id": "1",
+        "lat": -34,
+        "lng": 151.56,
+        "markerTitle": "1",
+        "name": "Branch",
+        "mapNumber": 12,
+        "markerType": "building",
+        "mapList": [
+          {
+            "id": "1",
+            "mapName": "Floor one",
+            "locked": "0"
+          }, {
+            "id": "2",
+            "mapName": "Floor Two",
+            "locked": "0"
+          }, {
+            "id": "2",
+            "mapName": "Floor Three",
+            "locked": "0"
+          }
+        ]
+      },
+      {
+        "id": "2",
+        "lat": -34,
+        "lng": 151.78,
+        "markerTitle": "2",
+        "name": "Market",
+        "mapNumber": 12,
+        "markerType": "building",
+        "mapList": [
+          {
+            "id": "1",
+            "mapName": "Floor One",
+            "locked": "0"
+          }, {
+            "id": "2",
+            "mapName": "Floor Two",
+            "locked": "0"
+          }
+        ]
+      }, {
+        "id": "3",
+        "lat": -34,
+        "lng": 151.78,
+        "markerTitle": "2",
+        "name": "Market",
+        "mapNumber": 12,
+        "markerType": "building",
+        "mapList": [
+          {
+            "id": "1",
+            "mapName": "Floor One",
+            "locked": "0"
+          }, {
+            "id": "2",
+            "mapName": "Floor Two",
+            "locked": "0"
+          }
+        ]
+      }
+    ]
+  }
+}

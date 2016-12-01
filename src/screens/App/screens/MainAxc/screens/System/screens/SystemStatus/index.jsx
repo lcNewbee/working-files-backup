@@ -247,12 +247,16 @@ export default class View extends PureComponent {
             >
               <div className="m-description-list">
                 <dl className="m-description-list-row">
-                  <dt>{_('License Status')}</dt>
-                  <dd>{_('Unlicensed')}</dd>
+                  <dt>{_('CPU ID')}</dt>
+                  <dd>{_('asda21312312312312')}</dd>
                 </dl>
                 <dl className="m-description-list-row">
-                  <dt>{_('Expiration Date')}</dt>
-                  <dd>2018-02-23</dd>
+                  <dt>{_('Flash ID')}</dt>
+                  <dd>asda21312312312312</dd>
+                </dl>
+                <dl className="m-description-list-row">
+                  <dt>{_('Memory ID')}</dt>
+                  <dd>asda21312312312312</dd>
                 </dl>
               </div>
 

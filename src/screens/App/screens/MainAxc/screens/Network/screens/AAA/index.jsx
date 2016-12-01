@@ -43,7 +43,7 @@ const authTypeSeletOptions = [
   },
   {
     value: 'radius-scheme',
-    label: `${_('Remotely')}`,
+    label: `${_('Remote')}`,
   },
 ];
 const listOptions = fromJS([

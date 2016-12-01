@@ -21,6 +21,20 @@ const cnCore = require('../lang/cn/core.json');
 const cnAxc = require('../lang/cn/axc.json');
 const validateCn = require('../lang/cn/validate.json');
 const langEn = require('../lang/en/core.json');
+const oldCnAXc = require('../lang/cn/axc_old.json');
+
+const item = {};
+
+
+Object.keys(cnAxc).forEach(
+  (key) => {
+    if (oldCnAXc[key] === undefined) {
+      item[key] = cnAxc[key];
+    }
+  },
+);
+
+console.log(JSON.stringify(item));
 
 const bodyElem = document.getElementsByTagName('body')[0];
 
@@ -186,7 +200,7 @@ const routes = [
             formUrl: 'goform/network/nat',
             component: sNetworkNat.Screen,
           },
-          // 先隐藏次项
+          // 先隐藏ACL
           // {
           //   id: 'networkAcl',
           //   icon: 'ban',
@@ -198,7 +212,7 @@ const routes = [
           {
             id: 'staticRoutes',
             path: '/main/network/static_routes',
-            text: _('Routes'),
+            text: _('Route'),
             icon: 'map-signs',
             formUrl: 'goform/network/route',
             component: sNetworkRoutes.Screen,
@@ -321,7 +335,7 @@ const routes = [
                 id: 'safeStatus',
                 path: '/main/group/monitor/safe',
                 formUrl: 'goform/group/safeStatus',
-                text: _('Safe Status'),
+                text: _('Secure State'),
                 component: sSafeStatus.Screen,
               },
             ],
@@ -343,15 +357,15 @@ const routes = [
                     id: 'liveMap',
                     path: '/main/group/map/live/list',
                     text: _('Live Map'),
-                    formUrl: 'goform/group/mapList',
+                    formUrl: 'goform/group/map/building',
                     isIndex: true,
                     component: sLiveMap.Screen,
                   }, {
 
                     id: 'buildMap',
                     path: '/main/group/map/live/(:id)',
-                    text: _('Build Floor Map'),
-                    formUrl: 'goform/getDeviceList',
+                    text: _('AP Plan Map'),
+                    formUrl: 'goform/group/map/apPlan',
                     component: sApPlanMap.Screen,
                     noNav: true,
                   },
@@ -425,7 +439,7 @@ const routes = [
                     id: 'wirelessEndpointProtection',
                     path: '/main/group/wireless/safe/endpointProtection',
                     formUrl: 'goform/group/wireless/protection',
-                    text: _('Endpoint Protection'),
+                    text: _('Terminal Protection'),
                     component: sEndpointProtection.Screen,
                   },
                 ],

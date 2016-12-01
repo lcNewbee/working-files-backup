@@ -45,7 +45,7 @@ const listOptions = fromJS({
       },
     }, {
       id: 'markerAddress',
-      label: _('Marker Address'),
+      label: _('Mark Address'),
       formProps: {
         type: 'text',
         display: 'inline',

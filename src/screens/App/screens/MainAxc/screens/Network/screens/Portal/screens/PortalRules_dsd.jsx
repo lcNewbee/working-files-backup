@@ -225,7 +225,7 @@ export default class View extends React.Component {
                     return 'dsds';
                   },
                 }, {
-                  title: _('Set Rule Trigger Action Condition'),
+                  title: _('Set Rule Trigger Action'),
                   render() {
                     return 'dsds';
                   },

@@ -165,6 +165,7 @@ export default class Blacklist extends React.Component {
     const $$group = this.props.group;
     const selectGroupId = $$group.getIn(['selected', 'id']);
     const copyFromGroupId = $$myScreenStore.getIn(['actionQuery', 'copyFromGroupId']);
+    const copyFromGroupName = '';
 
     if (!isCopyShow) {
       return null;
@@ -207,7 +208,7 @@ export default class Blacklist extends React.Component {
 
         </div>
         <div className="o-list cols col-8">
-          <h3 className="o-list__header">{_('Group SSID List')}</h3>
+          <h3 className="o-list__header">{_('Group Blacklist')}</h3>
           <Table
             options={listOptions}
             list={$$myScreenStore.getIn(['data', 'copyGroupBlacklist', 'list'])}

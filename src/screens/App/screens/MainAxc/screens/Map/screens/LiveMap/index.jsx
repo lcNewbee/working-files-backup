@@ -31,8 +31,8 @@ const listOptions = fromJS({
         display: 'inline',
       },
     }, {
-      id: 'floorNumber',
-      label: _('Floor Number'),
+      id: 'mapNumber',
+      label: _('Map Number'),
       noForm: true,
       formProps: {
         required: true,
@@ -225,11 +225,11 @@ export default class View extends React.Component {
       draggable: item.get('isLocked') !== '1',
       animation: google.maps.Animation.DROP,
     });
-    const contentString = `${'<div class="m-map-marker">' +
-                            '<h4>'}${  _('Test')  }</h4>` +
-                            `<dl><dt>${  _('Flow')  }</dt>` +
-                            `<dd>15.23Mbps</dd></dl>` +
-                          `</div>`;
+    const contentString = '<div class="m-map-marker">' +
+                            '<h4>' + _('Test') + '</h4>' +
+                            '<dl><dt>' + _('Flow') + '</dt>' +
+                            '<dd>15.23Mbps</dd></dl>' +
+                          '</div>';
 
     const infowindow = new google.maps.InfoWindow({
       content: contentString,
@@ -416,10 +416,10 @@ export default class View extends React.Component {
         options={[
           {
             value: '0',
-            label: _('Google Map'),
+            label: _('Live Google Map'),
           }, {
             value: '1',
-            label: _('Local List'),
+            label: _('Local Building List'),
           },
         ]}
         key="list"
@@ -436,7 +436,7 @@ export default class View extends React.Component {
         key="help"
         className="a-help"
         data-help={_('Help')}
-        data-help-text="这是帮助文本"
+        data-help-text={_('Help')}
       />,
     ];
     const isOpenHeader = actionQuery.get('action') === 'add';
@@ -458,6 +458,7 @@ export default class View extends React.Component {
           type: '0',
         }}
         actionable
+        addable
       >
         <div className="m-action-bar">
           {

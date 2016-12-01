@@ -15,8 +15,8 @@ import './_style.scss';
 const _ = window._;
 const msg = {
   password: _('Password'),
-  versionUses: _('Version Uses To'),
-  selectFile: _('Select Version File'),
+  versionUses: _('Version Description'),
+  selectFile: _('Select File'),
   dictDefaultMessage: _('Drop or click to select file'),
   removefile: _('Remove File'),
   currentVersion: _('Current Version'),

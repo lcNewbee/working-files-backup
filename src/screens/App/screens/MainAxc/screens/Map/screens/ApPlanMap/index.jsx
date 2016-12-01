@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import utils, { immutableUtils, dom } from 'shared/utils';
+import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
@@ -13,6 +14,7 @@ import FileUploads from 'shared/components/FileUpload';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 import * as propertiesActions from 'shared/actions/properties';
+import * as axcActions from '../../../../actions';
 
 import bkImg from '../../shared/images/map_bg.jpg';
 import '../../shared/_map.scss';
@@ -47,7 +49,7 @@ const listOptions = fromJS({
       },
     }, {
       id: 'markerAddress',
-      label: _('Marker Address'),
+      label: _('Mark Address'),
       formProps: {
         type: 'text',
         display: 'inline',
@@ -55,8 +57,6 @@ const listOptions = fromJS({
     },
   ],
 });
-
-const defaultEditData = immutableUtils.getDefaultData(listOptions.get('list'));
 
 const propTypes = {
   store: PropTypes.instanceOf(Map),
@@ -70,7 +70,16 @@ const propTypes = {
   updateListItemByIndex: PropTypes.func,
   closeListItemModal: PropTypes.func,
   addListItem: PropTypes.func,
+  createModal: PropTypes.func,
+
+  // AXC actons
+  selectManageGroupAp: PropTypes.func,
+  fetchModelList: PropTypes.func,
+  resetGroupAddDevice: PropTypes.func,
+  fetchGroupAps: PropTypes.func,
+  showMainModal: PropTypes.func,
 };
+
 const defaultProps = {};
 
 export default class View extends React.Component {
@@ -81,6 +90,7 @@ export default class View extends React.Component {
     this.state = {
       mapOffsetX: 0,
       mapOffsetY: 0,
+      isUnplacedListShow: true,
     };
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     utils.binds(this,
@@ -95,10 +105,21 @@ export default class View extends React.Component {
         'renderMapList',
         'renderCurMap',
         'updateState',
-      ]
+        'onToggleUnplacedList',
+      ],
     );
   }
+  onToggleUnplacedList(active) {
+    let isUnplacedListShow = !this.state.isUnplacedListShow;
 
+    if (active !== undefined) {
+      isUnplacedListShow = active;
+    }
+
+    this.setState({
+      isUnplacedListShow,
+    });
+  }
   onSave() {
     this.props.validateAll()
       .then((errMsg) => {
@@ -344,13 +365,15 @@ export default class View extends React.Component {
         }
 
         <div
-          className="cols col-3 o-map-list__add"
+          className="cols col-3"
           onClick={this.props.addListItem}
         >
-          <Icon
-            name="plus"
-            size="3x"
-          />
+          <div className="o-map-list__add">
+            <Icon
+              name="plus"
+              size="3x"
+            />
+          </div>
         </div>
       </div>
     );
@@ -411,6 +434,7 @@ export default class View extends React.Component {
             this.props.updateScreenSettings({
               curMapName: '',
             });
+            this.onToggleUnplacedList(true);
           } else {
             this.props.router.push('/main/group/map/live/list')
           }
@@ -449,7 +473,9 @@ export default class View extends React.Component {
         .toList();
 
     const isModalShow = actionQuery.get('action') === 'add' || actionQuery.get('action') === 'edit';
-    const buildId = this.props.params.id;
+    const deviceListClassname = classnames('o-list o-devices-list', {
+      active: !!curMapName && this.state.isUnplacedListShow,
+    });
 
     if (mapList.size === 1) {
       curMapName = mapList.getIn([0, 'map', 'mapName']);
@@ -465,7 +491,6 @@ export default class View extends React.Component {
             actionBarChildren
           }
         </div>
-
         <div className="o-map-warp">
           {
             curMapName ? this.renderCurMap(list, curMapName, myZoom) : this.renderMapList(mapList)
@@ -495,14 +520,65 @@ export default class View extends React.Component {
               </div>
             ) : null
           }
+          <div className={deviceListClassname} >
+            {
+              curMapName ? (
+                <div
+                  className="toggle-button"
+                  onClick={() => this.onToggleUnplacedList()}
+                >
+                  <Icon
+                    title={_('Unplaced AP List')}
+                    name="align-justify"
+                    size="2x"
+                  />
+                </div>
+              ) : null
+            }
 
-        </div>
-        <div className="o-devices-list" >
-          {
-            list ?
-              list.map(this.renderUndeployDevice) :
-              null
-          }
+            <div className="o-list__header">
+              {_('Unplaced AP List')}
+              <Icon
+                className="fr"
+                style={{
+                  fontSize: '16px',
+                  cursor: 'pointer',
+                }}
+                name="angle-double-right"
+                onClick={() => this.onToggleUnplacedList()}
+              />
+            </div>
+            <div className="o-list__body">
+              {
+                list ?
+                  list.map(this.renderUndeployDevice) :
+                  null
+              }
+            </div>
+            <div className="o-list__footer o-devices-list__footer">
+              <Button
+                icon="plus"
+                theme="primary"
+                text={_('Add AP to Group')}
+                onClick={
+                  () => {
+                    this.props.selectManageGroupAp({
+                      id: this.props.groupid,
+                    });
+                    this.props.fetchModelList();
+                    this.props.resetGroupAddDevice();
+                    this.props.fetchGroupAps(-1);
+                    this.props.showMainModal({
+                      title: _('Add AP to Group'),
+                      size: 'md',
+                      isShow: true,
+                      name: 'groupApAdd',
+                    });
+                  }
+                }
+              />
+            </div>
+          </div>
         </div>
 
         <Modal
@@ -545,12 +621,13 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
     screenActions,
-    propertiesActions
+    propertiesActions,
+    axcActions,
   ), dispatch);
 }
 
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(View);

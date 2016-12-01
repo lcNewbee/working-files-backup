@@ -30,7 +30,7 @@ const tableOptions = fromJS([
     width: '160',
   }, {
     id: 'jumpSecurityEvents',
-    text: _('Jump Security Events'),
+    text: _('Jump to Security Events'),
     width: '160',
   },
 ]);
@@ -54,7 +54,7 @@ function getSafeTypeChartOtion(attackTypeMap) {
       x: 'left',
     },
     title: {
-      text: _('Cyber Attack Diagram'),
+      text: _('Attack Type Diagram'),
       x: 'center',
     },
     series: [
@@ -91,7 +91,7 @@ function getSafeTypeChartOtion(attackTypeMap) {
       })
       .toArray();
 
-  apOption.title.subtext = _('Attacks: ') + totalNum;
+  apOption.title.subtext = _('Attack Number: ') + totalNum;
 
   apOption.series[0].data = safeTypeList.toArray();
 
@@ -136,7 +136,7 @@ export default class SafeStatus extends React.Component {
 
     return (
       <div className="Stats">
-        <h2>{ _('Safe Status') }</h2>
+        <h2>{ _('Secure State') }</h2>
         <div className="stats-group clearfix" >
           <div className="stats-group-large" >
             <div className="stats-group-cell">

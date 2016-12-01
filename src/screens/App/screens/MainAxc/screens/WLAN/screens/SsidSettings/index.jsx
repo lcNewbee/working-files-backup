@@ -66,10 +66,10 @@ const storeForwardOption = [
     label: _('Local Forward'),
   }, {
     value: 'centralized-802.3',
-    label: _('Centralized Forward-%s Tunnel', '802.3'),
+    label: _('Centralized Forward-%s', '802.3'),
   }, {
     value: 'centralized-802.11',
-    label: _('Centralized Forward-%s Tunnel', '802.11'),
+    label: _('Centralized Forward-%s', '802.11'),
   },
 ];
 const flowRateFilter = utils.filter('flowRate:["KB/s"]');

@@ -248,7 +248,7 @@ export default class Main extends Component {
   }
   onRemoveGroup() {
     const manageSelected = this.props.product.getIn(['group', 'manageSelected']);
-    const msgText = _('Are you sure delete group: %s ?', manageSelected.get('groupname'));
+    const msgText = _('Are you sure to delete group: %s ?', manageSelected.get('groupname'));
 
     this.props.createModal({
       id: 'settings',
@@ -267,7 +267,7 @@ export default class Main extends Component {
     const selectedStr = $$selectMacList.join(', ');
     const groupid = this.props.product
       .getIn(['group', 'manageSelected', 'id']);
-    const msgText = _('Are you sure delete selected aps: %s ?', selectedStr);
+    const msgText = _('Are you sure to delete selected aps: %s ?', selectedStr);
 
     this.props.createModal({
       id: 'settings',

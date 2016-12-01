@@ -20,7 +20,7 @@ const ssidListOptions = fromJS([
   }, {
     id: 'apNumber',
     width: '140',
-    text: _('AP Numbers'),
+    text: _('AP Number'),
   }, {
     id: 'bandwidth',
     text: _('Up/Down Speed'),

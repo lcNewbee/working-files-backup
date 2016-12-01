@@ -85,7 +85,7 @@ export default class View extends React.Component {
     return (
       <AppScreen
         {...this.props}
-        listTitle={_('NAT List')}
+        listTitle={_('NAT Rules')}
         listKey="allKeys"
         settingsFormOptions={commonFormOptions}
         listOptions={listOptions}
