@@ -1,13 +1,9 @@
 import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import { Map, fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import AppScreen from 'shared/components/Template/AppScreen';
-import FormGroup from 'shared/components/Form/FormGroup';
-import MySelect from 'shared/components/Select/index';
-import SaveButton from 'shared/components/Button/SaveButton';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 
@@ -18,40 +14,72 @@ const defaultProps = {};
 
 const settingsOptions = fromJS([
   {
-    id: 'ipType',
-    label: _('IP Type'),
-    fileset: 'acTime',
+    id: 'service',
+    label: _('Service'),
+    fieldset: 'acTime',
     legend: _('AC Time Synchronization Setting'),
-    type: 'select',
-    options: [
-      {
-        value: 'ipv4',
-        label: _('IPv4'),
-      }, {
-        value: 'ipv6',
-        label: _('IPv6'),
-      },
-    ],
-    defaultValue: 'ipv6',
+    type: 'checkbox',
   },
   {
-    id: 'we',
+    id: 'server1',
+    fieldset: 'acTime',
+    label: _('Server1'),
+    type: 'text',
+  },
+  {
+    id: 'server2',
+    fieldset: 'acTime',
+    label: _('Server2'),
+    type: 'text',
+  },
+  {
+    id: 'server3',
+    fieldset: 'acTime',
+    label: _('Server3'),
+    type: 'text',
+  },
+  {
+    id: 'sTimeInterval',
+    fieldset: 'acTime',
+    label: _('Synchronization Time Interval'),
+    type: 'text',
+  },
+  {
+    id: 'service2',
+    label: _('Service'),
+    fieldset: 'apTime',
+    legend: _('AP Time Synchronization Setting'),
+    type: 'checkbox',
+  },
+  {
+    id: 'ipType',
     label: _('IP Type'),
-    fileset: 'acTime',
+    fieldset: 'apTime',
     type: 'select',
     options: [
       {
         value: 'ipv4',
-        disabled: true,
         label: _('IPv4'),
       }, {
         value: 'ipv6',
         label: _('IPv6'),
       },
     ],
-    defaultValue: 'ipv6',
+    defaultValue: 'ipv4',
   },
-]);
+  {
+    id: 'ipAddress',
+    label: _('Synchronization IP Address'),
+    type: 'text',
+  },
+  {
+    id: 'syTimeInterval',
+    label: _('Synchronization Time Interval'),
+    type: 'text',
+  },
+
+]).groupBy(item => item.get('fieldset'))
+.toList();
 
 
 export default class View extends React.Component {
@@ -60,13 +88,14 @@ export default class View extends React.Component {
       <AppScreen
         {...this.props}
         settingsFormOptions={settingsOptions}
+        hasSettingsSaveButton
         noTitle
       />
     );
   }
 }
 //  <div className="o-form">
-//           <fileset>
+//           <fieldset>
 //             <legend className="o-form__legend">{_('AC Time Synchronization Setting')}</legend>
 //             <FormGroup
 //               label={_('Service')}
@@ -90,9 +119,9 @@ export default class View extends React.Component {
 //                 type="text"
 //               />
 //             </FormGroup>
-//           </fileset>
+//           </fieldset>
 
-//           <fileset>
+//           <fieldset>
 //             <legend className="o-form__legend">{_('AP Time Synchronization Setting')}</legend>
 //             <FormGroup
 //               label={_('Service')}
@@ -112,7 +141,7 @@ export default class View extends React.Component {
 //               label={_('Synchronization Time Interval')}
 //               type="text"
 //             />
-//           </fileset>
+//           </fieldset>
 //         </div>
 //       </AppScreen>
 

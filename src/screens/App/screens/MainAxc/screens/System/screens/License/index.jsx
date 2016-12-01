@@ -46,18 +46,18 @@ export default class View extends React.Component {
                   <dt style={dtStyle}>{_('License Status')}</dt>
                   <dd>{_('Licensed')}</dd>
                 </dl>
-                <dl className="m-description-list-row">
+           {/*  <dl className="m-description-list-row">
                   <dt style={dtStyle}>{_('AP Number')}</dt>
                   <dd>1000</dd>
                 </dl>
                 <dl className="m-description-list-row">
                   <dt style={dtStyle}>{_('Expiration Date')}</dt>
                   <dd>2018-02-23</dd>
-                </dl>
+                </dl> */}
               </div>
             </div>
             <div className="cols col-6">
-              <FormGroup
+          {/* <FormGroup
                 type="textarea"
                 label={_('Softe Upgrade License')}
               />
@@ -70,7 +70,7 @@ export default class View extends React.Component {
                   <dt style={dtStyle}>{_('Expiration Date')}</dt>
                   <dd>2018-02-23</dd>
                 </dl>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="form-group form-group--save">

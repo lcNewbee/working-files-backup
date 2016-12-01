@@ -76,7 +76,7 @@ export default class View extends React.Component {
         noTitle
       >
         <div className="o-form">
-          <fileset>
+          <fieldset>
             <legend className="o-form__legend">{route.text}</legend>
             <FormGroup label={_('Reboot Device')}>
               <SaveButton
@@ -94,8 +94,8 @@ export default class View extends React.Component {
                 onClick={this.onBackup}
               />
             </FormGroup>
-          </fileset>
-          <fileset>
+          </fieldset>
+          <fieldset>
             <legend className="o-form__legend">{_('Restore Configuration')}</legend>
             <FormGroup
               label={_('Restore From File')}
@@ -114,7 +114,7 @@ export default class View extends React.Component {
                 onClick={this.onRestore}
               />
             </FormGroup>
-          </fileset>
+          </fieldset>
 
           <fileset>
             <legend className="o-form__legend">{_('Language')}</legend>
