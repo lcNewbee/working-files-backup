@@ -19,6 +19,11 @@
         "maxClients": "12",
 				"apMacEnable": "0",
         "isolation": "0",
+        "speedLimit": {
+					"enable": "0",
+					"upload": "111",
+					"download": "222"
+				},
 				"security":{
 					"mode":"wpa",
 					"cipher":"aes",
@@ -36,6 +41,11 @@
         "vlanId": "2",
         "isolation": "0",
         "maxClients": "12",
+        "speedLimit": {
+					"enable": "1",
+					"upload": "333",
+					"download": "444"
+				},
 				"security":{
 					"mode":"wpa",
 					"cipher":"aes",
@@ -60,6 +70,11 @@
         "maxClients": "12",
 				"isolation":"0",
 				"hideSsid": 0,
+        "speedLimit": {
+					"enable": "1",
+					"upload": "555",
+					"download": "666"
+				},
 				"security":{
 					"cipher":"aes",
 					"key":"12345678",
@@ -86,6 +101,11 @@
 				"peers":
 				["14:ff:00:a0:c1:ff",
 				 "14:ff:00:a0:c1:f0"],
+        "speedLimit": {
+					"enable": "0",
+					"upload": "777",
+					"download": "888"
+				},
 				"security":{
 					"mode":"wpa",
 					"cipher":"aes",

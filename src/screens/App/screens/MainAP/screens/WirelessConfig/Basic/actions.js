@@ -168,6 +168,13 @@ export function changeSsidTableOptions(data) {
   };
 }
 
+export function changeShowSpeedLimitModal(data) {
+  return {
+    type: 'CHANGE_SHOW_SPEED_LIMIT_MODAL',
+    data,
+  };
+}
+
 // export function changeAirTimeEnable(data) {
 //   return {
 //     type: 'CHANGE_AIR_TIME_ENABLE',

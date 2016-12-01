@@ -12,11 +12,13 @@ import * as appActions from 'shared/actions/app';
 import * as selfActions from './actions';
 import reducer from './reducer';
 
+let intervalAction;
 const flowRateFilter = utils.filter('flowRate');
 
 const propTypes = {
   selfState: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
+  app: PropTypes.instanceOf(Map),
   initSettings: PropTypes.func,
   fetchSettings: PropTypes.func,
   route: PropTypes.object,
@@ -125,16 +127,33 @@ export default class SsidDetails extends React.Component {
   constructor(props) {
     super(props);
     this.onChangeRadio = this.onChangeRadio.bind(this);
+    this.refreshData = this.refreshData.bind(this);
   }
 
   componentWillMount() {
+    clearInterval(intervalAction);
     this.props.initSettings({
       settingId: this.props.route.id,
       fetchUrl: this.props.route.fetchUrl,
       defaultData: {},
     });
-    this.props.fetchSettings();
-    this.onChangeRadio({ value: 0 });
+    this.refreshData();
+    this.onChangeRadio({ value: '0' });
+    setInterval(() => {
+      this.refreshData();
+    }, 10000);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.app.get('refreshAt') !== prevProps.app.get('refreshAt')) {
+      clearInterval(intervalAction);
+      this.refreshData();
+      intervalAction = setInterval(this.refreshData, 10000);
+    }
+  }
+
+  componentWillUnmount() {
+    clearInterval(intervalAction);
   }
 
   onChangeRadio(data) { // 注意参数实际是data的value属性，这里表示radio序号
@@ -144,6 +163,10 @@ export default class SsidDetails extends React.Component {
       radioType,
     });
     this.props.changeCurrRadioConfig(config);
+  }
+
+  refreshData() {
+    this.props.fetchSettings();
   }
 
   render() {
@@ -185,6 +208,9 @@ export default class SsidDetails extends React.Component {
                 value={this.props.selfState.getIn(['currRadioConfig', 'radioId'])}
                 onChange={(data) => {
                   this.onChangeRadio(data);
+                }}
+                style={{
+                  marginBottom: '15px',
                 }}
               />
             ) : null

@@ -245,7 +245,7 @@ export default class ACL extends React.Component {
       <div>
         {
           this.props.product.get('deviceRadioList').size > 1 ? (
-            <FormGroup
+            <FormInput
               type="switch"
               label={_('Radio Select')}
               value={this.props.selfState.getIn(['currRadioConfig', 'radioId'])}
@@ -254,6 +254,10 @@ export default class ACL extends React.Component {
               onChange={(data) => {
                 this.onChangeRadio(data);
                 this.switchToNewRadioPage(data.value);
+              }}
+              style={{
+                marginRight: '10px',
+                marginBottom: '15px',
               }}
             />
           ) : null
@@ -357,6 +361,9 @@ export default class ACL extends React.Component {
             value={this.props.macInput.get('macValue')}
             onChange={(data, e) => this.onMacInputChange(data.value, e)}
             {...this.props.validateOption.inputMac}
+            style={{
+              width: '387px',
+            }}
           />
           <Button
             className="fl"
@@ -364,10 +371,6 @@ export default class ACL extends React.Component {
             text={_('Add')}
             disabled={store.getIn(['curData', 'radioList', radioId, 'aclEnable']) === '0'}
             onClick={this.onAddMacToLocalList}
-            style={{
-              marginTop: '2px',
-              marginLeft: '20px',
-            }}
           />
         </div>
         <FormGroup>

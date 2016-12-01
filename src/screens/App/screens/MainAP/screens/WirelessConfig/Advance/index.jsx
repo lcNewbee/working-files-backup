@@ -51,16 +51,19 @@ const validOptions = Map({
     rules: 'num:[-98, -10]',
   }),
   validBeacon: validator({
-    rules: 'num:[1, 100]',
+    rules: 'num:[1, 3500]',
   }),
   validDtim: validator({
-    rules: 'num:[1, 100]',
+    rules: 'num:[1, 255]',
   }),
   validSegment: validator({
-    rules: 'num:[1, 100]',
+    rules: 'num:[256, 2347]',
   }),
   validAmpdu: validator({
-    rules: 'num:[1, 100]',
+    rules: 'num:[1, 64]',
+  }),
+  validRts: validator({
+    rules: 'num:[1, 2347]',
   }),
 });
 
@@ -94,7 +97,7 @@ export default class Advance extends React.Component {
     this.props.validateAll().then((msg) => {
       if (msg.isEmpty()) {
         const rssi = this.props.store.getIn(['curData', 'radioList', radioId, 'rssi']);
-        if (rssi < -98 || rssi > -40 || !Number.isInteger(Number(rssi))) {
+        if (rssi < -95 || rssi > -40 || !Number.isInteger(Number(rssi))) {
           this.props.createModal({
             role: 'alert',
             text: _('Please input a valid rssi value.'),
@@ -172,19 +175,23 @@ export default class Advance extends React.Component {
       multiMonitor, probeRqstForbid, timeFairness, beamforming, rateSet, rssiEnable,
       rssi, airTimeEnable, fairAlgthm,
     } = this.props.store.getIn(['curData', 'radioList', radioId]).toJS();
-    const { validLed1, validLed2, validLed3, validLed4, validSens, validBeacon, validDtim, validSegment, validAmpdu } = this.props.validateOption;
+    const { validLed1, validLed2, validLed3, validLed4, validSens, validBeacon, validDtim, validSegment, validAmpdu, validRts } = this.props.validateOption;
     const funConfig = this.props.route.funConfig;
     return (
       <div className="advanceWrap">
         {
           this.props.productInfo.get('deviceRadioList').size > 1 ? (
-            <FormGroup
+            <FormInput
               type="switch"
               label={_('Radio Select')}
               value={this.props.selfState.getIn(['currRadioConfig', 'radioId'])}
               options={this.props.productInfo.get('radioSelectOptions')}
               minWidth="100px"
               onChange={(data) => { this.onChangeRadio(data); }}
+              style={{
+                marginRight: '10px',
+                marginBottom: '15px',
+              }}
             />
           ) : null
         }
@@ -195,6 +202,8 @@ export default class Advance extends React.Component {
               type="number"
               label={_('Beacon Interval')}
               value={beaconInterval}
+              help={`${_('Range: ')}1 ~ 3500`}
+              style={{ width: '490px' }}
               onChange={(data) => { this.changeFormValue(radioId, 'beaconInterval', data.value); }}
               required
               {...validBeacon}
@@ -207,6 +216,8 @@ export default class Advance extends React.Component {
               type="number"
               label={_('DTIM Interval')}
               value={dtimInterval}
+              help={`${_('Range: ')}1 ~ 255`}
+              style={{ width: '490px' }}
               onChange={(data) => { this.changeFormValue(radioId, 'dtimInterval', data.value); }}
               required
               {...validDtim}
@@ -219,6 +230,8 @@ export default class Advance extends React.Component {
               type="number"
               label={_('Segment Threshold')}
               value={segmentThresh}
+              help={`${_('Range: ')}256 ~ 2347`}
+              style={{ width: '490px' }}
               onChange={(data) => { this.changeFormValue(radioId, 'segmentThresh', data.value); }}
               required
               {...validSegment}
@@ -231,8 +244,10 @@ export default class Advance extends React.Component {
               type="number"
               label={_('AMPDU')}
               value={ampdu}
+              help={`${_('Range: ')}1 ~ 64`}
               onChange={(data) => { this.changeFormValue(radioId, 'ampdu', data.value); }}
               required
+              style={{ width: '490px' }}
               {...validAmpdu}
             />
           ) : null
@@ -243,11 +258,12 @@ export default class Advance extends React.Component {
               className="fl"
               label={_('RTS Threshold')}
               type="number"
-              placeholder={_('Range: ')}
               disabled={rtsEnable === '0'}
               value={rts}
+              placeholder={`${_('Range: ')}1 ~ 2347`}
               onChange={(data) => { this.changeFormValue(radioId, 'rts', data.value); }}
               required
+              {...validRts}
             />
           </div>
           <span
@@ -280,7 +296,7 @@ export default class Advance extends React.Component {
               label={_('Sensitivity Threshold')}
               type="number"
               disabled={sensEnable === '0'}
-              placeholder={_('Range: -90 ~ -50')}
+              placeholder={`${_('Range: ')}-98 ~ -10`}
               value={sensThreshold}
               onChange={(data) => { this.changeFormValue(radioId, 'sensThreshold', data.value); }}
               required
@@ -345,7 +361,7 @@ export default class Advance extends React.Component {
                   this.changeFormValue(radioId, 'rssi', data.value);
                 }}
               />
-              <span>{_('  dbm Range: -98 ~ -40')}</span>
+              <span>{`  dbm ${_('Range: ')}-98 ~ -40`}</span>
             </div>
           ) : null
         }

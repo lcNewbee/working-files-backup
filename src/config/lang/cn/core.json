@@ -386,6 +386,9 @@
   "Client Isolation":"客户端隔离",
 
   "Range: ":"范围：",
+  "More Details": "更多详情",
+  "SSID Flow": "SSID流量统计",
+  "Top10 Flow Clients": "客户端流量前十",
   "Sensitivity Threshold":"灵敏度",
   "Threshold Value":"灵敏度阈值",
   "Signal LED Thresholds":"信号强度指示灯",
@@ -403,5 +406,10 @@
   "Please input a valid username.": "用户名错误。",
   "Must be numbers, letters or an underscore": "密码只能由数字、英文字母及下划线组成。",
   "Must be ASCII.": "密码必须由ASCII码组成。",
-  "Must be hex.": "密码必须由十六进制字符组成。"
+  "Must be hex.": "密码必须由十六进制字符组成。",
+  "Please input a valid IP address": "请输入正确的IP地址",
+  "Please input a valid subnet mask": "请输入正确的子网掩码",
+  "The second character must be even number.": "Mac地址第二个字符必须为偶数",
+  "Please input a valid MAC address": "请输入正确的MAC地址",
+  "IP address begin with 127 is a reserved loopback address, please input another value between 1 to 233": "以127开始的IP地址为保留环回地址，请输入开始数字在1-233范围内的IP地址"
 }

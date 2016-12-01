@@ -4,20 +4,21 @@ import { connect } from 'react-redux';
 import Table from 'shared/components/Table';
 import Button from 'shared/components/Button/Button';
 import Icon from 'shared/components/Icon';
-import FormGroup from 'shared/components/Form/FormGroup';
 import FormInput from 'shared/components/Form/FormInput';
-import { fromJS, Map, List } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import utils from 'shared/utils';
 import * as sharedActions from 'shared/actions/settings';
 import * as appActions from 'shared/actions/app';
 import * as selfActions from './actions';
 import reducer from './reducer';
 
+let intervalAction;
+let timeoutAction;
 const flowRateFilter = utils.filter('flowRate');
 
 const propTypes = {
   selfState: PropTypes.instanceOf(Map),
-  fetch: PropTypes.func,
+  app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
   initSettings: PropTypes.func,
   fetchSettings: PropTypes.func,
@@ -54,28 +55,38 @@ export default class ClientsDetails extends React.Component {
   constructor(props) {
     super(props);
     this.onChangeRadio = this.onChangeRadio.bind(this);
-    // this.addBlockStatus = this.addBlockStatus.bind(this);
     this.updateBlockStatus = this.updateBlockStatus.bind(this);
+    this.refreshData = this.refreshData.bind(this);
   }
 
   componentWillMount() {
+    clearInterval(intervalAction);
+    clearTimeout(timeoutAction);
     this.props.initSettings({
       settingId: this.props.route.id,
       fetchUrl: this.props.route.fetchUrl,
       defaultData: {},
     });
-    this.props.fetchSettings().then(() => {
-      this.onChangeRadio({ value: 0 });
+    Promise.resolve().then(() => {
+      this.onChangeRadio({ value: '0' });
     }).then(() => {
-      const radioNum = this.props.product.get('deviceRadioList').size;
-      for (let i = 0; i < radioNum; i++) {
-        const staList = this.props.store.getIn(['curData', 'radioList', i, 'staList'])
-                          .map(item => item.set('block', false));
-        const radioList = this.props.store.getIn(['curData', 'radioList']).setIn([i, 'staList'], staList);
-        this.props.updateItemSettings({ radioList });
-        // console.log('radioList', radioList.toJS());
-      }
+      this.refreshData();
     });
+    intervalAction = setInterval(() => { this.refreshData(); }, 10000);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.app.get('refreshAt') !== prevProps.app.get('refreshAt')) {
+      clearInterval(intervalAction);
+      clearTimeout(timeoutAction);
+      this.refreshData();
+      intervalAction = setInterval(this.refreshData, 10000);
+    }
+  }
+
+  componentWillUnmount() {
+    clearInterval(intervalAction);
+    clearTimeout(timeoutAction);
   }
 
   onChangeRadio(data) { // 注意参数实际是data的value属性，这里表示radio序号
@@ -87,6 +98,18 @@ export default class ClientsDetails extends React.Component {
     this.props.changeCurrRadioConfig(config);
   }
 
+  refreshData() {
+    this.props.fetchSettings().then(() => {
+      const radioNum = this.props.product.get('deviceRadioList').size;
+      for (let i = 0; i < radioNum; i++) {
+        const staList = this.props.store.getIn(['curData', 'radioList', i, 'staList'])
+                          .map(item => item.set('block', false));
+        const radioList = this.props.store.getIn(['curData', 'radioList']).setIn([i, 'staList'], staList);
+        this.props.updateItemSettings({ radioList });
+      }
+    });
+  }
+
   updateBlockStatus(item) {
     const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
     const staList = this.props.store.getIn(['curData', 'radioList', radioId, 'staList']);
@@ -96,13 +119,6 @@ export default class ClientsDetails extends React.Component {
                           .setIn([radioId, 'staList', index, 'block'], true);
     this.props.updateItemSettings({ radioList });
   }
-
-  // addBlockStatus(radioId) {
-  //   const staList = this.props.store.getIn(['curData', 'radioList', radioId, 'staList'])
-  //                       .map(item => item.set('block', false));
-  //   const radioList = this.props.store.getIn(['curData', 'radioList']).setIn([radioId, 'staList'], staList);
-  //   this.props.updateItemSettings({ radioList });
-  // }
 
   render() {
     const that = this;
@@ -251,9 +267,14 @@ export default class ClientsDetails extends React.Component {
                     radioId: that.props.selfState.getIn(['currRadioConfig', 'radioId']),
                     mac: item.get('mac'),
                   };
-                  that.props.fetch('goform/kick_user_offline', query).then((json) => {
+                  that.props.save('goform/kick_user_offline', query).then((json) => {
                     if (json.state && json.state.code === 2000) {
                       that.updateBlockStatus(item);
+                      clearInterval(intervalAction);
+                      clearTimeout(timeoutAction);
+                      timeoutAction = setTimeout(() => { // 停止10秒再刷新，留足时间让用户下线
+                        intervalAction = setInterval(that.refreshData, 10000);
+                      }, 10000);
                     }
                   });
                 }}
@@ -300,12 +321,9 @@ export default class ClientsDetails extends React.Component {
                 value={this.props.selfState.getIn(['currRadioConfig', 'radioId'])}
                 onChange={(data) => {
                   this.onChangeRadio(data);
-                  // Promise.resolve().then(() => {
-                  //   this.onChangeRadio(data);
-                  // }).then(() => {
-                  //   const id = this.props.selfState.getIn('currRadioConfig', 'radioId');
-                  //   this.addBlockStatus(id);
-                  // });
+                }}
+                style={{
+                  marginBottom: '15px',
                 }}
               />
             ) : null

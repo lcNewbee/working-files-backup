@@ -123,7 +123,7 @@ export default class Login extends Component {
                 <FormGroup
                   display="block"
                   name="username"
-                  maxLength="21"
+                  maxLength="32"
                   data-label={_('Username')}
                   placeholder={_('Username')}
                   value={this.getDataValue('username')}
@@ -138,7 +138,7 @@ export default class Login extends Component {
               type="password"
               name="password"
               display="block"
-              maxLength="21"
+              maxLength="32"
               data-label={_('Password')}
               placeholder={_('Password')}
               value={this.getDataValue('password')}

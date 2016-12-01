@@ -353,7 +353,7 @@ export const SignUp = React.createClass({
 
   render() {
     const btnInfoRole = 'info';
-    const { version, guiName } = this.props.app.toJS();
+    const { guiName } = this.props.app.toJS();
     const currMode = this.props.selfState.get('currMode');
     const nextMode = this.props.selfState.get('nextMode');
     const { discoveryType, enable, acIp } = this.props.selfState.get('modeData').toJS();
@@ -379,7 +379,6 @@ export const SignUp = React.createClass({
       <div>
         <Navbar
           title={guiName}
-          version={version}
         />
         <div className="t-wizard">
           <h2>{_('Quick Mode Change')}</h2>
@@ -408,7 +407,7 @@ export const SignUp = React.createClass({
                 style={radioWrapStyle}
               >
                 <FormGroup
-                  type="select"
+                  type="switch"
                   label={_('AP Mode')}
                   value={nextMode}
                   options={[
@@ -423,7 +422,7 @@ export const SignUp = React.createClass({
                 {
                   nextMode === '1' ? (
                     <FormGroup
-                      type="select"
+                      type="switch"
                       label={_('Discovery Type')}
                       value={discoveryType}
                       options={[

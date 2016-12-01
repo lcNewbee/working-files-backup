@@ -7,10 +7,10 @@ import FormGroup from 'shared/components/Form/FormGroup';
 import utils from 'shared/utils';
 import * as appActions from 'shared/actions/app';
 import * as settingsActions from 'shared/actions/settings';
+import moment from 'moment';
 import * as selfActions from './actions';
 import reducer from './reducer';
-import moment from 'moment';
-import { timezone } from './TimeZone.js';
+import { timezone } from './TimeZone';
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
@@ -32,7 +32,7 @@ function createTimezoneOption(zone) {
   for (const key of zone.keys()) {
     const option = {
       value: key,
-      label: key,
+      label: `${key} - ${zone.get(key)}`,
     };
     options.push(option);
   }
@@ -76,7 +76,46 @@ export default class TimeSettings extends Component {
     const timeZone = this.props.selfState.get('timeZone');
     const saveData = this.props.store.get('curData').set('timeZone', timeZone)
                       .delete('zoneName').toJS();
-    this.props.save('goform/set_ntp', saveData);
+    const ntpStrValid = saveData.ntpServer.match(/^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/);
+    const ntpIpValid = saveData.ntpServer.match(/^([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){2}([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])$/);
+    console.log(ntpStrValid, ntpIpValid);
+    // if (!ntpIpValid && ntpStrValid && ntpStrValid[0] === saveData.ntpServer) {
+    //   console.log('ntp valid');
+    //   this.props.save('goform/set_ntp', saveData);
+    // } else {
+    //   console.log('ntp not valid');
+    //   this.props.createModal({
+    //     role: 'alert',
+    //     text: _('Please input a valid ntp server!'),
+    //   });
+    // }
+    function validIp(str) {
+      const ipArr = str.split('.');
+      const ipHead = ipArr[0];
+      if (ipArr[0] === '127') {
+        return _('IP address begin with 127 is a reserved loopback address, please input another value between 1 to 233');
+      }
+      if (ipArr[0] > 223) {
+        return `${_('Address begin with ')}${_('%s', ipHead)}${_(' is invalid, please input a value between 1 to 223.')}`;
+      }
+      return '';
+    }
+    let msg = '';
+    if (!ntpIpValid && !ntpStrValid) {
+      msg = _('Please input a valid ntp server!');
+    } else if (ntpIpValid && ntpIpValid[0] === saveData.ntpServer) {
+      msg = validIp(saveData.ntpServer);
+    } else if (ntpStrValid && ntpStrValid[0] !== saveData.ntpServer) {
+      msg = _('Please input a valid ntp server!');
+    }
+    if (msg === '') {
+      this.props.save('goform/set_ntp', saveData);
+    } else {
+      this.props.createModal({
+        role: 'alert',
+        text: msg,
+      });
+    }
   }
 
   firstInAndRefresh() {

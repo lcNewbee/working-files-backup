@@ -1094,7 +1094,7 @@ export default class Basic extends React.Component {
                   basicSettings.getIn(['vapList', '0', 'security', 'mode']) === 'wep') ? null : (
                     <div>
                       <FormGroup
-                        label={_('Algorithm')}
+                        label={_('Encryption')}
                         minWidth="66px"
                         type="switch"
                         value={basicSettings.getIn(['vapList', '0', 'security', 'cipher'])}
@@ -1174,7 +1174,7 @@ export default class Basic extends React.Component {
                         }}
                       />
                       <FormGroup
-                        label={_('Key Type')}
+                        label={_('Key Format')}
                         type="select"
                         options={keyTypeOptions}
                         value={basicSettings.getIn(['vapList', '0', 'security', 'keyType'])}
@@ -1590,7 +1590,7 @@ export default class Basic extends React.Component {
               tableItemForSsid.getIn(['item', 'security', 'mode']) === 'wep') ? null : (
                 <div>
                   <FormGroup
-                    label={_('Algorithm')}
+                    label={_('Encryption')}
                     minWidth="66px"
                     type="switch"
                     value={tableItemForSsid.getIn(['item', 'security', 'cipher'])}
@@ -1667,7 +1667,7 @@ export default class Basic extends React.Component {
                   }}
                 />
                 <FormGroup
-                  label={_('Key Type')}
+                  label={_('Key Format')}
                   type="select"
                   options={keyTypeOptions}
                   value={tableItemForSsid.getIn(['item', 'security', 'keyType'])}

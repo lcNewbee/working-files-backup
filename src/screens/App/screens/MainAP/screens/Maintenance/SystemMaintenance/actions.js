@@ -32,3 +32,10 @@ export function resetSelfState() {
   };
 }
 
+export function changePoeOut(data) {
+  return {
+    type: 'CHANGE_POE_OUT',
+    data,
+  };
+}
+

@@ -25,7 +25,7 @@ window.guiConfig = guiConfig;
 const App = require('../../screens/App');
 const pMainAP = require('../../screens/App/screens/MainAP');
 const sWizard = require('../../screens/App/screens/MainAP/Wizard');
-const sThinModeNotice = require('../../screens/App/screens/MainAP/ThinModeNotice');
+// const sThinModeNotice = require('../../screens/App/screens/MainAP/ThinModeNotice');
 // 登录界面
 const pLogin = require('../../screens/App/screens/Login');
 // 布局
@@ -39,7 +39,7 @@ const pSystemStatus = require('../../screens/App/screens/MainAP/screens/SystemSt
 const sSsidDetails = require('../../screens/App/screens/MainAP/screens/SystemStatus/SsidDetails');
 const sClientsDetails = require('../../screens/App/screens/MainAP/screens/SystemStatus/ClientsDetails');
 // 快速设置
-const pQuickSetup = require('../../screens/App/screens/MainAP/screens/QuickSetup/AIP5QuickSetup');
+const pQuickSetup = require('../../screens/App/screens/MainAP/screens/QuickSetup/AIP10QuickSetup');
 
 // 无线设置
 const pWirelessConfig = require('../../screens/App/screens/MainAP/screens/WirelessConfig');
@@ -73,9 +73,10 @@ const funConfig = {
       { value: 'sta', label: _('Station') },
       { value: 'repeater', label: _('Repeater') },
     ],
+    // 功能项参见WirelessConfig -> Basic页面下的ssidTableFullMemberOptions变量
     ssidTableKeys: [
       'enable', 'ssid', 'vlanId', 'hideSsid', 'isolation', 'security', 'delete', 'maxClients',
-      'airTimeEnable',
+      'airTimeEnable', 'speedLimit',
     ],
   },
   advance: {
@@ -87,6 +88,9 @@ const funConfig = {
     rateSetFun: true, // 速率集
     rssiLimitFun: true, // rssi限制
     airTimeFairnessFun: true, // 时间公平性
+  },
+  systemmaintenance: {
+    poeOutFun: false,
   },
 };
 
@@ -104,7 +108,7 @@ const routes = [{
       id: 'systemstatus',
       path: '/main/status',
       icon: 'pie-chart',
-      text: _('Device Status'),
+      text: _('Status'),
       noTree: true,
       indexRoute: {
         onEnter: (nextState, replace) => replace('/main/status/overview'),
@@ -193,7 +197,7 @@ const routes = [{
       id: 'pMaintenance',
       path: '/main/maintenance',
       icon: 'wrench',
-      text: _('Maintenance'),
+      text: _('System'),
       noNav: false,
       component: pMaintenance,
       indexRoute: {
@@ -206,6 +210,7 @@ const routes = [{
           path: '/main/maintenance/systemmaintenance',
           text: _('System Maintenance'),
           component: sSystemMaintenance.Screen,
+          funConfig: funConfig.systemmaintenance,
         }, {
           id: 'accountsettings',
           path: '/main/maintenance/accountsettings',
@@ -256,7 +261,7 @@ const routes = [{
     }, {
       id: 'modesettings',
       path: '/main/modesettings',
-      text: _('Mode Settings'),
+      text: _('Mode'),
       icon: 'exchange',
       component: pModeSettings,
       indexRoute: { onEnter: (nextState, replace) => replace('/main/modesettings/modesettings') },
@@ -273,9 +278,6 @@ const routes = [{
   }, {
     path: '/wizard',
     component: sWizard.Screen,
-  }, {
-    path: '/thinModeNotice',
-    component: sThinModeNotice.Screen,
   }],
 }, {
   path: '*',

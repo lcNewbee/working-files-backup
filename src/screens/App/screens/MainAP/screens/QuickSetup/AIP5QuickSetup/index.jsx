@@ -691,7 +691,7 @@ export default class QuickSetup extends React.Component {
                 /wpa/.test(store.getIn(['curData', 'radioList', radioId, 'security', 'mode'])) ? (
                   <div>
                     <FormGroup
-                      label={_('Algorithm')}
+                      label={_('Encryption')}
                       minWidth="66px"
                       type="switch"
                       value={store.getIn(['curData', 'radioList', radioId, 'security', 'cipher'])}
@@ -758,7 +758,7 @@ export default class QuickSetup extends React.Component {
                         />
                       */}
                       <FormGroup
-                        label={_('Key Type')}
+                        label={_('Key Format')}
                         type="switch"
                         options={keyTypeOptions}
                         value={store.getIn(['curData', 'radioList', radioId, 'security', 'keyType'])}
@@ -990,7 +990,7 @@ export default class QuickSetup extends React.Component {
                 /wpa/.test(store.getIn(['curData', 'radioList', radioId, 'security', 'mode'])) ? (
                   <div>
                     <FormGroup
-                      label={_('Algorithm')}
+                      label={_('Encryption')}
                       minWidth="66px"
                       type="switch"
                       value={store.getIn(['curData', 'radioList', radioId, 'security', 'cipher'])}
@@ -1057,7 +1057,7 @@ export default class QuickSetup extends React.Component {
                       />
                     */}
                     <FormGroup
-                      label={_('Key Type')}
+                      label={_('Key Format')}
                       type="switch"
                       options={keyTypeOptions}
                       value={store.getIn(['curData', 'radioList', radioId, 'security', 'keyType'])}
@@ -1322,7 +1322,7 @@ export default class QuickSetup extends React.Component {
                     */}
 
                     <FormGroup
-                      label={_('Key Type')}
+                      label={_('Key Format')}
                       type="switch"
                       options={keyTypeOptions}
                       value={keyType}

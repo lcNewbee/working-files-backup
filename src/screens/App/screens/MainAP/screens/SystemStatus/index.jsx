@@ -233,107 +233,107 @@ function changeUptimeToReadable(time) {
   return timeStr;
 }
 
-function getCpuOption(serverData) {
-  const ret = {
-    tooltip: {
-      trigger: 'item',
-      formatter: '{a} <br/>{b}: {d}%',
-    },
-    legend: {
-      orient: 'vertical',
-      x: 'left',
-      data: [_('Used'), _('Free')],
-    },
-    title: {
-      text: _('CPU Usage'),
-      x: 'center',
-    },
-    series: [
-      {
-        name: _('CPU Usage'),
-        type: 'pie',
-        radius: ['40%', '70%'],
-        avoidLabelOverlap: false,
-        label: {
-          normal: {
-            show: false,
-            position: 'center',
-          },
-          emphasis: {
-            show: true,
-            textStyle: {
-              fontSize: '20',
-              fontWeight: 'bold',
-            },
-          },
-        },
-        labelLine: {
-          normal: {
-            show: false,
-          },
-        },
+// function getCpuOption(serverData) {
+//   const ret = {
+//     tooltip: {
+//       trigger: 'item',
+//       formatter: '{a} <br/>{b}: {d}%',
+//     },
+//     legend: {
+//       orient: 'vertical',
+//       x: 'left',
+//       data: [_('Used'), _('Free')],
+//     },
+//     title: {
+//       text: _('CPU Usage'),
+//       x: 'center',
+//     },
+//     series: [
+//       {
+//         name: _('CPU Usage'),
+//         type: 'pie',
+//         radius: ['40%', '70%'],
+//         avoidLabelOverlap: false,
+//         label: {
+//           normal: {
+//             show: false,
+//             position: 'center',
+//           },
+//           emphasis: {
+//             show: true,
+//             textStyle: {
+//               fontSize: '20',
+//               fontWeight: 'bold',
+//             },
+//           },
+//         },
+//         labelLine: {
+//           normal: {
+//             show: false,
+//           },
+//         },
 
-      },
-    ],
-  };
+//       },
+//     ],
+//   };
 
-  ret.series[0].data = [
-    { value: serverData.get('cpuInfo'), name: _('Used') },
-    { value: serverData.get('cpuTotal') - serverData.get('cpuInfo'), name: _('Free') },
-  ];
+//   ret.series[0].data = [
+//     { value: serverData.get('cpuInfo'), name: _('Used') },
+//     { value: serverData.get('cpuTotal') - serverData.get('cpuInfo'), name: _('Free') },
+//   ];
 
-  return ret;
-}
-function getMemoryOption(serverData) {
-  const ret = {
-    tooltip: {
-      trigger: 'item',
-      formatter: '{a} <br/>{b}: {c}KB ({d}%)',
-    },
-    title: {
-      text: _('Memory Usage'),
-      x: 'center',
-    },
-    legend: {
-      orient: 'vertical',
-      x: 'left',
-      data: [_('Used'), _('Free')],
-    },
-    series: [
-      {
-        name: _('Memory Usage'),
-        type: 'pie',
-        radius: ['40%', '70%'],
-        avoidLabelOverlap: false,
-        label: {
-          normal: {
-            show: false,
-            position: 'center',
-          },
-          emphasis: {
-            show: true,
-            textStyle: {
-              fontSize: '20',
-              fontWeight: 'bold',
-            },
-          },
-        },
-        labelLine: {
-          normal: {
-            show: false,
-          },
-        },
-      },
-    ],
-  };
+//   return ret;
+// }
+// function getMemoryOption(serverData) {
+//   const ret = {
+//     tooltip: {
+//       trigger: 'item',
+//       formatter: '{a} <br/>{b}: {c}KB ({d}%)',
+//     },
+//     title: {
+//       text: _('Memory Usage'),
+//       x: 'center',
+//     },
+//     legend: {
+//       orient: 'vertical',
+//       x: 'left',
+//       data: [_('Used'), _('Free')],
+//     },
+//     series: [
+//       {
+//         name: _('Memory Usage'),
+//         type: 'pie',
+//         radius: ['40%', '70%'],
+//         avoidLabelOverlap: false,
+//         label: {
+//           normal: {
+//             show: false,
+//             position: 'center',
+//           },
+//           emphasis: {
+//             show: true,
+//             textStyle: {
+//               fontSize: '20',
+//               fontWeight: 'bold',
+//             },
+//           },
+//         },
+//         labelLine: {
+//           normal: {
+//             show: false,
+//           },
+//         },
+//       },
+//     ],
+//   };
 
-  ret.series[0].data = [
-    { value: serverData.get('memTotal') - serverData.get('memFree'), name: _('Used') },
-    { value: serverData.get('memFree'), name: _('Free') },
-  ];
+//   ret.series[0].data = [
+//     { value: serverData.get('memTotal') - serverData.get('memFree'), name: _('Used') },
+//     { value: serverData.get('memFree'), name: _('Free') },
+//   ];
 
-  return ret;
-}
+//   return ret;
+// }
 function getFlowPerSsidOption(serverData) {
   let dataList = serverData.get('flowPerSsid');
   let totalNum = 0;
@@ -346,7 +346,7 @@ function getFlowPerSsidOption(serverData) {
       formatter: '{a} <br/>{b} ({d}%)',
     },
     title: {
-      text: _('Total: ') + totalNum,
+      text: _('Total: ') + flowRateFilter.transform(totalNum),
       x: 'center',
       textStyle: {
         fontSize: '18',
@@ -443,13 +443,23 @@ function getTopTenFlowClientsOption(serverData) {
   };
 
   if (List.isList(dataList)) {
-    dataList = dataList.map(item => item.set('name', `${item.get('name')}: ${flowRateFilter.transform(item.get('value'))}`)
-                                        .set('value', `${Number(item.get('value'))}`));
+    dataList = dataList.map((item) => {
+      let name;
+      const userName = item.get('name');
+      if (!userName || userName === '') {
+        name = item.get('mac');  // 如果没有name，则使用mac代替
+      } else if (userName.length >= 16) {
+        name = `${userName.substr(0, 13)}...`; // 如果名称太长则后面显示省略号
+      } else if (userName.length < 16) {
+        name = userName; // 有名称，且长度合法
+      }
+      return item.set('name', `${name}: ${flowRateFilter.transform(item.get('value'))}`)
+                .set('value', `${Number(item.get('value'))}`)
+                .delete('mac'); // 删除数据中的mac变量
+    });
     ret.legend.data = dataList.map(item => `${item.get('name')}`).toJS();
-    // console.log('rat.legend.data2', ret.legend.data, dataList);
     ret.series[0].data = dataList.toJS();
   }
-
   return ret;
 }
 
@@ -476,7 +486,7 @@ export default class SystemStatus extends React.Component {
       // const customSetings = this.props.selfState.get('customSettingsForChart').toJS();
       this.prepareChartData();
     });
-    this.onChangeRadio({ value: 0 });
+    this.onChangeRadio({ value: '0' });
     a = setInterval(() => {
       this.props.fetchSettings().then(() => {
         this.prepareChartData();
@@ -497,7 +507,7 @@ export default class SystemStatus extends React.Component {
       // console.log('refresh');
       clearInterval(a);
       this.props.fetchSettings();
-      this.onChangeRadio({ value: 0 });
+      this.onChangeRadio({ value: '0' });
       a = setInterval(this.props.fetchSettings, 10000);
     }
   }
@@ -564,11 +574,13 @@ export default class SystemStatus extends React.Component {
         top10FlowClients = sortedStaList.map(item => fromJS({
           name: item.get('deviceName'),
           value: Number(item.get('txBytes')),
+          mac: item.get('mac'), // 如果客户端没有名称，则使用mac代替
         }));
       } else if (customSetings.top10ClientFlowDir === 'download') {
         top10FlowClients = sortedStaList.map(item => fromJS({
           name: item.get('deviceName'),
           value: Number(item.get('rxBytes')),
+          mac: item.get('mac'),
         }));
       }
       // console.log('top10FlowClients', top10FlowClients);
@@ -767,16 +779,17 @@ export default class SystemStatus extends React.Component {
       wirelessMode, security, frequency, channelWidth, channel, protocol, ssid,
       distance, txPower, noise, chutil, staList, peerList, vapList, signal,
     } = this.props.store.getIn(['curData', 'radioList', radioId]).toJS();
-    const vapInterfacesList = (wirelessMode === 'sta') ? [vapList[0]] : vapList;
+    const { memFree, memTotal, cpuInfo } = this.props.selfState.get('serverData').toJS();
+    // const vapInterfacesList = (wirelessMode === 'sta') ? [vapList[0]] : vapList;
     // 绘图
     const serverData = this.props.selfState.get('serverData');
-    const memoryStatusOption = getMemoryOption(serverData);
-    const cpuStatusOption = getCpuOption(serverData);
+    // const memoryStatusOption = getMemoryOption(serverData);
+    // const cpuStatusOption = getCpuOption(serverData);
     const topTenFlowClients = getTopTenFlowClientsOption(serverData);
     const flowPerSsid = getFlowPerSsidOption(serverData);
 
     return (
-      <div>
+      <div className="o-box">
         {
           this.props.product.get('deviceRadioList').size > 1 ? (
             <FormInput
@@ -798,45 +811,45 @@ export default class SystemStatus extends React.Component {
             />
           ) : null
         }
-        { // <h3 className="t-main__content-title">{_('System Status') }</h3>
-        }
 
-        <div className="o-box row">
-          <div className="cols col-6" >
-            <div className="o-box__cell">
-              <h3>{ _('Memory') }</h3>
+        {/* // CPU 和 Memory的两幅图片
+          <div className="o-box row">
+            <div className="cols col-6" >
+              <div className="o-box__cell">
+                <h3>{ _('Memory') }</h3>
+              </div>
+              <div className="o-box__cell">
+                <EchartReact
+                  option={memoryStatusOption}
+                  className="o-box__canvas"
+                  style={{
+                    width: '100%',
+                    minHeight: '200px',
+                  }}
+                />
+              </div>
             </div>
-            <div className="o-box__cell">
-              <EchartReact
-                option={memoryStatusOption}
-                className="o-box__canvas"
-                style={{
-                  width: '100%',
-                  minHeight: '200px',
-                }}
-              />
+            <div className="cols col-6">
+              <div className="o-box__cell">
+                <h3>{ _('CPU') }</h3>
+              </div>
+              <div className="o-box__cell">
+                <EchartReact
+                  option={cpuStatusOption}
+                  className="o-box__canvas"
+                  style={{
+                    width: '100%',
+                    minHeight: '200px',
+                  }}
+                />
+              </div>
             </div>
           </div>
-          <div className="cols col-6">
-            <div className="o-box__cell">
-              <h3>{ _('CPU') }</h3>
-            </div>
-            <div className="o-box__cell">
-              <EchartReact
-                option={cpuStatusOption}
-                className="o-box__canvas"
-                style={{
-                  width: '100%',
-                  minHeight: '200px',
-                }}
-              />
-            </div>
-          </div>
-        </div>
+        */}
 
-        {
+        { // SSID流量图 和 客户端流量前十
           wirelessMode === 'sta' ? null : (
-            <div className="o-box row">
+            <div className="row">
               <div className="cols col-6" >
                 <div className="o-box__cell clearfix">
                   <h3
@@ -851,8 +864,8 @@ export default class SystemStatus extends React.Component {
                   <FormInput
                     type="select"
                     options={[
-                      { label: 'Upload', value: 'upload' },
-                      { label: 'Download', value: 'download' },
+                      { label: _('Upload'), value: 'upload' },
+                      { label: _('Download'), value: 'download' },
                     ]}
                     value={this.props.selfState.getIn(['customSettingsForChart', 'ssidFlowDir'])}
                     onChange={(data) => {
@@ -868,6 +881,8 @@ export default class SystemStatus extends React.Component {
                     className="fr"
                     style={{
                       paddingTop: '5px',
+                      color: 'blue',
+                      // textDecoration: 'underline',
                     }}
                   >
                     {_('More Details')}
@@ -898,8 +913,8 @@ export default class SystemStatus extends React.Component {
                   <FormInput
                     type="select"
                     options={[
-                      { label: 'Upload', value: 'upload' },
-                      { label: 'Download', value: 'download' },
+                      { label: _('Upload'), value: 'upload' },
+                      { label: _('Download'), value: 'download' },
                     ]}
                     value={this.props.selfState.getIn(['customSettingsForChart', 'top10ClientFlowDir'])}
                     onChange={(data) => {
@@ -915,6 +930,7 @@ export default class SystemStatus extends React.Component {
                     className="fr"
                     style={{
                       paddingTop: '5px',
+                      color: 'blue',
                     }}
                   >
                     {_('More Details')}
@@ -922,125 +938,123 @@ export default class SystemStatus extends React.Component {
                 </div>
                 <div className="o-box__cell row">
                   {
-                  // <div
-                  //   className="cols col-4"
-                  //   style={{
-                  //     paddingRight: '6px',
-                  //   }}
-                  // >
-                  //     <h3
-                  //     style={{
-                  //       fontSize: '18px',
-                  //       lineHeight: '30px',
-                  //       textAlign: 'center',
-                  //       fontWeight: '400',
-                  //     }}
-                  //   >{_('Online Number')}</h3>
-
-                  //   <p
-                  //     style={{
-                  //       fontSize: '30px',
-                  //       marginTop: '10px',
-                  //       padding: '56px 0',
-                  //       textAlign: 'center',
-                  //       color: 'green',
-                  //       border: '1px solid #e5e5e5',
-                  //     }}
-                  //   >
-                  //     {serverData.get('clientsNumber') || 0}
-                  //   </p>
-                  // </div>
+                    this.props.selfState.getIn(['serverData', 'top10FlowClients']).size === 0 ? (
+                      <div
+                        style={{
+                          height: '260px',
+                          lineHeight: '260px',
+                          textAlign: 'center',
+                          fontSize: '20px',
+                          fontWeight: 'bold',
+                        }}
+                      >{_('No Client')}</div>
+                    ) : (
+                      <EchartReact
+                        option={topTenFlowClients}
+                        className="o-box__canvas cols col-12"
+                        style={{
+                          minHeight: '260px',
+                        }}
+                      />
+                    )
                   }
-                  <EchartReact
-                    option={topTenFlowClients}
-                    className="o-box__canvas cols col-12"
-                    style={{
-                      minHeight: '260px',
-                    }}
-                  />
                 </div>
               </div>
             </div>
           )
         }
 
-        <div className="stats-group">
-          <div className="stats-group-cell">
-            <h3>{_('System Status')}</h3>
-          </div>
-          <div className="stats-group-cell">
-            <div className="row">
-              <div className="cols col-5">
-                <FormGroup
-                  type="plain-text"
-                  label={_('Device Model :')}
-                  value={deviceModel}
-                />
-                <FormGroup
-                  label={_('Network Mode :')}
-                  type="plain-text"
-                  value={networkMode}
-                />
-                <FormGroup
-                  label={_('System Uptime :')}
-                  id="uptime"
-                  type="plain-text"
-                  value={changeUptimeToReadable(uptime)}
-                />
-                <FormGroup
-                  label={_('WLAN0 MAC :')}
-                  type="plain-text"
-                  value={wlan0Mac}
-                />
-                <FormGroup
-                  label={_('LAN1 MAC :')}
-                  type="plain-text"
-                  value={lan1Mac}
-                />
-
-              </div>
-              <div className="cols col-6">
-                <FormGroup
-                  label={_('Device Name :')}
-                  type="plain-text"
-                  value={deviceName}
-                />
-                <FormGroup
-                  label={_('Firmware Version :')}
-                  type="plain-text"
-                  value={version}
-                />
-                <FormGroup
-                  label={_('System Time :')}
-                  id="systemtime"
-                  type="plain-text"
-                  value={systemTime}
-                />
-                <FormGroup
-                  label={_('LAN0 MAC :')}
-                  type="plain-text"
-                  value={lan0Mac}
-                />
-                {
-                  wirelessMode !== 'sta' ? (
-                    <FormGroup
-                      label={_('Client Number :')}
-                      id="userNumber"
-                      type="plain-text"
-                      value={staList.length}
-                    />
-                  ) : null
-                }
+        <div className="row">
+          <div className="cols col-6">
+            <div className="o-box__cell">
+              <h3>{_('System Status')}</h3>
+            </div>
+            <div className="o-box__cell">
+              <div
+                style={{
+                  marginLeft: '-15px',
+                }}
+              >
+                <div className="cols col-6">
+                  <FormGroup
+                    type="plain-text"
+                    label={_('Device Model :')}
+                    value={deviceModel}
+                  />
+                  <FormGroup
+                    label={_('Network Mode :')}
+                    type="plain-text"
+                    value={networkMode}
+                  />
+                  <FormGroup
+                    label={_('System Uptime :')}
+                    id="uptime"
+                    type="plain-text"
+                    value={changeUptimeToReadable(uptime)}
+                  />
+                  <FormGroup
+                    label={_('WLAN0 MAC :')}
+                    type="plain-text"
+                    value={wlan0Mac}
+                  />
+                  <FormGroup
+                    label={_('LAN2 MAC :')}
+                    type="plain-text"
+                    value={lan1Mac}
+                  />
+                  <FormGroup
+                    label={_('Memory Used :')}
+                    type="plain-text"
+                    value={`${((memTotal - memFree) / memTotal) * 100}%`}
+                  />
+                </div>
+                <div className="cols col-6">
+                  <FormGroup
+                    label={_('Device Name :')}
+                    type="plain-text"
+                    value={deviceName}
+                  />
+                  <FormGroup
+                    label={_('Firmware Version :')}
+                    type="plain-text"
+                    value={version}
+                  />
+                  <FormGroup
+                    label={_('System Time :')}
+                    id="systemtime"
+                    type="plain-text"
+                    value={systemTime}
+                  />
+                  <FormGroup
+                    label={_('LAN1 MAC :')}
+                    type="plain-text"
+                    value={lan0Mac}
+                  />
+                  {
+                    wirelessMode !== 'sta' ? (
+                      <FormGroup
+                        label={_('Client Number :')}
+                        id="userNumber"
+                        type="plain-text"
+                        value={staList.length}
+                      />
+                    ) : null
+                  }
+                  <FormGroup
+                    label={_('CPU Used :')}
+                    type="plain-text"
+                    value={`${cpuInfo}%`}
+                  />
+                </div>
               </div>
             </div>
           </div>
-
-          <div className="stats-group-cell">
-            <h3>{_('Radio')}</h3>
-          </div>
-          <div className="stats-group-cell">
-            <div className="row">
-              <div className="cols col-5">
+          <div className="cols col-6">
+            <div className="o-box__cell">
+              <h3>{_('Radio')}</h3>
+            </div>
+            <div className="o-box__cell">
+              <div className="cols col-6">
                 <FormGroup
                   label={_('Wireless Model :')}
                   type="plain-text"
@@ -1105,55 +1119,37 @@ export default class SystemStatus extends React.Component {
               </div>
             </div>
           </div>
+        </div>
 
-          <h3 className="stats-group-cell">{_('Wired Interfaces')}</h3>
-          <div className="stats-group-cell">
+        <div>
+          <div className="o-box__cell">
+            <h3>{_('Wired Interfaces')}</h3>
+          </div>
+          <div className="o-box__cell">
             <Table
               className="table"
               options={interfaceOptions}
               list={interfaces}
             />
           </div>
-          {
-            // <h3 className="stats-group-cell">{_('Wireless Interfaces')}</h3>
-            // <div className="stats-group-cell">
-            //   <Table
-            //     className="table"
-            //     options={vapInterfaceOptions}
-            //     list={vapInterfacesList}
-            //   />
-            // </div>
-          }
-          {
-            // wirelessMode === 'ap' || wirelessMode === 'repeater' ? (
-            //   <div className="clientListTable">
-            //     <h3 className="stats-group-cell">{_('Clients')}</h3>
-            //     <div className="stats-group-cell">
-            //       <Table
-            //         className="table"
-            //         options={clientOptions}
-            //         list={staList}
-            //       />
-            //     </div>
-            //   </div>
-            // ) : null
-          }
-          {
-            wirelessMode === 'sta' ? (
-              <div className="remoteApTable">
-                <h3 className="stats-group-cell">{_('Connection Info')}</h3>
-                <div className="stats-group-cell">
-                  <Table
-                    className="table"
-                    options={connectionInfoOption}
-                    list={peerList}
-                  />
-                </div>
-              </div>
-            ) : null
-          }
         </div>
 
+        {
+          wirelessMode === 'sta' ? (
+            <div className="remoteApTable o-box">
+              <div className="o-box__cell">
+                <h3>{_('Connection Info')}</h3>
+              </div>
+              <div className="o-box__cell">
+                <Table
+                  className="table"
+                  options={connectionInfoOption}
+                  list={peerList}
+                />
+              </div>
+            </div>
+          ) : null
+        }
 
         {
           this.props.app.get('fetching') && this.props.selfState.get('firstRefresh') ? (
@@ -1170,7 +1166,6 @@ export default class SystemStatus extends React.Component {
             </div>
           ) : null
         }
-
       </div>
     );
   }

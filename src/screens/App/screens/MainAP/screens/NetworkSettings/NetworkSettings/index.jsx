@@ -108,6 +108,11 @@ export default class NetworkSettings extends React.Component {
       showError(msg);
       return;
     }
+    msg = validator.combineValid.noBroadcastIp(gateway, mask);
+    if (proto === 'static' && msg) {
+      showError(_('Gateway can not be broadcast IP address!'));
+      return;
+    }
     msg = validator.combineValid.staticIP(ip, mask, gateway);
     if (proto === 'static' && gateway !== '' && msg) {
       showError(msg);
@@ -190,8 +195,9 @@ export default class NetworkSettings extends React.Component {
       proto, fallbackIp, ip, mask, gateway, dns1, dns2,
       mngVlanId, utgVlanId, fallbackMask, vlanEnable,
     } = this.props.store.get('curData').toJS();
-    const { lanIp, lanMask, firstDNS, secondDNS,
-            validGateway, validVlanId1, validVlanId2 } = this.props.validateOption;
+    const {
+      lanIp, lanMask, firstDNS, secondDNS, validGateway, validVlanId1, validVlanId2,
+    } = this.props.validateOption;
     return (
       <div>
         <h3>{_('Lan IP Settings')}</h3>

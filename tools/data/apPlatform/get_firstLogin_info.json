@@ -7,6 +7,6 @@
     "ifFirstLogin": "0",
     "enable": "0",
     "discoveryType": "static",
-    "acIp": ""
+    "acIp": "192.168.0.1"
   }
 }

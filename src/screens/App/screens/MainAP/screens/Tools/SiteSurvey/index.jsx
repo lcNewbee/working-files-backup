@@ -119,11 +119,16 @@ export default class SiteSurvey extends React.Component {
           type="plain-text"
           value={_('Notice: Site survey scan may temporary disable wireless link(s)')}
         /> <br /><br />
-        <div className="clearfix">
+        <div
+          className="clearfix"
+          style={{
+            marginBottom: '15px',
+          }}
+        >
           <div className="fl">
             {
               this.props.product.get('deviceRadioList').size > 1 ? (
-                <FormGroup
+                <FormInput
                   type="select"
                   label={_('Radio Select')}
                   minWidth="100px"
@@ -132,7 +137,6 @@ export default class SiteSurvey extends React.Component {
                   onChange={(data) => {
                     this.onChangeRadio(data);
                   }}
-                  style={{ marginRight: '10px' }}
                 />
               ) : null
             }
@@ -144,6 +148,9 @@ export default class SiteSurvey extends React.Component {
               disabled={this.props.app.get('fetching')}
               text={_('Scan')}
               onClick={this.onScanBtnClick}
+              style={{
+                marginLeft: '10px',
+              }}
             />
           </div>
         </div>

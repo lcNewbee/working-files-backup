@@ -10,6 +10,7 @@ const defaultState = fromJS({
   showScanResult: false,
   showRadioSetting: true,
   showSsidSetting: true,
+  showSpeedLimitModal: false,
   showMultiSsid: false,
   ssidTableOptions: [],
   selectedResult: {},
@@ -88,6 +89,8 @@ export default function (state = defaultState, action) {
       return state.set('currRadioConfig', action.data);
     case 'CHANGE_AIR_TIME_ENABLE':
       return state.set('airTimeEnable', action.data);
+    case 'CHANGE_SHOW_SPEED_LIMIT_MODAL':
+      return state.set('showSpeedLimitModal', action.data);
     default:
   }
   return state;

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fromJS, Map } from 'immutable';
 import { FormGroup, FormInput, Modal, ProgressBar } from 'shared/components';
-import { Button } from 'shared/components/Button';
+import { Button, SaveButton } from 'shared/components/Button';
 import * as appActions from 'shared/actions/app';
 import * as settingActions from 'shared/actions/settings';
 import utils from 'shared/utils';
@@ -22,11 +22,14 @@ const propTypes = {
   isShow: PropTypes.bool,
   initSettings: PropTypes.func,
   fetchSettings: PropTypes.func,
+  fetch: PropTypes.func,
+  app: PropTypes.instanceOf(Map),
 
   createModal: PropTypes.func,
   restoreSelfState: PropTypes.func,
   changeUpgradeBarInfo: PropTypes.func,
   resetSelfState: PropTypes.func,
+  changePoeOut: PropTypes.func,
 };
 
 export default class SystemMaintenance extends Component {
@@ -45,6 +48,11 @@ export default class SystemMaintenance extends Component {
     this.props.initSettings({
       settingId: props.route.id,
       fetchUrl: props.route.fetchUrl,
+    });
+    this.props.fetch('goform/get_poe_out').then((json) => {
+      if (json.state && json.state.code === 2000) {
+        this.props.changePoeOut(json.data.poeOut);
+      }
     });
   }
 
@@ -259,6 +267,7 @@ export default class SystemMaintenance extends Component {
               type="button"
               text={_('Upgrade')}
               onClick={this.onFarewellUpgrade}
+              theme="primary"
             />
           </FormGroup>
         </form>
@@ -269,6 +278,7 @@ export default class SystemMaintenance extends Component {
           <Button
             text={_('Reboot')}
             onClick={this.onRebootDevice}
+            theme="primary"
           />
         </FormGroup>
 
@@ -279,6 +289,7 @@ export default class SystemMaintenance extends Component {
           <Button
             text={_('Backup')}
             onClick={this.onBackupConfig}
+            theme="primary"
           />
         </FormGroup>
 
@@ -298,6 +309,7 @@ export default class SystemMaintenance extends Component {
             <Button
               text={_('Restore')}
               onClick={this.onConfigurationRestore}
+              theme="primary"
             />
           </FormGroup>
         </form>
@@ -307,8 +319,42 @@ export default class SystemMaintenance extends Component {
           <Button
             text={_('Reset')}
             onClick={this.onResetDevice}
+            theme="primary"
           />
         </FormGroup>
+
+        {
+          this.props.route.funConfig.poeOutFun ? (
+            <div>
+              <div className="o-form__legend">
+                {_('POE')}
+              </div>
+              <div className="clearfix">
+                <FormGroup
+                  type="switch"
+                  label={_('POE Out')}
+                  className="fl"
+                  options={[
+                    { label: _('Turn On'), value: '1' },
+                    { label: _('Turn Off'), value: '0' },
+                  ]}
+                  minWidth="80px"
+                  value={this.props.selfState.get('poeOut')}
+                  onChange={(data) => {
+                    this.props.changePoeOut(data.value);
+                  }}
+                />
+                <SaveButton
+                  loading={this.props.app.get('saving')}
+                  onClick={() => {
+                    const query = { poeOut: this.props.selfState.get('poeOut') };
+                    this.props.save('goform/set_poe_out', query);
+                  }}
+                />
+              </div>
+            </div>
+            ) : null
+        }
 
         <Modal
           className="upgradeBar"

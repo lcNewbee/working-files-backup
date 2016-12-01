@@ -52,9 +52,11 @@ export default class ModeSettings extends React.Component {
             this.props.updateItemSettings({
               nextMode: json.data.enable,
               currMode: json.data.enable,
-              enable: json.data.enable,
+              currDiscoveryType: json.data.discoveryType,
               discoveryType: json.data.discoveryType,
+              currAcIp: json.data.acIp,
               acIp: json.data.acIp,
+              enable: json.data.enable,
             });
           }
         });
@@ -63,15 +65,17 @@ export default class ModeSettings extends React.Component {
   onSave() {
     this.props.validateAll().then((msg) => {
       if (msg.isEmpty()) {
-        const nextMode = this.props.store.getIn(['curData', 'nextMode']);
-        const currMode = this.props.store.getIn(['curData', 'currMode']);
+        const {
+          nextMode, currMode, currDiscoveryType, discoveryType, currAcIp, acIp,
+        } = this.props.store.get('curData').toJS();
         if (nextMode !== currMode) {
           this.props.createModal({
             role: 'alert',
             text: _('Mode changed, REBOOT to take effect ?'),
             apply: this.saveModalChange,
           });
-        } else if (nextMode === currMode && nextMode === '1') {
+        } else if (nextMode === currMode && nextMode === '1' &&
+          (currDiscoveryType !== discoveryType || currAcIp !== acIp)) {
           this.props.createModal({
             role: 'alert',
             text: _('Mode configuration changed, REBOOT to take effect ?'),

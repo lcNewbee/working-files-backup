@@ -2,6 +2,7 @@ import { fromJS } from 'immutable';
 
 
 const defaultState = fromJS({
+  poeOut: '0',
   progressBarInfo: {
     title: _('rebooting , please wait...'),
     time: 60,
@@ -32,6 +33,8 @@ export default function (state = defaultState, action) {
       return defaultState;
     case 'CHANGE_UPGRADE_BAR_INFO':
       return state.set('upgradeBarInfo', action.data);
+    case 'CHANGE_POE_OUT':
+      return state.set('poeOut', action.data);
     case 'RESET_SELF_STATE':
       return defaultState;
     default:

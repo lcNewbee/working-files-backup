@@ -3,7 +3,7 @@ import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { Map, fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
-import { Button, FormGroup, Table } from 'shared/components';
+import { Button, FormGroup, FormInput, Table } from 'shared/components';
 import * as appActions from 'shared/actions/app';
 import * as sharedActions from 'shared/actions/settings';
 import * as selfActions from './actions';
@@ -107,18 +107,22 @@ export default class ChannelUtilization extends React.Component {
     return (
       <div className="stats-group">
         <h3>{_('Channel Utilization Survey')}</h3><br />
-        <div className="clearfix">
+        <div
+          className="clearfix"
+          style={{
+            marginBottom: '15px',
+          }}
+        >
           <div className="fl">
             {
               this.props.product.get('deviceRadioList').size > 1 ? (
-                <FormGroup
+                <FormInput
                   type="select"
                   label={_('Radio Select')}
                   minWidth="100px"
                   options={this.props.product.get('radioSelectOptions').toJS()}
                   value={this.props.selfState.getIn(['currRadioConfig', 'radioId'])}
                   onChange={(data) => { this.onChangeRadio(data); }}
-                  style={{ marginRight: '10px' }}
                 />
               ) : null
             }
@@ -130,6 +134,9 @@ export default class ChannelUtilization extends React.Component {
               loading={this.props.app.get('fetching')}
               disabled={this.props.app.get('fetching')}
               onClick={() => this.onRunScanBtnClick()}
+              style={{
+                marginLeft: '10px',
+              }}
             />
           </div>
         </div><br /><br />
