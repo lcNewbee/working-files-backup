@@ -476,5 +476,5 @@
 
   "Are you sure to UPGRADE the software and REBOOT ?": "你确定要升级设备软件并重启？",
   "The current version is activate,you can't delete it. If you want to delete it,please active another version!":"当前版本为激活版本，删除无效。若要删除，请激活其他版本。",
-  "The version of the related model you select is activated, cancellation  option doesn't work!you can active another version directly when you want to  cancel the current version!":"你所选的版本为激活状态，取消激活操作无效。若想取消激活，请直接激活该型号的其他版本！",
+  "The version of the related model you select is activated, cancellation  option doesn't work!you can active another version directly when you want to  cancel the current version!":"你所选的版本为激活状态，取消激活操作无效。若想取消激活，请直接激活该型号的其他版本！"
 }
