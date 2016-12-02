@@ -86,7 +86,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'hiddenSsid',
-    text: _('Hidde SSID'),
+    text: _('Hide SSID'),
     options: [
       {
         value: '1',
@@ -396,7 +396,7 @@ export default class View extends React.Component {
           onChange={this.onUpdateSettings('ssidIsolation')}
         />
         <FormGroup
-          label={_('Hidde SSID')}
+          label={_('Hide SSID')}
           type="checkbox"
           checked={getCurrData('hiddenSsid') === '1'}
           onChange={this.onUpdateSettings('hiddenSsid')}
@@ -563,7 +563,7 @@ export default class View extends React.Component {
                 text: _('SSID'),
               }, {
                 id: 'hiddenSsid',
-                text: _('Hidde SSID'),
+                text: _('Hide SSID'),
                 options: [
                   {
                     value: '1',

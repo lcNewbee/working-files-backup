@@ -21,10 +21,10 @@ const msg = {
   removefile: _('Remove File'),
   currentVersion: _('Current Version'),
   upAcVersionTitle: _('Upgrade AC Version'),
-  backupAcVersion: _('Backup AC Version'),
-  sureUpgradeAc: _('Are you sure to UPGRADE the software and REBOOT ?'),
-  upgradingACversion: _('Upgrading AC version, Please do not shut down device.'),
-  backupingAcVersion: _('Backuping AC version'),
+  backupAcVersion: _('Backup AC Firmware'),
+  sureUpgradeAc: _('Are you sure to UPGRADE the Firmware and REBOOT?'),
+  upgradingACversion: _('Upgrading AC Firmware version, please do not shut down device.'),
+  backupingAcVersion: _('Backup AC Firmware'),
 };
 let checkUpgradOkTimeout = null;
 

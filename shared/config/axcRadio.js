@@ -115,7 +115,7 @@ export const radioBase = fromJS([
     form: 'radioBase',
     value: '1',
     defaultValue: '0',
-    text: _('Switch Radio'),
+    text: _('RF Switch'),
   }, {
     id: 'first5g',
     form: 'radioBase',
@@ -233,7 +233,7 @@ export const radioAdvance = fromJS([
   }, {
     id: 'fragthreshold',
     form: 'radioAdvance',
-    label: _('帧的分片门限值'),
+    label: _('Frame Fragment Threshold'),
     type: 'number',
     min: 256,
     max: 2346,
@@ -241,7 +241,7 @@ export const radioAdvance = fromJS([
   }, {
     id: 'maxrxduration',
     form: 'radioAdvance',
-    label: _('maxrxduration'),
+    label: _('Max RX Duration'),
     type: 'number',
     min: 1,
     max: 15,
@@ -249,7 +249,7 @@ export const radioAdvance = fromJS([
   }, {
     id: 'rtsthreshold',
     form: 'radioAdvance',
-    label: _('RTS发送请求门限'),
+    label: _('RTS Threshold'),
     type: 'number',
     min: 0,
     max: 2346,
@@ -257,7 +257,7 @@ export const radioAdvance = fromJS([
   }, {
     id: 'shortretrythreshold',
     form: 'radioAdvance',
-    label: _('小于RTS门限最大重传次数'),
+    label: _('Max Resend Times Under RTS Threshold'),
     type: 'number',
     min: 1,
     max: 15,
@@ -265,7 +265,7 @@ export const radioAdvance = fromJS([
   }, {
     id: 'longretrythreshold',
     form: 'radioAdvance',
-    label: _('大于RTS门限最大重传次数'),
+    label: _('Max Resend Times Beyond RTS Threshold'),
     type: 'number',
     min: 1,
     max: 15,
@@ -273,7 +273,7 @@ export const radioAdvance = fromJS([
   }, {
     id: 'dtim',
     form: 'radioAdvance',
-    label: _('信标帧间隔的数量'),
+    label: _('Beacon Frame Interval Number'),
     type: 'number',
     min: 1,
     max: 15,
@@ -281,14 +281,14 @@ export const radioAdvance = fromJS([
   }, {
     id: 'wmmenable',
     form: 'radioAdvance',
-    label: _('wmm开关'),
+    label: _('WMM Switch'),
     type: 'checkbox',
     value: '1',
     defaultValue: '0',
   }, {
     id: 'cwmin',
     form: 'radioAdvance',
-    label: _('wmm竞争窗口值的最小时间'),
+    label: _('CW Threshold Min Time'),
     type: 'number',
     min: 1,
     max: 3600,
@@ -296,7 +296,7 @@ export const radioAdvance = fromJS([
   }, {
     id: 'cwmax',
     form: 'radioAdvance',
-    label: _('wmm竞争窗口值的最大时间'),
+    label: _('CW Threshold Max Time'),
     type: 'number',
     min: 1,
     max: 3600,
@@ -304,7 +304,7 @@ export const radioAdvance = fromJS([
   }, {
     id: 'aifs',
     form: 'radioAdvance',
-    label: _('wmm任意内部数据帧间隙'),
+    label: _('WMM Random Internal Data Frame Interval'),
     type: 'number',
     min: 1,
     max: 3600,
@@ -328,7 +328,7 @@ export const radioAdvance = fromJS([
   }, {
     id: 'txchain',
     form: 'radioAdvance',
-    label: _('自定义发射空间流'),
+    label: _('Custom TX Spatial Stream'),
     type: 'switch',
     defaultValue: '1x1',
     required: true,
@@ -339,7 +339,7 @@ export const radioAdvance = fromJS([
   }, {
     id: 'rxchain',
     form: 'radioAdvance',
-    label: _('自定义接收空间流'),
+    label: _('Custom RX Spatial Stream'),
     type: 'switch',
     defaultValue: '1x1',
     required: true,
@@ -351,7 +351,7 @@ export const radioAdvance = fromJS([
   }, {
     id: 'shortgi',
     form: 'radioAdvance',
-    label: _('shortgi'),
+    label: _('Short GI'),
     type: 'checkbox',
     value: '1',
     defaultValue: '1',
@@ -361,7 +361,7 @@ export const radioAdvance = fromJS([
   }, {
     id: 'preamble',
     form: 'radioAdvance',
-    label: _('preamble'),
+    label: _('Preamble'),
     type: 'switch',
     inputStyle: {
       width: '100%',
@@ -383,7 +383,7 @@ export const radioAdvance = fromJS([
   }, {
     id: 'ampdu',
     form: 'radioAdvance',
-    label: _('ampdu'),
+    label: _('AMPDU'),
     type: 'checkbox',
     value: '1',
     defaultValue: '0',
@@ -393,7 +393,7 @@ export const radioAdvance = fromJS([
   }, {
     id: 'amsdu',
     form: 'radioAdvance',
-    label: _('amsdu'),
+    label: _('AMSDU'),
     type: 'checkbox',
     value: '1',
     defaultValue: '0',
@@ -403,7 +403,7 @@ export const radioAdvance = fromJS([
   }, {
     id: 'rateset',
     form: 'radioAdvance',
-    label: _('速率集'),
+    label: _('Rate Set'),
     type: 'text',
     maxLength: '32',
     defaultValue: '',

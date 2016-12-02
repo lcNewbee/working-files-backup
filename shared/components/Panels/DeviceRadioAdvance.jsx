@@ -17,6 +17,20 @@ const propTypes = {
 };
 const defaultProps = {
 };
+const formOptions = radioAdvance.map(
+  ($$item) => {
+    let $$ret = $$item;
+
+    if ($$item.get('id') === 'txchain' || $$item.get('id') === 'rxchain') {
+      $$ret = $$ret.set('inputStyle', {
+        display: 'block',
+      });
+    }
+
+    return $$ret;
+  },
+);
+
 class DeviceSystem extends React.Component {
   constructor(props) {
     super(props);
@@ -30,7 +44,6 @@ class DeviceSystem extends React.Component {
   render() {
     const { app, store, ...restProps } = this.props;
     const formData = store.getIn(['data']);
-    const formOptions = radioAdvance;
 
     return (
       <FormContainer

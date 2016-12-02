@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
-import { Map, List } from 'immutable';
+import { Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import {
   FormGroup, SaveButton,
@@ -59,7 +59,7 @@ export default class View extends React.Component {
             <div className="cols col-6">
           {/* <FormGroup
                 type="textarea"
-                label={_('Softe Upgrade License')}
+                label={_('Firmware Upgrade License')}
               />
               <div className="m-description-list">
                 <dl className="m-description-list-row">

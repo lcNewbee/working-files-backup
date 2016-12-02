@@ -422,7 +422,7 @@ export default class View extends React.Component {
       />) : (<Button
         icon="unlock-alt"
         key="0"
-        text={_('Lock All Devices')}
+        text={_('Lock All Device')}
         onClick={() => {
           this.props.updateScreenSettings({
             isLocked: '1',

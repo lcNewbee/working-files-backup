@@ -7,9 +7,12 @@ import appReducer from 'shared/reducers/app';
 import screensReducer from 'shared/reducers/screens';
 import propertiesReducer from 'shared/reducers/properties';
 import moment from 'moment';
+import { reducer as toastrReducer } from 'react-redux-toastr';
+
 
 // 公用 样式
 import 'shared/scss/styles.scss';
+import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
 
 // 公用组件
 
@@ -649,6 +652,8 @@ const reducers = {
 
   // product comstom reducers
   product: sMainAxc.reducer,
+
+  toastr: toastrReducer,
 };
 
 // Store

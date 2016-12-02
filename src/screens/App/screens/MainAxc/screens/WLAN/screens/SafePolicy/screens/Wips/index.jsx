@@ -93,7 +93,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'rpttime',
-    text: _('信道质量报告上报时间'),
+    text: _('Channel Quality Report Submit Time'),
     formProps: {
       type: 'number',
       min: 1,
@@ -102,12 +102,12 @@ const listOptions = fromJS([
     },
   }, {
     id: 'chlnum',
-    text: _('信道集合'),
+    text: _('Channel Set'),
     help: `${_('e.g. ')}1,5,8`,
     defaultValue: '',
   }, {
     id: 'enable2g4chl',
-    text: _('2.4G自动信道扫描开关'),
+    text: _('2.4G Auto Channel Scan Switch'),
     formProps: {
       type: 'checkbox',
       dataType: 'number',
@@ -116,7 +116,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'enable2g4pwr',
-    text: _('2.4G自动功率扫描开关'),
+    text: _('2.4G Auto Power Scan Switch'),
     formProps: {
       type: 'checkbox',
       dataType: 'number',
@@ -125,7 +125,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'adjafactor2g4',
-    text: _('2.4G频段邻居系数'),
+    text: _('2.4G Band Neighbor Coefficient'),
     formProps: {
       min: 0,
       type: 'number',
