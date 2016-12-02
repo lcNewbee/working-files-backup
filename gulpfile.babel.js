@@ -22,6 +22,8 @@ const paths = gulp.paths = {
   pubAp: '../qsdk/package/comlanos/goahead/files/web',
   webpack: './webpack.config.dev.js',
   pubWebpack: './webpack.config.production.js',
+  pubAip5: '../platform/COMLANOS/package/goahead/files/AIP5_web',
+  pubAip10: '../platform/COMLANOS/package/goahead/files/AIP10_web',
 };
 gulp.pkg = pkg;
 
