@@ -19,18 +19,14 @@
       "polyfill": true, // defaults to true
       "regenerator": true // defaults to true
     }],
-    // "transform-es5-property-mutators",
-    [
-      "module-alias",
-      [
-        {
-          "src": "./shared",
-          "expose": "shared"
-        }, {
-          "src": "./src",
-          "expose": "src"
-        }
-      ]
-    ]
+    ["module-resolver", {
+      "root": ["./src"],
+      "alias": {
+        "shared": "./shared",
+
+        // For test
+        "src": "./src"
+      }
+    }]
   ]
 }
