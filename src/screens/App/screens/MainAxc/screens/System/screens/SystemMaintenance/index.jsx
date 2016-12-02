@@ -76,7 +76,7 @@ export default class View extends React.Component {
         noTitle
       >
         <div className="o-form">
-          <fieldset>
+          <fieldset className="o-form__fieldset">
             <legend className="o-form__legend">{route.text}</legend>
             <FormGroup label={_('Reboot Device')}>
               <SaveButton
@@ -95,7 +95,7 @@ export default class View extends React.Component {
               />
             </FormGroup>
           </fieldset>
-          <fieldset>
+          <fieldset className="o-form__fieldset">
             <legend className="o-form__legend">{_('Restore Configuration')}</legend>
             <FormGroup
               label={_('Restore From File')}
@@ -116,7 +116,7 @@ export default class View extends React.Component {
             </FormGroup>
           </fieldset>
 
-          <fileset>
+          <fieldset className="o-form__fieldset">
             <legend className="o-form__legend">{_('Language')}</legend>
             <FormGroup
               type="select"
@@ -124,7 +124,7 @@ export default class View extends React.Component {
               value={b28n.getLang()}
               onChange={onChangeLang}
             />
-          </fileset>
+          </fieldset>
         </div>
       </AppScreen>
     );
