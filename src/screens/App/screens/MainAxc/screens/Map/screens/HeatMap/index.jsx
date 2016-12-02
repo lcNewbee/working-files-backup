@@ -281,6 +281,7 @@ export default class View extends React.Component {
         <Button
           icon="arrow-left"
           theme="primary"
+          key="back"
           text={_('Back')}
           onClick={() => {
             if (curMapName) {
@@ -297,6 +298,7 @@ export default class View extends React.Component {
       ) : null,
       <span
         className="a-help"
+        key="help"
         data-help={_('Help')}
         data-help-text={_('Help text')}
       />,

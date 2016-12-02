@@ -325,18 +325,24 @@ export default class View extends React.Component {
 
   fetchCopyGroupSsids(groupid) {
     const fetchUrl = this.props.route.fetchUrl || this.props.route.formUrl;
-
-    this.props.fetch(fetchUrl, {
+    const queryData = {
       groupid,
-    }).then(
-      (json) => {
-        if (json && json.state && json.state.code === 2000) {
-          this.props.reciveScreenData({
-            copyGroupSsids: json.data,
-          }, this.props.route.id);
-        }
-      },
-    );
+    };
+
+    if (groupid === -100) {
+      queryData.filterGroupid = this.props.groupid;
+    }
+
+    this.props.fetch(fetchUrl, queryData)
+      .then(
+        (json) => {
+          if (json && json.state && json.state.code === 2000) {
+            this.props.reciveScreenData({
+              copyGroupSsids: json.data,
+            }, this.props.route.id);
+          }
+        },
+      );
   }
 
   renderActionBar() {

@@ -9,6 +9,7 @@ import Icon from 'shared/components/Icon';
 import FormContainer from 'shared/components/Organism/FormContainer';
 import Table from 'shared/components/Table';
 import Modal from 'shared/components/Modal';
+import MapReact from 'shared/components/MapReact';
 import Switchs from 'shared/components/Switchs';
 import AppScreen from 'shared/components/Template/AppScreen';
 import * as appActions from 'shared/actions/app';
@@ -51,7 +52,6 @@ const listOptions = fromJS({
 });
 
 const listTableOptions = immutableUtils.getTableOptions(listOptions.get('list'));
-const defaultEditData = immutableUtils.getDefaultData(listOptions.get('list'));
 const formOptions = immutableUtils.getFormOptions(listOptions.get('list'));
 
 function getCurAppScreenState(listStore, name) {
@@ -76,6 +76,8 @@ const propTypes = {
   onListAction: PropTypes.func,
   reportValidError: PropTypes.func,
   closeListItemModal: PropTypes.func,
+  changeScreenActionQuery: PropTypes.func,
+  router: PropTypes.object,
 };
 const defaultProps = {};
 
@@ -100,16 +102,17 @@ export default class View extends React.Component {
       'onRowClick',
     ]);
 
+    this.loadingGoogleMap = true;
     utils.loadScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyBGOC8axWomvnetRPnTdcuNW-a558l-JAU&libraries=places',
       (error) => {
         if (!error) {
           utils.loadScript('//rawgit.com/googlemaps/v3-utility-library/master/infobox/src/infobox.js', () => {
             this.renderGoogleMap();
+            this.loadingGoogleMap = false;
           });
         }
       },
     6000);
-
 
     this.listTableOptions = listTableOptions.push(fromJS({
       id: 'actions',
@@ -144,7 +147,6 @@ export default class View extends React.Component {
     const prevList = getCurAppScreenState(prevProps.store, 'list');
     const thisSettings = this.props.store.getIn([myScreenId, 'curSettings']);
     const prevSettings = prevProps.store.getIn([myScreenId, 'curSettings']);
-
 
     if (typeof window.google !== 'undefined' && this.mapContent) {
       if (!this.map) {
@@ -194,7 +196,7 @@ export default class View extends React.Component {
   setMapOnAll(map) {
     const markers = this.markers;
 
-    for (let i = 0; i < markers.length; i++) {
+    for (let i = 0; i < markers.length; i += 1) {
       markers[i].setMap(map);
     }
   }
@@ -444,11 +446,6 @@ export default class View extends React.Component {
 
     if (isOpenHeader) {
       mapClassName = 'o-map o-map--open';
-    }
-
-    // 数据未初始化不渲染
-    if (myScreenId === 'base') {
-      return null;
     }
 
     return (
