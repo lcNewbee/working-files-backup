@@ -9,7 +9,6 @@ import propertiesReducer from 'shared/reducers/properties';
 import moment from 'moment';
 import { reducer as toastrReducer } from 'react-redux-toastr';
 
-
 // 公用 样式
 import 'shared/scss/styles.scss';
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
@@ -173,20 +172,20 @@ const routes = [
             icon: 'th',
             path: '/main/network/interface',
             formUrl: 'goform/network/interface',
-            text: _('Interface Settings'),
+            text: _('Interfaces'),
             component: sInterfaces.Screen,
           }, {
             id: 'networkDhcp',
             icon: 'random',
             path: '/main/network/dhcp',
             formUrl: 'goform/network/dhcp',
-            text: _('DHCP Settings'),
+            text: _('DHCP'),
             component: sNetworkDhcp.Screen,
           }, {
             id: 'networkNat',
             icon: 'exchange',
             path: '/main/network/nat',
-            text: _('NAT Settings'),
+            text: _('NAT'),
             formUrl: 'goform/network/nat',
             component: sNetworkNat.Screen,
           },
@@ -202,7 +201,7 @@ const routes = [
           {
             id: 'staticRoutes',
             path: '/main/network/static_routes',
-            text: _('Route'),
+            text: _('Routes'),
             icon: 'map-signs',
             formUrl: 'goform/network/route',
             component: sNetworkRoutes.Screen,
@@ -211,14 +210,14 @@ const routes = [
             path: '/main/network/port',
             icon: 'th-large',
             formUrl: '/goform/network/port',
-            text: _('Port'),
+            text: _('Ports'),
             component: sNetworkPort.Screen,
           }, {
             id: 'radiusTemplate',
             icon: 'clone',
             path: '/main/network/radius_template',
             formUrl: 'goform/network/radius/template',
-            text: _('Radius Service'),
+            text: _('Radius Server'),
             component: sRaduisTemplate.Screen,
           }, {
             id: 'networkAaa',
@@ -283,7 +282,7 @@ const routes = [
                 id: 'apList',
                 path: '/main/group/monitor/aps',
                 formUrl: 'goform/group/aps',
-                text: _('Access Point List'),
+                text: _('AP List'),
                 component: sApList.Screen,
               }, {
                 id: 'user',
@@ -295,7 +294,7 @@ const routes = [
                 id: 'flow',
                 path: '/main/group/monitor/flow',
                 formUrl: 'goform/flowList',
-                text: _('Flow'),
+                text: _('Traffic'),
                 component: SharedComponents.TabContainer,
                 indexRoute: {
                   onEnter: (nextState, replace) => replace('/main/group/monitor/flow/user'),
@@ -407,13 +406,13 @@ const routes = [
                 id: 'timerPolicy',
                 path: '/main/group/wireless/timer',
                 formUrl: 'goform/group/timerPolicy',
-                text: _('Timer Policy'),
+                text: _('Scheduler'),
                 component: sTimerPolicy.Screen,
               }, {
                 id: 'wirelessSafePolicy',
                 path: '/main/group/wireless/safe',
                 formUrl: 'goform/group/timerPolicy',
-                text: _('Wireless Safe Policy'),
+                text: _('Safe Policy'),
                 component: SharedComponents.TabContainer,
                 indexRoute: {
                   onEnter: (nextState, replace) => replace('/main/group/wireless/safe/wips'),
@@ -588,13 +587,13 @@ const routes = [
                 id: 'apsVersion',
                 path: '/main/system/upgrade/aps',
                 formUrl: 'goform/system/ap/version',
-                text: _('Access Point Version'),
+                text: _('AP Version'),
                 component: sApVersion.Screen,
               }, {
                 id: 'apModel',
                 path: '/main/system/upgrade/apModel',
                 formUrl: 'goform/system/ap/model',
-                text: _('Access Point Model'),
+                text: _('AP Model'),
                 component: sApModel.Screen,
               },
             ],

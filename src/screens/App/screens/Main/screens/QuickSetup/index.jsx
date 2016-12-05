@@ -1652,7 +1652,7 @@ export default class QuickSetup extends React.Component {
       },
     ]);
     const titleMap = {
-      ap: _('Scene: Access Point'),
+      ap: _('Scene: AP'),
       sta: _('Scene: Station'),
       repeater: _('Scene: Repeater'),
     };

@@ -98,6 +98,7 @@ export default class View extends React.Component {
       'onCloseEditModal',
       'onRemoveItem',
       'renderGoogleMap',
+      'renderActionBar',
       'addMarkerToMap',
       'onRowClick',
     ]);
@@ -386,6 +387,79 @@ export default class View extends React.Component {
     this.setMapOnAll(this.map);
   }
 
+  renderActionBar() {
+    const { store } = this.props;
+    const myScreenId = store.get('curScreenId');
+    const settings = store.getIn([myScreenId, 'curSettings']);
+    const lockButton = (
+      settings.get('isLocked') === '1' ? (
+        <Button
+          icon="lock"
+          key="0"
+          text={_('Unlock Map')}
+          onClick={() => {
+            this.props.updateScreenSettings({
+              isLocked: '0',
+            });
+          }}
+        />
+      ) : (
+        <Button
+          icon="unlock-alt"
+          key="0"
+          text={_('Lock Map')}
+          onClick={() => {
+            this.props.updateScreenSettings({
+              isLocked: '1',
+            });
+          }}
+        />
+      )
+    );
+
+    return (
+      <div className="m-action-bar">
+        <Switchs
+          options={[
+            {
+              value: '0',
+              label: _('Live Google Map'),
+            }, {
+              value: '1',
+              label: _('Local Building List'),
+            },
+          ]}
+          key="list"
+          value={settings.get('type')}
+          onChange={(data) => {
+            this.onCloseEditModal();
+            this.props.updateScreenSettings({
+              type: data.value,
+            });
+          }}
+        />
+        <Button
+          icon="plus"
+          text={_('Add')}
+          theme="primary"
+          onClick={
+            () => this.props.changeScreenActionQuery({
+              action: 'add',
+              myTitle: _('Add Building'),
+            })
+          }
+        />
+        { settings.get('type') === '0' ? lockButton : null }
+        <span
+          key="help"
+          className="a-help"
+          data-help={_('Help')}
+          data-help-text={_('Help')}
+        />
+      </div>
+    );
+  }
+
   render() {
     const { app, store } = this.props;
     const myScreenId = store.get('curScreenId');
@@ -394,53 +468,7 @@ export default class View extends React.Component {
     const list = store.getIn([myScreenId, 'data', 'list']);
     const page = store.getIn([myScreenId, 'data', 'page']);
     const editData = getCurAppScreenState(store, 'edit');
-    const lockButton = settings.get('isLocked') === '1' ? (<Button
-      icon="lock"
-      key="0"
-      text={_('Unlock Map')}
-      onClick={() => {
-        this.props.updateScreenSettings({
-          isLocked: '0',
-        });
-      }}
-    />) : (<Button
-      icon="unlock-alt"
-      key="0"
-      text={_('Lock Map')}
-      onClick={() => {
-        this.props.updateScreenSettings({
-          isLocked: '1',
-        });
-      }}
-    />);
-    const actionBarChildren = [
-      <Switchs
-        options={[
-          {
-            value: '0',
-            label: _('Live Google Map'),
-          }, {
-            value: '1',
-            label: _('Local Building List'),
-          },
-        ]}
-        key="list"
-        value={settings.get('type')}
-        onChange={(data) => {
-          this.onCloseEditModal();
-          this.props.updateScreenSettings({
-            type: data.value,
-          });
-        }}
-      />,
-      settings.get('type') === '0' ? lockButton : null,
-      <span
-        key="help"
-        className="a-help"
-        data-help={_('Help')}
-        data-help-text={_('Help')}
-      />,
-    ];
+
     const isOpenHeader = actionQuery.get('action') === 'add';
     let mapClassName = 'o-map';
 
@@ -457,11 +485,10 @@ export default class View extends React.Component {
         actionable
         addable
       >
-        <div className="m-action-bar">
-          {
-            actionBarChildren
-          }
-        </div>
+        {
+          this.renderActionBar()
+        }
+
         {
           settings.get('type') === '0' ? (
             <div className={mapClassName}>

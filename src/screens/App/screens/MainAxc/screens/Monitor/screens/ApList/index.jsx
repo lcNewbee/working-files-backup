@@ -4,7 +4,7 @@ import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import utils from 'shared/utils';
 import { radioBase, radioAdvance, numberKeys } from 'shared/config/axcRadio';
-import { SaveButton, Button } from 'shared/components/Button';
+import { Button } from 'shared/components/Button';
 import AppScreen from 'shared/components/Template/AppScreen';
 import FormContainer from 'shared/components/Organism/FormContainer';
 import Icon from 'shared/components/Icon';
@@ -235,13 +235,13 @@ export default class View extends React.Component {
     if ($$selectedList.size > 0) {
       this.props.changeScreenActionQuery({
         action: 'setting',
-        myTitle: _('Setting Selected AP'),
+        myTitle: _('Edit Selected AP'),
       });
     } else {
       this.props.createModal({
         id: 'settings',
         role: 'alert',
-        text: _('Please select %s rows', _('setting')),
+        text: _('Please select %s rows', _('edit')),
       });
     }
   }
@@ -360,10 +360,9 @@ export default class View extends React.Component {
     });
     const listActionBarChildren = (
       <Button
-        text={_('Setting Selected')}
+        text={_('Edit')}
         key="settingActionButton"
         icon="cog"
-        theme="primary"
         onClick={() => this.onSettingSelected()}
       />
     );

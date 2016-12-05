@@ -35,7 +35,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'ip',
-    text: _('IP'),
+    text: _('IP Address'),
     formProps: {
       form: 'port',
       type: 'text',
@@ -46,7 +46,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'mask',
-    text: _('Mask'),
+    text: _('Subnet Mask'),
     formProps: {
       form: 'port',
       type: 'text',

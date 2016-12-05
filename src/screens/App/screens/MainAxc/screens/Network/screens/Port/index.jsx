@@ -17,7 +17,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'workModel',
-    text: _('Work Model'),
+    text: _('Physical Mode'),
     options: [
       {
         value: 'half',

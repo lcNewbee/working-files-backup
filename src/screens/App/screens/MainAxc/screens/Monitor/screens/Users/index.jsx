@@ -24,13 +24,13 @@ const listOptions = fromJS([
     },
   }, {
     id: 'ip',
-    text: _('IP'),
+    text: _('IP Address'),
   }, {
     id: 'manufacturer',
     text: _('Vendor'),
   }, {
     id: 'terminalType',
-    text: _('Terminal Type'),
+    text: _('Device OS'),
   }, {
     id: 'type',
     text: _('User Type'),

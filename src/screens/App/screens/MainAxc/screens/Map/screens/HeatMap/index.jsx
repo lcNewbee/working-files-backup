@@ -33,7 +33,7 @@ const listOptions = fromJS({
             label: _('Building'),
           }, {
             value: 'ap',
-            label: _('Access Point'),
+            label: _('AP'),
           },
         ],
         display: 'inline',

@@ -117,13 +117,6 @@ export const radioBase = fromJS([
     defaultValue: '0',
     text: _('RF Switch'),
   }, {
-    id: 'first5g',
-    form: 'radioBase',
-    type: 'checkbox',
-    value: '1',
-    defaultValue: '0',
-    text: _('Band Steering'),
-  }, {
     id: 'phymode',
     form: 'radioAdvance',
     label: _('Work Mode'),
@@ -215,6 +208,13 @@ export const radioBase = fromJS([
 
 export const radioAdvance = fromJS([
   {
+    id: 'first5g',
+    form: 'radioBase',
+    type: 'checkbox',
+    value: '1',
+    defaultValue: '0',
+    text: _('Band Steering'),
+  }, {
     id: 'maxclientcount',
     form: 'radioAdvance',
     type: 'number',
@@ -328,7 +328,7 @@ export const radioAdvance = fromJS([
   }, {
     id: 'txchain',
     form: 'radioAdvance',
-    label: _('Custom TX Spatial Stream'),
+    label: _('TX Spatial Stream'),
     type: 'switch',
     defaultValue: '1x1',
     required: true,
@@ -339,7 +339,7 @@ export const radioAdvance = fromJS([
   }, {
     id: 'rxchain',
     form: 'radioAdvance',
-    label: _('Custom RX Spatial Stream'),
+    label: _('RX Spatial Stream'),
     type: 'switch',
     defaultValue: '1x1',
     required: true,

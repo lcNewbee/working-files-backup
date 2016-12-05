@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import 'react-dom';
 import { connect } from 'react-redux';
+import ReduxToastr from 'react-redux-toastr';
 import * as actions from 'shared/actions/app';
 import Modal from 'shared/components/Modal';
 import Icon from 'shared/components/Icon';
@@ -78,6 +79,15 @@ class App extends Component {
           }
           {modal.text}
         </Modal>
+        <ReduxToastr
+          timeOut={3000}
+          newestOnTop={false}
+          position="top-right"
+          transitionIn="fadeIn"
+          transitionOut="fadeOut"
+          preventDuplicates
+          progressBar
+        />
       </div>
     );
   }

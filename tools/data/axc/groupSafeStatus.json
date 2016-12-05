@@ -12,13 +12,12 @@
     },
     "list": [
       {
-        "id": "1",
-        "mac": "00:11:22:33:33:44:55",
-        "attackType": "dos",
-        "attackTime": "2015-2-5 12:34",
-        "attackDetails": "attackDetails",
-        "protectionMeasures": "protectionMeasures",
-        "jumpSecurityEvents": "jump Security Events"
+        "attackmac": "11:22:33:44:55:66",
+        "type": "xxx",
+        "time": "xxx",
+        "info": "xxx",
+        "protect":"xxx",
+        "jump":"xxx"
       }
     ]
   }

@@ -209,12 +209,12 @@ class ListInfo extends React.Component {
     }
   }
   onSelectedItemsAction(option) {
-    const actionName = option.actionName;
     const needConfirm = option.needConfirm;
     const store = this.props.store;
     const $$list = store.getIn(['data', 'list']);
     const $$actionQuery = store.getIn(['actionQuery']);
     const listKey = option.actionKey || this.props.listKey;
+    let actionName = option.actionName;
     let selectStr = '';
     let msgText = '';
     let $$selectedList = $$actionQuery.get('selectedList');
@@ -255,6 +255,9 @@ class ListInfo extends React.Component {
         this.props.onListAction();
       }
     } else {
+      if (actionName === 'setting') {
+        actionName = 'edit';
+      }
       this.props.createModal({
         role: 'alert',
         text: _('Please select %s rows', _(actionName)),
@@ -525,7 +528,7 @@ class ListInfo extends React.Component {
             <Button
               icon="trash-o"
               key="delete"
-              text={_('Delete Selected')}
+              text={_('Delete')}
               onClick={() => {
                 this.onSelectedItemsAction({
                   actionName: 'delete',

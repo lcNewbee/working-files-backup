@@ -29,7 +29,7 @@ const listOptions = fromJS([
         label: _('Static NAT'),
       }, {
         value: 'snat',
-        label: _('Source NAT'),
+        label: _('Source Address'),
       }, {
         value: 'dnat',
         disabled: true,
@@ -49,7 +49,7 @@ const listOptions = fromJS([
 
   }, {
     id: 'sourceAddress',
-    label: _('Source Address'),
+    label: _('Original IP Address'),
     formProps: {
       required: true,
       validator: validator({
@@ -58,7 +58,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'conversionAddress',
-    label: _('Conversion Address'),
+    label: _('Translated IP Address'),
     formProps: {
       required: true,
       validator: validator({

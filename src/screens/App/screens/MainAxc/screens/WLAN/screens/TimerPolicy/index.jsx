@@ -283,6 +283,7 @@ export default class View extends React.Component {
     return (
       <AppScreen
         {...this.props}
+        title={_('Wireless Scheduler')}
         listOptions={curListOptions}
         onBeforeSave={this.onBeforeSave}
         listKey="policy_id"

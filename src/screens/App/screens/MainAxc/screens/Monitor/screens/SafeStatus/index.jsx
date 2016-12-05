@@ -10,26 +10,26 @@ import * as screenActions from 'shared/actions/screens';
 
 const tableOptions = fromJS([
   {
-    id: 'mac',
+    id: 'attackmac',
     text: _('Attacker MAC'),
     transform(val, item) {
       return val || item.get('macaddress');
     },
   }, {
-    id: 'attackType',
+    id: 'type',
     text: _('Attack Type'),
   }, {
-    id: 'attackTime',
+    id: 'time',
     text: _('Attack Time'),
   }, {
-    id: 'attackDetails',
+    id: 'info',
     text: _('Attack Details'),
   }, {
-    id: 'protectionMeasures',
+    id: 'protect',
     text: _('Protection Measures'),
     width: '160',
   }, {
-    id: 'jumpSecurityEvents',
+    id: 'jump',
     text: _('Jump to Security Events'),
     width: '160',
   },
@@ -156,14 +156,18 @@ export default class SafeStatus extends React.Component {
             <div className="stats-group-cell">
               <h3>
                 { _('List Of Recent Security Incidents') }
-                <Button
-                  icon="download"
-                  theme="primary"
-                  text={_('Export Report')}
-                  style={{
-                    marginLeft: '12px',
-                  }}
-                />
+                {
+                /*
+                  <Button
+                    icon="download"
+                    theme="primary"
+                    text={_('Export Report')}
+                    style={{
+                      marginLeft: '12px',
+                    }}
+                  />
+                */
+                }
               </h3>
             </div>
             <div className="stats-group-cell">

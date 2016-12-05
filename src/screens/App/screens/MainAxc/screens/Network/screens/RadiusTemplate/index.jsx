@@ -19,7 +19,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'authpri_ipaddr',
-    label: _('Primary IP'),
+    label: _('Primary IP Address'),
     fieldset: 'auth',
     legend: _('Auth Server Settings'),
     defaultValue: '0',
@@ -30,7 +30,7 @@ const listOptions = fromJS([
 
   }, {
     id: 'authsecond_ipaddr',
-    label: _('Secondly IP'),
+    label: _('Secondary IP Address'),
     fieldset: 'auth',
     formProps: {
       type: 'text',
@@ -48,7 +48,7 @@ const listOptions = fromJS([
 
   }, {
     id: 'authsecond_port',
-    label: _('Secondly Port'),
+    label: _('Secondary Port'),
     fieldset: 'auth',
     formProps: {
       type: 'number',
@@ -66,7 +66,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'authsecond_key',
-    label: _('Secondly Password'),
+    label: _('Secondary Password'),
     fieldset: 'auth',
     noTable: true,
     formProps: {
@@ -75,7 +75,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'acctpri_ipaddr',
-    label: _('Primary IP'),
+    label: _('Primary IP Address'),
     fieldset: 'Accounting',
     legend: _('Accounting Server Settings'),
     defaultValue: '0',
@@ -86,7 +86,7 @@ const listOptions = fromJS([
 
   }, {
     id: 'acctsecond_ipaddr',
-    label: _('Secondly IP'),
+    label: _('Secondary IP Address'),
     fieldset: 'Accounting',
     formProps: {
       type: 'text',
@@ -104,7 +104,7 @@ const listOptions = fromJS([
 
   }, {
     id: 'acctsecond_port',
-    label: _('Secondly Port'),
+    label: _('Secondary Port'),
     fieldset: 'Accounting',
     formProps: {
       type: 'number',
@@ -123,7 +123,7 @@ const listOptions = fromJS([
 
   }, {
     id: 'acctsecond_key',
-    label: _('Secondly Password'),
+    label: _('Secondary Password'),
     fieldset: 'Accounting',
     noTable: true,
     formProps: {
@@ -196,7 +196,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'nasip',
-    label: _('Nas IP'),
+    label: _('Nas IP Address'),
     fieldset: 'parameter',
     noTable: true,
     formProps: {

@@ -26,7 +26,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'startIp',
-    text: _('Start IP'),
+    text: _('Start IP Address'),
     formProps: {
       required: true,
       maxLength: '15',
@@ -37,7 +37,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'mask',
-    text: _('Mask'),
+    text: _('Subnet Mask'),
     formProps: {
       required: true,
       maxLength: '15',
@@ -68,7 +68,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'secondDns',
-    text: _('Secondly DNS'),
+    text: _('Secondary DNS'),
     formProps: {
       maxLength: '15',
       validator: validator({
@@ -77,7 +77,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'releaseTime',
-    text: _('Release Time'),
+    text: _('Lease Time'),
     formProps: {
       required: true,
       help: _('Second'),

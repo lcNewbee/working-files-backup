@@ -24,7 +24,7 @@ const listOptions = fromJS([
     options: [
       {
         value: '1',
-        label: _('IP'),
+        label: _('IP Address'),
       }, {
         value: '2',
         label: _('Domain'),
@@ -35,7 +35,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'server_ipaddr',
-    label: _('Server IP'),
+    label: _('Server IP Address'),
     formProps: {
       type: 'text',
       required: true,
@@ -81,7 +81,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'ac_ip',
-    label: _('AC IP'),
+    label: _('AC IP Address'),
     formProps: {
       type: 'text',
       required: true,

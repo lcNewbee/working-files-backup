@@ -257,7 +257,7 @@ export default class NetworkSettings extends React.Component {
               />
               <FormGroup
                 type="text"
-                label={_('Mask')}
+                label={_('Subnet Mask')}
                 value={mask}
                 onChange={(data) => this.props.updateItemSettings({
                   mask: data.value,

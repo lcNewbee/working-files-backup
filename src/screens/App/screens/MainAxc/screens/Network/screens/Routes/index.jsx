@@ -21,7 +21,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'mask',
-    text: _('Target Mask'),
+    text: _('Target Subnet Mask'),
     defaultValue: '',
     formProps: {
       required: true,
@@ -31,7 +31,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'gateway',
-    text: _('Next Hop IP'),
+    text: _('Next Hop IP Address'),
     defaultValue: '',
     formProps: {
       required: true,

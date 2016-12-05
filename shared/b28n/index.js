@@ -1,7 +1,7 @@
 // "New Butterfat internationalization" (b28new.js)
 //  Released under the MIT License
-//	versions 3.0.0
-//	$Id: b28new.js 2014-12-23 ETw $
+//  versions 3.0.0
+//  $Id: b28new.js 2014-12-23 ETw $
 /** *********************************************************************************************
  ************************************************************************************************/
 import storage from '../utils/lib/storage';
@@ -42,7 +42,7 @@ const b28n = (function _b28n(doc, _win) {
     const len = supports.length;
     let i;
 
-    for (i = 0; i < len; i++) {
+    for (i = 0; i < len; i += 1) {
       if (lang === supports[i]) {
         return supports[i];
       }
@@ -226,7 +226,7 @@ const b28n = (function _b28n(doc, _win) {
     ro: 'Română', // 罗马尼亚
     ar: 'العربية', // 阿拉伯
     tr: 'Türkçe', // 土耳其
-    ru: 'Русский', // Russian	俄语
+    ru: 'Русский', // 俄语
     pt: 'Português', // Portugal 葡萄牙语
   };
 

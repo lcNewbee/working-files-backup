@@ -10,13 +10,9 @@ import * as screenActions from 'shared/actions/screens';
 
 const formOptions = fromJS([
   {
-    id: 'readPassword',
-    label: _('Read Password'),
-    type: 'textarea',
-  }, {
-    id: 'writePassword',
-    label: _('Write Password'),
-    type: 'textarea',
+    id: 'ip',
+    label: _('IP Address'),
+    type: 'text',
   }, {
     id: 'version',
     label: _('Version'),
@@ -36,6 +32,18 @@ const formOptions = fromJS([
     type: 'switch',
     minWidth: '60px',
   }, {
+    id: 'trapPassword',
+    label: _('Community Name'),
+    type: 'text',
+  }, {
+    id: 'readPassword',
+    label: _('Read Password'),
+    type: 'textarea',
+  }, {
+    id: 'writePassword',
+    label: _('Write Password'),
+    type: 'textarea',
+  }, {
     id: 'trapServer',
     label: _('Trap Server'),
     required: true,
@@ -43,6 +51,7 @@ const formOptions = fromJS([
   }, {
     id: 'trapPassword',
     label: _('Trap Password'),
+    required: true,
     type: 'password',
   },
 ]);

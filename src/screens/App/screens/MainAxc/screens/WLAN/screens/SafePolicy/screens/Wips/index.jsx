@@ -20,14 +20,14 @@ const listOptions = fromJS([
   }, {
     id: 'apopermode',
     width: '120',
-    text: _('Access Point Work Mode'),
+    text: _('AP Work Mode'),
     options: [
       {
         value: 1,
         label: _('Normal'),
       }, {
         value: 2,
-        label: _('Scan First'),
+        label: _('Monitor'),
       },
     ],
     defaultValue: '1',

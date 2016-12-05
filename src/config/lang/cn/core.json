@@ -69,8 +69,8 @@
   "Login in": "直接登录",
   "Sign up": "注册",
   "No": "序号",
-  "Mask": "子网掩码",
-  "Release Time": "租约时间",
+  "Subnet Mask": "子网掩码",
+  "Lease Time": "租约时间",
   "Remark": "备注",
   "To": "至",
   "Repeat": "重复",
@@ -109,6 +109,7 @@
   "Data": "数据",
   "Restore To Factory": "恢复出厂设置",
   "Date":"日期",
+  "Data Sync Error": "数据同步错误",
 
   "Are you sure to delete selected index: %s ?": "你确定要删除选择的项：%s ?",
   "Download Report": "下载报表",

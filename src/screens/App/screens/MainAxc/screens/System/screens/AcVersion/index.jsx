@@ -257,7 +257,7 @@ export default class AcVersion extends PureComponent {
 
     return (
       <WizardContainer
-        title={_('AC Version Setup Wizard')}
+        title={_('AC Firmware Management Wizard')}
         options={options}
         onBeforeStep={this.onBeforeStep}
         onCompleted={this.onComplete}

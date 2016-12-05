@@ -63,7 +63,7 @@ const listOptions = fromJS([
 
   }, {
     id: 'ipAddress',
-    label: _('IP'),
+    label: _('IP Address'),
     formProps: {
       required: true,
     },

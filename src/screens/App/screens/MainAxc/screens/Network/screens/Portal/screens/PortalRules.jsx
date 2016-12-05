@@ -83,7 +83,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'auth_ip',
-    label: _('Authentication IP'),
+    label: _('Authentication IP Address'),
     formProps: {
       type: 'text',
       validator: validator({
@@ -95,7 +95,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'auth_mask',
-    label: _('Authentication Mask'),
+    label: _('Authentication Subnet Mask'),
     formProps: {
       type: 'text',
       validator: validator({
