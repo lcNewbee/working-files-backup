@@ -925,7 +925,6 @@ export default class Main extends Component {
                   this.props.selectManageGroupAp(data);
                 }}
                 onPageChange={(data) => {
-                  console.log(data);
                 }}
               />
               <div className="o-list__footer action-btns">

@@ -125,7 +125,6 @@ function InfoBox(opt_opts) {
  */
 InfoBox.prototype = new google.maps.OverlayView();
 
-console.log('www =', google.maps)
 /**
  * Creates the DIV representing the InfoBox.
  * @private

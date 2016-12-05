@@ -60,7 +60,6 @@ export function fetchModelList() {
         size: 500,
       }),
     ).then((json) => {
-      console.log(json)
       if (json.state && json.state.code === 2000) {
         dispatch(rcFetchModelList(json.data));
       }

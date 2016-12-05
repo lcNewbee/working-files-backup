@@ -124,7 +124,6 @@ export default class NetworkPort extends React.Component {
     this.props.save(this.props.route.formUrl, query)
       .then((json) => {
         if (json.state && json.state.code === 2000) {
-          console.log(json);
         }
       });
   }

@@ -163,14 +163,12 @@ export default class View extends React.Component {
     if (data.targetStep > data.currStep) {
 
     } else {
-      console.log('prev');
     }
   }
 
   onAfterStep(data) {
     // next
     if (data.currStep) {
-      console.log(data.currStep);
     }
   }
 
