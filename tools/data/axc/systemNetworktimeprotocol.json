@@ -4,12 +4,13 @@
     "msg": "ok"
   },
   "data": {
-    "setting": {
+    "settings": {
        "ac_onoff": "0",
        "ac_server_name": "192.168.0.197 ",
        "ac_referral_server": "192.168.0.198",
        "ac_TimeInterval": "5",
-       "ac_timezone":"(UTC+08)",
+       "ac_timezone":"(UTC+08)"
     }
   }
 }
+
