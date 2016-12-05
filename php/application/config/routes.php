@@ -83,6 +83,7 @@ $route['goform/group/smartRf'] = 'wirelessSmart';
 $route['goform/group/timerPolicy'] = 'wirelessTimer';
 $route['goform/group/wips'] = 'wirelessSafe';
 $route['goform/group/wireless/protection'] = 'WirelessProtection';
+$route['goform/group/safeStatus'] = 'monitorSafeStatus';
 
 // 系统设置
 $route['goform/system/version/upload'] = 'systemVersion/upload';
@@ -98,5 +99,4 @@ $route['goform/system/maintenance'] = 'systemMaintenance';
 $route['goform/system/backup'] = 'systemMaintenance/backup';
 $route['goform/system/reboot'] = 'systemMaintenance/reboot';
 $route['goform/system/license'] = 'systemLicense';
-
-
+$route['goform/system/networktimeprotocol'] = 'systemNtp';
