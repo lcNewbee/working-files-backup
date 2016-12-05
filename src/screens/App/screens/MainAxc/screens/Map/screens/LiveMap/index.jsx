@@ -406,7 +406,7 @@ export default class View extends React.Component {
       ) : (
         <Button
           icon="unlock-alt"
-          key="0"
+          key="2"
           text={_('Lock Map')}
           onClick={() => {
             this.props.updateScreenSettings({
@@ -418,7 +418,7 @@ export default class View extends React.Component {
     );
 
     return (
-      <div className="m-action-bar">
+      <div className="m-action-bar" key="actionBar">
         <Switchs
           options={[
             {

@@ -77,6 +77,11 @@ $o-form-content-margin: 1em 0 0;
     @include clearfix;
     padding: 0;
 
+    .o-form__body,
+    .o-form__footer {
+      display: inline-block;
+    }
+
     .form-group {
       display: inline-block;
       vertical-align: middle;

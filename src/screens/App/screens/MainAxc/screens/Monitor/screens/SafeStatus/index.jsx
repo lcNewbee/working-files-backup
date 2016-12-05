@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
+import AppScreen from 'shared/components/Template/AppScreen';
 
 // components
 import {
@@ -99,87 +100,68 @@ function getSafeTypeChartOtion(attackTypeMap) {
 }
 
 const propTypes = {
-  screens: PropTypes.instanceOf(Map),
-  route: PropTypes.object,
-  initScreen: PropTypes.func,
-  leaveScreen: PropTypes.func,
-  fetchScreenData: PropTypes.func,
+  store: PropTypes.instanceOf(Map),
 };
 const defaultProps = {};
 
 // 原生的 react 页面
 export default class SafeStatus extends React.Component {
-  constructor(props) {
-    super(props);
-    props.initScreen({
-      id: props.route.id,
-      formUrl: props.route.formUrl,
-      path: props.route.path,
-      isFetchInfinite: true,
-      fetchIntervalTime: 5000,
-    });
-  }
-
-  componentWillMount() {
-    this.props.fetchScreenData();
-  }
-
-  componentWillUnmount() {
-    this.props.leaveScreen();
-  }
   render() {
-    const { screens } = this.props;
-    const curScreenId = screens.get('curScreenId');
-    const serverList = screens.getIn([curScreenId, 'data', 'list']);
-    const attackTypeMap = screens.getIn([curScreenId, 'data', 'attackType']);
+    const { store } = this.props;
+    const curScreenId = store.get('curScreenId');
+    const serverList = store.getIn([curScreenId, 'data', 'list']);
+    const attackTypeMap = store.getIn([curScreenId, 'data', 'attackType']);
     const safeTypeChartOtion = getSafeTypeChartOtion(attackTypeMap);
 
     return (
-      <div className="Stats">
-        <h2>{ _('Secure State') }</h2>
-        <div className="stats-group clearfix" >
-          <div className="stats-group-large" >
-            <div className="stats-group-cell">
-              <h3>{ _('Attack Type') }</h3>
+      <AppScreen
+        {...this.props}
+      >
+        <div className="Stats">
+          <div className="stats-group clearfix" >
+            <div className="stats-group-large" >
+              <div className="stats-group-cell">
+                <h3>{ _('Attack Type') }</h3>
+              </div>
+              <div className="stats-group-cell">
+                <EchartReact
+                  option={safeTypeChartOtion}
+                  className="stats-group-canvas"
+                  style={{
+                    width: '100%',
+                  }}
+                />
+              </div>
             </div>
-            <div className="stats-group-cell">
-              <EchartReact
-                option={safeTypeChartOtion}
-                className="stats-group-canvas"
-                style={{
-                  width: '100%',
-                }}
-              />
-            </div>
-          </div>
-          <div className="stats-group-large">
-            <div className="stats-group-cell">
-              <h3>
-                { _('List Of Recent Security Incidents') }
-                {
-                /*
-                  <Button
-                    icon="download"
-                    theme="primary"
-                    text={_('Export Report')}
-                    style={{
-                      marginLeft: '12px',
-                    }}
-                  />
-                */
-                }
-              </h3>
-            </div>
-            <div className="stats-group-cell">
-              <Table
-                className="table"
-                options={tableOptions}
-                list={serverList}
-              />
+            <div className="stats-group-large">
+              <div className="stats-group-cell">
+                <h3>
+                  { _('List Of Recent Security Incidents') }
+                  {
+                  /*
+                    <Button
+                      icon="download"
+                      theme="primary"
+                      text={_('Export Report')}
+                      style={{
+                        marginLeft: '12px',
+                      }}
+                    />
+                  */
+                  }
+                </h3>
+              </div>
+              <div className="stats-group-cell">
+                <Table
+                  className="table"
+                  options={tableOptions}
+                  list={serverList}
+                />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </AppScreen>
     );
   }
 }
@@ -190,7 +172,7 @@ SafeStatus.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
-    screens: state.screens,
+    store: state.screens,
     groupid: state.product.getIn(['group', 'selected', 'id']),
   };
 }

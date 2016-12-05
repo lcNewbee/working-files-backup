@@ -234,6 +234,7 @@ export default class View extends React.Component {
         <div
           id={`deivce${i}`}
           className={deviceClassName}
+          key={`deivce${i}`}
           style={{
             left: `${xpos}%`,
             top: `${ypos}%`,
@@ -280,6 +281,7 @@ export default class View extends React.Component {
           }
         </div>,
         <div
+          key={`deivceCoverage${i}`}
           className="m-device-coverage"
           style={{
             left: `${xpos}%`,
