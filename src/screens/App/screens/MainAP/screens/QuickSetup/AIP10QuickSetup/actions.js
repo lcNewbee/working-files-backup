@@ -112,3 +112,10 @@ export function changeCurrRadioConfig(data) {
     data,
   };
 }
+
+export function changeRadioSelectedArr(data) {
+  return {
+    type: 'CHANGE_RADIO_SELECTED_ARR',
+    data,
+  };
+}

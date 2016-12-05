@@ -11,3 +11,10 @@ export function changeEnable(data) {
     data,
   };
 }
+
+export function changeRadioType(data) {
+  return {
+    type: 'CHANGE_RADIO_TYPE',
+    data,
+  };
+}

@@ -310,6 +310,8 @@
   "Please input a valid ntp server!": "请输入正确的NTP服务器IP地址或域名！",
   "Address begin with ": "以",
   " is invalid, please input a value between 1 to 223.": "开始的IP地址为非法IP，请输入开始数字在1-233之间的IP地址",
+  "Notice: You see this page only when you first login. You can select the device operation mode(Fat/Thin) as you need. And it's ok if you skip this step.": "提示：该快速配置页面仅在您首次登陆时出现，您可以根据需求配置设备的操作模式(胖/瘦AP)及相关配置。您也可以跳过该配置步骤。",
+  "Notice: The device will reboot when you click 'OK' button if the configuration changed! Or, the page will be directed to management web.": "提示：如果您修改了该页面配置，则当点击确定后设备会重启，否则将跳转到管理页面。",
   "Memory": "内存",
   "Total: ": "总计：",
   "Memory Usage": "内存占用",
@@ -327,5 +329,7 @@
   "Airtime Fairness": "空口调度",
   "Owner SSID": "所属SSID",
   "CPU Used :": "CPU使用率：",
-  "Memory Used :": "内存使用率："
+  "Memory Used :": "内存使用率：",
+  "Skip": "跳过",
+  "Quick Setup": "快速设置"
 }

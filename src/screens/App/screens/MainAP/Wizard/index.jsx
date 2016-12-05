@@ -21,6 +21,7 @@ import * as appActions from 'shared/actions/app';
 import * as sharedActions from 'shared/actions/settings';
 import * as selfActions from './actions';
 import reducer from './reducer';
+import imgEn from './modeEN.png';
 
 const _ = window._;
 const msg = {
@@ -38,8 +39,8 @@ const msg = {
 const defaultCountry = ((window.navigator.language || window.navigator.userLanguage ||
     window.navigator.browserLanguage || window.navigator.systemLanguage ||
     'en').toUpperCase().split('-')[1] || '').toString();
-const defaultCountryLabel = List(countries).find((item) =>
-  (item.country === defaultCountry)
+const defaultCountryLabel = List(countries).find(item =>
+  (item.country === defaultCountry),
 )[b28n.getLang()];
 
 const defaultTimeZoneTitle = (((new Date()).getTimezoneOffset() / 60) * -1).toString();
@@ -53,12 +54,10 @@ TIME_ZONE.forEach((item) => {
   }
 });
 
-const countryList = List(countries).map((item) => {
-  return {
-    value: item.country,
-    label: item[b28n.getLang()],
-  };
-}).toJS();
+const countryList = List(countries).map(item => ({
+  value: item.country,
+  label: item[b28n.getLang()],
+})).toJS();
 
 const formGroups = Map({
   country: {
@@ -119,9 +118,18 @@ const formGroups = Map({
 });
 
 const propTypes = {
-  updateItemSettings: PropTypes.func,
   fetch: PropTypes.func,
-  changeCurrentMode: PropTypes.func,
+  selfState: PropTypes.instanceOf(Map),
+  changeNextMode: PropTypes.func,
+  changeNextModeData: PropTypes.func,
+  validateAll: PropTypes.func,
+  createModal: PropTypes.func,
+  changeShowProgressBar: PropTypes.func,
+  save: PropTypes.func,
+  app: PropTypes.instanceOf(Map),
+  validateOption: PropTypes.object,
+  changeCurrModeData: PropTypes.func,
+  changeShowThinModeConfigModal: PropTypes.func,
 };
 
 const validOptions = Map({
@@ -130,258 +138,90 @@ const validOptions = Map({
   }),
 });
 
+function onSkipButtonClick() {
+  window.location.href = '#/main/status';
+}
+
 // 原生的 react 页面
-export const SignUp = React.createClass({
-  mixins: [PureRenderMixin],
+export default class SignUp extends React.Component {
+  constructor(props) {
+    super(props);
+    this.onOkButtonClick = this.onOkButtonClick.bind(this);
+    this.onThinModeImgClick = this.onThinModeImgClick.bind(this);
+    this.comfirmModeChange = this.comfirmModeChange.bind(this);
+  }
 
-  getInitialState() {
-    return {
-      password: '',
-      confirmpasswd: '',
-      country: defaultCountry,
-      countryLabel: defaultCountryLabel,
-      timeZone: defaultTimeZoneValue,
-      timeZoneLabel: defaultTimeZoneLabel,
-      currStep: 1,
-    };
-  },
-
-
-  // onNext() {
-  //   const MAX_STEP = 3;
-  //   let currStep = this.state.currStep;
-  //   let checkResult;
-
-  //   if (currStep < MAX_STEP) {
-  //     currStep += 1;
-
-  //     if (this.state.currStep === 2) {
-  //       checkResult = this.checkStepTwo();
-
-  //       if (!checkResult) {
-  //         this.updateState({
-  //           currStep,
-  //           status: 'ok',
-  //         });
-  //       } else {
-  //         this.updateState({
-  //           status: checkResult,
-  //         });
-  //       }
-  //     } else if (this.state.currStep === 1) {
-  //       checkResult = this.checkStepOne();
-
-  //       if (!checkResult) {
-  //         this.updateState({
-  //           currStep,
-  //           status: 'ok',
-  //         });
-  //       } else {
-  //         this.updateState({
-  //           status: checkResult,
-  //         });
-  //       }
-  //     } else {
-  //       this.updateState({
-  //         currStep,
-  //       });
-  //     }
-  //   } else {
-  //     this.signUp();
-  //   }
-  // },
-
-  // onPrev() {
-  //   let currStep = this.state.currStep;
-
-  //   if (currStep > 1) {
-  //     currStep -= 1;
-  //     this.updateState({
-  //       currStep,
-  //       status: '',
-  //     });
-  //   }
-  // },
-
-  // onChangeData(name) {
-  //   return function changeData(options) {
-  //     const data = {};
-
-  //     data[name] = options.value;
-
-  //     if (options.label) {
-  //       data[`${name}Label`] = options.label;
-  //     }
-
-  //     this.updateState(data);
-  //   }.bind(this);
-  // },
-
-  // onInputKeyUp(e) {
-  //   if (e.which === 13) {
-  //     if (e.target.id === 'password') {
-  //       document.getElementById('confirmpasswd').focus();
-  //     } else {
-  //       this.onNext();
-  //     }
-  //   }
-  // },
-  // onSignUp() {
-  //   const checkResult = this.checkData();
-
-  //   // 如果有验证错误信息
-  //   if (checkResult) {
-  //     this.updateState({
-  //       status: checkResult,
-  //     });
-
-  //   //
-  //   } else {
-  //     this.signUp();
-  //   }
-  // },
-  // getDataValue(name) {
-  //   return this.state[name] || '';
-  // },
-
-  // checkStepTwo() {
-  //   const data = this.state;
-  //   const groupPass = formGroups.get('password');
-  //   let checkResult;
-
-  //   checkResult = groupPass.validator.check(data.password);
-
-  //   if (!checkResult) {
-  //     if (data.password !== data.confirmpasswd) {
-  //       checkResult = _('Password and confirm password must match');
-  //     }
-  //   }
-
-  //   return checkResult;
-  // },
-
-  // checkStepOne() {
-  //   const data = this.state;
-  //   let checkResult;
-
-  //   if (!data.country || data.country.length < 1) {
-  //     return _('Please select a country');
-  //   }
-
-  //   if (!data.timeZone || data.timeZone.length < 1) {
-  //     return _('Please select time zone');
-  //   }
-
-  //   return checkResult;
-  // },
-
-  // signUp() {
-  //   utils.save(urls.regist, {
-  //     country: this.state.country,
-  //     timeZone: this.state.timeZone,
-  //     password: this.state.password,
-  //     confirmpasswd: this.state.confirmpasswd,
-  //   })
-  //   .then((json) => {
-  //     if (json.state && json.state.code === 2000) {
-  //       window.location.hash = '';
-  //     }
-  //   });
-  // },
-
-  // updateState(data) {
-  //   this.setState(utils.extend({}, this.state, data));
-  // },
-
-  // createFormGruop(name) {
-  //   const myGroup = formGroups.get(name);
-  //   const input = myGroup.input;
-
-  //   return (
-  //     <FormGroup
-  //       {...input}
-  //       key={input.name}
-  //       id={input.name}
-  //       value={this.getDataValue(input.name)}
-  //       onChange={this.onChangeData(input.name)}
-  //       onKeyUp={this.onInputKeyUp}
-  //     />
-  //   );
-  // },
-
-// Mine
-
+  // Mine
   componentDidMount() {
     this.props.fetch('goform/get_firstLogin_info').then((json) => {
       if (json.state && json.state.code === 2000) {
-        const currMode = json.data.enable;
-        this.props.changeCurrentMode(currMode);
-        this.props.changeNextMode(currMode);
-        this.props.changeModeData(fromJS(json.data).delete('ifFirstLogin'));
+        const data = fromJS(json.data).delete('ifFirstLogin');
+        this.props.changeCurrModeData(data);
+        this.props.changeNextModeData(data);
       }
     });
-  },
+  }
 
   onOkButtonClick() {
-    this.props.validateAll().then((wrgmsg) => {
-      if (wrgmsg.isEmpty()) {
-        const currMode = this.props.selfState.get('currMode');
-        const nextMode = this.props.selfState.get('nextMode');
-        if (currMode === nextMode) {
-          window.location.href = '#/main/status';
-        } else if (currMode !== nextMode) {
-          this.props.createModal({
-            id: 'settings',
-            role: 'alert',
-            text: _('Mode Changed ! Reboot to take effect ?'),
-            apply: this.comfirmModeChange,
-          });
-        }
-      }
-    });
-  },
+    const { currModeData, nextModeData } = this.props.selfState.toJS();
+    const showThinModeConfigModal = this.props.selfState.get('showThinModeConfigModal');
+    if (nextModeData.enable === '1' && !showThinModeConfigModal) {
+      this.props.changeShowThinModeConfigModal(true);
+    } else if (currModeData.enable === nextModeData.enable) {
+      window.location.href = '#/main/status';
+    } else if (currModeData.enable !== nextModeData.enable
+      || currModeData.discoveryType !== nextModeData.discoveryType
+      || currModeData.acIp !== nextModeData.acIp) {
+      this.comfirmModeChange();
+    }
+  }
 
-  onSkipButtonClick() {
-    window.location.href = '#/main/status';
-  },
+  onThinModeImgClick() {
+    this.props.changeShowThinModeConfigModal(true);
+  }
 
   comfirmModeChange() {
-    const query = this.props.selfState.get('modeData').toJS();
+    const query = this.props.selfState.get('nextModeData').toJS();
     this.props.save('goform/set_thin', query);
     this.props.changeShowProgressBar(true);
-  },
+  }
 
   render() {
     const btnInfoRole = 'info';
     const { guiName } = this.props.app.toJS();
-    const currMode = this.props.selfState.get('currMode');
-    const nextMode = this.props.selfState.get('nextMode');
-    const { discoveryType, enable, acIp } = this.props.selfState.get('modeData').toJS();
-    const imgWrapStyle = {
-      width: '50%',
-      height: '100px',
-      border: '1px solid #000',
-      textAlign: 'center',
-    };
-    const radioWrapStyle = {
-      width: '50%',
-      border: '1px solid #FFF',
-      textAlign: 'center',
-    };
+    const { nextModeData, currModeData } = this.props.selfState.toJS();
+    // const imgWrapStyle = {
+    //   width: '50%',
+    //   height: '100px',
+    //   border: '1px solid #000',
+    //   textAlign: 'center',
+    // };
+    // const radioWrapStyle = {
+    //   width: '50%',
+    //   border: '1px solid #ddd',
+    //   textAlign: 'center',
+    //   overflow: 'hidden',
+    // };
     const selectedWrapStyle = {
-      width: '50%',
-      height: '100px',
-      border: '1px solid #000',
-      textAlign: 'center',
-      boxShadow: '0px 1px 3px rgba(34, 25, 25, 0.2)',
+      backgroundColor: '#005bcc',
     };
     return (
-      <div>
+      <div
+        style={{
+          overflow: 'auto',
+        }}
+      >
         <Navbar
           title={guiName}
         />
-        <div className="t-wizard">
-          <h2>{_('Quick Mode Change')}</h2>
+        <div
+          className="t-wizard"
+          style={{
+            marginTop: '0px',
+            overflow: 'auto',
+          }}
+        >
+          <h2>{_('Quick Setup')}</h2>
           <div
             className="t-wizard__content"
             style={{
@@ -397,111 +237,106 @@ export const SignUp = React.createClass({
               }}
             >
               {
-                `Notice: You see this page only when you first login. You can select the device operation mode(Fat/Thin) as you need. The current mode is ${
-                 currMode === '1' ? 'thin' : 'fat'}. And it's ok if you skip this step.`
+                _('Notice: You see this page only when you first login. You can select the device operation mode(Fat/Thin) as you need. And it\'s ok if you skip this step.')
               }
             </div>
-            <div className="row">
+            <div
+              className="row"
+              style={{
+                marginTop: '5px',
+              }}
+            >
               <div
-                className="cols cols-8"
-                style={radioWrapStyle}
-              >
-                <FormGroup
-                  type="switch"
-                  label={_('AP Mode')}
-                  value={nextMode}
-                  options={[
-                    { value: '0', label: _('Fat AP Mode') },
-                    { value: '1', label: _('Thin AP Mode') },
-                  ]}
-                  onChange={(data) => {
-                    this.props.changeNextMode(data.value);
-                    this.props.changeModeData(fromJS({ enable: data.value }));
-                  }}
-                />
-                {
-                  nextMode === '1' ? (
-                    <FormGroup
-                      type="switch"
-                      label={_('Discovery Type')}
-                      value={discoveryType}
-                      options={[
-                        { value: 'dhcp', label: _('DHCP') },
-                        { value: 'static', label: _('Static') },
-                      ]}
-                      onChange={(data) => {
-                        this.props.changeModeData(fromJS({ discoveryType: data.value }));
-                      }}
-                    />
-                  ) : null
-                }
-                {
-                  discoveryType === 'static' && nextMode === '1' ? (
-                    <FormGroup
-                      type="text"
-                      label={_('AC IP')}
-                      value={acIp}
-                      onChange={(data) => {
-                        this.props.changeModeData(fromJS({ acIp: data.value }));
-                      }}
-                      required
-                      {...this.props.validateOption.validateIp}
-                    />
-                  ) : null
-                }
-              </div>
-              <div
-                className="cols cols-4"
-                style={selectedWrapStyle}
-              >
-                {
-                  nextMode === '1' ? (
-                    <div>
-                      <img alt="img for thin AP" />
-                      <div>
-                        { 'Some introduction to thin AP.' }
-                      </div>
-                    </div>
-                  ) : (
-                    <div>
-                      <img alt="img for fat AP" />
-                      <div>
-                        { 'Some introduction to fat AP.' }
-                      </div>
-                    </div>
-                  )
-                }
-              </div>
-            </div>
-            {/*
-              <div
-                className="row"
+                className="cols cols-6"
                 style={{
-                  marginTop: '5px',
+                  width: '400px',
+                  border: '1px solid #ddd',
+                  overflow: 'hidden',
+                }}
+                onClick={() => {
+                  this.props.changeNextModeData({ enable: '0' });
                 }}
               >
                 <div
-                  className="cols cols-6"
-                  style={radioWrapStyle}
+                  style={nextModeData.enable === '0' ? selectedWrapStyle : {}}
                 >
+                  <img
+                    src={imgEn}
+                    alt="img for thin ap"
+                  />
                 </div>
                 <div
-                  className="cols cols-6"
-                  style={radioWrapStyle}
+                  style={{
+                    border: '1px solid #ddd',
+                    textAlign: 'center',
+                    height: '50px',
+                    lineHeight: '50px',
+                    fontSize: '15px',
+                    marginTop: '3px',
+                  }}
                 >
                   <FormInput
                     type="radio"
-                    id="thinSelectRadio"
-                    label={nextMode === '1' ? _('Thin') : _('Fat')}
-                    checked={nextMode === '1'}
+                    name="modeSelection"
+                    checked={nextModeData.enable === '0'}
+                    text={_('Fat AP Mode')}
+                    onChange={() => {
+                      this.props.changeNextModeData({ enable: '0' });
+                    }}
                   />
                 </div>
               </div>
-            */}
+              <div
+                className="cols cols-6"
+                style={{
+                  width: '400px',
+                  border: '1px solid #ddd',
+                  overflow: 'hidden',
+                }}
+                onClick={() => {
+                  this.props.changeNextModeData({ enable: '1' });
+                  this.props.changeShowThinModeConfigModal(true);
+                }}
+              >
+                <div
+                  style={nextModeData.enable === '1' ? selectedWrapStyle : {}}
+                >
+                  <img
+                    src={imgEn}
+                    alt="img for fat ap"
+                    style={{
+                      position: 'relative',
+                      left: '-400px',
+                    }}
+                  />
+                </div>
+                <div
+                  style={{
+                    border: '1px solid #ddd',
+                    textAlign: 'center',
+                    height: '50px',
+                    lineHeight: '50px',
+                    fontSize: '15px',
+                    marginTop: '3px',
+                  }}
+                >
+                  <FormInput
+                    type="radio"
+                    name="modeSelection"
+                    checked={nextModeData.enable === '1'}
+                    text={_('Thin AP Mode')}
+                    onChange={() => {
+                      this.props.changeNextModeData({ enable: '1' });
+                      this.props.changeShowThinModeConfigModal(true);
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
           <div className="t-wizard__footer">
             <Button
-              onClick={this.onSkipButtonClick}
+              onClick={() => onSkipButtonClick()}
               text={_('Skip')}
             />
             <Button
@@ -511,6 +346,50 @@ export const SignUp = React.createClass({
             />
           </div>
         </div>
+        <Modal
+          className="thinModeConfig"
+          isShow={this.props.selfState.get('showThinModeConfigModal')}
+          onOk={() => {
+            this.onOkButtonClick();
+            this.props.changeShowThinModeConfigModal(false);
+          }}
+          onClose={() => {
+            const data = this.props.selfState.get('currModeData').toJS();
+            this.props.changeNextModeData(fromJS(...data));
+            this.props.changeShowThinModeConfigModal(false);
+          }}
+        >
+          <FormGroup
+            type="switch"
+            label={_('Discovery Type')}
+            value={nextModeData.discoveryType}
+            options={[
+              { value: 'dhcp', label: _('DHCP') },
+              { value: 'static', label: _('Static') },
+            ]}
+            minWidth="73px"
+            onChange={(data) => {
+              this.props.changeNextModeData(fromJS({ discoveryType: data.value }));
+            }}
+          />
+          {
+            nextModeData.discoveryType === 'static' && nextModeData.enable === '1' ? (
+              <FormGroup
+                type="text"
+                label={_('AC IP')}
+                value={nextModeData.acIp}
+                onChange={(data) => {
+                  this.props.changeNextModeData(fromJS({ acIp: data.value }));
+                }}
+                required
+                {...this.props.validateOption.validateIp}
+              />
+            ) : null
+          }
+          <span>
+            {_('Notice: The device will reboot when you click \'OK\' button if the configuration changed! Or, the page will be directed to management web.')}
+          </span>
+        </Modal>
         <Modal
           className="excUpgradeBar"
           isShow={this.props.selfState.get('showProgressBar')}
@@ -536,8 +415,8 @@ export const SignUp = React.createClass({
         </Modal>
       </div>
     );
-  },
-});
+  }
+}
 
 SignUp.propTypes = propTypes;
 
@@ -551,7 +430,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     utils.extend({}, appActions, sharedActions, selfActions),
-    dispatch
+    dispatch,
   );
 }
 
@@ -559,7 +438,7 @@ function mapDispatchToProps(dispatch) {
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
-  validator.mergeProps(validOptions)
+  validator.mergeProps(validOptions),
 )(SignUp);
 
 export const wizard = reducer;

@@ -24,10 +24,10 @@ const ajaxTypeMap = {
 
 function initConfig(state, payload) {
   guiVersion = payload.version.replace(/\./g, '');
-  guiVersion = `.${guiVersion}`;
+  guiVersion = `${guiVersion}`;
 
   return state.set('config', payload)
-    .set('guiName', payload.title);
+    .set('guiName', payload.title || '');
 }
 
 
@@ -44,8 +44,14 @@ function receiveReport(state, data) {
 }
 
 function receiveAcInfo(state, action) {
-  const myData = fromJS(action.data)
-      .set('version', action.data.version + guiVersion);
+  let myData = fromJS(action.data);
+  let versionsStr = guiVersion;
+
+  if (action.data.version) {
+    versionsStr = `${action.data.version}.${guiVersion}`;
+  }
+
+  myData = myData.set('version', versionsStr);
 
   return state.set('fetching', false).merge(myData);
 }

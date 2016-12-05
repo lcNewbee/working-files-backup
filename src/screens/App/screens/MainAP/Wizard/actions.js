@@ -74,9 +74,30 @@ export function changeNextMode(data) {
   };
 }
 
-export function changeModeData(data) {
+export function changeNextModeData(data) {
   return {
-    type: 'CHANGE_MODE_DATA',
+    type: 'CHANGE_NEXT_MODE_DATA',
+    data,
+  };
+}
+
+export function changeCurrModeData(data) {
+  return {
+    type: 'CHANGE_CURR_MODE_DATA',
+    data,
+  };
+}
+
+export function changeShowThinModeConfigModal(data) {
+  return {
+    type: 'CHANGE_SHOW_THIN_MODE_CONFIG_MODAL',
+    data,
+  };
+}
+
+export function changeShowThinConfigModal(data) {
+  return {
+    type: 'CHANGE_SHOW_THIN_CONFIG_MODAL',
     data,
   };
 }

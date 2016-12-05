@@ -154,6 +154,7 @@ export default class ACL extends React.Component {
           this.props.changePreLenInMacInput(0);
           this.props.changeMacInput('');
           this.props.initMacstatus(listLen);
+          this.macListWrap.scrollIntoView();
         }
       }
     });
@@ -334,14 +335,17 @@ export default class ACL extends React.Component {
               border: '1px solid #ccc',
               overflow: 'auto',
               marginRight: '20px',
-
             }}
+
           >
             <MacList
               maclist={maclist}
               onMacClick={this.props.updateMacStatus}
               macStatusList={macStatus}
-
+            />
+            <div
+              id="macListWrap"
+              ref={(ref) => { this.macListWrap = ref; }}
             />
           </div>
           <Button

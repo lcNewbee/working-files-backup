@@ -30,3 +30,4 @@ gulp.task('config:ap', () => configProduct('ap'));
 gulp.task('config:ac', () => configProduct('ac'));
 gulp.task('config:aip5', () => configProduct('aip5'));
 gulp.task('config:aip10', () => configProduct('aip10'));
+gulp.task('config:extraHelp', () => configProduct('extraHelp'));

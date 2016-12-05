@@ -7,19 +7,28 @@ const defaultState = fromJS({
     password: '',
     timeZone: (new Date()).getTimezoneOffset(),
   },
-  currMode: '0',
-  nextMode: '0',
   showProgressBar: false,
-  modeData: {
+  showThinModeConfigModal: false,
+  currModeData: {
+    enable: '0',
+    discoveryType: 'dhcp',
+    acIp: '',
+  },
+  nextModeData: {
     enable: '0',
     discoveryType: 'dhcp',
     acIp: '',
   },
 });
 
-function onModeDataChange(state, action) {
-  const modeData = state.get('modeData').merge(action.data);
-  return state.set('modeData', modeData);
+function onNextModeData(state, action) {
+  const nextModeData = state.get('nextModeData').merge(action.data);
+  return state.set('nextModeData', nextModeData);
+}
+
+function onCurrModeData(state, action) {
+  const currModeData = state.get('currModeData').merge(action.data);
+  return state.set('currModeData', currModeData);
 }
 
 export default function (state = defaultState, action) {
@@ -39,14 +48,14 @@ export default function (state = defaultState, action) {
       });
 
     // Mine
-    case 'CHANGE_CURRENT_MODE':
-      return state.set('currMode', action.data);
     case 'CHANGE_SHOW_PROGRESS_BAR':
       return state.set('showProgressBar', action.data);
-    case 'CHANGE_NEXT_MODE':
-      return state.set('nextMode', action.data);
-    case 'CHANGE_MODE_DATA':
-      return onModeDataChange(state, action);
+    case 'CHANGE_NEXT_MODE_DATA':
+      return onNextModeData(state, action);
+    case 'CHANGE_CURR_MODE_DATA':
+      return onCurrModeData(state, action);
+    case 'CHANGE_SHOW_THIN_MODE_CONFIG_MODAL':
+      return state.set('showThinModeConfigModal', action.data);
     default:
   }
   return state;

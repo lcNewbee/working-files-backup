@@ -15,6 +15,7 @@ const defaultState = fromJS({
   scaning: false,
   showScanResult: false,
   selectedResult: {},
+  radioSelectedArr: [],
 });
 
 export default function (state = defaultState, action) {
@@ -45,6 +46,8 @@ export default function (state = defaultState, action) {
       return state.set('reinitAt', new Date().getTime());
     case 'CHANGE_CURR_RADIO_CONFIG':
       return state.set('currRadioConfig', action.data);
+    case 'CHANGE_RADIO_SELECTED_ARR':
+      return state.set('radioSelectedArr', action.data);
     case 'LEAVE_SCREEN':
       return defaultState;
     case 'RESTORE_SELF_STATE':

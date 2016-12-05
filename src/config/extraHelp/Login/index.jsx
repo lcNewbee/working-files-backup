@@ -17,6 +17,7 @@ const propTypes = {
   selfState: PropTypes.instanceOf(Map),
   fetch: PropTypes.func,
   save: PropTypes.func,
+  changeRadioType: PropTypes.func,
 };
 
 const defaultProps = {
@@ -57,6 +58,19 @@ export default class Login extends Component {
               }}
             />
             <FormGroup
+              type="switch"
+              label="Radio Type"
+              options={[
+                { label: '2.4G', value: '2.4' },
+                { label: '5G', value: '5' },
+              ]}
+              value={this.props.selfState.get('radioType')}
+              minWidth="99px"
+              onChange={(data) => {
+                this.props.changeRadioType(data.value);
+              }}
+            />
+            <FormGroup
               type="select"
               label={_('Direction Select')}
               value={this.props.selfState.get('direction')}
@@ -81,6 +95,7 @@ export default class Login extends Component {
                 const query = {
                   enable: this.props.selfState.get('enable'),
                   direction: this.props.selfState.get('direction'),
+                  radioType: this.props.selfState.get('radioType'),
                 };
                 this.props.save('goform/set_direction', query);
               }}
@@ -106,7 +121,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    actions
+    actions,
   ), dispatch);
 }
 
