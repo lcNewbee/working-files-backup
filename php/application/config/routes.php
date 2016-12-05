@@ -97,3 +97,6 @@ $route['goform/system/admins'] = 'systemAdmin';
 $route['goform/system/maintenance'] = 'systemMaintenance';
 $route['goform/system/backup'] = 'systemMaintenance/backup';
 $route['goform/system/reboot'] = 'systemMaintenance/reboot';
+$route['goform/system/license'] = 'systemLicense';
+
+

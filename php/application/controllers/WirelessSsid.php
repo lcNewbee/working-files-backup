@@ -9,7 +9,10 @@ class WirelessSsid extends CI_Controller {
         $this->load->model('group/WirelessSsid_Model');
 	}
 	function fetch() {
-		$retdata = array('groupid' => (int)element('groupid', $_GET),);
+		$retdata = array(
+			'groupid' => (int)element('groupid', $_GET),
+			'filterGroupid' => (int)element('filterGroupid', $_GET,0)
+		);        
         return $this->WirelessSsid_Model->get_ssid_list($retdata);		
 	}
 	function onAction($data) {
