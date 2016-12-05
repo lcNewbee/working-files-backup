@@ -612,7 +612,7 @@ const routes = [
             formUrl: 'goform/system/networktimeprotocol',
             path: '/main/system/networktimeprotocol',
             icon: 'cog',
-            text: _('Network Time Protocol'),
+            text: _('NTP'),
             component: sNetworkTimeProtocol.Screen,
           }, {
             id: 'admin',

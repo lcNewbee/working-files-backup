@@ -6,17 +6,18 @@ import { bindActionCreators } from 'redux';
 import AppScreen from 'shared/components/Template/AppScreen';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
+import TIME_ZONE from 'shared/config/timeZone';
 
 const propTypes = {
   store: PropTypes.instanceOf(Map),
-  app:  PropTypes.instanceOf(Map),
+  app: PropTypes.instanceOf(Map),
 };
 const defaultProps = {};
 
 const settingsOptions = fromJS([
   {
     id: 'ac_onoff',
-    label: _('Service'),
+    label: _('Enable NTP Sync'),
     fieldset: 'acTime',
     legend: _('AC Time Synchronization Setting'),
     type: 'checkbox',
@@ -44,7 +45,8 @@ const settingsOptions = fromJS([
     id: 'ac_timezone',
     fieldset: 'acTime',
     label: _('Synchronization Time Zone'),
-    type: 'text',
+    type: 'select',
+    options: TIME_ZONE,
   },
 ]).groupBy(item => item.get('fieldset'))
 .toList();

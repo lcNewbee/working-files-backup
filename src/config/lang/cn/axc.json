@@ -463,15 +463,15 @@
 
   "Active-Standby": "主备设置",
   "Enable Active-Standby": "启用主备",
-  "Network Time Protocol":"网络时间协议",
+  "NTP":"网络时间协议",
   "AC Time Synchronization Setting":"设置AC时间同步",
   "AP Time Synchronization Setting":"设置AP时间同步",
-  "Server1":"服务器1",
-  "Server2":"服务器2",
-  "Server3":"服务器3",
+  "Synchronization Server":"同步服务器",
+  "Enable NTP Sync":"启用NTP同步",
+  "Referral Server":"备用服务器",
   "Synchronization IP Address":"同步IP地址",
   "Synchronization Time Interval":"同步时间间隔",
-
+  "Synchronization Time Zone":"同步时区",
 
   "Custer Settings": "集群设置",
   "Authentication Mask":"认证 Mask",

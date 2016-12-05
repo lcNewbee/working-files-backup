@@ -58,7 +58,7 @@ export default class View extends React.Component {
               <div className="m-description-list">
                 <dl className="m-description-list-row">
                   <dt style={dtStyle}>{_('License Status')}</dt>
-                  <dd>{$$curData.get('secure_type')}</dd>
+                  <dd>{$$curData.get('secure_status')}</dd>
                 </dl>
                 {
                   /*  <dl className="m-description-list-row">
