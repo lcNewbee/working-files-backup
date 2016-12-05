@@ -17,6 +17,14 @@ class SystemStatus_Model extends CI_Model {
         $retda['memoryUsed'] = intval($data['mem_usage']);        
         $retda['storeUsed'] = intval($data['store_usage']);
         
+        $stateid = secure_system_info_get(json_encode(array()));
+
+        $obj = json_decode($stateid);
+        if(is_object($obj)){
+            $retda['system_cpuid'] = $obj->data->system_cpuid;
+            $retda['system_memid'] = $obj->data->system_memid;
+            $retda['system_sdaid'] = $obj->data->system_sdaid;          
+        }
         $arr['state'] = array('code'=>2000,'msg'=>'ok');
         $arr['data'] = $retda;								
         return json_encode($arr);
