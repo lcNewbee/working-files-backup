@@ -12,8 +12,11 @@ import * as screensActions from 'shared/actions/screens';
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
+  store: PropTypes.instanceOf(Map),
   saveScreenSettings: PropTypes.func,
+  updateScreenSettings: PropTypes.func,
 };
+
 const defaultProps = {};
 
 export default class View extends React.Component {
@@ -29,6 +32,9 @@ export default class View extends React.Component {
     const dtStyle = {
       width: '20%',
     };
+    const { app, store, updateScreenSettings } = this.props;
+    const myScreenId = store.get('curScreenId');
+    const $$curData = store.getIn([myScreenId, 'curSettings']);
 
     return (
       <AppScreen
@@ -39,25 +45,35 @@ export default class View extends React.Component {
             <div className="cols col-6">
               <FormGroup
                 type="textarea"
+                value={$$curData.get('secure_license')}
+                onChange={
+                  (data) => {
+                    updateScreenSettings({
+                      secure_license: data.value,
+                    });
+                  }
+                }
                 label={_('Device License')}
               />
               <div className="m-description-list">
                 <dl className="m-description-list-row">
                   <dt style={dtStyle}>{_('License Status')}</dt>
-                  <dd>{_('Licensed')}</dd>
+                  <dd>{$$curData.get('secure_type')}</dd>
                 </dl>
-           {/*  <dl className="m-description-list-row">
-                  <dt style={dtStyle}>{_('AP Number')}</dt>
-                  <dd>1000</dd>
-                </dl>
-                <dl className="m-description-list-row">
-                  <dt style={dtStyle}>{_('Expiration Date')}</dt>
-                  <dd>2018-02-23</dd>
-                </dl> */}
+                {
+                  /*  <dl className="m-description-list-row">
+                    <dt style={dtStyle}>{_('AP Number')}</dt>
+                    <dd>1000</dd>
+                  </dl>
+                  <dl className="m-description-list-row">
+                    <dt style={dtStyle}>{_('Expiration Date')}</dt>
+                    <dd>2018-02-23</dd>
+                  </dl> */
+                }
               </div>
             </div>
             <div className="cols col-6">
-          {/* <FormGroup
+              {/* <FormGroup
                 type="textarea"
                 label={_('Firmware Upgrade License')}
               />
@@ -77,7 +93,7 @@ export default class View extends React.Component {
             <div className="form-control">
               <SaveButton
                 type="button"
-                loading={this.props.app.get('saving')}
+                loading={app.get('saving')}
                 onClick={this.onSave}
               />
             </div>
@@ -95,7 +111,6 @@ function mapStateToProps(state) {
   return {
     app: state.app,
     store: state.screens,
-    groupId: state.product.getIn(['group', 'selected', 'id']),
   };
 }
 

@@ -1,0 +1,12 @@
+ {
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "settings": {
+      "secure_type": "1",
+      "secure_license": "a4b5c8d6e"
+    }
+  }
+}

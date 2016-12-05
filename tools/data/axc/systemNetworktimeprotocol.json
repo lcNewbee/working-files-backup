@@ -1,0 +1,19 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "setting": {
+       "ac_service": "0",
+       "ac_server1": "192.168.0.197 ",
+       "ac_server2": "192.168.0.198",
+       "ac_server3": "192.168.0.199 ",
+       "ac_TimeInterval": "5",
+       "ap_service": "0 ",
+       "ap_ipType": "IPv4",
+       "ap_ipAddress": "192.168.0.200 ",
+       "ap_TimeInterval": "6 "
+    }
+  }
+}
