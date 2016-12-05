@@ -41,11 +41,8 @@ if (module.hot) {
     } catch (error) {}
   };
 
-<<<<<<< e2fb2375c88cfcb9299ad467cb84d66003b1cdf6
+
   module.hot.accept('./config/axc', () => {
-=======
-  module.hot.accept('./config/aip10', () => {
->>>>>>> AP: 首次登陆的快速设置页面排版及功能完成
     setImmediate(() => {
       // Preventing the hot reloading error from react-router
       unmountComponentAtNode(mountNode);
