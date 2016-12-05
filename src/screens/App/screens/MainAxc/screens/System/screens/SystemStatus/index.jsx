@@ -248,18 +248,17 @@ export default class View extends PureComponent {
               <div className="m-description-list">
                 <dl className="m-description-list-row">
                   <dt>{_('CPU ID')}</dt>
-                  <dd>{_('asda21312312312312')}</dd>
-                </dl>
-                <dl className="m-description-list-row">
-                  <dt>{_('Flash ID')}</dt>
-                  <dd>asda21312312312312</dd>
+                  <dd>{serverData.get('system_cpuid')}</dd>
                 </dl>
                 <dl className="m-description-list-row">
                   <dt>{_('Memory ID')}</dt>
-                  <dd>asda21312312312312</dd>
+                  <dd>{serverData.get('system_memid')}</dd>
+                </dl>
+                <dl className="m-description-list-row">
+                  <dt>{_('Flash ID')}</dt>
+                  <dd>{serverData.get('system_sdaid')}</dd>
                 </dl>
               </div>
-
             </div>
           </div>
           <div className="cols col-12" >
