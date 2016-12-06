@@ -95,7 +95,7 @@ const funConfig = {
 const routes = [{
   path: '/',
   component: App.Screen,
-  formUrl: '/goform/get_system_info_forTestUse',
+  formUrl: '/goform/get_product_info',
   indexRoute: { component: pLogin.Screen },
   childRoutes: [{
     path: '/main',

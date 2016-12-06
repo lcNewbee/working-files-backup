@@ -14,8 +14,8 @@
 		"lan0Mac":"14:FF:00:00:11:10",
 		"lan1Mac":"14:FF:00:00:11:11",
 		"wlan0Mac":"14:FF:00:00:11:10",
-    "memTotal": "40",
-    "memFree": "20",
+    "memTotal": "126324",
+    "memFree": "68056",
 	  "cpuInfo": "80"
 	},
 	"radioList":[

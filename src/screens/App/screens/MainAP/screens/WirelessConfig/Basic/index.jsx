@@ -1177,14 +1177,16 @@ export default class Basic extends React.Component {
                 </div>
                 */}
               </div>
-
-              <div className="clearfix">
-                { // SSID输入框
-                  basicSettings.getIn(['radioList', radioId, 'wirelessMode']) === 'ap' ? (
+              { // SSID输入框**ap模式**
+                basicSettings.getIn(['radioList', radioId, 'wirelessMode']) === 'ap' ? (
+                  <div
+                    className="clearfix"
+                  >
                     <div
                       style={{
-                        width: '127px',
+                        width: '370px',
                       }}
+                      className="fl"
                     >
                       <FormGroup
                         label={_('SSID')}
@@ -1201,112 +1203,278 @@ export default class Basic extends React.Component {
                         {...validSsid}
                       />
                     </div>
-                  ) : null
-                }
-                <div>
-                  {
-                    (basicSettings.getIn(['radioList', radioId, 'wirelessMode']) === 'sta') ? (
-                      <div>
-                        <div
-                          style={{
-                            width: '127px',
+                    <div
+                      style={{
+                        display: 'inline-block',
+                        marginTop: '11px',
+                      }}
+                      className="fl"
+                    >
+                      <input
+                        style={{
+                          marginBottom: '-2px',
+                          marginRight: '4px',
+                        }}
+                        type="checkbox"
+                        checked={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'hideSsid']) === '1'}
+                        onClick={data => this.onHideSsidboxClick(data)}
+                      />
+                      {_('Hide')}
+                    </div>
+                  </div>
+                ) : null
+              }
+              { // SSID输入框**station模式**
+                basicSettings.getIn(['radioList', radioId, 'wirelessMode']) === 'sta' ? (
+                  <div className="clearfix">
+                    <div
+                      style={{
+                        width: '500px',
+                      }}
+                    >
+                      <div
+                        className="fl"
+                        style={{
+                          width: '370px',
+                        }}
+                      >
+                        <FormGroup
+                          label={_('Remote SSID')}
+                          className="fl"
+                          type="text"
+                          value={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'ssid'])}
+                          onChange={(data) => {
+                            const radioList = basicSettings.get('radioList')
+                                  .setIn([radioId, 'vapList', '0', 'ssid'], data.value);
+                            this.props.updateBasicSettings({ radioList });
                           }}
-                        >
-                          <FormGroup
-                            label={_('Remote SSID')}
-                            className="fl"
-                            type="text"
-                            value={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'ssid'])}
-                            onChange={(data) => {
-                              const radioList = basicSettings.get('radioList')
-                                    .setIn([radioId, 'vapList', '0', 'ssid'], data.value);
-                              this.props.updateBasicSettings({ radioList });
-                            }}
-                            required
-                            {...validSsid}
+                          required
+                          {...validSsid}
+                        />
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        paddingTop: '2px',
+                      }}
+                      className="fl"
+                    >
+                      {
+                        this.props.selfState.get('scaning') ? (
+                          <Button
+                            text={_('Stop')}
+                            onClick={this.onStopScanClick}
+                            loading
                           />
-                        </div>
-                        <span
-                          style={{
-                            paddingTop: '2px',
+                        ) : (
+                          <Button
+                            text={_('Scan')}
+                            onClick={this.onScanBtnClick}
+                          />
+                        )
+                      }
+                    </div>
+                  </div>
+                ) : null
+              }
+              { // SSID输入框**repeater模式**
+                basicSettings.getIn(['radioList', radioId, 'wirelessMode']) === 'repeater' ? (
+                  <div className="clearfix">
+                    <div
+                      style={{
+                        width: '500px',
+                      }}
+                    >
+                      <div
+                        className="fl"
+                        style={{
+                          width: '370px',
+                        }}
+                      >
+                        <FormGroup
+                          label={_('Remote SSID')}
+                          className="fl"
+                          type="text"
+                          value={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'ssid'])}
+                          onChange={(data) => {
+                            const radioList = basicSettings.get('radioList')
+                                            .setIn([radioId, 'vapList', '0', 'ssid'], data.value);
+                            this.props.updateBasicSettings({ radioList });
                           }}
-                        >&nbsp;&nbsp;
-                          {
-                          this.props.selfState.get('scaning') ? (
-                            <Button
-                              text={_('Stop')}
-                              onClick={this.onStopScanClick}
-                              loading
-                            />
-                          ) : (
-                            <Button
-                              text={_('Scan')}
-                              onClick={this.onScanBtnClick}
-                            />
-                          )
-                        }
-                        </span>
+                          required
+                          {...validSsid}
+                        />
                       </div>
-                    ) : (
-                      <div className="clearfix">
-                        {
-                          basicSettings.getIn(['radioList', radioId, 'wirelessMode']) === 'repeater' ? (
-                            <div
-                              className="fl"
-                            >
-                              <FormGroup
-                                label={_('Remote SSID')}
-                                className="fl"
-                                type="text"
-                                value={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'ssid'])}
-                                onChange={(data) => {
-                                  const radioList = basicSettings.get('radioList')
-                                                  .setIn([radioId, 'vapList', '0', 'ssid'], data.value);
-                                  this.props.updateBasicSettings({ radioList });
-                                }}
-                                required
-                                {...validSsid}
-                              />
-                              {
-                                this.props.selfState.get('scaning') ? (
-                                  <Button
-                                    text={_('Stop')}
-                                    onClick={this.onStopScanClick}
-                                    loading
-                                  />
-                                ) : (
-                                  <Button
-                                    text={_('Scan')}
-                                    onClick={this.onScanBtnClick}
-                                  />
-                                )
-                              }
-                            </div>
-                          ) : null
-                        }
-                        <div className="fl">
-                          <span
-                            style={{
-                              display: 'inline-block',
-                              marginTop: '11px',
-                            }}
-                          >&nbsp;&nbsp;
-                            <input
-                              style={{
-                                marginBottom: '-2px',
-                              }}
-                              type="checkbox"
-                              checked={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'hideSsid']) === '1'}
-                              onClick={data => this.onHideSsidboxClick(data)}
-                            />&nbsp;
-                            {_('Hide')}
-                          </span>
-                        </div>
-                      </div>
-                    )
-                  }
-                </div>
-              </div>
+                    </div>
+                    <div
+                      style={{
+                        paddingTop: '2px',
+                      }}
+                      className="fl"
+                    >
+                      {
+                        this.props.selfState.get('scaning') ? (
+                          <Button
+                            text={_('Stop')}
+                            onClick={this.onStopScanClick}
+                            loading
+                          />
+                        ) : (
+                          <Button
+                            text={_('Scan')}
+                            onClick={this.onScanBtnClick}
+                          />
+                        )
+                      }
+                    </div>
+                    <div
+                      style={{
+                        marginTop: '11px',
+                        marginLeft: '4px',
+                      }}
+                      className="fl"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'hideSsid']) === '1'}
+                        onClick={data => this.onHideSsidboxClick(data)}
+                      />
+                      {_('Hide')}
+                    </div>
+                  </div>
+                ) : null
+              }
+{
+              // <div className="clearfix">
+              //   { // SSID输入框
+              //     basicSettings.getIn(['radioList', radioId, 'wirelessMode']) === 'ap' ? (
+              //       <div
+              //         style={{
+              //           width: '127px',
+              //         }}
+              //       >
+              //         <FormGroup
+              //           label={_('SSID')}
+              //           className="fl"
+              //           form="basicSettings"
+              //           type="text"
+              //           value={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'ssid'])}
+              //           onChange={(data) => {
+              //             const radioList = basicSettings.get('radioList')
+              //                   .setIn([radioId, 'vapList', '0', 'ssid'], data.value);
+              //             this.props.updateBasicSettings({ radioList });
+              //           }}
+              //           required
+              //           {...validSsid}
+              //         />
+              //       </div>
+              //     ) : null
+              //   }
+              //   <div>
+              //     {
+              //       (basicSettings.getIn(['radioList', radioId, 'wirelessMode']) === 'sta') ? (
+              //         <div>
+              //           <div
+              //             style={{
+              //               width: '127px',
+              //             }}
+              //           >
+              //             <FormGroup
+              //               label={_('Remote SSID')}
+              //               className="fl"
+              //               type="text"
+              //               value={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'ssid'])}
+              //               onChange={(data) => {
+              //                 const radioList = basicSettings.get('radioList')
+              //                       .setIn([radioId, 'vapList', '0', 'ssid'], data.value);
+              //                 this.props.updateBasicSettings({ radioList });
+              //               }}
+              //               required
+              //               {...validSsid}
+              //             />
+              //           </div>
+              //           <span
+              //             style={{
+              //               paddingTop: '2px',
+              //             }}
+              //           >&nbsp;&nbsp;
+              //             {
+              //             this.props.selfState.get('scaning') ? (
+              //               <Button
+              //                 text={_('Stop')}
+              //                 onClick={this.onStopScanClick}
+              //                 loading
+              //               />
+              //             ) : (
+              //               <Button
+              //                 text={_('Scan')}
+              //                 onClick={this.onScanBtnClick}
+              //               />
+              //             )
+              //           }
+              //           </span>
+              //         </div>
+              //       ) : (
+              //         <div className="clearfix">
+              //           {
+              //             basicSettings.getIn(['radioList', radioId, 'wirelessMode']) === 'repeater' ? (
+              //               <div
+              //                 className="fl"
+              //               >
+              //                 <FormGroup
+              //                   label={_('Remote SSID')}
+              //                   className="fl"
+              //                   type="text"
+              //                   value={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'ssid'])}
+              //                   onChange={(data) => {
+              //                     const radioList = basicSettings.get('radioList')
+              //                                     .setIn([radioId, 'vapList', '0', 'ssid'], data.value);
+              //                     this.props.updateBasicSettings({ radioList });
+              //                   }}
+              //                   required
+              //                   {...validSsid}
+              //                 />
+              //                 {
+              //                   this.props.selfState.get('scaning') ? (
+              //                     <Button
+              //                       text={_('Stop')}
+              //                       onClick={this.onStopScanClick}
+              //                       loading
+              //                     />
+              //                   ) : (
+              //                     <Button
+              //                       text={_('Scan')}
+              //                       onClick={this.onScanBtnClick}
+              //                     />
+              //                   )
+              //                 }
+              //               </div>
+              //             ) : null
+              //           }
+              //           <div className="fl">
+              //             <span
+              //               style={{
+              //                 display: 'inline-block',
+              //                 marginTop: '11px',
+              //               }}
+              //             >&nbsp;&nbsp;
+              //               <input
+              //                 style={{
+              //                   marginBottom: '-2px',
+              //                 }}
+              //                 type="checkbox"
+              //                 checked={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'hideSsid']) === '1'}
+              //                 onClick={data => this.onHideSsidboxClick(data)}
+              //               />&nbsp;
+              //               {_('Hide')}
+              //             </span>
+              //           </div>
+              //         </div>
+              //       )
+              //     }
+              //   </div>
+              // </div>
+}
               <FormGroup
                 type="number"
                 label={_('Vlan ID')}

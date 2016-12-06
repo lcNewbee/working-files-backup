@@ -1005,7 +1005,7 @@ export default class SystemStatus extends React.Component {
                   <FormGroup
                     label={_('Memory Used :')}
                     type="plain-text"
-                    value={`${((memTotal - memFree) / memTotal) * 100}%`}
+                    value={`${parseInt(((Number(memTotal) - Number(memFree)) / Number(memTotal)) * 100, 10)}%`}
                   />
                 </div>
                 <div className="cols col-6">

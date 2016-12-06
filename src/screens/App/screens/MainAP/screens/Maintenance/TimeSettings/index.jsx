@@ -32,7 +32,7 @@ function createTimezoneOption(zone) {
   for (const key of zone.keys()) {
     const option = {
       value: key,
-      label: `${key} - ${zone.get(key)}`,
+      label: key,
     };
     options.push(option);
   }
@@ -162,7 +162,7 @@ export default class TimeSettings extends Component {
           />
           <FormGroup
             type="select"
-            label={_('Time Zone')}
+            label={_('Region')}
             options={timezoneOptions}
             disabled={ntpEnable === '0'}
             value={this.props.store.getIn(['curData', 'zoneName'])}

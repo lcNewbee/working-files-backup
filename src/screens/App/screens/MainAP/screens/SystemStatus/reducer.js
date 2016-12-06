@@ -13,8 +13,8 @@ const defaultState = fromJS({
   serverData: {
     cpuTotal: '100',
     cpuInfo: '40',
-    memFree: '40',
-    memTotal: '100',
+    memFree: '68056',
+    memTotal: '126324',
     flowPerSsid: [
       { name: 'Axilsopt1', value: '103' },
       { name: 'Axilspot2', value: '5' },

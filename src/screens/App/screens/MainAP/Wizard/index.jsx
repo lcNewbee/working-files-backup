@@ -263,6 +263,10 @@ export default class SignUp extends React.Component {
                   <img
                     src={imgEn}
                     alt="img for thin ap"
+                    style={{
+                      height: '350px',
+                      paddingLeft: '20px',
+                    }}
                   />
                 </div>
                 <div
@@ -303,10 +307,11 @@ export default class SignUp extends React.Component {
                 >
                   <img
                     src={imgEn}
-                    alt="img for fat ap"
+                    alt="img for thin ap"
                     style={{
                       position: 'relative',
-                      left: '-400px',
+                      left: '-330px',
+                      height: '350px',
                     }}
                   />
                 </div>

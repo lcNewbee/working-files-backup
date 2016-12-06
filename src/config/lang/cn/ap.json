@@ -251,6 +251,7 @@
   "Vietnam": "越南",
   "Yemen": "也门",
   "Zimbabwe": "津巴布韦",
+  "Region": "地区",
 
   "Peer IP": "对端IP",
   "Connection Status": "连接状态",
@@ -331,5 +332,6 @@
   "CPU Used :": "CPU使用率：",
   "Memory Used :": "内存使用率：",
   "Skip": "跳过",
-  "Quick Setup": "快速设置"
+  "Quick Setup": "快速设置",
+  "Peer Mac": "对端MAC"
 }

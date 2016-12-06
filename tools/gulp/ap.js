@@ -20,22 +20,22 @@ gulp.task('clean:pubap', () => {
 
 gulp.task('clean:pubAip5', () => {
   let distPath = paths.pubAip5;
-
+  const dist = '../AIP5_web';
   if (argv.d) {
     distPath = argv.d;
   }
 
-  return del([distPath, `${distPath}.zip`], { force: true });
+  return del([distPath, `${dist}.zip`], { force: true });
 });
 
 gulp.task('clean:pubAip10', () => {
   let distPath = paths.pubAip10;
-
+  const dist = '../AIP10_web';
   if (argv.d) {
     distPath = argv.d;
   }
 
-  return del([distPath, `${distPath}.rar`], { force: true });
+  return del([distPath, `${dist}.zip`], { force: true });
 });
 
 gulp.task('pub:copyap', () => {
@@ -101,7 +101,7 @@ gulp.task('compressAip5', () => {
   }
   const arr = distPath.split('/');
   const name = arr[arr.length - 1];
-  const dist = arr.slice(0, arr.length - 1).join('/');
+  const dist = arr.slice(0, 1).join('/');
   return gulp.src(`${distPath}/**`)
         .pipe(zip(`${name}.zip`))
         .pipe(gulp.dest(dist));
@@ -115,8 +115,8 @@ gulp.task('compressAip10', () => {
   }
   const arr = distPath.split('/');
   const name = arr[arr.length - 1];
-  const dist = arr.slice(0, arr.length - 1).join('/');
-  return gulp.src(`${distPath}/**/*`)
+  const dist = arr.slice(0, 1).join('/');
+  return gulp.src(`${distPath}/**`)
         .pipe(zip(`${name}.zip`))
         .pipe(gulp.dest(dist));
 });
