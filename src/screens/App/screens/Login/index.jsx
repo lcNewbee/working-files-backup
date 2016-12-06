@@ -25,6 +25,7 @@ const propTypes = {
   changeLoginState: PropTypes.func,
   save: PropTypes.func,
   validateAll: PropTypes.func,
+  routes: PropTypes.array,
   app: PropTypes.object,
   router: PropTypes.object,
   validateOption: PropTypes.object,
@@ -56,11 +57,17 @@ export default class Login extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const thisRoute = this.props.routes && this.props.routes[0];
+    let mainPath = '/main/status';
+
+    if (thisRoute && thisRoute.mainPath) {
+      mainPath = thisRoute.mainPath;
+    }
     if (nextProps.status === 'ok') {
       // 如果登录时间不一致
       // 后续可以做记住密码的功能
       if (this.props.loginedAt !== nextProps.loginedAt) {
-        this.props.router.push('/main/status');
+        this.props.router.push(mainPath);
       }
     }
   }
@@ -125,7 +132,7 @@ export default class Login extends Component {
   }
   onInputKeyUp(e) {
     if (e.which === 13) {
-      this.onLogin();
+      this.onValidateData();
     }
   }
   changeLoginStatus(loginState) {

@@ -20,7 +20,7 @@ const mountNode = document.getElementById('app');
 
 // 引入产品配置
 const renderApp = () => {
-  const prodConfig = require('./config/aip5');
+  const prodConfig = require('./config/axc');
 
   // 主渲染入口
   ReactDOM.render(
@@ -42,7 +42,7 @@ if (module.hot) {
   };
 
 
-  module.hot.accept('./config/aip5', () => {
+  module.hot.accept('./config/axc', () => {
     setImmediate(() => {
       // Preventing the hot reloading error from react-router
       unmountComponentAtNode(mountNode);
