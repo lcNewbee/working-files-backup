@@ -49,6 +49,18 @@ function isAscii(str) {
   return false;
 }
 
+function trim(str){
+  var retStr = str.replace(/^(\s|\u00A0)+/,'');
+
+  for(var i = retStr.length - 1; i >= 0; i--){
+    if(/\S/.test(retStr.charAt(i))){
+      retStr = retStr.substring(0, i + 1);
+      break;
+    }
+  }
+  return retStr;
+}
+
 /**
  * To determine whether an integer
  *
@@ -77,24 +89,35 @@ function isNumber(str) {
   return false;
 }
 
-function addClass(oldClass) {
-  var ret = oldClass;
+function addClassName(oldClassNames, addClassNameStr) {
+  var ret = oldClassNames || '';
 
-  return ret;
+  ret = trim(ret).split(' ');
+  ret.push(addClassNameStr);
+
+  return trim(ret.join(' '));
 }
 
-function removeClass(oldClass) {
-  var ret = oldClass;
+function removeClassName(oldClassNames, removeClassNameStr) {
+  var newClassName = oldClassNames || '';
+  var removeStr = trim(removeClassNameStr);
 
-  return ret;
+  if (removeStr) {
+    newClassName = newClassName.split(removeStr);
+  } else {
+    newClassName = [newClassName];
+  }
+
+  return trim(newClassName.join(' '));
 }
 
 coreUtils.extend(str, {
+  trim: String.prototype.trim || trim,
   isAscii: isAscii,
   isInteger: isInteger,
   isNumber: isNumber,
-  addClass: addClass,
-  removeClass: removeClass,
+  addClassName: addClassName,
+  removeClassName: removeClassName,
 
   prefixInteger: function(num, length) {
     var ret = '';

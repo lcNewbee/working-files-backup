@@ -42,6 +42,7 @@ const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
   group: PropTypes.instanceOf(Map),
+  groupid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   route: PropTypes.object,
   changeScreenActionQuery: PropTypes.func,
   fetch: PropTypes.func,
@@ -135,10 +136,15 @@ export default class Blacklist extends React.Component {
 
   fetchCopyGroupBlacklist(groupid) {
     const fetchUrl = this.props.route.fetchUrl || this.props.route.formUrl;
-
-    this.props.fetch(fetchUrl, {
+    const queryData = {
       groupid,
-    }).then(
+    };
+
+    if (groupid === -100) {
+      queryData.filterGroupid = this.props.groupid;
+    }
+
+    this.props.fetch(fetchUrl, queryData).then(
       (json) => {
         if (json && json.state && json.state.code === 2000) {
           this.props.reciveScreenData({

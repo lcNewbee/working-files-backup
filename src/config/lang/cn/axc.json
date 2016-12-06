@@ -45,7 +45,7 @@
   "Frame Fragment Threshold": "帧的分片门限值",
   "Max RX Duration": "最大接收时间",
   "RTS Threshold": "RTS发送请求门限",
-  "Max Resend Times": "RTS发送请求门限",
+  "Max Resend Times": "最大重传数",
   "Under RTS Threshold": "小于RTS门限",
   "Beyond RTS Threshold": "大于RTS门限",
   "Max Resend Times Under RTS Threshold": "小于RTS门限最大重传次数",

@@ -578,6 +578,9 @@ export default class Main extends Component {
       {
         id: 'devicename',
         text: _('Name'),
+        transform(val, $$data) {
+          return val || $$data.get('mac');
+        },
       }, {
         id: 'mac',
         text: _('MAC Address'),

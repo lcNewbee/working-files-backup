@@ -119,25 +119,25 @@ export const radioBase = fromJS([
   }, {
     id: 'phymode',
     form: 'radioAdvance',
-    label: _('Work Mode'),
+    label: _('Physical Mode'),
     type: 'select',
     defaultValue: 'B/G/N',
     options: [
       {
         value: 1,
-        label: '802.11B',
+        label: '802.11b',
       }, {
         value: 2,
-        label: '802.11A',
+        label: '802.11a',
       }, {
         value: 4,
-        label: '802.11G',
+        label: '802.11g',
       }, {
         value: 8,
-        label: '802.11N',
+        label: '802.11n',
       }, {
         value: 16,
-        label: '802.11BG',
+        label: '802.11bg',
       },
     ],
   }, {
@@ -213,7 +213,37 @@ export const radioAdvance = fromJS([
     type: 'checkbox',
     value: '1',
     defaultValue: '0',
-    text: _('Band Steering'),
+    label: _('Band Steering'),
+  }, {
+    id: 'txchain',
+    form: 'radioAdvance',
+    label: _('TX Spatial Stream'),
+    type: 'switch',
+    defaultValue: '1x1',
+    required: true,
+    options: spatialstreamsOptions,
+    showPrecondition(data) {
+      return parseInt(data.get('spatialstreams'), 10) !== 1;
+    },
+  }, {
+    id: 'rxchain',
+    form: 'radioAdvance',
+    label: _('RX Spatial Stream'),
+    type: 'switch',
+    defaultValue: '1x1',
+    required: true,
+    options: spatialstreamsOptions,
+    showPrecondition(data) {
+      return parseInt(data.get('spatialstreams'), 10) !== 1;
+    },
+
+  }, {
+    id: 'wmmenable',
+    form: 'radioAdvance',
+    label: _('WMM Switch'),
+    type: 'checkbox',
+    value: '1',
+    defaultValue: '0',
   }, {
     id: 'maxclientcount',
     form: 'radioAdvance',
@@ -257,7 +287,8 @@ export const radioAdvance = fromJS([
   }, {
     id: 'shortretrythreshold',
     form: 'radioAdvance',
-    label: _('Max Resend Times Under RTS Threshold'),
+    label: _('Max Resend Times'),
+    help: _('Under RTS Threshold'),
     type: 'number',
     min: 1,
     max: 15,
@@ -265,7 +296,8 @@ export const radioAdvance = fromJS([
   }, {
     id: 'longretrythreshold',
     form: 'radioAdvance',
-    label: _('Max Resend Times Beyond RTS Threshold'),
+    label: _('Max Resend Times'),
+    help: _('Beyond RTS Threshold'),
     type: 'number',
     min: 1,
     max: 15,
@@ -273,43 +305,38 @@ export const radioAdvance = fromJS([
   }, {
     id: 'dtim',
     form: 'radioAdvance',
-    label: _('Beacon Frame Interval Number'),
+    label: _('Beacon Interval Number'),
     type: 'number',
     min: 1,
     max: 15,
     defaultValue: 7,
-  }, {
-    id: 'wmmenable',
-    form: 'radioAdvance',
-    label: _('WMM Switch'),
-    type: 'checkbox',
-    value: '1',
-    defaultValue: '0',
-  }, {
-    id: 'cwmin',
-    form: 'radioAdvance',
-    label: _('CW Threshold Min Time'),
-    type: 'number',
-    min: 1,
-    max: 3600,
-    defaultValue: 60,
-  }, {
-    id: 'cwmax',
-    form: 'radioAdvance',
-    label: _('CW Threshold Max Time'),
-    type: 'number',
-    min: 1,
-    max: 3600,
-    defaultValue: 60,
-  }, {
-    id: 'aifs',
-    form: 'radioAdvance',
-    label: _('WMM Random Internal Data Frame Interval'),
-    type: 'number',
-    min: 1,
-    max: 3600,
-    defaultValue: 60,
-  }, {
+  },
+  // {
+  //   id: 'cwmin',
+  //   form: 'radioAdvance',
+  //   label: _('CW Threshold Min Time'),
+  //   type: 'number',
+  //   min: 1,
+  //   max: 3600,
+  //   defaultValue: 60,
+  // }, {
+  //   id: 'cwmax',
+  //   form: 'radioAdvance',
+  //   label: _('CW Threshold Max Time'),
+  //   type: 'number',
+  //   min: 1,
+  //   max: 3600,
+  //   defaultValue: 60,
+  // }, {
+  //   id: 'aifs',
+  //   form: 'radioAdvance',
+  //   label: _('WMM Random Internal Data Frame Interval'),
+  //   type: 'number',
+  //   min: 1,
+  //   max: 3600,
+  //   defaultValue: 60,
+  // },
+  {
     id: 'txop',
     form: 'radioAdvance',
     label: _('txop'),
@@ -325,29 +352,6 @@ export const radioAdvance = fromJS([
     min: 1,
     max: 3600,
     defaultValue: 60,
-  }, {
-    id: 'txchain',
-    form: 'radioAdvance',
-    label: _('TX Spatial Stream'),
-    type: 'switch',
-    defaultValue: '1x1',
-    required: true,
-    options: spatialstreamsOptions,
-    showPrecondition(data) {
-      return parseInt(data.get('spatialstreams'), 10) !== 1;
-    },
-  }, {
-    id: 'rxchain',
-    form: 'radioAdvance',
-    label: _('RX Spatial Stream'),
-    type: 'switch',
-    defaultValue: '1x1',
-    required: true,
-    options: spatialstreamsOptions,
-    showPrecondition(data) {
-      return parseInt(data.get('spatialstreams'), 10) !== 1;
-    },
-
   }, {
     id: 'shortgi',
     form: 'radioAdvance',

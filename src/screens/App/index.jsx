@@ -5,6 +5,7 @@ import ReduxToastr from 'react-redux-toastr';
 import * as actions from 'shared/actions/app';
 import Modal from 'shared/components/Modal';
 import Icon from 'shared/components/Icon';
+import stringUtils from 'shared/utils/lib/string';
 
 const propTypes = {
   closeModal: PropTypes.func,
@@ -51,10 +52,10 @@ class App extends Component {
 
     if (thisRoutes[1].path && thisRoutes[1].path.indexOf('/main/') !== -1) {
       if (bodyElem.className.indexOf('fixed') === -1) {
-        bodyElem.className = `${bodyElem.className} fixed`;
+        bodyElem.className = stringUtils.addClassName(bodyElem.className, 'fixed');
       }
     } else {
-      bodyElem.className = bodyElem.className.replace('fixed', '');
+      bodyElem.className = stringUtils.removeClassName(bodyElem.className, 'fixed');
     }
   }
 

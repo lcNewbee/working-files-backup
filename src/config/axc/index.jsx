@@ -2,6 +2,7 @@ import b28n from 'shared/b28n';
 import { combineReducers } from 'redux';
 import NotFound from 'shared/components/NotFound';
 import remoteActionMiddleware from 'shared/utils/lib/remote_action_middleware';
+import stringUtils from 'shared/utils/lib/string';
 import * as appActions from 'shared/actions/app';
 import appReducer from 'shared/reducers/app';
 import screensReducer from 'shared/reducers/screens';
@@ -41,7 +42,7 @@ if (b28n.getLang() === 'cn') {
   moment.locale('en');
 }
 
-bodyElem.className = `${bodyElem.className} ${b28n.getLang()}`;
+bodyElem.className = stringUtils.addClassName(bodyElem.className, b28n.getLang());
 
 /** ***********************************************************
  * 产品界面配置
@@ -149,7 +150,7 @@ const routes = [
     path: '/',
     component: App.Screen,
     formUrl: 'goform/axcInfo',
-    mainPath: '/main/network',
+    mainPath: '/main/group/monitor/overview',
     indexRoute: { component: sLogin.Screen },
     childRoutes: [
       {

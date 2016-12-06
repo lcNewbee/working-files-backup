@@ -35,7 +35,14 @@ const listOptions = fromJS([
       min: '1',
       max: '64',
       required: true,
+      dataType: 'number',
     },
+  }, {
+    id: 'vendor',
+    text: _('Vender'),
+    noTable: true,
+    noForm: true,
+    defaultValue: 48208,
   },
 ]);
 

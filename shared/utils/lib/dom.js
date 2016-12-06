@@ -1,3 +1,4 @@
+var stringUtils = require('./string');
 var dom;
 
 function getAbsPoint(e) {
@@ -26,9 +27,31 @@ function fragment(html) {
   return frag;
 }
 
+function addClass(elem, addClassName) {
+  var retElem = elem;
+
+  if(retElem) {
+    retElem.className = stringUtils.addClassName(retElem.className, addClassName);
+  }
+
+  return retElem;
+}
+
+function removeClass(elem, removeClassName) {
+  var retElem = elem;
+
+  if(retElem) {
+    retElem.className = stringUtils.removeClassName(retElem.className, removeClassName);
+  }
+
+  return retElem;
+}
+
 dom = {
   getAbsPoint: getAbsPoint,
-  fragment: fragment
+  fragment: fragment,
+  addClass: addClass,
+  removeClass: removeClass,
 }
 // exports
 if (typeof module === "object" && typeof module.exports === "object") {

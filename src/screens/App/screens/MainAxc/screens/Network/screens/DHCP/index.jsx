@@ -79,11 +79,14 @@ const listOptions = fromJS([
     id: 'releaseTime',
     text: _('Lease Time'),
     formProps: {
+      type: 'number',
       required: true,
       help: _('Second'),
+      min: '1',
+      max: '99999999',
       maxLength: '15',
       validator: validator({
-        rules: 'number',
+        rules: 'num',
       }),
     },
   }, {
