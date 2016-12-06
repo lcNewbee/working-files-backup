@@ -1,0 +1,45 @@
+.o-description-list {
+  display: table;
+  width: 100%;
+
+  .o-description-list-row {
+    display: table-row;
+    width: 100%;
+    line-height: 18px;
+
+    dt,
+    dd {
+      display: table-cell;
+      width: 50%;
+    }
+
+    dt {
+      width: 35%;
+      font-size: 10px;
+      font-weight: bold;
+      color: #969ba3;
+    }
+
+    dd {
+      width: 65%;
+      font-size: 11px;
+    }
+  }
+
+  &.o-description-list--lg {
+    .o-description-list-row {
+      line-height: 24px;
+
+      dt {
+        width: 40%;
+        font-size: 12px;
+        font-weight: 400;
+      }
+
+      dd {
+        width: 60%;
+        font-size: 12px;
+      }
+    }
+  }
+}

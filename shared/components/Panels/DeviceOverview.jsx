@@ -18,16 +18,16 @@ const defaultProps = {
 function DeviceOverview(props) {
   const info = props.store.getIn(['data']);
   return (
-    <div className="m-description-list">
-      <dl className="m-description-list-row">
+    <div className="o-description-list">
+      <dl className="o-description-list-row">
         <dt>{_('MAC Address')}</dt>
         <dd>{info.get('mac')}</dd>
       </dl>
-      <dl className="m-description-list-row">
+      <dl className="o-description-list-row">
         <dt>{_('Model')}</dt>
         <dd>{info.get('model')}</dd>
       </dl>
-      <dl className="m-description-list-row">
+      <dl className="o-description-list-row">
         <dt>{_('Soft Version')}</dt>
         <dd>{info.get('softversion')}</dd>
       </dl>

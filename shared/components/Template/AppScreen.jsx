@@ -10,6 +10,7 @@ const propTypes = {
   noTitle: PropTypes.bool,
   children: PropTypes.node,
   title: PropTypes.string,
+  refreshInterval: PropTypes.string,
   route: PropTypes.object,
   initOption: PropTypes.object,
   initScreen: PropTypes.func,
@@ -106,6 +107,13 @@ export default class AppScreen extends React.Component {
 
     if (this.props.fetchScreenData) {
       this.props.fetchScreenData();
+
+      if (this.props.refreshInterval) {
+        this.refreshTimer = setInterval(
+          () => this.props.fetchScreenData(),
+          this.props.refreshInterval,
+        );
+      }
     }
   }
   componentWillUpdate(nextProps) {
@@ -138,6 +146,7 @@ export default class AppScreen extends React.Component {
     }
   }
   componentWillUnmount() {
+    clearInterval(this.refreshTimer);
     if (this.props.leaveScreen) {
       this.props.leaveScreen();
     }

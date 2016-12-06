@@ -4,11 +4,14 @@
     "msg": "ok"
   },
   "data": {
-    "cpuUsed": 20,
+    "cpuUsed": 4,
     "cpuTotal": 100,
-    "memoryUsed": 40,
+    "memoryUsed": 22,
     "memoryTotal": 100,
-    "storeUsed": 10,
-    "storeTotal": 100
+    "storeUsed": 3,
+    "storeTotal": 100,
+    "system_cpuid": "78 06 03 00 FF FB EB BF",
+    "system_memid": "To be filled by O.E.M.",
+    "system_sdaid": "G39575R001867"
   }
 }

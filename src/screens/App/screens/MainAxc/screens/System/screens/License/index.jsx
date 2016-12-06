@@ -55,17 +55,17 @@ export default class View extends React.Component {
                 }
                 label={_('Device License')}
               />
-              <div className="m-description-list">
-                <dl className="m-description-list-row">
+              <div className="o-description-list">
+                <dl className="o-description-list-row">
                   <dt style={dtStyle}>{_('License Status')}</dt>
                   <dd>{$$curData.get('secure_status')}</dd>
                 </dl>
                 {
-                  /*  <dl className="m-description-list-row">
+                  /*  <dl className="o-description-list-row">
                     <dt style={dtStyle}>{_('AP Number')}</dt>
                     <dd>1000</dd>
                   </dl>
-                  <dl className="m-description-list-row">
+                  <dl className="o-description-list-row">
                     <dt style={dtStyle}>{_('Expiration Date')}</dt>
                     <dd>2018-02-23</dd>
                   </dl> */
@@ -77,12 +77,12 @@ export default class View extends React.Component {
                 type="textarea"
                 label={_('Firmware Upgrade License')}
               />
-              <div className="m-description-list">
-                <dl className="m-description-list-row">
+              <div className="o-description-list">
+                <dl className="o-description-list-row">
                   <dt style={dtStyle}>{_('License Status')}</dt>
                   <dd>{_('Unlicensed')}</dd>
                 </dl>
-                <dl className="m-description-list-row">
+                <dl className="o-description-list-row">
                   <dt style={dtStyle}>{_('Expiration Date')}</dt>
                   <dd>2018-02-23</dd>
                 </dl>
