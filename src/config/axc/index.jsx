@@ -647,7 +647,6 @@ const reducers = {
   app: appReducer,
   screens: screensReducer,
   properties: propertiesReducer,
-  login: sLogin.login,
 
   // product comstom reducers
   product: sMainAxc.reducer,

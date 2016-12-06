@@ -298,3 +298,13 @@ export function initAppConfig(payload) {
     payload,
   };
 }
+
+/**
+ * Login
+ */
+export function changeLoginState(payload) {
+  return {
+    type: 'CHANGE_LOGIN_STATE',
+    payload,
+  };
+}

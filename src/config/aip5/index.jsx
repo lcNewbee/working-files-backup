@@ -5,6 +5,7 @@ import { combineReducers } from 'redux';
 import b28n from 'shared/b28n';
 import * as appActions from 'shared/actions/app';
 import appReducer from 'shared/reducers/app';
+import { reducer as toastrReducer } from 'react-redux-toastr';
 
 //
 import 'shared/scss/styles.scss';
@@ -280,7 +281,7 @@ const routes = [{
 const reducers = {
   app: appReducer,
   settings: settingsReducer,
-  login: pLogin.login,
+  toastr: toastrReducer,
   networksettings: sNetworkSettings.networksettings,
   systemstatus: pSystemStatus.systemstatus,
   ssiddetails: sSsidDetails.ssiddetails,
