@@ -16,6 +16,13 @@ const defaultState = fromJS({
     items: [],
   },
   noControl: false,
+  login: {
+    username: 'admin',
+
+    // 用户权限管理
+    purview: 'none',
+    msg: '',
+  },
 });
 const ajaxTypeMap = {
   save: 'saving',
@@ -133,6 +140,9 @@ export default function (state = defaultState, action) {
 
     case 'CHANGE_MODAL_STATE':
       return state.mergeIn(['modal'], action.data);
+
+    case 'CHANGE_LOGIN_STATE':
+      return state.mergeIn(['login'], action.payload);
 
     default:
   }

@@ -11,6 +11,7 @@ const propTypes = {
   fetchProductInfo: PropTypes.func,
   app: PropTypes.object,
   route: PropTypes.object,
+  routes: PropTypes.array,
   children: PropTypes.node,
 };
 
@@ -24,6 +25,7 @@ class App extends Component {
 
     this.onModalClose = this.onModalClose.bind(this);
     this.onModalApply = this.onModalApply.bind(this);
+    this.renderHtmlBody = this.renderHtmlBody.bind(this);
   }
   componentWillMount() {
     if (this.props.fetchProductInfo) {
@@ -43,10 +45,25 @@ class App extends Component {
     });
   }
 
+  renderHtmlBody() {
+    const thisRoutes = this.props.routes;
+    const bodyElem = document.getElementsByTagName('body')[0];
+
+    if (thisRoutes[1].path && thisRoutes[1].path.indexOf('/main/') !== -1) {
+      if (bodyElem.className.indexOf('fixed') === -1) {
+        bodyElem.className = `${bodyElem.className} fixed`;
+      }
+    } else {
+      bodyElem.className = bodyElem.className.replace('fixed', '');
+    }
+  }
+
   render() {
     const { modal } = this.props.app.toJS();
     const modelRole = modal.role;
     const isLoadingModal = modelRole === 'loading';
+
+    this.renderHtmlBody();
 
     return (
       <div>

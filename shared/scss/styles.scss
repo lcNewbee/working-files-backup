@@ -30,16 +30,17 @@
 @import "./02_molecule/m-thumbnail";
 @import "./02_molecule/m-switch";
 
-/* 03: 组织(organism), 把分子组件按一定的结构组合起来 */
+/* 03: 组织(organism), 把原子或分子组件按一定的结构排列组合起来 */
 @import "./03_organism/o-table";
 @import "./03_organism/o-form";
 @import "./03_organism/o-wizard";
 @import "./03_organism/o-box";
-@import "./03_organism/o-top-menu-bar";
 @import "./03_organism/o-menu-bar";
+@import "./03_organism/o-top-menu-bar";
 @import "./03_organism/o-nav";
 @import "./03_organism/o-tab";
 @import "./03_organism/o-list";
+@import "./03_organism/o-description-list";
 @import "./03_organism/o-modal";
 @import "./03_organism/o-pop-over";
 @import "./03_organism/o-property-panel";

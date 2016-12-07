@@ -4,6 +4,7 @@ import NotFound from 'shared/components/NotFound';
 import remoteActionMiddleware from 'shared/utils/lib/remote_action_middleware';
 import * as appActions from 'shared/actions/app';
 import appReducer from 'shared/reducers/app';
+import { reducer as toastrReducer } from 'react-redux-toastr';
 
 //
 import 'shared/scss/styles.scss';
@@ -161,7 +162,6 @@ const reducers = {
 
   status: pStatus.status,
   devices: pDevices.devices,
-  login: pLogin.login,
   clients: pClients.clients,
   logs: pLogs.logs,
   // statistics: pStatistics.statistics,
@@ -171,6 +171,8 @@ const reducers = {
   guest: sGuest.reducer,
   voip: sVoip.reducer,
   admin: sAdmin.reducer,
+
+  toastr: toastrReducer,
 };
 
 // Store

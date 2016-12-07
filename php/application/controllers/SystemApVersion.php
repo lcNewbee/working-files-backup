@@ -192,7 +192,7 @@ class SystemApVersion extends CI_Controller {
             }
           }
       }
-    return json_encode($result);
+    return $result;
   }
 	public function index(){
 		$result = null;

@@ -9,8 +9,6 @@ import * as appActions from 'shared/actions/app';
 import Navbar from 'shared/components/Navbar';
 import Button from 'shared/components/Button/Button';
 import FormGroup from 'shared/components/Form/FormGroup';
-import * as actions from './actions';
-import reducer from './reducer';
 
 const validOptions = Map({
   username: validator({
@@ -24,13 +22,12 @@ const validOptions = Map({
 const propTypes = {
   status: PropTypes.string,
   loginedAt: PropTypes.number,
-  resetData: PropTypes.func,
-  updateData: PropTypes.func,
+  changeLoginState: PropTypes.func,
+  save: PropTypes.func,
   validateAll: PropTypes.func,
-  login: PropTypes.func,
-  changeLoginStatus: PropTypes.func,
-  data: PropTypes.object,
+  routes: PropTypes.array,
   app: PropTypes.object,
+  router: PropTypes.object,
   validateOption: PropTypes.object,
 };
 
@@ -46,20 +43,31 @@ export default class Login extends Component {
     utils.binds(this, [
       'onLogin',
       'onChangeData',
+      'onValidateData',
       'onInputKeyUp',
-      'getDataValue',
+      'changeLoginStatus',
     ]);
+    this.state = {
+      username: 'admin',
+      password: '',
+    };
   }
   componentWillMount() {
     document.getElementsByTagName('body')[0].className += ' sign-body';
   }
 
   componentWillReceiveProps(nextProps) {
+    const thisRoute = this.props.routes && this.props.routes[0];
+    let mainPath = '/main/status';
+
+    if (thisRoute && thisRoute.mainPath) {
+      mainPath = thisRoute.mainPath;
+    }
     if (nextProps.status === 'ok') {
       // 如果登录时间不一致
       // 后续可以做记住密码的功能
       if (this.props.loginedAt !== nextProps.loginedAt) {
-        window.location.hash = '#/main/status';
+        this.props.router.push(mainPath);
       }
     }
   }
@@ -68,7 +76,6 @@ export default class Login extends Component {
     const currClass = document.getElementsByTagName('body')[0].className;
 
     document.getElementsByTagName('body')[0].className = currClass.replace(' sign-body', '');
-    this.props.resetData();
   }
 
   onChangeData(name) {
@@ -76,31 +83,60 @@ export default class Login extends Component {
       const subData = {};
 
       subData[name] = data.value;
-      this.props.updateData(subData);
+      this.setState(subData);
     };
   }
-  onLogin() {
-    this.props
-      .validateAll()
+  onValidateData() {
+    this.props.validateAll()
       .then((invalid) => {
         if (invalid.isEmpty()) {
-          this.props.login((status) => {
-            const currClass = document.getElementsByTagName('body')[0].className;
-
-            document.body.className = currClass.replace(' sign-body', '');
-            this.props.changeLoginStatus(status);
-          });
+          this.onLogin();
         }
       });
   }
+  onLogin() {
+    const currClass = document.getElementsByTagName('body')[0].className;
+
+    document.body.className = currClass.replace(' sign-body', '');
+
+    this.props.save('goform/login', {
+      username: this.state.username,
+      password: this.state.password,
+    }).then(
+      (json) => {
+        const loginState = {
+          username: this.state.username,
+          purview: 'none',
+          loginedAt: Date.now(),
+        };
+        let result = _('Password Error');
+
+        if (json.state) {
+          if (json.state.code === 2000) {
+            result = 'ok';
+
+            if (json.data && json.data.purview) {
+              loginState.purview = json.data.purview;
+            } else {
+              loginState.purview = 'all';
+            }
+          } else {
+            result = json.state.msg;
+          }
+        }
+        loginState.msg = result;
+
+        return loginState;
+      },
+    ).then(this.changeLoginStatus);
+  }
   onInputKeyUp(e) {
     if (e.which === 13) {
-      this.onLogin();
+      this.onValidateData();
     }
   }
-  getDataValue(name) {
-    return typeof this.props.data.get === 'function' ?
-      this.props.data.get(name) : this.props.data[name];
+  changeLoginStatus(loginState) {
+    this.props.changeLoginState(loginState);
   }
 
   render() {
@@ -126,7 +162,7 @@ export default class Login extends Component {
                   maxLength="32"
                   data-label={_('Username')}
                   placeholder={_('Username')}
-                  value={this.getDataValue('username')}
+                  value={this.state.username}
                   onChange={this.onChangeData('username')}
                   onKeyUp={this.onUsernameKeyUp}
                   required
@@ -141,7 +177,7 @@ export default class Login extends Component {
               maxLength="32"
               data-label={_('Password')}
               placeholder={_('Password')}
-              value={this.getDataValue('password')}
+              value={this.state.password}
               onChange={this.onChangeData('password')}
               onKeyUp={this.onInputKeyUp}
               required
@@ -157,7 +193,7 @@ export default class Login extends Component {
               size="lg"
               theme="primary"
               text={_('Login')}
-              onClick={this.onLogin}
+              onClick={this.onValidateData}
             />
           </div>
         </div>
@@ -169,12 +205,11 @@ Login.propTypes = propTypes;
 Login.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
-  const myState = state.login;
+  const myState = state.app.get('login');
 
   return {
     loginedAt: myState.get('loginedAt'),
-    status: myState.get('status'),
-    data: myState.get('data'),
+    status: myState.get('msg'),
     app: state.app,
   };
 }
@@ -182,7 +217,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    actions
   ), dispatch);
 }
 
@@ -191,8 +225,5 @@ function mapDispatchToProps(dispatch) {
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
-  validator.mergeProps(validOptions)
+  validator.mergeProps(validOptions),
 )(Login);
-
-export const login = reducer;
-

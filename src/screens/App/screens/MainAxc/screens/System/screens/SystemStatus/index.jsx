@@ -3,9 +3,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import utils from 'shared/utils';
 import { Map } from 'immutable';
-import {
-  PureComponent, EchartReact,
-} from 'shared/components';
+import PureComponent from 'shared/components/Base/PureComponent';
+import EchartReact from 'shared/components/EchartReact';
+import AppScreen from 'shared/components/Template/AppScreen';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/screens';
 
@@ -28,7 +28,7 @@ function getCpuOption(serverData) {
       {
         name: _('CPU Usage'),
         type: 'pie',
-        radius: ['40%', '70%'],
+        radius: ['36%', '60%'],
         avoidLabelOverlap: false,
         label: {
           normal: {
@@ -79,7 +79,7 @@ function getMemoryOption(serverData) {
       {
         name: _('Memory Usage'),
         type: 'pie',
-        radius: ['40%', '70%'],
+        radius: ['36%', '60%'],
         avoidLabelOverlap: false,
         label: {
           normal: {
@@ -161,50 +161,63 @@ function getStoreOption(serverData) {
 }
 
 const propTypes = {
-  screens: PropTypes.instanceOf(Map),
-  route: PropTypes.object,
-  initScreen: PropTypes.func,
-  leaveScreen: PropTypes.func,
-  fetchScreenData: PropTypes.func,
-
+  store: PropTypes.instanceOf(Map),
 };
 const defaultProps = {};
+
 export default class View extends PureComponent {
-  constructor(props) {
-    super(props);
-
-    this.binds('getCpuOption');
-
-    props.initScreen({
-      id: props.route.id,
-      formUrl: props.route.formUrl,
-      path: props.route.path,
-      isFetchInfinite: true,
-      fetchIntervalTime: 5000,
-    });
-  }
-
-  componentWillMount() {
-    this.props.fetchScreenData();
-  }
-
-  componentWillUnmount() {
-    this.props.leaveScreen();
-  }
-
   render() {
-    const { screens } = this.props;
-    const curScreenId = screens.get('curScreenId');
-    const serverData = screens.getIn([curScreenId, 'data']);
+    const { store } = this.props;
+    const curScreenId = store.get('curScreenId');
+    const serverData = store.getIn([curScreenId, 'data']);
     const memoryStatusOption = getMemoryOption(serverData);
     const cpuStatusOption = getCpuOption(serverData);
     const storeStatusOption = getStoreOption(serverData);
 
     return (
-
-      <div>
-        <h3 className="t-main__content-title">{_('System Status') }</h3>
+      <AppScreen
+        {...this.props}
+        refreshInterval="6000"
+      >
         <div className="o-box row">
+          <div className="cols col-4" >
+            <div className="o-box__cell">
+              <h3>{ _('Details') }</h3>
+            </div>
+            <div
+              className="o-box__cell"
+              style={{
+                minHeight: '177px',
+              }}
+            >
+              <div className="o-description-list o-description-list--lg">
+                <dl className="o-description-list-row">
+                  <dt>{_('CPU ID')}</dt>
+                  <dd>{serverData.get('system_cpuid')}</dd>
+                </dl>
+                <dl className="o-description-list-row">
+                  <dt>{_('Memory ID')}</dt>
+                  <dd>{serverData.get('system_memid')}</dd>
+                </dl>
+                <dl className="o-description-list-row">
+                  <dt>{_('Flash ID')}</dt>
+                  <dd>{serverData.get('system_sdaid')}</dd>
+                </dl>
+                <dl className="o-description-list-row">
+                  <dt>{_('Frimware Version')}</dt>
+                  <dd>{serverData.get('system_sdaid')}</dd>
+                </dl>
+                <dl className="o-description-list-row">
+                  <dt>{_('Up Time')}</dt>
+                  <dd>{serverData.get('system_sdaid')}</dd>
+                </dl>
+                <dl className="o-description-list-row">
+                  <dt>{_('Storage Used')}</dt>
+                  <dd>{serverData.get('storeUsed')}%</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
           <div className="cols col-4" >
             <div className="o-box__cell">
               <h3>{ _('Memory') }</h3>
@@ -215,7 +228,7 @@ export default class View extends PureComponent {
                 className="o-box__canvas"
                 style={{
                   width: '100%',
-                  minHeight: '185px',
+                  minHeight: '160px',
                 }}
               />
             </div>
@@ -230,35 +243,9 @@ export default class View extends PureComponent {
                 className="o-box__canvas"
                 style={{
                   width: '100%',
-                  minHeight: '185px',
+                  minHeight: '160px',
                 }}
               />
-            </div>
-          </div>
-          <div className="cols col-4" >
-            <div className="o-box__cell">
-              <h3>{ _('Details') }</h3>
-            </div>
-            <div
-              className="o-box__cell"
-              style={{
-                minHeight: '202px',
-              }}
-            >
-              <div className="m-description-list">
-                <dl className="m-description-list-row">
-                  <dt>{_('CPU ID')}</dt>
-                  <dd>{serverData.get('system_cpuid')}</dd>
-                </dl>
-                <dl className="m-description-list-row">
-                  <dt>{_('Memory ID')}</dt>
-                  <dd>{serverData.get('system_memid')}</dd>
-                </dl>
-                <dl className="m-description-list-row">
-                  <dt>{_('Flash ID')}</dt>
-                  <dd>{serverData.get('system_sdaid')}</dd>
-                </dl>
-              </div>
             </div>
           </div>
           <div className="cols col-12" >
@@ -277,7 +264,7 @@ export default class View extends PureComponent {
             </div>
           </div>
         </div>
-      </div>
+      </AppScreen>
     );
   }
 }
@@ -288,18 +275,18 @@ View.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
-    screens: state.screens,
+    store: state.screens,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    actions
+    actions,
   ), dispatch);
 }
 
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(View);

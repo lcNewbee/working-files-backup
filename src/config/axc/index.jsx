@@ -149,6 +149,7 @@ const routes = [
     path: '/',
     component: App.Screen,
     formUrl: 'goform/axcInfo',
+    mainPath: '/main/network',
     indexRoute: { component: sLogin.Screen },
     childRoutes: [
       {
@@ -628,12 +629,6 @@ const routes = [
         component: sWizard.Screen,
       },
     ],
-  },
-
-  // 兼容登录跳转
-  {
-    path: '/main/status',
-    indexRoute: { onEnter: (nextState, replace) => replace('/main/network') },
   }, {
     path: '*',
     component: NotFound,
@@ -647,7 +642,6 @@ const reducers = {
   app: appReducer,
   screens: screensReducer,
   properties: propertiesReducer,
-  login: sLogin.login,
 
   // product comstom reducers
   product: sMainAxc.reducer,
