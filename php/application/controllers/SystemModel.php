@@ -70,8 +70,8 @@ class SystemModel extends CI_Controller {
         $retData = array(
             'name'=>element('name', $oriData),
             'hardware'=>element('hardware', $oriData,''),
-            'radionum'=>element('radionum', $oriData),
-            'vendor'=>element('vendor', $oriData),
+            'radionum'=>(int)element('radionum', $oriData),
+            'vendor'=>(int)element('vendor', $oriData),
         );
         return $retData;
     }
