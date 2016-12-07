@@ -1,8 +1,25 @@
-// Core
-
-//== Colors
+// Variables
 //
-//## Main Colors
+// Copy settings from this file into the provided `_custom.scss` to override
+
+
+// Table of Contents
+//
+//  1. Colors
+//  2. Options
+//  3. Distance
+//  4. Body
+//  5. LinksD
+//  6. Typography
+
+//  7. Components
+
+
+
+
+// 1. Colors
+//
+// 全局的灰度，品牌等颜色配置.
 
 $g-main-color:               #222 !default;
 $g-main-color-light:         #333 !default;
@@ -18,8 +35,6 @@ $g-color-neutral-light:        #A7B8D1 !default;
 $g-color-neutral-lighter:      #CFD7E7 !default;
 $g-color-neutral-lightest:     #EEF1F6 !default;
 
-//## Gray and brand colors for use across wgruis.
-//### Gray color
 $g-black:                   #000 !default;
 $g-gray-darker:               lighten($g-black, 13.5%) !default; // #222
 $g-gray-dark:                 lighten($g-black, 20%)   !default; // #333
@@ -27,39 +42,77 @@ $g-gray:                      lighten($g-black, 33.5%) !default; // #555
 $g-gray-light:                lighten($g-black, 46.7%) !default; // #777
 $g-gray-lighter:              lighten($g-black, 93.5%) !default; // #eee
 
-//### Brand color
 $g-brand-primary:           #0093DD !default;
 $g-brand-success:           #4BC076 !default;
 $g-brand-info:              #62B7ED !default;
 $g-brand-warning:           #F7B64B !default;
 $g-brand-danger:            #C23934 !default;
 
-//== Scaffolding
+// 2. Options
 //
-//## Settings for some of the most global styles.
+// Quickly modify global styling by enabling or disabling optional features.
 
-//### Background color for `<body>`.
-$g-body-bg:                 #f2f2f2 !default;
+$g-enable-flex:               false !default;
+$g-enable-rounded:            true !default;
+$g-enable-shadows:            false !default;
+$g-enable-gradients:          false !default;
+$g-enable-transitions:        true !default;
+$g-enable-hover-media-query:  false !default;
+$g-enable-grid-classes:       true !default;
+$g-enable-print-styles:       true !default;
 
-//### Global text color on `<body>`.
-$g-text-color:              $g-gray-dark !default;
+//  3. Distance
+//
+//  元素间距
 
-//### Global text color
+$g-distance: 			          1rem !default;
+$g-distance-x: 			        $g-distance !default;
+$g-distance-y: 			        $g-distance !default;
+$g-distance-md: 		        $g-distance * 1.25 !default;
+$g-distance-lg: 			      $g-distance * 1.5 !default;
+$g-distance-sm:             $g-distance * 0.75 !default;
+$g-distance-min:            $g-distance * 0.5 !default;
+
+//   Size
+//
+// Common size
+$g-size:                  $g-distance * 2 !default;
+$g-size-lg:               $g-size * 2 !default;
+$g-size-sm:               $g-size * 0.5 !default;
+$g-main-bar-height:       $g-distance * 2.25 !default;
+$g-top-menu-size:         $g-distance * 2.75 !default;
+
+// App icon size
+$g-icon-size:               55px !default;
+$g-icon-size-large:         $g-icon-size * 2 !default;
+$g-icon-size-small:         ceil(($g-icon-size * 0.29)) !default;
+
+
+
+//  4. Body
+//
+// Settings for the `<body>` element.
+
+$g-body-bg:       #f2f2f2 !default;
+$g-body-color:      $g-gray-dark !default;
+$g-inverse-bg:      $g-gray-dark !default;
+$g-inverse-color:   $g-gray-lighter !default;
+
 $g-text-highlight:          $g-brand-danger !default;
 $g-text-help:               #b1b1b1 !default;
 $g-text-btn:                #FFF !default;
 
-//### Global textual link color.
+
+//  5. Links
+//
+// Settings anchor element.
+
 $g-link-color:              $g-brand-primary !default;
-
-//### Link hover color set via `darken()` function.
 $g-link-hover-color:        darken($g-link-color, 15%) !default;
-
-//### Link hover decoration.
 $g-link-hover-decoration:   underline !default;
 
 
-//== Typography
+//  6. Typography
 //
 //## Font, line-height, and color for body text, headings, and more.
 $g-line-height:             1.428571429 !default; // 20/14
@@ -80,29 +133,6 @@ $g-font-size-h3:            ceil(($g-font-size * 1.7)) !default; // ~24px
 $g-font-size-h4:            ceil(($g-font-size * 1.25)) !default; // ~18px
 $g-font-size-h5:            $g-font-size !default;
 $g-font-size-h6:            ceil(($g-font-size * 0.85)) !default; // ~12px
-
-//== Distance
-//
-//** width, height, padding, margin size for use across kuaizhuan
-$g-distance: 			          10px !default;
-$g-distance-md: 		        floor(($g-distance * 1.25)) !default;
-$g-distance-lg: 			      ceil(($g-distance * 1.5)) !default;
-$g-distance-sm:             floor(($g-distance * 0.85)) !default;
-$g-distance-min:            floor(($g-distance * 0.5)) !default;
-
-//== Size
-//
-// Common size
-$g-size:                  30px !default;
-$g-size-lg:               ($g-size * 2) !default;
-$g-size-sm:               ceil($g-size * 0.53) !default;
-$g-main-bar-height:         36px;
-$g-top-menu-size:         46px;
-
-// App icon size
-$g-icon-size:               55px !default;
-$g-icon-size-large:         $g-icon-size * 2 !default;
-$g-icon-size-small:         ceil(($g-font-size * 0.29)) !default;
 
 //== Container size
 
@@ -125,7 +155,42 @@ $mw-xl:                       1382px !default;
 
 //== navbar
 // 值需为 4 的整数倍
-$g-navbar-height:             52px !default;
+$g-navbar-height:             $g-distance * 3.25 !default;
+
+
+// 10. Components
+//
+// Define common padding and border radius sizes and more.
+
+$c-line-height-lg:         (4 / 3) !default;
+$c-line-height-sm:         1.5 !default;
+
+$c-border-radius:          .25rem !default;
+$c-border-radius-lg:       .3rem !default;
+$c-border-radius-sm:       .2rem !default;
+
+$c-active-color:           #fff !default;
+$c-active-bg:               $g-brand-primary !default;
+
+$c-caret-width:            .3em !default;
+$c-caret-width-lg:         $c-caret-width !default;
+
+
+
+//  11. A Progress
+//
+//  Define Atom Components Progress
+
+$a-progress-bg:                 #ddd !default;
+$a-progress-bar-color:          #0074d9 !default;
+$a-progress-border-radius:      $c-border-radius !default;
+$a-progress-box-shadow:         inset 0 .1rem .1rem rgba(0,0,0,.1) !default;
+
+$a-progress-bar-bg:             $g-brand-primary !default;
+$a-progress-bar-success-bg:     $g-brand-success !default;
+$a-progress-bar-warning-bg:     $g-brand-warning !default;
+$a-progress-bar-danger-bg:      $g-brand-danger !default;
+$a-progress-bar-info-bg:        $g-brand-info !default;
 
 
 

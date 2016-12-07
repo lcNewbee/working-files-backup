@@ -81,6 +81,6 @@ gulp.task('demo', (callback) => {
     'clean', 'demo:pre',
     'build',
     ['demo:afterBuild', 'demo:copy'], 'demo:serve',
-    callback
+    callback,
   );
 });

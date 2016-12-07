@@ -9,12 +9,16 @@
 
 .bar-wrap {
   position: relative;
-  margin: 0px auto;
-  border: 1px solid black;
-  height: 30px;
-  width: 360px;
-  margin-top: 8px;
-  font-size: 14px;
+
+  .bar-percentage {
+    position: absolute;
+    width: 100%;
+    line-height: 1rem;
+    text-align: center;
+    top: 50%;
+    margin-top: -0.5rem;
+    color: #000;
+  }
 }
 
 .bar-body1 {

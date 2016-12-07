@@ -8,8 +8,8 @@ $main-blue: #0093dd;
 
   .o-nav__link {
     display: block;
-    padding: ($g-distance-md + 4px) 0;
-    padding-left: $g-size;
+    padding: ($g-distance * 1.25) 0;
+    padding-left: $g-distance;
     font-size: 13px;
     line-height: 20px;
     color: $nav-text-color;
@@ -33,7 +33,7 @@ $main-blue: #0093dd;
   .o-nav__sub-menus {
     .o-nav__link {
       padding: $g-distance-md 0;
-      padding-left: $g-size + 12px;
+      padding-left: $g-distance * 1.75;
       background-color: #555;
 
       &.active {

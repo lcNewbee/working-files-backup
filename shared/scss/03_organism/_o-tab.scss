@@ -12,19 +12,19 @@ $tab-nav-height: 28px;
     right: 0;
     left: 0;
     z-index: 2;
-    padding-left: $g-distance;
-    border-bottom: 4px solid $g-main-color-light;
+    padding-left: $g-distance-sm;
+    border-bottom: $c-border-radius solid $g-main-color-light;
 
     @include clearfix;
 
     li {
       float: left;
-      margin: 0 $g-distance-sm;
+      margin: 0 $g-distance-min;
 
       a {
         position: relative;
         display: block;
-        min-width: 80px;
+        min-width: $g-distance * 5;
         height: $tab-nav-height;
         padding: 0 $g-distance;
         padding-top: 1px;

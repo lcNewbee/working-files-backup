@@ -1,5 +1,19 @@
+@mixin box-shadow($shadow...) {
+  @if $g-enable-shadows {
+    box-shadow: $shadow;
+  }
+}
+
+@mixin transition($transition...) {
+  @if $g-enable-transitions {
+    transition: $transition;
+  }
+}
+
 @import "mixins/opacity";
 @import "mixins/clearfix";
 @import "mixins/grid";
 @import "mixins/ellipsis";
 @import "mixins/scrollbar";
+@import "mixins/gradients";
+@import "mixins/border-radius";

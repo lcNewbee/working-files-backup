@@ -1,6 +1,6 @@
 .m-user-overview {
   position: fixed;
-  top: $g-navbar-height + 1px;
+  top: $g-navbar-height + ($g-distance / 16);
   right: 0;
   z-index: 1070;
   min-width: 340px;

@@ -10,9 +10,9 @@
 
   .o-menu-bar__nav {
     float: left;
-    width: 190px;
+    width: $g-distance * 12;
     position: relative;
-    padding-left: 20px;
+    padding-left: $g-distance * 1.25;
     background-color: #252526;
     z-index: 10;
     user-select: none;
@@ -22,7 +22,7 @@
       position: absolute;
       top: 0;
       right: 0;
-      margin-right: -16px;
+      margin-right: -$g-distance;
       height: 0;
       border-width: ($g-main-bar-height / 2) 16px;
       border-color: transparent;

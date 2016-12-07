@@ -1,5 +1,5 @@
-$top-distance: $g-navbar-height+$g-distance * 2;
-$sidebar-width: 170px;
+$top-distance: $g-navbar-height + ($g-distance * 2);
+$sidebar-width: $g-distance * 10.75;
 $nav-text-color: #ababab;
 $main-blue: #0093dd;
 $t-main-top-menu-height: $g-top-menu-size;
@@ -36,16 +36,16 @@ body {
     background: #333;
     transition: left .3s ease-in;
     &.o-nav--tree {
-      width: $sidebar-width + 20px;
+      width: $g-distance * 12;
     }
   }
   .t-main__content {
     position: absolute;
-    top: $g-navbar-height + 5px;
+    top: $g-navbar-height + ($g-distance * 0.25);
     bottom: 0;
     left: $sidebar-width;
-    width: calc(100vw - 170px);
-    max-width: calc(100vw - 170px);
+    width: calc(100vw - 172px);
+    max-width: calc(100vw - 172px);
     padding: $g-distance;
     padding-left: $g-distance * 1.5;
     overflow: auto;
@@ -66,18 +66,18 @@ body {
     .t-main__nav {
       top: $g-navbar-height + $g-main-bar-height;
       left: $g-top-menu-size;
-      width: $sidebar-width + 20px;
+      width: $g-distance * 12;
       background-color: #252526;
       .m-menu__link {
         background-color: #444;
       }
       .o-nav__link {
         padding: 12px 0;
-        padding-left: 20px;
+        padding-left: ($g-distance * 1.25);
         font-size: 12px;
         .icon {
           font-size: 15px;
-          line-height: 20px;
+          line-height: ($g-distance * 1.25);
         }
         &.active {
           .icon {
@@ -122,14 +122,14 @@ body {
     .t-main__content {
       top: $g-navbar-height + $g-main-bar-height;
       bottom: 0;
-      left: $sidebar-width + $g-top-menu-size + 20px;
+      left: $sidebar-width + $g-top-menu-size + ($g-distance * 1.25);
       width: calc(100vw - 236px);
       max-width: calc(100vw - 236px);
     }
     .t-main__asider-left {
       top: $g-navbar-height + $g-main-bar-height;
       left: $g-top-menu-size;
-      width: $sidebar-width + 20px;
+      width: $sidebar-width + ($g-distance * 1.25);
     }
     .o-property-panel {
       top: $g-navbar-height;
@@ -149,7 +149,7 @@ body {
         border-top: 1px solid transparent;
         border-bottom: 1px solid transparent;
         .icon {
-          font-size: 20px;
+          font-size: ($g-distance * 1.25);
         }
         &::after {
           position: absolute;
@@ -191,11 +191,11 @@ body {
   }
   &.main--open-left {
     .t-main__nav {
-      left: $sidebar-width + 20px + $g-top-menu-size;
+      left: $sidebar-width + ($g-distance * 1.25) + $g-top-menu-size;
       ;
     }
     .t-main__content {
-      left: ($sidebar-width + 20px) * 2 + $g-top-menu-size;
+      left: ($sidebar-width + ($g-distance * 1.25)) * 2 + $g-top-menu-size;
     }
   }
 }
@@ -214,7 +214,7 @@ body {
 
 .t-main__asider-header {
   padding: 12px 18px;
-  line-height: 20px;
+  line-height: ($g-distance * 1.25);
   border-top: 1px solid #000;
   &::before {
     position: absolute;
