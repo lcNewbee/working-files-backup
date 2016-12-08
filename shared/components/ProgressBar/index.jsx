@@ -61,16 +61,17 @@ export default class ProgressBar extends React.Component {
     const percentageValue = parseInt((this.state.n / this.props.time) * 100, 10);
 
     return (
-      <div>
+      <div className="m-progress-bar">
         {
           this.props.title ? (
-            <div className="bar-title">
+            <div className="m-progress-bar__title">
               {this.props.title}
             </div>
           ) : null
         }
         <Progress
           {...this.props}
+          className="m-progress-bar__body"
           value={percentageValue > 100 ? 100 : percentageValue}
           max="100"
           unit="% ..."

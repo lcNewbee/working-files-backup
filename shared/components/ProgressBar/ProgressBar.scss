@@ -1,35 +1,12 @@
-.bar-background {
-  margin: 0 auto;
-  width: 400px;
-  height: 100px;
-  background-color: #999;
-  opacity: 0.5;
-  color: red;
-}
-
-.bar-wrap {
-  position: relative;
-
-  .bar-percentage {
-    position: absolute;
-    width: 100%;
-    line-height: 1rem;
+.m-progress-bar {
+  .m-progress-bar__title {
+    padding-top: 16px;
+    margin-bottom: 16px;
+    font-size: 14px;
     text-align: center;
-    top: 50%;
-    margin-top: -0.5rem;
-    color: #000;
   }
-}
-
-.bar-body1 {
-  height: 28px;
-  background-color: red;
-}
-
-.bar-title {
-  padding-top: 16px;
-  margin-bottom: 16px;
-  font-size: 14px;
-  text-align: center;
+  .m-progress-bar__body {
+    margin-bottom: 16px;
+  }
 }
 
