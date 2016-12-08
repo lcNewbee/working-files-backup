@@ -37,6 +37,20 @@
         "apMac": "12:11:11:11:11:11",
         "peers": ["12:11:11:11:11:11"]
       }
-    ]
+    ],
+    "wiredMode": "bridge",
+    "vlanId": "1",
+    "routerInfo": {
+      "proto": "static",
+      "ip": "192.168.1.1",
+      "mask": "255.255.255.0",
+      "gateway": "192.168.1.1",
+      "dns1": "8.8.8.8",
+      "dns2": "4.4.4.4",
+      "user": "aaa",
+      "password": "12345678",
+      "nat": "1"
+    },
+    "radioOnEffect": ["1"]
   }
 }

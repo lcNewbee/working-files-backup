@@ -34,7 +34,7 @@ const MainAP = require('../../screens/App/screens/MainAP');
 // 网络设置
 const pNetworkSettings = require('../../screens/App/screens/MainAP/screens/NetworkSettings');
 // 子菜单
-const sNetworkSettings = require('../../screens/App/screens/MainAP/screens/NetworkSettings/NetworkSettings');
+const sNetworkSettings = require('../../screens/App/screens/MainAP/screens/NetworkSettings/BridgeRouterNetwork');
 
 const pSystemStatus = require('../../screens/App/screens/MainAP/screens/SystemStatus');
 const sSsidDetails = require('../../screens/App/screens/MainAP/screens/SystemStatus/SsidDetails');
@@ -45,7 +45,7 @@ const pQuickSetup = require('../../screens/App/screens/MainAP/screens/QuickSetup
 // 无线设置
 const pWirelessConfig = require('../../screens/App/screens/MainAP/screens/WirelessConfig');
 // 子菜单
-const sBasic = require('../../screens/App/screens/MainAP/screens/WirelessConfig/Basic');
+const sBasic = require('../../screens/App/screens/MainAP/screens/WirelessConfig/Basic/BasicForCoverage');
 const sAdvance = require('../../screens/App/screens/MainAP/screens/WirelessConfig/Advance');
 // const sQos = require('../../screens/App/screens/MainAP/screens/WirelessConfig/QoS');
 const sACL = require('../../screens/App/screens/MainAP/screens/WirelessConfig/ACL');
@@ -101,6 +101,7 @@ const routes = [{
   path: '/',
   component: App.Screen,
   formUrl: 'goform/get_product_info',
+  mainPath: '/main/status',
   indexRoute: { component: pLogin.Screen },
   childRoutes: [{
     path: '/main',
@@ -155,7 +156,7 @@ const routes = [{
           formUrl: 'goform/get_network_info',
           saveUrl: 'goform/set_network',
           path: '/main/networksettings/networksettings',
-          text: _('LAN Settings'),
+          text: _('Wired Settings'),
           component: sNetworkSettings.Screen,
         },
       ],

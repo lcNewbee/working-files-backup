@@ -159,6 +159,10 @@ export default class SignUp extends React.Component {
         this.props.changeCurrModeData(data);
         this.props.changeNextModeData(data);
       }
+    }).then(() => {
+      // 后台根据是否请求过下面的接口识别是否是第一次登陆
+      // 故在此请求该接口，表明已经登陆过，无特殊意义
+      this.props.fetch('goform/get_system_info_forTestUse');
     });
   }
 

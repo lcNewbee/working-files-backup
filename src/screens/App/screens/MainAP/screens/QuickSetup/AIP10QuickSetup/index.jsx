@@ -40,7 +40,7 @@ const propTypes = {
   saveSettings: PropTypes.func,
   restoreSelfState: PropTypes.func,
   changeReinitAt: PropTypes.func,
-  changeRadioSelectedArr: PropTypes.func,
+  changeSsidInfo: PropTypes.func,
 };
 
 const defaultState = {
@@ -167,7 +167,8 @@ export default class QuickSetup extends React.Component {
       'onChangeWirelessMode',
       'updateItemInRadioList',
       'handleWrongSecurMode',
-      'initRadioSelectedArr',
+      'initRadioOnEffect',
+      'updateItemInRouterInfo',
     ]);
   }
 
@@ -184,14 +185,6 @@ export default class QuickSetup extends React.Component {
         this.props.changeReinitAt();
       });
     }
-    // const security = this.props.store.getIn(['curData', 'radioList', radioId, 'security']);
-    // if (!security) {
-    //   this.updateItemInRadioList('security', fromJS({ mode: 'none' }));
-    // }
-    // if (security && security.get('mode') !== 'wep' &&
-    //     this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) === 'repeater') {
-    //   this.updateItemInRadioList('security', fromJS({ mode: 'none' }));
-    // }
   }
 
   componentWillUnmount() {
@@ -280,8 +273,8 @@ export default class QuickSetup extends React.Component {
       }
     }
     if (data.currStep === 1 && data.targetStep === 2) {
-      const radioSelectedArr = this.props.selfState.get('radioSelectedArr').toJS();
-      if (!radioSelectedArr.some(val => val === '1')) {
+      const radioOnEffect = this.props.selfState.getIn(['ssidInfo', 'radioOnEffect']).toJS();
+      if (!radioOnEffect.some(val => val === '1')) {
         return _('Please select at least one radio to apply the SSID');
       }
     }
@@ -298,10 +291,10 @@ export default class QuickSetup extends React.Component {
 
   // 当点完成时处理函数
   onCompleted() {
-    const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-    const { ip, mask } = this.props.store.getIn(['curData']).toJS();
-    const saveData = this.props.store.getIn(['curData', 'radioList', radioId])
-                      .set('ip', ip).set('mask', mask);
+    const { ip, mask, wiredMode, vlanId, routerInfo } = this.props.store.getIn(['curData']).toJS();
+    const ssidInfo = this.props.selfState.get('ssidInfo').toJS();
+
+    const saveData = { ip, mask, wiredMode, vlanId, routerInfo, ...ssidInfo };
     this.props.save('goform/set_quicksetup', saveData);
   }
 
@@ -335,38 +328,22 @@ export default class QuickSetup extends React.Component {
       defaultData: defaultState,
     });
     this.onChangeRadio({ value: '0' });
-    props.changeAgreeProtocol(false);
     props.fetchSettings()
       .then(() => {
         const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
         const wirelessMode = this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']);
-        // const security = this.props.store.getIn(['curData', 'radioList', radioId, 'security']);
         this.props.changeDeviceMode(wirelessMode);
-        const requestInfo = {
-          radio: this.props.selfState.getIn(['currRadioConfig', 'radioType']),
-          country: this.props.store.getIn(['curData', 'radioList', radioId, 'countryCode']),
-          channelWidth: this.props.store.getIn(['curData', 'radioList', radioId, 'channelWidth']),
-        };
-        props.fetch('goform/get_country_info', requestInfo).then((json) => {
-          if (json.state && json.state.code === 2000) {
-            this.props.receiveCountryInfo(json.data);
-          }
-        });
         this.handleWrongSecurMode();
-        // const security = props.store.getIn(['curData', 'radioList', radioId, 'security']);
-        // if (!security) {
-        //   this.updateItemInRadioList('security', fromJS({ mode: 'none' }));
-        // }
       }).then(() => {
-        this.initRadioSelectedArr();
+        this.initRadioOnEffect();
       });
     props.resetVaildateMsg();
   }
 
-  initRadioSelectedArr() {
+  initRadioOnEffect() {
     const radioSelectOptions = this.props.product.get('radioSelectOptions').toJS();
-    const radioSelectedArr = radioSelectOptions.map(() => '0');
-    this.props.changeRadioSelectedArr(fromJS(radioSelectedArr));
+    const radioOnEffect = fromJS(radioSelectOptions.map(() => '0'));
+    this.props.changeSsidInfo({ radioOnEffect });
   }
 
   makeChannelOptions() {
@@ -400,7 +377,13 @@ export default class QuickSetup extends React.Component {
     this.props.updateItemSettings({ radioList });
   }
 
+  updateItemInRouterInfo(name, value) {
+    const routerInfo = this.props.store.getIn(['curData', 'routerInfo']).set(name, value);
+    this.props.updateItemSettings({ routerInfo });
+  }
+
   renderOperationMode() {
+    const store = this.props.store;
     return (
       <div className="firstScreen">
         <FormGroup
@@ -413,13 +396,21 @@ export default class QuickSetup extends React.Component {
           >
             <FormInput
               type="radio"
-              text={_('AP Mode')}
+              text={_('Bridge Mode')}
+              checked={store.getIn(['curData', 'wiredMode']) === 'bridge'}
               name="operationModeItem"
+              onClick={() => {
+                this.props.updateItemSettings({ wiredMode: 'bridge' });
+              }}
             />
             <FormInput
               type="radio"
               text={_('Router Mode')}
+              checked={store.getIn(['curData', 'wiredMode']) === 'router'}
               name="operationModeItem"
+              onClick={() => {
+                this.props.updateItemSettings({ wiredMode: 'router' });
+              }}
               style={{
                 marginLeft: '10px',
               }}
@@ -427,23 +418,39 @@ export default class QuickSetup extends React.Component {
           </div>
         </FormGroup>
         {
-          // AP mode
-          true ? (
+          // bridge mode
+          store.getIn(['curData', 'wiredMode']) === 'bridge' ? (
             <div>
               <FormGroup
                 type="text"
                 label={_('IP')}
+                value={store.getIn(['curData', 'ip'])}
+                onChange={(data) => {
+                  this.props.updateItemSettings({ ip: data.value });
+                }}
               />
               <FormGroup
                 type="text"
                 label={_('Subnet Mask')}
+                value={store.getIn(['curData', 'mask'])}
+                onChange={(data) => {
+                  this.props.updateItemSettings({ mask: data.value });
+                }}
+              />
+              <FormGroup
+                type="number"
+                label={_('Vlan Id')}
+                value={store.getIn(['curData', 'vlanId'])}
+                onChange={(data) => {
+                  this.props.updateItemSettings({ vlanId: data.value });
+                }}
               />
             </div>
           ) : null
         }
         {
           // Router Mode
-          true ? (
+          store.getIn(['curData', 'wiredMode']) === 'router' ? (
             <div>
               <FormGroup
                 type="select"
@@ -453,108 +460,151 @@ export default class QuickSetup extends React.Component {
                   { value: 'dhcp', label: _('DHCP') },
                   { value: 'pppoe', label: _('PPPOE') },
                 ]}
+                value={store.getIn(['curData', 'routerInfo', 'proto'])}
+                onChange={(data) => {
+                  this.updateItemInRouterInfo('proto', data.value);
+                }}
               />
               {
-                // static
-                true ? (
+                // dhcp
+                store.getIn(['curData', 'routerInfo', 'proto']) === 'dhcp' ? (
                   <div>
                     <FormGroup
-                      label={_('IP Address')}
                       type="text"
-                    />
-                    <FormGroup
-                      label={_('Subnet Mask')}
-                      type="text"
-                    />
-                    <FormGroup
-                      type="text"
-                      label={_('Gateway')}
+                      label={_('LAN IP')}
+                      value={this.props.store.getIn(['curData', 'routerInfo', 'lanIp'])}
+                      onChange={(data) => {
+                        this.updateItemInRouterInfo('lanIp', data.value);
+                      }}
                     />
                     <FormGroup
                       type="text"
-                      label={_('Primary DNS')}
-                    />
-                    <FormGroup
-                      type="text"
-                      label={_('Secondary DNS')}
+                      label={_('LAN Mask')}
+                      value={this.props.store.getIn(['curData', 'routerInfo', 'lanMask'])}
+                      onChange={(data) => {
+                        this.updateItemInRouterInfo('lanMask', data.value);
+                      }}
                     />
                   </div>
                 ) : null
               }
               {
-                // DHCP
-                <div>
-                  <FormGroup
-                    type="text"
-                    label={_('Fallback IP')}
-                    disabled
-                  />
-                  <FormGroup
-                    type="text"
-                    label={_('Fallback Netmask')}
-                    disabled
-                  />
-                  <FormGroup
-                    type="checkbox"
-                    label={_('NAT')}
-                  />
-                </div>
+                // static
+                store.getIn(['curData', 'routerInfo', 'proto']) === 'static' ? (
+                  <div>
+                    <FormGroup
+                      label={_('WAN IP')}
+                      type="text"
+                      value={this.props.store.getIn(['curData', 'routerInfo', 'ip'])}
+                      onChange={(data) => {
+                        this.updateItemInRouterInfo('ip', data.value);
+                      }}
+                    />
+                    <FormGroup
+                      label={_('Subnet Mask')}
+                      type="text"
+                      value={this.props.store.getIn(['curData', 'routerInfo', 'mask'])}
+                      onChange={(data) => {
+                        this.updateItemInRouterInfo('mask', data.value);
+                      }}
+                    />
+                    <FormGroup
+                      type="text"
+                      label={_('Gateway')}
+                      value={this.props.store.getIn(['curData', 'routerInfo', 'gateway'])}
+                      onChange={(data) => {
+                        this.updateItemInRouterInfo('gateway', data.value);
+                      }}
+                    />
+                    <FormGroup
+                      type="text"
+                      label={_('Primary DNS')}
+                      value={this.props.store.getIn(['curData', 'routerInfo', 'dns1'])}
+                      onChange={(data) => {
+                        this.updateItemInRouterInfo('dns1', data.value);
+                      }}
+                    />
+                    <FormGroup
+                      type="text"
+                      label={_('Secondary DNS')}
+                      value={this.props.store.getIn(['curData', 'routerInfo', 'dns2'])}
+                      onChange={(data) => {
+                        this.updateItemInRouterInfo('dns2', data.value);
+                      }}
+                    />
+                    <FormGroup
+                      type="text"
+                      label={_('LAN IP')}
+                      value={this.props.store.getIn(['curData', 'routerInfo', 'lanIp'])}
+                      onChange={(data) => {
+                        this.updateItemInRouterInfo('lanIp', data.value);
+                      }}
+                    />
+                    <FormGroup
+                      type="text"
+                      label={_('LAN Mask')}
+                      value={this.props.store.getIn(['curData', 'routerInfo', 'lanMask'])}
+                      onChange={(data) => {
+                        this.updateItemInRouterInfo('lanMask', data.value);
+                      }}
+                    />
+                  </div>
+                ) : null
               }
               {
                 // PPPOE
-                <div>
-                  <FormGroup
-                    type="text"
-                    label={_('Account')}
-                  />
-                  <FormGroup
-                    type="text"
-                    label={_('Password')}
-                  />
-                  <FormGroup
-                    type="checkbox"
-                    label={_('NAT')}
-                  />
-                </div>
+                store.getIn(['curData', 'routerInfo', 'proto']) === 'pppoe' ? (
+                  <div>
+                    <FormGroup
+                      type="text"
+                      label={_('Account')}
+                      value={store.getIn(['curData', 'routerInfo', 'user'])}
+                      onChange={(data) => {
+                        this.updateItemInRouterInfo('user', data.value);
+                      }}
+                    />
+                    <FormGroup
+                      type="text"
+                      label={_('Password')}
+                      value={store.getIn(['curData', 'routerInfo', 'password'])}
+                      onChange={(data) => {
+                        this.updateItemInRouterInfo('password', data.value);
+                      }}
+                    />
+                    <FormGroup
+                      type="text"
+                      label={_('LAN IP')}
+                      value={this.props.store.getIn(['curData', 'routerInfo', 'lanIp'])}
+                      onChange={(data) => {
+                        this.updateItemInRouterInfo('lanIp', data.value);
+                      }}
+                    />
+                    <FormGroup
+                      type="text"
+                      label={_('LAN Mask')}
+                      value={this.props.store.getIn(['curData', 'routerInfo', 'lanMask'])}
+                      onChange={(data) => {
+                        this.updateItemInRouterInfo('lanMask', data.value);
+                      }}
+                    />
+                  </div>
+                ) : null
               }
+              <FormGroup
+                type="checkbox"
+                checked={store.getIn(['curData', 'routerInfo', 'nat']) === '1'}
+                label={_('NAT')}
+                onChange={() => {
+                  const val = store.getIn(['curData', 'routerInfo', 'nat']) === '1' ? '0' : '1';
+                  this.updateItemInRouterInfo('nat', val);
+                }}
+              />
             </div>
           ) : null
         }
       </div>
     );
   }
-
-  // renderStepTwo() {
-  //   const store = this.props.store;
-  //   const { deviceMode } = this.props.selfState.toJS();
-  //   const { ip, mask } = store.get('curData').toJS();
-  //   const { lanIp, lanMask } = this.props.validateOption;
-
-  //   return (
-  //     <div className="secondScreen">
-  //       <FormGroup
-  //         label={_('IP Address')}
-  //         type="text"
-  //         value={ip}
-  //         onChange={data => this.props.updateItemSettings({
-  //           ip: data.value,
-  //         })}
-  //         {...lanIp}
-  //         required
-  //       />
-  //       <FormGroup
-  //         label={_('Subnet Mask')}
-  //         type="text"
-  //         value={mask}
-  //         onChange={data => this.props.updateItemSettings({
-  //           mask: data.value,
-  //         })}
-  //         {...lanMask}
-  //         required
-  //       />
-  //     </div>
-  //   );
-  // }
 
   renderStepThree() {
     const modalOptions = fromJS([
@@ -615,16 +665,7 @@ export default class QuickSetup extends React.Component {
     const store = this.props.store;
     const { deviceMode } = this.props.selfState.toJS();
     const { radioId, radioType } = this.props.selfState.get('currRadioConfig').toJS();
-    const {
-      ssid, countryCode, frequency, channelWidth, distance, wirelessMode, autoAdjust
-    } = store.getIn(['curData', 'radioList', radioId]).toJS();
-    const mode = store.getIn(['curData', 'radioList', radioId, 'security', 'mode']);
-    const key = store.getIn(['curData', 'radioList', radioId, 'security', 'key']);
-    const auth = store.getIn(['curData', 'radioList', radioId, 'security', 'auth']);
-    const keyLength = store.getIn(['curData', 'radioList', radioId, 'security', 'keyLength']);
-    const keyType = store.getIn(['curData', 'radioList', radioId, 'security', 'keyType']);
-    const keyIndex = store.getIn(['curData', 'radioList', radioId, 'security', 'keyIndex']);
-    const cipher = store.getIn(['curData', 'radioList', radioId, 'security', 'cipher']);
+    const { mode, key, auth, keyLength, keyType, keyIndex, cipher } = this.props.selfState.getIn(['ssidInfo', 'security']).toJS();
     const { lanIp, lanMask, validSsid, validDistance, validPassword, apmac3, staApmac } = this.props.validateOption;
     const radioSelectOptions = this.props.product.get('radioSelectOptions').toJS();
 
@@ -634,8 +675,10 @@ export default class QuickSetup extends React.Component {
           <FormGroup
             type="text"
             label={_('SSID')}
-            value={ssid}
-            onChange={data => this.updateItemInRadioList('ssid', data.value)}
+            value={this.props.selfState.getIn(['ssidInfo', 'ssid'])}
+            onChange={(data) => {
+              this.props.changeSsidInfo({ ssid: data.value });
+            }}
             required
             {...validSsid}
           />
@@ -647,31 +690,31 @@ export default class QuickSetup extends React.Component {
             onChange={(data) => {
               const security = fromJS({
                 mode: data.value,
-                cipher: store.getIn(['curData', 'radioList', radioId, 'security', 'cipher']) || 'aes',
-                auth: store.getIn(['curData', 'radioList', radioId, 'security', 'auth']) || 'open',
-                keyIndex: store.getIn(['curData', 'radioList', radioId, 'security', 'keyIndex']) || '1',
-                keyLength: store.getIn(['curData', 'radioList', radioId, 'security', 'keyLength']) || '64',
-                keyType: store.getIn(['curData', 'radioList', radioId, 'security', 'keyType']) || 'Hex',
+                cipher: 'aes',
+                auth: 'open',
+                keyIndex: '1',
+                keyLength: '64',
+                keyType: 'Hex',
                 key: '',
               });
-              this.updateItemInRadioList('security', security);
+              this.props.changeSsidInfo({ security });
             }}
           />
           {
-            /wpa/.test(store.getIn(['curData', 'radioList', radioId, 'security', 'mode'])) ? (
+            /wpa/.test(mode) ? (
               <div>
                 <FormGroup
                   label={_('Encryption')}
                   minWidth="66px"
                   type="switch"
-                  value={store.getIn(['curData', 'radioList', radioId, 'security', 'cipher'])}
+                  value={cipher}
                   onChange={(data) => {
                     const security = fromJS({
                       mode,
                       key,
                       cipher: data.value,
                     });
-                    this.updateItemInRadioList('security', security);
+                    this.props.changeSsidInfo({ security });
                   }}
                   options={[
                     { label: 'AES', value: 'aes' },
@@ -687,9 +730,9 @@ export default class QuickSetup extends React.Component {
                     const security = fromJS({
                       mode,
                       key: data.value,
-                      cipher: store.getIn(['curData', 'radioList', radioId, 'security', 'cipher']) || 'aes',
+                      cipher,
                     });
-                    this.updateItemInRadioList('security', security);
+                    this.props.changeSsidInfo({ security });
                   }}
                   required
                   {...validPassword}
@@ -698,17 +741,17 @@ export default class QuickSetup extends React.Component {
             ) : null
           }
           {
-              (store.getIn(['curData', 'radioList', radioId, 'security', 'mode']) === 'wep') ? (
+              (mode === 'wep') ? (
                 <div>
                   <FormGroup
                     label={_('Auth Type')}
                     type="switch"
                     options={wepAuthenOptions}
-                    value={store.getIn(['curData', 'radioList', radioId, 'security', 'auth'])}
+                    value={auth}
                     onChange={(data) => {
-                      const security = store.getIn(['curData', 'radioList', radioId, 'security'])
+                      const security = this.props.selfState.getIn(['ssidInfo', 'security'])
                                             .set('auth', data.value);
-                      this.updateItemInRadioList('security', security);
+                      this.props.changeSsidInfo({ security });
                     }}
                     minWidth="65px"
                   />
@@ -731,11 +774,11 @@ export default class QuickSetup extends React.Component {
                     label={_('Key Format')}
                     type="switch"
                     options={keyTypeOptions}
-                    value={store.getIn(['curData', 'radioList', radioId, 'security', 'keyType'])}
+                    value={keyType}
                     onChange={(data) => {
-                      const security = store.getIn(['curData', 'radioList', radioId, 'security'])
+                      const security = this.props.selfState.getIn(['ssidInfo', 'security'])
                                               .set('keyType', data.value);
-                      this.updateItemInRadioList('security', security);
+                      this.props.changeSsidInfo({ security });
                     }}
                     minWidth="65px"
                   />
@@ -743,24 +786,24 @@ export default class QuickSetup extends React.Component {
                     label={_('Key Index')}
                     type="select"
                     options={keyIndexOptions}
-                    value={store.getIn(['curData', 'radioList', radioId, 'security', 'keyIndex'])}
+                    value={keyIndex}
                     onChange={(data) => {
-                      const security = store.getIn(['curData', 'radioList', radioId, 'security'])
+                      const security = this.props.selfState.getIn(['ssidInfo', 'security'])
                                       .set('keyIndex', data.value);
-                      this.updateItemInRadioList('security', security);
+                      this.props.changeSsidInfo({ security });
                     }}
                   />
                   <FormGroup
                     type="password"
                     required
                     label={_('Password')}
-                    value={store.getIn(['curData', 'radioList', radioId, 'security', 'key'])}
+                    value={key}
                     onChange={(data) => {
-                      const security = store.getIn(['curData', 'radioList', radioId, 'security'])
+                      const security = this.props.selfState.getIn(['ssidInfo', 'security'])
                                               .set('key', data.value);
-                      this.updateItemInRadioList('security', security);
+                      this.props.changeSsidInfo({ security });
                     }}
-                    {...this.props.validateOption[store.getIn(['curData', 'radioList', radioId, 'security', 'keyType'])]}
+                    {...this.props.validateOption[this.props.selfState.getIn(['ssidInfo', 'security', 'keyType'])]}
                   />
                 </div>
               ) : null
@@ -776,15 +819,15 @@ export default class QuickSetup extends React.Component {
                       type="radio"
                       key={i}
                       text={`${_(item.label)}`}
-                      checked={this.props.selfState.getIn(['radioSelectedArr', i]) === '1'}
+                      checked={this.props.selfState.getIn(['ssidInfo', 'radioOnEffect', i]) === '1'}
                       onChange={() => {
-                        let radioSelectedArr = this.props.selfState.get('radioSelectedArr');
-                        if (radioSelectedArr.get(i) === '1') {
-                          radioSelectedArr = radioSelectedArr.set(i, '0');
+                        let radioOnEffect = this.props.selfState.getIn(['ssidInfo', 'radioOnEffect']);
+                        if (radioOnEffect.get(i) === '1') {
+                          radioOnEffect = radioOnEffect.set(i, '0');
                         } else {
-                          radioSelectedArr = radioSelectedArr.set(i, '1');
+                          radioOnEffect = radioOnEffect.set(i, '1');
                         }
-                        this.props.changeRadioSelectedArr(radioSelectedArr);
+                        this.props.changeSsidInfo({ radioOnEffect });
                       }}
                       style={{
                         marginTop: '8px',
@@ -797,588 +840,587 @@ export default class QuickSetup extends React.Component {
             ) : null
           }
         </div>
+{
+  //   deviceMode === 'sta' ? (
+  //     <div className="thirdForSta">
+  //       <div className="clearfix">
+  //         <div className="clearfix">
+  //           <div
+  //             style={{
+  //               width: '205px',
+  //             }}
+  //           >
+  //             <FormGroup
+  //               label="SSID"
+  //               className="fl"
+  //               type="text"
+  //               required
+  //               value={ssid}
+  //               onChange={data => this.updateItemInRadioList('ssid', data.value)}
+  //               {...validSsid}
+  //             />
+  //           </div>
+  //           <span className="fl">
+  //             <span>
+  //               {
+  //                 this.props.selfState.get('scaning') ? (
+  //                   <Button
+  //                     text={_('Stop')}
+  //                     onClick={this.onStopScanClick}
+  //                     loading
+  //                   />
+  //                 ) : (
+  //                   <Button
+  //                     text={_('Scan')}
+  //                     onClick={this.onScanBtnClick}
+  //                   />
+  //                 )
+  //               }
+  //             </span>
+  //             <Modal
+  //               isShow={this.props.selfState.get('showScanResult')}
+  //               onOk={this.onModalOkBtnClick}
+  //               onClose={this.onModalCloseBtnClick}
+  //               okText={_('Select')}
+  //               cancelText={_('Cancel')}
+  //               size="lg"
+  //               okButton
+  //               cancelButton
+  //             >
+  //               <Table
+  //                 className="table"
+  //                 options={modalOptions}
+  //                 list={store.getIn(['curData', 'scanResult', 'siteList'])}
+  //               />
+  //             </Modal>
+  //           </span>
+  //         </div>
+  //       </div>
+  //       <FormGroup
+  //         label={_('Lock To AP')}
+  //         type="checkbox"
+  //         checked={store.getIn(['curData', 'radioList', radioId, 'apMacEnable']) === '1'}
+  //         onChange={data => this.updateItemInRadioList('apMacEnable', data.value)}
+  //       />
+  //       {
+  //         store.getIn(['curData', 'radioList', radioId, 'apMacEnable']) === '1' ? (
+  //           <FormGroup
+  //             label={_('Peer Mac')}
+  //             value={store.getIn(['curData', 'radioList', radioId, 'apMac'])}
+  //             onChange={data => this.updateItemInRadioList('apMac', data.value)}
+  //             {...staApmac}
+  //           />
+  //         ) : null
+  //       }
+  //       <FormGroup
+  //         label={_('Country')}
+  //       >
+  //         <FormInput
+  //           type="text"
+  //           value={getCountryNameFromCode(
+  //             store.getIn(['curData', 'radioList', radioId, 'countryCode']),
+  //             countryMap
+  //           )}
+  //           disabled
+  //           style={{
+  //             width: '127px',
+  //             marginTop: '-3px',
+  //           }}
+  //         />
+  //         <Button
+  //           text={_('Change')}
+  //           style={{
+  //             marginLeft: '-1px',
+  //             width: '70px',
+  //           }}
+  //           onClick={() => { this.props.changeCtyModal(true); }}
+  //         />
+  //       </FormGroup>
+  //       <Modal
+  //         title={_('Country')}
+  //         onClose={this.onCloseCountrySelectModal}
+  //         onOk={this.props.saveCountrySelectModal}
+  //         isShow={this.props.selfState.get('showCtyModal')}
+  //       >
+  //         <h3>{_('User Protocol')}</h3>
+  //         <span>
+  //           {_('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
+  //         </span>
+  //         <FormGroup
+  //           type="radio"
+  //           text={_('I have read and agree')}
+  //           checked={this.props.selfState.get('agreeProtocol')}
+  //           onClick={() => { this.props.changeAgreeProtocol(true); }}
+  //         />
+  //         <FormGroup
+  //           label={_('Country')}
+  //           type="select"
+  //           options={this.makeCountryOptions(countryMap)}
+  //           value={this.props.selfState.get('selectedCountry')}
+  //           onChange={data => this.props.changeCountryCode(data.value)}
+  //           disabled={!this.props.selfState.get('agreeProtocol')}
+  //         />
+  //       </Modal>
+  //       <FormGroup
+  //         type="switch"
+  //         label={_('Channel Width')}
+  //         minWidth="66px"
+  //         options={channelWidthOptions}
+  //         value={channelWidth}
+  //         onChange={data => this.updateItemInRadioList('channelWidth', data.value)}
+  //       />
+  //       <FormGroup
+  //         type="select"
+  //         label={_('Channel')}
+  //         options={this.makeChannelOptions()}
+  //         value={frequency}
+  //         onChange={data => this.updateItemInRadioList('frequency', data.value)}
+  //       />
+  //       <FormGroup
+  //         type="select"
+  //         label={_('Security')}
+  //         options={staAndApSecurityOptions}
+  //         value={mode}
+  //         onChange={(data) => {
+  //           const security = fromJS({
+  //             mode: data.value,
+  //             cipher: store.getIn(['curData', 'radioList', radioId, 'security', 'cipher']) || 'aes',
+  //             auth: store.getIn(['curData', 'radioList', radioId, 'security', 'auth']) || 'open',
+  //             keyIndex: store.getIn(['curData', 'radioList', radioId, 'security', 'keyIndex']) || '1',
+  //             keyLength: store.getIn(['curData', 'radioList', radioId, 'security', 'keyLength']) || '64',
+  //             keyType: store.getIn(['curData', 'radioList', radioId, 'security', 'keyType']) || 'Hex',
+  //             key: '',
+  //           });
+  //           this.updateItemInRadioList('security', security);
+  //         }}
+  //       />
+  //       {
+  //         /wpa/.test(store.getIn(['curData', 'radioList', radioId, 'security', 'mode'])) ? (
+  //           <div>
+  //             <FormGroup
+  //               label={_('Encryption')}
+  //               minWidth="66px"
+  //               type="switch"
+  //               value={store.getIn(['curData', 'radioList', radioId, 'security', 'cipher'])}
+  //               onChange={(data) => {
+  //                 const security = fromJS({
+  //                   mode,
+  //                   key,
+  //                   cipher: data.value,
+  //                 });
+  //                 this.updateItemInRadioList('security', security);
+  //               }}
+  //               options={[
+  //                 { label: 'AES', value: 'aes' },
+  //                 { label: 'TKIP', value: 'tkip' },
+  //                 { label: 'MIXED', value: 'aes&tkip' },
+  //               ]}
+  //             />
+  //             <FormGroup
+  //               type="password"
+  //               label={_('Password')}
+  //               value={key}
+  //               onChange={(data) => {
+  //                 const security = fromJS({
+  //                   mode,
+  //                   key: data.value,
+  //                   cipher: store.getIn(['curData', 'radioList', radioId, 'security', 'cipher']) || 'aes',
+  //                 });
+  //                 this.updateItemInRadioList('security', security);
+  //               }}
+  //               required
+  //               {...validPassword}
+  //             />
+  //           </div>
+  //         ) : null
+  //       }
+  //       {
+  //         (store.getIn(['curData', 'security', 'mode']) === 'wep') ? (
+  //           <div>
+  //             <FormGroup
+  //               label={_('Auth Type')}
+  //               type="switch"
+  //               options={wepAuthenOptions}
+  //               value={store.getIn(['curData', 'radioList', radioId, 'security', 'auth'])}
+  //               onChange={(data) => {
+  //                 const security = store.getIn(['curData', 'radioList', radioId, 'security'])
+  //                                 .set('auth', data.value);
+  //                 this.updateItemInRadioList('security', security);
+  //               }}
+  //               minWidth="65px"
+  //             />
+  //             {/*
+  //               <FormGroup
+  //                 label={_('Key Length')}
+  //                 type="select"
+  //                 options={wepKeyLengthOptions}
+  //                 value={curData.getIn(['vapList', '0', 'security', 'keyLength'])}
+  //                 onChange={(data) => {
+  //                   const security = curData.getIn(['vapList', '0', 'security'])
+  //                                   .set('keyLength', data.value);
+  //                   const vapList = curData.get('vapList')
+  //                                   .setIn(['0', 'security'], security);
+  //                   this.props.updateItemSettings({ vapList });
+  //                 }}
+  //               />
+  //             */}
+  //             <FormGroup
+  //               label={_('Key Format')}
+  //               type="switch"
+  //               options={keyTypeOptions}
+  //               value={store.getIn(['curData', 'radioList', radioId, 'security', 'keyType'])}
+  //               onChange={(data) => {
+  //                 const security = store.getIn(['curData', 'radioList', radioId, 'security'])
+  //                                         .set('keyType', data.value);
+  //                 this.updateItemInRadioList('security', security);
+  //               }}
+  //               minWidth="65px"
+  //             />
+  //             <FormGroup
+  //               label={_('Key Index')}
+  //               type="select"
+  //               options={keyIndexOptions}
+  //               value={store.getIn(['curData', 'radioList', radioId, 'security', 'keyIndex'])}
+  //               onChange={(data) => {
+  //                 const security = store.getIn(['curData', 'radioList', radioId, 'security'])
+  //                                 .set('keyIndex', data.value);
+  //                 this.updateItemInRadioList('security', security);
+  //               }}
+  //             />
+  //             <FormGroup
+  //               type="password"
+  //               required
+  //               label={_('Password')}
+  //               value={store.getIn(['curData', 'radioList', radioId, 'security', 'key'])}
+  //               onChange={(data) => {
+  //                 const security = store.getIn(['curData', 'radioList', radioId, 'security'])
+  //                                         .set('key', data.value);
+  //                 this.updateItemInRadioList('security', security);
+  //               }}
+  //               {...this.props.validateOption[store.getIn(['curData', 'radioList', radioId, 'security', 'keyType'])]}
+  //             />
+  //           </div>
+  //         ) : null
+  //       }
+  //       <div className="clearfix">
+  //         <FormGroup
+  //           type="range"
+  //           className="fl"
+  //           label={_('Distance')}
+  //           value={distance}
+  //           min="1"
+  //           max="10"
+  //           step="0.1"
+  //           hasTextInput
+  //           help="km"
+  //           disabled={autoAdjust === '1'}
+  //           onChange={data => this.updateItemInRadioList('distance', data.value)}
+  //         />
+  //         <span
+  //           className="fl"
+  //           style={{
+  //             marginTop: '12px',
+  //             marginLeft: '4px',
+  //           }}
+  //         >
+  //           <label htmlFor="distance">
+  //             <input
+  //               id="distance"
+  //               type="checkbox"
+  //               checked={autoAdjust === '1'}
+  //               onClick={() => this.updateItemInRadioList('autoAdjust', autoAdjust === '1' ? '0' : '1')}
+  //               style={{ marginRight: '3px' }}
+  //             />
+  //             {_('auto')}
+  //           </label>
+  //         </span>
+  //       </div>
+  //     </div>
+  //   ) : null
+  // }
 
-        {
-        //   deviceMode === 'sta' ? (
-        //     <div className="thirdForSta">
-        //       <div className="clearfix">
-        //         <div className="clearfix">
-        //           <div
-        //             style={{
-        //               width: '205px',
-        //             }}
-        //           >
-        //             <FormGroup
-        //               label="SSID"
-        //               className="fl"
-        //               type="text"
-        //               required
-        //               value={ssid}
-        //               onChange={data => this.updateItemInRadioList('ssid', data.value)}
-        //               {...validSsid}
-        //             />
-        //           </div>
-        //           <span className="fl">
-        //             <span>
-        //               {
-        //                 this.props.selfState.get('scaning') ? (
-        //                   <Button
-        //                     text={_('Stop')}
-        //                     onClick={this.onStopScanClick}
-        //                     loading
-        //                   />
-        //                 ) : (
-        //                   <Button
-        //                     text={_('Scan')}
-        //                     onClick={this.onScanBtnClick}
-        //                   />
-        //                 )
-        //               }
-        //             </span>
-        //             <Modal
-        //               isShow={this.props.selfState.get('showScanResult')}
-        //               onOk={this.onModalOkBtnClick}
-        //               onClose={this.onModalCloseBtnClick}
-        //               okText={_('Select')}
-        //               cancelText={_('Cancel')}
-        //               size="lg"
-        //               okButton
-        //               cancelButton
-        //             >
-        //               <Table
-        //                 className="table"
-        //                 options={modalOptions}
-        //                 list={store.getIn(['curData', 'scanResult', 'siteList'])}
-        //               />
-        //             </Modal>
-        //           </span>
-        //         </div>
-        //       </div>
-        //       <FormGroup
-        //         label={_('Lock To AP')}
-        //         type="checkbox"
-        //         checked={store.getIn(['curData', 'radioList', radioId, 'apMacEnable']) === '1'}
-        //         onChange={data => this.updateItemInRadioList('apMacEnable', data.value)}
-        //       />
-        //       {
-        //         store.getIn(['curData', 'radioList', radioId, 'apMacEnable']) === '1' ? (
-        //           <FormGroup
-        //             label={_('Peer Mac')}
-        //             value={store.getIn(['curData', 'radioList', radioId, 'apMac'])}
-        //             onChange={data => this.updateItemInRadioList('apMac', data.value)}
-        //             {...staApmac}
-        //           />
-        //         ) : null
-        //       }
-        //       <FormGroup
-        //         label={_('Country')}
-        //       >
-        //         <FormInput
-        //           type="text"
-        //           value={getCountryNameFromCode(
-        //             store.getIn(['curData', 'radioList', radioId, 'countryCode']),
-        //             countryMap
-        //           )}
-        //           disabled
-        //           style={{
-        //             width: '127px',
-        //             marginTop: '-3px',
-        //           }}
-        //         />
-        //         <Button
-        //           text={_('Change')}
-        //           style={{
-        //             marginLeft: '-1px',
-        //             width: '70px',
-        //           }}
-        //           onClick={() => { this.props.changeCtyModal(true); }}
-        //         />
-        //       </FormGroup>
-        //       <Modal
-        //         title={_('Country')}
-        //         onClose={this.onCloseCountrySelectModal}
-        //         onOk={this.props.saveCountrySelectModal}
-        //         isShow={this.props.selfState.get('showCtyModal')}
-        //       >
-        //         <h3>{_('User Protocol')}</h3>
-        //         <span>
-        //           {_('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
-        //         </span>
-        //         <FormGroup
-        //           type="radio"
-        //           text={_('I have read and agree')}
-        //           checked={this.props.selfState.get('agreeProtocol')}
-        //           onClick={() => { this.props.changeAgreeProtocol(true); }}
-        //         />
-        //         <FormGroup
-        //           label={_('Country')}
-        //           type="select"
-        //           options={this.makeCountryOptions(countryMap)}
-        //           value={this.props.selfState.get('selectedCountry')}
-        //           onChange={data => this.props.changeCountryCode(data.value)}
-        //           disabled={!this.props.selfState.get('agreeProtocol')}
-        //         />
-        //       </Modal>
-        //       <FormGroup
-        //         type="switch"
-        //         label={_('Channel Width')}
-        //         minWidth="66px"
-        //         options={channelWidthOptions}
-        //         value={channelWidth}
-        //         onChange={data => this.updateItemInRadioList('channelWidth', data.value)}
-        //       />
-        //       <FormGroup
-        //         type="select"
-        //         label={_('Channel')}
-        //         options={this.makeChannelOptions()}
-        //         value={frequency}
-        //         onChange={data => this.updateItemInRadioList('frequency', data.value)}
-        //       />
-        //       <FormGroup
-        //         type="select"
-        //         label={_('Security')}
-        //         options={staAndApSecurityOptions}
-        //         value={mode}
-        //         onChange={(data) => {
-        //           const security = fromJS({
-        //             mode: data.value,
-        //             cipher: store.getIn(['curData', 'radioList', radioId, 'security', 'cipher']) || 'aes',
-        //             auth: store.getIn(['curData', 'radioList', radioId, 'security', 'auth']) || 'open',
-        //             keyIndex: store.getIn(['curData', 'radioList', radioId, 'security', 'keyIndex']) || '1',
-        //             keyLength: store.getIn(['curData', 'radioList', radioId, 'security', 'keyLength']) || '64',
-        //             keyType: store.getIn(['curData', 'radioList', radioId, 'security', 'keyType']) || 'Hex',
-        //             key: '',
-        //           });
-        //           this.updateItemInRadioList('security', security);
-        //         }}
-        //       />
-        //       {
-        //         /wpa/.test(store.getIn(['curData', 'radioList', radioId, 'security', 'mode'])) ? (
-        //           <div>
-        //             <FormGroup
-        //               label={_('Encryption')}
-        //               minWidth="66px"
-        //               type="switch"
-        //               value={store.getIn(['curData', 'radioList', radioId, 'security', 'cipher'])}
-        //               onChange={(data) => {
-        //                 const security = fromJS({
-        //                   mode,
-        //                   key,
-        //                   cipher: data.value,
-        //                 });
-        //                 this.updateItemInRadioList('security', security);
-        //               }}
-        //               options={[
-        //                 { label: 'AES', value: 'aes' },
-        //                 { label: 'TKIP', value: 'tkip' },
-        //                 { label: 'MIXED', value: 'aes&tkip' },
-        //               ]}
-        //             />
-        //             <FormGroup
-        //               type="password"
-        //               label={_('Password')}
-        //               value={key}
-        //               onChange={(data) => {
-        //                 const security = fromJS({
-        //                   mode,
-        //                   key: data.value,
-        //                   cipher: store.getIn(['curData', 'radioList', radioId, 'security', 'cipher']) || 'aes',
-        //                 });
-        //                 this.updateItemInRadioList('security', security);
-        //               }}
-        //               required
-        //               {...validPassword}
-        //             />
-        //           </div>
-        //         ) : null
-        //       }
-        //       {
-        //         (store.getIn(['curData', 'security', 'mode']) === 'wep') ? (
-        //           <div>
-        //             <FormGroup
-        //               label={_('Auth Type')}
-        //               type="switch"
-        //               options={wepAuthenOptions}
-        //               value={store.getIn(['curData', 'radioList', radioId, 'security', 'auth'])}
-        //               onChange={(data) => {
-        //                 const security = store.getIn(['curData', 'radioList', radioId, 'security'])
-        //                                 .set('auth', data.value);
-        //                 this.updateItemInRadioList('security', security);
-        //               }}
-        //               minWidth="65px"
-        //             />
-        //             {/*
-        //               <FormGroup
-        //                 label={_('Key Length')}
-        //                 type="select"
-        //                 options={wepKeyLengthOptions}
-        //                 value={curData.getIn(['vapList', '0', 'security', 'keyLength'])}
-        //                 onChange={(data) => {
-        //                   const security = curData.getIn(['vapList', '0', 'security'])
-        //                                   .set('keyLength', data.value);
-        //                   const vapList = curData.get('vapList')
-        //                                   .setIn(['0', 'security'], security);
-        //                   this.props.updateItemSettings({ vapList });
-        //                 }}
-        //               />
-        //             */}
-        //             <FormGroup
-        //               label={_('Key Format')}
-        //               type="switch"
-        //               options={keyTypeOptions}
-        //               value={store.getIn(['curData', 'radioList', radioId, 'security', 'keyType'])}
-        //               onChange={(data) => {
-        //                 const security = store.getIn(['curData', 'radioList', radioId, 'security'])
-        //                                         .set('keyType', data.value);
-        //                 this.updateItemInRadioList('security', security);
-        //               }}
-        //               minWidth="65px"
-        //             />
-        //             <FormGroup
-        //               label={_('Key Index')}
-        //               type="select"
-        //               options={keyIndexOptions}
-        //               value={store.getIn(['curData', 'radioList', radioId, 'security', 'keyIndex'])}
-        //               onChange={(data) => {
-        //                 const security = store.getIn(['curData', 'radioList', radioId, 'security'])
-        //                                 .set('keyIndex', data.value);
-        //                 this.updateItemInRadioList('security', security);
-        //               }}
-        //             />
-        //             <FormGroup
-        //               type="password"
-        //               required
-        //               label={_('Password')}
-        //               value={store.getIn(['curData', 'radioList', radioId, 'security', 'key'])}
-        //               onChange={(data) => {
-        //                 const security = store.getIn(['curData', 'radioList', radioId, 'security'])
-        //                                         .set('key', data.value);
-        //                 this.updateItemInRadioList('security', security);
-        //               }}
-        //               {...this.props.validateOption[store.getIn(['curData', 'radioList', radioId, 'security', 'keyType'])]}
-        //             />
-        //           </div>
-        //         ) : null
-        //       }
-        //       <div className="clearfix">
-        //         <FormGroup
-        //           type="range"
-        //           className="fl"
-        //           label={_('Distance')}
-        //           value={distance}
-        //           min="1"
-        //           max="10"
-        //           step="0.1"
-        //           hasTextInput
-        //           help="km"
-        //           disabled={autoAdjust === '1'}
-        //           onChange={data => this.updateItemInRadioList('distance', data.value)}
-        //         />
-        //         <span
-        //           className="fl"
-        //           style={{
-        //             marginTop: '12px',
-        //             marginLeft: '4px',
-        //           }}
-        //         >
-        //           <label htmlFor="distance">
-        //             <input
-        //               id="distance"
-        //               type="checkbox"
-        //               checked={autoAdjust === '1'}
-        //               onClick={() => this.updateItemInRadioList('autoAdjust', autoAdjust === '1' ? '0' : '1')}
-        //               style={{ marginRight: '3px' }}
-        //             />
-        //             {_('auto')}
-        //           </label>
-        //         </span>
-        //       </div>
-        //     </div>
-        //   ) : null
-        // }
+  // {
+  //   deviceMode === 'repeater' ? (
+  //     <div className="thirdForRepeater">
+  //       <div className="clearfix">
+  //         <div className="clearfix">
+  //           <div
+  //             style={{
+  //               width: '205px',
+  //             }}
+  //           >
+  //             <FormGroup
+  //               label="SSID"
+  //               className="fl"
+  //               type="text"
+  //               required
+  //               value={ssid}
+  //               onChange={data => this.updateItemInRadioList('ssid', data.value)}
+  //               {...validSsid}
+  //             />
+  //           </div>
+  //           <span className="fl">
+  //             <span>
+  //             {
+  //               this.props.selfState.get('scaning') ? (
+  //                 <Button
+  //                   text={_('Stop')}
+  //                   onClick={this.onStopScanClick}
+  //                   loading
+  //                 />
+  //               ) : (
+  //                 <Button
+  //                   text={_('Scan')}
+  //                   onClick={this.onScanBtnClick}
+  //                 />
+  //               )
+  //             }
+  //             </span>
+  //             <Modal
+  //               isShow={this.props.selfState.get('showScanResult')}
+  //               onOk={this.onModalOkBtnClick}
+  //               onClose={this.onModalCloseBtnClick}
+  //               okText={_('Select')}
+  //               cancelText={_('Cancel')}
+  //               size="lg"
+  //               okButton
+  //               cancelButton
+  //             >
+  //               <Table
+  //                 className="table"
+  //                 options={modalOptions}
+  //                 list={store.getIn(['curData', 'scanResult', 'siteList'])}
+  //               />
+  //             </Modal>
+  //           </span>
+  //         </div>
+  //       </div>
 
-        // {
-        //   deviceMode === 'repeater' ? (
-        //     <div className="thirdForRepeater">
-        //       <div className="clearfix">
-        //         <div className="clearfix">
-        //           <div
-        //             style={{
-        //               width: '205px',
-        //             }}
-        //           >
-        //             <FormGroup
-        //               label="SSID"
-        //               className="fl"
-        //               type="text"
-        //               required
-        //               value={ssid}
-        //               onChange={data => this.updateItemInRadioList('ssid', data.value)}
-        //               {...validSsid}
-        //             />
-        //           </div>
-        //           <span className="fl">
-        //             <span>
-        //             {
-        //               this.props.selfState.get('scaning') ? (
-        //                 <Button
-        //                   text={_('Stop')}
-        //                   onClick={this.onStopScanClick}
-        //                   loading
-        //                 />
-        //               ) : (
-        //                 <Button
-        //                   text={_('Scan')}
-        //                   onClick={this.onScanBtnClick}
-        //                 />
-        //               )
-        //             }
-        //             </span>
-        //             <Modal
-        //               isShow={this.props.selfState.get('showScanResult')}
-        //               onOk={this.onModalOkBtnClick}
-        //               onClose={this.onModalCloseBtnClick}
-        //               okText={_('Select')}
-        //               cancelText={_('Cancel')}
-        //               size="lg"
-        //               okButton
-        //               cancelButton
-        //             >
-        //               <Table
-        //                 className="table"
-        //                 options={modalOptions}
-        //                 list={store.getIn(['curData', 'scanResult', 'siteList'])}
-        //               />
-        //             </Modal>
-        //           </span>
-        //         </div>
-        //       </div>
+  //       <FormGroup
+  //         label={_('Peer MAC')}
+  //         type="text"
+  //         required
+  //         value={store.getIn(['curData', 'radioList', radioId, 'peers', 0])}
+  //         onChange={(data) => {
+  //           const peers = store.getIn(['curData', 'radioList', radioId, 'peers']).set(0, data.value);
+  //           this.updateItemInRadioList('peers', peers);
+  //         }}
+  //         {...apmac3}
+  //       />
+  //       <FormGroup
+  //         label={_('Country')}
+  //       >
+  //         <FormInput
+  //           type="text"
+  //           value={getCountryNameFromCode(
+  //             store.getIn(['curData', 'radioList', radioId, 'countryCode']),
+  //             countryMap
+  //           )}
+  //           disabled
+  //           style={{
+  //             width: '127px',
+  //             marginTop: '-3px',
+  //           }}
+  //         />
+  //         <Button
+  //           text={_('Change')}
+  //           style={{
+  //             marginLeft: '3px',
+  //             width: '70px',
+  //           }}
+  //           onClick={() => { this.props.changeCtyModal(true); }}
+  //         />
+  //       </FormGroup>
+  //       <Modal
+  //         title={_('Country')}
+  //         onClose={this.onCloseCountrySelectModal}
+  //         onOk={this.props.saveCountrySelectModal}
+  //         isShow={this.props.selfState.get('showCtyModal')}
+  //       >
+  //         <h3>{_('User Protocol')}</h3>
+  //         <span>
+  //           {_('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
+  //         </span>
+  //         <FormGroup
+  //           type="radio"
+  //           text={_('I have read and agree')}
+  //           checked={this.props.selfState.get('agreeProtocol')}
+  //           onClick={() => { this.props.changeAgreeProtocol(true); }}
+  //         />
+  //         <FormGroup
+  //           label={_('Country')}
+  //           type="select"
+  //           options={this.makeCountryOptions(countryMap)}
+  //           value={this.props.selfState.get('selectedCountry')}
+  //           onChange={data => this.props.changeCountryCode(data.value)}
+  //           disabled={!this.props.selfState.get('agreeProtocol')}
+  //         />
+  //       </Modal>
+  //       <FormGroup
+  //         type="switch"
+  //         label={_('Channel Width')}
+  //         minWidth="66px"
+  //         options={channelWidthOptions}
+  //         value={channelWidth}
+  //         onChange={data => this.updateItemInRadioList('channelWidth', data.value)}
+  //       />
+  //       <FormGroup
+  //         type="select"
+  //         label={_('Channel')}
+  //         options={this.makeChannelOptions()}
+  //         value={frequency}
+  //         onChange={data => this.updateItemInRadioList('frequency', data.value)}
+  //       />
+  //       <FormGroup
+  //         type="select"
+  //         label={_('Security')}
+  //         value={mode}
+  //         options={repeaterSecurityOptions}
+  //         onChange={(data) => {
+  //           const security = fromJS({
+  //             mode: data.value,
+  //             auth: store.getIn(['curData', 'radioList', radioId, 'security', 'auth']) || 'open',
+  //             keyLength: store.getIn(['curData', 'radioList', radioId, 'security', 'keyLength']) || '64',
+  //             keyIndex: store.getIn(['curData', 'radioList', radioId, 'security', 'keyIndex']) || '1',
+  //             keyType: store.getIn(['curData', 'radioList', radioId, 'security', 'keyType']) || 'Hex',
+  //             key: '',
+  //           });
+  //           this.updateItemInRadioList('security', security);
+  //         }}
+  //       />
+  //       {
+  //         store.getIn(['curData', 'radioList', radioId, 'security', 'mode']) === 'none' ? null : (
+  //           <div>
+  //             <FormGroup
+  //               label={_('Auth Type')}
+  //               type="switch"
+  //               options={wepAuthenOptions}
+  //               value={auth}
+  //               onChange={(data) => {
+  //                 const security = fromJS({
+  //                   mode,
+  //                   auth: data.value,
+  //                   keyLength,
+  //                   keyType,
+  //                   key,
+  //                   keyIndex,
+  //                 });
+  //                 this.updateItemInRadioList('security', security);
+  //               }}
+  //               minWidth="65px"
+  //             />
+  //             {/*
+  //               <FormGroup
+  //                 label={_('WEP Key Length')}
+  //                 type="switch"
+  //                 options={wepKeyLengthOptions}
+  //                 value={keyLength}
+  //                 onChange={(data) => this.props.updateItemSettings({
+  //                   security: {
+  //                     mode,
+  //                     auth,
+  //                     keyLength: data.value,
+  //                     keyType,
+  //                     key,
+  //                     keyIndex,
+  //                   },
+  //                 })}
+  //                 minWidth="65px"
+  //               />
+  //             */}
 
-        //       <FormGroup
-        //         label={_('Peer MAC')}
-        //         type="text"
-        //         required
-        //         value={store.getIn(['curData', 'radioList', radioId, 'peers', 0])}
-        //         onChange={(data) => {
-        //           const peers = store.getIn(['curData', 'radioList', radioId, 'peers']).set(0, data.value);
-        //           this.updateItemInRadioList('peers', peers);
-        //         }}
-        //         {...apmac3}
-        //       />
-        //       <FormGroup
-        //         label={_('Country')}
-        //       >
-        //         <FormInput
-        //           type="text"
-        //           value={getCountryNameFromCode(
-        //             store.getIn(['curData', 'radioList', radioId, 'countryCode']),
-        //             countryMap
-        //           )}
-        //           disabled
-        //           style={{
-        //             width: '127px',
-        //             marginTop: '-3px',
-        //           }}
-        //         />
-        //         <Button
-        //           text={_('Change')}
-        //           style={{
-        //             marginLeft: '3px',
-        //             width: '70px',
-        //           }}
-        //           onClick={() => { this.props.changeCtyModal(true); }}
-        //         />
-        //       </FormGroup>
-        //       <Modal
-        //         title={_('Country')}
-        //         onClose={this.onCloseCountrySelectModal}
-        //         onOk={this.props.saveCountrySelectModal}
-        //         isShow={this.props.selfState.get('showCtyModal')}
-        //       >
-        //         <h3>{_('User Protocol')}</h3>
-        //         <span>
-        //           {_('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
-        //         </span>
-        //         <FormGroup
-        //           type="radio"
-        //           text={_('I have read and agree')}
-        //           checked={this.props.selfState.get('agreeProtocol')}
-        //           onClick={() => { this.props.changeAgreeProtocol(true); }}
-        //         />
-        //         <FormGroup
-        //           label={_('Country')}
-        //           type="select"
-        //           options={this.makeCountryOptions(countryMap)}
-        //           value={this.props.selfState.get('selectedCountry')}
-        //           onChange={data => this.props.changeCountryCode(data.value)}
-        //           disabled={!this.props.selfState.get('agreeProtocol')}
-        //         />
-        //       </Modal>
-        //       <FormGroup
-        //         type="switch"
-        //         label={_('Channel Width')}
-        //         minWidth="66px"
-        //         options={channelWidthOptions}
-        //         value={channelWidth}
-        //         onChange={data => this.updateItemInRadioList('channelWidth', data.value)}
-        //       />
-        //       <FormGroup
-        //         type="select"
-        //         label={_('Channel')}
-        //         options={this.makeChannelOptions()}
-        //         value={frequency}
-        //         onChange={data => this.updateItemInRadioList('frequency', data.value)}
-        //       />
-        //       <FormGroup
-        //         type="select"
-        //         label={_('Security')}
-        //         value={mode}
-        //         options={repeaterSecurityOptions}
-        //         onChange={(data) => {
-        //           const security = fromJS({
-        //             mode: data.value,
-        //             auth: store.getIn(['curData', 'radioList', radioId, 'security', 'auth']) || 'open',
-        //             keyLength: store.getIn(['curData', 'radioList', radioId, 'security', 'keyLength']) || '64',
-        //             keyIndex: store.getIn(['curData', 'radioList', radioId, 'security', 'keyIndex']) || '1',
-        //             keyType: store.getIn(['curData', 'radioList', radioId, 'security', 'keyType']) || 'Hex',
-        //             key: '',
-        //           });
-        //           this.updateItemInRadioList('security', security);
-        //         }}
-        //       />
-        //       {
-        //         store.getIn(['curData', 'radioList', radioId, 'security', 'mode']) === 'none' ? null : (
-        //           <div>
-        //             <FormGroup
-        //               label={_('Auth Type')}
-        //               type="switch"
-        //               options={wepAuthenOptions}
-        //               value={auth}
-        //               onChange={(data) => {
-        //                 const security = fromJS({
-        //                   mode,
-        //                   auth: data.value,
-        //                   keyLength,
-        //                   keyType,
-        //                   key,
-        //                   keyIndex,
-        //                 });
-        //                 this.updateItemInRadioList('security', security);
-        //               }}
-        //               minWidth="65px"
-        //             />
-        //             {/*
-        //               <FormGroup
-        //                 label={_('WEP Key Length')}
-        //                 type="switch"
-        //                 options={wepKeyLengthOptions}
-        //                 value={keyLength}
-        //                 onChange={(data) => this.props.updateItemSettings({
-        //                   security: {
-        //                     mode,
-        //                     auth,
-        //                     keyLength: data.value,
-        //                     keyType,
-        //                     key,
-        //                     keyIndex,
-        //                   },
-        //                 })}
-        //                 minWidth="65px"
-        //               />
-        //             */}
-
-        //             <FormGroup
-        //               label={_('Key Format')}
-        //               type="switch"
-        //               options={keyTypeOptions}
-        //               value={keyType}
-        //               onChange={(data) => {
-        //                 const security = fromJS({
-        //                   mode,
-        //                   auth,
-        //                   keyLength,
-        //                   keyType: data.value,
-        //                   key,
-        //                   keyIndex,
-        //                 });
-        //                 this.updateItemInRadioList('security', security);
-        //               }}
-        //               minWidth="65px"
-        //             />
-        //             <FormGroup
-        //               label={_('Key Index')}
-        //               type="select"
-        //               options={keyIndexOptions}
-        //               value={keyIndex}
-        //               onChange={(data) => {
-        //                 const security = fromJS({
-        //                   mode,
-        //                   auth,
-        //                   keyLength,
-        //                   keyType,
-        //                   key,
-        //                   keyIndex: data.value,
-        //                 });
-        //                 this.updateItemInRadioList('security', security);
-        //               }}
-        //             />
-        //             <FormGroup
-        //               type="password"
-        //               label={_('Password')}
-        //               value={key || ''}
-        //               required
-        //               onChange={(data) => {
-        //                 const security = fromJS({
-        //                   mode,
-        //                   auth,
-        //                   keyLength,
-        //                   keyType,
-        //                   key: data.value,
-        //                   keyIndex,
-        //                 });
-        //                 this.updateItemInRadioList('security', security);
-        //               }}
-        //               {...this.props.validateOption[keyType]}
-        //             />
-        //           </div>
-        //         )
-        //       }
-        //       <div className="clearfix">
-        //         <FormGroup
-        //           type="range"
-        //           className="fl"
-        //           label={_('Distance')}
-        //           value={distance}
-        //           min="1"
-        //           max="10"
-        //           step="0.1"
-        //           hasTextInput
-        //           help="km"
-        //           disabled={autoAdjust === '1'}
-        //           onChange={data => this.updateItemInRadioList('distance', data.value)}
-        //         />
-        //         <span
-        //           className="fl"
-        //           style={{
-        //             marginTop: '12px',
-        //             marginLeft: '4px',
-        //           }}
-        //         >
-        //           <label htmlFor="distance">
-        //             <input
-        //               id="distance"
-        //               type="checkbox"
-        //               checked={autoAdjust === '1'}
-        //               onClick={() => this.updateItemInRadioList('autoAdjust', autoAdjust === '1' ? '0' : '1')}
-        //               style={{ marginRight: '3px' }}
-        //             />
-        //             {_('auto')}
-        //           </label>
-        //         </span>
-        //       </div>
-        //     </div>
-        //   ) : null
-        }
+  //             <FormGroup
+  //               label={_('Key Format')}
+  //               type="switch"
+  //               options={keyTypeOptions}
+  //               value={keyType}
+  //               onChange={(data) => {
+  //                 const security = fromJS({
+  //                   mode,
+  //                   auth,
+  //                   keyLength,
+  //                   keyType: data.value,
+  //                   key,
+  //                   keyIndex,
+  //                 });
+  //                 this.updateItemInRadioList('security', security);
+  //               }}
+  //               minWidth="65px"
+  //             />
+  //             <FormGroup
+  //               label={_('Key Index')}
+  //               type="select"
+  //               options={keyIndexOptions}
+  //               value={keyIndex}
+  //               onChange={(data) => {
+  //                 const security = fromJS({
+  //                   mode,
+  //                   auth,
+  //                   keyLength,
+  //                   keyType,
+  //                   key,
+  //                   keyIndex: data.value,
+  //                 });
+  //                 this.updateItemInRadioList('security', security);
+  //               }}
+  //             />
+  //             <FormGroup
+  //               type="password"
+  //               label={_('Password')}
+  //               value={key || ''}
+  //               required
+  //               onChange={(data) => {
+  //                 const security = fromJS({
+  //                   mode,
+  //                   auth,
+  //                   keyLength,
+  //                   keyType,
+  //                   key: data.value,
+  //                   keyIndex,
+  //                 });
+  //                 this.updateItemInRadioList('security', security);
+  //               }}
+  //               {...this.props.validateOption[keyType]}
+  //             />
+  //           </div>
+  //         )
+  //       }
+  //       <div className="clearfix">
+  //         <FormGroup
+  //           type="range"
+  //           className="fl"
+  //           label={_('Distance')}
+  //           value={distance}
+  //           min="1"
+  //           max="10"
+  //           step="0.1"
+  //           hasTextInput
+  //           help="km"
+  //           disabled={autoAdjust === '1'}
+  //           onChange={data => this.updateItemInRadioList('distance', data.value)}
+  //         />
+  //         <span
+  //           className="fl"
+  //           style={{
+  //             marginTop: '12px',
+  //             marginLeft: '4px',
+  //           }}
+  //         >
+  //           <label htmlFor="distance">
+  //             <input
+  //               id="distance"
+  //               type="checkbox"
+  //               checked={autoAdjust === '1'}
+  //               onClick={() => this.updateItemInRadioList('autoAdjust', autoAdjust === '1' ? '0' : '1')}
+  //               style={{ marginRight: '3px' }}
+  //             />
+  //             {_('auto')}
+  //           </label>
+  //         </span>
+  //       </div>
+  //     </div>
+  //   ) : null
+}
       </div>
     );
   }
@@ -1394,6 +1436,11 @@ export default class QuickSetup extends React.Component {
 
     return (
       <div className="fourthScreen">
+        <FormGroup
+          type="plain-text"
+          label={_(' ')}
+        />
+
         {
           deviceMode === 'ap' ? (
             <div className="fourthForAp row">

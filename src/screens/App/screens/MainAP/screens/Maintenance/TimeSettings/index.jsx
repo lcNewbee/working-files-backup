@@ -25,6 +25,7 @@ const propTypes = {
   selfState: PropTypes.instanceOf(Map),
   save: PropTypes.func,
   restoreSelfState: PropTypes.func,
+  createModal: PropTypes.func,
 };
 
 function createTimezoneOption(zone) {
@@ -78,7 +79,7 @@ export default class TimeSettings extends Component {
                       .delete('zoneName').toJS();
     const ntpStrValid = saveData.ntpServer.match(/^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/);
     const ntpIpValid = saveData.ntpServer.match(/^([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){2}([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])$/);
-    console.log(ntpStrValid, ntpIpValid);
+    const ntpEnable = this.props.store.getIn(['curData', 'ntpEnable']);
     // if (!ntpIpValid && ntpStrValid && ntpStrValid[0] === saveData.ntpServer) {
     //   console.log('ntp valid');
     //   this.props.save('goform/set_ntp', saveData);
@@ -101,11 +102,11 @@ export default class TimeSettings extends Component {
       return '';
     }
     let msg = '';
-    if (!ntpIpValid && !ntpStrValid) {
+    if (ntpEnable === '1' && !ntpIpValid && !ntpStrValid) {
       msg = _('Please input a valid ntp server!');
-    } else if (ntpIpValid && ntpIpValid[0] === saveData.ntpServer) {
+    } else if (ntpEnable === '1' && ntpIpValid && ntpIpValid[0] === saveData.ntpServer) {
       msg = validIp(saveData.ntpServer);
-    } else if (ntpStrValid && ntpStrValid[0] !== saveData.ntpServer) {
+    } else if (ntpEnable === '1' && ntpStrValid && ntpStrValid[0] !== saveData.ntpServer) {
       msg = _('Please input a valid ntp server!');
     }
     if (msg === '') {
@@ -188,7 +189,7 @@ export default class TimeSettings extends Component {
               moment(
                 (this.props.store.getIn(['curData', 'time']) || '00:00:00')
                   .replace(':', ''),
-                'hms'
+                'hms',
               )
             }
             format="HH:mm:ss"

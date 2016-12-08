@@ -4,7 +4,7 @@
     "code": 2000
   },
   "data": {
-    "ifFirstLogin": "1",
+    "ifFirstLogin": "0",
     "enable": "0",
     "discoveryType": "static",
     "acIp": "192.168.0.1"

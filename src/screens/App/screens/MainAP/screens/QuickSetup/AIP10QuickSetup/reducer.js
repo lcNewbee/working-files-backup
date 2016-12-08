@@ -15,8 +15,27 @@ const defaultState = fromJS({
   scaning: false,
   showScanResult: false,
   selectedResult: {},
-  radioSelectedArr: [],
+
+  ssidInfo: {
+    ssid: 'Axilspot',
+    security: {
+      mode: 'none',
+      auth: 'open',
+      keyLength: '64',
+      keyType: 'Hex',
+      key: '11223344',
+      keyIndex: '1',
+      cipher: 'aes',
+    },
+    radioOnEffect: [],
+  },
+
 });
+
+function onSsidInfoChange(state, action) {
+  const ssidInfo = state.get('ssidInfo').merge(action.data);
+  return state.set('ssidInfo', ssidInfo);
+}
 
 export default function (state = defaultState, action) {
   switch (action.type) {
@@ -48,6 +67,8 @@ export default function (state = defaultState, action) {
       return state.set('currRadioConfig', action.data);
     case 'CHANGE_RADIO_SELECTED_ARR':
       return state.set('radioSelectedArr', action.data);
+    case 'CHANGE_SSID_INFO':
+      return onSsidInfoChange(state, action);
     case 'LEAVE_SCREEN':
       return defaultState;
     case 'RESTORE_SELF_STATE':

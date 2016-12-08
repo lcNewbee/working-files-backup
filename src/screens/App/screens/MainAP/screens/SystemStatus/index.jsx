@@ -18,6 +18,7 @@ const propTypes = {
   selfState: PropTypes.instanceOf(Map),
   initSettings: PropTypes.func,
   fetchSettings: PropTypes.func,
+  fetch: PropTypes.func,
   changeCurrRadioConfig: PropTypes.func,
   changeCustomSettingsForChart: PropTypes.func,
 
@@ -479,12 +480,15 @@ export default class SystemStatus extends React.Component {
       fetchUrl: this.props.route.fetchUrl,
       defaultData: {},
     });
-    // console.log('this.props.product.getIn([deviceRadioList, 0])', this.props.product.getIn(['deviceRadioList', 0]));
     // this.props.changeCurrRadioConfig(this.props.product.getIn(['deviceRadioList', 0]));
-    this.props.fetchSettings().then(() => {
-      this.props.changeFirstRefresh(false);
-      // const customSetings = this.props.selfState.get('customSettingsForChart').toJS();
-      this.prepareChartData();
+    this.props.fetch('goform/get_firstLogin_info').then((json) => {
+      if (json.state && json.state.code === 2000 && json.data.ifFirstLogin === '0') {
+        this.props.fetchSettings().then(() => {
+          this.props.changeFirstRefresh(false);
+          // const customSetings = this.props.selfState.get('customSettingsForChart').toJS();
+          this.prepareChartData();
+        });
+      }
     });
     this.onChangeRadio({ value: '0' });
     a = setInterval(() => {
@@ -520,6 +524,7 @@ export default class SystemStatus extends React.Component {
   }
   onChangeRadio(data) { // 注意参数实际是data的value属性，这里表示radio序号
     const radioType = this.props.product.getIn(['deviceRadioList', data.value, 'radioType']);
+    console.log('radioType', radioType);
     const config = fromJS({
       radioId: data.value,
       radioType,

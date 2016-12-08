@@ -119,3 +119,10 @@ export function changeRadioSelectedArr(data) {
     data,
   };
 }
+
+export function changeSsidInfo(data) {
+  return {
+    type: 'CHANGE_SSID_INFO',
+    data,
+  };
+}

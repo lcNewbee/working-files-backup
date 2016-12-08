@@ -15,6 +15,19 @@
     "mtu": "1500",
 	  "mngVlanId":"1",
     "utgVlanId":"1",
-    "vlanEnable":"1"
+    "vlanEnable":"1",
+
+    "wiredMode": "router",
+    "routerInfo": {
+      "ip": "192.168.1.1",
+      "mask": "255.255.255.0",
+      "gateway": "192.168.1.2",
+      "dns1": "8.8.8.8",
+      "dns2": "4.4.4.4",
+      "user": "abcd",
+      "password": "12345",
+      "proto": "pppoe",
+      "nat": "1"
+    }
   }
 }

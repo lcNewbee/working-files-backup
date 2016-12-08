@@ -47,16 +47,13 @@ export default class MainAP extends Component {
         const options = this.makeRadioSelectOptions(json.data.deviceRadioList);
         this.props.setRadioSelectOptions(options);
       }
-    });
-  }
-
-  componentDidMount() {
-    this.props.fetch('goform/get_firstLogin_info').then((json) => {
+    }).then(() =>
+      this.props.fetch('goform/get_firstLogin_info'),
+    ).then((json) => {
       if (json.state && json.state.code === 2000) {
         if (json.data.ifFirstLogin === '1') {
           window.location.href = '#/wizard';
-        }
-        if (json.data.enable === '1') {
+        } else if (json.data.enable === '1') {
           const menus = this.props.route.childRoutes.filter(val => val.id !== 'wirelessconfig' && val.id !== 'quicksetup');
           this.props.changeMenus(fromJS(menus));
         } else if (json.data.enable === '0') {
@@ -66,6 +63,22 @@ export default class MainAP extends Component {
       }
     });
   }
+
+  // componentDidMount() {
+  //   this.props.fetch('goform/get_firstLogin_info').then((json) => {
+  //     if (json.state && json.state.code === 2000) {
+  //       if (json.data.ifFirstLogin === '1') {
+  //         window.location.href = '#/wizard';
+  //       } else if (json.data.enable === '1') {
+  //         const menus = this.props.route.childRoutes.filter(val => val.id !== 'wirelessconfig' && val.id !== 'quicksetup');
+  //         this.props.changeMenus(fromJS(menus));
+  //       } else if (json.data.enable === '0') {
+  //         const menus = this.props.route.childRoutes;
+  //         this.props.changeMenus(fromJS(menus));
+  //       }
+  //     }
+  //   });
+  // }
 
 
   onRefresh(e) {
@@ -101,6 +114,9 @@ export default class MainAP extends Component {
   render() {
     const { guiName, saving } = this.props.app.toJS();
     const { isShow } = this.state;
+    // 解决在管理页面刷新获取radioType为undefined，导致请求国家信道错误的问题
+    if (this.props.selfState.getIn(['deviceRadioList']).size === 0) return null;
+
     return (
       <div>
         <Navbar

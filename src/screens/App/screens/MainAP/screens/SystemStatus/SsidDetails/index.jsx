@@ -139,7 +139,7 @@ export default class SsidDetails extends React.Component {
     });
     this.refreshData();
     this.onChangeRadio({ value: '0' });
-    setInterval(() => {
+    intervalAction = setInterval(() => {
       this.refreshData();
     }, 10000);
   }
