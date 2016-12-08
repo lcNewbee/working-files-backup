@@ -25,6 +25,15 @@ class SystemStatus_Model extends CI_Model {
             $retda['system_memid'] = $obj->data->system_memid;
             $retda['system_sdaid'] = $obj->data->system_sdaid;          
         }
+        //
+        $version = file_get_contents('/etc/version');
+        $version = str_replace('AXC1000_V1_TEST_','',trim($version,'\n')); 
+        $retda['version'] = str_replace("\n","",$version);        
+        //
+        $runingtime = $this->sys_linux();
+        if($runingtime) {
+            $retda['running_time'] = $runingtime['uptime'];
+        }
         $arr['state'] = array('code'=>2000,'msg'=>'ok');
         $arr['data'] = $retda;								
         return json_encode($arr);
@@ -87,5 +96,22 @@ class SystemStatus_Model extends CI_Model {
         return array('cpu_usage'=>$cpu_usage,'mem_usage'=>$mem_usage,'store_usage'=>$store_usage);
     }
 
-    
+    public function sys_linux(){        
+        if (false === ($str = @file("/proc/uptime"))) return false;
+        $str = explode(" ", implode("", $str));
+        $str = trim($str[0]);
+        /*
+        $min = $str / 60;
+        $hours = $min / 60;
+        $days = floor($hours / 24);
+        $hours = floor($hours - ($days * 24));
+        $min = floor($min - ($days * 60 * 24) - ($hours * 60));
+        if ($days !== 0) $res['uptime'] = $days." Day ";
+        if ($hours !== 0) $res['uptime'] .= $hours." Hour ";
+        $res['uptime'] .= $min." Minute ";
+        */
+        $res['uptime'] = (int)$str;
+        return$res;
+    }
+     
 }

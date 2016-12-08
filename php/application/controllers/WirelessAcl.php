@@ -8,7 +8,10 @@ class WirelessAcl extends CI_Controller {
 		$this->load->model('group/WirelessAcl_Model');
 	}
 	function fetch() {
-		$retdata = array('groupid' => (int)element('groupid', $_GET, -1),);
+		$retdata = array(
+			'groupid' => (int)element('groupid', $_GET, -1),
+			'filterGroupid' => (int)element('filterGroupid', $_GET, -1),
+		);
 		return $this->WirelessAcl_Model->get_acl_list($retdata);
 	}
 	function onAction($data) {
