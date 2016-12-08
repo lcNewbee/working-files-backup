@@ -19,6 +19,7 @@ const propTypes = {
   isCollapsed: PropTypes.bool,
   store: PropTypes.instanceOf(Map),
   app: PropTypes.instanceOf(Map),
+  actionable: PropTypes.bool,
 };
 
 const defaultProps = {
@@ -35,26 +36,27 @@ class Panel extends React.Component {
       this.props.onSave();
     }
   }
-  onChangeData(data) {
-  }
   render() {
-    const { store, app } = this.props;
-
+    const { store, app, actionable } = this.props;
     return (
       <div className="o-form o-form--compassed">
         <FormGroup
           type="text"
           label={_('Nickname')}
           value={store.getIn(['data', 'alias'])}
-          onChange={(option) => this.props.onChangeData({
+          onChange={option => this.props.onChangeData({
             alias: option.value,
           })}
         />
-        <SaveButton
-          size="sm"
-          loading={app.get('saving')}
-          onClick={this.onSave}
-        />
+        {
+          actionable ? (
+            <SaveButton
+              size="sm"
+              loading={app.get('saving')}
+              onClick={this.onSave}
+            />
+          ) : null
+        }
       </div>
     );
   }

@@ -110,6 +110,7 @@
   "Restore To Factory": "恢复出厂设置",
   "Date":"日期",
   "Data Sync Error": "数据同步错误",
+  "Please Select File...": "请选择文件...",
 
   "Are you sure to delete selected index: %s ?": "你确定要删除选择的项：%s ?",
   "Download Report": "下载报表",

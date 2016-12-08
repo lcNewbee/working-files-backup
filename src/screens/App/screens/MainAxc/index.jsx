@@ -1208,6 +1208,7 @@ function mapStateToProps(state) {
     app: state.app,
     product: state.product,
     properties: state.properties,
+    groupid: state.product.getIn(['group', 'selected', 'id']),
   };
 }
 

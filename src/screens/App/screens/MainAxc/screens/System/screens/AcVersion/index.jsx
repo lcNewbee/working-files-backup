@@ -114,8 +114,8 @@ export default class AcVersion extends PureComponent {
         apply: () => {
           this.props.createModal({
             role: 'loading',
-            title: msg.upAcVersionTitle,
-            text: msg.upgradingACversion,
+            title: '',
+            loadingTitle: msg.upgradingACversion,
           });
 
           this.props.save(url, { filename })

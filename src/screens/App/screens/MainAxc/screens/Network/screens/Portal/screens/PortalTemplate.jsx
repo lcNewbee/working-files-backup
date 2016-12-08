@@ -145,12 +145,8 @@ export default class PortalProfile extends React.Component {
     };
   }
 
-  componentWillUnmount() {
-    this.props.leaveSettingsScreen();
-  }
-
   onSave() {
-    this.props.saveSettings();
+    this.props.saveScreenSettings();
   }
 
   selectShowImage(i) {

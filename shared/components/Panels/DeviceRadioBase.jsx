@@ -12,6 +12,7 @@ const propTypes = {
   onChangeData: PropTypes.func,
   onChangeItem: PropTypes.func,
   onSave: PropTypes.func,
+  actionable: PropTypes.bool,
 
   store: PropTypes.instanceOf(Map),
   app: PropTypes.instanceOf(Map),
@@ -36,7 +37,7 @@ class DeviceSystem extends React.Component {
     return this.props.store.getIn(['data', name]);
   }
   render() {
-    const { app, store, ...restProps } = this.props;
+    const { app, store, actionable, ...restProps } = this.props;
     const formData = store.getIn(['data']);
     const formOptions = radioBase;
 
@@ -64,7 +65,7 @@ class DeviceSystem extends React.Component {
             })}
           />,
         ]}
-        hasSaveButton
+        hasSaveButton={actionable}
       />
     );
   }

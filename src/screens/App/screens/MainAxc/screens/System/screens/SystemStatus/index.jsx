@@ -5,6 +5,7 @@ import utils from 'shared/utils';
 import { Map } from 'immutable';
 import PureComponent from 'shared/components/Base/PureComponent';
 import EchartReact from 'shared/components/EchartReact';
+import Progress from 'shared/components/Progress';
 import AppScreen from 'shared/components/Template/AppScreen';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/screens';
@@ -213,7 +214,14 @@ export default class View extends PureComponent {
                 </dl>
                 <dl className="o-description-list-row">
                   <dt>{_('Storage Used')}</dt>
-                  <dd>{serverData.get('storeUsed')}%</dd>
+                  <dd>
+                    <Progress
+                      value={serverData.get('storeUsed')}
+                      max="100"
+                      theme="success"
+                      showText
+                    />
+                  </dd>
                 </dl>
               </div>
             </div>

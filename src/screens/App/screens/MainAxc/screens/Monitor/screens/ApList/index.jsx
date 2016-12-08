@@ -347,6 +347,7 @@ export default class View extends React.Component {
     );
   }
   render() {
+    const groupid = this.props.groupid;
     const myListOptions = listOptions.setIn([0, 'transform'], (val, item) => {
       const mac = item.get('mac');
       return (

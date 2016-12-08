@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import ReduxToastr from 'react-redux-toastr';
 import * as actions from 'shared/actions/app';
 import Modal from 'shared/components/Modal';
+import ProgressBar from 'shared/components/ProgressBar';
 import Icon from 'shared/components/Icon';
 import stringUtils from 'shared/utils/lib/string';
 
@@ -83,19 +84,18 @@ class App extends Component {
         >
           {
             modelRole === 'loading' ? (
-              <div className="o-modal__body-icon">
-                <Icon
-                  name="spinner"
-                  size="2x"
-                  style={{
-                    color: '#0093DD',
-                  }}
-                  spin
-                />
-              </div>
+              <ProgressBar
+                title={modal.loadingTitle}
+                time={modal.loadingTime || 100}
+                style={{
+                  minHeight: '24px',
+                }}
+                theme="success"
+                start
+              />
             ) : null
           }
-          {modal.text}
+          {modal.text || ''}
         </Modal>
         <ReduxToastr
           timeOut={3000}
