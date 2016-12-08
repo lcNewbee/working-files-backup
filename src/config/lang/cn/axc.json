@@ -32,6 +32,7 @@
   "Copy From Other Group": "从其他组拷贝",
   "Please Select ": "请选择",
   "Physical Mode": "工作模式",
+  "Address Type": "地址类型",
 
   "Radio Base": "Radio基本配置",
   "Radio Advance": "Radio高级配置",
@@ -110,7 +111,8 @@
   "Route Configuration": "路由配置",
   "Route": "路由",
   "Routes": "路由",
-  "Target Subnet Mask": "目的掩码",
+  "Target IP": "目标IP",
+  "Target Subnet Mask": "目标掩码",
   "Next Hop IP": "下一跳IP",
 
   "Exchange Mode": "交换模式",
@@ -130,6 +132,8 @@
   "Accounting Server Settings": "计费服务器设置",
   "Primary IP": "主IP地址",
   "Secondary IP": "次IP地址",
+  "Primary IP Address": "主IP地址",
+  "Secondary IP Address": "次IP地址",
   "Primary Password": "主密钥",
   "Secondary Password": "次密钥",
   "Primary Port": "主端口",
@@ -163,7 +167,8 @@
   "Portal Template": "Portal模板",
   "Server Name": "服务器名称",
   "Server Domain": "服务器域名",
-  "Server Port": "服务端口",
+  "Server Port": "服务器端口",
+  "Server IP": "服务器IP",
   "Shared Key": "共享密钥",
   "Redirect URL": "重定向URL",
   "Force Auth Domain": "强制认证域",
@@ -383,8 +388,15 @@
   "Memory Activity Monitor": "内存使用状态",
   "CPU Activity Monitor": "CPU使用状态",
   "Memory ID": "内存ID",
+  "Memory Usage": "内存使用率",
+  "CPU Usage": "CPU使用率",
+  "Storage": "存储使用率",
 
   "Export": "导出",
+
+  "Level": "等级",
+  "Event Type": "事件类型",
+  "Event": "事件",
 
   "System": "系统",
   "System Upgrade": "系统升级",

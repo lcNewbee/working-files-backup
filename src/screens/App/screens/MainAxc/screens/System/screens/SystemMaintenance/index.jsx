@@ -8,8 +8,6 @@ import AppScreen from 'shared/components/Template/AppScreen';
 import FormGroup from 'shared/components/Form/FormGroup';
 import SaveButton from 'shared/components/Button/SaveButton';
 import FileUpload from 'shared/components/FileUpload';
-import ProgressBar from 'shared/components/ProgressBar';
-import Progress from 'shared/components/Progress';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 
@@ -31,7 +29,9 @@ const propTypes = {
   app: PropTypes.instanceOf(Map),
   route: PropTypes.object,
   save: PropTypes.func,
-  saveFile: PropTypes.func,
+  fetch: PropTypes.func,
+  createModal: PropTypes.func,
+  closeModal: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -44,6 +44,8 @@ export default class View extends React.Component {
       'onReboot',
       'onBackup',
       'onRestore',
+      'onConfirm',
+      'checkSaveResult',
     ]);
 
     this.state = {
@@ -53,19 +55,67 @@ export default class View extends React.Component {
   }
 
   onReboot() {
-    this.props.save('/goform/system/reboot')
-      .then((json) => {
-        if (json.state && json.state.code === 2000 ) {
-
-        }
-      });
+    this.props.save('goform/system/reboot');
   }
 
   onBackup() {
-    this.props.save('/goform/system/backup');
+    this.props.save('goform/system/backup');
   }
+
   onRestore() {
-    this.props.save('/goform/system/restore');
+    this.props.save('goform/system/restore');
+  }
+
+  onConfirm(type) {
+    const handleMap = {
+      reboot: {
+        text: _('Are you sure to reboot?'),
+        loadingTitle: _('Rebootting..., Do not shutdown device.'),
+        onSave: this.onReboot,
+      },
+      restore: {
+        text: _('Are you sure to restore to factory?'),
+        loadingTitle: _('Restoring..., Do not shutdown device'),
+        onSave: this.onRestore,
+      },
+    };
+    const curHandle = handleMap[type];
+
+    if (curHandle) {
+      this.props.createModal({
+        role: 'confirm',
+        text: curHandle.text,
+        apply: () => {
+          this.props.createModal({
+            role: 'loading',
+            title: '',
+            loadingTime: '12',
+            loadingTitle: curHandle.loadingTitle,
+            onLoaded() {
+              console.log('loaded');
+            },
+          });
+
+          curHandle.onSave();
+          this.checkSaveResult(true);
+        },
+      });
+    }
+  }
+  checkSaveResult(isFirst) {
+    if (!isFirst) {
+      this.props.fetch('goform/axcInfo')
+        .then((json) => {
+          if (json && json.state && json.state.code === 2000) {
+            clearTimeout(this.checkUpgradOkTimeout);
+            this.props.closeModal();
+          }
+        });
+    } else {
+      this.checkUpgradOkTimeout = setTimeout(() => {
+        this.checkSaveResult();
+      }, 5000);
+    }
   }
 
   render() {
@@ -85,7 +135,9 @@ export default class View extends React.Component {
                 type="button"
                 icon="refresh"
                 text={_('Reboot Now')}
-                onClick={this.onReboot}
+                onClick={
+                  () => this.onConfirm('reboot')
+                }
               />
             </FormGroup>
             <FormGroup label={_('Backup Configuration')}>
@@ -113,7 +165,9 @@ export default class View extends React.Component {
                 type="button"
                 icon="undo"
                 text=""
-                onClick={this.onRestore}
+                onClick={
+                  () => this.onConfirm('restore')
+                }
               />
             </FormGroup>
           </fieldset>

@@ -111,9 +111,16 @@
   "Date":"日期",
   "Data Sync Error": "数据同步错误",
   "Please Select File...": "请选择文件...",
+  "Rebootting..., Do not shutdown device.": "正在重启...，请不要关闭设备。",
+  "Restoring..., Do not shutdown device.": "正在恢复...，请不要关闭设备。",
+  "Are you sure to reboot?": "你确定要重启设备？",
+  "Are you sure to restore to factory?": "你确定要恢复出厂设置？",
 
   "Are you sure to delete selected index: %s ?": "你确定要删除选择的项：%s ?",
   "Download Report": "下载报表",
+  "Advanced Settings": "高级设置",
+  "Edit Selected AP": "配置选中的AP",
+  "Frimware Version": "固件版本",
 
   "Primary DNS": "主DNS",
   "Secondary DNS": "备用DNS",

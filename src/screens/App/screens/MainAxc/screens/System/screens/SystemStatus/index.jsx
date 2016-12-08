@@ -206,14 +206,14 @@ export default class View extends PureComponent {
                 </dl>
                 <dl className="o-description-list-row">
                   <dt>{_('Frimware Version')}</dt>
-                  <dd>{serverData.get('system_sdaid')}</dd>
+                  <dd>{serverData.get('version') || ''}</dd>
                 </dl>
                 <dl className="o-description-list-row">
-                  <dt>{_('Up Time')}</dt>
-                  <dd>{serverData.get('system_sdaid')}</dd>
+                  <dt>{_('Uptime')}</dt>
+                  <dd>{serverData.get('uptime') || ''}</dd>
                 </dl>
                 <dl className="o-description-list-row">
-                  <dt>{_('Storage Used')}</dt>
+                  <dt>{_('Storage')}</dt>
                   <dd>
                     <Progress
                       value={serverData.get('storeUsed')}

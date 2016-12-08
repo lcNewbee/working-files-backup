@@ -85,8 +85,7 @@ const listOptions = fromJS([
       required: true,
       type: 'select',
       placeholder: _('Please Select ') + _('Radius Service'),
-      loadOptions: getInterfaceTypeOptions,
-      isAsync: true,
+      options: [],
     },
   },
 ]);
@@ -100,6 +99,19 @@ export default class View extends React.Component {
     super(props);
 
     this.onAction = this.onAction.bind(this);
+    this.state = {
+      radiusOptions: [],
+    };
+  }
+
+  componentWillMount() {
+    getInterfaceTypeOptions().then(
+      (data) => {
+        this.setState({
+          radiusOptions: data.options,
+        });
+      },
+    );
   }
 
   onAction(no, type) {
@@ -116,11 +128,15 @@ export default class View extends React.Component {
   }
 
   render() {
+    const myListOptions = listOptions.setIn(
+      [-1, 'formProps', 'options'],
+      this.state.radiusOptions,
+    );
     return (
       <AppScreen
         {...this.props}
         listKey="domain_name"
-        listOptions={listOptions}
+        listOptions={myListOptions}
         actionable
         selectable
       />

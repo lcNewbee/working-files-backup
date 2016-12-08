@@ -1,0 +1,38 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "msgtype": "126",
+        "timer": "2015-12.7 08:00",
+        "eventtype": "ap",
+        "event":"interference",
+        "level":"warning",
+        "mail":"asd@com",
+        "msginfo": "rssi low"
+      },
+      {
+        "msgtype": "127",
+        "timer": "2015-12.7 08:00",
+        "eventtype": "ap",
+        "event":"interference",
+        "level":"warning",
+        "mail":"asd@com",
+        "msginfo": "rssi low"
+      },
+
+      {
+        "msgtype": "128",
+        "timer": "2015-12.7 08:00",
+        "eventtype": "ap",
+        "event":"interference",
+        "level":"warning",
+        "mail":"asd@com",
+        "msginfo": "rssi low"
+      }
+    ]
+  }
+}

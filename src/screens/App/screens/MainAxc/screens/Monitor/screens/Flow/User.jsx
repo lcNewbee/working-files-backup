@@ -39,7 +39,6 @@ export default function View(props) {
     <AppScreen
       {...props}
       listOptions={listOptions}
-      noTitle
     />
   );
 }

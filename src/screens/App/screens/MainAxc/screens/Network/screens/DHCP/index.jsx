@@ -26,7 +26,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'startIp',
-    text: _('Start IP Address'),
+    text: _('Start IP'),
     formProps: {
       required: true,
       maxLength: '15',

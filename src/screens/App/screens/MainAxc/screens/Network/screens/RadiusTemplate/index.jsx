@@ -19,7 +19,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'authpri_ipaddr',
-    label: _('Primary IP Address'),
+    label: _('Primary IP'),
     fieldset: 'auth',
     legend: _('Auth Server Settings'),
     defaultValue: '0',
@@ -30,7 +30,7 @@ const listOptions = fromJS([
 
   }, {
     id: 'authsecond_ipaddr',
-    label: _('Secondary IP Address'),
+    label: _('Secondary IP'),
     fieldset: 'auth',
     formProps: {
       type: 'text',
@@ -75,7 +75,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'acctpri_ipaddr',
-    label: _('Primary IP Address'),
+    label: _('Primary IP'),
     fieldset: 'Accounting',
     legend: _('Accounting Server Settings'),
     defaultValue: '0',
@@ -86,7 +86,7 @@ const listOptions = fromJS([
 
   }, {
     id: 'acctsecond_ipaddr',
-    label: _('Secondary IP Address'),
+    label: _('Secondary IP'),
     fieldset: 'Accounting',
     formProps: {
       type: 'text',

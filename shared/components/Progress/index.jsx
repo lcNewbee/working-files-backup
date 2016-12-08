@@ -26,7 +26,7 @@ export default class Progress extends React.Component {
   }
 
   render() {
-    const { className, theme, striped, value, max, animated, showText, unit } = this.props;
+    const { className, theme, striped, value, max, animated, showText, unit, ...restProps } = this.props;
     const progressClassNames = classnames('a-progress', {
       'a-progress--success': theme === 'success',
       'a-progress--info': theme === 'info',
@@ -43,7 +43,7 @@ export default class Progress extends React.Component {
     const hasTextProgress = (
       <div className={`${className} a-progress-wrap`} >
         <progress
-          {...this.props}
+          {...restProps}
           className={progressClassNames}
           value={value}
           max={max}
@@ -52,7 +52,7 @@ export default class Progress extends React.Component {
             // Start  For under Ie9
           }
           <div
-            {...this.props}
+            {...restProps}
             className={progressClassNames}
           >
             <span
