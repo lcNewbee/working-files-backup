@@ -1,0 +1,14 @@
+.m-file-upload {
+  position: relative;
+  overflow: hidden;
+
+  input[type='file'] {
+    opacity: 0;
+    position: absolute;
+    cursor: pointer;
+    line-height: 0;
+    height: 30px;
+    width: 240px;
+    margin-left: -80px;
+  }
+}

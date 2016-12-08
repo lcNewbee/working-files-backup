@@ -16,6 +16,7 @@ const propTypes = {
   changePropertyPanelRadioIndex: PropTypes.func,
   reportValidError: PropTypes.func,
   save: PropTypes.func,
+  groupid: PropTypes.any,
 
   data: PropTypes.instanceOf(Map),
   app: PropTypes.instanceOf(Map),
@@ -80,10 +81,10 @@ class PropertyPanel extends React.Component {
   }
 
   render() {
-    const { isShow, data, app, reportValidError } = this.props;
+    const { isShow, data, app, reportValidError, groupid } = this.props;
     const { activeIndex } = data.toJS();
-
     let propertyPanelClassName = 'o-property-panel';
+    let actionAable = true;
 
     if (isShow) {
       propertyPanelClassName = `${propertyPanelClassName} active`;
@@ -91,6 +92,10 @@ class PropertyPanel extends React.Component {
 
     if (data.get('list').size < 1) {
       return null;
+    }
+    console.log('groupid = ', groupid);
+    if (groupid === -100) {
+      actionAable = false;
     }
 
     return (
@@ -151,6 +156,7 @@ class PropertyPanel extends React.Component {
                     () => this.props.removeFromPropertyPanel(index)
                   }
                   onSave={this.onSave}
+                  actionable={actionAable}
 
                   // Validate Props
                   invalidMsg={app.get('invalid')}

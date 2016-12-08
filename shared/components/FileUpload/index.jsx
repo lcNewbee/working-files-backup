@@ -2,6 +2,8 @@ import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
 import Button from '../Button/Button';
 
+import './_FileUpload.scss';
+
 const MSG = {
   shouldSelectFile: _('Please select a upload file'),
   extensionRange: _('Select file extension range: %s'),
@@ -12,6 +14,7 @@ const propTypes = {
   name: PropTypes.string,
   url: PropTypes.string,
   buttonText: PropTypes.string,
+  placeholder: PropTypes.string,
   acceptExt: PropTypes.string,
   onChange: PropTypes.func,
   onBeforeUpload: PropTypes.func,
@@ -152,15 +155,24 @@ class FileUpload extends React.Component {
   }
 
   render() {
-    const { url, target, buttonText, name } = this.props;
+    const { url, target, buttonText, name, placeholder } = this.props;
     const { imageStatus } = this.state;
+    let curButtonText = buttonText || _('Upload Image');
+    let iconName = 'upload';
+    let displayStyle = 'none';
 
+    if (imageStatus === 'default') {
+      curButtonText = placeholder || _('Please Select File...');
+      iconName = 'file';
+      displayStyle = 'inline-block';
+    }
     return (
       <form
         action={url}
         method="POST"
         target={target}
         encType="multipart/form-data"
+        className="m-file-upload"
         ref={(formElem) => {
           if (formElem) {
             this.formElem = formElem;
@@ -175,6 +187,7 @@ class FileUpload extends React.Component {
           style={{
             marginRight: '8px',
             marginBottom: '4px',
+            display: displayStyle,
           }}
           ref={(fileElem) => {
             if (fileElem) {
@@ -184,8 +197,8 @@ class FileUpload extends React.Component {
         />
         <Button
           type="button"
-          text={buttonText || _('Upload Image')}
-          icon="upload"
+          text={curButtonText}
+          icon={iconName}
           loading={imageStatus === 'loading'}
           theme={imageStatus === 'selected' ? 'primary' : undefined}
           onClick={this.onUploadImage}

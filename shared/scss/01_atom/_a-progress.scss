@@ -33,12 +33,25 @@
 //
 // Basic progress bar
 //
+.a-progress-wrap {
+  position: relative;
 
+  .a-progress-text {
+    position: absolute;
+    width: 100%;
+    line-height: 1rem;
+    text-align: center;
+    left: 0;
+    top: 50%;
+    margin-top: -0.5rem;
+    color: #000;
+  }
+}
 .a-progress {
   display: block;
   width: 100%;
   height: $g-distance-y; // todo: make a new var for this
-  margin-bottom: $g-distance-y;
+  //margin-bottom: $g-distance-y;
   overflow: hidden; // force rounded corners by cropping it
 }
 .a-progress[value] {

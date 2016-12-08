@@ -62,26 +62,20 @@ export default class ProgressBar extends React.Component {
 
     return (
       <div>
-        <div className="bar-title">
-          {this.props.title}
-        </div>
-        <div
-          className="bar-wrap"
-        >
-          <Progress
-            {...this.props}
-            value={percentageValue}
-            max="100"
-          />
-          <div
-            className="bar-percentage"
-          >
-            {
-              percentageValue > 100 ? '100% ...' : `${percentageValue}% ...`
-            }
-          </div>
-        </div>
-
+        {
+          this.props.title ? (
+            <div className="bar-title">
+              {this.props.title}
+            </div>
+          ) : null
+        }
+        <Progress
+          {...this.props}
+          value={percentageValue > 100 ? 100 : percentageValue}
+          max="100"
+          unit="% ..."
+          showText
+        />
       </div>
     );
   }

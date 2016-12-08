@@ -8,11 +8,14 @@ const propTypes = {
   animated: PropTypes.bool,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   max: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  showText: PropTypes.bool,
+  unit: PropTypes.string,
 };
 
 const defaultProps = {
   value: 0,
   max: 100,
+  unit: '%',
 };
 
 export default class Progress extends React.Component {
@@ -22,7 +25,7 @@ export default class Progress extends React.Component {
   }
 
   render() {
-    const { theme, striped, value, max, animated } = this.props;
+    const { theme, striped, value, max, animated, showText, unit } = this.props;
     const progressClassNames = classnames('a-progress', {
       'a-progress--success': theme === 'success',
       'a-progress--info': theme === 'info',
@@ -36,8 +39,38 @@ export default class Progress extends React.Component {
       'a-progress-bar--striped': striped,
     });
     const pecentValue = parseInt(((value / max) * 100), 10);
+    const hasTextProgress = (
+      <div className="a-progress-wrap" >
+        <progress
+          {...this.props}
+          className={progressClassNames}
+          value={value}
+          max={max}
+        >
+          {
+            // Start  For under Ie9
+          }
+          <div
+            {...this.props}
+            className={progressClassNames}
+          >
+            <span
+              className={progressBarClassNames}
+              style={{
+                width: `${pecentValue}%`,
+              }}
+            />
+          </div>
+          {
+            // End  For under Ie9
+          }
 
-    return (
+        </progress>
+        <span className="a-progress-text">{`${value}${unit}`}</span>
+      </div>
+    );
+
+    return showText ? hasTextProgress : (
       <progress
         {...this.props}
         className={progressClassNames}

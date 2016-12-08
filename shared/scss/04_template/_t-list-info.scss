@@ -5,12 +5,17 @@
     margin-bottom: 1em;
   }
   .t-list-info__query {
+    width: 100%;
+
     .a-btn {
       line-height: 13px;
     }
     .Select {
       width: auto;
       min-width: 60px;
+    }
+    .o-form__body {
+      width: 100%;
     }
   }
 }

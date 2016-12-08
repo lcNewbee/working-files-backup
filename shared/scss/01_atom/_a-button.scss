@@ -8,7 +8,7 @@
   display: inline-block;
   padding: .5em 1em;
   font-size: $g-font-size;
-  line-height: 14px;
+  line-height: 1;
   color: #666;
   text-decoration: none;
   cursor: pointer;
@@ -50,16 +50,17 @@ a.a-btn {
 
 // Button size type
 .a-btn--sm {
-  font-size: 11px;
-  padding: 3px 9px;
+  font-size: 12px;
+  padding: 4px 8px;
 }
 .a-btn--min {
-  padding: 2px 6px;
+  font-size: 10px;
+  padding: .2em .6em;
 }
 
 .a-btn--lg {
+  font-size: 16px;
   padding: 9px 18px;
-  font-size: 14px;
 }
 
 // Button Role
