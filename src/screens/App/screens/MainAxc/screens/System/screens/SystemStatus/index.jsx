@@ -10,6 +10,8 @@ import AppScreen from 'shared/components/Template/AppScreen';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/screens';
 
+const uptimeFilter = utils.filter('connectTime');
+
 function getCpuOption(serverData) {
   const ret = {
     tooltip: {
@@ -210,7 +212,7 @@ export default class View extends PureComponent {
                 </dl>
                 <dl className="o-description-list-row">
                   <dt>{_('Uptime')}</dt>
-                  <dd>{serverData.get('uptime') || ''}</dd>
+                  <dd>{uptimeFilter.transform(serverData.get('running_time') || 0)}</dd>
                 </dl>
                 <dl className="o-description-list-row">
                   <dt>{_('Storage')}</dt>
