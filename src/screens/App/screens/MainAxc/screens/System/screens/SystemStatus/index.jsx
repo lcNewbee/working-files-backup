@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import utils from 'shared/utils';
 import { Map } from 'immutable';
-import PureComponent from 'shared/components/Base/PureComponent';
+import PureRenderMixin from 'react-addons-pure-render-mixin';
 import EchartReact from 'shared/components/EchartReact';
 import Progress from 'shared/components/Progress';
 import AppScreen from 'shared/components/Template/AppScreen';
@@ -13,6 +13,10 @@ import * as actions from 'shared/actions/screens';
 const uptimeFilter = utils.filter('connectTime');
 
 function getCpuOption(serverData) {
+  const usedValue = serverData.get('cpuUsed');
+  const freeValue = serverData.get('cpuTotal') - usedValue;
+  const usedName = `${_('Used')}: ${usedValue}%`;
+  const freeName = `${_('Used')}: ${freeValue}%`;
   const ret = {
     tooltip: {
       trigger: 'item',
@@ -21,7 +25,8 @@ function getCpuOption(serverData) {
     legend: {
       orient: 'vertical',
       x: 'left',
-      data: [_('Used'), _('Free')],
+      y: 'bottom',
+      data: [usedName, freeName],
     },
     title: {
       text: _('CPU Usage'),
@@ -31,7 +36,7 @@ function getCpuOption(serverData) {
       {
         name: _('CPU Usage'),
         type: 'pie',
-        radius: ['36%', '60%'],
+        radius: ['42%', '70%'],
         avoidLabelOverlap: false,
         label: {
           normal: {
@@ -41,7 +46,7 @@ function getCpuOption(serverData) {
           emphasis: {
             show: true,
             textStyle: {
-              fontSize: '20',
+              fontSize: '12',
               fontWeight: 'bold',
             },
           },
@@ -57,13 +62,17 @@ function getCpuOption(serverData) {
   };
 
   ret.series[0].data = [
-    { value: serverData.get('cpuUsed'), name: _('Used') },
-    { value: serverData.get('cpuTotal') - serverData.get('cpuUsed'), name: _('Free') },
+    { value: usedValue, name: usedName },
+    { value: freeValue, name: freeName },
   ];
 
   return ret;
 }
 function getMemoryOption(serverData) {
+  const usedValue = serverData.get('cpuUsed');
+  const freeValue = serverData.get('cpuTotal') - usedValue;
+  const usedName = `${_('Used')}: ${usedValue}%`;
+  const freeName = `${_('Used')}: ${freeValue}%`;
   const ret = {
     tooltip: {
       trigger: 'item',
@@ -76,13 +85,14 @@ function getMemoryOption(serverData) {
     legend: {
       orient: 'vertical',
       x: 'left',
-      data: [_('Used'), _('Free')],
+      y: 'bottom',
+      data: [usedName, freeName],
     },
     series: [
       {
         name: _('Memory Usage'),
         type: 'pie',
-        radius: ['36%', '60%'],
+        radius: ['42%', '70%'],
         avoidLabelOverlap: false,
         label: {
           normal: {
@@ -92,7 +102,7 @@ function getMemoryOption(serverData) {
           emphasis: {
             show: true,
             textStyle: {
-              fontSize: '20',
+              fontSize: '12',
               fontWeight: 'bold',
             },
           },
@@ -107,8 +117,8 @@ function getMemoryOption(serverData) {
   };
 
   ret.series[0].data = [
-    { value: serverData.get('memoryUsed'), name: _('Used') },
-    { value: serverData.get('memoryTotal') - serverData.get('memoryUsed'), name: _('Free') },
+    { value: usedValue, name: usedName },
+    { value: freeValue, name: freeName },
   ];
 
   return ret;
@@ -168,7 +178,13 @@ const propTypes = {
 };
 const defaultProps = {};
 
-export default class View extends PureComponent {
+export default class View extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+
+    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+  }
+
   render() {
     const { store } = this.props;
     const curScreenId = store.get('curScreenId');
@@ -199,16 +215,20 @@ export default class View extends PureComponent {
                   <dd>{serverData.get('system_cpuid')}</dd>
                 </dl>
                 <dl className="o-description-list-row">
-                  <dt>{_('Memory ID')}</dt>
-                  <dd>{serverData.get('system_memid')}</dd>
-                </dl>
-                <dl className="o-description-list-row">
                   <dt>{_('Flash ID')}</dt>
                   <dd>{serverData.get('system_sdaid')}</dd>
                 </dl>
                 <dl className="o-description-list-row">
+                  <dt>{_('Memory ID')}</dt>
+                  <dd>{serverData.get('system_memid')}</dd>
+                </dl>
+                <dl className="o-description-list-row">
                   <dt>{_('Frimware Version')}</dt>
                   <dd>{serverData.get('version') || ''}</dd>
+                </dl>
+                <dl className="o-description-list-row">
+                  <dt>{_('System Time')}</dt>
+                  <dd>{uptimeFilter.transform(serverData.get('running_time') || 0)}</dd>
                 </dl>
                 <dl className="o-description-list-row">
                   <dt>{_('Uptime')}</dt>
@@ -238,7 +258,7 @@ export default class View extends PureComponent {
                 className="o-box__canvas"
                 style={{
                   width: '100%',
-                  minHeight: '160px',
+                  minHeight: '170px',
                 }}
               />
             </div>
@@ -253,7 +273,7 @@ export default class View extends PureComponent {
                 className="o-box__canvas"
                 style={{
                   width: '100%',
-                  minHeight: '160px',
+                  minHeight: '170px',
                 }}
               />
             </div>
@@ -268,7 +288,7 @@ export default class View extends PureComponent {
                 className="o-box__canvas"
                 style={{
                   width: '100%',
-                  minHeight: '120px',
+                  minHeight: '130px',
                 }}
               />
             </div>

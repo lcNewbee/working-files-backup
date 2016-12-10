@@ -31,7 +31,7 @@ class Button extends React.Component {
   }
 
   render() {
-    const { Component, icon, size, theme, className, loading, text, type, } = this.props;
+    const { Component, icon, size, theme, className, loading, text, type, inverse } = this.props;
     const componentProps = utils.extend({}, this.props);
     const myIcon = icon ? <Icon name={icon} /> : null;
 
@@ -52,6 +52,9 @@ class Button extends React.Component {
     if (className) {
       classNames = `${classNames} ${className}`;
     }
+    if (inverse) {
+      classNames = `${classNames} a-btn--inverse`;
+    }
 
     if (Component === 'button' || Component === 'input') {
       delete componentProps.text;
@@ -60,6 +63,7 @@ class Button extends React.Component {
       delete componentProps.Component;
       delete componentProps.loading;
       delete componentProps.theme;
+      delete componentProps.actionName;
 
       componentProps.type = type;
     }

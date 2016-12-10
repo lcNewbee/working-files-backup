@@ -132,7 +132,9 @@ var immutableUtils = {
       function(item) {
         return item.delete('formProps')
       }
-    ).filterNot((item) => item.get('noTable'));
+    ).filterNot(function(item) {
+      return item.get('noTable')
+    });
 
     return ret;
   },
@@ -144,10 +146,11 @@ var immutableUtils = {
       return null;
     }
 
-    ret = ret.map(
-      (item) => item.delete('formProps')
-    ).filterNot((item) => item.get('noTable'));
-
+    ret = ret.map(function($$item) {
+      return $$item.delete('formProps')
+    }).filterNot(function($$item) {
+      return $$item.get('noTable');
+    })
     return ret;
   },
 
@@ -164,36 +167,38 @@ var immutableUtils = {
       }
     } else {
       if (data.selected) {
-        $$retList = $$retList.map((item, index) => {
+        $$retList = $$retList.map(function(item, index) {
           selectedList = selectedList.push(index);
 
           return item.set('__selected__', true);
         });
       } else {
-        $$retList = $$retList.map(item => item.set('__selected__', false));
+        $$retList = $$retList.map(function(item) {
+          return item.set('__selected__', false)
+        });
       }
     }
 
     return {
       $$list: $$retList,
-      selectedList,
-    }
+      selectedList: selectedList
+    };
   },
 
   getChanged: function ($$newData, $$oldData) {
     var $$ret = $$newData;
 
     $$ret = $$newData.filter(
-      (val, key) => {
-        let ret = false;
-        const oldVal = $$oldData.get(key);
+      function(val, key) {
+        var ret = false;
+        var oldVal = $$oldData.get(key);
 
         if (oldVal !== undefined && oldVal !== val) {
           ret = true;
         }
 
         return ret;
-      },
+      }
     );
 
     return $$ret;
@@ -207,8 +212,9 @@ var immutableUtils = {
 
     if ($$ret) {
       $$keysArr.forEach(
-        (key) => {
-          const curVal = $$ret.get(key);
+        function(key) {
+          var curVal = $$ret.get(key);
+
           if (curVal !== undefined) {
             $$ret = $$ret.set(key, parseInt(curVal));
           }
