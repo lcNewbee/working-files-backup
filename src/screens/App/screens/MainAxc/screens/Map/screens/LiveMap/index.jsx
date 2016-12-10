@@ -9,16 +9,17 @@ import Icon from 'shared/components/Icon';
 import FormContainer from 'shared/components/Organism/FormContainer';
 import Table from 'shared/components/Table';
 import Modal from 'shared/components/Modal';
-import MapReact from 'shared/components/MapReact';
 import Switchs from 'shared/components/Switchs';
 import AppScreen from 'shared/components/Template/AppScreen';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 import * as propertiesActions from 'shared/actions/properties';
 
-import './_map.scss';
+import '../../shared/_map.scss';
 import buildingIconImg from '../../shared/images/building_3d.png';
 
+const LIVE_GOOGLE_MAP = '0';
+const LOCAL_BUILDING_LIST = '1';
 
 const listOptions = fromJS({
   settings: [],
@@ -29,7 +30,6 @@ const listOptions = fromJS({
       defaultValue: 'building',
       formProps: {
         type: 'text',
-        display: 'inline',
       },
     }, {
       id: 'mapNumber',
@@ -38,14 +38,12 @@ const listOptions = fromJS({
       formProps: {
         required: true,
         type: 'number',
-        display: 'inline',
       },
     }, {
       id: 'address',
       label: _('Address'),
       formProps: {
         type: 'text',
-        display: 'inline',
       },
     },
   ],
@@ -101,16 +99,15 @@ export default class View extends React.Component {
       'renderActionBar',
       'addMarkerToMap',
       'onRowClick',
+      'renderGooglePlaceInput',
     ]);
 
     this.loadingGoogleMap = true;
     utils.loadScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyBGOC8axWomvnetRPnTdcuNW-a558l-JAU&libraries=places',
       (error) => {
         if (!error) {
-          utils.loadScript('//rawgit.com/googlemaps/v3-utility-library/master/infobox/src/infobox.js', () => {
-            this.renderGoogleMap();
-            this.loadingGoogleMap = false;
-          });
+          this.renderGoogleMap();
+          this.loadingGoogleMap = false;
         }
       },
     6000);
@@ -154,6 +151,10 @@ export default class View extends React.Component {
         this.renderGoogleMap();
       } else if (!prevSettings.equals(thisSettings) || !prevList.equals(thisList)) {
         this.renderGoogleMap();
+      }
+
+      if (this.isGoogleMapAdd) {
+        this.renderGooglePlaceInput();
       }
     }
 
@@ -238,28 +239,6 @@ export default class View extends React.Component {
       content: contentString,
       maxWidth: 500,
     });
-    const actionsWindow = new google.maps.InfoWindow({
-      content: '<div id="m-map-marker-actions">ddd</div>',
-      maxWidth: 500,
-      disableAutoPan: true,
-      pixelOffset: new google.maps.Size(2, 32),
-      zIndex: 2,
-    });
-    const infobox = new InfoBox({
-      content: '<div>dsds</div>',
-      disableAutoPan: false,
-      maxWidth: 150,
-      pixelOffset: new google.maps.Size(-140, 24),
-      zIndex: null,
-      boxStyle: {
-        background: '#ccc no-repeat',
-        opacity: 0.75,
-        width: '280px',
-      },
-      closeBoxMargin: '12px 4px 2px 2px',
-      closeBoxURL: 'http://www.google.com/intl/en_us/mapfiles/close.gif',
-      infoBoxClearance: new google.maps.Size(1, 1),
-    });
 
     marker.addListener('click', () => {
       infowindow.open(map, marker);
@@ -283,43 +262,23 @@ export default class View extends React.Component {
     return marker;
   }
 
-  renderGoogleMap() {
-    const store = this.props.store;
-    const list = getCurAppScreenState(store, 'list');
-    const settings = getCurAppScreenState(store, 'settings');
-    const google = window.google;
+  renderGooglePlaceInput() {
     const geocoder = new google.maps.Geocoder();
-    const markers = [];
-    let center = {
-      lat: -34.397,
-      lng: 150.644,
-    };
     const infowindow = new google.maps.InfoWindow();
-
-
-    if (list.size > 0) {
-      center = {
-        lat: list.getIn([0, 'lat']),
-        lng: list.getIn([0, 'lng']),
-      };
-    }
-
-    // Create a map object and specify the DOM element for display.
-    if (!this.map) {
-      this.map = new google.maps.Map(this.mapContent, {
-        center,
-        zoom: 13,
-      });
-     // console.log('init Map = ', this.map)
-    }
+    const buildingIcon = {
+      url: buildingIconImg, // url
+      scaledSize: new google.maps.Size(50, 50), // scaled size
+      origin: new google.maps.Point(0, 0), // origin
+      anchor: new google.maps.Point(25, 25), // anchor
+    };
     const marker = new google.maps.Marker({
       map: this.map,
       draggable: true,
       anchorPoint: new google.maps.Point(0, -29),
     });
-    const input = document.getElementsByName('markerAddress');
+    const input = document.getElementsByName('address');
 
-    if (input && input[0]) {
+    if (input && input[0] && !input[0].placeholder) {
       const autocomplete = new google.maps.places.Autocomplete(input[0]);
       autocomplete.bindTo('bounds', this.map);
       autocomplete.addListener('place_changed', () => {
@@ -338,13 +297,7 @@ export default class View extends React.Component {
           this.map.setCenter(place.geometry.location);
           this.map.setZoom(17);  // Why 17? Because it looks good.
         }
-        marker.setIcon(/** @type {google.maps.Icon} */({
-          url: place.icon,
-          size: new google.maps.Size(71, 71),
-          origin: new google.maps.Point(0, 0),
-          anchor: new google.maps.Point(17, 34),
-          scaledSize: new google.maps.Size(35, 35),
-        }));
+        marker.setIcon(buildingIcon);
         marker.setPosition(place.geometry.location);
         marker.setVisible(true);
 
@@ -366,9 +319,9 @@ export default class View extends React.Component {
           if (status === google.maps.GeocoderStatus.OK) {
             if (results[1]) {
               infowindow.setContent(results[1].formatted_address);
-              this.props.updateCurEditListItem({
-                markerAddress: results[1].formatted_address,
-              });
+              this.props.updateCurEditListItem(utils.extend({
+                address: results[1].formatted_address,
+              }, latlng));
             } else {
               window.alert('No results found');
             }
@@ -376,7 +329,36 @@ export default class View extends React.Component {
             window.alert(`Geocoder failed due to: ${status}`);
           }
         });
+        infowindow.open(this.map, marker);
       });
+    }
+  }
+
+  renderGoogleMap() {
+    const store = this.props.store;
+    const list = getCurAppScreenState(store, 'list');
+    const settings = getCurAppScreenState(store, 'settings');
+    const google = window.google;
+    const markers = [];
+    let center = {
+      lat: -34.397,
+      lng: 150.644,
+    };
+
+    if (list.size > 0) {
+      center = {
+        lat: list.getIn([0, 'lat']),
+        lng: list.getIn([0, 'lng']),
+      };
+    }
+
+    // Create a map object and specify the DOM element for display.
+    if (!this.map) {
+      this.map = new google.maps.Map(this.mapContent, {
+        center,
+        zoom: 13,
+      });
+     // console.log('init Map = ', this.map)
     }
 
     this.setMapOnAll(null);
@@ -431,6 +413,10 @@ export default class View extends React.Component {
           ]}
           key="list"
           value={settings.get('type')}
+          style={{
+            marginLeft: 0,
+            marginRight: '12px',
+          }}
           onChange={(data) => {
             this.onCloseEditModal();
             this.props.updateScreenSettings({
@@ -468,7 +454,6 @@ export default class View extends React.Component {
     const list = store.getIn([myScreenId, 'data', 'list']);
     const page = store.getIn([myScreenId, 'data', 'page']);
     const editData = getCurAppScreenState(store, 'edit');
-
     const isOpenHeader = actionQuery.get('action') === 'add';
     let mapClassName = 'o-map';
 
@@ -476,21 +461,22 @@ export default class View extends React.Component {
       mapClassName = 'o-map o-map--open';
     }
 
+    this.isGoogleMapAdd = isOpenHeader && settings.get('type') === LIVE_GOOGLE_MAP;
     return (
       <AppScreen
         {...this.props}
         defaultSettingsData={{
           type: '0',
         }}
+        noTitle
         actionable
         addable
       >
         {
           this.renderActionBar()
         }
-
         {
-          settings.get('type') === '0' ? (
+          settings.get('type') === LIVE_GOOGLE_MAP ? (
             <div className={mapClassName}>
               <div className="o-map__header">
                 <Icon
@@ -499,6 +485,7 @@ export default class View extends React.Component {
                   onClick={() => this.props.closeListItemModal()}
                 />
                 {
+                  // 实时地图中添加建筑
                   isOpenHeader ? (
                     <FormContainer
                       data={editData}
@@ -544,7 +531,8 @@ export default class View extends React.Component {
           )
         }
         {
-          settings.get('type') !== '0' ? (
+          // 本地地图中添加或编辑建筑
+          settings.get('type') === LOCAL_BUILDING_LIST ? (
             <Modal
               isShow={
                 actionQuery.get('action') === 'edit' ||

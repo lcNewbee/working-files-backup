@@ -104,7 +104,6 @@ const listOptions = fromJS([
     id: 'opt60',
     text: _('Vendor ID'),
     noTable: true,
-    noForm: true,
     formProps: {
       type: 'number',
       maxLength: '15',

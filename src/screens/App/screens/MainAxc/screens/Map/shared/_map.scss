@@ -1,4 +1,7 @@
 $border-radius: 2px;
+$map-distance: 1rem;
+$map-distance-x: $map-distance * .75;
+$map-distance-y: $map-distance * .75;
 
 .m-device {
   display: inline-block;
@@ -29,13 +32,13 @@ $border-radius: 2px;
         top: -2px;
         right: -2px;
         display: inline-block;
+        padding: 2px 4px;
         font: normal normal normal 14px/1 FontAwesome;
         font-size: 14px;
         color: #777;
         content: "\F023";
         background-color: #fff;
         border-radius: 20px;
-        padding: 2px 4px;
 
         text-rendering: auto;
         -webkit-font-smoothing: antialiased;
@@ -53,8 +56,8 @@ $border-radius: 2px;
     z-index: -1;
     color: #444;
     cursor: pointer;
-    transition: all .3s ease-in-out;
     opacity: 0;
+    transition: all .3s ease-in-out;
 
     &.close {
       color: #c23934;
@@ -81,41 +84,43 @@ $border-radius: 2px;
   margin-left: -35px;
   // padding: 50px;
   background: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 80, from(green), to(#fff));
-  background: -moz-radial-gradient(50% 50%, closest-corner, green,#fff);
+  background:    -moz-radial-gradient(50% 50%, closest-corner, green,#fff);
   background: -webkit-radial-gradient(50% 50%, closest-corner, green,#fff);
   border-radius: 50px;
   //background: #ccc;
   opacity: .8;
 }
+
+// AP 规划图
 .o-map-warp {
   position: absolute;
-  top: 85px;
-  right: 10px;
-  bottom: 10px;
-  left: 15px;
+  top: $map-distance * 3;
+  right: $map-distance;
+  bottom: $map-distance;
+  left: $map-distance;
+  z-index: 100;
   min-height: 400px;
+  padding: 0 5px;
   overflow: hidden;
   border: 1px solid #d2d2d2;
-  z-index: 100;
-  padding: 0 5px;
   border-radius: $border-radius;
 
   .o-map-warp__build {
     h3 {
-      margin-top: 12px;
       padding-left: 10px;
+      margin-top: $map-distance;
     }
   }
 
   .o-map-list__add {
     height: 208px;
-    text-align: center;
-    border: 1px solid #ccc;
     margin: 10px 5px;
     line-height: 208px;
     color: #666;
-    border-radius: $border-radius;
+    text-align: center;
     cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: $border-radius;
   }
   .m-thumbnail {
     margin: 10px 5px;
@@ -139,6 +144,63 @@ $border-radius: 2px;
   }
 }
 
+// 实时地图
+.o-map {
+  position: absolute;
+  top: $map-distance * 3;
+  right: $map-distance-x;
+  bottom: $map-distance-y;
+  left: $map-distance-x;
+  border: 1px solid #d2d2d2;
+
+  .o-map__header {
+    position: absolute;
+    top: 0;
+    z-index: 2;
+    width: 100%;
+    max-height: 0;
+    overflow: hidden;
+    background-color: #f2f2f2;
+    box-shadow: 0 2px 8px 0 rgba(50, 50, 50, .48);
+
+    .o-map__header-close {
+      position: absolute;
+      top: 5px;
+      right: $map-distance-x;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  }
+  .o-map__content {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    transition: top .3s ease-in-out;
+  }
+  .o-map__body {
+    width: 100%;
+    height: 100%;
+  }
+  .o-map__body-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -1em;
+    margin-left: -1em;
+    color: #0093dd;
+  }
+
+  &.o-map--open {
+    .o-map__content {
+      top: $map-distance * 3;
+    }
+    .o-map__header {
+      max-height: 2000px;
+      padding-top: 8px;
+    }
+  }
+}
 
 .o-map-container {
   position: absolute;
@@ -151,52 +213,52 @@ $border-radius: 2px;
   }
   .m-device {
     position: absolute;
+    z-index: 3;
     width: auto;
     border: 0;
-    z-index: 3;
   }
 }
 .o-map-zoom-bar {
   position: absolute;
   top: 10px;
   left: 10px;
-  background-color: #fff;
-  border: 1px solid #ccc;
   z-index: 3;
   text-align: center;
+  background-color: #fff;
+  border: 1px solid #ccc;
   border-radius: $border-radius;
 
   .o-map-zoom-bar__thmp {
+    display: inline-block;
     width: 40px;
     height: 27px;
-    display: inline-block;
     line-height: 27px;
     vertical-align: middle;
-    border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
     user-select: none;
+    border-right: 1px solid #ccc;
+    border-left: 1px solid #ccc;
   }
   .icon {
-    line-height: 26px;
     width: 28px;
-    cursor: pointer;
     font-size: 14px;
-    vertical-align: middle;
+    line-height: 26px;
     color: #444;
+    vertical-align: middle;
+    cursor: pointer;
   }
 }
 .o-devices-list {
   position: absolute;
   top: 10px;
-  bottom: 10px;
   right: 0;
+  bottom: 10px;
   width: 172px;
   max-width: 0;
-  background-color: #fff;
-  transition: .3s max-width ease-in-out, .3s right ease-in-out;
-  border-radius: $border-radius;
   padding: 0;
   padding-bottom: 36px;
+  background-color: #fff;
+  border-radius: $border-radius;
+  transition: .3s max-width ease-in-out, .3s right ease-in-out;
   //overflow: hidden;
 
   .m-device {
@@ -218,8 +280,8 @@ $border-radius: 2px;
     background-color: #222;
     border-radius: 16px 0 16px 16px;
     box-shadow: -2px 2px 0 0 rgba(0,0,0,.2);
-    transition: top .4s ease-in-out, opacity .4s ease-in-out;
     opacity: 1;
+    transition: top .4s ease-in-out, opacity .4s ease-in-out;
 
     .icon {
       font-size: 12px;
@@ -233,9 +295,9 @@ $border-radius: 2px;
   }
 
   &.active {
+    right: 10px;
     max-width: 160px;
     border: 1px solid #333;
-    right: 10px;
 
     .toggle-button {
       top: -60px;
@@ -243,25 +305,25 @@ $border-radius: 2px;
     }
   }
   .o-list__body {
-    overflow: auto;
     position: absolute;
     top: 34px;
     bottom: 42px;
+    overflow: auto;
 
     &::-webkit-scrollbar {
-      width: 12px;
-      height: 12px
+      width: $map-distance-x;
+      height: $map-distance-y;
     }
 
     &::-webkit-scrollbar-thumb {
-        background-color: #898989;
-        border: 4px solid transparent;
-        background-clip: content-box;
-        border-radius: 10px
+      background-color: #898989;
+      background-clip: content-box;
+      border: 4px solid transparent;
+      border-radius: 10px;
     }
 
     &::-webkit-scrollbar-track {
-        background-color: transparent
+      background-color: transparent;
     }
   }
 

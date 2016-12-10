@@ -42,32 +42,31 @@ const defaultState = fromJS({
  * @param {object} action
  * @returns New immutable state
  */
-function initScreenState(state, action) {
+function initScreenState($$state, action) {
   const screenId = action.payload.id;
-  let ret = state;
-  let settingsData = fromJS({});
-  let myItem = state.get(screenId);
+  const defaultSettingsData = action.payload.defaultSettingsData;
+  let $$ret = $$state;
+  let $$settingsData = $$ret.getIn([screenId, 'curSettings']) || fromJS({});
+  let $$myScreenState = $$ret.get(screenId);
 
-  if (!myItem) {
-    myItem = defaultItem.mergeDeep(action.payload);
+  if (!$$myScreenState) {
+    $$myScreenState = defaultItem.mergeDeep(action.payload);
   } else {
-    myItem = myItem.mergeDeep(action.payload);
+    $$myScreenState = $$myScreenState.mergeDeep(action.payload);
   }
 
-  if (action.payload.defaultSettingsData) {
-    settingsData = settingsData
-        .merge(action.payload.defaultSettingsData);
+  // 只有当 $$settingsData 为空时才合并默认Settings
+  if (defaultSettingsData && $$settingsData.isEmpty()) {
+    $$settingsData = $$settingsData.merge(defaultSettingsData);
   }
 
-  if (!state.get(screenId) || state.get(screenId).isEmpty()) {
-    ret = state.mergeIn(
-      [screenId],
-      myItem.set('curSettings', settingsData)
-    );
-  }
+  // 如何处理 screen的第一次初始化与其他初始
+  $$ret = $$ret.mergeIn(
+    [screenId],
+    $$myScreenState.set('curSettings', $$settingsData),
+  ).set('curScreenId', screenId);
 
-  return ret
-    .set('curScreenId', screenId);
+  return $$ret;
 }
 
 /**

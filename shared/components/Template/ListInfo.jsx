@@ -668,14 +668,14 @@ class ListInfo extends React.Component {
     }
 
     // 判断是否显示修改或添加 model
-    if (actionType === 'edit' || actionType === 'add') {
+    if (actionType === 'edit' || actionType === 'add' || !!modalChildren) {
       isEditModelshow = true;
     }
 
     return (
       !customModal ? (
         <Modal
-          isShow={isEditModelshow || !!modalChildren}
+          isShow={isEditModelshow}
           title={actionQuery.get('myTitle')}
           onOk={this.onSave}
           onClose={this.onCloseEditModal}

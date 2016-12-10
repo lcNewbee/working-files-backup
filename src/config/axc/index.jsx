@@ -287,13 +287,13 @@ const routes = [
                 text: _('AP List'),
                 component: sApList.Screen,
               }, {
-                id: 'user',
+                id: 'groupClient',
                 path: '/main/group/monitor/user',
                 formUrl: 'goform/group/client',
                 text: _('User'),
                 component: sUsers.Screen,
               }, {
-                id: 'flow',
+                id: 'groupTraffic',
                 path: '/main/group/monitor/flow',
                 formUrl: 'goform/group/flow/user',
                 text: _('Traffic'),

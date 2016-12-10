@@ -195,7 +195,7 @@ export default class View extends React.Component {
         groupid: props.groupid,
       },
 
-      : true,
+      isBaseShow: true,
       isAdvancedShow: false,
     };
 
