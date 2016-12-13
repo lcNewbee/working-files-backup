@@ -34,8 +34,13 @@ class SystemStatus_Model extends CI_Model {
         if($runingtime) {
             $retda['running_time'] = $runingtime['uptime'];
         }
+        //
+        $retda['network_state'] = $this->get_network_state();
+        //
+        $retda['system_time'] = (string)exec('date "+%Y-%m-%d %H:%M:%S"');
+        
         $arr['state'] = array('code'=>2000,'msg'=>'ok');
-        $arr['data'] = $retda;								
+        $arr['data'] = $retda;	                							
         return json_encode($arr);
 	}
     public function get_used_status() {
@@ -113,5 +118,18 @@ class SystemStatus_Model extends CI_Model {
         $res['uptime'] = (int)$str;
         return$res;
     }
-     
+    
+    public function get_network_state() {
+        $arr = array();
+        $arr['eth0'] = exec('ethtool eth0');
+        $arr['eth1'] = exec('ethtool eth1');
+        $arr['eth2'] = exec('ethtool eth2');
+        $arr['eth3'] = exec('ethtool eth3');
+        $arr['eth4'] = exec('ethtool eth4');
+        $arr['eth5'] = exec('ethtool eth5');
+        foreach($arr as $k=>$v) {            
+            $arr[$k] = trim(strstr($v,':'),': ');            
+        }
+        return $arr;
+    }
 }

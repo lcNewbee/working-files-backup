@@ -38,9 +38,11 @@ class SqlPage {
 		$total_row = $this->CI->db->count_all_results();
 		//2,计算总页
 		$total_page = 1;
-		$total_page = intval($total_row / $pagesize);
-		if (($total_row % $pagesize) > 0) {
-			$total_page = $total_page + 1;
+		if($pagesize > 0) {
+			$total_page = intval($total_row / $pagesize);
+			if (($total_row % $pagesize) > 0) {
+				$total_page = $total_page + 1;
+			}
 		}
 		//结果集
 		$this->CI->db->select($columns);

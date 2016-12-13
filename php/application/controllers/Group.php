@@ -88,7 +88,7 @@ class Group extends CI_Controller {
     elseif($actionType === 'groupApAdd'){
       $temp_data = array(
         'apmac'=>element('apmac', $data),
-        'name'=>element('name', $data),
+        'name'=>substr(element('name', $data),0,31),
         'model'=>element('model', $data),
         'groupid'=>(int)element('groupid', $data, -1),
       );
