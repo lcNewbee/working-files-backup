@@ -487,6 +487,7 @@ export default class View extends React.Component {
       <AppScreen
         {...this.props}
         actionable={false}
+        noTitle
       >
         <div className="m-action-bar">
           {

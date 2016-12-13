@@ -5,7 +5,6 @@ import { bindActionCreators } from 'redux';
 import utils from 'shared/utils';
 
 // components
-import PureComponent from 'shared/components/Base/PureComponent';
 import AppScreen from 'shared/components/Template/AppScreen';
 import Button from 'shared/components/Button/Button';
 
@@ -113,32 +112,19 @@ const styles = {
     minWidth: '90px',
   },
 };
+const propTypes = {};
+const defaultProps = {};
 
 // 原生的 react 页面
-export default class Clients extends PureComponent {
+export default class Clients extends React.Component {
   constructor(props) {
     super(props);
 
     utils.binds(
-      this,
-      [
+      this, [
         'onAction',
       ],
     );
-  }
-  onAction(mac, operate) {
-    const subData = {
-      groupid: this.props.groupid,
-      operate,
-      mac,
-    };
-
-    this.props.save('goform/group/client', subData)
-      .then((json) => {
-        if (json.state && json.state.code === 2000) {
-          this.props.fetchScreenData();
-        }
-      });
   }
   render() {
     // 添加操作项
@@ -177,7 +163,7 @@ export default class Clients extends PureComponent {
             />
           </div>
         );
-      }
+      },
     );
 
     return (
@@ -190,24 +176,27 @@ export default class Clients extends PureComponent {
   }
 }
 
+Clients.propTypes = propTypes;
+Clients.defaultProps = defaultProps;
+
 function mapStateToProps(state) {
   return {
     app: state.app,
-    groupid: state.product.getIn(['group', 'selected', 'id']),
     store: state.screens,
+    groupid: state.product.getIn(['group', 'selected', 'id']),
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    screenActions
+    screenActions,
   ), dispatch);
 }
 
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(Clients);
 

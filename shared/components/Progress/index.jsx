@@ -10,6 +10,7 @@ const propTypes = {
   max: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   showText: PropTypes.bool,
   unit: PropTypes.string,
+  className: PropTypes.string,
 };
 
 const defaultProps = {
@@ -25,7 +26,7 @@ export default class Progress extends React.Component {
   }
 
   render() {
-    const { theme, striped, value, max, animated, showText, unit } = this.props;
+    const { className, theme, striped, value, max, animated, showText, unit, ...restProps } = this.props;
     const progressClassNames = classnames('a-progress', {
       'a-progress--success': theme === 'success',
       'a-progress--info': theme === 'info',
@@ -40,9 +41,9 @@ export default class Progress extends React.Component {
     });
     const pecentValue = parseInt(((value / max) * 100), 10);
     const hasTextProgress = (
-      <div className="a-progress-wrap" >
+      <div className={`${className} a-progress-wrap`} >
         <progress
-          {...this.props}
+          {...restProps}
           className={progressClassNames}
           value={value}
           max={max}
@@ -51,7 +52,7 @@ export default class Progress extends React.Component {
             // Start  For under Ie9
           }
           <div
-            {...this.props}
+            {...restProps}
             className={progressClassNames}
           >
             <span
@@ -73,7 +74,7 @@ export default class Progress extends React.Component {
     return showText ? hasTextProgress : (
       <progress
         {...this.props}
-        className={progressClassNames}
+        className={`${className} ${progressClassNames}`}
         value={value}
         max={max}
       >

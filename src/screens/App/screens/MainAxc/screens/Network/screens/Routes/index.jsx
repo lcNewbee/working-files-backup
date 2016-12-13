@@ -11,7 +11,7 @@ import * as appActions from 'shared/actions/app';
 const listOptions = fromJS([
   {
     id: 'destnet',
-    text: _('Target Address'),
+    text: _('Target IP'),
     defaultValue: '',
     formProps: {
       required: true,
@@ -31,7 +31,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'gateway',
-    text: _('Next Hop IP Address'),
+    text: _('Next Hop IP'),
     defaultValue: '',
     formProps: {
       required: true,

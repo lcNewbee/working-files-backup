@@ -104,7 +104,8 @@ export default class AppScreen extends React.Component {
   }
   componentWillMount() {
     this.props.initScreen(this.initOption);
-
+  }
+  componentDidMount() {
     if (this.props.fetchScreenData) {
       this.props.fetchScreenData();
 

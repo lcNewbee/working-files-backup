@@ -87,6 +87,7 @@ class App extends Component {
               <ProgressBar
                 title={modal.loadingTitle}
                 time={modal.loadingTime || 100}
+                callback={modal.onLoaded}
                 style={{
                   minHeight: '24px',
                 }}

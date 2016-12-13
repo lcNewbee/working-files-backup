@@ -10,6 +10,8 @@
     "memoryTotal": 100,
     "storeUsed": 3,
     "storeTotal": 100,
+    "version": "v1",
+    "running_time": 56456,
     "system_cpuid": "78 06 03 00 FF FB EB BF",
     "system_memid": "To be filled by O.E.M.",
     "system_sdaid": "G39575R001867"

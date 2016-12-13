@@ -568,6 +568,7 @@ export default class Main extends Component {
     const { product } = this.props;
     const groupApAddData = product.getIn(['group', 'apAddData']);
     const modelListOptions = product.getIn(['model', 'options']);
+    let noMannageAp = false;
 
      // validate const
     const {
@@ -593,6 +594,7 @@ export default class Main extends Component {
         filter: 'translate',
       },
     ]);
+    let $$mannageGroupAps = product.getIn(['group', 'devices']);
 
     // console.log(product.get(['group', 'devices']).toJS())
 
@@ -715,7 +717,7 @@ export default class Main extends Component {
                     let classNames = 'm-menu__link';
 
                     // 目标组，不包含本组
-                    if (curId === selectGroupId) {
+                    if (curId === selectGroupId || curId === -100) {
                       return null;
                     }
                     if (curId === moveTargetGroupId) {
@@ -847,6 +849,13 @@ export default class Main extends Component {
         );
 
       case 'groupManage':
+
+        // 当没有选择组或为所有组时显示空列表
+        if (!selectGroupId || selectGroupId === -100) {
+          $$mannageGroupAps = fromJS([]);
+          noMannageAp = true;
+        }
+
         return (
           <div className="row">
             <div className="o-list cols col-4">
@@ -860,6 +869,7 @@ export default class Main extends Component {
                     if (curId === selectGroupId) {
                       classNames = `${classNames} active`;
                     }
+
                     // 不能管理 All Group
                     if (curId === ALL_GROUP_ID) {
                       return null;
@@ -923,52 +933,56 @@ export default class Main extends Component {
                 options={tableOption}
                 selectable
                 page={product.getIn(['group', 'devicesPage'])}
-                list={product.getIn(['group', 'devices'])}
+                list={$$mannageGroupAps}
                 onRowSelect={(data) => {
                   this.props.selectManageGroupAp(data);
                 }}
                 onPageChange={(data) => {
                 }}
               />
-              <div className="o-list__footer action-btns">
-                <Button
-                  icon="plus"
-                  text={_('Add AP')}
-                  onClick={() => {
-                    this.props.fetchModelList();
-                    this.props.resetGroupAddDevice();
-                    this.props.fetchGroupAps(-1);
-                    this.props.showMainModal({
-                      title: _('Add AP to Group'),
-                      size: 'md',
-                      isShow: true,
-                      name: 'groupApAdd',
-                    });
-                  }}
-                />
-                <Button
-                  icon="share"
-                  text={_('Move to Other Group')}
-                  onClick={() => {
-                    this.props.updateGroupMoveDevice({
-                      targetGroupId: -1,
-                    });
-                    this.props.showMainModal({
-                      title: _('Move Ap Other Group'),
-                      size: 'lg',
-                      isShow: true,
-                      name: 'groupMoveAp',
-                    });
-                  }}
-                />
-                <Button
-                  icon="trash"
-                  text={_('Delete Selected')}
-                  onClick={() => {
-                    this.onRemoveGroupAps();
-                  }}
-                />
-              </div>
+              {
+                noMannageAp ? null : (
+                  <div className="o-list__footer action-btns">
+                    <Button
+                      icon="plus"
+                      text={_('Add AP')}
+                      onClick={() => {
+                        this.props.fetchModelList();
+                        this.props.resetGroupAddDevice();
+                        this.props.fetchGroupAps(-1);
+                        this.props.showMainModal({
+                          title: _('Add AP to Group'),
+                          size: 'md',
+                          isShow: true,
+                          name: 'groupApAdd',
+                        });
+                      }}
+                    />
+                    <Button
+                      icon="share"
+                      text={_('Move to Other Group')}
+                      onClick={() => {
+                        this.props.updateGroupMoveDevice({
+                          targetGroupId: -1,
+                        });
+                        this.props.showMainModal({
+                          title: _('Move Ap Other Group'),
+                          size: 'lg',
+                          isShow: true,
+                          name: 'groupMoveAp',
+                        });
+                      }}
+                    />
+                    <Button
+                      icon="trash"
+                      text={_('Delete Selected')}
+                      onClick={() => {
+                        this.onRemoveGroupAps();
+                      }}
+                    />
+                  </div>
+                )
+              }
             </div>
           </div>
         );

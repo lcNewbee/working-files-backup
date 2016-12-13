@@ -194,6 +194,7 @@ export default class View extends React.Component {
         channelwidth: 40,
         groupid: props.groupid,
       },
+
       isBaseShow: true,
       isAdvancedShow: false,
     };

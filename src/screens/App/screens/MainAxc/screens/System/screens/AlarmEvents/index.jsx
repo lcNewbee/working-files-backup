@@ -9,18 +9,25 @@ import * as appActions from 'shared/actions/app';
 
 const listOptions = fromJS([
   {
-    id: 'time',
+    id: 'timer',
     text: _('Time'),
+    width: '130px',
   }, {
-    id: 'type',
-    text: _('Type'),
+    id: 'eventtype',
+    text: _('Event Type'),
     defaultQuery: '',
     formProps: {
       display: 'inline',
     },
   }, {
-    id: 'info',
-    text: _('Describe'),
+    id: 'event',
+    text: _('Event'),
+  }, {
+    id: 'level',
+    text: _('Level'),
+  }, {
+    id: 'msginfo',
+    text: _('Info'),
   },
 ]);
 const propTypes = {
@@ -76,7 +83,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    screenActions
+    screenActions,
   ), dispatch);
 }
 
@@ -84,5 +91,5 @@ function mapDispatchToProps(dispatch) {
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(View);

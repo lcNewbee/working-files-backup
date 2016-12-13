@@ -125,7 +125,7 @@ $model-z-index: 1650;
     }
   }
   .o-modal__body {
-    height: 110px;
+    min-height: 110px;
     text-align: center;
   }
   .o-modal__body-icon {

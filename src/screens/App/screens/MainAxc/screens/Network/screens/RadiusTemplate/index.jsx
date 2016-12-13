@@ -19,7 +19,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'authpri_ipaddr',
-    label: _('Primary IP Address'),
+    label: _('Primary IP'),
     fieldset: 'auth',
     legend: _('Auth Server Settings'),
     defaultValue: '0',
@@ -30,7 +30,7 @@ const listOptions = fromJS([
 
   }, {
     id: 'authsecond_ipaddr',
-    label: _('Secondary IP Address'),
+    label: _('Secondary IP'),
     fieldset: 'auth',
     formProps: {
       type: 'text',
@@ -75,7 +75,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'acctpri_ipaddr',
-    label: _('Primary IP Address'),
+    label: _('Primary IP'),
     fieldset: 'Accounting',
     legend: _('Accounting Server Settings'),
     defaultValue: '0',
@@ -86,7 +86,7 @@ const listOptions = fromJS([
 
   }, {
     id: 'acctsecond_ipaddr',
-    label: _('Secondary IP Address'),
+    label: _('Secondary IP'),
     fieldset: 'Accounting',
     formProps: {
       type: 'text',
@@ -131,20 +131,10 @@ const listOptions = fromJS([
       className: 'cols col-6',
     },
   }, {
-    id: 'accton_enable',
-    label: _('Accounting-on'),
-    fieldset: 'parameter',
-    legend: _('Advanced Settings'),
-    defaultValue: '0',
-    noTable: true,
-    formProps: {
-      type: 'checkbox',
-      className: 'cols col-6',
-    },
-  }, {
     id: 'username_format',
     label: _('User Format'),
     fieldset: 'parameter',
+    legend: _('Advanced Settings'),
     defaultValue: 'WITH',
     noTable: true,
     options: [
@@ -165,57 +155,6 @@ const listOptions = fromJS([
       placeholder: _('Please Select ') + _('User Format'),
     },
   }, {
-    id: 'accton_sendinterval',
-    label: _('Accounting-on Interval'),
-    fieldset: 'parameter',
-    defaultValue: '0',
-    noTable: true,
-    formProps: {
-      type: 'number',
-      className: 'cols col-6',
-      help: _('Seconds'),
-    },
-
-  }, {
-    id: 'accton_sendtimes',
-    label: _('Accounting-on Resend Times'),
-    fieldset: 'parameter',
-    noTable: true,
-    formProps: {
-      type: 'number',
-      className: 'cols col-6',
-    },
-  }, {
-    id: 'retry_times',
-    label: _('Max Messaging Times'),
-    fieldset: 'parameter',
-    noTable: true,
-    formProps: {
-      type: 'number',
-      className: 'cols col-6',
-    },
-  }, {
-    id: 'nasip',
-    label: _('Nas IP Address'),
-    fieldset: 'parameter',
-    noTable: true,
-    formProps: {
-      type: 'text',
-      className: 'cols col-6',
-    },
-  }, {
-    id: 'acct_interim_interval',
-    label: _('Accounting Send Interval'),
-    fieldset: 'parameter',
-    defaultValue: '0',
-    noTable: true,
-    formProps: {
-      type: 'number',
-      className: 'cols col-6',
-      help: _('Minute'),
-    },
-
-  }, {
     id: 'quiet_time',
     label: _('Silent Time'),
     fieldset: 'parameter',
@@ -228,8 +167,8 @@ const listOptions = fromJS([
     },
 
   }, {
-    id: 'realretrytimes',
-    label: _('Accounting Resend Times'),
+    id: 'retry_times',
+    label: _('Max Messaging Times'),
     fieldset: 'parameter',
     noTable: true,
     formProps: {
@@ -245,6 +184,68 @@ const listOptions = fromJS([
       type: 'number',
       className: 'cols col-6',
       help: _('Seconds'),
+    },
+  }, {
+    id: 'accton_enable',
+    label: _('Accounting-on'),
+    fieldset: 'parameter',
+    defaultValue: '0',
+    noTable: true,
+    formProps: {
+      type: 'checkbox',
+      text: _('Enable'),
+      className: 'cols col-6',
+    },
+  }, {
+    id: 'nasip',
+    label: _('Nas IP'),
+    fieldset: 'parameter',
+    noTable: true,
+    formProps: {
+      type: 'text',
+      className: 'cols col-6',
+    },
+  }, {
+    id: 'accton_sendinterval',
+    label: _('Accounting-on Resend Interval'),
+    fieldset: 'parameter',
+    defaultValue: '0',
+    noTable: true,
+    formProps: {
+      type: 'number',
+      className: 'cols col-6',
+      help: _('Seconds'),
+    },
+
+  }, {
+    id: 'acct_interim_interval',
+    label: _('Accounting Messaging Interval'),
+    fieldset: 'parameter',
+    defaultValue: '0',
+    noTable: true,
+    formProps: {
+      type: 'number',
+      className: 'cols col-6',
+      help: _('Minute'),
+    },
+
+  }, {
+    id: 'accton_sendtimes',
+    label: _('Accounting-on Resend Times'),
+    fieldset: 'parameter',
+    noTable: true,
+    formProps: {
+      type: 'number',
+      className: 'cols col-6',
+    },
+  }, {
+    id: 'realretrytimes',
+    label: _('Accounting Message-Resend Times'),
+    fieldset: 'parameter',
+    noTable: true,
+    formProps: {
+      type: 'number',
+      className: 'cols col-6',
     },
   },
 ]);

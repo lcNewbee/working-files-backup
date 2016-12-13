@@ -1,13 +1,8 @@
 import React, { PropTypes } from 'react';
 import { Map, List, fromJS } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import {
-  FormGroup,
-} from '../Form';
-
-import {
-  SaveButton,
-} from '../Button';
+import FormGroup from '../Form/FormGroup';
+import SaveButton from '../Button/SaveButton';
 
 const propTypes = {
   id: PropTypes.string,
@@ -55,11 +50,14 @@ class FormContainer extends React.Component {
     this.onChangeData = this.onChangeData.bind(this);
     this.renderFormGroup = this.renderFormGroup.bind(this);
     this.renderFormGroupTree = this.renderFormGroupTree.bind(this);
+    this.onOptionsChange = this.onOptionsChange.bind(this);
 
     this.syncData = {};
     this.inited = false;
   }
-
+  componentWillMount() {
+    this.onOptionsChange();
+  }
   componentDidMount() {
     if (!this.inited && Object.keys(this.syncData).length > 0) {
       if (this.props.onChangeData) {
@@ -69,7 +67,11 @@ class FormContainer extends React.Component {
       }
     }
   }
-
+  componentWillReceiveProps(nextProps) {
+    if (this.props.options !== nextProps.options) {
+      this.onOptionsChange();
+    }
+  }
   componentDidUpdate() {
     if (!this.inited && Object.keys(this.syncData).length > 0) {
       if (this.props.onChangeData) {
@@ -78,8 +80,19 @@ class FormContainer extends React.Component {
       }
     }
   }
+  onOptionsChange() {
+    this.options = this.props.options;
 
-
+    if (this.options) {
+      if (Map.isMap(this.props.options.get(0))) {
+        this.options = this.props.options
+          .groupBy(item => item.get('fieldset'))
+          .toList();
+      }
+    } else {
+      this.options = List([]);
+    }
+  }
   onSave() {
     const hasFile = this.props.hasFile;
 
@@ -236,7 +249,6 @@ class FormContainer extends React.Component {
     let formProps = null;
     let classNames = 'o-form';
     let encType = 'application/x-www-form-urlencoded';
-
 
     if (layout) {
       classNames = `${classNames} o-form--${layout}`;
