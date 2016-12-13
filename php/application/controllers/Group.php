@@ -12,8 +12,8 @@ class Group extends CI_Controller {
             ->from('ap_group')
             ->where('id >1')
             ->get()->result_array();
-    $allGroup = $this->db->select('id,group_name,remark')
-        ->from('ap_group')
+    $allGroup = $this->db->select('id')
+        ->from('ap_list')
         ->get()->result_array();
     $retList=array();
 
