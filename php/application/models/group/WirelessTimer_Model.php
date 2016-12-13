@@ -11,10 +11,10 @@ class WirelessTimer_Model extends CI_Model {
         $sqlpage = new SqlPage();
         $columns = '*';
 
-        $tablenames = 'objects_list';      
+        $tablenames = 'objects_list';
         $pageindex = 1;
         $pagesize =20;
-        $datalist = $sqlpage->sql_data_page($columns,$tablenames,$pageindex,$pagesize);  
+        $datalist = $sqlpage->sql_data_page($columns,$tablenames,$pageindex,$pagesize);
         $htmdata = array();
         foreach($datalist['data'] as $row) {
             $this->db->select('*');
@@ -61,7 +61,7 @@ class WirelessTimer_Model extends CI_Model {
         $arr['policy_times'] = element('policy_times',$data,'2016-11-24 18:00');    //策略执行时间 （2016-11-25 12:35）
         $arr['objects_name'] = element('objects_name',$data,'ssid');                   //操作对象（radio 或 ssid）
         $arr['objects_templatename'] = element('objects_templatename',$data,'');   //操作模板名（ssid 或 ap的mac地址）
-        $arr['objects_templateid'] = '';//element('objects_templateid',$data,' ');        //操作模板id（ssid 属性id 或者 ap的radio网卡id）
+        $arr['objects_templateid'] = (string)element('objects_templateid',$data,'');//element('objects_templateid',$data,' ');        //操作模板id（ssid 属性id 或者 ap的radio网卡id）
         $arr['objects_templateswitch'] = (string)element('objects_templateswitch',$data,'1');//执行事件（禁用或启用 （0或1））
 
         return policy_add_profile_id(json_encode($arr));
@@ -82,8 +82,9 @@ class WirelessTimer_Model extends CI_Model {
         $arr['policy_times'] = element('policy_times',$data,'2016-11-24 18:00');
         $arr['objects_name'] = element('objects_name',$data,'ssid');
         $arr['objects_templatename'] = element('objects_templatename',$data,'');
-        $arr['objects_templateid'] = '';//element('objects_templateid',$data,' ');
+        $arr['objects_templateid'] = (string)element('objects_templateid',$data,'');//element('objects_templateid',$data,' ');
         $arr['objects_templateswitch'] = (string)element('objects_templateswitch',$data,'1');
+
         return policy_edit_profile_id(json_encode($arr));
     }
 }

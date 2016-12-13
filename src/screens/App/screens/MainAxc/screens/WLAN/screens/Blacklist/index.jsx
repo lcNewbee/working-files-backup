@@ -10,6 +10,31 @@ import Table from 'shared/components/Table';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
+const listTypeMap = {};
+const $$listTypeOptions = fromJS([
+  {
+    value: 'black',
+    label: _('Black List'),
+  }, {
+    value: 'white',
+    label: _('White List'),
+  },
+]).map(
+  ($$item) => {
+    listTypeMap[$$item.get('value')] = $$item.get('label');
+    return $$item;
+  },
+);
+const settingsOptions = fromJS([
+  {
+    id: 'type',
+    label: _('Type Switch'),
+    type: 'switch',
+    options: $$listTypeOptions,
+    saveOnChange: true,
+  },
+]);
+
 const listOptions = fromJS([
   {
     id: 'mac',
@@ -173,7 +198,6 @@ export default class Blacklist extends React.Component {
     const $$group = this.props.group;
     const selectGroupId = $$group.getIn(['selected', 'id']);
     const copyFromGroupId = $$myScreenStore.getIn(['actionQuery', 'copyFromGroupId']);
-    const copyFromGroupName = '';
 
     if (!isCopyShow) {
       return null;
@@ -241,16 +265,22 @@ export default class Blacklist extends React.Component {
     const { route, store } = this.props;
     const actionQuery = store.getIn([route.id, 'actionQuery']) || Map({});
     const isCopySsid = actionQuery.get('action') === 'copy';
+    const listType = store.getIn([route.id, 'data', 'settings', 'type']) || Map({});
+    const listTitle = listTypeMap[listType];
 
     return (
       <AppScreen
         // Screen 全局属性
         {...this.props}
+
+        settingsFormOptions={settingsOptions}
+
         // List Props
         listOptions={listOptions}
         actionBarChildren={this.renderActionBar()}
         modalChildren={this.renderCopyFromOther()}
         listKey="allKeys"
+        listTitle={listTitle}
         editable={false}
         initOption={{
           actionQuery: {
@@ -260,6 +290,7 @@ export default class Blacklist extends React.Component {
         modalSize={isCopySsid ? 'lg' : 'md'}
         actionable
         selectable
+        noTitle
       />
     );
   }

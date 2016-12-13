@@ -32,9 +32,23 @@ const policyTypeOptions = [
   }, {
     value: 'Mon&Tue&Wed&Thu&Fri',
     label: _('Weekdays'),
-  }, {
+  },
+  // {
+  //   value: 'Loop',
+  //   label: _('Fixed Time Interval'),
+  // },
+  {
     value: 'custom',
     label: _('Custom'),
+  },
+];
+const objectsNameOptions = [
+  {
+    value: 'ssid',
+    label: _('SSID'),
+  }, {
+    value: 'scan',
+    label: _('Scan'),
   },
 ];
 
@@ -183,6 +197,27 @@ const screenOptions = fromJS([
         return timeStr;
       },
     },
+  },
+  {
+    id: 'objects_name',
+    label: _('Type'),
+    options: objectsNameOptions,
+    defaultValue: 'ssid',
+    formProps: {
+      type: 'switch',
+    },
+  }, {
+    id: 'objects_templatename',
+    text: _('Operation Object'),
+    formProps: {
+      type: 'select',
+      required: true,
+      showPrecondition($$data) {
+        const curRepaet = $$data.get('objects_name');
+
+        return curRepaet !== 'scan';
+      },
+    },
   }, {
     id: 'objects_templateswitch',
     text: _('Operation'),
@@ -198,13 +233,11 @@ const screenOptions = fromJS([
     ],
     formProps: {
       type: 'switch',
-    },
-  }, {
-    id: 'objects_templatename',
-    text: _('Operation Object'),
-    formProps: {
-      type: 'select',
-      required: true,
+      showPrecondition($$data) {
+        const curRepaet = $$data.get('objects_name');
+
+        return curRepaet !== 'scan';
+      },
     },
   }, {
     id: 'policy_enbale',
@@ -217,16 +250,15 @@ const screenOptions = fromJS([
     formProps: {
       type: 'checkbox',
     },
-  }, {
-    id: 'objects_name',
-    noTable: true,
-    noForm: true,
-    defaultValue: 'ssid',
   },
 ]);
 
 const propTypes = {
+  store: PropTypes.object,
   groupid: PropTypes.oneOfType([
+    PropTypes.number, PropTypes.string,
+  ]),
+  groupname: PropTypes.oneOfType([
     PropTypes.number, PropTypes.string,
   ]),
   updateCurEditListItem: PropTypes.func,
@@ -243,21 +275,16 @@ export default class View extends React.Component {
     utils.binds(this, [
       'onBeforeSave',
       'onBeforeAction',
+      'fetchObjectList',
     ]);
   }
 
   componentWillMount() {
-    getSsidList({
-      groupid: this.props.groupid,
-      page: 1,
-      size: 100,
-    }).then(
-      (options) => {
-        this.setState({
-          ssidOptions: fromJS(options),
-        });
-      },
-    );
+    this.fetchObjectList();
+  }
+
+  componentDidUpdate(prevProps) {
+    this.fetchObjectList(prevProps);
   }
 
   onBeforeSave($$actionQuery, $$curListItem) {
@@ -270,14 +297,61 @@ export default class View extends React.Component {
       if ($$curListItem.get('policy_type') === 'custom') {
         subItem.policy_type = $$curListItem.get('policy_custom_type');
       }
+
+      if ($$curListItem.get('objects_name') === 'scan') {
+        subItem.objects_templatename = this.props.groupname;
+        subItem.objects_templateid = this.props.groupid;
+      }
+
       this.props.updateCurEditListItem(subItem);
+    }
+  }
+
+  fetchObjectList(prevProps) {
+    const { store } = this.props;
+    const curScreenId = store.get('curScreenId');
+    const curListObjectType = store.getIn([curScreenId, 'curListItem', 'objects_name']);
+    let prevListObjectType;
+
+    if (prevProps) {
+      prevListObjectType = prevProps.store.getIn([curScreenId, 'curListItem', 'objects_name']);
+    }
+
+    if (curListObjectType === 'ssid') {
+      if (prevListObjectType !== 'ssid' || prevProps.groupid !== this.props.groupid ||
+          this.state.ssidOptions.isEmpty()) {
+        getSsidList({
+          groupid: this.props.groupid,
+          page: 1,
+          size: 100,
+        }).then(
+          (options) => {
+            this.setState({
+              ssidOptions: fromJS(options),
+            });
+          },
+        );
+      }
     }
   }
 
   render() {
     const curListOptions = screenOptions.setIn(
-      [6, 'options'],
+      [
+        screenOptions.findIndex(
+          $$item => $$item.get('id') === 'objects_templatename',
+        ),
+        'options',
+      ],
       this.state.ssidOptions,
+    ).setIn(
+      [
+        screenOptions.findIndex(
+          $$item => $$item.get('id') === 'objects_templateid',
+        ),
+        'options',
+      ],
+      this.state.objectsIdOptions,
     );
 
     return (
@@ -302,6 +376,7 @@ function mapStateToProps(state) {
   return {
     app: state.app,
     groupid: state.product.getIn(['group', 'selected', 'id']),
+    groupname: state.product.getIn(['group', 'selected', 'groupname']),
     store: state.screens,
   };
 }

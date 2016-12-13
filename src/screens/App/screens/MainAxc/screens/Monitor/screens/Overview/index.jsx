@@ -6,8 +6,35 @@ import { Map, List, fromJS } from 'immutable';
 import PureComponent from 'shared/components/Base/PureComponent';
 import EchartReact from 'shared/components/EchartReact';
 import Table from 'shared/components/Table';
+import Switchs from 'shared/components/Switchs';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/screens';
+
+const msg = {
+  days: _('Days'),
+};
+const timeTypeSwitchs = fromJS([
+  {
+    value: 'today',
+    label: _('Today'),
+  },
+  {
+    value: 'yesterday',
+    label: _('Yesterday'),
+  },
+  {
+    value: 'week',
+    label: `7 ${msg.days}`,
+  },
+  {
+    value: 'half_month',
+    label: `15 ${msg.days}`,
+  },
+  {
+    value: 'month',
+    label: `30 ${msg.days}`,
+  },
+]);
 
 function getTerminalTypeOption(serverData) {
   let dataList = serverData.get('terminalType');
@@ -119,94 +146,88 @@ function getApStatusOption(serverData) {
   return ret;
 }
 
-function getFlowOption(serverData) {
-  let dataList = serverData.get('flowList');
+function getFlowOption(serverData, timeType) {
   const option = {
     tooltip: {
       trigger: 'axis',
-      axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-        type: 'line',        // 默认为直线，可选为：'line' | 'shadow'
-      },
     },
-    legend: {},
-    grid: {
-      left: '6%',
-      right: '6%',
-      bottom: '4%',
-      containLabel: true,
+    legend: {
+      data: ['AP', _('Wireless'), _('Clients')],
     },
-    xAxis: [
-      {
-        type: 'category',
-        data: [],
+    xAxis: [{
+      type: 'category',
+      interval: 1,
+      splitLine: {
+        interval: 0,
       },
-    ],
-    yAxis: {
+      axisLabel: {
+        interval: 0,
+      },
+    }],
+    yAxis: [{
       type: 'value',
-      position: 'bottom',
-    },
+      name: _('KB'),
+      minInterval: 1,
+      splitNumber: 5,
+      axisLabel: {
+        formatter: '{value}',
+      },
+      axisLine: {
+        lineStyle: {},
+      },
+    }],
     series: [
       {
-        name: '直接访问',
-        type: 'bar',
-        barWidth: '60%',
-        data: [],
+        name: 'AP',
+        type: 'line',
+      },
+      {
+        name: _('Wireless'),
+        type: 'line',
+      },
+      {
+        name: _('Clients'),
+        type: 'line',
       },
     ],
   };
+  let xAxisData;
+  let xAxisName = _('Days');
+  let $$dataList = serverData.getIn(['flowList']);
 
-  if (List.isList(dataList)) {
-    dataList = dataList.sort(
-      (prev, next) => prev.get('value') < next.get('value')
-    );
-    option.xAxis[0].data = dataList.map(item => item.get('name')).toJS();
-    option.series[0].data = dataList.map(item => item.get('value')).toJS();
+  if (!$$dataList) {
+    return null;
   }
-  return option;
-}
-function getSafeAlarmOption(serverData) {
-  let dataList = serverData.get('safeAlarmEvents');
-  const option = {
-    tooltip: {
-      trigger: 'axis',
-      axisPointer: {            // 坐标轴指示器，坐标轴触发有效
-        type: 'line',        // 默认为直线，可选为：'line' | 'shadow'
-      },
-    },
-    legend: {},
-    grid: {
-      left: '6%',
-      right: '6%',
-      bottom: '4%',
-      containLabel: true,
-    },
-    xAxis: [
-      {
-        type: 'category',
-        data: [],
-      },
-    ],
-    yAxis: {
-      type: 'value',
-      position: 'bottom',
-    },
-    series: [
-      {
-        name: '直接访问',
-        type: 'bar',
-        barWidth: '60%',
-        data: [],
-      },
-    ],
-  };
 
-  if (List.isList(dataList)) {
-    dataList = dataList.sort(
-      (prev, next) => prev.get('value') < next.get('value')
-    );
-    option.xAxis[0].data = dataList.map(item => item.get('name')).toJS();
-    option.series[0].data = dataList.map(item => item.get('value')).toJS();
+  $$dataList = $$dataList.toJS();
+
+  if (timeType === 'yesterday' ||
+      timeType === 'today') {
+    xAxisData = List(new Array(24)).map(
+      (val, i) => `${i}:00`,
+    ).toJS();
+    xAxisName = _('Hours');
+  } else if (timeType === 'week') {
+    xAxisData = List(new Array(7)).map(
+      (val, i) => i + 1,
+    ).toJS();
+  } else if (timeType === 'half_month') {
+    xAxisData = List(new Array(15)).map(
+      (val, i) => i + 1,
+    ).toJS();
+  } else {
+    xAxisData = List(new Array(30)).map(
+      (val, i) => i + 1,
+    ).toJS();
   }
+
+  option.xAxis[0].data = xAxisData;
+  option.xAxis[0].name = xAxisName;
+
+  option.series[0].data = $$dataList[0].data;
+  option.series[1].data = $$dataList[1].data;
+  option.series[2].data = $$dataList[2].data;
+
   return option;
 }
 
@@ -224,8 +245,9 @@ export default class View extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.binds('getCpuOption');
-
+    utils.binds(this, [
+      'onChangeTimeType',
+    ]);
     props.initScreen({
       id: props.route.id,
       formUrl: props.route.formUrl,
@@ -234,6 +256,7 @@ export default class View extends PureComponent {
       fetchIntervalTime: 5000,
       query: {
         groupid: props.groupid,
+        timeType: 'today',
       },
     });
   }
@@ -255,14 +278,20 @@ export default class View extends PureComponent {
     this.props.leaveScreen();
   }
 
+  onChangeTimeType(data) {
+    this.props.changeScreenQuery({
+      timeType: data.value,
+    });
+    this.props.fetchScreenData();
+  }
+
   render() {
     const { screens, route } = this.props;
     const curScreenId = screens.get('curScreenId');
     const serverData = screens.getIn([curScreenId, 'data']);
     const apStatusOption = getApStatusOption(serverData);
     const terminalTypeOption = getTerminalTypeOption(serverData);
-    const flowOption = getFlowOption(serverData);
-    const safeAlarmOption = getSafeAlarmOption(serverData);
+    const flowOption = getFlowOption(serverData, screens.getIn([curScreenId, 'query', 'timeType']));
 
     return (
       <div>
@@ -327,7 +356,15 @@ export default class View extends PureComponent {
           </div>
           <div className="cols col-12">
             <div className="o-box__cell">
-              <h3>{ _('Flow') }</h3>
+              <h3>
+                { _('Flow') }
+                <Switchs
+                  options={timeTypeSwitchs}
+                  value={screens.getIn([curScreenId, 'query', 'timeType'])}
+                  onChange={this.onChangeTimeType}
+                />
+              </h3>
+
             </div>
             <div className="o-box__cell">
               <EchartReact
@@ -361,6 +398,30 @@ export default class View extends PureComponent {
                 ])}
                 list={serverData.getIn(['neighborsAps', 'list']) || fromJS([])}
                 page={serverData.getIn(['neighborsAps', 'page'])}
+              />
+            </div>
+          </div>
+          <div className="cols col-12">
+            <div className="o-box__cell">
+              <h3>{ _('Around AP List') }</h3>
+            </div>
+            <div className="o-box__cell">
+              <Table
+                className="table"
+                options={fromJS([
+                  {
+                    id: 'mac',
+                    text: _('MAC'),
+                  }, {
+                    id: 'channel',
+                    text: _('Channel'),
+                  }, {
+                    id: 'rssi',
+                    text: _('rssi'),
+                  },
+                ])}
+                list={serverData.getIn(['aroundAps', 'list']) || fromJS([])}
+                page={serverData.getIn(['aroundAps', 'page'])}
               />
             </div>
           </div>

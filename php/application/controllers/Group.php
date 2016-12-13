@@ -108,24 +108,24 @@ class Group extends CI_Controller {
         ->where('mac', element('apmac', $data))
         ->get()->result_array();
 
-      if(sizeof($q)> 0){
+      if (sizeof($q)> 0){
       	$result=array(
            'state'=>array(
            'code'=>6000,
            'msg'=>'the apname is not availble!'
            )
         );
-      }
-      elseif(sizeof($q_mac) > 0){
+        $result = json_encode($result);
+      } elseif(sizeof($q_mac) > 0){
         $result=array(
            'state'=>array(
            'code'=>6001,
            'msg'=>'mac is not availble!'
            )
         );
-      }
-      else{
-       $result=axc_add_aptogroup(json_encode($temp_data));
+        $result = json_encode($result);
+      } else {
+        $result=axc_add_aptogroup(json_encode($temp_data));
       }
     }
 

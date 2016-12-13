@@ -38,20 +38,14 @@ const listOptions = fromJS([
     defaultValue: '0',
     options: [
       {
-        value: '0',
-        label: 'Portal',
-      }, {
         value: '1',
-        label: 'AP',
+        label: _('Network'),
+      }, {
+        value: '2',
+        label: _('AP Group'),
       }, {
         value: '3',
-        label: 'Network',
-      }, {
-        value: '4',
-        label: 'System',
-      }, {
-        value: '5',
-        label: 'System2',
+        label: _('System'),
       },
     ],
 

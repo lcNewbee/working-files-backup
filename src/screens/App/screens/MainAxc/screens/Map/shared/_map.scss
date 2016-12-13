@@ -191,6 +191,14 @@ $map-distance-y: $map-distance * .75;
     color: #0093dd;
   }
 
+  .m-map__marker-infowindow {
+    min-width: 200px;
+    .a-btn {
+      margin-left: 12px;
+      float: right;
+    }
+  }
+
   &.o-map--open {
     .o-map__content {
       top: $map-distance * 3;

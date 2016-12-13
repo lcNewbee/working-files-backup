@@ -45,6 +45,18 @@ const listOptions = fromJS({
       formProps: {
         type: 'text',
       },
+    }, {
+      id: 'lat',
+      label: _('lat'),
+      formProps: {
+        type: 'text',
+      },
+    }, {
+      id: 'lng',
+      label: _('lng'),
+      formProps: {
+        type: 'text',
+      },
     },
   ],
 });
@@ -60,6 +72,7 @@ function getCurAppScreenState(listStore, name) {
   if (name) {
     ret = myStore.getIn([myScreenId, 'data', name]);
   }
+
   return ret || Map({});
 }
 const propTypes = {
@@ -98,7 +111,7 @@ export default class View extends React.Component {
       'renderGoogleMap',
       'renderActionBar',
       'addMarkerToMap',
-      'onRowClick',
+      'onViewBuildingInfo',
       'renderGooglePlaceInput',
     ]);
 
@@ -140,16 +153,17 @@ export default class View extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const myScreenId = this.props.store.get('curScreenId');
-    const thisList = getCurAppScreenState(this.props.store, 'list');
-    const prevList = getCurAppScreenState(prevProps.store, 'list');
-    const thisSettings = this.props.store.getIn([myScreenId, 'curSettings']);
-    const prevSettings = prevProps.store.getIn([myScreenId, 'curSettings']);
+    const $$thisData = getCurAppScreenState(this.props.store);
+    const $$prevData = getCurAppScreenState(prevProps.store);
+    const curScreenId = this.props.store.get('curScreenId');
+    const curType = this.props.store.getIn([curScreenId, 'curSettings', 'type']);
 
     if (typeof window.google !== 'undefined' && this.mapContent) {
       if (!this.map) {
         this.renderGoogleMap();
-      } else if (!prevSettings.equals(thisSettings) || !prevList.equals(thisList)) {
+      } else if ($$thisData !== $$prevData) {
+        // 服务器数据更新需要清空地图
+        this.map = null;
         this.renderGoogleMap();
       }
 
@@ -158,12 +172,11 @@ export default class View extends React.Component {
       }
     }
 
-    // 如果切换类型清空地图
-    if (thisSettings.get('type') !== '0') {
+    if (curType !== '0') {
       this.map = null;
     }
   }
-  onRowClick(e, i) {
+  onViewBuildingInfo(e, i) {
     // 过滤Button元素的点击
     if (e.target.nodeName.toLowerCase() !== 'button' &&
         e.target.parentNode.nodeName.toLowerCase() !== 'button') {
@@ -229,26 +242,45 @@ export default class View extends React.Component {
       draggable: item.get('isLocked') !== '1',
       animation: google.maps.Animation.DROP,
     });
-    const contentString = '<div class="m-map-marker">' +
-                            '<h4>' + _('Test') + '</h4>' +
-                            '<dl><dt>' + _('Flow') + '</dt>' +
-                            '<dd>15.23Mbps</dd></dl>' +
+    const markerId = item.get('id');
+    const contentString = '<div class="m-map__marker-infowindow">' +
+                            '<h4>' + item.get('name') + '</h4>' +
+                            '<div class="o-description-list">' +
+                              '<dl class="o-description-list-row">' +
+                                '<dt>' + _('Address') + '</dt>' +
+                                '<dd>' + item.get('address') + '</dd>' +
+                              '</dl>' +
+                              '<dl class="o-description-list-row">' +
+                                '<dt>' + _('Map Number') + '</dt>' +
+                                '<dd>' + item.get('mapNumber') + '</dd>' +
+                              '</dl>' +
+                            '</div>' +
+                            '<div class="m-map__marker-infowindow-footer">' +
+                              '<button class="a-btn a-btn--primary" id="editBulid' + markerId + '">' + _('Edit') + '</button>' +
+                              '<button class="a-btn a-btn--info" id="viewBulid' + markerId + '">' + _('View') + '</button>' +
+                            '</div>' +
                           '</div>';
 
     const infowindow = new google.maps.InfoWindow({
       content: contentString,
       maxWidth: 500,
     });
+    let editButtonElem = document.getElementById(`editBulid${markerId}`);
+    let viewButtonElem = document.getElementById(`viewBulid${markerId}`);
 
     marker.addListener('click', () => {
       infowindow.open(map, marker);
-      // actionsWindow.open(map, marker);
-      // infobox.open(map, marker);
+      editButtonElem = document.getElementById(`editBulid${markerId}`);
+      viewButtonElem = document.getElementById(`viewBulid${markerId}`);
 
-      if (item.get('markerType') === 'ap') {
-        this.props.addToPropertyPanel();
-      } else {
-        this.props.editListItemByIndex(index);
+      if (!editButtonElem.inited) {
+        editButtonElem.addEventListener('click', () => {
+          console.log(index)
+          this.props.editListItemByIndex(index);
+        });
+        viewButtonElem.addEventListener('click', () => {
+          this.props.router.push(`/main/group/map/live/${index}`);
+        });
       }
     });
     marker.addListener('mouseup', () => {
@@ -453,8 +485,8 @@ export default class View extends React.Component {
     const actionQuery = store.getIn([myScreenId, 'actionQuery']);
     const list = store.getIn([myScreenId, 'data', 'list']);
     const page = store.getIn([myScreenId, 'data', 'page']);
-    const editData = getCurAppScreenState(store, 'edit');
-    const isOpenHeader = actionQuery.get('action') === 'add';
+    const editData = store.getIn([myScreenId, 'curListItem']);
+    const isOpenHeader = actionQuery.get('action') === 'add' || actionQuery.get('action') === 'edit';
     let mapClassName = 'o-map';
 
     if (isOpenHeader) {
@@ -489,7 +521,9 @@ export default class View extends React.Component {
                   isOpenHeader ? (
                     <FormContainer
                       data={editData}
-                      options={formOptions}
+                      options={
+                        formOptions.deleteIn([0, -1]).deleteIn([0, -1])
+                      }
                       onSave={this.onSave}
                       onChangeData={this.props.updateCurEditListItem}
                       onValidError={this.props.reportValidError}
@@ -525,7 +559,7 @@ export default class View extends React.Component {
               list={list}
               page={page}
               onPageChange={this.onPageChange}
-              onRowClick={this.onRowClick}
+              onRowClick={this.onViewBuildingInfo}
               loading={app.get('fetching')}
             />
           )

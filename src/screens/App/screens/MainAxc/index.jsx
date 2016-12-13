@@ -138,6 +138,7 @@ export default class Main extends Component {
   onLogout(e) {
     e.preventDefault();
     this.props.changeLoginStatus('0');
+    this.onHiddenPopOver();
     window.location.hash = '#';
   }
 
@@ -349,13 +350,13 @@ export default class Main extends Component {
       if ($$curGroupDevices.find(
         $$item => $$item.get('mac') === $$subData.get('apmac'),
       )) {
-        ret = _('已经存在相同MAC的AP');
+        ret = _('AP with the same MAC already exists');
       }
 
       if ($$curGroupDevices.find(
         $$item => $$item.get('devicename') === $$subData.get('name'),
       )) {
-        ret = '已经存在相同名字的AP';
+        ret = _('AP with the same name already exists');
       }
     }
 
@@ -404,10 +405,10 @@ export default class Main extends Component {
 
             // apName 重复
             } else if (state.code === 6000) {
-              customCheckResult = '已经存在相同名字的AP';
+              customCheckResult = _('AP with the same name already exists');
             // Ap MAC 重复
             } else if (state.code === 6001) {
-              customCheckResult = '已经存在相同MAC的AP';
+              customCheckResult = _('AP with the same MAC already exists');
             }
           }
 
@@ -456,7 +457,7 @@ export default class Main extends Component {
               <Icon name="user-secret" className="icon-user" />
             </div>
             <div className="m-user-overview__controls">
-              <a className="change-pas" href="#/main/settings/admin">
+              <a className="change-pas" href="#/main/system/admin" onClick={this.onHiddenPopOver}>
                 <Icon
                   name="key"
                 />

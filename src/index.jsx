@@ -36,9 +36,7 @@ const renderApp = () => {
 // Enable hot reload by react-hot-loader
 if (module.hot) {
   const reRenderApp = () => {
-    try {
-      renderApp();
-    } catch (error) {}
+    renderApp();
   };
 
 

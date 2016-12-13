@@ -205,8 +205,11 @@
   "User Numbers": "用户数量",
   "Percentage": "百分比",
   "App Name": "应用名称",
+  "AP with the same name already exists": "已经存在相同名字的AP",
+  "AP with the same MAC already exists": "已经存在相同MAC的AP",
 
   "Traffic": "流量",
+  "Around AP List": "周围AP列表",
 
   "SSID Status": "SSID状态",
   "Group SSID List": "组内SSID列表",
@@ -282,6 +285,9 @@
   "Cients Trace": "终端行动轨迹",
 
   "Blacklist": "黑名单列表",
+  "Black List": "黑名单",
+  "White List": "白名单",
+  "Type Switch": "类型切换",
   "Dynamic Blacklists Release Time": "动态黑名单老化时间",
   "Manufacturer": "生产商",
   "Clients Type": "终端类型",
@@ -329,6 +335,7 @@
   "Workday": "工作日",
   "Weekdays": "工作日",
   "Custom": "自定义",
+  "Fixed Time Interval": "固定时间间隔",
   "Custom Cycle": "自定义周期",
   "Mon": "周一",
   "Tue": "周二",
@@ -436,7 +443,6 @@
   "Backup AC Firmware": "备份AC版本(2分钟)",
   "Current Frimware Version": "当前版本",
   "Upgrading AC Firmware version, please do not shut down device.": "正在升级AC版本，请勿关闭设备！",
-  "AP Model": "AP型号",
   "Model Name": "型号名称",
   "Radio Number": "射频数量",
   "Hardware Version": "硬件版本",

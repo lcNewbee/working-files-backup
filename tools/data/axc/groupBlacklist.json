@@ -5,10 +5,7 @@
   },
   "data": {
     "settings": {
-      "groupid": 0,
-      "attacttime" : 0,
-      "attactcnt": 5,
-      "dyaging": 10
+      "type": "white"
     },
     "list": [
       {

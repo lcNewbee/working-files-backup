@@ -114,3 +114,16 @@ $boder-color:         #ccc;
 .form-footer {
   margin-top: 20px;
 }
+.en-ds {
+  .form-group {
+    > label {
+      min-width: 165px;
+    }
+
+    .form-control {
+      margin-left: 180px;
+      color: #333;
+    }
+  }
+
+}
