@@ -11,6 +11,7 @@ class WirelessAcl extends CI_Controller {
 		$retdata = array(
 			'groupid' => (int)element('groupid', $_GET, -1),
 			'filterGroupid' => (int)element('filterGroupid', $_GET, -1),
+			'acltype' => element('aclType', $_GET, 'black')			
 		);
 		return $this->WirelessAcl_Model->get_acl_list($retdata);
 	}

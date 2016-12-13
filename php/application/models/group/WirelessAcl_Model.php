@@ -5,18 +5,27 @@ class WirelessAcl_Model extends CI_Model {
 		$this->load->database();
 		$this->load->helper(array('array', 'my_customfun_helper'));
 		$this->load->library('SqlPage');
-	}
-	public function get_acl_list($retdata) {
-		$result = axc_get_wireless_acl(json_encode($retdata));
-		$result = json_decode($result);
+	}	
+	public function get_acl_list($retdata) {		
+		$result = null;		
+		//所有组
 		if($retdata['groupid'] === -100) {
-			$querydata = $this->db->select('mac,vendor,clientType,reason,lastTime')
-									->from('sta_black_list')
-									->where('id !=',$retdata['filterGroupid'])
+			$result = $this->get_acl_data($retdata['filterGroupid'],$retdata['acltype']);
+		}else{			
+			$acltype = 'black';			
+			$querydata = $this->db->select('ap_group.id,wids_template.acltype')
+									->from('ap_group')
+									->join('wids_template','ap_group.wids_tmp_id=wids_template.id','left')
+									->where("ap_group.id=".$retdata['groupid'])
 									->get()->result_array();
-			if(count($querydata) > 0){
-				$result->data->list = $querydata;
+			if( count($querydata) > 0) {
+				$acltype = $querydata[0]['acltype'];		
 			}
+			$result = axc_get_wireless_acl(json_encode($retdata));	
+			$cgidata = json_decode($result);			
+			$cgidata->data->settings = array('type'=>$acltype);
+
+			$result = $cgidata;
 		}
 		return json_encode($result);
 	}
@@ -60,10 +69,32 @@ class WirelessAcl_Model extends CI_Model {
 		$result = null;
 		if(!empty($data['groupid'])){
 			$cgi_dyblk['groupid'] = (int)$data['groupid'];
-			$cgi_dyblk['attacttime'] = (int)$data['attacttime'];
-			$cgi_dyblk['attactcnt'] = (int)$data['attactcnt'];
-			$cgi_dyblk['dyaging'] = (int)$data['dyaging'];
-			$result = axc_set_wireless_dyblk(json_encode($cgi_dyblk));
+			$cgi_dyblk['type'] = (string)$data['type'];
+			$result = axc_change_wireless_acltype(json_encode($cgi_dyblk));
+		}
+		return $result;
+	}
+	/*********************
+	 * @filterid 过滤groupid
+	 * @type     获取类型 默认白
+	*********************/
+	public function get_acl_data($filterid=0,$type='black') {
+		$tableName = 'sta_black_list';
+		if( $type === 'white') {
+			$tableName = 'sta_white_list';
+		}
+		$result = array(
+			'state'=>array('code'=>2000,'msg'=>'ok'),
+			'data'=>array(
+				'list'=>array()
+			)
+		);
+		$querydata = $this->db->select('mac,vendor,clientType,reason,lastTime')
+								->from($tableName)
+								->where('wids_id !=',$filterid)
+								->get()->result_array();
+		if(count($querydata) > 0){
+			$result['data']['list'] = $querydata;				
 		}
 		return $result;
 	}
