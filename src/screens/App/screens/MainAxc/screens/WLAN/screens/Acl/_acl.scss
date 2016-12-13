@@ -1,0 +1,14 @@
+.s-group-wireless-acl {
+  .form-group {
+
+    &.no-label {
+      label {
+        display: none
+      }
+      .form-control {
+        margin-left: -1em;
+      }
+    }
+
+  }
+}

@@ -92,7 +92,6 @@ export function receiveAjaxError(payload) {
 }
 
 export function receiveServerError(state) {
-
   // 显示服务器错误
   if (state.code >= 6000) {
     toastr.error(_('Data Sync Error'), state.msg);

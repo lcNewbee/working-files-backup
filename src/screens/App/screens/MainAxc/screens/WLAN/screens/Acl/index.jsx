@@ -10,6 +10,8 @@ import Table from 'shared/components/Table';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
+import './_acl.scss';
+
 const listTypeMap = {};
 const $$listTypeOptions = fromJS([
   {
@@ -29,9 +31,11 @@ const settingsOptions = fromJS([
   {
     id: 'type',
     label: _('Type Switch'),
+    className: 'no-label',
     type: 'switch',
     options: $$listTypeOptions,
     saveOnChange: true,
+    help: _('Type Switch'),
   },
 ]);
 
@@ -300,6 +304,7 @@ export default class Blacklist extends React.Component {
       <AppScreen
         // Screen 全局属性
         {...this.props}
+        className="s-group-wireless-acl"
 
         settingsFormOptions={settingsOptions}
 

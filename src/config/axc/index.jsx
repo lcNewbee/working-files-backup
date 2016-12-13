@@ -78,8 +78,8 @@ const sPortalServer =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalServer');
 const sPortalRules =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalRules');
-const sPortalTemplate =
-    require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalTemplate');
+// const sPortalTemplate =
+//    require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalTemplate');
 
 /**
  * AP组管理
@@ -87,11 +87,11 @@ const sPortalTemplate =
 const sOverview = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Overview');
 const sUsers = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Users');
 const sFlowUser = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Flow/User');
-const sFlowApp = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Flow/App');
+// const sFlowApp = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Flow/App');
 const sSsidStatus = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/SsidStatus');
 const sApList = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/ApList');
 const sSafeStatus = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/SafeStatus');
-const sBlacklist = require('../../screens/App/screens/MainAxc/screens/WLAN/screens/Blacklist');
+const sWirelessAcl = require('../../screens/App/screens/MainAxc/screens/WLAN/screens/Acl');
 const sSsidSettings =
     require('../../screens/App/screens/MainAxc/screens/WLAN/screens/SsidSettings');
 const sSmartRf =
@@ -103,16 +103,16 @@ const sWips =
 const sEndpointProtection =
   require('../../screens/App/screens/MainAxc/screens/WLAN/screens/SafePolicy/screens/EndpointProtection');
 
-const sFlowReport =
-    require('../../screens/App/screens/MainAxc/screens/Report/screens/FlowReport');
-const sUsersAnalysis =
-    require('../../screens/App/screens/MainAxc/screens/Report/screens/BusinessReport/screens/UsersAnalysis');
+// const sFlowReport =
+//     require('../../screens/App/screens/MainAxc/screens/Report/screens/FlowReport');
+// const sUsersAnalysis =
+//     require('../../screens/App/screens/MainAxc/screens/Report/screens/BusinessReport/screens/UsersAnalysis');
 const sLiveMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/LiveMap');
 const sApPlanMap =
     require('../../screens/App/screens/MainAxc/screens/Map/screens/ApPlanMap');
 // const sRfMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/Rf');
-const sHeatMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/HeatMap');
-const sClientsTrace = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace');
+// const sHeatMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/HeatMap');
+// const sClientsTrace = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace');
 
 /**
  * 系统管理
@@ -129,12 +129,12 @@ const sSystemLogList =
     require('../../screens/App/screens/MainAxc/screens/System/screens/SystemLog/screens/LogList');
 const sSystemLogSettings =
     require('../../screens/App/screens/MainAxc/screens/System/screens/SystemLog/screens/LogSettings');
-const sSNMP =
-    require('../../screens/App/screens/MainAxc/screens/System/screens/SNMP');
-const sActiveStandby =
-    require('../../screens/App/screens/MainAxc/screens/System/screens/ActiveStandby');
-const sSignatures =
-    require('../../screens/App/screens/MainAxc/screens/System/screens/Signatures');
+// const sSNMP =
+//     require('../../screens/App/screens/MainAxc/screens/System/screens/SNMP');
+// const sActiveStandby =
+//     require('../../screens/App/screens/MainAxc/screens/System/screens/ActiveStandby');
+// const sSignatures =
+//     require('../../screens/App/screens/MainAxc/screens/System/screens/Signatures');
 const sAcVersion =
     require('../../screens/App/screens/MainAxc/screens/System/screens/AcVersion');
 const sApVersion =
@@ -145,6 +145,7 @@ const sSystemMaintenance =
     require('../../screens/App/screens/MainAxc/screens/System/screens/SystemMaintenance');
 const sNetworkTimeProtocol =
     require('../../screens/App/screens/MainAxc/screens/System/screens/NetworkTimeProtocol');
+
 const routes = [
   {
     path: '/',
@@ -394,11 +395,11 @@ const routes = [
                 text: _('SSID Settings'),
                 component: sSsidSettings.Screen,
               }, {
-                id: 'blacklist',
+                id: 'wirelessAcl',
                 path: '/main/group/wireless/acl',
-                formUrl: '/goform/group/blacklist',
+                formUrl: '/goform/group/wireless/acl',
                 text: _('ACL'),
-                component: sBlacklist.Screen,
+                component: sWirelessAcl.Screen,
               }, {
                 id: 'smartRf',
                 path: '/main/group/wireless/smart',

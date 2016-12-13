@@ -171,7 +171,7 @@ export default class AppScreen extends React.Component {
       tableOptions, editFormOptions, defaultEditData,
     } = this;
     const {
-      store, title, noTitle, route, listOptions, customSettingForm,
+      store, title, noTitle, route, listOptions, customSettingForm, className,
       settingsFormOptions, updateScreenSettings, hasSettingsSaveButton,
       ...commonProps
     } = this.props;
@@ -182,14 +182,19 @@ export default class AppScreen extends React.Component {
     const $$curSettings = $$myScreenStore.get('curSettings');
     const saveUrl = route.saveUrl || route.formUrl;
     const fetchUrl = route.fetchUrl || route.formUrl;
+    let screenClassName = 't-app-screen';
 
     // 数据未初始化不渲染
     if (myScreenId === 'base') {
       return null;
     }
 
+    if (className) {
+      screenClassName = `${screenClassName} ${className}`;
+    }
+
     return (
-      <div className="t-app-screen">
+      <div className={screenClassName}>
         {
           noTitle ? null : (
             <h2 className="t-app-screen__title">{myTitle}</h2>

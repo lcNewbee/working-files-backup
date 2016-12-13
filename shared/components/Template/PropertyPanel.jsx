@@ -93,7 +93,6 @@ class PropertyPanel extends React.Component {
     if (data.get('list').size < 1) {
       return null;
     }
-    console.log('groupid = ', groupid);
     if (groupid === -100) {
       actionAable = false;
     }

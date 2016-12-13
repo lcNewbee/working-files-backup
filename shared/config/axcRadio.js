@@ -43,7 +43,7 @@ const spatialstreamsOptions = [
   },
 ];
 
-function getChannelsOptions(currCountry, bandwidth) {
+function getChannelsOptions(currCountry) {
   let i;
   let len;
   let channelsRange;
@@ -207,14 +207,15 @@ export const radioBase = fromJS([
 ]);
 
 export const radioAdvance = fromJS([
+  // {
+  //   id: 'first5g',
+  //   form: 'radioBase',
+  //   type: 'checkbox',
+  //   value: '1',
+  //   defaultValue: '0',
+  //   label: _('Band Steering'),
+  // },
   {
-    id: 'first5g',
-    form: 'radioBase',
-    type: 'checkbox',
-    value: '1',
-    defaultValue: '0',
-    label: _('Band Steering'),
-  }, {
     id: 'txchain',
     form: 'radioAdvance',
     label: _('TX Spatial Stream'),
@@ -244,15 +245,17 @@ export const radioAdvance = fromJS([
     type: 'checkbox',
     value: '1',
     defaultValue: '0',
-  }, {
-    id: 'maxclientcount',
-    form: 'radioAdvance',
-    type: 'number',
-    min: 1,
-    max: 999,
-    defaultValue: 32,
-    label: _('Max Clients'),
-  }, {
+  },
+  // {
+  //   id: 'maxclientcount',
+  //   form: 'radioAdvance',
+  //   type: 'number',
+  //   min: 1,
+  //   max: 999,
+  //   defaultValue: 32,
+  //   label: _('Max Clients'),
+  // },
+  {
     id: 'beaconinterval',
     form: 'radioAdvance',
     type: 'number',
@@ -268,15 +271,17 @@ export const radioAdvance = fromJS([
     min: 256,
     max: 2346,
     defaultValue: 2346,
-  }, {
-    id: 'maxrxduration',
-    form: 'radioAdvance',
-    label: _('Max RX Duration'),
-    type: 'number',
-    min: 1,
-    max: 15,
-    defaultValue: 4,
-  }, {
+  },
+  // {
+  //   id: 'maxrxduration',
+  //   form: 'radioAdvance',
+  //   label: _('Max RX Duration'),
+  //   type: 'number',
+  //   min: 1,
+  //   max: 15,
+  //   defaultValue: 4,
+  // },
+  {
     id: 'rtsthreshold',
     form: 'radioAdvance',
     label: _('RTS Threshold'),
@@ -284,25 +289,27 @@ export const radioAdvance = fromJS([
     min: 0,
     max: 2346,
     defaultValue: 2346,
-  }, {
-    id: 'shortretrythreshold',
-    form: 'radioAdvance',
-    label: _('Max Resend Times'),
-    help: _('Under RTS Threshold'),
-    type: 'number',
-    min: 1,
-    max: 15,
-    defaultValue: 7,
-  }, {
-    id: 'longretrythreshold',
-    form: 'radioAdvance',
-    label: _('Max Resend Times'),
-    help: _('Beyond RTS Threshold'),
-    type: 'number',
-    min: 1,
-    max: 15,
-    defaultValue: 4,
-  }, {
+  },
+  // {
+  //   id: 'shortretrythreshold',
+  //   form: 'radioAdvance',
+  //   label: _('Max Resend Times'),
+  //   help: _('Under RTS Threshold'),
+  //   type: 'number',
+  //   min: 1,
+  //   max: 15,
+  //   defaultValue: 7,
+  // }, {
+  //   id: 'longretrythreshold',
+  //   form: 'radioAdvance',
+  //   label: _('Max Resend Times'),
+  //   help: _('Beyond RTS Threshold'),
+  //   type: 'number',
+  //   min: 1,
+  //   max: 15,
+  //   defaultValue: 4,
+  // },
+  {
     id: 'dtim',
     form: 'radioAdvance',
     label: _('Beacon Interval Number'),
@@ -336,23 +343,24 @@ export const radioAdvance = fromJS([
   //   max: 3600,
   //   defaultValue: 60,
   // },
+  // {
+  //   id: 'txop',
+  //   form: 'radioAdvance',
+  //   label: _('txop'),
+  //   type: 'number',
+  //   min: 1,
+  //   max: 3600,
+  //   defaultValue: 60,
+  // }, {
+  //   id: 'admctrmandatory',
+  //   form: 'radioAdvance',
+  //   label: _('admctrmandatory'),
+  //   type: 'number',
+  //   min: 1,
+  //   max: 3600,
+  //   defaultValue: 60,
+  // },
   {
-    id: 'txop',
-    form: 'radioAdvance',
-    label: _('txop'),
-    type: 'number',
-    min: 1,
-    max: 3600,
-    defaultValue: 60,
-  }, {
-    id: 'admctrmandatory',
-    form: 'radioAdvance',
-    label: _('admctrmandatory'),
-    type: 'number',
-    min: 1,
-    max: 3600,
-    defaultValue: 60,
-  }, {
     id: 'shortgi',
     form: 'radioAdvance',
     label: _('Short GI'),
@@ -362,29 +370,31 @@ export const radioAdvance = fromJS([
     showPrecondition(data) {
       return parseInt(data.get('phymode'), 10) === 8;
     },
-  }, {
-    id: 'preamble',
-    form: 'radioAdvance',
-    label: _('Preamble'),
-    type: 'switch',
-    inputStyle: {
-      width: '100%',
-    },
-    options: [
-      {
-        value: 1,
-        label: _('Short'),
-      }, {
-        value: 0,
-        label: _('Long'),
-      },
-    ],
-    defaultValue: '1',
-    showPrecondition(data) {
-      return parseInt(data.get('phymode'), 10) === 8 &&
-          parseInt(data.get('shortgi'), 10) === 1;
-    },
-  }, {
+  },
+  // {
+  //   id: 'preamble',
+  //   form: 'radioAdvance',
+  //   label: _('Preamble'),
+  //   type: 'switch',
+  //   inputStyle: {
+  //     width: '100%',
+  //   },
+  //   options: [
+  //     {
+  //       value: 1,
+  //       label: _('Short'),
+  //     }, {
+  //       value: 0,
+  //       label: _('Long'),
+  //     },
+  //   ],
+  //   defaultValue: '1',
+  //   showPrecondition(data) {
+  //     return parseInt(data.get('phymode'), 10) === 8 &&
+  //         parseInt(data.get('shortgi'), 10) === 1;
+  //   },
+  // },
+  {
     id: 'ampdu',
     form: 'radioAdvance',
     label: _('AMPDU'),
@@ -408,8 +418,35 @@ export const radioAdvance = fromJS([
     id: 'rateset',
     form: 'radioAdvance',
     label: _('Rate Set'),
-    type: 'text',
+    type: 'checkboxs',
     maxLength: '32',
     defaultValue: '',
+    options: [
+      {
+        value: 'MCS0',
+        label: 'MCS0',
+      }, {
+        value: 'MCS1',
+        label: 'MCS1',
+      }, {
+        value: 'MCS2',
+        label: 'MCS2',
+      }, {
+        value: 'MCS3',
+        label: 'MCS3',
+      }, {
+        value: 'MCS4',
+        label: 'MCS4',
+      }, {
+        value: 'MCS5',
+        label: 'MCS5',
+      }, {
+        value: 'MCS6',
+        label: 'MCS6',
+      }, {
+        value: 'MCS7',
+        label: 'MCS7',
+      },
+    ],
   },
 ]);
