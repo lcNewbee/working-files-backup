@@ -32,6 +32,7 @@ const propTypes = {
   fetch: PropTypes.func,
   createModal: PropTypes.func,
   closeModal: PropTypes.func,
+  changeModalState: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -89,10 +90,10 @@ export default class View extends React.Component {
           this.props.createModal({
             role: 'loading',
             title: '',
-            loadingTime: '12',
+            loadingStep: 3000,
             loadingTitle: curHandle.loadingTitle,
-            onLoaded() {
-              console.log('loaded');
+            onLoaded: () => {
+              this.props.closeModal();
             },
           });
 
@@ -107,8 +108,10 @@ export default class View extends React.Component {
       this.props.fetch('goform/axcInfo')
         .then((json) => {
           if (json && json.state && json.state.code === 2000) {
+            this.props.changeModalState({
+              loadingStep: 20,
+            });
             clearTimeout(this.checkUpgradOkTimeout);
-            this.props.closeModal();
           }
         });
     } else {

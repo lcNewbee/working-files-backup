@@ -44,7 +44,7 @@ function getTerminalTypeOption(serverData) {
       formatter: '{a} <br/>{b} ({d}%)',
     },
     title: {
-      text: _('Terminal Type'),
+      text: _('Clients'),
       x: 'center',
       textStyle: {
         fontSize: '18',
@@ -379,7 +379,7 @@ export default class View extends PureComponent {
           </div>
           <div className="cols col-12">
             <div className="o-box__cell">
-              <h3>{ _('Dubious AP List') }</h3>
+              <h3>{ _('Rogue AP List') }</h3>
             </div>
             <div className="o-box__cell">
               <Table

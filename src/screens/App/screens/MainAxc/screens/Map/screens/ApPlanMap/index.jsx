@@ -198,7 +198,9 @@ export default class View extends React.Component {
       }, {
         id: 'config',
         icon: 'cog',
-        onClick: () => this.props.addToPropertyPanel(),
+        onClick: mac => this.props.addToPropertyPanel({
+          mac,
+        }),
       }, {
         icon: 'times',
         id: 'close',
@@ -272,7 +274,7 @@ export default class View extends React.Component {
                     left: isOpen ? (Math.sin((ahd * index)) * radius) + 7 : 13,
                     top: isOpen ? (Math.cos((ahd * index)) * radius) : 13,
                   }}
-                  onClick={info.onClick}
+                  onClick={() => info.onClick(device.get('mac'))}
                 >
                   <Icon name={info.icon} />
                 </div>

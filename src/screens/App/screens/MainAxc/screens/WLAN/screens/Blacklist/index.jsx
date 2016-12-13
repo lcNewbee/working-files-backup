@@ -88,31 +88,51 @@ export default class Blacklist extends React.Component {
       'fetchCopyGroupBlacklist',
       'renderActionBar',
       'renderCopyFromOther',
+      'onBeforeSave',
     ]);
   }
+  onBeforeSave($$actionQuery) {
+    const { store, route } = this.props;
+    const aclType = store.getIn([route.id, 'data', 'settings', 'type']);
+    const actionType = $$actionQuery.get('action');
+
+    if (actionType === 'add') {
+      this.props.changeScreenActionQuery({
+        type: aclType,
+      });
+    }
+  }
   onSave(actionType) {
-    const { store } = this.props;
+    const { store, route } = this.props;
     const myScreenId = store.get('curScreenId');
     const $$myScreenStore = store.get(myScreenId);
     const $$copySelectedList = $$myScreenStore.getIn(['actionQuery', 'copySelectedList']);
+    const aclType = store.getIn([route.id, 'data', 'settings', 'type']);
 
     if (actionType === 'copy') {
       // 没有选择要拷贝的 Ssids
       if ($$copySelectedList.size < 1) {
         this.props.createModal({
           type: 'alert',
-          text: _('Please select ssid'),
+          text: _('Please select item'),
         });
       } else {
+        this.props.changeScreenActionQuery({
+          type: aclType,
+        });
         this.props.onListAction();
       }
     }
   }
   onSelectCopyFromGroup(groupId, e) {
+    const { store, route } = this.props;
+    const aclType = store.getIn([route.id, 'data', 'settings', 'type']);
+
     e.preventDefault();
     this.props.changeScreenActionQuery({
       copyFromGroupId: groupId,
       copySelectedList: fromJS([]),
+      type: aclType,
     });
     this.fetchCopyGroupBlacklist(groupId);
   }
@@ -160,13 +180,19 @@ export default class Blacklist extends React.Component {
   }
 
   fetchCopyGroupBlacklist(groupid) {
+    const { store, route } = this.props;
     const fetchUrl = this.props.route.fetchUrl || this.props.route.formUrl;
+    const aclType = store.getIn([route.id, 'data', 'settings', 'type']);
     const queryData = {
       groupid,
     };
 
     if (groupid === -100) {
       queryData.filterGroupid = this.props.groupid;
+    }
+
+    if (aclType) {
+      queryData.aclType = aclType;
     }
 
     this.props.fetch(fetchUrl, queryData).then(
@@ -191,13 +217,14 @@ export default class Blacklist extends React.Component {
     );
   }
   renderCopyFromOther() {
-    const { store, app } = this.props;
+    const { store, app, route } = this.props;
     const myScreenId = store.get('curScreenId');
     const $$myScreenStore = store.get(myScreenId);
     const isCopyShow = $$myScreenStore.getIn(['actionQuery', 'action']) === 'copy';
     const $$group = this.props.group;
     const selectGroupId = $$group.getIn(['selected', 'id']);
     const copyFromGroupId = $$myScreenStore.getIn(['actionQuery', 'copyFromGroupId']);
+    const listType = store.getIn([route.id, 'data', 'settings', 'type']);
 
     if (!isCopyShow) {
       return null;
@@ -213,8 +240,9 @@ export default class Blacklist extends React.Component {
                 const curId = item.get('id');
                 let classNames = 'm-menu__link';
 
-                // 不能选择自己组
-                if (curId === selectGroupId) {
+                // 不能选择自己组, 或黑白名单类型不一样的组
+                if (curId === selectGroupId ||
+                    ((item.get('aclType') !== listType) && curId !== -100)) {
                   return null;
                 }
 
@@ -265,7 +293,7 @@ export default class Blacklist extends React.Component {
     const { route, store } = this.props;
     const actionQuery = store.getIn([route.id, 'actionQuery']) || Map({});
     const isCopySsid = actionQuery.get('action') === 'copy';
-    const listType = store.getIn([route.id, 'data', 'settings', 'type']) || Map({});
+    const listType = store.getIn([route.id, 'data', 'settings', 'type']);
     const listTitle = listTypeMap[listType];
 
     return (
@@ -288,6 +316,7 @@ export default class Blacklist extends React.Component {
           },
         }}
         modalSize={isCopySsid ? 'lg' : 'md'}
+        onBeforeSave={this.onBeforeSave}
         actionable
         selectable
         noTitle

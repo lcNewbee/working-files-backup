@@ -44,6 +44,7 @@ const propTypes = {
   createModal: PropTypes.func,
   fetchProductInfo: PropTypes.func,
   closeModal: PropTypes.func,
+  changeModalState: PropTypes.func,
 };
 const defaultProps = {};
 export default class AcVersion extends PureComponent {
@@ -91,9 +92,8 @@ export default class AcVersion extends PureComponent {
         .then((json) => {
           if (json && json.state && json.state.code === 2000) {
             clearTimeout(checkUpgradOkTimeout);
-            this.props.closeModal();
-            this.setState({
-              initStep: 2,
+            this.props.changeModalState({
+              loadingStep: 10,
             });
           }
         });
@@ -115,7 +115,14 @@ export default class AcVersion extends PureComponent {
           this.props.createModal({
             role: 'loading',
             title: '',
+            loadingStep: 3000,
             loadingTitle: msg.upgradingACversion,
+            onLoaded: () => {
+              this.props.closeModal();
+              this.setState({
+                initStep: 2,
+              });
+            },
           });
 
           this.props.save(url, { filename })

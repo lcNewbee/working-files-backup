@@ -5,16 +5,23 @@ import './ProgressBar.scss';
 
 const propTypes = {
   title: PropTypes.string, // 进度条上方显示的提示文字
-  time: PropTypes.number, // 进度条时长
+
   isShow: PropTypes.bool, // 控制组件是否显示
   start: PropTypes.bool, // start属性控制进度条是否开始显示进度，为true表示开始移动，默认为false
   style: PropTypes.object, // 设置进度条的样式
   callback: PropTypes.func, //进度条走完后执行的函数
+
+  // 进度条总时长,单位为 秒（s）
+  time: PropTypes.number,
+
+  // 每 1% 间隔时间,单位为 毫秒（ms）
+  step: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 const defaultProps = {
   isShow: false,
   start: false,
+  time: 30,    // 默认总时间为 30 s
 };
 
 export default class ProgressBar extends React.Component {
@@ -27,6 +34,10 @@ export default class ProgressBar extends React.Component {
     };
   }
 
+  componentWillMount() {
+
+  }
+
   componentDidMount() {
     if (this.props.start === true) {
       this.startMove();
@@ -34,7 +45,8 @@ export default class ProgressBar extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.start === false && this.props.start === true) {
+    if ((prevProps.start === false && this.props.start === true) ||
+        prevProps.step !== this.props.step || prevProps.time !== this.props.time) {
       this.startMove();
     }
   }
@@ -43,22 +55,37 @@ export default class ProgressBar extends React.Component {
   }
 
   startMove() {
-    const time = this.props.time;
+    const time = this.props.time || 30;
+    let intervalTime = (time * 1000) / 100;
+
+    if (this.props.step) {
+      intervalTime = parseInt(this.props.step, 10);
+    } else {
+      intervalTime = (time * 1000) / 100;
+    }
+
+    clearInterval(this.barChangeInterval);
 
     this.barChangeInterval = setInterval(() => {
       const n = this.state.n;
-      if (n <= time) {
+
+      if (n <= 100) {
         this.setState({
           n: n + 1,
         });
-      } else if (this.props.callback && typeof (this.props.callback) === 'function') {
-        this.props.callback();
+
+      // 到达 100 清理定时器，执行回调
+      } else {
+        clearInterval(this.barChangeInterval);
+        if (this.props.callback && typeof (this.props.callback) === 'function') {
+          this.props.callback();
+        }
       }
-    }, 1000);
+    }, intervalTime);
   }
 
   render() {
-    const percentageValue = parseInt((this.state.n / this.props.time) * 100, 10);
+    const percentageValue = parseInt(this.state.n, 10);
 
     return (
       <div className="m-progress-bar">

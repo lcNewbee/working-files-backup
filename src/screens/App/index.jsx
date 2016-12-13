@@ -88,6 +88,7 @@ class App extends Component {
                 title={modal.loadingTitle}
                 time={modal.loadingTime || 100}
                 callback={modal.onLoaded}
+                step={modal.loadingStep}
                 style={{
                   minHeight: '24px',
                 }}

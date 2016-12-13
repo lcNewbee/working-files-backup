@@ -14,18 +14,21 @@
         "id": 1,
         "groupname": "Default",
         "remark": "description1",
+        "aclType": "black",
         "apNum": 23
       },
       {
         "id": 2,
         "groupname": "group1",
         "remark": "description1",
+        "aclType": "white",
         "apNum": 23
       },
       {
         "id": 3,
         "groupname": "group2",
         "remark": "description2",
+        "aclType": "white",
         "apNum": 2
       }
     ]

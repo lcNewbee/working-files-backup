@@ -121,9 +121,13 @@ export default class View extends React.Component {
         if (!error) {
           this.renderGoogleMap();
           this.loadingGoogleMap = false;
+        } else {
+          this.props.updateScreenSettings({
+            type: '1',
+          });
         }
       },
-    6000);
+    8000);
 
     this.listTableOptions = listTableOptions.push(fromJS({
       id: 'actions',
