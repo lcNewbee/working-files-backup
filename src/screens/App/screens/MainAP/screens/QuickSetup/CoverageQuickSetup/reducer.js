@@ -6,7 +6,7 @@ const defaultState = fromJS({
     radioType: '2.4G',
   },
   page: '1',
-  deviceMode: 'sta',
+  deviceMode: 'ap',
   reinitAt: new Date().getTime(),
   showCtyModal: false,
   agreeProtocol: false,
@@ -32,10 +32,6 @@ const defaultState = fromJS({
 
 });
 
-function onSsidInfoChange(state, action) {
-  const ssidInfo = state.get('ssidInfo').merge(action.data);
-  return state.set('ssidInfo', ssidInfo);
-}
 
 export default function (state = defaultState, action) {
   switch (action.type) {
@@ -43,18 +39,18 @@ export default function (state = defaultState, action) {
       return state.set('page', action.data);
     case 'CHANGE_DEVICE_MODE':
       return state.set('deviceMode', action.data);
-    case 'CHANGE_CTY_MODAL':
-      return state.set('showCtyModal', action.data);
-    case 'CHANGE_AGREE_PROTOCOL':
-      return state.set('agreeProtocol', action.data);
-    case 'CHANGE_COUNTRY_CODE':
-      return state.set('selectedCountry', action.data);
+    // case 'CHANGE_CTY_MODAL':
+    //   return state.set('showCtyModal', action.data);
+    // case 'CHANGE_AGREE_PROTOCOL':
+    //   return state.set('agreeProtocol', action.data);
+    // case 'CHANGE_COUNTRY_CODE':
+    //   return state.set('selectedCountry', action.data);
     case 'CLOSE_COUNTRY_SELECT_MODAL':
       return state.set('showCtyModal', false).set('agreeProtocol', false)
                   .set('selectedCountry', action.data);
-    case 'RECEIVE_COUNTRY_INFO':
-      return state.set('channels', fromJS(action.data.channels))
-                  .set('maxTxpower', action.data.maxTxpower);
+    // case 'RECEIVE_COUNTRY_INFO':
+    //   return state.set('channels', fromJS(action.data.channels))
+    //               .set('maxTxpower', action.data.maxTxpower);
     case 'CHANGE_SCAN_STATUS':
       return state.set('scaning', action.data);
     case 'CHANGE_SHOW_SCAN_RESULT_STATUS':
@@ -67,8 +63,6 @@ export default function (state = defaultState, action) {
       return state.set('currRadioConfig', action.data);
     case 'CHANGE_RADIO_SELECTED_ARR':
       return state.set('radioSelectedArr', action.data);
-    case 'CHANGE_SSID_INFO':
-      return onSsidInfoChange(state, action);
     case 'LEAVE_SCREEN':
       return defaultState;
     case 'RESTORE_SELF_STATE':

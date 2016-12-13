@@ -6,7 +6,7 @@
   "data":{
     "ip": "192.168.1.1",
     "mask": "255.255.255.0",
-      "radioList": [{
+    "radioList": [{
         "radioId": "0",
         "wirelessMode": "ap",
         "ssid": "axilspot",
@@ -38,7 +38,7 @@
         "peers": ["12:11:11:11:11:11"]
       }
     ],
-    "wiredMode": "bridge",
+
     "vlanId": "1",
     "routerInfo": {
       "proto": "static",

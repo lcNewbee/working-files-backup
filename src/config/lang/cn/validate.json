@@ -20,6 +20,9 @@
   "IP address begin with 127 is a reserved loopback address, please input another value between 1 to 233": "以127开始的地址为保留的环回地址，请指定一个1到223之间的值。",
   "Address begin with %s is invalid, please input a value between 1 to 223.": "以%s开始的地址无效，请指定一个1到223之间的值。",
   "Address begin with %s is invalid, please input a value between 223 to 255.": "以 %s 开始的地址无效，请指定一个223到255之间的值。",
+  "Address begin with ": "以",
+  " is invalid, please input a value between 1 to 223.": "开始的地址无效，请指定一个1到223之间的值。",
+  " is invalid, please input a value between 223 to 255.": "开始的地址无效，请指定一个223到255之间的值。",
   "Invalid Url": "无效的网址格式",
   "Please enter a valid IP segment": "请输入正确的IP网段",
   "Password and confirm password must match": "密码与确认密码必须一致",
@@ -28,5 +31,6 @@
   "Must be integer": "请输入整数",
   "Input integer range is: %s - %s": "整数大小范围：%s - %s",
   "Please select a country": "请选择国家",
-  "Please select time zone": "请选择时区"
+  "Please select time zone": "请选择时区",
+  "Please input a valid MAC address like 'AA:BB:CC:DD:EE:FF'or 'AA-BB-CC-DD-EE-FF'": "请输入正确的MAC地址，比如：'AA:BB:CC:DD:EE:FF'或'AA-BB-CC-DD-EE-FF'"
 }

@@ -22,8 +22,11 @@ const paths = gulp.paths = {
   pubAp: '../qsdk/package/comlanos/goahead/files/web',
   webpack: './webpack.config.dev.js',
   pubWebpack: './webpack.config.production.js',
-  pubAip5: '../platform/COMLANOS/package/goahead/files/AIP5_web',
-  pubAip10: '../platform/COMLANOS/package/goahead/files/AIP10_web',
+  pubAIP5: '../platform/COMLANOS/package/goahead/files/AIP5_web',
+  pubAIP10: '../platform/COMLANOS/package/goahead/files/AIP10_web',
+  pubAEC120: '../platform/COMLANOS/package/goahead/files/AEC120_web',
+  pubASW3: '../platform/COMLANOS/package/goahead/files/ASW3_web',
+  pubASC175: '../platform/COMLANOS/package/goahead/files/ASC175_web',
 };
 gulp.pkg = pkg;
 
@@ -70,3 +73,16 @@ gulp.task('open:src', shell.task([
 gulp.task('open:dist', ['build'], shell.task(['babel-node tools/distServer.js']));
 
 gulp.task('default', ['open:src']);
+
+// 处理浏览器标题
+function changeTitle(name) {
+  return gulp.src([`${paths.build}/**/*`, `!${paths.build}/portal/`, `!${paths.build}/portal/**/*`])
+            .pipe($.replace('<title>Axilspot Access Manager</title>', `<title>Axilspot ${name}</title>`))
+            .pipe(gulp.dest(paths.build));
+}
+gulp.task('changeAIP5Title', () => changeTitle('AIP5'));
+gulp.task('changeAIP10Title', () => changeTitle('AIP10'));
+gulp.task('changeAEC120Title', () => changeTitle('AEC120'));
+gulp.task('changeASC175Title', () => changeTitle('ASC175'));
+gulp.task('changeASW3Title', () => changeTitle('ASW3'));
+

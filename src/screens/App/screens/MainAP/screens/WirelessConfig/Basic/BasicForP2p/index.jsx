@@ -12,6 +12,20 @@ import * as selfActions from './actions';
 import reducer from './reducer';
 import countryMap from './country';
 
+// 可配置功能项
+/**
+basic: {
+  devicemodeOptions: [
+    { value: 'ap', label: _('AP') },
+    { value: 'sta', label: _('Station') },
+    { value: 'repeater', label: _('Repeater') },
+  ],
+  // 功能项参见WirelessConfig -> Basic页面下的ssidTableFullMemberOptions变量
+  ssidTableKeys: ['enable', 'ssid', 'vlanId', 'hideSsid', 'isolation',
+                  'security', 'delete', 'maxClients', 'airTimeEnable'],
+}
+ */
+
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   save: PropTypes.func,
@@ -20,10 +34,10 @@ const propTypes = {
   validateAll: PropTypes.func,
 
   route: PropTypes.object,
-  initSettings: PropTypes.func,
-  fetchSettings: PropTypes.func,
+  // initSettings: PropTypes.func,
+  // fetchSettings: PropTypes.func,
   fetch: PropTypes.func,
-  saveSettings: PropTypes.func,
+  // saveSettings: PropTypes.func,
   updateItemSettings: PropTypes.func,
   leaveSettingsScreen: PropTypes.func,
   validateOption: PropTypes.object,
@@ -107,16 +121,17 @@ const keyTypeOptions = [
 
 const radioModeOptionsFor5g = [
   { value: 'auto', label: 'auto' },
-  { value: '11ac', label: '802.11ac' },
-  { value: '11na', label: '802.11a+n' },
   { value: '11a', label: '802.11a' },
+  { value: '11na', label: '802.11na' },
+  { value: '11ac', label: '802.11ac' },
 ];
 
 const radioModeOptionsFor2g = [
   { value: 'auto', label: 'auto' },
   { value: '11b', label: '802.11b' },
   { value: '11g', label: '802.11g' },
-  { value: '11n', label: '802.11n' },
+  { value: '11bg', label: '802.11bg' },
+  { value: '11ng', label: '802.11bgn' },
 ];
 
 const channelWidthOptions = [
@@ -260,7 +275,7 @@ export default class Basic extends React.Component {
         },
         {
           id: 'vlanId',
-          label: _('Vlan ID'),
+          label: _('VLAN ID'),
           width: '250px',
           transform: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
@@ -701,7 +716,7 @@ export default class Basic extends React.Component {
        ({
          value: parseInt(val, 10).toString(),
          label: val,
-       })
+       }),
     )
     .unshift({ value: 'auto', label: 'auto' })
     .toJS();
@@ -809,7 +824,7 @@ export default class Basic extends React.Component {
       {
         id: 'security',
         text: _('Security Mode'),
-        transform: function (val) {
+        transform(val) {
           const mode = val.get('mode');
           if (mode === 'wpa') return 'WPA-PSK';
           else if (mode === 'wpa2') return 'WPA2-PSK';
@@ -1044,7 +1059,7 @@ export default class Basic extends React.Component {
     } = this.props.validateOption;
     const tableItemForSsid = this.props.selfState.get('tableItemForSsid');
     const funConfig = this.props.route.funConfig;
-    const keysFromRoute = funConfig.ssidTableKeys;
+    // const keysFromRoute = funConfig.ssidTableKeys;
     if (this.props.store.get('curSettingId') === 'base') {
       return null;
     }
@@ -1058,7 +1073,19 @@ export default class Basic extends React.Component {
               value={this.props.selfState.getIn(['currRadioConfig', 'radioId'])}
               options={this.props.productInfo.get('radioSelectOptions')}
               minWidth="100px"
-              onChange={(data) => { this.onChangeRadio(data); }}
+              onChange={(data) => {
+                this.onChangeRadio(data);
+                const saveInfo = {
+                  radio: this.props.productInfo.getIn(['deviceRadioList', data.value, 'radioType']),
+                  country: this.props.selfState.getIn(['radioSettings', 'radioList', data.value, 'countryCode']),
+                  channelWidth: this.props.selfState.getIn(['radioSettings', 'radioList', data.value, 'channelWidth']),
+                };
+                this.props.fetch('goform/get_country_info', saveInfo).then((json2) => {
+                  if (json2.state && json2.state.code === 2000) {
+                    this.props.receiveCountryInfo(json2.data);
+                  }
+                });
+              }}
               style={{
                 marginRight: '10px',
                 marginBottom: '15px',
@@ -1477,7 +1504,7 @@ export default class Basic extends React.Component {
 }
               <FormGroup
                 type="number"
-                label={_('Vlan ID')}
+                label={_('VLAN ID')}
                 value={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'vlanId'])}
                 help={`${_('Range: ')}1~4094`}
                 form="basicSettings"
@@ -1820,7 +1847,7 @@ export default class Basic extends React.Component {
                   type="text"
                   value={getCountryNameFromCode(
                       this.props.selfState.get('selectedCountry'),
-                      countryMap
+                      countryMap,
                     )}
                   disabled
                   style={{
@@ -1885,18 +1912,41 @@ export default class Basic extends React.Component {
                   this.props.updateRadioSettingsItem({ radioList });
                 }}
               />
-              <FormGroup
-                label={_('Channel Bandwidth')}
-                type="switch"
-                minWidth="66px"
-                options={channelWidthOptions}
-                value={radioSettings.getIn(['radioList', radioId, 'channelWidth'])}
-                onChange={(data) => {
-                  const radioList = radioSettings.get('radioList')
-                                    .setIn([radioId, 'channelWidth'], data.value);
-                  this.props.updateRadioSettingsItem({ radioList });
-                }}
-              />
+              { // 2.4G频宽
+                radioSettings.getIn(['radioList', radioId, 'radioMode']) === '11ng' &&
+                this.props.selfState.getIn(['currRadioConfig', 'radioType']) === '2.4G' ? (
+                  <FormGroup
+                    label={_('Channel Bandwidth')}
+                    type="switch"
+                    minWidth="99px"
+                    options={channelWidthOptions.slice(0, 2)}
+                    value={radioSettings.getIn(['radioList', radioId, 'channelWidth'])}
+                    onChange={(data) => {
+                      const radioList = radioSettings.get('radioList')
+                                        .setIn([radioId, 'channelWidth'], data.value);
+                      this.props.updateRadioSettingsItem({ radioList });
+                    }}
+                  />
+                ) : null
+              }
+              { // 5G频宽
+                this.props.selfState.getIn(['currRadioConfig', 'radioType']) === '5G' &&
+                (radioSettings.getIn(['radioList', radioId, 'radioMode']) === '11ac' ||
+                radioSettings.getIn(['radioList', radioId, 'radioMode']) === '11na') ? (
+                  <FormGroup
+                    label={_('Channel Bandwidth')}
+                    type="switch"
+                    minWidth="66px"
+                    options={channelWidthOptions}
+                    value={radioSettings.getIn(['radioList', radioId, 'channelWidth'])}
+                    onChange={(data) => {
+                      const radioList = radioSettings.get('radioList')
+                                        .setIn([radioId, 'channelWidth'], data.value);
+                      this.props.updateRadioSettingsItem({ radioList });
+                    }}
+                  />
+                ) : null
+              }
               {
                 funConfig.radioclientslimit ? (
                   <FormGroup
@@ -2085,7 +2135,7 @@ export default class Basic extends React.Component {
                       }
                     }
                     if (radioClientLimit !== 0 && totalNum > radioClientLimit) {
-                      error = _('The total number of ssid maximum clients should not exceed ') + `${radioClientLimit}`;
+                      error = `${_('The total number of ssid maximum clients should not exceed ')}${radioClientLimit}`;
                     }
                     // console.log('error', totalNum, radioClientLimit);
                     if (error === '') {
@@ -2383,7 +2433,7 @@ function mapDispatchToProps(dispatch) {
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
-  validator.mergeProps(validOptions)
+  validator.mergeProps(validOptions),
 )(Basic);
 
 export const basic = reducer;

@@ -40,7 +40,7 @@ const pSystemStatus = require('../../screens/App/screens/MainAP/screens/SystemSt
 const sSsidDetails = require('../../screens/App/screens/MainAP/screens/SystemStatus/SsidDetails');
 const sClientsDetails = require('../../screens/App/screens/MainAP/screens/SystemStatus/ClientsDetails');
 // 快速设置
-const pQuickSetup = require('../../screens/App/screens/MainAP/screens/QuickSetup/AIP10QuickSetup');
+const pQuickSetup = require('../../screens/App/screens/MainAP/screens/QuickSetup/CoverageQuickSetup');
 
 // 无线设置
 const pWirelessConfig = require('../../screens/App/screens/MainAP/screens/WirelessConfig');
@@ -66,6 +66,13 @@ const sChannelUtilization = require('../../screens/App/screens/MainAP/screens/To
 
 // 页面功能项配置
 const funConfig = {
+  // 覆盖型产品快速设置
+  coverageQuickSetup: {
+    router: true, // 是否有router模式
+  },
+  network: {
+    router: false, // 是否有router模式
+  },
   // 无线设置页面
   basic: {
     radioclientslimit: true, // 射频客户端限制
@@ -140,6 +147,7 @@ const routes = [{
       icon: 'map-signs',
       fetchUrl: 'goform/get_quicksetup_info_forTestUse',
       saveUrl: 'goform/set_quicksetup',
+      funConfig: funConfig.coverageQuickSetup,
       component: pQuickSetup.Screen,
     }, {
       id: 'networksettings',
@@ -156,6 +164,7 @@ const routes = [{
           formUrl: 'goform/get_network_info',
           saveUrl: 'goform/set_network',
           path: '/main/networksettings/networksettings',
+          funConfig: funConfig.network,
           text: _('Wired Settings'),
           component: sNetworkSettings.Screen,
         },

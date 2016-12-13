@@ -8,8 +8,22 @@ import { FormInput, FormGroup } from 'shared/components/Form';
 import { SaveButton } from 'shared/components/Button';
 import * as sharedActions from 'shared/actions/settings';
 import * as appActions from 'shared/actions/app';
-import * as selfActions from './actions.js';
-import reducer from './reducer.js';
+import * as selfActions from './actions';
+import reducer from './reducer';
+
+// 可配置功能项
+/**
+advance: {
+    ledThreshFun: true, // 信号强度控制LED灯功能
+    beaconIntervalFun: false, // Beacon帧间间隔
+    dtimIntervalFun: false, // DTIM间隔
+    segmentThreshFun: false, // 分片阈值
+    ampduFun: false, // ampdu值
+    rateSetFun: false, // 速率集
+    rssiLimitFun: false, // rssi限制
+    airTimeFairnessFun: false, // 时间公平性
+  }
+ */
 
 const propTypes = {
   store: PropTypes.instanceOf(Map),
@@ -94,10 +108,11 @@ export default class Advance extends React.Component {
   onSave() {
     const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
     const saveData = this.props.store.getIn(['curData', 'radioList', radioId]).toJS();
+    const rssiEnable = this.props.store.getIn(['curData', 'radioList', radioId, 'rssiEnable']);
     this.props.validateAll().then((msg) => {
       if (msg.isEmpty()) {
         const rssi = this.props.store.getIn(['curData', 'radioList', radioId, 'rssi']);
-        if (this.props.route.funConfig.rssiLimitFun &&
+        if (this.props.route.funConfig.rssiLimitFun && rssiEnable === '1' &&
           (rssi < -95 || rssi > -40 || !Number.isInteger(Number(rssi)))) {
           this.props.createModal({
             role: 'alert',
@@ -397,19 +412,20 @@ export default class Advance extends React.Component {
           ) : null
         }
         <div className="clearfix">
-          <FormGroup
-            className="fl"
-            type="range"
-            label={_('Distance Value')}
-            min="0"
-            max="10"
-            step="0.1"
-            help="km"
-            value={distance}
-            hasTextInput
-            disabled={autoAdjust === '1'}
-            onChange={(data) => { this.changeFormValue(radioId, 'distance', data.value); }}
-          />
+          <div className="fl">
+            <FormGroup
+              type="range"
+              label={_('Distance Value')}
+              min="0"
+              max="10"
+              step="0.1"
+              help="km"
+              value={distance}
+              hasTextInput
+              disabled={autoAdjust === '1'}
+              onChange={(data) => { this.changeFormValue(radioId, 'distance', data.value); }}
+            />
+          </div>
           <span
             className="fl"
             style={{

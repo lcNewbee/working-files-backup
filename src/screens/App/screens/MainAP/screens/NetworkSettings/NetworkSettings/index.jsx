@@ -13,6 +13,13 @@ import * as sharedActions from 'shared/actions/settings';
 // import * as actions from './actions';
 import reducer from './reducer';
 
+// 可配置功能项
+/**
+network: {
+  router: false, // 是否有router模式
+},
+ */
+
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
@@ -200,7 +207,7 @@ export default class NetworkSettings extends React.Component {
     } = this.props.validateOption;
     return (
       <div>
-        <h3>{_('Lan IP Settings')}</h3>
+        <h3>{_('LAN IP Settings')}</h3>
         <FormGroup
           label={_('IP Mode')}
         >
@@ -245,7 +252,7 @@ export default class NetworkSettings extends React.Component {
             <div>
               <FormGroup
                 type="text"
-                label={_('IP address')}
+                label={_('IP Address')}
                 value={ip}
                 onChange={data => this.props.updateItemSettings({
                   ip: data.value,
@@ -293,7 +300,7 @@ export default class NetworkSettings extends React.Component {
             </div>
           )
         }
-        <h3>{_('Vlan Settings')}</h3>
+        <h3>{_('VLAN Settings')}</h3>
         <FormGroup
           label={_('VLAN Enable')}
           type="checkbox"
@@ -308,7 +315,7 @@ export default class NetworkSettings extends React.Component {
           type="number"
           label={_('Management VLAN ID')}
           disabled={vlanEnable === '0'}
-          help={_('Range: 1 - 4094, Default: 1')}
+          help={`${_('Range: ')}1 - 4094, ${_('Default: ')}1`}
           value={mngVlanId}
           onChange={data => this.props.updateItemSettings({
             mngVlanId: data.value,
@@ -319,7 +326,7 @@ export default class NetworkSettings extends React.Component {
         <FormGroup
           type="number"
           label={_('Untagged VLAN ID')}
-          help={_('Range: 1 - 4094, Default: 1')}
+          help={`${_('Range: ')}1 - 4094, ${_('Default: ')}1`}
           value={utgVlanId}
           disabled={vlanEnable === '0'}
           onChange={data => this.props.updateItemSettings({

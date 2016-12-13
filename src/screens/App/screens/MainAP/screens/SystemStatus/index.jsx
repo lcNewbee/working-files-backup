@@ -53,7 +53,7 @@ const interfaceOptions = fromJS([
     width: '152px',
   }, {
     id: 'txBytes',
-    text: _('Tx Bytes'),
+    text: _('Tx Data'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -63,7 +63,7 @@ const interfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'rxBytes',
-    text: _('Rx Bytes'),
+    text: _('Rx Data'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -93,7 +93,7 @@ const interfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'txErrorPackets',
-    text: _('Tx Error'),
+    text: _('Tx Errors'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -103,7 +103,7 @@ const interfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'rxErrorPackets',
-    text: _('Rx Error'),
+    text: _('Rx Errors'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -1061,7 +1061,7 @@ export default class SystemStatus extends React.Component {
             <div className="o-box__cell">
               <div className="cols col-6">
                 <FormGroup
-                  label={_('Wireless Model :')}
+                  label={_('Wireless Mode :')}
                   type="plain-text"
                   value={wirelessMode === 'sta' ? 'station' : wirelessMode}
                 />
@@ -1128,7 +1128,7 @@ export default class SystemStatus extends React.Component {
 
         <div>
           <div className="o-box__cell">
-            <h3>{_('Wired Interfaces')}</h3>
+            <h3>{_('Ethernet')}</h3>
           </div>
           <div className="o-box__cell">
             <Table

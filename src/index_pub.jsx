@@ -10,7 +10,7 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const ReactRouter = require('react-router');
 const Provider = require('react-redux').Provider;
-const prodConfig = require('./config/aip10');
+const prodConfig = require('./config/AIP5');
 
 const Router = ReactRouter.Router;
 const hashHistory = ReactRouter.hashHistory;

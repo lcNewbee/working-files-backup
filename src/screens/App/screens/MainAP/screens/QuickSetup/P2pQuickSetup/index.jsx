@@ -18,6 +18,7 @@ import './index.scss';
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   fetch: PropTypes.func,
+  save: PropTypes.func,
   selfState: PropTypes.instanceOf(Map),
   fetchSettings: PropTypes.func,
   changeDeviceMode: PropTypes.func,
@@ -37,9 +38,10 @@ const propTypes = {
   closeCountrySelectModal: PropTypes.func,
   receiveCountryInfo: PropTypes.func,
   validateOption: PropTypes.object,
-  saveSettings: PropTypes.func,
+  // saveSettings: PropTypes.func,
   restoreSelfState: PropTypes.func,
   changeReinitAt: PropTypes.func,
+  changeCurrRadioConfig: PropTypes.func,
 };
 
 const defaultState = {
@@ -122,13 +124,33 @@ const validOptions = Map({
   }),
 });
 
+// countryMap为Object
+function makeCountryOptions(map) {
+  const countryList = [];
+  for (const key of Object.keys(map)) {
+    const entry = {
+      label: _(key),
+      value: map[key],
+    };
+    countryList.push(entry);
+  }
+  return countryList;
+}
+
+function getCountryNameFromCode(code, map) {
+  for (const name of Object.keys(map)) {
+    if (map[name] === code) {
+      return _(name);
+    }
+  }
+  return '';
+}
+
 export default class QuickSetup extends React.Component {
   constructor(props) {
     super(props);
 
     utils.binds(this, [
-      'makeCountryOptions',
-      'getCountryNameFromCode',
       'onScanBtnClick',
       'onStopScanClick',
       'onSelectScanResultItem',
@@ -154,7 +176,7 @@ export default class QuickSetup extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
+    // const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
     if (this.props.app.get('refreshAt') !== prevProps.app.get('refreshAt')) {
       const asyncStep = Promise.resolve(this.props.restoreSelfState());
       asyncStep.then(() => {
@@ -277,15 +299,6 @@ export default class QuickSetup extends React.Component {
     this.props.save('goform/set_quicksetup', saveData);
   }
 
-  getCountryNameFromCode(code, map) {
-    for (const name of Object.keys(map)) {
-      if (map[name] === code) {
-        return _(name);
-      }
-    }
-    return '';
-  }
-
   onChangeRadio(data) { // 注意参数实际是data的value属性，这里表示radio序号
     const radioType = this.props.product.getIn(['deviceRadioList', data.value, 'radioType']);
     const config = fromJS({
@@ -295,16 +308,28 @@ export default class QuickSetup extends React.Component {
     this.props.changeCurrRadioConfig(config);
   }
 
-  handleWrongSecurMode() {
-    const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-    const wirelessMode = this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']);
-    const security = this.props.store.getIn(['curData', 'radioList', radioId, 'security']);
-    if (!security) {
-      this.updateItemInRadioList('security', fromJS({ mode: 'none' }));
-    }
-    if (security && security.get('mode') !== 'wep' && wirelessMode === 'repeater') {
-      this.updateItemInRadioList('security', fromJS({ mode: 'none' }));
-    }
+  onChangeWirelessMode(data) {
+    this.props.fetchSettings().then(() => {
+      this.props.changeDeviceMode(data.value);
+      const radioList = this.props.store.getIn(['curData', 'radioList'])
+                        .map(item => item.set('wirelessMode', data.value));
+      this.props.updateItemSettings({ radioList });
+    }).then(() => {
+      this.handleWrongSecurMode();
+    });
+  }
+
+  makeChannelOptions() {
+    const channelList = this.props.selfState.get('channels');
+    // const channelOptions = [{ value: 'auto', label: 'auto' }];
+
+    const channelOptions = channelList.map(val => ({
+      value: parseInt(val, 10).toString(),
+      label: val,
+    }))
+    .unshift({ value: 'auto', label: 'auto' })
+    .toJS();
+    return channelOptions;
   }
 
   firstInAndRefresh() {
@@ -342,49 +367,23 @@ export default class QuickSetup extends React.Component {
     props.resetVaildateMsg();
   }
 
-
-  // countryMap为Object
-  makeCountryOptions(map) {
-    const countryList = [];
-    for (const key of Object.keys(map)) {
-      const entry = {
-        label: _(key),
-        value: map[key],
-      };
-      countryList.push(entry);
-    }
-    return countryList;
-  }
-
-  makeChannelOptions() {
-    const channelList = this.props.selfState.get('channels');
-    // const channelOptions = [{ value: 'auto', label: 'auto' }];
-
-    const channelOptions = channelList.map(val => ({
-      value: parseInt(val, 10).toString(),
-      label: val,
-    }))
-    .unshift({ value: 'auto', label: 'auto' })
-    .toJS();
-    return channelOptions;
-  }
-
-  onChangeWirelessMode(data) {
-    this.props.fetchSettings().then(() => {
-      this.props.changeDeviceMode(data.value);
-      const radioList = this.props.store.getIn(['curData', 'radioList'])
-                        .map(item => item.set('wirelessMode', data.value));
-      this.props.updateItemSettings({ radioList });
-    }).then(() => {
-      this.handleWrongSecurMode();
-    });
-  }
-
   updateItemInRadioList(name, value) {
     const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
     const radioList = this.props.store.getIn(['curData', 'radioList'])
                           .setIn([radioId, name], value);
     this.props.updateItemSettings({ radioList });
+  }
+
+  handleWrongSecurMode() {
+    const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
+    const wirelessMode = this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']);
+    const security = this.props.store.getIn(['curData', 'radioList', radioId, 'security']);
+    if (!security) {
+      this.updateItemInRadioList('security', fromJS({ mode: 'none' }));
+    }
+    if (security && security.get('mode') !== 'wep' && wirelessMode === 'repeater') {
+      this.updateItemInRadioList('security', fromJS({ mode: 'none' }));
+    }
   }
 
   renderOperationMode() {
@@ -490,7 +489,7 @@ export default class QuickSetup extends React.Component {
 
   renderStepTwo() {
     const store = this.props.store;
-    const { deviceMode } = this.props.selfState.toJS();
+    // const { deviceMode } = this.props.selfState.toJS();
     const { ip, mask } = store.get('curData').toJS();
     const { lanIp, lanMask } = this.props.validateOption;
 
@@ -546,14 +545,14 @@ export default class QuickSetup extends React.Component {
       {
         id: 'security',
         text: _('Security Mode'),
-        transform: function (val) {
+        transform(val) {
           const mode = val.get('mode');
           if (mode === 'wpa') return 'WPA-PSK';
           else if (mode === 'wpa2') return 'WPA2-PSK';
           else if (mode === 'wpa-mixed') return 'WPA/WPA2-PSK';
           else if (mode === 'wep') return 'WEP';
           return mode;
-        }.bind(this),
+        },
       },
       {
         id: 'signal',
@@ -578,9 +577,9 @@ export default class QuickSetup extends React.Component {
     ]);
     const store = this.props.store;
     const { deviceMode } = this.props.selfState.toJS();
-    const { radioId, radioType } = this.props.selfState.get('currRadioConfig').toJS();
+    const { radioId } = this.props.selfState.get('currRadioConfig').toJS();
     const {
-      ssid, countryCode, frequency, channelWidth, distance, wirelessMode, autoAdjust
+      ssid, frequency, channelWidth, distance, autoAdjust,
     } = store.getIn(['curData', 'radioList', radioId]).toJS();
     const mode = store.getIn(['curData', 'radioList', radioId, 'security', 'mode']);
     const key = store.getIn(['curData', 'radioList', radioId, 'security', 'key']);
@@ -588,8 +587,8 @@ export default class QuickSetup extends React.Component {
     const keyLength = store.getIn(['curData', 'radioList', radioId, 'security', 'keyLength']);
     const keyType = store.getIn(['curData', 'radioList', radioId, 'security', 'keyType']);
     const keyIndex = store.getIn(['curData', 'radioList', radioId, 'security', 'keyIndex']);
-    const cipher = store.getIn(['curData', 'radioList', radioId, 'security', 'cipher']);
-    const { lanIp, lanMask, validSsid, validDistance, validPassword, apmac3, staApmac } = this.props.validateOption;
+    // const cipher = store.getIn(['curData', 'radioList', radioId, 'security', 'cipher']);
+    const { validSsid, validPassword, apmac3, staApmac } = this.props.validateOption;
 
     return (
       <div className="thirdScreen">
@@ -609,9 +608,9 @@ export default class QuickSetup extends React.Component {
               >
                 <FormInput
                   type="text"
-                  value={this.getCountryNameFromCode(
+                  value={getCountryNameFromCode(
                     store.getIn(['curData', 'radioList', radioId, 'countryCode']),
-                    countryMap
+                    countryMap,
                   )}
                   disabled
                   style={{
@@ -647,7 +646,7 @@ export default class QuickSetup extends React.Component {
                 <FormGroup
                   label={_('Country')}
                   type="select"
-                  options={this.makeCountryOptions(countryMap)}
+                  options={makeCountryOptions(countryMap)}
                   value={this.props.selfState.get('selectedCountry') ||
                         store.getIn(['curData', 'radioList', radioId, 'countryCode'])}
                   onChange={data => this.props.changeCountryCode(data.value)}
@@ -909,9 +908,9 @@ export default class QuickSetup extends React.Component {
               >
                 <FormInput
                   type="text"
-                  value={this.getCountryNameFromCode(
+                  value={getCountryNameFromCode(
                     store.getIn(['curData', 'radioList', radioId, 'countryCode']),
-                    countryMap
+                    countryMap,
                   )}
                   disabled
                   style={{
@@ -947,7 +946,7 @@ export default class QuickSetup extends React.Component {
                 <FormGroup
                   label={_('Country')}
                   type="select"
-                  options={this.makeCountryOptions(countryMap)}
+                  options={makeCountryOptions(countryMap)}
                   value={this.props.selfState.get('selectedCountry')}
                   onChange={data => this.props.changeCountryCode(data.value)}
                   disabled={!this.props.selfState.get('agreeProtocol')}
@@ -1153,20 +1152,20 @@ export default class QuickSetup extends React.Component {
                   </div>
                   <span className="fl">
                     <span>
-                    {
-                      this.props.selfState.get('scaning') ? (
-                        <Button
-                          text={_('Stop')}
-                          onClick={this.onStopScanClick}
-                          loading
-                        />
-                      ) : (
-                        <Button
-                          text={_('Scan')}
-                          onClick={this.onScanBtnClick}
-                        />
-                      )
-                    }
+                      {
+                        this.props.selfState.get('scaning') ? (
+                          <Button
+                            text={_('Stop')}
+                            onClick={this.onStopScanClick}
+                            loading
+                          />
+                        ) : (
+                          <Button
+                            text={_('Scan')}
+                            onClick={this.onScanBtnClick}
+                          />
+                        )
+                      }
                     </span>
                     <Modal
                       isShow={this.props.selfState.get('showScanResult')}
@@ -1204,9 +1203,9 @@ export default class QuickSetup extends React.Component {
               >
                 <FormInput
                   type="text"
-                  value={this.getCountryNameFromCode(
+                  value={getCountryNameFromCode(
                     store.getIn(['curData', 'radioList', radioId, 'countryCode']),
-                    countryMap
+                    countryMap,
                   )}
                   disabled
                   style={{
@@ -1242,7 +1241,7 @@ export default class QuickSetup extends React.Component {
                 <FormGroup
                   label={_('Country')}
                   type="select"
-                  options={this.makeCountryOptions(countryMap)}
+                  options={makeCountryOptions(countryMap)}
                   value={this.props.selfState.get('selectedCountry')}
                   onChange={data => this.props.changeCountryCode(data.value)}
                   disabled={!this.props.selfState.get('agreeProtocol')}
@@ -1422,7 +1421,7 @@ export default class QuickSetup extends React.Component {
     const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
     const { deviceMode } = this.props.selfState.toJS();
     const { ip, mask } = this.props.store.get('curData').toJS();
-    const { ssid, countryCode, frequency, channelWidth, distance, wirelessMode } = store.getIn(['curData', 'radioList', radioId]).toJS();
+    const { ssid, countryCode, frequency, channelWidth, distance } = store.getIn(['curData', 'radioList', radioId]).toJS();
     const mode = store.getIn(['curData', 'radioList', radioId, 'security', 'mode']);
     const cipher = store.getIn(['curData', 'radioList', radioId, 'security', 'cipher']);
 
@@ -1456,7 +1455,7 @@ export default class QuickSetup extends React.Component {
                 <FormGroup
                   type="plain-text"
                   label={_('Country')}
-                  value={this.getCountryNameFromCode(countryCode, countryMap)}
+                  value={getCountryNameFromCode(countryCode, countryMap)}
                 />
               </div>
               <div className="cols col-7">
@@ -1526,7 +1525,7 @@ export default class QuickSetup extends React.Component {
                 <FormGroup
                   type="plain-text"
                   label={_('Country')}
-                  value={this.getCountryNameFromCode(countryCode, countryMap)}
+                  value={getCountryNameFromCode(countryCode, countryMap)}
                 />
               </div>
               <div className="cols col-7">
@@ -1601,7 +1600,7 @@ export default class QuickSetup extends React.Component {
                 <FormGroup
                   type="plain-text"
                   label={_('Country')}
-                  value={this.getCountryNameFromCode(countryCode, countryMap)}
+                  value={getCountryNameFromCode(countryCode, countryMap)}
                 />
               </div>
               <div className="cols col-7">
@@ -1647,7 +1646,7 @@ export default class QuickSetup extends React.Component {
   }
 
   render() {
-    const store = this.props.store;
+    // const store = this.props.store;
     const { deviceMode } = this.props.selfState.toJS();
     let wizardOptions = fromJS([
       {
@@ -1672,7 +1671,7 @@ export default class QuickSetup extends React.Component {
     if (deviceMode) {
       wizardOptions = wizardOptions.setIn(
         [0, 'title'],
-        titleMap[deviceMode]
+        titleMap[deviceMode],
       );
     }
 
@@ -1707,14 +1706,14 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     utils.extend({}, appActions, settingActions, selfActions),
-    dispatch
+    dispatch,
   );
 }
 
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
-  validator.mergeProps(validOptions)
+  validator.mergeProps(validOptions),
 )(QuickSetup);
 
 export const quicksetup = reducer;

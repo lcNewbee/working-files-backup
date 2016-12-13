@@ -25,6 +25,7 @@ const propTypes = {
   // leaveSettingsScreen: PropTypes.func,
   validateOption: PropTypes.object,
   validateAll: PropTypes.func,
+  route: PropTypes.object,
 };
 
 const defaultProps = {};
@@ -205,39 +206,52 @@ export default class NetworkSettings extends React.Component {
     const {
       lanIp, lanMask, firstDNS, secondDNS, validGateway, validVlanId1, validVlanId2,
     } = this.props.validateOption;
+    const funConfig = this.props.route.funConfig;
     return (
       <div>
-        <h3>{_('LAN/WAN Settings')}</h3>
-        <FormGroup
-          label={_('Device Mode')}
-        >
-          <div
-            style={{
-              marginTop: '8px',
-            }}
-          >
-            <FormInput
-              type="radio"
-              name="networkmode"
-              text={_('Bridge Mode')}
-              checked={wiredMode === 'bridge'}
-              onChange={() => {
-                this.props.updateItemSettings({ wiredMode: 'bridge' });
-              }}
-            />&nbsp;&nbsp;&nbsp;&nbsp;
-            <FormInput
-              type="radio"
-              name="networkmode"
-              text={_('Router Mode')}
-              checked={wiredMode === 'router'}
-              onChange={() => {
-                this.props.updateItemSettings({ wiredMode: 'router' });
-              }}
-            />
-          </div>
-        </FormGroup>
         {
-          wiredMode === 'bridge' ? (
+          funConfig.router ? (
+            // 网络设置，有router模式
+            <div>
+              <h3>{_('LAN/WAN Settings')}</h3>
+              <FormGroup
+                label={_('Device Mode')}
+              >
+                <div
+                  style={{
+                    marginTop: '8px',
+                  }}
+                >
+                  <FormInput
+                    type="radio"
+                    name="networkmode"
+                    text={_('Bridge Mode')}
+                    checked={wiredMode === 'bridge'}
+                    onChange={() => {
+                      this.props.updateItemSettings({ wiredMode: 'bridge' });
+                    }}
+                  />&nbsp;&nbsp;&nbsp;&nbsp;
+                  <FormInput
+                    type="radio"
+                    name="networkmode"
+                    text={_('Router Mode')}
+                    checked={wiredMode === 'router'}
+                    onChange={() => {
+                      this.props.updateItemSettings({ wiredMode: 'router' });
+                    }}
+                  />
+                </div>
+              </FormGroup>
+            </div>
+          ) : (
+            <div>
+              <h3>{_('LAN Settings')}</h3>
+            </div>
+          )
+        }
+
+        {
+          wiredMode === 'bridge' || !wiredMode ? (
             <div>
               <FormGroup
                 type="select"
@@ -272,7 +286,7 @@ export default class NetworkSettings extends React.Component {
                   <div>
                     <FormGroup
                       type="text"
-                      label={_('IP address')}
+                      label={_('IP Address')}
                       value={ip}
                       onChange={data => this.props.updateItemSettings({
                         ip: data.value,
@@ -526,7 +540,7 @@ export default class NetworkSettings extends React.Component {
                     <FormGroup
                       type="text"
                       value={store.getIn(['curData', 'routerInfo', 'startIp'])}
-                      label={_('Start IP')}
+                      label={_('Start IP Adress')}
                       onChange={(data) => {
                         this.updateItemInRouterInfo('startIp', data.value);
                       }}
@@ -534,7 +548,7 @@ export default class NetworkSettings extends React.Component {
                     <FormGroup
                       type="text"
                       value={store.getIn(['curData', 'routerInfo', 'endIp'])}
-                      label={_('End IP')}
+                      label={_('End IP Adress')}
                       onChange={(data) => {
                         this.updateItemInRouterInfo('endIp', data.value);
                       }}

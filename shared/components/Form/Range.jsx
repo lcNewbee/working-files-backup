@@ -35,10 +35,11 @@ class Checkbox extends React.Component {
     const value = this.props.value || min;
 
     return (
-      <div className="a-input-range">
+      <div className="a-input-range clearfix">
         <Input
           {...this.props}
           value={value}
+          className="fl"
         />
         {
           hasTextInput ? (
@@ -46,7 +47,11 @@ class Checkbox extends React.Component {
               {...this.props}
               type="number"
               value={value}
-              style={{}}
+              className="fl"
+              style={{
+                width: '60px',
+                marginLeft: '2px',
+              }}
             />
           ) : `${value}${unit}`
         }

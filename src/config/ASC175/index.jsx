@@ -40,7 +40,7 @@ const pSystemStatus = require('../../screens/App/screens/MainAP/screens/SystemSt
 const sSsidDetails = require('../../screens/App/screens/MainAP/screens/SystemStatus/SsidDetails');
 const sClientsDetails = require('../../screens/App/screens/MainAP/screens/SystemStatus/ClientsDetails');
 // 快速设置
-const pQuickSetup = require('../../screens/App/screens/MainAP/screens/QuickSetup/P2pQuickSetup');
+const pQuickSetup = require('../../screens/App/screens/MainAP/screens/QuickSetup/CoverageQuickSetup');
 
 // 无线设置
 const pWirelessConfig = require('../../screens/App/screens/MainAP/screens/WirelessConfig');
@@ -65,6 +65,14 @@ const sChannelUtilization = require('../../screens/App/screens/MainAP/screens/To
 
 // 页面功能项配置
 const funConfig = {
+  // 覆盖型产品快速设置
+  coverageQuickSetup: {
+    router: false, // 是否有router模式
+  },
+  // 网络设置
+  network: {
+    router: false, // 是否有router模式
+  },
   // 无线设置页面
   basic: {
     devicemodeOptions: [
@@ -76,17 +84,17 @@ const funConfig = {
     ssidTableKeys: ['enable', 'ssid', 'vlanId', 'hideSsid', 'isolation', 'security', 'delete'],
   },
   advance: {
-    ledThreshFun: true, // 信号强度控制LED灯功能
-    beaconIntervalFun: false, // Beacon帧间间隔
-    dtimIntervalFun: false, // DTIM间隔
-    segmentThreshFun: false, // 分片阈值
-    ampduFun: false, // ampdu值
-    rateSetFun: false, // 速率集
-    rssiLimitFun: false, // rssi限制
-    airTimeFairnessFun: false, // 时间公平性
+    ledThreshFun: false, // 信号强度控制LED灯功能
+    beaconIntervalFun: true, // Beacon帧间间隔
+    dtimIntervalFun: true, // DTIM间隔
+    segmentThreshFun: true, // 分片阈值
+    ampduFun: true, // ampdu值
+    rateSetFun: true, // 速率集
+    rssiLimitFun: true, // rssi限制
+    airTimeFairnessFun: true, // 时间公平性
   },
   systemmaintenance: {
-    poeOutFun: true,
+    poeOutFun: false,
   },
 };
 
@@ -132,6 +140,7 @@ const routes = [{
       path: '/main/quicksetup',
       text: _('Quick Setup'),
       icon: 'map-signs',
+      funConfig: funConfig.coverageQuickSetup,
       fetchUrl: 'goform/get_quicksetup_info_forTestUse',
       saveUrl: 'goform/set_quicksetup',
       component: pQuickSetup.Screen,

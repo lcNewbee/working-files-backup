@@ -12,6 +12,13 @@ import * as selfActions from './actions';
 import reducer from './reducer';
 // import './index.scss';
 
+/**
+ * 可配置功能项
+systemmaintenance: {
+  poeOutFun: false,
+}
+*/
+
 const propTypes = {
   save: PropTypes.func,
   route: PropTypes.object,
@@ -274,7 +281,7 @@ export default class SystemMaintenance extends Component {
         <div className="o-form__legend">
           {_('Reboot')}
         </div>
-        <FormGroup label={_('Reboot device')}>
+        <FormGroup label={_('Reboot Device')}>
           <Button
             text={_('Reboot')}
             onClick={this.onRebootDevice}
@@ -285,7 +292,7 @@ export default class SystemMaintenance extends Component {
         <div className="o-form__legend">
           {_('Configuration')}
         </div>
-        <FormGroup label={_('Backup configuration')}>
+        <FormGroup label={_('Backup Configuration')}>
           <Button
             text={_('Backup')}
             onClick={this.onBackupConfig}
@@ -300,7 +307,7 @@ export default class SystemMaintenance extends Component {
           encType="multipart/form-data"
         >
           <FormGroup
-            label={_('Restore configuration')}
+            label={_('Restore Configuration')}
           >
             <FormInput
               type="file"
@@ -314,7 +321,7 @@ export default class SystemMaintenance extends Component {
           </FormGroup>
         </form>
         <FormGroup
-          label={_('Reset configuration')}
+          label={_('Reset Configuration')}
         >
           <Button
             text={_('Reset')}
@@ -379,6 +386,7 @@ export default class SystemMaintenance extends Component {
             style={{
               borderRadius: '10px',
               overflow: 'hidden',
+              marginBottom: '10px',
             }}
           />
           <ProgressBar
@@ -435,13 +443,13 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     utils.extend({}, appActions, settingActions, selfActions),
-    dispatch
+    dispatch,
   );
 }
 
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(SystemMaintenance);
 
 export const systemmaintenance = reducer;

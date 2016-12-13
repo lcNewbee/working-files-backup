@@ -90,7 +90,8 @@ var vaildate = {
         return _("IP address begin with 127 is a reserved loopback address, please input another value between 1 to 233");
       }
       if (ipArr[0] > 223) {
-        return _("Address begin with %s is invalid, please input a value between 1 to 223.", ipHead);
+        return _("Address begin with ") + _("%s", ipHead) + _(" is invalid, please input a value between 1 to 223.");
+        // return _("Address begin with %s is invalid, please input a value between 1 to 223.", ipHead);
       }
     }
   },
@@ -116,7 +117,7 @@ var vaildate = {
         return _("IP address begin with 127 is a reserved loopback address, please input another value between 1 to 233");
       }
       if (ipArr[0] > 223) {
-        return _("Address begin with %s is invalid, please input a value between 1 to 223.", ipHead);
+        return _("Address begin with ") + _("%s", ipHead) + _(" is invalid, please input a value between 1 to 223.");
       }
     }
   },

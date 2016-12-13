@@ -163,7 +163,7 @@ export default class TimeSettings extends Component {
           />
           <FormGroup
             type="select"
-            label={_('Region')}
+            label={_('Time Zone')}
             options={timezoneOptions}
             disabled={ntpEnable === '0'}
             value={this.props.store.getIn(['curData', 'zoneName'])}
