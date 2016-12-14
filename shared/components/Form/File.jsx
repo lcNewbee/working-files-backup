@@ -34,6 +34,7 @@ class File extends React.Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     utils.binds(this, [
       'onChange',
+      'resetInput',
     ]);
     this.state = {
       showText: transformShowText(props.value),
@@ -48,6 +49,12 @@ class File extends React.Component {
     }
     this.setState({
       showText: transformShowText(val),
+    });
+  }
+
+  resetInput() {
+    this.setState({
+      showText: '',
     });
   }
 
@@ -68,6 +75,19 @@ class File extends React.Component {
           type="file"
           onChange={this.onChange}
           className="a-input-file_file"
+          ref={
+            (fileElem) => {
+              if (onRef) {
+                onRef(fileElem);
+
+                if (fileElem && fileElem.myRef) {
+                  this.setState({
+                    showText: transformShowText(fileElem.myRef.value),
+                  });
+                }
+              }
+            }
+          }
         />
         <Input
           className={inputClassName}
@@ -78,9 +98,6 @@ class File extends React.Component {
             (elem) => {
               if (elem) {
                 this.fileTextInput = elem;
-              }
-              if (onRef) {
-                onRef(elem);
               }
             }
           }

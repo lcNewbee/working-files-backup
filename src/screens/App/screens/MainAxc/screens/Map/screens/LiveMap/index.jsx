@@ -133,7 +133,7 @@ export default class View extends React.Component {
       id: 'actions',
       text: _('Actions'),
       width: '180',
-      transform: (val, item, index) => (
+      transform: (val, $$item, index) => (
         <div className="action-btns">
           <Button
             icon="edit"
@@ -148,7 +148,7 @@ export default class View extends React.Component {
             text={_('Delete')}
             size="sm"
             onClick={() => {
-              this.onRemoveItem(index);
+              this.onRemoveItem($$item.get('id'));
             }}
           />
         </div>
@@ -162,21 +162,24 @@ export default class View extends React.Component {
     const curScreenId = this.props.store.get('curScreenId');
     const curType = this.props.store.getIn([curScreenId, 'curSettings', 'type']);
 
-    if (typeof window.google !== 'undefined' && this.mapContent) {
-      if (!this.map) {
-        this.renderGoogleMap();
-      } else if ($$thisData !== $$prevData) {
-        // 服务器数据更新需要清空地图
-        this.map = null;
-        this.renderGoogleMap();
+    // google 实时地图
+    if (curType === '0') {
+      if (typeof window.google !== 'undefined' && this.mapContent) {
+        if (!this.map) {
+          this.renderGoogleMap();
+        } else if ($$thisData !== $$prevData) {
+          // 服务器数据更新需要清空地图
+          this.map = null;
+          this.renderGoogleMap();
+        }
+
+        if (this.isGoogleMapAdd) {
+          this.renderGooglePlaceInput();
+        }
       }
 
-      if (this.isGoogleMapAdd) {
-        this.renderGooglePlaceInput();
-      }
-    }
-
-    if (curType !== '0') {
+    // 本地建筑列表
+    } else {
       this.map = null;
     }
   }
@@ -196,10 +199,10 @@ export default class View extends React.Component {
       });
   }
 
-  onRemoveItem(i) {
+  onRemoveItem(id) {
     this.props.changeScreenActionQuery({
-      action: 'remove',
-      index: i,
+      action: 'delete',
+      selectedList: [id],
     });
     this.props.onListAction();
   }
@@ -608,6 +611,7 @@ function mapStateToProps(state) {
   return {
     app: state.app,
     store: state.screens,
+    groupid: state.product.getIn(['group', 'selected', 'id']),
   };
 }
 

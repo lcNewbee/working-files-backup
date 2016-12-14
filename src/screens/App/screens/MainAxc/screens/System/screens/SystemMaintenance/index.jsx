@@ -160,6 +160,7 @@ export default class View extends React.Component {
               <FileUpload
                 url={restoreUrl}
                 name="backupFile"
+                buttonIcon="undo"
                 buttonText={_('Restore Now')}
               />
             </FormGroup>

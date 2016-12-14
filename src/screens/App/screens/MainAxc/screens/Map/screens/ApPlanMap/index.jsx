@@ -7,6 +7,7 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { bindActionCreators } from 'redux';
 import AppScreen from 'shared/components/Template/AppScreen';
 import Button from 'shared/components/Button/Button';
+import SaveButton from 'shared/components/Button/SaveButton';
 import Icon from 'shared/components/Icon';
 import Modal from 'shared/components/Modal';
 import { FormGroup } from 'shared/components/Form';
@@ -19,44 +20,39 @@ import * as axcActions from '../../../../actions';
 import bkImg from '../../shared/images/map_bg.jpg';
 import '../../shared/_map.scss';
 
-const listOptions = fromJS({
-  settings: [],
-  list: [
-    {
-      id: 'markerType',
-      label: _('Marker Type'),
-      defaultValue: 'building',
-      formProps: {
-        type: 'switch',
-        options: [
-          {
-            value: 'building',
-            label: _('Building'),
-          }, {
-            value: 'ap',
-            label: _('AP'),
-          },
-        ],
-        display: 'inline',
-      },
-    }, {
-      id: 'markerTitle',
-      label: _('Marker Title'),
-      formProps: {
-        required: true,
-        type: 'text',
-        display: 'inline',
-      },
-    }, {
-      id: 'markerAddress',
-      label: _('Mark Address'),
-      formProps: {
-        type: 'text',
-        display: 'inline',
-      },
-    },
-  ],
-});
+function previewFile(file) {
+  const retPromise = new Promise((resolve) => {
+    let retUrl = '';
+    let reader = null;
+
+    // 如果支持 createObjectURL
+    if (URL && URL.createObjectURL) {
+      const img = new Image();
+      retUrl = URL.createObjectURL(file);
+      img.src = retUrl;
+
+      img.onload = () => {
+        resolve(retUrl);
+        // URL.revokeObjectURL(retUrl);
+      };
+
+    // 如果支持 FileReader
+    } else if (window.FileReader) {
+      reader = new FileReader();
+      reader.onload = (e) => {
+        retUrl = e.target.result;
+        resolve(retUrl);
+      };
+      reader.readAsDataURL(file);
+
+    // 其他放回 Flase
+    } else {
+      resolve(retUrl);
+    }
+  });
+
+  return retPromise;
+}
 
 const propTypes = {
   store: PropTypes.instanceOf(Map),
@@ -91,6 +87,7 @@ export default class View extends React.Component {
       mapOffsetX: 0,
       mapOffsetY: 0,
       isUnplacedListShow: true,
+      backgroundImgUrl: '',
     };
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     utils.binds(this,
@@ -106,8 +103,17 @@ export default class View extends React.Component {
         'renderCurMap',
         'updateState',
         'onToggleUnplacedList',
+        'onSaveMap',
       ],
     );
+  }
+  onSaveMap() {
+    const url = 'goform/group/map';
+    const formElem = this.formElem;
+    this.props.saveFile(url, formElem)
+      .then(() => {
+        this.props.closeListItemModal();
+      });
   }
   onToggleUnplacedList(active) {
     let isUnplacedListShow = !this.state.isUnplacedListShow;
@@ -589,23 +595,103 @@ export default class View extends React.Component {
         <Modal
           title={_('Add')}
           isShow={isModalShow}
-          onClose={() => this.props.closeListItemModal()}
+          onClose={() => {
+            this.props.closeListItemModal();
+            this.setState({
+              backgroundImgUrl: '',
+            });
+          }}
+          noFooter
         >
-          <FormGroup
-            label={_('Map Name')}
-          />
-          <FormGroup label=" ">
-            <FileUploads
-              url="/goform/uploadPortalImage"
-              name="image2"
-              acceptExt="png,gif,jpg,bmp"
-              createModal={this.props.createModal}
-              buttonText={_('Upload Image')}
+          <form
+            action="goform/group/map"
+            method="POST"
+            encType="multipart/form-data"
+            ref={(formElem) => {
+              if (formElem) {
+                this.formElem = formElem;
+              }
+            }}
+          >
+            <input
+              type="hidden"
+              name="groupid"
+              value={this.props.groupid}
             />
-          </FormGroup>
-          <p>
-            <img src="" alt="" />
-          </p>
+            <input
+              type="hidden"
+              name="action"
+              value="add"
+            />
+
+            <FormGroup
+              label={_('Map Name')}
+              value={this.state.mapName}
+              name="mapImg"
+              onChange={
+                (data) => {
+                  this.setData({
+                    mapName: data.value,
+                  });
+                }
+              }
+            />
+            <FormGroup
+              label={_('Map Backgroud Image')}
+              name="mapImg"
+              type="file"
+              onChange={(data, evt) => {
+                const selectFile = evt.target.files[0];
+
+                previewFile(selectFile).then(
+                  (url) => {
+                    if (url) {
+                      this.setState({
+                        backgroundImgUrl: url,
+                      });
+                    }
+                  },
+                );
+                this.setData({
+                  mapImgUrl: data.value,
+                });
+              }}
+            />
+            <p
+              style={{
+                textAlign: 'center',
+                marginBottom: '1em',
+              }}
+            >
+              {
+                this.state.backgroundImgUrl ? (
+                  <img
+                    src={this.state.backgroundImgUrl}
+                    alt="img"
+                    style={{
+                      height: '160px',
+                      backgroundColor: '#efefef',
+                    }}
+                    onLoad={
+                      () => {
+                        if (typeof URL.revokeObjectURL === 'function') {
+                          URL.revokeObjectURL(this.state.backgroundImgUrl);
+                        }
+                      }
+                    }
+                  />
+                ) : null
+              }
+            </p>
+            <div className="form-group form-group--save">
+              <div className="form-control">
+                <SaveButton
+                  type="button"
+                  onClick={this.onSaveMap}
+                />
+              </div>
+            </div>
+          </form>
         </Modal>
       </AppScreen>
     );
@@ -619,6 +705,7 @@ function mapStateToProps(state) {
   return {
     app: state.app,
     store: state.screens,
+    groupid: state.product.getIn(['group', 'selected', 'id']),
   };
 }
 

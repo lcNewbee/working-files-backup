@@ -16,6 +16,7 @@ const propTypes = {
   url: PropTypes.string,
   buttonText: PropTypes.string,
   placeholder: PropTypes.string,
+  buttonIcon: PropTypes.string,
   acceptExt: PropTypes.string,
   onChange: PropTypes.func,
   onBeforeUpload: PropTypes.func,
@@ -26,6 +27,7 @@ const propTypes = {
 };
 const defaultProps = {
   name: 'filename',
+  buttonIcon: 'upload',
 };
 
 class FileUpload extends React.Component {
@@ -92,9 +94,14 @@ class FileUpload extends React.Component {
 
   onUploadImage() {
     const { url, onBeforeUpload, onUploaded } = this.props;
-    const input = this.fileElem;
     const formElem = this.formElem;
+    let input = this.fileElem;
     let data;
+
+    // InputFile组件需要访问 myRef
+    if (input.myRef) {
+      input = input.myRef;
+    }
 
     if (!input.value) {
       this.onAlert(MSG.shouldSelectFile);
@@ -140,8 +147,14 @@ class FileUpload extends React.Component {
   }
 
   restImageStatus() {
-    const input = this.fileElem;
+    let input = this.fileElem;
     const data = {};
+
+    // InputFile组件需要访问 myRef
+    if (input.myRef) {
+      input = input.myRef;
+    }
+    this.formElem.reset();
 
     data.imageStatus = 'default';
     this.setState(utils.extend({}, this.state, data));
@@ -156,16 +169,15 @@ class FileUpload extends React.Component {
   }
 
   render() {
-    const { url, target, buttonText, name, placeholder } = this.props;
+    const { url, target, buttonText, name, buttonIcon } = this.props;
     const { imageStatus } = this.state;
     const curButtonText = buttonText || _('Upload Image');
-    let iconName = 'upload';
     let displayStyle = 'none';
 
     if (imageStatus === 'default') {
-      iconName = 'file';
       displayStyle = 'inline-block';
     }
+
     return (
       <form
         action={url}
@@ -197,7 +209,7 @@ class FileUpload extends React.Component {
         <Button
           type="button"
           text={curButtonText}
-          icon={iconName}
+          icon={buttonIcon}
           loading={imageStatus === 'loading'}
           theme={imageStatus === 'selected' ? 'primary' : undefined}
           onClick={this.onUploadImage}
