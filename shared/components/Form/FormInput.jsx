@@ -8,6 +8,7 @@ import RangeInput from './Range';
 import Radios from './Radios';
 import Input from './atom/Input';
 import NumberInput from './NumberInput';
+import FileInput from './File';
 import Checkboxs from './Checkboxs';
 import Switchs from '../Switchs';
 import TimePicker from '../TimePicker';
@@ -328,6 +329,8 @@ class FormInput extends React.Component {
         MyComponent = RangeInput;
       } else if (inpputType === 'number') {
         MyComponent = NumberInput;
+      } else if (inpputType === 'file') {
+        MyComponent = FileInput;
       } else {
         MyComponent = Input;
       }

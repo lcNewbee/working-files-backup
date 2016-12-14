@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
 import Button from '../Button/Button';
+import InputFile from '../Form/File';
 
 import './_FileUpload.scss';
 
@@ -157,12 +158,11 @@ class FileUpload extends React.Component {
   render() {
     const { url, target, buttonText, name, placeholder } = this.props;
     const { imageStatus } = this.state;
-    let curButtonText = buttonText || _('Upload Image');
+    const curButtonText = buttonText || _('Upload Image');
     let iconName = 'upload';
     let displayStyle = 'none';
 
     if (imageStatus === 'default') {
-      curButtonText = placeholder || _('Please Select File...');
       iconName = 'file';
       displayStyle = 'inline-block';
     }
@@ -179,17 +179,16 @@ class FileUpload extends React.Component {
           }
         }}
       >
-        <input
+        <InputFile
           type="file"
           className="text"
           name={name}
           onChange={this.onChangeImage}
           style={{
             marginRight: '8px',
-            marginBottom: '4px',
             display: displayStyle,
           }}
-          ref={(fileElem) => {
+          onRef={(fileElem) => {
             if (fileElem) {
               this.fileElem = fileElem;
             }

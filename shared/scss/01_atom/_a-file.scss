@@ -1,0 +1,28 @@
+.a-input-file {
+  position: relative;
+  display: inline-block;
+
+  .a-input-file__icon {
+    position: absolute;
+    top: 50%;
+    left: 8px;
+    margin-top: -.5em;
+  }
+
+  .a-input-file__input {
+    padding-left: 25px;
+  }
+
+  > input[type='file'],
+  .a-input-file__file {
+    position: absolute;
+    cursor: pointer;
+    line-height: 0;
+    height: 30px;
+    min-width: 280px;
+    margin-left: -80px;
+    font-size: 10px;
+
+    @include opacity(0);
+  }
+}
