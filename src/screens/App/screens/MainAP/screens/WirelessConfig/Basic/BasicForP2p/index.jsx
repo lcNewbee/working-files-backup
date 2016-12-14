@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Map, fromJS } from 'immutable';
 import validator from 'shared/utils/lib/validator';
 import { bindActionCreators } from 'redux';
+import Input from 'shared/components/Form/atom/Input';
 import { FormGroup, FormInput, Modal, Table, SaveButton, icon } from 'shared/components';
 import { Button } from 'shared/components/Button';
 import * as appActions from 'shared/actions/app';
@@ -1171,39 +1172,17 @@ export default class Basic extends React.Component {
                 overflow: 'visible',
               }}
             >
-              <div>
-                <FormGroup
-                  type="select"
-                  options={funConfig.devicemodeOptions}
-                  value={basicSettings.getIn(['radioList', radioId, 'wirelessMode'])}
-                  onChange={data => this.onChengeWirelessMode(data)}
-                  label={_('Device Mode')}
-                /> { /* 模式选择下拉框 */}
-                {/*
-                <div className="fl">
-                  { // repeater独有的自动选框
-                    (basicSettings.getIn(['radioList', radioId, 'wirelessMode']) === 'repeater') ? (
-                      <span
-                        style={{
-                          display: 'inline-block',
-                          marginTop: '11px',
-                        }}
-                      >&nbsp;&nbsp;
-                        <input
-                          style={{
-                            paddingBottom: '-2px',
-                          }}
-                          type="checkbox"
-                          checked={basicSettings.get('autoRepeat') === '1'}
-                          onClick={this.onAutoRepeatBoxClick}
-                        />&nbsp;
-                        {_('Auto')}
-                      </span>
-                    ) : null
-                  }
-                </div>
-                */}
-              </div>
+              { // 模式选择下拉框
+                funConfig.devicemodeOptions.length === 1 && funConfig.devicemodeOptions[0].value === 'ap' ? null : (
+                  <FormGroup
+                    type="select"
+                    options={funConfig.devicemodeOptions}
+                    value={basicSettings.getIn(['radioList', radioId, 'wirelessMode'])}
+                    onChange={data => this.onChengeWirelessMode(data)}
+                    label={_('Device Mode')}
+                  />
+                )
+              }
               { // SSID输入框**ap模式**
                 basicSettings.getIn(['radioList', radioId, 'wirelessMode']) === 'ap' ? (
                   <div
@@ -1371,137 +1350,6 @@ export default class Basic extends React.Component {
                   </div>
                 ) : null
               }
-{
-              // <div className="clearfix">
-              //   { // SSID输入框
-              //     basicSettings.getIn(['radioList', radioId, 'wirelessMode']) === 'ap' ? (
-              //       <div
-              //         style={{
-              //           width: '127px',
-              //         }}
-              //       >
-              //         <FormGroup
-              //           label={_('SSID')}
-              //           className="fl"
-              //           form="basicSettings"
-              //           type="text"
-              //           value={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'ssid'])}
-              //           onChange={(data) => {
-              //             const radioList = basicSettings.get('radioList')
-              //                   .setIn([radioId, 'vapList', '0', 'ssid'], data.value);
-              //             this.props.updateBasicSettings({ radioList });
-              //           }}
-              //           required
-              //           {...validSsid}
-              //         />
-              //       </div>
-              //     ) : null
-              //   }
-              //   <div>
-              //     {
-              //       (basicSettings.getIn(['radioList', radioId, 'wirelessMode']) === 'sta') ? (
-              //         <div>
-              //           <div
-              //             style={{
-              //               width: '127px',
-              //             }}
-              //           >
-              //             <FormGroup
-              //               label={_('Remote SSID')}
-              //               className="fl"
-              //               type="text"
-              //               value={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'ssid'])}
-              //               onChange={(data) => {
-              //                 const radioList = basicSettings.get('radioList')
-              //                       .setIn([radioId, 'vapList', '0', 'ssid'], data.value);
-              //                 this.props.updateBasicSettings({ radioList });
-              //               }}
-              //               required
-              //               {...validSsid}
-              //             />
-              //           </div>
-              //           <span
-              //             style={{
-              //               paddingTop: '2px',
-              //             }}
-              //           >&nbsp;&nbsp;
-              //             {
-              //             this.props.selfState.get('scaning') ? (
-              //               <Button
-              //                 text={_('Stop')}
-              //                 onClick={this.onStopScanClick}
-              //                 loading
-              //               />
-              //             ) : (
-              //               <Button
-              //                 text={_('Scan')}
-              //                 onClick={this.onScanBtnClick}
-              //               />
-              //             )
-              //           }
-              //           </span>
-              //         </div>
-              //       ) : (
-              //         <div className="clearfix">
-              //           {
-              //             basicSettings.getIn(['radioList', radioId, 'wirelessMode']) === 'repeater' ? (
-              //               <div
-              //                 className="fl"
-              //               >
-              //                 <FormGroup
-              //                   label={_('Remote SSID')}
-              //                   className="fl"
-              //                   type="text"
-              //                   value={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'ssid'])}
-              //                   onChange={(data) => {
-              //                     const radioList = basicSettings.get('radioList')
-              //                                     .setIn([radioId, 'vapList', '0', 'ssid'], data.value);
-              //                     this.props.updateBasicSettings({ radioList });
-              //                   }}
-              //                   required
-              //                   {...validSsid}
-              //                 />
-              //                 {
-              //                   this.props.selfState.get('scaning') ? (
-              //                     <Button
-              //                       text={_('Stop')}
-              //                       onClick={this.onStopScanClick}
-              //                       loading
-              //                     />
-              //                   ) : (
-              //                     <Button
-              //                       text={_('Scan')}
-              //                       onClick={this.onScanBtnClick}
-              //                     />
-              //                   )
-              //                 }
-              //               </div>
-              //             ) : null
-              //           }
-              //           <div className="fl">
-              //             <span
-              //               style={{
-              //                 display: 'inline-block',
-              //                 marginTop: '11px',
-              //               }}
-              //             >&nbsp;&nbsp;
-              //               <input
-              //                 style={{
-              //                   marginBottom: '-2px',
-              //                 }}
-              //                 type="checkbox"
-              //                 checked={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'hideSsid']) === '1'}
-              //                 onClick={data => this.onHideSsidboxClick(data)}
-              //               />&nbsp;
-              //               {_('Hide')}
-              //             </span>
-              //           </div>
-              //         </div>
-              //       )
-              //     }
-              //   </div>
-              // </div>
-}
               <FormGroup
                 type="number"
                 label={_('VLAN ID')}
@@ -1976,7 +1824,68 @@ export default class Basic extends React.Component {
                                     .setIn([radioId, 'txPower'], data.value);
                   this.props.updateRadioSettingsItem({ radioList });
                 }}
+                help="dBm"
+                inputStyle={{
+                  backgroundColor: '#f2f2f2',
+                }}
+                hasTextInput
               />
+              {
+                /**
+                <FormGroup
+                  label={_('Output Power')}
+                >
+                  <div
+                    className="clearfix"
+                    style={{
+                      padding: '0',
+                    }}
+                  >
+                    <Input
+                      type="range"
+                      step="0.1"
+                      min="1"
+                      ref={(rangeInput) => { this.rangeInput = rangeInput; }}
+                      max={this.props.selfState.get('maxTxpower')}
+                      value={radioSettings.getIn(['radioList', radioId, 'txPower'])}
+                      onChange={(e) => {
+                        const radioList = radioSettings.get('radioList')
+                                          .setIn([radioId, 'txPower'], e.target.value);
+                        this.props.updateRadioSettingsItem({ radioList });
+                      }}
+                      className="fl"
+                      style={{
+                        display: 'inline-block',
+                        padding: '0',
+                        margin: '-4px 0 0 0',
+                        height: '40px',
+                        backgroundColor: '#f2f2f2',
+                      }}
+                    />
+                    <Input
+                      type="number"
+                      step="0.1"
+                      min="1"
+                      className="fl"
+                      ref={(numberInput) => { this.numberInput = numberInput; }}
+                      max={this.props.selfState.get('maxTxpower')}
+                      value={radioSettings.getIn(['radioList', radioId, 'txPower'])}
+                      onChange={(e) => {
+                        const radioList = radioSettings.get('radioList')
+                                          .setIn([radioId, 'txPower'], e.target.value);
+                        this.props.updateRadioSettingsItem({ radioList });
+                      }}
+                      style={{
+                        marginLeft: '4px',
+                        width: '50px',
+                      }}
+                    />
+                  </div>
+                </FormGroup>
+                 *
+                 */
+              }
+
               <FormGroup>
                 <SaveButton
                   type="button"

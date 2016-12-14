@@ -9,7 +9,7 @@
     "radioList": [{
         "radioId": "0",
         "wirelessMode": "ap",
-        "ssid": "axilspot",
+        "ssid": "AXILSPOT",
         "countryCode": "US",
         "frequency": "36",
         "channelWidth": "HT20",

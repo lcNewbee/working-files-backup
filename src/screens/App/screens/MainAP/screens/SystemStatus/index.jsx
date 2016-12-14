@@ -234,6 +234,20 @@ function changeUptimeToReadable(time) {
   return timeStr;
 }
 
+function wirelessModeShowStyle(wirelessMode) {
+  let ret = '';
+  switch (wirelessMode) {
+    case 'sta':
+      ret = 'Station'; break;
+    case 'repeater':
+      ret = 'Repeater'; break;
+    case 'ap':
+      ret = 'AP'; break;
+    default:
+  }
+  return ret;
+}
+
 // function getCpuOption(serverData) {
 //   const ret = {
 //     tooltip: {
@@ -781,7 +795,7 @@ export default class SystemStatus extends React.Component {
     } = this.props.store.getIn(['curData', 'sysStatus']).toJS();
     const interfaces = this.props.store.getIn(['curData', 'interfaces']).toJS();
     const {
-      wirelessMode, security, frequency, channelWidth, channel, protocol, ssid,
+      wirelessMode, security, frequency, channelWidth, channel, radioMode, ssid,
       distance, txPower, noise, chutil, staList, peerList, vapList, signal,
     } = this.props.store.getIn(['curData', 'radioList', radioId]).toJS();
     const { memFree, memTotal, cpuInfo } = this.props.selfState.get('serverData').toJS();
@@ -1063,7 +1077,7 @@ export default class SystemStatus extends React.Component {
                 <FormGroup
                   label={_('Wireless Mode :')}
                   type="plain-text"
-                  value={wirelessMode === 'sta' ? 'station' : wirelessMode}
+                  value={wirelessModeShowStyle(wirelessMode)}
                 />
                 <FormGroup
                   label={_('SSID :')}
@@ -1073,7 +1087,7 @@ export default class SystemStatus extends React.Component {
                 <FormGroup
                   label={_('Protocol :')}
                   type="plain-text"
-                  value={protocol}
+                  value={radioMode}
                 />
                 <FormGroup
                   label={_('Channel/Frequency :')}

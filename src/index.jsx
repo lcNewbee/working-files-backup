@@ -40,7 +40,11 @@ if (module.hot) {
   };
 
 
+<<<<<<< 487686d74b67d5fcdc27b66a6f2e40baba6e5c98
   module.hot.accept('./config/axc', () => {
+=======
+  module.hot.accept('./config/ASW3', () => {
+>>>>>>> ap:添加portal页面
     setImmediate(() => {
       // Preventing the hot reloading error from react-router
       unmountComponentAtNode(mountNode);

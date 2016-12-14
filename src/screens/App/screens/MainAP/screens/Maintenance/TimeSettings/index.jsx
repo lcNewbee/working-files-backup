@@ -54,10 +54,7 @@ export default class TimeSettings extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.app.get('refreshAt') !== prevProps.app.get('refreshAt')) {
-      const asyncStep = Promise.resolve(this.props.restoreSelfState());
-      asyncStep.then(() => {
-        this.firstInAndRefresh();
-      });
+      this.firstInAndRefresh();
     }
   }
 
@@ -147,7 +144,7 @@ export default class TimeSettings extends Component {
           <FormGroup
             type="checkbox"
             label={_('NTP Client')}
-            checked={ntpEnable === '1'}
+            checked={this.props.store.getIn(['curData', 'ntpEnable']) === '1'}
             onChange={data => this.props.updateItemSettings({
               ntpEnable: data.value,
             })}

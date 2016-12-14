@@ -46,7 +46,7 @@ $contrast: 5% !default;
   border-radius: $thumb-radius;
   background: $thumb-color;
   cursor: pointer;
-  //transform: translateY(-4px);
+  transform: translateY(-3px);
 }
 
 input[type=range] {
@@ -117,6 +117,7 @@ input[type=range] {
   }
   &::-ms-thumb {
     @include thumb();
+    transform: translateY(2px);
   }
   &:focus::-ms-fill-lower {
     background: $track-color;
@@ -128,8 +129,11 @@ input[type=range] {
 .a-input-range {
   display: inline-block;
   vertical-align: middle;
+  //line-height: $thumb-height + 12px;
 
   input[type=range] {
     margin-right: .4em;
+    margin-top: -4px;
+    height: $thumb-height + 12px;
   }
 }

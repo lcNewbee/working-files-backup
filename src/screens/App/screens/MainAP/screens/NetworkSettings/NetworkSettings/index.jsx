@@ -32,6 +32,7 @@ const propTypes = {
   // leaveSettingsScreen: PropTypes.func,
   validateOption: PropTypes.object,
   validateAll: PropTypes.func,
+  resetVaildateMsg: PropTypes.func,
 };
 
 const defaultProps = {};
@@ -96,6 +97,7 @@ export default class NetworkSettings extends React.Component {
   componentDidUpdate(prevProps) {
     if (this.props.app.get('refreshAt') !== prevProps.app.get('refreshAt')) {
       this.firstInAndRefresh();
+      this.props.resetVaildateMsg();
     }
   }
 

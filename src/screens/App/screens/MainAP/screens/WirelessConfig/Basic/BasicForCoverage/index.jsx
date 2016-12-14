@@ -1055,6 +1055,10 @@ export default class Basic extends React.Component {
                     min="1"
                     max={this.props.selfState.get('maxTxpower')}
                     value={radioSettings.getIn(['radioList', radioId, 'txPower'])}
+                    inputStyle={{
+                      backgroundColor: '#f2f2f2',
+                    }}
+                    hasTextInput
                     onChange={(data) => {
                       const radioList = radioSettings.get('radioList')
                                         .setIn([radioId, 'txPower'], data.value);

@@ -39,3 +39,10 @@ export function changePoeOut(data) {
   };
 }
 
+export function changeVoipEnable(data) {
+  return {
+    type: 'CHANGE_VOIP_ENABLE',
+    data,
+  };
+}
+

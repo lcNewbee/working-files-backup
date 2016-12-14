@@ -13,7 +13,7 @@
   "Channel :": "信道：",
   "Frequency :": "频段：",
   "Channel Width :": "信道频宽：",
-  "Protocol :": "无线协议：",
+  "Protocol :": "射频模式：",
   "Security Mode :": "加密方式：",
   "Tx Packets": "发送数据包数",
   "Rx Packets": "接收数据包数",
@@ -96,7 +96,7 @@
   "Current Settings": "当前配置",
 
   "LAN IP Settings": "LAN口设置",
-  "VLAN Settings": "Vlan设置",
+  "VLAN Settings": "VLAN设置",
   "Accounts Settings": "账户设置",
 
   "Basic": "基础设置",

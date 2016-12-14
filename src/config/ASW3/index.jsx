@@ -62,6 +62,9 @@ const sSpeedTest = require('../../screens/App/screens/MainAP/screens/Tools/Speed
 const sSiteSurvey = require('../../screens/App/screens/MainAP/screens/Tools/SiteSurvey');
 const sSystemLogs = require('../../screens/App/screens/MainAP/screens/Tools/SystemLogs');
 const sChannelUtilization = require('../../screens/App/screens/MainAP/screens/Tools/ChannelUtilization');
+// Portal
+const pPortal = require('../../screens/App/screens/MainAP/screens/PortalSettings');
+const sPortalSettings = require('../../screens/App/screens/MainAP/screens/PortalSettings/PortalSettings');
 
 // 页面功能项配置
 const funConfig = {
@@ -77,8 +80,6 @@ const funConfig = {
   basic: {
     devicemodeOptions: [
       { value: 'ap', label: _('AP') },
-      { value: 'sta', label: _('Station') },
-      { value: 'repeater', label: _('Repeater') },
     ],
     // 功能项参见WirelessConfig -> Basic页面下的ssidTableFullMemberOptions变量
     ssidTableKeys: ['enable', 'ssid', 'vlanId', 'hideSsid', 'isolation', 'security', 'delete'],
@@ -95,6 +96,7 @@ const funConfig = {
   },
   systemmaintenance: {
     poeOutFun: false,
+    voipFun: true,
   },
 };
 
@@ -225,6 +227,25 @@ const routes = [{
           path: '/main/maintenance/timesettings',
           text: _('Time Settings'),
           component: sTimeSettings.Screen,
+        },
+      ],
+    }, {
+      id: 'portalsettings',
+      path: '/main/portalsettings',
+      icon: 'sphere',
+      text: _('Portal'),
+      component: pPortal,
+      indexRoute: {
+        onEnter: (nextState, replace) => replace('main/portalsettings/portalsettings'),
+      },
+      childRoutes: [
+        {
+          id: 'portalsettings',
+          path: '/main/portalsettings/portalsettings',
+          fetchUrl: 'goform/get_portal_info',
+          saveUrl: 'goform/set_portal',
+          text: _('Portal Settings'),
+          component: sPortalSettings.Screen,
         },
       ],
     }, {

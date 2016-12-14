@@ -91,6 +91,7 @@ export default class NetworkSettings extends React.Component {
   componentDidUpdate(prevProps) {
     if (this.props.app.get('refreshAt') !== prevProps.app.get('refreshAt')) {
       this.firstInAndRefresh();
+      this.props.resetVaildateMsg();
     }
   }
 

@@ -37,6 +37,7 @@ const propTypes = {
   changeUpgradeBarInfo: PropTypes.func,
   resetSelfState: PropTypes.func,
   changePoeOut: PropTypes.func,
+  changeVoipEnable: PropTypes.func,
 };
 
 export default class SystemMaintenance extends Component {
@@ -59,6 +60,11 @@ export default class SystemMaintenance extends Component {
     this.props.fetch('goform/get_poe_out').then((json) => {
       if (json.state && json.state.code === 2000) {
         this.props.changePoeOut(json.data.poeOut);
+      }
+    });
+    this.props.fetch('goform/get_voip_info').then((json) => {
+      if (json.state && json.state.code === 2000) {
+        this.props.changeVoipEnable(json.data.enable);
       }
     });
   }
@@ -269,6 +275,9 @@ export default class SystemMaintenance extends Component {
               type="file"
               name="filename"
               id="upgradeFile"
+              style={{
+                marginTop: '-4px',
+              }}
             />
             <Button
               type="button"
@@ -312,6 +321,9 @@ export default class SystemMaintenance extends Component {
             <FormInput
               type="file"
               id="restoreFile"
+              style={{
+                marginTop: '-4px',
+              }}
             />
             <Button
               text={_('Restore')}
@@ -356,6 +368,39 @@ export default class SystemMaintenance extends Component {
                   onClick={() => {
                     const query = { poeOut: this.props.selfState.get('poeOut') };
                     this.props.save('goform/set_poe_out', query);
+                  }}
+                />
+              </div>
+            </div>
+            ) : null
+        }
+
+        {
+          this.props.route.funConfig.voipFun ? (
+            <div>
+              <div className="o-form__legend">
+                {_('VOIP')}
+              </div>
+              <div className="clearfix">
+                <FormGroup
+                  type="switch"
+                  label={_('VOIP')}
+                  className="fl"
+                  options={[
+                    { label: _('Turn On'), value: '1' },
+                    { label: _('Turn Off'), value: '0' },
+                  ]}
+                  minWidth="80px"
+                  value={this.props.selfState.get('voipEnable')}
+                  onChange={(data) => {
+                    this.props.changeVoipEnable(data.value);
+                  }}
+                />
+                <SaveButton
+                  loading={this.props.app.get('saving')}
+                  onClick={() => {
+                    const query = { enable: this.props.selfState.get('voipEnable') };
+                    this.props.save('goform/set_voip', query);
                   }}
                 />
               </div>
