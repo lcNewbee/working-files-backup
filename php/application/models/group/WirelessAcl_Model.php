@@ -94,7 +94,21 @@ class WirelessAcl_Model extends CI_Model {
 								->where('wids_id !=',$filterid)
 								->get()->result_array();
 		if(count($querydata) > 0){
-			$result['data']['list'] = $querydata;				
+			$macary = array();
+			foreach ($querydata as $row) {
+				array_push($macary,$row['mac']);
+			}
+			//所有组去除重复
+			$retdata = array();
+			$macary = array_unique($macary);
+			foreach ($macary as $res) {
+				$queryrow = $this->db->select('mac,vendor,clientType,reason,lastTime')
+									->from($tableName)
+									->where('mac',$res)
+									->get()->result_array();
+				$retdata[] = $queryrow[0];
+			}			
+			$result['data']['list'] = $retdata;				
 		}
 		return $result;
 	}

@@ -85,7 +85,9 @@ $route['goform/group/wips'] = 'wirelessSafe';
 $route['goform/group/wireless/protection'] = 'WirelessProtection';
 $route['goform/group/safeStatus'] = 'monitorSafeStatus';
 $route['goform/group/map/building'] = 'mapBuilding';
-
+$route['goform/group/map/list'] = 'mapSonList';
+$route['goform/group/map/apPlan'] = 'mapApPlan';
+$route['goform/group/map/aps'] = 'mapAps';
 
 // 系统设置
 $route['goform/system/version/upload'] = 'systemVersion/upload';
