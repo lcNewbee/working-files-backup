@@ -15,13 +15,12 @@ const screenOptions = fromJS([
       type: 'checkbox',
       dataType: 'number',
       defaultValue: '0',
-      value: '1',
     },
   }, {
     id: 'attacttime',
     label: _('Harass Attact Time'),
     formProps: {
-      min: 0,
+      min: 1,
       type: 'number',
       dataType: 'number',
       defaultValue: 1,
@@ -31,7 +30,7 @@ const screenOptions = fromJS([
     id: 'attactcnt',
     label: _('Harass Number'),
     formProps: {
-      min: 0,
+      min: 1,
       type: 'number',
       dataType: 'number',
       defaultValue: 1,
@@ -41,7 +40,7 @@ const screenOptions = fromJS([
     id: 'dyaging',
     label: _('Dynamic Blacklists Release Time'),
     formProps: {
-      min: 0,
+      min: 1,
       type: 'number',
       dataType: 'number',
       defaultValue: 3600,

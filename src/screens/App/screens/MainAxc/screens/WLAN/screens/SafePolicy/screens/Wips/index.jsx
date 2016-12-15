@@ -59,9 +59,10 @@ const listOptions = fromJS([
     label: _('Scan Cycles Times'),
     formProps: {
       type: 'number',
-      min: 1,
+      min: 0,
+      max: 255,
       dataType: 'number',
-      defaultValue: '1',
+      defaultValue: '0',
     },
   }, {
     id: 'maxtxpwr',
@@ -99,12 +100,15 @@ const listOptions = fromJS([
       min: 1,
       dataType: 'number',
       defaultValue: '1',
+      help: _('Seconds'),
     },
   }, {
     id: 'chlnum',
     text: _('Channel Set'),
-    help: `${_('e.g. ')}1,5,8`,
-    defaultValue: '',
+    formProps: {
+      help: `${_('e.g. ')}1,5,8`,
+      defaultValue: '',
+    },
   }, {
     id: 'enable2g4chl',
     text: _('2.4G Auto Channel Scan Switch'),

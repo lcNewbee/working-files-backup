@@ -14,7 +14,7 @@ function getInterfaceTypeOptions() {
         options: json.data.list.map(
           item => ({
             value: item.template_name,
-            label: `${item.id}(${item.template_name})`,
+            label: item.template_name,
           }),
         ),
       }

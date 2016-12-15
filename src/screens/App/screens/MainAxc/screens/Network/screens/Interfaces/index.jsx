@@ -15,7 +15,7 @@ function getPortList() {
         options: json.data.list.map(
           item => ({
             value: item.name,
-            label: item.name,
+            label: `${item.id}(${item.name})`,
           }),
         ),
       }

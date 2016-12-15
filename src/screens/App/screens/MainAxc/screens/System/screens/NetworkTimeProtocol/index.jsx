@@ -7,6 +7,7 @@ import AppScreen from 'shared/components/Template/AppScreen';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 import TIME_ZONE from 'shared/config/timeZone';
+import validator from 'shared/utils/lib/validator';
 
 const propTypes = {
   store: PropTypes.instanceOf(Map),
@@ -21,31 +22,47 @@ const settingsOptions = fromJS([
     fieldset: 'acTime',
     legend: _('AC Time Synchronization Setting'),
     type: 'checkbox',
+
   },
   {
     id: 'ac_server_name',
     fieldset: 'acTime',
     label: _('Synchronization Server'),
     type: 'text',
-
+    required: 'true',
+    validator: validator({
+      rules: 'ip',
+    }),
   },
   {
     id: 'ac_referral_server',
     fieldset: 'acTime',
     label: _('Referral Server'),
     type: 'text',
+    validator: validator({
+      rules: 'ip',
+    }),
   },
   {
     id: 'ac_TimeInterval',
     fieldset: 'acTime',
     label: _('Synchronization Time Interval'),
-    type: 'text',
+    type: 'number',
+    required: 'true',
+    help: _('Second'),
+    min: '5',
+    max: '50000',
+    maxLength: '15',
+    validator: validator({
+      rules: 'num',
+    }),
   },
   {
     id: 'ac_timezone',
     fieldset: 'acTime',
     label: _('Synchronization Time Zone'),
     type: 'select',
+    required: 'true',
     options: TIME_ZONE,
   },
 ]).groupBy(item => item.get('fieldset'))
