@@ -18,10 +18,11 @@
     position: absolute;
     cursor: pointer;
     line-height: 0;
-    height: 30px;
+    height: 34px;
     min-width: 280px;
     margin-left: -80px;
     font-size: 10px;
+    z-index: 2;
 
     @include opacity(0);
   }

@@ -18,7 +18,7 @@ const propTypes = {
   store: PropTypes.instanceOf(Map),
   selfState: PropTypes.instanceOf(Map),
   validateAll: PropTypes.func,
-
+  fetchSettings: PropTypes.func,
   route: PropTypes.object,
   // initSettings: PropTypes.func,
   // fetchSettings: PropTypes.func,
@@ -41,10 +41,10 @@ const propTypes = {
   changeTitleShowIcon: PropTypes.func,
   changeTableItemForSsid: PropTypes.func,
   createModal: PropTypes.func,
-  updateSelfItemSettings: PropTypes.func,
-  updateBasicSettings: PropTypes.func,
+  // updateSelfItemSettings: PropTypes.func,
+  updateItemSettings: PropTypes.func,
   updateMultiSsidItem: PropTypes.func,
-  updateRadioSettingsItem: PropTypes.func,
+  // updateRadioSettingsItem: PropTypes.func,
   changeWhichButton: PropTypes.func,
   restoreSelfState: PropTypes.func,
   changeCurrRadioConfig: PropTypes.func,
@@ -204,7 +204,7 @@ export default class Basic extends React.Component {
           width: '200px',
           transform: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-            const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
+            const pos = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
             return (
               <input
                 type="checkbox"
@@ -222,7 +222,7 @@ export default class Basic extends React.Component {
           width: '250px',
           transform: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-            const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
+            const pos = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
             return (
               <FormInput
                 type="text"
@@ -243,7 +243,7 @@ export default class Basic extends React.Component {
           width: '250px',
           transform: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-            const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
+            const pos = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
             return (
               <FormInput
                 type="number"
@@ -350,7 +350,7 @@ export default class Basic extends React.Component {
           width: '200px',
           transform: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-            const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
+            const pos = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
             return (
               <div style={{ marginLeft: '-3px' }}>
                 <Button
@@ -375,7 +375,7 @@ export default class Basic extends React.Component {
           width: '200px',
           transform: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-            const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
+            const pos = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
             return (
               <div style={{ marginLeft: '-3px' }}>
                 <Button
@@ -400,7 +400,7 @@ export default class Basic extends React.Component {
           width: '200px',
           transform: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-            const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
+            const pos = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
             return (
               <div style={{ marginLeft: '-12px' }}>
                 <Button
@@ -438,13 +438,12 @@ export default class Basic extends React.Component {
     this.props.resetVaildateMsg();
   }
 
-  onSave(url, module, validID) {
-    // module指selfState中的radioSettings,multiSsid,basicSettings
+  onSave(validID) {
     const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
     this.props.validateAll(validID).then((msg) => {
       if (msg.isEmpty()) {
-        const dataToSave = this.props.selfState.getIn([module, 'radioList', radioId]).toJS();
-        this.props.save(url, dataToSave).then((json) => {
+        const dataToSave = this.props.store.getIn(['curData', 'radioList', radioId]).toJS();
+        this.props.save('goform/set_wl_all', dataToSave).then((json) => {
           if (json.state && json.state.code === 2000) {
             this.fetchFullPageData();
           }
@@ -455,10 +454,11 @@ export default class Basic extends React.Component {
 
   onHideSsidboxClick() {
     const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-    const basicSettings = this.props.selfState.get('basicSettings');
-    const hideSsid = basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'hideSsid']) === '1' ? '0' : '1';
-    const radioList = basicSettings.get('radioList').setIn([radioId, 'vapList', '0', 'hideSsid'], hideSsid);
-    this.props.updateBasicSettings({ radioList });
+    // const basicSettings = this.props.selfState.get('basicSettings');
+    const curData = this.props.store.get('curData');
+    const hideSsid = curData.getIn(['radioList', radioId, 'vapList', '0', 'hideSsid']) === '1' ? '0' : '1';
+    const radioList = curData.get('radioList').setIn([radioId, 'vapList', '0', 'hideSsid'], hideSsid);
+    this.props.updateItemSettings({ radioList });
   }
 
   onStopScanClick() {
@@ -485,17 +485,18 @@ export default class Basic extends React.Component {
       mac, ssid, security, frequency, channelWidth,
     } = this.props.selfState.get('selectedResult').toJS();
     const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-    const basicSettings = this.props.selfState.get('basicSettings');
+    const curData = this.props.store.get('curData');
+    // const basicSettings = this.props.selfState.get('basicSettings');
     if (!this.props.selfState.get('selectedResult').isEmpty()) {
-      let peers = basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'peers']);
+      let peers = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers']);
       if (peers !== undefined) { peers = peers.set('0', mac); }
-      const firstSsid = basicSettings.getIn(['radioList', radioId, 'vapList', '0'])
+      const firstSsid = curData.getIn(['radioList', radioId, 'vapList', '0'])
                         .set('peers', peers).set('ssid', ssid).set('apMac', mac)
                         .set('security', fromJS(security).set('key', ''))
                         .set('frequency', frequency)
                         .set('channelWidth', channelWidth);
-      const radioList = basicSettings.get('radioList').setIn([radioId, 'vapList', '0'], firstSsid);
-      this.props.updateBasicSettings({ radioList });
+      const radioList = curData.get('radioList').setIn([radioId, 'vapList', '0'], firstSsid);
+      this.props.updateItemSettings({ radioList });
       this.props.updateItemSettings({ scanResult: fromJS({}) });
       this.props.changeShowScanResultStatus(false);
       this.props.changeSelectedResult(fromJS({}));
@@ -514,18 +515,16 @@ export default class Basic extends React.Component {
     this.props.changeSelectedResult(result);
   }
   onChengeWirelessMode(data) {
-    this.props.fetch('goform/get_wl_info_forTestUse').then((json) => {
-      // 首先更新数据，防止之前修改模式但未保存时加密方式发生变化，目的是切换回去后显示原来的数据
-      if (json.state && json.state.code === 2000) {
-        const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-        let newRadioList = fromJS(json.data).setIn(['radioList', radioId, 'wirelessMode'], data.value);
-        // 处理切换成repeater后，加密方式为空的问题
-        if (data.value === 'repeater' && json.data.radioList[0].vapList[0].security.mode !== 'wep') {
-          newRadioList = newRadioList.setIn(['radioList', radioId, 'vapList', 0, 'security', 'mode'], 'none');
-        }
-        this.props.updateBasicSettings(newRadioList);
-      }
-    });
+    this.props.fetchSettings('goform/get_wl_all')
+        .then(() => {
+          // const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
+          let newRadioList = this.props.store.getIn(['curData', 'radioList']);
+          const securityMode = this.props.store.getIn(['curData', 'radioList', 0, 'vapList', 0, 'security', 'mode']);
+          if (data.value === 'repeater' && securityMode !== 'wep') {
+            newRadioList = newRadioList.setIn(['radioList', 0, 'vapList', 0, 'security', 'mode'], 'none');
+          }
+          this.props.updateItemSettings({ radioList: newRadioList });
+        });
   }
   onCloseCountrySelectModal() {
     this.props.fetch('goform/get_base_wl_info').then((json) => {
@@ -537,8 +536,9 @@ export default class Basic extends React.Component {
 
   onSecurityModeChange(data) {
     const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-    const basicSettings = this.props.selfState.get('basicSettings');
-    const preSecurity = basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'security']);
+    const curData = this.props.store.get('curData');
+    // const basicSettings = this.props.selfState.get('basicSettings');
+    const preSecurity = curData.getIn(['radioList', radioId, 'vapList', '0', 'security']);
     const mode = data.value;
     const auth = preSecurity.get('auth') || 'shared';
     const keyLength = preSecurity.get('keyLength') || '64';
@@ -551,9 +551,9 @@ export default class Basic extends React.Component {
                           .set('keyIndex', keyIndex)
                           .set('cipher', cipher)
                           .set('key', key);
-    const radioList = basicSettings.get('radioList')
+    const radioList = curData.get('radioList')
                     .setIn([radioId, 'vapList', '0', 'security'], afterSecurity);
-    this.props.updateBasicSettings({ radioList });
+    this.props.updateItemSettings({ radioList });
   }
 
   onAddNewSsidItem() {
@@ -592,14 +592,14 @@ export default class Basic extends React.Component {
 
   onSsidItemChange(val, item, valId, newVal) {
     const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-    const multiSsid = this.props.selfState.get('multiSsid');
-    const itemNum = multiSsid.getIn(['radioList', radioId, 'vapList']).keyOf(item);
+    const curData = this.props.store.get('curData');
+    const itemNum = curData.getIn(['radioList', radioId, 'vapList']).keyOf(item);
     const newItem = item.set(valId, newVal);
     // console.log('item', item, newItem);
-    const vapList = multiSsid.getIn(['radioList', radioId, 'vapList']).set(itemNum, newItem);
-    const radioList = this.props.selfState.getIn(['multiSsid', 'radioList'])
+    const vapList = curData.getIn(['radioList', radioId, 'vapList']).set(itemNum, newItem);
+    const radioList = this.props.store.getIn(['curData', 'radioList'])
                           .setIn([radioId, 'vapList'], vapList);
-    this.props.updateMultiSsidItem({ radioList });
+    this.props.updateItemSettings({ radioList });
   }
 
   onChangeRadio(data) { // 注意参数实际是data的value属性，这里表示radio序号
@@ -613,12 +613,12 @@ export default class Basic extends React.Component {
   }
 
   fetchFullPageData() {
-    this.props.fetch('goform/get_base_wl_info_forTestUse').then((json) => {
+    this.props.fetch('goform/get_wl_all').then((json) => {
       if (json.state && json.state.code === 2000) {
-        const radioInfo = {
-          curModule: 'radioSettings',
-          data: fromJS(json.data),
-        };
+        // const radioInfo = {
+        //   curModule: 'radioSettings',
+        //   data: fromJS(json.data),
+        // };
         // 根据国家和频段，获取信道列表信息
         const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
         const country = json.data.radioList[radioId].countryCode;
@@ -634,23 +634,8 @@ export default class Basic extends React.Component {
             this.props.receiveCountryInfo(json2.data);
           }
         });
-        this.props.updateSelfItemSettings(radioInfo);
-      } }).then(() => {
-        this.props.fetch('goform/get_wl_info_forTestUse').then((json) => {
-          if (json.state && json.state.code === 2000) {
-            const basicInfo = {
-              curModule: 'basicSettings',
-              data: fromJS(json.data),
-            };
-            const multiSsidInfo = {
-              curModule: 'multiSsid',
-              data: fromJS(json.data),
-            };
-            this.props.updateSelfItemSettings(basicInfo);
-            this.props.updateSelfItemSettings(multiSsidInfo);
-          }
-        });
-      }).then(() => { // 生成多SSID列表的options
+        // this.props.updateSelfItemSettings(radioInfo);
+      } }).then(() => { // 生成多SSID列表的options
         const funConfig = this.props.route.funConfig;
         const keysFromRoute = funConfig.ssidTableKeys;
         this.makeSsidTableOptions(this.state.ssidTableFullMemberOptions, keysFromRoute);
@@ -672,7 +657,7 @@ export default class Basic extends React.Component {
        ({
          value: parseInt(val, 10).toString(),
          label: val,
-       })
+       }),
     )
     .unshift({ value: 'auto', label: 'auto' })
     .toJS();
@@ -689,15 +674,11 @@ export default class Basic extends React.Component {
       settingId: props.route.id,
       formUrl: props.route.formUrl,
       saveUrl: props.route.saveUrl,
-      query: {
-        groupId,
-      },
-      saveQuery: {},
       defaultData: {
       },
     });
     this.fetchFullPageData();
-    props.changeTitleShowIcon({ name: 'showRadioSetting', value: true });
+    // props.changeTitleShowIcon({ name: 'showRadioSetting', value: true });
     props.changeTitleShowIcon({ name: 'showSsidSetting', value: true });
     props.changeTitleShowIcon({ name: 'showMultiSsid', value: true });
     props.changeShowSpeedLimitModal(false);
@@ -788,16 +769,17 @@ export default class Basic extends React.Component {
     ]);
     // const curData = this.props.store.get('curData');
     const { radioId, radioType } = this.props.selfState.get('currRadioConfig').toJS();
-    const radioSettings = this.props.selfState.get('radioSettings');
-    const multiSsid = this.props.selfState.get('multiSsid');
-    const basicSettings = this.props.selfState.get('basicSettings');
+    // const radioSettings = this.props.selfState.get('radioSettings');
+    // const multiSsid = this.props.selfState.get('multiSsid');
+    // const basicSettings = this.props.selfState.get('basicSettings');
     const {
       staApmac, apmac1, apmac2, apmac3, validSsid, validPwd1, validPwd2, validMaxClients,
       validDownload, validUpload,
     } = this.props.validateOption;
     const tableItemForSsid = this.props.selfState.get('tableItemForSsid');
     const funConfig = this.props.route.funConfig;
-    const keysFromRoute = funConfig.ssidTableKeys;
+    const curData = this.props.store.get('curData');
+    // const keysFromRoute = funConfig.ssidTableKeys;
     if (this.props.store.get('curSettingId') === 'base') {
       return null;
     }
@@ -815,8 +797,8 @@ export default class Basic extends React.Component {
                 this.onChangeRadio(data);
                 const saveInfo = {
                   radio: this.props.productInfo.getIn(['deviceRadioList', data.value, 'radioType']),
-                  country: this.props.selfState.getIn(['radioSettings', 'radioList', data.value, 'countryCode']),
-                  channelWidth: this.props.selfState.getIn(['radioSettings', 'radioList', data.value, 'channelWidth']),
+                  country: this.props.store.getIn(['curData', 'radioList', data.value, 'countryCode']),
+                  channelWidth: this.props.selfState.getIn(['curData', 'radioList', data.value, 'channelWidth']),
                 };
                 this.props.fetch('goform/get_country_info', saveInfo).then((json2) => {
                   if (json2.state && json2.state.code === 2000) {
@@ -911,16 +893,16 @@ export default class Basic extends React.Component {
                   <FormGroup
                     type="checkbox"
                     label={_('Radio')}
-                    checked={radioSettings.getIn(['radioList', radioId, 'enable']) === '1'}
+                    checked={curData.getIn(['radioList', radioId, 'enable']) === '1'}
                     onChange={(data) => {
-                      const radioList = radioSettings.get('radioList').setIn([radioId, 'enable'], data.value);
-                      this.props.updateRadioSettingsItem({ radioList });
+                      const radioList = curData.get('radioList').setIn([radioId, 'enable'], data.value);
+                      this.props.updateItemSettings({ radioList });
                     }}
                   />
                   <FormGroup
                     type="select"
                     options={funConfig.devicemodeOptions}
-                    value={basicSettings.getIn(['radioList', radioId, 'wirelessMode'])}
+                    value={curData.getIn(['radioList', radioId, 'wirelessMode'])}
                     onChange={data => this.onChengeWirelessMode(data)}
                     label={_('Device Mode')}
                   /> { /* 模式选择下拉框 */}
@@ -979,54 +961,54 @@ export default class Basic extends React.Component {
                     label={_('Radio Mode')}
                     type="select"
                     options={radioType === '5G' ? radioModeOptionsFor5g : radioModeOptionsFor2g}
-                    value={radioSettings.getIn(['radioList', radioId, 'radioMode'])}
+                    value={curData.getIn(['radioList', radioId, 'radioMode'])}
                     onChange={(data) => {
-                      const radioList = radioSettings.get('radioList').setIn([radioId, 'radioMode'], data.value);
-                      this.props.updateRadioSettingsItem({ radioList });
+                      const radioList = curData.get('radioList').setIn([radioId, 'radioMode'], data.value);
+                      this.props.updateItemSettings({ radioList });
                     }}
                   />
                   <FormGroup
                     label={_('Channel')}
                     type="select"
                     options={this.makeChannelOptions()}
-                    value={radioSettings.getIn(['radioList', radioId, 'frequency']) || 'auto'}
+                    value={curData.getIn(['radioList', radioId, 'frequency']) || 'auto'}
                     onChange={(data) => {
-                      const radioList = radioSettings.get('radioList')
+                      const radioList = curData.get('radioList')
                                         .setIn([radioId, 'frequency'], data.value || 'auto');
-                      this.props.updateRadioSettingsItem({ radioList });
+                      this.props.updateItemSettings({ radioList });
                     }}
                   />
                   { // 2.4G频宽
-                    radioSettings.getIn(['radioList', radioId, 'radioMode']) === '11ng' &&
+                    curData.getIn(['radioList', radioId, 'radioMode']) === '11ng' &&
                     this.props.selfState.getIn(['currRadioConfig', 'radioType']) === '2.4G' ? (
                       <FormGroup
                         label={_('Channel Bandwidth')}
                         type="switch"
                         minWidth="99px"
                         options={channelWidthOptions.slice(0, 2)}
-                        value={radioSettings.getIn(['radioList', radioId, 'channelWidth'])}
+                        value={curData.getIn(['radioList', radioId, 'channelWidth'])}
                         onChange={(data) => {
-                          const radioList = radioSettings.get('radioList')
+                          const radioList = curData.get('radioList')
                                             .setIn([radioId, 'channelWidth'], data.value);
-                          this.props.updateRadioSettingsItem({ radioList });
+                          this.props.updateItemSettings({ radioList });
                         }}
                       />
                     ) : null
                   }
                   { // 5G频宽
                     this.props.selfState.getIn(['currRadioConfig', 'radioType']) === '5G' &&
-                    (radioSettings.getIn(['radioList', radioId, 'radioMode']) === '11ac' ||
-                    radioSettings.getIn(['radioList', radioId, 'radioMode']) === '11na') ? (
+                    (curData.getIn(['radioList', radioId, 'radioMode']) === '11ac' ||
+                    curData.getIn(['radioList', radioId, 'radioMode']) === '11na') ? (
                       <FormGroup
                         label={_('Channel Bandwidth')}
                         type="switch"
                         minWidth="66px"
                         options={channelWidthOptions}
-                        value={radioSettings.getIn(['radioList', radioId, 'channelWidth'])}
+                        value={curData.getIn(['radioList', radioId, 'channelWidth'])}
                         onChange={(data) => {
-                          const radioList = radioSettings.get('radioList')
+                          const radioList = curData.get('radioList')
                                             .setIn([radioId, 'channelWidth'], data.value);
-                          this.props.updateRadioSettingsItem({ radioList });
+                          this.props.updateItemSettings({ radioList });
                         }}
                       />
                     ) : null
@@ -1037,11 +1019,11 @@ export default class Basic extends React.Component {
                         label={_('Max Clients')}
                         type="number"
                         form="maxradioclients"
-                        value={radioSettings.getIn(['radioList', radioId, 'maxRadioClients'])}
+                        value={curData.getIn(['radioList', radioId, 'maxRadioClients'])}
                         onChange={(data) => {
-                          const radioList = radioSettings.get('radioList')
+                          const radioList = curData.get('radioList')
                                             .setIn([radioId, 'maxRadioClients'], data.value);
-                          this.props.updateRadioSettingsItem({ radioList });
+                          this.props.updateItemSettings({ radioList });
                         }}
                         help={`${_('Range: ')}1 ~ 50`}
                         required
@@ -1054,21 +1036,21 @@ export default class Basic extends React.Component {
                     type="range"
                     min="1"
                     max={this.props.selfState.get('maxTxpower')}
-                    value={radioSettings.getIn(['radioList', radioId, 'txPower'])}
+                    value={curData.getIn(['radioList', radioId, 'txPower'])}
                     inputStyle={{
                       backgroundColor: '#f2f2f2',
                     }}
                     hasTextInput
                     onChange={(data) => {
-                      const radioList = radioSettings.get('radioList')
+                      const radioList = curData.get('radioList')
                                         .setIn([radioId, 'txPower'], data.value);
-                      this.props.updateRadioSettingsItem({ radioList });
+                      this.props.updateItemSettings({ radioList });
                     }}
                   />
                 </div>
                 <div className="cols col-6">
                   { // 远端SSID设置
-                    this.props.selfState.getIn(['basicSettings', 'radioList', radioId, 'wirelessMode']) !== 'ap' ? (
+                    this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap' ? (
                       <div
                         style={{
                           overflow: 'visible',
@@ -1076,7 +1058,7 @@ export default class Basic extends React.Component {
                         }}
                       >
                         { // SSID输入框**ap模式**
-                          basicSettings.getIn(['radioList', radioId, 'wirelessMode']) === 'ap' ? (
+                          curData.getIn(['radioList', radioId, 'wirelessMode']) === 'ap' ? (
                             <div
                               className="clearfix"
                             >
@@ -1091,11 +1073,11 @@ export default class Basic extends React.Component {
                                   className="fl"
                                   form="basicSettings"
                                   type="text"
-                                  value={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'ssid'])}
+                                  value={curData.getIn(['radioList', radioId, 'vapList', '0', 'ssid'])}
                                   onChange={(data) => {
-                                    const radioList = basicSettings.get('radioList')
+                                    const radioList = curData.get('radioList')
                                           .setIn([radioId, 'vapList', '0', 'ssid'], data.value);
-                                    this.props.updateBasicSettings({ radioList });
+                                    this.props.updateItemSettings({ radioList });
                                   }}
                                   required
                                   {...validSsid}
@@ -1114,7 +1096,7 @@ export default class Basic extends React.Component {
                                     marginRight: '4px',
                                   }}
                                   type="checkbox"
-                                  checked={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'hideSsid']) === '1'}
+                                  checked={curData.getIn(['radioList', radioId, 'vapList', '0', 'hideSsid']) === '1'}
                                   onClick={data => this.onHideSsidboxClick(data)}
                                 />
                                 {_('Hide')}
@@ -1123,7 +1105,7 @@ export default class Basic extends React.Component {
                           ) : null
                         }
                         { // SSID输入框**station模式**
-                          basicSettings.getIn(['radioList', radioId, 'wirelessMode']) === 'sta' ? (
+                          curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta' ? (
                             <div className="clearfix">
                               <div
                                 style={{
@@ -1140,11 +1122,11 @@ export default class Basic extends React.Component {
                                     label={_('Remote SSID')}
                                     className="fl"
                                     type="text"
-                                    value={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'ssid'])}
+                                    value={curData.getIn(['radioList', radioId, 'vapList', '0', 'ssid'])}
                                     onChange={(data) => {
-                                      const radioList = basicSettings.get('radioList')
+                                      const radioList = curData.get('radioList')
                                             .setIn([radioId, 'vapList', '0', 'ssid'], data.value);
-                                      this.props.updateBasicSettings({ radioList });
+                                      this.props.updateItemSettings({ radioList });
                                     }}
                                     required
                                     {...validSsid}
@@ -1176,7 +1158,7 @@ export default class Basic extends React.Component {
                           ) : null
                         }
                         { // SSID输入框**repeater模式**
-                          basicSettings.getIn(['radioList', radioId, 'wirelessMode']) === 'repeater' ? (
+                          curData.getIn(['radioList', radioId, 'wirelessMode']) === 'repeater' ? (
                             <div className="clearfix">
                               <div
                                 style={{
@@ -1193,11 +1175,11 @@ export default class Basic extends React.Component {
                                     label={_('Remote SSID')}
                                     className="fl"
                                     type="text"
-                                    value={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'ssid'])}
+                                    value={curData.getIn(['radioList', radioId, 'vapList', '0', 'ssid'])}
                                     onChange={(data) => {
-                                      const radioList = basicSettings.get('radioList')
+                                      const radioList = curData.get('radioList')
                                                       .setIn([radioId, 'vapList', '0', 'ssid'], data.value);
-                                      this.props.updateBasicSettings({ radioList });
+                                      this.props.updateItemSettings({ radioList });
                                     }}
                                     required
                                     {...validSsid}
@@ -1234,7 +1216,7 @@ export default class Basic extends React.Component {
                               >
                                 <input
                                   type="checkbox"
-                                  checked={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'hideSsid']) === '1'}
+                                  checked={curData.getIn(['radioList', radioId, 'vapList', '0', 'hideSsid']) === '1'}
                                   onClick={data => this.onHideSsidboxClick(data)}
                                 />
                                 {_('Hide')}
@@ -1245,76 +1227,76 @@ export default class Basic extends React.Component {
                         <FormGroup
                           type="number"
                           label={_('VLAN ID')}
-                          value={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'vlanId'])}
+                          value={curData.getIn(['radioList', radioId, 'vapList', '0', 'vlanId'])}
                           help={`${_('Range: ')}1~4094`}
                           form="basicSettings"
                           disabled={vlanEnable === '0'}
                           onChange={(data) => {
-                            const radioList = basicSettings.get('radioList').setIn([radioId, 'vapList', 0, 'vlanId'], data.value);
-                            this.props.updateBasicSettings({ radioList });
+                            const radioList = curData.get('radioList').setIn([radioId, 'vapList', 0, 'vlanId'], data.value);
+                            this.props.updateItemSettings({ radioList });
                           }}
                           required
                           {...this.props.validateOption.validVlanId}
                         />
                         {
-                          basicSettings.getIn(['radioList', radioId, 'wirelessMode']) === 'repeater' ||
-                          basicSettings.getIn(['radioList', radioId, 'wirelessMode']) === 'ap' ? (
+                          curData.getIn(['radioList', radioId, 'wirelessMode']) === 'repeater' ||
+                          curData.getIn(['radioList', radioId, 'wirelessMode']) === 'ap' ? (
                             <FormGroup
                               label={_('Client Isolation')}
                               type="checkbox"
-                              checked={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'isolation']) === '1'}
+                              checked={curData.getIn(['radioList', radioId, 'vapList', '0', 'isolation']) === '1'}
                               onChange={(data) => {
-                                const radioList = basicSettings.get('radioList')
+                                const radioList = curData.get('radioList')
                                                 .setIn([radioId, 'vapList', '0', 'isolation'], data.value);
-                                this.props.updateBasicSettings({ radioList });
+                                this.props.updateItemSettings({ radioList });
                               }}
                             />
                           ) : null
                         }
 
                         { // repeater模式下，对端AP的mac地址输入框
-                          (basicSettings.getIn(['radioList', radioId, 'wirelessMode']) === 'repeater') ? (
+                          (curData.getIn(['radioList', radioId, 'wirelessMode']) === 'repeater') ? (
                             <div>
                               <FormGroup
                                 label="WDS Peers"
                                 type="text"
-                                value={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'peers', '0']) || ''}
+                                value={curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '0']) || ''}
                                 onChange={(data) => {
-                                  const peer1 = basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'peers', '1']) || '';
-                                  const peer2 = basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'peers', '2']) || '';
-                                  const radioList = basicSettings.get('radioList')
+                                  const peer1 = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '1']) || '';
+                                  const peer2 = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '2']) || '';
+                                  const radioList = curData.get('radioList')
                                                     .setIn([radioId, 'vapList', '0', 'peers', '0'], data.value)
                                                     .setIn([radioId, 'vapList', '0', 'peers', '1'], peer1)
                                                     .setIn([radioId, 'vapList', '0', 'peers', '2'], peer2);
-                                  this.props.updateBasicSettings({ radioList });
+                                  this.props.updateItemSettings({ radioList });
                                 }}
                                 {...apmac1}
                               />
                               <FormGroup
                                 type="text"
-                                value={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'peers', '1']) || ''}
+                                value={curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '1']) || ''}
                                 onChange={(data) => {
-                                  const peer0 = basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'peers', '0']) || '';
-                                  const peer2 = basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'peers', '2']) || '';
-                                  const radioList = basicSettings.get('radioList')
+                                  const peer0 = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '0']) || '';
+                                  const peer2 = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '2']) || '';
+                                  const radioList = curData.get('radioList')
                                                     .setIn([radioId, 'vapList', '0', 'peers', '0'], peer0)
                                                     .setIn([radioId, 'vapList', '0', 'peers', '1'], data.value)
                                                     .setIn([radioId, 'vapList', '0', 'peers', '2'], peer2);
-                                  this.props.updateBasicSettings({ radioList });
+                                  this.props.updateItemSettings({ radioList });
                                 }}
                                 {... apmac2}
                               />
                               <FormGroup
                                 type="text"
-                                value={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'peers', '2']) || ''}
+                                value={curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '2']) || ''}
                                 onChange={(data) => {
-                                  const peer0 = basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'peers', '0']) || '';
-                                  const peer1 = basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'peers', '1']) || '';
-                                  const radioList = basicSettings.get('radioList')
+                                  const peer0 = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '0']) || '';
+                                  const peer1 = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '1']) || '';
+                                  const radioList = curData.get('radioList')
                                                     .setIn([radioId, 'vapList', '0', 'peers', '0'], peer0)
                                                     .setIn([radioId, 'vapList', '0', 'peers', '1'], peer1)
                                                     .setIn([radioId, 'vapList', '0', 'peers', '2'], data.value);
-                                  this.props.updateBasicSettings({ radioList });
+                                  this.props.updateItemSettings({ radioList });
                                 }}
                                 {... apmac3}
                               />
@@ -1322,28 +1304,28 @@ export default class Basic extends React.Component {
                           ) : null
                         }
                         { // station模式下，对端AP的mac地址输入框
-                          (basicSettings.getIn(['radioList', radioId, 'wirelessMode']) === 'sta') ? (
+                          (curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta') ? (
                             <div>
                               <FormGroup
                                 label={_('Lock To AP')}
                                 type="checkbox"
-                                checked={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'apMacEnable']) === '1'}
+                                checked={curData.getIn(['radioList', radioId, 'vapList', '0', 'apMacEnable']) === '1'}
                                 onChange={(data) => {
-                                  const radioList = basicSettings.get('radioList')
+                                  const radioList = curData.get('radioList')
                                                   .setIn([radioId, 'vapList', '0', 'apMacEnable'], data.value);
-                                  this.props.updateBasicSettings({ radioList });
+                                  this.props.updateItemSettings({ radioList });
                                 }}
                               />
                               {
-                                basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'apMacEnable']) === '1' ? (
+                                curData.getIn(['radioList', radioId, 'vapList', '0', 'apMacEnable']) === '1' ? (
                                   <FormGroup
                                     label={_('Peer Mac')}
                                     form="basicSettings"
-                                    value={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'apMac'])}
+                                    value={curData.getIn(['radioList', radioId, 'vapList', '0', 'apMac'])}
                                     onChange={(data) => {
-                                      const radioList = basicSettings.get('radioList')
+                                      const radioList = curData.get('radioList')
                                                       .setIn([radioId, 'vapList', '0', 'apMac'], data.value);
-                                      this.props.updateBasicSettings({ radioList });
+                                      this.props.updateItemSettings({ radioList });
                                     }}
                                     placeholder={_('not necessary')}
                                     {...staApmac}
@@ -1356,47 +1338,47 @@ export default class Basic extends React.Component {
 
                         <div>
                           { // 加密方式选择框
-                            (basicSettings.getIn(['radioList', radioId, 'wirelessMode']) === 'sta' ||
-                              basicSettings.getIn(['radioList', radioId, 'wirelessMode']) === 'ap') ? (
+                            (curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta' ||
+                              curData.getIn(['radioList', radioId, 'wirelessMode']) === 'ap') ? (
                                 <div>
                                   <FormGroup
                                     label={_('Security')}
                                     type="select"
                                     options={staAndApSecurityOptions}
-                                    value={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'security', 'mode']) || 'none'}
+                                    value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'mode']) || 'none'}
                                     onChange={data => this.onSecurityModeChange(data)}
                                   />
                                 </div>
                             ) : null
                           }
                           {
-                            (basicSettings.getIn(['radioList', radioId, 'wirelessMode']) === 'repeater') ? (
+                            (curData.getIn(['radioList', radioId, 'wirelessMode']) === 'repeater') ? (
                               <div>
                                 <FormGroup
                                   label={_('Security')}
                                   type="select"
                                   options={repeaterSecurityOptions}
-                                  value={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'security', 'mode'])}
+                                  value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'mode'])}
                                   onChange={data => this.onSecurityModeChange(data)}
                                 />
                               </div>
                             ) : null
                           }
                           {
-                            (basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'security', 'mode']) === 'none' ||
-                            basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'security', 'mode']) === 'wep') ? null : (
+                            (curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'mode']) === 'none' ||
+                            curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'mode']) === 'wep') ? null : (
                               <div>
                                 <FormGroup
                                   label={_('Encryption')}
                                   minWidth="66px"
                                   type="switch"
-                                  value={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'security', 'cipher'])}
+                                  value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'cipher'])}
                                   onChange={(data) => {
-                                    const security = basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'security'])
+                                    const security = curData.getIn(['radioList', radioId, 'vapList', '0', 'security'])
                                                             .set('cipher', data.value);
-                                    const radioList = basicSettings.get('radioList')
+                                    const radioList = curData.get('radioList')
                                                             .setIn([radioId, 'vapList', '0', 'security'], security);
-                                    this.props.updateBasicSettings({ radioList });
+                                    this.props.updateItemSettings({ radioList });
                                   }}
                                   options={[
                                     { label: 'AES', value: 'aes' },
@@ -1409,13 +1391,13 @@ export default class Basic extends React.Component {
                                   type="password"
                                   form="basicSettings"
                                   required
-                                  value={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'security', 'key'])}
+                                  value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'key'])}
                                   onChange={(data) => {
-                                    const security = basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'security'])
+                                    const security = curData.getIn(['radioList', radioId, 'vapList', '0', 'security'])
                                                                   .set('key', data.value);
-                                    const radioList = basicSettings.get('radioList')
+                                    const radioList = curData.get('radioList')
                                                                 .setIn([radioId, 'vapList', '0', 'security'], security);
-                                    this.props.updateBasicSettings({ radioList });
+                                    this.props.updateItemSettings({ radioList });
                                   }}
                                   {...validPwd1}
                                 />
@@ -1423,45 +1405,45 @@ export default class Basic extends React.Component {
                             )
                           }
                           {
-                            (basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'security', 'mode']) === 'wep') ? (
+                            (curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'mode']) === 'wep') ? (
                               <div>
                                 <FormGroup
                                   label={_('Auth Type')}
                                   type="select"
                                   options={wepAuthenOptions}
-                                  value={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'security', 'auth'])}
+                                  value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'auth'])}
                                   onChange={(data) => {
-                                    const security = basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'security'])
+                                    const security = curData.getIn(['radioList', radioId, 'vapList', '0', 'security'])
                                                     .set('auth', data.value);
-                                    const radioList = basicSettings.get('radioList')
+                                    const radioList = curData.get('radioList')
                                                     .setIn([radioId, 'vapList', '0', 'security'], security);
-                                    this.props.updateBasicSettings({ radioList });
+                                    this.props.updateItemSettings({ radioList });
                                   }}
                                 />
                                 <FormGroup
                                   label={_('Key Index')}
                                   type="select"
                                   options={keyIndexOptions}
-                                  value={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'security', 'keyIndex'])}
+                                  value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'keyIndex'])}
                                   onChange={(data) => {
-                                    const security = basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'security'])
+                                    const security = curData.getIn(['radioList', radioId, 'vapList', '0', 'security'])
                                                     .set('keyIndex', data.value);
-                                    const radioList = basicSettings.get('radioList')
+                                    const radioList = curData.get('radioList')
                                                     .setIn([radioId, 'vapList', '0', 'security'], security);
-                                    this.props.updateBasicSettings({ radioList });
+                                    this.props.updateItemSettings({ radioList });
                                   }}
                                 />
                                 <FormGroup
                                   label={_('Key Format')}
                                   type="select"
                                   options={keyTypeOptions}
-                                  value={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'security', 'keyType'])}
+                                  value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'keyType'])}
                                   onChange={(data) => {
-                                    const security = basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'security'])
+                                    const security = curData.getIn(['radioList', radioId, 'vapList', '0', 'security'])
                                                             .set('keyType', data.value);
-                                    const radioList = basicSettings.get('radioList')
+                                    const radioList = curData.get('radioList')
                                           .setIn([radioId, 'vapList', '0', 'security'], security);
-                                    this.props.updateBasicSettings({ radioList });
+                                    this.props.updateItemSettings({ radioList });
                                   }}
                                 />
                                 <FormGroup
@@ -1469,15 +1451,15 @@ export default class Basic extends React.Component {
                                   required
                                   label={_('Password')}
                                   form="basicSettings"
-                                  value={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'security', 'key'])}
+                                  value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'key'])}
                                   onChange={(data) => {
-                                    const security = basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'security'])
+                                    const security = curData.getIn(['radioList', radioId, 'vapList', '0', 'security'])
                                                             .set('key', data.value);
-                                    const radioList = basicSettings.get('radioList')
+                                    const radioList = curData.get('radioList')
                                                     .setIn([radioId, 'vapList', '0', 'security'], security);
-                                    this.props.updateBasicSettings({ radioList });
+                                    this.props.updateItemSettings({ radioList });
                                   }}
-                                  {...this.props.validateOption[basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'security', 'keyType'])]}
+                                  {...this.props.validateOption[curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'keyType'])]}
                                 />
                               </div>
                             ) : null
@@ -1502,7 +1484,7 @@ export default class Basic extends React.Component {
                     this.props.validateAll('maxradioclients').then((msg) => {
                       if (msg.isEmpty()) {
                         this.props.changeWhichButton('radioSettings');
-                        this.onSave('goform/set_base_wl', 'radioSettings', 'radioSettings');
+                        this.onSave('radioSettings');
                       }
                     });
                   }}
@@ -1575,11 +1557,11 @@ export default class Basic extends React.Component {
                 options={this.props.selfState.get('ssidTableOptions')}
                 list={(() => {
                   const list = fromJS([]);
-                  if (multiSsid.getIn(['radioList', radioId])) {
-                    if (multiSsid.getIn(['radioList', radioId, 'wirelessMode']) !== 'sta') {
-                      return multiSsid.getIn(['radioList', radioId, 'vapList']);
+                  if (curData.getIn(['radioList', radioId])) {
+                    if (curData.getIn(['radioList', radioId, 'wirelessMode']) !== 'sta') {
+                      return curData.getIn(['radioList', radioId, 'vapList']);
                     }
-                    return multiSsid.getIn(['radioList', radioId, 'vapList']).setSize(1);
+                    return curData.getIn(['radioList', radioId, 'vapList']).setSize(1);
                   }
                   return list;
                 })()
@@ -1594,18 +1576,18 @@ export default class Basic extends React.Component {
                   icon="plus"
                   onClick={() => this.onAddNewSsidItem()}
                   style={{ marginRight: '10px' }}
-                  disabled={multiSsid.getIn(['radioList', radioId, 'wirelessMode']) === 'sta'}
+                  disabled={curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta'}
                 />
                 <SaveButton
                   type="button"
                   loading={this.props.app.get('saving') &&
                           this.props.selfState.get('whichButton') === 'multiSsid'}
-                  disabled={multiSsid.get('wirelessMode') === 'sta'}
+                  disabled={curData.get('wirelessMode') === 'sta'}
                   onClick={() => {
                     let error = '';
                     let totalNum = 0;
-                    const vapList = multiSsid.getIn(['radioList', radioId, 'vapList']).toJS();
-                    const radioClientLimit = radioSettings.getIn(['radioList', radioId, 'maxRadioClients']);
+                    const vapList = curData.getIn(['radioList', radioId, 'vapList']).toJS();
+                    const radioClientLimit = curData.getIn(['radioList', radioId, 'maxRadioClients']);
                     const len = vapList.length;
                     const re = /^[0-9]*[1-9][0-9]*$/;
                     for (let i = 0; i < len; i++) {
@@ -1642,7 +1624,7 @@ export default class Basic extends React.Component {
                     // console.log('error', totalNum, radioClientLimit);
                     if (error === '') {
                       this.props.changeWhichButton('multiSsid');
-                      this.onSave('goform/set_wireless', 'multiSsid', 'multiSsid');
+                      this.onSave('multiSsid');
                     } else {
                       this.props.createModal({
                         id: 'settings',
@@ -1677,9 +1659,9 @@ export default class Basic extends React.Component {
             this.props.validateAll('speedlimitform').then((msg) => {
               if (msg.isEmpty()) {
                 const pos = tableItemForSsid.get('pos');
-                const vapList = multiSsid.getIn(['radioList', radioId, 'vapList'])
+                const vapList = curData.getIn(['radioList', radioId, 'vapList'])
                                 .set(pos, tableItemForSsid.get('item'));
-                const radioList = multiSsid.get('radioList').setIn([radioId, 'vapList'], vapList);
+                const radioList = curData.get('radioList').setIn([radioId, 'vapList'], vapList);
                 this.props.updateMultiSsidItem({ radioList });
                 this.props.changeShowSpeedLimitModal(false);
                 this.props.changeTableItemForSsid(fromJS({
@@ -1758,9 +1740,9 @@ export default class Basic extends React.Component {
             this.props.validateAll('ssidSecurityModal').then((msg) => {
               if (msg.isEmpty()) {
                 const pos = tableItemForSsid.get('pos');
-                const vapList = multiSsid.getIn(['radioList', radioId, 'vapList'])
+                const vapList = curData.getIn(['radioList', radioId, 'vapList'])
                                 .set(pos, tableItemForSsid.get('item'));
-                const radioList = multiSsid.get('radioList').setIn([radioId, 'vapList'], vapList);
+                const radioList = curData.get('radioList').setIn([radioId, 'vapList'], vapList);
                 this.props.updateMultiSsidItem({ radioList });
                 this.props.changeTableItemForSsid(fromJS({
                   isShow: '0',

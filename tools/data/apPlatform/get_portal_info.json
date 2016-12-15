@@ -1,0 +1,27 @@
+{
+  "state":{
+    "code":2000,
+    "msg":"success"
+  },
+  "data":{
+    "enable":"1",
+    "redirectUrl":"http://www.baidu.com",
+    "timeout":"1800",
+    "refreshTime":"3",
+    "title":"comlan portal",
+    "imageList":[
+      {
+        "index":"1",
+        "url":"http://192.168.0.21/1.png"
+      },
+      {
+        "index":"2",
+        "url":"http://192.168.0.21/2.png"
+      },
+      {
+        "index":"3",
+        "url":"http://192.168.0.21/3.png"
+      }
+    ]
+  }
+}

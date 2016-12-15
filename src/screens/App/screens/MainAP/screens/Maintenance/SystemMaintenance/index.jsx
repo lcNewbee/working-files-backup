@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fromJS, Map } from 'immutable';
 import { FormGroup, FormInput, Modal, ProgressBar } from 'shared/components';
-import { Button, SaveButton } from 'shared/components/Button';
+import { SaveButton } from 'shared/components/Button';
 import * as appActions from 'shared/actions/app';
 import * as settingActions from 'shared/actions/settings';
 import utils from 'shared/utils';
@@ -275,12 +275,10 @@ export default class SystemMaintenance extends Component {
               type="file"
               name="filename"
               id="upgradeFile"
-              style={{
-                marginTop: '-4px',
-              }}
             />
-            <Button
+            <SaveButton
               type="button"
+              icon=""
               text={_('Upgrade')}
               onClick={this.onFarewellUpgrade}
               theme="primary"
@@ -291,8 +289,9 @@ export default class SystemMaintenance extends Component {
           {_('Reboot')}
         </div>
         <FormGroup label={_('Reboot Device')}>
-          <Button
+          <SaveButton
             text={_('Reboot')}
+            icon=""
             onClick={this.onRebootDevice}
             theme="primary"
           />
@@ -302,8 +301,9 @@ export default class SystemMaintenance extends Component {
           {_('Configuration')}
         </div>
         <FormGroup label={_('Backup Configuration')}>
-          <Button
+          <SaveButton
             text={_('Backup')}
+            icon=""
             onClick={this.onBackupConfig}
             theme="primary"
           />
@@ -321,12 +321,10 @@ export default class SystemMaintenance extends Component {
             <FormInput
               type="file"
               id="restoreFile"
-              style={{
-                marginTop: '-4px',
-              }}
             />
-            <Button
+            <SaveButton
               text={_('Restore')}
+              icon=""
               onClick={this.onConfigurationRestore}
               theme="primary"
             />
@@ -335,8 +333,9 @@ export default class SystemMaintenance extends Component {
         <FormGroup
           label={_('Reset Configuration')}
         >
-          <Button
+          <SaveButton
             text={_('Reset')}
+            icon=""
             onClick={this.onResetDevice}
             theme="primary"
           />

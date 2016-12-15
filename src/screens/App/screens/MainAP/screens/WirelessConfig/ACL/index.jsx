@@ -130,7 +130,7 @@ export default class ACL extends React.Component {
   }
 
   onAddMacToLocalList() {
-    const macInputVal = this.props.macInput.get('macValue');
+    const macInputVal = this.props.macInput.get('macValue').replace(/-/g, ':');
     const selectedSsid = this.props.selectedSsid;
     const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
     const preList = this.props.store.getIn(['curData', 'radioList', radioId, 'aclConfList', selectedSsid, 'macList']);
@@ -160,24 +160,6 @@ export default class ACL extends React.Component {
     });
   }
 
-  updateAclMacList() {
-    const macStatusList = this.props.macStatus;
-    const selectedSsid = this.props.selectedSsid;
-    const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-    const macList = this.props.store.getIn(['curData', 'radioList', radioId, 'aclConfList', selectedSsid, 'macList']);
-    let newList = fromJS([]);
-    macStatusList.forEach((val, index) => {
-      if (!val) {
-        newList = newList.push(macList.get(index));
-      }
-    });
-    const aclConfList = this.props.store.getIn(['curData', 'radioList', radioId, 'aclConfList'])
-                            .setIn([selectedSsid, 'macList'], newList);
-    const radioList = this.props.store.getIn(['curData', 'radioList'])
-                      .setIn([radioId, 'aclConfList'], aclConfList);
-    this.props.updateItemSettings({ radioList });
-    this.props.initMacstatus(newList.size);
-  }
   onChangeRadio(data) {
     const radioType = this.props.product.getIn(['deviceRadioList', data.value, 'radioType']);
     const config = fromJS({
@@ -187,20 +169,11 @@ export default class ACL extends React.Component {
     this.props.changeCurrRadioConfig(config);
   }
 
-  firstInAndRefresh() {
-    this.props.initSettings({
-      settingId: this.props.route.id,
-      fetchUrl: this.props.route.fetchUrl,
-      defaultData: {
-        maclist: [
-        ],
-      },
-    });
-    // 初始化页面为第一个radio
-    this.onChangeRadio({ value: '0' });
-    // 获取后台数据并跳转到第一个radio设置页面
-    this.switchToNewRadioPage('0');
-    this.props.changeMacInput('');
+  onSave() {
+    const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
+    const saveData = this.props.store.getIn(['curData', 'radioList', radioId])
+                      .set('radioId', radioId).toJS();
+    this.props.save('goform/set_acl', saveData);
   }
 
   // 获取后台数据并跳转到指定的radioID设置页面
@@ -226,11 +199,39 @@ export default class ACL extends React.Component {
     });
   }
 
-  onSave() {
+  firstInAndRefresh() {
+    this.props.initSettings({
+      settingId: this.props.route.id,
+      fetchUrl: this.props.route.fetchUrl,
+      defaultData: {
+        maclist: [
+        ],
+      },
+    });
+    // 初始化页面为第一个radio
+    this.onChangeRadio({ value: '0' });
+    // 获取后台数据并跳转到第一个radio设置页面
+    this.switchToNewRadioPage('0');
+    this.props.changeMacInput('');
+  }
+
+  updateAclMacList() {
+    const macStatusList = this.props.macStatus;
+    const selectedSsid = this.props.selectedSsid;
     const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-    const saveData = this.props.store.getIn(['curData', 'radioList', radioId])
-                      .set('radioId', radioId).toJS();
-    this.props.save('goform/set_acl', saveData);
+    const macList = this.props.store.getIn(['curData', 'radioList', radioId, 'aclConfList', selectedSsid, 'macList']);
+    let newList = fromJS([]);
+    macStatusList.forEach((val, index) => {
+      if (!val) {
+        newList = newList.push(macList.get(index));
+      }
+    });
+    const aclConfList = this.props.store.getIn(['curData', 'radioList', radioId, 'aclConfList'])
+                            .setIn([selectedSsid, 'macList'], newList);
+    const radioList = this.props.store.getIn(['curData', 'radioList'])
+                      .setIn([radioId, 'aclConfList'], aclConfList);
+    this.props.updateItemSettings({ radioList });
+    this.props.initMacstatus(newList.size);
   }
 
   render() {
@@ -363,7 +364,10 @@ export default class ACL extends React.Component {
             form="macinput"
             disabled={store.getIn(['curData', 'radioList', radioId, 'aclEnable']) === '0'}
             value={this.props.macInput.get('macValue')}
-            onChange={(data, e) => this.onMacInputChange(data.value, e)}
+            onChange={(data, e) => {
+              const val = data.value.replace(/：/g, ':');
+              this.onMacInputChange(val, e);
+            }}
             {...this.props.validateOption.inputMac}
             style={{
               width: '387px',
