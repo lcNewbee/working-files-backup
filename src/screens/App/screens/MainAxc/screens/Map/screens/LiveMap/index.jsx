@@ -30,6 +30,7 @@ const listOptions = fromJS({
       defaultValue: 'building',
       formProps: {
         type: 'text',
+        required: true,
       },
     }, {
       id: 'mapNumber',
@@ -43,6 +44,7 @@ const listOptions = fromJS({
       id: 'address',
       label: _('Address'),
       formProps: {
+        required: true,
         type: 'text',
       },
     }, {
@@ -184,10 +186,13 @@ export default class View extends React.Component {
     }
   }
   onViewBuildingInfo(e, i) {
+    const list = this.props.store.getIn([this.props.route.id, 'data', 'list']);
+    const buildId = list.getIn([i, 'id']);
+
     // 过滤Button元素的点击
     if (e.target.nodeName.toLowerCase() !== 'button' &&
         e.target.parentNode.nodeName.toLowerCase() !== 'button') {
-      this.props.router.push(`/main/group/map/live/${i}`);
+      this.props.router.push(`/main/group/map/live/${buildId}`);
     }
   }
   onSave() {
@@ -349,6 +354,11 @@ export default class View extends React.Component {
           ].join(' ');
         }
 
+        this.props.updateCurEditListItem({
+          address,
+          lng: place.geometry.location.lng(),
+          lat: place.geometry.location.lat(),
+        });
         infowindow.setContent(`<div><strong>${place.name}</strong><br>${address}`);
         infowindow.open(this.map, marker);
       });

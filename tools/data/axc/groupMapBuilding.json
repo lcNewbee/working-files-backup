@@ -4,91 +4,22 @@
     "msg": "ok"
   },
   "data": {
-    "list": [
-      {
-        "id": "0",
-        "lat": -34,
-        "lng": 151.23,
-        "address": "shenzhen china",
-        "markerTitle": "0",
-        "name": "Head Office",
-        "mapNumber": 12,
-        "markerType": "building",
-        "mapList": [
-          {
-            "id": "1",
-            "mapName": "Floor One",
-            "locked": "0"
-          }, {
-            "id": "2",
-            "mapName": "Floor Two",
-            "locked": "0"
-          }
-        ]
-      },
-      {
-        "id": "1",
-        "lat": -34,
-        "lng": 151.56,
-        "markerTitle": "1",
-        "name": "Branch",
-        "mapNumber": 12,
-        "markerType": "building",
-        "mapList": [
-          {
-            "id": "1",
-            "mapName": "Floor one",
-            "locked": "0"
-          }, {
-            "id": "2",
-            "mapName": "Floor Two",
-            "locked": "0"
-          }, {
-            "id": "2",
-            "mapName": "Floor Three",
-            "locked": "0"
-          }
-        ]
-      },
-      {
-        "id": "2",
-        "lat": -34,
-        "lng": 151.78,
-        "markerTitle": "2",
-        "name": "Market",
-        "mapNumber": 12,
-        "markerType": "building",
-        "mapList": [
-          {
-            "id": "1",
-            "mapName": "Floor One",
-            "locked": "0"
-          }, {
-            "id": "2",
-            "mapName": "Floor Two",
-            "locked": "0"
-          }
-        ]
-      }, {
-        "id": "3",
-        "lat": -34,
-        "lng": 151.78,
-        "markerTitle": "2",
-        "name": "Market",
-        "mapNumber": 12,
-        "markerType": "building",
-        "mapList": [
-          {
-            "id": "1",
-            "mapName": "Floor One",
-            "locked": "0"
-          }, {
-            "id": "2",
-            "mapName": "Floor Two",
-            "locked": "0"
-          }
-        ]
-      }
-    ]
+    "list": [{
+      "id": 11,
+      "lat": 22.5476177,
+      "lng": 113.9462726,
+      "address": "5 \u79d1\u82d1\u8def \u5357\u5c71\u533a",
+      "name": "\u603b\u90e8",
+      "mapNumber": 1,
+      "marktype": "building"
+    }, {
+      "id": 13,
+      "lat": 22.554255,
+      "lng": 113.878773,
+      "address": "\u88d5\u5b89\u4e00\u8def \u5b9d\u5b89\u533a \u6df1\u5733\u5e02",
+      "name": "\u4fdd\u5b89\u5206\u90e8",
+      "mapNumber": 1,
+      "marktype": "building"
+    }]
   }
 }

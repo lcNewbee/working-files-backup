@@ -56,7 +56,9 @@ function previewFile(file) {
 
 const propTypes = {
   store: PropTypes.instanceOf(Map),
+  groupid: PropTypes.any,
   router: PropTypes.object,
+  params: PropTypes.object,
   updateScreenSettings: PropTypes.func,
   addToPropertyPanel: PropTypes.func,
   updateCurEditListItem: PropTypes.func,
@@ -67,6 +69,7 @@ const propTypes = {
   closeListItemModal: PropTypes.func,
   addListItem: PropTypes.func,
   createModal: PropTypes.func,
+  saveFile: PropTypes.func,
 
   // AXC actons
   selectManageGroupAp: PropTypes.func,
@@ -88,6 +91,8 @@ export default class View extends React.Component {
       mapOffsetY: 0,
       isUnplacedListShow: true,
       backgroundImgUrl: '',
+      curShowOptionDeviceMac: -100,
+      zoom: 100,
     };
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     utils.binds(this,
@@ -104,15 +109,43 @@ export default class View extends React.Component {
         'updateState',
         'onToggleUnplacedList',
         'onSaveMap',
+        'transformServerData',
+        'savePlaceDevice',
+        'fetchMapList',
       ],
     );
+    this.curBuildId = parseInt(props.params.id, 10);
+    this.curScreenId = props.route.id;
+    this.$$mapList = fromJS([]);
+    this.$$mapApList = fromJS({});
   }
+
+  componentWillMount() {
+    this.fetchMapList();
+  }
+
+  componentWillUpdate(nextProps) {
+    // Server Data Update
+    if (this.props.store.getIn([this.curScreenId, 'data']) !==
+        nextProps.store.getIn([this.curScreenId, 'data'])) {
+      this.transformServerData(nextProps.store);
+    }
+  }
+  componentDidUpdate(prevProps) {
+    // 当组内AP数据发生改变时，重新请求地图AP数量
+    if (this.props.groupDevice !== prevProps.groupDevice) {
+      this.props.fetchScreenData();
+    }
+  }
+
   onSaveMap() {
-    const url = 'goform/group/map';
+    const url = 'goform/group/map/list';
     const formElem = this.formElem;
+
     this.props.saveFile(url, formElem)
       .then(() => {
         this.props.closeListItemModal();
+        this.fetchMapList();
       });
   }
   onToggleUnplacedList(active) {
@@ -134,7 +167,7 @@ export default class View extends React.Component {
         }
       });
   }
-  onDrop(ev, curMapName) {
+  onDrop(ev, curMapId) {
     const mapOffset = dom.getAbsPoint(this.mapContent);
     const offsetX = (ev.clientX - mapOffset.x - 13);
     const offsetY = (ev.clientY - mapOffset.y - 13);
@@ -143,21 +176,26 @@ export default class View extends React.Component {
 
     this.props.updateCurEditListItem({
       map: {
-        mapName: curMapName,
         xpos: (offsetX * 100) / this.mapContent.offsetWidth,
         ypos: (offsetY * 100) / this.mapContent.offsetHeight,
       },
+      mapId: curMapId,
+      xpos: (offsetX * 100) / this.mapContent.offsetWidth,
+      ypos: (offsetY * 100) / this.mapContent.offsetHeight,
     }, true);
+    this.savePlaceDevice('place');
   }
   onUndeloyDevice(index) {
     this.updateListItemByIndex(index, {
       map: {
+        id: -100,
         xpos: -99,
         ypos: -99,
         isOpen: false,
         locked: false,
       },
     });
+    this.savePlaceDevice('unplace');
   }
   onMapMouseUp() {
     this.mapMouseDown = false;
@@ -179,19 +217,76 @@ export default class View extends React.Component {
       this.mapClientY = e.clientY;
     }
   }
+  fetchMapList() {
+    const url = 'goform/group/map/list';
+
+    this.props.fetch(url, {
+      groupid: this.props.groupid,
+      buildId: this.props.params.id,
+    }).then(
+      (json) => {
+        if (json && json.state && json.state.code === 2000) {
+          this.props.reciveScreenData({
+            maps: json.data,
+          });
+        }
+      },
+    );
+  }
+  deleteMapList(mapId) {
+    const url = 'goform/group/map/list';
+
+    this.props.save(url, {
+      groupid: this.props.groupid,
+      action: 'delete',
+      selectedList: [mapId],
+    }).then(
+      (json) => {
+        if (json && json.state && json.state.code === 2000) {
+          this.fetchMapList();
+        }
+      },
+    );
+  }
+  savePlaceDevice(type) {
+    this.props.changeScreenActionQuery({
+      action: type,
+    });
+    this.props.onListAction('', {
+      needMerge: true,
+    });
+  }
   updateState(data) {
     this.setState(utils.extend({}, data));
+  }
+  transformServerData($$newStore) {
+    const $$list = $$newStore.getIn([this.curScreenId, 'data', 'list']);
+
+    if ($$newStore.getIn([this.curScreenId, 'data', 'maps', 'list'])) {
+      this.$$mapList = $$newStore.getIn([this.curScreenId, 'data', 'maps', 'list']);
+    }
+
+    if ($$list) {
+      this.$$mapApList = $$list
+        .map((item, i) => item.set('_index', i))
+        .filter(
+          item => item.getIn(['map', 'buildId']) === this.curBuildId,
+        )
+        .groupBy(item => item.getIn(['map', 'id']))
+        .toMap();
+    }
   }
   startDrag(ev, i) {
     ev.dataTransfer.setData('Text', ev.target.id);
     this.props.editListItemByIndex(i, 'move');
   }
-  renderDeployedDevice(device, i, curMapName) {
-    const xpos = device.getIn(['map', 'xpos']);
-    const ypos = device.getIn(['map', 'ypos']);
-    const coverage = device.getIn(['map', 'coverage']);
-    const isLocked = device.getIn(['map', 'locked']) === '1';
-    const isOpen = device.getIn(['map', 'isOpen']);
+  renderDeployedDevice($$device, i, curMapId) {
+    const xpos = $$device.getIn(['map', 'xpos']);
+    const ypos = $$device.getIn(['map', 'ypos']);
+    const coverage = $$device.getIn(['map', 'coverage']);
+    const isLocked = $$device.getIn(['map', 'locked']) === '1';
+    const deviceMac = $$device.get('mac');
+    const isOpen = this.state.curShowOptionDeviceMac === deviceMac;
     const btnsList = [
       {
         id: 'lock',
@@ -210,28 +305,31 @@ export default class View extends React.Component {
       }, {
         icon: 'times',
         id: 'close',
-        onClick: () => this.props.updateListItemByIndex(i, {
-          map: {
-            xpos: -99,
-            ypos: -99,
-          },
-        }),
+        onClick: () => {
+          this.props.changeScreenActionQuery({
+            action: 'delete',
+            mapId: curMapId,
+            selectedList: [deviceMac],
+          });
+          this.props.onListAction();
+        },
       },
     ];
     const radius = 38;
     const avd = 220 / btnsList.length;
     const ahd = (avd * Math.PI) / 180;
-    const isCur = !curMapName || (curMapName === device.getIn(['map', 'mapName']));
+    const isCur = !curMapId || (curMapId === $$device.getIn(['map', 'id']));
 
     let ret = null;
     let deviceClassName = 'm-device';
     let avatarClass = 'm-device__avatar';
 
-    if (xpos > -50 && xpos > -50 && isCur) {
+    // 只在渲染当前 Map 里的 AP
+    if (isCur) {
       if (isLocked) {
         avatarClass = `${avatarClass} locked`;
       }
-      if (device.get('status') === '0') {
+      if ($$device.get('status') === '0') {
         avatarClass = `${avatarClass} danger`;
       }
 
@@ -252,23 +350,26 @@ export default class View extends React.Component {
             className={avatarClass}
             draggable={!isLocked}
             onDragStart={ev => this.startDrag(ev, i)}
-            onClick={() => this.props.updateListItemByIndex(i, {
-              map: {
-                isOpen: !isOpen,
-              },
-            })}
+            onClick={() => {
+              if (curMapId) {
+                this.setState({
+                  curShowOptionDeviceMac: isOpen ? -100 : deviceMac,
+                });
+              }
+            }}
           />
           <span
             className="m-device__name"
-            onClick={() => this.props.updateListItemByIndex(i, {
-              map: {
-                isOpen: !isOpen,
-              },
-            })}
+            onClick={() => {
+              if (curMapId) {
+                this.setState({
+                  curShowOptionDeviceMac: isOpen ? -100 : deviceMac,
+                });
+              }
+            }}
           >
-            {device.get('devicename') || device.get('mac')}
+            {$$device.get('devicename') || deviceMac}
           </span>
-
           {
             btnsList.map((info, index) => {
               const btnClassName = `m-device__btn ${info.id}`;
@@ -280,7 +381,7 @@ export default class View extends React.Component {
                     left: isOpen ? (Math.sin((ahd * index)) * radius) + 7 : 13,
                     top: isOpen ? (Math.cos((ahd * index)) * radius) : 13,
                   }}
-                  onClick={() => info.onClick(device.get('mac'))}
+                  onClick={() => info.onClick(deviceMac)}
                 >
                   <Icon name={info.icon} />
                 </div>
@@ -288,33 +389,34 @@ export default class View extends React.Component {
             })
           }
         </div>,
-        <div
-          key={`deivceCoverage${i}`}
-          className="m-device-coverage"
-          style={{
-            left: `${xpos}%`,
-            top: `${ypos}%`,
-            width: coverage,
-            height: coverage,
-          }}
-        />,
+        curMapId ? (
+          <div
+            key={`deivceCoverage${i}`}
+            className="m-device-coverage"
+            style={{
+              left: `${xpos}%`,
+              top: `${ypos}%`,
+              width: coverage,
+              height: coverage,
+            }}
+          />
+        ) : null,
       ];
     }
 
     return ret;
   }
-  renderUndeployDevice(device, i) {
-    const xpos = device.getIn(['map', 'xpos']);
-    const ypos = device.getIn(['map', 'ypos']);
+  renderUndeployDevice($$device, i) {
     const deviceClassName = 'm-device';
+    const deviceMac = $$device.get('mac');
     let avatarClass = 'm-device__avatar';
     let ret = null;
 
-    if (device.get('status') === '0') {
+    if ($$device.get('status') === '0') {
       avatarClass = `${avatarClass} danger`;
     }
 
-    if (xpos < -50 || ypos < -50) {
+    if ($$device.getIn(['map', 'id']) === -100) {
       ret = (
         <div
           id={`deivce_${i}`}
@@ -326,7 +428,7 @@ export default class View extends React.Component {
             onDragStart={ev => this.startDrag(ev, i)}
           />
           <span className="m-device__name">
-            {device.get('devicename') || device.get('mac')}
+            {$$device.get('devicename') || deviceMac}
           </span>
         </div>
       );
@@ -334,38 +436,69 @@ export default class View extends React.Component {
 
     return ret;
   }
-
-  renderMapList(mapList) {
+  renderMapList($$mapList) {
     return (
       <div className="row">
         {
-          mapList.map((maps) => {
-            const mapName = maps.getIn([0, 'map', 'mapName']);
+          $$mapList.map(($$map) => {
+            const mapId = $$map.getIn(['id']);
+            const mapName = $$map.getIn(['mapName']);
+            const imgUrl = $$map.getIn(['backgroudImg']);
+            const $$mapAps = this.$$mapApList.get(mapId);
+
+            if (mapId === -100) {
+              return null;
+            }
 
             return (
               <div className="cols col-3">
-                <div className="m-thumbnail">
+                <div
+                  className="m-thumbnail"
+                >
+                  <Icon
+                    name="times"
+                    className="close"
+                    onClick={
+                      () => {
+                        this.deleteMapList(mapId);
+                      }
+                    }
+                  />
                   <div
                     className="m-thumbnail__content"
+                    onClick={() => {
+                      this.curMapImgUrl = imgUrl;
+                      this.curMapName = mapName;
+                      this.props.updateScreenSettings({
+                        curMapId: mapId,
+                        curList: $$mapAps,
+                      });
+                    }}
                   >
                     <img
-                      src={bkImg}
+                      src={imgUrl}
                       draggable="false"
-                      alt="d"
-                      onClick={() => this.props.updateScreenSettings({
-                        curMapName: mapName,
-                        curList: maps,
-                      })}
+                      alt={mapName}
                     />
                     {
-                      maps ?
-                        maps.map(
-                          item => this.renderDeployedDevice(item, item.get('_index'))
+                      $$mapAps ?
+                        $$mapAps.map(
+                          item => this.renderDeployedDevice(item, item.get('_index')),
                         ) :
                         null
                     }
                   </div>
-                  <div className="m-thumbnail__caption">
+                  <div
+                    className="m-thumbnail__caption"
+                    onClick={() => {
+                      this.curMapImgUrl = imgUrl;
+                      this.curMapName = mapName;
+                      this.props.updateScreenSettings({
+                        curMapId: mapId,
+                        curList: $$mapAps,
+                      });
+                    }}
+                  >
                     <h3>{mapName}</h3>
                   </div>
                 </div>
@@ -388,11 +521,11 @@ export default class View extends React.Component {
       </div>
     );
   }
-  renderCurMap(list, curMapName, myZoom) {
+  renderCurMap($$list, curMapId, myZoom) {
     return (
       <div
         className="o-map-container"
-        onDrop={e => this.onDrop(e, curMapName)}
+        onDrop={e => this.onDrop(e, curMapId)}
         onDragOver={e => e.preventDefault()}
         ref={(mapContent) => {
           if (mapContent) {
@@ -405,22 +538,22 @@ export default class View extends React.Component {
           left: this.state.mapOffsetX,
           top: this.state.mapOffsetY,
           width: `${myZoom}%`,
+          backgroundImage: `url(${this.curMapImgUrl})`,
         }}
         onMouseDown={this.onMapMouseDown}
         onMouseUp={this.onMapMouseUp}
         onMouseMove={this.onMapMouseMove}
       >
         <img
-          src={bkImg}
+          src={this.curMapImgUrl}
           draggable="false"
-          alt="d"
+          alt={this.curMapName}
         />
         {
-          list ?
-            list.map(
-              (device, i) => this.renderDeployedDevice(device, i, curMapName)
-            ) :
-            null
+          $$list ?
+            $$list.map(
+              (device, i) => this.renderDeployedDevice(device, i, curMapId),
+            ) : null
         }
       </div>
     );
@@ -430,9 +563,9 @@ export default class View extends React.Component {
     const myScreenId = store.get('curScreenId');
     const list = store.getIn([myScreenId, 'data', 'list']);
     const isLocked = store.getIn([myScreenId, 'curSettings', 'isLocked']);
-    const myZoom = store.getIn([myScreenId, 'curSettings', 'zoom']);
+    const myZoom = this.state.zoom;
     const actionQuery = store.getIn([myScreenId, 'actionQuery']);
-    let curMapName = store.getIn([myScreenId, 'curSettings', 'curMapName']);
+    const curMapId = store.getIn([myScreenId, 'curSettings', 'curMapId']);
     const actionBarChildren = [
       <Button
         icon="arrow-left"
@@ -440,9 +573,9 @@ export default class View extends React.Component {
         text={_('Back')}
         key="back"
         onClick={() => {
-          if (curMapName) {
+          if (curMapId) {
             this.props.updateScreenSettings({
-              curMapName: '',
+              curMapId: '',
             });
             this.onToggleUnplacedList(true);
           } else {
@@ -475,26 +608,21 @@ export default class View extends React.Component {
         data-help-text={_('Help text')}
       />,
     ];
-    const mapList = list
-        .map((item, i) => item.merge({
-          _index: i,
-        }))
-        .groupBy(item => item.getIn(['map', 'buildId']))
-        .toList();
-
+    const $$thisMapList = this.$$mapList;
     const isModalShow = actionQuery.get('action') === 'add' || actionQuery.get('action') === 'edit';
     const deviceListClassname = classnames('o-list o-devices-list', {
-      active: !!curMapName && this.state.isUnplacedListShow,
+      active: !!curMapId && this.state.isUnplacedListShow,
     });
-
-    if (mapList.size === 1) {
-      curMapName = mapList.getIn([0, 'map', 'mapName']);
-    }
 
     return (
       <AppScreen
         {...this.props}
         actionable={false}
+        initOption={{
+          query: {
+            buildId: this.props.params.id,
+          },
+        }}
         noTitle
       >
         <div className="m-action-bar">
@@ -504,16 +632,16 @@ export default class View extends React.Component {
         </div>
         <div className="o-map-warp">
           {
-            curMapName ? this.renderCurMap(list, curMapName, myZoom) : this.renderMapList(mapList)
+            curMapId ? this.renderCurMap(list, curMapId, myZoom) : this.renderMapList($$thisMapList)
           }
           {
-            curMapName ? (
+            curMapId ? (
               <div className="o-map-zoom-bar">
                 <Icon
                   name="minus"
                   className="o-map-zoom-bar__minus"
                   onClick={() => {
-                    this.props.updateScreenSettings({
+                    this.setState({
                       zoom: (myZoom - 10) < 0 ? 0 : (myZoom - 10),
                     });
                   }}
@@ -523,7 +651,7 @@ export default class View extends React.Component {
                   name="plus"
                   className="o-map-zoom-bar__plus"
                   onClick={() => {
-                    this.props.updateScreenSettings({
+                    this.setState({
                       zoom: (myZoom + 10) > 200 ? 200 : (myZoom + 10),
                     });
                   }}
@@ -533,7 +661,7 @@ export default class View extends React.Component {
           }
           <div className={deviceListClassname} >
             {
-              curMapName ? (
+              curMapId ? (
                 <div
                   className="toggle-button"
                   onClick={() => this.onToggleUnplacedList()}
@@ -604,7 +732,7 @@ export default class View extends React.Component {
           noFooter
         >
           <form
-            action="goform/group/map"
+            action="goform/group/map/list"
             method="POST"
             encType="multipart/form-data"
             ref={(formElem) => {
@@ -623,6 +751,11 @@ export default class View extends React.Component {
               name="action"
               value="add"
             />
+            <input
+              type="hidden"
+              name="buildId"
+              value={this.props.params.id}
+            />
 
             <FormGroup
               label={_('Map Name')}
@@ -630,11 +763,12 @@ export default class View extends React.Component {
               name="mapImg"
               onChange={
                 (data) => {
-                  this.setData({
+                  this.setState({
                     mapName: data.value,
                   });
                 }
               }
+              required
             />
             <FormGroup
               label={_('Map Backgroud Image')}
@@ -652,10 +786,11 @@ export default class View extends React.Component {
                     }
                   },
                 );
-                this.setData({
+                this.setState({
                   mapImgUrl: data.value,
                 });
               }}
+              required
             />
             <p
               style={{
@@ -706,6 +841,7 @@ function mapStateToProps(state) {
     app: state.app,
     store: state.screens,
     groupid: state.product.getIn(['group', 'selected', 'id']),
+    groupDevice: state.product.getIn(['group', 'devices']),
   };
 }
 

@@ -143,7 +143,7 @@ export function closeListItemModal() {
     type: 'CLOSE_LIST_ITEM_MODAL',
   };
 }
-export function onListAction(url) {
+export function onListAction(url, option) {
   return (dispatch, getState) => {
     const globalState = getState();
     const name = globalState.screens.get('curScreenId');
@@ -155,6 +155,7 @@ export function onListAction(url) {
     const actionType = actionQuery.get('action');
     let subData = actionQuery.toJS();
     let originalData = globalState.screens.getIn([name, 'data', 'list', actionQuery.get('index')]);
+    const needMerge = option && option.needMerge;
 
     if (originalData && originalData.get) {
       originalData = originalData.toJS();
@@ -169,6 +170,8 @@ export function onListAction(url) {
       subData = actionQuery.merge(editMap).merge({
         originalData,
       }).toJS();
+    } else if (needMerge) {
+      subData = actionQuery.merge(editMap).toJS();
     }
 
     // 删除不需要传到后台的属性属性
