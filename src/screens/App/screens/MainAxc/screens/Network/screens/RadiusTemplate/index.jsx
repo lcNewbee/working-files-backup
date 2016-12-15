@@ -18,7 +18,6 @@ const listOptions = fromJS([
     id: 'template_name',
     label: _('Name'),
     type: 'text',
-    className: 'cols col-12',
     maxLength: '32',
     required: true,
     notEditable: true,
@@ -27,19 +26,17 @@ const listOptions = fromJS([
     label: _('Primary Auth IP'),
     fieldset: 'auth',
     legend: _('Primary Auth Server Settings'),
-    defaultValue: '0',
     type: 'text',
   }, {
     id: 'authpri_port',
     label: _('Primary Auth Port'),
     fieldset: 'auth',
-    defaultValue: '0',
+    defaultValue: '1812',
     type: 'number',
   }, {
     id: 'authpri_key',
     label: _('Primary Auth Password'),
     fieldset: 'auth',
-    defaultValue: '0',
     noTable: true,
     type: 'password',
   }, {

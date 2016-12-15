@@ -15,19 +15,17 @@ export const authServer = fromJS([
     label: _('Primary Auth IP'),
     fieldset: 'auth',
     legend: _('Primary Auth Server Settings'),
-    defaultValue: '0',
     type: 'text',
   }, {
     id: 'authpri_port',
     label: _('Primary Auth Port'),
     fieldset: 'auth',
-    defaultValue: '0',
+    defaultValue: '1812',
     type: 'number',
   }, {
     id: 'authpri_key',
     label: _('Primary Auth Password'),
     fieldset: 'auth',
-    defaultValue: '0',
     noTable: true,
     type: 'password',
   }, {
@@ -36,11 +34,13 @@ export const authServer = fromJS([
     legend: _('Secondary Auth Server Settings'),
     fieldset: 'auth_secondary',
     type: 'text',
+    noTable: true,
   }, {
     id: 'authsecond_port',
     label: _('Secondary Auth Port'),
     fieldset: 'auth_secondary',
     type: 'number',
+    noTable: true,
   }, {
     id: 'authsecond_key',
     label: _('Secondary Auth Password'),
@@ -56,19 +56,17 @@ export const accServer = fromJS([
     label: _('Primary Acc IP'),
     fieldset: 'Accounting',
     legend: _('Accounting Server Settings'),
-    defaultValue: '0',
     type: 'text',
   }, {
     id: 'acctpri_port',
     label: _('Primary Acc Port'),
     fieldset: 'Accounting',
-    defaultValue: '0',
+    defaultValue: '1813',
     type: 'number',
   }, {
     id: 'acctpri_key',
     label: _('Primary Acc Password'),
     fieldset: 'Accounting',
-    defaultValue: '0',
     noTable: true,
     type: 'password',
   }, {
@@ -76,11 +74,13 @@ export const accServer = fromJS([
     label: _('Secondary Acc IP'),
     fieldset: 'Accounting',
     type: 'text',
+    noTable: true,
   }, {
     id: 'acctsecond_port',
     label: _('Secondary Acc Port'),
     fieldset: 'Accounting',
     type: 'number',
+    noTable: true,
   }, {
     id: 'acctsecond_key',
     label: _('Secondary Acc Password'),

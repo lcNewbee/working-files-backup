@@ -154,7 +154,6 @@ var vaildate = {
       return _("Please input a valid time.");
     }
   },
-
   hex: function(str) {
     if (!(/^[0-9a-fA-F]{1,}$/).test(str)) {
       return _("Must be hex.");
