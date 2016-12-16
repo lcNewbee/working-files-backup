@@ -14,7 +14,7 @@ const listOptions = fromJS([
     label: _('Server Name'),
     formProps: {
       type: 'text',
-      maxLength: '32',
+      maxLength: '31',
       required: true,
     },
   }, {
@@ -61,6 +61,8 @@ const listOptions = fromJS([
     id: 'server_port',
     label: _('Server Port'),
     formProps: {
+      min: 1,
+      max: 65535,
       type: 'number',
       required: true,
     },
@@ -69,6 +71,8 @@ const listOptions = fromJS([
     label: _('Shared Key'),
     noTable: true,
     formProps: {
+      min: 1,
+      max: 31,
       type: 'password',
       required: true,
     },

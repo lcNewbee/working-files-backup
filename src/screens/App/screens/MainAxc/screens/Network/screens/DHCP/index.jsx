@@ -14,13 +14,14 @@ const listOptions = fromJS([
     text: _('Name'),
     formProps: {
       required: true,
-      maxLength: '24',
+      maxLength: '31',
       notEditable: true,
     },
   }, {
     id: 'domain',
     text: _('Domain'),
     formProps: {
+      maxLength: '31',
       required: true,
       type: 'text',
     },
@@ -29,7 +30,6 @@ const listOptions = fromJS([
     text: _('Start IP'),
     formProps: {
       required: true,
-      maxLength: '15',
       notEditable: true,
       validator: validator({
         rules: 'ip',
@@ -40,7 +40,6 @@ const listOptions = fromJS([
     text: _('Subnet Mask'),
     formProps: {
       required: true,
-      maxLength: '15',
       notEditable: true,
       validator: validator({
         rules: 'mask',
@@ -51,7 +50,7 @@ const listOptions = fromJS([
     text: _('Gateway'),
     formProps: {
       required: true,
-      maxLength: '15',
+      maxLength: '31',
       validator: validator({
         rules: 'ip',
       }),
@@ -61,7 +60,7 @@ const listOptions = fromJS([
     text: _('Primary DNS'),
     formProps: {
       required: true,
-      maxLength: '15',
+      maxLength: '31',
       validator: validator({
         rules: 'ip',
       }),
@@ -70,7 +69,6 @@ const listOptions = fromJS([
     id: 'secondDns',
     text: _('Secondary DNS'),
     formProps: {
-      maxLength: '15',
       validator: validator({
         rules: 'ip',
       }),
@@ -82,7 +80,6 @@ const listOptions = fromJS([
       type: 'number',
       required: true,
       help: _('Range:300-604800Second'),
-      maxLength: '15',
       min: '300',
       max: '604800',
       validator: validator({
@@ -95,7 +92,6 @@ const listOptions = fromJS([
     noTable: true,
     formProps: {
       type: 'text',
-      maxLength: '31',
       validator: validator({
         rules: 'iplist:[";"]',
       }),
@@ -106,7 +102,7 @@ const listOptions = fromJS([
     noTable: true,
     formProps: {
       type: 'number',
-      maxLength: '15',
+      maxLength: '31',
       validator: validator({
         rules: 'num',
       }),

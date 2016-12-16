@@ -42,9 +42,13 @@ const commonFormOptions = fromJS([
   }, {
     id: 'max_usernum',
     label: _('Max Users'),
-    type: 'number',
-    min: '1',
-    max: '99999',
+    formProps: {
+      type: 'number',
+      min: 5,
+      max: 4096,
+      value: '4096',
+    },
+
   }, {
     id: 'auth_mode',
     label: _('Auth Type'),
@@ -64,6 +68,8 @@ const commonFormOptions = fromJS([
     id: 'auth_domain',
     label: _('Force Auth Domain'),
     type: 'text',
+    minLength: '1',
+    maxLength: '31',
   }, {
     id: 'idle_test',
     label: _('Idle Detection'),
@@ -78,7 +84,7 @@ const listOptions = fromJS([
     label: _('Rule Name'),
     formProps: {
       type: 'text',
-      maxLength: '32',
+      maxLength: '31',
       required: true,
     },
   }, {
@@ -121,6 +127,9 @@ const listOptions = fromJS([
     label: _('IP Address'),
     formProps: {
       required: true,
+      validator: validator({
+        rules: 'ip',
+      }),
     },
   },
 ]);
