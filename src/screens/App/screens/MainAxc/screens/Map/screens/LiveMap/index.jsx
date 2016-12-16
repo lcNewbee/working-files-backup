@@ -287,7 +287,6 @@ export default class View extends React.Component {
 
       if (!editButtonElem.inited) {
         editButtonElem.addEventListener('click', () => {
-          console.log(index)
           this.props.editListItemByIndex(index);
         });
         viewButtonElem.addEventListener('click', () => {
@@ -485,12 +484,6 @@ export default class View extends React.Component {
           }
         />
         { settings.get('type') === '0' ? lockButton : null }
-        <span
-          key="help"
-          className="a-help"
-          data-help={_('Help')}
-          data-help-text={_('Help')}
-        />
       </div>
     );
   }
@@ -511,6 +504,7 @@ export default class View extends React.Component {
     }
 
     this.isGoogleMapAdd = isOpenHeader && settings.get('type') === LIVE_GOOGLE_MAP;
+
     return (
       <AppScreen
         {...this.props}

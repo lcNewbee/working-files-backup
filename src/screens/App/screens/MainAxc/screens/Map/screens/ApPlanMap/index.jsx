@@ -112,6 +112,7 @@ export default class View extends React.Component {
         'transformServerData',
         'savePlaceDevice',
         'fetchMapList',
+        'onUppaceDrop',
       ],
     );
     this.curBuildId = parseInt(props.params.id, 10);
@@ -167,6 +168,10 @@ export default class View extends React.Component {
         }
       });
   }
+  startDrag(ev, i) {
+    ev.dataTransfer.setData('Text', ev.target.id);
+    this.props.editListItemByIndex(i, 'move');
+  }
   onDrop(ev, curMapId) {
     const mapOffset = dom.getAbsPoint(this.mapContent);
     const offsetX = (ev.clientX - mapOffset.x - 13);
@@ -184,6 +189,20 @@ export default class View extends React.Component {
       ypos: (offsetY * 100) / this.mapContent.offsetHeight,
     }, true);
     this.savePlaceDevice('place');
+  }
+  onUppaceDrop(e) {
+    const myScreenId = this.props.route.id;
+    const deviceMac = this.props.store.getIn([
+      myScreenId, 'curListItem', 'mac',
+    ]);
+    const curMapId = this.props.store.getIn([myScreenId, 'curSettings', 'curMapId']);
+
+    this.props.changeScreenActionQuery({
+      action: 'delete',
+      mapId: curMapId,
+      selectedList: [deviceMac],
+    });
+    this.props.onListAction();
   }
   onUndeloyDevice(index) {
     this.updateListItemByIndex(index, {
@@ -275,10 +294,6 @@ export default class View extends React.Component {
         .groupBy(item => item.getIn(['map', 'id']))
         .toMap();
     }
-  }
-  startDrag(ev, i) {
-    ev.dataTransfer.setData('Text', ev.target.id);
-    this.props.editListItemByIndex(i, 'move');
   }
   renderDeployedDevice($$device, i, curMapId) {
     const xpos = $$device.getIn(['map', 'xpos']);
@@ -469,6 +484,7 @@ export default class View extends React.Component {
                     onClick={() => {
                       this.curMapImgUrl = imgUrl;
                       this.curMapName = mapName;
+                      this.curMapId = mapId;
                       this.props.updateScreenSettings({
                         curMapId: mapId,
                         curList: $$mapAps,
@@ -538,6 +554,8 @@ export default class View extends React.Component {
           left: this.state.mapOffsetX,
           top: this.state.mapOffsetY,
           width: `${myZoom}%`,
+          minHeight: '300px',
+          backgroundColor: '#ccc',
           backgroundImage: `url(${this.curMapImgUrl})`,
         }}
         onMouseDown={this.onMapMouseDown}
@@ -583,30 +601,30 @@ export default class View extends React.Component {
           }
         }}
       />,
-      isLocked === '1' ? (<Button
-        icon="lock"
-        key="0"
-        text={_('Unlock All Devices')}
-        onClick={() => {
-          this.props.updateScreenSettings({
-            isLocked: '0',
-          });
-        }}
-      />) : (<Button
-        icon="unlock-alt"
-        key="0"
-        text={_('Lock All Device')}
-        onClick={() => {
-          this.props.updateScreenSettings({
-            isLocked: '1',
-          });
-        }}
-      />),
-      <span
-        className="a-help"
-        data-help={_('Help')}
-        data-help-text={_('Help text')}
-      />,
+      // isLocked === '1' ? (<Button
+      //   icon="lock"
+      //   key="0"
+      //   text={_('Unlock All Devices')}
+      //   onClick={() => {
+      //     this.props.updateScreenSettings({
+      //       isLocked: '0',
+      //     });
+      //   }}
+      // />) : (<Button
+      //   icon="unlock-alt"
+      //   key="0"
+      //   text={_('Lock All Device')}
+      //   onClick={() => {
+      //     this.props.updateScreenSettings({
+      //       isLocked: '1',
+      //     });
+      //   }}
+      // />),
+      // <span
+      //   className="a-help"
+      //   data-help={_('Help')}
+      //   data-help-text={_('Help text')}
+      // />,
     ];
     const $$thisMapList = this.$$mapList;
     const isModalShow = actionQuery.get('action') === 'add' || actionQuery.get('action') === 'edit';
@@ -659,7 +677,11 @@ export default class View extends React.Component {
               </div>
             ) : null
           }
-          <div className={deviceListClassname} >
+          <div
+            className={deviceListClassname}
+            onDrop={e => this.onUppaceDrop(e)}
+            onDragOver={e => e.preventDefault()}
+          >
             {
               curMapId ? (
                 <div
