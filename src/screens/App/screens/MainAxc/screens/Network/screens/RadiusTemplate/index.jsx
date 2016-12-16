@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import utils from 'shared/utils';
-import { authServer, advancedSetting, accServer, radiusName } from 'shared/config/axcRadius';
-// import { Button } from 'shared/components/Button';
+import { authServer, advancedSetting, accServer } from 'shared/config/axcRadius';
 import AppScreen from 'shared/components/Template/AppScreen';
 import FormContainer from 'shared/components/Organism/FormContainer';
 import Icon from 'shared/components/Icon';
@@ -13,6 +12,7 @@ import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 import * as propertiesActions from 'shared/actions/properties';
 
+// 列表相关配置
 const listOptions = fromJS([
   {
     id: 'template_name',
@@ -21,44 +21,28 @@ const listOptions = fromJS([
     maxLength: '32',
     required: true,
     notEditable: true,
+    defaultValue: '',
   }, {
     id: 'authpri_ipaddr',
-    label: _('Primary Auth IP'),
+    label: _('Primary Auth Server IP'),
     fieldset: 'auth',
     legend: _('Primary Auth Server Settings'),
-    type: 'text',
   }, {
     id: 'authpri_port',
-    label: _('Primary Auth Port'),
+    label: _('Primary Auth Server Port'),
     fieldset: 'auth',
     defaultValue: '1812',
-    type: 'number',
-  }, {
-    id: 'authpri_key',
-    label: _('Primary Auth Password'),
-    fieldset: 'auth',
-    noTable: true,
-    type: 'password',
   }, {
     id: 'acctpri_ipaddr',
     label: _('Primary Acc IP'),
     fieldset: 'Accounting',
     legend: _('Accounting Server Settings'),
-    defaultValue: '0',
-    type: 'text',
+    defaultValue: '',
   }, {
     id: 'acctpri_port',
     label: _('Primary Acc Port'),
     fieldset: 'Accounting',
-    defaultValue: '0',
-    type: 'number',
-  }, {
-    id: 'acctpri_key',
-    label: _('Primary Acc Password'),
-    fieldset: 'Accounting',
-    defaultValue: '0',
-    noTable: true,
-    type: 'password',
+    defaultValue: '',
   },
 ]);
 
@@ -66,11 +50,9 @@ const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
   validateAll: PropTypes.func,
-  fetchScreenData: PropTypes.func,
-  saveScreenSettings: PropTypes.func,
-  updateScreenSettings: PropTypes.func,
-  changeScreenActionQuery: PropTypes.func,
-  createModal: PropTypes.func,
+  onListAction: PropTypes.func,
+  updateCurEditListItem: PropTypes.func,
+  reportValidError: PropTypes.func,
   groupid: PropTypes.any,
 };
 const defaultProps = {};
@@ -99,7 +81,12 @@ export default class View extends React.Component {
       'onAction',
       'onSave',
       'toggleBox',
+      'getDefaultEditData',
     ]);
+  }
+
+  componentWillMount() {
+    this.getDefaultEditData();
   }
 
   onSave(formId) {
@@ -107,10 +94,45 @@ export default class View extends React.Component {
       this.props.validateAll(formId)
         .then((errMsg) => {
           if (errMsg.isEmpty()) {
-            this.props.saveScreenSettings();
+            this.props.onListAction();
           }
         });
     }
+  }
+  getDefaultEditData() {
+    const myDefaultEditData = {};
+    authServer.forEach(
+      ($$item, index) => {
+        const curId = $$item.get('id');
+        const defaultValue = $$item.get('defaultValue') || '';
+
+        myDefaultEditData[curId] = defaultValue;
+
+        return index;
+      },
+    );
+    accServer.forEach(
+      ($$item, index) => {
+        const curId = $$item.get('id');
+        const defaultValue = $$item.get('defaultValue') || '';
+
+        myDefaultEditData[curId] = defaultValue;
+
+        return index;
+      },
+    );
+    advancedSetting.forEach(
+      ($$item, index) => {
+        const curId = $$item.get('id');
+        const defaultValue = $$item.get('defaultValue') || '';
+
+        myDefaultEditData[curId] = defaultValue;
+
+        return index;
+      },
+    );
+
+    this.defaultEditData = myDefaultEditData;
   }
   toggleBox(moduleName) {
     this.setState({
@@ -121,7 +143,7 @@ export default class View extends React.Component {
     const { store, app } = this.props;
     const myScreenId = store.get('curScreenId');
     const $$myScreenStore = store.get(myScreenId);
-    const $$curData = $$myScreenStore.get('curSettings');
+    const $$curData = $$myScreenStore.get('curListItem');
     const actionType = $$myScreenStore.getIn(['actionQuery', 'action']);
 
     if (actionType !== 'add' && actionType !== 'edit') {
@@ -130,16 +152,6 @@ export default class View extends React.Component {
 
     return (
       <div className="o-box row">
-          <FormContainer
-            id="radiusName"
-            options={radiusName}
-            data={$$curData}
-            onChangeData={this.props.updateScreenSettings}
-            onSave={() => this.onSave('radiusName')}
-            invalidMsg={app.get('invalid')}
-            validateAt={app.get('validateAt')}
-            isSaving={app.get('saving')}
-          />
         <div className="o-box__cell">
           <h3
             style={{ cursor: 'pointer' }}
@@ -152,7 +164,7 @@ export default class View extends React.Component {
                 marginRight: '5px',
               }}
             />
-            {_('Auth Server Settings')}
+            {_('Base Settings')}
           </h3>
         </div>
         {
@@ -160,12 +172,14 @@ export default class View extends React.Component {
             <div className="o-box__cell">
               <FormContainer
                 id="authServer"
+                className="o-form--compassed"
                 options={authServer}
                 data={$$curData}
-                onChangeData={this.props.updateScreenSettings}
+                onChangeData={this.props.updateCurEditListItem}
                 onSave={() => this.onSave('authServer')}
                 invalidMsg={app.get('invalid')}
                 validateAt={app.get('validateAt')}
+                onValidError={this.props.reportValidError}
                 isSaving={app.get('saving')}
                 hasSaveButton
               />
@@ -195,11 +209,13 @@ export default class View extends React.Component {
               <FormContainer
                 id="accServer"
                 options={accServer}
+                className="o-form--compassed"
                 data={$$curData}
-                onChangeData={this.props.updateScreenSettings}
+                onChangeData={this.props.updateCurEditListItem}
                 onSave={() => this.onSave('accServer')}
                 invalidMsg={app.get('invalid')}
                 validateAt={app.get('validateAt')}
+                onValidError={this.props.reportValidError}
                 isSaving={app.get('saving')}
                 hasSaveButton
               />
@@ -229,10 +245,11 @@ export default class View extends React.Component {
                 id="advancedSetting"
                 options={advancedSetting}
                 data={$$curData}
-                onChangeData={this.props.updateScreenSettings}
+                onChangeData={this.props.updateCurEditListItem}
                 onSave={() => this.onSave('advancedSetting')}
                 invalidMsg={app.get('invalid')}
                 validateAt={app.get('validateAt')}
+                onValidError={this.props.reportValidError}
                 isSaving={app.get('saving')}
                 hasSaveButton
               />
@@ -247,6 +264,7 @@ export default class View extends React.Component {
       <AppScreen
         {...this.props}
         listOptions={listOptions}
+        defaultEditData={this.defaultEditData}
         modalChildren={this.renderCustomModal()}
         selectable
         actionable
