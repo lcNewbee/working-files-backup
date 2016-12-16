@@ -5,34 +5,30 @@ class SystemModel extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this->load->database();
-		$this->load->helper('array');
+		$this->load->helper(array('array', 'my_customfun_helper'));
+		$this->load->library('SqlPage');
 	}
 	function fetch(){
-		$query=$this->db->select('id,name,radio_num as radionum,vender')
-              ->from('ap_model')
-              ->get()->result_array();
-
-        $state=array(
-            'code'=>2000,
-            'msg'=>'OK'
-        );
+        $sqlpage = new SqlPage();
+		$columns = 'id,name,radio_num as radionum,vender';
+		$tablenames = 'ap_model';
+		$pageindex = (int)element('page', $_GET, 1);
+		$pagesize = (int)element('size', $_GET, 20);
+		$datalist = $sqlpage->sql_data_page($columns,$tablenames,$pageindex,$pagesize);
         $page=array(
             "start"=>(int) element('start',$_GET,1),
             "size"=> (int)element('size',$_GET,20),
             "currPage"=>(int)element('currPage',$_GET,1),
             "totalPage"=>(int)element('totalPage',$_GET,1),
-            "total"=>(int)element('total',$_GET,11),
-            "pageCount"=>(int)element('pageCount',$_GET,11),
+            "total"=>(int)element('total_row',$datalist,20),
+            "pageCount"=>(int)element('total_page',$datalist,11),
             "nextPage"=>(int)element('nextPage',$_GET,-1),
             "lastPage"=>(int)element('lastPage',$_GET,1)
         );
-
-        $result=array(
-            'state'=>$state,
-            'data'=>array(
-                'page'=>$page,
-                'list'=>$query
-            )
+		$result['state'] = array('code' => 2000, 'msg' => 'ok');
+		$result['data'] = array(
+            'page' => $page,
+            'list' => $datalist['data']
         );
 		return $result;
 	}
