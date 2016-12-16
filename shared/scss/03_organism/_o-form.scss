@@ -8,6 +8,9 @@ $o-form-content-margin: 1em 0 0;
     padding: 1em 0;
     margin-bottom: 1.5em;
   }
+  .o-form__body {
+    @include clearfix();
+  }
   .o-form__title {
     margin-bottom: 1em;
     font-weight: bold;
@@ -121,10 +124,14 @@ $o-form-content-margin: 1em 0 0;
     padding: 0;
 
     .cols {
-      padding: 0 5px;
+      padding: 0 6px;
     }
     .row {
-      margin: 0 -5px;
+      margin: 0 -6px;
+    }
+    .o-form__legend {
+      margin-left: 0;
+      margin-bottom: 0.25rem;
     }
 
     .form-group {
@@ -138,13 +145,15 @@ $o-form-content-margin: 1em 0 0;
       }
       .form-control {
         margin-left: 0;
-        line-height: 24px;
         .m-switch {
           margin: 0;
           display: block;
           .m-switch__item {
             padding: 5px 10px;
           }
+        }
+        .a-password {
+          display: block;
         }
         .text {
           width: 100%;
@@ -172,6 +181,12 @@ $o-form-content-margin: 1em 0 0;
           height: 24px;
           line-height: 24px;
           width: 100%;
+        }
+        .error {
+          margin-top: 2px;
+        }
+        .help {
+          line-height: 24px;
         }
       }
     }

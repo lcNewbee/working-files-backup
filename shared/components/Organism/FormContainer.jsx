@@ -122,6 +122,7 @@ class FormContainer extends React.Component {
 
     delete myProps.fieldset;
     delete myProps.legend;
+    delete myProps.fieldsetOption;
 
     if (id) {
       myProps.form = id;
@@ -215,14 +216,23 @@ class FormContainer extends React.Component {
     // List 则需要循环渲染
     if (List.isList(options)) {
       return options.map((item, index) => {
-        const legendText = item.getIn([0, 'legend']);
+        const $$fieldsetOption = item.getIn([0, 'fieldsetOption']);
+        let fieldsetClassName = 'o-form__fieldset';
+        let legendText = item.getIn([0, 'legend']);
+
+        if ($$fieldsetOption) {
+          legendText = legendText || $$fieldsetOption.get('legend');
+          if ($$fieldsetOption.get('className')) {
+            fieldsetClassName = `${fieldsetClassName} ${$$fieldsetOption.get('className')}`;
+          }
+        }
 
         // 如果是带有标题 List，需添加legend
         if (legendText) {
           return (
             <fieldset
               key={index}
-              className="o-form__fieldset"
+              className={fieldsetClassName}
             >
               <legend className="o-form__legend">{legendText}</legend>
               {
@@ -297,7 +307,7 @@ class FormContainer extends React.Component {
               </div>
             ) : null
           }
-          { this.renderFormGroupTree(options) }
+          { this.renderFormGroupTree(this.options) }
           {
             rightChildren && leftChildren.length > 0 ? (
               <div className="form-group fr">

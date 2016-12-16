@@ -7,6 +7,7 @@ import FormContainer from 'shared/components/Organism/FormContainer';
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
+  defaultEditData: PropTypes.object,
   noTitle: PropTypes.bool,
   children: PropTypes.node,
   title: PropTypes.string,
@@ -17,6 +18,7 @@ const propTypes = {
   fetchScreenData: PropTypes.func,
   leaveScreen: PropTypes.func,
   validateAll: PropTypes.func,
+  reportValidError: PropTypes.func,
 
   // List 相关属性
   listOptions: PropTypes.oneOfType([
@@ -60,7 +62,7 @@ export default class AppScreen extends React.Component {
     // init listOptions
     this.tableOptions = immutableUtils.getTableOptions(listOptions);
     this.editFormOptions = immutableUtils.getFormOptions(listOptions);
-    this.defaultEditData = immutableUtils.getDefaultData(listOptions);
+    this.defaultEditData = props.defaultEditData || immutableUtils.getDefaultData(listOptions);
 
     // init Settings Form
     this.defaultSettingsData = defaultSettingsData ||
@@ -209,6 +211,7 @@ export default class AppScreen extends React.Component {
               onSave={this.onSaveSettings}
               invalidMsg={app.get('invalid')}
               validateAt={app.get('validateAt')}
+              onValidError={this.props.reportValidError}
               isSaving={app.get('saving')}
               hasSaveButton={hasSettingsSaveButton}
             />
