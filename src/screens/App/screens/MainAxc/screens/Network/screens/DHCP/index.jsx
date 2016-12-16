@@ -14,14 +14,14 @@ const listOptions = fromJS([
     text: _('Name'),
     formProps: {
       required: true,
-      maxLength: '31',
+      maxLength: '32',
       notEditable: true,
     },
   }, {
     id: 'domain',
     text: _('Domain'),
     formProps: {
-      maxLength: '31',
+      maxLength: '32',
       required: true,
       type: 'text',
     },
@@ -50,7 +50,7 @@ const listOptions = fromJS([
     text: _('Gateway'),
     formProps: {
       required: true,
-      maxLength: '31',
+      maxLength: '32',
       validator: validator({
         rules: 'ip',
       }),
@@ -60,7 +60,7 @@ const listOptions = fromJS([
     text: _('Primary DNS'),
     formProps: {
       required: true,
-      maxLength: '31',
+      maxLength: '32',
       validator: validator({
         rules: 'ip',
       }),
@@ -102,7 +102,8 @@ const listOptions = fromJS([
     noTable: true,
     formProps: {
       type: 'number',
-      maxLength: '31',
+      maxLength: '32',
+      minLength: '1',
       validator: validator({
         rules: 'num',
       }),

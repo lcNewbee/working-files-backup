@@ -42,13 +42,10 @@ const commonFormOptions = fromJS([
   }, {
     id: 'max_usernum',
     label: _('Max Users'),
-    formProps: {
-      type: 'number',
-      min: 5,
-      max: 4096,
-      value: '4096',
-    },
-
+    type: 'number',
+    min: 5,
+    max: 4096,
+    defaultValue: '4096',
   }, {
     id: 'auth_mode',
     label: _('Auth Type'),

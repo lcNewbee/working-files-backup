@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import utils from 'shared/utils';
 import AppScreen from 'shared/components/Template/AppScreen';
-
 // custom
 import * as screenActions from 'shared/actions/screens';
 
@@ -13,6 +12,7 @@ const ssidListOptions = fromJS([
     id: 'ssid',
     text: 'SSID',
     width: '180',
+
   }, {
     id: 'onlineNumber',
     width: '140',

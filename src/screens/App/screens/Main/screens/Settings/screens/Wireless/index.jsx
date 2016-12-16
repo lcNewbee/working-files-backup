@@ -256,7 +256,7 @@ export class Wireless extends PureComponent {
           label={_('SSID')}
           required
           value={getCurrData('ssid')}
-          maxLength="31"
+          maxLength="32"
           id="ssid"
           onChange={this.onUpdateSettings('ssid')}
           {...ssid}
@@ -275,7 +275,7 @@ export class Wireless extends PureComponent {
               type="password"
               required
               value={getCurrData('password')}
-              maxLength="31"
+              maxLength="32"
               onChange={this.onUpdateSettings('password')}
               {...password}
             /> : null

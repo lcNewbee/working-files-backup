@@ -643,7 +643,7 @@ export default class Main extends Component {
                     type="text"
                     name="name"
                     label={_('Name')}
-                    maxLength="31"
+                    maxLength="32"
                     value={groupApAddData.get('name')}
                     onChange={data => this.props.updateGroupAddDevice({
                       name: data.value,

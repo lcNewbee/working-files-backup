@@ -52,7 +52,8 @@ const listOptions = fromJS([
     text: _('Name'),
     defaultValue: '',
     formProps: {
-      maxLength: '31',
+      maxLenth: '32',
+      minLenth: '1',
       type: 'text',
       required: true,
     },

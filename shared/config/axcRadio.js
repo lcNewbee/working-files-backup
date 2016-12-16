@@ -259,7 +259,7 @@ export const radioAdvance = fromJS([
     id: 'beaconinterval',
     form: 'radioAdvance',
     type: 'number',
-    min: 1,
+    min: 32,
     max: 8191,
     defaultValue: 100,
     label: _('Beacon Interval'),

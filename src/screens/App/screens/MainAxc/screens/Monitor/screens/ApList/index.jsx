@@ -8,7 +8,7 @@ import { Button } from 'shared/components/Button';
 import AppScreen from 'shared/components/Template/AppScreen';
 import FormContainer from 'shared/components/Organism/FormContainer';
 import Icon from 'shared/components/Icon';
-
+import validator from 'shared/utils/lib/validator';
 // custom
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';

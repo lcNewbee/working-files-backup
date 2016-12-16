@@ -42,7 +42,7 @@ const loadBalanceTypeArr = [
 
 const validOptions = Map({
   password: validator({
-    rules: 'remarkTxt:["\'\\\\"]|len:[8, 31]',
+    rules: 'remarkTxt:["\'\\\\"]|len:[8, 256]',
   }),
   vlanid: validator({
     rules: 'num:[2, 4095]',
@@ -57,20 +57,21 @@ const validOptions = Map({
     rules: 'num:[32, 102400, 0]',
   }),
   maxUser: validator({
-    rules: 'num:[1, 64]',
+    rules: 'num:[0, 64]',
   }),
 });
 const storeForwardOption = [
   {
     value: 'local',
     label: _('Local Forward'),
-  }, {
-    value: 'centralized-802.3',
-    label: _('Centralized Forward-%s', '802.3'),
-  }, {
-    value: 'centralized-802.11',
-    label: _('Centralized Forward-%s', '802.11'),
   },
+  //  {
+  //   value: 'centralized-802.3',
+  //   label: _('Centralized Forward-%s', '802.3'),
+  // }, {
+  //   value: 'centralized-802.11',
+  //   label: _('Centralized Forward-%s', '802.11'),
+  // },
 ];
 const flowRateFilter = utils.filter('flowRate:["KB/s"]');
 const listOptions = fromJS([
@@ -80,7 +81,7 @@ const listOptions = fromJS([
     text: _('SSID'),
     formProps: {
       type: 'text',
-      maxLength: '32',
+      maxLen: '32',
       required: true,
       notEditable: true,
     },

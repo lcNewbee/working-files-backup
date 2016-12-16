@@ -145,10 +145,25 @@ export default class View extends React.Component {
     const $$myScreenStore = store.get(myScreenId);
     const $$curData = $$myScreenStore.get('curListItem');
     const actionType = $$myScreenStore.getIn(['actionQuery', 'action']);
+    let $$myAuthServer = authServer;
 
     if (actionType !== 'add' && actionType !== 'edit') {
       return null;
     }
+
+    if (actionType === 'edit') {
+      $$myAuthServer = $$myAuthServer.map(
+        ($$item) => {
+          let $$ret = $$item;
+          if ($$ret.get('notEditable')) {
+            $$ret = $$ret.set('disabled', true);
+          }
+
+          return $$ret;
+        },
+      );
+    }
+
 
     return (
       <div className="o-box row">
@@ -173,7 +188,7 @@ export default class View extends React.Component {
               <FormContainer
                 id="authServer"
                 className="o-form--compassed"
-                options={authServer}
+                options={$$myAuthServer}
                 data={$$curData}
                 onChangeData={this.props.updateCurEditListItem}
                 onSave={() => this.onSave('authServer')}

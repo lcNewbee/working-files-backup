@@ -20,7 +20,7 @@ var vaildate = {
     var len = str.length;
     if (min === max && len !== min) {
       return _('String length must be: ') + _('%s bit', min);
-    }else if (len < min || len > max) {
+    } else if (len < min || len > max) {
       return _('String length range is: ') + _('%s - %s bit', min, max);
     }
   },
