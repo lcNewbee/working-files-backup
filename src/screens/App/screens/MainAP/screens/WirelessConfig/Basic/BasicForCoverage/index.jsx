@@ -24,7 +24,6 @@ const propTypes = {
   // fetchSettings: PropTypes.func,
   fetch: PropTypes.func,
   // saveSettings: PropTypes.func,
-  updateItemSettings: PropTypes.func,
   leaveSettingsScreen: PropTypes.func,
   validateOption: PropTypes.object,
   changeScanStatus: PropTypes.func,
@@ -35,7 +34,6 @@ const propTypes = {
   changeAgreeProtocol: PropTypes.func,
   changeCountryCode: PropTypes.func,
   closeCountrySelectModal: PropTypes.func,
-  saveCountrySelectModal: PropTypes.func,
   receiveCountryInfo: PropTypes.func,
   resetVaildateMsg: PropTypes.func,
   changeTitleShowIcon: PropTypes.func,
@@ -196,6 +194,7 @@ export default class Basic extends React.Component {
     this.firstInAndRefresh = this.firstInAndRefresh.bind(this);
     this.onChangeRadio = this.onChangeRadio.bind(this);
     this.makeSsidTableOptions = this.makeSsidTableOptions.bind(this);
+    this.saveCountrySelectModal = this.saveCountrySelectModal.bind(this);
     this.state = {
       ssidTableFullMemberOptions: fromJS([
         {
@@ -517,11 +516,11 @@ export default class Basic extends React.Component {
   onChengeWirelessMode(data) {
     this.props.fetchSettings('goform/get_wl_all')
         .then(() => {
-          // const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-          let newRadioList = this.props.store.getIn(['curData', 'radioList']);
-          const securityMode = this.props.store.getIn(['curData', 'radioList', 0, 'vapList', 0, 'security', 'mode']);
+          const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
+          let newRadioList = this.props.store.getIn(['curData', 'radioList']).setIn([radioId, 'wirelessMode'], data.value);
+          const securityMode = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList', 0, 'security', 'mode']);
           if (data.value === 'repeater' && securityMode !== 'wep') {
-            newRadioList = newRadioList.setIn(['radioList', 0, 'vapList', 0, 'security', 'mode'], 'none');
+            newRadioList = newRadioList.setIn(['radioList', radioId, 'vapList', 0, 'security', 'mode'], 'none');
           }
           this.props.updateItemSettings({ radioList: newRadioList });
         });
@@ -574,20 +573,20 @@ export default class Basic extends React.Component {
       },
     });
     const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-    const vapList = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).push(newSsid);
-    const radioList = this.props.selfState.getIn(['multiSsid', 'radioList']).setIn([radioId, 'vapList'], vapList);
+    const vapList = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList']).push(newSsid);
+    const radioList = this.props.store.getIn(['curData', 'radioList']).setIn([radioId, 'vapList'], vapList);
     if (vapList.size <= 16) { // 最大支持16个SSID
-      this.props.updateMultiSsidItem({ radioList });
+      this.props.updateItemSettings({ radioList });
     }
   }
 
   onDeleteBtnClick(item) {
     const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-    const multiSsid = this.props.selfState.get('multiSsid');
-    const num = multiSsid.getIn(['radioList', radioId, 'vapList']).keyOf(item);
-    const vapList = multiSsid.getIn(['radioList', radioId, 'vapList']).delete(num);
-    const radioList = multiSsid.get('radioList').setIn([radioId, 'vapList'], vapList);
-    this.props.updateMultiSsidItem({ radioList });
+    const curDate = this.props.store.get('curData');
+    const num = curDate.getIn(['radioList', radioId, 'vapList']).keyOf(item);
+    const vapList = curDate.getIn(['radioList', radioId, 'vapList']).delete(num);
+    const radioList = curDate.get('radioList').setIn([radioId, 'vapList'], vapList);
+    this.props.updateItemSettings({ radioList });
   }
 
   onSsidItemChange(val, item, valId, newVal) {
@@ -619,6 +618,7 @@ export default class Basic extends React.Component {
         //   curModule: 'radioSettings',
         //   data: fromJS(json.data),
         // };
+        this.props.updateItemSettings(fromJS(json.data));
         // 根据国家和频段，获取信道列表信息
         const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
         const country = json.data.radioList[radioId].countryCode;
@@ -666,7 +666,6 @@ export default class Basic extends React.Component {
 
   firstInAndRefresh() {
     const props = this.props;
-    const groupId = props.groupId || -1;
     this.onChangeRadio({// 修改当前射频为第一个radio
       value: '0',
     });
@@ -709,6 +708,27 @@ export default class Basic extends React.Component {
       if (keys.includes(id)) return true;
     });
     this.props.changeSsidTableOptions(tableOptions);
+  }
+
+  saveCountrySelectModal() {
+    const selectedCode = this.props.selfState.get('selectedCountry');
+    const { radioId, radioType } = this.props.selfState.get('currRadioConfig').toJS();
+    const radioList = this.props.store.getIn(['curData', 'radioList'])
+                                .setIn([radioId, 'countryCode'], selectedCode);
+    this.props.updateItemSettings({ radioList });
+    const channelWidth = this.props.store.getIn(['curData', 'radioList', radioId, 'channelWidth']);
+    const saveInfo = {
+      radio: radioType,
+      country: selectedCode,
+      channelWidth,
+    };
+    this.props.fetch('goform/get_country_info', saveInfo)
+        .then((json) => {
+          if (json.state && json.state.code === 2000) {
+            this.props.receiveCountryInfo(json.data);
+          }
+        });
+    this.props.changeCtyModal(false);
   }
 
   render() {
@@ -769,9 +789,6 @@ export default class Basic extends React.Component {
     ]);
     // const curData = this.props.store.get('curData');
     const { radioId, radioType } = this.props.selfState.get('currRadioConfig').toJS();
-    // const radioSettings = this.props.selfState.get('radioSettings');
-    // const multiSsid = this.props.selfState.get('multiSsid');
-    // const basicSettings = this.props.selfState.get('basicSettings');
     const {
       staApmac, apmac1, apmac2, apmac3, validSsid, validPwd1, validPwd2, validMaxClients,
       validDownload, validUpload,
@@ -798,7 +815,7 @@ export default class Basic extends React.Component {
                 const saveInfo = {
                   radio: this.props.productInfo.getIn(['deviceRadioList', data.value, 'radioType']),
                   country: this.props.store.getIn(['curData', 'radioList', data.value, 'countryCode']),
-                  channelWidth: this.props.selfState.getIn(['curData', 'radioList', data.value, 'channelWidth']),
+                  channelWidth: this.props.store.getIn(['curData', 'radioList', data.value, 'channelWidth']),
                 };
                 this.props.fetch('goform/get_country_info', saveInfo).then((json2) => {
                   if (json2.state && json2.state.code === 2000) {
@@ -935,7 +952,7 @@ export default class Basic extends React.Component {
                   <Modal
                     title={_('Country Code')}
                     onClose={this.onCloseCountrySelectModal}
-                    onOk={this.props.saveCountrySelectModal}
+                    onOk={this.saveCountrySelectModal}
                     isShow={this.props.selfState.get('showCtyModal')}
                   >
                     <h3>{_('User Protocol')}</h3>
@@ -1662,7 +1679,7 @@ export default class Basic extends React.Component {
                 const vapList = curData.getIn(['radioList', radioId, 'vapList'])
                                 .set(pos, tableItemForSsid.get('item'));
                 const radioList = curData.get('radioList').setIn([radioId, 'vapList'], vapList);
-                this.props.updateMultiSsidItem({ radioList });
+                this.props.updateItemSettings({ radioList });
                 this.props.changeShowSpeedLimitModal(false);
                 this.props.changeTableItemForSsid(fromJS({
                   isShow: '0',
@@ -1743,7 +1760,7 @@ export default class Basic extends React.Component {
                 const vapList = curData.getIn(['radioList', radioId, 'vapList'])
                                 .set(pos, tableItemForSsid.get('item'));
                 const radioList = curData.get('radioList').setIn([radioId, 'vapList'], vapList);
-                this.props.updateMultiSsidItem({ radioList });
+                this.props.updateItemSettings({ radioList });
                 this.props.changeTableItemForSsid(fromJS({
                   isShow: '0',
                   val: '',

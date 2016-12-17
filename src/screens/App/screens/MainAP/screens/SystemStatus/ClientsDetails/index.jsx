@@ -199,7 +199,7 @@ export default class ClientsDetails extends React.Component {
       },
       {
         id: 'rxBytes',
-        text: _('Rx Bytes'),
+        text: _('Rx Data'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';

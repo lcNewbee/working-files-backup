@@ -347,5 +347,9 @@
   "WAN IP": "WAN口IP地址",
   "LAN IP Mode": "IP获取方式",
   "Wired Settings": "有线设置",
-  "Please select at least one radio to apply the SSID": "请至少选择一个射频以应用所配置的SSID"
+  "Please select at least one radio to apply the SSID": "请至少选择一个射频以应用所配置的SSID",
+  "Peers mac address table. The mac order represents the connection priority. The mac in higher order has the higher priority than mac bellow.The table allows you to drag to re-order to change the priority.":
+  "对端MAC地址列表。列表顺序代表了桥接优先级，从上到下优先级依次降低。列表允许拖动排序。",
+  "Mac list number can not exceed 10.": "列表中mac地址数量不能超过10个。",
+  "The mac address already exists in the list!": "该mac地址在列表中已经存在！"
 }

@@ -23,7 +23,7 @@
     },
     {
       "mac":"12:00:33:44:55:67",
-      "ssid":"axilspot2asdfasdfewfwsdf",
+      "ssid":"axilspotasdasdfafasdfasdfasf",
       "security":{
         "mode":"wep",
         "auth":"open",
@@ -39,7 +39,52 @@
     },
     {
       "mac":"32:22:33:44:55:67",
-      "ssid":"axilspot2",
+      "ssid":"axilspotasdasdfafasdfasdfasf",
+      "security":{
+        "mode":"wpa",
+        "cipher":"aes"
+      },
+      "signal":"-75",
+      "noise":"-95",
+      "protocol":"802.11ac",
+      "frequency":"36",
+      "channelWidth":"HT40"
+    },
+    {
+      "mac":"22:33:33:44:55:66",
+      "ssid":"axilspotasdasdfafasdfasdfasf",
+      "security":{
+        "mode":"wep",
+        "auth":"open",
+        "keyLength":"64",
+        "keyType":"Hex",
+        "keyIndex":"1"
+      },
+      "signal":"-75",
+      "noise":"-95",
+      "protocol":"802.11ac",
+      "frequency":"40",
+      "channelWidth":"HT20"
+    },
+    {
+      "mac":"12:44:33:44:55:67",
+      "ssid":"axilspotasdasdfafasdfasdfasf",
+      "security":{
+        "mode":"wep",
+        "auth":"open",
+        "keyLength":"64",
+        "keyType":"Hex",
+        "keyIndex":"2"
+      },
+      "signal":"-75",
+      "noise":"-95",
+      "protocol":"802.11ac",
+      "frequency":"36",
+      "channelWidth":"HT40"
+    },
+    {
+      "mac":"32:55:33:44:55:67",
+      "ssid":"axilspotasdasdfafasdfasdfasf",
       "security":{
         "mode":"wpa",
         "cipher":"aes"

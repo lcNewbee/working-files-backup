@@ -6,7 +6,9 @@ const defaultState = fromJS({
     radioId: '0',
     radioType: '2.4G',
   },
+  apMacInputData: '',
   scaning: true,
+  showMacHelpInfo: false,
   showScanResult: false,
   showRadioSetting: true,
   showSsidSetting: true,
@@ -42,7 +44,6 @@ function onUpdateSelfItemSettings(state, action) {
   const data = action.data.data;
   return state.mergeIn([curModule], data);
 }
-
 
 export default function (state = defaultState, action) {
   switch (action.type) {
@@ -91,6 +92,10 @@ export default function (state = defaultState, action) {
       return state.set('airTimeEnable', action.data);
     case 'CHANGE_SHOW_SPEED_LIMIT_MODAL':
       return state.set('showSpeedLimitModal', action.data);
+    case 'CHANGE_AP_MAC_INPUT':
+      return state.set('apMacInputData', action.data);
+    case 'CHANGE_SHOW_MAC_HELP_INFO':
+      return state.set('showMacHelpInfo', action.data);
     default:
   }
   return state;

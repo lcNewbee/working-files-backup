@@ -51,7 +51,7 @@ const interfaceOptions = fromJS([
     width: '152px',
   }, {
     id: 'txBytes',
-    text: _('Tx Bytes'),
+    text: _('Tx Data'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -61,7 +61,7 @@ const interfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'rxBytes',
-    text: _('Rx Bytes'),
+    text: _('Rx Data'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -91,7 +91,7 @@ const interfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'txErrorPackets',
-    text: _('Tx Error'),
+    text: _('Tx Errors'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -101,7 +101,7 @@ const interfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'rxErrorPackets',
-    text: _('Rx Error'),
+    text: _('Rx Errors'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -145,7 +145,7 @@ const vapInterfaceOptions = fromJS([
     width: '152px',
   }, {
     id: 'txBytes',
-    text: _('Tx Bytes'),
+    text: _('Tx Data'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -155,7 +155,7 @@ const vapInterfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'rxBytes',
-    text: _('Rx Bytes'),
+    text: _('Rx Data'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -185,7 +185,7 @@ const vapInterfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'txErrorPackets',
-    text: _('Tx Error'),
+    text: _('Tx Errors'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -195,7 +195,7 @@ const vapInterfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'rxErrorPackets',
-    text: _('Rx Error'),
+    text: _('Rx Errors'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -331,7 +331,7 @@ export default class SystemStatus extends React.Component {
       },
       {
         id: 'txBytes',
-        text: _('Tx Bytes'),
+        text: _('Tx Data'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -341,7 +341,7 @@ export default class SystemStatus extends React.Component {
       },
       {
         id: 'rxBytes',
-        text: _('Rx Bytes'),
+        text: _('Rx Data'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';

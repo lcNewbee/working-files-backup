@@ -90,13 +90,13 @@ export default class Networkmonitor extends React.Component {
         text: _('TX Flow'),
       }, {
         id: 'txerror',
-        text: _('TX Error'),
+        text: _('TX Errors'),
       }, {
         id: 'rxflow',
         text: _('RX Flow'),
       }, {
         id: 'rxerror',
-        text: _('RX Error'),
+        text: _('RX Errors'),
       },
     ]);
 

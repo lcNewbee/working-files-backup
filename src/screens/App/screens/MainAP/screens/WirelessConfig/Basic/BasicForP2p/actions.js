@@ -71,29 +71,29 @@ export function receiveCountryInfo(data) {
   };
 }
 
-export function saveCountrySelectModal() {
-  return (dispatch, getState) => {
-    const selectedCode = getState().basic.get('selectedCountry');
-    const { radioId, radioType } = getState().basic.get('currRadioConfig').toJS();
-    const radioList = getState().basic.getIn(['radioSettings', 'radioList'])
-                                .setIn([radioId, 'countryCode'], selectedCode);
-    dispatch(updateRadioSettingsItem({ radioList }));
-    const channelWidth = getState().basic.getIn(['radioSettings', 'radioList', radioId, 'channelWidth']);
-    const saveInfo = {
-      radio: radioType,
-      country: selectedCode,
-      channelWidth,
-    };
-    dispatch(fetch('goform/get_country_info', saveInfo))
-            .then((json) => {
-              // console.log('json', json.data);
-              if (json.state && json.state.code === 2000) {
-                dispatch(receiveCountryInfo(json.data));
-              }
-            });
-    dispatch(changeCtyModal(false));
-  };
-}
+// export function saveCountrySelectModal() {
+//   return (dispatch, getState) => {
+//     const selectedCode = getState().basic.get('selectedCountry');
+//     const { radioId, radioType } = getState().basic.get('currRadioConfig').toJS();
+//     const radioList = getState().basic.getIn(['radioSettings', 'radioList'])
+//                                 .setIn([radioId, 'countryCode'], selectedCode);
+//     dispatch(updateRadioSettingsItem({ radioList }));
+//     const channelWidth = getState().basic.getIn(['radioSettings', 'radioList', radioId, 'channelWidth']);
+//     const saveInfo = {
+//       radio: radioType,
+//       country: selectedCode,
+//       channelWidth,
+//     };
+//     dispatch(fetch('goform/get_country_info', saveInfo))
+//             .then((json) => {
+//               // console.log('json', json.data);
+//               if (json.state && json.state.code === 2000) {
+//                 dispatch(receiveCountryInfo(json.data));
+//               }
+//             });
+//     dispatch(changeCtyModal(false));
+//   };
+// }
 
 // 需求改变后的代码
 // data: {name: 'showMultiSsid/showSsidSetting/showRadioSetting', value: true}
@@ -181,3 +181,17 @@ export function changeShowSpeedLimitModal(data) {
 //     data,
 //   };
 // }
+
+export function changeApMacInput(data) {
+  return {
+    type: 'CHANGE_AP_MAC_INPUT',
+    data,
+  };
+}
+
+export function changeShowMacHelpInfo(data) {
+  return {
+    type: 'CHANGE_SHOW_MAC_HELP_INFO',
+    data,
+  };
+}

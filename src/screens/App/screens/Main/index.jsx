@@ -93,7 +93,7 @@ export default class Main extends Component {
                       <Icon
                         name="sign-out"
                       />
-                      {_('SIGN OUT')}
+                      {_('LOG OUT')}
                     </a>
                   </div>
                 </div>

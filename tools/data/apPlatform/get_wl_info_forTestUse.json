@@ -4,20 +4,28 @@
 	"msg":"success"
 },
 "data":{
+"lockType": "1",
 "radioList":
 [
 	{
 		"radioType":"2.4G",
 		"radioId":"0",
-		"wirelessMode":"ap",
+		"wirelessMode":"sta",
 		"vapList":[
 			{
 				"ssid":"axilspot1",
-				"apMac":"11:22:33:44:55:66",
+        "apMac": "12:22:33:44:55:55",
+				"apMacList":[
+          "12:22:33:44:55:55",
+          "12:22:33:44:55:66",
+          "12:22:33:44:55:77",
+          "12:22:33:44:55:88",
+          "12:22:33:44:55:99"
+        ],
         "vlanId": "1",
         "enable": "1",
         "maxClients": "12",
-				"apMacEnable": "0",
+				"apMacEnable": "1",
         "isolation": "0",
         "speedLimit": {
 					"enable": "0",
@@ -37,7 +45,14 @@
 			{
 				"ssid":"axilspot2",
         "enable": "1",
-				"apMac":"11:22:33:44:55:66",
+				"apMac": "12:22:33:44:55:55",
+        "apMacList":[
+          "12:22:33:44:55:55",
+          "12:22:33:44:55:66",
+          "12:22:33:44:55:77",
+          "12:22:33:44:55:88",
+          "12:22:33:44:55:99"
+        ],
         "vlanId": "2",
         "isolation": "0",
         "maxClients": "12",
@@ -70,6 +85,14 @@
         "maxClients": "12",
 				"isolation":"0",
 				"hideSsid": 0,
+        "apMac": "12:22:33:44:55:55",
+        "apMacList":[
+          "12:22:33:44:55:55",
+          "12:22:33:44:55:66",
+          "12:22:33:44:55:77",
+          "12:22:33:44:55:88",
+          "12:22:33:44:55:99"
+        ],
         "speedLimit": {
 					"enable": "1",
 					"upload": "555",

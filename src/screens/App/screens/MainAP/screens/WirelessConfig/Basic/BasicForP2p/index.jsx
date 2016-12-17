@@ -1,10 +1,11 @@
 import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
-import { Map, fromJS } from 'immutable';
+import { Map, fromJS, List } from 'immutable';
 import validator from 'shared/utils/lib/validator';
 import { bindActionCreators } from 'redux';
 import Input from 'shared/components/Form/atom/Input';
+import Icon from 'shared/components/Icon';
 import { FormGroup, FormInput, Modal, Table, SaveButton, icon } from 'shared/components';
 import { Button } from 'shared/components/Button';
 import * as appActions from 'shared/actions/app';
@@ -12,6 +13,8 @@ import * as actions from 'shared/actions/settings';
 import * as selfActions from './actions';
 import reducer from './reducer';
 import countryMap from './country';
+
+import './index.scss';
 
 // 可配置功能项
 /**
@@ -71,6 +74,8 @@ const propTypes = {
   productInfo: PropTypes.instanceOf(Map),
   changeSsidTableOptions: PropTypes.func,
   changeShowSpeedLimitModal: PropTypes.func,
+  changeApMacInput: PropTypes.func,
+  changeShowMacHelpInfo: PropTypes.func,
   // changeAirTimeEnable: PropTypes.func,
 };
 
@@ -157,6 +162,9 @@ const validOptions = Map({
   apmac3: validator({
     rules: 'mac',
   }),
+  validMacInput: validator({
+    rules: 'mac',
+  }),
   validPwd1: validator({
     rules: 'pwd|len:[8, 32]',
   }),
@@ -232,6 +240,7 @@ export default class Basic extends React.Component {
     // this.makeRadioSelectOptions = this.makeRadioSelectOptions.bind(this);
     this.onChangeRadio = this.onChangeRadio.bind(this);
     this.makeSsidTableOptions = this.makeSsidTableOptions.bind(this);
+    this.sortMacOrder = this.sortMacOrder.bind(this);
     // this.getAirTimeEnable = this.getAirTimeEnable.bind(this);
     this.state = {
       ssidTableFullMemberOptions: fromJS([
@@ -534,11 +543,21 @@ export default class Basic extends React.Component {
     if (!this.props.selfState.get('selectedResult').isEmpty()) {
       let peers = basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'peers']);
       if (peers !== undefined) { peers = peers.set('0', mac); }
-      const firstSsid = basicSettings.getIn(['radioList', radioId, 'vapList', '0'])
+      let firstSsid = basicSettings.getIn(['radioList', radioId, 'vapList', '0'])
                         .set('peers', peers).set('ssid', ssid).set('apMac', mac)
                         .set('security', fromJS(security).set('key', ''))
                         .set('frequency', frequency)
                         .set('channelWidth', channelWidth);
+      if (basicSettings.get('lockType') === '1') {
+        // 处理华润定制的多Station桥接功能
+        const scanResult = this.props.store.getIn(['curData', 'scanResult', 'siteList']);
+        let apMacList = fromJS([]);
+        scanResult.forEach((val) => {
+          if (val.get('ssid') === ssid) apMacList = apMacList.push(val.get('mac'));
+        });
+        firstSsid = firstSsid.set('apMacList', apMacList);
+      }
+
       const radioList = basicSettings.get('radioList').setIn([radioId, 'vapList', '0'], firstSsid);
       this.props.updateBasicSettings({ radioList });
       this.props.updateItemSettings({ scanResult: fromJS({}) });
@@ -797,6 +816,20 @@ export default class Basic extends React.Component {
       if (keys.includes(id)) return true;
     });
     this.props.changeSsidTableOptions(tableOptions);
+  }
+
+  sortMacOrder(it, apMacList, direction) {
+    const macVal = apMacList.get(it);
+    let macList = apMacList;
+    const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
+    if (it < apMacList.size && direction === 'down') {
+      macList = apMacList.insert(it + 2, macVal).delete(it);
+    } else if (it > 0 && direction === 'up') {
+      macList = apMacList.insert(it - 1, macVal).delete(it + 1);
+    }
+    const radioList = this.props.selfState.get('basicSettings').get('radioList')
+                        .setIn([radioId, 'vapList', '0', 'apMacList'], macList);
+    this.props.updateBasicSettings({ radioList });
   }
 
   render() {
@@ -1060,6 +1093,8 @@ export default class Basic extends React.Component {
     } = this.props.validateOption;
     const tableItemForSsid = this.props.selfState.get('tableItemForSsid');
     const funConfig = this.props.route.funConfig;
+    const apMac = basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'apMac']);
+    const apMacList = basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'apMacList']);
     // const keysFromRoute = funConfig.ssidTableKeys;
     if (this.props.store.get('curSettingId') === 'base') {
       return null;
@@ -1429,8 +1464,8 @@ export default class Basic extends React.Component {
                   </div>
                 ) : null
               }
-              { // station模式下，对端AP的mac地址输入框
-                (basicSettings.getIn(['radioList', radioId, 'wirelessMode']) === 'sta') ? (
+              { // station模式下，对端AP的mac地址输入框, 如果apMac不是List，则是普通AP的mac地址输入框
+                (basicSettings.getIn(['radioList', radioId, 'wirelessMode']) === 'sta' && basicSettings.get('lockType') === '0') ? (
                   <div>
                     <FormGroup
                       label={_('Lock To AP')}
@@ -1447,7 +1482,7 @@ export default class Basic extends React.Component {
                         <FormGroup
                           label={_('Peer Mac')}
                           form="basicSettings"
-                          value={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'apMac'])}
+                          value={apMac}
                           onChange={(data) => {
                             const radioList = basicSettings.get('radioList')
                                             .setIn([radioId, 'vapList', '0', 'apMac'], data.value);
@@ -1456,6 +1491,181 @@ export default class Basic extends React.Component {
                           placeholder={_('not necessary')}
                           {...staApmac}
                         />
+                      ) : null
+                    }
+                  </div>
+                ) : null
+              }
+              { // station模式下，对端AP的mac地址输入框，如果apMac是List，则是华润AP的mac地址输入框及排序框
+                (basicSettings.getIn(['radioList', radioId, 'wirelessMode']) === 'sta' && basicSettings.get('lockType') === '1') ? (
+                  <div>
+                    <FormGroup
+                      label={_('Lock To AP')}
+                      type="checkbox"
+                      checked={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'apMacEnable']) === '1'}
+                      onChange={(data) => {
+                        const radioList = basicSettings.get('radioList')
+                                        .setIn([radioId, 'vapList', '0', 'apMacEnable'], data.value);
+                        this.props.updateBasicSettings({ radioList });
+                      }}
+                    />
+                    {
+                      basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'apMacEnable']) === '1' ? (
+                        <div>
+                          <div className="clearfix">
+                            <FormGroup
+                              className="fl"
+                              label={_('Peer Mac')}
+                            >
+                              {
+                                apMacList.size === 0 ? (
+                                  <div className="paddingDiv" />
+                                ) : (
+                                  <ul className="apMacListWrap">
+                                    {
+                                      apMacList.toJS().map((val, it) => (
+                                        <div
+                                          className="clearfix"
+                                          key={it}
+                                        >
+                                          <li
+                                            className="apMacItem fl"
+                                            onDragOver={(e) => {
+                                              e.preventDefault();
+                                            }}
+                                            onDragStart={(e) => {
+                                              e.dataTransfer.setData('mac', e.target.innerHTML);
+                                            }}
+                                            onDrop={(e) => {
+                                              const dropMac = e.dataTransfer.getData('mac');
+                                              const targetMac = e.target.innerHTML;
+                                              let macList = apMacList;
+                                              const dropMacIter = macList.keyOf(dropMac);
+                                              const targetMacIter = macList.keyOf(targetMac);
+                                              if (typeof (dropMacIter) !== 'undefined' &&
+                                                  typeof (targetMacIter) !== 'undefined' &&
+                                                  targetMacIter >= dropMacIter) { // 向下移动
+                                                macList = macList.insert(targetMacIter + 1, dropMac)
+                                                          .delete(dropMacIter);
+                                              } else if (typeof (dropMacIter) !== 'undefined' &&
+                                                  typeof (targetMacIter) !== 'undefined' &&
+                                                  targetMacIter < dropMacIter) {
+                                                macList = macList.insert(targetMacIter, dropMac)
+                                                          .delete(dropMacIter + 1);
+                                              }
+                                              const radioList = basicSettings.get('radioList')
+                                                                .setIn([radioId, 'vapList', '0', 'apMacList'], macList);
+                                              this.props.updateBasicSettings({ radioList });
+                                            }}
+                                            draggable
+                                          >
+                                            {val}
+                                          </li>
+                                          <Icon
+                                            className="apMacIcon fl"
+                                            name="arrow-down"
+                                            onClick={() => { this.sortMacOrder(it, apMacList, 'down'); }}
+                                          />
+                                          <Icon
+                                            className="apMacIcon fl"
+                                            name="arrow-up"
+                                            onClick={() => { this.sortMacOrder(it, apMacList, 'up'); }}
+                                          />
+                                          <Icon
+                                            className="apMacIcon fl"
+                                            name="close"
+                                            id={it}
+                                            onClick={(e) => {
+                                              const macList = apMacList.delete(e.target.id);
+                                              const radioList = basicSettings.get('radioList')
+                                                                .setIn([radioId, 'vapList', '0', 'apMacList'], macList);
+                                              this.props.updateBasicSettings({ radioList });
+                                            }}
+                                          />
+                                        </div>
+                                      ))
+                                    }
+                                  </ul>
+                                )
+                              }
+                            </FormGroup>
+                            <Icon
+                              className="fl"
+                              name="question-circle"
+                              style={{ marginLeft: '5px' }}
+                              onMouseOver={() => {
+                                this.props.changeShowMacHelpInfo(true);
+                              }}
+                              onMouseOut={() => {
+                                this.props.changeShowMacHelpInfo(false);
+                              }}
+                            />
+                            {
+                              this.props.selfState.get('showMacHelpInfo') ? (
+                                <span
+                                  className="fl"
+                                  style={{
+                                    width: '250px',
+                                    fontSize: '14px',
+                                    backgroundColor: '#fff',
+                                    borderRadius: '5px',
+                                    padding: '5px',
+                                  }}
+                                >
+                                  {_('Peers mac address table. The mac order represents the connection priority. The mac in higher order has the higher priority than mac bellow.The table allows you to drag to re-order to change the priority.')}
+                                </span>
+                              ) : null
+                            }
+                          </div>
+                          <div className="clearfix">
+                            <FormGroup
+                              type="text"
+                              className="fl"
+                              form="macInputArea"
+                              value={this.props.selfState.get('apMacInputData')}
+                              onChange={(data) => {
+                                this.props.changeApMacInput(data.value);
+                              }}
+                              style={{
+                                width: '370px',
+                                marginTop: '-2px',
+                              }}
+                              {...this.props.validateOption.validMacInput}
+                            />
+                            <Button
+                              text={_('Add')}
+                              className="fl"
+                              theme="primary"
+                              onClick={() => {
+                                const val = this.props.selfState.get('apMacInputData').replace(/-/g, ':');
+                                let macList = apMacList;
+                                this.props.validateAll('macInputArea').then((msg) => {
+                                  if (msg.isEmpty()) {
+                                    if (macList.size >= 10) {
+                                      this.props.createModal({
+                                        id: 'settings',
+                                        role: 'alert',
+                                        text: _('Mac list number can not exceed 10.'),
+                                      });
+                                    } else if (macList.includes(val)) {
+                                      this.props.createModal({
+                                        id: 'settings',
+                                        role: 'alert',
+                                        text: _('The mac address already exists in the list!'),
+                                      });
+                                    } else if (val !== '') {
+                                      macList = macList.push(val);
+                                      const radioList = basicSettings.get('radioList')
+                                                      .setIn([radioId, 'vapList', '0', 'apMacList'], macList);
+                                      this.props.updateBasicSettings({ radioList });
+                                      this.props.changeApMacInput('');
+                                    }
+                                  }
+                                });
+                              }}
+                            />
+                          </div>
+                        </div>
                       ) : null
                     }
                   </div>
