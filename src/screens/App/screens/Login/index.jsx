@@ -116,7 +116,8 @@ export default class Login extends Component {
             result = 'ok';
 
             if (json.data && json.data.purview) {
-              loginState.purview = json.data.purview;
+              // loginState.purview = json.data.purview;
+              utils.extend(loginState, json.data);
             } else {
               loginState.purview = 'all';
             }

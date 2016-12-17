@@ -2,6 +2,24 @@ import { fromJS } from 'immutable';
 
 let guiVersion;
 
+function getDefaltLogin() {
+  let ret = sessionStorage.getItem('login');
+
+  if (ret) {
+    ret = JSON.parse(ret);
+  } else {
+    ret = {
+      username: 'admin',
+
+      // 用户权限管理
+      purview: 'none',
+      msg: '',
+    };
+  }
+
+  return ret;
+}
+
 const defaultState = fromJS({
   fetching: false,
   saving: false,
@@ -16,13 +34,7 @@ const defaultState = fromJS({
     items: [],
   },
   noControl: false,
-  login: {
-    username: 'admin',
-
-    // 用户权限管理
-    purview: 'none',
-    msg: '',
-  },
+  login: getDefaltLogin(),
 });
 const ajaxTypeMap = {
   save: 'saving',
@@ -69,6 +81,15 @@ function handleValidateAll(state, action) {
 
   return state.set('invalid', fromJS({}))
     .set('validateAt', `${formId}.${time}`);
+}
+
+function changeLoginState(state, action) {
+  const newLogin = state.get('login').merge(action.payload).toJS();
+
+  // sessionStorage.setItem('login', JSON.stringify(newLogin));
+  sessionStorage.setItem('login', JSON.stringify(newLogin));
+
+  return state.mergeIn(['login'], newLogin);
 }
 
 export default function (state = defaultState, action) {
@@ -141,8 +162,9 @@ export default function (state = defaultState, action) {
     case 'CHANGE_MODAL_STATE':
       return state.mergeIn(['modal'], action.data);
 
+    // 修改登录状态
     case 'CHANGE_LOGIN_STATE':
-      return state.mergeIn(['login'], action.payload);
+      return changeLoginState(state, action);
 
     default:
   }

@@ -6,25 +6,25 @@
   "data": {
     "list": [
       {
-        "userType": "0",
+        "userType": 0,
         "userName": "admin",
         "userPassword": "",
         "purview": "all"
       },
       {
-        "userType": "2",
+        "userType": 2,
         "userName": "Guest",
         "userPassword": "",
         "purview": "Readonly"
       },
       {
-        "userType": "1",
+        "userType": 1,
         "userName": "Network admin",
         "userPassword": "",
         "purview": "network"
       },
       {
-        "userType": "1",
+        "userType": 1,
         "userName": "Ap Group admin",
         "userPassword": "",
         "purview": "ap group,network"

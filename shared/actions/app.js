@@ -12,13 +12,6 @@ export function refreshAll() {
   };
 }
 
-export function changeLoginStatus(data) {
-  return {
-    type: 'CHANGE_LOGIN_STATUS',
-    data,
-  };
-}
-
 export function createModal(data) {
   return {
     type: 'CREATE_MODAL',
@@ -301,9 +294,18 @@ export function initAppConfig(payload) {
 /**
  * Login
  */
+// 修改登录相关对象
 export function changeLoginState(payload) {
   return {
     type: 'CHANGE_LOGIN_STATE',
     payload,
+  };
+}
+
+// 修改登录状态值
+export function changeLoginStatus(data) {
+  return {
+    type: 'CHANGE_LOGIN_STATUS',
+    data,
   };
 }

@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 import validator from 'shared/utils/lib/validator';
 import AppScreen from 'shared/components/Template/AppScreen';
 import { FormGroup } from 'shared/components/Form';
+import { purviewOptions } from 'shared/config/axc';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
@@ -17,13 +18,13 @@ const listOptions = fromJS([
     defaultValue: '0',
     options: [
       {
-        value: '0',
+        value: 0,
         label: _('Admin'),
       }, {
-        value: '1',
+        value: 1,
         label: _('Manager(Branch)'),
       }, {
-        value: '2',
+        value: 2,
         label: _('Manager(Read-only)'),
       },
     ],
@@ -35,25 +36,14 @@ const listOptions = fromJS([
     id: 'purview',
     width: '160',
     text: _('Purview'),
-    defaultValue: '0',
-    options: [
-      {
-        value: '1',
-        label: _('Network'),
-      }, {
-        value: '2',
-        label: _('AP Group'),
-      }, {
-        value: '3',
-        label: _('System'),
-      },
-    ],
+    defaultValue: '',
+    options: purviewOptions,
 
     formProps: {
       component(option, ...rest) {
         const myProps = option;
 
-        if (rest[0].get('userType') !== '1') {
+        if (rest[0].get('userType') !== 1) {
           return null;
         }
 

@@ -1,7 +1,8 @@
 import React, { PropTypes } from 'react';
 import utils, { immutableUtils } from 'shared/utils';
-import immutable, { List, Map } from 'immutable';
+import immutable, { List, Map, fromJS } from 'immutable';
 import ListInfo from 'shared/components/Template/ListInfo';
+import { purviewOptions } from 'shared/config/axc';
 import FormContainer from 'shared/components/Organism/FormContainer';
 
 const propTypes = {
@@ -102,6 +103,7 @@ export default class AppScreen extends React.Component {
 
     utils.binds(this, [
       'onSaveSettings',
+      'getActionable',
     ]);
   }
   componentWillMount() {
@@ -168,13 +170,48 @@ export default class AppScreen extends React.Component {
     }
   }
 
+  getActionable() {
+    const purview = this.props.app.getIn(['login', 'purview']);
+    const userType = this.props.app.getIn(['login', 'usertype']);
+    const $$purviewList = fromJS(purview.split(','));
+    const curModule = this.props.route.path.split('/')[2];
+    const curModuleVal = fromJS(purviewOptions).find(
+      $$item => $$item.get('module') === curModule,
+    ).get('value');
+    let ret = false;
+
+    // admin 或者 分支权限 all的管理员
+    if (purview === 'all' || userType === 0) {
+      ret = true;
+
+    // 只读管理员
+    } else if (userType === 2) {
+      ret = false;
+    } else {
+      $$purviewList.forEach(
+        (val, i) => {
+          let moduleRet = i;
+
+          if (curModuleVal === val) {
+            moduleRet = false;
+            ret = true;
+          }
+
+          return moduleRet;
+        },
+      );
+    }
+
+    return ret;
+  }
+
   render() {
     const {
       tableOptions, editFormOptions, defaultEditData,
     } = this;
     const {
       store, title, noTitle, route, listOptions, customSettingForm, className,
-      settingsFormOptions, updateScreenSettings, hasSettingsSaveButton,
+      settingsFormOptions, updateScreenSettings, hasSettingsSaveButton, actionable,
       ...commonProps
     } = this.props;
     const app = this.props.app;
@@ -184,6 +221,7 @@ export default class AppScreen extends React.Component {
     const $$curSettings = $$myScreenStore.get('curSettings');
     const saveUrl = route.saveUrl || route.formUrl;
     const fetchUrl = route.fetchUrl || route.formUrl;
+    const myActionable = this.getActionable() && actionable;
     let screenClassName = 't-app-screen';
 
     // 数据未初始化不渲染
@@ -213,7 +251,7 @@ export default class AppScreen extends React.Component {
               validateAt={app.get('validateAt')}
               onValidError={this.props.reportValidError}
               isSaving={app.get('saving')}
-              hasSaveButton={hasSettingsSaveButton}
+              hasSaveButton={this.getActionable() && hasSettingsSaveButton}
             />
           ) : null
         }
@@ -227,6 +265,7 @@ export default class AppScreen extends React.Component {
               store={$$myScreenStore}
               fetchUrl={fetchUrl}
               saveUrl={saveUrl}
+              actionable={myActionable}
             />
           ) : null
         }
