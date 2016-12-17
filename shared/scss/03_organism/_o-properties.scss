@@ -77,10 +77,13 @@
     font-size: 11px;
     line-height: 24px;
     margin-left: 8px;
-    color: $g-brand-success;
+    color: $g-brand-warning;
 
-    &.down {
+    &.offline {
       color: $g-brand-danger;
+    }
+    &.online {
+      color: $g-brand-success;
     }
   }
   .o-properties-header__title {

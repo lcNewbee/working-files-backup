@@ -36,7 +36,7 @@
       }, {
         "devicename": "",
         "mac": "f4:12:22:33:11:33",
-        "status": "no_up",
+        "status": "run",
         "devicetype": "inside",
         "ip": "192.168.5.54",
         "model": "V2.2",

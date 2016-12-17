@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
-import { Map } from 'immutable';
+import { Map, fromJS } from 'immutable';
 import Icon from 'shared/components/Icon';
+import { apStatus } from 'shared/config/axcAp';
 
 import DeviceOverview from './DeviceOverview';
 import DeviceGeneral from './DeviceGeneral';
@@ -35,6 +36,25 @@ function DevicesProperties(props) {
   const activeTab = item.get('activeTab');
   const activeTabPanels = item.get(activeTab);
   const activePanelKey = `${activeTab}ActivePanelIndex`;
+  const apStatuVal = fromJS(apStatus).find(
+    $$item => $$item.get('value') === item.getIn(['data', 'info', 'status'])
+  ).get('label');
+
+  let avatarIconClass = 'Icon Icon-ap-offline';
+  let statuIconClass = 'o-properties-header__status';
+  let statuTagClass = 'a-tag a-tag--danger';
+
+  if (apStatuVal === _('Offline')) {
+    statuIconClass = `${statuIconClass} offline`;
+    statuTagClass = 'a-tag a-tag--danger';
+  } else if (apStatuVal === _('Online')) {
+    statuIconClass = `${statuIconClass} online`;
+    avatarIconClass = 'Icon Icon-ap-online';
+    statuTagClass = 'a-tag a-tag--success';
+  } else {
+    statuIconClass = `${statuIconClass}`;
+    statuTagClass = 'a-tag a-tag--warning';
+  }
 
   return (
     <div
@@ -48,15 +68,11 @@ function DevicesProperties(props) {
           />
         </div>
         <div className="o-properties-header__avatar">
-          {
-            item.getIn(['data', 'info', 'status']) === '1' ? (
-              <span className="Icon Icon-ap-online" />
-            ) : <span className="Icon Icon-ap-offline" />
-          }
+          <span className={avatarIconClass} />
         </div>
         <Icon
           name="circle"
-          className="o-properties-header__status"
+          className={statuIconClass}
         />
         <div className="o-properties-header__title">
           <span>
@@ -66,7 +82,7 @@ function DevicesProperties(props) {
             }
           </span>
           <div className="o-properties-header__title-more">
-            <span className="a-tag a-tag--danger">{_('Up')}</span>
+            <span className={statuTagClass}>{apStatuVal}</span>
           </div>
         </div>
         <div className="o-properties-header__actions">
