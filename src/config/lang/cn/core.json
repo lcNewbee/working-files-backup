@@ -251,7 +251,8 @@
   "Bandwidth Control": "流量控制",
   "QoS Settings": "流量控制设置",
 
-  "Wireless": "无线设置",
+  "Wireless": "无线",
+  "Wireless Settings": "无线设置",
   "Wireless Channel": "无线信道",
   "ALL": "全部",
   "INDOOR": "室内接入",

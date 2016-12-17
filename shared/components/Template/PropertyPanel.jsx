@@ -42,6 +42,7 @@ class PropertyPanel extends React.Component {
     });
   }
 
+  // 模块数据保存
   onSave() {
     const { properties } = this.props;
     const activeIndex = properties.get('activeIndex');
@@ -54,10 +55,12 @@ class PropertyPanel extends React.Component {
       'configuration', activePanelconfigIndex,
     ]);
     const query = activePanelState.get('query').toJS();
+    const curModule = $$configData.get('module');
     let formUrl = 'goform/group/ap/radio';
     let $$subData = $$configData.get('data');
 
-    if ($$configData.get('module') === 'radio') {
+
+    if (curModule === 'radio') {
       formUrl = 'goform/group/ap/radio';
 
       $$subData = immutableUtils.getChanged(
@@ -70,6 +73,8 @@ class PropertyPanel extends React.Component {
       });
 
       $$subData = immutableUtils.toNumberWithKeys($$subData, List(numberKeys));
+    } else if (curModule === 'info') {
+      formUrl = 'goform/group/ap/radio';
     }
 
     this.props.save(formUrl, $$subData.toJS())

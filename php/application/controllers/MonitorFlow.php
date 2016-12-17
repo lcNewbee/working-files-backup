@@ -10,9 +10,9 @@ class MonitorFlow extends CI_Controller {
 
 	function fetch(){
 		$retdata = array(
-		        'groupid'=>(int)element('groupid', $_GET,-1),
-		      );
-			$result=axc_get_flow(json_encode($retdata));
+      'groupid'=>(int)element('groupid', $_GET, -100),
+    );
+		$result=axc_get_flow(json_encode($retdata));
 
 		return $result;
 	}
@@ -43,7 +43,7 @@ class MonitorFlow extends CI_Controller {
 				echo $result;
 			}
 			elseif($_SERVER['REQUEST_METHOD'] == 'GET') {
-				// $result = $this->fetch();
+				$result = $this->fetch();
 				echo $result;
 			}
   }

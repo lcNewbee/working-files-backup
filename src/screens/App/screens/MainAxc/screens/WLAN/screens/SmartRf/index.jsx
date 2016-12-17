@@ -17,6 +17,15 @@ const settingsFormOptions = radioBase
       const curId = $$item.get('id');
 
       switch (curId) {
+        // 功率添加自动选项
+        case 'phymode':
+          return $$item.updateIn(
+            ['options'],
+            $$options => $$options.unshift(Map({
+              value: 'auto',
+              label: _('Automatic'),
+            })),
+          ).set('disabled', true);
 
         // 功率添加自动选项
         case 'txpower':
@@ -26,7 +35,7 @@ const settingsFormOptions = radioBase
               value: 'auto',
               label: _('Automatic'),
             })),
-          );
+          ).set('disabled', true);
 
         // 信道只支持自动
         case 'channel':
@@ -38,7 +47,7 @@ const settingsFormOptions = radioBase
                 label: _('Automatic'),
               },
             ]),
-          );
+          ).set('disabled', true);
 
         // 5G优先,  11n优先
         case 'first5g':
@@ -60,6 +69,20 @@ const settingsFormOptions = radioBase
     item => item.get('fieldset'),
   )
   .toList();
+
+const $$radioAdvanceFormOptions = radioAdvance.filterNot(
+  ($$item) => {
+    let ret = false;
+    const curId = $$item.get('id');
+
+    if (curId === 'rateset' || curId === 'txchain' ||
+        curId === 'rxchain') {
+      ret = true;
+    }
+
+    return ret;
+  },
+);
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
@@ -193,7 +216,7 @@ export default class SmartRf extends React.Component {
               <div className="o-box__cell">
                 <FormContainer
                   id="radioAdvance"
-                  options={radioAdvance}
+                  options={$$radioAdvanceFormOptions}
                   data={$$curData}
                   onChangeData={updateScreenSettings}
                   onSave={() => this.onSave('radioAdvance')}

@@ -23,6 +23,11 @@
       max-height: 0;
       overflow: hidden;
     }
+    .o-properties-header {
+       .o-properties-header__title-more {
+        display: none;
+      }
+    }
   }
 
   &.is-undocked {
@@ -58,19 +63,34 @@
   .o-properties-header__avatar {
     float: left;
     margin-left: 4px;
-    .icon {
+
+    .Icon {
       font-size: 20px;
-      line-height: 20px;
+      width: 24px;
+      height: 24px;
       cursor: pointer;
+      background-size: 100%;
+    }
+  }
+  .o-properties-header__status {
+    float: left;
+    font-size: 11px;
+    line-height: 24px;
+    margin-left: 8px;
+    color: $g-brand-success;
+
+    &.down {
+      color: $g-brand-danger;
     }
   }
   .o-properties-header__title {
     float: left;
     width: 200px;
     margin-left: 8px;
-  }
-  .o-properties-header__status {
-     margin: 7px 0 0 20px;
+
+    .o-properties-header__title-more {
+      display: block;
+    }
   }
 
   .o-properties-header__actions {
@@ -84,6 +104,11 @@
         color: $g-brand-primary;
       }
     }
+  }
+
+  .o-properties-header__more {
+    display: block;
+    width: 100%;
   }
 }
 

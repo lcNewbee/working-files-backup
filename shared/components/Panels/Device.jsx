@@ -35,11 +35,6 @@ function DevicesProperties(props) {
   const activeTab = item.get('activeTab');
   const activeTabPanels = item.get(activeTab);
   const activePanelKey = `${activeTab}ActivePanelIndex`;
-  const apIconStyle = {
-    width: '18px',
-    height: '18px',
-    backgroundSize: '100%',
-  };
 
   return (
     <div
@@ -55,16 +50,24 @@ function DevicesProperties(props) {
         <div className="o-properties-header__avatar">
           {
             item.getIn(['data', 'info', 'status']) === '1' ? (
-              <span style={apIconStyle} className="Icon Icon-ap-online" />
-            ) : <span style={apIconStyle} className="Icon Icon-ap-offline" />
+              <span className="Icon Icon-ap-online" />
+            ) : <span className="Icon Icon-ap-offline" />
           }
-
         </div>
+        <Icon
+          name="circle"
+          className="o-properties-header__status"
+        />
         <div className="o-properties-header__title">
-          {
-            item.getIn(['data', 'info', 'devicename']) ||
-            item.getIn(['data', 'info', 'mac'])
-          }
+          <span>
+            {
+              item.getIn(['data', 'info', 'devicename']) ||
+              item.getIn(['data', 'info', 'mac'])
+            }
+          </span>
+          <div className="o-properties-header__title-more">
+            <span className="a-tag a-tag--danger">{_('Up')}</span>
+          </div>
         </div>
         <div className="o-properties-header__actions">
           <Icon

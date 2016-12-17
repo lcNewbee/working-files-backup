@@ -216,19 +216,28 @@ export function saveScreenSettings(option) {
 
     // 处理配置
     if (option) {
+      // 自定义URL
       if (option.url) {
         saveUrl = option.url;
       }
+
+      // 只保存修改
       if (option.onlyChanged) {
         $$subData = immutableUtils.getChanged($$subData, $$oriData);
+      }
+
+      // 数字类型转换
+      if (option.numberKeys) {
+        $$subData = immutableUtils.toNumberWithKeys($$subData, option.numberKeys);
+      }
+
+      // 自定义数据
+      if (option.data) {
+        $$subData = $$subData.merge(option.data);
       }
     }
 
     $$subData = $$subData.set('action', 'setting');
-
-    if (option && option.numberKeys) {
-      $$subData = immutableUtils.toNumberWithKeys($$subData, option.numberKeys);
-    }
 
     if ($$curQuery.get('groupid') !== undefined) {
       $$subData = $$subData.set('groupid', $$curQuery.get('groupid'));

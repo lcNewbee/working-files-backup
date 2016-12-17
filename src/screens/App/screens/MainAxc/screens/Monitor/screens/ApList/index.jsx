@@ -14,6 +14,7 @@ import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 import * as propertiesActions from 'shared/actions/properties';
 
+const EDIT_LIST_ACTION = 'editList';
 const flowRateFilter = utils.filter('flowRate:["KB"]');
 const apStatus = [
   {
@@ -62,6 +63,15 @@ const settingsFormOptions = radioBase
       const curId = $$item.get('id');
 
       switch (curId) {
+        // 功率添加自动选项
+        case 'phymode':
+          return $$item.updateIn(
+            ['options'],
+            $$options => $$options.unshift(Map({
+              value: 'auto',
+              label: _('Automatic'),
+            })),
+          ).set('disabled', true);
 
         // 功率添加自动选项
         case 'txpower':
@@ -71,7 +81,7 @@ const settingsFormOptions = radioBase
               value: 'auto',
               label: _('Automatic'),
             })),
-          );
+          ).set('disabled', true);
 
         // 信道只支持自动
         case 'channel':
@@ -83,7 +93,7 @@ const settingsFormOptions = radioBase
                 label: _('Automatic'),
               },
             ]),
-          );
+          ).set('disabled', true);
 
         // 5G优先,  11n优先
         case 'first5g':
@@ -106,6 +116,19 @@ const settingsFormOptions = radioBase
   )
   .toList();
 
+const $$radioAdvanceFormOptions = radioAdvance.filterNot(
+  ($$item) => {
+    let ret = false;
+    const curId = $$item.get('id');
+
+    if (curId === 'rateset' || curId === 'txchain' ||
+        curId === 'rxchain') {
+      ret = true;
+    }
+
+    return ret;
+  },
+);
 const listOptions = fromJS([
   {
     id: 'devicename',
@@ -167,6 +190,7 @@ const listActionBarButtons = [
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
+  route: PropTypes.object,
 
   validateAll: PropTypes.func,
   fetchScreenData: PropTypes.func,
@@ -205,6 +229,7 @@ export default class View extends React.Component {
       'onSave',
       'toggleBox',
     ]);
+    this.screenId = props.route.id;
   }
 
   componentDidMount() {
@@ -235,27 +260,51 @@ export default class View extends React.Component {
 
     if ($$selectedList.size > 0) {
       this.props.changeScreenActionQuery({
-        action: 'setting',
+        action: EDIT_LIST_ACTION,
         myTitle: _('Edit Selected AP'),
       });
     } else {
       this.props.createModal({
-        id: 'settings',
+        id: EDIT_LIST_ACTION,
         role: 'alert',
         text: _('Please select %s rows', _('edit')),
       });
     }
   }
   onSave(formId) {
+    const $$apList = this.props.store.getIn([
+      this.screenId,
+      'data',
+      'list',
+    ]);
+    const selectedMacList = this.props.store.getIn([
+      this.screenId,
+      'actionQuery',
+      'selectedList',
+    ]).map(
+      index => $$apList.getIn([index, 'mac']),
+    );
+
     if (this.props.validateAll) {
       this.props.validateAll(formId)
         .then((errMsg) => {
           if (errMsg.isEmpty()) {
             this.props.saveScreenSettings({
-              url: 'goform/group/smartRf',
+              url: 'goform/group/ap/radio',
               onlyChanged: true,
               numberKeys: fromJS(numberKeys),
-            });
+              data: {
+                action: EDIT_LIST_ACTION,
+                selectedList: selectedMacList,
+              },
+            }).then(
+              () => {
+                this.props.closeModal();
+                this.props.changeScreenActionQuery({
+                  action: '',
+                });
+              },
+            );
           }
         });
     }
@@ -270,9 +319,9 @@ export default class View extends React.Component {
     const myScreenId = store.get('curScreenId');
     const $$myScreenStore = store.get(myScreenId);
     const $$curData = $$myScreenStore.get('curSettings');
-    const isSetting = $$myScreenStore.getIn(['actionQuery', 'action']) === 'setting';
+    const isEditList = $$myScreenStore.getIn(['actionQuery', 'action']) === EDIT_LIST_ACTION;
 
-    if (!isSetting) {
+    if (!isEditList) {
       return null;
     }
 
@@ -332,7 +381,7 @@ export default class View extends React.Component {
             <div className="o-box__cell">
               <FormContainer
                 id="radioAdvance"
-                options={radioAdvance}
+                options={$$radioAdvanceFormOptions}
                 data={$$curData}
                 onChangeData={this.props.updateScreenSettings}
                 onSave={() => this.onSave('radioAdvance')}
@@ -348,7 +397,6 @@ export default class View extends React.Component {
     );
   }
   render() {
-    const groupid = this.props.groupid;
     const myListOptions = listOptions.setIn([0, 'transform'], (val, item) => {
       const mac = item.get('mac');
       return (
@@ -360,7 +408,7 @@ export default class View extends React.Component {
         </span>
       );
     });
-    const listActionBarChildren = (
+    let listActionBarChildren = (
       <Button
         text={_('Edit')}
         key="settingActionButton"
@@ -368,12 +416,19 @@ export default class View extends React.Component {
         onClick={() => this.onSettingSelected()}
       />
     );
+    let myActionButtons = listActionBarButtons;
+
+    // 如果是所有组不支持对AP的操作
+    if (this.props.groupid === -100) {
+      listActionBarChildren = null;
+      myActionButtons = [];
+    }
 
     return (
       <AppScreen
         {...this.props}
         listOptions={myListOptions}
-        actionBarButtons={listActionBarButtons}
+        actionBarButtons={myActionButtons}
         actionBarChildren={listActionBarChildren}
         modalChildren={this.renderCustomModal()}
         listKey="mac"

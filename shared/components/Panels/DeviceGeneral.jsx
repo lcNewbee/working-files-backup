@@ -43,9 +43,9 @@ class Panel extends React.Component {
         <FormGroup
           type="text"
           label={_('Nickname')}
-          value={store.getIn(['data', 'alias'])}
+          value={store.getIn(['data', 'devicename'])}
           onChange={option => this.props.onChangeData({
-            alias: option.value,
+            devicename: option.value,
           })}
         />
         {

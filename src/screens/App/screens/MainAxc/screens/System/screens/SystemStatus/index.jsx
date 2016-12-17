@@ -16,7 +16,7 @@ function getCpuOption(serverData) {
   const usedValue = serverData.get('cpuUsed');
   const freeValue = serverData.get('cpuTotal') - usedValue;
   const usedName = `${_('Used')}: ${usedValue}%`;
-  const freeName = `${_('Used')}: ${freeValue}%`;
+  const freeName = `${_('Free')}: ${freeValue}%`;
   const ret = {
     tooltip: {
       trigger: 'item',
@@ -72,7 +72,7 @@ function getMemoryOption(serverData) {
   const usedValue = serverData.get('cpuUsed');
   const freeValue = serverData.get('cpuTotal') - usedValue;
   const usedName = `${_('Used')}: ${usedValue}%`;
-  const freeName = `${_('Used')}: ${freeValue}%`;
+  const freeName = `${_('Free')}: ${freeValue}%`;
   const ret = {
     tooltip: {
       trigger: 'item',
@@ -228,7 +228,7 @@ export default class View extends React.Component {
                 </dl>
                 <dl className="o-description-list-row">
                   <dt>{_('System Time')}</dt>
-                  <dd>{uptimeFilter.transform(serverData.get('running_time') || 0)}</dd>
+                  <dd>{serverData.get('system_time')}</dd>
                 </dl>
                 <dl className="o-description-list-row">
                   <dt>{_('Uptime')}</dt>

@@ -1,0 +1,43 @@
+.a-tag {
+  display: inline-block;
+  padding: 0.25em 0.5em;
+  font-size: 75%;
+  font-weight: bold;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25rem;
+  background: #818a91;
+}
+// Button Role
+.a-tag--default {
+  background-color: #e8e8e8;
+  border-color:#ccc;
+
+  &:hover {
+    background-color: #e8e8e8 - #101010;
+    border-color: #adadad;
+  }
+}
+.a-tag--primary {
+  color: #fff;
+  background-color: $g-brand-primary;
+}
+.a-tag--success {
+  color: #fff;
+  background-color: $g-brand-success;
+}
+.a-tag--info {
+  color: #fff;
+  background-color: $g-brand-info;
+}
+.a-tag--warning {
+  color: #fff;
+  background-color: $g-brand-warning;
+}
+.a-tag--danger {
+  color: #fff;
+  background-color: $g-brand-danger;
+}
