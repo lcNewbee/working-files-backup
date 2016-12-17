@@ -57,10 +57,10 @@ class Group extends CI_Controller {
         $result = null;
 		$actionType = element('action', $data);
 		if ($actionType === 'add') {
-			$temp_data=getCgiParam($data);
+			$temp_data=$this->getCgiParam($data);
             $result=axc_add_apgroup(json_encode($temp_data));
 		} elseif ($actionType === 'edit') {
-            $temp_data=getCgiParam($data);
+            $temp_data=$this->getCgiParam($data);
             $result=axc_modify_apgroup(json_encode($temp_data));
 		} elseif ($actionType === 'deleteGroup') {
 			$result=axc_del_apgroup(json_encode($data));

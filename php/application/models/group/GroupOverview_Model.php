@@ -17,18 +17,13 @@ class GroupOverview_Model extends CI_Model {
 		$reqdata['groupid'] = (int)$reqdata['groupid'];
 		$reqdata['page'] = (int)$reqdata['page'];
 		$reqdata['size'] = (int)$reqdata['size'];
+        $reqdata['timeType'] = (string)$reqdata['timeType'];
         $result = json_decode($staticJsonStr);
-        /*
-		$neighborsAps = $this->get_neighbors_aps_list($reqdata);		
-		$result->data->neighborsAps = $neighborsAps;
-        */
+ 
         $result->data->neighborsAps = $this->get_ap_info($reqdata['groupid'],'getdoubtfulssid');                
         $result->data->aroundAps = $this->get_ap_info($reqdata['groupid'],'getaroundssid');
-        $result->data->flowList = array(
-            array('name'=>'ap','data'=>array(2 ,3, 2, 5, 6, 20, 34, 8, 9, 10, 11, 24, 13, 14, 15, 54, 17, 18, 19, 20, 21, 22, 23, 24)),
-            array('wireless'=>'ap','data'=>array(2 ,3, 4, 5, 6, 20, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24)),
-            array('clients'=>'ap','data'=>array(12,78, 36, 2, 123, 20, 75, 15, 2, 67, 2, 34, 2, 123, 34, 45,2,46, 34, 2, 2, 20, 2, 2))
-        );
+        $result->data->flowList = $this->flow_list($reqdata);
+
 		return $result;
 	}
     //周围AP
@@ -63,4 +58,58 @@ class GroupOverview_Model extends CI_Model {
         }
         return $arr;
 	}
+    //流量
+    public function flow_list($data) {        
+        $groupid = (int)element('groupid',$data,0);
+        $timeType = (string)element('timeType',$data,'today');
+        $tablename = 'data_flow_day';
+        if($timeType === 'today' || $timeType === 'yesterday'){
+            $tablename = 'data_flow_hour';
+        }
+        $timewh = $this->get_start_end_time($timeType);                        
+        $sqlstr = "select * from ".$tablename." where ApGroupId=".$groupid." and Timer>='".$timewh['start_date']."' and Timer <= '".$timewh['end_date']."'";
+        $querydata = $this->mysql->query($sqlstr);
+
+        $apAry = array();
+        $wireessAry = array();
+        $clientAry = array();
+        foreach($querydata->result_array() as $row) {
+            array_push($apAry,$row['ApRxFlow']);
+            array_push($wireessAry,$row['RadioRxFlow']);
+            array_push($clientAry,$row['StaRxFlow']);
+        }
+        $arr = array(
+            array('name'=>'ap','data'=>$apAry),
+            array('name'=>'wireless','data'=>$wireessAry),
+            array('name'=>'clients','data'=>$clientAry)
+        );
+        return $arr;      
+    }
+    public function get_start_end_time($gettype='today') {     
+        date_default_timezone_set('Asia/Shanghai');    
+        //echo (string)exec('date "+%Y-%m-%d %H:%M:%S"');
+        //当天初始时间
+        $stateDate = (string)exec('date "+%Y-%m-%d"')." 00:00:00";
+        //当天结束时间
+        $endDate = (string)exec('date "+%Y-%m-%d"')." 24:00:00";        
+        $startTime = (int)strtotime($stateDate);        
+        switch($gettype){
+            case 'yesterday' : 
+                $startTime = $startTime - (1 * 86400);                
+                $endDate = $stateDate;
+                break;
+            case 'week': $startTime = $startTime - (7 * 86400); 
+                break;
+            case 'half_month': $startTime = $startTime - (15 * 86400); 
+                break;
+            case 'month': $startTime = $startTime - (30 * 86400); 
+                break;                
+            default:
+                break;
+        }
+        $stateDate = date('Y-m-d H:i:s',$startTime);
+        $arr['start_date'] = $stateDate;
+        $arr['end_date'] = $endDate;
+        return $arr;
+    }    
 }
