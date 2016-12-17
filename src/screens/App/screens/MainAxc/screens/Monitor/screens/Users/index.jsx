@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
@@ -92,8 +92,7 @@ const listOptions = fromJS([
     text: _('Online Time'),
     filter: 'connectTime',
   }, {
-    id: 'op',
-    width: '220',
+    id: '__action__',
     text: _('Actions'),
   },
 ]);
@@ -112,7 +111,10 @@ const styles = {
     minWidth: '90px',
   },
 };
-const propTypes = {};
+const propTypes = {
+  changeScreenActionQuery: PropTypes.func,
+  onListAction: PropTypes.func,
+};
 const defaultProps = {};
 
 // 原生的 react 页面
@@ -125,6 +127,14 @@ export default class Clients extends React.Component {
         'onAction',
       ],
     );
+  }
+  onAction(mac, actionType) {
+    this.props.changeScreenActionQuery({
+      action: actionType,
+      operate: actionType,
+      mac,
+    });
+    this.props.onListAction();
   }
   render() {
     // 添加操作项
