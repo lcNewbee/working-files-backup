@@ -115,6 +115,12 @@ export default class Main extends Component {
 
   componentWillMount() {
     const rateInterval = this.props.app.get('rateInterval');
+    const purview = this.props.app.getIn(['login', 'purview']);
+
+    // 如果权限为空自动跳转到 登录Screen
+    if (purview === 'none') {
+      this.props.router.push('/');
+    }
 
     // 获取当前组AP
     this.props.fetchApGroup();

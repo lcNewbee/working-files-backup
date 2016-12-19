@@ -74,7 +74,6 @@ export default class Login extends Component {
 
   componentWillUnmount() {
     const currClass = document.getElementsByTagName('body')[0].className;
-
     document.getElementsByTagName('body')[0].className = currClass.replace(' sign-body', '');
   }
 
@@ -116,8 +115,18 @@ export default class Login extends Component {
             result = 'ok';
 
             if (json.data && json.data.purview) {
-              // loginState.purview = json.data.purview;
               utils.extend(loginState, json.data);
+
+              if (json.data.usertype !== undefined) {
+                // 超级管理员
+                if (json.data.usertype === 0) {
+                  loginState.purview = 'all';
+
+                // 只读管理员
+                } else if (json.data.usertype === 2) {
+                  loginState.purview = 'readonly';
+                }
+              }
             } else {
               loginState.purview = 'all';
             }

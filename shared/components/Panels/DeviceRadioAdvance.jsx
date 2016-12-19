@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Map } from 'immutable';
+import { Map, fromJS } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { radioAdvance } from 'shared/config/axcRadio';
 import {
@@ -45,6 +45,47 @@ class DeviceSystem extends React.Component {
   render() {
     const { app, store, actionable, ...restProps } = this.props;
     const formData = store.getIn(['data']);
+    const myFormOptions = formOptions.map(
+      ($$item) => {
+        const maxRateset = formData.get('ratesupport') || 'MCS4';
+        const spatialstreams = formData.get('spatialstreams') || 4;
+        let tmpArr = [];
+        let $$tmpOptions = [];
+        let $$ret = $$item;
+
+        // 自定义控件流
+        if ($$item.get('id') === 'txchain' || $$item.get('id') === 'rxchain') {
+          tmpArr = new Array(parseInt(spatialstreams, 10));
+
+          $$tmpOptions = fromJS(tmpArr).map(
+            (val, index) => {
+              const n = index + 1;
+              return {
+                value: `${n}`,
+                label: `${n}x${n}`,
+              };
+            },
+          );
+          $$ret = $$item.set('options', $$tmpOptions);
+        // 速率集
+        } else if ($$item.get('id') === 'rateset') {
+          tmpArr = new Array(parseInt(maxRateset.split('MCS')[1], 10) + 1);
+
+          $$tmpOptions = fromJS(tmpArr).map(
+            (val, index) => {
+              const n = index;
+              return {
+                value: `MCS${n}`,
+                label: `MCS${n}`,
+              };
+            },
+          );
+          $$ret = $$item.set('options', $$tmpOptions);
+        }
+
+        return $$ret;
+      },
+    );
 
     return (
       <FormContainer
@@ -52,7 +93,7 @@ class DeviceSystem extends React.Component {
         method="POST"
         data={formData}
         className="o-form o-form--compassed"
-        options={formOptions}
+        options={myFormOptions}
         isSaving={app.get('saving')}
         header={[
           <FormGroup

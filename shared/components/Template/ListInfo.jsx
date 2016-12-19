@@ -537,6 +537,10 @@ class ListInfo extends React.Component {
               }}
             />,
           );
+
+          if (actionBarChildren) {
+            leftChildrenNode.push(actionBarChildren);
+          }
         }
 
         // 用户自定义多行操作
@@ -581,9 +585,7 @@ class ListInfo extends React.Component {
         />,
       );
     }
-    if (actionBarChildren) {
-      leftChildrenNode.push(actionBarChildren);
-    }
+
     return (
       <FormContainer
         action={fetchUrl}

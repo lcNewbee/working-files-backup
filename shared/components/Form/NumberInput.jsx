@@ -20,8 +20,9 @@ class NumberInput extends React.Component {
 
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onNumberChange = this.onNumberChange.bind(this);
+    this.onBlur = this.onBlur.bind(this);
   }
-  onNumberChange(e) {
+  onNumberChange(e, needMin) {
     const { min, max } = this.props;
     const val = e.target.value;
 
@@ -29,7 +30,7 @@ class NumberInput extends React.Component {
       // 为空，或 - 时不做处理
       if (val !== '' && val !== '-') {
         // 小于或等于最小值，则返回最小值
-        if (parseInt(val, 10) <= parseInt(min, 10)) {
+        if ((parseInt(val, 10) <= parseInt(min, 10)) && needMin) {
           this.props.onChange(e, min);
 
         // 大于或等于最大值，则返回最大值
@@ -45,12 +46,16 @@ class NumberInput extends React.Component {
       }
     }
   }
+  onBlur(e) {
+    this.onNumberChange(e, true);
+  }
   render() {
     return (
       <div className="a-input-number">
         <Input
           {...this.props}
           onChange={this.onNumberChange}
+          onBlur={this.onBlur}
         />
       </div>
     );

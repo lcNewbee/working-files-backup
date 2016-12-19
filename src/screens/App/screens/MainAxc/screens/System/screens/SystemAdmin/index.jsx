@@ -15,7 +15,7 @@ const listOptions = fromJS([
     id: 'userType',
     width: '160',
     text: _('User Type'),
-    defaultValue: '0',
+    defaultValue: 1,
     options: [
       {
         value: 0,
@@ -83,6 +83,7 @@ const listOptions = fromJS([
 ]);
 
 const propTypes = {
+  app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
 
   route: PropTypes.object,
@@ -111,17 +112,20 @@ export default class View extends React.Component {
   }
 
   render() {
-    const { store, route } = this.props;
+    const { app, store, route } = this.props;
     const myStore = store.setIn(
       [route.id, 'data', 'list', 0, 'noDelete'],
       true,
     );
+    const purview = app.getIn(['login', 'purview']);
+    const isAdmin = purview === 'all';
+
     return (
       <AppScreen
         {...this.props}
         store={myStore}
         listOptions={listOptions}
-        actionable
+        actionable={isAdmin}
       />
     );
   }

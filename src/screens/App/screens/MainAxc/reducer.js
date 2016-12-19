@@ -163,7 +163,7 @@ function receiveDevices(state, action) {
       .set('defaultDevicesPage', fromJS(page));
   } else {
     ret = ret.setIn(['group', 'devices'], fromJS(rcList))
-      .set('devicesPage', fromJS(page));
+      .setIn(['group', 'devicesPage'], fromJS(page));
   }
 
   return ret;

@@ -32,7 +32,8 @@ const versionUsesOptions = [
   {
     value: '0',
     label: _('Upgrade'),
-  }, {
+  },
+  {
     value: '1',
     label: _('Backup'),
   },
@@ -200,16 +201,21 @@ export default class AcVersion extends PureComponent {
           label={msg.currentVersion}
           value={app.getIn(['version'])}
         />
-        <FormGroup
-          label={msg.versionUses}
-          type="switch"
-          name="versionUses"
-          options={versionUsesOptions}
-          value={this.state.versionUses}
-          onChange={data => this.updateState({
-            versionUses: data.value,
-          })}
-        />
+        {
+          /*
+            <FormGroup
+            label={msg.versionUses}
+            type="switch"
+            name="versionUses"
+            options={versionUsesOptions}
+            value={this.state.versionUses}
+            onChange={data => this.updateState({
+              versionUses: data.value,
+            })}
+          />
+          */
+        }
+
         <FormGroup
           label={msg.selectFile}
         >

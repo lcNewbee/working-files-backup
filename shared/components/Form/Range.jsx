@@ -40,7 +40,6 @@ class Checkbox extends React.Component {
           {...this.props}
           value={value}
           className="fl"
-
         />
         {
           hasTextInput ? (

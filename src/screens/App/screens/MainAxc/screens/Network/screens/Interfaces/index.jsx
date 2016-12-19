@@ -15,23 +15,22 @@ function getPortList() {
         options: json.data.list.map(
           item => ({
             value: item.name,
-            label: `${item.id}(${item.name})`,
+            label: `${item.name}`,
           }),
         ),
       }
     ),
   );
 }
-const listOptions = fromJS([
+const $$listOptions = fromJS([
   {
     id: 'name',
     text: _('Port Name'),
+    options: [],
     formProps: {
       form: 'port',
       type: 'select',
       required: true,
-      loadOptions: getPortList,
-      isAsync: true,
     },
   }, {
     id: 'ip',
@@ -57,23 +56,48 @@ const listOptions = fromJS([
     },
   },
 ]);
-const propTypes = {
-  route: PropTypes.object,
-  save: PropTypes.func,
-};
+const propTypes = {};
 const defaultProps = {};
 
-export default function NetworkInterface(props) {
-  return (
-    <AppScreen
-      {...props}
-      listOptions={listOptions}
-      editFormId="port"
-      listKey="allKeys"
-      actionable
-      selectable
-    />
-  );
+
+export default class NetworkInterface extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      portOptions: fromJS([]),
+      listOptions: $$listOptions,
+    };
+  }
+
+  componentWillMount() {
+    getPortList()
+      .then(
+        (data) => {
+          this.setState({
+            listOptions: $$listOptions.setIn(
+              [0, 'options'],
+              data.options,
+            ),
+          });
+
+          return data;
+        },
+      );
+  }
+
+  render() {
+    return (
+      <AppScreen
+        {...this.props}
+        listOptions={this.state.listOptions}
+        editFormId="port"
+        listKey="allKeys"
+        actionable
+        selectable
+      />
+    );
+  }
 }
 
 NetworkInterface.propTypes = propTypes;
