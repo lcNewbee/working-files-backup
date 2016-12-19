@@ -31,8 +31,7 @@ class ApRadio extends CI_Controller {
 								->get()->row();
 		
 		if(is_object($queryObj)) {
-
-			echo $queryObj->radio_tmp_id;
+			$result = $queryObj->radio_tmp_id;
 		}
 
 		return $result;

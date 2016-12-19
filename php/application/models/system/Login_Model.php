@@ -17,7 +17,16 @@ class Login_Model extends CI_Model {
 			$result['data'] = array(
 				'purview'=>$datarow->purview,
 				'usertype'=>$datarow->usertype
-			);			
+			);
+			/*
+			$logary = array(
+				'log_type'=>'login',
+				'operation_name'=>$username,
+				'operation_obj'=>'Other',
+				'description'=>""
+			);
+			Log_Record($this->db,$logary);
+			*/			
 		} else {
 			$result = json_no('Username or Password Error');
 		}

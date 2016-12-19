@@ -25,3 +25,23 @@
         }
         return $result;
     }
+    /**
+    * 日志记录
+    * @db 数据库对象
+    * @data 熟悉
+    *  $data = array(
+    *       'log_type'=>'add',
+    *       'operation_name'=>'admin',
+    *       'operation_obj'=>'ssid',
+    *       'description'=>'add ssid'
+    *  );
+    */
+    function Log_Record($db,$data) {
+        $result = FALSE;
+        $result = $db->insert('web_log', $data);
+        if ($result) {
+            $result = TRUE;
+        } 
+        return $result;
+    }
+
