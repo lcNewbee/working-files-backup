@@ -21,6 +21,9 @@ export const authServer = fromJS([
     required: true,
     className: 'cols col-12',
     notEditable: true,
+    validator: validator({
+      rules: 'len[1,32]',
+    }),
   }, {
     id: 'nasip',
     label: _('Nas IP'),
@@ -63,8 +66,11 @@ export const authServer = fromJS([
     form: 'authServer',
     type: 'password',
     required: true,
-    min: 1,
-    max: 32,
+    minLen: '1',
+    maxLen: '32',
+    validator: validator({
+      rules: 'pwd',
+    }),
   }, {
     id: 'authsecond_ipaddr',
     label: _('Auth IP'),
@@ -92,8 +98,10 @@ export const authServer = fromJS([
     fieldset: 'auth_secondary',
     type: 'password',
     form: 'authServer',
-    min: 1,
-    max: 32,
+    maxLength: '32',
+    validator: validator({
+      rules: 'pwd',
+    }),
   },
 ]);
 
@@ -108,22 +116,35 @@ export const accServer = fromJS([
     },
     required: true,
     type: 'text',
+    required: true,
     form: 'accServer',
+    validator: validator({
+      rules: 'ip',
+    }),
   }, {
     id: 'acctpri_port',
     label: _('Primary Acc Port'),
     fieldset: 'primary',
+    required: true,
     defaultValue: '1813',
     type: 'number',
     required: true,
     form: 'accServer',
   }, {
     id: 'acctpri_key',
+    required: true,
     label: _('Primary Acc Password'),
     fieldset: 'primary',
     form: 'accServer',
+<<<<<<< fef50c8563367faff2151fa5223925b1fb5923a8
     type: 'password',
     required: true,
+=======
+    maxLength: '32',
+    validator: validator({
+      rules: 'pwd',
+    }),
+>>>>>>> AXC: 部分数据验证测试以及Portal白名单列表
   }, {
     id: 'acctsecond_ipaddr',
     label: _('Secondary Acc IP'),
@@ -134,6 +155,9 @@ export const accServer = fromJS([
     fieldset: 'secondary',
     type: 'text',
     form: 'accServer',
+    validator: validator({
+      rules: 'ip',
+    }),
   }, {
     id: 'acctsecond_port',
     label: _('Secondary Acc Port'),
@@ -146,6 +170,10 @@ export const accServer = fromJS([
     fieldset: 'secondary',
     form: 'accServer',
     type: 'password',
+    maxLength: '32',
+    validator: validator({
+      rules: 'pwd',
+    }),
   },
 ]);
 
@@ -157,6 +185,7 @@ export const advancedSetting = fromJS([
     defaultValue: 'WITH',
     noTable: true,
     type: 'select',
+    required: true,
     placeholder: _('Please Select ') + _('User Format'),
     options: [
       {
@@ -179,6 +208,7 @@ export const advancedSetting = fromJS([
     max: 7200,
     noTable: true,
     type: 'number',
+    required: true,
     help: _('Seconds'),
   }, {
     id: 'retry_times',
@@ -188,6 +218,7 @@ export const advancedSetting = fromJS([
     defaultValue: '3',
     min: 3,
     max: 10,
+    required: true,
   }, {
     id: 'resp_time',
     label: _('Response Timeout Time'),
@@ -196,38 +227,68 @@ export const advancedSetting = fromJS([
     defaultValue: '3',
     min: 3,
     max: 30,
+    required: true,
     help: _('Seconds'),
-
   }, {
     id: 'accton_enable',
     label: _('Accounting-on'),
+<<<<<<< fef50c8563367faff2151fa5223925b1fb5923a8
     fieldset: 'acctonAdvance',
     defaultValue: '0',
     value: '1',
+=======
+    fieldset: 'parameter',
+    value: '0',
+    required: true,
+>>>>>>> AXC: 部分数据验证测试以及Portal白名单列表
     noTable: true,
     type: 'checkbox',
     text: _('Enable'),
   }, {
+<<<<<<< fef50c8563367faff2151fa5223925b1fb5923a8
+=======
+    id: 'accton_sendtimes',
+    label: _('Accounting-on Resend Times'),
+    fieldset: 'parameter',
+    type: 'number',
+    required: true,
+    defaultValue: '5',
+    min: 3,
+    max: 10,
+  }, {
+>>>>>>> AXC: 部分数据验证测试以及Portal白名单列表
     id: 'accton_sendinterval',
     label: _('Accounting-on Resend Interval'),
     fieldset: 'acctonAdvance',
     noTable: true,
     type: 'number',
+    required: true,
     help: _('Seconds'),
     defaultValue: '3',
     min: 3,
     max: 30,
   }, {
+    id: 'nasip',
+    label: _('Nas IP'),
+    fieldset: 'parameter',
+    type: 'text',
+    required: true,
+    validator: validator({
+      rules: 'ip',
+    }),
+  }, {
     id: 'acct_interim_interval',
     label: _('Accounting Messaging Interval'),
     fieldset: 'acctonAdvance',
     noTable: true,
+    required: true,
     type: 'number',
     help: _('Seconds'),
     defaultValue: '720',
     min: 300,
     max: 3600,
   }, {
+<<<<<<< fef50c8563367faff2151fa5223925b1fb5923a8
     id: 'accton_sendtimes',
     label: _('Accounting-on Resend Times'),
     fieldset: 'acctonAdvance',
@@ -236,10 +297,13 @@ export const advancedSetting = fromJS([
     min: 3,
     max: 10,
   }, {
+=======
+>>>>>>> AXC: 部分数据验证测试以及Portal白名单列表
     id: 'realretrytimes',
     label: _('Accounting Message-Resend Times'),
     fieldset: 'acctonAdvance',
     type: 'number',
+    required: true,
     defaultValue: '5',
     min: 3,
     max: 10,

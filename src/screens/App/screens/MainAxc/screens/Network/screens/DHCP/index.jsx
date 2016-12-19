@@ -22,7 +22,6 @@ const listOptions = fromJS([
     text: _('Domain'),
     formProps: {
       maxLength: '32',
-      required: true,
       type: 'text',
     },
   }, {
@@ -59,7 +58,6 @@ const listOptions = fromJS([
     id: 'mainDns',
     text: _('Primary DNS'),
     formProps: {
-      required: true,
       maxLength: '32',
       validator: validator({
         rules: 'ip',
@@ -83,7 +81,7 @@ const listOptions = fromJS([
       min: '300',
       max: '604800',
       validator: validator({
-        rules: 'num',
+        rules: 'num[300,604800]',
       }),
     },
   }, {
@@ -102,10 +100,10 @@ const listOptions = fromJS([
     noTable: true,
     formProps: {
       type: 'number',
-      maxLength: '32',
-      minLength: '1',
+      max: '32',
+      min: '1',
       validator: validator({
-        rules: 'num',
+        rules: 'num[1,32]',
       }),
     },
   },

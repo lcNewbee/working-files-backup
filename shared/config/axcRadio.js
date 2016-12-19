@@ -277,9 +277,8 @@ export const radioAdvance = fromJS([
   //   form: 'radioAdvance',
   //   label: _('Max RX Duration'),
   //   type: 'number',
-  //   min: 1,
-  //   max: 15,
-  //   defaultValue: 4,
+  //   min: 500,
+  //   max: 250000,
   // },
   {
     id: 'rtsthreshold',
@@ -446,6 +445,12 @@ export const radioAdvance = fromJS([
       }, {
         value: 'MCS7',
         label: 'MCS7',
+      }, {
+        value: 'MCS8',
+        label: 'MCS8',
+      }, {
+        value: 'MCS9',
+        label: 'MCS9',
       },
     ],
   },

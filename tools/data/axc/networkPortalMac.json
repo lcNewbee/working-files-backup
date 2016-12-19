@@ -1,0 +1,20 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "interface_bind": "eth0",
+        "mac":"192.189.2.2"
+      }, {
+        "interface_bind": "eth1",
+        "mac":"192.189.2.3"
+      }, {
+        "interface_bind": "eth2",
+        "mac":"192.189.2.4"
+      }
+    ]
+  }
+}

@@ -52,9 +52,8 @@ const settingsOptions = fromJS([
     help: _('Second'),
     min: '5',
     max: '50000',
-    maxLength: '15',
     validator: validator({
-      rules: 'num',
+      rules: 'num[5,50000]',
     }),
   },
   {

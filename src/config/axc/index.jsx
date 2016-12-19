@@ -78,6 +78,8 @@ const sPortalServer =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalServer');
 const sPortalRules =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalRules');
+const sPortalMac =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalMac');
 // const sPortalTemplate =
 //    require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalTemplate');
 
@@ -251,13 +253,13 @@ const routes = [
                 text: _('Rules'),
                 component: sPortalRules.Screen,
               },
-              // {
-              //   id: 'portalTemplate',
-              //   path: '/main/network/portal/template',
-              //   formUrl: 'goform/network/portal/template',
-              //   text: _('Profile'),
-              //   component: sPortalTemplate.Screen,
-              // },
+              {
+                id: 'portalMac',
+                path: '/main/network/portal/mac',
+                formUrl: 'goform/network/portal/mac',
+                text: _('White List'),
+                component: sPortalMac.Screen,
+              },
             ],
           },
         ],

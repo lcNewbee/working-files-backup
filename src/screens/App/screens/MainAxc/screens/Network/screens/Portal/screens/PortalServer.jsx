@@ -14,7 +14,7 @@ const listOptions = fromJS([
     label: _('Server Name'),
     formProps: {
       type: 'text',
-      maxLength: '31',
+      maxLength: '32',
       required: true,
     },
   }, {
@@ -71,10 +71,12 @@ const listOptions = fromJS([
     label: _('Shared Key'),
     noTable: true,
     formProps: {
-      min: 1,
-      max: 31,
       type: 'password',
+      maxLength: '32',
       required: true,
+      validator: validator({
+        rules: 'pwd',
+      }),
     },
   }, {
     id: 'server_url',

@@ -133,7 +133,6 @@ export default class NetworkPort extends React.Component {
       <AppScreen
         {...this.props}
         listOptions={listOptions}
-
         addable={false}
         deleteable={false}
         actionable

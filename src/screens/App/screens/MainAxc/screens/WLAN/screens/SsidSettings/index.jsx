@@ -51,10 +51,10 @@ const validOptions = Map({
     rules: 'remarkTxt:["\'\\\\"]|len:[1, 32]',
   }),
   upstream: validator({
-    rules: 'num:[32, 102400, 0]',
+    rules: 'num:[0, 102400, 0]',
   }),
   downstream: validator({
-    rules: 'num:[32, 102400, 0]',
+    rules: 'num:[0, 102400, 0]',
   }),
   maxUser: validator({
     rules: 'num:[0, 64]',
@@ -81,7 +81,6 @@ const listOptions = fromJS([
     text: _('SSID'),
     formProps: {
       type: 'text',
-      maxLen: '32',
       required: true,
       notEditable: true,
     },

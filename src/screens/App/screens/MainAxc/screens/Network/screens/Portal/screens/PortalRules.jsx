@@ -112,6 +112,7 @@ const listOptions = fromJS([
     label: _('Force Auth Domain'),
     formProps: {
       type: 'text',
+      maxLength: '32',
     },
   }, {
     id: 'idle_test',
