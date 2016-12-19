@@ -116,7 +116,6 @@ export const accServer = fromJS([
     },
     required: true,
     type: 'text',
-    required: true,
     form: 'accServer',
     validator: validator({
       rules: 'ip',
@@ -128,7 +127,6 @@ export const accServer = fromJS([
     required: true,
     defaultValue: '1813',
     type: 'number',
-    required: true,
     form: 'accServer',
   }, {
     id: 'acctpri_key',
@@ -136,15 +134,11 @@ export const accServer = fromJS([
     label: _('Primary Acc Password'),
     fieldset: 'primary',
     form: 'accServer',
-<<<<<<< fef50c8563367faff2151fa5223925b1fb5923a8
     type: 'password',
-    required: true,
-=======
     maxLength: '32',
     validator: validator({
       rules: 'pwd',
     }),
->>>>>>> AXC: 部分数据验证测试以及Portal白名单列表
   }, {
     id: 'acctsecond_ipaddr',
     label: _('Secondary Acc IP'),
@@ -232,21 +226,14 @@ export const advancedSetting = fromJS([
   }, {
     id: 'accton_enable',
     label: _('Accounting-on'),
-<<<<<<< fef50c8563367faff2151fa5223925b1fb5923a8
-    fieldset: 'acctonAdvance',
     defaultValue: '0',
     value: '1',
-=======
     fieldset: 'parameter',
-    value: '0',
     required: true,
->>>>>>> AXC: 部分数据验证测试以及Portal白名单列表
     noTable: true,
     type: 'checkbox',
     text: _('Enable'),
   }, {
-<<<<<<< fef50c8563367faff2151fa5223925b1fb5923a8
-=======
     id: 'accton_sendtimes',
     label: _('Accounting-on Resend Times'),
     fieldset: 'parameter',
@@ -256,7 +243,6 @@ export const advancedSetting = fromJS([
     min: 3,
     max: 10,
   }, {
->>>>>>> AXC: 部分数据验证测试以及Portal白名单列表
     id: 'accton_sendinterval',
     label: _('Accounting-on Resend Interval'),
     fieldset: 'acctonAdvance',
@@ -288,7 +274,6 @@ export const advancedSetting = fromJS([
     min: 300,
     max: 3600,
   }, {
-<<<<<<< fef50c8563367faff2151fa5223925b1fb5923a8
     id: 'accton_sendtimes',
     label: _('Accounting-on Resend Times'),
     fieldset: 'acctonAdvance',
@@ -297,8 +282,6 @@ export const advancedSetting = fromJS([
     min: 3,
     max: 10,
   }, {
-=======
->>>>>>> AXC: 部分数据验证测试以及Portal白名单列表
     id: 'realretrytimes',
     label: _('Accounting Message-Resend Times'),
     fieldset: 'acctonAdvance',
