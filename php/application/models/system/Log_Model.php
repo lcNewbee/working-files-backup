@@ -4,16 +4,30 @@ class Log_Model extends CI_Model {
 		parent::__construct();
         $this->load->database();
         $this->load->helper(array('array', 'my_customfun_helper'));
+		$this->load->library('SqlPage');
 	}
 	public function get_log_list($data) {
+		$sqlpage = new SqlPage();
+		$columns = 'id,time,type,operator,operationCommand,operationResult,description';
+		$tablenames = 'web_log';
+		$pageindex = (int)element('page', $data, 1);
+		$pagesize = (int)element('size', $data, 20);
+		$datalist = $sqlpage->sql_data_page($columns,$tablenames,$pageindex,$pagesize);
+
 		$arr['state'] = array('code' => 2000, 'msg' => 'OK');
 		$arr['data'] = array(
-            'settings' => '2016-11-15 log', 
-            'page' => array('start' => 1, 'size' => 20, 'currPage' => 1, 'totalPage' => 2, 'total' => 38, 'nextPage' => '-1', 'lastPage' => 2), 
-            'list' => array(
-                array('id' => 1, 'time' => '2016-11-15 18:15:20', 'type' => 'client', 'operationCommand' => 'unlock', 'operator' => 'admin', 'operationResult' => 'ok'), 
-                array('id' => 2, 'time' => '2016-11-15 18:15:20', 'type' => 'client', 'operationCommand' => 'unlock', 'operator' => 'admin', 'operationResult' => 'ok')
-            ));
+            'settings' => 15, 
+            'page' => array(
+				'start' => 1, 
+				'size' => 20, 
+				'currPage' => 1, 
+				'totalPage' => $datalist['total_page'], 
+				'total' => $datalist['total_row'], 
+				'nextPage' => '-1', 
+				'lastPage' => 2
+			), 
+            'list' => $datalist['data']
+		);
 		return json_encode($arr);
 	}
 	public function log_delete($data) {
@@ -25,4 +39,5 @@ class Log_Model extends CI_Model {
 		$result = null;
 		$result = json_no();
 		return json_encode($result);
+	}
 }

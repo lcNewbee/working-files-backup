@@ -20,9 +20,10 @@ class Login_Model extends CI_Model {
 			);
 			/*
 			$logary = array(
-				'log_type'=>'login',
-				'operation_name'=>$username,
-				'operation_obj'=>'Other',
+				'type'=>'login',
+				'operator'=>$username,
+				'operationCommand'=>'Other',
+				'operationResult'=>'ok',
 				'description'=>""
 			);
 			Log_Record($this->db,$logary);

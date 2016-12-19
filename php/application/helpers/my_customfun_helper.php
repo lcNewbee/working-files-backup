@@ -33,6 +33,7 @@
     *       'log_type'=>'add',
     *       'operation_name'=>'admin',
     *       'operation_obj'=>'ssid',
+    *       'outcome' =>'OK',
     *       'description'=>'add ssid'
     *  );
     */

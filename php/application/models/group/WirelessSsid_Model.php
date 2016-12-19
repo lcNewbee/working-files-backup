@@ -96,7 +96,7 @@ class WirelessSsid_Model extends CI_Model {
             $deleteItem = array('groupid' => element('groupid', $data), 'ssid' => element('ssid', $item));
             axc_del_wireless_ssid(json_encode($deleteItem));
         }
-        return json_ok();
+        return json_encode(json_ok());
     }
     public function update_ssid($data) {
         $temp_data = $this->getCgiParam($data);
