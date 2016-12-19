@@ -82,18 +82,32 @@ export default class View extends React.Component {
       'onSave',
       'toggleBox',
       'getDefaultEditData',
+      'onBeforeSave',
     ]);
   }
 
   componentWillMount() {
     this.getDefaultEditData();
   }
+  onBeforeSave() {
+    const { store } = this.props;
+    const myScreenId = store.get('curScreenId');
+    const $$myScreenStore = store.get(myScreenId);
+    const $$curData = $$myScreenStore.get('curListItem');
 
+    if (!$$curData.get('acctpri_ipaddr') || !$$curData.get('acctpri_key')) {
+      this.props.updateCurEditListItem({
+        acctpri_ipaddr: $$curData.get('authpri_ipaddr'),
+        acctpri_key: $$curData.get('authpri_key'),
+      });
+    }
+  }
   onSave(formId) {
     if (this.props.validateAll) {
       this.props.validateAll(formId)
         .then((errMsg) => {
           if (errMsg.isEmpty()) {
+            this.onBeforeSave();
             this.props.onListAction();
           }
         });

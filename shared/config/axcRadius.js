@@ -22,6 +22,17 @@ export const authServer = fromJS([
     className: 'cols col-12',
     notEditable: true,
   }, {
+    id: 'nasip',
+    label: _('Nas IP'),
+    form: 'authServer',
+    type: 'text',
+    maxLength: '15',
+    required: true,
+    className: 'cols col-12',
+    validator: validator({
+      rules: 'ip',
+    }),
+  }, {
     id: 'authpri_ipaddr',
     fieldset: 'auth',
     fieldsetOption: {
@@ -64,7 +75,6 @@ export const authServer = fromJS([
     },
     type: 'text',
     form: 'authServer',
-    noTable: true,
     validator: validator({
       rules: 'ip',
     }),
@@ -74,7 +84,6 @@ export const authServer = fromJS([
     fieldset: 'auth_secondary',
     type: 'number',
     form: 'authServer',
-    noTable: true,
     min: 1,
     max: 65535,
   }, {
@@ -97,6 +106,7 @@ export const accServer = fromJS([
       legend: _('Primary Accounting Server'),
       className: 'cols col-6',
     },
+    required: true,
     type: 'text',
     form: 'accServer',
   }, {
@@ -105,6 +115,7 @@ export const accServer = fromJS([
     fieldset: 'primary',
     defaultValue: '1813',
     type: 'number',
+    required: true,
     form: 'accServer',
   }, {
     id: 'acctpri_key',
@@ -112,6 +123,7 @@ export const accServer = fromJS([
     fieldset: 'primary',
     form: 'accServer',
     type: 'password',
+    required: true,
   }, {
     id: 'acctsecond_ipaddr',
     label: _('Secondary Acc IP'),
@@ -142,7 +154,6 @@ export const advancedSetting = fromJS([
     id: 'username_format',
     label: _('User Format'),
     fieldset: 'parameter',
-    legend: _('Advanced Settings'),
     defaultValue: 'WITH',
     noTable: true,
     type: 'select',
@@ -190,23 +201,16 @@ export const advancedSetting = fromJS([
   }, {
     id: 'accton_enable',
     label: _('Accounting-on'),
-    fieldset: 'parameter',
-    value: '0',
+    fieldset: 'acctonAdvance',
+    defaultValue: '0',
+    value: '1',
     noTable: true,
     type: 'checkbox',
     text: _('Enable'),
   }, {
-    id: 'nasip',
-    label: _('Nas IP'),
-    fieldset: 'parameter',
-    type: 'text',
-    validator: validator({
-      rules: 'ip',
-    }),
-  }, {
     id: 'accton_sendinterval',
     label: _('Accounting-on Resend Interval'),
-    fieldset: 'parameter',
+    fieldset: 'acctonAdvance',
     noTable: true,
     type: 'number',
     help: _('Seconds'),
@@ -216,7 +220,7 @@ export const advancedSetting = fromJS([
   }, {
     id: 'acct_interim_interval',
     label: _('Accounting Messaging Interval'),
-    fieldset: 'parameter',
+    fieldset: 'acctonAdvance',
     noTable: true,
     type: 'number',
     help: _('Seconds'),
@@ -226,7 +230,7 @@ export const advancedSetting = fromJS([
   }, {
     id: 'accton_sendtimes',
     label: _('Accounting-on Resend Times'),
-    fieldset: 'parameter',
+    fieldset: 'acctonAdvance',
     type: 'number',
     defaultValue: '3',
     min: 3,
@@ -234,7 +238,7 @@ export const advancedSetting = fromJS([
   }, {
     id: 'realretrytimes',
     label: _('Accounting Message-Resend Times'),
-    fieldset: 'parameter',
+    fieldset: 'acctonAdvance',
     type: 'number',
     defaultValue: '5',
     min: 3,
