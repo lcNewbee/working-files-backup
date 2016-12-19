@@ -117,6 +117,11 @@ export default class Blacklist extends React.Component {
     const aclType = store.getIn([route.id, 'data', 'settings', 'type']);
 
     if (actionType === 'copy') {
+      const $$copyGroupBlacklist = $$myScreenStore.getIn(['data', 'copyGroupBlacklist']);
+      const copySelectedList = $$copySelectedList.map(
+        index => $$copyGroupBlacklist.getIn(['list', index, 'mac']),
+      ).toJS();
+
       // 没有选择要拷贝的 Ssids
       if ($$copySelectedList.size < 1) {
         this.props.createModal({
@@ -126,6 +131,7 @@ export default class Blacklist extends React.Component {
       } else {
         this.props.changeScreenActionQuery({
           type: aclType,
+          copySelectedList,
         });
         this.props.onListAction();
       }
@@ -147,8 +153,9 @@ export default class Blacklist extends React.Component {
     const { store } = this.props;
     const myScreenId = store.get('curScreenId');
     const $$myScreenStore = store.get(myScreenId);
-    let $$copySelectedList = $$myScreenStore.getIn(['actionQuery', 'copySelectedList']);
+    const $$copySelectedList = $$myScreenStore.getIn(['actionQuery', 'copySelectedList']);
     let $$copyGroupBlacklist = $$myScreenStore.getIn(['data', 'copyGroupBlacklist']);
+    let $$newCopySelectedList = $$copySelectedList;
 
     $$copyGroupBlacklist = $$copyGroupBlacklist.update('list',
       ($$list) => {
@@ -157,9 +164,8 @@ export default class Blacklist extends React.Component {
           data,
           $$copySelectedList,
         );
-        $$copySelectedList = ret.selectedList.map(
-          index => $$copyGroupBlacklist.getIn(['list', index, 'mac']),
-        );
+
+        $$newCopySelectedList = ret.selectedList;
 
         return ret.$$list;
       },
@@ -168,8 +174,9 @@ export default class Blacklist extends React.Component {
     this.props.reciveScreenData({
       copyGroupBlacklist: $$copyGroupBlacklist,
     }, this.props.route.id);
+
     this.props.changeScreenActionQuery({
-      copySelectedList: $$copySelectedList,
+      copySelectedList: $$newCopySelectedList,
     });
   }
   onOpenCopyBlacklistModal() {

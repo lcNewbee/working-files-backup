@@ -269,8 +269,8 @@ function check(str, rules) {
     return ;
   }
 
-  if(typeof str !== 'string') {
-    throw new TypeError('validate function should be called with string, but ' + str);
+  if(typeof str !== 'string' && typeof str !== 'number') {
+    throw new TypeError('validate function should be called with string or number, but type ' + (typeof str));
   }
 
   for (i = 0; i < len; i++) {

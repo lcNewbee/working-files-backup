@@ -82,6 +82,12 @@ export default class Login extends Component {
       const subData = {};
 
       subData[name] = data.value;
+
+      if (this.props.status) {
+        this.props.changeLoginState({
+          msg: '',
+        });
+      }
       this.setState(subData);
     };
   }

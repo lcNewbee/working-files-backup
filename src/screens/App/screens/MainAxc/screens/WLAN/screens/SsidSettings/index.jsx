@@ -238,9 +238,14 @@ export default class View extends React.Component {
     const { store } = this.props;
     const myScreenId = store.get('curScreenId');
     const $$myScreenStore = store.get(myScreenId);
-    const $$copySelectedList = $$myScreenStore.getIn(['actionQuery', 'copySelectedList']);
+    const $$copyGroupSsids = $$myScreenStore.getIn(['data', 'copyGroupSsids']);
 
     if (type === 'copy') {
+      let $$copySelectedList = $$myScreenStore.getIn(['actionQuery', 'copySelectedList']);
+
+      $$copySelectedList = $$copySelectedList.map(
+        index => $$copyGroupSsids.getIn(['list', index, 'ssid']),
+      );
 
       // 没有选择要拷贝的 Ssids
       if ($$copySelectedList.size < 1) {
@@ -249,6 +254,9 @@ export default class View extends React.Component {
           text: _('Please select ssid'),
         });
       } else {
+        this.props.changeScreenActionQuery({
+          copySelectedList: $$copySelectedList.toJS(),
+        });
         this.props.onListAction();
       }
     } else {
@@ -304,9 +312,7 @@ export default class View extends React.Component {
           data,
           $$copySelectedList,
         );
-        $$copySelectedList = ret.selectedList.map(
-          index => $$copyGroupSsid.getIn(['list', index, 'ssid']),
-        );
+        $$copySelectedList = ret.selectedList;
 
         return ret.$$list;
       },

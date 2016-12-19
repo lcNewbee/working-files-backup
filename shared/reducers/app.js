@@ -7,6 +7,7 @@ function getDefaltLogin() {
 
   if (ret) {
     ret = JSON.parse(ret);
+    ret.msg = '';
   } else {
     ret = {
       username: 'admin',
