@@ -37,7 +37,7 @@ function DevicesProperties(props) {
   const activeTabPanels = item.get(activeTab);
   const activePanelKey = `${activeTab}ActivePanelIndex`;
   const apStatuVal = fromJS(apStatus).find(
-    $$item => $$item.get('value') === item.getIn(['data', 'info', 'status'])
+    $$item => $$item.get('value') === item.getIn(['data', 'info', 'status']),
   ).get('label');
 
   let avatarIconClass = 'Icon Icon-ap-offline';

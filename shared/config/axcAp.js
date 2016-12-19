@@ -1,7 +1,7 @@
 export const apStatus = [
   {
     value: 'new',
-    label: _('Auto AP'),
+    label: _('Offline'),
   }, {
     value: 'run',
     label: _('Online'),

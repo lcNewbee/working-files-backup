@@ -187,6 +187,8 @@ export default class AppScreen extends React.Component {
     // 只读管理员
     } else if (userType === 2) {
       ret = false;
+
+    // 分支管理员
     } else {
       $$purviewList.forEach(
         (val, i) => {

@@ -6,6 +6,7 @@ import { bindActionCreators } from 'redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Button from 'shared/components/Button/Button';
 import Icon from 'shared/components/Icon';
+import { getActionable } from 'shared/axc';
 import FormContainer from 'shared/components/Organism/FormContainer';
 import Table from 'shared/components/Table';
 import Modal from 'shared/components/Modal';
@@ -446,6 +447,7 @@ export default class View extends React.Component {
         />
       )
     );
+    const myActionable = getActionable(this.props);
 
     return (
       <div className="m-action-bar" key="actionBar">
@@ -472,18 +474,22 @@ export default class View extends React.Component {
             });
           }}
         />
-        <Button
-          icon="plus"
-          text={_('Add')}
-          theme="primary"
-          onClick={
-            () => this.props.changeScreenActionQuery({
-              action: 'add',
-              myTitle: _('Add Building'),
-            })
-          }
-        />
-        { settings.get('type') === '0' ? lockButton : null }
+        {
+          myActionable ? (
+            <Button
+              icon="plus"
+              text={_('Add')}
+              theme="primary"
+              onClick={
+                () => this.props.changeScreenActionQuery({
+                  action: 'add',
+                  myTitle: _('Add Building'),
+                })
+              }
+            />
+          ) : null
+        }
+    { ((settings.get('type') === '0') && myActionable) ? lockButton : null }
       </div>
     );
   }

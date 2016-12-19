@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react';
-import utils, { immutableUtils, dom } from 'shared/utils';
+import utils, { dom } from 'shared/utils';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
-import { fromJS, Map } from 'immutable';
+import { fromJS, Map, List } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { bindActionCreators } from 'redux';
 import AppScreen from 'shared/components/Template/AppScreen';
@@ -11,13 +11,11 @@ import SaveButton from 'shared/components/Button/SaveButton';
 import Icon from 'shared/components/Icon';
 import Modal from 'shared/components/Modal';
 import { FormGroup } from 'shared/components/Form';
-import FileUploads from 'shared/components/FileUpload';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 import * as propertiesActions from 'shared/actions/properties';
 import * as axcActions from '../../../../actions';
 
-import bkImg from '../../shared/images/map_bg.jpg';
 import '../../shared/_map.scss';
 
 function previewFile(file) {
@@ -56,7 +54,9 @@ function previewFile(file) {
 
 const propTypes = {
   store: PropTypes.instanceOf(Map),
+  groupDevice: PropTypes.instanceOf(List),
   groupid: PropTypes.any,
+  route: PropTypes.object,
   router: PropTypes.object,
   params: PropTypes.object,
   updateScreenSettings: PropTypes.func,
@@ -68,8 +68,12 @@ const propTypes = {
   updateListItemByIndex: PropTypes.func,
   closeListItemModal: PropTypes.func,
   addListItem: PropTypes.func,
-  createModal: PropTypes.func,
+  changeScreenActionQuery: PropTypes.func,
   saveFile: PropTypes.func,
+  save: PropTypes.func,
+  fetch: PropTypes.func,
+  reciveScreenData: PropTypes.func,
+  fetchScreenData: PropTypes.func,
 
   // AXC actons
   selectManageGroupAp: PropTypes.func,
@@ -168,10 +172,6 @@ export default class View extends React.Component {
         }
       });
   }
-  startDrag(ev, i) {
-    ev.dataTransfer.setData('Text', ev.target.id);
-    this.props.editListItemByIndex(i, 'move');
-  }
   onDrop(ev, curMapId) {
     const mapOffset = dom.getAbsPoint(this.mapContent);
     const offsetX = (ev.clientX - mapOffset.x - 13);
@@ -190,7 +190,7 @@ export default class View extends React.Component {
     }, true);
     this.savePlaceDevice('place');
   }
-  onUppaceDrop(e) {
+  onUppaceDrop() {
     const myScreenId = this.props.route.id;
     const deviceMac = this.props.store.getIn([
       myScreenId, 'curListItem', 'mac',
@@ -235,6 +235,10 @@ export default class View extends React.Component {
       this.mapClientX = e.clientX;
       this.mapClientY = e.clientY;
     }
+  }
+  startDrag(ev, i) {
+    ev.dataTransfer.setData('Text', ev.target.id);
+    this.props.editListItemByIndex(i, 'move');
   }
   fetchMapList() {
     const url = 'goform/group/map/list';
@@ -316,7 +320,7 @@ export default class View extends React.Component {
         icon: 'cog',
         onClick: mac => this.props.addToPropertyPanel({
           mac,
-        }),
+        }, $$device.toJS()),
       }, {
         icon: 'times',
         id: 'close',
@@ -580,7 +584,7 @@ export default class View extends React.Component {
     const { store } = this.props;
     const myScreenId = store.get('curScreenId');
     const list = store.getIn([myScreenId, 'data', 'list']);
-    const isLocked = store.getIn([myScreenId, 'curSettings', 'isLocked']);
+    // const isLocked = store.getIn([myScreenId, 'curSettings', 'isLocked']);
     const myZoom = this.state.zoom;
     const actionQuery = store.getIn([myScreenId, 'actionQuery']);
     const curMapId = store.getIn([myScreenId, 'curSettings', 'curMapId']);
@@ -597,7 +601,7 @@ export default class View extends React.Component {
             });
             this.onToggleUnplacedList(true);
           } else {
-            this.props.router.push('/main/group/map/live/list')
+            this.props.router.push('/main/group/map/live/list');
           }
         }}
       />,
