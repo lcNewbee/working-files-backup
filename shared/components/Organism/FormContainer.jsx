@@ -56,7 +56,7 @@ class FormContainer extends React.Component {
     this.inited = false;
   }
   componentWillMount() {
-    this.onOptionsChange();
+    this.onOptionsChange(this.props);
   }
   componentDidMount() {
     if (!this.inited && Object.keys(this.syncData).length > 0) {
@@ -69,7 +69,7 @@ class FormContainer extends React.Component {
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.options !== nextProps.options) {
-      this.onOptionsChange();
+      this.onOptionsChange(nextProps);
     }
   }
   componentDidUpdate() {
@@ -80,12 +80,12 @@ class FormContainer extends React.Component {
       }
     }
   }
-  onOptionsChange() {
-    this.options = this.props.options;
+  onOptionsChange(targetProps) {
+    this.options = targetProps.options;
 
     if (this.options) {
-      if (Map.isMap(this.props.options.get(0))) {
-        this.options = this.props.options
+      if (Map.isMap(this.options.get(0))) {
+        this.options = this.options
           .groupBy(item => item.get('fieldset'))
           .toList();
       }
@@ -251,7 +251,7 @@ class FormContainer extends React.Component {
   }
   render() {
     const {
-      isSaving, action, options, hasSaveButton, layout, size,
+      isSaving, action, hasSaveButton, layout, size,
       className, hasFile, method, leftChildren, rightChildren,
       component,
     } = this.props;
