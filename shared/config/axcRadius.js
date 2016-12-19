@@ -66,8 +66,7 @@ export const authServer = fromJS([
     form: 'authServer',
     type: 'password',
     required: true,
-    minLen: '1',
-    maxLen: '32',
+    maxLength: '32',
     validator: validator({
       rules: 'pwd',
     }),

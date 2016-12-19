@@ -20,6 +20,8 @@ const propTypes = {
   leaveScreen: PropTypes.func,
   validateAll: PropTypes.func,
   reportValidError: PropTypes.func,
+  className: PropTypes.string,
+  actionable: PropTypes.bool,
 
   // List 相关属性
   listOptions: PropTypes.oneOfType([

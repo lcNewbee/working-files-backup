@@ -8,7 +8,6 @@ import { Button } from 'shared/components/Button';
 import AppScreen from 'shared/components/Template/AppScreen';
 import FormContainer from 'shared/components/Organism/FormContainer';
 import Icon from 'shared/components/Icon';
-import validator from 'shared/utils/lib/validator';
 import { apStatus } from 'shared/config/axcAp';
 
 // custom
@@ -156,6 +155,7 @@ const propTypes = {
   store: PropTypes.instanceOf(Map),
   route: PropTypes.object,
 
+  closeModal: PropTypes.func.isRequired,
   validateAll: PropTypes.func,
   fetchScreenData: PropTypes.func,
   saveScreenSettings: PropTypes.func,

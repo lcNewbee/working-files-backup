@@ -81,8 +81,8 @@ function getCurAppScreenState(listStore, name) {
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
+  route: PropTypes.object,
   updateScreenSettings: PropTypes.func,
-  addToPropertyPanel: PropTypes.func,
   updateCurEditListItem: PropTypes.func,
   validateAll: PropTypes.func,
   editListItemByIndex: PropTypes.func,
@@ -329,6 +329,7 @@ export default class View extends React.Component {
         infowindow.close();
         marker.setVisible(false);
         const place = autocomplete.getPlace();
+
         if (!place.geometry) {
           window.alert("Autocomplete's returned place contains no geometry");
           return;
@@ -489,7 +490,7 @@ export default class View extends React.Component {
             />
           ) : null
         }
-    { ((settings.get('type') === '0') && myActionable) ? lockButton : null }
+        { ((settings.get('type') === '0') && myActionable) ? lockButton : null }
       </div>
     );
   }

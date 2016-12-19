@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
-import validator from 'shared/utils/lib/validator';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
@@ -49,6 +48,9 @@ const objectsNameOptions = [
   }, {
     value: 'scan',
     label: _('Scan'),
+  }, {
+    value: 'radio',
+    label: _('Radio'),
   },
 ];
 
@@ -270,7 +272,7 @@ export default class View extends React.Component {
     super(props);
 
     this.state = {
-      ssidOptions: fromJS([]),
+      objectOptions: fromJS([]),
     };
     utils.binds(this, [
       'onBeforeSave',
@@ -282,9 +284,8 @@ export default class View extends React.Component {
   componentWillMount() {
     this.fetchObjectList();
   }
-
-  componentDidUpdate(prevProps) {
-    this.fetchObjectList(prevProps);
+  componentWillUpdate(nextProps) {
+    this.fetchObjectList(nextProps);
   }
 
   onBeforeSave($$actionQuery, $$curListItem) {
@@ -303,23 +304,26 @@ export default class View extends React.Component {
         subItem.objects_templateid = this.props.groupid;
       }
 
+      if ($$curListItem.get('objects_name') === 'radio') {
+        subItem.objects_templateid = this.props.groupid;
+      }
+
       this.props.updateCurEditListItem(subItem);
     }
   }
 
-  fetchObjectList(prevProps) {
+  fetchObjectList(nextProps) {
     const { store } = this.props;
     const curScreenId = store.get('curScreenId');
     const curListObjectType = store.getIn([curScreenId, 'curListItem', 'objects_name']);
-    let prevListObjectType;
+    let nextListObjectType = '';
 
-    if (prevProps) {
-      prevListObjectType = prevProps.store.getIn([curScreenId, 'curListItem', 'objects_name']);
+    if (nextProps) {
+      nextListObjectType = nextProps.store.getIn([curScreenId, 'curListItem', 'objects_name']);
     }
 
-    if (curListObjectType === 'ssid') {
-      if (prevListObjectType !== 'ssid' || prevProps.groupid !== this.props.groupid ||
-          this.state.ssidOptions.isEmpty()) {
+    if (nextListObjectType !== curListObjectType || nextProps.groupid !== this.props.groupid) {
+      if (nextListObjectType === 'ssid') {
         getSsidList({
           groupid: this.props.groupid,
           page: 1,
@@ -327,10 +331,31 @@ export default class View extends React.Component {
         }).then(
           (options) => {
             this.setState({
-              ssidOptions: fromJS(options),
+              objectOptions: fromJS(options),
             });
           },
         );
+      } else if (nextListObjectType === 'radio') {
+        this.setState({
+          objectOptions: fromJS([
+            {
+              value: 1,
+              label: `${_('Radio')}1`,
+            },
+            {
+              value: 2,
+              label: `${_('Radio')}2`,
+            },
+            {
+              value: 3,
+              label: `${_('Radio')}3`,
+            },
+            {
+              value: 4,
+              label: `${_('Radio')}4`,
+            },
+          ]),
+        });
       }
     }
   }
@@ -343,15 +368,7 @@ export default class View extends React.Component {
         ),
         'options',
       ],
-      this.state.ssidOptions,
-    ).setIn(
-      [
-        screenOptions.findIndex(
-          $$item => $$item.get('id') === 'objects_templateid',
-        ),
-        'options',
-      ],
-      this.state.objectsIdOptions,
+      this.state.objectOptions,
     );
 
     return (

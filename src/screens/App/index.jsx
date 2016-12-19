@@ -5,7 +5,6 @@ import ReduxToastr from 'react-redux-toastr';
 import * as actions from 'shared/actions/app';
 import Modal from 'shared/components/Modal';
 import ProgressBar from 'shared/components/ProgressBar';
-import Icon from 'shared/components/Icon';
 import stringUtils from 'shared/utils/lib/string';
 
 const propTypes = {
