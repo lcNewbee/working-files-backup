@@ -192,6 +192,11 @@ class FormContainer extends React.Component {
       myProps.options = myProps.options($$data);
     }
 
+    // 处理异步加载 loadOptions 需要依据现有数据初始化
+    if (typeof myProps.loadOptions === 'function') {
+      myProps.loadOptions = myProps.loadOptions($$data);
+    }
+
     // 处理显示前提条件
     if (typeof myProps.showPrecondition === 'function') {
       isShow = myProps.showPrecondition($$data);

@@ -22,7 +22,7 @@
       "txop": 11,
       "admctrmandatory": 11,
       "countrycode": "CN",
-      "phymode": "auto",
+      "phymode": 0,
       "txchain": "1",
       "rxchain": "2",
       "shortgi": 1,

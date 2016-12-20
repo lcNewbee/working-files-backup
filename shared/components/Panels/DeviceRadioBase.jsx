@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
-import { Map } from 'immutable';
+import { Map, fromJS } from 'immutable';
+import utils from 'shared/utils';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { radioBase } from 'shared/config/axcRadio';
 import FormContainer from '../Organism/FormContainer';
@@ -7,6 +8,42 @@ import FormContainer from '../Organism/FormContainer';
 import {
   FormGroup,
 } from '../Form';
+
+function getChannelList(countrycode, is5G) {
+  return utils.fetch('goform/country/channel', {
+    country: countrycode,
+  })
+    .then((json) => {
+      const max24g = json.data['max_2.4g_channel'] || 13;
+      const channel5g = json.data.channel_5g;
+      const ret = {
+        options: [],
+      };
+      let i = 1;
+
+      if (is5G) {
+        ret.options = channel5g.map(
+          val => ({
+            value: val,
+            label: val,
+          }),
+        );
+      } else {
+        for (i; i <= max24g; i += 1) {
+          ret.options.push({
+            value: i,
+            label: i,
+          });
+        }
+      }
+      // ret.options.unshift({
+      //   value: 0,
+      //   label: _('Auto'),
+      // });
+      return ret;
+    },
+  );
+}
 
 const propTypes = {
   onChangeData: PropTypes.func,
@@ -25,21 +62,60 @@ class DeviceSystem extends React.Component {
     super(props);
 
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    this.onSave = this.onSave.bind(this);
-    this.getCurData = this.getCurData.bind(this);
+    utils.binds(this, [
+      'fetchChannelOptions',
+      'onSave',
+      'getCurData',
+    ]);
+    this.state = {
+      $$channelOptions: fromJS([]),
+    };
   }
+
+  componentWillMount() {
+    this.fetchChannelOptions(this.props);
+  }
+
+  componentWillUpdate(nextProps) {
+    if (this.props.store.getIn(['data', 'countrycode']) !== nextProps.store.getIn(['data', 'countrycode']) ||
+        this.props.store.getIn(['data', 'phymode']) !== nextProps.store.getIn(['data', 'phymode'])) {
+
+      this.fetchChannelOptions(nextProps);
+    }
+  }
+
   onSave() {
     if (this.props.onSave) {
       this.props.onSave();
     }
   }
+
   getCurData(name) {
     return this.props.store.getIn(['data', name]);
   }
+
+  fetchChannelOptions(props) {
+    const countrycode = props.store.getIn(['data', 'countrycode']);
+    const is5g = props.store.getIn(['data', 'phymode']) === 2;
+    getChannelList(countrycode, is5g)
+      .then(
+        (item) => {
+          this.setState({
+            $$channelOptions: fromJS(item.options),
+          });
+        },
+      );
+  }
+
   render() {
     const { app, store, actionable, ...restProps } = this.props;
     const formData = store.getIn(['data']);
-    const formOptions = radioBase;
+    const formOptions = radioBase.setIn([
+      radioBase.findIndex(
+        $$item => $$item.get('id') === 'channel',
+      ),
+      'options',
+    ], this.state.$$channelOptions);
 
     return (
       <FormContainer

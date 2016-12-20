@@ -40,7 +40,7 @@ const listOptions = fromJS([
       maxLength: '32',
       required: true,
       validator: validator({
-        rules: 'ip',
+        rules: 'mac',
       }),
     },
   },
@@ -79,6 +79,11 @@ export default class View extends React.Component {
         {...this.props}
         store={store}
         listOptions={curListOptions}
+        onBeforeAction={
+          () => {
+            alert(1);
+          }
+        }
         actionable
         selectable
         editable={false}

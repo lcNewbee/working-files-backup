@@ -119,20 +119,18 @@ export default class View extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onAction = this.onAction.bind(this);
+    this.onBeforeSave = this.onBeforeSave.bind(this);
   }
 
-  onAction(no, type) {
-    const query = {
-      no,
-      type,
-    };
+  onBeforeSave($$actionQuery, $$curListItem) {
+    const actionType = $$actionQuery.get('action');
+    let ret = '';
 
-    this.props.save(this.props.route.formUrl, query)
-      .then((json) => {
-        if (json.state && json.state.code === 2000) {
-        }
-      });
+    if (actionType === 'add' || actionType === 'edit') {
+      ret = '';
+    }
+
+    return ret;
   }
 
   render() {
@@ -141,7 +139,7 @@ export default class View extends React.Component {
         {...this.props}
         listOptions={listOptions}
         editFormOptions={editFormOptions}
-
+        onBeforeSave={this.onBeforeSave}
         listKey="name"
         actionable
         selectable

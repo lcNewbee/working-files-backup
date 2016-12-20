@@ -296,31 +296,33 @@ const routes = [
                 formUrl: 'goform/group/client',
                 text: _('User'),
                 component: sUsers.Screen,
-              }, {
-                id: 'groupTraffic',
-                path: '/main/group/monitor/flow',
-                formUrl: 'goform/group/flow/user',
-                text: _('Traffic'),
-                component: sFlowUser.Screen,
-                // indexRoute: {
-                //   onEnter: (nextState, replace) => replace('/main/group/monitor/flow/user'),
-                // },
-                // childRoutes: [
-                //   {
-                //     id: 'userFlow',
-                //     path: '/main/group/monitor/flow/user',
-                //     formUrl: 'goform/group/flow/user',
-                //     text: _('User'),
-                //     component: sFlowUser.Screen,
-                //   }, {
-                //     id: 'appFlow',
-                //     path: '/main/group/monitor/flow/app',
-                //     formUrl: 'goform/group/flow/app',
-                //     text: _('App'),
-                //     component: sFlowApp.Screen,
-                //   },
-                // ],
-              }, {
+              },
+              // {
+              //   id: 'groupTraffic',
+              //   path: '/main/group/monitor/flow',
+              //   formUrl: 'goform/group/flow/user',
+              //   text: _('Traffic'),
+              //   component: sFlowUser.Screen,
+              //   indexRoute: {
+              //     onEnter: (nextState, replace) => replace('/main/group/monitor/flow/user'),
+              //   },
+              //   childRoutes: [
+              //     {
+              //       id: 'userFlow',
+              //       path: '/main/group/monitor/flow/user',
+              //       formUrl: 'goform/group/flow/user',
+              //       text: _('User'),
+              //       component: sFlowUser.Screen,
+              //     }, {
+              //       id: 'appFlow',
+              //       path: '/main/group/monitor/flow/app',
+              //       formUrl: 'goform/group/flow/app',
+              //       text: _('App'),
+              //       component: sFlowApp.Screen,
+              //     },
+              //   ],
+              // },
+              {
                 id: 'ssidStatus',
                 path: '/main/group/monitor/ssid',
                 formUrl: 'goform/group/ssid',

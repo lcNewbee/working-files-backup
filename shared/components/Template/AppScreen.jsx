@@ -236,7 +236,6 @@ export default class AppScreen extends React.Component {
     if (className) {
       screenClassName = `${screenClassName} ${className}`;
     }
-
     return (
       <div className={screenClassName}>
         {

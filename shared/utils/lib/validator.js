@@ -95,6 +95,32 @@ var vaildate = {
       }
     }
   },
+  ipSegment: {
+    all: function(str) {
+      var ret = this.specific(str);
+
+      if (ret) {
+        return ret;
+      }
+
+      if (!(/^([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){2}([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])$/).test(str)) {
+        return _("Please input a valid IP address");
+      }
+    },
+
+    specific: function(str) {
+      var ipArr = str.split('.'),
+        ipHead = ipArr[0];
+
+      if (ipArr[0] === '127') {
+        return _("IP address begin with 127 is a reserved loopback address, please input another value between 1 to 233");
+      }
+      if (ipArr[0] > 223) {
+        return _("Address begin with ") + _("%s", ipHead) + _(" is invalid, please input a value between 1 to 223.");
+        // return _("Address begin with %s is invalid, please input a value between 1 to 223.", ipHead);
+      }
+    }
+  },
 
   dns: {
     all: function(str) {
@@ -371,6 +397,7 @@ function isSameNet(ip_lan, ip_wan, mask_lan, mask_wan) {
 }
 
 validator.combineValid = {
+
   //必须一样
   equal: function (str1, str2, msg) {
     if (str1 != str2) {
@@ -393,6 +420,12 @@ validator.combineValid = {
 
     if (!isSameNet(ip, gateway, mask, mask)) {
       return _("Static IP and default gateway must be in the same network segment");
+    }
+  },
+
+  isSameNet: function(ip, mask, gateway, msgOption) {
+    if(!isSameNet(ip, gateway, mask, mask)) {
+      return _("%s and %s must be in the same network segment", );
     }
   },
 

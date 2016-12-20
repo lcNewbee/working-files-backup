@@ -1,4 +1,5 @@
 import channels from 'shared/config/country.json';
+import utils from 'shared/utils';
 import { fromJS, List } from 'immutable';
 
 const channelBandwidthOptions = fromJS([
@@ -42,39 +43,6 @@ const spatialstreamsOptions = [
     label: '4x4',
   },
 ];
-
-function getChannelsOptions(currCountry) {
-  let i;
-  let len;
-  let channelsRange;
-  const channelsOptions = [
-    {
-      value: 0,
-      label: _('Automatic'),
-    },
-  ];
-  const channelsOption = channelsList.find(item =>
-      item.country === currCountry,
-  );
-
-  if (channelsOption) {
-    channelsRange = channelsOption['2.4g'].split('-');
-    i = parseInt(channelsRange[0], 10);
-    len = parseInt(channelsRange[1], 10);
-  } else {
-    i = 1;
-    len = 13;
-  }
-
-  for (i; i <= len; i += 1) {
-    channelsOptions.push({
-      value: i,
-      label: `${i}`,
-    });
-  }
-
-  return fromJS(channelsOptions);
-}
 
 export const numberKeys = [
   'groupid',
@@ -121,7 +89,7 @@ export const radioBase = fromJS([
     form: 'radioAdvance',
     label: _('Physical Mode'),
     type: 'select',
-    defaultValue: 'B/G/N',
+    defaultValue: '',
     options: [
       {
         value: 1,
@@ -188,12 +156,7 @@ export const radioBase = fromJS([
     form: 'radioBase',
     type: 'select',
     label: _('Channel'),
-    options:
-      ($$data) => {
-        const $$ret = getChannelsOptions($$data.get('countrycode'));
-        return $$ret.toJS();
-      }
-    ,
+    options: [],
   }, {
     id: 'channelwidth',
     form: 'radioBase',
