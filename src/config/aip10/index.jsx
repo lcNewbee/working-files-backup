@@ -36,7 +36,7 @@ const pNetworkSettings = require('../../screens/App/screens/MainAP/screens/Netwo
 // 子菜单
 const sNetworkSettings = require('../../screens/App/screens/MainAP/screens/NetworkSettings/BridgeRouterNetwork');
 
-const pSystemStatus = require('../../screens/App/screens/MainAP/screens/SystemStatus');
+const pSystemStatus = require('../../screens/App/screens/MainAP/screens/SystemStatus/SingleRadioOverview');
 const sSsidDetails = require('../../screens/App/screens/MainAP/screens/SystemStatus/SsidDetails');
 const sClientsDetails = require('../../screens/App/screens/MainAP/screens/SystemStatus/ClientsDetails');
 // 快速设置
@@ -72,14 +72,15 @@ const funConfig = {
   },
   network: {
     router: false, // 是否有router模式
+    hasVlan: true, // 是否有VLAN功能
   },
   // 无线设置页面
   basic: {
     radioclientslimit: true, // 射频客户端限制
     devicemodeOptions: [
       { value: 'ap', label: _('AP') },
-      { value: 'sta', label: _('Station') },
-      { value: 'repeater', label: _('Repeater') },
+      // { value: 'sta', label: _('Station') },
+      // { value: 'repeater', label: _('Repeater') },
     ],
     // 功能项参见WirelessConfig -> Basic页面下的ssidTableFullMemberOptions变量
     ssidTableKeys: [

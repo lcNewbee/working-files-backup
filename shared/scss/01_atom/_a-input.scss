@@ -25,6 +25,9 @@ input[type=number] {
     border: 1px solid $g-color-primary;
   }
 }
+input::-ms-clear {
+  display: none;
+}
 
 .a-input-number {
   display: inline-block;

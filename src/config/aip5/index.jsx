@@ -36,7 +36,7 @@ const pNetworkSettings = require('../../screens/App/screens/MainAP/screens/Netwo
 // 子菜单
 const sNetworkSettings = require('../../screens/App/screens/MainAP/screens/NetworkSettings/NetworkSettings');
 
-const pSystemStatus = require('../../screens/App/screens/MainAP/screens/SystemStatus');
+const pSystemStatus = require('../../screens/App/screens/MainAP/screens/SystemStatus/SingleRadioOverview');
 const sSsidDetails = require('../../screens/App/screens/MainAP/screens/SystemStatus/SsidDetails');
 const sClientsDetails = require('../../screens/App/screens/MainAP/screens/SystemStatus/ClientsDetails');
 // 快速设置
@@ -65,28 +65,42 @@ const sChannelUtilization = require('../../screens/App/screens/MainAP/screens/To
 
 // 页面功能项配置
 const funConfig = {
+  // 覆盖型产品快速设置
+  coverageQuickSetup: {
+    router: false, // 是否有router模式
+  },
+  // 网络设置
+  network: {
+    router: false, // 是否有router模式
+    hasVlan: true, // 是否有VLAN功能
+  },
   // 无线设置页面
   basic: {
     devicemodeOptions: [
-      { value: 'ap', label: _('AP') },
-      { value: 'sta', label: _('Station') },
-      { value: 'repeater', label: _('Repeater') },
+      { value: 'ap', label: _('AP') },              // AP模式
+      { value: 'sta', label: _('Station') },        // Station模式
+      { value: 'repeater', label: _('Repeater') },  // Repeater模式
     ],
     // 功能项参见WirelessConfig -> Basic页面下的ssidTableFullMemberOptions变量
+    // 决定哪些功能在ssid配置表格上出现
     ssidTableKeys: ['enable', 'ssid', 'vlanId', 'hideSsid', 'isolation', 'security', 'delete'],
   },
+  // 无线高级设置页面
   advance: {
-    ledThreshFun: true, // 信号强度控制LED灯功能
-    beaconIntervalFun: false, // Beacon帧间间隔
-    dtimIntervalFun: false, // DTIM间隔
-    segmentThreshFun: false, // 分片阈值
-    ampduFun: false, // ampdu值
-    rateSetFun: false, // 速率集
-    rssiLimitFun: false, // rssi限制
-    airTimeFairnessFun: false, // 时间公平性
+    ledThreshFun: true,        // 信号强度控制LED灯功能
+    beaconIntervalFun: false,    // Beacon帧间间隔
+    distanceFun: true,          // 距离调整拖动条
+    dtimIntervalFun: false,      // DTIM间隔
+    segmentThreshFun: false,     // 分片阈值
+    ampduFun: false,             // ampdu值
+    rateSetFun: false,           // 速率集
+    rssiLimitFun: false,         // rssi限制
+    airTimeFairnessFun: false,   // 时间公平性
   },
+  // 系统维护页面
   systemmaintenance: {
-    poeOutFun: true,
+    poeOutFun: true,           // POE输出功能
+    voipFun: false,             // VOIP功能
   },
 };
 
@@ -151,6 +165,7 @@ const routes = [{
           saveUrl: 'goform/set_network',
           path: '/main/networksettings/networksettings',
           text: _('LAN Settings'),
+          funConfig: funConfig.network,
           component: sNetworkSettings.Screen,
         },
       ],

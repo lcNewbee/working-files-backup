@@ -512,16 +512,19 @@ export default class QuickSetup extends React.Component {
                 required
                 {...validBrgLanMask}
               />
-              <FormGroup
-                type="number"
-                label={_('VLAN ID')}
-                value={store.getIn(['curData', 'vlanId'])}
-                onChange={(data) => {
-                  this.props.updateItemSettings({ vlanId: data.value });
-                }}
-                required
-                {...validVlan}
-              />
+              {/*
+                <FormGroup
+                  type="number"
+                  label={_('VLAN ID')}
+                  value={store.getIn(['curData', 'vlanId'])}
+                  onChange={(data) => {
+                    this.props.updateItemSettings({ vlanId: data.value });
+                  }}
+                  required
+                  {...validVlan}
+                />
+              */}
+
             </div>
           ) : null
         }
@@ -930,19 +933,21 @@ export default class QuickSetup extends React.Component {
                   label={_('Subnet Mask')}
                   value={mask}
                 />
+                {/*
+                  <FormGroup
+                    type="plain-text"
+                    label={_('VLAN ID')}
+                    value={vlanId}
+                  />
+                */}
                 <FormGroup
                   type="plain-text"
-                  label={_('VLAN ID')}
-                  value={vlanId}
+                  label={_('SSID')}
+                  value={ssid}
                 />
                 {
                   /wep/.test(security.mode) ? (
                     <div>
-                      <FormGroup
-                        type="plain-text"
-                        label={_('SSID')}
-                        value={ssid}
-                      />
                       {
                         /wpa/.test(security.mode) ? (
                           <FormGroup
@@ -966,11 +971,6 @@ export default class QuickSetup extends React.Component {
                 {
                   /wep/.test(security.mode) ? null : (
                     <div>
-                      <FormGroup
-                        type="plain-text"
-                        label={_('SSID')}
-                        value={ssid}
-                      />
                       {
                         /wpa/.test(security.mode) ? (
                           <FormGroup

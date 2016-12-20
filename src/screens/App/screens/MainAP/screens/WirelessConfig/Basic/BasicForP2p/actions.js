@@ -195,3 +195,10 @@ export function changeShowMacHelpInfo(data) {
     data,
   };
 }
+
+export function changeTransferData(data) {
+  return {
+    type: 'CHANGE_TRANSFER_DATA',
+    data,
+  };
+}

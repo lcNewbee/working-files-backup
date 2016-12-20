@@ -411,43 +411,47 @@ export default class Advance extends React.Component {
             </div>
           ) : null
         }
-        <div className="clearfix">
-          <div className="fl">
-            <FormGroup
-              type="range"
-              label={_('Distance Value')}
-              min="0"
-              max="10"
-              step="0.1"
-              help="km"
-              value={distance}
-              hasTextInput
-              disabled={autoAdjust === '1'}
-              onChange={(data) => { this.changeFormValue(radioId, 'distance', data.value); }}
-            />
-          </div>
-          <span
-            className="fl"
-            style={{
-              marginTop: '12px',
-              marginLeft: '4px',
-            }}
-          >
-            <label htmlFor="distance">
-              <input
-                id="distance"
-                type="checkbox"
-                checked={autoAdjust === '1'}
-                onChange={() => {
-                  const value = autoAdjust === '1' ? '0' : '1';
-                  this.changeFormValue(radioId, 'autoAdjust', value);
+        {
+          funConfig.distanceFun ? (
+            <div className="clearfix">
+              <div className="fl">
+                <FormGroup
+                  type="range"
+                  label={_('Distance Value')}
+                  min="0"
+                  max="10"
+                  step="0.1"
+                  help="km"
+                  value={distance}
+                  hasTextInput
+                  disabled={autoAdjust === '1'}
+                  onChange={(data) => { this.changeFormValue(radioId, 'distance', data.value); }}
+                />
+              </div>
+              <span
+                className="fl"
+                style={{
+                  marginTop: '12px',
+                  marginLeft: '4px',
                 }}
-                style={{ marginRight: '3px' }}
-              />
-              {_('auto')}
-            </label>
-          </span>
-        </div>
+              >
+                <label htmlFor="distance">
+                  <input
+                    id="distance"
+                    type="checkbox"
+                    checked={autoAdjust === '1'}
+                    onChange={() => {
+                      const value = autoAdjust === '1' ? '0' : '1';
+                      this.changeFormValue(radioId, 'autoAdjust', value);
+                    }}
+                    style={{ marginRight: '3px' }}
+                  />
+                  {_('auto')}
+                </label>
+              </span>
+            </div>
+          ) : null
+        }
         {/*
           {
             radioType === '5G' ? (

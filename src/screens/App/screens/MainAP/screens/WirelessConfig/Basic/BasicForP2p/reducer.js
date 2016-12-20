@@ -7,6 +7,7 @@ const defaultState = fromJS({
     radioType: '2.4G',
   },
   apMacInputData: '',
+  transferData: '',
   scaning: true,
   showMacHelpInfo: false,
   showScanResult: false,
@@ -96,6 +97,8 @@ export default function (state = defaultState, action) {
       return state.set('apMacInputData', action.data);
     case 'CHANGE_SHOW_MAC_HELP_INFO':
       return state.set('showMacHelpInfo', action.data);
+    case 'CHANGE_TRANSFER_DATA':
+      return state.set('transferData', action.data);
     default:
   }
   return state;

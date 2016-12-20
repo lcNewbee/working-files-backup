@@ -36,7 +36,6 @@ const propTypes = {
   store: PropTypes.instanceOf(Map),
   selfState: PropTypes.instanceOf(Map),
   validateAll: PropTypes.func,
-
   route: PropTypes.object,
   // initSettings: PropTypes.func,
   // fetchSettings: PropTypes.func,
@@ -45,12 +44,10 @@ const propTypes = {
   updateItemSettings: PropTypes.func,
   leaveSettingsScreen: PropTypes.func,
   validateOption: PropTypes.object,
-
   changeScanStatus: PropTypes.func,
   changeShowScanResultStatus: PropTypes.func,
   changeSelectedResult: PropTypes.func,
   leaveScreen: PropTypes.func,
-
   changeCtyModal: PropTypes.func,
   changeAgreeProtocol: PropTypes.func,
   changeCountryCode: PropTypes.func,
@@ -58,7 +55,6 @@ const propTypes = {
   saveCountrySelectModal: PropTypes.func,
   receiveCountryInfo: PropTypes.func,
   resetVaildateMsg: PropTypes.func,
-
   changeTitleShowIcon: PropTypes.func,
   changeTableItemForSsid: PropTypes.func,
   createModal: PropTypes.func,
@@ -68,8 +64,6 @@ const propTypes = {
   updateRadioSettingsItem: PropTypes.func,
   changeWhichButton: PropTypes.func,
   restoreSelfState: PropTypes.func,
-
-  // 平台代码
   changeCurrRadioConfig: PropTypes.func,
   productInfo: PropTypes.instanceOf(Map),
   changeSsidTableOptions: PropTypes.func,
@@ -77,6 +71,7 @@ const propTypes = {
   changeApMacInput: PropTypes.func,
   changeShowMacHelpInfo: PropTypes.func,
   // changeAirTimeEnable: PropTypes.func,
+  changeTransferData: PropTypes.func,
 };
 
 const defaultProps = {};
@@ -251,11 +246,12 @@ export default class Basic extends React.Component {
           transform: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
             const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
+            const basicSettings = this.props.selfState.get('basicSettings');
             return (
               <input
                 type="checkbox"
                 checked={val === '1'}
-                disabled={pos === 0}
+                disabled={pos === 0 && basicSettings.getIn(['radioList', radioId, 'wirelessMode']) !== 'ap'}
                 onClick={() => this.onSsidItemChange(val, item, 'enable', (val === '1' ? '0' : '1'))}
                 style={{ marginLeft: '3px' }}
               />
@@ -269,11 +265,12 @@ export default class Basic extends React.Component {
           transform: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
             const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
+            const basicSettings = this.props.selfState.get('basicSettings');
             return (
               <FormInput
                 type="text"
                 value={val}
-                disabled={pos === 0}
+                disabled={pos === 0 && basicSettings.getIn(['radioList', radioId, 'wirelessMode']) !== 'ap'}
                 onChange={data => this.onSsidItemChange(val, item, 'ssid', data.value)}
                 style={{
                   marginLeft: '-60px',
@@ -290,11 +287,12 @@ export default class Basic extends React.Component {
           transform: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
             const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
+            const basicSettings = this.props.selfState.get('basicSettings');
             return (
               <FormInput
                 type="number"
                 value={val}
-                disabled={pos === 0 || vlanEnable === '0'}
+                disabled={(pos === 0 && basicSettings.getIn(['radioList', radioId, 'wirelessMode']) !== 'ap') || vlanEnable === '0'}
                 onChange={(data) => {
                   this.onSsidItemChange(val, item, 'vlanId', data.value);
                 }}
@@ -311,8 +309,6 @@ export default class Basic extends React.Component {
           label: _('Max Clients'),
           width: '250px',
           transform: function (val, item) {
-            // const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-            // const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
             return (
               <FormInput
                 type="number"
@@ -334,9 +330,6 @@ export default class Basic extends React.Component {
           label: _('Airtime Fairness'),
           width: '250px',
           transform: function (val, item) {
-            // const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-            // const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
-            // const airTimeEnable = this.props.selfState.get('airTimeEnable');
             return (
               <input
                 type="checkbox"
@@ -355,8 +348,6 @@ export default class Basic extends React.Component {
           label: _('Hide'),
           width: '200px',
           transform: function (val, item) {
-            // const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-            // const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
             return (
               <input
                 type="checkbox"
@@ -375,8 +366,6 @@ export default class Basic extends React.Component {
           label: _('Client Isolation'),
           width: '200px',
           transform: function (val, item) {
-            // const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-            // const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
             return (
               <input
                 type="checkbox"
@@ -397,13 +386,14 @@ export default class Basic extends React.Component {
           transform: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
             const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
+            const basicSettings = this.props.selfState.get('basicSettings');
             return (
               <div style={{ marginLeft: '-3px' }}>
                 <Button
                   text={_('Edit')}
                   icon="pencil-square"
                   size="sm"
-                  disabled={pos === 0}
+                  disabled={pos === 0 && basicSettings.getIn(['radioList', radioId, 'wirelessMode']) !== 'ap'}
                   onClick={() => {
                     const tableItemForSsid = fromJS({}).set('val', val)
                           .set('item', item).set('isShow', '1')
@@ -447,13 +437,14 @@ export default class Basic extends React.Component {
           transform: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
             const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
+            const basicSettings = this.props.selfState.get('basicSettings');
             return (
               <div style={{ marginLeft: '-12px' }}>
                 <Button
                   text={_('Delete')}
                   icon="times"
                   size="sm"
-                  disabled={pos === 0}
+                  disabled={pos === 0 && basicSettings.getIn(['radioList', radioId, 'wirelessMode']) !== 'ap'}
                   onClick={() => this.onDeleteBtnClick(item)}
                 />
               </div>
@@ -588,6 +579,7 @@ export default class Basic extends React.Component {
           newRadioList = newRadioList.setIn(['radioList', radioId, 'vapList', 0, 'security', 'mode'], 'none');
         }
         this.props.updateBasicSettings(newRadioList);
+        this.props.updateMultiSsidItem(newRadioList);
       }
     });
   }
@@ -699,26 +691,27 @@ export default class Basic extends React.Component {
           }
         });
         this.props.updateSelfItemSettings(radioInfo);
-      } }).then(() => {
-        this.props.fetch('goform/get_wl_info_forTestUse').then((json) => {
-          if (json.state && json.state.code === 2000) {
-            const basicInfo = {
-              curModule: 'basicSettings',
-              data: fromJS(json.data),
-            };
-            const multiSsidInfo = {
-              curModule: 'multiSsid',
-              data: fromJS(json.data),
-            };
-            this.props.updateSelfItemSettings(basicInfo);
-            this.props.updateSelfItemSettings(multiSsidInfo);
-          }
-        });
-      }).then(() => { // 生成多SSID列表的options
-        const funConfig = this.props.route.funConfig;
-        const keysFromRoute = funConfig.ssidTableKeys;
-        this.makeSsidTableOptions(this.state.ssidTableFullMemberOptions, keysFromRoute);
+      }
+    }).then(() => {
+      this.props.fetch('goform/get_wl_info_forTestUse').then((json) => {
+        if (json.state && json.state.code === 2000) {
+          const basicInfo = {
+            curModule: 'basicSettings',
+            data: fromJS(json.data),
+          };
+          const multiSsidInfo = {
+            curModule: 'multiSsid',
+            data: fromJS(json.data),
+          };
+          this.props.updateSelfItemSettings(basicInfo);
+          this.props.updateSelfItemSettings(multiSsidInfo);
+        }
       });
+    }).then(() => { // 生成多SSID列表的options
+      const funConfig = this.props.route.funConfig;
+      const keysFromRoute = funConfig.ssidTableKeys;
+      this.makeSsidTableOptions(this.state.ssidTableFullMemberOptions, keysFromRoute);
+    });
   }
 
   noErrorThisPage() {
@@ -782,38 +775,14 @@ export default class Basic extends React.Component {
       radioType: this.props.productInfo.getIn(['deviceRadioList', 0, 'radioType']),
     });
     this.props.changeCurrRadioConfig(config);
-    // this.getAirTimeEnable();
   }
-
-  // getAirTimeEnable() {
-  //   const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-  //   this.props.fetch('goform/get_adv_wl_info_forTestUse').then((json) => {
-  //     if (json.state && json.state.code === 2000) {
-  //       const airTimeEnable = json.data.radioList[radioId].airTimeEnable;
-  //       this.props.changeAirTimeEnable(airTimeEnable);
-  //     }
-  //   });
-  // }
-
-  // makeRadioSelectOptions() {
-  //   const deviceRadioList = this.props.app.get('deviceRadioList');
-  //   const len = deviceRadioList.size;
-  //   let radioSelectOptions = fromJS([]);
-  //   for (let i = 0; i < len; i++) {
-  //     const item = fromJS({
-  //       label: deviceRadioList.getIn([i, 'name']),
-  //       value: deviceRadioList.getIn([i, 'radioId']),
-  //     });
-  //     radioSelectOptions = radioSelectOptions.push(item);
-  //   }
-  //   return radioSelectOptions;
-  // }
 
   makeSsidTableOptions(fullOptions, keysFromRoute) {
     const keys = fromJS(keysFromRoute);
     const tableOptions = fullOptions.filter((item) => {
       const id = item.get('id');
       if (keys.includes(id)) return true;
+      return false;
     });
     this.props.changeSsidTableOptions(tableOptions);
   }
@@ -888,201 +857,7 @@ export default class Basic extends React.Component {
         text: _('Channel Width'),
       },
     ]);
-    // const ssidTableFullMemberOptions = fromJS([
-    //   {
-    //     id: 'enable',
-    //     label: _('Enable'),
-    //     width: '200px',
-    //     transform: function (val, item) {
-    //       const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-    //       const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
-    //       return (
-    //         <input
-    //           type="checkbox"
-    //           checked={val === '1'}
-    //           disabled={pos === 0}
-    //           onClick={() => this.onSsidItemChange(val, item, 'enable', (val === '1' ? '0' : '1'))}
-    //           style={{ marginLeft: '3px' }}
-    //         />
-    //       );
-    //     }.bind(this),
-    //   },
-    //   {
-    //     id: 'ssid',
-    //     label: _('SSID'),
-    //     width: '250px',
-    //     transform: function (val, item) {
-    //       const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-    //       const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
-    //       return (
-    //         <FormInput
-    //           type="text"
-    //           value={val}
-    //           disabled={pos === 0}
-    //           onChange={data => this.onSsidItemChange(val, item, 'ssid', data.value)}
-    //           style={{
-    //             marginLeft: '-60px',
-    //             height: '29px',
-    //           }}
-    //         />
-    //       );
-    //     }.bind(this),
-    //   },
-    //   {
-    //     id: 'vlanId',
-    //     label: _('Vlan ID'),
-    //     width: '250px',
-    //     transform: function (val, item) {
-    //       const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-    //       const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
-    //       return (
-    //         <FormInput
-    //           type="number"
-    //           value={val}
-    //           disabled={pos === 0 || vlanEnable === '0'}
-    //           onChange={(data) => {
-    //             this.onSsidItemChange(val, item, 'vlanId', data.value);
-    //           }}
-    //           style={{
-    //             marginLeft: '-60px',
-    //             height: '29px',
-    //           }}
-    //         />
-    //       );
-    //     }.bind(this),
-    //   },
-    //   {
-    //     id: 'maxClients',
-    //     label: _('Max Clients'),
-    //     width: '250px',
-    //     transform: function (val, item) {
-    //       // const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-    //       // const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
-    //       return (
-    //         <FormInput
-    //           type="number"
-    //           value={val}
-    //           // disabled={pos === 0 || vlanEnable === '0'}
-    //           onChange={(data) => {
-    //             this.onSsidItemChange(val, item, 'maxClients', data.value);
-    //           }}
-    //           style={{
-    //             marginLeft: '-60px',
-    //             height: '29px',
-    //           }}
-    //         />
-    //       );
-    //     }.bind(this),
-    //   },
-    //   {
-    //     id: 'airTimeEnable',
-    //     label: _('Airtime Fairness'),
-    //     width: '250px',
-    //     transform: function (val, item) {
-    //       // const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-    //       // const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
-    //       // const airTimeEnable = this.props.selfState.get('airTimeEnable');
-    //       return (
-    //         <input
-    //           type="checkbox"
-    //           checked={val === '1'}
-    //           // disabled={airTimeEnable === 0}
-    //           onClick={
-    //             () => this.onSsidItemChange(val, item, 'airTimeEnable', (val === '1' ? '0' : '1'))
-    //           }
-    //           style={{ marginLeft: '3px' }}
-    //         />
-    //       );
-    //     }.bind(this),
-    //   },
-    //   {
-    //     id: 'hideSsid',
-    //     label: _('Hide'),
-    //     width: '200px',
-    //     transform: function (val, item) {
-    //       // const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-    //       // const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
-    //       return (
-    //         <input
-    //           type="checkbox"
-    //           checked={val === '1'}
-    //           // disabled={pos === 0}
-    //           onClick={
-    //             () => this.onSsidItemChange(val, item, 'hideSsid', (val === '1' ? '0' : '1'))
-    //           }
-    //           style={{ marginLeft: '3px' }}
-    //         />
-    //       );
-    //     }.bind(this),
-    //   },
-    //   {
-    //     id: 'isolation',
-    //     label: _('Client Isolation'),
-    //     width: '200px',
-    //     transform: function (val, item) {
-    //       // const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-    //       // const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
-    //       return (
-    //         <input
-    //           type="checkbox"
-    //           checked={val === '1'}
-    //           // disabled={pos === 0}
-    //           onClick={
-    //             () => this.onSsidItemChange(val, item, 'isolation', (val === '1' ? '0' : '1'))
-    //           }
-    //           style={{ marginLeft: '20px' }}
-    //         />
-    //       );
-    //     }.bind(this),
-    //   },
-    //   {
-    //     id: 'security',
-    //     label: _('Security Edit'),
-    //     width: '200px',
-    //     transform: function (val, item) {
-    //       const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-    //       const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
-    //       return (
-    //         <div style={{ marginLeft: '-3px' }}>
-    //           <Button
-    //             text={_('Edit')}
-    //             icon="pencil-square"
-    //             size="sm"
-    //             disabled={pos === 0}
-    //             onClick={() => {
-    //               const tableItemForSsid = fromJS({}).set('val', val)
-    //                     .set('item', item).set('isShow', '1')
-    //                     .set('pos', pos);
-    //               this.props.changeTableItemForSsid(tableItemForSsid);
-    //             }}
-    //           />
-    //         </div>
-    //       );
-    //     }.bind(this),
-    //   },
-    //   {
-    //     id: 'delete',
-    //     label: _('Delete'),
-    //     width: '200px',
-    //     transform: function (val, item) {
-    //       const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-    //       const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
-    //       return (
-    //         <div style={{ marginLeft: '-12px' }}>
-    //           <Button
-    //             text={_('Delete')}
-    //             icon="times"
-    //             size="sm"
-    //             disabled={pos === 0}
-    //             onClick={() => this.onDeleteBtnClick(item)}
-    //           />
-    //         </div>
-    //       );
-    //     }.bind(this),
-    //   },
-    // ]);
 
-    // const curData = this.props.store.get('curData');
     const { radioId, radioType } = this.props.selfState.get('currRadioConfig').toJS();
     const radioSettings = this.props.selfState.get('radioSettings');
     const multiSsid = this.props.selfState.get('multiSsid');
@@ -1534,14 +1309,16 @@ export default class Basic extends React.Component {
                                               e.preventDefault();
                                             }}
                                             onDragStart={(e) => {
-                                              e.dataTransfer.setData('mac', e.target.innerHTML);
+                                              // e.dataTransfer.setData('mac', e.target.innerHTML);
+                                              this.props.changeTransferData(e.target.innerHTML);
                                             }}
                                             onDrop={(e) => {
-                                              const dropMac = e.dataTransfer.getData('mac');
+                                              const dropMac = this.props.selfState.get('transferData');
                                               const targetMac = e.target.innerHTML;
                                               let macList = apMacList;
                                               const dropMacIter = macList.keyOf(dropMac);
                                               const targetMacIter = macList.keyOf(targetMac);
+
                                               if (typeof (dropMacIter) !== 'undefined' &&
                                                   typeof (targetMacIter) !== 'undefined' &&
                                                   targetMacIter >= dropMacIter) { // 向下移动
@@ -1556,6 +1333,7 @@ export default class Basic extends React.Component {
                                               const radioList = basicSettings.get('radioList')
                                                                 .setIn([radioId, 'vapList', '0', 'apMacList'], macList);
                                               this.props.updateBasicSettings({ radioList });
+                                              this.props.changeTransferData('');
                                             }}
                                             draggable
                                           >
@@ -2186,7 +1964,7 @@ export default class Basic extends React.Component {
         {
           this.props.selfState.get('showMultiSsid') ? (
             <div className="stats-group-cell">
-              <span>{_('Notice: The first SSID can\'t be modefied here !')}</span>
+              {/* <span>{_('Notice: The first SSID can\'t be modefied here !')}</span> */}
               <Table
                 className="table"
                 options={this.props.selfState.get('ssidTableOptions')}
@@ -2245,7 +2023,7 @@ export default class Basic extends React.Component {
                       //   }
                       // }
                       // 判断是否有该功能，没有则不验证
-                      if (this.props.route.funConfig.ssidTableKeys.includes('maxClients')) {
+                      if (this.props.route.funConfig.ssidTableKeys.indexOf('maxClients') !== -1) {
                         if (vapList[i].maxClients === '' || vapList[i].maxClients === '0') {
                           error = _('Max clients number must be positive interger !');
                           break;
@@ -2274,19 +2052,6 @@ export default class Basic extends React.Component {
           ) : null
         }
 
-        {
-          /*
-          <div className="form-group form-group--save">
-            <div className="form-control">
-              <SaveButton
-                type="button"
-                loading={this.props.app.get('saving')}
-                onClick={this.onSave}
-              />
-            </div>
-          </div>
-        */
-        }
         <Modal
           title={_('Speed Limit')}
           isShow={this.props.selfState.get('showSpeedLimitModal')}

@@ -23,7 +23,7 @@ network: {
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
-
+  route: PropTypes.object,
   // route: PropTypes.object,
   // initSettings: PropTypes.func,
   // fetchSettings: PropTypes.func,
@@ -75,8 +75,6 @@ const validOptions = Map({
     rules: 'num:[1, 4094]',
   }),
 });
-
-
 
 export default class NetworkSettings extends React.Component {
 
@@ -276,9 +274,10 @@ export default class NetworkSettings extends React.Component {
                 type="text"
                 label={_('Gateway')}
                 value={gateway}
-                onChange={data => this.props.updateItemSettings({
-                  gateway: data.value,
-                })}
+                onChange={(data) => {
+                  console.log('data.value', data.value);
+                  this.props.updateItemSettings({ gateway: data.value });
+                }}
                 {...validGateway}
               />
               <FormGroup
@@ -302,41 +301,47 @@ export default class NetworkSettings extends React.Component {
             </div>
           )
         }
-        <h3>{_('VLAN Settings')}</h3>
-        <FormGroup
-          label={_('VLAN Enable')}
-          type="checkbox"
-          checked={vlanEnable === '1'}
-          onClick={() => {
-            this.props.updateItemSettings({
-              vlanEnable: vlanEnable === '1' ? '0' : '1',
-            });
-          }}
-        />
-        <FormGroup
-          type="number"
-          label={_('Management VLAN ID')}
-          disabled={vlanEnable === '0'}
-          help={`${_('Range: ')}1 - 4094, ${_('Default: ')}1`}
-          value={mngVlanId}
-          onChange={data => this.props.updateItemSettings({
-            mngVlanId: data.value,
-          })}
-          required
-          {...validVlanId1}
-        />
-        <FormGroup
-          type="number"
-          label={_('Untagged VLAN ID')}
-          help={`${_('Range: ')}1 - 4094, ${_('Default: ')}1`}
-          value={utgVlanId}
-          disabled={vlanEnable === '0'}
-          onChange={data => this.props.updateItemSettings({
-            utgVlanId: data.value,
-          })}
-          required
-          {...validVlanId2}
-        />
+        {
+          this.props.route.funConfig.hasVlan ? (
+            <div>
+              <h3>{_('VLAN Settings')}</h3>
+              <FormGroup
+                label={_('VLAN Enable')}
+                type="checkbox"
+                checked={vlanEnable === '1'}
+                onClick={() => {
+                  this.props.updateItemSettings({
+                    vlanEnable: vlanEnable === '1' ? '0' : '1',
+                  });
+                }}
+              />
+              <FormGroup
+                type="number"
+                label={_('Management VLAN ID')}
+                disabled={vlanEnable === '0'}
+                help={`${_('Range: ')}1 - 4094, ${_('Default: ')}1`}
+                value={mngVlanId}
+                onChange={data => this.props.updateItemSettings({
+                  mngVlanId: data.value,
+                })}
+                required
+                {...validVlanId1}
+              />
+              <FormGroup
+                type="number"
+                label={_('Untagged VLAN ID')}
+                help={`${_('Range: ')}1 - 4094, ${_('Default: ')}1`}
+                value={utgVlanId}
+                disabled={vlanEnable === '0'}
+                onChange={data => this.props.updateItemSettings({
+                  utgVlanId: data.value,
+                })}
+                required
+                {...validVlanId2}
+              />
+            </div>
+          ) : null
+        }
         <div className="form-group form-group--save">
           <div className="form-control">
             <SaveButton

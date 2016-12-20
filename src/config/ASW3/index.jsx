@@ -36,7 +36,7 @@ const pNetworkSettings = require('../../screens/App/screens/MainAP/screens/Netwo
 // 子菜单
 const sNetworkSettings = require('../../screens/App/screens/MainAP/screens/NetworkSettings/NetworkSettings');
 
-const pSystemStatus = require('../../screens/App/screens/MainAP/screens/SystemStatus');
+const pSystemStatus = require('../../screens/App/screens/MainAP/screens/SystemStatus/SingleRadioOverview');
 const sSsidDetails = require('../../screens/App/screens/MainAP/screens/SystemStatus/SsidDetails');
 const sClientsDetails = require('../../screens/App/screens/MainAP/screens/SystemStatus/ClientsDetails');
 // 快速设置
@@ -63,8 +63,8 @@ const sSiteSurvey = require('../../screens/App/screens/MainAP/screens/Tools/Site
 const sSystemLogs = require('../../screens/App/screens/MainAP/screens/Tools/SystemLogs');
 const sChannelUtilization = require('../../screens/App/screens/MainAP/screens/Tools/ChannelUtilization');
 // Portal
-const pPortal = require('../../screens/App/screens/MainAP/screens/PortalSettings');
-const sPortalSettings = require('../../screens/App/screens/MainAP/screens/PortalSettings/PortalSettings');
+// const pPortal = require('../../screens/App/screens/MainAP/screens/PortalSettings');
+// const sPortalSettings = require('../../screens/App/screens/MainAP/screens/PortalSettings/PortalSettings');
 
 // 页面功能项配置
 const funConfig = {
@@ -75,6 +75,7 @@ const funConfig = {
   // 网络设置
   network: {
     router: false, // 是否有router模式
+    hasVlan: false, // 是否有VLAN功能
   },
   // 无线设置页面
   basic: {
@@ -87,6 +88,7 @@ const funConfig = {
   advance: {
     ledThreshFun: false, // 信号强度控制LED灯功能
     beaconIntervalFun: true, // Beacon帧间间隔
+    distanceFun: false,     // 距离值设置拖动条
     dtimIntervalFun: true, // DTIM间隔
     segmentThreshFun: true, // 分片阈值
     ampduFun: true, // ampdu值
@@ -99,8 +101,6 @@ const funConfig = {
     voipFun: true,
   },
 };
-
-
 
 const routes = [{
   path: '/',
@@ -160,6 +160,7 @@ const routes = [{
           id: 'networksettings',
           formUrl: 'goform/get_network_info',
           saveUrl: 'goform/set_network',
+          funConfig: funConfig.network,
           path: '/main/networksettings/networksettings',
           text: _('LAN Settings'),
           component: sNetworkSettings.Screen,
@@ -227,25 +228,6 @@ const routes = [{
           path: '/main/maintenance/timesettings',
           text: _('Time Settings'),
           component: sTimeSettings.Screen,
-        },
-      ],
-    }, {
-      id: 'portalsettings',
-      path: '/main/portalsettings',
-      icon: 'sphere',
-      text: _('Portal'),
-      component: pPortal,
-      indexRoute: {
-        onEnter: (nextState, replace) => replace('main/portalsettings/portalsettings'),
-      },
-      childRoutes: [
-        {
-          id: 'portalsettings',
-          path: '/main/portalsettings/portalsettings',
-          fetchUrl: 'goform/get_portal_info',
-          saveUrl: 'goform/set_portal',
-          text: _('Portal Settings'),
-          component: sPortalSettings.Screen,
         },
       ],
     }, {
@@ -338,7 +320,7 @@ const reducers = {
 
 const stores = remoteActionMiddleware(
   combineReducers(reducers),
-  window.devToolsExtension ? window.devToolsExtension() : f => f
+  window.devToolsExtension ? window.devToolsExtension() : f => f,
 );
 
 const ac5000 = {
@@ -350,3 +332,26 @@ const ac5000 = {
 stores.dispatch(appActions.initAppConfig(guiConfig));
 
 export default ac5000;
+/*
+{
+  id: 'portalsettings',
+  path: '/main/portalsettings',
+  icon: 'sphere',
+  text: _('Portal'),
+  component: pPortal,
+  indexRoute: {
+    onEnter: (nextState, replace) => replace('main/portalsettings/portalsettings'),
+  },
+  childRoutes: [
+    {
+      id: 'portalsettings',
+      noTree: true,
+      path: '/main/portalsettings/portalsettings',
+      fetchUrl: 'goform/get_portal_info',
+      saveUrl: 'goform/set_portal',
+      text: _('Portal Settings'),
+      component: sPortalSettings.Screen,
+    },
+  ],
+},
+*/

@@ -36,7 +36,7 @@ const pNetworkSettings = require('../../screens/App/screens/MainAP/screens/Netwo
 // 子菜单
 const sNetworkSettings = require('../../screens/App/screens/MainAP/screens/NetworkSettings/NetworkSettings');
 
-const pSystemStatus = require('../../screens/App/screens/MainAP/screens/SystemStatus');
+const pSystemStatus = require('../../screens/App/screens/MainAP/screens/SystemStatus/SingleRadioOverview');
 const sSsidDetails = require('../../screens/App/screens/MainAP/screens/SystemStatus/SsidDetails');
 const sClientsDetails = require('../../screens/App/screens/MainAP/screens/SystemStatus/ClientsDetails');
 // 快速设置
@@ -72,13 +72,14 @@ const funConfig = {
   // 网络设置
   network: {
     router: false, // 是否有router模式
+    hasVlan: true,
   },
   // 无线设置页面
   basic: {
     devicemodeOptions: [
       { value: 'ap', label: _('AP') },
-      { value: 'sta', label: _('Station') },
-      { value: 'repeater', label: _('Repeater') },
+      // { value: 'sta', label: _('Station') },
+      // { value: 'repeater', label: _('Repeater') },
     ],
     // 功能项参见WirelessConfig -> Basic页面下的ssidTableFullMemberOptions变量
     ssidTableKeys: ['enable', 'ssid', 'vlanId', 'hideSsid', 'isolation', 'security', 'delete'],
@@ -86,6 +87,7 @@ const funConfig = {
   advance: {
     ledThreshFun: false, // 信号强度控制LED灯功能
     beaconIntervalFun: true, // Beacon帧间间隔
+    distanceFun: false,          // 距离调整拖动条
     dtimIntervalFun: true, // DTIM间隔
     segmentThreshFun: true, // 分片阈值
     ampduFun: true, // ampdu值
@@ -95,6 +97,7 @@ const funConfig = {
   },
   systemmaintenance: {
     poeOutFun: false,
+    voipFun: false,             // VOIP功能
   },
 };
 
@@ -158,6 +161,7 @@ const routes = [{
           id: 'networksettings',
           formUrl: 'goform/get_network_info',
           saveUrl: 'goform/set_network',
+          funConfig: funConfig.network,
           path: '/main/networksettings/networksettings',
           text: _('LAN Settings'),
           component: sNetworkSettings.Screen,

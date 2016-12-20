@@ -351,5 +351,7 @@
   "Peers mac address table. The mac order represents the connection priority. The mac in higher order has the higher priority than mac bellow.The table allows you to drag to re-order to change the priority.":
   "对端MAC地址列表。列表顺序代表了桥接优先级，从上到下优先级依次降低。列表允许拖动排序。",
   "Mac list number can not exceed 10.": "列表中mac地址数量不能超过10个。",
-  "The mac address already exists in the list!": "该mac地址在列表中已经存在！"
+  "The mac address already exists in the list!": "该mac地址在列表中已经存在！",
+  "Primary and Secondary DNS can not be the same !": "主次DNS不能相同！",
+  "Please input a valid MAC address like AA:BB:CC:DD:EE:FF or AA-BB-CC-DD-EE-FF": "请输入正确的MAC地址，比如：AA:BB:CC:DD:EE:FF或AA-BB-CC-DD-EE-FF"
 }

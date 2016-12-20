@@ -8,6 +8,7 @@ const funConfig = {
   // 网络设置
   network: {
     router: false, // 是否有router模式
+    hasVlan: false, // 是否有VLAN功能
   },
   // 无线设置页面
   basic: {
@@ -35,6 +36,7 @@ const funConfig = {
   advance: {
     ledThreshFun: false,        // 信号强度控制LED灯功能
     beaconIntervalFun: true,    // Beacon帧间间隔
+    distanceFun: true,          // 距离调整拖动条
     dtimIntervalFun: true,      // DTIM间隔
     segmentThreshFun: true,     // 分片阈值
     ampduFun: true,             // ampdu值

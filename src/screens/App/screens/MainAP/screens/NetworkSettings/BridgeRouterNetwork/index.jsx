@@ -335,41 +335,47 @@ export default class NetworkSettings extends React.Component {
                   </div>
                 )
               }
-              <h3>{_('VLAN Settings')}</h3>
-              <FormGroup
-                label={_('VLAN Enable')}
-                type="checkbox"
-                checked={vlanEnable === '1'}
-                onClick={() => {
-                  this.props.updateItemSettings({
-                    vlanEnable: vlanEnable === '1' ? '0' : '1',
-                  });
-                }}
-              />
-              <FormGroup
-                type="number"
-                label={_('Management VLAN ID')}
-                disabled={vlanEnable === '0'}
-                help={_('Range: 1 - 4094, Default: 1')}
-                value={mngVlanId}
-                onChange={data => this.props.updateItemSettings({
-                  mngVlanId: data.value,
-                })}
-                required
-                {...validVlanId1}
-              />
-              <FormGroup
-                type="number"
-                label={_('Untagged VLAN ID')}
-                help={_('Range: 1 - 4094, Default: 1')}
-                value={utgVlanId}
-                disabled={vlanEnable === '0'}
-                onChange={data => this.props.updateItemSettings({
-                  utgVlanId: data.value,
-                })}
-                required
-                {...validVlanId2}
-              />
+              {
+                this.props.route.funConfig.hasVlan ? (
+                  <div>
+                    <h3>{_('VLAN Settings')}</h3>
+                    <FormGroup
+                      label={_('VLAN Enable')}
+                      type="checkbox"
+                      checked={vlanEnable === '1'}
+                      onClick={() => {
+                        this.props.updateItemSettings({
+                          vlanEnable: vlanEnable === '1' ? '0' : '1',
+                        });
+                      }}
+                    />
+                    <FormGroup
+                      type="number"
+                      label={_('Management VLAN ID')}
+                      disabled={vlanEnable === '0'}
+                      help={`${_('Range: ')}1 - 4094, ${_('Default: ')}1`}
+                      value={mngVlanId}
+                      onChange={data => this.props.updateItemSettings({
+                        mngVlanId: data.value,
+                      })}
+                      required
+                      {...validVlanId1}
+                    />
+                    <FormGroup
+                      type="number"
+                      label={_('Untagged VLAN ID')}
+                      help={`${_('Range: ')}1 - 4094, ${_('Default: ')}1`}
+                      value={utgVlanId}
+                      disabled={vlanEnable === '0'}
+                      onChange={data => this.props.updateItemSettings({
+                        utgVlanId: data.value,
+                      })}
+                      required
+                      {...validVlanId2}
+                    />
+                  </div>
+                ) : null
+              }
             </div>
           ) : null
         }
@@ -588,14 +594,14 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     utils.extend({}, appActions, sharedActions),
-    dispatch
+    dispatch,
   );
 }
 
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
-  validator.mergeProps(validOptions)
+  validator.mergeProps(validOptions),
 )(NetworkSettings);
 
 export const networksettings = reducer;

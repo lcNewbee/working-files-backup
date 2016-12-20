@@ -208,7 +208,7 @@ export default class Basic extends React.Component {
               <input
                 type="checkbox"
                 checked={val === '1'}
-                disabled={pos === 0}
+                disabled={pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
                 onClick={() => this.onSsidItemChange(val, item, 'enable', (val === '1' ? '0' : '1'))}
                 style={{ marginLeft: '3px' }}
               />
@@ -226,7 +226,7 @@ export default class Basic extends React.Component {
               <FormInput
                 type="text"
                 value={val}
-                disabled={pos === 0}
+                disabled={pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
                 onChange={data => this.onSsidItemChange(val, item, 'ssid', data.value)}
                 style={{
                   marginLeft: '-60px',
@@ -247,7 +247,9 @@ export default class Basic extends React.Component {
               <FormInput
                 type="number"
                 value={val}
-                disabled={pos === 0 || vlanEnable === '0'}
+                disabled={(pos === 0
+                          && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap')
+                          || vlanEnable === '0'}
                 onChange={(data) => {
                   this.onSsidItemChange(val, item, 'vlanId', data.value);
                 }}
@@ -356,7 +358,7 @@ export default class Basic extends React.Component {
                   text={_('Edit')}
                   icon="pencil-square"
                   size="sm"
-                  disabled={pos === 0}
+                  disabled={pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
                   onClick={() => {
                     const tableItemForSsid = fromJS({}).set('val', val)
                           .set('item', item).set('isShow', '1')
@@ -406,7 +408,7 @@ export default class Basic extends React.Component {
                   text={_('Delete')}
                   icon="times"
                   size="sm"
-                  disabled={pos === 0}
+                  disabled={pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
                   onClick={() => this.onDeleteBtnClick(item)}
                 />
               </div>
@@ -916,13 +918,17 @@ export default class Basic extends React.Component {
                       this.props.updateItemSettings({ radioList });
                     }}
                   />
-                  <FormGroup
-                    type="select"
-                    options={funConfig.devicemodeOptions}
-                    value={curData.getIn(['radioList', radioId, 'wirelessMode'])}
-                    onChange={data => this.onChengeWirelessMode(data)}
-                    label={_('Device Mode')}
-                  /> { /* 模式选择下拉框 */}
+                  { // 模式选择下拉框
+                    funConfig.devicemodeOptions.length === 1 && funConfig.devicemodeOptions[0].value === 'ap' ? null : (
+                      <FormGroup
+                        type="select"
+                        options={funConfig.devicemodeOptions}
+                        value={curData.getIn(['radioList', radioId, 'wirelessMode'])}
+                        onChange={data => this.onChengeWirelessMode(data)}
+                        label={_('Device Mode')}
+                      />
+                    )
+                  }
                   <FormGroup
                     label={_('Country')}
                   >
@@ -1568,7 +1574,7 @@ export default class Basic extends React.Component {
         {
           this.props.selfState.get('showMultiSsid') ? (
             <div className="stats-group-cell">
-              <span>{_('Notice: The first SSID can\'t be modefied here !')}</span>
+              {/* <span>{_('Notice: The first SSID can\'t be modefied here !')}</span> */}
               <Table
                 className="table"
                 options={this.props.selfState.get('ssidTableOptions')}
@@ -1627,7 +1633,7 @@ export default class Basic extends React.Component {
                       //   }
                       // }
                       // 判断是否有该功能，没有则不验证
-                      if (this.props.route.funConfig.ssidTableKeys.includes('maxClients')) {
+                      if (this.props.route.funConfig.ssidTableKeys.indexOf('maxClients') !== -1) {
                         if (vapList[i].maxClients === '' || vapList[i].maxClients === '0') {
                           error = _('Max clients number must be positive interger !');
                           break;
@@ -1636,7 +1642,7 @@ export default class Basic extends React.Component {
                       }
                     }
                     if (radioClientLimit !== 0 && totalNum > radioClientLimit) {
-                      error = _('The total number of ssid maximum clients should not exceed ') + `${radioClientLimit}`;
+                      error = `${_('The total number of ssid maximum clients should not exceed ')}${radioClientLimit}`;
                     }
                     // console.log('error', totalNum, radioClientLimit);
                     if (error === '') {

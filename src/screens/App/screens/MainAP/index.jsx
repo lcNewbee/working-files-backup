@@ -191,13 +191,13 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
   appActions,
-  actions
+  actions,
   ), dispatch);
 }
 
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(MainAP);
 
 export const product = reducer;

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fromJS, Map } from 'immutable';
 import { FormGroup, FormInput, Modal, ProgressBar } from 'shared/components';
-import { SaveButton } from 'shared/components/Button';
+import { SaveButton, Button } from 'shared/components/Button';
 import * as appActions from 'shared/actions/app';
 import * as settingActions from 'shared/actions/settings';
 import utils from 'shared/utils';
@@ -322,7 +322,7 @@ export default class SystemMaintenance extends Component {
               type="file"
               id="restoreFile"
             />
-            <SaveButton
+            <Button
               text={_('Restore')}
               icon=""
               onClick={this.onConfigurationRestore}

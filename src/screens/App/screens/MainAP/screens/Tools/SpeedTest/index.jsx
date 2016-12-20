@@ -451,7 +451,7 @@ export default class SpeedTest extends React.Component {
             label={_('Package Length')}
             form="advancedOptions"
             value={this.props.selfState.getIn(['query', 'packagelen'])}
-            help={_('range:128B ~ 1448B')}
+            help={`${_('Range: ')}128B ~ 1448B`}
             onChange={(data) => {
               const pQuery = this.props.selfState.get('query').set('packagelen', data.value);
               this.props.changeQueryData(pQuery);
@@ -464,7 +464,7 @@ export default class SpeedTest extends React.Component {
             label={_('Test Duration')}
             form="advancedOptions"
             value={this.props.selfState.getIn(['query', 'time'])}
-            help={_('range:10s ~ 300s')}
+            help={`${_('Range: ')}10s ~ 300s`}
             onChange={(data) => {
               const pQuery = this.props.selfState.get('query').set('time', data.value);
               this.props.changeQueryData(pQuery);
