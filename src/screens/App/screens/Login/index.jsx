@@ -137,7 +137,7 @@ export default class Login extends Component {
               loginState.purview = 'all';
             }
           } else {
-            result = json.state.msg;
+            result = _(json.state.msg);
           }
         }
         loginState.msg = result;
