@@ -15,19 +15,19 @@
         "userType": 2,
         "userName": "Guest",
         "userPassword": "",
-        "purview": "Readonly"
+        "purview": "2"
       },
       {
         "userType": 1,
         "userName": "Network admin",
         "userPassword": "",
-        "purview": "network"
+        "purview": "1"
       },
       {
         "userType": 1,
         "userName": "Ap Group admin",
         "userPassword": "",
-        "purview": "ap group,network"
+        "purview": "1,2"
       }
     ]
   }

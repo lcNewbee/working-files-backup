@@ -361,16 +361,23 @@ export default class View extends React.Component {
     );
   }
   render() {
-    const myListOptions = listOptions.setIn([0, 'transform'], (val, item) => {
-      const mac = item.get('mac');
-      return (
+    const myListOptions = listOptions.setIn([0, 'transform'], (val, $$item) => {
+      const mac = $$item.get('mac');
+      const statusVal = $$item.get('status');
+      let ret = (
         <span
-          onClick={() => this.onAction('edit', item)}
+          onClick={() => this.onAction('edit', $$item)}
           className="link-text"
         >
-          { item.get('devicename') || mac }
+          { $$item.get('devicename') || mac }
         </span>
       );
+
+      if (statusVal === 'new') {
+        ret = $$item.get('devicename') || mac;
+      }
+
+      return ret;
     });
     let listActionBarChildren = (
       <Button

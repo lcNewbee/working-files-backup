@@ -2,15 +2,15 @@ export const purviewOptions = [
   {
     value: '1',
     module: 'network',
-    label: _('Network'),
+    label: _('NETWORK'),
   }, {
     value: '2',
     module: 'group',
-    label: _('AP Group'),
+    label: _('AP GROUP'),
   }, {
     value: '3',
     module: 'system',
-    label: _('System'),
+    label: _('SYSTEM'),
   },
 ];
 

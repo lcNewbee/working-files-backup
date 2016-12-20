@@ -1,7 +1,7 @@
 export const apStatus = [
   {
     value: 'new',
-    label: _('Offline'),
+    label: _('non-configurable'),
   }, {
     value: 'run',
     label: _('Online'),
