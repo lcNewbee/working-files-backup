@@ -21,8 +21,8 @@ class MapSonList extends CI_Controller {
 		return $result;
 	}
 	//上传
-	public function do_upload() {
-		$config['upload_path'] = '/usr/web/images/mapimg';///var/conf/images';
+	public function do_upload() {				
+		$config['upload_path'] = '/var/conf/images'; /* /usr/web/images/mapimg & /var/conf/images */
 		$config['allowed_types'] = 'gif|jpg|png';
 		$config['overwrite'] = true;
 		$config['max_size'] = 0;
@@ -43,7 +43,7 @@ class MapSonList extends CI_Controller {
 
         $arr['maplist_id'] = element('buildId',$_POST,-1);
         $arr['mapname'] = element('mapImg',$_POST,'Name');
-        $arr['imgpath'] = str_replace('/usr/web','',element('full_path',$data['upload_data']) );
+        $arr['imgpath'] = str_replace('/var/conf/images','/images/mapimg',element('full_path',$data['upload_data']) );
         $arr['locked'] = 1;   
         if ( $this->db->insert('map_son_list', $arr)) {
             $result = json_encode(json_ok());
@@ -69,7 +69,15 @@ class MapSonList extends CI_Controller {
         $result = null;
         $actionType = element('action', $data);
 		if ($actionType === 'add') {
-            $result = $this->do_upload();
+			if( !is_dir('/var/conf/images') ){
+				$result = 'dsaa';
+				//创建并赋予权限
+				mkdir('/var/conf/images');
+				chmod('/var/conf/images',0777);
+				//软连接
+				exec('ln -s /var/conf/images/ /usr/web/images/mapimg');								
+			}
+            $result = $this->do_upload();			
             if($result['state']['code'] === 2000){
                 $result = $this->add_building_list( $result['data']);
             }else{
