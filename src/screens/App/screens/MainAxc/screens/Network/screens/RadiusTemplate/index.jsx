@@ -295,6 +295,7 @@ export default class View extends React.Component {
         listOptions={listOptions}
         defaultEditData={this.defaultEditData}
         modalChildren={this.renderCustomModal()}
+        listKey="template_name"
         selectable
         actionable
       />

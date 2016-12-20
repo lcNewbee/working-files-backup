@@ -22,7 +22,7 @@ const settingsFormOptions = radioBase
           return $$item.updateIn(
             ['options'],
             $$options => $$options.unshift(Map({
-              value: 'auto',
+              value: 0,
               label: _('Automatic'),
             })),
           ).set('disabled', true);

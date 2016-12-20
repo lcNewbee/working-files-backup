@@ -233,15 +233,6 @@ export const advancedSetting = fromJS([
     type: 'checkbox',
     text: _('Enable'),
   }, {
-    id: 'accton_sendtimes',
-    label: _('Accounting-on Resend Times'),
-    fieldset: 'parameter',
-    type: 'number',
-    required: true,
-    defaultValue: '5',
-    min: 3,
-    max: 10,
-  }, {
     id: 'accton_sendinterval',
     label: _('Accounting-on Resend Interval'),
     fieldset: 'acctonAdvance',
@@ -252,15 +243,6 @@ export const advancedSetting = fromJS([
     defaultValue: '3',
     min: 3,
     max: 30,
-  }, {
-    id: 'nasip',
-    label: _('Nas IP'),
-    fieldset: 'parameter',
-    type: 'text',
-    required: true,
-    validator: validator({
-      rules: 'ip',
-    }),
   }, {
     id: 'acct_interim_interval',
     label: _('Accounting Messaging Interval'),
@@ -280,6 +262,7 @@ export const advancedSetting = fromJS([
     defaultValue: '3',
     min: 3,
     max: 10,
+    required: true,
   }, {
     id: 'realretrytimes',
     label: _('Accounting Message-Resend Times'),

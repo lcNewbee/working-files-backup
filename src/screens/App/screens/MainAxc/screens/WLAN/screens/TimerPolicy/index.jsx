@@ -339,19 +339,19 @@ export default class View extends React.Component {
         this.setState({
           objectOptions: fromJS([
             {
-              value: 1,
+              value: '1',
               label: `${_('Radio')}1`,
             },
             {
-              value: 2,
+              value: '2',
               label: `${_('Radio')}2`,
             },
             {
-              value: 3,
+              value: '3',
               label: `${_('Radio')}3`,
             },
             {
-              value: 4,
+              value: '4',
               label: `${_('Radio')}4`,
             },
           ]),

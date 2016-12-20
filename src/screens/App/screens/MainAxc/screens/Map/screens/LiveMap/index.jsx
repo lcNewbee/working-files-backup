@@ -159,6 +159,14 @@ export default class View extends React.Component {
     }));
   }
 
+  componentWillMount() {
+    this.actionable = getActionable(this.props);
+  }
+
+  componentWillUpdate(nextProps) {
+    this.actionable = getActionable(nextProps);
+  }
+
   componentDidUpdate(prevProps) {
     const $$thisData = getCurAppScreenState(this.props.store);
     const $$prevData = getCurAppScreenState(prevProps.store);
@@ -448,7 +456,6 @@ export default class View extends React.Component {
         />
       )
     );
-    const myActionable = getActionable(this.props);
 
     return (
       <div className="m-action-bar" key="actionBar">
@@ -476,7 +483,7 @@ export default class View extends React.Component {
           }}
         />
         {
-          myActionable ? (
+          this.actionable ? (
             <Button
               icon="plus"
               text={_('Add')}
@@ -490,7 +497,7 @@ export default class View extends React.Component {
             />
           ) : null
         }
-        { ((settings.get('type') === '0') && myActionable) ? lockButton : null }
+        { ((settings.get('type') === '0') && this.actionable) ? lockButton : null }
       </div>
     );
   }
