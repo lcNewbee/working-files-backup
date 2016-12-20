@@ -4,6 +4,7 @@ const gutil = require('gulp-util');
 const runSequence = require('run-sequence');
 const $ = require('gulp-load-plugins')();
 const argv = require('minimist')(process.argv.slice(2));
+const shell = require('gulp-shell');
 
 const paths = gulp.paths;
 
@@ -45,3 +46,9 @@ gulp.task('pub:axc', (callback) => {
   gutil.log('切换 AXC 发布目标目录：', gutil.colors.magenta(distPath));
   runSequence('clean:pubaxc', 'config:axc', 'pub:path', ['build'], 'build:axc', 'pub:copyaxc', callback);
 });
+
+gulp.task('pub:axcIndia', shell.task([
+  `gulp pub -n axcIndia -d ${paths.pubAxcIndia}`,
+], {
+  env: { FORCE_COLOR: true },
+}));

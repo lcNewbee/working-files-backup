@@ -6,9 +6,11 @@ const $ = require('gulp-load-plugins')();
 
 const paths = gulp.paths;
 
-gulp.task('webpack', shell.task([
-  'webpack --config webpack.config.production.js',
-]));
+gulp.task('webpack', shell.task(
+  [
+    'webpack --config webpack.config.production.js',
+  ],
+));
 
 gulp.task('build:assets', () =>
   gulp.src(`${paths.src}/assets/**/*`)

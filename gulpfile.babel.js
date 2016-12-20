@@ -19,6 +19,7 @@ const paths = gulp.paths = {
   pub: 'dist',
   pubAc: '../win_ac/software/web/',
   pubAxc: '../axc/apps/web/web',
+  pubAxcIndia: '../axc_branch_india/ac/apps/web/web',
   pubAp: '../qsdk/package/comlanos/goahead/files/web',
   webpack: './webpack.config.dev.js',
   pubWebpack: './webpack.config.production.js',
@@ -37,6 +38,9 @@ require('./tools/gulp/demo');
 require('./tools/gulp/bump');
 require('./tools/gulp/config');
 require('./tools/gulp/test');
+
+// 发布
+require('./tools/gulp/pub');
 
 // 产品相关自定义任务
 require('./tools/gulp/ap');
@@ -70,7 +74,9 @@ gulp.task('pub:path', () => {
 
 gulp.task('open:src', shell.task([
   'babel-node ./tools/srcServer.js',
-]));
+], {
+  env: { FORCE_COLOR: true },
+}));
 gulp.task('open:dist', ['build'], shell.task(['babel-node tools/distServer.js']));
 
 gulp.task('default', ['open:src']);
