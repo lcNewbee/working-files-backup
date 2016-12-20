@@ -64,6 +64,7 @@ $route['goform/network/aci'] = 'networkAci';
 $route['goform/network/Aaa'] = 'networkAaa';
 $route['goform/network/portal/server'] = 'networkPortalServer';
 $route['goform/network/portal/rule'] = 'networkPortalRules';
+$route['goform/network/portal/mac'] = 'networkPortalMac';
 $route['goform/network/radius/template'] = 'networkRadius';
 
 // AP组管理
@@ -72,6 +73,7 @@ $route['goform/group/overview'] = 'groupOverview';
 $route['goform/group/ap'] = 'apRadio/fetch';
 $route['goform/group/ap/radio'] = 'apRadio/radio';
 $route['goform/group/ap/base'] = 'apradio/base';
+$route['goform/group/country/channel'] = 'ApChannel';
 $route['goform/group/client'] = 'monitorUser';
 $route['goform/group/flow/app'] = 'monitorFlow/app';
 $route['goform/group/flow/user'] = 'monitorFlow/user';

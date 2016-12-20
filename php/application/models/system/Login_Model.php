@@ -1,6 +1,6 @@
 <?php
 class Login_Model extends CI_Model {
-	public function __construct() {
+	public function __construct() {		
 		parent::__construct();
 		$this->load->database();
 		$this->load->helper(array('array', 'my_customfun_helper'));
@@ -9,7 +9,7 @@ class Login_Model extends CI_Model {
 		$result = null;
 		$username = element('username', $data, 'root');
 		$password = element('password', $data, '');
-		$sqlcmd = "select userpwd,usertype,purview from admininfo where username='" . $username . "'";
+		$sqlcmd = "select username,userpwd,usertype,purview from admininfo where username='" . $username . "'";
 		$queryda = $this->db->query($sqlcmd);
 		$datarow = $queryda->row();
 		if ($datarow->userpwd === MD5($password)) {
@@ -17,7 +17,7 @@ class Login_Model extends CI_Model {
 			$result['data'] = array(
 				'purview'=>$datarow->purview,
 				'usertype'=>$datarow->usertype
-			);
+			);				
 			/*
 			$logary = array(
 				'type'=>'login',
@@ -27,7 +27,7 @@ class Login_Model extends CI_Model {
 				'description'=>""
 			);
 			Log_Record($this->db,$logary);
-			*/			
+			*/
 		} else {
 			$result = json_no('Username or Password Error');
 		}

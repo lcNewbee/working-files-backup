@@ -16,7 +16,7 @@ class Log_Model extends CI_Model {
 
 		$arr['state'] = array('code' => 2000, 'msg' => 'OK');
 		$arr['data'] = array(
-            'settings' => 15, 
+            'settings' => array(), 
             'page' => array(
 				'start' => 1, 
 				'size' => 20, 
