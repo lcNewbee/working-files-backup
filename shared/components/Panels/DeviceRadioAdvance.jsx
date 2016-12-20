@@ -47,13 +47,13 @@ class DeviceSystem extends React.Component {
     const formData = store.getIn(['data']);
     const myFormOptions = formOptions.map(
       ($$item) => {
-        const maxRateset = formData.get('ratesupport') || 'MCS4';
-        const spatialstreams = formData.get('spatialstreams') || 4;
+        const maxRateset = formData.get('ratesupport') || '';
+        const spatialstreams = formData.get('spatialstreams') || 2;
         let tmpArr = [];
         let $$tmpOptions = [];
         let $$ret = $$item;
 
-        // 自定义控件流
+        // 自定义空间流
         if ($$item.get('id') === 'txchain' || $$item.get('id') === 'rxchain') {
           tmpArr = new Array(parseInt(spatialstreams, 10));
 
@@ -67,9 +67,15 @@ class DeviceSystem extends React.Component {
             },
           );
           $$ret = $$item.set('options', $$tmpOptions);
+
         // 速率集
         } else if ($$item.get('id') === 'rateset') {
-          tmpArr = new Array(parseInt(maxRateset.split('MCS')[1], 10) + 1);
+
+          if (maxRateset.indexOf('MCS') !== -1) {
+            tmpArr = new Array(parseInt(maxRateset.split('MCS')[1], 10) + 1);
+          } else {
+            tmpArr = [];
+          }
 
           $$tmpOptions = fromJS(tmpArr).map(
             (val, index) => {

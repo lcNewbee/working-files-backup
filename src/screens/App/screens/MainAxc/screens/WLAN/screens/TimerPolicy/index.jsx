@@ -48,10 +48,11 @@ const objectsNameOptions = [
   }, {
     value: 'scan',
     label: _('Scan'),
-  }, {
-    value: 'radio',
-    label: _('Radio'),
   },
+  // {
+  //   value: 'radio',
+  //   label: _('Radio'),
+  // },
 ];
 
 const daysOptions = fromJS([
