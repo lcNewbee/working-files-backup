@@ -48,7 +48,7 @@ class DeviceSystem extends React.Component {
     const myFormOptions = formOptions.map(
       ($$item) => {
         const maxRateset = formData.get('ratesupport') || '';
-        const spatialstreams = formData.get('spatialstreams') || 2;
+        const spatialstreams = formData.get('spatialstreams') || 3;
         let tmpArr = [];
         let $$tmpOptions = [];
         let $$ret = $$item;

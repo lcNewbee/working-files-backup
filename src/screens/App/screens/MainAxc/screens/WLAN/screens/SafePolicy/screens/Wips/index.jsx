@@ -94,7 +94,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'rpttime',
-    text: _('Channel Quality Report Submit Time'),
+    text: _('Channel Quality Report Cycle'),
     formProps: {
       type: 'number',
       min: 1,
