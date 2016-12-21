@@ -129,8 +129,8 @@ const sLicense =
     require('../../screens/App/screens/MainAxc/screens/System/screens/License');
 const sSystemLogList =
     require('../../screens/App/screens/MainAxc/screens/System/screens/SystemLog/screens/LogList');
-const sSystemLogSettings =
-    require('../../screens/App/screens/MainAxc/screens/System/screens/SystemLog/screens/LogSettings');
+const sSystemLogMaintenance =
+    require('../../screens/App/screens/MainAxc/screens/System/screens/SystemLog/screens/logMaintenance');
 // const sSNMP =
 //     require('../../screens/App/screens/MainAxc/screens/System/screens/SNMP');
 // const sActiveStandby =
@@ -533,11 +533,11 @@ const routes = [
                 text: _('Log List'),
                 component: sSystemLogList.Screen,
               }, {
-                id: 'systemLog',
-                path: '/main/system/log/settings',
+                id: 'systemLogMaintenance',
+                path: '/main/system/log/maintenance',
                 formUrl: 'goform/system/log',
-                text: _('Log Settings'),
-                component: sSystemLogSettings.Screen,
+                text: _('Log Maintenance'),
+                component: sSystemLogMaintenance.Screen,
               },
             ],
           },

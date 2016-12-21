@@ -124,10 +124,16 @@ export default class View extends React.Component {
 
   onBeforeSave($$actionQuery, $$curListItem) {
     const actionType = $$actionQuery.get('action');
+    const startIp = $$curListItem.get('startIp');
+    const mask = $$curListItem.get('mask');
+    const gateway = $$curListItem.get('gateway');
     let ret = '';
 
     if (actionType === 'add' || actionType === 'edit') {
-      ret = '';
+      ret = validator.combineValid.isSameNet(startIp, mask, gateway, {
+        ipLabel: _('Start IP'),
+        ip2Label: _('Gateway'),
+      });
     }
 
     return ret;

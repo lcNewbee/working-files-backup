@@ -425,7 +425,7 @@ validator.combineValid = {
 
   isSameNet: function(ip, mask, gateway, msgOption) {
     if(!isSameNet(ip, gateway, mask, mask)) {
-      return _("%s and %s must be in the same network segment", );
+      return _("%s and %s must be in the same network segment", msgOption.ipLabel, msgOption.ip2Label);
     }
   },
 
