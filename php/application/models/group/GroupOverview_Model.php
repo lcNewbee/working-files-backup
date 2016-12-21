@@ -19,10 +19,10 @@ class GroupOverview_Model extends CI_Model {
 		$reqdata['size'] = (int)$reqdata['size'];
         $reqdata['timeType'] = (string)$reqdata['timeType'];
         $result = json_decode($staticJsonStr);
- 
-        $result->data->neighborsAps = $this->get_ap_info($reqdata['groupid'],'getdoubtfulssid');                
+
+        $result->data->neighborsAps = $this->get_ap_info($reqdata['groupid'],'getdoubtfulssid');
         $result->data->aroundAps = $this->get_ap_info($reqdata['groupid'],'getaroundssid');
-        $result->data->flowList = $this->flow_list($reqdata);
+        //$result->data->flowList = $this->flow_list($reqdata);
 
 		return $result;
 	}
@@ -39,10 +39,10 @@ class GroupOverview_Model extends CI_Model {
                 "lastPage"=>2
             ),
             'list'=>array()
-        );     
+        );
         if(!empty($groupid)) {
-            $db_list = array();                                
-            $queryd = $this->mysql->query("call ".$prename."(".$groupid.")");            
+            $db_list = array();
+            $queryd = $this->mysql->query("call ".$prename."(".$groupid.")");
             $result = $queryd->result_array();
             $temporaryAry = array();
             foreach ($result as $row) {
@@ -50,7 +50,7 @@ class GroupOverview_Model extends CI_Model {
                 $temporaryAry['channel'] = $row['ChlNum'];
                 $temporaryAry['rssi'] = $row['MeanRSSI'];
                 $db_list[] = $temporaryAry;
-            }            
+            }
             $arr['list'] = $db_list;
             $arr['page']['total'] = count($result);
 
@@ -59,14 +59,14 @@ class GroupOverview_Model extends CI_Model {
         return $arr;
 	}
     //流量
-    public function flow_list($data) {        
+    public function flow_list($data) {
         $groupid = (int)element('groupid',$data,0);
         $timeType = (string)element('timeType',$data,'today');
         $tablename = 'data_flow_day';
         if($timeType === 'today' || $timeType === 'yesterday'){
             $tablename = 'data_flow_hour';
         }
-        $timewh = $this->get_start_end_time($timeType);                        
+        $timewh = $this->get_start_end_time($timeType);
         $sqlstr = "select * from ".$tablename." where ApGroupId=".$groupid." and Timer>='".$timewh['start_date']."' and Timer <= '".$timewh['end_date']."'";
         $querydata = $this->mysql->query($sqlstr);
 
@@ -83,27 +83,27 @@ class GroupOverview_Model extends CI_Model {
             array('name'=>'wireless','data'=>$wireessAry),
             array('name'=>'clients','data'=>$clientAry)
         );
-        return $arr;      
+        return $arr;
     }
-    public function get_start_end_time($gettype='today') {     
-        date_default_timezone_set('Asia/Shanghai');    
+    public function get_start_end_time($gettype='today') {
+        date_default_timezone_set('Asia/Shanghai');
         //echo (string)exec('date "+%Y-%m-%d %H:%M:%S"');
         //当天初始时间
         $stateDate = (string)exec('date "+%Y-%m-%d"')." 00:00:00";
         //当天结束时间
-        $endDate = (string)exec('date "+%Y-%m-%d"')." 24:00:00";        
-        $startTime = (int)strtotime($stateDate);        
+        $endDate = (string)exec('date "+%Y-%m-%d"')." 24:00:00";
+        $startTime = (int)strtotime($stateDate);
         switch($gettype){
-            case 'yesterday' : 
-                $startTime = $startTime - (1 * 86400);                
+            case 'yesterday' :
+                $startTime = $startTime - (1 * 86400);
                 $endDate = $stateDate;
                 break;
-            case 'week': $startTime = $startTime - (7 * 86400); 
+            case 'week': $startTime = $startTime - (7 * 86400);
                 break;
-            case 'half_month': $startTime = $startTime - (15 * 86400); 
+            case 'half_month': $startTime = $startTime - (15 * 86400);
                 break;
-            case 'month': $startTime = $startTime - (30 * 86400); 
-                break;                
+            case 'month': $startTime = $startTime - (30 * 86400);
+                break;
             default:
                 break;
         }
@@ -111,5 +111,5 @@ class GroupOverview_Model extends CI_Model {
         $arr['start_date'] = $stateDate;
         $arr['end_date'] = $endDate;
         return $arr;
-    }    
+    }
 }
