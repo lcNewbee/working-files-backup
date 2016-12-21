@@ -99,6 +99,7 @@ $route['goform/system/ap/version'] = 'systemApVersion';
 $route['goform/system/status'] = 'systemStatus';
 $route['goform/system/alarmEvents'] = 'systemAlarm';
 $route['goform/system/log'] = 'systemLog';
+$route['goform/system/logdownload'] = 'systemLog/logdownload';
 $route['goform/system/admins'] = 'systemAdmin';
 $route['goform/system/maintenance'] = 'systemMaintenance';
 $route['goform/system/backup'] = 'systemMaintenance/backup';

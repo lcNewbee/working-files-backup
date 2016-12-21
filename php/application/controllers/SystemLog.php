@@ -33,4 +33,11 @@ class SystemLog extends CI_Controller {
 			echo $result;
 		}
 	}
+	public function logdownload() {
+		//download
+		$this->load->helper('download');
+		$data = file_get_contents("/var/log/messages");
+		$name = 'messages';
+		force_download($name, $data);
+    }
 }

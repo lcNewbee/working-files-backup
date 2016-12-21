@@ -4,8 +4,7 @@ class SystemMaintenance extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this->load->database();
-		$this->load->helper('array');		
-		//$this->load->model('system/Log_Model');
+		$this->load->helper('array');				
 	}
 	function fetch() {
         /*
@@ -38,6 +37,11 @@ class SystemMaintenance extends CI_Controller {
         //系统备份        
         //copy('/var/run/config.db','/var/conf/config.db');
         exec('cp /var/run/config.db /var/conf/config.db');
+		//download
+		$this->load->helper('download');
+		$data = file_get_contents("/var/conf/config.db");
+		$name = 'config.db';
+		force_download($name, $data);
     }
     public function reboot() {
         //重启系统

@@ -32,12 +32,13 @@ class Log_Model extends CI_Model {
 	}
 	public function log_delete($data) {
 		$result = null;
+		if(count($data['selectedList']) > 0){
+			foreach($data['selectedList'] as $res) {
+				$this->db->where('id', $res);
+				$result = $this->db->delete('web_log');
+			}
+		}
 		$result = json_ok();
-		return json_encode($result);
-	}
-	public function log_cfg($data) {
-		$result = null;
-		$result = json_no();
 		return json_encode($result);
 	}
 }

@@ -3,127 +3,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // require_once('/libraries/Response.php');
 class Group extends CI_Controller {
 	public function __construct() {
-		parent::__construct();
-		$this->load->database();
+		parent::__construct();		
 		$this->load->helper('array');
+		$this->load->model('group/Group_Model');
 	}
-	function fetch() {
-		$apGroups = $this->db->select('ap_group.id,ap_group.group_name,ap_group.remark,wids_template.acltype')
-		                          ->from('ap_group')
-		                          ->join('wids_template','ap_group.wids_tmp_id=wids_template.id','left')
-		                          ->where('ap_group.id >1')
-		                          ->get()->result_array();
-
-		$allGroupAps = $this->db->select('id')
-		                          ->from('ap_list')
-		                          ->get()->result_array();
-		$retList = array();
-		// 		所有组
-		      array_push($retList, array(
-		          'groupname' => 'All Group',
-		          'remark' => '',
-		          'apNum' => sizeof($allGroupAps),
-		          'id' => - 100
-		          )
-		      );
-		foreach ($apGroups as $group) {
-			$groupItem = array(
-			              'groupname' => element('group_name', $group),
-			              'remark' => element('remark', $group, ''),
-			              'id' => element('id', $group),
-			              'aclType'=> element('acltype',$group)
-			          );
-			$aps = $this->db->select('group_id')
-			                          ->from('ap_list')
-			                          ->where('group_id', $groupItem['id'])
-			                          ->get()->result_array();
-
-			$groupItem['apNum'] = sizeof($aps);
-			array_push($retList, $groupItem);
-		}
-		$result = array('state' => array('code' => 2000, 'msg' => 'OK'), 'data' => array('list' => $retList));
-		return $result;
-	}
-  function getCgiParam($oriData) {
-			$retData = array(
-			            'groupname' => element('groupname', $oriData),
-			            'remark' => element('remark', $oriData),
-			            'groupid' => (int)element('id', $oriData, -1),
-			            'aplist' => element('aplist', $oriData, -1)
-			        );
-			return $retData;
-	}
-	function onAction($data) {
-		$result = null;
-		$actionType = element('action', $data);
-
-		if ($actionType === 'add') {
-			$temp_data= $this->getCgiParam($data);
-			$result=axc_add_apgroup(json_encode($temp_data));
-		}
-		elseif ($actionType === 'edit') {
-			$temp_data= $this->getCgiParam($data);
-			$result=axc_modify_apgroup(json_encode($temp_data));
-		}
-		elseif ($actionType === 'deleteGroup') {
-			$result=axc_del_apgroup(json_encode($data));
-		}
-		elseif ($actionType === 'move') {
-			$result=axc_aps_move_to_apgroup(json_encode($data));
-		}
-		elseif ($actionType === 'deleteGroupAps') {
-			$temp_data = array(
-			                'aplist'=>element('aplist', $data),
-			                'groupid'=>(int)element('groupid', $data, -1),
-			            );
-			$result=axc_del_aptogroup(json_encode($temp_data));
-		}
-		elseif ($actionType === 'groupApAdd') {
-			$temp_data = array(
-			                'apmac'=>element('apmac', $data),
-			                'name'=>substr(element('name', $data),0,31),
-			                'model'=>element('model', $data),
-			                'groupid'=>(int)element('groupid', $data, -1),
-			            );
-			if (element('type', $data) === 'auto') {
-				$temp_data = array(
-				                    'groupid'=>(int)element('groupid', $data, -1),
-				                    'autoaplist'=>element('aplist', $data),
-				                );
-			}
-			$q = $this->db->select('name')
-			                            ->from('ap_list')
-			                            ->where('name', element('name', $data))
-			                            ->get()->result_array();
-
-			$q_mac=$this->db->select('mac')
-			                            ->from('ap_list')
-			                            ->where('mac', element('apmac', $data))
-			                            ->get()->result_array();
-
-			if(sizeof($q)> 0){
-				$result=array(
-				                    'state'=>array(
-				                        'code'=>6000,
-				                        'msg'=>'the apname is not availble!'
-				                    )
-				                );
-			}
-			elseif (sizeof($q_mac) > 0){
-				$result=array(
-				                    'state'=>array(
-				                        'code'=>6001,
-				                        'msg'=>'mac is not availble!'
-				                    )
-				                );
-			}
-			else {
-				$result=axc_add_aptogroup(json_encode($temp_data));
-			}
-		}
-		return $result;
-	}
-
 	public function index() {
 		$result = null;
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -136,4 +19,31 @@ class Group extends CI_Controller {
 			echo json_encode($result);
 		}
 	}
+	function fetch() {
+		$result = null;
+		$result = $this->Group_Model->get_apgroup_info();
+		return $result;
+	}
+	function onAction($data) {
+		$result = null;
+		$actionType = element('action', $data);		
+		switch($actionType) {			
+			case "add" : $result = $this->Group_Model->add_apgroup($data);
+				break; 
+			case "edit" : $result = $this->Group_Model->up_apgroup($data);
+				break; 
+			case "deleteGroup" : $result = $this->Group_Model->del_apgroup($data);
+				break; 
+			case "move" : $result = $this->Group_Model->ap_move($data);
+				break; 
+			case "deleteGroupAps" : $result = $this->Group_Model->del_apgroup_ap($data);
+				break; 
+			case "groupApAdd" : $result = $this->Group_Model->add_apgroup_ap($data);
+				break; 
+			default :
+				$result = null;
+				break;
+		}	
+		return $result;
+	}	
 }
