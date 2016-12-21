@@ -130,7 +130,7 @@ filter.fn = filter.prototype = {
   transform: function (str) {
     var len = this.rules.length;
     var ret = str;
-    var args, rulesArr, i, ruleObj;
+    var args, i, ruleObj;
 
     if (str === undefined) {
       return;

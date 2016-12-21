@@ -36,7 +36,7 @@ export const apStatus = [
     value: 'build',
     label: _('Offline'),
   }, {
-    value: 'unkown',
+    value: 'unknown',
     label: _('Offline'),
   },
 ];

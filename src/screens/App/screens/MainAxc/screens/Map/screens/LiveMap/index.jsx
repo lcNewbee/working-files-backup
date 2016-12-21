@@ -131,36 +131,40 @@ export default class View extends React.Component {
         }
       },
     8000);
-
-    this.listTableOptions = listTableOptions.push(fromJS({
-      id: 'actions',
-      text: _('Actions'),
-      width: '180',
-      transform: (val, $$item, index) => (
-        <div className="action-btns">
-          <Button
-            icon="edit"
-            text={_('Edit')}
-            size="sm"
-            onClick={() => {
-              this.props.editListItemByIndex(index);
-            }}
-          />
-          <Button
-            icon="trash"
-            text={_('Delete')}
-            size="sm"
-            onClick={() => {
-              this.onRemoveItem($$item.get('id'));
-            }}
-          />
-        </div>
-      ),
-    }));
   }
 
   componentWillMount() {
     this.actionable = getActionable(this.props);
+
+    if (this.actionable) {
+      this.listTableOptions = listTableOptions.push(fromJS({
+        id: 'actions',
+        text: _('Actions'),
+        width: '180',
+        transform: (val, $$item, index) => (
+          <div className="action-btns">
+            <Button
+              icon="edit"
+              text={_('Edit')}
+              size="sm"
+              onClick={() => {
+                this.props.editListItemByIndex(index);
+              }}
+            />
+            <Button
+              icon="trash"
+              text={_('Delete')}
+              size="sm"
+              onClick={() => {
+                this.onRemoveItem($$item.get('id'));
+              }}
+            />
+          </div>
+        ),
+      }));
+    } else {
+      this.listTableOptions = listTableOptions;
+    }
   }
 
   componentWillUpdate(nextProps) {
@@ -256,9 +260,9 @@ export default class View extends React.Component {
       },
       icon: item.get('markerType') === 'ap' ?
           apIcon : buildingIcon,
-      title: item.get('markerTitle'),
+      title: item.get('markerTitle') || '',
       label: {
-        text: item.get('markerTitle'),
+        text: item.get('markerTitle') || '',
       },
       draggable: item.get('isLocked') !== '1',
       animation: google.maps.Animation.DROP,
@@ -277,11 +281,10 @@ export default class View extends React.Component {
                               '</dl>' +
                             '</div>' +
                             '<div class="m-map__marker-infowindow-footer">' +
-                              '<button class="a-btn a-btn--primary" id="editBulid' + markerId + '">' + _('Edit') + '</button>' +
+                              (this.actionable ? ('<button class="a-btn a-btn--primary" id="editBulid' + markerId + '">' + _('Edit') + '</button>') : '') +
                               '<button class="a-btn a-btn--info" id="viewBulid' + markerId + '">' + _('View') + '</button>' +
                             '</div>' +
                           '</div>';
-
     const infowindow = new google.maps.InfoWindow({
       content: contentString,
       maxWidth: 500,
@@ -525,8 +528,8 @@ export default class View extends React.Component {
         defaultSettingsData={{
           type: '0',
         }}
-        noTitle
         actionable
+        noTitle
         addable
       >
         {

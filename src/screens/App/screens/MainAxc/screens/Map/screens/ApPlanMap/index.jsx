@@ -10,6 +10,7 @@ import Button from 'shared/components/Button/Button';
 import SaveButton from 'shared/components/Button/SaveButton';
 import Icon from 'shared/components/Icon';
 import Modal from 'shared/components/Modal';
+import { getActionable } from 'shared/axc';
 import { FormGroup } from 'shared/components/Form';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
@@ -126,6 +127,7 @@ export default class View extends React.Component {
   }
 
   componentWillMount() {
+    this.actionable = getActionable(this.props);
     this.fetchMapList();
   }
 
@@ -275,9 +277,12 @@ export default class View extends React.Component {
     this.props.changeScreenActionQuery({
       action: type,
     });
-    this.props.onListAction('', {
-      needMerge: true,
-    });
+
+    if (this.actionable) {
+      this.props.onListAction('', {
+        needMerge: true,
+      });
+    }
   }
   updateState(data) {
     this.setState(utils.extend({}, data));
@@ -306,42 +311,49 @@ export default class View extends React.Component {
     const isLocked = $$device.getIn(['map', 'locked']) === '1';
     const deviceMac = $$device.get('mac');
     const isOpen = this.state.curShowOptionDeviceMac === deviceMac;
-    const btnsList = [
-      {
-        id: 'lock',
-        icon: isLocked ? 'unlock' : 'lock',
-        onClick: () => this.props.updateListItemByIndex(i, {
-          map: {
-            locked: isLocked ? '0' : '1',
-          },
-        }),
-      }, {
-        id: 'config',
-        icon: 'cog',
-        onClick: mac => this.props.addToPropertyPanel({
-          mac,
-        }, $$device.toJS()),
-      }, {
-        icon: 'times',
-        id: 'close',
-        onClick: () => {
-          this.props.changeScreenActionQuery({
-            action: 'delete',
-            mapId: curMapId,
-            selectedList: [deviceMac],
-          });
-          this.props.onListAction();
-        },
-      },
-    ];
     const radius = 38;
-    const avd = 220 / btnsList.length;
-    const ahd = (avd * Math.PI) / 180;
     const isCur = !curMapId || (curMapId === $$device.getIn(['map', 'id']));
+    let avd = 1;
+    let ahd = 1;
+    let btnsList = [];
 
     let ret = null;
     let deviceClassName = 'm-device';
     let avatarClass = 'm-device__avatar';
+
+    if (this.actionable) {
+      btnsList = [
+        {
+          id: 'lock',
+          icon: isLocked ? 'unlock' : 'lock',
+          onClick: () => this.props.updateListItemByIndex(i, {
+            map: {
+              locked: isLocked ? '0' : '1',
+            },
+          }),
+        }, {
+          id: 'config',
+          icon: 'cog',
+          onClick: mac => this.props.addToPropertyPanel({
+            mac,
+          }, $$device.toJS()),
+        }, {
+          icon: 'times',
+          id: 'close',
+          onClick: () => {
+            this.props.changeScreenActionQuery({
+              action: 'delete',
+              mapId: curMapId,
+              selectedList: [deviceMac],
+            });
+            this.props.onListAction();
+          },
+        },
+      ];
+    }
+
+    avd = 220 / btnsList.length;
+    ahd = (avd * Math.PI) / 180;
 
     // 只在渲染当前 Map 里的 AP
     if (isCur) {
@@ -474,15 +486,20 @@ export default class View extends React.Component {
                 <div
                   className="m-thumbnail"
                 >
-                  <Icon
-                    name="times"
-                    className="close"
-                    onClick={
-                      () => {
-                        this.deleteMapList(mapId);
-                      }
-                    }
-                  />
+                  {
+                    this.actionable ? (
+                      <Icon
+                        name="times"
+                        className="close"
+                        onClick={
+                          () => {
+                            this.deleteMapList(mapId);
+                          }
+                        }
+                      />
+                    ) : null
+                  }
+
                   <div
                     className="m-thumbnail__content"
                     onClick={() => {
@@ -526,18 +543,21 @@ export default class View extends React.Component {
             );
           })
         }
-
-        <div
-          className="cols col-3"
-          onClick={this.props.addListItem}
-        >
-          <div className="o-map-list__add">
-            <Icon
-              name="plus"
-              size="3x"
-            />
-          </div>
-        </div>
+        {
+          this.actionable ? (
+            <div
+              className="cols col-3"
+              onClick={this.props.addListItem}
+            >
+              <div className="o-map-list__add">
+                <Icon
+                  name="plus"
+                  size="3x"
+                />
+              </div>
+            </div>
+          ) : null
+        }
       </div>
     );
   }
@@ -721,27 +741,31 @@ export default class View extends React.Component {
               }
             </div>
             <div className="o-list__footer o-devices-list__footer">
-              <Button
-                icon="plus"
-                theme="primary"
-                text={_('Add AP to Group')}
-                onClick={
-                  () => {
-                    this.props.selectManageGroupAp({
-                      id: this.props.groupid,
-                    });
-                    this.props.fetchModelList();
-                    this.props.resetGroupAddDevice();
-                    this.props.fetchGroupAps(-1);
-                    this.props.showMainModal({
-                      title: _('Add AP to Group'),
-                      size: 'md',
-                      isShow: true,
-                      name: 'groupApAdd',
-                    });
-                  }
-                }
-              />
+              {
+                this.actionable ? (
+                  <Button
+                    icon="plus"
+                    theme="primary"
+                    text={_('Add AP to Group')}
+                    onClick={
+                      () => {
+                        this.props.selectManageGroupAp({
+                          id: this.props.groupid,
+                        });
+                        this.props.fetchModelList();
+                        this.props.resetGroupAddDevice();
+                        this.props.fetchGroupAps(-1);
+                        this.props.showMainModal({
+                          title: _('Add AP to Group'),
+                          size: 'md',
+                          isShow: true,
+                          name: 'groupApAdd',
+                        });
+                      }
+                    }
+                  />
+                ) : null
+              }
             </div>
           </div>
         </div>
