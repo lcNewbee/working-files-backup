@@ -2,6 +2,7 @@
 class Login_Model extends CI_Model {
 	public function __construct() {		
 		parent::__construct();
+		$this->load->library('session');
 		$this->load->database();
 		$this->load->helper(array('array', 'my_customfun_helper'));
 	}
@@ -17,8 +18,12 @@ class Login_Model extends CI_Model {
 			$result['data'] = array(
 				'purview'=>$datarow->purview,
 				'usertype'=>$datarow->usertype
-			);				
-			/*
+			);	
+			$sessiondata = array(
+				'username' => $username,
+				'purview' => $datarow->purview
+			);
+			$this->session->set_userdata($sessiondata);			
 			$logary = array(
 				'type'=>'login',
 				'operator'=>$username,
@@ -27,7 +32,6 @@ class Login_Model extends CI_Model {
 				'description'=>""
 			);
 			Log_Record($this->db,$logary);
-			*/
 		} else {
 			$result = json_no('Username or Password Error');
 		}

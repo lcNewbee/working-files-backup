@@ -3,6 +3,7 @@ class SystemAdmin_Model extends CI_Model {
 	public function __construct() {
 		parent::__construct();
 		$this->load->database();
+        $this->load->library('session');
 		$this->load->helper(array('array', 'my_customfun_helper'));
 		$this->load->library('SqlPage');
 	}
@@ -32,6 +33,15 @@ class SystemAdmin_Model extends CI_Model {
             $insertdata['purview'] = $data['purview'];
             $result = $this->db->insert('admininfo', $insertdata);
             if ($result) {
+                //log                
+                $logary = array(
+                    'type'=>'Add',
+                    'operator'=>element('username',$_SESSION,''),
+                    'operationCommand'=>"Add ".$insertdata['username']." account",
+                    'operationResult'=>'ok',
+                    'description'=>""
+                );
+                Log_Record($this->db,$logary);                
                 $result = json_ok();
             } else {
                 $result = json_no('data base busy');
@@ -55,6 +65,15 @@ class SystemAdmin_Model extends CI_Model {
             $updata['purview'] = $data['purview'];
             $result = $this->db->replace('admininfo', $updata);
             if ($result) {
+                //log                
+                $logary = array(
+                    'type'=>'Update',
+                    'operator'=>element('username',$_SESSION,''),
+                    'operationCommand'=>"Update ".$updata['username']." account",
+                    'operationResult'=>'ok',
+                    'description'=>""
+                );
+                Log_Record($this->db,$logary);
                 $result = json_ok();
             } else {
                 $result = json_no('data base busy');
@@ -67,6 +86,15 @@ class SystemAdmin_Model extends CI_Model {
 		$this->db->where('id', $data['id']);
 		$result = $this->db->delete('admininfo');
 		if ($result) {
+            //log            
+            $logary = array(
+                'type'=>'Delete',
+                'operator'=>element('username',$_SESSION,''),
+                'operationCommand'=>"Delete  account",
+                'operationResult'=>'ok',
+                'description'=>""
+            );
+            Log_Record($this->db,$logary);
 			$result = json_ok();
 		} else {
 			$result = json_no('data base busy');
