@@ -90,7 +90,7 @@ export default class View extends React.Component {
           this.props.createModal({
             role: 'loading',
             title: '',
-            loadingStep: 3000,
+            loadingStep: 3200,
             loadingTitle: curHandle.loadingTitle,
             onLoaded: () => {
               this.props.closeModal();

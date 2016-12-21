@@ -6,7 +6,9 @@ import { bindActionCreators } from 'redux';
 import validator from 'shared/utils/lib/validator';
 import AppScreen from 'shared/components/Template/AppScreen';
 import { FormGroup } from 'shared/components/Form';
-import { purviewOptions } from 'shared/config/axc';
+import {
+  purviewOptions, PURVIEW_ADMIN, PURVIEW_GUEST,
+} from 'shared/config/axc';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
@@ -38,7 +40,7 @@ const listOptions = fromJS([
     text: _('Purview'),
     defaultValue: '',
     options: purviewOptions,
-
+    multi: true,
     formProps: {
       component(option, ...rest) {
         const myProps = option;
@@ -87,7 +89,7 @@ const propTypes = {
   store: PropTypes.instanceOf(Map),
 
   route: PropTypes.object,
-  save: PropTypes.func,
+  updateCurEditListItem: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -95,20 +97,24 @@ export default class View extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onAction = this.onAction.bind(this);
+    this.onBeforeSave = this.onBeforeSave.bind(this);
   }
 
-  onAction(no, type) {
-    const query = {
-      no,
-      type,
-    };
+  onBeforeSave($$actionQuery, $$curListItem) {
+    const actionType = $$actionQuery.get('action');
+    const userType = $$curListItem.get('userType');
 
-    this.props.save(this.props.route.formUrl, query)
-      .then((json) => {
-        if (json.state && json.state.code === 2000) {
-        }
-      });
+    if ('add,edit'.indexOf(actionType) !== -1) {
+      if (userType === 0) {
+        this.props.updateCurEditListItem({
+          purview: PURVIEW_ADMIN,
+        });
+      } else if (userType === 2) {
+        this.props.updateCurEditListItem({
+          purview: PURVIEW_GUEST,
+        });
+      }
+    }
   }
 
   render() {
@@ -126,6 +132,7 @@ export default class View extends React.Component {
         store={myStore}
         listOptions={listOptions}
         actionable={isAdmin}
+        onBeforeSave={this.onBeforeSave}
       />
     );
   }

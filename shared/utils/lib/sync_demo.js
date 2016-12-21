@@ -61,11 +61,12 @@ var sync = {
 
     return fetch(url, {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Accept': 'application/json',
         'Cache-Control': 'no-cache',
         'If-Modified-Since': '1',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: data
     })
@@ -83,6 +84,7 @@ var sync = {
   postForm: function (url, form) {
     return fetch(url, {
       method: 'POST',
+      credentials: 'include',
       body: new FormData(form)
     })
   },
@@ -102,10 +104,12 @@ var sync = {
     }
     return fetch(url, {
       method: 'GET',
+      credentials: 'include',
       headers: {
         'Accept': 'application/json',
         'Cache-Control': 'no-cache',
-        'If-Modified-Since': '1'
+        'If-Modified-Since': '1',
+        'credentials': 'include'
       }
     })
       .then(checkStatus)

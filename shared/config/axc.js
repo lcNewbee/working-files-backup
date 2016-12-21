@@ -1,3 +1,6 @@
+export const PURVIEW_ADMIN = 'All';
+export const PURVIEW_GUEST = 'Read-only';
+
 export const purviewOptions = [
   {
     value: '1',
