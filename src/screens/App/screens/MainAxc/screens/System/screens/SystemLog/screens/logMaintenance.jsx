@@ -1,7 +1,7 @@
-import React, { PropTypes } from 'react';
-import utils, { immutableUtils } from 'shared/utils';
+import React from 'react';
+import utils from 'shared/utils';
 import { connect } from 'react-redux';
-import { fromJS, Map } from 'immutable';
+import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import AppScreen from 'shared/components/Template/AppScreen';
 import FormGroup from 'shared/components/Form/FormGroup';
@@ -42,7 +42,7 @@ export default class View extends React.Component {
     return (
       <AppScreen
         {...this.props}
-        settingsFormOptions={settingsFormOptions}
+        // settingsFormOptions={settingsFormOptions}
         noTitle
       >
         <div className="o-form">

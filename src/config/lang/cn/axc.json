@@ -36,6 +36,7 @@
   "Username or Password Error": "用户名或密码错误",
   "all": "所有",
   "non-configurable": "不可配置",
+  "Download": "下载",
 
   "Radio Base": "Radio基本配置",
   "Radio Advance": "Radio高级配置",
@@ -441,6 +442,7 @@
   "Log Settings": "日志设置",
   "Log Maintenance": "日志维护",
   "Log Duration": "日志保存时间",
+  "Download System Log": "下载系统日志",
 
   "Expiration Date": "过期日期",
 
