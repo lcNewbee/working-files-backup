@@ -105,7 +105,8 @@ let config = {
           path.resolve(__dirname, "src"),
           path.resolve(__dirname, "shared"),
           path.resolve(__dirname, "test"),
-          path.resolve(__dirname, "tools")
+          path.resolve(__dirname, "tools"),
+          path.resolve(__dirname, "node_modules/react-dates"),
         ],
         // exclude: /node_modules/,
         loader: 'babel',

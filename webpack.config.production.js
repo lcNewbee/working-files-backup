@@ -128,7 +128,12 @@ module.exports = {
         loader: ExtractTextPlugin.extract('css-loader?minimize!postcss-loader!sass'),
       }, {
         test: /\.(jsx|js)?$/,
-        exclude: /node_modules/,
+        include: [
+          path.resolve(__dirname, "src"),
+          path.resolve(__dirname, "shared"),
+          path.resolve(__dirname, "test"),
+          path.resolve(__dirname, "tools"),
+        ],
         loader: 'babel?cacheDirectory=true',
       }
     ],

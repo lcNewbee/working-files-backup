@@ -36,6 +36,7 @@ class Row extends Component {
     const { isTh, options, isSelectAll, selectable, item, index } = this.props;
     let tds;
 
+    // 渲染表格头部 th
     if (isTh) {
       tds = options.map((option, i) =>
         <th key={`tableRow${i}`} width={option.get('width')}>
@@ -56,59 +57,116 @@ class Row extends Component {
           </th>
         ));
       }
+
+    // 渲染表格内容 td
     } else {
       tds = options.map((option, i) => {
         const id = option.get('id');
         const filterObj = option.get('filterObj');
         const thisKey = `tableRow${i}`;
-        let currVal = item.get(id);
-        let $$currItem = null;
-        let tdDom = null;
+        const originVal = item.get(id);
+        let currVal = originVal;
+        let currItemArr = [];
+        let currValArr = [];
 
+        // 优先过滤处理值
         if (filterObj && typeof filterObj.transform === 'function') {
           currVal = filterObj.transform(currVal);
         }
 
+        // 如果没有自定义渲染函数，依据配置渲染
         if (!option.get('transform')) {
-          if (option.get('options') && option.get('options').size > 0) {
-            $$currItem = option.get('options').find((myMap) => {
-              let ret = false;
+          if (currVal !== undefined) {
+            // options 则需要渲染 value 对应的 label 值
+            if (option.get('options') && option.get('options').size > 0) {
 
-              if (myMap && typeof myMap.get === 'function') {
-                ret = myMap.get('value') === currVal;
-              } else {
-                ret = myMap === currVal;
-              }
-              return ret;
-            });
+              // 如果是多选
+              if (option.get('multi')) {
+                currItemArr = currVal.split(',').map(
+                  itemVal => option.get('options').find((myMap) => {
+                    let ret = false;
 
-            if ($$currItem) {
-              if (typeof $$currItem.get === 'function') {
-                if (typeof $$currItem.get('render') === 'function') {
-                  currVal = $$currItem.get('render')();
-                } else {
-                  currVal = $$currItem.get('label');
-                }
+                    if (myMap && typeof myMap.get === 'function') {
+                      ret = myMap.get('value') === itemVal;
+                    } else {
+                      ret = myMap === itemVal;
+                    }
+                    return ret;
+                  }),
+                );
+
+              // 单选
               } else {
-                currVal = $$currItem;
+                currItemArr.push(
+                  option.get('options').find((myMap) => {
+                    let ret = false;
+
+                    if (myMap && typeof myMap.get === 'function') {
+                      ret = myMap.get('value') === currVal;
+                    } else {
+                      ret = myMap === currVal;
+                    }
+                    return ret;
+                  }),
+                );
               }
+
+              currValArr = currItemArr.map(
+                ($$currItem) => {
+                  let retVal = '';
+
+                  if ($$currItem) {
+                    // 如果是 map 对象
+                    if (typeof $$currItem.get === 'function') {
+                      if (typeof $$currItem.get('render') === 'function') {
+                        retVal = $$currItem.get('render')();
+                      } else {
+                        retVal = $$currItem.get('label');
+                      }
+
+                    // 文本
+                    } else {
+                      retVal = $$currItem;
+                    }
+                  }
+                  return retVal;
+                },
+              ).filter(
+                curVal => !!curVal,
+              );
             }
+
+            // 如果 node列表长度大于0，需要添加分割符 ','
+            if (currValArr.length > 1) {
+              currVal = [];
+              currValArr.forEach(
+                (curVal, n) => {
+                  currVal.push(curVal);
+
+                  if (n < currValArr.length - 1) {
+                    currVal.push(', ');
+                  }
+                },
+              );
+            } else if (currValArr.length === 1) {
+              currVal = currValArr[0];
+            }
+
+          // 显示默认值
+          } else {
+            currVal = option.get('defaultValue') || '';
           }
 
-          if (currVal === undefined && option.get('defaultValue') !== undefined) {
-            currVal = option.get('defaultValue');
-          }
-
-          tdDom = <td key={thisKey}>{currVal}</td>;
+        // 使用自定义渲染函数
         } else {
-          tdDom = (
-            <td key={thisKey}>
-              {option.get('transform')(currVal, item, index)}
-            </td>
-          );
+          currVal = option.get('transform')(currVal, item, index);
         }
 
-        return tdDom;
+        return (
+          <td key={thisKey}>
+            { currVal }
+          </td>
+        );
       });
 
       if (selectable) {
