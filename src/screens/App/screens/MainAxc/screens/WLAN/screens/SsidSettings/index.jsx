@@ -79,6 +79,7 @@ const listOptions = fromJS([
     id: 'ssid',
     notEditable: true,
     text: _('SSID'),
+    maxLength: '32',
     formProps: {
       type: 'text',
       required: true,

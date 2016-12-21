@@ -58,9 +58,10 @@ const listOptions = fromJS([
     id: 'cycles',
     label: _('Scan Cycles Times'),
     formProps: {
-      type: 'number',
       min: 0,
       max: 255,
+      type: 'number',
+      help: 'Range: 0~255',
       dataType: 'number',
       defaultValue: '0',
     },
@@ -131,7 +132,8 @@ const listOptions = fromJS([
     id: 'adjafactor2g4',
     text: _('2.4G Band Neighbor Coefficient'),
     formProps: {
-      min: 0,
+      min: 1,
+      max: 255,
       type: 'number',
       dataType: 'number',
       defaultValue: '1',

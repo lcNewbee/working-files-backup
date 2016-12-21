@@ -66,7 +66,8 @@ const sMainAxc = require('../../screens/App/screens/MainAxc');
  */
 // const sNetworkVlan = require('../../screens/App/screens/MainAxc/screens/Network/screens/VLAN');
 const sInterfaces = require('../../screens/App/screens/MainAxc/screens/Network/screens/Interfaces');
-const sNetworkDhcp = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP');
+const sDhcpList = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/DhcpList');
+const sDhcpRelay = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/DhcpRelay');
 const sNetworkRoutes = require('../../screens/App/screens/MainAxc/screens/Network/screens/Routes');
 const sNetworkNat = require('../../screens/App/screens/MainAxc/screens/Network/screens/Nat');
 // const sNetworkAcl = require('../../screens/App/screens/MainAxc/screens/Network/screens/ACL');
@@ -182,10 +183,26 @@ const routes = [
           }, {
             id: 'networkDhcp',
             icon: 'random',
+            noTree: true,
+            component: SharedComponents.TabContainer,
             path: '/main/network/dhcp',
-            formUrl: 'goform/network/dhcp',
             text: _('DHCP'),
-            component: sNetworkDhcp.Screen,
+            indexRoute: { onEnter: (nextState, replace) => replace('/main/network/dhcp/List') },
+            childRoutes: [
+              {
+                id: 'dhcpList',
+                path: '/main/network/dhcp/List',
+                formUrl: 'goform/network/dhcp/list',
+                text: _('DHCP List'),
+                component: sDhcpList.Screen,
+              }, {
+                id: 'dhcpRelay',
+                path: '/main/network/dhcp/relay',
+                formUrl: 'goform/network/dhcp/relay',
+                text: _('DHCP Relay'),
+                component: sDhcpRelay.Screen,
+              },
+            ],
           }, {
             id: 'networkNat',
             icon: 'exchange',

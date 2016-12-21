@@ -225,6 +225,7 @@ export const radioAdvance = fromJS([
     min: 32,
     max: 8191,
     defaultValue: 100,
+    help: _('ms'),
     label: _('Beacon Interval'),
   }, {
     id: 'fragthreshold',
@@ -408,7 +409,8 @@ export const radioAdvance = fromJS([
       }, {
         value: 'MCS7',
         label: 'MCS7',
-      }, {
+      },
+      {
         value: 'MCS8',
         label: 'MCS8',
       }, {

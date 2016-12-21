@@ -216,7 +216,6 @@ export default class AppScreen extends React.Component {
     const {
       store, title, noTitle, route, listOptions, customSettingForm, className,
       settingsFormOptions, updateScreenSettings, hasSettingsSaveButton, actionable,
-      ...commonProps
     } = this.props;
     const app = this.props.app;
     const myScreenId = store.get('curScreenId');
@@ -261,7 +260,7 @@ export default class AppScreen extends React.Component {
         {
           listOptions ? (
             <ListInfo
-              {...commonProps}
+              {...this.props}
               tableOptions={tableOptions}
               editFormOptions={editFormOptions}
               defaultEditData={defaultEditData}

@@ -16,13 +16,13 @@ function getPortList() {
           item => ({
             value: item.interface_bind,
             label: item.interface_bind,
+            serverName: item.template_name,
           }),
         ),
       }
     ),
   );
 }
-
 const listOptions = fromJS([
   {
     id: 'interface_bind',
@@ -33,7 +33,7 @@ const listOptions = fromJS([
       notEditable: true,
     },
   }, {
-    id: 'mac',
+    id: 'src_mac',
     label: _('Mac White List'),
     formProps: {
       type: 'text',
@@ -48,6 +48,7 @@ const listOptions = fromJS([
 
 const propTypes = {
   store: PropTypes.instanceOf(Map),
+  updateCurEditListItem: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -57,6 +58,9 @@ export default class View extends React.Component {
     this.state = {
       portOptions: fromJS([]),
     };
+    utils.binds(this, [
+      'onBeforeSave',
+    ]);
   }
   componentWillMount() {
     getPortList()
@@ -67,6 +71,29 @@ export default class View extends React.Component {
       });
   }
 
+  onBeforeSave($$actionQuery, $$curListItem) {
+    const store = this.props.store;
+    const myScreenId = store.get('curScreenId');
+    const $$myScreenStore = store.get(myScreenId);
+    const actionType = $$actionQuery.getIn(['action']);
+    const interfaceBind = $$curListItem.get('interface_bind');
+    let serverName = '';
+
+    if (actionType === 'add' || actionType === 'delete') {
+      serverName = this.state.portOptions.find(
+        $$item => $$item.get('value') === interfaceBind,
+      ).get('serverName');
+      // if (this.state.portOptions.find(
+      //      item => item.interface_bind === interfaceBind,
+      // )) {
+      //   serverName = this.state.portOptions.serverName;
+      // }
+      this.props.updateCurEditListItem({
+        template_name: serverName,
+      });
+    }
+
+  }
   render() {
     const { store } = this.props;
     const myScreenId = store.get('curScreenId');
@@ -74,16 +101,21 @@ export default class View extends React.Component {
     const $$curList = $$myScreenStore.getIn(['data', 'list']);
     const curListOptions = listOptions
       .setIn([0, 'options'], this.state.portOptions);
+
     return (
       <AppScreen
         {...this.props}
         store={store}
         listOptions={curListOptions}
+<<<<<<< 70d3008c3388ab7f80fcc2eff7b58e8a84244d1d
         onBeforeAction={
           () => {
             alert(1);
           }
         }
+=======
+        onBeforeSave={this.onBeforeSave}
+>>>>>>> AXC: 数据验证以及DHCP Relay页面
         actionable
         selectable
         editable={false}
