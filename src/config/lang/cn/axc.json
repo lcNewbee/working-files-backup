@@ -437,7 +437,9 @@
   "Operation": "操作",
   "Result": "结果",
   "Log List": "日志列表",
+  "System Logs": "系统日志",
   "Log Settings": "日志设置",
+  "Log Maintenance": "日志维护",
   "Log Duration": "日志保存时间",
 
   "Expiration Date": "过期日期",

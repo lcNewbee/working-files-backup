@@ -60,7 +60,7 @@ export default class View extends React.Component {
   }
 
   onBackup() {
-    this.props.save('goform/system/backup');
+    window.location.href = '/goform/system/backup';
   }
 
   onRestore() {
