@@ -246,12 +246,11 @@ export default class Basic extends React.Component {
           transform: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
             const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
-            const basicSettings = this.props.selfState.get('basicSettings');
             return (
               <input
                 type="checkbox"
                 checked={val === '1'}
-                disabled={pos === 0 && basicSettings.getIn(['radioList', radioId, 'wirelessMode']) !== 'ap'}
+                disabled={pos === 0}
                 onClick={() => this.onSsidItemChange(val, item, 'enable', (val === '1' ? '0' : '1'))}
                 style={{ marginLeft: '3px' }}
               />
@@ -265,12 +264,11 @@ export default class Basic extends React.Component {
           transform: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
             const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
-            const basicSettings = this.props.selfState.get('basicSettings');
             return (
               <FormInput
                 type="text"
                 value={val}
-                disabled={pos === 0 && basicSettings.getIn(['radioList', radioId, 'wirelessMode']) !== 'ap'}
+                disabled={pos === 0}
                 onChange={data => this.onSsidItemChange(val, item, 'ssid', data.value)}
                 style={{
                   marginLeft: '-60px',
@@ -287,12 +285,11 @@ export default class Basic extends React.Component {
           transform: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
             const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
-            const basicSettings = this.props.selfState.get('basicSettings');
             return (
               <FormInput
                 type="number"
                 value={val}
-                disabled={(pos === 0 && basicSettings.getIn(['radioList', radioId, 'wirelessMode']) !== 'ap') || vlanEnable === '0'}
+                disabled={(pos === 0) || vlanEnable === '0'}
                 onChange={(data) => {
                   this.onSsidItemChange(val, item, 'vlanId', data.value);
                 }}
@@ -386,14 +383,13 @@ export default class Basic extends React.Component {
           transform: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
             const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
-            const basicSettings = this.props.selfState.get('basicSettings');
             return (
               <div style={{ marginLeft: '-3px' }}>
                 <Button
                   text={_('Edit')}
                   icon="pencil-square"
                   size="sm"
-                  disabled={pos === 0 && basicSettings.getIn(['radioList', radioId, 'wirelessMode']) !== 'ap'}
+                  disabled={pos === 0}
                   onClick={() => {
                     const tableItemForSsid = fromJS({}).set('val', val)
                           .set('item', item).set('isShow', '1')
@@ -437,14 +433,13 @@ export default class Basic extends React.Component {
           transform: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
             const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
-            const basicSettings = this.props.selfState.get('basicSettings');
             return (
               <div style={{ marginLeft: '-12px' }}>
                 <Button
                   text={_('Delete')}
                   icon="times"
                   size="sm"
-                  disabled={pos === 0 && basicSettings.getIn(['radioList', radioId, 'wirelessMode']) !== 'ap'}
+                  disabled={pos === 0}
                   onClick={() => this.onDeleteBtnClick(item)}
                 />
               </div>
@@ -599,7 +594,7 @@ export default class Basic extends React.Component {
     const auth = preSecurity.get('auth') || 'shared';
     const keyLength = preSecurity.get('keyLength') || '64';
     const keyType = preSecurity.get('keyType') || 'Hex';
-    const key = preSecurity.get('key') || '';
+    const key = '';
     const keyIndex = preSecurity.get('keyIndex') || '1';
     const cipher = preSecurity.get('cipher') || 'aes';
     const afterSecurity = preSecurity.set('mode', mode).set('auth', auth)
@@ -695,13 +690,19 @@ export default class Basic extends React.Component {
     }).then(() => {
       this.props.fetch('goform/get_wl_info_forTestUse').then((json) => {
         if (json.state && json.state.code === 2000) {
+          const radioList = fromJS(json.data).get('radioList')
+                            .map((radio) => {
+                              const vapList = radio.get('vapList').map(val => val.set('flag', Math.random()));
+                              return radio.set('vapList', vapList);
+                            });
+          const dataToUpdate = fromJS(json.data).set('radioList', radioList);
           const basicInfo = {
             curModule: 'basicSettings',
             data: fromJS(json.data),
           };
           const multiSsidInfo = {
             curModule: 'multiSsid',
-            data: fromJS(json.data),
+            data: dataToUpdate,
           };
           this.props.updateSelfItemSettings(basicInfo);
           this.props.updateSelfItemSettings(multiSsidInfo);
@@ -760,6 +761,7 @@ export default class Basic extends React.Component {
     props.changeShowSpeedLimitModal(false);
     props.changeShowScanResultStatus(false);
     props.changeScanStatus(false);
+    props.changeApMacInput('');
     props.changeTableItemForSsid(fromJS({
       isShow: '0',
       val: '',
@@ -1808,8 +1810,11 @@ export default class Basic extends React.Component {
                 max={this.props.selfState.get('maxTxpower')}
                 value={radioSettings.getIn(['radioList', radioId, 'txPower'])}
                 onChange={(data) => {
+                  let val = data.value;
+                  // const max = Number(this.props.selfState.get('maxTxpower'));
+                  // if (val > max) val = max;
                   const radioList = radioSettings.get('radioList')
-                                    .setIn([radioId, 'txPower'], data.value);
+                                    .setIn([radioId, 'txPower'], val);
                   this.props.updateRadioSettingsItem({ radioList });
                 }}
                 help="dBm"
@@ -1836,9 +1841,12 @@ export default class Basic extends React.Component {
                       ref={(rangeInput) => { this.rangeInput = rangeInput; }}
                       max={this.props.selfState.get('maxTxpower')}
                       value={radioSettings.getIn(['radioList', radioId, 'txPower'])}
-                      onChange={(e) => {
+                      onChange={(data) => {
+                        let val = data.value;
+                        const max = Number(this.props.selfState.get('maxTxpower'));
+                        if (val > max) val = max;
                         const radioList = radioSettings.get('radioList')
-                                          .setIn([radioId, 'txPower'], e.target.value);
+                                          .setIn([radioId, 'txPower'], val);
                         this.props.updateRadioSettingsItem({ radioList });
                       }}
                       className="fl"
@@ -1964,7 +1972,7 @@ export default class Basic extends React.Component {
         {
           this.props.selfState.get('showMultiSsid') ? (
             <div className="stats-group-cell">
-              {/* <span>{_('Notice: The first SSID can\'t be modefied here !')}</span> */}
+              <span>{_('Notice: The first SSID can\'t be modefied here !')}</span>
               <Table
                 className="table"
                 options={this.props.selfState.get('ssidTableOptions')}
@@ -2172,7 +2180,8 @@ export default class Basic extends React.Component {
             value={tableItemForSsid.getIn(['item', 'security', 'mode'])}
             onChange={(data) => {
               const newItem = tableItemForSsid.get('item')
-                              .setIn(['security', 'mode'], data.value);
+                              .setIn(['security', 'mode'], data.value)
+                              .setIn(['security', 'key'], '');
               const newItemForSsid = tableItemForSsid.set('item', newItem);
               this.props.changeTableItemForSsid(newItemForSsid);
             }}

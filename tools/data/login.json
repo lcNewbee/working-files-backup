@@ -1,7 +1,7 @@
 {
   "state": {
     "code": 2000,
-    "msg": "用户名或密码错误"
+    "msg": "username or password error"
   },
   "data": {
     "purview": "1,3",

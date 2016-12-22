@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Input from './atom/Input';
+import NumberInput from './NumberInput';
 
 const propTypes = {
   hasTextInput: PropTypes.bool,
@@ -43,7 +44,7 @@ class Checkbox extends React.Component {
         />
         {
           hasTextInput ? (
-            <Input
+            <NumberInput
               {...this.props}
               type="number"
               value={value}

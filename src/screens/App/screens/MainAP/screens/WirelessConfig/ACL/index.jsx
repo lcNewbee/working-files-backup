@@ -141,7 +141,7 @@ export default class ACL extends React.Component {
           this.props.createModal({
             id: 'settings',
             role: 'alert',
-            text: '该MAC地址已经在列表中存在！',
+            text: _('The MAC address already exists in the mac list !'),
           });
         } else {
           afterList = preList.push(macInputVal);
@@ -313,7 +313,7 @@ export default class ACL extends React.Component {
             <FormInput
               name="filtermode"
               type="radio"
-              text={_('Block Only')}
+              text={_('Deny Only')}
               disabled={store.getIn(['curData', 'radioList', radioId, 'aclEnable']) === '0'}
               checked={store.getIn(['curData', 'radioList', radioId, 'aclConfList', selectedSsid, 'aclMode']) === 'deny'}
               onClick={() => {
@@ -415,14 +415,14 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     utils.extend({}, appActions, sharedActions, actions),
-    dispatch
+    dispatch,
   );
 }
 
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
-  validator.mergeProps(validOptions)
+  validator.mergeProps(validOptions),
 )(ACL);
 
 export const acl = reducer;

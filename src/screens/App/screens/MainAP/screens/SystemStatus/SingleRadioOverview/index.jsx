@@ -500,14 +500,18 @@ export default class SystemStatus extends React.Component {
         this.props.fetchSettings().then(() => {
           this.props.changeFirstRefresh(false);
           // const customSetings = this.props.selfState.get('customSettingsForChart').toJS();
-          this.prepareChartData();
+          if (this.props.store.getIn(['curData', 'radioList', 0, 'enable']) === '1') {
+            this.prepareChartData();
+          }
         });
       }
     });
     this.onChangeRadio({ value: '0' });
     a = setInterval(() => {
       this.props.fetchSettings().then(() => {
-        this.prepareChartData();
+        if (this.props.store.getIn(['curData', 'radioList', 0, 'enable']) === '1') {
+          this.prepareChartData();
+        }
       });
     }, 10000);
   }
@@ -790,15 +794,15 @@ export default class SystemStatus extends React.Component {
     if (!this.props.store.getIn(['curData', 'radioList', radioId])
         || !this.props.store.getIn(['curData', 'sysStatus'])) return null;
     const {
-      deviceModel, deviceName, version, uptime, systemTime, networkMode,
-      lan0Mac, lan1Mac, wlan0Mac,
+      deviceModel, deviceName, version, uptime, systemTime, networkMode, systemMac,
+      memInfo, cpuInfo,
     } = this.props.store.getIn(['curData', 'sysStatus']).toJS();
     const interfaces = this.props.store.getIn(['curData', 'interfaces']).toJS();
     const {
       wirelessMode, security, frequency, channelWidth, channel, radioMode, ssid,
       distance, txPower, noise, chutil, staList, peerList, vapList, signal,
     } = this.props.store.getIn(['curData', 'radioList', radioId]).toJS();
-    const { memFree, memTotal, cpuInfo } = this.props.selfState.get('serverData').toJS();
+    // const { memInfo, cpuInfo } = this.props.selfState.get('serverData').toJS();
     // const vapInterfacesList = (wirelessMode === 'sta') ? [vapList[0]] : vapList;
     // 绘图
     const serverData = this.props.selfState.get('serverData');
@@ -821,7 +825,9 @@ export default class SystemStatus extends React.Component {
                 Promise.resolve().then(() => {
                   this.onChangeRadio(data);
                 }).then(() => {
-                  this.prepareChartData();
+                  if (this.props.store.getIn(['curData', 'radioList', data.value, 'enable']) === '1') {
+                    this.prepareChartData();
+                  }
                 });
               }}
               style={{
@@ -891,31 +897,54 @@ export default class SystemStatus extends React.Component {
                       Promise.resolve().then(() => {
                         this.props.changeCustomSettingsForChart(fromJS({ ssidFlowDir: data.value }));
                       }).then(() => {
-                        this.prepareChartData();
+                        if (this.props.store.getIn(['curData', 'radioList', data.value, 'enable']) === '1') {
+                          this.prepareChartData();
+                        }
                       });
                     }}
                   />
-                  <a
-                    href="#/main/status/ssiddetails"
-                    className="fr"
-                    style={{
-                      paddingTop: '5px',
-                      color: 'blue',
-                      // textDecoration: 'underline',
-                    }}
-                  >
-                    {_('More Details')}
-                  </a>
+                  {
+                    this.props.store.getIn(['curData', 'radioList', radioId, 'enable']) === '1' ? (
+                      <a
+                        href="#/main/status/ssiddetails"
+                        className="fr"
+                        style={{
+                          paddingTop: '5px',
+                          color: 'blue',
+                          // textDecoration: 'underline',
+                        }}
+                      >
+                        {_('More Details')}
+                      </a>
+                    ) : null
+                  }
                 </div>
                 <div className="o-box__cell">
-                  <EchartReact
-                    option={flowPerSsid}
-                    className="o-box__canvas"
-                    style={{
-                      width: '100%',
-                      minHeight: '260px',
-                    }}
-                  />
+                  {
+                    this.props.store.getIn(['curData', 'radioList', radioId, 'enable']) === '1' ? (
+                      <EchartReact
+                        option={flowPerSsid}
+                        className="o-box__canvas"
+                        style={{
+                          width: '100%',
+                          minHeight: '260px',
+                        }}
+                      />
+                    ) : (
+                      <div
+                        style={{
+                          width: '100%',
+                          height: '260px',
+                          lineHeight: '260px',
+                          textAlign: 'center',
+                          fontSize: '20px',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        Radio Off
+                      </div>
+                    )
+                  }
                 </div>
               </div>
               <div className="cols col-6">
@@ -940,24 +969,31 @@ export default class SystemStatus extends React.Component {
                       Promise.resolve().then(() => {
                         this.props.changeCustomSettingsForChart(fromJS({ top10ClientFlowDir: data.value }));
                       }).then(() => {
-                        this.prepareChartData();
+                        if (this.props.store.getIn(['curData', 'radioList', data.value, 'enable']) === '1') {
+                          this.prepareChartData();
+                        }
                       });
                     }}
                   />
-                  <a
-                    href="#/main/status/clientsdetails"
-                    className="fr"
-                    style={{
-                      paddingTop: '5px',
-                      color: 'blue',
-                    }}
-                  >
-                    {_('More Details')}
-                  </a>
+                  {
+                    this.props.store.getIn(['curData', 'radioList', radioId, 'enable']) === '1' ? (
+                      <a
+                        href="#/main/status/clientsdetails"
+                        className="fr"
+                        style={{
+                          paddingTop: '5px',
+                          color: 'blue',
+                        }}
+                      >
+                        {_('More Details')}
+                      </a>
+                    ) : null
+                  }
                 </div>
                 <div className="o-box__cell row">
                   {
-                    this.props.selfState.getIn(['serverData', 'top10FlowClients']).size === 0 ? (
+                    this.props.selfState.getIn(['serverData', 'top10FlowClients']).size === 0 ||
+                    this.props.store.getIn(['curData', 'radioList', radioId, 'enable']) === '0' ? (
                       <div
                         style={{
                           height: '260px',
@@ -1007,24 +1043,19 @@ export default class SystemStatus extends React.Component {
                   />
                   <FormGroup
                     label={_('System Uptime :')}
-                    id="uptime"
                     type="plain-text"
                     value={changeUptimeToReadable(uptime)}
                   />
                   <FormGroup
-                    label={_('WLAN0 MAC :')}
+                    label={_('AP MAC :')}
                     type="plain-text"
-                    value={wlan0Mac}
-                  />
-                  <FormGroup
-                    label={_('LAN2 MAC :')}
-                    type="plain-text"
-                    value={lan1Mac}
+                    value={systemMac}
                   />
                   <FormGroup
                     label={_('Memory Used :')}
                     type="plain-text"
-                    value={`${parseInt(((Number(memTotal) - Number(memFree)) / Number(memTotal)) * 100, 10)}%`}
+                    value={memInfo}
+                    help="%"
                   />
                 </div>
                 <div className="cols col-6">
@@ -1040,29 +1071,28 @@ export default class SystemStatus extends React.Component {
                   />
                   <FormGroup
                     label={_('System Time :')}
-                    id="systemtime"
                     type="plain-text"
                     value={systemTime}
                   />
-                  <FormGroup
-                    label={_('LAN1 MAC :')}
-                    type="plain-text"
-                    value={lan0Mac}
-                  />
-                  {
+                  {/*
+                    <FormGroup
+                      label={_('LAN1 MAC :')}
+                      type="plain-text"
+                      value={lan0Mac}
+                    />
                     wirelessMode !== 'sta' ? (
                       <FormGroup
                         label={_('Client Number :')}
-                        id="userNumber"
                         type="plain-text"
                         value={staList.length}
                       />
                     ) : null
-                  }
+                  */}
                   <FormGroup
                     label={_('CPU Used :')}
                     type="plain-text"
-                    value={`${cpuInfo}%`}
+                    value={cpuInfo}
+                    help="%"
                   />
                 </div>
               </div>
@@ -1072,71 +1102,75 @@ export default class SystemStatus extends React.Component {
             <div className="o-box__cell">
               <h3>{_('Radio')}</h3>
             </div>
-            <div className="o-box__cell">
-              <div className="cols col-6">
-                <FormGroup
-                  label={_('Wireless Mode :')}
-                  type="plain-text"
-                  value={wirelessModeShowStyle(wirelessMode)}
-                />
-                <FormGroup
-                  label={_('SSID :')}
-                  type="plain-text"
-                  value={ssid}
-                />
-                <FormGroup
-                  label={_('Protocol :')}
-                  type="plain-text"
-                  value={radioMode}
-                />
-                <FormGroup
-                  label={_('Channel/Frequency :')}
-                  type="plain-text"
-                  value={`${channel}/${frequency}`}
-                />
-                <FormGroup
-                  label={_('Channel Width :')}
-                  type="plain-text"
-                  value={channelWidth}
-                />
-                <FormGroup
-                  label={_('Security Mode :')}
-                  type="plain-text"
-                  value={security}
-                />
-              </div>
-              <div className="cols col-6">
-                <FormGroup
-                  label={_('Distance :')}
-                  type="plain-text"
-                  value={distance}
-                  help="km"
-                />
-                <FormGroup
-                  label={_('Tx Power :')}
-                  type="plain-text"
-                  value={txPower}
-                  help="dBm"
-                />
-                <FormGroup
-                  label={_('Signal :')}
-                  type="plain-text"
-                  value={signal}
-                  help="dBm"
-                />
-                <FormGroup
-                  label={_('Noise :')}
-                  type="plain-text"
-                  value={noise}
-                  help="dBm"
-                />
-                <FormGroup
-                  label={_('Channel Utilization :')}
-                  type="plain-text"
-                  value={chutil}
-                />
-              </div>
-            </div>
+            {
+              this.props.store.getIn(['curData', 'radioList', radioId, 'enable']) === '1' ? (
+                <div className="o-box__cell">
+                  <div className="cols col-6">
+                    <FormGroup
+                      label={_('Wireless Mode :')}
+                      type="plain-text"
+                      value={wirelessModeShowStyle(wirelessMode)}
+                    />
+                    <FormGroup
+                      label={_('Protocol :')}
+                      type="plain-text"
+                      value={radioMode}
+                    />
+                    <FormGroup
+                      label={_('Channel/Frequency :')}
+                      type="plain-text"
+                      value={`${channel}/${frequency}`}
+                    />
+                    <FormGroup
+                      label={_('Channel Utilization :')}
+                      type="plain-text"
+                      value={chutil}
+                    />
+                  </div>
+                  <div className="cols col-6">
+                    <FormGroup
+                      label={_('Distance :')}
+                      type="plain-text"
+                      value={distance}
+                      help="km"
+                    />
+                    <FormGroup
+                      label={_('Tx Power :')}
+                      type="plain-text"
+                      value={txPower}
+                      help="dBm"
+                    />
+                    <FormGroup
+                      label={_('Signal :')}
+                      type="plain-text"
+                      value={signal}
+                      help="dBm"
+                    />
+                    <FormGroup
+                      label={_('Noise :')}
+                      type="plain-text"
+                      value={noise}
+                      help="dBm"
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div
+                  className="o-box__cell"
+                  style={{
+                    width: '100%',
+                    height: '260px',
+                    lineHeight: '260px',
+                    textAlign: 'center',
+                    fontSize: '20px',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  Radio Off
+                </div>
+              )
+            }
+
           </div>
         </div>
 

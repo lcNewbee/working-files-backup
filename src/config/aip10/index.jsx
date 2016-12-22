@@ -79,8 +79,8 @@ const funConfig = {
     radioclientslimit: true, // 射频客户端限制
     devicemodeOptions: [
       { value: 'ap', label: _('AP') },
-      // { value: 'sta', label: _('Station') },
-      // { value: 'repeater', label: _('Repeater') },
+      { value: 'sta', label: _('Station') },
+      { value: 'repeater', label: _('Repeater') },
     ],
     // 功能项参见WirelessConfig -> Basic页面下的ssidTableFullMemberOptions变量
     ssidTableKeys: [

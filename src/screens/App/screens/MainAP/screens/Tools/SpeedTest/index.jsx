@@ -53,7 +53,7 @@ const validOptions = Map({
     rules: 'num:[10, 300]',
   }),
   validPkgLen: validator({
-    rules: 'num:[128, 1448]',
+    rules: 'num:[1200, 12000]',
   }),
 });
 export default class SpeedTest extends React.Component {
@@ -190,7 +190,7 @@ export default class SpeedTest extends React.Component {
       ip: '',
       time: '30',
       direction: '0',
-      packagelen: '128',
+      packagelen: '1200',
     };
     const props = this.props;
     clearInterval(a);
@@ -451,7 +451,7 @@ export default class SpeedTest extends React.Component {
             label={_('Package Length')}
             form="advancedOptions"
             value={this.props.selfState.getIn(['query', 'packagelen'])}
-            help={`${_('Range: ')}128B ~ 1448B`}
+            help={`${_('Range: ')}1200B ~ 12000B`}
             onChange={(data) => {
               const pQuery = this.props.selfState.get('query').set('packagelen', data.value);
               this.props.changeQueryData(pQuery);
@@ -539,7 +539,7 @@ function mapDispatchToProps(dispatch) {
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
-  validator.mergeProps(validOptions)
+  validator.mergeProps(validOptions),
 )(SpeedTest);
 
 

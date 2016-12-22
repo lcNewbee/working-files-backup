@@ -425,7 +425,15 @@ export default class Advance extends React.Component {
                   value={distance}
                   hasTextInput
                   disabled={autoAdjust === '1'}
-                  onChange={(data) => { this.changeFormValue(radioId, 'distance', data.value); }}
+                  onChange={(data, e) => {
+                    let val = data.value;
+                    // if (val > e.target.max) val = e.target.max;
+                    // else if (val < e.target.min) val = e.target.min;
+                    this.changeFormValue(radioId, 'distance', val);
+                  }}
+                  inputStyle={{
+                    backgroundColor: '#f2f2f2',
+                  }}
                 />
               </div>
               <span

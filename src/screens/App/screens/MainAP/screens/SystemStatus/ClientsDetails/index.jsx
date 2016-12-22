@@ -101,9 +101,14 @@ export default class ClientsDetails extends React.Component {
   refreshData() {
     this.props.fetchSettings().then(() => {
       const radioNum = this.props.product.get('deviceRadioList').size;
+      let staList;
       for (let i = 0; i < radioNum; i++) {
-        const staList = this.props.store.getIn(['curData', 'radioList', i, 'staList'])
-                          .map(item => item.set('block', false));
+        if (this.props.store.getIn(['curData', 'radioList', i, 'enable']) === '1') {
+          staList = this.props.store.getIn(['curData', 'radioList', i, 'staList'])
+                        .map(item => item.set('block', false));
+        } else {
+          staList = fromJS([]);
+        }
         const radioList = this.props.store.getIn(['curData', 'radioList']).setIn([i, 'staList'], staList);
         this.props.updateItemSettings({ radioList });
       }
@@ -114,7 +119,6 @@ export default class ClientsDetails extends React.Component {
     const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
     const staList = this.props.store.getIn(['curData', 'radioList', radioId, 'staList']);
     const index = staList.indexOf(item);
-    console.log('index', index);
     const radioList = this.props.store.getIn(['curData', 'radioList'])
                           .setIn([radioId, 'staList', index, 'block'], true);
     this.props.updateItemSettings({ radioList });

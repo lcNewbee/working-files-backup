@@ -208,7 +208,7 @@ export default class Basic extends React.Component {
               <input
                 type="checkbox"
                 checked={val === '1'}
-                disabled={pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
+                disabled={pos === 0}
                 onClick={() => this.onSsidItemChange(val, item, 'enable', (val === '1' ? '0' : '1'))}
                 style={{ marginLeft: '3px' }}
               />
@@ -226,7 +226,7 @@ export default class Basic extends React.Component {
               <FormInput
                 type="text"
                 value={val}
-                disabled={pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
+                disabled={pos === 0}
                 onChange={data => this.onSsidItemChange(val, item, 'ssid', data.value)}
                 style={{
                   marginLeft: '-60px',
@@ -247,9 +247,7 @@ export default class Basic extends React.Component {
               <FormInput
                 type="number"
                 value={val}
-                disabled={(pos === 0
-                          && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap')
-                          || vlanEnable === '0'}
+                disabled={pos === 0 || vlanEnable === '0'}
                 onChange={(data) => {
                   this.onSsidItemChange(val, item, 'vlanId', data.value);
                 }}
@@ -358,7 +356,7 @@ export default class Basic extends React.Component {
                   text={_('Edit')}
                   icon="pencil-square"
                   size="sm"
-                  disabled={pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
+                  disabled={pos === 0}
                   onClick={() => {
                     const tableItemForSsid = fromJS({}).set('val', val)
                           .set('item', item).set('isShow', '1')
@@ -408,7 +406,7 @@ export default class Basic extends React.Component {
                   text={_('Delete')}
                   icon="times"
                   size="sm"
-                  disabled={pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
+                  disabled={pos === 0}
                   onClick={() => this.onDeleteBtnClick(item)}
                 />
               </div>
@@ -544,14 +542,14 @@ export default class Basic extends React.Component {
     const auth = preSecurity.get('auth') || 'shared';
     const keyLength = preSecurity.get('keyLength') || '64';
     const keyType = preSecurity.get('keyType') || 'Hex';
-    const key = preSecurity.get('key') || '';
+    // const key = preSecurity.get('key') || '';
     const keyIndex = preSecurity.get('keyIndex') || '1';
     const cipher = preSecurity.get('cipher') || 'aes';
     const afterSecurity = preSecurity.set('mode', mode).set('auth', auth)
                           .set('keyType', keyType).set('keyLength', keyLength)
                           .set('keyIndex', keyIndex)
                           .set('cipher', cipher)
-                          .set('key', key);
+                          .set('key', '');
     const radioList = curData.get('radioList')
                     .setIn([radioId, 'vapList', '0', 'security'], afterSecurity);
     this.props.updateItemSettings({ radioList });
@@ -620,7 +618,15 @@ export default class Basic extends React.Component {
         //   curModule: 'radioSettings',
         //   data: fromJS(json.data),
         // };
-        this.props.updateItemSettings(fromJS(json.data));
+        /** ****向vapList中的每一项添加一个标识唯一性的标志flag***/
+        const radioList = fromJS(json.data).get('radioList')
+                          .map((radio) => {
+                            const vapList = radio.get('vapList').map(val => val.set('flag', Math.random()));
+                            return radio.set('vapList', vapList);
+                          });
+        const dataToUpdate = fromJS(json.data).set('radioList', radioList);
+        /** ***************************************************/
+        this.props.updateItemSettings(dataToUpdate);
         // 根据国家和频段，获取信道列表信息
         const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
         const country = json.data.radioList[radioId].countryCode;
@@ -637,11 +643,12 @@ export default class Basic extends React.Component {
           }
         });
         // this.props.updateSelfItemSettings(radioInfo);
-      } }).then(() => { // 生成多SSID列表的options
-        const funConfig = this.props.route.funConfig;
-        const keysFromRoute = funConfig.ssidTableKeys;
-        this.makeSsidTableOptions(this.state.ssidTableFullMemberOptions, keysFromRoute);
-      });
+      }
+    }).then(() => { // 生成多SSID列表的options
+      const funConfig = this.props.route.funConfig;
+      const keysFromRoute = funConfig.ssidTableKeys;
+      this.makeSsidTableOptions(this.state.ssidTableFullMemberOptions, keysFromRoute);
+    });
   }
 
   noErrorThisPage() {
@@ -1065,8 +1072,11 @@ export default class Basic extends React.Component {
                     }}
                     hasTextInput
                     onChange={(data) => {
+                      let val = data.value;
+                      // const max = Number(this.props.selfState.get('maxTxpower'));
+                      // if (val > max) val = max;
                       const radioList = curData.get('radioList')
-                                        .setIn([radioId, 'txPower'], data.value);
+                                        .setIn([radioId, 'txPower'], val);
                       this.props.updateItemSettings({ radioList });
                     }}
                   />
@@ -1574,7 +1584,7 @@ export default class Basic extends React.Component {
         {
           this.props.selfState.get('showMultiSsid') ? (
             <div className="stats-group-cell">
-              {/* <span>{_('Notice: The first SSID can\'t be modefied here !')}</span> */}
+              <span>{_('Notice: The first SSID can\'t be modefied here !')}</span>
               <Table
                 className="table"
                 options={this.props.selfState.get('ssidTableOptions')}
@@ -1795,7 +1805,8 @@ export default class Basic extends React.Component {
             value={tableItemForSsid.getIn(['item', 'security', 'mode'])}
             onChange={(data) => {
               const newItem = tableItemForSsid.get('item')
-                              .setIn(['security', 'mode'], data.value);
+                              .setIn(['security', 'mode'], data.value)
+                              .setIn(['security', 'key'], '');
               const newItemForSsid = tableItemForSsid.set('item', newItem);
               this.props.changeTableItemForSsid(newItemForSsid);
             }}

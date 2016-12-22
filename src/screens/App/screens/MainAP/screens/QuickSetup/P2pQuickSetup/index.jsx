@@ -806,7 +806,11 @@ export default class QuickSetup extends React.Component {
                   hasTextInput
                   help="km"
                   disabled={autoAdjust === '1'}
-                  onChange={data => this.updateItemInRadioList('distance', data.value)}
+                  onChange={(data, e) => {
+                    let val = data.value;
+                    // if (val > e.target.max) val = e.target.max;
+                    this.updateItemInRadioList('distance', val);
+                  }}
                 />
                 <span
                   className="fl"
@@ -1105,7 +1109,11 @@ export default class QuickSetup extends React.Component {
                   hasTextInput
                   help="km"
                   disabled={autoAdjust === '1'}
-                  onChange={data => this.updateItemInRadioList('distance', data.value)}
+                  onChange={(data, e) => {
+                    let val = data.value;
+                    // if (val > e.target.max) val = e.target.max;
+                    this.updateItemInRadioList('distance', val);
+                  }}
                 />
                 <span
                   className="fl"
@@ -1388,7 +1396,11 @@ export default class QuickSetup extends React.Component {
                   hasTextInput
                   help="km"
                   disabled={autoAdjust === '1'}
-                  onChange={data => this.updateItemInRadioList('distance', data.value)}
+                  onChange={(data, e) => {
+                    let val = data.value;
+                    // if (val > e.target.max) val = e.target.max;
+                    this.updateItemInRadioList('distance', val);
+                  }}
                 />
                 <span
                   className="fl"

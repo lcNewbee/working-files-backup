@@ -71,29 +71,36 @@ export function receiveCountryInfo(data) {
   };
 }
 
-// export function saveCountrySelectModal() {
-//   return (dispatch, getState) => {
-//     const selectedCode = getState().basic.get('selectedCountry');
-//     const { radioId, radioType } = getState().basic.get('currRadioConfig').toJS();
-//     const radioList = getState().basic.getIn(['radioSettings', 'radioList'])
-//                                 .setIn([radioId, 'countryCode'], selectedCode);
-//     dispatch(updateRadioSettingsItem({ radioList }));
-//     const channelWidth = getState().basic.getIn(['radioSettings', 'radioList', radioId, 'channelWidth']);
-//     const saveInfo = {
-//       radio: radioType,
-//       country: selectedCode,
-//       channelWidth,
-//     };
-//     dispatch(fetch('goform/get_country_info', saveInfo))
-//             .then((json) => {
-//               // console.log('json', json.data);
-//               if (json.state && json.state.code === 2000) {
-//                 dispatch(receiveCountryInfo(json.data));
-//               }
-//             });
-//     dispatch(changeCtyModal(false));
-//   };
-// }
+export function updateRadioSettingsItem(data) {
+  return {
+    type: 'UPDATE_RADIO_SETTINGS_ITEM',
+    data,
+  };
+}
+
+export function saveCountrySelectModal() {
+  return (dispatch, getState) => {
+    const selectedCode = getState().basic.get('selectedCountry');
+    const { radioId, radioType } = getState().basic.get('currRadioConfig').toJS();
+    const radioList = getState().basic.getIn(['radioSettings', 'radioList'])
+                                .setIn([radioId, 'countryCode'], selectedCode);
+    dispatch(updateRadioSettingsItem({ radioList }));
+    const channelWidth = getState().basic.getIn(['radioSettings', 'radioList', radioId, 'channelWidth']);
+    const saveInfo = {
+      radio: radioType,
+      country: selectedCode,
+      channelWidth,
+    };
+    dispatch(fetch('goform/get_country_info', saveInfo))
+            .then((json) => {
+              // console.log('json', json.data);
+              if (json.state && json.state.code === 2000) {
+                dispatch(receiveCountryInfo(json.data));
+              }
+            });
+    dispatch(changeCtyModal(false));
+  };
+}
 
 // 需求改变后的代码
 // data: {name: 'showMultiSsid/showSsidSetting/showRadioSetting', value: true}
@@ -114,13 +121,6 @@ export function changeTableItemForSsid(data) {
 export function updateSelfItemSettings(data) {
   return {
     type: 'UPDATE_SELF_ITEM_SETTINGS',
-    data,
-  };
-}
-
-export function updateRadioSettingsItem(data) {
-  return {
-    type: 'UPDATE_RADIO_SETTINGS_ITEM',
     data,
   };
 }

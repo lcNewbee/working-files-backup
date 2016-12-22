@@ -109,7 +109,7 @@
   "Filter Mode": "过滤模式",
   "Station List": "MAC列表",
   "Allow Only": "仅允许",
-  "Block Only": "仅禁止",
+  "Deny Only": "仅禁止",
   "Remove": "移除",
 
   "Speed Test": "网速测试",
@@ -353,5 +353,9 @@
   "Mac list number can not exceed 10.": "列表中mac地址数量不能超过10个。",
   "The mac address already exists in the list!": "该mac地址在列表中已经存在！",
   "Primary and Secondary DNS can not be the same !": "主次DNS不能相同！",
-  "Please input a valid MAC address like AA:BB:CC:DD:EE:FF or AA-BB-CC-DD-EE-FF": "请输入正确的MAC地址，比如：AA:BB:CC:DD:EE:FF或AA-BB-CC-DD-EE-FF"
+  "Please input a valid MAC address like AA:BB:CC:DD:EE:FF or AA-BB-CC-DD-EE-FF": "请输入正确的MAC地址，比如：AA:BB:CC:DD:EE:FF或AA-BB-CC-DD-EE-FF",
+  "The MAC address already exists in the mac list !": "该MAC地址已经在列表中存在！",
+  "username or password error": "用户名或密码错误",
+  "password error": "密码错误",
+  "Language Setting": "语言设置"
 }

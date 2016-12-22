@@ -5,7 +5,7 @@ import Input from './atom/Input';
 const propTypes = {
   min: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   max: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-
+  className: PropTypes.string,
   onChange: PropTypes.func,
 };
 
@@ -50,14 +50,18 @@ class NumberInput extends React.Component {
     this.onNumberChange(e, true);
   }
   render() {
+    let myClassName = 'a-input-number';
+
+    if (this.props.className) {
+      myClassName = `${myClassName} ${this.props.className}`;
+    }
     return (
-      <div className="a-input-number">
-        <Input
-          {...this.props}
-          onChange={this.onNumberChange}
-          onBlur={this.onBlur}
-        />
-      </div>
+      <Input
+        {...this.props}
+        className={myClassName}
+        onChange={this.onNumberChange}
+        onBlur={this.onBlur}
+      />
     );
   }
 }

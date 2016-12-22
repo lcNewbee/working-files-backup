@@ -10,7 +10,7 @@
 	{
 		"radioType":"2.4G",
 		"radioId":"0",
-		"wirelessMode":"ap",
+		"wirelessMode":"sta",
 		"vapList":[
 			{
 				"ssid":"axilspot1",

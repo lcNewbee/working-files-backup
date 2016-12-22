@@ -137,7 +137,7 @@ export default class Login extends Component {
               loginState.purview = 'all';
             }
           } else {
-            result = _(json.state.msg);
+            result = guiConfig.hasUsername ? _(json.state.msg) : _(json.state.msg.replace('username or ', ''));
           }
         }
         loginState.msg = result;
@@ -202,8 +202,12 @@ export default class Login extends Component {
 
             {
               this.props.status !== 'ok' ?
-                <p className="msg-error ">{this.props.status}</p> :
-                ''
+                <p
+                  className="msg-error "
+                  style={{ marginLeft: 0 }}
+                >
+                  {this.props.status}
+                </p> : ''
             }
             <Button
               size="lg"

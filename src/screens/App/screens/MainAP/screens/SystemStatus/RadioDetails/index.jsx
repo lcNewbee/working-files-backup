@@ -65,6 +65,99 @@ function wirelessModeShowStyle(wirelessMode) {
   return ret;
 }
 
+const vapInterfaceOptions = fromJS([
+  {
+    id: 'name',
+    text: _('Name'),
+    transform(val, item) {
+      const ssid = item.get('ssid');
+      if (val === '') {
+        return `--(${ssid})`;
+      }
+      return `${val}(${ssid})`;
+    },
+    width: '152px',
+  }, {
+    id: 'mac',
+    text: _('MAC'),
+    transform(val) {
+      if (val === '') {
+        return '--';
+      }
+      return val;
+    },
+    width: '152px',
+  }, {
+    id: 'txBytes',
+    text: _('Tx Data'),
+    transform(val) {
+      if (val === '') {
+        return '--';
+      }
+      return flowRateFilter.transform(val);
+    },
+    width: '144px',
+  }, {
+    id: 'rxBytes',
+    text: _('Rx Data'),
+    transform(val) {
+      if (val === '') {
+        return '--';
+      }
+      return flowRateFilter.transform(val);
+    },
+    width: '144px',
+  }, {
+    id: 'txPackets',
+    text: _('Tx Packets'),
+    transform(val) {
+      if (val === '') {
+        return '--';
+      }
+      return val;
+    },
+    width: '144px',
+  }, {
+    id: 'rxPackets',
+    text: _('Rx Packets'),
+    transform(val) {
+      if (val === '') {
+        return '--';
+      }
+      return val;
+    },
+    width: '144px',
+  }, {
+    id: 'txErrorPackets',
+    text: _('Tx Errors'),
+    transform(val) {
+      if (val === '') {
+        return '--';
+      }
+      return val;
+    },
+    width: '144px',
+  }, {
+    id: 'rxErrorPackets',
+    text: _('Rx Errors'),
+    transform(val) {
+      if (val === '') {
+        return '--';
+      }
+      return val;
+    },
+    width: '144px',
+  }, {
+    id: 'ccq',
+    text: _('CCQ'),
+    transform(val) {
+      if (val === '') {
+        return '--';
+      }
+      return val;
+    },
+  },
+]);
 
 export default class RadioDetails extends React.Component {
   constructor(props) {
@@ -305,6 +398,8 @@ export default class RadioDetails extends React.Component {
     // const { wirelessMode, vapList } = this.props.store.getIn(['curData', 'radioList', radioId]).toJS();
     const staList = this.props.store.getIn(['curData', 'radioList', radioId, 'staList']).toJS();
     const radioList = this.props.store.getIn(['curData', 'radioList']);
+    const { wirelessMode, vapList } = this.props.store.getIn(['curData', 'radioList', radioId]).toJS();
+    const vapInterfacesList = (wirelessMode === 'sta') ? [vapList[0]] : vapList;
     return (
       <div className="o-box">
         <Button
@@ -387,33 +482,24 @@ export default class RadioDetails extends React.Component {
             </div>
           </div>
         </div>
-        <div className="o-box__cell clearfix">
-          <h3
-            className="fl"
-            style={{
-              paddingTop: '3px',
-              marginRight: '15px',
-            }}
-          >
+
+        <div className="o-box__cell">
+          <h3>
+            {_('Wireless Interfaces')}
+          </h3>
+        </div>
+        <div className="o-box__cell">
+          <Table
+            className="table"
+            options={vapInterfaceOptions}
+            list={vapInterfacesList}
+          />
+        </div>
+
+        <div className="o-box__cell">
+          <h3>
             {`${_('Clients')} (${this.props.product.getIn(['radioSelectOptions', radioId, 'label'])})`}
           </h3>
-          {/*
-            this.props.product.get('deviceRadioList').size > 1 ? (
-              <FormInput
-                type="switch"
-                label={_('Radio Select')}
-                minWidth="100px"
-                options={this.props.product.get('radioSelectOptions')}
-                value={this.props.selfState.getIn(['currRadioConfig', 'radioId'])}
-                onChange={(data) => {
-                  this.onChangeRadio(data);
-                }}
-                style={{
-                  marginBottom: '15px',
-                }}
-              />
-            ) : null
-          */}
         </div>
         <div className="o-box__cell">
           <Table

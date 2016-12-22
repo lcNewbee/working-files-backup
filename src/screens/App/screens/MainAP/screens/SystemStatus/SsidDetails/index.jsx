@@ -38,7 +38,7 @@ const vapInterfaceOptions = fromJS([
       if (val === '') {
         return `--(${ssid})`;
       }
-      return `${val}(${ssid })`;
+      return `${val}(${ssid})`;
     },
     width: '152px',
   }, {
@@ -171,10 +171,10 @@ export default class SsidDetails extends React.Component {
 
   render() {
     const { radioId, radioType } = this.props.selfState.get('currRadioConfig').toJS();
-    if (!this.props.store.getIn(['curData', 'radioList', radioId, 'vapList'])) return null;
+    if (!this.props.store.getIn(['curData', 'radioList'])) return null;
     const { wirelessMode, vapList } = this.props.store.getIn(['curData', 'radioList', radioId]).toJS();
     const vapInterfacesList = (wirelessMode === 'sta') ? [vapList[0]] : vapList;
-    // console.log('vapInterfacesList', vapInterfacesList);
+    console.log('vapInterfacesList', vapInterfacesList);
     return (
       <div className="o-box">
         <Button
@@ -243,13 +243,13 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     utils.extend({}, appActions, sharedActions, selfActions),
-    dispatch
+    dispatch,
   );
 }
 
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(SsidDetails);
 
 export const ssiddetails = reducer;

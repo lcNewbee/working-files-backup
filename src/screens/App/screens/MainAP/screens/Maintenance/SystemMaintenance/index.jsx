@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { fromJS, Map } from 'immutable';
+import { fromJS, Map, List } from 'immutable';
 import { FormGroup, FormInput, Modal, ProgressBar } from 'shared/components';
 import { SaveButton, Button } from 'shared/components/Button';
 import * as appActions from 'shared/actions/app';
@@ -39,6 +39,20 @@ const propTypes = {
   changePoeOut: PropTypes.func,
   changeVoipEnable: PropTypes.func,
 };
+
+const languageOptions = List(b28n.getOptions().supportLang).map((item) => (
+  {
+    value: item,
+    label: b28n.langMap[item] || 'English',
+  }
+)).toJS();
+
+function onChangeLang(data) {
+  if (b28n.getLang() !== data.value) {
+    b28n.setLang(data.value);
+    window.location.reload();
+  }
+}
 
 export default class SystemMaintenance extends Component {
   constructor(props) {
@@ -292,6 +306,7 @@ export default class SystemMaintenance extends Component {
           <SaveButton
             text={_('Reboot')}
             icon=""
+            style={{ width: '68px' }}
             onClick={this.onRebootDevice}
             theme="primary"
           />
@@ -304,7 +319,20 @@ export default class SystemMaintenance extends Component {
           <SaveButton
             text={_('Backup')}
             icon=""
+            style={{ width: '68px' }}
             onClick={this.onBackupConfig}
+            theme="primary"
+          />
+        </FormGroup>
+
+        <FormGroup
+          label={_('Reset Configuration')}
+        >
+          <SaveButton
+            text={_('Reset')}
+            icon=""
+            style={{ width: '68px' }}
+            onClick={this.onResetDevice}
             theme="primary"
           />
         </FormGroup>
@@ -330,16 +358,14 @@ export default class SystemMaintenance extends Component {
             />
           </FormGroup>
         </form>
+
         <FormGroup
-          label={_('Reset Configuration')}
-        >
-          <SaveButton
-            text={_('Reset')}
-            icon=""
-            onClick={this.onResetDevice}
-            theme="primary"
-          />
-        </FormGroup>
+          type="select"
+          label={_('Language Setting')}
+          options={languageOptions}
+          value={b28n.getLang()}
+          onChange={onChangeLang}
+        />
 
         {
           this.props.route.funConfig.poeOutFun ? (
