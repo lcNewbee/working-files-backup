@@ -81,10 +81,19 @@ describe('MainAxc index reducer', () => {
         okButton: true,
         cancelButton: true,
       },
+      modalList: [
+        {
+          isShow: true,
+          size: 'md',
+          name: 'group',
+          okButton: true,
+          cancelButton: true,
+        },
+      ],
     }));
   });
 
-  it('Should merge default porps when SHOW_MAIN_MODAL with undefined option', () => {
+  it('Should merge default porps when SHOW_MAIN_MODAL with option', () => {
     const initialState = fromJS({
       modal: {
         isShow: false,
@@ -109,6 +118,15 @@ describe('MainAxc index reducer', () => {
         okButton: true,
         cancelButton: false,
       },
+      modalList: [
+        {
+          isShow: true,
+          size: 'md',
+          name: 'group',
+          okButton: true,
+          cancelButton: false,
+        },
+      ],
     }));
 
     action = {
@@ -131,6 +149,7 @@ describe('MainAxc index reducer', () => {
         okButton: false,
         cancelButton: false,
       },
+      modalList: [],
     }));
   });
 

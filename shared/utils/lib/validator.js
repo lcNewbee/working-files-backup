@@ -18,6 +18,7 @@ var msg = {
 var vaildate = {
   len: function(str, min, max) {
     var len = str.length;
+
     if (min === max && len !== min) {
       return _('String length must be: ') + _('%s bit', min);
     } else if (len < min || len > max) {
@@ -70,8 +71,13 @@ var vaildate = {
   },
 
   ip: {
-    all: function(str) {
-      var ret = this.specific(str);
+    all: function(str, excludeStr) {
+      var ret = this.specific(str, excludeStr);
+
+      // 排除不做验证的字符串
+      if(excludeStr === str) {
+        return '';
+      }
 
       if (ret) {
         return ret;
@@ -82,9 +88,14 @@ var vaildate = {
       }
     },
 
-    specific: function(str) {
+    specific: function(str, excludeStr) {
       var ipArr = str.split('.'),
         ipHead = ipArr[0];
+
+      // 排除不做验证的字符串
+      if(excludeStr === str) {
+        return '';
+      }
 
       if (ipArr[0] === '127') {
         return _("IP address begin with 127 is a reserved loopback address, please input another value between 1 to 233");
@@ -158,8 +169,13 @@ var vaildate = {
       }
     }
   },
-  mask: function(str) {
+  mask: function(str, excludeStr) {
     var rel = /^(254|252|248|240|224|192|128)\.0\.0\.0$|^(255\.(254|252|248|240|224|192|128|0)\.0\.0)$|^(255\.255\.(254|252|248|240|224|192|128|0)\.0)$|^(255\.255\.255\.(254|252|248|240|224|192|128|0))$/;
+
+    // 排除不做验证的字符串
+    if(excludeStr === str) {
+      return '';
+    }
 
     if (!rel.test(str)) {
       return _("Please input a valid subnet mask");
@@ -320,35 +336,56 @@ function check(str, rules) {
     }
   }
 }
+function isExclueString(obj, str) {
+  var ret = false;
+  var exclude = obj.exclude;
+
+  if (typeof exclude === 'string' && exclude === str) {
+    ret = true;
+  } else if (utils.isArray(exclude)) {
+    ret = exclude.indexOf(str) !== -1;
+  }
+
+  return ret;
+}
 
 validator.fn = validator.prototype = {
   constructor: validator,
   vaildate: vaildate,
 
   checkClear: function(str) {
-    var ret = checkClear(str, this.rules);
+    var ret;
     var label = msg.thisField;
 
-    if(this.label) {
-      label = this.label;
-    }
+    if(!isExclueString(this, str)) {
+      ret = checkClear(str, this.rules);
 
-    if(ret) {
-      ret = string.format(ret, label);
+      if(this.label) {
+        label = this.label || '';
+      }
+
+      if(ret) {
+        ret = string.format(ret, label);
+      }
     }
 
     return ret;
   },
 
   check: function(str) {
-    var ret = check(str, this.rules);
+    var ret;
     var label = msg.thisField;
 
-    if(this.label) {
-      label = this.label;
-    }
-    if(ret) {
-      ret = string.format(ret, label);
+    if(!isExclueString(this, str)) {
+      ret = check(str, this.rules);
+
+      if(this.label) {
+        label = this.label || '';
+      }
+
+      if(ret) {
+        ret = string.format(ret, label);
+      }
     }
 
     return ret;
@@ -370,6 +407,10 @@ var init = validator.fn.init = function(options) {
     this.rules = utils.getRulesObj(options.rules, vaildate);
   } else {
     this.rules = [];
+  }
+
+  if(options.exclude) {
+    this.exclude = options.exclude;
   }
 
   this.label = options.label;
