@@ -91,7 +91,7 @@ class WirelessAcl_Model extends CI_Model {
                     $logary = array(
                         'type'=>'Delete',
                         'operator'=>element('username',$_SESSION,''),
-                        'operationCommand'=>"Delete Acl ".$cgiary['mac']." Target group id=".$cgiary['groupid'],
+                        'operationCommand'=>"Delete Acl ".$detary['mac']." Target group id=".$detary['groupid'],
                         'operationResult'=>'ok',
                         'description'=>""
                     );
