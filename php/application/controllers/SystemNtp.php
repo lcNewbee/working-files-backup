@@ -1,12 +1,13 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class SystemNtp extends CI_Controller {
-	public function __construct() {
-		parent::__construct();
-		$this->load->database();
-		$this->load->helper('array');
-	}
-	function fetch() {
+    public function __construct() {
+        parent::__construct();
+        $this->load->library('session');
+        $this->load->database();
+        $this->load->helper(array('array', 'my_customfun_helper'));
+    }
+    function fetch() {
         $queryu = $this->db->select('ntptime_attr.attr_name,attr_value')
                             ->from('ntptime_params')
                             ->join('ntptime_attr','ntptime_params.ntptime_attr_id = ntptime_attr.id','left')
@@ -35,17 +36,13 @@ class SystemNtp extends CI_Controller {
             'settings'=>$retadr
         );                
         echo json_encode($arr);
-	}
-	function onAction($data) {
-		$result = null;
-		$actionType = element('action', $data);
-		if ($actionType === 'add') {
-			
-		} elseif ($actionType === 'edit') {
-						
-		} elseif ($actionType === 'delete') {
-			
-		} elseif ($actionType === 'setting') {
+    }
+    function onAction($data) {
+        $result = null;
+        $actionType = element('action', $data);
+        if ($actionType === 'add') {
+            //  
+        } elseif ($actionType === 'setting') {
             $state = $data['ac_onoff'] === '1' ? 'on' : 'off'; 
             $arr = array(                
                 'server_name'=>(string)element('ac_server_name',$data,''),
@@ -54,19 +51,31 @@ class SystemNtp extends CI_Controller {
                 'interval'=>(string)element('ac_TimeInterval',$data,'30'),
                 'timezone'=>(string)element('ac_timezone',$data,'')
             );          
-			$result = ntptime_msg_from_web(json_encode($arr));
-		}
-		return $result;
-	}
-	public function index() {
-		$result = null;
-		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-			$data = json_decode(file_get_contents("php://input"), true);
-			$result = $this->onAction($data);
-			echo $result;
-		} else if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-			$result = $this->fetch();
-			echo $result;
-		}
-	}
+            $result = ntptime_msg_from_web(json_encode($arr));
+            //log
+            $cgiObj = json_decode($result);			
+            if( is_object($cgiObj) && $cgiObj->state->code === 2000) {            
+                $logary = array(
+                    'type'=>'Setting',
+                    'operator'=>element('username',$_SESSION,''),
+                    'operationCommand'=>"Setting NTP ".$arr['server_name'],
+                    'operationResult'=>'ok',
+                    'description'=>""
+                );
+                Log_Record($this->db,$logary);
+            }
+        }
+        return $result;
+    }
+    public function index() {
+        $result = null;
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $data = json_decode(file_get_contents("php://input"), true);
+            $result = $this->onAction($data);
+            echo $result;
+        } else if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+            $result = $this->fetch();
+            echo $result;
+        }
+    }
 }
