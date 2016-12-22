@@ -35,6 +35,25 @@ const timeTypeSwitchs = fromJS([
     label: `30 ${msg.days}`,
   },
 ]);
+const ssidTableOptions = fromJS([
+  {
+    id: 'mac',
+    text: _('MAC'),
+    width: '30%',
+  }, {
+    id: 'ssid',
+    text: _('SSID'),
+    width: '30%',
+  }, {
+    id: 'channel',
+    text: _('Channel'),
+    width: '20%',
+  }, {
+    id: 'rssi',
+    text: _('rssi'),
+    width: '20%',
+  },
+]);
 
 function getTerminalTypeOption(serverData) {
   let dataList = serverData.get('terminalType');
@@ -379,23 +398,12 @@ export default class View extends PureComponent {
           </div>
           <div className="cols col-12">
             <div className="o-box__cell">
-              <h3>{ _('Rogue AP List') }</h3>
+              <h3>{ _('Rogue SSID List') }</h3>
             </div>
             <div className="o-box__cell">
               <Table
                 className="table"
-                options={fromJS([
-                  {
-                    id: 'mac',
-                    text: _('MAC'),
-                  }, {
-                    id: 'channel',
-                    text: _('Channel'),
-                  }, {
-                    id: 'rssi',
-                    text: _('rssi'),
-                  },
-                ])}
+                options={ssidTableOptions}
                 list={serverData.getIn(['neighborsAps', 'list']) || fromJS([])}
                 page={serverData.getIn(['neighborsAps', 'page'])}
               />
@@ -403,23 +411,12 @@ export default class View extends PureComponent {
           </div>
           <div className="cols col-12">
             <div className="o-box__cell">
-              <h3>{ _('Around AP List') }</h3>
+              <h3>{ _('Around SSID List') }</h3>
             </div>
             <div className="o-box__cell">
               <Table
                 className="table"
-                options={fromJS([
-                  {
-                    id: 'mac',
-                    text: _('MAC'),
-                  }, {
-                    id: 'channel',
-                    text: _('Channel'),
-                  }, {
-                    id: 'rssi',
-                    text: _('rssi'),
-                  },
-                ])}
+                options={ssidTableOptions}
                 list={serverData.getIn(['aroundAps', 'list']) || fromJS([])}
                 page={serverData.getIn(['aroundAps', 'page'])}
               />
@@ -445,11 +442,11 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    actions
+    actions,
   ), dispatch);
 }
 
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(View);

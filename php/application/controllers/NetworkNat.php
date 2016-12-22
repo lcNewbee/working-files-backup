@@ -47,42 +47,40 @@ class NetworkNat extends CI_Controller {
     );
 		return 	$result;
 	}
-
+  function getCgiParams($oriData) {
+    $ret = array(
+      'id'=>element('id', $oriData),
+      'type'=>element('ruleType', $oriData),
+      'ipaddr'=>element('sourceAddress', $oriData),
+      'natipaddr'=>element('conversionAddress', $oriData),
+    );
+    return $ret;
+  }
 	function onAction($data) {
 		$result = null;
 		$actionType = element('action', $data);
     $selectList = element('selectedList', $data);
 
-    function getCgiParams($oriData) {
-      $ret = array(
-        'id'=>element('id', $oriData),
-        'type'=>element('ruleType', $oriData),
-        'ipaddr'=>element('sourceAddress', $oriData),
-        'natipaddr'=>element('conversionAddress', $oriData),
-      );
-      return $ret;
-    }
-
 		if ($actionType === 'add') {
-			$cgiParams=getCgiParams($data);
-      $result=acnetmg_add_nat(json_encode($cgiParams));
+			$cgiParams = $this->getCgiParams($data);
+      $result = acnetmg_add_nat(json_encode($cgiParams));
 		}
 		elseif($actionType === 'edit') {
-			$cgiParams=getCgiParams($data);
-      $result=acnetmg_update_nat(json_encode($cgiParams));
+			$cgiParams = $this->getCgiParams($data);
+      $result = acnetmg_update_nat(json_encode($cgiParams));
 		}
 		elseif($actionType === 'delete') {
 
       foreach($selectList as $item) {
-        $deleteItem = getCgiParams($item);
-				$result=acnetmg_del_nat(json_encode($deleteItem));
+        $deleteItem = $this->getCgiParams($item);
+				$result = acnetmg_del_nat(json_encode($deleteItem));
 			}
 		}
     elseif($actionType === 'setting'){
       $cgiParams = array(
         'enable'=>(int)element('enable', $data)
       );
-      $result=acnetmg_nat_enable(json_encode($cgiParams));
+      $result = acnetmg_nat_enable(json_encode($cgiParams));
 		}
 		return 	$result;
 	}

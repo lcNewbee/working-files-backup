@@ -216,6 +216,9 @@
   "Overview": "概览",
   "Online Number": "在线数量",
   "Rogue AP List": "可疑AP列表",
+  "Rogue SSID List": "可疑SSID列表",
+  "Around AP List": "周围AP列表",
+  "Around SSID List": "周围SSID列表",
   "Safe Alarm Events": "安全告警事件",
   "Client Status": "客户端状态",
   "User Type": "用户类型",
@@ -227,7 +230,6 @@
   "AP with the same MAC already exists": "已经存在相同MAC的AP",
 
   "Traffic": "流量",
-  "Around AP List": "周围AP列表",
 
   "SSID Status": "SSID状态",
   "Group SSID List": "组内SSID列表",
