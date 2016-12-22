@@ -1,0 +1,14 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "settings": {
+      "discoverycnt": 5,
+      "echotime":  10,
+      "statistime": 120,
+      "autoap": 1
+    }
+  }
+}

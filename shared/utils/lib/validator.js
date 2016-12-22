@@ -71,31 +71,21 @@ var vaildate = {
   },
 
   ip: {
-    all: function(str, excludeStr) {
-      var ret = this.specific(str, excludeStr);
-
-      // 排除不做验证的字符串
-      if(excludeStr === str) {
-        return '';
-      }
+    all: function(str) {
+      var ret = this.specific(str);
 
       if (ret) {
         return ret;
       }
 
-      if (!(/^([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){2}([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])(\/)$/).test(str)) {
+      if (!(/^([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){2}([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])$/).test(str)) {
         return _("Please input a valid IP address");
       }
     },
 
-    specific: function(str, excludeStr) {
+    specific: function(str) {
       var ipArr = str.split('.'),
         ipHead = ipArr[0];
-
-      // 排除不做验证的字符串
-      if(excludeStr === str) {
-        return '';
-      }
 
       if (ipArr[0] === '127') {
         return _("IP address begin with 127 is a reserved loopback address, please input another value between 1 to 233");
@@ -169,13 +159,8 @@ var vaildate = {
       }
     }
   },
-  mask: function(str, excludeStr) {
+  mask: function(str) {
     var rel = /^(254|252|248|240|224|192|128)\.0\.0\.0$|^(255\.(254|252|248|240|224|192|128|0)\.0\.0)$|^(255\.255\.(254|252|248|240|224|192|128|0)\.0)$|^(255\.255\.255\.(254|252|248|240|224|192|128|0))$/;
-
-    // 排除不做验证的字符串
-    if(excludeStr === str) {
-      return '';
-    }
 
     if (!rel.test(str)) {
       return _("Please input a valid subnet mask");

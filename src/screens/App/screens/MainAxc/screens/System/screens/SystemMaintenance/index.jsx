@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
-import { Map, List } from 'immutable';
+import { Map, List, fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import AppScreen from 'shared/components/Template/AppScreen';
 import FormGroup from 'shared/components/Form/FormGroup';
@@ -24,6 +24,44 @@ function onChangeLang(data) {
     window.location.reload();
   }
 }
+
+const settingsFormOptions = fromJS([
+  {
+    id: 'discoverycnt',
+    label: _('ap重新加入次数'),
+    fieldset: 'retainDays',
+    legend: _('AP Maintenance'),
+    defaultValue: '7',
+    type: 'number',
+    min: '1',
+    max: '365',
+  }, {
+    id: 'echotime',
+    label: _('ap心跳时间'),
+    fieldset: 'retainDays',
+    defaultValue: '7',
+    type: 'number',
+    min: '1',
+    max: '365',
+    help: _('Seconds'),
+  }, {
+    id: 'statistime',
+    label: _('ap数据上报时间'),
+    fieldset: 'retainDays',
+    defaultValue: '7',
+    type: 'number',
+    min: '1',
+    max: '365',
+    help: _('Seconds'),
+  }, {
+    id: 'autoap',
+    label: _('是否允许自动加入AP'),
+    fieldset: 'retainDays',
+    defaultValue: '7',
+    type: 'checkbox',
+    value: '1',
+  },
+]);
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
@@ -128,6 +166,8 @@ export default class View extends React.Component {
     return (
       <AppScreen
         {...this.props}
+        settingsFormOptions={settingsFormOptions}
+        hasSettingsSaveButton
         noTitle
       >
         <div className="o-form">

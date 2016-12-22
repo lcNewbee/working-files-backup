@@ -62,7 +62,7 @@ function togglePopOverState(state, option) {
 
 function changeModalState(state, option) {
   const myOption = option || {};
-  let modalList = state.get('modalList');
+  let modalList = state.get('modalList') || fromJS([]);
   let targetModal = state.get('modal');
 
   if (myOption.isShow === undefined) {
@@ -228,6 +228,7 @@ export default function (state = defaultState, action) {
     // Modal 操作相关
     case 'SHOW_MAIN_MODAL':
       return changeModalState(state, action.option);
+
     case 'SHOW_PREV_MAIN_MODAL':
       return showPrevModel(state);
 

@@ -72,9 +72,6 @@ export default class View extends React.Component {
   }
 
   onBeforeSave($$actionQuery, $$curListItem) {
-    const store = this.props.store;
-    const myScreenId = store.get('curScreenId');
-    const $$myScreenStore = store.get(myScreenId);
     const actionType = $$actionQuery.getIn(['action']);
     const interfaceBind = $$curListItem.get('interface_bind');
     let serverName = '';
@@ -83,22 +80,17 @@ export default class View extends React.Component {
       serverName = this.state.portOptions.find(
         $$item => $$item.get('value') === interfaceBind,
       ).get('serverName');
-      // if (this.state.portOptions.find(
-      //      item => item.interface_bind === interfaceBind,
-      // )) {
-      //   serverName = this.state.portOptions.serverName;
-      // }
+
       this.props.updateCurEditListItem({
         template_name: serverName,
       });
     }
-
   }
+
   render() {
     const { store } = this.props;
     const myScreenId = store.get('curScreenId');
     const $$myScreenStore = store.get(myScreenId);
-    const $$curList = $$myScreenStore.getIn(['data', 'list']);
     const curListOptions = listOptions
       .setIn([0, 'options'], this.state.portOptions);
 
