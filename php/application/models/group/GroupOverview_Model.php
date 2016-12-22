@@ -47,6 +47,7 @@ class GroupOverview_Model extends CI_Model {
             $temporaryAry = array();
             foreach ($result as $row) {
                 $temporaryAry['mac'] = $row['NbrMac'];
+                $temporaryAry['ssid'] = $row['NbrSsid'];
                 $temporaryAry['channel'] = $row['ChlNum'];
                 $temporaryAry['rssi'] = $row['MeanRSSI'];
                 $db_list[] = $temporaryAry;
