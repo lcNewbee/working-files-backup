@@ -77,7 +77,7 @@ var vaildate = {
         return ret;
       }
 
-      if (!(/^([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){2}([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])$/).test(str)) {
+      if (!(/^([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){2}([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])(\/)$/).test(str)) {
         return _("Please input a valid IP address");
       }
     },
@@ -98,27 +98,26 @@ var vaildate = {
   ipSegment: {
     all: function(str) {
       var ret = this.specific(str);
+      var ip = str.split('/')[0];
+      var mask = str.split('/')[1];
 
       if (ret) {
         return ret;
       }
 
-      if (!(/^([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){2}([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])$/).test(str)) {
+      if (!(/^([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){2}([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])$/).test(ip)) {
         return _("Please input a valid IP address");
+      }
+
+      if (mask) {
+        if (!(/^([0-9]){1,2}$/.test(mask)) || mask > 32) {
+          return _("Network segment mask must be a number between 0-32");
+        }
       }
     },
 
     specific: function(str) {
-      var ipArr = str.split('.'),
-        ipHead = ipArr[0];
-
-      if (ipArr[0] === '127') {
-        return _("IP address begin with 127 is a reserved loopback address, please input another value between 1 to 233");
-      }
-      if (ipArr[0] > 223) {
-        return _("Address begin with ") + _("%s", ipHead) + _(" is invalid, please input a value between 1 to 223.");
-        // return _("Address begin with %s is invalid, please input a value between 1 to 223.", ipHead);
-      }
+      return vaildate.ip.specific(str);
     }
   },
 

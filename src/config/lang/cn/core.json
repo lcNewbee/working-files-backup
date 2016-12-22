@@ -411,6 +411,7 @@
   "NTP Client":"NTP客户端",
   "System Log":"系统日志",
   "NTP Server":"NTP服务器",
+  "Network segment mask must be a number between 0-32": "IP网段掩码必须为0-32间数字",
   "%s and %s must be in the same network segment": "%s与%s必须在同一网段",
   "Broadcast IP address is not allowed !": "IP地址不能为广播地址！",
   "Static IP cannot be the same as default gateway.": "IP地址和网关不能相同。",
