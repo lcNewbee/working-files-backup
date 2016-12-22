@@ -1,11 +1,12 @@
 <?php
 class WirelessTimer_Model extends CI_Model {
-	public function __construct() {
-		parent::__construct();
-		$this->load->database();
-		$this->load->helper('array');
+    public function __construct() {
+        parent::__construct();
+        $this->load->library('session');
+        $this->load->database();
+        $this->load->helper(array('array', 'my_customfun_helper'));
         $this->load->library('SqlPage');
-	}
+    }
     public function get_timer_list($data) {
         //时段	操作对象	重复	备注	开始时间	结束时间	状态
         $sqlpage = new SqlPage();
@@ -56,6 +57,7 @@ class WirelessTimer_Model extends CI_Model {
         return json_encode($arr);
     }
     public function add_timer_policy($data) {
+        $result = null;
         $arr['policy_enable'] = element('policy_enbale',$data,'1');                  //策略开关 （1或0）
         $arr['policy_type'] = element('policy_type',$data,'Once');                 //策略类型 （Once 或者 Mon&Tue&Wed&Thu&Fri&Sat&Sun）
         $arr['policy_times'] = element('policy_times',$data,'2016-11-24 18:00');    //策略执行时间 （2016-11-25 12:35）
@@ -63,19 +65,46 @@ class WirelessTimer_Model extends CI_Model {
         $arr['objects_templatename'] = element('objects_templatename',$data,'');   //操作模板名（ssid 或 ap的mac地址）
         $arr['objects_templateid'] = (string)element('objects_templateid',$data,'');//element('objects_templateid',$data,' ');        //操作模板id（ssid 属性id 或者 ap的radio网卡id）
         $arr['objects_templateswitch'] = (string)element('objects_templateswitch',$data,'1');//执行事件（禁用或启用 （0或1））
-
-        return policy_add_profile_id(json_encode($arr));
+        $result = policy_add_profile_id(json_encode($arr));
+        //log
+        $cgiObj = json_decode($result);
+        if( is_object($cgiObj) && $cgiObj->state->code === 2000 ) {
+            $logary = array(
+                'type'=>'Add',
+                'operator'=>element('username',$_SESSION,''),
+                'operationCommand'=>"Add TimingStrategy ".$arr['objects_templatename'],
+                'operationResult'=>'ok',
+                'description'=>json_encode($arr)
+            );
+            Log_Record($this->db,$logary);
+        }
+        return $result;
     }
     public function del_timer_policy($data) {
+        $result = null;
         $arr['policy_list'] = null;
         $bakary = array();
         foreach($data['selectedList'] as $value) {
             $bakary[] = (string)$value;
         }
         $arr['policy_list'] = $bakary;
-        return policy_del_profile_id(json_encode($arr));
+        $result = policy_del_profile_id(json_encode($arr));
+        //log
+        $cgiObj = json_decode($result);
+        if( is_object($cgiObj) && $cgiObj->state->code === 2000 ) {
+            $logary = array(
+                'type'=>'Delete',
+                'operator'=>element('username',$_SESSION,''),
+                'operationCommand'=>"Delete TimingStrategy ",
+                'operationResult'=>'ok',
+                'description'=> json_encode($data['selectedList'])
+            );
+            Log_Record($this->db,$logary);
+        }
+        return $result;
     }
     public function up_timer_policy($data) {
+        $result = null;
         $arr['policy_id'] = (string)element('policy_id',$data,'-1');
         $arr['policy_enable'] = element('policy_enbale',$data,'1');
         $arr['policy_type'] = element('policy_type',$data,'Once');
@@ -84,7 +113,19 @@ class WirelessTimer_Model extends CI_Model {
         $arr['objects_templatename'] = element('objects_templatename',$data,'');
         $arr['objects_templateid'] = (string)element('objects_templateid',$data,'');//element('objects_templateid',$data,' ');
         $arr['objects_templateswitch'] = (string)element('objects_templateswitch',$data,'1');
-
-        return policy_edit_profile_id(json_encode($arr));
+        $result = policy_edit_profile_id(json_encode($arr));
+        //log
+        $cgiObj = json_decode($result);
+        if( is_object($cgiObj) && $cgiObj->state->code === 2000 ) {
+            $logary = array(
+                'type'=>'Update',
+                'operator'=>element('username',$_SESSION,''),
+                'operationCommand'=>"Update TimingStrategy ".$arr['objects_templatename'],
+                'operationResult'=>'ok',
+                'description'=>json_encode($arr)
+            );
+            Log_Record($this->db,$logary);
+        }
+        return $result;
     }
 }

@@ -19,12 +19,12 @@ class Log_Model extends CI_Model {
             'settings' => array(), 
             'page' => array(
 				'start' => 1, 
-				'size' => 20, 
-				'currPage' => 1, 
+				'size' => $pagesize, 
+				'currPage' => $pageindex, 
 				'totalPage' => $datalist['total_page'], 
 				'total' => $datalist['total_row'], 
-				'nextPage' => '-1', 
-				'lastPage' => 2
+				'nextPage' => ($pageindex + 1) === $datalist['total_page'] ? ($pageindex + 1) : -1, 
+				'lastPage' => $datalist['total_page']
 			), 
             'list' => $datalist['data']
 		);
