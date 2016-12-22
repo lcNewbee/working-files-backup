@@ -107,15 +107,7 @@ export default class View extends React.Component {
         {...this.props}
         store={store}
         listOptions={curListOptions}
-<<<<<<< 70d3008c3388ab7f80fcc2eff7b58e8a84244d1d
-        onBeforeAction={
-          () => {
-            alert(1);
-          }
-        }
-=======
         onBeforeSave={this.onBeforeSave}
->>>>>>> AXC: 数据验证以及DHCP Relay页面
         actionable
         selectable
         editable={false}
