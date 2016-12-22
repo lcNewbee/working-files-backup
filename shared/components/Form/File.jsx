@@ -24,7 +24,6 @@ const propTypes = {
 
 const defaultProps = {
   Component: 'span',
-  searchOnChange: true,
 };
 
 class File extends React.Component {

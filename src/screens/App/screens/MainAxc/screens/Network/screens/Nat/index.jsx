@@ -49,11 +49,11 @@ const listOptions = fromJS([
 
   }, {
     id: 'sourceAddress',
-    label: _('Original IP Address'),
+    label: _('Source IP Address'),
     formProps: {
       required: true,
       validator: validator({
-        rules: 'ip',
+        rules: 'ipSegment',
       }),
     },
   }, {

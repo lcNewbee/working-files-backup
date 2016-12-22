@@ -73,7 +73,7 @@ const storeForwardOption = [
   //   label: _('Centralized Forward-%s', '802.11'),
   // },
 ];
-const flowRateFilter = utils.filter('flowRate:["KB/s"]');
+const flowRateFilter = utils.filter('flowRate:["KB"]');
 const listOptions = fromJS([
   {
     id: 'ssid',
@@ -136,7 +136,7 @@ const listOptions = fromJS([
       const upRate = flowRateFilter.transform(item.get('upstream'));
       const downRate = flowRateFilter.transform(item.get('downstream'));
 
-      return `${upRate}/${downRate}`;
+      return `${upRate} / ${downRate}`;
     },
   }, {
     id: 'maxBssUsers',

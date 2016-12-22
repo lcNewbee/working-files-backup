@@ -107,10 +107,10 @@ const listOptions = fromJS([
     options: [
       {
         value: '1',
-        label: _('Source Address'),
+        label: _('Source IP Address'),
       }, {
         value: '2',
-        label: _('Target Address'),
+        label: _('Target IP Address'),
       },
     ],
     formProps: {
