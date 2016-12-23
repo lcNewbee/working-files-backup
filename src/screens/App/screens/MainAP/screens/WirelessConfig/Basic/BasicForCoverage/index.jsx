@@ -1072,11 +1072,8 @@ export default class Basic extends React.Component {
                     }}
                     hasTextInput
                     onChange={(data) => {
-                      let val = data.value;
-                      // const max = Number(this.props.selfState.get('maxTxpower'));
-                      // if (val > max) val = max;
                       const radioList = curData.get('radioList')
-                                        .setIn([radioId, 'txPower'], val);
+                                        .setIn([radioId, 'txPower'], data.value);
                       this.props.updateItemSettings({ radioList });
                     }}
                   />

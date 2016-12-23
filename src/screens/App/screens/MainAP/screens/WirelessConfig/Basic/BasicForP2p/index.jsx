@@ -1810,11 +1810,8 @@ export default class Basic extends React.Component {
                 max={this.props.selfState.get('maxTxpower')}
                 value={radioSettings.getIn(['radioList', radioId, 'txPower'])}
                 onChange={(data) => {
-                  let val = data.value;
-                  // const max = Number(this.props.selfState.get('maxTxpower'));
-                  // if (val > max) val = max;
                   const radioList = radioSettings.get('radioList')
-                                    .setIn([radioId, 'txPower'], val);
+                                    .setIn([radioId, 'txPower'], data.value);
                   this.props.updateRadioSettingsItem({ radioList });
                 }}
                 help="dBm"

@@ -767,11 +767,8 @@ export default class QuickSetup extends React.Component {
                   hasTextInput
                   help="km"
                   disabled={autoAdjust === '1'}
-                  onChange={(data, e) => {
-                    let val = data.value;
-                    if (val > e.target.max) val = e.target.max;
-                    else if (val < e.target.min) val = e.target.min;
-                    this.props.updateItemSettings({ distance: val });
+                  onChange={(data) => {
+                    this.props.updateItemSettings({ distance: data.value });
                   }}
                 />
                 <span
