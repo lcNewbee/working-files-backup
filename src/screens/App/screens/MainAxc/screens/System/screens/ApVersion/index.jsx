@@ -85,8 +85,9 @@ export default class View extends React.Component {
     // 删除已激活版本
     } else if (actionType === 'delete' && parseInt($$actionQuery.get('active'), 10) === 1) {
       ret = _("The current Firmware version is active, you can't delete it. If you want to delete it, please activate another Firmware version!");
+    } else if (actionType === 'add' && parseInt($$actionQuery.get('active'), 10) === 0) {
+      ret = _('Not work!');
     }
-
     return ret;
   }
   getApModelList() {

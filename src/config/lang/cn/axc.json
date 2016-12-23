@@ -92,6 +92,8 @@
   "Port Name": "端口名称",
 
   "DHCP Settings": "DHCP配置",
+  "DHCP List":"DHCP 列表",
+  "DHCP Relay":"DHCP 中继",
   "Domain": "域名",
   "Start IP": "起始IP",
   "End IP": "结束IP",
