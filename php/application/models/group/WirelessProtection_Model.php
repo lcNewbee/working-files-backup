@@ -2,8 +2,10 @@
 class WirelessProtection_Model extends CI_Model {
 	public function __construct() {
 		parent::__construct();
+        $this->load->library('session');
 		$this->load->database();
-		$this->load->helper('array');				
+		$this->load->helper('array');		
+        $this->load->helper(array('array', 'my_customfun_helper'));		
 	}
     public function get_terminalprotect_info($data) {
         $sqldata = $this->db->select('enable,attack_time,attack_cnt,age_time')
@@ -29,6 +31,18 @@ class WirelessProtection_Model extends CI_Model {
         $arr['attactcnt'] = (int)element('attactcnt',$data,-1);
         $arr['dyaging'] = (int)element('dyaging',$data,-1);
         $result = axc_set_wireless_dyblk(json_encode($arr));
+        //log
+        $cgiObj = json_decode($result);			
+        if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
+            $logary = array(
+                'type'=>'Setting',
+                'operator'=>element('username',$_SESSION,''),
+                'operationCommand'=>"Setting Terminal protection",
+                'operationResult'=>'ok',
+                'description'=>json_encode($arr)
+            );
+            Log_Record($this->db,$logary);
+        }
         return $result;
     }
 }

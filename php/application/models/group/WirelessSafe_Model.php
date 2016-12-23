@@ -2,8 +2,9 @@
 class WirelessSafe_Model extends CI_Model {
 	public function __construct() {
 		parent::__construct();
+        $this->load->library('session');
 		$this->load->database();
-		$this->load->helper('array');
+		$this->load->helper(array('array', 'my_customfun_helper'));
 	}
 	public function get_wips_list($retdata) {
         $arr['state'] = array("code"=>2000,"msg"=>"ok");
@@ -34,6 +35,18 @@ class WirelessSafe_Model extends CI_Model {
         $arr['enable2g4pwr'] = (int)element('enable2g4pwr',$data,0);  /* 2.4G自动功率扫描开关 */
         $arr['adjafactor2g4'] = (int)element('adjafactor2g4',$data,1); /* 2.4G频段邻居系数 > 0 */
         $result = wrrm_set_param(json_encode($arr));
+        //log
+        $cgiObj = json_decode($result);			
+        if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
+            $logary = array(
+                'type'=>'Setting',
+                'operator'=>element('username',$_SESSION,''),
+                'operationCommand'=>"Setting WIPS",
+                'operationResult'=>'ok',
+                'description'=>json_encode($arr)
+            );
+            Log_Record($this->db,$logary);
+        }
         return $result;
     }
 

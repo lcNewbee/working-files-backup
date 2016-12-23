@@ -3,6 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class ApRadio extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
+		$this->load->library('session');
 		$this->load->database();
 		$this->load->helper(array('array', 'my_customfun_helper'));    
 	}
@@ -55,14 +56,36 @@ class ApRadio extends CI_Controller {
                 foreach($get_all_mac as $res ) {
 					$arr['mac'] = $res;					
                     $cgidata = axc_set_apradio(json_encode($arr));
-					if(strpos($cgidata,"2000")) {
+					//log
+					$cgiObj = json_decode($cgidata);			
+					if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
 						$ok_num++;
-					}		
+						$logary = array(
+							'type'=>'Setting',
+							'operator'=>element('username',$_SESSION,''),
+							'operationCommand'=>"Setting Radio ".$arr['mac'],
+							'operationResult'=>'ok',
+							'description'=>json_encode($arr)
+						);
+						Log_Record($this->db,$logary);
+					}	
                 }
                 $result = json_encode(json_ok($ok_num));
                 break;
             default :
                 $result = axc_set_apradio(json_encode($data));
+				//log
+				$cgiObj = json_decode($result);			
+				if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
+					$logary = array(
+						'type'=>'Setting',
+						'operator'=>element('username',$_SESSION,''),
+						'operationCommand'=>"Setting Radio ".$data['mac'],
+						'operationResult'=>'ok',
+						'description'=>json_encode($data)
+					);
+					Log_Record($this->db,$logary);
+				}
                 break;
         }
 		
