@@ -5,6 +5,7 @@
   },
   "data": {
     "settings": {
+       "relay_enable":"1",
        "dhcp_server": "192.168.0.197 ",
        "referral_server": "192.168.0.198",
        "option82_1": "22:22:22:22:22:22",

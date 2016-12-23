@@ -233,6 +233,18 @@ export const advancedSetting = fromJS([
     type: 'checkbox',
     text: _('Enable'),
   }, {
+    id: 'accton_sendtimes',
+    label: _('Accounting-on Resend Times'),
+    fieldset: 'acctonAdvance',
+    type: 'number',
+    defaultValue: '3',
+    min: 3,
+    max: 10,
+    required: true,
+    showPrecondition(data) {
+      return data.get('accton_enable') === '1';
+    },
+  }, {
     id: 'accton_sendinterval',
     label: _('Accounting-on Resend Interval'),
     fieldset: 'acctonAdvance',
@@ -243,6 +255,9 @@ export const advancedSetting = fromJS([
     defaultValue: '3',
     min: 3,
     max: 30,
+    showPrecondition(data) {
+      return data.get('accton_enable') === '1';
+    },
   }, {
     id: 'acct_interim_interval',
     label: _('Accounting Messaging Interval'),
@@ -254,15 +269,6 @@ export const advancedSetting = fromJS([
     defaultValue: '720',
     min: 300,
     max: 3600,
-  }, {
-    id: 'accton_sendtimes',
-    label: _('Accounting-on Resend Times'),
-    fieldset: 'acctonAdvance',
-    type: 'number',
-    defaultValue: '3',
-    min: 3,
-    max: 10,
-    required: true,
   }, {
     id: 'realretrytimes',
     label: _('Accounting Message-Resend Times'),

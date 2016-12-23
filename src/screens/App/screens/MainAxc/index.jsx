@@ -6,7 +6,6 @@ import { Link } from 'react-router';
 import utils from 'shared/utils';
 import classNamesUtils from 'classnames';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-
 import { Button, SaveButton } from 'shared/components/Button';
 import validator from 'shared/utils/lib/validator';
 import Nav from 'shared/components/Nav';
@@ -62,7 +61,7 @@ const propTypes = {
 
 const validOptions = fromJS({
   groupname: validator({
-    rules: 'len:[1, 64]',
+    rules: 'len:[1, 31]',
   }),
   remark: validator({
     rules: 'len:[1, 256]',
@@ -101,7 +100,6 @@ export default class Main extends Component {
       'fetchManageGroupAps',
       'isDuplicateAp',
       'autoRefreshData',
-
       'renderPopOverContent',
       'renderBreadcrumb',
     ]);
@@ -649,7 +647,7 @@ export default class Main extends Component {
                     type="text"
                     name="name"
                     label={_('Name')}
-                    maxLength="32"
+                    maxLength="31"
                     value={groupApAddData.get('name')}
                     onChange={data => this.props.updateGroupAddDevice({
                       name: data.value,
@@ -768,7 +766,7 @@ export default class Main extends Component {
                   type="text"
                   label={_('Group Name')}
                   name="groupname"
-                  maxLength="32"
+                  maxLength="31"
                   value={product.getIn(['group', 'addData', 'groupname'])}
                   onChange={data => this.props.updateAddApGroup({
                     groupname: data.value,
@@ -821,7 +819,7 @@ export default class Main extends Component {
               type="text"
               label={_('Group Name')}
               name="groupname"
-              maxLength="32"
+              maxLength="31"
               value={product.getIn(['group', 'manageSelected', 'groupname'])}
               onChange={data => this.props.updateEditApGroup({
                 groupname: data.value,

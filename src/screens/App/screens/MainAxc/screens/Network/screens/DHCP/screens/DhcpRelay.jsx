@@ -17,10 +17,19 @@ const defaultProps = {};
 
 const settingsOptions = fromJS([
   {
+    id: 'relay_enable',
+    label: _('Relay on'),
+    legend: _('DHCP Relay'),
+    fieldset: 'relay_setting',
+    defaultValue: '0',
+    value: '1',
+    required: true,
+    type: 'checkbox',
+    text: _('Enable'),
+  }, {
     id: 'dhcp_server',
     label: _('DHCP Server'),
     fieldset: 'relay_setting',
-    legend: _('DHCP Relay'),
     type: 'text',
     required: 'true',
     validator: validator({
