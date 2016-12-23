@@ -32,6 +32,18 @@ class SystemMaintenance extends CI_Controller {
                 'autoap' => (int)element('autoap',$data,1),
             );
             $result = axc_set_capwap_param(json_encode($cgiary));
+            //log
+            $cgiObj = json_decode($result);			
+            if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
+                $logary = array(
+                    'type'=>'Setting',
+                    'operator'=>element('username',$_SESSION,''),
+                    'operationCommand'=>"Setting capwap",
+                    'operationResult'=>'ok',
+                    'description'=>json_encode($cgiary)
+                );
+                Log_Record($this->db,$logary);
+            }
         }
         return $result;
     }
