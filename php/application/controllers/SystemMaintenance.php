@@ -8,15 +8,30 @@ class SystemMaintenance extends CI_Controller {
         $this->load->helper(array('array', 'my_customfun_helper'));			
     }
     function fetch() {
-        /**/
+        $retdata = array(
+            'page' => element('page',$_GET,1),
+            'size' => element('size',$_GET,20)
+        );    
+        $querydata = $this->db->query('select discover as discoverycnt,echo as echotime,acstatistime as statistime,autoap from capwap');
+        $arr = array(
+            'state' => array('code'=>2000,'msg'=>'ok'),
+            'data' => array(
+                'settings'=>$querydata->row_array()
+            )
+        );
+        return json_encode($arr);
     }
     function onAction($data) {
         $result = null;
         $actionType = element('action', $data);
-        if ($actionType === 'delete') {
-            $result = $this->Log_Model->log_delete($data);
-        } elseif ($actionType === 'setting') {
-            $result = $this->Log_Model->log_cfg($data);
+        if ($actionType === 'setting') {
+            $cgiary = array(
+                'discoverycnt' => (int)element('discoverycnt',$data,5),
+                'echotime' => (int)element('echotime',$data,10),
+                'statistime' => (int)element('statistime',$data,120),
+                'autoap' => (int)element('autoap',$data,1),
+            );
+            $result = axc_set_capwap_param(json_encode($cgiary));
         }
         return $result;
     }
