@@ -76,6 +76,15 @@ class SystemApVersion extends CI_Controller {
         }
         return $result;
     }
+    public function is_version_activation($model){
+        $result = False;
+        $sql = "select * from ap_firmware where  model='".$model."' and active=1";
+        $querydata = $this->db->query($sql);
+        if( $querydata->num_rows() > 0 ) {
+            $result = TRUE;
+        }
+        return $result;
+    }
     function onAction($data) {
         if (!$data) {
             $data = $_POST;
@@ -95,21 +104,28 @@ class SystemApVersion extends CI_Controller {
                     'fmname'=>$filename,
                     'filepath'=>$filepath,
                     'active'=>(int)element('active', $data,0)
-                );
-            }
-            $result=axc_add_apfirmware(json_encode($retData ));
-            //log
-            $cgiObj = json_decode($result);			
-            if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
-                $logary = array(
-                    'type'=>'Add',
-                    'operator'=>element('username',$_SESSION,''),
-                    'operationCommand'=>"Add AP Version ".$retData['vendor'],
-                    'operationResult'=>'ok',
-                    'description'=>""
-                );
-                Log_Record($this->db,$logary);
-            }
+                );      
+                if($retData['active'] === 0 && $this->is_version_activation($retData['model']) === False){                              
+                    //无激活
+                    $arr = array('state' => array('code'=>4000,'msg'=>'No activation'));
+                    $arr['sss'] =$this->is_version_activation($retData['model']);
+                    $result = json_encode($arr);               
+                }else{
+                    $result = axc_add_apfirmware(json_encode($retData ));
+                    //log
+                    $cgiObj = json_decode($result);			
+                    if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
+                        $logary = array(
+                            'type'=>'Add',
+                            'operator'=>element('username',$_SESSION,''),
+                            'operationCommand'=>"Add AP Version ".$retData['vendor'],
+                            'operationResult'=>'ok',
+                            'description'=>""
+                        );
+                        Log_Record($this->db,$logary);
+                    }
+                }
+            }                    
         } elseif ($actionType === 'active'){
             $retData = array(
                 'vendor'=>element('vendor',$data, 48208),
