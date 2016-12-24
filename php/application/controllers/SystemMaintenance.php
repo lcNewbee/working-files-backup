@@ -89,6 +89,39 @@ class SystemMaintenance extends CI_Controller {
         exec('/sbin/reboot');
     }
     public function restore() {
-        //恢复出厂设置
+        if(isset($_POST['suffix'])) {
+            //从文件恢复
+            $result = $this->do_upload();	            	
+            if($result['state']['code'] === 2000){
+                exec('/sbin/reboot');                
+            }else{
+                $result = json_encode($result);               
+            }	
+        }else{
+            //恢复出厂设置
+            if(file_exists('/var/conf/config.db')) {
+                unlink('/var/conf/config.db');
+            }
+            exec('/sbin/reboot');  
+        }            
+    }
+    //上传
+    public function do_upload() {	
+        $result = null;			
+        $config['upload_path'] = '/var/conf'; 
+        $config['allowed_types'] = '*';
+        $config['overwrite'] = true;
+        $config['max_size'] = 0;
+        $config['file_name'] = 'config.db';
+        
+        $this->load->library('upload', $config);
+        if (!$this->upload->do_upload('filename')) {
+            $error = array('error' => $this->upload->display_errors());
+            $result = array('state' => array('code' => 4000, 'msg' => $error));
+        } else {
+            $data = array('upload_data' => $this->upload->data());
+            $result = array('state' => array('code' => 2000, 'msg' => 'OK'), 'data' => $data);
+        }
+        return $result;
     }
 }
