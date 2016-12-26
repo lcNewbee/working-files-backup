@@ -20,7 +20,7 @@ const mountNode = document.getElementById('app');
 
 // 引入产品配置
 const renderApp = () => {
-  const prodConfig = require('./config/ac');
+  const prodConfig = require('./config/axc');
 
   // 主渲染入口
   ReactDOM.render(
@@ -39,11 +39,7 @@ if (module.hot) {
     renderApp();
   };
 
-<<<<<<< HEAD
-  module.hot.accept('./config/axcIndia', () => {
-=======
-  module.hot.accept('./config/ac', () => {
->>>>>>> Common: 有话图片loader
+  module.hot.accept('./config/axc', () => {
     setImmediate(() => {
       // Preventing the hot reloading error from react-router
       unmountComponentAtNode(mountNode);

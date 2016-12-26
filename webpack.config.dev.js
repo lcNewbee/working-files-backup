@@ -157,6 +157,11 @@ let config = {
     extensions: ['.js', '.jsx'],
     modules: ['node_modules', 'shared'],
   },
+  performance: {
+    hints: false, // enum
+    maxAssetSize: 24000000, // int (in bytes),
+    maxEntrypointSize: 40000000, // int (i bytes
+  },
 
   plugins: [
     new webpack.LoaderOptionsPlugin({
