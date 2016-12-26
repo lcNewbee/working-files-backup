@@ -28,7 +28,7 @@ const listOptions = fromJS([
       required: true,
       validator: validator({
         rules: 'mask',
-        exclude: '0.0.0.0',
+        exclude: ['0.0.0.0', '255.255.255.255'],
       }),
     },
   }, {
