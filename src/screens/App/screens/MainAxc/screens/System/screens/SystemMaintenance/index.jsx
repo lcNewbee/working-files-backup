@@ -28,7 +28,7 @@ function onChangeLang(data) {
 const settingsFormOptions = fromJS([
   {
     id: 'discoverycnt',
-    label: _('ap重新加入次数'),
+    label: _('AP Number of Re-joins'),
     fieldset: 'retainDays',
     legend: _('AP Maintenance'),
     defaultValue: '7',
@@ -37,7 +37,7 @@ const settingsFormOptions = fromJS([
     max: '365',
   }, {
     id: 'echotime',
-    label: _('ap心跳时间'),
+    label: _('AP Heartbeat Time'),
     fieldset: 'retainDays',
     defaultValue: '7',
     type: 'number',
@@ -46,7 +46,7 @@ const settingsFormOptions = fromJS([
     help: _('Seconds'),
   }, {
     id: 'statistime',
-    label: _('ap数据上报时间'),
+    label: _('AP Data Reporting Time'),
     fieldset: 'retainDays',
     defaultValue: '7',
     type: 'number',
@@ -55,7 +55,7 @@ const settingsFormOptions = fromJS([
     help: _('Seconds'),
   }, {
     id: 'autoap',
-    label: _('是否允许自动加入AP'),
+    label: _('Allow Automatic Add AP'),
     fieldset: 'retainDays',
     defaultValue: '7',
     type: 'checkbox',

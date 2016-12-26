@@ -496,6 +496,10 @@
   "Restore To Factory": "恢复出厂配置",
   "Restore Now": "开始恢复",
   "AP Maintenance": "AP维护",
+  "AP Data Reporting Time": "AP数据上报时间",
+  "Allow Automatic AP": "是否允许自动加入AP",
+  "AP Heartbeat Time": "AP心跳时间",
+  "AP Number of Re-joins": "AP重新加入次数",
 
   "Read Password": "读口令",
   "Write Password": "写口令",
