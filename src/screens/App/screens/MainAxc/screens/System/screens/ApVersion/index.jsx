@@ -20,7 +20,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'softVersion',
-    text: _('Soft Version'),
+    text: _('Firmware Version'),
     defaultValue: '',
     formProps: {
       type: 'text',
@@ -85,11 +85,18 @@ export default class View extends React.Component {
     // 删除已激活版本
     } else if (actionType === 'delete' && parseInt($$actionQuery.get('active'), 10) === 1) {
       ret = _("The current Firmware version is active, you can't delete it. If you want to delete it, please activate another Firmware version!");
-    } else if (actionType === 'add' && parseInt($$actionQuery.get('active'), 10) === 0) {
-      ret = _('Not work!');
+    } else if (actionType === 'add') {
+      this.props.save('goform/system/ap/version', $$actionQuery)
+      .then((json) => {
+        const state = json && json.state;
+        if (state.code === 4000) {
+          ret = _("There's no active version of the model,it should be activated!");
+        }
+      });
     }
     return ret;
   }
+
   getApModelList() {
     this.props.fetch('goform/system/ap/model', {
       page: 1,

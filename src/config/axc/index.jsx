@@ -611,13 +611,13 @@ const routes = [
                 id: 'axcVersion',
                 path: '/main/system/upgrade/axc',
                 formUrl: 'goform/system/version',
-                text: _('AC Version'),
+                text: _('AC Firmware'),
                 component: sAcVersion.Screen,
               }, {
                 id: 'apsVersion',
                 path: '/main/system/upgrade/aps',
                 formUrl: 'goform/system/ap/version',
-                text: _('AP Version'),
+                text: _('AP Firmware'),
                 component: sApVersion.Screen,
               }, {
                 id: 'apModel',

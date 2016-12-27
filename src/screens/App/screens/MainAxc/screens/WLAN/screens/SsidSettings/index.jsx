@@ -24,7 +24,7 @@ const encryptionOptions = [
     label: _('NONE'),
   }, {
     value: 'psk-mixed',
-    label: _('STRONG'),
+    label: _('SECURITY'),
   },
 ];
 const loadBalanceTypeArr = [

@@ -100,10 +100,10 @@ const listOptions = fromJS([
     noTable: true,
     formProps: {
       type: 'number',
-      max: '32',
-      min: '1',
+      min: 0,
+      maxLength: '32',
       validator: validator({
-        rules: 'num[1,32]',
+        rules: 'len[1,32]',
       }),
     },
   },

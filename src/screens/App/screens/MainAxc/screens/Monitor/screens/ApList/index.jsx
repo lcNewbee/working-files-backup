@@ -92,14 +92,20 @@ const $$radioAdvanceFormOptions = radioAdvance.filterNot(
   },
 );
 const listOptions = fromJS([
+  // {
+  //   id: 'devicename',
+  //   width: '180',
+  //   text: `${_('MAC Address')}/${_('Name')}`,
+  //   maxLength: '32',
+  //   transform(val, item) {
+  //     return item.get('devicename') || item.get('mac');
+  //   },
+  // },
   {
     id: 'devicename',
     width: '180',
-    text: `${_('MAC Address')}/${_('Name')}`,
+    text: _('Name'),
     maxLength: '32',
-    transform(val, item) {
-      return item.get('devicename') || item.get('mac');
-    },
   }, {
     id: 'ip',
     width: '160',

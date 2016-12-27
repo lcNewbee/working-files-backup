@@ -16,11 +16,11 @@ const _ = window._;
 const msg = {
   password: _('Password'),
   versionUses: _('Version Description'),
-  selectFile: _('Firmware File'),
+  selectFile: _('Image File'),
   dictDefaultMessage: _('Drop or click to select file'),
   removefile: _('Remove File'),
   currentVersion: _('Current Frimware Version'),
-  upAcVersionTitle: _('Upgrading AC Firmware'),
+  upAcVersionTitle: _('Upgrading Firmware'),
   backupAcVersion: _('Backup AC Firmware'),
   sureUpgradeAc: _('Are you sure to UPGRADE the Firmware and REBOOT?'),
   upgradingACversion: _('Upgrading AC Firmware version, please do not shut down device.'),
@@ -249,7 +249,7 @@ export default class AcVersion extends PureComponent {
     ];
     const options = fromJS([
       {
-        title: _('Upload AC Firmware'),
+        title: _('Upload Image'),
         render: this.renderStepOne,
       }, {
         title: stepTwoTitleArr[versionUses],
