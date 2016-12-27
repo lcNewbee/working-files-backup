@@ -1,5 +1,4 @@
 import channels from 'shared/config/country.json';
-import utils from 'shared/utils';
 import { fromJS, List } from 'immutable';
 
 const channelBandwidthOptions = fromJS([
@@ -43,6 +42,33 @@ const spatialstreamsOptions = [
     label: '4x4',
   },
 ];
+export const $$phymodeOptopns = fromJS([
+  {
+    value: 1,
+    label: '802.11b',
+  }, {
+    value: 2,
+    label: '802.11g',
+  }, {
+    value: 4,
+    label: '802.11n',
+  }, {
+    value: 3,
+    label: '802.11bg',
+  }, {
+    value: 7,
+    label: '802.11bgn',
+  }, {
+    value: 8,
+    label: '802.11a',
+  }, {
+    value: 12,
+    label: '802.11na',
+  }, {
+    value: 16,
+    label: '802.11ac',
+  },
+]);
 
 export const numberKeys = [
   'groupid',
@@ -90,24 +116,7 @@ export const radioBase = fromJS([
     label: _('Physical Mode'),
     type: 'select',
     defaultValue: '',
-    options: [
-      {
-        value: 1,
-        label: '802.11b',
-      }, {
-        value: 2,
-        label: '802.11a',
-      }, {
-        value: 4,
-        label: '802.11g',
-      }, {
-        value: 8,
-        label: '802.11n',
-      }, {
-        value: 16,
-        label: '802.11bg',
-      },
-    ],
+    options: $$phymodeOptopns,
   }, {
     id: 'switch11n',
     form: 'radioBase',
@@ -116,7 +125,7 @@ export const radioBase = fromJS([
     defaultValue: '0',
     text: _('11n Frist'),
     showPrecondition(data) {
-      return parseInt(data.get('phymode'), 10) === 8;
+      return parseInt(data.get('phymode'), 10) > 8;
     },
   }, {
     id: 'txpower',
@@ -331,7 +340,7 @@ export const radioAdvance = fromJS([
     value: '1',
     defaultValue: '1',
     showPrecondition(data) {
-      return parseInt(data.get('phymode'), 10) === 8;
+      return parseInt(data.get('phymode'), 10) >= 8;
     },
   },
   // {
@@ -365,7 +374,7 @@ export const radioAdvance = fromJS([
     value: '1',
     defaultValue: '0',
     showPrecondition(data) {
-      return parseInt(data.get('phymode'), 10) === 8;
+      return parseInt(data.get('phymode'), 10) >= 8;
     },
   }, {
     id: 'amsdu',
@@ -375,7 +384,7 @@ export const radioAdvance = fromJS([
     value: '1',
     defaultValue: '0',
     showPrecondition(data) {
-      return parseInt(data.get('phymode'), 10) === 8;
+      return parseInt(data.get('phymode'), 10) >= 8;
     },
   }, {
     id: 'rateset',

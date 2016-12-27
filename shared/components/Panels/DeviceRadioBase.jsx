@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { Map, fromJS } from 'immutable';
 import utils from 'shared/utils';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import { radioBase } from 'shared/config/axcRadio';
+import { radioBase, $$phymodeOptopns } from 'shared/config/axcRadio';
 import FormContainer from '../Organism/FormContainer';
 
 import {
@@ -66,21 +66,25 @@ class DeviceSystem extends React.Component {
       'fetchChannelOptions',
       'onSave',
       'getCurData',
+      'transformPhymode',
     ]);
     this.state = {
       $$channelOptions: fromJS([]),
+      $$phymodeOptopns: fromJS([]),
     };
   }
 
   componentWillMount() {
     this.fetchChannelOptions(this.props);
+    this.transformPhymode(this.props.store.getIn(['data', 'phymodesupport']));
   }
-
-  componentWillUpdate(nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (this.props.store.getIn(['data', 'countrycode']) !== nextProps.store.getIn(['data', 'countrycode']) ||
-        this.props.store.getIn(['data', 'phymode']) !== nextProps.store.getIn(['data', 'phymode'])) {
-
+      this.props.store.getIn(['data', 'phymode']) !== nextProps.store.getIn(['data', 'phymode'])) {
       this.fetchChannelOptions(nextProps);
+    }
+    if (this.getCurData('phymodesupport') !== nextProps.store.getIn(['data', 'phymodesupport'])) {
+      this.transformPhymode(nextProps.store.getIn(['data', 'phymodesupport']));
     }
   }
 
@@ -92,6 +96,15 @@ class DeviceSystem extends React.Component {
 
   getCurData(name) {
     return this.props.store.getIn(['data', name]);
+  }
+  transformPhymode(phymodesupport) {
+    const maxSupport = phymodesupport || 2;
+
+    this.setState({
+      $$phymodeOptopns: $$phymodeOptopns.filter(
+        $$item => $$item.get('value') <= maxSupport,
+      ),
+    });
   }
 
   fetchChannelOptions(props) {
@@ -115,7 +128,13 @@ class DeviceSystem extends React.Component {
         $$item => $$item.get('id') === 'channel',
       ),
       'options',
-    ], this.state.$$channelOptions);
+    ], this.state.$$channelOptions)
+    .setIn([
+      radioBase.findIndex(
+        $$item => $$item.get('id') === 'phymode',
+      ),
+      'options',
+    ], this.state.$$phymodeOptopns);
 
     return (
       <FormContainer

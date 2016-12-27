@@ -135,6 +135,7 @@ export function fetch(url, query) {
         if (json === undefined) {
           return {};
         }
+        // AP产品 无登录权限
         if (json.state && json.state.code === 4040) {
           window.location.href = '#';
         } else if (!json.state || (json.state && json.state.code !== 2000)) {

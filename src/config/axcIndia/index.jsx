@@ -66,7 +66,7 @@ const sMainAxc = require('../../screens/App/screens/MainAxc');
  */
 // const sNetworkVlan = require('../../screens/App/screens/MainAxc/screens/Network/screens/VLAN');
 const sInterfaces = require('../../screens/App/screens/MainAxc/screens/Network/screens/Interfaces');
-const sNetworkDhcp = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP');
+const sNetworkDhcp = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/DhcpList');
 const sNetworkRoutes = require('../../screens/App/screens/MainAxc/screens/Network/screens/Routes');
 const sNetworkNat = require('../../screens/App/screens/MainAxc/screens/Network/screens/Nat');
 // const sNetworkAcl = require('../../screens/App/screens/MainAxc/screens/Network/screens/ACL');

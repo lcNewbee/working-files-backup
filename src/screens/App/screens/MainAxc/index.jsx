@@ -1060,8 +1060,9 @@ export default class Main extends Component {
     const { saving, version, guiName } = this.props.app.toJS();
     const { popOver, modal } = this.props.product.toJS();
     const { isShowPanel } = this.props.properties.toJS();
+    const curTopNavText = this.props.route.text;
+    const curRoutePath = this.props.route.path;
     let isGroupMenu = false;
-    let curTopNavText = _('NETWORK');
     let mainClassName = 't-main t-main--axc';
     let isGroupAsiderShow = false;
     let groupTitleIconClassName = '';
@@ -1069,17 +1070,15 @@ export default class Main extends Component {
     let isMainRightShow = isShowPanel;
     let mainLeftMenus = this.props.route.childRoutes;
 
-    if (this.props.location.pathname.indexOf('/main/group') === 0) {
-      curTopNavText = _('AP GROUP');
+    if (curRoutePath === '/main/group') {
       isGroupMenu = true;
 
       // 如果当前是所有组，则隐藏组配置相关菜单
       if (selectGroupId === ALL_GROUP_ID) {
         mainLeftMenus = mainLeftMenus.slice(0, 1);
       }
-    } else if (this.props.location.pathname.indexOf('/main/system') === 0) {
-      curTopNavText = _('SYSTEM');
     }
+
     isMainLeftShow = popOver.isShow && (popOver.name === 'vlanAsider' || popOver.name === 'groupAsider');
     isMainRightShow = isShowPanel;
     mainClassName = classNamesUtils(mainClassName, {

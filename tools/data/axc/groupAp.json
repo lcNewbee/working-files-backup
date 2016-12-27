@@ -10,6 +10,9 @@
       {
         "radioID":   1,
         "enable": 1,
+        "phymodesupport": 12,
+        "spatialstreams": 2,
+        "ratesupport": "MCS15",
         "beaconinterval": 100,
         "fragthreshold": 1024,
         "longretrythreshold": 11,
@@ -37,12 +40,13 @@
         "rate": "xxx",
         "txpower": "100%",
         "rateset": "2x2",
-        "spatialstreams": 0,
         "switch11n": 1,
         "first5g": 1
       }, {
         "radioID":   2,
         "enable": 0,
+        "phymodesupport": 4,
+        "ratesupport": "MCS15",
         "beaconinterval": 100,
         "fragthreshold": 1024,
         "longretrythreshold": 11,

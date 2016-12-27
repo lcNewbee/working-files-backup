@@ -118,7 +118,6 @@ function rcPropertyPanelData(state, action) {
 
   if (dataIndex !== -1) {
     $$newData = $$newData.merge(rcData);
-
     // 设置已选中的网卡radio参数
     if (rcData.radios) {
       $$radiosOptions = $$radiosOptions.merge(
@@ -135,14 +134,16 @@ function rcPropertyPanelData(state, action) {
 
     $$ret = $$ret
       .setIn(['list', dataIndex, 'data'], $$newData)
-      .updateIn(
+      .setIn(
         ['list', dataIndex, 'configuration'],
-        item => item.map((subItem) => {
-          const module = subItem.get('module');
-          const $$moduleData = $$newData.get(module);
+        $$ret.getIn(['list', dataIndex, 'configuration']).map(
+          ($$item) => {
+            const module = $$item.get('module');
+            const $$moduleData = $$newData.get(module);
 
-          return subItem.mergeIn(['data'], $$moduleData);
-        }),
+            return $$item.mergeIn(['data'], $$moduleData);
+          },
+        ),
       );
   }
 
@@ -184,13 +185,11 @@ function changePropertyPanelRadioIndex(state, index) {
   let $$curListItem = $$ret.getIn(['list', activeIndex]);
   let $$curRadioData = $$curListItem.getIn(['data', 'radio']);
 
-
   $$curRadioData = $$curRadioData.merge(
       $$curListItem.getIn(
         ['data', 'radios', radioIndex],
       ),
     ).set('activeIndex', radioIndex);
-
   $$curListItem = $$curListItem
     .set('configurationRadioIndex', radioIndex)
     .updateIn(
@@ -218,10 +217,11 @@ function changePropertyPanelRadioIndex(state, index) {
 
 function changePropertysItem(state, action) {
   const changeData = action.payload;
+  const cuRadioIndex = changeData.configurationRadioIndex;
   let $$ret = state;
 
-  if (typeof changeData.configurationRadioIndex !== 'undefined') {
-    $$ret = changePropertyPanelRadioIndex(state, changeData.configurationRadioIndex);
+  if (typeof cuRadioIndex !== 'undefined') {
+    $$ret = changePropertyPanelRadioIndex(state, cuRadioIndex);
   }
 
   return $$ret.mergeIn(
