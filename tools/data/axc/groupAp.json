@@ -10,7 +10,7 @@
       {
         "radioID":   1,
         "enable": 1,
-        "phymodesupport": 12,
+        "phymodesupport": 16,
         "spatialstreams": 2,
         "ratesupport": "MCS15",
         "beaconinterval": 100,

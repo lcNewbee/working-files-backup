@@ -653,23 +653,25 @@ const routes = [
             component: sSystemAdmin.Screen,
           },
         ],
-      }, {
-        path: '/main/portal',
-        component: sMainAxc.Screen,
-        icon: 'road',
-        text: _('OPEN PORTAL'),
-        indexRoute: { onEnter: (nextState, replace) => replace('/main/portal/overview') },
-        childRoutes: [
-          {
-            id: 'overview',
-            icon: 'home',
-            path: '/main/portal/overview',
-            formUrl: 'goform/group/overview',
-            text: _('Overview'),
-            component: sOverview.Screen,
-          },
-        ],
-      }, {
+      },
+      // {
+      //   path: '/main/portal',
+      //   component: sMainAxc.Screen,
+      //   icon: 'road',
+      //   text: _('OPEN PORTAL'),
+      //   indexRoute: { onEnter: (nextState, replace) => replace('/main/portal/overview') },
+      //   childRoutes: [
+      //     {
+      //       id: 'overview',
+      //       icon: 'home',
+      //       path: '/main/portal/overview',
+      //       formUrl: 'goform/group/overview',
+      //       text: _('Overview'),
+      //       component: sOverview.Screen,
+      //     },
+      //   ],
+      // },
+      {
         path: '/wizard',
         component: sWizard.Screen,
       },

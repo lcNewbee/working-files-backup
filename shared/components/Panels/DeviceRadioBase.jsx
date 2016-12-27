@@ -67,6 +67,7 @@ class DeviceSystem extends React.Component {
       'onSave',
       'getCurData',
       'transformPhymode',
+      'onChangeRadio',
     ]);
     this.state = {
       $$channelOptions: fromJS([]),
@@ -93,6 +94,25 @@ class DeviceSystem extends React.Component {
       this.props.onSave();
     }
   }
+  onChangeRadio(data) {
+    const myData = data;
+    const phymode = data.phymode;
+    const curChannelwidth = this.props.store.getIn(['data', 'channelwidth']);
+
+    if (phymode !== undefined) {
+
+      // 只有20频宽模式
+      if ([1, 2, 3, 8].indexOf(phymode) !== -1) {
+        myData.channelwidth = 20;
+      } else if (phymode < 16 && curChannelwidth >= 80) {
+        myData.channelwidth = 50;
+      }
+    }
+
+    if (this.props.onChangeData) {
+      this.props.onChangeData(myData);
+    }
+  }
 
   getCurData(name) {
     return this.props.store.getIn(['data', name]);
@@ -102,7 +122,16 @@ class DeviceSystem extends React.Component {
 
     this.setState({
       $$phymodeOptopns: $$phymodeOptopns.filter(
-        $$item => $$item.get('value') <= maxSupport,
+        ($$item) => {
+          let ret = $$item.get('value');
+
+          if (maxSupport >= 8) {
+            ret = ret >= 8 && ret <= maxSupport;
+          } else {
+            ret = $$item.get('value') <= maxSupport;
+          }
+          return ret;
+        },
       ),
     });
   }
@@ -145,6 +174,7 @@ class DeviceSystem extends React.Component {
         options={formOptions}
         isSaving={app.get('saving')}
         onSave={this.onSave}
+        onChangeData={this.onChangeRadio}
         header={[
           <FormGroup
             key="dapterSelect"

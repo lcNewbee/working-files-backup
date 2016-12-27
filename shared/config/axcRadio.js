@@ -169,11 +169,59 @@ export const radioBase = fromJS([
   }, {
     id: 'channelwidth',
     form: 'radioBase',
-    type: 'select',
+    type: 'switch',
     label: _('Channel Bandwidth'),
-    options: channelBandwidthOptions,
+    inputStyle: {
+      display: 'block',
+    },
+    options($$data) {
+      const phymode = $$data.get('phymode');
+      const ret = [];
+
+      switch (phymode) {
+        case 4:
+        case 7:
+        case 12:
+          return [
+            {
+              value: 20,
+              label: 'HT20',
+            }, {
+              value: 30,
+              label: 'HT40-',
+            }, {
+              value: 50,
+              label: 'HT40+',
+            },
+          ];
+
+        case 16:
+          return [
+            {
+              value: 20,
+              label: 'HT20',
+            }, {
+              value: 30,
+              label: 'HT40-',
+            }, {
+              value: 50,
+              label: 'HT40+',
+            }, {
+              value: 80,
+              label: 'HT80',
+            },
+          ];
+
+        default:
+      }
+
+      return ret;
+    },
     showPrecondition(data) {
-      return parseInt(data.get('phymode'), 10) === 8;
+      const showArr = '4,7,12,16'.split(',');
+      const phymode = `${data.get('phymode')}`;
+
+      return showArr.indexOf(phymode) !== -1;
     },
   },
 ]);
