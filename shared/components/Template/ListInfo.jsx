@@ -152,11 +152,11 @@ class ListInfo extends React.Component {
             this.doSaveEditForm(saveOption);
           },
         );
-    } else if (onBeforeSaveResult) {
-      saveOption.msg = onBeforeSaveResult;
-
-      this.doSaveEditForm(saveOption);
     } else {
+      if (onBeforeSaveResult) {
+        saveOption.msg = onBeforeSaveResult;
+      }
+
       this.doSaveEditForm(saveOption);
     }
   }
@@ -282,6 +282,7 @@ class ListInfo extends React.Component {
       action: actionName,
     });
     let cancelMsg = '';
+    let onBeforeActionResult;
 
     if (listKey === 'allKeys') {
       $$actionQuery = $$actionQuery.merge($$actionItem);
@@ -302,13 +303,14 @@ class ListInfo extends React.Component {
       selectedList,
     });
 
-    console.log(onBeforeAction);
+    // 运行 onBeforeAction
+    if (onBeforeAction) {
+      onBeforeActionResult = onBeforeAction($$actionQuery);
+    }
 
     // 异步处理，如果是 Promise 对象
-    if (utils.isPromise(onBeforeAction)) {
-      console.log(onBeforeAction);
-      onBeforeAction($$actionQuery)
-        .then(
+    if (utils.isPromise(onBeforeActionResult)) {
+      onBeforeActionResult.then(
           msg => this.doItemAction($$actionQuery, {
             cancelMsg: msg,
             confirmText,
@@ -318,8 +320,8 @@ class ListInfo extends React.Component {
 
     // 同步处理
     } else {
-      if (onBeforeAction) {
-        cancelMsg = onBeforeAction($$actionQuery);
+      if (onBeforeActionResult) {
+        cancelMsg = onBeforeActionResult;
       }
       this.doItemAction($$actionQuery, {
         cancelMsg,

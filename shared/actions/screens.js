@@ -182,12 +182,18 @@ export function onListAction(url, option) {
       .then((json) => {
         let ret = 'Server Error';
 
-        if (json.state && json.state.code === 2000) {
+
+        if (json.state) {
           // dispatch(fetchScreenData(fetchUrl));
-          ret = 'ok';
+          if (json.state.code === 2000) {
+            ret = 'ok';
+          } else if (json.state.code <= 6000) {
+            dispatch(closeListItemModal());
+          }
         }
+
         dispatch(fetchScreenData(fetchUrl));
-        dispatch(closeListItemModal());
+
         return ret;
       });
   };

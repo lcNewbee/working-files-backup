@@ -511,6 +511,9 @@ export default class Main extends Component {
                         className={classNames}
                         onClick={(e) => {
                           this.onSelectGroup(curId, e);
+                          this.onToggleMainPopOver({
+                            name: 'groupAsider',
+                          });
                           if (curId === ALL_GROUP_ID) {
                             this.props.router.push('/main/group');
                           }
