@@ -191,11 +191,12 @@ body {
   &.main--open-left {
     .t-main__nav {
       left: $sidebar-width + ($g-distance * 1.25) + $g-top-menu-size;
-      ;
     }
     .t-main__content {
       left: ($sidebar-width + ($g-distance * 1.25)) * 2 + $g-top-menu-size;
+      max-width: calc(100vw - 426px);
     }
+
   }
 }
 
@@ -207,14 +208,19 @@ body {
   z-index: 999;
   width: 170px;
   overflow-y: auto;
+  overflow-x: hidden;
   color: #fff;
   background: #222;
+  padding-bottom: 60px;
+
+  @include scrollbar();
 }
 
 .t-main__asider-header {
   padding: 12px 18px;
   line-height: ($g-distance * 1.25);
-  border-top: 1px solid #000;
+  background-color: #191919;
+
   &::before {
     position: absolute;
     top: 0;
@@ -229,11 +235,25 @@ body {
 }
 
 .t-main__asider-footer {
-  position: absolute;
+  position: static;
   bottom: 0;
   width: 100%;
-  padding: 12px 18px;
+  padding: 6px 18px;
+  background-color: #191919;
+  width: 190px;
+  margin-left: 1px;
+  margin-top: 12px;
+
   .icon {
     cursor: pointer;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    transition: transform .3s ease-in-out;
+
+    &:hover {
+      transform: rotate(90deg);
+    }
   }
 }

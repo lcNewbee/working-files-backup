@@ -170,10 +170,10 @@ export default class Main extends Component {
 
   onClickTopMenu(path) {
     if (path === '/main/group') {
-      // this.onToggleMainPopOver({
-      //   name: 'groupAsider',
-      //   isShow: true,
-      // });
+      this.onToggleMainPopOver({
+        name: 'groupAsider',
+        isShow: true,
+      });
     } else {
       this.onToggleMainPopOver({
         isShow: false,
@@ -514,9 +514,6 @@ export default class Main extends Component {
                           if (curId === ALL_GROUP_ID) {
                             this.props.router.push('/main/group');
                           }
-                          this.onToggleMainPopOver({
-                            name: 'groupAsider',
-                          });
                         }}
                       >
                         {linkText}
@@ -951,6 +948,9 @@ export default class Main extends Component {
                   this.props.selectManageGroupAp(data);
                 }}
                 onPageChange={(data) => {
+                  this.props.fetchGroupAps(selectGroupId, {
+                    page: data,
+                  });
                 }}
               />
               {
@@ -1099,7 +1099,6 @@ export default class Main extends Component {
       active: isGroupAsiderShow,
     });
 
-
     return (
       <div className={mainClassName}>
         <Navbar title={_(guiName)} version={version}>
@@ -1168,6 +1167,11 @@ export default class Main extends Component {
                   <Icon
                     name="navicon"
                     className={groupTitleIconClassName}
+                    // onClick={
+                    //   () => this.onToggleMainPopOver({
+                    //     name: 'groupAsider',
+                    //   })
+                    // }
                   />
                 ) : null
               }
@@ -1191,7 +1195,11 @@ export default class Main extends Component {
           }
         </div>
 
-        <PopOver onClose={this.onHiddenPopOver} {...popOver}>
+        <PopOver
+          onClose={this.onHiddenPopOver}
+          {...popOver}
+          overlay={popOver.name !== 'groupAsider'}
+        >
           {
             this.renderPopOverContent(popOver)
           }

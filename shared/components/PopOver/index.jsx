@@ -4,20 +4,18 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 const propTypes = {
   isShow: PropTypes.bool,
-  id: PropTypes.string,
-  size: PropTypes.oneOf(['lg', '2x', '3x', '4x', '5x']),
-  role: PropTypes.oneOf(['dialog', 'alert', 'confirm', 'message']),
+  overlay: PropTypes.bool,
   transitionLeave: PropTypes.bool,
   transitionEnter: PropTypes.bool,
   children: PropTypes.any,
   onClose: PropTypes.func,
-  transitionName: PropTypes.oneOf(['fade-up', 'fade-left']),
 };
 
 const defaultProps = {
   transitionEnter: true,
   transitionLeave: true,
   transitionName: 'fade-up',
+  overlay: true,
 };
 
 class PopOver extends Component {
@@ -26,6 +24,7 @@ class PopOver extends Component {
 
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onClose = this.onClose.bind(this);
+    this.renderContent = this.renderContent.bind(this);
   }
 
   onClose() {
@@ -34,9 +33,28 @@ class PopOver extends Component {
     }
   }
 
+  renderContent() {
+    const { overlay } = this.props;
+    const keyVal = 'onlyPopOver';
+    let ret = this.props.children;
+
+    if (overlay) {
+      ret = (
+        <div key={keyVal} className="o-pop-over">
+          <div
+            className="o-pop-over__overlay"
+            onClick={this.onClose}
+          />
+
+          {this.props.children}
+        </div>
+      );
+    }
+    return ret;
+  }
+
   render() {
-    let keyVal = 'onlyPopOver';
-    const { transitionLeave, transitionEnter, isShow } = this.props;
+    const { transitionLeave, transitionEnter, isShow, overlay } = this.props;
 
     return (
       <ReactCSSTransitionGroup
@@ -49,13 +67,7 @@ class PopOver extends Component {
       >
         {
           isShow ? (
-            <div key={keyVal} className="o-pop-over">
-              <div
-                className="o-pop-over__overlay"
-                onClick={this.onClose}
-              />
-              {this.props.children}
-            </div>
+            this.renderContent()
           ) : null
         }
       </ReactCSSTransitionGroup>

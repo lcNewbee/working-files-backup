@@ -1,4 +1,5 @@
 import * as appActions from 'shared/actions/app';
+import utils from 'shared/utils';
 
 export function toggleMainPopOver(option) {
   return {
@@ -91,12 +92,14 @@ function rcFetchGroupAps(json, isDefault) {
   };
 }
 
-export function fetchGroupAps(id) {
+export function fetchGroupAps(id, query) {
   return (dispatch, getState) => {
     const productState = getState().product;
     const groupid = id || productState.getIn(['group', 'selected', 'id']);
-    const query = {
+    const curQuery = {
       groupid,
+      size: 20,
+      page: 1,
     };
     const isDefault = groupid === -1;
 
@@ -105,7 +108,11 @@ export function fetchGroupAps(id) {
       return null;
     }
 
-    return dispatch(appActions.fetch('goform/group/aps', query))
+    if (query) {
+      utils.extend(curQuery, query);
+    }
+
+    return dispatch(appActions.fetch('goform/group/aps', curQuery))
       .then((json) => {
         if (json) {
           dispatch(rcFetchGroupAps(json, isDefault));

@@ -262,7 +262,7 @@ export default class View extends React.Component {
           apIcon : buildingIcon,
       title: item.get('markerTitle') || '',
       label: {
-        text: item.get('markerTitle') || '',
+        text: item.get('markerTitle') || `${index}`,
       },
       draggable: item.get('isLocked') !== '1',
       animation: google.maps.Animation.DROP,
