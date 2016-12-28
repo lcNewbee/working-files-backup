@@ -106,7 +106,11 @@ class ApRadio extends CI_Controller {
 		$result = null;
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$data = json_decode(file_get_contents("php://input"), true);
-			$result = $this->onAction($data);
+			$cgiary = array(
+				'oldname' => (string)element('oldname',$data),
+				'newname' => (string)element('newname',$data)
+			);
+			$result = axc_change_apname(json_encode($cgiary));
 			echo $result;
 		} else if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 			$result = $this->fetch();
