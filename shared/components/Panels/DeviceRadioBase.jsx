@@ -91,7 +91,7 @@ class DeviceSystem extends React.Component {
 
   onSave() {
     if (this.props.onSave) {
-      this.props.onSave();
+      this.props.onSave('radioBase');
     }
   }
   onChangeRadio(data) {
@@ -100,7 +100,6 @@ class DeviceSystem extends React.Component {
     const curChannelwidth = this.props.store.getIn(['data', 'channelwidth']);
 
     if (phymode !== undefined) {
-
       // 只有20频宽模式
       if ([1, 2, 3, 8].indexOf(phymode) !== -1) {
         myData.channelwidth = 20;

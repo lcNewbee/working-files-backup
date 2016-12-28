@@ -10,7 +10,7 @@ import FormContainer from '../Organism/FormContainer';
 const propTypes = {
   onChangeData: PropTypes.func,
   onChangeItem: PropTypes.func,
-  onSave: PropTypes.func,
+  onSave: PropTypes.func.isRequired,
   actionable: PropTypes.bool,
 
   store: PropTypes.instanceOf(Map),
@@ -70,7 +70,6 @@ class DeviceSystem extends React.Component {
 
         // 速率集
         } else if ($$item.get('id') === 'rateset') {
-
           if (maxRateset.indexOf('MCS') !== -1) {
             tmpArr = new Array(parseInt(maxRateset.split('MCS')[1], 10) + 1);
           } else {
@@ -117,6 +116,9 @@ class DeviceSystem extends React.Component {
           />,
         ]}
         hasSaveButton={actionable}
+        onSave={
+          () => this.props.onSave('radioAdvance')
+        }
       />
     );
   }

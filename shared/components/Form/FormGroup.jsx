@@ -137,7 +137,6 @@ class FormGroup extends React.Component {
     if (display) {
       groupClassName = `${groupClassName} form-group--${display}`;
     }
-
     return (
       <div
         className={groupClassName}

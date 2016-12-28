@@ -10,15 +10,14 @@ import {
 } from '../Button';
 
 const propTypes = {
-  onCollapse: PropTypes.func,
+  onValidError: PropTypes.func,
   onChangeData: PropTypes.func,
-  onChangeItem: PropTypes.func,
-  onRemove: PropTypes.func,
   onSave: PropTypes.func,
+  validateAt: PropTypes.string,
 
-  isCollapsed: PropTypes.bool,
   store: PropTypes.instanceOf(Map),
   app: PropTypes.instanceOf(Map),
+  invalidMsg: PropTypes.instanceOf(Map),
   actionable: PropTypes.bool,
 };
 
@@ -33,20 +32,30 @@ class Panel extends React.Component {
   }
   onSave() {
     if (this.props.onSave) {
-      this.props.onSave();
+      this.props.onSave('deviceGeneral');
     }
   }
   render() {
-    const { store, app, actionable } = this.props;
+    const {
+      store, app, actionable, invalidMsg, validateAt, onValidError,
+    } = this.props;
     return (
       <div className="o-form o-form--compassed">
         <FormGroup
           type="text"
           label={_('Nickname')}
+          name="devicename"
+          form="deviceGeneral"
           value={store.getIn(['data', 'devicename'])}
           onChange={option => this.props.onChangeData({
             devicename: option.value,
           })}
+
+          // Validate Props
+          errMsg={invalidMsg.get('devicename')}
+          validateAt={validateAt}
+          onValidError={onValidError}
+          required
         />
         {
           actionable ? (

@@ -79,6 +79,7 @@ const daysOptions = fromJS([
     label: _('Sun'),
   },
 ]);
+
 const screenOptions = fromJS([
   {
     id: 'policy_type',

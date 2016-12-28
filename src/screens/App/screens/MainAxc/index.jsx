@@ -69,6 +69,12 @@ const validOptions = fromJS({
   apmac: validator({
     rules: 'mac',
   }),
+  name: validator({
+    rules: 'required',
+  }),
+  model: validator({
+    rules: '',
+  }),
 });
 
 const defaultProps = {
@@ -577,7 +583,7 @@ export default class Main extends Component {
 
      // validate const
     const {
-      groupname, remark, apmac,
+      groupname, remark, apmac, name, model,
     } = this.props.validateOption;
 
     const tableOption = fromJS([
@@ -653,6 +659,7 @@ export default class Main extends Component {
                       name: data.value,
                     })}
                     required
+                    {...name}
                   />
                   <FormGroup
                     type="select"
@@ -664,6 +671,7 @@ export default class Main extends Component {
                       model: data.value,
                     })}
                     required
+                    {...model}
                   />
                   <FormGroup
                     type="text"

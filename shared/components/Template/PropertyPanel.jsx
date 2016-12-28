@@ -16,6 +16,7 @@ const propTypes = {
   changePropertyPanelRadioIndex: PropTypes.func,
   reportValidError: PropTypes.func,
   save: PropTypes.func,
+  validateAll: PropTypes.func,
   groupid: PropTypes.any,
 
   data: PropTypes.instanceOf(Map),
@@ -59,7 +60,6 @@ class PropertyPanel extends React.Component {
     let formUrl = 'goform/group/ap/radio';
     let $$subData = $$configData.get('data');
 
-
     if (curModule === 'radio') {
       formUrl = 'goform/group/ap/radio';
 
@@ -74,7 +74,11 @@ class PropertyPanel extends React.Component {
 
       $$subData = immutableUtils.toNumberWithKeys($$subData, List(numberKeys));
     } else if (curModule === 'info') {
-      formUrl = 'goform/group/ap/radio';
+      formUrl = 'goform/group/ap/base';
+      $$subData = $$subData.clear().merge({
+        oldname: $$activeListData.getIn(['info', 'devicename']),
+        newname: $$subData.getIn(['devicename']),
+      });
     }
 
     this.props.save(formUrl, $$subData.toJS())
@@ -159,7 +163,16 @@ class PropertyPanel extends React.Component {
                   onRemove={
                     () => this.props.removeFromPropertyPanel(index)
                   }
-                  onSave={this.onSave}
+                  onSave={(formId) => {
+                    this.props.validateAll(formId)
+                      .then(
+                        ($$msg) => {
+                          if ($$msg.isEmpty()) {
+                            this.onSave();
+                          }
+                        },
+                      );
+                  }}
                   actionable={actionAable}
 
                   // Validate Props

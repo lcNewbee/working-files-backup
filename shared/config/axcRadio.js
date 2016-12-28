@@ -1,22 +1,19 @@
 import channels from 'shared/config/country.json';
 import { fromJS, List } from 'immutable';
 
-const channelBandwidthOptions = fromJS([
+const $$bandwidthOptions = fromJS([
   {
-    value: 5,
-    label: '5',
-  }, {
-    value: 10,
-    label: '10',
-  }, {
     value: 20,
-    label: '20',
+    label: 'HT20',
   }, {
-    value: 40,
-    label: '40',
+    value: 30,
+    label: 'HT40-',
+  }, {
+    value: 50,
+    label: 'HT40+',
   }, {
     value: 80,
-    label: '80',
+    label: 'HT80',
   },
 ]);
 const channelsList = List(channels);
@@ -117,6 +114,7 @@ export const radioBase = fromJS([
     type: 'select',
     defaultValue: '',
     options: $$phymodeOptopns,
+    required: true,
   }, {
     id: 'switch11n',
     form: 'radioBase',
@@ -133,6 +131,7 @@ export const radioBase = fromJS([
     type: 'select',
     label: _('Tx Power'),
     defaultValue: '100%',
+    required: true,
     options: [
       {
         value: '3%',
@@ -182,35 +181,10 @@ export const radioBase = fromJS([
         case 4:
         case 7:
         case 12:
-          return [
-            {
-              value: 20,
-              label: 'HT20',
-            }, {
-              value: 30,
-              label: 'HT40-',
-            }, {
-              value: 50,
-              label: 'HT40+',
-            },
-          ];
+          return $$bandwidthOptions.delete(-1);
 
         case 16:
-          return [
-            {
-              value: 20,
-              label: 'HT20',
-            }, {
-              value: 30,
-              label: 'HT40-',
-            }, {
-              value: 50,
-              label: 'HT40+',
-            }, {
-              value: 80,
-              label: 'HT80',
-            },
-          ];
+          return $$bandwidthOptions;
 
         default:
       }
@@ -441,6 +415,7 @@ export const radioAdvance = fromJS([
     type: 'checkboxs',
     maxLength: '32',
     defaultValue: '',
+    required: true,
     options: [
       {
         value: 'MCS0',
