@@ -171,7 +171,7 @@ function getFlowOption(serverData, timeType) {
       trigger: 'axis',
     },
     legend: {
-      data: ['AP', _('Wireless'), _('Clients')],
+      data: ['AP', _('Wireless')],
     },
     xAxis: [{
       type: 'category',
@@ -202,10 +202,6 @@ function getFlowOption(serverData, timeType) {
       },
       {
         name: _('Wireless'),
-        type: 'line',
-      },
-      {
-        name: _('Clients'),
         type: 'line',
       },
     ],
@@ -245,7 +241,6 @@ function getFlowOption(serverData, timeType) {
 
   option.series[0].data = $$dataList[0].data;
   option.series[1].data = $$dataList[1].data;
-  option.series[2].data = $$dataList[2].data;
 
   return option;
 }
@@ -375,8 +370,11 @@ export default class View extends PureComponent {
           </div>
           <div className="cols col-12">
             <div className="o-box__cell">
+              <h2>{ _('Historical Graphs') }</h2>
+            </div>
+            <div className="o-box__cell">
               <h3>
-                { _('Flow') }
+                { _('Traffic') }
                 <Switchs
                   options={timeTypeSwitchs}
                   value={screens.getIn([curScreenId, 'query', 'timeType'])}

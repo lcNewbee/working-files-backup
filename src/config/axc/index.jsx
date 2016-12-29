@@ -532,7 +532,7 @@ const routes = [
             id: 'systemLog',
             icon: 'file-text-o',
             path: '/main/system/log',
-            text: _('Log Management'),
+            text: _('System Log'),
             noTree: true,
             component: SharedComponents.TabContainer,
             indexRoute: {
@@ -640,7 +640,7 @@ const routes = [
             isIndex: true,
             formUrl: 'goform/system/networktimeprotocol',
             path: '/main/system/networktimeprotocol',
-            icon: 'cog',
+            icon: 'wrench',
             text: _('NTP'),
             component: sNetworkTimeProtocol.Screen,
           }, {

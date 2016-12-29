@@ -122,7 +122,7 @@ const listOptions = fromJS([
   }, {
     id: 'connectedNumbers',
     width: '80',
-    text: _('Connected Numbers'),
+    text: _('Clients'),
   }, {
     id: 'bandwidth',
     width: '80',

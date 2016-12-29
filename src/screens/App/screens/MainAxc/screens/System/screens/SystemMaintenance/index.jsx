@@ -173,7 +173,7 @@ export default class View extends React.Component {
         <div className="o-form">
           <fieldset className="o-form__fieldset">
             <legend className="o-form__legend">{route.text}</legend>
-            <FormGroup label={_('Reboot Device')}>
+            <FormGroup label={_('Reboot Controller')}>
               <SaveButton
                 type="button"
                 icon="refresh"
@@ -183,25 +183,15 @@ export default class View extends React.Component {
                 }
               />
             </FormGroup>
+          </fieldset>
+          <fieldset className="o-form__fieldset">
+            <legend className="o-form__legend">{_('Configuration')}</legend>
             <FormGroup label={_('Backup Configuration')}>
               <SaveButton
                 type="button"
                 icon="download"
                 text={_('')}
                 onClick={this.onBackup}
-              />
-            </FormGroup>
-          </fieldset>
-          <fieldset className="o-form__fieldset">
-            <legend className="o-form__legend">{_('Restore Configuration')}</legend>
-            <FormGroup
-              label={_('Restore From File')}
-            >
-              <FileUpload
-                url={restoreUrl}
-                name="backupFile"
-                buttonIcon="undo"
-                buttonText={_('Restore Now')}
               />
             </FormGroup>
             <FormGroup label={_('Restore To Factory')}>
@@ -214,6 +204,17 @@ export default class View extends React.Component {
                 }
               />
             </FormGroup>
+            <FormGroup
+              label={_('Restore Configuration')}
+            >
+              <FileUpload
+                url={restoreUrl}
+                name="backupFile"
+                buttonIcon="undo"
+                buttonText={_('Restore Now')}
+              />
+            </FormGroup>
+
           </fieldset>
 
           <fieldset className="o-form__fieldset">

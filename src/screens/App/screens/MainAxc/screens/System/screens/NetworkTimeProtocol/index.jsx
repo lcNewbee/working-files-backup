@@ -27,7 +27,7 @@ const settingsOptions = fromJS([
   {
     id: 'ac_server_name',
     fieldset: 'acTime',
-    label: _('Synchronization Server'),
+    label: _('NTP Server'),
     type: 'text',
     required: 'true',
     validator: validator({
@@ -46,7 +46,7 @@ const settingsOptions = fromJS([
   {
     id: 'ac_TimeInterval',
     fieldset: 'acTime',
-    label: _('Synchronization Time Interval'),
+    label: _('Poll Interval'),
     type: 'number',
     required: 'true',
     help: _('Second'),
@@ -59,7 +59,7 @@ const settingsOptions = fromJS([
   {
     id: 'ac_timezone',
     fieldset: 'acTime',
-    label: _('Synchronization Time Zone'),
+    label: _('Time Zone'),
     type: 'select',
     required: 'true',
     options: TIME_ZONE,

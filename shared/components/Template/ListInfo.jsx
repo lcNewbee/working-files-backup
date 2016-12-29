@@ -139,17 +139,21 @@ class ListInfo extends React.Component {
       formElem,
       hasFile,
     };
+    let onBeforeSaveResult = '';
 
-    if (utils.isPromise(onBeforeSave)) {
-      onBeforeSave($$actionQuery, $$curListItem)
-        .then(
+    if (onBeforeSave) {
+      onBeforeSaveResult = onBeforeSave($$actionQuery, $$curListItem);
+    }
+
+    if (utils.isPromise(onBeforeSaveResult)) {
+      onBeforeSaveResult.then(
           (msg) => {
             saveOption.msg = msg;
             this.doSaveEditForm(saveOption);
           },
         );
-    } else if (utils.isFunc(onBeforeSave)) {
-      saveOption.msg = onBeforeSave($$actionQuery, $$curListItem);
+    } else if (onBeforeSaveResult) {
+      saveOption.msg = onBeforeSaveResult;
 
       this.doSaveEditForm(saveOption);
     } else {
@@ -298,8 +302,11 @@ class ListInfo extends React.Component {
       selectedList,
     });
 
+    console.log(onBeforeAction);
+
     // 异步处理，如果是 Promise 对象
     if (utils.isPromise(onBeforeAction)) {
+      console.log(onBeforeAction);
       onBeforeAction($$actionQuery)
         .then(
           msg => this.doItemAction($$actionQuery, {

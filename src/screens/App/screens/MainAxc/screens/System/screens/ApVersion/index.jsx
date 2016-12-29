@@ -63,6 +63,7 @@ export default class View extends React.Component {
     utils.binds(this, [
       'getApModelList',
       'onBeforeAction',
+      'onBeforeSave',
     ]);
     this.state = {
       modelSelectPlaceholder: _('Loading'),
@@ -73,11 +74,26 @@ export default class View extends React.Component {
   componentWillMount() {
     this.getApModelList();
   }
+  onBeforeSave($$actionQuery, $$curListItem) {
+    const actionType = $$actionQuery.getIn(['action']);
+    let ret;
+
+    if (actionType === 'add') {
+      ret = this.props.save('goform/system/ap/version', $$actionQuery.merge($$curListItem).toJS())
+        .then((json) => {
+          const state = json && json.state;
+          let newRet;
+          if (state.code === 4000) {
+            newRet = _("There's no active version of the model,it should be activated!");
+          }
+
+          return newRet;
+        });
+    }
+    return ret;
+  }
 
   onBeforeAction($$actionQuery) {
-    const store = this.props.store;
-    const myScreenId = store.get('curScreenId');
-    const $$myScreenStore = store.get(myScreenId);
     const actionType = $$actionQuery.getIn(['action']);
     let ret = '';
     if (actionType === 'active' && parseInt($$actionQuery.get('active'), 10) === 0) {
@@ -85,14 +101,6 @@ export default class View extends React.Component {
     // 删除已激活版本
     } else if (actionType === 'delete' && parseInt($$actionQuery.get('active'), 10) === 1) {
       ret = _("The current Firmware version is active, you can't delete it. If you want to delete it, please activate another Firmware version!");
-    } else if (actionType === 'add') {
-      this.props.save('goform/system/ap/version', $$actionQuery)
-      .then((json) => {
-        const state = json && json.state;
-        if (state.code === 4000) {
-          ret = _("There's no active version of the model,it should be activated!");
-        }
-      });
     }
     return ret;
   }
@@ -139,6 +147,7 @@ export default class View extends React.Component {
           hasFile: true,
         }}
         onBeforeAction={this.onBeforeAction}
+        // onBeforeSave={this.onBeforeSave}
         noTitle
         actionable
         selectable

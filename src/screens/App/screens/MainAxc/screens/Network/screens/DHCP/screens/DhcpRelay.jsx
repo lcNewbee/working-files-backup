@@ -48,7 +48,7 @@ const settingsOptions = fromJS([
   {
     id: 'option82_1',
     fieldset: 'relay_setting',
-    label: _('Option82 字段一'),
+    label: _('Option82  field1'),
     type: 'text',
     required: 'true',
     validator: validator({
@@ -59,7 +59,7 @@ const settingsOptions = fromJS([
     id: 'option82_2',
     required: 'true',
     fieldset: 'relay_setting',
-    label: _('Option82 字段二'),
+    label: _('Option82  field2'),
     type: 'text',
   },
 ]).groupBy(item => item.get('fieldset'))

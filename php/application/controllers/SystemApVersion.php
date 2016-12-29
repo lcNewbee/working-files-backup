@@ -104,16 +104,16 @@ class SystemApVersion extends CI_Controller {
                     'fmname'=>$filename,
                     'filepath'=>$filepath,
                     'active'=>(int)element('active', $data,0)
-                );      
-                if($retData['active'] === 0 && $this->is_version_activation($retData['model']) === False){                              
+                );
+                if($retData['active'] === 0 && $this->is_version_activation($retData['model']) === False){
                     //无激活
-                    $arr = array('state' => array('code'=>4000,'msg'=>'No activation'));
+                    $arr = array('state' => array('code'=>6101,'msg'=>"There's no active version of the model,it should be activated!"));
                     $arr['sss'] =$this->is_version_activation($retData['model']);
-                    $result = json_encode($arr);               
+                    $result = json_encode($arr);
                 }else{
                     $result = axc_add_apfirmware(json_encode($retData ));
                     //log
-                    $cgiObj = json_decode($result);			
+                    $cgiObj = json_decode($result);
                     if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
                         $logary = array(
                             'type'=>'Add',
@@ -125,7 +125,7 @@ class SystemApVersion extends CI_Controller {
                         Log_Record($this->db,$logary);
                     }
                 }
-            }                    
+            }
         } elseif ($actionType === 'active'){
             $retData = array(
                 'vendor'=>element('vendor',$data, 48208),
@@ -164,7 +164,7 @@ class SystemApVersion extends CI_Controller {
             }
             $result=axc_modify_apfirmware(json_encode($retData));
             //log
-            $cgiObj = json_decode($result);			
+            $cgiObj = json_decode($result);
             if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
                 $logary = array(
                     'type'=>'Update',
@@ -195,7 +195,7 @@ class SystemApVersion extends CI_Controller {
                     $del_result=axc_del_apfirmware(json_encode($deleteItem));
                     $del_result_array=json_decode($del_result,true);
                     //log
-                    $cgiObj = json_decode($result);			
+                    $cgiObj = json_decode($result);
                     if( is_array($del_result_array) && $del_result_array['state']['code']==2000) {
                         $logary = array(
                             'type'=>'Delete',

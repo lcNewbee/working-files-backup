@@ -29,7 +29,7 @@ const listOptions = fromJS([
     text: _('Vendor'),
   }, {
     id: 'terminalType',
-    text: _('Device OS'),
+    text: _('OS'),
   }, {
     id: 'type',
     text: _('User Type'),
@@ -164,6 +164,7 @@ export default class Clients extends React.Component {
                 />
               )
             }
+            {/*
             <Button
               icon="repeat"
               size="sm"
@@ -171,6 +172,7 @@ export default class Clients extends React.Component {
               style={styles.actionButton}
               onClick={() => this.onAction(mac, 'reconnect')}
             />
+            */}
           </div>
         );
       },
