@@ -72,6 +72,7 @@ const validOptions = Map({
   }),
   validSegment: validator({
     rules: 'num:[256, 2347]',
+    exclude: '0',
   }),
   validAmpdu: validator({
     rules: 'num:[1, 64]',
@@ -246,8 +247,8 @@ export default class Advance extends React.Component {
               type="number"
               label={_('Segment Threshold')}
               value={segmentThresh}
-              help={`${_('Range: ')}256 ~ 2347`}
-              style={{ width: '490px' }}
+              help={`${_('Range: ')}0 or 256 ~ 2347`}
+              style={{ width: '510px' }}
               onChange={(data) => { this.changeFormValue(radioId, 'segmentThresh', data.value); }}
               required
               {...validSegment}
@@ -370,14 +371,25 @@ export default class Advance extends React.Component {
               <FormInput
                 type="number"
                 value={rssi}
-                style={{ width: '164px' }}
+                style={{
+                  width: '164px',
+                  padding: '0.6em 0.75em',
+                }}
                 disabled={rssiEnable === '0'}
                 className="fl"
                 onChange={(data) => {
                   this.changeFormValue(radioId, 'rssi', data.value);
                 }}
               />
-              <span>{`  dbm ${_('Range: ')}-98 ~ -40`}</span>
+              <span
+                style={{
+                  marginTop: '6px',
+                  marginLeft: '7px',
+                  display: 'inline-block',
+                }}
+              >
+                {`  dbm ${_('Range: ')}-98 ~ -40`}
+              </span>
             </div>
           ) : null
         }

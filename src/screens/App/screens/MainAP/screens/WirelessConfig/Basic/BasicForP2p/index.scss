@@ -1,3 +1,11 @@
+.title-span {
+  font-size: 1.17em;
+  font-family: 'Microsoft YaHei';
+  font-weight: bold;
+  padding-left: 4px;
+  cursor: pointer;
+}
+
 .apMacListWrap {
   width: 200px;
   background-color: #CCC;
@@ -28,4 +36,12 @@
   background-color: #CCC;
   border: 1px solid #aaa;
   border-radius: 5px;
+}
+
+.peer-mac-notice {
+  width: 250px;
+  font-size: 14px;
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 5px;
 }

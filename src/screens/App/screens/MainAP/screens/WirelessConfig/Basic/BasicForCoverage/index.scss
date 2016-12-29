@@ -1,0 +1,31 @@
+.bubble {
+  border: 1px solid #CCC;
+  position: relative;
+  padding: 20px;
+  top: 20px;
+  border-radius: 5px;
+  box-shadow: 1px 1px 1px #CCC;
+  background-color: #FFF;
+}
+
+.bubble-arrow-before {
+  position: absolute;
+  left: -100px;
+  top: 20px;
+  border-color: transparent;
+  border-right-color: #FFF;
+  border-width: 10px 100px 10px 0;
+  border-style: solid;
+  z-index: 999;
+}
+
+.bubble-arrow-after {
+  position: absolute;
+  left: -100px;
+  top: 20px;
+  border-color: transparent;
+  border-right-color: #CCC;
+  border-width: 11px 100px 10px 0;
+  border-style: solid;
+}
+

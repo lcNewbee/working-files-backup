@@ -62,6 +62,9 @@ const sSpeedTest = require('../../screens/App/screens/MainAP/screens/Tools/Speed
 const sSiteSurvey = require('../../screens/App/screens/MainAP/screens/Tools/SiteSurvey');
 const sSystemLogs = require('../../screens/App/screens/MainAP/screens/Tools/SystemLogs');
 const sChannelUtilization = require('../../screens/App/screens/MainAP/screens/Tools/ChannelUtilization');
+// portal
+const pPortal = require('../../screens/App/screens/MainAP/screens/PortalSettings');
+const sPortalSettings = require('../../screens/App/screens/MainAP/screens/PortalSettings/PortalSettings');
 
 // 页面功能项配置
 const funConfig = {
@@ -83,6 +86,7 @@ const funConfig = {
     ],
     // 功能项参见WirelessConfig -> Basic页面下的ssidTableFullMemberOptions变量
     ssidTableKeys: ['enable', 'ssid', 'vlanId', 'hideSsid', 'isolation', 'security', 'delete'],
+    portalFun: true,
   },
   advance: {
     ledThreshFun: false, // 信号强度控制LED灯功能
@@ -201,6 +205,26 @@ const routes = [{
         },
       ],
     }, {
+      id: 'portalsettings',
+      path: '/main/portalsettings',
+      icon: 'files-o',
+      text: _('Portal'),
+      component: pPortal,
+      indexRoute: {
+        onEnter: (nextState, replace) => replace('main/portalsettings/portalsettings'),
+      },
+      childRoutes: [
+        {
+          id: 'portalsettings',
+          noTree: true,
+          path: '/main/portalsettings/portalsettings',
+          fetchUrl: 'goform/get_portal_info',
+          saveUrl: 'goform/set_portal',
+          text: _('Portal Settings'),
+          component: sPortalSettings.Screen,
+        },
+      ],
+    }, {
       id: 'pMaintenance',
       path: '/main/maintenance',
       icon: 'wrench',
@@ -312,14 +336,14 @@ const reducers = {
   sitesurvey: sSiteSurvey.sitesurvey,
   systemlogs: sSystemLogs.systemlogs,
   channelutilization: sChannelUtilization.channelutilization,
-
+  // portalsettings: sPortalSettings.protalsettings,
   wizard: sWizard.wizard,
   product: pMainAP.product,
 };
 
 const stores = remoteActionMiddleware(
   combineReducers(reducers),
-  window.devToolsExtension ? window.devToolsExtension() : f => f
+  window.devToolsExtension ? window.devToolsExtension() : f => f,
 );
 
 const ac5000 = {

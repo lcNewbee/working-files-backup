@@ -84,6 +84,7 @@ const funConfig = {
     ],
     // 功能项参见WirelessConfig -> Basic页面下的ssidTableFullMemberOptions变量
     ssidTableKeys: ['enable', 'ssid', 'vlanId', 'hideSsid', 'isolation', 'security', 'delete'],
+    portalFun: true,
   },
   advance: {
     ledThreshFun: false, // 信号强度控制LED灯功能

@@ -79,11 +79,24 @@ const funConfig = {
   basic: {
     devicemodeOptions: [
       { value: 'ap', label: _('AP') },
-      // { value: 'sta', label: _('Station') },
-      // { value: 'repeater', label: _('Repeater') },
+      { value: 'sta', label: _('Station') },
+      { value: 'repeater', label: _('Repeater') },
     ],
     // 功能项参见WirelessConfig -> Basic页面下的ssidTableFullMemberOptions变量
-    ssidTableKeys: ['enable', 'ssid', 'vlanId', 'hideSsid', 'isolation', 'security', 'delete'],
+    ssidTableKeys: [    // 多SSID配置表格项
+      'enable',         // 该SSID是否启用
+      'ssid',           // SSID名称
+      'maxClients',     // SSID最大客户端限制
+      'airTimeEnable',  // 时间公平性
+      'speedLimit',     // SSID限速
+      'vlanId',         // VLAN ID
+      'hideSsid',       // 该SSID是否隐藏
+      'isolation',      // 是否启用客户端隔离
+      'security',       // 加密配置
+      'delete',         // 删除按钮
+      'portalEnable',         // portal功能开关
+    ],
+    portalFun: true,
   },
   advance: {
     ledThreshFun: false, // 信号强度控制LED灯功能

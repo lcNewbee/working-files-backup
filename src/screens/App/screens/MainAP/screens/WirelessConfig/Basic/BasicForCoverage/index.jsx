@@ -12,6 +12,8 @@ import * as selfActions from './actions';
 import reducer from './reducer';
 import countryMap from './country';
 
+import './index.scss';
+
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   save: PropTypes.func,
@@ -195,21 +197,22 @@ export default class Basic extends React.Component {
     this.onChangeRadio = this.onChangeRadio.bind(this);
     this.makeSsidTableOptions = this.makeSsidTableOptions.bind(this);
     this.saveCountrySelectModal = this.saveCountrySelectModal.bind(this);
+    this.radioSettingsHeadClassName = this.radioSettingsHeadClassName.bind(this);
     this.state = {
       ssidTableFullMemberOptions: fromJS([
         {
           id: 'enable',
           label: _('Enable'),
-          width: '200px',
+          width: '300px',
           transform: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
             const pos = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
             return (
-              <input
+              <FormInput
                 type="checkbox"
                 checked={val === '1'}
-                disabled={pos === 0}
-                onClick={() => this.onSsidItemChange(val, item, 'enable', (val === '1' ? '0' : '1'))}
+                disabled={pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
+                onChange={() => this.onSsidItemChange(val, item, 'enable', (val === '1' ? '0' : '1'))}
                 style={{ marginLeft: '3px' }}
               />
             );
@@ -226,7 +229,7 @@ export default class Basic extends React.Component {
               <FormInput
                 type="text"
                 value={val}
-                disabled={pos === 0}
+                disabled={pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
                 onChange={data => this.onSsidItemChange(val, item, 'ssid', data.value)}
                 style={{
                   marginLeft: '-60px',
@@ -247,13 +250,15 @@ export default class Basic extends React.Component {
               <FormInput
                 type="number"
                 value={val}
-                disabled={pos === 0 || vlanEnable === '0'}
+                disabled={(pos === 0 || vlanEnable === '0') &&
+                          this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
                 onChange={(data) => {
                   this.onSsidItemChange(val, item, 'vlanId', data.value);
                 }}
                 style={{
-                  marginLeft: '-60px',
+                  marginLeft: '-30px',
                   height: '29px',
+                  width: '100px',
                 }}
               />
             );
@@ -264,8 +269,6 @@ export default class Basic extends React.Component {
           label: _('Max Clients'),
           width: '250px',
           transform: function (val, item) {
-            // const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-            // const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
             return (
               <FormInput
                 type="number"
@@ -275,8 +278,9 @@ export default class Basic extends React.Component {
                   this.onSsidItemChange(val, item, 'maxClients', data.value);
                 }}
                 style={{
-                  marginLeft: '-60px',
+                  marginLeft: '-22px',
                   height: '29px',
+                  width: '100px',
                 }}
               />
             );
@@ -287,18 +291,15 @@ export default class Basic extends React.Component {
           label: _('Airtime Fairness'),
           width: '250px',
           transform: function (val, item) {
-            // const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-            // const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
-            // const airTimeEnable = this.props.selfState.get('airTimeEnable');
             return (
-              <input
+              <FormInput
                 type="checkbox"
                 checked={val === '1'}
                 // disabled={airTimeEnable === 0}
-                onClick={
+                onChange={
                   () => this.onSsidItemChange(val, item, 'airTimeEnable', (val === '1' ? '0' : '1'))
                 }
-                style={{ marginLeft: '3px' }}
+                style={{ marginLeft: '30px' }}
               />
             );
           }.bind(this),
@@ -308,17 +309,14 @@ export default class Basic extends React.Component {
           label: _('Hide'),
           width: '200px',
           transform: function (val, item) {
-            // const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-            // const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
             return (
-              <input
+              <FormInput
                 type="checkbox"
                 checked={val === '1'}
                 // disabled={pos === 0}
-                onClick={
+                onChange={
                   () => this.onSsidItemChange(val, item, 'hideSsid', (val === '1' ? '0' : '1'))
                 }
-                style={{ marginLeft: '3px' }}
               />
             );
           }.bind(this),
@@ -328,17 +326,31 @@ export default class Basic extends React.Component {
           label: _('Client Isolation'),
           width: '200px',
           transform: function (val, item) {
-            // const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-            // const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
             return (
-              <input
+              <FormInput
                 type="checkbox"
                 checked={val === '1'}
                 // disabled={pos === 0}
-                onClick={
+                onChange={
                   () => this.onSsidItemChange(val, item, 'isolation', (val === '1' ? '0' : '1'))
                 }
                 style={{ marginLeft: '20px' }}
+              />
+            );
+          }.bind(this),
+        },
+        {
+          id: 'portalEnable',
+          label: _('Portal'),
+          width: '200px',
+          transform: function (val, item) {
+            return (
+              <FormInput
+                type="checkbox"
+                checked={val === '1'}
+                onChange={
+                  () => this.onSsidItemChange(val, item, 'portalEnable', (val === '1' ? '0' : '1'))
+                }
               />
             );
           }.bind(this),
@@ -351,12 +363,12 @@ export default class Basic extends React.Component {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
             const pos = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
             return (
-              <div style={{ marginLeft: '-3px' }}>
+              <div style={{ marginLeft: '8px' }}>
                 <Button
                   text={_('Edit')}
                   icon="pencil-square"
                   size="sm"
-                  disabled={pos === 0}
+                  disabled={pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
                   onClick={() => {
                     const tableItemForSsid = fromJS({}).set('val', val)
                           .set('item', item).set('isShow', '1')
@@ -376,7 +388,7 @@ export default class Basic extends React.Component {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
             const pos = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
             return (
-              <div style={{ marginLeft: '-3px' }}>
+              <div style={{ marginLeft: '7px' }}>
                 <Button
                   text={_('Edit')}
                   icon="pencil-square"
@@ -715,6 +727,7 @@ export default class Basic extends React.Component {
     const tableOptions = fullOptions.filter((item) => {
       const id = item.get('id');
       if (keys.includes(id)) return true;
+      return false;
     });
     this.props.changeSsidTableOptions(tableOptions);
   }
@@ -738,6 +751,16 @@ export default class Basic extends React.Component {
           }
         });
     this.props.changeCtyModal(false);
+  }
+
+  radioSettingsHeadClassName() {
+    let radioSettingsClass = 'cols col-12 o-box__cell';
+    const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
+    const wirelessMode = this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']);
+    if (wirelessMode === 'ap') {
+      radioSettingsClass = 'cols col-12 o-box__cell';
+    }
+    return radioSettingsClass;
   }
 
   render() {
@@ -810,7 +833,7 @@ export default class Basic extends React.Component {
       return null;
     }
     return (
-      <div className="stats-group">
+      <div className="stats-group o-box">
         {
           this.props.productInfo.get('deviceRadioList').size > 1 ? (
             <FormInput
@@ -856,652 +879,627 @@ export default class Basic extends React.Component {
           />
         </Modal>{ /* SSID 扫描弹出框 */ }
 
-        <div className="stats-group-cell">
-          {  // 标题
-            this.props.selfState.get('showRadioSetting') ? (
-              <icon
-                className="fa fa-minus-square-o"
-                size="lg"
-                onClick={() => this.props.changeTitleShowIcon({
-                  name: 'showRadioSetting',
-                  value: false,
-                })}
-              >
-                <span
-                  style={{
-                    fontSize: '1.17em',
-                    fontFamily: 'Microsoft YaHei',
-                    fontWeight: 'bold',
-                    paddingLeft: '4px',
-                    cursor: 'pointer',
-                  }}
+        <div className="row">
+          <div className={this.radioSettingsHeadClassName()}>
+            {  // 标题
+              this.props.selfState.get('showRadioSetting') ? (
+                <icon
+                  className="fa fa-minus-square-o"
+                  size="lg"
+                  onClick={() => this.props.changeTitleShowIcon({
+                    name: 'showRadioSetting',
+                    value: false,
+                  })}
                 >
-                  {_('Radio Settings')}
-                </span>
-              </icon>
-            ) : (
-              <icon
-                className="fa fa-plus-square"
-                size="lg"
-                style={{
-                  marginRight: '4px',
-                }}
-                onClick={() => this.props.changeTitleShowIcon({
-                  name: 'showRadioSetting',
-                  value: true,
-                })}
-              >
-                <span
+                  <span
+                    style={{
+                      fontSize: '1.17em',
+                      fontFamily: 'Microsoft YaHei',
+                      fontWeight: 'bold',
+                      paddingLeft: '4px',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {_('Radio Settings')}
+                  </span>
+                </icon>
+              ) : (
+                <icon
+                  className="fa fa-plus-square"
+                  size="lg"
                   style={{
-                    fontSize: '1.17em',
-                    fontFamily: 'Microsoft YaHei',
-                    fontWeight: 'bold',
-                    paddingLeft: '4px',
-                    cursor: 'pointer',
+                    marginRight: '4px',
                   }}
+                  onClick={() => this.props.changeTitleShowIcon({
+                    name: 'showRadioSetting',
+                    value: true,
+                  })}
                 >
-                  {_('Radio Settings')}
-                </span>
-              </icon>
-            )
-          }
+                  <span
+                    style={{
+                      fontSize: '1.17em',
+                      fontFamily: 'Microsoft YaHei',
+                      fontWeight: 'bold',
+                      paddingLeft: '4px',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    {_('Radio Settings')}
+                  </span>
+                </icon>
+              )
+            }
+          </div>
         </div>
         { // 射频部分设置
           this.props.selfState.get('showRadioSetting') ? (
-            <div className="o-box">
-              <div className="row o-box__cell">
-                <div
-                  className="cols col-6"
-                  style={{
-                    overflow: 'visible',
+            <div className="o-box__cell">
+              <div
+                className="cols col-5"
+                style={{
+                  overflow: 'visible',
+                }}
+              >
+                <FormGroup
+                  type="checkbox"
+                  label={_('Radio')}
+                  checked={curData.getIn(['radioList', radioId, 'enable']) === '1'}
+                  onChange={(data) => {
+                    const radioList = curData.get('radioList').setIn([radioId, 'enable'], data.value);
+                    this.props.updateItemSettings({ radioList });
                   }}
+                />
+                { // 模式选择下拉框
+                  funConfig.devicemodeOptions.length === 1 && funConfig.devicemodeOptions[0].value === 'ap' ? null : (
+                    <FormGroup
+                      type="select"
+                      options={funConfig.devicemodeOptions}
+                      value={curData.getIn(['radioList', radioId, 'wirelessMode'])}
+                      onChange={data => this.onChengeWirelessMode(data)}
+                      label={_('Device Mode')}
+                    />
+                  )
+                }
+                <FormGroup
+                  label={_('Country')}
                 >
-                  <FormGroup
-                    type="checkbox"
-                    label={_('Radio')}
-                    checked={curData.getIn(['radioList', radioId, 'enable']) === '1'}
-                    onChange={(data) => {
-                      const radioList = curData.get('radioList').setIn([radioId, 'enable'], data.value);
-                      this.props.updateItemSettings({ radioList });
+                  <FormInput
+                    type="text"
+                    value={getCountryNameFromCode(
+                        this.props.selfState.get('selectedCountry'),
+                        countryMap,
+                      )}
+                    disabled
+                    style={{
+                      width: '127px',
                     }}
                   />
-                  { // 模式选择下拉框
-                    funConfig.devicemodeOptions.length === 1 && funConfig.devicemodeOptions[0].value === 'ap' ? null : (
-                      <FormGroup
-                        type="select"
-                        options={funConfig.devicemodeOptions}
-                        value={curData.getIn(['radioList', radioId, 'wirelessMode'])}
-                        onChange={data => this.onChengeWirelessMode(data)}
-                        label={_('Device Mode')}
-                      />
-                    )
-                  }
+                  <Button
+                    text={_('Change')}
+                    style={{
+                      marginLeft: '-1px',
+                      width: '70px',
+                    }}
+                    onClick={() => { this.props.changeCtyModal(true); }}
+                  />
+                </FormGroup>
+                { /* 国家代码弹出选择框 */
+                }
+                <Modal
+                  title={_('Country Code')}
+                  onClose={this.onCloseCountrySelectModal}
+                  onOk={this.saveCountrySelectModal}
+                  isShow={this.props.selfState.get('showCtyModal')}
+                >
+                  <h3>{_('User Protocol')}</h3>
+                  <span>
+                    {_('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
+                  </span>
+                  <FormGroup
+                    type="radio"
+                    text={_('I have read and agree')}
+                    checked={this.props.selfState.get('agreeProtocol')}
+                    onChange={() => { this.props.changeAgreeProtocol(true); }}
+                  />
                   <FormGroup
                     label={_('Country')}
-                  >
-                    <FormInput
-                      type="text"
-                      value={getCountryNameFromCode(
-                          this.props.selfState.get('selectedCountry'),
-                          countryMap,
-                        )}
-                      disabled
-                      style={{
-                        width: '127px',
-                        marginTop: '-3px',
+                    type="select"
+                    options={makeCountryOptions(countryMap)}
+                    value={this.props.selfState.get('selectedCountry')}
+                    onChange={data => this.props.changeCountryCode(data.value)}
+                    disabled={!this.props.selfState.get('agreeProtocol')}
+                  />
+                </Modal>
+                <FormGroup
+                  label={_('Radio Mode')}
+                  type="select"
+                  options={radioType === '5G' ? radioModeOptionsFor5g : radioModeOptionsFor2g}
+                  value={curData.getIn(['radioList', radioId, 'radioMode'])}
+                  onChange={(data) => {
+                    const radioList = curData.get('radioList').setIn([radioId, 'radioMode'], data.value);
+                    this.props.updateItemSettings({ radioList });
+                  }}
+                />
+                <FormGroup
+                  label={_('Channel')}
+                  type="select"
+                  options={this.makeChannelOptions()}
+                  value={curData.getIn(['radioList', radioId, 'frequency']) || 'auto'}
+                  onChange={(data) => {
+                    const radioList = curData.get('radioList')
+                                      .setIn([radioId, 'frequency'], data.value || 'auto');
+                    this.props.updateItemSettings({ radioList });
+                  }}
+                />
+                { // 2.4G频宽
+                  curData.getIn(['radioList', radioId, 'radioMode']) === '11ng' &&
+                  this.props.selfState.getIn(['currRadioConfig', 'radioType']) === '2.4G' ? (
+                    <FormGroup
+                      label={_('Channel Bandwidth')}
+                      type="switch"
+                      minWidth="99px"
+                      options={channelWidthOptions.slice(0, 2)}
+                      value={curData.getIn(['radioList', radioId, 'channelWidth'])}
+                      onChange={(data) => {
+                        const radioList = curData.get('radioList')
+                                          .setIn([radioId, 'channelWidth'], data.value);
+                        this.props.updateItemSettings({ radioList });
                       }}
                     />
-                    <Button
-                      text={_('Change')}
-                      style={{
-                        marginLeft: '-1px',
-                        width: '70px',
+                  ) : null
+                }
+                { // 5G频宽
+                  this.props.selfState.getIn(['currRadioConfig', 'radioType']) === '5G' &&
+                  (curData.getIn(['radioList', radioId, 'radioMode']) === '11ac' ||
+                  curData.getIn(['radioList', radioId, 'radioMode']) === '11na') ? (
+                    <FormGroup
+                      label={_('Channel Bandwidth')}
+                      type="switch"
+                      minWidth="66px"
+                      options={channelWidthOptions}
+                      value={curData.getIn(['radioList', radioId, 'channelWidth'])}
+                      onChange={(data) => {
+                        const radioList = curData.get('radioList')
+                                          .setIn([radioId, 'channelWidth'], data.value);
+                        this.props.updateItemSettings({ radioList });
                       }}
-                      onClick={() => { this.props.changeCtyModal(true); }}
                     />
-                  </FormGroup>
-                  { /* 国家代码弹出选择框 */
-                  }
-                  <Modal
-                    title={_('Country Code')}
-                    onClose={this.onCloseCountrySelectModal}
-                    onOk={this.saveCountrySelectModal}
-                    isShow={this.props.selfState.get('showCtyModal')}
+                  ) : null
+                }
+                {
+                  funConfig.radioclientslimit ? (
+                    <FormGroup
+                      label={_('Max Clients')}
+                      type="number"
+                      form="radioSettings"
+                      value={curData.getIn(['radioList', radioId, 'maxRadioClients'])}
+                      onChange={(data) => {
+                        const radioList = curData.get('radioList')
+                                          .setIn([radioId, 'maxRadioClients'], data.value);
+                        this.props.updateItemSettings({ radioList });
+                      }}
+                      help={`${_('Range: ')}1 ~ 50`}
+                      required
+                      {...validMaxClients}
+                    />
+                      ) : null
+                }
+                <FormGroup
+                  label={_('Output Power')}
+                  type="range"
+                  min="1"
+                  max={this.props.selfState.get('maxTxpower')}
+                  value={curData.getIn(['radioList', radioId, 'txPower'])}
+                  inputStyle={{
+                    backgroundColor: '#f2f2f2',
+                  }}
+                  hasTextInput
+                  onChange={(data) => {
+                    const radioList = curData.get('radioList')
+                                      .setIn([radioId, 'txPower'], data.value);
+                    this.props.updateItemSettings({ radioList });
+                  }}
+                />
+              </div>
+              {
+                this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap' ? (
+                  <div
+                    style={{
+                      overflow: 'visible',
+                    }}
+                    className="cols cols-6 bubble"
                   >
-                    <h3>{_('User Protocol')}</h3>
-                    <span>
-                      {_('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
-                    </span>
-                    <FormGroup
-                      type="radio"
-                      text={_('I have read and agree')}
-                      checked={this.props.selfState.get('agreeProtocol')}
-                      onChange={() => { this.props.changeAgreeProtocol(true); }}
-                    />
-                    <FormGroup
-                      label={_('Country')}
-                      type="select"
-                      options={makeCountryOptions(countryMap)}
-                      value={this.props.selfState.get('selectedCountry')}
-                      onChange={data => this.props.changeCountryCode(data.value)}
-                      disabled={!this.props.selfState.get('agreeProtocol')}
-                    />
-                  </Modal>
-                  <FormGroup
-                    label={_('Radio Mode')}
-                    type="select"
-                    options={radioType === '5G' ? radioModeOptionsFor5g : radioModeOptionsFor2g}
-                    value={curData.getIn(['radioList', radioId, 'radioMode'])}
-                    onChange={(data) => {
-                      const radioList = curData.get('radioList').setIn([radioId, 'radioMode'], data.value);
-                      this.props.updateItemSettings({ radioList });
-                    }}
-                  />
-                  <FormGroup
-                    label={_('Channel')}
-                    type="select"
-                    options={this.makeChannelOptions()}
-                    value={curData.getIn(['radioList', radioId, 'frequency']) || 'auto'}
-                    onChange={(data) => {
-                      const radioList = curData.get('radioList')
-                                        .setIn([radioId, 'frequency'], data.value || 'auto');
-                      this.props.updateItemSettings({ radioList });
-                    }}
-                  />
-                  { // 2.4G频宽
-                    curData.getIn(['radioList', radioId, 'radioMode']) === '11ng' &&
-                    this.props.selfState.getIn(['currRadioConfig', 'radioType']) === '2.4G' ? (
-                      <FormGroup
-                        label={_('Channel Bandwidth')}
-                        type="switch"
-                        minWidth="99px"
-                        options={channelWidthOptions.slice(0, 2)}
-                        value={curData.getIn(['radioList', radioId, 'channelWidth'])}
-                        onChange={(data) => {
-                          const radioList = curData.get('radioList')
-                                            .setIn([radioId, 'channelWidth'], data.value);
-                          this.props.updateItemSettings({ radioList });
-                        }}
-                      />
-                    ) : null
-                  }
-                  { // 5G频宽
-                    this.props.selfState.getIn(['currRadioConfig', 'radioType']) === '5G' &&
-                    (curData.getIn(['radioList', radioId, 'radioMode']) === '11ac' ||
-                    curData.getIn(['radioList', radioId, 'radioMode']) === '11na') ? (
-                      <FormGroup
-                        label={_('Channel Bandwidth')}
-                        type="switch"
-                        minWidth="66px"
-                        options={channelWidthOptions}
-                        value={curData.getIn(['radioList', radioId, 'channelWidth'])}
-                        onChange={(data) => {
-                          const radioList = curData.get('radioList')
-                                            .setIn([radioId, 'channelWidth'], data.value);
-                          this.props.updateItemSettings({ radioList });
-                        }}
-                      />
-                    ) : null
-                  }
-                  {
-                    funConfig.radioclientslimit ? (
-                      <FormGroup
-                        label={_('Max Clients')}
-                        type="number"
-                        form="maxradioclients"
-                        value={curData.getIn(['radioList', radioId, 'maxRadioClients'])}
-                        onChange={(data) => {
-                          const radioList = curData.get('radioList')
-                                            .setIn([radioId, 'maxRadioClients'], data.value);
-                          this.props.updateItemSettings({ radioList });
-                        }}
-                        help={`${_('Range: ')}1 ~ 50`}
-                        required
-                        {...validMaxClients}
-                      />
-                        ) : null
-                  }
-                  <FormGroup
-                    label={_('Output Power')}
-                    type="range"
-                    min="1"
-                    max={this.props.selfState.get('maxTxpower')}
-                    value={curData.getIn(['radioList', radioId, 'txPower'])}
-                    inputStyle={{
-                      backgroundColor: '#f2f2f2',
-                    }}
-                    hasTextInput
-                    onChange={(data) => {
-                      const radioList = curData.get('radioList')
-                                        .setIn([radioId, 'txPower'], data.value);
-                      this.props.updateItemSettings({ radioList });
-                    }}
-                  />
-                </div>
-                <div className="cols col-6">
-                  { // 远端SSID设置
-                    this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap' ? (
-                      <div
-                        style={{
-                          overflow: 'visible',
-                          borderLeft: '1px solid #CCC',
-                        }}
-                      >
-                        { // SSID输入框**ap模式**
-                          curData.getIn(['radioList', radioId, 'wirelessMode']) === 'ap' ? (
+                    <div className="bubble-arrow-before" />
+                    { // SSID输入框**station模式**
+                      curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta' ? (
+                        <div className="clearfix">
+                          <div
+                            style={{
+                              width: '500px',
+                            }}
+                          >
                             <div
-                              className="clearfix"
-                            >
-                              <div
-                                style={{
-                                  width: '370px',
-                                }}
-                                className="fl"
-                              >
-                                <FormGroup
-                                  label={_('SSID')}
-                                  className="fl"
-                                  form="basicSettings"
-                                  type="text"
-                                  value={curData.getIn(['radioList', radioId, 'vapList', '0', 'ssid'])}
-                                  onChange={(data) => {
-                                    const radioList = curData.get('radioList')
-                                          .setIn([radioId, 'vapList', '0', 'ssid'], data.value);
-                                    this.props.updateItemSettings({ radioList });
-                                  }}
-                                  required
-                                  {...validSsid}
-                                />
-                              </div>
-                              <div
-                                style={{
-                                  display: 'inline-block',
-                                  marginTop: '11px',
-                                }}
-                                className="fl"
-                              >
-                                <input
-                                  style={{
-                                    marginBottom: '-2px',
-                                    marginRight: '4px',
-                                  }}
-                                  type="checkbox"
-                                  checked={curData.getIn(['radioList', radioId, 'vapList', '0', 'hideSsid']) === '1'}
-                                  onClick={data => this.onHideSsidboxClick(data)}
-                                />
-                                {_('Hide')}
-                              </div>
-                            </div>
-                          ) : null
-                        }
-                        { // SSID输入框**station模式**
-                          curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta' ? (
-                            <div className="clearfix">
-                              <div
-                                style={{
-                                  width: '500px',
-                                }}
-                              >
-                                <div
-                                  className="fl"
-                                  style={{
-                                    width: '370px',
-                                  }}
-                                >
-                                  <FormGroup
-                                    label={_('Remote SSID')}
-                                    className="fl"
-                                    type="text"
-                                    value={curData.getIn(['radioList', radioId, 'vapList', '0', 'ssid'])}
-                                    onChange={(data) => {
-                                      const radioList = curData.get('radioList')
-                                            .setIn([radioId, 'vapList', '0', 'ssid'], data.value);
-                                      this.props.updateItemSettings({ radioList });
-                                    }}
-                                    required
-                                    {...validSsid}
-                                  />
-                                </div>
-                              </div>
-                              <div
-                                style={{
-                                  paddingTop: '2px',
-                                }}
-                                className="fl"
-                              >
-                                {
-                                  this.props.selfState.get('scaning') ? (
-                                    <Button
-                                      text={_('Stop')}
-                                      onClick={this.onStopScanClick}
-                                      loading
-                                    />
-                                  ) : (
-                                    <Button
-                                      text={_('Scan')}
-                                      onClick={this.onScanBtnClick}
-                                    />
-                                  )
-                                }
-                              </div>
-                            </div>
-                          ) : null
-                        }
-                        { // SSID输入框**repeater模式**
-                          curData.getIn(['radioList', radioId, 'wirelessMode']) === 'repeater' ? (
-                            <div className="clearfix">
-                              <div
-                                style={{
-                                  width: '500px',
-                                }}
-                              >
-                                <div
-                                  className="fl"
-                                  style={{
-                                    width: '370px',
-                                  }}
-                                >
-                                  <FormGroup
-                                    label={_('Remote SSID')}
-                                    className="fl"
-                                    type="text"
-                                    value={curData.getIn(['radioList', radioId, 'vapList', '0', 'ssid'])}
-                                    onChange={(data) => {
-                                      const radioList = curData.get('radioList')
-                                                      .setIn([radioId, 'vapList', '0', 'ssid'], data.value);
-                                      this.props.updateItemSettings({ radioList });
-                                    }}
-                                    required
-                                    {...validSsid}
-                                  />
-                                </div>
-                              </div>
-                              <div
-                                style={{
-                                  paddingTop: '2px',
-                                }}
-                                className="fl"
-                              >
-                                {
-                                  this.props.selfState.get('scaning') ? (
-                                    <Button
-                                      text={_('Stop')}
-                                      onClick={this.onStopScanClick}
-                                      loading
-                                    />
-                                  ) : (
-                                    <Button
-                                      text={_('Scan')}
-                                      onClick={this.onScanBtnClick}
-                                    />
-                                  )
-                                }
-                              </div>
-                              <div
-                                style={{
-                                  marginTop: '11px',
-                                  marginLeft: '4px',
-                                }}
-                                className="fl"
-                              >
-                                <input
-                                  type="checkbox"
-                                  checked={curData.getIn(['radioList', radioId, 'vapList', '0', 'hideSsid']) === '1'}
-                                  onClick={data => this.onHideSsidboxClick(data)}
-                                />
-                                {_('Hide')}
-                              </div>
-                            </div>
-                          ) : null
-                        }
-                        <FormGroup
-                          type="number"
-                          label={_('VLAN ID')}
-                          value={curData.getIn(['radioList', radioId, 'vapList', '0', 'vlanId'])}
-                          help={`${_('Range: ')}1~4094`}
-                          form="basicSettings"
-                          disabled={vlanEnable === '0'}
-                          onChange={(data) => {
-                            const radioList = curData.get('radioList').setIn([radioId, 'vapList', 0, 'vlanId'], data.value);
-                            this.props.updateItemSettings({ radioList });
-                          }}
-                          required
-                          {...this.props.validateOption.validVlanId}
-                        />
-                        {
-                          curData.getIn(['radioList', radioId, 'wirelessMode']) === 'repeater' ||
-                          curData.getIn(['radioList', radioId, 'wirelessMode']) === 'ap' ? (
-                            <FormGroup
-                              label={_('Client Isolation')}
-                              type="checkbox"
-                              checked={curData.getIn(['radioList', radioId, 'vapList', '0', 'isolation']) === '1'}
-                              onChange={(data) => {
-                                const radioList = curData.get('radioList')
-                                                .setIn([radioId, 'vapList', '0', 'isolation'], data.value);
-                                this.props.updateItemSettings({ radioList });
+                              className="fl"
+                              style={{
+                                width: '370px',
                               }}
+                            >
+                              <FormGroup
+                                label={_('Remote SSID')}
+                                className="fl"
+                                type="text"
+                                value={curData.getIn(['radioList', radioId, 'vapList', '0', 'ssid'])}
+                                onChange={(data) => {
+                                  const radioList = curData.get('radioList')
+                                        .setIn([radioId, 'vapList', '0', 'ssid'], data.value);
+                                  this.props.updateItemSettings({ radioList });
+                                }}
+                                required
+                                {...validSsid}
+                              />
+                            </div>
+                          </div>
+                          <div
+                            style={{
+                              paddingTop: '2px',
+                            }}
+                            className="fl"
+                          >
+                            {
+                              this.props.selfState.get('scaning') ? (
+                                <Button
+                                  text={_('Stop')}
+                                  onClick={this.onStopScanClick}
+                                  loading
+                                />
+                              ) : (
+                                <Button
+                                  text={_('Scan')}
+                                  onClick={this.onScanBtnClick}
+                                />
+                              )
+                            }
+                          </div>
+                        </div>
+                        ) : null
+                    }
+                    { // SSID输入框**repeater模式**
+                      curData.getIn(['radioList', radioId, 'wirelessMode']) === 'repeater' ? (
+                        <div className="clearfix">
+                          <div
+                            style={{
+                              width: '500px',
+                            }}
+                          >
+                            <div
+                              className="fl"
+                              style={{
+                                width: '370px',
+                              }}
+                            >
+                              <FormGroup
+                                label={_('Remote SSID')}
+                                className="fl"
+                                type="text"
+
+                                value={curData.getIn(['radioList', radioId, 'vapList', '0', 'ssid'])}
+                                onChange={(data) => {
+                                  const radioList = curData.get('radioList')
+                                                  .setIn([radioId, 'vapList', '0', 'ssid'], data.value);
+                                  this.props.updateItemSettings({ radioList });
+                                }}
+                                required
+                                {...validSsid}
+                              />
+                            </div>
+                          </div>
+                          <div
+                            style={{
+                              paddingTop: '2px',
+                            }}
+                            className="fl"
+                          >
+                            {
+                              this.props.selfState.get('scaning') ? (
+                                <Button
+                                  text={_('Stop')}
+                                  onClick={this.onStopScanClick}
+                                  loading
+                                />
+                              ) : (
+                                <Button
+                                  text={_('Scan')}
+                                  onClick={this.onScanBtnClick}
+                                />
+                              )
+                            }
+                          </div>
+                          <div
+                            style={{
+                              marginTop: '11px',
+                              marginLeft: '4px',
+                            }}
+                            className="fl"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={curData.getIn(['radioList', radioId, 'vapList', '0', 'hideSsid']) === '1'}
+                              onClick={data => this.onHideSsidboxClick(data)}
                             />
-                          ) : null
-                        }
+                            {_('Hide')}
+                          </div>
+                        </div>
+                      ) : null
+                    }
+                    <FormGroup
+                      type="number"
+                      label={_('VLAN ID')}
+                      value={curData.getIn(['radioList', radioId, 'vapList', '0', 'vlanId'])}
+                      help={`${_('Range: ')}1~4094`}
+                      form="radioSettings"
+                      disabled={vlanEnable === '0'}
+                      onChange={(data) => {
+                        const radioList = curData.get('radioList').setIn([radioId, 'vapList', 0, 'vlanId'], data.value);
+                        this.props.updateItemSettings({ radioList });
+                      }}
+                      style={{
+                        width: '500px',
+                      }}
+                      required
+                      {...this.props.validateOption.validVlanId}
+                    />
+                    {
+                      // curData.getIn(['radioList', radioId, 'wirelessMode']) === 'repeater' ||
+                      // curData.getIn(['radioList', radioId, 'wirelessMode']) === 'ap' ? (
+                      //   <FormGroup
+                      //     label={_('Client Isolation')}
+                      //     type="checkbox"
+                      //     checked={curData.getIn(['radioList', radioId, 'vapList', '0', 'isolation']) === '1'}
+                      //     onChange={(data) => {
+                      //       const radioList = curData.get('radioList')
+                      //                       .setIn([radioId, 'vapList', '0', 'isolation'], data.value);
+                      //       this.props.updateItemSettings({ radioList });
+                      //     }}
+                      //   />
+                      // ) : null
+                    }
+                    {
+                      // funConfig.portalFun &&
+                      // curData.getIn(['radioList', radioId, 'wirelessMode']) !== 'sta' ? (
+                      //   <FormGroup
+                      //     type="checkbox"
+                      //     label={_('Portal Enable')}
+                      //     checked={curData.getIn(['radioList', radioId, 'vapList', '0', 'portalEnable']) === '1'}
+                      //     onChange={(data) => {
+                      //       const radioList = curData.get('radioList')
+                      //                       .setIn([radioId, 'vapList', '0', 'portalEnable'], data.value);
+                      //       this.props.updateItemSettings({ radioList });
+                      //     }}
+                      //   />
+                      // ) : null
+                    }
 
-                        { // repeater模式下，对端AP的mac地址输入框
-                          (curData.getIn(['radioList', radioId, 'wirelessMode']) === 'repeater') ? (
-                            <div>
-                              <FormGroup
-                                label="WDS Peers"
-                                type="text"
-                                value={curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '0']) || ''}
-                                onChange={(data) => {
-                                  const peer1 = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '1']) || '';
-                                  const peer2 = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '2']) || '';
-                                  const radioList = curData.get('radioList')
-                                                    .setIn([radioId, 'vapList', '0', 'peers', '0'], data.value)
-                                                    .setIn([radioId, 'vapList', '0', 'peers', '1'], peer1)
-                                                    .setIn([radioId, 'vapList', '0', 'peers', '2'], peer2);
-                                  this.props.updateItemSettings({ radioList });
-                                }}
-                                {...apmac1}
-                              />
-                              <FormGroup
-                                type="text"
-                                value={curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '1']) || ''}
-                                onChange={(data) => {
-                                  const peer0 = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '0']) || '';
-                                  const peer2 = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '2']) || '';
-                                  const radioList = curData.get('radioList')
-                                                    .setIn([radioId, 'vapList', '0', 'peers', '0'], peer0)
-                                                    .setIn([radioId, 'vapList', '0', 'peers', '1'], data.value)
-                                                    .setIn([radioId, 'vapList', '0', 'peers', '2'], peer2);
-                                  this.props.updateItemSettings({ radioList });
-                                }}
-                                {... apmac2}
-                              />
-                              <FormGroup
-                                type="text"
-                                value={curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '2']) || ''}
-                                onChange={(data) => {
-                                  const peer0 = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '0']) || '';
-                                  const peer1 = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '1']) || '';
-                                  const radioList = curData.get('radioList')
-                                                    .setIn([radioId, 'vapList', '0', 'peers', '0'], peer0)
-                                                    .setIn([radioId, 'vapList', '0', 'peers', '1'], peer1)
-                                                    .setIn([radioId, 'vapList', '0', 'peers', '2'], data.value);
-                                  this.props.updateItemSettings({ radioList });
-                                }}
-                                {... apmac3}
-                              />
-                            </div>
-                          ) : null
-                        }
-                        { // station模式下，对端AP的mac地址输入框
-                          (curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta') ? (
-                            <div>
-                              <FormGroup
-                                label={_('Lock To AP')}
-                                type="checkbox"
-                                checked={curData.getIn(['radioList', radioId, 'vapList', '0', 'apMacEnable']) === '1'}
-                                onChange={(data) => {
-                                  const radioList = curData.get('radioList')
-                                                  .setIn([radioId, 'vapList', '0', 'apMacEnable'], data.value);
-                                  this.props.updateItemSettings({ radioList });
-                                }}
-                              />
-                              {
-                                curData.getIn(['radioList', radioId, 'vapList', '0', 'apMacEnable']) === '1' ? (
-                                  <FormGroup
-                                    label={_('Peer Mac')}
-                                    form="basicSettings"
-                                    value={curData.getIn(['radioList', radioId, 'vapList', '0', 'apMac'])}
-                                    onChange={(data) => {
-                                      const radioList = curData.get('radioList')
-                                                      .setIn([radioId, 'vapList', '0', 'apMac'], data.value);
-                                      this.props.updateItemSettings({ radioList });
-                                    }}
-                                    placeholder={_('not necessary')}
-                                    {...staApmac}
-                                  />
-                                ) : null
-                              }
-                            </div>
-                          ) : null
-                        }
 
+                    { // repeater模式下，对端AP的mac地址输入框
+                      (curData.getIn(['radioList', radioId, 'wirelessMode']) === 'repeater') ? (
                         <div>
-                          { // 加密方式选择框
-                            (curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta' ||
-                              curData.getIn(['radioList', radioId, 'wirelessMode']) === 'ap') ? (
-                                <div>
-                                  <FormGroup
-                                    label={_('Security')}
-                                    type="select"
-                                    options={staAndApSecurityOptions}
-                                    value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'mode']) || 'none'}
-                                    onChange={data => this.onSecurityModeChange(data)}
-                                  />
-                                </div>
-                            ) : null
-                          }
+                          <FormGroup
+                            label="WDS Peers"
+                            type="text"
+                            value={curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '0']) || ''}
+                            onChange={(data) => {
+                              const peer1 = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '1']) || '';
+                              const peer2 = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '2']) || '';
+                              const radioList = curData.get('radioList')
+                                                .setIn([radioId, 'vapList', '0', 'peers', '0'], data.value)
+                                                .setIn([radioId, 'vapList', '0', 'peers', '1'], peer1)
+                                                .setIn([radioId, 'vapList', '0', 'peers', '2'], peer2);
+                              this.props.updateItemSettings({ radioList });
+                            }}
+                            {...apmac1}
+                          />
+                          <FormGroup
+                            type="text"
+                            value={curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '1']) || ''}
+                            onChange={(data) => {
+                              const peer0 = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '0']) || '';
+                              const peer2 = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '2']) || '';
+                              const radioList = curData.get('radioList')
+                                                .setIn([radioId, 'vapList', '0', 'peers', '0'], peer0)
+                                                .setIn([radioId, 'vapList', '0', 'peers', '1'], data.value)
+                                                .setIn([radioId, 'vapList', '0', 'peers', '2'], peer2);
+                              this.props.updateItemSettings({ radioList });
+                            }}
+                            {... apmac2}
+                          />
+                          <FormGroup
+                            type="text"
+                            value={curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '2']) || ''}
+                            onChange={(data) => {
+                              const peer0 = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '0']) || '';
+                              const peer1 = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '1']) || '';
+                              const radioList = curData.get('radioList')
+                                                .setIn([radioId, 'vapList', '0', 'peers', '0'], peer0)
+                                                .setIn([radioId, 'vapList', '0', 'peers', '1'], peer1)
+                                                .setIn([radioId, 'vapList', '0', 'peers', '2'], data.value);
+                              this.props.updateItemSettings({ radioList });
+                            }}
+                            {... apmac3}
+                          />
+                        </div>
+                      ) : null
+                    }
+                    { // station模式下，对端AP的mac地址输入框
+                      (curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta') ? (
+                        <div>
+                          <FormGroup
+                            label={_('Lock To AP')}
+                            type="checkbox"
+                            checked={curData.getIn(['radioList', radioId, 'vapList', '0', 'apMacEnable']) === '1'}
+                            onChange={(data) => {
+                              const radioList = curData.get('radioList')
+                                              .setIn([radioId, 'vapList', '0', 'apMacEnable'], data.value);
+                              this.props.updateItemSettings({ radioList });
+                            }}
+                          />
                           {
-                            (curData.getIn(['radioList', radioId, 'wirelessMode']) === 'repeater') ? (
-                              <div>
-                                <FormGroup
-                                  label={_('Security')}
-                                  type="select"
-                                  options={repeaterSecurityOptions}
-                                  value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'mode'])}
-                                  onChange={data => this.onSecurityModeChange(data)}
-                                />
-                              </div>
-                            ) : null
-                          }
-                          {
-                            (curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'mode']) === 'none' ||
-                            curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'mode']) === 'wep') ? null : (
-                              <div>
-                                <FormGroup
-                                  label={_('Encryption')}
-                                  minWidth="66px"
-                                  type="switch"
-                                  value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'cipher'])}
-                                  onChange={(data) => {
-                                    const security = curData.getIn(['radioList', radioId, 'vapList', '0', 'security'])
-                                                            .set('cipher', data.value);
-                                    const radioList = curData.get('radioList')
-                                                            .setIn([radioId, 'vapList', '0', 'security'], security);
-                                    this.props.updateItemSettings({ radioList });
-                                  }}
-                                  options={[
-                                    { label: 'AES', value: 'aes' },
-                                    { label: 'TKIP', value: 'tkip' },
-                                    { label: 'MIXED', value: 'aes&tkip' },
-                                  ]}
-                                />
-                                <FormGroup
-                                  label={_('Password')}
-                                  type="password"
-                                  form="basicSettings"
-                                  required
-                                  value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'key'])}
-                                  onChange={(data) => {
-                                    const security = curData.getIn(['radioList', radioId, 'vapList', '0', 'security'])
-                                                                  .set('key', data.value);
-                                    const radioList = curData.get('radioList')
-                                                                .setIn([radioId, 'vapList', '0', 'security'], security);
-                                    this.props.updateItemSettings({ radioList });
-                                  }}
-                                  {...validPwd1}
-                                />
-                              </div>
-                            )
-                          }
-                          {
-                            (curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'mode']) === 'wep') ? (
-                              <div>
-                                <FormGroup
-                                  label={_('Auth Type')}
-                                  type="select"
-                                  options={wepAuthenOptions}
-                                  value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'auth'])}
-                                  onChange={(data) => {
-                                    const security = curData.getIn(['radioList', radioId, 'vapList', '0', 'security'])
-                                                    .set('auth', data.value);
-                                    const radioList = curData.get('radioList')
-                                                    .setIn([radioId, 'vapList', '0', 'security'], security);
-                                    this.props.updateItemSettings({ radioList });
-                                  }}
-                                />
-                                <FormGroup
-                                  label={_('Key Index')}
-                                  type="select"
-                                  options={keyIndexOptions}
-                                  value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'keyIndex'])}
-                                  onChange={(data) => {
-                                    const security = curData.getIn(['radioList', radioId, 'vapList', '0', 'security'])
-                                                    .set('keyIndex', data.value);
-                                    const radioList = curData.get('radioList')
-                                                    .setIn([radioId, 'vapList', '0', 'security'], security);
-                                    this.props.updateItemSettings({ radioList });
-                                  }}
-                                />
-                                <FormGroup
-                                  label={_('Key Format')}
-                                  type="select"
-                                  options={keyTypeOptions}
-                                  value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'keyType'])}
-                                  onChange={(data) => {
-                                    const security = curData.getIn(['radioList', radioId, 'vapList', '0', 'security'])
-                                                            .set('keyType', data.value);
-                                    const radioList = curData.get('radioList')
-                                          .setIn([radioId, 'vapList', '0', 'security'], security);
-                                    this.props.updateItemSettings({ radioList });
-                                  }}
-                                />
-                                <FormGroup
-                                  type="password"
-                                  required
-                                  label={_('Password')}
-                                  form="basicSettings"
-                                  value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'key'])}
-                                  onChange={(data) => {
-                                    const security = curData.getIn(['radioList', radioId, 'vapList', '0', 'security'])
-                                                            .set('key', data.value);
-                                    const radioList = curData.get('radioList')
-                                                    .setIn([radioId, 'vapList', '0', 'security'], security);
-                                    this.props.updateItemSettings({ radioList });
-                                  }}
-                                  {...this.props.validateOption[curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'keyType'])]}
-                                />
-                              </div>
+                            curData.getIn(['radioList', radioId, 'vapList', '0', 'apMacEnable']) === '1' ? (
+                              <FormGroup
+                                label={_('Peer Mac')}
+                                form="radioSettings"
+                                value={curData.getIn(['radioList', radioId, 'vapList', '0', 'apMac'])}
+                                onChange={(data) => {
+                                  const radioList = curData.get('radioList')
+                                                  .setIn([radioId, 'vapList', '0', 'apMac'], data.value);
+                                  this.props.updateItemSettings({ radioList });
+                                }}
+                                placeholder={_('not necessary')}
+                                {...staApmac}
+                              />
                             ) : null
                           }
                         </div>
-                      </div>
-                    ) : null
-                  }
-                </div>
-              </div>
+                      ) : null
+                    }
+                    <div>
+                      { // 加密方式选择框
+                        (curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta' ||
+                          curData.getIn(['radioList', radioId, 'wirelessMode']) === 'ap') ? (
+                            <div>
+                              <FormGroup
+                                label={_('Security')}
+                                type="select"
+                                options={staAndApSecurityOptions}
+                                value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'mode']) || 'none'}
+                                onChange={data => this.onSecurityModeChange(data)}
+                              />
+                            </div>
+                        ) : null
+                      }
+                      {
+                        (curData.getIn(['radioList', radioId, 'wirelessMode']) === 'repeater') ? (
+                          <div>
+                            <FormGroup
+                              label={_('Security')}
+                              type="select"
+                              options={repeaterSecurityOptions}
+                              value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'mode'])}
+                              onChange={data => this.onSecurityModeChange(data)}
+                            />
+                          </div>
+                        ) : null
+                      }
+                      {
+                        (curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'mode']) === 'none' ||
+                        curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'mode']) === 'wep') ? null : (
+                          <div>
+                            <FormGroup
+                              label={_('Encryption')}
+                              minWidth="66px"
+                              type="switch"
+                              value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'cipher'])}
+                              onChange={(data) => {
+                                const security = curData.getIn(['radioList', radioId, 'vapList', '0', 'security'])
+                                                        .set('cipher', data.value);
+                                const radioList = curData.get('radioList')
+                                                        .setIn([radioId, 'vapList', '0', 'security'], security);
+                                this.props.updateItemSettings({ radioList });
+                              }}
+                              options={[
+                                { label: 'AES', value: 'aes' },
+                                { label: 'TKIP', value: 'tkip' },
+                                { label: 'MIXED', value: 'aes&tkip' },
+                              ]}
+                            />
+                            <FormGroup
+                              label={_('Password')}
+                              type="password"
+                              form="radioSettings"
+                              required
+                              value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'key'])}
+                              onChange={(data) => {
+                                const security = curData.getIn(['radioList', radioId, 'vapList', '0', 'security'])
+                                                              .set('key', data.value);
+                                const radioList = curData.get('radioList')
+                                                            .setIn([radioId, 'vapList', '0', 'security'], security);
+                                this.props.updateItemSettings({ radioList });
+                              }}
+                              style={{
+                                width: '350px',
+                              }}
+                              {...validPwd1}
+                            />
+                          </div>
+                        )
+                      }
+                      {
+                        (curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'mode']) === 'wep') ? (
+                          <div>
+                            <FormGroup
+                              label={_('Auth Type')}
+                              type="select"
+                              options={wepAuthenOptions}
+                              value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'auth'])}
+                              onChange={(data) => {
+                                const security = curData.getIn(['radioList', radioId, 'vapList', '0', 'security'])
+                                                .set('auth', data.value);
+                                const radioList = curData.get('radioList')
+                                                .setIn([radioId, 'vapList', '0', 'security'], security);
+                                this.props.updateItemSettings({ radioList });
+                              }}
+                            />
+                            <FormGroup
+                              label={_('Key Index')}
+                              type="select"
+                              options={keyIndexOptions}
+                              value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'keyIndex'])}
+                              onChange={(data) => {
+                                const security = curData.getIn(['radioList', radioId, 'vapList', '0', 'security'])
+                                                .set('keyIndex', data.value);
+                                const radioList = curData.get('radioList')
+                                                .setIn([radioId, 'vapList', '0', 'security'], security);
+                                this.props.updateItemSettings({ radioList });
+                              }}
+                            />
+                            <FormGroup
+                              label={_('Key Format')}
+                              type="select"
+                              options={keyTypeOptions}
+                              value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'keyType'])}
+                              onChange={(data) => {
+                                const security = curData.getIn(['radioList', radioId, 'vapList', '0', 'security'])
+                                                        .set('keyType', data.value);
+                                const radioList = curData.get('radioList')
+                                      .setIn([radioId, 'vapList', '0', 'security'], security);
+                                this.props.updateItemSettings({ radioList });
+                              }}
+                            />
+                            <FormGroup
+                              type="password"
+                              required
+                              label={_('Password')}
+                              form="radioSettings"
+                              value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'key'])}
+                              onChange={(data) => {
+                                const security = curData.getIn(['radioList', radioId, 'vapList', '0', 'security'])
+                                                        .set('key', data.value);
+                                const radioList = curData.get('radioList')
+                                                .setIn([radioId, 'vapList', '0', 'security'], security);
+                                this.props.updateItemSettings({ radioList });
+                              }}
+                              {...this.props.validateOption[curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'keyType'])]}
+                            />
+                          </div>
+                        ) : null
+                      }
+                    </div>
+                    <div className="bubble-arrow-after" />
+                  </div>
+                ) : null
+              }
+
               <div
-                className="o-box__cell"
+                className="cols col-12"
                 style={{
                   paddingLeft: '20px',
                 }}
@@ -1523,7 +1521,7 @@ export default class Basic extends React.Component {
             </div>
           ) : null
         }
-        <div className="stats-group-cell">
+        <div className="cols col-12 o-box__cell">
           {
             this.props.selfState.get('showMultiSsid') ? (
               <icon
@@ -1580,7 +1578,7 @@ export default class Basic extends React.Component {
         </div>
         {
           this.props.selfState.get('showMultiSsid') ? (
-            <div className="stats-group-cell">
+            <div className="cols col-12 o-box__cell">
               <span>{_('Notice: The first SSID can\'t be modefied here !')}</span>
               <Table
                 className="table"
@@ -1598,7 +1596,6 @@ export default class Basic extends React.Component {
                 }
               />
               <div
-                className="stats-group-cell"
                 style={{ marginTop: '10px' }}
               >
                 <Button
@@ -1625,6 +1622,7 @@ export default class Basic extends React.Component {
                         error = _('Vlan ID must be positive interger !');
                         break;
                       }
+                      console.log('break from first if');
                       if (vapList[i].vlanId < 1 || vapList[i].vlanId > 4094) {
                         error = _('Vlan ID number out of range ! (1 ~ 4094)');
                         break;
@@ -1641,7 +1639,9 @@ export default class Basic extends React.Component {
                       // }
                       // 判断是否有该功能，没有则不验证
                       if (this.props.route.funConfig.ssidTableKeys.indexOf('maxClients') !== -1) {
-                        if (vapList[i].maxClients === '' || vapList[i].maxClients === '0') {
+                        if (vapList[i].maxClients === '' ||
+                            vapList[i].maxClients === '0' ||
+                            typeof (vapList[i].maxClients) === 'undefined') {
                           error = _('Max clients number must be positive interger !');
                           break;
                         }
@@ -1682,6 +1682,7 @@ export default class Basic extends React.Component {
           </div>
         */
         }
+
         <Modal
           title={_('Speed Limit')}
           isShow={this.props.selfState.get('showSpeedLimitModal')}
@@ -1740,6 +1741,7 @@ export default class Basic extends React.Component {
                     const newItemForSsid = tableItemForSsid.set('item', newItem);
                     this.props.changeTableItemForSsid(newItemForSsid);
                   }}
+                  style={{ width: '400px' }}
                   help="KB"
                   required
                   {...validUpload}
@@ -1755,6 +1757,7 @@ export default class Basic extends React.Component {
                     const newItemForSsid = tableItemForSsid.set('item', newItem);
                     this.props.changeTableItemForSsid(newItemForSsid);
                   }}
+                  style={{ width: '400px' }}
                   help="KB"
                   required
                   {...validDownload}
@@ -1948,7 +1951,7 @@ function mapDispatchToProps(dispatch) {
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
-  validator.mergeProps(validOptions)
+  validator.mergeProps(validOptions),
 )(Basic);
 
 export const basic = reducer;

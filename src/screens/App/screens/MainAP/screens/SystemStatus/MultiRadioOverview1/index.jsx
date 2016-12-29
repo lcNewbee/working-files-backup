@@ -22,7 +22,7 @@ const propTypes = {
   changeCurrRadioConfig: PropTypes.func,
   changeCustomSettingsForChart: PropTypes.func,
 
-  updateItemSettings: PropTypes.func,
+  // updateItemSettings: PropTypes.func,
   leaveSettingsScreen: PropTypes.func,
   app: PropTypes.instanceOf(Map),
   changeFirstRefresh: PropTypes.func,
@@ -349,134 +349,134 @@ function wirelessModeShowStyle(wirelessMode) {
 
 //   return ret;
 // }
-function getFlowPerSsidOption(serverData) {
-  let dataList = serverData.get('flowPerSsid');
-  let totalNum = 0;
-  dataList.forEach((item) => {
-    totalNum += Number(item.get('value'));
-  });
-  const ret = {
-    tooltip: {
-      trigger: 'item',
-      formatter: '{a} <br/>{b} ({d}%)',
-    },
-    title: {
-      text: _('Total: ') + flowRateFilter.transform(totalNum),
-      x: 'center',
-      textStyle: {
-        fontSize: '18',
-      },
-    },
-    legend: {
-      orient: 'vertical',
-      x: 'left',
-      y: 'top',
-    },
-    series: [
-      {
-        name: 'SSID',
-        type: 'pie',
-        radius: ['0%', '60%'],
-        avoidLabelOverlap: false,
-        label: {
-          normal: {
-            show: false,
-            //position: 'center',
-          },
-          emphasis: {
-            show: false,
-            textStyle: {
-              fontSize: '12',
-              fontWeight: 'bold',
-            },
-          },
-        },
-        labelLine: {
-          normal: {
-            show: false,
-          },
-        },
+// function getFlowPerSsidOption(serverData) {
+//   let dataList = serverData.get('flowPerSsid');
+//   let totalNum = 0;
+//   dataList.forEach((item) => {
+//     totalNum += Number(item.get('value'));
+//   });
+//   const ret = {
+//     tooltip: {
+//       trigger: 'item',
+//       formatter: '{a} <br/>{b} ({d}%)',
+//     },
+//     title: {
+//       text: _('Total: ') + flowRateFilter.transform(totalNum),
+//       x: 'center',
+//       textStyle: {
+//         fontSize: '18',
+//       },
+//     },
+//     legend: {
+//       orient: 'vertical',
+//       x: 'left',
+//       y: 'top',
+//     },
+//     series: [
+//       {
+//         name: 'SSID',
+//         type: 'pie',
+//         radius: ['0%', '60%'],
+//         avoidLabelOverlap: false,
+//         label: {
+//           normal: {
+//             show: false,
+//             //position: 'center',
+//           },
+//           emphasis: {
+//             show: false,
+//             textStyle: {
+//               fontSize: '12',
+//               fontWeight: 'bold',
+//             },
+//           },
+//         },
+//         labelLine: {
+//           normal: {
+//             show: false,
+//           },
+//         },
 
-      },
-    ],
-  };
+//       },
+//     ],
+//   };
 
-  if (List.isList(dataList)) {
-    dataList = dataList.map(item => item.set('name', `${item.get('name')}: ${flowRateFilter.transform(item.get('value'))}`)
-                                        .set('value', `${Number(item.get('value'))}`));
-    ret.legend.data = dataList.map(item => `${item.get('name')}`).toJS();
-    ret.series[0].data = dataList.toJS();
-  }
+//   if (List.isList(dataList)) {
+//     dataList = dataList.map(item => item.set('name', `${item.get('name')}: ${flowRateFilter.transform(item.get('value'))}`)
+//                                         .set('value', `${Number(item.get('value'))}`));
+//     ret.legend.data = dataList.map(item => `${item.get('name')}`).toJS();
+//     ret.series[0].data = dataList.toJS();
+//   }
 
-  return ret;
-}
-function getTopTenFlowClientsOption(serverData) {
-  let dataList = serverData.get('top10FlowClients');
-  const ret = {
-    tooltip: {
-      trigger: 'item',
-      formatter: '{a} <br/>{b} ({d}%)',
-    },
-    title: {
-      text: _('Top10 Flow Clients'),
-      x: 'center',
-    },
-    legend: {
-      show: true,
-      orient: 'vertical',
-      x: 'left',
-      y: 'top',
-      // data: [_('Offline'), _('Online')],
-    },
-    series: [
-      {
-        name: _('Name'),
-        type: 'pie',
-        radius: ['0%', '60%'],
-        avoidLabelOverlap: false,
-        label: {
-          // formatter: '{b}: {c}',
-          normal: {
-            show: false,
-            //position: 'center',
-          },
-          emphasis: {
-            show: true,
-            textStyle: {
-              fontSize: '12',
-              fontWeight: 'bold',
-            },
-          },
-        },
-        labelLine: {
-          normal: {
-            show: false,
-          },
-        },
-      },
-    ],
-  };
+//   return ret;
+// }
+// function getTopTenFlowClientsOption(serverData) {
+//   let dataList = serverData.get('top10FlowClients');
+//   const ret = {
+//     tooltip: {
+//       trigger: 'item',
+//       formatter: '{a} <br/>{b} ({d}%)',
+//     },
+//     title: {
+//       text: _('Top10 Flow Clients'),
+//       x: 'center',
+//     },
+//     legend: {
+//       show: true,
+//       orient: 'vertical',
+//       x: 'left',
+//       y: 'top',
+//       // data: [_('Offline'), _('Online')],
+//     },
+//     series: [
+//       {
+//         name: _('Name'),
+//         type: 'pie',
+//         radius: ['0%', '60%'],
+//         avoidLabelOverlap: false,
+//         label: {
+//           // formatter: '{b}: {c}',
+//           normal: {
+//             show: false,
+//             //position: 'center',
+//           },
+//           emphasis: {
+//             show: true,
+//             textStyle: {
+//               fontSize: '12',
+//               fontWeight: 'bold',
+//             },
+//           },
+//         },
+//         labelLine: {
+//           normal: {
+//             show: false,
+//           },
+//         },
+//       },
+//     ],
+//   };
 
-  if (List.isList(dataList)) {
-    dataList = dataList.map((item) => {
-      let name;
-      const userName = item.get('name');
-      if (!userName || userName === '') {
-        name = item.get('mac');  // 如果没有name，则使用mac代替
-      } else if (userName.length >= 16) {
-        name = `${userName.substr(0, 13)}...`; // 如果名称太长则后面显示省略号
-      } else if (userName.length < 16) {
-        name = userName; // 有名称，且长度合法
-      }
-      return item.set('name', `${name}: ${flowRateFilter.transform(item.get('value'))}`)
-                .set('value', `${Number(item.get('value'))}`)
-                .delete('mac'); // 删除数据中的mac变量
-    });
-    ret.legend.data = dataList.map(item => `${item.get('name')}`).toJS();
-    ret.series[0].data = dataList.toJS();
-  }
-  return ret;
-}
+//   if (List.isList(dataList)) {
+//     dataList = dataList.map((item) => {
+//       let name;
+//       const userName = item.get('name');
+//       if (!userName || userName === '') {
+//         name = item.get('mac');  // 如果没有name，则使用mac代替
+//       } else if (userName.length >= 16) {
+//         name = `${userName.substr(0, 13)}...`; // 如果名称太长则后面显示省略号
+//       } else if (userName.length < 16) {
+//         name = userName; // 有名称，且长度合法
+//       }
+//       return item.set('name', `${name}: ${flowRateFilter.transform(item.get('value'))}`)
+//                 .set('value', `${Number(item.get('value'))}`)
+//                 .delete('mac'); // 删除数据中的mac变量
+//     });
+//     ret.legend.data = dataList.map(item => `${item.get('name')}`).toJS();
+//     ret.series[0].data = dataList.toJS();
+//   }
+//   return ret;
+// }
 
 export default class SystemStatus extends React.Component {
   constructor(props) {
@@ -500,18 +500,14 @@ export default class SystemStatus extends React.Component {
         this.props.fetchSettings().then(() => {
           this.props.changeFirstRefresh(false);
           // const customSetings = this.props.selfState.get('customSettingsForChart').toJS();
-          if (this.props.store.getIn(['curData', 'radioList', 0, 'enable']) === '1') {
-            this.prepareChartData();
-          }
+          this.prepareChartData();
         });
       }
     });
     this.onChangeRadio({ value: '0' });
     a = setInterval(() => {
       this.props.fetchSettings().then(() => {
-        if (this.props.store.getIn(['curData', 'radioList', 0, 'enable']) === '1') {
-          this.prepareChartData();
-        }
+        this.prepareChartData();
       });
     }, 10000);
   }
@@ -553,6 +549,8 @@ export default class SystemStatus extends React.Component {
   prepareChartData() { // { ssidFlowDir, top10ClientFlowDir }为流量方向，'upload','download'
     const customSetings = this.props.selfState.get('customSettingsForChart').toJS();
     const { radioId, radioType } = this.props.selfState.get('currRadioConfig').toJS();
+    if (!this.props.store.getIn(['curData', 'radioList', radioId]) ||
+        !this.props.store.getIn(['curData', 'sysStatus'])) return null;
     const { cpuInfo, memTotal, memFree } = this.props.store.getIn(['curData', 'sysStatus']).toJS();
     const that = this;
     function getFlowPerSsidList() {
@@ -573,7 +571,6 @@ export default class SystemStatus extends React.Component {
     }
     function getTop10FlowClientsList() {
       const staList = that.props.store.getIn(['curData', 'radioList', radioId, 'staList']);
-      // console.log('staList', staList);
       let sortedStaList;
       let top10FlowClients;
       if (customSetings.top10ClientFlowDir === 'upload') { // 排序
@@ -589,7 +586,6 @@ export default class SystemStatus extends React.Component {
           return rxBytesB - rxBytesA;
         });
       }
-      // console.log('sortedStaList', sortedStaList);
       if (sortedStaList.size > 10) { // 裁剪前十
         sortedStaList = sortedStaList.slice(0, 10);
       }
@@ -616,411 +612,31 @@ export default class SystemStatus extends React.Component {
   }
 
   render() {
-    // const clientOptions = fromJS([
-    //   {
-    //     id: 'mac',
-    //     text: 'Mac',
-    //   },
-    //   {
-    //     id: 'deviceName',
-    //     text: _('Device Name'),
-    //     transform(val) {
-    //       if (val === '' || val === undefined) {
-    //         return '--';
-    //       }
-    //       return val;
-    //     },
-    //   },
-    //   {
-    //     id: 'ssid',
-    //     text: _('Owner SSID'),
-    //     transform(val) {
-    //       if (val === '' || val === undefined) {
-    //         return '--';
-    //       }
-    //       return val;
-    //     },
-    //   },
-    //   {
-    //     id: 'signal',
-    //     text: _('Signal(dBm)'),
-    //     transform(val) {
-    //       if (val === '' || val === undefined) {
-    //         return '--';
-    //       }
-    //       return val;
-    //     },
-    //   },
-    //   {
-    //     id: 'noise',
-    //     text: _('Noise(dBm)'),
-    //     transform(val) {
-    //       if (val === '' || val === undefined) {
-    //         return '--';
-    //       }
-    //       return val;
-    //     },
-    //   },
-    //   {
-    //     id: 'txRate',
-    //     text: _('Tx Rate'),
-    //     transform(val) {
-    //       if (val === '' || val === undefined) {
-    //         return '--';
-    //       }
-    //       return `${val}Mbps`;
-    //     },
-    //   },
-    //   {
-    //     id: 'rxRate',
-    //     text: _('Rx Rate'),
-    //     transform(val) {
-    //       if (val === '' || val === undefined) {
-    //         return '--';
-    //       }
-    //       return `${val}Mbps`;
-    //     },
-    //   },
-    //   {
-    //     id: 'txBytes',
-    //     text: _('Tx Bytes'),
-    //     transform(val) {
-    //       if (val === '' || val === undefined) {
-    //         return '--';
-    //       }
-    //       return flowRateFilter.transform(val);
-    //     },
-    //   },
-    //   {
-    //     id: 'rxBytes',
-    //     text: _('Rx Bytes'),
-    //     transform(val) {
-    //       if (val === '' || val === undefined) {
-    //         return '--';
-    //       }
-    //       return flowRateFilter.transform(val);
-    //     },
-    //   },
-    //   {
-    //     id: 'txPackets',
-    //     text: _('Tx Packets'),
-    //     transform(val) {
-    //       if (val === '' || val === undefined) {
-    //         return '--';
-    //       }
-    //       return val;
-    //     },
-    //   },
-    //   {
-    //     id: 'rxPackets',
-    //     text: _('Rx Packets'),
-    //     transform(val) {
-    //       if (val === '' || val === undefined) {
-    //         return '--';
-    //       }
-    //       return val;
-    //     },
-    //   },
-    //   {
-    //     id: 'connectTime',
-    //     text: _('Connect Time'),
-    //     transform(val) {
-    //       if (val === '' || val === undefined) {
-    //         return '--';
-    //       }
-    //       return changeUptimeToReadable(val);
-    //     },
-    //   },
-    //   {
-    //     id: 'ipAddr',
-    //     text: _('IP'),
-    //     transform(val) {
-    //       if (val === '' || val === undefined) {
-    //         return '--';
-    //       }
-    //       return val;
-    //     },
-    //   },
-    // ]);
-    const connectionInfoOption = fromJS([
-      {
-        id: 'status',
-        text: _('Connection Status'),
-        transform(val) {
-          if (val === '' || val === undefined) {
-            return '--';
-          }
-          return val;
-        },
-      }, {
-        id: 'connectTime',
-        text: _('Connect Time'),
-        transform(val) {
-          if (val === '' || val === undefined) {
-            return '--';
-          }
-          return changeUptimeToReadable(val);
-        },
-      }, {
-        id: 'txrate',
-        text: _('Tx Rate'),
-        transform(val) {
-          if (val === '' || val === undefined) {
-            return '--';
-          }
-          return `${val}Mbps`;
-        },
-      }, {
-        id: 'rxrate',
-        text: _('Rx Rate'),
-        transform(val) {
-          if (val === '' || val === undefined) {
-            return '--';
-          }
-          return `${val}Mbps`;
-        },
-      }, {
-        id: 'mac',
-        text: _('Peer MAC'),
-        transform(val) {
-          if (val === '' || val === undefined) {
-            return '--';
-          }
-          return val;
-        },
-      },
-    ]);
     const { radioId, radioType } = this.props.selfState.get('currRadioConfig').toJS();
     if (!this.props.store.getIn(['curData', 'radioList', radioId])
         || !this.props.store.getIn(['curData', 'sysStatus'])) return null;
     const {
-      deviceModel, deviceName, version, uptime, systemTime, networkMode, systemMac,
-      memInfo, cpuInfo,
+      deviceModel, deviceName, version, uptime, systemTime, networkMode, wlan0Mac,
     } = this.props.store.getIn(['curData', 'sysStatus']).toJS();
     const interfaces = this.props.store.getIn(['curData', 'interfaces']).toJS();
-    const {
-      wirelessMode, security, frequency, channelWidth, channel, radioMode, ssid,
-      distance, txPower, noise, chutil, staList, peerList, vapList, signal,
-    } = this.props.store.getIn(['curData', 'radioList', radioId]).toJS();
-    // const { memInfo, cpuInfo } = this.props.selfState.get('serverData').toJS();
+    // const {
+    //   wirelessMode, security, frequency, channelWidth, channel, radioMode, ssid,
+    //   distance, txPower, noise, chutil, staList, peerList, vapList, signal,
+    // } = this.props.store.getIn(['curData', 'radioList', radioId]).toJS();
+    const radioList = this.props.store.getIn(['curData', 'radioList']);
+    const { memFree, memTotal, cpuInfo } = this.props.selfState.get('serverData').toJS();
     // const vapInterfacesList = (wirelessMode === 'sta') ? [vapList[0]] : vapList;
     // 绘图
-    const serverData = this.props.selfState.get('serverData');
+    // const serverData = this.props.selfState.get('serverData');
     // const memoryStatusOption = getMemoryOption(serverData);
     // const cpuStatusOption = getCpuOption(serverData);
-    const topTenFlowClients = getTopTenFlowClientsOption(serverData);
-    const flowPerSsid = getFlowPerSsidOption(serverData);
+    // const topTenFlowClients = getTopTenFlowClientsOption(serverData);
+    // const flowPerSsid = getFlowPerSsidOption(serverData);
 
     return (
       <div className="o-box">
-        {
-          this.props.product.get('deviceRadioList').size > 1 ? (
-            <FormInput
-              type="switch"
-              label={_('Radio Select')}
-              minWidth="100px"
-              options={this.props.product.get('radioSelectOptions')}
-              value={this.props.selfState.getIn(['currRadioConfig', 'radioId'])}
-              onChange={(data) => {
-                Promise.resolve().then(() => {
-                  this.onChangeRadio(data);
-                }).then(() => {
-                  if (this.props.store.getIn(['curData', 'radioList', data.value, 'enable']) === '1') {
-                    this.prepareChartData();
-                  }
-                });
-              }}
-              style={{
-                marginBottom: '15px',
-              }}
-            />
-          ) : null
-        }
-
-        {/* // CPU 和 Memory的两幅图片
-          <div className="o-box row">
-            <div className="cols col-6" >
-              <div className="o-box__cell">
-                <h3>{ _('Memory') }</h3>
-              </div>
-              <div className="o-box__cell">
-                <EchartReact
-                  option={memoryStatusOption}
-                  className="o-box__canvas"
-                  style={{
-                    width: '100%',
-                    minHeight: '200px',
-                  }}
-                />
-              </div>
-            </div>
-            <div className="cols col-6">
-              <div className="o-box__cell">
-                <h3>{ _('CPU') }</h3>
-              </div>
-              <div className="o-box__cell">
-                <EchartReact
-                  option={cpuStatusOption}
-                  className="o-box__canvas"
-                  style={{
-                    width: '100%',
-                    minHeight: '200px',
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-        */}
-
-        { // SSID流量图 和 客户端流量前十
-          wirelessMode === 'sta' ? null : (
-            <div className="row">
-              <div className="cols col-6" >
-                <div className="o-box__cell clearfix">
-                  <h3
-                    className="fl"
-                    style={{
-                      paddingTop: '5px',
-                      marginRight: '10px',
-                    }}
-                  >
-                    { _('SSID Flow') }
-                  </h3>
-                  <FormInput
-                    type="select"
-                    options={[
-                      { label: _('Upload'), value: 'upload' },
-                      { label: _('Download'), value: 'download' },
-                    ]}
-                    value={this.props.selfState.getIn(['customSettingsForChart', 'ssidFlowDir'])}
-                    onChange={(data) => {
-                      Promise.resolve().then(() => {
-                        this.props.changeCustomSettingsForChart(fromJS({ ssidFlowDir: data.value }));
-                      }).then(() => {
-                        if (this.props.store.getIn(['curData', 'radioList', data.value, 'enable']) === '1') {
-                          this.prepareChartData();
-                        }
-                      });
-                    }}
-                  />
-                  {
-                    this.props.store.getIn(['curData', 'radioList', radioId, 'enable']) === '1' ? (
-                      <a
-                        href="#/main/status/ssiddetails"
-                        className="fr"
-                        style={{
-                          paddingTop: '5px',
-                          color: 'blue',
-                          // textDecoration: 'underline',
-                        }}
-                      >
-                        {_('More Details')}
-                      </a>
-                    ) : null
-                  }
-                </div>
-                <div className="o-box__cell">
-                  {
-                    this.props.store.getIn(['curData', 'radioList', radioId, 'enable']) === '1' ? (
-                      <EchartReact
-                        option={flowPerSsid}
-                        className="o-box__canvas"
-                        style={{
-                          width: '100%',
-                          minHeight: '260px',
-                        }}
-                      />
-                    ) : (
-                      <div
-                        style={{
-                          width: '100%',
-                          height: '260px',
-                          lineHeight: '260px',
-                          textAlign: 'center',
-                          fontSize: '20px',
-                          fontWeight: 'bold',
-                        }}
-                      >
-                        Radio Off
-                      </div>
-                    )
-                  }
-                </div>
-              </div>
-              <div className="cols col-6">
-                <div className="o-box__cell clearfix">
-                  <h3
-                    className="fl"
-                    style={{
-                      paddingTop: '5px',
-                      marginRight: '10px',
-                    }}
-                  >
-                    { _('Top10 Flow Clients') }
-                  </h3>
-                  <FormInput
-                    type="select"
-                    options={[
-                      { label: _('Upload'), value: 'upload' },
-                      { label: _('Download'), value: 'download' },
-                    ]}
-                    value={this.props.selfState.getIn(['customSettingsForChart', 'top10ClientFlowDir'])}
-                    onChange={(data) => {
-                      Promise.resolve().then(() => {
-                        this.props.changeCustomSettingsForChart(fromJS({ top10ClientFlowDir: data.value }));
-                      }).then(() => {
-                        if (this.props.store.getIn(['curData', 'radioList', data.value, 'enable']) === '1') {
-                          this.prepareChartData();
-                        }
-                      });
-                    }}
-                  />
-                  {
-                    this.props.store.getIn(['curData', 'radioList', radioId, 'enable']) === '1' ? (
-                      <a
-                        href="#/main/status/clientsdetails"
-                        className="fr"
-                        style={{
-                          paddingTop: '5px',
-                          color: 'blue',
-                        }}
-                      >
-                        {_('More Details')}
-                      </a>
-                    ) : null
-                  }
-                </div>
-                <div className="o-box__cell row">
-                  {
-                    this.props.selfState.getIn(['serverData', 'top10FlowClients']).size === 0 ||
-                    this.props.store.getIn(['curData', 'radioList', radioId, 'enable']) === '0' ? (
-                      <div
-                        style={{
-                          height: '260px',
-                          lineHeight: '260px',
-                          textAlign: 'center',
-                          fontSize: '20px',
-                          fontWeight: 'bold',
-                        }}
-                      >{_('No Client')}</div>
-                    ) : (
-                      <EchartReact
-                        option={topTenFlowClients}
-                        className="o-box__canvas cols col-12"
-                        style={{
-                          minHeight: '260px',
-                        }}
-                      />
-                    )
-                  }
-                </div>
-              </div>
-            </div>
-          )
-        }
-
         <div className="row">
-          <div className="cols col-6">
+          <div className="cols col-7">
             <div className="o-box__cell">
               <h3>{_('System Status')}</h3>
             </div>
@@ -1047,15 +663,14 @@ export default class SystemStatus extends React.Component {
                     value={changeUptimeToReadable(uptime)}
                   />
                   <FormGroup
-                    label={_('AP MAC :')}
+                    label={_('WLAN0 MAC :')}
                     type="plain-text"
-                    value={systemMac}
+                    value={wlan0Mac}
                   />
                   <FormGroup
                     label={_('Memory Used :')}
                     type="plain-text"
-                    value={memInfo}
-                    help="%"
+                    value={`${parseInt(((Number(memTotal) - Number(memFree)) / Number(memTotal)) * 100, 10)}%`}
                   />
                 </div>
                 <div className="cols col-6">
@@ -1074,105 +689,182 @@ export default class SystemStatus extends React.Component {
                     type="plain-text"
                     value={systemTime}
                   />
-                  {/*
-                    <FormGroup
-                      label={_('LAN1 MAC :')}
-                      type="plain-text"
-                      value={lan0Mac}
-                    />
-                    wirelessMode !== 'sta' ? (
-                      <FormGroup
-                        label={_('Client Number :')}
-                        type="plain-text"
-                        value={staList.length}
-                      />
-                    ) : null
-                  */}
                   <FormGroup
                     label={_('CPU Used :')}
                     type="plain-text"
-                    value={cpuInfo}
-                    help="%"
+                    value={`${cpuInfo}%`}
                   />
                 </div>
               </div>
             </div>
           </div>
-          <div className="cols col-6">
+          <div className="cols col-5">
             <div className="o-box__cell">
-              <h3>{_('Radio')}</h3>
+              <h3>{_('System Status')}</h3>
             </div>
-            {
-              this.props.store.getIn(['curData', 'radioList', radioId, 'enable']) === '1' ? (
-                <div className="o-box__cell">
+            <div className="o-box__cell">
+              <div
+                style={{
+                  marginLeft: '-15px',
+                }}
+              >
+                <div className="cols col-6">
+                  <FormGroup
+                    type="plain-text"
+                    label={_('Device Model :')}
+                    value={deviceModel}
+                  />
+                  <FormGroup
+                    label={_('Network Mode :')}
+                    type="plain-text"
+                    value={networkMode}
+                  />
+                  <FormGroup
+                    label={_('System Uptime :')}
+                    type="plain-text"
+                    value={changeUptimeToReadable(uptime)}
+                  />
+                  <FormGroup
+                    label={_('WLAN0 MAC :')}
+                    type="plain-text"
+                    value={wlan0Mac}
+                  />
+                  <FormGroup
+                    label={_('Memory Used :')}
+                    type="plain-text"
+                    value={`${parseInt(((Number(memTotal) - Number(memFree)) / Number(memTotal)) * 100, 10)}%`}
+                  />
+                </div>
+                <div className="cols col-6">
+                  <FormGroup
+                    label={_('Device Name :')}
+                    type="plain-text"
+                    value={deviceName}
+                  />
+                  <FormGroup
+                    label={_('Firmware Version :')}
+                    type="plain-text"
+                    value={version}
+                  />
+                  <FormGroup
+                    label={_('System Time :')}
+                    type="plain-text"
+                    value={systemTime}
+                  />
+                  <FormGroup
+                    label={_('CPU Used :')}
+                    type="plain-text"
+                    value={`${cpuInfo}%`}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {
+          this.props.product.get('radioSelectOptions').toJS().map(val => (
+            <div className="row">
+              <div className="o-box__cell clearfix">
+                <h3
+                  className="fl"
+                >
+                  {`Radio${_(val.value)}(${val.label})`}
+                </h3>
+                <a
+                  className="fl"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    const radioTypeVal = this.props.product.getIn(['deviceRadioList', val.value, 'radioType']);
+                    const config = fromJS({
+                      radioId: val.value,
+                      radioType: radioTypeVal,
+                    });
+                    this.props.changeCurrRadioConfig(config);
+                    window.location.href = '#/main/status/radiodetails';
+                  }}
+                  style={{
+                    paddingTop: '3px',
+                    marginLeft: '20px',
+                    color: 'blue',
+                    cursor: 'pointer',
+                    // fontWeight: 'bold',
+                    // textDecoration: 'underline',
+                  }}
+                >
+                  {_('More Details >>')}
+                </a>
+              </div>
+              <div className="o-box__cell">
+                <div
+                  style={{
+                    marginLeft: '-15px',
+                  }}
+                >
                   <div className="cols col-6">
                     <FormGroup
                       label={_('Wireless Mode :')}
                       type="plain-text"
-                      value={wirelessModeShowStyle(wirelessMode)}
+                      value={wirelessModeShowStyle(radioList.getIn([val.value, 'wirelessMode']))}
                     />
                     <FormGroup
                       label={_('Protocol :')}
                       type="plain-text"
-                      value={radioMode}
+                      value={radioList.getIn([val.value, 'radioMode'])}
                     />
                     <FormGroup
                       label={_('Channel/Frequency :')}
                       type="plain-text"
-                      value={`${channel}/${frequency}`}
+                      value={`${radioList.getIn([val.value, 'channel'])}/${radioList.getIn([val.value, 'frequency'])}`}
+                    />
+                    <FormGroup
+                      label={_('Channel Width :')}
+                      type="plain-text"
+                      value={radioList.getIn([val.value, 'channelWidth'])}
                     />
                     <FormGroup
                       label={_('Channel Utilization :')}
                       type="plain-text"
-                      value={chutil}
+                      value={radioList.getIn([val.value, 'chutil'])}
                     />
+
                   </div>
                   <div className="cols col-6">
                     <FormGroup
-                      label={_('Distance :')}
+                      label={_('Noise :')}
                       type="plain-text"
-                      value={distance}
-                      help="km"
-                    />
-                    <FormGroup
-                      label={_('Tx Power :')}
-                      type="plain-text"
-                      value={txPower}
+                      value={radioList.getIn([val.value, 'noise'])}
                       help="dBm"
                     />
                     <FormGroup
                       label={_('Signal :')}
                       type="plain-text"
-                      value={signal}
+                      value={radioList.getIn([val.value, 'signal'])}
                       help="dBm"
                     />
                     <FormGroup
-                      label={_('Noise :')}
+                      label={_('Transmit :')}
                       type="plain-text"
-                      value={noise}
-                      help="dBm"
                     />
+                    <FormGroup
+                      label={_('Receive :')}
+                      type="plain-text"
+                    />
+                    {/*
+                      wirelessMode !== 'sta' ? (
+                        <FormGroup
+                          label={_('Client Number :')}
+                          type="plain-text"
+                          value={radioList.getIn([val.value, 'staList']).size}
+                        />
+                      ) : null
+                    */}
                   </div>
                 </div>
-              ) : (
-                <div
-                  className="o-box__cell"
-                  style={{
-                    width: '100%',
-                    height: '260px',
-                    lineHeight: '260px',
-                    textAlign: 'center',
-                    fontSize: '20px',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  Radio Off
-                </div>
-              )
-            }
-
-          </div>
-        </div>
+              </div>
+            </div>
+          ))
+        }
 
         <div>
           <div className="o-box__cell">
@@ -1187,7 +879,7 @@ export default class SystemStatus extends React.Component {
           </div>
         </div>
 
-        {
+        {/*
           wirelessMode === 'sta' ? (
             <div className="remoteApTable o-box">
               <div className="o-box__cell">
@@ -1202,7 +894,7 @@ export default class SystemStatus extends React.Component {
               </div>
             </div>
           ) : null
-        }
+        */}
 
         {
           this.props.app.get('fetching') && this.props.selfState.get('firstRefresh') ? (

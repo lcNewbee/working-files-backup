@@ -9,7 +9,7 @@ import utils from 'shared/utils';
 import * as appActions from 'shared/actions/app';
 import * as settingActions from 'shared/actions/settings';
 import * as selfActions from './actions';
-import reducer from './reducer';
+// import reducer from './reducer';
 
 import './style.scss';
 
@@ -97,13 +97,13 @@ const propTypes = {
 };
 
 const defaultProps = {
-
 };
 
 export default class PortalSettings extends Component {
   constructor(props) {
     super(props);
     this.selectShowImage = this.selectShowImage.bind(this);
+    this.refreshPicture = this.refreshPicture.bind(this);
     this.state = {
       activeImageIndex: 1,
     };
@@ -124,12 +124,21 @@ export default class PortalSettings extends Component {
     });
   }
 
+  refreshPicture(i) {
+    const rand = Math.random();
+    const preUrl = this.props.store.getIn(['curData', 'imageList', i, 'url']).split('?')[0];
+    const url = `${preUrl}?rand=${rand}`;
+    const imageList = this.props.store.getIn(['curData', 'imageList']).setIn([i, 'url'], url);
+    this.props.updateItemSettings({ imageList });
+  }
+
   render() {
     const activeIndex = this.state.activeImageIndex;
     const curImgUrl = this.props.store.getIn(['curData', 'imageList', activeIndex - 1, 'url']) || '';
     const {
       enable, redirectUrl, timeout, refreshTime, title,
     } = this.props.store.get('curData').toJS();
+
     return (
       <div className="row">
         <h3>{_('Portal Settings')}</h3>
@@ -138,9 +147,10 @@ export default class PortalSettings extends Component {
             label={_('Portal Enable')}
             type="checkbox"
             maxLength="32"
-            value={enable}
-            onChange={(data) => {
-              this.props.updateItemSettings({ enable: data.value });
+            checked={enable === '1'}
+            onChange={() => {
+              const val = enable === '1' ? '0' : '1';
+              this.props.updateItemSettings({ enable: val });
             }}
             required
           />
@@ -186,27 +196,30 @@ export default class PortalSettings extends Component {
             <FileUpload
               url="cgi-bin/upload_file.cgi?id=1"
               buttonText={`${_('Upload Image')} 1`}
-              onUploaded={
-                () => this.selectShowImage(1)
-              }
+              onUploaded={() => {
+                this.selectShowImage(1);
+                this.refreshPicture(0);
+              }}
             />
           </FormGroup>
           <FormGroup>
             <FileUpload
               url="cgi-bin/upload_file.cgi?id=2"
               buttonText={`${_('Upload Image')} 2`}
-              onUploaded={
-                () => this.selectShowImage(2)
-              }
+              onUploaded={() => {
+                this.selectShowImage(2);
+                this.refreshPicture(1);
+              }}
             />
           </FormGroup>
           <FormGroup>
             <FileUpload
               url="cgi-bin/upload_file.cgi?id=3"
               buttonText={`${_('Upload Image')} 3`}
-              onUploaded={
-                () => this.selectShowImage(3)
-              }
+              onUploaded={() => {
+                this.selectShowImage(3);
+                this.refreshPicture(2);
+              }}
             />
           </FormGroup>
           <div className="form-group form-group--save">
@@ -297,5 +310,5 @@ export const Screen = connect(
   mapDispatchToProps,
 )(PortalSettings);
 
-export const portalsettings = reducer;
+// export const portalsettings = reducer;
 

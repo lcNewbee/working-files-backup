@@ -242,17 +242,19 @@ export default class Basic extends React.Component {
         {
           id: 'enable',
           label: _('Enable'),
-          width: '200px',
+          width: '300px',
           transform: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
             const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
             return (
-              <input
+              <FormInput
                 type="checkbox"
                 checked={val === '1'}
                 disabled={pos === 0}
-                onClick={() => this.onSsidItemChange(val, item, 'enable', (val === '1' ? '0' : '1'))}
-                style={{ marginLeft: '3px' }}
+                onChange={() => this.onSsidItemChange(val, item, 'enable', (val === '1' ? '0' : '1'))}
+                style={{
+                  marginLeft: '3px',
+                }}
               />
             );
           }.bind(this),
@@ -294,8 +296,9 @@ export default class Basic extends React.Component {
                   this.onSsidItemChange(val, item, 'vlanId', data.value);
                 }}
                 style={{
-                  marginLeft: '-60px',
+                  marginLeft: '-30px',
                   height: '29px',
+                  width: '100px',
                 }}
               />
             );
@@ -315,8 +318,9 @@ export default class Basic extends React.Component {
                   this.onSsidItemChange(val, item, 'maxClients', data.value);
                 }}
                 style={{
-                  marginLeft: '-60px',
+                  marginLeft: '-22px',
                   height: '29px',
+                  width: '100px',
                 }}
               />
             );
@@ -328,14 +332,14 @@ export default class Basic extends React.Component {
           width: '250px',
           transform: function (val, item) {
             return (
-              <input
+              <FormInput
                 type="checkbox"
                 checked={val === '1'}
                 // disabled={airTimeEnable === 0}
-                onClick={
+                onChange={
                   () => this.onSsidItemChange(val, item, 'airTimeEnable', (val === '1' ? '0' : '1'))
                 }
-                style={{ marginLeft: '3px' }}
+                style={{ marginLeft: '30px' }}
               />
             );
           }.bind(this),
@@ -346,14 +350,13 @@ export default class Basic extends React.Component {
           width: '200px',
           transform: function (val, item) {
             return (
-              <input
+              <FormInput
                 type="checkbox"
                 checked={val === '1'}
                 // disabled={pos === 0}
-                onClick={
+                onChange={
                   () => this.onSsidItemChange(val, item, 'hideSsid', (val === '1' ? '0' : '1'))
                 }
-                style={{ marginLeft: '3px' }}
               />
             );
           }.bind(this),
@@ -364,14 +367,30 @@ export default class Basic extends React.Component {
           width: '200px',
           transform: function (val, item) {
             return (
-              <input
+              <FormInput
                 type="checkbox"
                 checked={val === '1'}
                 // disabled={pos === 0}
-                onClick={
+                onChange={
                   () => this.onSsidItemChange(val, item, 'isolation', (val === '1' ? '0' : '1'))
                 }
                 style={{ marginLeft: '20px' }}
+              />
+            );
+          }.bind(this),
+        },
+        {
+          id: 'portalEnable',
+          label: _('Portal'),
+          width: '200px',
+          transform: function (val, item) {
+            return (
+              <FormInput
+                type="checkbox"
+                checked={val === '1'}
+                onChange={
+                  () => this.onSsidItemChange(val, item, 'portalEnable', (val === '1' ? '0' : '1'))
+                }
               />
             );
           }.bind(this),
@@ -384,7 +403,7 @@ export default class Basic extends React.Component {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
             const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
             return (
-              <div style={{ marginLeft: '-3px' }}>
+              <div style={{ marginLeft: '8px' }}>
                 <Button
                   text={_('Edit')}
                   icon="pencil-square"
@@ -409,7 +428,7 @@ export default class Basic extends React.Component {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
             const pos = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).keyOf(item);
             return (
-              <div style={{ marginLeft: '-3px' }}>
+              <div style={{ marginLeft: '7px' }}>
                 <Button
                   text={_('Edit')}
                   icon="pencil-square"
@@ -541,7 +560,7 @@ export default class Basic extends React.Component {
         scanResult.forEach((val) => {
           if (val.get('ssid') === ssid) apMacList = apMacList.push(val.get('mac'));
         });
-        firstSsid = firstSsid.set('apMacList', apMacList);
+        firstSsid = firstSsid.set('apMacList', apMacList.slice(0, 5));
       }
 
       const radioList = basicSettings.get('radioList').setIn([radioId, 'vapList', '0'], firstSsid);
@@ -938,13 +957,7 @@ export default class Basic extends React.Component {
                 })}
               >
                 <span
-                  style={{
-                    fontSize: '1.17em',
-                    fontFamily: 'Microsoft YaHei',
-                    fontWeight: 'bold',
-                    paddingLeft: '4px',
-                    cursor: 'pointer',
-                  }}
+                  className="title-span"
                 >
                   {_('Basic Settings')}
                 </span>
@@ -962,13 +975,7 @@ export default class Basic extends React.Component {
                 })}
               >
                 <span
-                  style={{
-                    fontSize: '1.17em',
-                    fontFamily: 'Microsoft YaHei',
-                    fontWeight: 'bold',
-                    paddingLeft: '4px',
-                    cursor: 'pointer',
-                  }}
+                  className="title-span"
                 >
                   {_('Basic Settings')}
                 </span>
@@ -1191,6 +1198,21 @@ export default class Basic extends React.Component {
                   />
                 ) : null
               }
+              {
+                funConfig.portalFun &&
+                basicSettings.getIn(['radioList', radioId, 'wirelessMode']) !== 'sta' ? (
+                  <FormGroup
+                    type="checkbox"
+                    label={_('Portal Enable')}
+                    checked={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'portalEnable']) === '1'}
+                    onChange={(data) => {
+                      const radioList = basicSettings.get('radioList')
+                                      .setIn([radioId, 'vapList', '0', 'portalEnable'], data.value);
+                      this.props.updateBasicSettings({ radioList });
+                    }}
+                  />
+                ) : null
+              }
 
               { // repeater模式下，对端AP的mac地址输入框
                 (basicSettings.getIn(['radioList', radioId, 'wirelessMode']) === 'repeater') ? (
@@ -1383,14 +1405,7 @@ export default class Basic extends React.Component {
                             {
                               this.props.selfState.get('showMacHelpInfo') ? (
                                 <span
-                                  className="fl"
-                                  style={{
-                                    width: '250px',
-                                    fontSize: '14px',
-                                    backgroundColor: '#fff',
-                                    borderRadius: '5px',
-                                    padding: '5px',
-                                  }}
+                                  className="fl peer-mac-notice"
                                 >
                                   {_('Peers mac address table. The mac order represents the connection priority. The mac in higher order has the higher priority than mac bellow.The table allows you to drag to re-order to change the priority.')}
                                 </span>
@@ -1421,11 +1436,11 @@ export default class Basic extends React.Component {
                                 let macList = apMacList;
                                 this.props.validateAll('macInputArea').then((msg) => {
                                   if (msg.isEmpty()) {
-                                    if (macList.size >= 10) {
+                                    if (macList.size >= 5) {
                                       this.props.createModal({
                                         id: 'settings',
                                         role: 'alert',
-                                        text: _('Mac list number can not exceed 10.'),
+                                        text: _('Mac list number can not exceed 5.'),
                                       });
                                     } else if (macList.includes(val)) {
                                       this.props.createModal({
@@ -1623,13 +1638,7 @@ export default class Basic extends React.Component {
                 })}
               >
                 <span
-                  style={{
-                    fontSize: '1.17em',
-                    fontFamily: 'Microsoft YaHei',
-                    fontWeight: 'bold',
-                    paddingLeft: '4px',
-                    cursor: 'pointer',
-                  }}
+                  className="title-span"
                 >
                   {_('Radio Settings')}
                 </span>
@@ -1647,13 +1656,7 @@ export default class Basic extends React.Component {
                 })}
               >
                 <span
-                  style={{
-                    fontSize: '1.17em',
-                    fontFamily: 'Microsoft YaHei',
-                    fontWeight: 'bold',
-                    paddingLeft: '4px',
-                    cursor: 'pointer',
-                  }}
+                  className="title-span"
                 >
                   {_('Radio Settings')}
                 </span>
@@ -1690,7 +1693,6 @@ export default class Basic extends React.Component {
                   disabled
                   style={{
                     width: '127px',
-                    marginTop: '-3px',
                   }}
                 />
                 <Button
@@ -1801,7 +1803,7 @@ export default class Basic extends React.Component {
                     required
                     {...validMaxClients}
                   />
-                    ) : null
+                ) : null
               }
               <FormGroup
                 label={_('Output Power')}
@@ -1927,13 +1929,7 @@ export default class Basic extends React.Component {
                 }}
               >
                 <span
-                  style={{
-                    fontSize: '1.17em',
-                    fontFamily: 'Microsoft YaHei',
-                    fontWeight: 'bold',
-                    paddingLeft: '4px',
-                    cursor: 'pointer',
-                  }}
+                  className="title-span"
                 >
                   {_('Multiple SSID')}
                 </span>
@@ -1952,13 +1948,7 @@ export default class Basic extends React.Component {
                 }}
               >
                 <span
-                  style={{
-                    fontSize: '1.17em',
-                    fontFamily: 'Microsoft YaHei',
-                    fontWeight: 'bold',
-                    paddingLeft: '4px',
-                    cursor: 'pointer',
-                  }}
+                  className="title-span"
                 >
                   {_('Multiple SSID')}
                 </span>
@@ -2093,7 +2083,7 @@ export default class Basic extends React.Component {
             type="checkbox"
             label={_('Speed Limit')}
             checked={tableItemForSsid.getIn(['item', 'speedLimit', 'enable']) === '1'}
-            onClick={() => {
+            onChange={() => {
               const val = tableItemForSsid.getIn(['item', 'speedLimit', 'enable']) === '1' ? '0' : '1';
               const newItem = tableItemForSsid.get('item')
                               .setIn(['speedLimit', 'enable'], val);

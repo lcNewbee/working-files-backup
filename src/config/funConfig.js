@@ -30,7 +30,9 @@ const funConfig = {
       'isolation',      // 是否启用客户端隔离
       'security',       // 加密配置
       'delete',         // 删除按钮
+      'portalEnable',         // portal功能开关
     ],
+    portalFun: true,    //是否有portal功能
   },
   // 无线高级设置页面
   advance: {
