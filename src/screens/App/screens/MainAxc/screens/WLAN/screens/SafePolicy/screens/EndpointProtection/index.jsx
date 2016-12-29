@@ -38,7 +38,9 @@ const screenOptions = fromJS([
 
   }, {
     id: 'dyaging',
-    label: _('Dynamic Blacklists Release Time'),
+    label: _('Release Time'),
+    legend: _('Dynamic Blacklists'),
+    fieldset: 'Dynamic',
     formProps: {
       min: 1,
       type: 'number',

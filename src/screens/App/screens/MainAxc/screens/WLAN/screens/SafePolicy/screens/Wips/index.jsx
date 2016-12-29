@@ -112,7 +112,9 @@ const listOptions = fromJS([
     },
   }, {
     id: 'enable2g4chl',
-    text: _('2.4G Auto Channel Scan Switch'),
+    text: _('2.4G Auto Channel Scan'),
+    legend: _('2.4G'),
+    fieldset: '2.4G',
     formProps: {
       type: 'checkbox',
       dataType: 'number',
@@ -121,7 +123,8 @@ const listOptions = fromJS([
     },
   }, {
     id: 'enable2g4pwr',
-    text: _('2.4G Auto Power Scan Switch'),
+    text: _('2.4G Auto Power Scan'),
+    fieldset: '2.4G',
     formProps: {
       type: 'checkbox',
       dataType: 'number',
@@ -130,7 +133,8 @@ const listOptions = fromJS([
     },
   }, {
     id: 'adjafactor2g4',
-    text: _('2.4G Band Neighbor Coefficient'),
+    text: _('2.4G Neighbor Coefficient'),
+    fieldset: '2.4G',
     formProps: {
       min: 1,
       max: 255,

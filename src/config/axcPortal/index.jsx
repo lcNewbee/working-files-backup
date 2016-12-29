@@ -138,14 +138,14 @@ const sSystemLogMaintenance =
 //     require('../../screens/App/screens/MainAxc/screens/System/screens/ActiveStandby');
 // const sSignatures =
 //     require('../../screens/App/screens/MainAxc/screens/System/screens/Signatures');
-const sAcVersion =
-    require('../../screens/App/screens/MainAxc/screens/System/screens/AcVersion');
 const sApVersion =
     require('../../screens/App/screens/MainAxc/screens/System/screens/ApVersion');
+const sApMaintenance =
+    require('../../screens/App/screens/MainAxc/screens/System/screens/ApMaintenance');
 const sApModel =
     require('../../screens/App/screens/MainAxc/screens/System/screens/ApModel');
-const sSystemMaintenance =
-    require('../../screens/App/screens/MainAxc/screens/System/screens/SystemMaintenance');
+const sAcMaintenance =
+    require('../../screens/App/screens/MainAxc/screens/System/screens/AcMaintenance');
 const sNetworkTimeProtocol =
     require('../../screens/App/screens/MainAxc/screens/System/screens/NetworkTimeProtocol');
 
@@ -158,6 +158,7 @@ const sOpenPortalBase =
     require('../../screens/App/screens/MainAxc/screens/OpenPortal/screens/Portal/Base');
 const sOpenPortalUrlParams =
     require('../../screens/App/screens/MainAxc/screens/OpenPortal/screens/Portal/UrlParams');
+
 
 const routes = [
   {
@@ -542,7 +543,7 @@ const routes = [
             id: 'systemLog',
             icon: 'file-text-o',
             path: '/main/system/log',
-            text: _('Log Management'),
+            text: _('System Log'),
             noTree: true,
             component: SharedComponents.TabContainer,
             indexRoute: {
@@ -606,23 +607,23 @@ const routes = [
             text: _('License Management'),
             component: sLicense.Screen,
           }, {
-            id: 'acUpgrade',
+            id: 'apMaintenance',
             isIndex: true,
             path: '/main/system/upgrade',
-            icon: 'level-up',
-            text: _('Version & Model'),
+            icon: 'dot-circle-o ',
+            text: _('AP Maintenance'),
             noTree: true,
             component: SharedComponents.TabContainer,
             indexRoute: {
-              onEnter: (nextState, replace) => replace('/main/system/upgrade/axc'),
+              onEnter: (nextState, replace) => replace('/main/system/ap/base'),
             },
             childRoutes: [
               {
-                id: 'axcVersion',
-                path: '/main/system/upgrade/axc',
-                formUrl: 'goform/system/version',
-                text: _('AC Firmware'),
-                component: sAcVersion.Screen,
+                id: 'apMaintenanceBase',
+                path: '/main/system/ap/base',
+                formUrl: 'goform/system/maintenance',
+                text: _('Configuration'),
+                component: sApMaintenance.Screen,
               }, {
                 id: 'apsVersion',
                 path: '/main/system/upgrade/aps',
@@ -638,19 +639,19 @@ const routes = [
               },
             ],
           }, {
-            id: 'maintenance',
+            id: 'acMaintenance',
             isIndex: true,
             formUrl: 'goform/system/maintenance',
             path: '/main/system/maintenance',
             icon: 'cog',
-            text: _('System Maintenance'),
-            component: sSystemMaintenance.Screen,
+            text: _('AC Maintenance'),
+            component: sAcMaintenance.Screen,
           }, {
             id: 'ntp',
             isIndex: true,
             formUrl: 'goform/system/networktimeprotocol',
             path: '/main/system/networktimeprotocol',
-            icon: 'cog',
+            icon: 'clock-o',
             text: _('NTP'),
             component: sNetworkTimeProtocol.Screen,
           }, {
@@ -692,19 +693,19 @@ const routes = [
                 path: '/main/portal/portal/base',
                 formUrl: 'goform/openPortal/base',
                 text: _('AC Firmware'),
-                component: sAcVersion.Screen,
+                component: sOpenPortalOverview.Screen,
               }, {
                 id: 'openPortalPortalUrlParams',
                 path: '/main/portal/portal/bas',
                 formUrl: 'goform/openPortal/bas',
                 text: _('AP Firmware'),
-                component: sApVersion.Screen,
+                component: sOpenPortalOverview.Screen,
               }, {
                 id: 'openPortalPortalUrlParams',
                 path: '/main/portal/portal/url',
                 formUrl: 'goform/openPortal/UrlParams',
                 text: _('AP Firmware'),
-                component: sApVersion.Screen,
+                component: sOpenPortalOverview.Screen,
               },
             ],
           },
@@ -753,4 +754,5 @@ stores.dispatch(appActions.initAppConfig(guiConfig));
 
 
 export default app;
+
 

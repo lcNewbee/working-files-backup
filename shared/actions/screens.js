@@ -187,7 +187,9 @@ export function onListAction(url, option) {
           // dispatch(fetchScreenData(fetchUrl));
           if (json.state.code === 2000) {
             ret = 'ok';
-          } else if (json.state.code <= 6000) {
+          }
+
+          if (json.state.code <= 6000) {
             dispatch(closeListItemModal());
           }
         }
