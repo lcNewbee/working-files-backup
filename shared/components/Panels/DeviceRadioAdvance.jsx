@@ -38,6 +38,19 @@ class DeviceSystem extends React.Component {
 
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.getCurData = this.getCurData.bind(this);
+    this.onChangeRadio = this.onChangeRadio.bind(this);
+  }
+  onChangeRadio(data) {
+    const myData = data;
+    const txchain = data.txchain;
+
+    if (txchain !== undefined) {
+      myData.rxchain = txchain;
+    }
+
+    if (this.props.onChangeData) {
+      this.props.onChangeData(myData);
+    }
   }
   getCurData(name) {
     return this.props.store.getIn(['data', name]);
@@ -119,6 +132,7 @@ class DeviceSystem extends React.Component {
         onSave={
           () => this.props.onSave('radioAdvance')
         }
+        onChangeData={this.onChangeRadio}
       />
     );
   }

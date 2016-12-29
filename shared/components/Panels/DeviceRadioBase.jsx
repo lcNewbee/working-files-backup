@@ -36,10 +36,10 @@ function getChannelList(countrycode, is5G) {
           });
         }
       }
-      // ret.options.unshift({
-      //   value: 0,
-      //   label: _('Auto'),
-      // });
+      ret.options.unshift({
+        value: 0,
+        label: _('Auto'),
+      });
       return ret;
     },
   );

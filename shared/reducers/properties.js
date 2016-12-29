@@ -28,7 +28,6 @@ const defaultItem = fromJS({
       data: {
         activeIndex: 0,
         enable: '1',
-        radiosOptions: [],
         countrycode: 'CN',
         phymode: '11n',
         channelwidth: 40,
@@ -42,9 +41,7 @@ const defaultItem = fromJS({
       module: 'radio',
       text: 'Radio Advance',
       data: {
-        activeIndex: 0,
-        phymode: 'B/G/N',
-        radiosOptions: [],
+        phymode: '1',
         maxclientcount: 32,
         beaconinterval: 100,
         fragthreshold: 2346,
@@ -65,12 +62,16 @@ const defaultItem = fromJS({
     },
   ],
   query: {},
+  curData: {
+    info: {},
+    radio: {
+      activeIndex: 0,
+      radiosOptions: [],
+    },
+  },
   data: {
     radios: [],
     info: {},
-    radio: {
-      radiosOptions: [],
-    },
   },
 });
 
@@ -118,6 +119,7 @@ function rcPropertyPanelData(state, action) {
 
   if (dataIndex !== -1) {
     $$newData = $$newData.merge(rcData);
+
     // 设置已选中的网卡radio参数
     if (rcData.radios) {
       $$radiosOptions = $$radiosOptions.merge(
@@ -133,7 +135,7 @@ function rcPropertyPanelData(state, action) {
     }
 
     $$ret = $$ret
-      .setIn(['list', dataIndex, 'data'], $$newData)
+      .setIn(['list', dataIndex, 'curData'], $$newData)
       .setIn(
         ['list', dataIndex, 'configuration'],
         $$ret.getIn(['list', dataIndex, 'configuration']).map(
@@ -183,13 +185,14 @@ function changePropertyPanelRadioIndex(state, index) {
   const activeIndex = $$ret.get('activeIndex');
   const radioIndex = index;
   let $$curListItem = $$ret.getIn(['list', activeIndex]);
-  let $$curRadioData = $$curListItem.getIn(['data', 'radio']);
+  let $$curRadioData = $$curListItem.getIn(['curData', 'radio']);
 
   $$curRadioData = $$curRadioData.merge(
       $$curListItem.getIn(
         ['data', 'radios', radioIndex],
       ),
     ).set('activeIndex', radioIndex);
+
   $$curListItem = $$curListItem
     .set('configurationRadioIndex', radioIndex)
     .updateIn(
@@ -210,7 +213,7 @@ function changePropertyPanelRadioIndex(state, index) {
         return $$subRet;
       }),
     )
-    .setIn(['data', 'radio'], $$curRadioData);
+    .setIn(['curData', 'radio'], $$curRadioData);
 
   return $$ret.setIn(['list', activeIndex], $$curListItem);
 }

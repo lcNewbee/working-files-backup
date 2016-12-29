@@ -66,6 +66,7 @@
   "Custom RX Spatial Stream": "自定义接收空间流",
   "TX Spatial Stream": "发射空间流",
   "RX Spatial Stream": "接收空间流",
+  "Custom Spatial Stream": "自定义空间流",
   "Short GI": "短保护间隔",
   "AMPDU": "报文聚合",
   "AMSDU": "总Mac服务数据单位",
@@ -488,6 +489,7 @@
   "The Firmware version you selected is active, cancellation option doesn't work! You can directly activate another Firmware version when you want to cancel the current version!": "你所选的版本为激活状态，取消激活操作无效。若想取消激活，请直接激活该型号的其他版本！",
 
   "System Maintenance": "系统维护",
+  "AC Maintenance": "AC维护",
   "Backup Configuration": "备份配置",
   "Restore Configuration": "恢复配置",
   "Backup Your Current Configuration": "备份当前配置",
@@ -498,7 +500,7 @@
   "Restore Now": "开始恢复",
   "AP Maintenance": "AP维护",
   "AP Data Reporting Time": "AP数据上报时间",
-  "Allow Automatic AP": "是否允许自动加入AP",
+  "Allow Automatic Add AP": "是否允许自动加入AP",
   "AP Heartbeat Time": "AP心跳时间",
   "AP Number of Re-joins": "AP重新加入次数",
 

@@ -30,7 +30,7 @@
         "countrycode": "CN",
         "phymode": 2,
         "txchain": "1",
-        "rxchain": "2",
+        "rxchain": "1",
         "shortgi": 1,
         "preamble": 1,
         "ampdu": 34,
@@ -64,7 +64,7 @@
         "countrycode": "CN",
         "phymode": 1,
         "txchain": "1",
-        "rxchain": "2",
+        "rxchain": "1",
         "shortgi": 1,
         "preamble": 1,
         "ampdu": 100,
@@ -78,6 +78,21 @@
         "switch11n": 1,
         "first5g": 1
       }
-    ]
+    ],
+    "info": {
+      "devicetype": "point2point",
+      "devicename": "神器",
+      "ip": "192.168.5.53",
+      "mac": "12:33:44:55:66:78",
+      "status": "run",
+      "model": "V2.2",
+      "softversion": "V1.1",
+      "channel": "auto",
+      "operationhours": 3600,
+      "downstream": 256,
+      "upstream": 1232323,
+      "connectedNumbers": 2323,
+      "newest": "1"
+    }
   }
 }

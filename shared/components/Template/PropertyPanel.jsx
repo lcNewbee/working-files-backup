@@ -18,6 +18,7 @@ const propTypes = {
   save: PropTypes.func,
   validateAll: PropTypes.func,
   groupid: PropTypes.any,
+  refreshAll: PropTypes.func,
 
   data: PropTypes.instanceOf(Map),
   app: PropTypes.instanceOf(Map),
@@ -85,6 +86,7 @@ class PropertyPanel extends React.Component {
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           this.props.fetchPropertyPanelData(query);
+          this.props.refreshAll();
         }
       });
   }
@@ -128,7 +130,6 @@ class PropertyPanel extends React.Component {
                   title={_('Remove All')}
                   name="trash"
                   onClick={() => this.props.removeFromPropertyPanel(-1)}
-
                 />
                 <Icon
                   title={_('Collapse All')}

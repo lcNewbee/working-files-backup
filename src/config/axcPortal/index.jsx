@@ -138,16 +138,26 @@ const sSystemLogMaintenance =
 //     require('../../screens/App/screens/MainAxc/screens/System/screens/ActiveStandby');
 // const sSignatures =
 //     require('../../screens/App/screens/MainAxc/screens/System/screens/Signatures');
+const sAcVersion =
+    require('../../screens/App/screens/MainAxc/screens/System/screens/AcVersion');
 const sApVersion =
     require('../../screens/App/screens/MainAxc/screens/System/screens/ApVersion');
-const sApMaintenance =
-    require('../../screens/App/screens/MainAxc/screens/System/screens/ApMaintenance');
 const sApModel =
     require('../../screens/App/screens/MainAxc/screens/System/screens/ApModel');
-const sAcMaintenance =
-    require('../../screens/App/screens/MainAxc/screens/System/screens/AcMaintenance');
+const sSystemMaintenance =
+    require('../../screens/App/screens/MainAxc/screens/System/screens/SystemMaintenance');
 const sNetworkTimeProtocol =
     require('../../screens/App/screens/MainAxc/screens/System/screens/NetworkTimeProtocol');
+
+/**
+ * 系统管理
+ */
+const sOpenPortalOverview =
+    require('../../screens/App/screens/MainAxc/screens/OpenPortal/screens/Overview');
+const sOpenPortalBase =
+    require('../../screens/App/screens/MainAxc/screens/OpenPortal/screens/Portal/Base');
+const sOpenPortalUrlParams =
+    require('../../screens/App/screens/MainAxc/screens/OpenPortal/screens/Portal/UrlParams');
 
 const routes = [
   {
@@ -532,7 +542,7 @@ const routes = [
             id: 'systemLog',
             icon: 'file-text-o',
             path: '/main/system/log',
-            text: _('System Log'),
+            text: _('Log Management'),
             noTree: true,
             component: SharedComponents.TabContainer,
             indexRoute: {
@@ -596,23 +606,23 @@ const routes = [
             text: _('License Management'),
             component: sLicense.Screen,
           }, {
-            id: 'apMaintenance',
+            id: 'acUpgrade',
             isIndex: true,
             path: '/main/system/upgrade',
-            icon: 'dot-circle-o ',
-            text: _('AP Maintenance'),
+            icon: 'level-up',
+            text: _('Version & Model'),
             noTree: true,
             component: SharedComponents.TabContainer,
             indexRoute: {
-              onEnter: (nextState, replace) => replace('/main/system/ap/base'),
+              onEnter: (nextState, replace) => replace('/main/system/upgrade/axc'),
             },
             childRoutes: [
               {
-                id: 'apMaintenanceBase',
-                path: '/main/system/ap/base',
-                formUrl: 'goform/system/maintenance',
-                text: _('Base'),
-                component: sApMaintenance.Screen,
+                id: 'axcVersion',
+                path: '/main/system/upgrade/axc',
+                formUrl: 'goform/system/version',
+                text: _('AC Firmware'),
+                component: sAcVersion.Screen,
               }, {
                 id: 'apsVersion',
                 path: '/main/system/upgrade/aps',
@@ -628,19 +638,19 @@ const routes = [
               },
             ],
           }, {
-            id: 'acMaintenance',
+            id: 'maintenance',
             isIndex: true,
             formUrl: 'goform/system/maintenance',
             path: '/main/system/maintenance',
             icon: 'cog',
-            text: _('AC Maintenance'),
-            component: sAcMaintenance.Screen,
+            text: _('System Maintenance'),
+            component: sSystemMaintenance.Screen,
           }, {
             id: 'ntp',
             isIndex: true,
             formUrl: 'goform/system/networktimeprotocol',
             path: '/main/system/networktimeprotocol',
-            icon: 'clock-o',
+            icon: 'cog',
             text: _('NTP'),
             component: sNetworkTimeProtocol.Screen,
           }, {
@@ -653,25 +663,53 @@ const routes = [
             component: sSystemAdmin.Screen,
           },
         ],
-      },
-      // {
-      //   path: '/main/portal',
-      //   component: sMainAxc.Screen,
-      //   icon: 'road',
-      //   text: _('OPEN PORTAL'),
-      //   indexRoute: { onEnter: (nextState, replace) => replace('/main/portal/overview') },
-      //   childRoutes: [
-      //     {
-      //       id: 'overview',
-      //       icon: 'home',
-      //       path: '/main/portal/overview',
-      //       formUrl: 'goform/group/overview',
-      //       text: _('Overview'),
-      //       component: sOverview.Screen,
-      //     },
-      //   ],
-      // },
-      {
+      }, {
+        path: '/main/portal',
+        component: sMainAxc.Screen,
+        icon: 'road',
+        text: _('OPEN PORTAL'),
+        indexRoute: { onEnter: (nextState, replace) => replace('/main/portal/overview') },
+        childRoutes: [
+          {
+            id: 'openPortalOverview',
+            icon: 'home',
+            path: '/main/portal/overview',
+            formUrl: 'goform/group/overview',
+            text: _('Overview'),
+            component: sOpenPortalOverview.Screen,
+          }, {
+            id: 'openPortalPortal',
+            isIndex: true,
+            path: '/main/portal/portal',
+            icon: 'level-up',
+            text: _('Portal'),
+            indexRoute: {
+              onEnter: (nextState, replace) => replace('/main/portal/portal/base'),
+            },
+            childRoutes: [
+              {
+                id: 'openPortalPortalBase',
+                path: '/main/portal/portal/base',
+                formUrl: 'goform/openPortal/base',
+                text: _('AC Firmware'),
+                component: sAcVersion.Screen,
+              }, {
+                id: 'openPortalPortalUrlParams',
+                path: '/main/portal/portal/bas',
+                formUrl: 'goform/openPortal/bas',
+                text: _('AP Firmware'),
+                component: sApVersion.Screen,
+              }, {
+                id: 'openPortalPortalUrlParams',
+                path: '/main/portal/portal/url',
+                formUrl: 'goform/openPortal/UrlParams',
+                text: _('AP Firmware'),
+                component: sApVersion.Screen,
+              },
+            ],
+          },
+        ],
+      }, {
         path: '/wizard',
         component: sWizard.Screen,
       },

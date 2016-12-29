@@ -1,5 +1,9 @@
 import React, { PropTypes } from 'react';
 import { Map } from 'immutable';
+import utils from 'shared/utils';
+
+const uptimeFilter = utils.filter('connectTime');
+const flowRateFilter = utils.filter('flowRate:["KB"]');
 
 const propTypes = {
   onCollapse: PropTypes.func,
@@ -28,8 +32,24 @@ function DeviceOverview(props) {
         <dd>{info.get('model')}</dd>
       </dl>
       <dl className="o-description-list-row">
-        <dt>{_('Soft Version')}</dt>
+        <dt>{_('Firmware Version')}</dt>
         <dd>{info.get('softversion')}</dd>
+      </dl>
+      <dl className="o-description-list-row">
+        <dt>{_('Connected Numbers')}</dt>
+        <dd>{info.get('connectedNumbers')}</dd>
+      </dl>
+      <dl className="o-description-list-row">
+        <dt>{_('Uptime')}</dt>
+        <dd>{uptimeFilter.transform(info.get('operationhours'))}</dd>
+      </dl>
+      <dl className="o-description-list-row">
+        <dt>{_('IP Address')}</dt>
+        <dd>{info.get('ip')}</dd>
+      </dl>
+      <dl className="o-description-list-row">
+        <dt>{_('Data')}</dt>
+        <dd>{flowRateFilter.transform(info.get('downstream'))}/{flowRateFilter.transform(info.get('upstream'))}</dd>
       </dl>
     </div>
   );

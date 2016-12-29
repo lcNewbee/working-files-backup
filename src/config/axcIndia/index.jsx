@@ -66,7 +66,8 @@ const sMainAxc = require('../../screens/App/screens/MainAxc');
  */
 // const sNetworkVlan = require('../../screens/App/screens/MainAxc/screens/Network/screens/VLAN');
 const sInterfaces = require('../../screens/App/screens/MainAxc/screens/Network/screens/Interfaces');
-const sNetworkDhcp = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/DhcpList');
+const sDhcpList = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/DhcpList');
+const sDhcpRelay = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/DhcpRelay');
 const sNetworkRoutes = require('../../screens/App/screens/MainAxc/screens/Network/screens/Routes');
 const sNetworkNat = require('../../screens/App/screens/MainAxc/screens/Network/screens/Nat');
 // const sNetworkAcl = require('../../screens/App/screens/MainAxc/screens/Network/screens/ACL');
@@ -137,14 +138,14 @@ const sSystemLogMaintenance =
 //     require('../../screens/App/screens/MainAxc/screens/System/screens/ActiveStandby');
 // const sSignatures =
 //     require('../../screens/App/screens/MainAxc/screens/System/screens/Signatures');
-const sAcVersion =
-    require('../../screens/App/screens/MainAxc/screens/System/screens/AcVersion');
 const sApVersion =
     require('../../screens/App/screens/MainAxc/screens/System/screens/ApVersion');
+const sApMaintenance =
+    require('../../screens/App/screens/MainAxc/screens/System/screens/ApMaintenance');
 const sApModel =
     require('../../screens/App/screens/MainAxc/screens/System/screens/ApModel');
-const sSystemMaintenance =
-    require('../../screens/App/screens/MainAxc/screens/System/screens/SystemMaintenance');
+const sAcMaintenance =
+    require('../../screens/App/screens/MainAxc/screens/System/screens/AcMaintenance');
 const sNetworkTimeProtocol =
     require('../../screens/App/screens/MainAxc/screens/System/screens/NetworkTimeProtocol');
 
@@ -183,12 +184,27 @@ const routes = [
           // {
           //   id: 'networkDhcp',
           //   icon: 'random',
+          //   noTree: true,
+          //   component: SharedComponents.TabContainer,
           //   path: '/main/network/dhcp',
-          //   formUrl: 'goform/network/dhcp',
           //   text: _('DHCP'),
-          //   component: sNetworkDhcp.Screen,
-          // },
-          // {
+          //   indexRoute: { onEnter: (nextState, replace) => replace('/main/network/dhcp/List') },
+          //   childRoutes: [
+          //     {
+          //       id: 'dhcpList',
+          //       path: '/main/network/dhcp/List',
+          //       formUrl: 'goform/network/dhcp/list',
+          //       text: _('DHCP List'),
+          //       component: sDhcpList.Screen,
+          //     }, {
+          //       id: 'dhcpRelay',
+          //       path: '/main/network/dhcp/relay',
+          //       formUrl: 'goform/network/dhcp/relay',
+          //       text: _('DHCP Relay'),
+          //       component: sDhcpRelay.Screen,
+          //     },
+          //   ],
+          // }, {
           //   id: 'networkNat',
           //   icon: 'exchange',
           //   path: '/main/network/nat',
@@ -583,28 +599,28 @@ const routes = [
             text: _('License Management'),
             component: sLicense.Screen,
           }, {
-            id: 'acUpgrade',
+            id: 'apMaintenance',
             isIndex: true,
             path: '/main/system/upgrade',
-            icon: 'level-up',
-            text: _('Version & Model'),
+            icon: 'dot-circle-o ',
+            text: _('AP Maintenance'),
             noTree: true,
             component: SharedComponents.TabContainer,
             indexRoute: {
-              onEnter: (nextState, replace) => replace('/main/system/upgrade/axc'),
+              onEnter: (nextState, replace) => replace('/main/system/ap/base'),
             },
             childRoutes: [
               {
-                id: 'axcVersion',
-                path: '/main/system/upgrade/axc',
-                formUrl: 'goform/system/version',
-                text: _('AC Version'),
-                component: sAcVersion.Screen,
+                id: 'apMaintenanceBase',
+                path: '/main/system/ap/base',
+                formUrl: 'goform/system/maintenance',
+                text: _('Base'),
+                component: sApMaintenance.Screen,
               }, {
                 id: 'apsVersion',
                 path: '/main/system/upgrade/aps',
                 formUrl: 'goform/system/ap/version',
-                text: _('AP Version'),
+                text: _('AP Firmware'),
                 component: sApVersion.Screen,
               }, {
                 id: 'apModel',
@@ -615,19 +631,19 @@ const routes = [
               },
             ],
           }, {
-            id: 'maintenance',
+            id: 'acMaintenance',
             isIndex: true,
             formUrl: 'goform/system/maintenance',
             path: '/main/system/maintenance',
             icon: 'cog',
-            text: _('System Maintenance'),
-            component: sSystemMaintenance.Screen,
+            text: _('AC Maintenance'),
+            component: sAcMaintenance.Screen,
           }, {
             id: 'ntp',
             isIndex: true,
             formUrl: 'goform/system/networktimeprotocol',
             path: '/main/system/networktimeprotocol',
-            icon: 'cog',
+            icon: 'clock-o',
             text: _('NTP'),
             component: sNetworkTimeProtocol.Screen,
           }, {
@@ -640,7 +656,25 @@ const routes = [
             component: sSystemAdmin.Screen,
           },
         ],
-      }, {
+      },
+      // {
+      //   path: '/main/portal',
+      //   component: sMainAxc.Screen,
+      //   icon: 'road',
+      //   text: _('OPEN PORTAL'),
+      //   indexRoute: { onEnter: (nextState, replace) => replace('/main/portal/overview') },
+      //   childRoutes: [
+      //     {
+      //       id: 'overview',
+      //       icon: 'home',
+      //       path: '/main/portal/overview',
+      //       formUrl: 'goform/group/overview',
+      //       text: _('Overview'),
+      //       component: sOverview.Screen,
+      //     },
+      //   ],
+      // },
+      {
         path: '/wizard',
         component: sWizard.Screen,
       },

@@ -212,7 +212,7 @@ export const radioAdvance = fromJS([
   {
     id: 'txchain',
     form: 'radioAdvance',
-    label: _('TX Spatial Stream'),
+    label: _('Custom Spatial Stream'),
     type: 'switch',
     defaultValue: '1x1',
     required: true,
@@ -220,19 +220,21 @@ export const radioAdvance = fromJS([
     showPrecondition(data) {
       return parseInt(data.get('spatialstreams'), 10) !== 1;
     },
-  }, {
-    id: 'rxchain',
-    form: 'radioAdvance',
-    label: _('RX Spatial Stream'),
-    type: 'switch',
-    defaultValue: '1x1',
-    required: true,
-    options: spatialstreamsOptions,
-    showPrecondition(data) {
-      return parseInt(data.get('spatialstreams'), 10) !== 1;
-    },
-
-  }, {
+  },
+  // {
+  //   id: 'rxchain',
+  //   form: 'radioAdvance',
+  //   label: _('RX Spatial Stream'),
+  //   type: 'switch',
+  //   defaultValue: '1x1',
+  //   required: true,
+  //   noForm: true,
+  //   options: spatialstreamsOptions,
+  //   showPrecondition(data) {
+  //     return parseInt(data.get('spatialstreams'), 10) !== 1;
+  //   },
+  // },
+  {
     id: 'wmmenable',
     form: 'radioAdvance',
     label: _('WMM Switch'),

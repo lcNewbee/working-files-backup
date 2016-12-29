@@ -10,6 +10,7 @@ import SaveButton from 'shared/components/Button/SaveButton';
 import FileUpload from 'shared/components/FileUpload';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
+import AcVersion from './AcVersion';
 
 const languageOptions = List(b28n.getOptions().supportLang).map((item) => (
   {
@@ -24,44 +25,6 @@ function onChangeLang(data) {
     window.location.reload();
   }
 }
-
-const settingsFormOptions = fromJS([
-  {
-    id: 'discoverycnt',
-    label: _('AP Number of Re-joins'),
-    fieldset: 'retainDays',
-    legend: _('AP Maintenance'),
-    defaultValue: '7',
-    type: 'number',
-    min: '1',
-    max: '365',
-  }, {
-    id: 'echotime',
-    label: _('AP Heartbeat Time'),
-    fieldset: 'retainDays',
-    defaultValue: '7',
-    type: 'number',
-    min: '1',
-    max: '365',
-    help: _('Seconds'),
-  }, {
-    id: 'statistime',
-    label: _('AP Data Reporting Time'),
-    fieldset: 'retainDays',
-    defaultValue: '7',
-    type: 'number',
-    min: '1',
-    max: '365',
-    help: _('Seconds'),
-  }, {
-    id: 'autoap',
-    label: _('Allow Automatic Add AP'),
-    fieldset: 'retainDays',
-    defaultValue: '7',
-    type: 'checkbox',
-    value: '1',
-  },
-]);
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
@@ -85,6 +48,7 @@ export default class View extends React.Component {
       'onRestore',
       'onConfirm',
       'checkSaveResult',
+      'renderUpgrade',
     ]);
 
     this.state = {
@@ -166,11 +130,13 @@ export default class View extends React.Component {
     return (
       <AppScreen
         {...this.props}
-        settingsFormOptions={settingsFormOptions}
-        hasSettingsSaveButton
         noTitle
       >
         <div className="o-form">
+          <AcVersion
+            {...this.props}
+          />
+
           <fieldset className="o-form__fieldset">
             <legend className="o-form__legend">{route.text}</legend>
             <FormGroup label={_('Reboot Controller')}>

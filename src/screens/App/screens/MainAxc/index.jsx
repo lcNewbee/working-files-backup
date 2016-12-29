@@ -135,6 +135,13 @@ export default class Main extends Component {
     setTimeout(() => {
       this.autoRefreshData();
     }, rateInterval);
+
+    if (this.props.route.path === '/main/group') {
+      this.onToggleMainPopOver({
+        name: 'groupAsider',
+        isShow: true,
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -1170,11 +1177,6 @@ export default class Main extends Component {
                   <Icon
                     name="navicon"
                     className={groupTitleIconClassName}
-                    // onClick={
-                    //   () => this.onToggleMainPopOver({
-                    //     name: 'groupAsider',
-                    //   })
-                    // }
                   />
                 ) : null
               }
@@ -1201,7 +1203,6 @@ export default class Main extends Component {
         <PopOver
           onClose={this.onHiddenPopOver}
           {...popOver}
-          overlay={popOver.name !== 'groupAsider'}
         >
           {
             this.renderPopOverContent(popOver)
