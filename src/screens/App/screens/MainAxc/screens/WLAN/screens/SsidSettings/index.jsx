@@ -194,14 +194,14 @@ const listOptions = fromJS([
   }, {
     id: 'storeForwardPattern',
     options: storeForwardOption,
-    text: _('Forward Pattern'),
+    text: _('Forwarding Mode'),
     defaultValue: 'local',
     formProps: {
       type: 'select',
     },
   }, {
     id: 'upstream/downstream',
-    text: _('Up/Down Flow'),
+    text: _('Downstream Traffic /Upstream Traffic'),
     transform(val, item) {
       const upRate = flowRateFilter.transform(item.get('upstream'));
       const downRate = flowRateFilter.transform(item.get('downstream'));

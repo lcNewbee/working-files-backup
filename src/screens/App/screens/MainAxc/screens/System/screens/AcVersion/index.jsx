@@ -16,7 +16,7 @@ const msg = {
   selectFile: _('Image File'),
   dictDefaultMessage: _('Drop or click to select file'),
   removefile: _('Remove File'),
-  currentVersion: _('Current Frimware Version'),
+  currentVersion: _('Current Firmware Version'),
   upAcVersionTitle: _('Upgrading Firmware'),
   backupAcVersion: _('Backup AC Firmware'),
   sureUpgradeAc: _('Are you sure to UPGRADE the Firmware and REBOOT?'),

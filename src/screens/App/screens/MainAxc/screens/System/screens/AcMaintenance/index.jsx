@@ -138,7 +138,6 @@ export default class View extends React.Component {
           />
 
           <fieldset className="o-form__fieldset">
-            <legend className="o-form__legend">{route.text}</legend>
             <FormGroup label={_('Reboot Controller')}>
               <SaveButton
                 type="button"

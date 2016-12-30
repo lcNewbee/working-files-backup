@@ -241,22 +241,23 @@
   "AP with the same MAC already exists": "已经存在相同MAC的AP",
 
   "Traffic": "流量",
-
+  "Downstream Traffic /Upstream Traffic": "上/下流量",
   "SSID Status": "SSID状态",
   "Group SSID List": "组内SSID列表",
   "Users": "用户",
+  "Client List":"客户端列表",
   "Cilents": "用户",
   "Enable SSID": "开启SSID",
   "Hide SSID": "隐藏SSID",
   "Compulsory Auth": "强制认证",
   "Max BSS Number": "最大SSID数",
-  "Forward Pattern": "转发模式",
+  "Forwarding Mode": "转发模式",
   "Load Balancing": "负载均衡",
   "Local Forward": "本地转发",
   "Centralized Forward-%s": "集中转发-%s隧道",
   "802.1X Auth": "802.1X 认证",
 
-  "Client List": "客户端列表",
+
   "Online Time": "在线时间",
   "Vendor": "生产商",
   "Client": "客户端",
@@ -330,7 +331,6 @@
 
   "SSID Settings": "SSID配置",
   "Access Control": "访问控制",
-
   "Smart RF": "智能RF",
   "Band Steering": "5G优先",
   "11n Frist": "11n优先",
@@ -480,7 +480,7 @@
   "Upload AC Firmware": "上传AC版本",
   "Upgrading Firmware": "升级AC版本(4分钟)",
   "Backup AC Firmware": "备份AC版本(2分钟)",
-  "Current Frimware Version": "当前版本",
+  "Current Firmware Version": "当前版本",
   "Upgrading AC Firmware version, please do not shut down device.": "正在升级AC版本，请勿关闭设备！",
   "Model Name": "型号名称",
   "Radio Number": "射频数量",
@@ -516,7 +516,7 @@
   "Trap Server": "Trap服务器",
   "Trap Password": "Trap口令",
 
-  "Admin Settings": "管理员配置",
+  "Admin Account": "管理员配置",
   "Admin": "超级管理员",
   "Manager(Read-only)": "只读管理员",
   "Manager(Branch)": "分支管理员",

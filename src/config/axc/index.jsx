@@ -311,7 +311,7 @@ const routes = [
                 id: 'groupClient',
                 path: '/main/group/monitor/user',
                 formUrl: 'goform/group/client',
-                text: _('User'),
+                text: _('Client List'),
                 component: sUsers.Screen,
               },
               // {
@@ -649,7 +649,7 @@ const routes = [
             path: '/main/system/admin',
             formUrl: 'goform/system/admins',
             icon: 'user',
-            text: _('Admin Settings'),
+            text: _('Admin Account'),
             component: sSystemAdmin.Screen,
           },
         ],
