@@ -397,7 +397,7 @@ export default class View extends PureComponent {
           </div>
           <div className="cols col-12">
             <div className="o-box__cell">
-              <h3>{ _('Rogue SSID List') }</h3>
+              <h3>{ _('Rogue AP List') }</h3>
             </div>
             <div className="o-box__cell">
               <Table
@@ -410,7 +410,7 @@ export default class View extends PureComponent {
           </div>
           <div className="cols col-12">
             <div className="o-box__cell">
-              <h3>{ _('Around SSID List') }</h3>
+              <h3>{ _('Interfering AP List') }</h3>
             </div>
             <div className="o-box__cell">
               <Table
