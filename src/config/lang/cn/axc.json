@@ -245,6 +245,7 @@
   "SSID Status": "SSID状态",
   "Group SSID List": "组内SSID列表",
   "Users": "用户",
+  "Cilents": "用户",
   "Enable SSID": "开启SSID",
   "Hide SSID": "隐藏SSID",
   "Compulsory Auth": "强制认证",
@@ -255,6 +256,7 @@
   "Centralized Forward-%s": "集中转发-%s隧道",
   "802.1X Auth": "802.1X 认证",
 
+  "Client List": "客户端列表",
   "Online Time": "在线时间",
   "Vendor": "生产商",
   "Client": "客户端",
@@ -276,6 +278,8 @@
   "Policy Type": "策略类型",
   "Operate Object": "操作对象",
   "Enable Policy": "启用策略",
+
+  "Cilent List": "用户列表",
 
   "Secure State": "安全状态",
   "Attack Type": "攻击类型",
@@ -332,7 +336,6 @@
   "11n Frist": "11n优先",
   "Base Settings": "基本设置",
   "Timer Policy": "定时策略",
-  "Max Users": "最大用户数",
   "Auto Power": "自动功率",
   "Auto Channel": "自动信道",
   "Terminal Release": "终端防粘",
@@ -408,7 +411,7 @@
   "Flow Report": "流量报表",
   "Traffic Report": "流量报表",
   "Business Report": "商业报表",
-  "Users Flow Analysis": "客流分析",
+  "Users Flow Analysis": "Users客流分析",
   "Information Push": "信息推送",
   "Analysis of Preferences": "喜好分析",
   "Cumulative visits": "累积来访",

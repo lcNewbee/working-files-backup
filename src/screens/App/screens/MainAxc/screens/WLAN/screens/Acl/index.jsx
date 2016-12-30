@@ -35,7 +35,6 @@ const settingsOptions = fromJS([
     type: 'switch',
     options: $$listTypeOptions,
     saveOnChange: true,
-    help: _('Type Switch'),
   },
 ]);
 

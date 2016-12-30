@@ -23,6 +23,7 @@ import guiConfig from './config.json';
 const cnCore = require('../lang/cn/core.json');
 const cnAxc = require('../lang/cn/axc.json');
 const validateCn = require('../lang/cn/validate.json');
+const cnOpenPortal = require('../lang/cn/openPortal.json');
 const langEn = require('../lang/en/core.json');
 
 const bodyElem = document.getElementsByTagName('body')[0];
@@ -30,6 +31,7 @@ const bodyElem = document.getElementsByTagName('body')[0];
 b28n.addDict(cnCore, 'cn');
 b28n.addDict(cnAxc, 'cn');
 b28n.addDict(validateCn, 'cn');
+b28n.addDict(cnOpenPortal, 'cn');
 b28n.addDict(langEn, 'en');
 window.CB = b28n.init({
   supportLang: ['en', 'cn'],
@@ -322,7 +324,7 @@ const routes = [
                 id: 'groupClient',
                 path: '/main/group/monitor/user',
                 formUrl: 'goform/group/client',
-                text: _('User'),
+                text: _('Client List'),
                 component: sUsers.Screen,
               },
               // {
@@ -675,7 +677,7 @@ const routes = [
             id: 'openPortalOverview',
             icon: 'home',
             path: '/main/portal/overview',
-            formUrl: 'goform/group/overview',
+            formUrl: 'goform/openPortal/overview',
             text: _('Overview'),
             component: sOpenPortalOverview.Screen,
           }, {

@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import utils from 'shared/utils';
 import { Map, List, fromJS } from 'immutable';
 import PureComponent from 'shared/components/Base/PureComponent';
@@ -13,6 +14,19 @@ import * as actions from 'shared/actions/screens';
 const msg = {
   days: _('Days'),
 };
+const recordOptions = [
+  {
+    id: 'recDate',
+    text: _('Time'),
+    transform(timeStr) {
+      return moment(timeStr).format('YYYY-MM-DD');
+    },
+  }, {
+    id: 'info',
+    text: _('Describe'),
+  },
+];
+
 const timeTypeSwitchs = fromJS([
   {
     value: 'today',
@@ -55,15 +69,14 @@ const ssidTableOptions = fromJS([
   },
 ]);
 
-function getTerminalTypeOption(serverData) {
-  let dataList = serverData.get('terminalType');
+function getOnlineOption(serverData) {
   const ret = {
     tooltip: {
       trigger: 'item',
       formatter: '{a} <br/>{b} ({d}%)',
     },
     title: {
-      text: _('Clients'),
+      text: _('Connection Status'),
       x: 'center',
       textStyle: {
         fontSize: '18',
@@ -73,10 +86,11 @@ function getTerminalTypeOption(serverData) {
       orient: 'vertical',
       x: 'left',
       y: 'bottom',
+      data: [_('Offline'), _('Online')],
     },
     series: [
       {
-        name: 'Type',
+        name: _('Status'),
         type: 'pie',
         radius: ['0%', '60%'],
         avoidLabelOverlap: false,
@@ -103,11 +117,10 @@ function getTerminalTypeOption(serverData) {
     ],
   };
 
-  if (List.isList(dataList)) {
-    dataList = dataList.map(item => item.set('name', `${item.get('name')}: ${item.get('value')}`));
-    ret.legend.data = dataList.map(item => item.get('name')).toJS();
-    ret.series[0].data = dataList.toJS();
-  }
+  ret.series[0].data = [
+    { value: serverData.get('outlineCount'), name: _('Offline') },
+    { value: serverData.get('onlineCount'), name: _('Online') },
+  ];
 
   return ret;
 }
@@ -118,7 +131,7 @@ function getApStatusOption(serverData) {
       formatter: '{a} <br/>{b}: {c} ({d}%)',
     },
     title: {
-      text: _('AP Status'),
+      text: _('Lock Status'),
       x: 'center',
     },
     legend: {
@@ -126,7 +139,7 @@ function getApStatusOption(serverData) {
       orient: 'vertical',
       x: 'left',
       y: 'bottom',
-      data: [_('Offline'), _('Online')],
+      data: [_('Locked'), _('Unlocked')],
     },
     series: [
       {
@@ -158,96 +171,11 @@ function getApStatusOption(serverData) {
   };
 
   ret.series[0].data = [
-    { value: serverData.get('memoryUsed'), name: _('Offline') },
-    { value: serverData.get('memoryTotal') - serverData.get('memoryUsed'), name: _('Online') },
+    { value: serverData.get('lockCount'), name: _('Locked') },
+    { value: serverData.get('trueCount'), name: _('Unlocked') },
   ];
 
   return ret;
-}
-
-function getFlowOption(serverData, timeType) {
-  const option = {
-    tooltip: {
-      trigger: 'axis',
-    },
-    legend: {
-      data: ['AP', _('Wireless'), _('Clients')],
-    },
-    xAxis: [{
-      type: 'category',
-      interval: 1,
-      splitLine: {
-        interval: 0,
-      },
-      axisLabel: {
-        interval: 0,
-      },
-    }],
-    yAxis: [{
-      type: 'value',
-      name: _('KB'),
-      minInterval: 1,
-      splitNumber: 5,
-      axisLabel: {
-        formatter: '{value}',
-      },
-      axisLine: {
-        lineStyle: {},
-      },
-    }],
-    series: [
-      {
-        name: 'AP',
-        type: 'line',
-      },
-      {
-        name: _('Wireless'),
-        type: 'line',
-      },
-      {
-        name: _('Clients'),
-        type: 'line',
-      },
-    ],
-  };
-  let xAxisData;
-  let xAxisName = _('Days');
-  let $$dataList = serverData.getIn(['flowList']);
-
-  if (!$$dataList) {
-    return null;
-  }
-
-  $$dataList = $$dataList.toJS();
-
-  if (timeType === 'yesterday' ||
-      timeType === 'today') {
-    xAxisData = List(new Array(24)).map(
-      (val, i) => `${i}:00`,
-    ).toJS();
-    xAxisName = _('Hours');
-  } else if (timeType === 'week') {
-    xAxisData = List(new Array(7)).map(
-      (val, i) => i + 1,
-    ).toJS();
-  } else if (timeType === 'half_month') {
-    xAxisData = List(new Array(15)).map(
-      (val, i) => i + 1,
-    ).toJS();
-  } else {
-    xAxisData = List(new Array(30)).map(
-      (val, i) => i + 1,
-    ).toJS();
-  }
-
-  option.xAxis[0].data = xAxisData;
-  option.xAxis[0].name = xAxisName;
-
-  option.series[0].data = $$dataList[0].data;
-  option.series[1].data = $$dataList[1].data;
-  option.series[2].data = $$dataList[2].data;
-
-  return option;
 }
 
 const propTypes = {
@@ -309,32 +237,15 @@ export default class View extends PureComponent {
     const curScreenId = screens.get('curScreenId');
     const serverData = screens.getIn([curScreenId, 'data']);
     const apStatusOption = getApStatusOption(serverData);
-    const terminalTypeOption = getTerminalTypeOption(serverData);
-    const flowOption = getFlowOption(serverData, screens.getIn([curScreenId, 'query', 'timeType']));
+    const onlineOption = getOnlineOption(serverData);
 
     return (
       <div>
-        <h3 className="t-main__content-title">{route.text}</h3>
         <div className="o-box row">
-          <div className="cols col-4" >
-            <div className="o-box__cell">
-              <h3>{ _('Users Status') }</h3>
-            </div>
-            <div className="o-box__cell">
-              <EchartReact
-                option={apStatusOption}
-                className="o-box__canvas"
-                style={{
-                  width: '100%',
-                  minHeight: '200px',
-                }}
-              />
-            </div>
+          <div className="cols col-12 o-box__cell">
+            <h3>{ _('Users') }</h3>
           </div>
-          <div className="cols col-8">
-            <div className="o-box__cell">
-              <h3>{ _('Users Info') }</h3>
-            </div>
+          <div className="cols col-7">
             <div className="o-box__cell row">
               <div
                 className="cols col-4"
@@ -361,13 +272,25 @@ export default class View extends PureComponent {
                     border: '1px solid #e5e5e5',
                   }}
                 >
-                  {serverData.get('clientsNumber') || 0}
+                  {serverData.get('onlineCount') || 0}
                 </p>
               </div>
               <EchartReact
-                option={terminalTypeOption}
+                option={onlineOption}
                 className="o-box__canvas cols col-8"
                 style={{
+                  minHeight: '200px',
+                }}
+              />
+            </div>
+          </div>
+          <div className="cols col-5" >
+            <div className="o-box__cell">
+              <EchartReact
+                option={apStatusOption}
+                className="o-box__canvas"
+                style={{
+                  width: '100%',
                   minHeight: '200px',
                 }}
               />
@@ -376,18 +299,14 @@ export default class View extends PureComponent {
           <div className="cols col-12">
             <div className="o-box__cell">
               <h3>
-                { _('Data') }
+                { _('Authentication logs') }
               </h3>
 
             </div>
             <div className="o-box__cell">
-              <EchartReact
-                option={flowOption}
-                className="o-box__canvas"
-                style={{
-                  width: '100%',
-                  minHeight: '200px',
-                }}
+              <Table
+                options={recordOptions}
+                list={serverData.get('operationRecords')}
               />
             </div>
           </div>

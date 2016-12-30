@@ -184,7 +184,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'maxBssUsers',
-    text: _('Max Users'),
+    text: _('Max Clients'),
     defaultValue: 32,
     formProps: {
       type: 'number',
