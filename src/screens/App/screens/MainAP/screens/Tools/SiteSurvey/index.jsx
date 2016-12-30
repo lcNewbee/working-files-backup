@@ -119,12 +119,7 @@ export default class SiteSurvey extends React.Component {
           type="plain-text"
           value={_('Notice: Site survey scan may temporary disable wireless link(s)')}
         /> <br /><br />
-        <div
-          className="clearfix"
-          style={{
-            marginBottom: '15px',
-          }}
-        >
+        <div className="clearfix">
           <div className="fl">
             {
               this.props.product.get('deviceRadioList').size > 1 ? (
@@ -150,6 +145,7 @@ export default class SiteSurvey extends React.Component {
               onClick={this.onScanBtnClick}
               style={{
                 marginLeft: '10px',
+                marginTop: '2px',
               }}
             />
           </div>

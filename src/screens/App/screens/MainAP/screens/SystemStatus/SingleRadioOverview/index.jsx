@@ -897,7 +897,7 @@ export default class SystemStatus extends React.Component {
                       Promise.resolve().then(() => {
                         this.props.changeCustomSettingsForChart(fromJS({ ssidFlowDir: data.value }));
                       }).then(() => {
-                        if (this.props.store.getIn(['curData', 'radioList', data.value, 'enable']) === '1') {
+                        if (this.props.store.getIn(['curData', 'radioList', radioId, 'enable']) === '1') {
                           this.prepareChartData();
                         }
                       });
@@ -969,7 +969,7 @@ export default class SystemStatus extends React.Component {
                       Promise.resolve().then(() => {
                         this.props.changeCustomSettingsForChart(fromJS({ top10ClientFlowDir: data.value }));
                       }).then(() => {
-                        if (this.props.store.getIn(['curData', 'radioList', data.value, 'enable']) === '1') {
+                        if (this.props.store.getIn(['curData', 'radioList', radioId, 'enable']) === '1') {
                           this.prepareChartData();
                         }
                       });

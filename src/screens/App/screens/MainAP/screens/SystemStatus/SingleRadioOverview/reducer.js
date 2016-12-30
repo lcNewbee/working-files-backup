@@ -7,8 +7,8 @@ const defaultState = fromJS({
     radioType: '2.4G',
   },
   customSettingsForChart: {
-    ssidFlowDir: 'upload', // 'upload' or 'download'
-    top10ClientFlowDir: 'upload', // 'upload' or 'download'
+    ssidFlowDir: 'download', // 'upload' or 'download'
+    top10ClientFlowDir: 'download', // 'upload' or 'download'
   },
   serverData: {
     cpuTotal: '100',

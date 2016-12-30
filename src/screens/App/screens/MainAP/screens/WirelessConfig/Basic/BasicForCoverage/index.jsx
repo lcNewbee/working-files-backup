@@ -1804,9 +1804,16 @@ export default class Basic extends React.Component {
             options={staAndApSecurityOptions}
             value={tableItemForSsid.getIn(['item', 'security', 'mode'])}
             onChange={(data) => {
-              const newItem = tableItemForSsid.get('item')
-                              .setIn(['security', 'mode'], data.value)
-                              .setIn(['security', 'key'], '');
+              const securDefault = fromJS({
+                cipher: 'aes',
+                auth: 'shared',
+                keyType: 'Hex',
+                keyIndex: '1',
+              });
+              const currentSecur = tableItemForSsid.getIn(['item', 'security']);
+              const secur = securDefault.merge(currentSecur)
+                            .set('mode', data.value).set('key', '');
+              const newItem = tableItemForSsid.get('item').set('security', secur);
               const newItemForSsid = tableItemForSsid.set('item', newItem);
               this.props.changeTableItemForSsid(newItemForSsid);
             }}

@@ -24,7 +24,7 @@ const propTypes = {
   changeCurrRadioConfig: PropTypes.func,
   changeCustomSettingsForChart: PropTypes.func,
 
-  // updateItemSettings: PropTypes.func,
+  updateItemSettings: PropTypes.func,
   leaveSettingsScreen: PropTypes.func,
   app: PropTypes.instanceOf(Map),
   changeFirstRefresh: PropTypes.func,
@@ -276,7 +276,7 @@ function getTopTenFlowClientsOption(serverData) {
       {
         name: _('Name'),
         type: 'pie',
-        radius: ['0%', '60%'],
+        radius: '55%',
         avoidLabelOverlap: false,
         label: {
           // formatter: '{b}: {c}',
@@ -347,7 +347,7 @@ function getFlowPerSsidOption(serverData) {
       {
         name: 'SSID',
         type: 'pie',
-        radius: ['0%', '60%'],
+        radius: '55%',
         avoidLabelOverlap: false,
         label: {
           normal: {
@@ -405,6 +405,13 @@ export default class SystemStatus extends React.Component {
     this.props.fetch('goform/get_firstLogin_info').then((json) => {
       if (json.state && json.state.code === 2000 && json.data.ifFirstLogin === '0') {
         this.props.fetchSettings().then(() => {
+          this.props.fetch('goform/get_network_info').then((json1) => {
+            if (json1.state && json1.state.code === 2000) {
+              const networkInfo = fromJS(json1.data);
+              this.props.updateItemSettings({ networkInfo });
+            }
+          });
+        }).then(() => {
           this.props.changeFirstRefresh(false);
           // const customSetings = this.props.selfState.get('customSettingsForChart').toJS();
           this.prepareChartData();
@@ -414,6 +421,12 @@ export default class SystemStatus extends React.Component {
     this.onChangeRadio({ value: '0' });
     a = setInterval(() => {
       this.props.fetchSettings().then(() => {
+        this.props.fetch('goform/get_network_info').then((json1) => {
+          if (json1.state && json1.state.code === 2000) {
+            const networkInfo = fromJS(json1.data);
+            this.props.updateItemSettings({ networkInfo });
+          }
+        });
         this.prepareChartData();
       });
     }, 10000);
@@ -451,6 +464,145 @@ export default class SystemStatus extends React.Component {
       radioType,
     });
     this.props.changeCurrRadioConfig(config);
+  }
+
+  getCpuAndMemPercentOption() {
+    const cpuUsed = Number(this.props.store.getIn(['curData', 'sysStatus', 'cpuInfo']));
+    const memUsed = Number(this.props.store.getIn(['curData', 'sysStatus', 'memInfo']));
+    const xAxisData = ['CPU', 'Memary'];
+    const data1 = [cpuUsed, memUsed];
+    const data2 = [100 - cpuUsed, 100 - memUsed];
+
+    const itemStyle = {
+      normal: {
+      },
+      emphasis: {
+        barBorderWidth: 1,
+        shadowBlur: 5,
+        shadowOffsetX: 0,
+        shadowOffsetY: 0,
+        // shadowColor: 'rgba(0,0,0,0.5)',
+      },
+    };
+
+    const option = {
+      backgroundColor: '#f2f2f2',
+      legend: {
+        data: ['Used', 'Free'],
+        orient: 'vertical',
+        align: 'left',
+        y: 'bottom',
+        left: 10,
+      },
+      title: {
+        text: _('CPU/MEM Usage'),
+        x: 'center',
+        textStyle: {
+          fontWeight: 'normal',
+          fontSize: '18',
+        },
+      },
+      brush: {
+        toolbox: ['rect', 'polygon', 'lineX', 'lineY', 'keep', 'clear'],
+        xAxisIndex: 0,
+      },
+      toolbox: {
+        feature: {
+          magicType: {
+            type: ['stack', 'tiled'],
+          },
+          dataView: {},
+        },
+      },
+      tooltip: {
+        show: true,
+        formatter: '{a} <br/> {b} : {c}%',
+      },
+      yAxis: {
+        data: xAxisData,
+        silent: false,
+        axisLine: { onZero: false },
+        splitLine: { show: false },
+        splitArea: { show: false },
+      },
+      xAxis: {
+        inverse: false,
+        splitArea: { show: false },
+      },
+      grid: {
+        left: 100,
+      },
+      series: [
+        {
+          name: 'Used',
+          type: 'bar',
+          stack: 'one',
+          barWidth: 25,
+          itemStyle,
+          data: data1,
+        },
+        {
+          name: 'Free',
+          type: 'bar',
+          stack: 'one',
+          barWidth: 25,
+          itemStyle,
+          data: data2,
+        },
+      ],
+    };
+
+    return option;
+  }
+
+  getStaPeerFlowOption() {
+    const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
+    const download = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList', '0', 'txBytes']);
+    const upload = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList', '0', 'rxBytes']);
+    const downloadFlow = flowRateFilter.transform(download);
+    const uploadFlow = flowRateFilter.transform(upload);
+
+    const option = {
+      title: {
+        text: _('Station Peer Flow'),
+        x: 'center',
+        textStyle: {
+          fontWeight: 'normal',
+          fontSize: '18',
+        },
+      },
+      tooltip: {
+        trigger: 'item',
+        formatter: '{a} <br/>{b} ({d}%)',
+      },
+      legend: {
+        orient: 'vertical',
+        left: 'left',
+        y: 'bottom',
+        data: [`${_('Download')}: ${downloadFlow}`, `${_('Upload')}: ${uploadFlow}`],
+      },
+      series: [
+        {
+          name: _('Flow'),
+          type: 'pie',
+          radius: '55%',
+          center: ['50%', '60%'],
+          data: [
+            { value: download, name: `Download: ${downloadFlow}` },
+            { value: upload, name: `Upload: ${uploadFlow}` },
+          ],
+          itemStyle: {
+            emphasis: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)',
+            },
+          },
+        },
+      ],
+    };
+
+    return option;
   }
 
   prepareChartData() { // { ssidFlowDir, top10ClientFlowDir }为流量方向，'upload','download'
@@ -518,143 +670,11 @@ export default class SystemStatus extends React.Component {
     this.props.changeServerData(fromJS({ cpuInfo, memFree, memTotal, flowPerSsid, top10FlowClients }));
   }
 
-  getCpuAndMemPercentOption() {
-    const cpuUsed = Number(this.props.store.getIn(['curData', 'sysStatus', 'cpuInfo']));
-    const memUsed = Number(this.props.store.getIn(['curData', 'sysStatus', 'memInfo']));
-    const xAxisData = ['CPU', 'Memary'];
-    const data1 = [cpuUsed, memUsed];
-    const data2 = [100 - cpuUsed, 100 - memUsed];
-
-    const itemStyle = {
-      normal: {
-      },
-      emphasis: {
-        barBorderWidth: 1,
-        shadowBlur: 5,
-        shadowOffsetX: 0,
-        shadowOffsetY: 0,
-        // shadowColor: 'rgba(0,0,0,0.5)',
-      },
-    };
-
-    const option = {
-      backgroundColor: '#f2f2f2',
-      legend: {
-        data: ['Used', 'Free'],
-        orient: 'vertical',
-        align: 'left',
-        left: 10,
-      },
-      title: {
-        text: _('CPU/MEM Usage'),
-        x: 'center',
-        textStyle: {
-          fontWeight: 'normal',
-          fontSize: '18',
-        },
-      },
-      brush: {
-        toolbox: ['rect', 'polygon', 'lineX', 'lineY', 'keep', 'clear'],
-        xAxisIndex: 0,
-      },
-      toolbox: {
-        feature: {
-          magicType: {
-            type: ['stack', 'tiled'],
-          },
-          dataView: {},
-        },
-      },
-      tooltip: {
-        show: true,
-        formatter: '{a} <br/> {b} : {c}%',
-      },
-      yAxis: {
-        data: xAxisData,
-        silent: false,
-        axisLine: { onZero: false },
-        splitLine: { show: false },
-        splitArea: { show: false },
-      },
-      xAxis: {
-        inverse: false,
-        splitArea: { show: false },
-      },
-      grid: {
-        left: 100,
-      },
-      series: [
-        {
-          name: 'Used',
-          type: 'bar',
-          stack: 'one',
-          barWidth: 30,
-          itemStyle,
-          data: data1,
-        },
-        {
-          name: 'Free',
-          type: 'bar',
-          stack: 'one',
-          barWidth: 30,
-          itemStyle,
-          data: data2,
-        },
-      ],
-    };
-
-    return option;
-  }
-
-  getStaPeerFlowOption() {
-    const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-    const download = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList', '0', 'txBytes']);
-    const upload = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList', '0', 'rxBytes']);
-    const downloadFlow = flowRateFilter.transform(download);
-    const uploadFlow = flowRateFilter.transform(upload);
-
-    const option = {
-      title: {
-        text: _('Station Peer Flow'),
-        x: 'center',
-      },
-      tooltip: {
-        trigger: 'item',
-        formatter: '{a} <br/>{b} : {c} ({d}%)',
-      },
-      legend: {
-        orient: 'vertical',
-        left: 'left',
-        data: [_('Download'), _('Upload')],
-      },
-      series: [
-        {
-          name: '流量',
-          type: 'pie',
-          radius: '55%',
-          center: ['50%', '60%'],
-          data: [
-            { value: download, name: 'Download' },
-            { value: upload, name: 'Upload' },
-          ],
-          itemStyle: {
-            emphasis: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)',
-            },
-          },
-        },
-      ],
-    };
-
-    return option;
-  }
-
   render() {
     const { radioId, radioType } = this.props.selfState.get('currRadioConfig').toJS();
     if (!this.props.store.getIn(['curData', 'radioList', radioId])
-        || !this.props.store.getIn(['curData', 'sysStatus'])) return null;
+        || !this.props.store.getIn(['curData', 'sysStatus'])
+        || !this.props.store.getIn(['curData', 'networkInfo'])) return null;
     const {
       deviceModel, deviceName, version, uptime, systemTime, networkMode, wlan0Mac,
     } = this.props.store.getIn(['curData', 'sysStatus']).toJS();
@@ -663,6 +683,10 @@ export default class SystemStatus extends React.Component {
       wirelessMode, security, frequency, channelWidth, channel, radioMode, ssid,
       distance, txPower, noise, chutil, staList, vapList, signal, enable,
     } = this.props.store.getIn(['curData', 'radioList', radioId]).toJS();
+    const {
+      wiredMode, proto, ip, gateway, mask, dns1, dns2,
+    } = this.props.store.getIn(['curData', 'networkInfo']).toJS();
+    const routerInfo = this.props.store.getIn(['curData', 'networkInfo', 'routerInfo']);
     const radioList = this.props.store.getIn(['curData', 'radioList']);
     const peerList = this.props.store.getIn(['curData', 'radioList', radioId, 'peerList']);
     const { memInfo, cpuInfo } = this.props.store.getIn(['curData', 'sysStatus']).toJS();
@@ -687,24 +711,67 @@ export default class SystemStatus extends React.Component {
               <h3>{_('Network Info')}</h3>
             </div>
             <div className="o-box__cell">
-              <div className="o-description-list o-description-list--lg info-box">
-                <dl className="o-description-list-row">
-                  <dt>{_('Device Model')}</dt>
-                  <dd>{deviceModel}</dd>
-                </dl>
-                <dl className="o-description-list-row">
-                  <dt>{_('Network Mode')}</dt>
-                  <dd>{networkMode}</dd>
-                </dl>
-                <dl className="o-description-list-row">
-                  <dt>{_('System Uptime')}</dt>
-                  <dd>{changeUptimeToReadable(uptime)}</dd>
-                </dl>
-                <dl className="o-description-list-row">
-                  <dt>{_('WLAN0 MAC')}</dt>
-                  <dd>{wlan0Mac}</dd>
-                </dl>
-              </div>
+              {
+                wiredMode === 'bridge' ? (
+                  <div className="o-description-list o-description-list--lg info-box">
+                    <dl className="o-description-list-row">
+                      <dt>{_('Network Mode')}</dt>
+                      <dd>{wiredMode}</dd>
+                    </dl>
+                    <dl className="o-description-list-row">
+                      <dt>{_('IP Mode')}</dt>
+                      <dd>{proto}</dd>
+                    </dl>
+                    <dl className="o-description-list-row">
+                      <dt>{_('IP Address')}</dt>
+                      <dd>{ip}</dd>
+                    </dl>
+                    <dl className="o-description-list-row">
+                      <dt>{_('Gateway')}</dt>
+                      <dd>{gateway}</dd>
+                    </dl>
+                    <dl className="o-description-list-row">
+                      <dt>{_('Network Mask')}</dt>
+                      <dd>{mask}</dd>
+                    </dl>
+                    <dl className="o-description-list-row">
+                      <dt>{_('Primary DNS')}</dt>
+                      <dd>{dns1}</dd>
+                    </dl>
+                    <dl className="o-description-list-row">
+                      <dt>{_('Secondary DNS')}</dt>
+                      <dd>{dns2}</dd>
+                    </dl>
+                  </div>
+                ) : (
+                  <div className="o-description-list o-description-list--lg info-box">
+                    <dl className="o-description-list-row">
+                      <dt>{_('Network Mode')}</dt>
+                      <dd>{wiredMode}</dd>
+                    </dl>
+                    <dl className="o-description-list-row">
+                      <dt>{_('WAN IP Mode')}</dt>
+                      <dd>{routerInfo.get('proto')}</dd>
+                    </dl>
+                    <dl className="o-description-list-row">
+                      <dt>{_('WAN IP')}</dt>
+                      <dd>{routerInfo.get('ip')}</dd>
+                    </dl>
+                    <dl className="o-description-list-row">
+                      <dt>{_('Gateway')}</dt>
+                      <dd>{routerInfo.get('gateway')}</dd>
+                    </dl>
+                    <dl className="o-description-list-row">
+                      <dt>{_('Network Mask')}</dt>
+                      <dd>{routerInfo.get('mask')}</dd>
+                    </dl>
+                    <dl className="o-description-list-row">
+                      <dt>{_('NAT Enable')}</dt>
+                      <dd>{routerInfo.get('nat') === '1' ? 'Enable' : 'Disabled'}</dd>
+                    </dl>
+                  </div>
+                )
+              }
             </div>
           </div>
           <div className="cols col-8">
@@ -714,16 +781,16 @@ export default class SystemStatus extends React.Component {
             <div className="o-box__cell cols col-6">
               <div className="o-description-list o-description-list--lg info-box">
                 <dl className="o-description-list-row">
+                  <dt>{_('Device Mode')}</dt>
+                  <dd>{deviceModel}</dd>
+                </dl>
+                <dl className="o-description-list-row">
                   <dt>{_('Device Name')}</dt>
                   <dd>{deviceName}</dd>
                 </dl>
                 <dl className="o-description-list-row">
                   <dt>{_('Firmware Version')}</dt>
                   <dd>{version}</dd>
-                </dl>
-                <dl className="o-description-list-row">
-                  <dt>{_('Network Mode')}</dt>
-                  <dd>{networkMode}</dd>
                 </dl>
                 <dl className="o-description-list-row">
                   <dt>{_('System Uptime')}</dt>
@@ -734,7 +801,7 @@ export default class SystemStatus extends React.Component {
                   <dd>{systemTime}</dd>
                 </dl>
                 <dl className="o-description-list-row">
-                  <dt>{_('WLAN0 MAC')}</dt>
+                  <dt>{_('AP MAC')}</dt>
                   <dd>{wlan0Mac}</dd>
                 </dl>
               </div>
@@ -839,12 +906,41 @@ export default class SystemStatus extends React.Component {
           </div>
           {
             wirelessMode !== 'sta' && enable === '1' && staList.length > 0 ? (
-              <div className="cols col-4 o-box__cell">
+              <div
+                className="cols col-4 o-box__cell"
+                style={{
+                  position: 'relative',
+                }}
+              >
+                <FormInput
+                  type="switch"
+                  options={[
+                    { value: 'download', label: _('Download') },
+                    { value: 'upload', label: _('Upload') },
+                  ]}
+                  minWidth="84px"
+                  style={{
+                    position: 'absolute',
+                    right: '0',
+                    bottom: '0',
+                    zIndex: '99',
+                  }}
+                  value={this.props.selfState.getIn(['customSettingsForChart', 'top10ClientFlowDir'])}
+                  onChange={(data) => {
+                    Promise.resolve().then(() => {
+                      this.props.changeCustomSettingsForChart(fromJS({ top10ClientFlowDir: data.value }));
+                    }).then(() => {
+                      if (this.props.store.getIn(['curData', 'radioList', radioId, 'enable']) === '1') {
+                        this.prepareChartData();
+                      }
+                    });
+                  }}
+                />
                 <EchartReact
                   option={topTenFlowClients}
                   className="o-box__canvas"
                   style={{
-                    minHeight: '260px',
+                    minHeight: '270px',
                   }}
                 />
               </div>
@@ -890,7 +986,7 @@ export default class SystemStatus extends React.Component {
             )
           }
 
-          <div className="cols col-4 o-box__cell">
+          <div className="cols col-4 o-box__cell" style={{ position: 'relative' }}>
             {
               enable === '0' ? (
                 <div className="radio-off-notice">{_('Radio Off')}</div>
@@ -898,23 +994,49 @@ export default class SystemStatus extends React.Component {
                 <div>
                   {
                     wirelessMode !== 'sta' ? (
+                      <div>
+                        <FormInput
+                          type="switch"
+                          options={[
+                            { value: 'download', label: _('Download') },
+                            { value: 'upload', label: _('Upload') },
+                          ]}
+                          minWidth="84px"
+                          style={{
+                            position: 'absolute',
+                            right: '0',
+                            bottom: '0',
+                            zIndex: '99',
+                          }}
+                          value={this.props.selfState.getIn(['customSettingsForChart', 'ssidFlowDir'])}
+                          onChange={(data) => {
+                            Promise.resolve().then(() => {
+                              this.props.changeCustomSettingsForChart(fromJS({ ssidFlowDir: data.value }));
+                            }).then(() => {
+                              if (this.props.store.getIn(['curData', 'radioList', radioId, 'enable']) === '1') {
+                                this.prepareChartData();
+                              }
+                            });
+                          }}
+                        />
+                        <EchartReact
+                          className="o-box__canvas"
+                          option={flowPerSsid}
+                          style={{
+                            minHeight: '270px',
+                          }}
+                        />
+                      </div>
+                    ) : (
                       <EchartReact
                         className="o-box__canvas"
                         option={this.getStaPeerFlowOption()}
                         style={{
-                          minHeight: '260px',
-                        }}
-                      />
-                    ) : (
-                      <EchartReact
-                        className="o-box__canvas"
-                        option={flowPerSsid}
-                        style={{
-                          minHeight: '260px',
+                          minHeight: '270px',
                         }}
                       />
                     )
-            }
+                  }
                 </div>
               )
             }

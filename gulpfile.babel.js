@@ -82,15 +82,16 @@ gulp.task('open:dist', ['build'], shell.task(['babel-node tools/distServer.js'])
 gulp.task('default', ['open:src']);
 
 // 处理浏览器标题
-function changeTitle(name) {
-  return gulp.src([`${paths.build}/**/*`, `!${paths.build}/portal/`, `!${paths.build}/portal/**/*`])
-            .pipe($.replace('<title>Axilspot Access Manager</title>', `<title>Axilspot ${name}</title>`))
-            .pipe(gulp.dest(paths.build));
+function changeTitle(name, callback) {
+  gulp.src([`${paths.build}/**/*`, `!${paths.build}/portal/`, `!${paths.build}/portal/**/*`])
+      .pipe($.replace('<title>Axilspot Access Manager</title>', `<title>Axilspot ${name}</title>`))
+      .pipe(gulp.dest(paths.build));
+  return callback();
 }
-gulp.task('changeAIP5Title', () => changeTitle('AIP5'));
-gulp.task('changeAIP10Title', () => changeTitle('AIP10'));
-gulp.task('changeAEC120Title', () => changeTitle('AEC120'));
-gulp.task('changeASC175Title', () => changeTitle('ASC175'));
-gulp.task('changeASW3Title', () => changeTitle('ASW3'));
-gulp.task('changeASC120Title', () => changeTitle('ASC120'));
+gulp.task('changeAIP5Title', callback => changeTitle('AIP5', callback));
+gulp.task('changeAIP10Title', callback => changeTitle('AIP10', callback));
+gulp.task('changeAEC120Title', callback => changeTitle('AEC120', callback));
+gulp.task('changeASC175Title', callback => changeTitle('ASC175', callback));
+gulp.task('changeASW3Title', callback => changeTitle('ASW3', callback));
+gulp.task('changeASC120Title', callback => changeTitle('ASC120', callback));
 

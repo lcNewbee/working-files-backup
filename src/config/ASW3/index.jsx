@@ -237,15 +237,9 @@ const routes = [{
       icon: 'cogs',
       text: _('Tools'),
       component: pTools,
-      indexRoute: { onEnter: (nextState, replace) => replace('/main/tools/speedtest') },
+      indexRoute: { onEnter: (nextState, replace) => replace('/main/tools/sitesurvey') },
       childRoutes: [
         {
-          id: 'speedtest',
-          path: '/main/tools/speedtest',
-          text: _('Speed Test'),
-          saveUrl: '/goform/bandwidth_test',
-          component: sSpeedTest.Screen,
-        }, {
           id: 'sitesurvey',
           path: '/main/tools/sitesurvey',
           fetchUrl: 'goform/get_site_survey',

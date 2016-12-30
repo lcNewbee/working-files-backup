@@ -107,12 +107,7 @@ export default class ChannelUtilization extends React.Component {
     return (
       <div className="stats-group">
         <h3>{_('Channel Utilization Survey')}</h3><br />
-        <div
-          className="clearfix"
-          style={{
-            marginBottom: '15px',
-          }}
-        >
+        <div className="clearfix">
           <div className="fl">
             {
               this.props.product.get('deviceRadioList').size > 1 ? (
@@ -130,12 +125,13 @@ export default class ChannelUtilization extends React.Component {
           <div className="fl">
             <Button
               theme="primary"
-              text={_('Run Test')}
+              text={_('Start Scan')}
               loading={this.props.app.get('fetching')}
               disabled={this.props.app.get('fetching')}
               onClick={() => this.onRunScanBtnClick()}
               style={{
                 marginLeft: '10px',
+                marginTop: '2px',
               }}
             />
           </div>

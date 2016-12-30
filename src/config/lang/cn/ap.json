@@ -5,11 +5,15 @@
 
   "Device Model :": "设备型号：",
   "Device Name :": "设备名称：",
+  "Device Name": "设备名称",
   "Network Mode :": "网络模式：",
   "Firmware Version :": "软件版本：",
+  "Firmware Version": "软件版本",
   "System Uptime :": "运行时间：",
+  "System Uptime": "运行时间",
   "System Time :": "系统时间：",
   "Client Number :": "连接数：",
+  "Client Number": "连接数",
   "Channel :": "信道：",
   "Frequency :": "频段：",
   "Channel Width :": "信道频宽：",
@@ -33,6 +37,8 @@
   "Key Format": "秘钥类型",
   "Remote SSID": "对端SSID",
   "Security Edit": "加密方式",
+  "Radio Info": "射频信息",
+  "Network Info": "网络信息",
 
   "Wireless Mode :": "无线模式：",
   "Device Mode": "设备模式",
@@ -357,5 +363,6 @@
   "The MAC address already exists in the mac list !": "该MAC地址已经在列表中存在！",
   "username or password error": "用户名或密码错误",
   "password error": "密码错误",
-  "Language Setting": "语言设置"
+  "Language Setting": "语言设置",
+  "Start Scan": "开始扫描"
 }

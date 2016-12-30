@@ -14,19 +14,19 @@ gulp.task('webpack', shell.task(
 
 gulp.task('build:assets', () =>
   gulp.src(`${paths.src}/assets/**/*`)
-    .pipe(gulp.dest(paths.build))
+    .pipe(gulp.dest(paths.build)),
 );
 
 gulp.task('build:html', () =>
   gulp.src(`${paths.build}/index.html`)
     .pipe(staticHash({ asset: 'static' }))
-    .pipe(gulp.dest(paths.build))
+    .pipe(gulp.dest(paths.build)),
 );
 
 gulp.task('build:header', () =>
   gulp.src(`${paths.build}/scripts/bundle.js`)
     .pipe($.header(`var a_165F8BA5ABE1A5DA = 0;var v_165F8BA5ABE1A5DA = "${gulp.pkg.version}";`))
-    .pipe(gulp.dest(`${paths.build}/scripts/`))
+    .pipe(gulp.dest(`${paths.build}/scripts/`)),
 );
 gulp.task('build:complete', () => {
   const configReg = /'\.\/config\/(\w+)'/g;
