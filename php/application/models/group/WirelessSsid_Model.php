@@ -3,7 +3,7 @@ class WirelessSsid_Model extends CI_Model {
     public function __construct() {
         parent::__construct();
         $this->load->library('session');
-        $this->load->database();		
+        $this->load->database();
         $this->load->helper(array('array', 'my_customfun_helper'));
         $this->load->library('SqlPage');
     }
@@ -22,7 +22,7 @@ class WirelessSsid_Model extends CI_Model {
             $cgilist = array();
             foreach($querydata as $row) {
                 $arr = array('groupid' => (int)element('id', $row));
-                $cgidata = json_decode( axc_get_wireless_ssid(json_encode($arr)) );
+                $cgidata = json_decode(axc_get_wireless_ssid(json_encode($arr)) );
                 if(is_object($cgidata)) {
                     if(count($cgidata->data->list) >0) {
                         foreach($cgidata->data->list as $row) {
@@ -36,7 +36,7 @@ class WirelessSsid_Model extends CI_Model {
                 }
             }
             //去			掉重复SSID
-                                    $temp = array();
+            $temp = array();
             foreach($upary as $k=>$v) {
                 $v = join(',',$v);
                 $temp[$k] = $v;
@@ -59,6 +59,7 @@ class WirelessSsid_Model extends CI_Model {
                 $temp2['downstream'] =$row[9];
                 $temp2['upstream'] =$row[10];
                 $temp2['loadBalanceType'] =$row[11];
+                $temp2['ssidisolate'] =$row[11];
 
                 $tempdata[] = $temp2;
             }
@@ -85,17 +86,18 @@ class WirelessSsid_Model extends CI_Model {
             'upstream' => (int)element('upstream', $oriData),
             'downstream' => (int)element('downstream', $oriData),
             'encryption' => element('encryption', $oriData),
-            'password' => element('password', $oriData, '')
+            'password' => element('password', $oriData, ''),
+            'ssidisolate' => (int)element('ssidisolate', $oriData, '')
         );
         return $ret;
     }
     public function add_ssid($data) {
         $result = null;
         $temp_data = $this->getCgiParam($data);
-        $result = axc_add_wireless_ssid(json_encode($temp_data));		
-        $cgiObj = json_decode($result);			
+        $result = axc_add_wireless_ssid(json_encode($temp_data));
+        $cgiObj = json_decode($result);
         if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
-            //log                
+            //log
             $logary = array(
                 'type'=>'Add',
                 'operator'=>element('username',$_SESSION,''),
@@ -103,8 +105,8 @@ class WirelessSsid_Model extends CI_Model {
                 'operationResult'=>'ok',
                 'description'=>""
             );
-            Log_Record($this->db,$logary);			
-        }		
+            Log_Record($this->db,$logary);
+        }
         return $result;
     }
     public function delete_ssid($data) {
@@ -113,9 +115,9 @@ class WirelessSsid_Model extends CI_Model {
         foreach ($selectList as $item) {
             $deleteItem = array('groupid' => element('groupid', $data), 'ssid' => element('ssid', $item));
             $result = axc_del_wireless_ssid(json_encode($deleteItem));
-            $cgiObj = json_decode($result);			
+            $cgiObj = json_decode($result);
             if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
-                //log                
+                //log
                 $logary = array(
                     'type'=>'Delete',
                     'operator'=>element('username',$_SESSION,''),
@@ -123,7 +125,7 @@ class WirelessSsid_Model extends CI_Model {
                     'operationResult'=>'ok',
                     'description'=>""
                 );
-                Log_Record($this->db,$logary);			
+                Log_Record($this->db,$logary);
             }
         }
         return json_encode(json_ok());
@@ -132,9 +134,9 @@ class WirelessSsid_Model extends CI_Model {
         $result = null;
         $temp_data = $this->getCgiParam($data);
         $result = axc_modify_wireless_ssid(json_encode($temp_data));
-        $cgiObj = json_decode($result);			
+        $cgiObj = json_decode($result);
         if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
-            //log                
+            //log
             $logary = array(
                 'type'=>'Update',
                 'operator'=>element('username',$_SESSION,''),
@@ -142,7 +144,7 @@ class WirelessSsid_Model extends CI_Model {
                 'operationResult'=>'ok',
                 'description'=>""
             );
-            Log_Record($this->db,$logary);			
+            Log_Record($this->db,$logary);
         }
         return $result;
     }
@@ -150,9 +152,9 @@ class WirelessSsid_Model extends CI_Model {
         $result = null;
         $temp_data = $this->getCgiParam($data);
         $result = axc_bind_wireless_ssid(json_encode($temp_data));
-        $cgiObj = json_decode($result);			
+        $cgiObj = json_decode($result);
         if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
-            //log                
+            //log
             $logary = array(
                 'type'=>'Binding',
                 'operator'=>element('username',$_SESSION,''),
@@ -160,7 +162,7 @@ class WirelessSsid_Model extends CI_Model {
                 'operationResult'=>'ok',
                 'description'=>""
             );
-            Log_Record($this->db,$logary);			
+            Log_Record($this->db,$logary);
         }
         return $result;
     }
@@ -168,9 +170,9 @@ class WirelessSsid_Model extends CI_Model {
         $result = null;
         $temp_data = $this->getCgiParam($data);
         $result = axc_unbind_wireless_ssid(json_encode($temp_data));
-        $cgiObj = json_decode($result);			
+        $cgiObj = json_decode($result);
         if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
-            //log                
+            //log
             $logary = array(
                 'type'=>'Unbundling',
                 'operator'=>element('username',$_SESSION,''),
@@ -178,7 +180,7 @@ class WirelessSsid_Model extends CI_Model {
                 'operationResult'=>'ok',
                 'description'=>""
             );
-            Log_Record($this->db,$logary);			
+            Log_Record($this->db,$logary);
         }
         return $result;
     }
@@ -191,9 +193,9 @@ class WirelessSsid_Model extends CI_Model {
                 if($res != ""){
                     $arr['ssid'] = (string)$res;
                     $result = axc_bind_wireless_ssid(json_encode($arr));
-                    $cgiObj = json_decode($result);			
+                    $cgiObj = json_decode($result);
                     if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
-                        //log                
+                        //log
                         $logary = array(
                             'type'=>'Binding',
                             'operator'=>element('username',$_SESSION,''),
@@ -201,7 +203,7 @@ class WirelessSsid_Model extends CI_Model {
                             'operationResult'=>'ok',
                             'description'=>""
                         );
-                        Log_Record($this->db,$logary);			
+                        Log_Record($this->db,$logary);
                     }
                 }
             }

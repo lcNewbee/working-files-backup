@@ -36,7 +36,7 @@ const loadBalanceTypeArr = [
     label: _('Users'),
   }, {
     value: '2',
-    label: _('Flow'),
+    label: _('SSID'),
   },
 ];
 
@@ -73,6 +73,38 @@ const storeForwardOption = [
   //   label: _('Centralized Forward-%s', '802.11'),
   // },
 ];
+const checkboxOptions = [
+  {
+    value: '1',
+    label: _('On'),
+    render() {
+      return (
+        <span
+          style={{
+            color: 'green',
+          }}
+        >
+          {_('On')}
+        </span>
+      );
+    },
+  }, {
+    value: '0',
+    label: _('Off'),
+    render() {
+      return (
+        <span
+          style={{
+            color: 'red',
+          }}
+        >
+          {_('Off')}
+        </span>
+      );
+    },
+  },
+];
+
 const flowRateFilter = utils.filter('flowRate:["KB"]');
 const listOptions = fromJS([
   {
@@ -96,37 +128,7 @@ const listOptions = fromJS([
   }, {
     id: 'enabled',
     text: _('Status'),
-    options: [
-      {
-        value: '1',
-        label: _('On'),
-        render() {
-          return (
-            <span
-              style={{
-                color: 'green',
-              }}
-            >
-              {_('On')}
-            </span>
-          );
-        },
-      }, {
-        value: '0',
-        label: _('Off'),
-        render() {
-          return (
-            <span
-              style={{
-                color: 'red',
-              }}
-            >
-              {_('Off')}
-            </span>
-          );
-        },
-      },
-    ],
+    options: checkboxOptions,
     defaultValue: '1',
     formProps: {
       type: 'checkbox',
@@ -172,9 +174,10 @@ const listOptions = fromJS([
       value: '1',
     },
   }, {
-    id: 'ssidIsolation',
+    id: 'ssidisolate',
     text: _('SSID Isolation'),
-    defaultValue: '1',
+    defaultValue: '0',
+    options: checkboxOptions,
     formProps: {
       type: 'checkbox',
       value: '1',
@@ -260,6 +263,7 @@ const listOptions = fromJS([
     id: 'password',
     text: _('Password'),
     defaultValue: '',
+    noTable: true,
     formProps: {
       type: 'password',
       maxLength: '64',

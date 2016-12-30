@@ -52,7 +52,7 @@ class PropertyPanel extends React.Component {
       'list', activeIndex,
     ]);
     const activePanelconfigIndex = activePanelState.get('configurationActivePanelIndex');
-    const $$activeListData = activePanelState.get('data');
+    const $$activeListData = activePanelState.get('curData');
     const $$configData = activePanelState.getIn([
       'configuration', activePanelconfigIndex,
     ]);
@@ -63,7 +63,6 @@ class PropertyPanel extends React.Component {
 
     if (curModule === 'radio') {
       formUrl = 'goform/group/ap/radio';
-
       $$subData = immutableUtils.getChanged(
         $$subData,
         $$activeListData.getIn(['radio']),

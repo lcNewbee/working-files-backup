@@ -1,5 +1,5 @@
 'use strict';
-var utils = require('./core');
+var utilsCore = require('./core');
 var string = require('./string');
 var validator = function(options) {
   return new validator.fn.init(options);
@@ -16,8 +16,21 @@ var msg = {
 
 // 验证函数
 var vaildate = {
+
+  // 纯字符串长度
   len: function(str, min, max) {
     var len = str.length;
+
+    if (min === max && len !== min) {
+      return _('String length must be: ') + _('%s bit', min);
+    } else if (len < min || len > max) {
+      return _('String length range is: ') + _('%s - %s bit', min, max);
+    }
+  },
+
+  // UTF-8 字节长度
+  utf8Len: function(str, min, max) {
+    var len = utilsCore.getUtf8Length(str);
 
     if (min === max && len !== min) {
       return _('String length must be: ') + _('%s bit', min);
@@ -327,7 +340,7 @@ function isExclueString(obj, str) {
 
   if (typeof exclude === 'string' && exclude === str) {
     ret = true;
-  } else if (utils.isArray(exclude)) {
+  } else if (utilsCore.isArray(exclude)) {
     ret = exclude.indexOf(str) !== -1;
   }
 
@@ -389,7 +402,7 @@ var init = validator.fn.init = function(options) {
   }
 
   if(options.rules) {
-    this.rules = utils.getRulesObj(options.rules, vaildate);
+    this.rules = utilsCore.getRulesObj(options.rules, vaildate);
   } else {
     this.rules = [];
   }
@@ -519,7 +532,7 @@ validator.mergeProps = function(validOptions) {
 
   return function(stateProps, dispatchProps, ownProps) {
 
-    return utils.extend({}, ownProps, stateProps, dispatchProps, {
+    return utilsCore.extend({}, ownProps, stateProps, dispatchProps, {
       validateOption: (function() {
         var ret = {};
 
@@ -544,7 +557,7 @@ validator.checkClear = function(str, rules) {
   if(!rules) {
     return ;
   }
-  rules = utils.getRulesObj(rules)
+  rules = utilsCore.getRulesObj(rules)
 
   return checkClear(str, rules);
 }
@@ -553,7 +566,7 @@ validator.check = function(str, rules) {
   if(!rules) {
     return ;
   }
-  rules = utils.getRulesObj(rules);
+  rules = utilsCore.getRulesObj(rules);
 
   return check(str, rules);
 }

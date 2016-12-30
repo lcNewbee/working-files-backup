@@ -78,7 +78,8 @@ function getTerminalTypeOption(serverData) {
       {
         name: 'Type',
         type: 'pie',
-        radius: ['0%', '60%'],
+        center: ['70%', '50%'],
+        radius: ['20%', '60%'],
         avoidLabelOverlap: false,
         label: {
           normal: {
@@ -132,7 +133,7 @@ function getApStatusOption(serverData) {
       {
         name: _('Status'),
         type: 'pie',
-        radius: ['0%', '60%'],
+        radius: ['20%', '60%'],
         avoidLabelOverlap: false,
         label: {
           formatter: '{b}: {c}',
@@ -370,7 +371,7 @@ export default class View extends PureComponent {
           </div>
           <div className="cols col-12">
             <div className="o-box__cell">
-              <h2>{ _('Historical Graphs') }</h2>
+              <h3>{ _('Historical Graphs') }</h3>
             </div>
             <div className="o-box__cell">
               <h3>

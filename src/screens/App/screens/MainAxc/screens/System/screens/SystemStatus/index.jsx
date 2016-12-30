@@ -36,6 +36,7 @@ function getCpuOption(serverData) {
       {
         name: _('CPU Usage'),
         type: 'pie',
+        center: ['72%', '55%'],
         radius: ['42%', '70%'],
         avoidLabelOverlap: false,
         label: {
@@ -92,6 +93,7 @@ function getMemoryOption(serverData) {
       {
         name: _('Memory Usage'),
         type: 'pie',
+        center: ['72%', '55%'],
         radius: ['42%', '70%'],
         avoidLabelOverlap: false,
         label: {
