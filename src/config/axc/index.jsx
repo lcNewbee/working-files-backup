@@ -67,7 +67,7 @@ const sMainAxc = require('../../screens/App/screens/MainAxc');
 // const sNetworkVlan = require('../../screens/App/screens/MainAxc/screens/Network/screens/VLAN');
 const sInterfaces = require('../../screens/App/screens/MainAxc/screens/Network/screens/Interfaces');
 const sDhcpList = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/DhcpList');
-const sDhcpRelay = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/DhcpRelay');
+// const sDhcpRelay = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/DhcpRelay');
 const sNetworkRoutes = require('../../screens/App/screens/MainAxc/screens/Network/screens/Routes');
 const sNetworkNat = require('../../screens/App/screens/MainAxc/screens/Network/screens/Nat');
 // const sNetworkAcl = require('../../screens/App/screens/MainAxc/screens/Network/screens/ACL');
@@ -195,13 +195,14 @@ const routes = [
                 formUrl: 'goform/network/dhcp/list',
                 text: _('DHCP List'),
                 component: sDhcpList.Screen,
-              }, {
-                id: 'dhcpRelay',
-                path: '/main/network/dhcp/relay',
-                formUrl: 'goform/network/dhcp/relay',
-                text: _('DHCP Relay'),
-                component: sDhcpRelay.Screen,
               },
+              // {
+              //   id: 'dhcpRelay',
+              //   path: '/main/network/dhcp/relay',
+              //   formUrl: 'goform/network/dhcp/relay',
+              //   text: _('DHCP Relay'),
+              //   component: sDhcpRelay.Screen,
+              // },
             ],
           }, {
             id: 'networkNat',
