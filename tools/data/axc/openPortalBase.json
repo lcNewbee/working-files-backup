@@ -1,0 +1,22 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "username": "",
+        "password": "",
+        "url": "http://www.qq.com",
+        "sessionTime": 0
+      },
+      {
+        "username": "",
+        "password": "",
+        "url": "http://www.baidu.com",
+        "sessionTime": 0
+      }
+    ]
+  }
+}

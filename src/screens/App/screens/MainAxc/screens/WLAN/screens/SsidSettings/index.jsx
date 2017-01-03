@@ -5,9 +5,7 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { SaveButton, Button } from 'shared/components/Button';
-import { FormGroup, FormInput } from 'shared/components/Form';
 import Table from 'shared/components/Table';
-import Modal from 'shared/components/Modal';
 import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
@@ -266,6 +264,7 @@ const listOptions = fromJS([
     noTable: true,
     formProps: {
       type: 'password',
+      required: true,
       maxLength: '64',
       validator: validator({
         rules: 'remarkTxt:["\'\\\\"]|len:[8, 256]',
@@ -283,17 +282,14 @@ const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
   group: PropTypes.instanceOf(Map),
-  validateOption: PropTypes.object,
   route: PropTypes.object,
   groupid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  closeListItemModal: PropTypes.func,
   changeScreenActionQuery: PropTypes.func,
   updateCurEditListItem: PropTypes.func,
   fetch: PropTypes.func,
   reciveScreenData: PropTypes.func,
   createModal: PropTypes.func,
   onListAction: PropTypes.func,
-  validateAll: PropTypes.func,
 };
 const defaultProps = {};
 

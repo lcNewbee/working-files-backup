@@ -117,12 +117,15 @@ function rcPropertyPanelData(state, action) {
   let $$newData = $$curList.get('data');
   let $$radiosOptions = fromJS([]);
 
-  if (dataIndex !== -1) {
-    $$newData = $$newData.merge(rcData);
+  // 把服务器端数据合并 到 data 中
+  $$newData = $$newData.merge(rcData);
+  $$ret = $$ret.setIn(['list', dataIndex, 'data'], $$newData);
 
+  // 处理radio相关数据
+  if (dataIndex !== -1) {
     // 设置已选中的网卡radio参数
     if (rcData.radios) {
-      $$radiosOptions = $$radiosOptions.merge(
+      $$radiosOptions = fromJS(
         rcData.radios.map((item, index) => ({
           value: index,
           label: item.radioID,
@@ -180,6 +183,7 @@ function updatePropertyPanelData(state, data) {
   );
 }
 
+// 切换 radio 网卡
 function changePropertyPanelRadioIndex(state, index) {
   const $$ret = state;
   const activeIndex = $$ret.get('activeIndex');
@@ -213,18 +217,18 @@ function changePropertyPanelRadioIndex(state, index) {
         return $$subRet;
       }),
     )
-    .setIn(['curData', 'radio'], $$curRadioData);
+    .mergeIn(['curData', 'radio'], $$curRadioData);
 
   return $$ret.setIn(['list', activeIndex], $$curListItem);
 }
 
 function changePropertysItem(state, action) {
   const changeData = action.payload;
-  const cuRadioIndex = changeData.configurationRadioIndex;
+  const curRadioIndex = changeData.configurationRadioIndex;
   let $$ret = state;
 
-  if (typeof cuRadioIndex !== 'undefined') {
-    $$ret = changePropertyPanelRadioIndex(state, cuRadioIndex);
+  if (typeof curRadioIndex !== 'undefined') {
+    $$ret = changePropertyPanelRadioIndex(state, curRadioIndex);
   }
 
   return $$ret.mergeIn(

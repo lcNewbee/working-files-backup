@@ -152,15 +152,29 @@ const sNetworkTimeProtocol =
     require('../../screens/App/screens/MainAxc/screens/System/screens/NetworkTimeProtocol');
 
 /**
- * 系统管理
+ * Open Portal
  */
 const sOpenPortalOverview =
     require('../../screens/App/screens/MainAxc/screens/OpenPortal/screens/Overview');
 const sOpenPortalBase =
     require('../../screens/App/screens/MainAxc/screens/OpenPortal/screens/Portal/Base');
+const sOpenPortalBas =
+    require('../../screens/App/screens/MainAxc/screens/OpenPortal/screens/Portal/Bas');
+
 const sOpenPortalUrlParams =
     require('../../screens/App/screens/MainAxc/screens/OpenPortal/screens/Portal/UrlParams');
 
+function getOpenPortalFormUrl(url) {
+  const hostname = window.location.hostname;
+  const protocolStr = window.location.protocol;
+  const portStr = window.location.port;
+  const prefix = 'goform';
+  let ret = '';
+
+  ret = `${protocolStr}//${hostname}:${portStr}/${prefix}/${url}`;
+
+  return ret;
+}
 
 const routes = [
   {
@@ -677,37 +691,67 @@ const routes = [
             id: 'openPortalOverview',
             icon: 'home',
             path: '/main/portal/overview',
-            formUrl: 'goform/openPortal/overview',
+            formUrl: getOpenPortalFormUrl('openPortal/overview'),
             text: _('Overview'),
             component: sOpenPortalOverview.Screen,
           }, {
             id: 'openPortalPortal',
             isIndex: true,
-            path: '/main/portal/portal',
+            path: '/main/openPortal/portal',
             icon: 'level-up',
             text: _('Portal'),
             indexRoute: {
-              onEnter: (nextState, replace) => replace('/main/portal/portal/base'),
+              onEnter: (nextState, replace) => replace('/main/openPortal/portal/base'),
             },
             childRoutes: [
               {
                 id: 'openPortalPortalBase',
-                path: '/main/portal/portal/base',
-                formUrl: 'goform/openPortal/base',
-                text: _('AC Firmware'),
-                component: sOpenPortalOverview.Screen,
+                path: '/main/openPortal/portal/base',
+                formUrl: getOpenPortalFormUrl('openPortal/base'),
+                text: _('Base'),
+                component: sOpenPortalBase.Screen,
               }, {
                 id: 'openPortalPortalUrlParams',
-                path: '/main/portal/portal/bas',
-                formUrl: 'goform/openPortal/bas',
-                text: _('AP Firmware'),
-                component: sOpenPortalOverview.Screen,
+                path: '/main/openPortal/portal/bas',
+                formUrl: getOpenPortalFormUrl('openPortal/bas'),
+                text: _('Bas'),
+                component: sOpenPortalBas.Screen,
               }, {
                 id: 'openPortalPortalUrlParams',
-                path: '/main/portal/portal/url',
-                formUrl: 'goform/openPortal/UrlParams',
-                text: _('AP Firmware'),
-                component: sOpenPortalOverview.Screen,
+                path: '/main/openPortal/portal/url',
+                formUrl: getOpenPortalFormUrl('openPortal/UrlParams'),
+                text: _('Url Params'),
+                component: sOpenPortalUrlParams.Screen,
+              },
+            ],
+          }, {
+            id: 'openPortalRadius',
+            isIndex: true,
+            path: '/main/openPortal/radius',
+            icon: 'level-up',
+            text: _('Radius'),
+            indexRoute: {
+              onEnter: (nextState, replace) => replace('/main/openPortal/radius/base'),
+            },
+            childRoutes: [
+              {
+                id: 'openPortalPortalBase',
+                path: '/main/openPortal/radius/base',
+                formUrl: getOpenPortalFormUrl('openPortal/base'),
+                text: _('NAS List'),
+                component: sOpenPortalBase.Screen,
+              }, {
+                id: 'openPortalPortalUrlParams',
+                path: '/main/openPortal/radius/url',
+                formUrl: getOpenPortalFormUrl('openPortal/UrlParams'),
+                text: _('Online List'),
+                component: sOpenPortalUrlParams.Screen,
+              }, {
+                id: 'openPortalPortalUrlParams',
+                path: '/main/openPortal/radius/bas',
+                formUrl: getOpenPortalFormUrl('openPortal/bas'),
+                text: _('Connect Logs'),
+                component: sOpenPortalBas.Screen,
               },
             ],
           },

@@ -177,10 +177,15 @@ export default class AppScreen extends React.Component {
     const userType = this.props.app.getIn(['login', 'usertype']);
     const $$purviewList = fromJS(purview.split(','));
     const curModule = this.props.route.path.split('/')[2];
-    const curModuleVal = fromJS(purviewOptions).find(
+    let curModuleVal = fromJS(purviewOptions).find(
       $$item => $$item.get('module') === curModule,
-    ).get('value');
+    );
     let ret = false;
+
+    // 当前模块
+    if (curModuleVal) {
+      curModuleVal = curModuleVal.get('value') || '';
+    }
 
     // admin 或者 分支权限 all的管理员
     if (purview === 'all' || userType === 0) {
