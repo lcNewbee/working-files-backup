@@ -121,16 +121,17 @@ function ajaxErrorCallback(dispatch, type, url) {
   };
 }
 
-export function fetch(url, query) {
+export function fetch(url, query, option) {
   return (dispatch) => {
     const errorFunc = ajaxErrorCallback(
       dispatch,
       'fetch',
       url,
     );
+
     dispatch(rqFetch());
 
-    return utils.fetch(url, query, errorFunc)
+    return utils.fetch(url, query, option)
       .then((json) => {
         if (json === undefined) {
           return {};
@@ -143,7 +144,8 @@ export function fetch(url, query) {
         }
         dispatch(rcFetch());
         return json;
-      });
+      })
+      .catch(errorFunc);
   };
 }
 
@@ -154,16 +156,17 @@ export function fetch(url, query) {
  * @param {Object} query
  * @returns Fetch Promise 对象
  */
-export function save(url, query) {
+export function save(url, query, option) {
   return (dispatch) => {
     const errorFunc = ajaxErrorCallback(
       dispatch,
       'save',
       url,
     );
+
     dispatch(requestSave());
 
-    return utils.save(url, query, errorFunc)
+    return utils.save(url, query, option)
       .then((json) => {
         if (json === undefined) {
           return {};
@@ -175,7 +178,8 @@ export function save(url, query) {
         }
         dispatch(receiveSave());
         return json;
-      });
+      })
+      .catch(errorFunc);
   };
 }
 
@@ -186,16 +190,16 @@ export function save(url, query) {
  * @param {Element} form表单元素
  * @returns Fetch Promise 对象
  */
-export function saveFile(url, formElem) {
+export function saveFile(url, formElem, option) {
   return (dispatch) => {
     const errorFunc = ajaxErrorCallback(
       dispatch,
-      'save',
+      'saveFile',
       url,
     );
     dispatch(requestSave());
 
-    return utils.postForm(url, formElem, errorFunc)
+    return utils.postForm(url, formElem, option)
       .then((json) => {
         if (json === undefined) {
           return {};
@@ -212,7 +216,8 @@ export function saveFile(url, formElem) {
 
         dispatch(receiveSave());
         return json;
-      });
+      })
+      .catch(errorFunc);
   };
 }
 

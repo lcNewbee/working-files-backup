@@ -50,15 +50,20 @@ export function reciveScreenData(data, name) {
     },
   };
 }
-export function fetchScreenData(url) {
+export function fetchScreenData(option) {
   return (dispatch, getState) => {
     const globalState = getState();
     const refreshTime = globalState.app.get('rateInterval');
     const name = globalState.screens.get('curScreenId');
     const isFetchInfinite = globalState.screens.getIn([name, 'isFetchInfinite']);
     const formUrl = globalState.screens.getIn([name, 'formUrl']);
+    const ajaxMode = globalState.screens.getIn([name, 'ajaxMode']);
     const fetchUrl = globalState.screens.getIn([name, 'fetchUrl']) || formUrl;
     const curFetchIntervalTime = globalState.screens.getIn([name, 'fetchIntervalTime']) || refreshTime;
+    const ajaxOption = {
+      mode: ajaxMode,
+    };
+    let myUrl = fetchUrl;
     let query = globalState.screens.getIn([name, 'query']) || {};
 
     window.clearTimeout(refreshTimeout);
@@ -68,7 +73,19 @@ export function fetchScreenData(url) {
       query = query.toJS();
     }
 
-    return dispatch(appActions.fetch(url || fetchUrl, query))
+    if (option) {
+      // 处理 ajax mode参数，是否跨域
+      if (option.mode) {
+        ajaxOption.mode = option.mode;
+      }
+
+      // 处理 ajax mode参数，是否跨域
+      if (option.url) {
+        myUrl = option.url;
+      }
+    }
+
+    return dispatch(appActions.fetch(myUrl, query, ajaxOption))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
           dispatch(reciveScreenData(json.data, name));
@@ -76,7 +93,9 @@ export function fetchScreenData(url) {
 
         if (isFetchInfinite && curFetchIntervalTime > 0) {
           refreshTimeout = window.setTimeout(() => {
-            dispatch(fetchScreenData(formUrl));
+            dispatch(fetchScreenData({
+              url: myUrl,
+            }));
           }, refreshTime);
         }
       });
@@ -149,13 +168,18 @@ export function onListAction(url, option) {
     const name = globalState.screens.get('curScreenId');
     const editMap = globalState.screens.getIn([name, 'curListItem']);
     const formUrl = globalState.screens.getIn([name, 'formUrl']);
+    const ajaxMode = globalState.screens.getIn([name, 'ajaxMode']);
     const saveUrl = globalState.screens.getIn([name, 'saveUrl']) || formUrl;
     const fetchUrl = globalState.screens.getIn([name, 'fetchUrl']) || formUrl;
     const actionQuery = globalState.screens.getIn([name, 'actionQuery']);
     const actionType = actionQuery.get('action');
+    const needMerge = option && option.needMerge;
+    const ajaxOption = {
+      mode: ajaxMode,
+    };
+    let myUrl = saveUrl;
     let subData = actionQuery.toJS();
     let originalData = globalState.screens.getIn([name, 'data', 'list', actionQuery.get('index')]);
-    const needMerge = option && option.needMerge;
 
     if (originalData && originalData.get) {
       originalData = originalData.toJS();
@@ -174,17 +198,28 @@ export function onListAction(url, option) {
       subData = actionQuery.merge(editMap).toJS();
     }
 
+    // 处理自定义配置
+    if (option) {
+      // 处理 ajax mode参数，是否跨域
+      if (option.mode) {
+        ajaxOption.mode = option.mode;
+      }
+
+      // 处理 ajax mode参数，是否跨域
+      if (option.url) {
+        myUrl = option.url;
+      }
+    }
+
     // 删除不需要传到后台的属性属性
     delete subData.myTitle;
     delete subData.index;
 
-    return dispatch(appActions.save(url || saveUrl, subData))
+    return dispatch(appActions.save(myUrl, subData, ajaxOption))
       .then((json) => {
         let ret = 'Server Error';
 
-
         if (json.state) {
-          // dispatch(fetchScreenData(fetchUrl));
           if (json.state.code === 2000) {
             ret = 'ok';
           }
@@ -194,7 +229,9 @@ export function onListAction(url, option) {
           }
         }
 
-        dispatch(fetchScreenData(fetchUrl));
+        dispatch(fetchScreenData({
+          url: fetchUrl,
+        }));
 
         return ret;
       });
@@ -218,11 +255,15 @@ export function saveScreenSettings(option) {
     const $$curData = globalState.screens.getIn([name, 'curSettings']);
     const $$oriData = globalState.screens.getIn([name, 'data', 'settings']);
     const formUrl = globalState.screens.getIn([name, 'formUrl']);
+    const ajaxMode = globalState.screens.getIn([name, 'ajaxMode']);
     const fetchUrl = globalState.screens.getIn([name, 'fetchUrl']) || formUrl;
+    const ajaxOption = {
+      mode: ajaxMode,
+    };
     let $$subData = $$curData;
     let saveUrl = formUrl;
 
-    // 处理配置
+    // 处理自定义配置
     if (option) {
       // 自定义URL
       if (option.url) {
@@ -243,6 +284,11 @@ export function saveScreenSettings(option) {
       if (option.data) {
         $$subData = $$subData.merge(option.data);
       }
+
+      // 处理 ajax mode参数，是否跨域
+      if (option.mode) {
+        ajaxOption.mode = option.mode;
+      }
     }
 
     $$subData = $$subData.set('action', 'setting');
@@ -251,9 +297,13 @@ export function saveScreenSettings(option) {
       $$subData = $$subData.set('groupid', $$curQuery.get('groupid'));
     }
 
-    return dispatch(appActions.save(saveUrl, $$subData.toJS()))
+    return dispatch(
+      appActions.save(saveUrl, $$subData.toJS(), ajaxOption),
+    )
       .then(() => {
-        dispatch(fetchScreenData(fetchUrl));
+        dispatch(fetchScreenData({
+          url: fetchUrl,
+        }));
       });
   };
 }

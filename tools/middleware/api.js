@@ -17,7 +17,7 @@ function tansformPath(url) {
     return pathRet;
   });
 
-  ret = newArr.join('');
+  ret = newArr.join('').replace(/.action$/, '');
 
   return path.normalize(`${ret}.json`);
 }
