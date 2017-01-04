@@ -63,13 +63,13 @@ class NetworkDhcp extends CI_Controller {
 		$actionType = element('action', $data);
     function getCgiParam($oriData) {
       $retData = array(
-        'pool_name'=>element('name', $oriData),
-        'pool_ipaddr'=>element('startIp', $oriData),
-        'pool_mask'=>element('mask', $oriData),
-        'pool_lease'=>element('releaseTime', $oriData),
-        'pool_route'=>element('gateway', $oriData),
-        'pool_domain'=>element('domain', $oriData),
-        'pool_dns1'=>element('mainDns', $oriData),
+        'pool_name'=>element('name', $oriData,''),
+        'pool_ipaddr'=>element('startIp', $oriData,''),
+        'pool_mask'=>element('mask', $oriData,''),
+        'pool_lease'=>element('releaseTime', $oriData,''),
+        'pool_route'=>element('gateway', $oriData,''),
+        'pool_domain'=>element('domain', $oriData,''),
+        'pool_dns1'=>element('mainDns', $oriData,''),
         'pool_dns2'=>element('secondDns', $oriData,''),
         'pool_opt43'=>element('opt43', $oriData, ''),
         'pool_opt60'=>element('opt60', $oriData,'')
@@ -79,7 +79,6 @@ class NetworkDhcp extends CI_Controller {
 
 		if ($actionType === 'add') {
 			$temp_data=getCgiParam($data);
-      // $result=json_encode($temp_data);
       $result=dhcpd_add_pool_name(json_encode($temp_data));
 		}
 		elseif($actionType === 'edit') {
