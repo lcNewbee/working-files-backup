@@ -10,96 +10,56 @@ import * as appActions from 'shared/actions/app';
 
 const listOptions = fromJS([
   {
-    id: 'name',
-    text: _('Name'),
-    formProps: {
-      type: 'plain-text',
-    },
+    id: 'basName',
+    text: _('Bas Name'),
   }, {
-    id: 'workModel',
-    text: _('Physical Mode'),
-    options: [
-      {
-        value: 'half',
-        label: _('Simplex'),
-      }, {
-        value: 'full',
-        label: _('Duplex'),
-      }, {
-        value: 'auto',
-        label: _('Auto'),
-      },
-    ],
-    formProps: {
-      type: 'switch',
-    },
-  },
-  {
-    id: 'speed',
-    text: _('Port Speed'),
-    options: [
-      {
-        value: '10',
-        label: '10',
-      }, {
-        value: '100',
-        label: '100',
-      }, {
-        value: '1000',
-        label: _('1000'),
-      },
-    ],
-    formProps: {
-      type: 'switch',
-      showPrecondition(data) {
-        return data.get('workModel') !== 'auto';
-      },
-    },
+    id: 'basIp',
+    text: _('Bas IP'),
   }, {
-    id: 'description',
-    text: _('Description'),
-    formProps: {
-      type: 'textarea',
-      maxLength: '64',
-    },
+    id: 'basPort',
+    text: _('Bas Port'),
   }, {
-    id: 'status',
-    text: _('Port Status'),
-    options: [
-      {
-        value: 1,
-        label: _('ON'),
-        render() {
-          return (
-            <span
-              style={{
-                color: 'green',
-              }}
-            >
-              {_('ON')}
-            </span>
-          );
-        },
-      }, {
-        value: 0,
-        label: _('OFF'),
-        render() {
-          return (
-            <span
-              style={{
-                color: 'red',
-              }}
-            >
-              {_('OFF')}
-            </span>
-          );
-        },
-      },
-    ],
-    formProps: {
-      type: 'checkbox',
-      value: '1',
-    },
+    id: 'portalVer',
+    text: _('Portal Vertion'),
+  }, {
+    id: 'authType',
+    text: _('Auth Type'),
+  }, {
+    id: 'sharedSecret',
+    text: _('Shared Secret'),
+  }, {
+    id: 'basUser',
+    text: _('User'),
+  }, {
+    id: 'basPwd',
+    text: _('Password'),
+  }, {
+    id: 'timeoutSec',
+    text: _('Time out'),
+  }, {
+    id: 'isPortalCheck',
+    text: _('Portal Check'),
+  }, {
+    id: 'isOut',
+    text: _('isOut'),
+  }, {
+    id: 'authInterface',
+    text: _('Interface Auth'),
+  }, {
+    id: 'isComputer',
+    text: _('Computer Auth'),
+  }, {
+    id: 'web',
+    text: _('Web'),
+  }, {
+    id: 'isdebug',
+    text: _('Debug'),
+  }, {
+    id: 'lateAuth',
+    text: _('Late Auth'),
+  }, {
+    id: 'lateAuthTime',
+    text: _('Late Authtime'),
   },
 ]);
 const propTypes = {
@@ -133,9 +93,8 @@ export default class OpenPortalBase extends React.Component {
       <AppScreen
         {...this.props}
         listOptions={listOptions}
-        addable={false}
-        deleteable={false}
         actionable
+        selectable
       />
     );
   }

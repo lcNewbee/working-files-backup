@@ -7,7 +7,7 @@
     "list": [{
       "id": 1,
       "bas": "2",
-      "basname": "ikuai",
+      "basName": "ikuai",
       "basIp": "129.0.0.1",
       "basPort": "2000",
       "portalVer": "1",

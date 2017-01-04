@@ -1,0 +1,19 @@
+{
+  "state": {
+  "code": 2000,
+  "msg": "ok"
+  },
+  "data": {
+    "settings": {
+      "id": 1,
+      "basname": "nasname",
+      "userip": "wlanuserip",
+      "usermac": "mac",
+      "url": "url",
+      "basip": "basip",
+      "ssid": "ssid",
+      "apmac": "apmac"
+    }
+  }
+}
+

@@ -4,5 +4,25 @@
   "Unlocked": "未封锁",
   "Lock Status": "封锁状态",
   "Connection Status": "连接状态",
-  "Normal": "正常"
+  "Normal": "正常",
+
+  "Bas Name":"Bas名称",
+  "Bas Port":"Bas端口",
+  "Portal Vertion":"Portal 版本",
+  "Auth Type":"认证类型",
+  "Shared Secret":"共享密钥",
+  "User":"用户",
+  "Password":"密码",
+  "Time out":"链接超时",
+  "Portal Check":"Portal 认证",
+  "Is Out":"过时",
+  "Interface Auth":"接口认证",
+  "Computer Auth":"电脑认证",
+  "Web":"网页",
+  "Debug":"调试",
+  "Late Auth":"延迟认证",
+  "Late Authtime":"延迟时长",
+
+  "User IP":"用户IP",
+  "User Mac":"用户Mac"
 }
