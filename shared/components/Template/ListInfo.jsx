@@ -383,7 +383,9 @@ class ListInfo extends React.Component {
             } else {
               this.props.saveFile(formUrl, formElem)
                 .then(() => {
-                  this.props.fetchScreenData(formUrl);
+                  this.props.fetchScreenData({
+                    url: formUrl,
+                  });
                   this.props.closeListItemModal();
                 });
             }

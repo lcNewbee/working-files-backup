@@ -48,7 +48,7 @@ function initScreenState($$state, action) {
   let $$ret = $$state;
   let $$settingsData = $$ret.getIn([screenId, 'curSettings']) || fromJS({});
   let $$myScreenState = $$ret.get(screenId);
-
+  console.log(screenId, ' = ', action.payload);
   if (!$$myScreenState) {
     $$myScreenState = defaultItem.mergeDeep(action.payload);
   } else {
@@ -127,7 +127,7 @@ function activeListItem(state, curScreenName, action) {
     listItemIndex = action.payload.val;
   } else {
     listItemIndex = curList.findIndex(
-      item => item.get(action.payload.keyName) === action.payload.val
+      item => item.get(action.payload.keyName) === action.payload.val,
     );
   }
 
@@ -135,7 +135,7 @@ function activeListItem(state, curScreenName, action) {
 
   return state.setIn(
       [curScreenName, 'curListItem'],
-      defaultEditData.merge(myItem)
+      defaultEditData.merge(myItem),
     )
     .mergeIn([curScreenName, 'actionQuery'], {
       action: action.meta.action || 'edit',
@@ -195,7 +195,7 @@ export default function (state = defaultState, action) {
     case 'ADD_LIST_ITEM':
       return state.setIn(
         [curScreenName, 'curListItem'],
-        fromJS({}).merge(action.payload || defaultEditData)
+        fromJS({}).merge(action.payload || defaultEditData),
       )
       .mergeIn([curScreenName, 'actionQuery'], {
         action: 'add',

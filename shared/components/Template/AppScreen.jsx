@@ -58,6 +58,7 @@ export default class AppScreen extends React.Component {
       formUrl: props.route.formUrl,
       fetchUrl: props.route.fetchUrl,
       saveUrl: props.route.saveUrl,
+      ajaxMode: props.route.mode,
     }, props.initOption);
 
     super(props);

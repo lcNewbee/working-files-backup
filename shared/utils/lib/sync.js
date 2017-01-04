@@ -2,10 +2,9 @@ var query = require('./query');
 var loadedScripts = [];
 
 function checkStatus(response) {
-  if (response.status < 200 || response.status >= 300) {
+  if (!response.ok) {
     console.error('Response Status not ok: ', response.statusText);
   }
-
   return response;
 }
 
@@ -32,54 +31,72 @@ function handleServerError(json) {
 var sync = {
 
   // 默认使用 JSON 格式数据传递
-  save: function (url, data, errorCallback) {
+  save: function (url, data, option) {
+    var baseOption = {
+      method: 'POST',
+    };
 
     if (data !== undefined) {
       data = JSON.stringify(data);
     }
 
-    return fetch(url, {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: {
+    // 跨域请求不能设置 credentials 与 headers
+    if (option && option.mode === 'cors') {
+      baseOption.mode = 'cors';
+
+    // 同域请求
+    } else {
+      baseOption.credentials = 'include';
+      baseOption.headers = {
         'Accept': 'application/json',
         'Cache-Control': 'no-cache',
         'If-Modified-Since': '1',
         'Content-Type': 'application/json',
-      },
-      body: data
-    })
+      }
+    }
+
+    baseOption.body = data;
+
+    return fetch(url, baseOption)
       .then(checkStatus)
       .then(parseJSON)
       .then(handleServerError)
       .catch(function (error) {
-        if (typeof errorCallback === 'function') {
-          errorCallback(error)
-        }
-        console.error('request failed', error)
+        console.error('Save request failed', error)
       });
   },
 
-  postForm: function (url, form) {
-    return fetch(url, {
-      credentials: 'same-origin',
+  postForm: function (url, form, option) {
+    var baseOption = {
       method: 'POST',
-      body: new FormData(form)
-    })
+    };
+
+    // 跨域请求不能设置 credentials 与 headers
+    if (option && option.mode === 'cors') {
+      baseOption.mode = 'cors';
+
+    // 同域请求
+    } else {
+      baseOption.credentials = 'include';
+    }
+
+    baseOption.body = new FormData(form);
+
+    return fetch(url, baseOption)
       .then(checkStatus)
       .then(parseJSON)
       .then(handleServerError)
       .catch(function (error) {
-        if (typeof errorCallback === 'function') {
-          errorCallback(error)
-        }
-        console.error('request failed', error)
+        console.error('Post form failed', error)
       });
   },
 
   //
-  fetch: function (url, data, errorCallback) {
+  fetch: function (url, data, option) {
     var queryStr = '';
+    var baseOption = {
+      method: 'GET',
+    };
 
     if (typeof data === 'object') {
       queryStr = query.queryToParamsStr(data);
@@ -88,23 +105,27 @@ var sync = {
     if (queryStr) {
       url += '?' + queryStr;
     }
-    return fetch(url, {
-      credentials: 'same-origin',
-      method: 'GET',
-      headers: {
+
+    // 跨域请求不能设置 credentials 与 headers
+    if (option && option.mode === 'cors') {
+      baseOption.mode = 'cors';
+
+    // 同域请求
+    } else {
+      baseOption.credentials = 'include';
+      baseOption.headers = {
         'Accept': 'application/json',
         'Cache-Control': 'no-cache',
         'If-Modified-Since': '1',
       }
-    })
+    }
+
+    return fetch(url, baseOption)
       .then(checkStatus)
       .then(parseJSON)
       .then(handleServerError)
       .catch(function (error) {
-        if (typeof errorCallback === 'function') {
-          errorCallback(error)
-        }
-        console.error('request failed', error)
+        console.error('Fetch request failed', error)
       });
   },
 

@@ -172,15 +172,16 @@ const sOpenPortalConnectLog =
     require('../../screens/App/screens/MainAxc/screens/OpenPortal/screens/Radius/ConnectLog');
 
 function getOpenPortalFormUrl(url) {
-  // const hostname = window.location.hostname;
+  //const hostname = window.location.hostname;
   const hostname = '192.168.1.56';
   const protocolStr = window.location.protocol;
-  // const portStr = window.location.port;
   const portStr = '8080';
+  //const portStr = window.location.port;
+
   const prefix = 'goform';
   let ret = '';
 
-  ret = `${protocolStr}//${hostname}:${portStr}/${prefix}/${url}`;
+  ret = `${protocolStr}//${hostname}:${portStr}/${prefix}/${url}.action`;
 
   return ret;
 }
@@ -685,7 +686,7 @@ const routes = [
             path: '/main/system/admin',
             formUrl: 'goform/system/admins',
             icon: 'user',
-            text: _('Admin Settings'),
+            text: _('Admin Account'),
             component: sSystemAdmin.Screen,
           },
         ],
@@ -693,7 +694,7 @@ const routes = [
         path: '/main/portal',
         component: sMainAxc.Screen,
         icon: 'road',
-        text: _('OPEN PORTAL'),
+        text: _('AXILSPOT PORTAL'),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/portal/overview') },
         childRoutes: [
           {
@@ -701,33 +702,34 @@ const routes = [
             icon: 'home',
             path: '/main/portal/overview',
             formUrl: getOpenPortalFormUrl('openPortal/overview'),
+            mode: 'cors',
             text: _('Overview'),
             component: sOpenPortalOverview.Screen,
           }, {
             id: 'openPortalPortal',
             isIndex: true,
-            path: '/main/openPortal/portal',
+            path: '/main/portal/portal',
             icon: 'level-up',
             text: _('Portal'),
             indexRoute: {
-              onEnter: (nextState, replace) => replace('/main/openPortal/portal/base'),
+              onEnter: (nextState, replace) => replace('/main/portal/portal/base'),
             },
             childRoutes: [
               {
                 id: 'openPortalPortalBase',
-                path: '/main/openPortal/portal/base',
+                path: '/main/portal/portal/base',
                 formUrl: getOpenPortalFormUrl('openPortal/base'),
                 text: _('Base'),
                 component: sOpenPortalBase.Screen,
               }, {
                 id: 'openPortalPortalUrlParams',
-                path: '/main/openPortal/portal/bas',
+                path: '/main/portal/portal/bas',
                 formUrl: getOpenPortalFormUrl('openPortal/bas'),
                 text: _('Bas'),
                 component: sOpenPortalBas.Screen,
               }, {
                 id: 'openPortalPortalUrlParams',
-                path: '/main/openPortal/portal/url',
+                path: '/main/portal/portal/url',
                 formUrl: getOpenPortalFormUrl('openPortal/UrlParams'),
                 text: _('Url Params'),
                 component: sOpenPortalUrlParams.Screen,
@@ -736,29 +738,29 @@ const routes = [
           }, {
             id: 'openPortalRadius',
             isIndex: true,
-            path: '/main/openPortal/radius',
+            path: '/main/portal/radius',
             icon: 'level-up',
             text: _('Radius'),
             indexRoute: {
-              onEnter: (nextState, replace) => replace('/main/openPortal/radius/nas'),
+              onEnter: (nextState, replace) => replace('/main/portal/radius/base'),
             },
             childRoutes: [
               {
-                id: 'openPortalRadiusNas',
-                path: '/main/openPortal/radius/nas',
-                formUrl: getOpenPortalFormUrl('openPortal/nas'),
+                id: 'openPortalPortalBase',
+                path: '/main/portal/radius/base',
+                formUrl: getOpenPortalFormUrl('openPortal/base'),
                 text: _('NAS List'),
                 component: sOpenPortalNas.Screen,
               }, {
-                id: 'openPortalRadiusOnline',
-                path: '/main/openPortal/radius/online',
-                formUrl: getOpenPortalFormUrl('openPortal/online'),
+                id: 'openPortalPortalUrlParams',
+                path: '/main/portal/radius/url',
+                formUrl: getOpenPortalFormUrl('openPortal/UrlParams'),
                 text: _('Online List'),
                 component: sOpenPortalOnline.Screen,
               }, {
-                id: 'openPortalRadiusConnectLog',
-                path: '/main/openPortal/radius/connectlog',
-                formUrl: getOpenPortalFormUrl('openPortal/connectlog'),
+                id: 'openPortalPortalUrlParams',
+                path: '/main/portal/radius/bas',
+                formUrl: getOpenPortalFormUrl('openPortal/bas'),
                 text: _('Connect Logs'),
                 component: sOpenPortalConnectLog.Screen,
               },

@@ -14,6 +14,10 @@ export const purviewOptions = [
     value: '3',
     module: 'system',
     label: _('SYSTEM'),
+  }, {
+    value: '3',
+    module: 'openPortal',
+    label: _('Open Portal'),
   },
 ];
 

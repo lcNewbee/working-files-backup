@@ -652,7 +652,7 @@ const routes = [
             path: '/main/system/admin',
             formUrl: 'goform/system/admins',
             icon: 'user',
-            text: _('Admin Settings'),
+            text: _('Admin Account'),
             component: sSystemAdmin.Screen,
           },
         ],

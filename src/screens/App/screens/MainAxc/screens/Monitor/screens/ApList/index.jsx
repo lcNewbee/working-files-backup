@@ -203,7 +203,9 @@ export default class View extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchScreenData('goform/group/smartRf');
+    this.props.fetchScreenData({
+      url: 'goform/group/smartRf',
+    });
   }
 
   onAction(type, item) {
