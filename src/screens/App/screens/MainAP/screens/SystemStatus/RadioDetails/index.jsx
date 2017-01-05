@@ -80,6 +80,7 @@ const vapInterfaceOptions = fromJS([
   }, {
     id: 'mac',
     text: _('MAC'),
+    sortable: true,
     transform(val) {
       if (val === '') {
         return '--';
@@ -90,6 +91,13 @@ const vapInterfaceOptions = fromJS([
   }, {
     id: 'txBytes',
     text: _('Tx Data'),
+    sortable: true,
+    sortFun: (a, b) => {
+      const aVal = parseInt(a, 10);
+      const bVal = parseInt(b, 10);
+      if (aVal - bVal < 0) return 1;
+      return -1;
+    },
     transform(val) {
       if (val === '') {
         return '--';
@@ -100,6 +108,13 @@ const vapInterfaceOptions = fromJS([
   }, {
     id: 'rxBytes',
     text: _('Rx Data'),
+    sortable: true,
+    sortFun: (a, b) => {
+      const aVal = parseInt(a, 10);
+      const bVal = parseInt(b, 10);
+      if (aVal - bVal < 0) return 1;
+      return -1;
+    },
     transform(val) {
       if (val === '') {
         return '--';
@@ -235,6 +250,7 @@ export default class RadioDetails extends React.Component {
       {
         id: 'mac',
         text: 'Mac',
+        sortable: true,
       },
       {
         id: 'deviceName',
@@ -249,6 +265,7 @@ export default class RadioDetails extends React.Component {
       {
         id: 'ssid',
         text: _('Owner SSID'),
+        sortable: true,
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -298,7 +315,14 @@ export default class RadioDetails extends React.Component {
       },
       {
         id: 'txBytes',
-        text: _('Tx Bytes'),
+        text: _('Tx Data'),
+        sortFun: (a, b) => {
+          const aVal = parseInt(a, 10);
+          const bVal = parseInt(b, 10);
+          if (aVal - bVal < 0) return 1;
+          return -1;
+        },
+        sortable: true,
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -309,6 +333,13 @@ export default class RadioDetails extends React.Component {
       {
         id: 'rxBytes',
         text: _('Rx Data'),
+        sortFun: (a, b) => {
+          const aVal = parseInt(a, 10);
+          const bVal = parseInt(b, 10);
+          if (aVal - bVal < 0) return 1;
+          return -1;
+        },
+        sortable: true,
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -349,6 +380,7 @@ export default class RadioDetails extends React.Component {
       {
         id: 'ipAddr',
         text: _('IP'),
+        sortable: true,
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -397,7 +429,7 @@ export default class RadioDetails extends React.Component {
     if (!this.props.store.getIn(['curData', 'radioList', radioId, 'staList'])) return null;
     // const { wirelessMode, vapList } = this.props.store.getIn(['curData', 'radioList', radioId]).toJS();
     const staList = this.props.store.getIn(['curData', 'radioList', radioId, 'staList']).toJS();
-    const radioList = this.props.store.getIn(['curData', 'radioList']);
+    // const radioList = this.props.store.getIn(['curData', 'radioList']);
     const { wirelessMode, vapList } = this.props.store.getIn(['curData', 'radioList', radioId]).toJS();
     const vapInterfacesList = (wirelessMode === 'sta') ? [vapList[0]] : vapList;
     return (
@@ -413,74 +445,67 @@ export default class RadioDetails extends React.Component {
           }}
         />
         <div className="row">
-          <div className="o-box__cell">
-            <h3>{`${_('Radio')} (${this.props.product.getIn(['radioSelectOptions', radioId, 'label'])})`}</h3>
-          </div>
-          <div className="o-box__cell">
-            <div className="cols col-6">
-              <FormGroup
-                label={_('Wireless Mode :')}
-                type="plain-text"
-                value={wirelessModeShowStyle(radioList.getIn([radioId, 'wirelessMode']))}
-              />
-              <FormGroup
-                label={_('SSID :')}
-                type="plain-text"
-                value={radioList.getIn([radioId, 'ssid'])}
-              />
-              <FormGroup
-                label={_('Protocol :')}
-                type="plain-text"
-                value={radioList.getIn([radioId, 'radioMode'])}
-              />
-              <FormGroup
-                label={_('Channel/Frequency :')}
-                type="plain-text"
-                value={`${radioList.getIn([radioId, 'channel'])}/${radioList.getIn([radioId, 'frequency'])}`}
-              />
-              <FormGroup
-                label={_('Channel Width :')}
-                type="plain-text"
-                value={radioList.getIn([radioId, 'channelWidth'])}
-              />
-              <FormGroup
-                label={_('Security Mode :')}
-                type="plain-text"
-                value={radioList.getIn([radioId, 'security'])}
-              />
+          {/*
+            <div className="o-box__cell">
+              <h3>{`${_('Radio')} (${this.props.product.getIn(['radioSelectOptions', radioId, 'label'])})`}</h3>
             </div>
-            <div className="cols col-6">
-              <FormGroup
-                label={_('Distance :')}
-                type="plain-text"
-                value={radioList.getIn([radioId, 'distance'])}
-                help="km"
-              />
-              <FormGroup
-                label={_('Tx Power :')}
-                type="plain-text"
-                value={radioList.getIn([radioId, 'txPower'])}
-                help="dBm"
-              />
-              <FormGroup
-                label={_('Signal :')}
-                type="plain-text"
-                value={radioList.getIn([radioId, 'signal'])}
-                help="dBm"
-              />
-              <FormGroup
-                label={_('Noise :')}
-                type="plain-text"
-                value={radioList.getIn([radioId, 'noise'])}
-                help="dBm"
-              />
-              <FormGroup
-                label={_('Channel Utilization :')}
-                type="plain-text"
-                value={radioList.getIn([radioId, 'chutil'])}
-              />
+            <div className="o-box__cell">
+              <div className="cols col-6">
+                <FormGroup
+                  label={_('Wireless Mode :')}
+                  type="plain-text"
+                  value={wirelessModeShowStyle(radioList.getIn([radioId, 'wirelessMode']))}
+                />
+                <FormGroup
+                  label={_('Protocol :')}
+                  type="plain-text"
+                  value={radioList.getIn([radioId, 'radioMode'])}
+                />
+                <FormGroup
+                  label={_('Channel/Frequency :')}
+                  type="plain-text"
+                  value={`${radioList.getIn([radioId, 'channel'])}/${radioList.getIn([radioId, 'frequency'])}`}
+                />
+                <FormGroup
+                  label={_('Channel Width :')}
+                  type="plain-text"
+                  value={radioList.getIn([radioId, 'channelWidth'])}
+                />
+              </div>
+              <div className="cols col-6">
+                <FormGroup
+                  label={_('Distance :')}
+                  type="plain-text"
+                  value={radioList.getIn([radioId, 'distance'])}
+                  help="km"
+                />
+                <FormGroup
+                  label={_('Tx Power :')}
+                  type="plain-text"
+                  value={radioList.getIn([radioId, 'txPower'])}
+                  help="dBm"
+                />
+                <FormGroup
+                  label={_('Signal :')}
+                  type="plain-text"
+                  value={radioList.getIn([radioId, 'signal'])}
+                  help="dBm"
+                />
+                <FormGroup
+                  label={_('Noise :')}
+                  type="plain-text"
+                  value={radioList.getIn([radioId, 'noise'])}
+                  help="dBm"
+                />
+                <FormGroup
+                  label={_('Channel Utilization :')}
+                  type="plain-text"
+                  value={radioList.getIn([radioId, 'chutil'])}
+                />
+              </div>
             </div>
-          </div>
+          */}
+
         </div>
 
         <div className="o-box__cell">

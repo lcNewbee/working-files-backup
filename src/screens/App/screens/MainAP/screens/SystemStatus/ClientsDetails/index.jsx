@@ -193,7 +193,7 @@ export default class ClientsDetails extends React.Component {
       },
       {
         id: 'txBytes',
-        text: _('Tx Bytes'),
+        text: _('Tx Data'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';

@@ -20,7 +20,7 @@ const mountNode = document.getElementById('app');
 
 // 引入产品配置
 const renderApp = () => {
-  const prodConfig = require('./config/axcPortal');
+  const prodConfig = require('./config/AIP10');
 
   // 主渲染入口
   ReactDOM.render(

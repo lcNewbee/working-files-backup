@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Checkbox from 'shared/components/Form/Checkbox';
-import Icon from 'shared/components/Icon';
 
 const propTypes = {
   options: PropTypes.object,
@@ -41,12 +40,7 @@ class Row extends Component {
     if (isTh) {
       tds = options.map((option, i) =>
         <th key={`tableRow${i}`} width={option.get('width')}>
-          <span>{option.get('text') || option.get('label')}</span>
-          {
-            option.get('sortable') ? (
-              <Icon name="sort" style={{ marginLeft: '5px', cursor: 'pointer' }} id={option.get('id')} />
-            ) : null
-          }
+          {option.get('text') || option.get('label')}
         </th>,
       );
 

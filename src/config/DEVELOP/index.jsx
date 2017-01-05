@@ -64,6 +64,7 @@ const sSiteSurvey = require('../../screens/App/screens/MainAP/screens/Tools/Site
 const sSystemLogs = require('../../screens/App/screens/MainAP/screens/Tools/SystemLogs');
 const sChannelUtilization = require('../../screens/App/screens/MainAP/screens/Tools/ChannelUtilization');
 
+const pPractice = require('../../screens/App/screens/MainAP/screens/Tools/Practice');
 // 页面功能项配置
 const funConfig = {
   // 覆盖型产品快速设置
@@ -291,6 +292,12 @@ const routes = [{
           component: sModeSettings.Screen,
         },
       ],
+    }, {
+      id: 'practice',
+      path: '/main/practice',
+      text: _('Practice'),
+      icon: 'exchange',
+      component: pPractice,
     },
     ],
   }, {

@@ -898,12 +898,11 @@ export default class QuickSetup extends React.Component {
   }
 
   renderStepFour() {
-    const store = this.props.store;
-    const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
+    // const store = this.props.store;
+    // const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
     const { deviceMode } = this.props.selfState.toJS();
-    const { ip, mask, wiredMode, vlanId, security } = this.props.store.get('curData').toJS();
+    const { ip, mask, wiredMode, vlanId, ssid, security } = this.props.store.get('curData').toJS();
     const { wanIp, wanMask, lanIp, lanMask, nat, dhcpEnable, dns1, dns2, user, password } = this.props.store.getIn(['curData', 'routerInfo']).toJS();
-    const ssid = store.getIn(['curData', 'radioList', radioId, 'ssid']);
     // const mode = store.getIn(['curData', 'radioList', radioId, 'security', 'mode']);
     // const cipher = store.getIn(['curData', 'radioList', radioId, 'security', 'cipher']);
 

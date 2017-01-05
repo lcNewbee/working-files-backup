@@ -132,11 +132,7 @@ export default class Advance extends React.Component {
       radioId: data.value,
       radioType,
     });
-    Promise.resolve().then(() => {
-      this.props.changeCurrRadioConfig(config);
-    }).then(() => {
-      this.makeRateSetOptions();
-    });
+    this.props.changeCurrRadioConfig(config);
   }
 
   firstInAndRefresh() {
@@ -147,8 +143,11 @@ export default class Advance extends React.Component {
       saveUrl: props.route.saveUrl,
     });
     this.props.fetchSettings();
-    this.onChangeRadio({ value: '0' });
-    this.makeRateSetOptions();
+    Promise.resolve().then(() => {
+      this.onChangeRadio({ value: '0' });
+    }).then(() => {
+      this.makeRateSetOptions();
+    });
   }
 
   changeFormValue(id, name, value) {
@@ -173,8 +172,7 @@ export default class Advance extends React.Component {
         radioMode = json.data.radioList[radioId].radioMode;
       }
       return { radio, radioMode };
-    }).then(query => this.props.fetch('goform/get_rate_set', query)
-    ).then((data) => {
+    }).then(query => this.props.fetch('goform/get_rate_set', query)).then((data) => {
       if (data.state && data.state.code === 2000) {
         const rateSetOptions = converListToOptions(fromJS(data.data.rateSetList));
         this.props.changeRateSetOptions(rateSetOptions);
@@ -204,7 +202,13 @@ export default class Advance extends React.Component {
               value={this.props.selfState.getIn(['currRadioConfig', 'radioId'])}
               options={this.props.productInfo.get('radioSelectOptions')}
               minWidth="100px"
-              onChange={(data) => { this.onChangeRadio(data); }}
+              onChange={(data) => {
+                Promise.resolve().then(() => {
+                  this.onChangeRadio(data);
+                }).then(() => {
+                  this.makeRateSetOptions();
+                });
+              }}
               style={{
                 marginRight: '10px',
                 marginBottom: '15px',

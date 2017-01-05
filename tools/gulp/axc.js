@@ -33,7 +33,7 @@ gulp.task('build:axc', () =>
   gulp.src([`${paths.build}/scripts/**/*`])
     .pipe($.replace(/(\/?)goform\//g, 'index.php/goform/'))
     .pipe($.replace('/~zhangfang/axc/', ''))
-    .pipe(gulp.dest(`${paths.build}/scripts/`))
+    .pipe(gulp.dest(`${paths.build}/scripts/`)),
 );
 
 gulp.task('pub:axc', (callback) => {

@@ -74,7 +74,7 @@ export default class TimeSettings extends Component {
     const timeZone = this.props.selfState.get('timeZone');
     const saveData = this.props.store.get('curData').set('timeZone', timeZone)
                       .delete('zoneName').toJS();
-    const ntpStrValid = saveData.ntpServer.match(/^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/);
+    const ntpStrValid = saveData.ntpServer.match(/^([a-zA-Z0-9]+(-[a-zA-Z0-9]+)*\.)+[a-zA-Z]{2,}$/);
     const ntpIpValid = saveData.ntpServer.match(/^([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){2}([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])$/);
     const ntpEnable = this.props.store.getIn(['curData', 'ntpEnable']);
     // if (!ntpIpValid && ntpStrValid && ntpStrValid[0] === saveData.ntpServer) {

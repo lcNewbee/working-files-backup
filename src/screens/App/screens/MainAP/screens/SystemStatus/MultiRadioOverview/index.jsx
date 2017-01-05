@@ -259,7 +259,7 @@ function getTopTenFlowClientsOption(serverData) {
     },
     title: {
       text: _('Top10 Flow Clients'),
-      x: 'center',
+      left: '48%',
       textStyle: {
         fontWeight: 'normal',
         fontSize: '18',
@@ -276,7 +276,7 @@ function getTopTenFlowClientsOption(serverData) {
       {
         name: _('Name'),
         type: 'pie',
-        radius: '55%',
+        radius: '50%',
         avoidLabelOverlap: false,
         label: {
           // formatter: '{b}: {c}',
@@ -332,7 +332,7 @@ function getFlowPerSsidOption(serverData) {
     },
     title: {
       text: _('SSID Flow'),
-      x: 'center',
+      left: '53%',
       textStyle: {
         fontWeight: 'normal',
         fontSize: '18',
@@ -347,7 +347,7 @@ function getFlowPerSsidOption(serverData) {
       {
         name: 'SSID',
         type: 'pie',
-        radius: '55%',
+        radius: '50%',
         avoidLabelOverlap: false,
         label: {
           normal: {
@@ -585,7 +585,7 @@ export default class SystemStatus extends React.Component {
         {
           name: _('Flow'),
           type: 'pie',
-          radius: '55%',
+          radius: '50%',
           center: ['50%', '60%'],
           data: [
             { value: download, name: `Download: ${downloadFlow}` },
@@ -704,13 +704,18 @@ export default class SystemStatus extends React.Component {
     // const flowPerSsid = getFlowPerSsidOption(serverData);
 
     return (
-      <div className="o-box">
+      <div className="o-box" style={{ minWidth: '1200px' }}>
         <div className="row">
-          <div className="cols col-4">
+          <div className="cols col-4" style={{ minWidth: '290px' }}>
             <div className="o-box__cell">
               <h3>{_('Network Info')}</h3>
             </div>
-            <div className="o-box__cell">
+            <div
+              className="o-box__cell"
+              style={{
+                height: '217px',
+              }}
+            >
               {
                 wiredMode === 'bridge' ? (
                   <div className="o-description-list o-description-list--lg info-box">
@@ -774,11 +779,16 @@ export default class SystemStatus extends React.Component {
               }
             </div>
           </div>
-          <div className="cols col-8">
+          <div className="cols col-8" style={{ minWidth: '380px' }}>
             <div className="o-box__cell">
               <h3>{_('System Status')}</h3>
             </div>
-            <div className="o-box__cell cols col-6">
+            <div
+              className="o-box__cell cols col-6"
+              style={{
+                height: '217px',
+              }}
+            >
               <div className="o-description-list o-description-list--lg info-box">
                 <dl className="o-description-list-row">
                   <dt>{_('Device Mode')}</dt>
@@ -806,7 +816,7 @@ export default class SystemStatus extends React.Component {
                 </dl>
               </div>
             </div>
-            <div className="cols col-6 o-box__cell">
+            <div className="cols col-6 o-box__cell" style={{ minWidth: '380px' }}>
               <EchartReact
                 className="o-box__canvas"
                 option={cpuAndMemUsage}
@@ -863,7 +873,13 @@ export default class SystemStatus extends React.Component {
               </a>
             </div>
           </div>
-          <div className="cols col-4 o-box__cell">
+          <div
+            className="cols col-4 o-box__cell"
+            style={{
+              height: '287px',
+              minWidth: '290px',
+            }}
+          >
             <div className="box-cell-head">{_('Radio Info')}</div>
             <div className="o-description-list o-description-list--lg info-box">
               <dl className="o-description-list-row">
@@ -895,12 +911,16 @@ export default class SystemStatus extends React.Component {
                 ) : null
               }
               <dl className="o-description-list-row">
-                <dt>{_('Transmit')}</dt>
-                <dd>{}</dd>
+                <dt>{_('Tx Power')}</dt>
+                <dd>{`${radioList.getIn([radioId, 'txPower'])} dBm`}</dd>
               </dl>
               <dl className="o-description-list-row">
-                <dt>{_('Receive')}</dt>
-                <dd>{}</dd>
+                <dt>{_('Signal')}</dt>
+                <dd>{`${radioList.getIn([radioId, 'signal'])} dBm`}</dd>
+              </dl>
+              <dl className="o-description-list-row">
+                <dt>{_('Noise')}</dt>
+                <dd>{`${radioList.getIn([radioId, 'noise'])} dBm`}</dd>
               </dl>
             </div>
           </div>
@@ -910,6 +930,7 @@ export default class SystemStatus extends React.Component {
                 className="cols col-4 o-box__cell"
                 style={{
                   position: 'relative',
+                  minWidth: '380px',
                 }}
               >
                 <FormInput
@@ -986,7 +1007,13 @@ export default class SystemStatus extends React.Component {
             )
           }
 
-          <div className="cols col-4 o-box__cell" style={{ position: 'relative' }}>
+          <div
+            className="cols col-4 o-box__cell"
+            style={{
+              position: 'relative',
+              minWidth: '380px',
+            }}
+          >
             {
               enable === '0' ? (
                 <div className="radio-off-notice">{_('Radio Off')}</div>

@@ -36,9 +36,10 @@ const pNetworkSettings = require('../../screens/App/screens/MainAP/screens/Netwo
 // 子菜单
 const sNetworkSettings = require('../../screens/App/screens/MainAP/screens/NetworkSettings/BridgeRouterNetwork');
 
-const pSystemStatus = require('../../screens/App/screens/MainAP/screens/SystemStatus/SingleRadioOverview');
+const pSystemStatus = require('../../screens/App/screens/MainAP/screens/SystemStatus/MultiRadioOverview');
 const sSsidDetails = require('../../screens/App/screens/MainAP/screens/SystemStatus/SsidDetails');
 const sClientsDetails = require('../../screens/App/screens/MainAP/screens/SystemStatus/ClientsDetails');
+const sRadioDetails = require('../../screens/App/screens/MainAP/screens/SystemStatus/RadioDetails');
 // 快速设置
 const pQuickSetup = require('../../screens/App/screens/MainAP/screens/QuickSetup/CoverageQuickSetup');
 
@@ -139,6 +140,11 @@ const routes = [{
           id: 'clientsdetails',
           path: '/main/status/clientsdetails',
           component: sClientsDetails.Screen,
+          fetchUrl: 'goform/get_system_info_forTestUse',
+        }, {
+          id: 'radiodetails',
+          path: '/main/status/radiodetails',
+          component: sRadioDetails.Screen,
           fetchUrl: 'goform/get_system_info_forTestUse',
         },
       ],

@@ -207,13 +207,16 @@ export default class Basic extends React.Component {
           transform: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
             const pos = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
+            const flag = pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap';
             return (
               <FormInput
                 type="checkbox"
                 checked={val === '1'}
-                disabled={pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
+                disabled={flag}
                 onChange={() => this.onSsidItemChange(val, item, 'enable', (val === '1' ? '0' : '1'))}
-                style={{ marginLeft: '3px' }}
+                style={{
+                  marginLeft: '3px',
+                }}
               />
             );
           }.bind(this),
@@ -230,7 +233,11 @@ export default class Basic extends React.Component {
                 type="text"
                 value={val}
                 disabled={pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
-                onChange={data => this.onSsidItemChange(val, item, 'ssid', data.value)}
+                onChange={(data) => {
+                  if (data.value.length <= 31) {
+                    this.onSsidItemChange(val, item, 'ssid', data.value);
+                  }
+                }}
                 style={{
                   marginLeft: '-60px',
                   height: '29px',
@@ -789,7 +796,7 @@ export default class Basic extends React.Component {
       {
         id: 'security',
         text: _('Security Mode'),
-        transform: function (val) {
+        transform(val) {
           const mode = val.get('mode');
           if (mode === 'wpa') return 'WPA-PSK';
           else if (mode === 'wpa2') return 'WPA2-PSK';
@@ -833,7 +840,7 @@ export default class Basic extends React.Component {
       return null;
     }
     return (
-      <div className="stats-group o-box">
+      <div className="stats-group o-box" style={{ minWidth: '1200px' }}>
         {
           this.props.productInfo.get('deviceRadioList').size > 1 ? (
             <FormInput

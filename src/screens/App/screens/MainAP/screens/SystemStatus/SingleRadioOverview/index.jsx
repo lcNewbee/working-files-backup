@@ -362,7 +362,8 @@ function getFlowPerSsidOption(serverData) {
     },
     title: {
       text: _('Total: ') + flowRateFilter.transform(totalNum),
-      x: 'center',
+      left: '55%',
+      // padding: [0, 0, 0, 370],
       textStyle: {
         fontSize: '18',
       },
@@ -396,7 +397,7 @@ function getFlowPerSsidOption(serverData) {
             show: false,
           },
         },
-
+        center: ['65%', '55%'],
       },
     ],
   };
@@ -419,7 +420,9 @@ function getTopTenFlowClientsOption(serverData) {
     },
     title: {
       text: _('Top10 Flow Clients'),
-      x: 'center',
+      // x: 'center',
+      // padding: [0, 0, 0, 350],
+      left: '50%',
     },
     legend: {
       show: true,
@@ -453,6 +456,7 @@ function getTopTenFlowClientsOption(serverData) {
             show: false,
           },
         },
+        center: ['65%', '55%'],
       },
     ],
   };
@@ -812,7 +816,7 @@ export default class SystemStatus extends React.Component {
     const flowPerSsid = getFlowPerSsidOption(serverData);
 
     return (
-      <div className="o-box">
+      <div className="o-box" style={{ minWidth: '1200px' }}>
         {
           this.props.product.get('deviceRadioList').size > 1 ? (
             <FormInput
@@ -874,8 +878,8 @@ export default class SystemStatus extends React.Component {
 
         { // SSID流量图 和 客户端流量前十
           wirelessMode === 'sta' ? null : (
-            <div className="row">
-              <div className="cols col-6" >
+            <div className="row" style={{ minWidth: '1200px' }}>
+              <div className="cols col-6" style={{ minWidth: '600px' }}>
                 <div className="o-box__cell clearfix">
                   <h3
                     className="fl"
@@ -947,7 +951,7 @@ export default class SystemStatus extends React.Component {
                   }
                 </div>
               </div>
-              <div className="cols col-6">
+              <div className="cols col-6" style={{ minWidth: '600px' }}>
                 <div className="o-box__cell clearfix">
                   <h3
                     className="fl"
@@ -1019,8 +1023,8 @@ export default class SystemStatus extends React.Component {
           )
         }
 
-        <div className="row">
-          <div className="cols col-6">
+        <div className="row" style={{ minWidth: '1200px' }}>
+          <div className="cols col-6" style={{ minWidth: '600px' }}>
             <div className="o-box__cell">
               <h3>{_('System Status')}</h3>
             </div>
@@ -1098,13 +1102,13 @@ export default class SystemStatus extends React.Component {
               </div>
             </div>
           </div>
-          <div className="cols col-6">
+          <div className="cols col-6" style={{ minWidth: '600px' }}>
             <div className="o-box__cell">
               <h3>{_('Radio')}</h3>
             </div>
             {
               this.props.store.getIn(['curData', 'radioList', radioId, 'enable']) === '1' ? (
-                <div className="o-box__cell">
+                <div className="o-box__cell" style={{ height: '227px' }}>
                   <div className="cols col-6">
                     <FormGroup
                       label={_('Wireless Mode :')}
@@ -1128,12 +1132,6 @@ export default class SystemStatus extends React.Component {
                     />
                   </div>
                   <div className="cols col-6">
-                    <FormGroup
-                      label={_('Distance :')}
-                      type="plain-text"
-                      value={distance}
-                      help="km"
-                    />
                     <FormGroup
                       label={_('Tx Power :')}
                       type="plain-text"
