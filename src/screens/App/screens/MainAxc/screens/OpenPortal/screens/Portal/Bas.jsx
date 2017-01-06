@@ -12,54 +12,113 @@ const listOptions = fromJS([
   {
     id: 'basName',
     text: _('Bas Name'),
+    formProps: {
+      required: true,
+    },
   }, {
     id: 'basIp',
     text: _('Bas IP'),
+    formProps: {
+      required: true,
+      validator: validator({
+        rules: 'ip',
+      }),
+    },
   }, {
     id: 'basPort',
     text: _('Bas Port'),
+    formProps: {
+      required: true,
+    },
   }, {
     id: 'portalVer',
     text: _('Portal Vertion'),
+    formProps: {
+      required: true,
+    },
   }, {
     id: 'authType',
     text: _('Auth Type'),
+    formProps: {
+      required: true,
+    },
   }, {
     id: 'sharedSecret',
     text: _('Shared Secret'),
+    formProps: {
+      type: 'password',
+      required: true,
+    },
   }, {
     id: 'basUser',
     text: _('User'),
+    formProps: {
+      required: true,
+      type: 'text',
+    },
   }, {
     id: 'basPwd',
     text: _('Password'),
+    formProps: {
+      required: true,
+      type: 'password',
+    },
   }, {
     id: 'timeoutSec',
     text: _('Time out'),
+    type: 'num',
+    formProps: {
+      required: true,
+    },
   }, {
     id: 'isPortalCheck',
     text: _('Portal Check'),
+    formProps: {
+      required: true,
+    },
   }, {
     id: 'isOut',
     text: _('isOut'),
+    formProps: {
+      required: true,
+    },
   }, {
     id: 'authInterface',
     text: _('Interface Auth'),
+    formProps: {
+      required: true,
+    },
   }, {
     id: 'isComputer',
     text: _('Computer Auth'),
+    formProps: {
+      required: true,
+    },
   }, {
     id: 'web',
     text: _('Web'),
+    formProps: {
+      required: true,
+    },
   }, {
     id: 'isdebug',
     text: _('Debug'),
+    formProps: {
+      required: true,
+    },
   }, {
     id: 'lateAuth',
     text: _('Late Auth'),
+    formProps: {
+      required: true,
+      type: 'checkbox',
+    },
   }, {
     id: 'lateAuthTime',
     text: _('Late Authtime'),
+    formProps: {
+      required: true,
+    },
   },
 ]);
 const propTypes = {

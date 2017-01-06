@@ -12,51 +12,95 @@ const listOptions = fromJS([
   {
     id: 'ip',
     text: _('IP'),
+    type: 'text',
+    validator: validator({
+      rules: 'ip',
+    }),
+    formProps: {
+      required: true,
+    },
   }, {
     id: 'name',
     text: _('Name'),
-  }, {
-    id: 'description',
-    text: _('Description'),
-  }, {
-    id: 'type',
-    text: _('Type'),
+    type: 'text',
+    formProps: {
+      required: true,
+    },
   }, {
     id: 'sharedSecret',
     text: _('Shared Secret'),
-  }, {
-    id: 'ex1',
-    text: _('Ex1'),
+    formProps: {
+      type: 'password',
+      required: true,
+    },
   }, {
     id: 'ex2',
-    text: _('Password'),
+    text: _('Acc Send Interval'),
+    defaultValue: '300',
+    type: 'num',
+    formProps: {
+      required: true,
+    },
   }, {
     id: 'ex3',
-    text: _('Time out'),
-  }, {
-    id: 'ex3',
-    text: _('Portal Check'),
+    text: _('Check Period'),
+    defaultValue: '600',
+    type: 'num',
+    formProps: {
+      required: true,
+    },
   }, {
     id: 'ex4',
-    text: _('isOut'),
+    text: _('Idle Time'),
+    defaultValue: '600',
+    type: 'num',
+    formProps: {
+      required: true,
+    },
+  }, {
+    id: 'type',
+    type: 'text',
+    options: [
+      {
+        value: 'standard',
+        label: _('Standard'),
+      }, {
+        disabled: true,
+        value: 'cisco',
+        label: _('Cisco'),
+      }, {
+        value: 'ros',
+        disabled: true,
+        label: _('ROS'),
+      },
+    ],
+    defaultValue: 'standard',
+    formProps: {
+      type: 'select',
+      required: true,
+      label: _('Equipment Type'),
+      placeholder: _('Please Select ') + _('Equipment Type'),
+    },
+  }, {
+    id: 'description',
+    text: _('Description'),
+    type: 'text',
+    required: 'true',
+  }, {
+    id: 'ex1',
+    text: _('is Delegated'),
+    formProps: {
+      type: 'checkbox',
+      required: true,
+    },
   }, {
     id: 'ex5',
-    text: _('Interface Auth'),
-  }, {
-    id: 'ex6',
-    text: _('Computer Auth'),
-  }, {
-    id: 'ex7',
-    text: _('Web'),
-  }, {
-    id: 'ex8',
-    text: _('Debug'),
-  }, {
-    id: 'ex9',
-    text: _('Late Auth'),
-  }, {
-    id: 'ex10',
-    text: _('Late Auth'),
+    text: _('Concurrency Unlock'),
+    formProps: {
+      form: 'port',
+      type: 'checkbox',
+      required: true,
+    },
   },
 ]);
 const propTypes = {

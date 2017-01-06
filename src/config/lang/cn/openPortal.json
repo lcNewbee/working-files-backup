@@ -24,5 +24,16 @@
   "Late Authtime":"延迟时长",
 
   "User IP":"用户IP",
-  "User Mac":"用户Mac"
+  "User Mac":"用户Mac",
+
+  "Name":"名称",
+  "Equipment Type":"设备类型",
+  "Description":"说明",
+  "is Delegated":"是否代理",
+  "Acc Send Interval":"计费上报间隔",
+  "Check Period":"检测周期",
+  "Idle Time":"闲置时长",
+  "Concurrency Unlock":"并发解锁",
+  "No":"否",
+  "Yes":"是"
 }

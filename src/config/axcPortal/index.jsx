@@ -172,9 +172,11 @@ const sOpenPortalConnectLog =
     require('../../screens/App/screens/MainAxc/screens/OpenPortal/screens/Radius/ConnectLog');
 
 function getOpenPortalFormUrl(url) {
-  const hostname = window.location.hostname;
+  // const hostname = window.location.hostname;
+  const hostname = '192.168.1.56';
   const protocolStr = window.location.protocol;
-  const portStr = window.location.port;
+  // const portStr = window.location.port;
+  const portStr = '8080';
   const prefix = 'goform';
   let ret = '';
 

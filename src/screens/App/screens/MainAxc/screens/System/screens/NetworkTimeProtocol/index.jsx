@@ -22,7 +22,6 @@ const settingsOptions = fromJS([
     fieldset: 'acTime',
     legend: _('AC Time Synchronization Setting'),
     type: 'checkbox',
-
   },
   {
     id: 'ac_server_name',
