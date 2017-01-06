@@ -1,103 +1,42 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-// require_once('/libraries/Response.php');
 class NetworkNat extends CI_Controller {
-	public function __construct() {
-		parent::__construct();
-		$this->load->database();
-		$this->load->helper('array');
-	}
-	function fetch(){
-		$query=$this->db
-      ->select('id,type,addr,nataddr')
-      ->from('nat_table')
-      ->get()->result_array();
-
-    $settings=$this->db
-      ->select('enable')
-      ->from('natenable')
-      ->get()->result_array();
-
-		$keys = array(
-      'id'=>'id',
-      'type'=> 'ruleType',
-      'addr'=>'sourceAddress',
-      'nataddr'=>'conversionAddress'
-    );
-    $newArray = array();
-    foreach($query as $key=>$val) {
-      $newArray[$key] = array();
-      foreach($val as $k=>$v) {
-        $newArray[$key][$keys[$k]] = $v;
-      }
+    public function __construct() {
+        parent::__construct();
+        $this->load->helper('array');
+        $this->load->model('network/NetworkNat_Model');
     }
-		$state=array(
-      'code'=>2000,
-      'msg'=>'OK'
-    );
-		$data=array(
-      "settings"=>array(
-        "enable"=>(string)element('enable', $settings[0]),
-      ),
-      'list'=> $newArray
-    );
-		$result=array(
-      'state'=>$state,
-      'data'=>$data
-    );
-		return 	$result;
-	}
-  function getCgiParams($oriData) {
-    $ret = array(
-      'id'=>element('id', $oriData),
-      'type'=>element('ruleType', $oriData),
-      'ipaddr'=>element('sourceAddress', $oriData),
-      'natipaddr'=>element('conversionAddress', $oriData),
-    );
-    return $ret;
-  }
-	function onAction($data) {
-		$result = null;
-		$actionType = element('action', $data);
-    $selectList = element('selectedList', $data);
-
-		if ($actionType === 'add') {
-			$cgiParams = $this->getCgiParams($data);
-      $result = acnetmg_add_nat(json_encode($cgiParams));
-		}
-		elseif($actionType === 'edit') {
-			$cgiParams = $this->getCgiParams($data);
-      $result = acnetmg_update_nat(json_encode($cgiParams));
-		}
-		elseif($actionType === 'delete') {
-
-      foreach($selectList as $item) {
-        $deleteItem = $this->getCgiParams($item);
-				$result = acnetmg_del_nat(json_encode($deleteItem));
-			}
-		}
-    elseif($actionType === 'setting'){
-      $cgiParams = array(
-        'enable'=>(int)element('enable', $data)
-      );
-      $result = acnetmg_nat_enable(json_encode($cgiParams));
-		}
-		return 	$result;
-	}
-
-	public function index() {
-		$result = null;
-		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-			$data = json_decode(file_get_contents("php://input"), true);
-			$result = $this->onAction($data);
-      echo $result;
-
-		}
-		else if($_SERVER['REQUEST_METHOD'] == 'GET') {
-		 	$result = $this->fetch();
-      echo json_encode($result);
-		}
-
-
-	}
+    public function index() {
+       $result = null;
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $data = json_decode(file_get_contents("php://input"), true);
+            $result = $this->onAction($data);
+            echo $result;
+        } else if($_SERVER['REQUEST_METHOD'] == 'GET') {
+            $result = $this->fetch();
+            echo json_encode($result);
+        }
+    }
+    function fetch(){        
+        return 	$this->NetworkNat_Model->get_net_list();
+    }
+  
+    function onAction($data) {
+        $result = null;
+        $actionType = element('action', $data);
+        $selectList = element('selectedList', $data);
+        switch($actionType) {
+            case 'add' : $result = $this->NetworkNat_Model->add_net($data);
+                break;
+            case 'delete' : $result = $this->NetworkNat_Model->del_net($selectList);
+                break;
+            case 'edit' : $result = $this->NetworkNat_Model->edit_net($data);
+                break;
+            case 'setting' : $result = $this->NetworkNat_Model->setting_net($data);
+                break;
+            default : $result = json_encode(array('state' => array('code' => 4000, 'msg' => 'No request action')));
+                break;
+        }        
+        return 	$result;
+    }
 }

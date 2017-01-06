@@ -1,92 +1,40 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-// require_once('/libraries/Response.php');
 class NetworkAaa extends CI_Controller {
-	public function __construct() {
-		parent::__construct();
-		$this->load->database();
-		$this->load->helper('array');
-	}
-	function fetch(){
-		$query=$this->db->select('domain_id,domain_name,attr_name,attr_value')
-              ->from('domain_params')
-              ->join('domain_list','domain_list.id=domain_params.domain_id')
-              ->join('domain_attr','domain_attr.id=domain_params.attr_id')
-              ->get()->result_array();
-		$state=array(
-				      'code'=>2000,
-				      'msg'=>'OK'
-				    );
-
-		$keyname=array(
-				      "auth_access_type"=>"auth_accesstype",
-				      "auth_scheme_type"=>"auth_schemetype",
-               "template_name"=>"radius_template"
-				    );
-		// 		定义一个临时接口数组
-		$interfaces  = array();
-		foreach($query as $v){
-			$interfaces[$v['domain_id']]['id'] = $v['domain_id'];
-			$interfaces[$v['domain_id']]['domain_name'] = $v['domain_name'];
-			$interfaces[$v['domain_id']][$v['attr_name']]= $v['attr_value'];
-			foreach($keyname as $k1=>$v1){
-				if($k1==$v['attr_name']) {
-					unset($interfaces[$v['domain_id']][$v['attr_name']]);
-					$interfaces[$v['domain_id']][$v1]=$v['attr_value'];
-				}
-			}
+    public function __construct() {
+        parent::__construct();
+        $this->load->database();
+        $this->load->helper('array');
+        $this->load->model('network/NetworkAaa_Model');
     }
-		//array_values是为了让pool_id也成为数组属性,重新赋值给接口数组
-		$interfaces_data=array_values($interfaces);
-		$result=array(
-						      'state'=>$state,
-						      'data'=>array(
-						      'list'=>$interfaces_data
-						      )
-						    );
-		return $result;
-	}
-
-	function onAction($data) {
-		$result = null;
-		$actionType = element('action', $data);
-    function getCgiParam($oriData) {
-      $retData = array(
-        'template_name'=>element('domain_name', $oriData),
-        'auth_accesstype'=>element('auth_accesstype', $oriData),
-        'auth_schemetype'=>element('auth_schemetype', $oriData),
-        'radius_template'=>element('radius_template', $oriData)
-      );
-      return $retData;
+    public function index() {
+        $result = null;
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $data = json_decode(file_get_contents("php://input"), true);
+            $result = $this->onAction($data);
+            echo $result;
+        } else if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+            $result = $this->fetch();
+            echo json_encode($result);
+        }
     }
-		if ($actionType === 'add') {
-			$temp_data=getCgiParam($data);
-      $result=aaa_add_template_name(json_encode($temp_data));
-		}
-		elseif($actionType === 'edit') {
-    	$temp_data=getCgiParam($data);
-      $result=aaa_edit_template_name(json_encode($temp_data));
-		}
-    elseif($actionType === 'delete'){
-       $temp_data=array(
-        'aaa_list'=>$data['selectedList']
-       );
-      $state=aaa_del_template_name(json_encode($temp_data));
-       $result=$state;
+    function fetch(){
+        return $this->NetworkAaa_Model->get_aaa_list();
     }
-
-		return $result;
-	}
-	public function index() {
-		$result = null;
-		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-			$data = json_decode(file_get_contents("php://input"), true);
-			$result = $this->onAction($data);
-			echo $result;
-		}
-		else if($_SERVER['REQUEST_METHOD'] == 'GET') {
-			$result = $this->fetch();
-      echo json_encode($result);
-		}
-	}
+    
+    function onAction($data) {
+        $result = null;
+        $actionType = element('action', $data);
+        switch($actionType) {
+            case 'add' : $result = $this->NetworkAaa_Model->add_aaa_template($data);
+                break;
+            case 'delete' : $result = $this->NetworkAaa_Model->del_aaa_template($data);
+                break;
+            case 'edit' : $result = $this->NetworkAaa_Model->edit_aaa_template($data);
+                break;
+            default : $result = json_encode(array('state' => array('code' => 4000, 'msg' => 'No request action')));
+                break;
+        }
+        return $result;
+    }
 }
