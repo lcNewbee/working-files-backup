@@ -356,17 +356,17 @@ export const radioAdvance = fromJS([
   //   max: 3600,
   //   defaultValue: 60,
   // },
-  {
-    id: 'shortgi',
-    form: 'radioAdvance',
-    label: _('Short GI'),
-    type: 'checkbox',
-    value: '1',
-    defaultValue: '1',
-    showPrecondition(data) {
-      return parseInt(data.get('phymode'), 10) >= 8;
-    },
-  },
+  // {
+  //   id: 'shortgi',
+  //   form: 'radioAdvance',
+  //   label: _('Short GI'),
+  //   type: 'checkbox',
+  //   value: '1',
+  //   defaultValue: '1',
+  //   showPrecondition(data) {
+  //     return parseInt(data.get('phymode'), 10) >= 8;
+  //   },
+  // },
   // {
   //   id: 'preamble',
   //   form: 'radioAdvance',
@@ -390,27 +390,28 @@ export const radioAdvance = fromJS([
   //         parseInt(data.get('shortgi'), 10) === 1;
   //   },
   // },
+  // {
+  //   id: 'ampdu',
+  //   form: 'radioAdvance',
+  //   label: _('AMPDU'),
+  //   type: 'checkbox',
+  //   value: '1',
+  //   defaultValue: '0',
+  //   showPrecondition(data) {
+  //     return parseInt(data.get('phymode'), 10) >= 8;
+  //   },
+  // }, {
+  //   id: 'amsdu',
+  //   form: 'radioAdvance',
+  //   label: _('AMSDU'),
+  //   type: 'checkbox',
+  //   value: '1',
+  //   defaultValue: '0',
+  //   showPrecondition(data) {
+  //     return parseInt(data.get('phymode'), 10) >= 8;
+  //   },
+  // },
   {
-    id: 'ampdu',
-    form: 'radioAdvance',
-    label: _('AMPDU'),
-    type: 'checkbox',
-    value: '1',
-    defaultValue: '0',
-    showPrecondition(data) {
-      return parseInt(data.get('phymode'), 10) >= 8;
-    },
-  }, {
-    id: 'amsdu',
-    form: 'radioAdvance',
-    label: _('AMSDU'),
-    type: 'checkbox',
-    value: '1',
-    defaultValue: '0',
-    showPrecondition(data) {
-      return parseInt(data.get('phymode'), 10) >= 8;
-    },
-  }, {
     id: 'rateset',
     form: 'radioAdvance',
     label: _('Rate Set'),

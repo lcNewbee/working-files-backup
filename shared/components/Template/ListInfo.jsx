@@ -104,11 +104,12 @@ class ListInfo extends React.Component {
   componentWillMount() {
     this.initListTableOptions(this.props);
   }
-  componentWillUpdate(nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (this.props.tableOptions !== nextProps.tableOptions) {
       this.initListTableOptions(nextProps);
     }
   }
+
   onFetchList() {
     if (this.props.fetchScreenData) {
       this.props.fetchScreenData();

@@ -6,11 +6,19 @@ $border-style: 1px solid #dedede;
   @include clearfix;
 
   .o-box__cell {
-    padding: 8px 13px;
+    padding: ($g-distance / 2) ($g-distance * .75);
     border-left: $border-style;
     border-top: $border-style;
     border-collapse: collapse;
 
     @include clearfix;
+  }
+
+  &.o-box--no-border {
+    border: none;
+
+    .o-box__cell {
+      border: none;
+    }
   }
 }

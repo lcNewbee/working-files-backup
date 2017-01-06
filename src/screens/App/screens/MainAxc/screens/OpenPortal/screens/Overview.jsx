@@ -37,7 +37,7 @@ function getOnlineOption(serverData) {
       text: _('Connection Status'),
       x: 'center',
       textStyle: {
-        fontSize: '18',
+        fontSize: '14',
       },
     },
     legend: {
@@ -91,6 +91,9 @@ function getApStatusOption(serverData) {
     title: {
       text: _('Lock Status'),
       x: 'center',
+      textStyle: {
+        fontSize: '14',
+      },
     },
     legend: {
       show: true,
@@ -159,11 +162,15 @@ export default class View extends PureComponent {
     return (
       <AppScreen
         {...this.props}
+        noTitle
       >
         <div className="o-box row">
-          <div className="cols col-12 o-box__cell">
+          <div
+            className="o-box__cell"
+          >
             <h3>{ _('Users') }</h3>
           </div>
+
           <div className="cols col-7">
             <div className="o-box__cell row">
               <div
@@ -174,7 +181,7 @@ export default class View extends PureComponent {
               >
                 <h3
                   style={{
-                    fontSize: '18px',
+                    fontSize: '14px',
                     lineHeight: '30px',
                     textAlign: 'center',
                     fontWeight: '400',
@@ -214,12 +221,15 @@ export default class View extends PureComponent {
               />
             </div>
           </div>
-          <div className="cols col-12">
-            <div className="o-box__cell">
+          <div
+            className="cols col-12"
+          >
+            <div
+              className="o-box__cell"
+            >
               <h3>
                 { _('Authentication logs') }
               </h3>
-
             </div>
             <div className="o-box__cell">
               <Table
