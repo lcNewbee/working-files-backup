@@ -17,6 +17,7 @@ const funConfig = {
       { value: 'sta', label: _('Station') },        // Station模式
       { value: 'repeater', label: _('Repeater') },  // Repeater模式
     ],
+    radioMaxClientsLimit: true,    // 射频最大客户端限制
     // 功能项参见WirelessConfig -> Basic页面下的ssidTableFullMemberOptions变量
     // 决定哪些功能在ssid配置表格上出现
     ssidTableKeys: [    // 多SSID配置表格项

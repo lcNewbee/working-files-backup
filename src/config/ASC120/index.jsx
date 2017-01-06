@@ -81,6 +81,7 @@ const funConfig = {
       // { value: 'sta', label: _('Station') },
       // { value: 'repeater', label: _('Repeater') },
     ],
+    radioMaxClientsLimit: false,    // 射频最大客户端限制
     // 功能项参见WirelessConfig -> Basic页面下的ssidTableFullMemberOptions变量
     ssidTableKeys: ['enable', 'ssid', 'vlanId', 'hideSsid', 'isolation', 'security', 'delete'],
     portalFun: true,

@@ -90,7 +90,7 @@ const keyTypeOptions = [
 const radioModeOptionsFor5g = [
   { value: 'auto', label: 'auto' },
   { value: '11ac', label: '802.11ac' },
-  { value: '11na', label: '802.11a+n' },
+  { value: '11na', label: '802.11an' },
   { value: '11a', label: '802.11a' },
 ];
 
@@ -98,7 +98,7 @@ const radioModeOptionsFor2g = [
   { value: 'auto', label: 'auto' },
   { value: '11b', label: '802.11b' },
   { value: '11g', label: '802.11g' },
-  { value: '11bg', label: '802.11b+g' },
+  { value: '11bg', label: '802.11bg' },
   { value: '11ng', label: '802.11bgn' },
 ];
 
@@ -251,14 +251,13 @@ export default class Basic extends React.Component {
           label: _('VLAN ID'),
           width: '250px',
           transform: function (val, item) {
-            const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-            const pos = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
+            // const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
+            // const pos = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
             return (
               <FormInput
                 type="number"
                 value={val}
-                disabled={(pos === 0 || vlanEnable === '0') &&
-                          this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
+                disabled={vlanEnable === '0'}
                 onChange={(data) => {
                   this.onSsidItemChange(val, item, 'vlanId', data.value);
                 }}
@@ -719,6 +718,7 @@ export default class Basic extends React.Component {
     props.fetch('goform/get_network_info').then((json) => {
       if (json.state && json.state.code === 2000) {
         vlanEnable = json.data.vlanEnable;
+        console.log('vlanEnable', vlanEnable);
       }
     });
     const config = fromJS({
@@ -1076,11 +1076,11 @@ export default class Basic extends React.Component {
                   ) : null
                 }
                 {
-                  funConfig.radioclientslimit ? (
+                  funConfig.radioMaxClientsLimit ? (
                     <FormGroup
                       label={_('Max Clients')}
                       type="number"
-                      form="radioSettings"
+                      form="maxradioclients"
                       value={curData.getIn(['radioList', radioId, 'maxRadioClients'])}
                       onChange={(data) => {
                         const radioList = curData.get('radioList')
@@ -1246,7 +1246,7 @@ export default class Basic extends React.Component {
                       value={curData.getIn(['radioList', radioId, 'vapList', '0', 'vlanId'])}
                       help={`${_('Range: ')}1~4094`}
                       form="radioSettings"
-                      disabled={vlanEnable === '0'}
+                      // disabled={vlanEnable === '0'}
                       onChange={(data) => {
                         const radioList = curData.get('radioList').setIn([radioId, 'vapList', 0, 'vlanId'], data.value);
                         this.props.updateItemSettings({ radioList });
@@ -1657,7 +1657,9 @@ export default class Basic extends React.Component {
                         totalNum += Number(vapList[i].maxClients);
                       }
                     }
-                    if (radioClientLimit !== 0 && totalNum > radioClientLimit) {
+                    if (funConfig.radioMaxClientsLimit && // 射频最大客户端限制功能存在
+                        radioClientLimit !== 0 && // 为零表示不限制
+                        totalNum > radioClientLimit) {
                       error = `${_('The total number of ssid maximum clients should not exceed ')}${radioClientLimit}`;
                     }
                     // console.log('error', totalNum, radioClientLimit);

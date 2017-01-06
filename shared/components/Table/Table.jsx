@@ -84,6 +84,7 @@ class Table extends Component {
 
   sortRowsById(id) {
     let sortFun = (a, b) => { // 默认的排序函数
+      console.log(a, b);
       if (a > b) return 1;
       else if (a < b) return -1;
       return 0;
@@ -97,6 +98,7 @@ class Table extends Component {
     }
     let list = this.state.myList;
     if (typeof (sortFun) === 'function') {
+      console.log('sortFun', sortFun, this.sortCalc);
       list = list.sortBy(
         item => item.get(id),
         (a, b) => sortFun(a, b) * this.sortCalc,

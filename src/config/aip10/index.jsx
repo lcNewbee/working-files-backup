@@ -77,7 +77,7 @@ const funConfig = {
   },
   // 无线设置页面
   basic: {
-    radioclientslimit: true, // 射频客户端限制
+    radioMaxClientsLimit: true, // 射频客户端限制
     devicemodeOptions: [
       { value: 'ap', label: _('AP') },
       { value: 'sta', label: _('Station') },

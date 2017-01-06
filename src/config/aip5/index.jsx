@@ -36,9 +36,12 @@ const pNetworkSettings = require('../../screens/App/screens/MainAP/screens/Netwo
 // 子菜单
 const sNetworkSettings = require('../../screens/App/screens/MainAP/screens/NetworkSettings/NetworkSettings');
 
-const pSystemStatus = require('../../screens/App/screens/MainAP/screens/SystemStatus/SingleRadioOverview');
+// const pSystemStatus = require('../../screens/App/screens/MainAP/screens/SystemStatus/SingleRadioOverview');
+const pSystemStatus = require('../../screens/App/screens/MainAP/screens/SystemStatus/MultiRadioOverview');
 const sSsidDetails = require('../../screens/App/screens/MainAP/screens/SystemStatus/SsidDetails');
 const sClientsDetails = require('../../screens/App/screens/MainAP/screens/SystemStatus/ClientsDetails');
+const sRadioDetails = require('../../screens/App/screens/MainAP/screens/SystemStatus/RadioDetails');
+
 // 快速设置
 const pQuickSetup = require('../../screens/App/screens/MainAP/screens/QuickSetup/P2pQuickSetup');
 
@@ -81,6 +84,7 @@ const funConfig = {
       { value: 'sta', label: _('Station') },        // Station模式
       { value: 'repeater', label: _('Repeater') },  // Repeater模式
     ],
+    radioMaxClientsLimit: false,    // 射频最大客户端限制
     // 功能项参见WirelessConfig -> Basic页面下的ssidTableFullMemberOptions变量
     // 决定哪些功能在ssid配置表格上出现
     ssidTableKeys: ['enable', 'ssid', 'vlanId', 'hideSsid', 'isolation', 'security', 'delete'],
@@ -138,6 +142,11 @@ const routes = [{
           id: 'clientsdetails',
           path: '/main/status/clientsdetails',
           component: sClientsDetails.Screen,
+          fetchUrl: 'goform/get_system_info_forTestUse',
+        }, {
+          id: 'radiodetails',
+          path: '/main/status/radiodetails',
+          component: sRadioDetails.Screen,
           fetchUrl: 'goform/get_system_info_forTestUse',
         },
       ],
