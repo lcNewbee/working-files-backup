@@ -266,6 +266,7 @@ export default class SpeedTest extends React.Component {
           onClose={this.onModalCancelClick}
           cancelButton
           okButton
+          draggable
           isShow={this.props.selfState.get('showScanResults')}
         >
           <Table
@@ -429,6 +430,7 @@ export default class SpeedTest extends React.Component {
         <Modal
           isShow={showAdvance === '1'}
           title={_('Advanced Settings')}
+          draggable
           onClose={() => {
             const pQuery = {
               time,
@@ -479,6 +481,7 @@ export default class SpeedTest extends React.Component {
           size="min"
           title={_('Notice')}
           noFooter
+          draggable
           isShow={!stopWait}
           onClose={() => {
             this.props.fetch('goform/stop_bandwidth_test').then((json) => {

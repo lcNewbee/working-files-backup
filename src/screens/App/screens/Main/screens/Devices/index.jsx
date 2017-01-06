@@ -461,6 +461,7 @@ export const Device = React.createClass({
           title={currData.get('mac')}
           onClose={this.props.closeDeviceEdit}
           onOk={this.onSaveDeviceNetWork}
+          draggable
         >
           <FormGroup
             label={_('Nickname')}

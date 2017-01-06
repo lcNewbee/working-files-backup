@@ -184,6 +184,7 @@ export default class AccountSettings extends Component {
           title={_('Error Message')}
           size="min"
           cancelButton={false}
+          draggable
         >
           {this.props.selfState.get('errorMsg')}
         </Modal>

@@ -320,6 +320,7 @@ export const GroupSettings = React.createClass({
           onOk={this.onSaveDeviceGroup}
           cancelButton={!isLook}
           okButton={!isLook}
+          draggable
         >
           {
             isLook ? (

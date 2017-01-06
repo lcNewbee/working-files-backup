@@ -441,6 +441,7 @@ export default class SystemMaintenance extends Component {
             borderRadius: '20px',
           }}
           noFooter
+          draggable
         >
           <ProgressBar
             title={this.props.selfState.getIn(['upgradeBarInfo', 'firstBar', 'title'])}
@@ -481,6 +482,7 @@ export default class SystemMaintenance extends Component {
             borderRadius: '20px',
           }}
           noFooter
+          draggable
         >
           <ProgressBar
             title={this.props.selfState.getIn(['progressBarInfo', 'title'])}

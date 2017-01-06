@@ -605,6 +605,7 @@ export default class View extends React.Component {
               onClose={this.onCloseEditModal}
               size="md"
               noFooter
+              draggable
             >
               <FormContainer
                 data={editData}

@@ -780,6 +780,7 @@ export default class View extends React.Component {
             });
           }}
           noFooter
+          draggable
         >
           <form
             action="goform/group/map/list"

@@ -39,7 +39,7 @@ if (module.hot) {
     renderApp();
   };
 
-  module.hot.accept('./config/axcPortal', () => {
+  module.hot.accept('./config/AIP10', () => {
     setImmediate(() => {
       // Preventing the hot reloading error from react-router
       unmountComponentAtNode(mountNode);

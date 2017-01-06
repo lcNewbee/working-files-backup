@@ -69,7 +69,7 @@ const sChannelUtilization = require('../../screens/App/screens/MainAP/screens/To
 const funConfig = {
   // 覆盖型产品快速设置
   coverageQuickSetup: {
-    router: true, // 是否有router模式
+    router: false, // 是否有router模式
   },
   network: {
     router: false, // 是否有router模式
@@ -86,9 +86,9 @@ const funConfig = {
     // 功能项参见WirelessConfig -> Basic页面下的ssidTableFullMemberOptions变量
     ssidTableKeys: [
       'enable', 'ssid', 'vlanId', 'hideSsid', 'isolation', 'security', 'delete', 'maxClients',
-      'airTimeEnable', 'speedLimit', 'portalEnable',
+      'airTimeEnable', 'speedLimit',
     ],
-    portalFun: true,
+    portalFun: false,
   },
   advance: {
     ledThreshFun: false, // 信号强度控制LED灯功能

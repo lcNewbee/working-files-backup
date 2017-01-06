@@ -317,6 +317,7 @@ export default class SystemMaintenance extends Component {
             top: '200px',
             borderRadius: '20px',
           }}
+          draggable
           noFooter
         >
           <ProgressBar
@@ -356,6 +357,7 @@ export default class SystemMaintenance extends Component {
             top: '200px',
             borderRadius: '20px',
           }}
+          draggable
           noFooter
         >
           <ProgressBar

@@ -573,6 +573,7 @@ export const Status = React.createClass({
           title={_('Offline Ap List')}
           onClose={this.hideOfflineApp}
           onOk={this.hideOfflineApp}
+          draggable
         >
           <Table
             className="table"

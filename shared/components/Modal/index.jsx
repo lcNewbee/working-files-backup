@@ -116,7 +116,11 @@ class Modal extends Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onClose = this.onClose.bind(this);
     this.onOk = this.onOk.bind(this);
+    this.state = {
+      modalStyle: props.style,
+    };
   }
+
   componentDidMount() {
     if (this.props.isShow && !this.props.customBackdrop) {
       renderBackdrop(
@@ -126,6 +130,14 @@ class Modal extends Component {
       );
     }
     this.modalKey = `model${utils.uuid()}`;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.style !== this.props.style) {
+      this.setState({
+        modalStyle: this.props.style,
+      });
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -223,13 +235,40 @@ class Modal extends Component {
               key={keyVal}
               className={modalClassName}
               role={role}
+              onDragOver={(e) => { e.preventDefault(); }} // 拖放事件：允许放置
+              onDrop={(e) => { // 拖放事件：放置事件
+                if (this.moveDiv.draggable) {
+                  const positionStyle = Object.assign({},
+                  this.state.modalStyle,
+                    {
+                      top: `${e.clientY - this.diffY}px`,
+                      left: `${e.clientX - this.diffX}px`,
+                      position: 'absolute',
+                    },
+                  );
+                  this.setState({
+                    modalStyle: positionStyle,
+                  });
+                }
+              }}
             >
               {
                 customBackdrop ? (
                   <div className="o-modal__backdrop in" />
                 ) : null
               }
-              <div className={contentClassNames} draggable={draggable} style={this.props.style}>
+              <div
+                className={contentClassNames}
+                draggable={draggable}
+                style={this.state.modalStyle}
+                ref={(ref) => {
+                  this.moveDiv = ref;
+                }}
+                onDragStart={(e) => { // 拖放事件：拖放准备
+                  this.diffX = e.clientX - this.moveDiv.offsetLeft;
+                  this.diffY = e.clientY - this.moveDiv.offsetTop;
+                }}
+              >
                 <div className="o-modal__content">
                   {
                     title ? (

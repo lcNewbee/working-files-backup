@@ -170,6 +170,7 @@ export default class ModeSettings extends React.Component {
             borderRadius: '20px',
           }}
           noFooter
+          draggable
         >
           <ProgressBar
             title={_('rebooting , please wait...')}

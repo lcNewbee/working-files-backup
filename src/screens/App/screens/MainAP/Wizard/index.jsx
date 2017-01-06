@@ -358,6 +358,7 @@ export default class SignUp extends React.Component {
         <Modal
           className="thinModeConfig"
           isShow={this.props.selfState.get('showThinModeConfigModal')}
+          draggable
           onOk={() => {
             this.onOkButtonClick();
             this.props.changeShowThinModeConfigModal(false);
@@ -407,6 +408,7 @@ export default class SignUp extends React.Component {
             borderRadius: '20px',
           }}
           noFooter
+          draggable
         >
           <ProgressBar
             title={_('rebooting , please wait...')}

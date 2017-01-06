@@ -451,7 +451,7 @@ export default class View extends React.Component {
     return (
       <AppScreen
         {...this.props}
-        
+
         actionBarChildren={actionBarChildren}
         actionable={false}
       >
@@ -498,6 +498,7 @@ export default class View extends React.Component {
           title={_('Add')}
           isShow={isModalShow}
           onClose={() => this.props.closeListItemModal()}
+          draggable
         >
           <FormGroup
             label={_('Map Name')}

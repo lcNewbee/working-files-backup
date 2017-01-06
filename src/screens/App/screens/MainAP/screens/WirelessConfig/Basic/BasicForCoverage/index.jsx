@@ -878,6 +878,7 @@ export default class Basic extends React.Component {
           size="lg"
           okButton
           cancelButton
+          draggable
         >
           <Table
             className="table"
@@ -996,6 +997,7 @@ export default class Basic extends React.Component {
                   title={_('Country Code')}
                   onClose={this.onCloseCountrySelectModal}
                   onOk={this.saveCountrySelectModal}
+                  draggable
                   isShow={this.props.selfState.get('showCtyModal')}
                 >
                   <h3>{_('User Protocol')}</h3>
@@ -1693,6 +1695,7 @@ export default class Basic extends React.Component {
         <Modal
           title={_('Speed Limit')}
           isShow={this.props.selfState.get('showSpeedLimitModal')}
+          draggable
           onOk={() => {
             this.props.validateAll('speedlimitform').then((msg) => {
               if (msg.isEmpty()) {
@@ -1776,6 +1779,7 @@ export default class Basic extends React.Component {
         <Modal
           title={_('Security Settings For SSID')}
           isShow={tableItemForSsid.get('isShow') === '1'}
+          draggable
           onOk={() => {
             this.props.validateAll('ssidSecurityModal').then((msg) => {
               if (msg.isEmpty()) {

@@ -632,6 +632,7 @@ export default class QuickSetup extends React.Component {
                 onClose={this.onCloseCountrySelectModal}
                 onOk={this.props.saveCountrySelectModal}
                 isShow={this.props.selfState.get('showCtyModal')}
+                draggable
               >
                 <h3>{_('User Protocol')}</h3>
                 <span>
@@ -879,6 +880,7 @@ export default class QuickSetup extends React.Component {
                       size="lg"
                       okButton
                       cancelButton
+                      draggable
                     >
                       <Table
                         className="table"
@@ -934,6 +936,7 @@ export default class QuickSetup extends React.Component {
                 onClose={this.onCloseCountrySelectModal}
                 onOk={this.props.saveCountrySelectModal}
                 isShow={this.props.selfState.get('showCtyModal')}
+                draggable
               >
                 <h3>{_('User Protocol')}</h3>
                 <span>
@@ -1180,6 +1183,7 @@ export default class QuickSetup extends React.Component {
                       size="lg"
                       okButton
                       cancelButton
+                      draggable
                     >
                       <Table
                         className="table"
@@ -1231,6 +1235,7 @@ export default class QuickSetup extends React.Component {
                 onClose={this.onCloseCountrySelectModal}
                 onOk={this.props.saveCountrySelectModal}
                 isShow={this.props.selfState.get('showCtyModal')}
+                draggable
               >
                 <h3>{_('User Protocol')}</h3>
                 <span>

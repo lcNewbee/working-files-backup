@@ -1218,6 +1218,7 @@ export default class Main extends Component {
             this.props.resetVaildateMsg();
           }}
           noFooter
+          draggable
         >
           {
             this.renderModalContent(modal)
