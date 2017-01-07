@@ -20,7 +20,7 @@ const mountNode = document.getElementById('app');
 
 // 引入产品配置
 const renderApp = () => {
-  const prodConfig = require('./config/ASC120');
+const prodConfig = require('./config/axcPortal');
 
   // 主渲染入口
   ReactDOM.render(

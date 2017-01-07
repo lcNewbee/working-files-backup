@@ -10,7 +10,11 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const ReactRouter = require('react-router');
 const Provider = require('react-redux').Provider;
+<<<<<<< ca21a0d707269bf1ec5190dd8d34ef44a3732de0
 const prodConfig = require('./config/ASC120');
+=======
+const prodConfig = require('./config/axcPortal');
+>>>>>>> AXC:切换产品
 
 const Router = ReactRouter.Router;
 const hashHistory = ReactRouter.hashHistory;
