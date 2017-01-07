@@ -10,95 +10,95 @@ import * as appActions from 'shared/actions/app';
 
 const listOptions = fromJS([
   {
-    id: 'ip',
-    text: _('IP'),
+    id: 'nasip',
+    text: _('Nas IP'),
     type: 'text',
-    validator: validator({
-      rules: 'ip',
-    }),
+    formProps: {
+      required: true,
+      validator: validator({
+        rules: 'ip',
+      }),
+    },
+  }, {
+    id: 'sourceip',
+    text: _('Source IP'),
+    type: 'text',
+    formProps: {
+      required: true,
+    },
+  }, {
+    id: 'userip',
+    text: _('User IP'),
+    formProps: {
+      required: true,
+    },
+  }, {
+    id: 'callingstationid',
+    text: _('Mac'),
     formProps: {
       required: true,
     },
   }, {
     id: 'name',
-    text: _('Name'),
-    type: 'text',
+    text: _('name'),
     formProps: {
       required: true,
     },
   }, {
-    id: 'sharedSecret',
-    text: _('Shared Secret'),
+    id: 'state',
+    text: _('Acc Type'),
     formProps: {
-      type: 'password',
+      required: true,
+    },
+  }, {
+    id: 'startDate',
+    text: _('Online Date'),
+    type: 'text',
+  }, {
+    id: 'endDate',
+    text: _('Offline Date'),
+    type: 'text',
+    required: 'true',
+  }, {
+    id: 'time',
+    text: _('Time'),
+    formProps: {
+      required: true,
+    },
+  }, {
+    id: 'ins',
+    text: _('Up Traffic'),
+    formProps: {
+      required: true,
+    },
+  }, {
+    id: 'outs',
+    text: _('Down Traffic'),
+    formProps: {
+      required: true,
+    },
+  }, {
+    id: 'octets',
+    text: _('Used Traffic'),
+    formProps: {
+      required: true,
+    },
+  }, {
+    id: 'acctsessionid',
+    text: _('Acc ID'),
+    formProps: {
+      required: true,
+    },
+  }, {
+    id: 'ex1',
+    text: _('NAS Type'),
+    formProps: {
       required: true,
     },
   }, {
     id: 'ex2',
-    text: _('Acc Send Interval'),
-    defaultValue: '300',
-    type: 'num',
+    text: _('Reason'),
     formProps: {
-      required: true,
-    },
-  }, {
-    id: 'ex3',
-    text: _('Check Period'),
-    defaultValue: '600',
-    type: 'num',
-    formProps: {
-      required: true,
-    },
-  }, {
-    id: 'ex4',
-    text: _('Idle Time'),
-    defaultValue: '600',
-    type: 'num',
-    formProps: {
-      required: true,
-    },
-  }, {
-    id: 'type',
-    type: 'text',
-    options: [
-      {
-        value: 'standard',
-        label: _('Standard'),
-      }, {
-        disabled: true,
-        value: 'cisco',
-        label: _('Cisco'),
-      }, {
-        value: 'ros',
-        disabled: true,
-        label: _('ROS'),
-      },
-    ],
-    defaultValue: 'standard',
-    formProps: {
-      type: 'select',
-      required: true,
-      label: _('Equipment Type'),
-      placeholder: _('Please Select ') + _('Equipment Type'),
-    },
-  }, {
-    id: 'description',
-    text: _('Description'),
-    type: 'text',
-    required: 'true',
-  }, {
-    id: 'ex1',
-    text: _('is Delegated'),
-    formProps: {
-      type: 'checkbox',
-      required: true,
-    },
-  }, {
-    id: 'ex5',
-    text: _('Concurrency Unlock'),
-    formProps: {
-      form: 'port',
-      type: 'checkbox',
       required: true,
     },
   },

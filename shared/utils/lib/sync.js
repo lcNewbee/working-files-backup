@@ -35,17 +35,19 @@ var sync = {
     var baseOption = {
       method: 'POST',
     };
-
-    if (data !== undefined) {
-      data = JSON.stringify(data);
-    }
+    var subData;
+    var subUrl = url;
 
     // 跨域请求不能设置 credentials 与 headers
     if (option && option.mode === 'cors') {
       baseOption.mode = 'cors';
+      subUrl = url + '?' + query.queryToParamsStr(data);
 
     // 同域请求
     } else {
+      if (data !== undefined) {
+        subData = JSON.stringify(data);
+      }
       baseOption.credentials = 'include';
       baseOption.headers = {
         'Accept': 'application/json',
@@ -55,9 +57,9 @@ var sync = {
       }
     }
 
-    baseOption.body = data;
+    baseOption.body = subData;
 
-    return fetch(url, baseOption)
+    return fetch(subUrl, baseOption)
       .then(checkStatus)
       .then(parseJSON)
       .then(handleServerError)

@@ -8,55 +8,56 @@ import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
+
 const listOptions = fromJS([
   {
-    id: 'ip',
+    id: 'nasip',
     text: _('IP'),
+  }, {
+    id: 'ip',
+    text: _('Source IP'),
+  }, {
+    id: 'userip',
+    text: _('User IP'),
+  }, {
+    id: 'callingstationid',
+    text: _('Mac'),
   }, {
     id: 'name',
     text: _('Name'),
   }, {
-    id: 'description',
-    text: _('Description'),
+    id: 'sessionTime',
+    text: _('Session Time'),
   }, {
-    id: 'type',
-    text: _('Type'),
+    id: 'octets',
+    text: _('Available Traffic'),
   }, {
-    id: 'sharedSecret',
-    text: _('Shared Secret'),
-  }, {
-    id: 'ex1',
-    text: _('Ex1'),
-  }, {
-    id: 'ex2',
-    text: _('Password'),
-  }, {
-    id: 'ex3',
+    id: 'clientType',
     text: _('Time out'),
   }, {
-    id: 'ex3',
-    text: _('Portal Check'),
+    id: 'startDate',
+    text: _('Online Date'),
   }, {
-    id: 'ex4',
-    text: _('isOut'),
+    id: 'costTime',
+    text: _('Online Time'),
   }, {
-    id: 'ex5',
-    text: _('Interface Auth'),
+    id: 'inS',
+    text: _('Up Traffic'),
   }, {
-    id: 'ex6',
-    text: _('Computer Auth'),
+    id: 'outS',
+    text: _('Down Traffic'),
   }, {
-    id: 'ex7',
-    text: _('Web'),
+    id: 'costOctets',
+    text: _('Used Traffic'),
   }, {
-    id: 'ex8',
-    text: _('Debug'),
+    id: 'updateDate',
+    text: _('Update Date'),
   }, {
-    id: 'ex9',
-    text: _('Late Auth'),
+    id: 'acctSessionId',
+    text: _('Acc ID'),
   }, {
-    id: 'ex10',
-    text: _('Late Auth'),
+    id: 'state',
+    text: _('Acc Type'),
   },
 ]);
 const propTypes = {

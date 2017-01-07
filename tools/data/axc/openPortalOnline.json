@@ -1,0 +1,27 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [{
+        "id": 1,        // 序号
+        "nasip": "",
+        "ip": "",       // sourceIP
+        "userip": "",
+        "callingstationid": "",  // MAC地址
+        "name": "",
+        "sessionTime": "",    // 可用时长
+        "octets": "",         // 可用流量
+        "clientType": "",    // NAS类型
+        "startDate": "",      // 上线时间
+        "costTime": "",       // 在线时长
+        "inS": "",           // 上行流量
+        "outS": "",          // 下行流量
+        "costOctets": "",       // 使用流量
+        "updateDate": "",     // 更新时间
+        "acctSessionId": "",     // 标识ID
+        "state": ""              // 计费类型
+      }]
+  }
+}
