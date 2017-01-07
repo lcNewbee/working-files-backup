@@ -689,6 +689,7 @@ class ListInfo extends React.Component {
     return (
       !customModal ? (
         <Modal
+          id="listInfoModal"
           isShow={isEditModelshow}
           title={actionQuery.get('myTitle')}
           onOk={this.onSave}

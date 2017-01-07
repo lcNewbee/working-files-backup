@@ -206,7 +206,7 @@ class Modal extends Component {
 
     // ReactCSSTransitionGroup need key value
     if (id) {
-      keyVal = `${id}Modal`;
+      keyVal = `${id}Key`;
     }
 
     // No top close button
@@ -253,7 +253,7 @@ class Modal extends Component {
               }}
             >
               {
-                customBackdrop ? (
+                customBackdrop && isShow ? (
                   <div className="o-modal__backdrop in" />
                 ) : null
               }

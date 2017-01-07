@@ -48,7 +48,6 @@ function initScreenState($$state, action) {
   let $$ret = $$state;
   let $$settingsData = $$ret.getIn([screenId, 'curSettings']) || fromJS({});
   let $$myScreenState = $$ret.get(screenId);
-  console.log(screenId, ' = ', action.payload);
   if (!$$myScreenState) {
     $$myScreenState = defaultItem.mergeDeep(action.payload);
   } else {

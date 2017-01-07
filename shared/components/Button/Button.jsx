@@ -14,6 +14,7 @@ const propTypes = {
   Component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
   loading: PropTypes.bool,
   text: PropTypes.string,
+  onClick: PropTypes.func,
 };
 
 const defaultProps = {
@@ -28,6 +29,14 @@ class Button extends React.Component {
     super(props);
 
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+    utils.binds(this, ['onClick']);
+  }
+
+  onClick(e) {
+    // loading 状态不响应点击事件
+    if (!this.props.loading && this.props.onClick) {
+      this.props.onClick(e);
+    }
   }
 
   render() {
@@ -72,6 +81,7 @@ class Button extends React.Component {
       <Component
         {...componentProps}
         className={classNames}
+        onClick={this.onClick}
       >
         {
           loading ? (
