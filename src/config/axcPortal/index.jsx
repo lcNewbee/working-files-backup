@@ -198,7 +198,7 @@ const routes = [
         path: '/main/network',
         component: sMainAxc.Screen,
         icon: 'sphere',
-        text: _('Network'),
+        text: _('Network '),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/network/interface') },
         childRoutes: [
           // {
@@ -321,7 +321,7 @@ const routes = [
         path: '/main/group',
         component: sMainAxc.Screen,
         icon: 'group',
-        text: _('AP Groups'),
+        text: _('AP Groups '),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/group/monitor') },
         childRoutes: [
           {
@@ -548,7 +548,7 @@ const routes = [
         path: '/main/system',
         component: sMainAxc.Screen,
         icon: 'cogs',
-        text: _('System'),
+        text: _('System '),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/system/status') },
         childRoutes: [
           {
@@ -690,11 +690,12 @@ const routes = [
             component: sSystemAdmin.Screen,
           },
         ],
-      }, {
+      },
+      {
         path: '/main/portal',
         component: sMainAxc.Screen,
         icon: 'road',
-        text: _('Portal'),
+        text: _('Portal '),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/portal/overview') },
         childRoutes: [
           {
@@ -709,7 +710,7 @@ const routes = [
             id: 'openPortalAccess',
             isIndex: true,
             path: '/main/portal/access',
-            icon: 'level-up',
+            icon: 'link',
             text: _('Access Auth'),
             indexRoute: {
               onEnter: (nextState, replace) => replace('/main/portal/access/config'),

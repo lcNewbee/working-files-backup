@@ -161,7 +161,7 @@ const routes = [
         path: '/main/network',
         component: sMainAxc.Screen,
         icon: 'sphere',
-        text: _('NETWORK'),
+        text: _('Network '),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/network/interface') },
         childRoutes: [
           // {
@@ -195,14 +195,13 @@ const routes = [
                 formUrl: 'goform/network/dhcp/list',
                 text: _('DHCP List'),
                 component: sDhcpList.Screen,
+              }, {
+                id: 'dhcpRelay',
+                path: '/main/network/dhcp/relay',
+                formUrl: 'goform/network/dhcp/relay',
+                text: _('DHCP Relay'),
+                component: sDhcpRelay.Screen,
               },
-              // {
-              //   id: 'dhcpRelay',
-              //   path: '/main/network/dhcp/relay',
-              //   formUrl: 'goform/network/dhcp/relay',
-              //   text: _('DHCP Relay'),
-              //   component: sDhcpRelay.Screen,
-              // },
             ],
           }, {
             id: 'networkNat',
@@ -285,7 +284,7 @@ const routes = [
         path: '/main/group',
         component: sMainAxc.Screen,
         icon: 'group',
-        text: _('AP GROUP'),
+        text: _('AP Groups '),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/group/monitor') },
         childRoutes: [
           {
@@ -512,7 +511,7 @@ const routes = [
         path: '/main/system',
         component: sMainAxc.Screen,
         icon: 'cogs',
-        text: _('SYSTEM'),
+        text: _('System '),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/system/status') },
         childRoutes: [
           {
@@ -655,23 +654,6 @@ const routes = [
           },
         ],
       },
-      // {
-      //   path: '/main/portal',
-      //   component: sMainAxc.Screen,
-      //   icon: 'road',
-      //   text: _('OPEN PORTAL'),
-      //   indexRoute: { onEnter: (nextState, replace) => replace('/main/portal/overview') },
-      //   childRoutes: [
-      //     {
-      //       id: 'overview',
-      //       icon: 'home',
-      //       path: '/main/portal/overview',
-      //       formUrl: 'goform/group/overview',
-      //       text: _('Overview'),
-      //       component: sOverview.Screen,
-      //     },
-      //   ],
-      // },
       {
         path: '/wizard',
         component: sWizard.Screen,
