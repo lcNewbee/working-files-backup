@@ -746,43 +746,22 @@ const routes = [
             },
             childRoutes: [
               {
-<<<<<<< HEAD
-                id: 'openPortalRadiusNas',
-                path: '/main/portal/radius/nas',
-                formUrl: getOpenPortalFormUrl('openPortal/radius/nas'),
-=======
                 id: 'portalRadiusNas',
                 path: '/main/portal/radius/nas',
                 formUrl: 'goform/portal/radius/nas',
->>>>>>> AXC: 完善portal模块界面
                 text: _('NAS List'),
-                mode: 'cors',
                 component: sOpenPortalNas.Screen,
               }, {
-<<<<<<< HEAD
-                id: 'openPortalRadiusOnline',
-                path: '/main/portal/radius/online',
-                formUrl: getOpenPortalFormUrl('openPortal/radius/online'),
-=======
                 id: 'portalRadiusOnlineList',
                 path: '/main/portal/radius/online',
                 formUrl: 'goform/portal/radius/online',
->>>>>>> AXC: 完善portal模块界面
                 text: _('Online List'),
-                mode: 'cors',
                 component: sOpenPortalOnline.Screen,
               }, {
-<<<<<<< HEAD
-                id: 'openPortalRadiusConnectLog',
-                path: '/main/portal/radius/connectlog',
-                formUrl: getOpenPortalFormUrl('openPortal/radius/linkRecordAll'),
-=======
                 id: 'portalRadiusConnectLogs',
                 path: '/main/portal/radius/logs',
                 formUrl: 'goform/portal/radius/logs',
->>>>>>> AXC: 完善portal模块界面
                 text: _('Connect Logs'),
-                mode: 'cors',
                 component: sOpenPortalConnectLog.Screen,
               },
             ],
