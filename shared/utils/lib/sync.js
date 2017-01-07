@@ -36,6 +36,7 @@ var sync = {
       method: 'POST',
     };
     var subData;
+    var subUrl = url;
 
     // 跨域请求不能设置 credentials 与 headers
     if (option && option.mode === 'cors') {
