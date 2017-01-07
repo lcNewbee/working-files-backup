@@ -526,7 +526,6 @@
   "Manager(Branch)": "分支管理员",
   "Purview": "权限",
 
-  "License": "License",
   "License": "License管理",
   "License Status": "许可状态",
   "Device License": "设备序列号",
@@ -561,6 +560,6 @@
   " Time Zone":"同步时区",
 
   "Custer Settings": "集群设置",
-  "Authentication Subnet Mask":"认证 Subnet Mask",
+  "Authentication Subnet Mask":"认证子网掩码",
   "Authentication IP":"认证 IP"
 }

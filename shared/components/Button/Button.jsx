@@ -64,6 +64,9 @@ class Button extends React.Component {
     if (inverse) {
       classNames = `${classNames} a-btn--inverse`;
     }
+    if (loading) {
+      classNames = `${classNames} a-btn--loading`;
+    }
 
     if (Component === 'button' || Component === 'input') {
       delete componentProps.text;

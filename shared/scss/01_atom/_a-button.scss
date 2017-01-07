@@ -33,6 +33,10 @@
     opacity: .6;
     cursor: not-allowed;
   }
+  &.a-btn--loading {
+    opacity: .8;
+    cursor: not-allowed;
+  }
 }
 
 a.a-btn {
@@ -44,6 +48,8 @@ a.a-btn {
     text-decoration: none;
   }
 }
+
+
 
 .a-btn--block {
   display: block;

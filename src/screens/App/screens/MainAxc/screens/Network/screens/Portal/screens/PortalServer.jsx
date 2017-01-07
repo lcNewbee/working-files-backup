@@ -20,7 +20,7 @@ const listOptions = fromJS([
   }, {
     id: 'address_type',
     label: _('Address Type'),
-    defaultValue: '0',
+    defaultValue: '1',
     options: [
       {
         value: '1',

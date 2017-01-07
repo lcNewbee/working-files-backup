@@ -23,7 +23,7 @@ import guiConfig from './config.json';
 const cnCore = require('../lang/cn/core.json');
 const cnAxc = require('../lang/cn/axc.json');
 const validateCn = require('../lang/cn/validate.json');
-const cnOpenPortal = require('../lang/cn/openPortal.json');
+const cnPortal = require('../lang/cn/Portal.json');
 const langEn = require('../lang/en/core.json');
 
 const bodyElem = document.getElementsByTagName('body')[0];
@@ -31,7 +31,7 @@ const bodyElem = document.getElementsByTagName('body')[0];
 b28n.addDict(cnCore, 'cn');
 b28n.addDict(cnAxc, 'cn');
 b28n.addDict(validateCn, 'cn');
-b28n.addDict(cnOpenPortal, 'cn');
+b28n.addDict(cnPortal, 'cn');
 b28n.addDict(langEn, 'en');
 window.CB = b28n.init({
   supportLang: ['en', 'cn'],
@@ -154,37 +154,21 @@ const sNetworkTimeProtocol =
 /**
  * Portal
  */
-const sOpenPortalOverview =
-    require('../../screens/App/screens/MainAxc/screens/OpenPortal/screens/Overview');
-const sOpenPortalBase =
-    require('../../screens/App/screens/MainAxc/screens/OpenPortal/screens/Portal/Base');
-const sOpenPortalBas =
-    require('../../screens/App/screens/MainAxc/screens/OpenPortal/screens/Portal/Bas');
+const sPortalOverview =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Overview');
+const sPortalBase =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Base');
+const sPortalBas =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Bas');
+const sPortalUrlParams =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/UrlParams');
 
-const sOpenPortalUrlParams =
-    require('../../screens/App/screens/MainAxc/screens/OpenPortal/screens/Portal/UrlParams');
-
-const sOpenPortalNas =
-    require('../../screens/App/screens/MainAxc/screens/OpenPortal/screens/Radius/Nas');
-const sOpenPortalOnline =
-    require('../../screens/App/screens/MainAxc/screens/OpenPortal/screens/Radius/Online');
-const sOpenPortalConnectLog =
-    require('../../screens/App/screens/MainAxc/screens/OpenPortal/screens/Radius/ConnectLog');
-
-function getOpenPortalFormUrl(url) {
-  //const hostname = window.location.hostname;
-  const hostname = '192.168.1.56';
-  const protocolStr = window.location.protocol;
-  const portStr = '8080';
-  //const portStr = window.location.port;
-
-  const prefix = 'goform';
-  let ret = '';
-
-  ret = `${protocolStr}//${hostname}:${portStr}/${prefix}/${url}.action`;
-
-  return ret;
-}
+const sPortalNas =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Radius/Nas');
+const sPortalOnline =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Radius/Online');
+const sPortalConnectLog =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Radius/ConnectLog');
 
 const routes = [
   {
@@ -699,15 +683,15 @@ const routes = [
         indexRoute: { onEnter: (nextState, replace) => replace('/main/portal/overview') },
         childRoutes: [
           {
-            id: 'openPortalOverview',
+            id: 'portalOverview',
             icon: 'home',
             path: '/main/portal/overview',
             formUrl: 'goform/portal/overview',
             mode: 'cors',
             text: _('Overview'),
-            component: sOpenPortalOverview.Screen,
+            component: sPortalOverview.Screen,
           }, {
-            id: 'openPortalAccess',
+            id: 'portalAccess',
             isIndex: true,
             path: '/main/portal/access',
             icon: 'link',
@@ -717,27 +701,27 @@ const routes = [
             },
             childRoutes: [
               {
-                id: 'openPortalAccessBase',
+                id: 'portalAccessBase',
                 path: '/main/portal/access/config',
                 formUrl: 'goform/portal/access/config',
                 text: _('Base'),
-                component: sOpenPortalBase.Screen,
+                component: sPortalBase.Screen,
               }, {
-                id: 'openPortalAccessUrlParams',
+                id: 'portalAccessUrlParams',
                 path: '/main/portal/access/list',
                 formUrl: 'goform/portal/access/list',
                 text: _('Bas'),
-                component: sOpenPortalBas.Screen,
+                component: sPortalBas.Screen,
               }, {
-                id: 'openPortalAccessUrlParameter',
+                id: 'portalAccessUrlParameter',
                 path: '/main/portal/access/urlParameter',
                 formUrl: 'goform/portal/access/urlParameter',
                 text: _('Url Parameter'),
-                component: sOpenPortalUrlParams.Screen,
+                component: sPortalUrlParams.Screen,
               },
             ],
           }, {
-            id: 'openPortalRadius',
+            id: 'portalRadius',
             isIndex: true,
             path: '/main/portal/radius',
             icon: 'copy',
@@ -751,19 +735,19 @@ const routes = [
                 path: '/main/portal/radius/nas',
                 formUrl: 'goform/portal/radius/nas',
                 text: _('NAS List'),
-                component: sOpenPortalNas.Screen,
+                component: sPortalNas.Screen,
               }, {
                 id: 'portalRadiusOnlineList',
                 path: '/main/portal/radius/online',
                 formUrl: 'goform/portal/radius/online',
                 text: _('Online List'),
-                component: sOpenPortalOnline.Screen,
+                component: sPortalOnline.Screen,
               }, {
                 id: 'portalRadiusConnectLogs',
                 path: '/main/portal/radius/logs',
                 formUrl: 'goform/portal/radius/logs',
                 text: _('Connect Logs'),
-                component: sOpenPortalConnectLog.Screen,
+                component: sPortalConnectLog.Screen,
               },
             ],
           },

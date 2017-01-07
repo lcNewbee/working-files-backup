@@ -9,23 +9,23 @@
         "userType": 0,
         "userName": "admin",
         "userPassword": "",
-        "purview": "all"
+        "purview": "All"
       },
       {
         "userType": 2,
         "userName": "Guest",
         "userPassword": "",
-        "purview": "2"
+        "purview": "Ready-only"
       },
       {
         "userType": 1,
-        "userName": "Network admin",
+        "userName": "Networkadmin",
         "userPassword": "",
         "purview": "1"
       },
       {
         "userType": 1,
-        "userName": "Ap Group admin",
+        "userName": "ApGroupAdmin",
         "userPassword": "",
         "purview": "1,2"
       }

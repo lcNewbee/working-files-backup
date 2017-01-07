@@ -174,7 +174,20 @@ function getStoreOption(serverData) {
 
   return option;
 }
-
+/*
+                <dl className="o-description-list-row">
+                  <dt>{_('CPU ID')}</dt>
+                  <dd>{serverData.get('system_cpuid')}</dd>
+                </dl>
+                <dl className="o-description-list-row">
+                  <dt>{_('Flash ID')}</dt>
+                  <dd>{serverData.get('system_sdaid')}</dd>
+                </dl>
+                <dl className="o-description-list-row">
+                  <dt>{_('Memory ID')}</dt>
+                  <dd>{serverData.get('system_memid')}</dd>
+                </dl>
+              */
 const propTypes = {
   store: PropTypes.instanceOf(Map),
 };
@@ -212,18 +225,6 @@ export default class View extends React.Component {
               }}
             >
               <div className="o-description-list o-description-list--lg">
-                <dl className="o-description-list-row">
-                  <dt>{_('CPU ID')}</dt>
-                  <dd>{serverData.get('system_cpuid')}</dd>
-                </dl>
-                <dl className="o-description-list-row">
-                  <dt>{_('Flash ID')}</dt>
-                  <dd>{serverData.get('system_sdaid')}</dd>
-                </dl>
-                <dl className="o-description-list-row">
-                  <dt>{_('Memory ID')}</dt>
-                  <dd>{serverData.get('system_memid')}</dd>
-                </dl>
                 <dl className="o-description-list-row">
                   <dt>{_('Frimware Version')}</dt>
                   <dd>{serverData.get('version') || ''}</dd>

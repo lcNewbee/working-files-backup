@@ -85,7 +85,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'auth_ip',
-    label: _('Authentication IP Address'),
+    label: _('Authentication IP'),
     formProps: {
       type: 'text',
       validator: validator({
