@@ -1,13 +1,22 @@
 import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
-import { fromJS, Map } from 'immutable';
+import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/utils/lib/validator';
 import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
+const checkboxOptions = [
+  {
+    value: '0',
+    label: _('OFF'),
+  }, {
+    value: '1',
+    label: _('ON'),
+  },
+];
 const listOptions = fromJS([
   {
     id: 'ip',
@@ -62,19 +71,13 @@ const listOptions = fromJS([
     type: 'text',
     options: [
       {
-        value: 'standard',
+        value: '0',
         label: _('Standard'),
-      }, {
-        disabled: true,
-        value: 'cisco',
-        label: _('Cisco'),
-      }, {
-        value: 'ros',
-        disabled: true,
-        label: _('ROS'),
       },
     ],
-    defaultValue: 'standard',
+    noTable: true,
+    noForm: true,
+    defaultValue: '0',
     formProps: {
       type: 'select',
       required: true,
@@ -89,13 +92,17 @@ const listOptions = fromJS([
   }, {
     id: 'ex1',
     text: _('is Delegated'),
+    defaultValue: '0',
+    options: checkboxOptions,
     formProps: {
       type: 'checkbox',
       required: true,
     },
   }, {
     id: 'ex5',
+    defaultValue: '0',
     text: _('Concurrency Unlock'),
+    options: checkboxOptions,
     formProps: {
       form: 'port',
       type: 'checkbox',

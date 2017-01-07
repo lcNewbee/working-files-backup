@@ -1211,6 +1211,7 @@ export default class Main extends Component {
 
         <Modal
           {...modal}
+          id="appScreenModal"
           onClose={() => {
             this.props.showMainModal({
               isShow: false,
@@ -1231,9 +1232,6 @@ export default class Main extends Component {
           data={this.props.properties}
           {...this.props}
         />
-        {
-          saving ? <div className="body-backdrop" /> : null
-        }
       </div>
     );
   }

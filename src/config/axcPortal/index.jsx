@@ -152,7 +152,7 @@ const sNetworkTimeProtocol =
     require('../../screens/App/screens/MainAxc/screens/System/screens/NetworkTimeProtocol');
 
 /**
- * Open Portal
+ * Portal
  */
 const sOpenPortalOverview =
     require('../../screens/App/screens/MainAxc/screens/OpenPortal/screens/Overview');
@@ -198,7 +198,7 @@ const routes = [
         path: '/main/network',
         component: sMainAxc.Screen,
         icon: 'sphere',
-        text: _('NETWORK'),
+        text: _('Network'),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/network/interface') },
         childRoutes: [
           // {
@@ -321,7 +321,7 @@ const routes = [
         path: '/main/group',
         component: sMainAxc.Screen,
         icon: 'group',
-        text: _('AP GROUP'),
+        text: _('AP Groups'),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/group/monitor') },
         childRoutes: [
           {
@@ -548,7 +548,7 @@ const routes = [
         path: '/main/system',
         component: sMainAxc.Screen,
         icon: 'cogs',
-        text: _('SYSTEM'),
+        text: _('System'),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/system/status') },
         childRoutes: [
           {
@@ -630,7 +630,7 @@ const routes = [
             path: '/main/system/license',
             formUrl: 'goform/system/license',
             icon: 'file-text',
-            text: _('License Management'),
+            text: _('License'),
             component: sLicense.Screen,
           }, {
             id: 'apMaintenance',
@@ -694,44 +694,44 @@ const routes = [
         path: '/main/portal',
         component: sMainAxc.Screen,
         icon: 'road',
-        text: _('AXILSPOT PORTAL'),
+        text: _('Portal'),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/portal/overview') },
         childRoutes: [
           {
             id: 'openPortalOverview',
             icon: 'home',
             path: '/main/portal/overview',
-            formUrl: getOpenPortalFormUrl('openPortal/overview'),
+            formUrl: 'goform/portal/overview',
             mode: 'cors',
             text: _('Overview'),
             component: sOpenPortalOverview.Screen,
           }, {
-            id: 'openPortalPortal',
+            id: 'openPortalAccess',
             isIndex: true,
-            path: '/main/portal/portal',
+            path: '/main/portal/access',
             icon: 'level-up',
-            text: _('Portal'),
+            text: _('Access Auth'),
             indexRoute: {
-              onEnter: (nextState, replace) => replace('/main/portal/portal/base'),
+              onEnter: (nextState, replace) => replace('/main/portal/access/config'),
             },
             childRoutes: [
               {
-                id: 'openPortalPortalBase',
-                path: '/main/portal/portal/base',
-                formUrl: getOpenPortalFormUrl('openPortal/base'),
+                id: 'openPortalAccessBase',
+                path: '/main/portal/access/config',
+                formUrl: 'goform/portal/access/config',
                 text: _('Base'),
                 component: sOpenPortalBase.Screen,
               }, {
-                id: 'openPortalPortalUrlParams',
-                path: '/main/portal/portal/bas',
-                formUrl: getOpenPortalFormUrl('openPortal/bas'),
+                id: 'openPortalAccessUrlParams',
+                path: '/main/portal/access/list',
+                formUrl: 'goform/portal/access/list',
                 text: _('Bas'),
                 component: sOpenPortalBas.Screen,
               }, {
-                id: 'openPortalPortalUrlParams',
-                path: '/main/portal/portal/url',
-                formUrl: getOpenPortalFormUrl('openPortal/UrlParams'),
-                text: _('Url Params'),
+                id: 'openPortalAccessUrlParameter',
+                path: '/main/portal/access/urlParameter',
+                formUrl: 'goform/portal/access/urlParameter',
+                text: _('Url Parameter'),
                 component: sOpenPortalUrlParams.Screen,
               },
             ],
@@ -739,30 +739,48 @@ const routes = [
             id: 'openPortalRadius',
             isIndex: true,
             path: '/main/portal/radius',
-            icon: 'level-up',
+            icon: 'copy',
             text: _('Radius'),
             indexRoute: {
               onEnter: (nextState, replace) => replace('/main/portal/radius/nas'),
             },
             childRoutes: [
               {
+<<<<<<< HEAD
                 id: 'openPortalRadiusNas',
                 path: '/main/portal/radius/nas',
                 formUrl: getOpenPortalFormUrl('openPortal/radius/nas'),
+=======
+                id: 'portalRadiusNas',
+                path: '/main/portal/radius/nas',
+                formUrl: 'goform/portal/radius/nas',
+>>>>>>> AXC: 完善portal模块界面
                 text: _('NAS List'),
                 mode: 'cors',
                 component: sOpenPortalNas.Screen,
               }, {
+<<<<<<< HEAD
                 id: 'openPortalRadiusOnline',
                 path: '/main/portal/radius/online',
                 formUrl: getOpenPortalFormUrl('openPortal/radius/online'),
+=======
+                id: 'portalRadiusOnlineList',
+                path: '/main/portal/radius/online',
+                formUrl: 'goform/portal/radius/online',
+>>>>>>> AXC: 完善portal模块界面
                 text: _('Online List'),
                 mode: 'cors',
                 component: sOpenPortalOnline.Screen,
               }, {
+<<<<<<< HEAD
                 id: 'openPortalRadiusConnectLog',
                 path: '/main/portal/radius/connectlog',
                 formUrl: getOpenPortalFormUrl('openPortal/radius/linkRecordAll'),
+=======
+                id: 'portalRadiusConnectLogs',
+                path: '/main/portal/radius/logs',
+                formUrl: 'goform/portal/radius/logs',
+>>>>>>> AXC: 完善portal模块界面
                 text: _('Connect Logs'),
                 mode: 'cors',
                 component: sOpenPortalConnectLog.Screen,

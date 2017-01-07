@@ -70,6 +70,7 @@ class App extends Component {
       <div>
         { this.props.children }
         <Modal
+          id="appModal"
           isShow={modal.status === 'show'}
           title={modal.title}
           role={modelRole}

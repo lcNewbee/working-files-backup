@@ -1,0 +1,27 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [{
+      "id": 1,
+      "nasip": "192.168.0.1",
+      "ip": "192.168.0.1",
+      "userip": "192.168.0.1",
+      "callingstationid": "",
+      "name": "dsd",
+      "sessionTime": "",
+      "octets": "",
+      "clientType": "",
+      "startDate": "",
+      "costTime": "",
+      "inS": "",
+      "outS": "",
+      "costOctets": "",
+      "updateDate": "",
+      "acctSessionId": "",
+      "state": ""
+    }]
+  }
+}

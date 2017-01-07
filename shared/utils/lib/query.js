@@ -36,7 +36,7 @@ function getQuery(search) {
       ret[key] = val;
     }
   }
-  
+
   return ret;
 }
 
@@ -45,7 +45,7 @@ function getUrlQuery() {
 
   ret = getQuery(window.location.search);
 
-  return ret;  
+  return ret;
 }
 
 /**
@@ -70,6 +70,27 @@ function queryToParamsStr(query) {
 }
 
 /**
+ * Query object to http request params string
+ * @param  {object} query The query object
+ * @return {string}       The http request params string
+ */
+function queryToFormData(query) {
+  var ret = new FormData();
+
+  if(typeof query !== 'object') {
+    return '';
+  }
+
+  for ( var key in query ) {
+    if(query.hasOwnProperty(key)) {
+      ret.append(key, query[key]);
+    }
+  }
+
+  return ret;
+}
+
+/**
  * [queryToJSON description]
  * @param  {[object]} query [description]
  * @return {[JOSN]}       [description]
@@ -91,7 +112,7 @@ function queryToJSON(query) {
       } else {
         encodeObj[key] = encodeURIComponent(query[key]);
       }
-      
+
     }
   }
 
@@ -106,7 +127,8 @@ query = {
   getQuery: getQuery,
   queryToParamsStr: queryToParamsStr,
   queryToJSON: queryToJSON,
-  getUrlQuery: getUrlQuery
+  getUrlQuery: getUrlQuery,
+  queryToFormData: queryToFormData
 };
 
 if (typeof module === "object" && typeof module.exports === "object" ) {

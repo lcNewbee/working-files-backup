@@ -594,7 +594,7 @@ const routes = [
             path: '/main/system/license',
             formUrl: 'goform/system/license',
             icon: 'file-text',
-            text: _('License Management'),
+            text: _('License'),
             component: sLicense.Screen,
           }, {
             id: 'apMaintenance',
