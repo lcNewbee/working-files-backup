@@ -58,7 +58,7 @@ export default class View extends React.Component {
   }
 
   onReboot() {
-    this.props.save('goform/system/reboot');
+    return this.props.save('goform/system/reboot');
   }
 
   onBackup() {
@@ -66,7 +66,7 @@ export default class View extends React.Component {
   }
 
   onRestore() {
-    this.props.save('goform/system/restore');
+    return this.props.save('goform/system/restore');
   }
 
   onConfirm(type) {
@@ -135,6 +135,7 @@ export default class View extends React.Component {
         <div className="o-form">
           <AcVersion
             {...this.props}
+            onReboot={this.onReboot}
           />
 
           <fieldset className="o-form__fieldset">

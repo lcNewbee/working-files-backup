@@ -88,7 +88,7 @@ const sPortalMac =
  * AP组管理
  */
 const sOverview = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Overview');
-const sUsers = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Users');
+const sClientList = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/ClientList');
 const sFlowUser = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Flow/User');
 // const sFlowApp = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Flow/App');
 const sSsidStatus = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/SsidStatus');
@@ -108,8 +108,8 @@ const sEndpointProtection =
 
 // const sFlowReport =
 //     require('../../screens/App/screens/MainAxc/screens/Report/screens/FlowReport');
-// const sUsersAnalysis =
-//     require('../../screens/App/screens/MainAxc/screens/Report/screens/BusinessReport/screens/UsersAnalysis');
+// const sClientListAnalysis =
+//     require('../../screens/App/screens/MainAxc/screens/Report/screens/BusinessReport/screens/ClientListAnalysis');
 const sLiveMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/LiveMap');
 const sApPlanMap =
     require('../../screens/App/screens/MainAxc/screens/Map/screens/ApPlanMap');
@@ -315,7 +315,7 @@ const routes = [
                 path: '/main/group/monitor/user',
                 formUrl: 'goform/group/client',
                 text: _('Client List'),
-                component: sUsers.Screen,
+                component: sClientList.Screen,
               },
               // {
               //   id: 'groupTraffic',

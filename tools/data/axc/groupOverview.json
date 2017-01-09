@@ -5,6 +5,8 @@
   },
   "data": {
     "clientsNumber": 693,
+    "online": 693,
+    "offline": 293,
     "terminalType": [
       {
         "name": "iPhone",

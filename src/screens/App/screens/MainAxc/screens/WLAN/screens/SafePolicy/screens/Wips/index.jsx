@@ -112,9 +112,12 @@ const listOptions = fromJS([
     },
   }, {
     id: 'enable2g4chl',
-    text: _('2.4G Auto Channel Scan'),
-    legend: _('2.4G'),
+    text: _('Auto Channel Scan'),
     fieldset: '2.4G',
+    fieldsetOption: {
+      legend: _('2.4G'),
+      className: 'cols col-6',
+    },
     formProps: {
       type: 'checkbox',
       dataType: 'number',
@@ -123,7 +126,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'enable2g4pwr',
-    text: _('2.4G Auto Power Scan'),
+    text: _('Auto Power Scan'),
     fieldset: '2.4G',
     formProps: {
       type: 'checkbox',
@@ -133,8 +136,43 @@ const listOptions = fromJS([
     },
   }, {
     id: 'adjafactor2g4',
-    text: _('2.4G Neighbor Coefficient'),
+    text: _('Neighbor Coefficient'),
     fieldset: '2.4G',
+    formProps: {
+      min: 1,
+      max: 255,
+      type: 'number',
+      dataType: 'number',
+      defaultValue: '1',
+    },
+  }, {
+    id: 'enable5gchl',
+    text: _('Auto Channel Scan'),
+    fieldset: '5G',
+    fieldsetOption: {
+      legend: _('5G'),
+      className: 'cols col-6',
+    },
+    formProps: {
+      type: 'checkbox',
+      dataType: 'number',
+      defaultValue: '1',
+      value: '1',
+    },
+  }, {
+    id: 'enable5gpwr',
+    text: _('Auto Power Scan'),
+    fieldset: '5G',
+    formProps: {
+      type: 'checkbox',
+      dataType: 'number',
+      defaultValue: '1',
+      value: '1',
+    },
+  }, {
+    id: 'adjafactor5g',
+    text: _('Neighbor Coefficient'),
+    fieldset: '5G',
     formProps: {
       min: 1,
       max: 255,

@@ -30,6 +30,14 @@ const listOptions = fromJS([
       validator: validator({}),
     },
   }, {
+    id: 'fileName',
+    text: _('Firmware File Name'),
+    defaultValue: '',
+    formProps: {
+      type: 'plain-text',
+      validator: validator({}),
+    },
+  }, {
     id: 'versionFile',
     text: _('Firmware File'),
     noTable: true,

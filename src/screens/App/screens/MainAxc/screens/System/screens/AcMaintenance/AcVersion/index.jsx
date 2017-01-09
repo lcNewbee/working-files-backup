@@ -32,6 +32,7 @@ const propTypes = {
   fetchProductInfo: PropTypes.func,
   closeModal: PropTypes.func,
   changeModalState: PropTypes.func,
+  onReboot: PropTypes.func,
 };
 const defaultProps = {};
 export default class AcVersion extends PureComponent {
@@ -40,7 +41,7 @@ export default class AcVersion extends PureComponent {
 
     utils.binds(this,
       [
-        'updateState', 'renderStepOne', 'onBeforeStep', 'upgradeAc',
+        'renderStepOne', 'onBeforeStep', 'upgradeAc', 'doUpgradeAc',
         'acUploading', 'checkUpgradOk', 'renderStepThree', 'onComplete',
       ],
     );
@@ -73,6 +74,24 @@ export default class AcVersion extends PureComponent {
     return ret;
   }
 
+  doUpgradeAc() {
+    this.props.createModal({
+      role: 'loading',
+      title: '',
+      loadingStep: 3000,
+      loadingTitle: msg.upgradingACversion,
+      onLoaded: () => {
+        this.props.closeModal();
+        this.setState({
+          initStep: 2,
+        });
+      },
+    });
+
+    this.props.onReboot();
+    this.checkUpgradOk(true);
+  }
+
   checkUpgradOk(isFirst) {
     if (!isFirst) {
       this.props.fetchProductInfo('goform/axcInfo')
@@ -89,7 +108,6 @@ export default class AcVersion extends PureComponent {
       this.checkUpgradOk();
     }, 5000);
   }
-
   upgradeAc() {
     const { filename } = this.state;
     const url = 'goform/system/version/upgrade';
@@ -102,20 +120,8 @@ export default class AcVersion extends PureComponent {
           this.props.save(url, { filename })
             .then((json) => {
               if (json && json.state.code === 2000) {
-                this.props.createModal({
-                  role: 'loading',
-                  title: '',
-                  loadingStep: 3000,
-                  loadingTitle: msg.upgradingACversion,
-                  onLoaded: () => {
-                    this.props.closeModal();
-                    this.setState({
-                      initStep: 2,
-                    });
-                  },
-                });
                 resolve();
-                this.checkUpgradOk(true);
+                this.doUpgradeAc();
               } else {
                 reject();
               }
@@ -128,10 +134,6 @@ export default class AcVersion extends PureComponent {
     return promise;
   }
 
-  updateState(data) {
-    this.setState(data);
-  }
-
   renderStepOne() {
     const { app } = this.props;
     const componentConfig = {
@@ -139,7 +141,7 @@ export default class AcVersion extends PureComponent {
     };
     const eventHandlers = {
       removedfile: () => {
-        this.updateState({
+        this.setState({
           fileUploaded: false,
           filename: '',
         });
@@ -151,7 +153,7 @@ export default class AcVersion extends PureComponent {
       uploadprogress: null,
       sending: null,
       success: (file) => {
-        this.updateState({
+        this.setState({
           fileUploaded: true,
           filename: file.name,
         });
@@ -198,7 +200,7 @@ export default class AcVersion extends PureComponent {
             name="versionUses"
             options={versionUsesOptions}
             value={this.state.versionUses}
-            onChange={data => this.updateState({
+            onChange={data => this.setState({
               versionUses: data.value,
             })}
           />

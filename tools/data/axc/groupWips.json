@@ -15,6 +15,9 @@
       "enable2g4chl": 0,
       "enable2g4pwr": 0,
       "adjafactor2g4": 0,
+      "enable5gchl": 0,
+      "enable5gpwr": 0,
+      "adjafactor5g": 0,
       "attacttime" : 0,
       "attactcnt": 5,
       "dyaging": 10

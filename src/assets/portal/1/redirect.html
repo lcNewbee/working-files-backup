@@ -20,9 +20,9 @@
       body {
         margin: 0;
         min-height: 100%;
-        background: url(images/bg.jpg);
+        background: url(images/bg.jpg) no-repeat;
         background-size: 100%;
-       }
+      }
 
       * {box-sizing: border-box;}
 
@@ -35,17 +35,20 @@
       }
       .header {
         text-align: center;
-        padding: 46px;
+        padding: 58px 0;
       }
       .header h1{
         font-size: 18px;
         font-weight: 400;
-        color: #fff;
+        color: #111;
         margin-bottom: 0;
       }
       .logo {
-        width: 80px;
-        height: 80px;
+        width: 160px;
+        height: 90px;
+        background: url(images/logo.png) center no-repeat;
+        background-size: 100%;
+        margin: 0 auto;
       }
       .container {
         text-align: center;
@@ -66,12 +69,15 @@
         text-align: center;
         border: none;
         border-radius: 5px;
-        margin-top: 55%;
+        margin-top: 110px;
       }
         .btn:active,
         .btn.active {
            opacity: 0.8;
         }
+      #tip {
+        color: #333;
+      }
   </style>
 
   <script type="text/javascript">
@@ -370,11 +376,12 @@
 
       var skiping = false;
 
-      function showTips(){
-        document.getElementById('tips').innerHTML = '如果没有自动跳转微信，请手动打开微信！';
+      function showTips(msg){
+        var myMsg = msg || '如果没有自动跳转微信，请手动打开微信！'
+        document.getElementById('tips').innerHTML = myMsg;
       }
 
-      function onlineImmediate() {
+      function weixinAuth() {
         var protocol = window.location.protocol;
         var hostname = window.location.hostname;
         var url = 'http://' + hostname + ':2051/goform/getWeixinInfo?action=continue&callback=?';
@@ -390,6 +397,19 @@
 
         setTimeout(showTips, 10000);
       }
+      function getPortalAuthUrl() {
+        var ret = window.location.protocol + "//" + window.location.hostname +
+          ':2050/auth_portal?callback=?';
+
+        return ret;
+      }
+
+      function onlineImmediate() {
+        $.getJSON(getPortalAuthUrl(), weixinAuth)
+          .fail(function() {
+            showTips('')
+          });
+      }
 
       // 配置
       $.ajaxSetup({
@@ -404,7 +424,7 @@
 </head>
 <body>
     <div class="header">
-      <h1>&nbsp;</h1>
+      <div class="logo"></div>
     </div>
     <div class="container">
       <button type="button" id="conBtn" class="btn" onClick="onlineImmediate()">打开微信连接Wi-Fi</button>

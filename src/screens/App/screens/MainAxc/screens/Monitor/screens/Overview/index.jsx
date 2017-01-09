@@ -60,7 +60,7 @@ function getTerminalTypeOption(serverData) {
   const ret = {
     tooltip: {
       trigger: 'item',
-      formatter: '{a} <br/>{b} ({d}%)',
+      formatter: '{a} <br/>{b}: {c} ({d}%)',
     },
     title: {
       text: _('Clients'),
@@ -73,15 +73,23 @@ function getTerminalTypeOption(serverData) {
       orient: 'vertical',
       x: 'left',
       y: 'bottom',
+      formatter: (name) => {
+        const num = serverData.get('terminalType')
+          .find($$item => $$item.get('name') === name)
+          .get('value');
+
+        return `${name}: ${num}`;
+      },
     },
     series: [
       {
-        name: 'Type',
+        name: _('Type'),
         type: 'pie',
         center: ['70%', '50%'],
         radius: ['20%', '60%'],
         avoidLabelOverlap: false,
         label: {
+          formatter: '{b}: {c}',
           normal: {
             show: false,
             //position: 'center',
@@ -99,13 +107,20 @@ function getTerminalTypeOption(serverData) {
             show: false,
           },
         },
-
       },
     ],
   };
 
+
   if (List.isList(dataList)) {
-    dataList = dataList.map(item => item.set('name', `${item.get('name')}: ${item.get('value')}`));
+    dataList = dataList.sort(($$a, $$b) => {
+      const a = $$a.get('value');
+      const b = $$b.get('value');
+
+      if (a < b) { return 1; }
+      if (a > b) { return -1; }
+      if (a === b) { return 0; }
+    });
     ret.legend.data = dataList.map(item => item.get('name')).toJS();
     ret.series[0].data = dataList.toJS();
   }
@@ -127,6 +142,14 @@ function getApStatusOption(serverData) {
       orient: 'vertical',
       x: 'left',
       y: 'bottom',
+      formatter: (name) => {
+        let num = serverData.get('offline');
+
+        if (name === _('Online')) {
+          num = serverData.get('online');
+        }
+        return `${name}: ${num}`;
+      },
       data: [_('Offline'), _('Online')],
     },
     series: [
@@ -134,6 +157,7 @@ function getApStatusOption(serverData) {
         name: _('Status'),
         type: 'pie',
         radius: ['20%', '60%'],
+        center: ['55%', '50%'],
         avoidLabelOverlap: false,
         label: {
           formatter: '{b}: {c}',
@@ -159,8 +183,8 @@ function getApStatusOption(serverData) {
   };
 
   ret.series[0].data = [
-    { value: serverData.get('memoryUsed'), name: _('Offline') },
-    { value: serverData.get('memoryTotal') - serverData.get('memoryUsed'), name: _('Online') },
+    { value: serverData.get('offline'), name: _('Offline') },
+    { value: serverData.get('online'), name: _('Online') },
   ];
 
   return ret;

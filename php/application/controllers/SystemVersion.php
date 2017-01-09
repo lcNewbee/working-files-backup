@@ -18,7 +18,7 @@ class SystemVersion extends CI_Controller {
             $error = array('error' => $this->upload->display_errors());
             $result = array(
                 'state' => array(
-                    'code' => 4000, 
+                    'code' => 4000,
                     'msg' => $error
                 )
             );
@@ -36,7 +36,7 @@ class SystemVersion extends CI_Controller {
     public function upload() {
         $result = array(
             'state' => array(
-                'code' => 3002, 
+                'code' => 2000,
                 'msg' => 'Need Post'
             )
         );
@@ -48,7 +48,7 @@ class SystemVersion extends CI_Controller {
     public function upgrade() {
         $result = array(
             'state' => array(
-                'code' => 3002, 
+                'code' => 2000,
                 'msg' => 'Need Post'
             )
         );
@@ -57,7 +57,6 @@ class SystemVersion extends CI_Controller {
             $filename = element('filename', $data, '');
             $msg = 'ok';
             $result['state']['msg'] = $msg;
-            sleep(1);
             $msg = shell_exec('sysupgrade -f /etc/Ac_ver/' . $filename);
             $needle = 'sysupgrade fail';
             if (strpos($msg, $needle)) {
@@ -70,7 +69,7 @@ class SystemVersion extends CI_Controller {
     public function backup() {
         $result = array(
             'state' => array(
-                'code' => 3002, 
+                'code' => 2000,
                 'msg' => 'Need Post'
             )
         );

@@ -125,9 +125,15 @@ export default class Clients extends React.Component {
     utils.binds(
       this, [
         'onAction',
+        'initListOptions',
       ],
     );
   }
+
+  componentWillMount() {
+    this.initListOptions(this.props);
+  }
+
   onAction(mac, actionType) {
     this.props.changeScreenActionQuery({
       action: actionType,
@@ -136,52 +142,59 @@ export default class Clients extends React.Component {
     });
     this.props.onListAction();
   }
+  initListOptions(props) {
+    // 所有组
+    if (props.groupid === -100) {
+      this.listOptions = listOptions.delete(-1);
+
+    //
+    } else {
+      this.listOptions = listOptions.setIn([-1, 'transform'],
+        (val, item) => {
+          const mac = item.get('mac');
+          const isLock = item.get('islock') === 'lock';
+
+          return (
+            <div className="action-btns">
+              {
+                isLock ? (
+                  <Button
+                    icon="unlock"
+                    size="sm"
+                    text={msg.unlock}
+                    style={styles.actionButton}
+                    onClick={() => this.onAction(mac, 'unlock')}
+                  />
+                ) : (
+                  <Button
+                    icon="lock"
+                    size="sm"
+                    text={msg.lock}
+                    style={styles.actionButton}
+                    onClick={() => this.onAction(mac, 'lock')}
+                  />
+                )
+              }
+              {/*
+              <Button
+                icon="repeat"
+                size="sm"
+                text={msg.reconnect}
+                style={styles.actionButton}
+                onClick={() => this.onAction(mac, 'reconnect')}
+              />
+              */}
+            </div>
+          );
+        },
+      );
+    }
+  }
   render() {
-    // 添加操作项
-    const myListOptions = listOptions.setIn([-1, 'transform'],
-      (val, item) => {
-        const mac = item.get('mac');
-        const isLock = item.get('islock') === 'lock';
-
-        return (
-          <div className="action-btns">
-            {
-              isLock ? (
-                <Button
-                  icon="unlock"
-                  size="sm"
-                  text={msg.unlock}
-                  style={styles.actionButton}
-                  onClick={() => this.onAction(mac, 'unlock')}
-                />
-              ) : (
-                <Button
-                  icon="lock"
-                  size="sm"
-                  text={msg.lock}
-                  style={styles.actionButton}
-                  onClick={() => this.onAction(mac, 'lock')}
-                />
-              )
-            }
-            {/*
-            <Button
-              icon="repeat"
-              size="sm"
-              text={msg.reconnect}
-              style={styles.actionButton}
-              onClick={() => this.onAction(mac, 'reconnect')}
-            />
-            */}
-          </div>
-        );
-      },
-    );
-
     return (
       <AppScreen
         {...this.props}
-        listOptions={myListOptions}
+        listOptions={this.listOptions}
         searchable
       />
     );

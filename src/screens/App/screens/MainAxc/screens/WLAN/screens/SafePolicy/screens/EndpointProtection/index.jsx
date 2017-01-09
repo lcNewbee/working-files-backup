@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import AppScreen from 'shared/components/Template/AppScreen';
 import * as appActions from 'shared/actions/app';
@@ -53,19 +53,31 @@ const screenOptions = fromJS([
 
 const settingsFormOptions = immutableUtils.getFormOptions(screenOptions);
 
-const propTypes = {};
+const propTypes = {
+  selectedGroup: PropTypes.instanceOf(Map),
+};
 const defaultProps = {};
 
 export default class View extends React.Component {
   constructor(props) {
     super(props);
   }
+
+  componentWillMount() {
+    this.actionable = this.props.selectedGroup.get('aclType') === 'black';
+  }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.selectedGroup !== this.props.selectedGroup) {
+      this.actionable = nextProps.selectedGroup.get('aclType') === 'black';
+    }
+  }
+
   render() {
     return (
       <AppScreen
         {...this.props}
         settingsFormOptions={settingsFormOptions}
-        hasSettingsSaveButton
+        hasSettingsSaveButton={this.actionable}
         noTitle
       />
     );
@@ -80,6 +92,7 @@ function mapStateToProps(state) {
     app: state.app,
     store: state.screens,
     groupid: state.product.getIn(['group', 'selected', 'id']),
+    selectedGroup: state.product.getIn(['group', 'selected']),
   };
 }
 

@@ -90,7 +90,7 @@ const sPortalMac =
  * AP组管理
  */
 const sOverview = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Overview');
-const sUsers = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Users');
+const sClientList = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/ClientList');
 const sFlowUser = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Flow/User');
 // const sFlowApp = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Flow/App');
 const sSsidStatus = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/SsidStatus');
@@ -333,7 +333,7 @@ const routes = [
                 path: '/main/group/monitor/user',
                 formUrl: 'goform/group/client',
                 text: _('Client List'),
-                component: sUsers.Screen,
+                component: sClientList.Screen,
               },
               // {
               //   id: 'groupTraffic',
@@ -508,8 +508,8 @@ const routes = [
           //           id: 'usersFlowAnalysis',
           //           path: '/main/group/report/business/usersFlow',
           //           formUrl: 'goform/usersFlowAnalysis',
-          //           text: _('Users Flow Analysis'),
-          //           component: sUsersAnalysis.Screen,
+          //           text: _('ClientList Flow Analysis'),
+          //           component: sClientListAnalysis.Screen,
           //         // }, {
           //         //   id: 'informationPush',
           //         //   path: '/main/group/report/business/informationPush',
