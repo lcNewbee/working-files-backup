@@ -96,12 +96,13 @@ export default class View extends React.Component {
   onBeforeAction($$actionQuery) {
     const actionType = $$actionQuery.getIn(['action']);
     let ret = '';
-    if (actionType === 'active' && parseInt($$actionQuery.get('active'), 10) === 0) {
-      ret = _('You should activate another Firmware version before deactivating this Firmware version');
-    // 删除已激活版本
-    } else if (actionType === 'delete' && parseInt($$actionQuery.get('active'), 10) === 1) {
-      ret = _("The current Firmware version is active, you can't delete it. If you want to delete it, please activate another Firmware version!");
-    }
+
+    // if (actionType === 'active' && parseInt($$actionQuery.get('active'), 10) === 0) {
+    //   ret = _('You should activate another Firmware version before deactivating this Firmware version');
+    // // 删除已激活版本
+    // } else if (actionType === 'delete' && parseInt($$actionQuery.get('active'), 10) === 1) {
+    //   ret = _("The current Firmware version is active, you can't delete it. If you want to delete it, please activate another Firmware version!");
+    // }
     return ret;
   }
 
