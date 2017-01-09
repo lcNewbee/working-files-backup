@@ -1,0 +1,40 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+class RadiusNas extends CI_Controller {
+	public function __construct() {
+		parent::__construct();
+		$this->load->database();
+		$this->load->helper('array');
+        $this->load->model('portal/RadiusNas_Model');
+	}
+    public function index() {
+		$result = null;
+		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+			$data = json_decode(file_get_contents("php://input"), true);
+			$result = $this->onAction($data);
+			echo $result;
+		} elseif ($_SERVER['REQUEST_METHOD'] == 'GET') {
+			$result = $this->fetch();
+			echo $result;
+		}
+	}
+	function fetch() {
+		return $this->RadiusNas_Model->get_nas_list('test');
+	}
+	function onAction($data) {
+		$result = null;
+		$actionType = element('action', $data);
+		switch($actionType) {
+            case 'add' : $result = $this->RadiusNas_Model->add_radius_nas($data);
+                break;
+            case 'delete' : $result = $this->RadiusNas_Model->del_radius_nas($data);
+                break;
+            case 'edit' : $result = $this->RadiusNas_Model->edit_radius_nas($data);
+                break;
+            default : $result = json_encode(array('state' => array('code' => 4000, 'msg' => 'No request action')));
+                break;
+        }
+		return $result;
+	}
+	
+}
