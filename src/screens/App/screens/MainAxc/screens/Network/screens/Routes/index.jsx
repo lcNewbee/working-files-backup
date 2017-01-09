@@ -16,7 +16,7 @@ const listOptions = fromJS([
     formProps: {
       required: true,
       validator: validator({
-        rules: 'ip',
+        rules: 'ip:[true]',
         exclude: '0.0.0.0',
       }),
     },

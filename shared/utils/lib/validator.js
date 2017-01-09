@@ -83,19 +83,31 @@ var vaildate = {
     }
   },
 
+  /**
+   * 一般IP不能
+   */
   ip: {
-    all: function(str) {
+    all: function(str, isSegment) {
       var ret = this.specific(str);
+      var ipReg = /^([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){2}([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])$/;
 
       if (ret) {
         return ret;
       }
 
-      if (!(/^([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){2}([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])$/).test(str)) {
+      // 如果是网段 ip, 允许最后一位为 0
+      if (isSegment) {
+        ipReg = /^([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){2}([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])$/;
+      }
+
+      if (!(ipReg).test(str)) {
         return _("Please input a valid IP address");
       }
     },
 
+    /**
+     * 不能为回环地址，A类地址
+     */
     specific: function(str) {
       var ipArr = str.split('.'),
         ipHead = ipArr[0];
@@ -110,8 +122,8 @@ var vaildate = {
     }
   },
   ipSegment: {
-    all: function(str) {
-      var ret = this.specific(str);
+    all: function(str, noMask) {
+      var ret = this.specific(str, noMask);
       var ip = str.split('/')[0];
       var mask = str.split('/')[1];
 
@@ -119,19 +131,20 @@ var vaildate = {
         return ret;
       }
 
-      if (!(/^([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){2}([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])$/).test(ip)) {
+      if (!(/^([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){2}([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])$/).test(ip)) {
         return _("Please input a valid IP address");
       }
 
-      if (mask) {
+      // 只有无 noMask 参数是才验证子网
+      if (!noMask && mask) {
         if (!(/^([0-9]){1,2}$/.test(mask)) || mask > 32) {
           return _("Network segment mask must be a number between 0-32");
         }
       }
     },
 
-    specific: function(str) {
-      return vaildate.ip.specific(str);
+    specific: function(str, noMask) {
+      return vaildate.ip.specific(str, noMask);
     }
   },
 
@@ -334,14 +347,35 @@ function check(str, rules) {
     }
   }
 }
+
+/**
+ * 处理排除规则
+ */
 function isExclueString(obj, str) {
   var ret = false;
   var exclude = obj.exclude;
+  var i, len, curExclude, curType;
 
   if (typeof exclude === 'string' && exclude === str) {
     ret = true;
   } else if (utilsCore.isArray(exclude)) {
-    ret = exclude.indexOf(str) !== -1;
+    for(i = 0, len = exclude.length; i < len; i += 1) {
+      curExclude = exclude[i];
+      curType = typeof curExclude;
+
+      // 单纯过滤字符串
+      if (curType === 'string' && curExclude === str) {
+        ret = true;
+
+      // 如果是过滤函数
+      } else if(curType === 'function') {
+        ret = curExclude(str);
+      }
+
+      if (ret) {
+        return ret;
+      }
+    }
   }
 
   return ret;
