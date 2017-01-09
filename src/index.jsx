@@ -39,7 +39,11 @@ if (module.hot) {
     renderApp();
   };
 
+<<<<<<< fa90e58c5da392a2721cd05aefd7042a18ad18a4
   module.hot.accept('./config/axcPortal', () => {
+=======
+  module.hot.accept('./config/AEC120', () => {
+>>>>>>> WEB:合并冲突
     setImmediate(() => {
       // Preventing the hot reloading error from react-router
       unmountComponentAtNode(mountNode);
