@@ -642,6 +642,8 @@ export default class Basic extends React.Component {
       vlanId: '1',
       hideSsid: '0',
       enable: '1',
+      portalEnable: '0',
+      airTimeEnable: '0',
       security: {
         mode: 'none',
         cipher: 'aes',
@@ -655,7 +657,7 @@ export default class Basic extends React.Component {
     const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
     const vapList = this.props.selfState.getIn(['multiSsid', 'radioList', radioId, 'vapList']).push(newSsid);
     const radioList = this.props.selfState.getIn(['multiSsid', 'radioList']).setIn([radioId, 'vapList'], vapList);
-    if (vapList.size <= 16) { // 最大支持16个SSID
+    if (vapList.size <= 15) { // 最大支持15个SSID
       this.props.updateMultiSsidItem({ radioList });
     }
   }

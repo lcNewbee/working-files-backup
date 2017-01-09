@@ -365,5 +365,6 @@
   "password error": "密码错误",
   "Language Setting": "语言设置",
   "Start Scan": "开始扫描",
+  "The number of MAC list items can not exceed 64 !": "MAC列表地址数目不能超过64！",
   "Default On": "默认开启"
 }

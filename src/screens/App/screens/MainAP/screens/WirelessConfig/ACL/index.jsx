@@ -143,7 +143,8 @@ export default class ACL extends React.Component {
             role: 'alert',
             text: _('The MAC address already exists in the mac list !'),
           });
-        } else {
+        }
+        if (preList.size < 64) {
           afterList = preList.push(macInputVal);
           const listLen = afterList.size;
           const aclConfList = this.props.store.getIn(['curData', 'radioList', radioId, 'aclConfList'])
@@ -155,6 +156,12 @@ export default class ACL extends React.Component {
           this.props.changeMacInput('');
           this.props.initMacstatus(listLen);
           this.macListWrap.scrollIntoView();
+        } else {
+          this.props.createModal({
+            id: 'settings',
+            role: 'alert',
+            text: _('The number of MAC list items can not exceed 64 !'),
+          });
         }
       }
     });
