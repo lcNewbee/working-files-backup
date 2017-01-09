@@ -83,11 +83,19 @@ export function receiveAjaxError(payload) {
     payload,
   };
 }
-
+const ERROR_MSG_MAP = {
+  6300: _('Pelect upload the correct firmware file'),
+};
 export function receiveServerError(state) {
+  let errorMsg = state.msg;
+
   // 显示服务器错误
   if (state.code >= 6000) {
-    toastr.error(_('Data Sync Error'), state.msg);
+    if (ERROR_MSG_MAP[state.code]) {
+      errorMsg = ERROR_MSG_MAP[state.code];
+    }
+
+    toastr.error(_('Data Sync Error'), _(errorMsg));
   }
 
   return {

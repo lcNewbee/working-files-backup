@@ -13,7 +13,7 @@ const _ = window._;
 const msg = {
   password: _('Password'),
   versionUses: _('Version Description'),
-  selectFile: _('Image File'),
+  selectFile: _('Firmware File'),
   dictDefaultMessage: _('Drop or click to select file'),
   removefile: _('Remove File'),
   currentVersion: _('Current Firmware Version'),
@@ -235,7 +235,7 @@ export default class AcVersion extends PureComponent {
     ];
     const options = fromJS([
       {
-        title: _('Upload Image'),
+        title: _('Upload Firmware'),
         render: this.renderStepOne,
       }, {
         title: stepTwoTitleArr[versionUses],

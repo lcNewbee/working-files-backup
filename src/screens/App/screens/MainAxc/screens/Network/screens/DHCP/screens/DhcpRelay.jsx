@@ -6,7 +6,6 @@ import { bindActionCreators } from 'redux';
 import AppScreen from 'shared/components/Template/AppScreen';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
-import TIME_ZONE from 'shared/config/timeZone';
 import validator from 'shared/utils/lib/validator';
 
 const propTypes = {
