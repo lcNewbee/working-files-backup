@@ -275,10 +275,15 @@ export default class Basic extends React.Component {
           label: _('Max Clients'),
           width: '250px',
           transform: function (val, item) {
+            if (val === '' || !Number.isInteger(+val) || parseInt(val, 10) <= 0) {
+              this.onSsidItemChange(val, item, 'maxClients', 50);
+            } // 后台没传值，或值错误，则提供默认值
             return (
               <FormInput
                 type="number"
                 value={val}
+                max={100}
+                min={1}
                 // disabled={pos === 0 || vlanEnable === '0'}
                 onChange={(data) => {
                   this.onSsidItemChange(val, item, 'maxClients', data.value);
@@ -580,6 +585,7 @@ export default class Basic extends React.Component {
       vlanId: '1',
       hideSsid: '0',
       enable: '1',
+      maxClients: '50',
       security: {
         mode: 'none',
         cipher: 'aes',
@@ -1080,6 +1086,8 @@ export default class Basic extends React.Component {
                     <FormGroup
                       label={_('Max Clients')}
                       type="number"
+                      max={200}
+                      min={1}
                       form="maxradioclients"
                       value={curData.getIn(['radioList', radioId, 'maxRadioClients'])}
                       onChange={(data) => {
@@ -1618,20 +1626,20 @@ export default class Basic extends React.Component {
                   type="button"
                   loading={this.props.app.get('saving') &&
                           this.props.selfState.get('whichButton') === 'multiSsid'}
-                  disabled={curData.get('wirelessMode') === 'sta'}
+                  // disabled={curData.get('wirelessMode') === 'sta'}
                   onClick={() => {
                     let error = '';
                     let totalNum = 0;
                     const vapList = curData.getIn(['radioList', radioId, 'vapList']).toJS();
                     const radioClientLimit = curData.getIn(['radioList', radioId, 'maxRadioClients']);
-                    const len = vapList.length;
+                    const len = curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta' ? 1 : vapList.length;
+                    console.log('len', curData.getIn([radioId, 'wirelessMode']));
                     const re = /^[0-9]*[1-9][0-9]*$/;
                     for (let i = 0; i < len; i++) {
                       if (!re.test(vapList[i].vlanId)) {
                         error = _('Vlan ID must be positive interger !');
                         break;
                       }
-                      console.log('break from first if');
                       if (vapList[i].vlanId < 1 || vapList[i].vlanId > 4094) {
                         error = _('Vlan ID number out of range ! (1 ~ 4094)');
                         break;
@@ -1649,8 +1657,8 @@ export default class Basic extends React.Component {
                       // 判断是否有该功能，没有则不验证
                       if (this.props.route.funConfig.ssidTableKeys.indexOf('maxClients') !== -1) {
                         if (vapList[i].maxClients === '' ||
-                            vapList[i].maxClients === '0' ||
-                            typeof (vapList[i].maxClients) === 'undefined') {
+                            !Number.isInteger(+vapList[i].maxClients) ||
+                            parseInt(vapList[i].maxClients, 10) <= 0) {
                           error = _('Max clients number must be positive interger !');
                           break;
                         }
@@ -1662,7 +1670,6 @@ export default class Basic extends React.Component {
                         totalNum > radioClientLimit) {
                       error = `${_('The total number of ssid maximum clients should not exceed ')}${radioClientLimit}`;
                     }
-                    // console.log('error', totalNum, radioClientLimit);
                     if (error === '') {
                       this.props.changeWhichButton('multiSsid');
                       this.onSave('multiSsid');

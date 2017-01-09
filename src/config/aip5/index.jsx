@@ -48,7 +48,8 @@ const pQuickSetup = require('../../screens/App/screens/MainAP/screens/QuickSetup
 // 无线设置
 const pWirelessConfig = require('../../screens/App/screens/MainAP/screens/WirelessConfig');
 // 子菜单
-const sBasic = require('../../screens/App/screens/MainAP/screens/WirelessConfig/Basic/BasicForP2p');
+const sBasic = require('../../screens/App/screens/MainAP/screens/WirelessConfig/Basic/BasicForCoverage');
+// const sBasic = require('../../screens/App/screens/MainAP/screens/WirelessConfig/Basic/BasicForP2p');
 const sAdvance = require('../../screens/App/screens/MainAP/screens/WirelessConfig/Advance');
 // const sQos = require('../../screens/App/screens/MainAP/screens/WirelessConfig/QoS');
 const sACL = require('../../screens/App/screens/MainAP/screens/WirelessConfig/ACL');
@@ -87,7 +88,16 @@ const funConfig = {
     radioMaxClientsLimit: false,    // 射频最大客户端限制
     // 功能项参见WirelessConfig -> Basic页面下的ssidTableFullMemberOptions变量
     // 决定哪些功能在ssid配置表格上出现
-    ssidTableKeys: ['enable', 'ssid', 'vlanId', 'hideSsid', 'isolation', 'security', 'delete'],
+    ssidTableKeys: [
+      'enable',
+      'ssid',
+      'vlanId',
+      'hideSsid',
+      'isolation',
+      'security',
+      'delete',
+      'maxClients',     // SSID最大客户端限制
+    ],
   },
   // 无线高级设置页面
   advance: {
@@ -103,7 +113,7 @@ const funConfig = {
   },
   // 系统维护页面
   systemmaintenance: {
-    poeOutFun: true,           // POE输出功能
+    poeOutFun: true,            // POE输出功能
     voipFun: false,             // VOIP功能
   },
 };

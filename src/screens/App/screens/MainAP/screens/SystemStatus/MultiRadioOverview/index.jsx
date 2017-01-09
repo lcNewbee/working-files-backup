@@ -467,8 +467,8 @@ export default class SystemStatus extends React.Component {
   }
 
   getCpuAndMemPercentOption() {
-    const cpuUsed = Number(this.props.store.getIn(['curData', 'sysStatus', 'cpuInfo']));
-    const memUsed = Number(this.props.store.getIn(['curData', 'sysStatus', 'memInfo']));
+    const cpuUsed = parseInt(this.props.store.getIn(['curData', 'sysStatus', 'cpuInfo']), 10);
+    const memUsed = parseInt(this.props.store.getIn(['curData', 'sysStatus', 'memInfo']), 10);
     const xAxisData = ['CPU', 'Memary'];
     const data1 = [cpuUsed, memUsed];
     const data2 = [100 - cpuUsed, 100 - memUsed];
@@ -689,7 +689,7 @@ export default class SystemStatus extends React.Component {
     const routerInfo = this.props.store.getIn(['curData', 'networkInfo', 'routerInfo']);
     const radioList = this.props.store.getIn(['curData', 'radioList']);
     const peerList = this.props.store.getIn(['curData', 'radioList', radioId, 'peerList']);
-    const { memInfo, cpuInfo } = this.props.store.getIn(['curData', 'sysStatus']).toJS();
+    // const { memInfo, cpuInfo } = this.props.store.getIn(['curData', 'sysStatus']).toJS();
     const radioSelectOptions = this.props.product.get('radioSelectOptions');
     const serverData = this.props.selfState.get('serverData');
     const topTenFlowClients = getTopTenFlowClientsOption(serverData);
@@ -756,23 +756,23 @@ export default class SystemStatus extends React.Component {
                     </dl>
                     <dl className="o-description-list-row">
                       <dt>{_('WAN IP Mode')}</dt>
-                      <dd>{routerInfo.get('proto')}</dd>
+                      <dd>{routerInfo ? routerInfo.get('proto') : ''}</dd>
                     </dl>
                     <dl className="o-description-list-row">
                       <dt>{_('WAN IP')}</dt>
-                      <dd>{routerInfo.get('ip')}</dd>
+                      <dd>{routerInfo ? routerInfo.get('ip') : ''}</dd>
                     </dl>
                     <dl className="o-description-list-row">
                       <dt>{_('Gateway')}</dt>
-                      <dd>{routerInfo.get('gateway')}</dd>
+                      <dd>{routerInfo ? routerInfo.get('gateway') : ''}</dd>
                     </dl>
                     <dl className="o-description-list-row">
                       <dt>{_('Network Mask')}</dt>
-                      <dd>{routerInfo.get('mask')}</dd>
+                      <dd>{routerInfo ? routerInfo.get('mask') : ''}</dd>
                     </dl>
                     <dl className="o-description-list-row">
                       <dt>{_('NAT Enable')}</dt>
-                      <dd>{routerInfo.get('nat') === '1' ? 'Enable' : 'Disabled'}</dd>
+                      <dd>{routerInfo && routerInfo.get('nat') === '1' ? 'Enable' : 'Disabled'}</dd>
                     </dl>
                   </div>
                 )

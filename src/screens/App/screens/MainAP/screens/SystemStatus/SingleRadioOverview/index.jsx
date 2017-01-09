@@ -546,7 +546,6 @@ export default class SystemStatus extends React.Component {
   }
   onChangeRadio(data) { // 注意参数实际是data的value属性，这里表示radio序号
     const radioType = this.props.product.getIn(['deviceRadioList', data.value, 'radioType']);
-    console.log('radioType', radioType);
     const config = fromJS({
       radioId: data.value,
       radioType,
@@ -1237,13 +1236,13 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     utils.extend({}, appActions, sharedActions, selfActions),
-    dispatch
+    dispatch,
   );
 }
 
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(SystemStatus);
 
 export const systemstatus = reducer;

@@ -65,6 +65,10 @@ const sSystemLogs = require('../../screens/App/screens/MainAP/screens/Tools/Syst
 const sChannelUtilization = require('../../screens/App/screens/MainAP/screens/Tools/ChannelUtilization');
 
 const pPractice = require('../../screens/App/screens/MainAP/screens/Tools/Practice');
+// Portal
+const pPortal = require('../../screens/App/screens/MainAP/screens/PortalSettings');
+const sPortalSettings = require('../../screens/App/screens/MainAP/screens/PortalSettings/PortalSettings');
+
 // 页面功能项配置
 const funConfig = {
   // 覆盖型产品快速设置
@@ -251,6 +255,26 @@ const routes = [{
         },
       ],
     }, {
+      id: 'portalsettings',
+      path: '/main/portalsettings',
+      icon: 'sphere',
+      text: _('Portal'),
+      component: pPortal,
+      indexRoute: {
+        onEnter: (nextState, replace) => replace('main/portalsettings/portalsettings'),
+      },
+      childRoutes: [
+        {
+          id: 'portalsettings',
+          noTree: true,
+          path: '/main/portalsettings/portalsettings',
+          fetchUrl: 'goform/get_portal_info',
+          saveUrl: 'goform/set_portal',
+          text: _('Portal Settings'),
+          component: sPortalSettings.Screen,
+        },
+      ],
+    }, {
       id: 'tools',
       path: '/main/tools',
       icon: 'cogs',
@@ -340,7 +364,7 @@ const reducers = {
 
 const stores = remoteActionMiddleware(
   combineReducers(reducers),
-  window.devToolsExtension ? window.devToolsExtension() : f => f
+  window.devToolsExtension ? window.devToolsExtension() : f => f,
 );
 
 const ac5000 = {

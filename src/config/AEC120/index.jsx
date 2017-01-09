@@ -227,7 +227,7 @@ const routes = [{
     }, {
       id: 'portalsettings',
       path: '/main/portalsettings',
-      icon: 'files-o',
+      icon: 'copy',
       text: _('Portal'),
       component: pPortal,
       indexRoute: {

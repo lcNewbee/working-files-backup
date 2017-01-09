@@ -97,6 +97,7 @@ const funConfig = {
       'isolation',
       'security',
       'delete',
+      'maxClients',
       // 'speedLimit',
       'portalEnable',         // portal功能开关
     ],
@@ -257,7 +258,7 @@ const routes = [{
     }, {
       id: 'portalsettings',
       path: '/main/portalsettings',
-      icon: 'sphere',
+      icon: 'copy',
       text: _('Portal'),
       component: pPortal,
       indexRoute: {

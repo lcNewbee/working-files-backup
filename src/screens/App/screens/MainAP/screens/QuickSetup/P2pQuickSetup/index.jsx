@@ -388,7 +388,7 @@ export default class QuickSetup extends React.Component {
 
   renderOperationMode() {
     return (
-      <div className="firstScreen">
+      <div className="firstScreen" style={{ minWidth: '866px' }}>
         <div className="clearfix">
           <div
             className="cols"

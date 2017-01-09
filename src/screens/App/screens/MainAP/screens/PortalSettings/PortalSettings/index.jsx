@@ -10,7 +10,6 @@ import * as appActions from 'shared/actions/app';
 import * as settingActions from 'shared/actions/settings';
 import * as selfActions from './actions';
 // import reducer from './reducer';
-
 import './style.scss';
 
 const MSG = {
@@ -136,7 +135,7 @@ export default class PortalSettings extends Component {
     const activeIndex = this.state.activeImageIndex;
     const curImgUrl = this.props.store.getIn(['curData', 'imageList', activeIndex - 1, 'url']) || '';
     const {
-      enable, redirectUrl, timeout, refreshTime, title,
+      enable, redirectUrl, timeout, refreshTime, title, shopId, appId, secretKey, weixinEnable,
     } = this.props.store.get('curData').toJS();
 
     return (
@@ -155,73 +154,122 @@ export default class PortalSettings extends Component {
             required
           />
           <FormGroup
-            label={_('Auth Redirect URL')}
-            type="text"
-            value={redirectUrl}
-            onChange={(data) => {
-              this.props.updateItemSettings({ redirectUrl: data.value });
-            }}
-            required
-          />
-          <FormGroup
-            label={_('Portal Title')}
-            type="text"
-            value={title}
-            onChange={(data) => {
-              this.props.updateItemSettings({ title: data.value });
-            }}
-            required
-          />
-          <FormGroup
-            label={_('Expiration')}
+            label={_('Auth Type')}
             type="select"
-            options={expirationOptions}
-            value={timeout}
+            value={weixinEnable === '1' ? 'weixin' : 'web'}
+            options={[
+              { label: _('WEB AUTH'), value: 'web' },
+              { label: _('WEIXIN AUTH'), value: 'weixin' },
+            ]}
             onChange={(data) => {
-              this.props.updateItemSettings({ timeout: data.value });
+              if (data.value === 'weixin') {
+                this.props.updateItemSettings({ weixinEnable: '1' });
+              } else {
+                this.props.updateItemSettings({ weixinEnable: '0' });
+              }
             }}
-            required
           />
-          <FormGroup
-            label={_('Images Slide Interval')}
-            type="select"
-            options={refreshtimeOtions}
-            value={refreshTime}
-            onChange={(data) => {
-              this.props.updateItemSettings({ refreshTime: data.value });
-            }}
-            required
-          />
-          <FormGroup>
-            <FileUpload
-              url="cgi-bin/upload_file.cgi?id=1"
-              buttonText={`${_('Upload Image')} 1`}
-              onUploaded={() => {
-                this.selectShowImage(1);
-                this.refreshPicture(0);
-              }}
-            />
-          </FormGroup>
-          <FormGroup>
-            <FileUpload
-              url="cgi-bin/upload_file.cgi?id=2"
-              buttonText={`${_('Upload Image')} 2`}
-              onUploaded={() => {
-                this.selectShowImage(2);
-                this.refreshPicture(1);
-              }}
-            />
-          </FormGroup>
-          <FormGroup>
-            <FileUpload
-              url="cgi-bin/upload_file.cgi?id=3"
-              buttonText={`${_('Upload Image')} 3`}
-              onUploaded={() => {
-                this.selectShowImage(3);
-                this.refreshPicture(2);
-              }}
-            />
-          </FormGroup>
+          {
+            this.props.store.getIn(['curData', 'weixinEnable']) === '1' ? (
+              <div>
+                <FormGroup
+                  type="text"
+                  label={_('shopId')}
+                  val={shopId}
+                  onChange={(data) => {
+                    this.props.updateItemSettings({ shopId: data.value });
+                  }}
+                />
+                <FormGroup
+                  type="text"
+                  label={_('appId')}
+                  val={appId}
+                  onChange={(data) => {
+                    this.props.updateItemSettings({ appId: data.value });
+                  }}
+                />
+                <FormGroup
+                  type="text"
+                  label={_('secretKey')}
+                  val={secretKey}
+                  onChange={(data) => {
+                    this.props.updateItemSettings({ secretKey: data.value });
+                  }}
+                />
+              </div>
+            ) : (
+              <div>
+                <FormGroup
+                  label={_('Auth Redirect URL')}
+                  type="text"
+                  value={redirectUrl}
+                  onChange={(data) => {
+                    this.props.updateItemSettings({ redirectUrl: data.value });
+                  }}
+                  required
+                />
+                <FormGroup
+                  label={_('Portal Title')}
+                  type="text"
+                  value={title}
+                  onChange={(data) => {
+                    this.props.updateItemSettings({ title: data.value });
+                  }}
+                  required
+                />
+                <FormGroup
+                  label={_('Expiration')}
+                  type="select"
+                  options={expirationOptions}
+                  value={timeout}
+                  onChange={(data) => {
+                    this.props.updateItemSettings({ timeout: data.value });
+                  }}
+                  required
+                />
+                <FormGroup
+                  label={_('Images Slide Interval')}
+                  type="select"
+                  options={refreshtimeOtions}
+                  value={refreshTime}
+                  onChange={(data) => {
+                    this.props.updateItemSettings({ refreshTime: data.value });
+                  }}
+                  required
+                />
+                <FormGroup>
+                  <FileUpload
+                    url="cgi-bin/upload_file.cgi?id=1"
+                    buttonText={`${_('Upload Image')} 1`}
+                    onUploaded={() => {
+                      this.selectShowImage(1);
+                      this.refreshPicture(0);
+                    }}
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <FileUpload
+                    url="cgi-bin/upload_file.cgi?id=2"
+                    buttonText={`${_('Upload Image')} 2`}
+                    onUploaded={() => {
+                      this.selectShowImage(2);
+                      this.refreshPicture(1);
+                    }}
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <FileUpload
+                    url="cgi-bin/upload_file.cgi?id=3"
+                    buttonText={`${_('Upload Image')} 3`}
+                    onUploaded={() => {
+                      this.selectShowImage(3);
+                      this.refreshPicture(2);
+                    }}
+                  />
+                </FormGroup>
+              </div>
+            )
+          }
           <div className="form-group form-group--save">
             <div className="form-control">
               <SaveButton
@@ -234,53 +282,57 @@ export default class PortalSettings extends Component {
             </div>
           </div>
         </div>
-        <div className="cols col-5">
-          <div className="o-preview-iphone">
-            <div className="o-preview-iphone__body">
-              <div className="carousel">
-                {
-                  curImgUrl ? (
-                    <img
-                      src={curImgUrl}
-                      alt={activeIndex}
-                    />
-                  ) : null
-                }
-                <ul className="carousel-indicators">
-                  {
-                    [1, 2, 3].map(
-                      (val) => {
-                        let myClassName = '';
+        {
+          weixinEnable === '1' ? null : (
+            <div className="cols col-5">
+              <div className="o-preview-iphone">
+                <div className="o-preview-iphone__body">
+                  <div className="carousel">
+                    {
+                      curImgUrl ? (
+                        <img
+                          src={curImgUrl}
+                          alt={activeIndex}
+                        />
+                      ) : null
+                    }
+                    <ul className="carousel-indicators">
+                      {
+                        [1, 2, 3].map(
+                          (val) => {
+                            let myClassName = '';
 
-                        if (val === activeIndex) {
-                          myClassName = 'active';
-                        }
+                            if (val === activeIndex) {
+                              myClassName = 'active';
+                            }
 
-                        return (
-                          <li
-                            className={myClassName}
-                            onClick={() => this.selectShowImage(val)}
-                            key={val}
-                          >
-                            {val}
-                          </li>
-                        );
-                      },
-                    )
-                  }
-                </ul>
+                            return (
+                              <li
+                                className={myClassName}
+                                onClick={() => this.selectShowImage(val)}
+                                key={val}
+                              >
+                                {val}
+                              </li>
+                            );
+                          },
+                        )
+                      }
+                    </ul>
+                  </div>
+                  <h4 className="o-preview-iphone__body-title">{this.props.store.getIn(['curData', 'title'])}</h4>
+                  <Button
+                    type="button"
+                    icon="sphere"
+                    theme="primary"
+                    text={_('Click on Internet')}
+                    id="online"
+                  />
+                </div>
               </div>
-              <h4 className="o-preview-iphone__body-title">{this.props.store.getIn(['curData', 'title'])}</h4>
-              <Button
-                type="button"
-                icon="sphere"
-                theme="primary"
-                text={_('Click on Internet')}
-                id="online"
-              />
             </div>
-          </div>
-        </div>
+          )
+        }
       </div>
     );
   }

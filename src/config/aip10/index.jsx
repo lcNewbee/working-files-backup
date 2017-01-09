@@ -85,8 +85,16 @@ const funConfig = {
     ],
     // 功能项参见WirelessConfig -> Basic页面下的ssidTableFullMemberOptions变量
     ssidTableKeys: [
-      'enable', 'ssid', 'vlanId', 'hideSsid', 'isolation', 'security', 'delete', 'maxClients',
-      'airTimeEnable', 'speedLimit',
+      'enable',
+      'ssid',
+      'vlanId',
+      'hideSsid',
+      'isolation',
+      'security',
+      'delete',
+      'maxClients',
+      'airTimeEnable',
+      'speedLimit',
     ],
     portalFun: false,
   },

@@ -1,0 +1,92 @@
+{
+	"data":	{
+		"interfaces":	[{
+				"name":	"eth1",
+				"mtu":	"1500",
+				"txBytes":	"2138048",
+				"rxBytes":	"399199",
+				"txPackets":	"1990",
+				"rxPackets":	"4621",
+				"txErrorPackets":	"0",
+				"rxErrorPackets":	"0",
+				"mac":	"14:c1:ff:b0:00:46",
+				"status":	"1000baseT/full"
+			}, {
+				"name":	"eth2",
+				"mtu":	"1500",
+				"txBytes":	"0",
+				"rxBytes":	"0",
+				"txPackets":	"0",
+				"rxPackets":	"0",
+				"txErrorPackets":	"0",
+				"rxErrorPackets":	"0",
+				"mac":	"14:c1:ff:b0:00:46",
+				"status":	"disconnected"
+			}],
+		"sysStatus":	{
+			"deviceModel":	"AIP5",
+			"version":	"AIP5.1.1.0",
+			"networkMode":	"switch",
+			"deviceName":	"AIP5",
+			"cpuInfo":	"10",
+			"memInfo":	"36",
+			"uptime":	"356",
+			"systemTime":	"2017-01-07 10:31:56",
+			"systemMac":	"14:c1:ff:b0:00:46"
+		},
+		"radioList":	[{
+				"radioId":	"0",
+				"radioType":	"5G",
+				"enable":	"1",
+				"wirelessMode":	"ap",
+				"countryCode":	"CN ",
+				"radioMode":	"11acvht80",
+				"frequency":	"5.745",
+				"channel":	"149",
+				"distance":	"5.0",
+				"noise":	"-98",
+				"chutil":	"0.00%",
+				"signal":	"-71",
+				"txPower":	"23",
+				"vapList":	[{
+						"name":	"ath1",
+						"txBytes":	"30823",
+						"rxBytes":	"175344",
+						"txPackets":	"0",
+						"rxPackets":	"0",
+						"txErrorPackets":	"3",
+						"rxErrorPackets":	"0",
+						"mac":	"14:c1:ff:b0:00:47",
+						"ccq":	"0.00%",
+						"ssid":	"Axilspot"
+					}],
+				"staList":	[{
+						"vapId":	"0",
+						"ssid":	"Axilspot",
+						"ipAddr":	"192.168.1.109",
+						"mac":	"90:3c:92:18:e5:55",
+						"connectTime":	"238",
+						"signal":	"-65",
+						"noise":	"-98",
+						"rxBytes":	"175344",
+						"txBytes":	"30823",
+						"rxPackets":	"191",
+						"txPackets":	"146",
+						"rxRate":	"423",
+						"txRate":	"342",
+						"deviceName":	"zhangfadeiPhone"
+					}],
+				"peerList":	[{
+						"status":	"connected",
+						"rxrate":	"0",
+						"txrate":	"0",
+						"connectTime":	"55",
+						"mac":	""
+					}]
+			}]
+	},
+	"state":	{
+		"code":	2000,
+		"msg":	""
+	}
+}

@@ -45,7 +45,8 @@ const pQuickSetup = require('../../screens/App/screens/MainAP/screens/QuickSetup
 // 无线设置
 const pWirelessConfig = require('../../screens/App/screens/MainAP/screens/WirelessConfig');
 // 子菜单
-const sBasic = require('../../screens/App/screens/MainAP/screens/WirelessConfig/Basic/BasicForP2p');
+// const sBasic = require('../../screens/App/screens/MainAP/screens/WirelessConfig/Basic/BasicForP2p');
+const sBasic = require('../../screens/App/screens/MainAP/screens/WirelessConfig/Basic/BasicForCoverage');
 const sAdvance = require('../../screens/App/screens/MainAP/screens/WirelessConfig/Advance');
 // const sQos = require('../../screens/App/screens/MainAP/screens/WirelessConfig/QoS');
 const sACL = require('../../screens/App/screens/MainAP/screens/WirelessConfig/ACL');
@@ -83,7 +84,19 @@ const funConfig = {
     ],
     radioMaxClientsLimit: false,    // 射频最大客户端限制
     // 功能项参见WirelessConfig -> Basic页面下的ssidTableFullMemberOptions变量
-    ssidTableKeys: ['enable', 'ssid', 'vlanId', 'hideSsid', 'isolation', 'security', 'delete'],
+    ssidTableKeys: [
+      'enable',
+      'ssid',
+      'vlanId',
+      'hideSsid',
+      'isolation',
+      'security',
+      'delete',
+      'maxClients',
+      // 'speedLimit',
+      'portalEnable',         // portal功能开关
+      'airTimeEnable',  // 时间公平性
+    ],
     portalFun: true,
   },
   advance: {

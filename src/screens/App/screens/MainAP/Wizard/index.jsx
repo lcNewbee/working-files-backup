@@ -138,10 +138,6 @@ const validOptions = Map({
   }),
 });
 
-function onSkipButtonClick() {
-  window.location.href = '#/main/status';
-}
-
 // 原生的 react 页面
 export default class SignUp extends React.Component {
   constructor(props) {
@@ -149,6 +145,7 @@ export default class SignUp extends React.Component {
     this.onOkButtonClick = this.onOkButtonClick.bind(this);
     this.onThinModeImgClick = this.onThinModeImgClick.bind(this);
     this.comfirmModeChange = this.comfirmModeChange.bind(this);
+    this.onSkipButtonClick = this.onSkipButtonClick.bind(this);
   }
 
   // Mine
@@ -182,6 +179,14 @@ export default class SignUp extends React.Component {
 
   onThinModeImgClick() {
     this.props.changeShowThinModeConfigModal(true);
+  }
+
+  onSkipButtonClick() {
+    this.props.fetch('goform/get_system_info_forTestUse').then((json) => {
+      if (json.state && json.state.code === 2000) {
+        window.setTimeout(() => { window.location.href = '#/main/status'; }, 500);
+      }
+    });
   }
 
   comfirmModeChange() {
@@ -345,7 +350,7 @@ export default class SignUp extends React.Component {
           </div>
           <div className="t-wizard__footer">
             <Button
-              onClick={() => onSkipButtonClick()}
+              onClick={() => this.onSkipButtonClick()}
               text={_('Skip')}
             />
             <Button

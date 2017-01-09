@@ -314,10 +314,15 @@ export default class Basic extends React.Component {
           label: _('Max Clients'),
           width: '250px',
           transform: function (val, item) {
+            if (val === '' || !Number.isInteger(+val) || parseInt(val, 10) <= 0) {
+              this.onSsidItemChange(val, item, 'maxClients', 50);
+            } // 后台没传值，或值错误，则提供默认值
             return (
               <FormInput
                 type="number"
                 value={val}
+                max={100}
+                min={1}
                 onChange={(data) => {
                   this.onSsidItemChange(val, item, 'maxClients', data.value);
                 }}
@@ -2001,13 +2006,13 @@ export default class Basic extends React.Component {
                   type="button"
                   loading={this.props.app.get('saving') &&
                           this.props.selfState.get('whichButton') === 'multiSsid'}
-                  disabled={multiSsid.get('wirelessMode') === 'sta'}
+                  // disabled={multiSsid.get('wirelessMode') === 'sta'}
                   onClick={() => {
                     let error = '';
                     let totalNum = 0;
                     const vapList = multiSsid.getIn(['radioList', radioId, 'vapList']).toJS();
                     const radioClientLimit = radioSettings.getIn(['radioList', radioId, 'maxRadioClients']);
-                    const len = vapList.length;
+                    const len = multiSsid.getIn(['radioList', radioId, 'wirelessMode']) === 'sta' ? 1 : vapList.length;
                     const re = /^[0-9]*[1-9][0-9]*$/;
                     for (let i = 0; i < len; i++) {
                       if (!re.test(vapList[i].vlanId)) {
@@ -2030,14 +2035,18 @@ export default class Basic extends React.Component {
                       // }
                       // 判断是否有该功能，没有则不验证
                       if (this.props.route.funConfig.ssidTableKeys.indexOf('maxClients') !== -1) {
-                        if (vapList[i].maxClients === '' || vapList[i].maxClients === '0') {
+                        if (vapList[i].maxClients === '' ||
+                            !Number.isInteger(+vapList[i].maxClients) ||
+                            parseInt(vapList[i].maxClients, 10) <= 0) {
                           error = _('Max clients number must be positive interger !');
                           break;
                         }
                         totalNum += Number(vapList[i].maxClients);
                       }
                     }
-                    if (radioClientLimit !== 0 && totalNum > radioClientLimit) {
+                    if (funConfig.radioMaxClientsLimit && // 射频最大客户端限制功能存在
+                        radioClientLimit !== 0 && // 为零表示不限制
+                        totalNum > radioClientLimit) {
                       error = `${_('The total number of ssid maximum clients should not exceed ')}${radioClientLimit}`;
                     }
                     // console.log('error', totalNum, radioClientLimit);
