@@ -8,7 +8,7 @@ class WirelessSafe_Model extends CI_Model {
 	}
 	public function get_wips_list($retdata) {
         $arr['state'] = array("code"=>2000,"msg"=>"ok");
-        $queryd = $this->db->select('enable,cycles,scantype,apopermode,rpttime,chlnum,enable2g4chl,enable2g4pwr,adjafactor2g4,maxtxpwr')
+        $queryd = $this->db->select('enable,cycles,scantype,apopermode,rpttime,chlnum,enable2g4chl,enable2g4pwr,adjafactor2g4,enable5gchl,enable5gpwr,adjafactor5g,maxtxpwr')
                             ->from('wrrm_template')
                             ->where('id', $retdata['groupid'])
                             ->get()
@@ -34,9 +34,12 @@ class WirelessSafe_Model extends CI_Model {
         $arr['enable2g4chl'] = (int)element('enable2g4chl',$data,0);  /* 2.4G自动信道扫描开关 */
         $arr['enable2g4pwr'] = (int)element('enable2g4pwr',$data,0);  /* 2.4G自动功率扫描开关 */
         $arr['adjafactor2g4'] = (int)element('adjafactor2g4',$data,1); /* 2.4G频段邻居系数 > 0 */
+         $arr['enable5gchl'] = (int)element('enable5gchl',$data,0);  /* 2.4G自动信道扫描开关 */
+        $arr['enable5gpwr'] = (int)element('enable5gpwr',$data,0);  /* 2.4G自动功率扫描开关 */
+        $arr['adjafactor5g'] = (int)element('adjafactor5g',$data,1); /* 2.4G频段邻居系数 > 0 */
         $result = wrrm_set_param(json_encode($arr));
         //log
-        $cgiObj = json_decode($result);			
+        $cgiObj = json_decode($result);
         if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
             $logary = array(
                 'type'=>'Setting',

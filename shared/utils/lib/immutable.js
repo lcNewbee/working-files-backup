@@ -13,6 +13,7 @@ var immutableUtils = {
           id: item.get('id'),
           label: item.get('text') || item.get('label'),
           fieldset: item.get('fieldset'),
+          fieldsetOption: item.get('fieldsetOption'),
           legend: item.get('legend'),
           options: item.get('options'),
           notEditable: item.get('notEditable'),
