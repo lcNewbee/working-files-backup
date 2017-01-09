@@ -188,4 +188,30 @@ class SystemApVersion_Model extends CI_Model {
         }
         return $result;
     }
+
+    function active_apversion($data) {
+        $result = null;
+        $retData = array(
+            'vendor'=>element('vendor',$data, 48208),
+            'model'=>element('model', $data),
+            'sfver'=>element('softVersion', $data),
+            'fmname'=>element('fileName', $data),
+            'filepath'=>element('uploadPath', $data),
+            'active'=>(int)element('active', $data,0)
+        );
+        $query_active=$this->db->select('id,active')
+                                ->from('ap_firmware')
+                                ->where('id',$item['id'])
+                                ->get()->result_array();
+        if($query_active['0']['active']==0){
+            $result=axc_active_apfirmware(json_encode($retData));
+        } else {
+            $state=array(
+                'code'=>6000,
+                'msg'=>"The version of the related model you select is actived, cancellation  option doesn't work!you should active another version when you want to  cancel the current version!"
+            );
+            $result=$state;
+        }
+        return $result;
+    }
 }

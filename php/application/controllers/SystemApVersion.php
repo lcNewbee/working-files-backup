@@ -36,6 +36,8 @@ class SystemApVersion extends CI_Controller {
                 break;
             case 'edit' : $result = $this->SystemApVersion_Model->up_apversion($data);
                 break;
+            case 'active' : $result = $this->SystemApVersion_Model->active_apversion($data);
+                break;
             default : $result = json_encode(array('state' => array('code' => 4000, 'msg' => 'No request action')));
                 break;
         }        
