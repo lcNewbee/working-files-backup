@@ -7,51 +7,41 @@ import AppScreen from 'shared/components/Template/AppScreen';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 
-const screenOptions = fromJS([
+const settingsFormOptions = fromJS([
   {
     id: 'widsenable',
     text: _('Enable'),
-    formProps: {
-      type: 'checkbox',
-      dataType: 'number',
-      defaultValue: '0',
-    },
+    type: 'checkbox',
+    dataType: 'number',
+    defaultValue: '0',
   }, {
     id: 'attacttime',
     label: _('Harass Attact Time'),
-    formProps: {
-      min: 1,
-      type: 'number',
-      dataType: 'number',
-      defaultValue: 1,
-      help: _('Seconds'),
-    },
+    min: 1,
+    type: 'number',
+    dataType: 'number',
+    defaultValue: 1,
+    help: _('Seconds'),
   }, {
     id: 'attactcnt',
     label: _('Harass Number'),
-    formProps: {
-      min: 1,
-      type: 'number',
-      dataType: 'number',
-      defaultValue: 1,
-    },
-
+    min: 1,
+    type: 'number',
+    dataType: 'number',
+    defaultValue: 1,
   }, {
     id: 'dyaging',
     label: _('Release Time'),
     legend: _('Dynamic Blacklists'),
     fieldset: 'Dynamic',
-    formProps: {
-      min: 1,
-      type: 'number',
-      dataType: 'number',
-      defaultValue: 3600,
-      help: _('Seconds'),
-    },
+    min: 1,
+    type: 'number',
+    dataType: 'number',
+    defaultValue: 3600,
+    help: _('Seconds'),
   },
 ]);
 
-const settingsFormOptions = immutableUtils.getFormOptions(screenOptions);
 
 const propTypes = {
   selectedGroup: PropTypes.instanceOf(Map),
@@ -65,10 +55,20 @@ export default class View extends React.Component {
 
   componentWillMount() {
     this.actionable = this.props.selectedGroup.get('aclType') === 'black';
+    this.settingsFormOptions = settingsFormOptions;
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.selectedGroup !== this.props.selectedGroup) {
       this.actionable = nextProps.selectedGroup.get('aclType') === 'black';
+
+      // 不可操作需隐藏开关按钮
+      if (!this.actionable) {
+        this.settingsFormOptions = settingsFormOptions.filterNot(
+          $$item => $$item.get('id') === 'widsenable'
+        );
+      } else {
+        this.settingsFormOptions = settingsFormOptions;
+      }
     }
   }
 
@@ -76,7 +76,7 @@ export default class View extends React.Component {
     return (
       <AppScreen
         {...this.props}
-        settingsFormOptions={settingsFormOptions}
+        settingsFormOptions={this.settingsFormOptions}
         hasSettingsSaveButton={this.actionable}
         noTitle
       />

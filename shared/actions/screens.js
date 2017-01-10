@@ -217,13 +217,9 @@ export function onListAction(url, option) {
 
     return dispatch(appActions.save(myUrl, subData, ajaxOption))
       .then((json) => {
-        let ret = 'Server Error';
+        const ret = json;
 
         if (json.state) {
-          if (json.state.code === 2000) {
-            ret = 'ok';
-          }
-
           if (json.state.code <= 6000) {
             dispatch(closeListItemModal());
           }
@@ -232,6 +228,7 @@ export function onListAction(url, option) {
         dispatch(fetchScreenData({
           url: fetchUrl,
         }));
+        ret.subData = subData;
 
         return ret;
       });
@@ -300,10 +297,15 @@ export function saveScreenSettings(option) {
     return dispatch(
       appActions.save(saveUrl, $$subData.toJS(), ajaxOption),
     )
-      .then(() => {
+      .then((json) => {
+        const ret = json;
+
         dispatch(fetchScreenData({
           url: fetchUrl,
         }));
+        ret.subData = $$subData.toJS();
+
+        return ret;
       });
   };
 }

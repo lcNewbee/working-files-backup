@@ -5,14 +5,18 @@ import ListInfo from 'shared/components/Template/ListInfo';
 import { purviewOptions } from 'shared/config/axc';
 import FormContainer from 'shared/components/Organism/FormContainer';
 
+function emptyFunc() {}
+
 const propTypes = {
-  app: PropTypes.instanceOf(Map),
-  store: PropTypes.instanceOf(Map),
+  app: PropTypes.instanceOf(Map).isRequired,
+  store: PropTypes.instanceOf(Map).isRequired,
   defaultEditData: PropTypes.object,
   noTitle: PropTypes.bool,
   children: PropTypes.node,
   title: PropTypes.string,
   refreshInterval: PropTypes.string,
+  className: PropTypes.string,
+  actionable: PropTypes.bool,
   route: PropTypes.object,
   initOption: PropTypes.object,
   initScreen: PropTypes.func,
@@ -20,8 +24,8 @@ const propTypes = {
   leaveScreen: PropTypes.func,
   validateAll: PropTypes.func,
   reportValidError: PropTypes.func,
-  className: PropTypes.string,
-  actionable: PropTypes.bool,
+  changeScreenActionQuery: PropTypes.func.isRequired,
+  changeScreenQuery: PropTypes.func.isRequired,
 
   // List 相关属性
   listOptions: PropTypes.oneOfType([
@@ -40,11 +44,24 @@ const propTypes = {
   defaultSettingsData: PropTypes.object,
   hasSettingsSaveButton: PropTypes.bool,
   customSettingForm: PropTypes.bool,
-  changeScreenActionQuery: PropTypes.func,
-  changeScreenQuery: PropTypes.func,
+
+  onAfterSync: PropTypes.func,
 };
 const defaultProps = {
+  onAfterSync: emptyFunc,
 
+  // ListInfo Option
+  groupid: '',
+  listOptions: [],
+
+  // Settings Form
+  updateScreenSettings: emptyFunc,
+  saveScreenSettings: emptyFunc,
+  defaultSettingsData: {},
+  hasSettingsSaveButton: false,
+  customSettingForm: false,
+
+  settingsFormOptions: [],
 };
 
 export default class AppScreen extends React.Component {
@@ -167,7 +184,13 @@ export default class AppScreen extends React.Component {
           if (errMsg.isEmpty()) {
             this.props.saveScreenSettings({
               numberKeys: this.settingsNumberKeys,
-            });
+            }).then(
+              (json) => {
+                this.props.onAfterSync(json, {
+                  action: 'setting',
+                });
+              },
+            );
           }
         });
     }

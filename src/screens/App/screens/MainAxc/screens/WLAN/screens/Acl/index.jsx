@@ -10,6 +10,8 @@ import Table from 'shared/components/Table';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
+import { fetchApGroup } from '../../../../actions';
+
 import './_acl.scss';
 
 const listTypeMap = {};
@@ -70,18 +72,21 @@ const listOptions = fromJS([
 ]);
 
 const propTypes = {
-  app: PropTypes.instanceOf(Map),
-  store: PropTypes.instanceOf(Map),
-  group: PropTypes.instanceOf(Map),
+  app: PropTypes.instanceOf(Map).isRequired,
+  store: PropTypes.instanceOf(Map).isRequired,
+  group: PropTypes.instanceOf(Map).isRequired,
   groupid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  route: PropTypes.object,
-  changeScreenActionQuery: PropTypes.func,
-  fetch: PropTypes.func,
-  reciveScreenData: PropTypes.func,
-  createModal: PropTypes.func,
-  onListAction: PropTypes.func,
+  route: PropTypes.object.isRequired,
+  changeScreenActionQuery: PropTypes.func.isRequired,
+  fetch: PropTypes.func.isRequired,
+  reciveScreenData: PropTypes.func.isRequired,
+  createModal: PropTypes.func.isRequired,
+  fetchApGroup: PropTypes.func.isRequired,
+  onListAction: PropTypes.func.isRequired,
 };
-const defaultProps = {};
+const defaultProps = {
+  groupid: '',
+};
 
 export default class Blacklist extends React.Component {
   constructor(props) {
@@ -95,17 +100,24 @@ export default class Blacklist extends React.Component {
       'renderActionBar',
       'renderCopyFromOther',
       'onBeforeSave',
+      'onAfterSync',
     ]);
   }
   onBeforeSave($$actionQuery) {
     const { store, route } = this.props;
     const aclType = store.getIn([route.id, 'data', 'settings', 'type']);
     const actionType = $$actionQuery.get('action');
-
     if (actionType === 'add') {
       this.props.changeScreenActionQuery({
         type: aclType,
       });
+    }
+  }
+  onAfterSync(json) {
+    const actionType = json.subData.action;
+
+    if (actionType === 'setting') {
+      this.props.fetchApGroup();
     }
   }
   onSave(actionType) {
@@ -314,6 +326,7 @@ export default class Blacklist extends React.Component {
         // Screen 全局属性
         {...this.props}
         className="s-group-wireless-acl"
+        onAfterSync={this.onAfterSync}
 
         settingsFormOptions={settingsOptions}
 
@@ -352,9 +365,9 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(utils.extend({},
-    appActions,
-    screenActions,
+  return bindActionCreators(utils.extend({
+    fetchApGroup,
+  }, appActions, screenActions,
   ), dispatch);
 }
 

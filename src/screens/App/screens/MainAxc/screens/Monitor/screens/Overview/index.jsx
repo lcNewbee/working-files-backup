@@ -198,6 +198,7 @@ function getFlowOption(serverData, timeType) {
     legend: {
       data: ['AP', _('Wireless')],
     },
+    calculable : true,
     xAxis: [{
       type: 'category',
       interval: 1,
@@ -224,10 +225,14 @@ function getFlowOption(serverData, timeType) {
       {
         name: 'AP',
         type: 'line',
+        smooth:true,
+        itemStyle: {normal: {areaStyle: {type: 'default'}}},
       },
       {
         name: _('Wireless'),
         type: 'line',
+        smooth:true,
+        itemStyle: {normal: {areaStyle: {type: 'default'}}},
       },
     ],
   };

@@ -123,8 +123,12 @@ $boder-color:         #ccc;
 
     .form-control {
       margin-left: 180px;
-      color: #333;
+    }
+
+    &.form-group--block {
+      .form-control {
+        margin-left: 0;
+      }
     }
   }
-
 }

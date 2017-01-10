@@ -75,6 +75,7 @@ const propTypes = {
   ]),
   onBeforeAction: PropTypes.func,
   onBeforeSave: PropTypes.func,
+  onAfterSync: PropTypes.func.isRequired,
 
   // React node 元素
   actionBarChildren: PropTypes.node,
@@ -196,7 +197,12 @@ class ListInfo extends React.Component {
           action: 'delete',
           selectedList,
         });
-        this.props.onListAction();
+        this.props.onListAction()
+          .then(
+            (json) => {
+              this.props.onAfterSync(json);
+            },
+          );
       },
     });
   }
@@ -249,7 +255,12 @@ class ListInfo extends React.Component {
               action: actionName,
               selectedList: $$selectedList,
             });
-            this.props.onListAction();
+            this.props.onListAction()
+              .then(
+                (json) => {
+                  this.props.onAfterSync(json);
+                },
+              );
           },
         });
       } else {
@@ -257,7 +268,12 @@ class ListInfo extends React.Component {
           action: actionName,
           selectedList: $$selectedList,
         });
-        this.props.onListAction();
+        this.props.onListAction()
+          .then(
+            (json) => {
+              this.props.onAfterSync(json);
+            },
+          );
       }
     } else {
       if (actionName === 'setting') {
@@ -352,7 +368,12 @@ class ListInfo extends React.Component {
               $$actionQuery.toJS(),
             );
           }
-          this.props.onListAction();
+          this.props.onListAction()
+            .then(
+              (json) => {
+                this.props.onAfterSync(json);
+              },
+            );
         },
       });
     } else {
@@ -361,7 +382,12 @@ class ListInfo extends React.Component {
           $$actionQuery.toJS(),
         );
       }
-      this.props.onListAction();
+      this.props.onListAction()
+        .then(
+          (json) => {
+            this.props.onAfterSync(json);
+          },
+        );
     }
   }
   doSaveEditForm(option) {
@@ -380,14 +406,20 @@ class ListInfo extends React.Component {
           if (errMsg.isEmpty()) {
             // 表单中无文件
             if (!hasFile) {
-              this.props.onListAction();
+              this.props.onListAction()
+                .then(
+                  (json) => {
+                    this.props.onAfterSync(json);
+                  },
+                );
             } else {
               this.props.saveFile(formUrl, formElem)
-                .then(() => {
+                .then((json) => {
                   this.props.fetchScreenData({
                     url: formUrl,
                   });
                   this.props.closeListItemModal();
+                  this.props.onAfterSync(json);
                 });
             }
           }
