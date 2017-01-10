@@ -7,12 +7,16 @@ import PureComponent from 'shared/components/Base/PureComponent';
 import EchartReact from 'shared/components/EchartReact';
 import Table from 'shared/components/Table';
 import Switchs from 'shared/components/Switchs';
+import Select from 'shared/components/Select';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/screens';
 
 const msg = {
   days: _('Days'),
 };
+const colors = [
+  '#2f92d4', '#feb909', '#a388d2',
+];
 const timeTypeSwitchs = fromJS([
   {
     value: 'today',
@@ -58,21 +62,23 @@ const ssidTableOptions = fromJS([
 function getTerminalTypeOption(serverData) {
   let dataList = serverData.get('terminalType');
   const ret = {
+    color: colors,
     tooltip: {
       trigger: 'item',
       formatter: '{a} <br/>{b}: {c} ({d}%)',
     },
     title: {
       text: _('Clients'),
-      x: 'center',
+      x: '40%',
+      y: 'center',
       textStyle: {
         fontSize: '18',
       },
     },
     legend: {
       orient: 'vertical',
-      x: 'left',
-      y: 'bottom',
+      x: '70%',
+      y: 'center',
       formatter: (name) => {
         const num = serverData.get('terminalType')
           .find($$item => $$item.get('name') === name)
@@ -85,8 +91,8 @@ function getTerminalTypeOption(serverData) {
       {
         name: _('Type'),
         type: 'pie',
-        center: ['70%', '50%'],
-        radius: ['20%', '60%'],
+        center: ['40%', '50%'],
+        radius: ['54%', '80%'],
         avoidLabelOverlap: false,
         label: {
           formatter: '{b}: {c}',
@@ -129,19 +135,22 @@ function getTerminalTypeOption(serverData) {
 }
 function getApStatusOption(serverData) {
   const ret = {
+    color: colors,
     tooltip: {
       trigger: 'item',
       formatter: '{a} <br/>{b}: {c} ({d}%)',
     },
     title: {
       text: _('AP Status'),
-      x: 'center',
+      x: '40%',
+      y: 'center',
+      textAlign: 'left',
     },
     legend: {
       show: true,
       orient: 'vertical',
-      x: 'left',
-      y: 'bottom',
+      x: '70%',
+      y: 'center',
       formatter: (name) => {
         let num = serverData.get('offline');
 
@@ -156,28 +165,8 @@ function getApStatusOption(serverData) {
       {
         name: _('Status'),
         type: 'pie',
-        radius: ['20%', '60%'],
-        center: ['55%', '50%'],
-        avoidLabelOverlap: false,
-        label: {
-          formatter: '{b}: {c}',
-          normal: {
-            show: true,
-            //position: 'center',
-          },
-          emphasis: {
-            show: true,
-            textStyle: {
-              fontSize: '12',
-              fontWeight: 'bold',
-            },
-          },
-        },
-        labelLine: {
-          normal: {
-            show: true,
-          },
-        },
+        radius: ['54%', '80%'],
+        center: ['40%', '50%'],
       },
     ],
   };
@@ -192,13 +181,14 @@ function getApStatusOption(serverData) {
 
 function getFlowOption(serverData, timeType) {
   const option = {
+    color: colors,
     tooltip: {
       trigger: 'axis',
     },
     legend: {
       data: ['AP', _('Wireless')],
     },
-    calculable : true,
+    calculable: true,
     xAxis: [{
       type: 'category',
       interval: 1,
@@ -225,14 +215,14 @@ function getFlowOption(serverData, timeType) {
       {
         name: 'AP',
         type: 'line',
-        smooth:true,
-        itemStyle: {normal: {areaStyle: {type: 'default'}}},
+        smooth: true,
+        itemStyle: { normal: { areaStyle: { type: 'default' } } },
       },
       {
         name: _('Wireless'),
         type: 'line',
-        smooth:true,
-        itemStyle: {normal: {areaStyle: {type: 'default'}}},
+        smooth: true,
+        itemStyle: { normal: { areaStyle: { type: 'default' } } },
       },
     ],
   };
@@ -247,7 +237,7 @@ function getFlowOption(serverData, timeType) {
   $$dataList = $$dataList.toJS();
 
   if (timeType === 'yesterday' ||
-      timeType === 'today') {
+    timeType === 'today') {
     xAxisData = List(new Array(24)).map(
       (val, i) => `${i}:00`,
     ).toJS();
@@ -339,11 +329,10 @@ export default class View extends PureComponent {
 
     return (
       <div>
-        <h3 className="t-main__content-title">{route.text}</h3>
-        <div className="o-box row">
-          <div className="cols col-4" >
+        <div className="o-box o-box--primary row">
+          <div className="cols col-6 o-box__section" >
             <div className="o-box__cell">
-              <h3>{ _('AP') }</h3>
+              <h3>{_('AP')}</h3>
             </div>
             <div className="o-box__cell">
               <EchartReact
@@ -356,62 +345,46 @@ export default class View extends PureComponent {
               />
             </div>
           </div>
-          <div className="cols col-8">
+          <div className="cols col-6 o-box__section">
             <div className="o-box__cell">
-              <h3>{ _('Clients') }</h3>
+              <h3>{_('Clients')}</h3>
             </div>
             <div className="o-box__cell row">
-              <div
-                className="cols col-4"
-                style={{
-                  paddingRight: '6px',
-                }}
-              >
-                <h3
-                  style={{
-                    fontSize: '18px',
-                    lineHeight: '30px',
-                    textAlign: 'center',
-                    fontWeight: '400',
-                  }}
-                >{_('Online Number')}</h3>
-
-                <p
-                  style={{
-                    fontSize: '30px',
-                    marginTop: '10px',
-                    padding: '56px 0',
-                    textAlign: 'center',
-                    color: 'green',
-                    border: '1px solid #e5e5e5',
-                  }}
-                >
-                  {serverData.get('clientsNumber') || 0}
-                </p>
-              </div>
               <EchartReact
                 option={terminalTypeOption}
                 className="o-box__canvas cols col-8"
                 style={{
                   minHeight: '200px',
+                  width: '100%',
                 }}
               />
             </div>
           </div>
-          <div className="cols col-12">
-            <div className="o-box__cell">
-              <h3>{ _('Historical Graphs') }</h3>
+          <div className="cols col-12 o-box__section">
+            <div
+              className="o-box__cell"
+              style={{
+                backgroundColor: 'transparent',
+              }}
+            >
+              <h3>{_('Historical Graphs')}</h3>
             </div>
-            <div className="o-box__cell">
+            <div className="o-box__cell o-box__cell--header">
               <h3>
-                { _('Traffic') }
-                <Switchs
-                  options={timeTypeSwitchs}
+                <span
+                  style={{
+                    marginRight: '16px',
+                  }}
+                >
+                  {_('Traffic')}
+                </span>
+                <Select
+                  options={timeTypeSwitchs.toJS()}
                   value={screens.getIn([curScreenId, 'query', 'timeType'])}
                   onChange={this.onChangeTimeType}
+                  clearable={false}
                 />
               </h3>
-
             </div>
             <div className="o-box__cell">
               <EchartReact
@@ -424,9 +397,9 @@ export default class View extends PureComponent {
               />
             </div>
           </div>
-          <div className="cols col-12">
+          <div className="cols col-12 o-box__section">
             <div className="o-box__cell">
-              <h3>{ _('Rogue AP List') }</h3>
+              <h3>{_('Rogue AP List')}</h3>
             </div>
             <div className="o-box__cell">
               <Table
@@ -437,9 +410,9 @@ export default class View extends PureComponent {
               />
             </div>
           </div>
-          <div className="cols col-12">
+          <div className="cols col-12 o-box__section">
             <div className="o-box__cell">
-              <h3>{ _('Interfering AP List') }</h3>
+              <h3>{_('Interfering AP List')}</h3>
             </div>
             <div className="o-box__cell">
               <Table

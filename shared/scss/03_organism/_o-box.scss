@@ -13,12 +13,27 @@ $border-style: 1px solid #dedede;
 
     @include clearfix;
   }
+  .o-box__section {
+    margin-bottom: $g-distance;
+  }
 
   &.o-box--no-border {
     border: none;
 
     .o-box__cell {
       border: none;
+    }
+  }
+
+  &.o-box--primary {
+    border: none;
+    .o-box__cell {
+      background-color: #fff;
+      border: none;
+
+      &.o-box__cell--header {
+        background-color: #f7f9fa;
+      }
     }
   }
 }

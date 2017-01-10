@@ -10,7 +10,7 @@
   min-height: $g-navbar-height;
   background: $g-main-color;
   background-color: #fff;
-  box-shadow: 0 2px 8px 0 rgba(50, 50, 50, .48);
+  box-shadow: 0 1px 4px 0 rgba(222, 222, 222, 1);
 
   &.navbar--metro {
     box-shadow: none;
@@ -37,12 +37,11 @@
     height: $g-navbar-height;
     padding: 10px;
     padding-left: $g-distance-md;
-    padding-left: 85px;
+    padding-left: 76px;
     line-height: 40px;
     color: #333;
-    background: url(images/logo.png) 25px center no-repeat;
-    background-size: 60px;
-    background-size: 60px;
+    background: url(images/logo.png) center no-repeat;
+    background-size: 66px;
 
     .logo {
       display: inline-block;

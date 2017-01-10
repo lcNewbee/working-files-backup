@@ -1,7 +1,9 @@
+$o-main-bar-size: $g-distance * 11;
+
 .o-menu-bar {
   height: $g-main-bar-height;
-  background-color: #666;
-  color: #ababab;
+  //background-color: #666;
+  color: #111;
   position: fixed;
   top: $g-navbar-height;
   width: 100%;
@@ -10,7 +12,7 @@
 
   .o-menu-bar__nav {
     float: left;
-    width: $g-distance * 12;
+    width: $o-main-bar-size;
     position: relative;
     padding-left: $g-distance * 1.25;
     background-color: #252526;

@@ -39,4 +39,43 @@
       }
     }
   }
+
+  &.m-breadcrumb--simple {
+    .m-breadcrumb__link {
+      display: block;
+      padding: 0 5px;
+      background-color: transparent;
+      padding-left: 25px;
+      color: #111;
+      position: relative;
+      font-size: $g-distance * 1;
+
+      &::after {
+        content: '/';
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin-right: -16px;
+        height: 0;
+        border: 0;
+      }
+    }
+
+    li {
+      &:nth-child(odd) {
+        .m-breadcrumb__link {
+          background-color: transparent;
+        }
+      }
+      &:first-child {
+        .m-breadcrumb__link {
+          color: $g-brand-primary;
+
+          &::after {
+            display: none;
+          }
+        }
+      }
+    }
+  }
 }

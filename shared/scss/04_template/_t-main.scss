@@ -1,11 +1,13 @@
 $top-distance: $g-navbar-height + ($g-distance * 2);
-$sidebar-width: $g-distance * 10.75;
+$sidebar-width: $g-distance * 11;
 $nav-text-color: #ababab;
 $main-blue: #0093dd;
-$t-main-top-menu-height: $g-top-menu-size;
+$t-main-top-menu-size: $g-distance * 4.75;
+$t-main-nav-size: $g-distance * 11;
 html,
 body {
   height: 100%;
+  //background: #edf4fd;
 }
 
 body {
@@ -36,7 +38,7 @@ body {
     background: #333;
     transition: left .3s ease-in;
     &.o-nav--tree {
-      width: $g-distance * 12;
+      width: $t-main-nav-size;
     }
   }
   .t-main__content {
@@ -63,13 +65,17 @@ body {
   &.t-main--axc {
     overflow: hidden;
     .t-main__nav {
-      top: $g-navbar-height + $g-main-bar-height;
-      left: $g-top-menu-size;
-      width: $g-distance * 12;
-      background-color: #252526;
+      top: $g-navbar-height;
+      left: $t-main-top-menu-size;
+      width: $t-main-nav-size;
+      background-color: #141a23;
+      color: #fff;
+      z-index: 1502;
+
       .m-menu__link {
-        background-color: #444;
+        background-color: #141a23;
       }
+
       .o-nav__link {
         padding: 12px 0;
         padding-left: ($g-distance * 1.25);
@@ -118,16 +124,48 @@ body {
         }
       }
     }
+    .t-main__asider-top {
+      max-height: 60px;
+      overflow: hidden;
+      transition: max-height .4s ease-in-out;
+
+      > h3 {
+        background-color: #1d2531;
+        margin: 10px;
+        margin-bottom: 0;
+        padding: 5px 10px;
+
+        > .icon {
+          float: right;
+          padding: 3px 5px;
+          background-color: #141a23;
+          color: $g-brand-primary;
+          cursor: pointer;
+        }
+      }
+
+      .toggle-bar {
+        text-align: center;
+        cursor: pointer;
+
+        .icon {
+          color: $g-brand-primary;
+          font-size: 1.25rem;
+          transition: transform .4s ease-in-out;
+        }
+      }
+    }
     .t-main__content {
       top: $g-navbar-height + $g-main-bar-height;
       bottom: 0;
-      left: $sidebar-width + $g-top-menu-size + ($g-distance * 1.25);
-      width: calc(100vw - 236px);
-      max-width: calc(100vw - 236px);
+      left: $sidebar-width + $t-main-top-menu-size;
+      width: calc(100vw - 15.75rem);
+      max-width: calc(100vw - 15.75rem);
+      padding-top: 0;
     }
     .t-main__asider-left {
       top: $g-navbar-height + $g-main-bar-height;
-      left: $g-top-menu-size;
+      left: $t-main-top-menu-size;
       width: $sidebar-width + ($g-distance * 1.25);
     }
     .o-property-panel {
@@ -137,52 +175,46 @@ body {
       position: fixed;
       top: $g-navbar-height;
       bottom: 0;
-      z-index: 1501;
-      width: $t-main-top-menu-height;
+      z-index: 1502;
+      width: $t-main-top-menu-size;
+      background-color: #1d2531;
       a {
         position: relative;
         display: block;
         padding: 11px 0;
-        color: #999;
+        color: #fff;
         text-align: center;
         border-top: 1px solid transparent;
         border-bottom: 1px solid transparent;
+        font-size: $g-distance * 0.75;
         .icon {
-          font-size: ($g-distance * 1.25);
+          font-size: ($g-distance * 2);
+          margin-bottom: 4px;
         }
         &::after {
           position: absolute;
+          content: '';
+          display: block;
           top: 50%;
-          left: 100%;
-          display: none;
-          min-width: 60px;
-          padding-left: 1em;
-          margin-top: -22px;
-          overflow: hidden;
-          font-size: 12px;
-          line-height: 44px;
-          color: #fff;
-          text-align: left;
-          content: attr(data-title);
-          background: #333;
-          border-left: 0;
-          white-space: nowrap;
-          padding-right: $g-distance;
-        }
-        &:hover {
-          color: #fff;
-          border-color: #444;
-          &::after {
-            display: block;
-          }
+          margin-top: -12px;
+          right: 0;
+          border-color: transparent #141a23 transparent transparent;
+          border-style: solid;
+          border-width: 6px 12px;
+          opacity: 0;
+          transition: opacity .3s ease-in-out;
         }
         &.active {
-          color: #fff;
+          color: $g-brand-primary;
+
+          &::after {
+            opacity: 1;
+          }
         }
       }
     }
     .o-menu-bar {
-      left: $g-top-menu-size;
+      left: $t-main-top-menu-size + $sidebar-width;
     }
     &.is-main-right-open {
       .t-main__content {
@@ -191,20 +223,20 @@ body {
     }
   }
   &.main--open-left {
-    .t-main__nav {
-      left: $sidebar-width + ($g-distance * 1.25) + $g-top-menu-size;
+    .t-main__asider-top {
+      max-height: 100%;
+      .toggle-bar {
+        .icon {
+          transform: rotate(180deg);
+        }
+      }
     }
-    .t-main__content {
-      left: ($sidebar-width + ($g-distance * 1.25)) * 2 + $g-top-menu-size;
-      max-width: calc(100vw - 426px);
-    }
-
   }
 }
 
 .t-main__asider-left {
   position: absolute;
-  top: $g-navbar-height + $g-main-bar-height + $t-main-top-menu-height;
+  top: $g-navbar-height + $g-main-bar-height + $t-main-top-menu-size;
   bottom: 0;
   left: 0;
   z-index: 999;
@@ -221,7 +253,6 @@ body {
 .t-main__asider-header {
   padding: 12px 18px;
   line-height: ($g-distance * 1.25);
-  background-color: #191919;
 
   &::before {
     position: absolute;
@@ -240,11 +271,10 @@ body {
   position: static;
   bottom: 0;
   width: 100%;
-  padding: 6px 18px;
-  background-color: #191919;
-  width: 190px;
+  padding: 4px 18px;
+  width: $sidebar-width;
   margin-left: 1px;
-  margin-top: 12px;
+  text-align: center;
 
   .icon {
     cursor: pointer;

@@ -49,6 +49,7 @@ const propTypes = {
 };
 const defaultProps = {
   onAfterSync: emptyFunc,
+  noTitle: true,
 
   // ListInfo Option
   groupid: '',

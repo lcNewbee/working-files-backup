@@ -140,6 +140,7 @@ export default class Main extends Component {
       this.onToggleMainPopOver({
         name: 'groupAsider',
         isShow: true,
+        overlay: false,
       });
     }
   }
@@ -180,6 +181,7 @@ export default class Main extends Component {
       this.onToggleMainPopOver({
         name: 'groupAsider',
         isShow: true,
+        overlay: false,
       });
     } else {
       this.onToggleMainPopOver({
@@ -192,6 +194,7 @@ export default class Main extends Component {
     if (this.props.location.pathname.indexOf('/main/group/') !== -1) {
       this.onToggleMainPopOver({
         name: 'groupAsider',
+        overlay: false,
       });
     } else {
       this.onToggleMainPopOver({
@@ -460,12 +463,117 @@ export default class Main extends Component {
       name: 'userOverview',
     });
   }
+  renderAsideTop() {
+    const { product } = this.props;
+    const selectGroupId = product.getIn(['group', 'selected', 'id']);
+    const manageGroupId = product.getIn(['group', 'manageSelected', 'id']);
+    const $$groupList = product.getIn(['group', 'list']);
+    const curRoutePath = this.props.route.path;
+    let isGroupMenu = false;
+
+    if (curRoutePath === '/main/group') {
+      isGroupMenu = true;
+    }
+
+    if (!isGroupMenu) {
+      return null;
+    }
+
+    return (
+      <aside className="t-main__asider-top">
+        <h3>
+          <span>{product.getIn(['group', 'selected', 'groupname'])}</span>
+          {
+            isGroupMenu ? (
+              <Icon
+                name="plus"
+                title={_('Add Ap Group')}
+                onClick={() => {
+                  this.props.fetchGroupAps();
+                  this.props.updateAddApGroup({
+                    groupname: '',
+                    remark: '',
+                  });
+                  this.props.showMainModal({
+                    title: _('Add Ap Group'),
+                    isShow: true,
+                    size: 'lg',
+                    name: 'groupAdd',
+                  });
+                }}
+              />
+            ) : null
+          }
+        </h3>
+        <div className="toggle-bar" onClick={this.onClickTopMenuTitle} >
+          <Icon
+            name="caret-down"
+            title={_('Toggle Group List')}
+          />
+        </div>
+        <h4 className="t-main__asider-header">{_('Group List')}</h4>
+        <ul
+          className="m-menu m-menu--open"
+        >
+          {
+            $$groupList.map((item) => {
+              const curId = item.get('id');
+              let classNames = 'm-menu__link';
+              let linkText = item.get('groupname');
+
+              if (curId === ALL_GROUP_ID) {
+                linkText = _(linkText);
+              }
+
+              if (curId === selectGroupId) {
+                classNames = `${classNames} active`;
+              }
+
+              linkText = `${linkText} (${item.get('apNum')})`;
+              return (
+                <li key={curId}>
+                  <a
+                    className={classNames}
+                    onClick={(e) => {
+                      this.onSelectGroup(curId, e);
+                      this.onToggleMainPopOver({
+                        name: 'groupAsider',
+                        overlay: false,
+                      });
+                      if (curId === ALL_GROUP_ID) {
+                        this.props.router.push('/main/group');
+                      }
+                    }}
+                  >
+                    {linkText}
+                  </a>
+                </li>
+              );
+            })
+          }
+        </ul>
+        <footer className="t-main__asider-footer">
+          <div className="m-action-bar">
+            <Icon
+              name="cog"
+              size="2x"
+              onClick={() => {
+                this.props.fetchGroupAps(manageGroupId);
+                this.props.showMainModal({
+                  title: _('Manage Ap Groups'),
+                  isShow: true,
+                  size: 'lg',
+                  name: 'groupManage',
+                });
+              }}
+            />
+          </div>
+        </footer>
+      </aside>
+    );
+  }
 
   renderPopOverContent(popOver) {
-    const selectGroupId = this.props.product.getIn(['group', 'selected', 'id']);
-    const manageGroupId = this.props.product.getIn(['group', 'manageSelected', 'id']);
-    const $$groupList = this.props.product.getIn(['group', 'list']);
-
     switch (popOver.name) {
       case 'userOverview':
         return (
@@ -488,90 +596,6 @@ export default class Main extends Component {
               </a>
             </div>
           </div>
-        );
-
-      case 'groupAsider':
-        return (
-          <asider className="t-main__asider-left">
-            <h3 className="t-main__asider-header">{_('Group List')}</h3>
-            <ul
-              className="m-menu m-menu--open"
-            >
-              {
-                $$groupList.map((item) => {
-                  const curId = item.get('id');
-                  let classNames = 'm-menu__link';
-                  let linkText = item.get('groupname');
-
-                  if (curId === ALL_GROUP_ID) {
-                    linkText = _(linkText);
-                  }
-
-                  if (curId === selectGroupId) {
-                    classNames = `${classNames} active`;
-                  }
-
-                  linkText = `${linkText} (${item.get('apNum')})`;
-                  return (
-                    <li key={curId}>
-                      <a
-                        className={classNames}
-                        onClick={(e) => {
-                          this.onSelectGroup(curId, e);
-                          this.onToggleMainPopOver({
-                            name: 'groupAsider',
-                          });
-                          if (curId === ALL_GROUP_ID) {
-                            this.props.router.push('/main/group');
-                          }
-                        }}
-                      >
-                        {linkText}
-                      </a>
-                    </li>
-                  );
-                })
-              }
-            </ul>
-            <footer className="t-main__asider-footer">
-              <div className="m-action-bar">
-                <div className="m-action-bar__left">
-                  <Icon
-                    name="cog"
-                    size="2x"
-                    onClick={() => {
-                      this.props.fetchGroupAps(manageGroupId);
-                      this.props.showMainModal({
-                        title: _('Manage Ap Groups'),
-                        isShow: true,
-                        size: 'lg',
-                        name: 'groupManage',
-                      });
-                    }}
-                  />
-                </div>
-                <div className="m-action-bar__right">
-                  <Icon
-                    name="plus"
-                    size="2x"
-                    onClick={() => {
-                      this.props.fetchGroupAps();
-                      this.props.updateAddApGroup({
-                        groupname: '',
-                        remark: '',
-                      });
-                      this.props.showMainModal({
-                        title: _('Add Ap Group'),
-                        isShow: true,
-                        size: 'lg',
-                        name: 'groupAdd',
-                      });
-                    }}
-                  />
-                </div>
-              </div>
-            </footer>
-          </asider>
         );
 
       default:
@@ -1055,7 +1079,7 @@ export default class Main extends Component {
     }
 
     return (
-      <ol className="m-breadcrumb">
+      <ol className="m-breadcrumb m-breadcrumb--simple">
         {
           breadcrumbList.map((item, index) => (
             <li key={index}>
@@ -1075,22 +1099,16 @@ export default class Main extends Component {
 
   render() {
     const selectGroupId = this.props.product.getIn(['group', 'selected', 'id']);
-    const { saving, version, guiName } = this.props.app.toJS();
+    const { version } = this.props.app.toJS();
     const { popOver, modal } = this.props.product.toJS();
     const { isShowPanel } = this.props.properties.toJS();
-    const curTopNavText = this.props.route.text;
     const curRoutePath = this.props.route.path;
-    let isGroupMenu = false;
     let mainClassName = 't-main t-main--axc';
-    let isGroupAsiderShow = false;
-    let groupTitleIconClassName = '';
     let isMainLeftShow = false;
     let isMainRightShow = isShowPanel;
     let mainLeftMenus = this.props.route.childRoutes;
 
     if (curRoutePath === '/main/group') {
-      isGroupMenu = true;
-
       // 如果当前是所有组，则隐藏组配置相关菜单
       if (selectGroupId === ALL_GROUP_ID) {
         mainLeftMenus = mainLeftMenus.slice(0, 1);
@@ -1103,19 +1121,14 @@ export default class Main extends Component {
       'main--open-left': isMainLeftShow,
       'is-main-right-open': isMainRightShow,
     });
-    isGroupAsiderShow = isMainLeftShow && popOver.name === 'groupAsider';
-
-    groupTitleIconClassName = classNamesUtils({
-      active: isGroupAsiderShow,
-    });
 
     return (
       <div className={mainClassName}>
-        <Navbar title={_(guiName)} version={version}>
+        <Navbar version={version}>
           <div className="aside">
             <button className="as-control" onClick={this.onRefresh} >
               <Icon name="refresh" className="icon" />
-              <span>{_('REFRESH')}</span>
+              <span>{_('Refresh')}</span>
             </button>
             <div className="user" onClick={this.showUserPopOver}>
               <Icon name="user-secret" className="icon-user" />
@@ -1145,6 +1158,7 @@ export default class Main extends Component {
                     }}
                   >
                     <Icon name={item.get('icon')} />
+                    <div>{item.get('text')}</div>
                   </Link>
                 </li>) : null;
               })
@@ -1164,36 +1178,21 @@ export default class Main extends Component {
           </ul>
         </div>
         <div className="o-menu-bar">
-          <nav
-            onClick={() =>
-              this.onClickTopMenuTitle()
-            }
-            className="o-menu-bar__nav"
-          >
-            <h3>
-              <span>{curTopNavText}</span>
-              {
-                isGroupMenu ? (
-                  <Icon
-                    name="navicon"
-                    className={groupTitleIconClassName}
-                  />
-                ) : null
-              }
-            </h3>
-          </nav>
           {
             this.renderBreadcrumb()
           }
         </div>
-        <Nav
-          className="t-main__nav"
-          role="tree"
-          menus={mainLeftMenus}
-          location={this.props.location}
-          onChange={this.onClickNav}
-          isTree
-        />
+        <div className="t-main__nav">
+          { this.renderAsideTop() }
+          <Nav
+            role="tree"
+            menus={mainLeftMenus}
+            location={this.props.location}
+            onChange={this.onClickNav}
+            isTree
+          />
+        </div>
+
         <div className="t-main__content">
           {
             this.props.children
