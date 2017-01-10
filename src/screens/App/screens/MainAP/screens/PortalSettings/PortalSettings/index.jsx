@@ -175,7 +175,7 @@ export default class PortalSettings extends Component {
                 <FormGroup
                   type="text"
                   label={_('shopId')}
-                  val={shopId}
+                  value={shopId}
                   onChange={(data) => {
                     this.props.updateItemSettings({ shopId: data.value });
                   }}
@@ -183,7 +183,7 @@ export default class PortalSettings extends Component {
                 <FormGroup
                   type="text"
                   label={_('appId')}
-                  val={appId}
+                  value={appId}
                   onChange={(data) => {
                     this.props.updateItemSettings({ appId: data.value });
                   }}
@@ -191,7 +191,7 @@ export default class PortalSettings extends Component {
                 <FormGroup
                   type="text"
                   label={_('secretKey')}
-                  val={secretKey}
+                  value={secretKey}
                   onChange={(data) => {
                     this.props.updateItemSettings({ secretKey: data.value });
                   }}

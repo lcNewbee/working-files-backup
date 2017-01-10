@@ -32,7 +32,37 @@
 			"memInfo":	"36",
 			"uptime":	"356",
 			"systemTime":	"2017-01-07 10:31:56",
-			"systemMac":	"14:c1:ff:b0:00:46"
+			"systemMac":	"14:c1:ff:b0:00:46",
+      "switchInfo": {
+        "proto":"static",
+        "fallbackIp":"192.168.1.11",
+        "fallbackMask":"255.255.255.0",
+        "ip":"192.168.1.10",
+        "mask":"255.255.255.0",
+        "gateway":"192.168.1.1",
+        "dns1":"192.168.1.1",
+        "dns2":"8.8.8.8",
+        "mtu":"1500",
+        "mngVlanId":"1",
+        "utgVlanId":"1",
+        "vlanEnable":"0"
+      },
+      "routerInfo": {
+        "wanIp": "192.168.1.1",
+        "lanIp": "192.168.1.1",
+        "lanMask": "255.255.255.0",
+        "wanMask": "255.255.255.0",
+        "gateway": "192.168.1.2",
+        "dns1": "8.8.8.8",
+        "dns2": "4.4.4.4",
+        "user": "abcd",
+        "password": "12345",
+        "proto": "pppoe",
+        "nat": "1",
+        "dhcpEnable": "1",
+        "startIp": "192.168.1.1",
+        "endIp": "192.168.1.100"
+      }
 		},
 		"radioList":	[{
 				"radioId":	"0",

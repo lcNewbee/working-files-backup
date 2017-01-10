@@ -405,13 +405,6 @@ export default class SystemStatus extends React.Component {
     this.props.fetch('goform/get_firstLogin_info').then((json) => {
       if (json.state && json.state.code === 2000 && json.data.ifFirstLogin === '0') {
         this.props.fetchSettings().then(() => {
-          this.props.fetch('goform/get_network_info').then((json1) => {
-            if (json1.state && json1.state.code === 2000) {
-              const networkInfo = fromJS(json1.data);
-              this.props.updateItemSettings({ networkInfo });
-            }
-          });
-        }).then(() => {
           this.props.changeFirstRefresh(false);
           // const customSetings = this.props.selfState.get('customSettingsForChart').toJS();
           this.prepareChartData();
@@ -421,12 +414,6 @@ export default class SystemStatus extends React.Component {
     this.onChangeRadio({ value: '0' });
     a = setInterval(() => {
       this.props.fetchSettings().then(() => {
-        this.props.fetch('goform/get_network_info').then((json1) => {
-          if (json1.state && json1.state.code === 2000) {
-            const networkInfo = fromJS(json1.data);
-            this.props.updateItemSettings({ networkInfo });
-          }
-        });
         this.prepareChartData();
       });
     }, 10000);
@@ -469,7 +456,7 @@ export default class SystemStatus extends React.Component {
   getCpuAndMemPercentOption() {
     const cpuUsed = parseInt(this.props.store.getIn(['curData', 'sysStatus', 'cpuInfo']), 10);
     const memUsed = parseInt(this.props.store.getIn(['curData', 'sysStatus', 'memInfo']), 10);
-    const xAxisData = ['CPU', 'Memary'];
+    const xAxisData = ['CPU', 'Memory'];
     const data1 = [cpuUsed, memUsed];
     const data2 = [100 - cpuUsed, 100 - memUsed];
 
@@ -673,28 +660,22 @@ export default class SystemStatus extends React.Component {
   render() {
     const { radioId, radioType } = this.props.selfState.get('currRadioConfig').toJS();
     if (!this.props.store.getIn(['curData', 'radioList', radioId])
-        || !this.props.store.getIn(['curData', 'sysStatus'])
-        || !this.props.store.getIn(['curData', 'networkInfo'])) return null;
+        || !this.props.store.getIn(['curData', 'sysStatus'])) return null;
     const {
-      deviceModel, deviceName, version, uptime, systemTime, networkMode, wlan0Mac,
+      deviceModel, deviceName, version, uptime, systemTime, networkMode, systemMac,
     } = this.props.store.getIn(['curData', 'sysStatus']).toJS();
-    const interfaces = this.props.store.getIn(['curData', 'interfaces']).toJS();
-    const {
-      wirelessMode, security, frequency, channelWidth, channel, radioMode, ssid,
-      distance, txPower, noise, chutil, staList, vapList, signal, enable,
-    } = this.props.store.getIn(['curData', 'radioList', radioId]).toJS();
-    const {
-      wiredMode, proto, ip, gateway, mask, dns1, dns2,
-    } = this.props.store.getIn(['curData', 'networkInfo']).toJS();
-    const routerInfo = this.props.store.getIn(['curData', 'networkInfo', 'routerInfo']);
+    const interfaces = this.props.store.getIn(['curData', 'interfaces']);
+    const { wirelessMode, staList, enable } = this.props.store.getIn(['curData', 'radioList', radioId]).toJS();
+    const routerInfo = this.props.store.getIn(['curData', 'sysStatus', 'routerInfo']);
+    const switchInfo = this.props.store.getIn(['curData', 'sysStatus', 'switchInfo']);
     const radioList = this.props.store.getIn(['curData', 'radioList']);
     const peerList = this.props.store.getIn(['curData', 'radioList', radioId, 'peerList']);
-    // const { memInfo, cpuInfo } = this.props.store.getIn(['curData', 'sysStatus']).toJS();
     const radioSelectOptions = this.props.product.get('radioSelectOptions');
     const serverData = this.props.selfState.get('serverData');
     const topTenFlowClients = getTopTenFlowClientsOption(serverData);
     const flowPerSsid = getFlowPerSsidOption(serverData);
     const cpuAndMemUsage = this.getCpuAndMemPercentOption();
+    console.log('networkMode', networkMode);
     // const vapInterfacesList = (wirelessMode === 'sta') ? [vapList[0]] : vapList;
     // 绘图
     // const serverData = this.props.selfState.get('serverData');
@@ -717,42 +698,42 @@ export default class SystemStatus extends React.Component {
               }}
             >
               {
-                wiredMode === 'bridge' ? (
+                networkMode === 'switch' ? (
                   <div className="o-description-list o-description-list--lg info-box">
                     <dl className="o-description-list-row">
                       <dt>{_('Network Mode')}</dt>
-                      <dd>{wiredMode}</dd>
+                      <dd>{networkMode}</dd>
                     </dl>
                     <dl className="o-description-list-row">
                       <dt>{_('IP Mode')}</dt>
-                      <dd>{proto}</dd>
+                      <dd>{switchInfo ? switchInfo.get('proto') : ''}</dd>
                     </dl>
                     <dl className="o-description-list-row">
                       <dt>{_('IP Address')}</dt>
-                      <dd>{ip}</dd>
+                      <dd>{switchInfo ? switchInfo.get('ip') : ''}</dd>
                     </dl>
                     <dl className="o-description-list-row">
                       <dt>{_('Gateway')}</dt>
-                      <dd>{gateway}</dd>
+                      <dd>{switchInfo ? switchInfo.get('gateway') : ''}</dd>
                     </dl>
                     <dl className="o-description-list-row">
                       <dt>{_('Network Mask')}</dt>
-                      <dd>{mask}</dd>
+                      <dd>{switchInfo ? switchInfo.get('mask') : ''}</dd>
                     </dl>
                     <dl className="o-description-list-row">
                       <dt>{_('Primary DNS')}</dt>
-                      <dd>{dns1}</dd>
+                      <dd>{switchInfo ? switchInfo.get('dns1') : ''}</dd>
                     </dl>
                     <dl className="o-description-list-row">
                       <dt>{_('Secondary DNS')}</dt>
-                      <dd>{dns2}</dd>
+                      <dd>{switchInfo ? switchInfo.get('dns2') : ''}</dd>
                     </dl>
                   </div>
                 ) : (
                   <div className="o-description-list o-description-list--lg info-box">
                     <dl className="o-description-list-row">
                       <dt>{_('Network Mode')}</dt>
-                      <dd>{wiredMode}</dd>
+                      <dd>{networkMode}</dd>
                     </dl>
                     <dl className="o-description-list-row">
                       <dt>{_('WAN IP Mode')}</dt>
@@ -760,7 +741,7 @@ export default class SystemStatus extends React.Component {
                     </dl>
                     <dl className="o-description-list-row">
                       <dt>{_('WAN IP')}</dt>
-                      <dd>{routerInfo ? routerInfo.get('ip') : ''}</dd>
+                      <dd>{routerInfo ? routerInfo.get('wanIp') : ''}</dd>
                     </dl>
                     <dl className="o-description-list-row">
                       <dt>{_('Gateway')}</dt>
@@ -768,7 +749,7 @@ export default class SystemStatus extends React.Component {
                     </dl>
                     <dl className="o-description-list-row">
                       <dt>{_('Network Mask')}</dt>
-                      <dd>{routerInfo ? routerInfo.get('mask') : ''}</dd>
+                      <dd>{routerInfo ? routerInfo.get('wanMask') : ''}</dd>
                     </dl>
                     <dl className="o-description-list-row">
                       <dt>{_('NAT Enable')}</dt>
@@ -812,7 +793,7 @@ export default class SystemStatus extends React.Component {
                 </dl>
                 <dl className="o-description-list-row">
                   <dt>{_('AP MAC')}</dt>
-                  <dd>{wlan0Mac}</dd>
+                  <dd>{systemMac}</dd>
                 </dl>
               </div>
             </div>

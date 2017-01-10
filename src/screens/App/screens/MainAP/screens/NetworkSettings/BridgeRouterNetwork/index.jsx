@@ -201,7 +201,7 @@ export default class NetworkSettings extends React.Component {
   render() {
     const store = this.props.store;
     const {
-      proto, fallbackIp, ip, mask, gateway, dns1, dns2, wiredMode,
+      proto, fallbackIp, ip, mask, gateway, dns1, dns2, networkMode,
       mngVlanId, utgVlanId, fallbackMask, vlanEnable,
     } = this.props.store.get('curData').toJS();
     const {
@@ -226,19 +226,19 @@ export default class NetworkSettings extends React.Component {
                   <FormInput
                     type="radio"
                     name="networkmode"
-                    text={_('Bridge Mode')}
-                    checked={wiredMode === 'bridge'}
+                    text={_('Switch Mode')}
+                    checked={networkMode === 'switch'}
                     onChange={() => {
-                      this.props.updateItemSettings({ wiredMode: 'bridge' });
+                      this.props.updateItemSettings({ networkMode: 'switch' });
                     }}
                   />&nbsp;&nbsp;&nbsp;&nbsp;
                   <FormInput
                     type="radio"
                     name="networkmode"
                     text={_('Router Mode')}
-                    checked={wiredMode === 'router'}
+                    checked={networkMode === 'router'}
                     onChange={() => {
-                      this.props.updateItemSettings({ wiredMode: 'router' });
+                      this.props.updateItemSettings({ networkMode: 'router' });
                     }}
                   />
                 </div>
@@ -252,7 +252,7 @@ export default class NetworkSettings extends React.Component {
         }
 
         {
-          wiredMode === 'bridge' || !wiredMode ? (
+          networkMode === 'switch' || !networkMode ? (
             <div>
               <FormGroup
                 type="select"
@@ -381,7 +381,7 @@ export default class NetworkSettings extends React.Component {
         }
 
         {
-          wiredMode === 'router' ? (
+          networkMode === 'router' ? (
             <div>
               <FormGroup
                 type="select"

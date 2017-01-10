@@ -8,6 +8,9 @@
     "redirectUrl":"http://www.baidu.com",
     "timeout":"1800",
     "refreshTime":"3",
+    "shopId": "shopId",
+    "appId": "appId",
+    "secretKey": "secretKey",
     "title":"comlan portal",
     "imageList":[
       {

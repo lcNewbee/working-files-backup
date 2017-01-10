@@ -10,12 +10,42 @@
 		"version":"p2p1.0.1",
 		"uptime":"1000",
 		"systemTime":"2016-11-30 11:39:56",
-		"networkMode":"Bridge",
+		"networkMode":"router",
 		"lan0Mac":"14:FF:00:00:11:10",
 		"lan1Mac":"14:FF:00:00:11:11",
-		"wlan0Mac":"14:FF:00:00:11:10",
+		"systemMac":"14:FF:00:00:11:10",
     "memInfo": "40",
-	  "cpuInfo": "80"
+	  "cpuInfo": "80",
+    "switchInfo": {
+        "proto":"static",
+        "fallbackIp":"192.168.1.11",
+        "fallbackMask":"255.255.255.0",
+        "ip":"192.168.1.10",
+        "mask":"255.255.255.0",
+        "gateway":"192.168.1.1",
+        "dns1":"192.168.1.1",
+        "dns2":"8.8.8.8",
+        "mtu":"1500",
+        "mngVlanId":"1",
+        "utgVlanId":"1",
+        "vlanEnable":"0"
+      },
+      "routerInfo": {
+        "wanIp": "192.168.1.1",
+        "lanIp": "192.168.1.1",
+        "lanMask": "255.255.255.0",
+        "wanMask": "255.255.255.0",
+        "gateway": "192.168.1.2",
+        "dns1": "8.8.8.8",
+        "dns2": "4.4.4.4",
+        "user": "abcd",
+        "password": "12345",
+        "proto": "pppoe",
+        "nat": "1",
+        "dhcpEnable": "1",
+        "startIp": "192.168.1.1",
+        "endIp": "192.168.1.100"
+      }
 	},
 	"radioList":[
 		{
