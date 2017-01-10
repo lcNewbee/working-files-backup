@@ -52,7 +52,6 @@ const defaultProps = {
 
   // ListInfo Option
   groupid: '',
-  listOptions: [],
 
   // Settings Form
   updateScreenSettings: emptyFunc,
@@ -61,7 +60,7 @@ const defaultProps = {
   hasSettingsSaveButton: false,
   customSettingForm: false,
 
-  settingsFormOptions: [],
+  settingsFormOptions: List([]),
 };
 
 export default class AppScreen extends React.Component {

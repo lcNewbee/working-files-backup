@@ -35,6 +35,7 @@ const listOptions = fromJS([
     defaultValue: '',
     formProps: {
       type: 'plain-text',
+      noAdd: true,
       validator: validator({}),
     },
   }, {

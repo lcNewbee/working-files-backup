@@ -99,15 +99,21 @@ class ListInfo extends React.Component {
       'initListTableOptions', 'doItemAction', 'doSaveEditForm',
       'onChangeQuery', 'onPageChange', 'onSaveEditForm', 'onCloseEditModal',
       'onChangeSearchText', 'onChangeType', 'onChangeTableSize', 'onRemoveSelectItems',
-      'onItemAction', 'onSelectedItemsAction',
+      'onItemAction', 'onSelectedItemsAction', 'initModalFormOptions',
     ]);
   }
   componentWillMount() {
     this.initListTableOptions(this.props);
+    this.initModalFormOptions(this.props);
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.tableOptions !== nextProps.tableOptions) {
       this.initListTableOptions(nextProps);
+    }
+    if (this.props.editFormOptions !== nextProps.editFormOptions ||
+        this.props.editFormOption !== nextProps.editFormOption ||
+        this.props.store.getIn(['actionQuery', 'action']) !== nextProps.store.getIn(['actionQuery', 'action'])) {
+      this.initModalFormOptions(nextProps);
     }
   }
 
@@ -536,6 +542,65 @@ class ListInfo extends React.Component {
       );
     }
   }
+  initModalFormOptions(props) {
+    const { editFormOptions, editFormOption, store } = props;
+    let myEditFormOptions = editFormOptions;
+    const actionType = store.getIn(['actionQuery', 'action']);
+
+    if (editFormOption && editFormOption.hasFile) {
+      myEditFormOptions = myEditFormOptions.unshift(fromJS({
+        id: 'action',
+        type: 'hidden',
+        value: actionType,
+      }));
+    }
+
+    // 处理可添加不能编辑的表单项
+    if (actionType === 'edit') {
+      myEditFormOptions = myEditFormOptions.map(($$formList) => {
+        let $$newFormList = $$formList;
+
+        if (List.isList($$newFormList)) {
+          $$newFormList = $$newFormList.map(($$formGroup) => {
+            let $$newFormGroup = $$formGroup;
+
+            if ($$formGroup.get('notEditable')) {
+              $$newFormGroup = $$newFormGroup.set('readOnly', true)
+                .set('type', 'text');
+
+              if ($$newFormGroup.get('type') === 'select' || $$newFormGroup.get('type') === 'switch') {
+                $$newFormGroup = $$newFormGroup.set('type', 'text');
+              }
+            }
+            return $$newFormGroup;
+          });
+        } else if ($$formList.get('notEditable')) {
+          $$newFormList = $$formList.set('readOnly', true);
+        }
+
+        return $$newFormList;
+      });
+    } else if (actionType === 'add') {
+      myEditFormOptions = myEditFormOptions.map(
+        ($$item) => {
+          let $$newItem = $$item;
+
+          if (List.isList($$newItem)) {
+            $$newItem = $$newItem.filterNot(
+              $$formGroup => $$formGroup.get('noAdd'),
+            );
+          } else if ($$item.get('noAdd')) {
+            $$newItem = $$newItem.set('style', { display: 'none' });
+          }
+
+          return $$newItem;
+        },
+      );
+    }
+
+
+    this.editFormOptions = myEditFormOptions;
+  }
   renderHeader() {
     const {
       store, app, fetchUrl,
@@ -667,51 +732,15 @@ class ListInfo extends React.Component {
       />
     );
   }
-
   renderFooter() {
     const {
       store, app, modalSize, customModal, modalChildren,
-      editFormLayout, editFormOptions, editFormOption, saveUrl,
+      editFormLayout, editFormOption, saveUrl,
     } = this.props;
     const editData = store.getIn(['curListItem']);
     const actionQuery = store.getIn(['actionQuery']);
     const actionType = actionQuery.get('action');
     let isEditModelshow = false;
-    let myEditFormOptions = editFormOptions;
-
-    if (editFormOption && editFormOption.hasFile) {
-      myEditFormOptions = myEditFormOptions.unshift(fromJS({
-        id: 'action',
-        type: 'hidden',
-        value: actionType,
-      }));
-    }
-    // 处理可添加不能编辑的表单项
-    if (actionType === 'edit') {
-      myEditFormOptions = myEditFormOptions.map(($$formList) => {
-        let $$newFormList = $$formList;
-
-        if (List.isList($$newFormList)) {
-          $$newFormList = $$newFormList.map(($$formGroup) => {
-            let $$newFormGroup = $$formGroup;
-
-            if ($$formGroup.get('notEditable')) {
-              $$newFormGroup = $$newFormGroup.set('readOnly', true)
-                .set('type', 'text');
-
-              if ($$newFormGroup.get('type') === 'select' || $$newFormGroup.get('type') === 'switch') {
-                $$newFormGroup = $$newFormGroup.set('type', 'text');
-              }
-            }
-            return $$newFormGroup;
-          });
-        } else if ($$formList.get('notEditable')) {
-          $$newFormList = $$formList.set('readOnly', true);
-        }
-
-        return $$newFormList;
-      });
-    }
 
     // 判断是否显示修改或添加 model
     if (actionType === 'edit' || actionType === 'add' || !!modalChildren) {
@@ -739,7 +768,7 @@ class ListInfo extends React.Component {
                 actionQuery={actionQuery}
                 invalidMsg={app.get('invalid')}
                 validateAt={app.get('validateAt')}
-                options={myEditFormOptions}
+                options={this.editFormOptions}
                 onSave={this.onSaveEditForm}
                 onChangeData={this.props.updateCurEditListItem}
                 onValidError={this.props.reportValidError}
