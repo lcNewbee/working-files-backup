@@ -255,7 +255,7 @@ const routes = [{
           component: sTimeSettings.Screen,
         },
       ],
-    }, {
+  }, /*{
       id: 'portalsettings',
       path: '/main/portalsettings',
       icon: 'copy',
@@ -274,7 +274,7 @@ const routes = [{
           component: sPortalSettings.Screen,
         },
       ],
-    }, {
+    },*/ {
       id: 'tools',
       path: '/main/tools',
       icon: 'cogs',

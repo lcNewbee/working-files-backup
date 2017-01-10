@@ -66,8 +66,8 @@ const sSiteSurvey = require('../../screens/App/screens/MainAP/screens/Tools/Site
 const sSystemLogs = require('../../screens/App/screens/MainAP/screens/Tools/SystemLogs');
 const sChannelUtilization = require('../../screens/App/screens/MainAP/screens/Tools/ChannelUtilization');
 // portal
-const pPortal = require('../../screens/App/screens/MainAP/screens/PortalSettings');
-const sPortalSettings = require('../../screens/App/screens/MainAP/screens/PortalSettings/PortalSettings');
+// const pPortal = require('../../screens/App/screens/MainAP/screens/PortalSettings');
+// const sPortalSettings = require('../../screens/App/screens/MainAP/screens/PortalSettings/PortalSettings');
 
 // 页面功能项配置
 const funConfig = {
@@ -224,7 +224,7 @@ const routes = [{
           component: sACL.Screen,
         },
       ],
-    }, {
+  }, /*{
       id: 'portalsettings',
       path: '/main/portalsettings',
       icon: 'copy',
@@ -244,7 +244,7 @@ const routes = [{
           component: sPortalSettings.Screen,
         },
       ],
-    }, {
+    },*/ {
       id: 'pMaintenance',
       path: '/main/maintenance',
       icon: 'wrench',
