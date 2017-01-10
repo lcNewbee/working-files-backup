@@ -276,7 +276,7 @@ export default class Basic extends React.Component {
           width: '250px',
           transform: function (val, item) {
             if (val === '' || !Number.isInteger(+val) || parseInt(val, 10) <= 0) {
-              this.onSsidItemChange(val, item, 'maxClients', 50);
+              this.onSsidItemChange(val, item, 'maxClients', '32');
             } // 后台没传值，或值错误，则提供默认值
             return (
               <FormInput
