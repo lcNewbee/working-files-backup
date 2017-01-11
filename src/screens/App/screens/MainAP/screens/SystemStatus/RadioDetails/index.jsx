@@ -238,7 +238,6 @@ export default class RadioDetails extends React.Component {
     const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
     const staList = this.props.store.getIn(['curData', 'radioList', radioId, 'staList']);
     const index = staList.indexOf(item);
-    console.log('index', index);
     const radioList = this.props.store.getIn(['curData', 'radioList'])
                           .setIn([radioId, 'staList', index, 'block'], true);
     this.props.updateItemSettings({ radioList });
@@ -249,7 +248,7 @@ export default class RadioDetails extends React.Component {
     const clientOptions = fromJS([
       {
         id: 'mac',
-        text: 'Mac',
+        text: 'MAC',
         sortable: true,
       },
       {

@@ -251,7 +251,7 @@ export default class Advance extends React.Component {
               type="number"
               label={_('Segment Threshold')}
               value={segmentThresh}
-              help={`${_('Range: ')}0 or 256 ~ 2347`}
+              help={`${_('Range: ')}${_('0 or 256 ~ 2347')}`}
               style={{ width: '510px' }}
               onChange={(data) => { this.changeFormValue(radioId, 'segmentThresh', data.value); }}
               required

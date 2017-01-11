@@ -207,7 +207,7 @@ export default class Basic extends React.Component {
           transform: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
             const pos = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
-            const flag = pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap';
+            const flag = (pos === 0);
             return (
               <FormInput
                 type="checkbox"
@@ -726,7 +726,6 @@ export default class Basic extends React.Component {
     props.fetch('goform/get_network_info').then((json) => {
       if (json.state && json.state.code === 2000) {
         vlanEnable = json.data.vlanEnable;
-        console.log('vlanEnable', vlanEnable);
       }
     });
     const config = fromJS({
@@ -847,6 +846,7 @@ export default class Basic extends React.Component {
     if (this.props.store.get('curSettingId') === 'base') {
       return null;
     }
+    const wirelessMode = this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']);
     return (
       <div className="stats-group o-box" style={{ minWidth: '1200px' }}>
         {
@@ -1121,7 +1121,8 @@ export default class Basic extends React.Component {
                 />
               </div>
               {
-                this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap' ? (
+                wirelessMode !== 'ap' &&
+                typeof (wirelessMode) !== 'undefined' ? ( // 处理第一次进入该页面，汽包内容闪现的问题。
                   <div
                     style={{
                       overflow: 'visible',
@@ -1517,12 +1518,7 @@ export default class Basic extends React.Component {
                 ) : null
               }
 
-              <div
-                className="cols col-12"
-                style={{
-                  paddingLeft: '20px',
-                }}
-              >
+              <div className="cols col-12">
                 <SaveButton
                   type="button"
                   loading={this.props.app.get('saving') &&
@@ -1598,7 +1594,6 @@ export default class Basic extends React.Component {
         {
           this.props.selfState.get('showMultiSsid') ? (
             <div className="cols col-12 o-box__cell">
-              <span>{_('Notice: The first SSID can\'t be modefied here !')}</span>
               <Table
                 className="table"
                 options={this.props.selfState.get('ssidTableOptions')}

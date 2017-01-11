@@ -644,6 +644,7 @@ export default class Basic extends React.Component {
       enable: '1',
       portalEnable: '0',
       airTimeEnable: '0',
+      maxClients: '32',
       security: {
         mode: 'none',
         cipher: 'aes',

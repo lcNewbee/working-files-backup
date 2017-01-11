@@ -92,7 +92,7 @@ const funConfig = {
     ssidTableKeys: [
       'enable',
       'ssid',
-      // 'vlanId',
+      'vlanId',
       'hideSsid',
       'isolation',
       'security',

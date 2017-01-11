@@ -59,9 +59,9 @@
 			"frequency":"2.412",
 			"channelWidth":"40+",
 			"distance":"1000",
-			"txPower":"14",
-			"noise":"80",
-			"signal":"90",
+			"txPower":"-100",
+			"noise":"-8",
+			"signal":"-90",
 			"chutil": "40%",
 			"staList":[
         {
