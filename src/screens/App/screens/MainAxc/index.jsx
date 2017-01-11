@@ -178,11 +178,11 @@ export default class Main extends Component {
 
   onClickTopMenu(path) {
     if (path === '/main/group') {
-      this.onToggleMainPopOver({
-        name: 'groupAsider',
-        isShow: true,
-        overlay: false,
-      });
+      // this.onToggleMainPopOver({
+      //   name: 'groupAsider',
+      //   isShow: true,
+      //   overlay: false,
+      // });
     } else {
       this.onToggleMainPopOver({
         isShow: false,
@@ -461,6 +461,8 @@ export default class Main extends Component {
   showUserPopOver() {
     this.onToggleMainPopOver({
       name: 'userOverview',
+      isShow: true,
+      overlay: true,
     });
   }
   renderAsideTop() {
@@ -579,7 +581,7 @@ export default class Main extends Component {
         return (
           <div className="m-user-overview">
             <div className="m-user-overview__info">
-              <Icon name="user-secret" className="icon-user" />
+              <Icon name="user" className="icon-user" />
             </div>
             <div className="m-user-overview__controls">
               <a className="change-pas" href="#/main/system/admin" onClick={this.onHiddenPopOver}>
@@ -1131,7 +1133,7 @@ export default class Main extends Component {
               <span>{_('Refresh')}</span>
             </button>
             <div className="user" onClick={this.showUserPopOver}>
-              <Icon name="user-secret" className="icon-user" />
+              <Icon name="user" className="icon-user" />
               <Icon
                 name="caret-down"
                 className="icon-down"

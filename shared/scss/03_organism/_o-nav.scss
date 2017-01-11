@@ -11,7 +11,7 @@ $main-blue: #0093dd;
 
   .o-nav__link {
     display: block;
-    padding: ($g-distance * 1.25) 0;
+    padding: $g-distance 0;
     padding-left: $g-distance;
     font-size: 13px;
     line-height: 20px;
@@ -25,10 +25,10 @@ $main-blue: #0093dd;
 
     &.active {
       color: #fff;
-      background-color: #444;
+      background-color: $g-brand-primary;
 
       .icon {
-        color: $main-blue;
+        color: #fff;
       }
     }
   }

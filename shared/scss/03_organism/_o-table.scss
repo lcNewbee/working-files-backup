@@ -21,7 +21,7 @@
   th {
     font-weight: 400;
     color: #fff;
-    background: #666;
+    background: #1d2531;
   }
 
   tr:hover {
@@ -36,6 +36,20 @@
   &.table--pionter {
     tr {
       cursor: pointer;
+    }
+  }
+
+  &.table--light {
+    background-color: #fff;
+    th {
+      border-top: none;
+      font-weight: bold;
+      background-color: #fff;
+      color: #333;
+    }
+
+    tr:hover {
+      background-color: #f3f3f3;
     }
   }
 }

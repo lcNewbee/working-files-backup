@@ -7,7 +7,7 @@ $t-main-nav-size: $g-distance * 11;
 html,
 body {
   height: 100%;
-  //background: #edf4fd;
+  background: #edf4fd;
 }
 
 body {
@@ -33,9 +33,9 @@ body {
     top: $g-navbar-height;
     bottom: 0;
     left: 0;
-    z-index: 1000;
+    z-index: 1502;
     width: $sidebar-width;
-    background: #333;
+    background: $g-main-color;
     transition: left .3s ease-in;
     &.o-nav--tree {
       width: $t-main-nav-size;
@@ -92,7 +92,7 @@ body {
       }
       .a-leaf-link {
         &.active {
-          background-color: $g-color-primary;
+          background-color: $g-brand-primary;
         }
       }
       .a-branch-link {
@@ -161,7 +161,7 @@ body {
       left: $sidebar-width + $t-main-top-menu-size;
       width: calc(100vw - 15.75rem);
       max-width: calc(100vw - 15.75rem);
-      padding-top: 0;
+      padding-top: 2px;
     }
     .t-main__asider-left {
       top: $g-navbar-height + $g-main-bar-height;

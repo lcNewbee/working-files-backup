@@ -10,7 +10,7 @@
     "terminalType": [
       {
         "name": "iPhone",
-        "value": 286
+        "value": 186
       }, {
         "name": "Mac",
         "value": 164
@@ -19,6 +19,24 @@
         "value": 126
       }, {
         "name": "Huaiwei",
+        "value": 237
+      }, {
+        "name": "Mac1",
+        "value": 164
+      }, {
+        "name": "Google1",
+        "value": 126
+      }, {
+        "name": "Huaiwei1",
+        "value": 117
+      }, {
+        "name": "Mac2",
+        "value": 164
+      }, {
+        "name": "Google2",
+        "value": 126
+      }, {
+        "name": "Huaiwei3",
         "value": 117
       }
     ],

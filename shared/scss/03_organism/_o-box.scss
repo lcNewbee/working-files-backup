@@ -15,6 +15,8 @@ $border-style: 1px solid #dedede;
   }
   .o-box__section {
     margin-bottom: $g-distance;
+    box-shadow: 0 1px 4px 0 rgba(222, 222, 222, 1);
+    @include clearfix;
   }
 
   &.o-box--no-border {
@@ -25,7 +27,7 @@ $border-style: 1px solid #dedede;
     }
   }
 
-  &.o-box--primary {
+  &.o-box--light {
     border: none;
     .o-box__cell {
       background-color: #fff;
@@ -33,6 +35,9 @@ $border-style: 1px solid #dedede;
 
       &.o-box__cell--header {
         background-color: #f7f9fa;
+      }
+      &.o-box__cell--transparent {
+        background-color: transparent;
       }
     }
   }

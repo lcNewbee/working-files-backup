@@ -11,12 +11,71 @@ import Select from 'shared/components/Select';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/screens';
 
+const colors = [
+  '#f6402b', '#ff9801', '#ffc100',
+  '#91d951', '#1fb5ac', '#73d6d1',
+  '#00a7f6', '#1193f5', '#3e4cb7',
+  '#6834bc', '#9c1ab2', '#eb1461',
+];
+const $$commonPieOption = fromJS({
+  color: colors,
+  tooltip: {
+    trigger: 'item',
+    formatter: '{a} <br/>{b}: {c} ({d}%)',
+  },
+  title: {
+    x: '29%',
+    y: '39%',
+    textAlign: 'center',
+    textStyle: {
+      fontSize: '14',
+      color: '#0093dd',
+    },
+    subtextStyle: {
+      fontSize: '18',
+      fontWeight: 'bolder',
+      color: '#000',
+    },
+  },
+  legend: {
+    orient: 'vertical',
+    x: '54%',
+    y: 'center',
+    itemWidth: 12,
+    itemHeight: 12,
+  },
+  series: [
+    {
+      type: 'pie',
+      center: ['30%', '50%'],
+      radius: ['60%', '86%'],
+      avoidLabelOverlap: false,
+      label: {
+        formatter: '{b}: {c}',
+        normal: {
+          show: false,
+          //position: 'center',
+        },
+        emphasis: {
+          show: false,
+          textStyle: {
+            fontSize: '12',
+            fontWeight: 'bold',
+          },
+        },
+      },
+      labelLine: {
+        normal: {
+          show: false,
+        },
+      },
+    },
+  ],
+});
+
 const msg = {
   days: _('Days'),
 };
-const colors = [
-  '#2f92d4', '#feb909', '#a388d2',
-];
 const timeTypeSwitchs = fromJS([
   {
     value: 'today',
@@ -61,24 +120,12 @@ const ssidTableOptions = fromJS([
 
 function getTerminalTypeOption(serverData) {
   let dataList = serverData.get('terminalType');
-  const ret = {
-    color: colors,
-    tooltip: {
-      trigger: 'item',
-      formatter: '{a} <br/>{b}: {c} ({d}%)',
-    },
+  const ret = $$commonPieOption.mergeDeep({
     title: {
-      text: _('Clients'),
-      x: '40%',
-      y: 'center',
-      textStyle: {
-        fontSize: '18',
-      },
+      text: _('Online Number'),
+      subtext: serverData.get('clientsNumber'),
     },
     legend: {
-      orient: 'vertical',
-      x: '70%',
-      y: 'center',
       formatter: (name) => {
         const num = serverData.get('terminalType')
           .find($$item => $$item.get('name') === name)
@@ -90,32 +137,9 @@ function getTerminalTypeOption(serverData) {
     series: [
       {
         name: _('Type'),
-        type: 'pie',
-        center: ['40%', '50%'],
-        radius: ['54%', '80%'],
-        avoidLabelOverlap: false,
-        label: {
-          formatter: '{b}: {c}',
-          normal: {
-            show: false,
-            //position: 'center',
-          },
-          emphasis: {
-            show: false,
-            textStyle: {
-              fontSize: '12',
-              fontWeight: 'bold',
-            },
-          },
-        },
-        labelLine: {
-          normal: {
-            show: false,
-          },
-        },
       },
     ],
-  };
+  }).toJS();
 
 
   if (List.isList(dataList)) {
@@ -134,23 +158,15 @@ function getTerminalTypeOption(serverData) {
   return ret;
 }
 function getApStatusOption(serverData) {
-  const ret = {
-    color: colors,
-    tooltip: {
-      trigger: 'item',
-      formatter: '{a} <br/>{b}: {c} ({d}%)',
-    },
+  const onlineNum = serverData.get('online') || 0;
+  const offlineNum = serverData.get('offline') || 0;
+  const ret = $$commonPieOption.mergeDeep({
+    color: [colors[7], colors[2]],
     title: {
       text: _('AP Status'),
-      x: '40%',
-      y: 'center',
-      textAlign: 'left',
+      subtext: `${onlineNum} / ${offlineNum}`,
     },
     legend: {
-      show: true,
-      orient: 'vertical',
-      x: '70%',
-      y: 'center',
       formatter: (name) => {
         let num = serverData.get('offline');
 
@@ -164,16 +180,13 @@ function getApStatusOption(serverData) {
     series: [
       {
         name: _('Status'),
-        type: 'pie',
-        radius: ['54%', '80%'],
-        center: ['40%', '50%'],
       },
     ],
-  };
+  }).toJS();
 
   ret.series[0].data = [
-    { value: serverData.get('offline'), name: _('Offline') },
-    { value: serverData.get('online'), name: _('Online') },
+    { value: offlineNum, name: _('Offline') },
+    { value: onlineNum, name: _('Online') },
   ];
 
   return ret;
@@ -181,19 +194,36 @@ function getApStatusOption(serverData) {
 
 function getFlowOption(serverData, timeType) {
   const option = {
-    color: colors,
+    color: [colors[7], colors[0]],
     tooltip: {
       trigger: 'axis',
     },
     legend: {
       data: ['AP', _('Wireless')],
     },
+    grid: {
+      left: '0',
+      right: '7%',
+      bottom: '3%',
+      containLabel: true,
+    },
     calculable: true,
     xAxis: [{
       type: 'category',
       interval: 1,
+      nameGap: 5,
+      nameTextStyle: {
+        fontWeight: 'bolder',
+      },
       splitLine: {
+        show: false,
         interval: 0,
+      },
+      axisLine: {
+        show: false,
+      },
+      axisTick: {
+        show: false,
       },
       axisLabel: {
         interval: 0,
@@ -204,11 +234,22 @@ function getFlowOption(serverData, timeType) {
       name: _('KB'),
       minInterval: 1,
       splitNumber: 5,
+      min: 0,
       axisLabel: {
         formatter: '{value}',
       },
+      splitLine: {
+        show: true,
+        lineStyle: {
+          type: 'dotted',
+          color: '#e1e6e9',
+        },
+      },
+      axisTick: {
+        show: false,
+      },
       axisLine: {
-        lineStyle: {},
+        show: false,
       },
     }],
     series: [
@@ -216,13 +257,27 @@ function getFlowOption(serverData, timeType) {
         name: 'AP',
         type: 'line',
         smooth: true,
-        itemStyle: { normal: { areaStyle: { type: 'default' } } },
+        // itemStyle: {
+        //   normal: {
+        //     areaStyle: {
+        //       type: 'default',
+        //       opacity: 0.3,
+        //     },
+        //   },
+        // },
       },
       {
         name: _('Wireless'),
         type: 'line',
         smooth: true,
-        itemStyle: { normal: { areaStyle: { type: 'default' } } },
+        // itemStyle: {
+        //   normal: {
+        //     areaStyle: {
+        //       type: 'default',
+        //       opacity: 0.4,
+        //     },
+        //   },
+        // },
       },
     ],
   };
@@ -329,47 +384,43 @@ export default class View extends PureComponent {
 
     return (
       <div>
-        <div className="o-box o-box--primary row">
-          <div className="cols col-6 o-box__section" >
-            <div className="o-box__cell">
-              <h3>{_('AP')}</h3>
+        <div className="t-overview">
+          <div className="t-overview__section row">
+            <div className="cols col-6" >
+              <div className="element">
+                <h3>{_('AP')}</h3>
+              </div>
+              <div className="element">
+                <EchartReact
+                  option={apStatusOption}
+                  className="o-box__canvas"
+                  style={{
+                    width: '100%',
+                    minHeight: '200px',
+                  }}
+                />
+              </div>
             </div>
-            <div className="o-box__cell">
-              <EchartReact
-                option={apStatusOption}
-                className="o-box__canvas"
-                style={{
-                  width: '100%',
-                  minHeight: '200px',
-                }}
-              />
+            <div className="cols col-6">
+              <div className="element">
+                <h3>{_('Clients')}</h3>
+              </div>
+              <div className="element row">
+                <EchartReact
+                  option={terminalTypeOption}
+                  className="o-box__canvas cols col-8"
+                  style={{
+                    minHeight: '200px',
+                    width: '100%',
+                  }}
+                />
+              </div>
             </div>
           </div>
-          <div className="cols col-6 o-box__section">
-            <div className="o-box__cell">
-              <h3>{_('Clients')}</h3>
-            </div>
-            <div className="o-box__cell row">
-              <EchartReact
-                option={terminalTypeOption}
-                className="o-box__canvas cols col-8"
-                style={{
-                  minHeight: '200px',
-                  width: '100%',
-                }}
-              />
-            </div>
-          </div>
-          <div className="cols col-12 o-box__section">
-            <div
-              className="o-box__cell"
-              style={{
-                backgroundColor: 'transparent',
-              }}
-            >
-              <h3>{_('Historical Graphs')}</h3>
-            </div>
-            <div className="o-box__cell o-box__cell--header">
+
+          <h3 className="element t-overview__header">{_('Historical Graphs')}</h3>
+          <div className="t-overview__section">
+            <div className="element t-overview__section-header">
               <h3>
                 <span
                   style={{
@@ -386,42 +437,38 @@ export default class View extends PureComponent {
                 />
               </h3>
             </div>
-            <div className="o-box__cell">
+            <div className="element">
               <EchartReact
                 option={flowOption}
                 className="o-box__canvas"
                 style={{
                   width: '100%',
-                  minHeight: '200px',
+                  minHeight: '300px',
                 }}
               />
             </div>
           </div>
-          <div className="cols col-12 o-box__section">
-            <div className="o-box__cell">
-              <h3>{_('Rogue AP List')}</h3>
-            </div>
-            <div className="o-box__cell">
-              <Table
-                className="table"
-                options={ssidTableOptions}
-                list={serverData.getIn(['neighborsAps', 'list']) || fromJS([])}
-                page={serverData.getIn(['neighborsAps', 'page'])}
-              />
-            </div>
+          <h3 className="element t-overview__header">
+            {_('Rogue AP List')}
+          </h3>
+          <div className="element t-overview__section">
+            <Table
+              className="table table--light"
+              options={ssidTableOptions}
+              list={serverData.getIn(['neighborsAps', 'list']) || fromJS([])}
+              page={serverData.getIn(['neighborsAps', 'page'])}
+            />
           </div>
-          <div className="cols col-12 o-box__section">
-            <div className="o-box__cell">
-              <h3>{_('Interfering AP List')}</h3>
-            </div>
-            <div className="o-box__cell">
-              <Table
-                className="table"
-                options={ssidTableOptions}
-                list={serverData.getIn(['aroundAps', 'list']) || fromJS([])}
-                page={serverData.getIn(['aroundAps', 'page'])}
-              />
-            </div>
+          <h3 className="element t-overview__header">
+            {_('Interfering AP List')}
+          </h3>
+          <div className="element t-overview__section">
+            <Table
+              className="table table--light"
+              options={ssidTableOptions}
+              list={serverData.getIn(['aroundAps', 'list']) || fromJS([])}
+              page={serverData.getIn(['aroundAps', 'page'])}
+            />
           </div>
         </div>
       </div>

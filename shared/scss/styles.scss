@@ -7,6 +7,7 @@
 @import './00_base/scaffolding';
 @import './00_base/helper';
 @import "./00_base/grid";
+@import "./00_base/lego";
 @import './00_base/typography';
 
 /* 01: 原子(Atom) 不可再分的组件 */
@@ -34,7 +35,6 @@
 @import "./02_molecule/m-switch";
 
 /* 03: 组织(organism), 把原子或分子组件按一定的结构排列组合起来 */
-@import "./03_organism/o-lego";
 @import "./03_organism/o-table";
 @import "./03_organism/o-form";
 @import "./03_organism/o-wizard";
@@ -55,6 +55,7 @@
 @import './04_template/t-sign';
 @import './04_template/t-wizard';
 @import './04_template/t-main';
+@import './04_template/t-overview';
 @import './04_template/t-app-screen';
 @import './04_template/t-list-info';
 

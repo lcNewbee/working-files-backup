@@ -1,0 +1,51 @@
+// Spacing variables
+$spacing: (
+  padding-x: $g-distance * 1.5,
+  padding-y: $g-distance,
+  padding-outer-x: $g-distance,
+  padding-outer-y: $g-distance
+);
+
+$spacing-tablet: (
+  padding-x: 5px,
+  padding-y: 10px,
+  padding-outer-x: 20px,
+  padding-outer-y: 15px
+);
+
+@mixin layout ($var) {
+
+  $padding-x: map-get($var, padding-x);
+  $padding-y: map-get($var, padding-y);
+  $padding-outer-x: map-get($var, padding-outer-x);
+  $padding-outer-y: map-get($var, padding-outer-y);
+
+  .container {
+    padding: $padding-outer-y $padding-outer-x;
+  }
+  .element {
+    padding: ($padding-y / 2) ($padding-x / 2);
+  }
+  .element-full-row {
+    margin: 0 (-$padding-outer-x);
+    padding: ($padding-y / 2) ($padding-x / 2 + $padding-outer-x);
+
+    &:first-child {
+      margin: (-$padding-outer-y) (-$padding-outer-x) 0;
+      padding: ($padding-y / 2 + $padding-outer-y) ($padding-x / 2 + $padding-outer-x) ($padding-y / 2);
+    }
+  }
+}
+
+.container {
+  margin: 0 auto;
+}
+
+// Generate default CSS rules
+@include layout($spacing);
+
+
+// Generate CSS rules for tablet view
+@media (max-width: 768px) {
+  @include layout($spacing-tablet);
+}

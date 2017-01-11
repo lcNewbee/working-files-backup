@@ -169,7 +169,7 @@ class Table extends Component {
     }
 
     if (className) {
-      myTableClassName = `${myTableClassName} className`;
+      myTableClassName = `${myTableClassName} ${className}`;
     }
 
     return (

@@ -4,8 +4,7 @@ $mw-md:  768px;
 $mw-lg:  1024px;
 $mw-xl:  1382px;
 
-.container {
-  width: $mw-lg;
+.container-grid {
   margin-right: auto;
   margin-left: auto;
 
@@ -18,7 +17,7 @@ $mw-xl:  1382px;
 [class='col-*'] {
   float: left;
 }
-.container {
+.container-grid {
   > .row {
     margin: 0 -10px;
 

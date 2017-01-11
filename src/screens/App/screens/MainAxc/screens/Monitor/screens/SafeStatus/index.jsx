@@ -117,48 +117,45 @@ export default class SafeStatus extends React.Component {
       <AppScreen
         {...this.props}
       >
-        <div className="Stats">
-          <div className="stats-group clearfix" >
-            <div className="stats-group-large" >
-              <div className="stats-group-cell">
-                <h3>{ _('Attack Type') }</h3>
-              </div>
-              <div className="stats-group-cell">
-                <EchartReact
-                  option={safeTypeChartOtion}
-                  className="stats-group-canvas"
+        <div className="t-overview o-box--light">
+          <div className="t-overview__section" >
+            <div className="element">
+              <h3>{ _('Attack Type') }</h3>
+            </div>
+            <div className="element">
+              <EchartReact
+                option={safeTypeChartOtion}
+                className="stats-group-canvas"
+                style={{
+                  width: '100%',
+                  height: '200px',
+                }}
+              />
+            </div>
+          </div>
+          <div className="element t-overview__header">
+            <h3>
+              { _('List Of Recent Security Incidents') }
+              {
+              /*
+                <Button
+                  icon="download"
+                  theme="primary"
+                  text={_('Export Report')}
                   style={{
-                    width: '100%',
+                    marginLeft: '12px',
                   }}
                 />
-              </div>
-            </div>
-            <div className="stats-group-large">
-              <div className="stats-group-cell">
-                <h3>
-                  { _('List Of Recent Security Incidents') }
-                  {
-                  /*
-                    <Button
-                      icon="download"
-                      theme="primary"
-                      text={_('Export Report')}
-                      style={{
-                        marginLeft: '12px',
-                      }}
-                    />
-                  */
-                  }
-                </h3>
-              </div>
-              <div className="stats-group-cell">
-                <Table
-                  className="table"
-                  options={tableOptions}
-                  list={serverList}
-                />
-              </div>
-            </div>
+              */
+              }
+            </h3>
+          </div>
+          <div className="element t-overview__section">
+            <Table
+              className="table table--light"
+              options={tableOptions}
+              list={serverList}
+            />
           </div>
         </div>
       </AppScreen>
