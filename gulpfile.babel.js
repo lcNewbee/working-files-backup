@@ -29,6 +29,7 @@ const paths = gulp.paths = {
   pubASW3: '../platform/COMLANOS/package/goahead/files/ASW3_web',
   pubASC175: '../platform/COMLANOS/package/goahead/files/ASC175_web',
   pubASC120: '../platform/COMLANOS/package/goahead/files/ASC120_web',
+  pubAEC60: '../platform/COMLANOS/package/goahead/files/AEC60_web',
 };
 gulp.pkg = pkg;
 
@@ -93,4 +94,5 @@ gulp.task('changeAEC120Title', () => changeTitle('AEC120'));
 gulp.task('changeASC175Title', () => changeTitle('ASC175'));
 gulp.task('changeASW3Title', () => changeTitle('ASW3'));
 gulp.task('changeASC120Title', () => changeTitle('ASC120'));
+gulp.task('changeAEC60Title', () => changeTitle('AEC60'));
 

@@ -69,6 +69,7 @@ gulp.task('clean:pubAEC120', () => cleanPubPath(paths.pubAEC120));
 gulp.task('clean:pubASC175', () => cleanPubPath(paths.pubASC175));
 gulp.task('clean:pubASW3', () => cleanPubPath(paths.pubASW3));
 gulp.task('clean:pubASC120', () => cleanPubPath(paths.pubASC120));
+gulp.task('clean:pubAEC60', () => cleanPubPath(paths.pubAEC60));
 
 // 将编译好的文件拷贝到发布文件夹
 function copyBuild2PubPath(dstPath) {
@@ -86,6 +87,7 @@ gulp.task('pub:copyAEC120', () => copyBuild2PubPath(paths.pubAEC120));
 gulp.task('pub:copyASW3', () => copyBuild2PubPath(paths.pubASW3));
 gulp.task('pub:copyASC175', () => copyBuild2PubPath(paths.pubASC175));
 gulp.task('pub:copyASC120', () => copyBuild2PubPath(paths.pubASC120));
+gulp.task('pub:copyAEC60', () => copyBuild2PubPath(paths.pubAEC60));
 
 // 编译，替换，发布，压缩
 function pubAP(name, callback) {
@@ -108,6 +110,7 @@ gulp.task('pub:AEC120', callback => pubAP('AEC120', callback));
 gulp.task('pub:ASW3', callback => pubAP('ASW3', callback));
 gulp.task('pub:ASC175', callback => pubAP('ASC175', callback));
 gulp.task('pub:ASC120', callback => pubAP('ASC120', callback));
+gulp.task('pub:AEC60', callback => pubAP('AEC60', callback));
 
 // 压缩文件夹,提供给后台开发测试
 function compressBulidFile(dstPath) {
@@ -129,8 +132,9 @@ gulp.task('compressAEC120', () => compressBulidFile(paths.pubAEC120));
 gulp.task('compressASW3', () => compressBulidFile(paths.pubASW3));
 gulp.task('compressASC175', () => compressBulidFile(paths.pubASC175));
 gulp.task('compressASC120', () => compressBulidFile(paths.pubASC120));
+gulp.task('compressAEC60', () => compressBulidFile(paths.pubAEC60));
 
 // 执行所有列表中的AP编译工作
 gulp.task('pub:all', () => {
-  runSequence('pub:AIP10', 'pub:AIP5', 'pub:ASW3', 'pub:AEC120', 'pub:ASC175', 'pub:ASC120');
+  runSequence('pub:AIP10', 'pub:AIP5', 'pub:ASW3', 'pub:AEC120', 'pub:ASC175', 'pub:ASC120', 'pub:AEC60');
 });
