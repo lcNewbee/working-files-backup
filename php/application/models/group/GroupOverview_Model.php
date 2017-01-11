@@ -62,13 +62,15 @@ class GroupOverview_Model extends CI_Model {
             $queryd = $this->mysql->query("call ".$prename."(".$groupid.")");
             $result = $queryd->result_array();
             $temporaryAry = array();
-            foreach ($result as $row) {
-                $temporaryAry['mac'] = $row['NbrMac'];
-                $temporaryAry['ssid'] = $row['NbrSsid'];
-                $temporaryAry['channel'] = $row['ChlNum'];
-                $temporaryAry['rssi'] = $row['MeanRSSI'];
-                $db_list[] = $temporaryAry;
-            }
+            if(count($result)){
+                foreach ($result as $row) {
+                    $temporaryAry['mac'] = $row['NbrMac'];
+                    $temporaryAry['ssid'] = $row['NbrSsid'];
+                    $temporaryAry['channel'] = $row['ChlNum'];
+                    $temporaryAry['rssi'] = $row['MeanRSSI'];
+                    $db_list[] = $temporaryAry;
+                }
+            }            
             $arr['list'] = $db_list;
             $arr['page']['total'] = count($result);
 

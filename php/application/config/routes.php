@@ -114,3 +114,5 @@ $route['goform/portal/overview'] = 'portal/overview';
 $route['goform/portal/radius/nas'] = 'portal/RadiusNas';
 $route['goform/portal/radius/online'] = 'portal/RadiusOnlineList';
 $route['goform/portal/radius/logs'] = 'portal/RadiusConnect';
+$route['goform/portal/account/accountList'] = 'portal/AccountList';
+$route['goform/portal/account/connectRecord'] = 'portal/AonnectRecord';

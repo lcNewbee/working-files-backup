@@ -68,9 +68,9 @@ class RadiusNas_Model extends CI_Model {
     function del_radius_nas($data) {
         $arr = json_no('del error');
         $dellist = $data['selectedList'];
-        foreach($dellist as $row) {            
-            $this->portalsql->where('id', $row['id']);
+        foreach($dellist as $row) {                        
             if($this->notice_socket($this->get_socket_pramse('delete',$row))) {
+                $this->portalsql->where('id', $row['id']);
                 $result = $this->portalsql->delete('radius_nas');
                 if($result){
                     $arr = json_ok();
