@@ -9,6 +9,68 @@ import {
 } from 'shared/components';
 import * as screenActions from 'shared/actions/screens';
 
+const colors = [
+  '#f6402b', '#ff9801', '#ffc100',
+  '#91d951', '#1fb5ac', '#73d6d1',
+  '#00a7f6', '#1193f5', '#3e4cb7',
+  '#6834bc', '#9c1ab2', '#eb1461',
+];
+const $$commonPieOption = fromJS({
+  color: colors,
+  tooltip: {
+    trigger: 'item',
+    formatter: '{a} <br/>{b}: {c} ({d}%)',
+  },
+  title: {
+    x: '29%',
+    y: '39%',
+    textAlign: 'center',
+    textStyle: {
+      fontSize: '14',
+      color: '#0093dd',
+    },
+    subtextStyle: {
+      fontSize: '18',
+      fontWeight: 'bolder',
+      color: '#000',
+    },
+  },
+  legend: {
+    orient: 'vertical',
+    x: '54%',
+    y: 'center',
+    itemWidth: 12,
+    itemHeight: 12,
+  },
+  series: [
+    {
+      type: 'pie',
+      center: ['30%', '50%'],
+      radius: ['60%', '86%'],
+      avoidLabelOverlap: false,
+      label: {
+        formatter: '{b}: {c}',
+        normal: {
+          show: false,
+          //position: 'center',
+        },
+        emphasis: {
+          show: false,
+          textStyle: {
+            fontSize: '12',
+            fontWeight: 'bold',
+          },
+        },
+      },
+      labelLine: {
+        normal: {
+          show: false,
+        },
+      },
+    },
+  ],
+});
+
 const tableOptions = fromJS([
   {
     id: 'attackmac',
@@ -45,36 +107,17 @@ function getSafeTypeChartOtion(attackTypeMap) {
   );
   let totalNum = 0;
 
-  const apOption = {
-    tooltip: {
-      trigger: 'item',
-      formatter: '{a} <br/>{b} : {c} ({d}%)',
-    },
-    legend: {
-      orient: 'vertical',
-      x: 'left',
-    },
+  const apOption = $$commonPieOption.mergeDeep({
     title: {
-      text: _('Attack Type Diagram'),
-      x: 'center',
+      text: _('Attack Number'),
     },
     series: [
       {
         name: _('Status'),
         type: 'pie',
-        radius: ['10%', '45%'],
-        center: ['50%', '58%'],
-
-        itemStyle: {
-          emphasis: {
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: 'rgba(0, 0, 0, 0.5)',
-          },
-        },
       },
     ],
-  };
+  }).toJS();
 
   if (attackTypeMap) {
     safeTypeList = attackTypeMap
@@ -92,7 +135,7 @@ function getSafeTypeChartOtion(attackTypeMap) {
       })
       .toArray();
 
-  apOption.title.subtext = _('Attack Number: ') + totalNum;
+  apOption.title.subtext = totalNum;
 
   apOption.series[0].data = safeTypeList.toArray();
 
