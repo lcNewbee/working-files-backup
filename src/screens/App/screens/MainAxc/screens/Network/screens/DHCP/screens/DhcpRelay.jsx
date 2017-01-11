@@ -18,7 +18,6 @@ const settingsOptions = fromJS([
   {
     id: 'relay_enable',
     label: _('Relay on'),
-    legend: _('DHCP Relay'),
     fieldset: 'relay_setting',
     defaultValue: '0',
     value: '1',

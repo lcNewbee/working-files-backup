@@ -1,5 +1,6 @@
 import { toastr } from 'react-redux-toastr';
-import utils from '../utils';
+import ERROR_MSG_MAP from 'shared/config/errorCode';
+import utils from 'shared/utils';
 
 const APP_CONFIG = {
   fetchInfo: '/goform/getAcInfo',
@@ -83,9 +84,6 @@ export function receiveAjaxError(payload) {
     payload,
   };
 }
-const ERROR_MSG_MAP = {
-  6300: _('Pelect upload the correct firmware file'),
-};
 export function receiveServerError(state) {
   let errorMsg = state.msg;
 

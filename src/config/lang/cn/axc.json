@@ -108,6 +108,7 @@
   "IP Pool Type": "地址池类型",
   "Are you sure to delete selected address pools?": "你确定要删除选择的地址池条目？",
   "Are you sure to delete address pool: %s?": "你确定要删除地址池条目：%s？",
+  "Please configure the appropriate IP addresses and mask on interfaces": "请先在接口上配置相应的ip地址、掩码",
 
   "NAT Settings": "NAT配置",
   "NAT": "NAT配置",
