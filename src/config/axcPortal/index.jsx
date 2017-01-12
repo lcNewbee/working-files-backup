@@ -85,7 +85,8 @@ const sPortalMac =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalMac');
 // const sPortalTemplate =
 //    require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalTemplate');
-
+const sDPIOverview =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/DPIOverview');
 /**
  * AP组管理
  */
@@ -311,6 +312,23 @@ const routes = [
                 formUrl: 'goform/network/portal/mac',
                 text: _('White List'),
                 component: sPortalMac.Screen,
+              },
+            ],
+          }, {
+            id: 'dpi',
+            icon: 'copy',
+            noTree: true,
+            component: SharedComponents.TabContainer,
+            path: '/main/network/dpi',
+            text: _('DPI'),
+            indexRoute: { onEnter: (nextState, replace) => replace('/main/network/dpi/dpioverview') },
+            childRoutes: [
+              {
+                id: 'dpioverview',
+                path: '/main/network/dpi/dpioverview',
+                formUrl: 'goform/network/dpi/overview',
+                text: _('Overview'),
+                component: sDPIOverview.Screen,
               },
             ],
           },

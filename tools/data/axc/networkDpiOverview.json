@@ -1,0 +1,135 @@
+{
+
+"state": {
+  "code": 2000,
+  "msg": "ok"
+},
+"data": {
+  "talkers": [
+    {
+      "name": "talker1",
+      "value": 50
+    }, {
+      "name": "talker2",
+      "value": 25
+    }, {
+      "name": "talker3",
+      "value": 25
+    }
+  ],
+
+  "hosts": [
+    {
+      "name": "hosts1",
+      "value": 40
+    }, {
+      "name": "hosts2",
+      "value": 25
+    }, {
+      "name": "hosts3",
+      "value": 35
+    }
+  ],
+
+  "clientPorts": [
+    {
+      "name": "ports1",
+      "value": 30
+    }, {
+      "name": "ports2",
+      "value": 10
+    }, {
+      "name": "ports3",
+      "value": 60
+    }
+  ],
+
+  "serverPorts": [
+    {
+      "name": "ports1",
+      "value": 50
+    }, {
+      "name": "ports2",
+      "value": 10
+    }, {
+      "name": "ports3",
+      "value": 40
+    }, {
+      "name": "poqwrts1",
+      "value": 50
+    }, {
+      "name": "pogrts2",
+      "value": 10
+    }, {
+      "name": "porqwets3",
+      "value": 40
+    }, {
+      "name": "portgs1",
+      "value": 50
+    }, {
+      "name": "posdrts2",
+      "value": 10
+    }, {
+      "name": "podrts3",
+      "value": 40
+    }, {
+      "name": "porhts1",
+      "value": 50
+    }, {
+      "name": "ponrts2",
+      "value": 10
+    }, {
+      "name": "porwts3",
+      "value": 40
+    }, {
+      "name": "porerqts1",
+      "value": 50
+    }, {
+      "name": "porsdgts2",
+      "value": 10
+    }, {
+      "name": "portsas3",
+      "value": 40
+    }
+  ],
+
+  "appProtocols": [
+    {
+      "name": "protocol1",
+      "value": 60
+    }, {
+      "name": "protocol2",
+      "value": 20
+    }, {
+      "name": "protocol3",
+      "value": 20
+    }
+  ],
+
+  "anss": [
+    {
+      "name": "ans1",
+      "value": 10
+    }, {
+      "name": "ans2",
+      "value": 10
+    }, {
+      "name": "ans3",
+      "value": 80
+    }
+  ],
+
+  "liveTalkers": [
+    {
+      "name": "talker1",
+      "value": 30
+    }, {
+      "name": "talker2",
+      "value": 60
+    }, {
+      "name": "talker3",
+      "value": 10
+    }
+  ]
+}
+}
