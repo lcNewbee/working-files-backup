@@ -78,7 +78,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'isOut',
-    text: _('isOut'),
+    text: _('Is Out'),
     formProps: {
       required: true,
     },

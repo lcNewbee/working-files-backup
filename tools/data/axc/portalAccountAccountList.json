@@ -1,0 +1,27 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [{
+      "loginName": 1,
+      "date": "192.168.0.1",
+      "time": "192.168.0.1",
+      "octets": "192.168.0.1",
+      "state": "1",
+      "maclimit": "dsd",
+      "maclimitcount": "1",
+      "autologin": "1",
+      "speed": "1",
+      "ex4": "1",
+      "ex3": "1",
+      "ex5": "null",
+      "ex6": "null",
+      "ex7": "null",
+      "ex8": "null",
+      "ex9": "null",
+      "ex10": "null"
+    }]
+  }
+}

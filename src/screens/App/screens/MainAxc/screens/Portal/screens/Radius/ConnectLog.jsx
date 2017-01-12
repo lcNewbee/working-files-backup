@@ -40,7 +40,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'name',
-    text: _('name'),
+    text: _('Name'),
     formProps: {
       required: true,
     },
@@ -136,6 +136,8 @@ export default class OpenPortalBase extends React.Component {
         listOptions={listOptions}
         actionable
         selectable
+        addable={false}
+        editable={false}
       />
     );
   }

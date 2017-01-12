@@ -170,6 +170,11 @@ const sPortalOnline =
 const sPortalConnectLog =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Radius/ConnectLog');
 
+const sPortalAccountList =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Account/AccountList');
+const sPortalConnectRecord =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Account/ConnectRecord');
+
 const routes = [
   {
     path: '/',
@@ -748,6 +753,30 @@ const routes = [
                 formUrl: 'goform/portal/radius/logs',
                 text: _('Connect Logs'),
                 component: sPortalConnectLog.Screen,
+              },
+            ],
+          }, {
+            id: 'portalAccount',
+            isIndex: true,
+            path: '/main/portal/account',
+            icon: 'copy',
+            text: _('Access Account'),
+            indexRoute: {
+              onEnter: (nextState, replace) => replace('/main/portal/account/accountList'),
+            },
+            childRoutes: [
+              {
+                id: 'portalAccountAccountList',
+                path: '/main/portal/account/accountList',
+                formUrl: 'goform/portal/account/accountList',
+                text: _('Account List'),
+                component: sPortalAccountList.Screen,
+              }, {
+                id: 'portalAccountConnectRecord',
+                path: '/main/portal/account/connectRecord',
+                formUrl: 'goform/portal/account/connectRecord',
+                text: _('Connect Record'),
+                component: sPortalConnectRecord.Screen,
               },
             ],
           },

@@ -11,17 +11,17 @@
       "userip": "192.168.0.1",
       "callingstationid": "",
       "name": "dsd",
-      "sessionTime": "",
-      "octets": "",
-      "clientType": "",
-      "startDate": "",
-      "costTime": "",
-      "inS": "",
-      "outS": "",
-      "costOctets": "",
-      "updateDate": "",
-      "acctSessionId": "",
-      "state": ""
+      "sessionTime": "1",
+      "octets": "1",
+      "clientType": "1",
+      "startDate": "1",
+      "costTime": "1",
+      "inS": "1",
+      "outS": "1",
+      "costOctets": "1",
+      "updateDate": "1",
+      "acctSessionId": "1",
+      "state": "1"
     }]
   }
 }

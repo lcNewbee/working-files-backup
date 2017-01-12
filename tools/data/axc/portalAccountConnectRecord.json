@@ -1,0 +1,22 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [{
+      "userName": 1,
+      "ip": "192.168.0.1",
+      "basip": "192.168.0.1",
+      "mac": "192.168.0.1",
+      "onlinedate": "11",
+      "offlinedate": "dsd",
+      "onlinetime": "1",
+      "accType": "1",
+      "downtraffic": "1",
+      "upTraffic": "1",
+      "accLogic": "1",
+      "reason": "1"
+    }]
+  }
+}
