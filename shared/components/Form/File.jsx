@@ -20,10 +20,12 @@ const propTypes = {
   value: PropTypes.any,
   onChange: PropTypes.func,
   onRef: PropTypes.func,
+  disabled: PropTypes.bool,
 };
 
 const defaultProps = {
   Component: 'span',
+  disabled: false,
 };
 
 class File extends React.Component {
@@ -89,6 +91,7 @@ class File extends React.Component {
           }
         />
         <Input
+          disabled={this.props.disabled}
           className={inputClassName}
           placeholder={placehodlerText}
           type="text"

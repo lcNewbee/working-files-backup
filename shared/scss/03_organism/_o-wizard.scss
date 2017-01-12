@@ -5,6 +5,7 @@ $nav-line-size: 4px;
 .o-wizard {
   margin: 10px auto;
   background: #fff;
+  box-shadow: 0 1px 4px 0 rgba(222, 222, 222, 1);
   // border: 1px solid #ccc;
   // border-radius: 4px;
   // box-shadow: 0 2px 8px 0 rgba(0,0,0,.3);
@@ -137,7 +138,6 @@ $nav-line-size: 4px;
 
   &.o-wizard--sm {
     border: 0;
-    box-shadow: none;
     margin: 0 auto;
 
     .o-wizard__title {

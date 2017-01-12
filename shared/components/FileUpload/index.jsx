@@ -24,10 +24,12 @@ const propTypes = {
 
   // 弹出提示宽
   createModal: PropTypes.func,
+  disabled: PropTypes.bool,
 };
 const defaultProps = {
   name: 'filename',
   buttonIcon: 'upload',
+  disabled: false,
 };
 
 class FileUpload extends React.Component {
@@ -93,10 +95,15 @@ class FileUpload extends React.Component {
   }
 
   onUploadImage() {
-    const { url, onBeforeUpload, onUploaded } = this.props;
+    const { url, onBeforeUpload, onUploaded, disabled } = this.props;
     const formElem = this.formElem;
     let input = this.fileElem;
     let data;
+
+    // 如果是禁用不响应事件
+    if (disabled) {
+      return null;
+    }
 
     // InputFile组件需要访问 myRef
     if (input.myRef) {
@@ -105,11 +112,11 @@ class FileUpload extends React.Component {
 
     if (!input.value) {
       this.onAlert(MSG.shouldSelectFile);
-      return;
+      return null;
     }
 
     if (this.state.imageStatus !== 'selected') {
-      return;
+      return null;
     }
 
     if (onBeforeUpload) {
@@ -169,7 +176,7 @@ class FileUpload extends React.Component {
   }
 
   render() {
-    const { url, target, buttonText, name, buttonIcon } = this.props;
+    const { url, target, buttonText, name, buttonIcon, disabled } = this.props;
     const { imageStatus } = this.state;
     const curButtonText = buttonText || _('Upload Image');
     let displayStyle = 'none';
@@ -196,6 +203,7 @@ class FileUpload extends React.Component {
           className="text"
           name={name}
           onChange={this.onChangeImage}
+          disabled={disabled}
           style={{
             marginRight: '8px',
             display: displayStyle,
@@ -213,6 +221,7 @@ class FileUpload extends React.Component {
           loading={imageStatus === 'loading'}
           theme={imageStatus === 'selected' ? 'primary' : undefined}
           onClick={this.onUploadImage}
+          disabled={disabled}
         />
       </form>
     );

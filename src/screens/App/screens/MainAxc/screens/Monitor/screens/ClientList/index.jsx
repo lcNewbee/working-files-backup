@@ -11,6 +11,7 @@ import Button from 'shared/components/Button/Button';
 // custom
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
+import { getActionable } from 'shared/axc';
 
 const flowRateFilter = utils.filter('flowRate:["KB"]');
 
@@ -143,8 +144,10 @@ export default class Clients extends React.Component {
     this.props.onListAction();
   }
   initListOptions(props) {
+    const actionable = getActionable(props);
+
     // 所有组
-    if (props.groupid === -100) {
+    if (props.groupid === -100 || !actionable) {
       this.listOptions = listOptions.delete(-1);
 
     //

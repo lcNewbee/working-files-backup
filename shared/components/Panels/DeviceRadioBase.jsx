@@ -137,7 +137,7 @@ class DeviceSystem extends React.Component {
 
   fetchChannelOptions(props) {
     const countrycode = props.store.getIn(['data', 'countrycode']);
-    const is5g = props.store.getIn(['data', 'phymode']) === 2;
+    const is5g = props.store.getIn(['data', 'phymode']) >= 8;
     getChannelList(countrycode, is5g)
       .then(
         (item) => {
@@ -189,6 +189,7 @@ class DeviceSystem extends React.Component {
             })}
           />,
         ]}
+        actionable={actionable}
         hasSaveButton={actionable}
       />
     );

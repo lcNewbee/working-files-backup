@@ -2,7 +2,8 @@
   .dropzone {
     padding: 5px 20px;
     padding-top: 10px;
-    min-width: 130px;
+    min-height: 120px;
+    border: 1px solid #ccc;
     .dz-preview {
       margin: 0;
       width: 100%;

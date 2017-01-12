@@ -271,13 +271,14 @@ export const SignUp = React.createClass({
     this.setState(utils.extend({}, this.state, data));
   },
 
-  createFormGruop(name) {
+  createFormGruop(name, option) {
     const myGroup = formGroups.get(name);
     const input = myGroup.input;
 
     return (
       <FormGroup
         {...input}
+        {...option}
         key={input.name}
         id={input.name}
         value={this.getDataValue(input.name)}
@@ -338,10 +339,14 @@ export const SignUp = React.createClass({
                   <p>{msg.welcomeDes}</p>
                   <div className="row">
                     <div className="cols cols-first col-6">
-                      {this.createFormGruop('country')}
+                      {this.createFormGruop('country', {
+                        display: 'block',
+                      })}
                     </div>
                     <div className="cols col-6">
-                      {this.createFormGruop('timeZone')}
+                      {this.createFormGruop('timeZone', {
+                        display: 'block',
+                      })}
                     </div>
                   </div>
                   {
@@ -359,10 +364,14 @@ export const SignUp = React.createClass({
                   <p>{msg.passwordDes}</p>
                   <div className="row">
                     <div className="cols cols-first col-6">
-                      {this.createFormGruop('password')}
+                      {this.createFormGruop('password', {
+                        display: 'block',
+                      })}
                     </div>
                     <div className="cols col-6">
-                      {this.createFormGruop('confirmpasswd')}
+                      {this.createFormGruop('confirmpasswd', {
+                        display: 'block',
+                      })}
                     </div>
                   </div>
 

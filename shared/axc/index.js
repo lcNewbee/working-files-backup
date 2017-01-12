@@ -1,11 +1,11 @@
 import { fromJS } from 'immutable';
 import { purviewOptions } from 'shared/config/axc';
 
-export function getActionable(props) {
+export function getActionable(props, moduleName) {
   const purview = props.app.getIn(['login', 'purview']);
   const userType = props.app.getIn(['login', 'usertype']);
   const $$purviewList = fromJS(purview.split(','));
-  const curModule = props.route.path.split('/')[2];
+  const curModule = moduleName || props.route.path.split('/')[2];
   const curModuleVal = fromJS(purviewOptions).find(
     $$item => $$item.get('module') === curModule,
   ).get('value');

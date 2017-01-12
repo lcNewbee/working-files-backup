@@ -3,6 +3,7 @@ import Icon from 'shared/components/Icon';
 import { Map, List } from 'immutable';
 import { immutableUtils } from 'shared/utils';
 import { numberKeys } from 'shared/config/axcRadio';
+import { getActionable } from 'shared/axc';
 import DevicePanel from '../Panels/Device';
 
 const propTypes = {
@@ -19,6 +20,7 @@ const propTypes = {
   validateAll: PropTypes.func,
   groupid: PropTypes.any,
   refreshAll: PropTypes.func,
+  route: PropTypes.object,
 
   data: PropTypes.instanceOf(Map),
   app: PropTypes.instanceOf(Map),
@@ -35,8 +37,16 @@ class PropertyPanel extends React.Component {
 
     this.onChangePropertysTab = this.onChangePropertysTab.bind(this);
     this.onSave = this.onSave.bind(this);
+    this.actionable = getActionable(this.props, 'group');
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.route.path !== this.props.route.path) {
+      if (this.props.route.path.indexOf('/group') === -1) {
+        this.props.onToggle(false);
+      }
+    }
+  }
   onChangePropertysTab(e, name) {
     e.preventDefault();
     this.props.changePropertysItem({
@@ -94,7 +104,7 @@ class PropertyPanel extends React.Component {
     const { isShow, data, app, reportValidError, groupid } = this.props;
     const { activeIndex } = data.toJS();
     let propertyPanelClassName = 'o-property-panel';
-    let actionAable = true;
+    let actionAable = this.actionable;
 
     if (isShow) {
       propertyPanelClassName = `${propertyPanelClassName} active`;

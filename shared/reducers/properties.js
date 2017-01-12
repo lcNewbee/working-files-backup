@@ -238,6 +238,7 @@ function changePropertysItem(state, action) {
 }
 
 export default function (state = defaultState, action) {
+
   switch (action.type) {
     case 'INIT_ADD_PROPERTY_PANEL':
       return initAddPropertyPanel(state, action);
@@ -249,7 +250,14 @@ export default function (state = defaultState, action) {
       return removeFromPropertyPanel(state, action);
 
     case 'TOGGLE_PROPERTY_PANEL':
-      return state.update('isShowPanel', val => !val);
+      return state.update('isShowPanel', (val) => {
+        let ret = !val;
+
+        if (typeof action.payload === 'boolean') {
+          ret = action.payload;
+        }
+        return ret;
+      });
 
     // 切换属性列表body折叠状态
     case 'COLLAPSE_PROPERTYS':

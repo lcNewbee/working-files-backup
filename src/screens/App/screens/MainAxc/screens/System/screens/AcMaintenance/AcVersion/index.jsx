@@ -33,8 +33,11 @@ const propTypes = {
   closeModal: PropTypes.func,
   changeModalState: PropTypes.func,
   onReboot: PropTypes.func,
+  actionable: PropTypes.bool,
 };
-const defaultProps = {};
+const defaultProps = {
+  actionable: true,
+};
 export default class AcVersion extends PureComponent {
   constructor(props) {
     super(props);
@@ -93,6 +96,8 @@ export default class AcVersion extends PureComponent {
   }
 
   checkUpgradOk(isFirst) {
+    let timeoutTime = 5000;
+
     if (!isFirst) {
       this.props.fetchProductInfo('goform/axcInfo')
         .then((json) => {
@@ -103,10 +108,14 @@ export default class AcVersion extends PureComponent {
             });
           }
         });
+
+    // 第一次 需要个长时间让 后台可以杀进程
+    } else {
+      timeoutTime = 30000;
     }
     checkUpgradOkTimeout = setTimeout(() => {
       this.checkUpgradOk();
-    }, 5000);
+    }, timeoutTime);
   }
   upgradeAc() {
     const { filename } = this.state;
@@ -209,12 +218,17 @@ export default class AcVersion extends PureComponent {
 
         <FormGroup
           label={msg.selectFile}
+          disabled={!this.props.actionable}
         >
-          <DropzoneComponent
-            config={componentConfig}
-            eventHandlers={eventHandlers}
-            djsConfig={djsConfig}
-          />
+          {
+            this.props.actionable ? (
+              <DropzoneComponent
+                config={componentConfig}
+                eventHandlers={eventHandlers}
+                djsConfig={djsConfig}
+              />
+            ) : null
+          }
         </FormGroup>
       </div>
     );

@@ -128,6 +128,7 @@ class DeviceSystem extends React.Component {
             })}
           />,
         ]}
+        actionable={actionable}
         hasSaveButton={actionable}
         onSave={
           () => this.props.onSave('radioAdvance')

@@ -10,6 +10,7 @@ import SaveButton from 'shared/components/Button/SaveButton';
 import FileUpload from 'shared/components/FileUpload';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
+import { getActionable } from 'shared/axc';
 import AcVersion from './AcVersion';
 
 const languageOptions = List(b28n.getOptions().supportLang).map((item) => (
@@ -55,18 +56,25 @@ export default class View extends React.Component {
       isRebooting: false,
       isRestoring: false,
     };
+    this.actionable = getActionable(props);
   }
 
   onReboot() {
-    return this.props.save('goform/system/reboot');
+    if (this.actionable) {
+      return this.props.save('goform/system/reboot');
+    }
   }
 
   onBackup() {
-    window.location.href = '/goform/system/backup';
+    if (this.actionable) {
+      window.location.href = '/goform/system/backup';
+    }
   }
 
   onRestore() {
-    return this.props.save('goform/system/restore');
+    if (this.actionable) {
+      return this.props.save('goform/system/restore');
+    }
   }
 
   onConfirm(type) {
@@ -124,7 +132,6 @@ export default class View extends React.Component {
   }
 
   render() {
-    const { route } = this.props;
     const restoreUrl = '/goform/system/restore';
 
     return (
@@ -136,6 +143,7 @@ export default class View extends React.Component {
           <AcVersion
             {...this.props}
             onReboot={this.onReboot}
+            actionable={this.actionable}
           />
 
           <fieldset className="o-form__fieldset">
@@ -144,6 +152,7 @@ export default class View extends React.Component {
                 type="button"
                 icon="refresh"
                 text={_('Reboot Now')}
+                disabled={!this.actionable}
                 onClick={
                   () => this.onConfirm('reboot')
                 }
@@ -158,6 +167,7 @@ export default class View extends React.Component {
                 icon="download"
                 text={_('')}
                 onClick={this.onBackup}
+                disabled={!this.actionable}
               />
             </FormGroup>
             <FormGroup label={_('Restore To Factory')}>
@@ -165,6 +175,7 @@ export default class View extends React.Component {
                 type="button"
                 icon="undo"
                 text=""
+                disabled={!this.actionable}
                 onClick={
                   () => this.onConfirm('restore')
                 }
@@ -178,6 +189,7 @@ export default class View extends React.Component {
                 name="backupFile"
                 buttonIcon="undo"
                 buttonText={_('Restore Now')}
+                disabled={!this.actionable}
               />
             </FormGroup>
 

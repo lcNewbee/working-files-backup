@@ -9,6 +9,7 @@ import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 import FormContainer from 'shared/components/Organism/FormContainer';
 import Icon from 'shared/components/Icon';
+import { getActionable } from 'shared/axc';
 
 const settingsFormOptions = radioBase
   // 添加自动功率
@@ -118,6 +119,7 @@ export default class SmartRf extends React.Component {
     utils.binds(this, [
       'onSave',
     ]);
+    this.actionable = getActionable(props);
   }
 
   componentDidUpdate(prevProps) {
@@ -189,7 +191,7 @@ export default class SmartRf extends React.Component {
                   invalidMsg={app.get('invalid')}
                   validateAt={app.get('validateAt')}
                   isSaving={app.get('saving')}
-                  hasSaveButton
+                  hasSaveButton={this.actionable}
                 />
               </div>
             ) : null
@@ -223,7 +225,7 @@ export default class SmartRf extends React.Component {
                   invalidMsg={app.get('invalid')}
                   validateAt={app.get('validateAt')}
                   isSaving={app.get('saving')}
-                  hasSaveButton
+                  hasSaveButton={this.actionable}
                 />
               </div>
             ) : null

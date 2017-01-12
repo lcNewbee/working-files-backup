@@ -523,6 +523,7 @@ class ListInfo extends React.Component {
                 type="checkbox"
                 name={$$item.get('id')}
                 value="1"
+                disabled={!actionable}
                 checked={parseInt(val, 10) === 1}
                 onChange={(data) => {
                   this.onItemAction(

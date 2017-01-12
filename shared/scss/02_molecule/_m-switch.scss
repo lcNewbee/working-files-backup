@@ -44,4 +44,10 @@
       font-size: 10px;
     }
   }
+
+  &.m-switch--disabled {
+    .m-switch__item {
+      cursor: not-allowed;
+    }
+  }
 }

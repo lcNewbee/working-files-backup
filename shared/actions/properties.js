@@ -1,8 +1,9 @@
 import * as appActions from 'shared/actions/app';
 
-export function togglePropertyPanel() {
+export function togglePropertyPanel(isShow) {
   return {
     type: 'TOGGLE_PROPERTY_PANEL',
+    payload: isShow,
   };
 }
 

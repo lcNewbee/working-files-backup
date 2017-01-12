@@ -107,3 +107,7 @@ li {
 li {
   list-style: none;
 }
+
+input[disabled] {
+  cursor: not-allowed;
+}

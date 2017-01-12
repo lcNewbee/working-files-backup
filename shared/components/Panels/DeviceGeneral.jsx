@@ -46,10 +46,12 @@ class Panel extends React.Component {
           label={_('Nickname')}
           name="devicename"
           form="deviceGeneral"
+
           value={store.getIn(['data', 'devicename'])}
           onChange={option => this.props.onChangeData({
             devicename: option.value,
           })}
+          disabled={!actionable}
 
           // Validate Props
           errMsg={invalidMsg.get('devicename')}

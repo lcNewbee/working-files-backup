@@ -3,9 +3,9 @@ import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { Map } from 'immutable';
 import { bindActionCreators } from 'redux';
-import {
-  FormGroup, SaveButton,
-} from 'shared/components';
+import SaveButton from 'shared/components/Button/SaveButton';
+import FormGroup from 'shared/components/Form/FormGroup';
+import { getActionable } from 'shared/axc';
 import AppScreen from 'shared/components/Template/AppScreen';
 import * as appActions from 'shared/actions/app';
 import * as screensActions from 'shared/actions/screens';
@@ -23,6 +23,7 @@ export default class View extends React.Component {
   constructor(props) {
     super(props);
     this.onSave = this.onSave.bind(this);
+    this.actionable = getActionable(props);
   }
   onSave() {
     this.props.saveScreenSettings();
@@ -89,15 +90,19 @@ export default class View extends React.Component {
               </div> */}
             </div>
           </div>
-          <div className="form-group form-group--save">
-            <div className="form-control">
-              <SaveButton
-                type="button"
-                loading={app.get('saving')}
-                onClick={this.onSave}
-              />
-            </div>
-          </div>
+          {
+            this.actionable ? (
+              <div className="form-group form-group--save">
+                <div className="form-control">
+                  <SaveButton
+                    type="button"
+                    loading={app.get('saving')}
+                    onClick={this.onSave}
+                  />
+                </div>
+              </div>
+            ) : null
+          }
         </form>
       </AppScreen>
     );

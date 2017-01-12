@@ -8,8 +8,8 @@ const propTypes = {
   id: PropTypes.string,
   action: PropTypes.string,
   className: PropTypes.string,
-  layout: PropTypes.oneOf(['flow', 'block']),
-  size: PropTypes.oneOf(['compassed']),
+  layout: PropTypes.oneOf(['default', 'flow', 'block']),
+  size: PropTypes.oneOf(['md', 'compassed']),
   component: PropTypes.oneOf(['form', 'div']),
 
   hasSaveButton: PropTypes.bool,
@@ -19,26 +19,29 @@ const propTypes = {
   rightChildren: PropTypes.node,
 
   // 数据验证相关
+  invalidMsg: PropTypes.instanceOf(Map),
   validateAt: PropTypes.string,
   onChangeData: PropTypes.func,
   onValidError: PropTypes.func,
   onSave: PropTypes.func,
 
   // f
-  options: PropTypes.instanceOf(List),
+  options: PropTypes.instanceOf(List).isRequired,
   data: PropTypes.oneOfType([
     PropTypes.instanceOf(Map), PropTypes.object,
   ]),
   actionQuery: PropTypes.instanceOf(Map),
-  invalidMsg: PropTypes.instanceOf(Map),
 
   hasFile: PropTypes.bool,
+  actionable: PropTypes.bool,
   method: PropTypes.oneOf(['POST', 'GET']),
 };
 const defaultProps = {
   hasSaveButton: false,
   method: 'POST',
   component: 'div',
+  actionable: true,
+  hasFile: false,
 };
 
 class FormContainer extends React.Component {
@@ -111,7 +114,7 @@ class FormContainer extends React.Component {
   }
   renderFormGroup(option, index) {
     const {
-      invalidMsg, validateAt, onValidError, actionQuery, id,
+      invalidMsg, validateAt, onValidError, actionQuery, id, actionable,
     } = this.props;
     const myProps = option.toJS();
     const formGroupId = myProps.id;
@@ -200,6 +203,11 @@ class FormContainer extends React.Component {
     // 处理显示前提条件
     if (typeof myProps.showPrecondition === 'function') {
       isShow = myProps.showPrecondition($$data);
+    }
+
+    // 如果是不可操作的
+    if (!actionable) {
+      myProps.disabled = true;
     }
 
     if (myComponent) {
@@ -329,6 +337,7 @@ class FormContainer extends React.Component {
                   <SaveButton
                     type="button"
                     loading={isSaving}
+                    disabled={!this.props.actionable}
                     onClick={this.onSave}
                   />
                 </div>

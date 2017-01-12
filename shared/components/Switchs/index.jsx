@@ -12,10 +12,12 @@ const propTypes = {
   style: PropTypes.object,
   role: PropTypes.oneOf(['switch']),
   minWidth: PropTypes.string,
+  disabled: PropTypes.bool,
 };
 
 const defaultProps = {
   role: 'switch',
+  disabled: false,
 };
 
 class Switchs extends React.Component {
@@ -36,7 +38,9 @@ class Switchs extends React.Component {
   }
 
   render() {
-    const { size, className, options, value, role, minWidth, style } = this.props;
+    const {
+      size, className, options, value, role, minWidth, style, disabled
+    } = this.props;
     const itemStyle = {
       minWidth,
     };
@@ -59,6 +63,10 @@ class Switchs extends React.Component {
 
     if (size) {
       classNames = `${classNames} m-switch--${size}`;
+    }
+
+    if (disabled) {
+      classNames = `${classNames} m-switch--disabled`;
     }
 
     if (className) {
@@ -94,6 +102,7 @@ class Switchs extends React.Component {
                 key={i}
                 className={myClassName}
                 value={val}
+                disabled={disabled}
                 onClick={(e) => {
                   this.onClick(e, {
                     value: val,
