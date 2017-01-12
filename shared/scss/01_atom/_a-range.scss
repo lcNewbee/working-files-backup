@@ -134,6 +134,7 @@ input[type=range] {
   input[type=range] {
     margin-right: .4em;
     margin-top: -4px;
-    height: $thumb-height + 12px;
+    //height: $thumb-height + 12px;
+    height: auto;
   }
 }

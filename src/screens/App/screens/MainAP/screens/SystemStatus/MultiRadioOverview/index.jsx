@@ -494,7 +494,7 @@ export default class SystemStatus extends React.Component {
     };
 
     const option = {
-      backgroundColor: '#f2f2f2',
+      backgroundColor: '#edf4fd',
       legend: {
         data: [_('Used'), _('Free')],
         orient: 'vertical',

@@ -1101,18 +1101,14 @@ export default class Basic extends React.Component {
                       required
                       {...validMaxClients}
                     />
-                      ) : null
+                  ) : null
                 }
                 <FormGroup
                   label={_('Output Power')}
-                  type="range"
-                  min="1"
+                  type="number"
+                  min="3"
                   max={this.props.selfState.get('maxTxpower')}
                   value={curData.getIn(['radioList', radioId, 'txPower'])}
-                  inputStyle={{
-                    backgroundColor: '#f2f2f2',
-                  }}
-                  hasTextInput
                   onChange={(data) => {
                     const radioList = curData.get('radioList')
                                       .setIn([radioId, 'txPower'], data.value);

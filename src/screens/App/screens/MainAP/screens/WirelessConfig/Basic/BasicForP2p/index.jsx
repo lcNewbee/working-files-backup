@@ -1826,8 +1826,8 @@ export default class Basic extends React.Component {
               }
               <FormGroup
                 label={_('Output Power')}
-                type="range"
-                min="1"
+                type="number"
+                min="3"
                 max={this.props.selfState.get('maxTxpower')}
                 value={radioSettings.getIn(['radioList', radioId, 'txPower'])}
                 onChange={(data) => {
@@ -1836,10 +1836,6 @@ export default class Basic extends React.Component {
                   this.props.updateRadioSettingsItem({ radioList });
                 }}
                 help="dBm"
-                inputStyle={{
-                  backgroundColor: '#f2f2f2',
-                }}
-                hasTextInput
               />
               {
                 /**
