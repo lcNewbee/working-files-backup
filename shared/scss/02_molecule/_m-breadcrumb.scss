@@ -45,8 +45,8 @@
       display: block;
       padding: 0 5px;
       background-color: transparent;
-      padding-left: 25px;
-      color: #111;
+      padding-left: 30px;
+      color: $g-main-color;
       position: relative;
       font-size: $g-distance * 1;
 
@@ -70,6 +70,7 @@
       &:first-child {
         .m-breadcrumb__link {
           color: $g-brand-primary;
+          text-shadow: 1px 1px 0 #fff;
 
           &::after {
             display: none;

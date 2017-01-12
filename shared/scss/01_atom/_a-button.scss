@@ -10,6 +10,8 @@
   font-size: $g-font-size;
   line-height: 1;
   color: #666;
+  white-space: nowrap;
+  user-select: none;
   text-decoration: none;
   cursor: pointer;
   background-color: #e8e8e8;

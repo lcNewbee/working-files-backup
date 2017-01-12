@@ -9,66 +9,9 @@ import Progress from 'shared/components/Progress';
 import AppScreen from 'shared/components/Template/AppScreen';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/screens';
+import { colors, $$commonPieOption } from 'shared/config/axc';
 
 const uptimeFilter = utils.filter('connectTime');
-const colors = [
-  '#2f92d4', '#feb909', '#a388d2',
-];
-const $$commonPieOption = fromJS({
-  color: colors,
-  tooltip: {
-    trigger: 'item',
-    formatter: '{a} <br/>{b}: {c} ({d}%)',
-  },
-  title: {
-    x: '39%',
-    y: '39%',
-    textAlign: 'center',
-    textStyle: {
-      fontSize: '14',
-      color: '#0093dd',
-    },
-    subtextStyle: {
-      fontSize: '18',
-      fontWeight: 'bold',
-      color: '#000',
-    },
-  },
-  legend: {
-    orient: 'vertical',
-    x: '70%',
-    y: 'center',
-    itemWidth: 12,
-    itemHeight: 12,
-  },
-  series: [
-    {
-      type: 'pie',
-      center: ['40%', '50%'],
-      radius: ['60%', '86%'],
-      avoidLabelOverlap: false,
-      label: {
-        formatter: '{b}: {c}',
-        normal: {
-          show: false,
-          //position: 'center',
-        },
-        emphasis: {
-          show: false,
-          textStyle: {
-            fontSize: '12',
-            fontWeight: 'bold',
-          },
-        },
-      },
-      labelLine: {
-        normal: {
-          show: false,
-        },
-      },
-    },
-  ],
-});
 
 function getCpuOption(serverData) {
   const usedValue = serverData.get('cpuUsed');
@@ -76,6 +19,7 @@ function getCpuOption(serverData) {
   const usedName = `${_('Used')}: ${usedValue}%`;
   const freeName = `${_('Free')}: ${freeValue}%`;
   const ret = $$commonPieOption.mergeDeep({
+    color: [colors[7], colors[1]],
     legend: {
       data: [usedName, freeName],
     },
@@ -103,6 +47,7 @@ function getMemoryOption(serverData) {
   const usedName = `${_('Used')}: ${usedValue}%`;
   const freeName = `${_('Free')}: ${freeValue}%`;
   const ret = $$commonPieOption.mergeDeep({
+    color: [colors[7], colors[1]],
     title: {
       text: `${_('Used')}`,
       subtext: `${usedValue}%`,
@@ -128,7 +73,7 @@ function getMemoryOption(serverData) {
 
 function getStoreOption(serverData) {
   const option = {
-    color: colors,
+    color: [colors[7], colors[1]],
     tooltip: {
       trigger: 'axis',
       axisPointer: {            // 坐标轴指示器，坐标轴触发有效

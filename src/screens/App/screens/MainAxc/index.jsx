@@ -483,36 +483,39 @@ export default class Main extends Component {
 
     return (
       <aside className="t-main__asider-top">
-        <h3>
-          <span>{product.getIn(['group', 'selected', 'groupname'])}</span>
-          {
-            isGroupMenu ? (
-              <Icon
-                name="plus"
-                title={_('Add Ap Group')}
-                onClick={() => {
-                  this.props.fetchGroupAps();
-                  this.props.updateAddApGroup({
-                    groupname: '',
-                    remark: '',
-                  });
-                  this.props.showMainModal({
-                    title: _('Add Ap Group'),
-                    isShow: true,
-                    size: 'lg',
-                    name: 'groupAdd',
-                  });
-                }}
-              />
-            ) : null
-          }
-        </h3>
-        <div className="toggle-bar" onClick={this.onClickTopMenuTitle} >
-          <Icon
-            name="caret-down"
-            title={_('Toggle Group List')}
-          />
-        </div>
+        <header>
+          <h3>
+            <span>{product.getIn(['group', 'selected', 'groupname'])}</span>
+            {
+              isGroupMenu ? (
+                <Icon
+                  name="plus"
+                  title={_('Add Ap Group')}
+                  onClick={() => {
+                    this.props.fetchGroupAps();
+                    this.props.updateAddApGroup({
+                      groupname: '',
+                      remark: '',
+                    });
+                    this.props.showMainModal({
+                      title: _('Add Ap Group'),
+                      isShow: true,
+                      size: 'lg',
+                      name: 'groupAdd',
+                    });
+                  }}
+                />
+              ) : null
+            }
+          </h3>
+          <div className="toggle-bar" onClick={this.onClickTopMenuTitle} >
+            <Icon
+              name="caret-down"
+              title={_('Toggle Group List')}
+            />
+          </div>
+        </header>
+
         <h4 className="t-main__asider-header">{_('Group List')}</h4>
         <ul
           className="m-menu m-menu--open"

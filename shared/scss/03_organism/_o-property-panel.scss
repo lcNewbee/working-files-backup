@@ -17,7 +17,7 @@
     color: #fff;
     text-align: center;
     cursor: pointer;
-    background-color: #333;
+    background-color: $g-main-color-light;
     border-radius: 16px 0 16px 16px;
     box-shadow: -2px 2px 0 0 rgba(0,0,0,.2);
     transition: top .4s ease-in-out, opacity .4s ease-in-out;
@@ -39,7 +39,7 @@
     line-height: 20px;
     color: #fff;
     user-select: none;
-    background-color: #333;
+    background-color: $g-main-color-light;
 
     .icon {
       margin-left: 12px;

@@ -25,7 +25,7 @@ function Navbar(props) {
       <h1>{title}</h1>
       {
         version ? (
-          <span className="version">GUI {version}</span>
+          <span className="version">{version}</span>
         ) : null
       }
 

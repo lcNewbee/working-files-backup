@@ -47,7 +47,7 @@
     &:checked {
       & + label {
         padding-left: 15px;
-        background-color: $g-brand-success;
+        background-color: $g-brand-primary;
 
         &::before {
           color: #fff;
@@ -81,7 +81,7 @@
       &:checked {
         & + label {
           text-align: right;
-          background-color: $g-brand-success;
+          background-color: $g-brand-primary;
 
           &::before {
             color: #fff;
@@ -117,10 +117,10 @@
 
       &:checked {
         & + label {
-          border-color: $g-brand-success;
+          border-color: $g-brand-primary;
 
           &::before {
-            color: $g-brand-success;
+            color: $g-brand-primary;
           }
         }
       }
