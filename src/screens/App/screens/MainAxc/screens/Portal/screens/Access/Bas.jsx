@@ -10,13 +10,14 @@ import * as appActions from 'shared/actions/app';
 
 const listOptions = fromJS([
   {
-    id: 'basName',
+    id: 'basname',
     text: _('Bas Name'),
     formProps: {
       required: true,
+      maxLength: '32',
     },
   }, {
-    id: 'basIp',
+    id: 'bas_ip',
     text: _('Bas IP'),
     formProps: {
       required: true,
@@ -25,20 +26,9 @@ const listOptions = fromJS([
       }),
     },
   }, {
-    id: 'basPort',
+    id: 'bas_port',
     text: _('Bas Port'),
-    formProps: {
-      required: true,
-    },
-  }, {
-    id: 'portalVer',
-    text: _('Portal Vertion'),
-    formProps: {
-      required: true,
-    },
-  }, {
-    id: 'authType',
-    text: _('Auth Type'),
+    noTable: true,
     formProps: {
       required: true,
     },
@@ -50,68 +40,178 @@ const listOptions = fromJS([
       required: true,
     },
   }, {
-    id: 'basUser',
+    id: 'bas_user',
     text: _('User'),
+    noTable: true,
     formProps: {
       required: true,
       type: 'text',
     },
   }, {
-    id: 'basPwd',
+    id: 'bas_pwd',
     text: _('Password'),
+    noTable: true,
     formProps: {
       required: true,
       type: 'password',
+    },
+  }, {
+    id: 'bas',
+    text: _('Device Type'),
+    options: [
+      {
+        value: '0',
+        label: _('Standard'),
+      },
+    ],
+    defaultValue: '0',
+    formProps: {
+      required: true,
+      type: 'select',
+      label: _('Device Type'),
+      placeholder: _('Please Select ') + _('Device Type'),
+    },
+  }, {
+    id: 'portalVer',
+    text: _('Portal Vertion'),
+    options: [
+      {
+        value: '1',
+        label: _('V1/CMCC'),
+      }, {
+        value: '2',
+        label: _('V2'),
+      },
+    ],
+    defaultValue: '0',
+    formProps: {
+      required: true,
+      type: 'select',
+      label: _('Portal Vertion'),
+      placeholder: _('Please Select ') + _('Portal Vertion'),
+    },
+  }, {
+    id: 'authType',
+    text: _('Auth Type'),
+    options: [
+      {
+        value: '0',
+        label: _('PAP'),
+      }, {
+        value: '1',
+        label: _('CHAP'),
+      },
+    ],
+    defaultValue: '0',
+    formProps: {
+      required: true,
+      type: 'select',
+      label: _('Auth Type'),
+      placeholder: _('Please Select ') + _('Auth Type'),
     },
   }, {
     id: 'timeoutSec',
     text: _('Time out'),
     type: 'num',
     formProps: {
+      min: '0',
       required: true,
     },
   }, {
+    id: 'web',
+    text: _('Web Template'),
+    options: [
+      {
+        required: true,
+        value: '0',
+        label: _('Default Web'),
+      },
+    ],
+    defaultValue: '0',
+    formProps: {
+      type: 'select',
+      label: _('Web Template'),
+      placeholder: _('Please Select ') + _('Web Template'),
+    },
+  }, {
     id: 'isPortalCheck',
-    text: _('Portal Check'),
+    text: _('Portal Acc'),
+    noForm: true,
+    noTable: true,
     formProps: {
       required: true,
     },
   }, {
     id: 'isOut',
-    text: _('Is Out'),
+    text: _('Enviroment Deployment'),
+    options: [
+      {
+        value: '0',
+        label: _('Inside Network Deployment'),
+      }, {
+        value: '1',
+        label: _('Outside Network Deployment'),
+      },
+    ],
+    defaultValue: '0',
     formProps: {
       required: true,
+      type: 'select',
+      label: _('Enviroment Deployment'),
+      placeholder: _('Please Select ') + _('Enviroment'),
     },
   }, {
-    id: 'authInterface',
+    id: 'auth_interface',
     text: _('Interface Auth'),
+    noTable: true,
     formProps: {
       required: true,
     },
   }, {
     id: 'isComputer',
     text: _('Computer Auth'),
+    options: [
+      {
+        value: '0',
+        label: _('Allowed'),
+      }, {
+        value: '1',
+        label: _('Forbidden'),
+      },
+    ],
+    defaultValue: '0',
     formProps: {
       required: true,
-    },
-  }, {
-    id: 'web',
-    text: _('Web'),
-    formProps: {
-      required: true,
+      type: 'select',
+      label: _('Computer Auth'),
+      placeholder: _('Please Select ') + _('Computer Auth'),
     },
   }, {
     id: 'isdebug',
     text: _('Debug'),
+    noTable: true,
+    noForm: true,
     formProps: {
       required: true,
     },
   }, {
     id: 'lateAuth',
     text: _('Late Auth'),
+    options: [
+      {
+        value: '0',
+        label: _('Closed'),
+      }, {
+        value: '1',
+        label: _('Open'),
+      },
+    ],
+    defaultValue: '0',
     formProps: {
       required: true,
-      type: 'checkbox',
+      type: 'select',
+      label: _('Late Auth'),
+      placeholder: _('Please Select ') + _('Late Auth'),
     },
   }, {
     id: 'lateAuthTime',

@@ -21,19 +21,20 @@ const listOptions = fromJS([
   {
     id: 'ip',
     text: _('IP'),
-    type: 'text',
-    validator: validator({
-      rules: 'ip',
-    }),
     formProps: {
+      type: 'text',
       required: true,
+      validator: validator({
+        rules: 'ip',
+      }),
     },
   }, {
     id: 'name',
     text: _('Name'),
-    type: 'text',
     formProps: {
+      type: 'text',
       required: true,
+      maxLength: '32',
     },
   }, {
     id: 'sharedSecret',
@@ -46,24 +47,27 @@ const listOptions = fromJS([
     id: 'ex2',
     text: _('Acc Send Interval'),
     defaultValue: '300',
-    type: 'num',
     formProps: {
+      type: 'num',
+      min: '0',
       required: true,
     },
   }, {
     id: 'ex3',
     text: _('Check Period'),
     defaultValue: '600',
-    type: 'num',
     formProps: {
+      type: 'num',
+      min: '0',
       required: true,
     },
   }, {
     id: 'ex4',
     text: _('Idle Time'),
     defaultValue: '600',
-    type: 'num',
     formProps: {
+      min: '0',
+      type: 'num',
       required: true,
     },
   }, {
@@ -88,7 +92,6 @@ const listOptions = fromJS([
     id: 'description',
     text: _('Description'),
     type: 'text',
-    required: 'true',
   }, {
     id: 'ex1',
     text: _('is Delegated'),

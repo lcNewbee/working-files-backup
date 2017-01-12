@@ -8,147 +8,37 @@ import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
-// const listOptions=fromJS([
-//   {
-//     id: 'loginName',
-//     text: _('User Name'),
-//     type: 'text',
-//     formProps: {
-//       required: true,
-//     },
-//   }, {
-//     id: 'date',
-//     text: _('Expired Date'),
-//     type: 'text',
-//     formProps: {
-//       required: true,
-//     },
-//   }, {
-//     id: 'time',
-//     text: _('Left Time'),
-//     type: 'text',
-//     formProps: {
-//       required: true,
-//     },
-//   }, {
-//     id: 'octets',
-//     text: _('Left Traffic'),
-//     type: 'text',
-//     formProps: {
-//       required: true,
-//     },
-//   }, {
-//     id: 'state',
-//     text: _('User Type'),
-//     type: 'text',
-//     formProps: {
-//       required: true,
-//     },
-//   }, {
-//     id: 'maclimit',
-//     text: _('Mac Limit'),
-//     options: [
-//       {
-//         value: '0',
-//         label: _('Closed'),
-//       }, {
-//         value: '1',
-//         label: _('Open'),
-//       },
-//     ],
-//     defaultValue: '0',
-//     formProps: {
-//       type: 'select',
-//       required: true,
-//       label: _('Mac Limit'),
-//       placeholder: _('Please Select ') + _('Mac Limit'),
-//     },
-//   }, {
-//     id: 'maclimitcount',
-//     text: _('Mac Quantity'),
-//     type: 'num',
-//     formProps: {
-//       required: true,
-//     },
-//   }, {
-//     id: 'autologin',
-//     text: _('Auto Login'),
-//     type: 'text',
-//     options: [
-//       {
-//         value: '0',
-//         label: _('Closed'),
-//       }, {
-//         value: '1',
-//         label: _('Open'),
-//       },
-//     ],
-//     defaultValue: '0',
-//     formProps: {
-//       type: 'select',
-//       required: true,
-//       label: _('Auto Login'),
-//       placeholder: _('Auto Login') + _('Auto Login'),
-//     },
-//   }, {
-//     id: 'speed',
-//     text: _('Speed Limit'),
-//     type: 'text',
-//     options: [
-//       {
-//         value: '0',
-//         label: _('1M'),
-//       },
-//     ],
-//     defaultValue: '0',
-//     formProps: {
-//       type: 'select',
-//       required: true,
-//       label: _('Speed Limit'),
-//       placeholder: _('Please Select ') + _('Speed Limit'),
-//     },
-//   }, {
-//     id: 'ex4',
-//     text: _('Last Unbind Month'),
-//     formProps: {
-//       required: true,
-//     },
-//   }, {
-//     id: 'ex3',
-//     text: _('Unbind Times'),
-//   },
-// ]);
-
 const listOptions = fromJS([
   {
     id: 'loginName',
     text: _('Login Name'),
-    type: 'text',
     formProps: {
+      type: 'text',
       required: true,
+      maxLength: '32',
     },
   }, {
     id: 'date',
     text: _('Expired Date'),
-    type: 'text',
     noForm: true,
     formProps: {
+      type: 'text',
       required: true,
     },
   }, {
     id: 'time',
     text: _('Left Time'),
-    type: 'text',
     noForm: true,
     formProps: {
+      type: 'text',
       required: true,
     },
   }, {
     id: 'octets',
     text: _('Left Traffic'),
-    type: 'text',
     noForm: true,
     formProps: {
+      type: 'text',
       required: true,
     },
   }, {
@@ -219,14 +109,14 @@ const listOptions = fromJS([
   }, {
     id: 'maclimitcount',
     text: _('Mac Quantity'),
-    type: 'num',
     formProps: {
+      type: 'num',
+      min: '0',
       required: true,
     },
   }, {
     id: 'autologin',
     text: _('Auto Login'),
-    type: 'text',
     options: [
       {
         value: '0',
@@ -246,7 +136,6 @@ const listOptions = fromJS([
   }, {
     id: 'speed',
     text: _('Speed Limit'),
-    type: 'text',
     options: [
       {
         value: '0',
@@ -264,15 +153,25 @@ const listOptions = fromJS([
     id: 'ex4',
     text: _('Last Unbind Month'),
     formProps: {
+      type: 'text',
       required: true,
     },
   }, {
     id: 'ex3',
     text: _('Unbind Times'),
+    formProps: {
+      type: 'num',
+      min: '0',
+      required: true,
+    },
   }, {
     id: 'name',
     text: _('Name'),
     noTable: true,
+    formProps: {
+      type: 'text',
+      maxLength: '32',
+    },
   }, {
     id: 'gender',
     text: _('Gender'),
@@ -296,22 +195,40 @@ const listOptions = fromJS([
     id: 'idnumber',
     text: _('ID No.'),
     noTable: true,
+    formProps: {
+      type: 'num',
+    },
   }, {
     id: 'phoneNumber',
     text: _('Phone'),
     noTable: true,
+    formProps: {
+      type: 'num',
+    },
   }, {
     id: 'address',
     text: _('Address'),
     noTable: true,
+    formProps: {
+      type: 'text',
+    },
   }, {
     id: 'email',
     text: _('Email'),
     noTable: true,
+    formProps: {
+      type: 'text',
+      validator: validator({
+        rules: 'email',
+      }),
+    },
   }, {
     id: 'description',
     text: _('Detail Information'),
     noTable: true,
+    formProps: {
+      type: 'text',
+    },
   }, {
     id: 'ex5',
     text: _('ex5'),
