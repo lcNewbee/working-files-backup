@@ -130,7 +130,32 @@ function getApStatusOption(serverData) {
 
   return ret;
 }
+function getFlowUnit(val) {
+  let ret = {};
 
+  if (val <= 10240) {
+    ret = {
+      label: 'B',
+      val: 1,
+    };
+  } else if (val <= (50 * Math.pow(1024, 2))) {
+    ret = {
+      label: 'KB',
+      val: Math.pow(1024, 1),
+    };
+  } else if (val <= (50 * Math.pow(1024, 3))) {
+    ret = {
+      label: 'GB',
+      val: Math.pow(1024, 2),
+    };
+  } else {
+    ret = {
+      label: 'TB',
+      val: Math.pow(1024, 3),
+    };
+  }
+  return ret;
+}
 function getFlowOption(serverData, timeType) {
   const option = {
     color: [colors[7], colors[0]],
@@ -223,10 +248,21 @@ function getFlowOption(serverData, timeType) {
   let xAxisData;
   let xAxisName = _('Days');
   let $$dataList = serverData.getIn(['flowList']);
+  let maxVal = 0;
+  let maxVal1 = 0;
+  let utilObj = {};
 
   if (!$$dataList) {
     return null;
   }
+
+  maxVal = $$dataList.getIn([0, 'data']).max();
+  maxVal1 = $$dataList.getIn([1, 'data']).max();
+  if (maxVal1 > maxVal) {
+    maxVal = maxVal1;
+  }
+
+  utilObj = getFlowUnit(maxVal);
 
   $$dataList = $$dataList.toJS();
 
@@ -252,9 +288,14 @@ function getFlowOption(serverData, timeType) {
 
   option.xAxis[0].data = xAxisData;
   option.xAxis[0].name = xAxisName;
+  option.yAxis[0].name = utilObj.label;
 
-  option.series[0].data = $$dataList[0].data;
-  option.series[1].data = $$dataList[1].data;
+  option.series[0].data = $$dataList[0].data.map(
+    val => (val / utilObj.val),
+  );
+  option.series[1].data = $$dataList[1].data.map(
+    val => (val / utilObj.val),
+  );
 
   return option;
 }

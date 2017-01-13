@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import utils from 'utils';
 import { Map, List, fromJS } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import FormGroup from '../Form/FormGroup';
@@ -49,12 +50,15 @@ class FormContainer extends React.Component {
     super(props);
 
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    this.onSave = this.onSave.bind(this);
-    this.onChangeData = this.onChangeData.bind(this);
-    this.renderFormGroup = this.renderFormGroup.bind(this);
-    this.renderFormGroupTree = this.renderFormGroupTree.bind(this);
-    this.onOptionsChange = this.onOptionsChange.bind(this);
 
+    utils.binds(this, [
+      'onSave',
+      'onOptionsChange',
+      'onChangeFormGoupData',
+      'changeFormGoupData',
+      'renderFormGroup',
+      'renderFormGroupTree',
+    ]);
     this.syncData = {};
     this.inited = false;
   }
@@ -103,13 +107,45 @@ class FormContainer extends React.Component {
       this.props.onSave(this.formElem, hasFile);
     }
   }
-  onChangeData(id, data) {
+  onChangeFormGoupData(option) {
+    const { id, data, saveOnChange } = option;
     const upDate = {};
 
     upDate[id] = data.value;
 
     if (this.props.onChangeData) {
       this.props.onChangeData(upDate);
+    }
+
+    if (saveOnChange) {
+      clearTimeout(this.saveOnChangeTimeout);
+      this.saveOnChangeTimeout = setTimeout(() => {
+        this.onSave();
+      }, 250);
+    }
+  }
+  changeFormGoupData(option) {
+    const { data, onBeforeChange, $$data } = option;
+    const beforeFuncOption = utils.extend({
+      curData: $$data.toJS(),
+      curValue: $$data.get(option.id),
+    }, data);
+    let beforeRusult;
+
+    if (utils.isFunc(onBeforeChange)) {
+      beforeRusult = onBeforeChange(beforeFuncOption);
+    }
+
+    if (!beforeRusult) {
+      this.onChangeFormGoupData(option);
+    } else if (utils.isPromise(beforeRusult)) {
+      beforeRusult.then(
+        (msg) => {
+          if (!msg) {
+            this.onChangeFormGoupData(option);
+          }
+        },
+      );
     }
   }
   renderFormGroup(option, index) {
@@ -179,16 +215,13 @@ class FormContainer extends React.Component {
     }
 
     // change
-    myProps.onChange = myData => this.onChangeData(formGroupId, myData);
-    if (myProps.saveOnChange) {
-      myProps.onChange = ((myData) => {
-        this.onChangeData(formGroupId, myData);
-        clearTimeout(this.saveOnChangeTimeout);
-        this.saveOnChangeTimeout = setTimeout(() => {
-          this.onSave();
-        }, 250);
-      });
-    }
+    myProps.onChange = myData => this.changeFormGoupData({
+      id: formGroupId,
+      data: myData,
+      onBeforeChange: myProps.onBeforeChange,
+      saveOnChange: myProps.saveOnChange,
+      $$data,
+    });
 
     // 处理 option需要依据表单值显示
     if (typeof myProps.options === 'function') {

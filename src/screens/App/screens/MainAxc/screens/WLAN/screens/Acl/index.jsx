@@ -23,6 +23,10 @@ const $$listTypeOptions = fromJS([
     value: 'white',
     label: _('White List'),
   },
+  // {
+  //   value: 'disable',
+  //   label: _('Disable'),
+  // },
 ]).map(
   ($$item) => {
     listTypeMap[$$item.get('value')] = $$item.get('label');
@@ -99,9 +103,41 @@ export default class Blacklist extends React.Component {
       'fetchCopyGroupBlacklist',
       'renderActionBar',
       'renderCopyFromOther',
-      'onBeforeSave',
+      'onBeforeChangeType',
       'onAfterSync',
     ]);
+    this.settingsOptions = settingsOptions.setIn(
+      [0, 'onBeforeChange'],
+      data => this.onBeforeChangeType(data.value),
+    );
+  }
+  onBeforeChangeType(type) {
+    let confirmText = _(
+      'Are you sure to use %s?',
+      $$listTypeOptions.find(
+        $$item => $$item.get('value') === type,
+      ).get('label'),
+    );
+
+    if (type === 'disable') {
+      confirmText = _('Are you sure to disable ACL?');
+    }
+
+    return new Promise(
+      (resolve) => {
+        this.props.createModal({
+          id: 'switchAclType',
+          role: 'confirm',
+          text: confirmText,
+          apply: () => {
+            resolve();
+          },
+          cancel: () => {
+            resolve('cancal');
+          },
+        });
+      },
+    );
   }
   onBeforeSave($$actionQuery) {
     const { store, route } = this.props;
@@ -320,6 +356,11 @@ export default class Blacklist extends React.Component {
     const isCopySsid = actionQuery.get('action') === 'copy';
     const listType = store.getIn([route.id, 'data', 'settings', 'type']);
     const listTitle = listTypeMap[listType];
+    let mylistOptions = listOptions;
+
+    if (listType === 'disable') {
+      mylistOptions = null;
+    }
 
     return (
       <AppScreen
@@ -328,10 +369,10 @@ export default class Blacklist extends React.Component {
         className="s-group-wireless-acl"
         onAfterSync={this.onAfterSync}
 
-        settingsFormOptions={settingsOptions}
+        settingsFormOptions={this.settingsOptions}
 
         // List Props
-        listOptions={listOptions}
+        listOptions={mylistOptions}
         actionBarChildren={this.renderActionBar()}
         modalChildren={this.renderCopyFromOther()}
         listKey="allKeys"
