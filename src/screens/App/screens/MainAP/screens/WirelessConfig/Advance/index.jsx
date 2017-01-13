@@ -432,21 +432,21 @@ export default class Advance extends React.Component {
             <div className="clearfix">
               <div className="fl">
                 <FormGroup
-                  type="range"
+                  type="number"
                   label={_('Distance Value')}
                   min="0"
                   max="10"
                   step="0.1"
-                  help="km"
                   value={distance}
                   hasTextInput
                   disabled={autoAdjust === '1'}
                   onChange={(data) => {
                     this.changeFormValue(radioId, 'distance', data.value);
                   }}
-                  inputStyle={{
-                    backgroundColor: '#f2f2f2',
-                  }}
+                  help={`${_('Range: ')}0~10 km`}
+                  // inputStyle={{
+                  //   backgroundColor: '#f2f2f2',
+                  // }}
                 />
               </div>
               <span

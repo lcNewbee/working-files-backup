@@ -379,5 +379,11 @@
   "No Client": "无客户端",
   "0 or 256 ~ 2347": "0或256 ~ 2347",
   "Strict Schedule Algorithm": "严格调度算法",
-  "Fair Quene Algorithm": "公平队列算法"
+  "Fair Quene Algorithm": "公平队列算法",
+  "Remote Client Info": "连接信息",
+  "Disconnected": "未连接",
+  "disconnected": "未连接",
+  "connected": "已连接",
+  "Station Flow": "流量统计",
+  "CPU/MEM Usage": "CPU及内存占用率"
 }

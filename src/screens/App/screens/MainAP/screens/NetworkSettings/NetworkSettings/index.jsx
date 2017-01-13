@@ -168,14 +168,14 @@ export default class NetworkSettings extends React.Component {
       },
       defaultData: {
         proto: 'dhcp', // static or dhcp
-        fallbackIp: '192.168.1.11', // fallback ip
-        fallbackMask: '255.255.255.0',
-        ip: '192.168.1.10',
-        mask: '255.255.255.0',
-        gateway: '192.168.1.1',
-        dns1: '192.168.1.1', // 主dns
-        dns2: '8.8.8.8', // 次dns
-        mtu: '1500',
+      //   fallbackIp: '192.168.1.11', // fallback ip
+      //   fallbackMask: '255.255.255.0',
+      //   ip: '192.168.1.10',
+      //   mask: '255.255.255.0',
+      //   gateway: '192.168.1.1',
+      //   dns1: '192.168.1.1', // 主dns
+      //   dns2: '8.8.8.8', // 次dns
+      //   mtu: '1500',
         vlanEnable: '1',  // 管理vlan开关,默认关
         vlanId: '1', // 2-4094 // vlan id
       },

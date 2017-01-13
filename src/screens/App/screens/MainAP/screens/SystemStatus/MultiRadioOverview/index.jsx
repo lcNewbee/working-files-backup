@@ -120,7 +120,7 @@ const interfaceOptions = fromJS([
       if (val === '') {
         return '--';
       }
-      return val;
+      return _(val);
     },
   },
 ]);
@@ -572,7 +572,7 @@ export default class SystemStatus extends React.Component {
 
     const option = {
       title: {
-        text: _('Station Peer Flow'),
+        text: _('Station Flow'),
         left: '45%',
         textStyle: {
           fontWeight: 'normal',
@@ -596,8 +596,8 @@ export default class SystemStatus extends React.Component {
           radius: '50%',
           center: ['60%', '55%'],
           data: [
-            { value: download, name: `Download: ${downloadFlow}` },
-            { value: upload, name: `Upload: ${uploadFlow}` },
+            { value: download, name: `${_('Download')}: ${downloadFlow}` },
+            { value: upload, name: `${_('Upload')}: ${uploadFlow}` },
           ],
           itemStyle: {
             emphasis: {
@@ -794,7 +794,7 @@ export default class SystemStatus extends React.Component {
             >
               <div className="o-description-list o-description-list--lg info-box">
                 <dl className="o-description-list-row">
-                  <dt>{_('Device Mode')}</dt>
+                  <dt>{_('Radio Mode')}</dt>
                   <dd>{deviceModel}</dd>
                 </dl>
                 <dl className="o-description-list-row">
@@ -888,11 +888,11 @@ export default class SystemStatus extends React.Component {
             <div className="box-cell-head">{_('Radio Info')}</div>
             <div className="o-description-list o-description-list--lg info-box">
               <dl className="o-description-list-row">
-                <dt>{_('Wireless Mode')}</dt>
+                <dt>{_('Radio Mode')}</dt>
                 <dd>{wirelessModeShowStyle(radioList.getIn([radioId, 'wirelessMode']))}</dd>
               </dl>
               <dl className="o-description-list-row">
-                <dt>{_('Protocol')}</dt>
+                <dt>{_('Wireless Mode')}</dt>
                 <dd>{radioList.getIn([radioId, 'radioMode'])}</dd>
               </dl>
               <dl className="o-description-list-row">
@@ -981,7 +981,7 @@ export default class SystemStatus extends React.Component {
                         <div className="o-description-list o-description-list--lg info-box">
                           <dl className="o-description-list-row">
                             <dt>{_('Connection Status')}</dt>
-                            <dd>{peerList.getIn([0, 'status']) || 'No Connection'}</dd>
+                            <dd>{_(peerList.getIn([0, 'status'])) || _('Disconnected')}</dd>
                           </dl>
                           <dl className="o-description-list-row">
                             <dt>{_('Remote SSID')}</dt>
@@ -996,11 +996,11 @@ export default class SystemStatus extends React.Component {
                             <dd>{changeUptimeToReadable(peerList.getIn([0, 'connectTime'])) || '--'}</dd>
                           </dl>
                           <dl className="o-description-list-row">
-                            <dt>{_('Tx Rate')}</dt>
+                            <dt>{`${_('Tx Rate')} Mbps`}</dt>
                             <dd>{peerList.getIn([0, 'txrate']) || '--'}</dd>
                           </dl>
                           <dl className="o-description-list-row">
-                            <dt>{_('Rx Rate')}</dt>
+                            <dt>{`${_('Rx Rate')} Mbps`}</dt>
                             <dd>{peerList.getIn([0, 'rxrate']) || '--'}</dd>
                           </dl>
                         </div>

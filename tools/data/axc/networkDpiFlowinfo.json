@@ -1,0 +1,49 @@
+{
+	"state":	{
+		"code":	2000,
+		"msg":	"ok"
+	},
+	"data":	{
+		"page":	{
+			"startline":	1,
+			"size":	20,
+			"currPage":	6,
+			"totalPage":	10,
+			"total":	128,
+			"nextPage":	2,
+			"lastline":	10
+		},
+		"list":	[{
+				"flowid":	1,
+				"lower_ip":	"fe80::7a:9d93:d72b:2ab",
+				"upper_ip":	"ff02::fb",
+				"lower_port":	"5353",
+				"upper_port":	"5353",
+				"protocol":	"UDP",
+				"detected_protocol":	"8/MDNS",
+				"packets":	"1",
+				"bytes":	"314"
+			}, {
+				"flowid":	7,
+				"lower_ip":	"192.168.4.104",
+				"upper_ip":	"192.168.7.255",
+				"lower_port":	"52583",
+				"upper_port":	"1947",
+				"protocol":	"UDP",
+				"detected_protocol":	"0/Unknown",
+				"packets":	"1",
+				"bytes":	"82"
+			},{
+				"flowid":	10,
+				"lower_ip":	"192.168.2.3",
+				"upper_ip":	"192.168.0.127",
+				"lower_port":	"8888",
+				"upper_port":	"55426",
+				"protocol":	"TCP",
+				"detected_protocol":	"7/HTTP",
+				"packets":	"11",
+				"bytes":	"2181",
+				"host_servername":	"192.168.2.3"
+			}]
+	}
+}

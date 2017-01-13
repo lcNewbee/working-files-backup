@@ -543,7 +543,7 @@ export default class Basic extends React.Component {
           let newRadioList = this.props.store.getIn(['curData', 'radioList']).setIn([radioId, 'wirelessMode'], data.value);
           const securityMode = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList', 0, 'security', 'mode']);
           if (data.value === 'repeater' && securityMode !== 'wep') {
-            newRadioList = newRadioList.setIn(['radioList', radioId, 'vapList', 0, 'security', 'mode'], 'none');
+            newRadioList = newRadioList.setIn([radioId, 'vapList', 0, 'security', 'mode'], 'none');
           }
           this.props.updateItemSettings({ radioList: newRadioList });
         });
@@ -972,7 +972,7 @@ export default class Basic extends React.Component {
                       options={funConfig.devicemodeOptions}
                       value={curData.getIn(['radioList', radioId, 'wirelessMode'])}
                       onChange={data => this.onChengeWirelessMode(data)}
-                      label={_('Device Mode')}
+                      label={_('Radio Mode')}
                     />
                   )
                 }
@@ -1028,7 +1028,7 @@ export default class Basic extends React.Component {
                   />
                 </Modal>
                 <FormGroup
-                  label={_('Radio Mode')}
+                  label={_('Wireless Mode')}
                   type="select"
                   options={radioType === '5G' ? radioModeOptionsFor5g : radioModeOptionsFor2g}
                   value={curData.getIn(['radioList', radioId, 'radioMode'])}
@@ -1114,6 +1114,7 @@ export default class Basic extends React.Component {
                                       .setIn([radioId, 'txPower'], data.value);
                     this.props.updateItemSettings({ radioList });
                   }}
+                  help={`${_('Range: ')} 3~${this.props.selfState.get('maxTxpower')} dBm`}
                 />
               </div>
               {
@@ -1247,23 +1248,28 @@ export default class Basic extends React.Component {
                         </div>
                       ) : null
                     }
-                    <FormGroup
-                      type="number"
-                      label={_('VLAN ID')}
-                      value={curData.getIn(['radioList', radioId, 'vapList', '0', 'vlanId'])}
-                      help={`${_('Range: ')}1~4094`}
-                      form="radioSettings"
-                      // disabled={vlanEnable === '0'}
-                      onChange={(data) => {
-                        const radioList = curData.get('radioList').setIn([radioId, 'vapList', 0, 'vlanId'], data.value);
-                        this.props.updateItemSettings({ radioList });
-                      }}
-                      style={{
-                        width: '500px',
-                      }}
-                      required
-                      {...this.props.validateOption.validVlanId}
-                    />
+                    {
+                      curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta' ? null : (
+                        <FormGroup
+                          type="number"
+                          label={_('VLAN ID')}
+                          value={curData.getIn(['radioList', radioId, 'vapList', '0', 'vlanId'])}
+                          help={`${_('Range: ')}1~4094`}
+                          form="radioSettings"
+                          disabled={vlanEnable === '0'}
+                          onChange={(data) => {
+                            const radioList = curData.get('radioList').setIn([radioId, 'vapList', 0, 'vlanId'], data.value);
+                            this.props.updateItemSettings({ radioList });
+                          }}
+                          style={{
+                            width: '500px',
+                          }}
+                          required
+                          {...this.props.validateOption.validVlanId}
+                        />
+                      )
+                    }
+
                     {
                       // curData.getIn(['radioList', radioId, 'wirelessMode']) === 'repeater' ||
                       // curData.getIn(['radioList', radioId, 'wirelessMode']) === 'ap' ? (

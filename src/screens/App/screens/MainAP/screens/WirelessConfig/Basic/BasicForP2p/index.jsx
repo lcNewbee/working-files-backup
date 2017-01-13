@@ -1014,7 +1014,7 @@ export default class Basic extends React.Component {
                     options={funConfig.devicemodeOptions}
                     value={basicSettings.getIn(['radioList', radioId, 'wirelessMode'])}
                     onChange={data => this.onChengeWirelessMode(data)}
-                    label={_('Device Mode')}
+                    label={_('Radio Mode')}
                   />
                 )
               }
@@ -1751,7 +1751,7 @@ export default class Basic extends React.Component {
                 />
               </Modal>
               <FormGroup
-                label={_('Radio Mode')}
+                label={_('Wireless Mode')}
                 type="select"
                 options={radioType === '5G' ? radioModeOptionsFor5g : radioModeOptionsFor2g}
                 value={radioSettings.getIn(['radioList', radioId, 'radioMode'])}
@@ -1835,7 +1835,7 @@ export default class Basic extends React.Component {
                                     .setIn([radioId, 'txPower'], data.value);
                   this.props.updateRadioSettingsItem({ radioList });
                 }}
-                help="dBm"
+                help={`${_('Range: ')} 3~${this.props.selfState.get('maxTxpower')} dBm`}
               />
               {
                 /**

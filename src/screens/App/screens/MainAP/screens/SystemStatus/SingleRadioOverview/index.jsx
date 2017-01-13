@@ -1110,12 +1110,12 @@ export default class SystemStatus extends React.Component {
                 <div className="o-box__cell" style={{ height: '227px' }}>
                   <div className="cols col-6">
                     <FormGroup
-                      label={_('Wireless Mode :')}
+                      label={_('Radio Mode :')}
                       type="plain-text"
                       value={wirelessModeShowStyle(wirelessMode)}
                     />
                     <FormGroup
-                      label={_('Protocol :')}
+                      label={_('Wireless Mode :')}
                       type="plain-text"
                       value={radioMode}
                     />
