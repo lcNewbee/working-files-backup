@@ -124,88 +124,88 @@ class GroupOverview_Model extends CI_Model {
         $sqlstr = "select * from ".$tablename." where ApGroupId=".$groupid." and Timer>='".$timewh['start_date']."' and Timer <= '".$timewh['end_date']."'";
         $querydata = $this->mysql->query($sqlstr);
 
-		$apAry = array();
-		$wireessAry = array();
-		$clientAry = array();
-		//添		加默认值针对小时
-		        if($tablename === 'data_flow_hour'){
-			$addnumber = 0;
-			if(count($querydata->result_array()) >0){
-				$st = $querydata->result_array()[0]['Timer'];
-				$addnumber = (int)substr($st,11,2);
-				//截				取时间获取整点
-			}
-			else{
-				$addnumber = 24;
-			}
-			if($addnumber > 0) {
-				for ($i = 1; $i <= $addnumber; $i++) {
-					array_push($apAry,0);
-					array_push($wireessAry,0);
-					array_push($clientAry,0);
-				}
-			}
-		}
-		//添		加默认值针对天数
-		        if($tablename === 'data_flow_day'){
-			$default_day = 7;
-			switch($timeType){
-				case 'half_month': $default_day = 15;
-				break;
-				case 'month': $default_day = 30;
-				break;
-			}
-			$add_day = $default_day - count($querydata->result_array());
-			for ($j = 1; $j <= $add_day; $j++) {
-				array_push($apAry,0);
-				array_push($wireessAry,0);
-				array_push($clientAry,0);
-			}
-		}
-		foreach($querydata->result_array() as $row) {
-			array_push($apAry,$row['ApRxFlow']);
-			array_push($wireessAry,$row['RadioRxFlow']);
-			array_push($clientAry,$row['StaRxFlow']);
-		}
-		$arr = array(
-		            array('name'=>'ap','data'=>$apAry),
-		            array('name'=>'wireless','data'=>$wireessAry),
-		            array('name'=>'clients','data'=>$clientAry)
-		        );
-		return $arr;
-	}
-	public function get_start_end_time($gettype='today') {
-		date_default_timezone_set('Asia/Shanghai');
-		//e		cho (string)exec('date "+%Y-%m-%d %H:%M:%S"');
-		//当		天初始时间
-		        $stateDate = (string)exec('date "+%Y-%m-%d"')." 00:00:00";
-		//当		天结束时间
-		        $endDate = (string)exec('date "+%Y-%m-%d"')." 24:00:00";
-		$startTime = (int)strtotime($stateDate);
-		switch($gettype){
-			case 'yesterday' :
-			                $startTime = $startTime - (1 * 86400);
-			$endDate = $stateDate;
-			break;
-			case 'week': $startTime = $startTime - (7 * 86400);
-			break;
-			case 'half_month': $startTime = $startTime - (15 * 86400);
-			break;
-			case 'month': $startTime = $startTime - (30 * 86400);
-			break;
-			default:
-			                break;
-		}
-		$stateDate = date('Y-m-d H:i:s',$startTime);
-		$arr['start_date'] = $stateDate;
-		$arr['end_date'] = $endDate;
-		return $arr;
-	}
+        $apAry = array();
+        $wireessAry = array();
+        $clientAry = array();
+        //添加默认值针对小时
+        if($tablename === 'data_flow_hour'){
+            $addnumber = 0;
+            if(count($querydata->result_array()) >0){
+                $st = $querydata->result_array()[0]['Timer'];
+                $addnumber = (int)substr($st,11,2);
+                //截取时间获取整点
+            }
+            else{
+                $addnumber = 24;
+            }
+            if($addnumber > 0) {
+                for ($i = 1; $i <= $addnumber; $i++) {
+                    array_push($apAry,0);
+                    array_push($wireessAry,0);
+                    array_push($clientAry,0);
+                }
+            }
+        }
+        //添加默认值针对天数
+        if($tablename === 'data_flow_day'){
+            $default_day = 7;
+            switch($timeType){
+                case 'half_month': $default_day = 15;
+                break;
+                case 'month': $default_day = 30;
+                break;
+            }
+            $add_day = $default_day - count($querydata->result_array());
+            for ($j = 1; $j <= $add_day; $j++) {
+                array_push($apAry,0);
+                array_push($wireessAry,0);
+                array_push($clientAry,0);
+            }
+        }
+        foreach($querydata->result_array() as $row) {
+            array_push($apAry,$row['ApRxFlow']);
+            array_push($wireessAry,$row['RadioRxFlow']);
+            array_push($clientAry,$row['StaRxFlow']);
+        }
+        $arr = array(
+                    array('name'=>'ap','data'=>$apAry),
+                    array('name'=>'wireless','data'=>$wireessAry),
+                    array('name'=>'clients','data'=>$clientAry)
+                );
+        return $arr;
+    }
+    public function get_start_end_time($gettype='today') {
+        date_default_timezone_set('Asia/Shanghai');
+        //echo (string)exec('date "+%Y-%m-%d %H:%M:%S"');
+        //当天初始时间
+        $stateDate = (string)exec('date "+%Y-%m-%d"')." 00:00:00";
+        //当天结束时间
+        $endDate = (string)exec('date "+%Y-%m-%d"')." 24:00:00";
+        $startTime = (int)strtotime($stateDate);
+        switch($gettype){
+            case 'yesterday' :
+                $startTime = $startTime - (1 * 86400);
+                $endDate = $stateDate;
+            break;
+                case 'week': $startTime = $startTime - (7 * 86400);
+            break;
+                case 'half_month': $startTime = $startTime - (15 * 86400);
+            break;
+                case 'month': $startTime = $startTime - (30 * 86400);
+            break;
+                default:
+                break;
+        }
+        $stateDate = date('Y-m-d H:i:s',$startTime);
+        $arr['start_date'] = $stateDate;
+        $arr['end_date'] = $endDate;
+        return $arr;
+    }
 
-	function get_overvies($groupid) {
-		$cgiarr = array('groupid'=>$groupid);
-		$cgistr = axc_get_overvies(json_encode($cgiarr));
-		$retobj = json_decode($cgistr);
-		return $retobj;
-	}
+    function get_overvies($groupid) {
+        $cgiarr = array('groupid'=>$groupid);
+        $cgistr = axc_get_overvies(json_encode($cgiarr));
+        $retobj = json_decode($cgistr);
+        return $retobj;
+    }
 }

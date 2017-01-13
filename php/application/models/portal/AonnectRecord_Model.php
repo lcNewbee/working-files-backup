@@ -29,60 +29,21 @@ class AonnectRecord_Model extends CI_Model {
 			)
 		);       
 		return json_encode($arr);
-	}
-    function add_account($data) {
-        $result = null;
-        $insertary = array(
-            'ip'=>element('ip',$data,''),
-            'basip'=>element('basip',$data,''),
-            'loginName'=>element('loginName',$data,''),
-            'state'=>element('state',$data,''),
-            'startDate'=>element('startDate',$data,''),
-            'endDate'=>element('endDate',$data,''),
-            'time'=>element('time',$data,''),
-            'ins'=>element('ins',$data,''),
-            'outs'=>element('outs',$data,''),
-            'octets'=>element('octets',$data,''),
-            'methodtype'=>element('methodtype',$data,''),
-            'mac'=>element('mac',$data,''),
-            'basname'=>element('basname',$data,''),
-            'ssid'=>element('ssid',$data,''),
-            'apmac'=>element('apmac',$data,''),
-            'auto'=>element('auto',$data,''),
-            'agent'=>element('agent',$data,''),
-            'ex1'=>element('ex1',$data,''),
-            'ex2'=>element('ex2',$data,''),
-            'ex3'=>element('ex3',$data,''),
-            'ex4'=>element('ex4',$data,''),
-            'ex5'=>element('ex5',$data,''),
-            'ex6'=>element('ex6',$data,''),
-            'ex7'=>element('ex7',$data,''),
-            'ex8'=>element('ex8',$data,''),
-            'ex9'=>element('ex9',$data,''),
-            'ex10'=>element('ex10',$data,'')
-        );                    
-        $result = $this->db->insert('portal_account', $insertary);
-        $result ? $result = json_ok() : $result = json_no('insert error');
-        return $result;
-    }
-    function del_account($data) {
+	}    
+    function del_aonnect($data) {
         $result = null;
         $selectedList = $data['selectedList'];
-		foreach($selectedList as $row){
-            if($this->notice_socket($this->get_socket_pramse('delete',$row))) {  
-                /*              
-                $this->portalsql->where('id', $row['id']);
-			    $result = $this->portalsql->delete('portal_account');
-                */    
-            }		
-		}
+        if($this->notice_socket($this->get_socket_pramse('delete',$selectedList))) {  
+            foreach($selectedList as $row){
+            	$this->portalsql->where('id', $row['id']);
+                $result = $this->portalsql->delete('portal_linkrecord');	
+		    }            
+        }		
 		$result ? $result = json_ok() : $result = json_no('delete fail');
 		return json_encode($result);
     }
-    function edit_account($data) {
-        $result = null;        
-        $updata = array(
-            'id'=>element('id',$data,0),
+    function getDbParam($data) {
+        $arr = array(
             'ip'=>element('ip',$data,''),
             'basip'=>element('basip',$data,''),
             'loginName'=>element('loginName',$data,''),
@@ -111,12 +72,9 @@ class AonnectRecord_Model extends CI_Model {
             'ex9'=>element('ex9',$data,''),
             'ex10'=>element('ex10',$data,'')
         );
-        
-        $result = $this->db->replace('portal_account', $updata);
-        $result ? $result = json_ok() : $result = json_no('insert error');
         return $result;
     }
-    //通知java 更新
+    //socket portal
     function notice_socket($data){
         $result = null;
         $portal_socket = new PortalSocket();                
@@ -130,7 +88,9 @@ class AonnectRecord_Model extends CI_Model {
          $socketarr = array(
             'action'=>$type,
             'resName'=>'accountuser',
-            'data'=>$data
+            'data'=>array(
+                'list'=>$data
+            )
         );
         return $socketarr;
     }

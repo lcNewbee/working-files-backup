@@ -33,21 +33,24 @@ class AccountList_Model extends CI_Model {
     function add_account($data) {
         $result = null;
         $insertary = $this->getDbParam($data);                   
-        $result = $this->db->insert('portal_account', $insertary);
+        $result = $this->portalsql->insert('portal_account', $insertary);
         $result ? $result = json_ok() : $result = json_no('insert error');
-        return $result;
+        return json_encode($result);
     }
     function del_account($data) {
         $result = null;
         $selectedList = $data['selectedList'];
-		foreach($selectedList as $row){
-            if($this->notice_socket($this->get_socket_pramse('delete',$row))) {  
-                /*              
+        if($this->notice_socket($this->get_socket_pramse('delete',$selectedList))) {            
+            foreach($selectedList as $row){             
                 $this->portalsql->where('id', $row['id']);
 			    $result = $this->portalsql->delete('portal_account');
-                */    
-            }		
-		}
+                if($result){
+                    //del portal_accountmacs
+                    $this->portalsql->where('accountId', $row['id']);
+			        $this->portalsql->delete('portal_accountmacs');
+                }            		
+		    }
+        }
 		$result ? $result = json_ok() : $result = json_no('delete fail');
 		return json_encode($result);
     }
@@ -55,29 +58,31 @@ class AccountList_Model extends CI_Model {
         $result = null;        
         $updata = $this->getDbParam($data);
         $updata['id'] = element('id',$data,0);        
-        $result = $this->db->replace('portal_account', $updata);
+        $result = $this->portalsql->replace('portal_account', $updata);
         $result ? $result = json_ok() : $result = json_no('insert error');
-        return $result;
+        return json_encode($result);
     }    
     function getDbParam($data){
-        $arr = array(
-            'ip'=>element('ip',$data,''),
-            'basip'=>element('basip',$data,''),
+        $linuxdate = (string)exec('date "+%Y-%m-%d %H:%M:%S"');
+        $numtime = $this->get_config_time();        
+        $arr = array(            
             'loginName'=>element('loginName',$data,''),
-            'state'=>element('state',$data,''),
-            'startDate'=>element('startDate',$data,''),
-            'endDate'=>element('endDate',$data,''),
-            'time'=>element('time',$data,''),
-            'ins'=>element('ins',$data,''),
-            'outs'=>element('outs',$data,''),
+            'password'=>element('password',$data,''),
+            'name'=>element('name',$data,''),
+            'gender'=>element('gender',$data,''),
+            'phoneNumber'=>element('phoneNumber',$data,''),
+            'email'=>element('email',$data,''),
+            'description'=>element('description',$data,''),
+            'date'=>element('date',$data,$linuxdate),
+            'time'=>element('time',$data,$numtime),
             'octets'=>element('octets',$data,''),
-            'methodtype'=>element('methodtype',$data,''),
-            'mac'=>element('mac',$data,''),
-            'basname'=>element('basname',$data,''),
-            'ssid'=>element('ssid',$data,''),
-            'apmac'=>element('apmac',$data,''),
-            'auto'=>element('auto',$data,''),
-            'agent'=>element('agent',$data,''),
+            'state'=>element('state',$data,0),
+            'idnumber'=>element('idnumber',$data,''),
+            'address'=>element('address',$data,''),
+            'speed'=>element('speed',$data,''),
+            'maclimit'=>element('maclimit',$data,''),
+            'maclimitcount'=>element('maclimitcount',$data,1),
+            'autologin'=>element('autologin',$data,''),
             'ex1'=>element('ex1',$data,''),
             'ex2'=>element('ex2',$data,''),
             'ex3'=>element('ex3',$data,''),
@@ -88,11 +93,11 @@ class AccountList_Model extends CI_Model {
             'ex8'=>element('ex8',$data,''),
             'ex9'=>element('ex9',$data,''),
             'ex10'=>element('ex10',$data,'')
-        );
+        );        
         return $arr;
     }
 
-    //通知java 更新
+    //socket portal
     function notice_socket($data){
         $result = null;
         $portal_socket = new PortalSocket();                
@@ -106,8 +111,18 @@ class AccountList_Model extends CI_Model {
          $socketarr = array(
             'action'=>$type,
             'resName'=>'accountuser',
-            'data'=>$data
+            'data'=>array('list'=>$data)
         );
         return $socketarr;
-    }    
+    }  
+
+    function get_config_time(){
+        $result = 0;
+        $query = $this->portalsql->query("select usertime from config where id=1");
+        if($query->row()->usertime){
+            $result = $query->row()->usertime;
+            $result = $result * 60000;
+        }
+        return $result;        
+    }  
 }
