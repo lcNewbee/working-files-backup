@@ -1,23 +1,23 @@
 <?php
 class PortalSocket {
 	protected $CI;
-	public function __construct() {
+	public function __construct() {        
 		$this->CI =& get_instance();
-		$this->CI->load->database();
-		/*
-		$this->load->database();
-		$this->load->helper('array');
-		*/
-        //$this->CI->db->select($columns);
+		$this->CI->load->database();	
 	}	
     /**
      * @data 请求参数 json格式
      * return array
      */
     public function portal_socket($data) {
-        $result = null;
-        $host    = "192.168.4.111";
+        $result = null;            
+        $host    = "127.0.0.1";        
         $port    = 55555;
+        $socketserver = config_item('portal_socket_info');
+        if(count($socketserver) > 0){
+            $host = $socketserver['ip'];
+            $port = $socketserver['port'];
+        }
         $message = $data ."\n";//PS 要有\n结尾
         // create socket
         $socket = socket_create(AF_INET, SOCK_STREAM, 0) or die("Could not create socket\n");           

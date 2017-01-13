@@ -19,7 +19,7 @@ class Overview extends CI_Controller {
 		}
 	}
 	function fetch() {
-		return $this->Overview_Model->get_overview_list('test');
+		return $this->Overview_Model->get_overview_list($_GET);
 	}
 	function onAction($data) {
 		$result = null;

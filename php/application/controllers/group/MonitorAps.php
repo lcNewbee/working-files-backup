@@ -23,25 +23,38 @@ class MonitorAps extends CI_Controller {
         }
         return $result;
     }
+    function is_active($mac){
+        $result = FALSE;
+        $sql = "select active from ap_firmware where model in(select model_name from ap_list where mac='".$mac."')";
+        $query = $this->db->query($sql);        
+        if($query->row()->active === 1){
+            $result = TRUE;
+        }
+        return $result;
+    }
     function onAction($data) {
         $result = null;
         $operate = element("action", $data);
         $selectedList = element("selectedList", $data);
-        $groupid = (int)element("groupid", $data);
-        foreach ($selectedList as $mac) {
-            $retdata = array("groupid" => $groupid, "operate" => $operate, "mac" => $mac,);
-            $result = axc_set_apoperate(json_encode($retdata));
-            //log
-            $cgiObj = json_decode($result);			
-            if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
-                $logary = array(
-                    'type'=>$retdata['operate'],
-                    'operator'=>element('username',$_SESSION,''),
-                    'operationCommand'=>$retdata['operate']." Ap ".$retdata['mac'],
-                    'operationResult'=>'ok',
-                    'description'=>json_encode($retdata)
-                );
-                Log_Record($this->db,$logary);
+        $groupid = (int)element("groupid", $data);      
+        foreach ($selectedList as $mac) {            
+            if($operate === 'upgrade' && !$this->is_active($mac)){
+                $result = json_encode(json_no('Version not activated'));
+            }else{
+                $retdata = array("groupid" => $groupid, "operate" => $operate, "mac" => $mac,);
+                $result = axc_set_apoperate(json_encode($retdata));
+                //log
+                $cgiObj = json_decode($result);			
+                if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
+                    $logary = array(
+                        'type'=>$retdata['operate'],
+                        'operator'=>element('username',$_SESSION,''),
+                        'operationCommand'=>$retdata['operate']." Ap ".$retdata['mac'],
+                        'operationResult'=>'ok',
+                        'description'=>json_encode($retdata)
+                    );
+                    Log_Record($this->db,$logary);
+                }                
             }
         }
         return $result;

@@ -9,7 +9,7 @@ class RadiusConnect_Model extends CI_Model {
 	function get_radius_connect($data) {   
 		//help_data_page
 		$columns = '*';
-		$tablenames = 'portal_linkrecordall';
+		$tablenames = 'radius_linkrecordall';
 		$pageindex = (int)element('page', $data, 1);
 		$pagesize = (int)element('size', $data, 20);		
 		$datalist = help_data_page($this->portalsql,$columns,$tablenames,$pageindex,$pagesize);
@@ -17,15 +17,7 @@ class RadiusConnect_Model extends CI_Model {
 		$arr = array(
 			'state'=>array('code'=>2000,'msg'=>'ok'),
 			'data'=>array(
-				'page'=>array(
-					'start' => 1, 
-					'size' => $pagesize, 
-					'currPage' => $pageindex, 
-					'totalPage' => $datalist['total_page'], 
-					'total' => $datalist['total_row'], 
-					'nextPage' => ($pageindex + 1) === $datalist['total_page'] ? ($pageindex + 1) : -1, 
-					'lastPage' => $datalist['total_page']
-				),
+				'page'=>$datalist['page'],
 				'list' => $datalist['data']
 			)
 		);       
@@ -36,7 +28,7 @@ class RadiusConnect_Model extends CI_Model {
         $selectedList = $data['selectedList'];
 		foreach($selectedList as $row){
 			$this->portalsql->where('id', $row['id']);
-			$result = $this->portalsql->delete('portal_linkrecordall');
+			$result = $this->portalsql->delete('radius_linkrecordall');
 		}
 		$result ? $result = json_ok() : $result = json_no('delete fail');
 		return json_encode($result);

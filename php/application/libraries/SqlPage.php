@@ -59,6 +59,15 @@ class SqlPage {
 		}
 		$this->CI->db->limit($pagesize, ($pageindex - 1) * $pagesize);
 		$sqldata = $this->CI->db->get()->result_array();
+		$arr['page'] = array(
+			'start'=>1,/*第一页固定=1*/
+			'size'=>$pagesize,/*每页大小*/
+			'currPage'=>$pageindex,/*当前页码*/
+			'totalPage'=>$total_page,/*总页*/
+			'total'=>$total_row,/*总行*/
+			'nextPage'=>($pageindex + 1) === $total_page ? ($pageindex + 1) : -1,/*下一页 -1为组后一页*/
+			'lastPage'=>$total_page/*最后一页*/
+		);
 		$arr['total_row'] = $total_row;
 		$arr['total_page'] = $total_page;
 		$arr['data'] = $sqldata;

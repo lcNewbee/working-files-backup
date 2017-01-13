@@ -18,13 +18,8 @@ class RadiusOnlineList extends CI_Controller {
 			echo $result;
 		}
 	}
-	function fetch() {
-		$arr = array(
-			'page' => (int)element('page',$_GET,1),
-			'size' => (int)element('size',$_GET,20),
-			'search'=> element('search',$_GET)
-		);		
-		return $this->RadiusOnlineList_Model->get_online_list($arr);
+	function fetch() {				
+		return $this->RadiusOnlineList_Model->get_online_list($_GET);
 	}
 	function onAction($data) {
 		$result = null;

@@ -15,14 +15,7 @@ class RadiusOnlineList_Model extends CI_Model {
                 'pageIndex'=>element('page',$data,20)                
             )
         );
-        $result = $this->notice_socket($socketarr);
-		
-        /*
-		$arr['state'] = array('code' => 2000, 'msg' => 'ok');
-		$arr['data'] = array(
-            'list' => $queryd->result_array()
-        );    
-        */    
+        $result = $this->notice_socket($socketarr);		
 		return json_encode($result);
 	}   
     function user_offline($data) {

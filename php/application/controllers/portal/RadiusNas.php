@@ -19,7 +19,7 @@ class RadiusNas extends CI_Controller {
 		}
 	}
 	function fetch() {
-		return $this->RadiusNas_Model->get_nas_list('test');
+		return $this->RadiusNas_Model->get_nas_list($_GET);
 	}
 	function onAction($data) {
 		$result = null;

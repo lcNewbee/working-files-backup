@@ -1,41 +1,33 @@
 <?php
 class AccessConfig_Model extends CI_Model {
-	public function __construct() {
-		parent::__construct();
-		$this->portalsql = $this->load->database('mysqlportal', TRUE);
-		$this->load->helper(array('array', 'my_customfun_helper'));
+    public function __construct() {
+        parent::__construct();
+        $this->portalsql = $this->load->database('mysqlportal', TRUE);
+        $this->load->helper(array('array', 'my_customfun_helper'));
         $this->load->library('PortalSocket');
-	}
-	function get_list($data) {   
+    }
+    function get_list($data) {   
         $configdata = array();
-		$columns = '*';
-		$tablenames = 'portal_config';
-		$pageindex = (int)element('page', $data, 1);
-		$pagesize = (int)element('size', $data, 20);	
+        $columns = '*';
+        $tablenames = 'portal_config';
+        $pageindex = (int)element('page', $data, 1);
+        $pagesize = (int)element('size', $data, 20);	
         $where = array(array('bas','0'));	
-		$datalist = help_data_page($this->portalsql,$columns,$tablenames,$pageindex,$pagesize,$where);
+        $datalist = help_data_page($this->portalsql,$columns,$tablenames,$pageindex,$pagesize,$where);
         if(count($datalist['data']) > 0){
             $cdata = $this->portalsql->query('select * from portal_basauth where basid='.$datalist['data'][0]['bas']);
             $configdata = $cdata->result_array();
         }
-		$arr = array(
-			'state'=>array('code'=>2000,'msg'=>'ok'),
-			'data'=>array(
+        $arr = array(
+            'state'=>array('code'=>2000,'msg'=>'ok'),
+            'data'=>array(
                 'settings'=>array('list'=>$configdata),                
-				'page'=>array(
-					'start' => 1, 
-					'size' => $pagesize, 
-					'currPage' => $pageindex, 
-					'totalPage' => $datalist['total_page'], 
-					'total' => $datalist['total_row'], 
-					'nextPage' => ($pageindex + 1) === $datalist['total_page'] ? ($pageindex + 1) : -1, 
-					'lastPage' => $datalist['total_page']
-				),
-				'list' => $datalist['data']
-			)
-		);       
-		return json_encode($arr);
-	}
+                'page'=>$datalist['page'],
+                'list' => $datalist['data']
+            )
+        );       
+        return json_encode($arr);
+    }
     function edit_accesss($data) {
         $result = null;        
         $updata = $this->getDbParam($data);
@@ -45,13 +37,15 @@ class AccessConfig_Model extends CI_Model {
             $result = $this->portalsql->replace('portal_config', $updata);
             if($result){
                 // up portal_basauth  
-                $up2 = array(
-                    'id'=>element('id',$data),
-                    'username'=>element('username',$data),
-                    'password'=>element('password',$data),                    
-                    'url'=>element('url',$data)                    
-                );
-                $result = $this->portalsql->replace('portal_basauth', $up2);
+                foreach($data['basauth'] as $row){
+                    $up2 = array(
+                        'id'=>element('id',$row),
+                        'username'=>element('username',$row),
+                        'password'=>element('password',$row),                    
+                        'url'=>element('url',$row)                    
+                    );
+                    $result = $this->portalsql->replace('portal_basauth', $up2);
+                }                                 
             }
         }
         

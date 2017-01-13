@@ -16,15 +16,7 @@ class AonnectRecord_Model extends CI_Model {
 		$arr = array(
 			'state'=>array('code'=>2000,'msg'=>'ok'),
 			'data'=>array(
-				'page'=>array(
-					'start' => 1, 
-					'size' => $pagesize, 
-					'currPage' => $pageindex, 
-					'totalPage' => $datalist['total_page'], 
-					'total' => $datalist['total_row'], 
-					'nextPage' => ($pageindex + 1) === $datalist['total_page'] ? ($pageindex + 1) : -1, 
-					'lastPage' => $datalist['total_page']
-				),
+				'page'=>$datalist['page'],
 				'list' => $datalist['data']
 			)
 		);       

@@ -7,11 +7,18 @@ class RadiusNas_Model extends CI_Model {
         $this->load->library('PortalSocket');
 	}
 	function get_nas_list($data) {        
-		$queryd = $this->portalsql->query('select * from radius_nas');
-		$arr['state'] = array('code' => 2000, 'msg' => 'ok');
-		$arr['data'] = array(
-            'list' => $queryd->result_array()
-        );        
+        $columns = '*';
+		$tablenames = 'radius_nas';
+		$pageindex = (int)element('page', $data, 1);
+		$pagesize = (int)element('size', $data, 20);	
+		$datalist = help_data_page($this->portalsql,$columns,$tablenames,$pageindex,$pagesize);
+		$arr = array(
+			'state'=>array('code'=>2000,'msg'=>'ok'),            
+			'data'=>array(                
+				'page'=>$datalist['page'],
+				'list' => $datalist['data']
+			)
+		);       
 		return json_encode($arr);
 	}
 	function add_radius_nas($data) {        
