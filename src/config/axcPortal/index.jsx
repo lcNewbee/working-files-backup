@@ -87,6 +87,8 @@ const sPortalMac =
 //    require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalTemplate');
 const sDPIOverview =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/DPIOverview');
+const sFlowInfo =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/FlowInfo');
 /**
  * AP组管理
  */
@@ -329,6 +331,12 @@ const routes = [
                 formUrl: 'goform/network/dpi/overview',
                 text: _('Overview'),
                 component: sDPIOverview.Screen,
+              }, {
+                id: 'flowinfo',
+                path: '/main/network/dpi/flowinfo',
+                formUrl: 'goform/network/dpi/flowinfo',
+                text: _('Flow Info'),
+                component: sFlowInfo.Screen,
               },
             ],
           },
