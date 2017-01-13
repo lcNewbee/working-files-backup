@@ -29,10 +29,11 @@ const propTypes = {
   app: PropTypes.instanceOf(Map),
   save: PropTypes.func,
   createModal: PropTypes.func,
-  fetchProductInfo: PropTypes.func,
-  closeModal: PropTypes.func,
-  changeModalState: PropTypes.func,
+  fetchProductInfo: PropTypes.func.isRequired,
+  closeModal: PropTypes.func.isRequired,
+  changeModalState: PropTypes.func.isRequired,
   onReboot: PropTypes.func,
+  changeLoginStatus: PropTypes.func.isRequired,
   actionable: PropTypes.bool,
 };
 const defaultProps = {
@@ -61,6 +62,8 @@ export default class AcVersion extends PureComponent {
       initStep: 0,
       fileUploaded: false,
     });
+    this.props.changeLoginStatus('0');
+    window.location.hash = '#';
   }
 
   onBeforeStep(data) {

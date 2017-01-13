@@ -1,12 +1,12 @@
 .ac-version {
   .dropzone {
+    min-height: 120px;
     padding: 5px 20px;
     padding-top: 10px;
-    min-height: 120px;
     border: 1px solid #ccc;
     .dz-preview {
-      margin: 0;
       width: 100%;
+      margin: 0;
 
       .dz-image {
         width: 100%;
@@ -17,8 +17,8 @@
         }
       }
       .dz-details {
-        padding: 1em;
         width: 100%;
+        padding: 1em;
 
         .dz-size {
           margin-bottom: 13px;
@@ -31,4 +31,3 @@
     }
   }
 }
-
