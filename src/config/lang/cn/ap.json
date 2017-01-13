@@ -385,5 +385,6 @@
   "disconnected": "未连接",
   "connected": "已连接",
   "Station Flow": "流量统计",
-  "CPU/MEM Usage": "CPU及内存占用率"
+  "CPU/MEM Usage": "CPU及内存占用率",
+  "Bandwidth": "信道频宽"
 }

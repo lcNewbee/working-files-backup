@@ -896,6 +896,10 @@ export default class SystemStatus extends React.Component {
                 <dd>{radioList.getIn([radioId, 'radioMode'])}</dd>
               </dl>
               <dl className="o-description-list-row">
+                <dt>{_('Bandwidth')}</dt>
+                <dd>{radioList.getIn([radioId, 'channelWidth'])}</dd>
+              </dl>
+              <dl className="o-description-list-row">
                 <dt>{_('Channel/Frequency')}</dt>
                 <dd>{`${radioList.getIn([radioId, 'channel'])}/${radioList.getIn([radioId, 'frequency'])}`}</dd>
               </dl>
