@@ -121,14 +121,14 @@ const keyTypeOptions = [
 ];
 
 const radioModeOptionsFor5g = [
-  { value: 'auto', label: 'auto' },
+  // { value: 'auto', label: 'auto' },
   { value: '11a', label: '802.11a' },
   { value: '11na', label: '802.11na' },
   { value: '11ac', label: '802.11ac' },
 ];
 
 const radioModeOptionsFor2g = [
-  { value: 'auto', label: 'auto' },
+  // { value: 'auto', label: 'auto' },
   { value: '11b', label: '802.11b' },
   { value: '11g', label: '802.11g' },
   { value: '11bg', label: '802.11bg' },
