@@ -215,7 +215,7 @@ export default class Basic extends React.Component {
                 disabled={flag}
                 onChange={() => this.onSsidItemChange(val, item, 'enable', (val === '1' ? '0' : '1'))}
                 style={{
-                  marginLeft: '3px',
+                  marginLeft: '-3px',
                 }}
               />
             );
@@ -368,26 +368,24 @@ export default class Basic extends React.Component {
         },
         {
           id: 'security',
-          label: _('Security Edit'),
+          label: _('Security'),
           width: '200px',
           transform: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
             const pos = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
             return (
-              <div style={{ marginLeft: '8px' }}>
-                <Button
-                  text={_('Edit')}
-                  icon="pencil-square"
-                  size="sm"
-                  disabled={pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
-                  onClick={() => {
-                    const tableItemForSsid = fromJS({}).set('val', val)
-                          .set('item', item).set('isShow', '1')
-                          .set('pos', pos);
-                    this.props.changeTableItemForSsid(tableItemForSsid);
-                  }}
-                />
-              </div>
+              <Button
+                text={_('Edit')}
+                icon="pencil-square"
+                size="sm"
+                disabled={pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
+                onClick={() => {
+                  const tableItemForSsid = fromJS({}).set('val', val)
+                        .set('item', item).set('isShow', '1')
+                        .set('pos', pos);
+                  this.props.changeTableItemForSsid(tableItemForSsid);
+                }}
+              />
             );
           }.bind(this),
         },

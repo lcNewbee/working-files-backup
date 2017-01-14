@@ -1000,12 +1000,12 @@ export default class SystemStatus extends React.Component {
                             <dd>{changeUptimeToReadable(peerList.getIn([0, 'connectTime'])) || '--'}</dd>
                           </dl>
                           <dl className="o-description-list-row">
-                            <dt>{`${_('Tx Rate')} Mbps`}</dt>
-                            <dd>{peerList.getIn([0, 'txrate']) || '--'}</dd>
+                            <dt>{_('Tx Rate')}</dt>
+                            <dd>{peerList.getIn([0, 'txrate']) ? `${_(peerList.getIn([0, 'txrate']))} Mbps` : '--'}</dd>
                           </dl>
                           <dl className="o-description-list-row">
-                            <dt>{`${_('Rx Rate')} Mbps`}</dt>
-                            <dd>{peerList.getIn([0, 'rxrate']) || '--'}</dd>
+                            <dt>{_('Rx Rate')}</dt>
+                            <dd>{peerList.getIn([0, 'rxrate']) ? `${_(peerList.getIn([0, 'rxrate']))} Mbps` : '--'}</dd>
                           </dl>
                         </div>
                       </div>
@@ -1013,7 +1013,6 @@ export default class SystemStatus extends React.Component {
                       <div className="radio-off-notice">{_('No Client')}</div>
                     )
                   }
-
                 </div>
               )
             }

@@ -317,6 +317,8 @@ export default class NetworkSettings extends React.Component {
               />
               <FormGroup
                 type="number"
+                min="1"
+                max="4094"
                 label={_('Management VLAN ID')}
                 disabled={vlanEnable === '0'}
                 help={`${_('Range: ')}1 - 4094, ${_('Default: ')}1`}
@@ -329,6 +331,8 @@ export default class NetworkSettings extends React.Component {
               />
               <FormGroup
                 type="number"
+                min="1"
+                max="4094"
                 label={_('Untagged VLAN ID')}
                 help={`${_('Range: ')}1 - 4094, ${_('Default: ')}1`}
                 value={utgVlanId}
@@ -369,14 +373,14 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     utils.extend({}, appActions, sharedActions),
-    dispatch
+    dispatch,
   );
 }
 
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
-  validator.mergeProps(validOptions)
+  validator.mergeProps(validOptions),
 )(NetworkSettings);
 
 export const networksettings = reducer;

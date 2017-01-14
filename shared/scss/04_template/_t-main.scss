@@ -46,8 +46,8 @@ body {
     top: $g-navbar-height + ($g-distance * 0.25);
     bottom: 0;
     left: $sidebar-width;
-    width: calc(100vw - 172px);
-    max-width: calc(100vw - 172px);
+    width: calc(100vw - 176px);
+    max-width: calc(100vw - 176px);
     padding: $g-distance * 0.75;
     overflow: auto;
     transition: left .4s ease-in-out, max-width .4s ease-in-out;
