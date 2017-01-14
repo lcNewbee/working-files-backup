@@ -69,6 +69,7 @@ export default class FlowInfo extends React.Component {
         <AppScreen
           {...this.props}
           listOptions={listOptions}
+          searchable
         />
       </div>
     );
