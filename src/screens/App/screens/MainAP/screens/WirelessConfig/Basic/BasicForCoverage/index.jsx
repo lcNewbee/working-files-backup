@@ -1530,13 +1530,18 @@ export default class Basic extends React.Component {
                   loading={this.props.app.get('saving') &&
                           this.props.selfState.get('whichButton') === 'radioSettings'}
                   onClick={() => {
-                    // this.props.validateAll('radioSettings').then((msg) => {
-                    //   if (msg.isEmpty()) {
+                    /** 规避添加新SSID但不编辑，再保存射频信息时，会下发空SSID的问题，暂时规避！ */
+                    const vapList = curData.getIn(['radioList', radioId, 'vapList'])
+                                    .filter(item => item.get('ssid') !== '');
+                    const radioList = curData.get('radioList').setIn([radioId, 'vapList'], vapList);
+                    /** ******************************************************************** */
                     this.props.changeWhichButton('radioSettings');
-                    this.onSave('radioSettings');
-                  }
-                    // });
-                  }
+                    Promise.resolve().then(() => {
+                      this.props.updateItemSettings({ radioList });
+                    }).then(() => {
+                      this.onSave('radioSettings');
+                    });
+                  }}
                 />
               </div>
             </div>
@@ -1834,8 +1839,10 @@ export default class Basic extends React.Component {
                 keyIndex: '1',
               });
               const currentSecur = tableItemForSsid.getIn(['item', 'security']);
+
               const secur = securDefault.merge(currentSecur)
                             .set('mode', data.value).set('key', '');
+              console.log('currentSecur', currentSecur.toJS(), secur.toJS());
               const newItem = tableItemForSsid.get('item').set('security', secur);
               const newItemForSsid = tableItemForSsid.set('item', newItem);
               this.props.changeTableItemForSsid(newItemForSsid);

@@ -99,7 +99,7 @@ const funConfig = {
       'delete',
       'maxClients',
       // 'speedLimit',
-      'portalEnable',         // portal功能开关
+      // 'portalEnable',         // portal功能开关
     ],
     portalFun: true,
   },

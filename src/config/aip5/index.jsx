@@ -97,6 +97,8 @@ const funConfig = {
       'security',
       'delete',
       'maxClients',     // SSID最大客户端限制
+      // 'speedLimit',
+      // 'portalEnable',         // portal功能开关
     ],
   },
   // 无线高级设置页面

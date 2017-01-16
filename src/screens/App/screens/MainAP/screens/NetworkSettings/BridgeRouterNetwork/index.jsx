@@ -300,7 +300,7 @@ export default class NetworkSettings extends React.Component {
                     <FormGroup
                       type="text"
                       label={_('IP Address')}
-                      value={ip}
+                      value={ip || ''}
                       onChange={data => this.props.updateItemSettings({
                         ip: data.value,
                       })}
@@ -310,7 +310,7 @@ export default class NetworkSettings extends React.Component {
                     <FormGroup
                       type="text"
                       label={_('Subnet Mask')}
-                      value={mask}
+                      value={mask || ''}
                       onChange={data => this.props.updateItemSettings({
                         mask: data.value,
                       })}
