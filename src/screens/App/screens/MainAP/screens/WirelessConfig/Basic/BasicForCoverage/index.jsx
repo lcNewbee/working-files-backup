@@ -1102,7 +1102,7 @@ export default class Basic extends React.Component {
                   ) : null
                 }
                 <FormGroup
-                  label={_('Output Power')}
+                  label={_('Tx Power')}
                   type="number"
                   min="3"
                   max={this.props.selfState.get('maxTxpower')}

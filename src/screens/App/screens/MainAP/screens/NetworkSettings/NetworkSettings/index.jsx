@@ -110,29 +110,39 @@ export default class NetworkSettings extends React.Component {
         text: _msg,
       });
     }
-    msg = validator.combineValid.noBroadcastIp(ip, mask);
-    if (proto === 'static' && msg) {
-      showError(msg);
-      return;
-    }
-    msg = validator.combineValid.noBroadcastIp(gateway, mask);
-    if (proto === 'static' && msg) {
-      showError(_('Gateway can not be broadcast IP address!'));
-      return;
-    }
-    msg = validator.combineValid.staticIP(ip, mask, gateway);
-    if (proto === 'static' && gateway !== '' && msg) {
-      showError(msg);
-      return;
-    }
-    msg = _('Primary and Secondary DNS can not be the same !');
-    if (dns1 !== '' && validator.combineValid.notequal(dns1, dns2, msg)) {
-      showError(msg);
-      return;
-    }
     this.props.validateAll()
       .then((mg) => {
         if (mg.isEmpty()) {
+          if (proto === 'static') {
+            if (ip !== '' && typeof (ip) !== 'undefined' && mask !== '' && typeof (mask) !== 'undefined') {
+              msg = validator.combineValid.noBroadcastIp(ip, mask);
+              if (msg) {
+                showError(msg);
+                return;
+              }
+            }
+            if (gateway !== '' && typeof (gateway) !== 'undefined' && mask !== '' && typeof (mask) !== 'undefined') {
+              msg = validator.combineValid.noBroadcastIp(gateway, mask);
+              if (proto === 'static' && msg) {
+                showError(_('Gateway can not be broadcast IP address!'));
+                return;
+              }
+            }
+            if (ip !== '' && typeof (ip) !== 'undefined' &&
+                mask !== '' && typeof (mask) !== 'undefined' &&
+                gateway !== '' && typeof (gateway) !== 'undefined') {
+              msg = validator.combineValid.staticIP(ip, mask, gateway);
+              if (proto === 'static' && gateway !== '' && msg) {
+                showError(msg);
+                return;
+              }
+            }
+            msg = _('Primary and Secondary DNS can not be the same !');
+            if (dns1 !== '' && validator.combineValid.notequal(dns1, dns2, msg)) {
+              showError(msg);
+              return;
+            }
+          }
           this.props.saveSettings();
         }
       });
