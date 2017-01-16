@@ -122,6 +122,9 @@ const validOptions = Map({
   staApmac: validator({
     rules: 'mac',
   }),
+  validDistance: validator({
+    rules: 'num:[1, 10]',
+  }),
 });
 
 // countryMap为Object
@@ -588,7 +591,7 @@ export default class QuickSetup extends React.Component {
     const keyType = store.getIn(['curData', 'radioList', radioId, 'security', 'keyType']);
     const keyIndex = store.getIn(['curData', 'radioList', radioId, 'security', 'keyIndex']);
     // const cipher = store.getIn(['curData', 'radioList', radioId, 'security', 'cipher']);
-    const { validSsid, validPassword, apmac3, staApmac } = this.props.validateOption;
+    const { validSsid, validPassword, apmac3, staApmac, validDistance } = this.props.validateOption;
 
     return (
       <div className="thirdScreen">
@@ -797,7 +800,7 @@ export default class QuickSetup extends React.Component {
               }
               <div className="clearfix">
                 <FormGroup
-                  type="range"
+                  type="number"
                   className="fl"
                   label={_('Distance')}
                   value={distance}
@@ -810,6 +813,8 @@ export default class QuickSetup extends React.Component {
                   onChange={(data) => {
                     this.updateItemInRadioList('distance', data.value);
                   }}
+                  required
+                  {...validDistance}
                 />
                 <span
                   className="fl"
@@ -1100,14 +1105,13 @@ export default class QuickSetup extends React.Component {
               }
               <div className="clearfix">
                 <FormGroup
-                  type="range"
+                  type="number"
                   className="fl"
                   label={_('Distance')}
                   value={distance}
                   min="1"
                   max="10"
                   step="0.1"
-                  hasTextInput
                   help="km"
                   disabled={autoAdjust === '1'}
                   onChange={(data) => {

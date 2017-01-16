@@ -794,7 +794,7 @@ export default class SystemStatus extends React.Component {
             >
               <div className="o-description-list o-description-list--lg info-box">
                 <dl className="o-description-list-row">
-                  <dt>{_('Radio Mode')}</dt>
+                  <dt>{_('Device Mode')}</dt>
                   <dd>{deviceModel}</dd>
                 </dl>
                 <dl className="o-description-list-row">

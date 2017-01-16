@@ -148,6 +148,9 @@ const validOptions = Map({
   validDownload: validator({
     rules: 'num:[1, 1000]',
   }),
+  validTxpower: validator({
+    rules: 'num:[1, 32]',
+  }),
 });
 
 function getCountryNameFromCode(code, map) {
@@ -835,7 +838,7 @@ export default class Basic extends React.Component {
     const { radioId, radioType } = this.props.selfState.get('currRadioConfig').toJS();
     const {
       staApmac, apmac1, apmac2, apmac3, validSsid, validPwd1, validPwd2, validMaxClients,
-      validDownload, validUpload,
+      validDownload, validUpload, validTxpower,
     } = this.props.validateOption;
     const tableItemForSsid = this.props.selfState.get('tableItemForSsid');
     const funConfig = this.props.route.funConfig;
@@ -1088,7 +1091,7 @@ export default class Basic extends React.Component {
                       type="number"
                       max={200}
                       min={1}
-                      form="maxradioclients"
+                      form="radioSettings"
                       value={curData.getIn(['radioList', radioId, 'maxRadioClients'])}
                       onChange={(data) => {
                         const radioList = curData.get('radioList')
@@ -1105,6 +1108,7 @@ export default class Basic extends React.Component {
                   label={_('Tx Power')}
                   type="number"
                   min="3"
+                  form="radioSettings"
                   max={this.props.selfState.get('maxTxpower')}
                   value={curData.getIn(['radioList', radioId, 'txPower'])}
                   onChange={(data) => {
@@ -1113,6 +1117,8 @@ export default class Basic extends React.Component {
                     this.props.updateItemSettings({ radioList });
                   }}
                   help={`${_('Range: ')} 3~${this.props.selfState.get('maxTxpower')} dBm`}
+                  required
+                  {...validTxpower}
                 />
               </div>
               {
@@ -1524,13 +1530,13 @@ export default class Basic extends React.Component {
                   loading={this.props.app.get('saving') &&
                           this.props.selfState.get('whichButton') === 'radioSettings'}
                   onClick={() => {
-                    this.props.validateAll('maxradioclients').then((msg) => {
-                      if (msg.isEmpty()) {
-                        this.props.changeWhichButton('radioSettings');
-                        this.onSave('radioSettings');
-                      }
-                    });
-                  }}
+                    // this.props.validateAll('radioSettings').then((msg) => {
+                    //   if (msg.isEmpty()) {
+                    this.props.changeWhichButton('radioSettings');
+                    this.onSave('radioSettings');
+                  }
+                    // });
+                  }
                 />
               </div>
             </div>

@@ -184,6 +184,9 @@ const validOptions = Map({
   validDownload: validator({
     rules: 'num:[1, 1000]',
   }),
+  validTxpower: validator({
+    rules: 'num:[1, 32]',
+  }),
 });
 
 function getCountryNameFromCode(code, map) {
@@ -900,7 +903,7 @@ export default class Basic extends React.Component {
     const basicSettings = this.props.selfState.get('basicSettings');
     const {
       staApmac, apmac1, apmac2, apmac3, validSsid, validPwd1, validPwd2, validMaxClients,
-      validDownload, validUpload,
+      validDownload, validUpload, validTxpower,
     } = this.props.validateOption;
     const tableItemForSsid = this.props.selfState.get('tableItemForSsid');
     const funConfig = this.props.route.funConfig;
@@ -1825,7 +1828,7 @@ export default class Basic extends React.Component {
                 ) : null
               }
               <FormGroup
-                label={_('Output Power')}
+                label={_('Tx Power')}
                 type="number"
                 min="3"
                 max={this.props.selfState.get('maxTxpower')}
@@ -1836,6 +1839,7 @@ export default class Basic extends React.Component {
                   this.props.updateRadioSettingsItem({ radioList });
                 }}
                 help={`${_('Range: ')} 3~${this.props.selfState.get('maxTxpower')} dBm`}
+                {...validTxpower}
               />
               {
                 /**
