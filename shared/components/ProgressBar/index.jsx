@@ -15,12 +15,15 @@ const propTypes = {
   time: PropTypes.number,
 
   // 每 1% 间隔时间,单位为 毫秒（ms）
+  initStep: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  curStep: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   step: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 const defaultProps = {
   isShow: false,
   start: false,
+  initStep: 0,
   time: 30,    // 默认总时间为 30 s
 };
 
@@ -30,12 +33,21 @@ export default class ProgressBar extends React.Component {
     this.startMove = this.startMove.bind(this);
     this.state = {
       width: 0,
-      n: 0,
+      n: props.initStep,
     };
   }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.initStep !== this.props.initStep) {
+      this.setState({
+        n: nextProps.initStep,
+      });
+    }
 
-  componentWillMount() {
-
+    if (nextProps.curStep !== this.props.curStep) {
+      this.setState({
+        n: nextProps.curStep,
+      });
+    }
   }
 
   componentDidMount() {

@@ -1,8 +1,7 @@
 import React, { PropTypes } from 'react';
 import utils, { immutableUtils } from 'shared/utils';
 import immutable, { List, Map, fromJS } from 'immutable';
-import ListInfo from 'shared/components/Template/ListInfo';
-import { purviewOptions } from 'shared/config/axc';
+import AppScreenList from 'shared/components/Template/AppScreenList';
 import FormContainer from 'shared/components/Organism/FormContainer';
 import { getActionable } from 'shared/axc';
 
@@ -52,7 +51,7 @@ const defaultProps = {
   onAfterSync: emptyFunc,
   noTitle: true,
 
-  // ListInfo Option
+  // AppScreenList Option
   groupid: '',
 
   // Settings Form
@@ -248,7 +247,7 @@ export default class AppScreen extends React.Component {
         }
         {
           listOptions ? (
-            <ListInfo
+            <AppScreenList
               {...this.props}
               tableOptions={tableOptions}
               editFormOptions={editFormOptions}

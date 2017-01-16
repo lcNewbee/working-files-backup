@@ -19,12 +19,23 @@ gulp.task('pub:clean', () => {
   return del([distPath], { force: true });
 });
 
-gulp.task('pub:build', () =>
-  gulp.src([`${paths.build}/scripts/**/*`])
-    .pipe($.replace(/(\/?)goform\//g, 'index.php/goform/'))
-    .pipe($.replace('/~zhangfang/axc/', ''))
-    .pipe(gulp.dest(`${paths.build}/scripts/`)),
-);
+gulp.task('pub:build', (callback) => {
+  // 产品系列：axc（默认值）, ap, ac
+  let productSeries = 'axc';
+
+  if (argv.n && argv.n.indexOf('axc') !== 0) {
+    productSeries = argv.n;
+  }
+
+  // 只有在 AXC 系列才需要做，goform 路径相关替换
+  if (productSeries === 'axc') {
+    return gulp.src([`${paths.build}/scripts/**/*`])
+      .pipe($.replace(/(\/?)goform\//g, 'index.php/goform/'))
+      .pipe($.replace('/~zhangfang/axc/', ''))
+      .pipe(gulp.dest(`${paths.build}/scripts/`));
+  }
+  return callback();
+});
 
 gulp.task('pub:copy', () => {
   let distPath = paths.pub;

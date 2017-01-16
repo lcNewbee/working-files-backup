@@ -496,6 +496,7 @@
   "Firmware File": "版本文件",
   "Upload Firmware": "上传版本",
   "Active Status": "激活状态",
+  "Checking firmware...": "正在检测固件...",
   "Pelect upload the correct firmware file": "请上传正确的版本文件",
   "You should activate another Firmware version before deactivating this Firmware version": "你应该先激活其他版本",
   "You can not delete active Firmware version": "不能删除已激活版本",

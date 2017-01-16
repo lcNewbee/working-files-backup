@@ -34,6 +34,7 @@ const propTypes = {
   changeModalState: PropTypes.func.isRequired,
   onReboot: PropTypes.func,
   changeLoginStatus: PropTypes.func.isRequired,
+  changeLoginState: PropTypes.func.isRequired,
   actionable: PropTypes.bool,
 };
 const defaultProps = {
@@ -63,6 +64,9 @@ export default class AcVersion extends PureComponent {
       fileUploaded: false,
     });
     this.props.changeLoginStatus('0');
+    this.props.changeLoginState({
+      needReload: true,
+    });
     window.location.hash = '#';
   }
 
@@ -85,6 +89,7 @@ export default class AcVersion extends PureComponent {
       role: 'loading',
       title: '',
       loadingStep: 3000,
+      loadingCurStep: 1,
       loadingTitle: msg.upgradingACversion,
       onLoaded: () => {
         this.props.closeModal();
@@ -129,11 +134,22 @@ export default class AcVersion extends PureComponent {
         title: msg.upAcVersionTitle,
         text: msg.sureUpgradeAc,
         apply: () => {
+          this.props.createModal({
+            role: 'loading',
+            title: '',
+            loadingStep: 100,
+            loadingTitle: _('Checking firmware...'),
+            onLoaded: () => {
+              this.doUpgradeAc();
+            },
+          });
           this.props.save(url, { filename })
             .then((json) => {
               if (json && json.state.code === 2000) {
                 resolve();
-                this.doUpgradeAc();
+                this.props.changeModalState({
+                  loadingStep: 10,
+                });
               } else {
                 reject();
               }

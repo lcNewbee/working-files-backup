@@ -591,13 +591,13 @@ export default class Main extends Component {
                 <Icon
                   name="key"
                 />
-                {_('CHANGE PASSWORD')}
+                {_('Change Password')}
               </a>
               <a className="sign-out" href="#/" onClick={this.onLogout}>
                 <Icon
                   name="sign-out"
                 />
-                {_('SIGN OUT')}
+                {_('Login Out')}
               </a>
             </div>
           </div>

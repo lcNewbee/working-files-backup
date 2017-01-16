@@ -53,6 +53,12 @@ export default class Login extends Component {
     };
   }
   componentWillMount() {
+    if (this.props.app.getIn(['login', 'needReload'])) {
+      this.props.changeLoginState({
+        needReload: false,
+      });
+      window.location.reload();
+    }
     document.getElementsByTagName('body')[0].className += ' sign-body';
   }
 

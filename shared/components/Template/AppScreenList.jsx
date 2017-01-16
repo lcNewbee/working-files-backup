@@ -90,7 +90,7 @@ const defaultProps = {
 };
 
 // 原生的 react 页面
-class ListInfo extends React.Component {
+class AppScreenList extends React.Component {
   constructor(props) {
     super(props);
     this.selectedList = [];
@@ -751,7 +751,7 @@ class ListInfo extends React.Component {
     return (
       !customModal ? (
         <Modal
-          id="listInfoModal"
+          id="AppScreenListModal"
           isShow={isEditModelshow}
           title={actionQuery.get('myTitle')}
           onOk={this.onSave}
@@ -822,8 +822,8 @@ class ListInfo extends React.Component {
   }
 }
 
-ListInfo.propTypes = propTypes;
-ListInfo.defaultProps = defaultProps;
+AppScreenList.propTypes = propTypes;
+AppScreenList.defaultProps = defaultProps;
 
-export default ListInfo;
+export default AppScreenList;
 

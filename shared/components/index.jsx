@@ -34,8 +34,8 @@ export { default as WizardContainer } from './Organism/WizardContainer';
 
 // Templates
 export { default as PropertyPanel } from './Template/PropertyPanel';
-export { default as ListInfo } from './Template/ListInfo';
+export { default as AppScreen } from './Template/AppScreen';
 export { default as NotFound } from './NotFound';
 
 // ProgressBar
-export {default as ProgressBar } from './ProgressBar';
+export { default as ProgressBar } from './ProgressBar';

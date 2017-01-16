@@ -89,6 +89,8 @@ class App extends Component {
                 time={modal.loadingTime || 100}
                 callback={modal.onLoaded}
                 step={modal.loadingStep}
+                initStep={modal.loadingInitStep}
+                curStep={modal.loadingCurStep}
                 style={{
                   minHeight: '24px',
                 }}

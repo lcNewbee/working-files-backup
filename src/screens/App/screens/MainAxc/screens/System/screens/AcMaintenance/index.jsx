@@ -114,6 +114,8 @@ export default class View extends React.Component {
     }
   }
   checkSaveResult(isFirst) {
+    let timeoutTime = 5000;
+
     if (!isFirst) {
       this.props.fetch('goform/axcInfo')
         .then((json) => {
@@ -125,10 +127,12 @@ export default class View extends React.Component {
           }
         });
     } else {
-      this.checkUpgradOkTimeout = setTimeout(() => {
-        this.checkSaveResult();
-      }, 5000);
+      timeoutTime = 15000;
     }
+
+    this.checkUpgradOkTimeout = setTimeout(() => {
+      this.checkSaveResult();
+    }, timeoutTime);
   }
 
   render() {

@@ -355,7 +355,7 @@ class FormContainer extends React.Component {
           }
           { this.renderFormGroupTree(this.options) }
           {
-            rightChildren && leftChildren.length > 0 ? (
+            rightChildren && rightChildren.length > 0 ? (
               <div className="form-group fr">
                 { rightChildren }
               </div>

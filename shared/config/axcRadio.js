@@ -158,18 +158,21 @@ export const radioBase = fromJS([
     form: 'radioBase',
     type: 'select',
     label: _('Country'),
+    defaultValue: '',
     options: countryOptions,
   }, {
     id: 'channel',
     form: 'radioBase',
     type: 'select',
     label: _('Channel'),
+    defaultValue: '',
     options: [],
   }, {
     id: 'channelwidth',
     form: 'radioBase',
     type: 'switch',
     label: _('Channel Bandwidth'),
+    defaultValue: '',
     inputStyle: {
       display: 'block',
     },
