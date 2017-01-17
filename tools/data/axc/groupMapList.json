@@ -8,11 +8,11 @@
       {
         "id": 1,
         "mapName": "Floor One",
-        "backgroudImg": "/images/map_bg.jpg"
+        "backgroudImg": "images/map_bg.jpg"
       }, {
         "id": 2,
         "mapName": "Floor Two",
-        "backgroudImg": "/images/mp_bg.jpg"
+        "backgroudImg": "images/map_bg.jpg"
       }
     ]
   }

@@ -9,35 +9,32 @@
     "offline": 293,
     "terminalType": [
       {
-        "name": "iPhone",
-        "value": 186
+        "name": "APPLE",
+        "value": 286
       }, {
-        "name": "Mac",
+        "name": "SAMSUNG",
         "value": 164
       }, {
         "name": "Google",
         "value": 126
       }, {
-        "name": "Huaiwei",
+        "name": "HUAWEI",
         "value": 237
       }, {
-        "name": "Mac1",
-        "value": 164
+        "name": "NOKIA",
+        "value": 135
       }, {
-        "name": "Google1",
-        "value": 126
+        "name": "LENOVO",
+        "value": 100
       }, {
-        "name": "Huaiwei1",
-        "value": 117
+        "name": "ZTE",
+        "value": 100
       }, {
-        "name": "Mac2",
-        "value": 164
+        "name": "OPPO",
+        "value": 100
       }, {
-        "name": "Google2",
-        "value": 126
-      }, {
-        "name": "Huaiwei3",
-        "value": 117
+        "name": "MI",
+        "value": 80
       }
     ],
     "flowList": [

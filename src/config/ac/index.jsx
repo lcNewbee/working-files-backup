@@ -4,6 +4,7 @@ import NotFound from 'shared/components/NotFound';
 import remoteActionMiddleware from 'shared/utils/lib/remote_action_middleware';
 import * as appActions from 'shared/actions/app';
 import appReducer from 'shared/reducers/app';
+import screensReducer from 'shared/reducers/screens';
 import { reducer as toastrReducer } from 'react-redux-toastr';
 
 //
@@ -11,13 +12,15 @@ import 'shared/scss/styles.scss';
 import guiConfig from './config.json';
 
 // 多语言工具
-const langCn = require('../lang/cn/core.json');
+const langCnCore = require('../lang/cn/core.json');
+const langCnAc = require('../lang/cn/ac.json');
 const validateCn = require('../lang/cn/validate.json');
 const langEn = require('../lang/en/core.json');
 
 const bodyElem = document.getElementsByTagName('body')[0];
 
-b28n.addDict(langCn, 'cn');
+b28n.addDict(langCnCore, 'cn');
+b28n.addDict(langCnAc, 'cn');
 b28n.addDict(validateCn, 'cn');
 b28n.addDict(langEn, 'en');
 
@@ -66,6 +69,7 @@ const sWireless = require('../../screens/App/screens/Main/screens/Settings/scree
 const sPortal = require('../../screens/App/screens/Main/screens/Settings/screens/Portal');
 const sGuest = require('../../screens/App/screens/Main/screens/Settings/screens/Guest');
 const sVoip = require('../../screens/App/screens/Main/screens/Settings/screens/Voip');
+const sMode = require('../../screens/App/screens/Main/screens/Settings/screens/Mode');
 const sAdmin = require('../../screens/App/screens/Main/screens/Settings/screens/Admin');
 
 
@@ -125,18 +129,25 @@ const routes = [{
           }, {
             id: 'portal',
             path: '/main/settings/portal',
-            text: _(_('Portal Settings')),
+            text: _(_('Portal')),
             component: sPortal.Screen,
           }, {
             id: 'guest',
             path: '/main/settings/guest',
-            text: _('Guest Settings'),
+            text: _('Guest'),
             component: sGuest.Screen,
           }, {
             id: 'voip',
             path: '/main/settings/voip',
             text: _('VoIP'),
             component: sVoip.Screen,
+          }, {
+            id: 'modeSetting',
+            path: '/main/settings/mode',
+            fetchUrl: 'goform/getApMode',
+            saveUrl: 'goform/setApMode',
+            text: _('AP Mode'),
+            component: sMode.Screen,
           }, {
             id: 'password',
             path: '/main/settings/admin',
@@ -159,6 +170,7 @@ const routes = [{
 // 配置模块页面 store
 const reducers = {
   app: appReducer,
+  screens: screensReducer,
 
   status: pStatus.status,
   devices: pDevices.devices,

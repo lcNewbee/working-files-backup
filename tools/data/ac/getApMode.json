@@ -1,0 +1,24 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+
+  "data": {
+    "list": [{
+        "groupname": "Default"
+      },
+      {
+        "groupname": "group231",
+        "thinenable": 1,
+        "thindiscovery": "static",
+        "thinacip": "192.168.14.3"
+      }, {
+        "groupname": "group222",
+        "thinenable": 0,
+        "thindiscovery": "dhcp",
+        "thinacip": "192.168.14.233"
+      }
+    ]
+  }
+}

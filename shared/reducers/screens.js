@@ -169,7 +169,7 @@ export default function (state = defaultState, action) {
     case 'LEAVE_SCREEN':
       return state.mergeIn([curScreenName, 'query'], {
         search: '',
-      });
+      }).setIn([curScreenName, 'curListItem'], defaultItem.get('curListItem'));
 
     case 'REQEUST_FETCH_SCREEN_DATA':
       return state.setIn([curScreenName, 'fetching'], true);

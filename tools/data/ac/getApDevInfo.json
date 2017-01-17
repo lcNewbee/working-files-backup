@@ -24,7 +24,8 @@
                 "softversion": "V1.1",
                 "channel": "auto",
                 "operationhours": 3600,
-                "newest": "1"
+                "newest": "1",
+                "operate": "Reboot"
             },
             {
                 "devicetype": "inside",
@@ -37,7 +38,8 @@
                 "channel": "1",
                 "operationhours": 6600,
                 "newest": "0",
-                "locatestatus": "location"
+                "locatestatus": "location",
+                "operate": "upgrading"
             },
             {
                 "devicetype": "inside",
@@ -49,7 +51,8 @@
                 "softversion": "V1.1",
                 "channel": "1",
                 "operationhours": 6600,
-                "hasNewSoft": "1"
+                "hasNewSoft": "1",
+                "operate": "Reboot"
             },
             {
                 "devicetype": "inside",
@@ -61,7 +64,8 @@
                 "softversion": "V1.1",
                 "channel": "1",
                 "operationhours": 6600,
-                "hasNewSoft": "1"
+                "hasNewSoft": "1",
+                "operate": "Reboot"
             }
         ]
     }

@@ -57,6 +57,10 @@ const urls = {
   fetchVoip: 'goform/getVoipInfo',
   saveVoip: 'goform/setVoipInfo',
 
+  // ap模式 设置
+  fetchApMode: 'goform/getApMode',
+  saveApMode: 'goform/setApMode',
+
   // Wifi 设置
   fetchWifi: 'goform/getWifi',
   saveWifi: 'goform/setWifi',

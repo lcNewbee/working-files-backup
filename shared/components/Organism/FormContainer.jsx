@@ -111,11 +111,17 @@ class FormContainer extends React.Component {
   }
   onChangeFormGoupData(option) {
     const { data, saveOnChange, valueQuery } = option;
-    let $$upDate = fromJS(this.props.data);
+    let $$upDate = fromJS({});
+
+    // 只有 当
+    if (valueQuery.length > 1) {
+      $$upDate = fromJS(this.props.data);
+    }
 
     $$upDate = $$upDate.setIn(valueQuery, data.value);
+
     if (this.props.onChangeData) {
-      this.props.onChangeData($$upDate);
+      this.props.onChangeData($$upDate.toJS());
     }
 
     if (saveOnChange) {

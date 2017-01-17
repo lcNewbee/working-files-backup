@@ -13,9 +13,9 @@ import myReducer from './reducer';
 
 
 const msg = {
-  'upSpeed': _('Up Speed'),
-  'downSpeed': _('Down Speed'),
-  'selectGroup': _('Select Group'),
+  upSpeed: _('Up Speed'),
+  downSpeed: _('Down Speed'),
+  selectGroup: _('Select Group'),
 };
 const encryptionOptions = [
   {
@@ -93,8 +93,8 @@ export const Voip = React.createClass({
   getGroupOptions() {
     return this.props.store
       .getIn(['data', 'list'])
-      .map(function (item, i) {
-        let groupname = item.get('groupname');
+      .map((item, i) => {
+        const groupname = item.get('groupname');
         let label = groupname;
 
         if (groupname === 'Default') {
@@ -158,7 +158,7 @@ export const Voip = React.createClass({
 });
 
 function mapStateToProps(state) {
-  let myState = state.voip;
+  const myState = state.voip;
 
   return {
     store: myState,
@@ -169,14 +169,14 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    myActions
+    myActions,
   ), dispatch);
 }
 
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
-  validator.mergeProps(validOptions)
+  validator.mergeProps(validOptions),
 )(Voip);
 
 export const reducer = myReducer;

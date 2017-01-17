@@ -266,20 +266,20 @@ export const Device = React.createClass({
               return val || deviceMac;
             },
         }, {
-            id: 'model',
-            text: _('Model'),
-          }, {
-            id: 'softversion',
-            text: _('Version'),
-          }, {
-            id: 'operationhours',
-            text: _('Uptime'),
-            filter: 'connectTime',
-          }, {
-            id: 'operate',
-            text: _('Action'),
-            filter: 'translate',
-          },
+          id: 'model',
+          text: _('Model'),
+        }, {
+          id: 'softversion',
+          text: _('Version'),
+        }, {
+          id: 'operationhours',
+          text: _('Uptime'),
+          filter: 'connectTime',
+        }, {
+          id: 'operate',
+          text: _('Action'),
+          filter: 'translate',
+        },
       ]);
     } else {
       ret = fromJS([

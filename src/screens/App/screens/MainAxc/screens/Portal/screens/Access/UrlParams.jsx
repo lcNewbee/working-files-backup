@@ -76,7 +76,7 @@ const settingsOptions = fromJS([
     validator: validator({
       rules: 'mac',
     }),
-  }
+  },
 ]).groupBy(item => item.get('fieldset'))
 .toList();
 
