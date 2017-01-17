@@ -157,6 +157,13 @@ const settingsOptions = fromJS([
       },
     ],
   }, {
+    id: 'auth_interface',
+    required: true,
+    fieldset: 'base_setting',
+    className: 'cols col-6',
+    label: _('Auth Interface'),
+    type: 'text',
+  }, {
     id: 'isComputer',
     required: true,
     fieldset: 'base_setting',
@@ -198,15 +205,71 @@ const settingsOptions = fromJS([
     label: _('Late Authtime'),
     type: 'text',
     help: _('second'),
+  }, {
+    id: 'list',
+    type: 'list',
+    list: [
+      {
+        id: 'enable',
+        required: 'true',
+        label: _('Initiate Mode'),
+        type: 'checkbox',
+        display: 'block',
+      }, {
+        id: 'basid',
+        required: 'true',
+        label: _('Bas ID'),
+        type: 'text',
+        display: 'block',
+      }, {
+        id: 'type',
+        required: 'true',
+        label: _('Auth Types'),
+        type: 'text',
+        display: 'block',
+      }, {
+        id: 'username',
+        required: 'true',
+        label: _('User Name'),
+        type: 'text',
+        display: 'block',
+      }, {
+        id: 'password',
+        required: 'true',
+        label: _('Password'),
+        type: 'password',
+        display: 'block',
+      }, {
+        id: 'basip',
+        required: 'true',
+        label: _('Bas IP'),
+        noForm: true,
+        noTitle: true,
+        type: 'text',
+        display: 'block',
+      }, {
+        id: 'sessiontime',
+        required: 'true',
+        label: _('Sesssion Time'),
+        type: 'text',
+        display: 'block',
+      }, {
+        id: 'url',
+        required: 'true',
+        label: _('URL After Auth'),
+        type: 'text',
+        display: 'block',
+      },
+    ],
   },
 ]);
 
 export default class View extends React.Component {
   render() {
-    console.log(this.props.test)
     return (
       <AppScreen
         {...this.props}
+        className="port-base"
         settingsFormOptions={settingsOptions}
         hasSettingsSaveButton
         noTitle

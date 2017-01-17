@@ -121,6 +121,12 @@ $boder-color:         #ccc;
     > .form-group {
       margin-bottom: 0;
     }
+    .form-control {
+      margin-left: 0;
+      .text {
+        width: auto;
+      }
+    }
   }
 }
 .en {

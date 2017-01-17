@@ -27,14 +27,91 @@
       "list": [
         {
           "id": "1",
+          "enbale": "0",
           "basid": "0",
           "type": "0",
-          "username": "",
+          "username": "username",
+          "password": "123",
+          "basip": "192.168.4.225",
+          "url": "http://www.baidu.com",
+          "sessiontime": "0"
+        },
+        {
+          "id": "2",
+          "enbale": "0",
+          "basid": "0",
+          "type": "1",
+          "username": "username",
+          "password": "123",
+          "basip": "192.168.4.225",
+          "url": "http://www.baidu.com",
+          "sessiontime": "0"
+        },
+        {
+          "id": "3",
+          "enbale": "0",
+          "basid": "0",
+          "type": "2",
+          "username": null,
+          "password": null,
+          "basip": "192.168.4.225",
+          "url": "http://www.baidu.com",
+          "sessiontime": "0"
+        },
+        {
+          "id": "4",
+          "enbale": "0",
+          "basid": "0",
+          "type": "3",
+          "username": "username",
+          "password": "123",
+          "basip": "192.168.4.225",
+          "url": "http://www.baidu.com",
+          "sessiontime": "0"
+        },
+        {
+          "id": "5",
+          "basid": "0",
+          "type": "4",
+          "username": "username",
+          "password": "123",
+          "basip": "192.168.4.225",
+          "url": "http://www.baidu.com",
+          "sessiontime": "0"
+        },
+        {
+          "id": "6",
+          "basid": "0",
+          "type": "5",
+          "username": "username",
+          "password": "123",
+          "basip": "192.168.4.225",
+          "url": "http://www.baidu.com",
+          "sessiontime": "0"
+        },
+        {
+          "id": "7",
+          "basid": "0",
+          "enbale": "0",
+          "type": "6",
+          "username": "username",
           "password": "",
-          "basip": null,
+          "basip": "192.168.4.225",
+          "url": "http://www.baidu.com",
+          "sessiontime": "0"
+        },
+        {
+          "id": "8",
+          "basid": "0",
+          "enbale": "1",
+          "type": "7",
+          "username": "username",
+          "password": "123",
+          "basip": "192.168.4.225",
           "url": "http://www.baidu.com",
           "sessiontime": "0"
         }
       ]
     }
   }
+}

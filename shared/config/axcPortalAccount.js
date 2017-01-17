@@ -10,40 +10,48 @@ export const baseSetting = fromJS([
     required: true,
     maxLength: '32',
   }, {
-    id: 'date',
-    label: _('Expired Date'),
-    noForm: true,
-    className: 'cols col-6',
-    type: 'text',
-    required: true,
-
-  }, {
-    id: 'time',
-    label: _('Left Time'),
-    className: 'cols col-6',
-    noForm: true,
-    formProps: {
-      type: 'text',
-      required: true,
-    },
-  }, {
-    id: 'octets',
-    label: _('Left Traffic'),
-    className: 'cols col-6',
-    noForm: true,
-    formProps: {
-      type: 'text',
-      required: true,
-    },
-  }, {
     id: 'password',
     label: _('Password'),
     className: 'cols col-6',
     type: 'pwd',
     noTable: true,
-    formProps: {
-      required: true,
-    },
+    required: true,
+  }, {
+    id: 'ex1',
+    label: _('Question'),
+    className: 'cols col-6',
+    noTable: true,
+    type: 'text',
+  }, {
+    id: 'ex2',
+    label: _('Answer'),
+    className: 'cols col-6',
+    noTable: true,
+    type: 'text',
+  }, {
+    id: 'type',
+    label: _('Type'),
+    className: 'cols col-6',
+    options: [
+      {
+        value: '0',
+        label: _('Unavailability'),
+      }, {
+        value: '1',
+        label: _('Timekeeping'),
+      }, {
+        value: '2',
+        label: _('Buy Out'),
+      }, {
+        value: '3',
+        label: _('Traffic'),
+      },
+    ],
+    defaultValue: '0',
+    type: 'select',
+    required: true,
+    placeholder: _('Please Select ') + _('Type'),
+
   }, {
     id: 'maclimit',
     label: _('Mac Limit'),
@@ -58,21 +66,16 @@ export const baseSetting = fromJS([
       },
     ],
     defaultValue: '0',
-    formProps: {
-      type: 'select',
-      required: true,
-      label: _('Mac Limit'),
-      placeholder: _('Please Select ') + _('Mac Limit'),
-    },
+    type: 'select',
+    required: true,
+    placeholder: _('Please Select ') + _('Mac Limit'),
   }, {
     id: 'maclimitcount',
     label: _('Mac Quantity'),
     className: 'cols col-6',
-    formProps: {
-      type: 'num',
-      min: '0',
-      required: true,
-    },
+    type: 'num',
+    min: '0',
+    required: true,
   }, {
     id: 'autologin',
     label: _('Auto Login'),
@@ -87,16 +90,14 @@ export const baseSetting = fromJS([
       },
     ],
     defaultValue: '0',
-    formProps: {
-      type: 'select',
-      required: true,
-      label: _('Auto Login'),
-      placeholder: _('Auto Login') + _('Auto Login'),
-    },
+    type: 'select',
+    required: true,
+    placeholder: _('Auto Login') + _('Auto Login'),
+
   }, {
     id: 'speed',
-    className: 'cols col-6',
     label: _('Speed Limit'),
+    className: 'cols col-6',
     options: [
       {
         value: '0',
@@ -104,12 +105,9 @@ export const baseSetting = fromJS([
       },
     ],
     defaultValue: '0',
-    formProps: {
-      type: 'select',
-      required: true,
-      label: _('Speed Limit'),
-      placeholder: _('Please Select ') + _('Speed Limit'),
-    },
+    type: 'select',
+    required: true,
+    placeholder: _('Please Select ') + _('Speed Limit'),
   }, {
     id: 'ex4',
     label: _('Last Unbind Month'),
@@ -135,11 +133,10 @@ export const advancedSetting = fromJS([
     id: 'name',
     label: _('Name'),
     noTable: true,
-    className: 'cols col-6',
-    formProps: {
-      type: 'text',
-      maxLength: '32',
-    },
+    className: 'cols col-12',
+    type: 'text',
+    maxLength: '32',
+
   }, {
     id: 'gender',
     label: _('Gender'),
@@ -155,52 +152,41 @@ export const advancedSetting = fromJS([
       },
     ],
     defaultValue: '0',
-    formProps: {
-      type: 'select',
-      label: _('Gender'),
-      placeholder: _('Please Select ') + _('Gender'),
-    },
+    type: 'select',
+    placeholder: _('Please Select ') + _('Gender'),
+
   }, {
     id: 'idnumber',
     label: _('ID No.'),
+    className: 'cols col-6',
     noTable: true,
-    formProps: {
-      type: 'num',
-      className: 'cols col-6',
-    },
+    type: 'num',
   }, {
     id: 'phoneNumber',
     label: _('Phone'),
     noTable: true,
     className: 'cols col-6',
-    formProps: {
-      type: 'num',
-    },
+    type: 'num',
   }, {
     id: 'address',
     label: _('Address'),
     className: 'cols col-6',
     noTable: true,
-    formProps: {
-      type: 'text',
-    },
+    type: 'text',
   }, {
     id: 'email',
     label: _('Email'),
+    className: 'cols col-6',
     noTable: true,
-    formProps: {
-      type: 'text',
-      validator: validator({
-        rules: 'email',
-      }),
-    },
+    type: 'text',
+    validator: validator({
+      rules: 'email',
+    }),
   }, {
     id: 'description',
     label: _('Detail Information'),
     className: 'cols col-6',
     noTable: true,
-    formProps: {
-      type: 'text',
-    },
+    type: 'text',
   },
 ]);

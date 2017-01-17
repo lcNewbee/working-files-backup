@@ -291,14 +291,14 @@ export default class View extends React.Component {
       'onAction',
       'onSave',
       'toggleBox',
-      // 'getDefaultEditData',
+      'getDefaultEditData',
       'onBeforeSave',
     ]);
   }
 
-  // componentWillMount() {
-  //   this.getDefaultEditData();
-  // }
+  componentWillMount() {
+    this.getDefaultEditData();
+  }
   onBeforeSave() {
     const { store } = this.props;
     const myScreenId = store.get('curScreenId');
@@ -316,31 +316,31 @@ export default class View extends React.Component {
         });
     }
   }
-  // getDefaultEditData() {
-  //   const myDefaultEditData = {};
-  //   baseSetting.forEach(
-  //     ($$item, index) => {
-  //       const curId = $$item.get('id');
-  //       const defaultValue = $$item.get('defaultValue') || '';
+  getDefaultEditData() {
+    const myDefaultEditData = {};
+    baseSetting.forEach(
+      ($$item, index) => {
+        const curId = $$item.get('id');
+        const defaultValue = $$item.get('defaultValue') || '';
 
-  //       myDefaultEditData[curId] = defaultValue;
+        myDefaultEditData[curId] = defaultValue;
 
-  //       return index;
-  //     },
-  //   );
-  //   advancedSetting.forEach(
-  //     ($$item, index) => {
-  //       const curId = $$item.get('id');
-  //       const defaultValue = $$item.get('defaultValue') || '';
+        return index;
+      },
+    );
+    advancedSetting.forEach(
+      ($$item, index) => {
+        const curId = $$item.get('id');
+        const defaultValue = $$item.get('defaultValue') || '';
 
-  //       myDefaultEditData[curId] = defaultValue;
+        myDefaultEditData[curId] = defaultValue;
 
-  //       return index;
-  //     },
-  //   );
+        return index;
+      },
+    );
 
-  //   this.defaultEditData = myDefaultEditData;
-  // }
+    this.defaultEditData = myDefaultEditData;
+  }
   toggleBox(moduleName) {
     this.setState({
       [moduleName]: !this.state[moduleName],
@@ -365,12 +365,10 @@ export default class View extends React.Component {
           if ($$ret.get('notEditable')) {
             $$ret = $$ret.set('disabled', true);
           }
-
           return $$ret;
         },
       );
     }
-
 
     return (
       <div className="o-box row">
@@ -430,6 +428,7 @@ export default class View extends React.Component {
               <FormContainer
                 id="advancedSetting"
                 options={advancedSetting}
+                className="o-form--compassed"
                 data={$$curData}
                 onChangeData={this.props.updateCurEditListItem}
                 onSave={() => this.onSave('advancedSetting')}
