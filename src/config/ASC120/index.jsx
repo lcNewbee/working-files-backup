@@ -97,7 +97,7 @@ const funConfig = {
       'maxClients',
       // 'speedLimit',
       // 'portalEnable',         // portal功能开关
-      'airTimeEnable',  // 时间公平性
+      // 'airTimeEnable',  // 时间公平性
     ],
     portalFun: true,
   },

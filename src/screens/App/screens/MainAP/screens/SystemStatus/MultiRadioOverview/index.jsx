@@ -734,7 +734,7 @@ export default class SystemStatus extends React.Component {
                       <dd>{switchInfo ? switchInfo.get('ip') : ''}</dd>
                     </dl>
                     <dl className="o-description-list-row">
-                      <dt>{_('Mask')}</dt>
+                      <dt>{_('Subnet Mask')}</dt>
                       <dd>{switchInfo ? switchInfo.get('mask') : ''}</dd>
                     </dl>
                     <dl className="o-description-list-row">
@@ -794,7 +794,7 @@ export default class SystemStatus extends React.Component {
             >
               <div className="o-description-list o-description-list--lg info-box">
                 <dl className="o-description-list-row">
-                  <dt>{_('Device Mode')}</dt>
+                  <dt>{_('Device Model')}</dt>
                   <dd>{deviceModel}</dd>
                 </dl>
                 <dl className="o-description-list-row">

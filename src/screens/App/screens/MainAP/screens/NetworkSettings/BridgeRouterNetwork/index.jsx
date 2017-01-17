@@ -9,14 +9,17 @@ import {
 import validator from 'shared/utils/lib/validator';
 import * as appActions from 'shared/actions/app';
 import * as sharedActions from 'shared/actions/settings';
+import Modal from 'shared/components/Modal';
+import ProgressBar from 'shared/components/ProgressBar';
 // import * as sharedReducer from 'shared/reducers/settings';
 // import * as actions from './actions';
+import * as selfActions from './actions';
 import reducer from './reducer';
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
-
+  selfState: PropTypes.instanceOf(Map),
   // route: PropTypes.object,
   // initSettings: PropTypes.func,
   // fetchSettings: PropTypes.func,
@@ -26,6 +29,7 @@ const propTypes = {
   validateOption: PropTypes.object,
   validateAll: PropTypes.func,
   route: PropTypes.object,
+  changeProgressModalShowStatus: PropTypes.func,
 };
 
 const defaultProps = {};
@@ -142,6 +146,7 @@ export default class NetworkSettings extends React.Component {
             }
           }
           this.props.saveSettings();
+          this.props.changeProgressModalShowStatus(true);
         }
       });
   }
@@ -220,8 +225,32 @@ export default class NetworkSettings extends React.Component {
       lanIp, lanMask, firstDNS, secondDNS, validGateway, validVlanId1, validVlanId2,
     } = this.props.validateOption;
     const funConfig = this.props.route.funConfig;
+    const nextIpAddr = this.props.store.getIn(['curData', 'ip']);
     return (
       <div>
+        <Modal
+          isShow={this.props.selfState.get('showProgressModal')}
+          cancelButton={false}
+          noFooter={false}
+          okButton={false}
+          draggable
+          title={_('The configuration is saving now, please wait...')}
+        >
+          <ProgressBar
+            isShow
+            start
+            time={60}
+            step={600}
+            callback={() => {
+              const nextProto = this.props.store.getIn(['curData', 'proto']);
+              if (this.curProto === nextProto && this.curProto === 'dhcp') {
+                window.location = '#';
+              } else {
+                window.location = nextProto === 'dhcp' ? 'http://192.168.188.1' : `http://${nextIpAddr}`;
+              }
+            }}
+          />
+        </Modal>
         {
           funConfig.router ? (
             // 网络设置，有router模式
@@ -604,12 +633,13 @@ function mapStateToProps(state) {
   return {
     app: state.app,
     store: state.settings,
+    selfState: state.networksettings,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
-    utils.extend({}, appActions, sharedActions),
+    utils.extend({}, appActions, sharedActions, selfActions),
     dispatch,
   );
 }

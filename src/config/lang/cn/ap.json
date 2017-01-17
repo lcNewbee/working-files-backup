@@ -370,6 +370,7 @@
   "Please input a valid MAC address like AA:BB:CC:DD:EE:FF or AA-BB-CC-DD-EE-FF": "请输入正确的MAC地址，比如：AA:BB:CC:DD:EE:FF或AA-BB-CC-DD-EE-FF",
   "The MAC address already exists in the mac list !": "该MAC地址已经在列表中存在！",
   "username or password error": "用户名或密码错误",
+  "The configuration is saving now, please wait...": "配置正在保存，请稍候...",
   "password error": "密码错误",
   "Language Setting": "语言设置",
   "Start Scan": "开始扫描",
@@ -386,5 +387,7 @@
   "connected": "已连接",
   "Station Flow": "流量统计",
   "CPU/MEM Usage": "CPU及内存占用率",
-  "Bandwidth": "信道频宽"
+  "Bandwidth": "信道频宽",
+  "Subnet Mask": "子网掩码",
+  "Radios Apply": "射频选择"
 }
