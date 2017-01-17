@@ -157,13 +157,6 @@ const settingsOptions = fromJS([
       },
     ],
   }, {
-    id: 'auth_interface',
-    required: true,
-    fieldset: 'base_setting',
-    className: 'cols col-6',
-    label: _('Auth Interface'),
-    type: 'text',
-  }, {
     id: 'isComputer',
     required: true,
     fieldset: 'base_setting',
@@ -211,52 +204,58 @@ const settingsOptions = fromJS([
     list: [
       {
         id: 'enable',
-        required: 'true',
         label: _('Initiate Mode'),
         type: 'checkbox',
         display: 'block',
       }, {
-        id: 'basid',
-        required: 'true',
-        label: _('Bas ID'),
-        type: 'text',
-        display: 'block',
-      }, {
         id: 'type',
-        required: 'true',
-        label: _('Auth Types'),
-        type: 'text',
-        display: 'block',
+        label: _('Authentication Types'),
+        options: [
+          {
+            value: '0',
+            label: _('One Key Authentication'),
+          }, {
+            value: '1',
+            label: _('Access User Authentication'),
+          }, {
+            value: '2',
+            label: _('Radius Authentication'),
+          }, {
+            value: '3',
+            label: _('App Authentication'),
+          }, {
+            value: '4',
+            label: _('Messages Authentication'),
+          }, {
+            value: '5',
+            label: _('Wechat Authentication'),
+          }, {
+            value: '6',
+            label: _('Public Platform Authentication'),
+          }, {
+            value: '7',
+            label: _('Visitor Authentication'),
+          },
+        ],
+        noForm: true,
       }, {
         id: 'username',
-        required: 'true',
-        label: _('User Name'),
+        label: _('Public User Name'),
         type: 'text',
         display: 'block',
       }, {
         id: 'password',
-        required: 'true',
-        label: _('Password'),
+        label: _('Public Password'),
         type: 'password',
         display: 'block',
       }, {
-        id: 'basip',
-        required: 'true',
-        label: _('Bas IP'),
-        noForm: true,
-        noTitle: true,
-        type: 'text',
-        display: 'block',
-      }, {
         id: 'sessiontime',
-        required: 'true',
         label: _('Sesssion Time'),
         type: 'text',
         display: 'block',
       }, {
         id: 'url',
-        required: 'true',
-        label: _('URL After Auth'),
+        label: _('URL After Authentication'),
         type: 'text',
         display: 'block',
       },

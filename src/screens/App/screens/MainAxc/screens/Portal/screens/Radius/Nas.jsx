@@ -47,8 +47,8 @@ const listOptions = fromJS([
     id: 'ex2',
     text: _('Acc Send Interval'),
     defaultValue: '300',
+    type: 'num',
     formProps: {
-      type: 'num',
       min: '0',
       required: true,
     },
@@ -56,8 +56,8 @@ const listOptions = fromJS([
     id: 'ex3',
     text: _('Check Period'),
     defaultValue: '600',
+    type: 'num',
     formProps: {
-      type: 'num',
       min: '0',
       required: true,
     },
@@ -65,9 +65,9 @@ const listOptions = fromJS([
     id: 'ex4',
     text: _('Idle Time'),
     defaultValue: '600',
+    type: 'num',
     formProps: {
       min: '0',
-      type: 'num',
       required: true,
     },
   }, {

@@ -13,7 +13,7 @@ export const baseSetting = fromJS([
     id: 'password',
     label: _('Password'),
     className: 'cols col-6',
-    type: 'pwd',
+    type: 'password',
     noTable: true,
     required: true,
   }, {
@@ -73,8 +73,7 @@ export const baseSetting = fromJS([
     id: 'maclimitcount',
     label: _('Mac Quantity'),
     className: 'cols col-6',
-    type: 'num',
-    min: '0',
+    type: 'text',
     required: true,
   }, {
     id: 'autologin',
