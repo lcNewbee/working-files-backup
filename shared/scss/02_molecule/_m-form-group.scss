@@ -115,6 +115,14 @@ $boder-color:         #ccc;
   margin-top: 20px;
 }
 
+.table {
+  td,
+  th {
+    > .form-group {
+      margin-bottom: 0;
+    }
+  }
+}
 .en {
   .form-group {
     > label {
@@ -126,6 +134,10 @@ $boder-color:         #ccc;
     }
 
     &.form-group--block {
+      > label,
+      .error {
+        display: block,
+      }
       .form-control {
         margin-left: 0;
       }

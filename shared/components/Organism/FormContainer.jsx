@@ -4,6 +4,7 @@ import { Map, List, fromJS } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import FormGroup from '../Form/FormGroup';
 import SaveButton from '../Button/SaveButton';
+import Table from '../Table/';
 
 const propTypes = {
   id: PropTypes.string,
@@ -57,6 +58,7 @@ class FormContainer extends React.Component {
       'onChangeFormGoupData',
       'changeFormGoupData',
       'renderFormGroup',
+      'renderFormGroupList',
       'renderFormGroupTree',
     ]);
     this.syncData = {};
@@ -108,13 +110,12 @@ class FormContainer extends React.Component {
     }
   }
   onChangeFormGoupData(option) {
-    const { id, data, saveOnChange } = option;
-    const upDate = {};
+    const { data, saveOnChange, valueQuery } = option;
+    let $$upDate = fromJS(this.props.data);
 
-    upDate[id] = data.value;
-
+    $$upDate = $$upDate.setIn(valueQuery, data.value);
     if (this.props.onChangeData) {
-      this.props.onChangeData(upDate);
+      this.props.onChangeData($$upDate);
     }
 
     if (saveOnChange) {
@@ -148,14 +149,16 @@ class FormContainer extends React.Component {
       );
     }
   }
-  renderFormGroup(option, index) {
+  renderFormGroup($$option, valueQuery) {
     const {
       invalidMsg, validateAt, onValidError, actionQuery, id, actionable,
     } = this.props;
-    const myProps = option.toJS();
-    const formGroupId = myProps.id;
+    const myProps = $$option.toJS();
+    const index = $$option.get('__index__');
     const myComponent = myProps.component;
     const checkboxValue = myProps.value || '1';
+    let formGroupId = myProps.id;
+    let myValueQuery = valueQuery;
     let isShow = true;
     let $$data = this.props.data;
 
@@ -168,9 +171,16 @@ class FormContainer extends React.Component {
     }
 
     if (formGroupId) {
+      if (!myValueQuery) {
+        myValueQuery = [formGroupId];
+      } else {
+        formGroupId = myValueQuery.join('.');
+      }
+
       myProps.name = formGroupId;
       myProps.key = `${formGroupId}${index}`;
     }
+
 
     // 同时支持 Map 或 object 数据
     // 数据的填充
@@ -180,8 +190,8 @@ class FormContainer extends React.Component {
       }
 
       // 正常获取值
-      if ($$data.get(formGroupId) !== undefined) {
-        myProps.value = $$data.get(formGroupId);
+      if ($$data.getIn(myValueQuery) !== undefined) {
+        myProps.value = $$data.getIn(myValueQuery);
       }
 
       // 有特殊初始化函数 initValue，只执行一次
@@ -220,6 +230,7 @@ class FormContainer extends React.Component {
       data: myData,
       onBeforeChange: myProps.onBeforeChange,
       saveOnChange: myProps.saveOnChange,
+      valueQuery: myValueQuery,
       $$data,
     });
 
@@ -253,18 +264,77 @@ class FormContainer extends React.Component {
       />
     ) : null;
   }
-  renderFormGroupTree(options, i) {
-    // Map直接渲染FormGroup
-    if (Map.isMap(options)) {
-      return this.renderFormGroup(options, i);
+  renderFormGroupList($$option) {
+    let $$data = this.props.data;
+    const formGroupListId = $$option.get('id');
+    let $$optionsList = $$option.get('list');
+    let ret = null;
+
+    if ($$data) {
+      if (!Map.isMap($$data)) {
+        $$data = fromJS($$data);
+      }
     }
 
+    if ($$data.get(formGroupListId)) {
+      $$optionsList = $$optionsList.map(
+        $$item => $$item.set(
+          'transform',
+          (val, $$listData, index) => this.renderFormGroup(
+            $$item.merge({
+              __index__: index,
+              showLabel: false,
+              display: 'block',
+            }),
+            [formGroupListId, index, $$item.get('id')],
+          ),
+        ),
+      );
+
+      ret = (
+        <Table
+          options={$$optionsList}
+          list={$$data.get(formGroupListId)}
+        />
+      );
+    }
+    // if ($$data.get(formGroupListId)) {
+    //   ret = $$data.get(formGroupListId).map(
+    //     ($$item, index) => $$optionsList.map(
+    //       ($$subItem, i) => this.renderFormGroup(
+    //         $$subItem.set('__index__', i),
+    //         [formGroupListId, index, $$subItem.get('id')],
+    //       ),
+    //     ),
+    //   );
+    // }
+
+    return ret;
+  }
+  renderFormGroupTree($$options, i) {
+    let ret = null;
+
+    // Map直接渲染FormGroup
+    if (Map.isMap($$options)) {
+      // 如果不是列表
+      if ($$options.get('type') !== 'list') {
+        ret = this.renderFormGroup(
+          $$options.set('__index__', i),
+        );
+      } else {
+        ret = this.renderFormGroupList(
+          $$options.set('__index__', i),
+        );
+      }
+
     // List 则需要循环渲染
-    if (List.isList(options)) {
-      return options.map((item, index) => {
-        const $$fieldsetOption = item.getIn([0, 'fieldsetOption']);
+    } else if (List.isList($$options)) {
+      ret = $$options.map(($$item, index) => {
+        const $$fieldsetOption = $$item.getIn([0, 'fieldsetOption']);
+        const fieldsetKey = `${$$item.getIn([0, 'fieldset'])}Fileset`;
         let fieldsetClassName = 'o-form__fieldset';
-        let legendText = item.getIn([0, 'legend']);
+        let legendText = $$item.getIn([0, 'legend']);
+
 
         if ($$fieldsetOption) {
           legendText = legendText || $$fieldsetOption.get('legend');
@@ -277,23 +347,23 @@ class FormContainer extends React.Component {
         if (legendText) {
           return (
             <fieldset
-              key={index}
+              key={fieldsetKey}
               className={fieldsetClassName}
             >
               <legend className="o-form__legend">{legendText}</legend>
               {
-                this.renderFormGroupTree(item, index)
+                this.renderFormGroupTree($$item, index)
               }
             </fieldset>
           );
         }
 
         // 如果是无标题 List
-        return this.renderFormGroupTree(item, index);
+        return this.renderFormGroupTree($$item, index);
       });
     }
 
-    return null;
+    return ret;
   }
   render() {
     const {

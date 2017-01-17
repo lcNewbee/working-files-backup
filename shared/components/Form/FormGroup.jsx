@@ -33,10 +33,11 @@ const propTypes = {
   children: PropTypes.node,
   'data-label': PropTypes.string,
   form: PropTypes.string,
+  showLabel: PropTypes.bool,
 };
 
 const defaultProps = {
-
+  showLabel: true,
 };
 
 class FormGroup extends React.Component {
@@ -116,7 +117,7 @@ class FormGroup extends React.Component {
 
   render() {
     const {
-      help, errMsg, required, children, role, id, label,
+      help, errMsg, required, children, role, id, label, showLabel,
       className, display, style, disabled, name, value,
     } = this.props;
     const { check, checkClear } = this;
@@ -144,7 +145,7 @@ class FormGroup extends React.Component {
         ref={ref => (this.myRef = ref)}
       >
         {
-          label ? (
+          label && showLabel ? (
             <label htmlFor={id}>
               {label}
               {required ? <span className="text-required">*</span> : null}

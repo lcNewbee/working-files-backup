@@ -6,10 +6,15 @@ export function getActionable(props, moduleName) {
   const userType = props.app.getIn(['login', 'usertype']);
   const $$purviewList = fromJS(purview.split(','));
   const curModule = moduleName || props.route.path.split('/')[2];
-  const curModuleVal = fromJS(purviewOptions).find(
+  const $$curModuleItem = fromJS(purviewOptions).find(
     $$item => $$item.get('module') === curModule,
-  ).get('value');
+  );
   let ret = false;
+  let curModuleVal = '';
+
+  if ($$curModuleItem) {
+    curModuleVal = $$curModuleItem.get('value');
+  }
 
   // admin 或者 分支权限 all的管理员
   if (purview === 'all' || userType === 0) {

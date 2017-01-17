@@ -11,6 +11,7 @@
     border-bottom: 1px solid #dedede;
     text-overflow: ellipsis;
     white-space: nowrap;
+    vertical-align: top;
 
     .a-checkbox--square {
       input[type=checkbox] + label {
