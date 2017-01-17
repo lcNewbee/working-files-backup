@@ -1,7 +1,7 @@
 {
   "state": {
-  "code": 2000,
-  "msg": "ok"
+    "code": 2000,
+    "msg": "ok"
   },
   "data": {
     "settings": {
@@ -12,8 +12,12 @@
       "url": "url",
       "basip": "basip",
       "ssid": "ssid",
-      "apmac": "00:11:22:33:22:33"
+      "apmac": "00:11:22:33:22:33",
+      "authTypes": [{
+        "apmac": "00:11:22:33:22:33"
+      }, {
+        "apmac": "02:11:22:33:22:31"
+      }]
     }
   }
 }
-

@@ -76,6 +76,39 @@ const settingsOptions = fromJS([
     validator: validator({
       rules: 'mac',
     }),
+  }, {
+    id: 'authTypes',
+    type: 'list',
+    list: [
+      {
+        id: 'apmac',
+        required: 'true',
+        fieldset: 'url_setting',
+        label: _('AP Mac'),
+        type: 'text',
+        validator: validator({
+          rules: 'mac',
+        }),
+      }, {
+        id: 'amac',
+        required: 'true',
+        fieldset: 'url_setting',
+        label: _('AP Mac'),
+        type: 'text',
+        validator: validator({
+          rules: 'mac',
+        }),
+      }, {
+        id: 'amac',
+        required: 'true',
+        fieldset: 'url_setting',
+        label: _('AP Mac'),
+        type: 'text',
+        validator: validator({
+          rules: 'mac',
+        }),
+      },
+    ],
   },
 ]).groupBy(item => item.get('fieldset'))
 .toList();
