@@ -1,148 +1,222 @@
 import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
-import { fromJS, Map } from 'immutable';
+import { Map, fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
-import validator from 'shared/utils/lib/validator';
 import AppScreen from 'shared/components/Template/AppScreen';
-import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
+import * as screenActions from 'shared/actions/screens';
+import validator from 'shared/utils/lib/validator';
 
-const listOptions = fromJS([
+const propTypes = {
+  store: PropTypes.instanceOf(Map),
+  app: PropTypes.instanceOf(Map),
+  test: PropTypes.number,
+};
+const defaultProps = {
+  test: 0,
+};
+
+const settingsOptions = fromJS([
   {
-    id: 'name',
-    text: _('Name'),
-    formProps: {
-      type: 'plain-text',
+    id: 'bas_ip',
+    label: _('Bas IP'),
+    fieldset: 'base_setting',
+    fieldsetOption: {
+      legend: _('Base Setting'),
     },
-  }, {
-    id: 'workModel',
-    text: _('Physical Mode'),
-    options: [
-      {
-        value: 'half',
-        label: _('Simplex'),
-      }, {
-        value: 'full',
-        label: _('Duplex'),
-      }, {
-        value: 'auto',
-        label: _('Auto'),
-      },
-    ],
-    formProps: {
-      type: 'switch',
-    },
+    type: 'text',
+    required: true,
+    validator: validator({
+      rules: 'ip',
+    }),
   },
   {
-    id: 'speed',
-    text: _('Port Speed'),
+    id: 'bas_port',
+    fieldset: 'base_setting',
+    className: 'cols col-6',
+    label: _('Bas Port'),
+    type: 'text',
+    required: true,
+  },
+  {
+    id: 'sharedSecret',
+    type: 'password',
+    required: true,
+    className: 'cols col-6',
+    fieldset: 'base_setting',
+    label: _('Shared Secret'),
+  },
+  {
+    id: 'bas_user',
+    type: 'text',
+    required: true,
+    className: 'cols col-6',
+    fieldset: 'base_setting',
+    label: _('User'),
+  },
+  {
+    id: 'bas_pwd',
+    type: 'password',
+    required: true,
+    className: 'cols col-6',
+    fieldset: 'base_setting',
+    label: _('Password'),
+  },
+  {
+    id: 'bas',
+    required: true,
+    fieldset: 'base_setting',
+    className: 'cols col-6',
+    label: _('Device Type'),
+    type: 'select',
+    defaultValue: '0',
     options: [
       {
-        value: '10',
-        label: '10',
-      }, {
-        value: '100',
-        label: '100',
-      }, {
-        value: '1000',
-        label: _('1000'),
+        value: '0',
+        label: _('Standard'),
       },
     ],
-    formProps: {
-      type: 'switch',
-      showPrecondition(data) {
-        return data.get('workModel') !== 'auto';
-      },
-    },
-  }, {
-    id: 'description',
-    text: _('Description'),
-    formProps: {
-      type: 'textarea',
-      maxLength: '64',
-    },
-  }, {
-    id: 'status',
-    text: _('Port Status'),
+  },
+  {
+    id: 'portalVer',
+    fieldset: 'base_setting',
+    className: 'cols col-6',
+    label: _('Portal Vertion'),
+    type: 'select',
     options: [
       {
-        value: 1,
-        label: _('ON'),
-        render() {
-          return (
-            <span
-              style={{
-                color: 'green',
-              }}
-            >
-              {_('ON')}
-            </span>
-          );
-        },
+        value: '1',
+        label: _('V1/CMCC'),
       }, {
-        value: 0,
-        label: _('OFF'),
-        render() {
-          return (
-            <span
-              style={{
-                color: 'red',
-              }}
-            >
-              {_('OFF')}
-            </span>
-          );
-        },
+        value: '2',
+        label: _('V2'),
       },
     ],
-    formProps: {
-      type: 'checkbox',
-      value: '1',
-    },
+  },
+  {
+    id: 'authType',
+    required: true,
+    fieldset: 'base_setting',
+    className: 'cols col-6',
+    label: _('Auth Type'),
+    type: 'select',
+    options: [
+      {
+        value: '0',
+        label: _('PAP'),
+      }, {
+        value: '1',
+        label: _('CHAP'),
+      },
+    ],
+  },
+  {
+    id: 'timeoutSec',
+    required: true,
+    fieldset: 'base_setting',
+    className: 'cols col-6',
+    label: _('Time out'),
+    min: '0',
+  }, {
+    id: 'web',
+    required: true,
+    fieldset: 'base_setting',
+    label: _('Web Template'),
+    className: 'cols col-6',
+    type: 'select',
+    options: [
+      {
+        required: true,
+        value: '0',
+        label: _('Default Web'),
+      },
+    ],
+  }, {
+    id: 'isPortalCheck',
+    required: true,
+    fieldset: 'base_setting',
+    className: 'cols col-6',
+    label: _('Portal Acc'),
+    noForm: true,
+    type: 'text',
+  }, {
+    id: 'isOut',
+    required: true,
+    fieldset: 'base_setting',
+    className: 'cols col-6',
+    label: _('Enviroment Deployment'),
+    type: 'select',
+    options: [
+      {
+        value: '0',
+        label: _('Inside Network Deployment'),
+      }, {
+        value: '1',
+        label: _('Outside Network Deployment'),
+      },
+    ],
+  }, {
+    id: 'isComputer',
+    required: true,
+    fieldset: 'base_setting',
+    className: 'cols col-6',
+    label: _('Computer Auth'),
+    type: 'select',
+    options: [
+      {
+        value: '0',
+        label: _('Allowed'),
+      }, {
+        value: '1',
+        label: _('Forbidden'),
+      },
+    ],
+    defaultValue: '0',
+  }, {
+    id: 'lateAuth',
+    required: true,
+    fieldset: 'base_setting',
+    className: 'cols col-6',
+    label: _('Late Auth'),
+    type: 'select',
+    options: [
+      {
+        value: '0',
+        label: _('Closed'),
+      }, {
+        value: '1',
+        label: _('Open'),
+      },
+    ],
+    defaultValue: '0',
+  }, {
+    id: 'lateAuthTime',
+    required: true,
+    fieldset: 'base_setting',
+    className: 'cols col-6',
+    label: _('Late Authtime'),
+    type: 'text',
+    help: _('second'),
   },
 ]);
-const propTypes = {
-  route: PropTypes.object,
-  save: PropTypes.func,
-};
-const defaultProps = {};
 
-export default class OpenPortalBase extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.onAction = this.onAction.bind(this);
-  }
-
-  onAction(no, type) {
-    const query = {
-      no,
-      type,
-    };
-
-    this.props.save(this.props.route.formUrl, query)
-      .then((json) => {
-        if (json.state && json.state.code === 2000) {
-        }
-      });
-  }
-
+export default class View extends React.Component {
   render() {
+    console.log(this.props.test)
     return (
       <AppScreen
         {...this.props}
-        listOptions={listOptions}
-        addable={false}
-        deleteable={false}
-        actionable
+        settingsFormOptions={settingsOptions}
+        hasSettingsSaveButton
+        noTitle
       />
     );
   }
 }
 
-OpenPortalBase.propTypes = propTypes;
-OpenPortalBase.defaultProps = defaultProps;
+View.propTypes = propTypes;
+View.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
@@ -150,6 +224,7 @@ function mapStateToProps(state) {
     store: state.screens,
   };
 }
+
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
@@ -157,8 +232,9 @@ function mapDispatchToProps(dispatch) {
   ), dispatch);
 }
 
+
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(OpenPortalBase);
+)(View);

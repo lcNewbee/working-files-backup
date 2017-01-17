@@ -1,13 +1,19 @@
 import React, { PropTypes } from 'react';
-import utils from 'shared/utils';
 import { connect } from 'react-redux';
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
+import utils from 'shared/utils';
 import validator from 'shared/utils/lib/validator';
+import { baseSetting, advancedSetting } from 'shared/config/axcPortalAccount';
 import AppScreen from 'shared/components/Template/AppScreen';
-import * as screenActions from 'shared/actions/screens';
+import FormContainer from 'shared/components/Organism/FormContainer';
+import Icon from 'shared/components/Icon';
+// custom
 import * as appActions from 'shared/actions/app';
+import * as screenActions from 'shared/actions/screens';
+import * as propertiesActions from 'shared/actions/properties';
 
+// 列表相关配置
 const listOptions = fromJS([
   {
     id: 'loginName',
@@ -261,46 +267,200 @@ const listOptions = fromJS([
     noForm: true,
   },
 ]);
+
 const propTypes = {
-  route: PropTypes.object,
-  save: PropTypes.func,
+  app: PropTypes.instanceOf(Map),
+  store: PropTypes.instanceOf(Map),
+  validateAll: PropTypes.func,
+  onListAction: PropTypes.func,
+  updateCurEditListItem: PropTypes.func,
+  reportValidError: PropTypes.func,
 };
 const defaultProps = {};
 
-export default class OpenPortalBase extends React.Component {
+export default class View extends React.Component {
   constructor(props) {
     super(props);
-
-    this.onAction = this.onAction.bind(this);
-  }
-
-  onAction(no, type) {
-    const query = {
-      no,
-      type,
+    this.state = {
+      isBaseShow: true,
+      isAdvancedShow: false,
     };
 
-    this.props.save(this.props.route.formUrl, query)
-      .then((json) => {
-        if (json.state && json.state.code === 2000) {
-        }
-      });
+    utils.binds(this, [
+      'renderCustomModal',
+      'onAction',
+      'onSave',
+      'toggleBox',
+      // 'getDefaultEditData',
+      'onBeforeSave',
+    ]);
   }
 
+  // componentWillMount() {
+  //   this.getDefaultEditData();
+  // }
+  onBeforeSave() {
+    const { store } = this.props;
+    const myScreenId = store.get('curScreenId');
+    const $$myScreenStore = store.get(myScreenId);
+    const $$curData = $$myScreenStore.get('curListItem');
+  }
+  onSave(formId) {
+    if (this.props.validateAll) {
+      this.props.validateAll(formId)
+        .then((errMsg) => {
+          if (errMsg.isEmpty()) {
+            this.onBeforeSave();
+            this.props.onListAction();
+          }
+        });
+    }
+  }
+  // getDefaultEditData() {
+  //   const myDefaultEditData = {};
+  //   baseSetting.forEach(
+  //     ($$item, index) => {
+  //       const curId = $$item.get('id');
+  //       const defaultValue = $$item.get('defaultValue') || '';
+
+  //       myDefaultEditData[curId] = defaultValue;
+
+  //       return index;
+  //     },
+  //   );
+  //   advancedSetting.forEach(
+  //     ($$item, index) => {
+  //       const curId = $$item.get('id');
+  //       const defaultValue = $$item.get('defaultValue') || '';
+
+  //       myDefaultEditData[curId] = defaultValue;
+
+  //       return index;
+  //     },
+  //   );
+
+  //   this.defaultEditData = myDefaultEditData;
+  // }
+  toggleBox(moduleName) {
+    this.setState({
+      [moduleName]: !this.state[moduleName],
+    });
+  }
+  renderCustomModal() {
+    const { store, app } = this.props;
+    const myScreenId = store.get('curScreenId');
+    const $$myScreenStore = store.get(myScreenId);
+    const $$curData = $$myScreenStore.get('curListItem');
+    const actionType = $$myScreenStore.getIn(['actionQuery', 'action']);
+    let $$mybaseSetting = baseSetting;
+
+    if (actionType !== 'add' && actionType !== 'edit') {
+      return null;
+    }
+
+    if (actionType === 'edit') {
+      $$mybaseSetting = $$mybaseSetting.map(
+        ($$item) => {
+          let $$ret = $$item;
+          if ($$ret.get('notEditable')) {
+            $$ret = $$ret.set('disabled', true);
+          }
+
+          return $$ret;
+        },
+      );
+    }
+
+
+    return (
+      <div className="o-box row">
+        <div className="o-box__cell">
+          <h3
+            style={{ cursor: 'pointer' }}
+            onClick={() => this.toggleBox('isBaseShow')}
+          >
+            <Icon
+              name={this.state.isBaseShow ? 'minus-square' : 'plus-square'}
+              size="lg"
+              style={{
+                marginRight: '5px',
+              }}
+            />
+            {_('Base Settings')}
+          </h3>
+        </div>
+        {
+          this.state.isBaseShow ? (
+            <div className="o-box__cell">
+              <FormContainer
+                id="baseSetting"
+                className="o-form--compassed"
+                options={$$mybaseSetting}
+                data={$$curData}
+                onChangeData={this.props.updateCurEditListItem}
+                onSave={() => this.onSave('baseSetting')}
+                invalidMsg={app.get('invalid')}
+                validateAt={app.get('validateAt')}
+                onValidError={this.props.reportValidError}
+                isSaving={app.get('saving')}
+                hasSaveButton
+              />
+            </div>
+          ) : null
+        }
+        <div className="o-box__cell">
+          <h3
+            style={{ cursor: 'pointer' }}
+            onClick={() => this.toggleBox('isAdvancedShow')}
+          >
+            <Icon
+              name={this.state.isAdvancedShow ? 'minus-square' : 'plus-square'}
+              size="lg"
+              style={{
+                marginRight: '5px',
+              }}
+              onClick={() => this.toggleBox('isAdvancedShow')}
+            />
+            {_('Advanced Settings')}
+          </h3>
+        </div>
+        {
+          this.state.isAdvancedShow ? (
+            <div className="o-box__cell">
+              <FormContainer
+                id="advancedSetting"
+                options={advancedSetting}
+                data={$$curData}
+                onChangeData={this.props.updateCurEditListItem}
+                onSave={() => this.onSave('advancedSetting')}
+                invalidMsg={app.get('invalid')}
+                validateAt={app.get('validateAt')}
+                onValidError={this.props.reportValidError}
+                isSaving={app.get('saving')}
+                hasSaveButton
+              />
+            </div>
+          ) : null
+        }
+      </div>
+    );
+  }
   render() {
     return (
       <AppScreen
         {...this.props}
         listOptions={listOptions}
-        actionable
+        defaultEditData={this.defaultEditData}
+        modalChildren={this.renderCustomModal()}
         selectable
+        actionable
       />
     );
   }
 }
 
-OpenPortalBase.propTypes = propTypes;
-OpenPortalBase.defaultProps = defaultProps;
+View.propTypes = propTypes;
+View.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
@@ -308,15 +468,18 @@ function mapStateToProps(state) {
     store: state.screens,
   };
 }
+
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
     screenActions,
+    propertiesActions,
   ), dispatch);
 }
+
 
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(OpenPortalBase);
+)(View);

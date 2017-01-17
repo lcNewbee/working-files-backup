@@ -28,7 +28,7 @@ const settingsOptions = fromJS([
     fieldset: 'acTime',
     label: _('NTP Server'),
     type: 'text',
-    required: 'true',
+    required: true,
     validator: validator({
       rules: 'ip',
     }),
@@ -47,7 +47,7 @@ const settingsOptions = fromJS([
     fieldset: 'acTime',
     label: _('Poll Interval'),
     type: 'number',
-    required: 'true',
+    required: true,
     help: _('Second'),
     min: '5',
     max: '50000',
@@ -60,7 +60,7 @@ const settingsOptions = fromJS([
     fieldset: 'acTime',
     label: _('Time Zone'),
     type: 'select',
-    required: 'true',
+    required: true,
     options: TIME_ZONE,
   },
 ]).groupBy(item => item.get('fieldset'))

@@ -39,8 +39,8 @@ const listOptions = fromJS([
       required: true,
     },
   }, {
-    id: 'name',
-    text: _('Name'),
+    id: 'loginname',
+    text: _('Login Name'),
     formProps: {
       required: true,
     },
@@ -58,7 +58,7 @@ const listOptions = fromJS([
     id: 'endDate',
     text: _('Offline Date'),
     type: 'text',
-    required: 'true',
+    required: true,
   }, {
     id: 'time',
     text: _('Time'),
@@ -86,12 +86,14 @@ const listOptions = fromJS([
   }, {
     id: 'acctsessionid',
     text: _('Acc ID'),
+    noTable: true,
     formProps: {
       required: true,
     },
   }, {
     id: 'ex1',
     text: _('NAS Type'),
+    noTable: true,
     formProps: {
       required: true,
     },

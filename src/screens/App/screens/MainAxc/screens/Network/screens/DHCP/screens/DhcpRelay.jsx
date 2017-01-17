@@ -29,7 +29,7 @@ const settingsOptions = fromJS([
     label: _('DHCP Server'),
     fieldset: 'relay_setting',
     type: 'text',
-    required: 'true',
+    required: true,
     validator: validator({
       rules: 'ip',
     }),
@@ -48,14 +48,14 @@ const settingsOptions = fromJS([
     fieldset: 'relay_setting',
     label: _('Option82  field1'),
     type: 'text',
-    required: 'true',
+    required: true,
     validator: validator({
       rules: 'mac',
     }),
   },
   {
     id: 'option82_2',
-    required: 'true',
+    required: true,
     fieldset: 'relay_setting',
     label: _('Option82  field2'),
     type: 'text',

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import utils from 'shared/utils';
-import { authServer, advancedSetting, accServer } from 'shared/config/axcRadius';
+import { baseSetting, advancedSetting } from 'shared/config/axcRadius';
 import AppScreen from 'shared/components/Template/AppScreen';
 import FormContainer from 'shared/components/Organism/FormContainer';
 import Icon from 'shared/components/Icon';
@@ -16,38 +16,81 @@ import * as propertiesActions from 'shared/actions/properties';
 const listOptions = fromJS([
   {
     id: 'loginName',
-    text: _('User Name'),
-    type: 'text',
+    text: _('Login Name'),
     formProps: {
+      type: 'text',
       required: true,
+      maxLength: '32',
     },
   }, {
     id: 'date',
     text: _('Expired Date'),
-    type: 'text',
+    noForm: true,
     formProps: {
+      type: 'text',
       required: true,
     },
   }, {
     id: 'time',
     text: _('Left Time'),
-    type: 'text',
+    noForm: true,
     formProps: {
+      type: 'text',
       required: true,
     },
   }, {
     id: 'octets',
     text: _('Left Traffic'),
-    type: 'text',
+    noForm: true,
+    formProps: {
+      type: 'text',
+      required: true,
+    },
+  }, {
+    id: 'password',
+    text: _('Password'),
+    type: 'pwd',
+    noTable: true,
     formProps: {
       required: true,
     },
   }, {
-    id: 'state',
-    text: _('User Type'),
-    type: 'text',
+    id: 'ex1',
+    text: _('Question'),
+    noTable: true,
     formProps: {
+      type: 'text',
+    },
+  }, {
+    id: 'ex2',
+    text: _('Answer'),
+    noTable: true,
+    type: 'text',
+  }, {
+    id: 'type',
+    type: 'text',
+    text: _('Type'),
+    options: [
+      {
+        value: '0',
+        label: _('Unavailability'),
+      }, {
+        value: '1',
+        label: _('Timekeeping'),
+      }, {
+        value: '2',
+        label: _('Buy Out'),
+      }, {
+        value: '3',
+        label: _('Traffic'),
+      },
+    ],
+    defaultValue: '0',
+    formProps: {
+      type: 'select',
       required: true,
+      label: _('Type'),
+      placeholder: _('Please Select ') + _('Type'),
     },
   }, {
     id: 'maclimit',
@@ -71,14 +114,14 @@ const listOptions = fromJS([
   }, {
     id: 'maclimitcount',
     text: _('Mac Quantity'),
-    type: 'num',
     formProps: {
+      type: 'num',
+      min: '0',
       required: true,
     },
   }, {
     id: 'autologin',
     text: _('Auto Login'),
-    type: 'text',
     options: [
       {
         value: '0',
@@ -98,7 +141,6 @@ const listOptions = fromJS([
   }, {
     id: 'speed',
     text: _('Speed Limit'),
-    type: 'text',
     options: [
       {
         value: '0',
@@ -116,11 +158,112 @@ const listOptions = fromJS([
     id: 'ex4',
     text: _('Last Unbind Month'),
     formProps: {
+      type: 'text',
       required: true,
     },
   }, {
     id: 'ex3',
     text: _('Unbind Times'),
+    formProps: {
+      type: 'num',
+      min: '0',
+      required: true,
+    },
+  }, {
+    id: 'name',
+    text: _('Name'),
+    noTable: true,
+    formProps: {
+      type: 'text',
+      maxLength: '32',
+    },
+  }, {
+    id: 'gender',
+    text: _('Gender'),
+    noTable: true,
+    options: [
+      {
+        value: '0',
+        label: _('Male'),
+      }, {
+        value: '1',
+        label: _('Female'),
+      },
+    ],
+    defaultValue: '0',
+    formProps: {
+      type: 'select',
+      label: _('Gender'),
+      placeholder: _('Please Select ') + _('Gender'),
+    },
+  }, {
+    id: 'idnumber',
+    text: _('ID No.'),
+    noTable: true,
+    formProps: {
+      type: 'num',
+    },
+  }, {
+    id: 'phoneNumber',
+    text: _('Phone'),
+    noTable: true,
+    formProps: {
+      type: 'num',
+    },
+  }, {
+    id: 'address',
+    text: _('Address'),
+    noTable: true,
+    formProps: {
+      type: 'text',
+    },
+  }, {
+    id: 'email',
+    text: _('Email'),
+    noTable: true,
+    formProps: {
+      type: 'text',
+      validator: validator({
+        rules: 'email',
+      }),
+    },
+  }, {
+    id: 'description',
+    text: _('Detail Information'),
+    noTable: true,
+    formProps: {
+      type: 'text',
+    },
+  }, {
+    id: 'ex5',
+    text: _('ex5'),
+    noTable: true,
+    noForm: true,
+  }, {
+    id: 'ex6',
+    text: _('ex6'),
+    noTable: true,
+    noForm: true,
+  }, {
+    id: 'ex7',
+    text: _('ex7'),
+    noTable: true,
+    noForm: true,
+  }, {
+    id: 'ex8',
+    text: _('ex8'),
+    noTable: true,
+    noForm: true,
+  }, {
+    id: 'ex9',
+    text: _('ex9'),
+    noTable: true,
+    noForm: true,
+  }, {
+    id: 'ex10',
+    text: _('ex10'),
+    noTable: true,
+    noForm: true,
   },
 ]);
 
@@ -140,16 +283,6 @@ export default class View extends React.Component {
     super(props);
 
     this.state = {
-      defaultSettingsData: {
-        first5g: 1,
-        switch11n: 1,
-        txpower: 'auto',
-        countrycode: 'CN',
-        channel: 0,
-        channelwidth: 40,
-        groupid: props.groupid,
-      },
-
       isBaseShow: true,
       isAdvancedShow: false,
     };
@@ -172,12 +305,6 @@ export default class View extends React.Component {
     const myScreenId = store.get('curScreenId');
     const $$myScreenStore = store.get(myScreenId);
     const $$curData = $$myScreenStore.get('curListItem');
-
-    if (!$$curData.get('acctpri_ipaddr') || !$$curData.get('acctpri_key')) {
-      this.props.updateCurEditListItem({
-        acctpri_ipaddr: $$curData.get('authpri_ipaddr'),
-        acctpri_key: $$curData.get('authpri_key'),
-      });
     }
   }
   onSave(formId) {
@@ -191,41 +318,41 @@ export default class View extends React.Component {
         });
     }
   }
-  getDefaultEditData() {
-    const myDefaultEditData = {};
-    authServer.forEach(
-      ($$item, index) => {
-        const curId = $$item.get('id');
-        const defaultValue = $$item.get('defaultValue') || '';
+  // getDefaultEditData() {
+  //   const myDefaultEditData = {};
+  //   authServer.forEach(
+  //     ($$item, index) => {
+  //       const curId = $$item.get('id');
+  //       const defaultValue = $$item.get('defaultValue') || '';
 
-        myDefaultEditData[curId] = defaultValue;
+  //       myDefaultEditData[curId] = defaultValue;
 
-        return index;
-      },
-    );
-    accServer.forEach(
-      ($$item, index) => {
-        const curId = $$item.get('id');
-        const defaultValue = $$item.get('defaultValue') || '';
+  //       return index;
+  //     },
+  //   );
+  //   accServer.forEach(
+  //     ($$item, index) => {
+  //       const curId = $$item.get('id');
+  //       const defaultValue = $$item.get('defaultValue') || '';
 
-        myDefaultEditData[curId] = defaultValue;
+  //       myDefaultEditData[curId] = defaultValue;
 
-        return index;
-      },
-    );
-    advancedSetting.forEach(
-      ($$item, index) => {
-        const curId = $$item.get('id');
-        const defaultValue = $$item.get('defaultValue') || '';
+  //       return index;
+  //     },
+  //   );
+  //   advancedSetting.forEach(
+  //     ($$item, index) => {
+  //       const curId = $$item.get('id');
+  //       const defaultValue = $$item.get('defaultValue') || '';
 
-        myDefaultEditData[curId] = defaultValue;
+  //       myDefaultEditData[curId] = defaultValue;
 
-        return index;
-      },
-    );
+  //       return index;
+  //     },
+  //   );
 
-    this.defaultEditData = myDefaultEditData;
-  }
+  //   this.defaultEditData = myDefaultEditData;
+  // }
   toggleBox(moduleName) {
     this.setState({
       [moduleName]: !this.state[moduleName],
@@ -237,14 +364,14 @@ export default class View extends React.Component {
     const $$myScreenStore = store.get(myScreenId);
     const $$curData = $$myScreenStore.get('curListItem');
     const actionType = $$myScreenStore.getIn(['actionQuery', 'action']);
-    let $$myAuthServer = authServer;
+    let $$mybaseSetting = baseSetting;
 
     if (actionType !== 'add' && actionType !== 'edit') {
       return null;
     }
 
     if (actionType === 'edit') {
-      $$myAuthServer = $$myAuthServer.map(
+      $$mybaseSetting = $$mybaseSetting.map(
         ($$item) => {
           let $$ret = $$item;
           if ($$ret.get('notEditable')) {
@@ -259,6 +386,76 @@ export default class View extends React.Component {
 
     return (
       <div className="o-box row">
+        <div className="o-box__cell">
+          <h3
+            style={{ cursor: 'pointer' }}
+            onClick={() => this.toggleBox('isBaseShow')}
+          >
+            <Icon
+              name={this.state.isBaseShow ? 'minus-square' : 'plus-square'}
+              size="lg"
+              style={{
+                marginRight: '5px',
+              }}
+            />
+            {_('Base Settings')}
+          </h3>
+        </div>
+        {
+          this.state.isBaseShow ? (
+            <div className="o-box__cell">
+              <FormContainer
+                id="authServer"
+                className="o-form--compassed"
+                options={$$mybaseSetting}
+                data={$$curData}
+                onChangeData={this.props.updateCurEditListItem}
+                onSave={() => this.onSave('baseSetting')}
+                invalidMsg={app.get('invalid')}
+                validateAt={app.get('validateAt')}
+                onValidError={this.props.reportValidError}
+                isSaving={app.get('saving')}
+                hasSaveButton
+              />
+            </div>
+          ) : null
+        }
+
+        <div className="o-box__cell">
+          <h3
+            style={{ cursor: 'pointer' }}
+            onClick={() => this.toggleBox('isAccountingShow')}
+          >
+            <Icon
+              name={this.state.isAccountingShow ? 'minus-square' : 'plus-square'}
+              size="lg"
+              style={{
+                marginRight: '5px',
+              }}
+              onClick={() => this.toggleBox('isAccountingShow')}
+            />
+            {_('Accounting Server Settings')}
+          </h3>
+        </div>
+        {
+          this.state.isAccountingShow ? (
+            <div className="o-box__cell">
+              <FormContainer
+                id="accServer"
+                options={accServer}
+                className="o-form--compassed"
+                data={$$curData}
+                onChangeData={this.props.updateCurEditListItem}
+                onSave={() => this.onSave('accServer')}
+                invalidMsg={app.get('invalid')}
+                validateAt={app.get('validateAt')}
+                onValidError={this.props.reportValidError}
+                isSaving={app.get('saving')}
+                hasSaveButton
+              />
+            </div>
+          ) : null
+        }
         <div className="o-box__cell">
           <h3
             style={{ cursor: 'pointer' }}
