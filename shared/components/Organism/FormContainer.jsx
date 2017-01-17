@@ -220,8 +220,9 @@ class FormContainer extends React.Component {
     // checkbox 的 value要特殊处理
     if (myProps.type === 'checkbox') {
       myProps.value = checkboxValue;
-      myProps.checked = $$data.get(formGroupId) === checkboxValue ||
-        parseInt($$data.get(formGroupId), 10) === parseInt(checkboxValue, 10);
+      myProps.id = formGroupId;
+      myProps.checked = $$data.getIn(myValueQuery) === checkboxValue ||
+        parseInt($$data.getIn(myValueQuery), 10) === parseInt(checkboxValue, 10);
     }
 
     // change
@@ -278,17 +279,24 @@ class FormContainer extends React.Component {
 
     if ($$data.get(formGroupListId)) {
       $$optionsList = $$optionsList.map(
-        $$item => $$item.set(
-          'transform',
-          (val, $$listData, index) => this.renderFormGroup(
-            $$item.merge({
-              __index__: index,
-              showLabel: false,
-              display: 'block',
-            }),
-            [formGroupListId, index, $$item.get('id')],
-          ),
-        ),
+        ($$item) => {
+          let retNode = $$item;
+
+          if (!$$item.get('noForm')) {
+            retNode = $$item.set(
+              'transform',
+              (val, $$listData, index) => this.renderFormGroup(
+                $$item.merge({
+                  __index__: index,
+                  showLabel: false,
+                  display: 'block',
+                }),
+                [formGroupListId, index, $$item.get('id')],
+              ),
+            );
+          }
+          return retNode;
+        },
       );
 
       ret = (
