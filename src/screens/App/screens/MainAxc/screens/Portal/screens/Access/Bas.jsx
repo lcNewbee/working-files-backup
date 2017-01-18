@@ -12,6 +12,7 @@ const listOptions = fromJS([
   {
     id: 'basname',
     text: _('Bas Name'),
+    className: 'col col-6',
     formProps: {
       required: true,
       maxLength: '32',
@@ -19,6 +20,7 @@ const listOptions = fromJS([
   }, {
     id: 'bas_ip',
     text: _('Bas IP'),
+    className: 'col col-6',
     formProps: {
       required: true,
       validator: validator({

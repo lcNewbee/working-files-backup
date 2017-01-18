@@ -5,10 +5,13 @@ export const baseSetting = fromJS([
   {
     id: 'loginName',
     label: _('Login Name'),
-    className: 'cols col-12',
+    className: 'cols col-6',
     type: 'text',
     required: true,
     maxLength: '32',
+    validator: validator({
+      rules: 'len[1,32]',
+    }),
   }, {
     id: 'password',
     label: _('Password'),
@@ -16,6 +19,9 @@ export const baseSetting = fromJS([
     type: 'password',
     noTable: true,
     required: true,
+    validator: validator({
+      rules: 'pwd',
+    }),
   }, {
     id: 'ex1',
     label: _('Question'),
@@ -31,7 +37,7 @@ export const baseSetting = fromJS([
   }, {
     id: 'type',
     label: _('Type'),
-    className: 'cols col-6',
+    className: 'cols col-12',
     options: [
       {
         value: '0',
@@ -159,13 +165,13 @@ export const advancedSetting = fromJS([
     label: _('ID No.'),
     className: 'cols col-6',
     noTable: true,
-    type: 'num',
+    type: 'number',
   }, {
     id: 'phoneNumber',
     label: _('Phone'),
     noTable: true,
     className: 'cols col-6',
-    type: 'num',
+    type: 'number',
   }, {
     id: 'address',
     label: _('Address'),

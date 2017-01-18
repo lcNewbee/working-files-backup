@@ -98,7 +98,7 @@ const listOptions = fromJS([
     defaultValue: '0',
     options: checkboxOptions,
     formProps: {
-      type: 'checkbox',
+      type: 'switch',
       required: true,
     },
   }, {
@@ -107,8 +107,7 @@ const listOptions = fromJS([
     text: _('Concurrency Unlock'),
     options: checkboxOptions,
     formProps: {
-      form: 'port',
-      type: 'checkbox',
+      type: 'switch',
       required: true,
     },
   },
