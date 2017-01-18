@@ -175,6 +175,15 @@ const sPortalAccountList =
 const sPortalConnectRecord =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Account/ConnectRecord');
 
+const sPortalAuthentication =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Authentication');
+const sPortalClassification =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Classification');
+const sPortalUser =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/User');
+const sPortalRole =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Role');
+
 const routes = [
   {
     path: '/',
@@ -777,6 +786,43 @@ const routes = [
                 formUrl: 'goform/portal/account/connectRecord',
                 text: _('Connect Record'),
                 component: sPortalConnectRecord.Screen,
+              },
+            ],
+          }, {
+            id: 'portalSystem',
+            isIndex: true,
+            path: '/main/portal/system',
+            icon: 'copy',
+            text: _('System'),
+            indexRoute: {
+              onEnter: (nextState, replace) => replace('/main/portal/system/classification'),
+            },
+            childRoutes: [
+              {
+                id: 'portalSystemClassification',
+                path: '/main/portal/system/classification',
+                formUrl: 'goform/portal/system/classification',
+                text: _('Classification '),
+                component: sPortalClassification.Screen,
+              }, {
+                id: 'portalSystemRole',
+                path: '/main/portal/system/role',
+                formUrl: 'goform/portal/system/role',
+                text: _('Role'),
+                component: sPortalRole.Screen,
+              },
+              {
+                id: 'portalSystemUser',
+                path: '/main/portal/system/user',
+                formUrl: 'goform/portal/system/user',
+                text: _('User'),
+                component: sPortalUser.Screen,
+              }, {
+                id: 'portalSystemAuthentication',
+                path: '/main/portal/system/authentication',
+                formUrl: 'goform/portal/system/authentication',
+                text: _('Authentication'),
+                component: sPortalAuthentication.Screen,
               },
             ],
           },

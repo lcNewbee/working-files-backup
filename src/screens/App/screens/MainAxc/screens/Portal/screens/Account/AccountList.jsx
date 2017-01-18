@@ -332,9 +332,7 @@ export default class View extends React.Component {
       ($$item, index) => {
         const curId = $$item.get('id');
         const defaultValue = $$item.get('defaultValue') || '';
-
         myDefaultEditData[curId] = defaultValue;
-
         return index;
       },
     );

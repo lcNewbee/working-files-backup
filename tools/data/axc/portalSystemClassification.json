@@ -1,0 +1,22 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "id": 1,
+        "name": "admin",
+        "parentId": "Super",
+        "description": "All"
+      },
+      {
+        "id": 2,
+        "name": "admin",
+        "parentId": "Super",
+        "description": "All"
+      }
+    ]
+  }
+}
