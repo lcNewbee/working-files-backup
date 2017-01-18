@@ -25,7 +25,7 @@ export const purviewOptions = [
 ];
 
 export const colors = [
-  '#f6402b', '#ff9801', '#ffc100',
+  '#00a7f6', '#f6402b', '#ff9801', '#ffc100',
   '#91d951', '#1fb5ac', '#73d6d1',
   '#00a7f6', '#1193f5', '#3e4cb7',
   '#6834bc', '#9c1ab2', '#eb1461',

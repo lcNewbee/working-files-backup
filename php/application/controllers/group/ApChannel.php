@@ -19,17 +19,19 @@ class ApChannel extends CI_Controller {
 	}
 	function fetch() {
 		$retdata = array(
-            'country' => (string)element('country',$_GET,'CN')
-        );        
+        'country' => (string)element('country',$_GET, 'CN'),
+        'phymode' => (int)element('phymode', $_GET),
+        'channelwidth' => (int)element('channelwidth', $_GET)
+    );
 		return axc_get_apchannel(json_encode($retdata));
 	}
 	function onAction($data) {
 		$result = null;
 		$actionType = element('action', $data);
 		if ($actionType === 'add') {
-            
-		} 
+
+		}
 		return $result;
 	}
-	
+
 }

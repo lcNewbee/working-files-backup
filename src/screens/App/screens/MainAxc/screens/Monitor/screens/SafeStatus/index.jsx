@@ -88,7 +88,7 @@ function getSafeTypeChartOtion(attackTypeMap) {
       })
       .toArray();
 
-  apOption.title.subtext = totalNum;
+  apOption.title.subtext = `${totalNum || 0}`;
 
   apOption.series[0].data = $$safeTypeList.toArray();
 

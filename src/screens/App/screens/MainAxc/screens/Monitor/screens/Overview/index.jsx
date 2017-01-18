@@ -62,13 +62,13 @@ function getTerminalTypeOption(serverData) {
   const ret = $$commonPieOption.mergeDeep({
     title: {
       text: _('Online Number'),
-      subtext: serverData.get('clientsNumber'),
+      subtext: `${serverData.get('clientsNumber') || 0}`,
     },
     legend: {
       formatter: (name) => {
         const num = serverData.get('terminalType')
           .find($$item => $$item.get('name') === name)
-          .get('value');
+          .get('value') || 0;
 
         return `${name}: ${num}`;
       },
@@ -107,10 +107,10 @@ function getApStatusOption(serverData) {
     },
     legend: {
       formatter: (name) => {
-        let num = serverData.get('offline');
+        let num = serverData.get('offline') || 0;
 
         if (name === _('Online')) {
-          num = serverData.get('online');
+          num = serverData.get('online') || 0;
         }
         return `${name}: ${num}`;
       },
@@ -158,7 +158,7 @@ function getFlowUnit(val) {
 }
 function getFlowOption(serverData, timeType) {
   const option = {
-    color: [colors[7], colors[0]],
+    color: [colors[0], colors[1]],
     tooltip: {
       trigger: 'axis',
     },
@@ -196,7 +196,6 @@ function getFlowOption(serverData, timeType) {
     yAxis: [{
       type: 'value',
       name: _('KB'),
-      minInterval: 1,
       splitNumber: 5,
       min: 0,
       axisLabel: {

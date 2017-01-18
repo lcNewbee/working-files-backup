@@ -242,6 +242,7 @@ utils.extend({
 
     return uuid;
   },
+  emptyFunc: function(){}
 })
 
 // exports

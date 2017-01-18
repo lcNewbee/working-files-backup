@@ -122,6 +122,7 @@ export default function (state = defaultState, action) {
         .set('state', action.state);
 
     case 'RECEIVE_AJAX_ERROR':
+      console.error('Ajax Error = ', action.payload);
       return state
         .mergeIn(['ajaxError'], action.payload)
         .set(ajaxTypeMap[action.payload.type], false);

@@ -22,11 +22,10 @@ const $$listTypeOptions = fromJS([
   }, {
     value: 'white',
     label: _('White List'),
+  }, {
+    value: 'disable',
+    label: _('Disable'),
   },
-  // {
-  //   value: 'disable',
-  //   label: _('Disable'),
-  // },
 ]).map(
   ($$item) => {
     listTypeMap[$$item.get('value')] = $$item.get('label');

@@ -159,6 +159,7 @@ export const radioBase = fromJS([
     type: 'select',
     label: _('Country'),
     defaultValue: '',
+    required: true,
     options: countryOptions,
   }, {
     id: 'channel',
@@ -166,6 +167,7 @@ export const radioBase = fromJS([
     type: 'select',
     label: _('Channel'),
     defaultValue: '',
+    required: true,
     options: [],
   }, {
     id: 'channelwidth',
@@ -173,6 +175,7 @@ export const radioBase = fromJS([
     type: 'switch',
     label: _('Channel Bandwidth'),
     defaultValue: '',
+    required: true,
     inputStyle: {
       display: 'block',
     },

@@ -12,6 +12,7 @@ function isValidateMyForm(validateAt, myForm) {
     validateForm === '__all__' || myForm === validateForm
   );
 }
+function emptyFunc() {}
 
 const propTypes = {
   onValidError: PropTypes.func,
@@ -38,6 +39,10 @@ const propTypes = {
 
 const defaultProps = {
   showLabel: true,
+  validator: {
+    check: emptyFunc,
+    checkClear: emptyFunc,
+  },
 };
 
 class FormGroup extends React.Component {
@@ -72,7 +77,7 @@ class FormGroup extends React.Component {
 
   // 验证不确定的错误
   check() {
-    const { name, label, value, required } = this.props;
+    const { name, label, value, required, options } = this.props;
     let checkResult;
 
     // 空字符串验证

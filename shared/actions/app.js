@@ -139,6 +139,7 @@ export function fetch(url, query, option) {
 
     return utils.fetch(url, query, option)
       .then((json) => {
+        dispatch(rcFetch());
         if (json === undefined) {
           return {};
         }
@@ -148,7 +149,7 @@ export function fetch(url, query, option) {
         } else if (!json.state || (json.state && json.state.code !== 2000)) {
           dispatch(receiveServerError(json.state));
         }
-        dispatch(rcFetch());
+
         return json;
       })
       .catch(errorFunc);
@@ -174,6 +175,8 @@ export function save(url, query, option) {
 
     return utils.save(url, query, option)
       .then((json) => {
+        dispatch(receiveSave());
+
         if (json === undefined) {
           return {};
         }
@@ -182,7 +185,7 @@ export function save(url, query, option) {
         } else if (!json.state || (json.state && json.state.code !== 2000)) {
           dispatch(receiveServerError(json.state));
         }
-        dispatch(receiveSave());
+
         return json;
       })
       .catch(errorFunc);

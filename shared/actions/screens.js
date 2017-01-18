@@ -87,7 +87,7 @@ export function fetchScreenData(option) {
 
     return dispatch(appActions.fetch(myUrl, query, ajaxOption))
       .then((json) => {
-        if (json.state && json.state.code === 2000) {
+        if (json && json.state && json.state.code === 2000) {
           dispatch(reciveScreenData(json.data, name));
         }
 
@@ -219,7 +219,7 @@ export function onListAction(url, option) {
       .then((json) => {
         const ret = json;
 
-        if (json.state) {
+        if (json && json.state) {
           if (json.state.code <= 6000) {
             dispatch(closeListItemModal());
           }

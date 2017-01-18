@@ -28,7 +28,7 @@ const propTypes = {
   onSave: PropTypes.func,
 
   // f
-  options: PropTypes.instanceOf(List).isRequired,
+  options: PropTypes.instanceOf(List),
   data: PropTypes.oneOfType([
     PropTypes.instanceOf(Map), PropTypes.object,
   ]),

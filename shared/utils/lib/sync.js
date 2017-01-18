@@ -62,10 +62,7 @@ var sync = {
     return fetch(subUrl, baseOption)
       .then(checkStatus)
       .then(parseJSON)
-      .then(handleServerError)
-      .catch(function (error) {
-        console.error('Save request failed', error)
-      });
+      .then(handleServerError);
   },
 
   postForm: function (url, form, option) {
@@ -87,10 +84,7 @@ var sync = {
     return fetch(url, baseOption)
       .then(checkStatus)
       .then(parseJSON)
-      .then(handleServerError)
-      .catch(function (error) {
-        console.error('Post form failed', error)
-      });
+      .then(handleServerError);
   },
 
   //
@@ -125,10 +119,7 @@ var sync = {
     return fetch(url, baseOption)
       .then(checkStatus)
       .then(parseJSON)
-      .then(handleServerError)
-      .catch(function (error) {
-        console.error('Fetch request failed', error)
-      });
+      .then(handleServerError);
   },
 
   loadScript: function (url, callback, timeout, isAsync){

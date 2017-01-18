@@ -9,33 +9,21 @@ import {
   FormGroup,
 } from '../Form';
 
-function getChannelList(countrycode, is5G) {
-  return utils.fetch('goform/country/channel', {
-    country: countrycode,
-  })
+function getChannelList(data) {
+  return utils.fetch('goform/country/channel', data)
     .then((json) => {
-      const max24g = json.data['max_2.4g_channel'] || 13;
-      const channel5g = json.data.channel_5g;
+      const channel = json.data.channel;
       const ret = {
         options: [],
       };
-      let i = 1;
 
-      if (is5G) {
-        ret.options = channel5g.map(
-          val => ({
-            value: val,
-            label: val,
-          }),
-        );
-      } else {
-        for (i; i <= max24g; i += 1) {
-          ret.options.push({
-            value: i,
-            label: i,
-          });
-        }
-      }
+      ret.options = channel.map(
+        val => ({
+          value: val,
+          label: val,
+        }),
+      );
+
       ret.options.unshift({
         value: 0,
         label: _('Auto'),
@@ -81,7 +69,8 @@ class DeviceSystem extends React.Component {
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.store.getIn(['data', 'countrycode']) !== nextProps.store.getIn(['data', 'countrycode']) ||
-      this.props.store.getIn(['data', 'phymode']) !== nextProps.store.getIn(['data', 'phymode'])) {
+        this.props.store.getIn(['data', 'phymode']) !== nextProps.store.getIn(['data', 'phymode']) ||
+        this.props.store.getIn(['data', 'channelwidth']) !== nextProps.store.getIn(['data', 'channelwidth'])) {
       this.fetchChannelOptions(nextProps);
     }
     if (this.getCurData('phymodesupport') !== nextProps.store.getIn(['data', 'phymodesupport'])) {
@@ -136,9 +125,14 @@ class DeviceSystem extends React.Component {
   }
 
   fetchChannelOptions(props) {
-    const countrycode = props.store.getIn(['data', 'countrycode']);
-    const is5g = props.store.getIn(['data', 'phymode']) >= 8;
-    getChannelList(countrycode, is5g)
+    const country = props.store.getIn(['data', 'countrycode']);
+    const phymode = props.store.getIn(['data', 'phymode']);
+    const channelwidth = props.store.getIn(['data', 'channelwidth']);
+    getChannelList({
+      country,
+      phymode,
+      channelwidth,
+    })
       .then(
         (item) => {
           this.setState({

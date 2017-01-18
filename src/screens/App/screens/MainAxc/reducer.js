@@ -111,44 +111,42 @@ function receiveApGroup(state, action) {
   const $$list = fromJS(payload.list);
   let $$defaultItem = $$list.get(0) || fromJS({});
   const $$defaultManageItem = $$list.get(1) || fromJS({});
-  let selectedItem = state.getIn(['group', 'selected']);
-  let manageSelectedItem = state.getIn(['group', 'manageSelected']);
-  let isDeleted = false;
+  let $$selectedItem = state.getIn(['group', 'selected']);
+  let $$manageSelectedItem = state.getIn(['group', 'manageSelected']);
+  let $$rcSelectedItem = null;
+  let $$rcManageSelectedItem = null;
 
   if ($$list.size > 1) {
     $$defaultItem = $$list.get(1);
   }
 
   // 当前显示的组
-  if (selectedItem.isEmpty()) {
-    selectedItem = $$defaultItem;
+  if ($$selectedItem.isEmpty()) {
+    $$selectedItem = $$defaultItem;
 
   // 判断选择的是否被删除
   } else {
-    isDeleted = $$list.findIndex(
-      item => item.get('id') === selectedItem.get('id'),
-    ) === -1;
-    if (isDeleted) {
-      selectedItem = $$defaultItem;
-    }
+    $$rcSelectedItem = $$list.find(
+      $$item => $$item.get('id') === $$selectedItem.get('id'),
+    );
+
+    $$selectedItem = $$rcSelectedItem || $$defaultItem;
   }
 
   // 当前正在管理的组
-  if (manageSelectedItem.isEmpty()) {
-    manageSelectedItem = $$defaultManageItem;
+  if ($$manageSelectedItem.isEmpty()) {
+    $$manageSelectedItem = $$defaultManageItem;
 
   // 判断选择的是否被删除
   } else {
-    isDeleted = $$list.findIndex(
-      item => item.get('id') === manageSelectedItem.get('id'),
-    ) === -1;
-    if (isDeleted) {
-      manageSelectedItem = $$defaultManageItem;
-    }
+    $$rcManageSelectedItem = $$list.find(
+      item => item.get('id') === $$manageSelectedItem.get('id'),
+    );
+    $$manageSelectedItem = $$rcManageSelectedItem || $$defaultManageItem;
   }
 
-  return state.setIn(['group', 'selected'], selectedItem)
-    .setIn(['group', 'manageSelected'], manageSelectedItem)
+  return state.setIn(['group', 'selected'], $$selectedItem)
+    .setIn(['group', 'manageSelected'], $$manageSelectedItem)
     .setIn(['group', 'list'], $$list);
 }
 
@@ -170,19 +168,19 @@ function receiveDevices(state, action) {
 }
 
 function selectList(state, name, id) {
-  const selectedItem = state.getIn([name, 'list'])
+  const $$selectedItem = state.getIn([name, 'list'])
       .find(item => item.get('id') === id) ||
       state.getIn([name, 'selected']);
 
-  return state.setIn([name, 'selected'], selectedItem);
+  return state.setIn([name, 'selected'], $$selectedItem);
 }
 
 function selectManageList(state, name, id) {
-  const selectedItem = state.getIn([name, 'list'])
+  const $$selectedItem = state.getIn([name, 'list'])
       .find(item => item.get('id') === id) ||
       state.getIn([name, 'manageSelected']);
 
-  return state.setIn([name, 'manageSelected'], selectedItem);
+  return state.setIn([name, 'manageSelected'], $$selectedItem);
 }
 
 function selectAddGroupDevices(state, action) {
