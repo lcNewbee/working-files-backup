@@ -107,9 +107,11 @@ export const radioBase = fromJS([
     value: '1',
     defaultValue: '0',
     text: _('RF Switch'),
+    label: _('RF Switch'),
+    showLabel: false,
   }, {
     id: 'phymode',
-    form: 'radioAdvance',
+    form: 'radioBase',
     label: _('Physical Mode'),
     type: 'select',
     defaultValue: '',

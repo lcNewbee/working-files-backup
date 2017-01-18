@@ -45,6 +45,33 @@ const defaultProps = {
   },
 };
 
+function notOptionsValue(options, val, type) {
+  let ret = false;
+  let myOptions = options;
+  let i;
+  let len;
+  let item;
+
+  if ('select,switch'.indexOf(type) !== -1 && options) {
+    if (options.toJS) {
+      myOptions = options.toJS();
+    }
+    len = myOptions.length;
+
+    for (i = 0; i < len; i += 1) {
+      item = myOptions[i];
+
+      if (item.value === val) {
+        return false;
+      }
+    }
+
+    ret = true;
+  }
+
+  return ret;
+}
+
 class FormGroup extends React.Component {
   constructor(props) {
     super(props);
@@ -77,11 +104,11 @@ class FormGroup extends React.Component {
 
   // 验证不确定的错误
   check() {
-    const { name, label, value, required, options } = this.props;
+    const { name, label, value, required, options, type } = this.props;
     let checkResult;
 
-    // 空字符串验证
-    if (value === '' || value === undefined) {
+    // 空字符串验证, 或者值 不在 options 列表中
+    if (value === '' || value === undefined || notOptionsValue(options, value, type)) {
       if (required) {
         checkResult = _('%s', label || this.props['data-label']) + _(' is required');
       }
@@ -122,9 +149,9 @@ class FormGroup extends React.Component {
 
   render() {
     const {
-      help, errMsg, required, children, role, id, label, showLabel,
-      className, display, style, disabled, name, value,
+      required, children, role, id, label, display, disabled, name, value,
     } = this.props;
+    const { style, help, errMsg, showLabel, className, ...restProps } = this.props;
     const { check, checkClear } = this;
     let groupClassName = 'form-group';
 
@@ -143,6 +170,7 @@ class FormGroup extends React.Component {
     if (display) {
       groupClassName = `${groupClassName} form-group--${display}`;
     }
+
     return (
       <div
         className={groupClassName}
@@ -183,12 +211,11 @@ class FormGroup extends React.Component {
               return ret;
             }) : (
               <FormInput
-                {...this.props}
+                {...restProps}
                 isFocus={!!errMsg}
                 check={this.check}
                 checkClear={this.checkClear}
                 style={this.props.inputStyle}
-                className=""
               />
             )
           }
