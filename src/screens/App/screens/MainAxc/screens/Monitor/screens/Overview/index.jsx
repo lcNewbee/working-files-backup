@@ -252,12 +252,16 @@ function getFlowOption(serverData, timeType) {
   let maxVal1 = 0;
   let utilObj = {};
 
-  if (!$$dataList) {
+  if (!$$dataList || !$$dataList.getIn([0, 'data']) || !$$dataList.getIn([1, 'data'])) {
     return null;
   }
+  if ($$dataList.getIn([0, 'data'])) {
+    maxVal = $$dataList.getIn([0, 'data']).max();
+  }
+  if ($$dataList.getIn([1, 'data'])) {
+    maxVal1 = $$dataList.getIn([1, 'data']).max();
+  }
 
-  maxVal = $$dataList.getIn([0, 'data']).max();
-  maxVal1 = $$dataList.getIn([1, 'data']).max();
   if (maxVal1 > maxVal) {
     maxVal = maxVal1;
   }
