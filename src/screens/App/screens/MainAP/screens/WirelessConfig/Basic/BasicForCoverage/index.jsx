@@ -281,7 +281,7 @@ export default class Basic extends React.Component {
           width: '250px',
           transform: function (val, item) {
             if (val === '' || !Number.isInteger(+val) || parseInt(val, 10) <= 0) {
-              this.onSsidItemChange(val, item, 'maxClients', '32');
+              this.onSsidItemChange(val, item, 'maxClients', '64');
             } // 后台没传值，或值错误，则提供默认值
             return (
               <FormInput
@@ -589,7 +589,7 @@ export default class Basic extends React.Component {
       vlanId: '1',
       hideSsid: '0',
       enable: '1',
-      maxClients: '32',
+      maxClients: '64',
       portalEnable: '0',
       airTimeEnable: '0',
       security: {
@@ -655,7 +655,9 @@ export default class Basic extends React.Component {
       if (json2.state && json2.state.code === 2000) {
         this.props.receiveCountryInfo(json2.data);
         // 如果返回的信道列表没有当前信道，则将信道置为auto
-        if (json2.data.channels.indexOf(frequency) === -1) {
+        const channelList = json2.data.channels.map(val => parseInt(val, 10).toString());
+        console.log('channelList', channelList);
+        if (channelList.indexOf(frequency) === -1) {
           const radioList = this.props.store.getIn(['curData', 'radioList']).setIn([radioId, 'frequency'], 'auto');
           this.props.updateItemSettings({ radioList });
         }
@@ -1086,10 +1088,10 @@ export default class Basic extends React.Component {
                   label={_('Channel')}
                   type="select"
                   options={this.makeChannelOptions()}
-                  value={curData.getIn(['radioList', radioId, 'frequency']) || 'auto'}
+                  value={curData.getIn(['radioList', radioId, 'frequency'])}
                   onChange={(data) => {
                     const radioList = curData.get('radioList')
-                                      .setIn([radioId, 'frequency'], data.value || 'auto');
+                                      .setIn([radioId, 'frequency'], data.value);
                     this.props.updateItemSettings({ radioList });
                   }}
                 />
