@@ -253,69 +253,71 @@ const routes = [{
           component: sTimeSettings.Screen,
         },
       ],
-  }, /*{
-      id: 'portalsettings',
-      path: '/main/portalsettings',
-      icon: 'copy',
-      text: _('Portal'),
-      component: pPortal,
-      indexRoute: {
-        onEnter: (nextState, replace) => replace('main/portalsettings/portalsettings'),
-      },
-      childRoutes: [
-        {
-          id: 'portalsettings',
-          path: '/main/portalsettings/portalsettings',
-          fetchUrl: 'goform/get_portal_info',
-          saveUrl: 'goform/set_portal',
-          text: _('Portal Settings'),
-          component: sPortalSettings.Screen,
-        },
-      ],
-    },*/ {
-      id: 'tools',
-      path: '/main/tools',
-      icon: 'cogs',
-      text: _('Tools'),
-      component: pTools,
-      indexRoute: { onEnter: (nextState, replace) => replace('/main/tools/sitesurvey') },
-      childRoutes: [
-        {
-          id: 'sitesurvey',
-          path: '/main/tools/sitesurvey',
-          fetchUrl: 'goform/get_site_survey',
-          text: _('Site Survey'),
-          component: sSiteSurvey.Screen,
-        }, {
-          id: 'systemlogs',
-          formUrl: 'goform/get_log_list',
-          path: '/main/tools/systemlogs',
-          text: _('System Logs'),
-          component: sSystemLogs.Screen,
-        }, {
-          id: 'channelutilization',
-          path: '/main/tools/channelutilization',
-          text: _('Channel Utilization'),
-          fetchUrl: 'goform/get_chanutil',
-          component: sChannelUtilization.Screen,
-        },
-      ],
-    }, {
-      id: 'modesettings',
-      path: '/main/modesettings',
-      text: _('Mode'),
-      icon: 'exchange',
-      component: pModeSettings,
-      indexRoute: { onEnter: (nextState, replace) => replace('/main/modesettings/modesettings') },
-      childRoutes: [
-        {
-          id: 'modesettings',
-          path: '/main/modesettings/modesettings',
-          text: _('Mode Settings'),
-          component: sModeSettings.Screen,
-        },
-      ],
     },
+    /* {
+        id: 'portalsettings',
+        path: '/main/portalsettings',
+        icon: 'copy',
+        text: _('Portal'),
+        component: pPortal,
+        indexRoute: {
+          onEnter: (nextState, replace) => replace('main/portalsettings/portalsettings'),
+        },
+        childRoutes: [
+          {
+            id: 'portalsettings',
+            path: '/main/portalsettings/portalsettings',
+            fetchUrl: 'goform/get_portal_info',
+            saveUrl: 'goform/set_portal',
+            text: _('Portal Settings'),
+            component: sPortalSettings.Screen,
+          },
+        ],
+      },*/
+      {
+        id: 'tools',
+        path: '/main/tools',
+        icon: 'cogs',
+        text: _('Tools'),
+        component: pTools,
+        indexRoute: { onEnter: (nextState, replace) => replace('/main/tools/sitesurvey') },
+        childRoutes: [
+          {
+            id: 'sitesurvey',
+            path: '/main/tools/sitesurvey',
+            fetchUrl: 'goform/get_site_survey',
+            text: _('Site Survey'),
+            component: sSiteSurvey.Screen,
+          }, {
+            id: 'systemlogs',
+            formUrl: 'goform/get_log_list',
+            path: '/main/tools/systemlogs',
+            text: _('System Logs'),
+            component: sSystemLogs.Screen,
+          }, {
+            id: 'channelutilization',
+            path: '/main/tools/channelutilization',
+            text: _('Channel Utilization'),
+            fetchUrl: 'goform/get_chanutil',
+            component: sChannelUtilization.Screen,
+          },
+        ],
+      }, {
+        id: 'modesettings',
+        path: '/main/modesettings',
+        text: _('Mode'),
+        icon: 'exchange',
+        component: pModeSettings,
+        indexRoute: { onEnter: (nextState, replace) => replace('/main/modesettings/modesettings') },
+        childRoutes: [
+          {
+            id: 'modesettings',
+            path: '/main/modesettings/modesettings',
+            text: _('Mode Settings'),
+            component: sModeSettings.Screen,
+          },
+        ],
+      },
     ],
   }, {
     path: '/wizard',

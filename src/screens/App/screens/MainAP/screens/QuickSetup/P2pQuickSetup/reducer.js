@@ -34,7 +34,8 @@ export default function (state = defaultState, action) {
                   .set('selectedCountry', action.data);
     case 'RECEIVE_COUNTRY_INFO':
       return state.set('channels', fromJS(action.data.channels))
-                  .set('maxTxpower', action.data.maxTxpower);
+                  .set('maxTxpower', action.data.maxTxpower)
+                  .set('minTxpower', action.data.minTxpower);
     case 'CHANGE_SCAN_STATUS':
       return state.set('scaning', action.data);
     case 'CHANGE_SHOW_SCAN_RESULT_STATUS':

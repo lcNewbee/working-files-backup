@@ -93,7 +93,7 @@ const funConfig = {
       'security',
       'delete',
       'maxClients',
-      'airTimeEnable',
+      // 'airTimeEnable',
       'speedLimit',
       // 'portalEnable',         // portal功能开关
     ],

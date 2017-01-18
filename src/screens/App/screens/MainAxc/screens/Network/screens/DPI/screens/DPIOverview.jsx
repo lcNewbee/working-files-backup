@@ -89,11 +89,11 @@ export default class DPIOverview extends React.Component {
           <div className="t-overview__section row">
             <div className="cols col-6" >
               <div className="element">
-                <h3>{_('talkers')}</h3>
+                <h3>{_('ethInterface')}</h3>
               </div>
               <div className="element">
                 <EchartReact
-                  option={getEchartOptionByName(serverData, 'talkers')}
+                  option={getEchartOptionByName(serverData, 'ethInterface')}
                   className="o-box__canvas"
                   style={{
                     width: '100%',
@@ -104,11 +104,11 @@ export default class DPIOverview extends React.Component {
             </div>
             <div className="cols col-6">
               <div className="element">
-                <h3>{_('hosts')}</h3>
+                <h3>{_('mac')}</h3>
               </div>
               <div className="element row">
                 <EchartReact
-                  option={getEchartOptionByName(serverData, 'hosts')}
+                  option={getEchartOptionByName(serverData, 'mac')}
                   className="o-box__canvas"
                   style={{
                     width: '100%',
@@ -120,28 +120,13 @@ export default class DPIOverview extends React.Component {
           </div>
 
           <div className="t-overview__section row">
-            <div className="cols col-6" >
+            <div className="cols col-12" >
               <div className="element">
-                <h3>{_('clientPorts')}</h3>
+                <h3>{_('proto')}</h3>
               </div>
               <div className="element">
                 <EchartReact
-                  option={getEchartOptionByName(serverData, 'clientPorts')}
-                  className="o-box__canvas"
-                  style={{
-                    width: '100%',
-                    minHeight: '200px',
-                  }}
-                />
-              </div>
-            </div>
-            <div className="cols col-6">
-              <div className="element">
-                <h3>{_('serverPorts')}</h3>
-              </div>
-              <div className="element row">
-                <EchartReact
-                  option={getEchartOptionByName(serverData, 'serverPorts')}
+                  option={getEchartOptionByName(serverData, 'proto')}
                   className="o-box__canvas"
                   style={{
                     width: '100%',

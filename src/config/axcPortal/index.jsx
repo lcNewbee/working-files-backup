@@ -89,6 +89,12 @@ const sDPIOverview =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/DPIOverview');
 const sFlowInfo =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/FlowInfo');
+const sMacStatistic =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/MacStatistic');
+const sEthStatistic =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/EthStatistic');
+const sProtoInfo =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/ProtoInfo');
 /**
  * AP组管理
  */
@@ -337,6 +343,24 @@ const routes = [
                 formUrl: 'goform/network/dpi/flowinfo',
                 text: _('Flow Info'),
                 component: sFlowInfo.Screen,
+              }, {
+                id: 'macstatistic',
+                path: '/main/network/dpi/macstatistic',
+                formUrl: 'goform/network/dpi/macstatistic',
+                text: _('Mac Statistic'),
+                component: sMacStatistic.Screen,
+              }, {
+                id: 'ethstatistic',
+                path: '/main/network/dpi/ethstatistic',
+                formUrl: 'goform/network/dpi/ethstatistic',
+                text: _('Ethernet Statistic'),
+                component: sEthStatistic.Screen,
+              }, {
+                id: 'protoinfo',
+                path: '/main/network/dpi/protoinfo',
+                formUrl: 'goform/network/dpi/protoinfo',
+                text: _('Proto Info'),
+                component: sProtoInfo.Screen,
               },
             ],
           },

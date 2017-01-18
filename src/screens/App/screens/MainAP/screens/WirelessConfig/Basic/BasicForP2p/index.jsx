@@ -240,6 +240,7 @@ export default class Basic extends React.Component {
     this.makeSsidTableOptions = this.makeSsidTableOptions.bind(this);
     this.sortMacOrder = this.sortMacOrder.bind(this);
     // this.getAirTimeEnable = this.getAirTimeEnable.bind(this);
+    this.getChannelListAndPowerRange = this.getChannelListAndPowerRange.bind(this);
     this.state = {
       ssidTableFullMemberOptions: fromJS([
         {
@@ -838,6 +839,22 @@ export default class Basic extends React.Component {
     const radioList = this.props.selfState.get('basicSettings').get('radioList')
                         .setIn([radioId, 'vapList', '0', 'apMacList'], macList);
     this.props.updateBasicSettings({ radioList });
+  }
+
+  getChannelListAndPowerRange(radioId) {
+    const saveInfo = {
+      // radio: this.props.productInfo.getIn(['deviceRadioList', radioId, 'radioType']),
+      radioId,
+      country: this.props.store.getIn(['curData', 'radioList', radioId, 'countryCode']),
+      channelwidth: this.props.store.getIn(['curData', 'radioList', radioId, 'channelWidth']),
+      // 快速设置中取不到该值，置为空，后台会处理
+      radiomode: this.props.store.getIn(['curData', 'radioList', radioId, 'radioMode']) || '',
+    };
+    this.props.fetch('goform/get_country_info', saveInfo).then((json2) => {
+      if (json2.state && json2.state.code === 2000) {
+        this.props.receiveCountryInfo(json2.data);
+      }
+    });
   }
 
   render() {

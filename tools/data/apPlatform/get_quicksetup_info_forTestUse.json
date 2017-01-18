@@ -12,6 +12,7 @@
         "ssid": "AXILSPOT",
         "countryCode": "US",
         "frequency": "36",
+        "radioMode": "11ng",
         "channelWidth": "HT20",
         "distance": "1",
         "apMac": "12:11:11:11:11:11",

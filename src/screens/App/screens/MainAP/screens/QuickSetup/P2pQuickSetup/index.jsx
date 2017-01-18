@@ -171,6 +171,7 @@ export default class QuickSetup extends React.Component {
       'onChangeWirelessMode',
       'updateItemInRadioList',
       'handleWrongSecurMode',
+      'getChannelListAndPowerRange',
     ]);
   }
 
@@ -239,7 +240,6 @@ export default class QuickSetup extends React.Component {
   onCloseCountrySelectModal() {
     const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
     const code = this.props.store.getIn(['curData', 'radioList', radioId, 'countryCode']);
-    // console.log(code);
     this.props.closeCountrySelectModal(code);
   }
 
@@ -351,16 +351,17 @@ export default class QuickSetup extends React.Component {
         const wirelessMode = this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']);
         // const security = this.props.store.getIn(['curData', 'radioList', radioId, 'security']);
         this.props.changeDeviceMode(wirelessMode);
-        const requestInfo = {
-          radio: this.props.selfState.getIn(['currRadioConfig', 'radioType']),
-          country: this.props.store.getIn(['curData', 'radioList', radioId, 'countryCode']),
-          channelWidth: this.props.store.getIn(['curData', 'radioList', radioId, 'channelWidth']),
-        };
-        props.fetch('goform/get_country_info', requestInfo).then((json) => {
-          if (json.state && json.state.code === 2000) {
-            this.props.receiveCountryInfo(json.data);
-          }
-        });
+        this.getChannelListAndPowerRange(radioId);
+        // const requestInfo = {
+        //   radio: this.props.selfState.getIn(['currRadioConfig', 'radioType']),
+        //   country: this.props.store.getIn(['curData', 'radioList', radioId, 'countryCode']),
+        //   channelWidth: this.props.store.getIn(['curData', 'radioList', radioId, 'channelWidth']),
+        // };
+        // props.fetch('goform/get_country_info', requestInfo).then((json) => {
+        //   if (json.state && json.state.code === 2000) {
+        //     this.props.receiveCountryInfo(json.data);
+        //   }
+        // });
         this.handleWrongSecurMode();
         // const security = props.store.getIn(['curData', 'radioList', radioId, 'security']);
         // if (!security) {
@@ -368,6 +369,28 @@ export default class QuickSetup extends React.Component {
         // }
       });
     props.resetVaildateMsg();
+  }
+
+  getChannelListAndPowerRange(radioId) {
+    const radioType = this.props.selfState.getIn(['currRadioConfig', 'radioType']);
+    const radiomode = this.props.store.getIn(['curData', 'radioList', radioId, 'radioMode']);
+    const country = this.props.store.getIn(['curData', 'radioList', radioId, 'countryCode']);
+    let channelwidth = this.props.store.getIn(['curData', 'radioList', radioId, 'channelWidth']);
+    const frequency = this.props.store.getIn(['curData', 'radioList', radioId, 'frequency']); // 当前信道
+    if ((radioType === '2.4G' && radiomode !== '11ng') || (radioType === '5G' && radiomode === '11a')) {
+      channelwidth = '';
+    }
+    const saveInfo = { radioId, country, channelwidth, radiomode };
+    this.props.fetch('goform/get_country_info', saveInfo).then((json2) => {
+      if (json2.state && json2.state.code === 2000) {
+        this.props.receiveCountryInfo(json2.data);
+        // 如果返回的信道列表没有当前信道，则将信道置为auto
+        if (json2.data.channels.indexOf(frequency) === -1) {
+          const radioList = this.props.store.getIn(['curData', 'radioList']).setIn([radioId, 'frequency'], 'auto');
+          this.props.updateItemSettings({ radioList });
+        }
+      }
+    });
   }
 
   updateItemInRadioList(name, value) {
@@ -618,7 +641,6 @@ export default class QuickSetup extends React.Component {
                   disabled
                   style={{
                     width: '127px',
-                    marginTop: '-3px',
                   }}
                 />
                 <Button
@@ -663,7 +685,14 @@ export default class QuickSetup extends React.Component {
                 minWidth="66px"
                 options={channelWidthOptions}
                 value={channelWidth}
-                onChange={data => this.updateItemInRadioList('channelWidth', data.value)}
+                onChange={(data) => {
+                  console.log('here');
+                  Promise.resolve().then(() => {
+                    this.updateItemInRadioList('channelWidth', data.value);
+                  }).then(() => {
+                    this.getChannelListAndPowerRange(radioId);
+                  });
+                }}
               />
               <FormGroup
                 type="select"
@@ -968,7 +997,14 @@ export default class QuickSetup extends React.Component {
                 minWidth="66px"
                 options={channelWidthOptions}
                 value={channelWidth}
-                onChange={data => this.updateItemInRadioList('channelWidth', data.value)}
+                onChange={(data) => {
+                  console.log('here');
+                  Promise.resolve().then(() => {
+                    this.updateItemInRadioList('channelWidth', data.value);
+                  }).then(() => {
+                    this.getChannelListAndPowerRange(radioId);
+                  });
+                }}
               />
               <FormGroup
                 type="select"

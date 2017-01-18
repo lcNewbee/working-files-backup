@@ -43,7 +43,7 @@ const propTypes = {
   createModal: PropTypes.func,
   // updateSelfItemSettings: PropTypes.func,
   updateItemSettings: PropTypes.func,
-  updateMultiSsidItem: PropTypes.func,
+  // updateMultiSsidItem: PropTypes.func,
   // updateRadioSettingsItem: PropTypes.func,
   changeWhichButton: PropTypes.func,
   restoreSelfState: PropTypes.func,
@@ -201,6 +201,7 @@ export default class Basic extends React.Component {
     this.makeSsidTableOptions = this.makeSsidTableOptions.bind(this);
     this.saveCountrySelectModal = this.saveCountrySelectModal.bind(this);
     this.radioSettingsHeadClassName = this.radioSettingsHeadClassName.bind(this);
+    this.getChannelListAndPowerRange = this.getChannelListAndPowerRange.bind(this);
     this.state = {
       ssidTableFullMemberOptions: fromJS([
         {
@@ -255,7 +256,8 @@ export default class Basic extends React.Component {
           width: '250px',
           transform: function (val, item) {
             // const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-            // const pos = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
+            // const pos = this.props.store
+            //                 .getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
             return (
               <FormInput
                 type="number"
@@ -550,9 +552,10 @@ export default class Basic extends React.Component {
         });
   }
   onCloseCountrySelectModal() {
-    this.props.fetch('goform/get_base_wl_info').then((json) => {
+    const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
+    this.props.fetch('goform/get_wl_all').then((json) => {
       if (json.state && json.state.code === 2000) {
-        this.props.closeCountrySelectModal(json.data.countryCode);
+        this.props.closeCountrySelectModal(json.data.radioList[radioId].countryCode);
       }
     });
   }
@@ -638,6 +641,28 @@ export default class Basic extends React.Component {
     // this.getAirTimeEnable();
   }
 
+  getChannelListAndPowerRange(radioId) {
+    const radioType = this.props.productInfo.getIn(['deviceRadioList', radioId, 'radioType']);
+    const radiomode = this.props.store.getIn(['curData', 'radioList', radioId, 'radioMode']);
+    const country = this.props.store.getIn(['curData', 'radioList', radioId, 'countryCode']);
+    let channelwidth = this.props.store.getIn(['curData', 'radioList', radioId, 'channelWidth']);
+    const frequency = this.props.store.getIn(['curData', 'radioList', radioId, 'frequency']); // 当前信道
+    if ((radioType === '2.4G' && radiomode !== '11ng') || (radioType === '5G' && radiomode === '11a')) {
+      channelwidth = '';
+    }
+    const saveInfo = { radioId, country, channelwidth, radiomode };
+    this.props.fetch('goform/get_country_info', saveInfo).then((json2) => {
+      if (json2.state && json2.state.code === 2000) {
+        this.props.receiveCountryInfo(json2.data);
+        // 如果返回的信道列表没有当前信道，则将信道置为auto
+        if (json2.data.channels.indexOf(frequency) === -1) {
+          const radioList = this.props.store.getIn(['curData', 'radioList']).setIn([radioId, 'frequency'], 'auto');
+          this.props.updateItemSettings({ radioList });
+        }
+      }
+    });
+  }
+
   fetchFullPageData() {
     this.props.fetch('goform/get_wl_all').then((json) => {
       if (json.state && json.state.code === 2000) {
@@ -658,18 +683,7 @@ export default class Basic extends React.Component {
         const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
         const country = json.data.radioList[radioId].countryCode;
         this.props.changeCountryCode(country);
-        const channelWidth = json.data.channelWidth;
-        const saveInfo = {
-          radio: this.props.selfState.getIn(['currRadioConfig', 'radioType']),
-          country,
-          channelWidth,
-        };
-        this.props.fetch('goform/get_country_info', saveInfo).then((json2) => {
-          if (json2.state && json2.state.code === 2000) {
-            this.props.receiveCountryInfo(json2.data);
-          }
-        });
-        // this.props.updateSelfItemSettings(radioInfo);
+        this.getChannelListAndPowerRange(radioId);
       }
     }).then(() => { // 生成多SSID列表的options
       const funConfig = this.props.route.funConfig;
@@ -749,22 +763,14 @@ export default class Basic extends React.Component {
 
   saveCountrySelectModal() {
     const selectedCode = this.props.selfState.get('selectedCountry');
-    const { radioId, radioType } = this.props.selfState.get('currRadioConfig').toJS();
+    const { radioId } = this.props.selfState.get('currRadioConfig').toJS();
     const radioList = this.props.store.getIn(['curData', 'radioList'])
                                 .setIn([radioId, 'countryCode'], selectedCode);
-    this.props.updateItemSettings({ radioList });
-    const channelWidth = this.props.store.getIn(['curData', 'radioList', radioId, 'channelWidth']);
-    const saveInfo = {
-      radio: radioType,
-      country: selectedCode,
-      channelWidth,
-    };
-    this.props.fetch('goform/get_country_info', saveInfo)
-        .then((json) => {
-          if (json.state && json.state.code === 2000) {
-            this.props.receiveCountryInfo(json.data);
-          }
-        });
+    Promise.resolve().then(() => {
+      this.props.updateItemSettings({ radioList });
+    }).then(() => {
+      this.getChannelListAndPowerRange(radioId);
+    });
     this.props.changeCtyModal(false);
   }
 
@@ -860,16 +866,7 @@ export default class Basic extends React.Component {
               minWidth="100px"
               onChange={(data) => {
                 this.onChangeRadio(data);
-                const saveInfo = {
-                  radio: this.props.productInfo.getIn(['deviceRadioList', data.value, 'radioType']),
-                  country: this.props.store.getIn(['curData', 'radioList', data.value, 'countryCode']),
-                  channelWidth: this.props.store.getIn(['curData', 'radioList', data.value, 'channelWidth']),
-                };
-                this.props.fetch('goform/get_country_info', saveInfo).then((json2) => {
-                  if (json2.state && json2.state.code === 2000) {
-                    this.props.receiveCountryInfo(json2.data);
-                  }
-                });
+                this.getChannelListAndPowerRange(data.value);
               }}
               style={{
                 marginRight: '10px',
@@ -1035,18 +1032,11 @@ export default class Basic extends React.Component {
                   value={curData.getIn(['radioList', radioId, 'radioMode'])}
                   onChange={(data) => {
                     const radioList = curData.get('radioList').setIn([radioId, 'radioMode'], data.value);
-                    this.props.updateItemSettings({ radioList });
-                  }}
-                />
-                <FormGroup
-                  label={_('Channel')}
-                  type="select"
-                  options={this.makeChannelOptions()}
-                  value={curData.getIn(['radioList', radioId, 'frequency']) || 'auto'}
-                  onChange={(data) => {
-                    const radioList = curData.get('radioList')
-                                      .setIn([radioId, 'frequency'], data.value || 'auto');
-                    this.props.updateItemSettings({ radioList });
+                    Promise.resolve().then(() => {
+                      this.props.updateItemSettings({ radioList });
+                    }).then(() => {
+                      this.getChannelListAndPowerRange(radioId);
+                    });
                   }}
                 />
                 { // 2.4G频宽
@@ -1061,7 +1051,11 @@ export default class Basic extends React.Component {
                       onChange={(data) => {
                         const radioList = curData.get('radioList')
                                           .setIn([radioId, 'channelWidth'], data.value);
-                        this.props.updateItemSettings({ radioList });
+                        Promise.resolve().then(() => {
+                          this.props.updateItemSettings({ radioList });
+                        }).then(() => {
+                          this.getChannelListAndPowerRange(radioId);
+                        });
                       }}
                     />
                   ) : null
@@ -1079,11 +1073,26 @@ export default class Basic extends React.Component {
                       onChange={(data) => {
                         const radioList = curData.get('radioList')
                                           .setIn([radioId, 'channelWidth'], data.value);
-                        this.props.updateItemSettings({ radioList });
+                        Promise.resolve().then(() => {
+                          this.props.updateItemSettings({ radioList });
+                        }).then(() => {
+                          this.getChannelListAndPowerRange(radioId);
+                        });
                       }}
                     />
                   ) : null
                 }
+                <FormGroup
+                  label={_('Channel')}
+                  type="select"
+                  options={this.makeChannelOptions()}
+                  value={curData.getIn(['radioList', radioId, 'frequency']) || 'auto'}
+                  onChange={(data) => {
+                    const radioList = curData.get('radioList')
+                                      .setIn([radioId, 'frequency'], data.value || 'auto');
+                    this.props.updateItemSettings({ radioList });
+                  }}
+                />
                 {
                   funConfig.radioMaxClientsLimit ? (
                     <FormGroup
@@ -1107,7 +1116,7 @@ export default class Basic extends React.Component {
                 <FormGroup
                   label={_('Tx Power')}
                   type="number"
-                  min="3"
+                  min={this.props.selfState.get('minTxpower')}
                   form="radioSettings"
                   max={this.props.selfState.get('maxTxpower')}
                   value={curData.getIn(['radioList', radioId, 'txPower'])}
@@ -1116,7 +1125,7 @@ export default class Basic extends React.Component {
                                       .setIn([radioId, 'txPower'], data.value);
                     this.props.updateItemSettings({ radioList });
                   }}
-                  help={`${_('Range: ')} 3~${this.props.selfState.get('maxTxpower')} dBm`}
+                  help={`${_('Range: ')} ${this.props.selfState.get('minTxpower') || '3'}~${this.props.selfState.get('maxTxpower') || '23'} dBm`}
                   required
                   {...validTxpower}
                 />
@@ -1273,38 +1282,6 @@ export default class Basic extends React.Component {
                         />
                       )
                     }
-
-                    {
-                      // curData.getIn(['radioList', radioId, 'wirelessMode']) === 'repeater' ||
-                      // curData.getIn(['radioList', radioId, 'wirelessMode']) === 'ap' ? (
-                      //   <FormGroup
-                      //     label={_('Client Isolation')}
-                      //     type="checkbox"
-                      //     checked={curData.getIn(['radioList', radioId, 'vapList', '0', 'isolation']) === '1'}
-                      //     onChange={(data) => {
-                      //       const radioList = curData.get('radioList')
-                      //                       .setIn([radioId, 'vapList', '0', 'isolation'], data.value);
-                      //       this.props.updateItemSettings({ radioList });
-                      //     }}
-                      //   />
-                      // ) : null
-                    }
-                    {
-                      // funConfig.portalFun &&
-                      // curData.getIn(['radioList', radioId, 'wirelessMode']) !== 'sta' ? (
-                      //   <FormGroup
-                      //     type="checkbox"
-                      //     label={_('Portal Enable')}
-                      //     checked={curData.getIn(['radioList', radioId, 'vapList', '0', 'portalEnable']) === '1'}
-                      //     onChange={(data) => {
-                      //       const radioList = curData.get('radioList')
-                      //                       .setIn([radioId, 'vapList', '0', 'portalEnable'], data.value);
-                      //       this.props.updateItemSettings({ radioList });
-                      //     }}
-                      //   />
-                      // ) : null
-                    }
-
 
                     { // repeater模式下，对端AP的mac地址输入框
                       (curData.getIn(['radioList', radioId, 'wirelessMode']) === 'repeater') ? (

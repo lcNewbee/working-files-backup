@@ -5,131 +5,45 @@
   "msg": "ok"
 },
 "data": {
-  "talkers": [
+
+  "ethInterface": [
     {
-      "name": "talker1",
+      "name": "eth1",
       "value": 50
     }, {
-      "name": "talker2",
+      "name": "eth2",
       "value": 25
     }, {
-      "name": "talker3",
+      "name": "eth3",
       "value": 25
     }
   ],
 
-  "hosts": [
+  "mac": [
     {
-      "name": "hosts1",
+      "name": "00:b0:2c:0c:85:6c",
       "value": 40
     }, {
-      "name": "hosts2",
+      "name": "dc:fe:07:d4:22:9c",
       "value": 25
     }, {
-      "name": "hosts3",
+      "name": "dc:fe:07:d4:22:9d",
       "value": 35
     }
   ],
 
-  "clientPorts": [
+  "proto": [
     {
-      "name": "ports1",
+      "name": "udp",
       "value": 30
     }, {
-      "name": "ports2",
+      "name": "tcp",
       "value": 10
     }, {
-      "name": "ports3",
+      "name": "dhcp",
       "value": 60
-    }
-  ],
-
-  "serverPorts": [
-    {
-      "name": "ports1",
-      "value": 50
-    }, {
-      "name": "ports2",
-      "value": 10
-    }, {
-      "name": "ports3",
-      "value": 40
-    }, {
-      "name": "poqwrts1",
-      "value": 50
-    }, {
-      "name": "pogrts2",
-      "value": 10
-    }, {
-      "name": "porqwets3",
-      "value": 40
-    }, {
-      "name": "portgs1",
-      "value": 50
-    }, {
-      "name": "posdrts2",
-      "value": 10
-    }, {
-      "name": "podrts3",
-      "value": 40
-    }, {
-      "name": "porhts1",
-      "value": 50
-    }, {
-      "name": "ponrts2",
-      "value": 10
-    }, {
-      "name": "porwts3",
-      "value": 40
-    }, {
-      "name": "porerqts1",
-      "value": 50
-    }, {
-      "name": "porsdgts2",
-      "value": 10
-    }, {
-      "name": "portsas3",
-      "value": 40
-    }
-  ],
-
-  "appProtocols": [
-    {
-      "name": "protocol1",
-      "value": 60
-    }, {
-      "name": "protocol2",
-      "value": 20
-    }, {
-      "name": "protocol3",
-      "value": 20
-    }
-  ],
-
-  "anss": [
-    {
-      "name": "ans1",
-      "value": 10
-    }, {
-      "name": "ans2",
-      "value": 10
-    }, {
-      "name": "ans3",
-      "value": 80
-    }
-  ],
-
-  "liveTalkers": [
-    {
-      "name": "talker1",
-      "value": 30
-    }, {
-      "name": "talker2",
-      "value": 60
-    }, {
-      "name": "talker3",
-      "value": 10
     }
   ]
+
 }
 }

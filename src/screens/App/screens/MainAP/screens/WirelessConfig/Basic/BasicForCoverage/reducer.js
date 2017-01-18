@@ -19,6 +19,7 @@ const defaultState = fromJS({
   selectedCountry: '',
   channels: [],
   maxTxpower: '27',
+  minTxpower: '3',
   security: {
     mode: 'wpa',
     cipher: 'aes',
@@ -63,7 +64,8 @@ export default function (state = defaultState, action) {
                   .set('selectedCountry', action.data);
     case 'RECEIVE_COUNTRY_INFO':
       return state.set('channels', fromJS(action.data.channels))
-                  .set('maxTxpower', action.data.maxTxpower);
+                  .set('maxTxpower', action.data.maxTxpower)
+                  .set('minTxpower', action.data.minTxpower);
     case 'LEAVE_SCREEN':
       return defaultState;
     case 'RESTORE_SELF_STATE':
