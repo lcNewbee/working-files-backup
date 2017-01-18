@@ -136,13 +136,13 @@ export default class Main extends Component {
       this.autoRefreshData();
     }, rateInterval);
 
-    if (this.props.route.path === '/main/group') {
-      this.onToggleMainPopOver({
-        name: 'groupAsider',
-        isShow: true,
-        overlay: false,
-      });
-    }
+    // if (this.props.route.path === '/main/group') {
+    //   this.onToggleMainPopOver({
+    //     name: 'groupAsider',
+    //     isShow: true,
+    //     overlay: false,
+    //   });
+    // }
   }
 
   componentWillUnmount() {

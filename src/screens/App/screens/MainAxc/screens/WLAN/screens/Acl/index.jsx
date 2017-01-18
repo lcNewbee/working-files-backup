@@ -96,6 +96,7 @@ export default class Blacklist extends React.Component {
     super(props);
     utils.binds(this, [
       'onSave',
+      'onBeforeSave',
       'onSelectCopyFromGroup',
       'onOpenCopyBlacklistModal',
       'onSelectCopyBlacklist',
