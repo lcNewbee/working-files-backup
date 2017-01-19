@@ -53,7 +53,7 @@ export const $$commonPieOption = fromJS({
   },
   legend: {
     orient: 'vertical',
-    x: '54%',
+    x: '56%',
     y: 'center',
     itemWidth: 12,
     itemHeight: 12,

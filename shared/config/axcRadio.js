@@ -17,12 +17,6 @@ const $$bandwidthOptions = fromJS([
   },
 ]);
 const channelsList = List(channels);
-const countryOptions = channelsList.map(item =>
-  ({
-    value: item.country,
-    label: b28n.getLang() === 'cn' ? _(item.cn) : _(item.en),
-  }),
-).toJS();
 
 const spatialstreamsOptions = [
   {
@@ -39,6 +33,13 @@ const spatialstreamsOptions = [
     label: '4x4',
   },
 ];
+
+export const countryOptions = channelsList.map(item =>
+  ({
+    value: item.country,
+    label: b28n.getLang() === 'cn' ? _(item.cn) : _(item.en),
+  }),
+).toJS();
 export const $$phymodeOptopns = fromJS([
   {
     value: 1,
@@ -163,6 +164,7 @@ export const radioBase = fromJS([
     defaultValue: '',
     required: true,
     options: countryOptions,
+    disabled: true,
   }, {
     id: 'channel',
     form: 'radioBase',

@@ -5,14 +5,14 @@ class SystemMaintenance extends CI_Controller {
         parent::__construct();
         $this->load->library('session');
         $this->load->database();
-        $this->load->helper(array('array', 'my_customfun_helper'));			
+        $this->load->helper(array('array', 'my_customfun_helper'));
     }
     function fetch() {
         $retdata = array(
             'page' => element('page',$_GET,1),
             'size' => element('size',$_GET,20)
-        );    
-        $querydata = $this->db->query('select discover as discoverycnt,echo as echotime,acstatistime as statistime,autoap from capwap');
+        );
+        $querydata = $this->db->query('select discover as discoverycnt,countrycode,echo as echotime,acstatistime as statistime,autoap from capwap');
         $arr = array(
             'state' => array('code'=>2000,'msg'=>'ok'),
             'data' => array(
@@ -30,11 +30,12 @@ class SystemMaintenance extends CI_Controller {
                 'echotime' => (int)element('echotime',$data,10),
                 'statistime' => (int)element('statistime',$data,120),
                 'autoap' => (int)element('autoap',$data,1),
+                'countrycode' => element('countrycode',$data),
             );
             $result = axc_set_capwap_param(json_encode($cgiary));
             //log
-            $cgiObj = json_decode($result);			
-            if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
+            $cgiObj = json_decode($result);
+            if(is_object($cgiObj) && $cgiObj->state->code === 2000) {
                 $logary = array(
                     'type'=>'Setting',
                     'operator'=>element('username',$_SESSION,''),
@@ -67,7 +68,7 @@ class SystemMaintenance extends CI_Controller {
             'description'=>""
         );
         Log_Record($this->db,$logary);
-        //系统备份        
+        //系统备份
         //copy('/var/run/config.db','/var/conf/config.db');
         exec('cp /var/run/config.db /var/conf/config.db');
         //download
@@ -91,29 +92,29 @@ class SystemMaintenance extends CI_Controller {
     public function restore() {
         if(isset($_POST['suffix'])) {
             //从文件恢复
-            $result = $this->do_upload();	            	
+            $result = $this->do_upload();
             if($result['state']['code'] === 2000){
-                exec('/sbin/reboot');                
+                exec('/sbin/reboot');
             }else{
-                $result = json_encode($result);               
-            }	
+                $result = json_encode($result);
+            }
         }else{
             //恢复出厂设置
             if(file_exists('/var/conf/config.db')) {
                 unlink('/var/conf/config.db');
             }
-            exec('/sbin/reboot');  
-        }            
+            exec('/sbin/reboot');
+        }
     }
     //上传
-    public function do_upload() {	
-        $result = null;			
-        $config['upload_path'] = '/var/conf'; 
+    public function do_upload() {
+        $result = null;
+        $config['upload_path'] = '/var/conf';
         $config['allowed_types'] = '*';
         $config['overwrite'] = true;
         $config['max_size'] = 0;
         $config['file_name'] = 'config.db';
-        
+
         $this->load->library('upload', $config);
         if (!$this->upload->do_upload('filename')) {
             $error = array('error' => $this->upload->display_errors());

@@ -8,7 +8,8 @@
       "discoverycnt": 5,
       "echotime":  10,
       "statistime": 120,
-      "autoap": 1
+      "autoap": 1,
+      "countrycode": "US"
     }
   }
 }

@@ -5,9 +5,7 @@ import { connect } from 'react-redux';
 import { Map, List, fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import AppScreen from 'shared/components/Template/AppScreen';
-import FormGroup from 'shared/components/Form/FormGroup';
-import SaveButton from 'shared/components/Button/SaveButton';
-import FileUpload from 'shared/components/FileUpload';
+import { countryOptions } from 'shared/config/axcRadio';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 
@@ -27,6 +25,12 @@ function onChangeLang(data) {
 
 const settingsFormOptions = fromJS([
   {
+    id: 'countrycode',
+    label: _('Country'),
+    fieldset: 'retainDays',
+    type: 'select',
+    options: countryOptions,
+  }, {
     id: 'discoverycnt',
     label: _('AP Number of Re-joins'),
     fieldset: 'retainDays',
@@ -77,19 +81,6 @@ export default class View extends React.Component {
   constructor(props) {
     super(props);
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-
-    utils.binds(this, [
-      'onReboot',
-      'onBackup',
-      'onRestore',
-      'onConfirm',
-      'checkSaveResult',
-    ]);
-
-    this.state = {
-      isRebooting: false,
-      isRestoring: false,
-    };
   }
 
   render() {

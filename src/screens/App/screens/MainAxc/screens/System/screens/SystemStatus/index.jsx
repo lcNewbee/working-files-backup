@@ -22,6 +22,7 @@ function getCpuOption(serverData) {
     color: [colors[1], colors[7]],
     legend: {
       data: [usedName, freeName],
+      x: '60%',
     },
     title: {
       text: `${_('Used')}`,
@@ -54,6 +55,7 @@ function getMemoryOption(serverData) {
     },
     legend: {
       data: [usedName, freeName],
+      x: '60%',
     },
     series: [
       {
