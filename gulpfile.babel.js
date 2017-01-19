@@ -12,6 +12,7 @@ const argv = minimist(process.argv.slice(2));
 const paths = gulp.paths = {
   tmp: '.tmp',
   build: 'build',
+  zip: 'zip',
   release: 'release',
   src: 'src',
   php: 'php/',

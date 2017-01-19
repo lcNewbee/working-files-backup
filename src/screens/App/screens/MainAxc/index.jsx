@@ -18,6 +18,7 @@ import Table from 'shared/components/Table';
 import PropertyPanel from 'shared/components/Template/PropertyPanel';
 import * as appActions from 'shared/actions/app';
 import * as propertiesActions from 'shared/actions/properties';
+import { getActionable } from 'shared/axc';
 import * as actions from './actions';
 import myReducer from './reducer';
 
@@ -393,7 +394,6 @@ export default class Main extends Component {
       .filter(item => item.get('__selected__'))
       .map(item1 => item1.get('mac'));
     let subData;
-    let customCheckResult;
 
     if (curModalName === 'groupAdd') {
       subData = $$addData.merge({
@@ -410,53 +410,26 @@ export default class Main extends Component {
         groupid: $$editData.get('id'),
         aplist: $$selectMacList.toJS(),
       });
-      customCheckResult = this.isDuplicateAp($$apAddData);
     }
-    if (!customCheckResult) {
-      this.props.save('/goform/group', subData)
-        .then((json) => {
-          const state = json && json.state;
-          customCheckResult = '';
+    this.props.save('/goform/group', subData)
+      .then((json) => {
+        const state = json && json.state;
 
-          if (state) {
-            if (state.code === 2000) {
-              this.props.fetchGroupAps($$editData.get('id'));
-              this.props.fetchGroupAps(-1);
-
-            // apName 重复
-            } else if (state.code === 6000) {
-              customCheckResult = _('AP with the same name already exists');
-            // Ap MAC 重复
-            } else if (state.code === 6001) {
-              customCheckResult = _('AP with the same MAC already exists');
-            }
-          }
-
-          if (curModalName === 'groupApAdd') {
-            this.props.resetGroupAddDevice();
-          }
-
-          this.props.fetchApGroup();
-
-          if (!customCheckResult) {
+        if (state) {
+          if (state.code === 2000) {
+            this.props.fetchGroupAps($$editData.get('id'));
+            this.props.fetchGroupAps(-1);
             this.props.showMainModal({
               isShow: false,
             });
-          } else {
-            this.props.createModal({
-              id: 'settings',
-              role: 'alert',
-              text: customCheckResult,
-            });
+            if (curModalName === 'groupApAdd') {
+              this.props.resetGroupAddDevice();
+            }
+
+            this.props.fetchApGroup();
           }
-        });
-    } else {
-      this.props.createModal({
-        id: 'settings',
-        role: 'alert',
-        text: customCheckResult,
+        }
       });
-    }
   }
   showUserPopOver() {
     this.onToggleMainPopOver({
@@ -472,6 +445,7 @@ export default class Main extends Component {
     const $$groupList = product.getIn(['group', 'list']);
     const curRoutePath = this.props.route.path;
     let isGroupMenu = false;
+    let actionable = getActionable(this.props);
 
     if (curRoutePath === '/main/group') {
       isGroupMenu = true;
@@ -487,7 +461,7 @@ export default class Main extends Component {
           <h3>
             <span>{product.getIn(['group', 'selected', 'groupname'])}</span>
             {
-              isGroupMenu ? (
+              actionable && isGroupMenu ? (
                 <Icon
                   name="plus"
                   title={_('Add Ap Group')}
@@ -559,19 +533,23 @@ export default class Main extends Component {
         </ul>
         <footer className="t-main__asider-footer">
           <div className="m-action-bar">
-            <Icon
-              name="cog"
-              size="2x"
-              onClick={() => {
-                this.props.fetchGroupAps(manageGroupId);
-                this.props.showMainModal({
-                  title: _('Manage Ap Groups'),
-                  isShow: true,
-                  size: 'lg',
-                  name: 'groupManage',
-                });
-              }}
-            />
+            {
+              actionable ? (
+                <Icon
+                  name="cog"
+                  size="2x"
+                  onClick={() => {
+                    this.props.fetchGroupAps(manageGroupId);
+                    this.props.showMainModal({
+                      title: _('Manage Ap Groups'),
+                      isShow: true,
+                      size: 'lg',
+                      name: 'groupManage',
+                    });
+                  }}
+                />
+              ) : null
+            }
           </div>
         </footer>
       </aside>

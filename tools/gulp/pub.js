@@ -4,6 +4,7 @@ const gutil = require('gulp-util');
 const runSequence = require('run-sequence');
 const $ = require('gulp-load-plugins')();
 const argv = require('minimist')(process.argv.slice(2));
+const zip = require('gulp-zip');
 
 const paths = gulp.paths;
 
@@ -39,9 +40,20 @@ gulp.task('pub:build', (callback) => {
 
 gulp.task('pub:copy', () => {
   let distPath = paths.pub;
+  let name = 'axc';
 
   if (argv.d) {
     distPath = argv.d;
+  }
+  if (argv.n) {
+    name = argv.n;
+  }
+
+  if (argv.z) {
+    return gulp.src([`${paths.build}/**/*`, `${paths.php}/**/*`])
+      .pipe(gulp.dest(distPath))
+      .pipe(zip(`${name}.zip`))
+      .pipe(gulp.dest(paths.tmp));
   }
 
   return gulp.src([`${paths.build}/**/*`, `${paths.php}/**/*`])

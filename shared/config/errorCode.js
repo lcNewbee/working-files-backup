@@ -1,4 +1,7 @@
 const ERROR_MSG_MAP = {
+  6000: _('AP with the same name already exists'),
+  6001: _('AP with the same MAC already exists'),
+
   // AXC： 网络设置 6100 - 6199
   6110: _('Please configure the appropriate IP addresses and mask on interfaces'),
 

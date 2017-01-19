@@ -5,7 +5,7 @@ class Group_Model extends CI_Model {
 		parent::__construct();
         $this->load->library('session');
 		$this->load->database();
-		$this->load->helper(array('array', 'my_customfun_helper'));		
+		$this->load->helper(array('array', 'my_customfun_helper'));
 	}
     function get_apgroup_info() {
 		$apGroups = $this->db->select('ap_group.id,ap_group.group_name,ap_group.remark,wids_template.acltype')
@@ -46,11 +46,11 @@ class Group_Model extends CI_Model {
 	}
     function add_apgroup($data) {
         $result = null;
-        $temp_data = $this->getCgiParam($data);   
+        $temp_data = $this->getCgiParam($data);
         $result = axc_add_apgroup(json_encode($temp_data));
-        $cgiObj = json_decode($result);			
+        $cgiObj = json_decode($result);
         if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
-            //log                
+            //log
             $logary = array(
                 'type'=>'Add',
                 'operator'=>element('username',$_SESSION,''),
@@ -60,15 +60,15 @@ class Group_Model extends CI_Model {
             );
             Log_Record($this->db,$logary);
         }
-        return $result;     
+        return $result;
     }
     function up_apgroup($data) {
         $result = null;
         $temp_data= $this->getCgiParam($data);
         $result=axc_modify_apgroup(json_encode($temp_data));
-        $cgiObj = json_decode($result);			
+        $cgiObj = json_decode($result);
         if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
-            //log                
+            //log
             $logary = array(
                 'type'=>'Update',
                 'operator'=>element('username',$_SESSION,''),
@@ -83,9 +83,9 @@ class Group_Model extends CI_Model {
     function del_apgroup($data) {
         $result = null;
         $result = axc_del_apgroup(json_encode($data));
-        $cgiObj = json_decode($result);			
+        $cgiObj = json_decode($result);
         if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
-            //log                
+            //log
             $logary = array(
                 'type'=>'Delete',
                 'operator'=>element('username',$_SESSION,''),
@@ -100,9 +100,9 @@ class Group_Model extends CI_Model {
     function ap_move($data) {
         $result = null;
         $result = axc_aps_move_to_apgroup(json_encode($data));
-        $cgiObj = json_decode($result);			
+        $cgiObj = json_decode($result);
         if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
-            //log                
+            //log
             $logary = array(
                 'type'=>'Move',
                 'operator'=>element('username',$_SESSION,''),
@@ -121,9 +121,9 @@ class Group_Model extends CI_Model {
             'groupid'=>(int)element('groupid', $data, -1),
         );
         $result = axc_del_aptogroup(json_encode($temp_data));
-        $cgiObj = json_decode($result);			
+        $cgiObj = json_decode($result);
         if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
-            //log                
+            //log
             $logary = array(
                 'type'=>'Delete',
                 'operator'=>element('username',$_SESSION,''),
@@ -166,6 +166,7 @@ class Group_Model extends CI_Model {
                     'msg'=>'the apname is not availble!'
                 )
             );
+            $result = json_encode($result);
         } elseif (sizeof($q_mac) > 0) {
             $result=array(
                 'state'=>array(
@@ -173,11 +174,12 @@ class Group_Model extends CI_Model {
                     'msg'=>'mac is not availble!'
                 )
             );
+            $result = json_encode($result);
         } else {
             $result = axc_add_aptogroup(json_encode($temp_data));
-            $cgiObj = json_decode($result);			
+            $cgiObj = json_decode($result);
             if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
-                //log                
+                //log
                 $logary = array(
                     'type'=>'Add',
                     'operator'=>element('username',$_SESSION,''),

@@ -45,7 +45,7 @@
       }, {
         "radioID":   2,
         "enable": 0,
-        "phymodesupport": 4,
+        "phymodesupport": 18,
         "ratesupport": "MCS15",
         "beaconinterval": 100,
         "fragthreshold": 1024,

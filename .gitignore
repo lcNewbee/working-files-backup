@@ -29,6 +29,7 @@ node_modules
 #dist folder
 dist
 build
+.tmp
 
 #Webstorm metadata
 .idea
