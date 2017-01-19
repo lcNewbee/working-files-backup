@@ -1,0 +1,29 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [{
+      "ip": "192.168.0.1",
+      "basip":"basip",
+      "mac": "192.168.0.1",
+      "loginName":"loginName",
+      "startDate":"startDate",
+      "endDate":"endDate",
+      "time":"time",
+      "state":"state",
+      "outs":"outs",
+      "ins":"ins",
+      "octets":"octets",
+      "basname":"basname",
+      "ssid":"ssid",
+      "apmac":"apmac",
+      "methodtype":"methodtype",
+      "auto":"auto",
+      "agent":"agent",
+      "ex1":"ex1"
+    }]
+  }
+}
+

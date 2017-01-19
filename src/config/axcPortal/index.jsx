@@ -171,6 +171,8 @@ const sPortalBas =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Bas');
 const sPortalUrlParams =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/UrlParams');
+const sPortalWeb =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Web');
 
 const sPortalNas =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Radius/Nas');
@@ -184,14 +186,21 @@ const sPortalAccountList =
 const sPortalConnectRecord =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Account/ConnectRecord');
 
-const sPortalAuthentication =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Authentication');
+const sPortalPermission =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Permission');
 const sPortalClassification =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Classification');
 const sPortalUser =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/User');
 const sPortalRole =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Role');
+
+const sPortalLogList =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Log/LogList');
+const sPortalOnlineRecordList =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Log/OnlineRecordList');
+const sPortalOnlineList =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Log/OnlineList');
 
 const routes = [
   {
@@ -782,6 +791,12 @@ const routes = [
                 formUrl: 'goform/portal/access/urlParameter',
                 text: _('Url Parameter'),
                 component: sPortalUrlParams.Screen,
+              }, {
+                id: 'portalAccessWeb',
+                path: '/main/portal/access/web',
+                formUrl: 'goform/portal/access/web',
+                text: _('Web Template'),
+                component: sPortalWeb.Screen,
               },
             ],
           }, {
@@ -839,6 +854,36 @@ const routes = [
               },
             ],
           }, {
+            id: 'portalLog',
+            isIndex: true,
+            path: '/main/portal/log',
+            icon: 'copy',
+            text: _('Online Record Log'),
+            indexRoute: {
+              onEnter: (nextState, replace) => replace('/main/portal/log/logList'),
+            },
+            childRoutes: [
+              {
+                id: 'portalLogLogList',
+                path: '/main/portal/log/logList',
+                formUrl: 'goform/portal/log/logList',
+                text: _('Log List'),
+                component: sPortalLogList.Screen,
+              }, {
+                id: 'portalLogOnlineList',
+                path: '/main/portal/log/onlineList',
+                formUrl: 'goform/portal/log/onlineList',
+                text: _('Online List'),
+                component: sPortalOnlineList.Screen,
+              }, {
+                id: 'portalLogOnlineRecordList',
+                path: '/main/portal/log/onlineRecordList',
+                formUrl: 'goform/portal/log/onlineRecordList',
+                text: _('Online Record List'),
+                component: sPortalOnlineRecordList.Screen,
+              },
+            ],
+          }, {
             id: 'portalSystem',
             isIndex: true,
             path: '/main/portal/system',
@@ -852,7 +897,7 @@ const routes = [
                 id: 'portalSystemClassification',
                 path: '/main/portal/system/classification',
                 formUrl: 'goform/portal/system/classification',
-                text: _('Classification '),
+                text: _('Classification'),
                 component: sPortalClassification.Screen,
               }, {
                 id: 'portalSystemRole',
@@ -868,11 +913,11 @@ const routes = [
                 text: _('User'),
                 component: sPortalUser.Screen,
               }, {
-                id: 'portalSystemAuthentication',
-                path: '/main/portal/system/authentication',
-                formUrl: 'goform/portal/system/authentication',
-                text: _('Authentication'),
-                component: sPortalAuthentication.Screen,
+                id: 'portalSystemPermission',
+                path: '/main/portal/system/permission',
+                formUrl: 'goform/portal/system/permission',
+                text: _('Permission'),
+                component: sPortalPermission.Screen,
               },
             ],
           },

@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/utils/lib/validator';
 import AppScreen from 'shared/components/Template/AppScreen';
@@ -10,31 +10,61 @@ import * as appActions from 'shared/actions/app';
 
 const listOptions = fromJS([
   {
-    id: 'parentId',
-    text: _('Parent Classification'),
+    id: 'name',
+    text: _('name'),
+    width: '120px',
+    formProps: {
+      type: 'text',
+      required: true,
+    },
+  }, {
+    id: 'adv',
+    text: _('Ads Page'),
+    width: '120px',
     options: [
       {
         value: '0',
-        label: _('Super Administrator'),
-      }, {
-        value: '1',
-        label: _('Operator'),
+        label: _('Open Portal'),
       },
     ],
-    defaultValue: '0',
     formProps: {
       type: 'select',
       required: true,
-      placeholder: _('Please Select ') + _('Parent Classification'),
     },
   }, {
-    id: 'name',
-    text: _('Authentication Name'),
-    type: 'text',
+    id: 'countShow',
+    text: _('countShow'),
+    defaultValue: '',
+    formProps: {
+      type: 'text',
+      maxLength: '32',
+    },
   }, {
-    id: 'url',
-    text: _('Visit URL'),
-    type: 'text',
+    id: 'countAuth',
+    text: _('countAuth'),
+    defaultValue: '',
+    formProps: {
+      type: 'text',
+    },
+  }, {
+    id: 'description',
+    text: _('description'),
+    defaultValue: '',
+    formProps: {
+      type: 'plain-text',
+      noAdd: true,
+      validator: validator({}),
+    },
+  }, {
+    id: 'file',
+    text: _('Template Zip File'),
+    noTable: true,
+    defaultValue: '',
+    formProps: {
+      type: 'file',
+      required: true,
+      validator: validator({}),
+    },
   },
 ]);
 const propTypes = {

@@ -119,12 +119,14 @@
   "Functional Description":"职能说明",
 
   "Role Name":"角色名称",
+  "Role":"角色",
   "Detail Description":"详细说明",
   "Belonged Classification":"所属分类",
   "Phone Number":"电话号码",
   "Super Administrator":"超级管理员",
-  "Authentication Name":"权限名称",
-  "Visit URL":"访问地址"
+  "Permission Name":"权限名称",
+  "Visit URL":"访问地址",
+  "Permission":"权限"
 
 
 

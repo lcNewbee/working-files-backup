@@ -1,0 +1,16 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [{
+      "name": "2",
+      "adv": "ikuai",
+      "countShow": "129.0.0.1",
+      "countAuth": "2000",
+      "description": "1",
+      "file": "0"
+    }]
+  }
+}
