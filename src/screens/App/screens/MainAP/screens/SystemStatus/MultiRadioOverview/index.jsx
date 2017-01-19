@@ -7,6 +7,7 @@ import Table from 'shared/components/Table';
 import utils from 'shared/utils';
 import * as sharedActions from 'shared/actions/settings';
 import * as appActions from 'shared/actions/app';
+import { colors } from 'shared/config/axc';
 import * as selfActions from './actions';
 import reducer from './reducer';
 
@@ -253,6 +254,7 @@ function wirelessModeShowStyle(wirelessMode) {
 function getTopTenFlowClientsOption(serverData) {
   let dataList = serverData.get('top10FlowClients');
   const ret = {
+    color: colors,
     tooltip: {
       trigger: 'item',
       formatter: '{a} <br/>{b} ({d}%)',
@@ -326,6 +328,7 @@ function getTopTenFlowClientsOption(serverData) {
 function getFlowPerSsidOption(serverData) {
   let dataList = serverData.get('flowPerSsid');
   const ret = {
+    color: colors,
     tooltip: {
       trigger: 'item',
       formatter: '{a} <br/>{b} ({d}%)',
@@ -494,6 +497,7 @@ export default class SystemStatus extends React.Component {
     };
 
     const option = {
+      color: ['#00a7f6', '#f6402b'],
       backgroundColor: '#edf4fd',
       legend: {
         data: [_('Used'), _('Free')],
@@ -571,6 +575,7 @@ export default class SystemStatus extends React.Component {
     const uploadFlow = flowRateFilter.transform(upload);
 
     const option = {
+      color: colors,
       title: {
         text: _('Station Flow'),
         left: '45%',

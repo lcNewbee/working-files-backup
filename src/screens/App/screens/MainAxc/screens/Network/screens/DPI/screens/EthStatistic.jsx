@@ -52,6 +52,11 @@ const listOptions = fromJS([
   }, {
     id: 'guessed_flow_protos',
     text: _('Guessed Flow Protos'),
+  }, {
+    id: 'active_eth',
+    text: _('Active Status'),
+    actionName: 'active',
+    type: 'switch',
   },
 ]);
 
@@ -60,6 +65,7 @@ export default class EthStatistic extends React.Component {
   constructor(props) {
     super(props);
   }
+
   render() {
     return (
       <div>
@@ -70,6 +76,11 @@ export default class EthStatistic extends React.Component {
             isFetchInfinite: true,
             fetchIntervalTime: 5000,
           }}
+          actionable
+          addable={false}
+          editable={false}
+          deleteable={false}
+          listKey="ethx_name"
         />
       </div>
     );

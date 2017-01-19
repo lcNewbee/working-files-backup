@@ -5,9 +5,6 @@
 	"msg":	"ok"
 },
 "data":	{
-	"page":	{
-		"startline":	7777
-	},
 	"list":	[{
 			"ethx_name":	"eth0",
 			"eth_bytes":	"44199",
@@ -29,7 +26,31 @@
 			"packets_size_1500":	"0",
 			"packets_size_other":	"0",
 			"ndpi_throughput":	"8.37 M/10.98 Gb",
-			"guessed_flow_protos":	"22"
+			"guessed_flow_protos":	"22",
+      "active_eth": "0"
+		}, {
+			"ethx_name":	"eth1",
+			"eth_bytes":	"44199",
+			"discarded_bytes":	"7506",
+			"ip_packets":	"251",
+			"ip_bytes":	"38175",
+			"unique_flows":	"57",
+			"tcp_packets":	"159",
+			"udp_packets":	"67",
+			"vlan_packets":	"0",
+			"mpls_packets":	"0",
+			"pppoe_packets":	"0",
+			"fragmented_packets":	"0",
+			"max_packets_size":	"1039",
+			"packets_size_64":	"0",
+			"packets_size_128":	"0",
+			"packets_size_256":	"0",
+			"packets_size_1024":	"0",
+			"packets_size_1500":	"0",
+			"packets_size_other":	"0",
+			"ndpi_throughput":	"8.37 M/10.98 Gb",
+			"guessed_flow_protos":	"22",
+      "active_eth": "1"
 		}]
 }
 }
