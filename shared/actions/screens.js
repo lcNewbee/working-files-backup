@@ -96,7 +96,7 @@ export function fetchScreenData(option) {
             dispatch(fetchScreenData({
               url: myUrl,
             }));
-          }, refreshTime);
+          }, curFetchIntervalTime);
         }
       });
   };

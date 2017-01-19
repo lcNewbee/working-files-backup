@@ -51,24 +51,29 @@ const defaultProps = {};
 export default class View extends React.Component {
   constructor(props) {
     super(props);
+    utils.binds(this, [
+      'initOptions',
+    ]);
   }
 
   componentWillMount() {
-    this.actionable = this.props.selectedGroup.get('aclType') === 'black';
-    this.settingsFormOptions = settingsFormOptions;
+    this.initOptions(this.props);
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.selectedGroup !== this.props.selectedGroup) {
-      this.actionable = nextProps.selectedGroup.get('aclType') === 'black';
+      this.initOptions(nextProps);
+    }
+  }
 
-      // 不可操作需隐藏开关按钮
-      if (!this.actionable) {
-        this.settingsFormOptions = settingsFormOptions.filterNot(
-          $$item => $$item.get('id') === 'widsenable'
-        );
-      } else {
-        this.settingsFormOptions = settingsFormOptions;
-      }
+  initOptions(props) {
+    this.actionable = props.selectedGroup.get('aclType') === 'black';
+    // 不可操作需隐藏开关按钮
+    if (!this.actionable) {
+      this.settingsFormOptions = settingsFormOptions.filterNot(
+        $$item => $$item.get('id') === 'widsenable',
+      );
+    } else {
+      this.settingsFormOptions = settingsFormOptions;
     }
   }
 
@@ -77,6 +82,7 @@ export default class View extends React.Component {
       <AppScreen
         {...this.props}
         settingsFormOptions={this.settingsFormOptions}
+        actionable={this.actionable}
         hasSettingsSaveButton={this.actionable}
         noTitle
       />

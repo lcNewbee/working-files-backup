@@ -40,6 +40,10 @@ export function getActionable(props, moduleName) {
     );
   }
 
+  if (props.actionable === false) {
+    ret = false;
+  }
+
   return ret;
 }
 

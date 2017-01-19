@@ -50,9 +50,9 @@ const propTypes = {
 const defaultProps = {
   onAfterSync: emptyFunc,
   noTitle: true,
+  groupid: 'not',
 
   // AppScreenList Option
-  groupid: '',
 
   // Settings Form
   updateScreenSettings: emptyFunc,
@@ -131,7 +131,14 @@ export default class AppScreen extends React.Component {
   }
   componentDidMount() {
     if (this.props.fetchScreenData) {
-      this.props.fetchScreenData();
+      // 默认非组管理界面，直接获取数据
+      if (this.props.groupid === 'not') {
+        this.props.fetchScreenData();
+
+      // 组管理界面，需要获取当前组id才能获取数据
+      } else if (this.props.groupid !== '') {
+        this.props.fetchScreenData();
+      }
 
       if (this.props.refreshInterval) {
         this.refreshTimer = setInterval(
@@ -151,6 +158,10 @@ export default class AppScreen extends React.Component {
       this.defaultEditData = immutableUtils.getDefaultData(nextListOptions);
     }
 
+    if (nextProps.actionable !== this.props.actionable) {
+      this.actionable = getActionable(nextProps);
+    }
+
     if (!immutable.is(nextSettingOptions, this.props.settingsFormOptions)) {
       this.defaultSettingsData = immutableUtils.getDefaultData(nextSettingOptions);
     }
@@ -167,7 +178,9 @@ export default class AppScreen extends React.Component {
       this.props.changeScreenQuery({
         groupid: this.props.groupid,
       });
-      this.props.fetchScreenData();
+      if (this.props.groupid !== '') {
+        this.props.fetchScreenData();
+      }
     }
   }
   componentWillUnmount() {

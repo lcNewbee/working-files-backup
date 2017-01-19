@@ -44,7 +44,6 @@ function mapStateToProps(state) {
   return {
     app: state.app,
     store: state.screens,
-    groupId: state.product.getIn(['group', 'selected', 'id']),
   };
 }
 

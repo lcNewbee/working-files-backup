@@ -19,7 +19,9 @@ const defaultState = fromJS({
 
   // Ap组相关
   group: {
-    selected: {},
+    selected: {
+      id: '',
+    },
     manageSelected: {},
     addData: {
       groupname: '',

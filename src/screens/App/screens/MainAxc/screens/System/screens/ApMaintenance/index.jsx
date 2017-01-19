@@ -110,7 +110,6 @@ View.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
-    groupId: state.product.getIn(['group', 'selected', 'id']),
     store: state.screens,
   };
 }
