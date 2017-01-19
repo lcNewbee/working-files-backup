@@ -15,7 +15,7 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: _('Super administrator'),
+        label: _('Super Administrator'),
       }, {
         value: '1',
         label: _('Operator'),

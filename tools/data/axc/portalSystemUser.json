@@ -1,0 +1,26 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "id": 1,
+        "loginName":"Fanny",
+        "name":"FannyZHANG",
+        "departmentId":"Program",
+        "roleId":"super admin",
+        "description": "All"
+      },
+      {
+        "id": 1,
+        "loginName":"Fanny",
+        "name":"FannyZHANG",
+        "departmentId":"Program",
+        "roleId":"super admin",
+        "description": "All"
+      }
+    ]
+  }
+}

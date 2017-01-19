@@ -111,7 +111,21 @@
   "NAS List":"NAS列表",
   "Online List":"在线列表",
   "Connect Logs":"连接记录列表",
-  "Url Parameter":"Url 参数设置"
+  "Url Parameter":"Url 参数设置",
+
+  "Classification": "分类",
+  "Parent Classification":"上级分类名称",
+  "Classification Name":"分类名称",
+  "Functional Description":"职能说明",
+
+  "Role Name":"角色名称",
+  "Detail Description":"详细说明",
+  "Belonged Classification":"所属分类",
+  "Phone Number":"电话号码",
+  "Super Administrator":"超级管理员",
+  "Authentication Name":"权限名称",
+  "Visit URL":"访问地址"
+
 
 
 }

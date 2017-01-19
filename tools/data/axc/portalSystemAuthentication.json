@@ -1,0 +1,22 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "id": 1,
+        "name":"FannyZHANG",
+        "parentId":"super admin",
+        "url": "www.baidu.com"
+      },
+      {
+        "id": 1,
+        "name":"FannyZHANG",
+        "parentId":"super admin",
+        "url": "www.baidu.com"
+      }
+    ]
+  }
+}
