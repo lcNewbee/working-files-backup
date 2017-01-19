@@ -31,7 +31,6 @@ var vaildate = {
   // UTF-8 字节长度
   utf8Len: function(str, min, max) {
     var len = utilsCore.getUtf8Length(str);
-
     if (min === max && len !== min) {
       return _('String length must be: ') + _('%s bit', min);
     } else if (len < min || len > max) {

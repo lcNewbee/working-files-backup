@@ -62,10 +62,10 @@ const propTypes = {
 
 const validOptions = fromJS({
   groupname: validator({
-    rules: 'len:[1, 31]',
+    rules: 'utf8Len:[1, 31]',
   }),
   remark: validator({
-    rules: 'len:[1, 256]',
+    rules: 'utf8Len:[1, 255]',
   }),
   apmac: validator({
     rules: 'mac',
@@ -444,8 +444,8 @@ export default class Main extends Component {
     const manageGroupId = product.getIn(['group', 'manageSelected', 'id']);
     const $$groupList = product.getIn(['group', 'list']);
     const curRoutePath = this.props.route.path;
+    const actionable = getActionable(this.props);
     let isGroupMenu = false;
-    let actionable = getActionable(this.props);
 
     if (curRoutePath === '/main/group') {
       isGroupMenu = true;
@@ -490,7 +490,26 @@ export default class Main extends Component {
           </div>
         </header>
 
-        <h4 className="t-main__asider-header">{_('Group List')}</h4>
+        <h4 className="t-main__asider-header row">
+          {_('Group List')}
+          {
+              actionable ? (
+                <Icon
+                  name="cog"
+                  className="fr"
+                  onClick={() => {
+                    this.props.fetchGroupAps(manageGroupId);
+                    this.props.showMainModal({
+                      title: _('Manage Ap Groups'),
+                      isShow: true,
+                      size: 'lg',
+                      name: 'groupManage',
+                    });
+                  }}
+                />
+              ) : null
+            }
+        </h4>
         <ul
           className="m-menu m-menu--open"
         >

@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Map } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import validator from 'shared/utils/lib/validator';
 import {
   FormGroup,
 } from '../Form';
@@ -46,6 +47,12 @@ class Panel extends React.Component {
           label={_('Nickname')}
           name="devicename"
           form="deviceGeneral"
+          maxLength="31"
+          validator={
+            validator({
+              rules: 'utf8Len:[1,31]',
+            })
+          }
 
           value={store.getIn(['data', 'devicename'])}
           onChange={option => this.props.onChangeData({

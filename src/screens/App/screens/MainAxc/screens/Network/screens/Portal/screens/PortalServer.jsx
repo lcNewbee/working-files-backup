@@ -14,8 +14,11 @@ const listOptions = fromJS([
     label: _('Server Name'),
     formProps: {
       type: 'text',
-      maxLength: '32',
+      maxLength: '31',
       required: true,
+      validator: validator({
+        rules: 'utf8Len:[1,31]',
+      }),
     },
   }, {
     id: 'address_type',
@@ -53,6 +56,9 @@ const listOptions = fromJS([
     formProps: {
       type: 'text',
       required: true,
+      validator: validator({
+        rules: 'utf8Len:[1,63]',
+      }),
       showPrecondition(data) {
         return data.get('address_type') === '2';
       },
@@ -72,7 +78,7 @@ const listOptions = fromJS([
     noTable: true,
     formProps: {
       type: 'password',
-      maxLength: '32',
+      maxLength: '31',
       required: true,
       validator: validator({
         rules: 'pwd',
