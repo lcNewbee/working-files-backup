@@ -110,7 +110,7 @@ const channelWidthOptions = [
 
 const validOptions = Map({
   validSsid: validator({
-    rules: 'remarkTxt:["\'\\\\"]|len:[1, 31]',
+    rules: 'remarkTxt:["\'\\\\"]|len:[1, 32]',
   }),
   staApmac: validator({
     rules: 'mac',
@@ -238,7 +238,7 @@ export default class Basic extends React.Component {
                 value={val}
                 disabled={pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
                 onChange={(data) => {
-                  if (data.value.length <= 31) {
+                  if (data.value.length <= 32) {
                     this.onSsidItemChange(val, item, 'ssid', data.value);
                   }
                 }}
@@ -1620,7 +1620,7 @@ export default class Basic extends React.Component {
                     const vapList = curData.getIn(['radioList', radioId, 'vapList']).toJS();
                     const radioClientLimit = curData.getIn(['radioList', radioId, 'maxRadioClients']);
                     const len = curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta' ? 1 : vapList.length;
-                    console.log('len', curData.getIn([radioId, 'wirelessMode']));
+                    // console.log('len', curData.getIn([radioId, 'wirelessMode']));
                     const re = /^[0-9]*[1-9][0-9]*$/;
                     for (let i = 0; i < len; i++) {
                       if (!re.test(vapList[i].vlanId)) {

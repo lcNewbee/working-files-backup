@@ -41,17 +41,6 @@ const listOptions = fromJS([
 export default class MacStatistic extends React.Component {
   constructor(props) {
     super(props);
-    this.props.initScreen({
-      id: this.props.route.id,
-      formUrl: this.props.route.formUrl,
-      path: this.props.route.path,
-      isFetchInfinite: true,
-      fetchIntervalTime: 5000,
-    });
-  }
-
-  componentWillMount() {
-    this.props.fetchScreenData();
   }
 
   render() {
@@ -60,6 +49,10 @@ export default class MacStatistic extends React.Component {
         <AppScreen
           {...this.props}
           listOptions={listOptions}
+          initOption={{
+            isFetchInfinite: true,
+            fetchIntervalTime: 5000,
+          }}
         />
       </div>
     );

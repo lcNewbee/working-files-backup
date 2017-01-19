@@ -17,40 +17,40 @@ const listOptions = fromJS([
     id: 'ethx_name',
     text: _('Name'),
   }, {
-    id: 'ndpi_eth_bytes',
+    id: 'eth_bytes',
     text: _('Flow Bytes'),
   }, {
-    id: 'ndpi_discarded_bytes',
+    id: 'discarded_bytes',
     text: _('Discarded Bytes'),
   }, {
-    id: 'ndpi_ip_packets',
+    id: 'ip_packets',
     text: _('IP Packets'),
   }, {
-    id: 'ndpi_ip_bytes',
+    id: 'ip_bytes',
     text: _('IP Bytes'),
   }, {
-    id: 'ndpi_tcp_packets',
+    id: 'tcp_packets',
     text: _('TCP Packets'),
   }, {
-    id: 'ndpi_udp_packets',
+    id: 'udp_packets',
     text: _('UDP Packets'),
   }, {
-    id: 'ndpi_vlan_packets',
+    id: 'vlan_packets',
     text: _('VLAN Packets'),
   }, {
-    id: 'ndpi_mpls_packets',
+    id: 'mpls_packets',
     text: _('MPLS Packets'),
   }, {
-    id: 'ndpi_pppoe_packets',
+    id: 'pppoe_packets',
     text: _('PPPoE Packets'),
   }, {
-    id: 'ndpi_fragmented_packets',
+    id: 'fragmented_packets',
     text: _('Fragmented Packets'),
   }, {
-    id: 'ndpi_ndpi_throughput',
+    id: 'ndpi_throughput',
     text: _('NDPI Throughput'),
   }, {
-    id: 'ndpi_guessed_flow_protos',
+    id: 'guessed_flow_protos',
     text: _('Guessed Flow Protos'),
   },
 ]);
@@ -59,25 +59,17 @@ const listOptions = fromJS([
 export default class EthStatistic extends React.Component {
   constructor(props) {
     super(props);
-    this.props.initScreen({
-      id: this.props.route.id,
-      formUrl: this.props.route.formUrl,
-      path: this.props.route.path,
-      isFetchInfinite: true,
-      fetchIntervalTime: 5000,
-    });
   }
-
-  componentWillMount() {
-    this.props.fetchScreenData();
-  }
-
   render() {
     return (
       <div>
         <AppScreen
           {...this.props}
           listOptions={listOptions}
+          initOption={{
+            isFetchInfinite: true,
+            fetchIntervalTime: 5000,
+          }}
         />
       </div>
     );

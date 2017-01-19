@@ -319,7 +319,7 @@ export default class Basic extends React.Component {
           width: '250px',
           transform: function (val, item) {
             if (val === '' || !Number.isInteger(+val) || parseInt(val, 10) <= 0) {
-              this.onSsidItemChange(val, item, 'maxClients', '32');
+              this.onSsidItemChange(val, item, 'maxClients', '64');
             } // 后台没传值，或值错误，则提供默认值
             return (
               <FormInput
@@ -648,7 +648,7 @@ export default class Basic extends React.Component {
       enable: '1',
       portalEnable: '0',
       airTimeEnable: '0',
-      maxClients: '32',
+      maxClients: '64',
       security: {
         mode: 'none',
         cipher: 'aes',

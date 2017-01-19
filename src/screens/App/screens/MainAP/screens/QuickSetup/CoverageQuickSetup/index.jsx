@@ -136,7 +136,7 @@ const validOptions = Map({
     rules: 'ip',
   }),
   validSsid: validator({
-    rules: 'remarkTxt:["\'\\\\"]|len:[1, 31]',
+    rules: 'remarkTxt:["\'\\\\"]|len:[1, 32]',
   }),
   validDistance: validator({
     rules: 'num:[1, 10]',
