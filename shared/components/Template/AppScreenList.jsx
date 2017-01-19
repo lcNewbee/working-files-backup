@@ -39,7 +39,9 @@ const propTypes = {
   customTable: PropTypes.bool,
   actionable: PropTypes.bool,
   addable: PropTypes.bool,
-  editable: PropTypes.bool,
+  editable: PropTypes.oneOfType([
+    PropTypes.bool, PropTypes.func,
+  ]),
   deleteable: PropTypes.bool,
   searchable: PropTypes.bool,
   selectable: PropTypes.bool,
@@ -461,53 +463,73 @@ class AppScreenList extends React.Component {
           id: '__actions__',
           text: _('Actions'),
           width: btnsNum * 90,
-          transform: (val, item, index) => (
-            <div className="action-btns">
-              {
-                editable ? (
-                  <Button
-                    icon="edit"
-                    text={_('Edit')}
-                    size="sm"
-                    onClick={() => {
-                      this.props.editListItemByIndex(index);
-                    }}
-                  />
-                ) : null
-              }
-              {
-                deleteable ? (
-                  <Button
-                    icon="trash"
-                    text={_('Delete')}
-                    size="sm"
-                    onClick={() => {
-                      this.onItemAction({
-                        actionName: 'delete',
-                        needConfirm: true,
-                      }, index);
-                    }}
-                  />
-                ) : null
-              }
-              {
-                btnList.map(btnItem => (
-                  <Button
-                    key={`${btnItem.get('name')}Btn`}
-                    icon={btnItem.get('icon')}
-                    text={btnItem.get('text')}
-                    size="sm"
-                    onClick={() => {
-                      this.onItemAction(
-                        btnItem.toJS(),
-                        index,
-                      );
-                    }}
-                  />
-                ))
-              }
-            </div>
-          ),
+          transform: (val, $$item, index) => {
+            let editableResult = editable;
+            let deleteableResult = deleteable;
+
+            if (utils.isFunc(editable)) {
+              editableResult = editable($$item, index);
+            }
+            if (utils.isFunc(deleteable)) {
+              deleteableResult = deleteable($$item, index);
+            }
+
+            return (
+              <div className="action-btns">
+                {
+                  editableResult ? (
+                    <Button
+                      icon="edit"
+                      text={_('Edit')}
+                      size="sm"
+                      onClick={() => {
+                        this.props.editListItemByIndex(index);
+                      }}
+                    />
+                  ) : null
+                }
+                {
+                  deleteableResult ? (
+                    <Button
+                      icon="trash"
+                      text={_('Delete')}
+                      size="sm"
+                      onClick={() => {
+                        this.onItemAction({
+                          actionName: 'delete',
+                          needConfirm: true,
+                        }, index);
+                      }}
+                    />
+                  ) : null
+                }
+                {
+                  btnList.map(($$btnItem) => {
+                    let hiddenResult = $$btnItem.get('isHidden');
+
+                    if (utils.isFunc(hiddenResult)) {
+                      hiddenResult = hiddenResult($$item, index);
+                    }
+
+                    return hiddenResult ? null : (
+                      <Button
+                        key={`${$$btnItem.get('name')}Btn`}
+                        icon={$$btnItem.get('icon')}
+                        text={$$btnItem.get('text')}
+                        size="sm"
+                        onClick={() => {
+                          this.onItemAction(
+                            $$btnItem.toJS(),
+                            index,
+                          );
+                        }}
+                      />
+                    );
+                  })
+                }
+              </div>
+            );
+          },
         }));
       }
     }

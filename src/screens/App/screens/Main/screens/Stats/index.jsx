@@ -162,6 +162,7 @@ const clientsStatsOption = fromJS({
     type: 'value',
     name: _('Number'),
     minInterval: 1,
+    min: 0,
     splitNumber: 5,
     color: colors[0],
     axisLabel: {
@@ -170,6 +171,12 @@ const clientsStatsOption = fromJS({
     axisLine: {
       lineStyle: {
         color: colors[1],
+      },
+    },
+    splitLine: {
+      lineStyle: {
+        color: '#ddd',
+        type: 'dotted',
       },
     },
   }],
@@ -409,10 +416,13 @@ export const Status = React.createClass({
     }).toJS();
     clientStatisticsList = clientStatisticsList.toJS();
 
-    maxData = Math.max.apply(null, clientStatisticsList[0].data.concat(clientStatisticsList[1].data));
+    maxData = Math.max.apply(null, totalClientStatisticsList);
 
-    maxData = parseInt(maxData * 1.2, 10);
-    maxData = maxData < 5 ? 5 : maxData;
+    maxData = parseInt(maxData, 10);
+
+    // if (maxData % 5 !== 0) {
+    //   maxData = (maxData + 5) - (maxData % 5);
+    // }
 
     if (this.props.query.get('time_type') === 'yesterday' ||
         this.props.query.get('time_type') === 'today') {
@@ -440,6 +450,7 @@ export const Status = React.createClass({
 
     ret.xAxis[0].data = xAxisData;
     ret.xAxis[0].name = xAxisName;
+    ret.yAxis[0].max = maxData;
 
     ret.series[0].data = clientStatisticsList[0].data;
     ret.series[1].data = clientStatisticsList[1].data;
@@ -520,7 +531,10 @@ export const Status = React.createClass({
               <EchartReact
                 className="stats-group-canvas"
                 option={statisticsChartOption}
-                style={eChartStyle}
+                style={{
+                  width: '100%',
+                  height: '300px',
+                }}
                 needClear
               />
             </div>

@@ -132,6 +132,9 @@ export default class View extends React.Component {
         store={myStore}
         listOptions={listOptions}
         actionable={isAdmin}
+        deleteable={
+          ($$item, index) => (index !== 0)
+        }
         onBeforeSave={this.onBeforeSave}
       />
     );

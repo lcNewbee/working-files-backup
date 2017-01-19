@@ -44,13 +44,14 @@ export default class Main extends Component {
   }
 
   render() {
-    const { saving, guiName } = this.props.app.toJS();
+    const { saving, guiName, version } = this.props.app.toJS();
     const { isShow } = this.state;
 
     return (
       <div>
         <Navbar
           title={guiName}
+          version={version}
         >
           <div className="aside">
             <a href="#" className="as-control" onClick={this.onRefresh}>

@@ -19,7 +19,7 @@ function getCpuOption(serverData) {
   const usedName = `${_('Used')}: ${usedValue}%`;
   const freeName = `${_('Free')}: ${freeValue}%`;
   const ret = $$commonPieOption.mergeDeep({
-    color: [colors[7], colors[1]],
+    color: [colors[1], colors[7]],
     legend: {
       data: [usedName, freeName],
     },
@@ -47,7 +47,7 @@ function getMemoryOption(serverData) {
   const usedName = `${_('Used')}: ${usedValue}%`;
   const freeName = `${_('Free')}: ${freeValue}%`;
   const ret = $$commonPieOption.mergeDeep({
-    color: [colors[7], colors[1]],
+    color: [colors[1], colors[7]],
     title: {
       text: `${_('Used')}`,
       subtext: `${usedValue}%`,
@@ -73,7 +73,7 @@ function getMemoryOption(serverData) {
 
 function getStoreOption(serverData) {
   const option = {
-    color: [colors[7], colors[1]],
+    color: [colors[1], colors[7]],
     tooltip: {
       trigger: 'axis',
       axisPointer: {            // 坐标轴指示器，坐标轴触发有效
