@@ -1,26 +1,26 @@
 <?php
 class AccessList_Model extends CI_Model {
-	public function __construct() {
-		parent::__construct();
-		$this->portalsql = $this->load->database('mysqlportal', TRUE);
-		$this->load->helper(array('array', 'my_customfun_helper'));
+    public function __construct() {
+        parent::__construct();
+        $this->portalsql = $this->load->database('mysqlportal', TRUE);
+        $this->load->helper(array('array', 'my_customfun_helper'));
         $this->load->library('PortalSocket');
-	}    
-	function get_list($data) {   
-		$columns = '*';
-		$tablenames = 'portal_bas';
-		$pageindex = (int)element('page', $data, 1);
-		$pagesize = (int)element('size', $data, 20);	        
-		$datalist = help_data_page($this->portalsql,$columns,$tablenames,$pageindex,$pagesize);
-		$arr = array(
-			'state'=>array('code'=>2000,'msg'=>'ok'),
-			'data'=>array(
-				'page'=>$datalist['page'],
-				'list' => $datalist['data']
-			)
-		);               
-		return json_encode($arr);
-	}    
+    }    
+    function get_list($data) {   
+        $columns = '*';
+        $tablenames = 'portal_bas';
+        $pageindex = (int)element('page', $data, 1);
+        $pagesize = (int)element('size', $data, 20);	        
+        $datalist = help_data_page($this->portalsql,$columns,$tablenames,$pageindex,$pagesize);
+        $arr = array(
+            'state'=>array('code'=>2000,'msg'=>'ok'),
+            'data'=>array(
+                'page'=>$datalist['page'],
+                'list' => $datalist['data']
+            )
+        );               
+        return json_encode($arr);
+    }    
     function add_bas($data) {
         $result = FALSE;
         $insertdata = $this->getSocketParam($data);

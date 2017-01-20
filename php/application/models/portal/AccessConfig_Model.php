@@ -17,27 +17,45 @@ class AccessConfig_Model extends CI_Model {
         if(count($datalist['data']) > 0){
             $cdata = $this->portalsql->query('select * from portal_basauth where basid='.$datalist['data'][0]['bas']);
             $configdata = $cdata->result_array();
+             
+            $str_array = explode(',',$datalist['data'][0]['auth_interface']);
+            
+            for($i = 0; $i < count($configdata); $i++){
+                $configdata[$i]['enable'] = 0;                          
+                for($j = 0; $j < count($str_array); $j++){                    
+                    if( (int)$str_array[$j] === $i){
+                        $configdata[$i]['enable'] = 1;
+                    }                   
+                }
+            }
+        }
+        if(count($datalist['data']) > 0){
+            $datalist['data'][0]['list'] = $configdata;
         }
         $arr = array(
             'state'=>array('code'=>2000,'msg'=>'ok'),
             'data'=>array(
-                'settings'=>array('list'=>$configdata),                
+                'settings'=>$datalist['data'][0],                
                 'page'=>$datalist['page'],
-                'list' => $datalist['data']
+                'list' => array()
             )
         );       
         return json_encode($arr);
     }
-    function edit_accesss($data) {
+    function edit_accesss($data) {        
         $result = null;        
-        $updata = $this->getDbParam($data);
+        $authinface = $this->get_start($data['list']);    
+        $updata = $this->getsocketParam($data);  
+        $updata['authInterface'] = $authinface;       
         if($this->notice_socket($this->get_socket_pramse('edit',$updata))){
-            //up portal_config
-            $updata['id'] = element('id',$data,0);        
+            //up portal_config            
+            $updata = $this->getDbParam($data);
+            $updata['id'] = element('id',$data,0);    
+            $updata['auth_interface'] = $authinface;          
             $result = $this->portalsql->replace('portal_config', $updata);
             if($result){
                 // up portal_basauth  
-                foreach($data['basauth'] as $row){
+                foreach($data['list'] as $row){
                     $up2 = array(
                         'id'=>element('id',$row),
                         'username'=>element('username',$row),
@@ -47,8 +65,7 @@ class AccessConfig_Model extends CI_Model {
                     $result = $this->portalsql->replace('portal_basauth', $up2);
                 }                                 
             }
-        }
-        
+        }  
         $result ? $result = json_ok() : $result = json_no('insert error');
         return json_encode($result);
     }    
@@ -77,7 +94,41 @@ class AccessConfig_Model extends CI_Model {
         );        
         return $arr;
     }
-
+    function getsocketParam($data){
+        $linuxdate = (string)exec('date "+%Y-%m-%d %H:%M:%S"');
+        $numtime = $this->get_config_time();        
+        $arr = array(            
+            'bas'=>element('bas',$data,''),
+            'basname'=>element('basname',$data,''),
+            'basIp'=>element('bas_ip',$data,''),
+            'basPort'=>element('bas_port',$data,''),
+            'portalVer'=>element('portalVer',$data,''),
+            'authType'=>element('authType',$data,''),
+            'sharedSecret'=>element('sharedSecret',$data,''),
+            'basUser'=>element('bas_user',$data,$linuxdate),
+            'basPwd'=>element('bas_pwd',$data,$numtime),
+            'timeoutSec'=>element('timeoutSec',$data,''),
+            'isPortalCheck'=>element('isPortalCheck',$data,0),
+            'isOut'=>element('isOut',$data,''),
+            'authInterface'=>element('auth_interface',$data,''),
+            'isComputer'=>element('isComputer',$data,''),
+            'web'=>element('web',$data,''),
+            'isdebug'=>element('isdebug',$data,1),
+            'lateAuth'=>element('lateAuth',$data,''),
+            'lateAuthTime'=>element('lateAuthTime',$data,'')
+        );        
+        return $arr;
+    }
+    function get_start($data){
+         $result = '';
+         for($i = 0; $i < count($data); $i++){         
+             if((int)$data[$i]['enable'] === 1){
+                 $result .= $i.',';
+             }
+         }
+         $result = rtrim($result,',');
+         return $result;
+    }
     //socket portal
     function notice_socket($data){
         $result = null;
@@ -91,12 +142,11 @@ class AccessConfig_Model extends CI_Model {
     function get_socket_pramse($type,$data) {
          $socketarr = array(
             'action'=>$type,
-            'resName'=>'accessbas',
-            'data'=>array('list'=>$data)
+            'resName'=>'bascfg',
+            'data'=>$data
         );
         return $socketarr;
     }  
-
     function get_config_time(){
         $result = 0;
         $query = $this->portalsql->query("select usertime from config where id=1");

@@ -67,6 +67,11 @@ $route['goform/network/portal/server'] = 'network/networkPortalServer';
 $route['goform/network/portal/rule'] = 'network/networkPortalRules';
 $route['goform/network/portal/mac'] = 'network/networkPortalMac';
 $route['goform/network/radius/template'] = 'network/networkRadius';
+$route['goform/network/dpi/overview'] = 'network/dpiOverview';
+$route['goform/network/dpi/flowinfo'] = 'network/dpiFlowInfo';
+$route['goform/network/dpi/macstatistic'] = 'network/dpiMac';
+$route['goform/network/dpi/ethstatistic'] = 'network/dpiEth';
+$route['goform/network/dpi/protoinfo'] = 'network/dpiProto';
 
 // AP组管理
 $route['goform/group'] = 'group/group';
@@ -119,3 +124,14 @@ $route['goform/portal/account/connectRecord'] = 'portal/AonnectRecord';
 $route['goform/portal/access/config'] = 'portal/AccessConfig';
 $route['goform/portal/access/list'] = 'portal/AccessList';
 $route['goform/portal/access/urlParameter'] = 'portal/AccessUrl';
+$route['goform/portal/access/web'] = 'portal/AccessWeb';
+$route['goform/portal/access/web/webPage'] = 'portal/AccessWeb/webPage';
+
+
+$route['goform/portal/system/user'] = 'portal/systemUser';
+$route['goform/portal/system/role'] = 'portal/systemRole';
+$route['goform/portal/system/classification'] = 'portal/systemClassify';
+
+$route['goform/portal/log/logList'] = 'portal/logList';
+$route['goform/portal/log/onlineList'] = 'portal/onlineList';
+$route['goform/portal/log/onlineRecordList'] = 'portal/onlineRecordList';

@@ -1,11 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class AccessConfig extends CI_Controller {
+class SystemRole extends CI_Controller {
 	public function __construct() {
-		parent::__construct();
-		$this->load->database();
+		parent::__construct();		
 		$this->load->helper('array');
-        $this->load->model('portal/AccessConfig_Model');
+        $this->load->model('portal/SystemRole_Model');
 	}
     public function index() {
 		$result = null;
@@ -19,13 +18,17 @@ class AccessConfig extends CI_Controller {
 		}
 	}
 	function fetch() {
-		return $this->AccessConfig_Model->get_list($_GET);
+		return $this->SystemRole_Model->get_list($_GET);
 	}
 	function onAction($data) {
 		$result = null;
 		$actionType = element('action', $data);
 		switch($actionType) {
-            case 'setting' : $result = $this->AccessConfig_Model->edit_accesss($data);
+            case 'add' : $result = $this->SystemRole_Model->Add($data);
+                break;
+            case 'delete' : $result = $this->SystemRole_Model->Delete($data);
+                break;
+            case 'edit' : $result = $this->SystemRole_Model->Edit($data);
                 break;
             default : $result = json_encode(array('state' => array('code' => 4000, 'msg' => 'No request action')));
                 break;
