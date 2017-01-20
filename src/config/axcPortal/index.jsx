@@ -340,11 +340,11 @@ const routes = [
             component: SharedComponents.TabContainer,
             path: '/main/network/dpi',
             text: _('DPI'),
-            indexRoute: { onEnter: (nextState, replace) => replace('/main/network/dpi/overview') },
+            indexRoute: { onEnter: (nextState, replace) => replace('/main/network/dpi/dpioverview') },
             childRoutes: [
               {
-                id: 'overview',
-                path: '/main/network/dpi/overview',
+                id: 'dpioverview',
+                path: '/main/network/dpi/dpioverview',
                 formUrl: 'goform/network/dpi/overview',
                 text: _('Overview'),
                 component: sDPIOverview.Screen,

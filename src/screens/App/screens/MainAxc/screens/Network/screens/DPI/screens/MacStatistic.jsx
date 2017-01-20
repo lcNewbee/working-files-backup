@@ -7,6 +7,7 @@ import AppScreen from 'shared/components/Template/AppScreen';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/screens';
 
+const flowRateFilter = utils.filter('flowRate');
 const propTypes = fromJS({
   route: PropTypes.object,
   initScreen: PropTypes.func,
@@ -25,9 +26,21 @@ const listOptions = fromJS([
   }, {
     id: 'upbytes',
     text: _('Upload Bytes'),
+    transform(val) {
+      if (val === '' || val === undefined) {
+        return '--';
+      }
+      return flowRateFilter.transform(val / 1024);
+    },
   }, {
     id: 'downbytes',
     text: _('Download Bytes'),
+    transform(val) {
+      if (val === '' || val === undefined) {
+        return '--';
+      }
+      return flowRateFilter.transform(val / 1024);
+    },
   }, {
     id: 'uppackets',
     text: _('Upload Packets'),

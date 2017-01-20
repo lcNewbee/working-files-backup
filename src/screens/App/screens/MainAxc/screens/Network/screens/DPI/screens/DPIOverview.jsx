@@ -113,7 +113,7 @@ export default class DPIOverview extends React.Component {
         ])}
       >
         {
-          this.props.store.getIn(['overview', 'data', 'settings', 'ndpiEnable']) === '1' ? (
+          this.props.store.getIn([curScreenId, 'curSettings', 'ndpiEnable']) === '1' ? (
             <div className="t-overview">
               <div className="t-overview__section row">
                 <div className="cols col-6" >
@@ -179,7 +179,6 @@ DPIOverview.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
-    groupid: state.product.getIn(['group', 'selected', 'id']),
     store: state.screens,
   };
 }
