@@ -190,7 +190,7 @@ class Row extends Component {
     }
 
     // 添加选择列
-    if (selectable) {
+    if (selectable && rowChilren) {
       rowChilren = rowChilren.unshift((
         <MyCompeont
           width="15"

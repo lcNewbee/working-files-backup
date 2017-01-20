@@ -109,18 +109,24 @@ const listOptions = fromJS([
     id: 'ssid',
     notEditable: true,
     text: _('SSID'),
-    maxLength: '32',
+    maxLength: '31',
     formProps: {
       type: 'text',
       required: true,
       notEditable: true,
+      validator: validator({
+        rules: 'utf8Len:[1, 31]',
+      }),
     },
   }, {
     id: 'remark',
     text: _('Description'),
     formProps: {
       type: 'text',
-      maxLength: 64,
+      maxLength: 63,
+      validator: validator({
+        rules: 'utf8Len:[1, 63]',
+      }),
     },
     noTable: true,
   }, {
@@ -199,7 +205,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'upstream/downstream',
-    text: _('Downstream Traffic /Upstream Traffic'),
+    text: _('UP/Down Traffic'),
     transform(val, item) {
       const upRate = flowRateFilter.transform(item.get('upstream'));
       const downRate = flowRateFilter.transform(item.get('downstream'));
@@ -209,7 +215,7 @@ const listOptions = fromJS([
     noForm: true,
   }, {
     id: 'loadBalanceType',
-    text: _('Load Balancing'),
+    text: _('Traffic Control'),
     defaultValue: '1',
     options: loadBalanceTypeArr,
     formProps: {
@@ -430,9 +436,9 @@ export default class View extends React.Component {
   renderActionBar() {
     return (
       <Button
-        text={_('Copy From Other Group')}
+        text={_('Link From Other Group')}
         key="cpoyActionButton"
-        icon="copy"
+        icon="link"
         theme="primary"
         onClick={() => this.onOpenCopySsidModal()}
       />

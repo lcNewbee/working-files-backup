@@ -3,7 +3,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import utils from 'shared/utils';
 import { Map, List, fromJS } from 'immutable';
-import PureComponent from 'shared/components/Base/PureComponent';
 import EchartReact from 'shared/components/EchartReact';
 import Table from 'shared/components/Table';
 import Switchs from 'shared/components/Switchs';
@@ -11,6 +10,7 @@ import Select from 'shared/components/Select';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/screens';
 import { colors, $$commonPieOption } from 'shared/config/axc';
+import AppScreen from 'shared/components/Template/AppScreen';
 
 const msg = {
   days: _('Days'),
@@ -56,6 +56,14 @@ const ssidTableOptions = fromJS([
     width: '20%',
   },
 ]);
+const chartStyle = {
+  width: '100%',
+  minHeight: '200px',
+};
+const flowChartStyle = {
+  width: '100%',
+  minHeight: '300px',
+};
 
 function getTerminalTypeOption(serverData) {
   let dataList = serverData.get('terminalType');
@@ -304,7 +312,7 @@ function getFlowOption(serverData, timeType) {
 }
 
 const propTypes = {
-  screens: PropTypes.instanceOf(Map),
+  store: PropTypes.instanceOf(Map),
   route: PropTypes.object,
   groupid: PropTypes.any,
   initScreen: PropTypes.func,
@@ -313,41 +321,24 @@ const propTypes = {
   changeScreenQuery: PropTypes.func,
 };
 const defaultProps = {};
-export default class View extends PureComponent {
+export default class View extends React.Component {
   constructor(props) {
     super(props);
 
     utils.binds(this, [
       'onChangeTimeType',
     ]);
-    props.initScreen({
-      id: props.route.id,
-      formUrl: props.route.formUrl,
-      path: props.route.path,
-      isFetchInfinite: true,
-      fetchIntervalTime: 5000,
-      query: {
-        groupid: props.groupid,
-        timeType: 'today',
-      },
-    });
   }
-
   componentWillMount() {
-    this.props.fetchScreenData();
+    this.initOptions(this.props);
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.groupid !== prevProps.groupid) {
-      this.props.changeScreenQuery({
-        groupid: this.props.groupid,
-      });
-      this.props.fetchScreenData();
+  componentWillReceiveProps(nextProps) {
+    const curScreenId = nextProps.store.get('curScreenId');
+
+    if (this.props.store.getIn([curScreenId, 'data']) !== nextProps.store.getIn([curScreenId, 'data'])) {
+      this.initOptions(nextProps);
     }
-  }
-
-  componentWillUnmount() {
-    this.props.leaveScreen();
   }
 
   onChangeTimeType(data) {
@@ -357,16 +348,32 @@ export default class View extends PureComponent {
     this.props.fetchScreenData();
   }
 
-  render() {
-    const { screens, route } = this.props;
-    const curScreenId = screens.get('curScreenId');
-    const serverData = screens.getIn([curScreenId, 'data']);
-    const apStatusOption = getApStatusOption(serverData);
-    const terminalTypeOption = getTerminalTypeOption(serverData);
-    const flowOption = getFlowOption(serverData, screens.getIn([curScreenId, 'query', 'timeType']));
+  initOptions(props) {
+    const { store } = props;
+    const curScreenId = store.get('curScreenId');
+    const serverData = store.getIn([curScreenId, 'data']);
 
+    this.serverData = serverData;
+    this.apStatusOption = getApStatusOption(serverData);
+    this.terminalTypeOption = getTerminalTypeOption(serverData);
+    this.flowOption = getFlowOption(serverData, store.getIn([curScreenId, 'query', 'timeType']));
+  }
+
+  render() {
+    const { store } = this.props;
+    const { serverData, apStatusOption, terminalTypeOption, flowOption } = this;
+    const curScreenId = store.get('curScreenId');
     return (
-      <div>
+      <AppScreen
+        {...this.props}
+        initOption={{
+          isFetchInfinite: true,
+          fetchIntervalTime: 10000,
+          query: {
+            timeType: 'today',
+          },
+        }}
+      >
         <div className="t-overview">
           <div className="t-overview__section row">
             <div className="cols col-6" >
@@ -377,10 +384,7 @@ export default class View extends PureComponent {
                 <EchartReact
                   option={apStatusOption}
                   className="o-box__canvas"
-                  style={{
-                    width: '100%',
-                    minHeight: '200px',
-                  }}
+                  style={chartStyle}
                 />
               </div>
             </div>
@@ -392,10 +396,7 @@ export default class View extends PureComponent {
                 <EchartReact
                   option={terminalTypeOption}
                   className="o-box__canvas cols col-8"
-                  style={{
-                    minHeight: '200px',
-                    width: '100%',
-                  }}
+                  style={chartStyle}
                 />
               </div>
             </div>
@@ -414,7 +415,7 @@ export default class View extends PureComponent {
                 </span>
                 <Select
                   options={timeTypeSwitchs.toJS()}
-                  value={screens.getIn([curScreenId, 'query', 'timeType'])}
+                  value={store.getIn([curScreenId, 'query', 'timeType'])}
                   onChange={this.onChangeTimeType}
                   clearable={false}
                 />
@@ -424,10 +425,7 @@ export default class View extends PureComponent {
               <EchartReact
                 option={flowOption}
                 className="o-box__canvas"
-                style={{
-                  width: '100%',
-                  minHeight: '300px',
-                }}
+                style={flowChartStyle}
               />
             </div>
           </div>
@@ -454,7 +452,7 @@ export default class View extends PureComponent {
             />
           </div>
         </div>
-      </div>
+      </AppScreen>
     );
   }
 }
@@ -466,7 +464,7 @@ function mapStateToProps(state) {
   return {
     app: state.app,
     groupid: state.product.getIn(['group', 'selected', 'id']),
-    screens: state.screens,
+    store: state.screens,
   };
 }
 

@@ -22,6 +22,7 @@ const propTypes = {
 
 const defaultProps = {
   isTh: false,
+  list: fromJS([]),
 };
 
 class Table extends Component {
@@ -32,24 +33,24 @@ class Table extends Component {
     utils.binds(this, [
       'onRowSelect',
       'onRowClick',
+      'initList',
       'onTheadRowClick',
       'transformOptions',
       'sortRowsById',
     ]);
     this.state = {
-      myList: List.isList(props.list) ? props.list : fromJS(props.list),
+      myList: [],
     };
     this.sortCalc = 1;
   }
 
   componentWillMount() {
     this.transformOptions(this.props.options);
+    this.initList(this.props);
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.list !== this.props.list) {
-      this.setState({
-        myList: List.isList(nextProps.list) ? nextProps.list : fromJS(nextProps.list),
-      });
+      this.initList(nextProps);
     }
     if (nextProps.options !== this.props.options) {
       this.transformOptions(nextProps.options);
@@ -74,6 +75,17 @@ class Table extends Component {
     if (option && option.get('sortable')) {
       this.sortRowsById(option.get('id'));
     }
+  }
+  initList(props) {
+    let $$tmpList = List.isList(props.list) ? props.list : fromJS(props.list);
+
+    $$tmpList = $$tmpList.filterNot(
+      item => !item,
+    );
+
+    this.setState({
+      myList: $$tmpList,
+    });
   }
   transformOptions($$options) {
     let $$retOptions = $$options;
@@ -124,10 +136,9 @@ class Table extends Component {
     let ret = null;
 
     this.selectedList = [];
-
     if (myList && myList.size > 0) {
       ret = myList.map((item, i) => {
-        const isSelected = !!item.get('__selected__');
+        const isSelected = item && !!item.get('__selected__');
 
         if (isSelected) {
           this.selectedList.push(i);
