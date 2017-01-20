@@ -29,6 +29,33 @@
     }, {
       "name": "dc:fe:07:d4:22:9d",
       "value": 35
+    }, {
+      "name": "00:b0:3c:0c:85:6c",
+      "value": 40
+    }, {
+      "name": "dc:fe:47:d4:22:9c",
+      "value": 25
+    }, {
+      "name": "dc:fe:57:d4:22:9d",
+      "value": 35
+    }, {
+      "name": "00:b0:6c:0c:85:6c",
+      "value": 40
+    }, {
+      "name": "dc:fe:77:d4:22:9c",
+      "value": 25
+    }, {
+      "name": "dc:fe:87:d4:22:9d",
+      "value": 35
+    }, {
+      "name": "00:b0:9c:0c:85:6c",
+      "value": 40
+    }, {
+      "name": "dc:fe:01:d4:22:9c",
+      "value": 25
+    }, {
+      "name": "dc:fe:02:d4:22:9d",
+      "value": 35
     }
   ],
 

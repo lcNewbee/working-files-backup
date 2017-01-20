@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { fromJS, List, Map } from 'immutable';
-import { colors, $$commonPieOption } from 'shared/config/axc';
+import { $$commonPieOption } from 'shared/config/axc';
 import EchartReact from 'shared/components/EchartReact';
 import AppScreen from 'shared/components/Template/AppScreen';
 import { bindActionCreators } from 'redux';
@@ -20,12 +20,25 @@ function getEchartOptionByName(serverData, listName) {
       formatter: '{a} <br/>{b}: {d}%',
     },
     legend: {
+      orient: 'vertical',
+      x: '56%',
+      y: 'center',
+      itemWidth: 12,
+      itemHeight: 12,
+      itemGap: 7,
+      height: 200,
+      textStyle: {
+        fontSize: 12,
+      },
+      tooltip: {
+        show: true,
+      },
       formatter: (name) => {
         const num = serverData.get(listName)
           .find($$item => $$item.get('name') === name)
           .get('value');
-
-        return `${name}: ${num}%`;
+        // return echarts.format.truncateText(`${name.substring(0, 8)}: ${num}%`, 150, '12px Microsoft Yahei', '…');
+        return listName === 'mac' ? `${name.substring(0, 8)}... : ${num}%` : `${name} : ${num}%`;
       },
     },
     series: [
@@ -93,14 +106,14 @@ export default class DPIOverview extends React.Component {
         settingsFormOptions={fromJS([
           {
             id: 'ndpiEnable',
-            label: _(' NDPI Enable'),
+            label: _('NDPI Enable'),
             type: 'checkbox',
             saveOnChange: true,
           },
         ])}
       >
         {
-          this.props.store.getIn(['dpioverview', 'data', 'settings', 'ndpiEnable']) === '1' ? (
+          this.props.store.getIn(['overview', 'data', 'settings', 'ndpiEnable']) === '1' ? (
             <div className="t-overview">
               <div className="t-overview__section row">
                 <div className="cols col-6" >
