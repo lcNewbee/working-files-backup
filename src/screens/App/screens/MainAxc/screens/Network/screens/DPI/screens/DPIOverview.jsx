@@ -37,8 +37,8 @@ function getEchartOptionByName(serverData, listName) {
         const num = serverData.get(listName)
           .find($$item => $$item.get('name') === name)
           .get('value');
-        // return echarts.format.truncateText(`${name.substring(0, 8)}: ${num}%`, 150, '12px Microsoft Yahei', '…');
-        return listName === 'mac' ? `${name.substring(0, 8)}... : ${num}%` : `${name} : ${num}%`;
+        // return listName === 'mac' ? `${name.substring(0, 8)}... : ${num}%` : `${name} : ${num}%`;
+        return name.length > 8 ? `${name.substring(0, 8)}... : ${num}%` : `${name} : ${num}%`;
       },
     },
     series: [

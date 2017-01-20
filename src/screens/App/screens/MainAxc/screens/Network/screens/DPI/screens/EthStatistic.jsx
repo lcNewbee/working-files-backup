@@ -38,6 +38,12 @@ const listOptions = fromJS([
   }, {
     id: 'ip_packets',
     text: _('IP Packets'),
+    transform(val) {
+      if (val === '' || val === undefined) {
+        return '--';
+      }
+      return val;
+    },
   }, {
     id: 'ip_bytes',
     text: _('IP Bytes'),
@@ -50,32 +56,86 @@ const listOptions = fromJS([
   }, {
     id: 'tcp_packets',
     text: _('TCP Packets'),
+    transform(val) {
+      if (val === '' || val === undefined) {
+        return '--';
+      }
+      return val;
+    },
   }, {
     id: 'udp_packets',
     text: _('UDP Packets'),
+    transform(val) {
+      if (val === '' || val === undefined) {
+        return '--';
+      }
+      return val;
+    },
   }, {
     id: 'vlan_packets',
     text: _('VLAN Packets'),
+    transform(val) {
+      if (val === '' || val === undefined) {
+        return '--';
+      }
+      return val;
+    },
   }, {
     id: 'mpls_packets',
     text: _('MPLS Packets'),
+    transform(val) {
+      if (val === '' || val === undefined) {
+        return '--';
+      }
+      return val;
+    },
   }, {
     id: 'pppoe_packets',
     text: _('PPPoE Packets'),
+    transform(val) {
+      if (val === '' || val === undefined) {
+        return '--';
+      }
+      return val;
+    },
   }, {
     id: 'fragmented_packets',
     text: _('Fragmented Packets'),
+    transform(val) {
+      if (val === '' || val === undefined) {
+        return '--';
+      }
+      return val;
+    },
   }, {
     id: 'ndpi_throughput',
     text: _('NDPI Throughput'),
+    transform(val) {
+      if (val === '' || val === undefined) {
+        return '--';
+      }
+      return val;
+    },
   }, {
     id: 'guessed_flow_protos',
     text: _('Guessed Flow Protos'),
+    transform(val) {
+      if (val === '' || val === undefined) {
+        return '--';
+      }
+      return val;
+    },
   }, {
     id: 'active_eth',
     text: _('Active Status'),
     actionName: 'active',
     type: 'switch',
+    transform(val) {
+      if (val === '' || val === undefined) {
+        return '--';
+      }
+      return val;
+    },
   },
 ]);
 

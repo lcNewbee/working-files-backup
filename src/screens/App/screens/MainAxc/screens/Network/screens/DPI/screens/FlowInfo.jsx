@@ -38,18 +38,6 @@ const listOptions = fromJS([
   }, {
     id: 'packets',
     text: _('Packets'),
-  }, {
-    id: 'bytes',
-    text: _('Bytes'),
-    transform(val) {
-      if (val === '' || val === undefined) {
-        return '--';
-      }
-      return flowRateFilter.transform(val / 1024);
-    },
-  }, {
-    id: 'host_servername',
-    text: _('Host Servername'),
   },
 ]);
 
