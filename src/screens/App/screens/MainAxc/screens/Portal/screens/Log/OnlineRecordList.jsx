@@ -81,7 +81,7 @@ const listOptions = fromJS([
         value: '4',
         label: _('Traffic'),
       }, {
-        value: 'null',
+        value: '-1',
         label: _('Outside User'),
       },
     ],
