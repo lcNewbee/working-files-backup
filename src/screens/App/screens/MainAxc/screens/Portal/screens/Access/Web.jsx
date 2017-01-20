@@ -10,8 +10,18 @@ import * as appActions from 'shared/actions/app';
 
 const listOptions = fromJS([
   {
+    id: 'id',
+    text: _('ID'),
+    width: '120px',
+    noTable: true,
+    noForm: true,
+    formProps: {
+      type: 'text',
+      required: true,
+    },
+  }, {
     id: 'name',
-    text: _('name'),
+    text: _('Name'),
     width: '120px',
     formProps: {
       type: 'text',
@@ -21,39 +31,32 @@ const listOptions = fromJS([
     id: 'adv',
     text: _('Ads Page'),
     width: '120px',
-    options: [
-      {
-        value: '0',
-        label: _('Open Portal'),
-      },
-    ],
+    options: [],
+    defaultValue: '1',
     formProps: {
       type: 'select',
       required: true,
     },
   }, {
     id: 'countShow',
-    text: _('countShow'),
+    text: _('Show Times'),
     defaultValue: '',
     formProps: {
-      type: 'text',
-      maxLength: '32',
+      type: 'number',
     },
   }, {
     id: 'countAuth',
-    text: _('countAuth'),
+    text: _('Click Times'),
     defaultValue: '',
     formProps: {
       type: 'text',
     },
   }, {
     id: 'description',
-    text: _('description'),
+    text: _('Description'),
     defaultValue: '',
     formProps: {
-      type: 'plain-text',
-      noAdd: true,
-      validator: validator({}),
+      type: 'text',
     },
   }, {
     id: 'file',
@@ -63,41 +66,74 @@ const listOptions = fromJS([
     formProps: {
       type: 'file',
       required: true,
-      validator: validator({}),
     },
   },
 ]);
+
 const propTypes = {
-  route: PropTypes.object,
-  save: PropTypes.func,
+  store: PropTypes.instanceOf(Map),
+  fetch: PropTypes.func,
 };
 const defaultProps = {};
-
-export default class OpenPortalBase extends React.Component {
+export default class View extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onAction = this.onAction.bind(this);
-  }
-
-  onAction(no, type) {
-    const query = {
-      no,
-      type,
+    utils.binds(this, [
+      'getAdsPage',
+    ]);
+    this.state = {
+      advSelectPlaceholder: _('Loading'),
+      advIsloading: true,
+      advOptions: [],
     };
-
-    this.props.save(this.props.route.formUrl, query)
-      .then((json) => {
-        if (json.state && json.state.code === 2000) {
-        }
-      });
+  }
+  componentWillMount() {
+    this.getAdsPage();
   }
 
+  getAdsPage() {
+    this.props.fetch('goform/portal/access/web/webPage', {
+      page: 1,
+      size: 500,
+    })
+      .then((json) => {
+        let options = [];
+
+        if (json && json.data && json.data.list) {
+          options = json.data.list.map(
+            item => ({
+              value: item.id,
+              label: item.name,
+            }),
+          );
+        }
+
+        this.setState({
+          advSelectPlaceholder: undefined,
+          advIsloading: false,
+          advOptions: options,
+        });
+      },
+    );
+  }
   render() {
+    const { advOptions, advIsloading, advSelectPlaceholder } = this.state;
+    const myEditFormOptions = listOptions.mergeIn(
+      [2, 'formProps'], {
+        isLoading: advIsloading,
+        options: advOptions,
+        placeholder: advSelectPlaceholder,
+      },
+    );
     return (
       <AppScreen
         {...this.props}
-        listOptions={listOptions}
+        listOptions={myEditFormOptions}
+        editFormOption={{
+          hasFile: true,
+        }}
+        noTitle
         actionable
         selectable
       />
@@ -105,8 +141,8 @@ export default class OpenPortalBase extends React.Component {
   }
 }
 
-OpenPortalBase.propTypes = propTypes;
-OpenPortalBase.defaultProps = defaultProps;
+View.propTypes = propTypes;
+View.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
@@ -114,6 +150,7 @@ function mapStateToProps(state) {
     store: state.screens,
   };
 }
+
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
@@ -121,8 +158,9 @@ function mapDispatchToProps(dispatch) {
   ), dispatch);
 }
 
+
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(OpenPortalBase);
+)(View);

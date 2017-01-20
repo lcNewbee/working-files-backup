@@ -173,6 +173,8 @@ const sPortalUrlParams =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/UrlParams');
 const sPortalWeb =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Web');
+const sPortalDefaultWeb =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/DefaultWeb');
 
 const sPortalNas =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Radius/Nas');
@@ -797,6 +799,12 @@ const routes = [
                 formUrl: 'goform/portal/access/web',
                 text: _('Web Template'),
                 component: sPortalWeb.Screen,
+              }, {
+                id: 'portalAccessDefaultWeb',
+                path: '/main/portal/access/defaultweb',
+                formUrl: 'goform/portal/access/defaultweb',
+                text: _('Default Web'),
+                component: sPortalDefaultWeb.Screen,
               },
             ],
           }, {

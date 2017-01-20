@@ -95,6 +95,7 @@ const listOptions = fromJS([
   },
 ]);
 const propTypes = {
+  route: PropTypes.object,
   save: PropTypes.func,
 };
 const defaultProps = {};

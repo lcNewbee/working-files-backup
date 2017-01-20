@@ -118,7 +118,7 @@ const propTypes = {
 };
 const defaultProps = {};
 
-export default class OpenPortalBase extends React.Component {
+export default class View extends React.Component {
   constructor(props) {
     super(props);
 
@@ -150,8 +150,8 @@ export default class OpenPortalBase extends React.Component {
   }
 }
 
-OpenPortalBase.propTypes = propTypes;
-OpenPortalBase.defaultProps = defaultProps;
+View.propTypes = propTypes;
+View.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
@@ -170,4 +170,4 @@ function mapDispatchToProps(dispatch) {
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(OpenPortalBase);
+)(View);

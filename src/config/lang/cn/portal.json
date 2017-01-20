@@ -126,8 +126,17 @@
   "Super Administrator":"超级管理员",
   "Permission Name":"权限名称",
   "Visit URL":"访问地址",
-  "Permission":"权限"
+  "Permission":"权限",
 
-
+  "Ads Page":"广告页面",
+  "Show Times":"展示次数",
+  "Click Times":"点击次数",
+  "Template Zip File":"模板Zip 文件",
+  "Online Record Log":"在线记录日志",
+  "Log Content":"日志内容",
+  "Record Date":"记录时间",
+  "Online Record List":"在线记录列表",
+  "Authetication Type":"认证类型",
+  "Auto Log":"无感知"
 
 }

@@ -60,6 +60,7 @@ const listOptions = fromJS([
     },
   },
 ]);
+
 const propTypes = {
   store: PropTypes.instanceOf(Map),
   fetch: PropTypes.func,
