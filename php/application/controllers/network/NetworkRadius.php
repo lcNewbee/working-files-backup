@@ -72,6 +72,9 @@ class NetworkRadius extends CI_Controller {
 		// 		array_values是为了让pool_id也成为数组属性,重新赋值给接口数组
 		$temp_query_server=array_values($temp_query_server);
     function merginData($v, $w) {
+      if (!$v || !$w) {
+        return null;
+      }
       $list_data = array_merge($v, $w);
       $temp_data=array(
         "id"=>element('id',$list_data,'' ),
@@ -99,11 +102,11 @@ class NetworkRadius extends CI_Controller {
         "nasip"=>element("nasip",$list_data ,''),
         "username_format"=>element("username_format",$list_data ,'')
       );
-    if($temp_data['accton_enable']=="enable"){
-        $temp_data['accton_enable']="1";
-    }else{
-        $temp_data['accton_enable']="0";
-    }
+      if($temp_data['accton_enable']=="enable"){
+          $temp_data['accton_enable']="1";
+      }else{
+          $temp_data['accton_enable']="0";
+      }
         return $temp_data;
     }
     $data = array_map('merginData', $temp_query_server, $temp_query_template);

@@ -6,6 +6,8 @@ import Pagination from '../Pagination';
 import Icon from '../Icon';
 import Row from './Row';
 
+const THEAD_INDEX = -1;
+
 const propTypes = {
   options: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
   list: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
@@ -30,6 +32,7 @@ class Table extends Component {
     utils.binds(this, [
       'onRowSelect',
       'onRowClick',
+      'onTheadRowClick',
       'transformOptions',
       'sortRowsById',
     ]);
@@ -62,6 +65,14 @@ class Table extends Component {
   onRowClick(e, i) {
     if (this.props.onRowClick) {
       this.props.onRowClick(e, i);
+    }
+  }
+  onTheadRowClick(e) {
+    const option = this.$$options.find(
+      item => `${item.get('id')}SortIcon` === e.target.id,
+    );
+    if (option && option.get('sortable')) {
+      this.sortRowsById(option.get('id'));
     }
   }
   transformOptions($$options) {
@@ -116,7 +127,9 @@ class Table extends Component {
 
     if (myList && myList.size > 0) {
       ret = myList.map((item, i) => {
-        if (item.get('__selected__')) {
+        const isSelected = !!item.get('__selected__');
+
+        if (isSelected) {
           this.selectedList.push(i);
         }
 
@@ -127,6 +140,7 @@ class Table extends Component {
             item={item}
             index={i}
             selectable={selectable}
+            selected={isSelected}
             onSelect={this.onRowSelect}
             onClick={e => this.onRowClick(e, i)}
           />
@@ -150,11 +164,10 @@ class Table extends Component {
 
   render() {
     const {
-      className, list, page, loading, selectable,
-      onRowClick,
+      className, page, loading, selectable, onRowClick,
     } = this.props;
     const myList = this.state.myList;
-    const bodyRow = this.renderBodyRow(myList);
+    const myBodyChildren = this.renderBodyRow(myList);
     let myTableClassName = 'table';
     let isSelectAll = false;
 
@@ -177,22 +190,15 @@ class Table extends Component {
             <Row
               options={this.$$options}
               selectable={selectable}
+              selected={isSelectAll}
+              index={THEAD_INDEX}
               onSelect={this.onRowSelect}
-              isSelectAll={isSelectAll}
+              onClick={this.onTheadRowClick}
               isTh
-              onClick={(e) => {
-                const option = this.$$options.find((item) => { // 找到id对应的option
-                  if (item.get('id') === e.target.id) return true;
-                  return false;
-                });
-                if (option && option.get('sortable')) {
-                  this.sortRowsById(e.target.id);
-                }
-              }}
             />
           </thead>
           <tbody>
-            { bodyRow }
+            { myBodyChildren }
           </tbody>
         </table>
 
