@@ -44,13 +44,20 @@ export const baseSetting = fromJS([
         label: _('Unavailability'),
       }, {
         value: '1',
+        label: _('Free'),
+      },
+      {
+        value: '2',
         label: _('Timekeeping'),
       }, {
-        value: '2',
+        value: '3',
         label: _('Buy Out'),
       }, {
-        value: '3',
+        value: '4',
         label: _('Traffic'),
+      }, {
+        value: 'null',
+        label: _('Outside User'),
       },
     ],
     defaultValue: '0',

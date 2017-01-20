@@ -34,7 +34,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'startDate',
-    text: _('Start Date'),
+    text: _('Online Date'),
     formProps: {
       required: true,
     },
@@ -47,19 +47,28 @@ const listOptions = fromJS([
   }, {
     id: 'state',
     text: _('Acc Type'),
-    formProps: {
-      required: true,
-    },
-  }, {
-    id: 'startDate',
-    text: _('Online Date'),
-    type: 'text',
-  }, {
-    id: 'time',
-    text: _('Time'),
-    formProps: {
-      required: true,
-    },
+    options: [
+      {
+        value: '0',
+        label: _('Unavailability'),
+      }, {
+        value: '1',
+        label: _('Free'),
+      },
+      {
+        value: '2',
+        label: _('Timekeeping'),
+      }, {
+        value: '3',
+        label: _('Buy Out'),
+      }, {
+        value: '4',
+        label: _('Traffic'),
+      }, {
+        value: 'null',
+        label: _('Outside User'),
+      },
+    ],
   }, {
     id: 'ins',
     text: _('Up Traffic'),
@@ -99,7 +108,7 @@ const listOptions = fromJS([
       required: true,
     },
   }, {
-    id: 'methodtype',
+    id: 'type',
     text: _('Authetication Type'),
     formProps: {
       required: true,

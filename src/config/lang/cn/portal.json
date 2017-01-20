@@ -137,6 +137,12 @@
   "Record Date":"记录时间",
   "Online Record List":"在线记录列表",
   "Authetication Type":"认证类型",
-  "Auto Log":"无感知"
-
+  "Auto Log":"无感知",
+"Free":"免费",
+"Outside User":"外部用户",
+"Current Authentication Page Download":"当前认证页面下载",
+"Authentication Page Download":"认证页面下载",
+"Authentication Page Update":"认证页面更新",
+"Please choose authentication page package(ZIP file)":"请选择认证页面压缩包（ZIP文件）",
+"Upload Now":"现在上传"
 }

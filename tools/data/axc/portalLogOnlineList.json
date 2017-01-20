@@ -10,14 +10,14 @@
       "loginName":"loginName",
       "startDate":"startDate",
       "time":"time",
-      "state":"state",
+      "state":"0",
       "outs":"outs",
       "ins":"ins",
       "octets":"octets",
       "basname":"basname",
       "ssid":"ssid",
       "apmac":"apmac",
-      "methodtype":"methodtype",
+      "type":"methodtype",
       "auto":"auto",
       "agent":"agent"
     }]

@@ -167,7 +167,7 @@ const sPortalOverview =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Overview');
 const sPortalBase =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Base');
-const sPortalBas =
+// const sPortalBas =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Bas');
 const sPortalUrlParams =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/UrlParams');
@@ -188,14 +188,14 @@ const sPortalAccountList =
 const sPortalConnectRecord =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Account/ConnectRecord');
 
-const sPortalPermission =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Permission');
-const sPortalClassification =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Classification');
-const sPortalUser =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/User');
-const sPortalRole =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Role');
+// const sPortalPermission =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Permission');
+// const sPortalClassification =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Classification');
+// const sPortalUser =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/User');
+// const sPortalRole =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Role');
 
 const sPortalLogList =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Log/LogList');
@@ -781,13 +781,15 @@ const routes = [
                 formUrl: 'goform/portal/access/config',
                 text: _('Base'),
                 component: sPortalBase.Screen,
-              }, {
-                id: 'portalAccessUrlParams',
-                path: '/main/portal/access/list',
-                formUrl: 'goform/portal/access/list',
-                text: _('Bas'),
-                component: sPortalBas.Screen,
-              }, {
+              },
+              // {
+              //   id: 'portalAccessUrlParams',
+              //   path: '/main/portal/access/list',
+              //   formUrl: 'goform/portal/access/list',
+              //   text: _('Bas'),
+              //   component: sPortalBas.Screen,
+              // },
+              {
                 id: 'portalAccessUrlParameter',
                 path: '/main/portal/access/urlParameter',
                 formUrl: 'goform/portal/access/urlParameter',
@@ -891,44 +893,45 @@ const routes = [
                 component: sPortalOnlineRecordList.Screen,
               },
             ],
-          }, {
-            id: 'portalSystem',
-            isIndex: true,
-            path: '/main/portal/system',
-            icon: 'copy',
-            text: _('System'),
-            indexRoute: {
-              onEnter: (nextState, replace) => replace('/main/portal/system/classification'),
-            },
-            childRoutes: [
-              {
-                id: 'portalSystemClassification',
-                path: '/main/portal/system/classification',
-                formUrl: 'goform/portal/system/classification',
-                text: _('Classification'),
-                component: sPortalClassification.Screen,
-              }, {
-                id: 'portalSystemRole',
-                path: '/main/portal/system/role',
-                formUrl: 'goform/portal/system/role',
-                text: _('Role'),
-                component: sPortalRole.Screen,
-              },
-              {
-                id: 'portalSystemUser',
-                path: '/main/portal/system/user',
-                formUrl: 'goform/portal/system/user',
-                text: _('User'),
-                component: sPortalUser.Screen,
-              }, {
-                id: 'portalSystemPermission',
-                path: '/main/portal/system/permission',
-                formUrl: 'goform/portal/system/permission',
-                text: _('Permission'),
-                component: sPortalPermission.Screen,
-              },
-            ],
           },
+          // {
+          //   id: 'portalSystem',
+          //   isIndex: true,
+          //   path: '/main/portal/system',
+          //   icon: 'copy',
+          //   text: _('System'),
+          //   indexRoute: {
+          //     onEnter: (nextState, replace) => replace('/main/portal/system/classification'),
+          //   },
+          //   childRoutes: [
+          //     {
+          //       id: 'portalSystemClassification',
+          //       path: '/main/portal/system/classification',
+          //       formUrl: 'goform/portal/system/classification',
+          //       text: _('Classification'),
+          //       component: sPortalClassification.Screen,
+          //     }, {
+          //       id: 'portalSystemRole',
+          //       path: '/main/portal/system/role',
+          //       formUrl: 'goform/portal/system/role',
+          //       text: _('Role'),
+          //       component: sPortalRole.Screen,
+          //     },
+          //     {
+          //       id: 'portalSystemUser',
+          //       path: '/main/portal/system/user',
+          //       formUrl: 'goform/portal/system/user',
+          //       text: _('User'),
+          //       component: sPortalUser.Screen,
+          //     }, {
+          //       id: 'portalSystemPermission',
+          //       path: '/main/portal/system/permission',
+          //       formUrl: 'goform/portal/system/permission',
+          //       text: _('Permission'),
+          //       component: sPortalPermission.Screen,
+          //     },
+          //   ],
+          // },
         ],
       }, {
         path: '/wizard',
