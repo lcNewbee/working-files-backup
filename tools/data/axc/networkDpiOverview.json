@@ -43,7 +43,11 @@
       "name": "dhcp",
       "value": 60
     }
-  ]
+  ],
+
+  "settings": {
+    "ndpiEnable": "1"
+  }
 
 }
 }

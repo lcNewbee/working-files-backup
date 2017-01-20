@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { fromJS, List, Map } from 'immutable';
 import { colors, $$commonPieOption } from 'shared/config/axc';
 import EchartReact from 'shared/components/EchartReact';
+import AppScreen from 'shared/components/Template/AppScreen';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import utils from 'shared/utils';
@@ -13,7 +14,6 @@ function getEchartOptionByName(serverData, listName) {
   const ret = $$commonPieOption.mergeDeep({
     title: {
       text: _(listName),
-      // subtext: serverData.get('clientsNumber'),
     },
     tooltip: {
       trigger: 'item',
@@ -53,13 +53,13 @@ function getEchartOptionByName(serverData, listName) {
 }
 
 const propTypes = {
-  screens: PropTypes.instanceOf(Map),
-  route: PropTypes.object,
-  groupid: PropTypes.any,
-  initScreen: PropTypes.func,
-  leaveScreen: PropTypes.func,
-  fetchScreenData: PropTypes.func,
-  changeScreenQuery: PropTypes.func,
+  store: PropTypes.instanceOf(Map),
+  // route: PropTypes.object,
+  // groupid: PropTypes.any,
+  // initScreen: PropTypes.func,
+  // leaveScreen: PropTypes.func,
+  // fetchScreenData: PropTypes.func,
+  // changeScreenQuery: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -67,77 +67,95 @@ export default class DPIOverview extends React.Component {
   constructor(props) {
     super(props);
 
-    props.initScreen({
-      id: props.route.id,
-      formUrl: props.route.formUrl,
-      path: props.route.path,
-      isFetchInfinite: true,
-      fetchIntervalTime: 5000,
-    });
+    // props.initScreen({
+    //   id: props.route.id,
+    //   formUrl: props.route.formUrl,
+    //   path: props.route.path,
+    //   isFetchInfinite: true,
+    //   fetchIntervalTime: 5000,
+    // });
   }
 
-  componentWillMount() {
-    this.props.fetchScreenData();
-  }
+  // componentWillMount() {
+  //   this.props.fetchScreenData();
+  // }
 
   render() {
-    const curScreenId = this.props.screens.get('curScreenId');
-    const serverData = this.props.screens.getIn([curScreenId, 'data']);
+    const curScreenId = this.props.store.get('curScreenId');
+    const serverData = this.props.store.getIn([curScreenId, 'data']);
     return (
-      <div>
-        <div className="t-overview">
-          <div className="t-overview__section row">
-            <div className="cols col-6" >
-              <div className="element">
-                <h3>{_('ethInterface')}</h3>
+      <AppScreen
+        {...this.props}
+        initOption={{
+          isFetchInfinite: true,
+          fetchIntervalTime: 10000,
+        }}
+        settingsFormOptions={fromJS([
+          {
+            id: 'ndpiEnable',
+            label: _(' NDPI Enable'),
+            type: 'checkbox',
+            saveOnChange: true,
+          },
+        ])}
+      >
+        {
+          this.props.store.getIn(['dpioverview', 'data', 'settings', 'ndpiEnable']) === '1' ? (
+            <div className="t-overview">
+              <div className="t-overview__section row">
+                <div className="cols col-6" >
+                  <div className="element">
+                    <h3>{_('ethInterface')}</h3>
+                  </div>
+                  <div className="element">
+                    <EchartReact
+                      option={getEchartOptionByName(serverData, 'ethInterface')}
+                      className="o-box__canvas"
+                      style={{
+                        width: '100%',
+                        minHeight: '200px',
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="cols col-6">
+                  <div className="element">
+                    <h3>{_('proto')}</h3>
+                  </div>
+                  <div className="element">
+                    <EchartReact
+                      option={getEchartOptionByName(serverData, 'proto')}
+                      className="o-box__canvas"
+                      style={{
+                        width: '100%',
+                        minHeight: '200px',
+                      }}
+                    />
+                  </div>
+                </div>
               </div>
-              <div className="element">
-                <EchartReact
-                  option={getEchartOptionByName(serverData, 'ethInterface')}
-                  className="o-box__canvas"
-                  style={{
-                    width: '100%',
-                    minHeight: '200px',
-                  }}
-                />
-              </div>
-            </div>
-            <div className="cols col-6">
-              <div className="element">
-                <h3>{_('mac')}</h3>
-              </div>
-              <div className="element row">
-                <EchartReact
-                  option={getEchartOptionByName(serverData, 'mac')}
-                  className="o-box__canvas"
-                  style={{
-                    width: '100%',
-                    minHeight: '200px',
-                  }}
-                />
-              </div>
-            </div>
-          </div>
 
-          <div className="t-overview__section row">
-            <div className="cols col-12" >
-              <div className="element">
-                <h3>{_('proto')}</h3>
-              </div>
-              <div className="element">
-                <EchartReact
-                  option={getEchartOptionByName(serverData, 'proto')}
-                  className="o-box__canvas"
-                  style={{
-                    width: '100%',
-                    minHeight: '200px',
-                  }}
-                />
+              <div className="t-overview__section row">
+                <div className="cols col-6" >
+                  <div className="element">
+                    <h3>{_('mac')}</h3>
+                  </div>
+                  <div className="element row">
+                    <EchartReact
+                      option={getEchartOptionByName(serverData, 'mac')}
+                      className="o-box__canvas"
+                      style={{
+                        width: '100%',
+                        minHeight: '200px',
+                      }}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
+          ) : null
+        }
+      </AppScreen>
     );
   }
 }
@@ -149,7 +167,7 @@ function mapStateToProps(state) {
   return {
     app: state.app,
     groupid: state.product.getIn(['group', 'selected', 'id']),
-    screens: state.screens,
+    store: state.screens,
   };
 }
 function mapDispatchToProps(dispatch) {
