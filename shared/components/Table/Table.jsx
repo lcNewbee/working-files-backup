@@ -39,7 +39,7 @@ class Table extends Component {
       'sortRowsById',
     ]);
     this.state = {
-      myList: [],
+      myList: fromJS([]),
     };
     this.sortCalc = 1;
   }
@@ -79,9 +79,13 @@ class Table extends Component {
   initList(props) {
     let $$tmpList = List.isList(props.list) ? props.list : fromJS(props.list);
 
-    $$tmpList = $$tmpList.filterNot(
-      item => !item,
-    );
+    if ($$tmpList) {
+      $$tmpList = $$tmpList.filterNot(
+        item => !item,
+      );
+    } else {
+      $$tmpList = fromJS([]);
+    }
 
     this.setState({
       myList: $$tmpList,

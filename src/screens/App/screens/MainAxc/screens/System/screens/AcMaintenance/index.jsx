@@ -104,6 +104,11 @@ export default class View extends React.Component {
             loadingTitle: curHandle.loadingTitle,
             onLoaded: () => {
               this.props.closeModal();
+              this.props.changeLoginStatus('0');
+              this.props.changeLoginState({
+                needReload: true,
+              });
+              window.location.hash = '#';
             },
           });
 
