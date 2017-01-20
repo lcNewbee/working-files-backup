@@ -41,7 +41,6 @@ class DpiEth_Model extends CI_Model {
 		$retary = array(
 			'state'=>array('code'=>2000,'msg'=>'ok'),
 			'data'=>array(
-				'page'=>array(),
 				'list'=>$ary
 			)			
 		);

@@ -42,21 +42,21 @@ class DpiOverview_Model extends CI_Model {
                 case 'ndpi_send_ethx_statistics':
                     foreach($result as $row){                    
                         $b['name'] = $row->ethx;
-                        $b['value'] = (int)$row->throughput_percent;
+                        $b['value'] = round($row->throughput_percent,3);
                         $arreth[] = $b;
                     }
                     break;
                 case 'ndpi_send_mac_statistics':
                     foreach($result as $row){                    
                         $b['name'] = $row->mac;
-                        $b['value'] = (int)$row->upbytes_precent;
+                        $b['value'] = round($row->upbytes_precent,3);
                         $arreth[] = $b;
                     }
                     break;
                 case 'ndpi_send_proto_statistics':
                     foreach($result as $row){                    
                         $b['name'] = $row->proto;
-                        $b['value'] = (int)$row->bytes_precent;
+                        $b['value'] = sprintf("%.3f", $row->bytes_precent);//round($row->bytes_precent,3);
                         $arreth[] = $b;
                     }
                     break;

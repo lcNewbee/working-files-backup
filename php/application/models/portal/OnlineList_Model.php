@@ -15,7 +15,7 @@ class OnlineList_Model extends CI_Model {
                 'pageIndex'=>(int)element('page',$data,20)     
             )
         );
-        $result = $this->notice_socket($socketarr);		
+        $result = $this->notice_socket($socketarr);		    
 		return json_encode($result);
 	}
 	

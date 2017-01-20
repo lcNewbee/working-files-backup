@@ -101,7 +101,10 @@ class SystemMaintenance extends CI_Controller {
         }else{
             //恢复出厂设置
             if(file_exists('/var/conf/config.db')) {
-                unlink('/var/conf/config.db');
+                unlink('/var/conf/config.db');                
+            }
+            if(file_exists('/var/netmanager/mysql')) {
+                unlink('/var/netmanager/mysql');                
             }
             exec('/sbin/reboot');
         }

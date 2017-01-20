@@ -126,6 +126,9 @@ $route['goform/portal/access/list'] = 'portal/AccessList';
 $route['goform/portal/access/urlParameter'] = 'portal/AccessUrl';
 $route['goform/portal/access/web'] = 'portal/AccessWeb';
 $route['goform/portal/access/web/webPage'] = 'portal/AccessWeb/webPage';
+$route['goform/portal/access/defaultweb'] = 'portal/AccessDefault';
+$route['goform/portal/access/download'] = 'portal/AccessDefault/download';
+$route['goform/portal/access/upload'] = 'portal/AccessDefault/upload';
 
 
 $route['goform/portal/system/user'] = 'portal/systemUser';
@@ -135,3 +138,4 @@ $route['goform/portal/system/classification'] = 'portal/systemClassify';
 $route['goform/portal/log/logList'] = 'portal/logList';
 $route['goform/portal/log/onlineList'] = 'portal/onlineList';
 $route['goform/portal/log/onlineRecordList'] = 'portal/onlineRecordList';
+
