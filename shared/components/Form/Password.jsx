@@ -48,7 +48,7 @@ class Password extends React.Component {
 
   render() {
     const { isSee, isFocus } = this.state;
-    const { display, style, seeAble } = this.props;
+    const { display, style, seeAble, ...restProps } = this.props;
     const myIsFocus = isFocus || this.props.isFocus;
     let passwordClassName = 'a-password';
     let iconClassName = 'a-password__icon';
@@ -88,7 +88,7 @@ class Password extends React.Component {
         }
 
         <Input
-          {...this.props}
+          {...restProps}
           isFocus={myIsFocus}
           type={type}
           onChange={this.onChange}
