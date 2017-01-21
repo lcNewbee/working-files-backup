@@ -8,29 +8,23 @@ const shell = require('gulp-shell');
 const zip = require('gulp-zip');
 
 const paths = gulp.paths;
+let distPath = paths.pubAxc;
+let name = 'axc';
+
+if (argv.d) {
+  distPath = argv.d;
+}
+
+if (argv.n) {
+  name = argv.n;
+}
 
 // 发布硬AC版本
 // 发布 AXC版本
 gulp.task('clean:pubaxc', () => {
-  let distPath = paths.pubAxc;
-
-  if (argv.d) {
-    distPath = argv.d;
-  }
-
   return del([distPath], { force: true });
 });
 gulp.task('pub:copyaxc', () => {
-  let distPath = paths.pub;
-  let name = 'axc';
-
-  if (argv.d) {
-    distPath = argv.d;
-  }
-  if (argv.n) {
-    name = argv.n;
-  }
-
   if (argv.z) {
     return gulp.src([`${paths.build}/**/*`, `${paths.php}/**/*`])
       .pipe(gulp.dest(distPath))
@@ -49,12 +43,6 @@ gulp.task('build:axc', () =>
 );
 
 gulp.task('pub:axc', (callback) => {
-  let distPath = paths.pubAxc;
-
-  if (argv.d) {
-    distPath = argv.d;
-  }
-
   gutil.log('切换 AXC 发布目标目录：', gutil.colors.magenta(distPath));
   runSequence('clean:pubaxc', 'config:axc', 'pub:path', ['build'], 'build:axc', 'pub:copyaxc', callback);
 });
