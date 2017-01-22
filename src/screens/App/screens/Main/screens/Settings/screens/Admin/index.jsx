@@ -46,7 +46,7 @@ export default class Admin extends PureComponent {
     super(props);
 
     this.binds('onSave', 'onUpdate',
-      'onChangeLang', 'onChangeLang', 'getSetting', 'combineValid');
+      'onChangeLang', 'onChangeLang', 'getSetting', 'combine');
   }
 
   componentWillUnmount() {
@@ -57,7 +57,7 @@ export default class Admin extends PureComponent {
   onSave() {
     this.props.validateAll()
       .then((invalid) => {
-        if (invalid.isEmpty() && !this.combineValid()) {
+        if (invalid.isEmpty() && !this.combine()) {
           this.props.savePassword(() => {
             this.props.changeLoginStatus('0');
             window.location.hash = '#';
@@ -83,7 +83,7 @@ export default class Admin extends PureComponent {
   getSetting(name) {
     return this.props.store.getIn(['data', name]);
   }
-  combineValid() {
+  combine() {
     const { newpasswd, confirmpasswd } = this.props.store.get('data').toJS();
     let ret;
 

@@ -81,7 +81,7 @@ const listOptions = fromJS([
     formProps: {
       type: 'number',
       required: true,
-      help: _('Range:300-604800Second'),
+      help: _('Range: 300-604800 Seconds'),
       min: '300',
       max: '604800',
       validator: validator({
@@ -134,7 +134,7 @@ export default class View extends React.Component {
     let ret = '';
 
     if (actionType === 'add' || actionType === 'edit') {
-      ret = validator.combineValid.isSameNet(startIp, mask, gateway, {
+      ret = validator.combine.needSameNet(startIp, mask, gateway, {
         ipLabel: _('Start IP'),
         ip2Label: _('Gateway'),
       });

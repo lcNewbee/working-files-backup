@@ -1,5 +1,4 @@
 $boder-color: #eee;
-
 .a-text,
 textarea,
 input[type=text],
@@ -14,21 +13,27 @@ input[type=number] {
   border: 1px solid #ccc;
   border-radius: 4px;
   outline: 0;
-
   &:disabled {
     background-color: $boder-color;
   }
   &:read-only {
     background-color: $boder-color;
   }
-  &:readonly {
+  &[readonly] {
     background-color: $boder-color;
   }
   &:focus {
     border: 1px solid $g-brand-primary;
   }
 }
+
 input::-ms-clear {
   display: none;
 }
-
+// For Firefox
+input[required]:invalid,
+input:focus:invalid,
+textarea[required]:invalid,
+textarea:focus:invalid {
+  box-shadow: none;
+}

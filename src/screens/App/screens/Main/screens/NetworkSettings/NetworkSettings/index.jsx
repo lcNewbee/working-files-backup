@@ -123,16 +123,16 @@ export default class NetworkSettings extends React.Component {
     const that = this;
     const {ip, mask, gateway, dns1, dns2, proto} = this.props.store.get('curData').toJS();
     let msg;
-    if (proto === 'static' && (msg = validator.combineValid.noBroadcastIp(ip, mask))){
+    if (proto === 'static' && (msg = validator.combine.noBroadcastIp(ip, mask))){
       showError(msg);
       return;
     }
-    if (proto === 'static' && gateway !== '' && (msg = validator.combineValid.staticIP(ip, mask, gateway))) {
+    if (proto === 'static' && gateway !== '' && (msg = validator.combine.needStaticIP(ip, mask, gateway))) {
       showError(msg);
       return;
     }
     msg = _('Primary and Secondary DNS can not be the same !');
-    if (dns1 !== '' && validator.combineValid.notequal(dns1, dns2, msg)) {
+    if (dns1 !== '' && validator.combine.notequal(dns1, dns2, msg)) {
       showError(msg);
       return;
     }

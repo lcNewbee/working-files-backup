@@ -1,10 +1,10 @@
 // 验证函数
 var utilsCore = require('shared/utils/lib/core');
-var string = require('shared/utils/lib/string');
+var utilsString = require('shared/utils/lib/string');
 var _ = window._;
 
 if(!_) {
-  _ = string.format;
+  _ = utilsString.format;
 }
 
 var vaildate = {
@@ -15,9 +15,9 @@ var vaildate = {
     var thisMin = min || 0;
 
     if (thisMin === max && len !== thisMin) {
-      return _('String length must be: ') + _('%s', min);
+      return _('String length must be: %s bit', min);
     } else if (len < thisMin || len > max) {
-      return _('String length range is: ') + _('%s - %s', min, max);
+      return _('String length range is: %s - %s bit', min, max);
     }
   },
 
@@ -25,15 +25,15 @@ var vaildate = {
   utf8Len: function(str, min, max) {
     var len = utilsCore.getUtf8Length(str);
     if (min === max && len !== min) {
-      return _('String length must be: ') + _('%s bit', min);
+      return _('String length must be: %s bytes', min);
     } else if (len < min || len > max) {
-      return _('String length range is: ') + _('%s - %s bit', min, max);
+      return _('String length range is: %s - %s bytes', min, max);
     }
   },
 
   num: function(str, min, max, expand) {
 
-    if (!string.isInteger(str)) {
+    if (!utilsString.isInteger(str)) {
       return _("Must be integer");
     }
 
@@ -105,11 +105,10 @@ var vaildate = {
         ipHead = ipArr[0];
 
       if (ipArr[0] === '127') {
-        return _("IP address begin with 127 is a reserved loopback address, please input another value between 1 to 233");
+        return _("Address begin with 127 is a reserved loopback address, please input another value between 1 to 233");
       }
       if (ipArr[0] > 223) {
-        return _("Address begin with ") + _("%s", ipHead) + _(" is invalid, please input a value between 1 to 223.");
-        // return _("Address begin with %s is invalid, please input a value between 1 to 223.", ipHead);
+        return _('Address begin with %s is invalid, please input a value between 1 to 223.', ipHead);
       }
     }
   },
@@ -158,10 +157,10 @@ var vaildate = {
         ipHead = ipArr[0];
 
       if (ipArr[0] === '127') {
-        return _("IP address begin with 127 is a reserved loopback address, please input another value between 1 to 233");
+        return _("Address begin with 127 is a reserved loopback address, please input another value between 1 to 233");
       }
       if (ipArr[0] > 223) {
-        return _("Address begin with ") + _("%s", ipHead) + _(" is invalid, please input a value between 1 to 223.");
+        return _('Address begin with %s is invalid, please input a value between 1 to 223.', ipHead);
       }
     }
   },
@@ -206,7 +205,7 @@ var vaildate = {
 
   ascii: function(str, min, max) {
 
-    if (!string.isAscii(str)) {
+    if (!utilsString.isAscii(str)) {
       return _("Must be ASCII.");
     }
     if (min || max) {

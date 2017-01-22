@@ -14,14 +14,12 @@ import guiConfig from './config.json';
 // 多语言工具
 const langCnCore = require('../lang/cn/core.json');
 const langCnAc = require('../lang/cn/ac.json');
-const validateCn = require('../lang/cn/validate.json');
 const langEn = require('../lang/en/core.json');
 
 const bodyElem = document.getElementsByTagName('body')[0];
 
 b28n.addDict(langCnCore, 'cn');
 b28n.addDict(langCnAc, 'cn');
-b28n.addDict(validateCn, 'cn');
 b28n.addDict(langEn, 'en');
 
 window.CB = b28n.init({

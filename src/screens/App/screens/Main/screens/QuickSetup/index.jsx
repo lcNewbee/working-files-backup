@@ -231,7 +231,7 @@ export default class QuickSetup extends React.Component {
     // 下一页
     if (data.currStep === 1 && data.targetStep === 2) {
       const { ip , mask } = this.props.store.get('curData').toJS();
-      const msg = validator.combineValid.noBroadcastIp(ip, mask);
+      const msg = validator.combine.noBroadcastIp(ip, mask);
       // console.log('ip&mask', ip + ',' + mask);
       if (msg) {
         return msg;

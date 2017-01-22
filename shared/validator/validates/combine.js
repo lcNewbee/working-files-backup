@@ -1,5 +1,9 @@
-var utilsCore = require('shared/utils/lib/core');
-var string = require('shared/utils/lib/string');
+var utilsString = require('shared/utils/lib/string');
+var _ = window._;
+
+if (!_) {
+  _ = utilsString.format;
+}
 
 // 关联验证
 function isSameNet(ip_lan, ip_wan, mask_lan, mask_wan) {
@@ -17,7 +21,20 @@ function isSameNet(ip_lan, ip_wan, mask_lan, mask_wan) {
   return true;
 }
 
-var combineValid = {
+function isBroadcastIp(ip, mask) {
+  var ipArry = ip.split(".");
+  var maskArry = mask.split(".");
+
+  for (var i = 0; i < 4; i++) {
+    var ipElem = parseInt(ipArry[i], 10);
+    var maskElem = parseInt(maskArry[i], 10);
+    if ((ipElem | maskElem) != 255) break;
+  }
+
+  return i === 4;
+}
+
+var combineVaildate = {
 
   //必须一样
   equal: function (str1, str2, msg) {
@@ -27,14 +44,14 @@ var combineValid = {
   },
 
   //不能一样
-  notequal: function (str1, str2) {
+  notEqual: function (str1, str2, msg) {
     if (str1 == str2) {
       return msg;
     }
   },
 
   //ip mask gateway 组合验证
-  staticIP: function (ip, mask, gateway) {
+  needStaticIP: function (ip, mask, gateway) {
     if (ip == gateway) {
       return _("Static IP cannot be the same as default gateway.");
     }
@@ -42,11 +59,23 @@ var combineValid = {
     if (!isSameNet(ip, gateway, mask, mask)) {
       return _("Static IP and default gateway must be in the same network segment");
     }
+    if (isBroadcastIp(ip, mask)) {
+      return _("%s can not be broadcast address", _('Static IP'));
+    }
+    if (isBroadcastIp(gateway, mask)) {
+      return _("%s can not be broadcast address", _('Gateway'));
+    }
   },
 
-  isSameNet: function(ip, mask, gateway, msgOption) {
-    if(!isSameNet(ip, gateway, mask, mask)) {
+  needSameNet: function (ip, mask, gateway, msgOption) {
+    if (!isSameNet(ip, gateway, mask, mask)) {
       return _("%s and %s must be in the same network segment", msgOption.ipLabel, msgOption.ip2Label);
+    }
+    if (isBroadcastIp(ip, mask)) {
+      return _("%s can not be broadcast address", msgOption.ipLabel);
+    }
+    if (isBroadcastIp(gateway, mask)) {
+      return _("%s can not be broadcast address", msgOption.ip2Label);
     }
   },
 
@@ -97,22 +126,16 @@ var combineValid = {
   },
 
   noBroadcastIp: function (ip, mask) {
-    var ipArry = ip.split(".");
-    var maskArry = mask.split(".");
+    var isBroadcastIp = isBroadcastIp(ip, mask);
 
-    for (var i = 0; i < 4; i++) {
-      var ipElem = parseInt(ipArry[i], 10);
-      var maskElem = parseInt(maskArry[i], 10);
-      if ((ipElem | maskElem) != 255) break;
+    if (isBroadcastIp) {
+      return _('Broadcast IP address is not allowed !');
     }
-    if (i == 4) return _('Broadcast IP address is not allowed !');
-    else return;
   }
 };
 
 // exports
 if (typeof module === "object" &&
   typeof module.exports === "object") {
-  module.exports = combineValid;
+  module.exports = combineVaildate;
 }
-

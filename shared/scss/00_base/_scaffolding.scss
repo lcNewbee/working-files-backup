@@ -51,10 +51,12 @@ textarea {
 // Links
 a {
   text-decoration: none;
+  outline: none;
 
   &:hover,
   &:focus {
     text-decoration: none;
+    outline: none;
   }
 }
 

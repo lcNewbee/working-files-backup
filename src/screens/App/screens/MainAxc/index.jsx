@@ -1173,8 +1173,10 @@ export default class Main extends Component {
             <li>
               <a
                 className=""
+                title={_('Email to Axilspot')}
+                href="mailto:sales@axilspot.com"
               >
-                <Icon name="comment" />
+                <Icon name="envelope" />
               </a>
             </li>
           </ul>

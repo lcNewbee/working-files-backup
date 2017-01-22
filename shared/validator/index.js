@@ -1,8 +1,8 @@
 'use strict';
 var utilsCore = require('shared/utils/lib/core');
 var string = require('shared/utils/lib/string');
-var validate = require('./lib/validate');
-var combineValid = require('./lib/combineValid');
+var validate = require('./validates/single');
+var combineValidate = require('./validates/combine');
 
 var validator = function(options) {
   return new validator.fn.init(options);
@@ -197,7 +197,7 @@ init.prototype = validator.fn;
 
 // 扩展 自己的工具函数
 utilsCore.extend(validator, {
-  combineValid: combineValid,
+  combine: combineValidate,
   validate: validate,
   checkClear: function(str, rules) {
     if(!rules) {

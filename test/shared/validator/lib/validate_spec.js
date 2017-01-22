@@ -1,15 +1,9 @@
-import {
-  expect,
-  assert,
-} from 'chai';
-import {
-  describe,
-  it,
-} from 'mocha';
-import validator from 'shared/validator/lib/validate';
+import { expect } from 'chai';
+import { describe, it } from 'mocha';
+import validator from 'shared/validator/validates/single';
 
 describe('validator.validate', () => {
-  describe('#validate.len', () => {
+  describe('#len()', () => {
     const validateFunc = validator.len;
 
     it('should return undefined when not min or max params', () => {
@@ -17,12 +11,16 @@ describe('validator.validate', () => {
       expect(validateFunc('')).to.equal(undefined);
     });
 
-    it('should return error msg when str length less than min', () => {
-      expect(validateFunc('sss', 4, 4)).to.equal('String length must be: 4');
+    it('should return error msg when str length within the range', () => {
+      expect(validateFunc('sss', 1, 4)).to.equal(undefined);
+      expect(validateFunc('sss', 1, 3)).to.equal(undefined);
+      expect(validateFunc('sss', 3, 4)).to.equal(undefined);
     });
 
-    it('should return error msg when str length more than max', () => {
-      expect(validateFunc('sss', 1, 2)).to.equal('String length range be: 1 - 2');
+    it('should return error msg when str length beyond range', () => {
+      expect(validateFunc('sss', 4, 4)).to.equal('String length must be: 4');
+      expect(validateFunc('s', 2, 8)).to.equal('String length range is: 2 - 8');
+      expect(validateFunc('sss', 1, 2)).to.equal('String length range is: 1 - 2');
     });
   });
 });

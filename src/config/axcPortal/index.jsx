@@ -22,7 +22,6 @@ import guiConfig from './config.json';
 // 多语言处理
 const cnCore = require('../lang/cn/core.json');
 const cnAxc = require('../lang/cn/axc.json');
-const validateCn = require('../lang/cn/validate.json');
 const cnPortal = require('../lang/cn/Portal.json');
 const langEn = require('../lang/en/core.json');
 
@@ -30,7 +29,6 @@ const bodyElem = document.getElementsByTagName('body')[0];
 
 b28n.addDict(cnCore, 'cn');
 b28n.addDict(cnAxc, 'cn');
-b28n.addDict(validateCn, 'cn');
 b28n.addDict(cnPortal, 'cn');
 b28n.addDict(langEn, 'en');
 window.CB = b28n.init({
