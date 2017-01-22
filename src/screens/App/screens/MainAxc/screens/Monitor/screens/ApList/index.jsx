@@ -9,7 +9,7 @@ import AppScreen from 'shared/components/Template/AppScreen';
 import FormContainer from 'shared/components/Organism/FormContainer';
 import Icon from 'shared/components/Icon';
 import { apStatus } from 'shared/config/axcAp';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 
 // custom
 import * as appActions from 'shared/actions/app';

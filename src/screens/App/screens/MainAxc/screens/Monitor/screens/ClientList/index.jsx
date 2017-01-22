@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import utils from 'shared/utils';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 
 // components
 import AppScreen from 'shared/components/Template/AppScreen';
