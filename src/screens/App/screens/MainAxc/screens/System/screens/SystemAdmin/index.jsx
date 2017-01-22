@@ -33,9 +33,7 @@ const listOptions = fromJS([
     formProps: {
       type: 'switch',
       minWidth: '100px',
-      showPrecondition: ($$data) => {
-        return $$data.get('id') !== 1;
-      },
+      showPrecondition: $$data => $$data.get('id') !== 1,
     },
   }, {
     id: 'purview',
@@ -74,7 +72,19 @@ const listOptions = fromJS([
     },
   }, {
     id: 'userPassword',
-    text: _('Password'),
+    text: _('New Password'),
+    noTable: true,
+    defaultValue: '',
+    formProps: {
+      type: 'password',
+      required: true,
+      validator: validator({
+        rules: 'len:[8,32]',
+      }),
+    },
+  }, {
+    id: 'confirmPassword',
+    text: _('Confirm Password'),
     noTable: true,
     defaultValue: '',
     formProps: {
@@ -100,15 +110,21 @@ export default class View extends React.Component {
   constructor(props) {
     super(props);
 
-    this.onBeforeSave = this.onBeforeSave.bind(this);
+    utils.binds(this, [
+      'onBeforeSave',
+    ]);
   }
 
   onBeforeSave($$actionQuery, $$curListItem) {
     const actionType = $$actionQuery.get('action');
     const userType = $$curListItem.get('userType');
+    let ret = null;
 
     if ('add,edit'.indexOf(actionType) !== -1) {
-      if (userType === 0) {
+      if (this.props.app.get('invalid').isEmpty() &&
+          $$curListItem.get('userPassword') !== $$curListItem.get('confirmPassword')) {
+        ret = _('New password and confirm password must match');
+      } else if (userType === 0) {
         this.props.updateCurEditListItem({
           purview: PURVIEW_ADMIN,
         });
@@ -118,6 +134,8 @@ export default class View extends React.Component {
         });
       }
     }
+
+    return ret;
   }
 
   render() {

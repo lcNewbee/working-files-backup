@@ -19,11 +19,13 @@ input[type=number] {
   &:read-only {
     background-color: $boder-color;
   }
-  &[readonly] {
-    background-color: $boder-color;
-  }
   &:focus {
     border: 1px solid $g-brand-primary;
+  }
+
+  // For IE
+  &[readonly] {
+    background-color: $boder-color;
   }
 }
 
