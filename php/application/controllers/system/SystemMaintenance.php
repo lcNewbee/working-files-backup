@@ -5,6 +5,7 @@ class SystemMaintenance extends CI_Controller {
         parent::__construct();
         $this->load->library('session');
         $this->load->database();
+        $this->load->helper('file');
         $this->load->helper(array('array', 'my_customfun_helper'));
     }
     function fetch() {
@@ -104,7 +105,7 @@ class SystemMaintenance extends CI_Controller {
                 unlink('/var/conf/config.db');
             }
             if(file_exists('/var/netmanager/mysql')) {
-                unlink('/var/netmanager/mysql');
+                delete_files('/var/netmanager/mysql', TRUE);
             }
             exec('/sbin/reboot');
         }
