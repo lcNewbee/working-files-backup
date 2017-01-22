@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Map } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 import {
   FormGroup,
 } from '../Form';

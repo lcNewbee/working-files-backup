@@ -1,6 +1,6 @@
 import React from 'react';
 import utils from 'shared/utils';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';

@@ -8,7 +8,7 @@ import {
 } from 'shared/components';
 import Modal from 'shared/components/Modal';
 import ProgressBar from 'shared/components/ProgressBar';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 import * as appActions from 'shared/actions/app';
 import * as sharedActions from 'shared/actions/settings';
 // import * as sharedReducer from 'shared/reducers/settings';

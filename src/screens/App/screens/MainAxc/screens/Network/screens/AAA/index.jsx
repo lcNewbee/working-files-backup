@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 
 function getInterfaceTypeOptions() {
   return utils.fetch('goform/network/radius/template')

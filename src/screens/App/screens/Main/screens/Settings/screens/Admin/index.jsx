@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { Map, List } from 'immutable';
 import { connect } from 'react-redux';
 import { SaveButton, PureComponent, FormGroup } from 'shared/components';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 import * as appActions from 'shared/actions/app';
 import * as myActions from './actions';
 import myReducer from './reducer';

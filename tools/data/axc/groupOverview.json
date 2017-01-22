@@ -7,36 +7,7 @@
     "clientsNumber": 0,
     "online": 693,
     "offline": 293,
-    "terminalType": [
-      {
-        "name": "APPLE",
-        "value": 286
-      }, {
-        "name": "SAMSUNG",
-        "value": 164
-      }, {
-        "name": "Google",
-        "value": 126
-      }, {
-        "name": "HUAWEI",
-        "value": 237
-      }, {
-        "name": "NOKIA",
-        "value": 135
-      }, {
-        "name": "LENOVO",
-        "value": 100
-      }, {
-        "name": "ZTE",
-        "value": 100
-      }, {
-        "name": "OPPO",
-        "value": 100
-      }, {
-        "name": "MI",
-        "value": 80
-      }
-    ],
+    "terminalType": [],
     "flowList": [
         {
             "name": "ap",

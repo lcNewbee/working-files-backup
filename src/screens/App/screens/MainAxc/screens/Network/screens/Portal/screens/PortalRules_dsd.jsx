@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 import { bindActionCreators } from 'redux';
 import AppScreen from 'shared/components/Template/AppScreen';
 import Modal from 'shared/components/Modal';

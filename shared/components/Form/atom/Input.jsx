@@ -61,9 +61,11 @@ class Input extends React.Component {
     if (inputProps.type === 'textarea') {
       ThisComponent = 'textarea';
     }
-    // if () {
 
-    // }
+    // 解决 ie9-11, readOnly情况下还是可以聚焦问题
+    if (inputProps.readOnly) {
+      inputProps.unselectable = 'on';
+    }
 
     return (
       <ThisComponent

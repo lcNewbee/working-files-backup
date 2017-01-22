@@ -3,7 +3,7 @@ import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 import { SaveButton, Button } from 'shared/components/Button';
 import AppScreen from 'shared/components/Template/AppScreen';
 import Table from 'shared/components/Table';

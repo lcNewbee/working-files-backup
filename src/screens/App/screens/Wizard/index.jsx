@@ -2,7 +2,7 @@ import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import { Map, List } from 'immutable';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 import utils from 'shared/utils';
 import TIME_ZONE from 'shared/config/timeZone';
 import countries from 'shared/config/country.json';

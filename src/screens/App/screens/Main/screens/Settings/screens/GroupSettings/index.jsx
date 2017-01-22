@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { fromJS, Map } from 'immutable';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 import { FormGroup } from 'shared/components/Form';
 import Table from 'shared/components/Table';
 import Modal from 'shared/components/Modal';

@@ -3,7 +3,7 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import FormGroup from 'shared/components/Form/FormGroup';
 import { List } from 'immutable';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 import utils from 'shared/utils';
 import urls from 'shared/config/urls';
 

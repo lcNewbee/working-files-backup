@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import utils from 'shared/utils';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 import { baseSetting, advancedSetting } from 'shared/config/axcPortalAccount';
 import AppScreen from 'shared/components/Template/AppScreen';
 import FormContainer from 'shared/components/Organism/FormContainer';

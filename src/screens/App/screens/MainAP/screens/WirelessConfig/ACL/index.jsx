@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Button, SaveButton } from 'shared/components/Button';
 import { fromJS, Map, List } from 'immutable';
 import { FormInput, FormGroup } from 'shared/components/Form';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 import * as sharedActions from 'shared/actions/settings';
 import * as appActions from 'shared/actions/app';
 import utils from 'shared/utils';

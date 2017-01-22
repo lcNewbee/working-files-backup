@@ -1,5 +1,5 @@
 import { fromJS } from 'immutable';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 
 export const baseSetting = fromJS([
   {

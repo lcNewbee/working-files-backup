@@ -3,7 +3,7 @@ import { fromJS, Map } from 'immutable';
 import { connect } from 'react-redux';
 import utils from 'shared/utils';
 import { bindActionCreators } from 'redux';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 import { FormInput, FormGroup } from 'shared/components/Form';
 import { SaveButton } from 'shared/components/Button';
 import * as sharedActions from 'shared/actions/settings';

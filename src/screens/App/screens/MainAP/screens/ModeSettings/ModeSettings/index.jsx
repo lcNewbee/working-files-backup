@@ -4,7 +4,7 @@ import { Map } from 'immutable';
 import FormGroup from 'shared/components/Form/FormGroup';
 import SaveButton from 'shared/components/Button/SaveButton';
 import ProgressBar from 'shared/components/ProgressBar';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 import Modal from 'shared/components/Modal';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
