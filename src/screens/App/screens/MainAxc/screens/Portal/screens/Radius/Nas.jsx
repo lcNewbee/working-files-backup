@@ -34,7 +34,7 @@ const listOptions = fromJS([
     formProps: {
       type: 'text',
       required: true,
-      maxLength: '32',
+      maxLength: '31',
     },
   }, {
     id: 'sharedSecret',

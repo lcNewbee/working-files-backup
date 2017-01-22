@@ -123,9 +123,9 @@ const listOptions = fromJS([
     text: _('Description'),
     formProps: {
       type: 'text',
-      maxLength: 63,
+      maxLength: 255,
       validator: validator({
-        rules: 'utf8Len:[1, 63]',
+        rules: 'utf8Len:[1, 255]',
       }),
     },
     noTable: true,

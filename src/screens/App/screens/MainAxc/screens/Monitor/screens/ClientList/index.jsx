@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import utils from 'shared/utils';
+import validator from 'shared/utils/lib/validator';
 
 // components
 import AppScreen from 'shared/components/Template/AppScreen';
@@ -22,6 +23,9 @@ const listOptions = fromJS([
     transform(val, item) {
       return item.get('devicename') || item.get('mac');
     },
+    validator: validator({
+      rules: 'utf8Len:[1, 31]',
+    }),
   }, {
     id: 'ip',
     text: _('IP Address'),

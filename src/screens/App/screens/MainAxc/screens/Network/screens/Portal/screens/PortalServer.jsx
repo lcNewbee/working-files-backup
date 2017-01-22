@@ -57,7 +57,7 @@ const listOptions = fromJS([
       type: 'text',
       required: true,
       validator: validator({
-        rules: 'utf8Len:[1,63]',
+        rules: 'utf8Len:[1,31]',
       }),
       showPrecondition(data) {
         return data.get('address_type') === '2';

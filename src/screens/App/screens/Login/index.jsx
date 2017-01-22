@@ -181,7 +181,7 @@ export default class Login extends Component {
                 <FormGroup
                   display="block"
                   name="username"
-                  maxLength="32"
+                  maxLength="31"
                   data-label={_('Username')}
                   placeholder={_('Username')}
                   value={this.state.username}
@@ -196,7 +196,7 @@ export default class Login extends Component {
               type="password"
               name="password"
               display="block"
-              maxLength="32"
+              maxLength="31"
               data-label={_('Password')}
               placeholder={_('Password')}
               value={this.state.password}

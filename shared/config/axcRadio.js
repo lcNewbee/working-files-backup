@@ -426,7 +426,7 @@ export const radioAdvance = fromJS([
     form: 'radioAdvance',
     label: _('Rate Set'),
     type: 'checkboxs',
-    maxLength: '32',
+    maxLength: '31',
     defaultValue: '',
     required: true,
     options: [

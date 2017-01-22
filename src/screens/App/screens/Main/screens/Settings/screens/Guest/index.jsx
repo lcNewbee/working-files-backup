@@ -165,7 +165,7 @@ export const Guest = React.createClass({
           <FormGroup
             label={_('Guest SSID')}
             required
-            maxLength="32"
+            maxLength="31"
             value={getCurrData('guestssid')}
             onChange={this.onUpdate('guestssid')}
 
@@ -185,7 +185,7 @@ export const Guest = React.createClass({
                 label={_('Password')}
                 required
                 type="password"
-                maxLength="32"
+                maxLength="31"
                 className="text"
                 value={getCurrData('password')}
                 onChange={this.onUpdate('password')}

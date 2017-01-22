@@ -90,7 +90,7 @@ const screenOptions = fromJS([
     label: _('Portal Name'),
     formProps: {
       type: 'text',
-      maxLength: '32',
+      maxLength: '31',
       required: true,
     },
   }, {

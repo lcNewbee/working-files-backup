@@ -21,7 +21,7 @@ const listOptions = fromJS([
     formProps: {
       type: 'text',
       required: true,
-      maxLength: '32',
+      maxLength: '31',
     },
   }, {
     id: 'date',
@@ -68,7 +68,7 @@ const listOptions = fromJS([
     noTable: true,
     type: 'text',
   }, {
-    id: 'type',
+    id: 'state',
     type: 'text',
     text: _('Type'),
     options: [
@@ -183,7 +183,7 @@ const listOptions = fromJS([
     noTable: true,
     formProps: {
       type: 'text',
-      maxLength: '32',
+      maxLength: '31',
     },
   }, {
     id: 'gender',

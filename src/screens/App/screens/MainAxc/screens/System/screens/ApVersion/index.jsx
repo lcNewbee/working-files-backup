@@ -24,10 +24,12 @@ const listOptions = fromJS([
     defaultValue: '',
     formProps: {
       type: 'text',
-      maxLength: '32',
+      maxLength: '31',
       required: true,
       notEditable: true,
-      validator: validator({}),
+      validator: validator({
+        rules: 'utf8Len:[1, 31]',
+      }),
     },
   }, {
     id: 'fileName',

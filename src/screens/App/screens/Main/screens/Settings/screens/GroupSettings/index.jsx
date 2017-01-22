@@ -343,7 +343,7 @@ export const GroupSettings = React.createClass({
                 <FormGroup
                   label={msg.remarks}
                   required
-                  maxLength="32"
+                  maxLength="31"
                   value={this.getEditVal('remark')}
                   id="remark"
                   onChange={this.onChangeGroupSettings('remark')}

@@ -15,7 +15,7 @@ const listOptions = fromJS([
     className: 'col col-6',
     formProps: {
       required: true,
-      maxLength: '32',
+      maxLength: '31',
     },
   }, {
     id: 'bas_ip',

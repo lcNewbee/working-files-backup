@@ -37,7 +37,7 @@ const listOptions = fromJS([
     label: _('Mac White List'),
     formProps: {
       type: 'text',
-      maxLength: '32',
+      maxLength: '31',
       required: true,
       validator: validator({
         rules: 'mac',
