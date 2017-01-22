@@ -142,7 +142,9 @@ export default class Login extends Component {
             } else {
               loginState.purview = 'all';
             }
-          } else {
+          } else if (json.state.msg.indexOf('upper bound') !== -1) {
+            result = _(json.state.msg);
+          } else if (json.state.msg.indexOf('password error') !== -1) {
             result = guiConfig.hasUsername ? _(json.state.msg) : _(json.state.msg.replace('username or ', ''));
           }
         }

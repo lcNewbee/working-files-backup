@@ -61,9 +61,10 @@ class Input extends React.Component {
     if (inputProps.type === 'textarea') {
       ThisComponent = 'textarea';
     }
-    // if () {
 
-    // }
+    if (inputProps.readOnly) {
+      inputProps.unselectable = 'on';
+    }
 
     return (
       <ThisComponent

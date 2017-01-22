@@ -8,7 +8,7 @@
 "radioList":
 [
 	{
-		"wirelessMode":"sta",
+		"wirelessMode":"ap",
 		"radioType":"2.4G",
 		"radioId":"0",
 		"enable":"1",
@@ -21,19 +21,13 @@
 		"frequency":"36",
 		"vapList":[
 			{
-				"ssid":"axilspot1",
+				"ssid":"axilspot11",
 				"apMac":"11:22:33:44:55:66",
 				"apMacEnable": "0",
         "maxClients": "15",
         "vlanId": "1",
 				"security":{
-					"mode":"wpa",
-					"cipher":"aes",
-					"key":"12345678",
-					"auth":"open",
-					"keyLength":"64",
-					"keyType":"Hex",
-					"keyIndex":"1"
+					"mode":"none"
 				},
 				"speedLimit": {
 					"enable": "0",
@@ -42,14 +36,13 @@
 				}
 			},
 			{
-				"ssid":"axilspot2",
+				"ssid":"axilspot22",
 				"apMac":"11:22:33:44:55:66",
         "vlanId": "1",
         "maxClients": "30",
 				"security":{
-					"cipher":"aes",
 					"key":"12345678",
-					"mode":"None",
+					"mode":"wep",
 					"auth":"open",
 					"keyLength":"64",
 					"keyType":"Hex",

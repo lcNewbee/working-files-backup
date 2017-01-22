@@ -272,7 +272,10 @@ function getTopTenFlowClientsOption(serverData) {
       orient: 'vertical',
       x: 'left',
       y: 'bottom',
-      // data: [_('Offline'), _('Online')],
+      itemGap: 7,
+      tooltip: {
+        show: true,
+      },
     },
     series: [
       {
@@ -345,6 +348,7 @@ function getFlowPerSsidOption(serverData) {
       orient: 'vertical',
       x: 'left',
       y: 'bottom',
+      itemGap: 7,
     },
     series: [
       {

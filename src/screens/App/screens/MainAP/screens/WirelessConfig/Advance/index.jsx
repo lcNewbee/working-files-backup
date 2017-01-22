@@ -392,7 +392,7 @@ export default class Advance extends React.Component {
                   display: 'inline-block',
                 }}
               >
-                {`  dbm ${_('Range: ')}-98 ~ -40`}
+                {`${_('Range: ')}-98 ~ -40dbm`}
               </span>
             </div>
           ) : null
@@ -560,7 +560,7 @@ export default class Advance extends React.Component {
                     id="threshdForLed1"
                     type="number"
                     label="LED1"
-                    help={`dbm ${_('Range: ')} -98 ~ -10`}
+                    help={`${_('Range: ')} -98 ~ -10 dbm`}
                     value={led1Threshold}
                     onChange={(data) => { this.changeFormValue(radioId, 'led1Threshold', data.value); }}
                     size="sm"
@@ -581,7 +581,7 @@ export default class Advance extends React.Component {
                     id="threshdForLed2"
                     type="number"
                     label="LED2"
-                    help={`dbm ${_('Range: ')} -98 ~ -10`}
+                    help={`${_('Range: ')} -98 ~ -10 dbm`}
                     value={led2Threshold}
                     onChange={(data) => { this.changeFormValue(radioId, 'led2Threshold', data.value); }}
                     size="sm"
@@ -602,7 +602,7 @@ export default class Advance extends React.Component {
                     id="threshdForLed3"
                     type="number"
                     label="LED3"
-                    help={`dbm ${_('Range: ')} -98 ~ -10`}
+                    help={`${_('Range: ')} -98 ~ -10 dbm`}
                     value={led3Threshold}
                     onChange={(data) => { this.changeFormValue(radioId, 'led3Threshold', data.value); }}
                     size="sm"
@@ -623,7 +623,7 @@ export default class Advance extends React.Component {
                     id="threshdForLed4"
                     type="number"
                     label="LED4"
-                    help={`dbm ${_('Range: ')} -98 ~ -10`}
+                    help={`${_('Range: ')} -98 ~ -10 dbm`}
                     value={led4Threshold}
                     onChange={(data) => { this.changeFormValue(radioId, 'led4Threshold', data.value); }}
                     size="sm"

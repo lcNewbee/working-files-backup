@@ -1,7 +1,7 @@
 {
   "state": {
     "code": 2000,
-    "msg": "username or password error"
+    "msg": "Users reach the upper bound"
   },
   "data": {
     "purview": "1",

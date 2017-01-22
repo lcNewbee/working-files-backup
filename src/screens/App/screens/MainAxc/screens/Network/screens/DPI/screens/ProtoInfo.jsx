@@ -51,6 +51,7 @@ export default class ProtoInfo extends React.Component {
             isFetchInfinite: true,
             fetchIntervalTime: 5000,
           }}
+          listTitle={_('Statistics Within 30 Seconds')}
         />
       </div>
     );

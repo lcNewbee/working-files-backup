@@ -13,7 +13,19 @@ function getEchartOptionByName(serverData, listName) {
   let dataList = serverData.get(listName);
   const ret = $$commonPieOption.mergeDeep({
     title: {
-      text: _(listName),
+      text: (() => {
+        let title;
+        switch (listName) {
+          case 'ethInterface':
+            title = _('Ethernet'); break;
+          case 'proto':
+            title = _('Protocols'); break;
+          case 'mac':
+            title = _('MAC'); break;
+          default:
+        }
+        return title;
+      })(),
     },
     tooltip: {
       trigger: 'item',
@@ -67,31 +79,13 @@ function getEchartOptionByName(serverData, listName) {
 
 const propTypes = {
   store: PropTypes.instanceOf(Map),
-  // route: PropTypes.object,
-  // groupid: PropTypes.any,
-  // initScreen: PropTypes.func,
-  // leaveScreen: PropTypes.func,
-  // fetchScreenData: PropTypes.func,
-  // changeScreenQuery: PropTypes.func,
 };
 const defaultProps = {};
 
 export default class DPIOverview extends React.Component {
   constructor(props) {
     super(props);
-
-    // props.initScreen({
-    //   id: props.route.id,
-    //   formUrl: props.route.formUrl,
-    //   path: props.route.path,
-    //   isFetchInfinite: true,
-    //   fetchIntervalTime: 5000,
-    // });
   }
-
-  // componentWillMount() {
-  //   this.props.fetchScreenData();
-  // }
 
   render() {
     const curScreenId = this.props.store.get('curScreenId');
@@ -115,10 +109,13 @@ export default class DPIOverview extends React.Component {
         {
           this.props.store.getIn([curScreenId, 'curSettings', 'ndpiEnable']) === '1' ? (
             <div className="t-overview">
+              <div className="t-list-info">
+                <h2 className="t-list-info__title">{_('Flow Statistics Within 30 Seconds')}</h2>
+              </div>
               <div className="t-overview__section row">
                 <div className="cols col-6" >
                   <div className="element">
-                    <h3>{_('ethInterface')}</h3>
+                    <h3>{_('Ethernet')}</h3>
                   </div>
                   <div className="element">
                     <EchartReact
@@ -133,7 +130,7 @@ export default class DPIOverview extends React.Component {
                 </div>
                 <div className="cols col-6">
                   <div className="element">
-                    <h3>{_('proto')}</h3>
+                    <h3>{_('Protocols')}</h3>
                   </div>
                   <div className="element">
                     <EchartReact
@@ -151,7 +148,7 @@ export default class DPIOverview extends React.Component {
               <div className="t-overview__section row">
                 <div className="cols col-6" >
                   <div className="element">
-                    <h3>{_('mac')}</h3>
+                    <h3>{_('MAC')}</h3>
                   </div>
                   <div className="element row">
                     <EchartReact

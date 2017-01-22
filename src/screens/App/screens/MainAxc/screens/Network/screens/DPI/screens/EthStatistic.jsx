@@ -160,6 +160,7 @@ export default class EthStatistic extends React.Component {
           editable={false}
           deleteable={false}
           listKey="ethx_name"
+          listTitle={_('Statistics Within 30 Seconds')}
         />
       </div>
     );

@@ -1775,7 +1775,6 @@ export default class Basic extends React.Component {
         <Modal
           title={_('Security Settings For SSID')}
           isShow={tableItemForSsid.get('isShow') === '1'}
-          draggable
           onOk={() => {
             this.props.validateAll('ssidSecurityModal').then((msg) => {
               if (msg.isEmpty()) {
@@ -1821,7 +1820,7 @@ export default class Basic extends React.Component {
 
               const secur = securDefault.merge(currentSecur)
                             .set('mode', data.value).set('key', '');
-              console.log('currentSecur', currentSecur.toJS(), secur.toJS());
+              // console.log('currentSecur', currentSecur.toJS(), secur.toJS());
               const newItem = tableItemForSsid.get('item').set('security', secur);
               const newItemForSsid = tableItemForSsid.set('item', newItem);
               this.props.changeTableItemForSsid(newItemForSsid);

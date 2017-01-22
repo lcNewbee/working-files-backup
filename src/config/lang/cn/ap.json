@@ -389,5 +389,6 @@
   "CPU/MEM Usage": "CPU及内存占用率",
   "Bandwidth": "信道频宽",
   "Subnet Mask": "子网掩码",
-  "Radios Apply": "射频选择"
+  "Radios Apply": "射频选择",
+  "Users reach the upper bound": "登录用户数已达上限"
 }
