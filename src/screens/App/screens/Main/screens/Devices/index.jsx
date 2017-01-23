@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { bindActionCreators } from 'redux';
 import { fromJS, Map } from 'immutable';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 import Table from 'shared/components/Table';
 import {
   Search, FormGroup, Button, Select, Modal, Switchs,
@@ -193,7 +193,7 @@ export const Device = React.createClass({
   },
 
   // 组合验证
-  combineValid() {
+  combine() {
     const { ip, mask, gateway, connect_type } = this.props.store.get('edit').toJS();
     const oriMask = this.props.store.getIn(['oriEdit', 'mask']);
     const oriGateway = this.props.store.getIn(['oriEdit', 'gateway']);
@@ -201,7 +201,7 @@ export const Device = React.createClass({
 
     if (connect_type === 'static') {
       if (!ret && gateway) {
-        ret = validator.combineValid.staticIP(ip, mask, gateway);
+        ret = validator.combine.needStaticIP(ip, mask, gateway);
       }
     }
 
@@ -212,20 +212,20 @@ export const Device = React.createClass({
 
     this.props.validateAll()
       .then((invalid) => {
-        const combineValidResult = this.combineValid();
+        const combineResult = this.combine();
         const { ip, mask, gateway, connect_type } = this.props.store.get('edit').toJS();
         const oriMask = this.props.store.getIn(['oriEdit', 'mask']);
         const oriGateway = this.props.store.getIn(['oriEdit', 'gateway']);
 
         if (invalid.isEmpty()) {
-          if (combineValidResult) {
+          if (combineResult) {
             this.props.createModal({
               title: _('DEVICES'),
               role: 'alert',
-              text: combineValidResult,
+              text: combineResult,
             });
           } else {
-            if ((oriGateway && validator.combineValid.staticIP(ip, oriMask, oriGateway)) || oriMask !== mask) {
+            if ((oriGateway && validator.combine.needStaticIP(ip, oriMask, oriGateway)) || oriMask !== mask) {
               this.props.createModal({
                 title: _('DEVICES'),
                 role: 'confirm',
@@ -233,7 +233,7 @@ export const Device = React.createClass({
                 apply: () => this.props.saveDeviceNetwork(),
               });
             } else {
-              if (validator.combineValid.staticIP(ip, oriMask, oriGateway) || oriMask !== mask) {
+              if (validator.combine.needStaticIP(ip, oriMask, oriGateway) || oriMask !== mask) {
                 this.props.createModal({
                   title: _('DEVICES'),
                   role: 'confirm',

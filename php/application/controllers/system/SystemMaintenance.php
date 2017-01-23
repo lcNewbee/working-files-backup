@@ -5,6 +5,7 @@ class SystemMaintenance extends CI_Controller {
         parent::__construct();
         $this->load->library('session');
         $this->load->database();
+        $this->load->helper('file');
         $this->load->helper(array('array', 'my_customfun_helper'));
     }
     function fetch() {
@@ -93,15 +94,18 @@ class SystemMaintenance extends CI_Controller {
         if(isset($_POST['suffix'])) {
             //从文件恢复
             $result = $this->do_upload();
-            if($result['state']['code'] === 2000){
+            if ($result['state']['code'] === 2000){
                 exec('/sbin/reboot');
-            }else{
+            } else{
                 $result = json_encode($result);
             }
-        }else{
+        } else {
             //恢复出厂设置
             if(file_exists('/var/conf/config.db')) {
                 unlink('/var/conf/config.db');
+            }
+            if(file_exists('/var/netmanager/mysql')) {
+                delete_files('/var/netmanager/mysql', TRUE);
             }
             exec('/sbin/reboot');
         }

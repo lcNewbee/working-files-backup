@@ -5,7 +5,7 @@ import { Map, fromJS } from 'immutable';
 import {
   Button, FormGroup, FormInput, Modal, Table, Icon,
 } from 'shared/components';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 import { bindActionCreators } from 'redux';
 import * as appActions from 'shared/actions/app';
 import * as sharedActions from 'shared/actions/settings';

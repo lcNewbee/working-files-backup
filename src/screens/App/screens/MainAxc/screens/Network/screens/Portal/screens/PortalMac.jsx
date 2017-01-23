@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 import { bindActionCreators } from 'redux';
 import AppScreen from 'shared/components/Template/AppScreen';
 import * as appActions from 'shared/actions/app';
@@ -37,7 +37,7 @@ const listOptions = fromJS([
     label: _('Mac White List'),
     formProps: {
       type: 'text',
-      maxLength: '32',
+      maxLength: '31',
       required: true,
       validator: validator({
         rules: 'mac',

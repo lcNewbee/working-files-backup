@@ -74,7 +74,7 @@ function getTerminalTypeOption(serverData) {
     },
     legend: {
       formatter: (name) => {
-        const num = serverData.get('terminalType')
+        const num = dataList
           .find($$item => $$item.get('name') === name)
           .get('value') || 0;
 
@@ -90,14 +90,22 @@ function getTerminalTypeOption(serverData) {
 
 
   if (List.isList(dataList)) {
-    dataList = dataList.sort(($$a, $$b) => {
-      const a = $$a.get('value');
-      const b = $$b.get('value');
+    if (dataList.size < 1) {
+      dataList = fromJS([{
+        name: _('None'),
+        value: 0,
+      }]);
+    } else {
+      dataList = dataList.sort(($$a, $$b) => {
+        const a = $$a.get('value');
+        const b = $$b.get('value');
 
-      if (a < b) { return 1; }
-      if (a > b) { return -1; }
-      if (a === b) { return 0; }
-    });
+        if (a < b) { return 1; }
+        if (a > b) { return -1; }
+        if (a === b) { return 0; }
+      });
+    }
+
     ret.legend.data = dataList.map(item => item.get('name')).toJS();
     ret.series[0].data = dataList.toJS();
   }

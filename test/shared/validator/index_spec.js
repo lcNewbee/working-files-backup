@@ -1,12 +1,12 @@
 import {
   expect,
-  assert
+  assert,
 } from 'chai';
 import {
   describe,
-  it
+  it,
 } from 'mocha';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 
 describe('utils validator', () => {
   const myValidator = validator();
@@ -82,7 +82,7 @@ describe('utils validator', () => {
           });
 
           expect(oneRuleArgsValidator.check(''))
-            .to.be.equal('String length range is: 1 - 3 bit');
+            .to.be.equal('String length range is: 1 - 3');
         });
 
       it('should handle correct when option has rules with params',
@@ -98,7 +98,7 @@ describe('utils validator', () => {
             .to.be.equal("Can't input: a");
 
           expect(rulesWithArgsValidator.check('efggg'))
-            .to.be.equal('String length range is: 1 - 3 bit');
+            .to.be.equal('String length range is: 1 - 3');
         });
     });
 

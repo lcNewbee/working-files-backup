@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import utils from 'shared/utils';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 import { baseSetting, advancedSetting } from 'shared/config/axcPortalAccount';
 import AppScreen from 'shared/components/Template/AppScreen';
 import FormContainer from 'shared/components/Organism/FormContainer';
@@ -21,7 +21,7 @@ const listOptions = fromJS([
     formProps: {
       type: 'text',
       required: true,
-      maxLength: '32',
+      maxLength: '31',
     },
   }, {
     id: 'date',
@@ -68,7 +68,7 @@ const listOptions = fromJS([
     noTable: true,
     type: 'text',
   }, {
-    id: 'type',
+    id: 'state',
     type: 'text',
     text: _('Type'),
     options: [
@@ -89,7 +89,7 @@ const listOptions = fromJS([
         value: '4',
         label: _('Traffic'),
       }, {
-        value: 'null',
+        value: '-1',
         label: _('Outside User'),
       },
     ],
@@ -183,7 +183,7 @@ const listOptions = fromJS([
     noTable: true,
     formProps: {
       type: 'text',
-      maxLength: '32',
+      maxLength: '31',
     },
   }, {
     id: 'gender',

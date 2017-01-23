@@ -4,7 +4,7 @@ import utils from 'shared/utils';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 import * as appActions from 'shared/actions/app';
 import Navbar from 'shared/components/Navbar';
 import Button from 'shared/components/Button/Button';
@@ -183,7 +183,7 @@ export default class Login extends Component {
                 <FormGroup
                   display="block"
                   name="username"
-                  maxLength="32"
+                  maxLength="31"
                   data-label={_('Username')}
                   placeholder={_('Username')}
                   value={this.state.username}
@@ -198,7 +198,7 @@ export default class Login extends Component {
               type="password"
               name="password"
               display="block"
-              maxLength="32"
+              maxLength="31"
               data-label={_('Password')}
               placeholder={_('Password')}
               value={this.state.password}

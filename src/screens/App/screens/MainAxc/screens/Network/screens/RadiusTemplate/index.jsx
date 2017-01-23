@@ -4,7 +4,7 @@ import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import utils from 'shared/utils';
 import AppScreen from 'shared/components/Template/AppScreen';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 import FormContainer from 'shared/components/Organism/FormContainer';
 import Icon from 'shared/components/Icon';
 // custom
@@ -30,7 +30,6 @@ const authServer = fromJS([
     label: _('Nas IP'),
     form: 'authServer',
     type: 'text',
-    maxLength: '15',
     required: true,
     className: 'cols col-12',
     validator: validator({
@@ -67,7 +66,7 @@ const authServer = fromJS([
     form: 'authServer',
     type: 'password',
     required: true,
-    maxLength: '32',
+    maxLength: '31',
     validator: validator({
       rules: 'pwd',
     }),
@@ -98,7 +97,7 @@ const authServer = fromJS([
     fieldset: 'auth_secondary',
     type: 'password',
     form: 'authServer',
-    maxLength: '32',
+    maxLength: '31',
     validator: validator({
       rules: 'pwd',
     }),
@@ -128,6 +127,8 @@ const accServer = fromJS([
     defaultValue: '1813',
     type: 'number',
     form: 'accServer',
+    min: 1,
+    max: 65535,
   }, {
     id: 'acctpri_key',
     required: true,
@@ -158,6 +159,8 @@ const accServer = fromJS([
     fieldset: 'secondary',
     type: 'number',
     form: 'accServer',
+    min: 1,
+    max: 65535,
   }, {
     id: 'acctsecond_key',
     label: _('Secondary Acc Password'),

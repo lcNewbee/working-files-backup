@@ -3,7 +3,7 @@ import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
@@ -15,7 +15,7 @@ const listOptions = fromJS([
     className: 'col col-6',
     formProps: {
       required: true,
-      maxLength: '32',
+      maxLength: '31',
     },
   }, {
     id: 'bas_ip',

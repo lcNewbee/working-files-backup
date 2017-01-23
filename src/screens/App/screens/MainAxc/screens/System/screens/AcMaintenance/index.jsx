@@ -84,10 +84,15 @@ export default class View extends React.Component {
         loadingTitle: _('Rebootting..., Do not shutdown device.'),
         onSave: this.onReboot,
       },
-      restore: {
+      restoreToFactory: {
         text: _('Are you sure to restore to factory?'),
         loadingTitle: _('Restoring..., Do not shutdown device'),
         onSave: this.onRestore,
+      },
+      restoreConfig: {
+        text: _('Are you sure to restore Configuration?'),
+        loadingTitle: _('Restoring..., Do not shutdown device'),
+        onSave: () => {},
       },
     };
     const curHandle = handleMap[type];
@@ -132,7 +137,7 @@ export default class View extends React.Component {
           }
         });
     } else {
-      timeoutTime = 15000;
+      timeoutTime = 20000;
     }
 
     this.checkUpgradOkTimeout = setTimeout(() => {
@@ -186,7 +191,7 @@ export default class View extends React.Component {
                 text=""
                 disabled={!this.actionable}
                 onClick={
-                  () => this.onConfirm('restore')
+                  () => this.onConfirm('restoreToFactory')
                 }
               />
             </FormGroup>
@@ -199,6 +204,25 @@ export default class View extends React.Component {
                 buttonIcon="undo"
                 buttonText={_('Restore Now')}
                 disabled={!this.actionable}
+                onBeforeUpload={
+                  () => {
+                    this.props.createModal({
+                      role: 'loading',
+                      title: '',
+                      loadingStep: 3200,
+                      loadingTitle: _('Restoring..., Do not shutdown device'),
+                      onLoaded: () => {
+                        this.props.closeModal();
+                        this.props.changeLoginStatus('0');
+                        this.props.changeLoginState({
+                          needReload: true,
+                        });
+                        window.location.hash = '#';
+                      },
+                    });
+                    this.checkSaveResult(true);
+                  }
+                }
               />
             </FormGroup>
 

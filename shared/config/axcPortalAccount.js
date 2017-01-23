@@ -1,5 +1,5 @@
 import { fromJS } from 'immutable';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 
 export const baseSetting = fromJS([
   {
@@ -8,9 +8,9 @@ export const baseSetting = fromJS([
     className: 'cols col-6',
     type: 'text',
     required: true,
-    maxLength: '32',
+    maxLength: '31',
     validator: validator({
-      rules: 'len[1,32]',
+      rules: 'len[1,31]',
     }),
   }, {
     id: 'password',
@@ -35,7 +35,7 @@ export const baseSetting = fromJS([
     noTable: true,
     type: 'text',
   }, {
-    id: 'type',
+    id: 'state',
     label: _('Type'),
     className: 'cols col-12',
     options: [
@@ -56,7 +56,7 @@ export const baseSetting = fromJS([
         value: '4',
         label: _('Traffic'),
       }, {
-        value: 'null',
+        value: '-1',
         label: _('Outside User'),
       },
     ],
@@ -147,7 +147,7 @@ export const advancedSetting = fromJS([
     noTable: true,
     className: 'cols col-12',
     type: 'text',
-    maxLength: '32',
+    maxLength: '31',
 
   }, {
     id: 'gender',

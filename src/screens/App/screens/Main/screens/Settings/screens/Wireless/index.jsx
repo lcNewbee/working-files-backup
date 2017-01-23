@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { fromJS, Map, List } from 'immutable';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 import * as appActions from 'shared/actions/app';
 import PureComponent from 'shared/components/Base/PureComponent';
 import { FormGroup, FormInput } from 'shared/components/Form';
@@ -256,7 +256,7 @@ export class Wireless extends PureComponent {
           label={_('SSID')}
           required
           value={getCurrData('ssid')}
-          maxLength="32"
+          maxLength="31"
           id="ssid"
           onChange={this.onUpdateSettings('ssid')}
           {...ssid}
@@ -275,7 +275,7 @@ export class Wireless extends PureComponent {
               type="password"
               required
               value={getCurrData('password')}
-              maxLength="32"
+              maxLength="31"
               onChange={this.onUpdateSettings('password')}
               {...password}
             /> : null

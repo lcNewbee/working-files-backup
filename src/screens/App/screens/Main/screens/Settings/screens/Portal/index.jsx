@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { fromJS, Map, List } from 'immutable';
 import { connect } from 'react-redux';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 import { FormGroup } from 'shared/components/Form';
 import Select from 'shared/components/Select';
 import { Button, SaveButton } from 'shared/components';

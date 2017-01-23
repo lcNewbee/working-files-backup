@@ -1,3 +1,11 @@
+import stringUtils from 'shared/utils/lib/string';
+
+let _ = window._;
+
+if (!_) {
+  _ = stringUtils.format;
+}
+
 const ERROR_MSG_MAP = {
   6000: _('AP with the same name already exists'),
   6001: _('AP with the same MAC already exists'),

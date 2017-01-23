@@ -110,7 +110,7 @@ class FormGroup extends React.Component {
     // 空字符串验证, 或者值 不在 options 列表中
     if (value === '' || value === undefined || notOptionsValue(options, value, type)) {
       if (required) {
-        checkResult = _('%s', label || this.props['data-label']) + _(' is required');
+        checkResult = _('%s is required', label || this.props['data-label']);
       }
 
     // 不为空，validator验证对象验证

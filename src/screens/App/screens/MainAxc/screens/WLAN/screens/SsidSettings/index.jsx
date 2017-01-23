@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import utils, { immutableUtils } from 'shared/utils';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
@@ -123,9 +123,9 @@ const listOptions = fromJS([
     text: _('Description'),
     formProps: {
       type: 'text',
-      maxLength: 63,
+      maxLength: 255,
       validator: validator({
-        rules: 'utf8Len:[1, 63]',
+        rules: 'utf8Len:[1, 255]',
       }),
     },
     noTable: true,

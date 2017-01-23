@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import {
   SaveButton, FormGroup, FormInput,
 } from 'shared/components';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 import * as appActions from 'shared/actions/app';
 import * as sharedActions from 'shared/actions/settings';
 import Modal from 'shared/components/Modal';
@@ -115,14 +115,14 @@ export default class NetworkSettings extends React.Component {
         if (mg.isEmpty()) {
           if (proto === 'static') {
             if (ip !== '' && typeof (ip) !== 'undefined' && mask !== '' && typeof (mask) !== 'undefined') {
-              msg = validator.combineValid.noBroadcastIp(ip, mask);
+              msg = validator.combine.noBroadcastIp(ip, mask);
               if (msg) {
                 showError(msg);
                 return;
               }
             }
             if (gateway !== '' && typeof (gateway) !== 'undefined' && mask !== '' && typeof (mask) !== 'undefined') {
-              msg = validator.combineValid.noBroadcastIp(gateway, mask);
+              msg = validator.combine.noBroadcastIp(gateway, mask);
               if (proto === 'static' && msg) {
                 showError(_('Gateway can not be broadcast IP address!'));
                 return;
@@ -131,7 +131,7 @@ export default class NetworkSettings extends React.Component {
             if (ip !== '' && typeof (ip) !== 'undefined' &&
                 mask !== '' && typeof (mask) !== 'undefined' &&
                 gateway !== '' && typeof (gateway) !== 'undefined') {
-              msg = validator.combineValid.staticIP(ip, mask, gateway);
+              msg = validator.combine.needStaticIP(ip, mask, gateway);
               if (proto === 'static' && gateway !== '' && msg) {
                 showError(msg);
                 return;
@@ -140,7 +140,7 @@ export default class NetworkSettings extends React.Component {
             msg = _('Primary and Secondary DNS can not be the same !');
             if (dns1 !== '' && typeof (dns1) !== 'undefined' &&
                 dns2 !== '' && typeof (dns2) !== 'undefined' &&
-                validator.combineValid.notequal(dns1, dns2, msg)) {
+                validator.combine.notequal(dns1, dns2, msg)) {
               showError(msg);
               return;
             }

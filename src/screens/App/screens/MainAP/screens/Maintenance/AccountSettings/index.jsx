@@ -6,7 +6,7 @@ import {
   SaveButton, FormGroup, Modal,
 } from 'shared/components';
 
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 import * as appActions from 'shared/actions/app';
 import * as settingsActions from 'shared/actions/settings';
 import utils from 'shared/utils';

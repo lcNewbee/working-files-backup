@@ -9,6 +9,7 @@ import AppScreen from 'shared/components/Template/AppScreen';
 import FormContainer from 'shared/components/Organism/FormContainer';
 import Icon from 'shared/components/Icon';
 import { apStatus } from 'shared/config/axcAp';
+import validator from 'shared/validator';
 
 // custom
 import * as appActions from 'shared/actions/app';
@@ -96,7 +97,7 @@ const listOptions = fromJS([
   //   id: 'devicename',
   //   width: '180',
   //   text: `${_('MAC Address')}/${_('Name')}`,
-  //   maxLength: '32',
+  //   maxLength: '31',
   //   transform(val, item) {
   //     return item.get('devicename') || item.get('mac');
   //   },
@@ -105,7 +106,10 @@ const listOptions = fromJS([
     id: 'devicename',
     width: '180',
     text: _('Name'),
-    maxLength: '32',
+    maxLength: '31',
+    validator: validator({
+      rules: 'utf8Len:[1,31]',
+    }),
   }, {
     id: 'ip',
     width: '160',

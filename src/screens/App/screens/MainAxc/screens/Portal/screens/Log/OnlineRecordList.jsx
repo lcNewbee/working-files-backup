@@ -3,7 +3,7 @@ import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
@@ -81,7 +81,7 @@ const listOptions = fromJS([
         value: '4',
         label: _('Traffic'),
       }, {
-        value: 'null',
+        value: '-1',
         label: _('Outside User'),
       },
     ],

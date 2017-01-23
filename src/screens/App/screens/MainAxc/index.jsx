@@ -7,7 +7,7 @@ import utils from 'shared/utils';
 import classNamesUtils from 'classnames';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { Button, SaveButton } from 'shared/components/Button';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 import Nav from 'shared/components/Nav';
 import Modal from 'shared/components/Modal';
 import Icon from 'shared/components/Icon';
@@ -1173,8 +1173,10 @@ export default class Main extends Component {
             <li>
               <a
                 className=""
+                title={_('Email to Axilspot')}
+                href="mailto:sales@axilspot.com"
               >
-                <Icon name="comment" />
+                <Icon name="envelope" />
               </a>
             </li>
           </ul>

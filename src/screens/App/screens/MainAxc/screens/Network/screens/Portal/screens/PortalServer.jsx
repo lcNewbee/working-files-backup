@@ -1,6 +1,6 @@
 import React from 'react';
 import utils from 'shared/utils';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
@@ -57,7 +57,7 @@ const listOptions = fromJS([
       type: 'text',
       required: true,
       validator: validator({
-        rules: 'utf8Len:[1,63]',
+        rules: 'utf8Len:[1,31]',
       }),
       showPrecondition(data) {
         return data.get('address_type') === '2';

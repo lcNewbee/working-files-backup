@@ -3,7 +3,7 @@ import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
-import validator from 'shared/utils/lib/validator';
+import validator from 'shared/validator';
 import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
@@ -14,14 +14,17 @@ const listOptions = fromJS([
     text: _('Name'),
     formProps: {
       required: true,
-      maxLength: '32',
+      maxLength: '31',
       notEditable: true,
+      validator: validator({
+        rules: 'utf8Len:[1, 31]',
+      }),
     },
   }, {
     id: 'domain',
     text: _('Domain'),
     formProps: {
-      maxLength: '32',
+      maxLength: '31',
       type: 'text',
     },
   }, {
@@ -49,7 +52,7 @@ const listOptions = fromJS([
     text: _('Gateway'),
     formProps: {
       required: true,
-      maxLength: '32',
+      maxLength: '31',
       validator: validator({
         rules: 'ip',
       }),
@@ -58,7 +61,7 @@ const listOptions = fromJS([
     id: 'mainDns',
     text: _('Primary DNS'),
     formProps: {
-      maxLength: '32',
+      maxLength: '31',
       validator: validator({
         rules: 'ip',
       }),
@@ -67,6 +70,7 @@ const listOptions = fromJS([
     id: 'secondDns',
     text: _('Secondary DNS'),
     formProps: {
+      maxLength: '31',
       validator: validator({
         rules: 'ip',
       }),
@@ -77,7 +81,7 @@ const listOptions = fromJS([
     formProps: {
       type: 'number',
       required: true,
-      help: _('Range:300-604800Second'),
+      help: _('Range: 300-604800 Seconds'),
       min: '300',
       max: '604800',
       validator: validator({
@@ -101,9 +105,9 @@ const listOptions = fromJS([
     formProps: {
       type: 'number',
       min: 0,
-      maxLength: '32',
+      maxLength: '31',
       validator: validator({
-        rules: 'len[1,32]',
+        rules: 'len[1,31]',
       }),
     },
   },
@@ -130,7 +134,7 @@ export default class View extends React.Component {
     let ret = '';
 
     if (actionType === 'add' || actionType === 'edit') {
-      ret = validator.combineValid.isSameNet(startIp, mask, gateway, {
+      ret = validator.combine.needSameNet(startIp, mask, gateway, {
         ipLabel: _('Start IP'),
         ip2Label: _('Gateway'),
       });
