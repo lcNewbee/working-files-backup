@@ -3,7 +3,6 @@ import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Button from 'shared/components/Button/Button';
 import Icon from 'shared/components/Icon';
 import { getActionable } from 'shared/axc';
@@ -95,7 +94,7 @@ const propTypes = {
 };
 const defaultProps = {};
 
-export default class View extends React.Component {
+export default class View extends React.PureComponent {
   constructor(props) {
     super(props);
     this.markers = [];
@@ -104,8 +103,6 @@ export default class View extends React.Component {
       isOpenHeader: true,
       buildingIndex: -1,
     };
-
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
 
     utils.binds(this, [
       'onSave',

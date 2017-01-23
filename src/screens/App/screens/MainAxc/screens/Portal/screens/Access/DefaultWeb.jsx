@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import { Map, List, fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
@@ -21,10 +20,9 @@ const propTypes = {
 };
 const defaultProps = {};
 
-export default class View extends React.Component {
+export default class View extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
 
     utils.binds(this, [
       'onBackup',

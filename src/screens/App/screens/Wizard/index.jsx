@@ -1,5 +1,4 @@
-import React from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Map, List } from 'immutable';
 import validator from 'shared/validator';
@@ -9,7 +8,6 @@ import countries from 'shared/config/country.json';
 import Navbar from 'shared/components/Navbar';
 import Button from 'shared/components/Button/Button';
 import FormGroup from 'shared/components/Form/FormGroup';
-
 import urls from 'shared/config/urls';
 
 const _ = window._;
@@ -28,8 +26,8 @@ const msg = {
 const defaultCountry = ((window.navigator.language || window.navigator.userLanguage ||
     window.navigator.browserLanguage || window.navigator.systemLanguage ||
     'en').toUpperCase().split('-')[1] || '').toString();
-const defaultCountryLabel = List(countries).find((item) =>
-  (item.country === defaultCountry)
+const defaultCountryLabel = List(countries).find(
+  item => item.country === defaultCountry,
 )[b28n.getLang()];
 
 const defaultTimeZoneTitle = (((new Date()).getTimezoneOffset() / 60) * -1).toString();
@@ -43,12 +41,10 @@ TIME_ZONE.forEach((item) => {
   }
 });
 
-const countryList = List(countries).map((item) => {
-  return {
-    value: item.country,
-    label: item[b28n.getLang()],
-  };
-}).toJS();
+const countryList = List(countries).map(item => ({
+  value: item.country,
+  label: item[b28n.getLang()],
+})).toJS();
 
 const formGroups = Map({
   country: {
@@ -108,12 +104,17 @@ const formGroups = Map({
   },
 });
 
-// 原生的 react 页面
-export const SignUp = React.createClass({
-  mixins: [PureRenderMixin],
+const propTypes = {
+  app: PropTypes.instanceOf(Map).isRequired,
+};
+const defaultProps = {};
 
-  getInitialState() {
-    return {
+// 原生的 react 页面
+export class SignUp extends React.PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.state = {
       password: '',
       confirmpasswd: '',
       country: defaultCountry,
@@ -122,8 +123,12 @@ export const SignUp = React.createClass({
       timeZoneLabel: defaultTimeZoneLabel,
       currStep: 1,
     };
-  },
-
+    utils.binds(this, [
+      'onNext', 'onPrev', 'onChangeData', 'onInputKeyUp', 'signUp',
+      'onSignUp', 'getDataValue', 'checkStepTwo', 'checkStepOne',
+      'createFormGruop',
+    ]);
+  }
 
   onNext() {
     const MAX_STEP = 3;
@@ -137,12 +142,12 @@ export const SignUp = React.createClass({
         checkResult = this.checkStepTwo();
 
         if (!checkResult) {
-          this.updateState({
+          this.setState({
             currStep,
             status: 'ok',
           });
         } else {
-          this.updateState({
+          this.setState({
             status: checkResult,
           });
         }
@@ -150,36 +155,36 @@ export const SignUp = React.createClass({
         checkResult = this.checkStepOne();
 
         if (!checkResult) {
-          this.updateState({
+          this.setState({
             currStep,
             status: 'ok',
           });
         } else {
-          this.updateState({
+          this.setState({
             status: checkResult,
           });
         }
       } else {
-        this.updateState({
+        this.setState({
           currStep,
         });
       }
     } else {
       this.signUp();
     }
-  },
+  }
 
   onPrev() {
     let currStep = this.state.currStep;
 
     if (currStep > 1) {
       currStep -= 1;
-      this.updateState({
+      this.setState({
         currStep,
         status: '',
       });
     }
-  },
+  }
 
   onChangeData(name) {
     return function changeData(options) {
@@ -191,9 +196,9 @@ export const SignUp = React.createClass({
         data[`${name}Label`] = options.label;
       }
 
-      this.updateState(data);
+      this.setState(data);
     }.bind(this);
-  },
+  }
 
   onInputKeyUp(e) {
     if (e.which === 13) {
@@ -203,13 +208,13 @@ export const SignUp = React.createClass({
         this.onNext();
       }
     }
-  },
+  }
   onSignUp() {
     const checkResult = this.checkData();
 
     // 如果有验证错误信息
     if (checkResult) {
-      this.updateState({
+      this.setState({
         status: checkResult,
       });
 
@@ -217,10 +222,10 @@ export const SignUp = React.createClass({
     } else {
       this.signUp();
     }
-  },
+  }
   getDataValue(name) {
     return this.state[name] || '';
-  },
+  }
 
   checkStepTwo() {
     const data = this.state;
@@ -236,7 +241,7 @@ export const SignUp = React.createClass({
     }
 
     return checkResult;
-  },
+  }
 
   checkStepOne() {
     const data = this.state;
@@ -251,7 +256,7 @@ export const SignUp = React.createClass({
     }
 
     return checkResult;
-  },
+  }
 
   signUp() {
     utils.save(urls.regist, {
@@ -265,11 +270,7 @@ export const SignUp = React.createClass({
         window.location.hash = '';
       }
     });
-  },
-
-  updateState(data) {
-    this.setState(utils.extend({}, this.state, data));
-  },
+  }
 
   createFormGruop(name, option) {
     const myGroup = formGroups.get(name);
@@ -286,7 +287,7 @@ export const SignUp = React.createClass({
         onKeyUp={this.onInputKeyUp}
       />
     );
-  },
+  }
 
   render() {
     const { currStep } = this.state;
@@ -429,8 +430,11 @@ export const SignUp = React.createClass({
         </div>
       </div>
     );
-  },
-});
+  }
+}
+
+SignUp.propTypes = propTypes;
+SignUp.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
@@ -440,5 +444,5 @@ function mapStateToProps(state) {
 
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
-  mapStateToProps
+  mapStateToProps,
 )(SignUp);

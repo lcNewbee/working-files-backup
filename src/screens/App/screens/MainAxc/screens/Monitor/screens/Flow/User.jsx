@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import utils from 'shared/utils';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import AppScreen from 'shared/components/Template/AppScreen';
 
 // custom
@@ -35,10 +34,9 @@ const listOptions = fromJS([
 const propTypes = {};
 const defaultProps = {};
 
-export default class FlowUser extends React.Component {
+export default class FlowUser extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
 
   render() {

@@ -2,7 +2,6 @@ import React, { PropTypes } from 'react';
 import utils, { immutableUtils, dom } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { bindActionCreators } from 'redux';
 import {
   Button, AppScreen, Icon, FormGroup, Modal,
@@ -70,7 +69,7 @@ const propTypes = {
 };
 const defaultProps = {};
 
-export default class View extends React.Component {
+export default class View extends React.PureComponent {
   constructor(props) {
     super(props);
     this.markers = [];
@@ -79,7 +78,6 @@ export default class View extends React.Component {
       mapOffsetX: 0,
       mapOffsetY: 0,
     };
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     utils.binds(this,
       [
         'onSave',

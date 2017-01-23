@@ -1,5 +1,4 @@
-import React, { Component, PropTypes } from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
 import { Map } from 'immutable';
 import { connect } from 'react-redux';
@@ -35,11 +34,10 @@ const defaultProps = {
   closeModal: () => true,
 };
 
-export default class Login extends Component {
+export default class Login extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     utils.binds(this, [
       'onLogin',
       'onChangeData',

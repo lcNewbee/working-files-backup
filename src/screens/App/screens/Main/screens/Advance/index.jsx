@@ -1,23 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import {fromJS} from 'immutable';
 import utils from 'shared/utils';
 
 //component
-import {FormInput, FormGroup} from 'shared/components/Form';
+import { FormInput, FormGroup } from 'shared/components/Form';
 
 
 //custom
 import reducer from './reducer';
 import * as actions from './actions';
 
-
-
-
 export const Advance = React.createClass({
-
-
   render() {
     return (
       <div className='advanceWrap'>

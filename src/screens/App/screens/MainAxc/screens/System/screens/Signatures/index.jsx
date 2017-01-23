@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import utils, { immutableUtils } from 'shared/utils';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
@@ -63,10 +62,9 @@ const defaultFormData = immutableUtils.getDefaultData(listOptions);
 const propTypes = {};
 const defaultProps = {};
 
-export default class View extends React.Component {
+export default class View extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   render() {
     return (

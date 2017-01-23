@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import { Map, List, fromJS } from 'immutable';
 import validator from 'shared/validator';

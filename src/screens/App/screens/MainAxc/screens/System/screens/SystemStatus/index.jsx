@@ -2,8 +2,7 @@ import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import utils from 'shared/utils';
-import { Map, fromJS } from 'immutable';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import { Map } from 'immutable';
 import EchartReact from 'shared/components/EchartReact';
 import Progress from 'shared/components/Progress';
 import AppScreen from 'shared/components/Template/AppScreen';
@@ -122,30 +121,14 @@ function getStoreOption(serverData) {
 
   return option;
 }
-/*
-                <dl className="o-description-list-row">
-                  <dt>{_('CPU ID')}</dt>
-                  <dd>{serverData.get('system_cpuid')}</dd>
-                </dl>
-                <dl className="o-description-list-row">
-                  <dt>{_('Flash ID')}</dt>
-                  <dd>{serverData.get('system_sdaid')}</dd>
-                </dl>
-                <dl className="o-description-list-row">
-                  <dt>{_('Memory ID')}</dt>
-                  <dd>{serverData.get('system_memid')}</dd>
-                </dl>
-              */
 const propTypes = {
-  store: PropTypes.instanceOf(Map),
+  store: PropTypes.instanceOf(Map).isRequired,
 };
 const defaultProps = {};
 
-export default class View extends React.Component {
+export default class View extends React.PureComponent {
   constructor(props, context) {
     super(props, context);
-
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
 
   render() {

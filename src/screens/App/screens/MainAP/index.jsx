@@ -1,8 +1,7 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import Nav from 'shared/components/Nav';
 import Icon from 'shared/components/Icon';
@@ -23,12 +22,11 @@ const propTypes = {
   selfState: PropTypes.instanceOf(Map),
 };
 
-export default class MainAP extends Component {
+export default class MainAP extends React.PureComponent {
   constructor(props) {
     super(props);
 
     this.state = { isShow: false };
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onRefresh = this.onRefresh.bind(this);
     this.onLogout = this.onLogout.bind(this);
     this.showUserPopOver = this.showUserPopOver.bind(this);

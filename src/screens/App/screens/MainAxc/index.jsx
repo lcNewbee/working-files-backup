@@ -1,11 +1,10 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import utils from 'shared/utils';
 import classNamesUtils from 'classnames';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { Button, SaveButton } from 'shared/components/Button';
 import validator from 'shared/validator';
 import Nav from 'shared/components/Nav';
@@ -83,12 +82,11 @@ const defaultProps = {
   role: 'default',
 };
 
-export default class Main extends Component {
+export default class Main extends React.PureComponent {
   constructor(props) {
     super(props);
 
     this.state = { isShowUserPop: false };
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     utils.binds(this, [
       'onSelectManageGroup',
       'showUserPopOver',

@@ -3,7 +3,6 @@ import utils, { dom } from 'shared/utils';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { fromJS, Map, List } from 'immutable';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { bindActionCreators } from 'redux';
 import AppScreen from 'shared/components/Template/AppScreen';
 import Button from 'shared/components/Button/Button';
@@ -86,7 +85,7 @@ const propTypes = {
 
 const defaultProps = {};
 
-export default class View extends React.Component {
+export default class View extends React.PureComponent {
   constructor(props) {
     super(props);
     this.markers = [];
@@ -99,7 +98,6 @@ export default class View extends React.Component {
       curShowOptionDeviceMac: -100,
       zoom: 100,
     };
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     utils.binds(this,
       [
         'onSave',

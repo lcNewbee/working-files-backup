@@ -1,5 +1,4 @@
-import React from 'react';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import FormGroup from 'shared/components/Form/FormGroup';
 import { List } from 'immutable';
@@ -40,83 +39,47 @@ const formGroups = List([
   },
 ]);
 
-function createList(item) {
-  const input = item.input;
-
-  return (
-    <FormGroup
-      {...input}
-      key={input.name}
-      id={input.name}
-      value={this.getDataValue(input.name)}
-      onChange={this.onChangeData(input.name)}
-      onKeyUp={this.onInputKeyUp}
-    />
-  );
-}
+const propTypes = {
+  app: PropTypes.instanceOf(Map).isRequired,
+};
+const defaultProps = {};
 
 // 原生的 react 页面
-export const SignUp = React.createClass({
-  mixins: [PureRenderMixin],
+export class SignUp extends React.PureComponent {
+  constructor(props) {
+    super(props);
 
-  getInitialState() {
-    return {
+    this.state = {
       password: '',
       confirmpasswd: '',
     };
-  },
+    utils.binds(this, [
+      'checkData',
+      'signUp',
+      'onSignUp',
+      'onChangeData',
+      'getDataValue',
+      'onInputKeyUp',
+      'createList',
+    ]);
+  }
 
   componentWillMount() {
     document.getElementsByTagName('body')[0].className += ' sign-body';
-  },
+  }
 
   componentWillUnmount() {
     const currClass = document.getElementsByTagName('body')[0].className;
 
     document.getElementsByTagName('body')[0].className = currClass.replace(' sign-body', '');
-  },
-
-  checkData() {
-    const data = this.state;
-    let checkResult;
-
-    formGroups.forEach(function (item) {
-      const key = item.input.name;
-
-      checkResult = item.validator.check(data[key]);
-
-      if (checkResult) {
-        return false;
-      }
-    });
-
-    if (!checkResult) {
-      if (this.state.password !== this.state.confirmpasswd) {
-        checkResult = _('Password and confirm password must match');
-      }
-    }
-
-    return checkResult;
-  },
-
-  signUp() {
-    utils.save(urls.regist, {
-      password: this.state.password,
-      confirmpasswd: this.state.confirmpasswd,
-    })
-    .then(function (json) {
-      if (json.state && json.state.code === 2000) {
-        window.location.hash = '';
-      }
-    }.bind(this));
-  },
+  }
 
   onSignUp() {
     const checkResult = this.checkData();
 
     // 如果有验证错误信息
     if (checkResult) {
-      this.updateState({
+      this.setState({
         status: checkResult,
       });
 
@@ -124,24 +87,16 @@ export const SignUp = React.createClass({
     } else {
       this.signUp();
     }
-  },
-
-  updateState(data) {
-    this.setState(utils.extend({}, this.state, data));
-  },
+  }
 
   onChangeData(name) {
     return function (options) {
       const data = {};
 
       data[name] = options.value;
-      this.updateState(data);
+      this.setState(data);
     }.bind(this);
-  },
-
-  getDataValue(name) {
-    return this.state[name] || '';
-  },
+  }
 
   onInputKeyUp(e) {
     if (e.which === 13) {
@@ -151,35 +106,92 @@ export const SignUp = React.createClass({
         this.onSignUp();
       }
     }
-  },
+  }
 
+  getDataValue(name) {
+    return this.state[name] || '';
+  }
+
+  checkData() {
+    const data = this.state;
+    let checkResult;
+
+    formGroups.forEach(
+      (item) => {
+        const key = item.input.name;
+        let ret = item;
+
+        checkResult = item.validator.check(data[key]);
+
+        if (checkResult) {
+          ret = false;
+        }
+
+        return ret;
+      },
+    );
+
+    if (!checkResult) {
+      if (this.state.password !== this.state.confirmpasswd) {
+        checkResult = _('Password and confirm password must match');
+      }
+    }
+
+    return checkResult;
+  }
+
+  signUp() {
+    utils.save(urls.regist, {
+      password: this.state.password,
+      confirmpasswd: this.state.confirmpasswd,
+    })
+    .then((json) => {
+      if (json.state && json.state.code === 2000) {
+        window.location.hash = '';
+      }
+    });
+  }
+  createList(item) {
+    const input = item.input;
+
+    return (
+      <FormGroup
+        {...input}
+        key={input.name}
+        id={input.name}
+        value={this.getDataValue(input.name)}
+        onChange={this.onChangeData(input.name)}
+        onKeyUp={this.onInputKeyUp}
+      />
+    );
+  }
   render() {
     const { version } = this.props.app.toJS();
-    let FormGroupList;
-    const that = this;
-    const myMsg = this.props.status;
-
-    FormGroupList = formGroups.map(createList.bind(this));
 
     return (
       <div>
         <header className="navbar">
-          <div className="brand"></div>
+          <div className="brand" />
           <h1>{_('Axilspot Access Manager')}</h1>
           <span className="version">GUI {version}</span>
         </header>
         <div className="sign sign-up">
-          <div className="sign-backdrop"></div>
+          <div className="sign-backdrop" />
           <div className="sign-content">
             <h1>{_('Please Sign Up')}</h1>
-            {FormGroupList}
+            {
+              formGroups.map(
+                item => this.createList(item),
+              )
+            }
             <a href="#/" className="help-link">{_('Login in')}</a>
             {
               this.state.status !== 'ok' ?
                 <p className="msg-error ">{this.state.status}</p> :
                 ''
             }
-            <button className="btn btn-info btn-lg"
+            <button
+              className="btn btn-info btn-lg"
               onClick={this.onSignUp}
             >
               {_('Sign Up')}
@@ -188,8 +200,11 @@ export const SignUp = React.createClass({
         </div>
       </div>
     );
-  },
-});
+  }
+}
+
+SignUp.propTypes = propTypes;
+SignUp.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
@@ -199,5 +214,5 @@ function mapStateToProps(state) {
 
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
-  mapStateToProps
+  mapStateToProps,
 )(SignUp);

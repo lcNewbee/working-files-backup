@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import utils from 'shared/utils';
 import { bindActionCreators } from 'redux';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import Nav from 'shared/components/Nav';
 import Icon from 'shared/components/Icon';
@@ -10,13 +9,12 @@ import * as appActions from 'shared/actions/app';
 import * as actions from './actions';
 
 
-export default class Main extends Component {
+export default class Main extends React.PureComponent {
   constructor(props) {
     super(props);
 
     this.state = { isShow: false };
 
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.showUserPopOver = this.showUserPopOver.bind(this);
     this.onRefresh = this.onRefresh.bind(this);
     this.onLogout = this.onLogout.bind(this);
