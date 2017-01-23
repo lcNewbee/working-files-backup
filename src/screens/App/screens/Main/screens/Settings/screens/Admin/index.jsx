@@ -1,9 +1,9 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes, PureComponent } from 'react';
 import utils from 'shared/utils';
 import { bindActionCreators } from 'redux';
 import { Map, List } from 'immutable';
 import { connect } from 'react-redux';
-import { SaveButton, PureComponent, FormGroup } from 'shared/components';
+import { SaveButton, FormGroup } from 'shared/components';
 import validator from 'shared/validator';
 import * as appActions from 'shared/actions/app';
 import * as myActions from './actions';

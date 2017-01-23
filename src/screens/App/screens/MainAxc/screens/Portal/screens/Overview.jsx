@@ -1,10 +1,9 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes, PureComponent } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import utils from 'shared/utils';
 import { Map, fromJS } from 'immutable';
-import PureComponent from 'shared/components/Base/PureComponent';
 import EchartReact from 'shared/components/EchartReact';
 import Table from 'shared/components/Table';
 import AppScreen from 'shared/components/Template/AppScreen';

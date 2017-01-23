@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import utils from 'shared/utils';
 import { List } from 'immutable';
 import moment from 'moment';
 import {
-  PureComponent, EchartReact, Button, FormGroup,
+  EchartReact, Button,
   FormInput,
 } from 'shared/components';
 import * as appActions from 'shared/actions/app';
