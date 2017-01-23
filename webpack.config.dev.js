@@ -178,7 +178,7 @@ let config = {
     }),
     new webpack.DefinePlugin(GLOBALS.DEFINE_OBJ),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
   ],
 };
 
