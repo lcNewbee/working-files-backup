@@ -35,6 +35,7 @@ const defaultProps = {
   options: List([]),
   nextDisabled: false,
   animation: false,
+  onBeforeStep: utilsCore.emptyFunc,
 };
 
 class WizardContainer extends React.Component {
@@ -50,7 +51,7 @@ class WizardContainer extends React.Component {
     };
     utilsCore.binds(
       this,
-      ['onNext', 'onPrev', 'updateState', 'onChangeStep']
+      ['onNext', 'onPrev', 'updateState', 'onChangeStep'],
     );
   }
   componentWillReceiveProps(nextProps) {
@@ -110,7 +111,7 @@ class WizardContainer extends React.Component {
           handleChange(result);
         })
         .catch(
-          () => (this.onBeforeSteping = false)
+          () => (this.onBeforeSteping = false),
         );
 
       // 如果 onBeforeNext 回调函数

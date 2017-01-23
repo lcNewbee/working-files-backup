@@ -134,24 +134,27 @@ export default class AcVersion extends PureComponent {
         title: msg.upAcVersionTitle,
         text: msg.sureUpgradeAc,
         apply: () => {
+          let resultMsg = '';
+
           this.props.createModal({
             role: 'loading',
             title: '',
             loadingStep: 100,
             loadingTitle: _('Checking firmware...'),
             onLoaded: () => {
-              this.doUpgradeAc();
+              resolve(resultMsg);
             },
           });
           this.props.save(url, { filename })
             .then((json) => {
-              if (json && json.state.code === 2000) {
-                resolve();
-                this.props.changeModalState({
-                  loadingStep: 10,
-                });
+              if (json && json.state.code !== 2000) {
+                resultMsg = _(' ');
+                resolve(resultMsg);
+                this.props.closeModal();
               } else {
-                reject();
+                this.props.changeModalState({
+                  loadingStep: 1,
+                });
               }
             });
         },
@@ -159,7 +162,14 @@ export default class AcVersion extends PureComponent {
       });
     });
 
-    return promise;
+    return promise.then(
+      (msgStr) => {
+        if (!msgStr) {
+          this.doUpgradeAc();
+        }
+        return msgStr;
+      },
+    );
   }
 
   renderStepOne() {
