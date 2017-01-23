@@ -69,7 +69,6 @@ var vaildate = {
         return _('The second character must be even number.');
       }
       if (str === "00:00:00:00:00:00") {
-
         return _('Mac can not be 00:00:00:00:00:00');
       }
     }

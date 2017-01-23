@@ -23,7 +23,7 @@ const ssidListOptions = fromJS([
     text: _('AP Number'),
   }, {
     id: 'bandwidth',
-    text: _('Downstream Traffic /Upstream Traffic'),
+    text: _('UP/Down Traffic'),
     transform(val, item) {
       const upRate = flowRateFilter.transform(item.get('upstream'));
       const downRate = flowRateFilter.transform(item.get('downstream'));
