@@ -13,7 +13,8 @@
     "immutable"
   ],
   "scripts": {
-    "test": "jest --config test/jest.config.json --watchAll --colors"
+    "test:watch": "jest --config test/jest.config.json --watchAll --colors",
+    "test": "jest --config test/jest.config.json --colors"
   },
   "author": "",
   "private": true,

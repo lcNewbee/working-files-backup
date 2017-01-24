@@ -39,11 +39,7 @@ if (module.hot) {
     renderApp();
   };
 
-<<<<<<< HEAD
   module.hot.accept('./config/axc', () => {
-=======
-  module.hot.accept('./config/ac', () => {
->>>>>>> platform: 修改test文件名称
     setImmediate(() => {
       // Preventing the hot reloading error from react-router
       unmountComponentAtNode(mountNode);

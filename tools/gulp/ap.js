@@ -136,5 +136,5 @@ gulp.task('compressAEC60', () => compressBulidFile(paths.pubAEC60));
 
 // 执行所有列表中的AP编译工作
 gulp.task('pub:all', () => {
-  runSequence('pub:AIP10', 'pub:AIP5', 'pub:ASW3', 'pub:AEC120', 'pub:ASC175', 'pub:ASC120', 'pub:AEC60');
+  runSequence('test', 'pub:AIP10', 'pub:AIP5', 'pub:ASW3', 'pub:AEC120', 'pub:ASC175', 'pub:ASC120', 'pub:AEC60');
 });

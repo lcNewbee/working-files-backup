@@ -70,5 +70,5 @@ gulp.task('pub', (callback) => {
 
   gutil.log('切换发布目标目录：', gutil.colors.magenta(distPath));
 
-  runSequence('pub:clean', 'config', 'pub:path', ['build'], 'pub:build', 'pub:copy', callback);
+  runSequence(['pub:clean', 'test'], 'config', 'pub:path', ['build'], 'pub:build', 'pub:copy', callback);
 });

@@ -1,11 +1,7 @@
-var chai = require('chai');
-var chaiImmutable = require('chai-immutable');
 var sinon = require('sinon');
 
 // Register babel so that it will transpile ES6 to ES5
 // before our tests run.
-chai.use(chaiImmutable);
-chai.config.includeStack = true;
 global.sinon = sinon;
 
 function noop() {
