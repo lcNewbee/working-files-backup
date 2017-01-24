@@ -1,12 +1,9 @@
-import { describe, it } from 'mocha';
-import { expect } from 'chai';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import * as screenActions from 'shared/actions/screens';
 
 const middlewares = [thunk]; // add your middlewares like `redux-thunk`
 const mockStore = configureStore(middlewares);
-
 
 describe('shared/actions/screens.js', () => {
   // Test example with mocha and expect
@@ -21,7 +18,7 @@ describe('shared/actions/screens.js', () => {
 
     const actions = store.getActions();
 
-    expect(actions).to.be.deep.equal([updateListSettingsAction]);
+    expect(actions).toEqual([updateListSettingsAction]);
   });
 
   it('should dispatch action 2', () => {

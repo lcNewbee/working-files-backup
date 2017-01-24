@@ -1,11 +1,3 @@
-import {
-  expect,
-  assert,
-} from 'chai';
-import {
-  describe,
-  it,
-} from 'mocha';
 import validator from 'shared/validator';
 
 describe('utils validator', () => {
@@ -13,26 +5,26 @@ describe('utils validator', () => {
 
   describe('core', () => {
     it('should have the correct Constructor', () => {
-      expect(myValidator.constructor).to.equal(validator);
+      expect(myValidator.constructor).toBe(validator);
     });
   });
 
   describe('prototype', () => {
     describe('#check()', () => {
       it('should have the correct length', () => {
-        expect(myValidator.check.length).to.be.equal(1);
+        expect(myValidator.check.length).toBe(1);
       });
 
       it('should throw when str is not string', () => {
-        assert.throws(() => {
+        expect(() => {
           myValidator.check(null);
-        }, TypeError);
-        assert.throws(() => {
+        }).toThrowError('');
+        expect(() => {
           myValidator.check(undefined);
-        }, TypeError);
-        assert.throws(() => {
+        }).toThrowError('');
+        expect(() => {
           myValidator.check({});
-        }, TypeError);
+        }).toThrowError('');
       });
 
       it('should handle correct when option has one rule', () => {
@@ -40,8 +32,8 @@ describe('utils validator', () => {
           rules: 'required',
         });
 
-        expect(oneRuleValidator.check('12')).to.be.equal(undefined);
-        expect(oneRuleValidator.check('')).to.be.equal('This field is required');
+        expect(oneRuleValidator.check('12')).toBeUndefined(undefined);
+        expect(oneRuleValidator.check('')).toBe('This field is required');
       });
 
       it('should handle exclude string', () => {
@@ -50,7 +42,7 @@ describe('utils validator', () => {
           exclude: '0.0.0.0',
         });
         expect(oneRuleOneArgValidator.check('0.0.0.0'))
-          .to.be.equal(undefined);
+          .toBe(undefined);
       });
 
       it('should handle exclude string array', () => {
@@ -59,9 +51,9 @@ describe('utils validator', () => {
           exclude: ['0.0.0.0', '255.255.255.255'],
         });
         expect(oneRuleOneArgValidator.check('0.0.0.0'))
-          .to.be.equal(undefined);
+          .toBe(undefined);
         expect(oneRuleOneArgValidator.check('255.255.255.255'))
-          .to.be.equal(undefined);
+          .toBe(undefined);
       });
 
       // rules = 'len:[1, 3]'
@@ -71,7 +63,7 @@ describe('utils validator', () => {
             rules: 'remarkTxt:"adc"',
           });
           expect(oneRuleOneArgValidator.check('addd'))
-            .to.be.equal("Can't input: a");
+            .toBe("Can't input: a");
         },
       );
 
@@ -82,7 +74,7 @@ describe('utils validator', () => {
           });
 
           expect(oneRuleArgsValidator.check(''))
-            .to.be.equal('String length range is: 1 - 3');
+            .toBe('String length range is: 1 - 3 bit');
         });
 
       it('should handle correct when option has rules with params',
@@ -92,31 +84,31 @@ describe('utils validator', () => {
           });
 
           expect(rulesWithArgsValidator.check(''))
-            .to.be.equal('This field is required');
+            .toBe('This field is required');
 
           expect(rulesWithArgsValidator.check('afggg'))
-            .to.be.equal("Can't input: a");
+            .toBe("Can't input: a");
 
           expect(rulesWithArgsValidator.check('efggg'))
-            .to.be.equal('String length range is: 1 - 3');
+            .toBe('String length range is: 1 - 3 bit');
         });
     });
 
     describe('#checkClear()', () => {
       it('should have the correct length', () => {
-        expect(myValidator.checkClear.length).to.be.equal(1);
+        expect(myValidator.checkClear.length).toBe(1);
       });
 
       it('should throw when str is not string', () => {
-        assert.throws(() => {
+        expect(() => {
           myValidator.checkClear(null);
-        }, TypeError);
-        assert.throws(() => {
+        }).toThrowError('');
+        expect(() => {
           myValidator.checkClear(undefined);
-        }, TypeError);
-        assert.throws(() => {
+        }).toThrowError('');
+        expect(() => {
           myValidator.checkClear({});
-        }, TypeError);
+        }).toThrowError('');
       });
 
       it('should handle correct when option has rules with params',
@@ -126,15 +118,15 @@ describe('utils validator', () => {
           });
 
           expect(rulesWithArgsValidator.checkClear(''))
-            .to.be.equal(undefined);
+            .toBe(undefined);
 
           // expect(rulesWithArgsValidator.checkClear('00:00:00:00:00:00'))
-          //   .to.be.equal("Mac can not be 00:00:00:00:00:00");
+          //   .toBe("Mac can not be 00:00:00:00:00:00");
 
           // expect(rulesWithArgsValidator.checkClear('127.'))
-          //   .to.be.equal("IP address first input don't be 127, becuse it is loopback address.");
+          //   .toBe("IP address first input don't be 127, becuse it is loopback address.");
           // expect(rulesWithArgsValidator.checkClear('245'))
-          //   .to.be.equal("First input 245 greater than 223.");
+          //   .toBe("First input 245 greater than 223.");
         });
     });
   });

@@ -1,29 +1,12 @@
-var babelRegister = require('babel-core/register');
-var jsdom = require('jsdom');
 var chai = require('chai');
 var chaiImmutable = require('chai-immutable');
 var sinon = require('sinon');
-var doc = jsdom.jsdom('<!doctype html><html><body></body></html>');
-var win = doc.defaultView;
 
 // Register babel so that it will transpile ES6 to ES5
 // before our tests run.
-babelRegister();
 chai.use(chaiImmutable);
 chai.config.includeStack = true;
-global.document = doc;
-global.window = win;
 global.sinon = sinon;
-global.expect = chai.expect;
-global.AssertionError = chai.AssertionError;
-global.Assertion = chai.Assertion;
-global.assert = chai.assert;
-
-Object.keys(window).forEach(function(key) {
-  if (!(key in global)) {
-    global[key] = window[key];
-  }
-});
 
 function noop() {
   return null;
@@ -38,7 +21,7 @@ function noop() {
 
 // This assures the .babelrc dev config (which includes
 // hot module reloading code) doesn't apply for tests.
-process.env.NODE_ENV = 'production';
+process.env.NODE_ENV = 'test';
 
 // Disable webpack-specific features for tests since
 // Mocha doesn't know what to do with them.

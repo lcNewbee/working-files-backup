@@ -1,1 +1,8 @@
-
+{
+  "modulePathIgnorePatterns": [
+    "<rootDir>/tools/"
+  ],
+  "collectCoverage": false,
+  "verbose": false,
+  "setupTestFrameworkScriptFile": "<rootDir>/tools/test/step.jest.js"
+}

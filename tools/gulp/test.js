@@ -1,7 +1,7 @@
 import gulp from 'gulp';
 import shell from 'gulp-shell';
 
-const mochaShellprefix = 'mocha --require ./tools/test/step.js --reporter dot -c';
+const mochaShellprefix = 'mocha --require ./tools/test/step.mocha.js --reporter dot -c';
 
 gulp.task('test', shell.task([
   `${mochaShellprefix} \"./test/**/*spec.@(js|jsx)\" --watch --watch-extensions jsx`,

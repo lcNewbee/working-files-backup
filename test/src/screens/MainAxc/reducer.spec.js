@@ -18,7 +18,7 @@ describe('MainAxc index reducer', () => {
     };
     const nextState = reducer(initialState, action);
 
-    expect(nextState).equal(fromJS({
+    expect(nextState).toEqual(fromJS({
       popOver: {
         isShow: true,
         transitionName: 'fade-up',
@@ -49,7 +49,7 @@ describe('MainAxc index reducer', () => {
     };
     const nextState = reducer(initialState, action);
 
-    expect(nextState).equal(fromJS({
+    expect(nextState).toEqual(fromJS({
       popOver: {
         isShow: true,
         transitionName: 'fade-ok',
@@ -73,7 +73,7 @@ describe('MainAxc index reducer', () => {
     };
     const nextState = reducer(initialState, action);
 
-    expect(nextState).equal(fromJS({
+    expect(nextState).toEqual(fromJS({
       modal: {
         isShow: true,
         size: 'md',
@@ -110,7 +110,7 @@ describe('MainAxc index reducer', () => {
     };
     let nextState = reducer(initialState, action);
 
-    expect(nextState).equal(fromJS({
+    expect(nextState).toEqual(fromJS({
       modal: {
         isShow: true,
         size: 'md',
@@ -141,7 +141,7 @@ describe('MainAxc index reducer', () => {
     };
     nextState = reducer(nextState, action);
 
-    expect(nextState).equal(fromJS({
+    expect(nextState).toEqual(fromJS({
       modal: {
         isShow: false,
         size: 'lg',
@@ -176,7 +176,7 @@ describe('MainAxc index reducer', () => {
     };
     const nextState = reducer(initialState, action);
 
-    expect(nextState).equal(fromJS({
+    expect(nextState).toEqual(fromJS({
       group: {
         selected: {
           id: '1',
