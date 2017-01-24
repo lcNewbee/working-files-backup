@@ -107,18 +107,18 @@ const propTypes = {
   changeWifiGroup: PropTypes.func,
   validateOption: PropTypes.object,
   app: PropTypes.instanceOf(Map),
-  store: PropTypes.instanceOf(List),
+  store: PropTypes.instanceOf(Map),
 };
 
 export class Wireless extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.binds(
+    utils.binds(this, [
       'onUpdate', 'onChangeGroup', 'onChangeEncryption', 'onUpdateSettings',
       'onSave', 'getCurrData', 'getGroupOptions', 'getChannelsOptions',
       'getChannelsValue',
-    );
+    ]);
     this.state = {
       frequency: '2.4G',
     };
@@ -138,12 +138,12 @@ export class Wireless extends PureComponent {
   }
 
   onUpdate(name) {
-    return function (item) {
+    return (item) => {
       const data = {};
 
       data[name] = item.value;
       this.props.changeWifiSettings(data);
-    }.bind(this);
+    };
   }
 
   onChangeGroup(item) {
@@ -159,7 +159,7 @@ export class Wireless extends PureComponent {
   }
 
   onUpdateSettings(name) {
-    return function (item) {
+    return (item) => {
       const data = {};
       data[name] = item.value;
 
@@ -168,7 +168,7 @@ export class Wireless extends PureComponent {
       }
 
       this.props.changeWifiSettings(data);
-    }.bind(this);
+    };
   }
 
   onSave() {
@@ -424,11 +424,11 @@ export class Wireless extends PureComponent {
           <div className="form-control">
             {
               noControl ? null : (
-              <SaveButton
-                type="button"
-                loading={this.props.app.get('saving')}
-                onClick={this.onSave}
-              />
+                <SaveButton
+                  type="button"
+                  loading={this.props.app.get('saving')}
+                  onClick={this.onSave}
+                />
               )
             }
           </div>

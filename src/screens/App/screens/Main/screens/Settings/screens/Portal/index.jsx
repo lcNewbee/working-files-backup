@@ -472,6 +472,7 @@ export const Portal = React.createClass({
 
                         return (
                           <li
+                            key={val}
                             className={myClassName}
                             onClick={() => this.setState({
                               activeIndex: val - 1,
@@ -480,7 +481,7 @@ export const Portal = React.createClass({
                             {val}
                           </li>
                         );
-                      }
+                      },
                     )
                   }
                 </ul>

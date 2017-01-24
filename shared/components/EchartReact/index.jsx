@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import echarts from 'echarts/lib/echarts';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 /**
  * echarts图标按需引入
@@ -44,7 +43,6 @@ class ReactEchart extends React.Component {
   constructor(props) {
     super(props);
 
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.renderEchartDom = this.renderEchartDom.bind(this);
     this.getEchartsInstance = this.getEchartsInstance.bind(this);
     this.initEvents = this.initEvents.bind(this);
@@ -52,7 +50,6 @@ class ReactEchart extends React.Component {
       needDispose: false,
     };
   }
-
   // first add
   componentDidMount() {
     const echartObj = this.renderEchartDom();
@@ -92,14 +89,6 @@ class ReactEchart extends React.Component {
     echarts.dispose(this.myRef);
     clearInterval(this.disposeInterval);
   }
-  componentDidMount() {
-    // this.resizeSensor = new ResizeSensor(
-    //   this.myRef,
-    //   () => {
-    //     console.log(this.myRef.clientWidth);
-    //   },
-    // );
-  }
 
   getEchartsInstance() {
     const needDispose = this.state.needDispose;
@@ -117,7 +106,7 @@ class ReactEchart extends React.Component {
       });
     } else {
       ret = echarts.getInstanceByDom(this.myRef) ||
-        echarts.init(this.myRef, this.props.theme)
+        echarts.init(this.myRef, this.props.theme);
     }
 
     return ret;

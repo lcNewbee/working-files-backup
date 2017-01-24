@@ -45,8 +45,10 @@ export default class Admin extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.binds('onSave', 'onUpdate',
-      'onChangeLang', 'onChangeLang', 'getSetting', 'combine');
+    utils.binds(this, [
+      'onSave', 'onUpdate', 'combine',
+      'onChangeLang', 'onChangeLang', 'getSetting',
+    ]);
   }
 
   componentWillUnmount() {

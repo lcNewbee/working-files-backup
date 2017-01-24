@@ -1,6 +1,5 @@
 import React from 'react';
 import utils from 'shared/utils';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { connect } from 'react-redux';
 import { List, fromJS } from 'immutable';
 
@@ -204,33 +203,53 @@ const eChartStyle = {
   height: '240px',
 };
 
-// 原生的 react 页面
-export const Status = React.createClass({
-  mixins: [PureRenderMixin],
+const propTypes = {
 
-  getInitialState() {
-    return {
+};
+
+const defaultProps = {
+};
+
+// 原生的 react 页面
+export class Status extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
       showOfflineAp: false,
     };
-  },
 
+    utils.binds(this, [
+      'hideOfflineApp',
+      'showOfflineAp',
+      'onChangeTime',
+      'onChangeClientSortType',
+      'onOfflineApPageChange',
+      'createTimeTypeClass',
+      'getClientsListOption',
+      'getApListOption',
+      'getOfflineApListOption',
+      'getClientNumberChartOption',
+      'getApNumberChartOption',
+      'getClientStatisticsChartOption',
+      'onDeleteOfflineDev',
+    ]);
+  }
   componentWillMount() {
     this.props.fetchStatus();
     this.props.fetchOfflineAp();
-  },
-
+  }
   componentWillUnmount() {
     this.props.leaveStatusScreen();
-  },
+  }
 
   hideOfflineApp() {
     this.props.hideOfflineAp()
-  },
+  }
 
   showOfflineAp() {
     this.props.showOfflineAp();
     this.props.fetchOfflineAp();
-  },
+  }
 
   onChangeTime(data) {
     if (data.value) {
@@ -240,7 +259,8 @@ export const Status = React.createClass({
 
       this.props.fetchStatus();
     }
-  },
+  }
+
   onChangeClientSortType(data) {
     if (data.value) {
       this.props.changeStatsQuery({
@@ -249,14 +269,14 @@ export const Status = React.createClass({
 
       this.props.fetchStatus();
     }
-  },
+  }
 
   onOfflineApPageChange(i) {
     this.props.changeOfflineApQuery({
       page: i,
     });
     this.props.fetchOfflineAp();
-  },
+  }
 
   createTimeTypeClass(type) {
     let ret = 'btn';
@@ -266,7 +286,7 @@ export const Status = React.createClass({
     }
 
     return ret;
-  },
+  }
 
   getClientsListOption() {
     const ret = fromJS([
@@ -298,7 +318,7 @@ export const Status = React.createClass({
     ]);
 
     return ret;
-  },
+  }
 
   getApListOption() {
     const ret = fromJS([
@@ -325,7 +345,7 @@ export const Status = React.createClass({
     ]);
 
     return ret;
-  },
+  }
 
   getOfflineApListOption() {
     const ret = fromJS([
@@ -356,7 +376,7 @@ export const Status = React.createClass({
     ]);
 
     return ret;
-  },
+  }
   getClientNumberChartOption(type) {
     const clientInfo = this.props.data.get('clientInfo');
     let ret = clientNetworkChartOption;
@@ -383,7 +403,7 @@ export const Status = React.createClass({
     ret.title.subtext = msg.total + clientInfo.get('total');
 
     return ret;
-  },
+  }
 
   getApNumberChartOption() {
     const apInfo = this.props.data.get('apInfo');
@@ -398,19 +418,19 @@ export const Status = React.createClass({
     apChartOption.title.subtext = msg.total + apInfo.get('total');
 
     return apChartOption;
-  },
+  }
   getClientStatisticsChartOption() {
-    const dayText = _('D');
     let clientStatisticsList = this.props.data.get('clientStatisticsList');
     let totalClientStatisticsList = null;
     let xAxisData;
     let xAxisName = _('Days');
     let maxData = 200;
-    var ret = clientsDayStatsOption;
+    let ret = clientsDayStatsOption;
 
     if (!clientStatisticsList) {
       return;
     }
+
     totalClientStatisticsList = clientStatisticsList.getIn([0, 'data']).map(function (item, i) {
       return item + clientStatisticsList.getIn([1, 'data', i]);
     }).toJS();
@@ -457,11 +477,10 @@ export const Status = React.createClass({
     ret.series[2].data = totalClientStatisticsList;
 
     return ret;
-  },
-
+  }
   onDeleteOfflineDev(mac) {
     this.props.deleteOfflineAp(mac);
-  },
+  }
 
   render() {
     const clientsListOption = this.getClientsListOption();
@@ -469,7 +488,7 @@ export const Status = React.createClass({
     const offlineApOption = this.getOfflineApListOption();
     const apNumberChartOption = this.getApNumberChartOption();
     const statisticsChartOption = this.getClientStatisticsChartOption();
-    const clientNetworkChartOption = this.getClientNumberChartOption();
+    const clientNetworkChartOptions = this.getClientNumberChartOption();
     const clientsProducerChart = this.getClientNumberChartOption('producer');
 
     return (
@@ -504,7 +523,7 @@ export const Status = React.createClass({
             <div className="o-box__cell row">
               <div className="cols col-6">
                 <EchartReact
-                  option={clientNetworkChartOption}
+                  option={clientNetworkChartOptions}
                   style={eChartStyle}
                 />
               </div>
@@ -600,11 +619,15 @@ export const Status = React.createClass({
         </Modal>
       </div>
     );
-  },
-});
+  }
+}
+
+Status.propTypes = propTypes;
+Status.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   const myState = state.status;
+
   return {
     app: state.app,
     fetching: myState.get('fetching'),
@@ -615,10 +638,11 @@ function mapStateToProps(state) {
   };
 }
 
+
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  actions
+  actions,
 )(Status);
 
 export const status = reducer;

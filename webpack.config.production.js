@@ -159,7 +159,6 @@ module.exports = {
       {
         test: /\.scss$/,
         loader: ExtractTextPlugin.extract({
-          publicPath: "styles",
           loader: "css-loader!postcss-loader!sass-loader",
         })
       },

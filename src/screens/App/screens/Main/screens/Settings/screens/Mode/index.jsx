@@ -79,18 +79,6 @@ const formOptions = fromJS([
   },
 ]);
 
-const propTypes = {
-  route: PropTypes.object.isRequired,
-  app: PropTypes.func.isRequired,
-  store: PropTypes.instanceOf(Map).isRequired,
-  updateCurEditListItem: PropTypes.func.isRequired,
-  validateAll: PropTypes.func.isRequired,
-  onListAction: PropTypes.func.isRequired,
-  editListItemByIndex: PropTypes.func.isRequired,
-  activeListItem: PropTypes.func.isRequired,
-  reportValidError: PropTypes.func.isRequired,
-};
-
 function getGroupOptions($$list) {
   if (!$$list) {
     return [];
@@ -111,6 +99,18 @@ function getGroupOptions($$list) {
     },
   );
 }
+
+const propTypes = {
+  route: PropTypes.object.isRequired,
+  app: PropTypes.instanceOf(Map).isRequired,
+  store: PropTypes.instanceOf(Map).isRequired,
+  updateCurEditListItem: PropTypes.func.isRequired,
+  validateAll: PropTypes.func.isRequired,
+  onListAction: PropTypes.func.isRequired,
+  editListItemByIndex: PropTypes.func.isRequired,
+  activeListItem: PropTypes.func.isRequired,
+  reportValidError: PropTypes.func.isRequired,
+};
 
 export default class ModeSettings extends React.Component {
   constructor(props) {
