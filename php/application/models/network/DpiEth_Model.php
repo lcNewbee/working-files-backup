@@ -5,13 +5,13 @@ class DpiEth_Model extends CI_Model {
 		$this->load->database();
 		$this->load->helper(array('array', 'my_customfun_helper'));
 	}
-	function get_list($data) { 
+	function get_list($data) {
 		$result = null;
 		$cgiary = array(
 			'page'=>'1',
 			'pagesize'=>'20'
-		);		
-		$ary = array();				
+		);
+		$ary = array();
 		for($i = 0; $i < 6; $i++){
 			$str = "eth".$i;
 			$ary[] = $this->gtePram($str);
@@ -23,28 +23,44 @@ class DpiEth_Model extends CI_Model {
 				foreach($cgiary['data']['list'] as $row){
 					if($ary[$i]['ethx_name'] === $row['ethx_name']){
 						$row['active_eth'] = 1;
-						$ary[$i] = $row;						
+						$ary[$i] = $row;
 					}
-				}				
-			}	
+				}
+			}
 		}
 		$ethstate = $this->get_eth_state();
 		for($k = 0; $k < 6; $k++){
-			foreach($ary as $res){				
+			foreach($ary as $res){
 				if($ethstate[$k]['ifname'] === $res['ethx_name']){
 					$ary[$k]['active_eth'] = $ethstate[$k]['value'];
 					break;
 				}
 			}
-											
-		}	
+
+		}
+
+    // 获取历史数据
+    $cgiprm = array(
+        'ethx'=>(string)element('mac',$data,'eth0'),
+        "set_interval_times" =>(string)element('set_interval_times',$data, '3'),
+        'days'=> (string)element('timeType',$data,'7')
+    );
+    $ethx_history_result = ndpi_send_ethx_history_statistics(json_encode($cgiprm));
+    $ethx_history_result_array = json_decode($ethx_history_result,true);
+    $upFlowList = array();
+    foreach ($ethx_history_result_array as $key => $val){
+      for($i=0;$i< sizeof($ethx_history_result_array['data']['list']);$i++){
+        $upFlowList[$i]=$ethx_history_result_array['data']['list'][$i]['throughput'];
+      }
+    }
 		$retary = array(
 			'state'=>array('code'=>2000,'msg'=>'ok'),
 			'data'=>array(
-				'list'=>$ary
-			)			
+				'list'=>$ary,
+        'upFlowList'=> $upFlowList
+			)
 		);
-		return json_encode($retary);	
+		return json_encode($retary);
 	}
 
 	function gtePram($ethstr){
@@ -72,7 +88,7 @@ class DpiEth_Model extends CI_Model {
 			'guessed_flow_protos'=>'',
 			'active_eth'=>0
 		);
-		return $arr;		
+		return $arr;
 	}
 
 	function get_eth_state(){
@@ -102,7 +118,7 @@ class DpiEth_Model extends CI_Model {
         $result = null;
 		$state = (int)element('active_eth',$data);
 		$arr = array('interface'=>$data['ethx_name']);
-		if($state === 1){			
+		if($state === 1){
         	$result = ndpi_set_interface_to_config(json_encode($arr));
 		}
 		if($state === 0){
