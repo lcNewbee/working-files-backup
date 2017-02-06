@@ -1,4 +1,5 @@
 {
+  "Portal Service":"Portal认证",
   "Authentication logs": "认证日志",
   "Locked": "已封锁",
   "Unlocked": "未封锁",
@@ -65,7 +66,7 @@
   "Reason":"理由",
 
   "Login Name":"登录名",
-  "Expired Date":"买断到期时间",
+  "Expired Date":"到期时间",
   "Left Time":"计时剩余时间",
   "Left Traffic":"剩余流量",
   "Question":"问题",
@@ -138,11 +139,11 @@
   "Online Record List":"在线记录列表",
   "Authetication Type":"认证类型",
   "Auto Log":"无感知",
-"Free":"免费",
-"Outside User":"外部用户",
-"Current Authentication Page Download":"当前认证页面下载",
-"Authentication Page Download":"认证页面下载",
-"Authentication Page Update":"认证页面更新",
-"Please choose authentication page package(ZIP file)":"请选择认证页面压缩包（ZIP文件）",
-"Upload Now":"现在上传"
+  "Free":"免费",
+  "Outside User":"外部用户",
+  "Current Authentication Page Download":"当前认证页面下载",
+  "Authentication Page Download":"认证页面下载",
+  "Authentication Page Update":"认证页面更新",
+  "Please choose authentication page package(ZIP file)":"请选择认证页面压缩包（ZIP文件）",
+  "Upload Now":"现在上传"
 }

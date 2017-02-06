@@ -752,7 +752,7 @@ const routes = [
         path: '/main/portal',
         component: sMainAxc.Screen,
         icon: 'road',
-        text: _('Portal '),
+        text: _('Portal Service'),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/portal/overview') },
         childRoutes: [
           {
@@ -768,7 +768,7 @@ const routes = [
             isIndex: true,
             path: '/main/portal/access',
             icon: 'link',
-            text: _('Access Auth'),
+            text: _('Access Authentication'),
             indexRoute: {
               onEnter: (nextState, replace) => replace('/main/portal/access/config'),
             },

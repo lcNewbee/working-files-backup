@@ -165,6 +165,8 @@ const listOptions = fromJS([
   }, {
     id: 'ex4',
     text: _('Last Unbind Month'),
+    noForm: true,
+    noTable: true,
     formProps: {
       type: 'text',
       required: true,
@@ -172,6 +174,8 @@ const listOptions = fromJS([
   }, {
     id: 'ex3',
     text: _('Unbind Times'),
+    noForm: true,
+    noTable: true,
     formProps: {
       type: 'num',
       min: '0',
