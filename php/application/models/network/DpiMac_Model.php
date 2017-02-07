@@ -26,11 +26,13 @@ class DpiMac_Model extends CI_Model {
         $upFlowList[$i]=$mac_history_result_array['data']['list'][$i]['upbytes'];
       }
     }
+    $downFlowList = array();
     $result = array(
       'state'=> $mac_result_array['state'],
 			'data'=> array (
          'list'=> $mac_result_array['data']['list'],
-         'upFlowList'=> $upFlowList
+         'upFlowList'=> $upFlowList,
+         'downFlowList'=>$downFlowList
       )
 		);
     return json_encode( $result );

@@ -1,0 +1,19 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [{
+      "id": "2",
+      "basip": "ikuai",
+      "ssid": "129.0.0.1",
+      "shopId": "2000",
+      "appId": "2000",
+      "domain": "2000",
+      "outTime": "1",
+      "secretKey": "0"
+    }]
+  }
+}
+

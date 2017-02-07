@@ -166,13 +166,15 @@ const sPortalOverview =
 const sPortalBase =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Base');
 // const sPortalBas =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Bas');
+    // require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Bas');
 const sPortalUrlParams =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/UrlParams');
 const sPortalWeb =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Web');
 const sPortalDefaultWeb =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/DefaultWeb');
+const sPortalWeixin =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Weixin');
 
 const sPortalNas =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Radius/Nas');
@@ -805,6 +807,12 @@ const routes = [
                 formUrl: 'goform/portal/access/defaultweb',
                 text: _('Default Web'),
                 component: sPortalDefaultWeb.Screen,
+              }, {
+                id: 'portalWechat',
+                path: '/main/portal/access/weixin',
+                formUrl: 'goform/portal/access/weixin',
+                text: _('Wechat Authentication'),
+                component: sPortalWeixin.Screen,
               },
             ],
           }, {
