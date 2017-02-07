@@ -265,11 +265,27 @@ export default class MacStatistic extends React.Component {
     utils.binds(this, [
       'initOptions',
       'onChangeTimeType',
+      'onChangeMac',
       'onChangeInterface',
+      'getMacOptions',
     ]);
   }
   componentWillMount() {
     this.initOptions(this.props);
+  }
+
+  componentDidMount() {
+    this.props.fetch(this.props.route.formUrl).then((json) => {
+      let macVal = '';
+      if (json.data.list && json.data.list[0]) {
+        macVal = json.data.list[0].mac;
+      }
+      this.props.changeScreenQuery({
+        mac: macVal,
+      });
+    }).then(() => {
+      this.props.fetchScreenData();
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -287,11 +303,30 @@ export default class MacStatistic extends React.Component {
     this.props.fetchScreenData();
   }
 
+  onChangeMac(data) {
+    this.props.changeScreenQuery({
+      mac: data.value,
+    });
+    this.props.fetchScreenData();
+  }
+
   onChangeInterface(data) {
     this.props.changeScreenQuery({
       ethx: data.value,
     });
     this.props.fetchScreenData();
+  }
+
+  getMacOptions() {
+    const curScreenId = this.props.store.get('curScreenId');
+    const list = this.props.store.getIn([curScreenId, 'data', 'list']);
+    const options = list.map((item) => {
+      return {
+        value: item.get('mac'),
+        label: item.get('mac')
+      };
+    });
+    return options.toJS();
   }
 
   initOptions(props) {
@@ -318,6 +353,7 @@ export default class MacStatistic extends React.Component {
           fetchIntervalTime: 5000,
           query: {
             timeType: '1',
+            mac: ''
           },
         }}
         // listTitle={_('Statistics Within 30 Seconds')}
@@ -346,6 +382,20 @@ export default class MacStatistic extends React.Component {
                   options={timeTypeSwitchs.toJS()}
                   value={store.getIn([curScreenId, 'query', 'timeType'])}
                   onChange={this.onChangeTimeType}
+                  clearable={false}
+                />
+                <span
+                  style={{
+                    marginRight: '10px',
+                    marginLeft: '20px',
+                  }}
+                >
+                  {_('MAC')}
+                </span>
+                <Select
+                  options={this.getMacOptions()}
+                  value={store.getIn([curScreenId, 'query', 'mac'])}
+                  onChange={this.onChangeMac}
                   clearable={false}
                 />
               </h3>
