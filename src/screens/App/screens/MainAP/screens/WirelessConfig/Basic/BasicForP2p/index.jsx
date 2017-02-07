@@ -1212,6 +1212,8 @@ export default class Basic extends React.Component {
                 label={_('VLAN ID')}
                 value={basicSettings.getIn(['radioList', radioId, 'vapList', '0', 'vlanId'])}
                 help={`${_('Range: ')}1~4094`}
+                min="1"
+                max="4094"
                 form="basicSettings"
                 disabled={vlanEnable === '0'}
                 onChange={(data) => {
@@ -1839,6 +1841,8 @@ export default class Basic extends React.Component {
                       this.props.updateRadioSettingsItem({ radioList });
                     }}
                     help={`${_('Range: ')}1 ~ 50`}
+                    min="1"
+                    max="50"
                     required
                     {...validMaxClients}
                   />

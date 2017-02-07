@@ -467,8 +467,24 @@ export default class Basic extends React.Component {
     const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
     this.props.validateAll(validID).then((msg) => {
       if (msg.isEmpty()) {
-        const dataToSave = this.props.store.getIn(['curData', 'radioList', radioId]).toJS();
-        this.props.save('goform/set_wl_all', dataToSave).then((json) => {
+        const curSettingId = this.props.store.get('curSettingId');
+        let dataToSave = this.props.store.getIn(['curData', 'radioList', radioId]);
+        let dataFromServer = this.props.store.getIn([curSettingId, 'data', 'radioList', radioId]);
+        // console.log('dataFromServer', dataFromServer.toJS());        
+        // 根据保存按钮，重新组织需要保存的数据（因为两部分数据是一个接口，所以要区分）
+        if (validID === 'radioSettings') {
+          const firstVap = dataToSave.getIn(['vapList', 0]);
+          // 如果是station和repeater模式，则除了第一个ssid外，其他都要替换,这里处理第一个ssid
+          if (dataToSave.get('wirelessMode') === 'sta' || dataToSave.get('wirelessMode') === 'repeater') {
+            dataFromServer = dataFromServer.setIn(['vapList', 0], firstVap);
+          }
+          const vapList = dataFromServer.get('vapList');
+          dataToSave = dataToSave.set('vapList', vapList);
+        } else if (validID === 'multiSsid') {
+          dataFromServer = dataFromServer.delete('vapList');
+          dataToSave = dataToSave.merge(dataFromServer);
+        }
+        this.props.save('goform/set_wl_all', dataToSave.toJS()).then((json) => {
           if (json.state && json.state.code === 2000) {
             this.fetchFullPageData();
           }
@@ -672,6 +688,9 @@ export default class Basic extends React.Component {
         //   curModule: 'radioSettings',
         //   data: fromJS(json.data),
         // };
+        // 将数据同步到setting下对应curSettingId的数据中，保存时要用到
+        const curSettingId = this.props.store.get('curSettingId');
+        this.props.reciveFetchSettings(json.data, curSettingId);
         /** ****向vapList中的每一项添加一个标识唯一性的标志flag***/
         const radioList = fromJS(json.data).get('radioList')
                           .map((radio) => {
@@ -1270,6 +1289,8 @@ export default class Basic extends React.Component {
                           label={_('VLAN ID')}
                           value={curData.getIn(['radioList', radioId, 'vapList', '0', 'vlanId'])}
                           help={`${_('Range: ')}1~4094`}
+                          min="1"
+                          max="4094"
                           form="radioSettings"
                           disabled={vlanEnable === '0'}
                           onChange={(data) => {
