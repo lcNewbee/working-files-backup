@@ -395,10 +395,16 @@ export default class EthStatistic extends React.Component {
         id: 'ndpi_throughput',
         text: _('NDPI Throughput'),
         transform(val) {
+          let str = '';
           if (val === '' || val === undefined) {
-            return '--';
+            str = '--';
+          } else {
+            const arr = val.split('/');
+            const val1 = flowRateFilter.transform(parseInt(arr[0], 10) / 1024);
+            const val2 = flowRateFilter.transform(parseInt(arr[1], 10) / 1024);
+            str = `${val1}/${val2}`;
           }
-          return val;
+          return str;
         },
       }, {
         id: 'guessed_flow_protos',

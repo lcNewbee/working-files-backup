@@ -672,7 +672,6 @@ export default class Basic extends React.Component {
         this.props.receiveCountryInfo(json2.data);
         // 如果返回的信道列表没有当前信道，则将信道置为auto
         const channelList = json2.data.channels.map(val => parseInt(val, 10).toString());
-        console.log('channelList', channelList);
         if (channelList.indexOf(frequency) === -1) {
           const radioList = this.props.store.getIn(['curData', 'radioList']).setIn([radioId, 'frequency'], 'auto');
           this.props.updateItemSettings({ radioList });

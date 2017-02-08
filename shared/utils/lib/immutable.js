@@ -1,7 +1,7 @@
 // 对 immutable 数据的操作
 
 var immutableUtils = {
-  getFormOptions: function ($$options) {
+  getFormOptions: function ($$options) { // 构造表格项的编辑内容
     var ret = $$options;
 
     if (!ret) {
@@ -31,10 +31,10 @@ var immutableUtils = {
 
         return retVal;
       })
-      .filterNot(function (x) {
+      .filterNot(function (x) { // listOptions中又不需要编辑的项目则添加该bool值
         return x === 'noForm';
       })
-      .groupBy(function (item) {
+      .groupBy(function (item) { // 使用fieldset分组
         return item.get('fieldset')
       })
       .toList();

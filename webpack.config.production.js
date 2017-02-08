@@ -47,7 +47,6 @@ var vendorList = [
   "react",
   "react-addons-css-transition-group",
   "react-addons-pure-render-mixin",
-  "react-addons-shallow-compare",
   "react-dom",
   "react-redux",
   "react-router",

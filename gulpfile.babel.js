@@ -75,7 +75,7 @@ gulp.task('pub:path', () => {
 });
 
 gulp.task('open:src', shell.task([
-  'babel-node ./tools/srcServer.js',
+  'babel-node ./tools/srcServer.js --colors',
 ], {
   env: { FORCE_COLOR: true },
 }));

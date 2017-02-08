@@ -25,7 +25,7 @@
 			"packets_size_1024":	"0",
 			"packets_size_1500":	"0",
 			"packets_size_other":	"0",
-			"ndpi_throughput":	"8.37 M/10.98 Gb",
+			"ndpi_throughput":	"242880/121850151",
 			"guessed_flow_protos":	"22",
       "active_eth": "0"
 		}, {
@@ -48,7 +48,7 @@
 			"packets_size_1024":	"0",
 			"packets_size_1500":	"0",
 			"packets_size_other":	"0",
-			"ndpi_throughput":	"8.37 M/10.98 Gb",
+			"ndpi_throughput":	"242880/121850151",
 			"guessed_flow_protos":	"22",
       "active_eth": "1"
 		}],

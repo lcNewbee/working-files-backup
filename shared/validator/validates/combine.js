@@ -126,9 +126,9 @@ var combineVaildate = {
   },
 
   noBroadcastIp: function (ip, mask) {
-    var isBroadcastIp = isBroadcastIp(ip, mask);
+    var isBroadcastIpRet = isBroadcastIp(ip, mask);
 
-    if (isBroadcastIp) {
+    if (isBroadcastIpRet) {
       return _('Broadcast IP address is not allowed !');
     }
   }

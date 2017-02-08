@@ -326,8 +326,6 @@ export default class Advance extends React.Component {
               className="fl"
               label={_('Sensitivity Threshold')}
               type="number"
-              min="-98"
-              max="-10"
               disabled={sensEnable === '0'}
               placeholder={`${_('Range: ')}-98 ~ -10`}
               value={sensThreshold}
@@ -391,8 +389,6 @@ export default class Advance extends React.Component {
                   width: '164px',
                   padding: '0.6em 0.75em',
                 }}
-                min="-98"
-                max="-40"
                 disabled={rssiEnable === '0'}
                 className="fl"
                 onChange={(data) => {
@@ -574,8 +570,6 @@ export default class Advance extends React.Component {
                     id="threshdForLed1"
                     type="number"
                     label="LED1"
-                    min="-98"
-                    max="-10"
                     help={`${_('Range: ')} -98 ~ -10 dbm`}
                     value={led1Threshold}
                     onChange={(data) => { this.changeFormValue(radioId, 'led1Threshold', data.value); }}
@@ -597,8 +591,6 @@ export default class Advance extends React.Component {
                     id="threshdForLed2"
                     type="number"
                     label="LED2"
-                    min="-98"
-                    max="-10"
                     help={`${_('Range: ')} -98 ~ -10 dbm`}
                     value={led2Threshold}
                     onChange={(data) => { this.changeFormValue(radioId, 'led2Threshold', data.value); }}
@@ -620,8 +612,6 @@ export default class Advance extends React.Component {
                     id="threshdForLed3"
                     type="number"
                     label="LED3"
-                    min="-98"
-                    max="-10"
                     help={`${_('Range: ')} -98 ~ -10 dbm`}
                     value={led3Threshold}
                     onChange={(data) => { this.changeFormValue(radioId, 'led3Threshold', data.value); }}
@@ -643,8 +633,6 @@ export default class Advance extends React.Component {
                     id="threshdForLed4"
                     type="number"
                     label="LED4"
-                    min="-98"
-                    max="-10"
                     help={`${_('Range: ')} -98 ~ -10 dbm`}
                     value={led4Threshold}
                     onChange={(data) => { this.changeFormValue(radioId, 'led4Threshold', data.value); }}

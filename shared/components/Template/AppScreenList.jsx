@@ -579,11 +579,11 @@ class AppScreenList extends React.Component {
     }
 
     // 处理可添加不能编辑的表单项
-    if (actionType === 'edit') {
+    if (actionType === 'edit') { // 给列表中所有项目添加是否可编辑的属性
       myEditFormOptions = myEditFormOptions.map(($$formList) => {
         let $$newFormList = $$formList;
 
-        if (List.isList($$newFormList)) {
+        if (List.isList($$newFormList)) { // 按照fieldset分组后的list
           $$newFormList = $$newFormList.map(($$formGroup) => {
             let $$newFormGroup = $$formGroup;
 
@@ -597,7 +597,7 @@ class AppScreenList extends React.Component {
             }
             return $$newFormGroup;
           });
-        } else if ($$formList.get('notEditable')) {
+        } else if ($$formList.get('notEditable')) { // 没有分组的list
           $$newFormList = $$formList.set('readOnly', true);
         }
 
