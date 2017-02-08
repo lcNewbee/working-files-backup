@@ -793,7 +793,7 @@ const routes = [
                 id: 'portalAccessUrlParameter',
                 path: '/main/portal/access/urlParameter',
                 formUrl: 'goform/portal/access/urlParameter',
-                text: _('Url Parameter'),
+                text: _('URL Parameter'),
                 component: sPortalUrlParams.Screen,
               }, {
                 id: 'portalAccessWeb',
@@ -819,7 +819,7 @@ const routes = [
             id: 'portalRadius',
             isIndex: true,
             path: '/main/portal/radius',
-            icon: 'copy',
+            icon: 'podcast',
             text: _('Radius'),
             indexRoute: {
               onEnter: (nextState, replace) => replace('/main/portal/radius/nas'),
@@ -849,7 +849,7 @@ const routes = [
             id: 'portalAccount',
             isIndex: true,
             path: '/main/portal/account',
-            icon: 'copy',
+            icon: 'user-o',
             text: _('Access Account'),
             indexRoute: {
               onEnter: (nextState, replace) => replace('/main/portal/account/accountList'),
@@ -873,7 +873,7 @@ const routes = [
             id: 'portalLog',
             isIndex: true,
             path: '/main/portal/log',
-            icon: 'copy',
+            icon: 'file-text-o',
             text: _('Online Record Log'),
             indexRoute: {
               onEnter: (nextState, replace) => replace('/main/portal/log/logList'),

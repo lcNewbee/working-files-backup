@@ -6,7 +6,10 @@
   "Lock Status": "封锁状态",
   "Connection Status": "连接状态",
   "Normal": "正常",
-
+  "Access Authentication":"接入认证",
+  "Base Setting":"基本设置",
+  "Contact Us":"联系我们",
+  "Refresh":"刷新",
   "Bas Name":"Bas名称",
   "Bas Port":"Bas端口",
   "Portal Vertion":"Portal 版本",
@@ -112,7 +115,7 @@
   "NAS List":"NAS列表",
   "Online List":"在线列表",
   "Connect Logs":"连接记录列表",
-  "Url Parameter":"Url 参数设置",
+  "URL Parameter":"URL参数设置",
 
   "Classification": "分类",
   "Parent Classification":"上级分类名称",
@@ -145,5 +148,9 @@
   "Authentication Page Download":"认证页面下载",
   "Authentication Page Update":"认证页面更新",
   "Please choose authentication page package(ZIP file)":"请选择认证页面压缩包（ZIP文件）",
-  "Upload Now":"现在上传"
+  "Upload Now":"现在上传",
+
+  "Out Time":"临时放行时间"
+
+
 }

@@ -20,7 +20,7 @@ const settingsOptions = fromJS([
     label: _('Bas Name'),
     fieldset: 'url_setting',
     type: 'text',
-    legend: 'Url Parameter',
+    legend: _('URL Parameter'),
     required: true,
   },
   {
@@ -47,7 +47,7 @@ const settingsOptions = fromJS([
     id: 'url',
     required: true,
     fieldset: 'url_setting',
-    label: _('Url'),
+    label: _('URL'),
     type: 'text',
   },
   {

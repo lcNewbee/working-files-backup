@@ -1175,6 +1175,7 @@ export default class Main extends React.PureComponent {
                 href="mailto:sales@axilspot.com"
               >
                 <Icon name="envelope" />
+                <div>{_('Contact Us')}</div>
               </a>
             </li>
           </ul>
