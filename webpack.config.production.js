@@ -151,15 +151,15 @@ module.exports = {
 
       {
         test: /\.css$/,
-        loader: ExtractTextPlugin.extract({
-          loader: "css-loader",
+        use: ExtractTextPlugin.extract({
+          use: "css-loader",
         })
       },
 
       {
         test: /\.scss$/,
-        loader: ExtractTextPlugin.extract({
-          loader: "css-loader!postcss-loader!sass-loader",
+        use: ExtractTextPlugin.extract({
+          use: ["css-loader", "postcss-loader", "sass-loader"],
         })
       },
 

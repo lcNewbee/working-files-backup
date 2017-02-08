@@ -1,16 +1,31 @@
 const gulp = require('gulp');
-const shell = require('gulp-shell');
+const gutil = require('gulp-util');
 const staticHash = require('gulp-static-hash');
 const runSequence = require('run-sequence');
 const $ = require('gulp-load-plugins')();
+const webpack = require('webpack');
+const webpackConfig = require('../../webpack.config.production.js');
 
 const paths = gulp.paths;
 
-gulp.task('webpack', shell.task(
-  [
-    'webpack --config webpack.config.production.js',
-  ],
-));
+const productCompiler = webpack(webpackConfig);
+
+// 引用webpack对js进行操作
+gulp.task('webpack', (callback) => {
+  productCompiler.run((err, stats) => {
+    if (err) throw new gutil.PluginError('webpack:build-js', err);
+    gutil.log('[webpack:build]', stats.toString({
+      colors: true,
+    }));
+    callback();
+  });
+});
+
+// gulp.task('webpack', shell.task(
+//   [
+//     'webpack --config webpack.config.production.js',
+//   ],
+// ));
 
 gulp.task('build:assets', () =>
   gulp.src(`${paths.src}/assets/**/*`)
