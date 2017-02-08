@@ -41,16 +41,18 @@ class DpiEth_Model extends CI_Model {
 
     // 获取历史数据
     $cgiprm = array(
-        'ethx'=>(string)element('mac',$data,'eth0'),
-        "set_interval_times" =>(string)element('set_interval_times',$data, '3'),
-        'days'=> (string)element('timeType',$data,'7')
+        'ethx'=>(string)element('ethx',$data),
+        "set_interval_times" =>(string)element('set_interval_times',$data,0),
+        'days'=> (string)element('timeType',$data)
     );
     $ethx_history_result = ndpi_send_ethx_history_statistics(json_encode($cgiprm));
     $ethx_history_result_array = json_decode($ethx_history_result,true);
     $upFlowList = array();
-    foreach ($ethx_history_result_array as $key => $val){
-      for($i=0;$i< sizeof($ethx_history_result_array['data']['list']);$i++){
-        $upFlowList[$i]=$ethx_history_result_array['data']['list'][$i]['throughput'];
+    if($ethx_history_result_array['state']['code'] === 2000){
+      foreach ($ethx_history_result_array as $key => $val){
+        for($i=0;$i< sizeof($ethx_history_result_array['data']['list']);$i++){
+          $upFlowList[$i]=$ethx_history_result_array['data']['list'][$i]['throughput'];
+        }
       }
     }
 		$retary = array(
