@@ -191,7 +191,6 @@ export default class SmartRf extends React.Component {
                   invalidMsg={app.get('invalid')}
                   validateAt={app.get('validateAt')}
                   isSaving={app.get('saving')}
-                  hasSaveButton={this.actionable}
                 />
               </div>
             ) : null
