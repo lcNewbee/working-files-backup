@@ -4,7 +4,7 @@ const staticHash = require('gulp-static-hash');
 const runSequence = require('run-sequence');
 const $ = require('gulp-load-plugins')();
 const webpack = require('webpack');
-const webpackConfig = require('../../webpack.config.production');
+const webpackConfig = require('../../webpack.config.production.js');
 
 const paths = gulp.paths;
 
@@ -13,7 +13,6 @@ const productCompiler = webpack(webpackConfig);
 // 引用webpack对js进行操作
 gulp.task('webpack', (callback) => {
   productCompiler.run((err, stats) => {
-
     if (err) throw new gutil.PluginError('webpack:production', err);
     gutil.log('[webpack:production]', stats.toString({
       colors: true,
@@ -21,7 +20,6 @@ gulp.task('webpack', (callback) => {
     callback();
   });
 });
-
 
 gulp.task('build:assets', () =>
   gulp.src(`${paths.src}/assets/**/*`)
