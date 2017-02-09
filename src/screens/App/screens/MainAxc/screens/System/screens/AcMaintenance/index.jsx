@@ -202,6 +202,8 @@ export default class View extends React.PureComponent {
                 buttonIcon="undo"
                 buttonText={_('Restore Now')}
                 disabled={!this.actionable}
+                acceptExt="db"
+                createModal={this.props.createModal}
                 onBeforeUpload={
                   () => {
                     this.props.createModal({

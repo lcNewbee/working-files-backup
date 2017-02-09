@@ -414,6 +414,7 @@
   "NTP Server":"NTP服务器",
   "Please select a country": "请选择国家",
   "Please select time zone": "请选择时区",
+  "Select file extension range: %s": "选择的文件后缀名范围: %s",
 
   "String length range is: %s - %s bit": "长度范围：%s - %s 位",
   "String length range is: %s - %s bytes": "长度范围：%s - %s 位字节",

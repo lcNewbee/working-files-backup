@@ -280,9 +280,9 @@ const listOptions = fromJS([
     formProps: {
       type: 'password',
       required: true,
-      maxLength: '64',
+      maxLength: '63',
       validator: validator({
-        rules: 'remarkTxt:["\'\\\\"]|len:[8, 256]',
+        rules: 'remarkTxt:["\'\\\\"]|utf8Len:[8, 63]',
       }),
       showPrecondition($$data) {
         const curRepaet = $$data.get('encryption');

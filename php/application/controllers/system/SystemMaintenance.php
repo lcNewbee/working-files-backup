@@ -91,6 +91,8 @@ class SystemMaintenance extends CI_Controller {
         exec('/sbin/reboot');
     }
     public function restore() {
+        $result = array('state' => array('code' => 2000, 'msg' => 'OK'));
+
         if(isset($_POST['suffix'])) {
             //从文件恢复
             $result = $this->do_upload();
@@ -109,6 +111,8 @@ class SystemMaintenance extends CI_Controller {
             }
             exec('/sbin/reboot');
         }
+
+        return $result;
     }
     //上传
     public function do_upload() {
