@@ -23,20 +23,9 @@ class WirelessSafe_Model extends CI_Model {
 
     public function add_wips_cfg($data) {
         $result = null;
-        $arr['groupid'] = (int)element('groupid',$data,-1);
-        $arr['enable'] = (int)element('enable',$data,0);      /*功能开关*/
-        $arr['cycles'] = (int)element('cycles',$data,0);              /* 扫描循环次数。值255表示持续进行循环扫描，0-扫描停止 */
-        $arr['scantype'] = (int)element('scantype',$data,1);          /* 扫描类型，1 主动扫描，2 被动扫描模式 */
-        $arr['apopermode'] = (int)element('apopermode',$data,1);      /* AP操作模式，1 正常工作模式，2 纯监测模式 */
-        $arr['maxtxpwr'] = element('maxtxpwr',$data,100);             /* 最大功率 */
-        $arr['rpttime'] = (int)$data['rpttime'];                      /* 信道质量报告上报时间 */
-        $arr['chlnum'] = element('chlnum',$data,'1,2,6,11,13,14');    /* 信道集合 '1,2,6,11,13,14'*/
-        $arr['enable2g4chl'] = (int)element('enable2g4chl',$data,0);  /* 2.4G自动信道扫描开关 */
-        $arr['enable2g4pwr'] = (int)element('enable2g4pwr',$data,0);  /* 2.4G自动功率扫描开关 */
-        $arr['adjafactor2g4'] = (int)element('adjafactor2g4',$data,1); /* 2.4G频段邻居系数 > 0 */
-         $arr['enable5gchl'] = (int)element('enable5gchl',$data,0);  /* 2.4G自动信道扫描开关 */
-        $arr['enable5gpwr'] = (int)element('enable5gpwr',$data,0);  /* 2.4G自动功率扫描开关 */
-        $arr['adjafactor5g'] = (int)element('adjafactor5g',$data,1); /* 2.4G频段邻居系数 > 0 */
+        $arr = $data;
+        $arr['groupid'] = (int)element('groupid',$data);
+
         $result = wrrm_set_param(json_encode($arr));
         //log
         $cgiObj = json_decode($result);

@@ -61,7 +61,7 @@ const listOptions = fromJS([
       min: 0,
       max: 255,
       type: 'number',
-      help: 'Range: 0~255',
+      help: '0~255',
       dataType: 'number',
       defaultValue: '0',
     },
@@ -112,24 +112,20 @@ const listOptions = fromJS([
     },
   }, {
     id: 'enable2g4chl',
-    text: _('Auto Channel Scan'),
-    fieldset: '2.4G',
-    fieldsetOption: {
-      legend: _('2.4G'),
-      className: 'cols col-6',
-    },
+    text: _('Auto Channel'),
     formProps: {
       type: 'checkbox',
+      linkId: 'enable5gchl',
       dataType: 'number',
       defaultValue: '1',
       value: '1',
     },
   }, {
     id: 'enable2g4pwr',
-    text: _('Auto Power Scan'),
-    fieldset: '2.4G',
+    text: _('Auto Power'),
     formProps: {
       type: 'checkbox',
+      linkId: 'enable5gpwr',
       dataType: 'number',
       defaultValue: '1',
       value: '1',
@@ -137,43 +133,8 @@ const listOptions = fromJS([
   }, {
     id: 'adjafactor2g4',
     text: _('Neighbor Coefficient'),
-    fieldset: '2.4G',
     formProps: {
-      min: 1,
-      max: 255,
-      type: 'number',
-      dataType: 'number',
-      defaultValue: '1',
-    },
-  }, {
-    id: 'enable5gchl',
-    text: _('Auto Channel Scan'),
-    fieldset: '5G',
-    fieldsetOption: {
-      legend: _('5G'),
-      className: 'cols col-6',
-    },
-    formProps: {
-      type: 'checkbox',
-      dataType: 'number',
-      defaultValue: '1',
-      value: '1',
-    },
-  }, {
-    id: 'enable5gpwr',
-    text: _('Auto Power Scan'),
-    fieldset: '5G',
-    formProps: {
-      type: 'checkbox',
-      dataType: 'number',
-      defaultValue: '1',
-      value: '1',
-    },
-  }, {
-    id: 'adjafactor5g',
-    text: _('Neighbor Coefficient'),
-    fieldset: '5G',
-    formProps: {
+      linkId: 'adjafactor5g',
       min: 1,
       max: 255,
       type: 'number',
@@ -197,9 +158,9 @@ export default class View extends React.Component {
       <AppScreen
         {...this.props}
         settingsFormOptions={settingsFormOptions}
+        settingOnlyChanged
         hasSettingsSaveButton
         noTitle
-        actionable
       />
     );
   }

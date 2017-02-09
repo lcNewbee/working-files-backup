@@ -417,7 +417,7 @@
   "String length range is: %s - %s bytes": "长度范围：%s - %s 位字节",
   "Network segment mask must be a number between 0-32": "IP网段掩码必须为0-32间数字",
   "%s and %s must be in the same network segment": "%s与%s必须在同一网段",
-  "Broadcast IP address is not allowed !": "IP地址不能为广播地址！",
+  "Broadcast IP address is not allowed!": "IP地址不能为广播地址！",
   "Static IP cannot be the same as default gateway.": "IP地址和网关不能相同。",
   "Static IP and default gateway must be in the same network segment": "IP地址和网关必须在同一网段。",
   "Please input a valid username.": "用户名错误。",
