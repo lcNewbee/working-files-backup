@@ -196,6 +196,15 @@ const listOptions = fromJS([
       max: 64,
     },
   }, {
+    id: 'mandatorydomain',
+    text: _('AAA Policy'),
+    defaultValue: '',
+    noTable: true,
+    formProps: {
+      type: 'select',
+      options: [],
+    },
+  }, {
     id: 'storeForwardPattern',
     options: storeForwardOption,
     text: _('Forwarding Mode'),
@@ -216,7 +225,7 @@ const listOptions = fromJS([
   }, {
     id: 'loadBalanceType',
     text: _('Traffic Control'),
-    defaultValue: '1',
+    defaultValue: '0',
     options: loadBalanceTypeArr,
     formProps: {
       type: 'switch',
@@ -315,12 +324,18 @@ export default class View extends React.Component {
       'renderUpdateSsid',
       'renderCopySsid',
       'onSelectCopySsid',
+      'fetchMandatoryDomainList',
     ]);
+    this.state = {
+      updateListOptions: false,
+    };
+    this.listOptions = listOptions;
   }
   componentDidMount() {
     this.props.changeScreenActionQuery({
       groupid: this.props.groupid,
     });
+    this.fetchMandatoryDomainList();
   }
   onSave(type) {
     const { store } = this.props;
@@ -431,6 +446,34 @@ export default class View extends React.Component {
           }
         },
       );
+  }
+  fetchMandatoryDomainList() {
+    this.props.fetch('goform/network/Aaa', {
+      page: 1,
+      size: 500,
+    })
+      .then((json) => {
+        let options = [];
+
+        if (json && json.data && json.data.list) {
+          options = json.data.list.map(
+            item => ({
+              value: item.domain_name,
+              label: item.domain_name,
+            }),
+          );
+        }
+
+        this.setState({
+          updateListOptions: !this.state.updateListOptions,
+        });
+        this.listOptions = listOptions.mergeIn(
+          [6, 'formProps'], {
+            options,
+          },
+        );
+      },
+    );
   }
 
   renderActionBar() {
@@ -573,7 +616,7 @@ export default class View extends React.Component {
     return (
       <AppScreen
         {...this.props}
-        listOptions={listOptions}
+        listOptions={this.listOptions}
         listKey="allKeys"
         actionBarChildren={this.renderActionBar()}
         initOption={{

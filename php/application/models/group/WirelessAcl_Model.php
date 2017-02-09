@@ -6,25 +6,34 @@ class WirelessAcl_Model extends CI_Model {
         $this->load->database();
         $this->load->helper(array('array', 'my_customfun_helper'));
         $this->load->library('SqlPage');
-    }	
-    public function get_acl_list($retdata) {		
-        $result = null;		
+    }
+    public function get_acl_list($retdata) {
+        $result = null;
         //所有组
-        if($retdata['groupid'] === -100) {
+        if ($retdata['groupid'] === -100) {
             $result = $this->get_acl_data($retdata['filterGroupid'],$retdata['acltype']);
-        }else{			
-            $acltype = 'black';			
+        } else {
+            $acltype = 'black';
             $querydata = $this->db->select('ap_group.id,wids_template.acltype')
                                     ->from('ap_group')
                                     ->join('wids_template','ap_group.wids_tmp_id=wids_template.id','left')
                                     ->where("ap_group.id=".$retdata['groupid'])
                                     ->get()->result_array();
-            if( count($querydata) > 0) {
-                $acltype = $querydata[0]['acltype'];		
+            if(count($querydata) > 0) {
+              $acltype = $querydata[0]['acltype'];
             }
-            $result = axc_get_wireless_acl(json_encode($retdata));	
-            $cgidata = json_decode($result);			
-            $cgidata->data->settings = array('type'=>$acltype);
+            $result = axc_get_wireless_acl(json_encode($retdata));
+            $cgidata = json_decode($result);
+
+            if ($cgidata->state->code === 2000) {
+              $cgidata->data->settings = array('type'=>$acltype);
+            } else {
+              $cgidata->data = array(
+                'data'=>array(
+                  'type'=>$acltype
+                )
+              );
+            }
 
             $result = $cgidata;
         }
@@ -38,8 +47,8 @@ class WirelessAcl_Model extends CI_Model {
             $cgiary['reason'] = (string)$data['reason'];
             $result = axc_set_wireless_acl(json_encode($cgiary));
             //log
-            $cgiObj = json_decode($result);			
-            if( is_object($cgiObj) && $cgiObj->state->code === 2000) {         
+            $cgiObj = json_decode($result);
+            if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
                 $logary = array(
                     'type'=>'Add',
                     'operator'=>element('username',$_SESSION,''),
@@ -61,8 +70,8 @@ class WirelessAcl_Model extends CI_Model {
                 $arr['reason'] = 'static';
                 $cgistr = axc_set_wireless_acl(json_encode($arr));
                 //log
-                $cgiObj = json_decode($cgistr);			
-                if( is_object($cgiObj) && $cgiObj->state->code === 2000) {         
+                $cgiObj = json_decode($cgistr);
+                if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
                     $logary = array(
                         'type'=>'Add',
                         'operator'=>element('username',$_SESSION,''),
@@ -75,7 +84,7 @@ class WirelessAcl_Model extends CI_Model {
             }
         }
         return json_encode(json_ok());
-        
+
     }
     public function delete_acl($data) {
         $result = null;
@@ -86,8 +95,8 @@ class WirelessAcl_Model extends CI_Model {
                 $detary['mac'] = $ary['mac'];
                 $cagistr = axc_del_wireless_acl(json_encode($detary));
                 //log
-                $cgiObj = json_decode($cagistr);			
-                if( is_object($cgiObj) && $cgiObj->state->code === 2000) {         
+                $cgiObj = json_decode($cagistr);
+                if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
                     $logary = array(
                         'type'=>'Delete',
                         'operator'=>element('username',$_SESSION,''),
@@ -144,8 +153,8 @@ class WirelessAcl_Model extends CI_Model {
                                     ->where('mac',$res)
                                     ->get()->result_array();
                 $retdata[] = $queryrow[0];
-            }			
-            $result['data']['list'] = $retdata;				
+            }
+            $result['data']['list'] = $retdata;
         }
         return $result;
     }

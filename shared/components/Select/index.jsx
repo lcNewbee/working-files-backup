@@ -9,10 +9,14 @@ const propTypes = {
   isAsync: PropTypes.bool,
   onChange: PropTypes.func,
   readOnly: PropTypes.bool,
+  disabled: PropTypes.bool,
 };
 
 const defaultProps = {
   isAsync: false,
+  readOnly: false,
+  disabled: false,
+  onChange: () => {},
   placeholder: _('Please Select '),
 };
 
@@ -41,7 +45,6 @@ class MySelect extends React.Component {
   }
 
   render() {
-    const { options } = this.props;
     let ThisComponent = Select;
     let myDisabled = this.props.disabled;
 

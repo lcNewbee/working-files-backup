@@ -140,6 +140,7 @@ export function fetch(url, query, option) {
     return utils.fetch(url, query, option)
       .then((json) => {
         dispatch(rcFetch());
+
         if (json === undefined) {
           return {};
         }

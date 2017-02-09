@@ -65,8 +65,7 @@ class WirelessSsid_Model extends CI_Model {
             }
             $retary['data'] = array('list'=>$tempdata);
             $result = json_encode($retary);
-        }
-        else{
+        } else {
             $arr = array('groupid' => (int)element('groupid', $retdata));
             $result = axc_get_wireless_ssid(json_encode($arr));
         }
@@ -82,6 +81,7 @@ class WirelessSsid_Model extends CI_Model {
             'maxBssUsers' => (int)element('maxBssUsers', $oriData),
             'loadBalanceType' => (int)element('loadBalanceType', $oriData),
             'hiddenSsid' => (int)element('hiddenSsid', $oriData),
+            'mandatorydomain' => element('mandatorydomain', $oriData),
             'storeForwardPattern' => element('storeForwardPattern', $oriData),
             'upstream' => (int)element('upstream', $oriData),
             'downstream' => (int)element('downstream', $oriData),

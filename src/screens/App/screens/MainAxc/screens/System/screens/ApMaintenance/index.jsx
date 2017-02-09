@@ -29,6 +29,7 @@ const settingsFormOptions = fromJS([
     fieldset: 'retainDays',
     type: 'select',
     options: countryOptions,
+    searchable: true,
   }, {
     id: 'discoverycnt',
     label: _('AP Number of Re-joins'),

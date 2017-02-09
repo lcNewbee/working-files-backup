@@ -64,8 +64,8 @@ const listOptions = fromJS([
 ]);
 
 const propTypes = {
-  store: PropTypes.instanceOf(Map),
-  fetch: PropTypes.func,
+  save: PropTypes.func.isRequired,
+  fetch: PropTypes.func.isRequired,
 };
 const defaultProps = {};
 export default class View extends React.Component {
@@ -78,10 +78,15 @@ export default class View extends React.Component {
       'onBeforeSave',
     ]);
     this.state = {
-      modelSelectPlaceholder: _('Loading'),
-      modelIsloading: true,
-      modelOptions: [],
+      updateModel: false,
     };
+    this.myEditFormOptions = listOptions.mergeIn(
+      [0, 'formProps'], {
+        isLoading: true,
+        placeholder: _('Loading'),
+        options: [],
+      },
+    );
   }
   componentWillMount() {
     this.getApModelList();
@@ -105,19 +110,6 @@ export default class View extends React.Component {
     return ret;
   }
 
-  onBeforeAction($$actionQuery) {
-    const actionType = $$actionQuery.getIn(['action']);
-    let ret = '';
-
-    // if (actionType === 'active' && parseInt($$actionQuery.get('active'), 10) === 0) {
-    //   ret = _('You should activate another Firmware version before deactivating this Firmware version');
-    // // 删除已激活版本
-    // } else if (actionType === 'delete' && parseInt($$actionQuery.get('active'), 10) === 1) {
-    //   ret = _("The current Firmware version is active, you can't delete it. If you want to delete it, please activate another Firmware version!");
-    // }
-    return ret;
-  }
-
   getApModelList() {
     this.props.fetch('goform/system/ap/model', {
       page: 1,
@@ -136,34 +128,29 @@ export default class View extends React.Component {
         }
 
         this.setState({
-          modelSelectPlaceholder: undefined,
-          modelIsloading: false,
-          modelOptions: options,
+          updateModel: !this.state.updateModel,
         });
+        this.myEditFormOptions = listOptions.mergeIn(
+          [0, 'formProps'], {
+            isLoading: false,
+            placeholder: undefined,
+            options,
+          },
+        );
       },
     );
   }
   render() {
-    const { modelIsloading, modelOptions, modelSelectPlaceholder } = this.state;
-    const myEditFormOptions = listOptions.mergeIn(
-      [0, 'formProps'], {
-        isLoading: modelIsloading,
-        options: modelOptions,
-        placeholder: modelSelectPlaceholder,
-      },
-    );
     return (
       <AppScreen
         {...this.props}
-        listOptions={myEditFormOptions}
+        listOptions={this.myEditFormOptions}
         editFormOption={{
           hasFile: true,
         }}
-        onBeforeAction={this.onBeforeAction}
-        // onBeforeSave={this.onBeforeSave}
-        noTitle
         actionable
         selectable
+        noTitle
       />
     );
   }

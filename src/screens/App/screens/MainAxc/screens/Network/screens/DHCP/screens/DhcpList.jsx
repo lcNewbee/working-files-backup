@@ -122,8 +122,9 @@ const defaultProps = {};
 export default class View extends React.Component {
   constructor(props) {
     super(props);
-
-    this.onBeforeSave = this.onBeforeSave.bind(this);
+    utils.binds(this, [
+      'onBeforeSave',
+    ]);
   }
 
   onBeforeSave($$actionQuery, $$curListItem) {

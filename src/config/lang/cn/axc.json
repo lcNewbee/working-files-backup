@@ -43,6 +43,7 @@
   "all": "所有",
   "non-configurable": "不可配置",
   "Download": "下载",
+  "Max Users": "最大用户数",
 
   "Radio Base": "Radio基本配置",
   "Radio Advance": "Radio高级配置",
@@ -219,6 +220,8 @@
   "Mac White List":"Mac白名单",
 
   "All Group": "所有组",
+  "Man Group": "所有组",
+  "Manage AP Groups": "管理AP组",
   "Group AP": "组内AP",
   "Add AP": "添加AP",
   "Custom AP": "自定义AP",
@@ -226,6 +229,7 @@
   "Please Select AP": "请选择AP",
   "Please select target group": "请选择目标组",
   "Move to Other Group": "移动到其他组",
+  "Move AP to Other Group": "移动到其他组",
   "Auto AP List": "自动AP列表",
   "Auto AP": "自动AP",
   "Monitor": "监控",
@@ -263,7 +267,6 @@
   "Local Forward": "本地转发",
   "Centralized Forward-%s": "集中转发-%s隧道",
   "802.1X Auth": "802.1X 认证",
-
 
   "Online Time": "在线时间",
   "Vendor": "生产商",
@@ -339,6 +342,7 @@
   "Are you sure to disable ACL?": "你确定要禁用 ACL？",
 
   "SSID Settings": "SSID配置",
+  "AAA Policy": "AAA策略",
   "Access Control": "访问控制",
   "Smart RF": "智能RF",
   "Band Steering": "5G优先",

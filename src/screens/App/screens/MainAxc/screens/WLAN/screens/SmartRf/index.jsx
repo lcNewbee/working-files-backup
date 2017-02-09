@@ -71,7 +71,7 @@ const settingsFormOptions = radioBase
   )
   .toList();
 
-const $$radioAdvanceFormOptions = radioAdvance.filterNot(
+let $$radioAdvanceFormOptions = radioAdvance.filterNot(
   ($$item) => {
     let ret = false;
     const curId = $$item.get('id');
@@ -120,6 +120,12 @@ export default class SmartRf extends React.Component {
       'onSave',
     ]);
     this.actionable = getActionable(props);
+
+    if (!this.actionable) {
+      $$radioAdvanceFormOptions = $$radioAdvanceFormOptions.map(
+        $$item => $$item.set('disabled', true),
+      );
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -162,6 +168,7 @@ export default class SmartRf extends React.Component {
         {...this.props}
         store={screenStore}
         defaultSettingsData={defaultSettingsData}
+        actionable={this.actionable}
       >
         <div className="o-box row">
           <div className="o-box__cell">

@@ -89,6 +89,8 @@ export function fetchScreenData(option) {
       .then((json) => {
         if (json && json.state && json.state.code === 2000) {
           dispatch(reciveScreenData(json.data, name));
+        } else {
+          dispatch(reciveScreenData(null, name));
         }
 
         if (isFetchInfinite && curFetchIntervalTime > 0) {

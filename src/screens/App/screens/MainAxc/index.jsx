@@ -462,7 +462,7 @@ export default class Main extends React.PureComponent {
               actionable && isGroupMenu ? (
                 <Icon
                   name="plus"
-                  title={_('Add Ap Group')}
+                  title={_('Add AP Group')}
                   onClick={() => {
                     this.props.fetchGroupAps();
                     this.props.updateAddApGroup({
@@ -470,7 +470,7 @@ export default class Main extends React.PureComponent {
                       remark: '',
                     });
                     this.props.showMainModal({
-                      title: _('Add Ap Group'),
+                      title: _('Add AP Group'),
                       isShow: true,
                       size: 'lg',
                       name: 'groupAdd',
@@ -498,7 +498,7 @@ export default class Main extends React.PureComponent {
                   onClick={() => {
                     this.props.fetchGroupAps(manageGroupId);
                     this.props.showMainModal({
-                      title: _('Manage Ap Groups'),
+                      title: _('Manage AP Groups'),
                       isShow: true,
                       size: 'lg',
                       name: 'groupManage',
@@ -558,7 +558,7 @@ export default class Main extends React.PureComponent {
                   onClick={() => {
                     this.props.fetchGroupAps(manageGroupId);
                     this.props.showMainModal({
-                      title: _('Manage Ap Groups'),
+                      title: _('Manage AP Groups'),
                       isShow: true,
                       size: 'lg',
                       name: 'groupManage',
@@ -822,7 +822,6 @@ export default class Main extends React.PureComponent {
                   onChange={data => this.props.updateAddApGroup({
                     remark: data.value,
                   })}
-                  required
                   {...remark}
                 />
                 <div
@@ -942,7 +941,7 @@ export default class Main extends React.PureComponent {
                       remark: '',
                     });
                     this.props.showMainModal({
-                      title: _('Add Ap Group'),
+                      title: _('Add AP Group'),
                       size: 'lg',
                       isShow: true,
                       name: 'groupAdd',
@@ -954,7 +953,7 @@ export default class Main extends React.PureComponent {
                   text={_('Edit')}
                   onClick={() => {
                     this.props.showMainModal({
-                      title: _('Edit Ap Group'),
+                      title: _('Edit AP Group'),
                       size: 'md',
                       isShow: true,
                       name: 'groupEdit',
@@ -1013,7 +1012,7 @@ export default class Main extends React.PureComponent {
                           targetGroupId: -1,
                         });
                         this.props.showMainModal({
-                          title: _('Move Ap Other Group'),
+                          title: _('Move AP to Other Group'),
                           size: 'lg',
                           isShow: true,
                           name: 'groupMoveAp',

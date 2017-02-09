@@ -101,6 +101,9 @@ var immutableUtils = {
     return ret;
   },
 
+  /**
+   *
+   */
   getNumberKeys: function($$options) {
     var ret = [];
 
@@ -171,7 +174,6 @@ var immutableUtils = {
     return ret;
   },
 
-  //
   selectList: function($$list, data, $$selectedList) {
     var $$retList = $$list;
     var selectedList = $$selectedList || $$retList.clear();
@@ -222,9 +224,6 @@ var immutableUtils = {
     return $$ret;
   },
 
-  /**
-   *
-   */
   toNumberWithKeys: function($$data, $$keysArr) {
     var $$ret = $$data;
 

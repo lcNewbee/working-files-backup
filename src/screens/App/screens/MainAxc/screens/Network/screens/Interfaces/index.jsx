@@ -68,6 +68,9 @@ export default class NetworkInterface extends React.Component {
       portOptions: fromJS([]),
       listOptions: $$listOptions,
     };
+    utils.binds(this, [
+      'onBeforeSave',
+    ]);
   }
 
   componentWillMount() {
@@ -86,11 +89,25 @@ export default class NetworkInterface extends React.Component {
       );
   }
 
+  onBeforeSave($$actionQuery, $$curListItem) {
+    const actionType = $$actionQuery.get('action');
+    const ip = $$curListItem.get('ip');
+    const mask = $$curListItem.get('mask');
+    let ret = '';
+
+    if (actionType === 'add' || actionType === 'edit') {
+      ret = validator.combine.noBroadcastIp(ip, mask);
+    }
+
+    return ret;
+  }
+
   render() {
     return (
       <AppScreen
         {...this.props}
         listOptions={this.state.listOptions}
+        onBeforeSave={this.onBeforeSave}
         editFormId="port"
         listKey="allKeys"
         actionable
