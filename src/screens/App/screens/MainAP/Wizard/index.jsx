@@ -144,7 +144,7 @@ export default class SignUp extends React.Component {
     this.onOkButtonClick = this.onOkButtonClick.bind(this);
     this.onThinModeImgClick = this.onThinModeImgClick.bind(this);
     this.comfirmModeChange = this.comfirmModeChange.bind(this);
-    this.onSkipButtonClick = this.onSkipButtonClick.bind(this);
+    // this.onSkipButtonClick = this.onSkipButtonClick.bind(this);
   }
 
   // Mine
@@ -180,13 +180,13 @@ export default class SignUp extends React.Component {
     this.props.changeShowThinModeConfigModal(true);
   }
 
-  onSkipButtonClick() {
-    this.props.fetch('goform/get_system_info_forTestUse').then((json) => {
-      if (json.state && json.state.code === 2000) {
-        window.setTimeout(() => { window.location.href = '#/main/status'; }, 500);
-      }
-    });
-  }
+  // onSkipButtonClick() {
+  //   this.props.fetch('goform/get_system_info_forTestUse').then((json) => {
+  //     if (json.state && json.state.code === 2000) {
+  //       window.setTimeout(() => { window.location.href = '#/main/status'; }, 500);
+  //     }
+  //   });
+  // }
 
   comfirmModeChange() {
     const query = this.props.selfState.get('nextModeData').toJS();
@@ -239,14 +239,26 @@ export default class SignUp extends React.Component {
           >
             <div
               style={{
-                marginTop: '-5px',
+                marginTop: '-20px',
                 marginBottom: '5px',
-                fontSize: '15px',
+                fontSize: '13px',
               }}
             >
-              {
-                _('Notice: You see this page only when you first login. You can select the device operation mode(Fat/Thin) as you need. And it\'s ok if you skip this step.')
-              }
+              <div style={{marginBottom: '5px'}}>
+                {
+                  _('Notice: You see this page only when you first login. You can select the device operation mode(Fat/Thin) as you need.')
+                }
+              </div>
+              <div style={{marginBottom: '5px'}}>
+                {
+                  _('Fat AP: The wireless access point handles all wireless clients independently, and each AP has to be configured individually.')
+                }
+              </div>
+              <div style={{marginBottom: '5px'}}>
+                {
+                  _('Thin AP:  The wireless access point managed by the controller. All configurations are done on the controller.')
+                }
+              </div>
             </div>
             <div
               className="row"
@@ -348,10 +360,10 @@ export default class SignUp extends React.Component {
             </div>
           </div>
           <div className="t-wizard__footer">
-            <Button
+            {/*<Button
               onClick={() => this.onSkipButtonClick()}
               text={_('Skip')}
-            />
+            />*/}
             <Button
               theme={btnInfoRole}
               onClick={this.onOkButtonClick}

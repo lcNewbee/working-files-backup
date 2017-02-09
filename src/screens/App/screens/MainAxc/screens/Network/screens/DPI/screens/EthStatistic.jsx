@@ -212,21 +212,21 @@ function getFlowOption(serverData, timeType) {
 
   if (timeType === '0' ||
     timeType === '1') {
-    xAxisData = List(new Array(24)).map(
+    xAxisData = List(new Array(25)).map(
       (val, i) => `${i}:00`,
     ).toJS();
     xAxisName = _('Hours');
   } else if (timeType === '7') {
-    xAxisData = List(new Array(7)).map(
-      (val, i) => i + 1,
+    xAxisData = List(new Array(8)).map(
+      (val, i) => i,
     ).toJS();
   } else if (timeType === '15') {
-    xAxisData = List(new Array(15)).map(
-      (val, i) => i + 1,
+    xAxisData = List(new Array(16)).map(
+      (val, i) => i,
     ).toJS();
   } else {
-    xAxisData = List(new Array(30)).map(
-      (val, i) => i + 1,
+    xAxisData = List(new Array(31)).map(
+      (val, i) => i,
     ).toJS();
   }
 

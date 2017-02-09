@@ -114,7 +114,7 @@ export default class Advance extends React.Component {
       if (msg.isEmpty()) {
         const rssi = this.props.store.getIn(['curData', 'radioList', radioId, 'rssi']);
         if (this.props.route.funConfig.rssiLimitFun && rssiEnable === '1' &&
-          (rssi < -95 || rssi > -40 || !Number.isInteger(Number(rssi)))) {
+          (rssi < -98 || rssi > -40 || !Number.isInteger(Number(rssi)))) {
           this.props.createModal({
             role: 'alert',
             text: _('Please input a valid rssi value.'),

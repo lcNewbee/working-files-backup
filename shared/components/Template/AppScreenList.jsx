@@ -603,16 +603,16 @@ class AppScreenList extends React.Component {
 
         return $$newFormList;
       });
-    } else if (actionType === 'add') {
+    } else if (actionType === 'add') { // 如果是添加操作，则根据
       myEditFormOptions = myEditFormOptions.map(
         ($$item) => {
           let $$newItem = $$item;
 
-          if (List.isList($$newItem)) {
+          if (List.isList($$newItem)) { // 分组后的list
             $$newItem = $$newItem.filterNot(
               $$formGroup => $$formGroup.get('noAdd'),
             );
-          } else if ($$item.get('noAdd')) {
+          } else if ($$item.get('noAdd')) { // 未分组的list
             $$newItem = $$newItem.set('style', { display: 'none' });
           }
 
