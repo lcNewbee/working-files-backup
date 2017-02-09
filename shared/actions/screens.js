@@ -271,7 +271,6 @@ export function saveScreenSettings(option) {
       if (option.onlyChanged) {
         $$subData = immutableUtils.getChanged($$subData, $$oriData);
       }
-
       // 数字类型转换
       if (option.numberKeys) {
         $$subData = immutableUtils.toNumberWithKeys($$subData, option.numberKeys);

@@ -110,7 +110,7 @@ class FormContainer extends React.Component {
     }
   }
   onChangeFormGoupData(option) {
-    const { data, saveOnChange, valueQuery } = option;
+    const { data, saveOnChange, valueQuery, linkId } = option;
     let $$upDate = fromJS({});
 
     // 只有 当
@@ -119,6 +119,11 @@ class FormContainer extends React.Component {
     }
 
     $$upDate = $$upDate.setIn(valueQuery, data.value);
+
+    // 处理同步链接的ID
+    if (typeof linkId === 'string') {
+      $$upDate = $$upDate.setIn(linkId.split('.'), data.value);
+    }
 
     if (this.props.onChangeData) {
       this.props.onChangeData($$upDate.toJS());
@@ -163,6 +168,7 @@ class FormContainer extends React.Component {
     const index = $$option.get('__index__');
     const myComponent = myProps.component;
     const checkboxValue = myProps.value || '1';
+    const linkId = myProps.linkId;
     let formGroupId = myProps.id;
     let myValueQuery = valueQuery;
     let isShow = true;
@@ -239,6 +245,7 @@ class FormContainer extends React.Component {
       saveOnChange: myProps.saveOnChange,
       valueQuery: myValueQuery,
       $$data,
+      linkId,
     });
 
     // 处理 option需要依据表单值显示

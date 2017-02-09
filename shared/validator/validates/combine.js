@@ -129,7 +129,7 @@ var combineVaildate = {
     var isBroadcastIpRet = isBroadcastIp(ip, mask);
 
     if (isBroadcastIpRet) {
-      return _('Broadcast IP address is not allowed !');
+      return _('Broadcast IP address is not allowed!');
     }
   }
 };

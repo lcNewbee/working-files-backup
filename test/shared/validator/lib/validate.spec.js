@@ -1,6 +1,6 @@
 import validator from 'shared/validator/validates/single';
 
-describe('validator.validate', () => {
+describe('validator.single', () => {
   describe('#len()', () => {
     const validateFunc = validator.len;
 

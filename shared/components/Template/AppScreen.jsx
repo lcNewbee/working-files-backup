@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import utils, { immutableUtils } from 'shared/utils';
-import immutable, { List, Map, fromJS } from 'immutable';
+import immutable, { List, Map } from 'immutable';
 import AppScreenList from 'shared/components/Template/AppScreenList';
 import FormContainer from 'shared/components/Organism/FormContainer';
 import { getActionable } from 'shared/axc';
@@ -44,6 +44,7 @@ const propTypes = {
   defaultSettingsData: PropTypes.object,
   hasSettingsSaveButton: PropTypes.bool,
   customSettingForm: PropTypes.bool,
+  settingOnlyChanged: PropTypes.bool,
 
   onAfterSync: PropTypes.func,
 };
@@ -60,6 +61,7 @@ const defaultProps = {
   defaultSettingsData: {},
   hasSettingsSaveButton: false,
   customSettingForm: false,
+  settingOnlyChanged: false,
 
   settingsFormOptions: List([]),
 };
@@ -88,6 +90,7 @@ export default class AppScreen extends React.Component {
     // init Settings Form
     this.defaultSettingsData = defaultSettingsData ||
         immutableUtils.getDefaultData(settingsFormOptions);
+
     this.settingsNumberKeys = immutableUtils.getNumberKeys(settingsFormOptions);
 
     if (this.defaultEditData) {
@@ -197,6 +200,7 @@ export default class AppScreen extends React.Component {
           if (errMsg.isEmpty()) {
             this.props.saveScreenSettings({
               numberKeys: this.settingsNumberKeys,
+              onlyChanged: this.props.settingOnlyChanged,
             }).then(
               (json) => {
                 this.props.onAfterSync(json, {

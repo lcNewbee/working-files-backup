@@ -11,6 +11,7 @@ var immutableUtils = {
     ret = ret.map(function (item) {
         var commonOption = {
           id: item.get('id'),
+          linkId: item.get('linkId'),
           label: item.get('text') || item.get('label'),
           fieldset: item.get('fieldset'),
           fieldsetOption: item.get('fieldsetOption'),
@@ -101,25 +102,40 @@ var immutableUtils = {
   },
 
   getNumberKeys: function($$options) {
-    var $$ret = [];
+    var ret = [];
 
     if(!$$options || ($$options && !$$options.clear)) {
-      return $$ret;
+      return ret;
     }
 
-    $$ret = $$options.clear();
+    function walkList($$list) {
+      var curId;
+      var linkId;
 
-    $$options.forEach(
-      function(item) {
-        var curId = item.get('id')
-        var dataType = item.get('dataType');
-        if (dataType === 'number') {
-          $$ret.push(curId);
+      // 如果是 List 类型
+      if (typeof $$list.unshift === 'function') {
+        $$list.forEach(
+          function($$item) {
+            walkList($$item);
+          }
+        );
+
+      // 如果是数字类型对象
+      } else if ($$list.get('dataType') === 'number') {
+        curId = $$list.get('id');
+        linkId = $$list.get('linkId');
+
+        ret.push(curId);
+
+        if(linkId) {
+          ret.push(linkId);
         }
       }
-    );
+    }
 
-    return $$ret;
+    walkList($$options)
+
+    return ret;
   },
 
   getValidatorOptions: function ($$options) {
