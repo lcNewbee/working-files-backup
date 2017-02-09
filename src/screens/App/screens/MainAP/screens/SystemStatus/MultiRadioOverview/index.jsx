@@ -276,6 +276,11 @@ function getTopTenFlowClientsOption(serverData) {
       tooltip: {
         show: true,
       },
+      formatter: (name) => {
+        const num = dataList.find($$item => $$item.get('name') === name).get('value');
+        const numStr = flowRateFilter.transform(num);
+        return name.length > 11 ? `${name.substring(0, 11)}... : ${numStr}` : `${name} : ${numStr}`;
+      }
     },
     series: [
       {
@@ -290,7 +295,7 @@ function getTopTenFlowClientsOption(serverData) {
             //position: 'center',
           },
           emphasis: {
-            show: true,
+            show: false,
             textStyle: {
               fontSize: '12',
               fontWeight: 'bold',
@@ -307,19 +312,34 @@ function getTopTenFlowClientsOption(serverData) {
     ],
   };
 
+  // if (List.isList(dataList)) {
+  //   dataList = dataList.map((item) => {
+  //     let name;
+  //     const userName = item.get('name');
+  //     if (!userName || userName === '') {
+  //       name = item.get('mac');  // 如果没有name，则使用mac代替
+  //     } else if (userName.length >= 13) {
+  //       name = `${userName.substr(0, 10)}...`; // 如果名称太长则后面显示省略号
+  //     } else if (userName.length < 13) {
+  //       name = userName; // 有名称，且长度合法
+  //     }
+  //     return item.set('name', `${name}: ${flowRateFilter.transform(item.get('value'))}`)
+  //               .set('value', `${Number(item.get('value'))}`)
+  //               .delete('mac'); // 删除数据中的mac变量
+  //   });
+  //   ret.legend.data = dataList.map(item => `${item.get('name')}`).toJS();
+  //   ret.series[0].data = dataList.toJS();
+  // }
   if (List.isList(dataList)) {
     dataList = dataList.map((item) => {
-      let name;
       const userName = item.get('name');
       if (!userName || userName === '') {
         name = item.get('mac');  // 如果没有name，则使用mac代替
-      } else if (userName.length >= 16) {
-        name = `${userName.substr(0, 13)}...`; // 如果名称太长则后面显示省略号
-      } else if (userName.length < 16) {
-        name = userName; // 有名称，且长度合法
+      } else {
+        name = userName;
       }
-      return item.set('name', `${name}: ${flowRateFilter.transform(item.get('value'))}`)
-                .set('value', `${Number(item.get('value'))}`)
+      return item.set('name', name)
+                .set('value', `${parseInt(item.get('value'), 10)}`)
                 .delete('mac'); // 删除数据中的mac变量
     });
     ret.legend.data = dataList.map(item => `${item.get('name')}`).toJS();
@@ -375,7 +395,6 @@ function getFlowPerSsidOption(serverData) {
             show: false,
           },
         },
-
       },
     ],
   };
