@@ -3,7 +3,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Table from 'shared/components/Table';
 import Button from 'shared/components/Button/Button';
-import { fromJS, Map } from 'immutable';
+import FormGroup from 'shared/components/Form/FormGroup';
+import FormInput from 'shared/components/Form/FormInput';
+import { fromJS, Map, List } from 'immutable';
 import utils from 'shared/utils';
 import * as sharedActions from 'shared/actions/settings';
 import * as appActions from 'shared/actions/app';
@@ -11,20 +13,17 @@ import * as selfActions from './actions';
 import reducer from './reducer';
 
 let intervalAction;
-let timeoutAction;
 const flowRateFilter = utils.filter('flowRate');
 
 const propTypes = {
   selfState: PropTypes.instanceOf(Map),
-  app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
+  app: PropTypes.instanceOf(Map),
   initSettings: PropTypes.func,
   fetchSettings: PropTypes.func,
   route: PropTypes.object,
   product: PropTypes.instanceOf(Map),
   changeCurrRadioConfig: PropTypes.func,
-  updateItemSettings: PropTypes.func,
-  radioIdFromUpper: PropTypes.string,
 };
 
 const defaultProps = {
@@ -32,9 +31,6 @@ const defaultProps = {
 
 const vapInterfaceOptions = fromJS([
   {
-    id: 'num',
-    text: _('No.'),
-  }, {
     id: 'name',
     text: _('Name'),
     transform(val, item) {
@@ -48,7 +44,6 @@ const vapInterfaceOptions = fromJS([
   }, {
     id: 'mac',
     text: _('MAC'),
-    sortable: true,
     transform(val) {
       if (val === '') {
         return '--';
@@ -59,13 +54,6 @@ const vapInterfaceOptions = fromJS([
   }, {
     id: 'txBytes',
     text: _('Tx Data'),
-    sortable: true,
-    sortFun: (a, b) => {
-      const aVal = parseInt(a, 10);
-      const bVal = parseInt(b, 10);
-      if (aVal - bVal < 0) return 1;
-      return -1;
-    },
     transform(val) {
       if (val === '') {
         return '--';
@@ -76,13 +64,6 @@ const vapInterfaceOptions = fromJS([
   }, {
     id: 'rxBytes',
     text: _('Rx Data'),
-    sortable: true,
-    sortFun: (a, b) => {
-      const aVal = parseInt(a, 10);
-      const bVal = parseInt(b, 10);
-      if (aVal - bVal < 0) return 1;
-      return -1;
-    },
     transform(val) {
       if (val === '') {
         return '--';
@@ -146,31 +127,26 @@ export default class SsidDetails extends React.Component {
   constructor(props) {
     super(props);
     this.onChangeRadio = this.onChangeRadio.bind(this);
-    this.updateBlockStatus = this.updateBlockStatus.bind(this);
     this.refreshData = this.refreshData.bind(this);
   }
 
   componentWillMount() {
     clearInterval(intervalAction);
-    clearTimeout(timeoutAction);
     this.props.initSettings({
       settingId: this.props.route.id,
       fetchUrl: this.props.route.fetchUrl,
       defaultData: {},
     });
-    Promise.resolve().then(() => {
-      const id = this.props.radioIdFromUpper;
-      this.onChangeRadio({ value: id });
-    }).then(() => {
+    this.refreshData();
+    this.onChangeRadio({ value: '0' });
+    intervalAction = setInterval(() => {
       this.refreshData();
-    });
-    intervalAction = setInterval(() => { this.refreshData(); }, 10000);
+    }, 10000);
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.app.get('refreshAt') !== prevProps.app.get('refreshAt')) {
       clearInterval(intervalAction);
-      clearTimeout(timeoutAction);
       this.refreshData();
       intervalAction = setInterval(this.refreshData, 10000);
     }
@@ -178,7 +154,6 @@ export default class SsidDetails extends React.Component {
 
   componentWillUnmount() {
     clearInterval(intervalAction);
-    clearTimeout(timeoutAction);
   }
 
   onChangeRadio(data) { // 注意参数实际是data的value属性，这里表示radio序号
@@ -191,36 +166,15 @@ export default class SsidDetails extends React.Component {
   }
 
   refreshData() {
-    this.props.fetchSettings().then(() => {
-      const radioNum = this.props.product.get('deviceRadioList').size;
-      for (let i = 0; i < radioNum; i++) {
-        const staList = this.props.store.getIn(['curData', 'radioList', i, 'staList'])
-                          .map(item => item.set('block', false));
-        const radioList = this.props.store.getIn(['curData', 'radioList']).setIn([i, 'staList'], staList);
-        this.props.updateItemSettings({ radioList });
-      }
-    });
-  }
-
-  updateBlockStatus(item) {
-    const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
-    const staList = this.props.store.getIn(['curData', 'radioList', radioId, 'staList']);
-    const index = staList.indexOf(item);
-    const radioList = this.props.store.getIn(['curData', 'radioList'])
-                          .setIn([radioId, 'staList', index, 'block'], true);
-    this.props.updateItemSettings({ radioList });
+    this.props.fetchSettings();
   }
 
   render() {
     const { radioId, radioType } = this.props.selfState.get('currRadioConfig').toJS();
-    if (!this.props.store.getIn(['curData', 'radioList', radioId, 'staList'])) return null;
+    if (!this.props.store.getIn(['curData', 'radioList'])) return null;
     const { wirelessMode, vapList } = this.props.store.getIn(['curData', 'radioList', radioId]).toJS();
-    const tableList = vapList.map((item, i) => {
-      const arr = item;
-      arr.num = i + 1;
-      return arr;
-    });
-    const vapInterfacesList = (wirelessMode === 'sta') ? [tableList[0]] : tableList;
+    const vapInterfacesList = (wirelessMode === 'sta') ? [vapList[0]] : vapList;
+    console.log('vapInterfacesList', vapInterfacesList);
     return (
       <div className="o-box">
         <Button
@@ -234,10 +188,33 @@ export default class SsidDetails extends React.Component {
           }}
         />
 
-        <div className="o-box__cell">
-          <h3>
-            {`${_('Wireless Interfaces')} (${this.props.product.getIn(['radioSelectOptions', radioId, 'label'])})`}
+        <div className="o-box__cell clearfix">
+          <h3
+            className="fl"
+            style={{
+              paddingTop: '3px',
+              marginRight: '15px',
+            }}
+          >
+            {_('Wireless Interfaces')}
           </h3>
+          {
+            this.props.product.get('deviceRadioList').size > 1 ? (
+              <FormInput
+                type="switch"
+                label={_('Radio Select')}
+                minWidth="100px"
+                options={this.props.product.get('radioSelectOptions')}
+                value={this.props.selfState.getIn(['currRadioConfig', 'radioId'])}
+                onChange={(data) => {
+                  this.onChangeRadio(data);
+                }}
+                style={{
+                  marginBottom: '15px',
+                }}
+              />
+            ) : null
+          }
         </div>
         <div className="o-box__cell">
           <Table
@@ -260,7 +237,6 @@ function mapStateToProps(state) {
     app: state.app,
     store: state.settings,
     product: state.product,
-    radioIdFromUpper: state.systemstatus.getIn(['currRadioConfig', 'radioId']),
   };
 }
 

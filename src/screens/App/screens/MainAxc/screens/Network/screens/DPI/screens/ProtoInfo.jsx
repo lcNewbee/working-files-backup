@@ -27,7 +27,7 @@ const listOptions = fromJS([
       if (val === '' || val === undefined) {
         return '--';
       }
-      return flowRateFilter.transform(val / 1024);
+      return flowRateFilter.transform(val / (1024 * 8));
     },
   }, {
     id: 'flows',

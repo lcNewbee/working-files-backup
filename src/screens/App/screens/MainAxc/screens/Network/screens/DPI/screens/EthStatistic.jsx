@@ -205,7 +205,7 @@ function getFlowOption(serverData, timeType) {
   //   maxVal = maxVal1;
   // }
 
-  utilObj = getFlowUnit(maxVal);
+  utilObj = getFlowUnit(maxVal / 8);
 
   $$upDataList = $$upDataList.toJS();
   // $$downDataList = $$downDataList.toJS();
@@ -234,8 +234,8 @@ function getFlowOption(serverData, timeType) {
   option.xAxis[0].name = xAxisName;
   option.yAxis[0].name = utilObj.label;
 
-  option.series[0].data = $$upDataList.map(
-    val => (val / utilObj.val),
+  option.series[0].data = $$upDataList.map( // 基础单位是B，后台传回的数据单位是byte
+    val => (val / (utilObj.val * 8)),
   );
   // option.series[1].data = $$downDataList.map(
   //   val => (val / utilObj.val),
@@ -308,7 +308,7 @@ export default class EthStatistic extends React.Component {
           if (val === '' || val === undefined) {
             return '--';
           }
-          return flowRateFilter.transform(val / 1024);
+          return flowRateFilter.transform(val / (1024 * 8));
         },
       }, {
         id: 'discarded_bytes',
@@ -317,7 +317,7 @@ export default class EthStatistic extends React.Component {
           if (val === '' || val === undefined) {
             return '--';
           }
-          return flowRateFilter.transform(val / 1024);
+          return flowRateFilter.transform(val / (1024 * 8));
         },
       }, {
         id: 'ip_packets',
@@ -335,7 +335,7 @@ export default class EthStatistic extends React.Component {
           if (val === '' || val === undefined) {
             return '--';
           }
-          return flowRateFilter.transform(val / 1024);
+          return flowRateFilter.transform(val / (1024 * 8));
         },
       }, {
         id: 'tcp_packets',
@@ -400,8 +400,8 @@ export default class EthStatistic extends React.Component {
             str = '--';
           } else {
             const arr = val.split('/');
-            const val1 = flowRateFilter.transform(parseInt(arr[0], 10) / 1024);
-            const val2 = flowRateFilter.transform(parseInt(arr[1], 10) / 1024);
+            const val1 = flowRateFilter.transform(parseInt(arr[0], 10) / (1024 * 8));
+            const val2 = flowRateFilter.transform(parseInt(arr[1], 10) / (1024 * 8));
             str = `${val1}/${val2}`;
           }
           return str;
@@ -455,7 +455,7 @@ export default class EthStatistic extends React.Component {
           isFetchInfinite: true,
           fetchIntervalTime: 5000,
           query: {
-            timeType: '1',
+            timeType: '0',
             ethx: 'eth0',
           },
         }}

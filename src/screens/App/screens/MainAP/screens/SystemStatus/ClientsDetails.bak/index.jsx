@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Table from 'shared/components/Table';
 import Button from 'shared/components/Button/Button';
 import Icon from 'shared/components/Icon';
-import FormGroup from 'shared/components/Form/FormGroup';
+import FormInput from 'shared/components/Form/FormInput';
 import { fromJS, Map } from 'immutable';
 import utils from 'shared/utils';
 import * as sharedActions from 'shared/actions/settings';
@@ -26,7 +26,6 @@ const propTypes = {
   product: PropTypes.instanceOf(Map),
   changeCurrRadioConfig: PropTypes.func,
   updateItemSettings: PropTypes.func,
-  radioIdFromUpper: PropTypes.string,
 };
 
 const defaultProps = {
@@ -51,6 +50,7 @@ function changeUptimeToReadable(time) {
   return timeStr;
 }
 
+
 export default class ClientsDetails extends React.Component {
   constructor(props) {
     super(props);
@@ -68,8 +68,7 @@ export default class ClientsDetails extends React.Component {
       defaultData: {},
     });
     Promise.resolve().then(() => {
-      const id = this.props.radioIdFromUpper;
-      this.onChangeRadio({ value: id });
+      this.onChangeRadio({ value: '0' });
     }).then(() => {
       this.refreshData();
     });
@@ -102,9 +101,14 @@ export default class ClientsDetails extends React.Component {
   refreshData() {
     this.props.fetchSettings().then(() => {
       const radioNum = this.props.product.get('deviceRadioList').size;
+      let staList;
       for (let i = 0; i < radioNum; i++) {
-        const staList = this.props.store.getIn(['curData', 'radioList', i, 'staList'])
-                          .map((item, j) => item.set('block', false).set('num', j + 1));
+        if (this.props.store.getIn(['curData', 'radioList', i, 'enable']) === '1') {
+          staList = this.props.store.getIn(['curData', 'radioList', i, 'staList'])
+                        .map(item => item.set('block', false));
+        } else {
+          staList = fromJS([]);
+        }
         const radioList = this.props.store.getIn(['curData', 'radioList']).setIn([i, 'staList'], staList);
         this.props.updateItemSettings({ radioList });
       }
@@ -124,12 +128,8 @@ export default class ClientsDetails extends React.Component {
     const that = this;
     const clientOptions = fromJS([
       {
-        id: 'num',
-        text: _('No.'),
-      }, {
         id: 'mac',
-        text: 'MAC',
-        sortable: true,
+        text: 'Mac',
       },
       {
         id: 'deviceName',
@@ -144,7 +144,6 @@ export default class ClientsDetails extends React.Component {
       {
         id: 'ssid',
         text: _('Owner SSID'),
-        sortable: true,
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -195,13 +194,6 @@ export default class ClientsDetails extends React.Component {
       {
         id: 'txBytes',
         text: _('Tx Data'),
-        sortFun: (a, b) => {
-          const aVal = parseInt(a, 10);
-          const bVal = parseInt(b, 10);
-          if (aVal - bVal < 0) return 1;
-          return -1;
-        },
-        sortable: true,
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -212,13 +204,6 @@ export default class ClientsDetails extends React.Component {
       {
         id: 'rxBytes',
         text: _('Rx Data'),
-        sortFun: (a, b) => {
-          const aVal = parseInt(a, 10);
-          const bVal = parseInt(b, 10);
-          if (aVal - bVal < 0) return 1;
-          return -1;
-        },
-        sortable: true,
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -259,7 +244,6 @@ export default class ClientsDetails extends React.Component {
       {
         id: 'ipAddr',
         text: _('IP'),
-        sortable: true,
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -306,6 +290,7 @@ export default class ClientsDetails extends React.Component {
     ]);
     const { radioId, radioType } = this.props.selfState.get('currRadioConfig').toJS();
     if (!this.props.store.getIn(['curData', 'radioList', radioId, 'staList'])) return null;
+    // const { wirelessMode, vapList } = this.props.store.getIn(['curData', 'radioList', radioId]).toJS();
     const staList = this.props.store.getIn(['curData', 'radioList', radioId, 'staList']).toJS();
     return (
       <div className="o-box">
@@ -319,25 +304,34 @@ export default class ClientsDetails extends React.Component {
             window.location.href = '#/main/status/overview';
           }}
         />
-        <div className="o-box__cell">
-          <span
+
+        <div className="o-box__cell clearfix">
+          <h3
+            className="fl"
             style={{
-              fontSize: '15px',
-              mraginBottom: '5px',
-              fontWeight: 'bold',
+              paddingTop: '3px',
+              marginRight: '15px',
             }}
           >
-            {`${_('Clients')} (${this.props.product.getIn(['radioSelectOptions', radioId, 'label'])})`}
-          </span>
-          <span
-            style={{
-              fontSize: '12px',
-              marginLeft: '15px',
-              mraginBottom: '3px',
-            }}
-          >
-            {`${_('Total Clients: ')}${staList.length}`}
-          </span>
+            {_('Clients')}
+          </h3>
+          {
+            this.props.product.get('deviceRadioList').size > 1 ? (
+              <FormInput
+                type="switch"
+                label={_('Radio Select')}
+                minWidth="100px"
+                options={this.props.product.get('radioSelectOptions')}
+                value={this.props.selfState.getIn(['currRadioConfig', 'radioId'])}
+                onChange={(data) => {
+                  this.onChangeRadio(data);
+                }}
+                style={{
+                  marginBottom: '15px',
+                }}
+              />
+            ) : null
+          }
         </div>
         <div className="o-box__cell">
           <Table
@@ -360,7 +354,6 @@ function mapStateToProps(state) {
     app: state.app,
     store: state.settings,
     product: state.product,
-    radioIdFromUpper: state.systemstatus.getIn(['currRadioConfig', 'radioId']),
   };
 }
 

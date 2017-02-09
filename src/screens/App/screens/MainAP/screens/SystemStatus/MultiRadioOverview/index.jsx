@@ -261,7 +261,8 @@ function getTopTenFlowClientsOption(serverData) {
     },
     title: {
       text: _('Top10 Flow Clients'),
-      left: '48%',
+      // left: '48%',
+      x: 'center',
       textStyle: {
         fontWeight: 'normal',
         fontSize: '18',
@@ -358,7 +359,8 @@ function getFlowPerSsidOption(serverData) {
     },
     title: {
       text: _('SSID Flow'),
-      left: '53%',
+      x: 'center',
+      // left: '53%',
       textStyle: {
         fontWeight: 'normal',
         fontSize: '18',
@@ -884,7 +886,7 @@ export default class SystemStatus extends React.Component {
                   />
                 ) : null
               }
-              <a
+              {/* <a
                 onClick={(e) => {
                   e.preventDefault();
                   const radioTypeVal = this.props.product.getIn(['deviceRadioList', radioId, 'radioType']);
@@ -903,7 +905,7 @@ export default class SystemStatus extends React.Component {
                 }}
               >
                 {_('More Details >>')}
-              </a>
+              </a>*/}
             </div>
           </div>
           <div
@@ -992,7 +994,34 @@ export default class SystemStatus extends React.Component {
                       });
                     }}
                   />
-                  <div style={{ minWidth: '300px' }}>
+                  <div
+                    style={{
+                      minWidth: '300px',
+                      position: 'relative',
+                    }}
+                  >
+                    <span
+                      style={{
+                        position: 'absolute',
+                        right: '5px',
+                        top: '5px',
+                        zIndex: '99',
+                        color: 'blue',
+                        cursor: 'pointer',
+                      }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const radioTypeVal = this.props.product.getIn(['deviceRadioList', radioId, 'radioType']);
+                        const config = fromJS({
+                          radioId,
+                          radioType: radioTypeVal,
+                        });
+                        this.props.changeCurrRadioConfig(config);
+                        window.location.href = '#/main/status/clientsdetails';
+                      }}
+                    >
+                      {_('More Details >>')}
+                    </span>
                     <EchartReact
                       option={topTenFlowClients}
                       className="o-box__canvas"
@@ -1084,7 +1113,34 @@ export default class SystemStatus extends React.Component {
                               });
                             }}
                           />
-                          <div style={{ minWidth: '300px' }}>
+                          <div
+                            style={{
+                              minWidth: '300px',
+                              positon: 'relative',
+                            }}
+                          >
+                            <span
+                              style={{
+                                position: 'absolute',
+                                right: '5px',
+                                top: '10px',
+                                zIndex: '99',
+                                color: 'blue',
+                                cursor: 'pointer',
+                              }}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                const radioTypeVal = this.props.product.getIn(['deviceRadioList', radioId, 'radioType']);
+                                const config = fromJS({
+                                  radioId,
+                                  radioType: radioTypeVal,
+                                });
+                                this.props.changeCurrRadioConfig(config);
+                                window.location.href = '#/main/status/ssiddetails';
+                              }}
+                            >
+                              {_('More Details >>')}
+                            </span>
                             <EchartReact
                               className="o-box__canvas"
                               option={flowPerSsid}

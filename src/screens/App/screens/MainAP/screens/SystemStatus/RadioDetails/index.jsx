@@ -509,7 +509,8 @@ export default class RadioDetails extends React.Component {
 
         <div className="o-box__cell">
           <h3>
-            {_('Wireless Interfaces')}
+            {`${_('Wireless Interfaces')} (${this.props.product.getIn(['radioSelectOptions', radioId, 'label'])})`}
+            {/* {_('Wireless Interfaces')}*/}
           </h3>
         </div>
         <div className="o-box__cell">
