@@ -4,7 +4,7 @@ const staticHash = require('gulp-static-hash');
 const runSequence = require('run-sequence');
 const $ = require('gulp-load-plugins')();
 const webpack = require('webpack');
-const webpackConfig = require('../../webpack.config.production.js');
+const webpackConfig = require('../../webpack.config.production');
 
 const paths = gulp.paths;
 
