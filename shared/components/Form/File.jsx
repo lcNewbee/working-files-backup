@@ -16,6 +16,7 @@ function transformShowText(fileValue) {
 }
 const propTypes = {
   className: PropTypes.string,
+  name: PropTypes.string,
   placeholder: PropTypes.string,
   value: PropTypes.any,
   onChange: PropTypes.func,
@@ -60,12 +61,26 @@ class File extends React.Component {
   }
 
   render() {
-    const { className, placeholder, onRef, ...restProps } = this.props;
+    const { className, value, placeholder, onRef, ...restProps } = this.props;
     const placehodlerText = placeholder || _('Please Select File...');
+    const fileTextInputProps = {
+      disabled: this.props.disabled,
+      placeholder: placehodlerText,
+      type: 'text',
+
+      // React waring: value 需要与 onChange 联合使用
+      value: this.state.showText,
+      onChange: utils.emptyFunc,
+    };
     let inputClassName = 'a-input-file__input';
 
     if (className) {
       inputClassName = `${inputClassName} ${className}`;
+      fileTextInputProps.className = inputClassName;
+    }
+
+    if (this.props.name) {
+      fileTextInputProps.name = `${this.props.name}Text`;
     }
 
     return (
@@ -91,11 +106,7 @@ class File extends React.Component {
           }
         />
         <Input
-          disabled={this.props.disabled}
-          className={inputClassName}
-          placeholder={placehodlerText}
-          type="text"
-          value={this.state.showText}
+          {...fileTextInputProps}
           ref={
             (elem) => {
               if (elem) {

@@ -149,7 +149,7 @@ class FormGroup extends React.Component {
 
   render() {
     const {
-      required, children, role, id, label, display, disabled, name, value,
+      required, children, role, id, label, display, disabled, name, value, type,
     } = this.props;
     const { style, help, errMsg, showLabel, className, ...restProps } = this.props;
     const { check, checkClear } = this;
@@ -169,6 +169,18 @@ class FormGroup extends React.Component {
 
     if (display) {
       groupClassName = `${groupClassName} form-group--${display}`;
+    }
+
+    // 如果是隐藏，值渲染 input
+    if (type === 'hidden') {
+      return (
+        <input
+          type="hidden"
+          name={name}
+          value={value}
+          ref={ref => (this.myRef = ref)}
+        />
+      );
     }
 
     return (

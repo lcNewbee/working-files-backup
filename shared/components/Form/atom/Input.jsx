@@ -8,6 +8,7 @@ const propTypes = {
 
 const defaultProps = {
   type: 'text',
+  isFocus: false,
 };
 
 class Input extends React.Component {
