@@ -112,7 +112,7 @@ const sLiveMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/
 const sApPlanMap =
     require('../../screens/App/screens/MainAxc/screens/Map/screens/ApPlanMap');
 // const sRfMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/Rf');
-// const sHeatMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/HeatMap');
+const sHeatMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/HeatMap');
 // const sClientsTrace = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace');
 
 /**
@@ -383,14 +383,15 @@ const routes = [
                   },
                 ],
               },
+              {
+                id: 'heatMap',
+                path: '/main/group/map/heat_map',
+                formUrl: '/goform/group/map/building',
+                fetchUrl: '/goform/group/map/building',
+                text: _('Heat Map'),
+                component: sHeatMap.Screen,
+              },
               // {
-              //   id: 'heatMap',
-              //   path: '/main/group/map/heat_map',
-              //   formUrl: '/goform/heatMap',
-              //   fetchUrl: '/goform/group/mapList',
-              //   text: _('Heat Map'),
-              //   component: sHeatMap.Screen,
-              // }, {
               //   id: 'cientsTrace',
               //   path: '/main/group/map/cients_trace',
               //   formUrl: '/goform/cientsTrace',

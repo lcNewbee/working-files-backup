@@ -33,22 +33,20 @@ const listOptions = fromJS([
     },
   }, {
     id: 'fileName',
-    text: _('Firmware File Name'),
-    defaultValue: '',
-    formProps: {
-      type: 'plain-text',
-      noAdd: true,
-      validator: validator({}),
-    },
-  }, {
-    id: 'versionFile',
     text: _('Firmware File'),
-    noTable: true,
     defaultValue: '',
     formProps: {
       type: 'file',
       required: true,
       validator: validator({}),
+    },
+  }, {
+    id: 'uploadPath',
+    text: _('Firmware File'),
+    defaultValue: '',
+    noTable: true,
+    formProps: {
+      type: 'hidden',
     },
   }, {
     id: 'active',

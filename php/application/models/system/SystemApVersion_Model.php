@@ -52,7 +52,7 @@ class SystemApVersion_Model extends CI_Model {
 		$config['allowed_types'] = '*';
 
 		$this->load->library('upload', $config);
-		if (!$this->upload->do_upload('versionFile')) {
+		if (!$this->upload->do_upload('fileName')) {
 			$error = array('error' => $this->upload->display_errors());
 			$result = array(
 			                'state'=>array(
@@ -110,21 +110,33 @@ class SystemApVersion_Model extends CI_Model {
 	function up_apversion($data) {
 		$result = null;
 		$upload_data=$this->do_upload();
+
+    // 上传了文件，修改版本文件
 		if($upload_data['state']['code']==2000){
 			$filename=$this->upload->data('file_name');
 			$filepath=$this->upload->data('full_path');
-			$retData = array(
-			                'vendor'=>element('vendor',$data, 48208),
-			                'model'=>element('model', $data,''),
-			                'sfver'=>element('softVersion', $data,''),
-			                'fmname'=>$filename,
-			                'filepath'=>$filepath,
-			                'active'=>(int)element('active', $data,0)
-			            );
-		}
+
+    // 没有修改版本文件
+		} else {
+      $filename = element('fileNameText', $data);
+      $filepath = element('uploadPath', $data);
+    }
+
+    $retData = array(
+        'vendor'=>element('vendor',$data, 48208),
+        'model'=>element('model', $data, ''),
+        'sfver'=>element('softVersion', $data, ''),
+        'fmname'=>$filename,
+        'filepath'=>$filepath,
+        'active'=>(int)element('active', $data, 0)
+    );
 		$result=axc_modify_apfirmware(json_encode($retData));
+    $result = json_decode($result);
+    $result->file = $upload_data;
+    $result->retData = $retData;
+    $result = json_encode($result);
 		//l		og
-		        $cgiObj = json_decode($result);
+		$cgiObj = json_decode($result);
 		if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
 			$logary = array(
 			                'type'=>'Update',

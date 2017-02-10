@@ -66,6 +66,9 @@
         "devDependencies": true
       }
     ],
-    "jsx-a11y/no-static-element-interactions": 0
+    "jsx-a11y/no-static-element-interactions": 0,
+
+    // 不需要验证默认属性
+    "react/require-default-props": false
   }
 }
