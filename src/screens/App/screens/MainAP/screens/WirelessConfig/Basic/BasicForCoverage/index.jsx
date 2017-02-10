@@ -470,7 +470,7 @@ export default class Basic extends React.Component {
         const curSettingId = this.props.store.get('curSettingId');
         let dataToSave = this.props.store.getIn(['curData', 'radioList', radioId]);
         let dataFromServer = this.props.store.getIn([curSettingId, 'data', 'radioList', radioId]);
-        // console.log('dataFromServer', dataFromServer.toJS());        
+        // console.log('dataFromServer', dataFromServer.toJS());
         // 根据保存按钮，重新组织需要保存的数据（因为两部分数据是一个接口，所以要区分）
         if (validID === 'radioSettings') {
           const firstVap = dataToSave.getIn(['vapList', 0]);
@@ -1795,6 +1795,7 @@ export default class Basic extends React.Component {
         <Modal
           title={_('Security Settings For SSID')}
           isShow={tableItemForSsid.get('isShow') === '1'}
+          draggable
           onOk={() => {
             this.props.validateAll('ssidSecurityModal').then((msg) => {
               if (msg.isEmpty()) {

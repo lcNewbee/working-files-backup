@@ -237,7 +237,7 @@ class Modal extends Component {
               role={role}
               onDragOver={(e) => { e.preventDefault(); }} // 拖放事件：允许放置
               onDrop={(e) => { // 拖放事件：放置事件
-                if (this.moveDiv.draggable) {
+                if (draggable) {
                   const positionStyle = Object.assign({},
                   this.state.modalStyle,
                     {
@@ -259,20 +259,24 @@ class Modal extends Component {
               }
               <div
                 className={contentClassNames}
-                draggable={draggable}
                 style={this.state.modalStyle}
                 ref={(ref) => {
                   this.moveDiv = ref;
                 }}
-                onDragStart={(e) => { // 拖放事件：拖放准备
-                  this.diffX = e.clientX - this.moveDiv.offsetLeft;
-                  this.diffY = e.clientY - this.moveDiv.offsetTop;
-                }}
               >
-                <div className="o-modal__content">
+                <div
+                  className="o-modal__content"
+                >
                   {
-                    title ? (
-                      <div className="o-modal__header">
+                    title ? ( // 只有Modal的标题部分允许拖动
+                      <div
+                        className="o-modal__header"
+                        draggable={draggable}
+                        onDragStart={(e) => { // 拖放事件：拖放准备
+                          this.diffX = e.clientX - this.moveDiv.offsetLeft;
+                          this.diffY = e.clientY - this.moveDiv.offsetTop;
+                        }}
+                      >
                         {
                           hasCloseBtn ? (
                             <button
