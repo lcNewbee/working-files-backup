@@ -84,15 +84,20 @@ function getFlowUnit(val) {
       label: 'KB',
       val: Math.pow(1024, 1),
     };
+  } else if (val <= (50 * Math.pow(1024, 2))) {
+    ret = {
+      label: 'MB',
+      val: Math.pow(1024, 2),
+    };
   } else if (val <= (50 * Math.pow(1024, 3))) {
     ret = {
       label: 'GB',
-      val: Math.pow(1024, 2),
+      val: Math.pow(1024, 3),
     };
   } else {
     ret = {
       label: 'TB',
-      val: Math.pow(1024, 3),
+      val: Math.pow(1024, 4),
     };
   }
   return ret;
@@ -105,7 +110,7 @@ function getFlowOption(serverData, timeType) {
       trigger: 'axis',
     },
     legend: {
-      data: [_('Upload')],
+      data: [_('Throughput')],
     },
     grid: {
       left: '0',
@@ -159,7 +164,7 @@ function getFlowOption(serverData, timeType) {
     }],
     series: [
       {
-        name: _('Upload'),
+        name: _('Throughput'),
         type: 'line',
         // smooth: true,
         // itemStyle: {
@@ -235,7 +240,7 @@ function getFlowOption(serverData, timeType) {
   option.yAxis[0].name = utilObj.label;
 
   option.series[0].data = $$upDataList.map( // 基础单位是B，后台传回的数据单位是byte
-    val => (val / (utilObj.val * 8)),
+    val => parseFloat(val / (utilObj.val * 8)).toFixed(3),
   );
   // option.series[1].data = $$downDataList.map(
   //   val => (val / utilObj.val),
@@ -364,25 +369,27 @@ export default class EthStatistic extends React.Component {
           }
           return val;
         },
-      }, {
-        id: 'mpls_packets',
-        text: _('MPLS Packets'),
-        transform(val) {
-          if (val === '' || val === undefined) {
-            return '--';
-          }
-          return val;
-        },
-      }, {
-        id: 'pppoe_packets',
-        text: _('PPPoE Packets'),
-        transform(val) {
-          if (val === '' || val === undefined) {
-            return '--';
-          }
-          return val;
-        },
-      }, {
+      },
+      // {
+      //   id: 'mpls_packets',
+      //   text: _('MPLS Packets'),
+      //   transform(val) {
+      //     if (val === '' || val === undefined) {
+      //       return '--';
+      //     }
+      //     return val;
+      //   },
+      // }, {
+      //   id: 'pppoe_packets',
+      //   text: _('PPPoE Packets'),
+      //   transform(val) {
+      //     if (val === '' || val === undefined) {
+      //       return '--';
+      //     }
+      //     return val;
+      //   },
+      // },
+      {
         id: 'fragmented_packets',
         text: _('Fragmented Packets'),
         transform(val) {

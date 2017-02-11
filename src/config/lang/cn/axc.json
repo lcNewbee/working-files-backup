@@ -573,5 +573,27 @@
 
   "Custer Settings": "集群设置",
   "Authentication Subnet Mask":"认证子网掩码",
-  "Authentication IP":"认证 IP"
+  "Authentication IP":"认证 IP",
+
+
+
+  "Flow Statistics Within 30 Seconds": "30秒数据统计",
+  "Statistics Within 30 Seconds": "30秒数据统计",
+  "Flow Id": "流序号",
+  "NDPI Enable": "NDPI启用",
+  "Ethernet": "以太网口数据",
+  "Protocols": "协议数据",
+  "Flow Info": "连接流信息",
+  "Mac Statistic": "MAC数据统计",
+  "Ethernet Statistic": "网口数据统计",
+  "Proto Info": "协议信息",
+  "Protocol": "协议",
+  "Packets": "数据包数",
+  "Flow Num": "连接流序号",
+  "Upload Bytes": "上传流量",
+  "Upload Packets": "上传数据包数",
+  "Download Bytes": "下载流量",
+  "Download Packets": "下载数据包数",
+  "Throughput": "流量",
+  "Upload": "上传"
 }

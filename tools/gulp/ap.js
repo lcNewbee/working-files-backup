@@ -97,11 +97,7 @@ function pubAP(name, callback) {
   }
   gutil.log('正在处理产品：', gutil.colors.magenta(name));
   gutil.log('切换 AP 发布目标目录：', gutil.colors.magenta(distPath));
-  if (callback) {
-    runSequence('pub:path', `config:${name}`, [`clean:pub${name}`, 'build'], `pub:copy${name}`, `compress${name}`, callback);
-  } else {
-    runSequence('pub:path', `config:${name}`, [`clean:pub${name}`, 'build'], `pub:copy${name}`, `compress${name}`);
-  }
+  runSequence('pub:path', `config:${name}`, [`clean:pub${name}`, 'build'], `change${name}Title`, `pub:copy${name}`, `compress${name}`, callback);
 }
 
 gulp.task('pub:AIP5', callback => pubAP('AIP5', callback));

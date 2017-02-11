@@ -114,7 +114,17 @@ const sApPlanMap =
 // const sRfMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/Rf');
 const sHeatMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/HeatMap');
 // const sClientsTrace = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace');
-
+// ndpi
+const sDPIOverview =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/DPIOverview');
+const sFlowInfo =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/FlowInfo');
+const sMacStatistic =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/MacStatistic');
+const sEthStatistic =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/EthStatistic');
+const sProtoInfo =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/ProtoInfo');
 /**
  * 系统管理
  */
@@ -274,6 +284,47 @@ const routes = [
                 formUrl: 'goform/network/portal/mac',
                 text: _('White List'),
                 component: sPortalMac.Screen,
+              },
+            ],
+          }, {
+            id: 'dpi',
+            icon: 'copy',
+            noTree: true,
+            component: SharedComponents.TabContainer,
+            path: '/main/network/dpi',
+            text: _('DPI'),
+            indexRoute: { onEnter: (nextState, replace) => replace('/main/network/dpi/dpioverview') },
+            childRoutes: [
+              {
+                id: 'dpioverview',
+                path: '/main/network/dpi/dpioverview',
+                formUrl: 'goform/network/dpi/overview',
+                text: _('Overview'),
+                component: sDPIOverview.Screen,
+              }, {
+                id: 'flowinfo',
+                path: '/main/network/dpi/flowinfo',
+                formUrl: 'goform/network/dpi/flowinfo',
+                text: _('Flow Info'),
+                component: sFlowInfo.Screen,
+              }, {
+                id: 'macstatistic',
+                path: '/main/network/dpi/macstatistic',
+                formUrl: 'goform/network/dpi/macstatistic',
+                text: _('Mac Statistic'),
+                component: sMacStatistic.Screen,
+              }, {
+                id: 'ethstatistic',
+                path: '/main/network/dpi/ethstatistic',
+                formUrl: 'goform/network/dpi/ethstatistic',
+                text: _('Ethernet Statistic'),
+                component: sEthStatistic.Screen,
+              }, {
+                id: 'protoinfo',
+                path: '/main/network/dpi/protoinfo',
+                formUrl: 'goform/network/dpi/protoinfo',
+                text: _('Proto Info'),
+                component: sProtoInfo.Screen,
               },
             ],
           },

@@ -58,7 +58,6 @@ export default class FlowInfo extends React.Component {
             fetchIntervalTime: 5000,
           }}
           listTitle={_('Statistics Within 30 Seconds')}
-          searchable
         />
       </div>
     );

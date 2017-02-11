@@ -49,3 +49,4 @@ if (module.hot) {
 }
 
 renderApp();
+;

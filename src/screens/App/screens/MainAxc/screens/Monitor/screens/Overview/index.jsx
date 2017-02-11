@@ -159,19 +159,25 @@ function getFlowUnit(val) {
       label: 'KB',
       val: Math.pow(1024, 1),
     };
+  } else if (val <= (50 * Math.pow(1024, 2))) {
+    ret = {
+      label: 'MB',
+      val: Math.pow(1024, 2),
+    };
   } else if (val <= (50 * Math.pow(1024, 3))) {
     ret = {
       label: 'GB',
-      val: Math.pow(1024, 2),
+      val: Math.pow(1024, 3),
     };
   } else {
     ret = {
       label: 'TB',
-      val: Math.pow(1024, 3),
+      val: Math.pow(1024, 4),
     };
   }
   return ret;
 }
+
 function getFlowOption(serverData, timeType) {
   const option = {
     color: [colors[0], colors[1]],
