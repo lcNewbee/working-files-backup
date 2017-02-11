@@ -150,7 +150,10 @@
   "Please choose authentication page package(ZIP file)":"请选择认证页面压缩包（ZIP文件）",
   "Upload Now":"现在上传",
 
-  "Out Time":"临时放行时间"
+  "Out Time":"临时放行时间",
 
+  "SSID Location":"SSID 位置",
+  "Authetication Count":"认证次数",
+  "Description":"描述"
 
 }

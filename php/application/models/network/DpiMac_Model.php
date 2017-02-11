@@ -27,6 +27,18 @@ class DpiMac_Model extends CI_Model {
           $upFlowList[$i]=$mac_history_result_array['data']['list'][$i]['upbytes'];
         }
       }
+    }else{
+        $j=(int)$data['timeType'];
+        if($j==0||$j==1){
+          for($i=0;$i<=24;$i++){
+          $upFlowList[$i]=0;
+          }
+        }
+        else{
+          for($i=0;$i<=$j;$i++){
+            $upFlowList[$i]=0;
+          }
+        }
     }
     $downFlowList = array();
     if($mac_history_result_array['state']['code'] === 2000){
@@ -35,6 +47,18 @@ class DpiMac_Model extends CI_Model {
           $downFlowList[$i]=$mac_history_result_array['data']['list'][$i]['downbytes'];
         }
       }
+    }else{
+        $j=(int)$data['timeType'];
+        if($j==0||$j==1){
+          for($i=0;$i<=24;$i++){
+            $downFlowList[$i]=0;
+          }
+        }
+        else{
+          for($i=0;$i<=$j;$i++){
+            $downFlowList[$i]=0;
+          }
+        }
     }
     $result = array(
       'state'=> $mac_result_array['state'],

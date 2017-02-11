@@ -175,6 +175,10 @@ const sPortalDefaultWeb =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/DefaultWeb');
 const sPortalWeixin =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Weixin');
+const sPortalApSetting=
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/ApSetting');
+const sPortalSsid =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Ssid');
 
 const sPortalNas =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Radius/Nas');
@@ -813,6 +817,18 @@ const routes = [
                 formUrl: 'goform/portal/access/weixin',
                 text: _('Wechat Authentication'),
                 component: sPortalWeixin.Screen,
+              }, {
+                id: 'portalApSetting',
+                path: '/main/portal/access/ap',
+                formUrl: 'goform/portal/access/ap',
+                text: _('AP Setting'),
+                component: sPortalApSetting.Screen,
+              }, {
+                id: 'portalSsid',
+                path: '/main/portal/access/ssid',
+                formUrl: 'goform/portal/access/ssid',
+                text: _('SSID'),
+                component: sPortalSsid.Screen,
               },
             ],
           }, {

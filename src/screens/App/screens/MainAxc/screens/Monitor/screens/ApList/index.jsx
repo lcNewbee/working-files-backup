@@ -124,6 +124,9 @@ const listOptions = fromJS([
     defaultValue: 'unkown',
     options: apStatus,
   }, {
+    id: 'model',
+    text: _('AP Model'),
+  }, {
     id: 'connectedNumbers',
     width: '80',
     text: _('Clients'),

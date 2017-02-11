@@ -37,6 +37,22 @@ function getPortalServerList() {
     ),
   );
 }
+
+function getAAADomainName() {
+  return utils.fetch('goform/network/Aaa')
+    .then(json => (
+      {
+        options: json.data.list.map(
+          item => ({
+            value: item.domain_name,
+            label: item.domain_name,
+          }),
+        ),
+      }
+    ),
+  );
+}
+
 const listOptions = fromJS([
   {
     id: 'interface_bind',
@@ -106,10 +122,11 @@ const listOptions = fromJS([
     },
   }, {
     id: 'auth_domain',
-    label: _('Force Auth Domain'),
+    text: _('AAA Strategy'),
+    defaultValue: '',
     formProps: {
-      type: 'text',
-      maxLength: '31',
+      type: 'select',
+      required: true,
     },
   }, {
     id: 'idle_test',
@@ -150,6 +167,7 @@ export default class View extends React.Component {
     this.state = {
       portOptions: fromJS([]),
       portalServerOption: fromJS([]),
+      AAADomainNameOption: fromJS([]),
     };
   }
   componentWillMount() {
@@ -164,6 +182,12 @@ export default class View extends React.Component {
       .then((data) => {
         this.setState({
           portalServerOption: fromJS(data.options),
+        });
+      });
+    getAAADomainName()
+      .then((data) => {
+        this.setState({
+          AAADomainNameOption: fromJS(data.options),
         });
       });
   }
@@ -181,7 +205,8 @@ export default class View extends React.Component {
       });
     const curListOptions = listOptions
       .setIn([0, 'options'], mypPortOptions)
-      .setIn([1, 'options'], this.state.portalServerOption);
+      .setIn([1, 'options'], this.state.portalServerOption)
+      .setIn([6, 'options'], this.state.AAADomainNameOption);
 
     return (
       <AppScreen

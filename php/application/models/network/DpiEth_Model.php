@@ -22,7 +22,7 @@ class DpiEth_Model extends CI_Model {
 			for($i = 0; $i < 6; $i++){
 				foreach($cgiary['data']['list'] as $row){
 					if($ary[$i]['ethx_name'] === $row['ethx_name']){
-						$row['active_eth'] = 1;
+						$row['active_eth'] = "1";
 						$ary[$i] = $row;
 					}
 				}
@@ -32,7 +32,7 @@ class DpiEth_Model extends CI_Model {
 		for($k = 0; $k < 6; $k++){
 			foreach($ary as $res){
 				if($ethstate[$k]['ifname'] === $res['ethx_name']){
-					$ary[$k]['active_eth'] = $ethstate[$k]['value'];
+					$ary[$k]['active_eth'] =(string)$ethstate[$k]['value'];
 					break;
 				}
 			}
@@ -54,6 +54,18 @@ class DpiEth_Model extends CI_Model {
           $upFlowList[$i]=$ethx_history_result_array['data']['list'][$i]['throughput'];
         }
       }
+    } else{
+        $j=(int)$data['timeType'];
+        if($j==0||$j==1){
+          for($i=0;$i<=24;$i++){
+          $upFlowList[$i]=0;
+          }
+        }
+        else{
+          for($i=0;$i<=$j;$i++){
+            $upFlowList[$i]=0;
+          }
+        }
     }
 		$retary = array(
 			'state'=>array('code'=>2000,'msg'=>'ok'),
@@ -118,12 +130,12 @@ class DpiEth_Model extends CI_Model {
 	}
 	function set_eth($data){
         $result = null;
-		$state = (int)element('active_eth',$data);
+		$state = (string)element('active_eth',$data);
 		$arr = array('interface'=>$data['ethx_name']);
-		if($state === 1){
+		if($state === "1"){
         	$result = ndpi_set_interface_to_config(json_encode($arr));
 		}
-		if($state === 0){
+		if($state === "0"){
 			$result = ndpi_del_interface_from_config(json_encode($arr));
 		}
         return $result;
