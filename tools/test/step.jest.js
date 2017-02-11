@@ -1,11 +1,13 @@
 var sinon = require('sinon');
+var string = require('shared/utils/lib/string');
 
 // Register babel so that it will transpile ES6 to ES5
 // before our tests run.
 global.sinon = sinon;
 
-function noop() {
-  return null;
+// mock 翻译函数
+if(!window._) {
+  window._ = string.format;
 }
 
 // Tests are placed alongside files under test.
@@ -19,9 +21,4 @@ function noop() {
 // hot module reloading code) doesn't apply for tests.
 process.env.NODE_ENV = 'test';
 
-// Disable webpack-specific features for tests since
-// Mocha doesn't know what to do with them.
-require.extensions['.css'] = noop;
-require.extensions['.scss'] = noop;
-require.extensions['.png'] = noop;
-require.extensions['.jpg'] = noop;
+module.exports = {};

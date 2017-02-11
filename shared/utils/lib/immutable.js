@@ -1,10 +1,14 @@
 // 对 immutable 数据的操作
 
+function isImmutableList($$list) {
+  return $$list && $$list.clear && (typeof $$list.map === 'function');
+}
+
 var immutableUtils = {
   getFormOptions: function ($$options) { // 构造表格项的编辑内容
     var ret = $$options;
 
-    if (!ret) {
+    if (!isImmutableList(ret)) {
       return null;
     }
 
@@ -41,37 +45,9 @@ var immutableUtils = {
       .toList();
 
     // 如果只有一组,则直接获取第一组List
-    // if (ret.size === 1) {
-    //   ret = ret.get(0);
-    // }
-    return ret;
-  },
-
-  getQueryFormOptions: function ($$options) {
-    var ret = $$options;
-
-    if (!ret) {
-      return null;
+    if (ret.size === 1) {
+      ret = ret.get(0);
     }
-
-    ret = ret.filter(function (x) {
-        return x.get('queryable');
-      }).map(function (item) {
-        var commonOption = {
-          id: item.get('id'),
-          label: item.get('text') || item.get('label'),
-          fieldset: item.get('fieldset'),
-          legend: item.get('legend'),
-          options: item.get('options'),
-        };
-        var retVal = item.clear()
-          .merge(commonOption)
-          .merge(item.get('formProps'));
-
-        return retVal;
-      })
-      .toList();
-
     return ret;
   },
 
@@ -92,12 +68,13 @@ var immutableUtils = {
       }
     }
 
-    if (!$$options) {
+    if (!isImmutableList($$options)) {
       return null;
     }
 
     // 初始化默认值对象
-    $$options.forEach(fillRet);
+    fillRet($$options);
+
     return ret;
   },
 
@@ -141,24 +118,9 @@ var immutableUtils = {
     return ret;
   },
 
-  getValidatorOptions: function ($$options) {
-    var ret = $$options;
-
-    if (!ret) {
-      return null;
-    }
-
-    ret = ret.map(
-      function(item) {
-        return item.delete('formProps')
-      }
-    ).filterNot(function(item) {
-      return item.get('noTable')
-    });
-
-    return ret;
-  },
-
+  /**
+   *
+   */
   getTableOptions: function ($$options) {
     var ret = $$options;
 
@@ -173,6 +135,26 @@ var immutableUtils = {
     })
     return ret;
   },
+
+  getChanged: function ($$newData, $$oldData) {
+    var $$ret = $$newData;
+
+    $$ret = $$newData.filter(
+      function(val, key) {
+        var ret = false;
+        var oldVal = $$oldData.get(key);
+
+        if (oldVal !== undefined && oldVal !== val) {
+          ret = true;
+        }
+
+        return ret;
+      }
+    );
+
+    return $$ret;
+  },
+
 
   selectList: function($$list, data, $$selectedList) {
     var $$retList = $$list;
@@ -203,25 +185,6 @@ var immutableUtils = {
       $$list: $$retList,
       selectedList: selectedList
     };
-  },
-
-  getChanged: function ($$newData, $$oldData) {
-    var $$ret = $$newData;
-
-    $$ret = $$newData.filter(
-      function(val, key) {
-        var ret = false;
-        var oldVal = $$oldData.get(key);
-
-        if (oldVal !== undefined && oldVal !== val) {
-          ret = true;
-        }
-
-        return ret;
-      }
-    );
-
-    return $$ret;
   },
 
   toNumberWithKeys: function($$data, $$keysArr) {

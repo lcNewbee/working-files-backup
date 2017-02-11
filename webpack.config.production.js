@@ -18,7 +18,6 @@ var GLOBALS = {
     NPM: path.resolve(__dirname, 'node_modules'),
   },
 
-
   autoprefixer: {
     browsers: [
       'Android 2.3',

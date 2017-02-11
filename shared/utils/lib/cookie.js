@@ -1,5 +1,4 @@
-
-const cookie = (function(doc) {
+var cookie = (function(doc) {
   return {
 		get: function (name) {
 			var cookieName = encodeURIComponent(name) + "=",
@@ -39,7 +38,7 @@ const cookie = (function(doc) {
 			this.set(name, '', path, domain, new Date(0), secure);
 		}
 	};
-  
+
 })(document)
 
 // exports

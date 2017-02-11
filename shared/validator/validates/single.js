@@ -15,7 +15,7 @@ var vaildate = {
     var thisMin = min || 0;
 
     if (thisMin === max && len !== thisMin) {
-      return _('String length must be: %s bit', min);
+      return _('String length must be: %s bit', min, len);
     } else if (len < thisMin || len > max) {
       return _('String length range is: %s - %s bit', min, max);
     }
@@ -24,9 +24,11 @@ var vaildate = {
   // UTF-8 字节长度
   utf8Len: function(str, min, max) {
     var len = utilsCore.getUtf8Length(str);
-    if (min === max && len !== min) {
+    var thisMin = min || 0;
+
+    if (thisMin === max && len !== thisMin) {
       return _('String length must be: %s bytes', min);
-    } else if (len < min || len > max) {
+    } else if (len < thisMin || len > max) {
       return _('String length range is: %s - %s bytes', min, max);
     }
   },
