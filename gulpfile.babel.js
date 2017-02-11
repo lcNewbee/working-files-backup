@@ -79,7 +79,7 @@ gulp.task('open:src', shell.task([
 ], {
   env: { FORCE_COLOR: true },
 }));
-gulp.task('open:dist', ['build'], shell.task(['babel-node tools/distServer.js']));
+gulp.task('open:build', ['build'], shell.task(['babel-node tools/buildServer.js']));
 
 gulp.task('default', ['open:src']);
 
