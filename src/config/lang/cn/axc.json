@@ -14,6 +14,8 @@
   "Are you sure to delete selected rows?": "你确定要删除选中的行?",
   "Are you sure to %s selected rows?": "你确定要%s选中的行？",
   "Are you sure to delete selected rows: %s": "你确定要删除选中的：%s",
+  "Are you sure to delete group: %s?": "你确定要删除组：%s?",
+  "Are you sure to delete selected aps: %s?": "你确定要删除AP：%s?",
   "Are you sure to %s selected rows: %s": "你确定要%s选中的行：%s",
   "Are you sure to %s selected: %s": "你确定要%s选中的：%s",
   "Please select delete rows": "请选择你要删除的项",
@@ -331,6 +333,7 @@
   "Cients Trace": "终端行动轨迹",
 
   "Blacklist": "黑名单列表",
+  "Need enable ACL": "请先开启ACL功能",
   "Black List": "黑名单",
   "White List": "白名单",
   "Type Switch": "类型切换",
@@ -512,6 +515,7 @@
 
   "System Maintenance": "系统维护",
   "AC Maintenance": "AC维护",
+  "Save Configuration": "保存配置",
   "Backup Configuration": "备份配置",
   "Restore Configuration": "恢复配置",
   "Backup Your Current Configuration": "备份当前配置",

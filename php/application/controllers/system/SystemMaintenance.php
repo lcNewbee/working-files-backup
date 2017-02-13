@@ -71,12 +71,30 @@ class SystemMaintenance extends CI_Controller {
         Log_Record($this->db,$logary);
         //系统备份
         //copy('/var/run/config.db','/var/conf/config.db');
-        exec('cp /var/run/config.db /var/conf/config.db');
+        // exec('cp /var/run/config.db /var/conf/config.db');
+
         //download
         $this->load->helper('download');
         $data = file_get_contents("/var/conf/config.db");
         $name = 'config.db';
         force_download($name, $data);
+    }
+    public function saveConfig() {
+        $logary = array(
+            'type'=>'saveConfig',
+            'operator'=>element('username',$_SESSION,''),
+            'operationCommand'=>"Save AC config",
+            'operationResult'=>'ok',
+            'description'=>""
+        );
+        Log_Record($this->db,$logary);
+        //系统备份
+        exec('cp /var/run/config.db /var/conf/config.db');
+        $result = array('state' => array('code' => 2000, 'msg' => 'OK'));
+
+        $result = json_encode($result);
+
+        echo $result;
     }
     public function reboot() {
         $logary = array(

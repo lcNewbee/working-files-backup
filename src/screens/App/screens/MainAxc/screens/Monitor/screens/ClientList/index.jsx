@@ -119,6 +119,8 @@ const styles = {
 const propTypes = {
   changeScreenActionQuery: PropTypes.func,
   onListAction: PropTypes.func,
+  createModal: PropTypes.func,
+  selectedGroup: PropTypes.object,
 };
 const defaultProps = {};
 
@@ -138,14 +140,27 @@ export default class Clients extends React.Component {
   componentWillMount() {
     this.initListOptions(this.props);
   }
+  componentWillReceiveProps(nextProps) {
+    if (this.props.selectedGroup !== nextProps.selectedGroup) {
+      this.initListOptions(nextProps);
+    }
+  }
 
   onAction(mac, actionType) {
-    this.props.changeScreenActionQuery({
-      action: actionType,
-      operate: actionType,
-      mac,
-    });
-    this.props.onListAction();
+    if (this.props.selectedGroup.get('aclType') === 'disable') {
+      this.props.createModal({
+        id: actionType,
+        role: 'alert',
+        text: _('Need enable ACL'),
+      });
+    } else {
+      this.props.changeScreenActionQuery({
+        action: actionType,
+        operate: actionType,
+        mac,
+      });
+      this.props.onListAction();
+    }
   }
   initListOptions(props) {
     const actionable = getActionable(props);
@@ -169,6 +184,7 @@ export default class Clients extends React.Component {
                     icon="unlock"
                     size="sm"
                     text={msg.unlock}
+                    //disabled={props.selectedGroup.get('aclType') === 'disable'}
                     style={styles.actionButton}
                     onClick={() => this.onAction(mac, 'unlock')}
                   />
@@ -177,6 +193,7 @@ export default class Clients extends React.Component {
                     icon="lock"
                     size="sm"
                     text={msg.lock}
+                    //disabled={props.selectedGroup.get('aclType') === 'disable'}
                     style={styles.actionButton}
                     onClick={() => this.onAction(mac, 'lock')}
                   />
@@ -216,6 +233,7 @@ function mapStateToProps(state) {
     app: state.app,
     store: state.screens,
     groupid: state.product.getIn(['group', 'selected', 'id']),
+    selectedGroup: state.product.getIn(['group', 'selected']),
   };
 }
 

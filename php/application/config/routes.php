@@ -110,6 +110,7 @@ $route['goform/system/admins'] = 'system/systemAdmin';
 $route['goform/system/maintenance'] = 'system/systemMaintenance';
 $route['goform/system/restore'] = 'system/systemMaintenance/restore';
 $route['goform/system/backup'] = 'system/systemMaintenance/backup';
+$route['goform/system/saveConfig'] = 'system/systemMaintenance/saveConfig';
 $route['goform/system/reboot'] = 'system/systemMaintenance/reboot';
 $route['goform/system/license'] = 'system/systemLicense';
 $route['goform/system/networktimeprotocol'] = 'system/systemNtp';

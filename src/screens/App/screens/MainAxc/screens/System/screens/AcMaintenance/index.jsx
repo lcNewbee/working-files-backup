@@ -44,6 +44,7 @@ export default class View extends React.PureComponent {
     utils.binds(this, [
       'onReboot',
       'onBackup',
+      'onSaveConfiguration',
       'onRestore',
       'onConfirm',
       'checkSaveResult',
@@ -53,6 +54,7 @@ export default class View extends React.PureComponent {
     this.state = {
       isRebooting: false,
       isRestoring: false,
+      isSaveConfig: false,
     };
     this.actionable = getActionable(props);
   }
@@ -66,6 +68,18 @@ export default class View extends React.PureComponent {
   onBackup() {
     if (this.actionable) {
       window.location.href = '/goform/system/backup';
+    }
+  }
+
+  onSaveConfiguration() {
+    if (this.actionable) {
+      this.setState({
+        isSaveConfig: true,
+      });
+      return this.props.save('goform/system/saveConfig')
+        .then(() => this.setState({
+          isSaveConfig: false,
+        }));
     }
   }
 
@@ -157,8 +171,19 @@ export default class View extends React.PureComponent {
             onReboot={this.onReboot}
             actionable={this.actionable}
           />
-
           <fieldset className="o-form__fieldset">
+            <FormGroup label={_('Save Configuration')}>
+              <SaveButton
+                type="button"
+                icon="save"
+                loading={this.state.isSaveConfig}
+                text={_('Save Configuration')}
+                disabled={!this.actionable}
+                onClick={
+                  () => this.onSaveConfiguration()
+                }
+              />
+            </FormGroup>
             <FormGroup label={_('Reboot Controller')}>
               <SaveButton
                 type="button"
