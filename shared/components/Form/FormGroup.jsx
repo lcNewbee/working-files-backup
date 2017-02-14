@@ -43,6 +43,10 @@ const defaultProps = {
     check: emptyFunc,
     checkClear: emptyFunc,
   },
+
+  // 默认所有值为空， 防止在 controlled 与 uncontrolled 间切换
+  // https://fb.me/react-controlled-components
+  value: '',
 };
 
 function notOptionsValue(options, val, type) {
@@ -81,6 +85,15 @@ class FormGroup extends React.Component {
     this.checkClear = this.checkClear.bind(this);
     this.clearValidError = this.clearValidError.bind(this);
   }
+  componentWillReceiveProps(nextProps) {
+    const nextValue = nextProps.value;
+    const curValue = this.props.value;
+
+    if (curValue === undefined && nextValue !== curValue) {
+      console.warn(`Formgroup ${this.props.id} switch between uncontrolled and controlled`);
+    }
+  }
+
   componentDidUpdate(prevProps) {
     const { value, validateAt, form } = this.props;
 

@@ -250,7 +250,7 @@ class AppScreenList extends React.Component {
 
         return ret;
       });
-      selectStr = $$actionQuery.get('selectedList').sort().join(', ');
+      selectStr = $$actionQuery.get('selectedList').sort().map(val => val + 1).join(', ');
       msgText = _('Are you sure to %s selected rows: %s', _(actionName), selectStr);
 
       if (needConfirm) {
@@ -301,7 +301,7 @@ class AppScreenList extends React.Component {
     const list = store.getIn(['data', 'list']);
     const listKey = option.actionKey || this.props.listKey;
     const $$actionItem = list.get(index);
-    const confirmText = _('Are you sure to %s selected: %s', _(actionName), index);
+    const confirmText = _('Are you sure to %s selected: %s', _(actionName), (index + 1));
     let selectedList = [];
     let $$actionQuery = Map({
       action: actionName,
@@ -506,9 +506,19 @@ class AppScreenList extends React.Component {
                 {
                   btnList.map(($$btnItem) => {
                     let hiddenResult = $$btnItem.get('isHidden');
+                    let onClickFunc = () => {
+                      this.onItemAction(
+                        $$btnItem.toJS(),
+                        index,
+                      );
+                    };
 
                     if (utils.isFunc(hiddenResult)) {
                       hiddenResult = hiddenResult($$item, index);
+                    }
+
+                    if (utils.isFunc($$btnItem.get('onClick'))) {
+                      onClickFunc = $$btnItem.get('onClick');
                     }
 
                     return hiddenResult ? null : (
@@ -517,12 +527,7 @@ class AppScreenList extends React.Component {
                         icon={$$btnItem.get('icon')}
                         text={$$btnItem.get('text')}
                         size="sm"
-                        onClick={() => {
-                          this.onItemAction(
-                            $$btnItem.toJS(),
-                            index,
-                          );
-                        }}
+                        onClick={onClickFunc}
                       />
                     );
                   })

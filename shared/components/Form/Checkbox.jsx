@@ -8,7 +8,7 @@ const propTypes = {
   theme: PropTypes.oneOf(['square']),
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   id: PropTypes.string,
-  options: PropTypes.object,
+  options: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   style: PropTypes.object,
   text: PropTypes.string,
 };
