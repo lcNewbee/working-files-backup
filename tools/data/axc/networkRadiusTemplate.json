@@ -1,12 +1,57 @@
-
-  {
+{
   "state": {
     "code": 2000,
     "msg": "ok"
   },
   "data": {
-    "list": [
-      null
-    ]
+    "list": [{
+      "id": 1,
+      "template_name": "test",
+      "authpri_ipaddr": "tes",
+      "authpri_port": "test",
+      "authpri_key": "test",
+      "authsecond_ipaddr": "test",
+      "authsecond_port": "test",
+      "authsecond_key": "test",
+      "acctpri_ipaddr": "test",
+      "acctpri_port": "test",
+      "acctpri_key": "test",
+      "acctsecond_ipaddr": "test",
+      "acctsecond_port": "test",
+      "acctsecond_key": "test",
+      "accton_enable": "test",
+      "accton_sendtimes": "tst",
+      "accton_sendinterval": "test",
+      "quiet_time": "test",
+      "resp_time": "test",
+      "retry_times": "tet",
+      "acct_interim_interval": "test",
+      "realretrytimes": "test",
+      "username_format": "test"
+    }, {
+      "id": 2,
+      "template_name": "test2",
+      "authpri_ipaddr": "tes",
+      "authpri_port": "test",
+      "authpri_key": "test",
+      "authsecond_ipaddr": "test",
+      "authsecond_port": "test",
+      "authsecond_key": "test",
+      "acctpri_ipaddr": "test",
+      "acctpri_port": "test",
+      "acctpri_key": "test",
+      "acctsecond_ipaddr": "test",
+      "acctsecond_port": "test",
+      "acctsecond_key": "test",
+      "accton_enable": "test",
+      "accton_sendtimes": "tst",
+      "accton_sendinterval": "test",
+      "quiet_time": "test",
+      "resp_time": "test",
+      "retry_times": "tet",
+      "acct_interim_interval": "test",
+      "realretrytimes": "test",
+      "username_format": "test"
+    }]
   }
 }

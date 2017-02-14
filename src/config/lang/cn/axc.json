@@ -164,6 +164,7 @@
   "Secondary Auth Password": "次认证密钥",
   "Primary Auth Port": "主认证端口",
   "Secondary Auth Port": "次认证端口",
+  "Radius Proxy": "Radius代理",
 
   "Accounting Server Settings": "计费服务器设置",
   "Primary Accounting Server":" 主计费服务器",
@@ -195,7 +196,6 @@
   "Accounting Service": "计费服务",
   "Local": "本地",
   "Remote": "远程",
-  "Clients": "用户数",
 
   "Portal Policy": "Portal策略",
   "Portal Server": "Portal服务器",
@@ -259,7 +259,7 @@
   "Group SSID List": "组内SSID列表",
   "Users": "用户",
   "Client List":"客户端列表",
-  "Cilents": "用户",
+  "Clients": "客户端",
   "Enable SSID": "开启SSID",
   "Hide SSID": "隐藏SSID",
   "Compulsory Auth": "强制认证",

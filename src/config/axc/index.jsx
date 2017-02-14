@@ -72,6 +72,8 @@ const sNetworkNat = require('../../screens/App/screens/MainAxc/screens/Network/s
 const sNetworkPort = require('../../screens/App/screens/MainAxc/screens/Network/screens/Port');
 const sRaduisTemplate =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/RadiusTemplate');
+const sRadiusProxy =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/RadiusProxy');
 const sNetworkAaa = require('../../screens/App/screens/MainAxc/screens/Network/screens/AAA');
 const sPortalServer =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalServer');
@@ -112,8 +114,9 @@ const sLiveMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/
 const sApPlanMap =
     require('../../screens/App/screens/MainAxc/screens/Map/screens/ApPlanMap');
 // const sRfMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/Rf');
-const sHeatMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/HeatMap');
-// const sClientsTrace = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace');
+// const sHeatMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/HeatMap');
+const sClientsTraceList = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace');
+const sClientsTraceSettings = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace/Settings');
 // ndpi
 const sDPIOverview =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/DPIOverview');
@@ -243,12 +246,28 @@ const routes = [
             text: _('Ports'),
             component: sNetworkPort.Screen,
           }, {
-            id: 'radiusTemplate',
+            id: 'networkRadius',
             icon: 'clone',
-            path: '/main/network/radius_template',
-            formUrl: 'goform/network/radius/template',
-            text: _('Radius Server'),
-            component: sRaduisTemplate.Screen,
+            path: '/main/network/radius',
+            text: _('Radius'),
+            noTree: true,
+            component: SharedComponents.TabContainer,
+            indexRoute: { onEnter: (nextState, replace) => replace('/main/network/radius/template') },
+            childRoutes: [
+              {
+                id: 'radiusTemplate',
+                path: '/main/network/radius/template',
+                formUrl: 'goform/network/radius/template',
+                text: _('Radius Server'),
+                component: sRaduisTemplate.Screen,
+              }, {
+                id: 'radiusProxy',
+                path: '/main/network/radius/proxy',
+                formUrl: 'goform/network/radius/proxy',
+                text: _('Radius Proxy'),
+                component: sRadiusProxy.Screen,
+              },
+            ],
           }, {
             id: 'networkAaa',
             icon: 'lock',
@@ -442,14 +461,33 @@ const routes = [
               //   text: _('Heat Map'),
               //   component: sHeatMap.Screen,
               // },
-              // {
-              //   id: 'cientsTrace',
-              //   path: '/main/group/map/cients_trace',
-              //   formUrl: '/goform/cientsTrace',
-              //   fetchUrl: '/goform/group/mapList',
-              //   text: _('Cients Trace'),
-              //   component: sClientsTrace.Screen,
-              // },
+              {
+                id: 'cientsTrace',
+                path: '/main/group/map/cients_trace',
+                formUrl: '/goform/cientsTrace',
+                fetchUrl: '/goform/group/mapList',
+                text: _('Clients'),
+                component: SharedComponents.TabContainer,
+                indexRoute: {
+                  onEnter: (nextState, replace) => replace('/main/group/map/cients_trace/list'),
+                },
+                childRoutes: [
+                  {
+                    id: 'wirelessWips',
+                    path: '/main/group/map/cients_trace/list',
+                    formUrl: '/goform/map/cients_trace',
+                    fetchUrl: '/goform/group/mapList',
+                    text: _('Cients Trace'),
+                    component: sClientsTraceList.Screen,
+                  }, {
+                    id: 'wirelessEndpointProtection',
+                    path: '/main/group/map/cients_trace/settings',
+                    formUrl: 'goform/group/map/cients_trace/settings',
+                    text: _('Settings'),
+                    component: sClientsTraceSettings.Screen,
+                  },
+                ],
+              },
             ],
           }, {
             id: 'wireless',
