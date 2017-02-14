@@ -8,6 +8,22 @@ import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
+function getWebTemplate() {
+  return utils.fetch('goform/portal/access/web')
+    .then(json => (
+      {
+        options: json.data.list.map(
+          item => ({
+            value: item.id,
+            label: item.name,
+          }),
+        ),
+      }
+    ),
+  );
+}
+
+
 const listOptions = fromJS([
   {
     id: 'name',
@@ -96,11 +112,27 @@ const propTypes = {
 };
 const defaultProps = {};
 export default class View extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      webTemplateOptions: fromJS([]),
+    };
+  }
+  componentWillMount() {
+    getWebTemplate()
+      .then((data) => {
+        this.setState({
+          webTemplateOptions: fromJS(data.options),
+        });
+      });
+  }
   render() {
+    const curListOptions = listOptions
+      .setIn([5, 'options'], this.state.webTemplateOptions);
     return (
       <AppScreen
         {...this.props}
-        listOptions={listOptions}
+        listOptions={curListOptions}
         noTitle
         actionable
         selectable

@@ -106,7 +106,15 @@ class DpiEth_Model extends CI_Model {
 	}
 
 	function get_eth_state(){
-		$arr = array(
+    $query=$this->db->select('attr_name,attr_value')
+                    ->from('ndpi_attr')
+                    ->join('ndpi_params','ndpi_params.attr_id = ndpi_attr.id')
+                    ->get()->result_array();
+    $interfaces  = array();
+    foreach ($query as $v){
+      $interfaces[$v['attr_name']]=$v['attr_value'];
+    }
+   	$arr = array(
 			array('ifname'=>'eth0','value'=>0),
 			array('ifname'=>'eth1','value'=>0),
 			array('ifname'=>'eth2','value'=>0),
@@ -115,19 +123,17 @@ class DpiEth_Model extends CI_Model {
 			array('ifname'=>'eth5','value'=>0),
 			array('ifname'=>'eth6','value'=>0)
 		);
-		$query = $this->db->query('select ndpi_attr.attr_name from ndpi_params left join ndpi_attr on ndpi_params.attr_id = ndpi_attr.id');
-		foreach($query->result_array() as $row){
-			switch($row['attr_name']){
-				case 'ndpi_ifname0' : $arr[0]['value'] = 1;break;
-				case 'ndpi_ifname1' : $arr[1]['value'] = 1;break;
-				case 'ndpi_ifname2' : $arr[2]['value'] = 1;break;
-				case 'ndpi_ifname3' : $arr[3]['value'] = 1;break;
-				case 'ndpi_ifname4' : $arr[4]['value'] = 1;break;
-				case 'ndpi_ifname5' : $arr[5]['value'] = 1;break;
-			}
-		}
+    foreach ($interfaces as $k=>$v ){
+          for($i = 0; $i < 6; $i++){
+              if($arr[$i]['ifname']==$interfaces[$k]){
+                   $arr[$i]['value'] = 1;
+              }
+          }
+    }
 		return $arr;
 	}
+
+
 	function set_eth($data){
         $result = null;
 		$state = (string)element('active_eth',$data);

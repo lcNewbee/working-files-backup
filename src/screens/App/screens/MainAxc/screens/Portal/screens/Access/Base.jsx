@@ -22,14 +22,17 @@ const settingsOptions = fromJS([
     id: 'bas_ip',
     label: _('Bas IP'),
     fieldset: 'base_setting',
+    className: 'cols col-6',
     fieldsetOption: {
       legend: _('Base Setting'),
     },
-    type: 'text',
     required: true,
-    validator: validator({
-      rules: 'ip',
-    }),
+    formProps: {
+      type: 'text',
+      validator: validator({
+        rules: 'ip',
+      }),
+    },
   },
   {
     id: 'bas_port',
@@ -91,6 +94,7 @@ const settingsOptions = fromJS([
       }, {
         value: '2',
         label: _('V2'),
+        disabled: true,
       },
     ],
   },
@@ -105,6 +109,7 @@ const settingsOptions = fromJS([
       {
         value: '0',
         label: _('PAP'),
+        disabled: true,
       }, {
         value: '1',
         label: _('CHAP'),
@@ -132,73 +137,74 @@ const settingsOptions = fromJS([
         label: _('Default Web'),
       },
     ],
-  }, {
-    id: 'isPortalCheck',
-    required: true,
-    fieldset: 'base_setting',
-    className: 'cols col-6',
-    label: _('Portal Acc'),
-    noForm: true,
-    type: 'text',
-  }, {
-    id: 'isOut',
-    required: true,
-    fieldset: 'base_setting',
-    className: 'cols col-6',
-    label: _('Enviroment Deployment'),
-    type: 'select',
-    options: [
-      {
-        value: '0',
-        label: _('Inside Network Deployment'),
-      }, {
-        value: '1',
-        label: _('Outside Network Deployment'),
-      },
-    ],
-  }, {
-    id: 'isComputer',
-    required: true,
-    fieldset: 'base_setting',
-    className: 'cols col-6',
-    label: _('Computer Auth'),
-    type: 'select',
-    options: [
-      {
-        value: '0',
-        label: _('Allowed'),
-      }, {
-        value: '1',
-        label: _('Forbidden'),
-      },
-    ],
-    defaultValue: '0',
-  }, {
-    id: 'lateAuth',
-    required: true,
-    fieldset: 'base_setting',
-    className: 'cols col-6',
-    label: _('Late Auth'),
-    type: 'select',
-    options: [
-      {
-        value: '0',
-        label: _('Closed'),
-      }, {
-        value: '1',
-        label: _('Open'),
-      },
-    ],
-    defaultValue: '0',
-  }, {
-    id: 'lateAuthTime',
-    required: true,
-    fieldset: 'base_setting',
-    className: 'cols col-6',
-    label: _('Late Authtime'),
-    type: 'text',
-    help: _('second'),
-  }, {
+  },
+  // {
+  //   id: 'isPortalCheck',
+  //   required: true,
+  //   fieldset: 'base_setting',
+  //   className: 'cols col-6',
+  //   label: _('Portal Acc'),
+  //   type: 'text',
+  // }, {
+  //   id: 'isOut',
+  //   required: true,
+  //   fieldset: 'base_setting',
+  //   className: 'cols col-6',
+  //   label: _('Enviroment Deployment'),
+  //   type: 'select',
+  //   options: [
+  //     {
+  //       value: '0',
+  //       label: _('Inside Network Deployment'),
+  //     }, {
+  //       value: '1',
+  //       label: _('Outside Network Deployment'),
+  //     },
+  //   ],
+  // }, {
+  //   id: 'isComputer',
+  //   required: true,
+  //   fieldset: 'base_setting',
+  //   className: 'cols col-6',
+  //   label: _('Computer Auth'),
+  //   type: 'select',
+  //   options: [
+  //     {
+  //       value: '0',
+  //       label: _('Allowed'),
+  //     }, {
+  //       value: '1',
+  //       label: _('Forbidden'),
+  //     },
+  //   ],
+  //   defaultValue: '0',
+  // }, {
+  //   id: 'lateAuth',
+  //   required: true,
+  //   fieldset: 'base_setting',
+  //   className: 'cols col-6',
+  //   label: _('Late Auth'),
+  //   type: 'select',
+  //   options: [
+  //     {
+  //       value: '0',
+  //       label: _('Closed'),
+  //     }, {
+  //       value: '1',
+  //       label: _('Open'),
+  //     },
+  //   ],
+  //   defaultValue: '0',
+  // }, {
+  //   id: 'lateAuthTime',
+  //   required: true,
+  //   fieldset: 'base_setting',
+  //   className: 'cols col-6',
+  //   label: _('Late Authtime'),
+  //   type: 'text',
+  //   help: _('second'),
+  // },
+  {
     id: 'list',
     type: 'list',
     list: [
@@ -242,22 +248,18 @@ const settingsOptions = fromJS([
         id: 'username',
         label: _('Public User Name'),
         type: 'text',
-        display: 'block',
       }, {
         id: 'password',
         label: _('Public Password'),
         type: 'password',
-        display: 'block',
       }, {
         id: 'sessiontime',
         label: _('Sesssion Time'),
         type: 'text',
-        display: 'block',
       }, {
         id: 'url',
         label: _('URL After Authentication'),
         type: 'text',
-        display: 'block',
       },
     ],
   },

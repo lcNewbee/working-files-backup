@@ -14,7 +14,7 @@ function getWebTemplate() {
       {
         options: json.data.list.map(
           item => ({
-            value: item.name,
+            value: item.id,
             label: item.name,
           }),
         ),
@@ -129,14 +129,24 @@ export default class View extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      p: fromJS([]),
+      webTemplateOptions: fromJS([]),
     };
   }
+  componentWillMount() {
+    getWebTemplate()
+      .then((data) => {
+        this.setState({
+          webTemplateOptions: fromJS(data.options),
+        });
+      });
+  }
   render() {
+    const curListOptions = listOptions
+      .setIn([5, 'options'], this.state.webTemplateOptions);
     return (
       <AppScreen
         {...this.props}
-        listOptions={listOptions}
+        listOptions={curListOptions}
         noTitle
         actionable
         selectable

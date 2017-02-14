@@ -13,6 +13,7 @@ class DpiMac_Model extends CI_Model {
 		);
 		$mac_result = ndpi_send_mac_to_php_db(json_encode($cgiary));
     $mac_result_array = json_decode($mac_result,true);
+
     $cgiprm = array(
         'mac'=>(string)element('mac',$data),
         "set_interval_times" =>(string)element('set_interval_times',$data,0),
@@ -68,6 +69,6 @@ class DpiMac_Model extends CI_Model {
          'downFlowList'=>$downFlowList
       )
 		);
-    return json_encode( $result );
+    return json_encode($result);
 	}
 }

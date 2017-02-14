@@ -22,6 +22,9 @@ const settingsOptions = fromJS([
     type: 'text',
     legend: _('URL Parameter'),
     required: true,
+    validator: validator({
+      rules: 'utf8Len:[1,255]',
+    }),
   },
   {
     id: 'userip',
@@ -30,7 +33,7 @@ const settingsOptions = fromJS([
     type: 'text',
     required: true,
     validator: validator({
-      rules: 'ip',
+      rules: 'utf8Len:[1,255]',
     }),
   },
   {
@@ -40,7 +43,7 @@ const settingsOptions = fromJS([
     type: 'text',
     required: true,
     validator: validator({
-      rules: 'mac',
+      rules: 'utf8Len:[1,255]',
     }),
   },
   {
@@ -49,6 +52,9 @@ const settingsOptions = fromJS([
     fieldset: 'url_setting',
     label: _('URL'),
     type: 'text',
+    validator: validator({
+      rules: 'utf8Len:[1,255]',
+    }),
   },
   {
     id: 'basip',
@@ -57,7 +63,7 @@ const settingsOptions = fromJS([
     label: _('Bas IP'),
     type: 'text',
     validator: validator({
-      rules: 'ip',
+      rules: 'utf8Len:[1,255]',
     }),
   },
   {
@@ -66,6 +72,9 @@ const settingsOptions = fromJS([
     fieldset: 'url_setting',
     label: _('SSID'),
     type: 'text',
+    validator: validator({
+      rules: 'utf8Len:[1,255]',
+    }),
   },
   {
     id: 'apmac',
@@ -74,7 +83,17 @@ const settingsOptions = fromJS([
     label: _('AP Mac'),
     type: 'text',
     validator: validator({
-      rules: 'mac',
+      rules: 'utf8Len:[1,255]',
+    }),
+  },
+  {
+    id: 'apip',
+    required: true,
+    fieldset: 'url_setting',
+    label: _('AP IP'),
+    type: 'text',
+    validator: validator({
+      rules: 'utf8Len:[1,255]',
     }),
   },
 ]).groupBy(item => item.get('fieldset'))

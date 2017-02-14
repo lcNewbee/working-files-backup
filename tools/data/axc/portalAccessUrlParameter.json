@@ -13,6 +13,7 @@
       "basip": "basip",
       "ssid": "ssid",
       "apmac": "00:11:22:33:22:33",
+      "apip":"apip",
       "authTypes": [{
         "enable": "0",
         "type": "0",
