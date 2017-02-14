@@ -454,16 +454,21 @@ class AppScreenList extends React.Component {
 
       if (actionsOption) {
         btnList = actionsOption.get('actions');
-        btnsNum += btnList.size;
+        if (btnList && btnList.size) {
+          btnsNum += btnList.size;
+        }
+        this.listTableOptions = tableOptions;
+      } else {
+        this.listTableOptions = tableOptions.push(Map({
+          id: '__actions__',
+          text: _('Actions'),
+        }));
       }
 
       // 有操作按钮时，添加操作列
       if (btnsNum > 0) {
-        this.listTableOptions = tableOptions.push(Map({
-          id: '__actions__',
-          text: _('Actions'),
-          width: btnsNum * 90,
-          transform: (val, $$item, index) => {
+        this.listTableOptions = this.listTableOptions.setIn([-1, 'transform'],
+          (val, $$item, index) => {
             let editableResult = editable;
             let deleteableResult = deleteable;
 
@@ -501,10 +506,10 @@ class AppScreenList extends React.Component {
                         }, index);
                       }}
                     />
-                  ) : null
-                }
+                    ) : null
+                  }
                 {
-                  btnList.map(($$btnItem) => {
+                  btnList ? btnList.map(($$btnItem) => {
                     let hiddenResult = $$btnItem.get('isHidden');
                     let onClickFunc = () => {
                       this.onItemAction(
@@ -530,12 +535,15 @@ class AppScreenList extends React.Component {
                         onClick={onClickFunc}
                       />
                     );
-                  })
+                  }) : null
+                }
+                {
+                  actionsOption.get('transform') ? actionsOption.get('transform')(val, $$item, index) : null
                 }
               </div>
             );
           },
-        }));
+        ).setIn([-1, 'width'], btnsNum * 90);
       }
     }
 
