@@ -4,3 +4,10 @@ export function changeCurrRadioConfig(data) {
     data,
   };
 }
+
+export function changeShowKickConfirm(data) {
+  return {
+    type: 'CHANGE_SHOW_KICK_CONFIRM',
+    data,
+  };
+}

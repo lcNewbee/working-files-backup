@@ -885,7 +885,9 @@ export default class Basic extends React.Component {
               options={this.props.productInfo.get('radioSelectOptions')}
               minWidth="100px"
               onChange={(data) => {
+                const country = this.props.store.getIn(['curData', 'radioList', data.value, 'countryCode']);
                 this.onChangeRadio(data);
+                this.props.changeCountryCode(country);
                 this.getChannelListAndPowerRange(data.value);
               }}
               style={{

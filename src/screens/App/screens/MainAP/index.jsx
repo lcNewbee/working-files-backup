@@ -22,6 +22,19 @@ const propTypes = {
   selfState: PropTypes.instanceOf(Map),
 };
 
+function makeRadioSelectOptions(list) {
+  const len = list.length;
+  let radioSelectOptions = fromJS([]);
+  for (let i = 0; i < len; i++) {
+    const item = fromJS({
+      label: list[i].name,
+      value: list[i].radioId,
+    });
+    radioSelectOptions = radioSelectOptions.push(item);
+  }
+  return radioSelectOptions;
+}
+
 export default class MainAP extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -30,7 +43,6 @@ export default class MainAP extends React.PureComponent {
     this.onRefresh = this.onRefresh.bind(this);
     this.onLogout = this.onLogout.bind(this);
     this.showUserPopOver = this.showUserPopOver.bind(this);
-    this.makeRadioSelectOptions = this.makeRadioSelectOptions.bind(this);
     document.onkeydown = function (e) {
       if (e.keyCode === 116) {
         this.onRefresh(e);
@@ -42,7 +54,7 @@ export default class MainAP extends React.PureComponent {
     this.props.fetch('goform/get_product_info').then((json) => {
       if (json.state && json.state.code === 2000) {
         this.props.setDeviceRadioList(fromJS(json.data.deviceRadioList));
-        const options = this.makeRadioSelectOptions(json.data.deviceRadioList);
+        const options = makeRadioSelectOptions(json.data.deviceRadioList);
         this.props.setRadioSelectOptions(options);
       }
     }).then(() =>
@@ -62,23 +74,6 @@ export default class MainAP extends React.PureComponent {
     });
   }
 
-  // componentDidMount() {
-  //   this.props.fetch('goform/get_firstLogin_info').then((json) => {
-  //     if (json.state && json.state.code === 2000) {
-  //       if (json.data.ifFirstLogin === '1') {
-  //         window.location.href = '#/wizard';
-  //       } else if (json.data.enable === '1') {
-  //         const menus = this.props.route.childRoutes.filter(val => val.id !== 'wirelessconfig' && val.id !== 'quicksetup');
-  //         this.props.changeMenus(fromJS(menus));
-  //       } else if (json.data.enable === '0') {
-  //         const menus = this.props.route.childRoutes;
-  //         this.props.changeMenus(fromJS(menus));
-  //       }
-  //     }
-  //   });
-  // }
-
-
   onRefresh(e) {
     e.preventDefault();
     this.props.refreshAll();
@@ -94,19 +89,6 @@ export default class MainAP extends React.PureComponent {
     this.setState({
       isShow: !this.state.isShow,
     });
-  }
-
-  makeRadioSelectOptions(list) {
-    const len = list.length;
-    let radioSelectOptions = fromJS([]);
-    for (let i = 0; i < len; i++) {
-      const item = fromJS({
-        label: list[i].name,
-        value: list[i].radioId,
-      });
-      radioSelectOptions = radioSelectOptions.push(item);
-    }
-    return radioSelectOptions;
   }
 
   render() {

@@ -5,6 +5,7 @@ const defaultState = fromJS({
     radioId: '0',
     radioType: '2.4G',
   },
+  showKickConfirm: '0',
 });
 
 

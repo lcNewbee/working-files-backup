@@ -165,15 +165,24 @@ export default class SignUp extends React.Component {
   onOkButtonClick() {
     const { currModeData, nextModeData } = this.props.selfState.toJS();
     const showThinModeConfigModal = this.props.selfState.get('showThinModeConfigModal');
-    if (nextModeData.enable === '1' && !showThinModeConfigModal) {
-      this.props.changeShowThinModeConfigModal(true);
-    } else if (currModeData.enable === nextModeData.enable) {
-      window.location.href = '#/main/status';
-    } else if (currModeData.enable !== nextModeData.enable
-      || currModeData.discoveryType !== nextModeData.discoveryType
-      || currModeData.acIp !== nextModeData.acIp) {
-      this.comfirmModeChange();
-    }
+    this.props.validateAll('acipinput').then((msg1) => {
+      if (msg1.isEmpty()) {
+        if (nextModeData.enable === '1' && !showThinModeConfigModal) {
+          this.props.changeShowThinModeConfigModal(true);
+        } else if (currModeData.enable === nextModeData.enable) {
+          if (currModeData.enable === '0' ||
+              (currModeData.enable === '1' && fromJS(currModeData).equals(fromJS(nextModeData)))) {
+            window.location.href = '#/main/status';
+          } else {
+            this.comfirmModeChange();
+            this.props.changeShowThinModeConfigModal(false);
+          }
+        } else {
+          this.comfirmModeChange();
+          this.props.changeShowThinModeConfigModal(false);
+        }
+      }
+    });
   }
 
   onThinModeImgClick() {
@@ -213,6 +222,7 @@ export default class SignUp extends React.Component {
     const selectedWrapStyle = {
       backgroundColor: '#005bcc',
     };
+    // console.log(this.props.validateOption.validateIp);
     return (
       <div
         style={{
@@ -244,17 +254,17 @@ export default class SignUp extends React.Component {
                 fontSize: '13px',
               }}
             >
-              <div style={{marginBottom: '5px'}}>
+              <div style={{ marginBottom: '5px' }}>
                 {
                   _('Notice: You see this page only when you first login. You can select the device operation mode(Fat/Thin) as you need.')
                 }
               </div>
-              <div style={{marginBottom: '5px'}}>
+              <div style={{ marginBottom: '5px' }}>
                 {
                   _('Fat AP: The wireless access point handles all wireless clients independently, and each AP has to be configured individually.')
                 }
               </div>
-              <div style={{marginBottom: '5px'}}>
+              <div style={{ marginBottom: '5px' }}>
                 {
                   _('Thin AP:  The wireless access point managed by the controller. All configurations are done on the controller.')
                 }
@@ -360,10 +370,6 @@ export default class SignUp extends React.Component {
             </div>
           </div>
           <div className="t-wizard__footer">
-            {/*<Button
-              onClick={() => this.onSkipButtonClick()}
-              text={_('Skip')}
-            />*/}
             <Button
               theme={btnInfoRole}
               onClick={this.onOkButtonClick}
@@ -377,7 +383,6 @@ export default class SignUp extends React.Component {
           draggable
           onOk={() => {
             this.onOkButtonClick();
-            this.props.changeShowThinModeConfigModal(false);
           }}
           onClose={() => {
             const data = this.props.selfState.get('currModeData').toJS();
@@ -403,6 +408,7 @@ export default class SignUp extends React.Component {
               <FormGroup
                 type="text"
                 label={_('AC IP')}
+                form="acipinput"
                 value={nextModeData.acIp}
                 onChange={(data) => {
                   this.props.changeNextModeData(fromJS({ acIp: data.value }));

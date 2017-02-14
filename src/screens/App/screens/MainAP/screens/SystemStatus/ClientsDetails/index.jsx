@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import Table from 'shared/components/Table';
 import Button from 'shared/components/Button/Button';
 import Icon from 'shared/components/Icon';
-import FormGroup from 'shared/components/Form/FormGroup';
 import { fromJS, Map } from 'immutable';
 import utils from 'shared/utils';
 import * as sharedActions from 'shared/actions/settings';
@@ -278,24 +277,31 @@ export default class ClientsDetails extends React.Component {
               <Icon
                 name="user-times"
                 size="lg"
+                title={_('add to blacklist')}
                 style={{
                   cursor: 'pointer',
                 }}
                 onClick={() => {
-                  const query = {
-                    vapId: item.get('vapId'),
-                    radioId: that.props.selfState.getIn(['currRadioConfig', 'radioId']),
-                    mac: item.get('mac'),
-                  };
-                  that.props.save('goform/kick_user_offline', query).then((json) => {
-                    if (json.state && json.state.code === 2000) {
-                      that.updateBlockStatus(item);
-                      clearInterval(intervalAction);
-                      clearTimeout(timeoutAction);
-                      timeoutAction = setTimeout(() => { // 停止10秒再刷新，留足时间让用户下线
-                        intervalAction = setInterval(that.refreshData, 10000);
-                      }, 10000);
-                    }
+                  that.props.createModal({
+                    role: 'confirm',
+                    text: `${_('Add client ')}${item.get('mac')}${_(' to blacklist ?')}`,
+                    apply: () => {
+                      const query = {
+                        vapId: item.get('vapId'),
+                        radioId: that.props.selfState.getIn(['currRadioConfig', 'radioId']),
+                        mac: item.get('mac'),
+                      };
+                      that.props.save('goform/kick_user_offline', query).then((json) => {
+                        if (json.state && json.state.code === 2000) {
+                          that.updateBlockStatus(item);
+                          clearInterval(intervalAction);
+                          clearTimeout(timeoutAction);
+                          timeoutAction = setTimeout(() => { // 停止10秒再刷新，留足时间让用户下线
+                            intervalAction = setInterval(that.refreshData, 10000);
+                          }, 10000);
+                        }
+                      });
+                    },
                   });
                 }}
               />
@@ -377,3 +383,4 @@ export const Screen = connect(
 )(ClientsDetails);
 
 export const clientsdetails = reducer;
+

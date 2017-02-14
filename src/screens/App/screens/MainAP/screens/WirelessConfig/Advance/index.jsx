@@ -400,9 +400,10 @@ export default class Advance extends React.Component {
                   marginTop: '6px',
                   marginLeft: '7px',
                   display: 'inline-block',
+                  color: '#999',
                 }}
               >
-                {`${_('Range: ')}-98 ~ -40dbm`}
+                {`${_('Range: ')}-98 ~ -40 dbm`}
               </span>
             </div>
           ) : null

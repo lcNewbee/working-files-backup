@@ -186,7 +186,7 @@ function getFlowOption(serverData, timeType) {
     maxVal = maxVal1;
   }
 
-  utilObj = getFlowUnit(maxVal / 8); // byte转化为Byte
+  utilObj = getFlowUnit(maxVal);
 
   $$upDataList = $$upDataList.toJS();
   $$downDataList = $$downDataList.toJS();
@@ -216,10 +216,10 @@ function getFlowOption(serverData, timeType) {
   option.yAxis[0].name = utilObj.label;
 
   option.series[0].data = $$upDataList.map(
-    val => parseFloat(val / (utilObj.val * 8)).toFixed(3),
+    val => parseFloat(val / utilObj.val).toFixed(3),
   );
   option.series[1].data = $$downDataList.map(
-    val => parseFloat(val / (utilObj.val * 8)).toFixed(3),
+    val => parseFloat(val / utilObj.val).toFixed(3),
   );
 
   return option;
@@ -242,7 +242,7 @@ const listOptions = fromJS([
       if (val === '' || val === undefined) {
         return '--';
       }
-      return flowRateFilter.transform(val / (1024 * 8));
+      return flowRateFilter.transform(val);
     },
   }, {
     id: 'downbytes',
@@ -251,7 +251,7 @@ const listOptions = fromJS([
       if (val === '' || val === undefined) {
         return '--';
       }
-      return flowRateFilter.transform(val / (1024 * 8));
+      return flowRateFilter.transform(val);
     },
   }, {
     id: 'uppackets',
