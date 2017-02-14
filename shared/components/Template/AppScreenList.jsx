@@ -439,6 +439,8 @@ class AppScreenList extends React.Component {
     let actionsOption = null;
     let btnsNum = 0;
     let btnList = List([]);
+    let transformFunc = null;
+    let hasTransformFunc = false;
 
     this.listTableOptions = tableOptions;
 
@@ -453,20 +455,25 @@ class AppScreenList extends React.Component {
       }
 
       if (actionsOption) {
+        transformFunc = actionsOption.get('transform');
+        hasTransformFunc = utils.isFunc(transformFunc);
+
         btnList = actionsOption.get('actions');
+
         if (btnList && btnList.size) {
           btnsNum += btnList.size;
         }
         this.listTableOptions = tableOptions;
-      } else {
-        this.listTableOptions = tableOptions.push(Map({
-          id: '__actions__',
-          text: _('Actions'),
-        }));
       }
 
       // 有操作按钮时，添加操作列
       if (btnsNum > 0) {
+        if (!actionsOption) {
+          this.listTableOptions = tableOptions.push(Map({
+            id: '__actions__',
+            text: _('Actions'),
+          }));
+        }
         this.listTableOptions = this.listTableOptions.setIn([-1, 'transform'],
           (val, $$item, index) => {
             let editableResult = editable;
@@ -475,8 +482,13 @@ class AppScreenList extends React.Component {
             if (utils.isFunc(editable)) {
               editableResult = editable($$item, index);
             }
+
             if (utils.isFunc(deleteable)) {
               deleteableResult = deleteable($$item, index);
+            }
+
+            if (hasTransformFunc) {
+              btnsNum = 'auto';
             }
 
             return (
@@ -538,12 +550,16 @@ class AppScreenList extends React.Component {
                   }) : null
                 }
                 {
-                  actionsOption.get('transform') ? actionsOption.get('transform')(val, $$item, index) : null
+                  hasTransformFunc ? transformFunc(val, $$item, index) : null
                 }
               </div>
             );
           },
-        ).setIn([-1, 'width'], btnsNum * 90);
+        );
+      }
+
+      if (btnsNum !== 'auto' && btnsNum > 0) {
+        this.listTableOptions = this.listTableOptions.setIn([-1, 'width'], btnsNum * 90);
       }
     }
 
@@ -578,6 +594,7 @@ class AppScreenList extends React.Component {
       );
     }
   }
+
   initModalFormOptions(props) {
     const { editFormOptions, editFormOption, store } = props;
     let myEditFormOptions = editFormOptions;
