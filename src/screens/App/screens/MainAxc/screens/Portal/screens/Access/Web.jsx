@@ -7,6 +7,8 @@ import validator from 'shared/validator';
 import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
+import './web.scss';
+
 
 const listOptions = fromJS([
   {
@@ -72,12 +74,12 @@ const listOptions = fromJS([
     text: _('Actions'),
     transform(val, $$item) {
       return (
-        <div>
+        <span>
           <a className="tablelink" href="/1/auth.jsp" target="_blank">认证页</a>
           <a className="tablelink" href="/1/ok.jsp"  target="_blank">成功页</a>
           <a className="tablelink" href="/1/out.jsp" target="_blank">退出页</a>
           <a className="tablelink" href="/1/wx.jsp" target="_blank">微信页</a>
-        </div>
+        </span>
       );
     },
   },
