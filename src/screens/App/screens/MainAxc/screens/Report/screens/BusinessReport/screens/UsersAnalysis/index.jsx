@@ -49,7 +49,7 @@ export default class View extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.binds('getCpuOption');
+    utils.binds(this, ['getCpuOption']);
   }
   render() {
     const { list } = this.props;

@@ -330,7 +330,7 @@
 
   "RF Plan": "RF规划",
   "Heat Map": "热力图",
-  "Cients Trace": "终端行动轨迹",
+  "Cients Trace": "终端轨迹",
 
   "Blacklist": "黑名单列表",
   "Need enable ACL": "请先开启ACL功能",
@@ -598,5 +598,9 @@
   "Download Packets": "下载数据包数",
   "Throughput": "流量",
   "Upload": "上传",
-  "AAA Strategy":"AAA 战略"
+  "AAA Strategy":"AAA 战略",
+
+  "Departure Time": "离开时间",
+  "Clients Analysis": "客流分析",
+  "Clients Flow State": "客流状态"
 }

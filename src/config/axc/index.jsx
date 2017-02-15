@@ -463,10 +463,8 @@ const routes = [
               // },
               {
                 id: 'cientsTrace',
-                path: '/main/group/map/cients_trace',
-                formUrl: '/goform/cientsTrace',
-                fetchUrl: '/goform/group/mapList',
-                text: _('Clients'),
+                path: '/main/group/map/clients_trace',
+                text: _('Clients Analysis'),
                 component: SharedComponents.TabContainer,
                 indexRoute: {
                   onEnter: (nextState, replace) => replace('/main/group/map/cients_trace/list'),
@@ -474,15 +472,14 @@ const routes = [
                 childRoutes: [
                   {
                     id: 'wirelessWips',
-                    path: '/main/group/map/cients_trace/list',
-                    formUrl: '/goform/map/cients_trace',
-                    fetchUrl: '/goform/group/mapList',
-                    text: _('Cients Trace'),
+                    path: '/main/group/map/clients_trace/list',
+                    formUrl: '/goform/group/map/clients_trace',
+                    text: _('Clients Flow State'),
                     component: sClientsTraceList.Screen,
                   }, {
                     id: 'wirelessEndpointProtection',
-                    path: '/main/group/map/cients_trace/settings',
-                    formUrl: 'goform/group/map/cients_trace/settings',
+                    path: '/main/group/map/clients_trace/settings',
+                    formUrl: 'goform/group/map/clients_trace/settings',
                     text: _('Settings'),
                     component: sClientsTraceSettings.Screen,
                   },
