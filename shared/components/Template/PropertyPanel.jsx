@@ -16,6 +16,7 @@ const propTypes = {
   fetchPropertyPanelData: PropTypes.func,
   changePropertyPanelRadioIndex: PropTypes.func,
   reportValidError: PropTypes.func,
+  resetVaildateMsg: PropTypes.func,
   save: PropTypes.func,
   validateAll: PropTypes.func,
   groupid: PropTypes.any,
@@ -101,7 +102,7 @@ class PropertyPanel extends React.Component {
   }
 
   render() {
-    const { isShow, data, app, reportValidError, groupid } = this.props;
+    const { isShow, data, app, reportValidError, resetVaildateMsg, groupid } = this.props;
     const { activeIndex } = data.toJS();
     let propertyPanelClassName = 'o-property-panel';
     let actionAable = this.actionable;
@@ -160,6 +161,7 @@ class PropertyPanel extends React.Component {
                   key={`properties_${index}`}
                   app={this.props.app}
                   item={item}
+                  deviceIndex={index}
                   isCollapsed={index !== activeIndex}
 
                   // Actions Props
@@ -188,6 +190,7 @@ class PropertyPanel extends React.Component {
                   // Validate Props
                   invalidMsg={app.get('invalid')}
                   validateAt={app.get('validateAt')}
+                  resetVaildateMsg={resetVaildateMsg}
                   onValidError={reportValidError}
                 />
               ))

@@ -104,6 +104,7 @@ class FormGroup extends React.Component {
         if (prevProps.value !== value) {
           this.checkClear();
         } else if (prevProps.validateAt !== validateAt) {
+
           if (this.myRef.offsetWidth > 0 &&
               isValidateMyForm(validateAt, form)) {
             this.check();

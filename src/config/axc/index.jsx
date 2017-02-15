@@ -467,7 +467,7 @@ const routes = [
                 text: _('Clients Analysis'),
                 component: SharedComponents.TabContainer,
                 indexRoute: {
-                  onEnter: (nextState, replace) => replace('/main/group/map/cients_trace/list'),
+                  onEnter: (nextState, replace) => replace('/main/group/map/clients_trace/list'),
                 },
                 childRoutes: [
                   {

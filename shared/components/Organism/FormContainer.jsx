@@ -162,7 +162,7 @@ class FormContainer extends React.Component {
   }
   renderFormGroup($$option, valueQuery) {
     const {
-      invalidMsg, validateAt, onValidError, actionQuery, id, actionable,
+      invalidMsg, validateAt, onValidError, actionQuery, id, actionable, formKey,
     } = this.props;
     const myProps = $$option.toJS();
     const index = $$option.get('__index__');
@@ -190,6 +190,7 @@ class FormContainer extends React.Component {
       }
 
       myProps.name = formGroupId;
+
       myProps.key = `${formGroupId}${index}`;
     }
 

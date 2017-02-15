@@ -1,23 +1,24 @@
+// npm
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
+
+// custom
 import utils from 'shared/utils';
 import AppScreen from 'shared/components/Template/AppScreen';
-import validator from 'shared/validator';
-// custom
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 import * as propertiesActions from 'shared/actions/properties';
 
 const formOptions = fromJS([
   {
-    id: 'enable',
+    id: 'radsec_enable',
     label: _('Enable'),
     type: 'checkbox',
     required: true,
   }, {
-    id: 'nasip',
+    id: 'radius_template',
     label: _('Radius Server'),
     type: 'select',
     required: true,

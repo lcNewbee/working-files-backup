@@ -7,12 +7,47 @@ import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 
 const flowRateFilter = utils.filter('flowRate:["KB"]');
+const checkboxOptions = [
+  {
+    value: '1',
+    label: _('On'),
+    render() {
+      return (
+        <span
+          style={{
+            color: 'green',
+          }}
+        >
+          {_('On')}
+        </span>
+      );
+    },
+  }, {
+    value: '0',
+    label: _('Off'),
+    render() {
+      return (
+        <span
+          style={{
+            color: 'red',
+          }}
+        >
+          {_('Off')}
+        </span>
+      );
+    },
+  },
+];
 const ssidListOptions = fromJS([
   {
     id: 'ssid',
     text: 'SSID',
     width: '180',
 
+  }, {
+    id: 'enabled',
+    text: _('Status'),
+    options: checkboxOptions,
   }, {
     id: 'onlineNumber',
     width: '140',
@@ -32,17 +67,44 @@ const ssidListOptions = fromJS([
     },
   },
 ]);
+const apNumberIndex = ssidListOptions.findIndex(
+  $$item => $$item.get('id') === 'apNumber',
+);
 
 const propTypes = {};
 const defaultProps = {};
+export default class View extends React.Component {
+  constructor(props) {
+    super(props);
+    utils.binds(this, [
+      'initListOptions',
+    ]);
+    this.initListOptions(props);
+  }
 
-export default function View(props) {
-  return (
-    <AppScreen
-      {...props}
-      listOptions={ssidListOptions}
-    />
-  );
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.groupid !== this.props.groupid) {
+      this.initListOptions(nextProps);
+    }
+  }
+
+  initListOptions(props) {
+    // 所有组
+    if (props.groupid === -100) {
+      this.listOptions = ssidListOptions;
+    } else {
+      this.listOptions = ssidListOptions.delete(apNumberIndex);
+    }
+  }
+
+  render() {
+    return (
+      <AppScreen
+        {...this.props}
+        listOptions={this.listOptions}
+      />
+    );
+  }
 }
 
 View.propTypes = propTypes;

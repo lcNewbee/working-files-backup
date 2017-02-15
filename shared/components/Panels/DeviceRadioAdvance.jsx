@@ -12,6 +12,7 @@ const propTypes = {
   onChangeItem: PropTypes.func,
   onSave: PropTypes.func.isRequired,
   actionable: PropTypes.bool,
+  deviceIndex: PropTypes.number,
 
   store: PropTypes.instanceOf(Map),
   app: PropTypes.instanceOf(Map),
@@ -39,7 +40,20 @@ class DeviceSystem extends React.Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.getCurData = this.getCurData.bind(this);
     this.onChangeRadio = this.onChangeRadio.bind(this);
+    this.initFormOptions = this.initFormOptions.bind(this);
+
+    this.initFormOptions(props);
   }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.store.get('data') !== this.props.store.get('data')) {
+      this.initFormOptions(nextProps);
+    }
+  }
+  componentWillUnmount() {
+    this.props.resetVaildateMsg();
+  }
+
+
   onChangeRadio(data) {
     const myData = data;
     const txchain = data.txchain;
@@ -55,10 +69,10 @@ class DeviceSystem extends React.Component {
   getCurData(name) {
     return this.props.store.getIn(['data', name]);
   }
-  render() {
-    const { app, store, actionable, ...restProps } = this.props;
-    const formData = store.getIn(['data']);
-    const myFormOptions = formOptions.map(
+  initFormOptions(props) {
+    const formData = props.store.getIn(['data']);
+
+    this.myFormOptions = formOptions.map(
       ($$item) => {
         const maxRateset = formData.get('ratesupport') || '';
         const spatialstreams = formData.get('spatialstreams') || 3;
@@ -104,14 +118,21 @@ class DeviceSystem extends React.Component {
         return $$ret;
       },
     );
+  }
+
+  render() {
+    const { app, store, deviceIndex, actionable, ...restProps } = this.props;
+    const formData = store.getIn(['data']);
+    const formId = `radioAdv${deviceIndex}`;
 
     return (
       <FormContainer
         {...restProps}
         method="POST"
         data={formData}
+        id={formId}
         className="o-form o-form--compassed"
-        options={myFormOptions}
+        options={this.myFormOptions}
         isSaving={app.get('saving')}
         header={[
           <FormGroup
@@ -131,7 +152,7 @@ class DeviceSystem extends React.Component {
         actionable={actionable}
         hasSaveButton={actionable}
         onSave={
-          () => this.props.onSave('radioAdvance')
+          () => this.props.onSave(formId)
         }
         onChangeData={this.onChangeRadio}
       />

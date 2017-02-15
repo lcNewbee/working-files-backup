@@ -96,81 +96,85 @@ function DevicesProperties(props) {
           />
         </div>
       </div>
-      <div className="o-properties__body">
-        <div className="o-tab o-tab--compassed">
-          <ul className="o-tab__nav">
-            <li>
-              <a
-                className={activeTab === 'details' ? 'active' : ''}
-                onClick={e => onChangeTab(e, 'details')}
-              >
-                {_('Details')}
-              </a>
-            </li>
-            <li>
-              <a
-                className={activeTab === 'configuration' ? 'active' : ''}
-                onClick={
-                  e => onChangeTab(e, 'configuration')
-                }
-              >
-                {_('Configuration')}
-              </a>
-            </li>
-          </ul>
-          <div className="o-properties-content">
-            <div className="o-panel-group">
-              {
-                activeTabPanels.map((panel, panelIndex) => {
-                  const panelKey = panel.get('panelKey');
-                  const isActive = item.get(activePanelKey) === panelIndex;
-                  const MyComponent = panelsComponentMap[panelKey];
+      {
+        !isCollapsed ? (
+          <div className="o-properties__body">
+            <div className="o-tab o-tab--compassed">
+              <ul className="o-tab__nav">
+                <li>
+                  <a
+                    className={activeTab === 'details' ? 'active' : ''}
+                    onClick={e => onChangeTab(e, 'details')}
+                  >
+                    {_('Details')}
+                  </a>
+                </li>
+                <li>
+                  <a
+                    className={activeTab === 'configuration' ? 'active' : ''}
+                    onClick={
+                      e => onChangeTab(e, 'configuration')
+                    }
+                  >
+                    {_('Configuration')}
+                  </a>
+                </li>
+              </ul>
+              <div className="o-properties-content">
+                <div className="o-panel-group">
+                  {
+                    activeTabPanels.map((panel, panelIndex) => {
+                      const panelKey = panel.get('panelKey');
+                      const isActive = item.get(activePanelKey) === panelIndex;
+                      const MyComponent = panelsComponentMap[panelKey];
+                      return (
+                        <div
+                          key={`${panelKey}`}
+                          className={`o-panel ${isActive ? '' : 'is-panel-hide'}`}
+                        >
+                          <div
+                            className="o-panel__header"
+                            onClick={
+                              () => {
+                                let activePanelIndex = panelIndex;
+                                const data = {};
 
-                  return (
-                    <div
-                      key={panelKey}
-                      className={`o-panel ${isActive ? '' : 'is-panel-hide'}`}
-                    >
-                      <div
-                        className="o-panel__header"
-                        onClick={
-                          () => {
-                            let activePanelIndex = panelIndex;
-                            const data = {};
+                                if (isActive) {
+                                  activePanelIndex = -1;
+                                }
 
-                            if (isActive) {
-                              activePanelIndex = -1;
+                                data[activePanelKey] = activePanelIndex;
+
+                                onChangeItem(data);
+                              }
                             }
-
-                            data[activePanelKey] = activePanelIndex;
-
-                            onChangeItem(data);
-                          }
-                        }
-                      >
-                        <Icon
-                          name={isActive ? 'angle-down' : 'angle-right'}
-                        />
-                        <span>{_(panel.get('text'))}</span>
-                      </div>
-                      {
-                        MyComponent ? (
-                          <div className="o-panel__body">
-                            <MyComponent
-                              {...props}
-                              store={panel}
+                          >
+                            <Icon
+                              name={isActive ? 'angle-down' : 'angle-right'}
                             />
+                            <span>{_(panel.get('text'))}</span>
                           </div>
-                        ) : null
-                      }
-                    </div>
-                  );
-                })
-              }
+                          {
+                            MyComponent ? (
+                              <div className="o-panel__body">
+                                <MyComponent
+                                  {...props}
+                                  store={panel}
+                                />
+                              </div>
+                            ) : null
+                          }
+                        </div>
+                      );
+                    })
+                  }
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        ) : null
+      }
+
     </div>
   );
 }

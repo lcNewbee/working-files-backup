@@ -98,10 +98,21 @@ class AppScreenList extends React.Component {
     this.selectedList = [];
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     utils.binds(this, [
-      'initListTableOptions', 'doItemAction', 'doSaveEditForm',
-      'onChangeQuery', 'onPageChange', 'onSaveEditForm', 'onCloseEditModal',
-      'onChangeSearchText', 'onChangeType', 'onChangeTableSize', 'onRemoveSelectItems',
-      'onItemAction', 'onSelectedItemsAction', 'initModalFormOptions',
+      'initListTableOptions',
+      'doItemAction',
+      'doSaveEditForm',
+      'onChangeQuery',
+      'onFetchList',
+      'onPageChange',
+      'onSaveEditForm',
+      'onCloseEditModal',
+      'onChangeSearchText',
+      'onChangeType',
+      'onChangeTableSize',
+      'onRemoveSelectItems',
+      'onItemAction',
+      'onSelectedItemsAction',
+      'initModalFormOptions',
     ]);
   }
   componentWillMount() {
@@ -665,6 +676,7 @@ class AppScreenList extends React.Component {
     const query = store.getIn(['query']);
     const leftChildrenNode = [];
     let $$curActionBarButtons = actionBarButtons;
+    let rightChildrenNode = null;
 
     // 处理列表操作相关按钮
     if (actionable) {
@@ -748,40 +760,43 @@ class AppScreenList extends React.Component {
       );
     }
 
+    // 页面大小选择下拉框
+    if (page) {
+      rightChildrenNode = [
+        <label
+          key="pageLabel"
+          htmlFor="pageSelect"
+        >
+          {_('View')}
+        </label>,
+        <Select
+          key="pageSelect"
+          value={query.get('size')}
+          onChange={this.onChangeTableSize}
+          options={selectOptions}
+          searchable={false}
+          clearable={false}
+        />,
+      ];
+    }
+
     return (
       <FormContainer
+        id={editFormId}
         action={fetchUrl}
         method="GET"
         layout="flow"
-        data={query}
         className="t-list-info__query"
+        data={query}
         options={queryFormOptions}
-        id={editFormId}
         isSaving={app.get('fetching')}
         invalidMsg={app.get('invalid')}
         validateAt={app.get('validateAt')}
-        onSave={this.onSave}
-        onChangeData={this.props.changeScreenQuery}
         onValidError={this.props.reportValidError}
+        onChangeData={this.onChangeQuery}
+        onSave={this.onFetchList}
         leftChildren={leftChildrenNode}
-        rightChildren={
-          page ? ([
-            <label
-              key="pageLabel"
-              htmlFor="pageSelect"
-            >
-              {_('View')}
-            </label>,
-            <Select
-              key="pageSelect"
-              value={query.get('size')}
-              onChange={this.onChangeTableSize}
-              options={selectOptions}
-              searchable={false}
-              clearable={false}
-            />,
-          ]) : null
-        }
+        rightChildren={rightChildrenNode}
       />
     );
   }
@@ -806,7 +821,6 @@ class AppScreenList extends React.Component {
           id="AppScreenListModal"
           isShow={isEditModelshow}
           title={actionQuery.get('myTitle')}
-          onOk={this.onSave}
           onClose={this.onCloseEditModal}
           size={modalSize}
           noFooter
