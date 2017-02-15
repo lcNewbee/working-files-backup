@@ -72,6 +72,7 @@ const listOptions = fromJS([
   }, {
     id: '__actions__',
     text: _('Actions'),
+    noForm: true,
     transform(val, $$item) {
       return (
         <span>
