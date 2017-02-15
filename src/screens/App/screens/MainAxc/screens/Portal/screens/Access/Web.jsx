@@ -58,7 +58,7 @@ const listOptions = fromJS([
     text: _('Description'),
     defaultValue: '',
     formProps: {
-      type: 'text',
+      type: 'textarea',
     },
   }, {
     id: 'file',
@@ -75,10 +75,16 @@ const listOptions = fromJS([
     transform(val, $$item) {
       return (
         <span>
-          <a className="tablelink" href="/1/auth.jsp" target="_blank">认证页</a>
-          <a className="tablelink" href="/1/ok.jsp"  target="_blank">成功页</a>
-          <a className="tablelink" href="/1/out.jsp" target="_blank">退出页</a>
-          <a className="tablelink" href="/1/wx.jsp" target="_blank">微信页</a>
+          <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$item.get('id')}/auth.jsp`} target="_blank">{_('Auth')}</a>
+          <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$item.get('id')}/ok.jsp`}  target="_blank">{_('Success')}</a>
+          <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$item.get('id')}/out.jsp`} target="_blank">{_('Exit')}</a>
+          <a
+            className="tablelink"
+            href={`http://${window.location.hostname}:8080/${$$item.get('id')}/wx.jsp`}
+            target="_blank"
+          >
+            {_('Wechat')}
+          </a>
         </span>
       );
     },
@@ -151,6 +157,9 @@ export default class View extends React.Component {
         noTitle
         actionable
         selectable
+        deleteable={
+          ($$item, index) => (index !== 0)
+        }
       />
     );
   }

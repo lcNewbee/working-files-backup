@@ -21,7 +21,6 @@ const settingsOptions = fromJS([
     fieldset: 'url_setting',
     type: 'text',
     legend: _('URL Parameter'),
-    required: true,
     validator: validator({
       rules: 'utf8Len:[1,255]',
     }),
@@ -41,14 +40,12 @@ const settingsOptions = fromJS([
     fieldset: 'url_setting',
     label: _('User Mac'),
     type: 'text',
-    required: true,
     validator: validator({
       rules: 'utf8Len:[1,255]',
     }),
   },
   {
     id: 'url',
-    required: true,
     fieldset: 'url_setting',
     label: _('URL'),
     type: 'text',
@@ -68,7 +65,6 @@ const settingsOptions = fromJS([
   },
   {
     id: 'ssid',
-    required: true,
     fieldset: 'url_setting',
     label: _('SSID'),
     type: 'text',
@@ -78,7 +74,6 @@ const settingsOptions = fromJS([
   },
   {
     id: 'apmac',
-    required: true,
     fieldset: 'url_setting',
     label: _('AP Mac'),
     type: 'text',
@@ -88,7 +83,6 @@ const settingsOptions = fromJS([
   },
   {
     id: 'apip',
-    required: true,
     fieldset: 'url_setting',
     label: _('AP IP'),
     type: 'text',

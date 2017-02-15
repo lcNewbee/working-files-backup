@@ -1,12 +1,12 @@
 {
-  "Portal Service":"Portal认证",
+  "Portal":"Portal认证",
   "Authentication logs": "认证日志",
   "Locked": "已封锁",
   "Unlocked": "未封锁",
   "Lock Status": "封锁状态",
   "Connection Status": "连接状态",
   "Normal": "正常",
-  "Access Authentication":"接入认证",
+  "Access Auth":"接入认证",
   "Base Setting":"基本设置",
   "Contact Us":"联系我们",
   "Refresh":"刷新",
@@ -97,7 +97,7 @@
   "Radius Authentication":"Radius认证",
   "App Authentication":"App认证",
   "Messages Authentication":"短信认证",
-  "Wechat Authentication":"微信认证",
+  "Wechat Auth":"微信认证",
   "Public Platform Authentication":"公众号认证",
   "Visitor Authentication":"访客认证",
   "Initiate Mode":"启用模式",
@@ -153,5 +153,11 @@
   "Out Time":"临时放行时间",
 
   "SSID Location":"SSID 位置",
-  "Authetication Count":"认证次数"
+  "Authetication Count":"认证次数",
+  "Auth":"认证页",
+  "Success":"成功页",
+  "Exit":"退出页",
+  "Wechat":"微信页",
+  "Mac Management":"Mac地址管理",
+  "Reset Password":"重置密码"
 }

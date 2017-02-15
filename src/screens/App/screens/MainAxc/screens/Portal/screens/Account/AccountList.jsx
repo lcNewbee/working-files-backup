@@ -276,6 +276,23 @@ const listOptions = fromJS([
     text: _('ex10'),
     noTable: true,
     noForm: true,
+  }, {
+    id: '__actions__',
+    text: _('Actions'),
+    actions: [
+      {
+        icon: 'save',
+        actionName: 'reset',
+        text: _('Reset Password'),
+      },
+    ],
+    transform(val, $$item) {
+      return (
+        <span>
+          <a href={`/index.html#/main/portal/account/accountListMac/${$$item.get('loginName')}`} className="tablelink">{_('Mac Management')}</a>
+        </span>
+      );
+    },
   },
 ]);
 
