@@ -175,10 +175,10 @@ const sPortalDefaultWeb =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/DefaultWeb');
 const sPortalWeixin =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Weixin');
-const sPortalApSetting =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/ApSetting');
-const sPortalSsid =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Ssid');
+// const sPortalApSetting =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/ApSetting');
+// const sPortalSsid =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Ssid');
 
 const sPortalNas =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Radius/Nas');
@@ -193,10 +193,10 @@ const sPortalConnectRecord =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Account/ConnectRecord');
 
 
-const sPortalSendBox =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Message/SendBox');
-const sPortalReceiveBox =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Message/ReceiveBox');
+// const sPortalSendBox =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Message/SendBox');
+// const sPortalReceiveBox =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Message/ReceiveBox');
 
 // const sPortalPermission =
 //     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Permission');
@@ -823,19 +823,20 @@ const routes = [
                 formUrl: 'goform/portal/access/weixin',
                 text: _('Wechat Authentication'),
                 component: sPortalWeixin.Screen,
-              }, {
-                id: 'portalApSetting',
-                path: '/main/portal/access/ap',
-                formUrl: 'goform/portal/access/ap',
-                text: _('AP Setting'),
-                component: sPortalApSetting.Screen,
-              }, {
-                id: 'portalSsid',
-                path: '/main/portal/access/ssid',
-                formUrl: 'goform/portal/access/ssid',
-                text: _('SSID'),
-                component: sPortalSsid.Screen,
               },
+              // {
+              //   id: 'portalApSetting',
+              //   path: '/main/portal/access/ap',
+              //   formUrl: 'goform/portal/access/ap',
+              //   text: _('AP Setting'),
+              //   component: sPortalApSetting.Screen,
+              // }, {
+              //   id: 'portalSsid',
+              //   path: '/main/portal/access/ssid',
+              //   formUrl: 'goform/portal/access/ssid',
+              //   text: _('SSID'),
+              //   component: sPortalSsid.Screen,
+              // },
             ],
           }, {
             id: 'portalRadius',
@@ -891,31 +892,33 @@ const routes = [
                 component: sPortalConnectRecord.Screen,
               },
             ],
-          }, {
-            id: 'portalMessage',
-            isIndex: true,
-            path: '/main/portal/message',
-            icon: 'user-o',
-            text: _('Message'),
-            indexRoute: {
-              onEnter: (nextState, replace) => replace('/main/portal/message/send'),
-            },
-            childRoutes: [
-              {
-                id: 'portalReceiveBox',
-                path: '/main/portal/message/receive',
-                formUrl: 'goform/portal/message/receivet',
-                text: _('Receive Box'),
-                component: sPortalReceiveBox.Screen,
-              }, {
-                id: 'portalSendBox',
-                path: '/main/portal/message/send',
-                formUrl: 'goform/portal/message/send',
-                text: _('Send Box'),
-                component: sPortalSendBox.Screen,
-              },
-            ],
-          }, {
+          },
+          // {
+          //   id: 'portalMessage',
+          //   isIndex: true,
+          //   path: '/main/portal/message',
+          //   icon: 'user-o',
+          //   text: _('Message'),
+          //   indexRoute: {
+          //     onEnter: (nextState, replace) => replace('/main/portal/message/send'),
+          //   },
+          //   childRoutes: [
+          //     {
+          //       id: 'portalReceiveBox',
+          //       path: '/main/portal/message/receive',
+          //       formUrl: 'goform/portal/message/receivet',
+          //       text: _('Receive Box'),
+          //       component: sPortalReceiveBox.Screen,
+          //     }, {
+          //       id: 'portalSendBox',
+          //       path: '/main/portal/message/send',
+          //       formUrl: 'goform/portal/message/send',
+          //       text: _('Send Box'),
+          //       component: sPortalSendBox.Screen,
+          //     },
+          //   ],
+          // },
+          {
             id: 'portalLog',
             isIndex: true,
             path: '/main/portal/log',

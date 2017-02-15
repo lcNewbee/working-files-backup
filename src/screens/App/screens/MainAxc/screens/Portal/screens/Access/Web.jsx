@@ -74,7 +74,7 @@ const listOptions = fromJS([
       return (
         <div>
           <a className="tablelink" href="/1/auth.jsp" target="_blank">认证页</a>
-          <a className="tablelink" href="/1/ok.jsp" target="_blank">成功页</a>
+          <a className="tablelink" href="/1/ok.jsp"  target="_blank">成功页</a>
           <a className="tablelink" href="/1/out.jsp" target="_blank">退出页</a>
           <a className="tablelink" href="/1/wx.jsp" target="_blank">微信页</a>
         </div>
