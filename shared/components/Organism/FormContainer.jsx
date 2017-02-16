@@ -63,6 +63,7 @@ class FormContainer extends React.Component {
     ]);
     this.syncData = {};
     this.inited = false;
+    this.hasFile = props.hasFile;
   }
   componentWillMount() {
     this.onOptionsChange(this.props);
@@ -103,10 +104,8 @@ class FormContainer extends React.Component {
     }
   }
   onSave() {
-    const hasFile = this.props.hasFile;
-
     if (this.props.onSave) {
-      this.props.onSave(this.formElem, hasFile);
+      this.props.onSave(this.formElem, this.hasFile);
     }
   }
   onChangeFormGoupData(option) {
@@ -177,6 +176,10 @@ class FormContainer extends React.Component {
     delete myProps.fieldset;
     delete myProps.legend;
     delete myProps.fieldsetOption;
+
+    if (myProps.type === 'file') {
+      this.hasFile = true;
+    }
 
     if (id) {
       myProps.form = id;
@@ -413,6 +416,7 @@ class FormContainer extends React.Component {
     if (hasFile) {
       encType = 'multipart/form-data';
       Component = 'form';
+      this.hasFile = true;
     }
 
     if (Component === 'form') {

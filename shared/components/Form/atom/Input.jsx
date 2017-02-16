@@ -58,6 +58,7 @@ class Input extends React.Component {
     delete inputProps.onRef;
     delete inputProps.__index__;
     delete inputProps.showLabel;
+    delete inputProps.linkId;
 
     if (inputProps.type === 'textarea') {
       ThisComponent = 'textarea';
