@@ -16,22 +16,36 @@ const listOptions = fromJS([
     formProps: {
       type: 'text',
       required: true,
+      validator: validator({
+        rules: 'mac',
+      }),
     },
   },
 ]);
 
 const propTypes = {
-  store: PropTypes.instanceOf(Map),
-  fetch: PropTypes.func,
+  params: PropTypes.object,
 };
 const defaultProps = {};
+
 export default class View extends React.Component {
   render() {
+    // {loginName:"1"}
+    const { loginName } = this.props.params;
+
     return (
       <AppScreen
         {...this.props}
         listOptions={listOptions}
         editable={false}
+        initOption={{
+          query: {
+            loginName,
+          },
+          actionQuery: {
+            loginName,
+          },
+        }}
         noTitle
         actionable
         selectable

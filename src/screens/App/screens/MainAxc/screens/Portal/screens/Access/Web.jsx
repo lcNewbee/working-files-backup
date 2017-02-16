@@ -52,6 +52,10 @@ const listOptions = fromJS([
     defaultValue: '',
     formProps: {
       type: 'text',
+      validator: validator({
+        rules: 'number',
+      }),
+
     },
   }, {
     id: 'description',

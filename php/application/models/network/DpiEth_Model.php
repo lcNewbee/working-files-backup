@@ -41,9 +41,9 @@ class DpiEth_Model extends CI_Model {
 
     // 获取历史数据
     $cgiprm = array(
-        'ethx'=>(string)element('ethx',$data),
+        'ethx'=>(string)element('ethx',$data,'eth0'),
         "set_interval_times" =>(string)element('set_interval_times',$data,0),
-        'days'=> (string)element('timeType',$data)
+        'days'=> (string)element('timeType',$data,0)
     );
     $ethx_history_result = ndpi_send_ethx_history_statistics(json_encode($cgiprm));
     $ethx_history_result_array = json_decode($ethx_history_result,true);

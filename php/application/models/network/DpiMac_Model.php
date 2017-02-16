@@ -15,9 +15,9 @@ class DpiMac_Model extends CI_Model {
     $mac_result_array = json_decode($mac_result,true);
 
     $cgiprm = array(
-        'mac'=>(string)element('mac',$data),
+        'mac'=>(string)element('mac',$data,$mac_result_array['data']['list'][0]['mac']),
         "set_interval_times" =>(string)element('set_interval_times',$data,0),
-        'days'=> (string)element('timeType',$data)
+        'days'=> (string)element('timeType',$data,0)
     );
     $mac_history_result = ndpi_send_mac_history_statistics(json_encode($cgiprm));
     $mac_history_result_array = json_decode($mac_history_result,true);
