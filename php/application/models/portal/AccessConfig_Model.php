@@ -58,9 +58,11 @@ class AccessConfig_Model extends CI_Model {
                 foreach($data['list'] as $row){
                     $up2 = array(
                         'id'=>element('id',$row),
+                        'type'=>element('type',$row),
                         'username'=>element('username',$row),
                         'password'=>element('password',$row),                    
-                        'url'=>element('url',$row)                    
+                        'url'=>element('url',$row),
+                        'sessiontime'=>element('sessiontime',$row,0)                    
                     );
                     $result = $this->portalsql->replace('portal_basauth', $up2);
                 }                                 

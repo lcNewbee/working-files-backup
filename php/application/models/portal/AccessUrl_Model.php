@@ -20,6 +20,7 @@ class AccessUrl_Model extends CI_Model {
         $result = null;
         $arr = array(
             'id'=>element('id',$data,1),
+            'apip'=>element('apip',$data,1),
             'basname'=>element('basname',$data,''),
             'userip'=>element('userip',$data,''),
             'usermac'=>element('usermac',$data,''),
