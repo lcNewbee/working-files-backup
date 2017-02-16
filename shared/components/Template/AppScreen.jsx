@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import utils, { immutableUtils } from 'shared/utils';
 import immutable, { List, Map } from 'immutable';
 import AppScreenList from 'shared/components/Template/AppScreenList';
-import FormContainer from 'shared/components/Organism/FormContainer';
+import AppScreenSettings from 'shared/components/Template/AppScreenSettings';
 import { getActionable } from 'shared/axc';
 
 function emptyFunc() {}
@@ -22,8 +22,6 @@ const propTypes = {
   initScreen: PropTypes.func,
   fetchScreenData: PropTypes.func,
   leaveScreen: PropTypes.func,
-  validateAll: PropTypes.func,
-  reportValidError: PropTypes.func,
   changeScreenActionQuery: PropTypes.func.isRequired,
   changeScreenQuery: PropTypes.func.isRequired,
 
@@ -39,14 +37,8 @@ const propTypes = {
     PropTypes.instanceOf(List),
     PropTypes.array,
   ]),
-  updateScreenSettings: PropTypes.func,
-  saveScreenSettings: PropTypes.func,
   defaultSettingsData: PropTypes.object,
-  hasSettingsSaveButton: PropTypes.bool,
   customSettingForm: PropTypes.bool,
-  settingOnlyChanged: PropTypes.bool,
-
-  onAfterSync: PropTypes.func,
 };
 const defaultProps = {
   onAfterSync: emptyFunc,
@@ -193,39 +185,18 @@ export default class AppScreen extends React.Component {
     }
   }
 
-  onSaveSettings() {
-    if (this.props.validateAll) {
-      this.props.validateAll()
-        .then((errMsg) => {
-          if (errMsg.isEmpty()) {
-            this.props.saveScreenSettings({
-              numberKeys: this.settingsNumberKeys,
-              onlyChanged: this.props.settingOnlyChanged,
-            }).then(
-              (json) => {
-                this.props.onAfterSync(json, {
-                  action: 'setting',
-                });
-              },
-            );
-          }
-        });
-    }
-  }
-
   render() {
     const {
       tableOptions, editFormOptions, defaultEditData,
     } = this;
     const {
       store, title, noTitle, route, listOptions, customSettingForm, className,
-      settingsFormOptions, updateScreenSettings, hasSettingsSaveButton, actionable,
+      settingsFormOptions,
+      actionable,
     } = this.props;
-    const app = this.props.app;
     const myScreenId = store.get('curScreenId');
     const $$myScreenStore = store.get(myScreenId);
     const myTitle = title || route.text;
-    const $$curSettings = $$myScreenStore.get('curSettings');
     const saveUrl = route.saveUrl || route.formUrl;
     const fetchUrl = route.fetchUrl || route.formUrl;
     const myActionable = this.actionable && actionable;
@@ -248,17 +219,12 @@ export default class AppScreen extends React.Component {
         }
         {
           settingsFormOptions && !customSettingForm ? (
-            <FormContainer
-              options={settingsFormOptions}
-              data={$$curSettings}
-              onChangeData={updateScreenSettings}
-              onSave={this.onSaveSettings}
-              invalidMsg={app.get('invalid')}
-              validateAt={app.get('validateAt')}
-              onValidError={this.props.reportValidError}
-              isSaving={app.get('saving')}
-              actionable={this.actionable}
-              hasSaveButton={this.actionable && hasSettingsSaveButton}
+            <AppScreenSettings
+              {...this.props}
+              store={$$myScreenStore}
+              actionable={myActionable}
+              fetchUrl={fetchUrl}
+              saveUrl={saveUrl}
             />
           ) : null
         }

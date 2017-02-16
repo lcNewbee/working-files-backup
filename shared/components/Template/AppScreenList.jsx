@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import { Map, List, fromJS } from 'immutable';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import utils from 'shared/utils';
 import { FormInput, Search } from 'shared/components/Form';
 import Select from 'shared/components/Select';
@@ -77,7 +76,7 @@ const propTypes = {
   ]),
   onBeforeAction: PropTypes.func,
   onBeforeSave: PropTypes.func,
-  onAfterSync: PropTypes.func.isRequired,
+  onAfterSync: PropTypes.func,
 
   // React node 元素
   actionBarChildren: PropTypes.node,
@@ -89,14 +88,19 @@ const defaultProps = {
   addable: true,
   editable: true,
   deleteable: true,
+  onAfterSync: utils.emptyFunc,
+  createModal: (option) => {
+    if (option && option.text) {
+      alert(option.text);
+    }
+  },
 };
 
 // 原生的 react 页面
-class AppScreenList extends React.Component {
+class AppScreenList extends React.PureComponent {
   constructor(props) {
     super(props);
     this.selectedList = [];
-    this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     utils.binds(this, [
       'initListTableOptions',
       'doItemAction',
