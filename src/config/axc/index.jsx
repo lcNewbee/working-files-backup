@@ -84,6 +84,7 @@ const sPortalMac =
 // const sPortalTemplate =
 //    require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalTemplate');
 
+
 /**
  * AP组管理
  */
@@ -128,6 +129,8 @@ const sEthStatistic =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/EthStatistic');
 const sProtoInfo =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/ProtoInfo');
+
+
 /**
  * 系统管理
  */
@@ -159,6 +162,63 @@ const sAcMaintenance =
     require('../../screens/App/screens/MainAxc/screens/System/screens/AcMaintenance');
 const sNetworkTimeProtocol =
     require('../../screens/App/screens/MainAxc/screens/System/screens/NetworkTimeProtocol');
+
+
+/**
+ * Portal
+ */
+const sPortalOverview =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Overview');
+const sPortalBase =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Base');
+// const sPortalBas =
+    // require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Bas');
+const sPortalUrlParams =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/UrlParams');
+const sPortalWeb =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Web');
+const sPortalDefaultWeb =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/DefaultWeb');
+const sPortalWeixin =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Weixin');
+// const sPortalApSetting =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/ApSetting');
+// const sPortalSsid =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Ssid');
+
+const sPortalNas =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Radius/Nas');
+const sPortalOnline =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Radius/Online');
+const sPortalConnectLog =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Radius/ConnectLog');
+
+const sPortalAccountList =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Account/AccountList');
+const sPortalConnectRecord =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Account/ConnectRecord');
+
+
+// const sPortalSendBox =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Message/SendBox');
+// const sPortalReceiveBox =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Message/ReceiveBox');
+
+// const sPortalPermission =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Permission');
+// const sPortalClassification =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Classification');
+// const sPortalUser =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/User');
+// const sPortalRole =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Role');
+
+const sPortalLogList =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Log/LogList');
+const sPortalOnlineRecordList =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Log/OnlineRecordList');
+const sPortalOnlineList =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Log/OnlineList');
 
 const routes = [
   {
@@ -471,15 +531,15 @@ const routes = [
                 },
                 childRoutes: [
                   {
-                    id: 'wirelessWips',
+                    id: 'clientsTrace',
                     path: '/main/group/map/clients_trace/list',
                     formUrl: '/goform/group/map/clients_trace',
                     text: _('Clients Flow State'),
                     component: sClientsTraceList.Screen,
                   }, {
-                    id: 'wirelessEndpointProtection',
+                    id: 'clientsTrace',
                     path: '/main/group/map/clients_trace/settings',
-                    formUrl: 'goform/group/map/clients_trace/settings',
+                    formUrl: 'goform/group/map/clients_trace',
                     text: _('Settings'),
                     component: sClientsTraceSettings.Screen,
                   },
@@ -737,6 +797,235 @@ const routes = [
             text: _('Admin Account'),
             component: sSystemAdmin.Screen,
           },
+        ],
+      },
+      {
+        path: '/main/portal',
+        component: sMainAxc.Screen,
+        icon: 'road',
+        text: _('Portal'),
+        indexRoute: { onEnter: (nextState, replace) => replace('/main/portal/overview') },
+        childRoutes: [
+          {
+            id: 'portalOverview',
+            icon: 'home',
+            path: '/main/portal/overview',
+            formUrl: 'goform/portal/overview',
+            mode: 'cors',
+            text: _('Overview'),
+            component: sPortalOverview.Screen,
+          }, {
+            id: 'portalAccess',
+            isIndex: true,
+            path: '/main/portal/access',
+            icon: 'link',
+            text: _('Access Authentication'),
+            indexRoute: {
+              onEnter: (nextState, replace) => replace('/main/portal/access/config'),
+            },
+            childRoutes: [
+              {
+                id: 'portalAccessBase',
+                path: '/main/portal/access/config',
+                formUrl: 'goform/portal/access/config',
+                text: _('Base'),
+                component: sPortalBase.Screen,
+              },
+              // {
+              //   id: 'portalAccessUrlParams',
+              //   path: '/main/portal/access/list',
+              //   formUrl: 'goform/portal/access/list',
+              //   text: _('Bas'),
+              //   component: sPortalBas.Screen,
+              // },
+              {
+                id: 'portalAccessUrlParameter',
+                path: '/main/portal/access/urlParameter',
+                formUrl: 'goform/portal/access/urlParameter',
+                text: _('URL Parameter'),
+                component: sPortalUrlParams.Screen,
+              }, {
+                id: 'portalAccessWeb',
+                path: '/main/portal/access/web',
+                formUrl: 'goform/portal/access/web',
+                text: _('Web Template'),
+                component: sPortalWeb.Screen,
+              }, {
+                id: 'portalAccessDefaultWeb',
+                path: '/main/portal/access/defaultweb',
+                formUrl: 'goform/portal/access/defaultweb',
+                text: _('Default Web'),
+                component: sPortalDefaultWeb.Screen,
+              }, {
+                id: 'portalWechat',
+                path: '/main/portal/access/weixin',
+                formUrl: 'goform/portal/access/weixin',
+                text: _('Wechat Authentication'),
+                component: sPortalWeixin.Screen,
+              },
+              // {
+              //   id: 'portalApSetting',
+              //   path: '/main/portal/access/ap',
+              //   formUrl: 'goform/portal/access/ap',
+              //   text: _('AP Setting'),
+              //   component: sPortalApSetting.Screen,
+              // }, {
+              //   id: 'portalSsid',
+              //   path: '/main/portal/access/ssid',
+              //   formUrl: 'goform/portal/access/ssid',
+              //   text: _('SSID'),
+              //   component: sPortalSsid.Screen,
+              // },
+            ],
+          }, {
+            id: 'portalRadius',
+            isIndex: true,
+            path: '/main/portal/radius',
+            icon: 'podcast',
+            text: _('Radius'),
+            indexRoute: {
+              onEnter: (nextState, replace) => replace('/main/portal/radius/nas'),
+            },
+            childRoutes: [
+              {
+                id: 'portalRadiusNas',
+                path: '/main/portal/radius/nas',
+                formUrl: 'goform/portal/radius/nas',
+                text: _('NAS List'),
+                component: sPortalNas.Screen,
+              }, {
+                id: 'portalRadiusOnlineList',
+                path: '/main/portal/radius/online',
+                formUrl: 'goform/portal/radius/online',
+                text: _('Online List'),
+                component: sPortalOnline.Screen,
+              }, {
+                id: 'portalRadiusConnectLogs',
+                path: '/main/portal/radius/logs',
+                formUrl: 'goform/portal/radius/logs',
+                text: _('Connect Logs'),
+                component: sPortalConnectLog.Screen,
+              },
+            ],
+          }, {
+            id: 'portalAccount',
+            isIndex: true,
+            path: '/main/portal/account',
+            icon: 'user-o',
+            text: _('Access Account'),
+            indexRoute: {
+              onEnter: (nextState, replace) => replace('/main/portal/account/accountList'),
+            },
+            childRoutes: [
+              {
+                id: 'portalAccountAccountList',
+                path: '/main/portal/account/accountList',
+                formUrl: 'goform/portal/account/accountList',
+                text: _('Account List'),
+                component: sPortalAccountList.Screen,
+              }, {
+                id: 'portalAccountConnectRecord',
+                path: '/main/portal/account/connectRecord',
+                formUrl: 'goform/portal/account/connectRecord',
+                text: _('Connect Record'),
+                component: sPortalConnectRecord.Screen,
+              },
+            ],
+          },
+          // {
+          //   id: 'portalMessage',
+          //   isIndex: true,
+          //   path: '/main/portal/message',
+          //   icon: 'user-o',
+          //   text: _('Message'),
+          //   indexRoute: {
+          //     onEnter: (nextState, replace) => replace('/main/portal/message/send'),
+          //   },
+          //   childRoutes: [
+          //     {
+          //       id: 'portalReceiveBox',
+          //       path: '/main/portal/message/receive',
+          //       formUrl: 'goform/portal/message/receivet',
+          //       text: _('Receive Box'),
+          //       component: sPortalReceiveBox.Screen,
+          //     }, {
+          //       id: 'portalSendBox',
+          //       path: '/main/portal/message/send',
+          //       formUrl: 'goform/portal/message/send',
+          //       text: _('Send Box'),
+          //       component: sPortalSendBox.Screen,
+          //     },
+          //   ],
+          // },
+          {
+            id: 'portalLog',
+            isIndex: true,
+            path: '/main/portal/log',
+            icon: 'file-text-o',
+            text: _('Online Record Log'),
+            indexRoute: {
+              onEnter: (nextState, replace) => replace('/main/portal/log/logList'),
+            },
+            childRoutes: [
+              {
+                id: 'portalLogLogList',
+                path: '/main/portal/log/logList',
+                formUrl: 'goform/portal/log/logList',
+                text: _('Log List'),
+                component: sPortalLogList.Screen,
+              }, {
+                id: 'portalLogOnlineList',
+                path: '/main/portal/log/onlineList',
+                formUrl: 'goform/portal/log/onlineList',
+                text: _('Online List'),
+                component: sPortalOnlineList.Screen,
+              }, {
+                id: 'portalLogOnlineRecordList',
+                path: '/main/portal/log/onlineRecordList',
+                formUrl: 'goform/portal/log/onlineRecordList',
+                text: _('Online Record List'),
+                component: sPortalOnlineRecordList.Screen,
+              },
+            ],
+          },
+          // {
+          //   id: 'portalSystem',
+          //   isIndex: true,
+          //   path: '/main/portal/system',
+          //   icon: 'copy',
+          //   text: _('System'),
+          //   indexRoute: {
+          //     onEnter: (nextState, replace) => replace('/main/portal/system/classification'),
+          //   },
+          //   childRoutes: [
+          //     {
+          //       id: 'portalSystemClassification',
+          //       path: '/main/portal/system/classification',
+          //       formUrl: 'goform/portal/system/classification',
+          //       text: _('Classification'),
+          //       component: sPortalClassification.Screen,
+          //     }, {
+          //       id: 'portalSystemRole',
+          //       path: '/main/portal/system/role',
+          //       formUrl: 'goform/portal/system/role',
+          //       text: _('Role'),
+          //       component: sPortalRole.Screen,
+          //     },
+          //     {
+          //       id: 'portalSystemUser',
+          //       path: '/main/portal/system/user',
+          //       formUrl: 'goform/portal/system/user',
+          //       text: _('User'),
+          //       component: sPortalUser.Screen,
+          //     }, {
+          //       id: 'portalSystemPermission',
+          //       path: '/main/portal/system/permission',
+          //       formUrl: 'goform/portal/system/permission',
+          //       text: _('Permission'),
+          //       component: sPortalPermission.Screen,
+          //     },
+          //   ],
+          // },
         ],
       },
       {

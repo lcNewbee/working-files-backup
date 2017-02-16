@@ -4,6 +4,10 @@
     "msg": "ok"
   },
   "data": {
+    "settings": {
+      "enable": 1,
+      "reporttime": 10
+    },
     "list": [{
       "stamac": "11:22:33:44:55:66",
       "starttime": "2017-02-10 12:00:00",

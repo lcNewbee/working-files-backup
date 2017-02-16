@@ -23,9 +23,6 @@ const settingsOptions = fromJS([
     label: _('Bas IP'),
     fieldset: 'base_setting',
     className: 'cols col-6',
-    fieldsetOption: {
-      legend: _('Base Setting'),
-    },
     required: true,
     formProps: {
       type: 'text',
