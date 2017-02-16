@@ -11,6 +11,7 @@ const propTypes = {
     PropTypes.instanceOf(List), PropTypes.array,
   ]),
 
+  changeScreenActionQuery: PropTypes.func,
   createModal: PropTypes.func,
 
   // 数据操作相关函数
@@ -96,6 +97,9 @@ class AppSettings extends React.PureComponent {
         text: option.msg,
       });
     } else if (this.props.validateAll) {
+      this.props.changeScreenActionQuery({
+        action: 'setting',
+      });
       this.props.validateAll()
           .then((errMsg) => {
             if (errMsg.isEmpty()) {

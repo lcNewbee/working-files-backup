@@ -192,6 +192,7 @@ export function onListAction(url, option) {
     // 需要把修改后数据合并到post参数里
     if (actionType === 'add') {
       subData = actionQuery.merge(editMap).toJS();
+      delete subData.selectedList;
     } else if (actionType === 'edit') {
       subData = actionQuery.merge(editMap).merge({
         originalData,
@@ -216,6 +217,10 @@ export function onListAction(url, option) {
     // 删除不需要传到后台的属性属性
     delete subData.myTitle;
     delete subData.index;
+
+    if (subData.groupid === 'not') {
+      delete subData.groupid;
+    }
 
     return dispatch(appActions.save(myUrl, subData, ajaxOption))
       .then((json) => {
@@ -251,6 +256,7 @@ export function saveScreenSettings(option) {
     const globalState = getState();
     const name = globalState.screens.get('curScreenId');
     const $$curQuery = globalState.screens.getIn([name, 'query']);
+    const $$actionQuery = globalState.screens.getIn([name, 'actionQuery']);
     const $$curData = globalState.screens.getIn([name, 'curSettings']);
     const $$oriData = globalState.screens.getIn([name, 'data', 'settings']);
     const formUrl = globalState.screens.getIn([name, 'formUrl']);
@@ -272,6 +278,11 @@ export function saveScreenSettings(option) {
       // 只保存修改
       if (option.onlyChanged) {
         $$subData = immutableUtils.getChanged($$subData, $$oriData);
+
+        // 如果没有改变的数据，就提交 actionQuery 数据
+        if ($$subData.isEmpty()) {
+          $$subData = $$actionQuery.delete('selectedList');
+        }
       }
       // 数字类型转换
       if (option.numberKeys) {

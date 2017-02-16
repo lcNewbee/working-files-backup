@@ -146,7 +146,9 @@ const listOptions = fromJS([
 
 const settingsFormOptions = immutableUtils.getFormOptions(listOptions);
 
-const propTypes = {};
+const propTypes = {
+  changeScreenActionQuery: PropTypes.func,
+};
 const defaultProps = {};
 
 export default class View extends React.Component {
@@ -156,8 +158,10 @@ export default class View extends React.Component {
       'onBeforeSave',
     ]);
   }
-  onBeforeSave() {
-    console.log(11)
+  onBeforeSave($$actionQuery, $$curSettings) {
+    this.props.changeScreenActionQuery({
+      enable: $$curSettings.get('enable'),
+    });
   }
   render() {
     return (
