@@ -281,7 +281,7 @@ const listOptions = fromJS([
     text: _('Actions'),
     actions: [
       {
-        icon: 'save',
+        icon: 'check-square-o',
         actionName: 'reset',
         text: _('Reset Password'),
       },

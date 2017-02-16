@@ -216,28 +216,28 @@ const settingsOptions = fromJS([
         options: [
           {
             value: '0',
-            label: _('One Key Authentication'),
+            label: _('One Key Auth'),
           }, {
             value: '1',
-            label: _('Access User Authentication'),
+            label: _('Access User Auth'),
           }, {
             value: '2',
-            label: _('Radius Authentication'),
+            label: _('Radius Auth'),
           }, {
             value: '3',
-            label: _('App Authentication'),
+            label: _('App Auth'),
           }, {
             value: '4',
-            label: _('Messages Authentication'),
+            label: _('Messages Auth'),
           }, {
             value: '5',
-            label: _('Wechat Authentication'),
+            label: _('Wechat Auth'),
           }, {
             value: '6',
-            label: _('Public Platform Authentication'),
+            label: _('Public Platform Auth'),
           }, {
             value: '7',
-            label: _('Visitor Authentication'),
+            label: _('Visitor Auth'),
           },
         ],
         noForm: true,
