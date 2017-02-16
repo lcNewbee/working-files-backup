@@ -195,9 +195,10 @@ const sPortalConnectLog =
 
 const sPortalAccountList =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Account/AccountList');
+const sPortalAccountListMac =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Account/AccountListMac');
 const sPortalConnectRecord =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Account/ConnectRecord');
-
 
 // const sPortalSendBox =
 //     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Message/SendBox');
@@ -819,7 +820,7 @@ const routes = [
             isIndex: true,
             path: '/main/portal/access',
             icon: 'link',
-            text: _('Access Authentication'),
+            text: _('Access Auth'),
             indexRoute: {
               onEnter: (nextState, replace) => replace('/main/portal/access/config'),
             },
@@ -860,7 +861,7 @@ const routes = [
                 id: 'portalWechat',
                 path: '/main/portal/access/weixin',
                 formUrl: 'goform/portal/access/weixin',
-                text: _('Wechat Authentication'),
+                text: _('Wechat Auth'),
                 component: sPortalWeixin.Screen,
               },
               // {
@@ -923,6 +924,13 @@ const routes = [
                 formUrl: 'goform/portal/account/accountList',
                 text: _('Account List'),
                 component: sPortalAccountList.Screen,
+              }, {
+                id: 'portalAccountAccountListMac',
+                path: '/main/portal/account/accountListMac/(:loginName)',
+                formUrl: 'goform/portal/account/accountListMac',
+                text: _('Account List Mac'),
+                component: sPortalAccountListMac.Screen,
+                noNav: true,
               }, {
                 id: 'portalAccountConnectRecord',
                 path: '/main/portal/account/connectRecord',
