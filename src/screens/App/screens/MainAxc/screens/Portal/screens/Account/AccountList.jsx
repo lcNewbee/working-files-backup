@@ -289,7 +289,7 @@ const listOptions = fromJS([
     transform(val, $$item) {
       return (
         <span>
-          <a href={`/index.html#/main/portal/account/accountListMac/${$$item.get('loginName')}`} className="tablelink">{_('Mac Management')}</a>
+          <a href={`/index.html#/main/portal/account/list/mac/${$$item.get('loginName')}`} className="tablelink">{_('Mac Management')}</a>
         </span>
       );
     },

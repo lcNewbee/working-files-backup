@@ -131,19 +131,15 @@ export default class Main extends React.PureComponent {
     // 获取未分组设备
     this.props.fetchGroupAps(-1);
 
-    setTimeout(() => {
+    this.autoRefreshTimer = setTimeout(() => {
       this.autoRefreshData();
     }, rateInterval);
-
-    // if (this.props.route.path === '/main/group') {
-    //   this.onToggleMainPopOver({
-    //     name: 'groupAsider',
-    //     isShow: true,
-    //     overlay: false,
-    //   });
-    // }
   }
-
+  componentDidUpdate(prevProps) {
+    if (prevProps.route.path !== this.props.route.path) {
+      this.autoRefreshData();
+    }
+  }
   componentWillUnmount() {
     clearTimeout(this.autoRefreshTimer);
   }
@@ -317,14 +313,16 @@ export default class Main extends React.PureComponent {
     const curRoutePath = this.props.route.path;
     const rateInterval = this.props.app.get('rateInterval');
 
+    clearTimeout(this.autoRefreshTimer);
+
     // 如是在AP组管理模块
     if (curRoutePath === '/main/group') {
-      // 获取当前组AP
+      // 更新AP组相关信息
       this.props.fetchApGroup();
 
       // 获取未分组设备
       this.props.fetchGroupAps(-1);
-      clearTimeout(this.autoRefreshTimer);
+
       this.autoRefreshTimer = setTimeout(
         () => this.autoRefreshData(),
         rateInterval,

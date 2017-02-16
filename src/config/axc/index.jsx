@@ -917,22 +917,34 @@ const routes = [
             icon: 'user-o',
             text: _('Access Account'),
             indexRoute: {
-              onEnter: (nextState, replace) => replace('/main/portal/account/accountList'),
+              onEnter: (nextState, replace) => replace('/main/portal/account/list'),
             },
             childRoutes: [
               {
                 id: 'portalAccountAccountList',
-                path: '/main/portal/account/accountList',
-                formUrl: 'goform/portal/account/accountList',
+                path: '/main/portal/account/list',
                 text: _('Account List'),
-                component: sPortalAccountList.Screen,
-              }, {
-                id: 'portalAccountAccountListMac',
-                path: '/main/portal/account/accountListMac/(:loginName)',
-                formUrl: 'goform/portal/account/accountListMac',
-                text: _('Account List Mac'),
-                component: sPortalAccountListMac.Screen,
-                noNav: true,
+                indexRoute: {
+                  onEnter: (nextState, replace) => replace('/main/portal/account/list/index'),
+                },
+                childRoutes: [
+                  {
+                    id: 'portalAccountAccountList',
+                    path: '/main/portal/account/list/index',
+                    formUrl: 'goform/portal/account/accountList',
+                    text: _('Account List'),
+                    isIndex: true,
+                    component: sPortalAccountList.Screen,
+                  }, {
+                    id: 'portalAccountAccountListMac',
+                    path: '/main/portal/account/list/mac/(:loginName)',
+                    formUrl: 'goform/portal/account/accountListMac',
+                    text: _('Account List Mac'),
+                    component: sPortalAccountListMac.Screen,
+                    noNav: true,
+                  },
+                ],
+                //component: sPortalAccountList.Screen,
               }, {
                 id: 'portalAccountConnectRecord',
                 path: '/main/portal/account/connectRecord',

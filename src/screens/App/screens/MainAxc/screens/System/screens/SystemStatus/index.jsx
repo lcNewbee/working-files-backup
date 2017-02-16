@@ -147,7 +147,7 @@ export default class View extends React.PureComponent {
         <div className="t-overview row">
           <div className="t-overview__section">
             <div className="cols col-4" >
-              <div className="element">
+              <div className="element t-overview__section-header">
                 <h3>{ _('Details') }</h3>
               </div>
               <div
@@ -184,7 +184,7 @@ export default class View extends React.PureComponent {
               </div>
             </div>
             <div className="cols col-4" >
-              <div className="element">
+              <div className="element t-overview__section-header">
                 <h3>{ _('Memory') }</h3>
               </div>
               <div className="element">
@@ -199,7 +199,7 @@ export default class View extends React.PureComponent {
               </div>
             </div>
             <div className="cols col-4" >
-              <div className="element">
+              <div className="element t-overview__section-header">
                 <h3>{ _('CPU') }</h3>
               </div>
               <div className="element">

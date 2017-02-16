@@ -152,6 +152,12 @@ const defaultProps = {};
 export default class View extends React.Component {
   constructor(props) {
     super(props);
+    utils.binds(this, [
+      'onBeforeSave',
+    ]);
+  }
+  onBeforeSave() {
+    console.log(11)
   }
   render() {
     return (
@@ -160,6 +166,7 @@ export default class View extends React.Component {
         settingsFormOptions={settingsFormOptions}
         settingOnlyChanged
         hasSettingsSaveButton
+        onBeforeSave={this.onBeforeSave}
         noTitle
       />
     );

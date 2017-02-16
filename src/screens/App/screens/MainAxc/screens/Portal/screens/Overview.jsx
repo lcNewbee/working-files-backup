@@ -9,10 +9,8 @@ import Table from 'shared/components/Table';
 import AppScreen from 'shared/components/Template/AppScreen';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/screens';
+import { colors, $$commonPieOption } from 'shared/config/axc';
 
-const msg = {
-  days: _('Days'),
-};
 const recordOptions = [
   {
     id: 'recDate',
@@ -27,112 +25,59 @@ const recordOptions = [
 ];
 
 function getOnlineOption(serverData) {
-  const ret = {
-    tooltip: {
-      trigger: 'item',
-      formatter: '{a} <br/>{b} ({d}%)',
+  const outlineCount = serverData.get('outlineCount') || 0;
+  const onlineCount = serverData.get('onlineCount') || 0;
+  const onlineText = _('Online');
+  const offlineText = _('Offline');
+  const ret = $$commonPieOption.mergeDeep({
+    color: [colors[7], colors[1]],
+    legend: {
+      data: [onlineText, offlineText],
+      x: '60%',
     },
     title: {
-      text: _('Connection Status'),
-      x: 'center',
-      textStyle: {
-        fontSize: '14',
-      },
-    },
-    legend: {
-      orient: 'vertical',
-      x: 'left',
-      y: 'bottom',
-      data: [_('Offline'), _('Online')],
+      text: _('Connect Status'),
+      subtext: `${onlineCount} / ${outlineCount}`,
     },
     series: [
       {
         name: _('Status'),
-        type: 'pie',
-        radius: ['0%', '60%'],
-        avoidLabelOverlap: false,
-        label: {
-          normal: {
-            show: false,
-            //position: 'center',
-          },
-          emphasis: {
-            show: false,
-            textStyle: {
-              fontSize: '12',
-              fontWeight: 'bold',
-            },
-          },
-        },
-        labelLine: {
-          normal: {
-            show: false,
-          },
-        },
-
       },
     ],
-  };
+  }).toJS();
 
   ret.series[0].data = [
-    { value: serverData.get('outlineCount'), name: _('Offline') },
-    { value: serverData.get('onlineCount'), name: _('Online') },
+    { value: onlineCount, name: onlineText },
+    { value: outlineCount, name: offlineText },
   ];
 
   return ret;
 }
 function getApStatusOption(serverData) {
-  const ret = {
-    tooltip: {
-      trigger: 'item',
-      formatter: '{a} <br/>{b}: {c} ({d}%)',
+  const lockText = _('Locked') || 0;
+  const unlockText = _('Unlocked') || 0;
+  const lockCount = serverData.get('lockCount');
+  const unlockCount = serverData.get('trueCount');
+  const ret = $$commonPieOption.mergeDeep({
+    color: [colors[7], colors[1]],
+    legend: {
+      data: [unlockText, lockText],
+      x: '60%',
     },
     title: {
       text: _('Lock Status'),
-      x: 'center',
-      textStyle: {
-        fontSize: '14',
-      },
-    },
-    legend: {
-      show: true,
-      orient: 'vertical',
-      x: 'left',
-      y: 'bottom',
-      data: [_('Locked'), _('Unlocked')],
+      subtext: `${lockCount} / ${unlockCount}`,
     },
     series: [
       {
         name: _('Status'),
-        type: 'pie',
-        radius: ['0%', '60%'],
-        avoidLabelOverlap: false,
-        label: {
-          formatter: '{b}: {c}',
-          normal: {
-            show: true,
-            //position: 'center',
-          },
-          emphasis: {
-            show: true,
-            textStyle: {
-              fontSize: '12',
-              fontWeight: 'bold',
-            },
-          },
-        },
-        labelLine: {
-          normal: {
-            show: true,
-          },
-        },
       },
     ],
-  };
+  }).toJS();
 
   ret.series[0].data = [
-    { value: serverData.get('lockCount'), name: _('Locked') },
-    { value: serverData.get('trueCount'), name: _('Unlocked') },
+    { value: unlockCount, name: unlockText },
+    { value: lockCount, name: lockText },
   ];
 
   return ret;
@@ -163,76 +108,81 @@ export default class View extends PureComponent {
         {...this.props}
         noTitle
       >
-        <div className="o-box row">
-          <div
-            className="o-box__cell"
-          >
-            <h3>{ _('Users') }</h3>
-          </div>
+        <div className="t-overview row">
+          <div className="t-overview__section">
+            <div
+              className="element t-overview__section-header"
+            >
+              <h3>{ _('Users') }</h3>
+            </div>
 
-          <div className="cols col-7">
-            <div className="o-box__cell row">
-              <div
-                className="cols col-4"
-                style={{
-                  paddingRight: '6px',
-                }}
-              >
-                <h3
+            <div className="cols col-7">
+              <div className="element row">
+                <div
+                  className="cols col-4"
                   style={{
-                    fontSize: '14px',
-                    lineHeight: '30px',
-                    textAlign: 'center',
-                    fontWeight: '400',
-                  }}
-                >{_('Online Number')}</h3>
-                <p
-                  style={{
-                    fontSize: '30px',
-                    marginTop: '10px',
-                    padding: '56px 0',
-                    textAlign: 'center',
-                    color: 'green',
-                    border: '1px solid #e5e5e5',
+                    paddingRight: '6px',
                   }}
                 >
-                  {serverData.get('onlineCount') || 0}
-                </p>
+                  <h3
+                    style={{
+                      fontSize: '14px',
+                      lineHeight: '30px',
+                      textAlign: 'center',
+                      fontWeight: '400',
+                    }}
+                  >{_('Total Number')}</h3>
+                  <p
+                    style={{
+                      fontSize: '30px',
+                      marginTop: '10px',
+                      padding: '56px 0',
+                      textAlign: 'center',
+                      color: 'green',
+                      border: '1px solid #e5e5e5',
+                      borderRadius: '4px',
+                    }}
+                  >
+                    {serverData.get('accCount') || 0}
+                  </p>
+                </div>
+                <EchartReact
+                  option={onlineOption}
+                  className="o-box__canvas cols col-8"
+                  style={{
+                    minHeight: '200px',
+                  }}
+                />
               </div>
-              <EchartReact
-                option={onlineOption}
-                className="o-box__canvas cols col-8"
-                style={{
-                  minHeight: '200px',
-                }}
-              />
+            </div>
+            <div className="cols col-5" >
+              <div className="element">
+                <EchartReact
+                  option={apStatusOption}
+                  className="o-box__canvas"
+                  style={{
+                    width: '100%',
+                    minHeight: '200px',
+                  }}
+                />
+              </div>
             </div>
           </div>
-          <div className="cols col-5" >
-            <div className="o-box__cell">
-              <EchartReact
-                option={apStatusOption}
-                className="o-box__canvas"
-                style={{
-                  width: '100%',
-                  minHeight: '200px',
-                }}
-              />
-            </div>
+
+          <div
+            className="element t-overview__header"
+          >
+            <h3>
+              { _('Authentication logs') }
+            </h3>
           </div>
           <div
-            className="cols col-12"
+            className="t-overview__section"
           >
-            <div
-              className="o-box__cell"
-            >
-              <h3>
-                { _('Authentication logs') }
-              </h3>
-            </div>
-            <div className="o-box__cell">
+            <div className="element">
               <Table
                 options={recordOptions}
+                className="table table--light"
                 list={serverData.get('operationRecords')}
               />
             </div>
