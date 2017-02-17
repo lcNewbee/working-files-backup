@@ -41,7 +41,9 @@ const propTypes = {
   editable: PropTypes.oneOfType([
     PropTypes.bool, PropTypes.func,
   ]),
-  deleteable: PropTypes.bool,
+  deleteable: PropTypes.oneOfType([
+    PropTypes.bool, PropTypes.func,
+  ]),
   searchable: PropTypes.bool,
   selectable: PropTypes.bool,
 
@@ -120,12 +122,12 @@ class AppScreenList extends React.PureComponent {
     ]);
   }
   componentWillMount() {
-    this.initListTableOptions(this.props);
+    this.initListTableOptions(this.props, this.props.editable);
     this.initModalFormOptions(this.props);
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.tableOptions !== nextProps.tableOptions) {
-      this.initListTableOptions(nextProps);
+      this.initListTableOptions(nextProps, nextProps.editable);
     }
     if (this.props.editFormOptions !== nextProps.editFormOptions ||
         this.props.editFormOption !== nextProps.editFormOption ||
@@ -449,8 +451,8 @@ class AppScreenList extends React.PureComponent {
         });
     }
   }
-  initListTableOptions(props) {
-    const { actionable, editable, deleteable, tableOptions } = props;
+  initListTableOptions(props, editable) {
+    const { actionable, deleteable, tableOptions } = props;
     let actionsOption = null;
     let btnsNum = 0;
     let btnList = List([]);

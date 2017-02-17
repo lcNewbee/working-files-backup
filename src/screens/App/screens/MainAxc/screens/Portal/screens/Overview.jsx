@@ -54,10 +54,10 @@ function getOnlineOption(serverData) {
   return ret;
 }
 function getApStatusOption(serverData) {
-  const lockText = _('Locked') || 0;
-  const unlockText = _('Unlocked') || 0;
-  const lockCount = serverData.get('lockCount');
-  const unlockCount = serverData.get('trueCount');
+  const lockText = _('Locked');
+  const unlockText = _('Unlocked');
+  const lockCount = serverData.get('lockCount') || 0;
+  const unlockCount = serverData.get('trueCount') || 0;
   const ret = $$commonPieOption.mergeDeep({
     color: [colors[7], colors[1]],
     legend: {

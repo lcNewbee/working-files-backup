@@ -110,7 +110,8 @@ export const radioBase = fromJS([
     text: _('RF Switch'),
     label: _('RF Switch'),
     showLabel: false,
-  }, {
+  },
+  {
     id: 'phymode',
     form: 'radioBase',
     label: _('Physical Mode'),
@@ -118,17 +119,19 @@ export const radioBase = fromJS([
     defaultValue: '',
     options: $$phymodeOptopns,
     required: true,
-  }, {
-    id: 'switch11n',
-    form: 'radioBase',
-    type: 'checkbox',
-    value: '1',
-    defaultValue: '0',
-    text: _('11n Frist'),
-    showPrecondition(data) {
-      return parseInt(data.get('phymode'), 10) > 8;
-    },
-  }, {
+  },
+  // {
+  //   id: 'switch11n',
+  //   form: 'radioBase',
+  //   type: 'checkbox',
+  //   value: '1',
+  //   defaultValue: '0',
+  //   text: _('11n Frist'),
+  //   showPrecondition(data) {
+  //     return parseInt(data.get('phymode'), 10) > 8;
+  //   },
+  // },
+  {
     id: 'txpower',
     form: 'radioBase',
     type: 'select',
@@ -156,7 +159,8 @@ export const radioBase = fromJS([
         label: '100%',
       },
     ],
-  }, {
+  },
+  {
     id: 'countrycode',
     form: 'radioBase',
     type: 'select',
@@ -165,7 +169,8 @@ export const radioBase = fromJS([
     required: true,
     options: countryOptions,
     disabled: true,
-  }, {
+  },
+  {
     id: 'channel',
     form: 'radioBase',
     type: 'select',
@@ -173,7 +178,8 @@ export const radioBase = fromJS([
     defaultValue: '',
     required: true,
     options: [],
-  }, {
+  },
+  {
     id: 'channelwidth',
     form: 'radioBase',
     type: 'switch',
