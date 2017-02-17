@@ -28,7 +28,7 @@ const listOptions = fromJS([
 const queryFormOptions = fromJS([
   {
     id: 'apmac',
-    label: _('Area'),
+    label: _('Location'),
     type: 'select',
     inputStyle: {
       minWidth: '160px',

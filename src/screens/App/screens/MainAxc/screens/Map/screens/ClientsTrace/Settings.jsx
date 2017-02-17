@@ -20,8 +20,8 @@ const formOptions = fromJS([
     id: 'wscanrpttime',
     label: _('Report Time'),
     type: 'number',
-    help: _('Seconds'),
-    min: '0',
+    help: _('Minutes'),
+    min: '1',
     required: true,
   },
 ]);
@@ -88,7 +88,7 @@ View.defaultProps = defaultProps;
 function mapStateToProps(state) {
   return {
     app: state.app,
-    apList: state.product.get('devices'),
+    groupid: state.product.getIn(['group', 'selected', 'id']),
     store: state.screens,
   };
 }
