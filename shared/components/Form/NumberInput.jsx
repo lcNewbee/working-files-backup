@@ -7,6 +7,7 @@ const propTypes = {
   max: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   className: PropTypes.string,
   onChange: PropTypes.func,
+  defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 const defaultProps = {
@@ -23,7 +24,7 @@ class NumberInput extends React.Component {
     this.onBlur = this.onBlur.bind(this);
   }
   onNumberChange(e, needMin) {
-    const { min, max } = this.props;
+    const { min, max, defaultValue } = this.props;
     const val = e.target.value;
     const intVal = parseInt(val, 10);
 
@@ -35,7 +36,7 @@ class NumberInput extends React.Component {
           this.props.onChange(e, min);
 
         // 大于或等于最大值，则返回最大值
-        } else if (intVal >= parseInt(max, 10)) {
+        } else if (intVal >= parseInt(max, 10) && needMin) {
           this.props.onChange(e, max);
 
         // 在范围内
@@ -43,7 +44,7 @@ class NumberInput extends React.Component {
           this.props.onChange(e);
         }
       } else if (needMin && isNaN(intVal)) {
-        this.props.onChange(e, min);
+        this.props.onChange(e, defaultValue || max);
       } else {
         this.props.onChange(e);
       }

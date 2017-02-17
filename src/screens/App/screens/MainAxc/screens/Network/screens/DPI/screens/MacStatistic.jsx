@@ -7,6 +7,7 @@ import Select from 'shared/components/Select';
 import Table from 'shared/components/Table';
 import EchartReact from 'shared/components/EchartReact';
 import AppScreen from 'shared/components/Template/AppScreen';
+import { FormGroup, FormInput } from 'shared/components/Form';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/screens';
 import { colors } from 'shared/config/axc';
@@ -233,11 +234,8 @@ const listOptions = fromJS([
     id: 'ip',
     text: _('IP'),
   }, {
-    id: 'flow_num',
-    text: _('Flow Num'),
-  }, {
-    id: 'upbytes',
-    text: _('Upload Bytes'),
+    id: 'flowBytes',
+    text: _('Flow Bytes'),
     transform(val) {
       if (val === '' || val === undefined) {
         return '--';
@@ -245,21 +243,19 @@ const listOptions = fromJS([
       return flowRateFilter.transform(val);
     },
   }, {
-    id: 'downbytes',
-    text: _('Download Bytes'),
-    transform(val) {
-      if (val === '' || val === undefined) {
-        return '--';
-      }
-      return flowRateFilter.transform(val);
-    },
+    id: 'transPackets',
+    text: _('Transfer Packets'),
   }, {
-    id: 'uppackets',
-    text: _('Upload Packets'),
-  }, {
-    id: 'downpackets',
-    text: _('Download Packets'),
+    id: 'application',
+    text: _('Application'),
   },
+]);
+
+const viewOptions = fromJS([
+  { label: '20', value: '20' },
+  { label: '50', value: '50' },
+  { label: '100', value: '100' },
+  { label: '150', value: '150' },
 ]);
 
 
@@ -270,28 +266,31 @@ export default class MacStatistic extends React.Component {
     utils.binds(this, [
       'initOptions',
       'onChangeTimeType',
-      'onChangeMac',
+      'onChangeSearchMac',
+      'onChangePage',
+      'onSelectRow',
       'onChangeInterface',
       'getMacOptions',
+      'onChangeView',
     ]);
   }
   componentWillMount() {
     this.initOptions(this.props);
   }
 
-  componentDidMount() {
-    this.props.fetch(this.props.route.formUrl).then((json) => {
-      let macVal = '';
-      if (json.data.list && json.data.list[0]) {
-        macVal = json.data.list[0].mac;
-      }
-      this.props.changeScreenQuery({
-        mac: macVal,
-      });
-    }).then(() => {
-      this.props.fetchScreenData();
-    });
-  }
+  // componentDidMount() {
+  //   this.props.fetch(this.props.route.formUrl).then((json) => {
+  //     let macVal = '';
+  //     if (json.data.list && json.data.list[0]) {
+  //       macVal = json.data.list[0].mac;
+  //     }
+  //     this.props.changeScreenQuery({
+  //       mac: macVal,
+  //     });
+  //   }).then(() => {
+  //     this.props.fetchScreenData();
+  //   });
+  // }
 
   componentWillReceiveProps(nextProps) {
     const curScreenId = nextProps.store.get('curScreenId');
@@ -302,23 +301,82 @@ export default class MacStatistic extends React.Component {
   }
 
   onChangeTimeType(data) {
-    this.props.changeScreenQuery({
-      timeType: data.value,
-    });
+    this.props.changeScreenQuery({ timeType: data.value });
     this.props.fetchScreenData();
   }
 
-  onChangeMac(data) {
-    this.props.changeScreenQuery({
-      mac: data.value,
+  onChangeSearchMac(data) {
+    this.props.changeScreenQuery({ search: data.value });
+    this.props.fetchScreenData();
+  }
+
+  onSelectRow(data) { // 最多允许勾选三个列表项进行绘图
+    const that = this;
+    const curScreenId = this.props.store.get('curScreenId');
+    const ifSelected = this.props.store.getIn([curScreenId, 'data', 'list', data.index, '__selected__']);
+    const list = this.props.store.getIn([curScreenId, 'data', 'list']);
+    if (data.index === -1) return;
+    /** *************** 注释的这段是单选的代码 ******************/
+    // this.props.selectListItem({
+    //   keyName: 'index',
+    //   index: data.index,
+    //   selected: !ifSelected,
+    // });
+    // if (!ifSelected) { // 单选，如果是勾选则将已经勾选的勾去
+    //   list.forEach((item, index) => {
+    //     if (index !== data.index) {
+    //       this.props.selectListItem({
+    //         keyName: 'index',
+    //         selected: false,
+    //         index,
+    //       });
+    //     }
+    //   });
+    // }
+    /** ********************** 单选代码完毕 **************************/
+
+    /** *********************** 多选代码 ****************************/
+    function selectGraphItem(num) {
+      if (!ifSelected) {
+        const checkedNum = list.count((item) => {
+          if (item.get('__selected__')) return true;
+        });
+        if (checkedNum < num) {
+          that.props.selectListItem({
+            keyName: 'index',
+            index: data.index,
+            selected: true,
+          });
+        }
+      } else {
+        that.props.selectListItem({
+          keyName: 'index',
+          index: data.index,
+          selected: false,
+        });
+      }
+    }
+    /** ******************* 多选代码完成 *************************** */
+    // 将选择的MAC加入query
+    Promise.resolve(3).then((n) => { selectGraphItem(n); }).then(() => {
+      const selectedList = this.props.store.getIn([curScreenId, 'actionQuery', 'selectedList']);
+      const graphMac = selectedList.map(val => list.getIn([val, 'mac']));
+      this.props.changeScreenQuery({ graphMac });
     });
+  }
+
+  onChangeView(data) {
+    this.props.changeScreenQuery({ size: data.value });
+    this.props.fetchScreenData();
+  }
+
+  onChangePage(data) {
+    this.props.changeScreenQuery({ page: data });
     this.props.fetchScreenData();
   }
 
   onChangeInterface(data) {
-    this.props.changeScreenQuery({
-      ethx: data.value,
-    });
+    this.props.changeScreenQuery({ ethx: data.value });
     this.props.fetchScreenData();
   }
 
@@ -346,14 +404,13 @@ export default class MacStatistic extends React.Component {
     const store = this.props.store;
     const curScreenId = store.get('curScreenId');
     const serverData = store.getIn([curScreenId, 'data']);
-
     return (
       <AppScreen
         {...this.props}
         // listOptions={listOptions}
         initOption={{
           isFetchInfinite: true,
-          fetchIntervalTime: 5000,
+          fetchIntervalTime: 30000,
           query: {
             timeType: '0',
             mac: '',
@@ -363,16 +420,58 @@ export default class MacStatistic extends React.Component {
       >
         <div className="t-overview">
           <h3 className="element t-overview__header">{_('Statistics Within 30 Seconds')}</h3>
+          <div className="element t-overview__section-header">
+            <h3>
+              <span
+                style={{
+                  marginRight: '10px',
+                }}
+              >
+                {_('Traffic')}
+              </span>
+              <Select
+                options={timeTypeSwitchs.toJS()}
+                value={store.getIn([curScreenId, 'query', 'timeType'])}
+                onChange={this.onChangeTimeType}
+                clearable={false}
+              />
+              <span
+                style={{
+                  marginRight: '10px',
+                  marginLeft: '20px',
+                }}
+              >
+                {_('Search MAC')}
+              </span>
+              <FormInput
+                // options={this.getMacOptions()}
+                value={store.getIn([curScreenId, 'query', 'search'])}
+                onChange={this.onChangeSearchMac}
+              />
+              <FormGroup
+                type="select"
+                className="fr"
+                label={_('View')}
+                options={viewOptions.toJS()}
+                value={store.getIn([curScreenId, 'query', 'size'])}
+                onChange={this.onChangeView}
+              />
+            </h3>
+          </div>
           <div className="t-overview__section">
             <Table
+              selectable
               className="table"
               options={listOptions}
               list={serverData.getIn(['list'])}
+              page={store.getIn([curScreenId, 'data', 'page'])}
+              onPageChange={this.onChangePage}
+              onRowSelect={this.onSelectRow}
             />
           </div>
           <h3 className="element t-overview__header">{_('Historical Graphs')}</h3>
           <div className="t-overview__section">
-            <div className="element t-overview__section-header">
+            {/* <div className="element t-overview__section-header">
               <h3>
                 <span
                   style={{
@@ -398,11 +497,11 @@ export default class MacStatistic extends React.Component {
                 <Select
                   options={this.getMacOptions()}
                   value={store.getIn([curScreenId, 'query', 'mac'])}
-                  onChange={this.onChangeMac}
+                  onChange={this.onChangeSearchMac}
                   clearable={false}
                 />
               </h3>
-            </div>
+            </div>*/}
             <div className="element">
               <EchartReact
                 option={flowOption}

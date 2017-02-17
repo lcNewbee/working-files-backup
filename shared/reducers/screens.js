@@ -83,6 +83,7 @@ function selectedListItem(state, action, curScreenName) {
 
   if (data.index !== -1) {
     list = list.setIn([data.index, '__selected__'], data.selected);
+    console.log('data.selected', data.index, data.selected);
     if (data.selected) {
       selectedList = selectedList.push(data.index);
     } else {

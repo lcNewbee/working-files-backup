@@ -137,6 +137,7 @@ export default class ACL extends React.Component {
     let afterList;
     this.props.validateAll().then((msg) => {
       if (msg.isEmpty()) {
+        if (macInputVal === '') return;
         if (preList.includes(macInputVal)) {
           this.props.createModal({
             id: 'settings',

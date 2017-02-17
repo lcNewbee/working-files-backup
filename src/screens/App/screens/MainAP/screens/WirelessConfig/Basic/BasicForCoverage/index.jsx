@@ -103,9 +103,10 @@ const radioModeOptionsFor2g = [
 ];
 
 const channelWidthOptions = [
-  { value: 'HT20', label: '20MHz' },
-  { value: 'HT40', label: '40MHz' },
-  { value: 'HT80', label: '80MHz' },
+  { value: 'HT20', label: 'HT20' },
+  { value: 'HT40-', label: 'HT40-' },
+  { value: 'HT40+', label: 'HT40+' },
+  { value: 'HT80', label: 'HT80' },
 ];
 
 const validOptions = Map({
@@ -262,6 +263,9 @@ export default class Basic extends React.Component {
               <FormInput
                 type="number"
                 value={val}
+                min="1"
+                max="4094"
+                defaultValue="1"
                 disabled={vlanEnable === '0'}
                 onChange={(data) => {
                   this.onSsidItemChange(val, item, 'vlanId', data.value);
@@ -280,15 +284,16 @@ export default class Basic extends React.Component {
           label: _('Max Clients'),
           width: '250px',
           transform: function (val, item) {
-            if (val === '' || !Number.isInteger(+val) || parseInt(val, 10) <= 0) {
-              this.onSsidItemChange(val, item, 'maxClients', '64');
-            } // 后台没传值，或值错误，则提供默认值
+            // if (val === '' || !Number.isInteger(+val) || parseInt(val, 10) <= 0) {
+            //   this.onSsidItemChange(val, item, 'maxClients', '64');
+            // } // 后台没传值，或值错误，则提供默认值
             return (
               <FormInput
                 type="number"
                 value={val}
-                max={100}
-                min={1}
+                max="100"
+                min="1"
+                defaultValue="64"
                 // disabled={pos === 0 || vlanEnable === '0'}
                 onChange={(data) => {
                   this.onSsidItemChange(val, item, 'maxClients', data.value);
@@ -746,7 +751,13 @@ export default class Basic extends React.Component {
       defaultData: {
       },
     });
-    this.fetchFullPageData();
+    props.fetch('goform/get_network_info').then((json) => {
+      if (json.state && json.state.code === 2000) {
+        vlanEnable = json.data.vlanEnable;
+      }
+    }).then(() => {
+      this.fetchFullPageData();
+    });
     // props.changeTitleShowIcon({ name: 'showRadioSetting', value: true });
     props.changeTitleShowIcon({ name: 'showSsidSetting', value: true });
     props.changeTitleShowIcon({ name: 'showMultiSsid', value: true });
@@ -758,11 +769,6 @@ export default class Basic extends React.Component {
       val: '',
       item: fromJS({}),
     }));
-    props.fetch('goform/get_network_info').then((json) => {
-      if (json.state && json.state.code === 2000) {
-        vlanEnable = json.data.vlanEnable;
-      }
-    });
     const config = fromJS({
       radioId: '0',
       radioType: this.props.productInfo.getIn(['deviceRadioList', 0, 'radioType']),
@@ -1067,8 +1073,8 @@ export default class Basic extends React.Component {
                     <FormGroup
                       label={_('Channel Bandwidth')}
                       type="switch"
-                      minWidth="99px"
-                      options={channelWidthOptions.slice(0, 2)}
+                      minWidth="66px"
+                      options={channelWidthOptions.slice(0, 3)}
                       value={curData.getIn(['radioList', radioId, 'channelWidth'])}
                       onChange={(data) => {
                         const radioList = curData.get('radioList')
@@ -1084,12 +1090,32 @@ export default class Basic extends React.Component {
                 }
                 { // 5G频宽
                   this.props.selfState.getIn(['currRadioConfig', 'radioType']) === '5G' &&
-                  (curData.getIn(['radioList', radioId, 'radioMode']) === '11ac' ||
-                  curData.getIn(['radioList', radioId, 'radioMode']) === '11na') ? (
+                  curData.getIn(['radioList', radioId, 'radioMode']) === '11na' ? (
                     <FormGroup
                       label={_('Channel Bandwidth')}
                       type="switch"
                       minWidth="66px"
+                      options={channelWidthOptions.slice(0, 3)}
+                      value={curData.getIn(['radioList', radioId, 'channelWidth'])}
+                      onChange={(data) => {
+                        const radioList = curData.get('radioList')
+                                          .setIn([radioId, 'channelWidth'], data.value);
+                        Promise.resolve().then(() => {
+                          this.props.updateItemSettings({ radioList });
+                        }).then(() => {
+                          this.getChannelListAndPowerRange(radioId);
+                        });
+                      }}
+                    />
+                  ) : null
+                }
+                { // 5G频宽
+                  this.props.selfState.getIn(['currRadioConfig', 'radioType']) === '5G' &&
+                  curData.getIn(['radioList', radioId, 'radioMode']) === '11ac' ? (
+                    <FormGroup
+                      label={_('Channel Bandwidth')}
+                      type="switch"
+                      minWidth="42px"
                       options={channelWidthOptions}
                       value={curData.getIn(['radioList', radioId, 'channelWidth'])}
                       onChange={(data) => {

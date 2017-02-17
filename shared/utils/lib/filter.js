@@ -98,13 +98,13 @@ helper = {
     }
 
     if(unitSize > UNIT_GB) {
-      ret = unitSize / UNIT_GB;
+      ret = unitSize / (UNIT_GB);
       unit = 'GB';
     } else if(unitSize > UNIT_MB) {
-      ret = unitSize / UNIT_MB;
+      ret = unitSize / (UNIT_MB);
       unit = 'MB';
     } else if(unitSize > UNIT_KB) {
-      ret = unitSize / UNIT_KB;
+      ret = unitSize / (UNIT_KB);
       unit = 'KB';
     } else {
       ret = unitSize;

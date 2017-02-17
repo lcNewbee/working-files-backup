@@ -180,8 +180,15 @@ class Row extends Component {
             currVal = $$curTdOption.get('transform')(currVal, item, index);
           }
 
+          // 当鼠标停留在列表上，该项是否显示悬浮提示框，如果该列需要，则在options中添加getTitle函数，函数返回的字符串则作为提示内容
+          const getTitle = $$curTdOption.get('getTitle');
+          const title = typeof (getTitle) === 'function' ? getTitle(currVal, item, index) : null;
+
           return (
-            <MyCompeont key={thisKey}>
+            <MyCompeont
+              key={thisKey}
+              title={title}
+            >
               { currVal }
             </MyCompeont>
           );

@@ -36,3 +36,6 @@ gulp.task('config:ASC175', () => configProduct('ASC175'));
 gulp.task('config:ASW3', () => configProduct('ASW3'));
 gulp.task('config:ASC120', () => configProduct('ASC120'));
 gulp.task('config:AEC60', () => configProduct('AEC60'));
+gulp.task('config:ASC3', () => configProduct('ASC3'));
+gulp.task('config:ASC6', () => configProduct('ASC6'));
+gulp.task('config:ASW120', () => configProduct('ASW120'));

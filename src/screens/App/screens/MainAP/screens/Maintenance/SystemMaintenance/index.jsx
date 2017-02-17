@@ -99,51 +99,32 @@ export default class SystemMaintenance extends Component {
     const that = this;
     const input = document.getElementById('upgradeFile');
     const formElem = document.getElementById('upgradeForm');
-    let data;
-
     e.preventDefault();
-
     if (!input.value) {
       return;
     }
-    const extension = utils.getExtension(input.value);
-
     function upgradeDevice() {
-      if (typeof FormData === 'function') {
-        data = new FormData();
-        data.append('filename', input.files[0]);
-        data.append('suffix', extension);
-        const step = Promise.resolve();
-        // const upgradeBarInfo = that.props.selfState.get('upgradeBarInfo')
-        //                         .set('isShow', true)
-        //                         .setIn(['firstBar', 'start'], true);
-        // that.props.changeUpgradeBarInfo(upgradeBarInfo);
-        step.then(() => {
-          const upgradeBarInfo = that.props.selfState.get('upgradeBarInfo')
-                                  .set('isShow', true);
-          that.props.changeUpgradeBarInfo(upgradeBarInfo);
-        }).then(() => {
-          const upgradeBarInfo = that.props.selfState.get('upgradeBarInfo')
-                                  .setIn(['firstBar', 'start'], true);
-          that.props.changeUpgradeBarInfo(upgradeBarInfo);
-        });
-
-        fetch(formElem.action, {
-          method: 'POST',
-          body: data,
-        }).then((rq) => {
-          if (rq.state && rq.state.code === 4000) {
-            that.props.resetSelfState();
-            that.props.createModal({
-              id: 'settings',
-              role: 'alert',
-              text: _('File verification failed! Please upload the right upgrading file.'),
-            });
-          }
-        });
-      } else {
-        formElem.submit();
-      }
+      utils.postForm(formElem.action, formElem).then((json) => {
+        if (json.state && json.state.code === 4000) {
+          that.props.resetSelfState();
+          that.props.createModal({
+            id: 'settings',
+            role: 'alert',
+            text: _('File verification failed! Please upload the right upgrading file.'),
+          });
+        } else {
+          const step = Promise.resolve();
+          step.then(() => {
+            const upgradeBarInfo = that.props.selfState.get('upgradeBarInfo')
+                                    .set('isShow', true);
+            that.props.changeUpgradeBarInfo(upgradeBarInfo);
+          }).then(() => {
+            const upgradeBarInfo = that.props.selfState.get('upgradeBarInfo')
+                                    .setIn(['firstBar', 'start'], true);
+            that.props.changeUpgradeBarInfo(upgradeBarInfo);
+          });
+        }
+      });
     }
 
     this.props.createModal({
@@ -158,35 +139,25 @@ export default class SystemMaintenance extends Component {
     const that = this;
     const input = document.getElementById('restoreFile');
     const formElem = document.getElementById('restoreForm');
-    let data;
     e.preventDefault();
-
     if (!input.value) {
       return;
     }
-    const extension = utils.getExtension(input.value);
     function saveConfig() {
-      if (typeof FormData === 'function') {
-        data = new FormData();
-        data.append('filename', input.files[0]);
-        data.append('suffix', extension);
-        const step = Promise.resolve();
-        step.then(() => {
-          const barInfo = that.props.selfState.get('progressBarInfo')
-                          .set('title', _('The configuration is restoring now, please wait ...'))
-                          .set('time', 120).set('isShow', true).set('start', false);
-          that.props.changeProgressBarInfo(barInfo);
-        }).then(() => {
-          const barInfo = that.props.selfState.get('progressBarInfo').set('start', true);
-          that.props.changeProgressBarInfo(barInfo);
-        });
-
-        fetch(formElem.action, {
-          method: 'POST',
-          body: data,
-        }).then((rq) => {
-          if (rq.state && rq.state.code === 4000) {
-            // clearTimeout(timeClock);
+      utils.postForm(formElem.action, formElem)
+        .then((json) => {
+          if (json.state && json.state.code === 2000) {
+            const step = Promise.resolve();
+            step.then(() => {
+              const barInfo = that.props.selfState.get('progressBarInfo')
+                              .set('title', _('The configuration is restoring now, please wait ...'))
+                              .set('time', 120).set('isShow', true).set('start', false);
+              that.props.changeProgressBarInfo(barInfo);
+            }).then(() => {
+              const barInfo = that.props.selfState.get('progressBarInfo').set('start', true);
+              that.props.changeProgressBarInfo(barInfo);
+            });
+          } else if (json.state && json.state.code === 4000) {
             that.props.resetSelfState();
             that.props.createModal({
               id: 'settings',
@@ -195,9 +166,6 @@ export default class SystemMaintenance extends Component {
             });
           }
         });
-      } else {
-        formElem.submit();
-      }
     }
 
     this.props.createModal({
@@ -342,6 +310,9 @@ export default class SystemMaintenance extends Component {
           action="/cgi-bin/upload_settings.cgi"
           method="POST"
           encType="multipart/form-data"
+          ref={(refs) => {
+            this.restoreForm = refs;
+          }}
         >
           <FormGroup
             label={_('Restore Configuration')}
@@ -349,6 +320,7 @@ export default class SystemMaintenance extends Component {
             <FormInput
               type="file"
               id="restoreFile"
+              name="restoreFile"
             />
             <Button
               text={_('Restore')}

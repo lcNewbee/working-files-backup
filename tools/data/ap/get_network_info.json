@@ -11,7 +11,7 @@
     "mtu": "1500",
 	  "mngVlanId":"1",
     "utgVlanId":"1",
-    "vlanEnable":"0",
+    "vlanEnable":"1",
 
     "wiredMode": "bridge",
     "routerInfo": {

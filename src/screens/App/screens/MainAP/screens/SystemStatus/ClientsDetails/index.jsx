@@ -133,11 +133,17 @@ export default class ClientsDetails extends React.Component {
       {
         id: 'deviceName',
         text: _('Device Name'),
+        maxWidth: '117px',
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
+          } else if (val.length > 14) {
+            return `${val.slice(0, 7)}...${val.slice(-4)}`;
           }
           return val;
+        },
+        getTitle(val, item) {
+          return item.get('deviceName');
         },
       },
       {
