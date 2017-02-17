@@ -142,12 +142,9 @@ $main-blue: #0093dd;
     margin: 0;
     color: #000;
 
-    .a-password {
-      display: block;
-    }
+    .a-password__input,
     .text {
-      padding: 6px 12px;
-      padding: 0.61538em 1.2em;
+      padding: 4px 12px;
       width: 100%;
       height: 40px;
       border: 1px solid #ccc;
@@ -155,7 +152,6 @@ $main-blue: #0093dd;
       background-image: none;
       color: #555;
       font-size: 14px;
-      font-size: 1.23077em;
       line-height: 1.42857143;
       transition: border-bottom-color ease-in-out .15s, box-shadow ease-in-out .15s;
 
@@ -163,6 +159,11 @@ $main-blue: #0093dd;
         border: 1px solid #ccc;
         border-bottom-color: $main-blue;
       }
+    }
+    .a-password {
+      display: block;
+      padding: 0;
+      border: 0;
     }
   }
 
@@ -173,5 +174,11 @@ $main-blue: #0093dd;
   .Select {
     width: 100%;
     max-width: 100%;
+  }
+}
+
+.en .t-wizard {
+  .form-control {
+    margin: 0;
   }
 }

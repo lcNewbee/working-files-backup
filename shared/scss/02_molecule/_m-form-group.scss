@@ -19,7 +19,8 @@ $boder-color:         #ccc;
 
   &.form-group--error {
     .form-control {
-      .text {
+      .a-password__input,
+      input.text {
         border: 1px solid $g-brand-danger;
       }
     }
@@ -51,18 +52,6 @@ $boder-color:         #ccc;
     line-height: 16px;
   }
 
-  .text {
-    width: 200px;
-    line-height: 16px;
-    vertical-align: middle;
-    margin-right: 5px;
-
-    &:focus {
-      border: 1px solid $g-brand-info;
-    }
-  }
-
-
   .input-sm {
     width: 80px;
   }
@@ -75,9 +64,23 @@ $boder-color:         #ccc;
       line-height: 30px;
     }
 
+    > .text {
+      width: 200px;
+      line-height: 16px;
+      vertical-align: middle;
+      margin-right: 5px;
+
+      &:focus {
+        border: 1px solid $g-brand-info;
+      }
+    }
+
     .a-checkbox {
       float: left;
       margin-top: 8px;
+    }
+    .a-password__input {
+      line-height: 16px;
     }
     .m-switch {
       margin-left: 0;
@@ -125,6 +128,11 @@ $boder-color:         #ccc;
       margin-left: 0;
       .text {
         width: auto;
+      }
+      .a-password {
+        .text {
+          width: 100%;
+        }
       }
     }
   }

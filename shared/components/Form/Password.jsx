@@ -6,6 +6,7 @@ import Input from './atom/Input';
 const propTypes = {
   seeAble: PropTypes.bool,
   autoFocus: PropTypes.bool,
+  className: PropTypes.string,
   onChange: PropTypes.func,
   type: PropTypes.oneOf(['text', 'password']),
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -16,6 +17,10 @@ const propTypes = {
 
 const defaultProps = {
   seeAble: true,
+};
+
+const inputStyle = {
+  width: '100%',
 };
 
 class Password extends React.Component {
@@ -48,7 +53,7 @@ class Password extends React.Component {
 
   render() {
     const { isSee, isFocus } = this.state;
-    const { display, style, seeAble, ...restProps } = this.props;
+    const { display, style, seeAble, className, ...restProps } = this.props;
     const myIsFocus = isFocus || this.props.isFocus;
     let passwordClassName = 'a-password';
     let iconClassName = 'a-password__icon';
@@ -67,6 +72,10 @@ class Password extends React.Component {
     }
 
     showIcon = seeAble && showIcon;
+
+    if (className) {
+      passwordClassName = `${passwordClassName} ${className}`;
+    }
 
     if (display) {
       passwordClassName = `${passwordClassName} a-password--${display}`;
@@ -89,6 +98,8 @@ class Password extends React.Component {
 
         <Input
           {...restProps}
+          className="a-password__input"
+          style={inputStyle}
           isFocus={myIsFocus}
           type={type}
           onChange={this.onChange}
