@@ -537,7 +537,7 @@ const routes = [
                     id: 'clientsTrace',
                     path: '/main/group/map/clients_trace/list',
                     formUrl: '/goform/group/map/clients_trace',
-                    text: _('Clients Flow State'),
+                    text: _('Clients State'),
                     component: sClientsTraceList.Screen,
                   }, {
                     id: 'clientsTrace',

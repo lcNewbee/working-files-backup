@@ -9,7 +9,7 @@ import pkg from './package.json';
 
 const $ = gulpLoadPlugins();
 const argv = minimist(process.argv.slice(2));
-const paths = gulp.paths = {
+const paths = {
   tmp: '.tmp',
   build: 'build',
   zip: 'zip',
@@ -33,6 +33,7 @@ const paths = gulp.paths = {
   pubAEC60: '../platform/COMLANOS/package/goahead/files/AEC60_web',
 };
 gulp.pkg = pkg;
+gulp.paths = paths;
 
 // 引入
 require('./tools/gulp/build');
@@ -96,5 +97,4 @@ gulp.task('changeASC175Title', () => changeTitle('ASC175'));
 gulp.task('changeASW3Title', () => changeTitle('ASW3'));
 gulp.task('changeASC120Title', () => changeTitle('ASC120'));
 gulp.task('changeAEC60Title', () => changeTitle('AEC60'));
-
 

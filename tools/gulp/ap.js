@@ -134,7 +134,3 @@ gulp.task('compressAEC60', () => compressBulidFile(paths.pubAEC60));
 gulp.task('pub:all', () => {
   runSequence('test', 'pub:AIP10', 'pub:AIP5', 'pub:ASW3', 'pub:AEC120', 'pub:ASC175', 'pub:ASC120', 'pub:AEC60');
 });
-
-gulp.task('test:all', () => {
-  runSequence('test', 'build', 'clean', 'build');
-});

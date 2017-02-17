@@ -94,15 +94,6 @@ let config = {
       },
 
       {
-        test: /\.json$/,
-        use: [
-          {
-            loader: 'json-loader',
-          }
-        ]
-      },
-
-      {
         test: /\.css$/,
         use: [
           {
@@ -137,8 +128,6 @@ let config = {
         include: [
           path.resolve(__dirname, "src"),
           path.resolve(__dirname, "shared"),
-          path.resolve(__dirname, "test"),
-          path.resolve(__dirname, "tools"),
         ],
         use: [
           {
@@ -155,7 +144,10 @@ let config = {
   },
   resolve: {
     extensions: ['.js', '.jsx'],
-    modules: ['node_modules', 'shared'],
+    modules: [
+      path.resolve(__dirname, "node_modules"),
+      path.resolve(__dirname, "shared"),
+    ],
   },
   performance: {
     hints: false, // enum

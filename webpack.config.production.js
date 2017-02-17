@@ -82,7 +82,7 @@ var vendorList = [
 module.exports = {
   entry: {
     app: './src/index_pub.jsx',
-    vendors: vendorList,
+    // vendors: vendorList,
   },
   module: {
     rules: [
@@ -139,15 +139,6 @@ module.exports = {
       },
 
       {
-        test: /\.json$/,
-        use: [
-          {
-            loader: 'json-loader',
-          }
-        ]
-      },
-
-      {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
           use: "css-loader",
@@ -166,8 +157,6 @@ module.exports = {
         include: [
           path.resolve(__dirname, "src"),
           path.resolve(__dirname, "shared"),
-          path.resolve(__dirname, "test"),
-          path.resolve(__dirname, "tools")
         ],
         use: [
           {
@@ -186,9 +175,8 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx'],
     modules: [
-      path.join(__dirname, "src"),
-      'node_modules',
-      'shared'
+      path.resolve(__dirname, "node_modules"),
+      path.resolve(__dirname, "shared"),
     ],
   },
   output: {
@@ -200,6 +188,9 @@ module.exports = {
   plugins: [
     new webpack.LoaderOptionsPlugin({
       cache: true,
+      // set to false to see a list of every file being bundled.
+      noInfo: true,
+
       options: {
         context: __dirname,
         postcss() {
@@ -207,12 +198,16 @@ module.exports = {
         },
       }
     }),
-    new webpack.DefinePlugin(GLOBALS.DEFINE_OBJ),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: ['vendors'], // 将公共模块提取，生成名为`vendors`bundle
-      chunks: ['vendors', 'app'], //提取哪些模块共有的部分,名字为上面的vendor
-      minChunks: 2, // Infinity // 提取至少*个模块共有的部分
+    new webpack.DllReferencePlugin({
+      context: "dll",
+      manifest: require("./src/config/scripts/vendors-manifest.json")
     }),
+    new webpack.DefinePlugin(GLOBALS.DEFINE_OBJ),
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: ['vendors'], // 将公共模块提取，生成名为`vendors`bundle
+    //   chunks: ['vendors', 'app'], //提取哪些模块共有的部分,名字为上面的vendor
+    //   minChunks: 2, // Infinity // 提取至少*个模块共有的部分
+    // }),
     new ExtractTextPlugin({
       filename: "styles/axilspot.css",
       disable: false,
