@@ -24,12 +24,10 @@ const settingsOptions = fromJS([
     fieldset: 'base_setting',
     className: 'cols col-6',
     required: true,
-    formProps: {
-      type: 'text',
-      validator: validator({
-        rules: 'ip',
-      }),
-    },
+    type: 'text',
+    validator: validator({
+      rules: 'ip',
+    }),
   },
   {
     id: 'bas_port',
@@ -41,11 +39,14 @@ const settingsOptions = fromJS([
   },
   {
     id: 'sharedSecret',
-    type: 'password',
     required: true,
+    type: 'password',
     className: 'cols col-6',
     fieldset: 'base_setting',
     label: _('Shared Secret'),
+    validator: validator({
+      rules: 'pwd',
+    }),
   },
   {
     id: 'bas_user',
@@ -62,6 +63,9 @@ const settingsOptions = fromJS([
     className: 'cols col-6',
     fieldset: 'base_setting',
     label: _('Password'),
+    validator: validator({
+      rules: 'pwd',
+    }),
   },
   {
     id: 'bas',
@@ -240,7 +244,7 @@ const settingsOptions = fromJS([
             label: _('Visitor Auth'),
           },
         ],
-        noForm: true,
+        // noForm: true,
       }, {
         id: 'username',
         label: _('Public User Name'),
