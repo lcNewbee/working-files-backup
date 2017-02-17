@@ -4,9 +4,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class AccessDefault extends CI_Controller {
     public function __construct() {
         parent::__construct();
-        $this->load->database();
         $this->load->helper('array');   
-        //$this->load->library('PHPZip');        
+        $this->load->library('PHPZip');        
     }
     public function index() {
         $result = null;
@@ -47,53 +46,15 @@ class AccessDefault extends CI_Controller {
             }
         }
         closedir($dir);
-    }
-    function list_dir($dir){
-        $result = array();
-        if (is_dir($dir)){
-            $file_dir = scandir($dir);                     
-            foreach($file_dir as $file){
-                if ($file == '.' || $file == '..'){
-                    continue;
-                }
-                elseif (is_dir($dir.$file)){
-                    $res = $this->list_dir($dir.$file.'/');                    
-                    $result = array_merge($result, $res);
-                }
-                else{
-                    array_push($result, $dir.$file);
-                }
-            }
-            
-        }
-        return $result;
-    }    
-    function addFileToZip($path,$zip){
-        $handler = opendir($path); //打开当前文件夹由$path指定。            
-        while(($filename=readdir($handler))!==false){            
-            if($filename != "." && $filename != ".."){//文件夹文件名字为'.'和‘..’，不要对他们进行操作
-                if(is_dir($path."/".$filename)){// 如果读取的某个对象是文件夹，则递归
-                    $this->addFileToZip($path."/".$filename, $zip);                    
-                }else{ //将文件加入zip对象                    
-                    $ss = ltrim($path."/".$filename,"/var/conf/portal_web_tmp/");
-                    $zip->addFile($path."/".$filename,$ss);//第二个参数加上路径后就会按路径生成文件夹，注意！
-                }
-            }
-        }
-        @closedir($path);        
-    } 
+    }  
+
     public function download() {             
-        $path = '/var/conf/portal_web_tmp';
         $copyPath = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/';
+        $path = '/var/conf/portal_web_tmp';//需压缩的目录（文件夹）        
         $filename = "/var/conf/portal_web_tmp.zip"; //最终生成的文件名（含路径）
         if(!is_dir($path)){
             mkdir($path,0777,true);            
-        }
-        /*
-        copy('/usr/web/index.html',$path.'/index.html');
-        copy('/usr/web/index.php',$path.'/index.php');
-        $this->copy_dir('/usr/web/images',$path.'/images');       
-        */        
+        }      
         if(!is_dir($path)){
             mkdir($path,0777,true);            
         }        
@@ -109,46 +70,42 @@ class AccessDefault extends CI_Controller {
         copy($copyPath.'APIout.jsp',$path.'/APIout.jsp');
         copy($copyPath.'APIwx.jsp',$path.'/APIwx.jsp');
         copy($copyPath.'APIwxpc.jsp',$path.'/APIwxpc.jsp');
-        copy($copyPath.'error.jsp',$path.'/error.jsp');
+        copy($copyPath.'error.html',$path.'/error.html');
         copy($copyPath.'info.jsp',$path.'/info.jsp');
         copy($copyPath.'OL.jsp',$path.'/OL.jsp');
         copy($copyPath.'wifidogAuth.jsp',$path.'/wifidogAuth.jsp');
         copy($copyPath.'wifidogOk.jsp',$path.'/wifidogOk.jsp');
         copy($copyPath.'wifidogOut.jsp',$path.'/wifidogOut.jsp');
         copy($copyPath.'wifidogWx.jsp',$path.'/wifidogWx.jsp'); 
-        
-        //PHP压缩文件夹为zip压缩文件
-        //获取列表 
-        $datalist = $this->list_dir('/var/conf/portal_web_tmp/');
-        $zip = new ZipArchive();
-        if($zip->open('/var/conf/portal_web_tmp.zip', ZipArchive::CREATE)=== TRUE){
-            $this->addFileToZip('/var/conf/portal_web_tmp', $zip); //调用方法，对要打包的根目录进行操作，并将ZipArchive的对象传递给方法
-            $zip->close(); //关闭处理的zip文件
-        }           
-        header("Cache-Control: public"); 
-        header("Content-Description: File Transfer"); 
-        header('Content-disposition: attachment; filename='.basename($filename)); //文件名   
-        header("Content-Type: application/zip"); //zip格式的   
-        header("Content-Transfer-Encoding: binary"); //告诉浏览器，这是二进制文件    
-        header('Content-Length: '. filesize($filename)); //告诉浏览器，文件大小   
-        @readfile($filename);    
-           
+         
+        $zip = new PHPZip();
+        //压缩并下载 
+        $zip->Zip_CompressDownload($path,$filename);
     }    
     public function upload() {
         $result = null;
-        $config['upload_path'] = '/var/conf/portalserver';
+        $config['upload_path'] = '/var/conf';
         $config['allowed_types'] = 'zip|rar';
         $config['overwrite'] = true;
         $config['max_size'] = 0;
-        $config['file_name'] = 'portal_web_tmp.zip';
+        $config['file_name'] = 'upload_portal_web_tmp.zip';
 
         $this->load->library('upload', $config);
         if (!$this->upload->do_upload('filename')) {
             $error = array('error' => $this->upload->display_errors());
             $result = array('state' => array('code' => 4000, 'msg' => $error));
         } else {
+            //上传成功            
             $data = array('upload_data' => $this->upload->data());
             $result = array('state' => array('code' => 2000, 'msg' => 'OK'), 'data' => $data);
+            //解压文件
+            $zip = new PHPZip();                
+            $path = "/var/conf/upload_portal_web_tmp.zip"; //需解压文件
+            $targetpath = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal';//解压地址               
+                    	
+            if(!$zip->Zip_Decompression($path,$targetpath)){
+                $result = array('state' => array('code' => 4000, 'msg' => 'Decompression'), 'data' => $data);
+            }            
         }
         echo json_encode($result);
     }           
