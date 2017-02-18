@@ -3,6 +3,7 @@ var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var autoprefixer = require('autoprefixer');
+var HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
 
 var GLOBALS = {
   DEFINE_OBJ: {
@@ -214,6 +215,12 @@ module.exports = {
       allChunks: true
     }),
     new webpack.optimize.UglifyJsPlugin(),
+
+    new HtmlWebpackIncludeAssetsPlugin({
+      assets: ['scripts/vendors.bundle.js'],
+      append: false,
+      hash: true
+    }),
     new HtmlWebpackPlugin({ //根据模板插入css/js等生成最终HTML
       favicon: 'src/favicon.ico', //favicon存放路径
       filename: 'index.html', //生成的html存放路径，相对于 path

@@ -5401,6 +5401,12 @@
       "resolved": "https://registry.npm.taobao.org/html-minifier/download/html-minifier-3.3.1.tgz",
       "dev": true
     },
+    "html-webpack-include-assets-plugin": {
+      "version": "0.0.4",
+      "from": "html-webpack-include-assets-plugin@latest",
+      "resolved": "https://registry.npmjs.org/html-webpack-include-assets-plugin/-/html-webpack-include-assets-plugin-0.0.4.tgz",
+      "dev": true
+    },
     "html-webpack-plugin": {
       "version": "2.28.0",
       "from": "html-webpack-plugin@2.28.0",
