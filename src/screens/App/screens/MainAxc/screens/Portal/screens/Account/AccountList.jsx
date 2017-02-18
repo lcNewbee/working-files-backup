@@ -279,13 +279,13 @@ const listOptions = fromJS([
   }, {
     id: '__actions__',
     text: _('Actions'),
-    actions: [
-      {
-        icon: 'check-square-o',
-        actionName: 'reset',
-        text: _('Reset Password'),
-      },
-    ],
+    // actions: [
+    //   {
+    //     icon: 'check-square-o',
+    //     actionName: 'reset',
+    //     text: _('Reset Password'),
+    //   },
+    // ],
     transform(val, $$item) {
       return (
         <span>
