@@ -8,50 +8,46 @@ class MapClients_Model extends CI_Model {
     }
     function get_list($data) {   
         $groupid = (int)element('groupid',$data,0);
-        //获取mac列表
-        $maclist = $this->get_apmac_list($groupid);
-
-        $cgidata = array();
-        foreach($maclist as $row){
-            $queryd = $this->mysql->query("call getwidsreport('".$row['mac']."',60)");
-            $cgidata = $queryd->result_array();
-        }        
-        /*    
+        $mac = element('apmac',$data,'');        
+        $datalist = array();
+        $timedata = $this->get_clients_cfg($groupid);
+        if(count($timedata) > 0 && $mac !== ''){
+            $dblist = $this->mysql->query("call getwidsreport('".$mac."',".$timedata['reporttime'].")");
+            $datalist = $dblist->result_array();
+        }                
         $arr = array(
             'state'=>array('code'=>2000,'msg'=>'ok'),
             'data'=>array(
-                'settings'=>$this->get_clients_cfg($groupid),
-                'list'=>$cgidata
+                'settings'=>$timedata,
+                'list'=>$datalist
             )
         );
         return json_encode($arr);
-        */
     }
+
     function get_clients_cfg($groupid){
         $arr = array(
             'enable'=>1,
             'reporttime'=>99
         );
-        $query = $this->db->query('select wscanenable,wscanrpttime from wrrm_template where id='.$groupid);
+        $query = $this->db->query('select wscanenable,wscanrpttime from wrrm_template where id='.$groupid);        
         $row = $query->row();
         if(isset($row)){
             $arr['enable'] = $row->wscanenable;
-            $arr['reporttime'] = $row->wscanrpttime;
+            $arr['reporttime'] = $row->wscanrpttime/60;
         }
         return $arr;
     }
-    function get_apmac_list($groupid){
-        $arr = array();        
-        $query = $this->db->select('mac')
-                        ->from('ap_list')    
-                        ->where('group_id',$groupid)                                        
-                        ->get()->result_array();
-        echo '<pre>';
-        print_r($query);
-        echo '</pre>';
-        if(count($query) > 0){
-            $arr = $query;
-        }
-        return $arr;
+    function setting($data) {
+        $result = null;
+        $min = element('reporttime',$data,100);
+        $cgiary = array(
+            'groupid'=>element('groupid',$data,1),
+            'enable'=>element('enable',$data,1),
+            'wscanrpttime'=>$min*60
+        );        
+        print_r($cgiary);
+        $result = wscan_set_param(json_encode($cgiary));
+        return $result;
     }
 }

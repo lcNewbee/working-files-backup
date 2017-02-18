@@ -97,7 +97,7 @@ $route['goform/group/map/building'] = 'group/mapBuilding';
 $route['goform/group/map/list'] = 'group/mapSonList';
 $route['goform/group/map/apPlan'] = 'group/mapApPlan';
 $route['goform/group/map/clients_trace'] = 'group/mapClients';
-$route['goform/group/map/clients_trace/settings'] = 'group/mapClientsSet';
+
 
 // 系统设置
 $route['goform/system/version/upload'] = 'system/systemVersion/upload';

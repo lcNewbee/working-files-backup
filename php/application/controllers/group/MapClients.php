@@ -24,7 +24,7 @@ class MapClients extends CI_Controller {
         $result = null;
         $actionType = element('action', $data);
         switch($actionType) {
-            case 'add' : $result = $this->MapClients_Model->add($data);
+            case 'setting' : $result = $this->MapClients_Model->setting($data);
                 break;
             default : $result = json_encode(array('state' => array('code' => 4000, 'msg' => 'No request action')));
                 break;
