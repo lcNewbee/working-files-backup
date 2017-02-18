@@ -8,6 +8,8 @@ import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
+const uptimeFilter = utils.filter('connectTime');
+
 const listOptions = fromJS([
   {
     id: 'ip',
@@ -59,6 +61,9 @@ const listOptions = fromJS([
     type: 'num',
     formProps: {
       required: true,
+    },
+    transform(val) {
+      return uptimeFilter.transform(val / 1000);
     },
   },   // {
   //   id: 'accType',

@@ -17,8 +17,8 @@ const formOptions = fromJS([
     type: 'checkbox',
     required: true,
   }, {
-    id: 'wscanrpttime',
-    label: _('Report Time'),
+    id: 'reporttime',
+    label: _('Data Report Time'),
     type: 'number',
     help: _('Minutes'),
     min: '1',

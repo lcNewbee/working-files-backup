@@ -6,8 +6,8 @@
   },
   "data": {
     "settings": {
-      "enable": "0",
-      "template_name": "test"
+      "radsec_enable": "0",
+      "radius_template": "test"
     }
   }
 }
