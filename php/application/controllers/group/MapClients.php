@@ -18,7 +18,7 @@ class MapClients extends CI_Controller {
         }
     }    
     function fetch() {
-        $this->MapClients_Model->get_list($_GET);
+        return $this->MapClients_Model->get_list($_GET);
     }
     function onAction($data) {        
         $result = null;

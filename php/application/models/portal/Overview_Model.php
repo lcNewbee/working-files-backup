@@ -8,7 +8,7 @@ class Overview_Model extends CI_Model {
 	}
 	function get_overview_list($data) {        
         $countdata = $this->get_count_info();        
-		$queryd = $this->portalsql->query('select * from portal_logrecord');        
+		$queryd = $this->portalsql->query('select * from portal_logrecord order by id desc limit 20');        
 		$arr['state'] = array('code' => 2000, 'msg' => 'ok');
 		$arr['data'] = array(
             'authInterface' => $countdata['authInterface'],

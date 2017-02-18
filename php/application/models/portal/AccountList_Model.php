@@ -53,7 +53,18 @@ class AccountList_Model extends CI_Model {
         $result = $this->portalsql->replace('portal_account', $updata);
         $result ? $result = json_ok() : $result = json_no('insert error');
         return json_encode($result);
-    }    
+    }  
+    function reset($data) {
+        $result = null;
+        //重置密码
+        $upd = array(
+            'password' => '123456'
+        );
+        $this->portalsql->where('id', $data['id']);
+        $result = $this->portalsql->update('portal_account', $upd);
+        $result ? $result = json_ok() : $result = json_no('reset error');
+        return json_encode($result);
+    }  
     function getDbParam($data){
         $linuxdate = (string)exec('date "+%Y-%m-%d %H:%M:%S"');
         $numtime = $this->get_config_time();        

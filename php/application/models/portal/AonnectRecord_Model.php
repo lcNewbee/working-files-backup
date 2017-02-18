@@ -10,8 +10,9 @@ class AonnectRecord_Model extends CI_Model {
 		$columns = '*';
 		$tablenames = 'portal_linkrecord';
 		$pageindex = (int)element('page', $data, 1);
-		$pagesize = (int)element('size', $data, 20);		
-		$datalist = help_data_page($this->portalsql,$columns,$tablenames,$pageindex,$pagesize);
+		$pagesize = (int)element('size', $data, 20);
+        $order = array(array('id','DESC'));	  		
+		$datalist = help_data_page_order($this->portalsql,$columns,$tablenames,$pageindex,$pagesize,$order);
 
 		$arr = array(
 			'state'=>array('code'=>2000,'msg'=>'ok'),

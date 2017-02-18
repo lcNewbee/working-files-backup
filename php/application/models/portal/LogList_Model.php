@@ -9,13 +9,15 @@ class LogList_Model extends CI_Model {
 		$columns = 'id,info,rec_date as recDate';
 		$tablenames = 'portal_logrecord';
 		$pageindex = (int)element('page', $data, 1);
-		$pagesize = (int)element('size', $data, 20);	      
-		$datalist = help_data_page($this->portalsql,$columns,$tablenames,$pageindex,$pagesize);
+		$pagesize = (int)element('size', $data, 20);	
+		$order = array(array('id','DESC'));      
+		//$datalist = help_data_page($this->portalsql,$columns,$tablenames,$pageindex,$pagesize);
+		$datalist = help_data_page_order($this->portalsql,$columns,$tablenames,$pageindex,$pagesize,$order);		
 		$arr = array(
 			'state'=>array('code'=>2000,'msg'=>'ok'),
 			'data'=>array(
 				'page'=>$datalist['page'],
-				'list' => $datalist['data']
+				'list' =>$datalist['data']
 			)
 		);               
 		return json_encode($arr);
