@@ -34,50 +34,6 @@ var GLOBALS = {
 // 自动添加兼容性css
 var autoprefixerHandle = autoprefixer(GLOBALS.autoprefixer);
 
-// 配置公用模块
-var vendorList = [
-  "es5-shim",
-  "es5-shim/es5-sham",
-  "es6-promise",
-  "classnames",
-  "whatwg-fetch",
-  "console-polyfill",
-  "immutable",
-  "react",
-  "react-addons-css-transition-group",
-  "react-addons-pure-render-mixin",
-  "react-dom",
-  "react-redux",
-  "react-router",
-  "react-select",
-  "react-dates",
-  "rc-time-picker",
-  "redux",
-  "redux-thunk",
-  "moment",
-
-  /**
-   * echarts图标按需引入
-   */
-  'echarts/lib/echarts',
-  // 引入柱状图
-  'echarts/lib/chart/bar',
-
-  // 引入折线图
-  'echarts/lib/chart/line',
-  'echarts/lib/chart/lines',
-
-  // 引入折饼图
-  'echarts/lib/chart/pie',
-
-  // 仪表盘
-  'echarts/lib/chart/gauge',
-
-  // 引入提示框和标题组件
-  'echarts/lib/component/tooltip',
-  'echarts/lib/component/legend',
-  'echarts/lib/component/title',
-];
 
 module.exports = {
   entry: {
@@ -115,7 +71,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "src/assets/"),
     publicPath: '/',
-    filename: 'scripts/[name].dll.js',
+    filename: 'scripts/[name].bundle.js',
     library: "[name]"
   },
   plugins: [

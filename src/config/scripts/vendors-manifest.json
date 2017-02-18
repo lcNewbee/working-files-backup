@@ -165,24 +165,28 @@
       "id": 38,
       "meta": {}
     },
-    "../node_modules/react-dates/lib/utils/isSameDay.js": {
+    "../node_modules/react-addons-shallow-compare/index.js": {
       "id": 39,
       "meta": {}
     },
-    "../node_modules/react-dom/lib/DOMLazyTree.js": {
+    "../node_modules/react-dates/lib/utils/isSameDay.js": {
       "id": 40,
       "meta": {}
     },
-    "../node_modules/react-dom/lib/DOMProperty.js": {
+    "../node_modules/react-dom/lib/DOMLazyTree.js": {
       "id": 41,
       "meta": {}
     },
-    "../node_modules/react-dom/lib/ReactReconciler.js": {
+    "../node_modules/react-dom/lib/DOMProperty.js": {
       "id": 42,
       "meta": {}
     },
-    "../node_modules/react-router/es/PatternUtils.js": {
+    "../node_modules/react-dom/lib/ReactReconciler.js": {
       "id": 43,
+      "meta": {}
+    },
+    "../node_modules/react-router/es/PatternUtils.js": {
+      "id": 44,
       "meta": {
         "harmonyModule": true
       },
@@ -195,7 +199,7 @@
       ]
     },
     "../node_modules/react-router/es/routerWarning.js": {
-      "id": 44,
+      "id": 45,
       "meta": {
         "harmonyModule": true
       },
@@ -205,34 +209,30 @@
       ]
     },
     "../node_modules/react/lib/ReactElement.js": {
-      "id": 45,
-      "meta": {}
-    },
-    "../node_modules/react/lib/reactProdInvariant.js": {
       "id": 46,
       "meta": {}
     },
-    "../node_modules/zrender/lib/contain/text.js": {
+    "../node_modules/react/lib/reactProdInvariant.js": {
       "id": 47,
       "meta": {}
     },
-    "../node_modules/dom-align/lib/utils.js": {
+    "../node_modules/zrender/lib/contain/text.js": {
       "id": 48,
       "meta": {}
     },
-    "../node_modules/echarts/lib/data/List.js": {
+    "../node_modules/dom-align/lib/utils.js": {
       "id": 49,
       "meta": {}
     },
-    "../node_modules/echarts/lib/model/Series.js": {
+    "../node_modules/echarts/lib/data/List.js": {
       "id": 50,
       "meta": {}
     },
-    "../node_modules/fbjs/lib/emptyObject.js": {
+    "../node_modules/echarts/lib/model/Series.js": {
       "id": 51,
       "meta": {}
     },
-    "../node_modules/react-addons-shallow-compare/index.js": {
+    "../node_modules/fbjs/lib/emptyObject.js": {
       "id": 52,
       "meta": {}
     },

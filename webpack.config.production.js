@@ -225,6 +225,6 @@ module.exports = {
         removeComments: false, //移除HTML中的注释
         collapseWhitespace: true //删除空白符与换行符
       }
-    })
+    }),
   ],
 };
