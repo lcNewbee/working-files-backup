@@ -54,7 +54,7 @@
   "Source IP":"源IP地址",
   "Session Time":"可用时长",
   "Available Traffic":"可用流量",
-  "Online Date":"在线时间",
+  "Online Date":"上线时间",
   "Online Time":"在线时长",
   "Up Traffic":"上行流量",
   "Down Traffic":"下行流量",
@@ -67,6 +67,8 @@
   "Acc ID":"计费ID",
   "NAS Type":"NAS 类型",
   "Reason":"理由",
+  "Offline":"下线",
+  "Batch Offline":"批量下线",
 
   "Login Name":"登录名",
   "Expired Date":"到期时间",

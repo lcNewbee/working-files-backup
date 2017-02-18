@@ -10,13 +10,6 @@ import * as appActions from 'shared/actions/app';
 
 const listOptions = fromJS([
   {
-    id: 'userName',
-    text: _('User Name'),
-    formProps: {
-      type: 'text',
-      required: true,
-    },
-  }, {
     id: 'ip',
     text: _('IP'),
     formProps: {
@@ -47,52 +40,54 @@ const listOptions = fromJS([
       }),
     },
   }, {
-    id: 'onlinedate',
+    id: 'startDate',
     text: _('Online Date'),
     formProps: {
       type: 'text',
       required: true,
     },
   }, {
-    id: 'offlinedate',
+    id: 'endDate',
     text: _('Offline Date'),
     formProps: {
       type: 'text',
       required: true,
     },
   }, {
-    id: 'onlinetime',
+    id: 'time',
     text: _('Online Time'),
     type: 'num',
     formProps: {
       required: true,
     },
-  }, {
-    id: 'accType',
-    text: _('Acc Type'),
-    formProps: {
-      required: true,
-    },
-  }, {
-    id: 'downtraffic',
+  },   // {
+  //   id: 'accType',
+  //   text: _('Acc Type'),
+  //   formProps: {
+  //     required: true,
+  //   },
+  // },
+  {
+    id: 'outs',
     text: _('Down Traffic'),
     formProps: {
       required: true,
     },
   }, {
-    id: 'upTraffic',
+    id: 'ins',
     text: _('Up Traffic'),
     formProps: {
       required: true,
     },
-  }, {
-    id: 'accLogic',
-    text: _('Acc Logic'),
-    formProps: {
-      required: true,
-    },
-  }, {
-    id: 'reason',
+  }, //  {
+  //   id: 'accLogic',
+  //   text: _('Acc Logic'),
+  //   formProps: {
+  //     required: true,
+  //   },
+  // },
+  {
+    id: 'ex2',
     text: _('Reason'),
     formProps: {
       required: true,

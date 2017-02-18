@@ -39,7 +39,7 @@ const listOptions = fromJS([
       required: true,
     },
   }, {
-    id: 'loginname',
+    id: 'name',
     text: _('Login Name'),
     formProps: {
       required: true,

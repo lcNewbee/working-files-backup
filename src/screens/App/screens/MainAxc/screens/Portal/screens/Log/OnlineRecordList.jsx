@@ -130,7 +130,7 @@ const listOptions = fromJS([
       required: true,
     },
   }, {
-    id: 'type',
+    id: 'methodtype',
     text: _('Authetication Type'),
     formProps: {
       required: true,

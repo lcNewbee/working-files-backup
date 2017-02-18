@@ -125,8 +125,26 @@ const listOptions = fromJS([
     formProps: {
       required: true,
     },
+  }, {
+    id: '__actions__',
+    text: _('Actions'),
+    actions: [
+      {
+        icon: 'arrow-down',
+        actionName: 'delete',
+        text: _('Offline'),
+      },
+    ],
   },
 ]);
+
+const listActionBarButtons = [
+  {
+    actionName: 'delete',
+    text: _('Batch Offline'),
+    icon: 'arrow-down',
+  },
+];
 const propTypes = {
   route: PropTypes.object,
   save: PropTypes.func,
@@ -154,14 +172,17 @@ export default class OpenPortalBase extends React.Component {
   }
 
   render() {
+    const myActionButtons = listActionBarButtons;
     return (
       <AppScreen
         {...this.props}
+        actionBarButtons={myActionButtons}
         listOptions={listOptions}
         actionable
         selectable
         addable={false}
         editable={false}
+        deleteable={false}
       />
     );
   }

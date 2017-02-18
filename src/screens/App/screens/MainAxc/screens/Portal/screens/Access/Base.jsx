@@ -244,7 +244,7 @@ const settingsOptions = fromJS([
             label: _('Visitor Auth'),
           },
         ],
-        // noForm: true,
+        noForm: true,
       }, {
         id: 'username',
         label: _('Public User Name'),
