@@ -104,24 +104,22 @@ export default class SystemMaintenance extends Component {
       return;
     }
     function upgradeDevice() {
+      Promise.resolve().then(() => {
+        const upgradeBarInfo = that.props.selfState.get('upgradeBarInfo')
+                                .set('isShow', true);
+        that.props.changeUpgradeBarInfo(upgradeBarInfo);
+      }).then(() => {
+        const upgradeBarInfo = that.props.selfState.get('upgradeBarInfo')
+                                .setIn(['firstBar', 'start'], true);
+        that.props.changeUpgradeBarInfo(upgradeBarInfo);
+      });
       utils.postForm(formElem.action, formElem).then((json) => {
         if (json.state && json.state.code === 4000) {
           that.props.resetSelfState();
           that.props.createModal({
             id: 'settings',
             role: 'alert',
-            text: _('File verification failed! Please upload the right upgrading file.'),
-          });
-        } else {
-          const step = Promise.resolve();
-          step.then(() => {
-            const upgradeBarInfo = that.props.selfState.get('upgradeBarInfo')
-                                    .set('isShow', true);
-            that.props.changeUpgradeBarInfo(upgradeBarInfo);
-          }).then(() => {
-            const upgradeBarInfo = that.props.selfState.get('upgradeBarInfo')
-                                    .setIn(['firstBar', 'start'], true);
-            that.props.changeUpgradeBarInfo(upgradeBarInfo);
+            text: _('Invalid firmware!'),
           });
         }
       });
@@ -251,21 +249,26 @@ export default class SystemMaintenance extends Component {
           method="POST"
           encType="multipart/form-data"
           id="upgradeForm"
+          className="clearfix"
         >
-          <FormGroup label={_('Firmware Upgrade')}>
-            <FormInput
-              type="file"
-              name="filename"
-              id="upgradeFile"
-            />
-            <SaveButton
-              type="button"
-              icon=""
-              text={_('Upgrade')}
-              onClick={this.onFarewellUpgrade}
-              theme="primary"
-            />
-          </FormGroup>
+          <FormGroup
+            label={_('Firmware Upgrade')}
+            type="file"
+            name="filename"
+            id="upgradeFile"
+            className="fl"
+            style={{
+              marginRight: '5px',
+            }}
+          />
+          <SaveButton
+            type="button"
+            icon=""
+            text={_('Upgrade')}
+            onClick={this.onFarewellUpgrade}
+            theme="primary"
+            className="fl"
+          />
         </form>
         <div className="o-form__legend">
           {_('Reboot')}
@@ -313,22 +316,25 @@ export default class SystemMaintenance extends Component {
           ref={(refs) => {
             this.restoreForm = refs;
           }}
+          className="clearfix"
         >
           <FormGroup
             label={_('Restore Configuration')}
-          >
-            <FormInput
-              type="file"
-              id="restoreFile"
-              name="restoreFile"
-            />
-            <Button
-              text={_('Restore')}
-              icon=""
-              onClick={this.onConfigurationRestore}
-              theme="primary"
-            />
-          </FormGroup>
+            type="file"
+            id="restoreFile"
+            name="restoreFile"
+            style={{
+              marginRight: '5px',
+            }}
+            className="fl"
+          />
+          <Button
+            text={_('Restore')}
+            icon=""
+            onClick={this.onConfigurationRestore}
+            theme="primary"
+            className="fl"
+          />
         </form>
 
         <FormGroup

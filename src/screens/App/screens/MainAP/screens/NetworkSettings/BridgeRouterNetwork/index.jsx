@@ -140,7 +140,7 @@ export default class NetworkSettings extends React.Component {
             msg = _('Primary and Secondary DNS can not be the same !');
             if (dns1 !== '' && typeof (dns1) !== 'undefined' &&
                 dns2 !== '' && typeof (dns2) !== 'undefined' &&
-                validator.combine.notequal(dns1, dns2, msg)) {
+                validator.combine.notEqual(dns1, dns2, msg)) {
               showError(msg);
               return;
             }

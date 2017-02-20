@@ -1,6 +1,7 @@
 .a-input-file {
   position: relative;
   display: inline-block;
+  overflow: hidden;
 
   .a-input-file__icon {
     position: absolute;

@@ -26,6 +26,7 @@ const paths = {
   pubWebpack: './webpack.config.production.js',
   pubAIP5: '../platform/COMLANOS/package/goahead/files/AIP5_web',
   pubAIP10: '../platform/COMLANOS/package/goahead/files/AIP10_web',
+  pubAIP10L: '../platform/COMLANOS/package/goahead/files/AIP10L_web',
   pubAEC120: '../platform/COMLANOS/package/goahead/files/AEC120_web',
   pubASW3: '../platform/COMLANOS/package/goahead/files/ASW3_web',
   pubASC175: '../platform/COMLANOS/package/goahead/files/ASC175_web',
@@ -95,6 +96,7 @@ function changeTitle(name) {
 }
 gulp.task('changeAIP5Title', () => changeTitle('AIP5'));
 gulp.task('changeAIP10Title', () => changeTitle('AIP10'));
+gulp.task('changeAIP10LTitle', () => changeTitle('AIP10L'));
 gulp.task('changeAEC120Title', () => changeTitle('AEC120'));
 gulp.task('changeASC175Title', () => changeTitle('ASC175'));
 gulp.task('changeASW3Title', () => changeTitle('ASW3'));

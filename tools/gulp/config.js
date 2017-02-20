@@ -30,6 +30,7 @@ gulp.task('config:ap', () => configProduct('ap'));
 gulp.task('config:ac', () => configProduct('ac'));
 gulp.task('config:AIP5', () => configProduct('AIP5'));
 gulp.task('config:AIP10', () => configProduct('AIP10'));
+gulp.task('config:AIP10L', () => configProduct('AIP10L'));
 gulp.task('config:extraHelp', () => configProduct('extraHelp'));
 gulp.task('config:AEC120', () => configProduct('AEC120'));
 gulp.task('config:ASC175', () => configProduct('ASC175'));

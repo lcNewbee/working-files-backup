@@ -18,7 +18,7 @@ const defaultState = fromJS({
       start: false,
     },
     secondBar: {
-      time: 100,
+      time: 150,
       start: false,
     },
   },

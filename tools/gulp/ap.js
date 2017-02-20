@@ -65,6 +65,7 @@ function cleanPubPath(dstPath) {
 
 gulp.task('clean:pubAIP5', () => cleanPubPath(paths.pubAIP5));
 gulp.task('clean:pubAIP10', () => cleanPubPath(paths.pubAIP10));
+gulp.task('clean:pubAIP10L', () => cleanPubPath(paths.pubAIP10L));
 gulp.task('clean:pubAEC120', () => cleanPubPath(paths.pubAEC120));
 gulp.task('clean:pubASC175', () => cleanPubPath(paths.pubASC175));
 gulp.task('clean:pubASW3', () => cleanPubPath(paths.pubASW3));
@@ -86,6 +87,7 @@ function copyBuild2PubPath(dstPath) {
 
 gulp.task('pub:copyAIP5', () => copyBuild2PubPath(paths.pubAIP5));
 gulp.task('pub:copyAIP10', () => copyBuild2PubPath(paths.pubAIP10));
+gulp.task('pub:copyAIP10L', () => copyBuild2PubPath(paths.pubAIP10L));
 gulp.task('pub:copyAEC120', () => copyBuild2PubPath(paths.pubAEC120));
 gulp.task('pub:copyASW3', () => copyBuild2PubPath(paths.pubASW3));
 gulp.task('pub:copyASC175', () => copyBuild2PubPath(paths.pubASC175));
@@ -108,6 +110,7 @@ function pubAP(name, callback) {
 
 gulp.task('pub:AIP5', callback => pubAP('AIP5', callback));
 gulp.task('pub:AIP10', callback => pubAP('AIP10', callback));
+gulp.task('pub:AIP10L', callback => pubAP('AIP10L', callback));
 gulp.task('pub:AEC120', callback => pubAP('AEC120', callback));
 gulp.task('pub:ASW3', callback => pubAP('ASW3', callback));
 gulp.task('pub:ASC175', callback => pubAP('ASC175', callback));
@@ -133,6 +136,7 @@ function compressBulidFile(dstPath) {
 
 gulp.task('compressAIP5', () => compressBulidFile(paths.pubAIP5));
 gulp.task('compressAIP10', () => compressBulidFile(paths.pubAIP10));
+gulp.task('compressAIP10L', () => compressBulidFile(paths.pubAIP10L));
 gulp.task('compressAEC120', () => compressBulidFile(paths.pubAEC120));
 gulp.task('compressASW3', () => compressBulidFile(paths.pubASW3));
 gulp.task('compressASC175', () => compressBulidFile(paths.pubASC175));
@@ -144,6 +148,6 @@ gulp.task('compressASW120', () => compressBulidFile(paths.pubASW120));
 
 // 执行所有列表中的AP编译工作
 gulp.task('pub:all', () => {
-  runSequence('test', 'pub:AIP5', 'pub:AIP10');
-  // runSequence('test', 'pub:AIP5', 'pub:AIP10', 'pub:ASW3', 'pub:AEC120', 'pub:ASC175', 'pub:ASC120', 'pub:AEC60', 'pub:ASC3', 'pub:ASC6', 'pub:ASW120');
+  runSequence('test', 'pub:AIP5', 'pub:AIP10', 'pub:ASW3', 'pub:AEC120', 'pub:ASC175', 'pub:ASC120', 'pub:AEC60', 'pub:ASC3', 'pub:ASC6', 'pub:ASW120', 'pub:AIP10L');
+  // runSequence('test', 'pub:AIP5', 'pub:ASW3', 'pub:AEC120', 'pub:ASC175', 'pub:ASC120');
 });

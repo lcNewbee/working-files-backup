@@ -272,25 +272,13 @@ export default class MacStatistic extends React.Component {
       'onChangeInterface',
       'getMacOptions',
       'onChangeView',
+      'selectMac',
     ]);
+    this.deleteMac = fromJS([]);
   }
   componentWillMount() {
     this.initOptions(this.props);
   }
-
-  // componentDidMount() {
-  //   this.props.fetch(this.props.route.formUrl).then((json) => {
-  //     let macVal = '';
-  //     if (json.data.list && json.data.list[0]) {
-  //       macVal = json.data.list[0].mac;
-  //     }
-  //     this.props.changeScreenQuery({
-  //       mac: macVal,
-  //     });
-  //   }).then(() => {
-  //     this.props.fetchScreenData();
-  //   });
-  // }
 
   componentWillReceiveProps(nextProps) {
     const curScreenId = nextProps.store.get('curScreenId');
@@ -298,6 +286,16 @@ export default class MacStatistic extends React.Component {
     if (this.props.store.getIn([curScreenId, 'data']) !== nextProps.store.getIn([curScreenId, 'data'])) {
       this.initOptions(nextProps);
     }
+  }
+
+
+  componentDidUpdate() {
+    const curScreenId = this.props.store.get('curScreenId');
+    let graphMac = this.props.store.getIn([curScreenId, 'query', 'graphMac']);
+    this.deleteMac.forEach((val) => {
+      graphMac = graphMac.delete(val);
+    });
+    this.props.changeScreenQuery({ graphMac });
   }
 
   onChangeTimeType(data) {
@@ -340,6 +338,7 @@ export default class MacStatistic extends React.Component {
       if (!ifSelected) {
         const checkedNum = list.count((item) => {
           if (item.get('__selected__')) return true;
+          return false;
         });
         if (checkedNum < num) {
           that.props.selectListItem({
@@ -359,8 +358,10 @@ export default class MacStatistic extends React.Component {
     /** ******************* 多选代码完成 *************************** */
     // 将选择的MAC加入query
     Promise.resolve(3).then((n) => { selectGraphItem(n); }).then(() => {
-      const selectedList = this.props.store.getIn([curScreenId, 'actionQuery', 'selectedList']);
-      const graphMac = selectedList.map(val => list.getIn([val, 'mac']));
+      const graphMac = this.props.store.getIn([curScreenId, 'data', 'list']).map((item) => {
+        if (item.get('__selected__')) return item.get('mac');
+        return '';
+      }).filter(mac => mac !== '');
       this.props.changeScreenQuery({ graphMac });
     });
   }
@@ -399,11 +400,36 @@ export default class MacStatistic extends React.Component {
     this.flowOption = getFlowOption(serverData, store.getIn([curScreenId, 'query', 'timeType']));
   }
 
+  selectMac() {
+    const store = this.props.store;
+    const curScreenId = store.get('curScreenId');
+    const graphMac = store.getIn([curScreenId, 'query', 'graphMac']);
+    const list = store.getIn([curScreenId, 'data', 'list']);
+    let newList = list;
+
+    // let newGraphMac = fromJS([]);
+    if (graphMac && graphMac.size > 0) {
+      newList = list.map((item) => {
+        if (graphMac.includes(item.get('mac'))) return item.set('__selected__', true);
+        return item;
+      });
+      graphMac.forEach((mac) => {
+        const index = list.find(item => item.get('mac') === mac);
+        if (index === -1) { // 不存在则在graphMac中删除该Mac
+          this.deleteMac = this.deleteMac.push(mac);
+        }
+      });
+    }
+    this.newList = newList;
+  }
+
   render() {
     const flowOption = this.flowOption;
     const store = this.props.store;
     const curScreenId = store.get('curScreenId');
-    const serverData = store.getIn([curScreenId, 'data']);
+    // const serverData = store.getIn([curScreenId, 'data']);
+
+    this.selectMac();
     return (
       <AppScreen
         {...this.props}
@@ -463,7 +489,7 @@ export default class MacStatistic extends React.Component {
               selectable
               className="table"
               options={listOptions}
-              list={serverData.getIn(['list'])}
+              list={this.newList}
               page={store.getIn([curScreenId, 'data', 'page'])}
               onPageChange={this.onChangePage}
               onRowSelect={this.onSelectRow}

@@ -397,5 +397,6 @@
   "Total Clients:": "客户端总数：",
   "add to blacklist": "加入黑名单",
   "Add client ": "确定将客户端 ",
-  " to blacklist ?": " 加入黑名单？"
+  " to blacklist ?": " 加入黑名单？",
+  "Invalid firmware!": "固件格式错误！"
 }
