@@ -58,7 +58,7 @@ const listOptions = fromJS([
     id: 'interface_bind',
     label: _('Port'),
     formProps: {
-      type: 'switch',
+      type: 'select',
       required: true,
       notEditable: true,
     },
@@ -196,17 +196,27 @@ export default class View extends React.Component {
     const { store } = this.props;
     const myScreenId = store.get('curScreenId');
     const $$myScreenStore = store.get(myScreenId);
+    const actionType = $$myScreenStore.getIn(['actionQuery', 'action']);
     const $$curList = $$myScreenStore.getIn(['data', 'list']);
-    const mypPortOptions = this.state.portOptions
+    let myPortOptions = this.state.portOptions
       .filterNot(($$item) => {
         const curPort = $$item.get('value');
-        const curPortIndex = $$curList.findIndex(($$listItem) => $$listItem.get('interface_bind') === curPort);
+        const curPortIndex = $$curList.findIndex($$listItem => $$listItem.get('interface_bind') === curPort);
         return curPortIndex !== -1;
       });
-    const curListOptions = listOptions
-      .setIn([0, 'options'], mypPortOptions)
+    let curListOptions = listOptions
       .setIn([1, 'options'], this.state.portalServerOption)
       .setIn([6, 'options'], this.state.AAADomainNameOption);
+
+    if (actionType === 'edit') {
+      myPortOptions = myPortOptions.push(fromJS({
+        value: $$myScreenStore.getIn(['curListItem', 'interface_bind']),
+        label: $$myScreenStore.getIn(['curListItem', 'interface_bind']),
+      }));
+    }
+
+    curListOptions = listOptions
+      .setIn([0, 'options'], myPortOptions);
 
     return (
       <AppScreen
