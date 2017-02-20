@@ -46,7 +46,6 @@ class MapClients_Model extends CI_Model {
             'enable'=>element('enable',$data,1),
             'wscanrpttime'=>$min*60
         );        
-        print_r($cgiary);
         $result = wscan_set_param(json_encode($cgiary));
         return $result;
     }
