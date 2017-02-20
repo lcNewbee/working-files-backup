@@ -8,6 +8,9 @@ const configReg = /'\.\/config\/(\w+)'/g;
 const mainPath = [`${paths.src}/index.jsx`, `${paths.src}/index_pub.jsx`];
 
 function configProduct(name) {
+  if (name) {
+    gulp.appName = name;
+  }
   return gulp.src(mainPath)
     .pipe($.replace(configReg, `'./config/${name}'`))
     .on('end', () => {

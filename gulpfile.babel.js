@@ -1,3 +1,5 @@
+import fs from 'fs';
+import path from 'path';
 import gulp from 'gulp';
 import gutil from 'gulp-util';
 import gulpLoadPlugins from 'gulp-load-plugins';
@@ -7,6 +9,7 @@ import shell from 'gulp-shell';
 
 import pkg from './package.json';
 
+const configReg = /'\.\/config\/(\w+)'/g;
 const $ = gulpLoadPlugins();
 const argv = minimist(process.argv.slice(2));
 const paths = {
@@ -39,7 +42,9 @@ const paths = {
 gulp.pkg = pkg;
 gulp.paths = paths;
 
+
 // 引入
+require('./tools/gulp/help');
 require('./tools/gulp/build');
 require('./tools/gulp/demo');
 require('./tools/gulp/bump');
@@ -54,7 +59,19 @@ require('./tools/gulp/ap');
 require('./tools/gulp/ac');
 require('./tools/gulp/axc');
 
-// 任务开始时全局提示信息
+// 获取 App 名称
+function getCurAppName() {
+  let str = '';
+
+  str = fs.readFileSync(path.resolve(__dirname, 'src/index.jsx'), 'utf-8');
+
+  return configReg.exec(str);
+}
+if (argv.n) {
+  gulp.appName = argv.n;
+} else {
+  gulp.appName = getCurAppName()[1];
+}
 
 // 删除
 gulp.task('clean', () => del([paths.build, paths.release]));

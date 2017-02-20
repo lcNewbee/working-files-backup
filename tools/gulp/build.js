@@ -1,3 +1,6 @@
+import fs from 'fs';
+import path from 'path';
+
 const gulp = require('gulp');
 const gutil = require('gulp-util');
 const staticHash = require('gulp-static-hash');
@@ -8,6 +11,15 @@ const webpackConfig = require('../../webpack.config.production.js');
 const webpackConfigDll = require('../../webpack.config.dll.js');
 
 const paths = gulp.paths;
+const configReg = /'\.\/config\/(\w+)'/g;
+
+function getCurAppName() {
+  let str = '';
+
+  str = fs.readFileSync(path.resolve(__dirname, 'src/index.jsx'), 'utf-8');
+
+  return configReg.exec(str);
+}
 
 // 引用webpack对js进行操作
 gulp.task('webpack', (callback) => {
@@ -34,9 +46,17 @@ gulp.task('webpack:dll', (callback) => {
   });
 });
 
-gulp.task('build:assets', () =>
-  gulp.src([`${paths.src}/assets/**/*`])
-    .pipe(gulp.dest(paths.build)),
+gulp.task('build:assets', () => {
+  const srcFiles = [`${paths.src}/assets/**/*`];
+
+  if (!gulp.appName) {
+    gulp.appName = getCurAppName()[1];
+  }
+  srcFiles.push(`${paths.src}/config/${gulp.appName}/assets/**/*`);
+
+  return gulp.src(srcFiles)
+    .pipe(gulp.dest(paths.build));
+},
 );
 
 gulp.task('build:html', () =>
