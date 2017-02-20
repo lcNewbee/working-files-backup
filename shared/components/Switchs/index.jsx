@@ -39,7 +39,7 @@ class Switchs extends React.Component {
 
   render() {
     const {
-      size, className, options, value, role, minWidth, style, disabled
+      size, className, options, value, role, minWidth, style, disabled, readOnly
     } = this.props;
     const itemStyle = {
       minWidth,
@@ -65,7 +65,7 @@ class Switchs extends React.Component {
       classNames = `${classNames} m-switch--${size}`;
     }
 
-    if (disabled) {
+    if (disabled || readOnly) {
       classNames = `${classNames} m-switch--disabled`;
     }
 
@@ -104,10 +104,12 @@ class Switchs extends React.Component {
                 value={val}
                 disabled={disabled}
                 onClick={(e) => {
-                  this.onClick(e, {
-                    value: val,
-                    label,
-                  });
+                  if (!readOnly && !disabled) {
+                    this.onClick(e, {
+                      value: val,
+                      label,
+                    });
+                  }
                 }}
                 style={itemStyle}
               >
