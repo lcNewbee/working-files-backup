@@ -9,7 +9,7 @@ import * as screenActions from 'shared/actions/screens';
 const flowRateFilter = utils.filter('flowRate:["KB"]');
 const checkboxOptions = [
   {
-    value: '1',
+    value: 1,
     label: _('On'),
     render() {
       return (
@@ -23,7 +23,7 @@ const checkboxOptions = [
       );
     },
   }, {
-    value: '0',
+    value: 0,
     label: _('Off'),
     render() {
       return (
