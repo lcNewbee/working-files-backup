@@ -8,8 +8,8 @@ import './_index.scss';
 const propTypes = {
   isAsync: PropTypes.bool,
   onChange: PropTypes.func,
-  readOnly: PropTypes.bool,
-  disabled: PropTypes.bool,
+  readOnly: PropTypes.any,
+  disabled: PropTypes.any,
 };
 
 const defaultProps = {
@@ -34,33 +34,38 @@ class MySelect extends React.Component {
 
     if (data.length !== undefined) {
       curData = [...data];
-      ret.value = curData.map((item) => item.value).join(',');
+      ret.value = curData.map(item => item.value).join(',');
     } else {
       ret = data;
     }
 
-    if (this.props.onChange) {
+    if (this.props.onChange && !this.props.readOnly) {
       this.props.onChange(ret, data);
     }
   }
 
   render() {
     let ThisComponent = Select;
-    let myDisabled = this.props.disabled;
+    const { readOnly, className } = this.props;
+    let thisClassname = className;
 
     if (this.props.isAsync) {
       ThisComponent = Select.Async;
     }
 
-    if (this.props.readOnly) {
-      myDisabled = true;
+    if (readOnly) {
+      if (thisClassname) {
+        thisClassname = `${thisClassname} is-disabled`;
+      } else {
+        thisClassname = 'is-disabled';
+      }
     }
 
     return (
       <ThisComponent
         {...this.props}
         onChange={this.onChange}
-        disabled={myDisabled}
+        className={thisClassname}
       />
     );
   }

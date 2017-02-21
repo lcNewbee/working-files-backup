@@ -12,12 +12,14 @@ const propTypes = {
   style: PropTypes.object,
   role: PropTypes.oneOf(['switch']),
   minWidth: PropTypes.string,
-  disabled: PropTypes.bool,
+  disabled: PropTypes.any,
+  readOnly: PropTypes.any,
 };
 
 const defaultProps = {
   role: 'switch',
   disabled: false,
+  readOnly: false,
 };
 
 class Switchs extends React.Component {
@@ -84,6 +86,7 @@ class Switchs extends React.Component {
             let myClassName = 'm-switch__item';
             let val;
             let label;
+            const thisKey = item.get('id') || item.get('name') || '';
 
             if (typeof item.get === 'function') {
               val = item.get('value');
@@ -99,7 +102,7 @@ class Switchs extends React.Component {
 
             return (
               <button
-                key={i}
+                key={`${thisKey}${val}`}
                 className={myClassName}
                 value={val}
                 disabled={disabled}

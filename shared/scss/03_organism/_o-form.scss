@@ -149,6 +149,14 @@ $o-form-content-margin: 1em 0 0;
       }
       .form-control {
         margin-left: 0;
+        .a-password__input,
+        .text {
+          width: 100%;
+          padding-top: .31429rem;
+          padding-bottom: .31429rem;
+          padding-left: .42857rem;
+          padding-right: .42857rem;
+        }
         .m-switch {
           margin: 0;
           display: block;
@@ -158,13 +166,7 @@ $o-form-content-margin: 1em 0 0;
         }
         .a-password {
           display: block;
-        }
-        .text {
-          width: 100%;
-          padding-top: .31429rem;
-          padding-bottom: .31429rem;
-          padding-left: .42857rem;
-          padding-right: .42857rem;
+          padding: 0;
         }
         .a-input-range {
           width: 100%;
