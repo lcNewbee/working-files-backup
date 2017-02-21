@@ -42,9 +42,9 @@ class MapClients_Model extends CI_Model {
         $result = null;
         $min = element('reporttime',$data,100);
         $cgiary = array(
-            'groupid'=>element('groupid',$data,1),
-            'enable'=>element('enable',$data,1),
-            'wscanrpttime'=>$min*60
+            'groupid'=>(int)element('groupid',$data,1),
+            'enable'=>(int)element('enable',$data,1),
+            'wscanrpttime'=>(int)$min*60
         );        
         $result = wscan_set_param(json_encode($cgiary));
         return $result;

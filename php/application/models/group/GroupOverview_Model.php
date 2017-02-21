@@ -89,7 +89,7 @@ class GroupOverview_Model extends CI_Model {
             if($timeType === 'today' || $timeType === 'yesterday'){
                 $tablename = 'data_flow_hour';
             }
-            $sql = "select Id,ApGroupId FROM ".$tablename." a where not exists (select 1 from  data_flow_hour where a.ApGroupId=ApGroupId  and id>a.id)";
+            $sql = "select Id,ApGroupId FROM ".$tablename." a where not exists (select 1 from  data_flow_hour where a.ApGroupId=ApGroupId  and id>a.id) order by ApGroupId";
             $allquery = $this->mysql->query($sql);
             $alldata = $data;
             $arr = array();
