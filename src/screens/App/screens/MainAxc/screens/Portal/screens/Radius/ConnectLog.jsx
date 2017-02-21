@@ -8,6 +8,8 @@ import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
+const onlinetimeFilter = utils.filter('connectTime');
+
 const listOptions = fromJS([
   {
     id: 'nasip',
@@ -64,6 +66,9 @@ const listOptions = fromJS([
     text: _('Time'),
     formProps: {
       required: true,
+    },
+    transform(val) {
+      return onlinetimeFilter.transform(val / 1000);
     },
   }, {
     id: 'ins',

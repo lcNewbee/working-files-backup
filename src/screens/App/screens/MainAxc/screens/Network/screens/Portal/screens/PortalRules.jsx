@@ -128,15 +128,16 @@ const listOptions = fromJS([
       type: 'select',
       required: true,
     },
-  }, {
-    id: 'idle_test',
-    label: _('Idle Detection'),
-    defaultValue: '0',
-    formProps: {
-      type: 'checkbox',
-      value: '1',
-    },
   },
+  // {
+  //   id: 'idle_test',
+  //   label: _('Idle Detection'),
+  //   defaultValue: '0',
+  //   formProps: {
+  //     type: 'checkbox',
+  //     value: '1',
+  //   },
+  // },
 ]);
 
 const objectTableOptions = fromJS([

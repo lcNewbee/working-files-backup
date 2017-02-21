@@ -602,5 +602,16 @@
 
   "Departure Time": "离开时间",
   "Clients Analysis": "客流分析",
-  "Clients Flow State": "客流分析状态"
+  "Clients Flow State": "客流分析状态",
+
+  "Attack Number":"攻击数量",
+  "":"",
+  "":"",
+  "":"",
+  "":"",
+  "":"",
+  "":"",
+  "":"",
+  "":"",
+  "":""
 }
