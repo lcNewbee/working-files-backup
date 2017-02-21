@@ -1,13 +1,13 @@
-import fs from 'fs';
-import path from 'path';
-import gulp from 'gulp';
-import gutil from 'gulp-util';
-import gulpLoadPlugins from 'gulp-load-plugins';
-import minimist from 'minimist';
-import del from 'del';
-import shell from 'gulp-shell';
+const fs = require('fs');
+const path = require('path');
+const gulp = require('gulp');
+const gutil = require('gulp-util');
+const gulpLoadPlugins = require('gulp-load-plugins');
+const minimist = require('minimist');
+const del = require('del');
+const shell = require('gulp-shell');
 
-import pkg from './package.json';
+const pkg = require('./package.json');
 
 const configReg = /'\.\/config\/(\w+)'/g;
 const $ = gulpLoadPlugins();

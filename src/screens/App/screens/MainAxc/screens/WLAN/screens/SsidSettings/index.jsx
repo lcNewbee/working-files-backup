@@ -187,6 +187,15 @@ const listOptions = fromJS([
       value: '1',
     },
   }, {
+    id: 'greenap',
+    text: _('Green AP Mode'),
+    defaultValue: '1',
+    options: checkboxOptions,
+    formProps: {
+      type: 'checkbox',
+      value: '1',
+    },
+  }, {
     id: 'maxBssUsers',
     text: _('Max Clients'),
     defaultValue: 32,

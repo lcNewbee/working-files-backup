@@ -20,6 +20,7 @@ const defaultItem = fromJS({
       module: 'info',
       data: {
         devicename: '',
+        mac: '',
       },
     }, {
       panelKey: 'radioBase',

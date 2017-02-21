@@ -129,6 +129,7 @@ const listOptions = fromJS([
       required: true,
     },
   },
+  // 闲置检查
   // {
   //   id: 'idle_test',
   //   label: _('Idle Detection'),
@@ -140,25 +141,8 @@ const listOptions = fromJS([
   // },
 ]);
 
-const objectTableOptions = fromJS([
-  {
-    id: 'nickName',
-    label: _('Nickname'),
-  }, {
-    id: 'occurrenceTime',
-    label: _('Occurrence Time'),
-  }, {
-    id: 'recentlyAppeared',
-    label: _('Recently Appeared'),
-  }, {
-    id: 'createtime',
-    label: _('Createtime'),
-  },
-]);
-
 const propTypes = {
   store: PropTypes.instanceOf(Map),
-  closeListItemModal: PropTypes.func,
 };
 const defaultProps = {};
 

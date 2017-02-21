@@ -10,6 +10,7 @@ import FormContainer from '../Organism/FormContainer';
 const propTypes = {
   onChangeData: PropTypes.func,
   onChangeItem: PropTypes.func,
+  resetVaildateMsg: PropTypes.func,
   onSave: PropTypes.func.isRequired,
   actionable: PropTypes.bool,
   deviceIndex: PropTypes.number,
@@ -52,7 +53,6 @@ class DeviceSystem extends React.Component {
   componentWillUnmount() {
     this.props.resetVaildateMsg();
   }
-
 
   onChangeRadio(data) {
     const myData = data;

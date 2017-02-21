@@ -71,6 +71,8 @@ class PropertyPanel extends React.Component {
     const curModule = $$configData.get('module');
     let formUrl = 'goform/group/ap/radio';
     let $$subData = $$configData.get('data');
+    let curName = '';
+    let first5g = '';
 
     if (curModule === 'radio') {
       formUrl = 'goform/group/ap/radio';
@@ -86,10 +88,25 @@ class PropertyPanel extends React.Component {
       $$subData = immutableUtils.toNumberWithKeys($$subData, List(numberKeys));
     } else if (curModule === 'info') {
       formUrl = 'goform/group/ap/base';
+      curName = $$subData.get('devicename');
+      first5g = $$subData.get('first5g');
+
       $$subData = $$subData.clear().merge({
+        apmac: $$activeListData.get('mac'),
         oldname: $$activeListData.getIn(['info', 'devicename']),
-        newname: $$subData.getIn(['devicename']),
       });
+
+      if (first5g && (parseInt(first5g, 10) !== $$activeListData.getIn(['radio', 'first5g']))) {
+        $$subData = $$subData.merge({
+          first5g,
+        });
+      }
+
+      if (curName && ($$activeListData.getIn(['info', 'devicename']) !== curName)) {
+        $$subData = $$subData.merge({
+          newname: curName,
+        });
+      }
     }
 
     this.props.save(formUrl, $$subData.toJS())

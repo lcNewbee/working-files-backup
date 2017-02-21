@@ -192,6 +192,10 @@ class FormInput extends React.Component {
 
     data.value = rawValue || val;
 
+    if (this.props.dataType === 'number') {
+      data.value = parseInt(data.value, 10);
+    }
+
     // 数据更新
     if (typeof this.props.onChange === 'function') {
       this.props.onChange(data, e);

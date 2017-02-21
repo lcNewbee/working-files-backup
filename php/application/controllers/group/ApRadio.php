@@ -23,7 +23,7 @@ class ApRadio extends CI_Controller {
 		$result = null;
 		if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$data = json_decode(file_get_contents("php://input"), true);
-			$result = $this->ApRadio_Model->set_ap_name($data);
+			$result = $this->ApRadio_Model->set_general($data);
 			echo $result;
 		} else if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 			$result = $this->fetch();
@@ -32,19 +32,19 @@ class ApRadio extends CI_Controller {
 	function fetch() {
 		$result = array();
 		$result = $this->ApRadio_Model->get_apradio_info($_GET);
-		echo json_encode($result);		
+		echo json_encode($result);
 	}
-	
+
 	function onAction($data) {
 		$result = null;
 		$actionType = element('action',$data,'');
 		switch($actionType) {
 			case 'setting' : $result = $this->ApRadio_Model->set_apradio($data);
-				break;							
+				break;
 			default : $result = $this->ApRadio_Model->set_def_apradio($data);
 				break;
 		}
 		return $result;
 	}
-	
+
 }

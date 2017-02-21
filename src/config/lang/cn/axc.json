@@ -346,6 +346,7 @@
 
   "SSID Settings": "SSID配置",
   "AAA Policy": "AAA策略",
+  "Green AP Mode": "绿色AP模式",
   "Access Control": "访问控制",
   "Smart RF": "智能RF",
   "Band Steering": "5G优先",
@@ -598,7 +599,7 @@
   "Download Packets": "下载数据包数",
   "Throughput": "流量",
   "Upload": "上传",
-  "AAA Strategy":"AAA 战略",
+  "AAA Strategy":"AAA 策略",
 
   "Departure Time": "离开时间",
   "Clients Analysis": "客流分析",

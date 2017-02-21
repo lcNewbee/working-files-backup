@@ -7,20 +7,18 @@ import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
-const listOptions = fromJS([
+const settingsFormOptions = fromJS([
   {
     id: 'enable',
     width: '60',
-    text: _('Enable'),
-    formProps: {
-      type: 'checkbox',
-      dataType: 'number',
-      value: '1',
-    },
+    label: _('Enable'),
+    type: 'checkbox',
+    dataType: 'number',
+    value: '1',
   }, {
     id: 'apopermode',
     width: '120',
-    text: _('AP Work Mode'),
+    label: _('AP Work Mode'),
     options: [
       {
         value: 1,
@@ -31,15 +29,12 @@ const listOptions = fromJS([
       },
     ],
     defaultValue: '1',
-    formProps: {
-      type: 'switch',
-      dataType: 'number',
-      value: '1',
-    },
+    type: 'switch',
+    dataType: 'number',
+    value: '1',
   }, {
     id: 'scantype',
-    text: _('Scan Type'),
-    defaultValue: '0',
+    label: _('Scan Type'),
     options: [
       {
         value: 2,
@@ -49,102 +44,84 @@ const listOptions = fromJS([
         label: _('Initiative'),
       },
     ],
-    formProps: {
-      type: 'switch',
-      dataType: 'number',
-      defaultValue: '1',
-    },
+    type: 'switch',
+    dataType: 'number',
+    defaultValue: '1',
   }, {
     id: 'cycles',
     label: _('Scan Cycles Times'),
-    formProps: {
-      min: 0,
-      max: 255,
-      type: 'number',
-      help: '0~255',
-      dataType: 'number',
-      defaultValue: '0',
-    },
+    min: 1,
+    max: 255,
+    type: 'number',
+    help: '0~255',
+    dataType: 'number',
+    defaultValue: '1',
   }, {
     id: 'maxtxpwr',
-    text: _('Max Power'),
-    formProps: {
-      type: 'select',
-      defaultValue: '100%',
-      options: [
-        {
-          value: '3%',
-          label: '3%',
-        }, {
-          value: '6%',
-          label: '6%',
-        }, {
-          value: '12%',
-          label: '12%',
-        }, {
-          value: '25%',
-          label: '25%',
-        }, {
-          value: '50%',
-          label: '50%',
-        }, {
-          value: '100%',
-          label: '100%',
-        },
-      ],
-    },
+    label: _('Max Power'),
+    type: 'select',
+    defaultValue: '100%',
+    options: [
+      {
+        value: '3%',
+        label: '3%',
+      }, {
+        value: '6%',
+        label: '6%',
+      }, {
+        value: '12%',
+        label: '12%',
+      }, {
+        value: '25%',
+        label: '25%',
+      }, {
+        value: '50%',
+        label: '50%',
+      }, {
+        value: '100%',
+        label: '100%',
+      },
+    ],
   }, {
     id: 'rpttime',
-    text: _('Channel Quality Report Cycle'),
-    formProps: {
-      type: 'number',
-      min: 1,
-      dataType: 'number',
-      defaultValue: '1',
-      help: _('Seconds'),
-    },
+    label: _('Channel Quality Report Cycle'),
+    type: 'number',
+    min: 1,
+    dataType: 'number',
+    defaultValue: '1',
+    help: _('Seconds'),
   }, {
     id: 'chlnum',
-    text: _('Channel Set'),
-    formProps: {
-      help: `${_('e.g. ')}1,5,8`,
-      defaultValue: '',
-    },
+    label: _('Channel Set'),
+    help: `${_('e.g. ')}1,5,8`,
+    defaultValue: '',
   }, {
     id: 'enable2g4chl',
-    text: _('Auto Channel'),
-    formProps: {
-      type: 'checkbox',
-      linkId: 'enable5gchl',
-      dataType: 'number',
-      defaultValue: '1',
-      value: '1',
-    },
+    label: _('Auto Channel'),
+    type: 'checkbox',
+    linkId: 'enable5gchl',
+    dataType: 'number',
+    defaultValue: '1',
+    value: '1',
   }, {
     id: 'enable2g4pwr',
-    text: _('Auto Power'),
-    formProps: {
-      type: 'checkbox',
-      linkId: 'enable5gpwr',
-      dataType: 'number',
-      defaultValue: '1',
-      value: '1',
-    },
+    label: _('Auto Power'),
+    type: 'checkbox',
+    linkId: 'enable5gpwr',
+    dataType: 'number',
+    defaultValue: '1',
+    value: '1',
   }, {
     id: 'adjafactor2g4',
-    text: _('Neighbor Coefficient'),
-    formProps: {
-      linkId: 'adjafactor5g',
-      min: 1,
-      max: 255,
-      type: 'number',
-      dataType: 'number',
-      defaultValue: '1',
-    },
+    label: _('Neighbor Coefficient'),
+    linkId: 'adjafactor5g',
+    min: 1,
+    max: 255,
+    type: 'number',
+    dataType: 'number',
+    defaultValue: '1',
   },
 ]);
-
-const settingsFormOptions = immutableUtils.getFormOptions(listOptions);
 
 const propTypes = {
   changeScreenActionQuery: PropTypes.func,

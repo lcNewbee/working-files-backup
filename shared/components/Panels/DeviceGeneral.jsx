@@ -1,14 +1,33 @@
 import React, { PropTypes } from 'react';
-import { Map } from 'immutable';
+import { Map, fromJS } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import validator from 'shared/validator';
-import {
-  FormGroup,
-} from '../Form';
+import FormContainer from '../Organism/FormContainer';
 
-import {
-  SaveButton,
-} from '../Button';
+const formOptions = fromJS([
+  {
+    id: 'devicename',
+    label: _('Nickname'),
+    form: 'deviceGeneral',
+    maxLength: '31',
+    validator: validator({
+      rules: 'utf8Len:[1,31]',
+    }),
+    required: true,
+  },
+  {
+    id: 'first5g',
+    form: 'deviceGeneral',
+    type: 'checkbox',
+    value: 1,
+    defaultValue: 1,
+    dataType: 'number',
+    text: _('Band Steering'),
+    showPrecondition($$data) {
+      return $$data.get('has5g');
+    },
+  },
+]);
 
 const propTypes = {
   onValidError: PropTypes.func,
@@ -38,44 +57,22 @@ class Panel extends React.Component {
   }
   render() {
     const {
-      store, app, actionable, invalidMsg, validateAt, onValidError,
+      store, app, actionable, ...restProps
     } = this.props;
+    const formData = store.get('data');
+
     return (
-      <div className="o-form o-form--compassed">
-        <FormGroup
-          type="text"
-          label={_('Nickname')}
-          name="devicename"
-          form="deviceGeneral"
-          maxLength="31"
-          validator={
-            validator({
-              rules: 'utf8Len:[1,31]',
-            })
-          }
-
-          value={store.getIn(['data', 'devicename'])}
-          onChange={option => this.props.onChangeData({
-            devicename: option.value,
-          })}
-          disabled={!actionable}
-
-          // Validate Props
-          errMsg={invalidMsg.get('devicename')}
-          validateAt={validateAt}
-          onValidError={onValidError}
-          required
-        />
-        {
-          actionable ? (
-            <SaveButton
-              size="sm"
-              loading={app.get('saving')}
-              onClick={this.onSave}
-            />
-          ) : null
-        }
-      </div>
+      <FormContainer
+        {...restProps}
+        method="POST"
+        data={formData}
+        className="o-form o-form--compassed"
+        options={formOptions}
+        isSaving={app.get('saving')}
+        onSave={this.onSave}
+        actionable={actionable}
+        hasSaveButton={actionable}
+      />
     );
   }
 }

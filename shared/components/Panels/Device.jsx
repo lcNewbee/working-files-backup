@@ -127,6 +127,19 @@ function DevicesProperties(props) {
                       const panelKey = panel.get('panelKey');
                       const isActive = item.get(activePanelKey) === panelIndex;
                       const MyComponent = panelsComponentMap[panelKey];
+                      let $$curStore = panel;
+
+                      if (panelKey === 'general') {
+                        $$curStore = $$curStore.setIn(['data', 'first5g'],
+                          panel.getIn(['data', 'first5g']) !== undefined ?
+                            panel.getIn(['data', 'first5g']) : item.getIn(['curData', 'radio', 'first5g']),
+                        );
+
+                        if (item.getIn(['data', 'radios']) && item.getIn(['data', 'radios']).size > 1) {
+                          $$curStore = $$curStore.setIn(['data', 'has5g'], true);
+                        }
+                      }
+
                       return (
                         <div
                           key={`${panelKey}`}
@@ -159,7 +172,7 @@ function DevicesProperties(props) {
                               <div className="o-panel__body">
                                 <MyComponent
                                   {...props}
-                                  store={panel}
+                                  store={$$curStore}
                                 />
                               </div>
                             ) : null

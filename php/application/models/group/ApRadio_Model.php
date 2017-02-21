@@ -4,7 +4,7 @@ class ApRadio_Model extends CI_Model {
 		parent::__construct();
 		$this->load->library('session');
 		$this->load->database();
-		$this->load->helper(array('array', 'my_customfun_helper'));		
+		$this->load->helper(array('array', 'my_customfun_helper'));
 	}
     function get_apradio_info($data) {
         $retdata = array(
@@ -30,7 +30,7 @@ class ApRadio_Model extends CI_Model {
 				'groupid' => (int)element('groupid', $data),
 				'mac' => element('mac', $data),
 				'radios' => $temp_result_data->data,
-			'info'=>$ap_info
+			  'info'=>$ap_info
 			)
 		);
 		return $result;
@@ -98,13 +98,10 @@ class ApRadio_Model extends CI_Model {
 		return $result;
 	}
 
-    function set_ap_name($data) {
+    function set_general($data) {
         $result = null;
-        $cgiary = array(
-            'oldname' => (string)element('oldname',$data),
-            'newname' => (string)element('newname',$data)
-        );
-        $result = axc_change_apname(json_encode($cgiary));
+        $result = axc_set_general(json_encode($data));
         return $result;
     }
 }
+

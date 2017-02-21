@@ -1,5 +1,5 @@
 import { toastr } from 'react-redux-toastr';
-import ERROR_MSG_MAP from 'shared/config/errorCode';
+import ERROR_MSG_MAP from 'shared/config/serverError';
 import utils from 'shared/utils';
 
 const APP_CONFIG = {

@@ -133,7 +133,7 @@ let config = {
           {
             loader: "babel-loader",
             options: {
-              "presets": [
+              presets: [
                 ["es2015", { "modules": false }]
               ]
             }

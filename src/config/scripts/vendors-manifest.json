@@ -326,7 +326,7 @@
       "id": 72,
       "meta": {}
     },
-    "../node_modules/node-libs-browser/node_modules/process/browser.js": {
+    "../node_modules/process/browser.js": {
       "id": 73,
       "meta": {}
     },
