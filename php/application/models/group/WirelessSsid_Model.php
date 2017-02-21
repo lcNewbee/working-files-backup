@@ -59,7 +59,8 @@ class WirelessSsid_Model extends CI_Model {
                 $temp2['downstream'] =$row[9];
                 $temp2['upstream'] =$row[10];
                 $temp2['loadBalanceType'] =$row[11];
-                $temp2['ssidisolate'] =$row[11];
+                $temp2['ssidisolate'] =$row[12];
+                $temp2['greenap'] = $row[13];
 
                 $tempdata[] = $temp2;
             }
@@ -87,7 +88,8 @@ class WirelessSsid_Model extends CI_Model {
             'downstream' => (int)element('downstream', $oriData),
             'encryption' => element('encryption', $oriData),
             'password' => element('password', $oriData, ''),
-            'ssidisolate' => (int)element('ssidisolate', $oriData, '')
+            'ssidisolate' => (int)element('ssidisolate', $oriData, ''),
+            'greenap' => (int)element('greenap', $oriData, '')
         );
         return $ret;
     }

@@ -89,23 +89,29 @@ class GroupOverview_Model extends CI_Model {
             if($timeType === 'today' || $timeType === 'yesterday'){
                 $tablename = 'data_flow_hour';
             }
-            $sql = "select Id,ApGroupId FROM ".$tablename." a where not exists (select 1 from  data_flow_hour where a.ApGroupId=ApGroupId  and id>a.id) order by ApGroupId";
+            $sql = "select Id,ApGroupId FROM ".$tablename." a where not exists (select 1 from  ".$tablename." where a.ApGroupId=ApGroupId  and id>a.id) order by ApGroupId";
             $allquery = $this->mysql->query($sql);
             $alldata = $data;
             $arr = array();
             foreach($allquery->result_array() as $row) {
                 $alldata['groupid'] = $row['ApGroupId'];
-                $flowlist = $this->flow_list($alldata);                
+                $flowlist = $this->flow_list($alldata);                                  
                 if(count($arr) === 0){
                    $arr =  $flowlist;
-                }else{                                    
-                    for($i = 0; $i < count($arr); $i++) {                      
-                        for($j = 0; $j < count($arr[$i]['data']); $j++) {
-                            $arr[$i]['data'][$j] = (int)$arr[$i]['data'][$j] + (int)$flowlist[$i]['data'][$j];
-                        }                        
+                }else{                                                    
+                    for($i = 0; $i < count($arr); $i++) {                              
+                        if( count($arr[$i]['data']) > count($flowlist[$i]['data']) ){
+                            for($j = 0; $j < count($flowlist[$i]['data']); $j++) {
+                                $arr[$i]['data'][$j] = (int)$arr[$i]['data'][$j] + (int)$flowlist[$i]['data'][$j];
+                            }
+                        }else{
+                            for($n = 0; $n < count($arr[$i]['data']); $n++) {
+                                $arr[$i]['data'][$n] = (int)$arr[$i]['data'][$n] + (int)$flowlist[$i]['data'][$n];
+                            }
+                        }
                     }     
                 }                                      
-            }
+            }            
             $result = $arr;   
         }else{
             $result = $this->flow_list($data);
@@ -131,7 +137,7 @@ class GroupOverview_Model extends CI_Model {
         if($tablename === 'data_flow_hour'){
             $addnumber = 0;
             if(count($querydata->result_array()) >0){
-                $st = $querydata->result_array()[0]['Timer'];
+                $st = $querydata->last_row()->Timer;
                 $addnumber = (int)substr($st,11,2);
                 //截取时间获取整点
             }
@@ -139,40 +145,45 @@ class GroupOverview_Model extends CI_Model {
                 $addnumber = 24;
             }
             if($addnumber > 0) {
-                for ($i = 1; $i <= $addnumber; $i++) {
+                for ($i = 0; $i <= $addnumber; $i++) {
                     array_push($apAry,0);
                     array_push($wireessAry,0);
                     array_push($clientAry,0);
                 }
             }
-        }
+            for($k=0; $k<count($querydata->result_array()); $k++){
+                $apAry[$k] = $querydata->result_array()[$k]['ApRxFlow'];
+                $wireessAry[$k] = $querydata->result_array()[$k]['RadioRxFlow'];
+                $clientAry[$k] = $querydata->result_array()[$k]['StaRxFlow'];
+            }
+        }        
         //添加默认值针对天数
         if($tablename === 'data_flow_day'){
             $default_day = 7;
             switch($timeType){
                 case 'half_month': $default_day = 15;
-                break;
+                    break;
                 case 'month': $default_day = 30;
-                break;
+                    break;
             }
             $add_day = $default_day - count($querydata->result_array());
-            for ($j = 1; $j <= $add_day; $j++) {
+            for ($j = 0; $j < $add_day; $j++) {                
                 array_push($apAry,0);
                 array_push($wireessAry,0);
-                array_push($clientAry,0);
+                array_push($clientAry,0);                
             }
-        }
-        foreach($querydata->result_array() as $row) {
-            array_push($apAry,$row['ApRxFlow']);
-            array_push($wireessAry,$row['RadioRxFlow']);
-            array_push($clientAry,$row['StaRxFlow']);
-        }
+            foreach($querydata->result_array() as $row){
+                array_push($apAry,$row['ApRxFlow']);
+                array_push($wireessAry,$row['RadioRxFlow']);
+                array_push($clientAry,$row['StaRxFlow']); 
+            }            
+        }                     
         $arr = array(
-                    array('name'=>'ap','data'=>$apAry),
-                    array('name'=>'wireless','data'=>$wireessAry),
-                    array('name'=>'clients','data'=>$clientAry)
-                );
-        return $arr;
+            array('name'=>'ap','data'=>$apAry),
+            array('name'=>'wireless','data'=>$wireessAry),
+            array('name'=>'clients','data'=>$clientAry)
+        );                       
+        return $arr;        
     }
     public function get_start_end_time($gettype='today') {
         date_default_timezone_set('Asia/Shanghai');

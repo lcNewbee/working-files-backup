@@ -12,7 +12,8 @@ class MapClients_Model extends CI_Model {
         $datalist = array();
         $timedata = $this->get_clients_cfg($groupid);
         if(count($timedata) > 0 && $mac !== ''){
-            $dblist = $this->mysql->query("call getwidsreport('".$mac."',".$timedata['reporttime'].")");
+            $s = 60 * (int)$timedata['reporttime'];            
+            $dblist = $this->mysql->query("call getwidsreport('".$mac."',".$s.")");
             $datalist = $dblist->result_array();
         }                
         $arr = array(
