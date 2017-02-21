@@ -143,8 +143,8 @@
   "Port Speed": "端口速率",
   "Default VLAN": "默认VLAN",
   "Work Model": "工作模式",
-  "Half": "单工",
-  "Duplex": "双工",
+  "Half Duplex": "单工",
+  "Full Duplex": "双工",
   "Auto": "自动",
 
   "Radius Template": "Radius模板",

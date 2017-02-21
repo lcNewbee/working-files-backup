@@ -21,10 +21,10 @@ const listOptions = fromJS([
     options: [
       {
         value: 'half',
-        label: _('Half'),
+        label: _('Half Duplex'),
       }, {
         value: 'full',
-        label: _('Duplex'),
+        label: _('Full Duplex'),
       }, {
         value: 'auto',
         label: _('Auto'),
