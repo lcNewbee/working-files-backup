@@ -21,7 +21,7 @@ const listOptions = fromJS([
     options: [
       {
         value: 'half',
-        label: _('Simplex'),
+        label: _('Half'),
       }, {
         value: 'full',
         label: _('Duplex'),
