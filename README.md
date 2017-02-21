@@ -6,12 +6,23 @@
 
 ## 快速上手
 首先确保安装node.js环境.
+
+### 依赖包安装
+安装依赖包
+npm
 接下来安装 npm 依赖,在国内推荐安装 npm淘宝镜像
 ``npm install``
 由于我们使用gulp，接下来安装 gulp-cli
 ``npm install gulp-cli -g``
+
+Yarn
+yarn config set registry https://registry.npm.taobao.org
+``yarn install``
+由于我们使用gulp，接下来安装 gulp-cli
+``yarn install gulp-cli -g``
+
 在浏览器中查看效果
-``gulp run``
+``gulp``
 
 ## 原则
 在Comlanos前端平台设计与开发过程中我们尽量遵守以下原则
