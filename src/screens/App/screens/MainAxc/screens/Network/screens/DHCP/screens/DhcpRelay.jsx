@@ -17,7 +17,7 @@ const defaultProps = {};
 const settingsOptions = fromJS([
   {
     id: 'relay_enable',
-    label: _('Relay on'),
+    label: _('Relay'),
     fieldset: 'relay_setting',
     defaultValue: '0',
     value: '1',
