@@ -20,23 +20,26 @@ const listOptions = fromJS([
         rules: 'utf8Len:[1,31]',
       }),
     },
-  }, {
-    id: 'address_type',
-    label: _('Address Type'),
-    defaultValue: '1',
-    options: [
-      {
-        value: '1',
-        label: _('IP Address'),
-      }, {
-        value: '2',
-        label: _('Domain'),
-      },
-    ],
-    formProps: {
-      type: 'switch',
-    },
-  }, {
+  },
+  // {
+  //   id: 'address_type',
+  //   label: _('Address Type'),
+  //   defaultValue: '1',
+  //   options: [
+  //     {
+  //       value: '1',
+  //       label: _('IP Address'),
+  //     }, {
+  //       value: '2',
+  //       label: _('Domain'),
+  //       disabled: true,
+  //     },
+  //   ],
+  //   formProps: {
+  //     type: 'switch',
+  //   },
+  // },
+  {
     id: 'server_ipaddr',
     label: _('Server IP'),
     formProps: {
@@ -45,26 +48,26 @@ const listOptions = fromJS([
       validator: validator({
         rules: 'ip',
       }),
-      showPrecondition(data) {
-        return data.get('address_type') === '1';
-      },
+      // showPrecondition(data) {
+      //   return data.get('address_type') === '1';
+      // },
     },
-
-  }, {
-    id: 'server_domain',
-    label: _('Server Domain'),
-    disabled: true,
-    formProps: {
-      type: 'text',
-      required: true,
-      validator: validator({
-        rules: 'utf8Len:[1,31]',
-      }),
-      showPrecondition(data) {
-        return data.get('address_type') === '2';
-      },
-    },
-  }, {
+  },
+  // {
+  //   id: 'server_domain',
+  //   label: _('Server Domain'),
+  //   formProps: {
+  //     type: 'text',
+  //     required: true,
+  //     validator: validator({
+  //       rules: 'utf8Len:[1,31]',
+  //     }),
+  //     showPrecondition(data) {
+  //       return data.get('address_type') === '2';
+  //     },
+  //   },
+  // },
+  {
     id: 'server_port',
     label: _('Server Port'),
     formProps: {

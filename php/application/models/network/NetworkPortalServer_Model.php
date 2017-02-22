@@ -39,7 +39,6 @@ class NetworkPortalServer_Model extends CI_Model {
 		}
         //array_values是为了让portal_id也成为数组属性,重新赋值给接口数组
         $server_data=array_values($server_data);
-        $server_data['address_type']='1';
         $result = array(
             'state'=>  array('code' => 2000, 'msg' => 'OK'),
             'data'=> array(
