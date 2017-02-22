@@ -41,7 +41,8 @@ class Switchs extends React.Component {
 
   render() {
     const {
-      size, className, options, value, role, minWidth, style, disabled, readOnly
+      size, className, options, value, role,
+      minWidth, style, disabled, readOnly,
     } = this.props;
     const itemStyle = {
       minWidth,
@@ -83,10 +84,11 @@ class Switchs extends React.Component {
       >
         {
           options ? optionsList.map((item, i) => {
+            const curDisabled = item.get('disabled') || disabled;
+            const thisKey = item.get('id') || item.get('name') || '';
             let myClassName = 'm-switch__item';
             let val;
             let label;
-            const thisKey = item.get('id') || item.get('name') || '';
 
             if (typeof item.get === 'function') {
               val = item.get('value');
@@ -100,14 +102,18 @@ class Switchs extends React.Component {
               myClassName += ' active';
             }
 
+            if (curDisabled) {
+              myClassName += ' disabled';
+            }
+
             return (
               <button
                 key={`${thisKey}${val}`}
                 className={myClassName}
                 value={val}
-                disabled={disabled}
+                disabled={curDisabled}
                 onClick={(e) => {
-                  if (!readOnly && !disabled) {
+                  if (!readOnly && !curDisabled) {
                     this.onClick(e, {
                       value: val,
                       label,

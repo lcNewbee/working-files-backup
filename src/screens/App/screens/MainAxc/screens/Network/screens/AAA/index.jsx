@@ -26,6 +26,7 @@ const accessTypeSeletOptions = [
   {
     value: 'lan-access',
     label: _('LAN'),
+    disabled: true,
   }, {
     value: 'ppp-access',
     label: _('PPP'),
