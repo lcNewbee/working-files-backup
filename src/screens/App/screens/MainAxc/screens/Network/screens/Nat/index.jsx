@@ -55,6 +55,7 @@ const listOptions = fromJS([
       validator: validator({
         rules: 'ipSegment',
       }),
+      help: _('eg: 192.168.100.12/24')
     },
   }, {
     id: 'conversionAddress',

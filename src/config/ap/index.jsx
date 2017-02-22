@@ -1,9 +1,6 @@
 import NotFound from 'shared/components/NotFound';
 import settingsReducer from 'shared/reducers/settings';
-import remoteActionMiddleware from 'shared/utils/lib/remote_action_middleware';
-import { combineReducers } from 'redux';
 import b28n from 'shared/b28n';
-import * as appActions from 'shared/actions/app';
 import appReducer from 'shared/reducers/app';
 import { reducer as toastrReducer } from 'react-redux-toastr';
 
@@ -298,22 +295,13 @@ const reducers = {
   systemmaintenance: sSystemMaintenance.systemmaintenance,
 };
 
-// Store
-const stores = remoteActionMiddleware(
-  combineReducers(reducers),
-
-  // 支持 chrome 插件 Redux DevTools
-  window.devToolsExtension ? window.devToolsExtension() : f => f
-);
 
 const ac5000 = {
   reducers,
   routes,
-  stores,
+  appConfig: guiConfig,
 };
 
-// 初始化app Config
-stores.dispatch(appActions.initAppConfig(guiConfig));
 
 export default ac5000;
 

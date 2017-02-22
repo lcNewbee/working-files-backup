@@ -1,9 +1,6 @@
 import b28n from 'shared/b28n';
-import { combineReducers } from 'redux';
 import NotFound from 'shared/components/NotFound';
-import remoteActionMiddleware from 'shared/utils/lib/remote_action_middleware';
 import stringUtils from 'shared/utils/lib/string';
-import * as appActions from 'shared/actions/app';
 import appReducer from 'shared/reducers/app';
 import screensReducer from 'shared/reducers/screens';
 import propertiesReducer from 'shared/reducers/properties';
@@ -697,22 +694,11 @@ const reducers = {
   toastr: toastrReducer,
 };
 
-// Store
-const stores = remoteActionMiddleware(
-  combineReducers(reducers),
-
-  // 支持 chrome 插件 Redux DevTools
-  window.devToolsExtension ? window.devToolsExtension() : f => f,
-);
-
 const app = {
   reducers,
   routes,
-  stores,
+  appConfig: guiConfig,
 };
-
-// 初始化app Config
-stores.dispatch(appActions.initAppConfig(guiConfig));
 
 
 export default app;

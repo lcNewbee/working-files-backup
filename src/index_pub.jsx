@@ -9,18 +9,35 @@ require('whatwg-fetch');
 const React = require('react');
 const ReactDOM = require('react-dom');
 const ReactRouter = require('react-router');
+const remoteActionMiddleware = require('shared/utils/lib/remote_action_middleware');
+const appActions = require('shared/actions/app');
+const combineReducers = require('redux').combineReducers;
 const Provider = require('react-redux').Provider;
-const prodConfig = require('./config/axc');
+const prodConfig = require('./config/ASW3');
 
 const Router = ReactRouter.Router;
 const hashHistory = ReactRouter.hashHistory;
 const mountNode = document.getElementById('app');
 
+const stores = remoteActionMiddleware(
+  combineReducers({
+    ...prodConfig.reducers,
+  }),
+
+  // 支持 chrome 插件 Redux DevTools
+  window.devToolsExtension ? window.devToolsExtension() : f => f,
+);
+
+// 初始化 App Config
+if (prodConfig.appConfig) {
+  stores.dispatch(appActions.initAppConfig(prodConfig.appConfig));
+}
+
 // 引入产品配置
 const renderApp = () => {
   // 主渲染入口
   ReactDOM.render(
-    <Provider store={prodConfig.stores}>
+    <Provider store={stores}>
       <Router history={hashHistory} routes={prodConfig.routes} />
     </Provider>,
     mountNode,

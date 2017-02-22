@@ -9,6 +9,9 @@ require('whatwg-fetch');
 const React = require('react');
 const ReactDOM = require('react-dom');
 const ReactRouter = require('react-router');
+const remoteActionMiddleware = require('shared/utils/lib/remote_action_middleware');
+const appActions = require('shared/actions/app');
+const combineReducers = require('redux').combineReducers;
 const Provider = require('react-redux').Provider;
 const AppContainer = require('react-hot-loader').AppContainer;
 
@@ -20,12 +23,26 @@ const mountNode = document.getElementById('app');
 
 // 引入产品配置
 const renderApp = () => {
-  const prodConfig = require('./config/axc');
+  const prodConfig = require('./config/ASW3');
+  // Store
+  const stores = remoteActionMiddleware(
+    combineReducers({
+      ...prodConfig.reducers,
+    }),
+
+    // 支持 chrome 插件 Redux DevTools
+    window.devToolsExtension ? window.devToolsExtension() : f => f,
+  );
+
+  // 初始化 App Config
+  if (prodConfig.appConfig) {
+    stores.dispatch(appActions.initAppConfig(prodConfig.appConfig));
+  }
 
   // 主渲染入口
   ReactDOM.render(
     <AppContainer>
-      <Provider store={prodConfig.stores}>
+      <Provider store={stores}>
         <Router history={hashHistory} routes={prodConfig.routes} />
       </Provider>
     </AppContainer>,
@@ -39,7 +56,7 @@ if (module.hot) {
     renderApp();
   };
 
-  module.hot.accept('./config/axc', () => {
+  module.hot.accept('./config/ASW3', () => {
     setImmediate(() => {
       // Preventing the hot reloading error from react-router
       unmountComponentAtNode(mountNode);
