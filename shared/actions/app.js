@@ -98,8 +98,9 @@ export function receiveServerError(state) {
 
   return {
     type: 'RECEIVE_SERVER_ERROR',
-    errorAt: Date.now(),
-    state,
+    payload: utils.extend({}, state, {
+      errorAt: Date.now(),
+    }),
   };
 }
 

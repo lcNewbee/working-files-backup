@@ -119,7 +119,7 @@ export default function (state = defaultState, action) {
     case 'RECEIVE_SAVE':
       return state.set('saving', false)
         .set('savedAt', action.savedAt)
-        .set('state', action.state);
+        .set('state', fromJS(action.state));
 
     case 'RECEIVE_AJAX_ERROR':
       console.error('Ajax Error = ', action.payload);
@@ -128,7 +128,7 @@ export default function (state = defaultState, action) {
         .set(ajaxTypeMap[action.payload.type], false);
 
     case 'RECEIVE_SERVER_ERROR':
-      return state.set('state', action.state);
+      return state.set('state', fromJS(action.payload));
 
     case 'RQ_FETCH':
       return state.set('fetching', true);

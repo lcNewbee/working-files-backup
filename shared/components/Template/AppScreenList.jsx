@@ -815,10 +815,16 @@ class AppScreenList extends React.PureComponent {
     const actionQuery = store.getIn(['actionQuery']);
     const actionType = actionQuery.get('action');
     let isEditModelshow = false;
+    const syncCode = app.getIn(['state', 'code']);
+    let savedText = _('Saved');
 
     // 判断是否显示修改或添加 model
     if (actionType === 'edit' || actionType === 'add' || !!modalChildren) {
       isEditModelshow = true;
+
+      if (syncCode >= 6000) {
+        savedText = _('Unsaved');
+      }
     }
 
     return (
@@ -837,6 +843,7 @@ class AppScreenList extends React.PureComponent {
                 action={saveUrl}
                 layout={editFormLayout}
                 isSaving={app.get('saving')}
+                savedText={savedText}
                 data={editData}
                 actionQuery={actionQuery}
                 invalidMsg={app.get('invalid')}

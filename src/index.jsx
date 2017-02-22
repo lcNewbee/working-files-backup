@@ -24,6 +24,7 @@ const mountNode = document.getElementById('app');
 // 引入产品配置
 const renderApp = () => {
   const prodConfig = require('./config/axc2.0');
+
   // Store
   const stores = remoteActionMiddleware(
     combineReducers({
