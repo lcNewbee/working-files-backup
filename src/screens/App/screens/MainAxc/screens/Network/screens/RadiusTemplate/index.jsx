@@ -43,7 +43,7 @@ const authServer = fromJS([
       className: 'cols col-6',
     },
     form: 'authServer',
-    label: _('Auth IP'),
+    label: _('IP Address'),
     type: 'text',
     required: true,
     validator: validator({
@@ -51,7 +51,7 @@ const authServer = fromJS([
     }),
   }, {
     id: 'authpri_port',
-    label: _('Auth Port'),
+    label: _('Port'),
     fieldset: 'auth',
     form: 'authServer',
     required: true,
@@ -61,7 +61,7 @@ const authServer = fromJS([
     max: 65535,
   }, {
     id: 'authpri_key',
-    label: _('Auth Password'),
+    label: _('Password'),
     fieldset: 'auth',
     form: 'authServer',
     type: 'password',
@@ -72,7 +72,7 @@ const authServer = fromJS([
     }),
   }, {
     id: 'authsecond_ipaddr',
-    label: _('Auth IP'),
+    label: _('IP Address'),
     fieldset: 'auth_secondary',
     fieldsetOption: {
       legend: _('Secondary Auth Server'),
@@ -85,7 +85,7 @@ const authServer = fromJS([
     }),
   }, {
     id: 'authsecond_port',
-    label: _('Auth Port'),
+    label: _('Port'),
     fieldset: 'auth_secondary',
     type: 'number',
     form: 'authServer',
@@ -93,7 +93,7 @@ const authServer = fromJS([
     max: 65535,
   }, {
     id: 'authsecond_key',
-    label: _('Auth Password'),
+    label: _('Password'),
     fieldset: 'auth_secondary',
     type: 'password',
     form: 'authServer',
@@ -107,7 +107,7 @@ const authServer = fromJS([
 const accServer = fromJS([
   {
     id: 'acctpri_ipaddr',
-    label: _('Primary Acc IP'),
+    label: _('IP Address'),
     fieldset: 'primary',
     fieldsetOption: {
       legend: _('Primary Accounting Server'),
@@ -122,7 +122,7 @@ const accServer = fromJS([
   },
   {
     id: 'acctpri_port',
-    label: _('Primary Acc Port'),
+    label: _('Port'),
     fieldset: 'primary',
     required: true,
     defaultValue: '1813',
@@ -133,7 +133,7 @@ const accServer = fromJS([
   }, {
     id: 'acctpri_key',
     required: true,
-    label: _('Primary Acc Password'),
+    label: _('Password'),
     fieldset: 'primary',
     form: 'accServer',
     type: 'password',
@@ -143,7 +143,7 @@ const accServer = fromJS([
     }),
   }, {
     id: 'acctsecond_ipaddr',
-    label: _('Secondary Acc IP'),
+    label: _('IP Address'),
     fieldsetOption: {
       legend: _('Secondary Accounting Server'),
       className: 'cols col-6',
@@ -156,7 +156,7 @@ const accServer = fromJS([
     }),
   }, {
     id: 'acctsecond_port',
-    label: _('Secondary Acc Port'),
+    label: _('Port'),
     fieldset: 'secondary',
     type: 'number',
     form: 'accServer',
@@ -164,7 +164,7 @@ const accServer = fromJS([
     max: 65535,
   }, {
     id: 'acctsecond_key',
-    label: _('Secondary Acc Password'),
+    label: _('Password'),
     fieldset: 'secondary',
     form: 'accServer',
     type: 'password',
@@ -303,23 +303,20 @@ const listOptions = fromJS([
   },
   {
     id: 'authpri_ipaddr',
-    label: _('Primary Auth Server IP'),
+    label: _('Auth Server IP'),
     fieldset: 'auth',
-    legend: _('Primary Auth Server Settings'),
   }, {
     id: 'authpri_port',
-    label: _('Primary Auth Server Port'),
+    label: _('Auth Server Port'),
     fieldset: 'auth',
     defaultValue: '1812',
   }, {
     id: 'acctpri_ipaddr',
-    label: _('Primary Acc IP'),
+    label: _('Accounting Server IP'),
     fieldset: 'Accounting',
-    legend: _('Accounting Server Settings'),
-    defaultValue: '',
   }, {
     id: 'acctpri_port',
-    label: _('Primary Acc Port'),
+    label: _('Accounting Server Port'),
     fieldset: 'Accounting',
     defaultValue: '',
   },
