@@ -389,14 +389,16 @@
   "disconnected": "未连接",
   "connected": "已连接",
   "Station Flow": "流量统计",
+  "Flow": "流量",
   "CPU/MEM Usage": "CPU及内存占用率",
   "Bandwidth": "信道频宽",
   "Subnet Mask": "子网掩码",
   "Radios Apply": "射频选择",
   "Users reach the upper bound": "登录用户数已达上限",
-  "Total Clients:": "客户端总数：",
+  "Total Clients: ": "客户端总数：",
   "add to blacklist": "加入黑名单",
   "Add client ": "确定将客户端 ",
   " to blacklist ?": " 加入黑名单？",
-  "Invalid firmware!": "固件格式错误！"
+  "Invalid firmware!": "固件格式错误！",
+  "String length must be: ": "密码长度必须为："
 }

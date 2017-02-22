@@ -28,6 +28,10 @@ const msg = {
 };
 const timeTypeSwitchs = fromJS([
   {
+    value: '-1',
+    label: _('Current'),
+  },
+  {
     value: '0',
     label: _('Today'),
   },
@@ -307,120 +311,26 @@ export default class EthStatistic extends React.Component {
         id: 'ethx_name',
         text: _('Name'),
       }, {
-        id: 'eth_bytes',
-        text: _('Flow Bytes'),
-        transform(val) {
-          if (val === '' || val === undefined) {
-            return '--';
-          }
-          return flowRateFilter.transform(val);
-        },
+        id: 'userNum',
+        text: _('User Number'),
       }, {
-        id: 'discarded_bytes',
-        text: _('Discarded Bytes'),
-        transform(val) {
-          if (val === '' || val === undefined) {
-            return '--';
-          }
-          return flowRateFilter.transform(val);
-        },
-      }, {
-        id: 'ip_packets',
-        text: _('IP Packets'),
-        transform(val) {
-          if (val === '' || val === undefined) {
-            return '--';
-          }
-          return val;
-        },
-      }, {
-        id: 'ip_bytes',
-        text: _('IP Bytes'),
-        transform(val) {
-          if (val === '' || val === undefined) {
-            return '--';
-          }
-          return flowRateFilter.transform(val);
-        },
-      }, {
-        id: 'tcp_packets',
-        text: _('TCP Packets'),
-        transform(val) {
-          if (val === '' || val === undefined) {
-            return '--';
-          }
-          return val;
-        },
-      }, {
-        id: 'udp_packets',
-        text: _('UDP Packets'),
-        transform(val) {
-          if (val === '' || val === undefined) {
-            return '--';
-          }
-          return val;
-        },
-      }, {
-        id: 'vlan_packets',
-        text: _('VLAN Packets'),
-        transform(val) {
-          if (val === '' || val === undefined) {
-            return '--';
-          }
-          return val;
-        },
-      },
-      // {
-      //   id: 'mpls_packets',
-      //   text: _('MPLS Packets'),
-      //   transform(val) {
-      //     if (val === '' || val === undefined) {
-      //       return '--';
-      //     }
-      //     return val;
-      //   },
-      // }, {
-      //   id: 'pppoe_packets',
-      //   text: _('PPPoE Packets'),
-      //   transform(val) {
-      //     if (val === '' || val === undefined) {
-      //       return '--';
-      //     }
-      //     return val;
-      //   },
-      // },
-      {
-        id: 'fragmented_packets',
-        text: _('Fragmented Packets'),
-        transform(val) {
-          if (val === '' || val === undefined) {
-            return '--';
-          }
-          return val;
-        },
-      }, {
-        id: 'ndpi_throughput',
-        text: _('NDPI Throughput'),
+        id: 'application',
+        text: _('Application'),
         transform(val) {
           let str = '';
-          if (val === '' || val === undefined) {
-            str = '--';
-          } else {
-            const arr = val.split('/');
-            const val1 = flowRateFilter.transform(parseInt(arr[0], 10));
-            const val2 = flowRateFilter.transform(parseInt(arr[1], 10));
-            str = `${val1}/${val2}`;
+          if (val) {
+            val.forEach((proto, iter) => {
+              str += (iter === val.size - 1 ? proto : `${proto}, `);
+            });
+            return str;
           }
-          return str;
+          return '--';
         },
       }, {
-        id: 'guessed_flow_protos',
-        text: _('Guessed Flow Protos'),
+        id: 'curRate',
+        text: _('Current Rate'),
         transform(val) {
-          if (val === '' || val === undefined) {
-            return '--';
-          }
-          return val;
+          return `${flowRateFilter.transform(val)}/s`;
         },
       }, {
         id: 'active_eth',
@@ -474,14 +384,6 @@ export default class EthStatistic extends React.Component {
         // listTitle={_('Statistics Within 30 Seconds')}
       >
         <div className="t-overview">
-          <h3 className="element t-overview__header">{_('Statistics Within 30 Seconds')}</h3>
-          <div className="t-overview__section">
-            <Table
-              options={listOptions}
-              list={serverData.get('list')}
-            />
-          </div>
-          <h3 className="element t-overview__header">{_('Historical Graphs')}</h3>
           <div className="t-overview__section">
             <div className="element t-overview__section-header">
               <h3>
@@ -490,7 +392,7 @@ export default class EthStatistic extends React.Component {
                     marginRight: '10px',
                   }}
                 >
-                  {_('Traffic')}
+                  {_('Time')}
                 </span>
                 <Select
                   options={timeTypeSwitchs.toJS()}
@@ -514,13 +416,20 @@ export default class EthStatistic extends React.Component {
                 />
               </h3>
             </div>
-            <div className="element">
-              <EchartReact
-                option={flowOption}
-                className="o-box__canvas"
-                style={flowChartStyle}
-              />
-            </div>
+          </div>
+          {/* <div className="element">
+            <EchartReact
+              option={flowOption}
+              className="o-box__canvas"
+              style={flowChartStyle}
+            />
+          </div>*/}
+          <div className="t-overview__section">
+            <Table
+              className="table"
+              options={listOptions}
+              list={serverData.get('list')}
+            />
           </div>
         </div>
       </AppScreen>

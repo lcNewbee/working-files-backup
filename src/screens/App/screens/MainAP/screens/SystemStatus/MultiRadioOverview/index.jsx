@@ -285,7 +285,7 @@ function getTopTenFlowClientsOption(serverData) {
     },
     series: [
       {
-        name: _('Name'),
+        name: `${_('Name')}/MAC`,
         type: 'pie',
         radius: '50%',
         avoidLabelOverlap: false,
@@ -625,6 +625,9 @@ export default class SystemStatus extends React.Component {
           type: 'pie',
           radius: '50%',
           center: ['60%', '55%'],
+          label: {
+            normal: { show: false },
+          },
           data: [
             { value: download, name: `${_('Download')}: ${downloadFlow}` },
             { value: upload, name: `${_('Upload')}: ${uploadFlow}` },

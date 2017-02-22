@@ -144,6 +144,7 @@ export default class ACL extends React.Component {
             role: 'alert',
             text: _('The MAC address already exists in the mac list !'),
           });
+          return;
         }
         if (preList.size < 64) {
           afterList = preList.push(macInputVal);

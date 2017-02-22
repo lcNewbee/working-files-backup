@@ -7,7 +7,7 @@
     "deviceRadioList": [
       {
         "radioId": "0",
-        "radioType": "2.4G",
+        "radioType": "5G",
         "name": "radio_1"
       },
       {

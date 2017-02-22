@@ -123,8 +123,8 @@ const sClientsTraceSettings = require('../../screens/App/screens/MainAxc/screens
 // ndpi
 const sDPIOverview =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/DPIOverview');
-const sFlowInfo =
-    require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/FlowInfo');
+// const sFlowInfo =
+//     require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/FlowInfo');
 const sMacStatistic =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/MacStatistic');
 const sEthStatistic =
@@ -384,13 +384,15 @@ const routes = [
                 formUrl: 'goform/network/dpi/overview',
                 text: _('Overview'),
                 component: sDPIOverview.Screen,
-              }, {
-                id: 'flowinfo',
-                path: '/main/network/dpi/flowinfo',
-                formUrl: 'goform/network/dpi/flowinfo',
-                text: _('Flow Info'),
-                component: sFlowInfo.Screen,
-              }, {
+              },
+              // {
+              //   id: 'flowinfo',
+              //   path: '/main/network/dpi/flowinfo',
+              //   formUrl: 'goform/network/dpi/flowinfo',
+              //   text: _('Flow Info'),
+              //   component: sFlowInfo.Screen,
+              // },
+              {
                 id: 'macstatistic',
                 path: '/main/network/dpi/macstatistic',
                 formUrl: 'goform/network/dpi/macstatistic',

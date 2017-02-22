@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import utils from 'shared/utils';
 import Select from 'shared/components/Select';
 import Table from 'shared/components/Table';
-import EchartReact from 'shared/components/EchartReact';
+// import EchartReact from 'shared/components/EchartReact';
 import AppScreen from 'shared/components/Template/AppScreen';
 import { FormGroup, FormInput } from 'shared/components/Form';
 import * as appActions from 'shared/actions/app';
@@ -18,15 +18,19 @@ const propTypes = fromJS({
   initScreen: PropTypes.func,
 });
 
-const flowChartStyle = {
-  width: '100%',
-  minHeight: '300px',
-};
+// const flowChartStyle = {
+//   width: '100%',
+//   minHeight: '300px',
+// };
 
 const msg = {
   days: _('Days'),
 };
 const timeTypeSwitchs = fromJS([
+  {
+    value: '-1',
+    label: _('Current'),
+  },
   {
     value: '0',
     label: _('Today'),
@@ -81,150 +85,150 @@ function getFlowUnit(val) {
   return ret;
 }
 
-function getFlowOption(serverData, timeType) {
-  const option = {
-    color: [colors[0], colors[1]],
-    tooltip: {
-      trigger: 'axis',
-    },
-    legend: {
-      data: [_('Upload'), _('Download')],
-    },
-    grid: {
-      left: '0',
-      right: '7%',
-      bottom: '3%',
-      containLabel: true,
-    },
-    calculable: true,
-    xAxis: [{
-      type: 'category',
-      interval: 1,
-      nameGap: 5,
-      nameTextStyle: {
-        fontWeight: 'bolder',
-      },
-      splitLine: {
-        show: false,
-        interval: 0,
-      },
-      axisLine: {
-        show: false,
-      },
-      axisTick: {
-        show: false,
-      },
-      axisLabel: {
-        interval: 0,
-      },
-    }],
-    yAxis: [{
-      type: 'value',
-      name: _('KB'),
-      splitNumber: 5,
-      min: 0,
-      axisLabel: {
-        formatter: '{value}',
-      },
-      splitLine: {
-        show: true,
-        lineStyle: {
-          type: 'dotted',
-          color: '#e1e6e9',
-        },
-      },
-      axisTick: {
-        show: false,
-      },
-      axisLine: {
-        show: false,
-      },
-    }],
-    series: [
-      {
-        name: _('Upload'),
-        type: 'line',
-        // smooth: true,
-        // itemStyle: {
-        //   normal: {
-        //     areaStyle: {
-        //       type: 'default',
-        //       opacity: 0.3,
-        //     },
-        //   },
-        // },
-      },
-      {
-        name: _('Download'),
-        type: 'line',
-        // smooth: true,
-        // itemStyle: {
-        //   normal: {
-        //     areaStyle: {
-        //       type: 'default',
-        //       opacity: 0.4,
-        //     },
-        //   },
-        // },
-      },
-    ],
-  };
-  let xAxisData;
-  let xAxisName = _('Days');
-  let $$upDataList = serverData.getIn(['upFlowList']);
-  let $$downDataList = serverData.getIn(['downFlowList']);
-  let maxVal = 0;
-  let maxVal1 = 0;
-  let utilObj = {};
+// function getFlowOption(serverData, timeType) {
+//   const option = {
+//     color: [colors[0], colors[1]],
+//     tooltip: {
+//       trigger: 'axis',
+//     },
+//     legend: {
+//       data: [_('Upload'), _('Download')],
+//     },
+//     grid: {
+//       left: '0',
+//       right: '7%',
+//       bottom: '3%',
+//       containLabel: true,
+//     },
+//     calculable: true,
+//     xAxis: [{
+//       type: 'category',
+//       interval: 1,
+//       nameGap: 5,
+//       nameTextStyle: {
+//         fontWeight: 'bolder',
+//       },
+//       splitLine: {
+//         show: false,
+//         interval: 0,
+//       },
+//       axisLine: {
+//         show: false,
+//       },
+//       axisTick: {
+//         show: false,
+//       },
+//       axisLabel: {
+//         interval: 0,
+//       },
+//     }],
+//     yAxis: [{
+//       type: 'value',
+//       name: _('KB'),
+//       splitNumber: 5,
+//       min: 0,
+//       axisLabel: {
+//         formatter: '{value}',
+//       },
+//       splitLine: {
+//         show: true,
+//         lineStyle: {
+//           type: 'dotted',
+//           color: '#e1e6e9',
+//         },
+//       },
+//       axisTick: {
+//         show: false,
+//       },
+//       axisLine: {
+//         show: false,
+//       },
+//     }],
+//     series: [
+//       {
+//         name: _('Upload'),
+//         type: 'line',
+//         // smooth: true,
+//         // itemStyle: {
+//         //   normal: {
+//         //     areaStyle: {
+//         //       type: 'default',
+//         //       opacity: 0.3,
+//         //     },
+//         //   },
+//         // },
+//       },
+//       {
+//         name: _('Download'),
+//         type: 'line',
+//         // smooth: true,
+//         // itemStyle: {
+//         //   normal: {
+//         //     areaStyle: {
+//         //       type: 'default',
+//         //       opacity: 0.4,
+//         //     },
+//         //   },
+//         // },
+//       },
+//     ],
+//   };
+//   let xAxisData;
+//   let xAxisName = _('Days');
+//   let $$upDataList = serverData.getIn(['upFlowList']);
+//   let $$downDataList = serverData.getIn(['downFlowList']);
+//   let maxVal = 0;
+//   let maxVal1 = 0;
+//   let utilObj = {};
 
-  if (!$$upDataList || !$$downDataList) {
-    return null;
-  }
-  maxVal = $$upDataList.max();
-  maxVal1 = $$downDataList.max();
+//   if (!$$upDataList || !$$downDataList) {
+//     return null;
+//   }
+//   maxVal = $$upDataList.max();
+//   maxVal1 = $$downDataList.max();
 
-  if (maxVal1 > maxVal) {
-    maxVal = maxVal1;
-  }
+//   if (maxVal1 > maxVal) {
+//     maxVal = maxVal1;
+//   }
 
-  utilObj = getFlowUnit(maxVal);
+//   utilObj = getFlowUnit(maxVal);
 
-  $$upDataList = $$upDataList.toJS();
-  $$downDataList = $$downDataList.toJS();
+//   $$upDataList = $$upDataList.toJS();
+//   $$downDataList = $$downDataList.toJS();
 
-  if (timeType === '0' ||
-    timeType === '1') {
-    xAxisData = List(new Array(25)).map(
-      (val, i) => `${i}:00`,
-    ).toJS();
-    xAxisName = _('Hours');
-  } else if (timeType === '7') {
-    xAxisData = List(new Array(8)).map(
-      (val, i) => i,
-    ).toJS();
-  } else if (timeType === '15') {
-    xAxisData = List(new Array(16)).map(
-      (val, i) => i,
-    ).toJS();
-  } else {
-    xAxisData = List(new Array(31)).map(
-      (val, i) => i,
-    ).toJS();
-  }
+//   if (timeType === '0' ||
+//     timeType === '1') {
+//     xAxisData = List(new Array(25)).map(
+//       (val, i) => `${i}:00`,
+//     ).toJS();
+//     xAxisName = _('Hours');
+//   } else if (timeType === '7') {
+//     xAxisData = List(new Array(8)).map(
+//       (val, i) => i,
+//     ).toJS();
+//   } else if (timeType === '15') {
+//     xAxisData = List(new Array(16)).map(
+//       (val, i) => i,
+//     ).toJS();
+//   } else {
+//     xAxisData = List(new Array(31)).map(
+//       (val, i) => i,
+//     ).toJS();
+//   }
 
-  option.xAxis[0].data = xAxisData;
-  option.xAxis[0].name = xAxisName;
-  option.yAxis[0].name = utilObj.label;
+//   option.xAxis[0].data = xAxisData;
+//   option.xAxis[0].name = xAxisName;
+//   option.yAxis[0].name = utilObj.label;
 
-  option.series[0].data = $$upDataList.map(
-    val => parseFloat(val / utilObj.val).toFixed(3),
-  );
-  option.series[1].data = $$downDataList.map(
-    val => parseFloat(val / utilObj.val).toFixed(3),
-  );
+//   option.series[0].data = $$upDataList.map(
+//     val => parseFloat(val / utilObj.val).toFixed(3),
+//   );
+//   option.series[1].data = $$downDataList.map(
+//     val => parseFloat(val / utilObj.val).toFixed(3),
+//   );
 
-  return option;
-}
+//   return option;
+// }
 
 const listOptions = fromJS([
   {
@@ -234,20 +238,36 @@ const listOptions = fromJS([
     id: 'ip',
     text: _('IP'),
   }, {
-    id: 'flowBytes',
-    text: _('Flow Bytes'),
+    id: 'osType',
+    text: _('OS Type'),
     transform(val) {
       if (val === '' || val === undefined) {
         return '--';
       }
-      return flowRateFilter.transform(val);
+      return val;
     },
-  }, {
-    id: 'transPackets',
-    text: _('Transfer Packets'),
   }, {
     id: 'application',
     text: _('Application'),
+    transform(val) {
+      let str = '';
+      if (val) {
+        val.forEach((proto, iter) => {
+          str += (iter === val.size - 1 ? proto : `${proto}, `);
+        });
+        return str;
+      }
+      return '--';
+    },
+  }, {
+    id: 'curRate',
+    text: _('Current Rate'),
+    transform(val) {
+      return `${flowRateFilter.transform(val)}/s`;
+    },
+  }, {
+    id: 'trafficPercent',
+    text: _('Proportion'),
   },
 ]);
 
@@ -269,12 +289,11 @@ export default class MacStatistic extends React.Component {
       'onChangeSearchMac',
       'onChangePage',
       'onSelectRow',
-      'onChangeInterface',
-      'getMacOptions',
+      // 'getMacOptions',
       'onChangeView',
-      'selectMac',
+      // 'selectMac',
     ]);
-    this.deleteMac = fromJS([]);
+    // this.deleteMac = fromJS([]);
   }
   componentWillMount() {
     this.initOptions(this.props);
@@ -289,14 +308,14 @@ export default class MacStatistic extends React.Component {
   }
 
 
-  componentDidUpdate() {
-    const curScreenId = this.props.store.get('curScreenId');
-    let graphMac = this.props.store.getIn([curScreenId, 'query', 'graphMac']);
-    this.deleteMac.forEach((val) => {
-      graphMac = graphMac.delete(val);
-    });
-    this.props.changeScreenQuery({ graphMac });
-  }
+  // componentDidUpdate() {
+  //   const curScreenId = this.props.store.get('curScreenId');
+  //   let graphMac = this.props.store.getIn([curScreenId, 'query', 'graphMac']);
+  //   this.deleteMac.forEach((val) => {
+  //     graphMac = graphMac.delete(val);
+  //   });
+  //   this.props.changeScreenQuery({ graphMac });
+  // }
 
   onChangeTimeType(data) {
     this.props.changeScreenQuery({ timeType: data.value });
@@ -308,63 +327,63 @@ export default class MacStatistic extends React.Component {
     this.props.fetchScreenData();
   }
 
-  onSelectRow(data) { // 最多允许勾选三个列表项进行绘图
-    const that = this;
-    const curScreenId = this.props.store.get('curScreenId');
-    const ifSelected = this.props.store.getIn([curScreenId, 'data', 'list', data.index, '__selected__']);
-    const list = this.props.store.getIn([curScreenId, 'data', 'list']);
-    if (data.index === -1) return;
-    /** *************** 注释的这段是单选的代码 ******************/
-    // this.props.selectListItem({
-    //   keyName: 'index',
-    //   index: data.index,
-    //   selected: !ifSelected,
-    // });
-    // if (!ifSelected) { // 单选，如果是勾选则将已经勾选的勾去
-    //   list.forEach((item, index) => {
-    //     if (index !== data.index) {
-    //       this.props.selectListItem({
-    //         keyName: 'index',
-    //         selected: false,
-    //         index,
-    //       });
-    //     }
-    //   });
-    // }
-    /** ********************** 单选代码完毕 **************************/
+  // onSelectRow(data) { // 最多允许勾选三个列表项进行绘图
+  //   const that = this;
+  //   const curScreenId = this.props.store.get('curScreenId');
+  //   const ifSelected = this.props.store.getIn([curScreenId, 'data', 'list', data.index, '__selected__']);
+  //   const list = this.props.store.getIn([curScreenId, 'data', 'list']);
+  //   if (data.index === -1) return;
+  //   /** *************** 注释的这段是单选的代码 ******************/
+  //   // this.props.selectListItem({
+  //   //   keyName: 'index',
+  //   //   index: data.index,
+  //   //   selected: !ifSelected,
+  //   // });
+  //   // if (!ifSelected) { // 单选，如果是勾选则将已经勾选的勾去
+  //   //   list.forEach((item, index) => {
+  //   //     if (index !== data.index) {
+  //   //       this.props.selectListItem({
+  //   //         keyName: 'index',
+  //   //         selected: false,
+  //   //         index,
+  //   //       });
+  //   //     }
+  //   //   });
+  //   // }
+  //   /** ********************** 单选代码完毕 **************************/
 
-    /** *********************** 多选代码 ****************************/
-    function selectGraphItem(num) {
-      if (!ifSelected) {
-        const checkedNum = list.count((item) => {
-          if (item.get('__selected__')) return true;
-          return false;
-        });
-        if (checkedNum < num) {
-          that.props.selectListItem({
-            keyName: 'index',
-            index: data.index,
-            selected: true,
-          });
-        }
-      } else {
-        that.props.selectListItem({
-          keyName: 'index',
-          index: data.index,
-          selected: false,
-        });
-      }
-    }
-    /** ******************* 多选代码完成 *************************** */
-    // 将选择的MAC加入query
-    Promise.resolve(3).then((n) => { selectGraphItem(n); }).then(() => {
-      const graphMac = this.props.store.getIn([curScreenId, 'data', 'list']).map((item) => {
-        if (item.get('__selected__')) return item.get('mac');
-        return '';
-      }).filter(mac => mac !== '');
-      this.props.changeScreenQuery({ graphMac });
-    });
-  }
+  //   /** *********************** 多选代码 ****************************/
+  //   function selectGraphItem(num) {
+  //     if (!ifSelected) {
+  //       const checkedNum = list.count((item) => {
+  //         if (item.get('__selected__')) return true;
+  //         return false;
+  //       });
+  //       if (checkedNum < num) {
+  //         that.props.selectListItem({
+  //           keyName: 'index',
+  //           index: data.index,
+  //           selected: true,
+  //         });
+  //       }
+  //     } else {
+  //       that.props.selectListItem({
+  //         keyName: 'index',
+  //         index: data.index,
+  //         selected: false,
+  //       });
+  //     }
+  //   }
+  //   /** ******************* 多选代码完成 *************************** */
+  //   // 将选择的MAC加入query
+  //   Promise.resolve(3).then((n) => { selectGraphItem(n); }).then(() => {
+  //     const graphMac = this.props.store.getIn([curScreenId, 'data', 'list']).map((item) => {
+  //       if (item.get('__selected__')) return item.get('mac');
+  //       return '';
+  //     }).filter(mac => mac !== '');
+  //     this.props.changeScreenQuery({ graphMac });
+  //   });
+  // }
 
   onChangeView(data) {
     this.props.changeScreenQuery({ size: data.value });
@@ -376,20 +395,15 @@ export default class MacStatistic extends React.Component {
     this.props.fetchScreenData();
   }
 
-  onChangeInterface(data) {
-    this.props.changeScreenQuery({ ethx: data.value });
-    this.props.fetchScreenData();
-  }
-
-  getMacOptions() {
-    const curScreenId = this.props.store.get('curScreenId');
-    const list = this.props.store.getIn([curScreenId, 'data', 'list']);
-    const options = list.map(item => ({
-      value: item.get('mac'),
-      label: item.get('mac'),
-    }));
-    return options.toJS();
-  }
+  // getMacOptions() {
+  //   const curScreenId = this.props.store.get('curScreenId');
+  //   const list = this.props.store.getIn([curScreenId, 'data', 'list']);
+  //   const options = list.map(item => ({
+  //     value: item.get('mac'),
+  //     label: item.get('mac'),
+  //   }));
+  //   return options.toJS();
+  // }
 
   initOptions(props) {
     const { store } = props;
@@ -397,39 +411,39 @@ export default class MacStatistic extends React.Component {
     const serverData = store.getIn([curScreenId, 'data']);
 
     this.serverData = serverData;
-    this.flowOption = getFlowOption(serverData, store.getIn([curScreenId, 'query', 'timeType']));
+    // this.flowOption = getFlowOption(serverData, store.getIn([curScreenId, 'query', 'timeType']));
   }
 
-  selectMac() {
-    const store = this.props.store;
-    const curScreenId = store.get('curScreenId');
-    const graphMac = store.getIn([curScreenId, 'query', 'graphMac']);
-    const list = store.getIn([curScreenId, 'data', 'list']);
-    let newList = list;
+  // selectMac() {
+  //   const store = this.props.store;
+  //   const curScreenId = store.get('curScreenId');
+  //   const graphMac = store.getIn([curScreenId, 'query', 'graphMac']);
+  //   const list = store.getIn([curScreenId, 'data', 'list']);
+  //   let newList = list;
 
-    // let newGraphMac = fromJS([]);
-    if (graphMac && graphMac.size > 0) {
-      newList = list.map((item) => {
-        if (graphMac.includes(item.get('mac'))) return item.set('__selected__', true);
-        return item;
-      });
-      graphMac.forEach((mac) => {
-        const index = list.find(item => item.get('mac') === mac);
-        if (index === -1) { // 不存在则在graphMac中删除该Mac
-          this.deleteMac = this.deleteMac.push(mac);
-        }
-      });
-    }
-    this.newList = newList;
-  }
+  //   // let newGraphMac = fromJS([]);
+  //   if (graphMac && graphMac.size > 0) {
+  //     newList = list.map((item) => {
+  //       if (graphMac.includes(item.get('mac'))) return item.set('__selected__', true);
+  //       return item;
+  //     });
+  //     graphMac.forEach((mac) => {
+  //       const index = list.find(item => item.get('mac') === mac);
+  //       if (index === -1) { // 不存在则在graphMac中删除该Mac
+  //         this.deleteMac = this.deleteMac.push(mac);
+  //       }
+  //     });
+  //   }
+  //   this.newList = newList;
+  // }
 
   render() {
-    const flowOption = this.flowOption;
+    // const flowOption = this.flowOption;
     const store = this.props.store;
     const curScreenId = store.get('curScreenId');
     // const serverData = store.getIn([curScreenId, 'data']);
 
-    this.selectMac();
+    // this.selectMac();
     return (
       <AppScreen
         {...this.props}
@@ -445,7 +459,6 @@ export default class MacStatistic extends React.Component {
         // listTitle={_('Statistics Within 30 Seconds')}
       >
         <div className="t-overview">
-          <h3 className="element t-overview__header">{_('Statistics Within 30 Seconds')}</h3>
           <div className="element t-overview__section-header">
             <h3>
               <span
@@ -453,7 +466,7 @@ export default class MacStatistic extends React.Component {
                   marginRight: '10px',
                 }}
               >
-                {_('Traffic')}
+                {_('Time')}
               </span>
               <Select
                 options={timeTypeSwitchs.toJS()}
@@ -486,18 +499,19 @@ export default class MacStatistic extends React.Component {
           </div>
           <div className="t-overview__section">
             <Table
-              selectable
+              // selectable
               className="table"
               options={listOptions}
-              list={this.newList}
+              // list={this.newList}
+              list={store.getIn([curScreenId, 'data', 'list'])}
               page={store.getIn([curScreenId, 'data', 'page'])}
               onPageChange={this.onChangePage}
-              onRowSelect={this.onSelectRow}
+              // onRowSelect={this.onSelectRow}
             />
           </div>
-          <h3 className="element t-overview__header">{_('Historical Graphs')}</h3>
+          {/* <h3 className="element t-overview__header">{_('Historical Graphs')}</h3>
           <div className="t-overview__section">
-            {/* <div className="element t-overview__section-header">
+            <div className="element t-overview__section-header">
               <h3>
                 <span
                   style={{
@@ -527,7 +541,7 @@ export default class MacStatistic extends React.Component {
                   clearable={false}
                 />
               </h3>
-            </div>*/}
+            </div>
             <div className="element">
               <EchartReact
                 option={flowOption}
@@ -535,7 +549,7 @@ export default class MacStatistic extends React.Component {
                 style={flowChartStyle}
               />
             </div>
-          </div>
+          </div>*/}
         </div>
       </AppScreen>
     );

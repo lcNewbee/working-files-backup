@@ -278,7 +278,7 @@
     {
 			"radioId":"1",
       "enable": "1",
-			"wirelessMode":"ap",
+			"wirelessMode":"sta",
 			"radioMode":"802.11ac",
 			"ssid":"axilspot",
 			"security":"none",

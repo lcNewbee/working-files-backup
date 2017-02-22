@@ -1,58 +1,28 @@
 {
 
-"state":	{
+"state":{
 	"code":	2000,
 	"msg":	"ok"
 },
 "data":	{
 	"list":	[{
-			"ethx_name":	"eth0",
-			"eth_bytes":	"44199",
-			"discarded_bytes":	"7506",
-			"ip_packets":	"251",
-			"ip_bytes":	"38175",
-			"unique_flows":	"57",
-			"tcp_packets":	"159",
-			"udp_packets":	"67",
-			"vlan_packets":	"0",
-			"mpls_packets":	"0",
-			"pppoe_packets":	"0",
-			"fragmented_packets":	"0",
-			"max_packets_size":	"1039",
-			"packets_size_64":	"0",
-			"packets_size_128":	"0",
-			"packets_size_256":	"0",
-			"packets_size_1024":	"0",
-			"packets_size_1500":	"0",
-			"packets_size_other":	"0",
-			"ndpi_throughput":	"242880/121850151",
-			"guessed_flow_protos":	"22",
-      "active_eth": "0"
-		}, {
-			"ethx_name":	"eth1",
-			"eth_bytes":	"44199",
-			"discarded_bytes":	"7506",
-			"ip_packets":	"251",
-			"ip_bytes":	"38175",
-			"unique_flows":	"57",
-			"tcp_packets":	"159",
-			"udp_packets":	"67",
-			"vlan_packets":	"0",
-			"mpls_packets":	"0",
-			"pppoe_packets":	"0",
-			"fragmented_packets":	"0",
-			"max_packets_size":	"1039",
-			"packets_size_64":	"0",
-			"packets_size_128":	"0",
-			"packets_size_256":	"0",
-			"packets_size_1024":	"0",
-			"packets_size_1500":	"0",
-			"packets_size_other":	"0",
-			"ndpi_throughput":	"242880/121850151",
-			"guessed_flow_protos":	"22",
-      "active_eth": "1"
-		}],
-    "upFlowList": [0, 0, 0, 1959878903, 5381601410, 6200716228, 7503529904, 8317442410, 5413569700, 799015144],
-    "downFlowList": [223, 232, 313, 331, 412, 421, 334, 343, 424, 442, 523, 532]
+		"ethx_name": "eth0",
+		"userNum":	"199",
+		"application":	["DHCP", "UDP", "POP3"],
+		"curRate":	"251",
+		"active_eth": "1"
+	},{
+		"ethx_name":	"eth1",
+		"userNum":	"199",
+		"application":	["DHCP", "UDP", "POP3"],
+		"curRate":	"251",
+		"active_eth": "0"
+	},{
+		"ethx_name":	"eth2",
+		"userNum":	"199",
+		"application":	["DHCP", "UDP", "POP3"],
+		"curRate":	"251",
+		"active_eth": "0"
+	}]
 }
 }

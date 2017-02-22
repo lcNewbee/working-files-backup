@@ -15,9 +15,9 @@ var vaildate = {
     var thisMin = min || 0;
 
     if (thisMin === max && len !== thisMin) {
-      return _('String length must be: %s bit', min, len);
+      return `${_('String length must be: ')}${min} bit`;
     } else if (len < thisMin || len > max) {
-      return _('String length range is: %s - %s bit', min, max);
+      return `${_('String length range is: ')}${min} - ${max} bit`;
     }
   },
 
@@ -27,9 +27,9 @@ var vaildate = {
     var thisMin = min || 0;
 
     if (thisMin === max && len !== thisMin) {
-      return _('String length must be: %s bytes', min);
+      return `${_('String length must be: ')}${min} bytes`;
     } else if (len < thisMin || len > max) {
-      return _('String length range is: %s - %s bytes', min, max);
+      return `${_('String length range is: ')}${min} - ${max} bytes`;
     }
   },
 

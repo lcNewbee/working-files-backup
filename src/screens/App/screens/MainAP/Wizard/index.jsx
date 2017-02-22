@@ -165,8 +165,22 @@ export default class SignUp extends React.Component {
   onOkButtonClick() {
     const { currModeData, nextModeData } = this.props.selfState.toJS();
     const showThinModeConfigModal = this.props.selfState.get('showThinModeConfigModal');
-    this.props.validateAll('acipinput').then((msg1) => {
-      if (msg1.isEmpty()) {
+    this.props.validateAll('acipinput').then((msg) => {
+      if (msg.isEmpty()) {
+        const acIp = nextModeData.acIp;
+        const mask = '255.255.255.0';
+        const str = validator.combine.noBroadcastIp(acIp, mask);
+        console.log('str', str);
+        if (str) {
+          this.props.createModal({
+            role: 'alert',
+            text: str,
+          });
+        }
+        return str;
+      }
+    }).then((str) => {
+      if (!str) {
         if (nextModeData.enable === '1' && !showThinModeConfigModal) {
           this.props.changeShowThinModeConfigModal(true);
         } else if (currModeData.enable === nextModeData.enable) {

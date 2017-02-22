@@ -3,12 +3,43 @@ import { fromJS, List, Map } from 'immutable';
 import { $$commonPieOption } from 'shared/config/axc';
 import EchartReact from 'shared/components/EchartReact';
 import AppScreen from 'shared/components/Template/AppScreen';
+import Select from 'shared/components/Select';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import utils from 'shared/utils';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/screens';
 
+const flowRateFilter = utils.filter('flowRate');
+const msg = {
+  days: _('Days'),
+};
+const timeTypeSwitchs = fromJS([
+  {
+    value: '-1',
+    label: _('Current'),
+  },
+  {
+    value: '0',
+    label: _('Today'),
+  },
+  {
+    value: '1',
+    label: _('Yesterday'),
+  },
+  {
+    value: '7',
+    label: `7 ${msg.days}`,
+  },
+  {
+    value: '15',
+    label: `15 ${msg.days}`,
+  },
+  {
+    value: '30',
+    label: `30 ${msg.days}`,
+  },
+]);
 function getEchartOptionByName(serverData, listName) {
   let dataList = serverData.get(listName);
   const ret = $$commonPieOption.mergeDeep({
@@ -50,12 +81,12 @@ function getEchartOptionByName(serverData, listName) {
           .find($$item => $$item.get('name') === name)
           .get('value');
         // return listName === 'mac' ? `${name.substring(0, 8)}... : ${num}%` : `${name} : ${num}%`;
-        return name.length > 7 ? `${name.substring(0, 7)}... : ${num}%` : `${name} : ${num}%`;
+        return name.length > 7 ? `${name.substring(0, 7)}... : ${flowRateFilter.transform(num)}` : `${name} : ${flowRateFilter.transform(num)}`;
       },
     },
     series: [
       {
-        name: _('Percentage'),
+        name: _('Traffic'),
       },
     ],
   }).toJS();
@@ -85,11 +116,21 @@ const defaultProps = {};
 export default class DPIOverview extends React.Component {
   constructor(props) {
     super(props);
+
+    utils.binds(this, [
+      'onChangeTimeType',
+    ])
   }
 
+  onChangeTimeType(data) {
+    this.props.changeScreenQuery({ timeType: data.value });
+    this.props.fetchScreenData();
+  }
   render() {
     const curScreenId = this.props.store.get('curScreenId');
     const serverData = this.props.store.getIn([curScreenId, 'data']);
+    const store = this.props.store;
+
     return (
       <AppScreen
         {...this.props}
@@ -109,8 +150,22 @@ export default class DPIOverview extends React.Component {
         {
           this.props.store.getIn([curScreenId, 'curSettings', 'ndpiEnable']) === '1' ? (
             <div className="t-overview">
-              <div className="t-list-info">
-                <h2 className="t-list-info__title">{_('Flow Statistics Within 30 Seconds')}</h2>
+              <div className="element t-overview__section-header">
+                <h3>
+                  <span
+                    style={{
+                      marginRight: '10px',
+                    }}
+                  >
+                    {_('Time')}
+                  </span>
+                  <Select
+                    options={timeTypeSwitchs.toJS()}
+                    value={store.getIn([curScreenId, 'query', 'timeType'])}
+                    onChange={this.onChangeTimeType}
+                    clearable={false}
+                  />
+                </h3>
               </div>
               <div className="t-overview__section row">
                 <div className="cols col-6" >

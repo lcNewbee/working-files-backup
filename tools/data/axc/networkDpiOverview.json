@@ -1,80 +1,47 @@
 {
-
-"state": {
-  "code": 2000,
-  "msg": "ok"
-},
-"data": {
-
-  "ethInterface": [
-    {
-      "name": "eth1",
-      "value": 50
-    }, {
-      "name": "eth2",
-      "value": 25
-    }, {
-      "name": "eth3",
-      "value": 25
-    }
-  ],
-
-  "mac": [
-    {
-      "name": "00:b0:2c:0c:85:6c",
-      "value": 40
-    }, {
-      "name": "dc:fe:07:d4:22:9c",
-      "value": 25
-    }, {
-      "name": "dc:fe:07:d4:22:9d",
-      "value": 35
-    }, {
-      "name": "00:b0:3c:0c:85:6c",
-      "value": 40
-    }, {
-      "name": "dc:fe:47:d4:22:9c",
-      "value": 25
-    }, {
-      "name": "dc:fe:57:d4:22:9d",
-      "value": 35
-    }, {
-      "name": "00:b0:6c:0c:85:6c",
-      "value": 40
-    }, {
-      "name": "dc:fe:77:d4:22:9c",
-      "value": 25
-    }, {
-      "name": "dc:fe:87:d4:22:9d",
-      "value": 35
-    }, {
-      "name": "00:b0:9c:0c:85:6c",
-      "value": 40
-    }, {
-      "name": "dc:fe:01:d4:22:9c",
-      "value": 25
-    }, {
-      "name": "dc:fe:02:d4:22:9d",
-      "value": 35
-    }
-  ],
-
-  "proto": [
-    {
-      "name": "udp",
-      "value": 30
-    }, {
-      "name": "tcp",
-      "value": 10
-    }, {
-      "name": "dhcp",
-      "value": 60
-    }
-  ],
-
-  "settings": {
-    "ndpiEnable": "1"
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "settings": {
+      "ndpiEnable": "1"
+    },
+    "ethInterface": [
+      {
+        "name": "eth1",
+        "value": "50123"
+      }, {
+        "name": "eth2",
+        "value": "251234"
+      }, {
+        "name": "eth3",
+        "value": "12312325"
+      }
+    ],
+    "mac": [
+      {
+        "name": "00:b0:2c:0c:85:6c",
+        "value": "123540"
+      }, {
+        "name": "dc:fe:07:d4:22:9c",
+        "value": "12325"
+      }, {
+        "name": "dc:fe:07:d4:22:9d",
+        "value": "21335"
+      }
+    ],
+    "proto": [
+      {
+        "name": "udp",
+        "value": "30123"
+      }, {
+        "name": "tcp",
+        "value": "1120"
+      }, {
+        "name": "dhcp",
+        "value": "61230"
+      }
+    ]
   }
-
-}
 }

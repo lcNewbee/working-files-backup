@@ -290,6 +290,7 @@ export default class Advance extends React.Component {
               type="number"
               min="1"
               max="2347"
+              defaultValue="1400"
               disabled={rtsEnable === '0'}
               value={rts}
               placeholder={`${_('Range: ')}1 ~ 2347`}

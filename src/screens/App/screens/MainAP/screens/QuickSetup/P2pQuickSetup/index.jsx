@@ -51,9 +51,10 @@ const defaultState = {
 };
 
 const channelWidthOptions = [
-  { value: 'HT20', label: '20MHz' },
-  { value: 'HT40', label: '40MHz' },
-  { value: 'HT80', label: '80MHz' },
+  { value: 'HT20', label: 'HT20' },
+  { value: 'HT40-', label: 'HT40-' },
+  { value: 'HT40+', label: 'HT40+' },
+  { value: 'HT80', label: 'HT80' },
 ];
 
 const staAndApSecurityOptions = [
@@ -99,7 +100,7 @@ const validOptions = Map({
     rules: 'mask',
   }),
   validSsid: validator({
-    rules: 'remarkTxt:["\'\\\\"]|len:[1, 32]',
+    rules: 'remarkTxt:["\'\\\\"]|len:[1, 64]',
   }),
   validDistance: validator({
     rules: 'num:[1, 10]',
@@ -605,7 +606,7 @@ export default class QuickSetup extends React.Component {
     const { deviceMode } = this.props.selfState.toJS();
     const { radioId } = this.props.selfState.get('currRadioConfig').toJS();
     const {
-      ssid, frequency, channelWidth, distance, autoAdjust,
+      ssid, frequency, channelWidth, distance, autoAdjust, radioMode,
     } = store.getIn(['curData', 'radioList', radioId]).toJS();
     const mode = store.getIn(['curData', 'radioList', radioId, 'security', 'mode']);
     const key = store.getIn(['curData', 'radioList', radioId, 'security', 'key']);
@@ -679,21 +680,42 @@ export default class QuickSetup extends React.Component {
                   disabled={!this.props.selfState.get('agreeProtocol')}
                 />
               </Modal>
-              <FormGroup
-                type="switch"
-                label={_('Channel Width')}
-                minWidth="66px"
-                options={channelWidthOptions}
-                value={channelWidth}
-                onChange={(data) => {
-                  console.log('here');
-                  Promise.resolve().then(() => {
-                    this.updateItemInRadioList('channelWidth', data.value);
-                  }).then(() => {
-                    this.getChannelListAndPowerRange(radioId);
-                  });
-                }}
-              />
+              {
+                radioMode === '11na' ? (
+                  <FormGroup
+                    type="switch"
+                    label={_('Channel Width')}
+                    minWidth="66px"
+                    options={channelWidthOptions.slice(0, 3)}
+                    value={channelWidth}
+                    onChange={(data) => {
+                      Promise.resolve().then(() => {
+                        this.updateItemInRadioList('channelWidth', data.value);
+                      }).then(() => {
+                        this.getChannelListAndPowerRange(radioId);
+                      });
+                    }}
+                  />
+                ) : null
+              }
+              {
+                radioMode === '11ac' ? (
+                  <FormGroup
+                    type="switch"
+                    label={_('Channel Width')}
+                    minWidth="50px"
+                    options={channelWidthOptions}
+                    value={channelWidth}
+                    onChange={(data) => {
+                      Promise.resolve().then(() => {
+                        this.updateItemInRadioList('channelWidth', data.value);
+                      }).then(() => {
+                        this.getChannelListAndPowerRange(radioId);
+                      });
+                    }}
+                  />
+                ) : null
+              }
               <FormGroup
                 type="select"
                 label={_('Channel')}
@@ -991,21 +1013,42 @@ export default class QuickSetup extends React.Component {
                   disabled={!this.props.selfState.get('agreeProtocol')}
                 />
               </Modal>
-              <FormGroup
-                type="switch"
-                label={_('Channel Width')}
-                minWidth="66px"
-                options={channelWidthOptions}
-                value={channelWidth}
-                onChange={(data) => {
-                  console.log('here');
-                  Promise.resolve().then(() => {
-                    this.updateItemInRadioList('channelWidth', data.value);
-                  }).then(() => {
-                    this.getChannelListAndPowerRange(radioId);
-                  });
-                }}
-              />
+              {
+                radioMode === '11na' ? (
+                  <FormGroup
+                    type="switch"
+                    label={_('Channel Width')}
+                    minWidth="66px"
+                    options={channelWidthOptions.slice(0, 3)}
+                    value={channelWidth}
+                    onChange={(data) => {
+                      Promise.resolve().then(() => {
+                        this.updateItemInRadioList('channelWidth', data.value);
+                      }).then(() => {
+                        this.getChannelListAndPowerRange(radioId);
+                      });
+                    }}
+                  />
+                ) : null
+              }
+              {
+                radioMode === '11ac' ? (
+                  <FormGroup
+                    type="switch"
+                    label={_('Channel Width')}
+                    minWidth="50px"
+                    options={channelWidthOptions}
+                    value={channelWidth}
+                    onChange={(data) => {
+                      Promise.resolve().then(() => {
+                        this.updateItemInRadioList('channelWidth', data.value);
+                      }).then(() => {
+                        this.getChannelListAndPowerRange(radioId);
+                      });
+                    }}
+                  />
+                ) : null
+              }
               <FormGroup
                 type="select"
                 label={_('Channel')}
@@ -1296,14 +1339,42 @@ export default class QuickSetup extends React.Component {
                   disabled={!this.props.selfState.get('agreeProtocol')}
                 />
               </Modal>
-              <FormGroup
-                type="switch"
-                label={_('Channel Width')}
-                minWidth="66px"
-                options={channelWidthOptions}
-                value={channelWidth}
-                onChange={data => this.updateItemInRadioList('channelWidth', data.value)}
-              />
+              {
+                radioMode === '11na' ? (
+                  <FormGroup
+                    type="switch"
+                    label={_('Channel Width')}
+                    minWidth="66px"
+                    options={channelWidthOptions.slice(0, 3)}
+                    value={channelWidth}
+                    onChange={(data) => {
+                      Promise.resolve().then(() => {
+                        this.updateItemInRadioList('channelWidth', data.value);
+                      }).then(() => {
+                        this.getChannelListAndPowerRange(radioId);
+                      });
+                    }}
+                  />
+                ) : null
+              }
+              {
+                radioMode === '11ac' ? (
+                  <FormGroup
+                    type="switch"
+                    label={_('Channel Width')}
+                    minWidth="50px"
+                    options={channelWidthOptions}
+                    value={channelWidth}
+                    onChange={(data) => {
+                      Promise.resolve().then(() => {
+                        this.updateItemInRadioList('channelWidth', data.value);
+                      }).then(() => {
+                        this.getChannelListAndPowerRange(radioId);
+                      });
+                    }}
+                  />
+                ) : null
+              }
               <FormGroup
                 type="select"
                 label={_('Channel')}

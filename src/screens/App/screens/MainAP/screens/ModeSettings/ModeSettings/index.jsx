@@ -65,6 +65,20 @@ export default class ModeSettings extends React.Component {
   onSave() {
     this.props.validateAll().then((msg) => {
       if (msg.isEmpty()) {
+        const acIp = this.props.store.getIn(['curData', 'acIp']);
+        const mask = '255.255.255.0';
+        const str = validator.combine.noBroadcastIp(acIp, mask);
+        console.log('str', str);
+        if (str) {
+          this.props.createModal({
+            role: 'alert',
+            text: str,
+          });
+        }
+        return str;
+      }
+    }).then((str) => {
+      if (!str) {
         const {
           nextMode, currMode, currDiscoveryType, discoveryType, currAcIp, acIp,
         } = this.props.store.get('curData').toJS();

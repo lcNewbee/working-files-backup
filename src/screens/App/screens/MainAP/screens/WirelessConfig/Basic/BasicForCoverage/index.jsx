@@ -111,7 +111,7 @@ const channelWidthOptions = [
 
 const validOptions = Map({
   validSsid: validator({
-    rules: 'remarkTxt:["\'\\\\"]|len:[1, 32]',
+    rules: 'remarkTxt:["\'\\\\"]|len:[1, 64]',
   }),
   staApmac: validator({
     rules: 'mac',
@@ -239,7 +239,7 @@ export default class Basic extends React.Component {
                 value={val}
                 disabled={pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
                 onChange={(data) => {
-                  if (data.value.length <= 32) {
+                  if (data.value.length <= 64) {
                     this.onSsidItemChange(val, item, 'ssid', data.value);
                   }
                 }}
@@ -1059,7 +1059,11 @@ export default class Basic extends React.Component {
                   options={radioType === '5G' ? radioModeOptionsFor5g : radioModeOptionsFor2g}
                   value={curData.getIn(['radioList', radioId, 'radioMode'])}
                   onChange={(data) => {
-                    const radioList = curData.get('radioList').setIn([radioId, 'radioMode'], data.value);
+                    let radioList = curData.get('radioList').setIn([radioId, 'radioMode'], data.value);
+                    const channelWidth = curData.getIn(['radioList', radioId, 'channelWidth']);
+                    if (data.value === '11na' && channelWidth === 'HT80') {
+                      radioList = radioList.setIn([radioId, 'channelWidth'], 'HT40+');
+                    }
                     Promise.resolve().then(() => {
                       this.props.updateItemSettings({ radioList });
                     }).then(() => {

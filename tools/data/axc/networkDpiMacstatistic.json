@@ -1,132 +1,51 @@
 {
-  "state":	{
-    "code":	2000,
-    "msg":	"ok"
-  },
-  "data":	{
-    "page":	{
-      "startline":	"1",
-      "size":	"50",
-      "currPage":	"1",
-      "totalPage":	"13",
-      "total":	"128",
-      "nextPage":	"2",
-      "lastline":	"10"
-    },
-    "list":	[{
-        "mac":	"dc:fe:07:d4:22:01",
-        "ip":	"192.168.0.127",
-        "flow_num":	"2",
-        "upbytes":	"334",
-        "downbytes":	"0",
-        "uppackets":	"4",
-        "downpackets":	"0"
-      }, {
-        "mac":	"dc:fe:07:d4:22:02",
-        "ip":	"192.168.0.127",
-        "flow_num":	"7",
-        "upbytes":	"694",
-        "downbytes":	"0",
-        "uppackets":	"10",
-        "downpackets":	"0"
-      }, {
-        "mac":	"dc:fe:07:d4:22:03",
-        "ip":	"192.168.0.127",
-        "flow_num":	"7",
-        "upbytes":	"694",
-        "downbytes":	"0",
-        "uppackets":	"10",
-        "downpackets":	"0"
-      }, {
-        "mac":	"dc:fe:07:d4:22:04",
-        "ip":	"192.168.0.127",
-        "flow_num":	"7",
-        "upbytes":	"694",
-        "downbytes":	"0",
-        "uppackets":	"10",
-        "downpackets":	"0"
-      }, {
-        "mac":	"dc:fe:07:d4:22:05",
-        "ip":	"192.168.0.127",
-        "flow_num":	"7",
-        "upbytes":	"694",
-        "downbytes":	"0",
-        "uppackets":	"10",
-        "downpackets":	"0"
-      }, {
-        "mac":	"dc:fe:07:d4:22:06",
-        "ip":	"192.168.0.127",
-        "flow_num":	"7",
-        "upbytes":	"694",
-        "downbytes":	"0",
-        "uppackets":	"10",
-        "downpackets":	"0"
-      }, {
-        "mac":	"dc:fe:07:d4:22:07",
-        "ip":	"192.168.0.127",
-        "flow_num":	"7",
-        "upbytes":	"694",
-        "downbytes":	"0",
-        "uppackets":	"10",
-        "downpackets":	"0"
-      }, {
-        "mac":	"dc:fe:07:d4:22:08",
-        "ip":	"192.168.0.127",
-        "flow_num":	"7",
-        "upbytes":	"694",
-        "downbytes":	"0",
-        "uppackets":	"10",
-        "downpackets":	"0"
-      }, {
-        "mac":	"dc:fe:07:d4:22:09",
-        "ip":	"192.168.0.127",
-        "flow_num":	"7",
-        "upbytes":	"694",
-        "downbytes":	"0",
-        "uppackets":	"10",
-        "downpackets":	"0"
-      }, {
-        "mac":	"dc:fe:07:d4:22:10",
-        "ip":	"192.168.0.127",
-        "flow_num":	"7",
-        "upbytes":	"694",
-        "downbytes":	"0",
-        "uppackets":	"10",
-        "downpackets":	"0"
-      }, {
-        "mac":	"dc:fe:07:d4:22:12",
-        "ip":	"192.168.0.127",
-        "flow_num":	"7",
-        "upbytes":	"694",
-        "downbytes":	"0",
-        "uppackets":	"10",
-        "downpackets":	"0"
-      }, {
-        "mac":	"dc:fe:07:d4:22:13",
-        "ip":	"192.168.0.127",
-        "flow_num":	"7",
-        "upbytes":	"694",
-        "downbytes":	"0",
-        "uppackets":	"10",
-        "downpackets":	"0"
-      }, {
-        "mac":	"dc:fe:07:d4:22:14",
-        "ip":	"192.168.0.127",
-        "flow_num":	"7",
-        "upbytes":	"694",
-        "downbytes":	"0",
-        "uppackets":	"10",
-        "downpackets":	"0"
-      }, {
-        "mac":	"dc:fe:07:d4:22:15",
-        "ip":	"192.168.0.127",
-        "flow_num":	"7",
-        "upbytes":	"694",
-        "downbytes":	"0",
-        "uppackets":	"10",
-        "downpackets":	"0"
-      }],
-    "upFlowList": [123, 132, 213, 231, 312, 321, 234, 243, 324, 342, 423, 432, 123, 132, 213, 231, 312, 321, 234, 243, 324, 342, 423, 432],
-    "downFlowList": [223, 232, 313, 331, 412, 421, 123, 132, 213, 231, 312, 321, 234, 243, 324, 342, 423, 432, 334, 343, 424, 442, 523, 532]
-  }
+
+"state":{
+	"code":	2000,
+	"msg":	"ok"
+},
+"data":	{
+  "page": {
+		"startline": "1",
+		"size":	"20",
+		"currPage":	"2",
+		"totalPage": "13",
+		"total": "128",
+		"nextPage":	"3",
+		"lastline":	"10"
+	},
+	"list":	[{
+		"name": "axilspot1",
+		"mac":	"dc:fe:07:d4:22:9c",
+		"ip":	"192.168.0.127",
+		"traffic": "1024",
+		"application": ["DHCP", "UDP", "TCP"],
+		"curRate": "1024",
+		"trafficPercent": "50.1%"
+	}, {
+		"name": "axilspot2",
+		"mac":	"dc:fe:07:d4:22:9d",
+		"ip":	"192.168.0.128",
+		"traffic": "1025",
+		"application": ["DHCP", "UDP", "TCP"],
+		"curRate": "1024",
+		"trafficPercent": "50.1%"
+	}, {
+		"name": "a",
+		"mac":	"dc:fe:07:d4:22:90",
+		"ip":	"192.168.0.128",
+		"traffic": "1025",
+		"application": ["DHCP", "UDP", "TCP"],
+		"curRate": "1024",
+		"trafficPercent": "50.1%"
+	}, {
+		"name": "b",
+		"mac":	"dc:fe:07:d4:22:91",
+		"ip":	"192.168.0.128",
+		"traffic": "10225",
+		"application": ["DHCP", "UDP", "TCP"],
+		"curRate": "1024",
+		"trafficPercent": "50.1%"
+	}]
+}
 }
