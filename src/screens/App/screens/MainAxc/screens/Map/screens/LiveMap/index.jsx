@@ -431,31 +431,32 @@ export default class View extends React.PureComponent {
     const { store } = this.props;
     const myScreenId = store.get('curScreenId');
     const settings = store.getIn([myScreenId, 'curSettings']);
-    const lockButton = (
-      settings.get('isLocked') === '1' ? (
-        <Button
-          icon="lock"
-          key="0"
-          text={_('Unlock Map')}
-          onClick={() => {
-            this.props.updateScreenSettings({
-              isLocked: '0',
-            });
-          }}
-        />
-      ) : (
-        <Button
-          icon="unlock-alt"
-          key="2"
-          text={_('Lock Map')}
-          onClick={() => {
-            this.props.updateScreenSettings({
-              isLocked: '1',
-            });
-          }}
-        />
-      )
-    );
+    const lockButton = null;
+    // const lockButton = (
+    //   settings.get('isLocked') === '1' ? (
+    //     <Button
+    //       icon="lock"
+    //       key="0"
+    //       text={_('Unlock Map')}
+    //       onClick={() => {
+    //         this.props.updateScreenSettings({
+    //           isLocked: '0',
+    //         });
+    //       }}
+    //     />
+    //   ) : (
+    //     <Button
+    //       icon="unlock-alt"
+    //       key="2"
+    //       text={_('Lock Map')}
+    //       onClick={() => {
+    //         this.props.updateScreenSettings({
+    //           isLocked: '1',
+    //         });
+    //       }}
+    //     />
+    //   )
+    // );
 
     return (
       <div className="m-action-bar" key="actionBar">

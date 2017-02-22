@@ -4,7 +4,7 @@ const $ = require('gulp-load-plugins')();
 const argv = require('minimist')(process.argv.slice(2));
 
 const paths = gulp.paths;
-const configReg = /'\.\/config\/(\w+)'/g;
+const configReg = /'\.\/config\/([\w.]+)'/g;
 const mainPath = [`${paths.src}/index.jsx`, `${paths.src}/index_pub.jsx`];
 
 function configProduct(name) {

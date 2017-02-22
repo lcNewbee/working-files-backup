@@ -23,7 +23,7 @@ const mountNode = document.getElementById('app');
 
 // 引入产品配置
 const renderApp = () => {
-  const prodConfig = require('./config/ASW3');
+  const prodConfig = require('./config/axc2.0');
   // Store
   const stores = remoteActionMiddleware(
     combineReducers({
@@ -56,7 +56,7 @@ if (module.hot) {
     renderApp();
   };
 
-  module.hot.accept('./config/ASW3', () => {
+  module.hot.accept('./config/axc2.0', () => {
     setImmediate(() => {
       // Preventing the hot reloading error from react-router
       unmountComponentAtNode(mountNode);

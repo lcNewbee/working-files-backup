@@ -9,7 +9,7 @@ const shell = require('gulp-shell');
 
 const pkg = require('./package.json');
 
-const configReg = /'\.\/config\/(\w+)'/g;
+const configReg = /'\.\/config\/([\w.]+)'/g;
 const $ = gulpLoadPlugins();
 const argv = minimist(process.argv.slice(2));
 const paths = {
@@ -22,7 +22,8 @@ const paths = {
   pubWebPath: '/',
   pub: 'dist',
   pubAc: '../win_ac/software/web/',
-  pubAxc: '../axc/apps/web/web',
+  pubAxc: '../axc_r1/web/web',
+  pubAxcR1: '../axc_r1/web/web',
   pubAxcIndia: '../axc_branch_india/ac/apps/web/web',
   pubAp: '../qsdk/package/comlanos/goahead/files/web',
   webpack: './webpack.config.dev.js',
@@ -69,8 +70,10 @@ function getCurAppName() {
 }
 if (argv.n) {
   gulp.appName = argv.n;
-} else {
+} else if (getCurAppName()) {
   gulp.appName = getCurAppName()[1];
+} else {
+  gulp.appName = 'axc';
 }
 
 // 删除

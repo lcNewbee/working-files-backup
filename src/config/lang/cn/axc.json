@@ -364,6 +364,7 @@
   "Auto Power": "自动功率",
   "Auto Channel": "自动信道",
   "Terminal Release": "终端防粘",
+  "Terminal Isolation": "终端隔离",
   "Automatic": "自动",
   "Please select ssid":"请选择ssid",
 
@@ -451,8 +452,6 @@
   "Average Dwell Time": "平均停留时间",
   "Range: 300-604800 Seconds":"范围：300-604800 秒",
   "Memory": "内存",
-  "Used": "已使用",
-  "Unused": "未使用",
   "Memory Activity Monitor": "内存使用状态",
   "CPU Activity Monitor": "CPU使用状态",
   "Memory ID": "内存ID",
@@ -614,14 +613,5 @@
   "Clients Analysis": "客流分析",
   "Clients Flow State": "客流分析状态",
 
-  "Attack Number":"攻击数量",
-  "":"",
-  "":"",
-  "":"",
-  "":"",
-  "":"",
-  "":"",
-  "":"",
-  "":"",
-  "":""
+  "Attack Number":"攻击数量"
 }

@@ -179,23 +179,25 @@ const listOptions = fromJS([
     },
   }, {
     id: 'ssidisolate',
-    text: _('SSID Isolation'),
-    defaultValue: '0',
-    options: checkboxOptions,
-    formProps: {
-      type: 'checkbox',
-      value: '1',
-    },
-  }, {
-    id: 'greenap',
-    text: _('Green AP Mode'),
+    text: _('Terminal Isolation'),
     defaultValue: '1',
     options: checkboxOptions,
     formProps: {
       type: 'checkbox',
       value: '1',
     },
-  }, {
+  },
+  // {
+  //   id: 'greenap',
+  //   text: _('Green AP Mode'),
+  //   defaultValue: '1',
+  //   options: checkboxOptions,
+  //   formProps: {
+  //     type: 'checkbox',
+  //     value: '1',
+  //   },
+  // },
+  {
     id: 'maxBssUsers',
     text: _('Max Clients'),
     defaultValue: 32,

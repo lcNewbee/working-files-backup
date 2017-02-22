@@ -119,7 +119,8 @@ const accServer = fromJS([
     validator: validator({
       rules: 'ip',
     }),
-  }, {
+  },
+  {
     id: 'acctpri_port',
     label: _('Primary Acc Port'),
     fieldset: 'primary',
@@ -291,11 +292,16 @@ const listOptions = fromJS([
     id: 'template_name',
     label: _('Name'),
     type: 'text',
-    maxLength: '31',
     required: true,
     notEditable: true,
     defaultValue: '',
-  }, {
+  },
+  {
+    id: 'nasip',
+    label: _('Nas IP'),
+    required: true,
+  },
+  {
     id: 'authpri_ipaddr',
     label: _('Primary Auth Server IP'),
     fieldset: 'auth',
