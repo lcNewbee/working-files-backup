@@ -74,8 +74,8 @@ const sNetworkNat = require('../../screens/App/screens/MainAxc/screens/Network/s
 const sNetworkPort = require('../../screens/App/screens/MainAxc/screens/Network/screens/Port');
 const sRaduisTemplate =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/RadiusTemplate');
-const sRadiusProxy =
-    require('../../screens/App/screens/MainAxc/screens/Network/screens/RadiusProxy');
+// const sRadiusProxy =
+//     require('../../screens/App/screens/MainAxc/screens/Network/screens/RadiusProxy');
 const sNetworkAaa = require('../../screens/App/screens/MainAxc/screens/Network/screens/AAA');
 const sPortalServer =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalServer');
@@ -323,13 +323,14 @@ const routes = [
                 formUrl: 'goform/network/radius/template',
                 text: _('Radius Server'),
                 component: sRaduisTemplate.Screen,
-              }, {
-                id: 'radiusProxy',
-                path: '/main/network/radius/proxy',
-                formUrl: 'goform/network/radius/proxy',
-                text: _('Radius Proxy'),
-                component: sRadiusProxy.Screen,
               },
+              // {
+              //   id: 'radiusProxy',
+              //   path: '/main/network/radius/proxy',
+              //   formUrl: 'goform/network/radius/proxy',
+              //   text: _('Radius Proxy'),
+              //   component: sRadiusProxy.Screen,
+              // },
             ],
           }, {
             id: 'networkAaa',

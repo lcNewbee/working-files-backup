@@ -30,18 +30,25 @@ const accessTypeSeletOptions = [
   }, {
     value: 'ppp-access',
     label: _('PPP'),
+    disabled: true,
   }, {
     value: 'portal',
     label: _('Portal'),
   }, {
     value: 'mac-access',
     label: _('MAC'),
+    disabled: true,
+  }, {
+    value: '802.1x',
+    label: _('802.1x'),
+    disabled: true,
   },
 ];
 const authTypeSeletOptions = [
   {
     value: 'local',
-    label: `${_('Local')} (${_('802.1X')})`,
+    label: `${_('Local')}`,
+    disabled: true,
   },
   {
     value: 'radius-scheme',
@@ -64,7 +71,7 @@ const listOptions = fromJS([
   }, {
     id: 'auth_accesstype',
     text: _('Access Type'),
-    defaultValue: 'lan-access',
+    defaultValue: 'portal',
     options: accessTypeSeletOptions,
     formProps: {
       label: _('Access Type'),

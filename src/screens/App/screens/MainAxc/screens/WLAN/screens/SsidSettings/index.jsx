@@ -204,16 +204,18 @@ const listOptions = fromJS([
       min: 1,
       max: 64,
     },
-  }, {
-    id: 'mandatorydomain',
-    text: _('AAA Policy'),
-    defaultValue: '',
-    noTable: true,
-    formProps: {
-      type: 'select',
-      options: [],
-    },
-  }, {
+  },
+  // {
+  //   id: 'mandatorydomain',
+  //   text: _('AAA Policy'),
+  //   defaultValue: '',
+  //   noTable: true,
+  //   formProps: {
+  //     type: 'select',
+  //     options: [],
+  //   },
+  // },
+  {
     id: 'storeForwardPattern',
     options: storeForwardOption,
     text: _('Forwarding Mode'),

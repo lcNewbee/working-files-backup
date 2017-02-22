@@ -53,6 +53,7 @@ const listOptions = fromJS([
   }, {
     id: 'server_domain',
     label: _('Server Domain'),
+    disabled: true,
     formProps: {
       type: 'text',
       required: true,
