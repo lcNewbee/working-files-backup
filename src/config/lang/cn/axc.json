@@ -367,6 +367,7 @@
   "Terminal Isolation": "终端隔离",
   "Automatic": "自动",
   "Please select ssid":"请选择ssid",
+  "Already exists with the same name SSID": "已存在同名的SSID",
 
   "AP Work Mode": "接入点工作模式",
   "Scan Type": "扫描类型",
@@ -570,7 +571,6 @@
   "Local Import": "本地导入",
   "Upgrade Online": "在线升级",
   "Auto Upgrade": "自动升级",
-
 
   "Active-Standby": "主备设置",
   "Enable Active-Standby": "启用主备",
