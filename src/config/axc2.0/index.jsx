@@ -64,15 +64,15 @@ const sMainAxc = require('../../screens/App/screens/MainAxc');
 // const sNetworkVlan = require('../../screens/App/screens/MainAxc/screens/Network/screens/VLAN');
 const sInterfaces = require('../../screens/App/screens/MainAxc/screens/Network/screens/Interfaces');
 const sDhcpList = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/DhcpList');
-const sDhcpRelay = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/DhcpRelay');
+// const sDhcpRelay = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/DhcpRelay');
 const sNetworkRoutes = require('../../screens/App/screens/MainAxc/screens/Network/screens/Routes');
 const sNetworkNat = require('../../screens/App/screens/MainAxc/screens/Network/screens/Nat');
 // const sNetworkAcl = require('../../screens/App/screens/MainAxc/screens/Network/screens/ACL');
 const sNetworkPort = require('../../screens/App/screens/MainAxc/screens/Network/screens/Port');
 const sRaduisTemplate =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/RadiusTemplate');
-const sRadiusProxy =
-    require('../../screens/App/screens/MainAxc/screens/Network/screens/RadiusProxy');
+// const sRadiusProxy =
+//     require('../../screens/App/screens/MainAxc/screens/Network/screens/RadiusProxy');
 const sNetworkAaa = require('../../screens/App/screens/MainAxc/screens/Network/screens/AAA');
 const sPortalServer =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalServer');
@@ -89,7 +89,7 @@ const sPortalMac =
  */
 const sOverview = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Overview');
 const sClientList = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/ClientList');
-const sFlowUser = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Flow/User');
+// const sFlowUser = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Flow/User');
 // const sFlowApp = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Flow/App');
 const sSsidStatus = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/SsidStatus');
 const sApList = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/ApList');
@@ -118,16 +118,16 @@ const sApPlanMap =
 const sClientsTraceList = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace');
 const sClientsTraceSettings = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace/Settings');
 // ndpi
-const sDPIOverview =
-    require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/DPIOverview');
+// const sDPIOverview =
+//     require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/DPIOverview');
 // const sFlowInfo =
 //     require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/FlowInfo');
-const sMacStatistic =
-    require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/MacStatistic');
-const sEthStatistic =
-    require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/EthStatistic');
-const sProtoInfo =
-    require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/ProtoInfo');
+// const sMacStatistic =
+//     require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/MacStatistic');
+// const sEthStatistic =
+//     require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/EthStatistic');
+// const sProtoInfo =
+//     require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/ProtoInfo');
 
 
 /**
@@ -166,59 +166,59 @@ const sNetworkTimeProtocol =
 /**
  * Portal
  */
-const sPortalOverview =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Overview');
-const sPortalBase =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Base');
-// const sPortalBas =
-    // require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Bas');
-const sPortalUrlParams =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/UrlParams');
-const sPortalWeb =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Web');
-const sPortalDefaultWeb =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/DefaultWeb');
-const sPortalWeixin =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Weixin');
-// const sPortalApSetting =
-//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/ApSetting');
-// const sPortalSsid =
-//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Ssid');
+// const sPortalOverview =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Overview');
+// const sPortalBase =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Base');
+// // const sPortalBas =
+//     // require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Bas');
+// const sPortalUrlParams =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/UrlParams');
+// const sPortalWeb =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Web');
+// const sPortalDefaultWeb =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/DefaultWeb');
+// const sPortalWeixin =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Weixin');
+// // const sPortalApSetting =
+// //     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/ApSetting');
+// // const sPortalSsid =
+// //     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Ssid');
 
-const sPortalNas =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Radius/Nas');
-const sPortalOnline =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Radius/Online');
-const sPortalConnectLog =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Radius/ConnectLog');
+// const sPortalNas =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Radius/Nas');
+// const sPortalOnline =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Radius/Online');
+// const sPortalConnectLog =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Radius/ConnectLog');
 
-const sPortalAccountList =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Account/AccountList');
-const sPortalAccountListMac =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Account/AccountListMac');
-const sPortalConnectRecord =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Account/ConnectRecord');
+// const sPortalAccountList =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Account/AccountList');
+// const sPortalAccountListMac =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Account/AccountListMac');
+// const sPortalConnectRecord =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Account/ConnectRecord');
 
-// const sPortalSendBox =
-//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Message/SendBox');
-// const sPortalReceiveBox =
-//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Message/ReceiveBox');
+// // const sPortalSendBox =
+// //     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Message/SendBox');
+// // const sPortalReceiveBox =
+// //     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Message/ReceiveBox');
 
-// const sPortalPermission =
-//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Permission');
-// const sPortalClassification =
-//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Classification');
-// const sPortalUser =
-//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/User');
-// const sPortalRole =
-//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Role');
+// // const sPortalPermission =
+// //     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Permission');
+// // const sPortalClassification =
+// //     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Classification');
+// // const sPortalUser =
+// //     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/User');
+// // const sPortalRole =
+// //     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Role');
 
-const sPortalLogList =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Log/LogList');
-const sPortalOnlineRecordList =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Log/OnlineRecordList');
-const sPortalOnlineList =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Log/OnlineList');
+// const sPortalLogList =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Log/LogList');
+// const sPortalOnlineRecordList =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Log/OnlineRecordList');
+// const sPortalOnlineList =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Log/OnlineList');
 
 const routes = [
   {
@@ -266,13 +266,14 @@ const routes = [
                 formUrl: 'goform/network/dhcp/list',
                 text: _('DHCP List'),
                 component: sDhcpList.Screen,
-              }, {
-                id: 'dhcpRelay',
-                path: '/main/network/dhcp/relay',
-                formUrl: 'goform/network/dhcp/relay',
-                text: _('DHCP Relay'),
-                component: sDhcpRelay.Screen,
               },
+              // {
+              //   id: 'dhcpRelay',
+              //   path: '/main/network/dhcp/relay',
+              //   formUrl: 'goform/network/dhcp/relay',
+              //   text: _('DHCP Relay'),
+              //   component: sDhcpRelay.Screen,
+              // },
             ],
           }, {
             id: 'networkNat',
