@@ -84,6 +84,7 @@ const listOptions = fromJS([
       help: _('Range: 300-604800 Seconds'),
       min: '300',
       max: '604800',
+      defaultValue: 7200,
       validator: validator({
         rules: 'num[300,604800]',
       }),
@@ -106,6 +107,7 @@ const listOptions = fromJS([
       type: 'number',
       min: 0,
       maxLength: '31',
+      defaultValue: '',
       validator: validator({
         rules: 'len[1,31]',
       }),
@@ -123,11 +125,11 @@ export default class View extends React.Component {
   constructor(props) {
     super(props);
     utils.binds(this, [
-      'onBeforeSave',
+      'onBeforeSync',
     ]);
   }
 
-  onBeforeSave($$actionQuery, $$curListItem) {
+  onBeforeSync($$actionQuery, $$curListItem) {
     const actionType = $$actionQuery.get('action');
     const startIp = $$curListItem.get('startIp');
     const mask = $$curListItem.get('mask');
@@ -150,7 +152,7 @@ export default class View extends React.Component {
         {...this.props}
         listOptions={listOptions}
         editFormOptions={editFormOptions}
-        onBeforeSave={this.onBeforeSave}
+        onBeforeSync={this.onBeforeSync}
         listKey="name"
         actionable
         selectable

@@ -27,27 +27,24 @@ class NumberInput extends React.Component {
     const { min, max, defaultValue } = this.props;
     const val = e.target.value;
     const intVal = parseInt(val, 10);
+    let relaceValue;
 
     if (this.props.onChange) {
       // 为空，或 - 时不做处理
       if (val !== '' && val !== '-') {
         // 小于或等于最小值，则返回最小值
         if ((intVal <= parseInt(min, 10)) && needMin) {
-          this.props.onChange(e, min);
+          relaceValue = min;
 
         // 大于或等于最大值，则返回最大值
         } else if (intVal >= parseInt(max, 10) && needMin) {
-          this.props.onChange(e, max);
-
-        // 在范围内
-        } else {
-          this.props.onChange(e);
+          relaceValue = max;
         }
       } else if (needMin && isNaN(intVal)) {
-        this.props.onChange(e, defaultValue || max);
-      } else {
-        this.props.onChange(e);
+        relaceValue = defaultValue !== undefined ? defaultValue : max;
       }
+
+      this.props.onChange(e, relaceValue);
     }
   }
   onBlur(e) {

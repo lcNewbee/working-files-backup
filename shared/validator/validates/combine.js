@@ -68,6 +68,11 @@ var combineVaildate = {
   },
 
   needSameNet: function (ip, mask, gateway, msgOption) {
+    // 过滤 undefined 值与空值
+    if (!ip || !mask || !gateway) {
+      return _("%s and %s must be in the same network segment", msgOption.ipLabel, msgOption.ip2Label);
+    }
+
     if (!isSameNet(ip, gateway, mask, mask)) {
       return _("%s and %s must be in the same network segment", msgOption.ipLabel, msgOption.ip2Label);
     }

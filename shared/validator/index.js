@@ -30,8 +30,7 @@ function checkClear(str, rules) {
   if(str === undefined) {
     return ;
   }
-
-  if(typeof str !== 'string') {
+  if(typeof str !== 'string' && typeof str !== 'number') {
     throw new TypeError('validate function should be called with string');
   }
 

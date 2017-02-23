@@ -52,6 +52,7 @@
   "Tx Power": "发射功率",
   "RF Switch": "射频开关",
   "Beacon Interval Number": "信标帧间隔数量",
+  "DTIM": "DTIM阈值",
   "Preamble": "短前导码",
   "Select Network Adapter": "选择网卡",
   "Max Clients": "最大客户端数",

@@ -78,6 +78,7 @@ const propTypes = {
   ]),
   onBeforeAction: PropTypes.func,
   onBeforeSave: PropTypes.func,
+  onBeforeSync: PropTypes.func,
   onAfterSync: PropTypes.func,
 
   // React node 元素
@@ -107,6 +108,8 @@ class AppScreenList extends React.PureComponent {
       'initListTableOptions',
       'doItemAction',
       'doSaveEditForm',
+      'doSyncData',
+      'onBeforeSync',
       'onChangeQuery',
       'onFetchList',
       'onPageChange',
@@ -157,6 +160,32 @@ class AppScreenList extends React.PureComponent {
       size: data.value,
       page: 1,
     }, true);
+  }
+  onBeforeSync(callback) {
+    const { onBeforeSync, store } = this.props;
+    const $$actionQuery = store.get('actionQuery');
+    const $$curListItem = store.get('curListItem');
+    const retOption = {};
+    let onBeforeSyncResult = '';
+
+    if (onBeforeSync) {
+      onBeforeSyncResult = onBeforeSync($$actionQuery, $$curListItem);
+    }
+
+    if (utils.isPromise(onBeforeSyncResult)) {
+      onBeforeSyncResult.then(
+          (msg) => {
+            retOption.msg = msg;
+            callback(retOption);
+          },
+        );
+    } else {
+      if (onBeforeSyncResult) {
+        retOption.msg = onBeforeSyncResult;
+      }
+
+      callback(retOption);
+    }
   }
   onSaveEditForm(formElem, hasFile) {
     const { onBeforeSave, store } = this.props;
@@ -415,6 +444,26 @@ class AppScreenList extends React.PureComponent {
         );
     }
   }
+  doSyncData(option) {
+    if (option && option.hasFile) {
+      this.props.saveFile(option.formUrl, option.formElem)
+        .then((json) => {
+          this.props.fetchScreenData({
+            url: option.formUrl,
+          });
+          this.props.closeListItemModal();
+          this.props.onAfterSync(json);
+        });
+    // 无文件提交
+    } else {
+      this.props.onListAction()
+        .then(
+          (json) => {
+            this.props.onAfterSync(json);
+          },
+        );
+    }
+  }
   doSaveEditForm(option) {
     const { formElem, hasFile } = option;
     const formUrl = formElem.getAttribute('action');
@@ -425,28 +474,29 @@ class AppScreenList extends React.PureComponent {
         role: 'alert',
         text: option.msg,
       });
+
+    // 数据验证，与 syncData 前验证
     } else if (this.props.validateAll) {
       this.props.validateAll(this.props.editFormId)
         .then((errMsg) => {
           if (errMsg.isEmpty()) {
-            // 表单中无文件
-            if (!hasFile) {
-              this.props.onListAction()
-                .then(
-                  (json) => {
-                    this.props.onAfterSync(json);
-                  },
-                );
-            } else {
-              this.props.saveFile(formUrl, formElem)
-                .then((json) => {
-                  this.props.fetchScreenData({
-                    url: formUrl,
+            this.onBeforeSync(
+              (syncOption) => {
+                if (!syncOption.msg) {
+                  this.doSyncData({
+                    hasFile,
+                    formUrl,
+                    formElem,
                   });
-                  this.props.closeListItemModal();
-                  this.props.onAfterSync(json);
-                });
-            }
+                } else {
+                  this.props.createModal({
+                    id: 'saveEditForm',
+                    role: 'alert',
+                    text: syncOption.msg,
+                  });
+                }
+              },
+            );
           }
         });
     }

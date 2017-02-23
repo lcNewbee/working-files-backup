@@ -195,12 +195,10 @@ export default class View extends React.Component {
 
         return ret;
       });
-    let curListOptions = listOptions
+    const curListOptions = listOptions
+      .setIn([0, 'options'], myPortOptions)
       .setIn([1, 'options'], this.state.portalServerOption)
       .setIn([6, 'options'], this.state.AAADomainNameOption);
-
-    curListOptions = listOptions
-      .setIn([0, 'options'], myPortOptions);
 
     return (
       <AppScreen

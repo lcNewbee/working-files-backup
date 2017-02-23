@@ -324,7 +324,7 @@ export const radioAdvance = fromJS([
   {
     id: 'dtim',
     form: 'radioAdvance',
-    label: _('Beacon Interval Number'),
+    label: _('DTIM'),
     type: 'number',
     min: 1,
     max: 15,
