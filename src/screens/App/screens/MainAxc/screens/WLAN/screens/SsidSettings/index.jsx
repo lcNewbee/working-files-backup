@@ -480,9 +480,15 @@ export default class View extends React.Component {
         this.setState({
           updateListOptions: !this.state.updateListOptions,
         });
-        this.listOptions = listOptions.mergeIn(
-          [6, 'formProps'], {
-            options,
+        this.listOptions = listOptions.map(
+          ($$item) => {
+            let $$retItem = $$item;
+
+            if ($$retItem.get('id') === 'mandatorydomain') {
+              $$retItem = $$retItem.setIn(['formProps', 'options'], options);
+            }
+
+            return $$item;
           },
         );
       },

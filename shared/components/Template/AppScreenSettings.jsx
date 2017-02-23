@@ -16,8 +16,15 @@ const propTypes = {
 
   // 数据操作相关函数
   updateScreenSettings: PropTypes.func,
-  onBeforeSave: PropTypes.func,
   saveScreenSettings: PropTypes.func,
+
+  // 数据验证前调用的函数，
+  // 可用于修改要保存数据
+  onBeforeSave: PropTypes.func,
+
+  // 向后台同步数据前后所调用的函数
+  // 用于自定义数据验证入口
+  onBeforeSync: PropTypes.func,
   onAfterSync: PropTypes.func,
 
   // 数据验证相关函数
@@ -48,13 +55,81 @@ class AppSettings extends React.PureComponent {
     utils.binds(this, [
       'onSaveSettings',
       'onChangeSettingsData',
-      'doSaveSettings',
+      'onBeforeSaveSettings',
+      'onBeforeSync',
+      'onSyncData',
     ]);
   }
   componentWillUnmount() {
     this.props.resetVaildateMsg();
   }
+  onSyncData() {
+    this.props.saveScreenSettings({
+      numberKeys: this.settingsNumberKeys,
+      onlyChanged: this.props.settingOnlyChanged,
+    }).then(
+      (json) => {
+        this.props.onAfterSync(json, {
+          action: 'setting',
+        });
+      },
+    );
+  }
+  onBeforeSync(callback) {
+    const { onBeforeSync, store } = this.props;
+    const $$actionQuery = store.get('actionQuery');
+    const $$curListItem = store.get('curListItem');
+    const retOption = {};
+    let onBeforeSyncResult = '';
 
+    if (onBeforeSync) {
+      onBeforeSyncResult = onBeforeSync($$actionQuery, $$curListItem);
+    }
+
+    if (utils.isPromise(onBeforeSyncResult)) {
+      onBeforeSyncResult.then(
+          (msg) => {
+            retOption.msg = msg;
+            callback(retOption);
+          },
+        );
+    } else {
+      if (onBeforeSyncResult) {
+        retOption.msg = onBeforeSyncResult;
+      }
+
+      callback(retOption);
+    }
+  }
+  onBeforeSaveSettings(option) {
+    if (option && option.msg) {
+      this.props.createModal({
+        id: 'saveSettings',
+        role: 'alert',
+        text: option.msg,
+      });
+    } else if (this.props.validateAll) {
+      this.props.changeScreenActionQuery({
+        action: 'setting',
+      });
+      this.props.validateAll()
+          .then((errMsg) => {
+            if (errMsg.isEmpty()) {
+              this.onBeforeSync((retOption) => {
+                if (retOption.msg) {
+                  this.props.createModal({
+                    id: 'saveSettings',
+                    role: 'alert',
+                    text: retOption.msg,
+                  });
+                } else {
+                  this.onSyncData();
+                }
+              });
+            }
+          });
+    }
+  }
   onSaveSettings(formElem, hasFile) {
     const { onBeforeSave, store } = this.props;
     const $$actionQuery = store.get('actionQuery');
@@ -73,7 +148,7 @@ class AppSettings extends React.PureComponent {
       onBeforeSaveResult.then(
           (msg) => {
             saveOption.msg = msg;
-            this.doSaveSettings(saveOption);
+            this.onBeforeSaveSettings(saveOption);
           },
         );
     } else {
@@ -81,41 +156,12 @@ class AppSettings extends React.PureComponent {
         saveOption.msg = onBeforeSaveResult;
       }
 
-      this.doSaveSettings(saveOption);
+      this.onBeforeSaveSettings(saveOption);
     }
   }
 
   onChangeSettingsData(data) {
     this.props.updateScreenSettings(data);
-  }
-
-  doSaveSettings(option) {
-    if (option && option.msg) {
-      this.props.createModal({
-        id: 'saveSettings',
-        role: 'alert',
-        text: option.msg,
-      });
-    } else if (this.props.validateAll) {
-      this.props.changeScreenActionQuery({
-        action: 'setting',
-      });
-      this.props.validateAll()
-          .then((errMsg) => {
-            if (errMsg.isEmpty()) {
-              this.props.saveScreenSettings({
-                numberKeys: this.settingsNumberKeys,
-                onlyChanged: this.props.settingOnlyChanged,
-              }).then(
-                (json) => {
-                  this.props.onAfterSync(json, {
-                    action: 'setting',
-                  });
-                },
-              );
-            }
-          });
-    }
   }
 
   render() {
