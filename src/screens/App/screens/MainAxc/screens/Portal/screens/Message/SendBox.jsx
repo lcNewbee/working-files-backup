@@ -8,7 +8,48 @@ import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
+
+function getUserName() {
+  return utils.fetch('goform/portal/account/accountList')
+    .then(json => (
+      {
+        options: json.data.list.map(
+          item => ({
+            value: item.loginName,
+            label: item.loginName,
+          }),
+        ),
+      }
+    ),
+  );
+}
 const listOptions = fromJS([
+  {
+    id: 'toPos',
+    text: _('Receiver Type'),
+    noForm: true,
+    formProps: {
+      type: 'select',
+      required: true,
+    },
+    options: [
+      {
+        value: '0',
+        label: _('System User'),
+      }, {
+        value: '1',
+        label: _('AP User'),
+      },
+    ],
+  }, {
+    id: 'toname',
+    text: _('Receiver'),
+    type: 'text',
+    formProps: {
+      type: 'select',
+      required: true,
+    },
+  },
   {
     id: 'title',
     text: _('Title'),
@@ -17,7 +58,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'date',
-    text: _('date'),
+    text: _('Date'),
     noForm: true,
     formProps: {
       required: true,
@@ -32,7 +73,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'fromid',
-    text: _('fromid'),
+    text: _('Sender ID'),
     noTable: true,
     noForm: true,
     formProps: {
@@ -40,7 +81,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'fromname',
-    text: _('fromname'),
+    text: _('Sender'),
     type: 'text',
     noTable: true,
     noForm: true,
@@ -49,7 +90,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'fromPos',
-    text: _('FromPos'),
+    text: _('Sender Type'),
     type: 'text',
     noTable: true,
     noForm: true,
@@ -66,7 +107,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'toId',
-    text: _('toId'),
+    text: _('Receiver ID'),
     type: 'text',
     noTable: true,
     noForm: true,
@@ -74,32 +115,8 @@ const listOptions = fromJS([
       required: true,
     },
   }, {
-    id: 'toPos',
-    text: _('toPos'),
-    formProps: {
-      type: 'select',
-      required: true,
-    },
-    options: [
-      {
-        value: '0',
-        label: _('System User'),
-      }, {
-        value: '1',
-        label: _('AP User'),
-      },
-    ],
-  }, {
-    id: 'toname',
-    text: _('toname'),
-    type: 'text',
-    formProps: {
-      type: 'select',
-      required: true,
-    },
-  }, {
     id: 'state',
-    text: _('state'),
+    text: _('State'),
     noForm: true,
     type: 'text',
     formProps: {
@@ -123,9 +140,27 @@ const listOptions = fromJS([
     formProps: {
       required: true,
     },
+  }, {
+    id: '__actions__',
+    text: _('Actions'),
+    noForm: true,
+    actions: [
+      {
+        icon: 'check-square-o',
+        actionName: 'update',
+        text: _('Update State'),
+      },
+    ],
+    transform(val, $$item) {
+      return (
+        <span>
+          <a href={`index.html#/main/portal/message/sendmessage/${$$item.get('toname')}`} className="tablelink">{_('Send Again')}</a>
+        </span>
+      );
+    },
   },
-
 ]);
+
 const propTypes = {
   route: PropTypes.object,
   save: PropTypes.func,
@@ -135,10 +170,19 @@ const defaultProps = {};
 export default class OpenPortalBase extends React.Component {
   constructor(props) {
     super(props);
-
     this.onAction = this.onAction.bind(this);
+    this.state = {
+      userNameOptions: fromJS([]),
+    };
   }
-
+  componentWillMount() {
+    getUserName()
+      .then((data) => {
+        this.setState({
+          userNameOptions: fromJS(data.options),
+        });
+      });
+  }
   onAction(no, type) {
     const query = {
       no,
@@ -153,12 +197,15 @@ export default class OpenPortalBase extends React.Component {
   }
 
   render() {
+    const curListOptions = listOptions
+      .setIn([1, 'options'], this.state.userNameOptions);
     return (
       <AppScreen
         {...this.props}
-        listOptions={listOptions}
+        listOptions={curListOptions}
         actionable
         selectable
+        editable={false}
       />
     );
   }

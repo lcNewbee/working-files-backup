@@ -93,7 +93,6 @@ export default class View extends React.Component {
     const $$myScreenStore = store.get(myScreenId);
     const curListOptions = listOptions
       .setIn([0, 'options'], this.state.portOptions);
-
     return (
       <AppScreen
         {...this.props}

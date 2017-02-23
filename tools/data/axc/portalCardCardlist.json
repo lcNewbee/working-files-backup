@@ -1,0 +1,24 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [{
+      "name": "包时卡",
+      "payType": "2",
+      "categoryType": "1",
+      "maclimit": "1",
+      "maclimitcount": "123",
+      "autologin": "1",
+      "speed": "0",
+      "cdKey": "12",
+      "payTime":"2",
+      "state":"2",
+      "accountName":"2",
+      "buyDate":"2",
+      "payDate":"2",
+      "money":"2"
+    }]
+  }
+}

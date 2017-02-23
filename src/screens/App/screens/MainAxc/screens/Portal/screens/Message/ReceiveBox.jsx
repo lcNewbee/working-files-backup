@@ -10,68 +10,8 @@ import * as appActions from 'shared/actions/app';
 
 const listOptions = fromJS([
   {
-    id: 'title',
-    text: _('Title'),
-    formProps: {
-      required: true,
-    },
-  }, {
-    id: 'date',
-    text: _('date'),
-    noForm: true,
-    formProps: {
-      required: true,
-    },
-  }, {
-    id: 'description',
-    text: _('Content'),
-    noTable: true,
-    formProps: {
-      type: 'textarea',
-      required: true,
-    },
-  }, {
-    id: 'fromid',
-    text: _('fromid'),
-    noForm: true,
-    formProps: {
-      required: true,
-    },
-  }, {
-    id: 'fromPos',
-    text: _('FromPos'),
-    noTable: true,
-    formProps: {
-      type: 'select',
-      required: true,
-    },
-  }, {
-    id: 'fromname',
-    text: _('fromname'),
-    formProps: {
-      type: 'select',
-      required: true,
-    },
-  }, {
-    id: 'ip',
-    text: _('IP'),
-    noTable: true,
-    noForm: true,
-    formProps: {
-      required: true,
-    },
-  }, {
-    id: 'toId',
-    text: _('toId'),
-    type: 'text',
-    noTable: true,
-    noForm: true,
-    formProps: {
-      required: true,
-    },
-  }, {
     id: 'toPos',
-    text: _('toPos'),
+    text: _('Receiver Type'),
     noForm: true,
     noTable: true,
     formProps: {
@@ -89,16 +29,78 @@ const listOptions = fromJS([
     ],
   }, {
     id: 'toname',
-    text: _('toname'),
-    noForm: true,
+    text: _('Receiver'),
     noTable: true,
     formProps: {
       type: 'select',
       required: true,
     },
   }, {
+    id: 'fromid',
+    text: _('Sender ID'),
+    noForm: true,
+    noTable: true,
+    formProps: {
+      required: true,
+    },
+  }, {
+    id: 'fromPos',
+    text: _('Sender Type'),
+    noForm: true,
+    formProps: {
+      type: 'select',
+      required: true,
+    },
+  }, {
+    id: 'fromname',
+    text: _('Sender'),
+    noForm: true,
+    formProps: {
+      type: 'select',
+      required: true,
+    },
+  },
+  {
+    id: 'title',
+    text: _('Title'),
+    formProps: {
+      required: true,
+    },
+  }, {
+    id: 'date',
+    text: _('Date'),
+    noForm: true,
+    formProps: {
+      required: true,
+    },
+  }, {
+    id: 'description',
+    text: _('Content'),
+    noTable: true,
+    formProps: {
+      type: 'textarea',
+      required: true,
+    },
+  }, {
+    id: 'ip',
+    text: _('IP'),
+    noTable: true,
+    noForm: true,
+    formProps: {
+      required: true,
+    },
+  }, {
+    id: 'toId',
+    text: _('Receiver ID'),
+    type: 'text',
+    noTable: true,
+    noForm: true,
+    formProps: {
+      required: true,
+    },
+  }, {
     id: 'state',
-    text: _('state'),
+    text: _('State'),
     noForm: true,
     type: 'text',
     formProps: {
@@ -122,9 +124,27 @@ const listOptions = fromJS([
     formProps: {
       required: true,
     },
+  }, {
+    id: '__actions__',
+    text: _('Actions'),
+    noForm: true,
+    actions: [
+      {
+        icon: 'check-square-o',
+        actionName: 'update',
+        text: _('Update State'),
+      },
+    ],
+    transform(val, $$item) {
+      return (
+        <span>
+          <a href={`index.html#/main/portal/message/sendmessage/${$$item.get('toname')}`} className="tablelink">{_('Reply')}</a>
+        </span>
+      );
+    },
   },
-
 ]);
+
 const propTypes = {
   route: PropTypes.object,
   save: PropTypes.func,

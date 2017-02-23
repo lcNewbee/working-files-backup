@@ -199,10 +199,19 @@ const sPortalAccountListMac =
 const sPortalConnectRecord =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Account/ConnectRecord');
 
-// const sPortalSendBox =
-//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Message/SendBox');
-// const sPortalReceiveBox =
-//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Message/ReceiveBox');
+
+const sPortalSendMessage =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Message/SendMessage');
+const sPortalSendBox =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Message/SendBox');
+const sPortalReceiveBox =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Message/ReceiveBox');
+
+
+const sPortalCardCategory =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Card/CardCategory');
+const sPortalCardList =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Card/CardList');
 
 // const sPortalPermission =
 //     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Permission');
@@ -981,6 +990,37 @@ const routes = [
           //   ],
           // },
           {
+            id: 'portalMessage',
+            isIndex: true,
+            path: '/main/portal/message',
+            icon: 'envelope-o',
+            text: _('Message'),
+            indexRoute: {
+              onEnter: (nextState, replace) => replace('/main/portal/message/send'),
+            },
+            childRoutes: [
+              {
+                id: 'portalSendMessage',
+                path: '/main/portal/message/sendmessage/(:name)',
+                formUrl: 'goform/portal/message/sendmessage',
+                text: _('Send Message'),
+                component: sPortalSendMessage.Screen,
+              }, {
+                id: 'portalReceiveBox',
+                path: '/main/portal/message/receive',
+                formUrl: 'goform/portal/message/receive',
+                text: _('Receive Box'),
+                component: sPortalReceiveBox.Screen,
+              }, {
+                id: 'portalSendBox',
+                path: '/main/portal/message/send',
+                formUrl: 'goform/portal/message/send',
+                text: _('Send Box'),
+                component: sPortalSendBox.Screen,
+              },
+            ],
+          },
+          {
             id: 'portalLog',
             isIndex: true,
             path: '/main/portal/log',
@@ -1008,6 +1048,31 @@ const routes = [
                 formUrl: 'goform/portal/log/onlineRecordList',
                 text: _('Online Record List'),
                 component: sPortalOnlineRecordList.Screen,
+              },
+            ],
+          },
+          {
+            id: 'portalCard',
+            isIndex: true,
+            path: '/main/portal/card',
+            icon: 'vcard-o',
+            text: _('Rechargeable Card'),
+            indexRoute: {
+              onEnter: (nextState, replace) => replace('/main/portal/card/cardcategory'),
+            },
+            childRoutes: [
+              {
+                id: 'sPortalCardCategory',
+                path: '/main/portal/card/cardcategory',
+                formUrl: 'goform/portal/card/cardcategory',
+                text: _('Card Category'),
+                component: sPortalCardCategory.Screen,
+              }, {
+                id: 'portalCardCardList',
+                path: '/main/portal/card/cardlist',
+                formUrl: 'goform/portal/card/cardlist',
+                text: _('Card List'),
+                component: sPortalCardList.Screen,
               },
             ],
           },

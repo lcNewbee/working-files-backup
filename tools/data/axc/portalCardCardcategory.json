@@ -1,0 +1,19 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [{
+      "name": "包时卡",
+      "description": "包时卡",
+      "time": "2h",
+      "state": "月卡",
+      "maclimit": "0",
+      "maclimitcount": "123",
+      "autologin": "1",
+      "speed": "0",
+      "money": "12"
+    }]
+  }
+}
