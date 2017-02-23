@@ -11,8 +11,8 @@ const propTypes = {
 };
 
 const defaultProps = {
-  min: -9007199254740991,
-  max: 9007199254740991,
+  min: '',
+  max: '',
 };
 
 class NumberInput extends React.Component {
@@ -23,7 +23,7 @@ class NumberInput extends React.Component {
     this.onNumberChange = this.onNumberChange.bind(this);
     this.onBlur = this.onBlur.bind(this);
   }
-  onNumberChange(e, needMin) {
+  onNumberChange(e, needRelace) {
     const { min, max, defaultValue } = this.props;
     const val = e.target.value;
     const intVal = parseInt(val, 10);
@@ -33,14 +33,16 @@ class NumberInput extends React.Component {
       // 为空，或 - 时不做处理
       if (val !== '' && val !== '-') {
         // 小于或等于最小值，则返回最小值
-        if ((intVal <= parseInt(min, 10)) && needMin) {
+        if ((intVal <= parseInt(min, 10)) && needRelace) {
           relaceValue = min;
 
         // 大于或等于最大值，则返回最大值
-        } else if (intVal >= parseInt(max, 10) && needMin) {
+        } else if (intVal >= parseInt(max, 10) && needRelace) {
           relaceValue = max;
         }
-      } else if (needMin && isNaN(intVal)) {
+
+      // 为空时默认替换为 defaultValue 或 max
+      } else if (needRelace && isNaN(intVal)) {
         relaceValue = defaultValue !== undefined ? defaultValue : max;
       }
 
