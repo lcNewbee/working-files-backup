@@ -23,45 +23,42 @@ const listOptions = fromJS([
     formProps: {
       type: 'select',
       required: true,
-      options: [
-        {
-          value: '0',
-          label: _('Hour Card'),
-        }, {
-          value: '1',
-          label: _('Day Card'),
-        },
-        {
-          value: '2',
-          label: _('Month Card'),
-        }, {
-          value: '3',
-          label: _('Year Card'),
-        }, {
-          value: '4',
-          label: _('Traffic Card'),
-        }, {
-          value: 'null',
-          label: _('Error'),
-        },
-      ],
     },
+    options: [
+      {
+        value: '0',
+        label: _('Hour Card'),
+      }, {
+        value: '1',
+        label: _('Day Card'),
+      },
+      {
+        value: '2',
+        label: _('Month Card'),
+      }, {
+        value: '3',
+        label: _('Year Card'),
+      }, {
+        value: '4',
+        label: _('Traffic Card'),
+      },
+    ],
   }, {
     id: 'maclimit',
     text: _('Mac Limit'),
     formProps: {
       type: 'select',
       required: true,
-      options: [
-        {
-          value: '0',
-          label: _('Closed'),
-        }, {
-          value: '1',
-          label: _('Open'),
-        },
-      ],
     },
+    options: [
+      {
+        value: '0',
+        label: _('Closed'),
+      }, {
+        value: '1',
+        label: _('Open'),
+      },
+    ],
   }, {
     id: 'maclimitcount',
     text: _('Mac Quantity'),
@@ -73,18 +70,19 @@ const listOptions = fromJS([
     id: 'autologin',
     text: _('Auto Login'),
     noTable: true,
+    options: [
+      {
+        value: '0',
+        label: _('Closed'),
+      }, {
+        value: '1',
+        label: _('Open'),
+      },
+    ],
     formProps: {
       type: 'select',
       required: true,
-      options: [
-        {
-          value: '0',
-          label: _('Closed'),
-        }, {
-          value: '1',
-          label: _('Open'),
-        },
-      ],
+
     },
   }, {
     id: 'speed',
@@ -92,13 +90,13 @@ const listOptions = fromJS([
     formProps: {
       type: 'select',
       required: true,
-      options: [
-        {
-          value: '0',
-          label: _('1M'),
-        },
-      ],
     },
+    options: [
+      {
+        value: '1',
+        label: _('1M'),
+      },
+    ],
   }, {
     id: 'time',
     text: _('Count'),

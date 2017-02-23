@@ -964,31 +964,6 @@ const routes = [
               },
             ],
           },
-          // {
-          //   id: 'portalMessage',
-          //   isIndex: true,
-          //   path: '/main/portal/message',
-          //   icon: 'user-o',
-          //   text: _('Message'),
-          //   indexRoute: {
-          //     onEnter: (nextState, replace) => replace('/main/portal/message/send'),
-          //   },
-          //   childRoutes: [
-          //     {
-          //       id: 'portalReceiveBox',
-          //       path: '/main/portal/message/receive',
-          //       formUrl: 'goform/portal/message/receivet',
-          //       text: _('Receive Box'),
-          //       component: sPortalReceiveBox.Screen,
-          //     }, {
-          //       id: 'portalSendBox',
-          //       path: '/main/portal/message/send',
-          //       formUrl: 'goform/portal/message/send',
-          //       text: _('Send Box'),
-          //       component: sPortalSendBox.Screen,
-          //     },
-          //   ],
-          // },
           {
             id: 'portalMessage',
             isIndex: true,

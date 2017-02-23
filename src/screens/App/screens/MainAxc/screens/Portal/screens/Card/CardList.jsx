@@ -25,58 +25,58 @@ const listOptions = fromJS([
     formProps: {
       type: 'select',
       required: true,
-      options: [
-        {
-          value: '0',
-          label: _('Unavailability'),
-        }, {
-          value: '1',
-          label: _('Free'),
-        },
-        {
-          value: '2',
-          label: _('Timekeeping'),
-        }, {
-          value: '3',
-          label: _('Buy Out'),
-        }, {
-          value: '4',
-          label: _('Traffic'),
-        }, {
-          value: '-1',
-          label: _('Outside User'),
-        },
-      ],
     },
+    options: [
+      {
+        value: '0',
+        label: _('Unavailability'),
+      }, {
+        value: '1',
+        label: _('Free'),
+      },
+      {
+        value: '2',
+        label: _('Timekeeping'),
+      }, {
+        value: '3',
+        label: _('Buy Out'),
+      }, {
+        value: '4',
+        label: _('Traffic'),
+      }, {
+        value: '-1',
+        label: _('Outside User'),
+      },
+    ],
   }, {
     id: 'categoryType',
     text: _('Category Type'),
     formProps: {
       type: 'select',
       required: true,
-      options: [
-        {
-          value: '0',
-          label: _('Hour Card'),
-        }, {
-          value: '1',
-          label: _('Day Card'),
-        },
-        {
-          value: '2',
-          label: _('Month Card'),
-        }, {
-          value: '3',
-          label: _('Year Card'),
-        }, {
-          value: '4',
-          label: _('Traffic Card'),
-        }, {
-          value: 'null',
-          label: _('Error'),
-        },
-      ],
     },
+    options: [
+      {
+        value: '0',
+        label: _('Hour Card'),
+      }, {
+        value: '1',
+        label: _('Day Card'),
+      },
+      {
+        value: '2',
+        label: _('Month Card'),
+      }, {
+        value: '3',
+        label: _('Year Card'),
+      }, {
+        value: '4',
+        label: _('Traffic Card'),
+      }, {
+        value: 'null',
+        label: _('Error'),
+      },
+    ],
   }, {
     id: 'maclimit',
     text: _('Mac Limit'),
@@ -84,16 +84,16 @@ const listOptions = fromJS([
     formProps: {
       type: 'select',
       required: true,
-      options: [
-        {
-          value: '0',
-          label: _('Closed'),
-        }, {
-          value: '1',
-          label: _('Open'),
-        },
-      ],
     },
+    options: [
+      {
+        value: '0',
+        label: _('Closed'),
+      }, {
+        value: '1',
+        label: _('Open'),
+      },
+    ],
   }, {
     id: 'maclimitcount',
     text: _('Mac Quantity'),
@@ -109,16 +109,16 @@ const listOptions = fromJS([
     formProps: {
       type: 'select',
       required: true,
-      options: [
-        {
-          value: '0',
-          label: _('Closed'),
-        }, {
-          value: '1',
-          label: _('Open'),
-        },
-      ],
     },
+    options: [
+      {
+        value: '0',
+        label: _('Closed'),
+      }, {
+        value: '1',
+        label: _('Open'),
+      },
+    ],
   }, {
     id: 'speed',
     text: _('Speed Limit'),
@@ -126,13 +126,13 @@ const listOptions = fromJS([
     formProps: {
       type: 'select',
       required: true,
-      options: [
-        {
-          value: '0',
-          label: _('1M'),
-        },
-      ],
     },
+    options: [
+      {
+        value: '1',
+        label: _('1M'),
+      },
+    ],
   }, {
     id: 'cdKey',
     text: _('CD Key'),
@@ -157,22 +157,22 @@ const listOptions = fromJS([
     formProps: {
       type: 'select',
       required: true,
-      options: [
-        {
-          value: '-1',
-          label: _('Unpayed'),
-        }, {
-          value: '0',
-          label: _('New Card'),
-        }, {
-          value: '1',
-          label: _('Sold'),
-        }, {
-          value: '0',
-          label: _('Active'),
-        },
-      ],
     },
+    options: [
+      {
+        value: '-1',
+        label: _('Unpayed'),
+      }, {
+        value: '0',
+        label: _('New Card'),
+      }, {
+        value: '1',
+        label: _('Sold'),
+      }, {
+        value: '2',
+        label: _('Active'),
+      },
+    ],
   }, {
     id: 'accountName',
     text: _('Recharge User'),
