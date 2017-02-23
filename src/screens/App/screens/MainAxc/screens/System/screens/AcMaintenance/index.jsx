@@ -165,25 +165,18 @@ export default class View extends React.PureComponent {
         {...this.props}
         noTitle
       >
-        <div className="o-form">
+        <div
+          className="o-form"
+          style={{
+            paddingBottom: '60px',
+          }}
+        >
           <AcVersion
             {...this.props}
             onReboot={this.onReboot}
             actionable={this.actionable}
           />
           <fieldset className="o-form__fieldset">
-            <FormGroup label={_('Save Configuration')}>
-              <SaveButton
-                type="button"
-                icon="save"
-                loading={this.state.isSaveConfig}
-                text={_('Save Configuration')}
-                disabled={!this.actionable}
-                onClick={
-                  () => this.onSaveConfiguration()
-                }
-              />
-            </FormGroup>
             <FormGroup label={_('Reboot Controller')}>
               <SaveButton
                 type="button"
@@ -198,6 +191,18 @@ export default class View extends React.PureComponent {
           </fieldset>
           <fieldset className="o-form__fieldset">
             <legend className="o-form__legend">{_('Configuration')}</legend>
+            <FormGroup label={_('Save Configuration')}>
+              <SaveButton
+                type="button"
+                icon="save"
+                loading={this.state.isSaveConfig}
+                text={_('Save Configuration')}
+                disabled={!this.actionable}
+                onClick={
+                  () => this.onSaveConfiguration()
+                }
+              />
+            </FormGroup>
             <FormGroup label={_('Backup Configuration')}>
               <SaveButton
                 type="button"

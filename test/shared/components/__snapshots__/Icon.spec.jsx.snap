@@ -1,6 +1,9 @@
-exports[`test Link changes the class when hovered 1`] = `
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Link changes the class when hovered 1`] = `
 <span
   className="icon fa fa-cog fa-2x fa-spin"
   name="cog"
-  size="2x" />
+  size="2x"
+/>
 `;

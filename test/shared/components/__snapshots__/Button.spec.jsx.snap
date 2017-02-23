@@ -1,9 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`Shared component Button 1`] = `
 <button
   className="a-btn a-btn--default"
   onClick={[Function]}
   role="button"
-  type="button">
+  type="button"
+>
   cog
 </button>
 `;
@@ -13,7 +16,8 @@ exports[`Shared component Button 2`] = `
   className="a-btn a-btn--default"
   onClick={[Function]}
   role="button"
-  type="button">
+  type="button"
+>
   cog
 </button>
 `;
@@ -24,10 +28,12 @@ exports[`Shared component SaveButton 1`] = `
   icon="save"
   onClick={[Function]}
   role="button"
-  type="button">
+  type="button"
+>
   <span
     className="icon fa fa-save"
-    name="save" />
+    name="save"
+  />
   cog
 </button>
 `;
@@ -38,10 +44,12 @@ exports[`Shared component SaveButton 2`] = `
   icon="save"
   onClick={[Function]}
   role="button"
-  type="button">
+  type="button"
+>
   <span
     className="icon fa fa-spinner fa-spin"
-    name="spinner" />
+    name="spinner"
+  />
   cog
 </button>
 `;
