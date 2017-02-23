@@ -11,9 +11,21 @@ $_height: 28px;
   .Select-control {
     height: $_height;
   }
-  &.is-disabled{
+  &.is-disabled {
     > .Select-control {
       background-color: #eee;
+    }
+    &::after {
+      position: absolute;
+      content: '';
+      display: block;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 1;
+      opacity: 0;
     }
   }
 

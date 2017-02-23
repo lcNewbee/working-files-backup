@@ -9,7 +9,7 @@ const propTypes = {
   isAsync: PropTypes.bool,
   onChange: PropTypes.func,
   readOnly: PropTypes.any,
-  disabled: PropTypes.any,
+  className: PropTypes.string,
 };
 
 const defaultProps = {
