@@ -24,11 +24,10 @@ class Radios extends React.Component {
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
   }
   render() {
-    const { options, size, theme, className, style, text } = this.props;
+    const { options, size, theme, className, style, text, ...restProps } = this.props;
     let { value, id } = this.props;
     let classNames = 'a-radio';
-
-    let label = options && options.label;
+    const label = options && options.label;
 
     value = value === undefined ? '1' : value;
 
@@ -51,7 +50,8 @@ class Radios extends React.Component {
     return (
       <label htmlFor={id} className={classNames} style={style}>
         <Input
-          {...this.props}
+          {...restProps}
+          style={style}
           className="a-radio__input"
           id={id}
           value={value}

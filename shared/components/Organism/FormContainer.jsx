@@ -164,8 +164,8 @@ class FormContainer extends React.Component {
     const {
       invalidMsg, validateAt, onValidError, actionQuery, id, actionable, formKey,
     } = this.props;
-    const myProps = $$option.toJS();
     const index = $$option.get('__index__');
+    const myProps = $$option.delete('__index__').toJS();
     const myComponent = myProps.component;
     const checkboxValue = myProps.value || '1';
     const linkId = myProps.linkId;
@@ -276,6 +276,11 @@ class FormContainer extends React.Component {
     if (myComponent) {
       return myComponent(myProps, $$data, actionQuery);
     }
+
+    // 删除自己特有属性，不往下传递
+    delete myProps.showPrecondition;
+    delete myProps.saveOnChange;
+    delete myProps.onBeforeChange;
 
     return isShow ? (
       <FormGroup

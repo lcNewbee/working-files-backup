@@ -30,8 +30,10 @@ const propTypes = {
     'email', 'number', 'color', 'range', 'tel', 'url',
 
     // custom
-    'ip', 'mac', 'switch', 'plain-text', 'date-range', 'checkboxs',
+    'switch', 'plain-text', 'date-range', 'checkboxs',
   ]),
+  dataType: PropTypes.oneOf(['string', 'number', 'ip', 'mac']),
+  dataFormat: PropTypes.object,
   check: PropTypes.func,
   checkClear: PropTypes.func,
   checkClearValue: PropTypes.func,
@@ -52,6 +54,8 @@ const propTypes = {
 const defaultProps = {
   Component: 'input',
   type: 'text',
+  dataType: 'string',
+  dataFormat: null,
 };
 
 class FormInput extends React.Component {
@@ -193,7 +197,7 @@ class FormInput extends React.Component {
     data.value = rawValue || val;
 
     if (this.props.dataType === 'number') {
-      data.value = parseInt(data.value, 10);
+      data.value = parseFloat(data.value, 10);
     }
 
     // 数据更新
@@ -302,7 +306,7 @@ class FormInput extends React.Component {
 
   render() {
     const {
-      Component, type, className, size, value,
+      Component, type, className, size, value, ...restProps
     } = this.props;
     const inpputType = this.props.type;
     const inputProps = utils.extend({}, this.props);

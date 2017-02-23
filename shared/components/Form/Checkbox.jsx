@@ -33,7 +33,7 @@ class Checkbox extends React.Component {
     }
   }
   render() {
-    const { options, size, theme, className, style, text } = this.props;
+    const { options, size, theme, className, style, text, ...restProps } = this.props;
     const label = options && options.label;
     const id = this.id;
     let { value } = this.props;
@@ -57,10 +57,11 @@ class Checkbox extends React.Component {
     return (
       <label htmlFor={id} className={classNames} style={style}>
         <Input
-          {...this.props}
+          {...restProps}
           className="a-checkbox__input"
           id={id}
           value={value}
+          style={style}
         />
         <label htmlFor={id} />
         {

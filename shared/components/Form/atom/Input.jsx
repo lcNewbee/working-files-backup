@@ -28,37 +28,27 @@ class Input extends React.Component {
     let ThisComponent = 'input';
 
     // 删除多余属性
-    delete inputProps.seeAble;
     delete inputProps.Component;
     delete inputProps.loading;
     delete inputProps.validator;
     delete inputProps.check;
     delete inputProps.checkClear;
-    delete inputProps.errMsg;
     delete inputProps.validateAt;
     delete inputProps.onValidError;
-    delete inputProps.options;
     delete inputProps.isFocus;
-    delete inputProps.help;
     delete inputProps.text;
-    delete inputProps.saveOnChange;
-    delete inputProps.showPrecondition;
     delete inputProps.display;
-    delete inputProps.hasTextInput;
-    delete inputProps.theme;
     delete inputProps.inputStyle;
     delete inputProps.onValue;
     delete inputProps.offValue;
-    delete inputProps.unit;
     delete inputProps.notEditable;
     delete inputProps.dataType;
     delete inputProps.defaultValue;
     delete inputProps.isLoading;
     delete inputProps.actionName;
     delete inputProps.onRef;
-    delete inputProps.__index__;
-    delete inputProps.showLabel;
     delete inputProps.linkId;
+    delete inputProps.dataFormat;
 
     if (inputProps.type === 'textarea') {
       ThisComponent = 'textarea';

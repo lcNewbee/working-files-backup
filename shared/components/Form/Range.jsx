@@ -32,14 +32,15 @@ class Checkbox extends React.Component {
     }
   }
   render() {
-    const { hasTextInput, unit, min } = this.props;
+    const { hasTextInput, unit, min, ...restProps } = this.props;
     const value = this.props.value || min;
 
     return (
       <div className="a-input-range clearfix">
         <Input
-          {...this.props}
+          {...restProps}
           value={value}
+          min={min}
           className="fl"
         />
         {

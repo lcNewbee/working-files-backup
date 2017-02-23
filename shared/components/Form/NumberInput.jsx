@@ -26,23 +26,23 @@ class NumberInput extends React.Component {
   onNumberChange(e, needRelace) {
     const { min, max, defaultValue } = this.props;
     const val = e.target.value;
-    const intVal = parseInt(val, 10);
+    const numberVal = parseFloat(val, 10);
     let relaceValue;
 
     if (this.props.onChange) {
       // 为空，或 - 时不做处理
       if (val !== '' && val !== '-') {
         // 小于或等于最小值，则返回最小值
-        if ((intVal <= parseInt(min, 10)) && needRelace) {
+        if ((numberVal <= parseFloat(min, 10)) && needRelace) {
           relaceValue = min;
 
         // 大于或等于最大值，则返回最大值
-        } else if (intVal >= parseInt(max, 10) && needRelace) {
+        } else if (numberVal >= parseFloat(max, 10) && needRelace) {
           relaceValue = max;
         }
 
       // 为空时默认替换为 defaultValue 或 max
-      } else if (needRelace && isNaN(intVal)) {
+      } else if (needRelace && isNaN(numberVal)) {
         relaceValue = defaultValue !== undefined ? defaultValue : max;
       }
 
