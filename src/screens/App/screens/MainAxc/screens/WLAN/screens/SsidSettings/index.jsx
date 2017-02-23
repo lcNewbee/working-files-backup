@@ -187,16 +187,16 @@ const listOptions = fromJS([
       value: '1',
     },
   },
-  // {
-  //   id: 'greenap',
-  //   text: _('Green AP Mode'),
-  //   defaultValue: '1',
-  //   options: checkboxOptions,
-  //   formProps: {
-  //     type: 'checkbox',
-  //     value: '1',
-  //   },
-  // },
+  {
+    id: 'greenap',
+    text: _('Green AP Mode'),
+    defaultValue: '1',
+    options: checkboxOptions,
+    formProps: {
+      type: 'checkbox',
+      value: '1',
+    },
+  },
   {
     id: 'maxBssUsers',
     text: _('Max Clients'),
@@ -207,16 +207,28 @@ const listOptions = fromJS([
       max: 64,
     },
   },
-  // {
-  //   id: 'mandatorydomain',
-  //   text: _('AAA Policy'),
-  //   defaultValue: '',
-  //   noTable: true,
-  //   formProps: {
-  //     type: 'select',
-  //     options: [],
-  //   },
-  // },
+  {
+    id: 'mandatorydomain',
+    text: _('AAA Policy'),
+    defaultValue: '',
+    noTable: true,
+    formProps: {
+      type: 'select',
+      options: [],
+    },
+  },
+  {
+    id: 'vlanId',
+    text: _('VLAN ID'),
+    defaultValue: '1',
+    noTable: true,
+    formProps: {
+      type: 'number',
+      min: '0',
+      max: '4096',
+      required: true,
+    },
+  },
   {
     id: 'storeForwardPattern',
     options: storeForwardOption,
