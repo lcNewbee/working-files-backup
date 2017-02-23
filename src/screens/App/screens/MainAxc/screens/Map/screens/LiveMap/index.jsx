@@ -65,6 +65,7 @@ const listOptions = fromJS({
 
 const listTableOptions = immutableUtils.getTableOptions(listOptions.get('list'));
 const formOptions = immutableUtils.getFormOptions(listOptions.get('list'));
+// const liveMapFormOptions = formOptions.re
 
 function getCurAppScreenState(listStore, name) {
   const myStore = listStore || Map({});
@@ -548,7 +549,7 @@ export default class View extends React.PureComponent {
                     <FormContainer
                       data={editData}
                       options={
-                        formOptions.deleteIn([0, -1]).deleteIn([0, -1])
+                        formOptions.deleteIn([-1]).deleteIn([-1])
                       }
                       onSave={this.onSave}
                       onChangeData={this.props.updateCurEditListItem}

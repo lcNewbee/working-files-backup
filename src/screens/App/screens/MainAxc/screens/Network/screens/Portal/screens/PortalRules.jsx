@@ -60,15 +60,14 @@ const listOptions = fromJS([
     formProps: {
       type: 'switch',
       required: true,
-      notEditable: true,
     },
   }, {
     id: 'template_name',
     label: _('Server Name'),
     formProps: {
       type: 'select',
-      notEditable: true,
       required: true,
+      notEditable: true,
     },
   }, {
     id: 'max_usernum',
@@ -189,7 +188,7 @@ export default class View extends React.Component {
         const curPortIndex = $$curList.findIndex($$listItem => $$listItem.get('interface_bind') === curPort);
         let ret = curPortIndex !== -1;
 
-        if (actionType === 'edit' && $$myScreenStore.getIn(['curListItem', 'interface_bind']) === curPort) {
+        if (actionType === 'edit' && $$myScreenStore.getIn(['curListItem', 'id']) === $$curList.getIn([curPortIndex, 'id'])) {
           ret = false;
         }
 

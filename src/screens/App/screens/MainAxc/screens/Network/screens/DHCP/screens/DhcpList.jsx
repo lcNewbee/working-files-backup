@@ -84,7 +84,7 @@ const listOptions = fromJS([
       help: _('Range: 300-604800 Seconds'),
       min: '300',
       max: '604800',
-      defaultValue: 7200,
+      defaultValue: '7200',
       validator: validator({
         rules: 'num[300,604800]',
       }),
