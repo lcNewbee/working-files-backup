@@ -62,6 +62,7 @@ const listOptions = fromJS([
     id: 'fromPos',
     text: _('Sender Type'),
     noForm: true,
+    noTable: true,
     formProps: {
       type: 'select',
       required: true,
@@ -121,6 +122,15 @@ const listOptions = fromJS([
     formProps: {
       required: true,
     },
+    options: [
+      {
+        value: '0',
+        label: _('Unread'),
+      }, {
+        value: '1',
+        label: _('Read'),
+      },
+    ],
   }, {
     id: 'delin',
     text: _('delin'),
@@ -153,7 +163,7 @@ const listOptions = fromJS([
     transform(val, $$item) {
       return (
         <span>
-          <a href={`index.html#/main/portal/message/sendmessage/${$$item.get('toname')}`} className="tablelink">{_('Reply')}</a>
+          <a href={`index.html#/main/portal/message/sendmessage/${$$item.get('fromname')}`} className="tablelink">{_('Reply')}</a>
         </span>
       );
     },
@@ -203,8 +213,11 @@ export default class OpenPortalBase extends React.Component {
       <AppScreen
         {...this.props}
         listOptions={curListOptions}
+        listKey="id"
         actionable
         selectable
+        addable={false}
+        editable={false}
       />
     );
   }

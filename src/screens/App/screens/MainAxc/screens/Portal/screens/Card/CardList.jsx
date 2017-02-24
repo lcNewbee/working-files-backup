@@ -8,6 +8,23 @@ import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
+function getCardCategoryName() {
+  return utils.fetch('goform/portal/card/cardcategory', {
+    size: 9999,
+    page: 1,
+  })
+    .then(json => (
+      {
+        options: json.data.list.map(
+          item => ({
+            value: item.id,
+            label: item.name,
+          }),
+        ),
+      }
+    ),
+  );
+}
 const listOptions = fromJS([
   {
     id: 'name',
@@ -49,8 +66,17 @@ const listOptions = fromJS([
       },
     ],
   }, {
+    id: 'categoryName',
+    text: _('Category Name'),
+    noTable: true,
+    formProps: {
+      type: 'select',
+      required: true,
+    },
+  }, {
     id: 'categoryType',
     text: _('Category Type'),
+    noForm: true,
     formProps: {
       type: 'select',
       required: true,
@@ -72,11 +98,16 @@ const listOptions = fromJS([
       }, {
         value: '4',
         label: _('Traffic Card'),
-      }, {
-        value: 'null',
-        label: _('Error'),
       },
     ],
+  }, {
+    id: 'cardCount',
+    text: _('Card Number'),
+    noTable: true,
+    formProps: {
+      type: 'number',
+      required: true,
+    },
   }, {
     id: 'maclimit',
     text: _('Mac Limit'),
@@ -96,6 +127,7 @@ const listOptions = fromJS([
     ],
   }, {
     id: 'maclimitcount',
+    noForm: true,
     text: _('Mac Quantity'),
     formProps: {
       type: 'number',
@@ -143,7 +175,7 @@ const listOptions = fromJS([
     },
   },
   {
-    id: 'paytime',
+    id: 'payTime',
     text: _('Count'),
     noForm: true,
     formProps: {
@@ -234,11 +266,27 @@ const propTypes = {
 };
 const defaultProps = {};
 export default class View extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      categoryTypeOptions: fromJS([]),
+    };
+  }
+  componentWillMount() {
+    getCardCategoryName()
+      .then((data) => {
+        this.setState({
+          categoryTypeOptions: fromJS(data.options),
+        });
+      });
+  }
   render() {
+    const curListOptions = listOptions
+      .setIn([2, 'options'], this.state.categoryTypeOptions);
     return (
       <AppScreen
         {...this.props}
-        listOptions={listOptions}
+        listOptions={curListOptions}
         noTitle
         actionable
         selectable

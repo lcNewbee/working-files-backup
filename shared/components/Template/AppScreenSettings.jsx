@@ -78,12 +78,12 @@ class AppSettings extends React.PureComponent {
   onBeforeSync(callback) {
     const { onBeforeSync, store } = this.props;
     const $$actionQuery = store.get('actionQuery');
-    const $$curListItem = store.get('curListItem');
+    const $$curSettings = store.get('curSettings');
     const retOption = {};
     let onBeforeSyncResult = '';
 
     if (onBeforeSync) {
-      onBeforeSyncResult = onBeforeSync($$actionQuery, $$curListItem);
+      onBeforeSyncResult = onBeforeSync($$actionQuery, $$curSettings);
     }
 
     if (utils.isPromise(onBeforeSyncResult)) {

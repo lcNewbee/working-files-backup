@@ -13,6 +13,7 @@ import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 import * as propertiesActions from 'shared/actions/properties';
 
+const uptimeFilter = utils.filter('connectTime');
 // 列表相关配置
 const listOptions = fromJS([
   {
@@ -38,6 +39,9 @@ const listOptions = fromJS([
     formProps: {
       type: 'text',
       required: true,
+    },
+    transform(val) {
+      return uptimeFilter.transform(val / 1000);
     },
   }, {
     id: 'octets',

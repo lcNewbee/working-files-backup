@@ -8,7 +8,6 @@ import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
-
 function getUserName() {
   return utils.fetch('goform/portal/account/accountList')
     .then(json => (
@@ -28,6 +27,7 @@ const listOptions = fromJS([
     id: 'toPos',
     text: _('Receiver Type'),
     noForm: true,
+    noTable: true,
     formProps: {
       type: 'select',
       required: true,
@@ -122,6 +122,15 @@ const listOptions = fromJS([
     formProps: {
       required: true,
     },
+    options: [
+      {
+        value: '0',
+        label: _('Unread'),
+      }, {
+        value: '1',
+        label: _('Read'),
+      },
+    ],
   }, {
     id: 'delin',
     text: _('delin'),
@@ -164,6 +173,7 @@ const listOptions = fromJS([
 const propTypes = {
   route: PropTypes.object,
   save: PropTypes.func,
+  updateScreenSettings: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -195,7 +205,6 @@ export default class OpenPortalBase extends React.Component {
         }
       });
   }
-
   render() {
     const curListOptions = listOptions
       .setIn([1, 'options'], this.state.userNameOptions);
@@ -203,6 +212,7 @@ export default class OpenPortalBase extends React.Component {
       <AppScreen
         {...this.props}
         listOptions={curListOptions}
+        listKey="id"
         actionable
         selectable
         editable={false}

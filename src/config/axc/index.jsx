@@ -976,7 +976,7 @@ const routes = [
             childRoutes: [
               {
                 id: 'portalSendMessage',
-                path: '/main/portal/message/sendmessage/(:name)',
+                path: '/main/portal/message/sendmessage/(:toname)',
                 formUrl: 'goform/portal/message/sendmessage',
                 text: _('Send Message'),
                 component: sPortalSendMessage.Screen,

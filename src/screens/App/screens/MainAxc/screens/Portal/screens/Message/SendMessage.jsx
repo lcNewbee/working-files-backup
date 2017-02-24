@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
-import { Map, fromJS } from 'immutable';
+import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import AppScreen from 'shared/components/Template/AppScreen';
 import * as appActions from 'shared/actions/app';
@@ -9,8 +9,9 @@ import * as screenActions from 'shared/actions/screens';
 import validator from 'shared/validator';
 
 const propTypes = {
-  store: PropTypes.instanceOf(Map),
-  app: PropTypes.instanceOf(Map),
+  params: PropTypes.object,
+  updateScreenSettings: PropTypes.func,
+  changeScreenActionQuery: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -25,6 +26,7 @@ function getUserName() {
           item => ({
             value: item.loginName,
             label: item.loginName,
+            id: item.id,
           }),
         ),
       }
@@ -59,9 +61,6 @@ const settingsOptions = fromJS([
     legend: _('Send Message'),
     required: true,
     type: 'select',
-    validator: validator({
-      rules: 'utf8Len:[1,255]',
-    }),
   },
   {
     id: 'title',
@@ -90,25 +89,51 @@ export default class View extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+
       userNameOptions: fromJS([]),
     };
+    utils.binds(this, [
+      'onBeforeSync',
+    ]);
   }
   componentWillMount() {
     getUserName()
       .then((data) => {
-
         this.setState({
           userNameOptions: fromJS(data.options),
         });
       });
   }
+  // componentDidMount() {
+  //   this.state = {
+  //     options: this.props.params.toname,
+  //   };
+  // }
+  onBeforeSync($$actionQuery, $$curSettings) {
+    const optionList = this.state.userNameOptions;
+    const id = optionList.find($$item => $$item.get('value') === $$curSettings.get('toname'),
+      ).get('id');
+    this.props.updateScreenSettings({
+      id,
+    });
+  }
   render() {
+    const { toname } = this.props.params;
     const curSettingOptions = settingsOptions
       .setIn([0, 'options'], this.state.userNameOptions);
     return (
       <AppScreen
         {...this.props}
         settingsFormOptions={curSettingOptions}
+        initOption={{
+          query: {
+            toname,
+          },
+          actionQuery: {
+            toname,
+          },
+        }}
+        onBeforeSync={this.onBeforeSync}
         hasSettingsSaveButton
         noTitle
       />

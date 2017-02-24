@@ -87,6 +87,8 @@ const listOptions = fromJS([
   }, {
     id: 'speed',
     text: _('Speed Limit'),
+    noTable: true,
+    noForm: true,
     formProps: {
       type: 'select',
       required: true,
