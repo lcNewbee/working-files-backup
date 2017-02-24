@@ -46,6 +46,8 @@
   "non-configurable": "不可配置",
   "Download": "下载",
   "Max Users": "最大用户数",
+  "Licensed": "已许可",
+  "Unlicensed": "未许可",
 
   "Radio Base": "Radio基本配置",
   "Radio Advance": "Radio高级配置",
