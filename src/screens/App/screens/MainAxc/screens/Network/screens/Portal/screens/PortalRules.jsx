@@ -75,8 +75,8 @@ const listOptions = fromJS([
     defaultValue: '4096',
     formProps: {
       type: 'number',
-      min: 5,
-      max: 4096,
+      min: '5',
+      max: '4096',
     },
   }, {
     id: 'auth_mode',
