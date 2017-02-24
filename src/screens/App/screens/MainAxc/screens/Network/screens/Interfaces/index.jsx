@@ -110,8 +110,13 @@ export default class NetworkInterface extends React.Component {
         onBeforeSave={this.onBeforeSave}
         editFormId="port"
         listKey="allKeys"
+        deleteable={
+          ($$item, index) => (index !== 0)
+        }
+        selectable={
+          ($$item, index) => (index !== 0)
+        }
         actionable
-        selectable
       />
     );
   }

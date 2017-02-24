@@ -44,8 +44,11 @@ const propTypes = {
   deleteable: PropTypes.oneOfType([
     PropTypes.bool, PropTypes.func,
   ]),
+  selectable: PropTypes.oneOfType([
+    PropTypes.bool, PropTypes.func,
+  ]),
   searchable: PropTypes.bool,
-  selectable: PropTypes.bool,
+
 
   // 通用操作函数
   fetchScreenData: PropTypes.func,

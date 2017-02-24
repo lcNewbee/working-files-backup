@@ -83,7 +83,6 @@ function selectedListItem(state, action, curScreenName) {
 
   if (data.index !== -1) {
     list = list.setIn([data.index, '__selected__'], data.selected);
-    console.log('data.selected', data.index, data.selected);
     if (data.selected) {
       selectedList = selectedList.push(data.index);
     } else {
@@ -91,11 +90,16 @@ function selectedListItem(state, action, curScreenName) {
     }
   } else {
     selectedList = fromJS([]);
+
     if (data.selected) {
       list = list.map((item, index) => {
-        selectedList = selectedList.push(index);
+        let $$ret = item;
 
-        return item.set('__selected__', true);
+        if (data.unselectableList.indexOf(index) === -1) {
+          selectedList = selectedList.push(index);
+          $$ret = $$ret.set('__selected__', true);
+        }
+        return $$ret;
       });
     } else {
       list = list.map(item => item.set('__selected__', false));

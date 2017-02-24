@@ -139,18 +139,13 @@ export default class View extends React.Component {
   }
 
   render() {
-    const { app, store, route } = this.props;
-    const myStore = store.setIn(
-      [route.id, 'data', 'list', 0, 'noDelete'],
-      true,
-    );
+    const { app } = this.props;
     const purview = app.getIn(['login', 'purview']);
     const isAdmin = purview === 'all';
 
     return (
       <AppScreen
         {...this.props}
-        store={myStore}
         listOptions={listOptions}
         actionable={isAdmin}
         deleteable={
