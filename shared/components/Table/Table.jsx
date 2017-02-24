@@ -15,7 +15,9 @@ const propTypes = {
   loading: PropTypes.bool,
   className: PropTypes.string,
   onPageChange: PropTypes.func,
-  selectable: PropTypes.bool,
+  selectable: PropTypes.oneOfType([
+    PropTypes.bool, PropTypes.func,
+  ]),
   onRowSelect: PropTypes.func,
   onRowClick: PropTypes.func,
 };
@@ -60,6 +62,7 @@ class Table extends Component {
   onRowSelect(data) {
     const actionData = data;
     if (this.props.onRowSelect) {
+      actionData.unselectableList = this.unselectableList;
       this.props.onRowSelect(actionData);
     }
   }
@@ -140,12 +143,23 @@ class Table extends Component {
     let ret = null;
 
     this.selectedList = [];
+    this.unselectableList = [];
     if (myList && myList.size > 0) {
       ret = myList.map((item, i) => {
         const isSelected = item && !!item.get('__selected__');
+        let curSelectable = selectable;
 
         if (isSelected) {
           this.selectedList.push(i);
+        }
+
+        if (utils.isFunc(selectable)) {
+          curSelectable = selectable(item, i);
+        }
+
+        // 不可选择的项
+        if (!curSelectable) {
+          this.unselectableList.push(i);
         }
 
         return (
@@ -155,7 +169,8 @@ class Table extends Component {
             item={item}
             index={i}
             selectable={selectable}
-            selected={isSelected}
+            curSelectable={curSelectable}
+            selected={curSelectable && isSelected}
             onSelect={this.onRowSelect}
             onClick={e => this.onRowClick(e, i)}
           />
@@ -183,10 +198,12 @@ class Table extends Component {
     } = this.props;
     const myList = this.state.myList;
     const myBodyChildren = this.renderBodyRow(myList);
+    const unselectableLen = this.unselectableList.length;
     let myTableClassName = 'table';
     let isSelectAll = false;
 
-    if (myList && myList.size > 0 && (this.selectedList.length === myList.size)) {
+    if (myList && myList.size > 0 &&
+        ((this.selectedList.length + unselectableLen) === myList.size)) {
       isSelectAll = true;
     }
 
@@ -209,6 +226,7 @@ class Table extends Component {
               index={THEAD_INDEX}
               onSelect={this.onRowSelect}
               onClick={this.onTheadRowClick}
+              curSelectable
               isTh
             />
           </thead>

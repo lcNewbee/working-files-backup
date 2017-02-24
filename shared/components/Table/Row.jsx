@@ -9,7 +9,10 @@ const propTypes = {
   isTh: PropTypes.bool,
   item: PropTypes.object,
   index: PropTypes.number,
-  selectable: PropTypes.bool,
+  selectable: PropTypes.oneOfType([
+    PropTypes.bool, PropTypes.func,
+  ]),
+  curSelectable: PropTypes.bool,
   selected: PropTypes.bool,
   onSelect: PropTypes.func,
   onClick: PropTypes.func,
@@ -39,7 +42,7 @@ class Row extends Component {
     });
   }
   render() {
-    const { isTh, options, selected, selectable, item, index, ...restProps } = this.props;
+    const { isTh, options, selected, selectable, curSelectable, item, index, ...restProps } = this.props;
     let rowChilren = null;
     let MyCompeont = 'td';
 
@@ -205,7 +208,8 @@ class Row extends Component {
         >
           <Checkbox
             theme="square"
-            checked={selected}
+            checked={curSelectable && selected}
+            disabled={!curSelectable}
             onChange={(e) => {
               this.onSelect(index, e);
             }}
