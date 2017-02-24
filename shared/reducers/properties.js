@@ -231,7 +231,6 @@ function changePropertysItem(state, action) {
   if (typeof curRadioIndex !== 'undefined') {
     $$ret = changePropertyPanelRadioIndex(state, curRadioIndex);
   }
-
   return $$ret.mergeIn(
     ['list', state.get('activeIndex')],
     action.payload,

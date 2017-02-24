@@ -422,6 +422,8 @@
   "Please select time zone": "请选择时区",
   "Select file extension range: %s": "选择的文件后缀名范围: %s",
 
+  "e.g. %s": "例如: %s",
+
   "String length range is: %s - %s bit": "长度范围：%s - %s 位",
   "String length range is: %s - %s bytes": "长度范围：%s - %s 位字节",
   "Network segment mask must be a number between 0-32": "IP网段掩码必须为0-32间数字",

@@ -59,19 +59,19 @@ const renderApp = () => {
   );
 };
 
+renderApp();
+
 // Enable hot reload by react-hot-loader
 if (module.hot) {
-  const reRenderApp = () => {
-    renderApp();
-  };
+  // const reRenderApp = () => {
+  //   renderApp();
+  // };
 
   module.hot.accept('./config/axc2.0', () => {
     setImmediate(() => {
       // Preventing the hot reloading error from react-router
       unmountComponentAtNode(mountNode);
-      reRenderApp();
+      renderApp();
     });
   });
 }
-
-renderApp();

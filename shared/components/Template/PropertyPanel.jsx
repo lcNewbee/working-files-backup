@@ -96,7 +96,7 @@ class PropertyPanel extends React.Component {
         oldname: $$activeListData.getIn(['info', 'devicename']),
       });
 
-      if (first5g && (parseInt(first5g, 10) !== $$activeListData.getIn(['radio', 'first5g']))) {
+      if (first5g !== undefined && (parseInt(first5g, 10) !== $$activeListData.getIn(['radio', 'first5g']))) {
         $$subData = $$subData.merge({
           first5g,
         });
