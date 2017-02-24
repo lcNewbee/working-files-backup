@@ -324,7 +324,9 @@ export default class MacStatistic extends React.Component {
 
   onChangeSearchMac(data) {
     this.props.changeScreenQuery({ search: data.value });
-    this.props.fetchScreenData();
+    if ((/^([0-9a-fA-F]{2}(:|-)){5}[0-9a-fA-F]{2}$/).test(data.value) || data.value === '') { // 目前只能搜索完整的MAC地址
+      this.props.fetchScreenData();
+    }
   }
 
   // onSelectRow(data) { // 最多允许勾选三个列表项进行绘图
@@ -453,7 +455,8 @@ export default class MacStatistic extends React.Component {
           fetchIntervalTime: 30000,
           query: {
             timeType: '0',
-            mac: '',
+            size: '50',
+            page: '1',
           },
         }}
         // listTitle={_('Statistics Within 30 Seconds')}
@@ -486,6 +489,7 @@ export default class MacStatistic extends React.Component {
                 // options={this.getMacOptions()}
                 value={store.getIn([curScreenId, 'query', 'search'])}
                 onChange={this.onChangeSearchMac}
+                placeholder={_('Complete MAC Address')}
               />
               <FormGroup
                 type="select"

@@ -293,7 +293,6 @@ export default class Advance extends React.Component {
               defaultValue="1400"
               disabled={rtsEnable === '0'}
               value={rts}
-              placeholder={`${_('Range: ')}1 ~ 2347`}
               onChange={(data) => { this.changeFormValue(radioId, 'rts', data.value); }}
               required
               {...validRts}
@@ -320,6 +319,16 @@ export default class Advance extends React.Component {
               {_('Default')}
             </label>
           </span>
+          <span
+            className="fl"
+            style={{
+              marginTop: '12px',
+              marginLeft: '4px',
+              color: '#999',
+            }}
+          >
+            {`${_('Range: ')}1 ~ 2347`}
+          </span>
         </div>
 
         <div className="clearfix">
@@ -332,7 +341,6 @@ export default class Advance extends React.Component {
               max="-10"
               defaultValue="-98"
               disabled={sensEnable === '0'}
-              placeholder={`${_('Range: ')}-98 ~ -10`}
               value={sensThreshold}
               onChange={(data) => { this.changeFormValue(radioId, 'sensThreshold', data.value); }}
               required
@@ -359,6 +367,16 @@ export default class Advance extends React.Component {
               />
               {_('Default')}
             </label>
+          </span>
+          <span
+            className="fl"
+            style={{
+              marginTop: '12px',
+              marginLeft: '4px',
+              color: '#999',
+            }}
+          >
+            {`${_('Range: ')}-98 ~ -10`}
           </span>
         </div>
         {

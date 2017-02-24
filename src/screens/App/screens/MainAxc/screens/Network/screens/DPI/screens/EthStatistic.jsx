@@ -1,13 +1,14 @@
 import React, { PropTypes } from 'react';
-import { fromJS, Map, List } from 'immutable';
+import { fromJS, List } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import utils from 'shared/utils';
 import { colors } from 'shared/config/axc';
 import Select from 'shared/components/Select';
 import Table from 'shared/components/Table';
+import Modal from 'shared/components/Modal';
 import FormInput from 'shared/components/Form/FormInput';
-import EchartReact from 'shared/components/EchartReact';
+// import EchartReact from 'shared/components/EchartReact';
 import AppScreen from 'shared/components/Template/AppScreen';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/screens';
@@ -18,10 +19,10 @@ const propTypes = fromJS({
   initScreen: PropTypes.func,
 });
 
-const flowChartStyle = {
-  width: '100%',
-  minHeight: '300px',
-};
+// const flowChartStyle = {
+//   width: '100%',
+//   minHeight: '300px',
+// };
 
 const msg = {
   days: _('Days'),
@@ -52,28 +53,62 @@ const timeTypeSwitchs = fromJS([
     label: `30 ${msg.days}`,
   },
 ]);
-const interfaceSwitchs = fromJS([
+// const interfaceSwitchs = fromJS([
+//   {
+//     value: 'eth0',
+//     label: 'Eth0',
+//   },
+//   {
+//     value: 'eth1',
+//     label: 'Eth1',
+//   },
+//   {
+//     value: 'eth2',
+//     label: 'Eth2',
+//   },
+//   {
+//     value: 'eth3',
+//     label: 'Eth3',
+//   },
+//   {
+//     value: 'eth4',
+//     label: 'Eth4',
+//   },
+// ]);
+
+const userModalOptions = fromJS([
   {
-    value: 'eth0',
-    label: 'Eth0',
+    id: 'mac',
+    text: 'MAC',
   },
   {
-    value: 'eth1',
-    label: 'Eth1',
+    id: 'ip',
+    text: 'IP',
   },
   {
-    value: 'eth2',
-    label: 'Eth2',
+    id: 'osType',
+    text: _('OS Type'),
   },
   {
-    value: 'eth3',
-    label: 'Eth3',
+    id: 'traffic',
+    text: _('Traffic'),
+    transform(val) {
+      return flowRateFilter.transform(val);
+    },
   },
   {
-    value: 'eth4',
-    label: 'Eth4',
+    id: 'trafficPercent',
+    text: _('Traffic Proportion'),
   },
 ]);
+
+const viewOptions = fromJS([
+  { label: '20', value: '20' },
+  { label: '50', value: '50' },
+  { label: '100', value: '100' },
+  { label: '150', value: '150' },
+]);
+
 
 function getFlowUnit(val) {
   let ret = {};
@@ -264,7 +299,13 @@ export default class EthStatistic extends React.Component {
       'initOptions',
       'onChangeTimeType',
       'onChangeInterface',
+      'onChangePage',
+      'onChangeView',
     ]);
+    this.state = {
+      showModal: false,
+      ethId: '0',
+    };
   }
   componentWillMount() {
     this.initOptions(this.props);
@@ -292,6 +333,15 @@ export default class EthStatistic extends React.Component {
     this.props.fetchScreenData();
   }
 
+  onChangePage(data) {
+    this.props.changeScreenQuery({ page: data });
+    this.props.fetchScreenData();
+  }
+  onChangeView(data) {
+    this.props.changeScreenQuery({ size: data.value });
+    this.props.fetchScreenData();
+  }
+
   initOptions(props) {
     const { store } = props;
     const curScreenId = store.get('curScreenId');
@@ -300,9 +350,8 @@ export default class EthStatistic extends React.Component {
     this.serverData = serverData;
     this.flowOption = getFlowOption(serverData, store.getIn([curScreenId, 'query', 'timeType']));
   }
-
   render() {
-    const flowOption = this.flowOption;
+    // const flowOption = this.flowOption;
     const store = this.props.store;
     const curScreenId = store.get('curScreenId');
     const serverData = store.getIn([curScreenId, 'data']);
@@ -313,6 +362,38 @@ export default class EthStatistic extends React.Component {
       }, {
         id: 'userNum',
         text: _('User Number'),
+        transform: function (val, item) {
+          return (
+            <span
+              style={{
+                width: '100%',
+                color: 'blue',
+                cursor: 'pointer',
+                display: 'inline-block',
+              }}
+              onClick={() => {
+                const ethList = store.getIn([curScreenId, 'data', 'list']);
+                const eth = item.get('ethx_name');
+                const index = ethList.findIndex(listItem => listItem.get('ethx_name') === eth);
+                this.setState({
+                  showModal: true,
+                  ethId: index,
+                });
+                Promise.resolve().then(() => {
+                  this.props.changeScreenQuery({
+                    ethx: `eth${this.state.ethId}`,
+                    page: '1',
+                    size: '20',
+                  });
+                }).then(() => {
+                  this.props.fetchScreenData();
+                });
+              }}
+            >
+              {val || '0'}
+            </span>
+          );
+        }.bind(this),
       }, {
         id: 'application',
         text: _('Application'),
@@ -332,7 +413,8 @@ export default class EthStatistic extends React.Component {
         transform(val) {
           return `${flowRateFilter.transform(val)}/s`;
         },
-      }, {
+      },
+      {
         id: 'active_eth',
         text: _('Active Status'),
         actionName: 'active',
@@ -384,6 +466,52 @@ export default class EthStatistic extends React.Component {
         // listTitle={_('Statistics Within 30 Seconds')}
       >
         <div className="t-overview">
+          <Modal
+            isShow={this.state.showModal}
+            title={`Eth${this.state.ethId} ${_('Clients List')}`}
+            cancelButton={false}
+            size="lg"
+            draggable
+            onOk={() => {
+              this.setState({
+                showModal: false,
+              });
+            }}
+            onClose={() => {
+              this.setState({
+                showModal: false,
+              });
+            }}
+          >
+            <div className="t-overview">
+              <div className="element t-overview__section-header">
+                <span
+                  style={{
+                    marginRight: '5px',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  {_('View')}
+                </span>
+                <FormInput
+                  label={_('View')}
+                  options={viewOptions.toJS()}
+                  type="select"
+                  value={store.getIn([curScreenId, 'query', 'size'])}
+                  onChange={this.onChangeView}
+                />
+              </div>
+              <div className="t-overview__section">
+                <Table
+                  options={userModalOptions}
+                  list={store.getIn([curScreenId, 'data', 'ethxClientList'])}
+                  className="table"
+                  page={store.getIn([curScreenId, 'data', 'page'])}
+                  onPageChange={this.onChangePage}
+                />
+              </div>
+            </div>
+          </Modal>
           <div className="t-overview__section">
             <div className="element t-overview__section-header">
               <h3>
@@ -400,7 +528,7 @@ export default class EthStatistic extends React.Component {
                   onChange={this.onChangeTimeType}
                   clearable={false}
                 />
-                <span
+                {/* <span
                   style={{
                     marginRight: '10px',
                     marginLeft: '20px',
@@ -413,7 +541,7 @@ export default class EthStatistic extends React.Component {
                   value={store.getIn([curScreenId, 'query', 'ethx'])}
                   onChange={this.onChangeInterface}
                   clearable={false}
-                />
+                />*/}
               </h3>
             </div>
           </div>
@@ -432,6 +560,21 @@ export default class EthStatistic extends React.Component {
             />
           </div>
         </div>
+        {/* onRowClick={(e, i) => {
+                this.setState({
+                  showModal: true,
+                  ethId: i,
+                });
+                Promise.resolve().then(() => {
+                  this.props.changeScreenQuery({
+                    ethx: `eth${this.state.ethId}`,
+                    page: '1',
+                    size: '20',
+                  });
+                }).then(() => {
+                  this.props.fetchScreenData();
+                });
+              }}*/}
       </AppScreen>
     );
   }

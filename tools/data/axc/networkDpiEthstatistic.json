@@ -5,6 +5,15 @@
 	"msg":	"ok"
 },
 "data":	{
+  "page": {
+		"startline": "1",
+		"size":	"20",
+		"currPage":	"1",
+		"totalPage": "13",
+		"total": "128",
+		"nextPage":	"3",
+		"lastline":	"10"
+	},
 	"list":	[{
 		"ethx_name": "eth0",
 		"userNum":	"199",
@@ -23,6 +32,15 @@
 		"application":	["DHCP", "UDP", "POP3"],
 		"curRate":	"251",
 		"active_eth": "0"
+	}],
+  "ethxClientList": [{
+		"mac": "11:22:33:44:55:66",
+		"ethx": "eth0",
+		"ip": "192.168.1.1"
+	}, {
+		"mac": "22:22:33:44:55:66",
+		"ethx": "eth0",
+		"ip": "192.168.1.2"
 	}]
 }
 }

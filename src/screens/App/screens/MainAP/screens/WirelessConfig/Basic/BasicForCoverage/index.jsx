@@ -141,7 +141,7 @@ const validOptions = Map({
     rules: 'num:[1, 4094]',
   }),
   validMaxClients: validator({
-    rules: 'num:[1, 50]',
+    rules: 'num:[1, 200]',
   }),
   validUpload: validator({
     rules: 'num:[1, 1000]',
@@ -291,7 +291,7 @@ export default class Basic extends React.Component {
               <FormInput
                 type="number"
                 value={val}
-                max="100"
+                max="1000"
                 min="1"
                 defaultValue="64"
                 // disabled={pos === 0 || vlanEnable === '0'}
@@ -1159,7 +1159,7 @@ export default class Basic extends React.Component {
                                           .setIn([radioId, 'maxRadioClients'], data.value);
                         this.props.updateItemSettings({ radioList });
                       }}
-                      help={`${_('Range: ')}1 ~ 50`}
+                      help={`${_('Range: ')}1 ~ 200`}
                       required
                       {...validMaxClients}
                     />
@@ -1322,6 +1322,7 @@ export default class Basic extends React.Component {
                           help={`${_('Range: ')}1~4094`}
                           min="1"
                           max="4094"
+                          defaultValue="1"
                           form="radioSettings"
                           disabled={vlanEnable === '0'}
                           onChange={(data) => {

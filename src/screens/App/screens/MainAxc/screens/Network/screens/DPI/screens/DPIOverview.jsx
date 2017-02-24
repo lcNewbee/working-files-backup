@@ -50,7 +50,7 @@ function getEchartOptionByName(serverData, listName) {
           case 'ethInterface':
             title = _('Ethernet'); break;
           case 'proto':
-            title = _('Protocols'); break;
+            title = _('Applications'); break;
           case 'mac':
             title = _('MAC'); break;
           default:
@@ -119,13 +119,14 @@ export default class DPIOverview extends React.Component {
 
     utils.binds(this, [
       'onChangeTimeType',
-    ])
+    ]);
   }
 
   onChangeTimeType(data) {
     this.props.changeScreenQuery({ timeType: data.value });
     this.props.fetchScreenData();
   }
+
   render() {
     const curScreenId = this.props.store.get('curScreenId');
     const serverData = this.props.store.getIn([curScreenId, 'data']);
@@ -137,6 +138,9 @@ export default class DPIOverview extends React.Component {
         initOption={{
           isFetchInfinite: true,
           fetchIntervalTime: 10000,
+          query: {
+            timeType: '0',
+          },
         }}
         settingsFormOptions={fromJS([
           {
@@ -169,12 +173,26 @@ export default class DPIOverview extends React.Component {
               </div>
               <div className="t-overview__section row">
                 <div className="cols col-6" >
-                  <div className="element">
-                    <h3>{_('Ethernet')}</h3>
+                  <div className="element clearfix">
+                    <h3 className="fl">{_('MAC')}</h3>
+                    <span
+                      className="fr"
+                      style={{
+                        marginRight: '40px',
+                        cursor: 'pointer',
+                        color: 'blue',
+                        fontSize: '14px',
+                      }}
+                      onClick={() => {
+                        window.location.href = '#/main/network/dpi/macstatistic';
+                      }}
+                    >
+                      {_('More details >>')}
+                    </span>
                   </div>
-                  <div className="element">
+                  <div className="element row">
                     <EchartReact
-                      option={getEchartOptionByName(serverData, 'ethInterface')}
+                      option={getEchartOptionByName(serverData, 'mac')}
                       className="o-box__canvas"
                       style={{
                         width: '100%',
@@ -184,8 +202,22 @@ export default class DPIOverview extends React.Component {
                   </div>
                 </div>
                 <div className="cols col-6">
-                  <div className="element">
-                    <h3>{_('Protocols')}</h3>
+                  <div className="element clearfix">
+                    <h3 className="fl">{_('Applications')}</h3>
+                    <span
+                      className="fr"
+                      style={{
+                        marginRight: '40px',
+                        cursor: 'pointer',
+                        color: 'blue',
+                        fontSize: '14px',
+                      }}
+                      onClick={() => {
+                        window.location.href = '#/main/network/dpi/protoinfo';
+                      }}
+                    >
+                      {_('More details >>')}
+                    </span>
                   </div>
                   <div className="element">
                     <EchartReact
@@ -202,12 +234,26 @@ export default class DPIOverview extends React.Component {
 
               <div className="t-overview__section row">
                 <div className="cols col-6" >
-                  <div className="element">
-                    <h3>{_('MAC')}</h3>
+                  <div className="element clearfix">
+                    <h3 className="fl">{_('Ethernet')}</h3>
+                    <span
+                      className="fr"
+                      style={{
+                        marginRight: '40px',
+                        cursor: 'pointer',
+                        color: 'blue',
+                        fontSize: '14px',
+                      }}
+                      onClick={() => {
+                        window.location.href = '#/main/network/dpi/ethstatistic';
+                      }}
+                    >
+                      {_('More details >>')}
+                    </span>
                   </div>
-                  <div className="element row">
+                  <div className="element">
                     <EchartReact
-                      option={getEchartOptionByName(serverData, 'mac')}
+                      option={getEchartOptionByName(serverData, 'ethInterface')}
                       className="o-box__canvas"
                       style={{
                         width: '100%',

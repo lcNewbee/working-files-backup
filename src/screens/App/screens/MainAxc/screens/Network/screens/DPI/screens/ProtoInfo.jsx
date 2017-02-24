@@ -6,6 +6,7 @@ import utils from 'shared/utils';
 import AppScreen from 'shared/components/Template/AppScreen';
 import Select from 'shared/components/Select';
 import Table from 'shared/components/Table';
+import Modal from 'shared/components/Modal';
 import { FormGroup, FormInput } from 'shared/components/Form';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/screens';
@@ -45,25 +46,6 @@ const timeTypeSwitchs = fromJS([
   },
 ]);
 
-const listOptions = fromJS([
-  {
-    id: 'attr_name',
-    text: _('Application'),
-  }, {
-    id: 'userNum',
-    text: _('User Number'),
-  }, {
-    id: 'curRate',
-    text: _('Current Rate'),
-    transform(val) {
-      return `${flowRateFilter.transform(val)}/s`;
-    },
-  }, {
-    id: 'trafficPercent',
-    text: _('Proportion'),
-  },
-]);
-
 const viewOptions = fromJS([
   { label: '20', value: '20' },
   { label: '50', value: '50' },
@@ -71,6 +53,34 @@ const viewOptions = fromJS([
   { label: '150', value: '150' },
 ]);
 
+const userModalOptions = fromJS([
+  {
+    id: 'mac',
+    text: 'MAC',
+  },
+  {
+    id: 'ip',
+    text: 'IP',
+  },
+  {
+    id: 'ethx_name',
+    text: _('Ethernet'),
+  },
+  {
+    id: 'osType',
+    text: _('OS Type'),
+  },
+  {
+    id: 'traffic',
+    text: 'Traffic',
+    transform(val) {
+      return flowRateFilter.transform(val);
+    },
+  }, {
+    id: 'trafficPercent',
+    text: 'Traffic Proportion',
+  },
+]);
 
 export default class ProtoInfo extends React.Component {
   constructor(props) {
@@ -81,7 +91,13 @@ export default class ProtoInfo extends React.Component {
       'onChangeTimeType',
       'onChangePage',
       'onChangeView',
+      'onChangeModalPage',
+      'onChangeModalView',
     ]);
+    this.state = {
+      showModal: false,
+      userModalOptions,
+    };
   }
 
   componentWillMount() {
@@ -106,8 +122,17 @@ export default class ProtoInfo extends React.Component {
     this.props.fetchScreenData();
   }
 
+  onChangeModalView(data) {
+    this.props.changeScreenQuery({ modalSize: data.value });
+    this.props.fetchScreenData();
+  }
+
   onChangePage(data) {
     this.props.changeScreenQuery({ page: data });
+    this.props.fetchScreenData();
+  }
+  onChangeModalPage(data) {
+    this.props.changeScreenQuery({ modalPage: data });
     this.props.fetchScreenData();
   }
 
@@ -123,6 +148,57 @@ export default class ProtoInfo extends React.Component {
   render() {
     const store = this.props.store;
     const curScreenId = store.get('curScreenId');
+    const listOptions = fromJS([
+      {
+        id: 'attr_name',
+        text: _('Application'),
+      }, {
+        id: 'userNum',
+        text: _('User Number'),
+        transform: function (val, item) {
+          return (
+            <span
+              style={{
+                width: '100%',
+                color: 'blue',
+                cursor: 'pointer',
+                display: 'inline-block',
+              }}
+              onClick={() => {
+                // 找到traffic在options中的位置，然后改变traffic的text属性
+                const optionsIndex = this.state.userModalOptions.findIndex(name => name.get('id') === 'traffic');
+                const options = this.state.userModalOptions.setIn([optionsIndex, 'text'], `${item.get('attr_name')} ${_('Traffic')}`);
+                this.setState({
+                  showModal: true,
+                  userModalOptions: options,
+                });
+                Promise.resolve().then(() => {
+                  this.props.changeScreenQuery({
+                    modalPage: '1',
+                    modalSize: '20',
+                    proto: item.get('attr_name'),
+                  });
+                }).then(() => {
+                  this.props.fetchScreenData();
+                });
+              }}
+            >
+              {val || '0'}
+            </span>
+          );
+        }.bind(this),
+      }, {
+        id: 'curRate',
+        text: _('Current Rate'),
+        transform(val) {
+          return `${flowRateFilter.transform(val)}/s`;
+        },
+      }, {
+        id: 'trafficPercent',
+        text: _('Proportion'),
+      },
+    ]);
+
 
     return (
       <div>
@@ -132,10 +208,61 @@ export default class ProtoInfo extends React.Component {
           initOption={{
             isFetchInfinite: true,
             fetchIntervalTime: 5000,
+            query: {
+              timeType: '0',
+              size: '50',
+              page: '1',
+            },
           }}
           // listTitle={_('Statistics Within 30 Seconds')}
         >
           <div className="t-overview">
+            <Modal
+              isShow={this.state.showModal}
+              title={`${_('Clients List')}`}
+              cancelButton={false}
+              draggable
+              size="lg"
+              onOk={() => {
+                this.setState({
+                  showModal: false,
+                });
+              }}
+              onClose={() => {
+                this.setState({
+                  showModal: false,
+                });
+              }}
+            >
+              <div className="t-overview">
+                <div className="element t-overview__section-header">
+                  <span
+                    style={{
+                      marginRight: '5px',
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    {_('View')}
+                  </span>
+                  <FormInput
+                    label={_('View')}
+                    options={viewOptions.toJS()}
+                    type="select"
+                    value={store.getIn([curScreenId, 'query', 'modalSize'])}
+                    onChange={this.onChangeModalView}
+                  />
+                </div>
+                <div className="t-overview__section">
+                  <Table
+                    options={this.state.userModalOptions}
+                    list={store.getIn([curScreenId, 'data', 'protoClientList'])}
+                    className="table"
+                    page={store.getIn([curScreenId, 'data', 'clientPage'])}
+                    onPageChange={this.onChangeModalPage}
+                  />
+                </div>
+              </div>
+            </Modal>
             <div className="element t-overview__section-header">
               <h3>
                 <span
