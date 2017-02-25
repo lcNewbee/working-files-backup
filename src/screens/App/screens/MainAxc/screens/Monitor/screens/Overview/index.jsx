@@ -39,13 +39,17 @@ const timeTypeSwitchs = fromJS([
 ]);
 const ssidTableOptions = fromJS([
   {
+    id: 'time',
+    text: _('Time'),
+    width: '20%',
+  }, {
     id: 'mac',
     text: _('MAC'),
-    width: '30%',
+    width: '20%',
   }, {
     id: 'ssid',
     text: _('SSID'),
-    width: '30%',
+    width: '20%',
   }, {
     id: 'channel',
     text: _('Channel'),

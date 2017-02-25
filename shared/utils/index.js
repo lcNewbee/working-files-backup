@@ -14,6 +14,7 @@ utils.extend({
   filter: require('./lib/filter'),
   dom: require('./lib/dom'),
   immutableUtils: require('./lib/immutable'),
+  inputFormat: require('./lib/inputFormat'),
 });
 
 // exports

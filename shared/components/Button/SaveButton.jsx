@@ -27,7 +27,6 @@ class SaveButton extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // console.log('loading', nextProps.loading);
     if (this.props.loading && !nextProps.loading) {
       this.setState({
         status: 'ok',
