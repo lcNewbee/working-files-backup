@@ -135,13 +135,17 @@ $route['goform/portal/access/weixin'] = 'portal/AccessWeixin';
 $route['goform/portal/access/defaultweb'] = 'portal/AccessDefault';
 $route['goform/portal/access/download'] = 'portal/AccessDefault/download';
 $route['goform/portal/access/upload'] = 'portal/AccessDefault/upload';
-
-
 $route['goform/portal/system/user'] = 'portal/systemUser';
 $route['goform/portal/system/role'] = 'portal/systemRole';
 $route['goform/portal/system/classification'] = 'portal/systemClassify';
-
 $route['goform/portal/log/logList'] = 'portal/logList';
 $route['goform/portal/log/onlineList'] = 'portal/onlineList';
 $route['goform/portal/log/onlineRecordList'] = 'portal/onlineRecordList';
+
+$route['goform/portal/card/cardlist'] = 'portal/cardList';
+$route['goform/portal/card/cardcategory'] = 'portal/cateGory';
+$route['goform/portal/message/receive'] = 'portal/messageReceive';
+$route['goform/portal/message/send'] = 'portal/messageSend';
+$route['goform/portal/message/sendmessage'] = 'portal/messageAdd';
+
 

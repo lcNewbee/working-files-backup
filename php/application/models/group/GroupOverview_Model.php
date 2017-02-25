@@ -64,6 +64,7 @@ class GroupOverview_Model extends CI_Model {
             $temporaryAry = array();
             if(count($result)){
                 foreach ($result as $row) {
+                    $temporaryAry['time'] = $row['Timer'];
                     $temporaryAry['mac'] = $row['NbrMac'];
                     $temporaryAry['ssid'] = $row['NbrSsid'];
                     $temporaryAry['channel'] = $row['ChlNum'];

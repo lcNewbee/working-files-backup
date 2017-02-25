@@ -77,7 +77,7 @@ class WirelessSsid_Model extends CI_Model {
             'groupid' => (int)element('groupid', $oriData),
             'ssid' => element('ssid', $oriData),
             'remark' => element('remark', $oriData),
-            'vlanid' => (int)element('vlanid', $oriData, 0),
+            'vlanid' => (int)element('vlanId', $oriData, 0),
             'enabled' => (int)element('enabled', $oriData),
             'maxBssUsers' => (int)element('maxBssUsers', $oriData),
             'loadBalanceType' => (int)element('loadBalanceType', $oriData),

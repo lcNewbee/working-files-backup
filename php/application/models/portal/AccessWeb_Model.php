@@ -3,7 +3,8 @@ class AccessWeb_Model extends CI_Model {
     public function __construct() {
         parent::__construct();
         $this->portalsql = $this->load->database('mysqlportal', TRUE);
-        $this->load->helper(array('array', 'my_customfun_helper'));		
+        $this->load->helper(array('array', 'my_customfun_helper'));	
+        $this->load->library('PHPZip');        	
     }
     function get_list($data) {   		
         $columns = 'portal_web.id,portal_web.name,portal_web.countShow,portal_web.countAuth,portal_web.description,adv_adv.name as adv';
@@ -52,7 +53,7 @@ class AccessWeb_Model extends CI_Model {
     }
     function Add($data) {
         $result = FALSE;
-        //上传        
+        //1.上传
         if( !is_dir('/var/conf/portalserver') ){
             //创建并赋予权限
             mkdir('/var/conf/portalserver');
@@ -60,8 +61,24 @@ class AccessWeb_Model extends CI_Model {
         }        
         $upload_data=$this->do_upload();
         if($upload_data['state']['code']==2000){
+            //2.写数据库
             $arr = $this->getPram($data);
             $result = $this->portalsql->insert('portal_web', $arr);
+            //3.生产新文件,并解压上传文件
+            $add_id = $this->portalsql->insert_id();
+            if($add_id > 0){
+                $filepath = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/'.$add_id;
+                if( !file_exists($filepath) ){
+                    mkdir($filepath);
+                    chmod($filepath,0777);
+                    $zip = new PHPZip();                
+                    $pathfile = "/var/conf/portalserver/portal_web_tmp.zip"; //需解压文件
+                    $targetpath = $filepath;//解压地址                                               
+                    if(!$zip->Zip_Decompression($pathfile,$targetpath)){
+                        $result = 0;//解压错误
+                    }
+                }
+            }
         }             
         $result = $result ? json_ok() : json_no('insert error');
         return json_encode($result);
@@ -74,7 +91,8 @@ class AccessWeb_Model extends CI_Model {
             $result = $this->portalsql->delete('portal_web');
             //delete file						
             if($result) {
-                unlink('/var/conf/portalserver/portal_web_tmp.zip');				
+                $this->deldir('/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/'.$row['id']);
+                //unlink('/var/conf/portalserver/portal_web_tmp.zip');				
             }
         }     
         $result = $result ? json_ok() : json_no('delete error');
@@ -82,11 +100,30 @@ class AccessWeb_Model extends CI_Model {
     }
     function Edit($data) {
         $result = null;
-         $upload_data=$this->do_upload();
+        //1.上传
+        if( !is_dir('/var/conf/portalserver') ){
+            //创建并赋予权限
+            mkdir('/var/conf/portalserver');
+            chmod('/var/conf/portalserver',0777);														
+        } 
+        $upload_data=$this->do_upload();
         if($upload_data['state']['code']==2000){
+            //2.操作数据库
             $arr = $this->getPram($data);
             $arr['id'] = element('id',$data);
             $result = $this->portalsql->replace('portal_web', $arr);
+            if($result){
+                //解压
+                $filepath = '/usr/web/apache-tomcat-7.0.73/project/AxilspotPortal/'.$data['id'];
+                if( file_exists($filepath) ){                    
+                    $zip = new PHPZip();                
+                    $pathfile = "/var/conf/portalserver/portal_web_tmp.zip"; //需解压文件
+                    $targetpath = $filepath;//解压地址                                               
+                    if(!$zip->Zip_Decompression($pathfile,$targetpath)){
+                        $result = 0;//解压错误
+                    }
+                }
+            }
         }        
         $result = $result ? json_ok() : json_no('update error');
         return json_encode($result);
@@ -111,5 +148,26 @@ class AccessWeb_Model extends CI_Model {
             )
         );        
         return json_encode($arr);
+    }
+    function deldir($dir) {
+        //先删除目录下的文件：
+        $dh=opendir($dir);
+        while ($file=readdir($dh)) {
+            if($file!="." && $file!="..") {
+                $fullpath=$dir."/".$file;
+                if(!is_dir($fullpath)) {
+                    unlink($fullpath);
+                } else {
+                    $this->deldir($fullpath);
+                }
+            }
+        }        
+        closedir($dh);
+        //删除当前文件夹：
+        if(rmdir($dir)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
