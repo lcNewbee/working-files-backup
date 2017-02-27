@@ -119,6 +119,7 @@ export default class NetworkInterface extends React.Component {
         onBeforeSync={this.onBeforeSync}
         editFormId="port"
         listKey="allKeys"
+        maxListSize="24"
         deleteable={
           ($$item, index) => (index !== 0)
         }

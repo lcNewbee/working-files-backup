@@ -205,6 +205,7 @@ export default class View extends React.Component {
         store={store}
         listKey="template_name"
         listOptions={curListOptions}
+        maxListSize="6"
         actionable
         selectable
         noTitle

@@ -151,6 +151,7 @@ export default class View extends React.Component {
         {...this.props}
         listKey="domain_name"
         listOptions={myListOptions}
+        maxListSize="16"
         actionable
         selectable
       />

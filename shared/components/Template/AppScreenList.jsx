@@ -23,6 +23,9 @@ const propTypes = {
 
   // 用于配置 list表格主键，用于Ajax保存
   listKey: PropTypes.string,
+  maxListSize: PropTypes.oneOfType([
+    PropTypes.string, PropTypes.number,
+  ]),
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
   tableOptions: PropTypes.oneOfType([
@@ -100,6 +103,7 @@ const defaultProps = {
       alert(option.text);
     }
   },
+  maxListSize: 999999,
 };
 
 // 原生的 react 页面
@@ -729,13 +733,16 @@ class AppScreenList extends React.PureComponent {
       store, app, fetchUrl,
       selectable, deleteable, searchable, addable, actionable,
       defaultEditData, editFormId, queryFormOptions, actionBarButtons,
-      actionBarChildren,
+      actionBarChildren, maxListSize,
     } = this.props;
     const page = store.getIn(['data', 'page']);
+    const $$curList = store.getIn(['data', 'list']) || List([]);
     const query = store.getIn(['query']);
     const leftChildrenNode = [];
+    const totalListItem = store.getIn(['data', 'page', 'total']) || $$curList.size;
     let $$curActionBarButtons = actionBarButtons;
     let rightChildrenNode = null;
+
 
     // 处理列表操作相关按钮
     if (actionable) {
@@ -748,7 +755,15 @@ class AppScreenList extends React.PureComponent {
             theme="primary"
             text={_('Add')}
             onClick={() => {
-              this.props.addListItem(defaultEditData);
+              if (totalListItem < parseInt(maxListSize, 10)) {
+                this.props.addListItem(defaultEditData);
+              } else {
+                this.props.createModal({
+                  id: 'addListItem',
+                  role: 'alert',
+                  text: _('Can not add more, max list size is %s', maxListSize),
+                });
+              }
             }}
           />,
         );

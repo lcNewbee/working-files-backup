@@ -171,6 +171,7 @@ export default class View extends React.Component {
         editFormOptions={editFormOptions}
         onBeforeSync={this.onBeforeSync}
         listKey="name"
+        maxListSize="32"
         actionable
         selectable
       />

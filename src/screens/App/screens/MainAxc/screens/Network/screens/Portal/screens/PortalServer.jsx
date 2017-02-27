@@ -120,6 +120,7 @@ export default class View extends React.Component {
         {...this.props}
         listKey="template_name"
         listOptions={listOptions}
+        maxListSize="16"
         actionable
         selectable
         noTitle
