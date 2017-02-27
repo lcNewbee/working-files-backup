@@ -101,7 +101,7 @@ const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
 
-  route: PropTypes.object,
+  changeLoginStatus: PropTypes.func.isRequired,
   updateCurEditListItem: PropTypes.func,
 };
 const defaultProps = {};
@@ -112,6 +112,7 @@ export default class View extends React.Component {
 
     utils.binds(this, [
       'onBeforeSave',
+      'onAfterSync',
     ]);
   }
 
@@ -137,6 +138,15 @@ export default class View extends React.Component {
 
     return ret;
   }
+  onAfterSync(option) {
+    const editUsername = option.subData.userName;
+    const loginUsername = this.props.app.getIn(['login', 'username']);
+
+    if (option.subData.action === 'edit' && editUsername === loginUsername) {
+      this.props.changeLoginStatus('0');
+      window.location.hash = '#';
+    }
+  }
 
   render() {
     const { app } = this.props;
@@ -152,6 +162,7 @@ export default class View extends React.Component {
           ($$item, index) => (index !== 0)
         }
         onBeforeSave={this.onBeforeSave}
+        onAfterSync={this.onAfterSync}
       />
     );
   }
