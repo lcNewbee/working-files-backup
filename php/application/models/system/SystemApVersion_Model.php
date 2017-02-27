@@ -52,6 +52,7 @@ class SystemApVersion_Model extends CI_Model {
     function do_upload() {
         $config['upload_path'] = '/etc/Ap_ver';
         $config['overwrite'] = true;
+        $config['encrypt_name'] = true;
         $config['max_size'] = 0;
         $config['allowed_types'] = '*';
         $this->load->library('upload', $config);
@@ -81,8 +82,8 @@ class SystemApVersion_Model extends CI_Model {
     }
     function add_apversion($data) {
         $result = null;
-        $diskAry = $this->get_disk_info();
-        if ($diskAry['3'] > 0) {
+        $diskAry = $this->get_disk_info();        
+        if ($diskAry['3'] == 0) {
             $result = array(
                 'state' => array(
                     'code' => 6301,
@@ -121,13 +122,14 @@ class SystemApVersion_Model extends CI_Model {
     }
     function up_apversion($data) {
         $result = null;
-        $upload_data = $this->do_upload();
-        // 上传了文件，修改版本文件
+        $upload_data = $this->do_upload();        
         if ($upload_data['state']['code'] == 2000) {
+            // 上传了文件，修改版本文件            
             $filename = $this->upload->data('file_name');
             $filepath = $this->upload->data('full_path');
-            // 没有修改版本文件            
+            unlink($data['uploadPath']);//del file
         } else {
+            // 没有修改版本文件            
             $filename = element('fileNameText', $data);
             $filepath = element('uploadPath', $data);
         }
@@ -144,9 +146,9 @@ class SystemApVersion_Model extends CI_Model {
         $result->file = $upload_data;
         $result->retData = $retData;
         $result = json_encode($result);
-        //log
+        //log + del
         $cgiObj = json_decode($result);
-        if (is_object($cgiObj) && $cgiObj->state->code === 2000) {
+        if (is_object($cgiObj) && $cgiObj->state->code === 2000) {            
             $logary = array(
                 'type' => 'Update',
                 'operator' => element('username', $_SESSION, '') ,
@@ -165,8 +167,8 @@ class SystemApVersion_Model extends CI_Model {
                 'model' => element('model', $item) ,
                 'sfver' => element('softVersion', $item) ,
             );
-            $result = axc_del_apfirmware(json_encode($deleteItem));
-            unlink('/etc/Ap_ver/' . $deleteItem['sfver']);
+            $result = axc_del_apfirmware(json_encode($deleteItem));            
+            unlink($item['uploadPath']);
         }
         return $result;
     }
@@ -185,16 +187,13 @@ class SystemApVersion_Model extends CI_Model {
     }
     private function get_disk_info() {
         $result = array();
-        $fp = popen('df | grep -w "/etc/Ap_ver"', "r");
+        $fp = popen("df | grep -w '/etc/Ap_ver' |awk '{print $1,$2,$3,$4,$5,$6}'", "r");	
         $rs = "";
         while (!feof($fp)) {
             $rs.= fread($fp, 1024);
         }
-        $arr = explode(" ", $rs);
-        foreach ($arr as $k => $v) {
-            if ($v) {
-                $result[] = $v;
-            }
+        if($rs){
+            $result = explode(" ", $rs);
         }
         return $result;
     }
