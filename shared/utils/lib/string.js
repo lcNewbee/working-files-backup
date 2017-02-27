@@ -111,13 +111,62 @@ function removeClassName(oldClassNames, removeClassNameStr) {
   return trim(newClassName.join(' '));
 }
 
-coreUtils.extend(str, {
+function changeMaskNumberToIp(num) {
+  var ret = [];
+  var len = 0;
+  var prifex = 0;
+  var prifexVal;
+  var i, j;
+
+  if (!num) {
+    return '';
+  }
+
+  len = parseInt(num / 8, 10)
+  prifexVal = num % 8;
+  if (prifexVal) {
+    prifexVal = '';
+    for (j = 0; j < 8; j += 1) {
+      if (j < prifex) {
+        prifexVal += '1';
+      } else {
+        prifexVal += '0';
+      }
+    }
+    prifexVal = parseInt(prifexVal, 2);
+  }
+
+  for (i = 0; i < 4; i += 1) {
+    if (i < len) {
+      ret.push('255');
+    } else if (i === len && prifexVal) {
+      ret.push(prifexVal);
+    } else {
+      ret.push('0');
+    }
+  }
+
+  return ret.join('.');
+}
+function getMaskFormIpSegment(ipSegment) {
+  var ret = '0.0.0.0';
+
+  if (typeof ipSegment === 'string') {
+    ret = changeMaskNumberToIp(ipSegment.split('/')[1]);
+  }
+
+  return ret;
+}
+
+str = {
   trim: String.prototype.trim || trim,
   isAscii: isAscii,
   isInteger: isInteger,
   isNumber: isNumber,
   addClassName: addClassName,
   removeClassName: removeClassName,
+  changeMaskNumberToIp: changeMaskNumberToIp,
+  getMaskFormIpSegment: getMaskFormIpSegment,
 
   prefixInteger: function(num, length) {
     var ret = '';
@@ -189,7 +238,7 @@ coreUtils.extend(str, {
 
     return ret;
   }
-});
+};
 
 // exports
 if (typeof module === "object" && typeof module.exports === "object" ) {

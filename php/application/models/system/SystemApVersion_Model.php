@@ -82,7 +82,7 @@ class SystemApVersion_Model extends CI_Model {
     }
     function add_apversion($data) {
         $result = null;
-        $diskAry = $this->get_disk_info();        
+        $diskAry = $this->get_disk_info();
         if ($diskAry['3'] == 0) {
             $result = array(
                 'state' => array(
@@ -117,19 +117,21 @@ class SystemApVersion_Model extends CI_Model {
                 );
                 Log_Record($this->db, $logary);
             }
+        } else {
+          $result = json_encode($upload_data);
         }
         return $result;
     }
     function up_apversion($data) {
         $result = null;
-        $upload_data = $this->do_upload();        
+        $upload_data = $this->do_upload();
         if ($upload_data['state']['code'] == 2000) {
-            // 上传了文件，修改版本文件            
+            // 上传了文件，修改版本文件
             $filename = $this->upload->data('file_name');
             $filepath = $this->upload->data('full_path');
             unlink($data['uploadPath']);//del file
         } else {
-            // 没有修改版本文件            
+            // 没有修改版本文件
             $filename = element('fileNameText', $data);
             $filepath = element('uploadPath', $data);
         }
@@ -148,7 +150,7 @@ class SystemApVersion_Model extends CI_Model {
         $result = json_encode($result);
         //log + del
         $cgiObj = json_decode($result);
-        if (is_object($cgiObj) && $cgiObj->state->code === 2000) {            
+        if (is_object($cgiObj) && $cgiObj->state->code === 2000) {
             $logary = array(
                 'type' => 'Update',
                 'operator' => element('username', $_SESSION, '') ,
@@ -167,7 +169,7 @@ class SystemApVersion_Model extends CI_Model {
                 'model' => element('model', $item) ,
                 'sfver' => element('softVersion', $item) ,
             );
-            $result = axc_del_apfirmware(json_encode($deleteItem));            
+            $result = axc_del_apfirmware(json_encode($deleteItem));
             unlink($item['uploadPath']);
         }
         return $result;
@@ -187,7 +189,7 @@ class SystemApVersion_Model extends CI_Model {
     }
     private function get_disk_info() {
         $result = array();
-        $fp = popen("df | grep -w '/etc/Ap_ver' |awk '{print $1,$2,$3,$4,$5,$6}'", "r");	
+        $fp = popen("df | grep -w '/etc/Ap_ver' |awk '{print $1,$2,$3,$4,$5,$6}'", "r");
         $rs = "";
         while (!feof($fp)) {
             $rs.= fread($fp, 1024);
@@ -196,6 +198,7 @@ class SystemApVersion_Model extends CI_Model {
             $result = explode(" ", $rs);
         }
         return $result;
+
     }
 }
 

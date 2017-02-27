@@ -21,6 +21,7 @@ const ERROR_MSG_MAP = {
   6300: _('Pelect upload the correct firmware file'),
 
   // AXC: Portal 6400 - 6499
+  6301: _('Upload the firmware file error'),
   6401: _('Fail to send message'),
 };
 

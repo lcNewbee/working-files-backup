@@ -55,7 +55,7 @@ const listOptions = fromJS([
       validator: validator({
         rules: 'ipSegment',
       }),
-      help: _('e.g. %s', '192.168.100.12/24'),
+      help: _('e.g. %s', '192.168.1.0/24'),
     },
   }, {
     id: 'conversionAddress',
@@ -69,19 +69,17 @@ const listOptions = fromJS([
   },
 ]);
 
-const propTypes = {
-  save: PropTypes.func,
-};
+const propTypes = {};
 const defaultProps = {};
 
 export default class View extends React.Component {
   constructor(props) {
     super(props);
-    this.onSave = this.onSave.bind(this);
+    utils.binds(this, [
+      'onBeforeSync',
+    ]);
   }
-  onSave() {
-    this.props.save();
-  }
+
   render() {
     return (
       <AppScreen
@@ -90,6 +88,7 @@ export default class View extends React.Component {
         listKey="allKeys"
         settingsFormOptions={commonFormOptions}
         listOptions={listOptions}
+        onBeforeSync={this.onBeforeSync}
         noTitle
         actionable
         selectable

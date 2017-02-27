@@ -193,4 +193,20 @@ describe('utils string', () => {
       expect(removeClassName('class1 ', 'class1')).toBe('');
     });
   });
+
+  describe('#changeMaskNumberToIp', () => {
+    const changeMaskNumberToIp = stringUtils.changeMaskNumberToIp;
+
+    it('should has correct length', () => {
+      expect(changeMaskNumberToIp.length).toBe(1);
+    });
+
+    it('should change correct when number is i', () => {
+      expect(changeMaskNumberToIp(32)).toBe('255.255.255.255');
+      expect(changeMaskNumberToIp(24)).toBe('255.255.255.0');
+    });
+    it('should change correct when number is 2', () => {
+      expect(changeMaskNumberToIp(30)).toBe('255.255.255.252');
+    });
+  });
 });

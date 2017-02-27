@@ -633,5 +633,6 @@
   "Proportion": "流量占比",
   "User Number": "用户数",
   "Current": "当前",
-  "Clients List": "客户端列表"
+  "Clients List": "客户端列表",
+  "Upload the firmware file error": "上传版本文件错误"
 }

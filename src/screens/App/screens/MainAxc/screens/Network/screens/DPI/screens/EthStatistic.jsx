@@ -200,7 +200,7 @@ function getFlowOption(serverData, timeType) {
       type: 'value',
       name: _('KB'),
       splitNumber: 5,
-      min: 0,
+      min: '0',
       axisLabel: {
         formatter: '{value}',
       },

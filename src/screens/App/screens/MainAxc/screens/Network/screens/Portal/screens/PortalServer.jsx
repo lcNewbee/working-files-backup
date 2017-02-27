@@ -71,9 +71,8 @@ const listOptions = fromJS([
     id: 'server_port',
     label: _('Server Port'),
     formProps: {
-      min: 1,
-      max: 65535,
-      type: 'number',
+      min: '1',
+      max: '65535',
       required: true,
     },
   }, {
