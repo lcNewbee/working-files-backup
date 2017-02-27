@@ -58,8 +58,8 @@ class SystemVersion extends CI_Controller {
             $msg = 'ok';
             $result['state']['msg'] = $msg;
             $msg = shell_exec('sysupgrade -f /etc/Ac_ver/' . $filename);
-            $needle = 'sysupgrade success';
-            if (strpos($msg, $needle) === FALSE) {
+            $needle = 'sysupgrade fail';
+            if (strpos($msg, $needle)) {
                 $result['state']['code'] = 6300;
                 $result['state']['msg'] = 'Firmware error upgrade failed';
             }

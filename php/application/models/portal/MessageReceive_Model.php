@@ -40,7 +40,7 @@ class MessageReceive_Model extends CI_Model {
             'ip' => $_SERVER['SERVER_ADDR'],// 发送者ip
             'fromPos' => 0,// 发送者类型
             'fromid' => 1,// 发送者id 暂且默认写admin ID
-            'fromname' => 'admin',// 发送者名称            
+            'fromname' => 'admin',// 发送者名称
             'toid' => $toid,//element('toId',$data,''),//接收者id
             'toPos' => 1,// 接收者类型，0-系统用户，1-接入用户
             'toname' => element('toname',$data,''),// 接收者名称            

@@ -151,3 +151,10 @@ $route['goform/portal/advertisement/stores'] = 'portal/advStores';
 $route['goform/portal/advertisement/adv'] = 'portal/advManagement';
 
 
+$route['goform/portal/card/cardlist'] = 'portal/cardList';
+$route['goform/portal/card/cardcategory'] = 'portal/cateGory';
+$route['goform/portal/message/receive'] = 'portal/messageReceive';
+$route['goform/portal/message/send'] = 'portal/messageSend';
+$route['goform/portal/message/sendmessage'] = 'portal/messageAdd';
+
+
