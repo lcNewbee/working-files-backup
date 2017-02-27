@@ -149,8 +149,8 @@ class DpiEth_Model extends CI_Model {
             $macAry = array();
             foreach($dataary['data']['list'] as $row){
                 $row['application'] =  explode('/',$row['detected_protos']);
-                //$row['trafficPercent'] = 'test';
-                $row['curRate'] = $this->get_ethbytes_mac($cgiarr,$row['mac']);
+                $row['trafficPercent'] = $this->get_ethbytes_mac($cgiarr,$row['mac'])['mac_sum_need'];
+                $row['curRate'] = $this->get_ethbytes_mac($cgiarr,$row['mac'])['mac_speed'];
                 $macAry[] = $row;
             }            
             $result['data'] = $macAry;
@@ -159,7 +159,10 @@ class DpiEth_Model extends CI_Model {
     }
     //mac 获取速率
     private function get_ethbytes_mac($data,$mac){
-        $result = 0;
+        $result = array(
+            'mac_speed'=>0,
+            'mac_sum_need'=>0
+        );
         $cgiary = array(
             'time'=>element('time',$data),
             'page'=>element('page',$data),
@@ -170,7 +173,8 @@ class DpiEth_Model extends CI_Model {
         $cgidata = json_decode($cgistr,true);
         if(is_array($cgidata) && $cgidata['state']['code'] === 2000){
             if(count($cgidata['data']['list']) > 0){
-                $result = $cgidata['data']['list'][0]['mac_speed'];
+                $result['mac_speed'] = $cgidata['data']['list'][0]['mac_speed'];
+                $result['mac_sum_need'] = intval( ((int)$cgidata['data']['list'][0]['mac_sum_need'] / (int)$cgidata['data']['total_msg']['sum_all_flow_statics'])*100);
             }
         }
         return $result;

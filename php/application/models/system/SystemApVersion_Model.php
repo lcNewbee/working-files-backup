@@ -56,7 +56,7 @@ class SystemApVersion_Model extends CI_Model {
 			$error = array('error' => $this->upload->display_errors());
 			$result = array(
 			                'state'=>array(
-			                    'code'=>4000,
+			                    'code'=>6301,
 			                    'msg'=>$error
 			                )
 			            );
@@ -158,6 +158,7 @@ class SystemApVersion_Model extends CI_Model {
 			              'sfver'=>element('softVersion', $item),
 			          );
 			$result=axc_del_apfirmware(json_encode($deleteItem));
+			unlink('/etc/Ap_ver/'.$deleteItem['sfver']);
 		}
 		return $result;
 	}
