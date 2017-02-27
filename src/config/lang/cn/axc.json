@@ -639,5 +639,6 @@
   "Same IP address(%s) item already exists": "已存在相同IP地址(%s)的项",
   "Same %s item already exists": "已存在相同%s的项",
   "segment": "网段",
-  "Max list size is %s": "列表最多能添加%s项"
+  "Max list size is %s": "列表最多能添加%s项",
+  "In process of synchronized on the AP....": "正在同步配置到AP..."
 }

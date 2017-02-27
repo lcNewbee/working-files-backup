@@ -108,12 +108,20 @@ class PropertyPanel extends React.Component {
         });
       }
     }
-
     this.props.save(formUrl, $$subData.toJS())
       .then((json) => {
         if (json.state && json.state.code === 2000) {
-          this.props.fetchPropertyPanelData(query);
-          this.props.refreshAll();
+          this.props.createModal({
+            role: 'loading',
+            title: '',
+            loadingStep: 50,
+            loadingTitle: _('In process of synchronized on the AP....'),
+            onLoaded: () => {
+              this.props.closeModal();
+              this.props.fetchPropertyPanelData(query);
+              this.props.refreshAll();
+            },
+          });
         }
       });
   }

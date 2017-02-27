@@ -36,9 +36,6 @@ const listOptions = fromJS([
     id: 'terminalType',
     text: _('OS'),
   }, {
-    id: 'type',
-    text: _('User Type'),
-  }, {
     id: 'ssid',
     text: 'SSID',
   }, {
