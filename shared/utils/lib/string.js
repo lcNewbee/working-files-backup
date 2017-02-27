@@ -118,13 +118,14 @@ function changeMaskNumberToIp(num) {
   var prifexVal;
   var i, j;
 
-  if (!num) {
-    return '';
+  if (typeof num !== 'string' && typeof num !== 'number') {
+    return;
   }
 
   len = parseInt(num / 8, 10)
-  prifexVal = num % 8;
-  if (prifexVal) {
+  prifex = num % 8;
+
+  if (prifex) {
     prifexVal = '';
     for (j = 0; j < 8; j += 1) {
       if (j < prifex) {

@@ -201,11 +201,16 @@ describe('utils string', () => {
       expect(changeMaskNumberToIp.length).toBe(1);
     });
 
-    it('should change correct when number is i', () => {
+    it('should return undefined then param is not num or number string', () => {
+      expect(changeMaskNumberToIp()).toBe(undefined);
+      expect(changeMaskNumberToIp({})).toBe(undefined);
+    });
+
+    it('should change correct when number is integral multiple 8', () => {
       expect(changeMaskNumberToIp(32)).toBe('255.255.255.255');
       expect(changeMaskNumberToIp(24)).toBe('255.255.255.0');
     });
-    it('should change correct when number is 2', () => {
+    it('should change correct when number is not multiple 8', () => {
       expect(changeMaskNumberToIp(30)).toBe('255.255.255.252');
     });
   });
