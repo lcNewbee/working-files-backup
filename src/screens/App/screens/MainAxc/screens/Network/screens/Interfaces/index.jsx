@@ -69,7 +69,7 @@ export default class NetworkInterface extends React.Component {
       listOptions: $$listOptions,
     };
     utils.binds(this, [
-      'onBeforeSave',
+      'onBeforeSync',
     ]);
   }
 
@@ -89,14 +89,23 @@ export default class NetworkInterface extends React.Component {
       );
   }
 
-  onBeforeSave($$actionQuery, $$curListItem) {
+  onBeforeSync($$actionQuery, $$curListItem) {
+    const { store, route } = this.props;
+    const $$curList = store.getIn([route.id, 'data', 'list']);
     const actionType = $$actionQuery.get('action');
     const ip = $$curListItem.get('ip');
     const mask = $$curListItem.get('mask');
+
     let ret = '';
 
     if (actionType === 'add' || actionType === 'edit') {
       ret = validator.combine.noBroadcastIp(ip, mask);
+
+      if ($$curList.find(
+        $$item => $$item.get('ip') === ip,
+      )) {
+        ret = _('Same IP address interface already exists');
+      }
     }
 
     return ret;
@@ -107,7 +116,7 @@ export default class NetworkInterface extends React.Component {
       <AppScreen
         {...this.props}
         listOptions={this.state.listOptions}
-        onBeforeSave={this.onBeforeSave}
+        onBeforeSync={this.onBeforeSync}
         editFormId="port"
         listKey="allKeys"
         deleteable={

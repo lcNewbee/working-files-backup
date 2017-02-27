@@ -460,5 +460,6 @@
   "Password and confirm password must match": "密码与确认密码必须一致",
   "Must be integer": "请输入整数",
   "Input integer range is: %s - %s": "整数大小范围：%s - %s",
-  "Please input a valid MAC address like AA:BB:CC:DD:EE:FF or AA-BB-CC-DD-EE-FF": "请输入正确的MAC地址，比如：AA:BB:CC:DD:EE:FF或AA-BB-CC-DD-EE-FF"
+  "Please input a valid MAC address like AA:BB:CC:DD:EE:FF or AA-BB-CC-DD-EE-FF": "请输入正确的MAC地址，比如：AA:BB:CC:DD:EE:FF或AA-BB-CC-DD-EE-FF",
+  "%s and %s can not has same segment": "%s与%s不能在同一网段"
 }

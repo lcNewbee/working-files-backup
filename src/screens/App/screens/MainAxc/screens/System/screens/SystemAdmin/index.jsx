@@ -99,8 +99,6 @@ const listOptions = fromJS([
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
-  store: PropTypes.instanceOf(Map),
-
   changeLoginStatus: PropTypes.func.isRequired,
   updateCurEditListItem: PropTypes.func,
 };

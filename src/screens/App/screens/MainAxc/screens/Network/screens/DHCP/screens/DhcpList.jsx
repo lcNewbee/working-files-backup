@@ -117,7 +117,7 @@ const listOptions = fromJS([
 const editFormOptions = immutableUtils.getFormOptions(listOptions);
 const propTypes = {
   route: PropTypes.object,
-  save: PropTypes.func,
+  store: PropTypes.object,
 };
 const defaultProps = {};
 
@@ -130,6 +130,8 @@ export default class View extends React.Component {
   }
 
   onBeforeSync($$actionQuery, $$curListItem) {
+    const { store, route } = this.props;
+    const $$curList = store.getIn([route.id, 'data', 'list']);
     const actionType = $$actionQuery.get('action');
     const startIp = $$curListItem.get('startIp');
     const mask = $$curListItem.get('mask');
@@ -141,6 +143,21 @@ export default class View extends React.Component {
         ipLabel: _('Start IP'),
         ip2Label: _('Gateway'),
       });
+
+      if ($$curList.find(
+        $$item => validator.combine.noSameSegment(
+          startIp,
+          mask,
+          $$item.get('startIp'),
+          $$item.get('mask'),
+          {
+            ipLabel: '',
+            ip1Label: '',
+          },
+        ),
+      )) {
+        ret = _('Same %s item already exists', _('segment'));
+      }
     }
 
     return ret;

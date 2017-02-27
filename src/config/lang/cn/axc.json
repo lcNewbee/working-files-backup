@@ -634,5 +634,9 @@
   "User Number": "用户数",
   "Current": "当前",
   "Clients List": "客户端列表",
-  "Upload the firmware file error": "上传版本文件错误"
+  "Upload the firmware file error": "上传版本文件错误",
+  "Same IP address interface already exists": "已存在相同IP地址的接口",
+  "Same IP address(%s) item already exists": "已存在相同IP地址(%s)的项",
+  "Same %s item already exists": "已存在相同%s的项",
+  "segment": "网段"
 }

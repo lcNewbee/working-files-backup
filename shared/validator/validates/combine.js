@@ -130,6 +130,13 @@ var combineVaildate = {
     }
   },
 
+  noSameSegment: function(ip, mask, ip1, mask1, msgOption) {
+
+    if (isSameNet(ip, ip1, mask, mask1)) {
+      return _('%s and %s can not has same segment', msgOption.ipLabel, msgOption.ip2Label);
+    }
+  },
+
   noBroadcastIp: function (ip, mask) {
     var isBroadcastIpRet = isBroadcastIp(ip, mask);
 
