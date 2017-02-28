@@ -422,10 +422,12 @@
   "Please select time zone": "请选择时区",
   "Select file extension range: %s": "选择的文件后缀名范围: %s",
 
+  "bytes": "字节",
   "e.g. %s": "例如: %s",
-
+  "String length range is: %s - %s %s": "长度范围: %s - %s %s",
+  "String length must be: %s %s": "长度必须为: %s %s",
   "String length range is: %s - %s bit": "长度范围：%s - %s 位",
-  "String length range is: %s - %s bytes": "长度范围：%s - %s 位字节",
+  "String length range is: %s - %s bytes": "长度范围：%s - %s 位字节（一个中文包含2-4位字节）",
   "Network segment mask must be a number between 0-32": "IP网段掩码必须为0-32间数字",
   "%s and %s must be in the same network segment": "%s与%s必须在同一网段",
   "Broadcast IP address is not allowed!": "IP地址不能为广播地址！",

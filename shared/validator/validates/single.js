@@ -3,59 +3,59 @@ var utilsCore = require('shared/utils/lib/core');
 var utilsString = require('shared/utils/lib/string');
 var _ = window._;
 
-if(!_) {
+if (!_) {
   _ = utilsString.format;
 }
 
 var vaildate = {
 
   // 纯字符串长度
-  len: function(str, min, max) {
+  len: function (str, min, max) {
     var len = str.length;
     var thisMin = min || 0;
 
     if (thisMin === max && len !== thisMin) {
-      return `${_('String length must be: ')}${min} ${_('bit')}`;
+      return _('String length must be: %s %s', min, '');
     } else if (len < thisMin || len > max) {
-      return `${_('String length range is: ')}${min} - ${max} ${_('bit')}`;
+      return _('String length range is: %s - %s bit', min, max);
     }
   },
 
   // UTF-8 字节长度
-  utf8Len: function(str, min, max) {
+  utf8Len: function (str, min, max) {
     var len = utilsCore.getUtf8Length(str);
     var thisMin = min || 0;
 
     if (thisMin === max && len !== thisMin) {
-      return `${_('String length must be: ')}${min} bytes`;
+      return _('String length must be: %s %s', min, _('bytes'));
     } else if (len < thisMin || len > max) {
-      return `${_('String length range is: ')}${min} - ${max} bytes`;
+      return _('String length range is: %s - %s bytes', min, max);
     }
   },
 
-  num: function(str, min, max, expand) {
+  num: function (str, min, max, expand) {
+    var retStr;
 
     if (!utilsString.isInteger(str)) {
       return _("Must be integer");
     }
-    console.log('expand', expand);
-    if(expand !== undefined) {
-      if(parseInt(str, 10) === parseInt(expand, 10)) {
-        return ;
+    if (expand !== undefined) {
+      if (parseInt(str, 10) === parseInt(expand, 10)) {
+        return;
       }
     }
 
     if (min !== undefined && max !== undefined) {
       if (parseInt(str, 10) < min || parseInt(str, 10) > max) {
-        const str = typeof (expand) !== 'undefined' ? _("Range: ") + _("%s", expand) + _(" or ") + _("%s - %s", min, max) :
-                             _("Range: ") + _("%s - %s", min, max);
-        return str;
+        retStr = typeof (expand) !== 'undefined' ? _("Range: ") + _("%s", expand) + _(" or ") + _("%s - %s", min, max) :
+          _("Range: ") + _("%s - %s", min, max);
+        return retStr;
       }
     }
   },
 
   mac: {
-    all: function(str) {
+    all: function (str) {
       var ret = this.specific(str);
 
       if (ret) {
@@ -67,7 +67,7 @@ var vaildate = {
       }
     },
 
-    specific: function(str) {
+    specific: function (str) {
       var subMac1 = str.split(':')[0];
       if (subMac1.charAt(1) && parseInt(subMac1.charAt(1), 16) % 2 !== 0) {
         return _('The second character must be even number.');
@@ -82,7 +82,7 @@ var vaildate = {
    * 一般IP不能
    */
   ip: {
-    all: function(str, isSegment) {
+    all: function (str, isSegment) {
       var ret = this.specific(str);
       var ipReg = /^([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){2}([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-4])$/;
 
@@ -98,7 +98,7 @@ var vaildate = {
     /**
      * 不能为回环地址，A类地址
      */
-    specific: function(str) {
+    specific: function (str) {
       var ipArr = str.split('.'),
         ipHead = ipArr[0];
 
@@ -111,7 +111,7 @@ var vaildate = {
     }
   },
   ipSegment: {
-    all: function(str, noMask) {
+    all: function (str, noMask) {
       var ret = this.specific(str, noMask);
       var ip = str.split('/')[0];
       var mask = str.split('/')[1];
@@ -132,13 +132,13 @@ var vaildate = {
       }
     },
 
-    specific: function(str, noMask) {
+    specific: function (str, noMask) {
       return vaildate.ip.specific(str, noMask);
     }
   },
 
   dns: {
-    all: function(str) {
+    all: function (str) {
       var ret = this.specific(str);
 
       if (ret) {
@@ -150,7 +150,7 @@ var vaildate = {
       }
     },
 
-    specific: function(str) {
+    specific: function (str) {
       var ipArr = str.split('.'),
         ipHead = ipArr[0];
 
@@ -162,7 +162,7 @@ var vaildate = {
       }
     }
   },
-  iplist: function(str, delimiter) {
+  iplist: function (str, delimiter) {
     var ipArr = str.split(delimiter);
     var len = ipArr.length;
     var i;
@@ -174,7 +174,7 @@ var vaildate = {
       }
     }
   },
-  mask: function(str) {
+  mask: function (str) {
     var rel = /^(254|252|248|240|224|192|128)\.0\.0\.0$|^(255\.(254|252|248|240|224|192|128|0)\.0\.0)$|^(255\.255\.(254|252|248|240|224|192|128|0)\.0)$|^(255\.255\.255\.(254|252|248|240|224|192|128|0))$/;
 
     if (!rel.test(str)) {
@@ -182,7 +182,7 @@ var vaildate = {
     }
   },
 
-  email: function(str) {
+  email: function (str) {
     var rel = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (!rel.test(str)) {
       return _("Please input a valid E-mail address");
@@ -190,18 +190,18 @@ var vaildate = {
 
   },
 
-  time: function(str) {
+  time: function (str) {
     if (!(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/).test(str)) {
       return _("Please input a valid time.");
     }
   },
-  hex: function(str) {
+  hex: function (str) {
     if (!(/^[0-9a-fA-F]{1,}$/).test(str)) {
       return _("Must be hex.");
     }
   },
 
-  ascii: function(str, min, max) {
+  ascii: function (str, min, max) {
 
     if (!utilsString.isAscii(str)) {
       return _("Must be ASCII.");
@@ -211,7 +211,7 @@ var vaildate = {
     }
   },
 
-  pwd: function(str, minLen, maxLen) {
+  pwd: function (str, minLen, maxLen) {
     var ret;
 
     if (!(/^[0-9a-zA-Z_]+$/).test(str)) {
@@ -226,13 +226,13 @@ var vaildate = {
     }
   },
 
-  username: function(str) {
+  username: function (str) {
     if (!(/^\w{1,}$/).test(str)) {
       return _("Please input a valid username.");
     }
   },
 
-  ssidPasword: function(str, minLen, maxLen) {
+  ssidPasword: function (str, minLen, maxLen) {
     var ret;
 
     ret = this.ascii(str);
@@ -246,7 +246,7 @@ var vaildate = {
     return ret;
   },
 
-  remarkTxt: function(str, banStr) {
+  remarkTxt: function (str, banStr) {
     var len = banStr.length,
       curChar,
       i;
@@ -259,7 +259,7 @@ var vaildate = {
     }
   },
 
-  required: function(str) {
+  required: function (str) {
     if (str === undefined || str === '') {
       return _('%s is required');
     }

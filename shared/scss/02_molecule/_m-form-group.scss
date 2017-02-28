@@ -20,6 +20,7 @@ $boder-color:         #ccc;
   &.form-group--error {
     .form-control {
       .a-password__input,
+      textarea.text,
       input.text {
         border: 1px solid $g-brand-danger;
       }
