@@ -57,8 +57,8 @@ const authServer = fromJS([
     required: true,
     defaultValue: '1812',
     type: 'number',
-    min: 1,
-    max: 65535,
+    min: '1',
+    max: '65535',
   }, {
     id: 'authpri_key',
     label: _('Password'),
@@ -89,8 +89,8 @@ const authServer = fromJS([
     fieldset: 'auth_secondary',
     type: 'number',
     form: 'authServer',
-    min: 1,
-    max: 65535,
+    min: '1',
+    max: '65535',
   }, {
     id: 'authsecond_key',
     label: _('Password'),
@@ -128,8 +128,8 @@ const accServer = fromJS([
     defaultValue: '1813',
     type: 'number',
     form: 'accServer',
-    min: 1,
-    max: 65535,
+    min: '1',
+    max: '65535',
   }, {
     id: 'acctpri_key',
     required: true,
@@ -160,8 +160,8 @@ const accServer = fromJS([
     fieldset: 'secondary',
     type: 'number',
     form: 'accServer',
-    min: 1,
-    max: 65535,
+    min: '1',
+    max: '65535',
   }, {
     id: 'acctsecond_key',
     label: _('Password'),
@@ -180,7 +180,7 @@ const advancedSetting = fromJS([
     id: 'username_format',
     label: _('User Format'),
     fieldset: 'parameter',
-    defaultValue: 'WITH',
+    defaultValue: 'WITHOUT',
     noTable: true,
     type: 'select',
     required: true,
@@ -192,9 +192,11 @@ const advancedSetting = fromJS([
       }, {
         value: 'WITH',
         label: 'WITH_DOMAN',
+        disabled: true,
       }, {
         value: 'UNCHANGE',
         label: 'KEEP_ORIGINAL',
+        disabled: true,
       },
     ],
   }, {
@@ -202,8 +204,8 @@ const advancedSetting = fromJS([
     label: _('Silent Time'),
     fieldset: 'parameter',
     defaultValue: '300',
-    min: 60,
-    max: 7200,
+    min: '60',
+    max: '7200',
     noTable: true,
     type: 'number',
     required: true,
@@ -214,8 +216,8 @@ const advancedSetting = fromJS([
     fieldset: 'parameter',
     type: 'number',
     defaultValue: '3',
-    min: 3,
-    max: 10,
+    min: '3',
+    max: '10',
     required: true,
   }, {
     id: 'resp_time',
@@ -223,8 +225,8 @@ const advancedSetting = fromJS([
     fieldset: 'parameter',
     type: 'number',
     defaultValue: '3',
-    min: 3,
-    max: 30,
+    min: '3',
+    max: '30',
     required: true,
     help: _('Seconds'),
   }, {
@@ -243,8 +245,8 @@ const advancedSetting = fromJS([
     fieldset: 'acctonAdvance',
     type: 'number',
     defaultValue: '3',
-    min: 3,
-    max: 10,
+    min: '3',
+    max: '10',
     required: true,
     showPrecondition(data) {
       return data.get('accton_enable') === '1';
@@ -258,8 +260,8 @@ const advancedSetting = fromJS([
     required: true,
     help: _('Seconds'),
     defaultValue: '3',
-    min: 3,
-    max: 30,
+    min: '3',
+    max: '30',
     showPrecondition(data) {
       return data.get('accton_enable') === '1';
     },
@@ -272,8 +274,8 @@ const advancedSetting = fromJS([
     type: 'number',
     help: _('Seconds'),
     defaultValue: '720',
-    min: 300,
-    max: 3600,
+    min: '300',
+    max: '3600',
   }, {
     id: 'realretrytimes',
     label: _('Accounting Message-Resend Times'),
@@ -281,8 +283,8 @@ const advancedSetting = fromJS([
     type: 'number',
     required: true,
     defaultValue: '5',
-    min: 3,
-    max: 10,
+    min: '3',
+    max: '10',
   },
 ]);
 

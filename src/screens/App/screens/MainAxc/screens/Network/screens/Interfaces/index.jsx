@@ -101,10 +101,20 @@ export default class NetworkInterface extends React.Component {
     if (actionType === 'add' || actionType === 'edit') {
       ret = validator.combine.noBroadcastIp(ip, mask);
 
+      // 检测是否有相同网段的接口
       if ($$curList.find(
-        $$item => $$item.get('ip') === ip,
+        $$item => validator.combine.noSameSegment(
+          ip,
+          mask,
+          $$item.get('ip'),
+          $$item.get('mask'),
+          {
+            ipLabel: '',
+            ip1Label: '',
+          },
+        ),
       )) {
-        ret = _('Same IP address interface already exists');
+        ret = _('Same %s item already exists', _('segment'));
       }
     }
 
