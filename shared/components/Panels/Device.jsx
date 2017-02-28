@@ -7,12 +7,14 @@ import DeviceOverview from './DeviceOverview';
 import DeviceGeneral from './DeviceGeneral';
 import DeviceRadioAdvance from './DeviceRadioAdvance';
 import DeviceRadioBase from './DeviceRadioBase';
+import DeviceRadioQos from './DeviceRadioQos';
 
 const panelsComponentMap = {
   overview: DeviceOverview,
   general: DeviceGeneral,
   radioAdvance: DeviceRadioAdvance,
   radioBase: DeviceRadioBase,
+  radioQos: DeviceRadioQos,
 };
 const propTypes = {
   onCollapse: PropTypes.func,

@@ -68,6 +68,22 @@ export const $$phymodeOptopns = fromJS([
   },
 ]);
 
+export const $$qosTypeOptopns = fromJS([
+  {
+    value: 0,
+    label: _('Default Optimization'),
+  }, {
+    value: 1,
+    label: _('Optimized for Throughput'),
+  }, {
+    value: 2,
+    label: _('Optimized for Capacity'),
+  }, {
+    value: 3,
+    label: _('Manual Configuration'),
+  },
+]);
+
 export const numberKeys = [
   'groupid',
   'radioenable',
@@ -467,6 +483,86 @@ export const radioAdvance = fromJS([
       }, {
         value: 'MCS9',
         label: 'MCS9',
+      },
+    ],
+  },
+]);
+
+export const radioQos = fromJS([
+  {
+    id: 'wmmtemplate',
+    form: 'radioQos',
+    label: _('性能优化模式'),
+    type: 'select',
+    defaultValue: '',
+    options: $$qosTypeOptopns,
+    required: true,
+  }, {
+    id: 'list',
+    type: 'list',
+    list: [
+      {
+        id: 'name',
+        label: _('Name'),
+        options: [
+          {
+            value: '0',
+            label: _('BestEffort(BE)'),
+          }, {
+            value: '1',
+            label: _('Background(BK)'),
+          }, {
+            value: '2',
+            label: _('Video(VI)'),
+          }, {
+            value: '3',
+            label: _('Video(VI)'),
+          }, {
+            value: '4',
+            label: _('Messages Auth'),
+          }, {
+            value: '5',
+            label: _('Wechat Auth'),
+          }, {
+            value: '6',
+            label: _('Public Platform Auth'),
+          }, {
+            value: '7',
+            label: _('Visitor Auth'),
+          },
+        ],
+        noForm: true,
+      },
+      {
+        id: 'basip',
+        label: _('CWMIN'),
+        min: '0',
+        max: '15',
+        type: 'text',
+      }, {
+        id: 'username',
+        label: _('CWMAX'),
+        min: '0',
+        max: '15',
+        type: 'text',
+      }, {
+        id: 'sessiontime',
+        label: _('AIFS'),
+        min: '0',
+        max: '15',
+        type: 'text',
+      }, {
+        id: 'basid',
+        label: _('TXOP'),
+        width: '80',
+        min: '0',
+        max: '15',
+        type: 'text',
+      }, {
+        id: 'enable',
+        label: _('NOACK'),
+        type: 'checkbox',
+        display: 'block',
       },
     ],
   },

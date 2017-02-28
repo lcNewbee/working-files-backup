@@ -8,6 +8,21 @@ import AppScreen from 'shared/components/Template/AppScreen';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 
+function getPortList() {
+  return utils.fetch('goform/network/port')
+    .then(json => (
+      {
+        options: json.data.list.map(
+          item => ({
+            value: item.name,
+            label: `${item.name}`,
+          }),
+        ),
+      }
+    ),
+  );
+}
+
 const commonFormOptions = fromJS([
   {
     id: 'enable',
@@ -66,6 +81,14 @@ const listOptions = fromJS([
         rules: 'ip',
       }),
     },
+  }, {
+    id: 'ifname',
+    label: _('Ifname'),
+    formProps: {
+      type: 'select',
+      required: true,
+      dataFormat: "ds",
+    },
   },
 ]);
 
@@ -76,8 +99,27 @@ export default class View extends React.Component {
   constructor(props) {
     super(props);
     utils.binds(this, [
-      'onBeforeSync',
+      'onSave',
     ]);
+    this.state = {
+      listOptions,
+    };
+  }
+
+  componentWillMount() {
+    getPortList()
+      .then(
+        (data) => {
+          this.setState({
+            listOptions: listOptions.setIn(
+              [-1, 'options'],
+              data.options,
+            ),
+          });
+
+          return data;
+        },
+      );
   }
 
   render() {
@@ -87,8 +129,7 @@ export default class View extends React.Component {
         listTitle={_('NAT Rules')}
         listKey="allKeys"
         settingsFormOptions={commonFormOptions}
-        listOptions={listOptions}
-        onBeforeSync={this.onBeforeSync}
+        listOptions={this.state.listOptions}
         noTitle
         actionable
         selectable

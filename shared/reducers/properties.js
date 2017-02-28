@@ -60,6 +60,33 @@ const defaultItem = fromJS({
         admctrmandatory: 32,
         spatialstreams: '1x1',
       },
+    }, {
+      panelKey: 'radioQos',
+      module: 'radio',
+      text: 'Radio QoS',
+      data: {
+        wmmtemplate: 1,
+        be_cwmin: 11,
+        be_cwmax: 11,
+        be_aifs: 11,
+        be_txop: 11,
+        be_noack: 1,
+        bk_cwmin: 11,
+        bk_cwmax: 11,
+        bk_aifs: 11,
+        bk_txop: 11,
+        bk_noack: 1,
+        vi_cwmin: 11,
+        vi_cwmax: 11,
+        vi_aifs: 11,
+        vi_txop: 11,
+        vi_noack: 1,
+        vo_cwmin: 11,
+        vo_cwmax: 11,
+        vo_aifs: 11,
+        vo_txop: 11,
+        vo_noack: 1,
+      },
     },
   ],
   query: {},
@@ -117,6 +144,7 @@ function rcPropertyPanelData(state, action) {
   let $$ret = state;
   let $$newData = $$curList.get('data');
   let $$radiosOptions = fromJS([]);
+  let radioName = '(2.4G)';
 
   // 把服务器端数据合并 到 data 中
   $$newData = $$newData.merge(rcData);
@@ -127,10 +155,15 @@ function rcPropertyPanelData(state, action) {
     // 设置已选中的网卡radio参数
     if (rcData.radios) {
       $$radiosOptions = fromJS(
-        rcData.radios.map((item, index) => ({
-          value: index,
-          label: item.radioID,
-        })),
+        rcData.radios.map((item, index) => {
+          if (item.phymodesupport >= 8) {
+            radioName = '(5G)';
+          }
+          return {
+            value: index,
+            label: `${item.radioID}${radioName}`,
+          };
+        }),
       );
       $$newData = $$newData
         .mergeIn(['radio'], rcData.radios[radioActiveIndex])
@@ -238,7 +271,6 @@ function changePropertysItem(state, action) {
 }
 
 export default function (state = defaultState, action) {
-
   switch (action.type) {
     case 'INIT_ADD_PROPERTY_PANEL':
       return initAddPropertyPanel(state, action);
