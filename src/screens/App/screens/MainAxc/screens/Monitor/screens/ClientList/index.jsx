@@ -32,10 +32,12 @@ const listOptions = fromJS([
   }, {
     id: 'vendor',
     text: _('Vendor'),
-  }, {
-    id: 'terminalType',
-    text: _('OS'),
-  }, {
+  },
+  // {
+  //   id: 'terminalType',
+  //   text: _('OS'),
+  // },
+  {
     id: 'ssid',
     text: 'SSID',
   }, {

@@ -12,6 +12,7 @@ const ERROR_MSG_MAP = {
 
   // AXC： 网络管理 6100 - 6199
   6110: _('Please configure the appropriate IP addresses and mask on interfaces'),
+  6111: _('Next hop IP must within interfaces segment'),
 
   // AXC： AP组管理 6200 - 6299
   6200: _(''),

@@ -60,7 +60,10 @@ const listOptions = fromJS([
     text: _('Description'),
     formProps: {
       type: 'textarea',
-      maxLength: '64',
+      maxLength: '31',
+      validator: validator({
+        rules: 'utf8Len:[0,31]',
+      }),
     },
   }, {
     id: 'status',

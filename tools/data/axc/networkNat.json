@@ -10,21 +10,24 @@
     "list": [
       {
         "id": "0",
-        "ruleType": "0",
+        "ruleType": "snat",
         "sourceAddress": "android-1213",
-        "conversionAddress": "192.168.5.123"
+        "conversionAddress": "192.168.5.123",
+        "ifname": "eth0"
       },
       {
         "id": "1",
         "ruleType": "snat",
         "sourceAddress": "android-1213",
-        "conversionAddress": "192.168.5.123"
+        "conversionAddress": "192.168.5.123",
+        "ifname": "eth3"
       },
       {
         "id": "2",
-        "ruleType": "dnat",
+        "ruleType": "snat",
         "sourceAddress": "android-1213",
-        "conversionAddress": "192.168.5.123"
+        "conversionAddress": "192.168.5.123",
+        "ifname": "eth5"
       }
     ]
   }
