@@ -194,10 +194,10 @@ class FormInput extends React.Component {
       val = elem.checked ? checkedValue : '0';
     }
 
-    data.value = rawValue || val;
+    data.value = rawValue !== undefined ? rawValue : val;
 
-    if (this.props.dataType === 'number') {
-      data.value = parseFloat(data.value, 10);
+    if (this.props.dataType === 'number' && data.value !== '') {
+      data.value = Number(data.value, 10);
     }
 
     // 数据更新
