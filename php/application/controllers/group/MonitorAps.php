@@ -25,7 +25,7 @@ class MonitorAps extends CI_Controller {
     }
     function is_active($mac){
         $result = FALSE;
-        $sql = "select active from ap_firmware where model in(select model_name from ap_list where mac='".$mac."')";
+        $sql = "select active from ap_firmware where active=1 and model in(select model_name from ap_list where mac='".$mac."')";
         $query = $this->db->query($sql);        
         if($query->row()->active === 1){
             $result = TRUE;
