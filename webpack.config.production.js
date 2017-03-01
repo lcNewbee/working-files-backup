@@ -149,7 +149,18 @@ module.exports = {
       {
         test: /\.scss$/,
         use: ExtractTextPlugin.extract({
-          use: ["css-loader", "postcss-loader", "sass-loader"],
+          use: [
+            "css-loader",
+            {
+              loader:  "postcss-loader",
+              options: {
+                plugins: function () {
+                  return [autoprefixerHandle];
+                }
+              }
+            },
+            "sass-loader"
+          ],
         })
       },
 
@@ -195,9 +206,6 @@ module.exports = {
 
       options: {
         context: __dirname,
-        postcss() {
-          return [autoprefixerHandle];
-        },
       }
     }),
     new webpack.DllReferencePlugin({

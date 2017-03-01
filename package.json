@@ -99,7 +99,7 @@
     "heatmap.js": "^2.0.5",
     "immutable": "^3.7.6",
     "moment": "^2.15.1",
-    "rc-time-picker": "^2.0.0",
+    "rc-time-picker": "^2.2.2",
     "react": "^15.3.2",
     "react-addons-css-transition-group": "^15.3.2",
     "react-addons-pure-render-mixin": "^15.3.2",
