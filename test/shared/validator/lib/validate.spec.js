@@ -16,7 +16,7 @@ describe('validator.single', () => {
     });
 
     it('should return error msg when str length beyond range', () => {
-      expect(validateLen('sss', 4, 4)).toBe('String length must be: 4 bit');
+      expect(validateLen('sss', 4, 4)).toBe('String length must be: 4 ');
       expect(validateLen('s', 2, 8)).toBe('String length range is: 2 - 8 bit');
       expect(validateLen('sss', 1, 2)).toBe('String length range is: 1 - 2 bit');
     });

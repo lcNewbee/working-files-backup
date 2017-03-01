@@ -73,7 +73,7 @@ export default class Progress extends React.Component {
 
     return showText ? hasTextProgress : (
       <progress
-        {...this.props}
+        {...restProps}
         className={`${className} ${progressClassNames}`}
         value={value}
         max={max}

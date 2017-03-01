@@ -115,7 +115,7 @@ class PropertyPanel extends React.Component {
             role: 'loading',
             title: '',
             loadingStep: 50,
-            loadingTitle: _('In process of synchronized on the AP....'),
+            loadingTitle: _('Synchronizing config for AP...'),
             onLoaded: () => {
               this.props.closeModal();
               this.props.fetchPropertyPanelData(query);

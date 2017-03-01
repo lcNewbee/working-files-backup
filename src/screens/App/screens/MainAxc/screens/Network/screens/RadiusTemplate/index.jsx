@@ -216,7 +216,7 @@ const advancedSetting = fromJS([
     fieldset: 'parameter',
     type: 'number',
     defaultValue: '3',
-    min: '3',
+    min: '1',
     max: '10',
     required: true,
   }, {
@@ -225,7 +225,7 @@ const advancedSetting = fromJS([
     fieldset: 'parameter',
     type: 'number',
     defaultValue: '3',
-    min: '3',
+    min: '1',
     max: '30',
     required: true,
     help: _('Seconds'),
@@ -245,7 +245,7 @@ const advancedSetting = fromJS([
     fieldset: 'acctonAdvance',
     type: 'number',
     defaultValue: '3',
-    min: '3',
+    min: '1',
     max: '10',
     required: true,
     showPrecondition(data) {
@@ -260,7 +260,7 @@ const advancedSetting = fromJS([
     required: true,
     help: _('Seconds'),
     defaultValue: '3',
-    min: '3',
+    min: '1',
     max: '30',
     showPrecondition(data) {
       return data.get('accton_enable') === '1';
@@ -283,7 +283,7 @@ const advancedSetting = fromJS([
     type: 'number',
     required: true,
     defaultValue: '5',
-    min: '3',
+    min: '1',
     max: '10',
   },
 ]);
