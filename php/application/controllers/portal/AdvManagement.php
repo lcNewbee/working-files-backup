@@ -1,10 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class CardList extends CI_Controller {
+class AdvManagement extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this->load->helper('array');
-        $this->load->model('portal/CardList_Model');
+        $this->load->model('portal/AdvManagement_Model');
 	}
     public function index() {
 		$result = null;
@@ -18,7 +18,7 @@ class CardList extends CI_Controller {
 		}
 	}
 	function fetch() {
-		return $this->CardList_Model->get_list($_GET);
+		return $this->AdvManagement_Model->get_list($_GET);
 	}
 	function onAction($data) {
 		if (!$data) {
@@ -27,14 +27,12 @@ class CardList extends CI_Controller {
 		$result = null;
 		$actionType = element('action',$data);
 		switch($actionType) {
-            case 'add' : $result = $this->CardList_Model->Add($data);
+            case 'add' : $result = $this->AdvManagement_Model->Add($data);
                 break;
-            case 'delete' : $result = $this->CardList_Model->Delete($data);
+            case 'delete' : $result = $this->AdvManagement_Model->Delete($data);
                 break;
-            case 'edit' : $result = $this->CardList_Model->Edit($data);
-                break;
-			case 'sendMessage' : $result = $this->CardList_Model->SendMessage($data);
-				break;
+            case 'edit' : $result = $this->AdvManagement_Model->Edit($data);
+                break;            
             default : $result = json_encode(array('state' => array('code' => 4000, 'msg' => 'No request action')));
                 break;
         }

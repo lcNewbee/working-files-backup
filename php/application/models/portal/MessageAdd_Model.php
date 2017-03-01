@@ -26,7 +26,7 @@ class MessageAdd_Model extends CI_Model {
             'ip' => $_SERVER['SERVER_ADDR'],// 发送者ip
             'fromPos' => 0,// 发送者类型
             'fromid' => 1,// 发送者id 暂且默认写admin ID
-            'fromname' => element('username',$_SESSION,''),// 发送者名称            
+            'fromname' => 'admin',// 发送者名称            
             'toid' => (int)element('id',$data,''),//接收者id
             'toPos' => 1,// 接收者类型，0-系统用户，1-接入用户
             'toname' => $toname,// 接收者名称            

@@ -100,7 +100,7 @@ class SystemApVersion_Model extends CI_Model {
                 'vendor' => element('vendor', $data, 48208) ,
                 'model' => element('model', $data) ,
                 'sfver' => element('softVersion', $data) ,
-                'fmname' => $filename,
+                'fmname' => element('fileNameText',$data),//$filename,
                 'filepath' => $filepath,
                 'active' => (int)element('active', $data, 0)
             );
@@ -137,7 +137,7 @@ class SystemApVersion_Model extends CI_Model {
             'vendor' => element('vendor', $data, 48208) ,
             'model' => element('model', $data, '') ,
             'sfver' => element('softVersion', $data, '') ,
-            'fmname' => $filename,
+            'fmname' => element('fileNameText',$data),
             'filepath' => $filepath,
             'active' => (int)element('active', $data, 0)
         );

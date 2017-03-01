@@ -141,11 +141,13 @@ $route['goform/portal/system/classification'] = 'portal/systemClassify';
 $route['goform/portal/log/logList'] = 'portal/logList';
 $route['goform/portal/log/onlineList'] = 'portal/onlineList';
 $route['goform/portal/log/onlineRecordList'] = 'portal/onlineRecordList';
-
 $route['goform/portal/card/cardlist'] = 'portal/cardList';
 $route['goform/portal/card/cardcategory'] = 'portal/cateGory';
 $route['goform/portal/message/receive'] = 'portal/messageReceive';
 $route['goform/portal/message/send'] = 'portal/messageSend';
 $route['goform/portal/message/sendmessage'] = 'portal/messageAdd';
+
+$route['goform/portal/advertisement/stores'] = 'portal/advStores';
+$route['goform/portal/advertisement/adv'] = 'portal/advManagement';
 
 

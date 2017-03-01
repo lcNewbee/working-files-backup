@@ -40,7 +40,7 @@ class MessageSend_Model extends CI_Model {
             'ip' => $_SERVER['SERVER_ADDR'],// 发送者ip
             'fromPos' => 0,// 发送者类型
             'fromid' => 1,// 发送者id 暂且默认写admin ID
-            'fromname' => element('username',$_SESSION,''),// 发送者名称            
+            'fromname' => 'admin',// 发送者名称            
             'toid' => $toid,//element('toId',$data,''),//接收者id
             'toPos' => 1,// 接收者类型，0-系统用户，1-接入用户
             'toname' => element('toname',$data,''),// 接收者名称            
@@ -59,8 +59,8 @@ class MessageSend_Model extends CI_Model {
     function Delete($data) {
         $result = FALSE;
         $dellist = $data['selectedList'];
-        foreach($dellist as $res) {
-            $this->portalsql->where('id', $res);
+        foreach($dellist as $row) {
+            $this->portalsql->where('id', $row['id']);
             $result = $this->portalsql->delete('portal_message');
         }
         $result = $result ? json_ok() : json_no('delete error');
@@ -73,5 +73,33 @@ class MessageSend_Model extends CI_Model {
         $result = $this->portalsql->replace('portal_message',$updata,array('id'=>$updata['id']));
         $result ? $result = json_ok() : $result = json_no('update error');
         return json_encode($result);
+    }
+    function SendMessage($data){
+        $result = FALSE;
+        $toid = 0;
+        $toname = element('toname',$data);
+        if($toname != ""){
+            $query = $this->portalsql->query("select id,loginName from portal_account where loginName='".$toname."'");
+            $row = $query->row();
+            $toid = $row->id;                        
+        }
+        $insertary = array(
+            'title' => element('title',$data,''),// 标题
+            'description' => element('description',$data,''),// 内容
+            'date' => (string)exec('date "+%Y-%m-%d %H-%M-%S"'),// 当前时间
+            'state' => 0,// 消息的状态，0-未读，1-已读
+            'ip' => $_SERVER['SERVER_ADDR'],// 发送者ip
+            'fromPos' => 0,// 发送者类型
+            'fromid' => 1,// 发送者id 暂且默认写admin ID
+            'fromname' => 'admin',// 发送者名称            
+            'toid' => $toid,//接收者id
+            'toPos' => 1,// 接收者类型，0-系统用户，1-接入用户
+            'toname' => $toname,// 接收者名称            
+            'delin' => 0,// 默认值0，值为1表示在收件箱中删除了此条记录
+            'delout' => 0,// 默认值0，值为1表示在发件箱中删除了此条记录                    
+        );
+        $result = $this->portalsql->insert('portal_message', $insertary);
+        $result ? $result = json_ok() : $result = json_no('sendMessage error');
+        return json_encode($result);    
     }
 }

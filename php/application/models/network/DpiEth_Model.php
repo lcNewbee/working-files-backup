@@ -143,22 +143,24 @@ class DpiEth_Model extends CI_Model {
             $arr['total'] = element('list_recnum',$dataary['data']['total_msg'],20);
             $arr['nextPage'] = (int)$data['page']+1;
             $arr['lastline'] = element('sum_page',$dataary['data']['total_msg'],1);
+            $arr['sum_upbytes_allmac'] = $dataary['data']['total_msg']['sum_upbytes_allmac'];
 
             $result['page'] = $arr;
             
             $macAry = array();
             foreach($dataary['data']['list'] as $row){
                 $row['application'] =  explode('/',$row['detected_protos']);
-                $row['trafficPercent'] = $this->get_ethbytes_mac($cgiarr,$row['mac'])['mac_sum_need'];
-                $row['curRate'] = $this->get_ethbytes_mac($cgiarr,$row['mac'])['mac_speed'];
+                $row['trafficPercent'] = round(( ( ((int)$row['upbytes'] + (int)$row['downbytes']) /$arr['sum_upbytes_allmac'])*100),2).'%';
+                $row['curRate'] = $this->get_ethbytes_mac($cgiarr,$row['mac'],$arr['sum_upbytes_allmac'])['mac_speed'];
+                $row['test'] = $arr['sum_upbytes_allmac'];
                 $macAry[] = $row;
             }            
             $result['data'] = $macAry;
         }
         return $result;
     }
-    //mac 获取速率
-    private function get_ethbytes_mac($data,$mac){
+    //mac 获取速率和百分比
+    private function get_ethbytes_mac($data,$mac,$sumeth){
         $result = array(
             'mac_speed'=>0,
             'mac_sum_need'=>0
@@ -174,7 +176,8 @@ class DpiEth_Model extends CI_Model {
         if(is_array($cgidata) && $cgidata['state']['code'] === 2000){
             if(count($cgidata['data']['list']) > 0){
                 $result['mac_speed'] = $cgidata['data']['list'][0]['mac_speed'];
-                $result['mac_sum_need'] = intval( ((int)$cgidata['data']['list'][0]['mac_sum_need'] / (int)$cgidata['data']['total_msg']['sum_all_flow_statics'])*100);
+                //$result['mac_sum_need'] = intval( ((int)$cgidata['data']['list'][0]['mac_sum_need'] / (int)$cgidata['data']['total_msg']['sum_all_flow_statics'])*100).'%';
+                $result['mac_sum_need'] =  round( ( ((int)$cgidata['data']['list'][0]['mac_sum_need'] / $sumeth)*100),2).'%';
             }
         }
         return $result;

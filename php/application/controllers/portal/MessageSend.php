@@ -33,6 +33,8 @@ class MessageSend extends CI_Controller {
                 break;
             case 'edit' : $result = $this->MessageSend_Model->Edit($data);
                 break;
+			case 'sendMessage' : $result = $this->MessageSend_Model->SendMessage($data);
+                break;
             default : $result = json_encode(array('state' => array('code' => 4000, 'msg' => 'No request action')));
                 break;
         }

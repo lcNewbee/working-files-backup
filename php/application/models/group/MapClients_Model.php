@@ -14,7 +14,11 @@ class MapClients_Model extends CI_Model {
         if(count($timedata) > 0 && $mac !== ''){
             $s = 60 * (int)$timedata['reporttime'];            
             $dblist = $this->mysql->query("call getwidsreport('".$mac."',".$s.")");
-            $datalist = $dblist->result_array();
+            //$datalist = $dblist->result_array();
+            foreach($dblist->result_array() as $row){
+                $row['endtime'] = $row['endtime'] === '0000-00-00 00:00:00'? '-- --' : $row['endtime'];
+                $datalist[] = $row;
+            }
         }                
         $arr = array(
             'state'=>array('code'=>2000,'msg'=>'ok'),
