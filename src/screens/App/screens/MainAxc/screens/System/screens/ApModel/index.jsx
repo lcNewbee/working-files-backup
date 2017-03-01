@@ -33,7 +33,7 @@ const listOptions = fromJS([
     formProps: {
       type: 'number',
       min: '1',
-      max: '64',
+      max: '4',
       required: true,
       dataType: 'number',
     },
