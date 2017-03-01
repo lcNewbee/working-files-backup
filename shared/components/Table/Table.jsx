@@ -202,7 +202,7 @@ class Table extends Component {
     let myTableClassName = 'table';
     let isSelectAll = false;
 
-    if (myList && myList.size > 0 &&
+    if (myList && myList.size > 0 && this.selectedList.length > 0 &&
         ((this.selectedList.length + unselectableLen) === myList.size)) {
       isSelectAll = true;
     }

@@ -2,32 +2,30 @@ import React, { PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 // React 所有支持的 HTML Attributes
-const supportAttr = `
-accept acceptCharset accessKey action allowFullScreen allowTransparency alt
-async autoComplete autoFocus autoPlay capture cellPadding cellSpacing challenge
-charSet checked cite classID className colSpan cols content contentEditable
-contextMenu controls coords crossOrigin data dateTime default defer dir
-disabled download draggable encType form formAction formEncType formMethod
-formNoValidate formTarget frameBorder headers height hidden high href hrefLang
-htmlFor httpEquiv icon id inputMode integrity is keyParams keyType kind label
-lang list loop low manifest marginHeight marginWidth max maxLength media
-mediaGroup method min minLength multiple muted name noValidate nonce open
-optimum pattern placeholder poster preload profile radioGroup readOnly rel
-required reversed role rowSpan rows sandbox scope scoped scrolling seamless
-selected shape size sizes span spellCheck src srcDoc srcLang srcSet start step
-style summary tabIndex target title type useMap value width wmode wrap value
-onCopy onCut onPaste
-onCompositionEnd onCompositionStart onCompositionUpdate
-onKeyDown onKeyPress onKeyUp
-onFocus onBlur
-onChange onInput onSubmit
-onClick onContextMenu onDoubleClick onDrag onDragEnd onDragEnter onDragExit
-onDragLeave onDragOver onDragStart onDrop onMouseDown onMouseEnter onMouseLeave
-onMouseMove onMouseOut onMouseOver onMouseUp
-onSelect
-onTouchCancel onTouchEnd onTouchMove onTouchStart
-onTransitionEnd
-`;
+const supportAttr = `accept,acceptCharset,accessKey,action,allowFullScreen,allowTransparency,alt,
+async,autoComplete,autoFocus,autoPlay,capture,cellPadding,cellSpacing,challenge,
+charSet,checked,cite,classID,className,colSpan,cols,content,contentEditable,
+contextMenu,controls,coords,crossOrigin,data,dateTime,default,defer,dir,
+disabled,download,draggable,encType,form,formAction,formEncType,formMethod,
+formNoValidate,formTarget,frameBorder,headers,height,hidden,high,href,hrefLang,
+htmlFor,httpEquiv,icon,id,inputMode,integrity,is,keyParams,keyType,kind,label,
+lang,list,loop,low,manifest,marginHeight,marginWidth,max,maxLength,media,
+mediaGroup,method,min,minLength,multiple,muted,name,noValidate,nonce,open,
+optimum,pattern,placeholder,poster,preload,profile,radioGroup,readOnly,rel,
+required,reversed,role,rowSpan,rows,sandbox,scope,scoped,scrolling,seamless,
+selected,shape,size,sizes,span,spellCheck,src,srcDoc,srcLang,srcSet,start,step,
+style,summary,tabIndex,target,title,type,useMap,value,width,wmode,wrap,value,
+onCopy,onCut,onPaste,
+onCompositionEnd,onCompositionStart,onCompositionUpdate,
+onKeyDown,onKeyPress,onKeyUp,
+onFocus,onBlur,
+onChange,onInput,onSubmit,
+onClick,onContextMenu,onDoubleClick,onDrag,onDragEnd,onDragEnter,onDragExit,
+onDragLeave,onDragOver,onDragStart,onDrop,onMouseDown,onMouseEnter,onMouseLeave,
+onMouseMove,onMouseOut,onMouseOver,onMouseUp,
+onSelect,
+onTouchCancel,onTouchEnd,onTouchMove,onTouchStart,
+onTransitionEnd,`;
 
 const propTypes = {
   isFocus: PropTypes.bool,
@@ -57,7 +55,7 @@ class Input extends React.Component {
 
     Object.keys(props).forEach(
       (curKey) => {
-        if (supportAttr.indexOf(curKey) !== -1) {
+        if (supportAttr.indexOf(`${curKey},`) !== -1) {
           inputProps[curKey] = props[curKey];
         }
       },

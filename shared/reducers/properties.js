@@ -156,12 +156,14 @@ function rcPropertyPanelData(state, action) {
     if (rcData.radios) {
       $$radiosOptions = fromJS(
         rcData.radios.map((item, index) => {
+          let curRaioName = '(2.4G)';
+
           if (item.phymodesupport >= 8) {
-            radioName = '(5G)';
+            curRaioName = '(5G)';
           }
           return {
             value: index,
-            label: `${item.radioID}${radioName}`,
+            label: `${item.radioID} ${curRaioName}`,
           };
         }),
       );
