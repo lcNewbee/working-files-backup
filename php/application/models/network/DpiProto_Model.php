@@ -10,7 +10,8 @@ class DpiProto_Model extends CI_Model {
 		$arr = array(
 			'state'=>array('code'=>2000,'msg'=>'ok'),
 			'data'=>array(
-				'list'=>array()
+				'list'=>array(),
+				'protoClientList'=>array()
 			)
 		); 
 		$cgiary = array(
@@ -39,5 +40,30 @@ class DpiProto_Model extends CI_Model {
 			return json_no($cgiobj->state->msg);
 		}		     	
 		return json_encode($arr);			
+	}
+	private function get_detailed($data){
+		$result = array();
+		$cgiary = array(
+			'page'=>(string)element('page',$data,1),
+			'time'=>(string)element('timeType',$data,0),
+			'proto_type'=>(string)element('proto',$data),
+			'pagesize'=>(string)element('size',$data,20)
+		);
+		$cgiret = ndpi_send_one_proto_all_macMsg_to_php(json_encode($cgiary));
+		$arr = json_decode($cgiret,true);
+		if(is_array($arr) && $arr['state']['code'] === 2000){
+			$htmdata = array();
+			$sumbts = $arr['data']['total_msg']['sum_all_mac_bytes'];
+			foreach($arr['data']['list'] as $row){
+				$htmdata['mac'] => $row['mac'],
+				$htmdata['ip'] => $row['ip'],
+				$htmdata['osType'] => '--',
+				$htmdata['ethx_name'] => '--', // 该客户端所在端口
+				$htmdata['traffic'] => $row['mac_sum_bytes'], // 该客户端使用当前应用的流量
+				$htmdata['trafficPercent'] => round((($row['mac_sum_bytes'] / $sumbts)*100),2).'%';
+				$result[] = $htmdata;
+			}
+		}
+		return $result;
 	}
 }

@@ -152,7 +152,12 @@ class CardList_Model extends CI_Model {
             'delout' => 0,// 默认值0，值为1表示在发件箱中删除了此条记录                    
         );
         $result = $this->portalsql->insert('portal_message', $insertary);
-        $result ? $result = json_ok() : $result = json_no('insert error');
+        if($result){
+            $result = json_ok();
+        }else{
+            $result = json_no('sendMessage error');
+            $result['state']['code'] = 6401;
+        }
         return json_encode($result);    
     }
     private function get_time($id){

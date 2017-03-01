@@ -53,7 +53,12 @@ class MessageReceive_Model extends CI_Model {
         $result = FALSE;
         $insertary = $this->getPram($data);
         $result = $this->portalsql->insert('portal_message', $insertary);
-        $result ? $result = json_ok() : $result = json_no('insert error');
+        if($result){
+            $result = json_ok();
+        }else{
+            $result = json_no('insert error');
+            $result['state']['code'] = 6401;
+        } 
         return json_encode($result);
     }
     function Delete($data) {
