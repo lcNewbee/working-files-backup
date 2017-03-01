@@ -106,10 +106,12 @@ export const baseSetting = fromJS([
   }, {
     id: 'speed',
     label: _('Speed Limit'),
+    noForm: true,
+    noTable: true,
     className: 'cols col-6',
     options: [
       {
-        value: '0',
+        value: '1',
         label: _('1M'),
       },
     ],

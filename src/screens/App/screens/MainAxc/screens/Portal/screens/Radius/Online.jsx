@@ -61,6 +61,32 @@ const listOptions = fromJS([
   }, {
     id: 'state',
     text: _('Acc Type'),
+    formProps: {
+      type: 'select',
+      required: true,
+    },
+    options: [
+      {
+        value: '0',
+        label: _('Unavailability'),
+      }, {
+        value: '1',
+        label: _('Free of Charge'),
+      },
+      {
+        value: '2',
+        label: _('Timekeeping'),
+      }, {
+        value: '3',
+        label: _('Buy Out'),
+      }, {
+        value: '4',
+        label: _('Traffic'),
+      }, {
+        value: '-1',
+        label: _('Outside User'),
+      },
+    ],
   },
 ]);
 const propTypes = {

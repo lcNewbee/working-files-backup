@@ -69,7 +69,7 @@ const listOptions = fromJS([
         label: _('Unavailability'),
       }, {
         value: '1',
-        label: _('Free'),
+        label: _('Free of Charge'),
       },
       {
         value: '2',

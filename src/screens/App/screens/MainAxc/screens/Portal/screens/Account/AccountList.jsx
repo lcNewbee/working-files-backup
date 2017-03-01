@@ -159,9 +159,11 @@ const listOptions = fromJS([
   }, {
     id: 'speed',
     text: _('Speed Limit'),
+    noForm: true,
+    noTable: true,
     options: [
       {
-        value: '0',
+        value: '1',
         label: _('1M'),
       },
     ],
