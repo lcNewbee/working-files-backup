@@ -50,7 +50,7 @@ const settingsFormOptions = fromJS([
   }, {
     id: 'cycles',
     label: _('Scan Cycles Times'),
-    min: 1,
+    min: 0,
     max: 255,
     type: 'number',
     help: '0~255',
@@ -93,7 +93,7 @@ const settingsFormOptions = fromJS([
   }, {
     id: 'chlnum',
     label: _('Channel Set'),
-    help: `${_('e.g. ')}1,5,8`,
+    help: _('e.g. %s', '1,5,8'),
     defaultValue: '',
   }, {
     id: 'enable2g4chl',
