@@ -11,16 +11,16 @@ const onlinetimeFilter = utils.filter('connectTime');
 
 const listOptions = fromJS([
   {
-    id: 'nasip',
+    id: 'nasIP',
     text: _('NAS IP'),
   }, {
     id: 'ip',
     text: _('Source IP'),
   }, {
-    id: 'userip',
+    id: 'userIP',
     text: _('User IP'),
   }, {
-    id: 'callingstationid',
+    id: 'callingStationId',
     text: _('Mac'),
   }, {
     id: 'name',

@@ -44,7 +44,7 @@ export const baseSetting = fromJS([
         label: _('Unavailability'),
       }, {
         value: '1',
-        label: _('Free'),
+        label: _('Free of Charge'),
       },
       {
         value: '2',
@@ -55,9 +55,6 @@ export const baseSetting = fromJS([
       }, {
         value: '4',
         label: _('Traffic'),
-      }, {
-        value: '-1',
-        label: _('Outside User'),
       },
     ],
     defaultValue: '0',

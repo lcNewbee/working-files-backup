@@ -11,7 +11,6 @@ import validator from 'shared/validator';
 const propTypes = {
   params: PropTypes.object,
   updateScreenSettings: PropTypes.func,
-  changeScreenActionQuery: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -34,26 +33,6 @@ function getUserName() {
   );
 }
 const settingsOptions = fromJS([
-  // {
-  //   id: 'toPos',
-  //   label: _('toPos'),
-  //   fieldset: 'send_message',
-  //   legend: _('Send Message'),
-  //   type: 'select',
-  //   options: [
-  //     {
-  //       value: '0',
-  //       label: _('System User'),
-  //     }, {
-  //       value: '1',
-  //       label: _('AP User'),
-  //     },
-  //   ],
-  //   required: true,
-  //   validator: validator({
-  //     rules: 'utf8Len:[1,255]',
-  //   }),
-  // },
   {
     id: 'toname',
     label: _('Receiver'),
@@ -89,11 +68,11 @@ export default class View extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-
       userNameOptions: fromJS([]),
     };
     utils.binds(this, [
       'onBeforeSync',
+      'onAfterSync',
     ]);
   }
   componentWillMount() {
@@ -104,17 +83,22 @@ export default class View extends React.Component {
         });
       });
   }
-  // componentDidMount() {
-  //   this.state = {
-  //     options: this.props.params.toname,
-  //   };
-  // }
   onBeforeSync($$actionQuery, $$curSettings) {
     const optionList = this.state.userNameOptions;
     const id = optionList.find($$item => $$item.get('value') === $$curSettings.get('toname'),
       ).get('id');
     this.props.updateScreenSettings({
       id,
+    });
+  }
+  onAfterSync() {
+    const toname = '';
+    const title = '';
+    const description = '';
+    this.props.updateScreenSettings({
+      toname,
+      title,
+      description,
     });
   }
   render() {
@@ -134,6 +118,7 @@ export default class View extends React.Component {
           },
         }}
         onBeforeSync={this.onBeforeSync}
+        onAfterSync={this.onAfterSync}
         hasSettingsSaveButton
         noTitle
       />

@@ -213,6 +213,11 @@ const sPortalCardCategory =
 const sPortalCardList =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Card/CardList');
 
+const sPortalStores =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Advertisement/Stores');
+const sPortalAdv =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Advertisement/Adv');
+
 // const sPortalPermission =
 //     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Permission');
 // const sPortalClassification =
@@ -995,6 +1000,32 @@ const routes = [
               },
             ],
           },
+          // 周三版本发布，暂时隐藏
+          // {
+          //   id: 'portalAdv',
+          //   isIndex: true,
+          //   path: '/main/portal/advertisement',
+          //   icon: 'envelope-o',
+          //   text: _('Advertisement'),
+          //   indexRoute: {
+          //     onEnter: (nextState, replace) => replace('/main/portal/advertisement/stores'),
+          //   },
+          //   childRoutes: [
+          //     {
+          //       id: 'portalStores',
+          //       path: '/main/portal/advertisement/stores',
+          //       formUrl: 'goform/portal/advertisement/stores',
+          //       text: _('Stores Management'),
+          //       component: sPortalStores.Screen,
+          //     }, {
+          //       id: 'portalAdv',
+          //       path: '/main/portal/advertisement/adv',
+          //       formUrl: 'goform/portal/advertisement/adv',
+          //       text: _('Ads Management'),
+          //       component: sPortalAdv.Screen,
+          //     },
+          //   ],
+          // },
           {
             id: 'portalLog',
             isIndex: true,

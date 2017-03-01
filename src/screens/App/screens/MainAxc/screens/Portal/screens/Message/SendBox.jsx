@@ -3,10 +3,11 @@ import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
-import validator from 'shared/validator';
 import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
+import { Button } from 'shared/components/Button';
+import FormContainer from 'shared/components/Organism/FormContainer';
 
 function getUserName() {
   return utils.fetch('goform/portal/account/accountList')
@@ -118,19 +119,11 @@ const listOptions = fromJS([
     id: 'state',
     text: _('State'),
     noForm: true,
-    type: 'text',
+    type: 'switch',
     formProps: {
-      required: true,
+      type: 'checkbox',
+      value: 1,
     },
-    options: [
-      {
-        value: '0',
-        label: _('Unread'),
-      }, {
-        value: '1',
-        label: _('Read'),
-      },
-    ],
   }, {
     id: 'delin',
     text: _('delin'),
@@ -153,37 +146,87 @@ const listOptions = fromJS([
     id: '__actions__',
     text: _('Actions'),
     noForm: true,
-    actions: [
-      {
-        icon: 'check-square-o',
-        actionName: 'update',
-        text: _('Update State'),
-      },
-    ],
-    transform(val, $$item) {
-      return (
-        <span>
-          <a href={`index.html#/main/portal/message/sendmessage/${$$item.get('toname')}`} className="tablelink">{_('Send Again')}</a>
-        </span>
-      );
-    },
+  },
+]);
+
+const sendMessageOptions = fromJS([
+  {
+    id: 'toname',
+    label: _('Receiver'),
+    form: 'sendMessage',
+    required: true,
+    type: 'select',
+  },
+  {
+    id: 'title',
+    label: _('Title'),
+    form: 'sendMessage',
+    type: 'text',
+    required: true,
+  },
+  {
+    id: 'description',
+    label: _('Content'),
+    form: 'sendMessage',
+    type: 'textarea',
+    required: true,
+  },
+]);
+
+const viewMessageOptions = fromJS([
+  {
+    id: 'date',
+    label: _('Date'),
+    type: 'text',
+    form: 'viewMessage',
+    required: true,
+  },
+  {
+    id: 'ip',
+    label: _('IP'),
+    form: 'viewMessage',
+    type: 'text',
+    required: true,
+  },
+  {
+    id: 'title',
+    label: _('Title'),
+    form: 'viewMessage',
+    type: 'text',
+    required: true,
+  },
+  {
+    id: 'description',
+    label: _('Content'),
+    form: 'viewMessage',
+    type: 'textarea',
+    required: true,
   },
 ]);
 
 const propTypes = {
+  app: PropTypes.instanceOf(Map),
   route: PropTypes.object,
+  store: PropTypes.instanceOf(Map),
   save: PropTypes.func,
-  updateScreenSettings: PropTypes.func,
+  updateCurEditListItem: PropTypes.func,
+  changeScreenActionQuery: PropTypes.func,
+  onListAction: PropTypes.func,
 };
 const defaultProps = {};
 
-export default class OpenPortalBase extends React.Component {
+export default class SendBox extends React.Component {
   constructor(props) {
     super(props);
     this.onAction = this.onAction.bind(this);
     this.state = {
       userNameOptions: fromJS([]),
     };
+    utils.binds(this, [
+      'onSave',
+      'renderSendMessageModal',
+    ]);
+    this.screenId = props.route.id;
   }
   componentWillMount() {
     getUserName()
@@ -192,6 +235,11 @@ export default class OpenPortalBase extends React.Component {
           userNameOptions: fromJS(data.options),
         });
       });
+  }
+  onSave() {
+    this.props.onListAction(this.props.route.formUrl, {
+      needMerge: true,
+    });
   }
   onAction(no, type) {
     const query = {
@@ -202,27 +250,124 @@ export default class OpenPortalBase extends React.Component {
     this.props.save(this.props.route.formUrl, query)
       .then((json) => {
         if (json.state && json.state.code === 2000) {
+          return json;
         }
+        return json;
       });
+  }
+  renderSendMessageModal() {
+    const { store, app, route } = this.props;
+    const isSendMessage = store.getIn([route.id, 'actionQuery', 'action']) === 'sendMessage';
+    const getSendMessageOptions = sendMessageOptions
+        .setIn([0, 'options'], this.state.userNameOptions);
+    const isViewMessage = store.getIn([route.id, 'actionQuery', 'action']) === 'viewMessage';
+
+    if (!isSendMessage && !isViewMessage) {
+      return null;
+    }
+
+    if (isViewMessage) {
+      return (
+        <FormContainer
+          id="viewMessage"
+          options={viewMessageOptions}
+          data={store.getIn([route.id, 'curListItem'])}
+          onChangeData={this.props.updateCurEditListItem}
+          onSave={() => this.onSave('viewMessage')}
+          invalidMsg={app.get('invalid')}
+          validateAt={app.get('validateAt')}
+          isSaving={app.get('saving')}
+          savedText="ssss"
+          hasSaveButton
+        />
+      );
+    }
+    return (
+      <FormContainer
+        id="sendMessage"
+        options={getSendMessageOptions}
+        data={store.getIn([route.id, 'curListItem'])}
+        onChangeData={this.props.updateCurEditListItem}
+        onSave={() => this.onSave('sendMessage')}
+        invalidMsg={app.get('invalid')}
+        validateAt={app.get('validateAt')}
+        isSaving={app.get('saving')}
+        savedText="success"
+        hasSaveButton
+      />
+    );
   }
   render() {
     const curListOptions = listOptions
-      .setIn([1, 'options'], this.state.userNameOptions);
+      .setIn([1, 'options'], this.state.userNameOptions)
+      .setIn([-1, 'transform'], (val, $$data) => (
+        <span>
+          <Button
+            text={_('View Message')}
+            key="viewActionButton"
+            icon="link"
+            theme="primary"
+            onClick={() => {
+              this.props.changeScreenActionQuery({
+                action: 'viewMessage',
+                myTitle: _('View Message'),
+              });
+              this.props.updateCurEditListItem({
+                date: $$data.get('date'),
+                ip: $$data.get('ip'),
+                title: $$data.get('title'),
+                description: $$data.get('description'),
+              });
+            }}
+          />
+          <Button
+            text={_('Transfer to Others')}
+            key="sendActionButton"
+            icon="envelope-o"
+            theme="primary"
+            onClick={() => {
+              this.props.changeScreenActionQuery({
+                action: 'sendMessage',
+                myTitle: _('Transfer to Others'),
+              });
+              this.props.updateCurEditListItem({
+                title: $$data.get('title'),
+                description: $$data.get('description'),
+              });
+            }}
+          />
+        </span>),
+      )
+      ;
+    const listActionBarChildren = (
+      <Button
+        text={_('Send Message')}
+        key="sendActionButton"
+        icon="link"
+        theme="primary"
+        onClick={() => this.props.changeScreenActionQuery({
+          action: 'sendMessage',
+          myTitle: _('Send Message'),
+        })}
+      />
+    );
     return (
       <AppScreen
         {...this.props}
         listOptions={curListOptions}
-        listKey="id"
+        actionBarChildren={listActionBarChildren}
+        modalChildren={this.renderSendMessageModal()}
         actionable
         selectable
         editable={false}
+        addable={false}
       />
     );
   }
 }
 
-OpenPortalBase.propTypes = propTypes;
-OpenPortalBase.defaultProps = defaultProps;
+SendBox.propTypes = propTypes;
+SendBox.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
@@ -241,4 +386,4 @@ function mapDispatchToProps(dispatch) {
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(OpenPortalBase);
+)(SendBox);

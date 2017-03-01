@@ -500,7 +500,7 @@ export default class View extends React.Component {
               $$retItem = $$retItem.setIn(['formProps', 'options'], options);
             }
 
-            return $$item;
+            return $$retItem;
           },
         );
       },

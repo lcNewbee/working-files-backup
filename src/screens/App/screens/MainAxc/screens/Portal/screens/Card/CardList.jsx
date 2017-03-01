@@ -7,6 +7,8 @@ import validator from 'shared/validator';
 import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
+import { Button } from 'shared/components/Button';
+import FormContainer from 'shared/components/Organism/FormContainer';
 
 function getCardCategoryName() {
   return utils.fetch('goform/portal/card/cardcategory', {
@@ -19,6 +21,20 @@ function getCardCategoryName() {
           item => ({
             value: item.id,
             label: item.name,
+          }),
+        ),
+      }
+    ),
+  );
+}
+function getUserName() {
+  return utils.fetch('goform/portal/account/accountList')
+    .then(json => (
+      {
+        options: json.data.list.map(
+          item => ({
+            value: item.loginName,
+            label: item.loginName,
           }),
         ),
       }
@@ -252,17 +268,39 @@ const listOptions = fromJS([
     id: '__actions__',
     noForm: true,
     text: _('Actions'),
-    transform(val, $$item) {
-      return (
-        <span>
-          <a href={`index.html#/main/portal/message/sendmessage/${$$item.get('name')}`} className="tablelink">{_('Send to Users')}</a>
-        </span>
-      );
-    },
+  },
+]);
+const sendMessageOptions = fromJS([
+  {
+    id: 'toname',
+    label: _('Receiver'),
+    form: 'sendMessage',
+    required: true,
+    type: 'select',
+  },
+  {
+    id: 'title',
+    label: _('Title'),
+    form: 'sendMessage',
+    type: 'text',
+    required: true,
+  },
+  {
+    id: 'description',
+    label: _('Content'),
+    form: 'sendMessage',
+    type: 'textarea',
+    required: true,
   },
 ]);
 const propTypes = {
+  app: PropTypes.instanceOf(Map),
+  route: PropTypes.object,
   store: PropTypes.instanceOf(Map),
+  save: PropTypes.func,
+  updateCurEditListItem: PropTypes.func,
+  changeScreenActionQuery: PropTypes.func,
+  onListAction: PropTypes.func,
 };
 const defaultProps = {};
 export default class View extends React.Component {
@@ -271,7 +309,13 @@ export default class View extends React.Component {
     this.state = {
       categoryTypeOptions: fromJS([]),
     };
+    utils.binds(this, [
+      'onSave',
+      'renderSendMessageModal',
+    ]);
+    this.screenId = props.route.id;
   }
+
   componentWillMount() {
     getCardCategoryName()
       .then((data) => {
@@ -279,14 +323,101 @@ export default class View extends React.Component {
           categoryTypeOptions: fromJS(data.options),
         });
       });
+    getUserName()
+      .then((data) => {
+        this.setState({
+          userNameOptions: fromJS(data.options),
+        });
+      });
+  }
+  onSave() {
+    this.props.onListAction(this.props.route.formUrl, {
+      needMerge: true,
+    });
+  }
+  onAction(no, type) {
+    const query = {
+      no,
+      type,
+    };
+
+    this.props.save(this.props.route.formUrl, query)
+      .then((json) => {
+        if (json.state && json.state.code === 2000) {
+          return json;
+        }
+        return json;
+      });
+  }
+  renderSendMessageModal() {
+    const { store, app, route } = this.props;
+    const isSendMessage = store.getIn([route.id, 'actionQuery', 'action']) === 'sendMessage';
+    const getSendMessageOptions = sendMessageOptions
+        .setIn([0, 'options'], this.state.userNameOptions);
+    if (!isSendMessage) {
+      return null;
+    }
+    return (
+      <FormContainer
+        id="sendMessage"
+        options={getSendMessageOptions}
+        data={store.getIn([route.id, 'curListItem'])}
+        onChangeData={this.props.updateCurEditListItem}
+        onSave={() => this.onSave('sendMessage')}
+        invalidMsg={app.get('invalid')}
+        validateAt={app.get('validateAt')}
+        isSaving={app.get('saving')}
+        savedText="ssss"
+        hasSaveButton
+      />
+    );
   }
   render() {
     const curListOptions = listOptions
-      .setIn([2, 'options'], this.state.categoryTypeOptions);
+      .setIn([2, 'options'], this.state.categoryTypeOptions)
+      .setIn([-1, 'transform'], (val, $$data) => {
+        const type = $$data.get('categoryType');
+        let x;
+        switch (type) {
+          case 0:
+            x = _('Hour Card');
+            break;
+          case 1:
+            x = _('Day Card');
+            break;
+          case 2:
+            x = _('Month Card');
+            break;
+          case 3:
+            x = _('Year Card');
+            break;
+          default:
+            x = _('Year Card');
+        }
+        if ($$data.get('state') === '0') {
+          return (<Button
+            text={_('Send to Users')}
+            key="sendActionButton"
+            icon="link"
+            theme="primary"
+            onClick={() => {
+              this.props.changeScreenActionQuery({
+                action: 'sendMessage',
+                myTitle: _('Send to Users'),
+              });
+              this.props.updateCurEditListItem({
+                title: _('CD Key of Recharge Card '),
+                description: _('Recharge Name:') + $$data.get('name') + _('; ') + _('CD Key:') + $$data.get('cdKey') + _('; ') + _('Category Type:') + x,
+              });
+            }}
+          />);
+        }
+      });
     return (
       <AppScreen
         {...this.props}
         listOptions={curListOptions}
+        modalChildren={this.renderSendMessageModal()}
         noTitle
         actionable
         selectable

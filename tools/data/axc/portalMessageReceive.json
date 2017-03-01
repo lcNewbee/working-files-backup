@@ -9,14 +9,15 @@
       "title": "ikuai",
       "date": "129.0.0.1",
       "state": "2000",
-      "fromid": "2000",
-      "fromname": "2000",
-      "FromPos": "1",
+      "fromid": 0,
+      "fromname": "fannyzhang",
+      "FromPos": "0",
       "ip": "0",
       "toId": "ikuai",
       "toname": "129.0.0.1",
       "toPos": "2000",
       "delin": "2000",
+      "description":"2200",
       "delout": "2000"
     }]
   }
