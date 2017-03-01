@@ -23,6 +23,9 @@ const listOptions = fromJS([
       type: 'text',
       required: true,
       maxLength: '31',
+      validator: validator({
+        rules: 'utf8Len:[1,31]',
+      }),
     },
   }, {
     id: 'date',
@@ -58,6 +61,9 @@ const listOptions = fromJS([
     noTable: true,
     formProps: {
       required: true,
+      validator: validator({
+        rules: 'pwd',
+      }),
     },
   }, {
     id: 'ex1',
@@ -127,6 +133,9 @@ const listOptions = fromJS([
       type: 'num',
       min: '0',
       required: true,
+      validator: validator({
+        rules: 'num[0,9999]',
+      }),
     },
   }, {
     id: 'autologin',
@@ -188,7 +197,10 @@ const listOptions = fromJS([
     noTable: true,
     formProps: {
       type: 'text',
-      maxLength: '31',
+      maxLength: '32',
+      validator: validator({
+        rules: 'utf8Len:[1,31]',
+      }),
     },
   }, {
     id: 'gender',
@@ -246,6 +258,10 @@ const listOptions = fromJS([
     noTable: true,
     formProps: {
       type: 'text',
+      maxLength: 256,
+      validator: validator({
+        rules: 'utf8Len:[1,255]',
+      }),
     },
   }, {
     id: 'ex5',

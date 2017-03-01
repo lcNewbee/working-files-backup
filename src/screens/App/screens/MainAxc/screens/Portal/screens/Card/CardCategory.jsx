@@ -16,6 +16,10 @@ const listOptions = fromJS([
     formProps: {
       type: 'text',
       required: true,
+      maxLength: 32,
+      validator: validator({
+        rules: 'utf8Len:[1,31]',
+      }),
     },
   }, {
     id: 'state',
@@ -65,6 +69,10 @@ const listOptions = fromJS([
     formProps: {
       type: 'number',
       required: true,
+      min: 0,
+      validator: validator({
+        rules: 'num[0,9999]',
+      }),
     },
   }, {
     id: 'autologin',
@@ -105,6 +113,10 @@ const listOptions = fromJS([
     formProps: {
       type: 'number',
       required: true,
+      min: 0,
+      validator: validator({
+        rules: 'num[0,9999]',
+      }),
     },
   }, {
     id: 'money',

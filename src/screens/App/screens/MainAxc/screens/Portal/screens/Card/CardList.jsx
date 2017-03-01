@@ -49,6 +49,10 @@ const listOptions = fromJS([
     formProps: {
       type: 'text',
       required: true,
+      maxLength: 32,
+      validator: validator({
+        rules: 'utf8Len:[1,31]',
+      }),
     },
   }, {
     id: 'payType',
@@ -123,6 +127,10 @@ const listOptions = fromJS([
     formProps: {
       type: 'number',
       required: true,
+      min: 0,
+      validator: validator({
+        rules: 'num[0,9999]',
+      }),
     },
   }, {
     id: 'maclimit',
@@ -148,6 +156,10 @@ const listOptions = fromJS([
     formProps: {
       type: 'number',
       required: true,
+      min: 0,
+      validator: validator({
+        rules: 'num[0,9999]',
+      }),
     },
   }, {
     id: 'autologin',
@@ -186,7 +198,7 @@ const listOptions = fromJS([
     text: _('CD Key'),
     noForm: true,
     formProps: {
-      type: 'number',
+      type: 'text',
       required: true,
     },
   },
@@ -197,6 +209,10 @@ const listOptions = fromJS([
     formProps: {
       type: 'number',
       required: true,
+      min: 0,
+      validator: validator({
+        rules: 'num[0,9999]',
+      }),
     },
   }, {
     id: 'state',
@@ -228,6 +244,10 @@ const listOptions = fromJS([
     formProps: {
       type: 'text',
       required: true,
+      maxLength: 32,
+      validator: validator({
+        rules: 'utf8Len:[1,31]',
+      }),
     },
   }, {
     id: 'buyDate',
@@ -398,7 +418,7 @@ export default class View extends React.Component {
           return (<Button
             text={_('Send to Users')}
             key="sendActionButton"
-            icon="link"
+            icon="repeat"
             theme="primary"
             onClick={() => {
               this.props.changeScreenActionQuery({

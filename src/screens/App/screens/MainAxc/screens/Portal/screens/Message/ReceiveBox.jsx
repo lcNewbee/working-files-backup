@@ -84,6 +84,10 @@ const listOptions = fromJS([
     text: _('Title'),
     formProps: {
       required: true,
+      maxLength: 32,
+      validator: validator({
+        rules: 'utf8Len:[1,31]',
+      }),
     },
   }, {
     id: 'date',
@@ -99,6 +103,10 @@ const listOptions = fromJS([
     formProps: {
       type: 'textarea',
       required: true,
+      maxLength: 256,
+      validator: validator({
+        rules: 'utf8Len:[1,255]',
+      }),
     },
   }, {
     id: 'ip',
@@ -165,6 +173,10 @@ const sendMessageOptions = fromJS([
     form: 'sendMessage',
     type: 'text',
     required: true,
+    maxLength: 32,
+    validator: validator({
+      rules: 'utf8Len:[1,31]',
+    }),
   },
   {
     id: 'description',
@@ -172,6 +184,10 @@ const sendMessageOptions = fromJS([
     form: 'sendMessage',
     type: 'textarea',
     required: true,
+    maxLength: 256,
+    validator: validator({
+      rules: 'utf8Len:[1,255]',
+    }),
   },
 ]);
 const viewMessageOptions = fromJS([
@@ -305,7 +321,7 @@ export default class OpenPortalBase extends React.Component {
           <Button
             text={_('View Message')}
             key="viewActionButton"
-            icon="link"
+            icon="eye"
             theme="primary"
             onClick={() => {
               this.props.changeScreenActionQuery({
@@ -323,7 +339,7 @@ export default class OpenPortalBase extends React.Component {
           <Button
             text={_('Reply')}
             key="sendActionButton"
-            icon="envelope-o"
+            icon="repeat"
             theme="primary"
             onClick={() => {
               this.props.changeScreenActionQuery({

@@ -19,6 +19,9 @@ const ERROR_MSG_MAP = {
 
   // AXC: 系统设置 6300 - 6399
   6300: _('Pelect upload the correct firmware file'),
+
+  // AXC: Portal 6400 - 6499
+  6401: _('Fail to send message'),
 };
 
 export default ERROR_MSG_MAP;

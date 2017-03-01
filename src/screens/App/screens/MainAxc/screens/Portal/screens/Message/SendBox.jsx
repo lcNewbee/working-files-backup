@@ -3,6 +3,7 @@ import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
+import validator from 'shared/validator';
 import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
@@ -71,6 +72,10 @@ const listOptions = fromJS([
     formProps: {
       type: 'textarea',
       required: true,
+      maxLength: 256,
+      validator: validator({
+        rules: 'utf8Len:[1,255]',
+      }),
     },
   }, {
     id: 'fromid',
@@ -163,6 +168,10 @@ const sendMessageOptions = fromJS([
     form: 'sendMessage',
     type: 'text',
     required: true,
+    maxLength: 32,
+    validator: validator({
+      rules: 'utf8Len:[1,31]',
+    }),
   },
   {
     id: 'description',
@@ -170,6 +179,10 @@ const sendMessageOptions = fromJS([
     form: 'sendMessage',
     type: 'textarea',
     required: true,
+    maxLength: 256,
+    validator: validator({
+      rules: 'utf8Len:[1,255]',
+    }),
   },
 ]);
 
@@ -305,7 +318,7 @@ export default class SendBox extends React.Component {
           <Button
             text={_('View Message')}
             key="viewActionButton"
-            icon="link"
+            icon="eye"
             theme="primary"
             onClick={() => {
               this.props.changeScreenActionQuery({
@@ -323,7 +336,7 @@ export default class SendBox extends React.Component {
           <Button
             text={_('Transfer to Others')}
             key="sendActionButton"
-            icon="envelope-o"
+            icon="repeat"
             theme="primary"
             onClick={() => {
               this.props.changeScreenActionQuery({
@@ -343,7 +356,7 @@ export default class SendBox extends React.Component {
       <Button
         text={_('Send Message')}
         key="sendActionButton"
-        icon="link"
+        icon="envelope-o"
         theme="primary"
         onClick={() => this.props.changeScreenActionQuery({
           action: 'sendMessage',

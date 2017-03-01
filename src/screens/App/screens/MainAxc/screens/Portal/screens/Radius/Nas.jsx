@@ -35,6 +35,9 @@ const listOptions = fromJS([
       type: 'text',
       required: true,
       maxLength: '31',
+      validator: validator({
+        rules: 'utf8Len:[1,31]',
+      }),
     },
   }, {
     id: 'sharedSecret',
@@ -42,6 +45,9 @@ const listOptions = fromJS([
     formProps: {
       type: 'password',
       required: true,
+      validator: validator({
+        rules: 'pwd',
+      }),
     },
   }, {
     id: 'ex2',

@@ -48,8 +48,9 @@ const settingsOptions = fromJS([
     type: 'text',
     required: true,
     legend: _('Send Message'),
+    maxLength: 32,
     validator: validator({
-      rules: 'utf8Len:[1,255]',
+      rules: 'utf8Len:[1,31]',
     }),
   },
   {
