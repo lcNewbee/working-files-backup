@@ -16,7 +16,7 @@
         "ac_ip":"192.189.2.2"
       }, {
         "id": 2,
-        "template_name":"test",
+        "template_name":"floor1",
         "address_type": "2",
         "server_ipaddr":"192.189.2.2",
         "server_port":"324",
@@ -25,7 +25,16 @@
         "ac_ip":"192.189.2.2"
       }, {
         "id": 3,
-        "template_name":"test",
+        "template_name":"test1",
+         "address_type": "2",
+        "server_ipaddr":"192.189.2.2",
+        "server_port":"324",
+        "server_key":"2334324432",
+        "server_url":"www.google.com",
+        "ac_ip":"192.189.2.2"
+      }, {
+        "id": 4,
+        "template_name":"test2",
          "address_type": "2",
         "server_ipaddr":"192.189.2.2",
         "server_port":"324",

@@ -103,6 +103,7 @@ const listOptions = fromJS([
       validator: validator({
         rules: 'ip',
       }),
+      required: true,
       showPrecondition(data) {
         return data.get('auth_mode') === '2';
       },
@@ -115,6 +116,7 @@ const listOptions = fromJS([
       validator: validator({
         rules: 'mask',
       }),
+      required: true,
       showPrecondition(data) {
         return data.get('auth_mode') === '2';
       },
@@ -194,10 +196,37 @@ export default class View extends React.Component {
 
         return ret;
       });
-    const curListOptions = listOptions
-      .setIn([0, 'options'], myPortOptions)
-      .setIn([1, 'options'], this.state.portalServerOption)
-      .setIn([6, 'options'], this.state.AAADomainNameOption);
+    const myPortalServerOption = this.state.portalServerOption
+      .filterNot(($$item) => {
+        const curServerName = $$item.get('value');
+        const curIndex = $$curList.findIndex($$listItem => $$listItem.get('template_name') === curServerName);
+        let ret = curIndex !== -1;
+
+        if (actionType === 'edit' && $$myScreenStore.getIn(['curListItem', 'id']) === $$curList.getIn([curIndex, 'id'])) {
+          ret = false;
+        }
+
+        return ret;
+      });
+    const curListOptions = listOptions.map(
+      ($$item) => {
+        const curId = $$item.get('id');
+
+        switch (curId) {
+          case 'interface_bind':
+            return $$item.set('options', myPortOptions);
+
+          case 'template_name':
+            return $$item.set('options', myPortalServerOption);
+
+          case 'auth_domain':
+            return $$item.set('options', this.state.AAADomainNameOption);
+
+          default:
+            return $$item;
+        }
+      },
+    );
 
     return (
       <AppScreen

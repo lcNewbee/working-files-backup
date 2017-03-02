@@ -640,5 +640,9 @@
   "Same %s item already exists": "已存在相同%s的项",
   "segment": "网段",
   "Max list size is %s": "列表最多能添加%s项",
-  "Synchronizing config for AP...": "正在同步配置到AP..."
+  "Synchronizing config for AP...": "正在同步配置到AP...",
+  "Clients Flow State": "客流分析状态",
+
+  "Direct": "直接",
+  "Layer3": "三层"
 }
