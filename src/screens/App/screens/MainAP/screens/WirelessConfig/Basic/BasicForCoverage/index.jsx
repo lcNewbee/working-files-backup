@@ -1454,6 +1454,38 @@ export default class Basic extends React.Component {
                           }
                         </div>
                       ) : null
+                    }
+                    {/* // station模式下，对端AP的mac地址输入框
+                      (curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta') ? (
+                        <div>
+                          <FormGroup
+                            label={_('Lock To AP')}
+                            type="checkbox"
+                            checked={curData.getIn(['radioList', radioId, 'vapList', '0', 'apMacEnable']) === '1'}
+                            onChange={(data) => {
+                              const radioList = curData.get('radioList')
+                                              .setIn([radioId, 'vapList', '0', 'apMacEnable'], data.value);
+                              this.props.updateItemSettings({ radioList });
+                            }}
+                          />
+                          {
+                            curData.getIn(['radioList', radioId, 'vapList', '0', 'apMacEnable']) === '1' ? (
+                              <FormGroup
+                                label={_('Peer Mac')}
+                                form="radioSettings"
+                                value={apMac}
+                                onChange={(data) => {
+                                  const radioList = curData.get('radioList')
+                                                  .setIn([radioId, 'vapList', '0', 'apMac'], data.value);
+                                  this.props.updateItemSettings({ radioList });
+                                }}
+                                placeholder={_('not necessary')}
+                                {...staApmac}
+                              />
+                            ) : null
+                          }
+                        </div>
+                      ) : null
                     */}
 
                     { // station模式，lock to ap功能根据lockType值判断是否是华润定制
@@ -1587,10 +1619,7 @@ export default class Basic extends React.Component {
                                   <Icon
                                     className="fl"
                                     name="question-circle"
-                                    style={{
-                                      marginLeft: '5px',
-                                      position: 'relative',
-                                    }}
+                                    style={{ marginLeft: '5px' }}
                                     onMouseOver={() => {
                                       this.props.changeShowMacHelpInfo(true);
                                     }}
