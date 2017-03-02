@@ -14,6 +14,7 @@ import * as screenActions from 'shared/actions/screens';
 import * as propertiesActions from 'shared/actions/properties';
 
 const uptimeFilter = utils.filter('connectTime');
+
 // 列表相关配置
 const listOptions = fromJS([
   {

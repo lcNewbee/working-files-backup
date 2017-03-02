@@ -275,6 +275,7 @@ const listOptions = fromJS([
     formProps: {
       type: 'text',
       required: true,
+      help: _('$'),
     },
   }, {
     id: 'decsription',
@@ -369,6 +370,7 @@ export default class View extends React.Component {
         return json;
       });
   }
+
   renderSendMessageModal() {
     const { store, app, route } = this.props;
     const isSendMessage = store.getIn([route.id, 'actionQuery', 'action']) === 'sendMessage';
@@ -415,23 +417,31 @@ export default class View extends React.Component {
             x = _('Year Card');
         }
         if ($$data.get('state') === '0') {
-          return (<Button
-            text={_('Send to Users')}
-            key="sendActionButton"
-            icon="repeat"
-            theme="primary"
-            onClick={() => {
-              this.props.changeScreenActionQuery({
-                action: 'sendMessage',
-                myTitle: _('Send to Users'),
-              });
-              this.props.updateCurEditListItem({
-                title: _('CD Key of Recharge Card '),
-                description: _('Recharge Name:') + $$data.get('name') + _('; ') + _('CD Key:') + $$data.get('cdKey') + _('; ') + _('Category Type:') + x,
-              });
-            }}
-          />);
+          return (
+            <Button
+              text={_('Send to Users')}
+              key="sendActionButton"
+              icon="repeat"
+              theme="primary"
+              onClick={() => {
+                this.props.changeScreenActionQuery({
+                  action: 'sendMessage',
+                  myTitle: _('Send to Users'),
+                });
+                this.props.updateCurEditListItem({
+                  id: $$data.get('id'),
+                  title: _('CD Key of Recharge Card '),
+                  description: _('Recharge Name:') + $$data.get('name') + _('; ') + _('CD Key:') + $$data.get('cdKey') + _('; ') + _('Category Type:') + x,
+                });
+              }}
+            />);
         }
+        return (
+          <Button
+            text={_('Card Sold Out')}
+            key="sendoutActionButton"
+            icon="repeat"
+          />);
       });
     return (
       <AppScreen

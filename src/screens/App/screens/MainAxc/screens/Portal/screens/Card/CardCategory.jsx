@@ -124,6 +124,7 @@ const listOptions = fromJS([
     formProps: {
       type: 'text',
       required: true,
+      help: _('$'),
     },
   }, {
     id: 'description',

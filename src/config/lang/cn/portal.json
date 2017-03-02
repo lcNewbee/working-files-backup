@@ -210,5 +210,7 @@
   "CD Key of Recharge Card ":"充值卡CD Key",
   "Recharge Name:":"名称:",
   "Category Type:":"分类类型:",
+  "$":"¥",
+  "Card Sold Out":"此卡已售出",
   "Card Number":"卡数"
 }

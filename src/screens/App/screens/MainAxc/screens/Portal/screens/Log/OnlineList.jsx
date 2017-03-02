@@ -1,12 +1,14 @@
 import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
-import { fromJS, Map } from 'immutable';
+import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/validator';
 import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
+
+const uptimeFilter = utils.filter('connectTime');
 
 const listOptions = fromJS([
   {
@@ -44,6 +46,9 @@ const listOptions = fromJS([
     formProps: {
       required: true,
     },
+    transform(val) {
+      return uptimeFilter.transform(val / 1000);
+    },
   }, {
     id: 'state',
     text: _('Acc Type'),
@@ -53,7 +58,7 @@ const listOptions = fromJS([
         label: _('Unavailability'),
       }, {
         value: '1',
-        label: _('Free'),
+        label: _('Free of Charge'),
       },
       {
         value: '2',
