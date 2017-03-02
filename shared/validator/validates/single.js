@@ -15,9 +15,9 @@ var vaildate = {
     var thisMin = min || 0;
 
     if (thisMin === max && len !== thisMin) {
-      return `${_('String length must be: ')}${min} bit`;
+      return `${_('String length must be: ')}${min} ${_('bit')}`;
     } else if (len < thisMin || len > max) {
-      return `${_('String length range is: ')}${min} - ${max} bit`;
+      return `${_('String length range is: ')}${min} - ${max} ${_('bit')}`;
     }
   },
 
@@ -38,7 +38,7 @@ var vaildate = {
     if (!utilsString.isInteger(str)) {
       return _("Must be integer");
     }
-
+    console.log('expand', expand);
     if(expand !== undefined) {
       if(parseInt(str, 10) === parseInt(expand, 10)) {
         return ;
@@ -47,7 +47,9 @@ var vaildate = {
 
     if (min !== undefined && max !== undefined) {
       if (parseInt(str, 10) < min || parseInt(str, 10) > max) {
-        return _("Range: ") + _("%s - %s", min, max);
+        const str = typeof (expand) !== 'undefined' ? _("Range: ") + _("%s", expand) + _(" or ") + _("%s - %s", min, max) :
+                             _("Range: ") + _("%s - %s", min, max);
+        return str;
       }
     }
   },

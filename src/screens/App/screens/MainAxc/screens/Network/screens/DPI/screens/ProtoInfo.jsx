@@ -56,29 +56,28 @@ const viewOptions = fromJS([
 const userModalOptions = fromJS([
   {
     id: 'mac',
-    text: 'MAC',
-  },
-  {
+    text: _('MAC'),
+  }, {
     id: 'ip',
-    text: 'IP',
-  },
-  {
-    id: 'ethx_name',
-    text: _('Ethernet'),
-  },
-  {
+    text: _('IP'),
+  }, {
     id: 'osType',
     text: _('OS Type'),
-  },
-  {
-    id: 'traffic',
-    text: 'Traffic',
     transform(val) {
-      return flowRateFilter.transform(val);
+      if (val === '' || val === undefined) {
+        return '--';
+      }
+      return val;
+    },
+  }, {
+    id: 'curRate',
+    text: _('Current Rate'),
+    transform(val) {
+      return `${flowRateFilter.transform(val)}/s`;
     },
   }, {
     id: 'trafficPercent',
-    text: 'Traffic Proportion',
+    text: _('Proportion'),
   },
 ]);
 
@@ -96,7 +95,7 @@ export default class ProtoInfo extends React.Component {
     ]);
     this.state = {
       showModal: false,
-      userModalOptions,
+      // userModalOptions,
     };
   }
 
@@ -164,13 +163,14 @@ export default class ProtoInfo extends React.Component {
                 cursor: 'pointer',
                 display: 'inline-block',
               }}
+              title={_('Click for details')}
               onClick={() => {
                 // 找到traffic在options中的位置，然后改变traffic的text属性
-                const optionsIndex = this.state.userModalOptions.findIndex(name => name.get('id') === 'traffic');
-                const options = this.state.userModalOptions.setIn([optionsIndex, 'text'], `${item.get('attr_name')} ${_('Traffic')}`);
+                // const optionsIndex = this.state.userModalOptions.findIndex(name => name.get('id') === 'traffic');
+                // const options = this.state.userModalOptions.setIn([optionsIndex, 'text'], `${item.get('attr_name')} ${_('Traffic')}`);
                 this.setState({
                   showModal: true,
-                  userModalOptions: options,
+                  // userModalOptions: options,
                 });
                 Promise.resolve().then(() => {
                   this.props.changeScreenQuery({
@@ -254,7 +254,7 @@ export default class ProtoInfo extends React.Component {
                 </div>
                 <div className="t-overview__section">
                   <Table
-                    options={this.state.userModalOptions}
+                    options={userModalOptions}
                     list={store.getIn([curScreenId, 'data', 'protoClientList'])}
                     className="table"
                     page={store.getIn([curScreenId, 'data', 'clientPage'])}

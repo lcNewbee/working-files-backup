@@ -598,7 +598,7 @@
   "Statistics Within 30 Seconds": "30秒数据统计",
   "Flow Id": "流序号",
   "NDPI Enable": "NDPI启用",
-  "Ethernet": "以太网口数据",
+  "Ethernet": "端口",
   "Protocols": "协议数据",
   "Flow Info": "连接流信息",
   "Mac Statistic": "MAC数据统计",
@@ -619,5 +619,17 @@
   "Clients Analysis": "客流分析",
   "Clients Flow State": "客流分析状态",
 
-  "Attack Number":"攻击数量"
+  "Attack Number":"攻击数量",
+
+  "More Details >>": "更多详情 >>",
+  "Applications": "应用",
+  "Application": "应用",
+  "Search MAC": "查找",
+  "Complete MAC Address": "输入完整的MAC地址",
+  "OS Type": "系统类型",
+  "Current Rate": "当前速率",
+  "Proportion": "流量占比",
+  "User Number": "用户数",
+  "Current": "当前",
+  "Clients List": "客户端列表"
 }

@@ -79,26 +79,41 @@ const timeTypeSwitchs = fromJS([
 const userModalOptions = fromJS([
   {
     id: 'mac',
-    text: 'MAC',
-  },
-  {
+    text: _('MAC'),
+  }, {
     id: 'ip',
-    text: 'IP',
-  },
-  {
+    text: _('IP'),
+  }, {
     id: 'osType',
     text: _('OS Type'),
-  },
-  {
-    id: 'traffic',
-    text: _('Traffic'),
     transform(val) {
-      return flowRateFilter.transform(val);
+      if (val === '' || val === undefined) {
+        return '--';
+      }
+      return val;
     },
-  },
-  {
+  }, {
+    id: 'application',
+    text: _('Applications'),
+    transform(val) {
+      let str = '';
+      if (val) {
+        val.forEach((proto, iter) => {
+          str += (iter === val.size - 1 ? proto : `${proto}, `);
+        });
+        return str;
+      }
+      return '--';
+    },
+  }, {
+    id: 'curRate',
+    text: _('Current Rate'),
+    transform(val) {
+      return `${flowRateFilter.transform(val)}/s`;
+    },
+  }, {
     id: 'trafficPercent',
-    text: _('Traffic Proportion'),
+    text: _('Proportion'),
   },
 ]);
 
@@ -371,6 +386,7 @@ export default class EthStatistic extends React.Component {
                 cursor: 'pointer',
                 display: 'inline-block',
               }}
+              title={_('Click for details')}
               onClick={() => {
                 const ethList = store.getIn([curScreenId, 'data', 'list']);
                 const eth = item.get('ethx_name');
@@ -396,7 +412,7 @@ export default class EthStatistic extends React.Component {
         }.bind(this),
       }, {
         id: 'application',
-        text: _('Application'),
+        text: _('Applications'),
         transform(val) {
           let str = '';
           if (val) {

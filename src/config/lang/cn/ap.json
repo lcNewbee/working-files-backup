@@ -116,7 +116,7 @@
   "Output Power": "发射功率",
   "Max TX Rate": "最高发送速率",
   "Filter Mode": "过滤模式",
-  "Station List": "MAC列表",
+  "MAC List": "MAC列表",
   "Allow Only": "仅允许",
   "Deny Only": "仅禁止",
   "Remove": "移除",
@@ -399,5 +399,8 @@
   "Add client ": "确定将客户端 ",
   " to blacklist ?": " 加入黑名单？",
   "Invalid firmware!": "固件格式错误！",
-  "String length must be: ": "密码长度必须为："
+  "String length must be: ": "字符串长度必须为：",
+  "String length range is: ": "字符串长度范围为：",
+  "bit": "位",
+  " or ": "或"
 }

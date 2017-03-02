@@ -71,8 +71,8 @@ const validOptions = Map({
     rules: 'num:[1, 255]',
   }),
   validSegment: validator({
-    rules: 'num:[256, 2347]',
-    exclude: '0',
+    rules: 'num:[256, 2347, 0]',
+    // exclude: '0',
   }),
   validAmpdu: validator({
     rules: 'num:[1, 64]',

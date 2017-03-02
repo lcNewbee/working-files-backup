@@ -334,7 +334,7 @@ export default class ACL extends React.Component {
           </div>
         </FormGroup>
         <FormGroup
-          label={_('Station List')}
+          label={_('MAC List')}
           className="clearfix"
         >
           <div

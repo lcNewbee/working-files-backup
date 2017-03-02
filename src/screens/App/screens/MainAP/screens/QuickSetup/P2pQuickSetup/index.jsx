@@ -100,7 +100,7 @@ const validOptions = Map({
     rules: 'mask',
   }),
   validSsid: validator({
-    rules: 'remarkTxt:["\'\\\\"]|len:[1, 64]',
+    rules: 'remarkTxt:["\'\\\\"]|len:[1, 32]',
   }),
   validDistance: validator({
     rules: 'num:[1, 10]',

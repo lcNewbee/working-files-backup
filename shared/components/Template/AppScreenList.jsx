@@ -685,6 +685,7 @@ class AppScreenList extends React.PureComponent {
             let $$newFormGroup = $$formGroup;
 
             if ($$formGroup.get('notEditable')) {
+              // 该项不可编辑，则置为只读，并将选择类型强制设为输入类型
               $$newFormGroup = $$newFormGroup.set('readOnly', true)
                 .set('type', 'text');
 
@@ -717,7 +718,6 @@ class AppScreenList extends React.PureComponent {
         },
       );
     }
-
 
     this.editFormOptions = myEditFormOptions;
   }

@@ -64,10 +64,11 @@ export default class ModeSettings extends React.Component {
 
   onSave() {
     this.props.validateAll().then((msg) => {
+      let str = true;
       if (msg.isEmpty()) {
         const acIp = this.props.store.getIn(['curData', 'acIp']);
         const mask = '255.255.255.0';
-        const str = validator.combine.noBroadcastIp(acIp, mask);
+        str = validator.combine.noBroadcastIp(acIp, mask);
         console.log('str', str);
         if (str) {
           this.props.createModal({
@@ -75,9 +76,10 @@ export default class ModeSettings extends React.Component {
             text: str,
           });
         }
-        return str;
       }
+      return str;
     }).then((str) => {
+      console.log('str', str);
       if (!str) {
         const {
           nextMode, currMode, currDiscoveryType, discoveryType, currAcIp, acIp,

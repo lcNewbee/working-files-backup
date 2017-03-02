@@ -111,7 +111,7 @@ const channelWidthOptions = [
 
 const validOptions = Map({
   validSsid: validator({
-    rules: 'remarkTxt:["\'\\\\"]|len:[1, 64]',
+    rules: 'remarkTxt:["\'\\\\"]|len:[1, 32]',
   }),
   staApmac: validator({
     rules: 'mac',
@@ -126,10 +126,10 @@ const validOptions = Map({
     rules: 'mac',
   }),
   validPwd1: validator({
-    rules: 'pwd|len:[8, 32]',
+    rules: 'pwd|len:[8, 63]',
   }),
   validPwd2: validator({
-    rules: 'pwd|len:[8, 32]',
+    rules: 'pwd|len:[8, 63]',
   }),
   Hex: validator({
     rules: 'hex|len:[10, 10]',
@@ -239,7 +239,7 @@ export default class Basic extends React.Component {
                 value={val}
                 disabled={pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
                 onChange={(data) => {
-                  if (data.value.length <= 64) {
+                  if (data.value.length <= 32) {
                     this.onSsidItemChange(val, item, 'ssid', data.value);
                   }
                 }}
@@ -1210,6 +1210,7 @@ export default class Basic extends React.Component {
                                 label={_('Remote SSID')}
                                 className="fl"
                                 type="text"
+                                form="radioSettings"
                                 value={curData.getIn(['radioList', radioId, 'vapList', '0', 'ssid'])}
                                 onChange={(data) => {
                                   const radioList = curData.get('radioList')
@@ -1263,7 +1264,7 @@ export default class Basic extends React.Component {
                                 label={_('Remote SSID')}
                                 className="fl"
                                 type="text"
-
+                                form="radioSettings"
                                 value={curData.getIn(['radioList', radioId, 'vapList', '0', 'ssid'])}
                                 onChange={(data) => {
                                   const radioList = curData.get('radioList')

@@ -187,7 +187,7 @@ export default class DPIOverview extends React.Component {
                         window.location.href = '#/main/network/dpi/macstatistic';
                       }}
                     >
-                      {_('More details >>')}
+                      {_('More Details >>')}
                     </span>
                   </div>
                   <div className="element row">
@@ -216,7 +216,7 @@ export default class DPIOverview extends React.Component {
                         window.location.href = '#/main/network/dpi/protoinfo';
                       }}
                     >
-                      {_('More details >>')}
+                      {_('More Details >>')}
                     </span>
                   </div>
                   <div className="element">
@@ -248,7 +248,7 @@ export default class DPIOverview extends React.Component {
                         window.location.href = '#/main/network/dpi/ethstatistic';
                       }}
                     >
-                      {_('More details >>')}
+                      {_('More Details >>')}
                     </span>
                   </div>
                   <div className="element">

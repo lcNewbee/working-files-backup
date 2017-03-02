@@ -165,20 +165,22 @@ export default class SignUp extends React.Component {
   onOkButtonClick() {
     const { currModeData, nextModeData } = this.props.selfState.toJS();
     const showThinModeConfigModal = this.props.selfState.get('showThinModeConfigModal');
-    this.props.validateAll('acipinput').then((msg) => {
-      if (msg.isEmpty()) {
+    this.props.validateAll('acipinput').then((mg) => {
+      let str = true;
+      if (mg.isEmpty()) {
         const acIp = nextModeData.acIp;
         const mask = '255.255.255.0';
-        const str = validator.combine.noBroadcastIp(acIp, mask);
-        console.log('str', str);
+        // 只有瘦AP才会验证IP地址，否则直接跳过
+        str = nextModeData.enable === '1' ? validator.combine.noBroadcastIp(acIp, mask) : null;
+        // console.log('str', str);
         if (str) {
           this.props.createModal({
             role: 'alert',
             text: str,
           });
         }
-        return str;
       }
+      return str;
     }).then((str) => {
       if (!str) {
         if (nextModeData.enable === '1' && !showThinModeConfigModal) {

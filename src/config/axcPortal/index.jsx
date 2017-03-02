@@ -381,7 +381,7 @@ const routes = [
                 id: 'protoinfo',
                 path: '/main/network/dpi/protoinfo',
                 formUrl: 'goform/network/dpi/protoinfo',
-                text: _('Application'),
+                text: _('Applications'),
                 component: sProtoInfo.Screen,
               },
             ],

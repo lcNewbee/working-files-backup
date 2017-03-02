@@ -248,7 +248,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'application',
-    text: _('Application'),
+    text: _('Applications'),
     transform(val) {
       let str = '';
       if (val) {

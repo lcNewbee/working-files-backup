@@ -12,6 +12,7 @@ import reducer from './reducer';
 
 const propTypes = {
   app: PropTypes.object,
+  save: PropTypes.func,
   fetch: PropTypes.func,
   refreshAll: PropTypes.func,
   route: PropTypes.object,
@@ -82,6 +83,7 @@ export default class MainAP extends React.PureComponent {
   onLogout(e) {
     e.preventDefault();
     this.props.changeLoginStatus('0');
+    this.props.save('goform/set_logout_stat');
     window.location.hash = '#';
   }
 
@@ -96,6 +98,7 @@ export default class MainAP extends React.PureComponent {
     const { isShow } = this.state;
     // 解决在管理页面刷新获取radioType为undefined，导致请求国家信道错误的问题
     if (this.props.selfState.getIn(['deviceRadioList']).size === 0) return null;
+    // console.log('menus', this.props.selfState.get('menus'));
 
     return (
       <div>
@@ -103,7 +106,7 @@ export default class MainAP extends React.PureComponent {
           title={guiName}
         >
           <div className="aside">
-            <a href="#" className="as-control" onClick={this.onRefresh}>
+            <a href="" className="as-control" onClick={this.onRefresh}>
               <Icon name="refresh" className="icon" />
               <span>{_('REFRESH')}</span>
             </a>
@@ -118,7 +121,7 @@ export default class MainAP extends React.PureComponent {
         </Navbar>
 
         <div className="t-main main--open">
-          <Nav className="t-main__nav" role="menu" menus={this.props.selfState.get('menus').toJS()} />
+          <Nav className="t-main__nav" role="menu" menus={this.props.selfState.get('menus')} />
           <div className="t-main__content">
             { this.props.children }
           </div>

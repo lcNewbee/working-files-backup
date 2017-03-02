@@ -36,6 +36,8 @@ export default class SystemLogs extends Component {
     this.onChangeLogSwitch = this.onChangeLogSwitch.bind(this);
     this.onChangePage = this.onChangePage.bind(this);
     this.onChangeSearchItem = this.onChangeSearchItem.bind(this);
+    this.fetchlogAndShow = this.fetchlogAndShow.bind(this);
+    this.generateLogNo = this.generateLogNo.bind(this);
   }
 
   componentWillMount() {
@@ -56,28 +58,14 @@ export default class SystemLogs extends Component {
     }).then((json) => {
       if (json.state && json.state.code === 2000) {
         if (json.data.logEnable === '1') {
-          this.props.fetch('goform/get_log_list').then((json2) => {
-            this.props.updateItemSettings({
-              logList: fromJS(json2.data.logList),
-            });
-            this.props.changeSearchItem('');
-            this.props.changSearchList(fromJS(json2.data.logList));
-            const totalLogs = json2.data.logList.length;
-            const perPageNum = this.props.selfState.get('perPageNum');
-            const totalPage = Math.ceil(totalLogs / perPageNum);
-            let nextPage;
-            if (totalPage < 2) { nextPage = -1; }
-            this.props.changePageObject(fromJS({
-              totalPage,
-              currPage: 1,
-              nextPage,
-              lastPage: totalPage,
-            }));
-            this.onChangePage(1);
-          });
+          this.fetchlogAndShow();
         }
       }
     });
+  }
+
+  componentWillReceiveProps() {
+    this.n = 0;
   }
 
   onChangeLogSwitch(data) {
@@ -87,13 +75,14 @@ export default class SystemLogs extends Component {
     if (data.value === '1') {
       this.props.save('goform/set_log', { logEnable: '1' }).then((json) => {
         if (json.state && json.state.code === 2000) {
-          this.props.fetch('goform/get_log_list').then((json2) => {
-            if (json.state && json.state.code === 2000) {
-              this.props.updateItemSettings({
-                logList: fromJS(json2.data.logList),
-              });
-            }
-          });
+          // this.props.fetch('goform/get_log_list').then((json2) => {
+          //   if (json2.state && json2.state.code === 2000) {
+          //     this.props.updateItemSettings({
+          //       logList: fromJS(json2.data.logList),
+          //     });
+          //   }
+          // });
+          this.fetchlogAndShow();
         }
       });
     } else {
@@ -106,7 +95,7 @@ export default class SystemLogs extends Component {
 
   onChangePage(data) {
     const totalPage = this.props.selfState.getIn(['logPage', 'totalPage']);
-    console.log('totalPage', totalPage);
+    // console.log('totalPage', totalPage);
     // console.log('selfState.get(searchItem)', this.props.selfState.get('searchItem'));
     // this.onChangeSearchItem(this.props.selfState.get('searchItem'));
     // let logList;
@@ -120,7 +109,7 @@ export default class SystemLogs extends Component {
     const perPageNum = this.props.selfState.get('perPageNum');
     const listLen = logList.length;
     const startNo = (data - 1) * perPageNum;
-    console.log(startNo, listLen);
+    // console.log(startNo, listLen);
     const list = [];
     let currPage;
     let nextPage;
@@ -160,40 +149,58 @@ export default class SystemLogs extends Component {
   }
 
   onChangeSearchItem(val) {
-    console.log('val', val);
     const temp = val;
     this.props.changeSearchItem(val);
-    // if (temp.replace(/\s/g, '') === '') {
-    //   temp = ' ';
-    // }
-    const searchList = [];
     const logList = this.props.store.getIn(['curData', 'logList']).toJS();
-    for (const log of logList) {
-      // console.log(log.time.indexOf(temp));
-      // console.log(log.content.indexOf(temp));
+    const searchList = logList.map((log) => {
       if (log.time.indexOf(temp) !== -1 || log.content.indexOf(temp) !== -1) {
-        searchList.push(log);
+        return log;
       }
-    }
+      return '';
+    }).filter(item => item !== '');
 
     // this.props.changeTableList(fromJS(searchList));
-    console.log('searchList.length', searchList.length);
-    console.log('this.props.selfState.get(perPageNum)', this.props.selfState.get('perPageNum'));
     this.props.changSearchList(fromJS(searchList));
     this.props.changePageObject(fromJS({
       totalPage: Math.ceil(searchList.length / this.props.selfState.get('perPageNum')),
     }));
   }
 
+  fetchlogAndShow() {
+    this.props.fetch('goform/get_log_list').then((json) => {
+      this.props.updateItemSettings({
+        logList: fromJS(json.data.logList),
+      });
+      this.props.changeSearchItem('');
+      this.props.changSearchList(fromJS(json.data.logList));
+      const totalLogs = json.data.logList.length;
+      const perPageNum = this.props.selfState.get('perPageNum');
+      const totalPage = Math.ceil(totalLogs / perPageNum);
+      let nextPage;
+      if (totalPage < 2) { nextPage = -1; }
+      this.props.changePageObject(fromJS({
+        totalPage,
+        currPage: 1,
+        nextPage,
+        lastPage: totalPage,
+      }));
+      this.onChangePage(1);
+    });
+  }
+
+  generateLogNo() {
+    const no = this.props.selfState.get('startNoForEveryPage') + this.n;
+    this.n = this.n + 1;
+    return no;
+  }
+
   render() {
-    let n = 0;
+    // let n = 0;
     const systemLogOptions = fromJS([
       {
         id: 'id',
         text: _('No.'),
-        transform: function () {
-          return this.props.selfState.get('startNoForEveryPage') + n++;
-        }.bind(this),
+        transform: this.generateLogNo,
         width: '80px',
       },
       {
@@ -221,7 +228,7 @@ export default class SystemLogs extends Component {
           type="checkbox"
           label={_('System Log')}
           checked={this.props.store.getIn(['curData', 'logEnable']) === '1'}
-          onChange={(data) => this.onChangeLogSwitch(data)}
+          onChange={data => this.onChangeLogSwitch(data)}
         />
         {
           this.props.store.getIn(['curData', 'logEnable']) === '1' ? (
@@ -246,7 +253,7 @@ export default class SystemLogs extends Component {
                   type="select"
                   options={numOfPerPageOptions}
                   value={this.props.selfState.get('perPageNum')}
-                  onChange={(data) => this.onChangeNumOfPerPage(data)}
+                  onChange={data => this.onChangeNumOfPerPage(data)}
                 />
               </div>
               <div className="stats-group-cell">
@@ -255,7 +262,7 @@ export default class SystemLogs extends Component {
                   options={systemLogOptions}
                   list={this.props.selfState.get('tableList')}
                   page={this.props.selfState.get('logPage')}
-                  onPageChange={(data) => this.onChangePage(data)}
+                  onPageChange={data => this.onChangePage(data)}
                 />
               </div>
             </div>
@@ -281,7 +288,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
     settingActions,
-    selfActions
+    selfActions,
   ), dispatch);
 }
 
