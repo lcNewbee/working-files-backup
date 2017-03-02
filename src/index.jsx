@@ -32,7 +32,6 @@ const remoteActionMiddleware = applyMiddleware(
 // 引入产品配置
 const renderApp = () => {
   const prodConfig = require('./config/axc2.5');
-
   // Store
   const stores = remoteActionMiddleware(
     combineReducers({
