@@ -181,3 +181,24 @@ export function changeShowSpeedLimitModal(data) {
 //     data,
 //   };
 // }
+
+export function changeTransferData(data) {
+  return {
+    type: 'CHANGE_TRANSFER_DATA',
+    data,
+  };
+}
+
+export function changeShowMacHelpInfo(data) {
+  return {
+    type: 'CHANGE_SHOW_MAC_HELP_INFO',
+    data,
+  };
+}
+
+export function changeApMacInput(data) {
+  return {
+    type: 'CHANGE_AP_MAC_INPUT',
+    data,
+  };
+}

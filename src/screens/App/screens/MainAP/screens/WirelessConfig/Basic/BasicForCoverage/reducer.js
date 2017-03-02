@@ -36,6 +36,9 @@ const defaultState = fromJS({
   multiSsid: {},
   basicSettings: {},
   airTimeEnable: '0',
+  transferData: '',
+  showMacHelpInfo: false,
+  apMacInputData: '',
 });
 
 function onUpdateSelfItemSettings(state, action) {
@@ -93,6 +96,12 @@ export default function (state = defaultState, action) {
       return state.set('airTimeEnable', action.data);
     case 'CHANGE_SHOW_SPEED_LIMIT_MODAL':
       return state.set('showSpeedLimitModal', action.data);
+    case 'CHANGE_TRANSFER_DATA':
+      return state.set('transferData', action.data);
+    case 'CHANGE_SHOW_MAC_HELP_INFO':
+      return state.set('showMacHelpInfo', action.data);
+    case 'CHANGE_AP_MAC_INPUT':
+      return state.set('apMacInputData', action.data);
     default:
   }
   return state;

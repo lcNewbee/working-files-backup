@@ -573,7 +573,7 @@ export default class Basic extends React.Component {
         scanResult.forEach((val) => {
           if (val.get('ssid') === ssid) apMacList = apMacList.push(val.get('mac'));
         });
-        firstSsid = firstSsid.set('apMacList', apMacList.slice(0, 5));
+        firstSsid = firstSsid.set('apMacList', apMacList.slice(0, 8));
       }
 
       const radioList = basicSettings.get('radioList').setIn([radioId, 'vapList', '0'], firstSsid);
@@ -1303,7 +1303,7 @@ export default class Basic extends React.Component {
                   </div>
                 ) : null
               }
-              { // station模式下，对端AP的mac地址输入框, 如果apMac不是List，则是普通AP的mac地址输入框
+              { // station模式，lock to ap功能根据lockType值判断是否是华润定制
                 (basicSettings.getIn(['radioList', radioId, 'wirelessMode']) === 'sta' && basicSettings.get('lockType') === '0') ? (
                   <div>
                     <FormGroup
@@ -1335,7 +1335,7 @@ export default class Basic extends React.Component {
                   </div>
                 ) : null
               }
-              { // station模式下，对端AP的mac地址输入框，如果apMac是List，则是华润AP的mac地址输入框及排序框
+              { // station模式下，根据lockType判断是否是华润定制模式
                 (basicSettings.getIn(['radioList', radioId, 'wirelessMode']) === 'sta' && basicSettings.get('lockType') === '1') ? (
                   <div>
                     <FormGroup

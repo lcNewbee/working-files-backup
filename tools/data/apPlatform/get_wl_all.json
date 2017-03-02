@@ -5,131 +5,140 @@
 	"msg":"success"
 },
 "data":{
-"radioList":
-[
-	{
-		"wirelessMode":"ap",
-		"radioType":"2.4G",
-		"radioId":"0",
-		"enable":"1",
-		"countryCode":"BR",
-		"radioMode":"11ac",
-		"channelWidth":"HT40+",
-		"txPower":"14",
-		"maxTxRate":"15",
-		"isolation":"1",
-		"frequency":"36",
-		"vapList":[
-			{
-				"ssid":"axilspot11",
-				"apMac":"11:22:33:44:55:66",
-				"apMacEnable": "0",
-        "maxClients": "15",
-        "vlanId": "1",
-				"security":{
-					"mode":"none"
-				},
-				"speedLimit": {
-					"enable": "0",
-					"upload": "123",
-					"download": "123"
-				}
-			},
-			{
-				"ssid":"axilspot22",
-				"apMac":"11:22:33:44:55:66",
-        "vlanId": "1",
-        "maxClients": "30",
-				"security":{
-					"key":"12345678",
-					"mode":"wep",
-					"auth":"open",
-					"keyLength":"64",
-					"keyType":"Hex",
-					"keyIndex":"1"
-				},
-				"speedLimit": {
-					"enable": "0",
-					"upload": "123",
-					"download": "123"
-				}
-			}
-		]
-	},
-	{
-		"radioType":"5G",
-		"radioId":"1",
-		"wirelessMode":"ap",
-		"enable":"1",
-		"countryCode":"CN",
-		"radioMode":"11ac",
-		"channelWidth":"HT80",
-		"frequency":"auto",
-		"txPower":"14",
-		"maxTxRate":"15",
-		"isolation":"1",
-		"vapList":[
-			{
-				"ssid":"axilspot2",
-				"enable": "1",
-				"vlanId": "1",
-				"isolation":"0",
-        "maxClients": "20",
-				"hideSsid": "0",
-				"security":{
-					"mode":"wpa",
-					"cipher":"aes",
-					"key":"12345678",
-					"auth":"open",
-					"keyLength":"64",
-					"keyType":"Hex",
-					"keyIndex":"1"
-				},
-				"speedLimit": {
-					"enable": "0",
-					"upload": "123",
-					"download": "123"
-				}
-			}
-		]
-	},
-	{
-		"radioType":"5G",
-		"radioId":"2",
-		"wirelessMode":"repeater",
-		"enable":"1",
-		"countryCode":"DO",
-		"radioMode":"11an",
-		"channelWidth":"HT40-",
-		"frequency":"auto",
-		"txPower":"14",
-		"isolation":"1",
-		"vapList":[
-			{
-				"ssid":"axilspot2",
-				"hideSsid": "0",
-				"isolation":"0",
-        "maxClients": "40",
-				"peers":
-				["14:ff:00:a0:c1:ff",
-				 "14:ff:00:a0:c1:f0"],
-				"security":{
-					"mode":"wpa",
-					"cipher":"aes",
-					"key":"12345678",
-					"auth":"open",
-					"keyLength":"64",
-					"keyType":"Hex",
-					"keyIndex":"1"
-				},
-				"speedLimit": {
-					"enable": "0",
-					"upload": "123",
-					"download": "123"
-				}
-			}
-		]
-	}
-	]
+  "lockType": "1",
+  "radioList":
+    [
+      {
+        "wirelessMode":"sta",
+        "radioType":"2.4G",
+        "radioId":"0",
+        "enable":"1",
+        "countryCode":"BR",
+        "radioMode":"11ac",
+        "channelWidth":"HT40+",
+        "txPower":"14",
+        "maxTxRate":"15",
+        "isolation":"1",
+        "frequency":"36",
+        "vapList":[
+          {
+            "ssid":"axilspot11",
+            "apMac":"12:22:33:44:55:66",
+            "apMacEnable": "0",
+            "apMacList": [
+              "12:22:33:44:55:66",
+              "12:22:33:44:55:77",
+              "12:22:33:44:55:88",
+              "12:22:33:44:55:99",
+              "12:22:33:44:55:00",
+              "12:22:33:44:55:11"
+            ],
+            "maxClients": "15",
+            "vlanId": "1",
+            "security":{
+              "mode":"none"
+            },
+            "speedLimit": {
+              "enable": "0",
+              "upload": "123",
+              "download": "123"
+            }
+          },
+          {
+            "ssid":"axilspot22",
+            "apMac":"11:22:33:44:55:66",
+            "vlanId": "1",
+            "maxClients": "30",
+            "security":{
+              "key":"12345678",
+              "mode":"wep",
+              "auth":"open",
+              "keyLength":"64",
+              "keyType":"Hex",
+              "keyIndex":"1"
+            },
+            "speedLimit": {
+              "enable": "0",
+              "upload": "123",
+              "download": "123"
+            }
+          }
+        ]
+      },
+      {
+        "radioType":"5G",
+        "radioId":"1",
+        "wirelessMode":"ap",
+        "enable":"1",
+        "countryCode":"CN",
+        "radioMode":"11ac",
+        "channelWidth":"HT80",
+        "frequency":"auto",
+        "txPower":"14",
+        "maxTxRate":"15",
+        "isolation":"1",
+        "vapList":[
+          {
+            "ssid":"axilspot2",
+            "enable": "1",
+            "vlanId": "1",
+            "isolation":"0",
+            "maxClients": "20",
+            "hideSsid": "0",
+            "security":{
+              "mode":"wpa",
+              "cipher":"aes",
+              "key":"12345678",
+              "auth":"open",
+              "keyLength":"64",
+              "keyType":"Hex",
+              "keyIndex":"1"
+            },
+            "speedLimit": {
+              "enable": "0",
+              "upload": "123",
+              "download": "123"
+            }
+          }
+        ]
+      },
+      {
+        "radioType":"5G",
+        "radioId":"2",
+        "wirelessMode":"repeater",
+        "enable":"1",
+        "countryCode":"DO",
+        "radioMode":"11an",
+        "channelWidth":"HT40-",
+        "frequency":"auto",
+        "txPower":"14",
+        "isolation":"1",
+        "vapList":[
+          {
+            "ssid":"axilspot2",
+            "hideSsid": "0",
+            "isolation":"0",
+            "maxClients": "40",
+            "peers":
+            ["14:ff:00:a0:c1:ff",
+            "14:ff:00:a0:c1:f0"],
+            "security":{
+              "mode":"wpa",
+              "cipher":"aes",
+              "key":"12345678",
+              "auth":"open",
+              "keyLength":"64",
+              "keyType":"Hex",
+              "keyIndex":"1"
+            },
+            "speedLimit": {
+              "enable": "0",
+              "upload": "123",
+              "download": "123"
+            }
+          }
+        ]
+      }
+    ]
 }
 }

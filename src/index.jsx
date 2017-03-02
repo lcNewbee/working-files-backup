@@ -31,7 +31,7 @@ const remoteActionMiddleware = applyMiddleware(
 
 // 引入产品配置
 const renderApp = () => {
-  const prodConfig = require('./config/AEC120');
+  const prodConfig = require('./config/AIP10');
   // Store
   const stores = remoteActionMiddleware(
     combineReducers({
@@ -63,7 +63,7 @@ if (module.hot) {
   const reRenderApp = () => {
     renderApp();
   };
-  module.hot.accept('./config/AEC120', () => {
+  module.hot.accept('./config/AIP10', () => {
     setImmediate(() => {
       // Preventing the hot reloading error from react-router
       unmountComponentAtNode(mountNode);
