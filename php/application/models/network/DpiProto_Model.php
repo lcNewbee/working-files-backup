@@ -36,6 +36,7 @@ class DpiProto_Model extends CI_Model {
 				$htmdata[] = $lsary;
 			}
 			$arr['data']['list'] = $htmdata;
+			$arr['data']['protoClientList'] = $this->get_detailed($data);
 		}else{
 			return json_no($cgiobj->state->msg);
 		}		     	
@@ -55,12 +56,13 @@ class DpiProto_Model extends CI_Model {
 			$htmdata = array();
 			$sumbts = $arr['data']['total_msg']['sum_all_mac_bytes'];
 			foreach($arr['data']['list'] as $row){
-				$htmdata['mac'] => $row['mac'],
-				$htmdata['ip'] => $row['ip'],
-				$htmdata['osType'] => '--',
-				$htmdata['ethx_name'] => '--', // 该客户端所在端口
-				$htmdata['traffic'] => $row['mac_sum_bytes'], // 该客户端使用当前应用的流量
-				$htmdata['trafficPercent'] => round((($row['mac_sum_bytes'] / $sumbts)*100),2).'%';
+				$htmdata['mac'] = $row['mac'];
+				$htmdata['ip'] = $row['ip'];
+				$htmdata['osType'] = '--';
+				$htmdata['ethx_name'] = '--'; // 该客户端所在端口
+				$htmdata['curRate'] = $row['mac_speed'];
+				$htmdata['traffic'] = $row['mac_sum_bytes']; // 该客户端使用当前应用的流量
+				$htmdata['trafficPercent'] = round((($row['mac_sum_bytes'] / $sumbts)*100),2).'%';
 				$result[] = $htmdata;
 			}
 		}
