@@ -154,6 +154,7 @@ class CardList_Model extends CI_Model {
         $result = $this->portalsql->insert('portal_message', $insertary);
         if($result){
             $result = json_ok();
+            $this->set_card_state($data['id']);
         }else{
             $result = json_no('sendMessage error');
             $result['state']['code'] = 6401;
@@ -186,5 +187,11 @@ class CardList_Model extends CI_Model {
         }
         return $result;
     }
-
+    private function set_card_state($id){
+        $result = 0;       
+        $this->portalsql->set('state',1);
+        $this->portalsql->where('id', $id);        
+        $result = $this->portalsql->update('portal_card');        
+        return $result;
+    }
 }
