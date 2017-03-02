@@ -61,7 +61,7 @@ const defaultProps = {
 export default class AppScreen extends React.Component {
   constructor(props) {
     const {
-      listOptions, defaultSettingsData, settingsFormOptions,
+      defaultSettingsData, settingsFormOptions,
       groupid,
     } = props;
     const initOption = utils.extend({
@@ -75,9 +75,7 @@ export default class AppScreen extends React.Component {
     super(props);
 
     // init listOptions
-    this.tableOptions = immutableUtils.getTableOptions(listOptions);
-    this.editFormOptions = immutableUtils.getFormOptions(listOptions);
-    this.defaultEditData = props.defaultEditData || immutableUtils.getDefaultData(listOptions);
+    this.refreshOptions(props);
 
     // init Settings Form
     this.defaultSettingsData = defaultSettingsData ||
@@ -148,9 +146,7 @@ export default class AppScreen extends React.Component {
     const nextSettingOptions = nextProps.settingsFormOptions;
 
     if (!immutable.is(nextListOptions, this.props.listOptions)) {
-      this.tableOptions = immutableUtils.getTableOptions(nextListOptions);
-      this.editFormOptions = immutableUtils.getFormOptions(nextListOptions);
-      this.defaultEditData = immutableUtils.getDefaultData(nextListOptions);
+      this.refreshOptions(nextProps);
     }
 
     if (nextProps.actionable !== this.props.actionable) {
@@ -183,6 +179,21 @@ export default class AppScreen extends React.Component {
     if (this.props.leaveScreen) {
       this.props.leaveScreen();
     }
+  }
+
+  refreshOptions(props) {
+    const { route, listOptions } = props;
+    let thisListOptions = listOptions;
+
+    if (route.funcConfig && route.funcConfig.listNotIds) {
+      thisListOptions = thisListOptions.filterNot(
+        $$item => route.funcConfig.listNotIds.indexOf($$item.get('id')) !== -1,
+      );
+    }
+
+    this.tableOptions = immutableUtils.getTableOptions(thisListOptions);
+    this.editFormOptions = immutableUtils.getFormOptions(thisListOptions);
+    this.defaultEditData = props.defaultEditData || immutableUtils.getDefaultData(thisListOptions);
   }
 
   render() {

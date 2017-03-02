@@ -643,6 +643,8 @@
   "Synchronizing config for AP...": "正在同步配置到AP...",
   "Clients Flow State": "客流分析状态",
 
+  "Next hop IP must within interfaces segment": "下一跳IP必须在已有接口的网段内",
   "Direct": "直接",
-  "Layer3": "三层"
+  "Layer3": "三层",
+  "Uplink Port": "外网连接端口"
 }

@@ -131,11 +131,11 @@ export default class View extends React.Component {
 
   onBeforeSync($$actionQuery, $$curListItem) {
     const { store, route } = this.props;
-    const $$curList = store.getIn([route.id, 'data', 'list']);
     const actionType = $$actionQuery.get('action');
     const startIp = $$curListItem.get('startIp');
     const mask = $$curListItem.get('mask');
     const gateway = $$curListItem.get('gateway');
+    let $$curList = store.getIn([route.id, 'data', 'list']);
     let ret = '';
 
     if (actionType === 'add' || actionType === 'edit') {
@@ -143,6 +143,13 @@ export default class View extends React.Component {
         ipLabel: _('Start IP'),
         ip2Label: _('Gateway'),
       });
+
+      // 过滤正在编辑的项
+      if (actionType === 'edit') {
+        $$curList = $$curList.filter(
+          $$item => $$item.get('name') !== $$curListItem.get('name'),
+        );
+      }
 
       if ($$curList.find(
         $$item => validator.combine.noSameSegment(

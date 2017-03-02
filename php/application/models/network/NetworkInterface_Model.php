@@ -11,24 +11,26 @@ class NetworkInterface_Model extends CI_Model {
 		$query = $this->db->select('portid,port_name,port_desc,speed,duplex,ip1,mask1,ip2,mask2,ip3,mask3,ip4,mask4,ip5,mask5,adminstate,mgifname')
                             ->from('port_table')
                             ->get()->result_array();
-		
+
 		$interfaces = array();
+    $interfaceId = 1;
 		foreach ($query as $index => $value) {
 			for ($x = 1;$x <= 5;$x++) {
 				$ip = element('ip' . $x, $value);
 				$mask = element('mask' . $x, $value);
 				if ($ip !== '0.0.0.0' && $mask !== '0.0.0.0') {
 					array_push($interfaces, array(
-                        'portid' => element('portid', $value), 
-                        'name' => element('port_name', $value), 
-                        'ip' => $ip, 
+                        'id' => $interfaceId,
+                        'name' => element('port_name', $value),
+                        'ip' => $ip,
                         'mask' => $mask)
                     );
+          $interfaceId = $interfaceId + 1;
 				}
 			}
 		}
 		$result = array(
-            'state' => array('code' => 2000, 'msg' => 'OK'), 
+            'state' => array('code' => 2000, 'msg' => 'OK'),
             'data' => array('list' => $interfaces)
         );
 		return $result;
@@ -36,8 +38,8 @@ class NetworkInterface_Model extends CI_Model {
 
     function getCgiParam($data) {
 		$retData = array(
-            'portname' => element('name', $data), 
-            'ip' => element('ip', $data), 
+            'portname' => element('name', $data),
+            'ip' => element('ip', $data),
             'mask' => element('mask', $data)
         );
 		return $retData;

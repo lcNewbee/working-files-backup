@@ -91,15 +91,21 @@ export default class NetworkInterface extends React.Component {
 
   onBeforeSync($$actionQuery, $$curListItem) {
     const { store, route } = this.props;
-    const $$curList = store.getIn([route.id, 'data', 'list']);
     const actionType = $$actionQuery.get('action');
     const ip = $$curListItem.get('ip');
     const mask = $$curListItem.get('mask');
-
+    let $$curList = store.getIn([route.id, 'data', 'list']);
     let ret = '';
 
     if (actionType === 'add' || actionType === 'edit') {
       ret = validator.combine.noBroadcastIp(ip, mask);
+
+      // 过滤正在编辑的项
+      if (actionType === 'edit') {
+        $$curList = $$curList.filter(
+          $$item => $$item.get('id') !== $$curListItem.get('id'),
+        );
+      }
 
       // 检测是否有相同网段的接口
       if ($$curList.find(

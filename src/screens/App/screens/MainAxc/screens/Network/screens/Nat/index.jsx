@@ -83,16 +83,19 @@ const listOptions = fromJS([
     },
   }, {
     id: 'ifname',
-    label: _('Ifname'),
+    label: _('Uplink Port'),
     formProps: {
       type: 'select',
       required: true,
-      dataFormat: "ds",
     },
   },
 ]);
 
-const propTypes = {};
+
+const propTypes = {
+  route: PropTypes.object,
+};
+
 const defaultProps = {};
 
 export default class View extends React.Component {
@@ -101,6 +104,7 @@ export default class View extends React.Component {
     utils.binds(this, [
       'onSave',
     ]);
+
     this.state = {
       listOptions,
     };
@@ -111,7 +115,7 @@ export default class View extends React.Component {
       .then(
         (data) => {
           this.setState({
-            listOptions: listOptions.setIn(
+            listOptions: this.state.listOptions.setIn(
               [-1, 'options'],
               data.options,
             ),
