@@ -749,9 +749,9 @@ export default class View extends React.Component {
                   });
                 }}
               />
-              <span>
+              {/*<span>
                 <a href={`/index.html#/main/portal/account/list/mac/${$$data.get('loginName')}`} className="tablelink">{_('Mac Management')}</a>
-              </span>
+              </span>*/}
             </span>
           ),
           );
