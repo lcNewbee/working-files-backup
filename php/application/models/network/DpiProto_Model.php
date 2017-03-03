@@ -35,6 +35,7 @@ class DpiProto_Model extends CI_Model {
 				$lsary['trafficPercent'] = round(($row->bytes / $sumbts)*100,2).'%';
 				$htmdata[] = $lsary;
 			}
+			$htmdata = $this->sigcol_arrsort($htmdata,'trafficPercent',SORT_DESC);
 			$arr['data']['list'] = $htmdata;
 			$arr['data']['protoClientList'] = $this->get_detailed($data);
 		}else{
@@ -65,7 +66,31 @@ class DpiProto_Model extends CI_Model {
 				$htmdata['trafficPercent'] = round((($row['mac_sum_bytes'] / $sumbts)*100),2).'%';
 				$result[] = $htmdata;
 			}
+			$result = $this->sigcol_arrsort($result,'trafficPercent',SORT_DESC);
 		}
 		return $result;
 	}
+	/**
+	 * 排序
+	 * @data 二维数组
+	 * @col 排序列
+	 * @type SORT_DESC/SORT_ASC
+	 */
+	function sigcol_arrsort($data,$col,$type=SORT_DESC){
+		if(is_array($data)){
+			$i=0;
+			foreach($data as $k=>$v){
+				if(key_exists($col,$v)){
+					$arr[$i] = $v[$col];
+					$i++;
+				}else{
+					continue;
+				}
+			}
+		}else{
+			return false;
+		}
+		array_multisort($arr,$type,$data);
+		return $data;
+	}	
 }

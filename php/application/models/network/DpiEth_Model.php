@@ -72,17 +72,7 @@ class DpiEth_Model extends CI_Model {
             $result = $obj->data->total_msg->list_recnum;
         }
         return $result;        
-    }
-	function gtePram($ethstr){
-		$arr = array(
-            'ethx_name'=>$ethstr,          
-            'userNum'=>0,
-            'application'=>'',
-            'curRate'=>'',
-            'active_eth'=>''
-        );
-		return $arr;
-	}
+    }	
 	function get_eth_state(){
         $query=$this->db->select('attr_name,attr_value')
                         ->from('ndpi_attr')
@@ -149,37 +139,23 @@ class DpiEth_Model extends CI_Model {
             
             $macAry = array();
             foreach($dataary['data']['list'] as $row){
-                $row['application'] =  explode('/',$row['detected_protos']);
-                $row['trafficPercent'] = round(( ( ((int)$row['upbytes'] + (int)$row['downbytes']) /$arr['sum_upbytes_allmac'])*100),2).'%';
-                $row['curRate'] = $this->get_ethbytes_mac($cgiarr,$row['mac'],$arr['sum_upbytes_allmac'])['mac_speed'];
-                $row['test'] = $arr['sum_upbytes_allmac'];
+                $row['application'] =  explode('/',$row['all_protos']);
+                $row['trafficPercent'] = round((($row['mac_sum_bytes'] / $arr['sum_upbytes_allmac'])*100),2).'%';
+                $row['curRate'] = $row['mac_speed'];
                 $macAry[] = $row;
             }            
             $result['data'] = $macAry;
         }
         return $result;
     }
-    //mac 获取速率和百分比
-    private function get_ethbytes_mac($data,$mac,$sumeth){
-        $result = array(
-            'mac_speed'=>0,
-            'mac_sum_need'=>0
+    private function gtePram($ethstr){
+		$arr = array(
+            'ethx_name'=>$ethstr,          
+            'userNum'=>0,
+            'application'=>'',
+            'curRate'=>'',
+            'active_eth'=>''
         );
-        $cgiary = array(
-            'time'=>element('time',$data),
-            'page'=>element('page',$data),
-            'pagesize'=>element('pagesize',$data),
-            'mac'=>$mac
-        );
-        $cgistr = ndpi_send_search_one_mac_msg_to_php(json_encode($cgiary));
-        $cgidata = json_decode($cgistr,true);
-        if(is_array($cgidata) && $cgidata['state']['code'] === 2000){
-            if(count($cgidata['data']['list']) > 0){
-                $result['mac_speed'] = $cgidata['data']['list'][0]['mac_speed'];
-                //$result['mac_sum_need'] = intval( ((int)$cgidata['data']['list'][0]['mac_sum_need'] / (int)$cgidata['data']['total_msg']['sum_all_flow_statics'])*100).'%';
-                $result['mac_sum_need'] =  round( ( ((int)$cgidata['data']['list'][0]['mac_sum_need'] / $sumeth)*100),2).'%';
-            }
-        }
-        return $result;
-    }
+		return $arr;
+	}
 }
