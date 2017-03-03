@@ -28,14 +28,14 @@ class DpiMac_Model extends CI_Model {
                 'lastline'=>element('sum_pages',$resAry['data']['total_msg'],1),// 最后一页
             );
             foreach($resAry['data']['list'] as $row){                                
-                $trafficPercent = ((int)$row['up_down_bytes']) / (int)$resAry['data']['total_msg']['sum_all_flow_statics'];
+                $trafficPercent = ((int)$row['mac_sum_need']) / (int)$resAry['data']['total_msg']['sum_all_flow_statics'];
                 $cary = array(
                     'name'=>'--',
                     'mac'=>element('mac',$row,''),
                     'ip'=>element('ip',$row,''),
                     'osType'=>element('osType',$row,''),
-                    'traffic'=>element('upbytes',$row,''),
-                    'application'=>explode('/',$row['detected_protos']),
+                    'traffic'=>element('mac_sum_need',$row,''),
+                    'application'=>explode('/',$row['all_protos']),
                     'curRate'=>element('mac_speed',$row,100),
                     'trafficPercent'=> round($trafficPercent*100,2).'%'
                 );
