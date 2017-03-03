@@ -83,16 +83,18 @@ const userModalOptions = fromJS([
   }, {
     id: 'ip',
     text: _('IP'),
-  }, {
-    id: 'osType',
-    text: _('OS Type'),
-    transform(val) {
-      if (val === '' || val === undefined) {
-        return '--';
-      }
-      return val;
-    },
-  }, {
+  },
+  // {
+  //   id: 'osType',
+  //   text: _('OS Type'),
+  //   transform(val) {
+  //     if (val === '' || val === undefined) {
+  //       return '--';
+  //     }
+  //     return val;
+  //   },
+  // },
+  {
     id: 'application',
     text: _('Applications'),
     transform(val) {

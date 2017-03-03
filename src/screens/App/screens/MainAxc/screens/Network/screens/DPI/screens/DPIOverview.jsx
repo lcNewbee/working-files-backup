@@ -81,7 +81,8 @@ function getEchartOptionByName(serverData, listName) {
           .find($$item => $$item.get('name') === name)
           .get('value');
         // return listName === 'mac' ? `${name.substring(0, 8)}... : ${num}%` : `${name} : ${num}%`;
-        return name.length > 7 ? `${name.substring(0, 7)}... : ${flowRateFilter.transform(num)}` : `${name} : ${flowRateFilter.transform(num)}`;
+        return name.length > 7 ? `${name.substring(0, 7)}... : ${flowRateFilter.transform(num)}` :
+                                 `${name} : ${flowRateFilter.transform(num)}`;
       },
     },
     series: [

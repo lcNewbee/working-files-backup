@@ -237,16 +237,18 @@ const listOptions = fromJS([
   }, {
     id: 'ip',
     text: _('IP'),
-  }, {
-    id: 'osType',
-    text: _('OS Type'),
-    transform(val) {
-      if (val === '' || val === undefined) {
-        return '--';
-      }
-      return val;
-    },
-  }, {
+  },
+  // {
+  //   id: 'osType',
+  //   text: _('OS Type'),
+  //   transform(val) {
+  //     if (val === '' || val === undefined) {
+  //       return '--';
+  //     }
+  //     return val;
+  //   },
+  // },
+  {
     id: 'application',
     text: _('Applications'),
     transform(val) {
@@ -452,7 +454,7 @@ export default class MacStatistic extends React.Component {
         // listOptions={listOptions}
         initOption={{
           isFetchInfinite: true,
-          fetchIntervalTime: 30000,
+          fetchIntervalTime: 10000,
           query: {
             timeType: '0',
             size: '50',
