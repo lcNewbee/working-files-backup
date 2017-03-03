@@ -5,22 +5,17 @@
   },
   "data": {
     "list": [{
-      "id": "2",
-      "img": "ikuai",
-      "name": "129.0.0.1",
-      "creatDate": "2000",
-      "endDate": "2000",
-      "state": "2000",
-      "showName": "1",
-      "showImg": "0",
-      "showInfo": "ikuai",
-      "toname": "129.0.0.1",
-      "userName": "2000",
-      "showCount": "2000",
-      "lockTime": "ikuai",
-      "pos": "129.0.0.1",
-      "clickCount": "2000"
+      "id":"1",
+      "name":"OpenPortal",
+      "description":"\u7f51\u7edc\u63a5\u5165\u8ba4\u8bc1\u4e13\u5bb6",
+      "creatDate":"2016-08-16 23:27:14",
+      "uid":"1",
+      "address":"\u8d35\u5dde\u7701\u8d35\u9633\u5e02",
+      "phone":"177841696650",
+      "img":"\/advPic\/1.jpg",
+      "showInfo":"1",
+      "x":"26.696248",
+      "y":"106.624166"
     }]
   }
 }
-

@@ -212,5 +212,21 @@
   "Category Type:":"分类类型:",
   "$":"¥",
   "Card Sold Out":"此卡已售出",
-  "Card Number":"卡数"
+  "Card Number":"卡数",
+  "Advertisement":"门店广告管理",
+  "Adv Pitcture":"广告图片",
+  "Create Date":"创建日期",
+  "Show Date":"投放日期",
+  "End Date":"结束日期",
+  "Ads Release":"广告投放",
+  "Show Name":"显示名称",
+  "Show Image":"显示导图",
+  "Show Remarks":"显示备注",
+  "User Name":"用户名",
+  "Show Count":"展示次数",
+  "Click Count":"点击次数",
+  "Countdown":"倒计时",
+  "Sorting":"排序",
+  "Recharge":"充值",
+  "Recharge Choices":"充值卡类型"
 }

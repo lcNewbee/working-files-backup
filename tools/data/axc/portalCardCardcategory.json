@@ -5,15 +5,48 @@
   },
   "data": {
     "list": [{
-      "name": "包时卡",
-      "description": "包时卡",
-      "time": "2h",
-      "state": "月卡",
-      "maclimit": "0",
-      "maclimitcount": "123",
-      "autologin": "1",
-      "speed": "0",
-      "money": "12"
-    }]
+      "id":"0",
+      "name": "1小时包时卡",
+      "description": "包时卡详细说明",
+      "time":"1H",
+      "state":"0",
+      "money":"0.01",
+      "speed":"1",
+      "maclimit":"0",
+      "maclimitcount":"1",
+      "autologin":"0",
+      "ex1":null,
+      "ex2":null,
+      "ex3":null,
+      "ex4":null,
+      "ex5":null,
+      "ex6":null,
+      "ex7":null,
+      "ex8":null,
+      "ex9":null,
+      "ex10":null
+    },{
+      "id":"1",
+      "name": "2小时包时卡",
+      "description": "包时卡详细说明",
+      "time":"1H",
+      "state":"0",
+      "money":"0.01",
+      "speed":"1",
+      "maclimit":"0",
+      "maclimitcount":"1",
+      "autologin":"0",
+      "ex1":null,
+      "ex2":null,
+      "ex3":null,
+      "ex4":null,
+      "ex5":null,
+      "ex6":null,
+      "ex7":null,
+      "ex8":null,
+      "ex9":null,
+      "ex10":null
+    }
+    ]
   }
 }

@@ -10,14 +10,6 @@ import * as appActions from 'shared/actions/app';
 
 const listOptions = fromJS([
   {
-    id: 'img',
-    text: _('Adv Pitcture'),
-    formProps: {
-      type: 'file',
-      required: true,
-    },
-  },
-  {
     id: 'name',
     text: _('Name'),
     formProps: {
@@ -26,8 +18,50 @@ const listOptions = fromJS([
     },
   },
   {
+    id: 'aid',
+    text: _('Ads'),
+    formProps: {
+      type: 'select',
+      required: true,
+    },
+  },
+  {
+    id: 'pos',
+    text: _('Sorting'),
+    formProps: {
+      type: 'text',
+      required: true,
+    },
+  },
+  {
+    id: 'url',
+    text: _('URL'),
+    noTable: true,
+    formProps: {
+      type: 'text',
+      required: true,
+    },
+  },
+  {
+    id: 'img',
+    text: _('Adv Pitcture'),
+    formProps: {
+      type: 'file',
+      required: true,
+    },
+  },
+  {
+    id: 'imgW',
+    text: _('Adv Big Pitcture'),
+    formProps: {
+      type: 'file',
+      required: true,
+    },
+  },
+  {
     id: 'uid',
-    text: _('Name'),
+    text: _('User'),
+    noForm: true,
     formProps: {
       type: 'text',
       required: true,
@@ -36,6 +70,7 @@ const listOptions = fromJS([
   {
     id: 'sid',
     text: _('Store Name'),
+    noForm: true,
     formProps: {
       type: 'text',
       required: true,
@@ -57,14 +92,7 @@ const listOptions = fromJS([
       required: true,
     },
   },
-  {
-    id: 'pos',
-    text: _('Sorting'),
-    formProps: {
-      type: 'text',
-      required: true,
-    },
-  },
+
 ]);
 
 const propTypes = {};

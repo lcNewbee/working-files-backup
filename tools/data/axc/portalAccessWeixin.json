@@ -5,14 +5,14 @@
   },
   "data": {
     "list": [{
-      "id": "2",
-      "basip": "ikuai",
-      "ssid": "129.0.0.1",
-      "shopId": "2000",
-      "appId": "2000",
-      "domain": "2000",
-      "outTime": "1",
-      "secretKey": "0"
+      "id":"1",
+      "basip":"127.0.0.1",
+      "ssid":"WXLeeSon5G",
+      "shopId":"7452864",
+      "appId":"wx3e336d4576886268",
+      "secretKey":"c95a4d10d40cc9a278a52bcd905be3b7",
+      "domain":"http:\/\/www.axilspot.com\/",
+      "outTime":"60"
     }]
   }
 }

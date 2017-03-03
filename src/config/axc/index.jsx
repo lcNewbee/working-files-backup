@@ -217,7 +217,8 @@ const sPortalStores =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Advertisement/Stores');
 const sPortalAdv =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Advertisement/Adv');
-
+const sPortalAdvPic =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Advertisement/AdvPic');
 // const sPortalPermission =
 //     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Permission');
 // const sPortalClassification =
@@ -1000,7 +1001,6 @@ const routes = [
               },
             ],
           },
-          // 周三版本发布，暂时隐藏
           // {
           //   id: 'portalAdv',
           //   isIndex: true,
@@ -1023,6 +1023,12 @@ const routes = [
           //       formUrl: 'goform/portal/advertisement/adv',
           //       text: _('Ads Management'),
           //       component: sPortalAdv.Screen,
+          //     }, {
+          //       id: 'portalAdvPic',
+          //       path: '/main/portal/advertisement/advpic',
+          //       formUrl: 'goform/portal/advertisement/advpic',
+          //       text: _('AdsPic Management'),
+          //       component: sPortalAdvPic.Screen,
           //     },
           //   ],
           // },

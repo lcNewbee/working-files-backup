@@ -421,7 +421,7 @@ export default class View extends React.Component {
             <Button
               text={_('Send to Users')}
               key="sendActionButton"
-              icon="repeat"
+              icon="mail-forward"
               theme="primary"
               onClick={() => {
                 this.props.changeScreenActionQuery({
@@ -440,7 +440,7 @@ export default class View extends React.Component {
           <Button
             text={_('Card Sold Out')}
             key="sendoutActionButton"
-            icon="repeat"
+            icon="mail-forward"
           />);
       });
     return (

@@ -336,7 +336,7 @@ export default class SendBox extends React.Component {
           <Button
             text={_('Transfer to Others')}
             key="sendActionButton"
-            icon="repeat"
+            icon="mail-forward"
             theme="primary"
             onClick={() => {
               this.props.changeScreenActionQuery({

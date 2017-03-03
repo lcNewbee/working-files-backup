@@ -77,7 +77,6 @@ const listOptions = fromJS([
   }, {
     id: 'autologin',
     text: _('Auto Login'),
-    noTable: true,
     options: [
       {
         value: '0',
@@ -95,8 +94,6 @@ const listOptions = fromJS([
   }, {
     id: 'speed',
     text: _('Speed Limit'),
-    noTable: true,
-    noForm: true,
     formProps: {
       type: 'select',
       required: true,

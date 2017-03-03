@@ -24,6 +24,14 @@ function getStoresName() {
 }
 const listOptions = fromJS([
   {
+    id: 'name',
+    text: _('Name'),
+    formProps: {
+      type: 'text',
+      required: true,
+    },
+  },
+  {
     id: 'img',
     text: _('Adv Pitcture'),
     formProps: {
@@ -31,14 +39,7 @@ const listOptions = fromJS([
       required: true,
     },
   },
-  {
-    id: 'name',
-    text: _('Name'),
-    formProps: {
-      type: 'text',
-      required: true,
-    },
-  }, {
+ {
     id: 'creatDate',
     text: _('Create Date'),
     defaultValue: '2018-2-28',
@@ -115,7 +116,7 @@ const listOptions = fromJS([
     ],
   }, {
     id: 'showInfo',
-    text: _('Show Info'),
+    text: _('Show Remarks'),
     noTable: true,
     formProps: {
       type: 'select',
@@ -153,7 +154,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'lockTime',
-    text: _('Countdown '),
+    text: _('Countdown'),
     formProps: {
       type: 'text',
       required: true,

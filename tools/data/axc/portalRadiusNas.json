@@ -4,19 +4,23 @@
     "msg": "ok"
   },
   "data": {
-    "list": [
-      {
-        "id": 1,
-        "ip": "192.168.0.1",
-        "name": "S5700",
-        "description": "华为S5700交换机",
-        "type": "1",
-        "sharedSecret": "LeeSon",
-        "ex1": "0",
-        "ex2": "300",
-        "ex3": "600",
-        "ex4": "600",
-        "ex5": "1"
+    "list": [{
+      "id":"1",
+      "ip":"192.168.100.226",
+      "name":"S5700",
+      "description":"\u534e\u4e3aS5700\u4ea4\u6362\u673a",
+      "type":"1",
+      "sharedSecret":"key",
+      "ex1":"0",
+      "ex2":"300",
+      "ex3":"600",
+      "ex4":"600",
+      "ex5":"1",
+      "ex6":null,
+      "ex7":null,
+      "ex8":null,
+      "ex9":null,
+      "ex10":null
       }
     ]
   }

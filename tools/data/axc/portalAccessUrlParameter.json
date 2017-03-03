@@ -5,24 +5,16 @@
   },
   "data": {
     "settings": {
-      "id": 1,
-      "basname": "nasname",
-      "userip": "wlanuserip",
-      "usermac": "mac",
-      "url": "url",
-      "basip": "basip",
-      "ssid": "ssid",
-      "apmac": "00:11:22:33:22:33",
-      "apip":"apip",
-      "authTypes": [{
-        "enable": "0",
-        "type": "0",
-        "apmac": "00:11:22:33:22:33"
-      }, {
-        "enable": "1",
-        "type": "1",
-        "apmac": "02:11:22:33:22:31"
-      }]
+      "id":"1",
+      "basname":"wlanacname",
+      "userip":"wlanuserip",
+      "usermac":"wlanusermac",
+      "url":"url",
+      "basip":"wlanacip",
+      "ssid":"ssid",
+      "apmac":"wlanapmac",
+      "apip":"wlanapip"
     }
   }
 }
+

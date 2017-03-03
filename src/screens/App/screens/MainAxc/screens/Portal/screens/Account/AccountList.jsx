@@ -12,6 +12,36 @@ import Icon from 'shared/components/Icon';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 import * as propertiesActions from 'shared/actions/properties';
+import { Button } from 'shared/components/Button';
+
+function getCardCategoryName() {
+  return utils.fetch('goform/portal/card/cardcategory', {
+    size: 9999,
+    page: 1,
+  })
+    .then(json => (
+      {
+        options: json.data.list.map(
+          item => ({
+            value: item.id,
+            label: item.name,
+          }),
+        ),
+      }
+    ),
+  );
+}
+function getCardInformation() {
+  return utils.fetch('goform/portal/card/cardcategory', {
+    size: 9999,
+    page: 1,
+  }).then((json) => {
+    if (json.state && json.state.code === 2000) {
+      return fromJS(json.data.list);
+    }
+    return fromJS([]);
+  });
+}
 
 const uptimeFilter = utils.filter('connectTime');
 
@@ -315,14 +345,181 @@ const listOptions = fromJS([
     },
   },
 ]);
+const rechargeOptions = fromJS([
+  {
+    id: 'loginName',
+    label: _('Login Name'),
+    form: 'recharge',
+    type: 'text',
+    disabled: true,
+    required: true,
+    maxLength: '31',
+    validator: validator({
+      rules: 'utf8Len:[1,31]',
+    }),
+  },
+  {
+    id: 'nickname',
+    label: _('Name'),
+    type: 'text',
+    form: 'recharge',
+    disabled: true,
+    required: true,
+    maxLength: '32',
+    validator: validator({
+      rules: 'utf8Len:[1,31]',
+    }),
+  },
+  {
+    id: 'name',
+    label: _('Recharge Choices'),
+    form: 'recharge',
+    required: true,
+    type: 'select',
+  },
+  {
+    id: 'state',
+    label: _('Type'),
+    form: 'recharge',
+    type: 'select',
+    disabled: true,
+    required: true,
+    options: [
+      {
+        value: '0',
+        label: _('Hour Card'),
+      }, {
+        value: '1',
+        label: _('Day Card'),
+      },
+      {
+        value: '2',
+        label: _('Month Card'),
+      }, {
+        value: '3',
+        label: _('Year Card'),
+      }, {
+        value: '4',
+        label: _('Traffic Card'),
+      },
+    ],
+    showPrecondition(data) {
+      return data.get('name') !== undefined;
+    },
+  }, {
+    id: 'maclimit',
+    label: _('Mac Limit'),
+    form: 'recharge',
+    disabled: true,
+    type: 'select',
+    required: true,
+    showPrecondition(data) {
+      return data.get('name') !== undefined;
+    },
+    options: [
+      {
+        value: '0',
+        label: _('Closed'),
+      }, {
+        value: '1',
+        label: _('Open'),
+      },
+    ],
+  }, {
+    id: 'maclimitcount',
+    label: _('Mac Quantity'),
+    disabled: true,
+    form: 'recharge',
+    type: 'number',
+    required: true,
+    min: 0,
+    showPrecondition(data) {
+      return data.get('name') !== undefined;
+    },
+    validator: validator({
+      rules: 'num[0,9999]',
+    }),
+  }, {
+    id: 'autologin',
+    label: _('Auto Login'),
+    disabled: true,
+    showPrecondition(data) {
+      return data.get('name') !== undefined;
+    },
+    options: [
+      {
+        value: '0',
+        label: _('Closed'),
+      }, {
+        value: '1',
+        label: _('Open'),
+      },
+    ],
+    type: 'select',
+    required: true,
+  }, {
+    id: 'speed',
+    label: _('Speed Limit'),
+    disabled: true,
+    form: 'recharge',
+    type: 'select',
+    required: true,
+    showPrecondition(data) {
+      return data.get('name') !== undefined;
+    },
+    options: [
+      {
+        value: '1',
+        label: _('1M'),
+      },
+    ],
+  }, {
+    id: 'time',
+    label: _('Count'),
+    type: 'text',
+    form: 'recharge',
+    disabled: true,
+    required: true,
+    showPrecondition(data) {
+      return data.get('name') !== undefined;
+    },
+    validator: validator({
+      rules: 'num[0,9999]',
+    }),
+  }, {
+    id: 'money',
+    label: _('Price'),
+    form: 'recharge',
+    disabled: true,
+    type: 'text',
+    required: true,
+    help: _('$'),
+    showPrecondition(data) {
+      return data.get('name') !== undefined;
+    },
+  }, {
+    id: 'description',
+    label: _('Description'),
+    form: 'recharge',
+    disabled: true,
+    width: '120px',
+    type: 'textarea',
+    required: true,
+    showPrecondition(data) {
+      return data.get('name') !== undefined;
+    },
+  },
+]);
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
+  route: PropTypes.object,
   validateAll: PropTypes.func,
   onListAction: PropTypes.func,
   updateCurEditListItem: PropTypes.func,
   reportValidError: PropTypes.func,
+  changeScreenActionQuery: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -342,27 +539,45 @@ export default class View extends React.Component {
       'getDefaultEditData',
       'onBeforeSave',
     ]);
+    this.state = {
+      $$cardDataList: fromJS([]),
+    };
   }
 
   componentWillMount() {
+    getCardCategoryName()
+      .then((data) => {
+        this.setState({
+          categoryTypeOptions: fromJS(data.options),
+        });
+      });
+    getCardInformation()
+      .then(($$data) => {
+        this.setState({
+          $$cardDataList: $$data,
+        });
+      });
     this.getDefaultEditData();
   }
-  onBeforeSave() {
-    const { store } = this.props;
-    const myScreenId = store.get('curScreenId');
-    const $$myScreenStore = store.get(myScreenId);
-    const $$curData = $$myScreenStore.get('curListItem');
-  }
-  onSave(formId) {
-    if (this.props.validateAll) {
-      this.props.validateAll(formId)
-        .then((errMsg) => {
-          if (errMsg.isEmpty()) {
-            this.onBeforeSave();
-            this.props.onListAction();
-          }
-        });
-    }
+  // onBeforeSave() {
+  //   const { store } = this.props;
+  //   const myScreenId = store.get('curScreenId');
+  //   const $$myScreenStore = store.get(myScreenId);
+  //   const $$curData = $$myScreenStore.get('curListItem');
+  // }
+  onSave() {
+    this.props.onListAction(this.props.route.formUrl, {
+      needMerge: true,
+    });
+    // if (this.props.validateAll) {
+    //   this.props.validateAll(formId)
+    //     .then((errMsg) => {
+    //       if (errMsg.isEmpty()) {
+    //         this.onBeforeSave();
+    //         this.props.onListAction();
+    //       }
+    //    });
+    // }
   }
   getDefaultEditData() {
     const myDefaultEditData = {};
@@ -393,17 +608,25 @@ export default class View extends React.Component {
     });
   }
   renderCustomModal() {
-    const { store, app } = this.props;
+    const { store, app, route } = this.props;
     const myScreenId = store.get('curScreenId');
     const $$myScreenStore = store.get(myScreenId);
     const $$curData = $$myScreenStore.get('curListItem');
     const actionType = $$myScreenStore.getIn(['actionQuery', 'action']);
+    const isRecharge = store.getIn([route.id, 'actionQuery', 'action']) === 'recharge';
+    const $$curRechargeOptions = rechargeOptions.setIn([2, 'options'], this.state.categoryTypeOptions);
+    const $$cardDataList = this.state.$$cardDataList;
+    const $$cardDataItem = $$cardDataList.find($$item => $$item.get('id') === $$curData.get('name'));
+    let $$rechargeDetailData = $$curData;
     let $$mybaseSetting = baseSetting;
 
-    if (actionType !== 'add' && actionType !== 'edit') {
-      return null;
+    if ($$cardDataItem) {
+      $$rechargeDetailData = $$curData.merge($$cardDataItem.delete('name'));
     }
 
+    if (actionType !== 'add' && actionType !== 'edit' && !isRecharge) {
+      return null;
+    }
     if (actionType === 'edit') {
       $$mybaseSetting = $$mybaseSetting.map(
         ($$item) => {
@@ -416,6 +639,22 @@ export default class View extends React.Component {
       );
     }
 
+    if (isRecharge) {
+      return (
+        <FormContainer
+          id="recharge"
+          options={$$curRechargeOptions}
+          data={$$rechargeDetailData}
+          onChangeData={this.props.updateCurEditListItem}
+          onSave={() => this.onSave('recharge')}
+          invalidMsg={app.get('invalid')}
+          validateAt={app.get('validateAt')}
+          isSaving={app.get('saving')}
+          savedText="success"
+          hasSaveButton
+        />
+      );
+    }
     return (
       <div className="o-box row">
         <div className="o-box__cell">
@@ -491,10 +730,35 @@ export default class View extends React.Component {
     );
   }
   render() {
+    const curListOptions = listOptions
+          .setIn([-1, 'transform'], (val, $$data) => (
+            <span>
+              <Button
+                text={_('Recharge')}
+                key="rechargeActionButton"
+                icon="vcard"
+                onClick={() => {
+                  this.props.changeScreenActionQuery({
+                    action: 'recharge',
+                    myTitle: _('Recharge'),
+                  });
+                  this.props.updateCurEditListItem({
+                    id: $$data.get('id'),
+                    loginName: $$data.get('loginName'),
+                    nickname: $$data.get('name'),
+                  });
+                }}
+              />
+              <span>
+                <a href={`/index.html#/main/portal/account/list/mac/${$$data.get('loginName')}`} className="tablelink">{_('Mac Management')}</a>
+              </span>
+            </span>
+          ),
+          );
     return (
       <AppScreen
         {...this.props}
-        listOptions={listOptions}
+        listOptions={curListOptions}
         defaultEditData={this.defaultEditData}
         modalChildren={this.renderCustomModal()}
         selectable

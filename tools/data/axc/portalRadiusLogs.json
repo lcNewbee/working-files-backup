@@ -5,25 +5,39 @@
   },
   "data": {
     "list": [{
-      "id": 1,
-      "nasip": "192.168.4.177",
-      "sourceip": "192.168.4.177",
-      "userip": "192.168.4.177",
-      "mac":"22:22:22:22:22",
-      "callingstationid": "1",
-      "name": "ac",
-      "state": "1",
-      "startDate": "wer",
-      "endDate": "wer",
-      "time": "11",
-      "ins": "11",
-      "outs": "11",
-      "octets": "22",
-      "acctsessionid": "22",
-      "ex1": "22",
-      "ex2": "22"
+      "id":"0",
+      "nasip":"192.168.100.226",
+      "sourceip":"192.168.100.226",
+      "userip":"192.168.100.213",
+      "callingstationid":"74:85:2a:1e:15:eb",
+      "name":"aaa",
+      "state":"1",
+      "startDate":"2017-03-02 18:53:35",
+      "endDate":"2017-03-02 18:54:55",
+      "time":"80000",
+      "ins":"0",
+      "outs":"0",
+      "octets":"0",
+      "acctsessionid":"PortalRDS1900-04-00:4387178:00:00-ffffffff011",
+      "ex1":"1",
+      "ex2":"Radius Account Stop"
+    },{
+      "id":"1",
+      "nasip":"192.168.100.227",
+      "sourceip":"192.168.100.227",
+      "userip":"192.168.100.214",
+      "callingstationid":"74:85:2a:1e:15:eb",
+      "name":"bbb",
+      "state":"2",
+      "startDate":"2017-03-02 18:53:35",
+      "endDate":"2017-03-02 18:54:55",
+      "time":"80000",
+      "ins":"0",
+      "outs":"0",
+      "octets":"0",
+      "acctsessionid":"PortalRDS1900-04-00:4387178:00:00-ffffffff011",
+      "ex1":"1",
+      "ex2":"Radius Account Stop"
     }]
   }
 }
-
-

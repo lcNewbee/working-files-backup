@@ -339,7 +339,7 @@ export default class OpenPortalBase extends React.Component {
           <Button
             text={_('Reply')}
             key="sendActionButton"
-            icon="repeat"
+            icon="mail-reply"
             theme="primary"
             onClick={() => {
               this.props.changeScreenActionQuery({
