@@ -61,7 +61,7 @@ const sMainAxc = require('../../screens/App/screens/MainAxc');
 /**
  * 网络设置
  */
-// const sNetworkVlan = require('../../screens/App/screens/MainAxc/screens/Network/screens/VLAN');
+const sNetworkVlan = require('../../screens/App/screens/MainAxc/screens/Network/screens/VLAN');
 const sInterfaces = require('../../screens/App/screens/MainAxc/screens/Network/screens/Interfaces');
 const sDhcpList = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/DhcpList');
 const sDhcpRelay = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/DhcpRelay');
@@ -228,15 +228,15 @@ const routes = [
         text: _('Network '),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/network/interface') },
         childRoutes: [
-          // {
-          //   id: 'networkVlan',
-          //   isIndex: true,
-          //   path: '/main/network/vlan',
-          //   formUrl: 'goform/networkVlan',
-          //   icon: 'road',
-          //   text: _('VLAN'),
-          //   component: sNetworkVlan.Screen,
-          // },
+          {
+            id: 'networkVlan',
+            isIndex: true,
+            path: '/main/network/vlan',
+            formUrl: 'goform/networkVlan',
+            icon: 'road',
+            text: _('VLAN'),
+            component: sNetworkVlan.Screen,
+          },
           {
             id: 'networkInterface',
             icon: 'th',

@@ -1372,56 +1372,58 @@ export default class Basic extends React.Component {
                         />
                       )
                     }
-
-                    { // repeater模式下，对端AP的mac地址输入框
-                      (curData.getIn(['radioList', radioId, 'wirelessMode']) === 'repeater') ? (
-                        <div>
-                          <FormGroup
-                            label="WDS Peers"
-                            type="text"
-                            value={curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '0']) || ''}
-                            onChange={(data) => {
-                              const peer1 = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '1']) || '';
-                              const peer2 = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '2']) || '';
-                              const radioList = curData.get('radioList')
-                                                .setIn([radioId, 'vapList', '0', 'peers', '0'], data.value)
-                                                .setIn([radioId, 'vapList', '0', 'peers', '1'], peer1)
-                                                .setIn([radioId, 'vapList', '0', 'peers', '2'], peer2);
-                              this.props.updateItemSettings({ radioList });
-                            }}
-                            {...apmac1}
-                          />
-                          <FormGroup
-                            type="text"
-                            value={curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '1']) || ''}
-                            onChange={(data) => {
-                              const peer0 = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '0']) || '';
-                              const peer2 = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '2']) || '';
-                              const radioList = curData.get('radioList')
-                                                .setIn([radioId, 'vapList', '0', 'peers', '0'], peer0)
-                                                .setIn([radioId, 'vapList', '0', 'peers', '1'], data.value)
-                                                .setIn([radioId, 'vapList', '0', 'peers', '2'], peer2);
-                              this.props.updateItemSettings({ radioList });
-                            }}
-                            {... apmac2}
-                          />
-                          <FormGroup
-                            type="text"
-                            value={curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '2']) || ''}
-                            onChange={(data) => {
-                              const peer0 = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '0']) || '';
-                              const peer1 = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '1']) || '';
-                              const radioList = curData.get('radioList')
-                                                .setIn([radioId, 'vapList', '0', 'peers', '0'], peer0)
-                                                .setIn([radioId, 'vapList', '0', 'peers', '1'], peer1)
-                                                .setIn([radioId, 'vapList', '0', 'peers', '2'], data.value);
-                              this.props.updateItemSettings({ radioList });
-                            }}
-                            {... apmac3}
-                          />
-                        </div>
-                      ) : null
-                    }
+                    <div style={{ width: '350px' }}>
+                      { // repeater模式下，对端AP的mac地址输入框
+                        (curData.getIn(['radioList', radioId, 'wirelessMode']) === 'repeater') ? (
+                          <div>
+                            <FormGroup
+                              label="WDS Peers"
+                              type="text"
+                              minWidth="350px"
+                              value={curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '0']) || ''}
+                              onChange={(data) => {
+                                const peer1 = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '1']) || '';
+                                const peer2 = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '2']) || '';
+                                const radioList = curData.get('radioList')
+                                                  .setIn([radioId, 'vapList', '0', 'peers', '0'], data.value)
+                                                  .setIn([radioId, 'vapList', '0', 'peers', '1'], peer1)
+                                                  .setIn([radioId, 'vapList', '0', 'peers', '2'], peer2);
+                                this.props.updateItemSettings({ radioList });
+                              }}
+                              {...apmac1}
+                            />
+                            <FormGroup
+                              type="text"
+                              value={curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '1']) || ''}
+                              onChange={(data) => {
+                                const peer0 = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '0']) || '';
+                                const peer2 = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '2']) || '';
+                                const radioList = curData.get('radioList')
+                                                  .setIn([radioId, 'vapList', '0', 'peers', '0'], peer0)
+                                                  .setIn([radioId, 'vapList', '0', 'peers', '1'], data.value)
+                                                  .setIn([radioId, 'vapList', '0', 'peers', '2'], peer2);
+                                this.props.updateItemSettings({ radioList });
+                              }}
+                              {... apmac2}
+                            />
+                            <FormGroup
+                              type="text"
+                              value={curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '2']) || ''}
+                              onChange={(data) => {
+                                const peer0 = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '0']) || '';
+                                const peer1 = curData.getIn(['radioList', radioId, 'vapList', '0', 'peers', '1']) || '';
+                                const radioList = curData.get('radioList')
+                                                  .setIn([radioId, 'vapList', '0', 'peers', '0'], peer0)
+                                                  .setIn([radioId, 'vapList', '0', 'peers', '1'], peer1)
+                                                  .setIn([radioId, 'vapList', '0', 'peers', '2'], data.value);
+                                this.props.updateItemSettings({ radioList });
+                              }}
+                              {... apmac3}
+                            />
+                          </div>
+                        ) : null
+                      }
+                    </div>
                     {/* // station模式下，对端AP的mac地址输入框
                       (curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta') ? (
                         <div>
@@ -1455,209 +1457,212 @@ export default class Basic extends React.Component {
                       ) : null
                     */}
 
-              { // station模式，lock to ap功能根据lockType值判断是否是华润定制
-                (curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta' && curData.get('lockType') === '0') ? (
-                  <div>
-                    <FormGroup
-                      label={_('Lock To AP')}
-                      type="checkbox"
-                      checked={curData.getIn(['radioList', radioId, 'vapList', '0', 'apMacEnable']) === '1'}
-                      onChange={(data) => {
-                        const radioList = curData.get('radioList')
-                                        .setIn([radioId, 'vapList', '0', 'apMacEnable'], data.value);
-                        this.props.updateItemSettings({ radioList });
-                      }}
-                    />
-                    {
-                      curData.getIn(['radioList', radioId, 'vapList', '0', 'apMacEnable']) === '1' ? (
-                        <FormGroup
-                          label={_('Peer Mac')}
-                          form="radioSettings"
-                          value={apMac}
-                          onChange={(data) => {
-                            const radioList = curData.get('radioList')
-                                            .setIn([radioId, 'vapList', '0', 'apMac'], data.value);
-                            this.props.updateItemSettings({ radioList });
-                          }}
-                          placeholder={_('not necessary')}
-                          {...staApmac}
-                        />
-                      ) : null
-                    }
-                  </div>
-                ) : null
-              }
-              { // station模式下，根据lockType判断是否是华润定制模式
-                (curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta' && curData.get('lockType') === '1') ? (
-                  <div>
-                    <FormGroup
-                      label={_('Lock To AP')}
-                      type="checkbox"
-                      checked={curData.getIn(['radioList', radioId, 'vapList', '0', 'apMacEnable']) === '1'}
-                      onChange={(data) => {
-                        const radioList = curData.get('radioList')
-                                        .setIn([radioId, 'vapList', '0', 'apMacEnable'], data.value);
-                        this.props.updateItemSettings({ radioList });
-                      }}
-                    />
-                    {
-                      curData.getIn(['radioList', radioId, 'vapList', '0', 'apMacEnable']) === '1' ? (
+                    { // station模式，lock to ap功能根据lockType值判断是否是华润定制
+                      (curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta' && curData.get('lockType') === '0') ? (
                         <div>
-                          <div className="clearfix">
-                            <FormGroup
-                              className="fl"
-                              label={_('Peer Mac')}
-                            >
-                              {
-                                apMacList.size === 0 ? (
-                                  <div className="paddingDiv" />
-                                ) : (
-                                  <ul className="apMacListWrap">
-                                    {
-                                      apMacList.toJS().map((val, it) => (
-                                        <div
-                                          className="clearfix"
-                                          key={it}
-                                        >
-                                          <li
-                                            className="apMacItem fl"
-                                            onDragOver={(e) => {
-                                              e.preventDefault();
-                                            }}
-                                            onDragStart={(e) => {
-                                              // e.dataTransfer.setData('mac', e.target.innerHTML);
-                                              this.props.changeTransferData(e.target.innerHTML);
-                                            }}
-                                            onDrop={(e) => {
-                                              const dropMac = this.props.selfState.get('transferData');
-                                              const targetMac = e.target.innerHTML;
-                                              let macList = apMacList;
-                                              const dropMacIter = macList.keyOf(dropMac);
-                                              const targetMacIter = macList.keyOf(targetMac);
-
-                                              if (typeof (dropMacIter) !== 'undefined' &&
-                                                  typeof (targetMacIter) !== 'undefined' &&
-                                                  targetMacIter >= dropMacIter) { // 向下移动
-                                                macList = macList.insert(targetMacIter + 1, dropMac)
-                                                          .delete(dropMacIter);
-                                              } else if (typeof (dropMacIter) !== 'undefined' &&
-                                                  typeof (targetMacIter) !== 'undefined' &&
-                                                  targetMacIter < dropMacIter) {
-                                                macList = macList.insert(targetMacIter, dropMac)
-                                                          .delete(dropMacIter + 1);
-                                              }
-                                              const radioList = curData.get('radioList')
-                                                                .setIn([radioId, 'vapList', '0', 'apMacList'], macList);
-                                              this.props.updateItemSettings({ radioList });
-                                              this.props.changeTransferData('');
-                                            }}
-                                            draggable
-                                          >
-                                            {val}
-                                          </li>
-                                          <Icon
-                                            className="apMacIcon fl"
-                                            name="arrow-down"
-                                            onClick={() => { this.sortMacOrder(it, apMacList, 'down'); }}
-                                          />
-                                          <Icon
-                                            className="apMacIcon fl"
-                                            name="arrow-up"
-                                            onClick={() => { this.sortMacOrder(it, apMacList, 'up'); }}
-                                          />
-                                          <Icon
-                                            className="apMacIcon fl"
-                                            name="close"
-                                            id={it}
-                                            onClick={(e) => {
-                                              const macList = apMacList.delete(e.target.id);
-                                              const radioList = curData.get('radioList')
-                                                                .setIn([radioId, 'vapList', '0', 'apMacList'], macList);
-                                              this.props.updateItemSettings({ radioList });
-                                            }}
-                                          />
-                                        </div>
-                                      ))
-                                    }
-                                  </ul>
-                                )
-                              }
-                            </FormGroup>
-                            <Icon
-                              className="fl"
-                              name="question-circle"
-                              style={{ marginLeft: '5px' }}
-                              onMouseOver={() => {
-                                this.props.changeShowMacHelpInfo(true);
-                              }}
-                              onMouseOut={() => {
-                                this.props.changeShowMacHelpInfo(false);
-                              }}
-                            />
-                            {
-                              this.props.selfState.get('showMacHelpInfo') ? (
-                                <span
-                                  className="fl peer-mac-notice"
-                                >
-                                  {_('Peers mac address table. The mac order represents the connection priority. The mac in higher order has the higher priority than mac bellow.The table allows you to drag to re-order to change the priority.')}
-                                </span>
-                              ) : null
-                            }
-                          </div>
-                          <div className="clearfix">
-                            <FormGroup
-                              type="text"
-                              className="fl"
-                              form="macInputArea"
-                              value={this.props.selfState.get('apMacInputData')}
-                              onChange={(data) => {
-                                this.props.changeApMacInput(data.value);
-                              }}
-                              style={{
-                                width: '370px',
-                                marginTop: '-2px',
-                              }}
-                              {...this.props.validateOption.validMacInput}
-                            />
-                            <Button
-                              text={_('Add')}
-                              className="fl"
-                              theme="primary"
-                              onClick={() => {
-                                const val = this.props.selfState.get('apMacInputData').replace(/-/g, ':');
-                                let macList = apMacList;
-                                this.props.validateAll('macInputArea').then((msg) => {
-                                  if (msg.isEmpty()) {
-                                    if (macList.size >= 5) {
-                                      this.props.createModal({
-                                        id: 'settings',
-                                        role: 'alert',
-                                        text: _('Mac list number can not exceed 5.'),
-                                      });
-                                    } else if (macList.includes(val)) {
-                                      this.props.createModal({
-                                        id: 'settings',
-                                        role: 'alert',
-                                        text: _('The mac address already exists in the list!'),
-                                      });
-                                    } else if (val !== '') {
-                                      macList = macList.push(val);
-                                      const radioList = curData.get('radioList')
-                                                      .setIn([radioId, 'vapList', '0', 'apMacList'], macList);
-                                      this.props.updateItemSettings({ radioList });
-                                      this.props.changeApMacInput('');
-                                    }
-                                  }
-                                });
-                              }}
-                            />
-                          </div>
+                          <FormGroup
+                            label={_('Lock To AP')}
+                            type="checkbox"
+                            checked={curData.getIn(['radioList', radioId, 'vapList', '0', 'apMacEnable']) === '1'}
+                            onChange={(data) => {
+                              const radioList = curData.get('radioList')
+                                              .setIn([radioId, 'vapList', '0', 'apMacEnable'], data.value);
+                              this.props.updateItemSettings({ radioList });
+                            }}
+                          />
+                          {
+                            curData.getIn(['radioList', radioId, 'vapList', '0', 'apMacEnable']) === '1' ? (
+                              <FormGroup
+                                label={_('Peer Mac')}
+                                form="radioSettings"
+                                value={apMac}
+                                onChange={(data) => {
+                                  const radioList = curData.get('radioList')
+                                                  .setIn([radioId, 'vapList', '0', 'apMac'], data.value);
+                                  this.props.updateItemSettings({ radioList });
+                                }}
+                                placeholder={_('not necessary')}
+                                {...staApmac}
+                              />
+                            ) : null
+                          }
                         </div>
                       ) : null
                     }
-                  </div>
-                ) : null
-              }
+                    { // station模式下，根据lockType判断是否是华润定制模式
+                      (curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta' && curData.get('lockType') === '1') ? (
+                        <div>
+                          <FormGroup
+                            label={_('Lock To AP')}
+                            type="checkbox"
+                            checked={curData.getIn(['radioList', radioId, 'vapList', '0', 'apMacEnable']) === '1'}
+                            onChange={(data) => {
+                              const radioList = curData.get('radioList')
+                                              .setIn([radioId, 'vapList', '0', 'apMacEnable'], data.value);
+                              this.props.updateItemSettings({ radioList });
+                            }}
+                          />
+                          {
+                            curData.getIn(['radioList', radioId, 'vapList', '0', 'apMacEnable']) === '1' ? (
+                              <div>
+                                <div className="clearfix">
+                                  <FormGroup
+                                    className="fl"
+                                    label={_('Peer Mac')}
+                                  >
+                                    {
+                                      apMacList.size === 0 ? (
+                                        <div className="paddingDiv" />
+                                      ) : (
+                                        <ul className="apMacListWrap">
+                                          {
+                                            apMacList.toJS().map((val, it) => (
+                                              <div
+                                                className="clearfix"
+                                                key={it}
+                                              >
+                                                <li
+                                                  className="apMacItem fl"
+                                                  onDragOver={(e) => {
+                                                    e.preventDefault();
+                                                  }}
+                                                  onDragStart={(e) => {
+                                                    // e.dataTransfer.setData('mac', e.target.innerHTML);
+                                                    this.props.changeTransferData(e.target.innerHTML);
+                                                  }}
+                                                  onDrop={(e) => {
+                                                    const dropMac = this.props.selfState.get('transferData');
+                                                    const targetMac = e.target.innerHTML;
+                                                    let macList = apMacList;
+                                                    const dropMacIter = macList.keyOf(dropMac);
+                                                    const targetMacIter = macList.keyOf(targetMac);
+
+                                                    if (typeof (dropMacIter) !== 'undefined' &&
+                                                        typeof (targetMacIter) !== 'undefined' &&
+                                                        targetMacIter >= dropMacIter) { // 向下移动
+                                                      macList = macList.insert(targetMacIter + 1, dropMac)
+                                                                .delete(dropMacIter);
+                                                    } else if (typeof (dropMacIter) !== 'undefined' &&
+                                                        typeof (targetMacIter) !== 'undefined' &&
+                                                        targetMacIter < dropMacIter) {
+                                                      macList = macList.insert(targetMacIter, dropMac)
+                                                                .delete(dropMacIter + 1);
+                                                    }
+                                                    const radioList = curData.get('radioList')
+                                                                      .setIn([radioId, 'vapList', '0', 'apMacList'], macList);
+                                                    this.props.updateItemSettings({ radioList });
+                                                    this.props.changeTransferData('');
+                                                  }}
+                                                  draggable
+                                                >
+                                                  {val}
+                                                </li>
+                                                <Icon
+                                                  className="apMacIcon fl"
+                                                  name="arrow-down"
+                                                  onClick={() => { this.sortMacOrder(it, apMacList, 'down'); }}
+                                                />
+                                                <Icon
+                                                  className="apMacIcon fl"
+                                                  name="arrow-up"
+                                                  onClick={() => { this.sortMacOrder(it, apMacList, 'up'); }}
+                                                />
+                                                <Icon
+                                                  className="apMacIcon fl"
+                                                  name="close"
+                                                  id={it}
+                                                  onClick={(e) => {
+                                                    const macList = apMacList.delete(e.target.id);
+                                                    const radioList = curData.get('radioList')
+                                                                      .setIn([radioId, 'vapList', '0', 'apMacList'], macList);
+                                                    this.props.updateItemSettings({ radioList });
+                                                  }}
+                                                />
+                                              </div>
+                                            ))
+                                          }
+                                        </ul>
+                                      )
+                                    }
+                                  </FormGroup>
+                                  <Icon
+                                    className="fl"
+                                    name="question-circle"
+                                    style={{
+                                      marginLeft: '5px',
+                                      position: 'relative',
+                                    }}
+                                    onMouseOver={() => {
+                                      this.props.changeShowMacHelpInfo(true);
+                                    }}
+                                    onMouseOut={() => {
+                                      this.props.changeShowMacHelpInfo(false);
+                                    }}
+                                  />
+                                  {
+                                    this.props.selfState.get('showMacHelpInfo') ? (
+                                      <span
+                                        className="fl peer-mac-notice"
+                                      >
+                                        {_('Peers mac address table. The mac order represents the connection priority. The mac in higher order has the higher priority than mac bellow.The table allows you to drag to re-order to change the priority.')}
+                                      </span>
+                                    ) : null
+                                  }
+                                </div>
+                                <div className="clearfix">
+                                  <FormGroup
+                                    type="text"
+                                    className="fl"
+                                    form="macInputArea"
+                                    value={this.props.selfState.get('apMacInputData')}
+                                    onChange={(data) => {
+                                      this.props.changeApMacInput(data.value);
+                                    }}
+                                    style={{
+                                      width: '370px',
+                                      marginTop: '-2px',
+                                    }}
+                                    {...this.props.validateOption.validMacInput}
+                                  />
+                                  <Button
+                                    text={_('Add')}
+                                    className="fl"
+                                    theme="primary"
+                                    onClick={() => {
+                                      const val = this.props.selfState.get('apMacInputData').replace(/-/g, ':');
+                                      let macList = apMacList;
+                                      this.props.validateAll('macInputArea').then((msg) => {
+                                        if (msg.isEmpty()) {
+                                          if (macList.size >= 5) {
+                                            this.props.createModal({
+                                              id: 'settings',
+                                              role: 'alert',
+                                              text: _('Mac list number can not exceed 5.'),
+                                            });
+                                          } else if (macList.includes(val)) {
+                                            this.props.createModal({
+                                              id: 'settings',
+                                              role: 'alert',
+                                              text: _('The mac address already exists in the list!'),
+                                            });
+                                          } else if (val !== '') {
+                                            macList = macList.push(val);
+                                            const radioList = curData.get('radioList')
+                                                            .setIn([radioId, 'vapList', '0', 'apMacList'], macList);
+                                            this.props.updateItemSettings({ radioList });
+                                            this.props.changeApMacInput('');
+                                          }
+                                        }
+                                      });
+                                    }}
+                                  />
+                                </div>
+                              </div>
+                            ) : null
+                          }
+                        </div>
+                      ) : null
+                    }
                     <div>
                       { // 加密方式选择框
                         (curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta' ||
@@ -1689,7 +1694,7 @@ export default class Basic extends React.Component {
                       {
                         (curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'mode']) === 'none' ||
                         curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'mode']) === 'wep') ? null : (
-                          <div>
+                          <div style={{ width: '350px' }}>
                             <FormGroup
                               label={_('Encryption')}
                               minWidth="66px"
@@ -1721,9 +1726,6 @@ export default class Basic extends React.Component {
                                                             .setIn([radioId, 'vapList', '0', 'security'], security);
                                 this.props.updateItemSettings({ radioList });
                               }}
-                              style={{
-                                width: '350px',
-                              }}
                               {...validPwd1}
                             />
                           </div>
@@ -1731,7 +1733,7 @@ export default class Basic extends React.Component {
                       }
                       {
                         (curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'mode']) === 'wep') ? (
-                          <div>
+                          <div style={{ width: '350px' }}>
                             <FormGroup
                               label={_('Auth Type')}
                               type="select"

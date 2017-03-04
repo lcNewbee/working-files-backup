@@ -342,9 +342,12 @@ export default class ACL extends React.Component {
             style={{
               width: '200px',
               height: '222px',
-              border: '1px solid #ccc',
               overflow: 'auto',
               marginRight: '20px',
+              backgroundColor: '#eee',
+              border: '1px solid #aaa',
+              borderRadius: '5px',
+              fontSize: '14px',
             }}
 
           >

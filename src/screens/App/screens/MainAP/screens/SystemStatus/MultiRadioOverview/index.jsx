@@ -281,7 +281,7 @@ function getTopTenFlowClientsOption(serverData) {
         const num = dataList.find($$item => $$item.get('name') === name).get('value');
         const numStr = flowRateFilter.transform(num);
         return name.length > 11 ? `${name.substring(0, 11)}... : ${numStr}` : `${name} : ${numStr}`;
-      }
+      },
     },
     series: [
       {
@@ -333,6 +333,7 @@ function getTopTenFlowClientsOption(serverData) {
   // }
   if (List.isList(dataList)) {
     dataList = dataList.map((item) => {
+      let name;
       const userName = item.get('name');
       if (!userName || userName === '') {
         name = item.get('mac');  // 如果没有name，则使用mac代替
@@ -659,12 +660,12 @@ export default class SystemStatus extends React.Component {
       if (customSetings.ssidFlowDir === 'upload') {
         flowPerSsid = vapList.map(item => fromJS({
           name: item.get('ssid'),
-          value: Number(item.get('rxBytes')),
+          value: Number(item.get('txBytes')),
         }));
       } else if (customSetings.ssidFlowDir === 'download') {
         flowPerSsid = vapList.map(item => fromJS({
           name: item.get('ssid'),
-          value: Number(item.get('txBytes')),
+          value: Number(item.get('rxBytes')),
         }));
       }
       return flowPerSsid;
@@ -729,14 +730,6 @@ export default class SystemStatus extends React.Component {
     const topTenFlowClients = getTopTenFlowClientsOption(serverData);
     const flowPerSsid = getFlowPerSsidOption(serverData);
     const cpuAndMemUsage = this.getCpuAndMemPercentOption();
-    // console.log('networkMode', networkMode);
-    // const vapInterfacesList = (wirelessMode === 'sta') ? [vapList[0]] : vapList;
-    // 绘图
-    // const serverData = this.props.selfState.get('serverData');
-    // const memoryStatusOption = getMemoryOption(serverData);
-    // const cpuStatusOption = getCpuOption(serverData);
-    // const topTenFlowClients = getTopTenFlowClientsOption(serverData);
-    // const flowPerSsid = getFlowPerSsidOption(serverData);
 
     return (
       <div className="o-box" style={{ minWidth: '1000px' }}>
@@ -889,26 +882,6 @@ export default class SystemStatus extends React.Component {
                   />
                 ) : null
               }
-              {/* <a
-                onClick={(e) => {
-                  e.preventDefault();
-                  const radioTypeVal = this.props.product.getIn(['deviceRadioList', radioId, 'radioType']);
-                  const config = fromJS({
-                    radioId,
-                    radioType: radioTypeVal,
-                  });
-                  this.props.changeCurrRadioConfig(config);
-                  window.location.href = '#/main/status/radiodetails';
-                }}
-                style={{
-                  paddingTop: '3px',
-                  marginLeft: '20px',
-                  color: 'blue',
-                  cursor: 'pointer',
-                }}
-              >
-                {_('More Details >>')}
-              </a>*/}
             </div>
           </div>
           <div
@@ -952,10 +925,10 @@ export default class SystemStatus extends React.Component {
                 <dt>{_('Tx Power')}</dt>
                 <dd style={{ whiteSpace: 'pre' }}>{modifySignalShowStyle(radioList.getIn([radioId, 'txPower']))}</dd>
               </dl>
-              <dl className="o-description-list-row">
+              {/* <dl className="o-description-list-row">
                 <dt>{_('Signal')}</dt>
                 <dd style={{ whiteSpace: 'pre' }}>{modifySignalShowStyle(radioList.getIn([radioId, 'signal']))}</dd>
-              </dl>
+              </dl>*/}
               <dl className="o-description-list-row">
                 <dt>{_('Noise')}</dt>
                 <dd style={{ whiteSpace: 'pre' }}>{modifySignalShowStyle(radioList.getIn([radioId, 'noise']))}</dd>
