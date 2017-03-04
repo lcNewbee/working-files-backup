@@ -16,7 +16,7 @@ const msg = {
   downSpeed: _('Down Speed'),
   selectGroup: _('Select Group'),
 };
-const encryptionOptions = fromJS([
+let encryptionOptions = fromJS([
   {
     value: 'none',
     label: _('NONE'),
@@ -28,6 +28,10 @@ const encryptionOptions = fromJS([
     label: '802.1x',
   },
 ]);
+
+if (window.guiConfig.versionCode < 20500) {
+  encryptionOptions = encryptionOptions.delete(-1);
+}
 const loadBalanceTypeArr = [
   {
     value: '0',

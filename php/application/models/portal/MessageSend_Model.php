@@ -11,7 +11,7 @@ class MessageSend_Model extends CI_Model {
         $tablenames = 'portal_message';
         $pageindex = (int)element('page', $data, 1);
         $pagesize = (int)element('size', $data, 20);
-        $order = array(array('id','DESC'));	
+        $order = array(array('id','DESC'));
         $where = array(array('fromname','admin'));
         $datalist = help_data_page_order($this->portalsql,$columns,$tablenames,$pageindex,$pagesize,$order,$where);
         $arr = array(
@@ -24,15 +24,15 @@ class MessageSend_Model extends CI_Model {
         return json_encode($arr);
     }
 
-    function getPram($data){  
+    function getPram($data){
         $toid = 0;
         $toname = element('toname',$data,0);
         if($toname){
             $query = $this->portalsql->query("select id from portal_account where loginName='".$toname."'");
             $row = $query->row();
-            $toid = (int)$row->id;            
+            $toid = (int)$row->id;
         }
-        $arr = array(            
+        $arr = array(
             'title' => element('title',$data,''),// 标题
             'description' => element('description',$data,''),// 内容
             'date' => (string)exec('date "+%Y-%m-%d %H-%M-%S"'),// 当前时间
@@ -40,12 +40,12 @@ class MessageSend_Model extends CI_Model {
             'ip' => $_SERVER['SERVER_ADDR'],// 发送者ip
             'fromPos' => 0,// 发送者类型
             'fromid' => 1,// 发送者id 暂且默认写admin ID
-            'fromname' => 'admin',// 发送者名称            
+            'fromname' => 'admin',// 发送者名称
             'toid' => $toid,//element('toId',$data,''),//接收者id
             'toPos' => 1,// 接收者类型，0-系统用户，1-接入用户
-            'toname' => element('toname',$data,''),// 接收者名称            
+            'toname' => element('toname',$data,''),// 接收者名称
             'delin' => 0,// 默认值0，值为1表示在收件箱中删除了此条记录
-            'delout' => 0,// 默认值0，值为1表示在发件箱中删除了此条记录                    
+            'delout' => 0,// 默认值0，值为1表示在发件箱中删除了此条记录
         );
         return $arr;
     }
@@ -81,7 +81,7 @@ class MessageSend_Model extends CI_Model {
         if($toname != ""){
             $query = $this->portalsql->query("select id,loginName from portal_account where loginName='".$toname."'");
             $row = $query->row();
-            $toid = $row->id;                        
+            $toid = $row->id;
         }
         $insertary = array(
             'title' => element('title',$data,''),// 标题
@@ -91,20 +91,20 @@ class MessageSend_Model extends CI_Model {
             'ip' => $_SERVER['SERVER_ADDR'],// 发送者ip
             'fromPos' => 0,// 发送者类型
             'fromid' => 1,// 发送者id 暂且默认写admin ID
-            'fromname' => 'admin',// 发送者名称            
+            'fromname' => 'admin',// 发送者名称
             'toid' => $toid,//接收者id
             'toPos' => 1,// 接收者类型，0-系统用户，1-接入用户
-            'toname' => $toname,// 接收者名称            
+            'toname' => $toname,// 接收者名称
             'delin' => 0,// 默认值0，值为1表示在收件箱中删除了此条记录
-            'delout' => 0,// 默认值0，值为1表示在发件箱中删除了此条记录                    
+            'delout' => 0,// 默认值0，值为1表示在发件箱中删除了此条记录
         );
-        $result = $this->portalsql->insert('portal_message', $insertary);        
+        $result = $this->portalsql->insert('portal_message', $insertary);
         if($result){
             $result = json_ok();
         }else{
             $result = json_no('sendMessage error');
             $result['state']['code'] = 6401;
-        } 
-        return json_encode($result);    
+        }
+        return json_encode($result);
     }
 }

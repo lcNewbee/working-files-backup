@@ -117,18 +117,24 @@ export default class View extends React.PureComponent {
     ]);
 
     this.loadingGoogleMap = true;
-    utils.loadScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyBGOC8axWomvnetRPnTdcuNW-a558l-JAU&libraries=places',
-      (error) => {
-        if (!error) {
-          this.renderGoogleMap();
-          this.loadingGoogleMap = false;
-        } else {
-          this.props.updateScreenSettings({
-            type: '1',
-          });
-        }
-      },
-    8000);
+
+    if (!window.google || (window.google && !window.google.maps)) {
+      utils.loadScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyBGOC8axWomvnetRPnTdcuNW-a558l-JAU&libraries=places',
+        (error) => {
+          if (!error) {
+            this.renderGoogleMap();
+            this.loadingGoogleMap = false;
+          } else {
+            this.props.updateScreenSettings({
+              type: '1',
+            });
+          }
+        },
+      8000);
+    } else if (this.mapContent) {
+      this.renderGoogleMap();
+      this.loadingGoogleMap = false;
+    }
   }
 
   componentWillMount() {

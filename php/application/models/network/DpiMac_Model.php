@@ -8,9 +8,9 @@ class DpiMac_Model extends CI_Model {
     function get_list($data) {
         $result = null;
         $cgiary = array(
-            'time'=>(string)element('timeType',$data,'0'), 
-            'page'=>(string)element('page',$data,'0'), 
-            'pagesize'=>(string)element('size',$data,'20'),        
+            'time'=>(string)element('timeType',$data,'0'),
+            'page'=>(string)element('page',$data,'0'),
+            'pagesize'=>(string)element('size',$data,'20'),
         );
         $mac = element('search',$data,'');
         $result = ndpi_send_allmac_allmsg_intime(json_encode($cgiary));
@@ -21,13 +21,13 @@ class DpiMac_Model extends CI_Model {
             $page_cfg = array(
                 'startline'=>1,
                 'size'=>(int)element('size',$data,20),
-                'currPage'=>(int)element('page',$data,0), 
+                'currPage'=>(int)element('page',$data,0),
                 'totalPage'=>element('sum_pages',$resAry['data']['total_msg'],1),// 总页数
-                'total'=>element('second_list_recnum',$resAry['data']['total_msg'],1),// 总行数 
-                'nextPage'=> (int)$data['page']+1, 
+                'total'=>element('second_list_recnum',$resAry['data']['total_msg'],1),// 总行数
+                'nextPage'=> (int)$data['page']+1,
                 'lastline'=>element('sum_pages',$resAry['data']['total_msg'],1),// 最后一页
             );
-            foreach($resAry['data']['list'] as $row){                                
+            foreach($resAry['data']['list'] as $row){
                 $trafficPercent = ((int)$row['mac_sum_need']) / (int)$resAry['data']['total_msg']['sum_all_flow_statics'];
                 $cary = array(
                     'name'=>'--',

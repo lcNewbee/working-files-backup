@@ -21,7 +21,7 @@ class DpiEth_Model extends CI_Model {
 		if(is_array($cgiary) && $cgiary['state']['code'] === 2000){
 			for($i = 0; $i < 6; $i++){
 				foreach($cgiary['data']['list'] as $row){
-					if($ary[$i]['ethx_name'] === $row['ethx_name']){					                      
+					if($ary[$i]['ethx_name'] === $row['ethx_name']){
                         $curRate = ((int)$row['eth_bytes_pre'] - (int)$row['eth_bytes'])/(int)$row['interval_time'];//版本编好再打开
                         $tary['active_eth'] = "1";
                         $tary['ethx_name']=$row['ethx_name'];
@@ -44,9 +44,9 @@ class DpiEth_Model extends CI_Model {
 				}
 			}
 
-		}    
-        //   
-        $ethmac = $this->get_eth_allmac($data);     
+		}
+        //
+        $ethmac = $this->get_eth_allmac($data);
 		$retary = array(
 			'state'=>array('code'=>2000,'msg'=>'ok'),
 			'data'=>array(
@@ -54,8 +54,8 @@ class DpiEth_Model extends CI_Model {
 				'list'=>$ary,
                 'ethxClientList'=>$ethmac['data']
 			)
-		);      
-		return json_encode($retary);        
+		);
+		return json_encode($retary);
 	}
     //获取用户数
     function get_user_num($data,$eth){
@@ -65,14 +65,14 @@ class DpiEth_Model extends CI_Model {
             'page'=>(string)element('page',$data,1),
             'pagesize'=>(string)element('size',$data,20),
             'ethx'=>$eth
-        );        
+        );
         $cgistr = ndpi_send_ethx_allmac_intime(json_encode($cgiary));
-        $obj = json_decode($cgistr);    
+        $obj = json_decode($cgistr);
         if( is_object($obj) && $obj->state->code === 2000 ){
             $result = $obj->data->total_msg->list_recnum;
         }
-        return $result;        
-    }	
+        return $result;
+    }
 	function get_eth_state(){
         $query=$this->db->select('attr_name,attr_value')
                         ->from('ndpi_attr')
@@ -121,7 +121,7 @@ class DpiEth_Model extends CI_Model {
             'time'=>(string)element('timeType',$data),
             'page'=>(string)element('page',$data),
             'pagesize'=>(string)element('size',$data),
-            'ethx'=>(string)element('ethx',$data,'eth0'),            
+            'ethx'=>(string)element('ethx',$data,'eth0'),
         );
         $cgidata = ndpi_send_ethx_allmac_intime(json_encode($cgiarr));
         $dataary = json_decode($cgidata,true);
@@ -136,21 +136,21 @@ class DpiEth_Model extends CI_Model {
             $arr['sum_upbytes_allmac'] = $dataary['data']['total_msg']['sum_upbytes_allmac'];
 
             $result['page'] = $arr;
-            
+
             $macAry = array();
             foreach($dataary['data']['list'] as $row){
                 $row['application'] =  explode('/',$row['all_protos']);
                 $row['trafficPercent'] = round((($row['mac_sum_bytes'] / $arr['sum_upbytes_allmac'])*100),2).'%';
                 $row['curRate'] = $row['mac_speed'];
                 $macAry[] = $row;
-            }            
+            }
             $result['data'] = $macAry;
         }
         return $result;
     }
     private function gtePram($ethstr){
 		$arr = array(
-            'ethx_name'=>$ethstr,          
+            'ethx_name'=>$ethstr,
             'userNum'=>0,
             'application'=>'',
             'curRate'=>'',

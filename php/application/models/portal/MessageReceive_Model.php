@@ -11,8 +11,8 @@ class MessageReceive_Model extends CI_Model {
         $tablenames = 'portal_message';
         $pageindex = (int)element('page', $data, 1);
         $pagesize = (int)element('size', $data, 20);
-        $order = array(array('id','DESC'));	
-        $where = array(array('toname','admin'));        
+        $order = array(array('id','DESC'));
+        $where = array(array('toname','admin'));
         $datalist = help_data_page_order($this->portalsql,$columns,$tablenames,$pageindex,$pagesize,$order,$where);
         $arr = array(
             'state'=>array('code'=>2000,'msg'=>'ok'),
@@ -24,15 +24,15 @@ class MessageReceive_Model extends CI_Model {
         return json_encode($arr);
     }
 
-    function getPram($data){  
+    function getPram($data){
         $toid = 0;
         $toname = element('toname',$data,0);
         if($toname){
             $query = $this->portalsql->query("select id from portal_account where loginName='".$toname."'");
             $row = $query->row();
-            $toid = (int)$row->id;            
+            $toid = (int)$row->id;
         }
-        $arr = array(            
+        $arr = array(
             'title' => element('title',$data,''),// 标题
             'description' => element('description',$data,''),// 内容
             'date' => (string)exec('date "+%Y-%m-%d %H-%M-%S"'),// 当前时间
@@ -43,9 +43,9 @@ class MessageReceive_Model extends CI_Model {
             'fromname' => 'admin',// 发送者名称
             'toid' => $toid,//element('toId',$data,''),//接收者id
             'toPos' => 1,// 接收者类型，0-系统用户，1-接入用户
-            'toname' => element('toname',$data,''),// 接收者名称            
+            'toname' => element('toname',$data,''),// 接收者名称
             'delin' => 0,// 默认值0，值为1表示在收件箱中删除了此条记录
-            'delout' => 0,// 默认值0，值为1表示在发件箱中删除了此条记录                    
+            'delout' => 0,// 默认值0，值为1表示在发件箱中删除了此条记录
         );
         return $arr;
     }
@@ -58,7 +58,7 @@ class MessageReceive_Model extends CI_Model {
         }else{
             $result = json_no('insert error');
             $result['state']['code'] = 6401;
-        } 
+        }
         return json_encode($result);
     }
     function Delete($data) {
@@ -80,8 +80,8 @@ class MessageReceive_Model extends CI_Model {
         return json_encode($result);
     }
     function Update($data){
-        $result = null;                
-        $updata ['state'] = 1;        
+        $result = null;
+        $updata ['state'] = 1;
         $this->portalsql->where('id', (int)element('id',$data));
         $result = $this->portalsql->update('portal_message', $updata);
         $result ? $result = json_ok() : $result = json_no('update error');
