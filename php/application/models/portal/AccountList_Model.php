@@ -13,11 +13,16 @@ class AccountList_Model extends CI_Model {
 		$pagesize = (int)element('size', $data, 20);		
 		$datalist = help_data_page($this->portalsql,$columns,$tablenames,$pageindex,$pagesize);
 
+        $htmdata = array();
+        foreach($datalist['data'] as $row){
+            $row['octets'] = ( (int)$row['octets'] / 1024 /1024).'M';
+            $htmdata[] = $row;
+        }
 		$arr = array(
 			'state'=>array('code'=>2000,'msg'=>'ok'),
 			'data'=>array(
 				'page'=>$datalist['page'],
-				'list' => $datalist['data']
+				'list' => $htmdata
 			)
 		);       
 		return json_encode($arr);
@@ -128,4 +133,139 @@ class AccountList_Model extends CI_Model {
         }
         return $result;        
     }  
+    //充值
+    function Recharge($data){
+        $result = FALSE;
+        $payTime = 0;
+
+        $cardcategory = $this->portalsql->query('select * from  portal_cardcategory where id='.$data['name']);
+        $row = $cardcategory->row();        
+        if(is_object($row)){
+            $time = $row->time;            
+            switch($row->state){
+                case 0 : $payTime = $time*1000*60*60;break;
+                case 1 : $payTime = $time*1000*60*60*24;break;
+                case 2 : $payTime = $time*1000*60*60*24*31;break;
+                case 3 : $payTime = $time*1000*60*60*24*31*12;break;
+                case 4 : $payTime = $time*1024*1024;break;
+            }
+        }
+        
+        $payType = $row->state;
+        switch($payType){
+            case '0' : $payType = 2;
+                break;
+            case '4' : $payType = 4;
+                break;            
+            default:
+                $payType = 3;
+                break;
+        }
+
+        $insertary = array(
+            'name' => $row->name,// 名称
+            'description' => $row->description,
+            'categoryType' => $row->state,// 分类，0-包时卡，1-日卡，2-月卡，3-年卡，4-流量卡
+            'payType' => $payType,// 充值类型，2-计时，3-买断，4-流量，null-错误
+            'state' => 1,// 状态，<0-未支付，0-新卡，1-已售出，2-已激活，null-错误
+            'accountName'=>'admin',// 充值用户
+            'payTime' => $payTime,// 计数            
+            'cdKey' => uniqid('',true),  // CD-KEY          
+            'payDate' => (string)exec('date "+%Y-%m-%d %H-%M-%S"'),// 充值日期
+            'buyDate' => (string)exec('date "+%Y-%m-%d %H-%M-%S"'),// 下单日期
+            'money' => $row->money,// 售价
+            'maclimit' => $row->maclimit,// MAC限制
+            'maclimitcount' => $row->maclimitcount,// 共享数
+            'autologin' => $row->autologin,// 无感知
+            'speed' => 1, // 限速设置
+            'accountDel' => 0,  
+            'userDel' =>0,
+            
+        );        
+        $result = $this->portalsql->insert('portal_card', $insertary);
+        if($result){
+            $this->add_user_recharge($data['id'],$payType,$payTime,$row->state,$row->time);
+        }
+        $result ? $result = json_ok() : $result = json_no('insert error');
+        return json_encode($result);
+    }
+    private function add_user_recharge($id,$payType,$payTime,$state,$sum){   
+        /*
+        echo '</br>payType:'.$payType;
+        echo '</br>payTime:'.$payTime;
+        echo '</br>state:'.$state;
+        echo '</br>sum:'.$sum;
+        */          
+        $result = 0;
+        $time = 0;
+        $octets = 0;
+
+        $query = $this->portalsql->query('select time,octets,date from portal_account where id='.$id);
+        $row = $query->row();
+        if(is_object($row)){
+            $time = $row->time;
+            $octets = $row->octets;
+        }
+        if($payType === 2){
+            //包时卡
+            $this->portalsql->set('time',($time+$payTime));
+            $this->portalsql->where('id', $id);  
+            $result = $this->portalsql->update('portal_account'); 
+        }
+        if($payType === 4){
+            //流量卡
+            $this->portalsql->set('octets',($octets+$payTime));
+            $this->portalsql->where('id', $id);  
+            $result = $this->portalsql->update('portal_account');            
+        } 
+        if($payType === 3){             
+            //买断
+            $arydate = explode('-',str_replace(' ','-',$row->date));  
+            $year = (int)$arydate[0];
+            $moth = (int)$arydate[1];
+            $day  = (int)$arydate[2];
+            $s    = $arydate[3];            
+            // 分类，0-包时卡，1-日卡，2-月卡，3-年卡，4-流量卡
+            if($state == 1){
+                $sumday = $day + $sum;
+                if($sumday>=30){
+                    $moth = $moth + intval($sumday/30);
+                    $day  = $sumday%30;
+                }else{
+                    $day = $sumday;
+                }
+                if($moth>12){
+                    $year = $year + intval($moth/12);
+                    $moth = $moth%12;
+                }
+
+                $dbtime = $year."-".$moth."-".$day." ".$s;
+                $this->portalsql->set('date',$dbtime);
+                $this->portalsql->where('id', $id);  
+                $result = $this->portalsql->update('portal_account');
+            }
+            if($state == 2){            
+                //月卡
+                if(($sum + $moth) > 12){
+                   $year = $year + 1; 
+                }else{
+                    $moth = $moth + $sum;
+                }
+                $dbtime = $year."-".$moth."-".$day." ".$s;
+                $this->portalsql->set('date',$dbtime);
+                $this->portalsql->where('id', $id);  
+                $result = $this->portalsql->update('portal_account');
+            }
+            if($state == 3){
+                //年卡
+                $year = $year + $sum;
+                $dbtime = $year."-".$moth."-".$day." ".$s;
+                                
+                $this->portalsql->set('date',$dbtime);
+                $this->portalsql->where('id', $id);  
+                $result = $this->portalsql->update('portal_account');
+            }
+        }        
+        return $result;        
+    }
 }
