@@ -646,5 +646,6 @@
   "Next hop IP must within interfaces segment": "下一跳IP必须在已有接口的网段内",
   "Direct": "直接",
   "Layer3": "三层",
-  "Uplink Port": "外网连接端口"
+  "Uplink Port": "外网连接端口",
+  "Set 0 to disable": "0 代表关闭"
 }

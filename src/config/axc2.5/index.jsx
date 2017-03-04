@@ -232,8 +232,7 @@ const sPortalStores =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Advertisement/Stores');
 const sPortalAdv =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Advertisement/Adv');
-const sPortalAdvPic =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Advertisement/AdvPic');
+
 // const sPortalPermission =
 //     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Permission');
 // const sPortalClassification =
@@ -639,52 +638,6 @@ const routes = [
               },
             ],
           },
-          // {
-          //   id: 'report',
-          //   isIndex: true,
-          //   path: '/main/group/report',
-          //   icon: 'file-text-o',
-          //   text: _('Report'),
-          //   indexRoute: { onEnter: (nextState, replace) => replace('/main/group/report/flow') },
-          //   childRoutes: [
-          //     {
-          //       id: 'flowReport',
-          //       path: '/main/group/report/flow',
-          //       formUrl: 'goform/timerPolicy',
-          //       text: _('Traffic Report'),
-          //       component: sFlowReport.Screen,
-          //     }, {
-          //       id: 'businessReport',
-          //       path: '/main/group/report/business',
-          //       text: _('Business Report'),
-          //       component: SharedComponents.TabContainer,
-          //       indexRoute: {
-          //         onEnter: (nextState, replace) => replace('/main/group/report/business/usersFlow'),
-          //       },
-          //       childRoutes: [
-          //         {
-          //           id: 'usersFlowAnalysis',
-          //           path: '/main/group/report/business/usersFlow',
-          //           formUrl: 'goform/usersFlowAnalysis',
-          //           text: _('Users Flow Analysis'),
-          //           component: sUsersAnalysis.Screen,
-          //         // }, {
-          //         //   id: 'informationPush',
-          //         //   path: '/main/group/report/business/informationPush',
-          //         //   formUrl: 'goform/informationPush',
-          //         //   text: _('Information Push'),
-          //         //   component: sInformationPush.Screen,
-          //         // }, {
-          //         //   id: 'preferencesAnalysis',
-          //         //   path: '/main/group/report/business/preferencesAnalysis',
-          //         //   formUrl: 'goform/PreferencesAnalysis',
-          //         //   text: _('Analysis of Preferences'),
-          //         //   component: sPreferencesAnalysis.Screen,
-          //         },
-          //       ],
-          //     },
-          //   ],
-          // },
         ],
       }, {
         path: '/main/system',
@@ -733,39 +686,6 @@ const routes = [
               },
             ],
           },
-          // {
-          //   id: 'SNPM',
-          //   icon: 'exclamation-circle',
-          //   formUrl: 'goform/system/snpm',
-          //   path: '/main/system/SNPM',
-          //   text: _('SNMP'),
-          //   component: sSNMP.Screen,
-          // },
-          // {
-          //   id: 'activeStandby',
-          //   isIndex: true,
-          //   formUrl: 'goform/system/activeStandby',
-          //   path: '/main/system/activeStandby',
-          //   icon: 'refresh',
-          //   text: _('Backup Settings'),
-          //   component: sActiveStandby.Screen,
-          // // }, {
-          // //   id: 'cluster',
-          // //   isIndex: true,
-          // //   path: '/main/system/cluster',
-          // //   icon: 'server',
-          // //   text: _('Custer Settings'),
-          // //   component: sCluster.Screen,
-          // },
-          // {
-          //   id: 'signatures',
-          //   isIndex: true,
-          //   path: '/main/system/signatures',
-          //   formUrl: 'goform/system/signatures',
-          //   icon: 'tasks',
-          //   text: _('Signatures'),
-          //   component: sSignatures.Screen,
-          // },
           {
             id: 'License',
             isIndex: true,
@@ -865,13 +785,6 @@ const routes = [
                 text: _('Base'),
                 component: sPortalBase.Screen,
               },
-              // {
-              //   id: 'portalAccessUrlParams',
-              //   path: '/main/portal/access/list',
-              //   formUrl: 'goform/portal/access/list',
-              //   text: _('Bas'),
-              //   component: sPortalBas.Screen,
-              // },
               {
                 id: 'portalAccessUrlParameter',
                 path: '/main/portal/access/urlParameter',
@@ -897,19 +810,6 @@ const routes = [
                 text: _('Wechat Auth'),
                 component: sPortalWeixin.Screen,
               },
-              // {
-              //   id: 'portalApSetting',
-              //   path: '/main/portal/access/ap',
-              //   formUrl: 'goform/portal/access/ap',
-              //   text: _('AP Setting'),
-              //   component: sPortalApSetting.Screen,
-              // }, {
-              //   id: 'portalSsid',
-              //   path: '/main/portal/access/ssid',
-              //   formUrl: 'goform/portal/access/ssid',
-              //   text: _('SSID'),
-              //   component: sPortalSsid.Screen,
-              // },
             ],
           }, {
             id: 'portalRadius',
@@ -1016,6 +916,7 @@ const routes = [
               },
             ],
           },
+          // 周三版本发布，暂时隐藏
           // {
           //   id: 'portalAdv',
           //   isIndex: true,
@@ -1038,12 +939,6 @@ const routes = [
           //       formUrl: 'goform/portal/advertisement/adv',
           //       text: _('Ads Management'),
           //       component: sPortalAdv.Screen,
-          //     }, {
-          //       id: 'portalAdvPic',
-          //       path: '/main/portal/advertisement/advpic',
-          //       formUrl: 'goform/portal/advertisement/advpic',
-          //       text: _('AdsPic Management'),
-          //       component: sPortalAdvPic.Screen,
           //     },
           //   ],
           // },

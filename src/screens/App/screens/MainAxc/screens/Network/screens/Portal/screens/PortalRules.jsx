@@ -12,7 +12,9 @@ function getPortList() {
   return utils.fetch('goform/network/port')
     .then(json => (
       {
-        options: json.data.list.map(
+        options: json.data.list.filter(
+          item => item,
+        ).map(
           item => ({
             value: item.name,
             label: item.name,
@@ -27,7 +29,9 @@ function getPortalServerList() {
   return utils.fetch('/goform/network/portal/server')
     .then(json => (
       {
-        options: json.data.list.map(
+        options: json.data.list.filter(
+          item => item,
+        ).map(
           item => ({
             value: item.template_name,
             label: item.template_name,
@@ -42,7 +46,9 @@ function getAAADomainName() {
   return utils.fetch('goform/network/Aaa')
     .then(json => (
       {
-        options: json.data.list.map(
+        options: json.data.list.filter(
+          item => item,
+        ).map(
           item => ({
             value: item.domain_name,
             label: item.domain_name,

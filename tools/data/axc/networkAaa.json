@@ -7,19 +7,19 @@
     "list": [
       {
         "domain_name":"test1",
-        "auth_accesstype": "0",
+        "auth_accesstype": "8021x-access",
         "auth_schemetype": "1",
         "radius_template": "test"
       },
       {
         "domain_name":"test2",
-        "auth_accesstype": "1",
+        "auth_accesstype": "8021x-access",
         "auth_schemetype": "0",
         "radius_template": "test22"
       },
       {
         "domain_name":"test3",
-        "auth_accesstype":"2",
+        "auth_accesstype":"portal",
         "auth_schemetype":"1",
         "radius_template": "test"
       }

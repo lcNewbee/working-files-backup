@@ -35,7 +35,7 @@ const commonFormOptions = fromJS([
 ]);
 const listOptions = fromJS([
   {
-    id: 'ruleType',
+    id: 'type',
     label: _('NAT Rule Type'),
     options: [
       {
@@ -63,7 +63,7 @@ const listOptions = fromJS([
     },
 
   }, {
-    id: 'sourceAddress',
+    id: 'addr',
     label: _('Source IP Address'),
     formProps: {
       required: true,
@@ -73,7 +73,7 @@ const listOptions = fromJS([
       help: _('e.g. %s', '192.168.1.0/24'),
     },
   }, {
-    id: 'conversionAddress',
+    id: 'nataddr',
     label: _('Translated IP Address'),
     formProps: {
       required: true,
@@ -82,7 +82,7 @@ const listOptions = fromJS([
       }),
     },
   }, {
-    id: 'ifname',
+    id: 'pubifname',
     label: _('Uplink Port'),
     formProps: {
       type: 'select',

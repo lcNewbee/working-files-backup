@@ -12,7 +12,9 @@ function getInterfaceTypeOptions() {
   return utils.fetch('goform/network/radius/template')
     .then(json => (
       {
-        options: json.data.list.map(
+        options: json.data.list.filter(
+          item => item,
+        ).map(
           item => ({
             value: item.template_name,
             label: item.template_name,
@@ -24,6 +26,15 @@ function getInterfaceTypeOptions() {
 }
 const accessTypeSeletOptions = [
   {
+    value: 'portal',
+    label: _('Portal'),
+  },
+  {
+    value: '8021x-access',
+    label: _('802.1x'),
+    disabled: true,
+  },
+  {
     value: 'lan-access',
     label: _('LAN'),
     disabled: true,
@@ -32,18 +43,12 @@ const accessTypeSeletOptions = [
     label: _('PPP'),
     disabled: true,
   }, {
-    value: 'portal',
-    label: _('Portal'),
-  }, {
     value: 'mac-access',
     label: _('MAC'),
     disabled: true,
-  }, {
-    value: '802.1x',
-    label: _('802.1x'),
-    disabled: true,
   },
 ];
+
 const authTypeSeletOptions = [
   {
     value: 'local',
@@ -55,6 +60,13 @@ const authTypeSeletOptions = [
     label: `${_('Remote')}`,
   },
 ];
+
+// 大于2.5版本
+if (window.guiConfig.versionCode >= 20500) {
+  // 开启 802.1x
+  accessTypeSeletOptions[1].disabled = false;
+}
+
 const listOptions = fromJS([
   {
     id: 'domain_name',

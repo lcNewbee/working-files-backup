@@ -16,15 +16,18 @@ const msg = {
   downSpeed: _('Down Speed'),
   selectGroup: _('Select Group'),
 };
-const encryptionOptions = [
+const encryptionOptions = fromJS([
   {
     value: 'none',
     label: _('NONE'),
   }, {
     value: 'psk-mixed',
     label: _('SECURITY'),
+  }, {
+    value: '802.1x',
+    label: '802.1x',
   },
-];
+]);
 const loadBalanceTypeArr = [
   {
     value: '0',
@@ -201,20 +204,11 @@ const listOptions = fromJS([
     id: 'maxBssUsers',
     text: _('Max Clients'),
     defaultValue: 32,
+
     formProps: {
       type: 'number',
       min: 1,
       max: 64,
-    },
-  },
-  {
-    id: 'mandatorydomain',
-    text: _('AAA Policy'),
-    defaultValue: '',
-    noTable: true,
-    formProps: {
-      type: 'select',
-      options: [],
     },
   },
   {
@@ -226,6 +220,7 @@ const listOptions = fromJS([
       type: 'number',
       min: '0',
       max: '4096',
+      help: _('Set 0 to disable'),
       required: true,
     },
   },
@@ -289,15 +284,17 @@ const listOptions = fromJS([
       },
       help: 'KB/S',
     },
-  }, {
+  },
+  {
     id: 'encryption',
     text: _('Encryption'),
     defaultValue: 'psk-mixed',
+    options: encryptionOptions,
     formProps: {
       type: 'switch',
-      options: encryptionOptions,
     },
-  }, {
+  },
+  {
     id: 'password',
     text: _('Password'),
     defaultValue: '',
@@ -315,6 +312,56 @@ const listOptions = fromJS([
         return curRepaet === 'psk-mixed';
       },
     },
+  },
+  {
+    id: 'mandatorydomain',
+    text: _('AAA Policy'),
+    defaultValue: '',
+    noTable: true,
+    formProps: {
+      type: 'select',
+      options: [],
+      // onChange(data) {
+      //   const retData = data;
+
+      //   if (retData.type === '8021x-access') {
+      //     retData.mergeData = {
+      //       encryption: '802.1x',
+      //     };
+      //   } else {
+      //     retData.mergeData = {
+      //       encryption: 'none',
+      //     };
+      //   }
+
+      //   return retData;
+      // },
+    },
+  },
+]);
+
+const $$accessTypeSeletOptions = fromJS([
+  {
+    value: 'portal',
+    label: _('Portal'),
+  },
+  {
+    value: '8021x-access',
+    label: _('802.1x'),
+    disabled: true,
+  },
+  {
+    value: 'lan-access',
+    label: _('LAN'),
+    disabled: true,
+  }, {
+    value: 'ppp-access',
+    label: _('PPP'),
+    disabled: true,
+  }, {
+    value: 'mac-access',
+    label: _('MAC'),
+    disabled: true,
   },
 ]);
 
@@ -335,6 +382,8 @@ const defaultProps = {};
 
 export default class View extends React.Component {
   constructor(props) {
+    const versionCode = props.app.get('versionCode');
+
     super(props);
 
     this.getCurrData = this.getCurrData.bind(this);
@@ -354,7 +403,28 @@ export default class View extends React.Component {
     this.state = {
       updateListOptions: false,
     };
-    this.listOptions = listOptions;
+
+    // 对特定版本处理
+    this.listOptions = listOptions.map(
+      ($$item) => {
+        let $$retItem = $$item;
+
+
+        // if (versionCode >= 20500) {
+        //   if ($$retItem.get('id') === 'encryption') {
+        //     $$retItem = $$retItem.setIn(['formProps', 'options'],
+        //       encryptionOptions.push(fromJS({
+        //         value: '802.1x',
+        //         label: '802.1x',
+        //       })),
+        //     );
+        //   }
+        // }
+
+
+        return $$retItem;
+      },
+    );
   }
   componentDidMount() {
     this.props.changeScreenActionQuery({
@@ -481,23 +551,56 @@ export default class View extends React.Component {
         let options = [];
 
         if (json && json.data && json.data.list) {
-          options = json.data.list.map(
-            item => ({
-              value: item.domain_name,
-              label: item.domain_name,
-            }),
-          );
+          options = json.data.list
+            .filter(
+              item => item,
+            ).map(
+              (item) => {
+                const curAccessTypeLabel = $$accessTypeSeletOptions.find(
+                  $$item => $$item.get('value') === item.auth_accesstype,
+                ).get('label');
+
+                return {
+                  value: item.domain_name,
+                  label: `${item.domain_name}(${curAccessTypeLabel})`,
+                  type: item.auth_accesstype,
+                };
+              },
+            );
+        }
+
+        if (options) {
+          options.unshift({
+            value: '',
+            label: _('None'),
+          });
         }
 
         this.setState({
           updateListOptions: !this.state.updateListOptions,
         });
-        this.listOptions = listOptions.map(
+        this.listOptions = this.listOptions.map(
           ($$item) => {
             let $$retItem = $$item;
 
             if ($$retItem.get('id') === 'mandatorydomain') {
-              $$retItem = $$retItem.setIn(['formProps', 'options'], options);
+              $$retItem = $$retItem.setIn(['formProps', 'options'],
+                ($$data) => {
+                  let $$retOptions = fromJS(options);
+
+                  if ($$data.get('encryption') === '802.1x') {
+                    $$retOptions = $$retOptions.filter(
+                      $$optionItem => $$optionItem.get('type') === '8021x-access',
+                    );
+                  } else {
+                    $$retOptions = $$retOptions.filter(
+                      $$optionItem => $$optionItem.get('type') !== '8021x-access',
+                    );
+                  }
+
+                  return $$retOptions.toJS();
+                },
+              );
             }
 
             return $$retItem;

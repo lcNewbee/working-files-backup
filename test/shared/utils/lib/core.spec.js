@@ -142,4 +142,31 @@ describe('utils core', () => {
       sinon.assert.calledWithExactly(console.error, errorMsg);
     });
   });
+
+  describe('#getUtf8Length', () => {
+    it('should throw error when target is not an object', () => {
+      expect(() => {
+        core.getUtf8Length(null);
+      }).toThrowError('');
+      expect(() => {
+        core.getUtf8Length(undefined);
+      }).toThrowError('');
+      expect(() => {
+        core.getUtf8Length({});
+      }).toThrowError('');
+    });
+    it('should return bytes length when isAscii string', () => {
+      expect(core.getUtf8Length('ab12~*')).toBe(6);
+      expect(core.getUtf8Length('')).toBe(0);
+    });
+    it('should  return bytes length when content 2 bytes string', () => {
+      expect(core.getUtf8Length('s中s')).toBe(5);
+    });
+    it('should return bytes length when content 3 bytes string', () => {
+      expect(core.getUtf8Length('吉祥如意ss')).toBe(14);
+    });
+    it('should return bytes length when content 4 bytes string', () => {
+      expect(core.getUtf8Length('及𠮷格ss')).toBe(12);
+    });
+  });
 });

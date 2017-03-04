@@ -180,23 +180,21 @@ const advancedSetting = fromJS([
     id: 'username_format',
     label: _('User Format'),
     fieldset: 'parameter',
-    defaultValue: 'WITHOUT',
+    defaultValue: 'UNCHANGE',
     noTable: true,
     type: 'select',
     required: true,
     placeholder: _('Please Select ') + _('User Format'),
     options: [
       {
-        value: 'WITHOUT',
-        label: 'WITHOUT_DOMAIN',
+        value: 'UNCHANGE',
+        label: 'KEEP_ORIGINAL',
       }, {
         value: 'WITH',
         label: 'WITH_DOMAN',
-        disabled: true,
       }, {
-        value: 'UNCHANGE',
-        label: 'KEEP_ORIGINAL',
-        disabled: true,
+        value: 'WITHOUT',
+        label: 'WITHOUT_DOMAIN',
       },
     ],
   }, {

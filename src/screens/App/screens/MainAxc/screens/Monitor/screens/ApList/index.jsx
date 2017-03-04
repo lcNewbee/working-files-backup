@@ -242,6 +242,9 @@ export default class View extends React.Component {
         action: EDIT_LIST_ACTION,
         myTitle: _('Edit Selected AP'),
       });
+      this.props.fetchScreenData({
+        url: 'goform/group/smartRf',
+      });
     } else {
       this.props.createModal({
         id: EDIT_LIST_ACTION,

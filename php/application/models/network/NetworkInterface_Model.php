@@ -6,46 +6,46 @@ class NetworkInterface_Model extends CI_Model {
 		$this->load->helper(array('array', 'my_customfun_helper'));
 	}
 
-    function get_interface_list() {
-        $result = null;
+	function get_interface_list() {
+		$result = null;
 		$query = $this->db->select('portid,port_name,port_desc,speed,duplex,ip1,mask1,ip2,mask2,ip3,mask3,ip4,mask4,ip5,mask5,adminstate,mgifname')
-                            ->from('port_table')
-                            ->get()->result_array();
+		                            ->from('port_table')
+		                            ->get()->result_array();
 
 		$interfaces = array();
-    $interfaceId = 1;
+		$interfaceId = 1;
 		foreach ($query as $index => $value) {
 			for ($x = 1;$x <= 5;$x++) {
 				$ip = element('ip' . $x, $value);
 				$mask = element('mask' . $x, $value);
 				if ($ip !== '0.0.0.0' && $mask !== '0.0.0.0') {
 					array_push($interfaces, array(
-                        'id' => $interfaceId,
-                        'name' => element('port_name', $value),
-                        'ip' => $ip,
-                        'mask' => $mask)
-                    );
-          $interfaceId = $interfaceId + 1;
+					                        'id' => $interfaceId,
+					                        'name' => element('port_name', $value),
+					                        'ip' => $ip,
+					                        'mask' => $mask)
+					                    );
+					$interfaceId = $interfaceId + 1;
 				}
 			}
 		}
 		$result = array(
-            'state' => array('code' => 2000, 'msg' => 'OK'),
-            'data' => array('list' => $interfaces)
-        );
+		            'state' => array('code' => 2000, 'msg' => 'OK'),
+		            'data' => array('list' => $interfaces)
+		        );
 		return $result;
 	}
 
-    function getCgiParam($data) {
+	function getCgiParam($data) {
 		$retData = array(
-            'portname' => element('name', $data),
-            'ip' => element('ip', $data),
-            'mask' => element('mask', $data)
-        );
+		            'portname' => element('name', $data),
+		            'ip' => element('ip', $data),
+		            'mask' => element('mask', $data)
+		        );
 		return $retData;
 	}
 
-    function add_interface($data) {
+	function add_interface($data) {
 		$result = null;
 		$addItem = $this->getCgiParam($data);
 		$result = acnetmg_add_portip(json_encode($addItem));
@@ -64,11 +64,11 @@ class NetworkInterface_Model extends CI_Model {
 		$oldData = element('originalData', $data);
 		$deleteItem = $this->getCgiParam($oldData);
 		$addItem = $this->getCgiParam($data);
-		//del
-		$result = acnetmg_del_portip(json_encode($deleteItem));
+		//d		el
+				$result = acnetmg_del_portip(json_encode($deleteItem));
 		if (strpos($result, '2000') !== false) {
-			//add
-			$result = acnetmg_add_portip(json_encode($addItem));
+			//a			dd
+						$result = acnetmg_add_portip(json_encode($addItem));
 		}
 		return $result;
 	}

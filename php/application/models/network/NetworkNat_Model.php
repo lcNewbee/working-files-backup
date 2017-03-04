@@ -8,30 +8,17 @@ class NetworkNat_Model extends CI_Model {
 
     function get_net_list() {
         $result = null;
-		$query = $this->db->select('id,type,addr,nataddr,ifname')
+		$query = $this->db->select('id,type,addr,nataddr,pubifname')
                             ->from('nat_table')
                             ->get()->result_array();
 
 		$settings = $this->db->select('enable')
                                 ->from('natenable')
                                 ->get()->result_array();
-		$keys = array(
-            'id' => 'id',
-            'type' => 'ruleType',
-            'addr' => 'sourceAddress',
-            'nataddr' => 'conversionAddress',
-            'ifname'=> 'ifname',
-        );
-		$newArray = array();
-		foreach ($query as $key => $val) {
-			$newArray[$key] = array();
-			foreach ($val as $k => $v) {
-				$newArray[$key][$keys[$k]] = $v;
-			}
-		}
+
 		$data = array(
             "settings" => array("enable" => (string)element('enable', $settings[0]),),
-            'list' => $newArray
+            'list' => $query
         );
 		$result = array(
             'state' => array('code' => 2000, 'msg' => 'OK'),
@@ -72,10 +59,10 @@ class NetworkNat_Model extends CI_Model {
     function getCgiParams($data) {
         $ret = array(
             'id'=>element('id', $data),
-            'type'=>element('ruleType', $data),
-            'ipaddr'=>element('sourceAddress', $data),
-            'natipaddr'=>element('conversionAddress', $data),
-            'ifname'=>element('ifname', $data),
+            'type'=>element('type', $data),
+            'ipaddr'=>element('addr', $data),
+            'natipaddr'=>element('nataddr', $data),
+            'ifname'=>element('pubifname', $data),
         );
         return $ret;
     }

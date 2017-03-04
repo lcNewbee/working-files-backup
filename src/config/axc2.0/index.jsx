@@ -31,6 +31,21 @@ b28n.addDict(langEn, 'en');
 window.CB = b28n.init({
   supportLang: ['en', 'cn'],
 });
+
+guiConfig.versionCode = guiConfig.version.split('.').reduce(
+  (x, y, index) => {
+    let ret = parseInt(x, 10);
+    const nextVal = parseInt(y, 10);
+
+    if (index === 1) {
+      ret = (10000 * ret) + (nextVal * 100);
+    } else if (index === 2) {
+      ret += nextVal;
+    }
+
+    return ret;
+  },
+);
 window.guiConfig = guiConfig;
 
 if (b28n.getLang() === 'cn') {
