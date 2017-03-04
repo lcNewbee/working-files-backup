@@ -95,8 +95,6 @@ const sPortalRules =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalRules');
 const sPortalMac =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalMac');
-// const sPortalTemplate =
-//    require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalTemplate');
 
 
 /**
@@ -104,8 +102,6 @@ const sPortalMac =
  */
 const sOverview = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Overview');
 const sClientList = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/ClientList');
-const sFlowUser = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Flow/User');
-// const sFlowApp = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Flow/App');
 const sSsidStatus = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/SsidStatus');
 const sApList = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/ApList');
 const sSafeStatus = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/SafeStatus');
@@ -121,22 +117,15 @@ const sWips =
 const sEndpointProtection =
   require('../../screens/App/screens/MainAxc/screens/WLAN/screens/SafePolicy/screens/EndpointProtection');
 
-// const sFlowReport =
-//     require('../../screens/App/screens/MainAxc/screens/Report/screens/FlowReport');
-// const sUsersAnalysis =
-//     require('../../screens/App/screens/MainAxc/screens/Report/screens/BusinessReport/screens/UsersAnalysis');
 const sLiveMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/LiveMap');
 const sApPlanMap =
     require('../../screens/App/screens/MainAxc/screens/Map/screens/ApPlanMap');
-// const sRfMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/Rf');
-// const sHeatMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/HeatMap');
 const sClientsTraceList = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace');
 const sClientsTraceSettings = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace/Settings');
 // ndpi
 const sDPIOverview =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/DPIOverview');
 // const sFlowInfo =
-//     require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/FlowInfo');
 const sMacStatistic =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/MacStatistic');
 const sEthStatistic =
@@ -227,21 +216,6 @@ const sPortalCardCategory =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Card/CardCategory');
 const sPortalCardList =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Card/CardList');
-
-const sPortalStores =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Advertisement/Stores');
-const sPortalAdv =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Advertisement/Adv');
-
-// const sPortalPermission =
-//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Permission');
-// const sPortalClassification =
-//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Classification');
-// const sPortalUser =
-//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/User');
-// const sPortalRole =
-//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Role');
-
 const sPortalLogList =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Log/LogList');
 const sPortalOnlineRecordList =
@@ -875,7 +849,6 @@ const routes = [
                     noNav: true,
                   },
                 ],
-                //component: sPortalAccountList.Screen,
               }, {
                 id: 'portalAccountConnectRecord',
                 path: '/main/portal/account/connectRecord',
@@ -916,32 +889,6 @@ const routes = [
               },
             ],
           },
-          // 周三版本发布，暂时隐藏
-          // {
-          //   id: 'portalAdv',
-          //   isIndex: true,
-          //   path: '/main/portal/advertisement',
-          //   icon: 'envelope-o',
-          //   text: _('Advertisement'),
-          //   indexRoute: {
-          //     onEnter: (nextState, replace) => replace('/main/portal/advertisement/stores'),
-          //   },
-          //   childRoutes: [
-          //     {
-          //       id: 'portalStores',
-          //       path: '/main/portal/advertisement/stores',
-          //       formUrl: 'goform/portal/advertisement/stores',
-          //       text: _('Stores Management'),
-          //       component: sPortalStores.Screen,
-          //     }, {
-          //       id: 'portalAdv',
-          //       path: '/main/portal/advertisement/adv',
-          //       formUrl: 'goform/portal/advertisement/adv',
-          //       text: _('Ads Management'),
-          //       component: sPortalAdv.Screen,
-          //     },
-          //   ],
-          // },
           {
             id: 'portalLog',
             isIndex: true,
@@ -998,44 +945,6 @@ const routes = [
               },
             ],
           },
-          // {
-          //   id: 'portalSystem',
-          //   isIndex: true,
-          //   path: '/main/portal/system',
-          //   icon: 'copy',
-          //   text: _('System'),
-          //   indexRoute: {
-          //     onEnter: (nextState, replace) => replace('/main/portal/system/classification'),
-          //   },
-          //   childRoutes: [
-          //     {
-          //       id: 'portalSystemClassification',
-          //       path: '/main/portal/system/classification',
-          //       formUrl: 'goform/portal/system/classification',
-          //       text: _('Classification'),
-          //       component: sPortalClassification.Screen,
-          //     }, {
-          //       id: 'portalSystemRole',
-          //       path: '/main/portal/system/role',
-          //       formUrl: 'goform/portal/system/role',
-          //       text: _('Role'),
-          //       component: sPortalRole.Screen,
-          //     },
-          //     {
-          //       id: 'portalSystemUser',
-          //       path: '/main/portal/system/user',
-          //       formUrl: 'goform/portal/system/user',
-          //       text: _('User'),
-          //       component: sPortalUser.Screen,
-          //     }, {
-          //       id: 'portalSystemPermission',
-          //       path: '/main/portal/system/permission',
-          //       formUrl: 'goform/portal/system/permission',
-          //       text: _('Permission'),
-          //       component: sPortalPermission.Screen,
-          //     },
-          //   ],
-          // },
         ],
       },
       {
