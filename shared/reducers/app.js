@@ -43,11 +43,32 @@ const ajaxTypeMap = {
 };
 
 function initConfig(state, payload) {
+  let versionCode = 0;
+
   guiVersion = payload.version.replace(/\./g, '');
   guiVersion = `${guiVersion}`;
 
+  versionCode = payload.version.split('.').reduce(
+    (x, y, index) => {
+      let ret = parseInt(x, 10);
+      const nextVal = parseInt(y, 10);
+
+      if (index === 1) {
+        ret = (10000 * ret) + (nextVal * 100);
+      } else if (index === 2) {
+        ret += nextVal;
+      }
+
+      return ret;
+    },
+  );
+
+  // 把 appVersionCode 暴露到全局
+  window.appVersionCode = versionCode;
+
   return state.set('config', payload)
-    .set('guiName', payload.title || '');
+    .set('guiName', payload.title || '')
+    .set('versionCode', parseInt(versionCode, 10));
 }
 
 

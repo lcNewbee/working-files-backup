@@ -150,15 +150,20 @@ function activeListItem(state, curScreenName, action) {
 
 function reciveScreenData($$state, curScreenName, action) {
   let $$ret = $$state;
+  let $$selectedList = $$state.getIn([curScreenName, 'actionQuery', 'selectedList']);
 
   if (action.payload && action.payload.settings) {
     $$ret = $$ret.mergeDeepIn([curScreenName, 'curSettings'], action.payload.settings);
   }
 
+  if (action.payload && !action.payload.list) {
+    $$selectedList = fromJS([]);
+  }
+
   return $$ret.setIn([curScreenName, 'fetching'], false)
     .mergeIn([curScreenName, 'data'], action.payload)
     .setIn([curScreenName, 'data', 'updateAt'], action.meta.updateAt)
-    .setIn([curScreenName, 'actionQuery', 'selectedList'], fromJS([]));
+    .setIn([curScreenName, 'actionQuery', 'selectedList'], $$selectedList);
 }
 
 export default function (state = defaultState, action) {

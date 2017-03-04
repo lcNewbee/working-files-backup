@@ -84,7 +84,7 @@ class Switchs extends React.Component {
       >
         {
           options ? optionsList.map((item, i) => {
-            const curDisabled = item.get('disabled') || disabled;
+            const curDisabled = disabled || item.get('disabled');
             const thisKey = item.get('id') || item.get('name') || '';
             let myClassName = 'm-switch__item';
             let val;

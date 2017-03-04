@@ -125,6 +125,11 @@ class FormContainer extends React.Component {
       $$upDate = $$upDate.setIn(linkId.split('.'), data.value);
     }
 
+    // 处理 额外要合并的数据
+    if (typeof data.mergeData === 'object') {
+      $$upDate = $$upDate.merge(data.mergeData);
+    }
+
     if (this.props.onChangeData) {
       this.props.onChangeData($$upDate.toJS());
     }
@@ -243,19 +248,36 @@ class FormContainer extends React.Component {
     }
 
     // change
-    myProps.onChange = myData => this.changeFormGoupData({
-      id: formGroupId,
-      data: myData,
-      onBeforeChange: myProps.onBeforeChange,
-      saveOnChange: myProps.saveOnChange,
-      valueQuery: myValueQuery,
-      $$data,
-      linkId,
-    });
+    if (typeof $$option.get('onChange') === 'function') {
+      myProps.onChange = (myData) => {
+        const customChangeData = $$option.get('onChange')(myData, $$data.toJS());
+        const changeData = customChangeData || myData;
+
+        this.changeFormGoupData({
+          id: formGroupId,
+          data: changeData,
+          onBeforeChange: myProps.onBeforeChange,
+          saveOnChange: myProps.saveOnChange,
+          valueQuery: myValueQuery,
+          $$data,
+          linkId,
+        });
+      };
+    } else {
+      myProps.onChange = myData => this.changeFormGoupData({
+        id: formGroupId,
+        data: myData,
+        onBeforeChange: myProps.onBeforeChange,
+        saveOnChange: myProps.saveOnChange,
+        valueQuery: myValueQuery,
+        $$data,
+        linkId,
+      });
+    }
 
     // 处理 option需要依据表单值显示
-    if (typeof myProps.options === 'function') {
-      myProps.options = myProps.options($$data);
+    if (typeof $$option.get('options') === 'function') {
+      myProps.options = $$option.get('options')($$data);
     }
 
     // 处理异步加载 loadOptions 需要依据现有数据初始化
@@ -276,11 +298,6 @@ class FormContainer extends React.Component {
     if (myComponent) {
       return myComponent(myProps, $$data, actionQuery);
     }
-
-    // 删除自己特有属性，不往下传递
-    delete myProps.showPrecondition;
-    delete myProps.saveOnChange;
-    delete myProps.onBeforeChange;
 
     return isShow ? (
       <FormGroup

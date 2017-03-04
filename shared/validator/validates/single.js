@@ -89,6 +89,9 @@ var vaildate = {
       if (ret) {
         return ret;
       }
+      if (isSegment) {
+        ipReg = /^([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){2}([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-4])$/
+      }
 
       if (!(ipReg).test(str)) {
         return _("Please input a valid IP address");
@@ -111,21 +114,17 @@ var vaildate = {
     }
   },
   ipSegment: {
-    all: function (str, noMask) {
-      var ret = this.specific(str, noMask);
+    all: function(str) {
       var ip = str.split('/')[0];
       var mask = str.split('/')[1];
+      var ret = vaildate.ip.all(ip, (mask !== undefined));
 
       if (ret) {
         return ret;
       }
 
-      if (!(/^([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){2}([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-4])$/).test(ip)) {
-        return _("Please input a valid IP address");
-      }
-
-      // 只有无 noMask 参数是才验证子网
-      if (!noMask && mask) {
+      // 如果有mask
+      if (mask) {
         if (!(/^([0-9]){1,2}$/.test(mask)) || mask > 32) {
           return _("Network segment mask must be a number between 0-32");
         }

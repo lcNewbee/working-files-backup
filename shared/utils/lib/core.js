@@ -10,6 +10,14 @@ function toObject(val) {
   return Object(val);
 }
 
+function isHighSurrogate(codePoint) {
+  return codePoint >= 0xd800 && codePoint <= 0xdbff;
+}
+
+function isLowSurrogate(codePoint) {
+  return codePoint >= 0xdc00 && codePoint <= 0xdfff;
+}
+
 /**
  * objectAssign
  * @param  {[type]} target [description]
@@ -143,27 +151,9 @@ utils.extend({
     return ret;
   },
 
-  getUtf8Length: function (str) {
-		var totalLength = 0,
-			charCode,
-			len = str.length,
-			i;
-
-		for (i = 0; i < len; i++) {
-			charCode = str.charCodeAt(i);
-			if (charCode < 0x007f) {
-				totalLength++;
-			} else if ((0x0080 <= charCode) && (charCode <= 0x07ff)) {
-				totalLength += 2;
-			} else if ((0x0800 <= charCode) && (charCode <= 0xffff)) {
-				totalLength += 3;
-			} else {
-				totalLength += 4;
-			}
-		}
-		return totalLength;
-	},
-
+  /**
+   *
+   */
   getRulesObj: function getRulesObj(rules, rulesContainer) {
     var ret = [];
     var rulesArr;
@@ -185,6 +175,46 @@ utils.extend({
 
     return ret;
   },
+
+  getUtf8Length: function (str) {
+    var charLength = 0;
+    var byteLength = 0;
+    var codePoint = null;
+    var prevCodePoint = null;
+
+		if (typeof str !== "string") {
+      throw new Error("Input must be string");
+    }
+
+    charLength = str.length;
+
+    for (var i = 0; i < charLength; i++) {
+      codePoint = str.charCodeAt(i);
+      // handle 4-byte non-BMP chars
+      // low surrogate
+      if (isLowSurrogate(codePoint)) {
+        // when parsing previous hi-surrogate, 3 is added to byteLength
+        if (prevCodePoint != null && isHighSurrogate(prevCodePoint)) {
+          byteLength += 1;
+        }
+        else {
+          byteLength += 3;
+        }
+      }
+      else if (codePoint <= 0x7f ) {
+        byteLength += 1;
+      }
+      else if (codePoint >= 0x80 && codePoint <= 0x7ff) {
+        byteLength += 2;
+      }
+      else if (codePoint >= 0x800 && codePoint <= 0xffff) {
+        byteLength += 3;
+      }
+      prevCodePoint = codePoint;
+    }
+
+    return byteLength;
+	},
 
   toNumber: function(val, funcName) {
     var valType = typeof val;

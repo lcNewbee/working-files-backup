@@ -38,6 +38,7 @@ function DevicesProperties(props) {
   const activeTab = item.get('activeTab');
   const activeTabPanels = item.get(activeTab);
   const activePanelKey = `${activeTab}ActivePanelIndex`;
+  const versionCode = props.app.get('versionCode');
   let apStatuVal = fromJS(apStatus).find(
     $$item => $$item.get('value') === item.getIn(['data', 'info', 'status']),
   );
@@ -139,6 +140,13 @@ function DevicesProperties(props) {
 
                         if (item.getIn(['data', 'radios']) && item.getIn(['data', 'radios']).size > 1) {
                           $$curStore = $$curStore.setIn(['data', 'has5g'], true);
+                        }
+                      }
+
+                      // 小于 2.5 版本
+                      if (versionCode < 20500) {
+                        if (panelKey === 'radioQos') {
+                          return null;
                         }
                       }
 
