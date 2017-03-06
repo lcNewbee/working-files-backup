@@ -379,6 +379,12 @@ export default class View extends React.Component {
         title={_('Wireless Scheduler')}
         listOptions={curListOptions}
         onBeforeSave={this.onBeforeSave}
+        initOption={{
+          query: {
+            page: 1,
+            size: 50,
+          },
+        }}
         listKey="policy_id"
         actionable
         selectable

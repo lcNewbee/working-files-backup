@@ -24,7 +24,6 @@ const hashHistory = ReactRouter.hashHistory;
 
 const mountNode = document.getElementById('app');
 
-
 const remoteActionMiddleware = applyMiddleware(
   thunkMiddleware,
 )(createStore);

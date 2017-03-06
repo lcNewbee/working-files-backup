@@ -50,7 +50,6 @@ const b28n = (function _b28n(doc, _win) {
 
     return false;
   }
-
   function getLangWithBrowserSetting() {
     let ret = (win.navigator.language || win.navigator.userLanguage ||
         win.navigator.browserLanguage || win.navigator.systemLanguage ||

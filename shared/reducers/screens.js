@@ -156,7 +156,8 @@ function reciveScreenData($$state, curScreenName, action) {
     $$ret = $$ret.mergeDeepIn([curScreenName, 'curSettings'], action.payload.settings);
   }
 
-  if (action.payload && !action.payload.list) {
+  // 如果接受新的 list，清空已选择状态
+  if (action.payload && action.payload.list) {
     $$selectedList = fromJS([]);
   }
 
@@ -179,7 +180,9 @@ export default function (state = defaultState, action) {
     case 'LEAVE_SCREEN':
       return state.mergeIn([curScreenName, 'query'], {
         search: '',
-      }).setIn([curScreenName, 'curListItem'], defaultItem.get('curListItem'));
+      })
+      .setIn([curScreenName, 'curListItem'], defaultItem.get('curListItem'))
+      .setIn([curScreenName, 'actionQuery', 'selectedList'], fromJS([]));
 
     case 'REQEUST_FETCH_SCREEN_DATA':
       return state.setIn([curScreenName, 'fetching'], true);
