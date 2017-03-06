@@ -30,9 +30,12 @@ const propTypes = {
 };
 const defaultProps = {};
 
+<<<<<<< 005743c9f267df2cd4c43378804db3249387de91
 const formOptions = fromJS([
 ])
 
+=======
+>>>>>>> AP:添加新产品AEC175；axcPortal：network添加VLAN配置页
 export default class View extends React.Component {
   constructor(props) {
     super(props);

@@ -32,6 +32,7 @@ const paths = {
   pubAIP10: '../svn/ap_web/AIP10_web',
   pubAIP10L: '../svn/ap_web/AIP10L_web',
   pubAEC120: '../svn/ap_web/AEC120_web',
+  pubAEC175: '../svn/ap_web/AEC175_web',
   pubASW3: '../svn/ap_web/ASW3_web',
   pubASC175: '../svn/ap_web/ASC175_web',
   pubASC120: '../svn/ap_web/ASC120_web',
@@ -118,6 +119,7 @@ gulp.task('changeAIP5Title', () => changeTitle('AIP5'));
 gulp.task('changeAIP10Title', () => changeTitle('AIP10'));
 gulp.task('changeAIP10LTitle', () => changeTitle('AIP10L'));
 gulp.task('changeAEC120Title', () => changeTitle('AEC120'));
+gulp.task('changeAEC175Title', () => changeTitle('AEC175'));
 gulp.task('changeASC175Title', () => changeTitle('ASC175'));
 gulp.task('changeASW3Title', () => changeTitle('ASW3'));
 gulp.task('changeASC120Title', () => changeTitle('ASC120'));

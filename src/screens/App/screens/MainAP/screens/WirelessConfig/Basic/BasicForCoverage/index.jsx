@@ -247,8 +247,8 @@ export default class Basic extends React.Component {
                 value={val}
                 disabled={pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
                 onChange={(data) => {
-                  console.log('data.value.length', utils.getUtf8Length(data.value))
-                  if (data.value.length * 2 <= 32) {
+                  console.log('data.value.length', utils.getUtf8Length(data.value), data.value, data.value.length);
+                  if (utils.getUtf8Length(data.value) <= 32) {
                     this.onSsidItemChange(val, item, 'ssid', data.value);
                   }
                 }}

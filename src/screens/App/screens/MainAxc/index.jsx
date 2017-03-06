@@ -1067,12 +1067,12 @@ export default class Main extends React.PureComponent {
       });
 
        // 如果是 VLAN
-      if (curRoutes[2].path === '/main/network/vlan' && i === 2) {
-        breadcrumbList = breadcrumbList.unshift({
-          path: '/main/network/vlan',
-          text: `${vlanData.getIn(['selected', 'id'])}(${vlanData.getIn(['selected', 'remark'])})`,
-        });
-      }
+      // if (curRoutes[2].path === '/main/network/vlan' && i === 2) {
+      //   breadcrumbList = breadcrumbList.unshift({
+      //     path: '/main/network/vlan',
+      //     text: `${vlanData.getIn(['selected', 'id'])}(${vlanData.getIn(['selected', 'remark'])})`,
+      //   });
+      // }
     }
 
     return (

@@ -1,0 +1,18 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+        {
+            "vlanId": "1",
+            "description": "fist vlan"
+        },
+        {
+            "vlanId": "2",
+            "description": "second vlan"
+        }
+      ]
+  }
+}

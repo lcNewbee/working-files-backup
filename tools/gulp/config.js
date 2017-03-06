@@ -36,6 +36,7 @@ gulp.task('config:AIP10', () => configProduct('AIP10'));
 gulp.task('config:AIP10L', () => configProduct('AIP10L'));
 gulp.task('config:extraHelp', () => configProduct('extraHelp'));
 gulp.task('config:AEC120', () => configProduct('AEC120'));
+gulp.task('config:AEC175', () => configProduct('AEC175'));
 gulp.task('config:ASC175', () => configProduct('ASC175'));
 gulp.task('config:ASW3', () => configProduct('ASW3'));
 gulp.task('config:ASC120', () => configProduct('ASC120'));

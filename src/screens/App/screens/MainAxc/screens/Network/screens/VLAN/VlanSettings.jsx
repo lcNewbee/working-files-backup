@@ -17,15 +17,15 @@ const listOptions = fromJS([
       type: 'number',
     },
   }, {
-    id: 'vlanRemark',
-    text: _('VLAN Remark'),
+    id: 'description',
+    text: _('Description'),
     formProps: {
       type: 'textarea',
     },
   },
 ]);
 // const tableOptions = immutableUtils.getTableOptions(listOptions);
-// const editFormOptions = immutableUtils.getFormOptions(listOptions);
+const editFormOptions = immutableUtils.getFormOptions(listOptions);
 // const defaultEditData = immutableUtils.getFormOptions(listOptions);
 
 const propTypes = {
@@ -43,36 +43,17 @@ const defaultProps = {};
 export default class View extends React.Component {
   constructor(props) {
     super(props);
-
-    this.onAction = this.onAction.bind(this);
-  }
-
-  onAction(no, type) {
-    const query = {
-      no,
-      type,
-    };
-
-    this.props.save(this.props.route.formUrl, query)
-      .then((json) => {
-        if (json.state && json.state.code === 2000) {
-        }
-      });
   }
 
   render() {
     return (
-      <div>
-        {/* <AppScreen
-          {...this.props}
-          listOptions={listOptions}
-          editFormOptions={editFormOptions}
-
-          actionable
-          selectable
-        />*/ }
-        this is the vlan page
-      </div>
+      <AppScreen
+        {...this.props}
+        listOptions={listOptions}
+        editFormOptions={editFormOptions}
+        actionable
+        selectable
+      />
     );
   }
 }
@@ -90,7 +71,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    screenActions
+    screenActions,
   ), dispatch);
 }
 
@@ -98,5 +79,5 @@ function mapDispatchToProps(dispatch) {
 // 添加 redux 属性的 react 页面
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(View);

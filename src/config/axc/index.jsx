@@ -77,6 +77,8 @@ const sMainAxc = require('../../screens/App/screens/MainAxc');
  * 网络设置
  */
 // const sNetworkVlan = require('../../screens/App/screens/MainAxc/screens/Network/screens/VLAN');
+const sVlanSettings = require('../../screens/App/screens/MainAxc/screens/Network/screens/VLAN/VlanSettings');
+const sQinqSettings = require('../../screens/App/screens/MainAxc/screens/Network/screens/VLAN/QinqSettings');
 const sInterfaces = require('../../screens/App/screens/MainAxc/screens/Network/screens/Interfaces');
 const sDhcpList = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/DhcpList');
 const sDhcpRelay = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/DhcpRelay');
@@ -265,15 +267,31 @@ const routes = [
         text: _('Network '),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/network/interface') },
         childRoutes: [
-          // {
-          //   id: 'networkVlan',
-          //   isIndex: true,
-          //   path: '/main/network/vlan',
-          //   formUrl: 'goform/networkVlan',
-          //   icon: 'road',
-          //   text: _('VLAN'),
-          //   component: sNetworkVlan.Screen,
-          // },
+          {
+            id: 'vlan',
+            icon: 'road',
+            component: SharedComponents.TabContainer,
+            path: '/main/network/vlan',
+            text: _('VLAN'),
+            noTree: true,
+            indexRoute: { onEnter: (nextState, replace) => replace('/main/network/vlan/vlansettings') },
+            childRoutes: [
+              {
+                id: 'networkVlanSettings',
+                path: '/main/network/vlan/vlansettings',
+                formUrl: 'goform/network/vlan/vlansettings',
+                text: _('VLAN Settings'),
+                component: sVlanSettings.Screen,
+              },
+              {
+                id: 'networkQinqSettings',
+                path: '/main/network/vlan/qinqsettings',
+                formUrl: 'goform/network/vlan/qinqsettings',
+                text: _('QINQ Settings'),
+                component: sQinqSettings.Screen,
+              },
+            ],
+          },
           {
             id: 'networkInterface',
             icon: 'th',
