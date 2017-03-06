@@ -185,6 +185,9 @@ class DeviceSystem extends React.Component {
         ]}
         actionable={actionable}
         hasSaveButton={actionable}
+        saveText={_('Apply')}
+        savingText={_('Applying')}
+        savedText={('Applied')}
       />
     );
   }

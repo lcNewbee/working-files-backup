@@ -98,6 +98,9 @@ export default class View extends React.Component {
                     type="button"
                     loading={app.get('saving')}
                     onClick={this.onSave}
+                    text={_('Apply')}
+                    savingText={_('Applying')}
+                    savedText={('Applied')}
                   />
                 </div>
               </div>

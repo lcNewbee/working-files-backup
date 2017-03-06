@@ -155,6 +155,9 @@ class DeviceSystem extends React.Component {
           () => this.props.onSave(formId)
         }
         onChangeData={this.onChangeRadio}
+        saveText={_('Apply')}
+        savingText={_('Applying')}
+        savedText={('Applied')}
       />
     );
   }

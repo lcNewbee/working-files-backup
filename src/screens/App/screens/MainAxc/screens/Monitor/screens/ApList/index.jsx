@@ -336,6 +336,9 @@ export default class View extends React.Component {
                 invalidMsg={app.get('invalid')}
                 validateAt={app.get('validateAt')}
                 isSaving={app.get('saving')}
+                saveText={_('Apply')}
+                savingText={_('Applying')}
+                savedText={('Applied')}
               />
             </div>
           ) : null
@@ -369,6 +372,9 @@ export default class View extends React.Component {
                 invalidMsg={app.get('invalid')}
                 validateAt={app.get('validateAt')}
                 isSaving={app.get('saving')}
+                saveText={_('Apply')}
+                savingText={_('Applying')}
+                savedText={('Applied')}
                 hasSaveButton
               />
             </div>

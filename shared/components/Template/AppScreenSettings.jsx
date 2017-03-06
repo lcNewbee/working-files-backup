@@ -35,7 +35,11 @@ const propTypes = {
   settingOnlyChanged: PropTypes.bool,
   hasSettingsSaveButton: PropTypes.bool,
   actionable: PropTypes.bool,
+  saveText: PropTypes.string,
+  savingText: PropTypes.string,
+  savedText: PropTypes.string,
 };
+
 const defaultProps = {
   hasSaveButton: true,
   updateScreenSettings: utils.emptyFunc,
@@ -45,6 +49,9 @@ const defaultProps = {
       alert(`${option.id}: ${option.text}`);
     }
   },
+  saveText: _('Apply'),
+  savingText: _('Applying'),
+  savedText: _('Applied'),
 };
 
 // 原生的 react 页面
@@ -173,6 +180,12 @@ class AppSettings extends React.PureComponent {
       hasSettingsSaveButton,
     } = this.props;
     const $$curSettings = store.get('curSettings');
+    const syncCode = app.getIn(['state', 'code']);
+    let curSavedText = this.props.savedText;
+
+    if (syncCode >= 6000) {
+      curSavedText = _('Unapply');
+    }
 
     return (
       <div className="t-settings">
@@ -187,6 +200,9 @@ class AppSettings extends React.PureComponent {
           isSaving={app.get('saving')}
           actionable={actionable}
           hasSaveButton={hasSettingsSaveButton}
+          saveText={this.props.saveText}
+          savingText={this.props.savingText}
+          savedText={curSavedText}
         />
       </div>
     );

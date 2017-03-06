@@ -8,6 +8,9 @@ import Modal from 'shared/components/Modal';
 import { Button } from 'shared/components/Button';
 import FormContainer from 'shared/components/Organism/FormContainer';
 
+const saveText = _('Apply');
+const savingText = _('Applying');
+let savedText = _('Applied');
 
 const selectOptions = [
   { value: 20, label: '20' },
@@ -869,6 +872,9 @@ class AppScreenList extends React.PureComponent {
         onValidError={this.props.reportValidError}
         onChangeData={this.onChangeQuery}
         onSave={this.onFetchList}
+        saveText={saveText}
+        savingText={savingText}
+        savedText={savedText}
         leftChildren={leftChildrenNode}
         rightChildren={rightChildrenNode}
       />
@@ -884,14 +890,13 @@ class AppScreenList extends React.PureComponent {
     const actionType = actionQuery.get('action');
     let isEditModelshow = false;
     const syncCode = app.getIn(['state', 'code']);
-    let savedText = _('Saved');
 
     // 判断是否显示修改或添加 model
     if (actionType === 'edit' || actionType === 'add' || !!modalChildren) {
       isEditModelshow = true;
 
       if (syncCode >= 6000) {
-        savedText = _('Unsaved');
+        savedText = _('Unapply');
       }
     }
 
@@ -911,7 +916,6 @@ class AppScreenList extends React.PureComponent {
                 action={saveUrl}
                 layout={editFormLayout}
                 isSaving={app.get('saving')}
-                savedText={savedText}
                 data={editData}
                 actionQuery={actionQuery}
                 invalidMsg={app.get('invalid')}
@@ -920,6 +924,7 @@ class AppScreenList extends React.PureComponent {
                 onSave={this.onSaveEditForm}
                 onChangeData={this.props.updateCurEditListItem}
                 onValidError={this.props.reportValidError}
+                savedText={savedText}
                 hasSaveButton
                 {...editFormOption}
               />

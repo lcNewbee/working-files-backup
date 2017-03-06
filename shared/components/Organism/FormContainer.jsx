@@ -35,6 +35,8 @@ const propTypes = {
   actionQuery: PropTypes.instanceOf(Map),
 
   hasFile: PropTypes.bool,
+  saveText: PropTypes.string,
+  savingText: PropTypes.string,
   savedText: PropTypes.string,
   actionable: PropTypes.bool,
   method: PropTypes.oneOf(['POST', 'GET']),
@@ -489,6 +491,8 @@ class FormContainer extends React.Component {
                   <SaveButton
                     type="button"
                     loading={isSaving}
+                    text={this.props.saveText}
+                    savingText={this.props.savingText}
                     savedText={this.props.savedText}
                     disabled={!this.props.actionable}
                     onClick={this.onSave}
