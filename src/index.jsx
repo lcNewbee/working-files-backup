@@ -65,7 +65,6 @@ if (module.hot) {
   // const reRenderApp = () => {
   //   renderApp();
   // };
-
   module.hot.accept('./config/axc2.5', () => {
     setImmediate(() => {
       // Preventing the hot reloading error from react-router

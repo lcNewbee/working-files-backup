@@ -94,11 +94,11 @@ class FormContainer extends React.Component {
   onOptionsChange(targetProps) {
     this.options = targetProps.options;
 
-    if (this.options) {
+    if (this.options) { // options: [{}, {}, {}, ...]
       if (Map.isMap(this.options.get(0))) {
         this.options = this.options
           .groupBy(item => item.get('fieldset'))
-          .toList();
+          .toList(); // [[{}, {}], [{}, {}], [{}], ...]
       }
     } else {
       this.options = List([]);
@@ -359,7 +359,7 @@ class FormContainer extends React.Component {
 
     return ret;
   }
-  renderFormGroupTree($$options, i) {
+  renderFormGroupTree($$options, i) { // $$options是options列表下的项
     let ret = null;
 
     // Map直接渲染FormGroup
