@@ -89,16 +89,15 @@ export default class View extends React.Component {
 
   render() {
     const { store } = this.props;
-    const myScreenId = store.get('curScreenId');
     const curListOptions = listOptions
       .setIn([0, 'options'], this.state.portOptions);
+
     return (
       <AppScreen
         {...this.props}
         store={store}
         listOptions={curListOptions}
         onBeforeSave={this.onBeforeSave}
-        maxListSize="64"
         editable={false}
         actionable
         selectable

@@ -14,7 +14,15 @@ const propTypes = {
   app: PropTypes.instanceOf(Map),
 };
 const defaultProps = {};
+const MY_TIME_ZONE = TIME_ZONE.map(
+  (item) => {
+    const prefix = item.label.split(')')[0].replace('(', '');
+    const ret = item;
 
+    ret.zoneCode = prefix;
+    return ret;
+  },
+);
 const settingsOptions = fromJS([
   {
     id: 'ac_onoff',
@@ -61,7 +69,17 @@ const settingsOptions = fromJS([
     label: _('Time Zone'),
     type: 'select',
     required: true,
-    options: TIME_ZONE,
+    options: MY_TIME_ZONE,
+    onChange(data) {
+      const curZoneCode = data.zoneCode;
+      const retData = data;
+
+      retData.mergeData = {
+        mysql_time_zone: curZoneCode,
+      };
+
+      return data;
+    },
   },
 ]).groupBy(item => item.get('fieldset'))
 .toList();

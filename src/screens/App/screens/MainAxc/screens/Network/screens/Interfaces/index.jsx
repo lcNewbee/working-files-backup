@@ -107,8 +107,10 @@ export default class NetworkInterface extends React.Component {
         );
       }
 
-      // 检测是否有相同网段的接口
-      if ($$curList.find(
+      // 检测是否有相同IP或网段的接口
+      if ($$curList.find($$item => ip === $$item.get('ip'))) {
+        ret = _('Same %s item already exists', _('IP'));
+      } else if ($$curList.find(
         $$item => validator.combine.noSameSegment(
           ip,
           mask,

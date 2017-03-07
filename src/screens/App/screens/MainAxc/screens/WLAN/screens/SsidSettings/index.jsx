@@ -29,9 +29,11 @@ let encryptionOptions = fromJS([
   },
 ]);
 
+// 处理小于 2.5的版本
 if (window.guiConfig.versionCode < 20500) {
   encryptionOptions = encryptionOptions.delete(-1);
 }
+
 const loadBalanceTypeArr = [
   {
     value: '0',
@@ -109,7 +111,30 @@ const checkboxOptions = [
     },
   },
 ];
-
+const $$accessTypeSeletOptions = fromJS([
+  {
+    value: 'portal',
+    label: _('Portal'),
+  },
+  {
+    value: '8021x-access',
+    label: _('802.1x'),
+    disabled: true,
+  },
+  {
+    value: 'lan-access',
+    label: _('LAN'),
+    disabled: true,
+  }, {
+    value: 'ppp-access',
+    label: _('PPP'),
+    disabled: true,
+  }, {
+    value: 'mac-access',
+    label: _('MAC'),
+    disabled: true,
+  },
+]);
 const flowRateFilter = utils.filter('flowRate:["KB"]');
 const listOptions = fromJS([
   {
@@ -344,31 +369,6 @@ const listOptions = fromJS([
   },
 ]);
 
-const $$accessTypeSeletOptions = fromJS([
-  {
-    value: 'portal',
-    label: _('Portal'),
-  },
-  {
-    value: '8021x-access',
-    label: _('802.1x'),
-    disabled: true,
-  },
-  {
-    value: 'lan-access',
-    label: _('LAN'),
-    disabled: true,
-  }, {
-    value: 'ppp-access',
-    label: _('PPP'),
-    disabled: true,
-  }, {
-    value: 'mac-access',
-    label: _('MAC'),
-    disabled: true,
-  },
-]);
-
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
@@ -409,26 +409,7 @@ export default class View extends React.Component {
     };
 
     // 对特定版本处理
-    this.listOptions = listOptions.map(
-      ($$item) => {
-        let $$retItem = $$item;
-
-
-        // if (versionCode >= 20500) {
-        //   if ($$retItem.get('id') === 'encryption') {
-        //     $$retItem = $$retItem.setIn(['formProps', 'options'],
-        //       encryptionOptions.push(fromJS({
-        //         value: '802.1x',
-        //         label: '802.1x',
-        //       })),
-        //     );
-        //   }
-        // }
-
-
-        return $$retItem;
-      },
-    );
+    this.listOptions = listOptions;
   }
   componentDidMount() {
     this.props.changeScreenActionQuery({

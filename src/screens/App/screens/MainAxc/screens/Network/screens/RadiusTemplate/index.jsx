@@ -227,43 +227,45 @@ const advancedSetting = fromJS([
     max: '30',
     required: true,
     help: _('Seconds'),
-  }, {
-    id: 'accton_enable',
-    label: _('Accounting-on'),
-    defaultValue: '0',
-    value: '1',
-    fieldset: 'parameter',
-    required: true,
-    noTable: true,
-    type: 'checkbox',
-    text: _('Enable'),
-  }, {
-    id: 'accton_sendtimes',
-    label: _('Accounting-on Resend Times'),
-    fieldset: 'acctonAdvance',
-    type: 'number',
-    defaultValue: '3',
-    min: '1',
-    max: '10',
-    required: true,
-    showPrecondition(data) {
-      return data.get('accton_enable') === '1';
-    },
-  }, {
-    id: 'accton_sendinterval',
-    label: _('Accounting-on Resend Interval'),
-    fieldset: 'acctonAdvance',
-    noTable: true,
-    type: 'number',
-    required: true,
-    help: _('Seconds'),
-    defaultValue: '3',
-    min: '1',
-    max: '30',
-    showPrecondition(data) {
-      return data.get('accton_enable') === '1';
-    },
-  }, {
+  },
+  // {
+  //   id: 'accton_enable',
+  //   label: _('Accounting-on'),
+  //   defaultValue: '0',
+  //   value: '1',
+  //   fieldset: 'parameter',
+  //   required: true,
+  //   noTable: true,
+  //   type: 'checkbox',
+  //   text: _('Enable'),
+  // }, {
+  //   id: 'accton_sendtimes',
+  //   label: _('Accounting-on Resend Times'),
+  //   fieldset: 'acctonAdvance',
+  //   type: 'number',
+  //   defaultValue: '3',
+  //   min: '1',
+  //   max: '10',
+  //   required: true,
+  //   showPrecondition(data) {
+  //     return data.get('accton_enable') === '1';
+  //   },
+  // }, {
+  //   id: 'accton_sendinterval',
+  //   label: _('Accounting-on Resend Interval'),
+  //   fieldset: 'acctonAdvance',
+  //   noTable: true,
+  //   type: 'number',
+  //   required: true,
+  //   help: _('Seconds'),
+  //   defaultValue: '3',
+  //   min: '1',
+  //   max: '30',
+  //   showPrecondition(data) {
+  //     return data.get('accton_enable') === '1';
+  //   },
+  // },
+  {
     id: 'acct_interim_interval',
     label: _('Accounting Messaging Interval'),
     fieldset: 'acctonAdvance',
