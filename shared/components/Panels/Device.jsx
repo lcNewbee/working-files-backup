@@ -144,7 +144,7 @@ function DevicesProperties(props) {
                       }
 
                       // 小于 2.5 版本， 功能未实现暂时隐藏
-                      if (versionCode < 40500) {
+                      if (versionCode < 20500) {
                         if (panelKey === 'radioQos') {
                           return null;
                         }

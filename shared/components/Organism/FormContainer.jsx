@@ -348,31 +348,94 @@ class FormContainer extends React.Component {
         />
       );
     }
-    // if ($$data.get(formGroupListId)) {
-    //   ret = $$data.get(formGroupListId).map(
-    //     ($$item, index) => $$optionsList.map(
-    //       ($$subItem, i) => this.renderFormGroup(
-    //         $$subItem.set('__index__', i),
-    //         [formGroupListId, index, $$subItem.get('id')],
-    //       ),
-    //     ),
-    //   );
-    // }
+
+    return ret;
+  }
+  renderFormGroupTable($$option) {
+    const $$data = this.props.data;
+    const $$optionsList = $$option.get('list');
+    const showPrecondition = $$option.get('showPrecondition');
+    let isShow = true;
+    let ret = null;
+
+    if (typeof showPrecondition === 'function') {
+      isShow = showPrecondition($$data);
+    }
+
+    if (isShow && $$optionsList) {
+      ret = (
+        <table className="table">
+          {
+            $$option.get('title') ? (
+              <caption>{$$option.get('title')}</caption>
+            ) : null
+          }
+          <thead>
+            <tr>
+              {
+                $$option.get('thead').map(
+                  text => <th>{text}</th>,
+                )
+              }
+            </tr>
+          </thead>
+          <tbody>
+            {
+              $$optionsList.map(
+                ($$list) => {
+                  if (List.isList($$list)) {
+                    return (
+                      <tr>
+                        {
+                          $$list.map(
+                            ($$item) => {
+                              let retNode = $$item;
+
+                              if (!$$item.get('noForm')) {
+                                retNode = this.renderFormGroup(
+                                  $$item.merge({
+                                    showLabel: false,
+                                    display: 'block',
+                                  }),
+                                );
+                              } else {
+                                retNode = retNode.get('text');
+                              }
+                              return <td>{retNode}</td>;
+                            },
+                          )
+                        }
+                      </tr>
+                    );
+                  }
+                  return null;
+                },
+              )
+            }
+          </tbody>
+        </table>
+      );
+    }
 
     return ret;
   }
   renderFormGroupTree($$options, i) { // $$options是options列表下的项
+    const curOptionType = $$options.get('type');
     let ret = null;
 
     // Map直接渲染FormGroup
     if (Map.isMap($$options)) {
       // 如果不是列表
-      if ($$options.get('type') !== 'list') {
-        ret = this.renderFormGroup(
+      if (curOptionType === 'list') {
+        ret = this.renderFormGroupList(
+          $$options.set('__index__', i),
+        );
+      } else if (curOptionType === 'table') {
+        ret = this.renderFormGroupTable(
           $$options.set('__index__', i),
         );
       } else {
-        ret = this.renderFormGroupList(
+        ret = this.renderFormGroup(
           $$options.set('__index__', i),
         );
       }

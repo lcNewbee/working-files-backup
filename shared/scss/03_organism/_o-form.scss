@@ -2,7 +2,9 @@ $o-form-content-margin: 1em 0 0;
 
 .o-form {
   padding: 0 1em;
-
+  .table {
+    margin-bottom: 12px;
+  }
   .o-form__switch-bar {
     border-bottom: 1px solid #d2d2d2;
     padding: 1em 0;
@@ -199,6 +201,12 @@ $o-form-content-margin: 1em 0 0;
 
     .table {
       font-size: 10px;
+      caption {
+        text-align: left;
+        line-height: 20px;
+        color: #777;
+        font-size: 12px;
+      }
       .form-group {
         .text {
           padding: 2px;

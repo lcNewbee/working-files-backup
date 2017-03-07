@@ -49,8 +49,9 @@
   "Licensed": "已许可",
   "Unlicensed": "未许可",
 
-  "Radio Base": "Radio基本配置",
-  "Radio Advance": "Radio高级配置",
+  "Radio Base": "射频基本配置",
+  "Radio Advance": "射频高级配置",
+  "Radio QoS": "射频QoS",
   "Tx Power": "发射功率",
   "RF Switch": "射频开关",
   "Beacon Interval Number": "信标帧间隔数量",
@@ -652,5 +653,12 @@
   "Set 0 to disable": "0 代表关闭",
   "Clients Statistics": "客流统计",
   "AP Scan Settings": "AP扫描设置",
-  "Statistics": "统计"
+  "Statistics": "统计",
+
+  "QoS Optimization Mode": "QoS性能优化模式",
+  "WMM Parameters": "WMM参数",
+  "Default Optimization": "典型应用场景优化",
+  "Optimized for Throughput": "单用户性能优化",
+  "Optimized for Capacity": "超多用户性能优化",
+  "Manual Configuration": "手动配置"
 }

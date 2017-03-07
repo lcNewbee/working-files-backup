@@ -1,38 +1,37 @@
 import channels from 'shared/config/country.json';
-import { fromJS, List } from 'immutable';
+import {
+  fromJS,
+  List,
+} from 'immutable';
 
-const $$bandwidthOptions = fromJS([
-  {
-    value: 20,
-    label: 'HT20',
-  }, {
-    value: 30,
-    label: 'HT40-',
-  }, {
-    value: 50,
-    label: 'HT40+',
-  }, {
-    value: 80,
-    label: 'HT80',
-  },
-]);
+const $$bandwidthOptions = fromJS([{
+  value: 20,
+  label: 'HT20',
+}, {
+  value: 30,
+  label: 'HT40-',
+}, {
+  value: 50,
+  label: 'HT40+',
+}, {
+  value: 80,
+  label: 'HT80',
+}]);
 const channelsList = List(channels);
 
-const spatialstreamsOptions = [
-  {
-    value: '1',
-    label: '1x1',
-  }, {
-    value: '2',
-    label: '2x2',
-  }, {
-    value: '3',
-    label: '3x3',
-  }, {
-    value: '4',
-    label: '4x4',
-  },
-];
+const spatialstreamsOptions = [{
+  value: '1',
+  label: '1x1',
+}, {
+  value: '2',
+  label: '2x2',
+}, {
+  value: '3',
+  label: '3x3',
+}, {
+  value: '4',
+  label: '4x4',
+}];
 
 export const countryOptions = channelsList.map(item =>
   ({
@@ -40,49 +39,45 @@ export const countryOptions = channelsList.map(item =>
     label: b28n.getLang() === 'cn' ? _(item.cn) : _(item.en),
   }),
 ).toJS();
-export const $$phymodeOptopns = fromJS([
-  {
-    value: 1,
-    label: '802.11b',
-  }, {
-    value: 2,
-    label: '802.11g',
-  }, {
-    value: 4,
-    label: '802.11n',
-  }, {
-    value: 3,
-    label: '802.11bg',
-  }, {
-    value: 7,
-    label: '802.11bgn',
-  }, {
-    value: 8,
-    label: '802.11a',
-  }, {
-    value: 12,
-    label: '802.11na',
-  }, {
-    value: 16,
-    label: '802.11ac',
-  },
-]);
+export const $$phymodeOptopns = fromJS([{
+  value: 1,
+  label: '802.11b',
+}, {
+  value: 2,
+  label: '802.11g',
+}, {
+  value: 4,
+  label: '802.11n',
+}, {
+  value: 3,
+  label: '802.11bg',
+}, {
+  value: 7,
+  label: '802.11bgn',
+}, {
+  value: 8,
+  label: '802.11a',
+}, {
+  value: 12,
+  label: '802.11na',
+}, {
+  value: 16,
+  label: '802.11ac',
+}]);
 
-export const $$qosTypeOptopns = fromJS([
-  {
-    value: 0,
-    label: _('Default Optimization'),
-  }, {
-    value: 1,
-    label: _('Optimized for Throughput'),
-  }, {
-    value: 2,
-    label: _('Optimized for Capacity'),
-  }, {
-    value: 3,
-    label: _('Manual Configuration'),
-  },
-]);
+export const $$qosTypeOptopns = fromJS([{
+  value: 0,
+  label: _('Default Optimization'),
+}, {
+  value: 1,
+  label: _('Optimized for Throughput'),
+}, {
+  value: 2,
+  label: _('Optimized for Capacity'),
+}, {
+  value: 3,
+  label: _('Manual Configuration'),
+}]);
 
 export const numberKeys = [
   'groupid',
@@ -266,14 +261,14 @@ export const radioAdvance = fromJS([
   //     return parseInt(data.get('spatialstreams'), 10) !== 1;
   //   },
   // },
-  {
-    id: 'wmmenable',
-    form: 'radioAdvance',
-    label: _('WMM Switch'),
-    type: 'checkbox',
-    value: '1',
-    defaultValue: '0',
-  },
+  // {
+  //   id: 'wmmenable',
+  //   form: 'radioAdvance',
+  //   label: _('WMM Switch'),
+  //   type: 'checkbox',
+  //   value: '1',
+  //   defaultValue: '0',
+  // },
   // {
   //   id: 'maxclientcount',
   //   form: 'radioAdvance',
@@ -475,8 +470,7 @@ export const radioAdvance = fromJS([
       }, {
         value: 'MCS7',
         label: 'MCS7',
-      },
-      {
+      }, {
         value: 'MCS8',
         label: 'MCS8',
       }, {
@@ -487,82 +481,208 @@ export const radioAdvance = fromJS([
   },
 ]);
 
-export const radioQos = fromJS([
-  {
-    id: 'wmmtemplate',
-    form: 'radioQos',
-    label: _('性能优化模式'),
-    type: 'select',
-    defaultValue: '',
-    options: $$qosTypeOptopns,
-    required: true,
-  }, {
-    id: 'list',
-    type: 'list',
-    list: [
+export const radioQos = fromJS([{
+  id: 'wmmtemplate',
+  form: 'radioQos',
+  label: _('QoS Optimization Mode'),
+  type: 'select',
+  defaultValue: '',
+  options: $$qosTypeOptopns,
+  required: true,
+}, {
+  id: 'add',
+  type: 'table',
+  title: _('WMM Parameters'),
+  thead: [
+    _('Name'),
+    _('CWMIN'),
+    _('CWMAX'),
+    _('AIFS'),
+    _('TXOP'),
+    _('NOACK'),
+  ],
+  showPrecondition($$data) {
+    return $$data.get('wmmtemplate') === 3;
+  },
+  list: [
+    [
       {
-        id: 'name',
-        label: _('Name'),
-        options: [
-          {
-            value: '0',
-            label: _('BestEffort(BE)'),
-          }, {
-            value: '1',
-            label: _('Background(BK)'),
-          }, {
-            value: '2',
-            label: _('Video(VI)'),
-          }, {
-            value: '3',
-            label: _('Video(VI)'),
-          }, {
-            value: '4',
-            label: _('Messages Auth'),
-          }, {
-            value: '5',
-            label: _('Wechat Auth'),
-          }, {
-            value: '6',
-            label: _('Public Platform Auth'),
-          }, {
-            value: '7',
-            label: _('Visitor Auth'),
-          },
-        ],
+        text: _(''),
         noForm: true,
       },
       {
-        id: 'basip',
-        label: _('CWMIN'),
-        min: '0',
-        max: '15',
-        type: 'text',
+        text: _('0-15'),
+        noForm: true,
       }, {
-        id: 'username',
-        label: _('CWMAX'),
-        min: '0',
-        max: '15',
-        type: 'text',
+        text: _('0-15'),
+        noForm: true,
       }, {
-        id: 'sessiontime',
-        label: _('AIFS'),
-        min: '0',
-        max: '15',
-        type: 'text',
+        text: _('0-15'),
+        noForm: true,
       }, {
-        id: 'basid',
-        label: _('TXOP'),
-        width: '80',
-        min: '0',
-        max: '15',
-        type: 'text',
+        text: _('0-8192'),
+        noForm: true,
       }, {
-        id: 'enable',
-        label: _('NOACK'),
-        type: 'checkbox',
-        display: 'block',
+        text: _(''),
+        noForm: true,
       },
     ],
-  },
-]);
+    [
+      {
+        id: 'name',
+        form: 'radioQos',
+        text: _('BestEffort'),
+        noForm: true,
+      },
+      {
+        id: 'be_cwmin',
+        form: 'radioQos',
+        min: '0',
+        max: '15',
+        type: 'number',
+      }, {
+        id: 'be_cwmax',
+        form: 'radioQos',
+        min: '0',
+        max: '15',
+        type: 'number',
+      }, {
+        id: 'be_aifs',
+        form: 'radioQos',
+        min: '0',
+        max: '15',
+        type: 'number',
+      }, {
+        id: 'be_txop',
+        form: 'radioQos',
+        min: '0',
+        max: '8192',
+        type: 'number',
+      }, {
+        id: 'be_noack',
+        form: 'radioQos',
+        type: 'checkbox',
+      },
+    ],
+    [
+      {
+        id: 'name',
+        text: _('Background'),
+        noForm: true,
+      },
+      {
+        id: 'bk_cwmin',
+        dataType: 'number',
+        min: '0',
+        max: '15',
+        type: 'number',
+      }, {
+        id: 'bk_cwmax',
+        form: 'radioQos',
+        dataType: 'number',
+        min: '0',
+        max: '15',
+        type: 'number',
+      }, {
+        id: 'bk_aifs',
+        form: 'radioQos',
+        dataType: 'number',
+        min: '0',
+        max: '15',
+        type: 'number',
+      }, {
+        id: 'bk_txop',
+        form: 'radioQos',
+        dataType: 'number',
+        min: '0',
+        max: '8192',
+        type: 'number',
+      }, {
+        id: 'bk_noack',
+        type: 'checkbox',
+      },
+    ],
+    [
+      {
+        id: 'name',
+        text: _('Video(VI)'),
+        noForm: true,
+      },
+      {
+        id: 'vi_cwmin',
+        form: 'radioQos',
+        dataType: 'number',
+        min: '0',
+        max: '15',
+        type: 'number',
+      }, {
+        id: 'vi_cwmax',
+        form: 'radioQos',
+        dataType: 'number',
+        min: '0',
+        max: '15',
+        type: 'number',
+      }, {
+        id: 'vi_aifs',
+        form: 'radioQos',
+        dataType: 'number',
+        min: '0',
+        max: '15',
+        type: 'number',
+      }, {
+        id: 'vi_txop',
+        form: 'radioQos',
+        dataType: 'number',
+        min: '0',
+        max: '8192',
+        type: 'number',
+      }, {
+        id: 'vi_noack',
+        form: 'radioQos',
+        dataType: 'number',
+        type: 'checkbox',
+      },
+    ],
+    [
+      {
+        id: 'name',
+        text: _('Voice(VO)'),
+        noForm: true,
+      },
+      {
+        id: 'vo_cwmin',
+        form: 'radioQos',
+        dataType: 'number',
+        min: '0',
+        max: '15',
+        type: 'number',
+      }, {
+        id: 'vo_cwmax',
+        form: 'radioQos',
+        dataType: 'number',
+        min: '0',
+        max: '15',
+        type: 'number',
+      }, {
+        id: 'vo_aifs',
+        form: 'radioQos',
+        dataType: 'number',
+        min: '0',
+        max: '15',
+        type: 'number',
+      }, {
+        id: 'vo_txop',
+        form: 'radioQos',
+        dataType: 'number',
+        min: '0',
+        max: '8192',
+        type: 'number',
+      }, {
+        id: 'vo_noack',
+        form: 'radioQos',
+        dataType: 'number',
+        type: 'checkbox',
+      },
+    ],
+  ],
+}]);

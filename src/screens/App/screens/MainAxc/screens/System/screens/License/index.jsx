@@ -100,7 +100,7 @@ export default class View extends React.Component {
                     onClick={this.onSave}
                     text={_('Apply')}
                     savingText={_('Applying')}
-                    savedText={('Applied')}
+                    savedText={_('Applied')}
                   />
                 </div>
               </div>

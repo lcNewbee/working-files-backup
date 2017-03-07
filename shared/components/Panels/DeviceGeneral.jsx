@@ -74,7 +74,7 @@ class Panel extends React.Component {
         hasSaveButton={actionable}
         saveText={_('Apply')}
         savingText={_('Applying')}
-        savedText={('Applied')}
+        savedText={_('Applied')}
       />
     );
   }

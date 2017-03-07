@@ -80,7 +80,7 @@ class DeviceSystem extends React.Component {
 
   onSave() {
     if (this.props.onSave) {
-      this.props.onSave('radioBase');
+      this.props.onSave('radioQos');
     }
   }
   onChangeRadio(data) {
@@ -175,7 +175,7 @@ class DeviceSystem extends React.Component {
         hasSaveButton={actionable}
         saveText={_('Apply')}
         savingText={_('Applying')}
-        savedText={('Applied')}
+        savedText={_('Applied')}
       />
     );
   }

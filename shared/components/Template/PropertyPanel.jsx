@@ -74,6 +74,8 @@ class PropertyPanel extends React.Component {
     let curName = '';
     let first5g = '';
 
+    console.log('Qos')
+
     if (curModule === 'radio') {
       formUrl = 'goform/group/ap/radio';
       $$subData = immutableUtils.getChanged(

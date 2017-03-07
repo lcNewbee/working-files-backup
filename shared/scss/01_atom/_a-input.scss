@@ -42,3 +42,12 @@ textarea[required]:invalid,
 textarea:focus:invalid {
   box-shadow: none;
 }
+
+// 去掉 number 类型的箭头
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+input[type="number"]{
+    -moz-appearance: textfield;
+}

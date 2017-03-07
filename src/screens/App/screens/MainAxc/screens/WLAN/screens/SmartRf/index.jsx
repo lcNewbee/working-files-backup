@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import AppScreen from 'shared/components/Template/AppScreen';
-import { radioBase, radioAdvance, numberKeys } from 'shared/config/axcRadio';
+import { radioBase, radioAdvance, numberKeys, radioQos } from 'shared/config/axcRadio';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 import FormContainer from 'shared/components/Organism/FormContainer';
@@ -83,7 +83,7 @@ let $$radioAdvanceFormOptions = radioAdvance.filterNot(
 
     return ret;
   },
-);
+).concat(radioQos);
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
@@ -200,7 +200,7 @@ export default class SmartRf extends React.Component {
                   isSaving={app.get('saving')}
                   saveText={_('Apply')}
                   savingText={_('Applying')}
-                  savedText={('Applied')}
+                  savedText={_('Applied')}
                 />
               </div>
             ) : null
@@ -237,7 +237,7 @@ export default class SmartRf extends React.Component {
                   hasSaveButton={this.actionable}
                   saveText={_('Apply')}
                   savingText={_('Applying')}
-                  savedText={('Applied')}
+                  savedText={_('Applied')}
                 />
               </div>
             ) : null
