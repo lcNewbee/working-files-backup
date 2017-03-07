@@ -23,12 +23,34 @@ $main-blue: #0093dd;
       color: #fff;
     }
 
+    &.has-tabs {
+      position: relative;
+      &::after {
+        position: absolute;
+        top: 50%;
+        left: 10px;
+        display: inline-block;
+        margin-top: -5px;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
+        font-size: 10px;
+        content: "\f142";
+        text-rendering: auto;
+        transition: transform .4s ease-in-out;
+      }
+    }
     &.active {
       color: #fff;
       background-color: $g-brand-primary;
 
       .icon {
         color: #fff;
+      }
+
+      &.has-tabs {
+        &::after {
+          transform: rotate(90deg);
+        }
       }
     }
   }

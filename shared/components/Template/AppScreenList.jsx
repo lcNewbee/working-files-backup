@@ -764,7 +764,7 @@ class AppScreenList extends React.PureComponent {
                 this.props.createModal({
                   id: 'addListItem',
                   role: 'alert',
-                  text: _('Can not add more, max list size is %s', maxListSize),
+                  text: _('Max list size is %s', maxListSize),
                 });
               }
             }}

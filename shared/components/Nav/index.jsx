@@ -34,12 +34,12 @@ function NavLink(props) {
       to={path}
       className={className}
       activeClassName="active"
-      onClick={(e) => props.onClick(path, e)}
+      onClick={e => props.onClick(path, e)}
     >
       {
         icon ? <Icon name={icon} /> : null
       }
-    {text}
+      {text}
     </Link>
   );
 }
@@ -84,7 +84,9 @@ class Nav extends Component {
           {
             fromJS(menus).map((item, i) => {
               const myKey = `nav${i}`;
-              const hasSubmenus = isTree && item.get('childRoutes') && !item.get('noTree');
+              const hasChildRoutes = isTree && item.get('childRoutes');
+              const hasSubmenus = hasChildRoutes && !item.get('noTree');
+              const hasTabs = hasChildRoutes && item.get('noTree');
               let subMenuClassName = 'o-nav__sub-menus m-menu';
               let linkClassName = 'm-menu__link o-nav__link';
               let isActive = false;
@@ -102,10 +104,15 @@ class Nav extends Component {
                 subMenuClassName = `${subMenuClassName} m-menu--open`;
               }
 
+
               if (!hasSubmenus) {
                 linkClassName = `${linkClassName} a-leaf-link`;
               } else {
                 linkClassName = `${linkClassName} a-branch-link`;
+              }
+
+              if (hasTabs) {
+                linkClassName = `${linkClassName} has-tabs`;
               }
 
               return (
@@ -126,6 +133,7 @@ class Nav extends Component {
                             if (subItem.get('noNav')) {
                               return null;
                             }
+
                             return (
                               <li key={thisKey}>
                                 <NavLink

@@ -73,6 +73,8 @@ body {
       color: #fff;
       z-index: 1502;
       overflow: hidden;
+      overflow-y: auto;
+      transition: overflow-y .4s ease-in-out;
 
       @include scrollbar();
 
@@ -133,7 +135,6 @@ body {
     .t-main__asider-top {
       margin-top: 60px;
       max-height: 0;
-      overflow-y: auto;
       overflow-x: hidden;
       transition: max-height .4s ease-in-out;
       background-color: #141a23;
@@ -250,8 +251,12 @@ body {
     }
   }
   &.main--open-left {
+    .t-main__nav {
+      overflow-y: hidden;
+    }
     .t-main__asider-top {
       max-height: calc(100vh - 170px);
+      overflow-y: auto;
 
       .toggle-bar {
         .icon {
