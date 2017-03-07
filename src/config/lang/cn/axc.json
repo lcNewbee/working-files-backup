@@ -348,6 +348,7 @@
   "Heat Map": "热力图",
   "Cients Trace": "终端轨迹",
 
+  "ACL": "访问控制",
   "Blacklist": "黑名单列表",
   "Need enable ACL": "请先开启ACL功能",
   "Black List": "黑名单",
@@ -394,7 +395,7 @@
   "Dynamic Blacklists": "动态黑名单",
   "Release Time": "老化时间",
 
-  "Scheduler": "定时策略",
+  "Scheduler": "时间策略",
   "Wireless Scheduler": "无线定时策略",
   "Date": "日期",
   "Timer Duration": "时段",
@@ -647,5 +648,8 @@
   "Direct": "直接",
   "Layer3": "三层",
   "Uplink Port": "外网连接端口",
-  "Set 0 to disable": "0 代表关闭"
+  "Set 0 to disable": "0 代表关闭",
+  "Clients Statistics": "客流统计",
+  "AP Scan Settings": "AP扫描设置",
+  "Statistics": "统计"
 }

@@ -1108,7 +1108,7 @@ export default class Main extends React.PureComponent {
     if (curRoutePath === '/main/group') {
       // 如果当前是所有组，则隐藏组配置相关菜单
       if (selectGroupId === ALL_GROUP_ID) {
-        mainLeftMenus = mainLeftMenus.slice(0, 1);
+        mainLeftMenus = mainLeftMenus.slice(0, 3);
       }
     }
 

@@ -238,15 +238,6 @@ const routes = [
         text: _('Network '),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/network/interface') },
         childRoutes: [
-          // {
-          //   id: 'networkVlan',
-          //   isIndex: true,
-          //   path: '/main/network/vlan',
-          //   formUrl: 'goform/networkVlan',
-          //   icon: 'road',
-          //   text: _('VLAN'),
-          //   component: sNetworkVlan.Screen,
-          // },
           {
             id: 'networkInterface',
             icon: 'th',
@@ -285,15 +276,6 @@ const routes = [
             formUrl: 'goform/network/nat',
             component: sNetworkNat.Screen,
           },
-          // 先隐藏ACL
-          // {
-          //   id: 'networkAcl',
-          //   icon: 'ban',
-          //   path: '/main/network/acl',
-          //   text: _('Access Control'),
-          //   formUrl: 'goform/network/acl',
-          //   component: sNetworkAcl.Screen,
-          // },
           {
             id: 'staticRoutes',
             path: '/main/network/static_routes',
@@ -386,13 +368,6 @@ const routes = [
                 text: _('Overview'),
                 component: sDPIOverview.Screen,
               },
-              // {
-              //   id: 'flowinfo',
-              //   path: '/main/network/dpi/flowinfo',
-              //   formUrl: 'goform/network/dpi/flowinfo',
-              //   text: _('Flow Info'),
-              //   component: sFlowInfo.Screen,
-              // },
               {
                 id: 'macstatistic',
                 path: '/main/network/dpi/macstatistic',
@@ -436,18 +411,6 @@ const routes = [
                 formUrl: 'goform/group/overview',
                 text: _('Overview'),
                 component: sOverview.Screen,
-              }, {
-                id: 'apList',
-                path: '/main/group/monitor/aps',
-                formUrl: 'goform/group/aps',
-                text: _('AP List'),
-                component: sApList.Screen,
-              }, {
-                id: 'groupClient',
-                path: '/main/group/monitor/user',
-                formUrl: 'goform/group/client',
-                text: _('Client List'),
-                component: sClientList.Screen,
               },
               // {
               //   id: 'groupTraffic',
@@ -488,7 +451,24 @@ const routes = [
                 component: sSafeStatus.Screen,
               },
             ],
+          },
+
+          {
+            id: 'apList',
+            icon: 'bullseye',
+            path: '/main/group/aps',
+            formUrl: 'goform/group/aps',
+            text: _('AP List'),
+            component: sApList.Screen,
           }, {
+            id: 'groupClient',
+            icon: 'desktop',
+            path: '/main/group/user',
+            formUrl: 'goform/group/client',
+            text: _('Client List'),
+            component: sClientList.Screen,
+          },
+          {
             id: 'map',
             isIndex: true,
             path: '/main/group/map',
@@ -528,37 +508,42 @@ const routes = [
               //   text: _('Heat Map'),
               //   component: sHeatMap.Screen,
               // },
+            ],
+          },
+          {
+            id: 'cientsTrace',
+            path: '/main/group/clients_trace',
+            text: _('Clients Statistics'),
+            icon: 'bar-chart',
+            noTree: true,
+            component: SharedComponents.TabContainer,
+            indexRoute: {
+              onEnter: (nextState, replace) => replace('/main/group/clients_trace/list'),
+            },
+            childRoutes: [
               {
-                id: 'cientsTrace',
-                path: '/main/group/map/clients_trace',
-                text: _('Clients Analysis'),
-                component: SharedComponents.TabContainer,
-                indexRoute: {
-                  onEnter: (nextState, replace) => replace('/main/group/map/clients_trace/list'),
-                },
-                childRoutes: [
-                  {
-                    id: 'clientsTrace',
-                    path: '/main/group/map/clients_trace/list',
-                    formUrl: '/goform/group/map/clients_trace',
-                    text: _('Clients State'),
-                    component: sClientsTraceList.Screen,
-                  }, {
-                    id: 'clientsTrace',
-                    path: '/main/group/map/clients_trace/settings',
-                    formUrl: 'goform/group/map/clients_trace',
-                    text: _('Settings'),
-                    component: sClientsTraceSettings.Screen,
-                  },
-                ],
+                id: 'clientsTrace',
+                path: '/main/group/clients_trace/list',
+                formUrl: '/goform/group/map/clients_trace',
+                text: _('Clients Statistics'),
+                component: sClientsTraceList.Screen,
+              }, {
+                id: 'clientsTrace',
+                path: '/main/group/clients_trace/settings',
+                formUrl: 'goform/group/map/clients_trace',
+                text: _('Settings'),
+                component: sClientsTraceSettings.Screen,
               },
             ],
-          }, {
+          },
+          {
             id: 'wireless',
             isIndex: true,
             path: '/main/group/wireless',
             icon: 'wifi',
-            text: _('Wireless'),
+            noTree: true,
+            component: SharedComponents.TabContainer,
+            text: _('Radio'),
             indexRoute: { onEnter: (nextState, replace) => replace('/main/group/wireless/ssid') },
             childRoutes: [
               {
@@ -568,49 +553,56 @@ const routes = [
                 text: _('SSID Settings'),
                 component: sSsidSettings.Screen,
               }, {
-                id: 'wirelessAcl',
-                path: '/main/group/wireless/acl',
-                formUrl: '/goform/group/wireless/acl',
-                text: _('ACL'),
-                component: sWirelessAcl.Screen,
-              }, {
                 id: 'smartRf',
                 path: '/main/group/wireless/smart',
                 formUrl: 'goform/group/smartRf',
                 text: _('Smart RF'),
                 component: sSmartRf.Screen,
-              }, {
-                id: 'timerPolicy',
-                path: '/main/group/wireless/timer',
-                formUrl: 'goform/group/timerPolicy',
-                text: _('Scheduler'),
-                component: sTimerPolicy.Screen,
-              }, {
-                id: 'wirelessSafePolicy',
-                path: '/main/group/wireless/safe',
-                formUrl: 'goform/group/timerPolicy',
-                text: _('Safe Policy'),
-                component: SharedComponents.TabContainer,
-                indexRoute: {
-                  onEnter: (nextState, replace) => replace('/main/group/wireless/safe/wips'),
-                },
-                childRoutes: [
-                  {
-                    id: 'wirelessWips',
-                    path: '/main/group/wireless/safe/wips',
-                    formUrl: 'goform/group/wips',
-                    text: _('WIPS'),
-                    component: sWips.Screen,
-                  }, {
-                    id: 'wirelessEndpointProtection',
-                    path: '/main/group/wireless/safe/endpointProtection',
-                    formUrl: 'goform/group/wireless/protection',
-                    text: _('Terminal Protection'),
-                    component: sEndpointProtection.Screen,
-                  },
-                ],
               },
             ],
+          },
+          {
+            id: 'wirelessAcl',
+            icon: 'ban',
+            path: '/main/group/acl',
+            formUrl: '/goform/group/wireless/acl',
+            text: _('ACL'),
+            component: sWirelessAcl.Screen,
+          },
+          {
+            id: 'wirelessSafePolicy',
+            icon: 'certificate',
+            path: '/main/group/safe',
+            formUrl: 'goform/group/timerPolicy',
+            text: _('Safe Policy'),
+            noTree: true,
+            component: SharedComponents.TabContainer,
+            indexRoute: {
+              onEnter: (nextState, replace) => replace('/main/group/safe/wips'),
+            },
+            childRoutes: [
+              {
+                id: 'wirelessWips',
+                path: '/main/group/safe/wips',
+                formUrl: 'goform/group/wips',
+                text: _('AP Scan Settings'),
+                component: sWips.Screen,
+              }, {
+                id: 'wirelessEndpointProtection',
+                path: '/main/group/safe/endpointProtection',
+                formUrl: 'goform/group/wireless/protection',
+                text: _('Terminal Protection'),
+                component: sEndpointProtection.Screen,
+              },
+            ],
+          },
+          {
+            id: 'timerPolicy',
+            icon: 'clock-o',
+            path: '/main/group/timer',
+            formUrl: 'goform/group/timerPolicy',
+            text: _('Scheduler'),
+            component: sTimerPolicy.Screen,
           },
         ],
       }, {
