@@ -23,9 +23,10 @@ const ERROR_MSG_MAP = {
 
   // AXC: 系统设置 6300 - 6399
   6300: _('Pelect upload the correct firmware file'),
+  6301: _('Upload the firmware file error'),
+  6302: _('Same AP model and firmware version item already exists'),
 
   // AXC: Portal 6400 - 6499
-  6301: _('Upload the firmware file error'),
   6401: _('Fail to send message'),
 };
 

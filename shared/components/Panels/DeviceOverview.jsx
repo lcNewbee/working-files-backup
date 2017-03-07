@@ -36,7 +36,7 @@ function DeviceOverview(props) {
         <dd>{info.get('softversion')}</dd>
       </dl>
       <dl className="o-description-list-row">
-        <dt>{_('Connected Numbers')}</dt>
+        <dt>{_('Clients Number')}</dt>
         <dd>{info.get('connectedNumbers')}</dd>
       </dl>
       <dl className="o-description-list-row">

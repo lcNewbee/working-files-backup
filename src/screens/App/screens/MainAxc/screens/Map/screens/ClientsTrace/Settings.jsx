@@ -22,6 +22,8 @@ const formOptions = fromJS([
     type: 'number',
     help: _('Minutes'),
     min: '1',
+    defaultValue: '10',
+    max: '720000',
     required: true,
   },
 ]);

@@ -548,6 +548,7 @@
   "Allow Automatic Add AP": "是否允许自动加入AP",
   "AP Heartbeat Time": "AP心跳时间",
   "AP Number of Re-joins": "AP重新加入次数",
+  "Same AP model and firmware version item already exists": "已存在相同AP型号与软件版本号的项",
 
   "Read Password": "读口令",
   "Write Password": "写口令",

@@ -450,7 +450,6 @@ export const radioAdvance = fromJS([
     type: 'checkboxs',
     maxLength: '31',
     defaultValue: '',
-    required: true,
     options: [
       {
         value: 'MCS0',

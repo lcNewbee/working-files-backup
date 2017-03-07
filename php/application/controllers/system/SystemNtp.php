@@ -34,27 +34,28 @@ class SystemNtp extends CI_Controller {
         $arr['state'] = array('code'=>2000,'msg'=>'ok');
         $arr['data'] = array(
             'settings'=>$retadr
-        );                
+        );
         echo json_encode($arr);
     }
     function onAction($data) {
         $result = null;
         $actionType = element('action', $data);
         if ($actionType === 'add') {
-            //  
+            //
         } elseif ($actionType === 'setting') {
-            $state = $data['ac_onoff'] === '1' ? 'on' : 'off'; 
-            $arr = array(                
+            $state = $data['ac_onoff'] === '1' ? 'on' : 'off';
+            $arr = array(
                 'server_name'=>(string)element('ac_server_name',$data,''),
                 'onoff'=>$state,
                 'reserver_server'=>(string)element('ac_referral_server',$data,''),
                 'interval'=>(string)element('ac_TimeInterval',$data,'30'),
-                'timezone'=>(string)element('ac_timezone',$data,'')
-            );          
+                'timezone'=>(string)element('ac_timezone',$data,''),
+                'mysql_time_zone'=>(string)element('mysql_time_zone',$data,''),
+            );
             $result = ntptime_msg_from_web(json_encode($arr));
             //log
-            $cgiObj = json_decode($result);			
-            if( is_object($cgiObj) && $cgiObj->state->code === 2000) {            
+            $cgiObj = json_decode($result);
+            if( is_object($cgiObj) && $cgiObj->state->code === 2000) {
                 $logary = array(
                     'type'=>'Setting',
                     'operator'=>element('username',$_SESSION,''),
