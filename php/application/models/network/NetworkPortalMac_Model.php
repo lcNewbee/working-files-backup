@@ -5,19 +5,17 @@ class NetworkPortalMac_Model extends CI_Model {
 		$this->load->database();
 		$this->load->helper(array('array', 'my_customfun_helper'));
 	}
-    function get_portal_white_list(){
-        $retdata = array(
-            'page' => (int)element('page', $_GET, -1), 
-            'size' => (int)element('size', $_GET, -1)
-        );        
-        $query = $this->db->select('blackwhite_list.*,portal_auth.portal_name')
-                        ->from('blackwhite_list')
-                        ->join('portal_auth','blackwhite_list.portal_id = portal_auth.id','left')
-                        ->get()->result_array();
-
+    function get_portal_white_list($data){
+        $columns = 'blackwhite_list.*,portal_auth.portal_name';
+        $tablenames = 'blackwhite_list';
+        $pageindex = (int)element('page', $data, 1);
+        $pagesize = (int)element('size', $data, 20);
+        $where = array();
+        $joins = array(array('portal_auth','blackwhite_list.portal_id = portal_auth.id','left'));
+        $datalist = help_data_page($this->db,$columns,$tablenames,$pageindex,$pagesize,$where,$joins);
         $arr = array();
-        if(count($query) > 0) {
-            foreach ($query as $row) {
+        if(count($datalist['data']) > 0) {
+            foreach ($datalist['data'] as $row) {
                 $witeary = $this->get_white_info($row['id']);
                 $arr[] = $witeary;
             }
@@ -25,6 +23,7 @@ class NetworkPortalMac_Model extends CI_Model {
         $ret = array(
             'state'=>array('code'=>2000,'msg'=>'ok'),
             'data'=>array(
+                'page'=>$datalist['page'],
                 'list'=>$arr
             )
         );
@@ -32,12 +31,17 @@ class NetworkPortalMac_Model extends CI_Model {
     }
     function add_portal_wite($data){
         $result = null;
-        $arr = array(
-            'template_name'=>$this->get_portal_tmpname($data['interface_bind']),
-            'if_name'=>(string)$data['interface_bind'],
-            'src_mac'=>(string)$data['src_mac']
-        );
-        $result = portal_add_template_whitelist(json_encode($arr));
+        $dbsum = $this->is_add_sum($data['interface_bind']);
+        if( $dbsum < 513){
+            $arr = array(
+                'template_name'=>$this->get_portal_tmpname($data['interface_bind']),
+                'if_name'=>(string)$data['interface_bind'],
+                'src_mac'=>(string)$data['src_mac']
+            );
+            $result = portal_add_template_whitelist(json_encode($arr));
+        }else{
+            $result = json_encode(array('state'=>array('code'=>6112,'msg'=>'Has the largest'.$dbsum)));
+        }
         return $result;
     }
     function del_portal_wite($data) {
@@ -97,6 +101,24 @@ class NetworkPortalMac_Model extends CI_Model {
         if( count($query) > 0) {
             $result['template_name'] = $query[0]['portal_name'];
             $result['rule_id'] = (string)$query[0]['rule_id'];            
+        }
+        return $result;
+    }
+    private function is_add_sum($facename){
+        $result = 0;
+        $query = $this->db->select('blackwhite_list.*,portal_auth.portal_name')
+                ->from('blackwhite_list')
+                ->join('portal_auth','blackwhite_list.portal_id = portal_auth.id','left')
+                ->get()->result_array();
+
+        $arr = array();
+        if(count($query) > 0) {
+            foreach ($query as $row) {
+                $witeary = $this->get_white_info($row['id']);
+                if($witeary['interface_bind'] == $facename){
+                    $result = $result + 1;
+                }
+            }
         }
         return $result;
     }

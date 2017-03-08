@@ -19,7 +19,7 @@ class NetworkPortalMac extends CI_Controller {
 		}
 	}
 	function fetch() {        
-        return $this->NetworkPortalMac_Model->get_portal_white_list();
+        return $this->NetworkPortalMac_Model->get_portal_white_list($_GET);
 	}
     
 	function onAction($data) {
