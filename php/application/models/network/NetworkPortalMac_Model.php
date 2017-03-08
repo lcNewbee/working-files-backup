@@ -31,8 +31,8 @@ class NetworkPortalMac_Model extends CI_Model {
     }
     function add_portal_wite($data){
         $result = null;
-        $dbsum = $this->is_add_sum($data['interface_bind']);
-        if( $dbsum < 513){
+        $res = $this->is_add_sum($data['interface_bind'],$data['src_mac']);       
+        if( $res['totalsum'] < 513 && $res['macsum'] === 0){
             $arr = array(
                 'template_name'=>$this->get_portal_tmpname($data['interface_bind']),
                 'if_name'=>(string)$data['interface_bind'],
@@ -40,7 +40,7 @@ class NetworkPortalMac_Model extends CI_Model {
             );
             $result = portal_add_template_whitelist(json_encode($arr));
         }else{
-            $result = json_encode(array('state'=>array('code'=>6112,'msg'=>'Has the largest'.$dbsum)));
+            $result = json_encode(array('state'=>array('code'=>6112,'msg'=>'Has the largest')));
         }
         return $result;
     }
@@ -104,22 +104,25 @@ class NetworkPortalMac_Model extends CI_Model {
         }
         return $result;
     }
-    private function is_add_sum($facename){
-        $result = 0;
+    private function is_add_sum($facename,$mac){        
+        $totalsum = 0;
+        $macsum = 0;
         $query = $this->db->select('blackwhite_list.*,portal_auth.portal_name')
                 ->from('blackwhite_list')
                 ->join('portal_auth','blackwhite_list.portal_id = portal_auth.id','left')
                 ->get()->result_array();
 
-        $arr = array();
         if(count($query) > 0) {
-            foreach ($query as $row) {
+             foreach ($query as $row) {
                 $witeary = $this->get_white_info($row['id']);
                 if($witeary['interface_bind'] == $facename){
-                    $result = $result + 1;
-                }
-            }
-        }
-        return $result;
+                    $totalsum = $totalsum + 1;
+                }  
+                if($witeary['src_mac'] == $mac){
+                    $macsum = 1;
+                }              
+            }            
+        }    
+       return array('totalsum'=>$totalsum,'macsum'=>$macsum);    
     }
 }
