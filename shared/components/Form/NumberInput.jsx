@@ -41,8 +41,8 @@ class NumberInput extends React.Component {
           relaceValue = max;
         }
 
-      // 为空时默认替换为 defaultValue 或 max
-      } else if (!val && needRelace) {
+      // 为空或不能转换为数字时，替换为 defaultValue || max || min
+      } else if (!val && needRelace && isNaN(numberVal)) {
         relaceValue = defaultValue !== undefined ? defaultValue : (max || min);
       }
 
