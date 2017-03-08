@@ -9,6 +9,13 @@ import DeviceRadioAdvance from './DeviceRadioAdvance';
 import DeviceRadioBase from './DeviceRadioBase';
 import DeviceRadioQos from './DeviceRadioQos';
 
+const MY_MSG = {
+  saveText: _('Apply'),
+  savingText: _('Applying'),
+  savedText: _('Applied'),
+  unsavedText: _('Unapplied'),
+};
+
 const panelsComponentMap = {
   overview: DeviceOverview,
   general: DeviceGeneral,
@@ -42,6 +49,7 @@ function DevicesProperties(props) {
   let apStatuVal = fromJS(apStatus).find(
     $$item => $$item.get('value') === item.getIn(['data', 'info', 'status']),
   );
+  let curSavedText = MY_MSG.savedText;
 
   if (apStatuVal) {
     apStatuVal = apStatuVal.get('label');
@@ -183,6 +191,9 @@ function DevicesProperties(props) {
                                 <MyComponent
                                   {...props}
                                   store={$$curStore}
+                                  saveText={MY_MSG.saveText}
+                                  savingText={MY_MSG.savingText}
+                                  savedText={curSavedText}
                                 />
                               </div>
                             ) : null

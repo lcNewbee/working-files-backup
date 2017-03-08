@@ -74,8 +74,6 @@ class PropertyPanel extends React.Component {
     let curName = '';
     let first5g = '';
 
-    console.log('Qos')
-
     if (curModule === 'radio') {
       formUrl = 'goform/group/ap/radio';
       $$subData = immutableUtils.getChanged(
@@ -110,6 +108,7 @@ class PropertyPanel extends React.Component {
         });
       }
     }
+
     this.props.save(formUrl, $$subData.toJS())
       .then((json) => {
         if (json.state && json.state.code === 2000) {

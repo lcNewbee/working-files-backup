@@ -8,6 +8,7 @@
   "SYSTEM": "系统管理",
   "System ": "系统管理",
   "Portal ": "Portal管理",
+  "Hotspot": "认证计费",
   "Flow": "流量",
   "Traffic Control": "流量控制",
   "System Status": "系统状态",
@@ -49,6 +50,7 @@
   "Licensed": "已许可",
   "Unlicensed": "未许可",
 
+  "Radio ": "射频管理",
   "Radio Base": "射频基本配置",
   "Radio Advance": "射频高级配置",
   "Radio QoS": "射频QoS",

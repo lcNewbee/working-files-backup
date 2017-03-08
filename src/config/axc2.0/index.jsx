@@ -316,7 +316,8 @@ const routes = [
             ],
           },
         ],
-      }, {
+      },
+      {
         path: '/main/group',
         component: sMainAxc.Screen,
         icon: 'group',
@@ -378,7 +379,6 @@ const routes = [
               },
             ],
           },
-
           {
             id: 'apList',
             icon: 'bullseye',
@@ -393,6 +393,33 @@ const routes = [
             formUrl: 'goform/group/client',
             text: _('Client List'),
             component: sClientList.Screen,
+          },
+          {
+            id: 'wireless',
+            isIndex: true,
+            path: '/main/group/wireless',
+            icon: 'wifi',
+            noTree: true,
+            component: SharedComponents.TabContainer,
+
+            // 不要删除空格
+            text: _('Radio '),
+            indexRoute: { onEnter: (nextState, replace) => replace('/main/group/wireless/ssid') },
+            childRoutes: [
+              {
+                id: 'ssidSettings',
+                path: '/main/group/wireless/ssid',
+                formUrl: 'goform/group/ssidSetting',
+                text: _('SSID Settings'),
+                component: sSsidSettings.Screen,
+              }, {
+                id: 'smartRf',
+                path: '/main/group/wireless/smart',
+                formUrl: 'goform/group/smartRf',
+                text: _('Smart RF'),
+                component: sSmartRf.Screen,
+              },
+            ],
           },
           {
             id: 'map',
@@ -434,57 +461,6 @@ const routes = [
               //   text: _('Heat Map'),
               //   component: sHeatMap.Screen,
               // },
-            ],
-          },
-          {
-            id: 'cientsTrace',
-            path: '/main/group/clients_trace',
-            text: _('Clients Statistics'),
-            icon: 'bar-chart',
-            noTree: true,
-            component: SharedComponents.TabContainer,
-            indexRoute: {
-              onEnter: (nextState, replace) => replace('/main/group/clients_trace/list'),
-            },
-            childRoutes: [
-              {
-                id: 'clientsTrace',
-                path: '/main/group/clients_trace/list',
-                formUrl: '/goform/group/map/clients_trace',
-                text: _('Clients Statistics'),
-                component: sClientsTraceList.Screen,
-              }, {
-                id: 'clientsTrace',
-                path: '/main/group/clients_trace/settings',
-                formUrl: 'goform/group/map/clients_trace',
-                text: _('Settings'),
-                component: sClientsTraceSettings.Screen,
-              },
-            ],
-          },
-          {
-            id: 'wireless',
-            isIndex: true,
-            path: '/main/group/wireless',
-            icon: 'wifi',
-            noTree: true,
-            component: SharedComponents.TabContainer,
-            text: _('Radio'),
-            indexRoute: { onEnter: (nextState, replace) => replace('/main/group/wireless/ssid') },
-            childRoutes: [
-              {
-                id: 'ssidSettings',
-                path: '/main/group/wireless/ssid',
-                formUrl: 'goform/group/ssidSetting',
-                text: _('SSID Settings'),
-                component: sSsidSettings.Screen,
-              }, {
-                id: 'smartRf',
-                path: '/main/group/wireless/smart',
-                formUrl: 'goform/group/smartRf',
-                text: _('Smart RF'),
-                component: sSmartRf.Screen,
-              },
             ],
           },
           {
@@ -530,8 +506,35 @@ const routes = [
             text: _('Scheduler'),
             component: sTimerPolicy.Screen,
           },
+          {
+            id: 'cientsTrace',
+            path: '/main/group/clients_trace',
+            text: _('Clients Statistics'),
+            icon: 'bar-chart',
+            noTree: true,
+            component: SharedComponents.TabContainer,
+            indexRoute: {
+              onEnter: (nextState, replace) => replace('/main/group/clients_trace/list'),
+            },
+            childRoutes: [
+              {
+                id: 'clientsTrace',
+                path: '/main/group/clients_trace/list',
+                formUrl: '/goform/group/map/clients_trace',
+                text: _('Clients Statistics'),
+                component: sClientsTraceList.Screen,
+              }, {
+                id: 'clientsTrace',
+                path: '/main/group/clients_trace/settings',
+                formUrl: 'goform/group/map/clients_trace',
+                text: _('Settings'),
+                component: sClientsTraceSettings.Screen,
+              },
+            ],
+          },
         ],
-      }, {
+      },
+      {
         path: '/main/system',
         component: sMainAxc.Screen,
         icon: 'cogs',
