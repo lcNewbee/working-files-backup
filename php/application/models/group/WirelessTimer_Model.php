@@ -5,17 +5,14 @@ class WirelessTimer_Model extends CI_Model {
         $this->load->library('session');
         $this->load->database();
         $this->load->helper(array('array', 'my_customfun_helper'));
-        $this->load->library('SqlPage');
     }
-    public function get_timer_list($data) {
+    public function get_timer_list($data) {       
         //时段	操作对象	重复	备注	开始时间	结束时间	状态
-        $sqlpage = new SqlPage();
         $columns = '*';
-
         $tablenames = 'objects_list';
-        $pageindex = 1;
-        $pagesize =20;
-        $datalist = $sqlpage->sql_data_page($columns,$tablenames,$pageindex,$pagesize);
+        $pageindex = (int)element('page', $data, 1);
+        $pagesize = (int)element('size', $data, 20);
+        $datalist = help_data_page($this->db,$columns,$tablenames,$pageindex,$pagesize);      
         $htmdata = array();
         foreach($datalist['data'] as $row) {
             $this->db->select('*');
@@ -51,9 +48,11 @@ class WirelessTimer_Model extends CI_Model {
             }
             $htmdata[] = $arya;
         }
-
         $arr['state'] = array("code"=>2000,"msg"=>"ok");
-        $arr['data'] = array("list"=>$htmdata);
+        $arr['data'] = array(
+            "page"=>$datalist['page'],
+            "list"=>$htmdata            
+        );
         return json_encode($arr);
     }
     public function add_timer_policy($data) {

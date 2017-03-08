@@ -8,12 +8,8 @@ class WirelessTimer extends CI_Controller {
         $this->load->helper('array');
         $this->load->model('group/WirelessTimer_Model');
     }
-    function fetch(){
-        $retdata = array(
-            'groupid'=>(int)element('groupid', $_GET,-1),
-            'size'=>(int)element('size', $_GET,-1)
-        );        
-        $result = $this->WirelessTimer_Model->get_timer_list($retdata);
+    function fetch(){                
+        $result = $this->WirelessTimer_Model->get_timer_list($_GET);
         return $result;               
     }
 
