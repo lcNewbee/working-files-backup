@@ -219,6 +219,9 @@ export default class Clients extends React.Component {
         {...this.props}
         listOptions={this.listOptions}
         searchable
+        searchProps={{
+          placeholder: 'MAC'
+        }}
       />
     );
   }

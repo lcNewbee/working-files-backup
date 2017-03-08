@@ -432,6 +432,9 @@ export default class View extends React.Component {
         selectable
         actionable
         searchable
+        searchProps={{
+          placeholder: `${_('Name')}/MAC`
+        }}
       />
     );
   }

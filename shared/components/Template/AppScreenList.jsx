@@ -11,6 +11,9 @@ import FormContainer from 'shared/components/Organism/FormContainer';
 const saveText = _('Apply');
 const savingText = _('Applying');
 let savedText = _('Applied');
+const searchInputStyle = {
+  marginRight: '12px',
+}
 
 const selectOptions = [
   { value: 20, label: '20' },
@@ -53,8 +56,9 @@ const propTypes = {
   selectable: PropTypes.oneOfType([
     PropTypes.bool, PropTypes.func,
   ]),
-  searchable: PropTypes.bool,
-
+  searchable: PropTypes.oneOfType([
+    PropTypes.bool, PropTypes.func,
+  ]),
 
   // 通用操作函数
   fetchScreenData: PropTypes.func,
@@ -734,7 +738,7 @@ class AppScreenList extends React.PureComponent {
   renderHeader() {
     const {
       store, app, fetchUrl,
-      selectable, deleteable, searchable, addable, actionable,
+      selectable, deleteable, searchable, searchProps, addable, actionable,
       defaultEditData, editFormId, queryFormOptions, actionBarButtons,
       actionBarChildren, maxListSize,
     } = this.props;
@@ -745,7 +749,6 @@ class AppScreenList extends React.PureComponent {
     const totalListItem = store.getIn(['data', 'page', 'total']) || $$curList.size;
     let $$curActionBarButtons = actionBarButtons;
     let rightChildrenNode = null;
-
 
     // 处理列表操作相关按钮
     if (actionable) {
@@ -825,14 +828,13 @@ class AppScreenList extends React.PureComponent {
     if (searchable) {
       leftChildrenNode.push(
         <Search
+          {...searchProps}
           value={query.get('text')}
           key="searchInput"
           maxLength="265"
           onChange={this.onChangeSearchText}
           onSearch={this.handleSearch}
-          style={{
-            marginRight: '12px',
-          }}
+          style={searchInputStyle}
         />,
       );
     }

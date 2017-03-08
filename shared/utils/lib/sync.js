@@ -143,8 +143,6 @@ var sync = {
       return null;
     }
 
-    loadedScripts.push(url);
-
     // 如果callback不是函数则赋值为空函数
     if (typeof callback !== 'function') {
       myCallback = function(){};
@@ -159,6 +157,7 @@ var sync = {
         if (script.readyState == "loaded" || script.readyState == "complete") {
           script.onreadystatechange = null;
           myCallback();
+          loadedScripts.push(url);
           clearTimeout(thisTimeout);
         }
       };
@@ -167,13 +166,16 @@ var sync = {
     } else {
       script.onload = function () {
         myCallback();
+        loadedScripts.push(url);
         clearTimeout(thisTimeout);
       };
     }
 
-
     thisTimeout = setTimeout(function() {
       myCallback('load error');
+      clearTimeout(thisTimeout);
+      script = null;
+      document.body.removeChild(script);
     }, myTimeout)
 
     script.src = url;

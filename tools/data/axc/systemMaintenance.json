@@ -6,10 +6,13 @@
   "data": {
     "settings": {
       "discoverycnt": 5,
-      "echotime":  10,
+      "echotime": 10,
       "statistime": 120,
       "autoap": 1,
       "countrycode": "US"
+    },
+    "info": {
+      "configUpdateAt": 1488953909311
     }
   }
 }

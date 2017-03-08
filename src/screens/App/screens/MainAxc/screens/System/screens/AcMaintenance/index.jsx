@@ -3,6 +3,7 @@ import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { Map, List, fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
+import moment from 'moment';
 import AppScreen from 'shared/components/Template/AppScreen';
 import FormGroup from 'shared/components/Form/FormGroup';
 import SaveButton from 'shared/components/Button/SaveButton';
@@ -34,6 +35,8 @@ const propTypes = {
   createModal: PropTypes.func,
   closeModal: PropTypes.func,
   changeModalState: PropTypes.func,
+  changeLoginStatus: PropTypes.func,
+  changeLoginState: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -159,6 +162,13 @@ export default class View extends React.PureComponent {
 
   render() {
     const restoreUrl = '/goform/system/restore';
+    const { store, route } = this.props;
+    const configUpdateAt = store.getIn([
+      route.id,
+      'data',
+      'info',
+      'configUpdateAt',
+    ]);
 
     return (
       <AppScreen
@@ -211,6 +221,11 @@ export default class View extends React.PureComponent {
                 onClick={this.onBackup}
                 disabled={!this.actionable}
               />
+              <span className="help">
+                {
+                  configUpdateAt ? `${_('Latest Configuration:')} ${moment(configUpdateAt).format('YYYY-MM-DD HH:mm')}` : ''
+                }
+              </span>
             </FormGroup>
             <FormGroup label={_('Restore To Factory')}>
               <SaveButton

@@ -117,6 +117,10 @@ export default class View extends React.PureComponent {
     ]);
 
     this.loadingGoogleMap = true;
+  }
+
+  componentWillMount() {
+    this.actionable = getActionable(this.props);
 
     if (!window.google || (window.google && !window.google.maps)) {
       utils.loadScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyBGOC8axWomvnetRPnTdcuNW-a558l-JAU&libraries=places',
@@ -135,10 +139,6 @@ export default class View extends React.PureComponent {
       this.renderGoogleMap();
       this.loadingGoogleMap = false;
     }
-  }
-
-  componentWillMount() {
-    this.actionable = getActionable(this.props);
 
     if (this.actionable) {
       this.listTableOptions = listTableOptions.push(fromJS({
