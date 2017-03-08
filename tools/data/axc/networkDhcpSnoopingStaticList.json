@@ -1,0 +1,34 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "id": "0",
+        "name": "静态1",
+        "interface": "eth0",
+        "ip": "192.168.118.1",
+        "source_ip": "192.168.118.2",
+        "destination_ip": "192.168.118.3"
+      },
+      {
+        "id": "1",
+        "name": "静态2",
+        "interface": "eth1",
+        "ip": "192.168.118.1",
+        "source_ip": "192.168.118.2",
+        "destination_ip": "192.168.118.3"
+      },
+      {
+        "id": "2",
+        "name": "静态3",
+        "interface": "eth2",
+        "ip": "192.168.118.1",
+        "source_ip": "192.168.118.2",
+        "destination_ip": "192.168.118.3"
+      }
+    ]
+  }
+}

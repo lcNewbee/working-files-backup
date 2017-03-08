@@ -1,0 +1,14 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "settings": {
+       "dhcp_service":"1",
+       "isLease":"1",
+       "ping_delay":"1"
+
+    }
+  }
+}

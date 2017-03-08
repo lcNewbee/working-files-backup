@@ -1,0 +1,31 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "id": "0",
+        "name": "过滤器1",
+        "option": "61",
+        "deviation": "1",
+        "option_value": "22：22：22：22：22：22"
+      },
+      {
+        "id": "1",
+        "name": "过滤器1",
+        "option": "62",
+        "deviation": "2",
+        "option_value": "22：22：22：22：22：22"
+      },
+      {
+        "id": "2",
+        "name": "过滤器1",
+        "option": "63",
+        "deviation": "3",
+        "option_value": "22：22：22：22：22：22"
+      }
+    ]
+  }
+}

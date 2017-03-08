@@ -1,0 +1,31 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "id": "0",
+        "ssid": "Axilspot_Web",
+        "filterGroup": "研发前端小组",
+        "filterMode": "0",
+        "isFilter": "0"
+      },
+      {
+        "id": "1",
+        "ssid": "Axilspot_backend",
+        "filterGroup": "研发后台小组",
+        "filterMode": "0",
+        "isFilter": "0"
+      },
+      {
+        "id": "2",
+        "ssid": "Axilspot_market",
+        "filterGroup": "市场部",
+        "filterMode": "0",
+        "isFilter": "0"
+      }
+    ]
+  }
+}

@@ -1,7 +1,7 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
-import { Map, fromJS } from 'immutable';
+import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import AppScreen from 'shared/components/Template/AppScreen';
 import * as appActions from 'shared/actions/app';
@@ -9,56 +9,35 @@ import * as screenActions from 'shared/actions/screens';
 import validator from 'shared/validator';
 
 const propTypes = {
-  store: PropTypes.instanceOf(Map),
-  app: PropTypes.instanceOf(Map),
 };
 const defaultProps = {};
 
 const settingsOptions = fromJS([
   {
-    id: 'relay_enable',
-    label: _('Relay'),
-    fieldset: 'relay_setting',
+    id: 'dhcp_service',
+    label: _('DHCP Service'),
+    fieldset: 'service_setting',
     defaultValue: '0',
     value: '1',
     required: true,
     type: 'checkbox',
     text: _('Enable'),
   }, {
-    id: 'dhcp_server',
-    label: _('DHCP Server'),
-    fieldset: 'relay_setting',
-    type: 'text',
+    id: 'isLease',
+    label: _('Backup Lease'),
+    fieldset: 'service_setting',
+    defaultValue: '0',
+    value: '1',
     required: true,
-    validator: validator({
-      rules: 'ip',
-    }),
+    type: 'checkbox',
+    text: _('Enable'),
   },
   {
-    id: 'referral_server',
-    label: _('Referral Server'),
-    fieldset: 'relay_setting',
-    type: 'text',
-    validator: validator({
-      rules: 'ip',
-    }),
-  },
-  {
-    id: 'option82_1',
-    fieldset: 'relay_setting',
-    label: _('Option82  field1'),
-    type: 'text',
-    required: true,
-    validator: validator({
-      rules: 'mac',
-    }),
-  },
-  {
-    id: 'option82_2',
-    required: true,
-    fieldset: 'relay_setting',
-    label: _('Option82  field2'),
-    type: 'text',
+    id: 'ping_delay',
+    label: _('PING Delay'),
+    fieldset: 'service_setting',
+    type: 'number',
+    help: _('Second'),
   },
 ]).groupBy(item => item.get('fieldset'))
 .toList();
