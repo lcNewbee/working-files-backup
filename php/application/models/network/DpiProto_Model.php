@@ -66,7 +66,9 @@ class DpiProto_Model extends CI_Model {
 				$htmdata['trafficPercent'] = round((($row['mac_sum_bytes'] / $sumbts)*100),2).'%';
 				$result[] = $htmdata;
 			}
-			$result = $this->sigcol_arrsort($result,'trafficPercent',SORT_DESC);
+			if($result){
+				$result = $this->sigcol_arrsort($result,'trafficPercent',SORT_DESC);
+			}
 		}
 		return $result;
 	}
