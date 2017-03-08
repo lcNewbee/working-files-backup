@@ -17,7 +17,10 @@ class SystemMaintenance extends CI_Controller {
         $arr = array(
             'state' => array('code'=>2000,'msg'=>'ok'),
             'data' => array(
-                'settings'=>$querydata->row_array()
+                'settings'=>$querydata->row_array(),
+                'info'=>array(
+                    'configUpdateAt'=>filectime('/var/conf/config.db')
+                )
             )
         );
         return json_encode($arr);
