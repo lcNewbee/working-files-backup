@@ -30,7 +30,7 @@ const remoteActionMiddleware = applyMiddleware(
 
 // 引入产品配置
 const renderApp = () => {
-  const prodConfig = require('./config/AIP10');
+  const prodConfig = require('./config/axc2.5');
   // Store
   const stores = remoteActionMiddleware(
     combineReducers({
@@ -64,7 +64,7 @@ if (module.hot) {
   // const reRenderApp = () => {
   //   renderApp();
   // };
-  module.hot.accept('./config/AIP10', () => {
+  module.hot.accept('./config/axc2.5', () => {
     setImmediate(() => {
       // Preventing the hot reloading error from react-router
       unmountComponentAtNode(mountNode);

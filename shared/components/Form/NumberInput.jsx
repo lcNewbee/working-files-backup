@@ -7,6 +7,7 @@ const propTypes = {
   max: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   className: PropTypes.string,
   onChange: PropTypes.func,
+  required: PropTypes.bool,
   defaultValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
@@ -24,26 +25,34 @@ class NumberInput extends React.Component {
     this.onBlur = this.onBlur.bind(this);
   }
   onNumberChange(e, needRelace) {
-    const { min, max, defaultValue } = this.props;
+    const { min, max, defaultValue, required } = this.props;
     const val = e.target.value;
     const numberVal = parseFloat(val, 10);
+    const relaceDefValue = defaultValue !== undefined ? defaultValue : (max || min);
     let relaceValue;
 
     if (this.props.onChange) {
-      // 为空，或 - 时不做处理
-      if (val !== '' && val !== '-') {
-        // 小于或等于最小值，则返回最小值
-        if ((numberVal <= parseFloat(min, 10)) && needRelace) {
-          relaceValue = min;
+      // 需要替换值
+      if (needRelace) {
+        // 默认不为空才考虑替换值
+        if (val !== '') {
+          // 小于或等于最小值，则返回最小值
+          if ((numberVal <= parseFloat(min, 10))) {
+            relaceValue = min;
 
-        // 大于或等于最大值，则返回最大值
-        } else if (numberVal >= parseFloat(max, 10) && needRelace) {
-          relaceValue = max;
+          // 大于或等于最大值，则返回最大值
+          } else if (numberVal >= parseFloat(max, 10)) {
+            relaceValue = max;
+
+          // 不能转换为数字时，替换为 defaultValue || max || min
+          } else if (isNaN(numberVal)) {
+            relaceValue = relaceDefValue;
+          }
+
+        // 如果是必填项，为空时也要替换
+        } else if (required) {
+          relaceValue = relaceDefValue;
         }
-
-      // 为空或不能转换为数字时，替换为 defaultValue || max || min
-      } else if (!val && needRelace && isNaN(numberVal)) {
-        relaceValue = defaultValue !== undefined ? defaultValue : (max || min);
       }
 
       this.props.onChange(e, relaceValue);
