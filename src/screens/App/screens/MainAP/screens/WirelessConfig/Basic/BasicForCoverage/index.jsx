@@ -1098,6 +1098,9 @@ export default class Basic extends React.Component {
                     if (data.value === '11na' && channelWidth === 'HT80') {
                       radioList = radioList.setIn([radioId, 'channelWidth'], 'HT40+');
                     }
+                    if (data.value === '11b' || data.value === '11g' || data.value === '11bg' || data.value === '11a') {
+                      radioList = radioList.setIn([radioId, 'channelWidth'], 'HT20');
+                    }
                     Promise.resolve().then(() => {
                       this.props.updateItemSettings({ radioList });
                     }).then(() => {

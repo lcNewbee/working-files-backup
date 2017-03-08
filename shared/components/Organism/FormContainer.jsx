@@ -423,7 +423,7 @@ class FormContainer extends React.Component {
     const curOptionType = $$options.get('type');
     let ret = null;
 
-    // Map直接渲染FormGroup
+    // 没有分组信息的项目，每个$$options就是一个表单项，直接渲染
     if (Map.isMap($$options)) {
       // 如果不是列表
       if (curOptionType === 'list') {
@@ -439,15 +439,13 @@ class FormContainer extends React.Component {
           $$options.set('__index__', i),
         );
       }
-
     // List 则需要循环渲染
-    } else if (List.isList($$options)) {
+    } else if (List.isList($$options)) { // 经过分组，每个$$options就是一个分组
       ret = $$options.map(($$item, index) => {
         const $$fieldsetOption = $$item.getIn([0, 'fieldsetOption']);
         const fieldsetKey = `${$$item.getIn([0, 'fieldset'])}Fileset`;
         let fieldsetClassName = 'o-form__fieldset';
         let legendText = $$item.getIn([0, 'legend']);
-
 
         if ($$fieldsetOption) {
           legendText = legendText || $$fieldsetOption.get('legend');

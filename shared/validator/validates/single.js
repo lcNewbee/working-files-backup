@@ -47,8 +47,9 @@ var vaildate = {
 
     if (min !== undefined && max !== undefined) {
       if (parseInt(str, 10) < min || parseInt(str, 10) > max) {
-        retStr = typeof (expand) !== 'undefined' ? _("Range: ") + _("%s", expand) + _(" or ") + _("%s - %s", min, max) :
-          _("Range: ") + _("%s - %s", min, max);
+        // retStr = typeof (expand) !== 'undefined' ? _("Range: ") + _("%s", expand) + _(" or ") + _("%s - %s", min, max) :
+        //   _("Range: ") + _("%s - %s", min, max);
+        retStr = typeof (expand) !== 'undefined' ? _("Range: %s or %s - %s", expand, min, max):_("Range: %s - %s", min, max);
         return retStr;
       }
     }

@@ -64,7 +64,11 @@ const sMainAxc = require('../../screens/App/screens/MainAxc');
 // const sNetworkVlan = require('../../screens/App/screens/MainAxc/screens/Network/screens/VLAN');
 const sVlanSettings = require('../../screens/App/screens/MainAxc/screens/Network/screens/VLAN/VlanSettings');
 const sQinqSettings = require('../../screens/App/screens/MainAxc/screens/Network/screens/VLAN/QinqSettings');
-const sInterfaces = require('../../screens/App/screens/MainAxc/screens/Network/screens/Interfaces');
+const sV3Interfaces = require('../../screens/App/screens/MainAxc/screens/Network/screens/V3Interfaces');
+const sHostNetwork = require('../../screens/App/screens/MainAxc/screens/Network/screens/HostNetwork');
+const sPortSettings = require('../../screens/App/screens/MainAxc/screens/Network/screens/EthernetPort/PortSettings');
+const sPortMirring = require('../../screens/App/screens/MainAxc/screens/Network/screens/EthernetPort/PortMirring');
+const sPortAggregation = require('../../screens/App/screens/MainAxc/screens/Network/screens/EthernetPort/PortAggregation');
 const sDhcpList = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/DhcpList');
 const sDhcpRelay = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/DhcpRelay');
 const sNetworkRoutes = require('../../screens/App/screens/MainAxc/screens/Network/screens/Routes');
@@ -228,7 +232,7 @@ const routes = [
         component: sMainAxc.Screen,
         icon: 'sphere',
         text: _('Network '),
-        indexRoute: { onEnter: (nextState, replace) => replace('/main/network/interface') },
+        indexRoute: { onEnter: (nextState, replace) => replace('/main/network/v3interface') },
         childRoutes: [
           {
             id: 'vlan',
@@ -256,13 +260,64 @@ const routes = [
             ],
           },
           {
+            id: 'networkHostnetwork',
+            path: '/main/network/hostnetwork',
+            formUrl: 'goform/network/hostnetwork',
+            text: _('Host Network'),
+            icon: 'th',
+            component: sHostNetwork.Screen,
+          },
+          {
+            id: 'ethernetPort',
+            path: '/main/network/ethernetport',
+            isIndex: true,
+            icon: 'th',
+            text: _('Ethernet Port'),
+            indexRoute: { onEnter: (nextState, replace) => replace('/main/network/ethernetport/portsettings') },
+            childRoutes: [
+              {
+                id: 'ethernetPortSettings',
+                path: '/main/network/ethernetport/portsettings',
+                formUrl: 'goform/network/portsettings',
+                text: _('Port Settings'),
+                icon: 'th',
+                component: sPortSettings.Screen,
+              },
+              {
+                id: 'ethernetPortMirring',
+                path: '/main/network/ethernetport/portmirring',
+                formUrl: 'goform/network/portmirring',
+                text: _('Port Mirring'),
+                icon: 'th',
+                component: sPortMirring.Screen,
+              },
+              {
+                id: 'ethernetPortAggregation',
+                path: '/main/network/ethernetport/portaggregation',
+                formUrl: 'goform/network/portaggregation',
+                text: _('Port Aggregation'),
+                icon: 'th',
+                component: sPortAggregation.Screen,
+              },
+            ],
+          },
+          // { // V2.0版本接口设置
+          //   id: 'networkInterface',
+          //   icon: 'th',
+          //   path: '/main/network/interface',
+          //   formUrl: 'goform/network/interface',
+          //   text: _('Interfaces'),
+          //   component: sInterfaces.Screen,
+          // },
+          { // V3.0版本接口设置
             id: 'networkInterface',
             icon: 'th',
-            path: '/main/network/interface',
-            formUrl: 'goform/network/interface',
+            path: '/main/network/v3interface',
+            formUrl: 'goform/network/v3interface',
             text: _('Interfaces'),
-            component: sInterfaces.Screen,
-          }, {
+            component: sV3Interfaces.Screen,
+          },
+          {
             id: 'networkDhcp',
             icon: 'random',
             noTree: true,
@@ -1035,5 +1090,4 @@ const app = {
 
 
 export default app;
-
 

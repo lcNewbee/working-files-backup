@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import {
-  FormContainer,
+  AppScreen,
 } from 'shared/components';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
@@ -30,8 +30,14 @@ const propTypes = {
 };
 const defaultProps = {};
 
-const formOptions = fromJS([
-])
+const settingsFormOptions = fromJS([
+  {
+    id: 'qinqMode',
+    label: _('QINQ Mode'),
+    type: 'select',
+    options: qinqOptions,
+  },
+]);
 
 export default class View extends React.Component {
   constructor(props) {
@@ -41,8 +47,10 @@ export default class View extends React.Component {
 
   render() {
     return (
-      <FormContainer
-        hasSaveButton
+      <AppScreen
+        {...this.props}
+        settingsFormOptions={settingsFormOptions}
+        hasSettingsSaveButton
       />
     );
   }

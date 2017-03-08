@@ -42,7 +42,7 @@ class NumberInput extends React.Component {
         }
 
       // 为空时默认替换为 defaultValue 或 max
-      } else if (!val && needRelace && isNaN(numberVal)) {
+      } else if (!val && needRelace) {
         relaceValue = defaultValue !== undefined ? defaultValue : (max || min);
       }
 

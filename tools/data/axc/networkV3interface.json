@@ -1,0 +1,36 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "index": "1",
+        "status": "up",
+        "arpAgent": "on",
+        "vlanId": "1",
+        "firstIpv4Ip": "192.168.0.1",
+        "firstIpv4Mask": "255.255.255.0",
+        "secondIpv4Ip": "192.168.0.2",
+        "secondIpv4Mask": "255.255.248.0",
+        "Ipv6Ip": "",
+        "Ipv6Mask": "",
+        "description": "this is the first interface"
+      },
+      {
+        "index": "2",
+        "status": "off",
+        "arpAgent": "off",
+        "vlanId": "2",
+        "firstIpv4Ip": "192.168.0.3",
+        "firstIpv4Mask": "255.255.255.0",
+        "secondIpv4Ip": "192.168.0.4",
+        "secondIpv4Mask": "255.255.248.0",
+        "Ipv6Ip": "",
+        "Ipv6Mask": "",
+        "description": "this is the second interface"
+      }
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "name": "eth0",
+        "exchangeMode": "access",
+        "status": "1",
+        "rate": "1g",
+        "workMode": "simplex",
+        "maxPacket": "1000",
+        "nativeVlan": "1",
+        "vlanList": "1,5-10,30",
+        "description": "this first ETH"
+      },
+      {
+        "name": "eth1",
+        "exchangeMode": "trunk",
+        "status": "0",
+        "rate": "10g",
+        "workMode": "duplex",
+        "maxPacket": "10000",
+        "nativeVlan": "2",
+        "vlanList": "1,5-10,30",
+        "description": "this second ETH"
+      }
+    ]
+  }
+}

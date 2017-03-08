@@ -1,0 +1,28 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "id": "0",
+        "balanceAlgthm": "srcmac",
+        "slotId": "0",
+        "portId": ["0", "1", "2", "3", "4"]
+      },
+      {
+        "id": "1",
+        "balanceAlgthm": "desmac",
+        "slotId": "1",
+        "portId": ["0", "1", "2", "3", "4"]
+      },
+      {
+        "id": "2",
+        "balanceAlgthm": "mac",
+        "slotId": "2",
+        "portId": ["0", "1", "2", "3", "4"]
+      }
+    ]
+  }
+}

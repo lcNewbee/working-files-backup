@@ -400,6 +400,7 @@ export default class Advance extends React.Component {
                 label={_('RSSI Limit')}
                 className="fl"
                 checked={rssiEnable === '1'}
+                defaultValue="-98"
                 onClick={() => {
                   const val = rssiEnable === '1' ? '0' : '1';
                   this.changeFormValue(radioId, 'rssiEnable', val);

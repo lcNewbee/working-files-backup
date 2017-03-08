@@ -31,7 +31,7 @@ const MainAP = require('../../screens/App/screens/MainAP');
 // 网络设置
 const pNetworkSettings = require('../../screens/App/screens/MainAP/screens/NetworkSettings');
 // 子菜单
-const sNetworkSettings = require('../../screens/App/screens/MainAP/screens/NetworkSettings/BridgeRouterNetwork');
+const sNetworkSettings = require('../../screens/App/screens/MainAP/screens/NetworkSettings/NetworkSettings');
 
 const pSystemStatus = require('../../screens/App/screens/MainAP/screens/SystemStatus/MultiRadioOverview');
 const sSsidDetails = require('../../screens/App/screens/MainAP/screens/SystemStatus/SsidDetails');
