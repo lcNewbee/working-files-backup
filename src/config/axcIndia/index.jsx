@@ -76,30 +76,14 @@ const sMainAxc = require('../../screens/App/screens/MainAxc');
  */
 // const sNetworkVlan = require('../../screens/App/screens/MainAxc/screens/Network/screens/VLAN');
 const sInterfaces = require('../../screens/App/screens/MainAxc/screens/Network/screens/Interfaces');
-const sDhcpList = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/DhcpList');
-const sDhcpRelay = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/DhcpRelay');
-const sNetworkRoutes = require('../../screens/App/screens/MainAxc/screens/Network/screens/Routes');
-const sNetworkNat = require('../../screens/App/screens/MainAxc/screens/Network/screens/Nat');
-// const sNetworkAcl = require('../../screens/App/screens/MainAxc/screens/Network/screens/ACL');
 const sNetworkPort = require('../../screens/App/screens/MainAxc/screens/Network/screens/Port');
-const sRaduisTemplate =
-    require('../../screens/App/screens/MainAxc/screens/Network/screens/RadiusTemplate');
-const sNetworkAaa = require('../../screens/App/screens/MainAxc/screens/Network/screens/AAA');
-const sPortalServer =
-    require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalServer');
-const sPortalRules =
-    require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalRules');
-const sPortalMac =
-    require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalMac');
 // const sPortalTemplate =
-//    require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalTemplate');
 
 /**
  * AP组管理
  */
 const sOverview = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Overview');
 const sClientList = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/ClientList');
-const sFlowUser = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Flow/User');
 // const sFlowApp = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Flow/App');
 const sSsidStatus = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/SsidStatus');
 const sApList = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/ApList');
@@ -116,16 +100,9 @@ const sWips =
 const sEndpointProtection =
   require('../../screens/App/screens/MainAxc/screens/WLAN/screens/SafePolicy/screens/EndpointProtection');
 
-// const sFlowReport =
-//     require('../../screens/App/screens/MainAxc/screens/Report/screens/FlowReport');
-// const sClientListAnalysis =
-//     require('../../screens/App/screens/MainAxc/screens/Report/screens/BusinessReport/screens/ClientListAnalysis');
 const sLiveMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/LiveMap');
 const sApPlanMap =
     require('../../screens/App/screens/MainAxc/screens/Map/screens/ApPlanMap');
-// const sRfMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/Rf');
-// const sHeatMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/HeatMap');
-// const sClientsTrace = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace');
 
 /**
  * 系统管理
@@ -189,15 +166,6 @@ const routes = [
         text: _('Network '),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/network/interface') },
         childRoutes: [
-          // {
-          //   id: 'networkVlan',
-          //   isIndex: true,
-          //   path: '/main/network/vlan',
-          //   formUrl: 'goform/networkVlan',
-          //   icon: 'road',
-          //   text: _('VLAN'),
-          //   component: sNetworkVlan.Screen,
-          // },
           {
             id: 'networkInterface',
             icon: 'th',
@@ -206,54 +174,6 @@ const routes = [
             text: _('Interfaces'),
             component: sInterfaces.Screen,
           },
-          // {
-          //   id: 'networkDhcp',
-          //   icon: 'random',
-          //   noTree: true,
-          //   component: SharedComponents.TabContainer,
-          //   path: '/main/network/dhcp',
-          //   text: _('DHCP'),
-          //   indexRoute: { onEnter: (nextState, replace) => replace('/main/network/dhcp/List') },
-          //   childRoutes: [
-          //     {
-          //       id: 'dhcpList',
-          //       path: '/main/network/dhcp/List',
-          //       formUrl: 'goform/network/dhcp/list',
-          //       text: _('DHCP List'),
-          //       component: sDhcpList.Screen,
-          //     }, {
-          //       id: 'dhcpRelay',
-          //       path: '/main/network/dhcp/relay',
-          //       formUrl: 'goform/network/dhcp/relay',
-          //       text: _('DHCP Relay'),
-          //       component: sDhcpRelay.Screen,
-          //     },
-          //   ],
-          // }, {
-          //   id: 'networkNat',
-          //   icon: 'exchange',
-          //   path: '/main/network/nat',
-          //   text: _('NAT'),
-          //   formUrl: 'goform/network/nat',
-          //   component: sNetworkNat.Screen,
-          // },
-          // 先隐藏ACL
-          // {
-          //   id: 'networkAcl',
-          //   icon: 'ban',
-          //   path: '/main/network/acl',
-          //   text: _('Access Control'),
-          //   formUrl: 'goform/network/acl',
-          //   component: sNetworkAcl.Screen,
-          // },
-          // {
-          //   id: 'staticRoutes',
-          //   path: '/main/network/static_routes',
-          //   text: _('Routes'),
-          //   icon: 'map-signs',
-          //   formUrl: 'goform/network/route',
-          //   component: sNetworkRoutes.Screen,
-          // },
           {
             id: 'networkPort',
             path: '/main/network/port',
@@ -262,51 +182,6 @@ const routes = [
             text: _('Ports'),
             component: sNetworkPort.Screen,
           },
-          // {
-          //   id: 'radiusTemplate',
-          //   icon: 'clone',
-          //   path: '/main/network/radius_template',
-          //   formUrl: 'goform/network/radius/template',
-          //   text: _('Radius Server'),
-          //   component: sRaduisTemplate.Screen,
-          // }, {
-          //   id: 'networkAaa',
-          //   icon: 'lock',
-          //   path: '/main/network/aaa',
-          //   formUrl: 'goform/network/Aaa',
-          //   text: _('AAA'),
-          //   component: sNetworkAaa.Screen,
-          // }, {
-          //   id: 'networkPortal',
-          //   icon: 'copy',
-          //   noTree: true,
-          //   component: SharedComponents.TabContainer,
-          //   path: '/main/network/portal',
-          //   text: _('Portal Policy'),
-          //   indexRoute: { onEnter: (nextState, replace) => replace('/main/network/portal/server') },
-          //   childRoutes: [
-          //     {
-          //       id: 'portalServer',
-          //       path: '/main/network/portal/server',
-          //       formUrl: 'goform/network/portal/server',
-          //       text: _('Server'),
-          //       component: sPortalServer.Screen,
-          //     }, {
-          //       id: 'portalRules',
-          //       path: '/main/network/portal/rules',
-          //       formUrl: 'goform/network/portal/rule',
-          //       text: _('Rules'),
-          //       component: sPortalRules.Screen,
-          //     },
-          //     {
-          //       id: 'portalMac',
-          //       path: '/main/network/portal/mac',
-          //       formUrl: 'goform/network/portal/mac',
-          //       text: _('White List'),
-          //       component: sPortalMac.Screen,
-          //     },
-          //   ],
-          // },
         ],
       }, {
         path: '/main/group',
@@ -413,21 +288,6 @@ const routes = [
                   },
                 ],
               },
-              // {
-              //   id: 'heatMap',
-              //   path: '/main/group/map/heat_map',
-              //   formUrl: '/goform/heatMap',
-              //   fetchUrl: '/goform/group/mapList',
-              //   text: _('Heat Map'),
-              //   component: sHeatMap.Screen,
-              // }, {
-              //   id: 'cientsTrace',
-              //   path: '/main/group/map/cients_trace',
-              //   formUrl: '/goform/cientsTrace',
-              //   fetchUrl: '/goform/group/mapList',
-              //   text: _('Cients Trace'),
-              //   component: sClientsTrace.Screen,
-              // },
             ],
           }, {
             id: 'wireless',
@@ -489,52 +349,6 @@ const routes = [
               },
             ],
           },
-          // {
-          //   id: 'report',
-          //   isIndex: true,
-          //   path: '/main/group/report',
-          //   icon: 'file-text-o',
-          //   text: _('Report'),
-          //   indexRoute: { onEnter: (nextState, replace) => replace('/main/group/report/flow') },
-          //   childRoutes: [
-          //     {
-          //       id: 'flowReport',
-          //       path: '/main/group/report/flow',
-          //       formUrl: 'goform/timerPolicy',
-          //       text: _('Traffic Report'),
-          //       component: sFlowReport.Screen,
-          //     }, {
-          //       id: 'businessReport',
-          //       path: '/main/group/report/business',
-          //       text: _('Business Report'),
-          //       component: SharedComponents.TabContainer,
-          //       indexRoute: {
-          //         onEnter: (nextState, replace) => replace('/main/group/report/business/usersFlow'),
-          //       },
-          //       childRoutes: [
-          //         {
-          //           id: 'usersFlowAnalysis',
-          //           path: '/main/group/report/business/usersFlow',
-          //           formUrl: 'goform/usersFlowAnalysis',
-          //           text: _('Users Flow Analysis'),
-          //           component: sUsersAnalysis.Screen,
-          //         // }, {
-          //         //   id: 'informationPush',
-          //         //   path: '/main/group/report/business/informationPush',
-          //         //   formUrl: 'goform/informationPush',
-          //         //   text: _('Information Push'),
-          //         //   component: sInformationPush.Screen,
-          //         // }, {
-          //         //   id: 'preferencesAnalysis',
-          //         //   path: '/main/group/report/business/preferencesAnalysis',
-          //         //   formUrl: 'goform/PreferencesAnalysis',
-          //         //   text: _('Analysis of Preferences'),
-          //         //   component: sPreferencesAnalysis.Screen,
-          //         },
-          //       ],
-          //     },
-          //   ],
-          // },
         ],
       }, {
         path: '/main/system',
