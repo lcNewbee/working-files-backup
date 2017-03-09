@@ -16,7 +16,7 @@ const listOptions = fromJS([
     text: _('SSID'),
   }, {
     id: 'filterGroup',
-    text: _('Filter Rules Group'),
+    text: _('Rules Group'),
   }, {
     id: 'filterMode',
     text: _('URL Filter Mode'),
@@ -26,10 +26,10 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: 'Black List',
+        label: _('Black List'),
       }, {
         value: '1',
-        label: 'White List',
+        label: _('White List'),
       },
     ],
   }, {
@@ -41,10 +41,10 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: 'Closed',
+        label: _('Closed'),
       }, {
         value: '1',
-        label: 'Open',
+        label: _('Open'),
       },
     ],
   }, {
@@ -60,7 +60,7 @@ const wlanOptions = fromJS([
     label: _('SSID'),
   }, {
     id: 'filterGroup',
-    label: _('Filter Rules Group'),
+    label: _('Rules Group'),
     type: 'select',
   }, {
     id: 'filterMode',
@@ -69,10 +69,10 @@ const wlanOptions = fromJS([
     options: [
       {
         value: '0',
-        label: 'Black List',
+        label: _('Closed'),
       }, {
         value: '1',
-        label: 'White List',
+        label: _('Open'),
       },
     ],
   },
@@ -262,13 +262,13 @@ export default class View extends React.Component {
     const listActionBarChildren = (
       <span>
         <Button
-          text={_('Filter Rules Group')}
+          text={_('Create Rules Group')}
           key="createGroupActionButton"
           icon="user-plus"
           theme="primary"
           onClick={() => this.props.changeScreenActionQuery({
             action: 'createGroup',
-            myTitle: _('Create Filter Rules Group'),
+            myTitle: _('Create Rules Group'),
           })}
         />
         <Button

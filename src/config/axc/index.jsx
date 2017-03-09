@@ -312,13 +312,13 @@ const routes = [
             id: 'networkDhcp',
             icon: 'random',
             path: '/main/network/dhcp',
-            text: _('DHCP'),
+            text: _('DHCP Config'),
             indexRoute: { onEnter: (nextState, replace) => replace('/main/network/dhcp/dhcp') },
             childRoutes: [
               {
                 id: 'dhcp',
                 path: '/main/network/dhcp/dhcp',
-                text: _('DHCP'),
+                text: _('DHCP Service'),
                 component: SharedComponents.TabContainer,
                 indexRoute: {
                   onEnter: (nextState, replace) => replace('/main/network/dhcp/dhcp/service'),
@@ -360,14 +360,14 @@ const routes = [
                     id: 'userList',
                     path: '/main/network/dhcp/snooping/userList',
                     formUrl: 'goform/network/dhcp/snooping/userList',
-                    text: _('Snooping User'),
+                    text: _('Snooping User List'),
                     component: sSnoopingUserList.Screen,
                   },
                   {
                     id: 'staticList',
                     path: '/main/network/dhcp/snooping/staticList',
                     formUrl: 'goform/network/dhcp/snooping/staticList',
-                    text: _('Static List'),
+                    text: _('Snooping Static List'),
                     component: sSnoopingStaticList.Screen,
                   },
                 ],
@@ -451,10 +451,10 @@ const routes = [
             component: sNetworkAaa.Screen,
           }, {
             id: 'networkURL ',
-            icon: 'lock',
+            icon: 'filter',
             path: '/main/network/url',
             formUrl: 'goform/network/url',
-            text: _('URL'),
+            text: _('URL Filter'),
             component: sNetworkUrlFilter.Screen,
           }, {
             id: 'networkPortal',
