@@ -69,10 +69,8 @@ const listOptions = fromJS([
     formProps: {
       type: 'number',
       required: true,
-      min: 0,
-      validator: validator({
-        rules: 'num[0,9999]',
-      }),
+      min: '0',
+      max: '999999',
     },
   }, {
     id: 'autologin',
@@ -98,6 +96,7 @@ const listOptions = fromJS([
       type: 'select',
       required: true,
     },
+    defaultValue: '1',
     options: [
       {
         value: '1',
@@ -110,17 +109,17 @@ const listOptions = fromJS([
     formProps: {
       type: 'number',
       required: true,
-      min: 0,
-      validator: validator({
-        rules: 'num[0,9999]',
-      }),
+      min: '0',
+      max: '999999',
     },
   }, {
     id: 'money',
     text: _('Price'),
     formProps: {
-      type: 'text',
+      type: 'number',
       required: true,
+      min: '0',
+      max: '999999',
       help: _('$'),
     },
   }, {
@@ -131,6 +130,10 @@ const listOptions = fromJS([
     formProps: {
       type: 'textarea',
       required: true,
+      maxLength: 255,
+      validator: validator({
+        rules: 'utf8Len:[1,255]',
+      }),
     },
   },
 ]);

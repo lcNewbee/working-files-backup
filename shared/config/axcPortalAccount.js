@@ -8,9 +8,9 @@ export const baseSetting = fromJS([
     className: 'cols col-6',
     type: 'text',
     required: true,
-    maxLength: '31',
+    maxLength: '32',
     validator: validator({
-      rules: 'len[1,31]',
+      rules: 'utf8Len:[1,31]',
     }),
   }, {
     id: 'password',
@@ -19,8 +19,9 @@ export const baseSetting = fromJS([
     type: 'password',
     noTable: true,
     required: true,
+    maxLength: '32',
     validator: validator({
-      rules: 'pwd',
+      rules: 'utf8Len:[1,31]',
     }),
   }, {
     id: 'ex1',
@@ -28,12 +29,20 @@ export const baseSetting = fromJS([
     className: 'cols col-6',
     noTable: true,
     type: 'text',
+    maxLength: '32',
+    validator: validator({
+      rules: 'utf8Len:[1,31]',
+    }),
   }, {
     id: 'ex2',
     label: _('Answer'),
     className: 'cols col-6',
     noTable: true,
     type: 'text',
+    maxLength: '32',
+    validator: validator({
+      rules: 'utf8Len:[1,31]',
+    }),
   }, {
     id: 'state',
     label: _('Type'),
@@ -83,7 +92,9 @@ export const baseSetting = fromJS([
     id: 'maclimitcount',
     label: _('Mac Quantity'),
     className: 'cols col-6',
-    type: 'text',
+    type: 'number',
+    min: '0',
+    max: '999999',
     required: true,
   }, {
     id: 'autologin',
@@ -123,19 +134,18 @@ export const baseSetting = fromJS([
     id: 'ex4',
     label: _('Last Unbind Month'),
     className: 'cols col-6',
-    formProps: {
-      type: 'text',
-      required: true,
-    },
+    type: 'number',
+    required: true,
+    min: '1',
+    max: '12',
   }, {
     id: 'ex3',
     label: _('Unbind Times'),
     className: 'cols col-6',
-    formProps: {
-      type: 'num',
-      min: '0',
-      required: true,
-    },
+    type: 'number',
+    min: '0',
+    max: '999999',
+    required: true,
   },
 ]);
 
@@ -146,8 +156,10 @@ export const advancedSetting = fromJS([
     noTable: true,
     className: 'cols col-12',
     type: 'text',
-    maxLength: '31',
-
+    maxLength: '32',
+    validator: validator({
+      rules: 'utf8Len:[1,31]',
+    }),
   }, {
     id: 'gender',
     label: _('Gender'),
@@ -171,25 +183,38 @@ export const advancedSetting = fromJS([
     label: _('ID No.'),
     className: 'cols col-6',
     noTable: true,
-    type: 'number',
+    type: 'text',
+    maxLength: '19',
+    validator: validator({
+      rules: 'utf8Len:[1,18]',
+    }),
   }, {
     id: 'phoneNumber',
     label: _('Phone'),
     noTable: true,
     className: 'cols col-6',
-    type: 'number',
+    type: 'text',
+    maxLength: '19',
+    validator: validator({
+      rules: 'utf8Len:[1,18]',
+    }),
   }, {
     id: 'address',
     label: _('Address'),
     className: 'cols col-6',
     noTable: true,
     type: 'text',
+    maxLength: '32',
+    validator: validator({
+      rules: 'utf8Len:[1,31]',
+    }),
   }, {
     id: 'email',
     label: _('Email'),
     className: 'cols col-6',
     noTable: true,
     type: 'text',
+    maxLength: '32',
     validator: validator({
       rules: 'email',
     }),
@@ -199,5 +224,9 @@ export const advancedSetting = fromJS([
     className: 'cols col-6',
     noTable: true,
     type: 'text',
+    maxLength: '255',
+    validator: validator({
+      rules: 'utf8Len:[1,255]',
+    }),
   },
 ]);

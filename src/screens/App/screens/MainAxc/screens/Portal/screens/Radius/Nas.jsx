@@ -36,7 +36,7 @@ const listOptions = fromJS([
     formProps: {
       type: 'text',
       required: true,
-      maxLength: '31',
+      maxLength: '32',
       validator: validator({
         rules: 'utf8Len:[1,31]',
       }),
@@ -47,34 +47,37 @@ const listOptions = fromJS([
     formProps: {
       type: 'password',
       required: true,
+      maxLength: '32',
       validator: validator({
-        rules: 'pwd',
+        rules: 'utf8Len:[1,31]',
       }),
     },
   }, {
     id: 'ex2',
     text: _('Acc Send Interval'),
     defaultValue: '300',
-    type: 'num',
     transform(val) {
       return uptimeFilter.transform(val / 1000);
     },
     formProps: {
+      type: 'number',
       help: _('Seconds'),
       min: '0',
+      max: '99999',
       required: true,
     },
   }, {
     id: 'ex3',
     text: _('Check Period'),
     defaultValue: '600',
-    type: 'num',
     transform(val) {
       return uptimeFilter.transform(val / 1000);
     },
     formProps: {
       help: _('Seconds'),
       min: '0',
+      max: '99999',
+      type: 'number',
       required: true,
     },
   }, {
@@ -84,10 +87,11 @@ const listOptions = fromJS([
     transform(val) {
       return uptimeFilter.transform(val / 1000);
     },
-    type: 'num',
     formProps: {
       help: _('Second'),
       min: '0',
+      max: '99999',
+      type: 'number',
       required: true,
     },
   }, {
@@ -111,7 +115,14 @@ const listOptions = fromJS([
   }, {
     id: 'description',
     text: _('Description'),
-    type: 'text',
+    formProps: {
+      type: 'textarea',
+      required: true,
+      maxLength: '255',
+      validator: validator({
+        rules: 'utf8Len:[1,255]',
+      }),
+    },
   }, {
     id: 'ex1',
     text: _('is Delegated'),

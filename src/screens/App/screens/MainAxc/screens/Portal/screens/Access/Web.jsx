@@ -27,7 +27,11 @@ const listOptions = fromJS([
     width: '120px',
     formProps: {
       type: 'text',
+      maxLength: '32',
       required: true,
+      validator: validator({
+        rules: 'utf8Len:[1, 31]',
+      }),
     },
   }, {
     id: 'adv',
@@ -42,27 +46,36 @@ const listOptions = fromJS([
   }, {
     id: 'countShow',
     text: _('Show Times'),
-    defaultValue: '',
+    defaultValue: '15',
     formProps: {
       type: 'number',
+      min: '0',
+      max: '99999',
+      validator: validator({
+        rules: 'num',
+      }),
     },
   }, {
     id: 'countAuth',
     text: _('Click Times'),
-    defaultValue: '',
+    defaultValue: '15',
     formProps: {
-      type: 'text',
+      type: 'number',
+      min: '0',
+      max: '99999',
       validator: validator({
-        rules: 'number',
+        rules: 'num',
       }),
-
     },
   }, {
     id: 'description',
     text: _('Description'),
-    defaultValue: '',
     formProps: {
       type: 'textarea',
+      maxLength: '255',
+      validator: validator({
+        rules: 'utf8Len:[0, 255]',
+      }),
     },
   }, {
     id: 'file',

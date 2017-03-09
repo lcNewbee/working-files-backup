@@ -16,6 +16,9 @@ const listOptions = fromJS([
     formProps: {
       type: 'text',
       required: true,
+      validator: validator({
+        rules: 'ip',
+      }),
     },
   }, {
     id: 'ssid',
@@ -23,22 +26,34 @@ const listOptions = fromJS([
     width: '120px',
     options: [],
     formProps: {
+      maxLength: '32',
       type: 'text',
       required: true,
+      validator: validator({
+        rules: 'utf8Len:[1, 31]',
+      }),
     },
   }, {
     id: 'shopId',
     text: _('Shop ID'),
     formProps: {
-      type: 'number',
+      maxLength: '32',
+      type: 'text',
       required: true,
+      validator: validator({
+        rules: 'utf8Len:[1, 31]',
+      }),
     },
   }, {
     id: 'appId',
     text: _('App ID'),
     formProps: {
-      type: 'number',
+      maxLength: '32',
+      type: 'text',
       required: true,
+      validator: validator({
+        rules: 'utf8Len:[1, 31]',
+      }),
     },
   }, {
     id: 'domain',
@@ -47,13 +62,19 @@ const listOptions = fromJS([
     formProps: {
       noAdd: true,
       type: 'text',
+      maxLength: '32',
       required: true,
+      validator: validator({
+        rules: 'utf8Len:[1, 31]',
+      }),
     },
   }, {
     id: 'outTime',
     text: _('Out Time'),
     noForm: true,
     formProps: {
+      min: '0',
+      max: '99999999',
       type: 'number',
       required: true,
     },
@@ -62,8 +83,12 @@ const listOptions = fromJS([
     text: _('Secret Key'),
     noTable: true,
     formProps: {
-      type: 'text',
+      type: 'password',
       required: true,
+      maxLength: '32',
+      validator: validator({
+        rules: 'utf8Len:[1, 31]',
+      }),
     },
   },
 ]);

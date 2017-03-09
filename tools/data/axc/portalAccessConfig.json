@@ -10,7 +10,7 @@
       "basname": null,
       "bas_ip": "192.168.4.225",
       "bas_port": "2001",
-      "portalVer": "2",
+      "portalVer": "1",
       "authType": "1",
       "sharedSecret": "LeeSon",
       "bas_user": "aaa",

@@ -34,8 +34,13 @@ const settingsOptions = fromJS([
     fieldset: 'base_setting',
     className: 'cols col-6',
     label: _('Bas Port'),
-    type: 'text',
+    type: 'number',
     required: true,
+    min: '1',
+    max: '65535',
+    validator: validator({
+      rules: 'num',
+    }),
   },
   {
     id: 'sharedSecret',
@@ -44,6 +49,7 @@ const settingsOptions = fromJS([
     className: 'cols col-6',
     fieldset: 'base_setting',
     label: _('Shared Secret'),
+    maxLength: '32',
     validator: validator({
       rules: 'pwd',
     }),
@@ -54,7 +60,11 @@ const settingsOptions = fromJS([
     required: true,
     className: 'cols col-6',
     fieldset: 'base_setting',
+    maxLength: '32',
     label: _('User'),
+    validator: validator({
+      rules: 'utf8Len:[1, 31]',
+    }),
   },
   {
     id: 'bas_pwd',
@@ -63,6 +73,7 @@ const settingsOptions = fromJS([
     className: 'cols col-6',
     fieldset: 'base_setting',
     label: _('Password'),
+    maxLength: '32',
     validator: validator({
       rules: 'pwd',
     }),
@@ -86,8 +97,10 @@ const settingsOptions = fromJS([
     id: 'portalVer',
     fieldset: 'base_setting',
     className: 'cols col-6',
+    required: true,
     label: _('Portal Vertion'),
     type: 'select',
+    defaultValue: '1',
     options: [
       {
         value: '1',
@@ -106,6 +119,7 @@ const settingsOptions = fromJS([
     className: 'cols col-6',
     label: _('Auth Type'),
     type: 'select',
+    defaultValue: '1',
     options: [
       {
         value: '0',
@@ -120,10 +134,15 @@ const settingsOptions = fromJS([
   {
     id: 'timeoutSec',
     required: true,
+    type: 'number',
     fieldset: 'base_setting',
     className: 'cols col-6',
     label: _('Time out'),
     min: '0',
+    max: '1000',
+    validator: validator({
+      rules: 'num',
+    }),
   }, {
     id: 'web',
     required: true,
@@ -131,6 +150,7 @@ const settingsOptions = fromJS([
     label: _('Web Template'),
     className: 'cols col-6',
     type: 'select',
+    defaultValue: '0',
     options: [
       {
         required: true,
