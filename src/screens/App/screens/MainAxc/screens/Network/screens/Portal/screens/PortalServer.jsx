@@ -15,6 +15,7 @@ const listOptions = fromJS([
     formProps: {
       type: 'text',
       maxLength: '31',
+      notEditable: true,
       required: true,
       validator: validator({
         rules: 'utf8Len:[1,31]',

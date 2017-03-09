@@ -247,9 +247,8 @@ const listOptions = fromJS([
     noTable: true,
     formProps: {
       type: 'number',
-      min: '0',
+      min: '1',
       max: '4096',
-      help: _('Set 0 to disable'),
       required: true,
     },
   },

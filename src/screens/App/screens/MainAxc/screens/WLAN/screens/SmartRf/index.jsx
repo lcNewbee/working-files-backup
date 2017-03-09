@@ -83,13 +83,19 @@ let $$radioAdvanceFormOptions = radioAdvance.filterNot(
 
     return ret;
   },
-).concat(radioQos);
+);
+
+// 处理大于 2.5的版本
+if (window.guiConfig.versionCode >= 20500) {
+  $$radioAdvanceFormOptions = $$radioAdvanceFormOptions.concat(radioQos);
+}
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   screenStore: PropTypes.instanceOf(Map),
   groupid: PropTypes.any,
 
+  reportValidError: PropTypes.func,
   changeScreenQuery: PropTypes.func,
   fetchScreenData: PropTypes.func,
   updateScreenSettings: PropTypes.func,
@@ -142,8 +148,8 @@ export default class SmartRf extends React.Component {
   onSave(formId) {
     if (this.props.validateAll) {
       this.props.validateAll(formId)
-        .then((errMsg) => {
-          if (errMsg.isEmpty()) {
+        .then(($$errMsg) => {
+          if ($$errMsg.isEmpty()) {
             this.props.saveScreenSettings({
               onlyChanged: true,
               numberKeys: fromJS(numberKeys),
@@ -233,6 +239,7 @@ export default class SmartRf extends React.Component {
                   onSave={() => this.onSave('radioAdvance')}
                   invalidMsg={app.get('invalid')}
                   validateAt={app.get('validateAt')}
+                  onValidError={this.props.reportValidError}
                   isSaving={app.get('saving')}
                   hasSaveButton={this.actionable}
                   saveText={_('Apply')}

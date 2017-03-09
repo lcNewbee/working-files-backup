@@ -217,6 +217,7 @@ export default class AcVersion extends PureComponent {
     const djsConfig = {
       paramName: 'versionFile',
       maxFiles: 1,
+      maxFilesize: 1024,
       addRemoveLinks: 'dictCancelUploadConfirmation',
       dictDefaultMessage: msg.dictDefaultMessage,
       dictRemoveFile: msg.removefile,

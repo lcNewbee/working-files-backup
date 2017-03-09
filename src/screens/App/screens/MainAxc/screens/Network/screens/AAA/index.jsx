@@ -72,6 +72,7 @@ const listOptions = fromJS([
     id: 'domain_name',
     text: _('Name'),
     defaultValue: '',
+    notEditable: true,
     formProps: {
       type: 'text',
       required: true,

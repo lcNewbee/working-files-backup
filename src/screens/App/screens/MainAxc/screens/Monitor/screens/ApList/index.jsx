@@ -79,7 +79,7 @@ const settingsFormOptions = radioBase
   )
   .toList();
 
-const $$radioAdvanceFormOptions = radioAdvance.filterNot(
+let $$radioAdvanceFormOptions = radioAdvance.filterNot(
   ($$item) => {
     let ret = false;
     const curId = $$item.get('id');
@@ -91,7 +91,12 @@ const $$radioAdvanceFormOptions = radioAdvance.filterNot(
 
     return ret;
   },
-).concat(radioQos);
+);
+
+// 处理大于 2.5的版本
+if (window.guiConfig.versionCode >= 20500) {
+  $$radioAdvanceFormOptions = $$radioAdvanceFormOptions.concat(radioQos);
+}
 const listOptions = fromJS([
   // {
   //   id: 'devicename',

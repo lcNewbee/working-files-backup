@@ -164,9 +164,9 @@
   "Reset Password":"重置密码",
 
   "Message":"消息",
-    "Send Message":"发送消息",
-    "Send Box":"发件箱",
-    "Receive Box":"收件箱",
+  "Send Message":"发送消息",
+  "Send Box":"发件箱",
+  "Receive Box":"收件箱",
 
   "Receiver":"收件人",
   "Title":"标题",
