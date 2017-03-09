@@ -23,11 +23,13 @@ class SystemVersion extends CI_Controller {
                 )
             );
         } else {
+            /*
             if($this->checkTitle($this->upload->data()['full_path']) != 115117){
                 //115117 自己测出来的 AC 固件就是这个值，获取后续会变化->再看吧 额！
                 $result = array('state' => array('code' => 6300, 'msg' => 'file error'));
                 return $result; 
             }
+            */
             $data = array('upload_data' => $this->upload->data());            
             //$this->acVersion = $data['name'];
             $result = array('state' => array('code' => 2000, 'msg' => $data));
