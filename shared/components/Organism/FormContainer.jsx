@@ -171,7 +171,7 @@ class FormContainer extends React.Component {
     const {
       invalidMsg, validateAt, onValidError, actionQuery, id, actionable, formKey,
     } = this.props;
-    const index = $$option.get('__index__');
+    const index = $$option.get('__index__') || '';
     const myProps = $$option.delete('__index__').toJS();
     const myComponent = myProps.component;
     const checkboxValue = myProps.value || '1';
@@ -374,7 +374,7 @@ class FormContainer extends React.Component {
             <tr>
               {
                 $$option.get('thead').map(
-                  text => <th>{text}</th>,
+                  (text, i) => <th key={i}>{text}</th>,
                 )
               }
             </tr>
@@ -382,13 +382,13 @@ class FormContainer extends React.Component {
           <tbody>
             {
               $$optionsList.map(
-                ($$list) => {
+                ($$list, rowIndex) => {
                   if (List.isList($$list)) {
                     return (
-                      <tr>
+                      <tr key={rowIndex}>
                         {
                           $$list.map(
-                            ($$item) => {
+                            ($$item, colIndex) => {
                               let retNode = $$item;
 
                               if (!$$item.get('noForm')) {
@@ -401,7 +401,7 @@ class FormContainer extends React.Component {
                               } else {
                                 retNode = retNode.get('text');
                               }
-                              return <td>{retNode}</td>;
+                              return <td key={`${rowIndex}${colIndex}`}>{retNode}</td>;
                             },
                           )
                         }

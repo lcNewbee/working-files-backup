@@ -196,10 +196,11 @@ const b28n = (function _b28n(doc, _win) {
 
   // 初始化默认字典
   if (!currDict) {
-    currDict = dicts[localB28n.getLang()] = {};
+    currDict = {};
+    dicts[localB28n.getLang()] = {};
   }
 
-  localB28n._ = win._ = function _(str, ...rest) {
+  localB28n._ = function _(str, ...rest) {
     const translateStr = localB28n.translate(str);
     let ret;
 
@@ -211,6 +212,8 @@ const b28n = (function _b28n(doc, _win) {
 
     return ret;
   };
+
+  win._ = localB28n._;
 
   localB28n.langMap = {
     cn: '简体中文',

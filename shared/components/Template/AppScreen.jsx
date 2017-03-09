@@ -103,12 +103,8 @@ export default class AppScreen extends React.Component {
       initOption.actionQuery = utils.extend({}, initOption.actionQuery, {
         groupid,
       });
-      initOption.defaultEditData = utils.extend({}, initOption.defaultEditData, {
-        groupid,
-      });
-      initOption.defaultSettingsData = utils.extend({}, initOption.defaultSettingsData, {
-        groupid,
-      });
+      initOption.defaultEditData = utils.extend({}, initOption.defaultEditData);
+      initOption.defaultSettingsData = utils.extend({}, initOption.defaultSettingsData);
     }
 
     this.initOption = initOption;
@@ -180,7 +176,6 @@ export default class AppScreen extends React.Component {
       this.props.leaveScreen();
     }
   }
-
   refreshOptions(props) {
     const { route, listOptions } = props;
     let thisListOptions = listOptions;

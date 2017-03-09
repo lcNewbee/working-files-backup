@@ -35,6 +35,8 @@ const propTypes = {
   'data-label': PropTypes.string,
   form: PropTypes.string,
   showLabel: PropTypes.bool,
+  options: PropTypes.array,
+  type: PropTypes.string,
 };
 
 const defaultProps = {
@@ -49,14 +51,29 @@ const defaultProps = {
   value: '',
 };
 
-function notOptionsValue(options, val, type) {
-  let ret = false;
+function isStringBe(str, nextStr) {
+  return `${str}` === `${nextStr}`;
+}
+function isContainer(strArr, containerStr) {
+  return strArr.indexOf(`${containerStr}`) !== -1;
+}
+
+function isNotSelectValue(option) {
+  const { options, value, type, multi } = option;
   let myOptions = options;
   let i;
   let len;
   let item;
+  let curVal = value === undefined ? '' : value;
+  let judgeFunc = isStringBe;
+  let ret = false;
 
-  if ('select,switch'.indexOf(type) !== -1 && options) {
+  if ('select,switch,'.indexOf(`${type},`) !== -1 && options) {
+    if (multi) {
+      curVal = curVal.split(',');
+      judgeFunc = isContainer;
+    }
+
     if (options.toJS) {
       myOptions = options.toJS();
     }
@@ -64,8 +81,7 @@ function notOptionsValue(options, val, type) {
 
     for (i = 0; i < len; i += 1) {
       item = myOptions[i];
-
-      if (item.value === val) {
+      if (judgeFunc(curVal, item.value)) {
         return false;
       }
     }
@@ -118,11 +134,17 @@ class FormGroup extends React.Component {
 
   // 验证不确定的错误
   check() {
-    const { name, label, value, required, options, type } = this.props;
+    const { name, label, value, required, options, type, multi, } = this.props;
     let checkResult;
 
     // 空字符串验证, 或者值 不在 options 列表中
-    if (value === '' || value === undefined || notOptionsValue(options, value, type)) {
+    if (value === '' || value === undefined ||
+        isNotSelectValue({
+          options,
+          value,
+          type,
+          multi,
+        })) {
       if (required) {
         checkResult = _('%s is required', label || this.props['data-label']);
       }
