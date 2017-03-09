@@ -54,7 +54,6 @@ const listOptions = fromJS([
           <FormGroup
             {...myProps}
             type="select"
-            required
             multi
           />
         );

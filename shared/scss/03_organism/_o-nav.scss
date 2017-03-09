@@ -49,7 +49,7 @@ $main-blue: #0093dd;
 
       &.has-tabs {
         &::after {
-          transform: rotate(90deg);
+          transform: rotate(-90deg);
         }
       }
     }
@@ -63,6 +63,11 @@ $main-blue: #0093dd;
 
       &.active {
         background-color: #666;
+      }
+      &.has-tabs {
+        &::after {
+          left: $g-distance * 1.70;
+        }
       }
     }
   }

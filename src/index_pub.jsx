@@ -13,7 +13,7 @@ const remoteActionMiddleware = require('shared/utils/lib/remote_action_middlewar
 const appActions = require('shared/actions/app');
 const combineReducers = require('redux').combineReducers;
 const Provider = require('react-redux').Provider;
-const prodConfig = require('./config/axc2.5');
+const prodConfig = require('./config/axc');
 
 const Router = ReactRouter.Router;
 const hashHistory = ReactRouter.hashHistory;

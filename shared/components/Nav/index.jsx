@@ -126,18 +126,22 @@ class Nav extends Component {
                     hasSubmenus ? (
                       <ul className={subMenuClassName}>
                         {
-                          item.get('childRoutes').map((subItem, n) => {
+                          item.get('childRoutes').map(($$subItem, n) => {
                             const thisKey = `${myKey}.${n}`;
-                            const mylinkClassName = 'm-menu__link o-nav__link a-leaf-link';
-
-                            if (subItem.get('noNav')) {
+                            let mylinkClassName = 'm-menu__link o-nav__link a-leaf-link';
+                            const subHasTabs = $$subItem.get('childRoutes');
+                            if ($$subItem.get('noNav')) {
                               return null;
+                            }
+
+                            if (subHasTabs) {
+                              mylinkClassName = `${mylinkClassName} has-tabs`;
                             }
 
                             return (
                               <li key={thisKey}>
                                 <NavLink
-                                  item={subItem}
+                                  item={$$subItem}
                                   className={mylinkClassName}
                                   onClick={this.onSelectItem}
                                 />
