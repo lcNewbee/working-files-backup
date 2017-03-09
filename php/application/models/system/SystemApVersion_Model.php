@@ -82,14 +82,13 @@ class SystemApVersion_Model extends CI_Model {
     }
     function add_apversion($data) {
         $result = null;
+        if($this->is_add($data['model'],$data['softVersion'])){
+            $result = array('state' => array('code' => 6302,'msg' => 'disk drive full'));
+            return json_encode($result);            
+        }
         $diskAry = $this->get_disk_info();
         if ($diskAry['3'] == 0) {
-            $result = array(
-                'state' => array(
-                    'code' => 6301,
-                    'msg' => 'disk drive full'
-                )
-            );
+            $result = array('state' => array('code' => 6301,'msg' => 'disk drive full'));
             return json_encode($result);
         }
         $upload_data = $this->do_upload();
@@ -187,6 +186,7 @@ class SystemApVersion_Model extends CI_Model {
         $result = axc_active_apfirmware(json_encode($retData));
         return $result;
     }
+    //检测是否还有空间
     private function get_disk_info() {
         $result = array();
         $fp = popen("df | grep -w '/etc/Ap_ver' |awk '{print $1,$2,$3,$4,$5,$6}'", "r");
@@ -199,6 +199,17 @@ class SystemApVersion_Model extends CI_Model {
         }
         return $result;
 
+    }
+    private function is_add($model,$version){
+        $result = 0;
+        $query = $this->db->select('id')->from('ap_firmware')
+                        ->where('model',$model)
+                        ->where('subversion',$version)
+                        ->get()->result_array();
+        if(count($query) > 0){
+            $result = 1;
+        }
+        return $result;
     }
 }
 
