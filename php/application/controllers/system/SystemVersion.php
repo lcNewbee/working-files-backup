@@ -23,7 +23,12 @@ class SystemVersion extends CI_Controller {
                 )
             );
         } else {
-            $data = array('upload_data' => $this->upload->data());
+            if($this->checkTitle($this->upload->data()['full_path']) != 115117){
+                //115117 自己测出来的 AC 固件就是这个值，获取后续会变化->再看吧 额！
+                $result = array('state' => array('code' => 6300, 'msg' => 'file error'));
+                return $result; 
+            }
+            $data = array('upload_data' => $this->upload->data());            
             //$this->acVersion = $data['name'];
             $result = array('state' => array('code' => 2000, 'msg' => $data));
         }
@@ -78,5 +83,47 @@ class SystemVersion extends CI_Controller {
         }
         $result['state']['msg'] = $msg;
         echo json_encode($result);
+    }
+    function checkTitle($filename) {
+        $file = fopen($filename, "rb");
+        $bin = fread($file, 2); //只读2字节
+        fclose($file);
+        $strInfo = @unpack("c2chars", $bin);
+        $typeCode = intval($strInfo['chars1'].$strInfo['chars2']);
+        $fileType = '';
+        switch ($typeCode)
+        {
+        case 7790:
+        $fileType = 'exe';
+        break;
+        case 7784:
+        $fileType = 'midi';
+        break;
+        case 8297:
+        $fileType = 'rar';
+        break;
+        case 255216:
+        $fileType = 'jpg';
+        break;
+        case 7173:
+        $fileType = 'gif';
+        break;
+        case 6677:
+        $fileType = 'bmp';
+        break;
+        case 13780:
+        $fileType = 'png';
+        break;
+        default:
+        $fileType = $typeCode;
+        }
+        //Fix
+        if ($strInfo['chars1']=='-1' && $strInfo['chars2']=='-40' ) {
+            return 'jpg';
+        }
+        if ($strInfo['chars1']=='-119' && $strInfo['chars2']=='80' ) {
+            return 'png';
+        }
+        return $fileType;
     }
 }
