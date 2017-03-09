@@ -567,7 +567,7 @@
   "Are you sure to UPGRADE the Firmware and REBOOT?": "你确定要升级设备软件并重启？",
   "The current Firmware version is active, you can't delete it. If you want to delete it, please activate another Firmware version!":"当前版本为激活版本，删除无效。若要删除，请激活其他版本。",
   "The Firmware version you selected is active, cancellation option doesn't work! You can directly activate another Firmware version when you want to cancel the current version!": "你所选的版本为激活状态，取消激活操作无效。若想取消激活，请直接激活该型号的其他版本！",
-
+  "Cancel upload":"取消上传",
   "System Maintenance": "系统维护",
   "AC Maintenance": "AC维护",
   "Save Configuration": "保存配置",
@@ -585,6 +585,7 @@
   "AP Heartbeat Time": "AP心跳时间",
   "AP Number of Re-joins": "AP重新加入次数",
   "Same AP model and firmware version item already exists": "已存在相同AP型号与软件版本号的项",
+  "Restoring..., Do not shutdown device": "恢复中，请不要关闭设备",
 
   "Read Password": "读口令",
   "Write Password": "写口令",

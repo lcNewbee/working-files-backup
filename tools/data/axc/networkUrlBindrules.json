@@ -1,0 +1,25 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "id": "0",
+        "filterGroup":"研发前端小组",
+        "rule_name": "购物网站"
+      },
+      {
+        "id": "1",
+        "filterGroup":"研发后台小组",
+        "rule_name": "购物网站"
+      },
+      {
+        "id": "2",
+        "filterGroup":"市场部",
+        "rule_name": "购物网站"
+      }
+    ]
+  }
+}

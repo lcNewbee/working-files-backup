@@ -1,0 +1,25 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "id": "0",
+        "group_name": "研发硬件小组",
+        "description": "10人"
+      },
+      {
+        "id": "1",
+        "group_name": "采购部",
+        "description": "2人"
+      },
+      {
+        "id": "2",
+        "group_name": "财务部",
+        "description": "4人"
+      }
+    ]
+  }
+}

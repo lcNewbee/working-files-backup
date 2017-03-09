@@ -103,8 +103,14 @@ const sPortalRules =
 const sPortalMac =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalMac');
 
-const sNetworkUrlFilter =
-    require('../../screens/App/screens/MainAxc/screens/Network/screens/URL');
+const sNetworkUrlWlan =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/URL/screens/Wlan');
+const sNetworkUrlRulesGroup =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/URL/screens/RulesGroup');
+const sNetworkUrlFilterRules =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/URL/screens/FilterRules');
+const sNetworkUrlBindRules =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/URL/screens/BindRules');
 
 // const sPortalTemplate =
 //    require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalTemplate');
@@ -309,6 +315,13 @@ const routes = [
             text: _('Interfaces'),
             component: sInterfaces.Screen,
           }, {
+            id: 'networkPort',
+            path: '/main/network/port',
+            icon: 'th-large',
+            formUrl: '/goform/network/port',
+            text: _('Ports'),
+            component: sNetworkPort.Screen,
+          }, {
             id: 'networkDhcp',
             icon: 'random',
             path: '/main/network/dhcp',
@@ -412,13 +425,6 @@ const routes = [
             formUrl: 'goform/network/route',
             component: sNetworkRoutes.Screen,
           }, {
-            id: 'networkPort',
-            path: '/main/network/port',
-            icon: 'th-large',
-            formUrl: '/goform/network/port',
-            text: _('Ports'),
-            component: sNetworkPort.Screen,
-          }, {
             id: 'networkRadius',
             icon: 'clone',
             path: '/main/network/radius',
@@ -450,12 +456,44 @@ const routes = [
             text: _('AAA'),
             component: sNetworkAaa.Screen,
           }, {
-            id: 'networkURL ',
+            id: 'networkURL',
             icon: 'filter',
             path: '/main/network/url',
             formUrl: 'goform/network/url',
             text: _('URL Filter'),
-            component: sNetworkUrlFilter.Screen,
+            noTree: true,
+            component: SharedComponents.TabContainer,
+            indexRoute: { onEnter: (nextState, replace) => replace('/main/network/url/wlan') },
+            childRoutes: [
+              {
+                id: 'urlWlan',
+                path: '/main/network/url/wlan',
+                formUrl: 'goform/network/url/wlan',
+                text: _('WLAN'),
+                component: sNetworkUrlWlan.Screen,
+              },
+              {
+                id: 'urlRulesGroup',
+                path: '/main/network/url/rulesgroup',
+                formUrl: 'goform/network/url/rulesgroup',
+                text: _('Rules Group'),
+                component: sNetworkUrlRulesGroup.Screen,
+              },
+              {
+                id: 'urlFilterRules',
+                path: '/main/network/url/filterrules',
+                formUrl: 'goform/network/url/filterrules',
+                text: _('Filter Rules'),
+                component: sNetworkUrlFilterRules.Screen,
+              },
+              {
+                id: 'urlBindRules',
+                path: '/main/network/url/bindrules',
+                formUrl: 'goform/network/url/bindrules',
+                text: _('Bind Rules'),
+                component: sNetworkUrlBindRules.Screen,
+              },
+            ],
           }, {
             id: 'networkPortal',
             icon: 'copy',

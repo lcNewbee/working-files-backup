@@ -1,0 +1,28 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "id": "0",
+        "rule_name":"购物网站",
+        "filter_url": "www.taobao.com,www.amazon.com",
+        "description": "一共2个网址"
+      },
+      {
+        "id": "1",
+        "rule_name":"色情网站",
+        "filter_url": "www.sexy.com",
+        "description": "一共1个网址"
+      },
+      {
+        "id": "2",
+        "rule_name":"游戏网站",
+        "filter_url": "www.playgame.com,www.999game.com",
+        "description": "一共2个网址"
+      }
+    ]
+  }
+}
