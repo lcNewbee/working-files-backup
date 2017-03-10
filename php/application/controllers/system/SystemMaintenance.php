@@ -130,6 +130,7 @@ class SystemMaintenance extends CI_Controller {
             if(file_exists('/var/netmanager/mysql')) {
                 delete_files('/var/netmanager/mysql', TRUE);
             }
+            exec('sysreset');
             exec('/sbin/reboot');
         }
 
