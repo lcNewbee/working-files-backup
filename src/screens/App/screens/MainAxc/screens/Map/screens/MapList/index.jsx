@@ -23,7 +23,7 @@ const propTypes = {
   router: PropTypes.object,
   params: PropTypes.object,
   updateScreenSettings: PropTypes.func,
-  addToPropertyPanel: PropTypes.func,
+  addPropertyPanel: PropTypes.func,
   updateCurEditListItem: PropTypes.func,
   validateAll: PropTypes.func,
   editListItemByIndex: PropTypes.func,
@@ -219,7 +219,7 @@ export default class View extends React.PureComponent {
       }, {
         id: 'config',
         icon: 'cog',
-        onClick: mac => this.props.addToPropertyPanel({
+        onClick: mac => this.props.addPropertyPanel({
           mac,
         }),
       }, {

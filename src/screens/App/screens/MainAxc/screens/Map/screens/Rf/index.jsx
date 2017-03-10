@@ -58,7 +58,7 @@ const defaultEditData = immutableUtils.getDefaultData(listOptions.get('list'));
 const propTypes = {
   store: PropTypes.instanceOf(Map),
   updateScreenSettings: PropTypes.func,
-  addToPropertyPanel: PropTypes.func,
+  addPropertyPanel: PropTypes.func,
   updateCurEditListItem: PropTypes.func,
   validateAll: PropTypes.func,
   editListItemByIndex: PropTypes.func,
@@ -172,7 +172,7 @@ export default class View extends React.PureComponent {
       }, {
         id: 'config',
         icon: 'cog',
-        onClick: () => this.props.addToPropertyPanel(),
+        onClick: () => this.props.addPropertyPanel(),
       }, {
         icon: 'times',
         id: 'close',

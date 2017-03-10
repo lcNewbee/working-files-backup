@@ -34,7 +34,7 @@ const propTypes = {
   selectManageGroup: PropTypes.func,
   selectAddApGroupDevice: PropTypes.func,
   showMainModal: PropTypes.func,
-  togglePropertyPanel: PropTypes.func,
+  togglePropertyContainer: PropTypes.func,
   updateAddApGroup: PropTypes.func,
   updateEditApGroup: PropTypes.func,
   updateGroupMoveDevice: PropTypes.func,
@@ -1227,7 +1227,7 @@ export default class Main extends React.PureComponent {
 
         <PropertyPanel
           isShow={isShowPanel}
-          onToggle={this.props.togglePropertyPanel}
+          onToggle={this.props.togglePropertyContainer}
           data={this.props.properties}
           {...this.props}
         />

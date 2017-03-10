@@ -9,10 +9,10 @@ import DevicePanel from '../Panels/Device';
 const propTypes = {
   isShow: PropTypes.bool,
   onToggle: PropTypes.func,
-  collapsePropertys: PropTypes.func,
-  changePropertysItem: PropTypes.func,
-  removeFromPropertyPanel: PropTypes.func,
-  updatePropertyPanelData: PropTypes.func,
+  collapsePropertyPanel: PropTypes.func,
+  changePropertyPanelItem: PropTypes.func,
+  removePropertyPanel: PropTypes.func,
+  changePropertyPanelData: PropTypes.func,
   fetchPropertyPanelData: PropTypes.func,
   changePropertyPanelRadioIndex: PropTypes.func,
   reportValidError: PropTypes.func,
@@ -50,7 +50,7 @@ class PropertyPanel extends React.Component {
   }
   onChangePropertysTab(e, name) {
     e.preventDefault();
-    this.props.changePropertysItem({
+    this.props.changePropertyPanelItem({
       activeTab: name,
     });
   }
@@ -165,12 +165,12 @@ class PropertyPanel extends React.Component {
                 <Icon
                   title={_('Remove All')}
                   name="trash"
-                  onClick={() => this.props.removeFromPropertyPanel(-1)}
+                  onClick={() => this.props.removePropertyPanel(-1)}
                 />
                 <Icon
                   title={_('Collapse All')}
                   name="navicon"
-                  onClick={() => this.props.collapsePropertys(-1)}
+                  onClick={() => this.props.collapsePropertyPanel(-1)}
                 />
                 <Icon
                   title={_('Hidde Property Panel')}
@@ -192,14 +192,14 @@ class PropertyPanel extends React.Component {
 
                   // Actions Props
                   onCollapse={
-                    () => this.props.collapsePropertys(index)
+                    () => this.props.collapsePropertyPanel(index)
                   }
-                  onChangeData={this.props.updatePropertyPanelData}
+                  onChangeData={this.props.changePropertyPanelData}
                   onChangeTab={this.onChangePropertysTab}
-                  onChangeItem={this.props.changePropertysItem}
+                  onChangeItem={this.props.changePropertyPanelItem}
                   onChangeRadioIndex={this.props.changePropertyPanelRadioIndex}
                   onRemove={
-                    () => this.props.removeFromPropertyPanel(index)
+                    () => this.props.removePropertyPanel(index)
                   }
                   onSave={(formId) => {
                     this.props.validateAll(formId)

@@ -1,4 +1,19 @@
 import { fromJS } from 'immutable';
+import {
+  TOGGLE_PROPERTY,
+  INIT_PROPERTY_PANEL,
+  COLLAPSE_PROPERTY_PANEL,
+  REMOVE_PROPERTY_PANEL,
+
+  // 操作属性面板内容
+  CHANGE_PROPERTY_PANEL_ITEM,
+
+  // 接收属性面板数据 Data
+  RC_PROPERTY_PANEL_DATA,
+
+  // 更新属性面板数据
+  CHANGE_PROPERTY_PANEL_DATA,
+} from 'shared/constants/action';
 
 const defaultItem = fromJS({
   id: '-1',
@@ -134,7 +149,7 @@ function initAddPropertyPanel(state, action) {
       .set('activeIndex', activeIndex);
 }
 
-function rcPropertyPanelData(state, action) {
+function receivePropertyPanelData(state, action) {
   const rcData = action.payload.data || {};
   const mac = action.payload.mac;
   const dataIndex = state.get('list')
@@ -144,7 +159,6 @@ function rcPropertyPanelData(state, action) {
   let $$ret = state;
   let $$newData = $$curList.get('data');
   let $$radiosOptions = fromJS([]);
-  let radioName = '(2.4G)';
 
   // 把服务器端数据合并 到 data 中
   $$newData = $$newData.merge(rcData);
@@ -190,7 +204,7 @@ function rcPropertyPanelData(state, action) {
 
   return $$ret;
 }
-function removeFromPropertyPanel(state, action) {
+function removePropertyPanel(state, action) {
   let ret = state;
 
   if (action.index < 0) {
@@ -258,7 +272,7 @@ function changePropertyPanelRadioIndex(state, index) {
   return $$ret.setIn(['list', activeIndex], $$curListItem);
 }
 
-function changePropertysItem(state, action) {
+function changePropertyPanelItem(state, action) {
   const changeData = action.payload;
   const curRadioIndex = changeData.configurationRadioIndex;
   let $$ret = state;
@@ -274,16 +288,10 @@ function changePropertysItem(state, action) {
 
 export default function (state = defaultState, action) {
   switch (action.type) {
-    case 'INIT_ADD_PROPERTY_PANEL':
-      return initAddPropertyPanel(state, action);
+    case CHANGE_PROPERTY_PANEL_DATA:
+      return updatePropertyPanelData(state, action.data);
 
-    case 'RC_PROPERTY_PANEL_DATA':
-      return rcPropertyPanelData(state, action);
-
-    case 'REMOVE_FROM_PROPERTY_PANEL':
-      return removeFromPropertyPanel(state, action);
-
-    case 'TOGGLE_PROPERTY_PANEL':
+    case TOGGLE_PROPERTY:
       return state.update('isShowPanel', (val) => {
         let ret = !val;
 
@@ -293,8 +301,14 @@ export default function (state = defaultState, action) {
         return ret;
       });
 
+    case INIT_PROPERTY_PANEL:
+      return initAddPropertyPanel(state, action);
+
+    case RC_PROPERTY_PANEL_DATA:
+      return receivePropertyPanelData(state, action);
+
     // 切换属性列表body折叠状态
-    case 'COLLAPSE_PROPERTYS':
+    case COLLAPSE_PROPERTY_PANEL:
       return state.update('activeIndex', (i) => {
         let ret = action.index;
 
@@ -305,19 +319,12 @@ export default function (state = defaultState, action) {
         return ret;
       });
 
-    // 切换属性列表某项的Tab选择
-    case 'CHANGE_PROPERTYS_TAB':
-      return state.setIn(
-        ['list', state.get('activeIndex'), 'activeTab'],
-        action.name,
-      );
+    case REMOVE_PROPERTY_PANEL:
+      return removePropertyPanel(state, action);
 
-    // 更新合并属性列表某项的数据
-    case 'CHANGE_PROPERTYS_ITEM':
-      return changePropertysItem(state, action);
-
-    case 'UPDATE_PROPERTY_PANEL_DATA':
-      return updatePropertyPanelData(state, action.data);
+    // 修改合并属性列表某项的数据
+    case CHANGE_PROPERTY_PANEL_ITEM:
+      return changePropertyPanelItem(state, action);
 
     default:
   }

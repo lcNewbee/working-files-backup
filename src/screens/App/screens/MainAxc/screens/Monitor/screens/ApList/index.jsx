@@ -177,7 +177,7 @@ const propTypes = {
   validateAll: PropTypes.func,
   fetchScreenData: PropTypes.func,
   saveScreenSettings: PropTypes.func,
-  addToPropertyPanel: PropTypes.func,
+  addPropertyPanel: PropTypes.func,
   updateScreenSettings: PropTypes.func,
   changeScreenActionQuery: PropTypes.func,
   onListAction: PropTypes.func,
@@ -226,7 +226,7 @@ export default class View extends React.Component {
     };
     if (type === 'edit') {
       actionQuery.mac = item.get('mac');
-      this.props.addToPropertyPanel(actionQuery, item.toJS());
+      this.props.addPropertyPanel(actionQuery, item.toJS());
     } else {
       actionQuery.mac = item;
       actionQuery.action = type;

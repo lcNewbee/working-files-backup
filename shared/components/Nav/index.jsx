@@ -134,7 +134,7 @@ class Nav extends Component {
                               return null;
                             }
 
-                            if (subHasTabs) {
+                            if (subHasTabs && $$subItem.get('component')) {
                               mylinkClassName = `${mylinkClassName} has-tabs`;
                             }
 
