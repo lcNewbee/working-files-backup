@@ -59,6 +59,7 @@ const settingsOptions = fromJS([
     fieldset: 'send_message',
     type: 'textarea',
     required: true,
+    rows: '5',
     validator: validator({
       rules: 'utf8Len:[1,255]',
     }),

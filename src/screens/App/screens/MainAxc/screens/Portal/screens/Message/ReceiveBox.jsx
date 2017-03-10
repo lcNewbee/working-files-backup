@@ -185,6 +185,7 @@ const sendMessageOptions = fromJS([
     type: 'textarea',
     required: true,
     maxLength: 256,
+    rows: '5',
     validator: validator({
       rules: 'utf8Len:[1,255]',
     }),
@@ -217,6 +218,7 @@ const viewMessageOptions = fromJS([
     label: _('Content'),
     form: 'viewMessage',
     type: 'textarea',
+    rows: '5',
     required: true,
   },
 ]);

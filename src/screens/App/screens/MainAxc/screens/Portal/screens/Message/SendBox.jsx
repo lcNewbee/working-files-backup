@@ -180,6 +180,7 @@ const sendMessageOptions = fromJS([
     type: 'textarea',
     required: true,
     maxLength: 256,
+    rows: '5',
     validator: validator({
       rules: 'utf8Len:[1,255]',
     }),
@@ -190,7 +191,7 @@ const viewMessageOptions = fromJS([
   {
     id: 'date',
     label: _('Date'),
-    type: 'text',
+    type: 'plain-text',
     form: 'viewMessage',
     required: true,
   },
@@ -198,14 +199,14 @@ const viewMessageOptions = fromJS([
     id: 'ip',
     label: _('IP'),
     form: 'viewMessage',
-    type: 'text',
+    type: 'plain-text',
     required: true,
   },
   {
     id: 'title',
     label: _('Title'),
     form: 'viewMessage',
-    type: 'text',
+    type: 'plain-text',
     required: true,
   },
   {
@@ -213,6 +214,8 @@ const viewMessageOptions = fromJS([
     label: _('Content'),
     form: 'viewMessage',
     type: 'textarea',
+    readOnly: true,
+    rows: '5',
     required: true,
   },
 ]);
