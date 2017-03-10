@@ -44,45 +44,35 @@ const listOptions = fromJS([
   {
     id: 'id',
     type: 'text',
-    noForm: true,
-    text: _('ID'),
+    text: _('Group ID'),
+    formProps: {
+      noAdd: true,
+    },
+    notEditable: true,
   },
   {
-    id: 'balanceAlgthm',
-    text: _('Balance Algorithm'),
+    id: 'groupName',
+    text: _('Group Name'),
+    type: 'text',
+  },
+  {
+    id: 'defaultAction',
+    text: _('Default Action'),
     type: 'select',
-    options: balanceAlgthmOptions,
+    options: [
+      { label: _('Accept'), value: 'accept' },
+      { label: _('Reject'), value: 'reject' },
+      { label: _('Redirect'), value: 'redirect' },
+    ],
     formProps: {
       type: 'select',
-      options: balanceAlgthmOptions,
     },
   },
   {
-    id: 'slotId',
-    text: _('Slot ID'),
+    id: 'description',
+    text: _('Description'),
     formProps: {
-      type: 'select',
-      options: slotIdOptions,
-    },
-  },
-  {
-    id: 'portId',
-    text: _('Port ID'),
-    transform(item) {
-      const arr = item ? item.split(',') : [];
-      let str = '';
-      const length = arr.length;
-      arr.forEach((val, i) => {
-        if (i >= length - 1) str += portIdOptions[val].label;
-        else str += `${portIdOptions[val].label}, `;
-      });
-      return str;
-    },
-    formProps: {
-      options: portIdOptions,
-      type: 'checkboxs',
-      splitStr: ',',
-      maxChecked: 8,
+      type: 'textarea',
     },
   },
 ]);
@@ -97,9 +87,9 @@ export default class View extends React.Component {
       <AppScreen
         {...this.props}
         listOptions={listOptions}
-        actionable
-        deleteable
         addable
+        deleteable
+        actionable
         editable
         selectable
       />

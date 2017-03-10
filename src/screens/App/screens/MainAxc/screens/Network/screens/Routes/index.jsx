@@ -1,3 +1,4 @@
+// V2.5版本的静态路由功能页面
 import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';

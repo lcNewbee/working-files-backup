@@ -40,68 +40,79 @@ const balanceAlgthmOptions = [
   { label: _('Source & Destination IP'), value: 'ip' },
 ];
 
-const listOptions = fromJS([
-  {
-    id: 'id',
-    type: 'text',
-    noForm: true,
-    text: _('ID'),
-  },
-  {
-    id: 'balanceAlgthm',
-    text: _('Balance Algorithm'),
-    type: 'select',
-    options: balanceAlgthmOptions,
-    formProps: {
-      type: 'select',
-      options: balanceAlgthmOptions,
-    },
-  },
-  {
-    id: 'slotId',
-    text: _('Slot ID'),
-    formProps: {
-      type: 'select',
-      options: slotIdOptions,
-    },
-  },
-  {
-    id: 'portId',
-    text: _('Port ID'),
-    transform(item) {
-      const arr = item ? item.split(',') : [];
-      let str = '';
-      const length = arr.length;
-      arr.forEach((val, i) => {
-        if (i >= length - 1) str += portIdOptions[val].label;
-        else str += `${portIdOptions[val].label}, `;
-      });
-      return str;
-    },
-    formProps: {
-      options: portIdOptions,
-      type: 'checkboxs',
-      splitStr: ',',
-      maxChecked: 8,
-    },
-  },
-]);
+
 
 export default class View extends React.Component {
   constructor(props) {
     super(props);
+
+    this.aclGroupListOptions = fromJS([]);
+  }
+
+  componentWillMount() {
+    this.props.fetch('goform/network/extendacl/rulebinding', { page: 'all' })
+        .then((json) => {
+          if (json.state && json.state.code === 2000) {
+            const list = fromJS(json.data.list);
+            this.aclGroupListOptions = list.map((item) => {
+              const groupId = item.get('groupId');
+              const groupName = item.get('groupName');
+              return fromJS({ label: groupName, value: groupId });
+            });
+          }
+        });
   }
 
   render() {
+    const listOptions = fromJS([
+      {
+        id: 'wlanId',
+        type: 'text',
+        text: _('WLAN ID'),
+        notEditable: true,
+      },
+      {
+        id: 'SSID',
+        text: _('SSID'),
+        notEditable: true,
+        formProps: {
+          type: 'text',
+        },
+      },
+      {
+        id: 'aclStatus',
+        text: _('ACL Status'),
+        type: 'select',
+        options: [
+          { label: _('ON'), value: 'on' },
+          { label: _('OFF'), value: 'off' },
+        ],
+        formProps: {
+          type: 'switch',
+        },
+      },
+      {
+        id: 'aclGroup',
+        type: 'select',
+        text: _('ACL Group'),
+        options: this.aclGroupListOptions,
+        transform: function (val) {
+          const optionItem = this.aclGroupListOptions.find(item => item.get('value') === val);
+          return optionItem ? optionItem.get('label') : '';
+        }.bind(this),
+        formProps: {
+          type: 'select',
+        },
+      },
+    ]);
     return (
       <AppScreen
         {...this.props}
         listOptions={listOptions}
+        addable={false}
+        deleteable={false}
         actionable
-        deleteable
-        addable
         editable
-        selectable
       />
     );
   }

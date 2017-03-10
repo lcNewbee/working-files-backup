@@ -90,9 +90,16 @@ export default class NetworkSettings extends React.Component {
     // this.onVlanBtnClick = this.onVlanBtnClick.bind(this);
     this.noErrorThisPage = this.noErrorThisPage.bind(this);
     this.firstInAndRefresh = this.firstInAndRefresh.bind(this);
+    this.apMode = '0';
   }
 
   componentWillMount() {
+    this.props.fetch('goform/get_firstLogin_info')
+        .then((json) => {
+          if (json.state && json.state.code === 2000) {
+            this.apMode = json.data.enable;
+          }
+        });
     this.firstInAndRefresh();
   }
 
@@ -233,16 +240,17 @@ export default class NetworkSettings extends React.Component {
         <Modal
           isShow={this.props.selfState.get('showProgressModal')}
           cancelButton={false}
-          noFooter={false}
+          noFooter
           okButton={false}
           draggable
-          title={_('The configuration is saving now, please wait...')}
+          noHeader
         >
           <ProgressBar
             isShow
             start
             time={60}
             step={600}
+            title={_('The configuration is saving now, please wait...')}
             callback={() => {
               const nextProto = this.props.store.getIn(['curData', 'proto']);
               if (this.curProto === nextProto && this.curProto === 'dhcp') {
@@ -350,16 +358,33 @@ export default class NetworkSettings extends React.Component {
           this.props.route.funConfig.hasVlan ? (
             <div>
               <h3>{_('VLAN Settings')}</h3>
-              <FormGroup
-                label={_('VLAN Enable')}
-                type="checkbox"
-                checked={vlanEnable === '1'}
-                onClick={() => {
-                  this.props.updateItemSettings({
-                    vlanEnable: vlanEnable === '1' ? '0' : '1',
-                  });
-                }}
-              />
+              <div className="clearfix">
+                <FormGroup
+                  label={_('VLAN Enable')}
+                  className="fl"
+                  type="checkbox"
+                  disabled={this.apMode === '1'}
+                  checked={vlanEnable === '1'}
+                  onClick={() => {
+                    this.props.updateItemSettings({
+                      vlanEnable: vlanEnable === '1' ? '0' : '1',
+                    });
+                  }}
+                />
+                {
+                  this.apMode === '1' ? (
+                    <span
+                      className="fl"
+                      style={{
+                        marginLeft: '10px',
+                        marginTop: '7px',
+                      }}
+                    >
+                      {_('Notice: The device is in thin AP mode now, VLAN is enabled by force.')}
+                    </span>
+                  ) : null
+                }
+              </div>
               <FormGroup
                 type="number"
                 min="1"

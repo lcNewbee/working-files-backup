@@ -102,7 +102,7 @@ const customActionButton = [
   },
 ];
 
-const cardIdOptions = [
+const slotIdOptions = [
   { label: _('ALL'), value: 'all' },
 ];
 
@@ -110,13 +110,23 @@ const portTypeOptions = [
   { label: _('ALL'), value: 'all' },
 ];
 
-const portIdOptions = [
-  { label: _('ALL'), value: 'all' },
-];
-
 export default class View extends React.Component {
   constructor(props) {
     super(props);
+    this.onClearSearchCondition = this.onClearSearchCondition.bind(this);
+  }
+
+  onClearSearchCondition() {
+    const search = fromJS({
+      slotId: 'all',
+      portId: '',
+      portType: 'all',
+    });
+    Promise.resolve().then(() => {
+      this.props.changeScreenQuery(search);
+    }).then(() => {
+      this.props.fetchScreenData();
+    });
   }
 
   render() {
@@ -143,27 +153,27 @@ export default class View extends React.Component {
         >
           <div className="fl">
             <label
-              htmlFor="cardid"
+              htmlFor="slotid"
               style={{
                 marginTop: '7px',
                 marginRight: '10px',
                 fontWeight: 'bold',
               }}
             >
-              {_('Card Id')}
+              {_('Slot Id')}
             </label>
             <Select
-              // value={query.get('size')}
-              id="cardid"
-              onChange={this.onChangeTableSize}
-              options={cardIdOptions}
+              id="slotid"
+              onChange={data => this.props.changeScreenQuery({ slotId: data.value })}
+              options={slotIdOptions}
+              value={store.getIn([curScreenId, 'query', 'slotId'])}
               searchable={false}
               clearable={false}
             />
           </div>
           <div className="fl">
             <label
-              htmlFor="cardtype"
+              htmlFor="porttype"
               style={{
                 marginTop: '7px',
                 marginRight: '10px',
@@ -173,9 +183,9 @@ export default class View extends React.Component {
               {_('Port Type')}
             </label>
             <Select
-              // value={query.get('size')}
-              id="cardtype"
-              onChange={this.onChangeTableSize}
+              id="porttype"
+              onChange={data => this.props.changeScreenQuery({ portType: data.value })}
+              value={store.getIn([curScreenId, 'query', 'portType'])}
               options={portTypeOptions}
               searchable={false}
               clearable={false}
@@ -183,7 +193,7 @@ export default class View extends React.Component {
           </div>
           <div className="fl">
             <label
-              htmlFor="cardtype"
+              htmlFor="portid"
               style={{
                 marginTop: '7px',
                 marginRight: '10px',
@@ -192,22 +202,21 @@ export default class View extends React.Component {
             >
               {_('Port Id')}
             </label>
-            <Select
-              // value={query.get('size')}
-              id="cardtype"
-              // onChange={this.onChangeTableSize}
-              options={portTypeOptions}
-              searchable={false}
-              clearable={false}
+            <FormInput
+              id="portid"
+              type="text"
+              value={store.getIn([curScreenId, 'query', 'portId'])}
+              onChange={data => this.props.changeScreenQuery({ portId: data.value })}
             />
           </div>
           <div className="fl">
             <Button
               text={_('Search')}
+              onClick={() => this.props.fetchScreenData()}
             />
             <Button
               text={_('Clear')}
-              // onClick={this.onClearSearchCondition}
+              onClick={this.onClearSearchCondition}
             />
           </div>
         </div>

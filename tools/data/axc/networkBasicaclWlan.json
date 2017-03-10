@@ -1,0 +1,28 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "wlanId": "0",
+        "SSID": "ssid0",
+        "aclStatus": "on",
+        "aclGroup": "0"
+      },
+      {
+        "wlanId": "1",
+        "SSID": "ssid1",
+        "aclStatus": "off",
+        "aclGroup": "1"
+      },
+      {
+        "wlanId": "2",
+        "SSID": "ssid2",
+        "aclStatus": "on",
+        "aclGroup": "2"
+      }
+    ]
+  }
+}

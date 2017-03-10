@@ -1,0 +1,58 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "id": "0",
+        "ruleName": "rule0",
+        "action": "accept",
+        "ipType": "ipv4",
+        "protoType": "any",
+        "flowDirection": "in",
+        "srcIp": "192.168.0.1",
+        "srcIpMask": "255.255.255.0",
+        "destIp": "192.168.0.100",
+        "destIpMask": "255.255.255.0",
+        "srcStartPort": "0",
+        "srcEndPort": "100",
+        "destStartPort": "0",
+        "destEndPort": "200"
+      },
+      {
+        "id": "1",
+        "ruleName": "rule1",
+        "action": "reject",
+        "ipType": "ipv6",
+        "protoType": "tcp",
+        "flowDirection": "out",
+        "srcIp": "192.168.0.2",
+        "srcIpMask": "255.255.255.0",
+        "destIp": "192.168.0.200",
+        "destIpMask": "255.255.255.0",
+        "srcStartPort": "0",
+        "srcEndPort": "200",
+        "destStartPort": "0",
+        "destEndPort": "200"
+      },
+      {
+        "id": "2",
+        "ruleName": "rule2",
+        "action": "reject",
+        "ipType": "ipv6",
+        "protoType": "tcp",
+        "flowDirection": "out",
+        "srcIp": "192.168.0.3",
+        "srcIpMask": "255.255.255.0",
+        "destIp": "192.168.0.200",
+        "destIpMask": "255.255.255.0",
+        "srcStartPort": "0",
+        "srcEndPort": "200",
+        "destStartPort": "0",
+        "destEndPort": "200"
+      }
+    ]
+  }
+}

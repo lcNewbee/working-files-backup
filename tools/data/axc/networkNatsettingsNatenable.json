@@ -1,0 +1,11 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "settings": {
+      "enable": "1"
+    }
+  }
+}

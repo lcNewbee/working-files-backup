@@ -1,0 +1,28 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "id": "0",
+        "groupName": "group0",
+        "defaultAction": "accept",
+        "description": "the first group"
+      },
+      {
+        "id": "1",
+        "groupName": "group1",
+        "defaultAction": "reject",
+        "description": "the first group"
+      },
+      {
+        "id": "2",
+        "groupName": "group2",
+        "defaultAction": "redirect",
+        "description": "the first group"
+      }
+    ]
+  }
+}

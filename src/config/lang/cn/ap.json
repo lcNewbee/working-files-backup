@@ -402,5 +402,6 @@
   "String length must be: ": "字符串长度必须为：",
   "String length range is: ": "字符串长度范围为：",
   "bit": "位",
-  " or ": "或"
+  " or ": "或",
+  "Notice: The device is in thin AP mode now, VLAN is enabled by force.": "注意：设备当前为瘦AP模式，VLAN功能强制开启。"
 }

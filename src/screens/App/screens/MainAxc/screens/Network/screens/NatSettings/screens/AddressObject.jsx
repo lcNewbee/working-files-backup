@@ -40,66 +40,75 @@ const balanceAlgthmOptions = [
   { label: _('Source & Destination IP'), value: 'ip' },
 ];
 
-const listOptions = fromJS([
-  {
-    id: 'id',
-    type: 'text',
-    noForm: true,
-    text: _('ID'),
-  },
-  {
-    id: 'balanceAlgthm',
-    text: _('Balance Algorithm'),
-    type: 'select',
-    options: balanceAlgthmOptions,
-    formProps: {
-      type: 'select',
-      options: balanceAlgthmOptions,
-    },
-  },
-  {
-    id: 'slotId',
-    text: _('Slot ID'),
-    formProps: {
-      type: 'select',
-      options: slotIdOptions,
-    },
-  },
-  {
-    id: 'portId',
-    text: _('Port ID'),
-    transform(item) {
-      const arr = item ? item.split(',') : [];
-      let str = '';
-      const length = arr.length;
-      arr.forEach((val, i) => {
-        if (i >= length - 1) str += portIdOptions[val].label;
-        else str += `${portIdOptions[val].label}, `;
-      });
-      return str;
-    },
-    formProps: {
-      options: portIdOptions,
-      type: 'checkboxs',
-      splitStr: ',',
-      maxChecked: 8,
-    },
-  },
-]);
-
 export default class View extends React.Component {
   constructor(props) {
     super(props);
+
+    // this.aclGroupListOptions = fromJS([]);
   }
 
+//   componentWillMount() {
+//     this.props.fetch('goform/network/extendacl/rulebinding', { page: 'all' })
+//         .then((json) => {
+//           if (json.state && json.state.code === 2000) {
+//             const list = fromJS(json.data.list);
+//             this.aclGroupListOptions = list.map((item) => {
+//               const groupId = item.get('groupId');
+//               const groupName = item.get('groupName');
+//               return fromJS({ label: groupName, value: groupId });
+//             });
+//           }
+//           console.log(this.aclGroupListOptions);
+//         });
+//   }
+
   render() {
+    const listOptions = fromJS([
+      {
+        id: 'id',
+        type: 'select',
+        text: _('ID'),
+        notEditable: true,
+        formProps: {
+          noAdd: true,
+        }
+      },
+      {
+        id: 'objectName',
+        text: _('Object Name'),
+        formProps: {
+          type: 'text',
+        },
+      },
+      {
+        id: 'ip',
+        text: _('IP'),
+        formProps: {
+          type: 'text',
+        },
+      },
+      {
+        id: 'mask',
+        text: _('Mask'),
+        formProps: {
+          type: 'text',
+        },
+      },
+      {
+        id: 'description',
+        text: _('Description'),
+        formProps: {
+          type: 'textarea',
+        },
+      },
+    ]);
     return (
       <AppScreen
         {...this.props}
         listOptions={listOptions}
-        actionable
-        deleteable
         addable
+        deleteable
+        actionable
         editable
         selectable
       />

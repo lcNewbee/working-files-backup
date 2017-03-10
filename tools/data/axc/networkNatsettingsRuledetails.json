@@ -1,0 +1,90 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "id": "0",
+        "natType": "src",
+        "externalIp": "192.168.0.100",
+        "internalIp": "192.168.0.1",
+        "interface": "0",
+        "srcIp": "192.168.0.1",
+        "destIp": "192.168.0.100",
+        "serve": "0",
+        "exitPort": "100",
+        "entryPort": "0",
+        "transferedScr": "192.168.0.101",
+        "transferedDest": "192.168.1.101",
+        "logEnable": "1",
+        "description": "the first rule"
+      },
+      {
+        "id": "1",
+        "natType": "dest",
+        "externalIp": "192.168.0.100",
+        "internalIp": "192.168.0.1",
+        "interface": "0",
+        "srcIp": "192.168.0.1",
+        "destIp": "192.168.0.100",
+        "serve": "0",
+        "exitPort": "100",
+        "entryPort": "0",
+        "transferedScr": "192.168.0.101",
+        "transferedDest": "192.168.1.101",
+        "logEnable": "1",
+        "description": "the first rule"
+      },
+      {
+        "id": "2",
+        "natType": "src_dest",
+        "externalIp": "192.168.0.100",
+        "internalIp": "192.168.0.1",
+        "interface": "0",
+        "srcIp": "192.168.0.1",
+        "destIp": "192.168.0.100",
+        "serve": "0",
+        "exitPort": "100",
+        "entryPort": "0",
+        "transferedScr": "192.168.0.101",
+        "transferedDest": "192.168.1.101",
+        "logEnable": "1",
+        "description": "the second rule"
+      },
+      {
+        "id": "3",
+        "natType": "public",
+        "externalIp": "192.168.0.100",
+        "internalIp": "192.168.0.1",
+        "interface": "0",
+        "srcIp": "192.168.0.1",
+        "destIp": "192.168.0.100",
+        "serve": "0",
+        "exitPort": "100",
+        "entryPort": "0",
+        "transferedScr": "192.168.0.101",
+        "transferedDest": "192.168.1.101",
+        "logEnable": "1",
+        "description": "the third rule"
+      },
+      {
+        "id": "4",
+        "natType": "static",
+        "externalIp": "192.168.0.100",
+        "internalIp": "192.168.0.1",
+        "interface": "0",
+        "srcIp": "192.168.0.1",
+        "destIp": "192.168.0.100",
+        "serve": "0",
+        "exitPort": "100",
+        "entryPort": "0",
+        "transferedScr": "192.168.0.101",
+        "transferedDest": "192.168.1.101",
+        "logEnable": "1",
+        "description": "the fourth rule"
+      }
+    ]
+  }
+}

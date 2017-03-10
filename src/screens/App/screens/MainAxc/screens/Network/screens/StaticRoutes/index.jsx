@@ -24,65 +24,60 @@ const portIdOptions = [
   { label: 'GE0/13', value: '13' },
 ];
 
-const slotIdOptions = [
-  { label: 'slot_0', value: '0' },
-  { label: 'slot_1', value: '1' },
-  { label: 'slot_2', value: '2' },
-  { label: 'slot_3', value: '3' },
-];
-
-const balanceAlgthmOptions = [
-  { label: _('Source MAC'), value: 'srcmac' },
-  { label: _('Destiation MAc'), value: 'desmac' },
-  { label: _('Source & Destination MAC'), value: 'mac' },
-  { label: _('Source IP'), value: 'srcip' },
-  { label: _('Destination IP'), value: 'desmac' },
-  { label: _('Source & Destination IP'), value: 'ip' },
+const ipTypeOptions = [
+  { label: 'IPV4', value: 'ipv4' },
+  { label: 'IPV6', value: 'ipv6' },
 ];
 
 const listOptions = fromJS([
   {
     id: 'id',
     type: 'text',
-    noForm: true,
     text: _('ID'),
+    notEditable: true,
+    formProps: {
+      noAdd: true,
+    },
   },
   {
-    id: 'balanceAlgthm',
-    text: _('Balance Algorithm'),
+    id: 'ipType',
+    text: _('IP Type'),
     type: 'select',
-    options: balanceAlgthmOptions,
+    options: ipTypeOptions,
     formProps: {
       type: 'select',
-      options: balanceAlgthmOptions,
+      options: ipTypeOptions,
     },
   },
   {
-    id: 'slotId',
-    text: _('Slot ID'),
+    id: 'destIP',
+    text: _('Destination IP'),
     formProps: {
-      type: 'select',
-      options: slotIdOptions,
+      type: 'text',
     },
   },
   {
-    id: 'portId',
-    text: _('Port ID'),
-    transform(item) {
-      const arr = item ? item.split(',') : [];
-      let str = '';
-      const length = arr.length;
-      arr.forEach((val, i) => {
-        if (i >= length - 1) str += portIdOptions[val].label;
-        else str += `${portIdOptions[val].label}, `;
-      });
-      return str;
-    },
+    id: 'destMask',
+    text: _('Destination Mask'),
     formProps: {
+      type: 'text',
+    },
+  },
+  {
+    id: 'nextHopIp',
+    text: _('Next Hop IP'),
+    formProps: {
+      type: 'text',
+    },
+  },
+  {
+    id: 'interface',
+    type: 'select',
+    text: _('Interface'),
+    options: portIdOptions,
+    formProps: {
+      type: 'select',
       options: portIdOptions,
-      type: 'checkboxs',
-      splitStr: ',',
-      maxChecked: 8,
     },
   },
 ]);

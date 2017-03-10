@@ -8,6 +8,7 @@ const propTypes = {
   onChange: PropTypes.func,
   splitStr: PropTypes.string,
   value: PropTypes.string,
+  maxChecked: PropTypes.number,
 };
 
 const defaultProps = {
@@ -15,6 +16,7 @@ const defaultProps = {
   splitStr: ',',
   onValue: 1,
   offValue: 0,
+  maxChecked: 99,
 };
 
 class Checkboxs extends React.Component {
@@ -30,8 +32,9 @@ class Checkboxs extends React.Component {
     const isChecked = e.target.checked;
     const label = $$item.get('label');
     let curValue = '';
+    const checkedNum = this.valueArrState.filter(state => state).length;
 
-    if (isChecked) {
+    if (isChecked && checkedNum < this.props.maxChecked) {
       this.valueArrState[index] = $$item.get('value');
     } else {
       this.valueArrState[index] = false;

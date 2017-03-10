@@ -1,0 +1,34 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "id": "0",
+        "ipType": "ipv4",
+        "destIP": "192.168.4.12",
+        "destMask": "192.168.5.12",
+        "nextHopIp": "192.168.5.123",
+        "interface": "0"
+      },
+      {
+        "id": "1",
+        "ipType": "ipv6",
+        "destIP": "192.168.4.22",
+        "destMask": "192.168.5.22",
+        "nextHopIp": "192.168.5.123",
+        "interface": "1"
+      },
+      {
+        "id": "2",
+        "ipType": "ipv4",
+        "destIP": "192.168.4.12",
+        "destMask": "192.168.5.12",
+        "nextHopIp": "192.168.5.123",
+        "interface": "2"
+      }
+    ]
+  }
+}

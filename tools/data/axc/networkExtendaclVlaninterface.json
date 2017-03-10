@@ -1,0 +1,31 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "interface": "0",
+        "ipv4Ip": "192.168.0.1",
+        "ipv6Ip": "192.168.118.1",
+        "aclStatus": "off",
+        "aclGroup": "0"
+      },
+      {
+        "interface": "2",
+        "ipv4Ip": "192.168.0.1",
+        "ipv6Ip": "192.168.118.1",
+        "aclStatus": "on",
+        "aclGroup": "1"
+      },
+      {
+        "interface": "2",
+        "ipv4Ip": "192.168.0.1",
+        "ipv6Ip": "192.168.118.1",
+        "aclStatus": "off",
+        "aclGroup": "2"
+      }
+    ]
+  }
+}

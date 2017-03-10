@@ -1,0 +1,30 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "groupId": "0",
+        "groupName": "binded1",
+        "ruleId": "1,2,3"
+      },
+      {
+        "groupId": "1",
+        "groupName": "binded2",
+        "ruleId": "1,2,3"
+      },
+      {
+        "groupId": "2",
+        "groupName": "binded3",
+        "ruleId": "2,3,4"
+      },
+      {
+        "groupId": "3",
+        "groupName": "binded4",
+        "ruleId": "3,4,5"
+      }
+    ]
+  }
+}

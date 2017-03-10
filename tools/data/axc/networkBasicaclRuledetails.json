@@ -1,0 +1,34 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "id": "0",
+        "ruleName": "rule0",
+        "action": "accept",
+        "ipType": "ipv4",
+        "destType": "src",
+        "ipTable": "192.168.1.1; 192.168.1.2 - 192.168.1.200; 192.168.1.3"
+      },
+      {
+        "id": "1",
+        "ruleName": "rule1",
+        "action": "reject",
+        "ipType": "ipv6",
+        "destType": "dest",
+        "ipTable": "192.168.1.1; 192.168.1.2; 192.168.1.3"
+      },
+      {
+        "id": "2",
+        "ruleName": "rule2",
+        "action": "reject",
+        "ipType": "ipv4",
+        "destType": "src",
+        "ipTable": "192.168.1.1; 192.168.1.2; 192.168.1.3"
+      }
+    ]
+  }
+}

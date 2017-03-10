@@ -1,0 +1,40 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "id": "0",
+        "serveName": "serve1",
+        "protoType": "any",
+        "srcStartPort": "0",
+        "srcEndPort": "100",
+        "destStartPort": "0",
+        "destEndPort": "200",
+        "description": "--0--"
+      },
+      {
+        "id": "1",
+        "serveName": "serve2",
+        "protoType": "tcp",
+        "srcStartPort": "0",
+        "srcEndPort": "100",
+        "destStartPort": "0",
+        "destEndPort": "200",
+        "description": "--0--"
+      },
+      {
+        "id": "2",
+        "serveName": "serve3",
+        "protoType": "udp",
+        "srcStartPort": "0",
+        "srcEndPort": "100",
+        "destStartPort": "0",
+        "destEndPort": "200",
+        "description": "--0--"
+      }
+    ]
+  }
+}
