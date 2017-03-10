@@ -1,0 +1,23 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "id":"1",
+        "user_name": "Fanny1",
+        "pwd":"1234567"
+      }, {
+        "id":"2",
+        "user_name": "Fanny2",
+        "pwd":"1234567"
+      }, {
+        "id":"3",
+        "user_name": "Fanny3",
+        "pwd":"1234567"
+      }
+    ]
+  }
+}

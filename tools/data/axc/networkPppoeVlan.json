@@ -1,0 +1,20 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [
+      {
+        "vlanID":"1",
+        "interface": "eth0"
+      }, {
+        "vlanID":"2",
+        "interface": "eth1"
+      }, {
+        "vlanID":"3",
+        "interface": "eth2"
+      }
+    ]
+  }
+}

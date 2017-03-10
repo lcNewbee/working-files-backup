@@ -100,6 +100,10 @@ const sNetworkUrlFilterRules =
 const sNetworkUrlBindRules =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/URL/screens/BindRules');
 
+const sPPPOEBaseConfig = require('../../screens/App/screens/MainAxc/screens/Network/screens/PPPOE/screens/Base');
+const sPPPOEUserList = require('../../screens/App/screens/MainAxc/screens/Network/screens/PPPOE/screens/User');
+const sPPPOEBindVlan = require('../../screens/App/screens/MainAxc/screens/Network/screens/PPPOE/screens/Vlan');
+
 const sDPIOverview =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/DPIOverview');
 // const sFlowInfo =
@@ -493,6 +497,38 @@ const routes = [
                 formUrl: 'goform/network/url/bindrules',
                 text: _('Bind Rules'),
                 component: sNetworkUrlBindRules.Screen,
+              },
+            ],
+          }, {
+            id: 'networkPPPOE',
+            icon: 'filter',
+            path: '/main/network/pppoe',
+            formUrl: 'goform/network/pppoe',
+            text: _('PPPOE'),
+            noTree: true,
+            component: SharedComponents.TabContainer,
+            indexRoute: { onEnter: (nextState, replace) => replace('/main/network/pppoe/baseConfig') },
+            childRoutes: [
+              {
+                id: 'pppoeBase',
+                path: '/main/network/pppoe/baseConfig',
+                formUrl: 'goform/network/pppoe/baseConfig',
+                text: _('Base Config'),
+                component: sPPPOEBaseConfig.Screen,
+              },
+              {
+                id: 'pppoeUser',
+                path: '/main/network/pppoe/userList',
+                formUrl: 'goform/network/pppoe/userList',
+                text: _('User List'),
+                component: sPPPOEUserList.Screen,
+              },
+              {
+                id: 'pppoeVlan',
+                path: '/main/network/pppoe/vlan',
+                formUrl: 'goform/network/pppoe/vlan',
+                text: _('Bind Vlan'),
+                component: sPPPOEBindVlan.Screen,
               },
             ],
           }, {
