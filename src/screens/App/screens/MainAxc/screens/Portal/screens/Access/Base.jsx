@@ -139,7 +139,8 @@ const settingsOptions = fromJS([
     className: 'cols col-6',
     label: _('Time out'),
     min: '0',
-    max: '1000',
+    max: '999999999',
+    help: _('Second'),
     validator: validator({
       rules: 'num',
     }),

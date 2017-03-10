@@ -252,12 +252,12 @@ const routes = [
             component: SharedComponents.TabContainer,
             path: '/main/network/dhcp',
             text: _('DHCP'),
-            indexRoute: { onEnter: (nextState, replace) => replace('/main/network/dhcp/List') },
+            indexRoute: { onEnter: (nextState, replace) => replace('/main/network/dhcp/service/list') },
             childRoutes: [
               {
                 id: 'dhcpList',
-                path: '/main/network/dhcp/List',
-                formUrl: 'goform/network/dhcp/list',
+                path: '/main/network/dhcp/service/list',
+                formUrl: 'goform/network/dhcp/service/list',
                 text: _('DHCP List'),
                 component: sDhcpList.Screen,
               }, {

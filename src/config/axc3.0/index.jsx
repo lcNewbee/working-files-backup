@@ -70,7 +70,12 @@ const sPortSettings = require('../../screens/App/screens/MainAxc/screens/Network
 const sPortMirring = require('../../screens/App/screens/MainAxc/screens/Network/screens/EthernetPort/PortMirring');
 const sPortAggregation = require('../../screens/App/screens/MainAxc/screens/Network/screens/EthernetPort/PortAggregation');
 const sDhcpList = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/DHCP/DhcpList');
+const sDhcpService = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/DHCP/DhcpService');
+const sDpcpStaticList = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/DHCP/DpcpStaticList');
+const sSnoopingUserList = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/Snooping/UserList');
+const sSnoopingStaticList = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/Snooping/StaticList');
 const sDhcpRelay = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/Relay/DhcpRelay');
+const sDhcpFilter = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/Filter/DhcpFilter');
 const sNetworkRoutes = require('../../screens/App/screens/MainAxc/screens/Network/screens/Routes');
 const sNetworkNat = require('../../screens/App/screens/MainAxc/screens/Network/screens/Nat');
 // const sNetworkAcl = require('../../screens/App/screens/MainAxc/screens/Network/screens/ACL');
@@ -86,6 +91,15 @@ const sPortalMac =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalMac');
 // const sPortalTemplate =
 //    require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalTemplate');
+const sNetworkUrlWlan =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/URL/screens/Wlan');
+const sNetworkUrlRulesGroup =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/URL/screens/RulesGroup');
+const sNetworkUrlFilterRules =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/URL/screens/FilterRules');
+const sNetworkUrlBindRules =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/URL/screens/BindRules');
+
 const sDPIOverview =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/DPIOverview');
 // const sFlowInfo =
@@ -318,26 +332,90 @@ const routes = [
             component: sV3Interfaces.Screen,
           },
           {
+            id: 'networkPort',
+            path: '/main/network/port',
+            icon: 'th-large',
+            formUrl: '/goform/network/port',
+            text: _('Ports'),
+            component: sNetworkPort.Screen,
+          },
+          {
             id: 'networkDhcp',
             icon: 'random',
-            noTree: true,
-            component: SharedComponents.TabContainer,
             path: '/main/network/dhcp',
-            text: _('DHCP'),
-            indexRoute: { onEnter: (nextState, replace) => replace('/main/network/dhcp/List') },
+            text: _('DHCP Config'),
+            indexRoute: { onEnter: (nextState, replace) => replace('/main/network/dhcp/dhcp') },
             childRoutes: [
               {
-                id: 'dhcpList',
-                path: '/main/network/dhcp/List',
-                formUrl: 'goform/network/dhcp/list',
-                text: _('DHCP List'),
-                component: sDhcpList.Screen,
-              }, {
+                id: 'dhcp',
+                path: '/main/network/dhcp/dhcp',
+                text: _('DHCP Service'),
+                component: SharedComponents.TabContainer,
+                indexRoute: {
+                  onEnter: (nextState, replace) => replace('/main/network/dhcp/service/serviceConfig'),
+                },
+                childRoutes: [
+                  {
+                    id: 'dhcpService',
+                    path: '/main/network/dhcp/service/serviceConfig',
+                    formUrl: 'goform/network/dhcp/service/serviceConfig',
+                    text: _('DHCP Service'),
+                    component: sDhcpService.Screen,
+                  },
+                  {
+                    id: 'dhcpList',
+                    path: '/main/network/dhcp/service/list',
+                    formUrl: 'goform/network/dhcp/service/list',
+                    text: _('DHCP List'),
+                    component: sDhcpList.Screen,
+                  },
+                  {
+                    id: 'dhcpStaticList',
+                    path: '/main/network/dhcp/service/staticList',
+                    formUrl: 'goform/network/dhcp/service/staticList',
+                    text: _('DHCP Static List'),
+                    component: sDpcpStaticList.Screen,
+                  },
+                ],
+              },
+              {
+                id: 'snooping',
+                path: '/main/network/dhcp/snooping',
+                text: _('Snooping'),
+                component: SharedComponents.TabContainer,
+                indexRoute: {
+                  onEnter: (nextState, replace) => replace('/main/network/dhcp/snooping/userList'),
+                },
+                childRoutes: [
+                  {
+                    id: 'userList',
+                    path: '/main/network/dhcp/snooping/userList',
+                    formUrl: 'goform/network/dhcp/snooping/userList',
+                    text: _('Snooping User List'),
+                    component: sSnoopingUserList.Screen,
+                  },
+                  {
+                    id: 'staticList',
+                    path: '/main/network/dhcp/snooping/staticList',
+                    formUrl: 'goform/network/dhcp/snooping/staticList',
+                    text: _('Snooping Static List'),
+                    component: sSnoopingStaticList.Screen,
+                  },
+                ],
+              },
+              {
                 id: 'dhcpRelay',
                 path: '/main/network/dhcp/relay',
                 formUrl: 'goform/network/dhcp/relay',
                 text: _('DHCP Relay'),
                 component: sDhcpRelay.Screen,
+              },
+              {
+                id: 'dhcpFilter',
+                path: '/main/network/dhcp/filter',
+                formUrl: 'goform/network/dhcp/filter',
+                text: _('DHCP Filter'),
+                component: sDhcpFilter.Screen,
               },
             ],
           }, {
@@ -365,13 +443,6 @@ const routes = [
             formUrl: 'goform/network/route',
             component: sNetworkRoutes.Screen,
           }, {
-            id: 'networkPort',
-            path: '/main/network/port',
-            icon: 'th-large',
-            formUrl: '/goform/network/port',
-            text: _('Ports'),
-            component: sNetworkPort.Screen,
-          }, {
             id: 'radiusTemplate',
             icon: 'clone',
             path: '/main/network/radius_template',
@@ -385,6 +456,45 @@ const routes = [
             formUrl: 'goform/network/Aaa',
             text: _('AAA'),
             component: sNetworkAaa.Screen,
+          }, {
+            id: 'networkURL',
+            icon: 'filter',
+            path: '/main/network/url',
+            formUrl: 'goform/network/url',
+            text: _('URL Filter'),
+            noTree: true,
+            component: SharedComponents.TabContainer,
+            indexRoute: { onEnter: (nextState, replace) => replace('/main/network/url/wlan') },
+            childRoutes: [
+              {
+                id: 'urlWlan',
+                path: '/main/network/url/wlan',
+                formUrl: 'goform/network/url/wlan',
+                text: _('WLAN'),
+                component: sNetworkUrlWlan.Screen,
+              },
+              {
+                id: 'urlRulesGroup',
+                path: '/main/network/url/rulesgroup',
+                formUrl: 'goform/network/url/rulesgroup',
+                text: _('Rules Group'),
+                component: sNetworkUrlRulesGroup.Screen,
+              },
+              {
+                id: 'urlFilterRules',
+                path: '/main/network/url/filterrules',
+                formUrl: 'goform/network/url/filterrules',
+                text: _('Filter Rules'),
+                component: sNetworkUrlFilterRules.Screen,
+              },
+              {
+                id: 'urlBindRules',
+                path: '/main/network/url/bindrules',
+                formUrl: 'goform/network/url/bindrules',
+                text: _('Bind Rules'),
+                component: sNetworkUrlBindRules.Screen,
+              },
+            ],
           }, {
             id: 'networkPortal',
             icon: 'copy',

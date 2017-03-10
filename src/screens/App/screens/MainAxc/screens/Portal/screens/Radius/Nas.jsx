@@ -63,7 +63,7 @@ const listOptions = fromJS([
       type: 'number',
       help: _('Seconds'),
       min: '0',
-      max: '99999',
+      max: '99999999',
       required: true,
     },
   }, {
@@ -76,7 +76,7 @@ const listOptions = fromJS([
     formProps: {
       help: _('Seconds'),
       min: '0',
-      max: '99999',
+      max: '99999999',
       type: 'number',
       required: true,
     },
@@ -90,7 +90,7 @@ const listOptions = fromJS([
     formProps: {
       help: _('Second'),
       min: '0',
-      max: '99999',
+      max: '99999999',
       type: 'number',
       required: true,
     },

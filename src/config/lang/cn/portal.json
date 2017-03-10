@@ -133,7 +133,8 @@
   "Permission Name":"权限名称",
   "Visit URL":"访问地址",
   "Permission":"权限",
-
+   "Dynamic": "动态生成",
+   "Static": "静态配置",
   "Ads Page":"广告页面",
   "Show Times":"展示次数",
   "Click Times":"点击次数",

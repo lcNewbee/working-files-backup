@@ -37,7 +37,12 @@ const listOptions = fromJS([
     id: 'adv',
     text: _('Ads Page'),
     width: '120px',
-    options: [],
+    options: [
+      {
+        value: '0',
+        label: 'OpenPortal',
+      },
+    ],
     defaultValue: '1',
     formProps: {
       type: 'select',
@@ -46,11 +51,11 @@ const listOptions = fromJS([
   }, {
     id: 'countShow',
     text: _('Show Times'),
-    defaultValue: '15',
+    defaultValue: '150',
     formProps: {
       type: 'number',
       min: '0',
-      max: '99999',
+      max: '999999999',
       validator: validator({
         rules: 'num',
       }),
@@ -58,11 +63,11 @@ const listOptions = fromJS([
   }, {
     id: 'countAuth',
     text: _('Click Times'),
-    defaultValue: '15',
+    defaultValue: '100',
     formProps: {
       type: 'number',
       min: '0',
-      max: '99999',
+      max: '999999999',
       validator: validator({
         rules: 'num',
       }),
@@ -168,7 +173,7 @@ export default class View extends React.Component {
     return (
       <AppScreen
         {...this.props}
-        listOptions={myEditFormOptions}
+        listOptions={listOptions}
         editFormOption={{
           hasFile: true,
         }}

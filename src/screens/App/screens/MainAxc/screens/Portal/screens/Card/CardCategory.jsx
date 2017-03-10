@@ -70,7 +70,7 @@ const listOptions = fromJS([
       type: 'number',
       required: true,
       min: '0',
-      max: '999999',
+      max: '999999999',
     },
   }, {
     id: 'autologin',
@@ -110,7 +110,7 @@ const listOptions = fromJS([
       type: 'number',
       required: true,
       min: '0',
-      max: '999999',
+      max: '999999999',
     },
   }, {
     id: 'money',
@@ -119,7 +119,7 @@ const listOptions = fromJS([
       type: 'number',
       required: true,
       min: '0',
-      max: '999999',
+      max: '999999999',
       help: _('$'),
     },
   }, {
