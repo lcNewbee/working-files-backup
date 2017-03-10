@@ -1,4 +1,31 @@
 import { fromJS } from 'immutable';
+import {
+  INIT_SCREEN,
+  LEAVE_SCREEN,
+
+  // Ajax Fetch
+  CHANGE_SCREEN_QUERY,
+  REQEUST_FETCH_SCREEN_DATA,
+  RECIVE_SCREEN_DATA,
+
+  // Ajax Save
+  CHANGE_SCREEN_ACTION_QUERY,
+
+  // Screen Settings
+  UPDATE_SCREEN_SETTINGS,
+
+  // Screen List
+  ADD_LIST_ITEM,
+  ACTIVE_LIST_ITEM,
+  SELECT_LIST_ITEM,
+  UPDATE_CUR_EDIT_LIST_ITEM,
+  UPDATE_LIST_ITEM_BY_INDEX,
+  CLOSE_LIST_ITEM_MODAL,
+
+  // Custom Props
+  UPDATE_SCREEN_CUSTOM_PROPS,
+
+} from 'shared/constants/action';
 
 const defaultItem = fromJS({
   fetching: false,
@@ -174,37 +201,37 @@ export default function (state = defaultState, action) {
   switch (action.type) {
 
     // Screen 全局action
-    case 'INIT_SCREEN':
+    case INIT_SCREEN:
       return initScreenState(state, action, curScreenName);
 
-    case 'LEAVE_SCREEN':
+    case LEAVE_SCREEN:
       return state.mergeIn([curScreenName, 'query'], {
         search: '',
       })
       .setIn([curScreenName, 'curListItem'], defaultItem.get('curListItem'))
       .setIn([curScreenName, 'actionQuery', 'selectedList'], fromJS([]));
 
-    case 'REQEUST_FETCH_SCREEN_DATA':
+    case REQEUST_FETCH_SCREEN_DATA:
       return state.setIn([curScreenName, 'fetching'], true);
 
-    case 'UPDATE_SCREEN_CUSTOM_PROPS':
+    case UPDATE_SCREEN_CUSTOM_PROPS:
       return state.mergeDeepIn([curScreenName, 'customProps'], action.payload);
 
-    case 'RECIVE_SCREEN_DATA':
+    case RECIVE_SCREEN_DATA:
       return reciveScreenData(state, curScreenName, action);
 
     // Screen Setting相关
-    case 'UPDATE_SCREEN_SETTINGS':
+    case UPDATE_SCREEN_SETTINGS:
       return state.mergeDeepIn([curScreenName, 'curSettings'], action.payload);
 
     // Screen 列表操作
-    case 'CHANGE_SCREEN_QUERY':
+    case CHANGE_SCREEN_QUERY:
       return state.mergeIn([curScreenName, 'query'], action.payload);
 
-    case 'CHANGE_SCREEN_ACTION_QUERY':
+    case CHANGE_SCREEN_ACTION_QUERY:
       return state.mergeIn([curScreenName, 'actionQuery'], action.payload);
 
-    case 'ADD_LIST_ITEM':
+    case ADD_LIST_ITEM:
       return state.setIn(
         [curScreenName, 'curListItem'],
         fromJS({}).merge(action.payload || defaultEditData),
@@ -214,22 +241,22 @@ export default function (state = defaultState, action) {
         myTitle: _('Add'),
       });
 
-    case 'SELECT_LIST_ITEM':
+    case SELECT_LIST_ITEM:
       return selectedListItem(state, action, curScreenName);
 
-    case 'UPDATE_CUR_EDIT_LIST_ITEM':
+    case UPDATE_CUR_EDIT_LIST_ITEM:
       return updateCurEditListItem(curScreenName, state, action);
 
-    case 'UPDATE_LIST_ITEM_BY_INDEX':
+    case UPDATE_LIST_ITEM_BY_INDEX:
       return state.mergeDeepIn(
         [curScreenName, 'data', 'list', action.meta.index],
         action.payload,
       );
 
-    case 'ACTIVE_LIST_ITEM':
+    case ACTIVE_LIST_ITEM:
       return activeListItem(state, curScreenName, action);
 
-    case 'CLOSE_LIST_ITEM_MODAL':
+    case CLOSE_LIST_ITEM_MODAL:
       return state.setIn([curScreenName, 'curListItem'], fromJS({}))
         .setIn([curScreenName, 'actionQuery', 'action'], '');
 

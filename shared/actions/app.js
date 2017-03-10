@@ -1,6 +1,36 @@
 import { toastr } from 'react-redux-toastr';
 import ERROR_MSG_MAP from 'shared/config/serverError';
 import utils from 'shared/utils';
+import {
+  INIT_APP_CONFIG,
+
+  // Vaildate
+  START_VALIDATE_ALL,
+  RESET_VAILDATE_MSG,
+  REPORT_VALID_ERROR,
+
+  // Ajax
+  REQUEST_SAVE,
+  RECEIVE_SAVE,
+  RQ_FETCH,
+  RC_FETCH,
+  RECEIVE_AJAX_ERROR,
+  RECEIVE_SERVER_ERROR,
+
+  // Login
+  CHANGE_LOGIN_STATUS,
+  CHANGE_LOGIN_STATE,
+
+  // 常用操作
+  REFRESH_ALL,
+  REQUEST_FETCH_AC_INFO,
+  RECIVECE_FETCH_AC_INFO,
+
+  // Model框
+  CREATE_MODAL,
+  CHANGE_MODAL_STATE,
+
+} from 'shared/constants/action';
 
 const APP_CONFIG = {
   fetchInfo: '/goform/getAcInfo',
@@ -8,21 +38,21 @@ const APP_CONFIG = {
 
 export function refreshAll() {
   return {
-    type: 'REFRESH_ALL',
+    type: REFRESH_ALL,
     refreshAt: Date.now(),
   };
 }
 
 export function createModal(data) {
   return {
-    type: 'CREATE_MODAL',
+    type: CREATE_MODAL,
     data,
   };
 }
 
 export function changeModalState(data) {
   return {
-    type: 'CHANGE_MODAL_STATE',
+    type: CHANGE_MODAL_STATE,
     data,
   };
 }
@@ -48,12 +78,12 @@ export function closeModal(data) {
 
 export function requestFetchProductInfo() {
   return {
-    type: 'REQUEST_FETCH_AC_INFO',
+    type: REQUEST_FETCH_AC_INFO,
   };
 }
 export function receiveFetchProductInfo(data) {
   return {
-    type: 'RECIVECE_FETCH_AC_INFO',
+    type: RECIVECE_FETCH_AC_INFO,
     data,
   };
 }
@@ -66,13 +96,13 @@ export function receiveFetchProductInfo(data) {
  */
 export function requestSave() {
   return {
-    type: 'REQUEST_SAVE',
+    type: REQUEST_SAVE,
   };
 }
 
 export function receiveSave(state) {
   return {
-    type: 'RECEIVE_SAVE',
+    type: RECEIVE_SAVE,
     savedAt: Date.now(),
     state,
   };
@@ -80,7 +110,7 @@ export function receiveSave(state) {
 
 export function receiveAjaxError(payload) {
   return {
-    type: 'RECEIVE_AJAX_ERROR',
+    type: RECEIVE_AJAX_ERROR,
     payload,
   };
 }
@@ -97,7 +127,7 @@ export function receiveServerError(state) {
   }
 
   return {
-    type: 'RECEIVE_SERVER_ERROR',
+    type: RECEIVE_SERVER_ERROR,
     payload: utils.extend({}, state, {
       errorAt: Date.now(),
     }),
@@ -109,12 +139,12 @@ export function receiveServerError(state) {
  */
 export function rqFetch() {
   return {
-    type: 'RQ_FETCH',
+    type: RQ_FETCH,
   };
 }
 export function rcFetch() {
   return {
-    type: 'RC_FETCH',
+    type: RC_FETCH,
   };
 }
 
@@ -254,7 +284,7 @@ export function fetchProductInfo(url) {
  */
 export function startValidateAll(formId) {
   return {
-    type: 'START_VALIDATE_ALL',
+    type: START_VALIDATE_ALL,
     payload: {
       validateAt: Date.now(),
       formId,
@@ -290,20 +320,20 @@ export function validateAll(formId, func) {
 
 export function resetVaildateMsg() {
   return {
-    type: 'RESET_VAILDATE_MSG',
+    type: RESET_VAILDATE_MSG,
   };
 }
 
 export function reportValidError(data) {
   return {
-    type: 'REPORT_VALID_ERROR',
+    type: REPORT_VALID_ERROR,
     data,
   };
 }
 
 export function initAppConfig(payload) {
   return {
-    type: 'INIT_APP_CONFIG',
+    type: INIT_APP_CONFIG,
     payload,
   };
 }
@@ -314,7 +344,7 @@ export function initAppConfig(payload) {
 // 修改登录相关对象
 export function changeLoginState(payload) {
   return {
-    type: 'CHANGE_LOGIN_STATE',
+    type: CHANGE_LOGIN_STATE,
     payload,
   };
 }
@@ -322,7 +352,7 @@ export function changeLoginState(payload) {
 // 修改登录状态值
 export function changeLoginStatus(data) {
   return {
-    type: 'CHANGE_LOGIN_STATUS',
+    type: CHANGE_LOGIN_STATUS,
     data,
   };
 }

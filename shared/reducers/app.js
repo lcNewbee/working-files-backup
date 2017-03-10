@@ -1,4 +1,34 @@
 import { fromJS } from 'immutable';
+import {
+  INIT_APP_CONFIG,
+
+  // Vaildate
+  START_VALIDATE_ALL,
+  RESET_VAILDATE_MSG,
+  REPORT_VALID_ERROR,
+
+  // Ajax
+  REQUEST_SAVE,
+  RECEIVE_SAVE,
+  RQ_FETCH,
+  RC_FETCH,
+  RECEIVE_AJAX_ERROR,
+  RECEIVE_SERVER_ERROR,
+
+  // Login
+  CHANGE_LOGIN_STATUS,
+  CHANGE_LOGIN_STATE,
+
+  // 常用操作
+  REFRESH_ALL,
+  REQUEST_FETCH_AC_INFO,
+  RECIVECE_FETCH_AC_INFO,
+
+  // Model框
+  CREATE_MODAL,
+  CHANGE_MODAL_STATE,
+
+} from 'shared/constants/action';
 
 let guiVersion;
 
@@ -116,78 +146,78 @@ function changeLoginState(state, action) {
 
 export default function (state = defaultState, action) {
   switch (action.type) {
-    case 'INIT_APP_CONFIG':
-      return initConfig(state, action.payload);
-
     /**
      * 全局数据验证
      */
-    case 'START_VALIDATE_ALL':
+    case START_VALIDATE_ALL:
       return handleValidateAll(state, action);
 
-    case 'RESET_VAILDATE_MSG':
+    case RESET_VAILDATE_MSG:
       return state.set('invalid', fromJS({}));
 
-    case 'REPORT_VALID_ERROR':
+    case REPORT_VALID_ERROR:
       return receiveReport(state, action.data);
 
     /**
      * Ajax
      */
-    case 'REQUEST_SAVE':
+    case REQUEST_SAVE:
       return state.set('saving', true);
 
-    case 'RECEIVE_SAVE':
+    case RECEIVE_SAVE:
       return state.set('saving', false)
         .set('savedAt', action.savedAt)
         .set('state', fromJS(action.state));
 
-    case 'RECEIVE_AJAX_ERROR':
+    case RECEIVE_AJAX_ERROR:
       console.error('Ajax Error = ', action.payload);
       return state
         .mergeIn(['ajaxError'], action.payload)
         .set(ajaxTypeMap[action.payload.type], false);
 
-    case 'RECEIVE_SERVER_ERROR':
+    case RECEIVE_SERVER_ERROR:
       return state.set('state', fromJS(action.payload));
 
-    case 'RQ_FETCH':
+    case RQ_FETCH:
       return state.set('fetching', true);
 
-    case 'RC_FETCH':
+    case RC_FETCH:
       return state.set('fetching', false);
 
     /**
      * 登录状态
      */
-    case 'CHANGE_LOGIN_STATUS':
+    case CHANGE_LOGIN_STATUS:
       sessionStorage.setItem('a_165F8BA5ABE1A5DA', action.data);
       return state;
 
-    case 'REFRESH_ALL':
+    case REFRESH_ALL:
       return state.set('refreshAt', action.refreshAt);
 
     // 获取 设备基本配置信息
-    case 'REQUEST_FETCH_AC_INFO':
+    case REQUEST_FETCH_AC_INFO:
       return state.set('fetching', true);
 
-    case 'RECIVECE_FETCH_AC_INFO':
+    case RECIVECE_FETCH_AC_INFO:
       return receiveAcInfo(state, action);
 
     // 全局摸态框通知
-    case 'CREATE_MODAL':
+    case CREATE_MODAL:
       return state.set('modal', fromJS({
         status: 'show',
         role: 'alert',
         title: _('MESSAGE'),
       })).mergeIn(['modal'], action.data);
 
-    case 'CHANGE_MODAL_STATE':
+    case CHANGE_MODAL_STATE:
       return state.mergeIn(['modal'], action.data);
 
     // 修改登录状态
-    case 'CHANGE_LOGIN_STATE':
+    case CHANGE_LOGIN_STATE:
       return changeLoginState(state, action);
+
+    case INIT_APP_CONFIG:
+      return initConfig(state, action.payload);
 
     default:
   }
