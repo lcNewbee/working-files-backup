@@ -1,4 +1,4 @@
-const ACTION = {
+const ACTION_TYPE = {
 
   /** *****************************************
    * APP Actions
@@ -80,5 +80,5 @@ const ACTION = {
   RC_PROPERTY_PANEL_DATA: 'RECIVECE_PROPERTY_PANEL_DATA',
 };
 
-export default ACTION;
+export default ACTION_TYPE;
 

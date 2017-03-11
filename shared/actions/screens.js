@@ -1,39 +1,13 @@
 import { immutableUtils } from 'shared/utils';
 import * as appActions from 'shared/actions/app';
-import {
-  INIT_SCREEN,
-  LEAVE_SCREEN,
-
-  // Ajax Fetch
-  CHANGE_SCREEN_QUERY,
-  REQEUST_FETCH_SCREEN_DATA,
-  RECIVE_SCREEN_DATA,
-
-  // Ajax Save
-  CHANGE_SCREEN_ACTION_QUERY,
-
-  // Screen Settings
-  UPDATE_SCREEN_SETTINGS,
-
-  // Screen List
-  ADD_LIST_ITEM,
-  ACTIVE_LIST_ITEM,
-  SELECT_LIST_ITEM,
-  UPDATE_CUR_EDIT_LIST_ITEM,
-  UPDATE_LIST_ITEM_BY_INDEX,
-  CLOSE_LIST_ITEM_MODAL,
-
-  // Custom Props
-  UPDATE_SCREEN_CUSTOM_PROPS,
-
-} from 'shared/constants/action';
+import ACTION_TYPE from 'shared/constants/action';
 
 let refreshTimeout = null;
 
 // Screen common actions
 export function initScreen(option) {
   return {
-    type: INIT_SCREEN,
+    type: ACTION_TYPE.INIT_SCREEN,
     payload: option,
   };
 }
@@ -41,35 +15,35 @@ export function leaveScreen() {
   window.clearTimeout(refreshTimeout);
 
   return {
-    type: LEAVE_SCREEN,
+    type: ACTION_TYPE.LEAVE_SCREEN,
   };
 }
 export function changeScreenQuery(payload) {
   return {
-    type: CHANGE_SCREEN_QUERY,
+    type: ACTION_TYPE.CHANGE_SCREEN_QUERY,
     payload,
   };
 }
 export function changeScreenActionQuery(payload) {
   return {
-    type: CHANGE_SCREEN_ACTION_QUERY,
+    type: ACTION_TYPE.CHANGE_SCREEN_ACTION_QUERY,
     payload,
   };
 }
 export function updateScreenCustomProps(payload) {
   return {
-    type: UPDATE_SCREEN_CUSTOM_PROPS,
+    type: ACTION_TYPE.UPDATE_SCREEN_CUSTOM_PROPS,
     payload,
   };
 }
 export function reqeustFetchScreenData() {
   return {
-    type: REQEUST_FETCH_SCREEN_DATA,
+    type: ACTION_TYPE.REQEUST_FETCH_SCREEN_DATA,
   };
 }
 export function reciveScreenData(data, name) {
   return {
-    type: RECIVE_SCREEN_DATA,
+    type: ACTION_TYPE.RECIVE_SCREEN_DATA,
     payload: data,
     meta: {
       name,
@@ -134,7 +108,7 @@ export function fetchScreenData(option) {
 // SCREEN list actions
 export function updateCurEditListItem(data, sync) {
   return {
-    type: UPDATE_CUR_EDIT_LIST_ITEM,
+    type: ACTION_TYPE.UPDATE_CUR_EDIT_LIST_ITEM,
     payload: data,
     meta: {
       sync,
@@ -143,7 +117,7 @@ export function updateCurEditListItem(data, sync) {
 }
 export function updateListItemByIndex(index, data) {
   return {
-    type: UPDATE_LIST_ITEM_BY_INDEX,
+    type: ACTION_TYPE.UPDATE_LIST_ITEM_BY_INDEX,
     payload: data,
     meta: {
       index,
@@ -152,7 +126,7 @@ export function updateListItemByIndex(index, data) {
 }
 export function editListItemByIndex(index, action) {
   return {
-    type: ACTIVE_LIST_ITEM,
+    type: ACTION_TYPE.ACTIVE_LIST_ITEM,
     payload: {
       keyName: 'index',
       val: index,
@@ -164,7 +138,7 @@ export function editListItemByIndex(index, action) {
 }
 export function activeListItem(keyName, val, action) {
   return {
-    type: ACTIVE_LIST_ITEM,
+    type: ACTION_TYPE.ACTIVE_LIST_ITEM,
     payload: {
       keyName,
       val,
@@ -176,19 +150,19 @@ export function activeListItem(keyName, val, action) {
 }
 export function addListItem(defaultItem) {
   return {
-    type: ADD_LIST_ITEM,
+    type: ACTION_TYPE.ADD_LIST_ITEM,
     payload: defaultItem,
   };
 }
 export function selectListItem(payload) {
   return {
-    type: SELECT_LIST_ITEM,
+    type: ACTION_TYPE.SELECT_LIST_ITEM,
     payload,
   };
 }
 export function closeListItemModal() {
   return {
-    type: CLOSE_LIST_ITEM_MODAL,
+    type: ACTION_TYPE.CLOSE_LIST_ITEM_MODAL,
   };
 }
 export function onListAction(url, option) {
@@ -274,7 +248,7 @@ export function onListAction(url, option) {
  */
 export function updateScreenSettings(payload) {
   return {
-    type: UPDATE_SCREEN_SETTINGS,
+    type: ACTION_TYPE.UPDATE_SCREEN_SETTINGS,
     payload,
   };
 }
