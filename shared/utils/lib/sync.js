@@ -174,8 +174,8 @@ var sync = {
     thisTimeout = setTimeout(function() {
       myCallback('load error');
       clearTimeout(thisTimeout);
-      script = null;
       document.body.removeChild(script);
+      script = null;
     }, myTimeout)
 
     script.src = url;

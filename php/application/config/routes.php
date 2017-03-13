@@ -57,7 +57,7 @@ $route['goform/axcInfo'] = 'axcInfo';
 // 网络设置
 $route['goform/network/port'] = 'network/networkPort';
 $route['goform/network/interface'] = 'network/networkInterface';
-$route['goform/network/dhcp/list'] = 'network/networkDhcp';
+$route['goform/network/dhcp/service/list'] = 'network/networkDhcp';
 $route['goform/network/dhcp/relay'] = 'network/networkDhcpRelay';
 $route['goform/network/nat'] = 'network/networkNat';
 $route['goform/network/route'] = 'network/networkRoute';

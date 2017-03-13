@@ -65,11 +65,11 @@ class NetworkInterface_Model extends CI_Model {
 		$deleteItem = $this->getCgiParam($oldData);
 		$addItem = $this->getCgiParam($data);
 		//d		el
-				$result = acnetmg_del_portip(json_encode($deleteItem));
-		if (strpos($result, '2000') !== false) {
+				//$result = acnetmg_del_portip(json_encode($deleteItem));
+		//if (strpos($result, '2000') !== false) {
 			//a			dd
-						$result = acnetmg_add_portip(json_encode($addItem));
-		}
+		$result = acnetmg_add_portip(json_encode($addItem));
+		//}
 		return $result;
 	}
 }

@@ -91,7 +91,7 @@ class NetworkRadius extends CI_Controller {
         "acctsecond_ipaddr"=>element("acctsecond_ipaddr",$list_data,'' ),
         "acctsecond_port"=>element("acctsecond_port",$list_data,'' ),
         "acctsecond_key"=>element("acctsecond_key",$list_data,'' ),
-        "accton_enable"=>element("accton_enable",$list_data ,''),
+        "accton_enable"=>element("accton_enable",$list_data ,'0'),
         "accton_sendtimes"=>element("accton_sendtimes",$list_data ,''),
         "accton_sendinterval"=>element("accton_sendinterval",$list_data ,''),
         "quiet_time"=>element("quiettime",$list_data ,''),
@@ -127,48 +127,17 @@ class NetworkRadius extends CI_Controller {
 	function onAction($data) {
 		$result = null;
 		$actionType = element('action', $data);
-    function getCgiParams($oriData) {
-      $ret = array(
-        "template_name"=>(string)element('template_name',$oriData,''),
-        "authpri_ipaddr"=>(string)element("authpri_ipaddr",$oriData,'' ),
-        "authpri_port"=>(string)element("authpri_port",$oriData,'' ),
-        "authpri_key"=>(string)element("authpri_key",$oriData,'' ),
-        "authsecond_ipaddr"=>(string)element("authsecond_ipaddr",$oriData ,''),
-        "authsecond_port"=>(string)element("authsecond_port",$oriData,'' ),
-        "authsecond_key"=>(string)element("authsecond_key",$oriData,'' ),
-        "acctpri_ipaddr"=>(string)element("acctpri_ipaddr",$oriData,'' ),
-        "acctpri_port"=>(string)element("acctpri_port",$oriData,'' ),
-        "acctpri_key"=>(string)element("acctpri_key",$oriData,'' ),
-        "acctsecond_ipaddr"=>(string)element("acctsecond_ipaddr",$oriData,'' ),
-        "acctsecond_port"=>(string)element("acctsecond_port",$oriData,'' ),
-        "acctsecond_key"=>(string)element("acctsecond_key",$oriData,'' ),
-        "accton_enable"=>(string)element("accton_enable",$oriData ,''),
-        "accton_sendtimes"=>(string)element("accton_sendtimes",$oriData ,''),
-        "accton_sendinterval"=>(string)element("accton_sendinterval",$oriData ,''),
-        "quiet_time"=>(string)element("quiet_time",$oriData ,''),
-        "resp_time"=>(string)element("resp_time",$oriData ,''),
-        "retry_times"=>(string)element("retry_times",$oriData ,''),
-        "acct_interim_interval"=>(string)element("acct_interim_interval",$oriData ,''),
-        "realretrytimes"=>(string)element("realretrytimes",$oriData ,''),
-        "nasip"=>(string)element("nasip",$oriData ,''),
-        "username_format"=>(string)element("username_format",$oriData ,'')
-      );
-      return $ret;
-    }
+    $cgiParams = json_encode($data);
 		if ($actionType === 'add') {
-      $temp=getCgiParams($data);
       // $result=json_encode($temp);
-			$result=radius_add_template_name(json_encode($temp));
+			$result=radius_add_template_name($cgiParams);
 		}
 		elseif($actionType === 'edit') {
-      $temp=getCgiParams($data);
       // $result=json_encode($temp);
-			$result=radius_edit_template_name(json_encode($temp));
+			$result=radius_edit_template_name($cgiParams);
 		}
 		elseif($actionType === 'delete'){
-			$retdata=array(
-				 "radius_list"=>$data["selectedList"]
-												      );
+			$retdata=array("radius_list"=>$data["selectedList"]);
 			$result=radius_del_template_name(json_encode($retdata));
 		}
 		return $result;

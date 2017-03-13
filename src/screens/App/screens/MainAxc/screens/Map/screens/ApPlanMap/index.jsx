@@ -15,6 +15,7 @@ import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 import * as propertiesActions from 'shared/actions/properties';
 import * as axcActions from '../../../../actions';
+import MapList from '../../shared/MapList';
 
 import '../../shared/_map.scss';
 
@@ -240,37 +241,6 @@ export default class View extends React.PureComponent {
     ev.dataTransfer.setData('Text', ev.target.id);
     this.props.editListItemByIndex(i, 'move');
   }
-  fetchMapList() {
-    const url = 'goform/group/map/list';
-
-    this.props.fetch(url, {
-      groupid: this.props.groupid,
-      buildId: this.props.params.id,
-    }).then(
-      (json) => {
-        if (json && json.state && json.state.code === 2000) {
-          this.props.reciveScreenData({
-            maps: json.data,
-          });
-        }
-      },
-    );
-  }
-  deleteMapList(mapId) {
-    const url = 'goform/group/map/list';
-
-    this.props.save(url, {
-      groupid: this.props.groupid,
-      action: 'delete',
-      selectedList: [mapId],
-    }).then(
-      (json) => {
-        if (json && json.state && json.state.code === 2000) {
-          this.fetchMapList();
-        }
-      },
-    );
-  }
   savePlaceDevice(type) {
     this.props.changeScreenActionQuery({
       action: type,
@@ -465,100 +435,6 @@ export default class View extends React.PureComponent {
 
     return ret;
   }
-  renderMapList($$mapList) {
-    return (
-      <div className="row">
-        {
-          $$mapList.map(($$map) => {
-            const mapId = $$map.getIn(['id']);
-            const mapName = $$map.getIn(['mapName']);
-            const imgUrl = $$map.getIn(['backgroudImg']);
-            const $$mapAps = this.$$mapApList.get(mapId);
-
-            if (mapId === -100) {
-              return null;
-            }
-
-            return (
-              <div className="cols col-3">
-                <div
-                  className="m-thumbnail"
-                >
-                  {
-                    this.actionable ? (
-                      <Icon
-                        name="times"
-                        className="close"
-                        onClick={
-                          () => {
-                            this.deleteMapList(mapId);
-                          }
-                        }
-                      />
-                    ) : null
-                  }
-
-                  <div
-                    className="m-thumbnail__content"
-                    onClick={() => {
-                      this.curMapImgUrl = imgUrl;
-                      this.curMapName = mapName;
-                      this.curMapId = mapId;
-                      this.props.updateScreenSettings({
-                        curMapId: mapId,
-                        curList: $$mapAps,
-                      });
-                    }}
-                  >
-                    <img
-                      src={imgUrl}
-                      draggable="false"
-                      alt={mapName}
-                    />
-                    {
-                      $$mapAps ?
-                        $$mapAps.map(
-                          item => this.renderDeployedDevice(item, item.get('_index')),
-                        ) :
-                        null
-                    }
-                  </div>
-                  <div
-                    className="m-thumbnail__caption"
-                    onClick={() => {
-                      this.curMapImgUrl = imgUrl;
-                      this.curMapName = mapName;
-                      this.props.updateScreenSettings({
-                        curMapId: mapId,
-                        curList: $$mapAps,
-                      });
-                    }}
-                  >
-                    <h3>{mapName}</h3>
-                  </div>
-                </div>
-              </div>
-            );
-          })
-        }
-        {
-          this.actionable ? (
-            <div
-              className="cols col-3"
-              onClick={this.props.addListItem}
-            >
-              <div className="o-map-list__add">
-                <Icon
-                  name="plus"
-                  size="3x"
-                />
-              </div>
-            </div>
-          ) : null
-        }
-      </div>
-    );
-  }
   renderCurMap($$list, curMapId, myZoom) {
     return (
       <div
@@ -653,6 +529,9 @@ export default class View extends React.PureComponent {
     const deviceListClassname = classnames('o-list o-devices-list', {
       active: !!curMapId && this.state.isUnplacedListShow,
     });
+    const mapWarpClassname = classnames('o-map-warp', {
+      dsada: false,
+    });
 
     return (
       <AppScreen
@@ -670,9 +549,34 @@ export default class View extends React.PureComponent {
             actionBarChildren
           }
         </div>
-        <div className="o-map-warp">
+        <div className={mapWarpClassname}>
           {
-            curMapId ? this.renderCurMap(list, curMapId, myZoom) : this.renderMapList($$thisMapList)
+            curMapId ? this.renderCurMap(list, curMapId, myZoom) : (
+              <MapList
+                actionable={this.actionable}
+                $$mapList={$$thisMapList}
+                groupid={this.props.groupid}
+                buildId={this.props.params.id}
+                onSelectMap={($$mapItem) => {
+                  const mapId = $$mapItem.getIn(['id']);
+                  const mapName = $$mapItem.getIn(['mapName']);
+                  const imgUrl = $$mapItem.getIn(['backgroudImg']);
+                  const $$mapAps = this.$$mapApList.get(mapId);
+
+                  this.curMapImgUrl = imgUrl;
+                  this.curMapName = mapName;
+                  this.curMapId = mapId;
+                  this.props.updateScreenSettings({
+                    curMapId: mapId,
+                    curList: $$mapAps,
+                  });
+                }}
+                save={this.props.save}
+                fetch={this.props.fetch}
+                saveFile={this.props.saveFile}
+                reciveScreenData={this.props.reciveScreenData}
+              />
+            )
           }
           {
             curMapId ? (

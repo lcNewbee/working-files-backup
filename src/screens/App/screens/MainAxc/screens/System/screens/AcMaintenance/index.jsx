@@ -13,12 +13,15 @@ import * as screenActions from 'shared/actions/screens';
 import { getActionable } from 'shared/axc';
 import AcVersion from './AcVersion';
 
+
 const languageOptions = List(b28n.getOptions().supportLang).map((item) => (
   {
     value: item,
     label: b28n.langMap[item] || 'English',
   }
 )).toJS();
+const AXC1000_REBOOT_TIME = 4200;
+const AXC3000_REBOOT_TIME = 3000;
 
 function onChangeLang(data) {
   if (b28n.getLang() !== data.value) {
@@ -52,14 +55,26 @@ export default class View extends React.PureComponent {
       'onConfirm',
       'checkSaveResult',
       'renderUpgrade',
+      'initState',
     ]);
 
     this.state = {
       isRebooting: false,
       isRestoring: false,
       isSaveConfig: false,
+      rebootStepTime: AXC3000_REBOOT_TIME,
     };
     this.actionable = getActionable(props);
+  }
+
+  componentWillMount() {
+    this.initState(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.app.get('version') !== this.props.app.get('version')) {
+      this.initState(nextProps);
+    }
   }
 
   onReboot() {
@@ -120,7 +135,7 @@ export default class View extends React.PureComponent {
           this.props.createModal({
             role: 'loading',
             title: '',
-            loadingStep: 3200,
+            loadingStep: this.state.rebootStepTime,
             loadingTitle: curHandle.loadingTitle,
             onLoaded: () => {
               this.props.closeModal();
@@ -135,6 +150,13 @@ export default class View extends React.PureComponent {
           curHandle.onSave();
           this.checkSaveResult(true);
         },
+      });
+    }
+  }
+  initState(props) {
+    if (props.app.get('version').indexOf('AXC1000')) {
+      this.setState({
+        rebootStepTime: AXC1000_REBOOT_TIME,
       });
     }
   }
@@ -254,7 +276,7 @@ export default class View extends React.PureComponent {
                     this.props.createModal({
                       role: 'loading',
                       title: '',
-                      loadingStep: 3200,
+                      loadingStep: this.state.rebootStepTime,
                       loadingTitle: _('Restoring..., Do not shutdown device'),
                       onLoaded: () => {
                         this.props.closeModal();
