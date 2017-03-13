@@ -49,7 +49,7 @@ class DpiOverview_Model extends CI_Model {
                 case 'ndpi_send_mac_statistics':
                     foreach($result as $row){                    
                         $b['name'] = $row->mac;
-                        $b['value'] = round($row->upbytes_precent,3);
+                        $b['value'] = round($row->upbytes,3);
                         $arreth[] = $b;
                     }
                     break;
