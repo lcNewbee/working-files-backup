@@ -64,6 +64,7 @@ const sMainAxc = require('../../screens/App/screens/MainAxc');
 // const sNetworkVlan = require('../../screens/App/screens/MainAxc/screens/Network/screens/VLAN');
 const sVlanSettings = require('../../screens/App/screens/MainAxc/screens/Network/screens/VLAN/VlanSettings');
 const sQinqSettings = require('../../screens/App/screens/MainAxc/screens/Network/screens/VLAN/QinqSettings');
+// const sInterfaces = require('../../screens/App/screens/MainAxc/screens/Network/screens/Interfaces');
 const sV3Interfaces = require('../../screens/App/screens/MainAxc/screens/Network/screens/V3Interfaces');
 const sHostNetwork = require('../../screens/App/screens/MainAxc/screens/Network/screens/HostNetwork');
 const sPortSettings = require('../../screens/App/screens/MainAxc/screens/Network/screens/EthernetPort/PortSettings');
@@ -318,7 +319,7 @@ const routes = [
                 id: 'ethernetPortSettings',
                 path: '/main/network/ethernetport/portsettings',
                 formUrl: 'goform/network/portsettings',
-                text: _('Port Settings'),
+                text: _('Settings'),
                 icon: 'th',
                 component: sPortSettings.Screen,
               },
@@ -326,7 +327,7 @@ const routes = [
                 id: 'ethernetPortMirring',
                 path: '/main/network/ethernetport/portmirring',
                 formUrl: 'goform/network/portmirring',
-                text: _('Port Mirring'),
+                text: _('Mirring'),
                 icon: 'th',
                 component: sPortMirring.Screen,
               },
@@ -334,7 +335,7 @@ const routes = [
                 id: 'ethernetPortAggregation',
                 path: '/main/network/ethernetport/portaggregation',
                 formUrl: 'goform/network/portaggregation',
-                text: _('Port Aggregation'),
+                text: _('Aggregation'),
                 icon: 'th',
                 component: sPortAggregation.Screen,
               },
