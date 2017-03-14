@@ -129,6 +129,11 @@ export default class MapList extends React.PureComponent {
   }
   render() {
     const { actionable, $$mapList, onSelectMap } = this.props;
+    let mapRatio = '1024 * 760';
+
+    if (this.state.width && this.state.length) {
+      mapRatio = `1024 * ${parseInt((this.state.width * 1024) / this.state.length, 10)}`;
+    }
     return (
       <div className="o-map-list">
         {
@@ -253,7 +258,7 @@ export default class MapList extends React.PureComponent {
               required
             />
             <FormGroup
-              label={_('Length')}
+              label={_('Physical Length')}
               value={this.state.length}
               name="length"
               type="number"
@@ -269,7 +274,7 @@ export default class MapList extends React.PureComponent {
               required
             />
             <FormGroup
-              label={_('Width')}
+              label={_('Physical Width')}
               value={this.state.width}
               name="width"
               type="number"
@@ -301,6 +306,7 @@ export default class MapList extends React.PureComponent {
                   },
                 );
               }}
+              help={_('Image ratio: %s', mapRatio)}
               required
             />
             <p

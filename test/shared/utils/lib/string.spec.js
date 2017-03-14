@@ -214,4 +214,21 @@ describe('utils string', () => {
       expect(changeMaskNumberToIp(30)).toBe('255.255.255.252');
     });
   });
+
+  describe('#cutFixedFloat', () => {
+    const cutFixedFloat = stringUtils.cutFixedFloat;
+
+    it('should has correct length', () => {
+      expect(cutFixedFloat.length).toBe(2);
+    });
+
+    it('should return undefined then param is not num or number string', () => {
+      expect(cutFixedFloat()).toBe(undefined);
+      expect(cutFixedFloat({})).toBe(undefined);
+    });
+
+    it('should cut over fixed number string', () => {
+      expect(cutFixedFloat(2.24512, 2)).toBe(2.24);
+    });
+  });
 });

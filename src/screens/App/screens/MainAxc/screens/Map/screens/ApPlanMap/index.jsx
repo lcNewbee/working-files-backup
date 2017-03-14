@@ -386,8 +386,8 @@ export default class View extends React.PureComponent {
             style={{
               left: `${xpos}%`,
               top: `${ypos}%`,
-              width: coverage,
-              height: coverage,
+              width: parseInt(coverage, 10),
+              height: parseInt(coverage, 10),
             }}
           />
         ) : null,
@@ -445,16 +445,17 @@ export default class View extends React.PureComponent {
           width: `${myZoom}%`,
           minHeight: '300px',
           backgroundColor: '#ccc',
-          backgroundImage: `url(${this.curMapItem.curMapImgUrl})`,
+          backgroundImage: `url(${this.curMapItem.backgroudImg})`,
+          backgroundRepeat: 'no-repeat',
         }}
         onMouseDown={this.onMapMouseDown}
         onMouseUp={this.onMapMouseUp}
         onMouseMove={this.onMapMouseMove}
       >
         <img
-          src={this.curMapItem.curMapImgUrl}
+          src={this.curMapItem.backgroudImg}
           draggable="false"
-          alt={this.curMapItem.curMapName}
+          alt={this.curMapItem.mapName}
         />
         {
           $$list ?
@@ -634,116 +635,6 @@ export default class View extends React.PureComponent {
             </div>
           </div>
         </div>
-
-        <Modal
-          title={_('Add')}
-          isShow={isModalShow}
-          onClose={() => {
-            this.props.closeListItemModal();
-            this.setState({
-              backgroundImgUrl: '',
-            });
-          }}
-          noFooter
-          draggable
-        >
-          <form
-            action="goform/group/map/list"
-            method="POST"
-            encType="multipart/form-data"
-            ref={(formElem) => {
-              if (formElem) {
-                this.formElem = formElem;
-              }
-            }}
-          >
-            <input
-              type="hidden"
-              name="groupid"
-              value={this.props.groupid}
-            />
-            <input
-              type="hidden"
-              name="action"
-              value="add"
-            />
-            <input
-              type="hidden"
-              name="buildId"
-              value={this.props.params.id}
-            />
-
-            <FormGroup
-              label={_('Map Name')}
-              value={this.state.mapName}
-              name="mapImg"
-              onChange={
-                (data) => {
-                  this.setState({
-                    mapName: data.value,
-                  });
-                }
-              }
-              required
-            />
-            <FormGroup
-              label={_('Map Backgroud Image')}
-              name="mapImg"
-              type="file"
-              onChange={(data, evt) => {
-                const selectFile = evt.target.files[0];
-
-                previewFile(selectFile).then(
-                  (url) => {
-                    if (url) {
-                      this.setState({
-                        backgroundImgUrl: url,
-                      });
-                    }
-                  },
-                );
-                this.setState({
-                  mapImgUrl: data.value,
-                });
-              }}
-              required
-            />
-            <p
-              style={{
-                textAlign: 'center',
-                marginBottom: '1em',
-              }}
-            >
-              {
-                this.state.backgroundImgUrl ? (
-                  <img
-                    src={this.state.backgroundImgUrl}
-                    alt="img"
-                    style={{
-                      height: '160px',
-                      backgroundColor: '#efefef',
-                    }}
-                    onLoad={
-                      () => {
-                        if (typeof URL.revokeObjectURL === 'function') {
-                          URL.revokeObjectURL(this.state.backgroundImgUrl);
-                        }
-                      }
-                    }
-                  />
-                ) : null
-              }
-            </p>
-            <div className="form-group form-group--save">
-              <div className="form-control">
-                <SaveButton
-                  type="button"
-                  onClick={this.onSaveMap}
-                />
-              </div>
-            </div>
-          </form>
-        </Modal>
       </AppScreen>
     );
   }

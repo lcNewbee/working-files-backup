@@ -1,4 +1,3 @@
-var coreUtils = require('./core');
 var str = {};
 
 function getText(val) {
@@ -189,14 +188,14 @@ str = {
     return (Array(length).join('0') + num).slice(-length);
   },
 
-  toDecimal: function(x, len) {
+  cutFixedFloat: function(x, len) {
     var f = parseFloat(x);
     var UNIT = Math.pow(10, len)
 
     if (isNaN(f)) {
       return;
     }
-    f = Math.round(x * UNIT) / UNIT;
+    f = parseInt(x * UNIT, 10) / UNIT;
 
     return f;
   },

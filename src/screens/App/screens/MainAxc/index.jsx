@@ -872,7 +872,6 @@ export default class Main extends React.PureComponent {
                 remark: data.value,
               })}
               maxLength="256"
-              required
               {...remark}
             />
             <div
