@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import h337 from 'heatmap.js';
 import AppScreen from 'shared/components/Template/AppScreen';
 import {
-  Button, Table,
+  Button, Table, FormGroup,
 } from 'shared/components';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
@@ -70,7 +70,7 @@ export default class View extends React.PureComponent {
   constructor(props) {
     super(props);
     this.markers = [];
-
+    this.mapList = fromJS([]);
     this.state = {
       mapOffsetX: 0,
       mapOffsetY: 0,
@@ -91,9 +91,26 @@ export default class View extends React.PureComponent {
         'renderBulidList',
         'renderBulidMapList',
         'onViewBuild',
+        'onChangeBuilding',
+        'onChangeMapId',
       ],
     );
   }
+
+  componentWillMount() {
+    this.props.fetch('goform/group/map/building').then((json) => {
+      if (json.state && json.state.code === 2000) {
+        this.buildOptions = fromJS(json.data.list).map(item => fromJS({ label: item.get('name'), value: item.get('id') }));
+      }
+      this.onChangeBuilding(this.buildOptions.getIn([0, 'value']));
+    }).then((list) => {
+      // console.log('this.mapOptions', this.mapOptions);
+      if (typeof (list) !== 'undefined') {
+        this.onChangeMapId(this.mapOptions.getIn([0, 'value']));
+      }
+    });
+  }
+
 
   componentDidUpdate() {
     const { store } = this.props;
@@ -107,22 +124,55 @@ export default class View extends React.PureComponent {
     }
   }
 
-  onSave() {
-    this.props.validateAll()
-      .then((errMsg) => {
-        if (errMsg.isEmpty()) {
-          this.props.onListAction();
-        }
-      });
+  // onChangeBuilding(id) {
+  //   Promise.resolve().then(() => {
+  //     this.props.changeScreenQuery({ buildId: id });
+  //   }).then(() => {
+  //     this.props.fetchScreenData();
+  //   }).then(() => {
+  //     const curScreenId = this.props.store.get('curScreenId');
+  //     const mapList = this.props.store.getIn([curScreenId, 'data', 'list']);
+  //     this.mapOptions = mapList.map(item => fromJS({ label: item.get('mapName'), value: item.get('id') }));
+  //   });
+  // }
+
+  onChangeBuilding(id) {
+    this.props.changeScreenQuery({ buildId: id });
+    this.setState({ buildId: id });
+    this.props.fetch('goform/group/map/list', { buildId: id })
+        .then((json) => {
+          if (json.state && json.state.code === 2000) {
+            this.mapOptions = fromJS(json.data.list).map(item => fromJS({ label: item.get('mapName'), value: item.get('id') }));
+            this.mapList = fromJS(json.data.list);
+          }
+          console.log('this.mapOptions', this.mapOptions);
+        }).then(() => {
+          this.onChangeMapId(this.mapOptions.getIn([0, 'value']));
+        });
   }
-  updateState(data) {
-    this.setState(utils.extend({}, data));
-  }
-  onViewBuild(i) {
-    this.updateState({
-      buildIndex: i,
+
+  onChangeMapId(id) {
+    console.log('id', id);
+    Promise.resolve().then(() => {
+      this.props.changeScreenQuery({ curMapId: id });
+      this.setState({ curMapId: id });
+    }).then(() => {
+      this.props.fetchScreenData();
     });
   }
+
+  // onSave() {
+  //   this.props.validateAll()
+  //     .then((errMsg) => {
+  //       if (errMsg.isEmpty()) {
+  //         this.props.onListAction();
+  //       }
+  //     });
+  // }
+  // updateState(data) {
+  //   this.setState(utils.extend({}, data));
+  // }
+
   removeHeatMap() {
     const heatCanvas = document.querySelectorAll('.heatmap-canvas');
     const len = heatCanvas.length;
@@ -134,45 +184,13 @@ export default class View extends React.PureComponent {
     heatmapInstance = null;
   }
 
-  renderFloorList(mapList) {
-    return (
-      <div className="row">
-        {
-          mapList.map((maps) => {
-            const mapName = maps.getIn(['mapName']);
-
-            return (
-              <div className="cols col-3">
-                <div className="m-thumbnail">
-                  <div
-                    className="m-thumbnail__content"
-                  >
-                    <img
-                      src={bkImg}
-                      draggable="false"
-                      alt="d"
-                      onClick={() => this.props.updateScreenSettings({
-                        curMapName: mapName,
-                        curList: maps,
-                      })}
-                    />
-                  </div>
-                  <div className="m-thumbnail__caption">
-                    <h3>{mapName}</h3>
-                  </div>
-                </div>
-              </div>
-            );
-          })
-        }
-      </div>
-    );
-  }
-  renderCurMap(list, curMapName, myZoom) {
+  renderCurMap(list, curMapId) {
+    const curItem = list.find(item => item.get('id') === curMapId);
+    const imgUrl = curItem ? curItem.get('backgroundImg') : '';
     return (
       <div
         className="o-map-container"
-        onDrop={e => this.onDrop(e, curMapName)}
+        // onDrop={e => this.onDrop(e, curMapName)}
         onDragOver={e => e.preventDefault()}
         ref={(mapContent) => {
           if (mapContent) {
@@ -184,18 +202,14 @@ export default class View extends React.PureComponent {
         style={{
           left: this.state.mapOffsetX,
           top: this.state.mapOffsetY,
-          width: `${myZoom}%`,
+          width: '100%',
+          height: '600px',
+          background: `url(${imgUrl}) 0 0 no-repeat`,
         }}
-        onMouseDown={this.onMapMouseDown}
-        onMouseUp={this.onMapMouseUp}
-        onMouseMove={this.onMapMouseMove}
-      >
-        <img
-          src={bkImg}
-          draggable="false"
-          alt="d"
-        />
-      </div>
+        // onMouseDown={this.onMapMouseDown}
+        // onMouseUp={this.onMapMouseUp}
+        // onMouseMove={this.onMapMouseMove}
+      />
     );
   }
   renderHeatMap() {
@@ -237,85 +251,37 @@ export default class View extends React.PureComponent {
       heatmapInstance.repaint();
     }
   }
-  renderBulidList() {
-    const { store, app } = this.props;
-    const myScreenId = store.get('curScreenId');
-    const list = store.getIn([myScreenId, 'data', 'list']);
-    const page = store.getIn([myScreenId, 'data', 'page']);
 
-    return (
-      <Table
-        className="table"
-        options={tableOptions}
-        list={list}
-        page={page}
-        onPageChange={this.onPageChange}
-        loading={app.get('fetching')}
-        onRowClick={(e, i) => this.onViewBuild(i, e)}
-      />
-    );
-  }
-  renderBulidMapList() {
-    const { store } = this.props;
-    const myScreenId = store.get('curScreenId');
-    const list = store.getIn([myScreenId, 'data', 'list', this.state.buildIndex, 'floorList']);
-    const curMapName = store.getIn([myScreenId, 'curSettings', 'curMapName']);
-    return (
-      <div className="o-map-warp">
-        {
-          curMapName ?
-            this.renderCurMap(list, curMapName, '100%') :
-            this.renderFloorList(list)
-        }
-      </div>
-    );
-  }
   render() {
     const { store } = this.props;
     const myScreenId = store.get('curScreenId');
-    const curMapName = store.getIn([myScreenId, 'curSettings', 'curMapName']);
-    const actionBarChildren = [
-      curMapName || this.state.buildIndex >= 0 ? (
-        <Button
-          icon="arrow-left"
-          theme="primary"
-          key="back"
-          text={_('Back')}
-          onClick={() => {
-            if (curMapName) {
-              this.props.updateScreenSettings({
-                curMapName: '',
-              });
-            } else {
-              this.updateState({
-                buildIndex: -1,
-              });
-            }
-          }}
-        />
-      ) : null,
-      <span
-        className="a-help"
-        key="help"
-        data-help={_('Help')}
-        data-help-text={_('Help text')}
-      />,
-    ];
+    // const curMapName = store.getIn([myScreenId, 'curSettings', 'curMapName']);
 
     return (
       <AppScreen
         {...this.props}
       >
-        <div className="m-action-bar">
-          {
-            actionBarChildren
-          }
+        <div className="m-action-bar clearfix">
+          <FormGroup
+            type="select"
+            className="fl"
+            label={_('Building')}
+            value={this.state.buildId}
+            options={this.buildOptions ? this.buildOptions.toJS() : []}
+            onChange={data => this.onChangeBuilding(data.value)}
+          />
+          <FormGroup
+            type="select"
+            className="fl"
+            label={_('Map Name')}
+            value={this.state.curMapId}
+            options={this.mapOptions ? this.mapOptions.toJS() : []}
+            onChange={data => this.onChangeMapId(data.value)}
+          />
         </div>
-        {
-          this.state.buildIndex >= 0 ?
-            this.renderBulidMapList() :
-            this.renderBulidList()
-        }
+        <div style={{ position: 'relative' }}>
+          {this.renderCurMap(this.mapList, this.state.curMapId)}
+        </div>
       </AppScreen>
     );
   }

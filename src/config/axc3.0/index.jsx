@@ -166,7 +166,7 @@ const sApPlanMap =
 const sClientsTraceList = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace');
 const sClientsTraceSettings = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace/Settings');
 // const sRfMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/Rf');
-// const sHeatMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/HeatMap');
+const sHeatMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/HeatMap');
 // const sClientsTrace = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace');
 
 /**
@@ -955,14 +955,14 @@ const routes = [
                   },
                 ],
               },
-              // {
-              //   id: 'heatMap',
-              //   path: '/main/group/map/heat_map',
-              //   formUrl: '/goform/group/map/building',
-              //   fetchUrl: '/goform/group/map/building',
-              //   text: _('Heat Map'),
-              //   component: sHeatMap.Screen,
-              // },
+              {
+                id: 'heatMap',
+                path: '/main/group/map/heat_map',
+                formUrl: 'goform/group/map/heatmap',
+                fetchUrl: 'goform/group/map/heatmap',
+                text: _('Heat Map'),
+                component: sHeatMap.Screen,
+              },
             ],
           },
           {
