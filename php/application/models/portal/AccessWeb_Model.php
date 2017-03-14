@@ -25,9 +25,9 @@ class AccessWeb_Model extends CI_Model {
     }
     function do_upload(){
         $config['upload_path'] = '/var/conf/portalserver';
-        $config['overwrite']=true;
+        $config['overwrite']=true;  
         $config['max_size'] = 0;
-        $config['allowed_types'] = '*';
+        $config['allowed_types'] = 'zip';
         $config['file_name'] = 'portal_web_tmp.zip';
 
         $this->load->library('upload', $config);
@@ -80,7 +80,7 @@ class AccessWeb_Model extends CI_Model {
                 }
             }
         }             
-        $result = $result ? json_ok() : json_no('insert error');
+        $result = $result ? json_ok() : json_no($this->upload->display_errors());
         return json_encode($result);
     }
     function Delete($data) {
