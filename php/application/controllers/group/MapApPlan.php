@@ -26,8 +26,8 @@ class MapApPlan extends CI_Controller {
 						'imgpath' => '',
 						'mapName' => '',
 						'mapType' => 'plan',
-						'xpos' => 25,
-						'ypos' => 25,
+						'lat' => 25,
+						'lng' => 25,
 						'locked' => '0',
 						'coverage' => 100
 					)
@@ -42,8 +42,8 @@ class MapApPlan extends CI_Controller {
 						$aa['map']['imgpath'] = element('imgpath',$res,'');
 						$aa['map']['mapName'] = element('son_name',$res,'ap');
 						$aa['map']['mapType'] = element('maptype',$res);
-						$aa['map']['xpos'] = element('xpos',$res,25);
-						$aa['map']['ypos'] = element('ypos',$res,25);
+						$aa['map']['lat'] = element('xpos',$res,25);
+						$aa['map']['lng'] = element('ypos',$res,25);
 						$aa['map']['locked'] = element('locked',$res,1);
 						$aa['map']['coverage'] = element('coverage',$res,100);
 					}						
@@ -87,8 +87,8 @@ class MapApPlan extends CI_Controller {
             'ap_mac' => element('mac',$data),
             'build_id' => element('mapId',$data),
 			'maptype' => element('mapType',$data['map']),
-            'xpos' => element('xpos',$data),
-			'ypos' => element('ypos',$data),
+            'xpos' => element('lat',$data),
+			'ypos' => element('lng',$data),
 			'locked' => element('locked',$data['map']),
 			'coverage' => element('coverage',$data['map'])
         );

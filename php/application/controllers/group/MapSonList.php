@@ -8,8 +8,9 @@ class MapSonList extends CI_Controller {
     }
     function fetch() {	
         $buildId = (int)element('buildId',$_GET,0);	
-        $sondata = $this->db->select('id,mapname as mapName,imgpath as backgroudImg')
-                            ->from('map_son_list')									
+        $sondata = $this->db->select('a.id,a.length,a.width,a.mapname as mapName,a.imgpath as backgroudImg,b.lat,b.lng')
+                            ->from('map_son_list as a')									
+                            ->join('map_list as b','a.maplist_id=b.id','left')
                             ->where('maplist_id',$buildId)
                             ->get()->result_array();
         $result = array(
