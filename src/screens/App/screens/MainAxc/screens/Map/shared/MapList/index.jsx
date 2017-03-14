@@ -75,6 +75,10 @@ export default class MapList extends React.PureComponent {
       isModalShow: false,
     };
   }
+  componentDidMount() {
+    this.fetchMapList();
+  }
+
   onSaveMap() {
     const url = 'goform/group/map/list';
     const formElem = this.formElem;
@@ -201,6 +205,9 @@ export default class MapList extends React.PureComponent {
             this.setState({
               backgroundImgUrl: '',
               isModalShow: false,
+              mapName: '',
+              width: '',
+              length: '',
             });
           }}
           noFooter
@@ -233,7 +240,7 @@ export default class MapList extends React.PureComponent {
             />
 
             <FormGroup
-              label={_('Map Name')}
+              label={_('Name')}
               value={this.state.mapName}
               name="mapImg"
               onChange={
@@ -246,7 +253,39 @@ export default class MapList extends React.PureComponent {
               required
             />
             <FormGroup
-              label={_('Map Backgroud Image')}
+              label={_('Length')}
+              value={this.state.length}
+              name="length"
+              type="number"
+              min="1"
+              onChange={
+                (data) => {
+                  this.setState({
+                    length: data.value,
+                  });
+                }
+              }
+              help={_('Meter')}
+              required
+            />
+            <FormGroup
+              label={_('Width')}
+              value={this.state.width}
+              name="width"
+              type="number"
+              min="1"
+              onChange={
+                (data) => {
+                  this.setState({
+                    width: data.value,
+                  });
+                }
+              }
+              help={_('Meter')}
+              required
+            />
+            <FormGroup
+              label={_('Backgroud Image')}
               name="mapImg"
               type="file"
               onChange={(data, evt) => {

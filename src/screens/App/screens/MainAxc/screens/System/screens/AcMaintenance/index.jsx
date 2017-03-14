@@ -205,6 +205,7 @@ export default class View extends React.PureComponent {
         >
           <AcVersion
             {...this.props}
+            loadingStep={this.state.rebootStepTime}
             onReboot={this.onReboot}
             actionable={this.actionable}
           />

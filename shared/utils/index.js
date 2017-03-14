@@ -13,6 +13,7 @@ utils.extend({
   storage: require('./lib/storage'),
   filter: require('./lib/filter'),
   dom: require('./lib/dom'),
+  gps: require('./lib/gps'),
   immutableUtils: require('./lib/immutable'),
   inputFormat: require('./lib/inputFormat'),
 });

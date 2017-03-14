@@ -100,6 +100,12 @@ export default class ProgressBar extends React.Component {
     const { title, ...restProps } = this.props;
     const percentageValue = parseInt(this.state.n, 10);
 
+    delete restProps.initStep;
+    delete restProps.time;
+    delete restProps.curStep;
+    delete restProps.isShow;
+    delete restProps.callback;
+
     return (
       <div className="m-progress-bar">
         {

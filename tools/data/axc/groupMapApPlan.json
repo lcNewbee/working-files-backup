@@ -14,8 +14,8 @@
         "imgpath": "\/var\/conf\/images\/1481701029.jpg",
         "mapName": "AAA",
         "mapType": "plan",
-        "xpos": 25.2314,
-        "ypos": 56.2501,
+        "lat": 22.502423986242,
+        "lng": 113.93842783228,
         "locked": 1,
         "coverage": "100"
       },
@@ -39,8 +39,8 @@
         "imgpath": "\/var\/conf\/images\/1481704955.jpg",
         "mapName": "BBB",
         "mapType": "plan",
-        "xpos": 32.2314,
-        "ypos": 46.2501,
+        "lat": 22.502443986242,
+        "lng": 113.93845783228,
         "locked": 1,
         "coverage": "100"
       },
@@ -64,8 +64,8 @@
         "imgpath": "",
         "mapName": "",
         "mapType": "plan",
-        "xpos": 0,
-        "ypos": 0,
+        "lat": 0,
+        "lng": 0,
         "locked": "0",
         "coverage": 100
       },

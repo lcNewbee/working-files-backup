@@ -248,7 +248,7 @@ const listOptions = fromJS([
     formProps: {
       type: 'number',
       min: '1',
-      max: '4096',
+      max: '4094',
       required: true,
     },
   },

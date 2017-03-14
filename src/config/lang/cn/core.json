@@ -119,6 +119,10 @@
   "Location": "位置",
   "Data Report Time": "数据上报时间",
 
+  "Width": "宽度",
+  "Length": "长度",
+  "Meter": "米",
+
   "Loading": "加载中",
   "Data": "数据",
   "Restore To Factory": "恢复出厂设置",

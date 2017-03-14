@@ -373,6 +373,9 @@
   "Security Alarm Events": "安全告警事件",
 
   "Map": "地图",
+  "Map Name": "地图名称",
+  "Map Backgroud Image": "地图背景图",
+  "Backgroud Image": "背景图",
   "Live Map": "实时地图",
   "Unlock Map": "解锁",
   "Lock Map": "锁定",

@@ -87,7 +87,7 @@ export default class AcVersion extends PureComponent {
     this.props.createModal({
       role: 'loading',
       title: '',
-      loadingStep: 3000,
+      loadingStep: this.props.loadingStep,
       loadingCurStep: 1,
       loadingTitle: msg.upgradingACversion,
       onLoaded: () => {
@@ -138,7 +138,7 @@ export default class AcVersion extends PureComponent {
           this.props.createModal({
             role: 'loading',
             title: '',
-            loadingStep: 100,
+            loadingStep: 300,
             loadingTitle: _('Checking firmware...'),
             onLoaded: () => {
               resolve(resultMsg);

@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import utils, { dom } from 'shared/utils';
+import utils, { dom, gps } from 'shared/utils';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { fromJS, Map, List } from 'immutable';
@@ -115,7 +115,6 @@ export default class View extends React.PureComponent {
         'onSaveMap',
         'transformServerData',
         'savePlaceDevice',
-        'fetchMapList',
         'onUppaceDrop',
       ],
     );
@@ -127,7 +126,6 @@ export default class View extends React.PureComponent {
 
   componentWillMount() {
     this.actionable = getActionable(this.props);
-    this.fetchMapList();
   }
 
   componentWillUpdate(nextProps) {
@@ -144,16 +142,6 @@ export default class View extends React.PureComponent {
     }
   }
 
-  onSaveMap() {
-    const url = 'goform/group/map/list';
-    const formElem = this.formElem;
-
-    this.props.saveFile(url, formElem)
-      .then(() => {
-        this.props.closeListItemModal();
-        this.fetchMapList();
-      });
-  }
   onToggleUnplacedList(active) {
     let isUnplacedListShow = !this.state.isUnplacedListShow;
 
@@ -177,18 +165,20 @@ export default class View extends React.PureComponent {
     const mapOffset = dom.getAbsPoint(this.mapContent);
     const offsetX = (ev.clientX - mapOffset.x - 13);
     const offsetY = (ev.clientY - mapOffset.y - 13);
+    const curOffset = {
+      x: (offsetX * 100) / this.mapContent.offsetWidth,
+      y: (offsetY * 100) / this.mapContent.offsetHeight,
+    };
+    const gpsPoint = gps.getGpsPointFromOffset(curOffset, this.curMapItem);
 
     ev.preventDefault();
 
     this.props.updateCurEditListItem({
-      map: {
-        xpos: (offsetX * 100) / this.mapContent.offsetWidth,
-        ypos: (offsetY * 100) / this.mapContent.offsetHeight,
-      },
+      map: { ...gpsPoint },
       mapId: curMapId,
-      xpos: (offsetX * 100) / this.mapContent.offsetWidth,
-      ypos: (offsetY * 100) / this.mapContent.offsetHeight,
+      ...gpsPoint,
     }, true);
+
     this.savePlaceDevice('place');
   }
   onUppaceDrop() {
@@ -273,58 +263,59 @@ export default class View extends React.PureComponent {
     }
   }
   renderDeployedDevice($$device, i, curMapId) {
-    const xpos = $$device.getIn(['map', 'xpos']);
-    const ypos = $$device.getIn(['map', 'ypos']);
+    const deivceOffset = gps.getOffsetFromGpsPoint(
+      $$device.get('map').toJS(), this.curMapItem,
+    );
     const coverage = $$device.getIn(['map', 'coverage']);
     const isLocked = $$device.getIn(['map', 'locked']) === '1';
     const deviceMac = $$device.get('mac');
     const isOpen = this.state.curShowOptionDeviceMac === deviceMac;
     const radius = 38;
     const isCur = !curMapId || (curMapId === $$device.getIn(['map', 'id']));
+    const xpos = deivceOffset.x;
+    const ypos = deivceOffset.y;
     let avd = 1;
     let ahd = 1;
     let btnsList = [];
-
     let ret = null;
     let deviceClassName = 'm-device';
     let avatarClass = 'm-device__avatar';
 
-    if (this.actionable) {
-      btnsList = [
-        {
-          id: 'lock',
-          icon: isLocked ? 'unlock' : 'lock',
-          onClick: () => this.props.updateListItemByIndex(i, {
-            map: {
-              locked: isLocked ? '0' : '1',
-            },
-          }),
-        }, {
-          id: 'config',
-          icon: 'cog',
-          onClick: mac => this.props.addPropertyPanel({
-            mac,
-          }, $$device.toJS()),
-        }, {
-          icon: 'times',
-          id: 'close',
-          onClick: () => {
-            this.props.changeScreenActionQuery({
-              action: 'delete',
-              mapId: curMapId,
-              selectedList: [deviceMac],
-            });
-            this.props.onListAction();
-          },
-        },
-      ];
-    }
-
-    avd = 220 / btnsList.length;
-    ahd = (avd * Math.PI) / 180;
-
     // 只在渲染当前 Map 里的 AP
     if (isCur) {
+      if (this.actionable) {
+        btnsList = [
+          {
+            id: 'lock',
+            icon: isLocked ? 'unlock' : 'lock',
+            onClick: () => this.props.updateListItemByIndex(i, {
+              map: {
+                locked: isLocked ? '0' : '1',
+              },
+            }),
+          }, {
+            id: 'config',
+            icon: 'cog',
+            onClick: mac => this.props.addPropertyPanel({
+              mac,
+            }, $$device.toJS()),
+          }, {
+            icon: 'times',
+            id: 'close',
+            onClick: () => {
+              this.props.changeScreenActionQuery({
+                action: 'delete',
+                mapId: curMapId,
+                selectedList: [deviceMac],
+              });
+              this.props.onListAction();
+            },
+          },
+        ];
+      }
+
+      avd = 220 / btnsList.length;
+      ahd = (avd * Math.PI) / 180;
       if (isLocked) {
         avatarClass = `${avatarClass} locked`;
       }
@@ -454,16 +445,16 @@ export default class View extends React.PureComponent {
           width: `${myZoom}%`,
           minHeight: '300px',
           backgroundColor: '#ccc',
-          backgroundImage: `url(${this.curMapImgUrl})`,
+          backgroundImage: `url(${this.curMapItem.curMapImgUrl})`,
         }}
         onMouseDown={this.onMapMouseDown}
         onMouseUp={this.onMapMouseUp}
         onMouseMove={this.onMapMouseMove}
       >
         <img
-          src={this.curMapImgUrl}
+          src={this.curMapItem.curMapImgUrl}
           draggable="false"
-          alt={this.curMapName}
+          alt={this.curMapItem.curMapName}
         />
         {
           $$list ?
@@ -499,30 +490,6 @@ export default class View extends React.PureComponent {
           }
         }}
       />,
-      // isLocked === '1' ? (<Button
-      //   icon="lock"
-      //   key="0"
-      //   text={_('Unlock All Devices')}
-      //   onClick={() => {
-      //     this.props.updateScreenSettings({
-      //       isLocked: '0',
-      //     });
-      //   }}
-      // />) : (<Button
-      //   icon="unlock-alt"
-      //   key="0"
-      //   text={_('Lock All Device')}
-      //   onClick={() => {
-      //     this.props.updateScreenSettings({
-      //       isLocked: '1',
-      //     });
-      //   }}
-      // />),
-      // <span
-      //   className="a-help"
-      //   data-help={_('Help')}
-      //   data-help-text={_('Help text')}
-      // />,
     ];
     const $$thisMapList = this.$$mapList;
     const isModalShow = actionQuery.get('action') === 'add' || actionQuery.get('action') === 'edit';
@@ -559,13 +526,9 @@ export default class View extends React.PureComponent {
                 buildId={this.props.params.id}
                 onSelectMap={($$mapItem) => {
                   const mapId = $$mapItem.getIn(['id']);
-                  const mapName = $$mapItem.getIn(['mapName']);
-                  const imgUrl = $$mapItem.getIn(['backgroudImg']);
                   const $$mapAps = this.$$mapApList.get(mapId);
 
-                  this.curMapImgUrl = imgUrl;
-                  this.curMapName = mapName;
-                  this.curMapId = mapId;
+                  this.curMapItem = $$mapItem.toJS();
                   this.props.updateScreenSettings({
                     curMapId: mapId,
                     curList: $$mapAps,
