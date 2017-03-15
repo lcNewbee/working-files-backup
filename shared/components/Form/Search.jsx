@@ -5,15 +5,16 @@ import Input from './atom/Input';
 import utils from '../../utils';
 
 const propTypes = {
-  className: PropTypes.string,
+  style: PropTypes.object,
   searchOnChange: PropTypes.bool,
-  onChange: PropTypes.func,
+  onChange: PropTypes.func.isRequired,
   onSearch: PropTypes.func,
 };
 
 const defaultProps = {
   Component: 'span',
   searchOnChange: true,
+  onSearch: utils.emptyFunc,
 };
 
 class Search extends React.Component {
@@ -21,31 +22,51 @@ class Search extends React.Component {
     super(props);
 
     this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
-    this.onChange = this.onChange.bind(this);
-    this.onKeyUp = this.onKeyUp.bind(this);
+    utils.binds(this, [
+      'onChange',
+      'handleKeyUp',
+      'handleClearClick',
+      'handleInputChange',
+    ]);
+
+    this.state = {
+      showClearIcon: false,
+    };
   }
 
-  onChange(e) {
-    const val = e.target.value;
+  onChange(val, e) {
+    const showClearIcon = val && val.length >= 2;
 
-    if (this.props.onChange) {
-      this.props.onChange(val, e);
+    if (showClearIcon) {
+      this.setState({
+        showClearIcon: true,
+      });
+    } else {
+      this.setState({
+        showClearIcon: false,
+      });
     }
+
+    this.props.onChange(val, e);
 
     if (this.props.searchOnChange) {
-      if (this.props.onSearch) {
-        this.props.onSearch(e);
-      }
+      this.props.onSearch(e);
     }
   }
+  handleInputChange(e) {
+    const val = e.target.value;
+    this.onChange(val, e);
+  }
 
-  onKeyUp(e) {
+  handleClearClick(e) {
+    this.onChange('', e);
+  }
+
+  handleKeyUp(e) {
     const which = e.which;
 
     if (which === 13) {
-      if (this.props.onSearch) {
-        this.props.onSearch(e);
-      }
+      this.props.onSearch(e);
     }
   }
 
@@ -55,17 +76,24 @@ class Search extends React.Component {
     delete inputProps.onSearch;
     delete inputProps.Component;
     delete inputProps.searchOnChange;
+    delete inputProps.style;
 
     return (
-      <div className="m-search fl">
+      <div className="m-search fl" style={this.props.style}>
         <Icon className="m-search__icon" name="search" />
         <Input
           {...inputProps}
           className="m-search__input"
           type="text"
-          onChange={this.onChange}
-          onKeyUp={this.onKeyUp}
+          onChange={this.handleInputChange}
+          onKeyUp={this.handleKeyUp}
         />
+        {
+          this.state.showClearIcon ? (
+            <Icon className="m-search__clear" name="times-circle-o" onClick={this.handleClearClick} />
+          ) : null
+        }
+
       </div>
     );
   }

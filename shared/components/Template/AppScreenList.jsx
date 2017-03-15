@@ -829,7 +829,7 @@ class AppScreenList extends React.PureComponent {
       leftChildrenNode.push(
         <Search
           {...searchProps}
-          value={query.get('text')}
+          value={query.get('search')}
           key="searchInput"
           maxLength="265"
           onChange={this.onChangeSearchText}

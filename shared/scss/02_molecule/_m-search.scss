@@ -11,4 +11,13 @@
   .m-search__input {
     padding-left: 25px;
   }
+  .m-search__clear {
+    position: absolute;
+    top: 50%;
+    right: 6px;
+    font-size: 14px;
+    margin-top: -.5em;
+    color: #999;
+    cursor: pointer;
+  }
 }

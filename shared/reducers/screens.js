@@ -7,6 +7,7 @@ const defaultItem = fromJS({
     type: '0',
     size: 20,
     page: 1,
+    search: '',
   },
   data: {
     settings: {},
