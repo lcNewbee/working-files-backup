@@ -13,7 +13,7 @@ const savingText = _('Applying');
 let savedText = _('Applied');
 const searchInputStyle = {
   marginRight: '12px',
-}
+};
 
 const selectOptions = [
   { value: 20, label: '20' },
@@ -74,6 +74,7 @@ const propTypes = {
   resetVaildateMsg: PropTypes.func,
 
   // List Action 具体列表项操作相关
+  searchProps: PropTypes.object,
   modalSize: PropTypes.string,
   editFormId: PropTypes.string,
   editFormLayout: PropTypes.string,
@@ -120,7 +121,7 @@ class AppScreenList extends React.PureComponent {
     this.selectedList = [];
     utils.binds(this, [
       'initListTableOptions',
-      'doItemAction',
+      'onItemAction',
       'doSaveEditForm',
       'doSyncData',
       'onBeforeSync',
@@ -133,7 +134,7 @@ class AppScreenList extends React.PureComponent {
       'onChangeType',
       'onChangeTableSize',
       'onRemoveSelectItems',
-      'onItemAction',
+      'handleItemAction',
       'onSelectedItemsAction',
       'initModalFormOptions',
     ]);
@@ -297,6 +298,18 @@ class AppScreenList extends React.PureComponent {
     let selectStr = '';
     let msgText = '';
     let $$selectedList = $$actionQuery.get('selectedList');
+    const doSelectedItemsAction = () => {
+      this.props.changeScreenActionQuery({
+        action: actionName,
+        selectedList: $$selectedList,
+      });
+      this.props.onListAction()
+        .then(
+          (json) => {
+            this.props.onAfterSync(json);
+          },
+        );
+    };
 
     if ($$selectedList && $$selectedList.size > 0) {
       $$selectedList = $$selectedList.map((val) => {
@@ -318,30 +331,10 @@ class AppScreenList extends React.PureComponent {
           id: 'settings',
           role: 'confirm',
           text: msgText,
-          apply: () => {
-            this.props.changeScreenActionQuery({
-              action: actionName,
-              selectedList: $$selectedList,
-            });
-            this.props.onListAction()
-              .then(
-                (json) => {
-                  this.props.onAfterSync(json);
-                },
-              );
-          },
+          apply: doSelectedItemsAction,
         });
       } else {
-        this.props.changeScreenActionQuery({
-          action: actionName,
-          selectedList: $$selectedList,
-        });
-        this.props.onListAction()
-          .then(
-            (json) => {
-              this.props.onAfterSync(json);
-            },
-          );
+        doSelectedItemsAction();
       }
     } else {
       if (actionName === 'setting') {
@@ -353,37 +346,78 @@ class AppScreenList extends React.PureComponent {
       });
     }
   }
-  onItemAction(option, index, $$data) {
+  onItemAction($$actionQuery, option) {
+    const { cancelMsg, needConfirm, confirmText, $$curData } = option;
+    const modalId = 'listAction';
+    const doItemAction = () => {
+      let needMerge = false;
+
+      if ($$actionQuery) {
+        this.props.changeScreenActionQuery($$actionQuery.toJS());
+      }
+
+      if (!$$curData.isEmpty()) {
+        this.props.updateCurEditListItem($$curData.toJS());
+        needMerge = true;
+      }
+      this.props.onListAction({ needMerge })
+        .then(
+          (json) => {
+            this.props.onAfterSync(json);
+          },
+        );
+    };
+
+    // 打印取消原因提示
+    if (cancelMsg) {
+      this.props.createModal({
+        id: modalId,
+        role: 'alert',
+        text: cancelMsg,
+      });
+
+    // 需要询问用户
+    } else if (needConfirm) {
+      this.props.createModal({
+        id: modalId,
+        role: 'confirm',
+        text: confirmText,
+        apply: doItemAction,
+      });
+
+    // 直接提交
+    } else {
+      doItemAction();
+    }
+  }
+  handleItemAction(option, $$data) {
+    const { index, needConfirm } = option;
+    const { store, onBeforeAction } = this.props;
     const actionName = option.actionName || option.actionType;
-    const { onBeforeAction } = this.props;
-    const needConfirm = option.needConfirm;
-    const store = this.props.store;
     const list = store.getIn(['data', 'list']);
     const listKey = option.actionKey || this.props.listKey;
     const $$actionItem = list.get(index);
     const confirmText = _('Are you sure to %s selected: %s', _(actionName), (index + 1));
     let selectedList = [];
+    let cancelMsg = '';
+    let onBeforeActionResult;
+    let $$curData = Map({});
     let $$actionQuery = Map({
       action: actionName,
     });
-    let cancelMsg = '';
-    let onBeforeActionResult;
 
     if (listKey === 'allKeys') {
-      $$actionQuery = $$actionQuery.merge($$actionItem);
+      $$curData = $$curData.merge($$actionItem);
       selectedList = [list.get(index)];
     } else {
-      $$actionQuery = $$actionQuery.set(
+      $$curData = $$curData.set(
         listKey,
         $$actionItem.get(listKey),
       );
       selectedList = [list.getIn([index, listKey])];
     }
 
-    if ($$data) {
-      $$actionQuery = $$actionQuery.merge($$data);
-    }
-
+    $$curData = $$curData.merge($$data);
     $$actionQuery = $$actionQuery.merge({
       selectedList,
     });
@@ -396,10 +430,11 @@ class AppScreenList extends React.PureComponent {
     // 异步处理，如果是 Promise 对象
     if (utils.isPromise(onBeforeActionResult)) {
       onBeforeActionResult.then(
-          msg => this.doItemAction($$actionQuery, {
+          msg => this.onItemAction($$actionQuery, {
             cancelMsg: msg,
             confirmText,
             needConfirm,
+            $$curData,
           }),
         );
 
@@ -408,54 +443,12 @@ class AppScreenList extends React.PureComponent {
       if (onBeforeActionResult) {
         cancelMsg = onBeforeActionResult;
       }
-      this.doItemAction($$actionQuery, {
+      this.onItemAction($$actionQuery, {
         cancelMsg,
         needConfirm,
         confirmText,
+        $$curData,
       });
-    }
-  }
-  doItemAction($$actionQuery, option) {
-    const { cancelMsg, needConfirm, confirmText } = option;
-    const modalId = 'listAction';
-
-    if (cancelMsg) {
-      this.props.createModal({
-        id: modalId,
-        role: 'alert',
-        text: cancelMsg,
-      });
-    } else if (needConfirm) {
-      this.props.createModal({
-        id: modalId,
-        role: 'confirm',
-        text: confirmText,
-        apply: () => {
-          if ($$actionQuery) {
-            this.props.changeScreenActionQuery(
-              $$actionQuery.toJS(),
-            );
-          }
-          this.props.onListAction()
-            .then(
-              (json) => {
-                this.props.onAfterSync(json);
-              },
-            );
-        },
-      });
-    } else {
-      if ($$actionQuery) {
-        this.props.changeScreenActionQuery(
-          $$actionQuery.toJS(),
-        );
-      }
-      this.props.onListAction()
-        .then(
-          (json) => {
-            this.props.onAfterSync(json);
-          },
-        );
     }
   }
   doSyncData(option) {
@@ -593,10 +586,11 @@ class AppScreenList extends React.PureComponent {
                       text={_('Delete')}
                       size="sm"
                       onClick={() => {
-                        this.onItemAction({
+                        this.handleItemAction({
                           actionName: 'delete',
                           needConfirm: true,
-                        }, index);
+                          index,
+                        });
                       }}
                     />
                     ) : null
@@ -605,9 +599,8 @@ class AppScreenList extends React.PureComponent {
                   btnList ? btnList.map(($$btnItem) => {
                     let hiddenResult = $$btnItem.get('isHidden');
                     let onClickFunc = () => {
-                      this.onItemAction(
-                        $$btnItem.toJS(),
-                        index,
+                      this.handleItemAction(
+                        $$btnItem.set('index', index).toJS(),
                       );
                     };
 
@@ -658,9 +651,8 @@ class AppScreenList extends React.PureComponent {
                 disabled={!actionable}
                 checked={parseInt(val, 10) === 1}
                 onChange={(data) => {
-                  this.onItemAction(
-                    $$item.toJS(),
-                    index,
+                  this.handleItemAction(
+                    $$item.set('index', index).toJS(),
                     {
                       [$$item.get('id')]: data.value,
                     },

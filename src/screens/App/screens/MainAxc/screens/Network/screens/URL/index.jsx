@@ -147,7 +147,8 @@ export default class View extends React.Component {
     this.screenId = props.route.id;
   }
   onSave() {
-    this.props.onListAction(this.props.route.formUrl, {
+    this.props.onListAction({
+      url: this.props.route.formUrl,
       needMerge: true,
     });
   }

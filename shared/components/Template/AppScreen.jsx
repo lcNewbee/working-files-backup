@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import utils, { immutableUtils } from 'shared/utils';
-import immutable, { List, Map } from 'immutable';
+import immutable, { fromJS, List, Map } from 'immutable';
 import AppScreenList from 'shared/components/Template/AppScreenList';
 import AppScreenSettings from 'shared/components/Template/AppScreenSettings';
 import { getActionable } from 'shared/axc';
@@ -61,7 +61,7 @@ const defaultProps = {
 export default class AppScreen extends React.Component {
   constructor(props) {
     const {
-      defaultSettingsData, settingsFormOptions,
+      defaultSettingsData, settingsFormOptions, listOptions,
       groupid,
     } = props;
     const initOption = utils.extend({
@@ -78,21 +78,24 @@ export default class AppScreen extends React.Component {
     this.refreshOptions(props);
 
     // init Settings Form
-    this.defaultSettingsData = defaultSettingsData ||
-        immutableUtils.getDefaultData(settingsFormOptions);
-
+    this.defaultSettingsData = defaultSettingsData || immutableUtils.getDefaultData(settingsFormOptions);
     this.settingsNumberKeys = immutableUtils.getNumberKeys(settingsFormOptions);
-
-    if (this.defaultEditData) {
-      initOption.defaultEditData = this.defaultEditData;
-    }
-
-    if (this.defaultQueryData) {
-      initOption.query = this.defaultQueryData;
-    }
-
     if (this.defaultSettingsData) {
-      initOption.defaultSettingsData = this.defaultSettingsData;
+      initOption.defaultSettingsData = utils.extend(
+        {},
+        this.defaultSettingsData,
+        initOption.defaultSettingsData,
+      );
+    }
+
+    // init list defaultData
+    this.defaultEditData = immutableUtils.getDefaultData(listOptions);
+    if (this.defaultEditData) {
+      initOption.defaultEditData = utils.extend(
+        {},
+        this.defaultEditData,
+        initOption.defaultEditData,
+      );
     }
 
     // 需要对 groupid特处理
@@ -103,8 +106,6 @@ export default class AppScreen extends React.Component {
       initOption.actionQuery = utils.extend({}, initOption.actionQuery, {
         groupid,
       });
-      initOption.defaultEditData = utils.extend({}, initOption.defaultEditData);
-      initOption.defaultSettingsData = utils.extend({}, initOption.defaultSettingsData);
     }
 
     this.initOption = initOption;
@@ -188,7 +189,6 @@ export default class AppScreen extends React.Component {
 
     this.tableOptions = immutableUtils.getTableOptions(thisListOptions);
     this.editFormOptions = immutableUtils.getFormOptions(thisListOptions);
-    this.defaultEditData = props.defaultEditData || immutableUtils.getDefaultData(thisListOptions);
   }
 
   render() {
@@ -216,6 +216,7 @@ export default class AppScreen extends React.Component {
     if (className) {
       screenClassName = `${screenClassName} ${className}`;
     }
+
     return (
       <div className={screenClassName}>
         {

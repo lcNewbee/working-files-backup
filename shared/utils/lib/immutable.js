@@ -56,7 +56,7 @@ var immutableUtils = {
     var ret = {};
 
     function fillRet($$item) {
-      var defaultVal = $$item.get(defaultKey);
+      var defaultVal = $$item.get(defaultKey) || $$item.getIn(['formProps', defaultKey]);
 
       // 如果是列表继续循环
       if (typeof $$item.findIndex === 'function') {

@@ -17,11 +17,11 @@ export const purviewOptions = [
     module: 'system',
     label: _('System '),
   },
-  // {
-  //   value: '3',
-  //   module: 'portal',
-  //   label: _('Portal '),
-  // },
+  {
+    value: '4',
+    module: 'portal',
+    label: _('Hotspot'),
+  },
 ];
 
 export const colors = [

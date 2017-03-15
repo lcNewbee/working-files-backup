@@ -445,7 +445,7 @@ export default class View extends React.PureComponent {
           width: `${myZoom}%`,
           minHeight: '300px',
           backgroundColor: '#ccc',
-          backgroundImage: `url(${this.curMapItem.backgroudImg})`,
+          backgroundImage: `url(${this.curMapItem.backgroundImg})`,
           backgroundRepeat: 'no-repeat',
         }}
         onMouseDown={this.onMapMouseDown}
@@ -453,7 +453,7 @@ export default class View extends React.PureComponent {
         onMouseMove={this.onMapMouseMove}
       >
         <img
-          src={this.curMapItem.backgroudImg}
+          src={this.curMapItem.backgroundImg}
           draggable="false"
           alt={this.curMapItem.mapName}
         />

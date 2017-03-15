@@ -253,7 +253,7 @@ export default class SendBox extends React.Component {
       });
   }
   onSave() {
-    this.props.onListAction(this.props.route.formUrl, {
+    this.props.onListAction({
       needMerge: true,
     });
   }

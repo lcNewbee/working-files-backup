@@ -140,7 +140,7 @@ export default class MapList extends React.PureComponent {
           $$mapList.map(($$map) => {
             const mapId = $$map.getIn(['id']);
             const mapName = $$map.getIn(['mapName']);
-            const imgUrl = $$map.getIn(['backgroudImg']);
+            const imgUrl = $$map.getIn(['backgroundImg']);
 
             if (mapId === -100) {
               return null;

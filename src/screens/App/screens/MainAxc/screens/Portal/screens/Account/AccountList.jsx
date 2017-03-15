@@ -4,7 +4,6 @@ import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import utils from 'shared/utils';
 import validator from 'shared/validator';
-import { baseSetting, advancedSetting } from 'shared/config/axcPortalAccount';
 import AppScreen from 'shared/components/Template/AppScreen';
 import FormContainer from 'shared/components/Organism/FormContainer';
 import Icon from 'shared/components/Icon';
@@ -50,30 +49,14 @@ const listOptions = fromJS([
   {
     id: 'loginName',
     text: _('Login Name'),
-    formProps: {
-      type: 'text',
-      required: true,
-      maxLength: '31',
-      validator: validator({
-        rules: 'utf8Len:[1,31]',
-      }),
-    },
   }, {
     id: 'date',
     text: _('Expired Date'),
     noForm: true,
-    formProps: {
-      type: 'text',
-      required: true,
-    },
   }, {
     id: 'time',
     text: _('Left Time'),
     noForm: true,
-    formProps: {
-      type: 'text',
-      required: true,
-    },
     transform(val) {
       return uptimeFilter.transform(val / 1000);
     },
@@ -81,28 +64,15 @@ const listOptions = fromJS([
     id: 'octets',
     text: _('Left Traffic'),
     noForm: true,
-    formProps: {
-      type: 'text',
-      required: true,
-    },
   }, {
     id: 'password',
     text: _('Password'),
     type: 'pwd',
     noTable: true,
-    formProps: {
-      required: true,
-      validator: validator({
-        rules: 'pwd',
-      }),
-    },
   }, {
     id: 'ex1',
     text: _('Question'),
     noTable: true,
-    formProps: {
-      type: 'text',
-    },
   }, {
     id: 'ex2',
     text: _('Answer'),
@@ -132,12 +102,6 @@ const listOptions = fromJS([
       },
     ],
     defaultValue: '0',
-    formProps: {
-      type: 'select',
-      required: true,
-      label: _('Type'),
-      placeholder: _('Please Select ') + _('Type'),
-    },
   }, {
     id: 'maclimit',
     text: _('Mac Limit'),
@@ -151,23 +115,9 @@ const listOptions = fromJS([
       },
     ],
     defaultValue: '0',
-    formProps: {
-      type: 'select',
-      required: true,
-      label: _('Mac Limit'),
-      placeholder: _('Please Select ') + _('Mac Limit'),
-    },
   }, {
     id: 'maclimitcount',
     text: _('Mac Quantity'),
-    formProps: {
-      type: 'num',
-      min: '0',
-      required: true,
-      validator: validator({
-        rules: 'num[0,9999]',
-      }),
-    },
   }, {
     id: 'autologin',
     text: _('Auto Login'),
@@ -181,12 +131,6 @@ const listOptions = fromJS([
       },
     ],
     defaultValue: '0',
-    formProps: {
-      type: 'select',
-      required: true,
-      label: _('Auto Login'),
-      placeholder: _('Auto Login') + _('Auto Login'),
-    },
   }, {
     id: 'speed',
     text: _('Speed Limit'),
@@ -198,43 +142,21 @@ const listOptions = fromJS([
         label: _('1M'),
       },
     ],
-    defaultValue: '0',
-    formProps: {
-      type: 'select',
-      required: true,
-      label: _('Speed Limit'),
-      placeholder: _('Please Select ') + _('Speed Limit'),
-    },
+    defaultValue: '1',
   }, {
     id: 'ex4',
     text: _('Last Unbind Month'),
     noForm: true,
     noTable: true,
-    formProps: {
-      type: 'text',
-      required: true,
-    },
   }, {
     id: 'ex3',
     text: _('Unbind Times'),
     noForm: true,
     noTable: true,
-    formProps: {
-      type: 'num',
-      min: '0',
-      required: true,
-    },
   }, {
     id: 'name',
     text: _('Name'),
     noTable: true,
-    formProps: {
-      type: 'text',
-      maxLength: '32',
-      validator: validator({
-        rules: 'utf8Len:[1,31]',
-      }),
-    },
   }, {
     id: 'gender',
     text: _('Gender'),
@@ -249,53 +171,26 @@ const listOptions = fromJS([
       },
     ],
     defaultValue: '0',
-    formProps: {
-      type: 'select',
-      label: _('Gender'),
-      placeholder: _('Please Select ') + _('Gender'),
-    },
   }, {
     id: 'idnumber',
     text: _('ID No.'),
     noTable: true,
-    formProps: {
-      type: 'num',
-    },
   }, {
     id: 'phoneNumber',
     text: _('Phone'),
     noTable: true,
-    formProps: {
-      type: 'num',
-    },
   }, {
     id: 'address',
     text: _('Address'),
     noTable: true,
-    formProps: {
-      type: 'text',
-    },
   }, {
     id: 'email',
     text: _('Email'),
     noTable: true,
-    formProps: {
-      type: 'text',
-      validator: validator({
-        rules: 'email',
-      }),
-    },
   }, {
     id: 'description',
     text: _('Detail Information'),
     noTable: true,
-    formProps: {
-      type: 'text',
-      maxLength: 256,
-      validator: validator({
-        rules: 'utf8Len:[1,255]',
-      }),
-    },
   }, {
     id: 'ex5',
     text: _('ex5'),
@@ -329,13 +224,6 @@ const listOptions = fromJS([
   }, {
     id: '__actions__',
     text: _('Actions'),
-    // actions: [
-    //   {
-    //     icon: 'check-square-o',
-    //     actionName: 'reset',
-    //     text: _('Reset Password'),
-    //   },
-    // ],
     transform(val, $$item) {
       return (
         <span>
@@ -343,6 +231,235 @@ const listOptions = fromJS([
         </span>
       );
     },
+  },
+]);
+export const baseSetting = fromJS([
+  {
+    id: 'loginName',
+    label: _('Login Name'),
+    className: 'cols col-6',
+    type: 'text',
+    required: true,
+    maxLength: '32',
+    validator: validator({
+      rules: 'utf8Len:[1,31]',
+    }),
+  }, {
+    id: 'password',
+    label: _('Password'),
+    className: 'cols col-6',
+    type: 'password',
+    noTable: true,
+    required: true,
+    maxLength: '32',
+    validator: validator({
+      rules: 'utf8Len:[1,31]',
+    }),
+  }, {
+    id: 'ex1',
+    label: _('Question'),
+    className: 'cols col-6',
+    noTable: true,
+    type: 'text',
+    maxLength: '32',
+    validator: validator({
+      rules: 'utf8Len:[1,31]',
+    }),
+  }, {
+    id: 'ex2',
+    label: _('Answer'),
+    className: 'cols col-6',
+    noTable: true,
+    type: 'text',
+    maxLength: '32',
+    validator: validator({
+      rules: 'utf8Len:[1,31]',
+    }),
+  }, {
+    id: 'state',
+    label: _('Type'),
+    className: 'cols col-12',
+    options: [
+      {
+        value: '0',
+        label: _('Unavailability'),
+      }, {
+        value: '1',
+        label: _('Free of Charge'),
+      },
+      {
+        value: '2',
+        label: _('Timekeeping'),
+      }, {
+        value: '3',
+        label: _('Buy Out'),
+      }, {
+        value: '4',
+        label: _('Traffic'),
+      },
+    ],
+    defaultValue: '0',
+    type: 'select',
+    required: true,
+    placeholder: _('Please Select ') + _('Type'),
+
+  }, {
+    id: 'maclimit',
+    label: _('Mac Limit'),
+    className: 'cols col-6',
+    options: [
+      {
+        value: '0',
+        label: _('Closed'),
+      }, {
+        value: '1',
+        label: _('Open'),
+      },
+    ],
+    defaultValue: '0',
+    type: 'select',
+    required: true,
+    placeholder: _('Please Select ') + _('Mac Limit'),
+  }, {
+    id: 'maclimitcount',
+    label: _('Mac Quantity'),
+    className: 'cols col-6',
+    type: 'number',
+    min: '0',
+    max: '999999',
+    required: true,
+  }, {
+    id: 'autologin',
+    label: _('Auto Login'),
+    className: 'cols col-6',
+    options: [
+      {
+        value: '0',
+        label: _('Closed'),
+      }, {
+        value: '1',
+        label: _('Open'),
+      },
+    ],
+    defaultValue: '0',
+    type: 'select',
+    required: true,
+    placeholder: _('Auto Login') + _('Auto Login'),
+
+  }, {
+    id: 'speed',
+    label: _('Speed Limit'),
+    noForm: true,
+    noTable: true,
+    className: 'cols col-6',
+    options: [
+      {
+        value: '1',
+        label: _('1M'),
+      },
+    ],
+    defaultValue: '0',
+    type: 'select',
+    required: true,
+    placeholder: _('Please Select ') + _('Speed Limit'),
+  }, {
+    id: 'ex4',
+    label: _('Last Unbind Month'),
+    className: 'cols col-6',
+    type: 'number',
+    required: true,
+    min: '1',
+    max: '12',
+  }, {
+    id: 'ex3',
+    label: _('Unbind Times'),
+    className: 'cols col-6',
+    type: 'number',
+    min: '0',
+    max: '999999',
+    required: true,
+  },
+]);
+
+export const advancedSetting = fromJS([
+  {
+    id: 'name',
+    label: _('Name'),
+    noTable: true,
+    className: 'cols col-12',
+    type: 'text',
+    maxLength: '32',
+    validator: validator({
+      rules: 'utf8Len:[1,31]',
+    }),
+  }, {
+    id: 'gender',
+    label: _('Gender'),
+    className: 'cols col-6',
+    noTable: true,
+    options: [
+      {
+        value: '0',
+        label: _('Male'),
+      }, {
+        value: '1',
+        label: _('Female'),
+      },
+    ],
+    defaultValue: '0',
+    type: 'select',
+    placeholder: _('Please Select ') + _('Gender'),
+
+  }, {
+    id: 'idnumber',
+    label: _('ID No.'),
+    className: 'cols col-6',
+    noTable: true,
+    type: 'text',
+    maxLength: '19',
+    validator: validator({
+      rules: 'utf8Len:[1,18]',
+    }),
+  }, {
+    id: 'phoneNumber',
+    label: _('Phone'),
+    noTable: true,
+    className: 'cols col-6',
+    type: 'text',
+    maxLength: '19',
+    validator: validator({
+      rules: 'utf8Len:[1,18]',
+    }),
+  }, {
+    id: 'address',
+    label: _('Address'),
+    className: 'cols col-6',
+    noTable: true,
+    type: 'text',
+    maxLength: '32',
+    validator: validator({
+      rules: 'utf8Len:[1,31]',
+    }),
+  }, {
+    id: 'email',
+    label: _('Email'),
+    className: 'cols col-6',
+    noTable: true,
+    type: 'text',
+    maxLength: '32',
+    validator: validator({
+      rules: 'email',
+    }),
+  }, {
+    id: 'description',
+    label: _('Detail Information'),
+    className: 'cols col-6',
+    noTable: true,
+    type: 'text',
+    maxLength: '255',
+    validator: validator({
+      rules: 'utf8Len:[1,255]',
+    }),
   },
 ]);
 const rechargeOptions = fromJS([
@@ -557,7 +674,7 @@ export default class View extends React.Component {
           $$cardDataList: $$data,
         });
       });
-    this.getDefaultEditData();
+    // this.getDefaultEditData();
   }
   // onBeforeSave() {
   //   const { store } = this.props;
@@ -565,43 +682,41 @@ export default class View extends React.Component {
   //   const $$myScreenStore = store.get(myScreenId);
   //   const $$curData = $$myScreenStore.get('curListItem');
   // }
-  onSave() {
-    this.props.onListAction(this.props.route.formUrl, {
-      needMerge: true,
-    });
-    // if (this.props.validateAll) {
-    //   this.props.validateAll(formId)
-    //     .then((errMsg) => {
-    //       if (errMsg.isEmpty()) {
-    //         this.onBeforeSave();
-    //         this.props.onListAction();
-    //       }
-    //    });
-    // }
+  onSave(formId) {
+    if (this.props.validateAll) {
+      this.props.validateAll(formId)
+        .then((errMsg) => {
+          if (errMsg.isEmpty()) {
+            this.props.onListAction({
+              needMerge: true,
+            });
+          }
+        });
+    }
   }
-  getDefaultEditData() {
-    const myDefaultEditData = {};
-    baseSetting.forEach(
-      ($$item, index) => {
-        const curId = $$item.get('id');
-        const defaultValue = $$item.get('defaultValue') || '';
+  // getDefaultEditData() {
+  //   const myDefaultEditData = {};
+  //   baseSetting.forEach(
+  //     ($$item, index) => {
+  //       const curId = $$item.get('id');
+  //       const defaultValue = $$item.get('defaultValue') || '';
 
-        myDefaultEditData[curId] = defaultValue;
+  //       myDefaultEditData[curId] = defaultValue;
 
-        return index;
-      },
-    );
-    advancedSetting.forEach(
-      ($$item, index) => {
-        const curId = $$item.get('id');
-        const defaultValue = $$item.get('defaultValue') || '';
-        myDefaultEditData[curId] = defaultValue;
-        return index;
-      },
-    );
+  //       return index;
+  //     },
+  //   );
+  //   advancedSetting.forEach(
+  //     ($$item, index) => {
+  //       const curId = $$item.get('id');
+  //       const defaultValue = $$item.get('defaultValue') || '';
+  //       myDefaultEditData[curId] = defaultValue;
+  //       return index;
+  //     },
+  //   );
 
-    this.defaultEditData = myDefaultEditData;
-  }
+  //   this.defaultEditData = myDefaultEditData;
+  // }
   toggleBox(moduleName) {
     this.setState({
       [moduleName]: !this.state[moduleName],
@@ -749,9 +864,6 @@ export default class View extends React.Component {
                   });
                 }}
               />
-              {/*<span>
-                <a href={`/index.html#/main/portal/account/list/mac/${$$data.get('loginName')}`} className="tablelink">{_('Mac Management')}</a>
-              </span>*/}
             </span>
           ),
           );
@@ -759,7 +871,6 @@ export default class View extends React.Component {
       <AppScreen
         {...this.props}
         listOptions={curListOptions}
-        defaultEditData={this.defaultEditData}
         modalChildren={this.renderCustomModal()}
         selectable
         actionable

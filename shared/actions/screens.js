@@ -165,7 +165,7 @@ export function closeListItemModal() {
     type: ACTION_TYPE.CLOSE_LIST_ITEM_MODAL,
   };
 }
-export function onListAction(url, option) {
+export function onListAction(option) {
   return (dispatch, getState) => {
     const globalState = getState();
     const name = globalState.screens.get('curScreenId');
@@ -209,7 +209,7 @@ export function onListAction(url, option) {
         ajaxOption.mode = option.mode;
       }
 
-      // 处理 ajax mode参数，是否跨域
+      // 处理 ajax url参数，是否跨域
       if (option.url) {
         myUrl = option.url;
       }
