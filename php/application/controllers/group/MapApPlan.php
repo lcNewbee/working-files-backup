@@ -4,6 +4,7 @@ class MapApPlan extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this->load->database();    
+		$this->mysql = $this->load->database('mysqli', TRUE);//netmanager
         $this->load->helper(array('array', 'my_customfun_helper'));    
 	}
 	function fetch() {
@@ -75,7 +76,8 @@ class MapApPlan extends CI_Controller {
 			$result = $this->ap_map_bind($data);
 		} elseif ($actionType === 'delete') {
             foreach ($data['selectedList'] as $mac) {
-                $this->db->delete('ap_map',array('ap_mac'=>$mac));
+                $this->db->delete('ap_map',array('ap_mac'=>$mac));	
+				$this->up_netmanager_ap($mac,true);
             }
             $result = json_encode(json_ok());
         }
@@ -94,6 +96,7 @@ class MapApPlan extends CI_Controller {
         );
         if( $this->db->insert('ap_map', $arr) ) {
             $result = json_ok();
+			$this->up_netmanager_ap($data);
         }
         return json_encode($result);
 	}
@@ -108,5 +111,23 @@ class MapApPlan extends CI_Controller {
 			$result = $this->fetch();
             echo json_encode($result);
 		}
+	}
+	//更新 netmanager 数据库 ap_list表
+	private function up_netmanager_ap($data,$type=false){
+		$result = 0;			
+		if($type){
+			$arr['Lat'] = null;
+			$arr['Lon'] = null;
+			$this->mysql->where('ApMac', $data);
+			$result = $this->mysql->update('ap_list', $arr);
+		}else{
+			$arr = array(
+				'Lat' => element('lat',$data,0),
+				'Lon' => element('lng',$data,0)
+			);
+			$this->mysql->where('ApMac', element('mac',$data));
+			$result = $this->mysql->update('ap_list', $arr);
+		}			
+		return $result;
 	}
 }
