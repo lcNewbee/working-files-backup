@@ -232,12 +232,11 @@ const listOptions = fromJS([
   {
     id: 'maxBssUsers',
     text: _('Max Clients'),
-    defaultValue: 32,
-
+    defaultValue: 64,
     formProps: {
       type: 'number',
       min: 1,
-      max: 64,
+      max: 128,
     },
   },
   {

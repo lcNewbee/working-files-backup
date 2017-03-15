@@ -35,6 +35,7 @@ const propTypes = {
   changeLoginStatus: PropTypes.func.isRequired,
   changeLoginState: PropTypes.func.isRequired,
   actionable: PropTypes.bool,
+  loadingStep: PropTypes.number,
 };
 const defaultProps = {
   actionable: true,

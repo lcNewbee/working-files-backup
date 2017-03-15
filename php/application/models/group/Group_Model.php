@@ -159,7 +159,7 @@ class Group_Model extends CI_Model {
                         ->where('mac', element('apmac', $data))
                         ->get()->result_array();
 
-        if(sizeof($q)> 0) {
+        if(element('type', $data) !== 'auto' && sizeof($q)> 0) {
             $result=array(
                 'state'=>array(
                     'code'=>6000,
@@ -167,7 +167,7 @@ class Group_Model extends CI_Model {
                 )
             );
             $result = json_encode($result);
-        } elseif (sizeof($q_mac) > 0) {
+        } elseif (element('type', $data) !== 'auto' && sizeof($q_mac) > 0) {
             $result=array(
                 'state'=>array(
                     'code'=>6001,

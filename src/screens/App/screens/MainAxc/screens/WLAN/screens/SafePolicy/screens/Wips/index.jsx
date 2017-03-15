@@ -87,8 +87,10 @@ const settingsFormOptions = fromJS([
     label: _('Channel Quality Report Cycle'),
     type: 'number',
     min: 1,
+    max: 65535,
     dataType: 'number',
-    defaultValue: '1',
+    defaultValue: 30,
+    required: true,
     help: _('Seconds'),
   }, {
     id: 'chlnum',
@@ -101,8 +103,8 @@ const settingsFormOptions = fromJS([
     type: 'checkbox',
     linkId: 'enable5gchl',
     dataType: 'number',
-    defaultValue: '1',
-    value: '1',
+    defaultValue: 1,
+    value: 1,
   }, {
     id: 'enable2g4pwr',
     label: _('Auto Power'),

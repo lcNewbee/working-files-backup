@@ -20,8 +20,8 @@ const languageOptions = List(b28n.getOptions().supportLang).map((item) => (
     label: b28n.langMap[item] || 'English',
   }
 )).toJS();
-const AXC1000_REBOOT_TIME = 4200;
-const AXC3000_REBOOT_TIME = 3000;
+const AXC1000_REBOOT_TIME = 6200;
+const AXC3000_REBOOT_TIME = 3200;
 
 function onChangeLang(data) {
   if (b28n.getLang() !== data.value) {
@@ -35,6 +35,7 @@ const propTypes = {
   route: PropTypes.object,
   save: PropTypes.func,
   fetch: PropTypes.func,
+  fetchScreenData: PropTypes.func,
   createModal: PropTypes.func,
   closeModal: PropTypes.func,
   changeModalState: PropTypes.func,
@@ -95,9 +96,12 @@ export default class View extends React.PureComponent {
         isSaveConfig: true,
       });
       return this.props.save('goform/system/saveConfig')
-        .then(() => this.setState({
-          isSaveConfig: false,
-        }));
+        .then(() => {
+          this.props.fetchScreenData();
+          this.setState({
+            isSaveConfig: false,
+          });
+        });
     }
   }
 
@@ -246,7 +250,7 @@ export default class View extends React.PureComponent {
               />
               <span className="help">
                 {
-                  configUpdateAt ? `${_('Latest Configuration:')} ${moment(configUpdateAt).format('YYYY-MM-DD HH:mm')}` : ''
+                  configUpdateAt ? `${_('Latest Configuration:')} ${moment.unix(configUpdateAt).format('YYYY-MM-DD HH:mm')}` : ''
                 }
               </span>
             </FormGroup>
