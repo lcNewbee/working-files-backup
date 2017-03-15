@@ -163,6 +163,7 @@ const sEndpointProtection =
 const sLiveMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/LiveMap');
 const sApPlanMap =
     require('../../screens/App/screens/MainAxc/screens/Map/screens/ApPlanMap');
+const sOrbitTrace = require('../../screens/App/screens/MainAxc/screens/Map/screens/OrbitTrace');
 const sClientsTraceList = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace');
 const sClientsTraceSettings = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace/Settings');
 // const sRfMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/Rf');
@@ -962,6 +963,14 @@ const routes = [
                 fetchUrl: 'goform/group/map/heatmap',
                 text: _('Heat Map'),
                 component: sHeatMap.Screen,
+              },
+              {
+                id: 'orbitTrace',
+                path: '/main/group/map/orbittrace',
+                formUrl: '/goform/group/map/orbittrace',
+                fetchUrl: '/goform/group/map/orbittrace',
+                text: _('Orbit Trace'),
+                component: sOrbitTrace.Screen,
               },
             ],
           },

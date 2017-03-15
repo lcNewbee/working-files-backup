@@ -20,7 +20,7 @@ const recordOptions = [
     },
   }, {
     id: 'info',
-    text: _('Describe'),
+    text: _('Description'),
   },
 ];
 
@@ -36,7 +36,7 @@ function getOnlineOption(serverData) {
       x: '60%',
     },
     title: {
-      text: _('Connect Status'),
+      text: _('Connection Status'),
       subtext: `${onlineCount} / ${outlineCount}`,
     },
     series: [
