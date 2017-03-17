@@ -7,10 +7,9 @@ function getOffsetFromGpsPoint(gpsPoint, mapItem) {
 
   ret.x = Number((xMeter / mapItem.length) * 100).toFixed(4);
   ret.y = Number((yMeter / mapItem.width) * 100).toFixed(4);
-
+  // 返回值：百分比*100
   ret.x = Math.abs(parseFloat(ret.x));
   ret.y = Math.abs(parseFloat(ret.y));
-
   return ret;
 }
 

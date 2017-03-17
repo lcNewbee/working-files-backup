@@ -962,7 +962,7 @@ const routes = [
               },
               {
                 id: 'heatMap',
-                path: '/main/group/map/heat_map',
+                path: '/main/group/map/heatmap',
                 formUrl: 'goform/group/map/heatmap',
                 fetchUrl: 'goform/group/map/heatmap',
                 text: _('Heat Map'),

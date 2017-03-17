@@ -264,8 +264,14 @@ $map-distance-y: $map-distance * .75;
   background-size: 100%;
   > img {
     width: 100%;
-    // visibility: hidden;
+    visibility: hidden;
+
+    &.auto {
+      visibility: visible;
+      width: 100%;
+    }
   }
+
   .m-device {
     position: absolute;
     z-index: 3;
