@@ -69,6 +69,12 @@ class NetworkInterface_Model extends CI_Model {
 		//if (strpos($result, '2000') !== false) {
 			//a			dd
 		$result = acnetmg_add_portip(json_encode($addItem));
+
+    if (json_decode($result)->state->code === 2000) {
+      $result = acnetmg_del_portip(json_encode($deleteItem));
+    } else {
+      $result = '{"state":{"code": 6109}}';
+    }
 		//}
 		return $result;
 	}

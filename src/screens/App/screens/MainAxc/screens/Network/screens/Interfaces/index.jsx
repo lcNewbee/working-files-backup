@@ -111,7 +111,7 @@ export default class NetworkInterface extends React.Component {
       if ($$curList.find($$item => ip === $$item.get('ip'))) {
         ret = _('Same %s item already exists', _('IP'));
       } else if ($$curList.find(
-        $$item => validator.combine.noSameSegment(
+        $$item => validator.combine.needSeparateSegment(
           ip,
           mask,
           $$item.get('ip'),

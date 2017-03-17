@@ -33,6 +33,32 @@ function isBroadcastIp(ip, mask) {
 
   return i === 4;
 }
+function getGreaterMask(mask1, mask2) {
+  var mask1Arry = mask1.split(".");
+  var mask2Arry = mask2.split(".");
+  var mask1Elem;
+  var mask2Elem;
+
+  for (var i = 0; i < 4; i++) {
+    mask1Elem = parseInt(mask1Arry[i], 10);
+    mask2Elem = parseInt(mask2Arry[i], 10);
+    if (mask1Elem > mask2Elem) {
+      return mask2;
+    } else if (mask1Elem < mask2Elem) {
+      return mask1;
+    }
+  }
+
+  return mask1;
+}
+function getMaxMask(maskArr) {
+  if (!maskArr || (maskArr && typeof maskArr.reduce !== 'function')) {
+    return ;
+  }
+  return maskArr.reduce(function (x, y) {
+    return getGreaterMask(x, y);
+  })
+}
 
 var combineVaildate = {
 
@@ -130,10 +156,28 @@ var combineVaildate = {
     }
   },
 
+  needSeparateSegment: function(ip, mask, ip1, mask1, msgOption) {
+    var maxMask = getGreaterMask(mask, mask1);
+    var msg = (msgOption && msgOption.ipLabel) || '';
+    var msg1 = (msgOption && msgOption.ip2Label) || '';
+
+    if (isSameNet(ip, ip1, maxMask, maxMask)) {
+      if (msg && msg1) {
+        return _('%s and %s can not has same segment', msg, msg1);
+      } else {
+        return _('Can not has same segment');
+      }
+    }
+  },
+
   noSameSegment: function(ip, mask, ip1, mask1, msgOption) {
 
     if (isSameNet(ip, ip1, mask, mask1)) {
-      return _('%s and %s can not has same segment', msgOption.ipLabel, msgOption.ip2Label);
+      if (msgOption && msgOption.ipLabel && msgOption.ip2Label) {
+        return _('%s and %s can not has same segment', msgOption.ipLabel, msgOption.ip2Label);
+      } else {
+        return _('Can not has same segment');
+      }
     }
   },
 
