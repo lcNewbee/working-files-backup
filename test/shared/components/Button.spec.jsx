@@ -1,58 +1,28 @@
 // Link.react-test.js
 import React from 'react';
 import Button from 'shared/components/Button/Button';
-import SaveButton from 'shared/components/Button/SaveButton';
-import renderer from 'react-test-renderer';
+import { shallow } from 'enzyme';
+import sinon from 'sinon';
+import Icon from 'shared/components/Icon';
 
 describe('Shared component', () => {
-  it('Button', () => {
-    const component = renderer.create(
-      <Button text="cog" />,
-    );
-    let tree = component.toJSON();
-    expect(tree).toMatchSnapshot();
-
-    tree.props.onClick();
-    tree = component.toJSON();
-    expect(tree).toMatchSnapshot();
-
-    // // manually trigger the callback
-    // tree.props.onMouseEnter();
-    // // re-rendering
-    // tree = component.toJSON();
-    // expect(tree).toMatchSnapshot();
-
-    // // manually trigger the callback
-    // tree.props.onMouseLeave();
-    // // re-rendering
-    // tree = component.toJSON();
-    // expect(tree).toMatchSnapshot();
-  });
-
-  it('SaveButton', () => {
-    let component = renderer.create(
-      <SaveButton text="cog" />,
-    );
-    let tree = component.toJSON();
-    expect(tree).toMatchSnapshot();
-
-    component = renderer.create(
-      <SaveButton text="cog" loading />,
-    );
-    tree = component.toJSON();
-    expect(tree).toMatchSnapshot();
-
-    // // manually trigger the callback
-    // tree.props.onMouseEnter();
-    // // re-rendering
-    // tree = component.toJSON();
-    // expect(tree).toMatchSnapshot();
-
-    // // manually trigger the callback
-    // tree.props.onMouseLeave();
-    // // re-rendering
-    // tree = component.toJSON();
-    // expect(tree).toMatchSnapshot();
+  describe('Button', () => {
+    it('should render without throwing an error', () => {
+      const wrapper = shallow(<Button text="test" />);
+      expect(wrapper.text()).toBe('test');
+    });
+    it('should render loading icon', () => {
+      const wrapper = shallow(<Button loading />);
+      expect(wrapper.find(Icon).length).toBe(1);
+    });
+    it('simulates click events', () => {
+      const onButtonClick = sinon.spy();
+      const wrapper = shallow(
+        <Button onClick={onButtonClick} />,
+      );
+      wrapper.find('button').simulate('click');
+      expect(onButtonClick.callCount).toBe(1);
+    });
   });
 });
 
