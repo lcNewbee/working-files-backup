@@ -43,9 +43,9 @@ class DpiMac_Model extends CI_Model {
             }
         }
         if($mac){
-            foreach($listData as $row){
-                 if(array_search($mac,$row)){
-                     $listData = array($row);
+            foreach($listData as $rows){
+                 if($mac == $rows['mac']){
+                     $listData = array($rows);
                      break;
                  }
             }
