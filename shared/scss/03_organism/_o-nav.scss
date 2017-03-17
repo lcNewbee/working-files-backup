@@ -10,6 +10,7 @@ $main-blue: #0093dd;
   @include scrollbar();
 
   .o-nav__link {
+    position: relative;
     display: block;
     padding: $g-distance 0;
     padding-left: $g-distance;
@@ -17,28 +18,24 @@ $main-blue: #0093dd;
     line-height: 20px;
     color: $nav-text-color;
     letter-spacing: 1px;
-    transition: background-color .2s ease-in-out, color .2s ease;
+    transition: color .2s ease-in-out;
+    user-select: none;
 
-    &:hover {
-      color: #fff;
+    .o-nav__icon-tabs,
+    .o-nav__icon-toggle {
+      position: absolute;
+      top: 50%;
+      left: 6px;
+      display: inline-block;
+      margin-top: -6px;
+      font-size: 12px;
+      width: 12px;
+      height: 12px;
+      line-height: 12px;
+      text-align: center;
+      transition: .3s transform ease-in-out;
     }
 
-    &.has-tabs {
-      position: relative;
-      &::after {
-        position: absolute;
-        top: 50%;
-        left: 10px;
-        display: inline-block;
-        margin-top: -5px;
-        font: normal normal normal 14px/1 FontAwesome;
-        font-size: inherit;
-        font-size: 10px;
-        content: "\f142";
-        text-rendering: auto;
-        transition: transform .4s ease-in-out;
-      }
-    }
     &.active {
       color: #fff;
       background-color: $g-brand-primary;
@@ -46,11 +43,13 @@ $main-blue: #0093dd;
       .icon {
         color: #fff;
       }
-
-      &.has-tabs {
-        &::after {
-          transform: rotate(-90deg);
-        }
+      .o-nav__icon-tabs {
+        transform: rotate(90deg);
+      }
+    }
+    &.is-open {
+      .o-nav__icon-toggle {
+        transform: rotate(90deg);
       }
     }
   }

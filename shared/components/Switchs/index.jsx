@@ -60,7 +60,7 @@ class Switchs extends React.Component {
     // 如果 switch 样式为block或者 设置了固定宽度
     // item将平分器宽度
     if (style && (style.display === 'block' || style.width)) {
-      width = utils.toDecimal(100 / optionsList.size, 3);
+      width = utils.cutFixedFloat(100 / optionsList.size, 3);
       itemStyle.width = `${width}%`;
     }
 
@@ -84,8 +84,8 @@ class Switchs extends React.Component {
       >
         {
           options ? optionsList.map((item, i) => {
-            const curDisabled = disabled || item.get('disabled');
-            const thisKey = item.get('id') || item.get('name') || '';
+            let curDisabled = disabled;
+            let thisKey = i;
             let myClassName = 'm-switch__item';
             let val;
             let label;
@@ -93,6 +93,8 @@ class Switchs extends React.Component {
             if (typeof item.get === 'function') {
               val = item.get('value');
               label = item.get('label');
+              thisKey = item.get('id') || item.get('name') || '';
+              curDisabled = disabled || item.get('disabled')
             } else {
               val = `${i}`;
               label = item;

@@ -78,52 +78,37 @@ body {
 
       @include scrollbar();
 
+      .m-menu--open {
+        border-bottom: 1px solid #1d2531;
+      }
+       
       .m-menu__link {
         background-color: #141a23;
+        transition: background-color .2s ease-in-out;
+
+        &:hover {
+          background-color: lighten(#141a23, 8%)
+        }
       }
 
       .o-nav__link {
-        padding: 12px 0;
+        padding: 11px 0;
         padding-left: ($g-distance * 1.25);
         font-size: 12px;
-        .icon {
+        .o-nav__link-avatar {
           font-size: 15px;
           line-height: ($g-distance * 1.25);
         }
         &.active {
-          .icon {
+          .o-nav__link-avatar {
             color: #fff;
           }
         }
       }
       .a-leaf-link {
-
         &.active {
           background-color: $g-brand-primary;
           text-shadow: 1px 1px 1px #141a23;
-        }
-      }
-      .a-branch-link {
-        position: relative;
-        &::before {
-          position: absolute;
-          top: 50%;
-          left: 10px;
-          display: inline-block;
-          margin-top: -6px;
-          font: normal normal normal 14px/1 FontAwesome;
-          font-size: inherit;
-          font-size: 12px;
-          content: "\f0da";
-
-          text-rendering: auto;
-          -webkit-font-smoothing: antialiased;
-          -moz-osx-font-smoothing: grayscale;
-        }
-        &.active {
-          &::before {
-            transform: rotate(90deg);
-          }
         }
       }
       .o-nav__sub-menus {

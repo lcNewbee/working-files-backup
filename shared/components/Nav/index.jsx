@@ -26,43 +26,90 @@ const defaultProps = {
  * @returns
  */
 function NavLink(props) {
-  const { item, className } = props;
+  const { item, className, hasSubmenus, hasTabs } = props;
   const { icon, path, text } = item.toJS();
+  let branchIconName = 'caret-right';
+  let CurComponent = Link;
+  let toggleIconClassName = 'o-nav__icon-toggle';
+  let linkProps = {
+    to: path,
+    activeClassName: 'active',
+  };
+
+  if (hasTabs) {
+    branchIconName = 'ellipsis-v';
+    toggleIconClassName = 'o-nav__icon-tabs';
+  }
+  if (hasSubmenus) {
+    CurComponent = 'a';
+    linkProps = null;
+  }
 
   return (
-    <Link
-      to={path}
+    <CurComponent
+      {...linkProps}
       className={className}
-      activeClassName="active"
       onClick={e => props.onClick(path, e)}
     >
       {
-        icon ? <Icon name={icon} /> : null
+        hasSubmenus || hasTabs ? (
+          <Icon
+            className={toggleIconClassName}
+            name={branchIconName}
+          />
+        ) : null
+      }
+      {
+        icon ? (
+          <Icon
+            className="o-nav__link-avatar"
+            name={icon}
+          />
+        ) : null
       }
       {text}
-    </Link>
+    </CurComponent>
   );
 }
 NavLink.propTypes = {
   item: PropTypes.object.isRequired,
   className: PropTypes.string,
   onClick: PropTypes.func,
+  hasSubmenus: PropTypes.any,
+  hasTabs: PropTypes.any,
 };
 
 
-class Nav extends Component {
+class Nav extends React.PureComponent {
   constructor(props) {
     super(props);
 
     // this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     this.onSelectItem = this.onSelectItem.bind(this);
-  }
+    this.onToggleBranch = this.onToggleBranch.bind(this);
 
+    this.state = {};
+  }
+  componentDidMount() {
+    if (this.defaultOpen) {
+      this.setState({
+        [this.defaultOpen]: !this.state[this.defaultOpen],
+      });
+      this.defaultOpen = '';
+    }
+  }
+  
   onSelectItem(path, e) {
     if (this.props.onChange) {
       this.props.onChange(path, e);
     }
   }
+  onToggleBranch(id) {
+    this.setState({
+      [id]: !this.state[id],
+    });
+  }
+
   render() {
     const { className, menus, location, role } = this.props;
     let navClassName = className || '';
@@ -82,14 +129,15 @@ class Nav extends Component {
       >
         <ul className="m-menu m-menu--open">
           {
-            fromJS(menus).map((item, i) => {
-              const myKey = `nav${i}`;
+            fromJS(menus).map((item) => {
+              const myKey = item.get('id');
               const hasChildRoutes = isTree && item.get('childRoutes');
               const hasSubmenus = hasChildRoutes && !item.get('noTree');
               const hasTabs = hasChildRoutes && item.get('noTree');
               let subMenuClassName = 'o-nav__sub-menus m-menu';
               let linkClassName = 'm-menu__link o-nav__link';
               let isActive = false;
+              let isOpen = this.state[myKey];
 
               if (item.get('noNav')) {
                 return null;
@@ -100,19 +148,22 @@ class Nav extends Component {
                   || location.pathname === item.get('path');
               }
 
-              if (isActive) {
-                subMenuClassName = `${subMenuClassName} m-menu--open`;
-              }
-
-
               if (!hasSubmenus) {
                 linkClassName = `${linkClassName} a-leaf-link`;
               } else {
                 linkClassName = `${linkClassName} a-branch-link`;
+                if (isActive && isOpen === undefined) {
+                  this.defaultOpen = myKey;
+                }
+              }
+              
+              if (isOpen) {
+                subMenuClassName = `${subMenuClassName} m-menu--open`;
+                linkClassName = `${linkClassName} is-open`;
               }
 
-              if (hasTabs) {
-                linkClassName = `${linkClassName} has-tabs`;
+              if (isActive) {
+                linkClassName = `${linkClassName} active`;
               }
 
               return (
@@ -120,28 +171,34 @@ class Nav extends Component {
                   <NavLink
                     item={item}
                     className={linkClassName}
-                    onClick={this.onSelectItem}
+                    hasSubmenus={hasSubmenus}
+                    hasTabs={hasTabs}
+                    onClick={() => {
+                      if (hasSubmenus) {
+                        this.onToggleBranch(myKey);
+                      }
+                    }}
                   />
                   {
-                    hasSubmenus ? (
+                    isOpen ? (
                       <ul className={subMenuClassName}>
                         {
-                          item.get('childRoutes').map(($$subItem, n) => {
-                            const thisKey = `${myKey}.${n}`;
-                            let mylinkClassName = 'm-menu__link o-nav__link a-leaf-link';
-                            const subHasTabs = $$subItem.get('childRoutes');
+                          item.get('childRoutes').map(($$subItem) => {
+                            const thisKey = $$subItem.get('id');
+                            const subHasSubmenus = $$subItem.get('childRoutes');
+                            const subHasTabs = subHasSubmenus && $$subItem.get('component');
+                            const mylinkClassName = 'm-menu__link o-nav__link a-leaf-link';
+
                             if ($$subItem.get('noNav')) {
                               return null;
-                            }
-
-                            if (subHasTabs && $$subItem.get('component')) {
-                              mylinkClassName = `${mylinkClassName} has-tabs`;
                             }
 
                             return (
                               <li key={thisKey}>
                                 <NavLink
                                   item={$$subItem}
+                                  hasSubmenus={false}
+                                  hasTabs={subHasTabs}
                                   className={mylinkClassName}
                                   onClick={this.onSelectItem}
                                 />

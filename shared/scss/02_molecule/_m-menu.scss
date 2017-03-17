@@ -38,17 +38,12 @@
       vertical-align: middle;
     }
 
-    &:hover {
-      color: #fff;
-    }
-
     &.active {
       background-color: #666;
       color: #fff;
 
       .icon {
         color: $g-brand-primary;
-
       }
     }
   }
