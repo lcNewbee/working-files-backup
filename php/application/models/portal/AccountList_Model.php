@@ -209,12 +209,14 @@ class AccountList_Model extends CI_Model {
         if($payType === 2){
             //包时卡
             $this->portalsql->set('time',($time+$payTime));
+            $this->portalsql->set('state','2');
             $this->portalsql->where('id', $id);  
             $result = $this->portalsql->update('portal_account'); 
         }
         if($payType === 4){
             //流量卡
             $this->portalsql->set('octets',($octets+$payTime));
+            $this->portalsql->set('state','4');
             $this->portalsql->where('id', $id);  
             $result = $this->portalsql->update('portal_account');            
         } 
@@ -241,6 +243,7 @@ class AccountList_Model extends CI_Model {
 
                 $dbtime = $year."-".$moth."-".$day." ".$s;
                 $this->portalsql->set('date',$dbtime);
+                $this->portalsql->set('state','3');
                 $this->portalsql->where('id', $id);  
                 $result = $this->portalsql->update('portal_account');
             }
@@ -253,6 +256,7 @@ class AccountList_Model extends CI_Model {
                 }
                 $dbtime = $year."-".$moth."-".$day." ".$s;
                 $this->portalsql->set('date',$dbtime);
+                $this->portalsql->set('state','3');
                 $this->portalsql->where('id', $id);  
                 $result = $this->portalsql->update('portal_account');
             }
@@ -260,7 +264,7 @@ class AccountList_Model extends CI_Model {
                 //年卡
                 $year = $year + $sum;
                 $dbtime = $year."-".$moth."-".$day." ".$s;
-                                
+                $this->portalsql->set('state','3');                                
                 $this->portalsql->set('date',$dbtime);
                 $this->portalsql->where('id', $id);  
                 $result = $this->portalsql->update('portal_account');
