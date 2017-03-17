@@ -269,19 +269,37 @@ const settingsOptions = fromJS([
       }, {
         id: 'username',
         label: _('Public User Name'),
+        defaultValue: 'Empty Wanted',
         type: 'text',
+        maxLength: '32',
+        validator: validator({
+          rules: 'utf8Len:[1, 31]',
+        }),
       }, {
         id: 'password',
         label: _('Public Password'),
         type: 'password',
+        maxLength: '30',
+        validator: validator({
+          rules: 'pwd',
+        }),
       }, {
         id: 'sessiontime',
         label: _('Sesssion Time'),
-        type: 'text',
+        type: 'number',
+        min: '0',
+        max: '99999',
+        validator: validator({
+          rules: 'num',
+        }),
       }, {
         id: 'url',
         label: _('URL After Authentication'),
         type: 'text',
+        maxLength: '32',
+        validator: validator({
+          rules: 'utf8Len:[1, 31]',
+        }),
       },
     ],
   },

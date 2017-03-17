@@ -9,7 +9,7 @@ import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
 const uptimeFilter = utils.filter('connectTime');
-
+const flowFilter = utils.filter('flowRate');
 const listOptions = fromJS([
   {
     id: 'ip',
@@ -80,11 +80,17 @@ const listOptions = fromJS([
     formProps: {
       required: true,
     },
+    transform(val) {
+      return `${flowFilter.transform(val)}`;
+    },
   }, {
     id: 'outs',
     text: _('Down Traffic'),
     formProps: {
       required: true,
+    },
+    transform(val) {
+      return `${flowFilter.transform(val)}`;
     },
   }, {
     id: 'octets',

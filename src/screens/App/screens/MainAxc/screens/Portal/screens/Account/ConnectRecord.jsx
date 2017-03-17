@@ -9,6 +9,7 @@ import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
 const uptimeFilter = utils.filter('connectTime');
+const flowFilter = utils.filter('flowRate');
 
 const listOptions = fromJS([
   {
@@ -78,11 +79,17 @@ const listOptions = fromJS([
     formProps: {
       required: true,
     },
+    transform(val) {
+      return `${flowFilter.transform(val)}`;
+    },
   }, {
     id: 'ins',
     text: _('Up Traffic'),
     formProps: {
       required: true,
+    },
+    transform(val) {
+      return `${flowFilter.transform(val)}`;
     },
   }, //  {
   //   id: 'accLogic',

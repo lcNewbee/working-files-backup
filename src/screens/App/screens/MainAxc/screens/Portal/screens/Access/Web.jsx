@@ -39,7 +39,7 @@ const listOptions = fromJS([
     width: '120px',
     options: [
       {
-        value: '0',
+        value: '1',
         label: 'OpenPortal',
       },
     ],
@@ -64,8 +64,8 @@ const listOptions = fromJS([
     id: 'countAuth',
     text: _('Click Times'),
     defaultValue: '100',
+    type: 'number',
     formProps: {
-      type: 'number',
       min: '0',
       max: '999999999',
       validator: validator({

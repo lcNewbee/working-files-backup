@@ -1,55 +1,312 @@
 import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
-import { fromJS } from 'immutable';
 import { connect } from 'react-redux';
+import { fromJS} from 'immutable';
 import { bindActionCreators } from 'redux';
 import AppScreen from 'shared/components/Template/AppScreen';
-import Button from 'shared/components/Button/Button';
+import { FormGroup } from 'shared/components';
+import moment from 'moment';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 import * as propertiesActions from 'shared/actions/properties';
-import * as axcActions from '../../../../actions';
-import '../../shared/_map.scss';
+import './orbitTrace.scss';
+import bgImg from '../../shared/images/map_bg.jpg';
 
+
+function getBuildingName() {
+  return utils.fetch('goform/group/map/building')
+    .then(json => (
+      {
+        options: json.data.list.map(
+          item => ({
+            value: item.id,
+            label: item.name,
+          }),
+        ),
+      }
+    ),
+  );
+}
+function getLayerMap() {
+  return utils.fetch('/goform/group/map/list')
+    .then(json => (
+      {
+        options: json.data.list.map(
+          item => ({
+            value: item.id,
+            label: item.mapName,
+          }),
+        ),
+      }
+    ),
+  );
+}
 const propTypes = {
-
+  store: PropTypes.object,
+  changeScreenQuery: PropTypes.func,
+  fetch: PropTypes.func,
+  fetchScreenData: PropTypes.func,
+};
+const defaultProps = {};
+const defaultQuery = {
+  date: moment().format('YYYY-MM-DD'),
+  fromTime: '08:00:11',
+  toTime: '20:00:11',
 };
 
-const defaultProps = {};
+export default class View extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      buildingNameOptions: fromJS([]),
+      layerMapOptions: fromJS([]),
+      date: moment().format('YYYY-MM-DD'),
+      fromTime: '08:00:11',
+      toTime: '20:00:11',
+    };
+    utils.binds(this,
+      [
+        'onSave',
+        'renderCurMap',
+        'updateState',
+        'onChangeBuilding',
+        'onChangeMapId',
+        'onSearch',
+      ],
+    );
+  }
+  componentWillMount() {
+    getBuildingName()
+      .then((data) => {
+        this.setState({
+          buildingNameOptions: fromJS(data.options),
+        });
+      });
+    getLayerMap()
+      .then((data) => {
+        this.setState({
+          layerMapOptions: fromJS(data.options),
+        });
+      });
+  }
+  componentDidMount() {
+    this.updateCanvas();
+  }
 
-const queryFormOptions = fromJS([
-  {
-    id: 'time',
-    label: _('Time'),
-    type: 'select',
-    inputStyle: {
-      minWidth: '160px',
-    },
-    searchable: true,
-    saveOnChange: true,
-    options: [],
-  },
-]);
+  componentDidUpdate() {
+    this.updateCanvas();
+  }
+  onChangeBuilding(id) {
+    this.props.changeScreenQuery({ buildId: id });
+    this.setState({ buildId: id });
+    this.props.fetch('goform/group/map/list', { buildId: id })
+        .then((json) => {
+          if (json.state && json.state.code === 2000) {
+            this.mapOptions = fromJS(json.data.list).map(item => fromJS({ label: item.get('mapName'), value: item.get('id') }));
+            this.mapList = fromJS(json.data.list);
+          }
+        }).then(() => {
+          this.onChangeMapId(this.mapOptions.getIn([0, 'value']));
+        });
+  }
+  onChangeMapId(id) {
+    Promise.resolve().then(() => {
+      this.props.changeScreenQuery({ curMapId: id });
+      this.setState({ curMapId: id });
+    }).then(() => {
+      this.props.fetchScreenData();
+    });
+  }
+  onSearch() {
+    clearTimeout(this.querySaveTimeout);
 
-export default class View extends React.PureComponent {
+    this.querySaveTimeout = setTimeout(() => {
+      this.onFetchList();
+    }, 200);
+  }
+  updateCanvas(data) {
+    let ctx = this.canvasElem;
+    if (!ctx) {
+      return null;
+    }
+    ctx = this.canvasElem.getContext('2d');
+    // ctx.strokeStyle = '#0093dd';
+    // ctx.lineWidth = '3';
+    // ctx.moveTo(300, 150);
+    // ctx.quadraticCurveTo(200, 250, 100, 150);
+    // ctx.quadraticCurveTo(230, 200, 150, 450);
+    // ctx.quadraticCurveTo(300, 400, 450, 400);
+    // ctx.quadraticCurveTo(700, 300, 700, 200);
+    // ctx.stroke();
+
+    // 原点加直线
+    ctx.fillStyle = 'red';
+    ctx.beginPath();
+    ctx.arc(330, 150, 5, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(100, 150, 5, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(150, 450, 5, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(520, 430, 5, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(800, 300, 5, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.strokeStyle = '#0093dd';
+    ctx.lineWidth = '3';
+    ctx.moveTo(330, 150);
+    ctx.lineTo(100, 150);
+    ctx.lineTo(150, 450);
+    ctx.lineTo(520, 430);
+    ctx.lineTo(800, 300);
+    return ctx.stroke();
+
+    // ctx.fillStyle = 'red';
+    // this.stationaryPoint(ctx, data);
+    // ctx.strokeStyle = '#0093dd';
+    // return this.oribitPath(ctx, data);
+  }
+
+  stationaryPoint(ctx, data) {
+    const path = data.path;
+    const len = path.length;
+    let i;
+    if (len === null) {
+      return null;
+    }
+    this.ctx.beginPath();
+    for (i = 0; i < len; i++) {
+      this.ctx.arc(path[i].x, path[i].y, 5, 0, 2 * Math.PI);
+    }
+    return this.ctx.fill();
+  }
+  oribitPath(ctx, data) {
+    const path = data.path;
+    const len = path.length;
+    if (len === 1 || path === null) {
+      return null;
+    }
+    const startX = path['0'].x;
+    const startY = path['0'].y;
+    this.ctx.beginPath();
+    this.ctx.moveTo(startX, startY);
+    for (let i = 1; i < len; i++) {
+      this.ctx.moveTo(path[i].x, path[i].y);
+    }
+    return this.ctx.stroke();
+  }
+  handleChangeQuery(name, data) {
+    this.props.changeScreenQuery({ [name]: data.value });
+    this.onSearch();
+  }
+  renderCurMap(curMapId,data) {
+    return (
+      <div
+        className="o-map-container"
+        ref={(mapContent) => {
+          if (mapContent) {
+            this.mapContent = mapContent;
+            this.mapWidth = mapContent.offsetWidth;
+            this.mapHeight = mapContent.offsetHeight;
+          }
+        }}
+        style={{
+          left: this.state.mapOffsetX,
+          top: this.state.mapOffsetY,
+          width: '100%',
+          height: '600px',
+          backgroundImage: `url(${bgImg})`,
+        }}
+      >
+        <canvas
+          ref={(canvasElem) => {
+            if (canvasElem && this.canvasElem !== canvasElem) {
+              this.canvasElem = canvasElem;
+            }
+          }}
+          width={1000}
+          height={600}
+          data={data}
+        />
+      </div>
+    );
+  }
+
   render() {
-    const actionBarChildren = [
+    const { store } = this.props;
+    const curScreenId = store.get('curScreenId');
+    const $$screenQuery = store.getIn([curScreenId, 'query']);
 
-    ];
     return (
       <AppScreen
         {...this.props}
-        actionable={false}
-        queryFormOptions={queryFormOptions}
+        initOption={{
+          query: defaultQuery,
+        }}
       >
         <div className="m-action-bar">
-          {
-            actionBarChildren
-          }
+          <FormGroup
+            type="select"
+            className="fl"
+            label={_('Building')}
+            value={this.state.buildId}
+            options={this.state.buildingNameOptions.toJS()}
+            onChange={data => this.onChangeBuilding(data.value)}
+          />
+          <FormGroup
+            type="select"
+            className="fl"
+            label={_('Map')}
+            value={this.state.curMapId}
+            options={this.state.layerMapOptions.toJS()}
+            onChange={data => this.onChangeMapId(data.value)}
+          />
+          <FormGroup
+            type="select"
+            className="fl"
+            name="client"
+            label={_('Client')}
+          />
+          <FormGroup
+            type="date"
+            className="fl"
+            label={_('Date')}
+            value={$$screenQuery.get('date')}
+            onChange={(data) => {
+              this.handleChangeQuery('date', data);
+            }}
+          />
+          <FormGroup
+            type="time"
+            className="fl"
+            label={_('Time from')}
+            value={$$screenQuery.get('fromTime')}
+            onChange={(data) => {
+              this.handleChangeQuery('fromTime', data);
+            }}
+            showSecond={false}
+          />
+
+          <FormGroup
+            type="time"
+            className="fl"
+            label={_('to')}
+            value={$$screenQuery.get('toTime')}
+            onChange={(data) => {
+              this.handleChangeQuery('toTime', data);
+            }}
+            showSecond={false}
+          />
         </div>
         <div className="o-map-warp">
-          <h2>23423</h2>
+          {this.renderCurMap(this.state.curMapId)}
         </div>
+
       </AppScreen>
     );
   }
@@ -62,6 +319,7 @@ function mapStateToProps(state) {
   return {
     app: state.app,
     store: state.screens,
+    product: state.product,
   };
 }
 
@@ -70,7 +328,6 @@ function mapDispatchToProps(dispatch) {
     appActions,
     screenActions,
     propertiesActions,
-    axcActions,
   ), dispatch);
 }
 

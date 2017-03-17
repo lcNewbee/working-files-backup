@@ -8,6 +8,7 @@ import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
+const uptimeFilter = utils.filter('connectTime');
 const listOptions = fromJS([
   {
     id: 'basip',
@@ -77,6 +78,9 @@ const listOptions = fromJS([
       max: '99999999',
       type: 'number',
       required: true,
+    },
+    transform(val) {
+      return uptimeFilter.transform(val / 1000);
     },
   }, {
     id: 'secretKey',

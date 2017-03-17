@@ -5,21 +5,39 @@
   },
   "data": {
     "list": [{
+      "id": "0",
       "ip": "192.168.0.1",
-      "mac": "192.168.0.1",
-      "loginName":"loginName",
-      "startDate":"startDate",
-      "time":"time",
+      "mac": "22:22:22:22:221",
+      "loginName":"FannyZHANG",
+      "startDate":"2017.12.24",
+      "time":"2",
       "state":"0",
-      "outs":"outs",
-      "ins":"ins",
-      "octets":"octets",
-      "basname":"basname",
-      "ssid":"ssid",
-      "apmac":"apmac",
-      "type":"methodtype",
-      "auto":"auto",
-      "agent":"agent"
+      "ins": 99999,
+      "outs": 100,
+      "octets":"3",
+      "basname":"werwe",
+      "ssid":"fannyZhang",
+      "type":"微信认证",
+      "apmac":"unknow",
+      "auto":"no",
+      "agent":"Client"
+    },{
+      "id": "1",
+      "ip": "192.168.0.1",
+      "mac": "22:22:22:22:221",
+      "loginName":"FannyZHANG",
+      "startDate":"2017.12.24",
+      "time":"2",
+      "state":"0",
+      "ins": 999999999,
+      "outs": 100,
+      "octets":"3",
+      "basname":"werwe",
+      "ssid":"fannyZhang",
+      "type":"微信认证",
+      "apmac":"unknow",
+      "auto":"no",
+      "agent":"Client"
     }]
   }
 }
