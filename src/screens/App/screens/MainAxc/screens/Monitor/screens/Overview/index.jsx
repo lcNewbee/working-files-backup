@@ -102,10 +102,15 @@ function getTerminalTypeOption(serverData) {
       dataList = dataList.sort(($$a, $$b) => {
         const a = $$a.get('value');
         const b = $$b.get('value');
+        let result = 0;
 
-        if (a < b) { return 1; }
-        if (a > b) { return -1; }
-        if (a === b) { return 0; }
+        if (a < b) {
+          result = 1;
+        } else if (a > b) {
+          result = -1;
+        }
+
+        return result;
       });
     }
 
@@ -157,25 +162,25 @@ function getFlowUnit(val) {
       label: 'B',
       val: 1,
     };
-  } else if (val <= (50 * Math.pow(1024, 2))) {
+  } else if (val <= (50 * (1024 ** 2))) {
     ret = {
       label: 'KB',
-      val: Math.pow(1024, 1),
+      val: 1024,
     };
-  } else if (val <= (50 * Math.pow(1024, 3))) {
+  } else if (val <= (50 * (1024 ** 3))) {
     ret = {
       label: 'MB',
-      val: Math.pow(1024, 2),
+      val: 1024 ** 2,
     };
-  } else if (val <= (50 * Math.pow(1024, 4))) {
+  } else if (val <= (50 * (1024 ** 4))) {
     ret = {
       label: 'GB',
-      val: Math.pow(1024, 3),
+      val: 1024 ** 3,
     };
   } else {
     ret = {
       label: 'TB',
-      val: Math.pow(1024, 4),
+      val: 1024 ** 4,
     };
   }
   return ret;
@@ -303,10 +308,10 @@ function getFlowOption(serverData, timeType) {
   option.yAxis[0].name = utilObj.label;
 
   option.series[0].data = $$dataList[0].data.map(
-    val => Number(val / utilObj.val).toFixed(12),
+    val => parseFloat(Number(val / utilObj.val).toFixed(12)),
   );
   option.series[1].data = $$dataList[1].data.map(
-    val => Number(val / utilObj.val).toFixed(12),
+    val => parseFloat(Number(val / utilObj.val).toFixed(12)),
   );
 
   return option;
@@ -314,10 +319,6 @@ function getFlowOption(serverData, timeType) {
 
 const propTypes = {
   store: PropTypes.instanceOf(Map),
-  route: PropTypes.object,
-  groupid: PropTypes.any,
-  initScreen: PropTypes.func,
-  leaveScreen: PropTypes.func,
   fetchScreenData: PropTypes.func,
   changeScreenQuery: PropTypes.func,
 };

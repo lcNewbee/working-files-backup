@@ -77,7 +77,8 @@ export default class AppScreen extends React.Component {
     this.refreshOptions(props);
 
     // init Settings Form
-    this.defaultSettingsData = defaultSettingsData || immutableUtils.getDefaultData(settingsFormOptions);
+    this.defaultSettingsData = defaultSettingsData ||
+        immutableUtils.getDefaultData(settingsFormOptions);
     this.settingsNumberKeys = immutableUtils.getNumberKeys(settingsFormOptions);
     if (this.defaultSettingsData) {
       initOption.defaultSettingsData = utils.extend(

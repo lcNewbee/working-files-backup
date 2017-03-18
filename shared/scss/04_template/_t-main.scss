@@ -74,7 +74,7 @@ body {
       z-index: 1502;
       overflow: hidden;
       overflow-y: auto;
-      transition: overflow-y .4s ease-in-out;
+      transition: overflow-y .2s ease-in-out;
 
       @include scrollbar();
 

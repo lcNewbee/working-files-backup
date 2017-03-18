@@ -48,7 +48,7 @@ helper = {
     return ret;
   },
 
-  connectTime: function (time, unit) {
+  connectTime: function (time) {
     var ret = '';
     var remainder = coreUtils.toNumber(time, 'connectTime');
     var days, hours, minutes, seconds;
