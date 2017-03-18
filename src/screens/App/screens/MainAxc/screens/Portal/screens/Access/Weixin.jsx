@@ -27,33 +27,33 @@ const listOptions = fromJS([
     width: '120px',
     options: [],
     formProps: {
-      maxLength: '32',
+      maxLength: '33',
       type: 'text',
       required: true,
       validator: validator({
-        rules: 'utf8Len:[1, 31]',
+        rules: 'utf8Len:[1, 32]',
       }),
     },
   }, {
     id: 'shopId',
     text: _('Shop ID'),
     formProps: {
-      maxLength: '32',
+      maxLength: '33',
       type: 'text',
       required: true,
       validator: validator({
-        rules: 'utf8Len:[1, 31]',
+        rules: 'utf8Len:[1, 32]',
       }),
     },
   }, {
     id: 'appId',
     text: _('App ID'),
     formProps: {
-      maxLength: '32',
+      maxLength: '33',
       type: 'text',
       required: true,
       validator: validator({
-        rules: 'utf8Len:[1, 31]',
+        rules: 'utf8Len:[1, 32]',
       }),
     },
   }, {
@@ -63,10 +63,10 @@ const listOptions = fromJS([
     formProps: {
       noAdd: true,
       type: 'text',
-      maxLength: '32',
+      maxLength: '33',
       required: true,
       validator: validator({
-        rules: 'utf8Len:[1, 31]',
+        rules: 'utf8Len:[1, 32]',
       }),
     },
   }, {
@@ -89,7 +89,7 @@ const listOptions = fromJS([
     formProps: {
       type: 'password',
       required: true,
-      maxLength: '64',
+      maxLength: '66',
       validator: validator({
         rules: 'utf8Len:[1, 64]',
       }),

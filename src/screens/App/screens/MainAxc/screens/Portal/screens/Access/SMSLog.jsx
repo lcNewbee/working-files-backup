@@ -24,7 +24,7 @@ const listOptions = fromJS([
     id: 'mContent',
     text: _('Message Content'),
     formProps: {
-      maxLength: '256',
+      maxLength: '257',
       type: 'text',
       required: true,
       validator: validator({

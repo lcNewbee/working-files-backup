@@ -32,7 +32,7 @@ const settingsOptions = fromJS([
     type: 'text',
     required: true,
     validator: validator({
-      rules: 'utf8Len:[1,255]',
+      rules: 'utf8Len:[1,32]',
     }),
   },
   {
@@ -41,7 +41,7 @@ const settingsOptions = fromJS([
     label: _('User Mac'),
     type: 'text',
     validator: validator({
-      rules: 'utf8Len:[1,255]',
+      rules: 'utf8Len:[1,32]',
     }),
   },
   {
@@ -50,7 +50,7 @@ const settingsOptions = fromJS([
     label: _('URL'),
     type: 'text',
     validator: validator({
-      rules: 'utf8Len:[1,255]',
+      rules: 'utf8Len:[1,32]',
     }),
   },
   {
@@ -60,7 +60,7 @@ const settingsOptions = fromJS([
     label: _('Bas IP'),
     type: 'text',
     validator: validator({
-      rules: 'utf8Len:[1,255]',
+      rules: 'utf8Len:[1,32]',
     }),
   },
   {

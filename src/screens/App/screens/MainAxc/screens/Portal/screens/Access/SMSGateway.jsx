@@ -17,7 +17,7 @@ const listOptions = fromJS([
     formProps: {
       type: 'text',
       required: true,
-      maxLength: '64',
+      maxLength: '65',
       validator: validator({
         rules: 'utf8Len:[1, 64]',
       }),
@@ -29,7 +29,7 @@ const listOptions = fromJS([
     formProps: {
       type: 'text',
       required: true,
-      maxLength: '64',
+      maxLength: '65',
       validator: validator({
         rules: 'utf8Len:[1, 64]',
       }),
@@ -39,7 +39,7 @@ const listOptions = fromJS([
     text: _('App Key'),
     formProps: {
       help: _('gwid,accountid,username'),
-      maxLength: '64',
+      maxLength: '65',
       type: 'text',
       required: true,
       validator: validator({
@@ -61,12 +61,12 @@ const listOptions = fromJS([
     id: 'serviceID',
     text: _('Template ID'),
     formProps: {
-      maxLength: '32',
+      maxLength: '33',
       help: _('ServiceID, Spcode'),
       type: 'text',
       required: true,
       validator: validator({
-        rules: 'utf8Len:[1, 31]',
+        rules: 'utf8Len:[1, 32]',
       }),
     },
   }, {
@@ -75,10 +75,10 @@ const listOptions = fromJS([
     formProps: {
       help: _('srcTermID'),
       type: 'text',
-      maxLength: '32',
+      maxLength: '33',
       required: true,
       validator: validator({
-        rules: 'utf8Len:[1, 31]',
+        rules: 'utf8Len:[1, 32]',
       }),
     },
   }, {
@@ -86,10 +86,10 @@ const listOptions = fromJS([
     text: _('Company Name'),
     formProps: {
       type: 'text',
-      maxLength: '32',
+      maxLength: '33',
       required: true,
       validator: validator({
-        rules: 'utf8Len:[1, 31]',
+        rules: 'utf8Len:[1, 32]',
       }),
     },
   }, {
@@ -175,7 +175,7 @@ const listOptions = fromJS([
     formProps: {
       type: 'textarea',
       required: true,
-      maxLength: '256',
+      maxLength: '257',
       validator: validator({
         rules: 'utf8Len:[1, 256]',
       }),

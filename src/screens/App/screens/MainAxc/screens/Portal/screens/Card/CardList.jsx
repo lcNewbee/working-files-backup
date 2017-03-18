@@ -49,9 +49,9 @@ const listOptions = fromJS([
     formProps: {
       type: 'text',
       required: true,
-      maxLength: 32,
+      maxLength: 33,
       validator: validator({
-        rules: 'utf8Len:[1,31]',
+        rules: 'utf8Len:[1,32]',
       }),
     },
   }, {
@@ -244,9 +244,9 @@ const listOptions = fromJS([
     formProps: {
       type: 'text',
       required: true,
-      maxLength: 32,
+      maxLength: 33,
       validator: validator({
-        rules: 'utf8Len:[1,31]',
+        rules: 'utf8Len:[1,32]',
       }),
     },
   }, {

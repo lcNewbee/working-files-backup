@@ -27,10 +27,10 @@ const listOptions = fromJS([
     width: '120px',
     formProps: {
       type: 'text',
-      maxLength: '32',
+      maxLength: '33',
       required: true,
       validator: validator({
-        rules: 'utf8Len:[1, 31]',
+        rules: 'utf8Len:[1, 32]',
       }),
     },
   }, {
@@ -77,9 +77,9 @@ const listOptions = fromJS([
     text: _('Description'),
     formProps: {
       type: 'textarea',
-      maxLength: '255',
+      maxLength: '257',
       validator: validator({
-        rules: 'utf8Len:[0, 255]',
+        rules: 'utf8Len:[0, 256]',
       }),
     },
   }, {

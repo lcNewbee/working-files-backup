@@ -103,9 +103,9 @@ const listOptions = fromJS([
     text: _('Reason'),
     formProps: {
       required: true,
-      maxLength: 256,
+      maxLength: 257,
       validator: validator({
-        rules: 'utf8Len:[1,255]',
+        rules: 'utf8Len:[1,256]',
       }),
     },
   },

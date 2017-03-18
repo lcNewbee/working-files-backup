@@ -240,9 +240,9 @@ export const baseSetting = fromJS([
     className: 'cols col-6',
     type: 'text',
     required: true,
-    maxLength: '32',
+    maxLength: '33',
     validator: validator({
-      rules: 'utf8Len:[1,31]',
+      rules: 'utf8Len:[1,32]',
     }),
   }, {
     id: 'password',
@@ -251,9 +251,9 @@ export const baseSetting = fromJS([
     type: 'password',
     noTable: true,
     required: true,
-    maxLength: '32',
+    maxLength: '33',
     validator: validator({
-      rules: 'utf8Len:[1,31]',
+      rules: 'utf8Len:[1,32]',
     }),
   }, {
     id: 'ex1',
@@ -261,9 +261,9 @@ export const baseSetting = fromJS([
     className: 'cols col-6',
     noTable: true,
     type: 'text',
-    maxLength: '32',
+    maxLength: '33',
     validator: validator({
-      rules: 'utf8Len:[1,31]',
+      rules: 'utf8Len:[1,32]',
     }),
   }, {
     id: 'ex2',
@@ -271,9 +271,9 @@ export const baseSetting = fromJS([
     className: 'cols col-6',
     noTable: true,
     type: 'text',
-    maxLength: '32',
+    maxLength: '33',
     validator: validator({
-      rules: 'utf8Len:[1,31]',
+      rules: 'utf8Len:[1,32]',
     }),
   }, {
     id: 'state',
@@ -436,9 +436,9 @@ export const advancedSetting = fromJS([
     className: 'cols col-6',
     noTable: true,
     type: 'text',
-    maxLength: '32',
+    maxLength: '33',
     validator: validator({
-      rules: 'utf8Len:[1,31]',
+      rules: 'utf8Len:[1,32]',
     }),
   }, {
     id: 'email',
@@ -456,9 +456,9 @@ export const advancedSetting = fromJS([
     className: 'cols col-6',
     noTable: true,
     type: 'text',
-    maxLength: '255',
+    maxLength: '257',
     validator: validator({
-      rules: 'utf8Len:[1,255]',
+      rules: 'utf8Len:[1,256]',
     }),
   },
 ]);
@@ -482,9 +482,9 @@ const rechargeOptions = fromJS([
     form: 'recharge',
     disabled: true,
     required: true,
-    maxLength: '32',
+    maxLength: '33',
     validator: validator({
-      rules: 'utf8Len:[1,31]',
+      rules: 'utf8Len:[1,32]',
     }),
   },
   {
