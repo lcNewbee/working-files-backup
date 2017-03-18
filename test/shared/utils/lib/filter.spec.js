@@ -14,7 +14,7 @@ describe('utils', () => {
     const connectTime = filter.helper.connectTime;
 
     it('should have the correct length', () => {
-      expect(connectTime.length).toBe(2);
+      expect(connectTime.length).toBe(1);
     });
 
     it('should return 0second when time is empty', () => {

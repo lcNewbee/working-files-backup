@@ -62,19 +62,20 @@ class NetworkInterface_Model extends CI_Model {
 	function edit_interface($data) {
 		$result = null;
 		$oldData = element('originalData', $data);
-		$deleteItem = $this->getCgiParam($oldData);
-		$addItem = $this->getCgiParam($data);
+  
+    $cgiParams = array(
+      'portname' => element('name', $data),
+      'oip' => element('ip', $oldData),
+      'omask' => element('mask', $oldData),
+      'nip' => element('ip', $data),
+      'nmask' => element('mask', $data)
+    )
 		//d		el
 				//$result = acnetmg_del_portip(json_encode($deleteItem));
 		//if (strpos($result, '2000') !== false) {
 			//a			dd
-		$result = acnetmg_add_portip(json_encode($addItem));
+		$result = acnetmg_update_portip(json_encode($cgiParams));
 
-    if (json_decode($result)->state->code === 2000) {
-      $result = acnetmg_del_portip(json_encode($deleteItem));
-    } else {
-      $result = '{"state":{"code": 6109}}';
-    }
 		//}
 		return $result;
 	}
