@@ -67,183 +67,185 @@ const App = require('../../screens/App');
 const SharedComponents = require('shared/components');
 
 //
-const sLogin = require('../../screens/App/screens/Login');
-const sWizard = require('../../screens/App/screens/Wizard');
+const sLogin = require('../../screens/Login');
+const sWizard = require('../../screens/Wizard');
 
 //
-const sMainAxc = require('../../screens/App/screens/MainAxc');
+const sMainAxc = require('../../screens/MainAxc');
 
 /**
  * 网络设置
  */
-// const sNetworkVlan = require('../../screens/App/screens/MainAxc/screens/Network/screens/VLAN');
-const sInterfaces = require('../../screens/App/screens/MainAxc/screens/Network/screens/Interfaces');
-const sDhcpList = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/DHCP/DhcpList');
-const sDhcpRelay = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/Relay/DhcpRelay');
-const sNetworkRoutes = require('../../screens/App/screens/MainAxc/screens/Network/screens/Routes');
-const sNetworkNat = require('../../screens/App/screens/MainAxc/screens/Network/screens/Nat');
-// const sNetworkAcl = require('../../screens/App/screens/MainAxc/screens/Network/screens/ACL');
-const sNetworkPort = require('../../screens/App/screens/MainAxc/screens/Network/screens/Port');
+// const sNetworkVlan = require('../../screens/MainAxc/screens/Network/screens/VLAN');
+const sInterfaces = require('../../screens/MainAxc/screens/Network/screens/Interfaces');
+const sDhcpList = require('../../screens/MainAxc/screens/Network/screens/DHCP/screens/DHCP/DhcpList');
+const sDhcpRelay = require('../../screens/MainAxc/screens/Network/screens/DHCP/screens/Relay/DhcpRelay');
+const sNetworkRoutes = require('../../screens/MainAxc/screens/Network/screens/Routes');
+const sNetworkNat = require('../../screens/MainAxc/screens/Network/screens/Nat');
+// const sNetworkAcl = require('../../screens/MainAxc/screens/Network/screens/ACL');
+const sNetworkPort = require('../../screens/MainAxc/screens/Network/screens/Port');
 const sRaduisTemplate =
-    require('../../screens/App/screens/MainAxc/screens/Network/screens/RadiusTemplate');
+    require('../../screens/MainAxc/screens/Network/screens/RadiusTemplate');
 const sRadiusProxy =
-    require('../../screens/App/screens/MainAxc/screens/Network/screens/RadiusProxy');
-const sNetworkAaa = require('../../screens/App/screens/MainAxc/screens/Network/screens/AAA');
+    require('../../screens/MainAxc/screens/Network/screens/RadiusProxy');
+const sNetworkAaa = require('../../screens/MainAxc/screens/Network/screens/AAA');
 const sPortalServer =
-    require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalServer');
+    require('../../screens/MainAxc/screens/Network/screens/Portal/screens/PortalServer');
 const sPortalRules =
-    require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalRules');
+    require('../../screens/MainAxc/screens/Network/screens/Portal/screens/PortalRules');
 const sPortalMac =
-    require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalMac');
+    require('../../screens/MainAxc/screens/Network/screens/Portal/screens/PortalMac');
 
 
 /**
  * AP组管理
  */
-const sOverview = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Overview');
-const sClientList = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/ClientList');
-const sSsidStatus = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/SsidStatus');
-const sApList = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/ApList');
-const sSafeStatus = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/SafeStatus');
-const sWirelessAcl = require('../../screens/App/screens/MainAxc/screens/WLAN/screens/Acl');
+const sOverview = require('../../screens/MainAxc/screens/Monitor/screens/Overview');
+const sClientList = require('../../screens/MainAxc/screens/Monitor/screens/ClientList');
+const sSsidStatus = require('../../screens/MainAxc/screens/Monitor/screens/SsidStatus');
+const sApList = require('../../screens/MainAxc/screens/Monitor/screens/ApList');
+const sSafeStatus = require('../../screens/MainAxc/screens/Monitor/screens/SafeStatus');
+const sWirelessAcl = require('../../screens/MainAxc/screens/WLAN/screens/Acl');
 const sSsidSettings =
-    require('../../screens/App/screens/MainAxc/screens/WLAN/screens/SsidSettings');
+    require('../../screens/MainAxc/screens/WLAN/screens/SsidSettings');
 const sSmartRf =
-    require('../../screens/App/screens/MainAxc/screens/WLAN/screens/SmartRf');
+    require('../../screens/MainAxc/screens/WLAN/screens/SmartRf');
 const sTimerPolicy =
-    require('../../screens/App/screens/MainAxc/screens/WLAN/screens/TimerPolicy');
+    require('../../screens/MainAxc/screens/WLAN/screens/TimerPolicy');
 const sWips =
-    require('../../screens/App/screens/MainAxc/screens/WLAN/screens/SafePolicy/screens/Wips');
+    require('../../screens/MainAxc/screens/WLAN/screens/SafePolicy/screens/Wips');
 const sEndpointProtection =
-  require('../../screens/App/screens/MainAxc/screens/WLAN/screens/SafePolicy/screens/EndpointProtection');
+  require('../../screens/MainAxc/screens/WLAN/screens/SafePolicy/screens/EndpointProtection');
 
-const sLiveMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/LiveMap');
+const sLiveMap = require('../../screens/MainAxc/screens/Map/screens/LiveMap');
 const sApPlanMap =
-    require('../../screens/App/screens/MainAxc/screens/Map/screens/ApPlanMap');
-const sOrbitTrace = require('../../screens/App/screens/MainAxc/screens/Map/screens/OrbitTrace');
-const sClientsTraceList = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace');
-const sClientsTraceSettings = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace/Settings');
-const sHeatMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/HeatMap');
+    require('../../screens/MainAxc/screens/Map/screens/ApPlanMap');
+const sOrbitTrace = require('../../screens/MainAxc/screens/Map/screens/OrbitTrace');
+const sClientsTraceList = require('../../screens/MainAxc/screens/Map/screens/ClientsTrace');
+const sClientsTraceSettings = require('../../screens/MainAxc/screens/Map/screens/ClientsTrace/Settings');
+const sHeatMap = require('../../screens/MainAxc/screens/Map/screens/HeatMap');
 
 // ndpi
 const sDPIOverview =
-    require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/DPIOverview');
+    require('../../screens/MainAxc/screens/Network/screens/DPI/screens/DPIOverview');
 // const sFlowInfo =
 const sMacStatistic =
-    require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/MacStatistic');
+    require('../../screens/MainAxc/screens/Network/screens/DPI/screens/MacStatistic');
 const sEthStatistic =
-    require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/EthStatistic');
+    require('../../screens/MainAxc/screens/Network/screens/DPI/screens/EthStatistic');
 const sProtoInfo =
-    require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/ProtoInfo');
+    require('../../screens/MainAxc/screens/Network/screens/DPI/screens/ProtoInfo');
 
 
 /**
  * 系统管理
  */
 const sSystemStatus =
-    require('../../screens/App/screens/MainAxc/screens/System/screens/SystemStatus');
+    require('../../screens/MainAxc/screens/System/screens/SystemStatus');
 const sSystemAdmin =
-    require('../../screens/App/screens/MainAxc/screens/System/screens/SystemAdmin');
+    require('../../screens/MainAxc/screens/System/screens/SystemAdmin');
 const sAlarmEvents =
-    require('../../screens/App/screens/MainAxc/screens/System/screens/AlarmEvents');
+    require('../../screens/MainAxc/screens/System/screens/AlarmEvents');
 const sLicense =
-    require('../../screens/App/screens/MainAxc/screens/System/screens/License');
+    require('../../screens/MainAxc/screens/System/screens/License');
 const sSystemLogList =
-    require('../../screens/App/screens/MainAxc/screens/System/screens/SystemLog/screens/LogList');
+    require('../../screens/MainAxc/screens/System/screens/SystemLog/screens/LogList');
 const sSystemLogMaintenance =
-    require('../../screens/App/screens/MainAxc/screens/System/screens/SystemLog/screens/logMaintenance');
+    require('../../screens/MainAxc/screens/System/screens/SystemLog/screens/logMaintenance');
 // const sSNMP =
-//     require('../../screens/App/screens/MainAxc/screens/System/screens/SNMP');
+//     require('../../screens/MainAxc/screens/System/screens/SNMP');
 // const sActiveStandby =
-//     require('../../screens/App/screens/MainAxc/screens/System/screens/ActiveStandby');
+//     require('../../screens/MainAxc/screens/System/screens/ActiveStandby');
 // const sSignatures =
-//     require('../../screens/App/screens/MainAxc/screens/System/screens/Signatures');
+//     require('../../screens/MainAxc/screens/System/screens/Signatures');
 const sApVersion =
-    require('../../screens/App/screens/MainAxc/screens/System/screens/ApVersion');
+    require('../../screens/MainAxc/screens/System/screens/ApVersion');
 const sApMaintenance =
-    require('../../screens/App/screens/MainAxc/screens/System/screens/ApMaintenance');
+    require('../../screens/MainAxc/screens/System/screens/ApMaintenance');
 const sApModel =
-    require('../../screens/App/screens/MainAxc/screens/System/screens/ApModel');
+    require('../../screens/MainAxc/screens/System/screens/ApModel');
 const sAcMaintenance =
-    require('../../screens/App/screens/MainAxc/screens/System/screens/AcMaintenance');
+    require('../../screens/MainAxc/screens/System/screens/AcMaintenance');
 const sNetworkTimeProtocol =
-    require('../../screens/App/screens/MainAxc/screens/System/screens/NetworkTimeProtocol');
+    require('../../screens/MainAxc/screens/System/screens/NetworkTimeProtocol');
 
 
 /**
  * Portal
  */
 const sPortalOverview =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Overview');
+    require('../../screens/MainAxc/screens/Portal/screens/Overview');
 const sPortalBase =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Base');
+    require('../../screens/MainAxc/screens/Portal/screens/Access/Base');
 // const sPortalBas =
-    // require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Bas');
+    // require('../../screens/MainAxc/screens/Portal/screens/Access/Bas');
 const sPortalUrlParams =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/UrlParams');
+    require('../../screens/MainAxc/screens/Portal/screens/Access/UrlParams');
 const sPortalWeb =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Web');
+    require('../../screens/MainAxc/screens/Portal/screens/Access/Web');
 const sPortalDefaultWeb =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/DefaultWeb');
+    require('../../screens/MainAxc/screens/Portal/screens/Access/DefaultWeb');
 const sPortalWeixin =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Weixin');
+    require('../../screens/MainAxc/screens/Portal/screens/Access/Weixin');
 // const sPortalApSetting =
-//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/ApSetting');
+//     require('../../screens/MainAxc/screens/Portal/screens/Access/ApSetting');
 // const sPortalSsid =
-//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Ssid');
+//     require('../../screens/MainAxc/screens/Portal/screens/Access/Ssid');
 
 const sPortalNas =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Radius/Nas');
+    require('../../screens/MainAxc/screens/Portal/screens/Radius/Nas');
 const sPortalOnline =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Radius/Online');
+    require('../../screens/MainAxc/screens/Portal/screens/Radius/Online');
 const sPortalConnectLog =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Radius/ConnectLog');
+    require('../../screens/MainAxc/screens/Portal/screens/Radius/ConnectLog');
 
 const sPortalAccountList =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Account/AccountList');
+    require('../../screens/MainAxc/screens/Portal/screens/Account/AccountList');
 const sPortalAccountListMac =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Account/AccountListMac');
+    require('../../screens/MainAxc/screens/Portal/screens/Account/AccountListMac');
 const sPortalConnectRecord =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Account/ConnectRecord');
+    require('../../screens/MainAxc/screens/Portal/screens/Account/ConnectRecord');
 
 const sPortalSMSGateWay =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/SMSGateway');
 const sPortalSMSLog =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/SMSLog');
 const sPortalSendMessage =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Message/SendMessage');
+    require('../../screens/MainAxc/screens/Portal/screens/Message/SendMessage');
 const sPortalSendBox =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Message/SendBox');
+    require('../../screens/MainAxc/screens/Portal/screens/Message/SendBox');
 const sPortalReceiveBox =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Message/ReceiveBox');
+    require('../../screens/MainAxc/screens/Portal/screens/Message/ReceiveBox');
 
 
 const sPortalCardCategory =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Card/CardCategory');
+    require('../../screens/MainAxc/screens/Portal/screens/Card/CardCategory');
 const sPortalCardList =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Card/CardList');
+    require('../../screens/MainAxc/screens/Portal/screens/Card/CardList');
 const sPortalLogList =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Log/LogList');
+    require('../../screens/MainAxc/screens/Portal/screens/Log/LogList');
 const sPortalOnlineRecordList =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Log/OnlineRecordList');
+    require('../../screens/MainAxc/screens/Portal/screens/Log/OnlineRecordList');
 const sPortalOnlineList =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Log/OnlineList');
+    require('../../screens/MainAxc/screens/Portal/screens/Log/OnlineList');
 
 const routes = [
   {
-    path: '/',
     component: App.Screen,
     formUrl: 'goform/axcInfo',
-    mainPath: '/main/group/monitor/overview',
-    indexRoute: { component: sLogin.Screen },
-    childRoutes: [
+    routes: [
+      {
+        path: '/',
+        mainPath: '/main/group/monitor/overview',
+        component: sLogin.Screen,
+      },
       {
         path: '/main/network',
         component: sMainAxc.Screen,
         icon: 'sphere',
         text: _('Network '),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/network/interface') },
-        childRoutes: [
+        routes: [
           {
             id: 'networkInterface',
             icon: 'th',
@@ -259,7 +261,7 @@ const routes = [
             path: '/main/network/dhcp',
             text: _('DHCP'),
             indexRoute: { onEnter: (nextState, replace) => replace('/main/network/dhcp/service/list') },
-            childRoutes: [
+            routes: [
               {
                 id: 'dhcpList',
                 path: '/main/network/dhcp/service/list',
@@ -304,7 +306,7 @@ const routes = [
             noTree: true,
             component: SharedComponents.TabContainer,
             indexRoute: { onEnter: (nextState, replace) => replace('/main/network/radius/template') },
-            childRoutes: [
+            routes: [
               {
                 id: 'radiusTemplate',
                 path: '/main/network/radius/template',
@@ -335,7 +337,7 @@ const routes = [
             path: '/main/network/portal',
             text: _('Portal Policy'),
             indexRoute: { onEnter: (nextState, replace) => replace('/main/network/portal/server') },
-            childRoutes: [
+            routes: [
               {
                 id: 'portalServer',
                 path: '/main/network/portal/server',
@@ -366,7 +368,7 @@ const routes = [
             path: '/main/network/dpi',
             text: _('DPI'),
             indexRoute: { onEnter: (nextState, replace) => replace('/main/network/dpi/dpioverview') },
-            childRoutes: [
+            routes: [
               {
                 id: 'dpioverview',
                 path: '/main/network/dpi/dpioverview',
@@ -403,7 +405,7 @@ const routes = [
         icon: 'group',
         text: _('AP Groups '),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/group/monitor') },
-        childRoutes: [
+        routes: [
           {
             id: 'monitor',
             isIndex: true,
@@ -411,7 +413,7 @@ const routes = [
             icon: 'pie-chart',
             text: _('Monitor'),
             indexRoute: { onEnter: (nextState, replace) => replace('/main/group/monitor/overview') },
-            childRoutes: [
+            routes: [
               {
                 id: 'overview',
                 path: '/main/group/monitor/overview',
@@ -428,7 +430,7 @@ const routes = [
               //   indexRoute: {
               //     onEnter: (nextState, replace) => replace('/main/group/monitor/flow/user'),
               //   },
-              //   childRoutes: [
+              //   routes: [
               //     {
               //       id: 'userFlow',
               //       path: '/main/group/monitor/flow/user',
@@ -485,7 +487,7 @@ const routes = [
             // 不要删除空格
             text: _('Radio '),
             indexRoute: { onEnter: (nextState, replace) => replace('/main/group/wireless/ssid') },
-            childRoutes: [
+            routes: [
               {
                 id: 'ssidSettings',
                 path: '/main/group/wireless/ssid',
@@ -508,13 +510,13 @@ const routes = [
             icon: 'map',
             text: _('Map'),
             indexRoute: { onEnter: (nextState, replace) => replace('/main/group/map/live') },
-            childRoutes: [
+            routes: [
               {
                 id: 'liveMap',
                 path: '/main/group/map/live',
                 text: _('Live Map'),
                 indexRoute: { onEnter: (nextState, replace) => replace('/main/group/map/live/list') },
-                childRoutes: [
+                routes: [
                   {
                     id: 'liveMap',
                     path: '/main/group/map/live/list',
@@ -559,7 +561,7 @@ const routes = [
                 indexRoute: {
                   onEnter: (nextState, replace) => replace('/main/group/clients_trace/list'),
                 },
-                childRoutes: [
+                routes: [
                   {
                     id: 'clientsTrace',
                     path: '/main/group/clients_trace/list',
@@ -596,7 +598,7 @@ const routes = [
             indexRoute: {
               onEnter: (nextState, replace) => replace('/main/group/safe/wips'),
             },
-            childRoutes: [
+            routes: [
               {
                 id: 'wirelessWips',
                 path: '/main/group/safe/wips',
@@ -628,7 +630,7 @@ const routes = [
         icon: 'road',
         text: _('Hotspot'),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/portal/overview') },
-        childRoutes: [
+        routes: [
           {
             id: 'portalOverview',
             icon: 'home',
@@ -646,7 +648,7 @@ const routes = [
             indexRoute: {
               onEnter: (nextState, replace) => replace('/main/portal/access/config'),
             },
-            childRoutes: [
+            routes: [
               {
                 id: 'portalAccessBase',
                 path: '/main/portal/access/config',
@@ -701,7 +703,7 @@ const routes = [
             indexRoute: {
               onEnter: (nextState, replace) => replace('/main/portal/radius/nas'),
             },
-            childRoutes: [
+            routes: [
               {
                 id: 'portalRadiusNas',
                 path: '/main/portal/radius/nas',
@@ -731,7 +733,7 @@ const routes = [
             indexRoute: {
               onEnter: (nextState, replace) => replace('/main/portal/account/list'),
             },
-            childRoutes: [
+            routes: [
               {
                 id: 'portalAccountAccountList',
                 path: '/main/portal/account/list',
@@ -739,7 +741,7 @@ const routes = [
                 indexRoute: {
                   onEnter: (nextState, replace) => replace('/main/portal/account/list/index'),
                 },
-                childRoutes: [
+                routes: [
                   {
                     id: 'portalAccountAccountList',
                     path: '/main/portal/account/list/index',
@@ -774,7 +776,7 @@ const routes = [
             indexRoute: {
               onEnter: (nextState, replace) => replace('/main/portal/message/send'),
             },
-            childRoutes: [
+            routes: [
               {
                 id: 'portalSendMessage',
                 path: '/main/portal/message/sendmessage/(:toname)',
@@ -805,7 +807,7 @@ const routes = [
             indexRoute: {
               onEnter: (nextState, replace) => replace('/main/portal/log/logList'),
             },
-            childRoutes: [
+            routes: [
               {
                 id: 'portalLogLogList',
                 path: '/main/portal/log/logList',
@@ -836,7 +838,7 @@ const routes = [
             indexRoute: {
               onEnter: (nextState, replace) => replace('/main/portal/card/cardcategory'),
             },
-            childRoutes: [
+            routes: [
               {
                 id: 'sPortalCardCategory',
                 path: '/main/portal/card/cardcategory',
@@ -860,7 +862,7 @@ const routes = [
         icon: 'cogs',
         text: _('System '),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/system/status') },
-        childRoutes: [
+        routes: [
           {
             id: 'systemStatus',
             icon: 'area-chart',
@@ -885,7 +887,7 @@ const routes = [
             indexRoute: {
               onEnter: (nextState, replace) => replace('/main/system/log/list'),
             },
-            childRoutes: [
+            routes: [
               {
                 id: 'systemLog',
                 path: '/main/system/log/list',
@@ -920,7 +922,7 @@ const routes = [
             indexRoute: {
               onEnter: (nextState, replace) => replace('/main/system/ap/base'),
             },
-            childRoutes: [
+            routes: [
               {
                 id: 'apMaintenanceBase',
                 path: '/main/system/ap/base',
@@ -972,10 +974,11 @@ const routes = [
         path: '/wizard',
         component: sWizard.Screen,
       },
+      {
+        path: '*',
+        component: NotFound,
+      },
     ],
-  }, {
-    path: '*',
-    component: NotFound,
   },
 ];
 

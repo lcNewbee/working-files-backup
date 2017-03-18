@@ -9,6 +9,7 @@ require('whatwg-fetch');
 const React = require('react');
 const ReactDOM = require('react-dom');
 const ReactRouter = require('react-router');
+const ReactRouterDom = require('react-router-dom');
 const appActions = require('shared/actions/app');
 const thunkMiddleware = require('redux-thunk').default;
 
@@ -17,10 +18,10 @@ const applyMiddleware = require('redux').applyMiddleware;
 const createStore = require('redux').createStore;
 const Provider = require('react-redux').Provider;
 const AppContainer = require('react-hot-loader').AppContainer;
+let prodConfig = require('./config/axc2.5');
 
+const HashRouter = ReactRouterDom.HashRouter;
 const unmountComponentAtNode = ReactDOM.unmountComponentAtNode;
-const Router = ReactRouter.Router;
-const hashHistory = ReactRouter.hashHistory;
 
 const mountNode = document.getElementById('app');
 
@@ -30,7 +31,11 @@ const remoteActionMiddleware = applyMiddleware(
 
 // 引入产品配置
 const renderApp = () => {
-  const prodConfig = require('./config/axc3.0');
+  let App = null;
+
+  prodConfig = require('./config/axc2.5');
+  App = prodConfig.routes[0].component;
+
   // Store
   const stores = remoteActionMiddleware(
     combineReducers({
@@ -50,7 +55,9 @@ const renderApp = () => {
   ReactDOM.render(
     <AppContainer>
       <Provider store={stores}>
-        <Router history={hashHistory} routes={prodConfig.routes} />
+        <HashRouter>
+          <App routes={prodConfig.routes} />
+        </HashRouter>
       </Provider>
     </AppContainer>,
     mountNode,

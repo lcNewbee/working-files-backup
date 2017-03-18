@@ -30,7 +30,7 @@ class App extends Component {
   }
   componentWillMount() {
     if (this.props.fetchProductInfo) {
-      this.props.fetchProductInfo(this.props.route.formUrl);
+      this.props.fetchProductInfo(this.props.routes[0].formUrl);
     }
   }
 
@@ -65,11 +65,9 @@ class App extends Component {
     const isLoadingModal = modelRole === 'loading';
 
     this.renderHtmlBody();
-
-
+    
     return (
       <div>
-        { this.props.children }
         <Modal
           id="appModal"
           isShow={modal.status === 'show'}
