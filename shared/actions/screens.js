@@ -96,9 +96,7 @@ export function fetchScreenData(option) {
 
         if (isFetchInfinite && curFetchIntervalTime > 0) {
           refreshTimeout = window.setTimeout(() => {
-            dispatch(fetchScreenData({
-              url: myUrl,
-            }));
+            dispatch(fetchScreenData());
           }, curFetchIntervalTime);
         }
       });

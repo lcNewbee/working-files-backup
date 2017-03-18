@@ -5,7 +5,6 @@ import utils from 'shared/utils';
 import { Map, List, fromJS } from 'immutable';
 import EchartReact from 'shared/components/EchartReact';
 import Table from 'shared/components/Table';
-import Switchs from 'shared/components/Switchs';
 import Select from 'shared/components/Select';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/screens';
@@ -163,12 +162,12 @@ function getFlowUnit(val) {
       label: 'KB',
       val: Math.pow(1024, 1),
     };
-  } else if (val <= (50 * Math.pow(1024, 2))) {
+  } else if (val <= (50 * Math.pow(1024, 3))) {
     ret = {
       label: 'MB',
       val: Math.pow(1024, 2),
     };
-  } else if (val <= (50 * Math.pow(1024, 3))) {
+  } else if (val <= (50 * Math.pow(1024, 4))) {
     ret = {
       label: 'GB',
       val: Math.pow(1024, 3),
@@ -246,27 +245,11 @@ function getFlowOption(serverData, timeType) {
         name: 'AP',
         type: 'line',
         smooth: true,
-        // itemStyle: {
-        //   normal: {
-        //     areaStyle: {
-        //       type: 'default',
-        //       opacity: 0.3,
-        //     },
-        //   },
-        // },
       },
       {
         name: _('Wireless'),
         type: 'line',
         smooth: true,
-        // itemStyle: {
-        //   normal: {
-        //     areaStyle: {
-        //       type: 'default',
-        //       opacity: 0.4,
-        //     },
-        //   },
-        // },
       },
     ],
   };
@@ -320,10 +303,10 @@ function getFlowOption(serverData, timeType) {
   option.yAxis[0].name = utilObj.label;
 
   option.series[0].data = $$dataList[0].data.map(
-    val => (val / utilObj.val),
+    val => Number(val / utilObj.val).toFixed(12),
   );
   option.series[1].data = $$dataList[1].data.map(
-    val => (val / utilObj.val),
+    val => Number(val / utilObj.val).toFixed(12),
   );
 
   return option;

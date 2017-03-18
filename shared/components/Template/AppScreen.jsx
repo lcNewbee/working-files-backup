@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import utils, { immutableUtils } from 'shared/utils';
-import immutable, { fromJS, List, Map } from 'immutable';
+import immutable, { List, Map } from 'immutable';
 import AppScreenList from 'shared/components/Template/AppScreenList';
 import AppScreenSettings from 'shared/components/Template/AppScreenSettings';
 import { getActionable } from 'shared/axc';
@@ -10,7 +10,6 @@ function emptyFunc() {}
 const propTypes = {
   app: PropTypes.instanceOf(Map).isRequired,
   store: PropTypes.instanceOf(Map).isRequired,
-  defaultEditData: PropTypes.object,
   noTitle: PropTypes.bool,
   children: PropTypes.node,
   title: PropTypes.string,

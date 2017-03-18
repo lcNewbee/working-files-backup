@@ -484,52 +484,6 @@ export default class EthStatistic extends React.Component {
         // listTitle={_('Statistics Within 30 Seconds')}
       >
         <div className="t-overview">
-          <Modal
-            isShow={this.state.showModal}
-            title={`Eth${this.state.ethId} ${_('Clients List')}`}
-            cancelButton={false}
-            size="lg"
-            draggable
-            onOk={() => {
-              this.setState({
-                showModal: false,
-              });
-            }}
-            onClose={() => {
-              this.setState({
-                showModal: false,
-              });
-            }}
-          >
-            <div className="t-overview">
-              <div className="element t-overview__section-header">
-                <span
-                  style={{
-                    marginRight: '5px',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  {_('View')}
-                </span>
-                <FormInput
-                  label={_('View')}
-                  options={viewOptions.toJS()}
-                  type="select"
-                  value={store.getIn([curScreenId, 'query', 'size'])}
-                  onChange={this.onChangeView}
-                />
-              </div>
-              <div className="t-overview__section">
-                <Table
-                  options={userModalOptions}
-                  list={store.getIn([curScreenId, 'data', 'ethxClientList'])}
-                  className="table"
-                  page={store.getIn([curScreenId, 'data', 'page'])}
-                  onPageChange={this.onChangePage}
-                />
-              </div>
-            </div>
-          </Modal>
           <div className="t-overview__section">
             <div className="element t-overview__section-header">
               <h3>
@@ -578,21 +532,52 @@ export default class EthStatistic extends React.Component {
             />
           </div>
         </div>
-        {/* onRowClick={(e, i) => {
-                this.setState({
-                  showModal: true,
-                  ethId: i,
-                });
-                Promise.resolve().then(() => {
-                  this.props.changeScreenQuery({
-                    ethx: `eth${this.state.ethId}`,
-                    page: '1',
-                    size: '20',
-                  });
-                }).then(() => {
-                  this.props.fetchScreenData();
-                });
-              }}*/}
+        <Modal
+          isShow={this.state.showModal}
+          title={`Eth${this.state.ethId} ${_('Clients List')}`}
+          cancelButton={false}
+          size="lg"
+          draggable
+          onOk={() => {
+            this.setState({
+              showModal: false,
+            });
+          }}
+          onClose={() => {
+            this.setState({
+              showModal: false,
+            });
+          }}
+        >
+          <div className="t-overview">
+            <div className="element t-overview__section-header">
+              <span
+                style={{
+                  marginRight: '5px',
+                  fontWeight: 'bold',
+                }}
+              >
+                {_('View')}
+              </span>
+              <FormInput
+                label={_('View')}
+                options={viewOptions.toJS()}
+                type="select"
+                value={store.getIn([curScreenId, 'query', 'size'])}
+                onChange={this.onChangeView}
+              />
+            </div>
+            <div className="t-overview__section">
+              <Table
+                options={userModalOptions}
+                list={store.getIn([curScreenId, 'data', 'ethxClientList'])}
+                className="table"
+                page={store.getIn([curScreenId, 'data', 'page'])}
+                onPageChange={this.onChangePage}
+              />
+            </div>
+          </div>
+        </Modal>
       </AppScreen>
     );
   }

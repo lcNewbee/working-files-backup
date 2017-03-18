@@ -21,9 +21,9 @@ const formOptions = fromJS([
     label: _('Data Report Time'),
     type: 'number',
     help: _('Minutes'),
-    min: '1',
-    defaultValue: '10',
-    max: '720000',
+    min: 1,
+    defaultValue: 10,
+    max: 65535,
     required: true,
   },
 ]);

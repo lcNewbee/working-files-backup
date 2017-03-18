@@ -120,8 +120,11 @@ const sEndpointProtection =
 const sLiveMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/LiveMap');
 const sApPlanMap =
     require('../../screens/App/screens/MainAxc/screens/Map/screens/ApPlanMap');
+const sOrbitTrace = require('../../screens/App/screens/MainAxc/screens/Map/screens/OrbitTrace');
 const sClientsTraceList = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace');
 const sClientsTraceSettings = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace/Settings');
+const sHeatMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/HeatMap');
+
 // ndpi
 const sDPIOverview =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/DPIOverview');
@@ -530,11 +533,45 @@ const routes = [
               // {
               //   id: 'heatMap',
               //   path: '/main/group/map/heat_map',
-              //   formUrl: '/goform/group/map/building',
-              //   fetchUrl: '/goform/group/map/building',
+              //   formUrl: 'goform/group/map/heatmap',
+              //   fetchUrl: 'goform/group/map/heatmap',
               //   text: _('Heat Map'),
               //   component: sHeatMap.Screen,
               // },
+              // {
+              //   id: 'orbitTrace',
+              //   path: '/main/group/map/orbittrace',
+              //   formUrl: '/goform/group/map/orbittrace',
+              //   fetchUrl: '/goform/group/map/orbittrace',
+              //   text: _('Orbit Trace'),
+              //   component: sOrbitTrace.Screen,
+              // },
+              {
+                id: 'cientsTrace',
+                path: '/main/group/clients_trace',
+                text: _('Clients Statistics'),
+                icon: 'bar-chart',
+                noTree: true,
+                component: SharedComponents.TabContainer,
+                indexRoute: {
+                  onEnter: (nextState, replace) => replace('/main/group/clients_trace/list'),
+                },
+                childRoutes: [
+                  {
+                    id: 'clientsTrace',
+                    path: '/main/group/clients_trace/list',
+                    formUrl: '/goform/group/map/clients_trace',
+                    text: _('Clients Statistics'),
+                    component: sClientsTraceList.Screen,
+                  }, {
+                    id: 'clientsTrace',
+                    path: '/main/group/clients_trace/settings',
+                    formUrl: 'goform/group/map/clients_trace',
+                    text: _('Settings'),
+                    component: sClientsTraceSettings.Screen,
+                  },
+                ],
+              },
             ],
           },
           {
@@ -579,32 +616,6 @@ const routes = [
             formUrl: 'goform/group/timerPolicy',
             text: _('Scheduler'),
             component: sTimerPolicy.Screen,
-          },
-          {
-            id: 'cientsTrace',
-            path: '/main/group/clients_trace',
-            text: _('Clients Statistics'),
-            icon: 'bar-chart',
-            noTree: true,
-            component: SharedComponents.TabContainer,
-            indexRoute: {
-              onEnter: (nextState, replace) => replace('/main/group/clients_trace/list'),
-            },
-            childRoutes: [
-              {
-                id: 'clientsTrace',
-                path: '/main/group/clients_trace/list',
-                formUrl: '/goform/group/map/clients_trace',
-                text: _('Clients Statistics'),
-                component: sClientsTraceList.Screen,
-              }, {
-                id: 'clientsTrace',
-                path: '/main/group/clients_trace/settings',
-                formUrl: 'goform/group/map/clients_trace',
-                text: _('Settings'),
-                component: sClientsTraceSettings.Screen,
-              },
-            ],
           },
         ],
       },
