@@ -200,62 +200,24 @@ export default class View extends React.PureComponent {
     });
   }
 
-  // onDrop(ev, curMapId) {
-  //   const mapOffset = dom.getAbsPoint(this.mapContent);
-  //   const offsetX = (ev.clientX - mapOffset.x - 13);
-  //   const offsetY = (ev.clientY - mapOffset.y - 13);
-  //   const curOffset = {
-  //     x: (offsetX * 100) / this.mapContent.offsetWidth,
-  //     y: (offsetY * 100) / this.mapContent.offsetHeight,
-  //   };
-  //   const curMapItem = this.mapList.find(item => item.get('id') === curMapId);
-  //   const gpsPoint = gps.getGpsPointFromOffset(curOffset, curMapItem);
-
-  //   ev.preventDefault();
-
-  //   this.props.updateCurEditListItem({
-  //     map: { ...gpsPoint },
-  //     mapId: curMapId,
-  //     ...gpsPoint,
-  //   }, true);
-
-  //   this.savePlaceDevice('place');
-  // }
-  // onMapMouseUp() {
-  //   this.mapMouseDown = false;
-  // }
-  // onMapMouseDown(e) {
-  //   if (e.target.className.indexOf('o-map-container') !== -1) {
-  //     this.mapMouseDown = true;
-  //     this.mapClientX = e.clientX;
-  //     this.mapClientY = e.clientY;
-  //   }
-  // }
-  // onMapMouseMove(e) {
-  //   if (this.mapMouseDown) {
-  //     this.updateState({
-  //       mapOffsetX: (this.state.mapOffsetX + e.clientX) - this.mapClientX,
-  //       mapOffsetY: (this.state.mapOffsetY + e.clientY) - this.mapClientY,
-  //     });
-  //     this.mapClientX = e.clientX;
-  //     this.mapClientY = e.clientY;
-  //   }
-  // }
-  // startDrag(ev, i) {
-  //   ev.dataTransfer.setData('Text', ev.target.id);
-  //   this.props.editListItemByIndex(i, 'move');
-  // }
-  // savePlaceDevice(type) {
-  //   this.props.changeScreenActionQuery({
-  //     action: type,
-  //   });
-
-  //   if (this.actionable) {
-  //     this.props.onListAction('', {
-  //       needMerge: true,
-  //     });
-  //   }
-  // }
+  onMapMouseUp() {
+    this.mapMouseDown = false;
+  }
+  onMapMouseDown(e) {
+    this.mapMouseDown = true;
+    this.mapClientX = e.clientX;
+    this.mapClientY = e.clientY;
+  }
+  onMapMouseMove(e) {
+    if (this.mapMouseDown) {
+      this.setState({
+        mapOffsetX: (this.state.mapOffsetX + e.clientX) - this.mapClientX,
+        mapOffsetY: (this.state.mapOffsetY + e.clientY) - this.mapClientY,
+      });
+      this.mapClientX = e.clientX;
+      this.mapClientY = e.clientY;
+    }
+  }
 
   removeHeatMap() {
     const heatCanvas = document.querySelectorAll('.heatmap-canvas');
@@ -274,7 +236,7 @@ export default class View extends React.PureComponent {
       <div
         className="o-map-container"
         // onDrop={e => this.onDrop(e, curMapId)}
-        onDragOver={e => e.preventDefault()}
+        // onDragOver={e => e.preventDefault()}
         ref={(mapContent) => {
           if (mapContent) {
             this.mapContent = mapContent;
@@ -287,9 +249,9 @@ export default class View extends React.PureComponent {
           top: this.state.mapOffsetY,
           width: `${myZoom}%`,
         }}
-        // onMouseDown={this.onMapMouseDown}
-        // onMouseUp={this.onMapMouseUp}
-        // onMouseMove={this.onMapMouseMove}
+        onMouseDown={this.onMapMouseDown}
+        onMouseUp={this.onMapMouseUp}
+        onMouseMove={this.onMapMouseMove}
       >
         <img src={imgUrl} className="auto" alt={curMapId} />
       </div>
@@ -427,7 +389,14 @@ export default class View extends React.PureComponent {
             onChange={(data) => { this.setState({ observeRadius: data.value }); }}
           />
         </div>
-        <div style={{ position: 'relative' }}>
+        <div
+          style={{
+            position: 'relative',
+            border: '1px solid #CCC',
+            overflow: 'hidden',
+          }}
+          // onDragOver={(e) => { e.preventDefault(); }}
+        >
           {this.renderCurMap(this.mapList, this.state.curMapId, this.state.zoom)}
           <div className="o-map-zoom-bar">
             <Icon

@@ -191,6 +191,7 @@ class Row extends Component {
             <MyCompeont
               key={thisKey}
               title={title}
+              width="200px"
             >
               { currVal }
             </MyCompeont>

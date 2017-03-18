@@ -155,7 +155,7 @@ export default class DPIOverview extends React.Component {
         {
           this.props.store.getIn([curScreenId, 'curSettings', 'ndpiEnable']) === '1' ? (
             <div className="t-overview">
-              <div className="element t-overview__section-header">
+              {/* <div className="element t-overview__section-header">
                 <h3>
                   <span
                     style={{
@@ -171,7 +171,7 @@ export default class DPIOverview extends React.Component {
                     clearable={false}
                   />
                 </h3>
-              </div>
+              </div>*/}
               <div className="t-overview__section row">
                 <div className="cols col-6" >
                   <div className="element clearfix">

@@ -98,14 +98,20 @@ const userModalOptions = fromJS([
     id: 'application',
     text: _('Applications'),
     transform(val) {
-      let str = '';
-      if (val) {
-        val.forEach((proto, iter) => {
-          str += (iter === val.size - 1 ? proto : `${proto}, `);
-        });
-        return str;
+      if (typeof (val) === 'undefined' || val.size === 0) return '--';
+      const len = val.size;
+      const n1 = len / 10;
+      const n2 = len % 10;
+      let div = [];
+      for (let i = 0; i < n1; i++) {
+        const start = i * 10;
+        const end = i * 10 + 10;
+        const arrStr = val.slice(start, end).join(', ');
+        div.push(<span>{arrStr}<br /></span>)
       }
-      return '--';
+      const lastArrStr = n2 === 0 ? '' : val.slice(n1 * 10, len).join(', ');
+      div.push(<span>{lastArrStr}</span>);
+      return div;
     },
   }, {
     id: 'curRate',
@@ -416,14 +422,20 @@ export default class EthStatistic extends React.Component {
         id: 'application',
         text: _('Applications'),
         transform(val) {
-          let str = '';
-          if (val) {
-            val.forEach((proto, iter) => {
-              str += (iter === val.size - 1 ? proto : `${proto}, `);
-            });
-            return str;
+          if (typeof (val) === 'undefined' || val.size === 0) return '--';
+          const len = val.size;
+          const n1 = len / 10;
+          const n2 = len % 10;
+          let div = [];
+          for (let i = 0; i < n1; i++) {
+            const start = i * 10;
+            const end = i * 10 + 10;
+            const arrStr = val.slice(start, end).join(', ');
+            div.push(<span>{arrStr}<br /></span>)
           }
-          return '--';
+          const lastArrStr = n2 === 0 ? '' : val.slice(n1 * 10, len).join(', ');
+          div.push(<span>{lastArrStr}</span>);
+          return div;
         },
       }, {
         id: 'curRate',

@@ -11,6 +11,8 @@ import * as actions from 'shared/actions/screens';
 import { colors, $$commonPieOption } from 'shared/config/axc';
 import AppScreen from 'shared/components/Template/AppScreen';
 
+const flowRateFilter = utils.filter('flowRate');
+
 const msg = {
   days: _('Days'),
 };
@@ -191,6 +193,11 @@ function getFlowOption(serverData, timeType) {
     color: [colors[0], colors[1]],
     tooltip: {
       trigger: 'axis',
+      formatter: (params) => {
+        return `${params[0].name}<br />
+                ${params[0].seriesName}: ${flowRateFilter.transform(params[0].value)}<br />
+                ${params[1].seriesName}: ${flowRateFilter.transform(params[1].value)}`
+      }
     },
     legend: {
       data: ['AP', _('Wireless')],

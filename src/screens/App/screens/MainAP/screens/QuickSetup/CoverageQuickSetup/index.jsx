@@ -306,15 +306,15 @@ export default class QuickSetup extends React.Component {
   // 当准备改变步骤时
   onBeforeStep(data) {
     // 下一页
-    if (data.currStep === 0 && data.targetStep === 1) {
-      const { ip, mask } = this.props.store.get('curData').toJS();
+    // if (data.currStep === 0 && data.targetStep === 1) {
+    //   const { ip, mask } = this.props.store.get('curData').toJS();
 
-       console.log(validator.combine);
-       const msg = validator.combine.noBroadcastIp(ip, mask);
-      if (msg) {
-        return msg;
-      }
-    }
+    //    console.log(validator.combine);
+    //    const msg = validator.combine.noBroadcastIp(ip, mask);
+    //   if (msg) {
+    //     return msg;
+    //   }
+    // }
     if (data.currStep === 1 && data.targetStep === 2) {
       const radioOnEffect = this.props.store.getIn(['curData', 'radioOnEffect']).toJS();
       if (!radioOnEffect.some(val => val === '1')) { // 需要用户选择，而且必须选择至少一个
