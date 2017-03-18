@@ -228,5 +228,18 @@
   "Countdown":"倒计时",
   "Sorting":"排序",
   "Recharge":"充值",
-  "Recharge Choices":"充值卡类型"
+  "Recharge Choices":"充值卡类型",
+
+  "Template ID":"模板ID",
+  "Signature ID":"签名ID",
+  "Company Name":"公司名称",
+  "Used Times":"使用次数",
+  "MultiTerminal Log":"多终端登录",
+  "Overdue Duration":"过期时长",
+  "Message Content":"短信内容",
+  "SMS Gateway":"短信网关设置",
+  "On Service":"启用",
+  "Out of Service":"停用",
+  "SMS Log":"短信发送日志",
+  "Gate Type":"网关类型"
 }

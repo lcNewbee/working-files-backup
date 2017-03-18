@@ -72,6 +72,8 @@ export default class View extends React.Component {
         'onChangeBuilding',
         'onChangeMapId',
         'onSearch',
+        'stationaryPoint',
+        'oribitPath',
       ],
     );
   }
@@ -90,11 +92,17 @@ export default class View extends React.Component {
       });
   }
   componentDidMount() {
-    this.updateCanvas();
+    const store = this.props.store;
+    const curScreenId = store.get('curScreenId');
+    const data = store.getIn([curScreenId, 'data', 'settings', 'path']);
+    this.updateCanvas(data);
   }
 
   componentDidUpdate() {
-    this.updateCanvas();
+    const store = this.props.store;
+    const curScreenId = store.get('curScreenId');
+    const data = store.getIn([curScreenId, 'data', 'settings', 'path']);
+    this.updateCanvas(data);
   }
   onChangeBuilding(id) {
     this.props.changeScreenQuery({ buildId: id });
@@ -125,6 +133,8 @@ export default class View extends React.Component {
     }, 200);
   }
   updateCanvas(data) {
+    if (typeof (data) === 'undefined') { return null; }
+    console.log('data', data);
     let ctx = this.canvasElem;
     if (!ctx) {
       return null;
@@ -140,71 +150,72 @@ export default class View extends React.Component {
     // ctx.stroke();
 
     // 原点加直线
-    ctx.fillStyle = 'red';
-    ctx.beginPath();
-    ctx.arc(330, 150, 5, 0, 2 * Math.PI);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(100, 150, 5, 0, 2 * Math.PI);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(150, 450, 5, 0, 2 * Math.PI);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(520, 430, 5, 0, 2 * Math.PI);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(800, 300, 5, 0, 2 * Math.PI);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.strokeStyle = '#0093dd';
-    ctx.lineWidth = '3';
-    ctx.moveTo(330, 150);
-    ctx.lineTo(100, 150);
-    ctx.lineTo(150, 450);
-    ctx.lineTo(520, 430);
-    ctx.lineTo(800, 300);
-    return ctx.stroke();
-
     // ctx.fillStyle = 'red';
-    // this.stationaryPoint(ctx, data);
+    // ctx.beginPath();
+    // ctx.arc(330, 150, 5, 0, 2 * Math.PI);
+    // ctx.fill();
+    // ctx.beginPath();
+    // ctx.arc(100, 150, 5, 0, 2 * Math.PI);
+    // ctx.fill();
+    // ctx.beginPath();
+    // ctx.arc(150, 450, 5, 0, 2 * Math.PI);
+    // ctx.fill();
+    // ctx.beginPath();
+    // ctx.arc(520, 430, 5, 0, 2 * Math.PI);
+    // ctx.fill();
+    // ctx.beginPath();
+    // ctx.arc(800, 300, 5, 0, 2 * Math.PI);
+    // ctx.fill();
+    // ctx.beginPath();
     // ctx.strokeStyle = '#0093dd';
-    // return this.oribitPath(ctx, data);
+    // ctx.lineWidth = '3';
+    // ctx.moveTo(330, 150);
+    // ctx.lineTo(100, 150);
+    // ctx.lineTo(150, 450);
+    // ctx.lineTo(520, 430);
+    // ctx.lineTo(800, 300);
+    // return ctx.stroke();
+
+    ctx.fillStyle = 'red';
+    this.stationaryPoint(ctx, data);
+    ctx.strokeStyle = '#0093dd';
+    this.oribitPath(ctx, data);
   }
 
   stationaryPoint(ctx, data) {
-    const path = data.path;
-    const len = path.length;
+    const len = data.size;
+    console.log('data', data);
     let i;
     if (len === null) {
       return null;
     }
-    this.ctx.beginPath();
+    ctx.beginPath();
     for (i = 0; i < len; i++) {
-      this.ctx.arc(path[i].x, path[i].y, 5, 0, 2 * Math.PI);
+      ctx.arc(data[i].x, data[i].y, 5, 0, 2 * Math.PI);
     }
-    return this.ctx.fill();
+    ctx.fill();
   }
   oribitPath(ctx, data) {
-    const path = data.path;
-    const len = path.length;
-    if (len === 1 || path === null) {
+    const len = data.size;
+    if (len === 1 || data === null) {
       return null;
     }
-    const startX = path['0'].x;
-    const startY = path['0'].y;
-    this.ctx.beginPath();
-    this.ctx.moveTo(startX, startY);
+    const startX = data[0].x;
+    const startY = data[0].y;
+    ctx.beginPath();
+    ctx.moveTo(startX, startY);
     for (let i = 1; i < len; i++) {
-      this.ctx.moveTo(path[i].x, path[i].y);
+      ctx.moveTo(data[i].x, data[i].y);
     }
-    return this.ctx.stroke();
+    ctx.stroke();
   }
   handleChangeQuery(name, data) {
     this.props.changeScreenQuery({ [name]: data.value });
     this.onSearch();
   }
-  renderCurMap(curMapId,data) {
+  renderCurMap(curMapId, data) {
+    const store = this.props.store;
+    const curScreenId = store.get('curScreenId');
     return (
       <div
         className="o-map-container"
@@ -231,7 +242,7 @@ export default class View extends React.Component {
           }}
           width={1000}
           height={600}
-          data={data}
+          data={store.getIn([curScreenId, 'data', 'settings', 'path'])}
         />
       </div>
     );

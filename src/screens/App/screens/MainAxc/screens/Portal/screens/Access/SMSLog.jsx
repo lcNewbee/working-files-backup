@@ -8,92 +8,39 @@ import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
-const uptimeFilter = utils.filter('connectTime');
 const listOptions = fromJS([
   {
-    id: 'basip',
-    text: _('Bas IP'),
-    width: '120px',
+    id: 'phoneNumber',
+    text: _('Phone Number'),
     formProps: {
       type: 'text',
       required: true,
+      maxLength: '22',
       validator: validator({
-        rules: 'ip',
+        rules: 'utf8Len:[1, 20]',
       }),
     },
   }, {
-    id: 'ssid',
-    text: _('SSID'),
-    width: '120px',
-    options: [],
+    id: 'mContent',
+    text: _('Message Content'),
     formProps: {
-      maxLength: '32',
+      maxLength: '256',
       type: 'text',
       required: true,
       validator: validator({
-        rules: 'utf8Len:[1, 31]',
+        rules: 'utf8Len:[1, 256]',
       }),
     },
   }, {
-    id: 'shopId',
-    text: _('Shop ID'),
+    id: 'date',
+    text: _('Date'),
     formProps: {
-      maxLength: '32',
-      type: 'text',
+      type: 'date',
       required: true,
-      validator: validator({
-        rules: 'utf8Len:[1, 31]',
-      }),
     },
   }, {
-    id: 'appId',
-    text: _('App ID'),
-    formProps: {
-      maxLength: '32',
-      type: 'text',
-      required: true,
-      validator: validator({
-        rules: 'utf8Len:[1, 31]',
-      }),
-    },
-  }, {
-    id: 'domain',
-    text: _('Domain'),
-    noForm: true,
-    formProps: {
-      noAdd: true,
-      type: 'text',
-      maxLength: '32',
-      required: true,
-      validator: validator({
-        rules: 'utf8Len:[1, 31]',
-      }),
-    },
-  }, {
-    id: 'outTime',
-    text: _('Out Time'),
-    noForm: true,
-    formProps: {
-      min: '0',
-      max: '99999999',
-      type: 'number',
-      required: true,
-    },
-    transform(val) {
-      return uptimeFilter.transform(val / 1000);
-    },
-  }, {
-    id: 'secretKey',
-    text: _('Secret Key'),
-    noTable: true,
-    formProps: {
-      type: 'password',
-      required: true,
-      maxLength: '64',
-      validator: validator({
-        rules: 'utf8Len:[1, 64]',
-      }),
-    },
+    id: 'gatewayType',
+    text: _('Gate Type'),
   },
 ]);
 
@@ -108,11 +55,10 @@ export default class View extends React.Component {
         {...this.props}
         listOptions={listOptions}
         noTitle
-        deleteable={
-          ($$item, index) => (index !== 0)
-        }
         actionable
         selectable
+        addable={false}
+        editable={false}
       />
     );
   }
