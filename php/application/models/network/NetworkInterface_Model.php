@@ -69,14 +69,9 @@ class NetworkInterface_Model extends CI_Model {
       'omask' => element('mask', $oldData),
       'nip' => element('ip', $data),
       'nmask' => element('mask', $data)
-    )
-		//d		el
-				//$result = acnetmg_del_portip(json_encode($deleteItem));
-		//if (strpos($result, '2000') !== false) {
-			//a			dd
+    );
 		$result = acnetmg_update_portip(json_encode($cgiParams));
-
-		//}
-		return $result;
+		
+    return $result;
 	}
 }
