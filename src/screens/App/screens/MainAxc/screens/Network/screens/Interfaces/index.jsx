@@ -30,6 +30,7 @@ const $$listOptions = fromJS([
     formProps: {
       form: 'port',
       type: 'select',
+      notEditable: true,
       required: true,
     },
   }, {
