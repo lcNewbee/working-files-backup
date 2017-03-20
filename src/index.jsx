@@ -11,7 +11,6 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const ReactRouterDom = require('react-router-dom');
 const appActions = require('shared/actions/app');
-const reactRouterConfig = require('shared/components/Organism/RouterConfig');
 const thunkMiddleware = require('redux-thunk').default;
 
 const combineReducers = require('redux').combineReducers;
@@ -22,6 +21,7 @@ const AppContainer = require('react-hot-loader').AppContainer;
 const prodConfig = require('./config/axc2.5');
 
 const HashRouter = ReactRouterDom.HashRouter;
+const Route = ReactRouterDom.Route;
 // const unmountComponentAtNode = ReactDOM.unmountComponentAtNode;
 
 const mountNode = document.getElementById('app');
@@ -45,19 +45,31 @@ if (prodConfig.appConfig) {
   stores.dispatch(appActions.initAppConfig(prodConfig.appConfig));
 }
 
-// 引入产品配置
+function renderApp(renderRoutes) {
+  const appRootRoute = renderRoutes[0];
 
-// 主渲染入口
-ReactDOM.render(
-  <AppContainer>
-    <Provider store={stores}>
-      <HashRouter>
-        {reactRouterConfig(prodConfig.routes)}
-      </HashRouter>
-    </Provider>
-  </AppContainer>,
-  mountNode,
-);
+  // 主渲染入口
+  ReactDOM.render(
+    <AppContainer>
+      <Provider store={stores}>
+        <HashRouter>
+          <Route
+            path={appRootRoute.path}
+            render={
+              ({ match, ...rest }) => (
+                <appRootRoute.component {...rest} route={appRootRoute} />
+              )
+            }
+          />
+        </HashRouter>
+      </Provider>
+    </AppContainer>,
+    mountNode,
+  );
+}
+
+renderApp(prodConfig.routes);
+
 
 // Enable hot reload by react-hot-loader
 if (module.hot) {
@@ -71,16 +83,7 @@ if (module.hot) {
         ...nextConfig.reducers,
       }));
       // 主渲染入口
-      ReactDOM.render(
-        <AppContainer>
-          <Provider store={stores}>
-            <HashRouter>
-              {reactRouterConfig(nextConfig.routes)}
-            </HashRouter>
-          </Provider>
-        </AppContainer>,
-        mountNode,
-      );
+      renderApp(nextConfig.routes);
     });
   });
 }

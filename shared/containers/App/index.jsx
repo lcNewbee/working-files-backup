@@ -7,34 +7,7 @@ import * as actions from 'shared/actions/app';
 import Modal from 'shared/components/Modal';
 import ProgressBar from 'shared/components/ProgressBar';
 import stringUtils from 'shared/utils/lib/string';
-import { renderRoutesList } from 'shared/components/Organism/RouterConfig';
-import matchPath from 'react-router/matchPath';
-import Router from 'react-router/Router';
-
-// ensure we're using the exact code for default root match
-const { computeMatch } = Router.prototype;
-
-const matchRoutes = (routes, pathname, /* not public API*/branch = []) => {
-  routes.some((route) => {
-    const match = route.path
-      ? matchPath(pathname, route)
-      : branch.length
-        ? branch[branch.length - 1].match // use parent match
-        : computeMatch(pathname); // use default "root" match
-    if (match) {
-      branch.push({ ...route, match });
-
-      if (route.routes) {
-        matchRoutes(route.routes, pathname, branch);
-      }
-    }
-
-    return match;
-  });
-
-  return branch;
-};
-
+import { matchRoutes } from 'react-router-config';
 
 const propTypes = {
   closeModal: PropTypes.func,
@@ -53,6 +26,7 @@ const defaultProps = {
 export default class App extends Component {
   constructor(props) {
     super(props);
+
     this.onModalClose = this.onModalClose.bind(this);
     this.onModalApply = this.onModalApply.bind(this);
     this.renderHtmlBody = this.renderHtmlBody.bind(this);
@@ -86,7 +60,8 @@ export default class App extends Component {
   }
 
   updateRouter() {
-    const routes = fromJS(matchRoutes(this.props.route.routes, this.props.location.pathname));
+    const routes = fromJS(matchRoutes(this.props.route.routes));
+
     this.props.updateRouter({
       routes,
     });
@@ -105,7 +80,7 @@ export default class App extends Component {
   }
 
   render() {
-    const { modal, router } = this.props.app.toJS();
+    const { modal } = this.props.app.toJS();
     const modelRole = modal.role;
     const isLoadingModal = modelRole === 'loading';
 
@@ -114,8 +89,7 @@ export default class App extends Component {
     return (
       <div>
         {
-          renderRoutesList(this.props.route.routes)
-          // renderRoutesConfig(this.props.route.routes)
+          this.props.children
         }
         <Modal
           id="appModal"

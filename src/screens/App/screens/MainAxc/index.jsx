@@ -17,8 +17,8 @@ import Table from 'shared/components/Table';
 import PropertyPanel from 'shared/components/Template/PropertyPanel';
 import * as appActions from 'shared/actions/app';
 import * as propertiesActions from 'shared/actions/properties';
+import { renderRoutesList, renderRoutesSwitch } from 'shared/components/Organism/RouterConfig';
 import { getActionable } from 'shared/axc';
-import SwitchRoutes from 'shared/components/Organism/RouterConfig';
 import * as actions from './actions';
 import myReducer from './reducer';
 
@@ -1040,7 +1040,7 @@ export default class Main extends React.PureComponent {
   renderBreadcrumb() {
     const { route, location, product, app } = this.props;
     const groupData = product.get('group');
-    const curRoutes = app.getIn(['router', 'routes']);
+    const curRoutes = app.getIn(['router', 'routes']).toJS();
     let breadcrumbList = fromJS([]);
     const len = curRoutes.length;
     let i = 2;
@@ -1061,11 +1061,14 @@ export default class Main extends React.PureComponent {
     }
 
     for (i; i < len; i += 1) {
+      console.log(curRoutes[i]);
       breadcrumbList = breadcrumbList.unshift({
         path: curRoutes[i].path,
         text: curRoutes[i].text,
       });
     }
+
+    console.log(breadcrumbList)
 
     return (
       <ol className="m-breadcrumb m-breadcrumb--simple">
@@ -1091,11 +1094,12 @@ export default class Main extends React.PureComponent {
     const { version, router } = this.props.app.toJS();
     const { popOver, modal } = this.props.product.toJS();
     const { isShowPanel } = this.props.properties.toJS();
-    const curRoutePath = this.props.route.path;
+    const curRoutePath = this.props.location.pathname;
     let mainClassName = 't-main t-main--axc';
     let isMainLeftShow = false;
     let isMainRightShow = isShowPanel;
-    let mainLeftMenus = this.props.route.routes;
+    let curMainIndex = 0;
+    let mainLeftMenus = this.props.route.routes[curMainIndex].routes;
 
     if (curRoutePath === '/main/group') {
       // 如果当前是所有组，则隐藏组配置相关菜单
@@ -1110,7 +1114,6 @@ export default class Main extends React.PureComponent {
       'main--open-left': isMainLeftShow,
       'is-main-right-open': isMainRightShow,
     });
-
     return (
       <div className={mainClassName}>
         <Navbar version={version}>
@@ -1184,7 +1187,7 @@ export default class Main extends React.PureComponent {
         </div>
 
         <div className="t-main__content">
-          {this.props.children}
+          {renderRoutesSwitch(mainLeftMenus)}
         </div>
 
         <PopOver

@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import Tab from 'shared/components/Tab';
-import { renderRoutes } from 'react-router-config';
+import { renderRoutesList } from 'shared/components/Organism/RouterConfig';
 
 const propTypes = {
   route: PropTypes.object,
@@ -9,13 +9,12 @@ const propTypes = {
 const defaultProps = {};
 
 function TabContainer(props) {
-  console.log('tab = ', props.route.routes)
   return (
     <Tab
       menus={props.route.routes}
       role="tab"
     >
-      {props.children}
+      {renderRoutesList(props.route.routes)}
     </Tab>
   );
 }
