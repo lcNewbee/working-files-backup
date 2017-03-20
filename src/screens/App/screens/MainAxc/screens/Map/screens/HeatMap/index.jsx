@@ -7,7 +7,7 @@ import h337 from 'heatmap.js';
 import moment from 'moment';
 import AppScreen from 'shared/components/Template/AppScreen';
 import {
-  Button, Table, FormInput, Icon,
+  FormInput, Icon,
 } from 'shared/components';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
@@ -233,7 +233,7 @@ export default class View extends React.PureComponent {
       const showDiv = doc.createElement('div');
       const yPosition = (y - mapRadius - 50) < 0 ? (y + mapRadius) : (y - mapRadius - 50);
       // console.log('y - mapRadius - 50', yPosition);
-      showDiv.className = 'observeShower'
+      showDiv.className = 'observeShower';
       showDiv.style.width = '150px';
       showDiv.style.height = '50px';
       showDiv.style.backgroundColor = '#00ddca';
@@ -300,6 +300,7 @@ export default class View extends React.PureComponent {
     // 实际数据生成代码
     this.datas = points.toJS().map((point) => {
       const ret = gps.getOffsetFromGpsPoint(point, curMapInfo.toJS());
+      // console.log(gps.getGpsPointFromOffset(ret, curMapInfo.toJS()));
       const x = Math.floor((ret.x * this.mapWidth) / 100);
       const y = Math.floor((ret.y * this.mapHeight) / 100);
       max = max > point.value ? max : point.value;
@@ -367,6 +368,7 @@ export default class View extends React.PureComponent {
             endDate: moment().format('YYYY-MM-DD'),
             startTime: '00:00:00',
             endTime: '23:59:59',
+            mapType: 'number',
           },
         }}
       >
@@ -513,11 +515,41 @@ export default class View extends React.PureComponent {
             }}
           />
         </div>
+        <div>
+          <span
+            style={{
+              marginRight: '10px',
+              display: 'inline-block',
+              width: '100px',
+              textAlign: 'right',
+            }}
+          >
+            {_('Map Type')}
+          </span>
+          <FormInput
+            type="switch"
+            value={store.getIn([curScreenId, 'query', 'mapType'])}
+            label={_('Map Type')}
+            options={[
+              { label: _('User Number'), value: 'number' },
+              { label: _('User Times'), value: 'times' },
+            ]}
+            onChange={(data) => {
+              Promise.resolve().then(() => {
+                this.props.changeScreenQuery({ mapType: data.value });
+              }).then(() => {
+                this.props.fetchScreenData();
+              });
+            }}
+          />
+        </div>
         <div
           style={{
             position: 'relative',
             border: '1px solid #CCC',
             overflow: 'hidden',
+            minHeight: '500px',
+            marginTop: '20px',
           }}
         >
           {this.renderCurMap(this.mapList, this.state.curMapId, this.state.zoom)}
@@ -556,6 +588,7 @@ function mapStateToProps(state) {
     app: state.app,
     store: state.screens,
     // product: state.product,
+    groupid: state.product.getIn(['group', 'selected', 'id']),
   };
 }
 

@@ -2,9 +2,9 @@ import gulp from 'gulp';
 import shell from 'gulp-shell';
 
 gulp.task('test', shell.task([
-  'npm run test',
+  'yarn run test',
 ]));
 
 gulp.task('test:watch', shell.task([
-  'npm run test:watch',
+  'yarn run test:watch',
 ]));
