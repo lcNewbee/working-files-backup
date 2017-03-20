@@ -94,15 +94,17 @@ export default class View extends React.Component {
   componentDidMount() {
     const store = this.props.store;
     const curScreenId = store.get('curScreenId');
-    const data = store.getIn([curScreenId, 'data', 'settings', 'path']);
-    this.updateCanvas(data);
+    const $$pathList = store.getIn([curScreenId, 'data', 'list']);
+
+    this.updateCanvas($$pathList);
   }
 
   componentDidUpdate() {
     const store = this.props.store;
     const curScreenId = store.get('curScreenId');
-    const data = store.getIn([curScreenId, 'data', 'settings', 'path']);
-    this.updateCanvas(data);
+    const $$pathList = store.getIn([curScreenId, 'data', 'list']);
+
+    this.updateCanvas($$pathList);
   }
   onChangeBuilding(id) {
     this.props.changeScreenQuery({ buildId: id });
@@ -132,14 +134,16 @@ export default class View extends React.Component {
       this.onFetchList();
     }, 200);
   }
-  updateCanvas(data) {
-    if (typeof (data) === 'undefined') { return null; }
-    console.log('data', data);
+  updateCanvas($$pathList) {
+    if (typeof $$pathList === 'undefined') { return null; }
     let ctx = this.canvasElem;
+    let backctx = this.canvasBackElem;
     if (!ctx) {
       return null;
     }
     ctx = this.canvasElem.getContext('2d');
+    backctx = this.canvasBackElem.getContext('2d');
+    ctx.globalAlpha = 0.85;
     // ctx.strokeStyle = '#0093dd';
     // ctx.lineWidth = '3';
     // ctx.moveTo(300, 150);
@@ -175,47 +179,57 @@ export default class View extends React.Component {
     // ctx.lineTo(520, 430);
     // ctx.lineTo(800, 300);
     // return ctx.stroke();
-
-    ctx.fillStyle = 'red';
-    this.stationaryPoint(ctx, data);
+    this.stationaryPoint(ctx, $$pathList);
     ctx.strokeStyle = '#0093dd';
-    this.oribitPath(ctx, data);
+    // this.oribitPath(ctx, $$pathList);
   }
+  function draw(options) {
+      backCtx.globalCompositeOperation = 'copy';
+      backCtx.drawImage(canvas, 0, 0, canvas.width, canvas.height);
 
-  stationaryPoint(ctx, data) {
-    const len = data.size;
-    console.log('data', data);
-    let i;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath();
+      ctx.arc(options.x, options.y, options.r, 0, Math.PI * 2, true);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(7,120,249,1)';
+      ctx.fill();
+
+      ctx.drawImage( backDom, 0, 0, backDom.width, backDom.height);
+  }
+  stationaryPoint(ctx, $$pathList) {
+    const len = $$pathList.size;
     if (len === null) {
       return null;
     }
-    ctx.beginPath();
-    for (i = 0; i < len; i++) {
-      ctx.arc(data[i].x, data[i].y, 5, 0, 2 * Math.PI);
-    }
-    ctx.fill();
+    $$pathList.forEach(
+      ($$point) => {
+        ctx.beginPath();
+        ctx.arc($$point.get('x'), $$point.get('y'), 5, 0, 2 * Math.PI);
+        ctx.closePath();
+        ctx.fill();
+      },
+    );
+    ctx.fillStyle = 'red';
   }
-  oribitPath(ctx, data) {
-    const len = data.size;
-    if (len === 1 || data === null) {
+  oribitPath(ctx, $$pathList) {
+    const len = $$pathList.size;
+    if (len === 1 || $$pathList === null) {
       return null;
     }
-    const startX = data[0].x;
-    const startY = data[0].y;
+    const startX = $$pathList.getIn(0, 'x');
+    const startY = $$pathList.getIn(0, 'y');
     ctx.beginPath();
-    ctx.moveTo(startX, startY);
-    for (let i = 1; i < len; i++) {
-      ctx.moveTo(data[i].x, data[i].y);
-    }
+    $$pathList.forEach(
+    ($$point) => {
+      ctx.moveTo($$point.get('x'), $$point.get('y'));
+    },);
     ctx.stroke();
   }
   handleChangeQuery(name, data) {
     this.props.changeScreenQuery({ [name]: data.value });
     this.onSearch();
   }
-  renderCurMap(curMapId, data) {
-    const store = this.props.store;
-    const curScreenId = store.get('curScreenId');
+  renderCurMap(curMapId) {
     return (
       <div
         className="o-map-container"
@@ -242,7 +256,15 @@ export default class View extends React.Component {
           }}
           width={1000}
           height={600}
-          data={store.getIn([curScreenId, 'data', 'settings', 'path'])}
+        />
+        <canvas
+          ref={(canvasBackElem) => {
+            if (canvasBackElem && this.canvasBackElem !== canvasBackElem) {
+              this.canvasBackElem = canvasBackElem;
+            }
+          }}
+          width={1000}
+          height={600}
         />
       </div>
     );

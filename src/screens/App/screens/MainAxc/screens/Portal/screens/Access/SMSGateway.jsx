@@ -35,7 +35,7 @@ const listOptions = fromJS([
       }),
     },
   }, {
-    id: 'appKey',
+    id: 'appkey',
     text: _('App Key'),
     formProps: {
       help: _('gwid,accountid,username'),
@@ -47,7 +47,7 @@ const listOptions = fromJS([
       }),
     },
   }, {
-    id: 'pwd',
+    id: 'appsecret',
     text: _('Password'),
     formProps: {
       maxLength: '32',
@@ -58,7 +58,7 @@ const listOptions = fromJS([
       }),
     },
   }, {
-    id: 'serviceID',
+    id: 'smstemplate',
     text: _('Template ID'),
     formProps: {
       maxLength: '33',
@@ -70,7 +70,7 @@ const listOptions = fromJS([
       }),
     },
   }, {
-    id: 'srcTermID',
+    id: 'smssign',
     text: _('Signature ID'),
     formProps: {
       help: _('srcTermID'),
@@ -82,7 +82,7 @@ const listOptions = fromJS([
       }),
     },
   }, {
-    id: 'companyName',
+    id: 'company',
     text: _('Company Name'),
     formProps: {
       type: 'text',
@@ -93,7 +93,7 @@ const listOptions = fromJS([
       }),
     },
   }, {
-    id: 'usedTimes',
+    id: 'count',
     text: _('Used Times'),
     noForm: true,
     formProps: {
@@ -116,11 +116,11 @@ const listOptions = fromJS([
     },
     options: [
       {
-        value: '0',
-        label: _('On Service'),
-      }, {
         value: '1',
-        label: _('Out of Service'),
+        label: _('Virtual Gateway'),
+      }, {
+        value: '2',
+        label: _('Qianhai Smart Commumication'),
       },
     ],
   }, {
@@ -133,14 +133,14 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: _('Allowed'),
+        label: _('On Service'),
       }, {
         value: '1',
-        label: _('Forbidden'),
+        label: _('Out of Service'),
       },
     ],
   }, {
-    id: 'multiTerminalLog',
+    id: 'more',
     text: _('MultiTerminal Log'),
     formProps: {
       type: 'select',
@@ -156,7 +156,7 @@ const listOptions = fromJS([
       },
     ],
   }, {
-    id: 'overDueDuration',
+    id: 'time',
     text: _('Overdue Duration'),
     formProps: {
       type: 'number',
@@ -169,7 +169,7 @@ const listOptions = fromJS([
       }),
     },
   }, {
-    id: 'mContent',
+    id: 'text',
     text: _('Message Content'),
     noTable: true,
     formProps: {

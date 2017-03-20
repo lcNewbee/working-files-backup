@@ -107,10 +107,8 @@ const listOptions = fromJS([
     id: 'time',
     text: _('Count'),
     formProps: {
-      type: 'number',
+      type: 'text',
       required: true,
-      min: '0',
-      max: '999999999',
     },
   }, {
     id: 'money',

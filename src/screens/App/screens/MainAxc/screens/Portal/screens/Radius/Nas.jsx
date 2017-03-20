@@ -8,7 +8,7 @@ import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
-const uptimeFilter = utils.filter('connectTime');
+const onlinetimeFilter = utils.filter('connectTime');
 
 const checkboxOptions = [
   {
@@ -56,43 +56,43 @@ const listOptions = fromJS([
     id: 'ex2',
     text: _('Acc Send Interval'),
     defaultValue: '300',
-    transform(val) {
-      return uptimeFilter.transform(val / 1000);
-    },
     formProps: {
       type: 'number',
       help: _('Seconds'),
       min: '0',
       max: '99999999',
       required: true,
+    },
+    transform(val) {
+      return onlinetimeFilter.transform(val);
     },
   }, {
     id: 'ex3',
     text: _('Check Period'),
-    defaultValue: '600',
-    transform(val) {
-      return uptimeFilter.transform(val / 1000);
-    },
     formProps: {
+      defaultValue: '600',
       help: _('Seconds'),
       min: '0',
       max: '99999999',
       type: 'number',
       required: true,
+    },
+    transform(val) {
+      return onlinetimeFilter.transform(val);
     },
   }, {
     id: 'ex4',
     text: _('Idle Time'),
     defaultValue: '600',
-    transform(val) {
-      return uptimeFilter.transform(val / 1000);
-    },
     formProps: {
       help: _('Second'),
       min: '0',
       max: '99999999',
       type: 'number',
       required: true,
+    },
+    transform(val) {
+      return onlinetimeFilter.transform(val);
     },
   }, {
     id: 'type',

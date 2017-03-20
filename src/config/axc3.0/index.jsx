@@ -220,7 +220,7 @@ const sPortalDefaultWeb =
 const sPortalWeixin =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Weixin');
 const sPortalSMSGateWay =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/SMSGateWay');
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/SMSGateway');
 const sPortalSMSLog =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/SMSLog');
 // const sPortalApSetting =
@@ -1116,7 +1116,7 @@ const routes = [
                 id: 'portaSMSGateWay',
                 path: '/main/portal/access/smsgateWay',
                 formUrl: 'goform/portal/access/smsgateWay',
-                text: _('SMS GateWay'),
+                text: _('SMS Gateway'),
                 component: sPortalSMSGateWay.Screen,
               }, {
                 id: 'portalSMSLog',

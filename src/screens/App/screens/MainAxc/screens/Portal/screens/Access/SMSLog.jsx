@@ -10,7 +10,7 @@ import * as appActions from 'shared/actions/app';
 
 const listOptions = fromJS([
   {
-    id: 'phoneNumber',
+    id: 'phone',
     text: _('Phone Number'),
     formProps: {
       type: 'text',
@@ -21,7 +21,7 @@ const listOptions = fromJS([
       }),
     },
   }, {
-    id: 'mContent',
+    id: 'info',
     text: _('Message Content'),
     formProps: {
       maxLength: '257',
@@ -32,15 +32,35 @@ const listOptions = fromJS([
       }),
     },
   }, {
-    id: 'date',
+    id: 'sendTime',
     text: _('Date'),
     formProps: {
-      type: 'date',
+      type: 'text',
       required: true,
     },
   }, {
-    id: 'gatewayType',
+    id: 'sid',
+    text: _('sid'),
+    noTable: true,
+    formProps: {
+      type: 'text',
+      required: true,
+    },
+  }, {
+    id: 'type',
     text: _('Gate Type'),
+    formProps: {
+      type: 'select',
+    },
+    options: [
+      {
+        value: '1',
+        label: _('Virtual Gateway'),
+      }, {
+        value: '2',
+        label: _('Qianhai Smart Commumication'),
+      },
+    ],
   },
 ]);
 

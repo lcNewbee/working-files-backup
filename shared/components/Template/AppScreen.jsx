@@ -24,7 +24,7 @@ const propTypes = {
   changeScreenActionQuery: PropTypes.func.isRequired,
   changeScreenQuery: PropTypes.func.isRequired,
 
-  // List 相关属性
+  // List 相关属性list
   listOptions: PropTypes.oneOfType([
     PropTypes.instanceOf(List),
     PropTypes.array,
