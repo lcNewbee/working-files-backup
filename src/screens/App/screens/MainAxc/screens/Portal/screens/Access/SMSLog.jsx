@@ -32,7 +32,7 @@ const listOptions = fromJS([
       }),
     },
   }, {
-    id: 'sendTime',
+    id: 'sendDate',
     text: _('Date'),
     formProps: {
       type: 'text',

@@ -206,7 +206,10 @@ const sPortalAccountListMac =
 const sPortalConnectRecord =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Account/ConnectRecord');
 
-
+const sPortalSMSGateWay =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/SMSGateway');
+const sPortalSMSLog =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/SMSLog');
 const sPortalSendMessage =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Message/SendMessage');
 const sPortalSendBox =
@@ -675,6 +678,18 @@ const routes = [
                 formUrl: 'goform/portal/access/weixin',
                 text: _('Wechat Auth'),
                 component: sPortalWeixin.Screen,
+              }, {
+                id: 'portaSMSGateWay',
+                path: '/main/portal/access/smsgateWay',
+                formUrl: 'goform/portal/access/smsgateWay',
+                text: _('SMS Gateway'),
+                component: sPortalSMSGateWay.Screen,
+              }, {
+                id: 'portalSMSLog',
+                path: '/main/portal/access/portalsmslog',
+                formUrl: 'goform/portal/access/portalsmslog',
+                text: _('SMS Log'),
+                component: sPortalSMSLog.Screen,
               },
             ],
           }, {

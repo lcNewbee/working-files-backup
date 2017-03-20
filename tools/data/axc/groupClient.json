@@ -15,6 +15,7 @@
     },
     "list": [
       {
+        "id": "1",
         "type": "wireless",
         "devicename": "iPhone",
         "ip": "192.168.5.123",
@@ -32,6 +33,7 @@
         "lasttime": "2016-06-22 17:25:51"
       },
       {
+        "id": "2",
         "type": "guest",
         "devicename": "gruis",
         "ip": "192.168.5.32",
@@ -49,6 +51,7 @@
         "lasttime": "2016-06-22 17:25:51"
       },
       {
+        "id": "3",
         "type": "guest",
         "devicename": "windy ihone",
         "ip": "192.168.5.32",
@@ -67,6 +70,7 @@
         "lasttime": "2016-06-22 17:25:51"
       },
       {
+        "id": "4",
         "type": "guest",
         "devicename": "android-1",
         "ip": "192.168.5.32",

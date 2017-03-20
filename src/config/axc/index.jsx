@@ -212,6 +212,11 @@ const sPortalDefaultWeb =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/DefaultWeb');
 const sPortalWeixin =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Weixin');
+const sPortalSMSGateWay =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/SMSGateway');
+const sPortalSMSLog =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/SMSLog');
+
 // const sPortalApSetting =
 //     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/ApSetting');
 // const sPortalSsid =
@@ -851,6 +856,18 @@ const routes = [
                 formUrl: 'goform/portal/access/weixin',
                 text: _('Wechat Auth'),
                 component: sPortalWeixin.Screen,
+              }, {
+                id: 'portaSMSGateWay',
+                path: '/main/portal/access/smsgateWay',
+                formUrl: 'goform/portal/access/smsgateWay',
+                text: _('SMS Gateway'),
+                component: sPortalSMSGateWay.Screen,
+              }, {
+                id: 'portalSMSLog',
+                path: '/main/portal/access/portalsmslog',
+                formUrl: 'goform/portal/access/portalsmslog',
+                text: _('SMS Log'),
+                component: sPortalSMSLog.Screen,
               },
               // {
               //   id: 'portalApSetting',

@@ -64,7 +64,6 @@ const listOptions = fromJS([
       maxLength: '33',
       help: _('ServiceID, Spcode'),
       type: 'text',
-      required: true,
       validator: validator({
         rules: 'utf8Len:[1, 32]',
       }),
@@ -76,7 +75,6 @@ const listOptions = fromJS([
       help: _('srcTermID'),
       type: 'text',
       maxLength: '33',
-      required: true,
       validator: validator({
         rules: 'utf8Len:[1, 32]',
       }),

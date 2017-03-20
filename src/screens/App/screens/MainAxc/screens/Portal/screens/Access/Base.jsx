@@ -155,20 +155,30 @@ const settingsOptions = fromJS([
     defaultValue: '0',
     options: [
       {
-        required: true,
         value: '0',
         label: _('Default Web'),
       },
     ],
   },
+  {
+    id: 'isPortalCheck',
+    required: true,
+    fieldset: 'base_setting',
+    className: 'cols col-6',
+    label: _('Portal Acc'),
+    type: 'select',
+    defaultValue: '1',
+    options: [
+      {
+        value: '0',
+        label: _('Closed'),
+      }, {
+        value: '1',
+        label: _('Open'),
+      },
+    ],
+  },
   // {
-  //   id: 'isPortalCheck',
-  //   required: true,
-  //   fieldset: 'base_setting',
-  //   className: 'cols col-6',
-  //   label: _('Portal Acc'),
-  //   type: 'text',
-  // }, {
   //   id: 'isOut',
   //   required: true,
   //   fieldset: 'base_setting',

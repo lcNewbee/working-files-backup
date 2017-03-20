@@ -10,7 +10,6 @@ import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 import * as propertiesActions from 'shared/actions/properties';
 import './orbitTrace.scss';
-import bgImg from '../../shared/images/map_bg.jpg';
 
 
 function getBuildingName() {
@@ -37,10 +36,27 @@ function getLayerMap() {
             label: item.mapName,
           }),
         ),
+        list: json.data.list,
       }
     ),
   );
 }
+
+function getClientMac() {
+  return utils.fetch('/goform/group/user')
+    .then(json => (
+      {
+        options: json.data.list.map(
+          item => ({
+            value: item.id,
+            label: item.mac,
+          }),
+        ),
+      }
+    ),
+  );
+}
+
 const propTypes = {
   store: PropTypes.object,
   changeScreenQuery: PropTypes.func,
@@ -49,6 +65,7 @@ const propTypes = {
 };
 const defaultProps = {};
 const defaultQuery = {
+  curMapId: 1,
   date: moment().format('YYYY-MM-DD'),
   fromTime: '08:00:11',
   toTime: '20:00:11',
@@ -60,9 +77,14 @@ export default class View extends React.Component {
     this.state = {
       buildingNameOptions: fromJS([]),
       layerMapOptions: fromJS([]),
+      clientMacOptions: fromJS([]),
+      mapList: fromJS([]),
       date: moment().format('YYYY-MM-DD'),
+      curMapId: 1,
       fromTime: '08:00:11',
       toTime: '20:00:11',
+      mapOffsetX: 0,
+      mapOffsetY: 0,
     };
     utils.binds(this,
       [
@@ -88,23 +110,33 @@ export default class View extends React.Component {
       .then((data) => {
         this.setState({
           layerMapOptions: fromJS(data.options),
+          mapList: fromJS(data.list),
         });
+      });
+    getClientMac()
+      .then((data) => {
+        this.setState({
+          clientMacOptions: fromJS(data.options),
+        });
+        console.log(clientMacOptions)
       });
   }
   componentDidMount() {
     const store = this.props.store;
     const curScreenId = store.get('curScreenId');
     const $$pathList = store.getIn([curScreenId, 'data', 'list']);
-
-    this.updateCanvas($$pathList);
+    const startX = store.getIn([curScreenId, 'data', 'list', 0, 'x']);
+    const startY = store.getIn([curScreenId, 'data', 'list', 0, 'y']);
+    this.updateCanvas(startX, startY, $$pathList);
   }
 
   componentDidUpdate() {
     const store = this.props.store;
     const curScreenId = store.get('curScreenId');
     const $$pathList = store.getIn([curScreenId, 'data', 'list']);
-
-    this.updateCanvas($$pathList);
+    const startX = store.getIn([curScreenId, 'data', 'list', 0, 'x']);
+    const startY = store.getIn([curScreenId, 'data', 'list', 0, 'y']);
+    this.updateCanvas(startX, startY, $$pathList);
   }
   onChangeBuilding(id) {
     this.props.changeScreenQuery({ buildId: id });
@@ -134,67 +166,19 @@ export default class View extends React.Component {
       this.onFetchList();
     }, 200);
   }
-  updateCanvas($$pathList) {
+  updateCanvas(startX, startY, $$pathList) {
     if (typeof $$pathList === 'undefined') { return null; }
     let ctx = this.canvasElem;
-    let backctx = this.canvasBackElem;
+    // let backctx = this.canvasBackElem;
     if (!ctx) {
       return null;
     }
     ctx = this.canvasElem.getContext('2d');
-    backctx = this.canvasBackElem.getContext('2d');
-    ctx.globalAlpha = 0.85;
-    // ctx.strokeStyle = '#0093dd';
-    // ctx.lineWidth = '3';
-    // ctx.moveTo(300, 150);
-    // ctx.quadraticCurveTo(200, 250, 100, 150);
-    // ctx.quadraticCurveTo(230, 200, 150, 450);
-    // ctx.quadraticCurveTo(300, 400, 450, 400);
-    // ctx.quadraticCurveTo(700, 300, 700, 200);
-    // ctx.stroke();
-
-    // 原点加直线
-    // ctx.fillStyle = 'red';
-    // ctx.beginPath();
-    // ctx.arc(330, 150, 5, 0, 2 * Math.PI);
-    // ctx.fill();
-    // ctx.beginPath();
-    // ctx.arc(100, 150, 5, 0, 2 * Math.PI);
-    // ctx.fill();
-    // ctx.beginPath();
-    // ctx.arc(150, 450, 5, 0, 2 * Math.PI);
-    // ctx.fill();
-    // ctx.beginPath();
-    // ctx.arc(520, 430, 5, 0, 2 * Math.PI);
-    // ctx.fill();
-    // ctx.beginPath();
-    // ctx.arc(800, 300, 5, 0, 2 * Math.PI);
-    // ctx.fill();
-    // ctx.beginPath();
-    // ctx.strokeStyle = '#0093dd';
-    // ctx.lineWidth = '3';
-    // ctx.moveTo(330, 150);
-    // ctx.lineTo(100, 150);
-    // ctx.lineTo(150, 450);
-    // ctx.lineTo(520, 430);
-    // ctx.lineTo(800, 300);
-    // return ctx.stroke();
+    // backctx = this.canvasBackElem.getContext('2d');
+    // 实现动画的关键
+    // ctx.globalAlpha = 0.85;
     this.stationaryPoint(ctx, $$pathList);
-    ctx.strokeStyle = '#0093dd';
-    // this.oribitPath(ctx, $$pathList);
-  }
-  function draw(options) {
-      backCtx.globalCompositeOperation = 'copy';
-      backCtx.drawImage(canvas, 0, 0, canvas.width, canvas.height);
-
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.beginPath();
-      ctx.arc(options.x, options.y, options.r, 0, Math.PI * 2, true);
-      ctx.closePath();
-      ctx.fillStyle = 'rgba(7,120,249,1)';
-      ctx.fill();
-
-      ctx.drawImage( backDom, 0, 0, backDom.width, backDom.height);
+    return this.oribitPath(ctx, startX, startY, $$pathList);
   }
   stationaryPoint(ctx, $$pathList) {
     const len = $$pathList.size;
@@ -211,25 +195,28 @@ export default class View extends React.Component {
     );
     ctx.fillStyle = 'red';
   }
-  oribitPath(ctx, $$pathList) {
+  oribitPath(ctx, startX, startY, $$pathList) {
     const len = $$pathList.size;
     if (len === 1 || $$pathList === null) {
       return null;
     }
-    const startX = $$pathList.getIn(0, 'x');
-    const startY = $$pathList.getIn(0, 'y');
     ctx.beginPath();
+    ctx.moveTo(startX, startY);
     $$pathList.forEach(
-    ($$point) => {
-      ctx.moveTo($$point.get('x'), $$point.get('y'));
-    },);
-    ctx.stroke();
+      ($$point) => {
+        ctx.lineTo($$point.get('x'), $$point.get('y'));
+      },
+    );
+    ctx.strokeStyle = '#0093dd';
+    return ctx.stroke();
   }
   handleChangeQuery(name, data) {
     this.props.changeScreenQuery({ [name]: data.value });
     this.onSearch();
   }
-  renderCurMap(curMapId) {
+  renderCurMap(mapList, curMapId) {
+    const curItem = mapList.find(item => item.get('id') === curMapId);
+    const imgUrl = curItem ? curItem.get('backgroundImg') : '';
     return (
       <div
         className="o-map-container"
@@ -244,8 +231,8 @@ export default class View extends React.Component {
           left: this.state.mapOffsetX,
           top: this.state.mapOffsetY,
           width: '100%',
-          height: '600px',
-          backgroundImage: `url(${bgImg})`,
+          height: '700px',
+          backgroundImage: `url(${imgUrl})`,
         }}
       >
         <canvas
@@ -254,17 +241,8 @@ export default class View extends React.Component {
               this.canvasElem = canvasElem;
             }
           }}
-          width={1000}
-          height={600}
-        />
-        <canvas
-          ref={(canvasBackElem) => {
-            if (canvasBackElem && this.canvasBackElem !== canvasBackElem) {
-              this.canvasBackElem = canvasBackElem;
-            }
-          }}
-          width={1000}
-          height={600}
+          width={1144}
+          height={700}
         />
       </div>
     );
@@ -302,8 +280,12 @@ export default class View extends React.Component {
           <FormGroup
             type="select"
             className="fl"
-            name="client"
             label={_('Client')}
+            options={this.state.clientMacOptions.toJS()}
+            value={$$screenQuery.get('mac')}
+            onChange={(data) => {
+              this.handleChangeQuery('mac', data);
+            }}
           />
           <FormGroup
             type="date"
@@ -337,7 +319,7 @@ export default class View extends React.Component {
           />
         </div>
         <div className="o-map-warp">
-          {this.renderCurMap(this.state.curMapId)}
+          {this.renderCurMap(this.state.mapList, this.state.curMapId)}
         </div>
 
       </AppScreen>
