@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import h337 from 'heatmap.js';
+import moment from 'moment';
 import AppScreen from 'shared/components/Template/AppScreen';
 import {
   Button, Table, FormInput, Icon,
@@ -115,6 +116,7 @@ export default class View extends React.PureComponent {
         'renderBackgroundImg',
         'bindCanvasEvent',
         'renderBlankCanvas',
+        'removeShowerDiv',
       ],
     );
   }
@@ -139,6 +141,7 @@ export default class View extends React.PureComponent {
     }).then(() => {
       this.bindCanvasEvent();
     });
+    this.removeShowerDiv();
   }
 
   onChangeBuilding(id) {
@@ -162,6 +165,32 @@ export default class View extends React.PureComponent {
     }).then(() => {
       this.props.fetchScreenData();
     });
+  }
+  onMapMouseUp() {
+    this.mapMouseDown = false;
+  }
+  onMapMouseDown(e) {
+    this.mapMouseDown = true;
+    this.mapClientX = e.clientX;
+    this.mapClientY = e.clientY;
+  }
+  onMapMouseMove(e) {
+    if (this.mapMouseDown) {
+      this.setState({
+        mapOffsetX: (this.state.mapOffsetX + e.clientX) - this.mapClientX,
+        mapOffsetY: (this.state.mapOffsetY + e.clientY) - this.mapClientY,
+      });
+      this.mapClientX = e.clientX;
+      this.mapClientY = e.clientY;
+    }
+  }
+
+  removeShowerDiv() {
+    const showers = document.querySelectorAll('.observeShower');
+    const len = showers.length;
+    for (let i = len; i;) {
+      this.mapContent.removeChild(showers[--i]);
+    }
   }
 
   bindCanvasEvent() {
@@ -188,6 +217,7 @@ export default class View extends React.PureComponent {
 
       // 在canvas上绘制圆形范围
       const context = blankCanvas.getContext('2d');
+      // this.mapContent.removeChild(doc.querySelectorAll('.observeShower')[0]);
       context.clearRect(0, 0, bb.width, bb.height);
       context.beginPath();
       context.arc(x, y, mapRadius, 0, 2 * Math.PI);
@@ -197,26 +227,29 @@ export default class View extends React.PureComponent {
       // 计算圆形范围内的value之和
       const observeValue = calcValueWithinCircle(this.datas, { x, y }, mapRadius);
       // this.setState({ observeValue }); // 不能在这里更新state
-    });
-  }
 
-  onMapMouseUp() {
-    this.mapMouseDown = false;
-  }
-  onMapMouseDown(e) {
-    this.mapMouseDown = true;
-    this.mapClientX = e.clientX;
-    this.mapClientY = e.clientY;
-  }
-  onMapMouseMove(e) {
-    if (this.mapMouseDown) {
-      this.setState({
-        mapOffsetX: (this.state.mapOffsetX + e.clientX) - this.mapClientX,
-        mapOffsetY: (this.state.mapOffsetY + e.clientY) - this.mapClientY,
-      });
-      this.mapClientX = e.clientX;
-      this.mapClientY = e.clientY;
-    }
+      // 显示计算的结果
+      this.removeShowerDiv();
+      const showDiv = doc.createElement('div');
+      const yPosition = (y - mapRadius - 50) < 0 ? (y + mapRadius) : (y - mapRadius - 50);
+      // console.log('y - mapRadius - 50', yPosition);
+      showDiv.className = 'observeShower'
+      showDiv.style.width = '150px';
+      showDiv.style.height = '50px';
+      showDiv.style.backgroundColor = '#00ddca';
+      showDiv.style.color = '#00f';
+      showDiv.style.fontSize = '15px';
+      showDiv.style.fontWeight = 'bold';
+      showDiv.style.textAlign = 'center';
+      showDiv.style.lineHeight = '50px';
+      showDiv.style.boxShadow = '5px 5px 5px #888888';
+      showDiv.style.borderRadius = '5px';
+      showDiv.style.top = `${yPosition}px`;
+      showDiv.style.left = `${x + mapRadius}px`;
+      showDiv.style.position = 'absolute';
+      showDiv.innerHTML = `Total User: ${observeValue}`;
+      this.mapContent.appendChild(showDiv);
+    });
   }
 
   removeHeatMap() {
@@ -328,11 +361,22 @@ export default class View extends React.PureComponent {
     return (
       <AppScreen
         {...this.props}
+        initOption={{
+          query: {
+            startDate: moment().format('YYYY-MM-DD'),
+            endDate: moment().format('YYYY-MM-DD'),
+            startTime: '00:00:00',
+            endTime: '23:59:59',
+          },
+        }}
       >
         <div className="m-action-bar">
           <span
             style={{
               marginRight: '10px',
+              display: 'inline-block',
+              width: '100px',
+              textAlign: 'right',
             }}
           >
             {_('Building')}
@@ -347,7 +391,9 @@ export default class View extends React.PureComponent {
           <span
             style={{
               marginRight: '10px',
-              marginLeft: '20px',
+              display: 'inline-block',
+              width: '100px',
+              textAlign: 'right',
             }}
           >
             {_('Map Name')}
@@ -362,19 +408,9 @@ export default class View extends React.PureComponent {
           <span
             style={{
               marginRight: '10px',
-              marginLeft: '20px',
-            }}
-          >
-            {_('Time')}
-          </span>
-          <FormInput
-            type="select"
-            value={store.getIn([curScreenId, 'query', 'time'])}
-          />
-          <span
-            style={{
-              marginRight: '10px',
-              marginLeft: '20px',
+              display: 'inline-block',
+              width: '100px',
+              textAlign: 'right',
             }}
           >
             {_('Observe Radius')}
@@ -389,13 +425,100 @@ export default class View extends React.PureComponent {
             onChange={(data) => { this.setState({ observeRadius: data.value }); }}
           />
         </div>
+        <div style={{ marginBottom: '10px' }}>
+          <span
+            style={{
+              marginRight: '10px',
+              display: 'inline-block',
+              width: '100px',
+              textAlign: 'right',
+            }}
+          >
+            {_('Start Date')}
+          </span>
+          <FormInput
+            type="date"
+            value={store.getIn([curScreenId, 'query', 'startDate'])}
+            onChange={(data) => {
+              Promise.resolve().then(() => {
+                const now = moment().format('YYYY-MM-DD');
+                let endDate = store.getIn([curScreenId, 'query', 'endDate']) || now;
+                const startDate = data.value;
+                const diff = moment(endDate).isBefore(startDate);
+                endDate = diff ? data.value : endDate;
+                this.props.changeScreenQuery({ startDate, endDate });
+              }).then(() => {
+                this.props.fetchScreenData();
+              });
+            }}
+            isOutsideRange={() => false}
+          />
+          <FormInput
+            type="time"
+            value={store.getIn([curScreenId, 'query', 'startTime'])}
+            onChange={(data) => {
+              Promise.resolve().then(() => {
+                this.props.changeScreenQuery({ startTime: data.value });
+              }).then(() => {
+                this.props.fetchScreenData();
+              });
+            }}
+            style={{
+              marginLeft: '5px',
+              paddingTop: '3px',
+              display: 'inline-block',
+            }}
+          />
+          <span
+            style={{
+              marginRight: '10px',
+              display: 'inline-block',
+              width: '100px',
+              textAlign: 'right',
+            }}
+          >
+            {_('End Date')}
+          </span>
+          <FormInput
+            type="date"
+            value={store.getIn([curScreenId, 'query', 'endDate'])}
+            onChange={(data) => {
+              Promise.resolve().then(() => {
+                const now = moment().format('YYYY-MM-DD');
+                let startDate = store.getIn([curScreenId, 'query', 'endDate']) || now;
+                const endDate = data.value;
+                const diff = moment(endDate).isBefore(startDate);
+                startDate = diff ? data.value : startDate;
+                this.props.changeScreenQuery({ startDate, endDate });
+              }).then(() => {
+                this.props.fetchScreenData();
+              });
+            }}
+            isOutsideRange={() => false}
+          />
+          <FormInput
+            type="time"
+            value={store.getIn([curScreenId, 'query', 'endTime'])}
+            onChange={(data) => {
+              Promise.resolve().then(() => {
+                this.props.changeScreenQuery({ endTime: data.value });
+              }).then(() => {
+                this.props.fetchScreenData();
+              });
+            }}
+            style={{
+              marginLeft: '5px',
+              paddingTop: '3px',
+              display: 'inline-block',
+            }}
+          />
+        </div>
         <div
           style={{
             position: 'relative',
             border: '1px solid #CCC',
             overflow: 'hidden',
           }}
-          // onDragOver={(e) => { e.preventDefault(); }}
         >
           {this.renderCurMap(this.mapList, this.state.curMapId, this.state.zoom)}
           <div className="o-map-zoom-bar">
