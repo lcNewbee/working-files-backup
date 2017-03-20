@@ -32,7 +32,7 @@ class NetworkPortalMac_Model extends CI_Model {
     function add_portal_wite($data){
         $result = null;
         $res = $this->is_add_sum($data['interface_bind'],$data['src_mac']);       
-        if( $res['totalsum'] < 513 && $res['macsum'] === 0){
+        if( $res['totalsum'] < 513 && $res['ismac'] === 0){
             $arr = array(
                 'template_name'=>$this->get_portal_tmpname($data['interface_bind']),
                 'if_name'=>(string)$data['interface_bind'],
@@ -104,25 +104,24 @@ class NetworkPortalMac_Model extends CI_Model {
         }
         return $result;
     }
-    private function is_add_sum($facename,$mac){        
+    private function is_add_sum($facename,$mac){ 
         $totalsum = 0;
-        $macsum = 0;
-        $query = $this->db->select('blackwhite_list.*,portal_auth.portal_name')
-                ->from('blackwhite_list')
-                ->join('portal_auth','blackwhite_list.portal_id = portal_auth.id','left')
-                ->get()->result_array();
+        $ismac = 0;  
+        $query = $this->db->query("select blackwhite_id from blackwhite_params  where attr_value='".$facename."'");
 
-        if(count($query) > 0) {
-             foreach ($query as $row) {
-                $witeary = $this->get_white_info($row['id']);
-                if($witeary['interface_bind'] == $facename){
+        foreach($query->result_array() as $row){            
+            $query2 = $this->db->query("select * from blackwhite_params where blackwhite_id=".$row['blackwhite_id']);
+            foreach($query2->result_array() as $row2){
+                if($row2['attr_id'] === 6){//6代表mac
+                    //计算mac 数量
                     $totalsum = $totalsum + 1;
-                }  
-                if($witeary['src_mac'] == $mac){
-                    $macsum = 1;
-                }              
-            }            
-        }    
-       return array('totalsum'=>$totalsum,'macsum'=>$macsum);    
+                    if($row2['attr_value'] === $mac){
+                        //判断是否存在某个mac
+                        $ismac = 1;
+                    }
+                }
+            }
+        }
+        return array('totalsum'=>$totalsum,'ismac'=>$ismac);
     }
 }

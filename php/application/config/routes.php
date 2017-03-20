@@ -97,7 +97,8 @@ $route['goform/group/map/building'] = 'group/mapBuilding';
 $route['goform/group/map/list'] = 'group/mapSonList';
 $route['goform/group/map/apPlan'] = 'group/mapApPlan';
 $route['goform/group/map/clients_trace'] = 'group/mapClients';
-
+$route['goform/group/map/heatmap'] = 'group/mapHeat';
+$route['goform/group/map/orbittrace'] = 'group/mapOrbit';
 
 // 系统设置
 $route['goform/system/version/upload'] = 'system/systemVersion/upload';
@@ -135,6 +136,10 @@ $route['goform/portal/access/weixin'] = 'portal/AccessWeixin';
 $route['goform/portal/access/defaultweb'] = 'portal/AccessDefault';
 $route['goform/portal/access/download'] = 'portal/AccessDefault/download';
 $route['goform/portal/access/upload'] = 'portal/AccessDefault/upload';
+$route['goform/portal/access/smsgateWay'] = 'portal/AccessSms';
+$route['goform/portal/access/portalsmslog'] = 'portal/AccessSmslog';
+
+
 $route['goform/portal/system/user'] = 'portal/systemUser';
 $route['goform/portal/system/role'] = 'portal/systemRole';
 $route['goform/portal/system/classification'] = 'portal/systemClassify';
@@ -156,5 +161,6 @@ $route['goform/portal/card/cardcategory'] = 'portal/cateGory';
 $route['goform/portal/message/receive'] = 'portal/messageReceive';
 $route['goform/portal/message/send'] = 'portal/messageSend';
 $route['goform/portal/message/sendmessage'] = 'portal/messageAdd';
+
 
 
