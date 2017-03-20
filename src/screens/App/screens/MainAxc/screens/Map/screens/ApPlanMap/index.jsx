@@ -177,7 +177,7 @@ export default class View extends React.PureComponent {
       map: { ...gpsPoint },
       mapId: curMapId,
       ...gpsPoint,
-    }, true);
+    });
 
     this.savePlaceDevice('place');
   }
@@ -195,18 +195,18 @@ export default class View extends React.PureComponent {
     });
     this.props.onListAction();
   }
-  onUndeloyDevice(index) {
-    this.updateListItemByIndex(index, {
-      map: {
-        id: -100,
-        xpos: -99,
-        ypos: -99,
-        isOpen: false,
-        locked: false,
-      },
-    });
-    this.savePlaceDevice('unplace');
-  }
+  // onUndeloyDevice(index) {
+  //   this.updateListItemByIndex(index, {
+  //     map: {
+  //       id: -100,
+  //       xpos: -99,
+  //       ypos: -99,
+  //       isOpen: false,
+  //       locked: false,
+  //     },
+  //   });
+  //   this.savePlaceDevice('unplace');
+  // }
   onMapMouseUp() {
     this.mapMouseDown = false;
   }
@@ -237,7 +237,7 @@ export default class View extends React.PureComponent {
     });
 
     if (this.actionable) {
-      this.props.onListAction('', {
+      this.props.onListAction({
         needMerge: true,
       });
     }
