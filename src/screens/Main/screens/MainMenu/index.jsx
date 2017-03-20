@@ -5,7 +5,7 @@ export default class Mainmenu extends Component {
   render() {
     return (
       <Tab
-        menus={this.props.route.childRoutes}
+        menus={this.props.route.routes}
       >
         {this.props.children}
       </Tab>

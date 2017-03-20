@@ -1,18 +1,21 @@
 import React, { PropTypes, Component } from 'react';
 import 'react-dom';
+import { fromJS } from 'immutable';
 import { connect } from 'react-redux';
 import ReduxToastr from 'react-redux-toastr';
 import * as actions from 'shared/actions/app';
 import Modal from 'shared/components/Modal';
 import ProgressBar from 'shared/components/ProgressBar';
 import stringUtils from 'shared/utils/lib/string';
+import { matchRoutes } from 'react-router-config';
 
 const propTypes = {
   closeModal: PropTypes.func,
   fetchProductInfo: PropTypes.func,
+  updateRouter: PropTypes.func,
   app: PropTypes.object,
   route: PropTypes.object,
-  routes: PropTypes.array,
+  location: PropTypes.object,
   children: PropTypes.node,
 };
 
@@ -20,17 +23,27 @@ const defaultProps = {
   closeModal: () => true,
 };
 
-class App extends Component {
+export default class App extends Component {
   constructor(props) {
     super(props);
 
     this.onModalClose = this.onModalClose.bind(this);
     this.onModalApply = this.onModalApply.bind(this);
     this.renderHtmlBody = this.renderHtmlBody.bind(this);
+    this.updateRouter = this.updateRouter.bind(this);
   }
   componentWillMount() {
     if (this.props.fetchProductInfo) {
-      this.props.fetchProductInfo(this.props.routes[0].formUrl);
+      this.props.fetchProductInfo(this.props.route.formUrl);
+    }
+  }
+  componentDidMount() {
+    this.updateRouter();
+  }
+  componentDidUpdate(prevProps) {
+    // 更新路由
+    if (this.props.location.pathname !== prevProps.location.pathname) {
+      this.updateRouter();
     }
   }
 
@@ -46,11 +59,18 @@ class App extends Component {
     });
   }
 
-  renderHtmlBody() {
-    const thisRoutes = this.props.routes;
-    const bodyElem = document.getElementsByTagName('body')[0];
+  updateRouter() {
+    const routes = fromJS(matchRoutes(this.props.route.routes));
 
-    if (thisRoutes[1].path && thisRoutes[1].path.indexOf('/main/') !== -1) {
+    this.props.updateRouter({
+      routes,
+    });
+  }
+
+  renderHtmlBody() {
+    const { route } = this.props;
+    const bodyElem = document.getElementsByTagName('body')[0];
+    if (route.path !== '/') {
       if (bodyElem.className.indexOf('fixed') === -1) {
         bodyElem.className = stringUtils.addClassName(bodyElem.className, 'fixed');
       }
@@ -65,9 +85,12 @@ class App extends Component {
     const isLoadingModal = modelRole === 'loading';
 
     this.renderHtmlBody();
-    
+
     return (
       <div>
+        {
+          this.props.children
+        }
         <Modal
           id="appModal"
           isShow={modal.status === 'show'}
@@ -125,5 +148,3 @@ export const Screen = connect(
   mapStateToProps,
   actions,
 )(App);
-
-export { default as app } from './reducer';

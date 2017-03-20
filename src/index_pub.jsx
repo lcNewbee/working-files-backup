@@ -8,14 +8,13 @@ require('whatwg-fetch');
 
 const React = require('react');
 const ReactDOM = require('react-dom');
-const ReactRouter = require('react-router');
 const ReactRouterDom = require('react-router-dom');
 const remoteActionMiddleware = require('shared/utils/lib/remote_action_middleware');
 const appActions = require('shared/actions/app');
 const combineReducers = require('redux').combineReducers;
 const Provider = require('react-redux').Provider;
 const prodConfig = require('./config/axc2.5');
-const App = require('./screens/App');
+const renderRouterConfig = require('shared/components/Organism/RouterConfig');
 
 const HashRouter = ReactRouterDom.HashRouter;
 const mountNode = document.getElementById('app');
@@ -40,7 +39,7 @@ const renderApp = () => {
   ReactDOM.render(
     <Provider store={stores}>
       <HashRouter>
-        <App routes={prodConfig.routes} />
+        {renderRouterConfig(prodConfig.routes)}
       </HashRouter>
     </Provider>,
     mountNode,

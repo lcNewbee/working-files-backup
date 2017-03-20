@@ -61,7 +61,7 @@ export default class Login extends React.PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    const thisRoute = this.props.routes && this.props.routes[0];
+    const thisRoute = this.props.route;
     let mainPath = '/main/status';
 
     if (thisRoute && thisRoute.mainPath) {
@@ -71,7 +71,7 @@ export default class Login extends React.PureComponent {
       // 如果登录时间不一致
       // 后续可以做记住密码的功能
       if (this.props.loginedAt !== nextProps.loginedAt) {
-        this.props.router.push(mainPath);
+        this.props.history.push(mainPath);
       }
     }
   }

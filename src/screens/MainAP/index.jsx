@@ -65,10 +65,10 @@ export default class MainAP extends React.PureComponent {
         if (json.data.ifFirstLogin === '1') {
           window.location.href = '#/wizard';
         } else if (json.data.enable === '1') {
-          const menus = this.props.route.childRoutes.filter(val => val.id !== 'wirelessconfig' && val.id !== 'quicksetup');
+          const menus = this.props.route.routes.filter(val => val.id !== 'wirelessconfig' && val.id !== 'quicksetup');
           this.props.changeMenus(fromJS(menus));
         } else if (json.data.enable === '0') {
-          const menus = this.props.route.childRoutes;
+          const menus = this.props.route.routes;
           this.props.changeMenus(fromJS(menus));
         }
       }

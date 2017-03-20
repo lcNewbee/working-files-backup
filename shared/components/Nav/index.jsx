@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
+import { NavLink as Link } from 'react-router-dom';
 import { fromJS } from 'immutable';
 import Icon from '../Icon';
 
@@ -98,7 +98,7 @@ class Nav extends React.PureComponent {
       this.defaultOpen = '';
     }
   }
-  
+
   onSelectItem(path, e) {
     if (this.props.onChange) {
       this.props.onChange(path, e);
@@ -131,7 +131,7 @@ class Nav extends React.PureComponent {
           {
             fromJS(menus).map((item) => {
               const myKey = item.get('id');
-              const hasChildRoutes = isTree && item.get('childRoutes');
+              const hasChildRoutes = isTree && item.get('routes');
               const hasSubmenus = hasChildRoutes && !item.get('noTree');
               const hasTabs = hasChildRoutes && item.get('noTree');
               let subMenuClassName = 'o-nav__sub-menus m-menu';
@@ -156,7 +156,7 @@ class Nav extends React.PureComponent {
                   this.defaultOpen = myKey;
                 }
               }
-              
+
               if (isOpen) {
                 subMenuClassName = `${subMenuClassName} m-menu--open`;
                 linkClassName = `${linkClassName} is-open`;
@@ -183,9 +183,9 @@ class Nav extends React.PureComponent {
                     isOpen ? (
                       <ul className={subMenuClassName}>
                         {
-                          item.get('childRoutes').map(($$subItem) => {
+                          item.get('routes').map(($$subItem) => {
                             const thisKey = $$subItem.get('id');
-                            const subHasSubmenus = $$subItem.get('childRoutes');
+                            const subHasSubmenus = $$subItem.get('routes');
                             const subHasTabs = subHasSubmenus && $$subItem.get('component');
                             const mylinkClassName = 'm-menu__link o-nav__link a-leaf-link';
 

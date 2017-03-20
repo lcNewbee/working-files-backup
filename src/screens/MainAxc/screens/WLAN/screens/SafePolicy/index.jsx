@@ -10,7 +10,7 @@ const defaultProps = {};
 function TabView(props) {
   return (
     <Tab
-      menus={props.route.childRoutes}
+      menus={props.route.routes}
       role="tab"
     >
       {props.children}

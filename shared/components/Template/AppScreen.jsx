@@ -63,6 +63,7 @@ export default class AppScreen extends React.Component {
       defaultSettingsData, settingsFormOptions, listOptions,
       groupid,
     } = props;
+    console.log(props.route)
     const initOption = utils.extend({
       id: props.route.id,
       formUrl: props.route.formUrl,

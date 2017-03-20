@@ -1,19 +1,5 @@
 import { fromJS } from 'immutable';
-import {
-  TOGGLE_PROPERTY,
-  INIT_PROPERTY_PANEL,
-  COLLAPSE_PROPERTY_PANEL,
-  REMOVE_PROPERTY_PANEL,
-
-  // 操作属性面板内容
-  CHANGE_PROPERTY_PANEL_ITEM,
-
-  // 接收属性面板数据 Data
-  RC_PROPERTY_PANEL_DATA,
-
-  // 更新属性面板数据
-  CHANGE_PROPERTY_PANEL_DATA,
-} from 'shared/constants/action';
+import ACTIONS from 'shared/constants/action';
 
 const defaultItem = fromJS({
   id: '-1',
@@ -288,10 +274,10 @@ function changePropertyPanelItem(state, action) {
 
 export default function (state = defaultState, action) {
   switch (action.type) {
-    case CHANGE_PROPERTY_PANEL_DATA:
+    case ACTIONS.CHANGE_PROPERTY_PANEL_DATA:
       return updatePropertyPanelData(state, action.data);
 
-    case TOGGLE_PROPERTY:
+    case ACTIONS.TOGGLE_PROPERTY:
       return state.update('isShowPanel', (val) => {
         let ret = !val;
 
@@ -301,14 +287,14 @@ export default function (state = defaultState, action) {
         return ret;
       });
 
-    case INIT_PROPERTY_PANEL:
+    case ACTIONS.INIT_PROPERTY_PANEL:
       return initAddPropertyPanel(state, action);
 
-    case RC_PROPERTY_PANEL_DATA:
+    case ACTIONS.RC_PROPERTY_PANEL_DATA:
       return receivePropertyPanelData(state, action);
 
     // 切换属性列表body折叠状态
-    case COLLAPSE_PROPERTY_PANEL:
+    case ACTIONS.COLLAPSE_PROPERTY_PANEL:
       return state.update('activeIndex', (i) => {
         let ret = action.index;
 
@@ -319,11 +305,11 @@ export default function (state = defaultState, action) {
         return ret;
       });
 
-    case REMOVE_PROPERTY_PANEL:
+    case ACTIONS.REMOVE_PROPERTY_PANEL:
       return removePropertyPanel(state, action);
 
     // 修改合并属性列表某项的数据
-    case CHANGE_PROPERTY_PANEL_ITEM:
+    case ACTIONS.CHANGE_PROPERTY_PANEL_ITEM:
       return changePropertyPanelItem(state, action);
 
     default:

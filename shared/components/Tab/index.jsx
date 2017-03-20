@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { fromJS } from 'immutable';
-import { Link } from 'react-router';
+import { NavLink as Link } from 'react-router-dom';
 import Icon from '../Icon';
 import './_index.scss';
 

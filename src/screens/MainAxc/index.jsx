@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
+import { NavLink } from 'react-router-dom';
 import utils from 'shared/utils';
 import classNamesUtils from 'classnames';
 import { Button, SaveButton } from 'shared/components/Button';
@@ -18,6 +18,7 @@ import PropertyPanel from 'shared/components/Template/PropertyPanel';
 import * as appActions from 'shared/actions/app';
 import * as propertiesActions from 'shared/actions/properties';
 import { getActionable } from 'shared/axc';
+import SwitchRoutes from 'shared/components/Organism/RouterConfig';
 import * as actions from './actions';
 import myReducer from './reducer';
 
@@ -1037,15 +1038,15 @@ export default class Main extends React.PureComponent {
   }
 
   renderBreadcrumb() {
-    const groupData = this.props.product.get('group');
-    const vlanData = this.props.product.get('vlan');
-    const curRoutes = this.props.routes;
+    const { route, location, product, app } = this.props;
+    const groupData = product.get('group');
+    const curRoutes = app.getIn(['router', 'routes']);
     let breadcrumbList = fromJS([]);
     const len = curRoutes.length;
     let i = 2;
 
     // 如果是 AP组管理
-    if (curRoutes[1].path === '/main/group') {
+    if (curRoutes.path === '/main/group') {
       breadcrumbList = breadcrumbList.unshift({
         path: '/main/group',
         text: _('All Group'),
@@ -1064,14 +1065,6 @@ export default class Main extends React.PureComponent {
         path: curRoutes[i].path,
         text: curRoutes[i].text,
       });
-
-       // 如果是 VLAN
-      // if (curRoutes[2].path === '/main/network/vlan' && i === 2) {
-      //   breadcrumbList = breadcrumbList.unshift({
-      //     path: '/main/network/vlan',
-      //     text: `${vlanData.getIn(['selected', 'id'])}(${vlanData.getIn(['selected', 'remark'])})`,
-      //   });
-      // }
     }
 
     return (
@@ -1079,13 +1072,13 @@ export default class Main extends React.PureComponent {
         {
           breadcrumbList.map((item, index) => (
             <li key={index}>
-              <Link
+              <NavLink
                 className="m-breadcrumb__link"
                 to={item.path}
                 onClick={() => this.onClickNav(item.path)}
               >
                 {item.text}
-              </Link>
+              </NavLink>
             </li>
           ))
         }
@@ -1095,14 +1088,14 @@ export default class Main extends React.PureComponent {
 
   render() {
     const selectGroupId = this.props.product.getIn(['group', 'selected', 'id']);
-    const { version } = this.props.app.toJS();
+    const { version, router } = this.props.app.toJS();
     const { popOver, modal } = this.props.product.toJS();
     const { isShowPanel } = this.props.properties.toJS();
     const curRoutePath = this.props.route.path;
     let mainClassName = 't-main t-main--axc';
     let isMainLeftShow = false;
     let isMainRightShow = isShowPanel;
-    let mainLeftMenus = this.props.route.childRoutes;
+    let mainLeftMenus = this.props.route.routes;
 
     if (curRoutePath === '/main/group') {
       // 如果当前是所有组，则隐藏组配置相关菜单
@@ -1140,13 +1133,11 @@ export default class Main extends React.PureComponent {
             className="m-menu m-menu--open"
           >
             {
-              fromJS(this.props.routes[0].childRoutes).map((item) => {
+              fromJS(this.props.route.routes).map((item) => {
                 const keyVal = `${item.get('path')}`;
-
                 return item.get('text') ? (<li key={keyVal}>
-                  <Link
+                  <NavLink
                     to={item.get('path')}
-                    className=""
                     activeClassName="active"
                     data-title={item.get('text')}
                     onClick={() => {
@@ -1155,7 +1146,7 @@ export default class Main extends React.PureComponent {
                   >
                     <Icon name={item.get('icon')} />
                     <div>{item.get('text')}</div>
-                  </Link>
+                  </NavLink>
                 </li>) : null;
               })
             }
@@ -1193,9 +1184,7 @@ export default class Main extends React.PureComponent {
         </div>
 
         <div className="t-main__content">
-          {
-            this.props.children
-          }
+          {this.props.children}
         </div>
 
         <PopOver

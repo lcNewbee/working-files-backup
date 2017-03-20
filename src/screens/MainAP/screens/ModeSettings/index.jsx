@@ -5,7 +5,7 @@ export default class ModeSettings extends Component {
   render() {
     return (
       <Tab
-        menus={this.props.route.childRoutes}
+        menus={this.props.route.routes}
         role="tab"
       >
         {this.props.children}
