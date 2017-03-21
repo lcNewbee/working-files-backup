@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import utils, { gps } from 'shared/utils';
 import { connect } from 'react-redux';
-import { fromJS } from 'immutable';
+import { fromJS} from 'immutable';
 import { bindActionCreators } from 'redux';
 import AppScreen from 'shared/components/Template/AppScreen';
 import { FormGroup } from 'shared/components';
@@ -58,10 +58,6 @@ function getClientMac() {
   );
 }
 
-function getDistance(p1, p2) {
-  return Math.sqrt(((p1[0] - p2[0]) * (p1[0] - p2[0])) + ((p1[1] - p2[1]) * (p1[1] - p2[1])));
-}
-
 const propTypes = {
   store: PropTypes.object,
   changeScreenQuery: PropTypes.func,
@@ -81,7 +77,6 @@ const defaultQuery = {
 export default class View extends React.Component {
   constructor(props) {
     super(props);
-    this.colors = ['#c23531', '#2f4554', '#0093dd', '#d48265', '#91c7ae'];
     this.state = {
       buildingNameOptions: fromJS([]),
       layerMapOptions: fromJS([]),
@@ -109,13 +104,6 @@ export default class View extends React.Component {
         'onMapMouseUp',
         'onMapMouseDown',
         'onMapMouseMove',
-
-        'drawLinePath',
-        'smoothSpline',
-        'getOffsetPoint',
-        'getPointList',
-        'interpolate',
-        'drawCurvePath',
       ],
     );
   }
@@ -163,10 +151,7 @@ export default class View extends React.Component {
     const $$pathList = store.getIn([curScreenId, 'data', 'list']);
     const startX = store.getIn([curScreenId, 'data', 'list', 0, 'x']);
     const startY = store.getIn([curScreenId, 'data', 'list', 0, 'y']);
-    const mapList = this.mapList;
-    if (typeof (mapList) !== 'undefined') {
-      this.updateCanvas(startX, startY, $$pathList, mapList, curMapId);
-    }
+    this.updateCanvas(startX, startY, $$pathList, curMapId);
   }
 
   componentDidUpdate() {
@@ -176,10 +161,7 @@ export default class View extends React.Component {
     const $$pathList = store.getIn([curScreenId, 'data', 'list']);
     const startX = store.getIn([curScreenId, 'data', 'list', 0, 'x']);
     const startY = store.getIn([curScreenId, 'data', 'list', 0, 'y']);
-    const mapList = this.mapList;
-    if (typeof (mapList) !== 'undefined') {
-      this.updateCanvas(startX, startY, $$pathList, mapList, curMapId);
-    }
+    this.updateCanvas(startX, startY, $$pathList, curMapId);
   }
   onChangeBuilding(id) {
     this.props.changeScreenQuery({ buildId: id });
@@ -244,40 +226,19 @@ export default class View extends React.Component {
       return null;
     }
     ctx = this.canvasElem.getContext('2d');
-    const curItem = mapList.find(item => item.get('id') === curMapId);
+    // console.log('curMapId', curMapId)
+    // const curItem = mapList.find(item => item.get('id') === curMapId);
     // 经纬度转换为画布上的像素
-    const pathListPixel = $$pathList.toJS().map(($$point) => {
-      const ret = gps.getOffsetFromGpsPoint($$point, curItem.toJS());
-      const x = Math.floor((ret.x * this.mapWidth) / 100);
-      const y = Math.floor((ret.y * this.mapHeight) / 100);
-      return { x, y };
-    });
-
-    const len = pathListPixel.length;
-    pathListPixel.forEach((item, index, arr) => {
-      if (index === len - 1) return;
-      const crvPoints = this.getPointList(item, arr[index + 1]);
-      this.drawCurvePath(ctx, crvPoints);
-    })
-    
-    this.stationaryPoint(ctx, pathListPixel);
-    // this.oribitPath(ctx, startX, startY, fromJS(pathListPixel));
-  }
-
-  drawCurvePath(ctx, crvPoints) {
-    const len = crvPoints.length;
-    const colorsLen = this.colors.length;
-    if (len === null)  return null;
-    ctx.moveTo(crvPoints[0][0], crvPoints[0][1]);
-    ctx.save();
-    ctx.beginPath();
-    ctx.strokeStyle = this.colors[Math.floor(colorsLen * Math.random())];
-    ctx.lineWidth = 2;
-    crvPoints.forEach((point, index) => {
-      ctx.lineTo(point[0], point[1]);
-    });
-    ctx.stroke();
-    ctx.restore();
+    // console.log('curItem', curItem)
+    // const pathListPixel = $$pathList.toJS().map(($$point) => {
+    //   const ret = gps.getOffsetFromGpsPoint($$point, curItem.toJS());
+    //   const x = Math.floor((ret.x * this.mapWidth) / 100);
+    //   const y = Math.floor((ret.y * this.mapHeight) / 100);
+    //   return { x, y };
+    // });
+    // console.log('pathListPixel', pathListPixel);
+    this.stationaryPoint(ctx, $$pathList);
+    this.oribitPath(ctx, startX, startY, $$pathList);
   }
 
   stationaryPoint(ctx, $$pathList) {
@@ -285,27 +246,24 @@ export default class View extends React.Component {
     if (len === null) {
       return null;
     }
-    // console.log('$$pathList', $$pathList);
     $$pathList.forEach(
       ($$point) => {
         // 默认值为source-over
-        // const prev = ctx.globalCompositeOperation;
+        const prev = ctx.globalCompositeOperation;
         //  只显示canvas上原图像的重叠部分
-        // ctx.globalCompositeOperation = 'destination-in';
+        ctx.globalCompositeOperation = 'destination-in';
         //  设置主canvas的绘制透明度
-        // ctx.globalAlpha = 0.9;
+        ctx.globalAlpha = 0.9;
         //  这一步目的是将canvas上的图像变的透明
-        // ctx.fillRect(0, 0, 1144, 700);
+        ctx.fillRect(0, 0, 1144, 700);
         //  在原图像上重叠新图像
-        // ctx.globalCompositeOperation = prev;
+        ctx.globalCompositeOperation = prev;
         //  在主canvas上画新圆
-        // console.log('$$point', $$point);
         ctx.save();
         ctx.beginPath();
-        ctx.fillStyle = 'red';
-        // console.log('$$point.x', $$point.x);
-        ctx.arc($$point.x, $$point.y, 4, 0, 2 * Math.PI);
+        ctx.arc($$point.get('x'), $$point.get('y'), 4, 0, 2 * Math.PI);
         ctx.closePath();
+        ctx.fillStyle = 'red';
         ctx.fill();
         ctx.restore();
       },
@@ -370,8 +328,8 @@ export default class View extends React.Component {
               this.canvasElem = canvasElem;
             }
           }}
-          width={this.mapWidth}
-          height={this.mapHeight}
+          width={1144}
+          height={700}
           style={{
             position: 'absolute',
             left: 0,
@@ -382,126 +340,11 @@ export default class View extends React.Component {
     );
   }
 
-  getPointList(from, to) {
-    // console.log('from.x, to.x', from.x, to.x);
-    let points = [
-        [from.x, from.y],
-        [to.x, to.y],
-    ];
-    const ex = points[1][0];
-    const ey = points[1][1];
-    points[3] = [ex, ey];
-    points[1] = this.getOffsetPoint(points[0], points[3]);
-    points[2] = this.getOffsetPoint(points[3], points[0]);
-    points = this.smoothSpline(points, false);
-    // 修正最后一点在插值产生的偏移
-    points[points.length - 1] = [ex, ey];
-    return points;
-  }
-
-  getOffsetPoint(start, end) {
-    const distance = getDistance(start, end) / 3; // 除以3？
-    let angle; let dX; let dY;
-    const mp = [start[0], start[1]];
-    const deltaAngle = -0.2; // 偏移0.2弧度
-    if (start[0] !== end[0] && start[1] !== end[1]) { // 斜率存在
-      const k = (end[1] - start[1]) / (end[0] - start[0]);
-      angle = Math.atan(k);
-    } else if (start[0] === end[0]) { // 垂直线
-      angle = (start[1] <= end[1] ? 1 : -1) * (Math.PI / 2);
-    } else { // 水平线
-      angle = 0;
-    }
-    if (start[0] <= end[0]) {
-      angle -= deltaAngle;
-      dX = Math.round(Math.cos(angle) * distance);
-      dY = Math.round(Math.sin(angle) * distance);
-      mp[0] += dX;
-      mp[1] += dY;
-    } else {
-      angle += deltaAngle;
-      dX = Math.round(Math.cos(angle) * distance);
-      dY = Math.round(Math.sin(angle) * distance);
-      mp[0] -= dX;
-      mp[1] -= dY;
-    }
-    return mp;
-  }
-
-  smoothSpline(points, isLoop) {
-    const len = points.length;
-    const ret = [];
-    let distance = 0;
-    for (let i = 1; i < len; i++) {
-      distance += getDistance(points[i - 1], points[i]);
-    }
-    let segs = distance / 2;
-    segs = segs < len ? len : segs;
-    for (let i = 0; i < segs; i++) {
-      const pos = (i / (segs - 1)) * (isLoop ? len : len - 1);
-      const idx = Math.floor(pos);
-      const w = pos - idx;
-      let p0;
-      const p1 = points[idx % len];
-      let p2;
-      let p3;
-      if (!isLoop) {
-        p0 = points[idx === 0 ? idx : idx - 1];
-        p2 = points[idx > len - 2 ? len - 1 : idx + 1];
-        p3 = points[idx > len - 3 ? len - 1 : idx + 2];
-      } else {
-        p0 = points[((idx - 1) + len) % len];
-        p2 = points[(idx + 1) % len];
-        p3 = points[(idx + 2) % len];
-      }
-      const w2 = w * w;
-      const w3 = w * w2;
-
-      ret.push([
-        this.interpolate(p0[0], p1[0], p2[0], p3[0], w, w2, w3),
-        this.interpolate(p0[1], p1[1], p2[1], p3[1], w, w2, w3),
-      ]);
-    }
-    return ret;
-  }
-
-  interpolate(p0, p1, p2, p3, t, t2, t3) {
-    var v0 = (p2 - p0) * 0.5;
-    var v1 = (p3 - p1) * 0.5;
-    return (2 * (p1 - p2) + v0 + v1) * t3 + (-3 * (p1 - p2) - 2 * v0 - v1) * t2 + v0 * t + p1;
-  }
-
-  drawLinePath(context) {
-    this.path = this.getPointList(map.pointToPixel(this.from.location), map.pointToPixel(this.to.location));
-    const pointList = this.path;
-    const len = pointList.length;
-    context.save();
-    context.beginPath();
-    context.lineWidth = options.lineWidth;
-    context.strokeStyle = options.colors[this.id];
-
-    if (!options.lineType || options.lineType === 'solid') {
-      context.moveTo(pointList[0][0], pointList[0][1]);
-      for (let i = 0; i < len; i++) {
-        context.lineTo(pointList[i][0], pointList[i][1]);
-      }
-    } else if (options.lineType === 'dashed' || options.lineType === 'dotted') {
-      for (let i = 1; i < len; i += 2) {
-        context.moveTo(pointList[i - 1][0], pointList[i - 1][1]);
-        context.lineTo(pointList[i][0], pointList[i][1]);
-      }
-    }
-    context.stroke();
-    context.restore();
-    this.step = 0; // 缩放地图时重新绘制动画
-  }
-
   render() {
     const myZoom = this.state.zoom;
     const { store } = this.props;
     const curScreenId = store.get('curScreenId');
     const $$screenQuery = store.getIn([curScreenId, 'query']);
-    if (!this.mapList) return null;
 
     return (
       <AppScreen
@@ -567,7 +410,7 @@ export default class View extends React.Component {
           />
         </div>
         <div className="o-map-warp">
-          {this.renderCurMap(this.mapList, this.state.curMapId, this.state.zoom)}
+          {this.renderCurMap(this.state.mapList, this.state.curMapId, this.state.zoom)}
           <div className="o-map-zoom-bar">
             <Icon
               name="minus"
