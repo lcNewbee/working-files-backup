@@ -13,11 +13,7 @@ const remoteActionMiddleware = require('shared/utils/lib/remote_action_middlewar
 const appActions = require('shared/actions/app');
 const combineReducers = require('redux').combineReducers;
 const Provider = require('react-redux').Provider;
-<<<<<<< 281d46858173aca389f52d8c835ca2f72ef0c646
 const prodConfig = require('./config/axc3.0');
-=======
-const prodConfig = require('./config/axc');
->>>>>>> axc: 短信网关 2.5 版本路径修改
 
 const Router = ReactRouter.Router;
 const hashHistory = ReactRouter.hashHistory;
