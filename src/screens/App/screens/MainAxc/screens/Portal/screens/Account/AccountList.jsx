@@ -58,7 +58,7 @@ const listOptions = fromJS([
     text: _('Left Time'),
     noForm: true,
     transform(val) {
-      return uptimeFilter.transform(val);
+      return uptimeFilter.transform(val / 1000);
     },
   }, {
     id: 'octets',
