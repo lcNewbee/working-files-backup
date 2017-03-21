@@ -67,7 +67,6 @@ function calcValueWithinCircle(dataList, centerPoint, radius) {
       totalValue += item.value;
     }
   });
-  console.log('totalValue', totalValue);
   return totalValue;
 }
 

@@ -1,0 +1,93 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "page": {
+      "start": 2,
+      "size": 2,
+      "currPage": 2,
+      "totalPage": 3,
+      "total": 4,
+      "nextPage": 2,
+      "lastPage": 4
+    },
+    "list": [
+      {
+        "id": "1",
+        "type": "wireless",
+        "devicename": "iPhone",
+        "ip": "192.168.5.123",
+        "mac": "12:22:33:44:55:66",
+        "ssid": "ssid1",
+        "connectap": "ap1",
+        "downstream": "256",
+        "upstream": "1232323",
+        "rssi": "86",
+        "authtype": "portal",
+        "operationhours": "23444",
+        "wirelessType": "main",
+        "islock": "lock",
+        "vendor": "huawei",
+        "lasttime": "2016-06-22 17:25:51"
+      },
+      {
+        "id": "2",
+        "type": "guest",
+        "devicename": "gruis",
+        "ip": "192.168.5.32",
+        "mac": "12:22:33:44:55:65",
+        "ssid": "ssid2",
+        "connectap": "ap2",
+        "downstream": "128",
+        "upstream": "64",
+        "rssi": "76",
+        "authtype": "portal",
+        "operationhours": "6600",
+        "wirelessType": "main",
+        "islock": "unlock",
+        "vendor": "huawei",
+        "lasttime": "2016-06-22 17:25:51"
+      },
+      {
+        "id": "3",
+        "type": "guest",
+        "devicename": "windy ihone",
+        "ip": "192.168.5.32",
+        "mac": "12:22:33:44:55:61",
+        "ssid": "ssid2",
+        "connectap": "",
+        "apmac": "12:22:33:44:55:61",
+        "downstream": "128",
+        "upstream": "68",
+        "rssi": "70",
+        "authtype": "0",
+        "operationhours": "6600",
+        "wirelessType": "main",
+        "islock": "unlock",
+        "vendor": "huawei",
+        "lasttime": "2016-06-22 17:25:51"
+      },
+      {
+        "id": "4",
+        "type": "guest",
+        "devicename": "android-1",
+        "ip": "192.168.5.32",
+        "mac": "12:22:33:44:55:63",
+        "ssid": "ssid2",
+        "connectap": "ap2",
+        "downstream": "128",
+        "upstream": "64",
+        "rssi": "60",
+        "authtype": "portal",
+        "operationhours": "6600",
+        "wirelessType": "guest",
+        "islock": "unlock",
+        "vendor": "huawei",
+        "lasttime": "2016-06-22 17:25:51",
+        "status": "disable"
+      }
+    ]
+  }
+}

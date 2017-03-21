@@ -1,10 +1,11 @@
 import React, { PropTypes } from 'react';
-import utils from 'shared/utils';
+import utils, { gps } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS} from 'immutable';
 import { bindActionCreators } from 'redux';
 import AppScreen from 'shared/components/Template/AppScreen';
 import { FormGroup } from 'shared/components';
+import { Icon } from 'shared/components';
 import moment from 'moment';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
@@ -65,7 +66,9 @@ const propTypes = {
 };
 const defaultProps = {};
 const defaultQuery = {
+  buildId: 2,
   curMapId: 1,
+  mac: 1,
   date: moment().format('YYYY-MM-DD'),
   fromTime: '08:00:11',
   toTime: '20:00:11',
@@ -83,6 +86,7 @@ export default class View extends React.Component {
       curMapId: 1,
       fromTime: '08:00:11',
       toTime: '20:00:11',
+      zoom: 50,
       mapOffsetX: 0,
       mapOffsetY: 0,
     };
@@ -96,6 +100,10 @@ export default class View extends React.Component {
         'onSearch',
         'stationaryPoint',
         'oribitPath',
+        'drawCircle',
+        'onMapMouseUp',
+        'onMapMouseDown',
+        'onMapMouseMove',
       ],
     );
   }
@@ -118,25 +126,42 @@ export default class View extends React.Component {
         this.setState({
           clientMacOptions: fromJS(data.options),
         });
-        console.log(clientMacOptions)
       });
+    this.props.fetch('goform/group/map/building').then((json) => {
+      if (json.state && json.state.code === 2000) {
+        this.buildOptions = fromJS(json.data.list).map(item => fromJS({ label: item.get('name'), value: item.get('id') }));
+      }
+      this.onChangeBuilding(this.buildOptions.getIn([0, 'value']));
+    }).then((list) => {
+      if (typeof (list) !== 'undefined') {
+        this.onChangeMapId(this.mapOptions.getIn([0, 'value']));
+      }
+    });
+    this.props.fetch('/goform/group/user').then((json) => {
+      if (json.state && json.state.code === 2000) {
+        this.macOptions = fromJS(json.data.list).map(item => fromJS({ label: item.get('mac'), value: item.get('id') }));
+      }
+      this.onChangeMac(this.macOptions.getIn([0, 'value']));
+    });
   }
   componentDidMount() {
     const store = this.props.store;
     const curScreenId = store.get('curScreenId');
+    const curMapId = store.getIn([curScreenId, 'query', 'curMapId']);
     const $$pathList = store.getIn([curScreenId, 'data', 'list']);
     const startX = store.getIn([curScreenId, 'data', 'list', 0, 'x']);
     const startY = store.getIn([curScreenId, 'data', 'list', 0, 'y']);
-    this.updateCanvas(startX, startY, $$pathList);
+    this.updateCanvas(startX, startY, $$pathList, curMapId);
   }
 
   componentDidUpdate() {
     const store = this.props.store;
     const curScreenId = store.get('curScreenId');
+    const curMapId = store.getIn([curScreenId, 'query', 'curMapId']);
     const $$pathList = store.getIn([curScreenId, 'data', 'list']);
     const startX = store.getIn([curScreenId, 'data', 'list', 0, 'x']);
     const startY = store.getIn([curScreenId, 'data', 'list', 0, 'y']);
-    this.updateCanvas(startX, startY, $$pathList);
+    this.updateCanvas(startX, startY, $$pathList, curMapId);
   }
   onChangeBuilding(id) {
     this.props.changeScreenQuery({ buildId: id });
@@ -159,6 +184,34 @@ export default class View extends React.Component {
       this.props.fetchScreenData();
     });
   }
+  onChangeMac(id) {
+    this.props.changeScreenQuery({ macId: id });
+    this.setState({ macId: id });
+    this.props.fetch('goform/group/user', { macId: id })
+        .then((json) => {
+          if (json.state && json.state.code === 2000) {
+            this.macOptions = fromJS(json.data.list).map(item => fromJS({ label: item.get('mac'), value: item.get('id') }));
+          }
+        });
+  }
+  onMapMouseUp() {
+    this.mapMouseDown = false;
+  }
+  onMapMouseDown(e) {
+    this.mapMouseDown = true;
+    this.mapClientX = e.clientX;
+    this.mapClientY = e.clientY;
+  }
+  onMapMouseMove(e) {
+    if (this.mapMouseDown) {
+      this.setState({
+        mapOffsetX: (this.state.mapOffsetX + e.clientX) - this.mapClientX,
+        mapOffsetY: (this.state.mapOffsetY + e.clientY) - this.mapClientY,
+      });
+      this.mapClientX = e.clientX;
+      this.mapClientY = e.clientY;
+    }
+  }
   onSearch() {
     clearTimeout(this.querySaveTimeout);
 
@@ -166,20 +219,28 @@ export default class View extends React.Component {
       this.onFetchList();
     }, 200);
   }
-  updateCanvas(startX, startY, $$pathList) {
+  updateCanvas(startX, startY, $$pathList, mapList, curMapId) {
     if (typeof $$pathList === 'undefined') { return null; }
     let ctx = this.canvasElem;
-    // let backctx = this.canvasBackElem;
     if (!ctx) {
       return null;
     }
     ctx = this.canvasElem.getContext('2d');
-    // backctx = this.canvasBackElem.getContext('2d');
-    // 实现动画的关键
-    // ctx.globalAlpha = 0.85;
+    // console.log('curMapId', curMapId)
+    // const curItem = mapList.find(item => item.get('id') === curMapId);
+    // 经纬度转换为画布上的像素
+    // console.log('curItem', curItem)
+    // const pathListPixel = $$pathList.toJS().map(($$point) => {
+    //   const ret = gps.getOffsetFromGpsPoint($$point, curItem.toJS());
+    //   const x = Math.floor((ret.x * this.mapWidth) / 100);
+    //   const y = Math.floor((ret.y * this.mapHeight) / 100);
+    //   return { x, y };
+    // });
+    // console.log('pathListPixel', pathListPixel);
     this.stationaryPoint(ctx, $$pathList);
-    return this.oribitPath(ctx, startX, startY, $$pathList);
+    this.oribitPath(ctx, startX, startY, $$pathList);
   }
+
   stationaryPoint(ctx, $$pathList) {
     const len = $$pathList.size;
     if (len === null) {
@@ -187,19 +248,40 @@ export default class View extends React.Component {
     }
     $$pathList.forEach(
       ($$point) => {
+        // 默认值为source-over
+        const prev = ctx.globalCompositeOperation;
+        //  只显示canvas上原图像的重叠部分
+        ctx.globalCompositeOperation = 'destination-in';
+        //  设置主canvas的绘制透明度
+        ctx.globalAlpha = 0.9;
+        //  这一步目的是将canvas上的图像变的透明
+        ctx.fillRect(0, 0, 1144, 700);
+        //  在原图像上重叠新图像
+        ctx.globalCompositeOperation = prev;
+        //  在主canvas上画新圆
+        ctx.save();
         ctx.beginPath();
-        ctx.arc($$point.get('x'), $$point.get('y'), 5, 0, 2 * Math.PI);
+        ctx.arc($$point.get('x'), $$point.get('y'), 4, 0, 2 * Math.PI);
         ctx.closePath();
+        ctx.fillStyle = 'red';
         ctx.fill();
+        ctx.restore();
       },
     );
+  }
+  drawCircle(ctx, $$point) {
+    ctx.beginPath();
+    ctx.arc($$point.get('x'), $$point.get('y'), 1, 0, 2 * Math.PI);
+    ctx.closePath();
     ctx.fillStyle = 'red';
+    ctx.fill();
   }
   oribitPath(ctx, startX, startY, $$pathList) {
     const len = $$pathList.size;
     if (len === 1 || $$pathList === null) {
       return null;
     }
+    ctx.save();
     ctx.beginPath();
     ctx.moveTo(startX, startY);
     $$pathList.forEach(
@@ -207,14 +289,16 @@ export default class View extends React.Component {
         ctx.lineTo($$point.get('x'), $$point.get('y'));
       },
     );
-    ctx.strokeStyle = '#0093dd';
-    return ctx.stroke();
+    ctx.strokeStyle = 'red';
+    ctx.lineWidth = '1';
+    ctx.stroke();
+    ctx.restore();
   }
   handleChangeQuery(name, data) {
     this.props.changeScreenQuery({ [name]: data.value });
     this.onSearch();
   }
-  renderCurMap(mapList, curMapId) {
+  renderCurMap(mapList, curMapId, myZoom) {
     const curItem = mapList.find(item => item.get('id') === curMapId);
     const imgUrl = curItem ? curItem.get('backgroundImg') : '';
     return (
@@ -230,11 +314,14 @@ export default class View extends React.Component {
         style={{
           left: this.state.mapOffsetX,
           top: this.state.mapOffsetY,
-          width: '100%',
-          height: '700px',
-          backgroundImage: `url(${imgUrl})`,
+          width: `${myZoom}%`,
+
         }}
+        onMouseDown={this.onMapMouseDown}
+        onMouseUp={this.onMapMouseUp}
+        onMouseMove={this.onMapMouseMove}
       >
+        <img src={imgUrl} className="auto" alt={curMapId} />
         <canvas
           ref={(canvasElem) => {
             if (canvasElem && this.canvasElem !== canvasElem) {
@@ -243,12 +330,18 @@ export default class View extends React.Component {
           }}
           width={1144}
           height={700}
+          style={{
+            position: 'absolute',
+            left: 0,
+            top: 0,
+          }}
         />
       </div>
     );
   }
 
   render() {
+    const myZoom = this.state.zoom;
     const { store } = this.props;
     const curScreenId = store.get('curScreenId');
     const $$screenQuery = store.getIn([curScreenId, 'query']);
@@ -265,16 +358,16 @@ export default class View extends React.Component {
             type="select"
             className="fl"
             label={_('Building')}
-            value={this.state.buildId}
             options={this.state.buildingNameOptions.toJS()}
+            value={this.state.buildId}
             onChange={data => this.onChangeBuilding(data.value)}
           />
           <FormGroup
             type="select"
             className="fl"
             label={_('Map')}
-            value={this.state.curMapId}
             options={this.state.layerMapOptions.toJS()}
+            value={this.state.curMapId}
             onChange={data => this.onChangeMapId(data.value)}
           />
           <FormGroup
@@ -282,10 +375,8 @@ export default class View extends React.Component {
             className="fl"
             label={_('Client')}
             options={this.state.clientMacOptions.toJS()}
-            value={$$screenQuery.get('mac')}
-            onChange={(data) => {
-              this.handleChangeQuery('mac', data);
-            }}
+            value={this.state.macId}
+            onChange={data => this.onChangeMac(data.value)}
           />
           <FormGroup
             type="date"
@@ -318,15 +409,30 @@ export default class View extends React.Component {
             showSecond={false}
           />
         </div>
-        <div
-          className="o-map-warp"
-          style={{
-            top: '6rem',
-          }}
-        >
-          {this.renderCurMap(this.state.mapList, this.state.curMapId)}
+        <div className="o-map-warp">
+          {this.renderCurMap(this.state.mapList, this.state.curMapId, this.state.zoom)}
+          <div className="o-map-zoom-bar">
+            <Icon
+              name="minus"
+              className="o-map-zoom-bar__minus"
+              onClick={() => {
+                this.setState({
+                  zoom: (myZoom - 10) < 10 ? 10 : (myZoom - 10),
+                });
+              }}
+            />
+            <div className="o-map-zoom-bar__thmp" >{myZoom}%</div>
+            <Icon
+              name="plus"
+              className="o-map-zoom-bar__plus"
+              onClick={() => {
+                this.setState({
+                  zoom: (myZoom + 10) > 200 ? 200 : (myZoom + 10),
+                });
+              }}
+            />
+          </div>
         </div>
-
       </AppScreen>
     );
   }
