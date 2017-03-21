@@ -24,9 +24,7 @@ const listOptions = fromJS([
     },
   },
 ]);
-// const tableOptions = immutableUtils.getTableOptions(listOptions);
 const editFormOptions = immutableUtils.getFormOptions(listOptions);
-// const defaultEditData = immutableUtils.getFormOptions(listOptions);
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),

@@ -167,11 +167,14 @@ export default class ModeSettings extends React.Component {
     return (
       <AppScreen
         {...this.props}
-        defaultEditData={{
-          thinenable: 1,
-          thindiscovery: 'dhcp',
-          thinacip: '',
+        initOption={{
+          defaultEditData: {
+            thinenable: 1,
+            thindiscovery: 'dhcp',
+            thinacip: '',
+          },
         }}
+       
       >
         <FormContainer
           options={this.formOptions}

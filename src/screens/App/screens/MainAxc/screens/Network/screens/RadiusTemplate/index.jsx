@@ -573,7 +573,9 @@ export default class View extends React.Component {
       <AppScreen
         {...this.props}
         listOptions={listOptions}
-        defaultEditData={this.defaultEditData}
+        initOption={{
+          defaultEditData: this.defaultEditData,
+        }}
         modalChildren={this.renderCustomModal()}
         listKey="template_name"
         maxListSize="16"

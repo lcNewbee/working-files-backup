@@ -78,7 +78,6 @@ const propTypes = {
   modalSize: PropTypes.string,
   editFormId: PropTypes.string,
   editFormLayout: PropTypes.string,
-  defaultEditData: PropTypes.object,
   editFormOptions: PropTypes.oneOfType([
     PropTypes.instanceOf(List), PropTypes.array,
   ]),
@@ -731,7 +730,7 @@ class AppScreenList extends React.PureComponent {
     const {
       store, app, fetchUrl,
       selectable, deleteable, searchable, searchProps, addable, actionable,
-      defaultEditData, editFormId, queryFormOptions, actionBarButtons,
+      editFormId, queryFormOptions, actionBarButtons,
       actionBarChildren, maxListSize,
     } = this.props;
     const page = store.getIn(['data', 'page']);
@@ -754,7 +753,7 @@ class AppScreenList extends React.PureComponent {
             text={_('Add')}
             onClick={() => {
               if (totalListItem < parseInt(maxListSize, 10)) {
-                this.props.addListItem(defaultEditData);
+                this.props.addListItem();
               } else {
                 this.props.createModal({
                   id: 'addListItem',
