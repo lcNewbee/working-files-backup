@@ -318,7 +318,12 @@ export default class View extends React.Component {
             showSecond={false}
           />
         </div>
-        <div className="o-map-warp">
+        <div
+          className="o-map-warp"
+          style={{
+            top: '6rem',
+          }}
+        >
           {this.renderCurMap(this.state.mapList, this.state.curMapId)}
         </div>
 
