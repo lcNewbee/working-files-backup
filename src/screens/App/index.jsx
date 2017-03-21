@@ -105,7 +105,7 @@ export default class App extends Component {
   }
 
   render() {
-    const { modal, router } = this.props.app.toJS();
+    const { modal } = this.props.app.toJS();
     const modelRole = modal.role;
     const isLoadingModal = modelRole === 'loading';
 

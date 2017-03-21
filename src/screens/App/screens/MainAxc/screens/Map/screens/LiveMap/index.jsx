@@ -92,11 +92,11 @@ const propTypes = {
   reportValidError: PropTypes.func,
   closeListItemModal: PropTypes.func,
   changeScreenActionQuery: PropTypes.func,
-  router: PropTypes.object,
+  history: PropTypes.object,
 };
 const defaultProps = {};
 
-export default class View extends React.PureComponent {
+export default class LiveMap extends React.PureComponent {
   constructor(props) {
     super(props);
     this.markers = [];
@@ -183,7 +183,6 @@ export default class View extends React.PureComponent {
   }
 
   componentDidMount() {
-    console.log('didmount', this.mapContent);
     if (this.mapContent) {
       this.heatmap = h337.create({
         container: this.mapContent,
@@ -236,7 +235,7 @@ export default class View extends React.PureComponent {
     // 过滤Button元素的点击
     if (e.target.nodeName.toLowerCase() !== 'button' &&
         e.target.parentNode.nodeName.toLowerCase() !== 'button') {
-      this.props.router.push(`/main/group/map/live/${buildId}`);
+      this.props.history.push(`/main/group/map/building/${buildId}`);
     }
   }
   onSave() {
@@ -333,7 +332,7 @@ export default class View extends React.PureComponent {
           this.props.editListItemByIndex(index);
         });
         viewButtonElem.addEventListener('click', () => {
-          this.props.router.push(`/main/group/map/live/${index}`);
+          this.props.history.push(`/main/group/map/building/${index}`);
         });
       }
     });
@@ -686,8 +685,8 @@ export default class View extends React.PureComponent {
   }
 }
 
-View.propTypes = propTypes;
-View.defaultProps = defaultProps;
+LiveMap.propTypes = propTypes;
+LiveMap.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
@@ -709,4 +708,4 @@ function mapDispatchToProps(dispatch) {
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(View);
+)(LiveMap);

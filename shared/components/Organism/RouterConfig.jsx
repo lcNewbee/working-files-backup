@@ -1,7 +1,6 @@
 import React from 'react';
 import Switch from 'react-router/Switch';
 import Route from 'react-router/Route';
-import { Redirect } from 'react-router-dom';
 
 export default function renderRoutesTree(routes) {
   if (!routes) {
@@ -26,14 +25,14 @@ export default function renderRoutesTree(routes) {
                 route={route}
                 {...rest}
               >
-                { match && renderRoutesConfig(routeRoutes)}
+                { match && renderRoutesTree(routeRoutes)}
               </RouteComponent>
             )}
           />
 
         );
       } else {
-        retComponent = renderRoutesConfig(routeRoutes);
+        retComponent = renderRoutesTree(routeRoutes);
       }
     } else if (RouteComponent) {
       retComponent = (
@@ -79,14 +78,21 @@ export function renderRoutesList(routes) {
   routes.forEach(
     (route) => {
       const retNodes = [];
+      const sunRoutes = route.routes;
+      const curKey = route.id || route.path;
 
       if (route.component) {
         routeList.push(<Route
+          key={curKey}
           path={route.path}
           render={
             routeProps => <route.component {...routeProps} route={route} />
           }
         />);
+      
+      // 如果无 component 又有子路由
+      } else if (sunRoutes.length > 0) {
+        routeList = routeList.concat(renderRoutesList(sunRoutes));
       }
 
       return retNodes;
@@ -97,6 +103,8 @@ export function renderRoutesList(routes) {
 }
 
 export function renderRoutesSwitch(routes) {
-  return <Switch>{renderRoutesList(routes)}</Switch>;
+  const routeList = renderRoutesList(routes);
+  console.log(routeList);
+  return <Switch>{routeList}</Switch>;
 }
 

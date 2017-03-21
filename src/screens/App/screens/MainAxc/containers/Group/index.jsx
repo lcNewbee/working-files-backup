@@ -4,14 +4,12 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import utils from 'shared/utils';
-import classNamesUtils from 'classnames';
 import { Button, SaveButton } from 'shared/components/Button';
 import validator from 'shared/validator';
 import Nav from 'shared/components/Nav';
 import Modal from 'shared/components/Modal';
 import Icon from 'shared/components/Icon';
 import PopOver from 'shared/components/PopOver';
-import Navbar from 'shared/components/Navbar';
 import { FormGroup } from 'shared/components/Form';
 import Table from 'shared/components/Table';
 import PropertyPanel from 'shared/components/Template/PropertyPanel';
@@ -19,7 +17,7 @@ import * as appActions from 'shared/actions/app';
 import * as propertiesActions from 'shared/actions/properties';
 import { renderRoutesList } from 'shared/components/Organism/RouterConfig';
 import { getActionable } from 'shared/axc';
-import * as productActions from '../../actions';
+import * as actions from '../../actions';
 
 const ALL_GROUP_ID = -100;
 
@@ -27,6 +25,7 @@ const propTypes = {
   fetchApGroup: PropTypes.func,
   fetchGroupAps: PropTypes.func,
   refreshAll: PropTypes.func,
+  changeLoginStatus: PropTypes.func,
   toggleMainPopOver: PropTypes.func,
   validateAll: PropTypes.func,
   selectGroup: PropTypes.func,
@@ -42,12 +41,14 @@ const propTypes = {
   selectManageGroupAp: PropTypes.func,
   route: PropTypes.shape({
     routes: PropTypes.array,
-  }),
-  match: PropTypes.shape({
-    url: PropTypes.string.isRequired,
+    path: PropTypes.string,
   }),
   history: PropTypes.shape({
     replace: PropTypes.func.isRequired,
+    push: PropTypes.func.isRequired,
+  }),
+  match: PropTypes.shape({
+    url: PropTypes.string.isRequired,
   }),
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired,
@@ -57,7 +58,6 @@ const propTypes = {
   fetchModelList: PropTypes.func,
   resetVaildateMsg: PropTypes.func,
 
-  children: PropTypes.node,
   validateOption: PropTypes.object,
 
   // immutable data
@@ -112,8 +112,6 @@ export default class MainGroup extends React.PureComponent {
       'fetchManageGroupAps',
       'isDuplicateAp',
       'autoRefreshData',
-      'renderPopOverContent',
-      'renderBreadcrumb',
     ]);
 
     document.onkeydown = (e) => {
@@ -125,6 +123,12 @@ export default class MainGroup extends React.PureComponent {
 
   componentWillMount() {
     const rateInterval = this.props.app.get('rateInterval');
+    const purview = this.props.app.getIn(['login', 'purview']);
+
+    // 如果权限为空自动跳转到 登录Screen
+    if (purview === 'none') {
+      this.props.history.push('/login');
+    }
 
     // 获取当前组AP
     this.props.fetchApGroup();
@@ -146,16 +150,8 @@ export default class MainGroup extends React.PureComponent {
     }
   }
   componentDidUpdate(prevProps) {
-    const { location, history, match, route } = this.props;
-    let indexPath = route.indexPath;
-
     if (prevProps.route.path !== this.props.route.path) {
       this.autoRefreshData();
-    }
-
-    if (match.url === location.pathname) {
-      indexPath = indexPath || route.routes[0].path;
-      history.replace(indexPath);
     }
   }
   componentWillUnmount() {
@@ -165,6 +161,12 @@ export default class MainGroup extends React.PureComponent {
   onRefresh(e) {
     e.preventDefault();
     this.props.refreshAll();
+  }
+  onLogout(e) {
+    e.preventDefault();
+    this.props.changeLoginStatus('0');
+    this.onHiddenPopOver();
+    window.location.hash = '#';
   }
 
   onToggleMainPopOver(option) {
@@ -180,20 +182,6 @@ export default class MainGroup extends React.PureComponent {
   onClickNav(path) {
     if (path === '/main/group') {
       this.props.selectGroup(-100);
-    }
-  }
-
-  onClickTopMenu(path) {
-    if (path === '/main/group') {
-      // this.onToggleMainPopOver({
-      //   name: 'groupAsider',
-      //   isShow: true,
-      //   overlay: false,
-      // });
-    } else {
-      this.onToggleMainPopOver({
-        isShow: false,
-      });
     }
   }
 
@@ -1011,24 +999,23 @@ export default class MainGroup extends React.PureComponent {
   }
 
   render() {
-    const { route } = this.props;
     const selectGroupId = this.props.product.getIn(['group', 'selected', 'id']);
-    const { version, router } = this.props.app.toJS();
     const { popOver, modal } = this.props.product.toJS();
     const { isShowPanel } = this.props.properties.toJS();
-    const curRoutePath = this.props.location.pathname;
-    let mainClassName = 't-main t-main--axc';
-    let isMainLeftShow = false;
-    let isMainRightShow = isShowPanel;
-    let curMainIndex = 0;
-   
+    let mainLeftMenus = this.props.route.routes;
+
+    // 如果当前是所有组，则隐藏组配置相关菜单
+    if (selectGroupId === ALL_GROUP_ID) {
+      mainLeftMenus = mainLeftMenus.slice(0, 3);
+    }
+
     return (
-       <div>
+      <div>
         <div className="t-main__nav">
           {this.renderAsideTop()}
           <Nav
             role="tree"
-            menus={route.routes}
+            menus={mainLeftMenus}
             location={this.props.location}
             onChange={this.onClickNav}
             isTree
@@ -1036,8 +1023,9 @@ export default class MainGroup extends React.PureComponent {
         </div>
 
         <div className="t-main__content">
-          {renderRoutesList(route.routes)}
+          {renderRoutesList(this.props.route.routes)}
         </div>
+
         <Modal
           {...modal}
           id="appScreenModal"
@@ -1081,7 +1069,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    productActions,
+    actions,
     propertiesActions,
   ), dispatch);
 }

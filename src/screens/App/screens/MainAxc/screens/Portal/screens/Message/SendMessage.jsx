@@ -36,18 +36,14 @@ const settingsOptions = fromJS([
   {
     id: 'toname',
     label: _('Receiver'),
-    fieldset: 'send_message',
-    legend: _('Send Message'),
     required: true,
     type: 'select',
   },
   {
     id: 'title',
     label: _('Title'),
-    fieldset: 'send_message',
     type: 'text',
     required: true,
-    legend: _('Send Message'),
     maxLength: 33,
     validator: validator({
       rules: 'utf8Len:[1,32]',
@@ -56,7 +52,6 @@ const settingsOptions = fromJS([
   {
     id: 'description',
     label: _('Content'),
-    fieldset: 'send_message',
     type: 'textarea',
     required: true,
     rows: '5',
@@ -104,7 +99,7 @@ export default class View extends React.Component {
     });
   }
   render() {
-    const { toname } = this.props.params;
+    const { toname } = this.props.match.params;
     const curSettingOptions = settingsOptions
       .setIn([0, 'options'], this.state.userNameOptions);
     return (

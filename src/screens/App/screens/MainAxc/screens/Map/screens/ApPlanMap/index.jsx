@@ -6,11 +6,8 @@ import { fromJS, Map, List } from 'immutable';
 import { bindActionCreators } from 'redux';
 import AppScreen from 'shared/components/Template/AppScreen';
 import Button from 'shared/components/Button/Button';
-import SaveButton from 'shared/components/Button/SaveButton';
 import Icon from 'shared/components/Icon';
-import Modal from 'shared/components/Modal';
 import { getActionable } from 'shared/axc';
-import { FormGroup } from 'shared/components/Form';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 import * as propertiesActions from 'shared/actions/properties';
@@ -19,47 +16,15 @@ import MapList from '../../shared/MapList';
 
 import '../../shared/_map.scss';
 
-function previewFile(file) {
-  const retPromise = new Promise((resolve) => {
-    let retUrl = '';
-    let reader = null;
-
-    // 如果支持 createObjectURL
-    if (URL && URL.createObjectURL) {
-      const img = new Image();
-      retUrl = URL.createObjectURL(file);
-      img.src = retUrl;
-
-      img.onload = () => {
-        resolve(retUrl);
-        // URL.revokeObjectURL(retUrl);
-      };
-
-    // 如果支持 FileReader
-    } else if (window.FileReader) {
-      reader = new FileReader();
-      reader.onload = (e) => {
-        retUrl = e.target.result;
-        resolve(retUrl);
-      };
-      reader.readAsDataURL(file);
-
-    // 其他放回 Flase
-    } else {
-      resolve(retUrl);
-    }
-  });
-
-  return retPromise;
-}
-
 const propTypes = {
   store: PropTypes.instanceOf(Map),
   groupDevice: PropTypes.instanceOf(List),
   groupid: PropTypes.any,
   route: PropTypes.object,
-  router: PropTypes.object,
-  params: PropTypes.object,
+  history: PropTypes.object,
+  match: PropTypes.shape({
+    params: PropTypes.object,
+  }),
   updateScreenSettings: PropTypes.func,
   addPropertyPanel: PropTypes.func,
   updateCurEditListItem: PropTypes.func,
@@ -67,8 +32,6 @@ const propTypes = {
   editListItemByIndex: PropTypes.func,
   onListAction: PropTypes.func,
   updateListItemByIndex: PropTypes.func,
-  closeListItemModal: PropTypes.func,
-  addListItem: PropTypes.func,
   changeScreenActionQuery: PropTypes.func,
   saveFile: PropTypes.func,
   save: PropTypes.func,
@@ -118,7 +81,7 @@ export default class View extends React.PureComponent {
         'onUppaceDrop',
       ],
     );
-    this.curBuildId = parseInt(props.params.id, 10);
+    this.curBuildId = parseInt(props.match.params.id, 10);
     this.curScreenId = props.route.id;
     this.$$mapList = fromJS([]);
     this.$$mapApList = fromJS({});
@@ -472,7 +435,6 @@ export default class View extends React.PureComponent {
     const list = store.getIn([myScreenId, 'data', 'list']);
     // const isLocked = store.getIn([myScreenId, 'curSettings', 'isLocked']);
     const myZoom = this.state.zoom;
-    const actionQuery = store.getIn([myScreenId, 'actionQuery']);
     const curMapId = store.getIn([myScreenId, 'curSettings', 'curMapId']);
     const actionBarChildren = [
       <Button
@@ -487,13 +449,12 @@ export default class View extends React.PureComponent {
             });
             this.onToggleUnplacedList(true);
           } else {
-            this.props.router.push('/main/group/map/live/list');
+            this.props.history.push('/main/group/map/live/list');
           }
         }}
       />,
     ];
     const $$thisMapList = this.$$mapList;
-    const isModalShow = actionQuery.get('action') === 'add' || actionQuery.get('action') === 'edit';
     const deviceListClassname = classnames('o-list o-devices-list', {
       active: !!curMapId && this.state.isUnplacedListShow,
     });
@@ -507,7 +468,7 @@ export default class View extends React.PureComponent {
         actionable={false}
         initOption={{
           query: {
-            buildId: this.props.params.id,
+            buildId: this.props.match.params.id,
           },
         }}
         noTitle
@@ -524,7 +485,7 @@ export default class View extends React.PureComponent {
                 actionable={this.actionable}
                 $$mapList={$$thisMapList}
                 groupid={this.props.groupid}
-                buildId={this.props.params.id}
+                buildId={this.props.match.params.id}
                 onSelectMap={($$mapItem) => {
                   const mapId = $$mapItem.getIn(['id']);
                   const $$mapAps = this.$$mapApList.get(mapId);

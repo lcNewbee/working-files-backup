@@ -24,9 +24,7 @@ const propTypes = {
   changeLoginState: PropTypes.func,
   save: PropTypes.func,
   validateAll: PropTypes.func,
-  routes: PropTypes.array,
   app: PropTypes.object,
-  router: PropTypes.object,
   validateOption: PropTypes.object,
 };
 

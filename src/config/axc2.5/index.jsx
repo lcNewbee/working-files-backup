@@ -76,7 +76,6 @@ const sMainAxc = require('../../screens/App/screens/MainAxc');
 /**
  * 网络设置
  */
-const cNetwork = require('../../screens/App/screens/MainAxc/containers/Network');
 const sInterfaces = require('../../screens/App/screens/MainAxc/screens/Network/screens/Interfaces');
 const sDhcpList = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/DHCP/DhcpList');
 const sDhcpRelay = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/Relay/DhcpRelay');
@@ -100,6 +99,7 @@ const sPortalMac =
 /**
  * AP组管理
  */
+const cGroup = require('../../screens/App/screens/MainAxc/containers/Group');
 const sOverview = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Overview');
 const sClientList = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/ClientList');
 const sSsidStatus = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/SsidStatus');
@@ -235,6 +235,7 @@ const routes = [
     path: '/',
     component: App.Screen,
     formUrl: 'goform/axcInfo',
+    indexPath: '/login',
     routes: [
       {
         id: 'main',
@@ -308,7 +309,6 @@ const routes = [
                 text: _('Radius'),
                 noTree: true,
                 component: SharedComponents.TabContainer,
-                indexRoute: { onEnter: (nextState, replace) => replace('/main/network/radius/template') },
                 routes: [
                   {
                     id: 'radiusTemplate',
@@ -335,10 +335,10 @@ const routes = [
               }, {
                 id: 'networkPortal',
                 icon: 'copy',
+                text: _('Portal Policy'),
                 noTree: true,
                 component: SharedComponents.TabContainer,
                 path: '/main/network/portal',
-                text: _('Portal Policy'),
                 indexPath: '/main/network/portal/server',
                 routes: [
                   {
@@ -407,8 +407,8 @@ const routes = [
             path: '/main/group',
             icon: 'group',
             text: _('AP Groups '),
-            component: null,
-            indexRoute: { onEnter: (nextState, replace) => replace('/main/group/monitor') },
+            component: cGroup.Screen,
+            indexPath: '/main/group/monitor/overview',
             routes: [
               {
                 id: 'monitor',
@@ -416,7 +416,6 @@ const routes = [
                 path: '/main/group/monitor',
                 icon: 'pie-chart',
                 text: _('Monitor'),
-                indexRoute: { onEnter: (nextState, replace) => replace('/main/group/monitor/overview') },
                 routes: [
                   {
                     id: 'overview',
@@ -513,32 +512,47 @@ const routes = [
                 path: '/main/group/map',
                 icon: 'map',
                 text: _('Map'),
-                indexRoute: { onEnter: (nextState, replace) => replace('/main/group/map/live') },
                 routes: [
                   {
                     id: 'liveMap',
-                    path: '/main/group/map/live',
+                    path: '/main/group/map/live/list',
                     text: _('Live Map'),
-                    indexRoute: { onEnter: (nextState, replace) => replace('/main/group/map/live/list') },
-                    routes: [
-                      {
-                        id: 'liveMap',
-                        path: '/main/group/map/live/list',
-                        text: _('Live Map'),
-                        formUrl: 'goform/group/map/building',
-                        isIndex: true,
-                        component: sLiveMap.Screen,
-                      }, {
+                    formUrl: 'goform/group/map/building',
+                    isIndex: true,
+                    component: sLiveMap.Screen,
+                  }, {
 
-                        id: 'buildMap',
-                        path: '/main/group/map/live/(:id)',
-                        text: _('AP Plan Map'),
-                        formUrl: 'goform/group/map/apPlan',
-                        component: sApPlanMap.Screen,
-                        noNav: true,
-                      },
-                    ],
+                    id: 'buildMap',
+                    path: '/main/group/map/building/:id',
+                    text: _('AP Plan Map'),
+                    formUrl: 'goform/group/map/apPlan',
+                    component: sApPlanMap.Screen,
+                    noNav: true,
                   },
+                  // {
+                  //   id: 'liveMap',
+                  //   path: '/main/group/map/live',
+                  //   text: _('Live Map'),
+                  //   indexPath: '/main/group/map/live/list',
+                  //   routes: [
+                  //     {
+                  //       id: 'liveMap',
+                  //       path: '/main/group/map/live/list',
+                  //       text: _('Live Map'),
+                  //       formUrl: 'goform/group/map/building',
+                  //       isIndex: true,
+                  //       component: sLiveMap.Screen,
+                  //     }, {
+
+                  //       id: 'buildMap',
+                  //       path: '/main/group/map/live/(:id)',
+                  //       text: _('AP Plan Map'),
+                  //       formUrl: 'goform/group/map/apPlan',
+                  //       component: sApPlanMap.Screen,
+                  //       noNav: true,
+                  //     },
+                  //   ],
+                  // },
                   // {
                   //   id: 'heatMap',
                   //   path: '/main/group/map/heat_map',
@@ -557,24 +571,21 @@ const routes = [
                   // },
                   {
                     id: 'cientsTrace',
-                    path: '/main/group/clients_trace',
+                    path: '/main/group/map/clients_trace',
                     text: _('Clients Statistics'),
                     icon: 'bar-chart',
                     noTree: true,
                     component: SharedComponents.TabContainer,
-                    indexRoute: {
-                      onEnter: (nextState, replace) => replace('/main/group/clients_trace/list'),
-                    },
                     routes: [
                       {
                         id: 'clientsTrace',
-                        path: '/main/group/clients_trace/list',
+                        path: '/main/group/map/clients_trace/list',
                         formUrl: '/goform/group/map/clients_trace',
                         text: _('Clients Statistics'),
                         component: sClientsTraceList.Screen,
                       }, {
                         id: 'clientsTrace',
-                        path: '/main/group/clients_trace/settings',
+                        path: '/main/group/map/clients_trace/settings',
                         formUrl: 'goform/group/map/clients_trace',
                         text: _('Settings'),
                         component: sClientsTraceSettings.Screen,
@@ -723,27 +734,20 @@ const routes = [
                 routes: [
                   {
                     id: 'portalAccountAccountList',
-                    path: '/main/portal/account/list',
+                    path: '/main/portal/account/list/index',
+                    formUrl: 'goform/portal/account/accountList',
                     text: _('Account List'),
-                    indexPath: '/main/portal/account/list/index',
-                    routes: [
-                      {
-                        id: 'portalAccountAccountList',
-                        path: '/main/portal/account/list/index',
-                        formUrl: 'goform/portal/account/accountList',
-                        text: _('Account List'),
-                        isIndex: true,
-                        component: sPortalAccountList.Screen,
-                      }, {
-                        id: 'portalAccountAccountListMac',
-                        path: '/main/portal/account/list/mac/(:loginName)',
-                        formUrl: 'goform/portal/account/accountListMac',
-                        text: _('Account List Mac'),
-                        component: sPortalAccountListMac.Screen,
-                        noNav: true,
-                      },
-                    ],
+                    isIndex: true,
+                    component: sPortalAccountList.Screen,
                   }, {
+                    id: 'portalAccountAccountListMac',
+                    path: '/main/portal/account/list/mac/:loginName',
+                    formUrl: 'goform/portal/account/accountListMac',
+                    text: _('Account List Mac'),
+                    component: sPortalAccountListMac.Screen,
+                    noNav: true,
+                  },
+                  {
                     id: 'portalAccountConnectRecord',
                     path: '/main/portal/account/connectRecord',
                     formUrl: 'goform/portal/account/connectRecord',
@@ -762,7 +766,7 @@ const routes = [
                 routes: [
                   {
                     id: 'portalSendMessage',
-                    path: '/main/portal/message/sendmessage/(:toname)',
+                    path: '/main/portal/message/sendmessage',
                     formUrl: 'goform/portal/message/sendmessage',
                     text: _('Send Message'),
                     component: sPortalSendMessage.Screen,
@@ -893,7 +897,7 @@ const routes = [
               }, {
                 id: 'apMaintenance',
                 isIndex: true,
-                path: '/main/system/upgrade',
+                path: '/main/system/ap',
                 icon: 'dot-circle-o ',
                 text: _('AP Maintenance'),
                 noTree: true,
@@ -953,10 +957,12 @@ const routes = [
         ],
       },
       {
+        id: 'wizard',
         path: '/wizard',
         component: sWizard.Screen,
       },
       {
+        id: 'login',
         path: '/login',
         mainPath: '/main/group/monitor/overview',
         component: sLogin.Screen,
