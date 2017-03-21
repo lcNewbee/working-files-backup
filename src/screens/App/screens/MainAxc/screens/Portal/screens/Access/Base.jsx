@@ -27,6 +27,7 @@ const settingsOptions = fromJS([
     type: 'text',
     validator: validator({
       rules: 'ip',
+      exclude: '127.0.0.1',
     }),
   },
   {
