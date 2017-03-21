@@ -271,14 +271,14 @@ const routes = [
     formUrl: 'goform/axcInfo',
     mainPath: '/main/group/monitor/overview',
     indexRoute: { component: sLogin.Screen },
-    childRoutes: [
+    routes: [
       {
         path: '/main/network',
         component: sMainAxc.Screen,
         icon: 'sphere',
         text: _('Network '),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/network/v3interface') },
-        childRoutes: [
+        routes: [
           {
             id: 'vlan',
             icon: 'road',
@@ -287,7 +287,7 @@ const routes = [
             text: _('VLAN'),
             noTree: true,
             indexRoute: { onEnter: (nextState, replace) => replace('/main/network/vlan/vlansettings') },
-            childRoutes: [
+            routes: [
               {
                 id: 'networkVlanSettings',
                 path: '/main/network/vlan/vlansettings',
@@ -319,7 +319,7 @@ const routes = [
             icon: 'th-large',
             text: _('Ethernet Port'),
             indexRoute: { onEnter: (nextState, replace) => replace('/main/network/ethernetport/portsettings') },
-            childRoutes: [
+            routes: [
               {
                 id: 'ethernetPortSettings',
                 path: '/main/network/ethernetport/portsettings',
@@ -376,7 +376,7 @@ const routes = [
             path: '/main/network/dhcp',
             text: _('DHCP Config'),
             indexRoute: { onEnter: (nextState, replace) => replace('/main/network/dhcp/dhcp') },
-            childRoutes: [
+            routes: [
               {
                 id: 'dhcp',
                 path: '/main/network/dhcp/dhcp',
@@ -385,7 +385,7 @@ const routes = [
                 indexRoute: {
                   onEnter: (nextState, replace) => replace('/main/network/dhcp/service/serviceConfig'),
                 },
-                childRoutes: [
+                routes: [
                   {
                     id: 'dhcpService',
                     path: '/main/network/dhcp/service/serviceConfig',
@@ -417,7 +417,7 @@ const routes = [
                 indexRoute: {
                   onEnter: (nextState, replace) => replace('/main/network/dhcp/snooping/userList'),
                 },
-                childRoutes: [
+                routes: [
                   {
                     id: 'userList',
                     path: '/main/network/dhcp/snooping/userList',
@@ -466,7 +466,7 @@ const routes = [
             text: _('NAT'),
             component: SharedComponents.TabContainer,
             indexRoute: { onEnter: (nextState, replace) => replace('/main/network/natsettings/natenable') },
-            childRoutes: [
+            routes: [
               {
                 id: 'networkNatEnable',
                 path: '/main/network/natsettings/natenable',
@@ -525,19 +525,19 @@ const routes = [
             icon: 'th-large',
             text: _('ACL'),
             indexRoute: { onEnter: (nextState, replace) => replace('/main/network/acl/basicacl') },
-            childRoutes: [
+            routes: [
               {
                 id: 'networkBasicAcl',
                 path: '/main/network/acl/basicacl',
                 text: _('Basic ACL'),
                 icon: 'th',
                 indexRoute: { onEnter: (nextState, replace) => replace('/main/network/acl/basicacl/vlaninterface') },
-                childRoutes: [
+                routes: [
                   {
                     id: 'basicAclIndex',
                     path: '/main/network/acl/basicacl/basicaclindex',
                     component: SharedComponents.TabContainer,
-                    childRoutes: [
+                    routes: [
                       {
                         id: 'basicAclVlanInterface',
                         path: '/main/network/acl/basicacl/vlaninterface',
@@ -583,12 +583,12 @@ const routes = [
                 text: _('Extend ACL'),
                 icon: 'th',
                 indexRoute: { onEnter: (nextState, replace) => replace('/main/network/acl/extendacl/vlaninterface') },
-                childRoutes: [
+                routes: [
                   {
                     id: 'extendAclIndex',
                     path: '/main/network/acl/extendacl/extendaclindex',
                     component: SharedComponents.TabContainer,
-                    childRoutes: [
+                    routes: [
                       {
                         id: 'extendAclVlanInterface',
                         path: '/main/network/acl/extendacl/vlaninterface',
@@ -686,7 +686,7 @@ const routes = [
             noTree: true,
             component: SharedComponents.TabContainer,
             indexRoute: { onEnter: (nextState, replace) => replace('/main/network/url/wlan') },
-            childRoutes: [
+            routes: [
               {
                 id: 'urlWlan',
                 path: '/main/network/url/wlan',
@@ -725,7 +725,7 @@ const routes = [
             noTree: true,
             component: SharedComponents.TabContainer,
             indexRoute: { onEnter: (nextState, replace) => replace('/main/network/pppoe/baseConfig') },
-            childRoutes: [
+            routes: [
               {
                 id: 'pppoeBase',
                 path: '/main/network/pppoe/baseConfig',
@@ -756,7 +756,7 @@ const routes = [
             path: '/main/network/portal',
             text: _('Portal Policy'),
             indexRoute: { onEnter: (nextState, replace) => replace('/main/network/portal/server') },
-            childRoutes: [
+            routes: [
               {
                 id: 'portalServer',
                 path: '/main/network/portal/server',
@@ -786,7 +786,7 @@ const routes = [
             path: '/main/network/dpi',
             text: _('DPI'),
             indexRoute: { onEnter: (nextState, replace) => replace('/main/network/dpi/dpioverview') },
-            childRoutes: [
+            routes: [
               {
                 id: 'dpioverview',
                 path: '/main/network/dpi/dpioverview',
@@ -830,7 +830,7 @@ const routes = [
         icon: 'group',
         text: _('AP Groups '),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/group/monitor') },
-        childRoutes: [
+        routes: [
           {
             id: 'monitor',
             isIndex: true,
@@ -838,7 +838,7 @@ const routes = [
             icon: 'pie-chart',
             text: _('Monitor'),
             indexRoute: { onEnter: (nextState, replace) => replace('/main/group/monitor/overview') },
-            childRoutes: [
+            routes: [
               {
                 id: 'overview',
                 path: '/main/group/monitor/overview',
@@ -855,7 +855,7 @@ const routes = [
               //   indexRoute: {
               //     onEnter: (nextState, replace) => replace('/main/group/monitor/flow/user'),
               //   },
-              //   childRoutes: [
+              //   routes: [
               //     {
               //       id: 'userFlow',
               //       path: '/main/group/monitor/flow/user',
@@ -912,7 +912,7 @@ const routes = [
             // 不要删除空格
             text: _('Radio '),
             indexRoute: { onEnter: (nextState, replace) => replace('/main/group/wireless/ssid') },
-            childRoutes: [
+            routes: [
               {
                 id: 'ssidSettings',
                 path: '/main/group/wireless/ssid',
@@ -935,13 +935,13 @@ const routes = [
             icon: 'map',
             text: _('Map'),
             indexRoute: { onEnter: (nextState, replace) => replace('/main/group/map/live') },
-            childRoutes: [
+            routes: [
               {
                 id: 'liveMap',
                 path: '/main/group/map/live',
                 text: _('Live Map'),
                 indexRoute: { onEnter: (nextState, replace) => replace('/main/group/map/live/list') },
-                childRoutes: [
+                routes: [
                   {
                     id: 'liveMap',
                     path: '/main/group/map/live/list',
@@ -997,7 +997,7 @@ const routes = [
             indexRoute: {
               onEnter: (nextState, replace) => replace('/main/group/safe/wips'),
             },
-            childRoutes: [
+            routes: [
               {
                 id: 'wirelessWips',
                 path: '/main/group/safe/wips',
@@ -1031,7 +1031,7 @@ const routes = [
             indexRoute: {
               onEnter: (nextState, replace) => replace('/main/group/clients_trace/list'),
             },
-            childRoutes: [
+            routes: [
               {
                 id: 'clientsTrace',
                 path: '/main/group/clients_trace/list',
@@ -1055,7 +1055,7 @@ const routes = [
         icon: 'road',
         text: _('Hotspot'),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/portal/overview') },
-        childRoutes: [
+        routes: [
           {
             id: 'portalOverview',
             icon: 'home',
@@ -1073,7 +1073,7 @@ const routes = [
             indexRoute: {
               onEnter: (nextState, replace) => replace('/main/portal/access/config'),
             },
-            childRoutes: [
+            routes: [
               {
                 id: 'portalAccessBase',
                 path: '/main/portal/access/config',
@@ -1148,7 +1148,7 @@ const routes = [
             indexRoute: {
               onEnter: (nextState, replace) => replace('/main/portal/radius/nas'),
             },
-            childRoutes: [
+            routes: [
               {
                 id: 'portalRadiusNas',
                 path: '/main/portal/radius/nas',
@@ -1178,7 +1178,7 @@ const routes = [
             indexRoute: {
               onEnter: (nextState, replace) => replace('/main/portal/account/accountList'),
             },
-            childRoutes: [
+            routes: [
               {
                 id: 'portalAccountAccountList',
                 path: '/main/portal/account/accountList',
@@ -1210,7 +1210,7 @@ const routes = [
           //   indexRoute: {
           //     onEnter: (nextState, replace) => replace('/main/portal/message/send'),
           //   },
-          //   childRoutes: [
+          //   routes: [
           //     {
           //       id: 'portalReceiveBox',
           //       path: '/main/portal/message/receive',
@@ -1235,7 +1235,7 @@ const routes = [
             indexRoute: {
               onEnter: (nextState, replace) => replace('/main/portal/log/logList'),
             },
-            childRoutes: [
+            routes: [
               {
                 id: 'portalLogLogList',
                 path: '/main/portal/log/logList',
@@ -1266,7 +1266,7 @@ const routes = [
           //   indexRoute: {
           //     onEnter: (nextState, replace) => replace('/main/portal/system/classification'),
           //   },
-          //   childRoutes: [
+          //   routes: [
           //     {
           //       id: 'portalSystemClassification',
           //       path: '/main/portal/system/classification',
@@ -1303,7 +1303,7 @@ const routes = [
         icon: 'cogs',
         text: _('System '),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/system/status') },
-        childRoutes: [
+        routes: [
           {
             id: 'systemStatus',
             icon: 'area-chart',
@@ -1328,7 +1328,7 @@ const routes = [
             indexRoute: {
               onEnter: (nextState, replace) => replace('/main/system/log/list'),
             },
-            childRoutes: [
+            routes: [
               {
                 id: 'systemLog',
                 path: '/main/system/log/list',
@@ -1396,7 +1396,7 @@ const routes = [
             indexRoute: {
               onEnter: (nextState, replace) => replace('/main/system/ap/base'),
             },
-            childRoutes: [
+            routes: [
               {
                 id: 'apMaintenanceBase',
                 path: '/main/system/ap/base',

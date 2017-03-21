@@ -158,14 +158,14 @@ const routes = [
     formUrl: 'goform/axcInfo',
     mainPath: '/main/group/monitor/overview',
     indexRoute: { component: sLogin.Screen },
-    childRoutes: [
+    routes: [
       {
         path: '/main/network',
         component: sMainAxc.Screen,
         icon: 'sphere',
         text: _('Network '),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/network/interface') },
-        childRoutes: [
+        routes: [
           {
             id: 'networkInterface',
             icon: 'th',
@@ -189,7 +189,7 @@ const routes = [
         icon: 'group',
         text: _('AP Groups '),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/group/monitor') },
-        childRoutes: [
+        routes: [
           {
             id: 'monitor',
             isIndex: true,
@@ -197,7 +197,7 @@ const routes = [
             icon: 'pie-chart',
             text: _('Monitor'),
             indexRoute: { onEnter: (nextState, replace) => replace('/main/group/monitor/overview') },
-            childRoutes: [
+            routes: [
               {
                 id: 'overview',
                 path: '/main/group/monitor/overview',
@@ -226,7 +226,7 @@ const routes = [
               //   indexRoute: {
               //     onEnter: (nextState, replace) => replace('/main/group/monitor/flow/user'),
               //   },
-              //   childRoutes: [
+              //   routes: [
               //     {
               //       id: 'userFlow',
               //       path: '/main/group/monitor/flow/user',
@@ -263,13 +263,13 @@ const routes = [
             icon: 'map',
             text: _('Map'),
             indexRoute: { onEnter: (nextState, replace) => replace('/main/group/map/live') },
-            childRoutes: [
+            routes: [
               {
                 id: 'liveMap',
                 path: '/main/group/map/live',
                 text: _('Live Map'),
                 indexRoute: { onEnter: (nextState, replace) => replace('/main/group/map/live/list') },
-                childRoutes: [
+                routes: [
                   {
                     id: 'liveMap',
                     path: '/main/group/map/live/list',
@@ -296,7 +296,7 @@ const routes = [
             icon: 'wifi',
             text: _('Wireless'),
             indexRoute: { onEnter: (nextState, replace) => replace('/main/group/wireless/ssid') },
-            childRoutes: [
+            routes: [
               {
                 id: 'ssidSettings',
                 path: '/main/group/wireless/ssid',
@@ -331,7 +331,7 @@ const routes = [
                 indexRoute: {
                   onEnter: (nextState, replace) => replace('/main/group/wireless/safe/wips'),
                 },
-                childRoutes: [
+                routes: [
                   {
                     id: 'wirelessWips',
                     path: '/main/group/wireless/safe/wips',
@@ -356,7 +356,7 @@ const routes = [
         icon: 'cogs',
         text: _('System '),
         indexRoute: { onEnter: (nextState, replace) => replace('/main/system/status') },
-        childRoutes: [
+        routes: [
           {
             id: 'systemStatus',
             icon: 'area-chart',
@@ -381,7 +381,7 @@ const routes = [
             indexRoute: {
               onEnter: (nextState, replace) => replace('/main/system/log/list'),
             },
-            childRoutes: [
+            routes: [
               {
                 id: 'systemLog',
                 path: '/main/system/log/list',
@@ -449,7 +449,7 @@ const routes = [
             indexRoute: {
               onEnter: (nextState, replace) => replace('/main/system/ap/base'),
             },
-            childRoutes: [
+            routes: [
               {
                 id: 'apMaintenanceBase',
                 path: '/main/system/ap/base',
@@ -503,7 +503,7 @@ const routes = [
       //   icon: 'road',
       //   text: _('OPEN PORTAL'),
       //   indexRoute: { onEnter: (nextState, replace) => replace('/main/portal/overview') },
-      //   childRoutes: [
+      //   routes: [
       //     {
       //       id: 'overview',
       //       icon: 'home',

@@ -73,10 +73,10 @@ const routes = [{
   component: App.Screen,
   formUrl: '/goform/getAcInfo',
   indexRoute: { component: pLogin.Screen },
-  childRoutes: [{
+  routes: [{
     path: '/main',
     component: Main,
-    childRoutes: [
+    routes: [
       {
         id: 'status',
         isIndex: true,
@@ -111,7 +111,7 @@ const routes = [{
         indexRoute: {
           onEnter: (nextState, replace) => replace('/main/settings/group'),
         },
-        childRoutes: [
+        routes: [
           {
             path: '/main/settings/group',
             text: _('Groups'),

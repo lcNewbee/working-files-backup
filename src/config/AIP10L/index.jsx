@@ -119,10 +119,10 @@ const routes = [{
   formUrl: 'goform/get_product_info',
   mainPath: '/main/status',
   indexRoute: { component: pLogin.Screen },
-  childRoutes: [{
+  routes: [{
     path: '/main',
     component: MainAP.Screen,
-    childRoutes: [{
+    routes: [{
       id: 'systemstatus',
       path: '/main/status',
       icon: 'pie-chart',
@@ -131,7 +131,7 @@ const routes = [{
       indexRoute: {
         onEnter: (nextState, replace) => replace('/main/status/overview'),
       },
-      childRoutes: [
+      routes: [
         {
           id: 'overview',
           fetchUrl: 'goform/get_system_info_forTestUse',
@@ -172,7 +172,7 @@ const routes = [{
       indexRoute: {
         onEnter: (nextState, replace) => replace('main/networksettings/networksettings'),
       },
-      childRoutes: [
+      routes: [
         {
           id: 'networksettings',
           formUrl: 'goform/get_network_info',
@@ -192,7 +192,7 @@ const routes = [{
       indexRoute: {
         onEnter: (nextState, replace) => replace('/main/wirelessconfig/basic'),
       },
-      childRoutes: [
+      routes: [
         {
           id: 'basic',
           path: '/main/wirelessconfig/basic',
@@ -228,7 +228,7 @@ const routes = [{
       indexRoute: {
         onEnter: (nextState, replace) => replace('/main/maintenance/systemmaintenance'),
       },
-      childRoutes: [
+      routes: [
         {
           id: 'systemmaintenance',
           fetchUrl: 'goform/save_config',
@@ -256,7 +256,7 @@ const routes = [{
       text: _('Tools'),
       component: pTools,
       indexRoute: { onEnter: (nextState, replace) => replace('/main/tools/speedtest') },
-      childRoutes: [
+      routes: [
         {
           id: 'speedtest',
           path: '/main/tools/speedtest',
@@ -290,7 +290,7 @@ const routes = [{
       icon: 'exchange',
       component: pModeSettings,
       indexRoute: { onEnter: (nextState, replace) => replace('/main/modesettings/modesettings') },
-      childRoutes: [
+      routes: [
         {
           id: 'modesettings',
           path: '/main/modesettings/modesettings',

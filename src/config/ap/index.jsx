@@ -111,10 +111,10 @@ const routes = [{
   component: App.Screen,
   formUrl: '/goform/get_system_info',
   indexRoute: { component: pLogin.Screen },
-  childRoutes: [{
+  routes: [{
     path: '/main',
     component: Main,
-    childRoutes: [{
+    routes: [{
       id: 'systemstatus',
       fetchUrl: 'goform/get_system_info',
       path: '/main/status',
@@ -138,7 +138,7 @@ const routes = [{
       indexRoute: {
         onEnter: (nextState, replace) => replace('main/networksettings/networksettings'),
       },
-      childRoutes: [
+      routes: [
         {
           id: 'networksettings',
           formUrl: 'goform/get_network_info',
@@ -157,7 +157,7 @@ const routes = [{
       indexRoute: {
         onEnter: (nextState, replace) => replace('/main/wirelessconfig/basic'),
       },
-      childRoutes: [
+      routes: [
         {
           id: 'basic',
           path: '/main/wirelessconfig/basic',
@@ -188,7 +188,7 @@ const routes = [{
       indexRoute: {
         onEnter: (nextState, replace) => replace('/main/maintenance/systemmaintenance'),
       },
-      childRoutes: [
+      routes: [
         {
           id: 'systemmaintenance',
           fetchUrl: 'goform/save_config',
@@ -214,7 +214,7 @@ const routes = [{
       text: _('Tools'),
       component: pTools,
       indexRoute: { onEnter: (nextState, replace) => replace('/main/tools/speedtest') },
-      childRoutes: [
+      routes: [
         {
           id: 'speedtest',
           path: '/main/tools/speedtest',
@@ -314,7 +314,7 @@ export default ac5000;
       indexRoute: {
         onEnter: (nextState, replace) => replace('/main/networkservice/ntpclient'),
       },
-      childRoutes: [
+      routes: [
         {
           id: 'ntpclient',
           path: '/main/networkservice/ntpclient',
