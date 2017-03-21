@@ -9,16 +9,26 @@ require('whatwg-fetch');
 const React = require('react');
 const ReactDOM = require('react-dom');
 const ReactRouterDom = require('react-router-dom');
-const remoteActionMiddleware = require('shared/utils/lib/remote_action_middleware');
 const appActions = require('shared/actions/app');
+const thunkMiddleware = require('redux-thunk').default;
+
 const combineReducers = require('redux').combineReducers;
+const applyMiddleware = require('redux').applyMiddleware;
+const createStore = require('redux').createStore;
 const Provider = require('react-redux').Provider;
 const prodConfig = require('./config/axc2.5');
-const renderRouterConfig = require('shared/components/Organism/RouterConfig');
 
 const HashRouter = ReactRouterDom.HashRouter;
+const Route = ReactRouterDom.Route;
+// const unmountComponentAtNode = ReactDOM.unmountComponentAtNode;
+
 const mountNode = document.getElementById('app');
 
+const remoteActionMiddleware = applyMiddleware(
+  thunkMiddleware,
+)(createStore);
+
+// Store
 const stores = remoteActionMiddleware(
   combineReducers({
     ...prodConfig.reducers,
@@ -33,17 +43,25 @@ if (prodConfig.appConfig) {
   stores.dispatch(appActions.initAppConfig(prodConfig.appConfig));
 }
 
-// 引入产品配置
-const renderApp = () => {
+function renderApp(renderRoutes) {
+  const appRootRoute = renderRoutes[0];
+
   // 主渲染入口
   ReactDOM.render(
     <Provider store={stores}>
       <HashRouter>
-        {renderRouterConfig(prodConfig.routes)}
+        <Route
+          path={appRootRoute.path}
+          render={
+            props => (
+              <appRootRoute.component {...props} route={appRootRoute} />
+            )
+          }
+        />
       </HashRouter>
     </Provider>,
     mountNode,
   );
-};
+}
 
-renderApp();
+renderApp(prodConfig.routes);

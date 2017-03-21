@@ -8,9 +8,10 @@ import classNamesUtils from 'classnames';
 import Icon from 'shared/components/Icon';
 import PopOver from 'shared/components/PopOver';
 import Navbar from 'shared/components/Navbar';
+import PropertyPanel from 'shared/components/Template/PropertyPanel';
 import * as appActions from 'shared/actions/app';
 import * as propertiesActions from 'shared/actions/properties';
-import { renderRoutesSwitch } from 'shared/components/Organism/RouterConfig';
+import { renderRoutesSwitch, renderRoutesList } from 'shared/components/Organism/RouterConfig';
 import * as actions from './actions';
 import myReducer from './reducer';
 
@@ -292,6 +293,7 @@ export default class Main extends React.PureComponent {
         </div>
 
         {renderRoutesSwitch(this.props.route.routes)}
+        
         <PopOver
           onClose={this.onHiddenPopOver}
           {...popOver}
@@ -300,6 +302,12 @@ export default class Main extends React.PureComponent {
             this.renderPopOverContent(popOver)
           }
         </PopOver>
+        <PropertyPanel
+          isShow={isShowPanel}
+          onToggle={this.props.togglePropertyContainer}
+          data={this.props.properties}
+          {...this.props}
+        />
       </div>
     );
   }

@@ -200,6 +200,7 @@ module.exports = {
   },
   plugins: [
     new webpack.LoaderOptionsPlugin({
+      debug: false,
       cache: true,
       // set to false to see a list of every file being bundled.
       noInfo: true,

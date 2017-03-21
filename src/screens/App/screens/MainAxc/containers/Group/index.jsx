@@ -12,7 +12,6 @@ import Icon from 'shared/components/Icon';
 import PopOver from 'shared/components/PopOver';
 import { FormGroup } from 'shared/components/Form';
 import Table from 'shared/components/Table';
-import PropertyPanel from 'shared/components/Template/PropertyPanel';
 import * as appActions from 'shared/actions/app';
 import * as propertiesActions from 'shared/actions/properties';
 import { renderRoutesList } from 'shared/components/Organism/RouterConfig';
@@ -150,11 +149,20 @@ export default class MainGroup extends React.PureComponent {
     }
   }
   componentDidUpdate(prevProps) {
+    const { location, history, match, route } = this.props;
+    let indexPath = route.indexPath;
+
+    if (match.url === location.pathname) {
+      indexPath = indexPath || route.routes[0].path;
+      history.replace(indexPath);
+    }
+    
     if (prevProps.route.path !== this.props.route.path) {
       this.autoRefreshData();
     }
   }
   componentWillUnmount() {
+    this.props.togglePropertyContainer(false);
     clearTimeout(this.autoRefreshTimer);
   }
 
@@ -1042,13 +1050,6 @@ export default class MainGroup extends React.PureComponent {
             this.renderModalContent(modal)
           }
         </Modal>
-
-        <PropertyPanel
-          isShow={isShowPanel}
-          onToggle={this.props.togglePropertyContainer}
-          data={this.props.properties}
-          {...this.props}
-        />
       </div>
     );
   }

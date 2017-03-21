@@ -104,7 +104,6 @@ export function renderRoutesList(routes) {
 
 export function renderRoutesSwitch(routes) {
   const routeList = renderRoutesList(routes);
-  console.log(routeList);
   return <Switch>{routeList}</Switch>;
 }
 

@@ -56,8 +56,8 @@ function renderApp(renderRoutes) {
           <Route
             path={appRootRoute.path}
             render={
-              ({ match, ...rest }) => (
-                <appRootRoute.component {...rest} route={appRootRoute} />
+              props => (
+                <appRootRoute.component {...props} route={appRootRoute} />
               )
             }
           />
@@ -74,7 +74,7 @@ renderApp(prodConfig.routes);
 // Enable hot reload by react-hot-loader
 if (module.hot) {
   module.hot.accept('./config/axc2.5', () => {
-    setImmediate(() => {
+    //setImmediate(() => {
       const nextConfig = require('./config/axc2.5');
       // Preventing the hot reloading error from react-router
       // unmountComponentAtNode(mountNode);
@@ -85,5 +85,5 @@ if (module.hot) {
       // 主渲染入口
       renderApp(nextConfig.routes);
     });
-  });
+  //});
 }

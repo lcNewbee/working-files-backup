@@ -952,6 +952,7 @@ const routes = [
             ],
           },
           {
+            id: 'notFound',
             component: NotFound,
           },
         ],
@@ -967,7 +968,10 @@ const routes = [
         mainPath: '/main/group/monitor/overview',
         component: sLogin.Screen,
       },
-
+      {
+        id: 'notFound',
+        component: NotFound,
+      },
     ],
   },
 ];
