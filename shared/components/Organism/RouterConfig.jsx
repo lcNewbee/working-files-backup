@@ -68,33 +68,32 @@ export default function renderRoutesTree(routes) {
 }
 
 export function renderRoutesList(routes) {
+  let routeList = null;
+
   if (!routes) {
-    return null;
+    return routeList;
   }
 
-  return (
-    routes.map(
-      (route) => {
-        const { path, indexPath } = route;
-        const retNodes = [];
+  routeList = [];
 
-        if (route.indexPath) {
-          retNodes.push(<Redirect from={path} to={indexPath} />);
-        }
+  routes.forEach(
+    (route) => {
+      const retNodes = [];
 
-        if (route.component) {
-          retNodes.push(<Route
-            path={route.path}
-            render={
-              routeProps => <route.component {...routeProps} route={route} />
-            }
-          />);
-        }
+      if (route.component) {
+        routeList.push(<Route
+          path={route.path}
+          render={
+            routeProps => <route.component {...routeProps} route={route} />
+          }
+        />);
+      }
 
-        return retNodes;
-      },
-    )
+      return retNodes;
+    },
   );
+
+  return routeList;
 }
 
 export function renderRoutesSwitch(routes) {

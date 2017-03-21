@@ -76,7 +76,7 @@ const sMainAxc = require('../../screens/App/screens/MainAxc');
 /**
  * 网络设置
  */
-// const sNetworkVlan = require('../../screens/App/screens/MainAxc/screens/Network/screens/VLAN');
+const cNetwork = require('../../screens/App/screens/MainAxc/containers/Network');
 const sInterfaces = require('../../screens/App/screens/MainAxc/screens/Network/screens/Interfaces');
 const sDhcpList = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/DHCP/DhcpList');
 const sDhcpRelay = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/Relay/DhcpRelay');
@@ -246,6 +246,7 @@ const routes = [
             path: '/main/network',
             icon: 'sphere',
             text: _('Network '),
+            component: SharedComponents.NavContainer,
             indexPath: '/main/network/interface',
             routes: [
               {
@@ -338,7 +339,7 @@ const routes = [
                 component: SharedComponents.TabContainer,
                 path: '/main/network/portal',
                 text: _('Portal Policy'),
-                indexRoute: { onEnter: (nextState, replace) => replace('/main/network/portal/server') },
+                indexPath: '/main/network/portal/server',
                 routes: [
                   {
                     id: 'portalServer',
@@ -632,8 +633,8 @@ const routes = [
             path: '/main/portal',
             icon: 'road',
             text: _('Hotspot'),
-            component: null,
-            indexRoute: { onEnter: (nextState, replace) => replace('/main/portal/overview') },
+            component: SharedComponents.NavContainer,
+            indexPath: '/main/portal/overview',
             routes: [
               {
                 id: 'portalOverview',
@@ -649,9 +650,7 @@ const routes = [
                 path: '/main/portal/access',
                 icon: 'link',
                 text: _('Access Auth'),
-                indexRoute: {
-                  onEnter: (nextState, replace) => replace('/main/portal/access/config'),
-                },
+                indexPath: '/main/portal/access/config',
                 routes: [
                   {
                     id: 'portalAccessBase',
@@ -688,13 +687,11 @@ const routes = [
                 ],
               }, {
                 id: 'portalRadius',
-                isIndex: true,
                 path: '/main/portal/radius',
                 icon: 'podcast',
                 text: _('Radius'),
-                indexRoute: {
-                  onEnter: (nextState, replace) => replace('/main/portal/radius/nas'),
-                },
+                isIndex: true,
+                indexPath: '/main/portal/radius/nas',
                 routes: [
                   {
                     id: 'portalRadiusNas',
@@ -722,17 +719,13 @@ const routes = [
                 path: '/main/portal/account',
                 icon: 'user-o',
                 text: _('Access Account'),
-                indexRoute: {
-                  onEnter: (nextState, replace) => replace('/main/portal/account/list'),
-                },
+                indexPath: '/main/portal/account/list',
                 routes: [
                   {
                     id: 'portalAccountAccountList',
                     path: '/main/portal/account/list',
                     text: _('Account List'),
-                    indexRoute: {
-                      onEnter: (nextState, replace) => replace('/main/portal/account/list/index'),
-                    },
+                    indexPath: '/main/portal/account/list/index',
                     routes: [
                       {
                         id: 'portalAccountAccountList',
@@ -765,9 +758,7 @@ const routes = [
                 path: '/main/portal/message',
                 icon: 'envelope-o',
                 text: _('Message'),
-                indexRoute: {
-                  onEnter: (nextState, replace) => replace('/main/portal/message/send'),
-                },
+                indexPath: '/main/portal/message/send',
                 routes: [
                   {
                     id: 'portalSendMessage',
@@ -796,9 +787,6 @@ const routes = [
                 path: '/main/portal/log',
                 icon: 'file-text-o',
                 text: _('Online Record Log'),
-                indexRoute: {
-                  onEnter: (nextState, replace) => replace('/main/portal/log/logList'),
-                },
                 routes: [
                   {
                     id: 'portalLogLogList',
@@ -853,8 +841,8 @@ const routes = [
             path: '/main/system',
             icon: 'cogs',
             text: _('System '),
-            component: null,
-            indexRoute: { onEnter: (nextState, replace) => replace('/main/system/status') },
+            component: SharedComponents.NavContainer,
+            indexPath: '/main/system/status',
             routes: [
               {
                 id: 'systemStatus',
@@ -877,9 +865,7 @@ const routes = [
                 text: _('System Log'),
                 noTree: true,
                 component: SharedComponents.TabContainer,
-                indexRoute: {
-                  onEnter: (nextState, replace) => replace('/main/system/log/list'),
-                },
+                indexPath: '/main/system/log/list',
                 routes: [
                   {
                     id: 'systemLog',
@@ -912,9 +898,7 @@ const routes = [
                 text: _('AP Maintenance'),
                 noTree: true,
                 component: SharedComponents.TabContainer,
-                indexRoute: {
-                  onEnter: (nextState, replace) => replace('/main/system/ap/base'),
-                },
+                indexPath: '/main/system/ap/base',
                 routes: [
                   {
                     id: 'apMaintenanceBase',
@@ -924,13 +908,13 @@ const routes = [
                     component: sApMaintenance.Screen,
                   }, {
                     id: 'apsVersion',
-                    path: '/main/system/upgrade/aps',
+                    path: '/main/system/ap/version',
                     formUrl: 'goform/system/ap/version',
                     text: _('AP Firmware'),
                     component: sApVersion.Screen,
                   }, {
                     id: 'apModel',
-                    path: '/main/system/upgrade/apModel',
+                    path: '/main/system/ap/model',
                     formUrl: 'goform/system/ap/model',
                     text: _('AP Model'),
                     component: sApModel.Screen,

@@ -1061,14 +1061,11 @@ export default class Main extends React.PureComponent {
     }
 
     for (i; i < len; i += 1) {
-      console.log(curRoutes[i]);
       breadcrumbList = breadcrumbList.unshift({
         path: curRoutes[i].path,
         text: curRoutes[i].text,
       });
     }
-
-    console.log(breadcrumbList)
 
     return (
       <ol className="m-breadcrumb m-breadcrumb--simple">
@@ -1175,20 +1172,9 @@ export default class Main extends React.PureComponent {
             this.renderBreadcrumb()
           }
         </div>
-        <div className="t-main__nav">
-          { this.renderAsideTop() }
-          <Nav
-            role="tree"
-            menus={mainLeftMenus}
-            location={this.props.location}
-            onChange={this.onClickNav}
-            isTree
-          />
-        </div>
-
-        <div className="t-main__content">
-          {renderRoutesSwitch(mainLeftMenus)}
-        </div>
+        {
+          renderRoutesSwitch(this.props.route.routes)
+        }
 
         <PopOver
           onClose={this.onHiddenPopOver}

@@ -31,6 +31,7 @@ export { default as Table } from './Table';
 export { default as TabContainer } from './Organism/TabContainer';
 export { default as FormContainer } from './Organism/FormContainer';
 export { default as WizardContainer } from './Organism/WizardContainer';
+export { default as NavContainer } from './Organism/NavContainer';
 
 // Templates
 export { default as PropertyPanel } from './Template/PropertyPanel';

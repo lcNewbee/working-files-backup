@@ -7,7 +7,7 @@ import * as actions from 'shared/actions/app';
 import Modal from 'shared/components/Modal';
 import ProgressBar from 'shared/components/ProgressBar';
 import stringUtils from 'shared/utils/lib/string';
-import { renderRoutesList } from 'shared/components/Organism/RouterConfig';
+import { renderRoutesSwitch } from 'shared/components/Organism/RouterConfig';
 import matchPath from 'react-router/matchPath';
 import Router from 'react-router/Router';
 
@@ -114,7 +114,7 @@ export default class App extends Component {
     return (
       <div>
         {
-          renderRoutesList(this.props.route.routes)
+          renderRoutesSwitch(this.props.route.routes)
           // renderRoutesConfig(this.props.route.routes)
         }
         <Modal
