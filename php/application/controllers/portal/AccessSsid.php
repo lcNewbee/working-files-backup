@@ -1,10 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-class MapOrbit extends CI_Controller {
+class AccessSsid extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this->load->helper('array');
-        $this->load->model('group/MapOrbit_Model');
+        $this->load->model('portal/AccessSsid_Model');
 	}
     public function index() {
 		$result = null;
@@ -18,10 +18,10 @@ class MapOrbit extends CI_Controller {
 		}
 	}
 	function fetch() {
-		return $this->MapOrbit_Model->get_list($_GET);
+		return $this->AccessSsid_Model->get_list($_GET);
 	}
-	function getmac() {
-		echo $this->MapOrbit_Model->get_mac($_GET);
+	function apmac() {
+		echo $this->AccessSsid_Model->get_apinfo();
 	}
 	function onAction($data) {
 		if (!$data) {
@@ -30,12 +30,12 @@ class MapOrbit extends CI_Controller {
 		$result = null;
 		$actionType = element('action',$data);
 		switch($actionType) {
-            case 'add' : $result = $this->MapOrbit_Model->Add($data);
+            case 'add' : $result = $this->AccessSsid_Model->Add($data);
                 break;
-            case 'delete' : $result = $this->MapOrbit_Model->Delete($data);
+            case 'delete' : $result = $this->AccessSsid_Model->Delete($data);
                 break;
-            case 'edit' : $result = $this->MapOrbit_Model->Edit($data);
-                break;
+            case 'edit' : $result = $this->AccessSsid_Model->Edit($data);
+                break;		
             default : $result = json_encode(array('state' => array('code' => 4000, 'msg' => 'No request action')));
                 break;
         }

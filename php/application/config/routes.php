@@ -99,6 +99,7 @@ $route['goform/group/map/apPlan'] = 'group/mapApPlan';
 $route['goform/group/map/clients_trace'] = 'group/mapClients';
 $route['goform/group/map/heatmap'] = 'group/mapHeat';
 $route['goform/group/map/orbittrace'] = 'group/mapOrbit';
+$route['goform/group/map/orbit/user'] = 'group/mapOrbit/getmac';
 
 // 系统设置
 $route['goform/system/version/upload'] = 'system/systemVersion/upload';
@@ -138,6 +139,8 @@ $route['goform/portal/access/download'] = 'portal/AccessDefault/download';
 $route['goform/portal/access/upload'] = 'portal/AccessDefault/upload';
 $route['goform/portal/access/smsgateWay'] = 'portal/AccessSms';
 $route['goform/portal/access/portalsmslog'] = 'portal/AccessSmslog';
+$route['goform/portal/access/ssidmanagement'] = 'portal/AccessSsid';
+$route['goform/portal/access/ap'] = 'portal/AccessSsid/apmac';
 
 
 $route['goform/portal/system/user'] = 'portal/systemUser';

@@ -2,62 +2,73 @@
 class MapOrbit_Model extends CI_Model {
 	public function __construct() {
 		parent::__construct();
-		$this->mysql = $this->load->database('mysqlportal', TRUE);
+        $this->load->database();
+		$this->mysql = $this->load->database('mysqli', TRUE);        
 		$this->load->helper(array('array', 'my_customfun_helper'));
 	}
-	function get_list($data) {   
-        /*
-		$columns = '*';
-		$tablenames = 'portal_smsapi';
-		$pageindex = (int)element('page', $data, 1);
-		$pagesize = (int)element('size', $data, 20);	
-		$order = array(array('id','DESC'));      		
-		$datalist = help_data_page_order($this->portalsql,$columns,$tablenames,$pageindex,$pagesize,$order);		
-		$arr = array(
-			'state'=>array('code'=>2000,'msg'=>'ok'),
-			'data'=>array(
-				'page'=>$datalist['page'],
-				'list' =>$datalist['data']
-			)
-		);               
-		return json_encode($arr);
-        */
+	function get_list($data) { 
+        $list = array();
+        $macList = array();
+                    
+        $build_id = $data['curMapId'];//区域id
+        $groupid = $data['groupid'];
+        $sta_mac = $data['mac'];    
+        $strtime = $data['date'].' '.$data['fromTime'];
+        $endtime = $data['date'].' '.$data['toTime'];
+        //得到区域中所有Ap (同一张图中的Ap)
+        $apmac_list = $this->get_ap_mac($build_id);
+        //1.$apmac_list[] = array('ap_mac'=>'14:c1:ff:b0:00:3e');
+        foreach($apmac_list as $row){
+            //1.1得到某Ap下所有终端
+            $macList = array_merge($macList, $this->get_mac($groupid,$row['ap_mac'])); 
+        }
+        //2.通过终端mac 查询数据    
+        //call active_orbit_func(3,'68:c9:7b:cd:a3:da','2017-03-21 21:00:30','2017-03-22 20:00:00');        
+        $strtime = '2017-03-22 20:00:00';
+        $endtime = '2017-03-22 23:00:00';
+        if($sta_mac){            
+            $sql = "call active_orbit_func({$groupid},'{$sta_mac}','{$strtime}','{$endtime}')";            
+            $queryd = $this->mysql->query($sql);        
+            foreach($apmac_list as $rows){
+                foreach($queryd->result_array() as $row) {
+                    if($row['ApMac'] === $rows['ap_mac']){
+                        $list[] = array(
+                            'lat'=>$row['Lat'],
+                            'lng'=>$row['Lon'],
+                            'time'=>$row['m_timestamp'],
+                        );
+                    }
+                }                               
+            }            
+        }        
         $arr = array(
             'state'=>array('code'=>2000,'msg'=>'ok'),
             'data'=>array(
-                'list'=>array(
-                    array('lat'=>116.91261,'lng'=>22.565962,'value'=>3),
-                    array('lat'=>116.912735,'lng'=>22.566563,'value'=>2),
-                    array('lat'=>116.913113,'lng'=>22.565679,'value'=>3),
-                    array('lat'=>116.912448,'lng'=>22.564894,'value'=>7)
-                )
+                'macList'=>$macList,
+                'list'=>$list
             )   
         );
         return json_encode($arr);
 	}
-    function Add($data){
-        $result = 0;
-        $arr = $this->params($data);
-        $result = $this->portalsql->insert('portal_smsapi',$arr);
-        $result = $result ? json_ok() : json_no('delete error');
-        return json_encode($result);
-    }    
-    function Delete($data){
-        $result = FALSE;
-        $dellist = $data['selectedList'];       
-        foreach($dellist as $row) {
-            $this->portalsql->where('id', $row['id']);
-            $result = $this->portalsql->delete('portal_smsapi');
-        }     
-        $result = $result ? json_ok() : json_on('delete error');
-        return json_encode($result);
+    //获取分组下所有终端mac地址
+    function get_mac($groupid,$apmac){        
+        $sql = "select ApMac,StaMac from (select * from sta_flow_sample group by StaMac) as t1 where ApGroupId=".$groupid." and ApMac='".$apmac."'";
+        $query = $this->mysql->query($sql);
+
+        $ary = array();
+        foreach($query->result_array() as $row){
+            array_push($ary,$row['StaMac']);
+        }
+        
+        return $ary;
+    }  
+
+    //用内部平面图查找该 图中所有AP mac
+    private function get_ap_mac($build_id){
+        $result = array();
+        $query = $this->db->query("select ap_mac from ap_map where build_id=".$build_id);
+
+        $result = $query->result_array();
+        return $result;        
     }
-    function Edit($data){
-        $result = 0;
-        $arr = $this->params($data);        
-        $this->portalsql->where('id', $data['id']);
-        $result = $this->portalsql->update('portal_smsapi', $arr);
-        $result = $result ? json_ok() : json_no('edit error');
-        return json_encode($result);
-    }        
 }

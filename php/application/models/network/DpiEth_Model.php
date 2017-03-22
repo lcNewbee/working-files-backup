@@ -26,7 +26,7 @@ class DpiEth_Model extends CI_Model {
                         $tary['active_eth'] = "1";
                         $tary['ethx_name']=$row['ethx_name'];
                         $tary['userNum']= (string)$this->get_user_num($data,$row['ethx_name']);
-                        $tary['application']= explode('/',$row['detected_protos']);
+                        $tary['application']= $row['detected_protos'] === " " ? array() : explode('/',$row['detected_protos']);
                         $tary['curRate']= (string)$curRate;
 
                         $ary[$i] = $tary;
@@ -152,7 +152,7 @@ class DpiEth_Model extends CI_Model {
 		$arr = array(
             'ethx_name'=>$ethstr,
             'userNum'=>0,
-            'application'=>'',
+            'application'=>array(),
             'curRate'=>'',
             'active_eth'=>''
         );
