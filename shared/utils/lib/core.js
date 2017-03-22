@@ -221,8 +221,8 @@ utils.extend({
     var ret = parseInt(val || '0', 10);
 
     if (isNaN(ret)) {
-      throw new TypeError(funcName + ' expected be called with number or number string,'+
-          ' actual is ' + valType);
+      console.error(funcName + ' expected be called with number or number string,'+
+          ' actual is ' + valType + 'and value = ' + val);
     }
 
     return ret;
@@ -232,7 +232,7 @@ utils.extend({
     var valType = typeof val;
 
     if(valType !== 'string') {
-      throw new TypeError(funcName + ' expected be called with string, actual is ' + valType);
+      console.error(funcName + ' expected be called with string, actual is ' + valType + ' and value = ' + val);
     }
 
     return val;
@@ -244,7 +244,6 @@ utils.extend({
     var func;
 
     if (typeof target !== 'object' || !utils.isArray(keys)) {
-
       console.error('utils.binds should call with object target and array keys');
       return ;
     }
