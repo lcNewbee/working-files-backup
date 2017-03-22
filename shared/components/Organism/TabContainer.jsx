@@ -7,9 +7,6 @@ const propTypes = {
     routes: PropTypes.array,
   }),
   children: PropTypes.node,
-  history: PropTypes.shape({
-    replace: PropTypes.func.isRequired,
-  }),
   match: PropTypes.shape({
     url: PropTypes.string.isRequired,
   }),

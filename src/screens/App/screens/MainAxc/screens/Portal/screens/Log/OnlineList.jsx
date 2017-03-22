@@ -47,7 +47,7 @@ const listOptions = fromJS([
       required: true,
     },
     transform(val) {
-      return uptimeFilter.transform(val);
+      return uptimeFilter.transform(val / 1000);
     },
   }, {
     id: 'state',

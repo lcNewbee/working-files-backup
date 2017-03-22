@@ -2,14 +2,12 @@ import React, { PropTypes } from 'react';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
 import utils from 'shared/utils';
 import { Button, SaveButton } from 'shared/components/Button';
 import validator from 'shared/validator';
 import Nav from 'shared/components/Nav';
 import Modal from 'shared/components/Modal';
 import Icon from 'shared/components/Icon';
-import PopOver from 'shared/components/PopOver';
 import { FormGroup } from 'shared/components/Form';
 import Table from 'shared/components/Table';
 import * as appActions from 'shared/actions/app';
@@ -46,9 +44,6 @@ const propTypes = {
     replace: PropTypes.func.isRequired,
     push: PropTypes.func.isRequired,
   }),
-  match: PropTypes.shape({
-    url: PropTypes.string.isRequired,
-  }),
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired,
   }),
@@ -62,7 +57,6 @@ const propTypes = {
   // immutable data
   app: PropTypes.instanceOf(Map),
   product: PropTypes.instanceOf(Map),
-  properties: PropTypes.instanceOf(Map),
 };
 
 const validOptions = fromJS({
@@ -139,7 +133,7 @@ export default class MainGroup extends React.PureComponent {
       this.autoRefreshData();
     }, rateInterval);
   }
-  componentDidUpdate(prevProps) {   
+  componentDidUpdate(prevProps) {
     if (prevProps.route.path !== this.props.route.path) {
       this.autoRefreshData();
     }
@@ -629,7 +623,7 @@ export default class MainGroup extends React.PureComponent {
               ) : (
                 <div className="o-form__fileset">
                   <legend className="o-form__legend">
-                    { _('Custom AP') }
+                    { _('Custom APs') }
                   </legend>
                   <FormGroup
                     type="text"
@@ -730,7 +724,7 @@ export default class MainGroup extends React.PureComponent {
                             });
                           }}
                         >
-                          {item.get('groupname')} ({item.get('apNum')})
+                          {`${item.get('groupname')} (${item.get('apNum')})`}
                         </a>
                       </li>
                     );
@@ -873,7 +867,7 @@ export default class MainGroup extends React.PureComponent {
                           className={classNames}
                           onClick={e => this.onSelectManageGroup(curId, e)}
                         >
-                          {item.get('groupname')} ({item.get('apNum')})
+                          {`${item.get('groupname')} (${item.get('apNum')})`}
                         </a>
                       </li>
                     );
@@ -991,8 +985,7 @@ export default class MainGroup extends React.PureComponent {
 
   render() {
     const selectGroupId = this.props.product.getIn(['group', 'selected', 'id']);
-    const { popOver, modal } = this.props.product.toJS();
-    const { isShowPanel } = this.props.properties.toJS();
+    const { modal } = this.props.product.toJS();
     let mainLeftMenus = this.props.route.routes;
 
     // 如果当前是所有组，则隐藏组配置相关菜单
