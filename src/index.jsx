@@ -18,7 +18,7 @@ const applyMiddleware = require('redux').applyMiddleware;
 const createStore = require('redux').createStore;
 const Provider = require('react-redux').Provider;
 const AppContainer = require('react-hot-loader').AppContainer;
-const prodConfig = require('./config/axc2.0');
+const prodConfig = require('./config/AEC60');
 
 const HashRouter = ReactRouterDom.HashRouter;
 const Route = ReactRouterDom.Route;
@@ -73,9 +73,9 @@ renderApp(prodConfig.routes);
 
 // Enable hot reload by react-hot-loader
 if (module.hot) {
-  module.hot.accept('./config/axc2.0', () => {
+  module.hot.accept('./config/AEC60', () => {
     //setImmediate(() => {
-      const nextConfig = require('./config/axc2.0');
+      const nextConfig = require('./config/AEC60');
       // Preventing the hot reloading error from react-router
       // unmountComponentAtNode(mountNode);
 

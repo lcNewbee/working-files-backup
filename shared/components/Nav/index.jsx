@@ -1,23 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { NavLink as Link } from 'react-router-dom';
-import { fromJS } from 'immutable';
+import { fromJS, Map, List } from 'immutable';
+import TabContainer from '../Organism/TabContainer';
 import Icon from '../Icon';
-
-const propTypes = {
-  menus: PropTypes.array.isRequired,
-  className: PropTypes.string,
-  location: PropTypes.object,
-  role: PropTypes.oneOf(['tree', 'menu']),
-  onChange: PropTypes.func,
-  onClick: PropTypes.func,
-  style: PropTypes.object,
-};
-
-const defaultProps = {
-  menus: [],
-  isTree: false,
-  role: 'menu',
-};
 
 /**
  * DSAD
@@ -72,14 +57,38 @@ function NavLink(props) {
   );
 }
 NavLink.propTypes = {
-  item: PropTypes.object.isRequired,
+  item: PropTypes.instanceOf(Map),
   className: PropTypes.string,
   onClick: PropTypes.func,
-  hasSubmenus: PropTypes.any,
-  hasTabs: PropTypes.any,
+  hasSubmenus: PropTypes.bool,
+  hasTabs: PropTypes.bool,
 };
 
 
+/**
+ * 导航菜单
+ *
+ * @Compoent Nav
+ * @extends {React.PureComponent}
+ */
+const propTypes = {
+  menus: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.instanceOf(List),
+  ]).isRequired,
+  className: PropTypes.string,
+  location: PropTypes.object.isRequired,
+  role: PropTypes.oneOf(['tree', 'menu']),
+  onChange: PropTypes.func,
+  onClick: PropTypes.func,
+  style: PropTypes.object,
+};
+
+const defaultProps = {
+  menus: [],
+  isTree: false,
+  role: 'menu',
+};
 class Nav extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -109,7 +118,6 @@ class Nav extends React.PureComponent {
       [id]: !this.state[id],
     });
   }
-
   render() {
     const { className, menus, location, role } = this.props;
     let navClassName = className || '';
@@ -131,13 +139,13 @@ class Nav extends React.PureComponent {
           {
             fromJS(menus).map((item) => {
               const myKey = item.get('id');
+              const isOpen = this.state[myKey];
               const hasChildRoutes = isTree && item.get('routes');
               const hasSubmenus = hasChildRoutes && !item.get('noTree');
-              const hasTabs = hasChildRoutes && item.get('noTree');
+              const hasTabs = item.get('component') === TabContainer;
               let subMenuClassName = 'o-nav__sub-menus m-menu';
               let linkClassName = 'm-menu__link o-nav__link';
               let isActive = false;
-              let isOpen = this.state[myKey];
 
               if (item.get('noNav')) {
                 return null;
@@ -155,6 +163,9 @@ class Nav extends React.PureComponent {
                 if (isActive && isOpen === undefined) {
                   this.defaultOpen = myKey;
                 }
+                if (isActive) {
+                  linkClassName = `${linkClassName} active`;
+                }
               }
 
               if (isOpen) {
@@ -162,17 +173,13 @@ class Nav extends React.PureComponent {
                 linkClassName = `${linkClassName} is-open`;
               }
 
-              if (isActive) {
-                linkClassName = `${linkClassName} active`;
-              }
-
               return (
                 <li key={myKey}>
                   <NavLink
                     item={item}
                     className={linkClassName}
-                    hasSubmenus={hasSubmenus}
-                    hasTabs={hasTabs}
+                    hasSubmenus={!!hasSubmenus}
+                    hasTabs={!!hasTabs}
                     onClick={() => {
                       if (hasSubmenus) {
                         this.onToggleBranch(myKey);
@@ -185,8 +192,7 @@ class Nav extends React.PureComponent {
                         {
                           item.get('routes').map(($$subItem) => {
                             const thisKey = $$subItem.get('id');
-                            const subHasSubmenus = $$subItem.get('routes');
-                            const subHasTabs = subHasSubmenus && $$subItem.get('component');
+                            const subHasTabs = $$subItem.get('component') === TabContainer;
                             const mylinkClassName = 'm-menu__link o-nav__link a-leaf-link';
 
                             if ($$subItem.get('noNav')) {
@@ -198,7 +204,7 @@ class Nav extends React.PureComponent {
                                 <NavLink
                                   item={$$subItem}
                                   hasSubmenus={false}
-                                  hasTabs={subHasTabs}
+                                  hasTabs={!!subHasTabs}
                                   className={mylinkClassName}
                                   onClick={this.onSelectItem}
                                 />

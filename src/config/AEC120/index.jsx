@@ -21,6 +21,7 @@ window.guiConfig = guiConfig;
 
 
 const App = require('../../screens/App');
+const SharedComponents = require('shared/components');
 const pMainAP = require('../../screens/App/screens/MainAP');
 const sWizard = require('../../screens/App/screens/MainAP/Wizard');
 // const sThinModeNotice = require('../../screens/App/screens/MainAP/ThinModeNotice');
@@ -131,9 +132,6 @@ const routes = [{
       icon: 'pie-chart',
       text: _('Status'),
       noTree: true,
-      indexRoute: {
-        onEnter: (nextState, replace) => replace('/main/status/overview'),
-      },
       routes: [
         {
           id: 'overview',
@@ -171,10 +169,7 @@ const routes = [{
       path: '/main/networksettings',
       icon: 'sphere',
       text: _('Network'),
-      component: pNetworkSettings,
-      indexRoute: {
-        onEnter: (nextState, replace) => replace('main/networksettings/networksettings'),
-      },
+      component: SharedComponents.TabContainer,
       routes: [
         {
           id: 'networksettings',
@@ -191,10 +186,7 @@ const routes = [{
       path: '/main/wirelessconfig',
       icon: 'wifi',
       text: _('Wireless'),
-      component: pWirelessConfig,
-      indexRoute: {
-        onEnter: (nextState, replace) => replace('/main/wirelessconfig/basic'),
-      },
+      component: SharedComponents.TabContainer,
       routes: [
         {
           id: 'basic',
@@ -221,35 +213,12 @@ const routes = [{
           component: sACL.Screen,
         },
       ],
-  }, /*{
-      id: 'portalsettings',
-      path: '/main/portalsettings',
-      icon: 'copy',
-      text: _('Portal'),
-      component: pPortal,
-      indexRoute: {
-        onEnter: (nextState, replace) => replace('main/portalsettings/portalsettings'),
-      },
-      routes: [
-        {
-          id: 'portalsettings',
-          noTree: true,
-          path: '/main/portalsettings/portalsettings',
-          fetchUrl: 'goform/get_portal_info',
-          saveUrl: 'goform/set_portal',
-          text: _('Portal Settings'),
-          component: sPortalSettings.Screen,
-        },
-      ],
-    },*/ {
+    }, {
       id: 'pMaintenance',
       path: '/main/maintenance',
       icon: 'wrench',
       text: _('System'),
-      component: pMaintenance,
-      indexRoute: {
-        onEnter: (nextState, replace) => replace('/main/maintenance/systemmaintenance'),
-      },
+      component: SharedComponents.TabContainer,
       routes: [
         {
           id: 'systemmaintenance',
@@ -275,8 +244,7 @@ const routes = [{
       path: '/main/tools',
       icon: 'cogs',
       text: _('Tools'),
-      component: pTools,
-      indexRoute: { onEnter: (nextState, replace) => replace('/main/tools/sitesurvey') },
+      component: SharedComponents.TabContainer,
       routes: [
         {
           id: 'sitesurvey',
@@ -303,8 +271,7 @@ const routes = [{
       path: '/main/modesettings',
       text: _('Mode'),
       icon: 'exchange',
-      component: pModeSettings,
-      indexRoute: { onEnter: (nextState, replace) => replace('/main/modesettings/modesettings') },
+      component: SharedComponents.TabContainer,
       routes: [
         {
           id: 'modesettings',
@@ -318,6 +285,9 @@ const routes = [{
   }, {
     path: '/wizard',
     component: sWizard.Screen,
+  }, {
+    path: '/login',
+    component: pLogin.Screen,
   }],
 }, {
   path: '*',

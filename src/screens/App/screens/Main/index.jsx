@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Nav from 'shared/components/Nav';
 import Icon from 'shared/components/Icon';
 import Navbar from 'shared/components/Navbar';
+import { renderRoutesList } from 'shared/components/Organism/RouterConfig';
 import * as appActions from 'shared/actions/app';
 import * as actions from './actions';
 
@@ -44,7 +45,6 @@ export default class Main extends React.PureComponent {
   render() {
     const { saving, guiName, version } = this.props.app.toJS();
     const { isShow } = this.state;
-
     return (
       <div>
         <Navbar
@@ -67,64 +67,67 @@ export default class Main extends React.PureComponent {
         </Navbar>
 
         <div className="t-main main--open">
-          <Nav className="t-main__nav" role="menu" menus={this.props.route.routes} />
+          <Nav
+            className="t-main__nav"
+            role="menu"
+            location={this.props.location}
+            menus={this.props.route.routes}
+          />
           <div className="t-main__content">
             {
-              this.props.children
+              renderRoutesList(this.props.route.routes)
             }
           </div>
         </div>
         {
-            isShow ? (
-              <div className="o-pop-over" onClick={this.showUserPopOver}>
-                <div className="o-pop-over__content m-user-overview">
-                  <div className="m-user-overview__info">
-                    <Icon name="user-secret" className="icon-user" />
-                  </div>
-                  <div className="m-user-overview__controls">
-                    <a className="change-pas" href="#/main/maintenance/accountsettings">
-                      <Icon
-                        name="key"
-                      />
-                      {_('CHANGE PASSWORD')}
-                    </a>
-                    <a className="sign-out" href="#" onClick={this.onLogout}>
-                      <Icon
-                        name="sign-out"
-                      />
-                      {_('LOG OUT')}
-                    </a>
-                  </div>
+          isShow ? (
+            <div className="o-pop-over" onClick={this.showUserPopOver}>
+              <div className="o-pop-over__content m-user-overview">
+                <div className="m-user-overview__info">
+                  <Icon name="user-secret" className="icon-user" />
                 </div>
-                <div className="o-pop-over__overlay"></div>
+                <div className="m-user-overview__controls">
+                  <a className="change-pas" href="#/main/maintenance/accountsettings">
+                    <Icon
+                      name="key"
+                    />
+                    {_('CHANGE PASSWORD')}
+                  </a>
+                  <a className="sign-out" href="#" onClick={this.onLogout}>
+                    <Icon
+                      name="sign-out"
+                    />
+                    {_('LOG OUT')}
+                  </a>
+                </div>
               </div>
-            ) : null
-          }
+              <div className="o-pop-over__overlay"></div>
+            </div>
+          ) : null
+        }
 
         {
-            saving ? <div className="body-backdrop"></div> : null
-          }
+          saving ? <div className="body-backdrop"></div> : null
+        }
       </div>
     );
   }
 }
 
 function mapStateToProps(state) {
-  let myState = state.app;
-
   return {
-    app: myState,
+    app: state.app,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    actions
+    actions,
   ), dispatch);
 }
 
 export const Screen = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(Main);

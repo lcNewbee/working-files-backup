@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import Nav from 'shared/components/Nav';
 import Icon from 'shared/components/Icon';
 import Navbar from 'shared/components/Navbar';
+import { renderRoutesList } from 'shared/components/Organism/RouterConfig';
 import * as appActions from 'shared/actions/app';
 import * as actions from './actions';
 import reducer from './reducer';
@@ -121,9 +122,16 @@ export default class MainAP extends React.PureComponent {
         </Navbar>
 
         <div className="t-main main--open">
-          <Nav className="t-main__nav" role="menu" menus={this.props.selfState.get('menus')} />
+          <Nav
+            className="t-main__nav"
+            role="menu"
+            location={this.props.location}
+            menus={this.props.selfState.get('menus')}
+          />
           <div className="t-main__content">
-            { this.props.children }
+            {
+              renderRoutesList(this.props.route.routes)
+            }
           </div>
         </div>
         {

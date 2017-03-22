@@ -21,6 +21,7 @@ window.guiConfig = guiConfig;
 
 
 const App = require('../../screens/App');
+const SharedComponents = require('shared/components');
 const pMainAP = require('../../screens/App/screens/MainAP');
 const sWizard = require('../../screens/App/screens/MainAP/Wizard');
 // const sThinModeNotice = require('../../screens/App/screens/MainAP/ThinModeNotice');
@@ -28,8 +29,6 @@ const sWizard = require('../../screens/App/screens/MainAP/Wizard');
 const pLogin = require('../../screens/App/screens/Login');
 // 布局
 const MainAP = require('../../screens/App/screens/MainAP');
-// 网络设置
-const pNetworkSettings = require('../../screens/App/screens/MainAP/screens/NetworkSettings');
 // 子菜单
 const sNetworkSettings = require('../../screens/App/screens/MainAP/screens/NetworkSettings/NetworkSettings');
 
@@ -42,22 +41,17 @@ const sRadioDetails = require('../../screens/App/screens/MainAP/screens/SystemSt
 const pQuickSetup = require('../../screens/App/screens/MainAP/screens/QuickSetup/CoverageQuickSetup');
 
 // 无线设置
-const pWirelessConfig = require('../../screens/App/screens/MainAP/screens/WirelessConfig');
-// 子菜单
 // const sBasic = require('../../screens/App/screens/MainAP/screens/WirelessConfig/Basic/BasicForP2p');
 const sBasic = require('../../screens/App/screens/MainAP/screens/WirelessConfig/Basic/BasicForCoverage');
 const sAdvance = require('../../screens/App/screens/MainAP/screens/WirelessConfig/Advance');
 // const sQos = require('../../screens/App/screens/MainAP/screens/WirelessConfig/QoS');
 const sACL = require('../../screens/App/screens/MainAP/screens/WirelessConfig/ACL');
 // 系统维护
-const pMaintenance = require('../../screens/App/screens/MainAP/screens/Maintenance');
 const sSystemMaintenance = require('../../screens/App/screens/MainAP/screens/Maintenance/SystemMaintenance');
 const sTimeSettings = require('../../screens/App/screens/MainAP/screens/Maintenance/TimeSettings');
 const sAccountSettings = require('../../screens/App/screens/MainAP/screens/Maintenance/AccountSettings');
-const pModeSettings = require('../../screens/App/screens/MainAP/screens/ModeSettings');
 const sModeSettings = require('../../screens/App/screens/MainAP/screens/ModeSettings/ModeSettings');
 // 工具
-const pTools = require('../../screens/App/screens/MainAP/screens/Tools');
 const sSpeedTest = require('../../screens/App/screens/MainAP/screens/Tools/SpeedTest');
 const sSiteSurvey = require('../../screens/App/screens/MainAP/screens/Tools/SiteSurvey');
 const sSystemLogs = require('../../screens/App/screens/MainAP/screens/Tools/SystemLogs');
@@ -116,209 +110,181 @@ const funConfig = {
 };
 
 
-
 const routes = [{
   path: '/',
   component: App.Screen,
   formUrl: '/goform/get_product_info',
-  indexRoute: { component: pLogin.Screen },
-  routes: [{
-    path: '/main',
-    component: MainAP.Screen,
-    routes: [{
-      id: 'systemstatus',
-      path: '/main/status',
-      icon: 'pie-chart',
-      text: _('Status'),
-      noTree: true,
-      indexRoute: {
-        onEnter: (nextState, replace) => replace('/main/status/overview'),
+  indexPath: '/login',
+  routes: [
+    {
+      path: '/main',
+      component: MainAP.Screen,
+      indexPath: '/main/status/overview',
+      routes: [{
+        id: 'systemstatus',
+        path: '/main/status',
+        icon: 'pie-chart',
+        text: _('Status'),
+        noTree: true,
+        indexPath: '/main/status/overview',
+        routes: [
+          {
+            id: 'overview',
+            fetchUrl: 'goform/get_system_info_forTestUse',
+            path: '/main/status/overview',
+            component: pSystemStatus.Screen,
+          }, {
+            id: 'ssiddetails',
+            path: '/main/status/ssiddetails',
+            component: sSsidDetails.Screen,
+            fetchUrl: 'goform/get_system_info_forTestUse',
+          }, {
+            id: 'clientsdetails',
+            path: '/main/status/clientsdetails',
+            component: sClientsDetails.Screen,
+            fetchUrl: 'goform/get_system_info_forTestUse',
+          }, {
+            id: 'radiodetails',
+            path: '/main/status/radiodetails',
+            component: sRadioDetails.Screen,
+            fetchUrl: 'goform/get_system_info_forTestUse',
+          },
+        ],
+      }, {
+        id: 'quicksetup',
+        path: '/main/quicksetup',
+        text: _('Quick Setup'),
+        icon: 'map-signs',
+        funConfig: funConfig.coverageQuickSetup,
+        fetchUrl: 'goform/get_quicksetup_info_forTestUse',
+        saveUrl: 'goform/set_quicksetup',
+        component: pQuickSetup.Screen,
+      }, {
+        id: 'networksettings',
+        path: '/main/networksettings',
+        icon: 'sphere',
+        text: _('Network'),
+        component: SharedComponents.TabContainer,
+        routes: [
+          {
+            id: 'networksettings',
+            formUrl: 'goform/get_network_info',
+            saveUrl: 'goform/set_network',
+            path: '/main/networksettings/networksettings',
+            text: _('LAN Settings'),
+            funConfig: funConfig.network,
+            component: sNetworkSettings.Screen,
+          },
+        ],
+      }, {
+        id: 'wirelessconfig',
+        path: '/main/wirelessconfig',
+        icon: 'wifi',
+        text: _('Wireless'),
+        component: SharedComponents.TabContainer,
+        routes: [
+          {
+            id: 'basic',
+            path: '/main/wirelessconfig/basic',
+            text: _('Basic'),
+            formUrl: 'goform/get_wl_info_forTestUse',
+            saveUrl: 'goform/set_wireless_forTestUse',
+            funConfig: funConfig.basic,
+            component: sBasic.Screen,
+          },
+          {
+            id: 'advance',
+            path: '/main/wirelessconfig/advance',
+            text: _('Advance'),
+            fetchUrl: 'goform/get_adv_wl_info_forTestUse',
+            funConfig: funConfig.advance,
+            component: sAdvance.Screen,
+          },
+          {
+            id: 'acl',
+            fetchUrl: 'goform/get_acl_info_forTestUse',
+            path: '/main/wirelessconfig/acl',
+            text: 'ACL',
+            component: sACL.Screen,
+          },
+        ],
+      }, {
+        id: 'pMaintenance',
+        path: '/main/maintenance',
+        icon: 'wrench',
+        text: _('System'),
+        component: SharedComponents.TabContainer,
+        routes: [
+          {
+            id: 'systemmaintenance',
+            fetchUrl: 'goform/save_config',
+            path: '/main/maintenance/systemmaintenance',
+            text: _('System Maintenance'),
+            component: sSystemMaintenance.Screen,
+            funConfig: funConfig.systemmaintenance,
+          }, {
+            id: 'accountsettings',
+            path: '/main/maintenance/accountsettings',
+            text: _('Account Settings'),
+            component: sAccountSettings.Screen,
+          }, {
+            id: 'timesettings',
+            path: '/main/maintenance/timesettings',
+            text: _('Time Settings'),
+            component: sTimeSettings.Screen,
+          },
+        ],
+      }, {
+        id: 'tools',
+        path: '/main/tools',
+        icon: 'cogs',
+        text: _('Tools'),
+        component: SharedComponents.TabContainer,
+        routes: [
+          {
+            id: 'sitesurvey',
+            path: '/main/tools/sitesurvey',
+            fetchUrl: 'goform/get_site_survey',
+            text: _('Site Survey'),
+            component: sSiteSurvey.Screen,
+          }, {
+            id: 'systemlogs',
+            formUrl: 'goform/get_log_list',
+            path: '/main/tools/systemlogs',
+            text: _('System Logs'),
+            component: sSystemLogs.Screen,
+          }, {
+            id: 'channelutilization',
+            path: '/main/tools/channelutilization',
+            text: _('Channel Utilization'),
+            fetchUrl: 'goform/get_chanutil',
+            component: sChannelUtilization.Screen,
+          },
+        ],
+      }, {
+        id: 'modesettings',
+        path: '/main/modesettings',
+        text: _('Mode'),
+        icon: 'exchange',
+        component: SharedComponents.TabContainer,
+        routes: [
+          {
+            id: 'modesettings',
+            path: '/main/modesettings/modesettings',
+            text: _('Mode Settings'),
+            component: sModeSettings.Screen,
+          },
+        ],
       },
-      routes: [
-        {
-          id: 'overview',
-          fetchUrl: 'goform/get_system_info_forTestUse',
-          path: '/main/status/overview',
-          component: pSystemStatus.Screen,
-        }, {
-          id: 'ssiddetails',
-          path: '/main/status/ssiddetails',
-          component: sSsidDetails.Screen,
-          fetchUrl: 'goform/get_system_info_forTestUse',
-        }, {
-          id: 'clientsdetails',
-          path: '/main/status/clientsdetails',
-          component: sClientsDetails.Screen,
-          fetchUrl: 'goform/get_system_info_forTestUse',
-        }, {
-          id: 'radiodetails',
-          path: '/main/status/radiodetails',
-          component: sRadioDetails.Screen,
-          fetchUrl: 'goform/get_system_info_forTestUse',
-        },
       ],
     }, {
-      id: 'quicksetup',
-      path: '/main/quicksetup',
-      text: _('Quick Setup'),
-      icon: 'map-signs',
-      funConfig: funConfig.coverageQuickSetup,
-      fetchUrl: 'goform/get_quicksetup_info_forTestUse',
-      saveUrl: 'goform/set_quicksetup',
-      component: pQuickSetup.Screen,
+      path: '/wizard',
+      component: sWizard.Screen,
     }, {
-      id: 'networksettings',
-      path: '/main/networksettings',
-      icon: 'sphere',
-      text: _('Network'),
-      component: pNetworkSettings,
-      indexRoute: {
-        onEnter: (nextState, replace) => replace('main/networksettings/networksettings'),
-      },
-      routes: [
-        {
-          id: 'networksettings',
-          formUrl: 'goform/get_network_info',
-          saveUrl: 'goform/set_network',
-          path: '/main/networksettings/networksettings',
-          text: _('LAN Settings'),
-          funConfig: funConfig.network,
-          component: sNetworkSettings.Screen,
-        },
-      ],
-    }, {
-      id: 'wirelessconfig',
-      path: '/main/wirelessconfig',
-      icon: 'wifi',
-      text: _('Wireless'),
-      component: pWirelessConfig,
-      indexRoute: {
-        onEnter: (nextState, replace) => replace('/main/wirelessconfig/basic'),
-      },
-      routes: [
-        {
-          id: 'basic',
-          path: '/main/wirelessconfig/basic',
-          text: _('Basic'),
-          formUrl: 'goform/get_wl_info_forTestUse',
-          saveUrl: 'goform/set_wireless_forTestUse',
-          funConfig: funConfig.basic,
-          component: sBasic.Screen,
-        },
-        {
-          id: 'advance',
-          path: '/main/wirelessconfig/advance',
-          text: _('Advance'),
-          fetchUrl: 'goform/get_adv_wl_info_forTestUse',
-          funConfig: funConfig.advance,
-          component: sAdvance.Screen,
-        },
-        {
-          id: 'acl',
-          fetchUrl: 'goform/get_acl_info_forTestUse',
-          path: '/main/wirelessconfig/acl',
-          text: 'ACL',
-          component: sACL.Screen,
-        },
-      ],
-  }, /*{
-      id: 'portalsettings',
-      path: '/main/portalsettings',
-      icon: 'copy',
-      text: _('Portal'),
-      component: pPortal,
-      indexRoute: {
-        onEnter: (nextState, replace) => replace('main/portalsettings/portalsettings'),
-      },
-      routes: [
-        {
-          id: 'portalsettings',
-          noTree: true,
-          path: '/main/portalsettings/portalsettings',
-          fetchUrl: 'goform/get_portal_info',
-          saveUrl: 'goform/set_portal',
-          text: _('Portal Settings'),
-          component: sPortalSettings.Screen,
-        },
-      ],
-    },*/ {
-      id: 'pMaintenance',
-      path: '/main/maintenance',
-      icon: 'wrench',
-      text: _('System'),
-      component: pMaintenance,
-      indexRoute: {
-        onEnter: (nextState, replace) => replace('/main/maintenance/systemmaintenance'),
-      },
-      routes: [
-        {
-          id: 'systemmaintenance',
-          fetchUrl: 'goform/save_config',
-          path: '/main/maintenance/systemmaintenance',
-          text: _('System Maintenance'),
-          component: sSystemMaintenance.Screen,
-          funConfig: funConfig.systemmaintenance,
-        }, {
-          id: 'accountsettings',
-          path: '/main/maintenance/accountsettings',
-          text: _('Account Settings'),
-          component: sAccountSettings.Screen,
-        }, {
-          id: 'timesettings',
-          path: '/main/maintenance/timesettings',
-          text: _('Time Settings'),
-          component: sTimeSettings.Screen,
-        },
-      ],
-    }, {
-      id: 'tools',
-      path: '/main/tools',
-      icon: 'cogs',
-      text: _('Tools'),
-      component: pTools,
-      indexRoute: { onEnter: (nextState, replace) => replace('/main/tools/sitesurvey') },
-      routes: [
-        {
-          id: 'sitesurvey',
-          path: '/main/tools/sitesurvey',
-          fetchUrl: 'goform/get_site_survey',
-          text: _('Site Survey'),
-          component: sSiteSurvey.Screen,
-        }, {
-          id: 'systemlogs',
-          formUrl: 'goform/get_log_list',
-          path: '/main/tools/systemlogs',
-          text: _('System Logs'),
-          component: sSystemLogs.Screen,
-        }, {
-          id: 'channelutilization',
-          path: '/main/tools/channelutilization',
-          text: _('Channel Utilization'),
-          fetchUrl: 'goform/get_chanutil',
-          component: sChannelUtilization.Screen,
-        },
-      ],
-    }, {
-      id: 'modesettings',
-      path: '/main/modesettings',
-      text: _('Mode'),
-      icon: 'exchange',
-      component: pModeSettings,
-      indexRoute: { onEnter: (nextState, replace) => replace('/main/modesettings/modesettings') },
-      routes: [
-        {
-          id: 'modesettings',
-          path: '/main/modesettings/modesettings',
-          text: _('Mode Settings'),
-          component: sModeSettings.Screen,
-        },
-      ],
+      path: '/login',
+      component: pLogin.Screen,
     },
-    ],
-  }, {
-    path: '/wizard',
-    component: sWizard.Screen,
-  }],
+  ],
 }, {
   path: '*',
   component: NotFound,

@@ -1,6 +1,7 @@
 import React from 'react';
 import Switch from 'react-router/Switch';
 import Route from 'react-router/Route';
+import { Redirect } from 'react-router-dom';
 
 export default function renderRoutesTree(routes) {
   if (!routes) {
@@ -40,7 +41,6 @@ export default function renderRoutesTree(routes) {
           path={route.path}
           render={
             (props) => {
-              console.log('cur Route', route);
               return <RouteComponent {...props} route={route} />;
             }
           }
@@ -80,6 +80,20 @@ export function renderRoutesList(routes) {
       const retNodes = [];
       const sunRoutes = route.routes;
       const curKey = route.id || route.path;
+      const indexPath = route.indexPath ||
+        (sunRoutes && sunRoutes[0] && sunRoutes[0].path);
+
+      if (indexPath) {
+        routeList.push(
+          <Route
+            exact
+            path={route.path}
+            render={() => (
+              <Redirect to={indexPath} />
+            )}
+          />,
+        );
+      }
 
       if (route.component) {
         routeList.push(<Route

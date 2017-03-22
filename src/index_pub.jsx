@@ -16,7 +16,7 @@ const combineReducers = require('redux').combineReducers;
 const applyMiddleware = require('redux').applyMiddleware;
 const createStore = require('redux').createStore;
 const Provider = require('react-redux').Provider;
-const prodConfig = require('./config/axc2.0');
+const prodConfig = require('./config/AEC60');
 
 const HashRouter = ReactRouterDom.HashRouter;
 const Route = ReactRouterDom.Route;

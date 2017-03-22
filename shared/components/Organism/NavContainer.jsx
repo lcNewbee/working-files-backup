@@ -6,12 +6,6 @@ const propTypes = {
   route: PropTypes.shape({
     routes: PropTypes.array,
   }),
-  history: PropTypes.shape({
-    replace: PropTypes.func.isRequired,
-  }),
-  match: PropTypes.shape({
-    url: PropTypes.string.isRequired,
-  }),
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired,
   }),
@@ -19,26 +13,6 @@ const propTypes = {
 const defaultProps = {};
 
 class NavContainer extends React.PureComponent {
-  componentDidMount() {
-    const { location, history, match, route } = this.props;
-    let indexPath = route.indexPath;
-
-    if (match.url === location.pathname) {
-      indexPath = indexPath || route.routes[0].path;
-      history.replace(indexPath);
-    }
-  }
-
-  componentDidUpdate() {
-    const { location, history, match, route } = this.props;
-    let indexPath = route.indexPath;
-
-    if (match.url === location.pathname) {
-      indexPath = indexPath || route.routes[0].path;
-      history.replace(indexPath);
-    }
-  }
-
   render() {
     const { route } = this.props;
     return (

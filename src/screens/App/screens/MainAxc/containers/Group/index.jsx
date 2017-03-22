@@ -139,24 +139,7 @@ export default class MainGroup extends React.PureComponent {
       this.autoRefreshData();
     }, rateInterval);
   }
-  componentDidMount() {
-    const { location, history, match, route } = this.props;
-    let indexPath = route.indexPath;
-
-    if (match.url === location.pathname) {
-      indexPath = indexPath || route.routes[0].path;
-      history.replace(indexPath);
-    }
-  }
-  componentDidUpdate(prevProps) {
-    const { location, history, match, route } = this.props;
-    let indexPath = route.indexPath;
-
-    if (match.url === location.pathname) {
-      indexPath = indexPath || route.routes[0].path;
-      history.replace(indexPath);
-    }
-    
+  componentDidUpdate(prevProps) {   
     if (prevProps.route.path !== this.props.route.path) {
       this.autoRefreshData();
     }

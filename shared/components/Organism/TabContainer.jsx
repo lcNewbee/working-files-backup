@@ -20,16 +20,6 @@ const propTypes = {
 const defaultProps = {};
 
 class TabContainer extends React.PureComponent {
-  componentDidMount() {
-    const { location, history, match, route } = this.props;
-    let indexPath = route.indexPath;
-
-    if (match.url === location.pathname) {
-      indexPath = indexPath || route.routes[0].path;
-      history.replace(indexPath);
-    }
-  }
-
   render() {
     const { route, match, location } = this.props;
 
