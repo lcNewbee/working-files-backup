@@ -62,6 +62,15 @@ function getDistance(p1, p2) {
   return Math.sqrt(((p1[0] - p2[0]) * (p1[0] - p2[0])) + ((p1[1] - p2[1]) * (p1[1] - p2[1])));
 }
 
+function sleep(n) {
+  const start = new Date().getTime();
+  while(true) {
+    const end = new Date().getTime();
+    if (end - start > n) break;
+  }
+  console.log('sleep end');
+}
+
 const propTypes = {
   store: PropTypes.object,
   changeScreenQuery: PropTypes.func,
@@ -81,6 +90,8 @@ const defaultQuery = {
 export default class View extends React.Component {
   constructor(props) {
     super(props);
+    this.curvePath = [];
+    this.timeoutVal = [];
     this.colors = ['#c23531', '#2f4554', '#0093dd', '#d48265', '#91c7ae'];
     this.state = {
       buildingNameOptions: fromJS([]),
@@ -116,6 +127,8 @@ export default class View extends React.Component {
         'getPointList',
         'interpolate',
         'drawCurvePath',
+        'drawCurveAnimPath',
+        'drawLineBetweenPoints',
       ],
     );
   }
@@ -157,6 +170,7 @@ export default class View extends React.Component {
     });
   }
   componentDidMount() {
+    if (typeof (this.canvasElem) === 'undefined') return ;
     const store = this.props.store;
     const curScreenId = store.get('curScreenId');
     const curMapId = store.getIn([curScreenId, 'query', 'curMapId']);
@@ -164,12 +178,15 @@ export default class View extends React.Component {
     const startX = store.getIn([curScreenId, 'data', 'list', 0, 'x']);
     const startY = store.getIn([curScreenId, 'data', 'list', 0, 'y']);
     const mapList = this.mapList;
+    const ctx = this.canvasElem.getContext('2d');
     if (typeof (mapList) !== 'undefined') {
       this.updateCanvas(startX, startY, $$pathList, mapList, curMapId);
+      this.drawCurveAnimPath(ctx, this.curvePath);
     }
   }
 
   componentDidUpdate() {
+    if (typeof (this.canvasElem) === 'undefined') return ;
     const store = this.props.store;
     const curScreenId = store.get('curScreenId');
     const curMapId = store.getIn([curScreenId, 'query', 'curMapId']);
@@ -177,10 +194,28 @@ export default class View extends React.Component {
     const startX = store.getIn([curScreenId, 'data', 'list', 0, 'x']);
     const startY = store.getIn([curScreenId, 'data', 'list', 0, 'y']);
     const mapList = this.mapList;
+    const ctx = this.canvasElem.getContext('2d');
     if (typeof (mapList) !== 'undefined') {
       this.updateCanvas(startX, startY, $$pathList, mapList, curMapId);
+      if (!this.mapMouseDown) this.drawCurveAnimPath(ctx, this.curvePath);
     }
   }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log('shouldComponentUpdate');
+    const store = this.props.store;
+    const curScreenId = store.get('curScreenId');
+    if (!store.getIn([curScreenId, 'data']).equals(nextProps.store.getIn([curScreenId, 'data']))) {
+      console.log('data is changed');
+      return true;
+    }
+    if (!fromJS(this.state).equals(fromJS(nextState))) {
+      console.log('state is changed', this.state, nextState);
+      return true
+    };
+    return false;
+  }
+
   onChangeBuilding(id) {
     this.props.changeScreenQuery({ buildId: id });
     this.setState({ buildId: id });
@@ -214,11 +249,17 @@ export default class View extends React.Component {
   }
   onMapMouseUp() {
     this.mapMouseDown = false;
+    if (this.posXBeforeMove !== this.state.mapOffsetX || this.posYBeforeMove !== this.state.mapOffsetY) {
+      const ctx = this.canvasElem.getContext('2d');
+      this.drawCurveAnimPath(ctx, this.curvePath);
+    }
   }
   onMapMouseDown(e) {
     this.mapMouseDown = true;
     this.mapClientX = e.clientX;
     this.mapClientY = e.clientY;
+    this.posXBeforeMove = this.state.mapOffsetX;
+    this.posYBeforeMove = this.state.mapOffsetY;
   }
   onMapMouseMove(e) {
     if (this.mapMouseDown) {
@@ -226,6 +267,7 @@ export default class View extends React.Component {
         mapOffsetX: (this.state.mapOffsetX + e.clientX) - this.mapClientX,
         mapOffsetY: (this.state.mapOffsetY + e.clientY) - this.mapClientY,
       });
+      console.log('mapOffsetX', this.state.mapOffsetX);
       this.mapClientX = e.clientX;
       this.mapClientY = e.clientY;
     }
@@ -244,24 +286,60 @@ export default class View extends React.Component {
       return null;
     }
     ctx = this.canvasElem.getContext('2d');
+    ctx.clearRect(0, 0, this.state.mapWidth, this.state.mapHeight);
     const curItem = mapList.find(item => item.get('id') === curMapId);
     // 经纬度转换为画布上的像素
     const pathListPixel = $$pathList.toJS().map(($$point) => {
       const ret = gps.getOffsetFromGpsPoint($$point, curItem.toJS());
-      const x = Math.floor((ret.x * this.mapWidth) / 100);
-      const y = Math.floor((ret.y * this.mapHeight) / 100);
+      const x = Math.floor((ret.x * this.state.mapWidth) / 100);
+      const y = Math.floor((ret.y * this.state.mapHeight) / 100);
       return { x, y };
     });
 
     const len = pathListPixel.length;
+    this.curvePath = [];
     pathListPixel.forEach((item, index, arr) => {
       if (index === len - 1) return;
       const crvPoints = this.getPointList(item, arr[index + 1]);
-      this.drawCurvePath(ctx, crvPoints);
+      this.curvePath = this.curvePath.concat(crvPoints);
+      // this.drawCurvePath(ctx, crvPoints);
     })
     
     this.stationaryPoint(ctx, pathListPixel);
+    // this.drawCurveAnimPath(ctx, this.curvePath);
     // this.oribitPath(ctx, startX, startY, fromJS(pathListPixel));
+  }
+
+  drawCurveAnimPath(ctx, curvePath) {
+    const len = curvePath.length;
+    console.log('len', len);
+    if (len === 0)  return null;
+    // 清除之前没有画完的定时器
+    let timeoutLen = this.timeoutVal.length;
+    while(timeoutLen--) {
+      clearTimeout(this.timeoutVal[timeoutLen]);
+    }
+    const colorsLen = this.colors.length;
+    ctx.beginPath();
+    let point1 = curvePath[0];
+    ctx.strokeStyle = this.colors[Math.floor(colorsLen * Math.random())];
+    ctx.lineWidth = 2;
+    console.log('curvePath', curvePath);
+    curvePath.forEach((point, index) => {
+      let a;
+      a = setTimeout(() => {
+        this.drawLineBetweenPoints(ctx, point1, point);
+        point1 = point;
+      }, 10);
+      this.timeoutVal.push(a);
+    });
+  }
+
+  drawLineBetweenPoints(ctx, point1, point2) {
+    ctx.moveTo(point1[0], point1[1]);
+    ctx.lineTo(point2[0], point2[1]);
+    ctx.stroke();
+    sleep(1);
   }
 
   drawCurvePath(ctx, crvPoints) {
@@ -288,18 +366,6 @@ export default class View extends React.Component {
     // console.log('$$pathList', $$pathList);
     $$pathList.forEach(
       ($$point) => {
-        // 默认值为source-over
-        // const prev = ctx.globalCompositeOperation;
-        //  只显示canvas上原图像的重叠部分
-        // ctx.globalCompositeOperation = 'destination-in';
-        //  设置主canvas的绘制透明度
-        // ctx.globalAlpha = 0.9;
-        //  这一步目的是将canvas上的图像变的透明
-        // ctx.fillRect(0, 0, 1144, 700);
-        //  在原图像上重叠新图像
-        // ctx.globalCompositeOperation = prev;
-        //  在主canvas上画新圆
-        // console.log('$$point', $$point);
         ctx.save();
         ctx.beginPath();
         ctx.fillStyle = 'red';
@@ -349,8 +415,10 @@ export default class View extends React.Component {
         ref={(mapContent) => {
           if (mapContent) {
             this.mapContent = mapContent;
-            this.mapWidth = mapContent.offsetWidth;
-            this.mapHeight = mapContent.offsetHeight;
+            this.setState({
+              mapWidth: mapContent.offsetWidth,
+              mapHeight: mapContent.offsetHeight,
+            });
           }
         }}
         style={{
@@ -370,8 +438,8 @@ export default class View extends React.Component {
               this.canvasElem = canvasElem;
             }
           }}
-          width={this.mapWidth}
-          height={this.mapHeight}
+          width={this.state.mapWidth}
+          height={this.state.mapHeight}
           style={{
             position: 'absolute',
             left: 0,
@@ -385,8 +453,8 @@ export default class View extends React.Component {
   getPointList(from, to) {
     // console.log('from.x, to.x', from.x, to.x);
     let points = [
-        [from.x, from.y],
-        [to.x, to.y],
+      [from.x, from.y],
+      [to.x, to.y],
     ];
     const ex = points[1][0];
     const ey = points[1][1];
@@ -469,31 +537,6 @@ export default class View extends React.Component {
     var v0 = (p2 - p0) * 0.5;
     var v1 = (p3 - p1) * 0.5;
     return (2 * (p1 - p2) + v0 + v1) * t3 + (-3 * (p1 - p2) - 2 * v0 - v1) * t2 + v0 * t + p1;
-  }
-
-  drawLinePath(context) {
-    this.path = this.getPointList(map.pointToPixel(this.from.location), map.pointToPixel(this.to.location));
-    const pointList = this.path;
-    const len = pointList.length;
-    context.save();
-    context.beginPath();
-    context.lineWidth = options.lineWidth;
-    context.strokeStyle = options.colors[this.id];
-
-    if (!options.lineType || options.lineType === 'solid') {
-      context.moveTo(pointList[0][0], pointList[0][1]);
-      for (let i = 0; i < len; i++) {
-        context.lineTo(pointList[i][0], pointList[i][1]);
-      }
-    } else if (options.lineType === 'dashed' || options.lineType === 'dotted') {
-      for (let i = 1; i < len; i += 2) {
-        context.moveTo(pointList[i - 1][0], pointList[i - 1][1]);
-        context.lineTo(pointList[i][0], pointList[i][1]);
-      }
-    }
-    context.stroke();
-    context.restore();
-    this.step = 0; // 缩放地图时重新绘制动画
   }
 
   render() {
