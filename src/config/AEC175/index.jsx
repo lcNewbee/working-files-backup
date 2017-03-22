@@ -21,6 +21,7 @@ window.guiConfig = guiConfig;
 
 
 const App = require('../../screens/App');
+const SharedComponents = require('shared/components');
 const pMainAP = require('../../screens/App/screens/MainAP');
 const sWizard = require('../../screens/App/screens/MainAP/Wizard');
 // const sThinModeNotice = require('../../screens/App/screens/MainAP/ThinModeNotice');
@@ -29,11 +30,8 @@ const pLogin = require('../../screens/App/screens/Login');
 // 布局
 const MainAP = require('../../screens/App/screens/MainAP');
 // 网络设置
-const pNetworkSettings = require('../../screens/App/screens/MainAP/screens/NetworkSettings');
-// 子菜单
 const sNetworkSettings = require('../../screens/App/screens/MainAP/screens/NetworkSettings/NetworkSettings');
 
-// const pSystemStatus = require('../../screens/App/screens/MainAP/screens/SystemStatus/SingleRadioOverview');
 const pSystemStatus = require('../../screens/App/screens/MainAP/screens/SystemStatus/MultiRadioOverview');
 const sSsidDetails = require('../../screens/App/screens/MainAP/screens/SystemStatus/SsidDetails');
 const sClientsDetails = require('../../screens/App/screens/MainAP/screens/SystemStatus/ClientsDetails');
@@ -42,29 +40,22 @@ const sRadioDetails = require('../../screens/App/screens/MainAP/screens/SystemSt
 const pQuickSetup = require('../../screens/App/screens/MainAP/screens/QuickSetup/CoverageQuickSetup');
 
 // 无线设置
-const pWirelessConfig = require('../../screens/App/screens/MainAP/screens/WirelessConfig');
-// 子菜单
-// const sBasic = require('../../screens/App/screens/MainAP/screens/WirelessConfig/Basic/BasicForP2p');
 const sBasic = require('../../screens/App/screens/MainAP/screens/WirelessConfig/Basic/BasicForCoverage');
 const sAdvance = require('../../screens/App/screens/MainAP/screens/WirelessConfig/Advance');
 // const sQos = require('../../screens/App/screens/MainAP/screens/WirelessConfig/QoS');
 const sACL = require('../../screens/App/screens/MainAP/screens/WirelessConfig/ACL');
 // 系统维护
-const pMaintenance = require('../../screens/App/screens/MainAP/screens/Maintenance');
 const sSystemMaintenance = require('../../screens/App/screens/MainAP/screens/Maintenance/SystemMaintenance');
 const sTimeSettings = require('../../screens/App/screens/MainAP/screens/Maintenance/TimeSettings');
 const sAccountSettings = require('../../screens/App/screens/MainAP/screens/Maintenance/AccountSettings');
-const pModeSettings = require('../../screens/App/screens/MainAP/screens/ModeSettings');
 const sModeSettings = require('../../screens/App/screens/MainAP/screens/ModeSettings/ModeSettings');
 // 工具
-const pTools = require('../../screens/App/screens/MainAP/screens/Tools');
 const sSpeedTest = require('../../screens/App/screens/MainAP/screens/Tools/SpeedTest');
 const sSiteSurvey = require('../../screens/App/screens/MainAP/screens/Tools/SiteSurvey');
 const sSystemLogs = require('../../screens/App/screens/MainAP/screens/Tools/SystemLogs');
 const sChannelUtilization = require('../../screens/App/screens/MainAP/screens/Tools/ChannelUtilization');
 // portal
 // const pPortal = require('../../screens/App/screens/MainAP/screens/PortalSettings');
-// const sPortalSettings = require('../../screens/App/screens/MainAP/screens/PortalSettings/PortalSettings');
 
 // 页面功能项配置
 const funConfig = {
@@ -115,13 +106,11 @@ const funConfig = {
   },
 };
 
-
-
 const routes = [{
   path: '/',
   component: App.Screen,
   formUrl: '/goform/get_product_info',
-  indexRoute: { component: pLogin.Screen },
+  indexPath: '/login',
   routes: [{
     path: '/main',
     component: MainAP.Screen,
@@ -131,9 +120,6 @@ const routes = [{
       icon: 'pie-chart',
       text: _('Status'),
       noTree: true,
-      indexRoute: {
-        onEnter: (nextState, replace) => replace('/main/status/overview'),
-      },
       routes: [
         {
           id: 'overview',
@@ -171,10 +157,7 @@ const routes = [{
       path: '/main/networksettings',
       icon: 'sphere',
       text: _('Network'),
-      component: pNetworkSettings,
-      indexRoute: {
-        onEnter: (nextState, replace) => replace('main/networksettings/networksettings'),
-      },
+      component: SharedComponents.TabContainer,
       routes: [
         {
           id: 'networksettings',
@@ -191,10 +174,7 @@ const routes = [{
       path: '/main/wirelessconfig',
       icon: 'wifi',
       text: _('Wireless'),
-      component: pWirelessConfig,
-      indexRoute: {
-        onEnter: (nextState, replace) => replace('/main/wirelessconfig/basic'),
-      },
+      component: SharedComponents.TabContainer,
       routes: [
         {
           id: 'basic',
@@ -221,35 +201,12 @@ const routes = [{
           component: sACL.Screen,
         },
       ],
-  }, /*{
-      id: 'portalsettings',
-      path: '/main/portalsettings',
-      icon: 'copy',
-      text: _('Portal'),
-      component: pPortal,
-      indexRoute: {
-        onEnter: (nextState, replace) => replace('main/portalsettings/portalsettings'),
-      },
-      routes: [
-        {
-          id: 'portalsettings',
-          noTree: true,
-          path: '/main/portalsettings/portalsettings',
-          fetchUrl: 'goform/get_portal_info',
-          saveUrl: 'goform/set_portal',
-          text: _('Portal Settings'),
-          component: sPortalSettings.Screen,
-        },
-      ],
-    },*/ {
+    }, {
       id: 'pMaintenance',
       path: '/main/maintenance',
       icon: 'wrench',
       text: _('System'),
-      component: pMaintenance,
-      indexRoute: {
-        onEnter: (nextState, replace) => replace('/main/maintenance/systemmaintenance'),
-      },
+      component: SharedComponents.TabContainer,
       routes: [
         {
           id: 'systemmaintenance',
@@ -275,8 +232,7 @@ const routes = [{
       path: '/main/tools',
       icon: 'cogs',
       text: _('Tools'),
-      component: pTools,
-      indexRoute: { onEnter: (nextState, replace) => replace('/main/tools/sitesurvey') },
+      component: SharedComponents.TabContainer,
       routes: [
         {
           id: 'sitesurvey',
@@ -303,8 +259,7 @@ const routes = [{
       path: '/main/modesettings',
       text: _('Mode'),
       icon: 'exchange',
-      component: pModeSettings,
-      indexRoute: { onEnter: (nextState, replace) => replace('/main/modesettings/modesettings') },
+      component: SharedComponents.TabContainer,
       routes: [
         {
           id: 'modesettings',
@@ -318,6 +273,10 @@ const routes = [{
   }, {
     path: '/wizard',
     component: sWizard.Screen,
+  }, {
+    path: '/login',
+    mainPath: '/main/status',
+    component: pLogin.Screen,
   }],
 }, {
   path: '*',

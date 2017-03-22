@@ -82,6 +82,7 @@ const sNetworkPort = require('../../screens/App/screens/MainAxc/screens/Network/
 /**
  * AP组管理
  */
+const cGroup = require('../../screens/App/screens/MainAxc/containers/Group');
 const sOverview = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Overview');
 const sClientList = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/ClientList');
 // const sFlowApp = require('../../screens/App/screens/MainAxc/screens/Monitor/screens/Flow/App');
@@ -103,6 +104,8 @@ const sEndpointProtection =
 const sLiveMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/LiveMap');
 const sApPlanMap =
     require('../../screens/App/screens/MainAxc/screens/Map/screens/ApPlanMap');
+const sClientsTraceList = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace');
+const sClientsTraceSettings = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace/Settings');
 
 /**
  * 系统管理
@@ -136,139 +139,126 @@ const sAcMaintenance =
 const sNetworkTimeProtocol =
     require('../../screens/App/screens/MainAxc/screens/System/screens/NetworkTimeProtocol');
 
-
-const funcConfig = {
-  networkNat: {
-    listNotIds: [
-      'ifname',
-    ],
-  },
-  ssidSettings: {
-    listNotIds: [
-      'mandatorydomain',
-      'vlanId',
-    ],
-  },
-};
-
 const routes = [
   {
+    id: 'root',
     path: '/',
     component: App.Screen,
     formUrl: 'goform/axcInfo',
-    mainPath: '/main/group/monitor/overview',
-    indexRoute: { component: sLogin.Screen },
+    indexPath: '/login',
     routes: [
       {
-        path: '/main/network',
+        id: 'main',
+        path: '/main/',
         component: sMainAxc.Screen,
-        icon: 'sphere',
-        text: _('Network '),
-        indexRoute: { onEnter: (nextState, replace) => replace('/main/network/interface') },
         routes: [
           {
-            id: 'networkInterface',
-            icon: 'th',
-            path: '/main/network/interface',
-            formUrl: 'goform/network/interface',
-            text: _('Interfaces'),
-            component: sInterfaces.Screen,
-          },
-          {
-            id: 'networkPort',
-            path: '/main/network/port',
-            icon: 'th-large',
-            formUrl: '/goform/network/port',
-            text: _('Ports'),
-            component: sNetworkPort.Screen,
-          },
-        ],
-      }, {
-        path: '/main/group',
-        component: sMainAxc.Screen,
-        icon: 'group',
-        text: _('AP Groups '),
-        indexRoute: { onEnter: (nextState, replace) => replace('/main/group/monitor') },
-        routes: [
-          {
-            id: 'monitor',
-            isIndex: true,
-            path: '/main/group/monitor',
-            icon: 'pie-chart',
-            text: _('Monitor'),
-            indexRoute: { onEnter: (nextState, replace) => replace('/main/group/monitor/overview') },
+            path: '/main/network',
+            component: SharedComponents.NavContainer,
+            icon: 'sphere',
+            text: _('Network '),
             routes: [
               {
-                id: 'overview',
-                path: '/main/group/monitor/overview',
-                formUrl: 'goform/group/overview',
-                text: _('Overview'),
-                component: sOverview.Screen,
-              }, {
+                id: 'networkInterface',
+                icon: 'th',
+                path: '/main/network/interface',
+                formUrl: 'goform/network/interface',
+                text: _('Interfaces'),
+                component: sInterfaces.Screen,
+              },
+              {
+                id: 'networkPort',
+                path: '/main/network/port',
+                icon: 'th-large',
+                formUrl: '/goform/network/port',
+                text: _('Ports'),
+                component: sNetworkPort.Screen,
+              },
+            ],
+          },
+          {
+            path: '/main/group',
+            icon: 'group',
+            text: _('AP Groups '),
+            component: cGroup.Screen,
+            indexPath: '/main/group/monitor/overview',
+            routes: [
+              {
+                id: 'monitor',
+                isIndex: true,
+                path: '/main/group/monitor',
+                icon: 'pie-chart',
+                text: _('Monitor'),
+                routes: [
+                  {
+                    id: 'overview',
+                    path: '/main/group/monitor/overview',
+                    formUrl: 'goform/group/overview',
+                    text: _('Overview'),
+                    component: sOverview.Screen,
+                  },
+                  {
+                    id: 'ssidStatus',
+                    path: '/main/group/monitor/ssid',
+                    formUrl: 'goform/group/ssid',
+                    text: _('SSID Status'),
+                    component: sSsidStatus.Screen,
+                  }, {
+                    id: 'safeStatus',
+                    path: '/main/group/monitor/safe',
+                    formUrl: 'goform/group/safeStatus',
+                    text: _('Secure State'),
+                    component: sSafeStatus.Screen,
+                  },
+                ],
+              },
+              {
                 id: 'apList',
-                path: '/main/group/monitor/aps',
+                icon: 'bullseye',
+                path: '/main/group/aps',
                 formUrl: 'goform/group/aps',
                 text: _('AP List'),
                 component: sApList.Screen,
               }, {
                 id: 'groupClient',
-                path: '/main/group/monitor/user',
+                icon: 'desktop',
+                path: '/main/group/user',
                 formUrl: 'goform/group/client',
                 text: _('Client List'),
                 component: sClientList.Screen,
               },
-              // {
-              //   id: 'groupTraffic',
-              //   path: '/main/group/monitor/flow',
-              //   formUrl: 'goform/group/flow/user',
-              //   text: _('Traffic'),
-              //   component: sFlowUser.Screen,
-              //   indexRoute: {
-              //     onEnter: (nextState, replace) => replace('/main/group/monitor/flow/user'),
-              //   },
-              //   routes: [
-              //     {
-              //       id: 'userFlow',
-              //       path: '/main/group/monitor/flow/user',
-              //       formUrl: 'goform/group/flow/user',
-              //       text: _('User'),
-              //       component: sFlowUser.Screen,
-              //     }, {
-              //       id: 'appFlow',
-              //       path: '/main/group/monitor/flow/app',
-              //       formUrl: 'goform/group/flow/app',
-              //       text: _('App'),
-              //       component: sFlowApp.Screen,
-              //     },
-              //   ],
-              // },
               {
-                id: 'ssidStatus',
-                path: '/main/group/monitor/ssid',
-                formUrl: 'goform/group/ssid',
-                text: _('SSID Status'),
-                component: sSsidStatus.Screen,
-              }, {
-                id: 'safeStatus',
-                path: '/main/group/monitor/safe',
-                formUrl: 'goform/group/safeStatus',
-                text: _('Secure State'),
-                component: sSafeStatus.Screen,
+                id: 'wireless',
+                isIndex: true,
+                path: '/main/group/wireless',
+                icon: 'wifi',
+                noTree: true,
+                component: SharedComponents.TabContainer,
+
+                // 不要删除空格
+                text: _('Radio '),
+                routes: [
+                  {
+                    id: 'ssidSettings',
+                    path: '/main/group/wireless/ssid',
+                    formUrl: 'goform/group/ssidSetting',
+                    text: _('SSID Settings'),
+                    component: sSsidSettings.Screen,
+                  }, {
+                    id: 'smartRf',
+                    path: '/main/group/wireless/smart',
+                    formUrl: 'goform/group/smartRf',
+                    text: _('Smart RF'),
+                    component: sSmartRf.Screen,
+                  },
+                ],
               },
-            ],
-          }, {
-            id: 'map',
-            isIndex: true,
-            path: '/main/group/map',
-            icon: 'map',
-            text: _('Map'),
-            indexRoute: { onEnter: (nextState, replace) => replace('/main/group/map/live') },
-            routes: [
               {
-                id: 'liveMap',
-                path: '/main/group/map/live',
-                text: _('Live Map'),
-                indexRoute: { onEnter: (nextState, replace) => replace('/main/group/map/live/list') },
+                id: 'map',
+                isIndex: true,
+                path: '/main/group/map',
+                icon: 'map',
+                text: _('Map'),
                 routes: [
                   {
                     id: 'liveMap',
@@ -280,251 +270,206 @@ const routes = [
                   }, {
 
                     id: 'buildMap',
-                    path: '/main/group/map/live/(:id)',
+                    path: '/main/group/map/building/:id',
                     text: _('AP Plan Map'),
                     formUrl: 'goform/group/map/apPlan',
                     component: sApPlanMap.Screen,
                     noNav: true,
                   },
+                  {
+                    id: 'cientsTrace',
+                    path: '/main/group/map/clients_trace',
+                    text: _('Clients Statistics'),
+                    icon: 'bar-chart',
+                    noTree: true,
+                    component: SharedComponents.TabContainer,
+                    routes: [
+                      {
+                        id: 'clientsTrace',
+                        path: '/main/group/map/clients_trace/list',
+                        formUrl: '/goform/group/map/clients_trace',
+                        text: _('Clients Statistics'),
+                        component: sClientsTraceList.Screen,
+                      }, {
+                        id: 'clientsTrace',
+                        path: '/main/group/map/clients_trace/settings',
+                        formUrl: 'goform/group/map/clients_trace',
+                        text: _('Settings'),
+                        component: sClientsTraceSettings.Screen,
+                      },
+                    ],
+                  },
                 ],
               },
-            ],
-          }, {
-            id: 'wireless',
-            isIndex: true,
-            path: '/main/group/wireless',
-            icon: 'wifi',
-            text: _('Wireless'),
-            indexRoute: { onEnter: (nextState, replace) => replace('/main/group/wireless/ssid') },
-            routes: [
               {
-                id: 'ssidSettings',
-                path: '/main/group/wireless/ssid',
-                formUrl: 'goform/group/ssidSetting',
-                text: _('SSID Settings'),
-                component: sSsidSettings.Screen,
-                funcConfig: funcConfig.ssidSettings,
-              }, {
                 id: 'wirelessAcl',
-                path: '/main/group/wireless/acl',
+                icon: 'ban',
+                path: '/main/group/acl',
                 formUrl: '/goform/group/wireless/acl',
                 text: _('ACL'),
                 component: sWirelessAcl.Screen,
-              }, {
-                id: 'smartRf',
-                path: '/main/group/wireless/smart',
-                formUrl: 'goform/group/smartRf',
-                text: _('Smart RF'),
-                component: sSmartRf.Screen,
-              }, {
-                id: 'timerPolicy',
-                path: '/main/group/wireless/timer',
-                formUrl: 'goform/group/timerPolicy',
-                text: _('Scheduler'),
-                component: sTimerPolicy.Screen,
-              }, {
+              },
+              {
                 id: 'wirelessSafePolicy',
-                path: '/main/group/wireless/safe',
+                icon: 'certificate',
+                path: '/main/group/safe',
                 formUrl: 'goform/group/timerPolicy',
                 text: _('Safe Policy'),
+                noTree: true,
                 component: SharedComponents.TabContainer,
-                indexRoute: {
-                  onEnter: (nextState, replace) => replace('/main/group/wireless/safe/wips'),
-                },
                 routes: [
                   {
                     id: 'wirelessWips',
-                    path: '/main/group/wireless/safe/wips',
+                    path: '/main/group/safe/wips',
                     formUrl: 'goform/group/wips',
-                    text: _('WIPS'),
+                    text: _('AP Scan Settings'),
                     component: sWips.Screen,
                   }, {
                     id: 'wirelessEndpointProtection',
-                    path: '/main/group/wireless/safe/endpointProtection',
+                    path: '/main/group/safe/endpointProtection',
                     formUrl: 'goform/group/wireless/protection',
                     text: _('Terminal Protection'),
                     component: sEndpointProtection.Screen,
                   },
                 ],
               },
+              {
+                id: 'timerPolicy',
+                icon: 'clock-o',
+                path: '/main/group/timer',
+                formUrl: 'goform/group/timerPolicy',
+                text: _('Scheduler'),
+                component: sTimerPolicy.Screen,
+              },
             ],
           },
-        ],
-      }, {
-        path: '/main/system',
-        component: sMainAxc.Screen,
-        icon: 'cogs',
-        text: _('System '),
-        indexRoute: { onEnter: (nextState, replace) => replace('/main/system/status') },
-        routes: [
           {
-            id: 'systemStatus',
-            icon: 'area-chart',
-            path: '/main/system/status',
-            formUrl: '/goform/system/status',
-            text: _('System Status'),
-            component: sSystemStatus.Screen,
-          }, {
-            id: 'alarmEvents',
-            icon: 'exclamation-circle',
-            path: '/main/system/alarm',
-            formUrl: '/goform/system/alarmEvents',
-            text: _('Alarm Events'),
-            component: sAlarmEvents.Screen,
-          }, {
-            id: 'systemLog',
-            icon: 'file-text-o',
-            path: '/main/system/log',
-            text: _('Log Management'),
-            noTree: true,
-            component: SharedComponents.TabContainer,
-            indexRoute: {
-              onEnter: (nextState, replace) => replace('/main/system/log/list'),
-            },
+            path: '/main/system',
+            component: SharedComponents.NavContainer,
+            icon: 'cogs',
+            text: _('System '),
+            indexRoute: { onEnter: (nextState, replace) => replace('/main/system/status') },
             routes: [
               {
+                id: 'systemStatus',
+                icon: 'area-chart',
+                path: '/main/system/status',
+                formUrl: '/goform/system/status',
+                text: _('System Status'),
+                component: sSystemStatus.Screen,
+              }, {
+                id: 'alarmEvents',
+                icon: 'exclamation-circle',
+                path: '/main/system/alarm',
+                formUrl: '/goform/system/alarmEvents',
+                text: _('Alarm Events'),
+                component: sAlarmEvents.Screen,
+              }, {
                 id: 'systemLog',
-                path: '/main/system/log/list',
-                formUrl: 'goform/system/log',
-                text: _('Log List'),
-                component: sSystemLogList.Screen,
-              }, {
-                id: 'systemLogMaintenance',
-                path: '/main/system/log/maintenance',
-                formUrl: 'goform/system/log',
-                text: _('Log Maintenance'),
-                component: sSystemLogMaintenance.Screen,
+                icon: 'file-text-o',
+                path: '/main/system/log',
+                text: _('System Log'),
+                noTree: true,
+                component: SharedComponents.TabContainer,
+                routes: [
+                  {
+                    id: 'systemLog',
+                    path: '/main/system/log/list',
+                    formUrl: 'goform/system/log',
+                    text: _('Log List'),
+                    component: sSystemLogList.Screen,
+                  }, {
+                    id: 'systemLogMaintenance',
+                    path: '/main/system/log/maintenance',
+                    formUrl: 'goform/system/log',
+                    text: _('Log Maintenance'),
+                    component: sSystemLogMaintenance.Screen,
+                  },
+                ],
               },
-            ],
-          },
-          // {
-          //   id: 'SNPM',
-          //   icon: 'exclamation-circle',
-          //   formUrl: 'goform/system/snpm',
-          //   path: '/main/system/SNPM',
-          //   text: _('SNMP'),
-          //   component: sSNMP.Screen,
-          // },
-          // {
-          //   id: 'activeStandby',
-          //   isIndex: true,
-          //   formUrl: 'goform/system/activeStandby',
-          //   path: '/main/system/activeStandby',
-          //   icon: 'refresh',
-          //   text: _('Backup Settings'),
-          //   component: sActiveStandby.Screen,
-          // // }, {
-          // //   id: 'cluster',
-          // //   isIndex: true,
-          // //   path: '/main/system/cluster',
-          // //   icon: 'server',
-          // //   text: _('Custer Settings'),
-          // //   component: sCluster.Screen,
-          // },
-          // {
-          //   id: 'signatures',
-          //   isIndex: true,
-          //   path: '/main/system/signatures',
-          //   formUrl: 'goform/system/signatures',
-          //   icon: 'tasks',
-          //   text: _('Signatures'),
-          //   component: sSignatures.Screen,
-          // },
-          {
-            id: 'License',
-            isIndex: true,
-            path: '/main/system/license',
-            formUrl: 'goform/system/license',
-            icon: 'file-text',
-            text: _('License'),
-            component: sLicense.Screen,
-          }, {
-            id: 'apMaintenance',
-            isIndex: true,
-            path: '/main/system/upgrade',
-            icon: 'dot-circle-o ',
-            text: _('AP Maintenance'),
-            noTree: true,
-            component: SharedComponents.TabContainer,
-            indexRoute: {
-              onEnter: (nextState, replace) => replace('/main/system/ap/base'),
-            },
-            routes: [
               {
-                id: 'apMaintenanceBase',
-                path: '/main/system/ap/base',
+                id: 'License',
+                isIndex: true,
+                path: '/main/system/license',
+                formUrl: 'goform/system/license',
+                icon: 'file-text',
+                text: _('License'),
+                component: sLicense.Screen,
+              }, {
+                id: 'apMaintenance',
+                isIndex: true,
+                path: '/main/system/ap',
+                icon: 'dot-circle-o ',
+                text: _('AP Maintenance'),
+                noTree: true,
+                component: SharedComponents.TabContainer,
+                indexPath: '/main/system/ap/base',
+                routes: [
+                  {
+                    id: 'apMaintenanceBase',
+                    path: '/main/system/ap/base',
+                    formUrl: 'goform/system/maintenance',
+                    text: _('Configuration'),
+                    component: sApMaintenance.Screen,
+                  }, {
+                    id: 'apsVersion',
+                    path: '/main/system/ap/version',
+                    formUrl: 'goform/system/ap/version',
+                    text: _('AP Firmware'),
+                    component: sApVersion.Screen,
+                  }, {
+                    id: 'apModel',
+                    path: '/main/system/ap/model',
+                    formUrl: 'goform/system/ap/model',
+                    text: _('AP Model'),
+                    component: sApModel.Screen,
+                  },
+                ],
+              }, {
+                id: 'acMaintenance',
+                isIndex: true,
                 formUrl: 'goform/system/maintenance',
-                text: _('Configuration'),
-                component: sApMaintenance.Screen,
+                path: '/main/system/maintenance',
+                icon: 'cog',
+                text: _('AC Maintenance'),
+                component: sAcMaintenance.Screen,
               }, {
-                id: 'apsVersion',
-                path: '/main/system/upgrade/aps',
-                formUrl: 'goform/system/ap/version',
-                text: _('AP Firmware'),
-                component: sApVersion.Screen,
+                id: 'ntp',
+                isIndex: true,
+                formUrl: 'goform/system/networktimeprotocol',
+                path: '/main/system/networktimeprotocol',
+                icon: 'clock-o',
+                text: _('NTP'),
+                component: sNetworkTimeProtocol.Screen,
               }, {
-                id: 'apModel',
-                path: '/main/system/upgrade/apModel',
-                formUrl: 'goform/system/ap/model',
-                text: _('AP Model'),
-                component: sApModel.Screen,
+                id: 'admin',
+                isIndex: true,
+                path: '/main/system/admin',
+                formUrl: 'goform/system/admins',
+                icon: 'user',
+                text: _('Admin Account'),
+                component: sSystemAdmin.Screen,
               },
             ],
-          }, {
-            id: 'acMaintenance',
-            isIndex: true,
-            formUrl: 'goform/system/maintenance',
-            path: '/main/system/maintenance',
-            icon: 'cog',
-            text: _('AC Maintenance'),
-            component: sAcMaintenance.Screen,
-          }, {
-            id: 'ntp',
-            isIndex: true,
-            formUrl: 'goform/system/networktimeprotocol',
-            path: '/main/system/networktimeprotocol',
-            icon: 'clock-o',
-            text: _('NTP'),
-            component: sNetworkTimeProtocol.Screen,
-          }, {
-            id: 'admin',
-            isIndex: true,
-            path: '/main/system/admin',
-            formUrl: 'goform/system/admins',
-            icon: 'user',
-            text: _('Admin Account'),
-            component: sSystemAdmin.Screen,
           },
         ],
       },
-      // {
-      //   path: '/main/portal',
-      //   component: sMainAxc.Screen,
-      //   icon: 'road',
-      //   text: _('OPEN PORTAL'),
-      //   indexRoute: { onEnter: (nextState, replace) => replace('/main/portal/overview') },
-      //   routes: [
-      //     {
-      //       id: 'overview',
-      //       icon: 'home',
-      //       path: '/main/portal/overview',
-      //       formUrl: 'goform/group/overview',
-      //       text: _('Overview'),
-      //       component: sOverview.Screen,
-      //     },
-      //   ],
-      // },
       {
         path: '/wizard',
         component: sWizard.Screen,
       },
+      {
+        path: '/login',
+        component: sLogin.Screen,
+        mainPath: '/main/group/monitor/overview',
+      },
     ],
   }, {
+    id: 'notFound',
     path: '*',
     component: NotFound,
   },
 ];
-
 
 // 配置模块页面 store
 const reducers = {

@@ -33,6 +33,14 @@ document.getElementsByTagName('body')[0].className += ' ' + b28n.getLang();
 
 // 主APP
 const App = require('../../screens/App');
+const SharedComponents = require('shared/components');
+
+// 登录界面
+const pLogin = require('../../screens/App/screens/Login');
+const sWizard = require('../../screens/App/screens/Wizard');
+
+// 布局
+const Main = require('../../screens/App/screens/Main').Screen;
 
 // system status
 const pSystemStatus = require('../../screens/App/screens/Main/screens/SystemStatus');
@@ -43,7 +51,6 @@ const pQuickSetup = require('../../screens/App/screens/Main/screens/QuickSetup')
 // System Settings
 const pNetworkSettings = require('../../screens/App/screens/Main/screens/NetworkSettings');
 const sNetworkSettings = require('../../screens/App/screens/Main/screens/NetworkSettings/NetworkSettings');
-// const sCommonSettings = require('../../screens/App/screens/Main/screens/SystemSettings/CommonSettings');
 const sTimeSettings = require('../../screens/App/screens/Main/screens/Maintenance/TimeSettings');
 const sAccountSettings = require('../../screens/App/screens/Main/screens/Maintenance/AccountSettings');
 
@@ -55,62 +62,22 @@ const sAdvance = require('../../screens/App/screens/Main/screens/WirelessConfig/
 // const sQoS = require('../../screens/App/screens/Main/screens/WirelessConfig/QoS');
 const sACL = require('../../screens/App/screens/Main/screens/WirelessConfig/ACL');
 
-
-// 主菜单
-// const pMainMenu = require('../../screens/App/screens/Main/screens/MainMenu');
-// 主菜单下的子菜单
-// const sSystemstatus = require('../../screens/App/screens/Main/screens/MainMenu/screens/Systemstatus');
-// const sNetworkmonitor = require('../../screens/App/screens/Main/screens/MainMenu/screens/Networkmonitor');
-
-
-// 网络服务
-// const pNetworkService = require('../../screens/App/screens/Main/screens/NetworkService');
-// 子菜单
-// const sNTPClient = require('../../screens/App/screens/Main/screens/NetworkService/NTPClient');
-
-
-// 登录界面
-const pLogin = require('../../screens/App/screens/Login');
-// const sRegister = require('../../screens/App/screens/SignUp');
-const sWizard = require('../../screens/App/screens/Wizard');
-
-// 布局
-const Main = require('../../screens/App/screens/Main').Screen;
-// const Settings = require('../../screens/App/screens/Main/screens/Settings');
-
 // 热点统计
 const pStatus = require('../../screens/App/screens/Main/screens/Stats');
 
-// 设备
-// const pDevices = require('../../screens/App/screens/Main/screens/Devices');
-
-// 设备地图
-// const pDeviceMap = require('../../screens/App/screens/Main/screens/DeviceMap');
-// const pPreview = require('../../screens/App/screens/Main/screens/Preview');
-
 // 维护
-const pMaintenance = require('../../screens/App/screens/Main/screens/Maintenance');
 const sSystemMaintenance = require('../../screens/App/screens/Main/screens/Maintenance/SystemMaintenance');
 // 工具
-const pTools = require('../../screens/App/screens/Main/screens/Tools');
 const sSpeedTest = require('../../screens/App/screens/Main/screens/Tools/SpeedTest');
-// const sAntenna = require('../../screens/App/screens/Main/screens/Tools/Antenna');
 const sSiteSurvey = require('../../screens/App/screens/Main/screens/Tools/SiteSurvey');
 const sSystemLogs = require('../../screens/App/screens/Main/screens/Tools/SystemLogs');
 const sChannelUtilization = require('../../screens/App/screens/Main/screens/Tools/ChannelUtilization');
-// 设置
-// const pGroupSettings = require('../../screens/App/screens/Main/screens/Settings/screens/GroupSettings');
-// const sWireless = require('../../screens/App/screens/Main/screens/Settings/screens/Wireless');
-// const sPortal = require('../../screens/App/screens/Main/screens/Settings/screens/Portal');
-// const sGuest = require('../../screens/App/screens/Main/screens/Settings/screens/Guest');
-// const sVoip = require('../../screens/App/screens/Main/screens/Settings/screens/Voip');
-// const sAdmin = require('../../screens/App/screens/Main/screens/Settings/screens/Admin');
 
 const routes = [{
   path: '/',
   component: App.Screen,
   formUrl: '/goform/get_system_info',
-  indexRoute: { component: pLogin.Screen },
+  indexPath: '/login',
   routes: [{
     path: '/main',
     component: Main,
@@ -134,10 +101,7 @@ const routes = [{
       path: '/main/networksettings',
       icon: 'sphere',
       text: _('Network'),
-      component: pNetworkSettings,
-      indexRoute: {
-        onEnter: (nextState, replace) => replace('main/networksettings/networksettings'),
-      },
+      component: SharedComponents.TabContainer,
       routes: [
         {
           id: 'networksettings',
@@ -153,10 +117,7 @@ const routes = [{
       path: '/main/wirelessconfig',
       icon: 'wifi',
       text: _('Wireless'),
-      component: pWirelessConfig,
-      indexRoute: {
-        onEnter: (nextState, replace) => replace('/main/wirelessconfig/basic'),
-      },
+      component: SharedComponents.TabContainer,
       routes: [
         {
           id: 'basic',
@@ -184,10 +145,7 @@ const routes = [{
       path: '/main/maintenance',
       icon: 'wrench',
       text: _('Maintenance'),
-      component: pMaintenance,
-      indexRoute: {
-        onEnter: (nextState, replace) => replace('/main/maintenance/systemmaintenance'),
-      },
+      component: SharedComponents.TabContainer,
       routes: [
         {
           id: 'systemmaintenance',
@@ -212,8 +170,7 @@ const routes = [{
       path: '/main/tools',
       icon: 'cogs',
       text: _('Tools'),
-      component: pTools,
-      indexRoute: { onEnter: (nextState, replace) => replace('/main/tools/speedtest') },
+      component: SharedComponents.TabContainer,
       routes: [
         {
           id: 'speedtest',
@@ -245,8 +202,11 @@ const routes = [{
   }, {
     path: '/wizard',
     component: sWizard.Screen,
-  },
-  ],
+  }, {
+    path: '/login',
+    mainPath: '/main/status',
+    component: pLogin.Screen,
+  }],
 }, {
   path: '*',
   component: NotFound,

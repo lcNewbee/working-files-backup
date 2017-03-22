@@ -38,6 +38,7 @@ export default function renderRoutesTree(routes) {
     } else if (RouteComponent) {
       retComponent = (
         <Route
+
           path={route.path}
           render={
             (props) => {
@@ -86,11 +87,12 @@ export function renderRoutesList(routes) {
       if (indexPath) {
         routeList.push(
           <Route
-            exact
+            key={`${curKey}Redirect`}
             path={route.path}
             render={() => (
               <Redirect to={indexPath} />
             )}
+            exact
           />,
         );
       }
@@ -103,7 +105,7 @@ export function renderRoutesList(routes) {
             routeProps => <route.component {...routeProps} route={route} />
           }
         />);
-      
+
       // 如果无 component 又有子路由
       } else if (sunRoutes.length > 0) {
         routeList = routeList.concat(renderRoutesList(sunRoutes));

@@ -21,6 +21,10 @@ $main-blue: #0093dd;
     transition: color .2s ease-in-out;
     user-select: none;
 
+    > .icon {
+      line-height: 20px;
+    }
+
     .o-nav__icon-tabs,
     .o-nav__icon-toggle {
       position: absolute;

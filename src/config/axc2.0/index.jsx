@@ -79,7 +79,6 @@ const sMainAxc = require('../../screens/App/screens/MainAxc');
 // const sNetworkVlan = require('../../screens/App/screens/MainAxc/screens/Network/screens/VLAN');
 const sInterfaces = require('../../screens/App/screens/MainAxc/screens/Network/screens/Interfaces');
 const sDhcpList = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/DHCP/DhcpList');
-// const sDhcpRelay = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/DhcpRelay');
 const sNetworkRoutes = require('../../screens/App/screens/MainAxc/screens/Network/screens/Routes');
 const sNetworkNat = require('../../screens/App/screens/MainAxc/screens/Network/screens/Nat');
 // const sNetworkAcl = require('../../screens/App/screens/MainAxc/screens/Network/screens/ACL');
@@ -125,7 +124,6 @@ const sEndpointProtection =
 // const sFlowReport =
 //     require('../../screens/App/screens/MainAxc/screens/Report/screens/FlowReport');
 // const sUsersAnalysis =
-//     require('../../screens/App/screens/MainAxc/screens/Report/screens/BusinessReport/screens/UsersAnalysis');
 const sLiveMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/LiveMap');
 const sApPlanMap =
     require('../../screens/App/screens/MainAxc/screens/Map/screens/ApPlanMap');
@@ -218,13 +216,6 @@ const routes = [
                     text: _('DHCP List'),
                     component: sDhcpList.Screen,
                   },
-                  // {
-                  //   id: 'dhcpRelay',
-                  //   path: '/main/network/dhcp/relay',
-                  //   formUrl: 'goform/network/dhcp/relay',
-                  //   text: _('DHCP Relay'),
-                  //   component: sDhcpRelay.Screen,
-                  // },
                 ],
               }, {
                 id: 'networkNat',
@@ -235,15 +226,6 @@ const routes = [
                 funcConfig: funcConfig.networkNat,
                 component: sNetworkNat.Screen,
               },
-              // 先隐藏ACL
-              // {
-              //   id: 'networkAcl',
-              //   icon: 'ban',
-              //   path: '/main/network/acl',
-              //   text: _('Access Control'),
-              //   formUrl: 'goform/network/acl',
-              //   component: sNetworkAcl.Screen,
-              // },
               {
                 id: 'staticRoutes',
                 path: '/main/network/static_routes',
@@ -406,6 +388,7 @@ const routes = [
                     formUrl: 'goform/group/ssidSetting',
                     text: _('SSID Settings'),
                     component: sSsidSettings.Screen,
+                    funcConfig: funcConfig.ssidSettings,
                   }, {
                     id: 'smartRf',
                     path: '/main/group/wireless/smart',
@@ -625,10 +608,11 @@ const routes = [
         component: sLogin.Screen,
         mainPath: '/main/group/monitor/overview',
       },
-      {
-        component: NotFound,
-      },
     ],
+  }, {
+    path: '*',
+    id: 'notFound',
+    component: NotFound,
   },
 ];
 

@@ -32,7 +32,6 @@ const MainAP = require('../../screens/App/screens/MainAP');
 // 子菜单
 const sNetworkSettings = require('../../screens/App/screens/MainAP/screens/NetworkSettings/NetworkSettings');
 
-// const pSystemStatus = require('../../screens/App/screens/MainAP/screens/SystemStatus/SingleRadioOverview');
 const pSystemStatus = require('../../screens/App/screens/MainAP/screens/SystemStatus/MultiRadioOverview');
 const sSsidDetails = require('../../screens/App/screens/MainAP/screens/SystemStatus/SsidDetails');
 const sClientsDetails = require('../../screens/App/screens/MainAP/screens/SystemStatus/ClientsDetails');
@@ -41,7 +40,6 @@ const sRadioDetails = require('../../screens/App/screens/MainAP/screens/SystemSt
 const pQuickSetup = require('../../screens/App/screens/MainAP/screens/QuickSetup/CoverageQuickSetup');
 
 // 无线设置
-// const sBasic = require('../../screens/App/screens/MainAP/screens/WirelessConfig/Basic/BasicForP2p');
 const sBasic = require('../../screens/App/screens/MainAP/screens/WirelessConfig/Basic/BasicForCoverage');
 const sAdvance = require('../../screens/App/screens/MainAP/screens/WirelessConfig/Advance');
 // const sQos = require('../../screens/App/screens/MainAP/screens/WirelessConfig/QoS');
@@ -58,7 +56,6 @@ const sSystemLogs = require('../../screens/App/screens/MainAP/screens/Tools/Syst
 const sChannelUtilization = require('../../screens/App/screens/MainAP/screens/Tools/ChannelUtilization');
 // portal
 // const pPortal = require('../../screens/App/screens/MainAP/screens/PortalSettings');
-// const sPortalSettings = require('../../screens/App/screens/MainAP/screens/PortalSettings/PortalSettings');
 
 // 页面功能项配置
 const funConfig = {
