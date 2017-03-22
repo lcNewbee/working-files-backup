@@ -9,8 +9,8 @@ babelRegister();
 global.sinon = sinon;
 
 // mock 翻译函数
-if(!window._) {
-  window._ = string.format;
+if(!window.__) {
+  window.__ = string.format;
 }
 
 // Tests are placed alongside files under test.

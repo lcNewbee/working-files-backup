@@ -65,7 +65,7 @@ describe('b28n', () => {
     });
   });
 
-  describe('#_()', () => {
+  describe('#__()', () => {
     const testDict = {
       english: '英语',
       dict: '词典',
@@ -75,19 +75,19 @@ describe('b28n', () => {
     b28n.addDict(testDict, 'cn');
 
     it('should do nothing when key not in dict', () => {
-      expect(_('nothing')).toBe('nothing');
+      expect(__('nothing')).toBe('nothing');
     });
 
     it('should translate with added dict', () => {
       b28n.setLang('cn');
-      expect(_('english')).toBe('英语');
+      expect(__('english')).toBe('英语');
       b28n.setLang('en');
-      expect(_('english')).toBe('english');
+      expect(__('english')).toBe('english');
     });
 
     it('should translate with added dict and repalce %s', () => {
       b28n.setLang('cn');
-      expect(_('This is %s and %s', 12, 23)).toBe('这是 12 和 23');
+      expect(__('This is %s and %s', 12, 23)).toBe('这是 12 和 23');
     });
   });
 });
