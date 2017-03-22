@@ -10,18 +10,16 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const ReactRouterDom = require('react-router-dom');
 const appActions = require('shared/actions/app');
-const thunkMiddleware = require('redux-thunk').default;
 
+const thunkMiddleware = require('redux-thunk').default;
 const combineReducers = require('redux').combineReducers;
 const applyMiddleware = require('redux').applyMiddleware;
 const createStore = require('redux').createStore;
 const Provider = require('react-redux').Provider;
-const prodConfig = require('./config/axcIndia');
+const renderRoutesSwitch = require('shared/components/Organism/RouterConfig').renderRoutesSwitch;
+const prodConfig = require('./config/ap');
 
 const HashRouter = ReactRouterDom.HashRouter;
-const Route = ReactRouterDom.Route;
-// const unmountComponentAtNode = ReactDOM.unmountComponentAtNode;
-
 const mountNode = document.getElementById('app');
 
 const remoteActionMiddleware = applyMiddleware(
@@ -44,20 +42,11 @@ if (prodConfig.appConfig) {
 }
 
 function renderApp(renderRoutes) {
-  const appRootRoute = renderRoutes[0];
-
   // 主渲染入口
   ReactDOM.render(
     <Provider store={stores}>
       <HashRouter>
-        <Route
-          path={appRootRoute.path}
-          render={
-            props => (
-              <appRootRoute.component {...props} route={appRootRoute} />
-            )
-          }
-        />
+        {renderRoutesSwitch(renderRoutes)}
       </HashRouter>
     </Provider>,
     mountNode,

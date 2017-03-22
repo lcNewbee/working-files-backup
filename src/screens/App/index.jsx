@@ -73,25 +73,9 @@ export default class App extends Component {
     }
   }
   componentDidMount() {
-    const { location, history, match, route } = this.props;
-
     this.updateRouter();
-    let indexPath = route.indexPath;
-
-    if (match.url === location.pathname) {
-      indexPath = indexPath || route.routes[0].path;
-      history.replace(indexPath);
-    }
   }
   componentDidUpdate(prevProps) {
-    const { location, history, match, route } = this.props;
-    let indexPath = route.indexPath;
-
-    if (match.url === location.pathname) {
-      indexPath = indexPath || route.routes[0].path;
-      history.replace(indexPath);
-    }
-    
     // 更新路由
     if (this.props.location.pathname !== prevProps.location.pathname) {
       this.updateRouter();

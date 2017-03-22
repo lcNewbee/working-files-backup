@@ -5,6 +5,12 @@
 > - [new] 新特性
 > - [fix] Bug 修复
 
+2.0.0-beta.3 / 2017-3-22
+==================
+- [new] 开发：react-router升级到 v4.0
+- [breaking] 开发：产品配置Routes接口改变
+- [fix] 开发：解决不能热加载reducer与react-router配置问题
+
 2.0.0-beta.2 / 2017-01-23
 ==================
 - [new] 开发：更新 webpack 大版本至 2
