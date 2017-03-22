@@ -13,16 +13,16 @@ const onlinetimeFilter = utils.filter('connectTime');
 const checkboxOptions = [
   {
     value: '0',
-    label: _('OFF'),
+    label: __('OFF'),
   }, {
     value: '1',
-    label: _('ON'),
+    label: __('ON'),
   },
 ];
 const listOptions = fromJS([
   {
     id: 'ip',
-    text: _('IP'),
+    text: __('IP'),
     formProps: {
       type: 'text',
       required: true,
@@ -32,7 +32,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'name',
-    text: _('Name'),
+    text: __('Name'),
     formProps: {
       type: 'text',
       required: true,
@@ -43,7 +43,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'sharedSecret',
-    text: _('Shared Secret'),
+    text: __('Shared Secret'),
     formProps: {
       type: 'password',
       required: true,
@@ -54,11 +54,11 @@ const listOptions = fromJS([
     },
   }, {
     id: 'ex2',
-    text: _('Acc Send Interval'),
+    text: __('Acc Send Interval'),
     defaultValue: '300',
     formProps: {
       type: 'number',
-      help: _('Seconds'),
+      help: __('Seconds'),
       min: '0',
       max: '99999999',
       required: true,
@@ -68,10 +68,10 @@ const listOptions = fromJS([
     },
   }, {
     id: 'ex3',
-    text: _('Check Period'),
+    text: __('Check Period'),
     formProps: {
       defaultValue: '600',
-      help: _('Seconds'),
+      help: __('Seconds'),
       min: '0',
       max: '99999999',
       type: 'number',
@@ -82,10 +82,10 @@ const listOptions = fromJS([
     },
   }, {
     id: 'ex4',
-    text: _('Idle Time'),
+    text: __('Idle Time'),
     defaultValue: '600',
     formProps: {
-      help: _('Second'),
+      help: __('Second'),
       min: '0',
       max: '99999999',
       type: 'number',
@@ -100,7 +100,7 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: _('Standard'),
+        label: __('Standard'),
       },
     ],
     noTable: true,
@@ -109,12 +109,12 @@ const listOptions = fromJS([
     formProps: {
       type: 'select',
       required: true,
-      label: _('Equipment Type'),
-      placeholder: _('Please Select ') + _('Equipment Type'),
+      label: __('Equipment Type'),
+      placeholder: __('Please Select ') + __('Equipment Type'),
     },
   }, {
     id: 'description',
-    text: _('Description'),
+    text: __('Description'),
     formProps: {
       type: 'textarea',
       required: true,
@@ -125,7 +125,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'ex1',
-    text: _('is Delegated'),
+    text: __('is Delegated'),
     defaultValue: '0',
     options: checkboxOptions,
     formProps: {
@@ -135,7 +135,7 @@ const listOptions = fromJS([
   }, {
     id: 'ex5',
     defaultValue: '0',
-    text: _('Concurrency Unlock'),
+    text: __('Concurrency Unlock'),
     options: checkboxOptions,
     formProps: {
       type: 'switch',

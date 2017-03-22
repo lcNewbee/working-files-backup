@@ -25,14 +25,14 @@ import * as appActions from 'shared/actions/app';
 const $$listOptions = fromJS([
   {
     id: 'index',
-    text: _('Index'),
+    text: __('Index'),
   },
   {
     id: 'status',
-    text: _('Status'),
+    text: __('Status'),
     options: [
-      { label: _('UP'), value: 'up' },
-      { label: _('OFF'), value: 'off' },
+      { label: __('UP'), value: 'up' },
+      { label: __('OFF'), value: 'off' },
     ],
     formProps: {
       type: 'select',
@@ -40,10 +40,10 @@ const $$listOptions = fromJS([
   },
   {
     id: 'arpAgent',
-    text: _('ARP Agent'),
+    text: __('ARP Agent'),
     options: [
-      { label: _('ON'), value: 'on' },
-      { label: _('OFF'), value: 'off' },
+      { label: __('ON'), value: 'on' },
+      { label: __('OFF'), value: 'off' },
     ],
     formProps: {
       type: 'select',
@@ -58,49 +58,49 @@ const $$listOptions = fromJS([
   },
   {
     id: 'firstIpv4Ip',
-    text: _('First IPV4 IP'),
+    text: __('First IPV4 IP'),
     formProps: {
       type: 'text',
     },
   },
   {
     id: 'firstIpv4Mask',
-    text: _('First IPV4 Mask'),
+    text: __('First IPV4 Mask'),
     formProps: {
       type: 'text',
     },
   },
   {
     id: 'secondIpv4Ip',
-    text: _('Second IPV4 IP'),
+    text: __('Second IPV4 IP'),
     formProps: {
       type: 'text',
     },
   },
   {
     id: 'secondIpv4Mask',
-    text: _('Second IPV4 Mask'),
+    text: __('Second IPV4 Mask'),
     formProps: {
       type: 'text',
     },
   },
   {
     id: 'Ipv6Ip',
-    text: _('IPV6 IP'),
+    text: __('IPV6 IP'),
     formProps: {
       type: 'text',
     },
   },
   {
     id: 'Ipv6Mask',
-    text: _('IPV6 Mask'),
+    text: __('IPV6 Mask'),
     formProps: {
       type: 'text',
     },
   },
   {
     id: 'description',
-    text: _('Description'),
+    text: __('Description'),
     formProps: {
       type: 'text',
     },
@@ -170,7 +170,7 @@ export default class NetworkInterface extends React.Component {
       //     },
       //   ),
       // )) {
-      //   ret = _('Same %s item already exists', _('segment'));
+      //   ret = __('Same %s item already exists', __('segment'));
       // }
   //   }
 

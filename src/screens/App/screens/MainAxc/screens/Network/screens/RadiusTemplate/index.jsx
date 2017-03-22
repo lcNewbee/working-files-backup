@@ -15,7 +15,7 @@ import * as propertiesActions from 'shared/actions/properties';
 const authServer = fromJS([
   {
     id: 'template_name',
-    label: _('Name'),
+    label: __('Name'),
     form: 'authServer',
     type: 'text',
     maxLength: '31',
@@ -27,7 +27,7 @@ const authServer = fromJS([
     }),
   }, {
     id: 'nasip',
-    label: _('Nas IP'),
+    label: __('Nas IP'),
     form: 'authServer',
     type: 'text',
     required: true,
@@ -39,11 +39,11 @@ const authServer = fromJS([
     id: 'authpri_ipaddr',
     fieldset: 'auth',
     fieldsetOption: {
-      legend: _('Primary Auth Server'),
+      legend: __('Primary Auth Server'),
       className: 'cols col-6',
     },
     form: 'authServer',
-    label: _('IP Address'),
+    label: __('IP Address'),
     type: 'text',
     required: true,
     validator: validator({
@@ -51,7 +51,7 @@ const authServer = fromJS([
     }),
   }, {
     id: 'authpri_port',
-    label: _('Port'),
+    label: __('Port'),
     fieldset: 'auth',
     form: 'authServer',
     required: true,
@@ -61,7 +61,7 @@ const authServer = fromJS([
     max: '65535',
   }, {
     id: 'authpri_key',
-    label: _('Password'),
+    label: __('Password'),
     fieldset: 'auth',
     form: 'authServer',
     type: 'password',
@@ -72,10 +72,10 @@ const authServer = fromJS([
     }),
   }, {
     id: 'authsecond_ipaddr',
-    label: _('IP Address'),
+    label: __('IP Address'),
     fieldset: 'auth_secondary',
     fieldsetOption: {
-      legend: _('Secondary Auth Server'),
+      legend: __('Secondary Auth Server'),
       className: 'cols col-6',
     },
     type: 'text',
@@ -85,7 +85,7 @@ const authServer = fromJS([
     }),
   }, {
     id: 'authsecond_port',
-    label: _('Port'),
+    label: __('Port'),
     fieldset: 'auth_secondary',
     type: 'number',
     form: 'authServer',
@@ -93,7 +93,7 @@ const authServer = fromJS([
     max: '65535',
   }, {
     id: 'authsecond_key',
-    label: _('Password'),
+    label: __('Password'),
     fieldset: 'auth_secondary',
     type: 'password',
     form: 'authServer',
@@ -107,10 +107,10 @@ const authServer = fromJS([
 const accServer = fromJS([
   {
     id: 'acctpri_ipaddr',
-    label: _('IP Address'),
+    label: __('IP Address'),
     fieldset: 'primary',
     fieldsetOption: {
-      legend: _('Primary Accounting Server'),
+      legend: __('Primary Accounting Server'),
       className: 'cols col-6',
     },
     required: true,
@@ -122,7 +122,7 @@ const accServer = fromJS([
   },
   {
     id: 'acctpri_port',
-    label: _('Port'),
+    label: __('Port'),
     fieldset: 'primary',
     required: true,
     defaultValue: '1813',
@@ -133,7 +133,7 @@ const accServer = fromJS([
   }, {
     id: 'acctpri_key',
     required: true,
-    label: _('Password'),
+    label: __('Password'),
     fieldset: 'primary',
     form: 'accServer',
     type: 'password',
@@ -143,9 +143,9 @@ const accServer = fromJS([
     }),
   }, {
     id: 'acctsecond_ipaddr',
-    label: _('IP Address'),
+    label: __('IP Address'),
     fieldsetOption: {
-      legend: _('Secondary Accounting Server'),
+      legend: __('Secondary Accounting Server'),
       className: 'cols col-6',
     },
     fieldset: 'secondary',
@@ -156,7 +156,7 @@ const accServer = fromJS([
     }),
   }, {
     id: 'acctsecond_port',
-    label: _('Port'),
+    label: __('Port'),
     fieldset: 'secondary',
     type: 'number',
     form: 'accServer',
@@ -164,7 +164,7 @@ const accServer = fromJS([
     max: '65535',
   }, {
     id: 'acctsecond_key',
-    label: _('Password'),
+    label: __('Password'),
     fieldset: 'secondary',
     form: 'accServer',
     type: 'password',
@@ -178,13 +178,13 @@ const accServer = fromJS([
 const advancedSetting = fromJS([
   {
     id: 'username_format',
-    label: _('User Format'),
+    label: __('User Format'),
     fieldset: 'parameter',
     defaultValue: 'UNCHANGE',
     noTable: true,
     type: 'select',
     required: true,
-    placeholder: _('Please Select ') + _('User Format'),
+    placeholder: __('Please Select ') + __('User Format'),
     options: [
       {
         value: 'UNCHANGE',
@@ -199,7 +199,7 @@ const advancedSetting = fromJS([
     ],
   }, {
     id: 'quiet_time',
-    label: _('Silent Time'),
+    label: __('Silent Time'),
     fieldset: 'parameter',
     defaultValue: '300',
     min: '60',
@@ -207,10 +207,10 @@ const advancedSetting = fromJS([
     noTable: true,
     type: 'number',
     required: true,
-    help: _('Seconds'),
+    help: __('Seconds'),
   }, {
     id: 'retry_times',
-    label: _('Max Messaging Times'),
+    label: __('Max Messaging Times'),
     fieldset: 'parameter',
     type: 'number',
     defaultValue: '3',
@@ -219,18 +219,18 @@ const advancedSetting = fromJS([
     required: true,
   }, {
     id: 'resp_time',
-    label: _('Response Timeout Time'),
+    label: __('Response Timeout Time'),
     fieldset: 'parameter',
     type: 'number',
     defaultValue: '3',
     min: '1',
     max: '30',
     required: true,
-    help: _('Seconds'),
+    help: __('Seconds'),
   },
   {
     id: 'accton_enable',
-    label: _('Accounting-on'),
+    label: __('Accounting-on'),
     defaultValue: '0',
     value: '1',
     fieldset: 'parameter',
@@ -238,10 +238,10 @@ const advancedSetting = fromJS([
     noTable: true,
     noForm: true,
     type: 'checkbox',
-    text: _('Enable'),
+    text: __('Enable'),
   }, {
     id: 'accton_sendtimes',
-    label: _('Accounting-on Resend Times'),
+    label: __('Accounting-on Resend Times'),
     fieldset: 'acctonAdvance',
     type: 'number',
     defaultValue: '3',
@@ -255,13 +255,13 @@ const advancedSetting = fromJS([
     },
   }, {
     id: 'accton_sendinterval',
-    label: _('Accounting-on Resend Interval'),
+    label: __('Accounting-on Resend Interval'),
     fieldset: 'acctonAdvance',
     noTable: true,
     noForm: true,
     type: 'number',
     required: true,
-    help: _('Seconds'),
+    help: __('Seconds'),
     defaultValue: '3',
     min: '1',
     max: '30',
@@ -271,18 +271,18 @@ const advancedSetting = fromJS([
   },
   {
     id: 'acct_interim_interval',
-    label: _('Accounting Messaging Interval'),
+    label: __('Accounting Messaging Interval'),
     fieldset: 'acctonAdvance',
     noTable: true,
     required: true,
     type: 'number',
-    help: _('Seconds'),
+    help: __('Seconds'),
     defaultValue: '720',
     min: '300',
     max: '3600',
   }, {
     id: 'realretrytimes',
-    label: _('Accounting Message-Resend Times'),
+    label: __('Accounting Message-Resend Times'),
     fieldset: 'acctonAdvance',
     type: 'number',
     required: true,
@@ -296,7 +296,7 @@ const advancedSetting = fromJS([
 const listOptions = fromJS([
   {
     id: 'template_name',
-    label: _('Name'),
+    label: __('Name'),
     type: 'text',
     required: true,
     notEditable: true,
@@ -304,25 +304,25 @@ const listOptions = fromJS([
   },
   {
     id: 'nasip',
-    label: _('Nas IP'),
+    label: __('Nas IP'),
     required: true,
   },
   {
     id: 'authpri_ipaddr',
-    label: _('Auth Server IP'),
+    label: __('Auth Server IP'),
     fieldset: 'auth',
   }, {
     id: 'authpri_port',
-    label: _('Auth Server Port'),
+    label: __('Auth Server Port'),
     fieldset: 'auth',
     defaultValue: '1812',
   }, {
     id: 'acctpri_ipaddr',
-    label: _('Accounting Server IP'),
+    label: __('Accounting Server IP'),
     fieldset: 'Accounting',
   }, {
     id: 'acctpri_port',
-    label: _('Accounting Server Port'),
+    label: __('Accounting Server Port'),
     fieldset: 'Accounting',
     defaultValue: '',
   },
@@ -473,7 +473,7 @@ export default class View extends React.Component {
                 marginRight: '5px',
               }}
             />
-            {_('Base Settings')}
+            {__('Base Settings')}
           </h3>
         </div>
         {
@@ -509,7 +509,7 @@ export default class View extends React.Component {
               }}
               onClick={() => this.toggleBox('isAccountingShow')}
             />
-            {_('Accounting Server Settings')}
+            {__('Accounting Server Settings')}
           </h3>
         </div>
         {
@@ -544,7 +544,7 @@ export default class View extends React.Component {
               }}
               onClick={() => this.toggleBox('isAdvancedShow')}
             />
-            {_('Advanced Settings')}
+            {__('Advanced Settings')}
           </h3>
         </div>
         {

@@ -14,16 +14,16 @@ import AppScreen from 'shared/components/Template/AppScreen';
 const flowRateFilter = utils.filter('flowRate');
 
 const msg = {
-  days: _('Days'),
+  days: __('Days'),
 };
 const timeTypeSwitchs = fromJS([
   {
     value: 'today',
-    label: _('Today'),
+    label: __('Today'),
   },
   {
     value: 'yesterday',
-    label: _('Yesterday'),
+    label: __('Yesterday'),
   },
   {
     value: 'week',
@@ -41,23 +41,23 @@ const timeTypeSwitchs = fromJS([
 const ssidTableOptions = fromJS([
   {
     id: 'time',
-    text: _('Time'),
+    text: __('Time'),
     width: '20%',
   }, {
     id: 'mac',
-    text: _('MAC'),
+    text: __('MAC'),
     width: '20%',
   }, {
     id: 'ssid',
-    text: _('SSID'),
+    text: __('SSID'),
     width: '20%',
   }, {
     id: 'channel',
-    text: _('Channel'),
+    text: __('Channel'),
     width: '20%',
   }, {
     id: 'rssi',
-    text: _('rssi'),
+    text: __('rssi'),
     width: '20%',
   },
 ]);
@@ -74,7 +74,7 @@ function getTerminalTypeOption(serverData) {
   let dataList = serverData.get('terminalType');
   const ret = $$commonPieOption.mergeDeep({
     title: {
-      text: _('Online Number'),
+      text: __('Online Number'),
       subtext: `${serverData.get('clientsNumber') || 0}`,
     },
     legend: {
@@ -88,7 +88,7 @@ function getTerminalTypeOption(serverData) {
     },
     series: [
       {
-        name: _('Type'),
+        name: __('Type'),
       },
     ],
   }).toJS();
@@ -97,7 +97,7 @@ function getTerminalTypeOption(serverData) {
   if (List.isList(dataList)) {
     if (dataList.size < 1) {
       dataList = fromJS([{
-        name: _('None'),
+        name: __('None'),
         value: 0,
       }]);
     } else {
@@ -128,30 +128,30 @@ function getApStatusOption(serverData) {
   const ret = $$commonPieOption.mergeDeep({
     color: [colors[7], colors[2]],
     title: {
-      text: _('AP Status'),
+      text: __('AP Status'),
       subtext: `${onlineNum} / ${offlineNum}`,
     },
     legend: {
       formatter: (name) => {
         let num = serverData.get('offline') || 0;
 
-        if (name === _('Online')) {
+        if (name === __('Online')) {
           num = serverData.get('online') || 0;
         }
         return `${name}: ${num}`;
       },
-      data: [_('Offline'), _('Online')],
+      data: [__('Offline'), __('Online')],
     },
     series: [
       {
-        name: _('Status'),
+        name: __('Status'),
       },
     ],
   }).toJS();
 
   ret.series[0].data = [
-    { value: offlineNum, name: _('Offline') },
-    { value: onlineNum, name: _('Online') },
+    { value: offlineNum, name: __('Offline') },
+    { value: onlineNum, name: __('Online') },
   ];
 
   return ret;
@@ -200,7 +200,7 @@ function getFlowOption(serverData, timeType) {
       }
     },
     legend: {
-      data: ['AP', _('Wireless')],
+      data: ['AP', __('Wireless')],
     },
     grid: {
       left: '0',
@@ -232,7 +232,7 @@ function getFlowOption(serverData, timeType) {
     }],
     yAxis: [{
       type: 'value',
-      name: _('KB'),
+      name: __('KB'),
       splitNumber: 5,
       min: 0,
       axisLabel: {
@@ -259,14 +259,14 @@ function getFlowOption(serverData, timeType) {
         smooth: true,
       },
       {
-        name: _('Wireless'),
+        name: __('Wireless'),
         type: 'line',
         smooth: true,
       },
     ],
   };
   let xAxisData;
-  let xAxisName = _('Days');
+  let xAxisName = __('Days');
   let $$dataList = serverData.getIn(['flowList']);
   let maxVal = 0;
   let maxVal1 = 0;
@@ -295,7 +295,7 @@ function getFlowOption(serverData, timeType) {
     xAxisData = List(new Array(24)).map(
       (val, i) => `${i}:00`,
     ).toJS();
-    xAxisName = _('Hours');
+    xAxisName = __('Hours');
   } else if (timeType === 'week') {
     xAxisData = List(new Array(7)).map(
       (val, i) => i + 1,
@@ -387,7 +387,7 @@ export default class View extends React.Component {
           <div className="t-overview__section row">
             <div className="cols col-6" >
               <div className="element">
-                <h3>{_('AP')}</h3>
+                <h3>{__('AP')}</h3>
               </div>
               <div className="element">
                 <EchartReact
@@ -399,7 +399,7 @@ export default class View extends React.Component {
             </div>
             <div className="cols col-6">
               <div className="element">
-                <h3>{_('Clients')}</h3>
+                <h3>{__('Clients')}</h3>
               </div>
               <div className="element row">
                 <EchartReact
@@ -411,7 +411,7 @@ export default class View extends React.Component {
             </div>
           </div>
 
-          <h3 className="element t-overview__header">{_('Historical Graphs')}</h3>
+          <h3 className="element t-overview__header">{__('Historical Graphs')}</h3>
           <div className="t-overview__section">
             <div className="element t-overview__section-header">
               <h3>
@@ -420,7 +420,7 @@ export default class View extends React.Component {
                     marginRight: '16px',
                   }}
                 >
-                  {_('Traffic')}
+                  {__('Traffic')}
                 </span>
                 <Select
                   options={timeTypeSwitchs.toJS()}
@@ -439,7 +439,7 @@ export default class View extends React.Component {
             </div>
           </div>
           <h3 className="element t-overview__header">
-            {_('Rogue AP List')}
+            {__('Rogue AP List')}
           </h3>
           <div className="element t-overview__section">
             <Table
@@ -450,7 +450,7 @@ export default class View extends React.Component {
             />
           </div>
           <h3 className="element t-overview__header">
-            {_('Interfering AP List')}
+            {__('Interfering AP List')}
           </h3>
           <div className="element t-overview__section">
             <Table

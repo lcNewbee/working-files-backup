@@ -99,8 +99,8 @@ const propTypes = {
 const defaultProps = {
   title: '',
   role: 'dialog',
-  okText: _('OK'),
-  cancelText: _('Cancel'),
+  okText: __('OK'),
+  cancelText: __('Cancel'),
   transitionEnter: true,
   transitionLeave: true,
   okButton: true,

@@ -10,7 +10,7 @@ import * as screenActions from 'shared/actions/screens';
 const formOptions = fromJS([
   {
     id: 'enable',
-    text: _('Enable'),
+    text: __('Enable'),
     type: 'checkbox',
   },
 ]);

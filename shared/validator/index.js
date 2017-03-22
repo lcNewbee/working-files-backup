@@ -14,7 +14,7 @@ if(!_) {
 }
 
 var msg = {
-  thisField: _('This field')
+  thisField: __('This field')
 };
 
 /**

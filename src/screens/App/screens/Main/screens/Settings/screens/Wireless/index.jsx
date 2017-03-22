@@ -14,18 +14,18 @@ import { fetchDeviceGroups } from '../GroupSettings/actions';
 import myReducer from './reducer';
 
 const msg = {
-  upSpeed: _('Up Speed'),
-  downSpeed: _('Down Speed'),
-  selectGroup: _('Select Group'),
+  upSpeed: __('Up Speed'),
+  downSpeed: __('Down Speed'),
+  selectGroup: __('Select Group'),
 };
 const encryptionOptions = [
   {
     value: 'none',
-    label: _('NONE'),
+    label: __('NONE'),
   },
   {
     value: 'psk-mixed',
-    label: _('STRONG'),
+    label: __('STRONG'),
   },
 ];
 const channelBandwidthOptions = fromJS([
@@ -63,7 +63,7 @@ function getCountryOptions() {
   return channelsList.map(item =>
      ({
        value: item.country,
-       label: b28n.getLang() === 'cn' ? _(item.cn) : _(item.en),
+       label: b28n.getLang() === 'cn' ? __(item.cn) : __(item.en),
      }),
   ).toJS();
 }
@@ -75,7 +75,7 @@ function getChannelsOptions(currCountry) {
   const channelsOptions = [
     {
       value: '0',
-      label: _('auto'),
+      label: __('auto'),
     },
   ];
   const channelsOption = channelsList.find(item =>
@@ -204,7 +204,7 @@ export class Wireless extends PureComponent {
         let label = groupname;
 
         if (groupname === 'Default') {
-          label = _('Ungrouped Devices');
+          label = __('Ungrouped Devices');
         }
         return {
           value: groupname,
@@ -240,7 +240,7 @@ export class Wireless extends PureComponent {
 
     return (
       <div>
-        <h3>{ _('Current Group') }</h3>
+        <h3>{ __('Current Group') }</h3>
         <FormGroup
           type="select"
           label={msg.selectGroup}
@@ -249,9 +249,9 @@ export class Wireless extends PureComponent {
           id="groupname"
           onChange={this.onChangeGroup}
         />
-        <h3>{_('Basic Configuration')}</h3>
+        <h3>{__('Basic Configuration')}</h3>
         <FormGroup
-          label={_('SSID')}
+          label={__('SSID')}
           required
           value={getCurrData('ssid')}
           maxLength="31"
@@ -261,7 +261,7 @@ export class Wireless extends PureComponent {
         />
         <FormGroup
           type="switch"
-          label={_('Encryption')}
+          label={__('Encryption')}
           options={encryptionOptions}
           value={getCurrData('encryption')}
           onChange={this.onUpdateSettings('encryption')}
@@ -269,7 +269,7 @@ export class Wireless extends PureComponent {
         {
           getCurrData('encryption') === 'psk-mixed' ?
             <FormGroup
-              label={_('Password')}
+              label={__('Password')}
               type="password"
               required
               value={getCurrData('password')}
@@ -279,7 +279,7 @@ export class Wireless extends PureComponent {
             /> : null
         }
         <FormGroup
-          label={_('VLAN')}
+          label={__('VLAN')}
           value={getCurrData('vlanid')}
           required={getCurrData('vlanenable') == '1'}
           disabled={getCurrData('vlanenable') != '1'}
@@ -291,7 +291,7 @@ export class Wireless extends PureComponent {
             checked={getCurrData('vlanenable') == '1'}
             onChange={this.onUpdate('vlanenable')}
           />
-          { _('VLAN ID:') }
+          { __('VLAN ID:') }
           <FormInput
             type="text"
             style={{ marginLeft: '3px' }}
@@ -302,17 +302,17 @@ export class Wireless extends PureComponent {
           />
           <span className="help">(2 - 4095)</span>
         </FormGroup>
-        <h3>{_('Radio Settings')}</h3>
+        <h3>{__('Radio Settings')}</h3>
         <FormGroup
           type="select"
-          label={_('Country')}
+          label={__('Country')}
           options={countryOptions}
           value={getCurrData('country')}
           onChange={this.onUpdateSettings('country')}
         />
         <FormGroup
           type="switch"
-          label={_('Frequency')}
+          label={__('Frequency')}
           inputStyle={{
             width: '199px',
           }}
@@ -337,12 +337,12 @@ export class Wireless extends PureComponent {
             <div>
               <FormGroup
                 type="select"
-                label={_('Channel')}
+                label={__('Channel')}
                 options={channelsOptions}
                 value={getCurrData('channel5g')}
                 onChange={this.onUpdateSettings('channel5g')}
               />
-              <FormGroup label={_('Channel Bandwidth')} >
+              <FormGroup label={__('Channel Bandwidth')} >
                 <Switchs
                   options={myChannelWidthOptions}
                   value={getCurrData('channelsBandwidth5g')}
@@ -354,12 +354,12 @@ export class Wireless extends PureComponent {
             <div>
               <FormGroup
                 type="select"
-                label={_('Channel')}
+                label={__('Channel')}
                 options={channelsOptions}
                 value={getCurrData('channel')}
                 onChange={this.onUpdateSettings('channel')}
               />
-              <FormGroup label={_('Channel Bandwidth')} >
+              <FormGroup label={__('Channel Bandwidth')} >
                 <Switchs
                   options={channelBandwidthOptions}
                   value={getCurrData('channelsBandwidth')}
@@ -369,7 +369,7 @@ export class Wireless extends PureComponent {
             </div>
             )
         }
-        <h3>{_('Bandwidth Control')}</h3>
+        <h3>{__('Bandwidth Control')}</h3>
         <FormGroup
           label={msg.upSpeed}
           help="KB/s"
@@ -383,7 +383,7 @@ export class Wireless extends PureComponent {
             checked={getCurrData('upstream') === '' || getCurrData('upstream') > 0}
             onChange={this.onUpdate('upstream')}
           />
-          {`${_('limited to')} `}
+          {`${__('limited to')} `}
           <FormInput
             type="number"
             maxLength="6"
@@ -409,7 +409,7 @@ export class Wireless extends PureComponent {
             checked={getCurrData('downstream') === '' || getCurrData('downstream') > 0}
             onChange={this.onUpdate('downstream')}
           />
-          {`${_('limited to')} `}
+          {`${__('limited to')} `}
           <FormInput
             type="number"
             maxLength="6"

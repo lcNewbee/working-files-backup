@@ -32,12 +32,12 @@ const slotIdOptions = [
 ];
 
 const balanceAlgthmOptions = [
-  { label: _('Source MAC'), value: 'srcmac' },
-  { label: _('Destiation MAc'), value: 'desmac' },
-  { label: _('Source & Destination MAC'), value: 'mac' },
-  { label: _('Source IP'), value: 'srcip' },
-  { label: _('Destination IP'), value: 'desmac' },
-  { label: _('Source & Destination IP'), value: 'ip' },
+  { label: __('Source MAC'), value: 'srcmac' },
+  { label: __('Destiation MAc'), value: 'desmac' },
+  { label: __('Source & Destination MAC'), value: 'mac' },
+  { label: __('Source IP'), value: 'srcip' },
+  { label: __('Destination IP'), value: 'desmac' },
+  { label: __('Source & Destination IP'), value: 'ip' },
 ];
 
 export default class View extends React.Component {
@@ -67,7 +67,7 @@ export default class View extends React.Component {
       {
         id: 'id',
         type: 'select',
-        text: _('ID'),
+        text: __('ID'),
         notEditable: true,
         formProps: {
           noAdd: true,
@@ -75,28 +75,28 @@ export default class View extends React.Component {
       },
       {
         id: 'objectName',
-        text: _('Object Name'),
+        text: __('Object Name'),
         formProps: {
           type: 'text',
         },
       },
       {
         id: 'ip',
-        text: _('IP'),
+        text: __('IP'),
         formProps: {
           type: 'text',
         },
       },
       {
         id: 'mask',
-        text: _('Mask'),
+        text: __('Mask'),
         formProps: {
           type: 'text',
         },
       },
       {
         id: 'description',
-        text: _('Description'),
+        text: __('Description'),
         formProps: {
           type: 'textarea',
         },

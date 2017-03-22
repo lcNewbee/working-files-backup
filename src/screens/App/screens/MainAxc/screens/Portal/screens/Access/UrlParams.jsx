@@ -17,17 +17,17 @@ const defaultProps = {};
 const settingsOptions = fromJS([
   {
     id: 'basname',
-    label: _('Bas Name'),
+    label: __('Bas Name'),
     fieldset: 'url_setting',
     type: 'text',
-    legend: _('URL Parameter'),
+    legend: __('URL Parameter'),
     validator: validator({
       rules: 'utf8Len:[1,255]',
     }),
   },
   {
     id: 'userip',
-    label: _('User IP'),
+    label: __('User IP'),
     fieldset: 'url_setting',
     type: 'text',
     required: true,
@@ -38,7 +38,7 @@ const settingsOptions = fromJS([
   {
     id: 'usermac',
     fieldset: 'url_setting',
-    label: _('User Mac'),
+    label: __('User Mac'),
     type: 'text',
     validator: validator({
       rules: 'utf8Len:[1,32]',
@@ -47,7 +47,7 @@ const settingsOptions = fromJS([
   {
     id: 'url',
     fieldset: 'url_setting',
-    label: _('URL'),
+    label: __('URL'),
     type: 'text',
     validator: validator({
       rules: 'utf8Len:[1,32]',
@@ -57,7 +57,7 @@ const settingsOptions = fromJS([
     id: 'basip',
     required: true,
     fieldset: 'url_setting',
-    label: _('Bas IP'),
+    label: __('Bas IP'),
     type: 'text',
     validator: validator({
       rules: 'utf8Len:[1,32]',
@@ -66,7 +66,7 @@ const settingsOptions = fromJS([
   {
     id: 'ssid',
     fieldset: 'url_setting',
-    label: _('SSID'),
+    label: __('SSID'),
     type: 'text',
     validator: validator({
       rules: 'utf8Len:[1,255]',
@@ -75,7 +75,7 @@ const settingsOptions = fromJS([
   {
     id: 'apmac',
     fieldset: 'url_setting',
-    label: _('AP Mac'),
+    label: __('AP Mac'),
     type: 'text',
     validator: validator({
       rules: 'utf8Len:[1,255]',
@@ -84,7 +84,7 @@ const settingsOptions = fromJS([
   {
     id: 'apip',
     fieldset: 'url_setting',
-    label: _('AP IP'),
+    label: __('AP IP'),
     type: 'text',
     validator: validator({
       rules: 'utf8Len:[1,255]',

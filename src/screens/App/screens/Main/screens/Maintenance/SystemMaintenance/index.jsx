@@ -102,7 +102,7 @@ export default class SystemMaintenance extends Component {
             that.props.createModal({
               id: 'settings',
               role: 'alert',
-              text: _('File verification failed! Please upload the right upgrading file.'),
+              text: __('File verification failed! Please upload the right upgrading file.'),
             });
           }
         });
@@ -114,7 +114,7 @@ export default class SystemMaintenance extends Component {
     this.props.createModal({
       id: 'settings',
       role: 'confirm',
-      text: _('Sure you want to UPGRADE the software and REBOOT ?'),
+      text: __('Sure you want to UPGRADE the software and REBOOT ?'),
       apply: upgradeDevice,
     });
   }
@@ -138,7 +138,7 @@ export default class SystemMaintenance extends Component {
         const step = Promise.resolve();
         step.then(() => {
           const barInfo = that.props.selfState.get('progressBarInfo')
-                          .set('title', _('The configuration is restoring now, please wait ...'))
+                          .set('title', __('The configuration is restoring now, please wait ...'))
                           .set('time', 120).set('isShow', true).set('start', false);
           that.props.changeProgressBarInfo(barInfo);
         }).then(() => {
@@ -156,7 +156,7 @@ export default class SystemMaintenance extends Component {
             that.props.createModal({
               id: 'settings',
               role: 'alert',
-              text: _('Save configuration failed !'),
+              text: __('Save configuration failed !'),
             });
           }
         });
@@ -168,7 +168,7 @@ export default class SystemMaintenance extends Component {
     this.props.createModal({
       id: 'settings',
       role: 'confirm',
-      text: _('Sure you want to RESTORE the configuration and REBOOT ?'),
+      text: __('Sure you want to RESTORE the configuration and REBOOT ?'),
       apply: saveConfig,
     });
   }
@@ -180,7 +180,7 @@ export default class SystemMaintenance extends Component {
       const step = Promise.resolve();
       step.then(() => {
         that.props.changeProgressBarInfo(fromJS({
-          title: _('The device is rebooting now, please wait ...'),
+          title: __('The device is rebooting now, please wait ...'),
           time: 90,
           isShow: true,
         }));
@@ -193,7 +193,7 @@ export default class SystemMaintenance extends Component {
     this.props.createModal({
       id: 'settings',
       role: 'confirm',
-      text: _('Sure you want to REBOOT the device ?'),
+      text: __('Sure you want to REBOOT the device ?'),
       apply: rebootDevice,
     });
   }
@@ -205,7 +205,7 @@ export default class SystemMaintenance extends Component {
       const step = Promise.resolve();
       step.then(() => {
         that.props.changeProgressBarInfo(fromJS({
-          title: _('The device is reseting now, please wait ...'),
+          title: __('The device is reseting now, please wait ...'),
           time: 90,
           isShow: true,
         }));
@@ -218,7 +218,7 @@ export default class SystemMaintenance extends Component {
     this.props.createModal({
       id: 'settings',
       role: 'confirm',
-      text: _('Sure you want to restore the device into factory default ?'),
+      text: __('Sure you want to restore the device into factory default ?'),
       apply: resetDevice,
     });
   }
@@ -231,7 +231,7 @@ export default class SystemMaintenance extends Component {
         this.props.createModal({
           id: 'settings',
           role: 'alert',
-          text: _('Backup failed! Please try again.'),
+          text: __('Backup failed! Please try again.'),
         });
       }
     });
@@ -241,7 +241,7 @@ export default class SystemMaintenance extends Component {
     return (
       <div className="o-form">
         <div className="o-form__legend">
-          {_('Upgrade')}
+          {__('Upgrade')}
         </div>
         <form
           action="/cgi-bin/upload.cgi"
@@ -249,7 +249,7 @@ export default class SystemMaintenance extends Component {
           encType="multipart/form-data"
           id="upgradeForm"
         >
-          <FormGroup label={_('Firmware Upgrade')}>
+          <FormGroup label={__('Firmware Upgrade')}>
             <FormInput
               type="file"
               name="filename"
@@ -257,27 +257,27 @@ export default class SystemMaintenance extends Component {
             />
             <Button
               type="button"
-              text={_('Upgrade')}
+              text={__('Upgrade')}
               onClick={this.onFarewellUpgrade}
             />
           </FormGroup>
         </form>
         <div className="o-form__legend">
-          {_('Reboot')}
+          {__('Reboot')}
         </div>
-        <FormGroup label={_('Reboot device')}>
+        <FormGroup label={__('Reboot device')}>
           <Button
-            text={_('Reboot')}
+            text={__('Reboot')}
             onClick={this.onRebootDevice}
           />
         </FormGroup>
 
         <div className="o-form__legend">
-          {_('Configuration')}
+          {__('Configuration')}
         </div>
-        <FormGroup label={_('Backup configuration')}>
+        <FormGroup label={__('Backup configuration')}>
           <Button
-            text={_('Backup')}
+            text={__('Backup')}
             onClick={this.onBackupConfig}
           />
         </FormGroup>
@@ -289,23 +289,23 @@ export default class SystemMaintenance extends Component {
           encType="multipart/form-data"
         >
           <FormGroup
-            label={_('Restore configuration')}
+            label={__('Restore configuration')}
           >
             <FormInput
               type="file"
               id="restoreFile"
             />
             <Button
-              text={_('Restore')}
+              text={__('Restore')}
               onClick={this.onConfigurationRestore}
             />
           </FormGroup>
         </form>
         <FormGroup
-          label={_('Reset configuration')}
+          label={__('Reset configuration')}
         >
           <Button
-            text={_('Reset')}
+            text={__('Reset')}
             onClick={this.onResetDevice}
           />
         </FormGroup>
@@ -324,7 +324,7 @@ export default class SystemMaintenance extends Component {
             title={this.props.selfState.getIn(['upgradeBarInfo', 'firstBar', 'title'])}
             time={this.props.selfState.getIn(['upgradeBarInfo', 'firstBar', 'time'])}
             callback={() => {
-              const txt = _('Upgrading, please DO NOT cut the power !');
+              const txt = __('Upgrading, please DO NOT cut the power !');
               const upgradeBarInfo = this.props.selfState.get('upgradeBarInfo')
                                         .setIn(['secondBar', 'start'], true)
                                         .setIn(['firstBar', 'title'], txt);

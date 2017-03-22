@@ -11,14 +11,14 @@ import * as appActions from 'shared/actions/app';
 const listOptions = fromJS([
   {
     id: 'name',
-    text: _('Name'),
+    text: __('Name'),
     formProps: {
       type: 'text',
       required: true,
     },
   }, {
     id: 'showInfo',
-    text: _('Show Info'),
+    text: __('Show Info'),
     noTable: true,
     formProps: {
       type: 'select',
@@ -27,36 +27,36 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: _('Hide'),
+        label: __('Hide'),
       }, {
         value: '1',
-        label: _('Show'),
+        label: __('Show'),
       },
     ],
   }, {
     id: 'img',
-    text: _('Logo'),
+    text: __('Logo'),
     formProps: {
       type: 'file',
       required: true,
     },
   }, {
     id: 'address',
-    text: _('Address'),
+    text: __('Address'),
     formProps: {
       type: 'text',
       required: true,
     },
   }, {
     id: 'phone',
-    text: _('Phone'),
+    text: __('Phone'),
     formProps: {
       type: 'text',
       required: true,
     },
   }, {
     id: 'creatDate',
-    text: _('Create Date'),
+    text: __('Create Date'),
     defaultValue: '2018-2-28',
     formProps: {
       type: 'date',
@@ -64,14 +64,14 @@ const listOptions = fromJS([
     },
   }, {
     id: 'description',
-    text: _('Description'),
+    text: __('Description'),
     formProps: {
       type: 'textarea',
       required: true,
     },
   }, {
     id: 'userName',
-    text: _('User Name'),
+    text: __('User Name'),
     noForm: true,
     defaultValue: 'Admin',
     formProps: {

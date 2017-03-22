@@ -10,35 +10,35 @@ import * as screenActions from 'shared/actions/screens';
 const settingsFormOptions = fromJS([
   {
     id: 'widsenable',
-    text: _('Enable'),
+    text: __('Enable'),
     type: 'checkbox',
     dataType: 'number',
     defaultValue: '0',
   }, {
     id: 'attacttime',
-    label: _('Harass Attact Time'),
+    label: __('Harass Attact Time'),
     min: 1,
     type: 'number',
     dataType: 'number',
     defaultValue: 1,
-    help: _('Seconds'),
+    help: __('Seconds'),
   }, {
     id: 'attactcnt',
-    label: _('Harass Number'),
+    label: __('Harass Number'),
     min: 1,
     type: 'number',
     dataType: 'number',
     defaultValue: 1,
   }, {
     id: 'dyaging',
-    label: _('Release Time'),
-    legend: _('Dynamic Blacklists'),
+    label: __('Release Time'),
+    legend: __('Dynamic Blacklists'),
     fieldset: 'Dynamic',
     min: 1,
     type: 'number',
     dataType: 'number',
     defaultValue: 3600,
-    help: _('Seconds'),
+    help: __('Seconds'),
   },
 ]);
 

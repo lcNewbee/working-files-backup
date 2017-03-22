@@ -131,7 +131,7 @@ export default class NetworkSettings extends React.Component {
             if (gateway !== '' && typeof (gateway) !== 'undefined' && mask !== '' && typeof (mask) !== 'undefined') {
               msg = validator.combine.noBroadcastIp(gateway, mask);
               if (proto === 'static' && msg) {
-                showError(_('Gateway can not be broadcast IP address!'));
+                showError(__('Gateway can not be broadcast IP address!'));
                 return;
               }
             }
@@ -144,7 +144,7 @@ export default class NetworkSettings extends React.Component {
                 return;
               }
             }
-            msg = _('Primary and Secondary DNS can not be the same !');
+            msg = __('Primary and Secondary DNS can not be the same !');
             if (dns1 !== '' && typeof (dns1) !== 'undefined' &&
                 dns2 !== '' && typeof (dns2) !== 'undefined' &&
                 validator.combine.notEqual(dns1, dns2, msg)) {
@@ -241,7 +241,7 @@ export default class NetworkSettings extends React.Component {
           noFooter={false}
           okButton={false}
           draggable
-          title={_('The configuration is saving now, please wait...')}
+          title={__('The configuration is saving now, please wait...')}
         >
           <ProgressBar
             isShow
@@ -262,9 +262,9 @@ export default class NetworkSettings extends React.Component {
           funConfig.router ? (
             // 网络设置，有router模式
             <div>
-              <h3>{_('LAN/WAN Settings')}</h3>
+              <h3>{__('LAN/WAN Settings')}</h3>
               <FormGroup
-                label={_('Device Mode')}
+                label={__('Device Mode')}
               >
                 <div
                   style={{
@@ -274,7 +274,7 @@ export default class NetworkSettings extends React.Component {
                   <FormInput
                     type="radio"
                     name="networkmode"
-                    text={_('Switch Mode')}
+                    text={__('Switch Mode')}
                     checked={networkMode === 'switch'}
                     onChange={() => {
                       this.props.updateItemSettings({ networkMode: 'switch' });
@@ -283,7 +283,7 @@ export default class NetworkSettings extends React.Component {
                   <FormInput
                     type="radio"
                     name="networkmode"
-                    text={_('Router Mode')}
+                    text={__('Router Mode')}
                     checked={networkMode === 'router'}
                     onChange={() => {
                       this.props.updateItemSettings({ networkMode: 'router' });
@@ -294,7 +294,7 @@ export default class NetworkSettings extends React.Component {
             </div>
           ) : (
             <div>
-              <h3>{_('LAN Settings')}</h3>
+              <h3>{__('LAN Settings')}</h3>
             </div>
           )
         }
@@ -304,10 +304,10 @@ export default class NetworkSettings extends React.Component {
             <div>
               <FormGroup
                 type="select"
-                label={_('LAN IP Mode')}
+                label={__('LAN IP Mode')}
                 options={[
-                  { value: 'dhcp', label: _('DHCP') },
-                  { value: 'static', label: _('Static') },
+                  { value: 'dhcp', label: __('DHCP') },
+                  { value: 'static', label: __('Static') },
                 ]}
                 minWidth="100px"
                 value={proto}
@@ -320,13 +320,13 @@ export default class NetworkSettings extends React.Component {
                   <div>
                     <FormGroup
                       type="text"
-                      label={_('Fallback IP')}
+                      label={__('Fallback IP')}
                       value={fallbackIp}
                       disabled
                     />
                     <FormGroup
                       type="text"
-                      label={_('Fallback Netmask')}
+                      label={__('Fallback Netmask')}
                       value={fallbackMask}
                       disabled
                     />
@@ -335,7 +335,7 @@ export default class NetworkSettings extends React.Component {
                   <div>
                     <FormGroup
                       type="text"
-                      label={_('IP Address')}
+                      label={__('IP Address')}
                       value={ip || ''}
                       onChange={data => this.props.updateItemSettings({
                         ip: data.value,
@@ -345,7 +345,7 @@ export default class NetworkSettings extends React.Component {
                     />
                     <FormGroup
                       type="text"
-                      label={_('Subnet Mask')}
+                      label={__('Subnet Mask')}
                       value={mask || ''}
                       onChange={data => this.props.updateItemSettings({
                         mask: data.value,
@@ -355,7 +355,7 @@ export default class NetworkSettings extends React.Component {
                     />
                     <FormGroup
                       type="text"
-                      label={_('Gateway')}
+                      label={__('Gateway')}
                       value={gateway}
                       onChange={data => this.props.updateItemSettings({
                         gateway: data.value,
@@ -364,7 +364,7 @@ export default class NetworkSettings extends React.Component {
                     />
                     <FormGroup
                       type="text"
-                      label={_('Primary DNS')}
+                      label={__('Primary DNS')}
                       value={dns1}
                       onChange={data => this.props.updateItemSettings({
                         dns1: data.value,
@@ -373,7 +373,7 @@ export default class NetworkSettings extends React.Component {
                     />
                     <FormGroup
                       type="text"
-                      label={_('Secondary DNS')}
+                      label={__('Secondary DNS')}
                       value={dns2}
                       onChange={data => this.props.updateItemSettings({
                         dns2: data.value,
@@ -386,10 +386,10 @@ export default class NetworkSettings extends React.Component {
               {
                 this.props.route.funConfig.hasVlan ? (
                   <div>
-                    <h3>{_('VLAN Settings')}</h3>
+                    <h3>{__('VLAN Settings')}</h3>
                     <div className="clearfix">
                       <FormGroup
-                        label={_('VLAN Enable')}
+                        label={__('VLAN Enable')}
                         type="checkbox"
                         className="fl"
                         disabled={this.apMode === '1'}
@@ -409,7 +409,7 @@ export default class NetworkSettings extends React.Component {
                               marginTop: '7px',
                             }}
                           >
-                            {_('Notice: The device is in thin AP mode now, VLAN is enabled by force.')}
+                            {__('Notice: The device is in thin AP mode now, VLAN is enabled by force.')}
                           </span>
                         ) : null
                       }
@@ -419,9 +419,9 @@ export default class NetworkSettings extends React.Component {
                       min="1"
                       max="4094"
                       defaultValue="1"
-                      label={_('Management VLAN ID')}
+                      label={__('Management VLAN ID')}
                       disabled={vlanEnable === '0'}
-                      help={`${_('Range: ')}1 - 4094, ${_('Default: ')}1`}
+                      help={`${__('Range: ')}1 - 4094, ${__('Default: ')}1`}
                       value={mngVlanId}
                       onChange={data => this.props.updateItemSettings({
                         mngVlanId: data.value,
@@ -434,8 +434,8 @@ export default class NetworkSettings extends React.Component {
                       min="1"
                       max="4094"
                       defaultValue="1"
-                      label={_('Untagged VLAN ID')}
-                      help={`${_('Range: ')}1 - 4094, ${_('Default: ')}1`}
+                      label={__('Untagged VLAN ID')}
+                      help={`${__('Range: ')}1 - 4094, ${__('Default: ')}1`}
                       value={utgVlanId}
                       disabled={vlanEnable === '0'}
                       onChange={data => this.props.updateItemSettings({
@@ -456,11 +456,11 @@ export default class NetworkSettings extends React.Component {
             <div>
               <FormGroup
                 type="select"
-                label={_('WAN IP Mode')}
+                label={__('WAN IP Mode')}
                 options={[
-                  { value: 'static', label: _('Static IP') },
-                  { value: 'dhcp', label: _('DHCP') },
-                  { value: 'pppoe', label: _('PPPOE') },
+                  { value: 'static', label: __('Static IP') },
+                  { value: 'dhcp', label: __('DHCP') },
+                  { value: 'pppoe', label: __('PPPOE') },
                 ]}
                 minWidth="66px"
                 value={this.props.store.getIn(['curData', 'routerInfo', 'proto'])}
@@ -473,7 +473,7 @@ export default class NetworkSettings extends React.Component {
                 store.getIn(['curData', 'routerInfo', 'proto']) === 'dhcp' ? (
                   <div>
                     <FormGroup
-                      label={_('LAN IP')}
+                      label={__('LAN IP')}
                       type="text"
                       value={this.props.store.getIn(['curData', 'routerInfo', 'lanIp'])}
                       onChange={(data) => {
@@ -481,7 +481,7 @@ export default class NetworkSettings extends React.Component {
                       }}
                     />
                     <FormGroup
-                      label={_('Subnet Mask')}
+                      label={__('Subnet Mask')}
                       type="text"
                       value={this.props.store.getIn(['curData', 'routerInfo', 'lanMask'])}
                       onChange={(data) => {
@@ -496,7 +496,7 @@ export default class NetworkSettings extends React.Component {
                 store.getIn(['curData', 'routerInfo', 'proto']) === 'static' ? (
                   <div>
                     <FormGroup
-                      label={_('WAN IP')}
+                      label={__('WAN IP')}
                       type="text"
                       value={this.props.store.getIn(['curData', 'routerInfo', 'wanIp'])}
                       onChange={(data) => {
@@ -504,7 +504,7 @@ export default class NetworkSettings extends React.Component {
                       }}
                     />
                     <FormGroup
-                      label={_('Subnet Mask')}
+                      label={__('Subnet Mask')}
                       type="text"
                       value={this.props.store.getIn(['curData', 'routerInfo', 'wanMask'])}
                       onChange={(data) => {
@@ -513,7 +513,7 @@ export default class NetworkSettings extends React.Component {
                     />
                     <FormGroup
                       type="text"
-                      label={_('Gateway')}
+                      label={__('Gateway')}
                       value={this.props.store.getIn(['curData', 'routerInfo', 'gateway'])}
                       onChange={(data) => {
                         this.updateItemInRouterInfo('gateway', data.value);
@@ -521,7 +521,7 @@ export default class NetworkSettings extends React.Component {
                     />
                     <FormGroup
                       type="text"
-                      label={_('Primary DNS')}
+                      label={__('Primary DNS')}
                       value={this.props.store.getIn(['curData', 'routerInfo', 'dns1'])}
                       onChange={(data) => {
                         this.updateItemInRouterInfo('dns1', data.value);
@@ -529,14 +529,14 @@ export default class NetworkSettings extends React.Component {
                     />
                     <FormGroup
                       type="text"
-                      label={_('Secondary DNS')}
+                      label={__('Secondary DNS')}
                       value={this.props.store.getIn(['curData', 'routerInfo', 'dns2'])}
                       onChange={(data) => {
                         this.updateItemInRouterInfo('dns2', data.value);
                       }}
                     />
                     <FormGroup
-                      label={_('LAN IP')}
+                      label={__('LAN IP')}
                       type="text"
                       value={this.props.store.getIn(['curData', 'routerInfo', 'lanIp'])}
                       onChange={(data) => {
@@ -544,7 +544,7 @@ export default class NetworkSettings extends React.Component {
                       }}
                     />
                     <FormGroup
-                      label={_('Subnet Mask')}
+                      label={__('Subnet Mask')}
                       type="text"
                       value={this.props.store.getIn(['curData', 'routerInfo', 'lanMask'])}
                       onChange={(data) => {
@@ -560,7 +560,7 @@ export default class NetworkSettings extends React.Component {
                   <div>
                     <FormGroup
                       type="text"
-                      label={_('Account')}
+                      label={__('Account')}
                       value={store.getIn(['curData', 'routerInfo', 'user'])}
                       onChange={(data) => {
                         this.updateItemInRouterInfo('user', data.value);
@@ -568,14 +568,14 @@ export default class NetworkSettings extends React.Component {
                     />
                     <FormGroup
                       type="text"
-                      label={_('Password')}
+                      label={__('Password')}
                       value={store.getIn(['curData', 'routerInfo', 'password'])}
                       onChange={(data) => {
                         this.updateItemInRouterInfo('password', data.value);
                       }}
                     />
                     <FormGroup
-                      label={_('LAN IP')}
+                      label={__('LAN IP')}
                       type="text"
                       value={this.props.store.getIn(['curData', 'routerInfo', 'lanIp'])}
                       onChange={(data) => {
@@ -583,7 +583,7 @@ export default class NetworkSettings extends React.Component {
                       }}
                     />
                     <FormGroup
-                      label={_('Subnet Mask')}
+                      label={__('Subnet Mask')}
                       type="text"
                       value={this.props.store.getIn(['curData', 'routerInfo', 'lanMask'])}
                       onChange={(data) => {
@@ -596,17 +596,17 @@ export default class NetworkSettings extends React.Component {
               <FormGroup
                 type="checkbox"
                 checked={store.getIn(['curData', 'routerInfo', 'nat']) === '1'}
-                label={_('NAT')}
+                label={__('NAT')}
                 onChange={() => {
                   const val = store.getIn(['curData', 'routerInfo', 'nat']) === '1' ? '0' : '1';
                   this.updateItemInRouterInfo('nat', val);
                 }}
               />
-              <h3>{_('DHCP Pool')}</h3>
+              <h3>{__('DHCP Pool')}</h3>
               <FormGroup
                 type="checkbox"
                 checked={store.getIn(['curData', 'routerInfo', 'dhcpEnable']) === '1'}
-                label={_('DHCP Sever')}
+                label={__('DHCP Sever')}
                 onChange={() => {
                   const val = store.getIn(['curData', 'routerInfo', 'dhcpEnable']) === '1' ? '0' : '1';
                   this.updateItemInRouterInfo('dhcpEnable', val);
@@ -618,7 +618,7 @@ export default class NetworkSettings extends React.Component {
                     <FormGroup
                       type="text"
                       value={store.getIn(['curData', 'routerInfo', 'startIp'])}
-                      label={_('Start IP Adress')}
+                      label={__('Start IP Adress')}
                       onChange={(data) => {
                         this.updateItemInRouterInfo('startIp', data.value);
                       }}
@@ -626,7 +626,7 @@ export default class NetworkSettings extends React.Component {
                     <FormGroup
                       type="text"
                       value={store.getIn(['curData', 'routerInfo', 'endIp'])}
-                      label={_('End IP Adress')}
+                      label={__('End IP Adress')}
                       onChange={(data) => {
                         this.updateItemInRouterInfo('endIp', data.value);
                       }}

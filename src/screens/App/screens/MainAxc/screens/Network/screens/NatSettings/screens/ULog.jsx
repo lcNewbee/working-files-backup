@@ -18,23 +18,23 @@ export default class View extends React.Component {
       {
         id: 'time',
         type: 'text',
-        text: _('Time'),
+        text: __('Time'),
         notEditable: true,
       },
       {
         id: 'srcIp',
-        text: _('Source IP'),
+        text: __('Source IP'),
       },
       {
         id: 'destIp',
-        text: _('Destiation IP'),
+        text: __('Destiation IP'),
       },
     ]);
     return (
       <AppScreen
         {...this.props}
         listOptions={listOptions}
-        listTitle={_('Protocol')}
+        listTitle={__('Protocol')}
       >
         <div
           style={{
@@ -49,7 +49,7 @@ export default class View extends React.Component {
               fontWeight: 'bold',
             }}
           >
-            {_('Protocol')}
+            {__('Protocol')}
           </span>*/}
           <FormInput
             type="select"

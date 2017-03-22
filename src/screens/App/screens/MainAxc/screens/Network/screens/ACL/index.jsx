@@ -10,9 +10,9 @@ import * as screenActions from 'shared/actions/screens';
 const commonFormOptions = fromJS([
   {
     id: 'enable',
-    label: _('ACL'),
+    label: __('ACL'),
     type: 'checkbox',
-    text: _('Enable'),
+    text: __('Enable'),
     value: '1',
     saveOnChange: true,
   },
@@ -20,7 +20,7 @@ const commonFormOptions = fromJS([
 const listOptions = fromJS([
   {
     id: 'ruleName',
-    label: _('Name'),
+    label: __('Name'),
     formProps: {
       type: 'text',
       maxLength: '32',
@@ -28,15 +28,15 @@ const listOptions = fromJS([
     },
   }, {
     id: 'ruleAction',
-    label: _('Rule'),
+    label: __('Rule'),
     defaultValue: '0',
     options: [
       {
         value: '0',
-        label: _('Allow'),
+        label: __('Allow'),
       }, {
         value: '1',
-        label: _('Prevent'),
+        label: __('Prevent'),
       },
     ],
     formProps: {
@@ -45,25 +45,25 @@ const listOptions = fromJS([
 
   }, {
     id: 'addressType',
-    label: _('Address Type'),
+    label: __('Address Type'),
     options: [
       {
         value: '1',
-        label: _('Source IP Address'),
+        label: __('Source IP Address'),
       }, {
         value: '2',
-        label: _('Target IP Address'),
+        label: __('Target IP Address'),
       },
     ],
     formProps: {
       type: 'select',
-      label: _('Address Type'),
-      placeholder: _('Please Select ') + _('NAT Rule Type'),
+      label: __('Address Type'),
+      placeholder: __('Please Select ') + __('NAT Rule Type'),
     },
 
   }, {
     id: 'ipAddress',
-    label: _('IP Address'),
+    label: __('IP Address'),
     formProps: {
       required: true,
     },
@@ -84,7 +84,7 @@ export default class View extends React.Component {
     return (
       <AppScreen
         {...this.props}
-        listTitle={_('ACL List')}
+        listTitle={__('ACL List')}
         store={this.props.store}
         listOptions={listOptions}
         settingsFormOptions={commonFormOptions}

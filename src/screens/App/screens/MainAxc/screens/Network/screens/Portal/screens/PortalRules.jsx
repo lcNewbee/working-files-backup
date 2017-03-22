@@ -62,14 +62,14 @@ function getAAADomainName() {
 const listOptions = fromJS([
   {
     id: 'interface_bind',
-    label: _('Port'),
+    label: __('Port'),
     formProps: {
       type: 'switch',
       required: true,
     },
   }, {
     id: 'template_name',
-    label: _('Server Name'),
+    label: __('Server Name'),
     formProps: {
       type: 'select',
       required: true,
@@ -77,7 +77,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'max_usernum',
-    label: _('Max Users'),
+    label: __('Max Users'),
     defaultValue: '4096',
     formProps: {
       type: 'number',
@@ -86,16 +86,16 @@ const listOptions = fromJS([
     },
   }, {
     id: 'auth_mode',
-    label: _('Auth Type'),
+    label: __('Auth Type'),
     defaultValue: '1',
     options: [
       {
         value: '1',
-        label: _('Direct'),
+        label: __('Direct'),
       },
       {
         value: '2',
-        label: _('Layer3'),
+        label: __('Layer3'),
       },
     ],
     formProps: {
@@ -103,7 +103,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'auth_ip',
-    label: _('Authentication IP'),
+    label: __('Authentication IP'),
     formProps: {
       type: 'text',
       validator: validator({
@@ -116,7 +116,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'auth_mask',
-    label: _('Authentication Subnet Mask'),
+    label: __('Authentication Subnet Mask'),
     formProps: {
       type: 'text',
       validator: validator({
@@ -129,7 +129,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'auth_domain',
-    text: _('AAA Strategy'),
+    text: __('AAA Strategy'),
     defaultValue: '',
     formProps: {
       type: 'select',
@@ -139,7 +139,7 @@ const listOptions = fromJS([
   // 闲置检查
   // {
   //   id: 'idle_test',
-  //   label: _('Idle Detection'),
+  //   label: __('Idle Detection'),
   //   defaultValue: '0',
   //   formProps: {
   //     type: 'checkbox',

@@ -10,7 +10,7 @@ import * as appActions from 'shared/actions/app';
 const listOptions = fromJS([
   {
     id: 'name',
-    text: _('Model Name'),
+    text: __('Model Name'),
     formProps: {
       type: 'text',
       maxLength: '31',
@@ -19,7 +19,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'radionum',
-    text: _('Radio Number'),
+    text: __('Radio Number'),
     defaultValue: 2,
     options: [
       {
@@ -39,7 +39,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'vendor',
-    text: _('Vender'),
+    text: __('Vender'),
     noTable: true,
     noForm: true,
     defaultValue: 48208,

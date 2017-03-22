@@ -32,12 +32,12 @@ const slotIdOptions = [
 ];
 
 const balanceAlgthmOptions = [
-  { label: _('Source MAC'), value: 'srcmac' },
-  { label: _('Destiation MAc'), value: 'desmac' },
-  { label: _('Source & Destination MAC'), value: 'mac' },
-  { label: _('Source IP'), value: 'srcip' },
-  { label: _('Destination IP'), value: 'desmac' },
-  { label: _('Source & Destination IP'), value: 'ip' },
+  { label: __('Source MAC'), value: 'srcmac' },
+  { label: __('Destiation MAc'), value: 'desmac' },
+  { label: __('Source & Destination MAC'), value: 'mac' },
+  { label: __('Source IP'), value: 'srcip' },
+  { label: __('Destination IP'), value: 'desmac' },
+  { label: __('Source & Destination IP'), value: 'ip' },
 ];
 
 const listOptions = fromJS([
@@ -45,11 +45,11 @@ const listOptions = fromJS([
     id: 'id',
     type: 'text',
     noForm: true,
-    text: _('ID'),
+    text: __('ID'),
   },
   {
     id: 'balanceAlgthm',
-    text: _('Balance Algorithm'),
+    text: __('Balance Algorithm'),
     type: 'select',
     options: balanceAlgthmOptions,
     formProps: {
@@ -59,7 +59,7 @@ const listOptions = fromJS([
   },
   {
     id: 'slotId',
-    text: _('Slot ID'),
+    text: __('Slot ID'),
     formProps: {
       type: 'select',
       options: slotIdOptions,
@@ -67,7 +67,7 @@ const listOptions = fromJS([
   },
   {
     id: 'portId',
-    text: _('Port ID'),
+    text: __('Port ID'),
     transform(item) {
       const arr = item ? item.split(',') : [];
       let str = '';

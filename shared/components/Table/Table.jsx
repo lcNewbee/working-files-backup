@@ -183,7 +183,7 @@ class Table extends Component {
             colSpan={this.$$options.size + (selectable ? 1 : 0)}
             className="empty"
           >
-            {_('No Data')}
+            {__('No Data')}
           </td>
         </tr>
       );

@@ -14,13 +14,13 @@ import * as screenActions from 'shared/actions/screens';
 import '../style.scss';
 
 const MSG = {
-  Seconds: _('Seconds'),
-  minutes: _('Minutes'),
-  hour: _('Hour'),
-  hours: _('Hours'),
-  days: _('Days'),
-  userDef: _('User Defined'),
-  imageDes: _('Select 1-3 slide pictures of dimension 640px*640px'),
+  Seconds: __('Seconds'),
+  minutes: __('Minutes'),
+  hour: __('Hour'),
+  hours: __('Hours'),
+  days: __('Days'),
+  userDef: __('User Defined'),
+  imageDes: __('Select 1-3 slide pictures of dimension 640px*640px'),
 };
 const refreshtimeOtions = [
   {
@@ -87,7 +87,7 @@ const expirationOptions = [
 const screenOptions = fromJS([
   {
     id: 'template_name',
-    label: _('Portal Name'),
+    label: __('Portal Name'),
     formProps: {
       type: 'text',
       maxLength: '31',
@@ -95,27 +95,27 @@ const screenOptions = fromJS([
     },
   }, {
     id: 'authRedirectUrl',
-    label: _('Auth Redirect URL'),
+    label: __('Auth Redirect URL'),
     defaultValue: '0',
     formProps: {
       type: 'text',
     },
   }, {
     id: 'portalTitle',
-    label: _('Portal Title'),
+    label: __('Portal Title'),
     formProps: {
       type: 'text',
     },
   }, {
     id: 'expiration',
-    label: _('Expiration'),
+    label: __('Expiration'),
     options: expirationOptions,
     formProps: {
       type: 'select',
     },
   }, {
     id: 'imagesSlideInterval',
-    label: _('Images Slide Interval'),
+    label: __('Images Slide Interval'),
     options: refreshtimeOtions,
     formProps: {
       type: 'select',
@@ -195,7 +195,7 @@ export default class PortalProfile extends React.Component {
                   target="imagesIf"
                   acceptExt="png,gif,jpg,bmp"
                   createModal={this.props.createModal}
-                  buttonText={`${_('Upload Image')} 1`}
+                  buttonText={`${__('Upload Image')} 1`}
                   onUploaded={
                     () => this.selectShowImage(1)
                   }
@@ -207,7 +207,7 @@ export default class PortalProfile extends React.Component {
                   name="image2"
                   acceptExt="png,gif,jpg,bmp"
                   createModal={this.props.createModal}
-                  buttonText={`${_('Upload Image')} 2`}
+                  buttonText={`${__('Upload Image')} 2`}
                   onUploaded={
                     () => this.selectShowImage(2)
                   }
@@ -220,7 +220,7 @@ export default class PortalProfile extends React.Component {
                   target="imagesIf"
                   acceptExt="png,gif,jpg,bmp"
                   createModal={this.props.createModal}
-                  buttonText={`${_('Upload Image')} 3`}
+                  buttonText={`${__('Upload Image')} 3`}
                   onUploaded={
                     () => this.selectShowImage(3)
                   }
@@ -229,7 +229,7 @@ export default class PortalProfile extends React.Component {
               <div className="form-group form-group--save">
                 <div className="form-control">
                   <SaveButton
-                    text={_('Save')}
+                    text={__('Save')}
                     id="online"
                   />
                 </div>
@@ -276,7 +276,7 @@ export default class PortalProfile extends React.Component {
                   type="button"
                   icon="sphere"
                   theme="primary"
-                  text={_('Click on Internet')}
+                  text={__('Click on Internet')}
                   id="online"
                 />
               </div>

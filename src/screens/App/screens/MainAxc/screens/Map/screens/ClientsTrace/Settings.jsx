@@ -13,14 +13,14 @@ import * as propertiesActions from 'shared/actions/properties';
 const formOptions = fromJS([
   {
     id: 'enable',
-    label: _('Enable'),
+    label: __('Enable'),
     type: 'checkbox',
     required: true,
   }, {
     id: 'reporttime',
-    label: _('Data Report Time'),
+    label: __('Data Report Time'),
     type: 'number',
-    help: _('Minutes'),
+    help: __('Minutes'),
     min: 1,
     defaultValue: 10,
     max: 65535,

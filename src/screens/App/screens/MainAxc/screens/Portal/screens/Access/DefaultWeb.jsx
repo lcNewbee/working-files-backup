@@ -49,12 +49,12 @@ export default class View extends React.PureComponent {
       >
         <div className="o-form">
           <fieldset className="o-form__fieldset">
-            <legend className="o-form__legend">{_('Current Authentication Page Download')}</legend>
-            <FormGroup label={_('Authentication Page Download')} >
+            <legend className="o-form__legend">{__('Current Authentication Page Download')}</legend>
+            <FormGroup label={__('Authentication Page Download')} >
               <SaveButton
                 type="button"
                 icon="download"
-                text={_('')}
+                text={__('')}
                 onClick={this.onBackup}
                 disabled={!this.actionable}
               />
@@ -62,15 +62,15 @@ export default class View extends React.PureComponent {
           </fieldset>
 
           <fieldset className="o-form__fieldset">
-            <legend className="o-form__legend">{_('Authentication Page Update')}</legend>
+            <legend className="o-form__legend">{__('Authentication Page Update')}</legend>
             <FormGroup
-              label={_('Please choose authentication page package(ZIP file)')}
+              label={__('Please choose authentication page package(ZIP file)')}
             >
               <FileUpload
                 url={uploadUrl}
                 name="authenticationPageFile"
                 buttonIcon="undo"
-                buttonText={_('Upload Now')}
+                buttonText={__('Upload Now')}
                 disabled={!this.actionable}
               />
             </FormGroup>

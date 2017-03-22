@@ -20,25 +20,25 @@ const flowRateFilter = utils.filter('flowRate:["KB"]');
 const clientsTableOptions = fromJS([
   {
     id: 'devicename',
-    text: _('MAC Address') + '/' + _('Name'),
+    text: __('MAC Address') + '/' + __('Name'),
     transform(val, item) {
       return item.get('devicename') || item.get('mac');
     },
   }, {
     id: 'ip',
-    text: _('IP Address'),
+    text: __('IP Address'),
   }, {
     id: 'ssid',
     text: 'SSID',
   }, {
     id: 'connectap',
-    text: _('Associated AP'),
+    text: __('Associated AP'),
     transform(val, item) {
       return item.get('connectap') || item.get('apmac');
     },
   }, {
     id: 'bandwidth',
-    text: _('Up/Down Flow'),
+    text: __('Up/Down Flow'),
     transform(val, item) {
       const upRate = flowRateFilter.transform(item.get('upstream'));
       const downRate = flowRateFilter.transform(item.get('downstream'));
@@ -47,7 +47,7 @@ const clientsTableOptions = fromJS([
     },
   }, {
     id: 'rssi',
-    text: _('RSSI'),
+    text: __('RSSI'),
     transform(val, item) {
       const intVal = parseInt(val, 10);
       let classNames = 'Icon Icon-block Icon-wifi';
@@ -75,7 +75,7 @@ const clientsTableOptions = fromJS([
   },
   // {
   //   id: 'authtype',
-  //   text: _('Authentication'),
+  //   text: __('Authentication'),
   //   transform(val, item) {
   //     var ret = val;
 
@@ -84,28 +84,28 @@ const clientsTableOptions = fromJS([
   //     } else if (val === 'portal') {
   //       ret = 'Portal';
   //     }
-  //     ret = _(ret);
+  //     ret = __(ret);
 
   //     return ret;
   //   }
   // },
   {
     id: 'operationhours',
-    text: _('Connect Time'),
+    text: __('Connect Time'),
     filter: 'connectTime',
   }, {
     id: 'op',
     width: '220',
-    text: _('Actions'),
+    text: __('Actions'),
   },
 ]);
 
 const msg = {
-  TITLE: _('Clients Info'),
-  reconnect: _('Reconnect'),
-  lock: _('Lock'),
-  unlock: _('Unlock'),
-  perPage: _('Items per page: '),
+  TITLE: __('Clients Info'),
+  reconnect: __('Reconnect'),
+  lock: __('Lock'),
+  unlock: __('Unlock'),
+  perPage: __('Items per page: '),
 };
 
 const selectOptions = [
@@ -115,11 +115,11 @@ const selectOptions = [
 ];
 
 const typeArr = [
-  _('ALL'),
-  _('WIRELESS'),
-  _('WIRED'),
-  _('GUEST'),
-  _('BLOCKED/LAST APPEARED'),
+  __('ALL'),
+  __('WIRELESS'),
+  __('WIRED'),
+  __('GUEST'),
+  __('BLOCKED/LAST APPEARED'),
 ];
 
 const styles = {
@@ -256,30 +256,30 @@ export const Clients = React.createClass({
     const blockOption = fromJS([
       {
         id: 'devicename',
-        text: _('MAC Address') + '/' + _('Name'),
+        text: __('MAC Address') + '/' + __('Name'),
         transform(val, item) {
           return item.get('devicename') || item.get('mac');
         },
       }, {
         id: 'vendor',
-        text: _('Manufacturer'),
+        text: __('Manufacturer'),
       }, {
         id: 'wirelessType',
-        text: _('Type'),
+        text: __('Type'),
         transform(val, item) {
           const typeMap = {
-            main: _('Main SSID'),
-            guest: _('Guest SSID'),
+            main: __('Main SSID'),
+            guest: __('Guest SSID'),
           };
 
-          return typeMap[val] || _('Main Wireless');
+          return typeMap[val] || __('Main Wireless');
         },
       }, {
         id: 'apmac',
-        text: _('Associated AP'),
+        text: __('Associated AP'),
       }, {
         id: 'bandwidth',
-        text: _('Up/Down Speed'),
+        text: __('Up/Down Speed'),
         transform(val, item) {
           const upRate = flowRateFilter.transform(item.get('upstream'));
           const downRate = flowRateFilter.transform(item.get('downstream'));
@@ -288,10 +288,10 @@ export const Clients = React.createClass({
         },
       }, {
         id: 'lasttime',
-        text: _('Last Seen'),
+        text: __('Last Seen'),
       }, {
         id: 'op',
-        text: _('Actions'),
+        text: __('Actions'),
         transform: function (val, item) {
           const deviceMac = item.get('mac');
           const status = item.get('status');
@@ -331,7 +331,7 @@ export const Clients = React.createClass({
             value={this.props.query.get('text')}
             onChange={this.onChangeSearchText}
             onSearch={this.handleSearch}
-            placeholder={_('IP or MAC Address')}
+            placeholder={__('IP or MAC Address')}
           />
           <Switchs
             value={this.props.query.get('type')}

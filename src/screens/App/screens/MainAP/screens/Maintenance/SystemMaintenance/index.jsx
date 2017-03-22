@@ -119,7 +119,7 @@ export default class SystemMaintenance extends Component {
           that.props.createModal({
             id: 'settings',
             role: 'alert',
-            text: _('Invalid firmware!'),
+            text: __('Invalid firmware!'),
           });
         }
       });
@@ -128,7 +128,7 @@ export default class SystemMaintenance extends Component {
     this.props.createModal({
       id: 'settings',
       role: 'confirm',
-      text: _('Sure you want to UPGRADE the software and REBOOT ?'),
+      text: __('Sure you want to UPGRADE the software and REBOOT ?'),
       apply: upgradeDevice,
     });
   }
@@ -148,7 +148,7 @@ export default class SystemMaintenance extends Component {
             const step = Promise.resolve();
             step.then(() => {
               const barInfo = that.props.selfState.get('progressBarInfo')
-                              .set('title', _('The configuration is restoring now, please wait ...'))
+                              .set('title', __('The configuration is restoring now, please wait ...'))
                               .set('time', 120).set('isShow', true).set('start', false);
               that.props.changeProgressBarInfo(barInfo);
             }).then(() => {
@@ -160,7 +160,7 @@ export default class SystemMaintenance extends Component {
             that.props.createModal({
               id: 'settings',
               role: 'alert',
-              text: _('Save configuration failed !'),
+              text: __('Save configuration failed !'),
             });
           }
         });
@@ -169,7 +169,7 @@ export default class SystemMaintenance extends Component {
     this.props.createModal({
       id: 'settings',
       role: 'confirm',
-      text: _('Sure you want to RESTORE the configuration and REBOOT ?'),
+      text: __('Sure you want to RESTORE the configuration and REBOOT ?'),
       apply: saveConfig,
     });
   }
@@ -181,7 +181,7 @@ export default class SystemMaintenance extends Component {
       const step = Promise.resolve();
       step.then(() => {
         that.props.changeProgressBarInfo(fromJS({
-          title: _('The device is rebooting now, please wait ...'),
+          title: __('The device is rebooting now, please wait ...'),
           time: 90,
           isShow: true,
         }));
@@ -194,7 +194,7 @@ export default class SystemMaintenance extends Component {
     this.props.createModal({
       id: 'settings',
       role: 'confirm',
-      text: _('Sure you want to REBOOT the device ?'),
+      text: __('Sure you want to REBOOT the device ?'),
       apply: rebootDevice,
     });
   }
@@ -206,7 +206,7 @@ export default class SystemMaintenance extends Component {
       const step = Promise.resolve();
       step.then(() => {
         that.props.changeProgressBarInfo(fromJS({
-          title: _('The device is reseting now, please wait ...'),
+          title: __('The device is reseting now, please wait ...'),
           time: 90,
           isShow: true,
         }));
@@ -219,7 +219,7 @@ export default class SystemMaintenance extends Component {
     this.props.createModal({
       id: 'settings',
       role: 'confirm',
-      text: _('Sure you want to restore the device into factory default ?'),
+      text: __('Sure you want to restore the device into factory default ?'),
       apply: resetDevice,
     });
   }
@@ -232,7 +232,7 @@ export default class SystemMaintenance extends Component {
         this.props.createModal({
           id: 'settings',
           role: 'alert',
-          text: _('Backup failed! Please try again.'),
+          text: __('Backup failed! Please try again.'),
         });
       }
     });
@@ -242,7 +242,7 @@ export default class SystemMaintenance extends Component {
     return (
       <div className="o-form">
         <div className="o-form__legend">
-          {_('Upgrade')}
+          {__('Upgrade')}
         </div>
         <form
           action="/cgi-bin/upload.cgi"
@@ -252,7 +252,7 @@ export default class SystemMaintenance extends Component {
           className="clearfix"
         >
           <FormGroup
-            label={_('Firmware Upgrade')}
+            label={__('Firmware Upgrade')}
             type="file"
             name="filename"
             id="upgradeFile"
@@ -264,18 +264,18 @@ export default class SystemMaintenance extends Component {
           <SaveButton
             type="button"
             icon=""
-            text={_('Upgrade')}
+            text={__('Upgrade')}
             onClick={this.onFarewellUpgrade}
             theme="primary"
             className="fl"
           />
         </form>
         <div className="o-form__legend">
-          {_('Reboot')}
+          {__('Reboot')}
         </div>
-        <FormGroup label={_('Reboot Device')}>
+        <FormGroup label={__('Reboot Device')}>
           <SaveButton
-            text={_('Reboot')}
+            text={__('Reboot')}
             icon=""
             style={{ width: '68px' }}
             onClick={this.onRebootDevice}
@@ -284,11 +284,11 @@ export default class SystemMaintenance extends Component {
         </FormGroup>
 
         <div className="o-form__legend">
-          {_('Configuration')}
+          {__('Configuration')}
         </div>
-        <FormGroup label={_('Backup Configuration')}>
+        <FormGroup label={__('Backup Configuration')}>
           <SaveButton
-            text={_('Backup')}
+            text={__('Backup')}
             icon=""
             style={{ width: '68px' }}
             onClick={this.onBackupConfig}
@@ -297,10 +297,10 @@ export default class SystemMaintenance extends Component {
         </FormGroup>
 
         <FormGroup
-          label={_('Reset Configuration')}
+          label={__('Reset Configuration')}
         >
           <SaveButton
-            text={_('Reset')}
+            text={__('Reset')}
             icon=""
             style={{ width: '68px' }}
             onClick={this.onResetDevice}
@@ -319,7 +319,7 @@ export default class SystemMaintenance extends Component {
           className="clearfix"
         >
           <FormGroup
-            label={_('Restore Configuration')}
+            label={__('Restore Configuration')}
             type="file"
             id="restoreFile"
             name="restoreFile"
@@ -329,7 +329,7 @@ export default class SystemMaintenance extends Component {
             className="fl"
           />
           <Button
-            text={_('Restore')}
+            text={__('Restore')}
             icon=""
             onClick={this.onConfigurationRestore}
             theme="primary"
@@ -339,7 +339,7 @@ export default class SystemMaintenance extends Component {
 
         <FormGroup
           type="select"
-          label={_('Language Setting')}
+          label={__('Language Setting')}
           options={languageOptions}
           value={b28n.getLang()}
           onChange={onChangeLang}
@@ -349,16 +349,16 @@ export default class SystemMaintenance extends Component {
           this.props.route.funConfig.poeOutFun ? (
             <div>
               <div className="o-form__legend">
-                {_('POE')}
+                {__('POE')}
               </div>
               <div className="clearfix">
                 <FormGroup
                   type="switch"
-                  label={_('POE Out')}
+                  label={__('POE Out')}
                   className="fl"
                   options={[
-                    { label: _('Turn On'), value: '1' },
-                    { label: _('Turn Off'), value: '0' },
+                    { label: __('Turn On'), value: '1' },
+                    { label: __('Turn Off'), value: '0' },
                   ]}
                   minWidth="80px"
                   value={this.props.selfState.get('poeOut')}
@@ -382,16 +382,16 @@ export default class SystemMaintenance extends Component {
           this.props.route.funConfig.voipFun ? (
             <div>
               <div className="o-form__legend">
-                {_('VOIP')}
+                {__('VOIP')}
               </div>
               <div className="clearfix">
                 <FormGroup
                   type="switch"
-                  label={_('VOIP')}
+                  label={__('VOIP')}
                   className="fl"
                   options={[
-                    { label: _('Turn On'), value: '1' },
-                    { label: _('Turn Off'), value: '0' },
+                    { label: __('Turn On'), value: '1' },
+                    { label: __('Turn Off'), value: '0' },
                   ]}
                   minWidth="80px"
                   value={this.props.selfState.get('voipEnable')}
@@ -425,7 +425,7 @@ export default class SystemMaintenance extends Component {
             title={this.props.selfState.getIn(['upgradeBarInfo', 'firstBar', 'title'])}
             time={this.props.selfState.getIn(['upgradeBarInfo', 'firstBar', 'time'])}
             callback={() => {
-              const txt = _('Upgrading, please DO NOT cut the power !');
+              const txt = __('Upgrading, please DO NOT cut the power !');
               const upgradeBarInfo = this.props.selfState.get('upgradeBarInfo')
                                         .setIn(['secondBar', 'start'], true)
                                         .setIn(['firstBar', 'title'], txt);

@@ -10,45 +10,45 @@ import * as screenActions from 'shared/actions/screens';
 const listOptions = fromJS([
   {
     id: 'importTime',
-    label: _('Import Time'),
+    label: __('Import Time'),
     fieldset: 'status',
-    legend: _('Signatures Status'),
+    legend: __('Signatures Status'),
     formProps: {
       type: 'plain-text',
     },
   }, {
     id: 'lastUpgradeTime',
-    label: _('Last Upgrade Time'),
+    label: __('Last Upgrade Time'),
     fieldset: 'status',
     formProps: {
       type: 'plain-text',
     },
   }, {
     id: 'expire',
-    label: _('Expiration'),
+    label: __('Expiration'),
     fieldset: 'status',
     formProps: {
       type: 'plain-text',
     },
   }, {
     id: 'importUpgradeFile',
-    label: _('Local Import'),
+    label: __('Local Import'),
     fieldset: 'upgrade',
-    legend: _('Upgrade'),
+    legend: __('Upgrade'),
     formProps: {
       required: true,
       type: 'file',
     },
   }, {
     id: 'upgradeOnline',
-    label: _('Upgrade Online'),
+    label: __('Upgrade Online'),
     fieldset: 'upgrade',
     formProps: {
       type: 'checkbox',
     },
   }, {
     id: 'autoUpgrade',
-    label: _('Auto Upgrade'),
+    label: __('Auto Upgrade'),
     fieldset: 'upgrade',
     formProps: {
       type: 'checkbox',

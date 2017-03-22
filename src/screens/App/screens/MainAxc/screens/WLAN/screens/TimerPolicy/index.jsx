@@ -24,66 +24,66 @@ function getSsidList(data) {
 const policyTypeOptions = [
   {
     value: 'Once',
-    label: _('Exactly-once'),
+    label: __('Exactly-once'),
   }, {
     value: 'Mon&Tue&Wed&Thu&Fri&Sat&Sun',
-    label: _('Everyday'),
+    label: __('Everyday'),
   }, {
     value: 'Mon&Tue&Wed&Thu&Fri',
-    label: _('Weekdays'),
+    label: __('Weekdays'),
   },
   // {
   //   value: 'Loop',
-  //   label: _('Fixed Time Interval'),
+  //   label: __('Fixed Time Interval'),
   // },
   {
     value: 'custom',
-    label: _('Custom'),
+    label: __('Custom'),
   },
 ];
 const objectsNameOptions = [
   {
     value: 'ssid',
-    label: _('SSID'),
+    label: __('SSID'),
   }, {
     value: 'scan',
-    label: _('Scan'),
+    label: __('Scan'),
   },
   // {
   //   value: 'radio',
-  //   label: _('Radio'),
+  //   label: __('Radio'),
   // },
 ];
 
 const daysOptions = fromJS([
   {
     value: 'Mon',
-    label: _('Mon'),
+    label: __('Mon'),
   }, {
     value: 'Tue',
-    label: _('Tue'),
+    label: __('Tue'),
   }, {
     value: 'Wed',
-    label: _('Wed'),
+    label: __('Wed'),
   }, {
     value: 'Thu',
-    label: _('Thu'),
+    label: __('Thu'),
   }, {
     value: 'Fri',
-    label: _('Fri'),
+    label: __('Fri'),
   }, {
     value: 'Sat',
-    label: _('Sat'),
+    label: __('Sat'),
   }, {
     value: 'Sun',
-    label: _('Sun'),
+    label: __('Sun'),
   },
 ]);
 
 const screenOptions = fromJS([
   {
     id: 'policy_type',
-    label: _('Repeat'),
+    label: __('Repeat'),
     options: policyTypeOptions,
     width: '120',
     defaultValue: 'Mon&Tue&Wed&Thu&Fri&Sat&Sun',
@@ -94,7 +94,7 @@ const screenOptions = fromJS([
       if (oldVal !== 'Mon&Tue&Wed&Thu&Fri&Sat&Sun' &&
         oldVal !== 'Mon&Tue&Wed&Thu&Fri' && oldVal !== 'Once') {
         ret = ret.split('&').map(
-          day => _(day),
+          day => __(day),
         ).join(',');
       } else {
         policyTypeOptions.forEach(
@@ -122,7 +122,7 @@ const screenOptions = fromJS([
     },
   }, {
     id: 'policy_custom_type',
-    label: _('Custom Cycle'),
+    label: __('Custom Cycle'),
     noTable: true,
     formProps: {
       type: 'checkboxs',
@@ -142,7 +142,7 @@ const screenOptions = fromJS([
   }, {
     id: 'policy_times',
     width: '130',
-    text: _('Time'),
+    text: __('Time'),
     transform(val, $$data) {
       const type = $$data.get('policy_type');
       let ret = val || ' ';
@@ -157,7 +157,7 @@ const screenOptions = fromJS([
   }, {
     id: 'policy_date',
     width: '130',
-    text: _('Date'),
+    text: __('Date'),
     noTable: true,
     defaultValue: moment().format('YYYY-MM-DD'),
     formProps: {
@@ -182,7 +182,7 @@ const screenOptions = fromJS([
     },
   }, {
     id: 'policy_time',
-    text: _('Time'),
+    text: __('Time'),
     noTable: true,
     defaultValue: moment().format('HH:mm'),
     formProps: {
@@ -204,7 +204,7 @@ const screenOptions = fromJS([
   },
   {
     id: 'objects_name',
-    label: _('Type'),
+    label: __('Type'),
     options: objectsNameOptions,
     defaultValue: 'ssid',
     formProps: {
@@ -212,7 +212,7 @@ const screenOptions = fromJS([
     },
   }, {
     id: 'objects_templatename',
-    text: _('Operation Object'),
+    text: __('Operation Object'),
     formProps: {
       type: 'select',
       required: true,
@@ -224,15 +224,15 @@ const screenOptions = fromJS([
     },
   }, {
     id: 'objects_templateswitch',
-    text: _('Operation'),
+    text: __('Operation'),
     defaultValue: '1',
     options: [
       {
         value: '1',
-        label: _('Enable'),
+        label: __('Enable'),
       }, {
         value: '0',
-        label: _('Disable'),
+        label: __('Disable'),
       },
     ],
     formProps: {
@@ -245,7 +245,7 @@ const screenOptions = fromJS([
     },
   }, {
     id: 'policy_enbale',
-    label: _('Policy Switch'),
+    label: __('Policy Switch'),
     width: '90px',
     type: 'switch',
     actionName: 'switch',
@@ -342,19 +342,19 @@ export default class View extends React.Component {
           objectOptions: fromJS([
             {
               value: '1',
-              label: `${_('Radio')}1`,
+              label: `${__('Radio')}1`,
             },
             {
               value: '2',
-              label: `${_('Radio')}2`,
+              label: `${__('Radio')}2`,
             },
             {
               value: '3',
-              label: `${_('Radio')}3`,
+              label: `${__('Radio')}3`,
             },
             {
               value: '4',
-              label: `${_('Radio')}4`,
+              label: `${__('Radio')}4`,
             },
           ]),
         });
@@ -376,7 +376,7 @@ export default class View extends React.Component {
     return (
       <AppScreen
         {...this.props}
-        title={_('Wireless Scheduler')}
+        title={__('Wireless Scheduler')}
         listOptions={curListOptions}
         onBeforeSave={this.onBeforeSave}
         initOption={{

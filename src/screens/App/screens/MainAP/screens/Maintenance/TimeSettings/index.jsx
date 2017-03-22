@@ -84,27 +84,27 @@ export default class TimeSettings extends Component {
     //   console.log('ntp not valid');
     //   this.props.createModal({
     //     role: 'alert',
-    //     text: _('Please input a valid ntp server!'),
+    //     text: __('Please input a valid ntp server!'),
     //   });
     // }
     function validIp(str) {
       const ipArr = str.split('.');
       const ipHead = ipArr[0];
       if (ipArr[0] === '127') {
-        return _('IP address begin with 127 is a reserved loopback address, please input another value between 1 to 233');
+        return __('IP address begin with 127 is a reserved loopback address, please input another value between 1 to 233');
       }
       if (ipArr[0] > 223) {
-        return _('IP Address begin with %s is invalid, please input a value between 1 to 223.', ipHead);
+        return __('IP Address begin with %s is invalid, please input a value between 1 to 223.', ipHead);
       }
       return '';
     }
     let msg = '';
     if (ntpEnable === '1' && !ntpIpValid && !ntpStrValid) {
-      msg = _('Please input a valid ntp server!');
+      msg = __('Please input a valid ntp server!');
     } else if (ntpEnable === '1' && ntpIpValid && ntpIpValid[0] === saveData.ntpServer) {
       msg = validIp(saveData.ntpServer);
     } else if (ntpEnable === '1' && ntpStrValid && ntpStrValid[0] !== saveData.ntpServer) {
-      msg = _('Please input a valid ntp server!');
+      msg = __('Please input a valid ntp server!');
     }
     if (msg === '') {
       this.props.save('goform/set_ntp', saveData);
@@ -140,10 +140,10 @@ export default class TimeSettings extends Component {
     return (
       <div>
         <div>
-          <h3>{_('Time Settings')}</h3>
+          <h3>{__('Time Settings')}</h3>
           <FormGroup
             type="checkbox"
-            label={_('NTP Client')}
+            label={__('NTP Client')}
             checked={this.props.store.getIn(['curData', 'ntpEnable']) === '1'}
             onChange={data => this.props.updateItemSettings({
               ntpEnable: data.value,
@@ -151,7 +151,7 @@ export default class TimeSettings extends Component {
           />
           <FormGroup
             type="text"
-            label={_('NTP Server')}
+            label={__('NTP Server')}
             value={ntpServer}
             disabled={ntpEnable === '0'}
             onChange={data => this.props.updateItemSettings({
@@ -160,7 +160,7 @@ export default class TimeSettings extends Component {
           />
           <FormGroup
             type="select"
-            label={_('Time Zone')}
+            label={__('Time Zone')}
             options={timezoneOptions}
             disabled={ntpEnable === '0'}
             value={this.props.store.getIn(['curData', 'zoneName'])}
@@ -170,7 +170,7 @@ export default class TimeSettings extends Component {
         <div>
           <FormGroup
             type="date"
-            label={_('Date')}
+            label={__('Date')}
             displayFormat="YYYY-MM-DD"
             disabled={ntpEnable === '1'}
             value={this.props.store.getIn(['curData', 'date'])}
@@ -180,7 +180,7 @@ export default class TimeSettings extends Component {
           />
           <FormGroup
             type="time"
-            label={_('Time')}
+            label={__('Time')}
             disabled={ntpEnable === '1'}
             value={
               moment(

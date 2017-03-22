@@ -20,7 +20,7 @@ const defaultProps = {
 const settingsOptions = fromJS([
   {
     id: 'bas_ip',
-    label: _('Bas IP'),
+    label: __('Bas IP'),
     fieldset: 'base_setting',
     className: 'cols col-6',
     required: true,
@@ -34,7 +34,7 @@ const settingsOptions = fromJS([
     id: 'bas_port',
     fieldset: 'base_setting',
     className: 'cols col-6',
-    label: _('Bas Port'),
+    label: __('Bas Port'),
     type: 'number',
     required: true,
     min: '1',
@@ -49,7 +49,7 @@ const settingsOptions = fromJS([
     type: 'password',
     className: 'cols col-6',
     fieldset: 'base_setting',
-    label: _('Shared Secret'),
+    label: __('Shared Secret'),
     maxLength: '32',
     validator: validator({
       rules: 'pwd',
@@ -62,7 +62,7 @@ const settingsOptions = fromJS([
     className: 'cols col-6',
     fieldset: 'base_setting',
     maxLength: '32',
-    label: _('User'),
+    label: __('User'),
     validator: validator({
       rules: 'utf8Len:[1, 31]',
     }),
@@ -73,7 +73,7 @@ const settingsOptions = fromJS([
     required: true,
     className: 'cols col-6',
     fieldset: 'base_setting',
-    label: _('Password'),
+    label: __('Password'),
     maxLength: '32',
     validator: validator({
       rules: 'pwd',
@@ -84,13 +84,13 @@ const settingsOptions = fromJS([
     required: true,
     fieldset: 'base_setting',
     className: 'cols col-6',
-    label: _('Device Type'),
+    label: __('Device Type'),
     type: 'select',
     defaultValue: '0',
     options: [
       {
         value: '0',
-        label: _('Standard'),
+        label: __('Standard'),
       },
     ],
   },
@@ -99,16 +99,16 @@ const settingsOptions = fromJS([
     fieldset: 'base_setting',
     className: 'cols col-6',
     required: true,
-    label: _('Portal Vertion'),
+    label: __('Portal Vertion'),
     type: 'select',
     defaultValue: '1',
     options: [
       {
         value: '1',
-        label: _('V1/CMCC'),
+        label: __('V1/CMCC'),
       }, {
         value: '2',
-        label: _('V2'),
+        label: __('V2'),
         disabled: true,
       },
     ],
@@ -118,17 +118,17 @@ const settingsOptions = fromJS([
     required: true,
     fieldset: 'base_setting',
     className: 'cols col-6',
-    label: _('Auth Type'),
+    label: __('Auth Type'),
     type: 'select',
     defaultValue: '1',
     options: [
       {
         value: '0',
-        label: _('PAP'),
+        label: __('PAP'),
         disabled: true,
       }, {
         value: '1',
-        label: _('CHAP'),
+        label: __('CHAP'),
       },
     ],
   },
@@ -138,11 +138,11 @@ const settingsOptions = fromJS([
     type: 'number',
     fieldset: 'base_setting',
     className: 'cols col-6',
-    label: _('Time out'),
+    label: __('Time out'),
     min: '0',
     max: '10',
     defaultValue: '4',
-    help: _('Second'),
+    help: __('Second'),
     validator: validator({
       rules: 'num',
     }),
@@ -150,14 +150,14 @@ const settingsOptions = fromJS([
     id: 'web',
     required: true,
     fieldset: 'base_setting',
-    label: _('Web Template'),
+    label: __('Web Template'),
     className: 'cols col-6',
     type: 'select',
     defaultValue: '0',
     options: [
       {
         value: '0',
-        label: _('Default Web'),
+        label: __('Default Web'),
       },
     ],
   },
@@ -166,16 +166,16 @@ const settingsOptions = fromJS([
     required: true,
     fieldset: 'base_setting',
     className: 'cols col-6',
-    label: _('Portal Acc'),
+    label: __('Portal Acc'),
     type: 'select',
     defaultValue: '1',
     options: [
       {
         value: '0',
-        label: _('Closed'),
+        label: __('Closed'),
       }, {
         value: '1',
-        label: _('Open'),
+        label: __('Open'),
       },
     ],
   },
@@ -184,15 +184,15 @@ const settingsOptions = fromJS([
   //   required: true,
   //   fieldset: 'base_setting',
   //   className: 'cols col-6',
-  //   label: _('Enviroment Deployment'),
+  //   label: __('Enviroment Deployment'),
   //   type: 'select',
   //   options: [
   //     {
   //       value: '0',
-  //       label: _('Inside Network Deployment'),
+  //       label: __('Inside Network Deployment'),
   //     }, {
   //       value: '1',
-  //       label: _('Outside Network Deployment'),
+  //       label: __('Outside Network Deployment'),
   //     },
   //   ],
   // }, {
@@ -200,15 +200,15 @@ const settingsOptions = fromJS([
   //   required: true,
   //   fieldset: 'base_setting',
   //   className: 'cols col-6',
-  //   label: _('Computer Auth'),
+  //   label: __('Computer Auth'),
   //   type: 'select',
   //   options: [
   //     {
   //       value: '0',
-  //       label: _('Allowed'),
+  //       label: __('Allowed'),
   //     }, {
   //       value: '1',
-  //       label: _('Forbidden'),
+  //       label: __('Forbidden'),
   //     },
   //   ],
   //   defaultValue: '0',
@@ -217,15 +217,15 @@ const settingsOptions = fromJS([
   //   required: true,
   //   fieldset: 'base_setting',
   //   className: 'cols col-6',
-  //   label: _('Late Auth'),
+  //   label: __('Late Auth'),
   //   type: 'select',
   //   options: [
   //     {
   //       value: '0',
-  //       label: _('Closed'),
+  //       label: __('Closed'),
   //     }, {
   //       value: '1',
-  //       label: _('Open'),
+  //       label: __('Open'),
   //     },
   //   ],
   //   defaultValue: '0',
@@ -234,9 +234,9 @@ const settingsOptions = fromJS([
   //   required: true,
   //   fieldset: 'base_setting',
   //   className: 'cols col-6',
-  //   label: _('Late Authtime'),
+  //   label: __('Late Authtime'),
   //   type: 'text',
-  //   help: _('second'),
+  //   help: __('second'),
   // },
   {
     id: 'list',
@@ -244,43 +244,43 @@ const settingsOptions = fromJS([
     list: [
       {
         id: 'enable',
-        label: _('Initiate Mode'),
+        label: __('Initiate Mode'),
         type: 'checkbox',
         display: 'block',
       }, {
         id: 'type',
-        label: _('Authentication Types'),
+        label: __('Authentication Types'),
         options: [
           {
             value: '0',
-            label: _('One Key Auth'),
+            label: __('One Key Auth'),
           }, {
             value: '1',
-            label: _('Access User Auth'),
+            label: __('Access User Auth'),
           }, {
             value: '2',
-            label: _('Radius Auth'),
+            label: __('Radius Auth'),
           }, {
             value: '3',
-            label: _('App Auth'),
+            label: __('App Auth'),
           }, {
             value: '4',
-            label: _('Messages Auth'),
+            label: __('Messages Auth'),
           }, {
             value: '5',
-            label: _('Wechat Auth'),
+            label: __('Wechat Auth'),
           }, {
             value: '6',
-            label: _('Public Platform Auth'),
+            label: __('Public Platform Auth'),
           }, {
             value: '7',
-            label: _('Visitor Auth'),
+            label: __('Visitor Auth'),
           },
         ],
         noForm: true,
       }, {
         id: 'username',
-        label: _('Public User Name'),
+        label: __('Public User Name'),
         defaultValue: 'Empty Wanted',
         type: 'text',
         maxLength: '32',
@@ -289,7 +289,7 @@ const settingsOptions = fromJS([
         }),
       }, {
         id: 'password',
-        label: _('Public Password'),
+        label: __('Public Password'),
         type: 'password',
         maxLength: '30',
         validator: validator({
@@ -297,7 +297,7 @@ const settingsOptions = fromJS([
         }),
       }, {
         id: 'sessiontime',
-        label: _('Sesssion Time'),
+        label: __('Sesssion Time'),
         type: 'number',
         min: '0',
         max: '99999',
@@ -306,7 +306,7 @@ const settingsOptions = fromJS([
         }),
       }, {
         id: 'url',
-        label: _('URL After Authentication'),
+        label: __('URL After Authentication'),
         type: 'text',
         maxLength: '32',
         validator: validator({

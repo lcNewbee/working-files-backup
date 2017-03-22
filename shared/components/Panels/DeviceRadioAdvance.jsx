@@ -141,7 +141,7 @@ class DeviceSystem extends React.Component {
             inputStyle={{
               display: 'block',
             }}
-            label={_('Select Network Adapter')}
+            label={__('Select Network Adapter')}
             value={this.getCurData('activeIndex')}
             options={this.getCurData('radiosOptions')}
             onChange={option => this.props.onChangeItem({
@@ -155,9 +155,9 @@ class DeviceSystem extends React.Component {
           () => this.props.onSave(formId)
         }
         onChangeData={this.onChangeRadio}
-        saveText={_('Apply')}
-        savingText={_('Applying')}
-        savedText={_('Applied')}
+        saveText={__('Apply')}
+        savingText={__('Applying')}
+        savedText={__('Applied')}
       />
     );
   }

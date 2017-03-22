@@ -11,11 +11,11 @@ import * as appActions from 'shared/actions/app';
 const listOptions = fromJS([
   {
     id: 'name',
-    text: _('Role Name'),
+    text: __('Role Name'),
     type: 'text',
   }, {
     id: 'description',
-    text: _('Detail Description'),
+    text: __('Detail Description'),
     type: 'text',
   },
 ]);

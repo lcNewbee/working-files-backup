@@ -30,30 +30,30 @@ const settingsFormOptions = fromJS([
   {
     id: 'enable',
     type: 'checkbox',
-    label: _('Mirring Enable'),
+    label: __('Mirring Enable'),
   },
   {
     id: 'slotId',
     type: 'select',
-    label: _('Monitor Slot'),
+    label: __('Monitor Slot'),
     options: slotIdOptions,
   },
   {
     id: 'monitorPort',
     type: 'select',
-    label: _('Monitor Port'),
+    label: __('Monitor Port'),
     options: portIdOptions,
   },
   {
     id: 'entryPort',
     type: 'select',
-    label: _('Monitored Entry Port'),
+    label: __('Monitored Entry Port'),
     options: portIdOptions,
   },
   {
     id: 'exitPort',
     type: 'select',
-    label: _('Monitored Exit Port'),
+    label: __('Monitored Exit Port'),
     options: portIdOptions,
   },
 ]);

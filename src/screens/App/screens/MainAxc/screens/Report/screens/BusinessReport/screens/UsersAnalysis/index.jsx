@@ -14,34 +14,34 @@ import myReducer from './reducer';
 const tableOptions = fromJS([
   {
     id: 'time',
-    text: _('Time'),
+    text: __('Time'),
   }, {
     id: 'cumulativeVisits',
-    text: _('Cumulative visits'),
+    text: __('Cumulative visits'),
   }, {
     id: 'firstVisits',
-    text: _('First visits'),
+    text: __('First visits'),
   }, {
     id: 'newlyRegistered',
-    text: _('Newly Registered'),
+    text: __('Newly Registered'),
   }, {
     id: 'passBy',
-    text: _('Pass By'),
+    text: __('Pass By'),
   }, {
     id: 'accessSubscriber',
-    text: _('Access Subscriber'),
+    text: __('Access Subscriber'),
   }, {
     id: 'nonFirstVisit',
-    text: _('Non - First Visit'),
+    text: __('Non - First Visit'),
   }, {
     id: 'accessRatio',
-    text: _('Visit Ratio'),
+    text: __('Visit Ratio'),
   }, {
     id: 'reVisitingRatio',
-    text: _('Re-visiting Ratio'),
+    text: __('Re-visiting Ratio'),
   }, {
     id: 'averageDetentionTime',
-    text: _('Average Dwell Time'),
+    text: __('Average Dwell Time'),
   },
 ]);
 
@@ -67,20 +67,20 @@ export default class View extends PureComponent {
                 style={{ marginRight: '20px' }}
                 htmlFor="dateRange"
               >
-                {_('Date Range')}
+                {__('Date Range')}
               </label>
               <FormInput
                 type="date-range"
                 id="dateRange"
                 dateFormat="YYYY-MM-DD"
-                todayButton={_('Today')}
+                todayButton={__('Today')}
               />
             </div>
             <div className="cols col-6">
               <Button
                 theme="primary"
                 icon="download"
-                text={`${_('Download Report')}(PDF)`}
+                text={`${__('Download Report')}(PDF)`}
               />
             </div>
           </div>

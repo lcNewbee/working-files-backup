@@ -49,9 +49,9 @@ const defaultProps = {
       alert(`${option.id}: ${option.text}`);
     }
   },
-  saveText: _('Apply'),
-  savingText: _('Applying'),
-  savedText: _('Applied'),
+  saveText: __('Apply'),
+  savingText: __('Applying'),
+  savedText: __('Applied'),
 };
 
 // 原生的 react 页面
@@ -184,7 +184,7 @@ class AppSettings extends React.PureComponent {
     let curSavedText = this.props.savedText;
 
     if (syncCode >= 6000) {
-      curSavedText = _('Unapply');
+      curSavedText = __('Unapply');
     }
 
     return (

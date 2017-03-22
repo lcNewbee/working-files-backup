@@ -14,12 +14,12 @@ import * as propertiesActions from 'shared/actions/properties';
 const formOptions = fromJS([
   {
     id: 'radsec_enable',
-    label: _('Enable'),
+    label: __('Enable'),
     type: 'checkbox',
     required: true,
   }, {
     id: 'radius_template',
-    label: _('Radius Server'),
+    label: __('Radius Server'),
     type: 'select',
     required: true,
   },

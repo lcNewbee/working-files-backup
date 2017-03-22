@@ -46,7 +46,7 @@ export default class View extends PureComponent {
         data: List(dataList).map(item => item.name).toJS(),
       },
       title: {
-        text: _('应用流量占比'),
+        text: __('应用流量占比'),
         x: 'center',
       },
       series: [
@@ -105,7 +105,7 @@ export default class View extends PureComponent {
         formatter: '{a} <br/>{b}: {c} ({d}%)',
       },
       title: {
-        text: _('终端类型分布'),
+        text: __('终端类型分布'),
         x: 'center',
       },
       legend: {
@@ -198,24 +198,24 @@ export default class View extends PureComponent {
 
     return (
       <div>
-        <h3 className="t-main__content-title">{_('Flow Report') }</h3>
+        <h3 className="t-main__content-title">{__('Flow Report') }</h3>
         <div className="m-action-bar">
           <div className="cols col-6">
-            <label style={{ marginRight: '20px' }}>{_('日期范围')}</label>
+            <label style={{ marginRight: '20px' }}>{__('日期范围')}</label>
             <FormInput
               type="date"
               dateFormat="YYYY-MM-DD"
-              todayButton={_('Today')}
+              todayButton={__('Today')}
               selected={moment()}
               style={{ marginRight: '.5em' }}
             />
-            <span style={{ margin: '0 .5em' }}>{_('To')}</span>
+            <span style={{ margin: '0 .5em' }}>{__('To')}</span>
             <FormInput
               type="date"
               dateFormat="YYYY-MM-DD"
-              todayButton={_('Today')}
+              todayButton={__('Today')}
               selected={moment()}
-              label={_('日期')}
+              label={__('日期')}
               style={{ marginLeft: '.5em' }}
             />
           </div>
@@ -223,14 +223,14 @@ export default class View extends PureComponent {
             <Button
               theme="primary"
               icon="download"
-              text={`${_('Download Report')}(PDF)`}
+              text={`${__('Download Report')}(PDF)`}
             />
           </div>
         </div>
         <div className="stats-group clearfix" >
           <div className="cols col-6" >
             <div className="stats-group-cell">
-              <h3>{ _('用户数') }</h3>
+              <h3>{ __('用户数') }</h3>
             </div>
             <div className="stats-group-cell">
               <EchartReact
@@ -244,7 +244,7 @@ export default class View extends PureComponent {
           </div>
           <div className="cols col-6" >
             <div className="stats-group-cell">
-              <h3>{ _('应用流量') }</h3>
+              <h3>{ __('应用流量') }</h3>
             </div>
             <div className="stats-group-cell">
               <EchartReact
@@ -258,7 +258,7 @@ export default class View extends PureComponent {
           </div>
           <div className="stats-group-large">
             <div className="stats-group-header">
-              <h3>{ _('流量趋势') }</h3>
+              <h3>{ __('流量趋势') }</h3>
             </div>
             <div className="stats-group-cell">
               <EchartReact

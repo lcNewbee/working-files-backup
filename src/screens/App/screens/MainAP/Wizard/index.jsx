@@ -24,14 +24,14 @@ import imgEn from './modeEN.png';
 
 const _ = window._;
 const msg = {
-  password: _('Password'),
-  country: _('Country'),
-  timeZone: _('Time Zone'),
-  confirmpasswd: _('Confirm Password'),
-  welcomeDes: _('Thank you for purchasing Axilspot enterprise-class products,' +
+  password: __('Password'),
+  country: __('Country'),
+  timeZone: __('Time Zone'),
+  confirmpasswd: __('Confirm Password'),
+  welcomeDes: __('Thank you for purchasing Axilspot enterprise-class products,' +
     ' you will complete the configuration for management system in minutes'),
-  passwordDes: _('Please provide an administrator password to login to Axilspot management system'),
-  completeDes: _('Please confirm your configuration below.' +
+  passwordDes: __('Please provide an administrator password to login to Axilspot management system'),
+  completeDes: __('Please confirm your configuration below.' +
     ' Click back to modify the configuration or click finish to activate the configuration.' +
     ' After finish you will skip to management interface.'),
 };
@@ -255,7 +255,7 @@ export default class SignUp extends React.Component {
             overflow: 'auto',
           }}
         >
-          <h2>{_('Quick Setup')}</h2>
+          <h2>{__('Quick Setup')}</h2>
           <div
             className="t-wizard__content"
             style={{
@@ -272,17 +272,17 @@ export default class SignUp extends React.Component {
             >
               <div style={{ marginBottom: '5px' }}>
                 {
-                  _('Notice: You see this page only when you first login. You can select the device operation mode(Fat/Thin) as you need.')
+                  __('Notice: You see this page only when you first login. You can select the device operation mode(Fat/Thin) as you need.')
                 }
               </div>
               <div style={{ marginBottom: '5px' }}>
                 {
-                  _('Fat AP: The wireless access point handles all wireless clients independently, and each AP has to be configured individually.')
+                  __('Fat AP: The wireless access point handles all wireless clients independently, and each AP has to be configured individually.')
                 }
               </div>
               <div style={{ marginBottom: '5px' }}>
                 {
-                  _('Thin AP:  The wireless access point managed by the controller. All configurations are done on the controller.')
+                  __('Thin AP:  The wireless access point managed by the controller. All configurations are done on the controller.')
                 }
               </div>
             </div>
@@ -329,7 +329,7 @@ export default class SignUp extends React.Component {
                     type="radio"
                     name="modeSelection"
                     checked={nextModeData.enable === '0'}
-                    text={_('Fat AP Mode')}
+                    text={__('Fat AP Mode')}
                     onChange={() => {
                       this.props.changeNextModeData({ enable: '0' });
                     }}
@@ -375,7 +375,7 @@ export default class SignUp extends React.Component {
                     type="radio"
                     name="modeSelection"
                     checked={nextModeData.enable === '1'}
-                    text={_('Thin AP Mode')}
+                    text={__('Thin AP Mode')}
                     onChange={() => {
                       this.props.changeNextModeData({ enable: '1' });
                       this.props.changeShowThinModeConfigModal(true);
@@ -389,7 +389,7 @@ export default class SignUp extends React.Component {
             <Button
               theme={btnInfoRole}
               onClick={this.onOkButtonClick}
-              text={_('OK')}
+              text={__('OK')}
             />
           </div>
         </div>
@@ -408,11 +408,11 @@ export default class SignUp extends React.Component {
         >
           <FormGroup
             type="switch"
-            label={_('Discovery Type')}
+            label={__('Discovery Type')}
             value={nextModeData.discoveryType}
             options={[
-              { value: 'dhcp', label: _('DHCP') },
-              { value: 'static', label: _('Static') },
+              { value: 'dhcp', label: __('DHCP') },
+              { value: 'static', label: __('Static') },
             ]}
             minWidth="73px"
             onChange={(data) => {
@@ -423,7 +423,7 @@ export default class SignUp extends React.Component {
             nextModeData.discoveryType === 'static' && nextModeData.enable === '1' ? (
               <FormGroup
                 type="text"
-                label={_('AC IP')}
+                label={__('AC IP')}
                 form="acipinput"
                 value={nextModeData.acIp}
                 onChange={(data) => {
@@ -435,7 +435,7 @@ export default class SignUp extends React.Component {
             ) : null
           }
           <span>
-            {_('Notice: The device will reboot when you click \'OK\' button if the configuration changed! Or, the page will be directed to management web.')}
+            {__('Notice: The device will reboot when you click \'OK\' button if the configuration changed! Or, the page will be directed to management web.')}
           </span>
         </Modal>
         <Modal
@@ -449,7 +449,7 @@ export default class SignUp extends React.Component {
           draggable
         >
           <ProgressBar
-            title={_('rebooting , please wait...')}
+            title={__('rebooting , please wait...')}
             time={60}
             callback={() => {
               this.props.changeShowProgressBar(false);

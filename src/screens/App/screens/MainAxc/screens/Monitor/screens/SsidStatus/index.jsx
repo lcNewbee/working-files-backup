@@ -10,7 +10,7 @@ const flowRateFilter = utils.filter('flowRate:["KB"]');
 const checkboxOptions = [
   {
     value: 1,
-    label: _('On'),
+    label: __('On'),
     render() {
       return (
         <span
@@ -18,13 +18,13 @@ const checkboxOptions = [
             color: 'green',
           }}
         >
-          {_('On')}
+          {__('On')}
         </span>
       );
     },
   }, {
     value: 0,
-    label: _('Off'),
+    label: __('Off'),
     render() {
       return (
         <span
@@ -32,7 +32,7 @@ const checkboxOptions = [
             color: 'red',
           }}
         >
-          {_('Off')}
+          {__('Off')}
         </span>
       );
     },
@@ -46,19 +46,19 @@ const ssidListOptions = fromJS([
 
   }, {
     id: 'enabled',
-    text: _('Status'),
+    text: __('Status'),
     options: checkboxOptions,
   }, {
     id: 'onlineNumber',
     width: '140',
-    text: _('Online Numbers'),
+    text: __('Online Numbers'),
   }, {
     id: 'apNumber',
     width: '140',
-    text: _('AP Number'),
+    text: __('AP Number'),
   }, {
     id: 'bandwidth',
-    text: _('UP/Down Traffic'),
+    text: __('UP/Down Traffic'),
     transform(val, item) {
       const upRate = flowRateFilter.transform(item.get('upstream'));
       const downRate = flowRateFilter.transform(item.get('downstream'));

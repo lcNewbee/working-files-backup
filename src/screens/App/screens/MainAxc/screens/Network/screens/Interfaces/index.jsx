@@ -25,7 +25,7 @@ function getPortList() {
 const $$listOptions = fromJS([
   {
     id: 'name',
-    text: _('Port Name'),
+    text: __('Port Name'),
     options: [],
     formProps: {
       form: 'port',
@@ -35,7 +35,7 @@ const $$listOptions = fromJS([
     },
   }, {
     id: 'ip',
-    text: _('IP Address'),
+    text: __('IP Address'),
     formProps: {
       form: 'port',
       type: 'text',
@@ -46,7 +46,7 @@ const $$listOptions = fromJS([
     },
   }, {
     id: 'mask',
-    text: _('Subnet Mask'),
+    text: __('Subnet Mask'),
     formProps: {
       form: 'port',
       type: 'text',
@@ -110,7 +110,7 @@ export default class NetworkInterface extends React.Component {
 
       // 检测是否有相同IP或网段的接口
       if ($$curList.find($$item => ip === $$item.get('ip'))) {
-        ret = _('Same %s item already exists', _('IP'));
+        ret = __('Same %s item already exists', __('IP'));
       } else if ($$curList.find(
         $$item => validator.combine.needSeparateSegment(
           ip,
@@ -123,7 +123,7 @@ export default class NetworkInterface extends React.Component {
           },
         ),
       )) {
-        ret = _('Same %s item already exists', _('segment'));
+        ret = __('Same %s item already exists', __('segment'));
       }
     }
 

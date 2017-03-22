@@ -48,186 +48,186 @@ const uptimeFilter = utils.filter('connectTime');
 const listOptions = fromJS([
   {
     id: 'loginName',
-    text: _('Login Name'),
+    text: __('Login Name'),
   }, {
     id: 'date',
-    text: _('Expired Date'),
+    text: __('Expired Date'),
     noForm: true,
   }, {
     id: 'time',
-    text: _('Left Time'),
+    text: __('Left Time'),
     noForm: true,
     transform(val) {
       return uptimeFilter.transform(val / 1000);
     },
   }, {
     id: 'octets',
-    text: _('Left Traffic'),
+    text: __('Left Traffic'),
     noForm: true,
   }, {
     id: 'password',
-    text: _('Password'),
+    text: __('Password'),
     type: 'pwd',
     noTable: true,
   }, {
     id: 'ex1',
-    text: _('Question'),
+    text: __('Question'),
     noTable: true,
   }, {
     id: 'ex2',
-    text: _('Answer'),
+    text: __('Answer'),
     noTable: true,
     type: 'text',
   }, {
     id: 'state',
     type: 'text',
-    text: _('Type'),
+    text: __('Type'),
     options: [
       {
         value: '0',
-        label: _('Unavailability'),
+        label: __('Unavailability'),
       }, {
         value: '1',
-        label: _('Free of Charge'),
+        label: __('Free of Charge'),
       },
       {
         value: '2',
-        label: _('Timekeeping'),
+        label: __('Timekeeping'),
       }, {
         value: '3',
-        label: _('Buy Out'),
+        label: __('Buy Out'),
       }, {
         value: '4',
-        label: _('Traffic'),
+        label: __('Traffic'),
       },
     ],
     defaultValue: '0',
   }, {
     id: 'maclimit',
-    text: _('Mac Limit'),
+    text: __('Mac Limit'),
     options: [
       {
         value: '0',
-        label: _('Closed'),
+        label: __('Closed'),
       }, {
         value: '1',
-        label: _('Open'),
+        label: __('Open'),
       },
     ],
     defaultValue: '0',
   }, {
     id: 'maclimitcount',
-    text: _('Mac Quantity'),
+    text: __('Mac Quantity'),
   }, {
     id: 'autologin',
-    text: _('Auto Login'),
+    text: __('Auto Login'),
     options: [
       {
         value: '0',
-        label: _('Closed'),
+        label: __('Closed'),
       }, {
         value: '1',
-        label: _('Open'),
+        label: __('Open'),
       },
     ],
     defaultValue: '0',
   }, {
     id: 'speed',
-    text: _('Speed Limit'),
+    text: __('Speed Limit'),
     noForm: true,
     noTable: true,
     options: [
       {
         value: '1',
-        label: _('1M'),
+        label: __('1M'),
       },
     ],
     defaultValue: '1',
   }, {
     id: 'ex4',
-    text: _('Last Unbind Month'),
+    text: __('Last Unbind Month'),
     noForm: true,
     noTable: true,
   }, {
     id: 'ex3',
-    text: _('Unbind Times'),
+    text: __('Unbind Times'),
     noForm: true,
     noTable: true,
   }, {
     id: 'name',
-    text: _('Name'),
+    text: __('Name'),
     noTable: true,
   }, {
     id: 'gender',
-    text: _('Gender'),
+    text: __('Gender'),
     noTable: true,
     options: [
       {
         value: '0',
-        label: _('Male'),
+        label: __('Male'),
       }, {
         value: '1',
-        label: _('Female'),
+        label: __('Female'),
       },
     ],
     defaultValue: '0',
   }, {
     id: 'idnumber',
-    text: _('ID No.'),
+    text: __('ID No.'),
     noTable: true,
   }, {
     id: 'phoneNumber',
-    text: _('Phone'),
+    text: __('Phone'),
     noTable: true,
   }, {
     id: 'address',
-    text: _('Address'),
+    text: __('Address'),
     noTable: true,
   }, {
     id: 'email',
-    text: _('Email'),
+    text: __('Email'),
     noTable: true,
   }, {
     id: 'description',
-    text: _('Detail Information'),
+    text: __('Detail Information'),
     noTable: true,
   }, {
     id: 'ex5',
-    text: _('ex5'),
+    text: __('ex5'),
     noTable: true,
     noForm: true,
   }, {
     id: 'ex6',
-    text: _('ex6'),
+    text: __('ex6'),
     noTable: true,
     noForm: true,
   }, {
     id: 'ex7',
-    text: _('ex7'),
+    text: __('ex7'),
     noTable: true,
     noForm: true,
   }, {
     id: 'ex8',
-    text: _('ex8'),
+    text: __('ex8'),
     noTable: true,
     noForm: true,
   }, {
     id: 'ex9',
-    text: _('ex9'),
+    text: __('ex9'),
     noTable: true,
     noForm: true,
   }, {
     id: 'ex10',
-    text: _('ex10'),
+    text: __('ex10'),
     noTable: true,
     noForm: true,
   }, {
     id: '__actions__',
-    text: _('Actions'),
+    text: __('Actions'),
     transform(val, $$item) {
       return (
         <span>
-          <a href={`/index.html#/main/portal/account/list/mac/${$$item.get('loginName')}`} className="tablelink">{_('Mac Management')}</a>
+          <a href={`/index.html#/main/portal/account/list/mac/${$$item.get('loginName')}`} className="tablelink">{__('Mac Management')}</a>
         </span>
       );
     },
@@ -236,7 +236,7 @@ const listOptions = fromJS([
 export const baseSetting = fromJS([
   {
     id: 'loginName',
-    label: _('Login Name'),
+    label: __('Login Name'),
     className: 'cols col-6',
     type: 'text',
     required: true,
@@ -246,7 +246,7 @@ export const baseSetting = fromJS([
     }),
   }, {
     id: 'password',
-    label: _('Password'),
+    label: __('Password'),
     className: 'cols col-6',
     type: 'password',
     noTable: true,
@@ -257,7 +257,7 @@ export const baseSetting = fromJS([
     }),
   }, {
     id: 'ex1',
-    label: _('Question'),
+    label: __('Question'),
     className: 'cols col-6',
     noTable: true,
     type: 'text',
@@ -267,7 +267,7 @@ export const baseSetting = fromJS([
     }),
   }, {
     id: 'ex2',
-    label: _('Answer'),
+    label: __('Answer'),
     className: 'cols col-6',
     noTable: true,
     type: 'text',
@@ -277,52 +277,52 @@ export const baseSetting = fromJS([
     }),
   }, {
     id: 'state',
-    label: _('Type'),
+    label: __('Type'),
     className: 'cols col-12',
     options: [
       {
         value: '0',
-        label: _('Unavailability'),
+        label: __('Unavailability'),
       }, {
         value: '1',
-        label: _('Free of Charge'),
+        label: __('Free of Charge'),
       },
       {
         value: '2',
-        label: _('Timekeeping'),
+        label: __('Timekeeping'),
       }, {
         value: '3',
-        label: _('Buy Out'),
+        label: __('Buy Out'),
       }, {
         value: '4',
-        label: _('Traffic'),
+        label: __('Traffic'),
       },
     ],
     defaultValue: '0',
     type: 'select',
     required: true,
-    placeholder: _('Please Select ') + _('Type'),
+    placeholder: __('Please Select ') + __('Type'),
 
   }, {
     id: 'maclimit',
-    label: _('Mac Limit'),
+    label: __('Mac Limit'),
     className: 'cols col-6',
     options: [
       {
         value: '0',
-        label: _('Closed'),
+        label: __('Closed'),
       }, {
         value: '1',
-        label: _('Open'),
+        label: __('Open'),
       },
     ],
     defaultValue: '0',
     type: 'select',
     required: true,
-    placeholder: _('Please Select ') + _('Mac Limit'),
+    placeholder: __('Please Select ') + __('Mac Limit'),
   }, {
     id: 'maclimitcount',
-    label: _('Mac Quantity'),
+    label: __('Mac Quantity'),
     className: 'cols col-6',
     type: 'number',
     min: '0',
@@ -330,41 +330,41 @@ export const baseSetting = fromJS([
     required: true,
   }, {
     id: 'autologin',
-    label: _('Auto Login'),
+    label: __('Auto Login'),
     className: 'cols col-6',
     options: [
       {
         value: '0',
-        label: _('Closed'),
+        label: __('Closed'),
       }, {
         value: '1',
-        label: _('Open'),
+        label: __('Open'),
       },
     ],
     defaultValue: '0',
     type: 'select',
     required: true,
-    placeholder: _('Auto Login') + _('Auto Login'),
+    placeholder: __('Auto Login') + __('Auto Login'),
 
   }, {
     id: 'speed',
-    label: _('Speed Limit'),
+    label: __('Speed Limit'),
     noForm: true,
     noTable: true,
     className: 'cols col-6',
     options: [
       {
         value: '1',
-        label: _('1M'),
+        label: __('1M'),
       },
     ],
     defaultValue: '0',
     type: 'select',
     required: true,
-    placeholder: _('Please Select ') + _('Speed Limit'),
+    placeholder: __('Please Select ') + __('Speed Limit'),
   }, {
     id: 'ex4',
-    label: _('Last Unbind Month'),
+    label: __('Last Unbind Month'),
     className: 'cols col-6',
     type: 'number',
     required: true,
@@ -372,7 +372,7 @@ export const baseSetting = fromJS([
     max: '12',
   }, {
     id: 'ex3',
-    label: _('Unbind Times'),
+    label: __('Unbind Times'),
     className: 'cols col-6',
     type: 'number',
     min: '0',
@@ -384,7 +384,7 @@ export const baseSetting = fromJS([
 export const advancedSetting = fromJS([
   {
     id: 'name',
-    label: _('Name'),
+    label: __('Name'),
     noTable: true,
     className: 'cols col-12',
     type: 'text',
@@ -394,25 +394,25 @@ export const advancedSetting = fromJS([
     }),
   }, {
     id: 'gender',
-    label: _('Gender'),
+    label: __('Gender'),
     className: 'cols col-6',
     noTable: true,
     options: [
       {
         value: '0',
-        label: _('Male'),
+        label: __('Male'),
       }, {
         value: '1',
-        label: _('Female'),
+        label: __('Female'),
       },
     ],
     defaultValue: '0',
     type: 'select',
-    placeholder: _('Please Select ') + _('Gender'),
+    placeholder: __('Please Select ') + __('Gender'),
 
   }, {
     id: 'idnumber',
-    label: _('ID No.'),
+    label: __('ID No.'),
     className: 'cols col-6',
     noTable: true,
     type: 'text',
@@ -422,7 +422,7 @@ export const advancedSetting = fromJS([
     }),
   }, {
     id: 'phoneNumber',
-    label: _('Phone'),
+    label: __('Phone'),
     noTable: true,
     className: 'cols col-6',
     type: 'text',
@@ -432,7 +432,7 @@ export const advancedSetting = fromJS([
     }),
   }, {
     id: 'address',
-    label: _('Address'),
+    label: __('Address'),
     className: 'cols col-6',
     noTable: true,
     type: 'text',
@@ -442,7 +442,7 @@ export const advancedSetting = fromJS([
     }),
   }, {
     id: 'email',
-    label: _('Email'),
+    label: __('Email'),
     className: 'cols col-6',
     noTable: true,
     type: 'text',
@@ -452,7 +452,7 @@ export const advancedSetting = fromJS([
     }),
   }, {
     id: 'description',
-    label: _('Detail Information'),
+    label: __('Detail Information'),
     className: 'cols col-6',
     noTable: true,
     type: 'text',
@@ -465,7 +465,7 @@ export const advancedSetting = fromJS([
 const rechargeOptions = fromJS([
   {
     id: 'loginName',
-    label: _('Login Name'),
+    label: __('Login Name'),
     form: 'recharge',
     type: 'text',
     disabled: true,
@@ -477,7 +477,7 @@ const rechargeOptions = fromJS([
   },
   {
     id: 'nickname',
-    label: _('Name'),
+    label: __('Name'),
     type: 'text',
     form: 'recharge',
     disabled: true,
@@ -489,14 +489,14 @@ const rechargeOptions = fromJS([
   },
   {
     id: 'name',
-    label: _('Recharge Choices'),
+    label: __('Recharge Choices'),
     form: 'recharge',
     required: true,
     type: 'select',
   },
   {
     id: 'state',
-    label: _('Type'),
+    label: __('Type'),
     form: 'recharge',
     type: 'select',
     disabled: true,
@@ -504,20 +504,20 @@ const rechargeOptions = fromJS([
     options: [
       {
         value: '0',
-        label: _('Hour Card'),
+        label: __('Hour Card'),
       }, {
         value: '1',
-        label: _('Day Card'),
+        label: __('Day Card'),
       },
       {
         value: '2',
-        label: _('Month Card'),
+        label: __('Month Card'),
       }, {
         value: '3',
-        label: _('Year Card'),
+        label: __('Year Card'),
       }, {
         value: '4',
-        label: _('Traffic Card'),
+        label: __('Traffic Card'),
       },
     ],
     showPrecondition(data) {
@@ -525,7 +525,7 @@ const rechargeOptions = fromJS([
     },
   }, {
     id: 'maclimit',
-    label: _('Mac Limit'),
+    label: __('Mac Limit'),
     form: 'recharge',
     disabled: true,
     type: 'select',
@@ -536,15 +536,15 @@ const rechargeOptions = fromJS([
     options: [
       {
         value: '0',
-        label: _('Closed'),
+        label: __('Closed'),
       }, {
         value: '1',
-        label: _('Open'),
+        label: __('Open'),
       },
     ],
   }, {
     id: 'maclimitcount',
-    label: _('Mac Quantity'),
+    label: __('Mac Quantity'),
     disabled: true,
     form: 'recharge',
     type: 'number',
@@ -558,7 +558,7 @@ const rechargeOptions = fromJS([
     }),
   }, {
     id: 'autologin',
-    label: _('Auto Login'),
+    label: __('Auto Login'),
     disabled: true,
     showPrecondition(data) {
       return data.get('name') !== undefined;
@@ -566,17 +566,17 @@ const rechargeOptions = fromJS([
     options: [
       {
         value: '0',
-        label: _('Closed'),
+        label: __('Closed'),
       }, {
         value: '1',
-        label: _('Open'),
+        label: __('Open'),
       },
     ],
     type: 'select',
     required: true,
   }, {
     id: 'speed',
-    label: _('Speed Limit'),
+    label: __('Speed Limit'),
     disabled: true,
     form: 'recharge',
     type: 'select',
@@ -587,12 +587,12 @@ const rechargeOptions = fromJS([
     options: [
       {
         value: '1',
-        label: _('1M'),
+        label: __('1M'),
       },
     ],
   }, {
     id: 'time',
-    label: _('Count'),
+    label: __('Count'),
     type: 'text',
     form: 'recharge',
     disabled: true,
@@ -605,18 +605,18 @@ const rechargeOptions = fromJS([
     }),
   }, {
     id: 'money',
-    label: _('Price'),
+    label: __('Price'),
     form: 'recharge',
     disabled: true,
     type: 'text',
     required: true,
-    help: _('$'),
+    help: __('$'),
     showPrecondition(data) {
       return data.get('name') !== undefined;
     },
   }, {
     id: 'description',
-    label: _('Description'),
+    label: __('Description'),
     form: 'recharge',
     disabled: true,
     width: '120px',
@@ -784,7 +784,7 @@ export default class View extends React.Component {
                 marginRight: '5px',
               }}
             />
-            {_('Base Settings')}
+            {__('Base Settings')}
           </h3>
         </div>
         {
@@ -819,7 +819,7 @@ export default class View extends React.Component {
               }}
               onClick={() => this.toggleBox('isAdvancedShow')}
             />
-            {_('Advanced Settings')}
+            {__('Advanced Settings')}
           </h3>
         </div>
         {
@@ -849,13 +849,13 @@ export default class View extends React.Component {
           .setIn([-1, 'transform'], (val, $$data) => (
             <span>
               <Button
-                text={_('Recharge')}
+                text={__('Recharge')}
                 key="rechargeActionButton"
                 icon="vcard"
                 onClick={() => {
                   this.props.changeScreenActionQuery({
                     action: 'recharge',
-                    myTitle: _('Recharge'),
+                    myTitle: __('Recharge'),
                   });
                   this.props.updateCurEditListItem({
                     id: $$data.get('id'),

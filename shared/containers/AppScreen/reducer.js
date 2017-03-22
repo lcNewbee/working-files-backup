@@ -145,7 +145,7 @@ function activeListItem(state, curScreenName, action) {
     )
     .mergeIn([curScreenName, 'actionQuery'], {
       action: action.meta.action || 'edit',
-      myTitle: `${_('Edit')}: ${action.payload.val}`,
+      myTitle: `${__('Edit')}: ${action.payload.val}`,
       index: listItemIndex,
     });
 }
@@ -213,7 +213,7 @@ export default function (state = defaultState, action) {
       )
       .mergeIn([curScreenName, 'actionQuery'], {
         action: 'add',
-        myTitle: _('Add'),
+        myTitle: __('Add'),
       });
 
     case ACTIONS.SELECT_LIST_ITEM:

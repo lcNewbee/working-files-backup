@@ -11,7 +11,7 @@ import * as appActions from 'shared/actions/app';
 const listOptions = fromJS([
   {
     id: 'basname',
-    text: _('Bas Name'),
+    text: __('Bas Name'),
     className: 'col col-6',
     formProps: {
       required: true,
@@ -19,7 +19,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'bas_ip',
-    text: _('Bas IP'),
+    text: __('Bas IP'),
     className: 'col col-6',
     formProps: {
       required: true,
@@ -29,21 +29,21 @@ const listOptions = fromJS([
     },
   }, {
     id: 'bas_port',
-    text: _('Bas Port'),
+    text: __('Bas Port'),
     noTable: true,
     formProps: {
       required: true,
     },
   }, {
     id: 'sharedSecret',
-    text: _('Shared Secret'),
+    text: __('Shared Secret'),
     formProps: {
       type: 'password',
       required: true,
     },
   }, {
     id: 'bas_user',
-    text: _('User'),
+    text: __('User'),
     noTable: true,
     formProps: {
       required: true,
@@ -51,7 +51,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'bas_pwd',
-    text: _('Password'),
+    text: __('Password'),
     noTable: true,
     formProps: {
       required: true,
@@ -59,61 +59,61 @@ const listOptions = fromJS([
     },
   }, {
     id: 'bas',
-    text: _('Device Type'),
+    text: __('Device Type'),
     options: [
       {
         value: '0',
-        label: _('Standard'),
+        label: __('Standard'),
       },
     ],
     defaultValue: '0',
     formProps: {
       required: true,
       type: 'select',
-      label: _('Device Type'),
-      placeholder: _('Please Select ') + _('Device Type'),
+      label: __('Device Type'),
+      placeholder: __('Please Select ') + __('Device Type'),
     },
   }, {
     id: 'portalVer',
-    text: _('Portal Vertion'),
+    text: __('Portal Vertion'),
     options: [
       {
         value: '1',
-        label: _('V1/CMCC'),
+        label: __('V1/CMCC'),
       }, {
         value: '2',
-        label: _('V2'),
+        label: __('V2'),
       },
     ],
     defaultValue: '0',
     formProps: {
       required: true,
       type: 'select',
-      label: _('Portal Vertion'),
-      placeholder: _('Please Select ') + _('Portal Vertion'),
+      label: __('Portal Vertion'),
+      placeholder: __('Please Select ') + __('Portal Vertion'),
     },
   }, {
     id: 'authType',
-    text: _('Auth Type'),
+    text: __('Auth Type'),
     options: [
       {
         value: '0',
-        label: _('PAP'),
+        label: __('PAP'),
       }, {
         value: '1',
-        label: _('CHAP'),
+        label: __('CHAP'),
       },
     ],
     defaultValue: '0',
     formProps: {
       required: true,
       type: 'select',
-      label: _('Auth Type'),
-      placeholder: _('Please Select ') + _('Auth Type'),
+      label: __('Auth Type'),
+      placeholder: __('Please Select ') + __('Auth Type'),
     },
   }, {
     id: 'timeoutSec',
-    text: _('Time out'),
+    text: __('Time out'),
     type: 'num',
     formProps: {
       min: '0',
@@ -121,23 +121,23 @@ const listOptions = fromJS([
     },
   }, {
     id: 'web',
-    text: _('Web Template'),
+    text: __('Web Template'),
     options: [
       {
         required: true,
         value: '0',
-        label: _('Default Web'),
+        label: __('Default Web'),
       },
     ],
     defaultValue: '0',
     formProps: {
       type: 'select',
-      label: _('Web Template'),
-      placeholder: _('Please Select ') + _('Web Template'),
+      label: __('Web Template'),
+      placeholder: __('Please Select ') + __('Web Template'),
     },
   }, {
     id: 'isPortalCheck',
-    text: _('Portal Acc'),
+    text: __('Portal Acc'),
     noForm: true,
     noTable: true,
     formProps: {
@@ -145,52 +145,52 @@ const listOptions = fromJS([
     },
   }, {
     id: 'isOut',
-    text: _('Enviroment Deployment'),
+    text: __('Enviroment Deployment'),
     options: [
       {
         value: '0',
-        label: _('Inside Network Deployment'),
+        label: __('Inside Network Deployment'),
       }, {
         value: '1',
-        label: _('Outside Network Deployment'),
+        label: __('Outside Network Deployment'),
       },
     ],
     defaultValue: '0',
     formProps: {
       required: true,
       type: 'select',
-      label: _('Enviroment Deployment'),
-      placeholder: _('Please Select ') + _('Enviroment'),
+      label: __('Enviroment Deployment'),
+      placeholder: __('Please Select ') + __('Enviroment'),
     },
   }, {
     id: 'auth_interface',
-    text: _('Interface Auth'),
+    text: __('Interface Auth'),
     noTable: true,
     formProps: {
       required: true,
     },
   }, {
     id: 'isComputer',
-    text: _('Computer Auth'),
+    text: __('Computer Auth'),
     options: [
       {
         value: '0',
-        label: _('Allowed'),
+        label: __('Allowed'),
       }, {
         value: '1',
-        label: _('Forbidden'),
+        label: __('Forbidden'),
       },
     ],
     defaultValue: '0',
     formProps: {
       required: true,
       type: 'select',
-      label: _('Computer Auth'),
-      placeholder: _('Please Select ') + _('Computer Auth'),
+      label: __('Computer Auth'),
+      placeholder: __('Please Select ') + __('Computer Auth'),
     },
   }, {
     id: 'isdebug',
-    text: _('Debug'),
+    text: __('Debug'),
     noTable: true,
     noForm: true,
     formProps: {
@@ -198,26 +198,26 @@ const listOptions = fromJS([
     },
   }, {
     id: 'lateAuth',
-    text: _('Late Auth'),
+    text: __('Late Auth'),
     options: [
       {
         value: '0',
-        label: _('Closed'),
+        label: __('Closed'),
       }, {
         value: '1',
-        label: _('Open'),
+        label: __('Open'),
       },
     ],
     defaultValue: '0',
     formProps: {
       required: true,
       type: 'select',
-      label: _('Late Auth'),
-      placeholder: _('Please Select ') + _('Late Auth'),
+      label: __('Late Auth'),
+      placeholder: __('Please Select ') + __('Late Auth'),
     },
   }, {
     id: 'lateAuthTime',
-    text: _('Late Authtime'),
+    text: __('Late Authtime'),
     formProps: {
       required: true,
     },

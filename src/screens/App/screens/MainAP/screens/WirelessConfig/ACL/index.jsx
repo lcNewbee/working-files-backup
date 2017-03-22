@@ -142,7 +142,7 @@ export default class ACL extends React.Component {
           this.props.createModal({
             id: 'settings',
             role: 'alert',
-            text: _('The MAC address already exists in the mac list !'),
+            text: __('The MAC address already exists in the mac list !'),
           });
           return;
         }
@@ -162,7 +162,7 @@ export default class ACL extends React.Component {
           this.props.createModal({
             id: 'settings',
             role: 'alert',
-            text: _('The number of MAC list items can not exceed 64 !'),
+            text: __('The number of MAC list items can not exceed 64 !'),
           });
         }
       }
@@ -258,7 +258,7 @@ export default class ACL extends React.Component {
           this.props.product.get('deviceRadioList').size > 1 ? (
             <FormInput
               type="switch"
-              label={_('Radio Select')}
+              label={__('Radio Select')}
               value={this.props.selfState.getIn(['currRadioConfig', 'radioId'])}
               options={radioSelectOptions}
               minWidth="100px"
@@ -274,7 +274,7 @@ export default class ACL extends React.Component {
           ) : null
         }
         <FormGroup
-          label={_('Enable')}
+          label={__('Enable')}
           type="checkbox"
           checked={store.getIn(['curData', 'radioList', radioId, 'aclEnable']) === '1'}
           onChange={() => {
@@ -285,7 +285,7 @@ export default class ACL extends React.Component {
           }}
         />
         <FormGroup
-          label={_('SSID')}
+          label={__('SSID')}
           type="select"
           size="min"
           options={this.props.selfState.get('ssidSelectOptions').toJS()}
@@ -297,7 +297,7 @@ export default class ACL extends React.Component {
           })}
         />
         <FormGroup
-          label={_('Filter Mode')}
+          label={__('Filter Mode')}
         >
           <div
             style={{
@@ -307,7 +307,7 @@ export default class ACL extends React.Component {
             <FormInput
               name="filtermode"
               type="radio"
-              text={_('Allow Only')}
+              text={__('Allow Only')}
               disabled={store.getIn(['curData', 'radioList', radioId, 'aclEnable']) === '0'}
               checked={store.getIn(['curData', 'radioList', radioId, 'aclConfList', selectedSsid, 'aclMode']) === 'allow'}
               onClick={() => {
@@ -322,7 +322,7 @@ export default class ACL extends React.Component {
             <FormInput
               name="filtermode"
               type="radio"
-              text={_('Deny Only')}
+              text={__('Deny Only')}
               disabled={store.getIn(['curData', 'radioList', radioId, 'aclEnable']) === '0'}
               checked={store.getIn(['curData', 'radioList', radioId, 'aclConfList', selectedSsid, 'aclMode']) === 'deny'}
               onClick={() => {
@@ -334,7 +334,7 @@ export default class ACL extends React.Component {
           </div>
         </FormGroup>
         <FormGroup
-          label={_('MAC List')}
+          label={__('MAC List')}
           className="clearfix"
         >
           <div
@@ -364,7 +364,7 @@ export default class ACL extends React.Component {
           <Button
             className="fl"
             theme="primary"
-            text={_('Remove')}
+            text={__('Remove')}
             disabled={store.getIn(['curData', 'radioList', radioId, 'aclEnable']) === '0'}
             onClick={this.updateAclMacList}
           />
@@ -388,7 +388,7 @@ export default class ACL extends React.Component {
           <Button
             className="fl"
             theme="primary"
-            text={_('Add')}
+            text={__('Add')}
             disabled={store.getIn(['curData', 'radioList', radioId, 'aclEnable']) === '0'}
             onClick={this.onAddMacToLocalList}
           />
@@ -396,7 +396,7 @@ export default class ACL extends React.Component {
         <FormGroup>
           <SaveButton
             theme="primary"
-            text={_('Save')}
+            text={__('Save')}
             loading={this.props.app.get('saving')}
             onClick={() => { this.onSave(); }}
           />

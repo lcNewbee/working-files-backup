@@ -56,9 +56,9 @@ const defaultProps = {};
 let vlanEnable = '0';
 
 const devicemodeOptions = [
-  { value: 'ap', label: _('AP') },
-  { value: 'sta', label: _('Station') },
-  { value: 'repeater', label: _('Repeater') },
+  { value: 'ap', label: __('AP') },
+  { value: 'sta', label: __('Station') },
+  { value: 'repeater', label: __('Repeater') },
 ];
 
 const staAndApSecurityOptions = [
@@ -352,7 +352,7 @@ export default class Basic extends React.Component {
   getCountryNameFromCode(code, map) {
     for (const name of Object.keys(map)) {
       if (map[name] === code) {
-        return _(name);
+        return __(name);
       }
     }
     return '';
@@ -402,7 +402,7 @@ export default class Basic extends React.Component {
     const countryList = [];
     for (const key of Object.keys(map)) {
       const entry = {
-        label: _(key),
+        label: __(key),
         value: map[key],
       };
       countryList.push(entry);
@@ -468,7 +468,7 @@ export default class Basic extends React.Component {
     const modalOptions = fromJS([
       {
         id: 'operate',
-        text: _('Select'),
+        text: __('Select'),
         transform: function (val, item) {
           return (
             <FormInput
@@ -481,15 +481,15 @@ export default class Basic extends React.Component {
       },
       {
         id: 'mac',
-        text: _('MAC'),
+        text: __('MAC'),
       },
       {
         id: 'ssid',
-        text: _('SSID'),
+        text: __('SSID'),
       },
       {
         id: 'security',
-        text: _('Security Mode'),
+        text: __('Security Mode'),
         transform: function (val) {
           const mode = val.get('mode');
           if (mode === 'wpa') return 'WPA-PSK';
@@ -501,29 +501,29 @@ export default class Basic extends React.Component {
       },
       {
         id: 'signal',
-        text: _('Signal'),
+        text: __('Signal'),
       },
       {
         id: 'noise',
-        text: _('Noise'),
+        text: __('Noise'),
       },
       {
         id: 'protocol',
-        text: _('Protocol'),
+        text: __('Protocol'),
       },
       {
         id: 'frequency',
-        text: _('Channel'),
+        text: __('Channel'),
       },
       {
         id: 'channelWidth',
-        text: _('Channel Width'),
+        text: __('Channel Width'),
       },
     ]);
     const ssidTableOptions = fromJS([
       {
         id: 'enable',
-        label: _('Enable'),
+        label: __('Enable'),
         width: '200px',
         transform: function (val, item) {
           const pos = this.props.selfState.getIn(['multiSsid', 'vapList']).keyOf(item);
@@ -540,7 +540,7 @@ export default class Basic extends React.Component {
       },
       {
         id: 'ssid',
-        label: _('SSID'),
+        label: __('SSID'),
         width: '250px',
         transform: function (val, item) {
           const pos = this.props.selfState.getIn(['multiSsid', 'vapList']).keyOf(item);
@@ -560,7 +560,7 @@ export default class Basic extends React.Component {
       },
       {
         id: 'vlanId',
-        label: _('Vlan ID'),
+        label: __('Vlan ID'),
         width: '250px',
         transform: function (val, item) {
           const pos = this.props.selfState.getIn(['multiSsid', 'vapList']).keyOf(item);
@@ -580,7 +580,7 @@ export default class Basic extends React.Component {
       },
       {
         id: 'hideSsid',
-        label: _('Hide'),
+        label: __('Hide'),
         width: '200px',
         transform: function (val, item) {
           const pos = this.props.selfState.getIn(['multiSsid', 'vapList']).keyOf(item);
@@ -599,7 +599,7 @@ export default class Basic extends React.Component {
       },
       {
         id: 'isolation',
-        label: _('Client Isolation'),
+        label: __('Client Isolation'),
         width: '200px',
         transform: function (val, item) {
           const pos = this.props.selfState.getIn(['multiSsid', 'vapList']).keyOf(item);
@@ -618,14 +618,14 @@ export default class Basic extends React.Component {
       },
       {
         id: 'security',
-        label: _('Security Edit'),
+        label: __('Security Edit'),
         width: '200px',
         transform: function (val, item) {
           const pos = this.props.selfState.getIn(['multiSsid', 'vapList']).keyOf(item);
           return (
             <div style={{ marginLeft: '-3px' }}>
               <Button
-                text={_('Edit')}
+                text={__('Edit')}
                 icon="pencil-square"
                 size="sm"
                 disabled={pos === 0}
@@ -642,14 +642,14 @@ export default class Basic extends React.Component {
       },
       {
         id: 'delete',
-        label: _('Delete'),
+        label: __('Delete'),
         width: '200px',
         transform: function (val, item) {
           const pos = this.props.selfState.getIn(['multiSsid', 'vapList']).keyOf(item);
           return (
             <div style={{ marginLeft: '-12px' }}>
               <Button
-                text={_('Delete')}
+                text={__('Delete')}
                 icon="times"
                 size="sm"
                 disabled={pos === 0}
@@ -677,8 +677,8 @@ export default class Basic extends React.Component {
           isShow={this.props.selfState.get('showScanResult')}
           onOk={this.onModalOkBtnClick}
           onClose={this.onModalCloseBtnClick}
-          okText={_('Select')}
-          cancelText={_('Cancel')}
+          okText={__('Select')}
+          cancelText={__('Cancel')}
           size="lg"
           okButton
           cancelButton
@@ -714,7 +714,7 @@ export default class Basic extends React.Component {
                     cursor: 'pointer',
                   }}
                 >
-                  {_('Basic Settings')}
+                  {__('Basic Settings')}
                 </span>
               </icon>
             ) : (
@@ -738,7 +738,7 @@ export default class Basic extends React.Component {
                     cursor: 'pointer',
                   }}
                 >
-                  {_('Basic Settings')}
+                  {__('Basic Settings')}
                 </span>
               </icon>
             )
@@ -758,7 +758,7 @@ export default class Basic extends React.Component {
                   options={devicemodeOptions}
                   value={basicSettings.get('wirelessMode')}
                   onChange={data => this.onChengeWirelessMode(data)}
-                  label={_('Device Mode')}
+                  label={__('Device Mode')}
                 /> { /* 模式选择下拉框 */}
                 {/*
                 <div className="fl">
@@ -778,7 +778,7 @@ export default class Basic extends React.Component {
                           checked={basicSettings.get('autoRepeat') === '1'}
                           onClick={this.onAutoRepeatBoxClick}
                         />&nbsp;
-                        {_('Auto')}
+                        {__('Auto')}
                       </span>
                     ) : null
                   }
@@ -797,7 +797,7 @@ export default class Basic extends React.Component {
                       className="fl"
                     >
                       <FormGroup
-                        label={_('SSID')}
+                        label={__('SSID')}
                         form="basicSettings"
                         type="text"
                         value={basicSettings.getIn(['vapList', '0', 'ssid'])}
@@ -826,7 +826,7 @@ export default class Basic extends React.Component {
                         checked={basicSettings.getIn(['vapList', '0', 'hideSsid']) === '1'}
                         onClick={data => this.onHideSsidboxClick(data)}
                       />
-                      {_('Hide')}
+                      {__('Hide')}
                     </div>
                   </div>
                 ) : null
@@ -846,7 +846,7 @@ export default class Basic extends React.Component {
                         }}
                       >
                         <FormGroup
-                          label={_('Remote SSID')}
+                          label={__('Remote SSID')}
                           type="text"
                           value={basicSettings.getIn(['vapList', '0', 'ssid'])}
                           onChange={(data) => {
@@ -868,13 +868,13 @@ export default class Basic extends React.Component {
                       {
                         this.props.selfState.get('scaning') ? (
                           <Button
-                            text={_('Stop')}
+                            text={__('Stop')}
                             onClick={this.onStopScanClick}
                             loading
                           />
                         ) : (
                           <Button
-                            text={_('Scan')}
+                            text={__('Scan')}
                             onClick={this.onScanBtnClick}
                           />
                         )
@@ -898,7 +898,7 @@ export default class Basic extends React.Component {
                         }}
                       >
                         <FormGroup
-                          label={_('Remote SSID')}
+                          label={__('Remote SSID')}
                           className="fl"
                           type="text"
                           value={basicSettings.getIn(['vapList', '0', 'ssid'])}
@@ -921,13 +921,13 @@ export default class Basic extends React.Component {
                       {
                         this.props.selfState.get('scaning') ? (
                           <Button
-                            text={_('Stop')}
+                            text={__('Stop')}
                             onClick={this.onStopScanClick}
                             loading
                           />
                         ) : (
                           <Button
-                            text={_('Scan')}
+                            text={__('Scan')}
                             onClick={this.onScanBtnClick}
                           />
                         )
@@ -945,16 +945,16 @@ export default class Basic extends React.Component {
                         checked={basicSettings.getIn(['vapList', '0', 'hideSsid']) === '1'}
                         onClick={data => this.onHideSsidboxClick(data)}
                       />
-                      {_('Hide')}
+                      {__('Hide')}
                     </div>
                   </div>
                 ) : null
               }
               <FormGroup
                 type="number"
-                label={_('Vlan ID')}
+                label={__('Vlan ID')}
                 value={basicSettings.getIn(['vapList', '0', 'vlanId'])}
-                help={_('Range: 1~4094')}
+                help={__('Range: 1~4094')}
                 form="basicSettings"
                 disabled={vlanEnable === '0'}
                 onChange={(data) => {
@@ -968,7 +968,7 @@ export default class Basic extends React.Component {
                 basicSettings.get('wirelessMode') === 'repeater' ||
                 basicSettings.get('wirelessMode') === 'ap' ? (
                   <FormGroup
-                    label={_('Client Isolation')}
+                    label={__('Client Isolation')}
                     type="checkbox"
                     checked={basicSettings.getIn(['vapList', '0', 'isolation']) === '1'}
                     onChange={(data) => {
@@ -1033,7 +1033,7 @@ export default class Basic extends React.Component {
                 (basicSettings.get('wirelessMode') === 'sta') ? (
                   <div>
                     <FormGroup
-                      label={_('Lock To AP')}
+                      label={__('Lock To AP')}
                       type="checkbox"
                       checked={basicSettings.getIn(['vapList', '0', 'apMacEnable']) === '1'}
                       onChange={(data) => {
@@ -1045,7 +1045,7 @@ export default class Basic extends React.Component {
                     {
                       basicSettings.getIn(['vapList', '0', 'apMacEnable']) === '1' ? (
                         <FormGroup
-                          label={_('Peer Mac')}
+                          label={__('Peer Mac')}
                           form="basicSettings"
                           value={basicSettings.getIn(['vapList', '0', 'apMac'])}
                           onChange={(data) => {
@@ -1053,7 +1053,7 @@ export default class Basic extends React.Component {
                                                         .setIn(['0', 'apMac'], data.value);
                             this.props.updateBasicSettings({ vapList });
                           }}
-                          placeholder={_('not necessary')}
+                          placeholder={__('not necessary')}
                           {...staApmac}
                         />
                       ) : null
@@ -1068,7 +1068,7 @@ export default class Basic extends React.Component {
                     basicSettings.get('wirelessMode') === 'ap') ? (
                       <div>
                         <FormGroup
-                          label={_('Security')}
+                          label={__('Security')}
                           type="select"
                           options={staAndApSecurityOptions}
                           value={basicSettings.getIn(['vapList', '0', 'security', 'mode']) || 'none'}
@@ -1081,7 +1081,7 @@ export default class Basic extends React.Component {
                   (basicSettings.get('wirelessMode') === 'repeater') ? (
                     <div>
                       <FormGroup
-                        label={_('Security')}
+                        label={__('Security')}
                         type="select"
                         options={repeaterSecurityOptions}
                         value={basicSettings.getIn(['vapList', '0', 'security', 'mode'])}
@@ -1095,7 +1095,7 @@ export default class Basic extends React.Component {
                   basicSettings.getIn(['vapList', '0', 'security', 'mode']) === 'wep') ? null : (
                     <div>
                       <FormGroup
-                        label={_('Encryption')}
+                        label={__('Encryption')}
                         minWidth="66px"
                         type="switch"
                         value={basicSettings.getIn(['vapList', '0', 'security', 'cipher'])}
@@ -1113,7 +1113,7 @@ export default class Basic extends React.Component {
                         ]}
                       />
                       <FormGroup
-                        label={_('Password')}
+                        label={__('Password')}
                         type="password"
                         form="basicSettings"
                         required
@@ -1134,7 +1134,7 @@ export default class Basic extends React.Component {
                   (basicSettings.getIn(['vapList', '0', 'security', 'mode']) === 'wep') ? (
                     <div>
                       <FormGroup
-                        label={_('Auth Type')}
+                        label={__('Auth Type')}
                         type="select"
                         options={wepAuthenOptions}
                         value={basicSettings.getIn(['vapList', '0', 'security', 'auth'])}
@@ -1148,7 +1148,7 @@ export default class Basic extends React.Component {
                       />
                       {/*
                         <FormGroup
-                          label={_('Key Length')}
+                          label={__('Key Length')}
                           type="select"
                           options={wepKeyLengthOptions}
                           value={curData.getIn(['vapList', '0', 'security', 'keyLength'])}
@@ -1162,7 +1162,7 @@ export default class Basic extends React.Component {
                         />
                       */}
                       <FormGroup
-                        label={_('Key Index')}
+                        label={__('Key Index')}
                         type="select"
                         options={keyIndexOptions}
                         value={basicSettings.getIn(['vapList', '0', 'security', 'keyIndex'])}
@@ -1175,7 +1175,7 @@ export default class Basic extends React.Component {
                         }}
                       />
                       <FormGroup
-                        label={_('Key Format')}
+                        label={__('Key Format')}
                         type="select"
                         options={keyTypeOptions}
                         value={basicSettings.getIn(['vapList', '0', 'security', 'keyType'])}
@@ -1190,7 +1190,7 @@ export default class Basic extends React.Component {
                       <FormGroup
                         type="password"
                         required
-                        label={_('Password')}
+                        label={__('Password')}
                         form="basicSettings"
                         value={basicSettings.getIn(['vapList', '0', 'security', 'key'])}
                         onChange={(data) => {
@@ -1241,7 +1241,7 @@ export default class Basic extends React.Component {
                     cursor: 'pointer',
                   }}
                 >
-                  {_('Radio Settings')}
+                  {__('Radio Settings')}
                 </span>
               </icon>
             ) : (
@@ -1265,7 +1265,7 @@ export default class Basic extends React.Component {
                     cursor: 'pointer',
                   }}
                 >
-                  {_('Radio Settings')}
+                  {__('Radio Settings')}
                 </span>
               </icon>
             )
@@ -1281,14 +1281,14 @@ export default class Basic extends React.Component {
             >
               <FormGroup
                 type="checkbox"
-                label={_('Radio')}
+                label={__('Radio')}
                 checked={radioSettings.get('enable') === '1'}
                 onChange={data => this.props.updateRadioSettingsItem({
                   enable: data.value,
                 })}
               />
               <FormGroup
-                label={_('Country')}
+                label={__('Country')}
               >
                 <FormInput
                   type="text"
@@ -1303,7 +1303,7 @@ export default class Basic extends React.Component {
                   }}
                 />
                 <Button
-                  text={_('Change')}
+                  text={__('Change')}
                   style={{
                     marginLeft: '-1px',
                     width: '70px',
@@ -1312,24 +1312,24 @@ export default class Basic extends React.Component {
                 />
               </FormGroup>
               <Modal
-                title={_('Country Code')}
+                title={__('Country Code')}
                 onClose={this.onCloseCountrySelectModal}
                 onOk={this.props.saveCountrySelectModal}
                 isShow={this.props.selfState.get('showCtyModal')}
                 draggable
               >
-                <h3>{_('User Protocol')}</h3>
+                <h3>{__('User Protocol')}</h3>
                 <span>
-                  {_('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
+                  {__('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
                 </span>
                 <FormGroup
                   type="radio"
-                  text={_('I have read and agree')}
+                  text={__('I have read and agree')}
                   checked={this.props.selfState.get('agreeProtocol')}
                   onChange={() => { this.props.changeAgreeProtocol(true); }}
                 />
                 <FormGroup
-                  label={_('Country')}
+                  label={__('Country')}
                   type="select"
                   options={this.makeCountryOptions(countryMap)}
                   value={this.props.selfState.get('selectedCountry')}
@@ -1338,7 +1338,7 @@ export default class Basic extends React.Component {
                 />
               </Modal>
               <FormGroup
-                label={_('Radio Mode')}
+                label={__('Radio Mode')}
                 type="select"
                 options={radioModeOptions}
                 value={radioSettings.get('radioMode')}
@@ -1349,7 +1349,7 @@ export default class Basic extends React.Component {
                 }}
               />
               <FormGroup
-                label={_('Channel')}
+                label={__('Channel')}
                 type="select"
                 options={this.makeChannelOptions()}
                 value={radioSettings.get('frequency') || 'auto'}
@@ -1358,7 +1358,7 @@ export default class Basic extends React.Component {
                 })}
               />
               <FormGroup
-                label={_('Channel Bandwidth')}
+                label={__('Channel Bandwidth')}
                 type="switch"
                 minWidth="66px"
                 options={channelWidthOptions}
@@ -1368,7 +1368,7 @@ export default class Basic extends React.Component {
                 })}
               />
               <FormGroup
-                label={_('Output Power')}
+                label={__('Output Power')}
                 type="range"
                 min="1"
                 max={this.props.selfState.get('maxTxpower')}
@@ -1392,7 +1392,7 @@ export default class Basic extends React.Component {
               {
                 /*
                 <FormGroup
-                  label={_('Max TX Rate')}
+                  label={__('Max TX Rate')}
                   type="select"
                   value={maxTxRate}
                   options={rateOptions}
@@ -1427,7 +1427,7 @@ export default class Basic extends React.Component {
                     cursor: 'pointer',
                   }}
                 >
-                  {_('Multiple SSID')}
+                  {__('Multiple SSID')}
                 </span>
               </icon>
             ) : (
@@ -1449,7 +1449,7 @@ export default class Basic extends React.Component {
                     cursor: 'pointer',
                   }}
                 >
-                  {_('Multiple SSID')}
+                  {__('Multiple SSID')}
                 </span>
               </icon>
             )
@@ -1458,7 +1458,7 @@ export default class Basic extends React.Component {
         {
           this.props.selfState.get('showMultiSsid') ? (
             <div className="stats-group-cell">
-              <span>{_('Notice: The first SSID can\'t be modefied here !')}</span>
+              <span>{__('Notice: The first SSID can\'t be modefied here !')}</span>
               <Table
                 className="table"
                 options={ssidTableOptions}
@@ -1479,7 +1479,7 @@ export default class Basic extends React.Component {
                 style={{ marginTop: '10px' }}
               >
                 <Button
-                  text={_('Add')}
+                  text={__('Add')}
                   icon="plus"
                   onClick={() => this.onAddNewSsidItem()}
                   style={{ marginRight: '10px' }}
@@ -1546,7 +1546,7 @@ export default class Basic extends React.Component {
         */
         }
         <Modal
-          title={_('Security Settings For SSID')}
+          title={__('Security Settings For SSID')}
           isShow={tableItemForSsid.get('isShow') === '1'}
           draggable
           onOk={() => {
@@ -1577,7 +1577,7 @@ export default class Basic extends React.Component {
           cancelButton
         >
           <FormGroup
-            label={_('Security')}
+            label={__('Security')}
             type="select"
             options={staAndApSecurityOptions}
             value={tableItemForSsid.getIn(['item', 'security', 'mode'])}
@@ -1593,7 +1593,7 @@ export default class Basic extends React.Component {
               tableItemForSsid.getIn(['item', 'security', 'mode']) === 'wep') ? null : (
                 <div>
                   <FormGroup
-                    label={_('Encryption')}
+                    label={__('Encryption')}
                     minWidth="66px"
                     type="switch"
                     value={tableItemForSsid.getIn(['item', 'security', 'cipher'])}
@@ -1610,7 +1610,7 @@ export default class Basic extends React.Component {
                     }}
                   />
                   <FormGroup
-                    label={_('Password')}
+                    label={__('Password')}
                     type="password"
                     required
                     form="ssidSecurityModal"
@@ -1630,7 +1630,7 @@ export default class Basic extends React.Component {
             (tableItemForSsid.getIn(['item', 'security', 'mode']) === 'wep') ? (
               <div>
                 <FormGroup
-                  label={_('Auth Type')}
+                  label={__('Auth Type')}
                   type="select"
                   options={wepAuthenOptions}
                   value={tableItemForSsid.getIn(['item', 'security', 'auth'])}
@@ -1644,7 +1644,7 @@ export default class Basic extends React.Component {
                 {
                   /**
                   <FormGroup
-                    label={_('Key Length')}
+                    label={__('Key Length')}
                     type="select"
                     options={wepKeyLengthOptions}
                     value={tableItemForSsid.getIn(['item', 'security', 'keyLength'])}
@@ -1658,7 +1658,7 @@ export default class Basic extends React.Component {
                    */
                 }
                 <FormGroup
-                  label={_('Key Index')}
+                  label={__('Key Index')}
                   type="select"
                   options={keyIndexOptions}
                   value={tableItemForSsid.getIn(['item', 'security', 'keyIndex'])}
@@ -1670,7 +1670,7 @@ export default class Basic extends React.Component {
                   }}
                 />
                 <FormGroup
-                  label={_('Key Format')}
+                  label={__('Key Format')}
                   type="select"
                   options={keyTypeOptions}
                   value={tableItemForSsid.getIn(['item', 'security', 'keyType'])}
@@ -1684,7 +1684,7 @@ export default class Basic extends React.Component {
                 <FormGroup
                   type="password"
                   required
-                  label={_('Password')}
+                  label={__('Password')}
                   form="ssidSecurityModal"
                   value={tableItemForSsid.getIn(['item', 'security', 'key'])}
                   onChange={(data) => {

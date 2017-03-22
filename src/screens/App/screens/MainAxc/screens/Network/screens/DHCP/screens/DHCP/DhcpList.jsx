@@ -11,7 +11,7 @@ import * as appActions from 'shared/actions/app';
 const listOptions = fromJS([
   {
     id: 'name',
-    text: _('Name'),
+    text: __('Name'),
     formProps: {
       required: true,
       maxLength: '31',
@@ -22,14 +22,14 @@ const listOptions = fromJS([
     },
   }, {
     id: 'domain',
-    text: _('Domain'),
+    text: __('Domain'),
     formProps: {
       maxLength: '31',
       type: 'text',
     },
   }, {
     id: 'startIp',
-    text: _('IP Address'),
+    text: __('IP Address'),
     formProps: {
       required: true,
       notEditable: true,
@@ -39,7 +39,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'mask',
-    text: _('Subnet Mask'),
+    text: __('Subnet Mask'),
     formProps: {
       required: true,
       notEditable: true,
@@ -49,7 +49,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'gateway',
-    text: _('Gateway'),
+    text: __('Gateway'),
     formProps: {
       required: true,
       maxLength: '31',
@@ -59,7 +59,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'mainDns',
-    text: _('Primary DNS'),
+    text: __('Primary DNS'),
     formProps: {
       maxLength: '31',
       validator: validator({
@@ -68,7 +68,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'secondDns',
-    text: _('Secondary DNS'),
+    text: __('Secondary DNS'),
     formProps: {
       maxLength: '31',
       validator: validator({
@@ -77,11 +77,11 @@ const listOptions = fromJS([
     },
   }, {
     id: 'releaseTime',
-    text: _('Lease Time'),
+    text: __('Lease Time'),
     formProps: {
       type: 'number',
       required: true,
-      help: _('Range: 300-604800 Seconds'),
+      help: __('Range: 300-604800 Seconds'),
       min: '300',
       max: '604800',
       defaultValue: '7200',
@@ -91,7 +91,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'opt43',
-    text: _('AC Address'),
+    text: __('AC Address'),
     noTable: true,
     formProps: {
       type: 'text',
@@ -101,7 +101,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'opt60',
-    text: _('Vendor ID'),
+    text: __('Vendor ID'),
     noTable: true,
     formProps: {
       type: 'number',
@@ -140,8 +140,8 @@ export default class View extends React.Component {
 
     if (actionType === 'add' || actionType === 'edit') {
       ret = validator.combine.needSameNet(startIp, mask, gateway, {
-        ipLabel: _('Start IP'),
-        ip2Label: _('Gateway'),
+        ipLabel: __('Start IP'),
+        ip2Label: __('Gateway'),
       });
 
       // 过滤正在编辑的项
@@ -163,7 +163,7 @@ export default class View extends React.Component {
           },
         ),
       )) {
-        ret = _('Same %s item already exists', _('segment'));
+        ret = __('Same %s item already exists', __('segment'));
       }
     }
 

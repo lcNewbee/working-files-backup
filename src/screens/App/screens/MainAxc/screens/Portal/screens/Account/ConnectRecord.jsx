@@ -14,7 +14,7 @@ const flowFilter = utils.filter('flowRate');
 const listOptions = fromJS([
   {
     id: 'ip',
-    text: _('IP'),
+    text: __('IP'),
     formProps: {
       type: 'text',
       required: true,
@@ -24,7 +24,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'basip',
-    text: _('Bas IP'),
+    text: __('Bas IP'),
     formProps: {
       type: 'text',
       required: true,
@@ -34,7 +34,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'mac',
-    text: _('Mac'),
+    text: __('Mac'),
     type: 'text',
     formProps: {
       required: true,
@@ -44,21 +44,21 @@ const listOptions = fromJS([
     },
   }, {
     id: 'startDate',
-    text: _('Online Date'),
+    text: __('Online Date'),
     formProps: {
       type: 'text',
       required: true,
     },
   }, {
     id: 'endDate',
-    text: _('Offline Date'),
+    text: __('Offline Date'),
     formProps: {
       type: 'text',
       required: true,
     },
   }, {
     id: 'time',
-    text: _('Online Time'),
+    text: __('Online Time'),
     type: 'num',
     formProps: {
       required: true,
@@ -68,14 +68,14 @@ const listOptions = fromJS([
     },
   },   // {
   //   id: 'accType',
-  //   text: _('Acc Type'),
+  //   text: __('Acc Type'),
   //   formProps: {
   //     required: true,
   //   },
   // },
   {
     id: 'outs',
-    text: _('Down Traffic'),
+    text: __('Down Traffic'),
     formProps: {
       required: true,
     },
@@ -84,7 +84,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'ins',
-    text: _('Up Traffic'),
+    text: __('Up Traffic'),
     formProps: {
       required: true,
     },
@@ -93,14 +93,14 @@ const listOptions = fromJS([
     },
   }, //  {
   //   id: 'accLogic',
-  //   text: _('Acc Logic'),
+  //   text: __('Acc Logic'),
   //   formProps: {
   //     required: true,
   //   },
   // },
   {
     id: 'ex2',
-    text: _('Reason'),
+    text: __('Reason'),
     formProps: {
       required: true,
       maxLength: 257,

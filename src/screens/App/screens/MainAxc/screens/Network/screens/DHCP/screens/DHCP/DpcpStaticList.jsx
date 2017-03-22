@@ -26,14 +26,14 @@ function getInterfaceList() {
 const listOptions = fromJS([
   {
     id: 'interface_name',
-    text: _('Interface Name'),
+    text: __('Interface Name'),
     formProps: {
       required: true,
       type: 'select',
     },
   }, {
     id: 'mac',
-    text: _('Mac Address'),
+    text: __('Mac Address'),
     formProps: {
       required: true,
       validator: validator({
@@ -42,7 +42,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'ip',
-    text: _('IP Address'),
+    text: __('IP Address'),
     formProps: {
       maxLength: '31',
       required: true,

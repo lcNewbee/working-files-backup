@@ -25,7 +25,7 @@ function getStoresName() {
 const listOptions = fromJS([
   {
     id: 'name',
-    text: _('Name'),
+    text: __('Name'),
     formProps: {
       type: 'text',
       required: true,
@@ -33,7 +33,7 @@ const listOptions = fromJS([
   },
   {
     id: 'img',
-    text: _('Adv Pitcture'),
+    text: __('Adv Pitcture'),
     formProps: {
       type: 'file',
       required: true,
@@ -41,7 +41,7 @@ const listOptions = fromJS([
   },
  {
     id: 'creatDate',
-    text: _('Create Date'),
+    text: __('Create Date'),
     defaultValue: '2018-2-28',
     formProps: {
       type: 'date',
@@ -49,7 +49,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'showDate',
-    text: _('Show Date'),
+    text: __('Show Date'),
     defaultValue: '2018-2-28',
     formProps: {
       type: 'date',
@@ -57,7 +57,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'endDate',
-    text: _('End Date'),
+    text: __('End Date'),
     defaultValue: '2018-2-28',
     formProps: {
       type: 'date',
@@ -65,7 +65,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'state',
-    text: _('Ads Release'),
+    text: __('Ads Release'),
     noTable: true,
     formProps: {
       type: 'select',
@@ -74,15 +74,15 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: _('No'),
+        label: __('No'),
       }, {
         value: '1',
-        label: _('Yes'),
+        label: __('Yes'),
       },
     ],
   }, {
     id: 'showName',
-    text: _('Show Name'),
+    text: __('Show Name'),
     noTable: true,
     formProps: {
       type: 'select',
@@ -91,15 +91,15 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: _('Hide'),
+        label: __('Hide'),
       }, {
         value: '1',
-        label: _('Show'),
+        label: __('Show'),
       },
     ],
   }, {
     id: 'showImage',
-    text: _('Show Image'),
+    text: __('Show Image'),
     noTable: true,
     formProps: {
       type: 'select',
@@ -108,15 +108,15 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: _('Hide'),
+        label: __('Hide'),
       }, {
         value: '1',
-        label: _('Show'),
+        label: __('Show'),
       },
     ],
   }, {
     id: 'showInfo',
-    text: _('Show Remarks'),
+    text: __('Show Remarks'),
     noTable: true,
     formProps: {
       type: 'select',
@@ -125,43 +125,43 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: _('Hide'),
+        label: __('Hide'),
       }, {
         value: '1',
-        label: _('Show'),
+        label: __('Show'),
       },
     ],
   }, {
     id: 'userName',
-    text: _('User Name'),
+    text: __('User Name'),
     formProps: {
       type: 'select',
       required: true,
     },
   }, {
     id: 'showCount',
-    text: _('Show Count'),
+    text: __('Show Count'),
     formProps: {
       type: 'text',
       required: true,
     },
   }, {
     id: 'clickCount',
-    text: _('Click Count'),
+    text: __('Click Count'),
     formProps: {
       type: 'text',
       required: true,
     },
   }, {
     id: 'lockTime',
-    text: _('Countdown'),
+    text: __('Countdown'),
     formProps: {
       type: 'text',
       required: true,
     },
   }, {
     id: 'url',
-    text: _('URL'),
+    text: __('URL'),
     noTable: true,
     formProps: {
       type: 'text',
@@ -169,7 +169,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'pos',
-    text: _('Sorting'),
+    text: __('Sorting'),
     formProps: {
       type: 'text',
       required: true,

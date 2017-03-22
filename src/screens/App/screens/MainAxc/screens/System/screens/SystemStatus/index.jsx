@@ -15,8 +15,8 @@ const uptimeFilter = utils.filter('connectTime');
 function getCpuOption(serverData) {
   const usedValue = serverData.get('cpuUsed');
   const freeValue = serverData.get('cpuTotal') - usedValue;
-  const usedName = `${_('Used')}: ${usedValue}%`;
-  const freeName = `${_('Free')}: ${freeValue}%`;
+  const usedName = `${__('Used')}: ${usedValue}%`;
+  const freeName = `${__('Free')}: ${freeValue}%`;
   const ret = $$commonPieOption.mergeDeep({
     color: [colors[1], colors[7]],
     legend: {
@@ -24,12 +24,12 @@ function getCpuOption(serverData) {
       x: '60%',
     },
     title: {
-      text: `${_('Used')}`,
+      text: `${__('Used')}`,
       subtext: `${usedValue}%`,
     },
     series: [
       {
-        name: _('CPU Usage'),
+        name: __('CPU Usage'),
       },
     ],
   }).toJS();
@@ -44,12 +44,12 @@ function getCpuOption(serverData) {
 function getMemoryOption(serverData) {
   const usedValue = serverData.get('cpuUsed');
   const freeValue = serverData.get('cpuTotal') - usedValue;
-  const usedName = `${_('Used')}: ${usedValue}%`;
-  const freeName = `${_('Free')}: ${freeValue}%`;
+  const usedName = `${__('Used')}: ${usedValue}%`;
+  const freeName = `${__('Free')}: ${freeValue}%`;
   const ret = $$commonPieOption.mergeDeep({
     color: [colors[1], colors[7]],
     title: {
-      text: `${_('Used')}`,
+      text: `${__('Used')}`,
       subtext: `${usedValue}%`,
     },
     legend: {
@@ -58,7 +58,7 @@ function getMemoryOption(serverData) {
     },
     series: [
       {
-        name: _('Memory Usage'),
+        name: __('Memory Usage'),
         type: 'pie',
       },
     ],
@@ -82,7 +82,7 @@ function getStoreOption(serverData) {
       },
     },
     legend: {
-      data: [_('Used'), _('Free')],
+      data: [__('Used'), __('Free')],
     },
     grid: {
       left: '3%',
@@ -99,21 +99,21 @@ function getStoreOption(serverData) {
     yAxis: [
       {
         type: 'category',
-        data: [_('Store')],
+        data: [__('Store')],
       },
     ],
     series: [
       {
-        name: _('Used'),
+        name: __('Used'),
         type: 'bar',
         barWidth: 20,
-        stack: _('Store'),
+        stack: __('Store'),
         data: [serverData.get('storeUsed')],
       },
       {
-        name: _('Free'),
+        name: __('Free'),
         type: 'bar',
-        stack: _('Store'),
+        stack: __('Store'),
         data: [serverData.get('storeTotal') - serverData.get('storeUsed')],
       },
     ],
@@ -148,7 +148,7 @@ export default class View extends React.PureComponent {
           <div className="t-overview__section">
             <div className="cols col-4" >
               <div className="element t-overview__section-header">
-                <h3>{ _('Details') }</h3>
+                <h3>{ __('Details') }</h3>
               </div>
               <div
                 className="element"
@@ -158,19 +158,19 @@ export default class View extends React.PureComponent {
               >
                 <div className="o-description-list o-description-list--lg">
                   <dl className="o-description-list-row">
-                    <dt>{_('Frimware Version')}</dt>
+                    <dt>{__('Frimware Version')}</dt>
                     <dd>{serverData.get('version') || ''}</dd>
                   </dl>
                   <dl className="o-description-list-row">
-                    <dt>{_('System Time')}</dt>
+                    <dt>{__('System Time')}</dt>
                     <dd>{serverData.get('system_time')}</dd>
                   </dl>
                   <dl className="o-description-list-row">
-                    <dt>{_('Uptime')}</dt>
+                    <dt>{__('Uptime')}</dt>
                     <dd>{uptimeFilter.transform(serverData.get('running_time') || 0)}</dd>
                   </dl>
                   <dl className="o-description-list-row">
-                    <dt>{_('Storage')}</dt>
+                    <dt>{__('Storage')}</dt>
                     <dd>
                       <Progress
                         value={serverData.get('storeUsed')}
@@ -185,7 +185,7 @@ export default class View extends React.PureComponent {
             </div>
             <div className="cols col-4" >
               <div className="element t-overview__section-header">
-                <h3>{ _('Memory') }</h3>
+                <h3>{ __('Memory') }</h3>
               </div>
               <div className="element">
                 <EchartReact
@@ -200,7 +200,7 @@ export default class View extends React.PureComponent {
             </div>
             <div className="cols col-4" >
               <div className="element t-overview__section-header">
-                <h3>{ _('CPU') }</h3>
+                <h3>{ __('CPU') }</h3>
               </div>
               <div className="element">
                 <EchartReact
@@ -214,7 +214,7 @@ export default class View extends React.PureComponent {
               </div>
             </div>
           </div>
-          <h3 className="element t-overview__header">{ _('Storage') }</h3>
+          <h3 className="element t-overview__header">{ __('Storage') }</h3>
           <div className="t-overview__section">
             <div className="element">
               <EchartReact

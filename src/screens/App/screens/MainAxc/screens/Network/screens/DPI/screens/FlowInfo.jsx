@@ -16,28 +16,28 @@ const propTypes = fromJS({
 const listOptions = fromJS([
   {
     id: 'flowid',
-    text: _('Flow Id'),
+    text: __('Flow Id'),
   }, {
     id: 'lower_ip',
-    text: _('Lower IP'),
+    text: __('Lower IP'),
   }, {
     id: 'upper_ip',
-    text: _('Upper IP'),
+    text: __('Upper IP'),
   }, {
     id: 'lower_port',
-    text: _('Lower Port'),
+    text: __('Lower Port'),
   }, {
     id: 'upper_port',
-    text: _('Upper Port'),
+    text: __('Upper Port'),
   }, {
     id: 'protocol',
-    text: _('Protocol'),
+    text: __('Protocol'),
   }, {
     id: 'detected_protocol',
-    text: _('Detected Protocol'),
+    text: __('Detected Protocol'),
   }, {
     id: 'packets',
-    text: _('Packets'),
+    text: __('Packets'),
   },
 ]);
 
@@ -57,7 +57,7 @@ export default class FlowInfo extends React.Component {
             isFetchInfinite: true,
             fetchIntervalTime: 5000,
           }}
-          listTitle={_('Statistics Within 30 Seconds')}
+          listTitle={__('Statistics Within 30 Seconds')}
         />
       </div>
     );

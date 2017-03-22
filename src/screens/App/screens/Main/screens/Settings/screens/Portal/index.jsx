@@ -15,13 +15,13 @@ import myReducer from './reducer';
 import './index.scss';
 
 const MSG = {
-  Seconds: _('Seconds'),
-  minutes: _('Minutes'),
-  hour: _('Hour'),
-  hours: _('Hours'),
-  days: _('Days'),
-  userDef: _('User Defined'),
-  imageDes: _('Select 1-3 slide pictures of dimension 640px*640px'),
+  Seconds: __('Seconds'),
+  minutes: __('Minutes'),
+  hour: __('Hour'),
+  hours: __('Hours'),
+  days: __('Days'),
+  userDef: __('User Defined'),
+  imageDes: __('Select 1-3 slide pictures of dimension 640px*640px'),
 };
 
 const validOptions = fromJS({
@@ -103,7 +103,7 @@ export const Portal = React.createClass({
         this.props.createModal({
           id: 'admin',
           role: 'alert',
-          text: _('Please select a upload image'),
+          text: __('Please select a upload image'),
         });
         return;
       }
@@ -112,7 +112,7 @@ export const Portal = React.createClass({
         this.props.createModal({
           id: 'admin',
           role: 'alert',
-          text: _('Please select a upload image'),
+          text: __('Please select a upload image'),
         });
 
         e.target.value = '';
@@ -154,7 +154,7 @@ export const Portal = React.createClass({
         that.props.createModal({
           id: 'admin',
           role: 'alert',
-          text: _('Please select a upload image'),
+          text: __('Please select a upload image'),
         });
         return;
       }
@@ -277,10 +277,10 @@ export const Portal = React.createClass({
 
     return (
       <div className="row">
-        <h3>{_('Portal Settings')}</h3>
+        <h3>{__('Portal Settings')}</h3>
         <div className="cols col-7">
           <FormGroup
-            label={_('Portal Name')}
+            label={__('Portal Name')}
             name="portalname"
             value={getCurrData('portalname')}
             onChange={this.onUpdateSettings('portalname')}
@@ -288,14 +288,14 @@ export const Portal = React.createClass({
             {...portalname}
           />
           <FormGroup
-            label={_('Auth Redirect URL')}
+            label={__('Auth Redirect URL')}
             name="url"
             value={getCurrData('url')}
             onChange={this.onUpdateSettings('url')}
             {...url}
           />
           <FormGroup
-            label={_('Portal Title')}
+            label={__('Portal Title')}
             name="title"
             value={getCurrData('title')}
             onChange={this.onUpdateSettings('title')}
@@ -303,7 +303,7 @@ export const Portal = React.createClass({
             {...title}
           />
           <FormGroup
-            label={_('Expiration')}
+            label={__('Expiration')}
             value={getCurrData('timeout')}
             {...timeout}
           >
@@ -318,7 +318,7 @@ export const Portal = React.createClass({
           </FormGroup>
 
           <FormGroup
-            label={_('Images Slide Interval')}
+            label={__('Images Slide Interval')}
             type="select"
             options={refreshtimeOtions}
             name="refreshtime"
@@ -350,7 +350,7 @@ export const Portal = React.createClass({
                 noControl ? null : (
                   <Button
                     type="button"
-                    text={_('Upload Image') + ' 1'}
+                    text={__('Upload Image') + ' 1'}
                     icon="upload"
                     loading={this.state.imageStatus1 === 'loading'}
                     theme={this.state.imageStatus1 === 'selected' ? 'info' : undefined}
@@ -386,7 +386,7 @@ export const Portal = React.createClass({
                 noControl ? null : (
                   <Button
                     type="button"
-                    text={_('Upload Image') + ' 2'}
+                    text={__('Upload Image') + ' 2'}
                     icon="upload"
                     style={uploadStyles}
                     loading={this.state.imageStatus2 === 'loading'}
@@ -421,7 +421,7 @@ export const Portal = React.createClass({
                 noControl ? null : (
                   <Button
                     type="button"
-                    text={_('Upload Image') + ' 3'}
+                    text={__('Upload Image') + ' 3'}
                     icon="upload"
                     style={uploadStyles}
                     loading={this.state.imageStatus3 === 'loading'}
@@ -490,7 +490,7 @@ export const Portal = React.createClass({
               <Button
                 type="button"
                 theme="primary"
-                text={_('Click on Internet')}
+                text={__('Click on Internet')}
                 id="online"
               />
             </div>

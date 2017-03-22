@@ -13,7 +13,7 @@ import * as appActions from 'shared/actions/app';
 const listOptions = fromJS([
   {
     id: 'name',
-    text: _('Name'),
+    text: __('Name'),
     formProps: {
       type: 'text',
       required: true,
@@ -24,7 +24,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'url',
-    text: _('URL'),
+    text: __('URL'),
     noTable: true,
     formProps: {
       type: 'text',
@@ -36,9 +36,9 @@ const listOptions = fromJS([
     },
   }, {
     id: 'appkey',
-    text: _('App Key'),
+    text: __('App Key'),
     formProps: {
-      help: _('gwid,accountid,username'),
+      help: __('gwid,accountid,username'),
       maxLength: '65',
       type: 'text',
       required: true,
@@ -48,7 +48,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'appsecret',
-    text: _('Password'),
+    text: __('Password'),
     formProps: {
       maxLength: '32',
       type: 'password',
@@ -59,10 +59,10 @@ const listOptions = fromJS([
     },
   }, {
     id: 'smstemplate',
-    text: _('Template ID'),
+    text: __('Template ID'),
     formProps: {
       maxLength: '33',
-      help: _('ServiceID, Spcode'),
+      help: __('ServiceID, Spcode'),
       type: 'text',
       validator: validator({
         rules: 'utf8Len:[1, 32]',
@@ -70,9 +70,9 @@ const listOptions = fromJS([
     },
   }, {
     id: 'smssign',
-    text: _('Signature ID'),
+    text: __('Signature ID'),
     formProps: {
-      help: _('srcTermID'),
+      help: __('srcTermID'),
       type: 'text',
       maxLength: '33',
       validator: validator({
@@ -81,7 +81,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'company',
-    text: _('Company Name'),
+    text: __('Company Name'),
     formProps: {
       type: 'text',
       maxLength: '33',
@@ -92,7 +92,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'count',
-    text: _('Used Times'),
+    text: __('Used Times'),
     noForm: true,
     formProps: {
       type: 'number',
@@ -100,14 +100,14 @@ const listOptions = fromJS([
       min: '0',
       max: '99999',
       defaultValue: '5',
-      help: _('Times'),
+      help: __('Times'),
       validator: validator({
         rules: 'num',
       }),
     },
   }, {
     id: 'type',
-    text: _('Type'),
+    text: __('Type'),
     formProps: {
       type: 'select',
       required: true,
@@ -115,15 +115,15 @@ const listOptions = fromJS([
     options: [
       {
         value: '1',
-        label: _('Virtual Gateway'),
+        label: __('Virtual Gateway'),
       }, {
         value: '2',
-        label: _('Qianhai Smart Commumication'),
+        label: __('Qianhai Smart Commumication'),
       },
     ],
   }, {
     id: 'state',
-    text: _('State'),
+    text: __('State'),
     formProps: {
       type: 'select',
       required: true,
@@ -131,15 +131,15 @@ const listOptions = fromJS([
     options: [
       {
         value: '1',
-        label: _('On Service'),
+        label: __('On Service'),
       }, {
         value: '0',
-        label: _('Out of Service'),
+        label: __('Out of Service'),
       },
     ],
   }, {
     id: 'more',
-    text: _('MultiTerminal Log'),
+    text: __('MultiTerminal Log'),
     formProps: {
       type: 'select',
       required: true,
@@ -147,28 +147,28 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: _('Allowed'),
+        label: __('Allowed'),
       }, {
         value: '1',
-        label: _('Forbidden'),
+        label: __('Forbidden'),
       },
     ],
   }, {
     id: 'time',
-    text: _('Overdue Duration'),
+    text: __('Overdue Duration'),
     formProps: {
       type: 'number',
       min: '0',
       max: '10',
       defaultValue: '5',
-      help: _('Minutes'),
+      help: __('Minutes'),
       validator: validator({
         rules: 'num',
       }),
     },
   }, {
     id: 'text',
-    text: _('Message Content'),
+    text: __('Message Content'),
     noTable: true,
     formProps: {
       type: 'textarea',

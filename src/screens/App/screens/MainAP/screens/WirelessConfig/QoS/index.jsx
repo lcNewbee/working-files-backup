@@ -8,19 +8,19 @@ import * as actions from './actions';
 import reducer from './reducer';
 
 const radioOptions = [
-  { value: '1', label: _('Radio 1(2.4G)') },
-  { value: '2', label: _('Radio 1(5G)') },
+  { value: '1', label: __('Radio 1(2.4G)') },
+  { value: '2', label: __('Radio 1(5G)') },
 ];
 
 const qosTempOptions = [
-  { value: '1', label: _('Default') },
-  { value: '2', label: _('Custom') },
+  { value: '1', label: __('Default') },
+  { value: '2', label: __('Custom') },
 ];
 
 const wapEdcaOptions = fromJS([
   {
     id: 'Application',
-    text: _('Application'),
+    text: __('Application'),
   },
   {
     id: 'AIFS',
@@ -104,7 +104,7 @@ export default class QoS extends React.Component {
     return (
       <div>
         <div className="radioSelect">
-          <h3>{_('Select Your Radio')}</h3>
+          <h3>{__('Select Your Radio')}</h3>
           <FormGroup
             label="Radio"
           >
@@ -121,9 +121,9 @@ export default class QoS extends React.Component {
           </FormGroup>
         </div>
         <div className="qosSettings">
-          <h3>{_('QoS Setting')}</h3>
+          <h3>{__('QoS Setting')}</h3>
           <FormGroup
-            label={_('WAP EDCA Parameters')}
+            label={__('WAP EDCA Parameters')}
           >
             <Table
               className="table"
@@ -138,7 +138,7 @@ export default class QoS extends React.Component {
         />
         <div className="stationEdcaPara">
           <FormGroup
-            label={_('Station EDCA Parameters')}
+            label={__('Station EDCA Parameters')}
           >
             <Table
               className="table"

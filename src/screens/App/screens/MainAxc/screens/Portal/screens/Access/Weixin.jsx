@@ -12,7 +12,7 @@ const uptimeFilter = utils.filter('connectTime');
 const listOptions = fromJS([
   {
     id: 'basip',
-    text: _('Bas IP'),
+    text: __('Bas IP'),
     width: '120px',
     formProps: {
       type: 'text',
@@ -23,7 +23,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'ssid',
-    text: _('SSID'),
+    text: __('SSID'),
     width: '120px',
     options: [],
     formProps: {
@@ -36,7 +36,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'shopId',
-    text: _('Shop ID'),
+    text: __('Shop ID'),
     formProps: {
       maxLength: '33',
       type: 'text',
@@ -47,7 +47,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'appId',
-    text: _('App ID'),
+    text: __('App ID'),
     formProps: {
       maxLength: '33',
       type: 'text',
@@ -58,7 +58,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'domain',
-    text: _('Domain'),
+    text: __('Domain'),
     noForm: true,
     formProps: {
       noAdd: true,
@@ -71,7 +71,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'outTime',
-    text: _('Out Time'),
+    text: __('Out Time'),
     noForm: true,
     formProps: {
       min: '0',
@@ -84,7 +84,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'secretKey',
-    text: _('Secret Key'),
+    text: __('Secret Key'),
     noTable: true,
     formProps: {
       type: 'password',

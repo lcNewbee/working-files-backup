@@ -144,7 +144,7 @@ export default class SpeedTest extends React.Component {
                 } else if (json2.state && json2.state.code === 4000) {
                   clearInterval(a);
                   clearInterval(b);
-                  this.props.changeTimeClock(_('Test failed! Something wrong happened with the network!'));
+                  this.props.changeTimeClock(__('Test failed! Something wrong happened with the network!'));
                 }
               });
             }, 2000);
@@ -153,7 +153,7 @@ export default class SpeedTest extends React.Component {
             this.props.createModal({
               id: 'settings',
               role: 'alert',
-              text: _('Error: The destination can not be reached!'),
+              text: __('Error: The destination can not be reached!'),
             });
           }
         });
@@ -163,8 +163,8 @@ export default class SpeedTest extends React.Component {
         //   const timeStr = (clock--).toString();
         //   this.props.changeTimeClock(timeStr);
         //   if (clock === 0) {
-        // const txt = _('The test is not complete, please keep waiting...');
-        const txt = _('Running test, please wait ...');
+        // const txt = __('The test is not complete, please keep waiting...');
+        const txt = __('Running test, please wait ...');
         this.props.changeTimeClock(txt);
         //     clearInterval(a);
         //   }
@@ -216,7 +216,7 @@ export default class SpeedTest extends React.Component {
     const scanIpOptions = fromJS([
       {
         id: 'action',
-        text: _('Select'),
+        text: __('Select'),
         width: '50',
         transform: function (val, item) {
           return (
@@ -230,12 +230,12 @@ export default class SpeedTest extends React.Component {
       },
       {
         id: 'ip',
-        text: _('IP'),
+        text: __('IP'),
       },
     ]);
     return (
       <div className="o-form">
-        <div className="o-form__legend">{_('Speed Test')}</div>
+        <div className="o-form__legend">{__('Speed Test')}</div>
         <div className="clearfix">
           <div
             className="fl"
@@ -243,7 +243,7 @@ export default class SpeedTest extends React.Component {
           >
             <FormGroup
               type="text"
-              label={_('Destination IP')}
+              label={__('Destination IP')}
               value={ip}
               onChange={(data) => this.props.updateItemSettings({
                 ip: data.value,
@@ -255,13 +255,13 @@ export default class SpeedTest extends React.Component {
           <Button
             className="fl"
             theme="default"
-            text={_('Select')}
+            text={__('Select')}
             onClick={this.onSelectBtnClick}
           />
         </div>
         <Modal
-          cancelText={_('Cancel')}
-          okText={_('OK')}
+          cancelText={__('Cancel')}
+          okText={__('OK')}
           onOk={this.onModalOkClick}
           onClose={this.onModalCancelClick}
           cancelButton
@@ -277,7 +277,7 @@ export default class SpeedTest extends React.Component {
         </Modal>
         <FormGroup
           type="radio"
-          label={_('Flow Direction')}
+          label={__('Flow Direction')}
         >
           <div
             style={{
@@ -287,7 +287,7 @@ export default class SpeedTest extends React.Component {
             <FormInput
               type="radio"
               name="directionSelect"
-              text={_('Duplex')}
+              text={__('Duplex')}
               checked={direction === '0'}
               onChange={() => this.props.updateItemSettings({
                 direction: '0',
@@ -296,7 +296,7 @@ export default class SpeedTest extends React.Component {
             <FormInput
               type="radio"
               name="directionSelect"
-              text={_('Receive')}
+              text={__('Receive')}
               checked={direction === '1'}
               onChange={() => this.props.updateItemSettings({
                 direction: '1',
@@ -305,7 +305,7 @@ export default class SpeedTest extends React.Component {
             <FormInput
               type="radio"
               name="directionSelect"
-              text={_('Transmit')}
+              text={__('Transmit')}
               checked={direction === '2'}
               onChange={() => this.props.updateItemSettings({
                 direction: '2',
@@ -313,7 +313,7 @@ export default class SpeedTest extends React.Component {
             />
           </div>
         </FormGroup>
-        <div className="o-form__legend">{_('Bandwidth Status')}</div>
+        <div className="o-form__legend">{__('Bandwidth Status')}</div>
         <div
           style={{
             width: '400px',
@@ -358,7 +358,7 @@ export default class SpeedTest extends React.Component {
                   color: '#CCC',
                 }}
               >
-                {_('Download')}
+                {__('Download')}
               </div>
             </div>
             <div
@@ -389,7 +389,7 @@ export default class SpeedTest extends React.Component {
                   color: '#CCC',
                 }}
               >
-                {_('Upload')}
+                {__('Upload')}
               </div>
             </div>
           </div>
@@ -402,7 +402,7 @@ export default class SpeedTest extends React.Component {
           >
             <Button
               theme="primary"
-              text={_('Run Test')}
+              text={__('Run Test')}
               onClick={this.onRunTest}
             />
             <span
@@ -413,7 +413,7 @@ export default class SpeedTest extends React.Component {
             />
             <Button
               theme="primary"
-              text={_('Advanced')}
+              text={__('Advanced')}
               onClick={() => {
                 const pQuery = {
                   time,
@@ -429,7 +429,7 @@ export default class SpeedTest extends React.Component {
         }
         <Modal
           isShow={showAdvance === '1'}
-          title={_('Advanced Settings')}
+          title={__('Advanced Settings')}
           draggable
           onClose={() => {
             const pQuery = {
@@ -450,12 +450,12 @@ export default class SpeedTest extends React.Component {
         >
           <FormGroup
             type="number"
-            label={_('Package Length')}
+            label={__('Package Length')}
             form="advancedOptions"
             min="1200"
             max="12000"
             value={this.props.selfState.getIn(['query', 'packagelen'])}
-            help={`${_('Range: ')}1200B ~ 12000B`}
+            help={`${__('Range: ')}1200B ~ 12000B`}
             onChange={(data) => {
               const pQuery = this.props.selfState.get('query').set('packagelen', data.value);
               this.props.changeQueryData(pQuery);
@@ -465,12 +465,12 @@ export default class SpeedTest extends React.Component {
           />
           <FormGroup
             type="number"
-            label={_('Test Duration')}
+            label={__('Test Duration')}
             form="advancedOptions"
             value={this.props.selfState.getIn(['query', 'time'])}
             min="10"
             max="300"
-            help={`${_('Range: ')}10s ~ 300s`}
+            help={`${__('Range: ')}10s ~ 300s`}
             onChange={(data) => {
               const pQuery = this.props.selfState.get('query').set('time', data.value);
               this.props.changeQueryData(pQuery);
@@ -483,7 +483,7 @@ export default class SpeedTest extends React.Component {
         }
         <Modal
           size="min"
-          title={_('Notice')}
+          title={__('Notice')}
           noFooter
           draggable
           isShow={!stopWait}
@@ -513,7 +513,7 @@ export default class SpeedTest extends React.Component {
           >
             {
               /[0-9]+/.test(this.props.selfState.get('time')) ? (
-                _('Time Remaining: ') + this.props.selfState.get('time') + 's'
+                __('Time Remaining: ') + this.props.selfState.get('time') + 's'
               ) : (
                 this.props.selfState.get('time')
               )

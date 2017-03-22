@@ -13,43 +13,43 @@ import FormContainer from 'shared/components/Organism/FormContainer';
 const listOptions = fromJS([
   {
     id: 'ssid',
-    text: _('SSID'),
+    text: __('SSID'),
   }, {
     id: 'filterGroup',
-    text: _('Rules Group'),
+    text: __('Rules Group'),
   }, {
     id: 'filterMode',
-    text: _('URL Filter Mode'),
+    text: __('URL Filter Mode'),
     formProps: {
       type: 'select',
     },
     options: [
       {
         value: '0',
-        label: _('Black List'),
+        label: __('Black List'),
       }, {
         value: '1',
-        label: _('White List'),
+        label: __('White List'),
       },
     ],
   }, {
     id: 'isFilter',
-    text: _('URL Filter State'),
+    text: __('URL Filter State'),
     formProps: {
       type: 'select',
     },
     options: [
       {
         value: '0',
-        label: _('Closed'),
+        label: __('Closed'),
       }, {
         value: '1',
-        label: _('Open'),
+        label: __('Open'),
       },
     ],
   }, {
     id: '__actions__',
-    text: _('Actions'),
+    text: __('Actions'),
     noForm: true,
   },
 ]);
@@ -57,22 +57,22 @@ const listOptions = fromJS([
 const wlanOptions = fromJS([
   {
     id: 'ssid',
-    label: _('SSID'),
+    label: __('SSID'),
   }, {
     id: 'filterGroup',
-    label: _('Rules Group'),
+    label: __('Rules Group'),
     type: 'select',
   }, {
     id: 'filterMode',
-    label: _('URL Filter Mode'),
+    label: __('URL Filter Mode'),
     type: 'select',
     options: [
       {
         value: '0',
-        label: _('Closed'),
+        label: __('Closed'),
       }, {
         value: '1',
-        label: _('Open'),
+        label: __('Open'),
       },
     ],
   },
@@ -81,11 +81,11 @@ const wlanOptions = fromJS([
 const groupOptions = fromJS([
   {
     id: 'group_name',
-    label: _('Group Name'),
+    label: __('Group Name'),
     type: 'text',
   }, {
     id: 'description',
-    label: _('Description'),
+    label: __('Description'),
     type: 'textarea',
   },
 ]);
@@ -93,19 +93,19 @@ const groupOptions = fromJS([
 const rulesDetailsOptions = fromJS([
   {
     id: 'rule_name',
-    label: _('Rule Name'),
+    label: __('Rule Name'),
     type: 'text',
     required: true,
   },
   {
     id: 'filter_url',
-    label: _('Filter URL'),
+    label: __('Filter URL'),
     type: 'textarea',
     required: true,
-    help: _('Filter URL[1-100]'),
+    help: __('Filter URL[1-100]'),
   }, {
     id: 'description',
-    label: _('Description'),
+    label: __('Description'),
     type: 'textarea',
     required: true,
   },
@@ -114,12 +114,12 @@ const rulesDetailsOptions = fromJS([
 const bindRulesOptions = fromJS([
   {
     id: 'group_name',
-    label: _('Group Name'),
+    label: __('Group Name'),
     type: 'select',
     required: true,
   }, {
     id: 'rules',
-    label: _('Filter Rules'),
+    label: __('Filter Rules'),
     type: 'select',
     multi: true,
     required: true,
@@ -243,14 +243,14 @@ export default class View extends React.Component {
       .setIn([-1, 'transform'], (val, $$data) => (
         <span>
           <Button
-            text={_('Open Filter')}
+            text={__('Open Filter')}
             key="filterActionButton"
             icon="filter"
             theme="primary"
             onClick={() => {
               this.props.changeScreenActionQuery({
                 action: 'filter',
-                myTitle: _('Filter'),
+                myTitle: __('Filter'),
               });
               this.props.updateCurEditListItem({
                 ssid: $$data.get('ssid'),
@@ -263,33 +263,33 @@ export default class View extends React.Component {
     const listActionBarChildren = (
       <span>
         <Button
-          text={_('Create Rules Group')}
+          text={__('Create Rules Group')}
           key="createGroupActionButton"
           icon="user-plus"
           theme="primary"
           onClick={() => this.props.changeScreenActionQuery({
             action: 'createGroup',
-            myTitle: _('Create Rules Group'),
+            myTitle: __('Create Rules Group'),
           })}
         />
         <Button
-          text={_('Make Filter Rules')}
+          text={__('Make Filter Rules')}
           key="makeFilterRulesActionButton"
           icon="edit"
           theme="primary"
           onClick={() => this.props.changeScreenActionQuery({
             action: 'makeFilterRules',
-            myTitle: _('Make Filter Rules'),
+            myTitle: __('Make Filter Rules'),
           })}
         />
         <Button
-          text={_('Bind Rules')}
+          text={__('Bind Rules')}
           key="bindRulesActionButton"
           icon="lock"
           theme="primary"
           onClick={() => this.props.changeScreenActionQuery({
             action: 'bindRules',
-            myTitle: _('Bind Rules'),
+            myTitle: __('Bind Rules'),
           })}
         />
       </span>

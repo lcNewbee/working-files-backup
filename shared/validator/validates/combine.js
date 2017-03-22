@@ -79,34 +79,34 @@ var combineVaildate = {
   //ip mask gateway 组合验证
   needStaticIP: function (ip, mask, gateway) {
     if (ip == gateway) {
-      return _("Static IP cannot be the same as default gateway.");
+      return __("Static IP cannot be the same as default gateway.");
     }
 
     if (!isSameNet(ip, gateway, mask, mask)) {
-      return _("Static IP and default gateway must be in the same network segment");
+      return __("Static IP and default gateway must be in the same network segment");
     }
     if (isBroadcastIp(ip, mask)) {
-      return _("%s can not be broadcast address", _('Static IP'));
+      return __("%s can not be broadcast address", __('Static IP'));
     }
     if (isBroadcastIp(gateway, mask)) {
-      return _("%s can not be broadcast address", _('Gateway'));
+      return __("%s can not be broadcast address", __('Gateway'));
     }
   },
 
   needSameNet: function (ip, mask, gateway, msgOption) {
     // 过滤 undefined 值与空值
     if (!ip || !mask || !gateway) {
-      return _("%s and %s must be in the same network segment", msgOption.ipLabel, msgOption.ip2Label);
+      return __("%s and %s must be in the same network segment", msgOption.ipLabel, msgOption.ip2Label);
     }
 
     if (!isSameNet(ip, gateway, mask, mask)) {
-      return _("%s and %s must be in the same network segment", msgOption.ipLabel, msgOption.ip2Label);
+      return __("%s and %s must be in the same network segment", msgOption.ipLabel, msgOption.ip2Label);
     }
     if (isBroadcastIp(ip, mask)) {
-      return _("%s can not be broadcast address", msgOption.ipLabel);
+      return __("%s can not be broadcast address", msgOption.ipLabel);
     }
     if (isBroadcastIp(gateway, mask)) {
-      return _("%s can not be broadcast address", msgOption.ip2Label);
+      return __("%s can not be broadcast address", msgOption.ip2Label);
     }
   },
 
@@ -152,7 +152,7 @@ var combineVaildate = {
     if (netIndex == 0 || netIndex1 == 0) {
       return;
     } else {
-      return _("Please enter a valid IP segment");
+      return __("Please enter a valid IP segment");
     }
   },
 
@@ -163,9 +163,9 @@ var combineVaildate = {
 
     if (isSameNet(ip, ip1, maxMask, maxMask)) {
       if (msg && msg1) {
-        return _('%s and %s can not has same segment', msg, msg1);
+        return __('%s and %s can not has same segment', msg, msg1);
       } else {
-        return _('Can not has same segment');
+        return __('Can not has same segment');
       }
     }
   },
@@ -174,9 +174,9 @@ var combineVaildate = {
 
     if (isSameNet(ip, ip1, mask, mask1)) {
       if (msgOption && msgOption.ipLabel && msgOption.ip2Label) {
-        return _('%s and %s can not has same segment', msgOption.ipLabel, msgOption.ip2Label);
+        return __('%s and %s can not has same segment', msgOption.ipLabel, msgOption.ip2Label);
       } else {
-        return _('Can not has same segment');
+        return __('Can not has same segment');
       }
     }
   },
@@ -185,7 +185,7 @@ var combineVaildate = {
     var isBroadcastIpRet = isBroadcastIp(ip, mask);
 
     if (isBroadcastIpRet) {
-      return _('Broadcast IP address is not allowed!');
+      return __('Broadcast IP address is not allowed!');
     }
   }
 };

@@ -11,14 +11,14 @@ import * as appActions from 'shared/actions/app';
 const listOptions = fromJS([
   {
     id: 'group_name',
-    label: _('Group Name'),
+    label: __('Group Name'),
     formProps: {
       type: 'text',
       required: true,
     },
   }, {
     id: 'description',
-    label: _('Description'),
+    label: __('Description'),
     formProps: {
       type: 'textarea',
       required: true,

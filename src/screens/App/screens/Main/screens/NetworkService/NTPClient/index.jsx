@@ -16,12 +16,12 @@ class NTPClient extends React.Component{
     return (
       <div className="ntpClientConfg">
         <FormGroup
-          label={_("NTP Client")}
+          label={__("NTP Client")}
           type="checkbox"
           defaultChecked
         />
         <FormGroup
-          label={_("NTP Server")}
+          label={__("NTP Server")}
           help="IP地址或域名"
           required
         />

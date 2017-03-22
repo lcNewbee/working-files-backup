@@ -24,20 +24,20 @@ const propTypes = fromJS({
 // };
 
 const msg = {
-  days: _('Days'),
+  days: __('Days'),
 };
 const timeTypeSwitchs = fromJS([
   {
     value: '-1',
-    label: _('Current'),
+    label: __('Current'),
   },
   {
     value: '0',
-    label: _('Today'),
+    label: __('Today'),
   },
   {
     value: '1',
-    label: _('Yesterday'),
+    label: __('Yesterday'),
   },
   {
     value: '7',
@@ -92,7 +92,7 @@ function getFlowUnit(val) {
 //       trigger: 'axis',
 //     },
 //     legend: {
-//       data: [_('Upload'), _('Download')],
+//       data: [__('Upload'), __('Download')],
 //     },
 //     grid: {
 //       left: '0',
@@ -124,7 +124,7 @@ function getFlowUnit(val) {
 //     }],
 //     yAxis: [{
 //       type: 'value',
-//       name: _('KB'),
+//       name: __('KB'),
 //       splitNumber: 5,
 //       min: 0,
 //       axisLabel: {
@@ -146,7 +146,7 @@ function getFlowUnit(val) {
 //     }],
 //     series: [
 //       {
-//         name: _('Upload'),
+//         name: __('Upload'),
 //         type: 'line',
 //         // smooth: true,
 //         // itemStyle: {
@@ -159,7 +159,7 @@ function getFlowUnit(val) {
 //         // },
 //       },
 //       {
-//         name: _('Download'),
+//         name: __('Download'),
 //         type: 'line',
 //         // smooth: true,
 //         // itemStyle: {
@@ -174,7 +174,7 @@ function getFlowUnit(val) {
 //     ],
 //   };
 //   let xAxisData;
-//   let xAxisName = _('Days');
+//   let xAxisName = __('Days');
 //   let $$upDataList = serverData.getIn(['upFlowList']);
 //   let $$downDataList = serverData.getIn(['downFlowList']);
 //   let maxVal = 0;
@@ -201,7 +201,7 @@ function getFlowUnit(val) {
 //     xAxisData = List(new Array(25)).map(
 //       (val, i) => `${i}:00`,
 //     ).toJS();
-//     xAxisName = _('Hours');
+//     xAxisName = __('Hours');
 //   } else if (timeType === '7') {
 //     xAxisData = List(new Array(8)).map(
 //       (val, i) => i,
@@ -233,14 +233,14 @@ function getFlowUnit(val) {
 const listOptions = fromJS([
   {
     id: 'mac',
-    text: _('MAC'),
+    text: __('MAC'),
   }, {
     id: 'ip',
-    text: _('IP'),
+    text: __('IP'),
   },
   // {
   //   id: 'osType',
-  //   text: _('OS Type'),
+  //   text: __('OS Type'),
   //   transform(val) {
   //     if (val === '' || val === undefined) {
   //       return '--';
@@ -250,7 +250,7 @@ const listOptions = fromJS([
   // },
   {
     id: 'application',
-    text: _('Applications'),
+    text: __('Applications'),
     transform(val) {
       if (typeof (val) === 'undefined' || val.size === 0) return '--';
       const len = val.size;
@@ -269,13 +269,13 @@ const listOptions = fromJS([
     },
   }, {
     id: 'curRate',
-    text: _('Current Rate'),
+    text: __('Current Rate'),
     transform(val) {
       return `${flowRateFilter.transform(val)}/s`;
     },
   }, {
     id: 'trafficPercent',
-    text: _('Proportion'),
+    text: __('Proportion'),
   },
 ]);
 
@@ -467,7 +467,7 @@ export default class MacStatistic extends React.Component {
             page: '1',
           },
         }}
-        // listTitle={_('Statistics Within 30 Seconds')}
+        // listTitle={__('Statistics Within 30 Seconds')}
       >
         <div className="t-overview">
           <div className="element t-overview__section-header">
@@ -477,7 +477,7 @@ export default class MacStatistic extends React.Component {
                   marginRight: '10px',
                 }}
               >
-                {_('Time')}
+                {__('Time')}
               </span>
               <Select
                 options={timeTypeSwitchs.toJS()}
@@ -491,18 +491,18 @@ export default class MacStatistic extends React.Component {
                   marginLeft: '20px',
                 }}
               >
-                {_('Search MAC')}
+                {__('Search MAC')}
               </span>
               <FormInput
                 // options={this.getMacOptions()}
                 value={store.getIn([curScreenId, 'query', 'search'])}
                 onChange={this.onChangeSearchMac}
-                placeholder={_('Complete MAC Address')}
+                placeholder={__('Complete MAC Address')}
               />
               <FormGroup
                 type="select"
                 className="fr"
-                label={_('View')}
+                label={__('View')}
                 options={viewOptions.toJS()}
                 value={store.getIn([curScreenId, 'query', 'size'])}
                 onChange={this.onChangeView}
@@ -521,7 +521,7 @@ export default class MacStatistic extends React.Component {
               // onRowSelect={this.onSelectRow}
             />
           </div>
-          {/* <h3 className="element t-overview__header">{_('Historical Graphs')}</h3>
+          {/* <h3 className="element t-overview__header">{__('Historical Graphs')}</h3>
           <div className="t-overview__section">
             <div className="element t-overview__section-header">
               <h3>
@@ -530,7 +530,7 @@ export default class MacStatistic extends React.Component {
                     marginRight: '10px',
                   }}
                 >
-                  {_('Traffic')}
+                  {__('Traffic')}
                 </span>
                 <Select
                   options={timeTypeSwitchs.toJS()}
@@ -544,7 +544,7 @@ export default class MacStatistic extends React.Component {
                     marginLeft: '20px',
                   }}
                 >
-                  {_('MAC')}
+                  {__('MAC')}
                 </span>
                 <Select
                   options={this.getMacOptions()}

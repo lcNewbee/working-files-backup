@@ -11,7 +11,7 @@ import * as appActions from 'shared/actions/app';
 const listOptions = fromJS([
   {
     id: 'model',
-    text: _('AP Model'),
+    text: __('AP Model'),
     width: '120px',
     formProps: {
       type: 'select',
@@ -20,7 +20,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'softVersion',
-    text: _('Firmware Version'),
+    text: __('Firmware Version'),
     defaultValue: '',
     formProps: {
       type: 'text',
@@ -33,7 +33,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'fileName',
-    text: _('Firmware File'),
+    text: __('Firmware File'),
     defaultValue: '',
     formProps: {
       type: 'file',
@@ -42,7 +42,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'uploadPath',
-    text: _('Firmware File'),
+    text: __('Firmware File'),
     defaultValue: '',
     noTable: true,
     formProps: {
@@ -50,7 +50,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'active',
-    text: _('Active Status'),
+    text: __('Active Status'),
     actionName: 'active',
     type: 'switch',
     width: '100px',
@@ -81,7 +81,7 @@ export default class View extends React.Component {
     this.myEditFormOptions = listOptions.mergeIn(
       [0, 'formProps'], {
         isLoading: true,
-        placeholder: _('Loading'),
+        placeholder: __('Loading'),
         options: [],
       },
     );
@@ -99,7 +99,7 @@ export default class View extends React.Component {
           const state = json && json.state;
           let newRet;
           if (state.code === 4000) {
-            newRet = _("There's no active version of the model,it should be activated!");
+            newRet = __("There's no active version of the model,it should be activated!");
           }
 
           return newRet;

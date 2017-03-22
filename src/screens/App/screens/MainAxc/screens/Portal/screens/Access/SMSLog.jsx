@@ -11,7 +11,7 @@ import * as appActions from 'shared/actions/app';
 const listOptions = fromJS([
   {
     id: 'phone',
-    text: _('Phone Number'),
+    text: __('Phone Number'),
     formProps: {
       type: 'text',
       required: true,
@@ -22,7 +22,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'info',
-    text: _('Message Content'),
+    text: __('Message Content'),
     formProps: {
       maxLength: '257',
       type: 'text',
@@ -33,14 +33,14 @@ const listOptions = fromJS([
     },
   }, {
     id: 'sendDate',
-    text: _('Date'),
+    text: __('Date'),
     formProps: {
       type: 'text',
       required: true,
     },
   }, {
     id: 'sid',
-    text: _('sid'),
+    text: __('sid'),
     noTable: true,
     formProps: {
       type: 'text',
@@ -48,17 +48,17 @@ const listOptions = fromJS([
     },
   }, {
     id: 'type',
-    text: _('Gate Type'),
+    text: __('Gate Type'),
     formProps: {
       type: 'select',
     },
     options: [
       {
         value: '1',
-        label: _('Virtual Gateway'),
+        label: __('Virtual Gateway'),
       }, {
         value: '2',
-        label: _('Qianhai Smart Commumication'),
+        label: __('Qianhai Smart Commumication'),
       },
     ],
   },

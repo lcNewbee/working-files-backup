@@ -217,75 +217,75 @@
       "id": 53,
       "meta": {}
     },
-    "../node_modules/zrender/lib/core/matrix.js": {
+    "../node_modules/webpack/buildin/global.js": {
       "id": 54,
       "meta": {}
     },
-    "../node_modules/zrender/lib/mixin/Eventful.js": {
+    "../node_modules/zrender/lib/core/matrix.js": {
       "id": 55,
       "meta": {}
     },
-    "../node_modules/zrender/lib/tool/color.js": {
+    "../node_modules/zrender/lib/mixin/Eventful.js": {
       "id": 56,
       "meta": {}
     },
-    "../node_modules/core-js/library/modules/_descriptors.js": {
+    "../node_modules/zrender/lib/tool/color.js": {
       "id": 57,
       "meta": {}
     },
-    "../node_modules/echarts/lib/CoordinateSystem.js": {
+    "../node_modules/core-js/library/modules/_descriptors.js": {
       "id": 58,
       "meta": {}
     },
-    "../node_modules/echarts/lib/model/mixin/makeStyleMapper.js": {
+    "../node_modules/echarts/lib/CoordinateSystem.js": {
       "id": 59,
       "meta": {}
     },
-    "../node_modules/echarts/lib/scale/Scale.js": {
+    "../node_modules/echarts/lib/model/mixin/makeStyleMapper.js": {
       "id": 60,
       "meta": {}
     },
-    "../node_modules/echarts/lib/util/symbol.js": {
+    "../node_modules/echarts/lib/scale/Scale.js": {
       "id": 61,
       "meta": {}
     },
-    "../node_modules/echarts/lib/view/Chart.js": {
+    "../node_modules/echarts/lib/util/symbol.js": {
       "id": 62,
       "meta": {}
     },
-    "../node_modules/fbjs/lib/shallowEqual.js": {
+    "../node_modules/echarts/lib/view/Chart.js": {
       "id": 63,
       "meta": {}
     },
-    "../node_modules/process/browser.js": {
+    "../node_modules/fbjs/lib/shallowEqual.js": {
       "id": 64,
       "meta": {}
     },
-    "../node_modules/react-dom/lib/ReactBrowserEventEmitter.js": {
+    "../node_modules/process/browser.js": {
       "id": 65,
       "meta": {}
     },
-    "../node_modules/react-dom/lib/SyntheticMouseEvent.js": {
+    "../node_modules/react-dom/lib/ReactBrowserEventEmitter.js": {
       "id": 66,
       "meta": {}
     },
-    "../node_modules/react-dom/lib/Transaction.js": {
+    "../node_modules/react-dom/lib/SyntheticMouseEvent.js": {
       "id": 67,
       "meta": {}
     },
-    "../node_modules/react-dom/lib/escapeTextContentForBrowser.js": {
+    "../node_modules/react-dom/lib/Transaction.js": {
       "id": 68,
       "meta": {}
     },
-    "../node_modules/react-dom/lib/setInnerHTML.js": {
+    "../node_modules/react-dom/lib/escapeTextContentForBrowser.js": {
       "id": 69,
       "meta": {}
     },
-    "../node_modules/react-select/lib/Select.js": {
+    "../node_modules/react-dom/lib/setInnerHTML.js": {
       "id": 70,
       "meta": {}
     },
-    "../node_modules/webpack/buildin/global.js": {
+    "../node_modules/react-select/lib/Select.js": {
       "id": 71,
       "meta": {}
     },

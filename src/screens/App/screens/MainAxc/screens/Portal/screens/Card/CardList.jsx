@@ -44,7 +44,7 @@ function getUserName() {
 const listOptions = fromJS([
   {
     id: 'name',
-    text: _('Recharge Name'),
+    text: __('Recharge Name'),
     width: '120px',
     formProps: {
       type: 'text',
@@ -56,7 +56,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'payType',
-    text: _('Recharge Type'),
+    text: __('Recharge Type'),
     width: '120px',
     noForm: true,
     formProps: {
@@ -66,28 +66,28 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: _('Unavailability'),
+        label: __('Unavailability'),
       }, {
         value: '1',
-        label: _('Free of Charge'),
+        label: __('Free of Charge'),
       },
       {
         value: '2',
-        label: _('Timekeeping'),
+        label: __('Timekeeping'),
       }, {
         value: '3',
-        label: _('Buy Out'),
+        label: __('Buy Out'),
       }, {
         value: '4',
-        label: _('Traffic'),
+        label: __('Traffic'),
       }, {
         value: '-1',
-        label: _('Outside User'),
+        label: __('Outside User'),
       },
     ],
   }, {
     id: 'categoryName',
-    text: _('Category Name'),
+    text: __('Category Name'),
     noTable: true,
     formProps: {
       type: 'select',
@@ -95,7 +95,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'categoryType',
-    text: _('Category Type'),
+    text: __('Category Type'),
     noForm: true,
     formProps: {
       type: 'select',
@@ -104,25 +104,25 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: _('Hour Card'),
+        label: __('Hour Card'),
       }, {
         value: '1',
-        label: _('Day Card'),
+        label: __('Day Card'),
       },
       {
         value: '2',
-        label: _('Month Card'),
+        label: __('Month Card'),
       }, {
         value: '3',
-        label: _('Year Card'),
+        label: __('Year Card'),
       }, {
         value: '4',
-        label: _('Traffic Card'),
+        label: __('Traffic Card'),
       },
     ],
   }, {
     id: 'cardCount',
-    text: _('Card Number'),
+    text: __('Card Number'),
     noTable: true,
     formProps: {
       type: 'number',
@@ -134,7 +134,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'maclimit',
-    text: _('Mac Limit'),
+    text: __('Mac Limit'),
     noForm: true,
     formProps: {
       type: 'select',
@@ -143,16 +143,16 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: _('Closed'),
+        label: __('Closed'),
       }, {
         value: '1',
-        label: _('Open'),
+        label: __('Open'),
       },
     ],
   }, {
     id: 'maclimitcount',
     noForm: true,
-    text: _('Mac Quantity'),
+    text: __('Mac Quantity'),
     formProps: {
       type: 'number',
       required: true,
@@ -163,7 +163,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'autologin',
-    text: _('Auto Login'),
+    text: __('Auto Login'),
     noForm: true,
     noTable: true,
     formProps: {
@@ -173,15 +173,15 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: _('Closed'),
+        label: __('Closed'),
       }, {
         value: '1',
-        label: _('Open'),
+        label: __('Open'),
       },
     ],
   }, {
     id: 'speed',
-    text: _('Speed Limit'),
+    text: __('Speed Limit'),
     noForm: true,
     formProps: {
       type: 'select',
@@ -190,12 +190,12 @@ const listOptions = fromJS([
     options: [
       {
         value: '1',
-        label: _('1M'),
+        label: __('1M'),
       },
     ],
   }, {
     id: 'cdKey',
-    text: _('CD Key'),
+    text: __('CD Key'),
     noForm: true,
     formProps: {
       type: 'text',
@@ -204,7 +204,7 @@ const listOptions = fromJS([
   },
   {
     id: 'payTime',
-    text: _('Count'),
+    text: __('Count'),
     noForm: true,
     formProps: {
       type: 'number',
@@ -216,7 +216,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'state',
-    text: _('State'),
+    text: __('State'),
     noForm: true,
     formProps: {
       type: 'select',
@@ -225,21 +225,21 @@ const listOptions = fromJS([
     options: [
       {
         value: '-1',
-        label: _('Unpayed'),
+        label: __('Unpayed'),
       }, {
         value: '0',
-        label: _('New Card'),
+        label: __('New Card'),
       }, {
         value: '1',
-        label: _('Sold'),
+        label: __('Sold'),
       }, {
         value: '2',
-        label: _('Active'),
+        label: __('Active'),
       },
     ],
   }, {
     id: 'accountName',
-    text: _('Recharge User'),
+    text: __('Recharge User'),
     noForm: true,
     formProps: {
       type: 'text',
@@ -251,7 +251,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'buyDate',
-    text: _('Order Date'),
+    text: __('Order Date'),
     noForm: true,
     width: '120px',
     options: [],
@@ -261,7 +261,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'payDate',
-    text: _('Recharge Date'),
+    text: __('Recharge Date'),
     noForm: true,
     width: '120px',
     options: [],
@@ -271,16 +271,16 @@ const listOptions = fromJS([
     },
   }, {
     id: 'money',
-    text: _('Price'),
+    text: __('Price'),
     formProps: {
       type: 'text',
       required: true,
-      help: _('$'),
+      help: __('$'),
     },
   }, {
     id: 'decsription',
     noTable: true,
-    text: _('Description'),
+    text: __('Description'),
     formProps: {
       type: 'textarea',
       required: true,
@@ -288,27 +288,27 @@ const listOptions = fromJS([
   }, {
     id: '__actions__',
     noForm: true,
-    text: _('Actions'),
+    text: __('Actions'),
   },
 ]);
 const sendMessageOptions = fromJS([
   {
     id: 'toname',
-    label: _('Receiver'),
+    label: __('Receiver'),
     form: 'sendMessage',
     required: true,
     type: 'select',
   },
   {
     id: 'title',
-    label: _('Title'),
+    label: __('Title'),
     form: 'sendMessage',
     type: 'text',
     required: true,
   },
   {
     id: 'description',
-    label: _('Content'),
+    label: __('Content'),
     form: 'sendMessage',
     type: 'textarea',
     required: true,
@@ -402,43 +402,43 @@ export default class View extends React.Component {
         let x;
         switch (type) {
           case 0:
-            x = _('Hour Card');
+            x = __('Hour Card');
             break;
           case 1:
-            x = _('Day Card');
+            x = __('Day Card');
             break;
           case 2:
-            x = _('Month Card');
+            x = __('Month Card');
             break;
           case 3:
-            x = _('Year Card');
+            x = __('Year Card');
             break;
           default:
-            x = _('Year Card');
+            x = __('Year Card');
         }
         if ($$data.get('state') === '0') {
           return (
             <Button
-              text={_('Send to Users')}
+              text={__('Send to Users')}
               key="sendActionButton"
               icon="mail-forward"
               theme="primary"
               onClick={() => {
                 this.props.changeScreenActionQuery({
                   action: 'sendMessage',
-                  myTitle: _('Send to Users'),
+                  myTitle: __('Send to Users'),
                 });
                 this.props.updateCurEditListItem({
                   id: $$data.get('id'),
-                  title: _('CD Key of Recharge Card '),
-                  description: _('Recharge Name:') + $$data.get('name') + _('; ') + _('CD Key:') + $$data.get('cdKey') + _('; ') + _('Category Type:') + x,
+                  title: __('CD Key of Recharge Card '),
+                  description: __('Recharge Name:') + $$data.get('name') + __('; ') + __('CD Key:') + $$data.get('cdKey') + __('; ') + __('Category Type:') + x,
                 });
               }}
             />);
         }
         return (
           <Button
-            text={_('Card Sold Out')}
+            text={__('Card Sold Out')}
             key="sendoutActionButton"
             icon="mail-forward"
           />);

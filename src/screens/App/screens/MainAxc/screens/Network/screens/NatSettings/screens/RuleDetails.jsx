@@ -39,11 +39,11 @@ const portIdOptions = [
 ];
 
 const natTypeOptions = [
-  { label: _('Static IP Transform'), value: 'static' },
-  { label: _('Source IP Transform'), value: 'src' },
-  { label: _('Destination IP Transform'), value: 'dest' },
-  { label: _('Src/Dest IP Transform'), value: 'src_dest' },
-  { label: _('Public IP Passthrough'), value: 'public' },
+  { label: __('Static IP Transform'), value: 'static' },
+  { label: __('Source IP Transform'), value: 'src' },
+  { label: __('Destination IP Transform'), value: 'dest' },
+  { label: __('Src/Dest IP Transform'), value: 'src_dest' },
+  { label: __('Public IP Passthrough'), value: 'public' },
 ];
 
 function getListOptionsByNatType(fullOptions, natType) {
@@ -87,7 +87,7 @@ export default class View extends React.Component {
         id: 'id',
         filter: 'all',
         type: 'text',
-        text: _('ID'),
+        text: __('ID'),
         notEditable: true,
         formProps: {
           noAdd: true,
@@ -95,7 +95,7 @@ export default class View extends React.Component {
       },
       {
         id: 'natType',
-        text: _('NAT Type'),
+        text: __('NAT Type'),
         options: natTypeOptions,
         type: 'select',
         filter: 'all',
@@ -107,7 +107,7 @@ export default class View extends React.Component {
       { // 静态地址转换时可配
         id: 'externalIp',
         filter: 'static',
-        text: _('External IP'),
+        text: __('External IP'),
         formProps: {
           type: 'text',
         },
@@ -115,7 +115,7 @@ export default class View extends React.Component {
       { // 静态地址转换时可配
         id: 'internalIp',
         filter: 'static',
-        text: _('Internal IP'),
+        text: __('Internal IP'),
         formProps: {
           type: 'text',
         },
@@ -123,7 +123,7 @@ export default class View extends React.Component {
       { // 静态地址转换时可配
         id: 'interface',
         filter: 'static',
-        text: _('Interface'),
+        text: __('Interface'),
         formProps: {
           type: 'select',
           options: portIdOptions,
@@ -132,7 +132,7 @@ export default class View extends React.Component {
       { // 源地址/目的地址转换时可配
         id: 'srcIp',
         filter: 'src_dest',
-        text: _('Source IP'),
+        text: __('Source IP'),
         formProps: {
           type: 'text',
         },
@@ -140,7 +140,7 @@ export default class View extends React.Component {
       { // 源地址/目的地址转换时可配
         id: 'destIp',
         filter: 'src_dest',
-        text: _('Destination IP'),
+        text: __('Destination IP'),
         formProps: {
           type: 'text',
         },
@@ -148,7 +148,7 @@ export default class View extends React.Component {
       { // 源地址/目的地址转换时可配
         id: 'serve',
         filter: 'src_dest',
-        text: _('Serve'),
+        text: __('Serve'),
         formProps: {
           type: 'select',
         },
@@ -156,7 +156,7 @@ export default class View extends React.Component {
       { // 源地址转换时可配
         id: 'exitPort',
         filter: 'src',
-        text: _('Exit Port'),
+        text: __('Exit Port'),
         formProps: {
           type: 'select',
           options: portIdOptions,
@@ -165,7 +165,7 @@ export default class View extends React.Component {
       { // 目的地址转换时可配
         id: 'entryPort',
         filter: 'dest',
-        text: _('Entry Port'),
+        text: __('Entry Port'),
         formProps: {
           type: 'select',
           options: portIdOptions,
@@ -174,7 +174,7 @@ export default class View extends React.Component {
       { // 源地址转换时可配
         id: 'transferedScr',
         filter: 'src',
-        text: _('Transferd Source IP '),
+        text: __('Transferd Source IP '),
         formProps: {
           type: 'select',
         },
@@ -182,17 +182,17 @@ export default class View extends React.Component {
       { // 目的地址转换时可配
         id: 'transferedDest',
         filter: 'dest',
-        text: _('Transfered Destination IP'),
+        text: __('Transfered Destination IP'),
         formProps: {
           type: 'select',
         },
       },
       {
         id: 'logEnable',
-        text: _('Log Enable'),
+        text: __('Log Enable'),
         options: [
-          { label: _('ON'), value: '1' },
-          { label: _('OFF'), value: '0' },
+          { label: __('ON'), value: '1' },
+          { label: __('OFF'), value: '0' },
         ],
         filter: 'all',
         formProps: {
@@ -202,7 +202,7 @@ export default class View extends React.Component {
       {
         id: 'description',
         filter: 'all',
-        text: _('Description'),
+        text: __('Description'),
         formProps: {
           type: 'textarea',
         },
@@ -232,7 +232,7 @@ export default class View extends React.Component {
               marginRight: '10px',
             }}
           >
-            {_('NAT Type')}
+            {__('NAT Type')}
           </span>
           <FormInput
             type="select"

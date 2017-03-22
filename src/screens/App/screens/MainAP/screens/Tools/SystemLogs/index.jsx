@@ -127,7 +127,7 @@ export default class SystemLogs extends Component {
       lastPage: totalPage,
     }));
     if (startNo > listLen) {
-      throw new Error(_('The page does not exist'));
+      throw new Error(__('The page does not exist'));
     }
     this.props.changeStartNo(startNo + 1);
     for (let i = 0; i < perPageNum && (startNo + i) < listLen; i++) {
@@ -199,18 +199,18 @@ export default class SystemLogs extends Component {
     const systemLogOptions = fromJS([
       {
         id: 'id',
-        text: _('No.'),
+        text: __('No.'),
         transform: this.generateLogNo,
         width: '80px',
       },
       {
         id: 'time',
-        text: _('Time'),
+        text: __('Time'),
         width: '200px',
       },
       {
         id: 'content',
-        text: _('Content'),
+        text: __('Content'),
       },
     ]);
 
@@ -223,10 +223,10 @@ export default class SystemLogs extends Component {
 
     return (
       <div className="stats-group">
-        <h3>{_('System Logs')}</h3>
+        <h3>{__('System Logs')}</h3>
         <FormGroup
           type="checkbox"
-          label={_('System Log')}
+          label={__('System Log')}
           checked={this.props.store.getIn(['curData', 'logEnable']) === '1'}
           onChange={data => this.onChangeLogSwitch(data)}
         />
@@ -249,7 +249,7 @@ export default class SystemLogs extends Component {
                   }}
                 />
                 <FormGroup
-                  label={_('Items Per Page')}
+                  label={__('Items Per Page')}
                   type="select"
                   options={numOfPerPageOptions}
                   value={this.props.selfState.get('perPageNum')}

@@ -11,7 +11,7 @@ const listOptions = fromJS([
   {
     id: 'id',
     type: 'text',
-    text: _('Rule ID'),
+    text: __('Rule ID'),
     formProps: {
       noAdd: true,
     },
@@ -19,17 +19,17 @@ const listOptions = fromJS([
   },
   {
     id: 'ruleName',
-    text: _('Rule Name'),
+    text: __('Rule Name'),
     type: 'text',
   },
   {
     id: 'action',
-    text: _('Action'),
+    text: __('Action'),
     type: 'select',
     options: [
-      { label: _('Accept'), value: 'accept' },
-      { label: _('Reject'), value: 'reject' },
-      { label: _('Redirect'), value: 'redirect' },
+      { label: __('Accept'), value: 'accept' },
+      { label: __('Reject'), value: 'reject' },
+      { label: __('Redirect'), value: 'redirect' },
     ],
     formProps: {
       type: 'select',
@@ -37,11 +37,11 @@ const listOptions = fromJS([
   },
   {
     id: 'destType',
-    text: _('Destination Type'),
+    text: __('Destination Type'),
     type: 'select',
     options: [
-      { label: _('Source IP'), value: 'src' },
-      { label: _('Destination IP'), value: 'dest' },
+      { label: __('Source IP'), value: 'src' },
+      { label: __('Destination IP'), value: 'dest' },
     ],
     formProps: {
       type: 'select',
@@ -50,7 +50,7 @@ const listOptions = fromJS([
   {
     id: 'ipType',
     type: 'select',
-    text: _('IP Type'),
+    text: __('IP Type'),
     options: [
       { label: 'IPV4', value: 'ipv4' },
       { label: 'IPV6', value: 'ipv6' },
@@ -62,7 +62,7 @@ const listOptions = fromJS([
   {
     id: 'ipTable',
     type: 'text',
-    text: _('IP Table'),
+    text: __('IP Table'),
     formProps: {
       type: 'textarea',
     }

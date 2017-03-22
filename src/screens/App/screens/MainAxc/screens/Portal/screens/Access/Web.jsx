@@ -13,7 +13,7 @@ import './web.scss';
 const listOptions = fromJS([
   {
     id: 'id',
-    text: _('ID'),
+    text: __('ID'),
     width: '120px',
     noTable: true,
     noForm: true,
@@ -23,7 +23,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'name',
-    text: _('Name'),
+    text: __('Name'),
     width: '120px',
     formProps: {
       type: 'text',
@@ -35,7 +35,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'adv',
-    text: _('Ads Page'),
+    text: __('Ads Page'),
     width: '120px',
     options: [
       {
@@ -50,7 +50,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'countShow',
-    text: _('Show Times'),
+    text: __('Show Times'),
     defaultValue: '150',
     formProps: {
       type: 'number',
@@ -62,7 +62,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'countAuth',
-    text: _('Click Times'),
+    text: __('Click Times'),
     defaultValue: '100',
     type: 'number',
     formProps: {
@@ -74,7 +74,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'description',
-    text: _('Description'),
+    text: __('Description'),
     formProps: {
       type: 'textarea',
       maxLength: '257',
@@ -84,7 +84,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'file',
-    text: _('Template Zip File'),
+    text: __('Template Zip File'),
     noTable: true,
     defaultValue: '',
     formProps: {
@@ -93,20 +93,20 @@ const listOptions = fromJS([
     },
   }, {
     id: '__actions__',
-    text: _('Actions'),
+    text: __('Actions'),
     noForm: true,
     transform(val, $$item) {
       return (
         <span>
-          <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$item.get('id')}/auth.jsp`} target="_blank">{_('Auth')}</a>
-          <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$item.get('id')}/ok.jsp`}  target="_blank">{_('Success')}</a>
-          <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$item.get('id')}/out.jsp`} target="_blank">{_('Exit')}</a>
+          <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$item.get('id')}/auth.jsp`} target="_blank">{__('Auth')}</a>
+          <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$item.get('id')}/ok.jsp`}  target="_blank">{__('Success')}</a>
+          <a className="tablelink" href={`http://${window.location.hostname}:8080/${$$item.get('id')}/out.jsp`} target="_blank">{__('Exit')}</a>
           <a
             className="tablelink"
             href={`http://${window.location.hostname}:8080/${$$item.get('id')}/wx.jsp`}
             target="_blank"
           >
-            {_('Wechat')}
+            {__('Wechat')}
           </a>
         </span>
       );
@@ -127,7 +127,7 @@ export default class View extends React.Component {
       'getAdsPage',
     ]);
     this.state = {
-      advSelectPlaceholder: _('Loading'),
+      advSelectPlaceholder: __('Loading'),
       advIsloading: true,
       advOptions: [],
     };

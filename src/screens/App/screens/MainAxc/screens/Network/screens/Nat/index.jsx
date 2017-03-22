@@ -26,9 +26,9 @@ function getPortList() {
 const commonFormOptions = fromJS([
   {
     id: 'enable',
-    label: _('NAT Service'),
+    label: __('NAT Service'),
     type: 'checkbox',
-    text: _('Enable'),
+    text: __('Enable'),
     value: 1,
     saveOnChange: true,
   },
@@ -36,45 +36,45 @@ const commonFormOptions = fromJS([
 const listOptions = fromJS([
   {
     id: 'type',
-    label: _('NAT Rule Type'),
+    label: __('NAT Rule Type'),
     options: [
       {
         value: '0',
         disabled: true,
-        label: _('Static NAT'),
+        label: __('Static NAT'),
       }, {
         value: 'snat',
-        label: _('Source Address'),
+        label: __('Source Address'),
       }, {
         value: 'dnat',
         disabled: true,
-        label: _('Destination NAT'),
+        label: __('Destination NAT'),
       }, {
         value: 'masquerade',
         disabled: true,
-        label: _('Internet NAT'),
+        label: __('Internet NAT'),
       },
     ],
     defaultValue: 'snat',
     formProps: {
       type: 'select',
-      label: _('NAT Rule Type'),
-      placeholder: _('Please Select ') + _('NAT Rule Type'),
+      label: __('NAT Rule Type'),
+      placeholder: __('Please Select ') + __('NAT Rule Type'),
     },
 
   }, {
     id: 'addr',
-    label: _('Source IP Address'),
+    label: __('Source IP Address'),
     formProps: {
       required: true,
       validator: validator({
         rules: 'ipSegment',
       }),
-      help: _('e.g. %s', '192.168.1.0/24'),
+      help: __('e.g. %s', '192.168.1.0/24'),
     },
   }, {
     id: 'nataddr',
-    label: _('Translated IP Address'),
+    label: __('Translated IP Address'),
     formProps: {
       required: true,
       validator: validator({
@@ -83,7 +83,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'pubifname',
-    label: _('Uplink Port'),
+    label: __('Uplink Port'),
     formProps: {
       type: 'select',
       required: true,
@@ -130,7 +130,7 @@ export default class View extends React.Component {
     return (
       <AppScreen
         {...this.props}
-        listTitle={_('NAT Rules')}
+        listTitle={__('NAT Rules')}
         listKey="allKeys"
         settingsFormOptions={commonFormOptions}
         listOptions={this.state.listOptions}

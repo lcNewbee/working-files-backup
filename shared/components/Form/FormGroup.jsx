@@ -146,7 +146,7 @@ class FormGroup extends React.Component {
           multi,
         })) {
       if (required) {
-        checkResult = _('%s is required', label || this.props['data-label']);
+        checkResult = __('%s is required', label || this.props['data-label']);
       }
 
     // 不为空，validator验证对象验证

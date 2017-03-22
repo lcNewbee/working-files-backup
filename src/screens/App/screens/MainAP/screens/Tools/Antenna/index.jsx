@@ -8,7 +8,7 @@ export default class Antenna extends React.Component {
     const yAxisData = fromJS(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10']);
     const echartOption = {
       title: {
-        text: _('Antenna Adjust'),
+        text: __('Antenna Adjust'),
       },
       tooltip: {
         trigger: 'axis',

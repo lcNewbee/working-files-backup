@@ -256,7 +256,7 @@ export default class QuickSetup extends React.Component {
   getCountryNameFromCode(code, map) {
     for (const name of Object.keys(map)) {
       if (map[name] === code) {
-        return _(name);
+        return __(name);
       }
     }
     return '';
@@ -298,7 +298,7 @@ export default class QuickSetup extends React.Component {
     const countryList = [];
     for (const key of Object.keys(map)) {
       const entry = {
-        label: _(key),
+        label: __(key),
         value: map[key],
       };
       countryList.push(entry);
@@ -358,7 +358,7 @@ export default class QuickSetup extends React.Component {
             <div
               className="cols col-7"
             >
-              {_('This device connected to a router on ethernet port and allow other devices to connect to it wirelessly.')}
+              {__('This device connected to a router on ethernet port and allow other devices to connect to it wirelessly.')}
             </div>
           </div>
         </div>
@@ -398,7 +398,7 @@ export default class QuickSetup extends React.Component {
             <div
               className="cols col-7"
             >
-              {_('This device is wirelessly connected to a AP or a wireless router, and allows another device  to connect to it via wire.')}
+              {__('This device is wirelessly connected to a AP or a wireless router, and allows another device  to connect to it via wire.')}
             </div>
           </div>
         </div>
@@ -439,7 +439,7 @@ export default class QuickSetup extends React.Component {
             <div
               className="cols col-7"
             >
-              {_('This device is wirelessly connected to  AP or a wireless router, and allows other wireless clients to connect to it. It extends the reach of your wireless network.')}
+              {__('This device is wirelessly connected to  AP or a wireless router, and allows other wireless clients to connect to it. It extends the reach of your wireless network.')}
             </div>
           </div>
         </div>
@@ -456,7 +456,7 @@ export default class QuickSetup extends React.Component {
     return (
       <div className="secondScreen">
         <FormGroup
-          label={_('IP Address')}
+          label={__('IP Address')}
           type="text"
           value={ip}
           onChange={data => this.props.updateItemSettings({
@@ -466,7 +466,7 @@ export default class QuickSetup extends React.Component {
           required
         />
         <FormGroup
-          label={_('Subnet Mask')}
+          label={__('Subnet Mask')}
           type="text"
           value={mask}
           onChange={data => this.props.updateItemSettings({
@@ -483,7 +483,7 @@ export default class QuickSetup extends React.Component {
     const modalOptions = fromJS([
       {
         id: 'operate',
-        text: _('Select'),
+        text: __('Select'),
         transform: function (val, item) {
           return (
             <FormInput
@@ -496,15 +496,15 @@ export default class QuickSetup extends React.Component {
       },
       {
         id: 'mac',
-        text: _('MAC'),
+        text: __('MAC'),
       },
       {
         id: 'ssid',
-        text: _('SSID'),
+        text: __('SSID'),
       },
       {
         id: 'security',
-        text: _('Security Mode'),
+        text: __('Security Mode'),
         transform: function (val) {
           const mode = val.get('mode');
           if (mode === 'wpa') return 'WPA-PSK';
@@ -516,23 +516,23 @@ export default class QuickSetup extends React.Component {
       },
       {
         id: 'signal',
-        text: _('Signal'),
+        text: __('Signal'),
       },
       {
         id: 'noise',
-        text: _('Noise'),
+        text: __('Noise'),
       },
       {
         id: 'protocol',
-        text: _('Protocol'),
+        text: __('Protocol'),
       },
       {
         id: 'frequency',
-        text: _('Channel'),
+        text: __('Channel'),
       },
       {
         id: 'channelWidth',
-        text: _('Channel Width'),
+        text: __('Channel Width'),
       },
     ]);
     const store = this.props.store;
@@ -554,7 +554,7 @@ export default class QuickSetup extends React.Component {
             <div className="thirdForAp">
               <FormGroup
                 type="text"
-                label={_('SSID')}
+                label={__('SSID')}
                 value={ssid}
                 onChange={data => this.props.updateItemSettings({
                   ssid: data.value,
@@ -563,7 +563,7 @@ export default class QuickSetup extends React.Component {
                 {...validSsid}
               />
               <FormGroup
-                label={_('Country')}
+                label={__('Country')}
               >
                 <FormInput
                   type="text"
@@ -578,7 +578,7 @@ export default class QuickSetup extends React.Component {
                   }}
                 />
                 <Button
-                  text={_('Change')}
+                  text={__('Change')}
                   style={{
                     marginLeft: '-1px',
                     width: '70px',
@@ -587,24 +587,24 @@ export default class QuickSetup extends React.Component {
                 />
               </FormGroup>
               <Modal
-                title={_('Country')}
+                title={__('Country')}
                 onClose={this.onCloseCountrySelectModal}
                 onOk={this.props.saveCountrySelectModal}
                 isShow={this.props.selfState.get('showCtyModal')}
                 draggable
               >
-                <h3>{_('User Protocol')}</h3>
+                <h3>{__('User Protocol')}</h3>
                 <span>
-                  {_('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
+                  {__('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
                 </span>
                 <FormGroup
                   type="radio"
-                  text={_('I have read and agree')}
+                  text={__('I have read and agree')}
                   checked={this.props.selfState.get('agreeProtocol')}
                   onClick={() => { this.props.changeAgreeProtocol(true); }}
                 />
                 <FormGroup
-                  label={_('Country')}
+                  label={__('Country')}
                   type="select"
                   options={this.makeCountryOptions(countryMap)}
                   value={this.props.selfState.get('selectedCountry') ||
@@ -615,7 +615,7 @@ export default class QuickSetup extends React.Component {
               </Modal>
               <FormGroup
                 type="switch"
-                label={_('Channel Width')}
+                label={__('Channel Width')}
                 minWidth="66px"
                 options={channelWidthOptions}
                 value={channelWidth}
@@ -625,7 +625,7 @@ export default class QuickSetup extends React.Component {
               />
               <FormGroup
                 type="select"
-                label={_('Channel')}
+                label={__('Channel')}
                 options={this.makeChannelOptions()}
                 value={frequency}
                 onChange={data => this.props.updateItemSettings({
@@ -634,7 +634,7 @@ export default class QuickSetup extends React.Component {
               />
               <FormGroup
                 type="select"
-                label={_('Security')}
+                label={__('Security')}
                 options={staAndApSecurityOptions}
                 value={mode || 'none'}
                 onChange={data => this.props.updateItemSettings({
@@ -653,7 +653,7 @@ export default class QuickSetup extends React.Component {
                 /wpa/.test(store.getIn(['curData', 'security', 'mode'])) ? (
                   <div>
                     <FormGroup
-                      label={_('Encryption')}
+                      label={__('Encryption')}
                       minWidth="66px"
                       type="switch"
                       value={store.getIn(['curData', 'security', 'cipher'])}
@@ -673,7 +673,7 @@ export default class QuickSetup extends React.Component {
                     />
                     <FormGroup
                       type="password"
-                      label={_('Password')}
+                      label={__('Password')}
                       value={key}
                       onChange={data => this.props.updateItemSettings({
                         security: {
@@ -692,7 +692,7 @@ export default class QuickSetup extends React.Component {
                   (store.getIn(['curData', 'security', 'mode']) === 'wep') ? (
                     <div>
                       <FormGroup
-                        label={_('Auth Type')}
+                        label={__('Auth Type')}
                         type="switch"
                         options={wepAuthenOptions}
                         value={store.getIn(['curData', 'security', 'auth'])}
@@ -705,7 +705,7 @@ export default class QuickSetup extends React.Component {
                       />
                       {/*
                         <FormGroup
-                          label={_('Key Length')}
+                          label={__('Key Length')}
                           type="select"
                           options={wepKeyLengthOptions}
                           value={curData.getIn(['vapList', '0', 'security', 'keyLength'])}
@@ -719,7 +719,7 @@ export default class QuickSetup extends React.Component {
                         />
                       */}
                       <FormGroup
-                        label={_('Key Format')}
+                        label={__('Key Format')}
                         type="switch"
                         options={keyTypeOptions}
                         value={store.getIn(['curData', 'security', 'keyType'])}
@@ -731,7 +731,7 @@ export default class QuickSetup extends React.Component {
                         minWidth="65px"
                       />
                       <FormGroup
-                        label={_('Key Index')}
+                        label={__('Key Index')}
                         type="select"
                         options={keyIndexOptions}
                         value={store.getIn(['curData', 'security', 'keyIndex'])}
@@ -744,7 +744,7 @@ export default class QuickSetup extends React.Component {
                       <FormGroup
                         type="password"
                         required
-                        label={_('Password')}
+                        label={__('Password')}
                         value={store.getIn(['curData', 'security', 'key'])}
                         onChange={(data) => {
                           const security = store.getIn(['curData', 'security'])
@@ -760,7 +760,7 @@ export default class QuickSetup extends React.Component {
                 <FormGroup
                   type="range"
                   className="fl"
-                  label={_('Distance')}
+                  label={__('Distance')}
                   value={distance}
                   min="1"
                   max="10"
@@ -791,7 +791,7 @@ export default class QuickSetup extends React.Component {
                       }}
                       style={{ marginRight: '3px' }}
                     />
-                    {_('auto')}
+                    {__('auto')}
                   </label>
                 </span>
               </div>
@@ -826,13 +826,13 @@ export default class QuickSetup extends React.Component {
                     {
                       this.props.selfState.get('scaning') ? (
                         <Button
-                          text={_('Stop')}
+                          text={__('Stop')}
                           onClick={this.onStopScanClick}
                           loading
                         />
                       ) : (
                         <Button
-                          text={_('Scan')}
+                          text={__('Scan')}
                           onClick={this.onScanBtnClick}
                         />
                       )
@@ -842,8 +842,8 @@ export default class QuickSetup extends React.Component {
                       isShow={this.props.selfState.get('showScanResult')}
                       onOk={this.onModalOkBtnClick}
                       onClose={this.onModalCloseBtnClick}
-                      okText={_('Select')}
-                      cancelText={_('Cancel')}
+                      okText={__('Select')}
+                      cancelText={__('Cancel')}
                       size="lg"
                       okButton
                       cancelButton
@@ -859,7 +859,7 @@ export default class QuickSetup extends React.Component {
                 </div>
               </div>
               <FormGroup
-                label={_('Lock To AP')}
+                label={__('Lock To AP')}
                 type="checkbox"
                 checked={store.getIn(['curData', 'apMacEnable']) === '1'}
                 onChange={(data) => this.props.updateItemSettings({
@@ -869,7 +869,7 @@ export default class QuickSetup extends React.Component {
               {
                 store.getIn(['curData', 'apMacEnable']) === '1' ? (
                   <FormGroup
-                    label={_('Peer Mac')}
+                    label={__('Peer Mac')}
                     value={store.getIn(['curData', 'apMac'])}
                     onChange={(data) => this.props.updateItemSettings({
                       apMac: data.value,
@@ -879,7 +879,7 @@ export default class QuickSetup extends React.Component {
                 ) : null
               }
               <FormGroup
-                label={_('Country')}
+                label={__('Country')}
               >
                 <FormInput
                   type="text"
@@ -894,7 +894,7 @@ export default class QuickSetup extends React.Component {
                   }}
                 />
                 <Button
-                  text={_('Change')}
+                  text={__('Change')}
                   style={{
                     marginLeft: '-1px',
                     width: '70px',
@@ -903,24 +903,24 @@ export default class QuickSetup extends React.Component {
                 />
               </FormGroup>
               <Modal
-                title={_('Country')}
+                title={__('Country')}
                 onClose={this.onCloseCountrySelectModal}
                 onOk={this.props.saveCountrySelectModal}
                 isShow={this.props.selfState.get('showCtyModal')}
                 draggable
               >
-                <h3>{_('User Protocol')}</h3>
+                <h3>{__('User Protocol')}</h3>
                 <span>
-                  {_('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
+                  {__('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
                 </span>
                 <FormGroup
                   type="radio"
-                  text={_('I have read and agree')}
+                  text={__('I have read and agree')}
                   checked={this.props.selfState.get('agreeProtocol')}
                   onClick={() => { this.props.changeAgreeProtocol(true); }}
                 />
                 <FormGroup
-                  label={_('Country')}
+                  label={__('Country')}
                   type="select"
                   options={this.makeCountryOptions(countryMap)}
                   value={this.props.selfState.get('selectedCountry')}
@@ -930,7 +930,7 @@ export default class QuickSetup extends React.Component {
               </Modal>
               <FormGroup
                 type="switch"
-                label={_('Channel Width')}
+                label={__('Channel Width')}
                 minWidth="66px"
                 options={channelWidthOptions}
                 value={channelWidth}
@@ -940,7 +940,7 @@ export default class QuickSetup extends React.Component {
               />
               <FormGroup
                 type="select"
-                label={_('Channel')}
+                label={__('Channel')}
                 options={this.makeChannelOptions()}
                 value={frequency}
                 onChange={data => this.props.updateItemSettings({
@@ -949,7 +949,7 @@ export default class QuickSetup extends React.Component {
               />
               <FormGroup
                 type="select"
-                label={_('Security')}
+                label={__('Security')}
                 options={staAndApSecurityOptions}
                 value={mode || 'none'}
                 onChange={data => this.props.updateItemSettings({
@@ -968,7 +968,7 @@ export default class QuickSetup extends React.Component {
                 /wpa/.test(store.getIn(['curData', 'security', 'mode'])) ? (
                   <div>
                     <FormGroup
-                      label={_('Encryption')}
+                      label={__('Encryption')}
                       minWidth="66px"
                       type="switch"
                       value={store.getIn(['curData', 'security', 'cipher'])}
@@ -988,7 +988,7 @@ export default class QuickSetup extends React.Component {
                     />
                     <FormGroup
                       type="password"
-                      label={_('Password')}
+                      label={__('Password')}
                       value={key}
                       onChange={data => this.props.updateItemSettings({
                         security: {
@@ -1007,7 +1007,7 @@ export default class QuickSetup extends React.Component {
                 (store.getIn(['curData', 'security', 'mode']) === 'wep') ? (
                   <div>
                     <FormGroup
-                      label={_('Auth Type')}
+                      label={__('Auth Type')}
                       type="switch"
                       options={wepAuthenOptions}
                       value={store.getIn(['curData', 'security', 'auth'])}
@@ -1020,7 +1020,7 @@ export default class QuickSetup extends React.Component {
                     />
                     {/*
                       <FormGroup
-                        label={_('Key Length')}
+                        label={__('Key Length')}
                         type="select"
                         options={wepKeyLengthOptions}
                         value={curData.getIn(['vapList', '0', 'security', 'keyLength'])}
@@ -1034,7 +1034,7 @@ export default class QuickSetup extends React.Component {
                       />
                     */}
                     <FormGroup
-                      label={_('Key Format')}
+                      label={__('Key Format')}
                       type="switch"
                       options={keyTypeOptions}
                       value={store.getIn(['curData', 'security', 'keyType'])}
@@ -1046,7 +1046,7 @@ export default class QuickSetup extends React.Component {
                       minWidth="65px"
                     />
                     <FormGroup
-                      label={_('Key Index')}
+                      label={__('Key Index')}
                       type="select"
                       options={keyIndexOptions}
                       value={store.getIn(['curData', 'security', 'keyIndex'])}
@@ -1059,7 +1059,7 @@ export default class QuickSetup extends React.Component {
                     <FormGroup
                       type="password"
                       required
-                      label={_('Password')}
+                      label={__('Password')}
                       value={store.getIn(['curData', 'security', 'key'])}
                       onChange={(data) => {
                         const security = store.getIn(['curData', 'security'])
@@ -1075,7 +1075,7 @@ export default class QuickSetup extends React.Component {
                 <FormGroup
                   type="range"
                   className="fl"
-                  label={_('Distance')}
+                  label={__('Distance')}
                   value={distance}
                   min="1"
                   max="10"
@@ -1106,7 +1106,7 @@ export default class QuickSetup extends React.Component {
                       }}
                       style={{ marginRight: '3px' }}
                     />
-                    {_('auto')}
+                    {__('auto')}
                   </label>
                 </span>
               </div>
@@ -1141,13 +1141,13 @@ export default class QuickSetup extends React.Component {
                     {
                       this.props.selfState.get('scaning') ? (
                         <Button
-                          text={_('Stop')}
+                          text={__('Stop')}
                           onClick={this.onStopScanClick}
                           loading
                         />
                       ) : (
                         <Button
-                          text={_('Scan')}
+                          text={__('Scan')}
                           onClick={this.onScanBtnClick}
                         />
                       )
@@ -1157,8 +1157,8 @@ export default class QuickSetup extends React.Component {
                       isShow={this.props.selfState.get('showScanResult')}
                       onOk={this.onModalOkBtnClick}
                       onClose={this.onModalCloseBtnClick}
-                      okText={_('Select')}
-                      cancelText={_('Cancel')}
+                      okText={__('Select')}
+                      cancelText={__('Cancel')}
                       size="lg"
                       okButton
                       cancelButton
@@ -1175,7 +1175,7 @@ export default class QuickSetup extends React.Component {
               </div>
 
               <FormGroup
-                label={_('Peer')}
+                label={__('Peer')}
                 type="text"
                 required
                 value={store.getIn(['curData', 'peers', 0])}
@@ -1186,7 +1186,7 @@ export default class QuickSetup extends React.Component {
                 {...apmac3}
               />
               <FormGroup
-                label={_('Country')}
+                label={__('Country')}
               >
                 <FormInput
                   type="text"
@@ -1201,7 +1201,7 @@ export default class QuickSetup extends React.Component {
                   }}
                 />
                 <Button
-                  text={_('Change')}
+                  text={__('Change')}
                   style={{
                     marginLeft: '3px',
                     width: '70px',
@@ -1210,24 +1210,24 @@ export default class QuickSetup extends React.Component {
                 />
               </FormGroup>
               <Modal
-                title={_('Country')}
+                title={__('Country')}
                 onClose={this.onCloseCountrySelectModal}
                 onOk={this.props.saveCountrySelectModal}
                 isShow={this.props.selfState.get('showCtyModal')}
                 draggable
               >
-                <h3>{_('User Protocol')}</h3>
+                <h3>{__('User Protocol')}</h3>
                 <span>
-                  {_('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
+                  {__('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
                 </span>
                 <FormGroup
                   type="radio"
-                  text={_('I have read and agree')}
+                  text={__('I have read and agree')}
                   checked={this.props.selfState.get('agreeProtocol')}
                   onClick={() => { this.props.changeAgreeProtocol(true); }}
                 />
                 <FormGroup
-                  label={_('Country')}
+                  label={__('Country')}
                   type="select"
                   options={this.makeCountryOptions(countryMap)}
                   value={this.props.selfState.get('selectedCountry')}
@@ -1237,7 +1237,7 @@ export default class QuickSetup extends React.Component {
               </Modal>
               <FormGroup
                 type="switch"
-                label={_('Channel Width')}
+                label={__('Channel Width')}
                 minWidth="66px"
                 options={channelWidthOptions}
                 value={channelWidth}
@@ -1247,7 +1247,7 @@ export default class QuickSetup extends React.Component {
               />
               <FormGroup
                 type="select"
-                label={_('Channel')}
+                label={__('Channel')}
                 options={this.makeChannelOptions()}
                 value={frequency}
                 onChange={data => this.props.updateItemSettings({
@@ -1256,7 +1256,7 @@ export default class QuickSetup extends React.Component {
               />
               <FormGroup
                 type="select"
-                label={_('Security')}
+                label={__('Security')}
                 value={
                   mode === 'wep' ? mode : 'none'
                 }
@@ -1276,7 +1276,7 @@ export default class QuickSetup extends React.Component {
                 store.getIn(['curData', 'security', 'mode']) === 'none' ? null : (
                   <div>
                     <FormGroup
-                      label={_('Auth Type')}
+                      label={__('Auth Type')}
                       type="switch"
                       options={wepAuthenOptions}
                       value={auth}
@@ -1294,7 +1294,7 @@ export default class QuickSetup extends React.Component {
                     />
                     {/*
                       <FormGroup
-                        label={_('WEP Key Length')}
+                        label={__('WEP Key Length')}
                         type="switch"
                         options={wepKeyLengthOptions}
                         value={keyLength}
@@ -1313,7 +1313,7 @@ export default class QuickSetup extends React.Component {
                     */}
 
                     <FormGroup
-                      label={_('Key Format')}
+                      label={__('Key Format')}
                       type="switch"
                       options={keyTypeOptions}
                       value={keyType}
@@ -1330,7 +1330,7 @@ export default class QuickSetup extends React.Component {
                       minWidth="65px"
                     />
                     <FormGroup
-                      label={_('Key Index')}
+                      label={__('Key Index')}
                       type="select"
                       options={keyIndexOptions}
                       value={keyIndex}
@@ -1347,7 +1347,7 @@ export default class QuickSetup extends React.Component {
                     />
                     <FormGroup
                       type="password"
-                      label={_('Password')}
+                      label={__('Password')}
                       value={key || ''}
                       required
                       onChange={data => this.props.updateItemSettings({
@@ -1369,7 +1369,7 @@ export default class QuickSetup extends React.Component {
                 <FormGroup
                   type="range"
                   className="fl"
-                  label={_('Distance')}
+                  label={__('Distance')}
                   value={distance}
                   min="1"
                   max="10"
@@ -1400,7 +1400,7 @@ export default class QuickSetup extends React.Component {
                       }}
                       style={{ marginRight: '3px' }}
                     />
-                    {_('auto')}
+                    {__('auto')}
                   </label>
                 </span>
               </div>
@@ -1426,35 +1426,35 @@ export default class QuickSetup extends React.Component {
               <div className="cols col-5">
                 <FormGroup
                   type="plain-text"
-                  label={_('Current Mode')}
+                  label={__('Current Mode')}
                   value="AP"
                 />
                 <FormGroup
                   type="plain-text"
-                  label={_('LAN IP')}
+                  label={__('LAN IP')}
                   value={ip}
                 />
                 <FormGroup
                   type="plain-text"
-                  label={_('Subnet Mask')}
+                  label={__('Subnet Mask')}
                   value={mask}
                 />
 
                 <FormGroup
                   type="plain-text"
-                  label={_('SSID')}
+                  label={__('SSID')}
                   value={ssid}
                 />
                 <FormGroup
                   type="plain-text"
-                  label={_('Country')}
+                  label={__('Country')}
                   value={this.getCountryNameFromCode(countryCode, countryMap)}
                 />
               </div>
               <div className="cols col-7">
                 <FormGroup
                   type="plain-text"
-                  label={_('Channel Width')}
+                  label={__('Channel Width')}
                   value={(() => {
                     if (channelWidth) {
                       return channelWidth.slice(2).concat('MHz');
@@ -1465,12 +1465,12 @@ export default class QuickSetup extends React.Component {
                 />
                 <FormGroup
                   type="plain-text"
-                  label={_('Channel')}
+                  label={__('Channel')}
                   value={frequency}
                 />
                 <FormGroup
                   type="plain-text"
-                  label={_('Security')}
+                  label={__('Security')}
                   value={(() => {
                     if (mode !== undefined) {
                       if (mode === 'none') return mode;
@@ -1482,7 +1482,7 @@ export default class QuickSetup extends React.Component {
                 />
                 <FormGroup
                   type="plain-text"
-                  label={_('Distance')}
+                  label={__('Distance')}
                   value={distance}
                 />
               </div>
@@ -1496,40 +1496,40 @@ export default class QuickSetup extends React.Component {
               <div className="cols col-5">
                 <FormGroup
                   type="plain-text"
-                  label={_('Current Mode')}
+                  label={__('Current Mode')}
                   value="Station"
                 />
 
                 <FormGroup
                   type="plain-text"
-                  label={_('LAN IP')}
+                  label={__('LAN IP')}
                   value={ip}
                 />
                 <FormGroup
                   type="plain-text"
-                  label={_('Subnet Mask')}
+                  label={__('Subnet Mask')}
                   value={mask}
                 />
                 <FormGroup
                   type="plain-text"
-                  label={_('SSID')}
+                  label={__('SSID')}
                   value={ssid}
                 />
                 <FormGroup
                   type="plain-text"
-                  label={_('Country')}
+                  label={__('Country')}
                   value={this.getCountryNameFromCode(countryCode, countryMap)}
                 />
               </div>
               <div className="cols col-7">
                 <FormGroup
                   type="plain-text"
-                  label={_('Peer')}
+                  label={__('Peer')}
                   value={store.getIn(['curData', 'apMac'])}
                 />
                 <FormGroup
                   type="plain-text"
-                  label={_('Channel Width')}
+                  label={__('Channel Width')}
                   value={(() => {
                     if (channelWidth) {
                       return channelWidth.slice(2).concat('MHz');
@@ -1540,12 +1540,12 @@ export default class QuickSetup extends React.Component {
                 />
                 <FormGroup
                   type="plain-text"
-                  label={_('Channel')}
+                  label={__('Channel')}
                   value={frequency}
                 />
                 <FormGroup
                   type="plain-text"
-                  label={_('Security')}
+                  label={__('Security')}
                   value={(() => {
                     if (mode !== undefined) {
                       if (mode === 'none') return mode;
@@ -1557,7 +1557,7 @@ export default class QuickSetup extends React.Component {
                 />
                 <FormGroup
                   type="plain-text"
-                  label={_('Distance')}
+                  label={__('Distance')}
                   value={distance}
                 />
               </div>
@@ -1571,35 +1571,35 @@ export default class QuickSetup extends React.Component {
               <div className="cols col-5">
                 <FormGroup
                   type="plain-text"
-                  label={_('Current Mode')}
+                  label={__('Current Mode')}
                   value="Repeater"
                 />
                 <FormGroup
                   type="plain-text"
-                  label={_('LAN IP')}
+                  label={__('LAN IP')}
                   value={ip}
                 />
                 <FormGroup
                   type="plain-text"
-                  label={_('Subnet Mask')}
+                  label={__('Subnet Mask')}
                   value={mask}
                 />
 
                 <FormGroup
                   type="plain-text"
-                  label={_('SSID')}
+                  label={__('SSID')}
                   value={ssid}
                 />
                 <FormGroup
                   type="plain-text"
-                  label={_('Country')}
+                  label={__('Country')}
                   value={this.getCountryNameFromCode(countryCode, countryMap)}
                 />
               </div>
               <div className="cols col-7">
                 <FormGroup
                   type="plain-text"
-                  label={_('Channel Width')}
+                  label={__('Channel Width')}
                   value={(() => {
                     if (channelWidth) {
                       return channelWidth.slice(2).concat('MHz');
@@ -1610,12 +1610,12 @@ export default class QuickSetup extends React.Component {
                 />
                 <FormGroup
                   type="plain-text"
-                  label={_('Channel')}
+                  label={__('Channel')}
                   value={frequency}
                 />
                 <FormGroup
                   type="plain-text"
-                  label={_('Security')}
+                  label={__('Security')}
                   value={(() => {
                     if (mode !== undefined) {
                       if (mode === 'none' || mode === 'wep') return mode;
@@ -1627,7 +1627,7 @@ export default class QuickSetup extends React.Component {
                 />
                 <FormGroup
                   type="plain-text"
-                  label={_('Distance')}
+                  label={__('Distance')}
                   value={distance}
                 />
               </div>
@@ -1643,23 +1643,23 @@ export default class QuickSetup extends React.Component {
     const { deviceMode } = this.props.selfState.toJS();
     let wizardOptions = fromJS([
       {
-        title: _('Operation Mode'),
+        title: __('Operation Mode'),
         render: this.renderOperationMode,
       }, {
-        title: _('LAN Settings'),
+        title: __('LAN Settings'),
         render: this.renderStepTwo,
       }, {
-        title: _('Wireless Settings'),
+        title: __('Wireless Settings'),
         render: this.renderStepThree,
       }, {
-        title: _('Confirm Settings'),
+        title: __('Confirm Settings'),
         render: this.renderStepFour,
       },
     ]);
     const titleMap = {
-      ap: _('Scene: AP'),
-      sta: _('Scene: Station'),
-      repeater: _('Scene: Repeater'),
+      ap: __('Scene: AP'),
+      sta: __('Scene: Station'),
+      repeater: __('Scene: Repeater'),
     };
     if (deviceMode) {
       wizardOptions = wizardOptions.setIn(
@@ -1672,7 +1672,7 @@ export default class QuickSetup extends React.Component {
       <div className="wrapall">
         <WizardContainer
           size="sm"
-          title={_('Quick Setup')}
+          title={__('Quick Setup')}
           options={wizardOptions}
           onBeforeStep={this.onBeforeStep}
           onCompleted={this.onCompleted}

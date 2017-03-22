@@ -13,13 +13,13 @@ import * as selfActions from './actions';
 import './style.scss';
 
 const MSG = {
-  Seconds: _('Seconds'),
-  minutes: _('Minutes'),
-  hour: _('Hour'),
-  hours: _('Hours'),
-  days: _('Days'),
-  userDef: _('User Defined'),
-  imageDes: _('Select 1-3 slide pictures of dimension 640px*640px'),
+  Seconds: __('Seconds'),
+  minutes: __('Minutes'),
+  hour: __('Hour'),
+  hours: __('Hours'),
+  days: __('Days'),
+  userDef: __('User Defined'),
+  imageDes: __('Select 1-3 slide pictures of dimension 640px*640px'),
 };
 
 const expirationOptions = [
@@ -140,10 +140,10 @@ export default class PortalSettings extends Component {
 
     return (
       <div className="row">
-        <h3>{_('Portal Settings')}</h3>
+        <h3>{__('Portal Settings')}</h3>
         <div className="cols cols-7">
           <FormGroup
-            label={_('Portal Enable')}
+            label={__('Portal Enable')}
             type="checkbox"
             maxLength="32"
             checked={enable === '1'}
@@ -154,12 +154,12 @@ export default class PortalSettings extends Component {
             required
           />
           <FormGroup
-            label={_('Auth Type')}
+            label={__('Auth Type')}
             type="select"
             value={weixinEnable === '1' ? 'weixin' : 'web'}
             options={[
-              { label: _('WEB AUTH'), value: 'web' },
-              { label: _('WEIXIN AUTH'), value: 'weixin' },
+              { label: __('WEB AUTH'), value: 'web' },
+              { label: __('WEIXIN AUTH'), value: 'weixin' },
             ]}
             onChange={(data) => {
               if (data.value === 'weixin') {
@@ -174,7 +174,7 @@ export default class PortalSettings extends Component {
               <div>
                 <FormGroup
                   type="text"
-                  label={_('shopId')}
+                  label={__('shopId')}
                   value={shopId}
                   onChange={(data) => {
                     this.props.updateItemSettings({ shopId: data.value });
@@ -182,7 +182,7 @@ export default class PortalSettings extends Component {
                 />
                 <FormGroup
                   type="text"
-                  label={_('appId')}
+                  label={__('appId')}
                   value={appId}
                   onChange={(data) => {
                     this.props.updateItemSettings({ appId: data.value });
@@ -190,7 +190,7 @@ export default class PortalSettings extends Component {
                 />
                 <FormGroup
                   type="text"
-                  label={_('secretKey')}
+                  label={__('secretKey')}
                   value={secretKey}
                   onChange={(data) => {
                     this.props.updateItemSettings({ secretKey: data.value });
@@ -200,7 +200,7 @@ export default class PortalSettings extends Component {
             ) : (
               <div>
                 <FormGroup
-                  label={_('Auth Redirect URL')}
+                  label={__('Auth Redirect URL')}
                   type="text"
                   value={redirectUrl}
                   onChange={(data) => {
@@ -209,7 +209,7 @@ export default class PortalSettings extends Component {
                   required
                 />
                 <FormGroup
-                  label={_('Portal Title')}
+                  label={__('Portal Title')}
                   type="text"
                   value={title}
                   onChange={(data) => {
@@ -218,7 +218,7 @@ export default class PortalSettings extends Component {
                   required
                 />
                 <FormGroup
-                  label={_('Expiration')}
+                  label={__('Expiration')}
                   type="select"
                   options={expirationOptions}
                   value={timeout}
@@ -228,7 +228,7 @@ export default class PortalSettings extends Component {
                   required
                 />
                 <FormGroup
-                  label={_('Images Slide Interval')}
+                  label={__('Images Slide Interval')}
                   type="select"
                   options={refreshtimeOtions}
                   value={refreshTime}
@@ -240,7 +240,7 @@ export default class PortalSettings extends Component {
                 <FormGroup>
                   <FileUpload
                     url="cgi-bin/upload_file.cgi?id=1"
-                    buttonText={`${_('Upload Image')} 1`}
+                    buttonText={`${__('Upload Image')} 1`}
                     onUploaded={() => {
                       this.selectShowImage(1);
                       this.refreshPicture(0);
@@ -250,7 +250,7 @@ export default class PortalSettings extends Component {
                 <FormGroup>
                   <FileUpload
                     url="cgi-bin/upload_file.cgi?id=2"
-                    buttonText={`${_('Upload Image')} 2`}
+                    buttonText={`${__('Upload Image')} 2`}
                     onUploaded={() => {
                       this.selectShowImage(2);
                       this.refreshPicture(1);
@@ -260,7 +260,7 @@ export default class PortalSettings extends Component {
                 <FormGroup>
                   <FileUpload
                     url="cgi-bin/upload_file.cgi?id=3"
-                    buttonText={`${_('Upload Image')} 3`}
+                    buttonText={`${__('Upload Image')} 3`}
                     onUploaded={() => {
                       this.selectShowImage(3);
                       this.refreshPicture(2);
@@ -325,7 +325,7 @@ export default class PortalSettings extends Component {
                     type="button"
                     icon="sphere"
                     theme="primary"
-                    text={_('Click on Internet')}
+                    text={__('Click on Internet')}
                     id="online"
                   />
                 </div>

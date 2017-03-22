@@ -12,14 +12,14 @@ import urls from 'shared/config/urls';
 
 const _ = window._;
 const msg = {
-  password: _('Password'),
-  country: _('Country'),
-  timeZone: _('Time Zone'),
-  confirmpasswd: _('Confirm Password'),
-  welcomeDes: _('Thank you for purchasing Axilspot enterprise-class products,' +
+  password: __('Password'),
+  country: __('Country'),
+  timeZone: __('Time Zone'),
+  confirmpasswd: __('Confirm Password'),
+  welcomeDes: __('Thank you for purchasing Axilspot enterprise-class products,' +
     ' you will complete the configuration for management system in minutes'),
-  passwordDes: _('Please provide an administrator password to login to Axilspot management system'),
-  completeDes: _('Please confirm your configuration below.' +
+  passwordDes: __('Please provide an administrator password to login to Axilspot management system'),
+  completeDes: __('Please confirm your configuration below.' +
     ' Click back to modify the configuration or click finish to activate the configuration.' +
     ' After finish you will skip to management interface.'),
 };
@@ -236,7 +236,7 @@ export class SignUp extends React.PureComponent {
 
     if (!checkResult) {
       if (data.password !== data.confirmpasswd) {
-        checkResult = _('Password and confirm password must match');
+        checkResult = __('Password and confirm password must match');
       }
     }
 
@@ -248,11 +248,11 @@ export class SignUp extends React.PureComponent {
     let checkResult;
 
     if (!data.country || data.country.length < 1) {
-      return _('Please select a country');
+      return __('Please select a country');
     }
 
     if (!data.timeZone || data.timeZone.length < 1) {
-      return _('Please select time zone');
+      return __('Please select time zone');
     }
 
     return checkResult;
@@ -315,20 +315,20 @@ export class SignUp extends React.PureComponent {
           version={version}
         />
         <div className="t-wizard">
-          <h2>{_('Setup Wizard')}</h2>
+          <h2>{__('Setup Wizard')}</h2>
           <div className="t-wizard__header">
             <ul>
               <li className={stepOneClass}>
                 <span className="icon" />
-                <h3>1. {_('Welcome')}</h3>
+                <h3>1. {__('Welcome')}</h3>
               </li>
               <li className={stepTwoClass}>
                 <span className="icon" />
-                <h3>2. {_('Password')}</h3>
+                <h3>2. {__('Password')}</h3>
               </li>
               <li className={stepThreeClass}>
                 <span className="icon" />
-                <h3>3. {_('Completed')}</h3>
+                <h3>3. {__('Completed')}</h3>
               </li>
             </ul>
           </div>
@@ -416,7 +416,7 @@ export class SignUp extends React.PureComponent {
               currStep > 1 ? (
                 <Button
                   onClick={this.onPrev}
-                  text={_('Back')}
+                  text={__('Back')}
                 />
               ) : null
             }
@@ -424,7 +424,7 @@ export class SignUp extends React.PureComponent {
             <Button
               theme={btnInfoRole}
               onClick={this.onNext}
-              text={this.state.currStep !== 3 ? _('Next Step') : _('Completed')}
+              text={this.state.currStep !== 3 ? __('Next Step') : __('Completed')}
             />
           </div>
         </div>

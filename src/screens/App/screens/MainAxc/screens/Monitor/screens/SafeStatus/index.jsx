@@ -14,26 +14,26 @@ import * as screenActions from 'shared/actions/screens';
 const tableOptions = fromJS([
   {
     id: 'attackmac',
-    text: _('Attacker MAC'),
+    text: __('Attacker MAC'),
     transform(val, item) {
       return val || item.get('macaddress');
     },
   }, {
     id: 'type',
-    text: _('Attack Type'),
+    text: __('Attack Type'),
   }, {
     id: 'time',
-    text: _('Attack Time'),
+    text: __('Attack Time'),
   }, {
     id: 'info',
-    text: _('Attack Details'),
+    text: __('Attack Details'),
   }, {
     id: 'protect',
-    text: _('Protection Measures'),
+    text: __('Protection Measures'),
     width: '160',
   }, {
     id: 'jump',
-    text: _('Jump to Security Events'),
+    text: __('Jump to Security Events'),
     width: '160',
   },
 ]);
@@ -55,7 +55,7 @@ function getSafeTypeChartOtion(attackTypeMap) {
   apOption = $$commonPieOption.mergeDeep({
     title: {
       x: '29.5%',
-      text: _('Attack Number'),
+      text: __('Attack Number'),
     },
     legend: {
       formatter: (name) => {
@@ -66,7 +66,7 @@ function getSafeTypeChartOtion(attackTypeMap) {
     },
     series: [
       {
-        name: _('Status'),
+        name: __('Status'),
         type: 'pie',
       },
     ],
@@ -76,7 +76,7 @@ function getSafeTypeChartOtion(attackTypeMap) {
     $$safeTypeList = attackTypeMap
       .map((val, key) => ({
         value: val,
-        name: _(key),
+        name: __(key),
       }))
       .toList()
       .sort((prev, next) => prev.value <= next.value);
@@ -116,7 +116,7 @@ export default class SafeStatus extends React.Component {
         <div className="t-overview o-box--light">
           <div className="t-overview__section" >
             <div className="element">
-              <h3>{ _('Attack Type') }</h3>
+              <h3>{ __('Attack Type') }</h3>
             </div>
             <div className="element">
               <EchartReact
@@ -131,13 +131,13 @@ export default class SafeStatus extends React.Component {
           </div>
           <div className="element t-overview__header">
             <h3>
-              { _('List Of Recent Security Incidents') }
+              { __('List Of Recent Security Incidents') }
               {
               /*
                 <Button
                   icon="download"
                   theme="primary"
-                  text={_('Export Report')}
+                  text={__('Export Report')}
                   style={{
                     marginLeft: '12px',
                   }}

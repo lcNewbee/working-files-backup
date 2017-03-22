@@ -184,7 +184,7 @@ export default function (state = defaultState, action) {
       return state.set('modal', fromJS({
         status: 'show',
         role: 'alert',
-        title: _('MESSAGE'),
+        title: __('MESSAGE'),
       })).mergeIn(['modal'], action.data);
 
     case ACTIONS.CHANGE_MODAL_STATE:

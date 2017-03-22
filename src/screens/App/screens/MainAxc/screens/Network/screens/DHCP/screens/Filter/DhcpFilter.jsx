@@ -11,7 +11,7 @@ import * as appActions from 'shared/actions/app';
 const listOptions = fromJS([
   {
     id: 'name',
-    text: _('Filter Name'),
+    text: __('Filter Name'),
     formProps: {
       required: true,
       type: 'text',
@@ -22,21 +22,21 @@ const listOptions = fromJS([
     },
   }, {
     id: 'option',
-    text: _('Option Number'),
+    text: __('Option Number'),
     formProps: {
       type: 'text',
       required: true,
     },
   }, {
     id: 'deviation',
-    text: _('Deviation'),
+    text: __('Deviation'),
     formProps: {
       type: 'text',
       required: true,
     },
   }, {
     id: 'option_value',
-    text: _('Option Value'),
+    text: __('Option Value'),
     formProps: {
       required: true,
       type: 'text',

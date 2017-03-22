@@ -32,12 +32,12 @@ const slotIdOptions = [
 ];
 
 const balanceAlgthmOptions = [
-  { label: _('Source MAC'), value: 'srcmac' },
-  { label: _('Destiation MAc'), value: 'desmac' },
-  { label: _('Source & Destination MAC'), value: 'mac' },
-  { label: _('Source IP'), value: 'srcip' },
-  { label: _('Destination IP'), value: 'desmac' },
-  { label: _('Source & Destination IP'), value: 'ip' },
+  { label: __('Source MAC'), value: 'srcmac' },
+  { label: __('Destiation MAc'), value: 'desmac' },
+  { label: __('Source & Destination MAC'), value: 'mac' },
+  { label: __('Source IP'), value: 'srcip' },
+  { label: __('Destination IP'), value: 'desmac' },
+  { label: __('Source & Destination IP'), value: 'ip' },
 ];
 
 
@@ -68,12 +68,12 @@ export default class View extends React.Component {
       {
         id: 'wlanId',
         type: 'text',
-        text: _('WLAN ID'),
+        text: __('WLAN ID'),
         notEditable: true,
       },
       {
         id: 'SSID',
-        text: _('SSID'),
+        text: __('SSID'),
         notEditable: true,
         formProps: {
           type: 'text',
@@ -81,11 +81,11 @@ export default class View extends React.Component {
       },
       {
         id: 'aclStatus',
-        text: _('ACL Status'),
+        text: __('ACL Status'),
         type: 'select',
         options: [
-          { label: _('ON'), value: 'on' },
-          { label: _('OFF'), value: 'off' },
+          { label: __('ON'), value: 'on' },
+          { label: __('OFF'), value: 'off' },
         ],
         formProps: {
           type: 'switch',
@@ -94,7 +94,7 @@ export default class View extends React.Component {
       {
         id: 'aclGroup',
         type: 'select',
-        text: _('ACL Group'),
+        text: __('ACL Group'),
         options: this.aclGroupListOptions,
         transform: function (val) {
           const optionItem = this.aclGroupListOptions.find(item => item.get('value') === val);

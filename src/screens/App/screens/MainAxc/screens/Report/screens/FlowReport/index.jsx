@@ -61,12 +61,12 @@ export default class View extends React.Component {
         data: List(dataList).map(item => item.name).toJS(),
       },
       title: {
-        text: _('App Flow'),
+        text: __('App Flow'),
         x: 'center',
       },
       series: [
         {
-          name: _('App Flow'),
+          name: __('App Flow'),
           type: 'pie',
           radius: ['40%', '70%'],
           avoidLabelOverlap: false,
@@ -116,7 +116,7 @@ export default class View extends React.Component {
         formatter: '{a} <br/>{b}: {c} ({d}%)',
       },
       title: {
-        text: _('Vendor'),
+        text: __('Vendor'),
         x: 'center',
       },
       legend: {
@@ -218,7 +218,7 @@ export default class View extends React.Component {
               style={{ marginRight: '20px' }}
               htmlFor="dateRange"
             >
-              {_('Date Range')}
+              {__('Date Range')}
             </label>
             <FormInput
               type="date-range"
@@ -235,14 +235,14 @@ export default class View extends React.Component {
             <Button
               theme="primary"
               icon="download"
-              text={`${_('Download Report')}(PDF)`}
+              text={`${__('Download Report')}(PDF)`}
             />
           </div>
         </div>
         <div className="row" >
           <div className="cols col-6" >
             <div className="o-box__cell">
-              <h3>{ _('Users Number') }</h3>
+              <h3>{ __('Users Number') }</h3>
             </div>
             <div className="o-box__cell">
               <EchartReact
@@ -253,7 +253,7 @@ export default class View extends React.Component {
           </div>
           <div className="cols col-6" >
             <div className="o-box__cell">
-              <h3>{ _('App Flow') }</h3>
+              <h3>{ __('App Flow') }</h3>
             </div>
             <div className="o-box__cell">
               <EchartReact
@@ -263,7 +263,7 @@ export default class View extends React.Component {
             </div>
           </div>
           <div className="cols col-12 o-box__cell">
-            <h3>{ _('Flow Trend') }</h3>
+            <h3>{ __('Flow Trend') }</h3>
           </div>
           <div className="cols col-12 o-box__cell">
             <EchartReact

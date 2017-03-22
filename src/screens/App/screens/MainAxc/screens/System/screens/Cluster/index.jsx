@@ -10,11 +10,11 @@ import * as screenActions from 'shared/actions/screens';
 const formOptions = fromJS([
   {
     id: 'enable',
-    label: _('Access Control'),
-    text: _('Enable'),
+    label: __('Access Control'),
+    text: __('Enable'),
     type: 'checkbox',
   }, {
-    lable: _('Rules Group'),
+    lable: __('Rules Group'),
     type: 'select',
   },
 ]);

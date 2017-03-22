@@ -7,20 +7,20 @@ export const purviewOptions = [
   {
     value: '1',
     module: 'network',
-    label: _('Network '),
+    label: __('Network '),
   }, {
     value: '2',
     module: 'group',
-    label: _('AP Groups '),
+    label: __('AP Groups '),
   }, {
     value: '3',
     module: 'system',
-    label: _('System '),
+    label: __('System '),
   },
   {
     value: '4',
     module: 'portal',
-    label: _('Hotspot'),
+    label: __('Hotspot'),
   },
 ];
 

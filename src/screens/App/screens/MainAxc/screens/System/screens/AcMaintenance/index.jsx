@@ -114,18 +114,18 @@ export default class View extends React.PureComponent {
   onConfirm(type) {
     const handleMap = {
       reboot: {
-        text: _('Are you sure to reboot?'),
-        loadingTitle: _('Rebootting..., Do not shutdown device.'),
+        text: __('Are you sure to reboot?'),
+        loadingTitle: __('Rebootting..., Do not shutdown device.'),
         onSave: this.onReboot,
       },
       restoreToFactory: {
-        text: _('Are you sure to restore to factory?'),
-        loadingTitle: _('Restoring..., Do not shutdown device'),
+        text: __('Are you sure to restore to factory?'),
+        loadingTitle: __('Restoring..., Do not shutdown device'),
         onSave: this.onRestore,
       },
       restoreConfig: {
-        text: _('Are you sure to restore Configuration?'),
-        loadingTitle: _('Restoring..., Do not shutdown device'),
+        text: __('Are you sure to restore Configuration?'),
+        loadingTitle: __('Restoring..., Do not shutdown device'),
         onSave: () => {},
       },
     };
@@ -214,11 +214,11 @@ export default class View extends React.PureComponent {
             actionable={this.actionable}
           />
           <fieldset className="o-form__fieldset">
-            <FormGroup label={_('Reboot Controller')}>
+            <FormGroup label={__('Reboot Controller')}>
               <SaveButton
                 type="button"
                 icon="refresh"
-                text={_('Reboot Now')}
+                text={__('Reboot Now')}
                 disabled={!this.actionable}
                 onClick={
                   () => this.onConfirm('reboot')
@@ -227,34 +227,34 @@ export default class View extends React.PureComponent {
             </FormGroup>
           </fieldset>
           <fieldset className="o-form__fieldset">
-            <legend className="o-form__legend">{_('Configuration')}</legend>
-            <FormGroup label={_('Save Configuration')}>
+            <legend className="o-form__legend">{__('Configuration')}</legend>
+            <FormGroup label={__('Save Configuration')}>
               <SaveButton
                 type="button"
                 icon="save"
                 loading={this.state.isSaveConfig}
-                text={_('Save Configuration')}
+                text={__('Save Configuration')}
                 disabled={!this.actionable}
                 onClick={
                   () => this.onSaveConfiguration()
                 }
               />
             </FormGroup>
-            <FormGroup label={_('Backup Configuration')}>
+            <FormGroup label={__('Backup Configuration')}>
               <SaveButton
                 type="button"
                 icon="download"
-                text={_('')}
+                text={__('')}
                 onClick={this.onBackup}
                 disabled={!this.actionable}
               />
               <span className="help">
                 {
-                  configUpdateAt ? `${_('Latest Configuration:')} ${moment.unix(configUpdateAt).format('YYYY-MM-DD HH:mm')}` : ''
+                  configUpdateAt ? `${__('Latest Configuration:')} ${moment.unix(configUpdateAt).format('YYYY-MM-DD HH:mm')}` : ''
                 }
               </span>
             </FormGroup>
-            <FormGroup label={_('Restore To Factory')}>
+            <FormGroup label={__('Restore To Factory')}>
               <SaveButton
                 type="button"
                 icon="undo"
@@ -266,13 +266,13 @@ export default class View extends React.PureComponent {
               />
             </FormGroup>
             <FormGroup
-              label={_('Restore Configuration')}
+              label={__('Restore Configuration')}
             >
               <FileUpload
                 url={restoreUrl}
                 name="backupFile"
                 buttonIcon="undo"
-                buttonText={_('Restore Now')}
+                buttonText={__('Restore Now')}
                 disabled={!this.actionable}
                 acceptExt="db"
                 createModal={this.props.createModal}
@@ -282,7 +282,7 @@ export default class View extends React.PureComponent {
                       role: 'loading',
                       title: '',
                       loadingStep: this.state.rebootStepTime,
-                      loadingTitle: _('Restoring..., Do not shutdown device'),
+                      loadingTitle: __('Restoring..., Do not shutdown device'),
                       onLoaded: () => {
                         this.props.closeModal();
                         this.props.changeLoginStatus('0');
@@ -301,7 +301,7 @@ export default class View extends React.PureComponent {
           </fieldset>
 
           <fieldset className="o-form__fieldset">
-            <legend className="o-form__legend">{_('Language')}</legend>
+            <legend className="o-form__legend">{__('Language')}</legend>
             <FormGroup
               type="select"
               options={languageOptions}

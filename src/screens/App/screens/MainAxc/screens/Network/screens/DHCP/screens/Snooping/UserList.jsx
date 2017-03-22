@@ -10,9 +10,9 @@ import * as screenActions from 'shared/actions/screens';
 const commonFormOptions = fromJS([
   {
     id: 'enable',
-    label: _('Snooping Service'),
+    label: __('Snooping Service'),
     type: 'checkbox',
-    text: _('Enable'),
+    text: __('Enable'),
     value: 1,
     saveOnChange: true,
   },
@@ -20,31 +20,31 @@ const commonFormOptions = fromJS([
 const listOptions = fromJS([
   {
     id: 'mac',
-    label: _('Mac Address'),
+    label: __('Mac Address'),
   }, {
     id: 'ip',
-    label: _('IP Address'),
+    label: __('IP Address'),
   }, {
     id: 'type',
-    label: _('Address Type'),
+    label: __('Address Type'),
     options: [
       {
         value: '0',
-        label: _('Dynamic'),
+        label: __('Dynamic'),
       }, {
         value: '1',
-        label: _('Static'),
+        label: __('Static'),
       },
     ],
   }, {
     id: 'port',
-    label: _('Port'),
+    label: __('Port'),
   }, {
     id: 'vlanid',
-    label: _('Vlan ID'),
+    label: __('Vlan ID'),
   }, {
     id: 'leaseTime',
-    label: _('Lease Time'),
+    label: __('Lease Time'),
   },
 ]);
 
@@ -65,7 +65,7 @@ export default class View extends React.Component {
     return (
       <AppScreen
         {...this.props}
-        listTitle={_('User List')}
+        listTitle={__('User List')}
         settingsFormOptions={commonFormOptions}
         listOptions={listOptions}
         addable={false}

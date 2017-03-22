@@ -32,6 +32,7 @@
     "document": true,
     "fetch": true,
     "_": true,
+    "__": true,
     "GUI_CONFIG": true,
     "guiConfig": true,
     "sessionStorage": true,

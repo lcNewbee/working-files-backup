@@ -15,9 +15,9 @@ var vaildate = {
     var thisMin = min || 0;
 
     if (thisMin === max && len !== thisMin) {
-      return _('String length must be: %s %s', min, '');
+      return __('String length must be: %s %s', min, '');
     } else if (len < thisMin || len > max) {
-      return _('String length range is: %s - %s bit', min, max);
+      return __('String length range is: %s - %s bit', min, max);
     }
   },
 
@@ -27,9 +27,9 @@ var vaildate = {
     var thisMin = min || 0;
 
     if (thisMin === max && len !== thisMin) {
-      return _('String length must be: %s %s', min, _('bytes'));
+      return __('String length must be: %s %s', min, __('bytes'));
     } else if (len < thisMin || len > max) {
-      return _('String length range is: %s - %s bytes', min, max);
+      return __('String length range is: %s - %s bytes', min, max);
     }
   },
 
@@ -37,7 +37,7 @@ var vaildate = {
     var retStr;
 
     if (!utilsString.isInteger(str)) {
-      return _("Must be integer");
+      return __("Must be integer");
     }
     if (expand !== undefined) {
       if (parseInt(str, 10) === parseInt(expand, 10)) {
@@ -47,9 +47,9 @@ var vaildate = {
 
     if (min !== undefined && max !== undefined) {
       if (parseInt(str, 10) < min || parseInt(str, 10) > max) {
-        // retStr = typeof (expand) !== 'undefined' ? _("Range: ") + _("%s", expand) + _(" or ") + _("%s - %s", min, max) :
-        //   _("Range: ") + _("%s - %s", min, max);
-        retStr = typeof (expand) !== 'undefined' ? _("Range: %s or %s - %s", expand, min, max):_("Range: %s - %s", min, max);
+        // retStr = typeof (expand) !== 'undefined' ? __("Range: ") + __("%s", expand) + __(" or ") + __("%s - %s", min, max) :
+        //   __("Range: ") + __("%s - %s", min, max);
+        retStr = typeof (expand) !== 'undefined' ? __("Range: %s or %s - %s", expand, min, max):__("Range: %s - %s", min, max);
         return retStr;
       }
     }
@@ -64,17 +64,17 @@ var vaildate = {
       }
 
       if (!(/^([0-9a-fA-F]{2}(:|-)){5}[0-9a-fA-F]{2}$/).test(str)) {
-        return _('Please input a valid MAC address like AA:BB:CC:DD:EE:FF or AA-BB-CC-DD-EE-FF');
+        return __('Please input a valid MAC address like AA:BB:CC:DD:EE:FF or AA-BB-CC-DD-EE-FF');
       }
     },
 
     specific: function (str) {
       var subMac1 = str.split(':')[0];
       if (subMac1.charAt(1) && parseInt(subMac1.charAt(1), 16) % 2 !== 0) {
-        return _('The second character must be even number.');
+        return __('The second character must be even number.');
       }
       if (str === "00:00:00:00:00:00") {
-        return _('Mac can not be 00:00:00:00:00:00');
+        return __('Mac can not be 00:00:00:00:00:00');
       }
     }
   },
@@ -95,7 +95,7 @@ var vaildate = {
       }
 
       if (!(ipReg).test(str)) {
-        return _("Please input a valid IP address");
+        return __("Please input a valid IP address");
       }
     },
 
@@ -107,10 +107,10 @@ var vaildate = {
         ipHead = ipArr[0];
 
       if (ipArr[0] === '127') {
-        return _("Address begin with 127 is a reserved loopback address, please input another value between 1 to 233");
+        return __("Address begin with 127 is a reserved loopback address, please input another value between 1 to 233");
       }
       if (ipArr[0] > 223) {
-        return _('Address begin with %s is invalid, please input a value between 1 to 223.', ipHead);
+        return __('Address begin with %s is invalid, please input a value between 1 to 223.', ipHead);
       }
     }
   },
@@ -127,7 +127,7 @@ var vaildate = {
       // 如果有mask
       if (mask) {
         if (!(/^([0-9]){1,2}$/.test(mask)) || mask > 32) {
-          return _("Network segment mask must be a number between 0-32");
+          return __("Network segment mask must be a number between 0-32");
         }
       }
     },
@@ -146,7 +146,7 @@ var vaildate = {
       }
 
       if (!(/^([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(([0-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){2}([1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])$/).test(str)) {
-        return _("Please input a valid IP address");
+        return __("Please input a valid IP address");
       }
     },
 
@@ -155,10 +155,10 @@ var vaildate = {
         ipHead = ipArr[0];
 
       if (ipArr[0] === '127') {
-        return _("Address begin with 127 is a reserved loopback address, please input another value between 1 to 233");
+        return __("Address begin with 127 is a reserved loopback address, please input another value between 1 to 233");
       }
       if (ipArr[0] > 223) {
-        return _('Address begin with %s is invalid, please input a value between 1 to 223.', ipHead);
+        return __('Address begin with %s is invalid, please input a value between 1 to 223.', ipHead);
       }
     }
   },
@@ -178,33 +178,33 @@ var vaildate = {
     var rel = /^(254|252|248|240|224|192|128)\.0\.0\.0$|^(255\.(254|252|248|240|224|192|128|0)\.0\.0)$|^(255\.255\.(254|252|248|240|224|192|128|0)\.0)$|^(255\.255\.255\.(254|252|248|240|224|192|128|0))$/;
 
     if (!rel.test(str)) {
-      return _("Please input a valid subnet mask");
+      return __("Please input a valid subnet mask");
     }
   },
 
   email: function (str) {
     var rel = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (!rel.test(str)) {
-      return _("Please input a valid E-mail address");
+      return __("Please input a valid E-mail address");
     }
 
   },
 
   time: function (str) {
     if (!(/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/).test(str)) {
-      return _("Please input a valid time.");
+      return __("Please input a valid time.");
     }
   },
   hex: function (str) {
     if (!(/^[0-9a-fA-F]{1,}$/).test(str)) {
-      return _("Must be hex.");
+      return __("Must be hex.");
     }
   },
 
   ascii: function (str, min, max) {
 
     if (!utilsString.isAscii(str)) {
-      return _("Must be ASCII.");
+      return __("Must be ASCII.");
     }
     if (min || max) {
       return this.len(str, min, max);
@@ -215,7 +215,7 @@ var vaildate = {
     var ret;
 
     if (!(/^[0-9a-zA-Z_]+$/).test(str)) {
-      return _('Must be numbers, letters or an underscore');
+      return __('Must be numbers, letters or an underscore');
     }
 
     if (minLen && maxLen) {
@@ -228,7 +228,7 @@ var vaildate = {
 
   username: function (str) {
     if (!(/^\w{1,}$/).test(str)) {
-      return _("Please input a valid username.");
+      return __("Please input a valid username.");
     }
   },
 
@@ -254,14 +254,14 @@ var vaildate = {
     for (i = 0; i < len; i++) {
       curChar = banStr.charAt(i);
       if (str.indexOf(curChar) !== -1) {
-        return _("Can't input: %s", curChar);
+        return __("Can't input: %s", curChar);
       }
     }
   },
 
   required: function (str) {
     if (str === undefined || str === '') {
-      return _('%s is required');
+      return __('%s is required');
     }
   }
 };

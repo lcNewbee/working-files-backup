@@ -57,7 +57,7 @@ export default class View extends React.Component {
           <FormGroup
             value="1"
             type="checkbox"
-            text={_('AP Isolation')}
+            text={__('AP Isolation')}
             checked={curData.apEanble === '1'}
             onChange={
               item => this.onChangeSettings('apEanble', item)
@@ -66,7 +66,7 @@ export default class View extends React.Component {
           <FormGroup
             value="1"
             type="checkbox"
-            text={_('SSID Isolation')}
+            text={__('SSID Isolation')}
             checked={curData.ssidEanble === '1'}
             onChange={
               item => this.onChangeSettings('ssidEanble', item)

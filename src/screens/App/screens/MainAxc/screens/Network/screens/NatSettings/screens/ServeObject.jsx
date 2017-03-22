@@ -32,12 +32,12 @@ const slotIdOptions = [
 ];
 
 const balanceAlgthmOptions = [
-  { label: _('Source MAC'), value: 'srcmac' },
-  { label: _('Destiation MAc'), value: 'desmac' },
-  { label: _('Source & Destination MAC'), value: 'mac' },
-  { label: _('Source IP'), value: 'srcip' },
-  { label: _('Destination IP'), value: 'desmac' },
-  { label: _('Source & Destination IP'), value: 'ip' },
+  { label: __('Source MAC'), value: 'srcmac' },
+  { label: __('Destiation MAc'), value: 'desmac' },
+  { label: __('Source & Destination MAC'), value: 'mac' },
+  { label: __('Source IP'), value: 'srcip' },
+  { label: __('Destination IP'), value: 'desmac' },
+  { label: __('Source & Destination IP'), value: 'ip' },
 ];
 
 const protoTypeOptions = [
@@ -78,7 +78,7 @@ export default class View extends React.Component {
       {
         id: 'id',
         type: 'select',
-        text: _('ID'),
+        text: __('ID'),
         notEditable: true,
         formProps: {
           noAdd: true,
@@ -86,14 +86,14 @@ export default class View extends React.Component {
       },
       {
         id: 'serveName',
-        text: _('Serve Name'),
+        text: __('Serve Name'),
         formProps: {
           type: 'text',
         },
       },
       {
         id: 'protoType',
-        text: _('Protocol'),
+        text: __('Protocol'),
         formProps: {
           type: 'select',
           options: protoTypeOptions,
@@ -101,7 +101,7 @@ export default class View extends React.Component {
       },
       {
         id: 'srcPortRange',
-        text: _('Source Port'),
+        text: __('Source Port'),
         transform: (val, item) => {
           const srcStartPort = item.get('srcStartPort');
           const srcEndPort = item.get('srcEndPort');
@@ -132,7 +132,7 @@ export default class View extends React.Component {
       },
       {
         id: 'destPortRange',
-        text: _('Destination Port'),
+        text: __('Destination Port'),
         transform: (val, item) => {
           const destStartPort = item.get('srcStartPort');
           const destEndPort = item.get('srcEndPort');
@@ -163,7 +163,7 @@ export default class View extends React.Component {
       },
       {
         id: 'description',
-        text: _('Description'),
+        text: __('Description'),
         formProps: {
           type: 'textarea',
         },

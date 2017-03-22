@@ -26,15 +26,15 @@ const MY_TIME_ZONE = TIME_ZONE.map(
 const settingsOptions = fromJS([
   {
     id: 'ac_onoff',
-    label: _('Enable NTP Sync'),
+    label: __('Enable NTP Sync'),
     fieldset: 'acTime',
-    legend: _('AC Time Synchronization Setting'),
+    legend: __('AC Time Synchronization Setting'),
     type: 'checkbox',
   },
   {
     id: 'ac_server_name',
     fieldset: 'acTime',
-    label: _('NTP Server'),
+    label: __('NTP Server'),
     type: 'text',
     required: true,
     validator: validator({
@@ -44,7 +44,7 @@ const settingsOptions = fromJS([
   {
     id: 'ac_referral_server',
     fieldset: 'acTime',
-    label: _('Referral Server'),
+    label: __('Referral Server'),
     type: 'text',
     validator: validator({
       rules: 'ip',
@@ -53,10 +53,10 @@ const settingsOptions = fromJS([
   {
     id: 'ac_TimeInterval',
     fieldset: 'acTime',
-    label: _('Poll Interval'),
+    label: __('Poll Interval'),
     type: 'number',
     required: true,
-    help: _('Second'),
+    help: __('Second'),
     min: '5',
     max: '50000',
     validator: validator({
@@ -66,7 +66,7 @@ const settingsOptions = fromJS([
   {
     id: 'ac_timezone',
     fieldset: 'acTime',
-    label: _('Time Zone'),
+    label: __('Time Zone'),
     type: 'select',
     required: true,
     options: MY_TIME_ZONE,

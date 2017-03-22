@@ -20,41 +20,41 @@ import reducer from './reducer';
 const logsTableOptions = fromJS([
   {
     id: 'time',
-    text: _('Time'),
+    text: __('Time'),
     width: '200',
   }, {
     id: 'type',
-    text: _('Type'),
+    text: __('Type'),
     width: '180',
     transform (val, item) {
       const typeMap = {
-        ap: _('DEVICES'),
-        client: _('CLIENTS'),
-        group: _('Groups'),
-        wireless: _('Wireless'),
-        portal: _('Portal Settings'),
-        guest: _('Guest Settings'),
-        admin: _('Admin'),
+        ap: __('DEVICES'),
+        client: __('CLIENTS'),
+        group: __('Groups'),
+        wireless: __('Wireless'),
+        portal: __('Portal Settings'),
+        guest: __('Guest Settings'),
+        admin: __('Admin'),
       };
 
       return typeMap[val] || val;
     },
   }, {
     id: 'loginfo',
-    text: _('Describe'),
+    text: __('Describe'),
     transform (val, item) {
-      let ret = _(utils.toCamel(item.get('logaction')));
+      let ret = __(utils.toCamel(item.get('logaction')));
       let logType = item.get('type');
       let groupname;
       let statusMap = {
-        0: _('start'),
-        1: _('success'),
-        2: _('failed'),
+        0: __('start'),
+        1: __('success'),
+        2: __('failed'),
       };
 
       if (val && val.get) {
         if (val.get('groupname') === 'Default') {
-          groupname = _('Ungrouped Devices');
+          groupname = __('Ungrouped Devices');
         }
 
         ret += ': ' + (val.get('name') || groupname || val.get('mac') || '');
@@ -70,11 +70,11 @@ const logsTableOptions = fromJS([
 ]);
 
 const msg = {
-  TITLE: _('Logs Info'),
-  reconnect: _('Reconnect'),
-  lock: _('Lock'),
-  unlock: _('Unlock'),
-  perPage: _('Items per page: '),
+  TITLE: __('Logs Info'),
+  reconnect: __('Reconnect'),
+  lock: __('Lock'),
+  unlock: __('Unlock'),
+  perPage: __('Items per page: '),
 };
 
 const selectOptions = [
@@ -84,10 +84,10 @@ const selectOptions = [
 ];
 
 const typeArr = fromJS([
-  _('ALL'),
-  _('DEVICES'),
-  _('CLIENTS'),
-  _('SETTINGS'),
+  __('ALL'),
+  __('DEVICES'),
+  __('CLIENTS'),
+  __('SETTINGS'),
 ]);
 
 const styles = {
@@ -128,12 +128,12 @@ export const Logs = React.createClass({
   },
 
   cleanAllLog() {
-    let msg_text = _('Are you sure to clean all logs?');
+    let msg_text = __('Are you sure to clean all logs?');
 
     this.props.createModal({
       id: 'Logs',
       role: 'confirm',
-      title: _('CONFIRM'),
+      title: __('CONFIRM'),
       text: msg_text,
       apply: function () {
         this.props.cleanAllLog();
@@ -197,7 +197,7 @@ export const Logs = React.createClass({
 
           <Button
             className="fl"
-            text={_('Clean All Logs')}
+            text={__('Clean All Logs')}
             icon="trash"
             theme="danger"
             onClick={this.cleanAllLog}

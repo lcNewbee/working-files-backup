@@ -131,7 +131,7 @@ export default class NetworkSettings extends React.Component {
       showError(msg);
       return;
     }
-    msg = _('Primary and Secondary DNS can not be the same !');
+    msg = __('Primary and Secondary DNS can not be the same !');
     if (dns1 !== '' && validator.combine.notequal(dns1, dns2, msg)) {
       showError(msg);
       return;
@@ -194,9 +194,9 @@ export default class NetworkSettings extends React.Component {
             validGateway, validVlanId1, validVlanId2} = this.props.validateOption;
     return (
       <div>
-        <h3>{_('Lan IP Settings')}</h3>
+        <h3>{__('Lan IP Settings')}</h3>
         <FormGroup
-          label={_('IP Mode')}
+          label={__('IP Mode')}
         >
           <div
             style={{
@@ -206,14 +206,14 @@ export default class NetworkSettings extends React.Component {
             <FormInput
               type="radio"
               name="networkmode"
-              text={_('DHCP')}
+              text={__('DHCP')}
               checked={proto === 'dhcp'}
               onChange={this.onDhcpClick}
             />&nbsp;&nbsp;&nbsp;&nbsp;
             <FormInput
               type="radio"
               name="networkmode"
-              text={_('Static')}
+              text={__('Static')}
               checked={proto === 'static'}
               onChange={this.onStaticClick}
             />
@@ -224,7 +224,7 @@ export default class NetworkSettings extends React.Component {
             <div>
               <FormGroup
                 type="text"
-                label={_('Fallback IP')}
+                label={__('Fallback IP')}
                 value={fallbackIp}
                 disabled
                 // onChange={(data) => this.props.updateItemSettings({
@@ -234,7 +234,7 @@ export default class NetworkSettings extends React.Component {
               />
               <FormGroup
                 type="text"
-                label={_('Fallback Netmask')}
+                label={__('Fallback Netmask')}
                 value={fallbackMask}
                 disabled
                 // onChange={(data) => this.props.updateItemSettings({
@@ -247,7 +247,7 @@ export default class NetworkSettings extends React.Component {
             <div>
               <FormGroup
                 type="text"
-                label={_('IP address')}
+                label={__('IP address')}
                 value={ip}
                 onChange={(data) => this.props.updateItemSettings({
                   ip: data.value,
@@ -257,7 +257,7 @@ export default class NetworkSettings extends React.Component {
               />
               <FormGroup
                 type="text"
-                label={_('Subnet Mask')}
+                label={__('Subnet Mask')}
                 value={mask}
                 onChange={(data) => this.props.updateItemSettings({
                   mask: data.value,
@@ -267,7 +267,7 @@ export default class NetworkSettings extends React.Component {
               />
               <FormGroup
                 type="text"
-                label={_('Gateway')}
+                label={__('Gateway')}
                 value={gateway}
                 onChange={(data) => this.props.updateItemSettings({
                   gateway: data.value,
@@ -276,7 +276,7 @@ export default class NetworkSettings extends React.Component {
               />
               <FormGroup
                 type="text"
-                label={_('Primary DNS')}
+                label={__('Primary DNS')}
                 value={dns1}
                 onChange={(data) => this.props.updateItemSettings({
                   dns1: data.value,
@@ -285,7 +285,7 @@ export default class NetworkSettings extends React.Component {
               />
               <FormGroup
                 type="text"
-                label={_('Secondary DNS')}
+                label={__('Secondary DNS')}
                 value={dns2}
                 onChange={(data) => this.props.updateItemSettings({
                   dns2: data.value,
@@ -295,9 +295,9 @@ export default class NetworkSettings extends React.Component {
             </div>
           )
         }
-        <h3>{_('Vlan Settings')}</h3>
+        <h3>{__('Vlan Settings')}</h3>
         <FormGroup
-          label={_('VLAN Enable')}
+          label={__('VLAN Enable')}
           type="checkbox"
           checked={vlanEnable === '1'}
           onClick={() => {
@@ -308,9 +308,9 @@ export default class NetworkSettings extends React.Component {
         />
         <FormGroup
           type="number"
-          label={_('Management VLAN ID')}
+          label={__('Management VLAN ID')}
           disabled={vlanEnable === '0'}
-          help={_('Range: 1 - 4094, Default: 1')}
+          help={__('Range: 1 - 4094, Default: 1')}
           value={mngVlanId}
           onChange={(data) => this.props.updateItemSettings({
             mngVlanId: data.value,
@@ -320,8 +320,8 @@ export default class NetworkSettings extends React.Component {
         />
         <FormGroup
           type="number"
-          label={_('Untagged VLAN ID')}
-          help={_('Range: 1 - 4094, Default: 1')}
+          label={__('Untagged VLAN ID')}
+          help={__('Range: 1 - 4094, Default: 1')}
           value={utgVlanId}
           disabled={vlanEnable === '0'}
           onChange={(data) => this.props.updateItemSettings({

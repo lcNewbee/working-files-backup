@@ -10,31 +10,31 @@ import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 
 const msg = {
-  upSpeed: _('Up Speed'),
-  downSpeed: _('Down Speed'),
-  selectGroup: _('Select Group'),
+  upSpeed: __('Up Speed'),
+  downSpeed: __('Down Speed'),
+  selectGroup: __('Select Group'),
 };
 const formOptions = fromJS([
   {
     id: 'groupname',
     label: msg.selectGroup,
     fieldset: 'group',
-    legend: _('Current Group'),
+    legend: __('Current Group'),
     type: 'select',
     required: true,
   }, {
     id: 'thinenable',
-    label: _('AP Mode'),
-    legend: _('Settings'),
+    label: __('AP Mode'),
+    legend: __('Settings'),
     fieldset: 'mode',
     defaultValue: '1',
     options: [
       {
         value: 0,
-        label: _('Fat AP'),
+        label: __('Fat AP'),
       }, {
         value: 1,
-        label: _('Thin AP'),
+        label: __('Thin AP'),
       },
     ],
     inputStyle: {
@@ -44,16 +44,16 @@ const formOptions = fromJS([
     required: true,
   }, {
     id: 'thindiscovery',
-    label: _('Discovery Type'),
+    label: __('Discovery Type'),
     fieldset: 'mode',
     defaultValue: 'dhcp',
     options: [
       {
         value: 'dhcp',
-        label: _('DHCP'),
+        label: __('DHCP'),
       }, {
         value: 'static',
-        label: _('Static'),
+        label: __('Static'),
       },
     ],
     inputStyle: {
@@ -64,7 +64,7 @@ const formOptions = fromJS([
     showPrecondition: $$data => $$data.get('thinenable') === 1,
   }, {
     id: 'thinacip',
-    label: _('AC IP'),
+    label: __('AC IP'),
     fieldset: 'mode',
     type: 'text',
     required: true,
@@ -89,7 +89,7 @@ function getGroupOptions($$list) {
       let label = groupname;
 
       if (groupname === 'Default') {
-        label = _('Ungrouped Devices');
+        label = __('Ungrouped Devices');
       }
 
       return $$item.clear().merge({

@@ -26,7 +26,7 @@ function getWebTemplate() {
 const listOptions = fromJS([
   {
     id: 'name',
-    text: _('Name'),
+    text: __('Name'),
     width: '120px',
     formProps: {
       type: 'text',
@@ -34,7 +34,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'ip',
-    text: _('IP'),
+    text: __('IP'),
     width: '120px',
     options: [],
     formProps: {
@@ -46,7 +46,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'mac',
-    text: _('Mac'),
+    text: __('Mac'),
     formProps: {
       type: 'number',
       required: true,
@@ -56,14 +56,14 @@ const listOptions = fromJS([
     },
   }, {
     id: 'address',
-    text: _('Address'),
+    text: __('Address'),
     formProps: {
       type: 'text',
       required: true,
     },
   }, {
     id: 'basip',
-    text: _('Bas IP'),
+    text: __('Bas IP'),
     formProps: {
       type: 'text',
       required: true,
@@ -73,14 +73,14 @@ const listOptions = fromJS([
     },
   }, {
     id: 'web',
-    text: _('Web Template'),
+    text: __('Web Template'),
     formProps: {
       type: 'select',
       required: true,
     },
   }, {
     id: 'count',
-    text: _('Authetication Count'),
+    text: __('Authetication Count'),
     noTable: true,
     formProps: {
       type: 'number',
@@ -88,7 +88,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'des',
-    text: _('Description'),
+    text: __('Description'),
     noTable: true,
     formProps: {
       type: 'textarea',
@@ -96,7 +96,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'x',
-    text: _('X'),
+    text: __('X'),
     noForm: true,
     noTable: true,
     formProps: {
@@ -105,7 +105,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'y',
-    text: _('Y'),
+    text: __('Y'),
     noForm: true,
     noTable: true,
     formProps: {
@@ -114,7 +114,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'ssid',
-    text: _('SSID Location'),
+    text: __('SSID Location'),
     formProps: {
       required: true,
     },

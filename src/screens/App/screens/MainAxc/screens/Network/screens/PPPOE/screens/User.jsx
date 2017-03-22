@@ -11,14 +11,14 @@ import * as appActions from 'shared/actions/app';
 const listOptions = fromJS([
   {
     id: 'user_name',
-    text: _('User Name'),
+    text: __('User Name'),
     formProps: {
       type: 'text',
       required: true,
     },
   }, {
     id: 'pwd',
-    text: _('User Password'),
+    text: __('User Password'),
     formProps: {
       type: 'text',
       required: true,

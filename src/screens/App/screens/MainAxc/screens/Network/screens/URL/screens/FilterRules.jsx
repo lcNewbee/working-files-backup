@@ -11,22 +11,22 @@ import * as appActions from 'shared/actions/app';
 const listOptions = fromJS([
   {
     id: 'rule_name',
-    label: _('Rule Name'),
+    label: __('Rule Name'),
     formProps: {
       type: 'text',
       required: true,
     },
   }, {
     id: 'filter_url',
-    label: _('Filter URL'),
-    help: _('Filter URL[1-100]'),
+    label: __('Filter URL'),
+    help: __('Filter URL[1-100]'),
     formProps: {
       type: 'text',
       required: true,
     },
   }, {
     id: 'description',
-    label: _('Description'),
+    label: __('Description'),
     formProps: {
       type: 'textarea',
       required: true,

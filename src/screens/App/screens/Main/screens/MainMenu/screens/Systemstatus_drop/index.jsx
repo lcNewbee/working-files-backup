@@ -25,30 +25,30 @@ export default class Systemstatus extends React.Component {
     const systemState = this.props.data.get('status');
     return (
       <div>
-        <p>{_('Wirelss Model: ')}<span>{this.props.data.get('WirelessMode')}</span></p>
-        <p>{_('Device Name: ')}<span>{systemState.get('DeviceName')}</span></p>
-        <p>{_('Network Mode: ')}<span>{systemState.get('NetworkMode')}</span></p>
-        <p>{_('Wireless Mode: ')}<span>b/g/n</span></p>
-        <p>{_('SSID: ')}<span>{systemState.get('SSID')}</span></p>
-        <p>{_('Security Mode: ')}<span>{systemState.get('Security')}</span></p>
-        <p>{_('Software Version: ')}<span>{systemState.get('Version')}</span></p>
-        <p>{_('Run Time: ')}<span>{systemState.get('Uptime')}</span></p>
-        <p>{_('System Time: ')}<span>{systemState.get('SystemTime')}</span></p>
-        <p>{_('Channel/Frequency: ')}<span>{systemState.get('Channel')}</span></p>
-        <p>{_('Channel Width: ')}<span>{systemState.get('ChannelWidth')}</span></p>
-        <p>{_('Distance: ')}<span>{systemState.get('Distance')}</span></p>
-        <p>{_('RF Power: ')}<span>{systemState.get('TxPower')}</span></p>
-        <p>{_('Antenna: ')}<span>{systemState.get('Atenna')}</span></p>
+        <p>{__('Wirelss Model: ')}<span>{this.props.data.get('WirelessMode')}</span></p>
+        <p>{__('Device Name: ')}<span>{systemState.get('DeviceName')}</span></p>
+        <p>{__('Network Mode: ')}<span>{systemState.get('NetworkMode')}</span></p>
+        <p>{__('Wireless Mode: ')}<span>b/g/n</span></p>
+        <p>{__('SSID: ')}<span>{systemState.get('SSID')}</span></p>
+        <p>{__('Security Mode: ')}<span>{systemState.get('Security')}</span></p>
+        <p>{__('Software Version: ')}<span>{systemState.get('Version')}</span></p>
+        <p>{__('Run Time: ')}<span>{systemState.get('Uptime')}</span></p>
+        <p>{__('System Time: ')}<span>{systemState.get('SystemTime')}</span></p>
+        <p>{__('Channel/Frequency: ')}<span>{systemState.get('Channel')}</span></p>
+        <p>{__('Channel Width: ')}<span>{systemState.get('ChannelWidth')}</span></p>
+        <p>{__('Distance: ')}<span>{systemState.get('Distance')}</span></p>
+        <p>{__('RF Power: ')}<span>{systemState.get('TxPower')}</span></p>
+        <p>{__('Antenna: ')}<span>{systemState.get('Atenna')}</span></p>
         <p>WLAN0 MAC: <span>{systemState.get('Wlan0Mac')}</span></p>
         <p>LAN0 MAC: <span>{systemState.get('Lan0Mac')}</span></p>
         <p>LAN1 MAC: <span>{systemState.get('Lan1Mac')}</span></p>
         <p>LAN0/LAN1: <span>{systemState.get('Security')}</span></p>
         <p>AP mac: <span>{systemState.get('Security')}</span></p>
-        <p>{_('Online User: ')}<span>{systemState.get('Security')}</span></p>
-        <p>{_('Background Noise: ')}<span>{systemState.get('Security')}</span></p>
-        <p>{_('Transform CCQ: ')}<span>{systemState.get('Security')}</span></p>
-        <p>{_('Singal Stength: ')}<span>{systemState.get('Security')}</span></p>
-        <p>{_('TX/RX Rate: ')}<span>{systemState.get('Security')}</span></p>
+        <p>{__('Online User: ')}<span>{systemState.get('Security')}</span></p>
+        <p>{__('Background Noise: ')}<span>{systemState.get('Security')}</span></p>
+        <p>{__('Transform CCQ: ')}<span>{systemState.get('Security')}</span></p>
+        <p>{__('Singal Stength: ')}<span>{systemState.get('Security')}</span></p>
+        <p>{__('TX/RX Rate: ')}<span>{systemState.get('Security')}</span></p>
       </div>
     );
   }

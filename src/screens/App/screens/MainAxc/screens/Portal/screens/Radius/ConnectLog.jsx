@@ -13,7 +13,7 @@ const onlinetimeFilter = utils.filter('connectTime');
 const listOptions = fromJS([
   {
     id: 'nasip',
-    text: _('Nas IP'),
+    text: __('Nas IP'),
     type: 'text',
     formProps: {
       required: true,
@@ -23,32 +23,32 @@ const listOptions = fromJS([
     },
   }, {
     id: 'sourceip',
-    text: _('Source IP'),
+    text: __('Source IP'),
     type: 'text',
     formProps: {
       required: true,
     },
   }, {
     id: 'userip',
-    text: _('User IP'),
+    text: __('User IP'),
     formProps: {
       required: true,
     },
   }, {
     id: 'callingstationid',
-    text: _('Mac'),
+    text: __('Mac'),
     formProps: {
       required: true,
     },
   }, {
     id: 'name',
-    text: _('Login Name'),
+    text: __('Login Name'),
     formProps: {
       required: true,
     },
   }, {
     id: 'state',
-    text: _('Acc Type'),
+    text: __('Acc Type'),
     formProps: {
       type: 'select',
       required: true,
@@ -56,37 +56,37 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: _('Unavailability'),
+        label: __('Unavailability'),
       }, {
         value: '1',
-        label: _('Free of Charge'),
+        label: __('Free of Charge'),
       },
       {
         value: '2',
-        label: _('Timekeeping'),
+        label: __('Timekeeping'),
       }, {
         value: '3',
-        label: _('Buy Out'),
+        label: __('Buy Out'),
       }, {
         value: '4',
-        label: _('Traffic'),
+        label: __('Traffic'),
       }, {
         value: '-1',
-        label: _('Outside User'),
+        label: __('Outside User'),
       },
     ],
   }, {
     id: 'startDate',
-    text: _('Online Date'),
+    text: __('Online Date'),
     type: 'text',
   }, {
     id: 'endDate',
-    text: _('Offline Date'),
+    text: __('Offline Date'),
     type: 'text',
     required: true,
   }, {
     id: 'time',
-    text: _('Time'),
+    text: __('Time'),
     formProps: {
       required: true,
     },
@@ -95,39 +95,39 @@ const listOptions = fromJS([
     },
   }, {
     id: 'ins',
-    text: _('Up Traffic'),
+    text: __('Up Traffic'),
     formProps: {
       required: true,
     },
   }, {
     id: 'outs',
-    text: _('Down Traffic'),
+    text: __('Down Traffic'),
     formProps: {
       required: true,
     },
   }, {
     id: 'octets',
-    text: _('Used Traffic'),
+    text: __('Used Traffic'),
     formProps: {
       required: true,
     },
   }, {
     id: 'acctsessionid',
-    text: _('Acc ID'),
+    text: __('Acc ID'),
     noTable: true,
     formProps: {
       required: true,
     },
   }, {
     id: 'ex1',
-    text: _('NAS Type'),
+    text: __('NAS Type'),
     noTable: true,
     formProps: {
       required: true,
     },
   }, {
     id: 'ex2',
-    text: _('Reason'),
+    text: __('Reason'),
     formProps: {
       required: true,
     },

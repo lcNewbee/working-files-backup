@@ -11,21 +11,21 @@ const settingsFormOptions = fromJS([
   {
     id: 'enable',
     width: '60',
-    label: _('Enable'),
+    label: __('Enable'),
     type: 'checkbox',
     dataType: 'number',
     value: '1',
   }, {
     id: 'apopermode',
     width: '120',
-    label: _('AP Work Mode'),
+    label: __('AP Work Mode'),
     options: [
       {
         value: 1,
-        label: _('Normal'),
+        label: __('Normal'),
       }, {
         value: 2,
-        label: _('Monitor'),
+        label: __('Monitor'),
       },
     ],
     defaultValue: '1',
@@ -34,14 +34,14 @@ const settingsFormOptions = fromJS([
     value: '1',
   }, {
     id: 'scantype',
-    label: _('Scan Type'),
+    label: __('Scan Type'),
     options: [
       {
         value: 2,
-        label: _('Passive'),
+        label: __('Passive'),
       }, {
         value: 1,
-        label: _('Initiative'),
+        label: __('Initiative'),
       },
     ],
     type: 'switch',
@@ -49,7 +49,7 @@ const settingsFormOptions = fromJS([
     defaultValue: '1',
   }, {
     id: 'cycles',
-    label: _('Scan Cycles Times'),
+    label: __('Scan Cycles Times'),
     min: 0,
     max: 255,
     type: 'number',
@@ -58,7 +58,7 @@ const settingsFormOptions = fromJS([
     defaultValue: '1',
   }, {
     id: 'maxtxpwr',
-    label: _('Max Power'),
+    label: __('Max Power'),
     type: 'select',
     defaultValue: '100%',
     options: [
@@ -84,22 +84,22 @@ const settingsFormOptions = fromJS([
     ],
   }, {
     id: 'rpttime',
-    label: _('Channel Quality Report Cycle'),
+    label: __('Channel Quality Report Cycle'),
     type: 'number',
     min: 1,
     max: 65535,
     dataType: 'number',
     defaultValue: 30,
     required: true,
-    help: _('Seconds'),
+    help: __('Seconds'),
   }, {
     id: 'chlnum',
-    label: _('Channel Set'),
-    help: _('e.g. %s', '1,5,8'),
+    label: __('Channel Set'),
+    help: __('e.g. %s', '1,5,8'),
     defaultValue: '',
   }, {
     id: 'enable2g4chl',
-    label: _('Auto Channel'),
+    label: __('Auto Channel'),
     type: 'checkbox',
     linkId: 'enable5gchl',
     dataType: 'number',
@@ -107,7 +107,7 @@ const settingsFormOptions = fromJS([
     value: 1,
   }, {
     id: 'enable2g4pwr',
-    label: _('Auto Power'),
+    label: __('Auto Power'),
     type: 'checkbox',
     linkId: 'enable5gpwr',
     dataType: 'number',
@@ -115,7 +115,7 @@ const settingsFormOptions = fromJS([
     value: '1',
   }, {
     id: 'adjafactor2g4',
-    label: _('Neighbor Coefficient'),
+    label: __('Neighbor Coefficient'),
     linkId: 'adjafactor5g',
     min: 1,
     max: 255,

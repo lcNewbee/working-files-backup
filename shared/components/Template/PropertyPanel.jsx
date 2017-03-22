@@ -116,7 +116,7 @@ class PropertyPanel extends React.Component {
             role: 'loading',
             title: '',
             loadingStep: 50,
-            loadingTitle: _('Synchronizing config for AP...'),
+            loadingTitle: __('Synchronizing config for AP...'),
             onLoaded: () => {
               this.props.closeModal();
               this.props.fetchPropertyPanelData(query);
@@ -151,29 +151,29 @@ class PropertyPanel extends React.Component {
           onClick={this.props.onToggle}
         >
           <Icon
-            title={_('Show Property Panel')}
+            title={__('Show Property Panel')}
             name="angle-double-left"
             size="2x"
           />
         </div>
         <div className="o-property-panel__inner">
           <header className="m-action-bar o-property-panel__header">
-            <div className="m-action-bar__left">{_('PROPERTIES')}</div>
+            <div className="m-action-bar__left">{__('PROPERTIES')}</div>
 
             <div className="m-action-bar__right">
               <div className="action-icon-group">
                 <Icon
-                  title={_('Remove All')}
+                  title={__('Remove All')}
                   name="trash"
                   onClick={() => this.props.removePropertyPanel(-1)}
                 />
                 <Icon
-                  title={_('Collapse All')}
+                  title={__('Collapse All')}
                   name="navicon"
                   onClick={() => this.props.collapsePropertyPanel(-1)}
                 />
                 <Icon
-                  title={_('Hidde Property Panel')}
+                  title={__('Hidde Property Panel')}
                   name="angle-double-right"
                   onClick={this.props.onToggle}
                 />

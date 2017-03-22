@@ -62,7 +62,7 @@ class File extends React.Component {
 
   render() {
     const { className, value, placeholder, onRef, ...restProps } = this.props;
-    const placehodlerText = placeholder || _('Please Select File...');
+    const placehodlerText = placeholder || __('Please Select File...');
     const fileTextInputProps = {
       disabled: this.props.disabled,
       placeholder: placehodlerText,

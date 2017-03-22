@@ -36,7 +36,7 @@ const spatialstreamsOptions = [{
 export const countryOptions = channelsList.map(item =>
   ({
     value: item.country,
-    label: b28n.getLang() === 'cn' ? _(item.cn) : _(item.en),
+    label: b28n.getLang() === 'cn' ? __(item.cn) : __(item.en),
   }),
 ).toJS();
 export const $$phymodeOptopns = fromJS([{
@@ -67,16 +67,16 @@ export const $$phymodeOptopns = fromJS([{
 
 export const $$qosTypeOptopns = fromJS([{
   value: 0,
-  label: _('Default Optimization'),
+  label: __('Default Optimization'),
 }, {
   value: 1,
-  label: _('Optimized for Throughput'),
+  label: __('Optimized for Throughput'),
 }, {
   value: 2,
-  label: _('Optimized for Capacity'),
+  label: __('Optimized for Capacity'),
 }, {
   value: 3,
-  label: _('Manual Configuration'),
+  label: __('Manual Configuration'),
 }]);
 
 export const numberKeys = [
@@ -118,14 +118,14 @@ export const radioBase = fromJS([
     form: 'radioBase',
     value: '1',
     defaultValue: '0',
-    text: _('RF Switch'),
-    label: _('RF Switch'),
+    text: __('RF Switch'),
+    label: __('RF Switch'),
     showLabel: false,
   },
   {
     id: 'phymode',
     form: 'radioBase',
-    label: _('Physical Mode'),
+    label: __('Physical Mode'),
     type: 'select',
     defaultValue: '',
     options: $$phymodeOptopns,
@@ -137,7 +137,7 @@ export const radioBase = fromJS([
   //   type: 'checkbox',
   //   value: '1',
   //   defaultValue: '0',
-  //   text: _('11n Frist'),
+  //   text: __('11n Frist'),
   //   showPrecondition(data) {
   //     return parseInt(data.get('phymode'), 10) > 8;
   //   },
@@ -146,7 +146,7 @@ export const radioBase = fromJS([
     id: 'txpower',
     form: 'radioBase',
     type: 'select',
-    label: _('Tx Power'),
+    label: __('Tx Power'),
     defaultValue: '100%',
     required: true,
     options: [
@@ -175,7 +175,7 @@ export const radioBase = fromJS([
     id: 'countrycode',
     form: 'radioBase',
     type: 'select',
-    label: _('Country'),
+    label: __('Country'),
     defaultValue: '',
     required: true,
     options: countryOptions,
@@ -185,7 +185,7 @@ export const radioBase = fromJS([
     id: 'channel',
     form: 'radioBase',
     type: 'select',
-    label: _('Channel'),
+    label: __('Channel'),
     defaultValue: '',
     required: true,
     options: [],
@@ -194,7 +194,7 @@ export const radioBase = fromJS([
     id: 'channelwidth',
     form: 'radioBase',
     type: 'switch',
-    label: _('Channel Bandwidth'),
+    label: __('Channel Bandwidth'),
     defaultValue: '',
     required: true,
     inputStyle: {
@@ -234,12 +234,12 @@ export const radioAdvance = fromJS([
   //   type: 'checkbox',
   //   value: '1',
   //   defaultValue: '0',
-  //   label: _('Band Steering'),
+  //   label: __('Band Steering'),
   // },
   {
     id: 'txchain',
     form: 'radioAdvance',
-    label: _('Custom Spatial Stream'),
+    label: __('Custom Spatial Stream'),
     type: 'switch',
     defaultValue: '1x1',
     required: true,
@@ -251,7 +251,7 @@ export const radioAdvance = fromJS([
   // {
   //   id: 'rxchain',
   //   form: 'radioAdvance',
-  //   label: _('RX Spatial Stream'),
+  //   label: __('RX Spatial Stream'),
   //   type: 'switch',
   //   defaultValue: '1x1',
   //   required: true,
@@ -264,7 +264,7 @@ export const radioAdvance = fromJS([
   // {
   //   id: 'wmmenable',
   //   form: 'radioAdvance',
-  //   label: _('WMM Switch'),
+  //   label: __('WMM Switch'),
   //   type: 'checkbox',
   //   value: '1',
   //   defaultValue: '0',
@@ -276,7 +276,7 @@ export const radioAdvance = fromJS([
   //   min: 1,
   //   max: 999,
   //   defaultValue: 32,
-  //   label: _('Max Clients'),
+  //   label: __('Max Clients'),
   // },
   {
     id: 'beaconinterval',
@@ -285,12 +285,12 @@ export const radioAdvance = fromJS([
     min: 32,
     max: 8191,
     defaultValue: 100,
-    help: _('ms'),
-    label: _('Beacon Interval'),
+    help: __('ms'),
+    label: __('Beacon Interval'),
   }, {
     id: 'fragthreshold',
     form: 'radioAdvance',
-    label: _('Frame Fragment Threshold'),
+    label: __('Frame Fragment Threshold'),
     type: 'number',
     min: 256,
     max: 2346,
@@ -299,7 +299,7 @@ export const radioAdvance = fromJS([
   // {
   //   id: 'maxrxduration',
   //   form: 'radioAdvance',
-  //   label: _('Max RX Duration'),
+  //   label: __('Max RX Duration'),
   //   type: 'number',
   //   min: 500,
   //   max: 250000,
@@ -307,7 +307,7 @@ export const radioAdvance = fromJS([
   {
     id: 'rtsthreshold',
     form: 'radioAdvance',
-    label: _('RTS Threshold'),
+    label: __('RTS Threshold'),
     type: 'number',
     min: 0,
     max: 2346,
@@ -316,8 +316,8 @@ export const radioAdvance = fromJS([
   // {
   //   id: 'shortretrythreshold',
   //   form: 'radioAdvance',
-  //   label: _('Max Resend Times'),
-  //   help: _('Under RTS Threshold'),
+  //   label: __('Max Resend Times'),
+  //   help: __('Under RTS Threshold'),
   //   type: 'number',
   //   min: 1,
   //   max: 15,
@@ -325,8 +325,8 @@ export const radioAdvance = fromJS([
   // }, {
   //   id: 'longretrythreshold',
   //   form: 'radioAdvance',
-  //   label: _('Max Resend Times'),
-  //   help: _('Beyond RTS Threshold'),
+  //   label: __('Max Resend Times'),
+  //   help: __('Beyond RTS Threshold'),
   //   type: 'number',
   //   min: 1,
   //   max: 15,
@@ -335,7 +335,7 @@ export const radioAdvance = fromJS([
   {
     id: 'dtim',
     form: 'radioAdvance',
-    label: _('DTIM'),
+    label: __('DTIM'),
     type: 'number',
     min: 1,
     max: 15,
@@ -344,7 +344,7 @@ export const radioAdvance = fromJS([
   // {
   //   id: 'cwmin',
   //   form: 'radioAdvance',
-  //   label: _('CW Threshold Min Time'),
+  //   label: __('CW Threshold Min Time'),
   //   type: 'number',
   //   min: 1,
   //   max: 3600,
@@ -352,7 +352,7 @@ export const radioAdvance = fromJS([
   // }, {
   //   id: 'cwmax',
   //   form: 'radioAdvance',
-  //   label: _('CW Threshold Max Time'),
+  //   label: __('CW Threshold Max Time'),
   //   type: 'number',
   //   min: 1,
   //   max: 3600,
@@ -360,7 +360,7 @@ export const radioAdvance = fromJS([
   // }, {
   //   id: 'aifs',
   //   form: 'radioAdvance',
-  //   label: _('WMM Random Internal Data Frame Interval'),
+  //   label: __('WMM Random Internal Data Frame Interval'),
   //   type: 'number',
   //   min: 1,
   //   max: 3600,
@@ -369,7 +369,7 @@ export const radioAdvance = fromJS([
   // {
   //   id: 'txop',
   //   form: 'radioAdvance',
-  //   label: _('txop'),
+  //   label: __('txop'),
   //   type: 'number',
   //   min: 1,
   //   max: 3600,
@@ -377,7 +377,7 @@ export const radioAdvance = fromJS([
   // }, {
   //   id: 'admctrmandatory',
   //   form: 'radioAdvance',
-  //   label: _('admctrmandatory'),
+  //   label: __('admctrmandatory'),
   //   type: 'number',
   //   min: 1,
   //   max: 3600,
@@ -386,7 +386,7 @@ export const radioAdvance = fromJS([
   // {
   //   id: 'shortgi',
   //   form: 'radioAdvance',
-  //   label: _('Short GI'),
+  //   label: __('Short GI'),
   //   type: 'checkbox',
   //   value: '1',
   //   defaultValue: '1',
@@ -397,7 +397,7 @@ export const radioAdvance = fromJS([
   // {
   //   id: 'preamble',
   //   form: 'radioAdvance',
-  //   label: _('Preamble'),
+  //   label: __('Preamble'),
   //   type: 'switch',
   //   inputStyle: {
   //     width: '100%',
@@ -405,10 +405,10 @@ export const radioAdvance = fromJS([
   //   options: [
   //     {
   //       value: 1,
-  //       label: _('Short'),
+  //       label: __('Short'),
   //     }, {
   //       value: 0,
-  //       label: _('Long'),
+  //       label: __('Long'),
   //     },
   //   ],
   //   defaultValue: '1',
@@ -420,7 +420,7 @@ export const radioAdvance = fromJS([
   // {
   //   id: 'ampdu',
   //   form: 'radioAdvance',
-  //   label: _('AMPDU'),
+  //   label: __('AMPDU'),
   //   type: 'checkbox',
   //   value: '1',
   //   defaultValue: '0',
@@ -430,7 +430,7 @@ export const radioAdvance = fromJS([
   // }, {
   //   id: 'amsdu',
   //   form: 'radioAdvance',
-  //   label: _('AMSDU'),
+  //   label: __('AMSDU'),
   //   type: 'checkbox',
   //   value: '1',
   //   defaultValue: '0',
@@ -441,7 +441,7 @@ export const radioAdvance = fromJS([
   {
     id: 'rateset',
     form: 'radioAdvance',
-    label: _('Rate Set'),
+    label: __('Rate Set'),
     type: 'checkboxs',
     maxLength: '31',
     defaultValue: '',
@@ -484,7 +484,7 @@ export const radioAdvance = fromJS([
 export const radioQos = fromJS([{
   id: 'wmmtemplate',
   form: 'radioAdvance',
-  label: _('QoS Optimization Mode'),
+  label: __('QoS Optimization Mode'),
   type: 'select',
   defaultValue: '',
   options: $$qosTypeOptopns,
@@ -492,14 +492,14 @@ export const radioQos = fromJS([{
 }, {
   id: 'add',
   type: 'table',
-  title: _('WMM Parameters'),
+  title: __('WMM Parameters'),
   thead: [
-    _('Name'),
-    _('CWMIN'),
-    _('CWMAX'),
-    _('AIFS'),
-    _('TXOP'),
-    _('NOACK'),
+    __('Name'),
+    __('CWMIN'),
+    __('CWMAX'),
+    __('AIFS'),
+    __('TXOP'),
+    __('NOACK'),
   ],
   showPrecondition($$data) {
     return $$data.get('wmmtemplate') === 3;
@@ -507,23 +507,23 @@ export const radioQos = fromJS([{
   list: [
     [
       {
-        text: _(''),
+        text: __(''),
         noForm: true,
       },
       {
-        text: _('0-15'),
+        text: __('0-15'),
         noForm: true,
       }, {
-        text: _('0-15'),
+        text: __('0-15'),
         noForm: true,
       }, {
-        text: _('0-15'),
+        text: __('0-15'),
         noForm: true,
       }, {
-        text: _('0-8192'),
+        text: __('0-8192'),
         noForm: true,
       }, {
-        text: _(''),
+        text: __(''),
         noForm: true,
       },
     ],
@@ -531,7 +531,7 @@ export const radioQos = fromJS([{
       {
         id: 'name',
         form: 'radioAdvance',
-        text: _('BestEffort'),
+        text: __('BestEffort'),
         noForm: true,
       },
       {
@@ -576,7 +576,7 @@ export const radioQos = fromJS([{
     [
       {
         id: 'name',
-        text: _('Background'),
+        text: __('Background'),
         noForm: true,
       },
       {
@@ -620,7 +620,7 @@ export const radioQos = fromJS([{
     [
       {
         id: 'name',
-        text: _('Video(VI)'),
+        text: __('Video(VI)'),
         noForm: true,
       },
       {
@@ -665,7 +665,7 @@ export const radioQos = fromJS([{
     [
       {
         id: 'name',
-        text: _('Voice(VO)'),
+        text: __('Voice(VO)'),
         noForm: true,
       },
       {

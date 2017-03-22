@@ -87,20 +87,20 @@ export default class ModeSettings extends React.Component {
         if (nextMode !== currMode) {
           this.props.createModal({
             role: 'alert',
-            text: _('Mode changed, REBOOT to take effect ?'),
+            text: __('Mode changed, REBOOT to take effect ?'),
             apply: this.saveModalChange,
           });
         } else if (nextMode === currMode && nextMode === '1' &&
           (currDiscoveryType !== discoveryType || currAcIp !== acIp)) {
           this.props.createModal({
             role: 'alert',
-            text: _('Mode configuration changed, REBOOT to take effect ?'),
+            text: __('Mode configuration changed, REBOOT to take effect ?'),
             apply: this.saveModalChange,
           });
         } else {
           this.props.createModal({
             role: 'alert',
-            text: _('Nothing changed, no need to do anything!'),
+            text: __('Nothing changed, no need to do anything!'),
           });
         }
       }
@@ -119,7 +119,7 @@ export default class ModeSettings extends React.Component {
       } else {
         this.props.createModal({
           role: 'alert',
-          text: _('Mode Changed Failed !'),
+          text: __('Mode Changed Failed !'),
         });
       }
     });
@@ -129,15 +129,15 @@ export default class ModeSettings extends React.Component {
     const { nextMode, discoveryType, acIp } = this.props.store.get('curData').toJS();
     return (
       <div className="o-form">
-        <div className="o-form__legend">{_('Device Operation Mode')}</div>
+        <div className="o-form__legend">{__('Device Operation Mode')}</div>
         <br />
         <FormGroup
           type="select"
-          label={_('AP Mode')}
+          label={__('AP Mode')}
           value={nextMode}
           options={[
-            { value: '0', label: _('Fat AP Mode') },
-            { value: '1', label: _('Thin AP Mode') },
+            { value: '0', label: __('Fat AP Mode') },
+            { value: '1', label: __('Thin AP Mode') },
           ]}
           onChange={(data) => {
             this.props.updateItemSettings({ nextMode: data.value });
@@ -147,11 +147,11 @@ export default class ModeSettings extends React.Component {
           nextMode === '1' ? (
             <FormGroup
               type="select"
-              label={_('Discovery Type')}
+              label={__('Discovery Type')}
               value={discoveryType}
               options={[
-                { value: 'dhcp', label: _('DHCP') },
-                { value: 'static', label: _('Static') },
+                { value: 'dhcp', label: __('DHCP') },
+                { value: 'static', label: __('Static') },
               ]}
               onChange={(data) => {
                 this.props.updateItemSettings({ discoveryType: data.value });
@@ -163,7 +163,7 @@ export default class ModeSettings extends React.Component {
           discoveryType === 'static' && nextMode === '1' ? (
             <FormGroup
               type="text"
-              label={_('AC IP')}
+              label={__('AC IP')}
               value={acIp}
               onChange={(data) => {
                 this.props.updateItemSettings({ acIp: data.value });
@@ -189,7 +189,7 @@ export default class ModeSettings extends React.Component {
           draggable
         >
           <ProgressBar
-            title={_('rebooting , please wait...')}
+            title={__('rebooting , please wait...')}
             time={60}
             callback={() => {
               this.props.updateItemSettings({ showProgressBar: false });

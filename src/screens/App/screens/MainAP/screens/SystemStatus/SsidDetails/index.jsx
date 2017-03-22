@@ -33,10 +33,10 @@ const defaultProps = {
 const vapInterfaceOptions = fromJS([
   {
     id: 'num',
-    text: _('No.'),
+    text: __('No.'),
   }, {
     id: 'name',
-    text: _('Name'),
+    text: __('Name'),
     transform(val, item) {
       const ssid = item.get('ssid');
       if (val === '') {
@@ -47,7 +47,7 @@ const vapInterfaceOptions = fromJS([
     width: '152px',
   }, {
     id: 'mac',
-    text: _('MAC'),
+    text: __('MAC'),
     sortable: true,
     transform(val) {
       if (val === '') {
@@ -58,7 +58,7 @@ const vapInterfaceOptions = fromJS([
     width: '152px',
   }, {
     id: 'txBytes',
-    text: _('Tx Data'),
+    text: __('Tx Data'),
     sortable: true,
     sortFun: (a, b) => {
       const aVal = parseInt(a, 10);
@@ -75,7 +75,7 @@ const vapInterfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'rxBytes',
-    text: _('Rx Data'),
+    text: __('Rx Data'),
     sortable: true,
     sortFun: (a, b) => {
       const aVal = parseInt(a, 10);
@@ -92,7 +92,7 @@ const vapInterfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'txPackets',
-    text: _('Tx Packets'),
+    text: __('Tx Packets'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -102,7 +102,7 @@ const vapInterfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'rxPackets',
-    text: _('Rx Packets'),
+    text: __('Rx Packets'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -112,7 +112,7 @@ const vapInterfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'txErrorPackets',
-    text: _('Tx Errors'),
+    text: __('Tx Errors'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -122,7 +122,7 @@ const vapInterfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'rxErrorPackets',
-    text: _('Rx Errors'),
+    text: __('Rx Errors'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -132,7 +132,7 @@ const vapInterfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'ccq',
-    text: _('CCQ'),
+    text: __('CCQ'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -224,7 +224,7 @@ export default class SsidDetails extends React.Component {
     return (
       <div className="o-box">
         <Button
-          text={_('Back')}
+          text={__('Back')}
           theme="primary"
           style={{
             marginBottom: '15px',
@@ -236,7 +236,7 @@ export default class SsidDetails extends React.Component {
 
         <div className="o-box__cell">
           <h3>
-            {`${_('Wireless Interfaces')} (${this.props.product.getIn(['radioSelectOptions', radioId, 'label'])})`}
+            {`${__('Wireless Interfaces')} (${this.props.product.getIn(['radioSelectOptions', radioId, 'label'])})`}
           </h3>
         </div>
         <div className="o-box__cell">

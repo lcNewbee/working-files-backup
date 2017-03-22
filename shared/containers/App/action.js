@@ -101,7 +101,7 @@ export function receiveServerError(state) {
       errorMsg = ERROR_MSG_MAP[state.code];
     }
 
-    toastr.error(_('Data Sync Error'), _(errorMsg));
+    toastr.error(__('Data Sync Error'), __(errorMsg));
   }
 
   return {

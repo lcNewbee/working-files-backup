@@ -77,11 +77,11 @@ export default class AccountSettings extends Component {
         .then((msg) => {
           if (msg.isEmpty()) {
             if (newPassword !== confirmPassword) {
-              const text = _('Please make sure that the new passwords you input twice are the same!');
+              const text = __('Please make sure that the new passwords you input twice are the same!');
               props.showValidMsg('1', text);
               noError = false;
             } else if (oldPassword === newPassword) {
-              const text = _('Please make sure that the new password is different from the old one!');
+              const text = __('Please make sure that the new password is different from the old one!');
               props.showValidMsg('1', text);
               noError = false;
             }
@@ -93,7 +93,7 @@ export default class AccountSettings extends Component {
                   .then((json) => {
                     if (json.state && json.state.code === 4000) {
                       // const text = json.state.msg;
-                      const text = _('old password error.');
+                      const text = __('old password error.');
                       props.showValidMsg('1', text);
                     } else if (json.state && json.state.code === 2000) {
                       window.location.href = '#';
@@ -132,10 +132,10 @@ export default class AccountSettings extends Component {
     return (
       <div>
         <div>
-          <h3>{_('Accounts Settings')}</h3>
+          <h3>{__('Accounts Settings')}</h3>
           <FormGroup
             type="password"
-            label={_('Old Password')}
+            label={__('Old Password')}
             value={oldPassword}
             onChange={(data) => {
               this.props.updateItemSettings({
@@ -147,7 +147,7 @@ export default class AccountSettings extends Component {
           />
           <FormGroup
             type="password"
-            label={_('New Password')}
+            label={__('New Password')}
             value={newPassword}
             onChange={(data) => {
               this.props.updateItemSettings({
@@ -159,7 +159,7 @@ export default class AccountSettings extends Component {
           />
           <FormGroup
             type="password"
-            label={_('Confirm Password')}
+            label={__('Confirm Password')}
             value={confirmPassword}
             onChange={(data) => {
               this.props.updateItemSettings({
@@ -180,8 +180,8 @@ export default class AccountSettings extends Component {
           isShow={this.props.selfState.get('showErrorMsg') === '1'}
           onClose={this.onModalOkBtnClick}
           onOk={this.onModalOkBtnClick}
-          okText={_('OK')}
-          title={_('Error Message')}
+          okText={__('OK')}
+          title={__('Error Message')}
           size="min"
           cancelButton={false}
           draggable

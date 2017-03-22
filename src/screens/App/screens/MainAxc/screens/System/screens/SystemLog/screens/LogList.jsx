@@ -10,23 +10,23 @@ import * as appActions from 'shared/actions/app';
 const listOptions = fromJS([
   {
     id: 'time',
-    text: _('Time'),
+    text: __('Time'),
   }, {
     id: 'operator',
-    text: _('Operator'),
+    text: __('Operator'),
     defaultQuery: '',
     formProps: {
       display: 'inline',
     },
   }, {
     id: 'type',
-    text: _('Type'),
+    text: __('Type'),
   }, {
     id: 'operationCommand',
-    text: _('Operation'),
+    text: __('Operation'),
   }, {
     id: 'operationResult',
-    text: _('Result'),
+    text: __('Result'),
   },
 ]);
 const propTypes = {

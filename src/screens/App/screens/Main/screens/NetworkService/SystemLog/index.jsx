@@ -16,7 +16,7 @@ class SyStemLog extends React.Component{
     return(
       <div className="systemLogConfg">
         <FormGroup
-          label={_("System Log")}
+          label={__("System Log")}
           type="checkbox"
           defaultChecked
         />

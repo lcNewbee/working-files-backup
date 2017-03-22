@@ -14,21 +14,21 @@ import { colors, $$commonPieOption } from 'shared/config/axc';
 const recordOptions = [
   {
     id: 'recDate',
-    text: _('Time'),
+    text: __('Time'),
     transform(timeStr) {
       return moment(timeStr).format('YYYY-MM-DD');
     },
   }, {
     id: 'info',
-    text: _('Description'),
+    text: __('Description'),
   },
 ];
 
 function getOnlineOption(serverData) {
   const outlineCount = serverData.get('outlineCount') || 0;
   const onlineCount = serverData.get('onlineCount') || 0;
-  const onlineText = _('Online');
-  const offlineText = _('Offline');
+  const onlineText = __('Online');
+  const offlineText = __('Offline');
   const ret = $$commonPieOption.mergeDeep({
     color: [colors[7], colors[1]],
     legend: {
@@ -36,12 +36,12 @@ function getOnlineOption(serverData) {
       x: '60%',
     },
     title: {
-      text: _('Connection Status'),
+      text: __('Connection Status'),
       subtext: `${onlineCount} / ${outlineCount}`,
     },
     series: [
       {
-        name: _('Status'),
+        name: __('Status'),
       },
     ],
   }).toJS();
@@ -54,8 +54,8 @@ function getOnlineOption(serverData) {
   return ret;
 }
 function getApStatusOption(serverData) {
-  const lockText = _('Locked');
-  const unlockText = _('Unlocked');
+  const lockText = __('Locked');
+  const unlockText = __('Unlocked');
   const lockCount = serverData.get('lockCount') || 0;
   const unlockCount = serverData.get('trueCount') || 0;
   const ret = $$commonPieOption.mergeDeep({
@@ -65,12 +65,12 @@ function getApStatusOption(serverData) {
       x: '60%',
     },
     title: {
-      text: _('Lock Status'),
+      text: __('Lock Status'),
       subtext: `${lockCount} / ${unlockCount}`,
     },
     series: [
       {
-        name: _('Status'),
+        name: __('Status'),
       },
     ],
   }).toJS();
@@ -113,7 +113,7 @@ export default class View extends PureComponent {
             <div
               className="element t-overview__section-header"
             >
-              <h3>{ _('Users') }</h3>
+              <h3>{ __('Users') }</h3>
             </div>
 
             <div className="cols col-7">
@@ -131,7 +131,7 @@ export default class View extends PureComponent {
                       textAlign: 'center',
                       fontWeight: '400',
                     }}
-                  >{_('Total Number')}</h3>
+                  >{__('Total Number')}</h3>
                   <p
                     style={{
                       fontSize: '30px',
@@ -173,7 +173,7 @@ export default class View extends PureComponent {
             className="element t-overview__header"
           >
             <h3>
-              { _('Authentication logs') }
+              { __('Authentication logs') }
             </h3>
           </div>
           <div

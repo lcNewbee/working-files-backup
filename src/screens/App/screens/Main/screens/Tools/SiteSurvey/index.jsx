@@ -30,38 +30,38 @@ const defaultProps = {};
 const siteScanResultOptions = fromJS([
   {
     id: 'mac',
-    text: _('MAC'),
+    text: __('MAC'),
   },
   {
     id: 'ssid',
-    text: _('SSID'),
+    text: __('SSID'),
   },
   {
     id: 'security',
-    text: _('Security'),
+    text: __('Security'),
     transform(val) {
       return val.get('mode');
     },
   },
   {
     id: 'signal',
-    text: _('Signal,dBm'),
+    text: __('Signal,dBm'),
   },
   {
     id: 'noise',
-    text: _('Noise,dBm'),
+    text: __('Noise,dBm'),
   },
   {
     id: 'protocol',
-    text: _('Protocol'),
+    text: __('Protocol'),
   },
   {
     id: 'frequency',
-    text: _('Channel'),
+    text: __('Channel'),
   },
   {
     id: 'channelWidth',
-    text: _('Channel Width'),
+    text: __('Channel Width'),
   },
 ]);
 
@@ -99,13 +99,13 @@ export default class SiteSurvey extends React.Component {
       <div>
         <FormInput
           type="plain-text"
-          value={_('Notice: Site survey scan may temporary disable wireless link(s)')}
+          value={__('Notice: Site survey scan may temporary disable wireless link(s)')}
         /> <br /><br />
         <Button
           theme="primary"
           loading={fetching}
           disabled={fetching}
-          text={_('Scan')}
+          text={__('Scan')}
           onClick={this.onScanBtnClick}
         /><br /><br />
         {

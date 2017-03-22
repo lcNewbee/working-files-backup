@@ -11,9 +11,9 @@ const propTypes = {
 };
 
 const defaultProps = {
-  text: _('Save'),
-  savingText: _('Saving'),
-  savedText: _('Saved'),
+  text: __('Save'),
+  savingText: __('Saving'),
+  savedText: __('Saved'),
   theme: 'primary',
   icon: 'save',
 };

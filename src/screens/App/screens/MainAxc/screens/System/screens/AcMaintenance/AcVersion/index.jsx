@@ -10,17 +10,17 @@ import './_style.scss';
 
 const _ = window._;
 const msg = {
-  password: _('Password'),
-  versionUses: _('Version Description'),
-  selectFile: _('Firmware File'),
-  dictDefaultMessage: _('Drop or click to select file'),
-  removefile: _('Remove File'),
-  currentVersion: _('Current Firmware Version'),
-  upAcVersionTitle: _('Upgrading Firmware'),
-  backupAcVersion: _('Backup AC Firmware'),
-  sureUpgradeAc: _('Are you sure to UPGRADE the Firmware and REBOOT?'),
-  upgradingACversion: _('Upgrading AC Firmware version, please do not shut down device.'),
-  backupingAcVersion: _('Backup AC Firmware'),
+  password: __('Password'),
+  versionUses: __('Version Description'),
+  selectFile: __('Firmware File'),
+  dictDefaultMessage: __('Drop or click to select file'),
+  removefile: __('Remove File'),
+  currentVersion: __('Current Firmware Version'),
+  upAcVersionTitle: __('Upgrading Firmware'),
+  backupAcVersion: __('Backup AC Firmware'),
+  sureUpgradeAc: __('Are you sure to UPGRADE the Firmware and REBOOT?'),
+  upgradingACversion: __('Upgrading AC Firmware version, please do not shut down device.'),
+  backupingAcVersion: __('Backup AC Firmware'),
 };
 let checkUpgradOkTimeout = null;
 
@@ -140,7 +140,7 @@ export default class AcVersion extends PureComponent {
             role: 'loading',
             title: '',
             loadingStep: 300,
-            loadingTitle: _('Checking firmware...'),
+            loadingTitle: __('Checking firmware...'),
             onLoaded: () => {
               resolve(resultMsg);
             },
@@ -148,7 +148,7 @@ export default class AcVersion extends PureComponent {
           this.props.save(url, { filename })
             .then((json) => {
               if (json && json.state.code !== 2000) {
-                resultMsg = _(' ');
+                resultMsg = __(' ');
                 resolve(resultMsg);
                 this.props.closeModal();
               } else {
@@ -284,7 +284,7 @@ export default class AcVersion extends PureComponent {
     ];
     const options = fromJS([
       {
-        title: _('Upload Firmware'),
+        title: __('Upload Firmware'),
         render: this.renderStepOne,
       }, {
         title: stepTwoTitleArr[versionUses],
@@ -298,14 +298,14 @@ export default class AcVersion extends PureComponent {
           return ret;
         },
       }, {
-        title: _('Completed'),
+        title: __('Completed'),
         render: this.renderStepThree,
       },
     ]);
 
     return (
       <WizardContainer
-        title={_('AC Firmware Management Wizard')}
+        title={__('AC Firmware Management Wizard')}
         options={options}
         onBeforeStep={this.onBeforeStep}
         onCompleted={this.onComplete}

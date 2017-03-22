@@ -17,13 +17,13 @@ const exchangeOptions = [
 const listOptions = fromJS([
   {
     id: 'name',
-    text: _('Name'),
+    text: __('Name'),
     type: 'text',
     notEditable: true,
   },
   {
     id: 'exchangeMode',
-    text: _('Exchange Mode'),
+    text: __('Exchange Mode'),
     formProps: {
       type: 'select',
       options: exchangeOptions,
@@ -31,63 +31,63 @@ const listOptions = fromJS([
   },
   {
     id: 'status',
-    text: _('Status'),
+    text: __('Status'),
     formProps: {
       options: [
-        { label: _('ON'), value: '1' },
-        { label: _('OFF'), value: '0' },
+        { label: __('ON'), value: '1' },
+        { label: __('OFF'), value: '0' },
       ],
       type: 'select',
     },
   },
   {
     id: 'rate',
-    text: _('Rate'),
+    text: __('Rate'),
     formProps: {
       options: [
         { label: '1G', value: '1g' },
         { label: '10G', value: '10g' },
-        { label: _('Auto'), value: 'auto' },
+        { label: __('Auto'), value: 'auto' },
       ],
       type: 'select',
     },
   },
   {
     id: 'workMode',
-    text: _('Working Mode'),
+    text: __('Working Mode'),
     formProps: {
       options: [
-        { label: _('Simplex'), value: 'simplex' },
-        { label: _('Duplex'), value: 'duplex' },
-        { label: _('Auto'), value: 'auto' },
+        { label: __('Simplex'), value: 'simplex' },
+        { label: __('Duplex'), value: 'duplex' },
+        { label: __('Auto'), value: 'auto' },
       ],
       type: 'select',
     },
   },
   {
     id: 'maxPacket',
-    text: _('Max Transfer Packet'),
+    text: __('Max Transfer Packet'),
     formProps: {
       type: 'number',
     },
   },
   {
     id: 'nativeVlan',
-    text: _('Native VLAN'),
+    text: __('Native VLAN'),
     formProps: {
       type: 'number',
     },
   },
   {
     id: 'vlanList',
-    text: _('VLAN List'),
+    text: __('VLAN List'),
     formProps: {
       type: 'text',
     },
   },
   {
     id: 'description',
-    text: _('Description'),
+    text: __('Description'),
     formProps: {
       type: 'textarea',
     },
@@ -97,17 +97,17 @@ const listOptions = fromJS([
 const customActionButton = [
   {
     actionName: 'reset',
-    text: _('Reset'),
+    text: __('Reset'),
     icon: 'reply-all',
   },
 ];
 
 const slotIdOptions = [
-  { label: _('ALL'), value: 'all' },
+  { label: __('ALL'), value: 'all' },
 ];
 
 const portTypeOptions = [
-  { label: _('ALL'), value: 'all' },
+  { label: __('ALL'), value: 'all' },
 ];
 
 export default class View extends React.Component {
@@ -160,7 +160,7 @@ export default class View extends React.Component {
                 fontWeight: 'bold',
               }}
             >
-              {_('Slot Id')}
+              {__('Slot Id')}
             </label>
             <Select
               id="slotid"
@@ -180,7 +180,7 @@ export default class View extends React.Component {
                 fontWeight: 'bold',
               }}
             >
-              {_('Port Type')}
+              {__('Port Type')}
             </label>
             <Select
               id="porttype"
@@ -200,7 +200,7 @@ export default class View extends React.Component {
                 fontWeight: 'bold',
               }}
             >
-              {_('Port Id')}
+              {__('Port Id')}
             </label>
             <FormInput
               id="portid"
@@ -211,11 +211,11 @@ export default class View extends React.Component {
           </div>
           <div className="fl">
             <Button
-              text={_('Search')}
+              text={__('Search')}
               onClick={() => this.props.fetchScreenData()}
             />
             <Button
-              text={_('Clear')}
+              text={__('Clear')}
               onClick={this.onClearSearchCondition}
             />
           </div>

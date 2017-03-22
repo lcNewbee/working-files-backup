@@ -15,17 +15,17 @@ const defaultProps = {};
 const settingsOptions = fromJS([
   {
     id: 'relay_enable',
-    label: _('Relay'),
+    label: __('Relay'),
     fieldset: 'relay_setting',
-    legend: _('DHCP Relay'),
+    legend: __('DHCP Relay'),
     defaultValue: '0',
     value: '1',
     required: true,
     type: 'checkbox',
-    text: _('Enable'),
+    text: __('Enable'),
   }, {
     id: 'dhcp_server',
-    label: _('DHCP Server'),
+    label: __('DHCP Server'),
     fieldset: 'relay_setting',
     type: 'text',
     required: true,
@@ -35,7 +35,7 @@ const settingsOptions = fromJS([
   },
   {
     id: 'referral_server',
-    label: _('Referral Server'),
+    label: __('Referral Server'),
     fieldset: 'relay_setting',
     type: 'text',
     validator: validator({
@@ -45,7 +45,7 @@ const settingsOptions = fromJS([
   {
     id: 'option82_1',
     fieldset: 'relay_setting',
-    label: _('Option82  field1'),
+    label: __('Option82  field1'),
     type: 'text',
     required: true,
     validator: validator({
@@ -56,7 +56,7 @@ const settingsOptions = fromJS([
     id: 'option82_2',
     required: true,
     fieldset: 'relay_setting',
-    label: _('Option82  field2'),
+    label: __('Option82  field2'),
     type: 'text',
   },
 ]).groupBy(item => item.get('fieldset'))

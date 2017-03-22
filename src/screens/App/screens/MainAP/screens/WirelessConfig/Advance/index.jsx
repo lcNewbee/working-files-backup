@@ -117,7 +117,7 @@ export default class Advance extends React.Component {
           (rssi < -98 || rssi > -40 || !Number.isInteger(Number(rssi)))) {
           this.props.createModal({
             role: 'alert',
-            text: _('Please input a valid rssi value.'),
+            text: __('Please input a valid rssi value.'),
           });
         } else {
           this.props.save('goform/set_adv_wireless', saveData);
@@ -198,7 +198,7 @@ export default class Advance extends React.Component {
           this.props.productInfo.get('deviceRadioList').size > 1 ? (
             <FormInput
               type="switch"
-              label={_('Radio Select')}
+              label={__('Radio Select')}
               value={this.props.selfState.getIn(['currRadioConfig', 'radioId'])}
               options={this.props.productInfo.get('radioSelectOptions')}
               minWidth="100px"
@@ -216,17 +216,17 @@ export default class Advance extends React.Component {
             />
           ) : null
         }
-        <h3>{_('Advance')}</h3>
+        <h3>{__('Advance')}</h3>
         { // Beacon帧间间隔
           funConfig.beaconIntervalFun ? (
             <FormGroup
               type="number"
-              label={_('Beacon Interval')}
+              label={__('Beacon Interval')}
               min="1"
               max="3500"
               defaultValue="100"
               value={beaconInterval}
-              help={`${_('Range: ')}1 ~ 3500`}
+              help={`${__('Range: ')}1 ~ 3500`}
               style={{ width: '490px' }}
               onChange={(data) => { this.changeFormValue(radioId, 'beaconInterval', data.value); }}
               required
@@ -238,11 +238,11 @@ export default class Advance extends React.Component {
           funConfig.dtimIntervalFun ? (
             <FormGroup
               type="number"
-              label={_('DTIM Interval')}
+              label={__('DTIM Interval')}
               value={dtimInterval}
               min="1"
               max="255"
-              help={`${_('Range: ')}1 ~ 255`}
+              help={`${__('Range: ')}1 ~ 255`}
               style={{ width: '490px' }}
               onChange={(data) => { this.changeFormValue(radioId, 'dtimInterval', data.value); }}
               required
@@ -254,11 +254,11 @@ export default class Advance extends React.Component {
           funConfig.segmentThreshFun ? (
             <FormGroup
               type="number"
-              label={_('Segment Threshold')}
+              label={__('Segment Threshold')}
               value={segmentThresh}
               min="0"
               max="2347"
-              help={`${_('Range: ')}${_('0 or 256 ~ 2347')}`}
+              help={`${__('Range: ')}${__('0 or 256 ~ 2347')}`}
               style={{ width: '610px' }}
               onChange={(data) => { this.changeFormValue(radioId, 'segmentThresh', data.value); }}
               required
@@ -270,11 +270,11 @@ export default class Advance extends React.Component {
           funConfig.ampduFun ? (
             <FormGroup
               type="number"
-              label={_('AMPDU')}
+              label={__('AMPDU')}
               value={ampdu}
               min="1"
               max="64"
-              help={`${_('Range: ')}1 ~ 64`}
+              help={`${__('Range: ')}1 ~ 64`}
               onChange={(data) => { this.changeFormValue(radioId, 'ampdu', data.value); }}
               required
               style={{ width: '490px' }}
@@ -286,7 +286,7 @@ export default class Advance extends React.Component {
           <div style={{ width: '300px' }} >
             <FormGroup
               className="fl"
-              label={_('RTS Threshold')}
+              label={__('RTS Threshold')}
               type="number"
               min="1"
               max="2347"
@@ -316,7 +316,7 @@ export default class Advance extends React.Component {
                 }}
                 style={{ marginRight: '3px' }}
               />
-              {_('Default')}
+              {__('Default')}
             </label>
           </span>
           <span
@@ -327,7 +327,7 @@ export default class Advance extends React.Component {
               color: '#999',
             }}
           >
-            {`${_('Range: ')}1 ~ 2347`}
+            {`${__('Range: ')}1 ~ 2347`}
           </span>
         </div>
 
@@ -335,7 +335,7 @@ export default class Advance extends React.Component {
           <div style={{ width: '300px' }} >
             <FormGroup
               className="fl"
-              label={_('Sensitivity Threshold')}
+              label={__('Sensitivity Threshold')}
               type="number"
               min="-98"
               max="-10"
@@ -365,7 +365,7 @@ export default class Advance extends React.Component {
                 }}
                 style={{ marginRight: '3px' }}
               />
-              {_('Default')}
+              {__('Default')}
             </label>
           </span>
           <span
@@ -376,14 +376,14 @@ export default class Advance extends React.Component {
               color: '#999',
             }}
           >
-            {`${_('Range: ')}-98 ~ -10`}
+            {`${__('Range: ')}-98 ~ -10`}
           </span>
         </div>
         {
           funConfig.rateSetFun ? (
             <FormGroup
               type="select"
-              label={_('Rate Set')}
+              label={__('Rate Set')}
               value={rateSet}
               options={this.props.selfState.get('rateSetOptions').toJS()}
               onChange={(data) => {
@@ -397,7 +397,7 @@ export default class Advance extends React.Component {
             <div className="clearfix">
               <FormGroup
                 type="checkbox"
-                label={_('RSSI Limit')}
+                label={__('RSSI Limit')}
                 className="fl"
                 checked={rssiEnable === '1'}
                 defaultValue="-98"
@@ -430,7 +430,7 @@ export default class Advance extends React.Component {
                   color: '#999',
                 }}
               >
-                {`${_('Range: ')}-98 ~ -40 dbm`}
+                {`${__('Range: ')}-98 ~ -40 dbm`}
               </span>
             </div>
           ) : null
@@ -440,7 +440,7 @@ export default class Advance extends React.Component {
             <div className="clearfix">
               <FormGroup
                 type="checkbox"
-                label={_('Airtime Fairness')}
+                label={__('Airtime Fairness')}
                 className="fl"
                 checked={airTimeEnable === '1'}
                 onClick={() => {
@@ -454,8 +454,8 @@ export default class Advance extends React.Component {
                 className="fl"
                 disabled={airTimeEnable === '0'}
                 options={[
-                  { value: 'strict', label: _('Strict Schedule Algorithm') },
-                  { value: 'fairquen', label: _('Fair Quene Algorithm') },
+                  { value: 'strict', label: __('Strict Schedule Algorithm') },
+                  { value: 'fairquen', label: __('Fair Quene Algorithm') },
                 ]}
                 onChange={(data) => {
                   this.changeFormValue(radioId, 'fairAlgthm', data.value);
@@ -471,7 +471,7 @@ export default class Advance extends React.Component {
               <div className="fl">
                 <FormGroup
                   type="number"
-                  label={_('Distance Value')}
+                  label={__('Distance Value')}
                   min="0"
                   max="10"
                   step="0.1"
@@ -481,7 +481,7 @@ export default class Advance extends React.Component {
                   onChange={(data) => {
                     this.changeFormValue(radioId, 'distance', data.value);
                   }}
-                  help={`${_('Range: ')}0~10 km`}
+                  help={`${__('Range: ')}0~10 km`}
                   // inputStyle={{
                   //   backgroundColor: '#f2f2f2',
                   // }}
@@ -505,7 +505,7 @@ export default class Advance extends React.Component {
                     }}
                     style={{ marginRight: '3px' }}
                   />
-                  {_('auto')}
+                  {__('auto')}
                 </label>
               </span>
             </div>
@@ -516,7 +516,7 @@ export default class Advance extends React.Component {
             radioType === '5G' ? (
               <FormGroup
                 type="checkbox"
-                label={_('5G First')}
+                label={__('5G First')}
                 checked={fiveFirst === '1'}
                 onChange={() => {
                   const value = fiveFirst === '1' ? '0' : '1';
@@ -527,7 +527,7 @@ export default class Advance extends React.Component {
           }
           <FormGroup
             type="checkbox"
-            label={_('Multicast To Unicast')}
+            label={__('Multicast To Unicast')}
             checked={multiToUnicast === '1'}
             onChange={() => {
               const value = multiToUnicast === '1' ? '0' : '1';
@@ -536,7 +536,7 @@ export default class Advance extends React.Component {
           />
           <FormGroup
             type="checkbox"
-            label={_('TGMP Snooping')}
+            label={__('TGMP Snooping')}
             checked={tgmpSnoop === '1'}
             onChange={() => {
               const value = tgmpSnoop === '1' ? '0' : '1';
@@ -545,7 +545,7 @@ export default class Advance extends React.Component {
           />
           <FormGroup
             type="checkbox"
-            label={_('Multicast Monitor')}
+            label={__('Multicast Monitor')}
             checked={multiMonitor === '1'}
             onChange={() => {
               const value = multiMonitor === '1' ? '0' : '1';
@@ -554,7 +554,7 @@ export default class Advance extends React.Component {
           />
           <FormGroup
             type="checkbox"
-            label={_('Probe Request Forbidden')}
+            label={__('Probe Request Forbidden')}
             checked={probeRqstForbid === '1'}
             onChange={() => {
               const value = probeRqstForbid === '1' ? '0' : '1';
@@ -563,7 +563,7 @@ export default class Advance extends React.Component {
           />
           <FormGroup
             type="checkbox"
-            label={_('Airtime Fairness')}
+            label={__('Airtime Fairness')}
             checked={timeFairness === '1'}
             onChange={() => {
               const value = timeFairness === '1' ? '0' : '1';
@@ -572,7 +572,7 @@ export default class Advance extends React.Component {
           />
           <FormGroup
             type="checkbox"
-            label={_('Beamforming')}
+            label={__('Beamforming')}
             checked={beamforming === '1'}
             onChange={() => {
               const value = beamforming === '1' ? '0' : '1';
@@ -584,7 +584,7 @@ export default class Advance extends React.Component {
           funConfig.ledThreshFun ? (
             <div className="signalLedConfg">
               <FormGroup
-                label={_('Signal LED Thresholds')}
+                label={__('Signal LED Thresholds')}
               >
                 <br /><br />
                 <div
@@ -600,7 +600,7 @@ export default class Advance extends React.Component {
                     label="LED1"
                     min="-98"
                     max="-10"
-                    help={`${_('Range: ')} -98 ~ -10 dbm`}
+                    help={`${__('Range: ')} -98 ~ -10 dbm`}
                     value={led1Threshold}
                     onChange={(data) => { this.changeFormValue(radioId, 'led1Threshold', data.value); }}
                     size="sm"
@@ -623,7 +623,7 @@ export default class Advance extends React.Component {
                     label="LED2"
                     min="-98"
                     max="-10"
-                    help={`${_('Range: ')} -98 ~ -10 dbm`}
+                    help={`${__('Range: ')} -98 ~ -10 dbm`}
                     value={led2Threshold}
                     onChange={(data) => { this.changeFormValue(radioId, 'led2Threshold', data.value); }}
                     size="sm"
@@ -646,7 +646,7 @@ export default class Advance extends React.Component {
                     label="LED3"
                     min="-98"
                     max="-10"
-                    help={`${_('Range: ')} -98 ~ -10 dbm`}
+                    help={`${__('Range: ')} -98 ~ -10 dbm`}
                     value={led3Threshold}
                     onChange={(data) => { this.changeFormValue(radioId, 'led3Threshold', data.value); }}
                     size="sm"
@@ -669,7 +669,7 @@ export default class Advance extends React.Component {
                     label="LED4"
                     min="-98"
                     max="-10"
-                    help={`${_('Range: ')} -98 ~ -10 dbm`}
+                    help={`${__('Range: ')} -98 ~ -10 dbm`}
                     value={led4Threshold}
                     onChange={(data) => { this.changeFormValue(radioId, 'led4Threshold', data.value); }}
                     size="sm"

@@ -11,7 +11,7 @@ const settingsFormOptions = fromJS([
   {
     id: 'enable',
     type: 'checkbox',
-    label: _('NAT Enable'),
+    label: __('NAT Enable'),
   },
 ]);
 

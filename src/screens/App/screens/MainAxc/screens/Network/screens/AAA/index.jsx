@@ -27,24 +27,24 @@ function getInterfaceTypeOptions() {
 const accessTypeSeletOptions = [
   {
     value: 'portal',
-    label: _('Portal'),
+    label: __('Portal'),
   },
   {
     value: '8021x-access',
-    label: _('802.1x'),
+    label: __('802.1x'),
     disabled: true,
   },
   {
     value: 'lan-access',
-    label: _('LAN'),
+    label: __('LAN'),
     disabled: true,
   }, {
     value: 'ppp-access',
-    label: _('PPP'),
+    label: __('PPP'),
     disabled: true,
   }, {
     value: 'mac-access',
-    label: _('MAC'),
+    label: __('MAC'),
     disabled: true,
   },
 ];
@@ -52,12 +52,12 @@ const accessTypeSeletOptions = [
 const authTypeSeletOptions = [
   {
     value: 'local',
-    label: `${_('Local')}`,
+    label: `${__('Local')}`,
     disabled: true,
   },
   {
     value: 'radius-scheme',
-    label: `${_('Remote')}`,
+    label: `${__('Remote')}`,
   },
 ];
 
@@ -70,7 +70,7 @@ if (window.guiConfig.versionCode >= 20500) {
 const listOptions = fromJS([
   {
     id: 'domain_name',
-    text: _('Name'),
+    text: __('Name'),
     defaultValue: '',
     notEditable: true,
     formProps: {
@@ -83,34 +83,34 @@ const listOptions = fromJS([
     },
   }, {
     id: 'auth_accesstype',
-    text: _('Access Type'),
+    text: __('Access Type'),
     defaultValue: 'portal',
     options: accessTypeSeletOptions,
     formProps: {
-      label: _('Access Type'),
+      label: __('Access Type'),
       required: true,
       type: 'switch',
-      placeholder: _('Please Select ') + _('Rules Group'),
+      placeholder: __('Please Select ') + __('Rules Group'),
     },
   }, {
     id: 'auth_schemetype',
-    text: _('Type'),
+    text: __('Type'),
     defaultValue: 'radius-scheme',
     options: authTypeSeletOptions,
     formProps: {
-      label: _('Type'),
+      label: __('Type'),
       required: true,
       type: 'switch',
-      placeholder: _('Please Select ') + _('Rules Group'),
+      placeholder: __('Please Select ') + __('Rules Group'),
     },
   }, {
     id: 'radius_template',
-    text: _('Radius Template'),
+    text: __('Radius Template'),
     formProps: {
-      label: _('Radius Template'),
+      label: __('Radius Template'),
       required: true,
       type: 'select',
-      placeholder: _('Please Select ') + _('Radius Service'),
+      placeholder: __('Please Select ') + __('Radius Service'),
       options: [],
     },
   },

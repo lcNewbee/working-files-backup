@@ -12,20 +12,20 @@ import * as actions from 'shared/actions/screens';
 
 const flowRateFilter = utils.filter('flowRate');
 const msg = {
-  days: _('Days'),
+  days: __('Days'),
 };
 const timeTypeSwitchs = fromJS([
   {
     value: '-1',
-    label: _('Current'),
+    label: __('Current'),
   },
   {
     value: '0',
-    label: _('Today'),
+    label: __('Today'),
   },
   {
     value: '1',
-    label: _('Yesterday'),
+    label: __('Yesterday'),
   },
   {
     value: '7',
@@ -48,11 +48,11 @@ function getEchartOptionByName(serverData, listName) {
         let title;
         switch (listName) {
           case 'ethInterface':
-            title = _('Ethernet'); break;
+            title = __('Ethernet'); break;
           case 'proto':
-            title = _('Applications'); break;
+            title = __('Applications'); break;
           case 'mac':
-            title = _('MAC'); break;
+            title = __('MAC'); break;
           default:
         }
         return title;
@@ -87,7 +87,7 @@ function getEchartOptionByName(serverData, listName) {
     },
     series: [
       {
-        name: _('Traffic'),
+        name: __('Traffic'),
       },
     ],
   }).toJS();
@@ -146,7 +146,7 @@ export default class DPIOverview extends React.Component {
         settingsFormOptions={fromJS([
           {
             id: 'ndpiEnable',
-            label: _('NDPI Enable'),
+            label: __('NDPI Enable'),
             type: 'checkbox',
             saveOnChange: true,
           },
@@ -162,7 +162,7 @@ export default class DPIOverview extends React.Component {
                       marginRight: '10px',
                     }}
                   >
-                    {_('Time')}
+                    {__('Time')}
                   </span>
                   <Select
                     options={timeTypeSwitchs.toJS()}
@@ -175,7 +175,7 @@ export default class DPIOverview extends React.Component {
               <div className="t-overview__section row">
                 <div className="cols col-6" >
                   <div className="element clearfix">
-                    <h3 className="fl">{_('MAC')}</h3>
+                    <h3 className="fl">{__('MAC')}</h3>
                     <span
                       className="fr"
                       style={{
@@ -188,7 +188,7 @@ export default class DPIOverview extends React.Component {
                         window.location.href = '#/main/network/dpi/macstatistic';
                       }}
                     >
-                      {_('More Details >>')}
+                      {__('More Details >>')}
                     </span>
                   </div>
                   <div className="element row">
@@ -204,7 +204,7 @@ export default class DPIOverview extends React.Component {
                 </div>
                 <div className="cols col-6">
                   <div className="element clearfix">
-                    <h3 className="fl">{_('Applications')}</h3>
+                    <h3 className="fl">{__('Applications')}</h3>
                     <span
                       className="fr"
                       style={{
@@ -217,7 +217,7 @@ export default class DPIOverview extends React.Component {
                         window.location.href = '#/main/network/dpi/protoinfo';
                       }}
                     >
-                      {_('More Details >>')}
+                      {__('More Details >>')}
                     </span>
                   </div>
                   <div className="element">
@@ -236,7 +236,7 @@ export default class DPIOverview extends React.Component {
               <div className="t-overview__section row">
                 <div className="cols col-6" >
                   <div className="element clearfix">
-                    <h3 className="fl">{_('Ethernet')}</h3>
+                    <h3 className="fl">{__('Ethernet')}</h3>
                     <span
                       className="fr"
                       style={{
@@ -249,7 +249,7 @@ export default class DPIOverview extends React.Component {
                         window.location.href = '#/main/network/dpi/ethstatistic';
                       }}
                     >
-                      {_('More Details >>')}
+                      {__('More Details >>')}
                     </span>
                   </div>
                   <div className="element">

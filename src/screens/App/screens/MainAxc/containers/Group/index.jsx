@@ -243,13 +243,13 @@ export default class MainGroup extends React.PureComponent {
       this.props.createModal({
         role: 'alert',
         customBackdrop: true,
-        text: _('Please select target group'),
+        text: __('Please select target group'),
       });
     }
   }
   onRemoveGroup() {
     const manageSelected = this.props.product.getIn(['group', 'manageSelected']);
-    const msgText = _('Are you sure to delete group: %s?', manageSelected.get('groupname'));
+    const msgText = __('Are you sure to delete group: %s?', manageSelected.get('groupname'));
 
     this.props.createModal({
       id: 'settings',
@@ -268,7 +268,7 @@ export default class MainGroup extends React.PureComponent {
     const selectedStr = $$selectMacList.join(', ');
     const groupid = this.props.product
       .getIn(['group', 'manageSelected', 'id']);
-    const msgText = _('Are you sure to delete selected aps: %s?', selectedStr);
+    const msgText = __('Are you sure to delete selected aps: %s?', selectedStr);
 
     this.props.createModal({
       id: 'settings',
@@ -352,13 +352,13 @@ export default class MainGroup extends React.PureComponent {
       if ($$curGroupDevices.find(
         $$item => $$item.get('mac') === $$subData.get('apmac'),
       )) {
-        ret = _('AP with the same MAC already exists');
+        ret = __('AP with the same MAC already exists');
       }
 
       if ($$curGroupDevices.find(
         $$item => $$item.get('devicename') === $$subData.get('name'),
       )) {
-        ret = _('AP with the same name already exists');
+        ret = __('AP with the same name already exists');
       }
     }
 
@@ -438,7 +438,7 @@ export default class MainGroup extends React.PureComponent {
               actionable && isGroupMenu ? (
                 <Icon
                   name="plus"
-                  title={_('Add AP Group')}
+                  title={__('Add AP Group')}
                   onClick={() => {
                     this.props.fetchGroupAps();
                     this.props.updateAddApGroup({
@@ -446,7 +446,7 @@ export default class MainGroup extends React.PureComponent {
                       remark: '',
                     });
                     this.props.showMainModal({
-                      title: _('Add AP Group'),
+                      title: __('Add AP Group'),
                       isShow: true,
                       size: 'lg',
                       name: 'groupAdd',
@@ -459,13 +459,13 @@ export default class MainGroup extends React.PureComponent {
           <div className="toggle-bar" onClick={this.onClickTopMenuTitle} >
             <Icon
               name="caret-down"
-              title={_('Toggle Group List')}
+              title={__('Toggle Group List')}
             />
           </div>
         </header>
 
         <h4 className="t-main__asider-header row">
-          {_('Group List')}
+          {__('Group List')}
           {
               actionable ? (
                 <Icon
@@ -474,7 +474,7 @@ export default class MainGroup extends React.PureComponent {
                   onClick={() => {
                     this.props.fetchGroupAps(manageGroupId);
                     this.props.showMainModal({
-                      title: _('Manage AP Groups'),
+                      title: __('Manage AP Groups'),
                       isShow: true,
                       size: 'lg',
                       name: 'groupManage',
@@ -494,7 +494,7 @@ export default class MainGroup extends React.PureComponent {
               let linkText = item.get('groupname');
 
               if (curId === ALL_GROUP_ID) {
-                linkText = _(linkText);
+                linkText = __(linkText);
               }
 
               if (curId === selectGroupId) {
@@ -534,7 +534,7 @@ export default class MainGroup extends React.PureComponent {
                   onClick={() => {
                     this.props.fetchGroupAps(manageGroupId);
                     this.props.showMainModal({
-                      title: _('Manage AP Groups'),
+                      title: __('Manage AP Groups'),
                       isShow: true,
                       size: 'lg',
                       name: 'groupManage',
@@ -565,41 +565,40 @@ export default class MainGroup extends React.PureComponent {
     const tableOption = fromJS([
       {
         id: 'devicename',
-        text: _('Name'),
+        text: __('Name'),
         transform(val, $$data) {
           return val || $$data.get('mac');
         },
       }, {
         id: 'mac',
-        text: _('MAC Address'),
+        text: __('MAC Address'),
       }, {
         id: 'ip',
-        text: _('IP Address'),
+        text: __('IP Address'),
       }, {
         id: 'status',
-        text: _('Status'),
+        text: __('Status'),
         filter: 'translate',
       },
     ]);
     let $$mannageGroupAps = product.getIn(['group', 'devices']);
 
     // console.log(product.get(['group', 'devices']).toJS())
-
     switch (option.name) {
       case 'groupApAdd':
         return (
           <div className="o-form">
             <FormGroup
               type="switch"
-              label={_('Type')}
+              label={__('Type')}
               value={groupApAddData.get('type')}
               options={[
                 {
                   value: 'auto',
-                  label: _('Auto AP'),
+                  label: __('Auto AP'),
                 }, {
                   value: 'custom',
-                  label: _('Custom'),
+                  label: __('Custom'),
                 },
               ]}
               onChange={data => this.props.updateGroupAddDevice({
@@ -610,7 +609,7 @@ export default class MainGroup extends React.PureComponent {
               groupApAddData.get('type') === 'auto' ? (
                 <div className="o-form__fileset">
                   <legend className="o-form__legend">
-                    { _('Auto AP List') }
+                    { __('Auto AP List') }
                   </legend>
                   <Table
                     className="table"
@@ -623,12 +622,12 @@ export default class MainGroup extends React.PureComponent {
               ) : (
                 <div className="o-form__fileset">
                   <legend className="o-form__legend">
-                    { _('Custom APs') }
+                    { __('Custom AP') }
                   </legend>
                   <FormGroup
                     type="text"
                     name="name"
-                    label={_('Name')}
+                    label={__('Name')}
                     maxLength="31"
                     value={groupApAddData.get('name')}
                     onChange={data => this.props.updateGroupAddDevice({
@@ -641,7 +640,7 @@ export default class MainGroup extends React.PureComponent {
                     type="select"
                     name="model"
                     options={modelListOptions}
-                    label={_('Model')}
+                    label={__('Model')}
                     value={groupApAddData.get('model')}
                     onChange={data => this.props.updateGroupAddDevice({
                       model: data.value,
@@ -651,7 +650,7 @@ export default class MainGroup extends React.PureComponent {
                   />
                   <FormGroup
                     type="text"
-                    label={_('MAC')}
+                    label={__('MAC')}
                     name="apmac"
                     maxLength="18"
                     value={groupApAddData.get('apmac')}
@@ -686,7 +685,7 @@ export default class MainGroup extends React.PureComponent {
         return (
           <div className="row">
             <div className="o-list cols col-8">
-              <h3 className="o-list__header">{_('Please Select AP')}</h3>
+              <h3 className="o-list__header">{__('Please Select AP')}</h3>
               <Table
                 className="table"
                 options={tableOption}
@@ -698,7 +697,7 @@ export default class MainGroup extends React.PureComponent {
               />
             </div>
             <div className="o-list cols col-4">
-              <h3 className="o-list__header">{_('Target Group List')}</h3>
+              <h3 className="o-list__header">{__('Target Group List')}</h3>
               <ul className="m-menu m-menu--open">
                 {
                   product.getIn(['group', 'list']).map((item) => {
@@ -748,7 +747,7 @@ export default class MainGroup extends React.PureComponent {
               <div className="o-list cols col-4">
                 <FormGroup
                   type="text"
-                  label={_('Group Name')}
+                  label={__('Group Name')}
                   name="groupname"
                   maxLength="31"
                   value={product.getIn(['group', 'addData', 'groupname'])}
@@ -760,7 +759,7 @@ export default class MainGroup extends React.PureComponent {
                 />
                 <FormGroup
                   type="textarea"
-                  label={_('Remarks')}
+                  label={__('Remarks')}
                   name="remark"
                   maxLength="256"
                   value={product.getIn(['group', 'addData', 'remark'])}
@@ -782,7 +781,7 @@ export default class MainGroup extends React.PureComponent {
                 </div>
               </div>
               <div className="o-list cols col-8">
-                <h3>{_('Select AP to group')}</h3>
+                <h3>{__('Select AP to group')}</h3>
                 <Table
                   className="table"
                   options={tableOption}
@@ -800,7 +799,7 @@ export default class MainGroup extends React.PureComponent {
           <div className="o-form o-form--block">
             <FormGroup
               type="text"
-              label={_('Group Name')}
+              label={__('Group Name')}
               name="groupname"
               maxLength="31"
               value={product.getIn(['group', 'manageSelected', 'groupname'])}
@@ -812,7 +811,7 @@ export default class MainGroup extends React.PureComponent {
             />
             <FormGroup
               type="textarea"
-              label={_('Remarks')}
+              label={__('Remarks')}
               name="remark"
               value={product.getIn(['group', 'manageSelected', 'remark'])}
               onChange={data => this.props.updateEditApGroup({
@@ -846,7 +845,7 @@ export default class MainGroup extends React.PureComponent {
         return (
           <div className="row">
             <div className="o-list cols col-4">
-              <h3 className="o-list__header">{_('Group List')}</h3>
+              <h3 className="o-list__header">{__('Group List')}</h3>
               <ul className="m-menu m-menu--open">
                 {
                   product.getIn(['group', 'list']).map((item) => {
@@ -877,7 +876,7 @@ export default class MainGroup extends React.PureComponent {
               <div className="o-list__footer action-btns">
                 <Button
                   icon="plus"
-                  text={_('Add')}
+                  text={__('Add')}
                   onClick={() => {
                     this.props.fetchGroupAps();
                     this.props.updateAddApGroup({
@@ -885,7 +884,7 @@ export default class MainGroup extends React.PureComponent {
                       remark: '',
                     });
                     this.props.showMainModal({
-                      title: _('Add AP Group'),
+                      title: __('Add AP Group'),
                       size: 'lg',
                       isShow: true,
                       name: 'groupAdd',
@@ -894,10 +893,10 @@ export default class MainGroup extends React.PureComponent {
                 />
                 <Button
                   icon="edit"
-                  text={_('Edit')}
+                  text={__('Edit')}
                   onClick={() => {
                     this.props.showMainModal({
-                      title: _('Edit AP Group'),
+                      title: __('Edit AP Group'),
                       size: 'md',
                       isShow: true,
                       name: 'groupEdit',
@@ -906,7 +905,7 @@ export default class MainGroup extends React.PureComponent {
                 />
                 <Button
                   icon="trash"
-                  text={_('Delete')}
+                  text={__('Delete')}
                   onClick={(e) => {
                     this.onRemoveGroup(e);
                   }}
@@ -914,7 +913,7 @@ export default class MainGroup extends React.PureComponent {
               </div>
             </div>
             <div className="o-list cols col-8">
-              <h3 className="o-list__header">{_('Group AP')}</h3>
+              <h3 className="o-list__header">{__('Group AP')}</h3>
               <Table
                 className="table"
                 options={tableOption}
@@ -935,13 +934,13 @@ export default class MainGroup extends React.PureComponent {
                   <div className="o-list__footer action-btns">
                     <Button
                       icon="plus"
-                      text={_('Add AP')}
+                      text={__('Add AP')}
                       onClick={() => {
                         this.props.fetchModelList();
                         this.props.resetGroupAddDevice();
                         this.props.fetchGroupAps(-1);
                         this.props.showMainModal({
-                          title: _('Add AP to Group'),
+                          title: __('Add AP to Group'),
                           size: 'md',
                           isShow: true,
                           name: 'groupApAdd',
@@ -950,13 +949,13 @@ export default class MainGroup extends React.PureComponent {
                     />
                     <Button
                       icon="share"
-                      text={_('Move to Other Group')}
+                      text={__('Move to Other Group')}
                       onClick={() => {
                         this.props.updateGroupMoveDevice({
                           targetGroupId: -1,
                         });
                         this.props.showMainModal({
-                          title: _('Move AP to Other Group'),
+                          title: __('Move AP to Other Group'),
                           size: 'lg',
                           isShow: true,
                           name: 'groupMoveAp',
@@ -965,7 +964,7 @@ export default class MainGroup extends React.PureComponent {
                     />
                     <Button
                       icon="trash"
-                      text={_('Delete Selected')}
+                      text={__('Delete Selected')}
                       onClick={() => {
                         this.onRemoveGroupAps();
                       }}

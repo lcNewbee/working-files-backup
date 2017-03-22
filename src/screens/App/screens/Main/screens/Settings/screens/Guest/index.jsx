@@ -13,18 +13,18 @@ import { fetchDeviceGroups } from '../GroupSettings/actions';
 import myReducer from './reducer';
 
 const msg = {
-  upSpeed: _('Up Speed'),
-  downSpeed: _('Down Speed'),
-  selectGroup: _('Select Group'),
+  upSpeed: __('Up Speed'),
+  downSpeed: __('Down Speed'),
+  selectGroup: __('Select Group'),
 };
 const encryptionOptions = [
   {
     value: 'none',
-    label: _('NONE'),
+    label: __('NONE'),
   },
   {
     value: 'psk-mixed',
-    label: _('STRONG'),
+    label: __('STRONG'),
   },
 ];
 
@@ -117,7 +117,7 @@ export const Guest = React.createClass({
         let label = groupname;
 
         if (groupname === 'Default') {
-          label = _('Ungrouped Devices');
+          label = __('Ungrouped Devices');
         }
         return {
           value: groupname,
@@ -141,7 +141,7 @@ export const Guest = React.createClass({
 
     return (
       <div>
-        <h3>{ _('Current Group') }</h3>
+        <h3>{ __('Current Group') }</h3>
         <FormGroup
           label={msg.selectGroup}
           type="select"
@@ -150,12 +150,12 @@ export const Guest = React.createClass({
           onChange={this.onChangeGroup}
         />
 
-        <h3>{_('Guest Settings') }</h3>
+        <h3>{__('Guest Settings') }</h3>
         <FormGroup
-          label={_('Enable Guest')}
+          label={__('Enable Guest')}
           type="checkbox"
           options={{
-            label: _('Enable'),
+            label: __('Enable'),
           }}
           checked={getCurrData('enable') == '1'}
           onChange={this.onUpdate('enable')}
@@ -163,7 +163,7 @@ export const Guest = React.createClass({
 
         <div className={settngClassName}>
           <FormGroup
-            label={_('Guest SSID')}
+            label={__('Guest SSID')}
             required
             maxLength="31"
             value={getCurrData('guestssid')}
@@ -173,7 +173,7 @@ export const Guest = React.createClass({
           />
 
           <FormGroup
-            label={_('Encryption')}
+            label={__('Encryption')}
             type="select"
             value={getCurrData('encryption')}
             options={encryptionOptions}
@@ -182,7 +182,7 @@ export const Guest = React.createClass({
           {
             getCurrData('encryption') === 'psk-mixed' ?
               <FormGroup
-                label={_('Password')}
+                label={__('Password')}
                 required
                 type="password"
                 maxLength="31"
@@ -194,16 +194,16 @@ export const Guest = React.createClass({
           }
           <FormGroup
             type="checkbox"
-            label={_('Enable Portal')}
+            label={__('Enable Portal')}
             options={{
-              label: _('Enable'),
+              label: __('Enable'),
             }}
             checked={getCurrData('portalenable') == '1'}
             onChange={this.onUpdate('portalenable')}
           />
 
           <FormGroup
-            label={_('VLAN')}
+            label={__('VLAN')}
             value={getCurrData('vlanid')}
             required={getCurrData('vlanenable') == '1'}
             disabled={getCurrData('vlanenable') != '1'}
@@ -216,7 +216,7 @@ export const Guest = React.createClass({
               onChange={this.onUpdate('vlanenable')}
             />
 
-            { _('VLAN ID:') }
+            { __('VLAN ID:') }
             <FormInput
               type="text"
               style={{ 'marginLeft': '3px' }}
@@ -241,7 +241,7 @@ export const Guest = React.createClass({
             checked={getCurrData('upstream') === '' || getCurrData('upstream') > 0}
             onChange={this.onUpdate('upstream')}
           />
-            {_('limited to') + ' '}
+            {__('limited to') + ' '}
             <FormInput
               type="number"
               maxLength="6"
@@ -268,7 +268,7 @@ export const Guest = React.createClass({
               checked={getCurrData('downstream') === '' || getCurrData('downstream') > 0}
               onChange={this.onUpdate('downstream')}
             />
-            {_('limited to') + ' '}
+            {__('limited to') + ' '}
             <FormInput
               type="number"
               maxLength="6"

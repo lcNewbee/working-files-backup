@@ -28,21 +28,21 @@ function getFilterGroup() {
 const listOptions = fromJS([
   {
     id: 'ssid',
-    text: _('SSID'),
+    text: __('SSID'),
     formProps: {
       type: 'text',
       required: true,
     },
   }, {
     id: 'filterGroup',
-    text: _('Rules Group'),
+    text: __('Rules Group'),
     formProps: {
       type: 'select',
       required: true,
     },
   }, {
     id: 'filterMode',
-    text: _('URL Filter Mode'),
+    text: __('URL Filter Mode'),
     formProps: {
       required: true,
       type: 'select',
@@ -50,15 +50,15 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: _('Black List'),
+        label: __('Black List'),
       }, {
         value: '1',
-        label: _('White List'),
+        label: __('White List'),
       },
     ],
   }, {
     id: 'isFilter',
-    text: _('URL Filter State'),
+    text: __('URL Filter State'),
     noForm: true,
     formProps: {
       required: true,
@@ -67,37 +67,37 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: _('Closed'),
+        label: __('Closed'),
       }, {
         value: '1',
-        label: _('Open'),
+        label: __('Open'),
       },
     ],
   }, {
     id: '__actions__',
-    text: _('Actions'),
+    text: __('Actions'),
     noForm: true,
   },
 ]);
 const wlanOptions = fromJS([
   {
     id: 'ssid',
-    label: _('SSID'),
+    label: __('SSID'),
   }, {
     id: 'filterGroup',
-    label: _('Rules Group'),
+    label: __('Rules Group'),
     type: 'select',
   }, {
     id: 'filterMode',
-    label: _('URL Filter Mode'),
+    label: __('URL Filter Mode'),
     type: 'select',
     options: [
       {
         value: '0',
-        label: _('Black List'),
+        label: __('Black List'),
       }, {
         value: '1',
-        label: _('White List'),
+        label: __('White List'),
       },
     ],
   },
@@ -183,14 +183,14 @@ export default class View extends React.Component {
       .setIn([-1, 'transform'], (val, $$data) => (
         <span>
           <Button
-            text={_('Open Filter')}
+            text={__('Open Filter')}
             key="filterActionButton"
             icon="filter"
             theme="primary"
             onClick={() => {
               this.props.changeScreenActionQuery({
                 action: 'filter',
-                myTitle: _('Filter'),
+                myTitle: __('Filter'),
               });
               this.props.updateCurEditListItem({
                 ssid: $$data.get('ssid'),

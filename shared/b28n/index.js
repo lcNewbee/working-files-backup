@@ -200,7 +200,7 @@ const b28n = (function _b28n(doc, _win) {
     dicts[localB28n.getLang()] = {};
   }
 
-  localB28n._ = function _(str, ...rest) {
+  localB28n._ = function __(str, ...rest) {
     const translateStr = localB28n.translate(str);
     let ret;
 
@@ -214,6 +214,7 @@ const b28n = (function _b28n(doc, _win) {
   };
 
   win._ = localB28n._;
+  win.__ = localB28n._;
 
   localB28n.langMap = {
     cn: '简体中文',

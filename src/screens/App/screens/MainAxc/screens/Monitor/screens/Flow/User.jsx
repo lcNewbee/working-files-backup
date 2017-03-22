@@ -11,14 +11,14 @@ const flowRateFilter = utils.filter('flowRate:["KB"]');
 const listOptions = fromJS([
   {
     id: 'username',
-    text: _('User Name'),
+    text: __('User Name'),
     width: '200',
   }, {
     id: 'curApp',
-    text: _('Current App'),
+    text: __('Current App'),
   }, {
     id: 'bandwidth',
-    text: _('Up/Down Speed'),
+    text: __('Up/Down Speed'),
     transform(val, item) {
       const upRate = flowRateFilter.transform(item.get('upstream'));
       const downRate = flowRateFilter.transform(item.get('downstream'));
@@ -27,7 +27,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'percentage',
-    text: _('Percentage'),
+    text: __('Percentage'),
   },
 ]);
 

@@ -12,23 +12,23 @@ import * as appActions from 'shared/actions/app';
 const listOptions = fromJS([
   {
     id: 'stamac',
-    label: _('Client'),
+    label: __('Client'),
     width: '200',
   }, {
     id: 'starttime',
-    label: _('Occurrence Time'),
+    label: __('Occurrence Time'),
   }, {
     id: 'endtime',
-    label: _('Departure Time'),
+    label: __('Departure Time'),
   }, {
     id: 'rssi',
-    label: _('RSSI'),
+    label: __('RSSI'),
   },
 ]);
 const queryFormOptions = fromJS([
   {
     id: 'apmac',
-    label: _('Location'),
+    label: __('Location'),
     type: 'select',
     inputStyle: {
       minWidth: '160px',

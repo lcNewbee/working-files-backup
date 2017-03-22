@@ -5,7 +5,7 @@ const defaultState = fromJS({
   poeOut: '0',
   voipEnable: '0',
   progressBarInfo: {
-    title: _('rebooting , please wait...'),
+    title: __('rebooting , please wait...'),
     time: 60,
     isShow: false,
     start: false,
@@ -13,7 +13,7 @@ const defaultState = fromJS({
   upgradeBarInfo: {
     isShow: false,
     firstBar: {
-      title: _('Uploading file...'),
+      title: __('Uploading file...'),
       time: 30,
       start: false,
     },

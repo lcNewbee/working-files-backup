@@ -14,7 +14,7 @@ const propTypes = {
 };
 const defaultProps = {
   isAsync: false,
-  placeholder: _('Please Select '),
+  placeholder: __('Please Select '),
 };
 
 class MyTimePicker extends React.Component {

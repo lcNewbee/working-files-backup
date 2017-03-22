@@ -8,9 +8,9 @@ import Modal from 'shared/components/Modal';
 import { Button } from 'shared/components/Button';
 import FormContainer from 'shared/components/Organism/FormContainer';
 
-const saveText = _('Apply');
-const savingText = _('Applying');
-let savedText = _('Applied');
+const saveText = __('Apply');
+const savingText = __('Applying');
+let savedText = __('Applied');
 const searchInputStyle = {
   marginRight: '12px',
 };
@@ -248,7 +248,7 @@ class AppScreenList extends React.PureComponent {
     const list = store.getIn(['data', 'list']);
     const listKey = this.props.listKey;
     let selectedList = [];
-    const msgText = _('Are you sure to delete selected row: %s', i);
+    const msgText = __('Are you sure to delete selected row: %s', i);
 
     if (listKey === 'allKeys') {
       selectedList = [list.get(i)];
@@ -323,7 +323,7 @@ class AppScreenList extends React.PureComponent {
         return ret;
       });
       selectStr = $$actionQuery.get('selectedList').sort().map(val => val + 1).join(', ');
-      msgText = _('Are you sure to %s selected rows: %s', _(actionName), selectStr);
+      msgText = __('Are you sure to %s selected rows: %s', __(actionName), selectStr);
 
       if (needConfirm) {
         this.props.createModal({
@@ -341,7 +341,7 @@ class AppScreenList extends React.PureComponent {
       }
       this.props.createModal({
         role: 'alert',
-        text: _('Please select %s rows', _(actionName)),
+        text: __('Please select %s rows', __(actionName)),
       });
     }
   }
@@ -396,7 +396,7 @@ class AppScreenList extends React.PureComponent {
     const list = store.getIn(['data', 'list']);
     const listKey = option.actionKey || this.props.listKey;
     const $$actionItem = list.get(index);
-    const confirmText = _('Are you sure to %s selected: %s', _(actionName), (index + 1));
+    const confirmText = __('Are you sure to %s selected: %s', __(actionName), (index + 1));
     let selectedList = [];
     let cancelMsg = '';
     let onBeforeActionResult;
@@ -544,7 +544,7 @@ class AppScreenList extends React.PureComponent {
         if (!actionsOption) {
           this.listTableOptions = tableOptions.push(Map({
             id: '__actions__',
-            text: _('Actions'),
+            text: __('Actions'),
           }));
         }
         this.listTableOptions = this.listTableOptions.setIn([-1, 'transform'],
@@ -570,7 +570,7 @@ class AppScreenList extends React.PureComponent {
                   editableResult ? (
                     <Button
                       icon="edit"
-                      text={_('Edit')}
+                      text={__('Edit')}
                       size="sm"
                       onClick={() => {
                         this.props.editListItemByIndex(index);
@@ -582,7 +582,7 @@ class AppScreenList extends React.PureComponent {
                   deleteableResult ? (
                     <Button
                       icon="trash"
-                      text={_('Delete')}
+                      text={__('Delete')}
                       size="sm"
                       onClick={() => {
                         this.handleItemAction({
@@ -750,7 +750,7 @@ class AppScreenList extends React.PureComponent {
             icon="plus"
             key="addBtn"
             theme="primary"
-            text={_('Add')}
+            text={__('Add')}
             onClick={() => {
               if (totalListItem < parseInt(maxListSize, 10)) {
                 this.props.addListItem();
@@ -758,7 +758,7 @@ class AppScreenList extends React.PureComponent {
                 this.props.createModal({
                   id: 'addListItem',
                   role: 'alert',
-                  text: _('Max list size is %s', maxListSize),
+                  text: __('Max list size is %s', maxListSize),
                 });
               }
             }}
@@ -773,7 +773,7 @@ class AppScreenList extends React.PureComponent {
             <Button
               icon="trash-o"
               key="delete"
-              text={_('Delete')}
+              text={__('Delete')}
               onClick={() => {
                 this.onSelectedItemsAction({
                   actionName: 'delete',
@@ -837,7 +837,7 @@ class AppScreenList extends React.PureComponent {
           key="pageLabel"
           htmlFor="pageSelect"
         >
-          {_('View')}
+          {__('View')}
         </label>,
         <Select
           key="pageSelect"
@@ -889,7 +889,7 @@ class AppScreenList extends React.PureComponent {
       isEditModelshow = true;
 
       if (syncCode >= 6000) {
-        savedText = _('Unapply');
+        savedText = __('Unapply');
       }
     }
 

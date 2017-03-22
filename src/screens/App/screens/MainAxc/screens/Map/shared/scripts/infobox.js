@@ -167,19 +167,19 @@ InfoBox.prototype.createInfoBoxDiv_ = function () {
 
     this.div_ = document.createElement("div");
 
-    this.setBoxStyle_();
+    this.setBoxStyle__();
 
     if (typeof this.content_.nodeType === "undefined") {
-      this.div_.innerHTML = this.getCloseBoxImg_() + this.content_;
+      this.div_.innerHTML = this.getCloseBoxImg__() + this.content_;
     } else {
-      this.div_.innerHTML = this.getCloseBoxImg_();
+      this.div_.innerHTML = this.getCloseBoxImg__();
       this.div_.appendChild(this.content_);
     }
 
     // Add the InfoBox DIV to the DOM
     this.getPanes()[this.pane_].appendChild(this.div_);
 
-    this.addClickHandler_();
+    this.addClickHandler__();
 
     if (this.div_.style.width) {
 
@@ -195,14 +195,14 @@ InfoBox.prototype.createInfoBoxDiv_ = function () {
 
       } else { // The following code is needed to overcome problems with MSIE
 
-        bw = this.getBoxWidths_();
+        bw = this.getBoxWidths__();
 
         this.div_.style.width = (this.div_.offsetWidth - bw.left - bw.right) + "px";
         this.fixedWidthSet_ = false;
       }
     }
 
-    this.panBox_(this.disableAutoPan_);
+    this.panBox__(this.disableAutoPan_);
 
     if (!this.enableEventPropagation_) {
 
@@ -271,7 +271,7 @@ InfoBox.prototype.addClickHandler_ = function () {
   if (this.closeBoxURL_ !== "") {
 
     closeBox = this.div_.firstChild;
-    this.closeListener_ = google.maps.event.addDomListener(closeBox, "click", this.getCloseClickHandler_());
+    this.closeListener_ = google.maps.event.addDomListener(closeBox, "click", this.getCloseClickHandler__());
 
   } else {
 
@@ -479,7 +479,7 @@ InfoBox.prototype.onRemove = function () {
  */
 InfoBox.prototype.draw = function () {
 
-  this.createInfoBoxDiv_();
+  this.createInfoBoxDiv__();
 
   var pixPosition = this.getProjection().fromLatLngToDivPixel(this.position_);
 
@@ -512,12 +512,12 @@ InfoBox.prototype.setOptions = function (opt_opts) {
   if (typeof opt_opts.boxClass !== "undefined") { // Must be first
 
     this.boxClass_ = opt_opts.boxClass;
-    this.setBoxStyle_();
+    this.setBoxStyle__();
   }
   if (typeof opt_opts.boxStyle !== "undefined") { // Must be second
 
     this.boxStyle_ = opt_opts.boxStyle;
-    this.setBoxStyle_();
+    this.setBoxStyle__();
   }
   if (typeof opt_opts.content !== "undefined") {
 
@@ -602,9 +602,9 @@ InfoBox.prototype.setContent = function (content) {
     }
 
     if (typeof content.nodeType === "undefined") {
-      this.div_.innerHTML = this.getCloseBoxImg_() + content;
+      this.div_.innerHTML = this.getCloseBoxImg__() + content;
     } else {
-      this.div_.innerHTML = this.getCloseBoxImg_();
+      this.div_.innerHTML = this.getCloseBoxImg__();
       this.div_.appendChild(content);
     }
 
@@ -614,14 +614,14 @@ InfoBox.prototype.setContent = function (content) {
     if (!this.fixedWidthSet_) {
       this.div_.style.width = this.div_.offsetWidth + "px";
       if (typeof content.nodeType === "undefined") {
-        this.div_.innerHTML = this.getCloseBoxImg_() + content;
+        this.div_.innerHTML = this.getCloseBoxImg__() + content;
       } else {
-        this.div_.innerHTML = this.getCloseBoxImg_();
+        this.div_.innerHTML = this.getCloseBoxImg__();
         this.div_.appendChild(content);
       }
     }
 
-    this.addClickHandler_();
+    this.addClickHandler__();
   }
 
   /**
@@ -775,7 +775,7 @@ InfoBox.prototype.open = function (map, anchor) {
 
   if (this.div_) {
 
-    this.panBox_();
+    this.panBox__();
   }
 };
 

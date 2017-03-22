@@ -18,13 +18,13 @@ const listTypeMap = {};
 const $$listTypeOptions = fromJS([
   {
     value: 'black',
-    label: _('Black List'),
+    label: __('Black List'),
   }, {
     value: 'white',
-    label: _('White List'),
+    label: __('White List'),
   }, {
     value: 'disable',
-    label: _('Disable'),
+    label: __('Disable'),
   },
 ]).map(
   ($$item) => {
@@ -35,7 +35,7 @@ const $$listTypeOptions = fromJS([
 const settingsOptions = fromJS([
   {
     id: 'type',
-    label: _('Type Switch'),
+    label: __('Type Switch'),
     className: 'no-label',
     type: 'switch',
     options: $$listTypeOptions,
@@ -46,7 +46,7 @@ const settingsOptions = fromJS([
 const listOptions = fromJS([
   {
     id: 'mac',
-    text: _('MAC Address'),
+    text: __('MAC Address'),
     formProps: {
       required: true,
       validator: validator({
@@ -55,15 +55,15 @@ const listOptions = fromJS([
     },
   }, {
     id: 'vendor',
-    text: _('Manufacturer'),
+    text: __('Manufacturer'),
     noForm: true,
   }, {
     id: 'clientType',
-    text: _('Client Type'),
+    text: __('Client Type'),
     noForm: true,
   }, {
     id: 'reason',
-    text: _('Reason'),
+    text: __('Reason'),
     formProps: {
       type: 'textarea',
       maxLength: 255,
@@ -113,7 +113,7 @@ export default class Blacklist extends React.Component {
     );
   }
   onBeforeChangeType(type) {
-    let confirmText = _(
+    let confirmText = __(
       'Are you sure to use %s?',
       $$listTypeOptions.find(
         $$item => $$item.get('value') === type,
@@ -121,7 +121,7 @@ export default class Blacklist extends React.Component {
     );
 
     if (type === 'disable') {
-      confirmText = _('Are you sure to disable ACL?');
+      confirmText = __('Are you sure to disable ACL?');
     }
 
     return new Promise(
@@ -174,7 +174,7 @@ export default class Blacklist extends React.Component {
       if ($$copySelectedList.size < 1) {
         this.props.createModal({
           type: 'alert',
-          text: _('Please select item'),
+          text: __('Please select item'),
         });
       } else {
         this.props.changeScreenActionQuery({
@@ -235,7 +235,7 @@ export default class Blacklist extends React.Component {
 
     this.props.changeScreenActionQuery({
       action: 'copy',
-      myTitle: _('Copy Form Other Group'),
+      myTitle: __('Copy Form Other Group'),
       copySelectedList: fromJS([]),
     });
     this.fetchCopyGroupBlacklist(copyFromGroupId);
@@ -270,7 +270,7 @@ export default class Blacklist extends React.Component {
   renderActionBar() {
     return (
       <Button
-        text={_('Copy From Other Group')}
+        text={__('Copy From Other Group')}
         key="cpoyActionButton"
         icon="copy"
         theme="primary"
@@ -295,7 +295,7 @@ export default class Blacklist extends React.Component {
     return (
       <div className="row">
         <div className="o-list cols col-4">
-          <h3 className="o-list__header">{_('Group List')}</h3>
+          <h3 className="o-list__header">{__('Group List')}</h3>
           <ul className="m-menu m-menu--open">
             {
               $$group.getIn(['list']).map((item) => {
@@ -330,7 +330,7 @@ export default class Blacklist extends React.Component {
 
         </div>
         <div className="o-list cols col-8">
-          <h3 className="o-list__header">{_('Group Blacklist')}</h3>
+          <h3 className="o-list__header">{__('Group Blacklist')}</h3>
           <Table
             options={listOptions}
             list={$$myScreenStore.getIn(['data', 'copyGroupBlacklist', 'list'])}

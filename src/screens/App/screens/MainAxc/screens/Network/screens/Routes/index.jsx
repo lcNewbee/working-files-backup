@@ -12,7 +12,7 @@ import * as appActions from 'shared/actions/app';
 const listOptions = fromJS([
   {
     id: 'destnet',
-    text: _('Target IP'),
+    text: __('Target IP'),
     defaultValue: '',
     formProps: {
       required: true,
@@ -23,7 +23,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'mask',
-    text: _('Target Subnet Mask'),
+    text: __('Target Subnet Mask'),
     defaultValue: '',
     formProps: {
       required: true,
@@ -34,7 +34,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'gateway',
-    text: _('Next Hop IP'),
+    text: __('Next Hop IP'),
     defaultValue: '',
     formProps: {
       required: true,

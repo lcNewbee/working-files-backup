@@ -26,7 +26,7 @@ function getInterfaceList() {
 const listOptions = fromJS([
   {
     id: 'vlanID',
-    text: _('ID'),
+    text: __('ID'),
     noForm: true,
     formProps: {
       type: 'text',
@@ -35,7 +35,7 @@ const listOptions = fromJS([
   },
   {
     id: 'interface',
-    text: _('Vlan Interface Binded'),
+    text: __('Vlan Interface Binded'),
     formProps: {
       type: 'select',
       required: true,

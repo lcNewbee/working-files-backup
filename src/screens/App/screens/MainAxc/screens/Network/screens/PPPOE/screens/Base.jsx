@@ -11,18 +11,18 @@ import * as appActions from 'shared/actions/app';
 const listOptions = fromJS([
   {
     id: 'service',
-    text: _('PPPOE Service'),
+    text: __('PPPOE Service'),
     defaultValue: '1',
     type: 'switch',
     formProps: {
       required: true,
       type: 'checkbox',
       value: '1',
-      text: _('Enable'),
+      text: __('Enable'),
     },
   }, {
     id: 'auth_method',
-    text: _('Auth Method'),
+    text: __('Auth Method'),
     formProps: {
       type: 'select',
       required: true,
@@ -30,73 +30,73 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: _('Unencrypted'),
+        label: __('Unencrypted'),
       },
       {
         value: '1',
-        label: _('PAP'),
+        label: __('PAP'),
       },
       {
         value: '2',
-        label: _('CHAP'),
+        label: __('CHAP'),
       },
     ],
   }, {
     id: 'validate_mode',
-    text: _('Validation Mode'),
+    text: __('Validation Mode'),
     formProps: {
-      label: _('Validation Mode'),
+      label: __('Validation Mode'),
       type: 'switch',
       required: true,
     },
     options: [
       {
         value: 'local',
-        label: `${_('Local')}`,
+        label: `${__('Local')}`,
       },
       {
         value: 'radius-scheme',
-        label: `${_('Remote')}`,
+        label: `${__('Remote')}`,
       },
     ],
   }, {
     id: 'max_user',
-    text: _('Max Users'),
+    text: __('Max Users'),
     formProps: {
       type: 'text',
       required: true,
     },
   }, {
     id: 'serverIP',
-    text: _('Server IP'),
+    text: __('Server IP'),
     formProps: {
       type: 'text',
       required: true,
     },
   }, {
     id: 'clientIP',
-    text: _('Client IP'),
+    text: __('Client IP'),
     formProps: {
       type: 'text',
       required: true,
     },
   }, {
     id: 'dns_server',
-    text: _('DNS Server'),
+    text: __('DNS Server'),
     formProps: {
       type: 'text',
       required: true,
     },
   }, {
     id: 'standyby_server',
-    text: _('Standby DNS Server'),
+    text: __('Standby DNS Server'),
     formProps: {
       type: 'text',
       required: true,
     },
   }, {
     id: 'cur_user',
-    text: _('Connected Users'),
+    text: __('Connected Users'),
     formProps: {
       type: 'text',
       required: true,

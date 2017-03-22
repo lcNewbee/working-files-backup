@@ -83,7 +83,7 @@ class Checkboxs extends React.Component {
                   type="checkbox"
                   theme="square"
                   value={thisVal}
-                  text={_($$item.get('label'))}
+                  text={__($$item.get('label'))}
                   checked={isChecked}
                   onChange={
                     e => this.onChange(e, i, $$item)

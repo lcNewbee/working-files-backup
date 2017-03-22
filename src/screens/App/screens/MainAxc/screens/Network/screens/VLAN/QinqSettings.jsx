@@ -10,9 +10,9 @@ import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
 const qinqOptions = [
-  { label: _('Turn Off'), value: '0' },
-  { label: _('Based On VLAN'), value: '1' },
-  { label: _('Based On AP'), value: '2' },
+  { label: __('Turn Off'), value: '0' },
+  { label: __('Based On VLAN'), value: '1' },
+  { label: __('Based On AP'), value: '2' },
 ];
 // const tableOptions = immutableUtils.getTableOptions(listOptions);
 // const editFormOptions = immutableUtils.getFormOptions(listOptions);
@@ -33,7 +33,7 @@ const defaultProps = {};
 const settingsFormOptions = fromJS([
   {
     id: 'qinqMode',
-    label: _('QINQ Mode'),
+    label: __('QINQ Mode'),
     type: 'select',
     options: qinqOptions,
   },

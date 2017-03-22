@@ -35,13 +35,13 @@ function getUserName() {
 const settingsOptions = fromJS([
   {
     id: 'toname',
-    label: _('Receiver'),
+    label: __('Receiver'),
     required: true,
     type: 'select',
   },
   {
     id: 'title',
-    label: _('Title'),
+    label: __('Title'),
     type: 'text',
     required: true,
     maxLength: 33,
@@ -51,7 +51,7 @@ const settingsOptions = fromJS([
   },
   {
     id: 'description',
-    label: _('Content'),
+    label: __('Content'),
     type: 'textarea',
     required: true,
     rows: '5',

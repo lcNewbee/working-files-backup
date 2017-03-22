@@ -11,13 +11,13 @@ import * as appActions from 'shared/actions/app';
 const listOptions = fromJS([
   {
     id: 'info',
-    text: _('Log Content'),
+    text: __('Log Content'),
     formProps: {
       required: true,
     },
   }, {
     id: 'recDate',
-    text: _('Record Date'),
+    text: __('Record Date'),
     type: 'text',
     formProps: {
       required: true,

@@ -135,7 +135,7 @@ export default class NetworkSettings extends React.Component {
             if (gateway !== '' && typeof (gateway) !== 'undefined' && mask !== '' && typeof (mask) !== 'undefined') {
               msg = validator.combine.noBroadcastIp(gateway, mask);
               if (proto === 'static' && msg) {
-                showError(_('Gateway can not be broadcast IP address!'));
+                showError(__('Gateway can not be broadcast IP address!'));
                 return;
               }
             }
@@ -148,7 +148,7 @@ export default class NetworkSettings extends React.Component {
                 return;
               }
             }
-            msg = _('Primary and Secondary DNS can not be the same !');
+            msg = __('Primary and Secondary DNS can not be the same !');
             if (dns1 !== '' && typeof (dns1) !== 'undefined' &&
                 dns2 !== '' && typeof (dns2) !== 'undefined' &&
                 validator.combine.notEqual(dns1, dns2, msg)) {
@@ -250,7 +250,7 @@ export default class NetworkSettings extends React.Component {
             start
             time={60}
             step={600}
-            title={_('The configuration is saving now, please wait...')}
+            title={__('The configuration is saving now, please wait...')}
             callback={() => {
               const nextProto = this.props.store.getIn(['curData', 'proto']);
               if (this.curProto === nextProto && this.curProto === 'dhcp') {
@@ -261,9 +261,9 @@ export default class NetworkSettings extends React.Component {
             }}
           />
         </Modal>
-        <h3>{_('LAN IP Settings')}</h3>
+        <h3>{__('LAN IP Settings')}</h3>
         <FormGroup
-          label={_('IP Mode')}
+          label={__('IP Mode')}
         >
           <div
             style={{
@@ -273,14 +273,14 @@ export default class NetworkSettings extends React.Component {
             <FormInput
               type="radio"
               name="networkmode"
-              text={_('DHCP')}
+              text={__('DHCP')}
               checked={proto === 'dhcp'}
               onChange={this.onDhcpClick}
             />&nbsp;&nbsp;&nbsp;&nbsp;
             <FormInput
               type="radio"
               name="networkmode"
-              text={_('Static')}
+              text={__('Static')}
               checked={proto === 'static'}
               onChange={this.onStaticClick}
             />
@@ -291,13 +291,13 @@ export default class NetworkSettings extends React.Component {
             <div>
               <FormGroup
                 type="text"
-                label={_('Fallback IP')}
+                label={__('Fallback IP')}
                 value={fallbackIp}
                 disabled
               />
               <FormGroup
                 type="text"
-                label={_('Fallback Netmask')}
+                label={__('Fallback Netmask')}
                 value={fallbackMask}
                 disabled
               />
@@ -306,7 +306,7 @@ export default class NetworkSettings extends React.Component {
             <div>
               <FormGroup
                 type="text"
-                label={_('IP Address')}
+                label={__('IP Address')}
                 value={ip || ''}
                 onChange={data => this.props.updateItemSettings({
                   ip: data.value,
@@ -316,7 +316,7 @@ export default class NetworkSettings extends React.Component {
               />
               <FormGroup
                 type="text"
-                label={_('Subnet Mask')}
+                label={__('Subnet Mask')}
                 value={mask || ''}
                 onChange={data => this.props.updateItemSettings({
                   mask: data.value,
@@ -326,7 +326,7 @@ export default class NetworkSettings extends React.Component {
               />
               <FormGroup
                 type="text"
-                label={_('Gateway')}
+                label={__('Gateway')}
                 value={gateway}
                 onChange={(data) => {
                   this.props.updateItemSettings({ gateway: data.value });
@@ -335,7 +335,7 @@ export default class NetworkSettings extends React.Component {
               />
               <FormGroup
                 type="text"
-                label={_('Primary DNS')}
+                label={__('Primary DNS')}
                 value={dns1}
                 onChange={data => this.props.updateItemSettings({
                   dns1: data.value,
@@ -344,7 +344,7 @@ export default class NetworkSettings extends React.Component {
               />
               <FormGroup
                 type="text"
-                label={_('Secondary DNS')}
+                label={__('Secondary DNS')}
                 value={dns2}
                 onChange={data => this.props.updateItemSettings({
                   dns2: data.value,
@@ -357,10 +357,10 @@ export default class NetworkSettings extends React.Component {
         {
           this.props.route.funConfig.hasVlan ? (
             <div>
-              <h3>{_('VLAN Settings')}</h3>
+              <h3>{__('VLAN Settings')}</h3>
               <div className="clearfix">
                 <FormGroup
-                  label={_('VLAN Enable')}
+                  label={__('VLAN Enable')}
                   className="fl"
                   type="checkbox"
                   disabled={this.apMode === '1'}
@@ -380,7 +380,7 @@ export default class NetworkSettings extends React.Component {
                         marginTop: '7px',
                       }}
                     >
-                      {_('Notice: The device is in thin AP mode now, VLAN is enabled by force.')}
+                      {__('Notice: The device is in thin AP mode now, VLAN is enabled by force.')}
                     </span>
                   ) : null
                 }
@@ -389,9 +389,9 @@ export default class NetworkSettings extends React.Component {
                 type="number"
                 min="1"
                 max="4094"
-                label={_('Management VLAN ID')}
+                label={__('Management VLAN ID')}
                 disabled={vlanEnable === '0'}
-                help={`${_('Range: ')}1 - 4094, ${_('Default: ')}1`}
+                help={`${__('Range: ')}1 - 4094, ${__('Default: ')}1`}
                 value={mngVlanId}
                 onChange={data => this.props.updateItemSettings({
                   mngVlanId: data.value,
@@ -403,8 +403,8 @@ export default class NetworkSettings extends React.Component {
                 type="number"
                 min="1"
                 max="4094"
-                label={_('Untagged VLAN ID')}
-                help={`${_('Range: ')}1 - 4094, ${_('Default: ')}1`}
+                label={__('Untagged VLAN ID')}
+                help={`${__('Range: ')}1 - 4094, ${__('Default: ')}1`}
                 value={utgVlanId}
                 disabled={vlanEnable === '0'}
                 onChange={data => this.props.updateItemSettings({

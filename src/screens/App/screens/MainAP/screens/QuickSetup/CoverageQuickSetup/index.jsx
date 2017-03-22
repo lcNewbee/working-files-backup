@@ -169,7 +169,7 @@ const validOptions = Map({
 //   const countryList = [];
 //   for (const key of Object.keys(map)) {
 //     const entry = {
-//       label: _(key),
+//       label: __(key),
 //       value: map[key],
 //     };
 //     countryList.push(entry);
@@ -180,7 +180,7 @@ const validOptions = Map({
 // function getCountryNameFromCode(code, map) {
 //   for (const name of Object.keys(map)) {
 //     if (map[name] === code) {
-//       return _(name);
+//       return __(name);
 //     }
 //   }
 //   return '';
@@ -318,7 +318,7 @@ export default class QuickSetup extends React.Component {
     if (data.currStep === 1 && data.targetStep === 2) {
       const radioOnEffect = this.props.store.getIn(['curData', 'radioOnEffect']).toJS();
       if (!radioOnEffect.some(val => val === '1')) { // 需要用户选择，而且必须选择至少一个
-        return _('Please select at least one radio to apply the SSID');
+        return __('Please select at least one radio to apply the SSID');
       }
     }
 
@@ -455,7 +455,7 @@ export default class QuickSetup extends React.Component {
         {
           this.props.route.funConfig.router ? (
             <FormGroup
-              label={_('Operation Mode')}
+              label={__('Operation Mode')}
             >
               <div
                 style={{
@@ -464,7 +464,7 @@ export default class QuickSetup extends React.Component {
               >
                 <FormInput
                   type="radio"
-                  text={_('AP Mode')}
+                  text={__('AP Mode')}
                   checked={store.getIn(['curData', 'wiredMode']) === 'bridge'}
                   name="operationModeItem"
                   onClick={() => {
@@ -473,7 +473,7 @@ export default class QuickSetup extends React.Component {
                 />
                 <FormInput
                   type="radio"
-                  text={_('Router Mode')}
+                  text={__('Router Mode')}
                   checked={store.getIn(['curData', 'wiredMode']) === 'router'}
                   name="operationModeItem"
                   onClick={() => {
@@ -495,7 +495,7 @@ export default class QuickSetup extends React.Component {
             <div>
               <FormGroup
                 type="text"
-                label={_('IP')}
+                label={__('IP')}
                 value={store.getIn(['curData', 'ip'])}
                 onChange={(data) => {
                   this.props.updateItemSettings({ ip: data.value });
@@ -505,7 +505,7 @@ export default class QuickSetup extends React.Component {
               />
               <FormGroup
                 type="text"
-                label={_('Subnet Mask')}
+                label={__('Subnet Mask')}
                 value={store.getIn(['curData', 'mask'])}
                 onChange={(data) => {
                   this.props.updateItemSettings({ mask: data.value });
@@ -516,7 +516,7 @@ export default class QuickSetup extends React.Component {
               {/*
                 <FormGroup
                   type="number"
-                  label={_('VLAN ID')}
+                  label={__('VLAN ID')}
                   value={store.getIn(['curData', 'vlanId'])}
                   onChange={(data) => {
                     this.props.updateItemSettings({ vlanId: data.value });
@@ -535,11 +535,11 @@ export default class QuickSetup extends React.Component {
             <div>
               <FormGroup
                 type="select"
-                label={_('Internet Connection Type')}
+                label={__('Internet Connection Type')}
                 options={[
-                  { value: 'static', label: _('Static IP') },
-                  { value: 'dhcp', label: _('DHCP') },
-                  { value: 'pppoe', label: _('PPPOE') },
+                  { value: 'static', label: __('Static IP') },
+                  { value: 'dhcp', label: __('DHCP') },
+                  { value: 'pppoe', label: __('PPPOE') },
                 ]}
                 value={store.getIn(['curData', 'routerInfo', 'proto'])}
                 onChange={(data) => {
@@ -552,7 +552,7 @@ export default class QuickSetup extends React.Component {
                   <div>
                     <FormGroup
                       type="text"
-                      label={_('LAN IP')}
+                      label={__('LAN IP')}
                       value={this.props.store.getIn(['curData', 'routerInfo', 'lanIp'])}
                       onChange={(data) => {
                         this.updateItemInRouterInfo('lanIp', data.value);
@@ -562,7 +562,7 @@ export default class QuickSetup extends React.Component {
                     />
                     <FormGroup
                       type="text"
-                      label={_('LAN Mask')}
+                      label={__('LAN Mask')}
                       value={this.props.store.getIn(['curData', 'routerInfo', 'lanMask'])}
                       onChange={(data) => {
                         this.updateItemInRouterInfo('lanMask', data.value);
@@ -578,7 +578,7 @@ export default class QuickSetup extends React.Component {
                 store.getIn(['curData', 'routerInfo', 'proto']) === 'static' ? (
                   <div>
                     <FormGroup
-                      label={_('WAN IP')}
+                      label={__('WAN IP')}
                       type="text"
                       value={this.props.store.getIn(['curData', 'routerInfo', 'ip'])}
                       onChange={(data) => {
@@ -588,7 +588,7 @@ export default class QuickSetup extends React.Component {
                       {...validWanIp}
                     />
                     <FormGroup
-                      label={_('Subnet Mask')}
+                      label={__('Subnet Mask')}
                       type="text"
                       value={this.props.store.getIn(['curData', 'routerInfo', 'mask'])}
                       onChange={(data) => {
@@ -599,7 +599,7 @@ export default class QuickSetup extends React.Component {
                     />
                     <FormGroup
                       type="text"
-                      label={_('Gateway')}
+                      label={__('Gateway')}
                       value={this.props.store.getIn(['curData', 'routerInfo', 'gateway'])}
                       onChange={(data) => {
                         this.updateItemInRouterInfo('gateway', data.value);
@@ -609,7 +609,7 @@ export default class QuickSetup extends React.Component {
                     />
                     <FormGroup
                       type="text"
-                      label={_('Primary DNS')}
+                      label={__('Primary DNS')}
                       value={this.props.store.getIn(['curData', 'routerInfo', 'dns1'])}
                       onChange={(data) => {
                         this.updateItemInRouterInfo('dns1', data.value);
@@ -619,7 +619,7 @@ export default class QuickSetup extends React.Component {
                     />
                     <FormGroup
                       type="text"
-                      label={_('Secondary DNS')}
+                      label={__('Secondary DNS')}
                       value={this.props.store.getIn(['curData', 'routerInfo', 'dns2'])}
                       onChange={(data) => {
                         this.updateItemInRouterInfo('dns2', data.value);
@@ -628,7 +628,7 @@ export default class QuickSetup extends React.Component {
                     />
                     <FormGroup
                       type="text"
-                      label={_('LAN IP')}
+                      label={__('LAN IP')}
                       value={this.props.store.getIn(['curData', 'routerInfo', 'lanIp'])}
                       onChange={(data) => {
                         this.updateItemInRouterInfo('lanIp', data.value);
@@ -638,7 +638,7 @@ export default class QuickSetup extends React.Component {
                     />
                     <FormGroup
                       type="text"
-                      label={_('LAN Mask')}
+                      label={__('LAN Mask')}
                       value={this.props.store.getIn(['curData', 'routerInfo', 'lanMask'])}
                       onChange={(data) => {
                         this.updateItemInRouterInfo('lanMask', data.value);
@@ -655,7 +655,7 @@ export default class QuickSetup extends React.Component {
                   <div>
                     <FormGroup
                       type="text"
-                      label={_('Account')}
+                      label={__('Account')}
                       value={store.getIn(['curData', 'routerInfo', 'user'])}
                       onChange={(data) => {
                         this.updateItemInRouterInfo('user', data.value);
@@ -663,7 +663,7 @@ export default class QuickSetup extends React.Component {
                     />
                     <FormGroup
                       type="text"
-                      label={_('Password')}
+                      label={__('Password')}
                       value={store.getIn(['curData', 'routerInfo', 'password'])}
                       onChange={(data) => {
                         this.updateItemInRouterInfo('password', data.value);
@@ -671,7 +671,7 @@ export default class QuickSetup extends React.Component {
                     />
                     <FormGroup
                       type="text"
-                      label={_('LAN IP')}
+                      label={__('LAN IP')}
                       value={this.props.store.getIn(['curData', 'routerInfo', 'lanIp'])}
                       onChange={(data) => {
                         this.updateItemInRouterInfo('lanIp', data.value);
@@ -681,7 +681,7 @@ export default class QuickSetup extends React.Component {
                     />
                     <FormGroup
                       type="text"
-                      label={_('LAN Mask')}
+                      label={__('LAN Mask')}
                       value={this.props.store.getIn(['curData', 'routerInfo', 'lanMask'])}
                       onChange={(data) => {
                         this.updateItemInRouterInfo('lanMask', data.value);
@@ -695,7 +695,7 @@ export default class QuickSetup extends React.Component {
               <FormGroup
                 type="checkbox"
                 checked={store.getIn(['curData', 'routerInfo', 'nat']) === '1'}
-                label={_('NAT')}
+                label={__('NAT')}
                 onChange={() => {
                   const val = store.getIn(['curData', 'routerInfo', 'nat']) === '1' ? '0' : '1';
                   this.updateItemInRouterInfo('nat', val);
@@ -704,7 +704,7 @@ export default class QuickSetup extends React.Component {
               <FormGroup
                 type="checkbox"
                 checked={store.getIn(['curData', 'routerInfo', 'dhcpEnable']) === '1'}
-                label={_('DHCP Sever')}
+                label={__('DHCP Sever')}
                 onChange={() => {
                   const val = store.getIn(['curData', 'routerInfo', 'dhcpEnable']) === '1' ? '0' : '1';
                   this.updateItemInRouterInfo('dhcpEnable', val);
@@ -727,7 +727,7 @@ export default class QuickSetup extends React.Component {
         <div className="thirdForAp">
           <FormGroup
             type="text"
-            label={_('SSID')}
+            label={__('SSID')}
             value={this.props.store.getIn(['curData', 'ssid'])}
             onChange={(data) => {
               this.props.updateItemSettings({ ssid: data.value });
@@ -737,7 +737,7 @@ export default class QuickSetup extends React.Component {
           />
           <FormGroup
             type="select"
-            label={_('Security')}
+            label={__('Security')}
             options={staAndApSecurityOptions}
             value={mode}
             onChange={(data) => {
@@ -757,7 +757,7 @@ export default class QuickSetup extends React.Component {
             /wpa/.test(mode) ? (
               <div>
                 <FormGroup
-                  label={_('Encryption')}
+                  label={__('Encryption')}
                   minWidth="66px"
                   type="switch"
                   value={cipher}
@@ -777,7 +777,7 @@ export default class QuickSetup extends React.Component {
                 />
                 <FormGroup
                   type="password"
-                  label={_('Password')}
+                  label={__('Password')}
                   value={key}
                   onChange={(data) => {
                     const security = fromJS({
@@ -797,7 +797,7 @@ export default class QuickSetup extends React.Component {
               (mode === 'wep') ? (
                 <div>
                   <FormGroup
-                    label={_('Auth Type')}
+                    label={__('Auth Type')}
                     type="switch"
                     options={wepAuthenOptions}
                     value={auth}
@@ -810,7 +810,7 @@ export default class QuickSetup extends React.Component {
                   />
                   {/*
                     <FormGroup
-                      label={_('Key Length')}
+                      label={__('Key Length')}
                       type="select"
                       options={wepKeyLengthOptions}
                       value={curData.getIn(['vapList', '0', 'security', 'keyLength'])}
@@ -824,7 +824,7 @@ export default class QuickSetup extends React.Component {
                     />
                   */}
                   <FormGroup
-                    label={_('Key Format')}
+                    label={__('Key Format')}
                     type="switch"
                     options={keyTypeOptions}
                     value={keyType}
@@ -836,7 +836,7 @@ export default class QuickSetup extends React.Component {
                     minWidth="65px"
                   />
                   <FormGroup
-                    label={_('Key Index')}
+                    label={__('Key Index')}
                     type="select"
                     options={keyIndexOptions}
                     value={keyIndex}
@@ -849,7 +849,7 @@ export default class QuickSetup extends React.Component {
                   <FormGroup
                     type="password"
                     required
-                    label={_('Password')}
+                    label={__('Password')}
                     value={key}
                     onChange={(data) => {
                       const security = this.props.store.getIn(['curData', 'security'])
@@ -864,7 +864,7 @@ export default class QuickSetup extends React.Component {
           {
             radioSelectOptions.length > 1 ? (
               <FormGroup
-                label={_('Radios Apply')}
+                label={__('Radios Apply')}
               >
                 {
                   radioSelectOptions.map((item, i) => (
@@ -872,7 +872,7 @@ export default class QuickSetup extends React.Component {
                       type="checkbox"
                       theme="square"
                       key={i}
-                      text={`${_(item.label)}`}
+                      text={`${__(item.label)}`}
                       checked={this.props.store.getIn(['curData', 'radioOnEffect', i]) === '1'}
                       onChange={() => {
                         let radioOnEffect = this.props.store.getIn(['curData', 'radioOnEffect']);
@@ -918,31 +918,31 @@ export default class QuickSetup extends React.Component {
                   this.props.route.funConfig.router ? (
                     <FormGroup
                       type="plain-text"
-                      label={_('Current Mode')}
+                      label={__('Current Mode')}
                       value={wiredMode === 'bridge' ? 'AP' : wiredMode}
                     />
                   ) : null
                 }
                 <FormGroup
                   type="plain-text"
-                  label={_('LAN IP')}
+                  label={__('LAN IP')}
                   value={ip}
                 />
                 <FormGroup
                   type="plain-text"
-                  label={_('Subnet Mask')}
+                  label={__('Subnet Mask')}
                   value={mask}
                 />
                 {/*
                   <FormGroup
                     type="plain-text"
-                    label={_('VLAN ID')}
+                    label={__('VLAN ID')}
                     value={vlanId}
                   />
                 */}
                 <FormGroup
                   type="plain-text"
-                  label={_('SSID')}
+                  label={__('SSID')}
                   value={ssid}
                 />
                 {
@@ -952,13 +952,13 @@ export default class QuickSetup extends React.Component {
                         /wpa/.test(security.mode) ? (
                           <FormGroup
                             type="plain-text"
-                            label={_('Security Mode')}
+                            label={__('Security Mode')}
                             value={`${security.mode}/${security.cipher}`}
                           />
                         ) : (
                           <FormGroup
                             type="plain-text"
-                            label={_('Security Mode')}
+                            label={__('Security Mode')}
                             value={security.mode}
                           />
                         )
@@ -975,13 +975,13 @@ export default class QuickSetup extends React.Component {
                         /wpa/.test(security.mode) ? (
                           <FormGroup
                             type="plain-text"
-                            label={_('Security Mode')}
+                            label={__('Security Mode')}
                             value={`${security.mode}/${security.cipher}`}
                           />
                         ) : (
                           <FormGroup
                             type="plain-text"
-                            label={_('Security Mode')}
+                            label={__('Security Mode')}
                             value={security.mode}
                           />
                         )
@@ -994,17 +994,17 @@ export default class QuickSetup extends React.Component {
                     <div>
                       <FormGroup
                         type="plain-text"
-                        label={_('Auth Type')}
+                        label={__('Auth Type')}
                         value={security.auth}
                       />
                       <FormGroup
                         type="plain-text"
-                        label={_('Key Format')}
+                        label={__('Key Format')}
                         value={security.keyType}
                       />
                       <FormGroup
                         type="plain-text"
-                        label={_('Key Index')}
+                        label={__('Key Index')}
                         value={`key ${security.keyIndex}`}
                       />
                     </div>
@@ -1014,7 +1014,7 @@ export default class QuickSetup extends React.Component {
                   security.mode !== 'none' ? (
                     <FormGroup
                       type="plain-text"
-                      label={_('Key')}
+                      label={__('Key')}
                       value={security.key}
                     />
                   ) : null
@@ -1023,7 +1023,7 @@ export default class QuickSetup extends React.Component {
                   this.props.product.get('radioSelectOptions').size > 1 ? (
                     <FormGroup
                       type="plain-text"
-                      label={_('Radio')}
+                      label={__('Radio')}
                       value={this.generateRadioString()}
                     />
                   ) : null
@@ -1041,7 +1041,7 @@ export default class QuickSetup extends React.Component {
                   this.props.route.funConfig.router ? (
                     <FormGroup
                       type="plain-text"
-                      label={_('Current Mode')}
+                      label={__('Current Mode')}
                       value={wiredMode === 'bridge' ? 'AP' : wiredMode}
                     />
                   ) : null
@@ -1051,22 +1051,22 @@ export default class QuickSetup extends React.Component {
                     <div>
                       <FormGroup
                         type="plain-text"
-                        label={_('WAN IP')}
+                        label={__('WAN IP')}
                         value={wanIp}
                       />
                       <FormGroup
                         type="plain-text"
-                        label={_('WAN Mask')}
+                        label={__('WAN Mask')}
                         value={wanMask}
                       />
                       <FormGroup
                         type="plain-text"
-                        label={_('First DNS')}
+                        label={__('First DNS')}
                         value={dns1}
                       />
                       <FormGroup
                         type="plain-text"
-                        label={_('Secondary DNS')}
+                        label={__('Secondary DNS')}
                         value={dns2}
                       />
                     </div>
@@ -1077,12 +1077,12 @@ export default class QuickSetup extends React.Component {
                     <div>
                       <FormGroup
                         type="plain-text"
-                        label={_('Account')}
+                        label={__('Account')}
                         value={user}
                       />
                       <FormGroup
                         type="plain-text"
-                        label={_('Password')}
+                        label={__('Password')}
                         value={password}
                       />
                     </div>
@@ -1090,42 +1090,42 @@ export default class QuickSetup extends React.Component {
                 }
                 <FormGroup
                   type="plain-text"
-                  label={_('LAN IP')}
+                  label={__('LAN IP')}
                   value={lanIp}
                 />
                 <FormGroup
                   type="plain-text"
-                  label={_('LAN Mask')}
+                  label={__('LAN Mask')}
                   value={lanMask}
                 />
                 <FormGroup
                   type="plain-text"
-                  label={_('NAT')}
+                  label={__('NAT')}
                   value={nat === '1' ? 'On' : 'Off'}
                 />
                 <FormGroup
                   type="plain-text"
-                  label={_('DHCP Sever')}
+                  label={__('DHCP Sever')}
                   value={dhcpEnable === '1' ? 'On' : 'Off'}
                 />
               </div>
               <div className="cols col-7">
                 <FormGroup
                   type="plain-text"
-                  label={_('SSID')}
+                  label={__('SSID')}
                   value={ssid}
                 />
                 {
                   /wpa/.test(security.mode) ? (
                     <FormGroup
                       type="plain-text"
-                      label={_('Security Mode')}
+                      label={__('Security Mode')}
                       value={`${security.mode}/${security.cipher}`}
                     />
                   ) : (
                     <FormGroup
                       type="plain-text"
-                      label={_('Security Mode')}
+                      label={__('Security Mode')}
                       value={security.mode}
                     />
                   )
@@ -1135,17 +1135,17 @@ export default class QuickSetup extends React.Component {
                     <div>
                       <FormGroup
                         type="plain-text"
-                        label={_('Auth')}
+                        label={__('Auth')}
                         value={security.auth}
                       />
                       <FormGroup
                         type="plain-text"
-                        label={_('Key Format')}
+                        label={__('Key Format')}
                         value={security.keyType}
                       />
                       <FormGroup
                         type="plain-text"
-                        label={_('Key Index')}
+                        label={__('Key Index')}
                         value={security.keyIndex}
                       />
                     </div>
@@ -1155,14 +1155,14 @@ export default class QuickSetup extends React.Component {
                   security.mode !== 'none' ? (
                     <FormGroup
                       type="plain-text"
-                      label={_('Key')}
+                      label={__('Key')}
                       value={security.key}
                     />
                   ) : null
                 }
                 <FormGroup
                   type="plain-text"
-                  label={_('Radio')}
+                  label={__('Radio')}
                   value={this.generateRadioString()}
                 />
               </div>
@@ -1178,20 +1178,20 @@ export default class QuickSetup extends React.Component {
     // const { deviceMode } = this.props.selfState.toJS();
     const wizardOptions = fromJS([
       {
-        title: _('Wired Settings'),
+        title: __('Wired Settings'),
         render: this.renderOperationMode,
       }, {
-        title: _('Wireless Settings'),
+        title: __('Wireless Settings'),
         render: this.renderStepThree,
       }, {
-        title: _('Confirm Settings'),
+        title: __('Confirm Settings'),
         render: this.renderStepFour,
       },
     ]);
     // const titleMap = {
-    //   ap: _('Scene: Access Point'),
-    //   sta: _('Scene: Station'),
-    //   repeater: _('Scene: Repeater'),
+    //   ap: __('Scene: Access Point'),
+    //   sta: __('Scene: Station'),
+    //   repeater: __('Scene: Repeater'),
     // };
     // if (deviceMode) {
     //   wizardOptions = wizardOptions.setIn(
@@ -1204,7 +1204,7 @@ export default class QuickSetup extends React.Component {
       <div className="wrapall">
         <WizardContainer
           size="sm"
-          title={_('Quick Setup')}
+          title={__('Quick Setup')}
           options={wizardOptions}
           onBeforeStep={this.onBeforeStep}
           onCompleted={this.onCompleted}

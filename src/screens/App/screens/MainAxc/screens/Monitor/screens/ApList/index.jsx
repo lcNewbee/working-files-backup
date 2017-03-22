@@ -32,7 +32,7 @@ const settingsFormOptions = radioBase
             ['options'],
             $$options => $$options.unshift(Map({
               value: 'auto',
-              label: _('Automatic'),
+              label: __('Automatic'),
             })),
           ).set('disabled', true);
 
@@ -42,7 +42,7 @@ const settingsFormOptions = radioBase
             ['options'],
             $$options => $$options.unshift(Map({
               value: 'auto',
-              label: _('Automatic'),
+              label: __('Automatic'),
             })),
           ).set('disabled', true);
 
@@ -53,7 +53,7 @@ const settingsFormOptions = radioBase
             fromJS([
               {
                 value: 0,
-                label: _('Automatic'),
+                label: __('Automatic'),
               },
             ]),
           ).set('disabled', true);
@@ -101,7 +101,7 @@ const listOptions = fromJS([
   // {
   //   id: 'devicename',
   //   width: '180',
-  //   text: `${_('MAC Address')}/${_('Name')}`,
+  //   text: `${__('MAC Address')}/${__('Name')}`,
   //   maxLength: '31',
   //   transform(val, item) {
   //     return item.get('devicename') || item.get('mac');
@@ -110,7 +110,7 @@ const listOptions = fromJS([
   {
     id: 'devicename',
     width: '180',
-    text: _('Name'),
+    text: __('Name'),
     maxLength: '31',
     validator: validator({
       rules: 'utf8Len:[1,31]',
@@ -118,27 +118,27 @@ const listOptions = fromJS([
   }, {
     id: 'ip',
     width: '160',
-    text: _('IP Address'),
+    text: __('IP Address'),
   }, {
     id: 'mac',
     width: '160',
-    text: _('MAC Address'),
+    text: __('MAC Address'),
   }, {
     id: 'status',
-    text: _('Status'),
+    text: __('Status'),
     defaultValue: 'unkown',
     options: apStatus,
   }, {
     id: 'model',
-    text: _('AP Model'),
+    text: __('AP Model'),
   }, {
     id: 'connectedNumbers',
     width: '80',
-    text: _('Clients'),
+    text: __('Clients'),
   }, {
     id: 'bandwidth',
     width: '80',
-    text: _('Data'),
+    text: __('Data'),
     transform(val, item) {
       const upRate = flowRateFilter.transform(item.get('upstream'));
       const downRate = flowRateFilter.transform(item.get('downstream'));
@@ -147,7 +147,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'operationhours',
-    text: _('Uptime'),
+    text: __('Uptime'),
     width: '80',
     filter: 'connectTime',
   },
@@ -155,15 +155,15 @@ const listOptions = fromJS([
 const listActionBarButtons = [
   {
     actionName: 'upgrade',
-    text: _('Upgrade'),
+    text: __('Upgrade'),
     icon: 'arrow-circle-o-up',
   }, {
     actionName: 'reboot',
-    text: _('Reboot'),
+    text: __('Reboot'),
     icon: 'recycle',
   }, {
     actionName: 'reset',
-    text: _('Reset'),
+    text: __('Reset'),
     icon: 'reply-all',
   },
 ];
@@ -245,7 +245,7 @@ export default class View extends React.Component {
     if ($$selectedList.size > 0) {
       this.props.changeScreenActionQuery({
         action: EDIT_LIST_ACTION,
-        myTitle: _('Edit Selected AP'),
+        myTitle: __('Edit Selected AP'),
       });
       this.props.fetchScreenData({
         url: 'goform/group/smartRf',
@@ -254,7 +254,7 @@ export default class View extends React.Component {
       this.props.createModal({
         id: EDIT_LIST_ACTION,
         role: 'alert',
-        text: _('Please select %s rows', _('edit')),
+        text: __('Please select %s rows', __('edit')),
       });
     }
   }
@@ -326,7 +326,7 @@ export default class View extends React.Component {
                 marginRight: '5px',
               }}
             />
-            {_('Base Settings')}
+            {__('Base Settings')}
           </h3>
         </div>
         {
@@ -341,9 +341,9 @@ export default class View extends React.Component {
                 invalidMsg={app.get('invalid')}
                 validateAt={app.get('validateAt')}
                 isSaving={app.get('saving')}
-                saveText={_('Apply')}
-                savingText={_('Applying')}
-                savedText={_('Applied')}
+                saveText={__('Apply')}
+                savingText={__('Applying')}
+                savedText={__('Applied')}
               />
             </div>
           ) : null
@@ -362,7 +362,7 @@ export default class View extends React.Component {
               }}
               onClick={() => this.toggleBox('isAdvancedShow')}
             />
-            {_('Advanced Settings')}
+            {__('Advanced Settings')}
           </h3>
         </div>
         {
@@ -377,9 +377,9 @@ export default class View extends React.Component {
                 invalidMsg={app.get('invalid')}
                 validateAt={app.get('validateAt')}
                 isSaving={app.get('saving')}
-                saveText={_('Apply')}
-                savingText={_('Applying')}
-                savedText={_('Applied')}
+                saveText={__('Apply')}
+                savingText={__('Applying')}
+                savedText={__('Applied')}
                 hasSaveButton
               />
             </div>
@@ -409,7 +409,7 @@ export default class View extends React.Component {
     });
     let listActionBarChildren = (
       <Button
-        text={_('Edit')}
+        text={__('Edit')}
         key="settingActionButton"
         icon="cog"
         onClick={() => this.onSettingSelected()}
@@ -438,7 +438,7 @@ export default class View extends React.Component {
         actionable
         searchable
         searchProps={{
-          placeholder: `${_('Name')}/MAC`
+          placeholder: `${__('Name')}/MAC`
         }}
       />
     );

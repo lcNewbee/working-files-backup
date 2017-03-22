@@ -11,29 +11,29 @@ import * as appActions from 'shared/actions/app';
 const listOptions = fromJS([
   {
     id: 'parentId',
-    text: _('Parent Classification'),
+    text: __('Parent Classification'),
     options: [
       {
         value: '0',
-        label: _('Super Administrator'),
+        label: __('Super Administrator'),
       }, {
         value: '1',
-        label: _('Operator'),
+        label: __('Operator'),
       },
     ],
     defaultValue: '0',
     formProps: {
       type: 'select',
       required: true,
-      placeholder: _('Please Select ') + _('Parent Classification'),
+      placeholder: __('Please Select ') + __('Parent Classification'),
     },
   }, {
     id: 'name',
-    text: _('Classification Name'),
+    text: __('Classification Name'),
     type: 'text',
   }, {
     id: 'description',
-    text: _('Functional Description'),
+    text: __('Functional Description'),
     type: 'text',
   },
 ]);

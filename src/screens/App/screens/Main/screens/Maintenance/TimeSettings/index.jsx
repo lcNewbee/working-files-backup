@@ -85,7 +85,7 @@ export default class TimeSettings extends Component {
       console.log('ntp not valid');
       this.props.createModal({
         role: 'alert',
-        text: _('Please input a valid ntp server!'),
+        text: __('Please input a valid ntp server!'),
       });
     }
   }
@@ -114,10 +114,10 @@ export default class TimeSettings extends Component {
     return (
       <div>
         <div>
-          <h3>{_('Time Settings')}</h3>
+          <h3>{__('Time Settings')}</h3>
           <FormGroup
             type="checkbox"
-            label={_('NTP Client')}
+            label={__('NTP Client')}
             checked={ntpEnable === '1'}
             onChange={data => this.props.updateItemSettings({
               ntpEnable: data.value,
@@ -125,7 +125,7 @@ export default class TimeSettings extends Component {
           />
           <FormGroup
             type="text"
-            label={_('NTP Server')}
+            label={__('NTP Server')}
             value={ntpServer}
             disabled={ntpEnable === '0'}
             onChange={data => this.props.updateItemSettings({
@@ -134,7 +134,7 @@ export default class TimeSettings extends Component {
           />
           <FormGroup
             type="select"
-            label={_('Time Zone')}
+            label={__('Time Zone')}
             options={timezoneOptions}
             disabled={ntpEnable === '0'}
             value={this.props.store.getIn(['curData', 'zoneName'])}
@@ -144,7 +144,7 @@ export default class TimeSettings extends Component {
         <div>
           <FormGroup
             type="date"
-            label={_('Date')}
+            label={__('Date')}
             displayFormat="YYYY-MM-DD"
             disabled={ntpEnable === '1'}
             value={this.props.store.getIn(['curData', 'date'])}
@@ -154,7 +154,7 @@ export default class TimeSettings extends Component {
           />
           <FormGroup
             type="time"
-            label={_('Time')}
+            label={__('Time')}
             disabled={ntpEnable === '1'}
             value={
               moment(

@@ -22,24 +22,24 @@ const listOptions = fromJS({
   list: [
     {
       id: 'name',
-      label: _('Name'),
+      label: __('Name'),
       defaultValue: 'building',
       formProps: {
         type: 'switch',
         options: [
           {
             value: 'building',
-            label: _('Building'),
+            label: __('Building'),
           }, {
             value: 'ap',
-            label: _('AP'),
+            label: __('AP'),
           },
         ],
         display: 'inline',
       },
     }, {
       id: 'floorNumber',
-      label: _('Floor Number'),
+      label: __('Floor Number'),
       formProps: {
         required: true,
         type: 'text',
@@ -47,7 +47,7 @@ const listOptions = fromJS({
       },
     }, {
       id: 'address',
-      label: _('Address'),
+      label: __('Address'),
       formProps: {
         type: 'text',
         display: 'inline',
@@ -380,11 +380,11 @@ export default class View extends React.PureComponent {
               textAlign: 'right',
             }}
           >
-            {_('Building')}
+            {__('Building')}
           </span>
           <FormInput
             type="select"
-            label={_('Building')}
+            label={__('Building')}
             value={this.state.buildId}
             options={this.buildOptions ? this.buildOptions.toJS() : []}
             onChange={data => this.onChangeBuilding(data.value)}
@@ -397,11 +397,11 @@ export default class View extends React.PureComponent {
               textAlign: 'right',
             }}
           >
-            {_('Map Name')}
+            {__('Map Name')}
           </span>
           <FormInput
             type="select"
-            label={_('Map Name')}
+            label={__('Map Name')}
             value={this.state.curMapId}
             options={this.mapOptions ? this.mapOptions.toJS() : []}
             onChange={data => this.onChangeMapId(data.value)}
@@ -414,7 +414,7 @@ export default class View extends React.PureComponent {
               textAlign: 'right',
             }}
           >
-            {_('Observe Radius')}
+            {__('Observe Radius')}
           </span>
           <FormInput
             type="select"
@@ -435,7 +435,7 @@ export default class View extends React.PureComponent {
               textAlign: 'right',
             }}
           >
-            {_('Start Date')}
+            {__('Start Date')}
           </span>
           <FormInput
             type="date"
@@ -478,7 +478,7 @@ export default class View extends React.PureComponent {
               textAlign: 'right',
             }}
           >
-            {_('End Date')}
+            {__('End Date')}
           </span>
           <FormInput
             type="date"
@@ -523,15 +523,15 @@ export default class View extends React.PureComponent {
               textAlign: 'right',
             }}
           >
-            {_('Map Type')}
+            {__('Map Type')}
           </span>
           <FormInput
             type="switch"
             value={store.getIn([curScreenId, 'query', 'mapType'])}
-            label={_('Map Type')}
+            label={__('Map Type')}
             options={[
-              { label: _('User Number'), value: 'number' },
-              { label: _('User Times'), value: 'times' },
+              { label: __('User Number'), value: 'number' },
+              { label: __('User Times'), value: 'times' },
             ]}
             onChange={(data) => {
               Promise.resolve().then(() => {

@@ -7,7 +7,7 @@ import FormContainer from '../Organism/FormContainer';
 const formOptions = fromJS([
   {
     id: 'devicename',
-    label: _('Nickname'),
+    label: __('Nickname'),
     form: 'deviceGeneral',
     maxLength: '31',
     validator: validator({
@@ -22,7 +22,7 @@ const formOptions = fromJS([
     value: 1,
     defaultValue: 1,
     dataType: 'number',
-    text: _('Band Steering'),
+    text: __('Band Steering'),
     showPrecondition($$data) {
       return $$data.get('has5g');
     },
@@ -72,9 +72,9 @@ class Panel extends React.Component {
         onSave={this.onSave}
         actionable={actionable}
         hasSaveButton={actionable}
-        saveText={_('Apply')}
-        savingText={_('Applying')}
-        savedText={_('Applied')}
+        saveText={__('Apply')}
+        savingText={__('Applying')}
+        savedText={__('Applied')}
       />
     );
   }

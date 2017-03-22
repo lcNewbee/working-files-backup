@@ -11,7 +11,7 @@ import * as appActions from 'shared/actions/app';
 const listOptions = fromJS([
   {
     id: 'mac',
-    text: _('Mac Address'),
+    text: __('Mac Address'),
     width: '120px',
     formProps: {
       type: 'text',

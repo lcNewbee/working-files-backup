@@ -54,20 +54,20 @@ export default class View extends React.Component {
                     });
                   }
                 }
-                label={_('Device License')}
+                label={__('Device License')}
               />
               <div className="o-description-list">
                 <dl className="o-description-list-row">
-                  <dt style={dtStyle}>{_('License Status')}</dt>
-                  <dd>{_($$curData.get('secure_status'))}</dd>
+                  <dt style={dtStyle}>{__('License Status')}</dt>
+                  <dd>{__($$curData.get('secure_status'))}</dd>
                 </dl>
                 {
                   /*  <dl className="o-description-list-row">
-                    <dt style={dtStyle}>{_('AP Number')}</dt>
+                    <dt style={dtStyle}>{__('AP Number')}</dt>
                     <dd>1000</dd>
                   </dl>
                   <dl className="o-description-list-row">
-                    <dt style={dtStyle}>{_('Expiration Date')}</dt>
+                    <dt style={dtStyle}>{__('Expiration Date')}</dt>
                     <dd>2018-02-23</dd>
                   </dl> */
                 }
@@ -76,15 +76,15 @@ export default class View extends React.Component {
             <div className="cols col-6">
               {/* <FormGroup
                 type="textarea"
-                label={_('Firmware Upgrade License')}
+                label={__('Firmware Upgrade License')}
               />
               <div className="o-description-list">
                 <dl className="o-description-list-row">
-                  <dt style={dtStyle}>{_('License Status')}</dt>
-                  <dd>{_('Unlicensed')}</dd>
+                  <dt style={dtStyle}>{__('License Status')}</dt>
+                  <dd>{__('Unlicensed')}</dd>
                 </dl>
                 <dl className="o-description-list-row">
-                  <dt style={dtStyle}>{_('Expiration Date')}</dt>
+                  <dt style={dtStyle}>{__('Expiration Date')}</dt>
                   <dd>2018-02-23</dd>
                 </dl>
               </div> */}
@@ -98,9 +98,9 @@ export default class View extends React.Component {
                     type="button"
                     loading={app.get('saving')}
                     onClick={this.onSave}
-                    text={_('Apply')}
-                    savingText={_('Applying')}
-                    savedText={_('Applied')}
+                    text={__('Apply')}
+                    savingText={__('Applying')}
+                    savedText={__('Applied')}
                   />
                 </div>
               </div>

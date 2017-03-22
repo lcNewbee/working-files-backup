@@ -14,14 +14,14 @@ import * as actions from './actions';
 import reducer from './reducer';
 
 const msg = {
-  delete: _('Delete'),
-  edit: _('Edit'),
-  look: _('View'),
-  add: _('Add'),
-  remarks: _('Remarks'),
-  groupname: _('Group Name'),
-  action: _('Actions'),
-  devicesNum: _('Devices Number'),
+  delete: __('Delete'),
+  edit: __('Edit'),
+  look: __('View'),
+  add: __('Add'),
+  remarks: __('Remarks'),
+  groupname: __('Group Name'),
+  action: __('Actions'),
+  devicesNum: __('Devices Number'),
 };
 
 const validOptions = Map({
@@ -84,7 +84,7 @@ export const GroupSettings = React.createClass({
   },
 
   onDeleteGroup(groupname) {
-    let comfri_text = _('Are you sure delete group: %s?', groupname);
+    let comfri_text = __('Are you sure delete group: %s?', groupname);
 
     this.props.createModal({
       id: 'groupSettings',
@@ -129,7 +129,7 @@ export const GroupSettings = React.createClass({
             this.props.createModal({
               id: 'groupSettings',
               role: 'alert',
-              text: _("Group name '%s' is already in use", editData.groupname),
+              text: __("Group name '%s' is already in use", editData.groupname),
             });
           } else {
             this.props.saveDeviceGroup();
@@ -156,7 +156,7 @@ export const GroupSettings = React.createClass({
         text: msg.groupname,
         transform (val) {
         if (val === 'Default') {
-          val = _('Ungrouped Devices');
+          val = __('Ungrouped Devices');
         }
         return val;
       },
@@ -219,29 +219,29 @@ export const GroupSettings = React.createClass({
   getDevicesTableOptions() {
     let ret = fromJS([{
       id: 'devicename',
-      text: _('MAC Address') + '/' + _('Name'),
+      text: __('MAC Address') + '/' + __('Name'),
       transform (val, item) {
           return item.get('devicename') || item.get('mac');
         },
     }, {
         id: 'ip',
-        text: _('IP Address'),
+        text: __('IP Address'),
       }, {
         id: 'status',
-        text: _('Status'),
+        text: __('Status'),
         filter: 'translate',
       }, {
         id: 'groupname',
-        text: _('Current Group'),
+        text: __('Current Group'),
         transform (val) {
           if (val === 'Default') {
-            val = _('Ungrouped Devices');
+            val = __('Ungrouped Devices');
           }
           return val;
         },
       }, {
         id: 'op',
-        text: _('Select'),
+        text: __('Select'),
         width: '50',
         transform: function (val, item) {
           let deviceMac;
@@ -283,7 +283,7 @@ export const GroupSettings = React.createClass({
       modalTitle = msg.edit + ' ' + modalTitle;
     } else if (this.props.actionType === 'look') {
       if (this.props.edit.get('groupname') === 'Default') {
-        modalTitle = _('Ungrouped Devices');
+        modalTitle = __('Ungrouped Devices');
       } else {
         modalTitle = this.props.edit.get('groupname');
       }
@@ -291,7 +291,7 @@ export const GroupSettings = React.createClass({
 
     return (
       <div>
-        <h3>{_('Group List')}</h3>
+        <h3>{__('Group List')}</h3>
         <Table
           className="table"
           loading={this.props.fetching}

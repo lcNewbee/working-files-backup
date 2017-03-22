@@ -17,7 +17,7 @@ const defaultProps = {
   readOnly: false,
   disabled: false,
   onChange: () => {},
-  placeholder: _('Please Select '),
+  placeholder: __('Please Select '),
 };
 
 class MySelect extends React.Component {

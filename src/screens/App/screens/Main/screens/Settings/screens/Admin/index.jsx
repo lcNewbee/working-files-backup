@@ -90,7 +90,7 @@ export default class Admin extends PureComponent {
     let ret;
 
     if (newpasswd !== confirmpasswd) {
-      ret = _('New password and confirm password must match');
+      ret = __('New password and confirm password must match');
 
       this.props.createModal({
         id: 'admin',
@@ -108,11 +108,11 @@ export default class Admin extends PureComponent {
 
     return (
       <form>
-        <h3>{_('Change Password') }</h3>
+        <h3>{__('Change Password') }</h3>
 
         <FormGroup
           type="password"
-          label={_('Old Password')}
+          label={__('Old Password')}
           name="oldpasswd"
           value={this.getSetting('oldpasswd')}
           onChange={(data) => this.onUpdate('oldpasswd', data)}
@@ -122,7 +122,7 @@ export default class Admin extends PureComponent {
 
         <FormGroup
           type="password"
-          label={_('New Password')}
+          label={__('New Password')}
           name="newpasswd"
           value={this.getSetting('newpasswd')}
           onChange={(data) => this.onUpdate('newpasswd', data)}
@@ -132,7 +132,7 @@ export default class Admin extends PureComponent {
 
         <FormGroup
           type="password"
-          label={_('Confirm Password')}
+          label={__('Confirm Password')}
           name="confirmpasswd"
           value={this.getSetting('confirmpasswd')}
           onChange={(data) => this.onUpdate('confirmpasswd', data)}
@@ -145,7 +145,7 @@ export default class Admin extends PureComponent {
             {
               this.props.store.getIn(['state', 'code']) === 4000 ? (
                 <div>
-                  <p className="error">{_('Old password error!') }</p>
+                  <p className="error">{__('Old password error!') }</p>
                 </div>
               ) : null
             }
@@ -161,10 +161,10 @@ export default class Admin extends PureComponent {
           </div>
         </div>
 
-        <h3>{_('System Settings') }</h3>
+        <h3>{__('System Settings') }</h3>
 
         <FormGroup
-          label={_('Select Language')}
+          label={__('Select Language')}
           type="select"
           options={languageOptions}
           value={b28n.getLang()}

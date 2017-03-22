@@ -11,10 +11,10 @@ import FormGroup from 'shared/components/Form/FormGroup';
 
 const validOptions = Map({
   username: validator({
-    label: _('Username'),
+    label: __('Username'),
   }),
   password: validator({
-    label: _('Password'),
+    label: __('Password'),
   }),
 });
 
@@ -116,7 +116,7 @@ export default class Login extends React.PureComponent {
           purview: 'none',
           loginedAt: Date.now(),
         };
-        let result = _('Password Error');
+        let result = __('Password Error');
 
         if (json.state) {
           if (json.state.code === 2000) {
@@ -139,9 +139,9 @@ export default class Login extends React.PureComponent {
               loginState.purview = 'all';
             }
           } else if (json.state.msg.indexOf('upper bound') !== -1) {
-            result = _(json.state.msg);
+            result = __(json.state.msg);
           } else if (json.state.msg.indexOf('password error') !== -1) {
-            result = guiConfig.hasUsername ? _(json.state.msg) : _(json.state.msg.replace('username or ', ''));
+            result = guiConfig.hasUsername ? __(json.state.msg) : __(json.state.msg.replace('username or ', ''));
           }
         }
         loginState.msg = result;
@@ -173,15 +173,15 @@ export default class Login extends React.PureComponent {
         <div className="sign">
           <div className="sign-backdrop" />
           <div className="sign-content">
-            <h1 className="title">{_('Please Login')}</h1>
+            <h1 className="title">{__('Please Login')}</h1>
             {
               guiConfig.hasUsername ? (
                 <FormGroup
                   display="block"
                   name="username"
                   maxLength="31"
-                  data-label={_('Username')}
-                  placeholder={_('Username')}
+                  data-label={__('Username')}
+                  placeholder={__('Username')}
                   value={this.state.username}
                   onChange={this.onChangeData('username')}
                   onKeyUp={this.onUsernameKeyUp}
@@ -195,8 +195,8 @@ export default class Login extends React.PureComponent {
               name="password"
               display="block"
               maxLength="31"
-              data-label={_('Password')}
-              placeholder={_('Password')}
+              data-label={__('Password')}
+              placeholder={__('Password')}
               value={this.state.password}
               onChange={this.onChangeData('password')}
               onKeyUp={this.onInputKeyUp}
@@ -216,7 +216,7 @@ export default class Login extends React.PureComponent {
             <Button
               size="lg"
               theme="primary"
-              text={_('Login')}
+              text={__('Login')}
               onClick={this.onValidateData}
             />
           </div>

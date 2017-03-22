@@ -44,7 +44,7 @@ export default class View extends React.Component {
       {
         id: 'groupId',
         type: 'text',
-        text: _('Group ID'),
+        text: __('Group ID'),
         formProps: {
           noAdd: true,
         },
@@ -52,7 +52,7 @@ export default class View extends React.Component {
       },
       {
         id: 'groupName',
-        text: _('Group Name'),
+        text: __('Group Name'),
         options: this.groupNameListOptions,
         formProps: {
           type: 'select',
@@ -60,7 +60,7 @@ export default class View extends React.Component {
       },
       {
         id: 'ruleId',
-        text: _('Action'),
+        text: __('Action'),
         type: 'text',
         formProps: {
           type: 'select',

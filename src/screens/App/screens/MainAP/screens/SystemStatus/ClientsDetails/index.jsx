@@ -124,7 +124,7 @@ export default class ClientsDetails extends React.Component {
     const clientOptions = fromJS([
       {
         id: 'num',
-        text: _('No.'),
+        text: __('No.'),
       }, {
         id: 'mac',
         text: 'MAC',
@@ -132,7 +132,7 @@ export default class ClientsDetails extends React.Component {
       },
       {
         id: 'deviceName',
-        text: _('Device Name'),
+        text: __('Device Name'),
         maxWidth: '117px',
         transform(val) {
           if (val === '' || val === undefined) {
@@ -148,7 +148,7 @@ export default class ClientsDetails extends React.Component {
       },
       {
         id: 'ssid',
-        text: _('Owner SSID'),
+        text: __('Owner SSID'),
         sortable: true,
         transform(val) {
           if (val === '' || val === undefined) {
@@ -159,7 +159,7 @@ export default class ClientsDetails extends React.Component {
       },
       {
         id: 'signal',
-        text: _('Signal(dBm)'),
+        text: __('Signal(dBm)'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -169,7 +169,7 @@ export default class ClientsDetails extends React.Component {
       },
       {
         id: 'noise',
-        text: _('Noise(dBm)'),
+        text: __('Noise(dBm)'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -179,7 +179,7 @@ export default class ClientsDetails extends React.Component {
       },
       {
         id: 'txRate',
-        text: _('Tx Rate'),
+        text: __('Tx Rate'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -189,7 +189,7 @@ export default class ClientsDetails extends React.Component {
       },
       {
         id: 'rxRate',
-        text: _('Rx Rate'),
+        text: __('Rx Rate'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -199,7 +199,7 @@ export default class ClientsDetails extends React.Component {
       },
       {
         id: 'txBytes',
-        text: _('Tx Data'),
+        text: __('Tx Data'),
         sortFun: (a, b) => {
           const aVal = parseInt(a, 10);
           const bVal = parseInt(b, 10);
@@ -216,7 +216,7 @@ export default class ClientsDetails extends React.Component {
       },
       {
         id: 'rxBytes',
-        text: _('Rx Data'),
+        text: __('Rx Data'),
         sortFun: (a, b) => {
           const aVal = parseInt(a, 10);
           const bVal = parseInt(b, 10);
@@ -233,7 +233,7 @@ export default class ClientsDetails extends React.Component {
       },
       {
         id: 'txPackets',
-        text: _('Tx Packets'),
+        text: __('Tx Packets'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -243,7 +243,7 @@ export default class ClientsDetails extends React.Component {
       },
       {
         id: 'rxPackets',
-        text: _('Rx Packets'),
+        text: __('Rx Packets'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -253,7 +253,7 @@ export default class ClientsDetails extends React.Component {
       },
       {
         id: 'connectTime',
-        text: _('Connect Time'),
+        text: __('Connect Time'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -263,7 +263,7 @@ export default class ClientsDetails extends React.Component {
       },
       {
         id: 'ipAddr',
-        text: _('IP'),
+        text: __('IP'),
         sortable: true,
         transform(val) {
           if (val === '' || val === undefined) {
@@ -274,23 +274,23 @@ export default class ClientsDetails extends React.Component {
       },
       {
         id: 'block',
-        text: _('Block'),
+        text: __('Block'),
         transform(val, item) {
           return (
             val ? (
-              <span>{_('offline')}</span>
+              <span>{__('offline')}</span>
             ) : (
               <Icon
                 name="user-times"
                 size="lg"
-                title={_('add to blacklist')}
+                title={__('add to blacklist')}
                 style={{
                   cursor: 'pointer',
                 }}
                 onClick={() => {
                   that.props.createModal({
                     role: 'confirm',
-                    text: `${_('Add client ')}${item.get('mac')}${_(' to blacklist ?')}`,
+                    text: `${__('Add client ')}${item.get('mac')}${__(' to blacklist ?')}`,
                     apply: () => {
                       const query = {
                         vapId: item.get('vapId'),
@@ -322,7 +322,7 @@ export default class ClientsDetails extends React.Component {
     return (
       <div className="o-box">
         <Button
-          text={_('Back')}
+          text={__('Back')}
           theme="primary"
           style={{
             marginBottom: '15px',
@@ -339,7 +339,7 @@ export default class ClientsDetails extends React.Component {
               fontWeight: 'bold',
             }}
           >
-            {`${_('Clients')} (${this.props.product.getIn(['radioSelectOptions', radioId, 'label'])})`}
+            {`${__('Clients')} (${this.props.product.getIn(['radioSelectOptions', radioId, 'label'])})`}
           </span>
           <span
             style={{
@@ -348,7 +348,7 @@ export default class ClientsDetails extends React.Component {
               mraginBottom: '3px',
             }}
           >
-            {`${_('Total Clients: ')}${staList.length}`}
+            {`${__('Total Clients: ')}${staList.length}`}
           </span>
         </div>
         <div className="o-box__cell">

@@ -18,22 +18,22 @@ export const Advance = React.createClass({
 
         <div className='rtsConfg'>
           <FormGroup
-            label={_('RTS Switch') }
+            label={__('RTS Switch') }
             type="checkbox"
             onChange={this.onRtsSwitchToggle}
           />
           <FormGroup
             className="rtsThresholdValue"
-            label={_('RTS Threshold') }
+            label={__('RTS Threshold') }
             type="number"
-            help={_("Range: ")}
+            help={__("Range: ")}
             required
           />
         </div>
 
         <div className="disConfg">
           <FormGroup
-            label={_("Distance Adjust Mode")}
+            label={__("Distance Adjust Mode")}
             type="checkbox"
           >
             <label htmlFor="autoDis">
@@ -60,34 +60,34 @@ export const Advance = React.createClass({
           <div className="disValue">
             <FormGroup
               type="number"
-              label={_("Distance Value") }
+              label={__("Distance Value") }
               help="M"
             />
           </div>
 
         <div className="clientIsoConfg">
           <FormGroup
-            label={_("Client Isolation") }
+            label={__("Client Isolation") }
             type="checkbox"
           />
         </div>
 
         <div className="sensitivityConfg">
           <FormGroup
-            label={_("Sensitivity Threshold") }
+            label={__("Sensitivity Threshold") }
             type="checkbox"
           />
           <FormGroup
             className="sensThresholdValue"
-            label={_('Threshold Value') }
+            label={__('Threshold Value') }
             type="number"
-            help={"dBm "+_("Range: ")+"-96 ~ 0"}
+            help={"dBm "+__("Range: ")+"-96 ~ 0"}
             required
            />
         </div>
 
         <div className="signalLedConfg">
-          <FormGroup label={_("Signal LED Thresholds") } >
+          <FormGroup label={__("Signal LED Thresholds") } >
             <br/><br/>
             <label htmlFor="threshdForLed1">
               <span>LED1  </span>

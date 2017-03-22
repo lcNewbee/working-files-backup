@@ -24,31 +24,31 @@ function DeviceOverview(props) {
   return (
     <div className="o-description-list">
       <dl className="o-description-list-row">
-        <dt>{_('MAC Address')}</dt>
+        <dt>{__('MAC Address')}</dt>
         <dd>{info.get('mac')}</dd>
       </dl>
       <dl className="o-description-list-row">
-        <dt>{_('Model')}</dt>
+        <dt>{__('Model')}</dt>
         <dd>{info.get('model')}</dd>
       </dl>
       <dl className="o-description-list-row">
-        <dt>{_('Firmware Version')}</dt>
+        <dt>{__('Firmware Version')}</dt>
         <dd>{info.get('softversion')}</dd>
       </dl>
       <dl className="o-description-list-row">
-        <dt>{_('Clients Number')}</dt>
+        <dt>{__('Clients Number')}</dt>
         <dd>{info.get('connectedNumbers')}</dd>
       </dl>
       <dl className="o-description-list-row">
-        <dt>{_('Uptime')}</dt>
+        <dt>{__('Uptime')}</dt>
         <dd>{uptimeFilter.transform(info.get('operationhours'))}</dd>
       </dl>
       <dl className="o-description-list-row">
-        <dt>{_('IP Address')}</dt>
+        <dt>{__('IP Address')}</dt>
         <dd>{info.get('ip')}</dd>
       </dl>
       <dl className="o-description-list-row">
-        <dt>{_('Data')}</dt>
+        <dt>{__('Data')}</dt>
         <dd>{flowRateFilter.transform(info.get('downstream'))}/{flowRateFilter.transform(info.get('upstream'))}</dd>
       </dl>
     </div>

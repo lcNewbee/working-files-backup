@@ -17,20 +17,20 @@ const propTypes = fromJS({
   initScreen: PropTypes.func,
 });
 const msg = {
-  days: _('Days'),
+  days: __('Days'),
 };
 const timeTypeSwitchs = fromJS([
   {
     value: '-1',
-    label: _('Current'),
+    label: __('Current'),
   },
   {
     value: '0',
-    label: _('Today'),
+    label: __('Today'),
   },
   {
     value: '1',
-    label: _('Yesterday'),
+    label: __('Yesterday'),
   },
   {
     value: '7',
@@ -56,14 +56,14 @@ const viewOptions = fromJS([
 const userModalOptions = fromJS([
   {
     id: 'mac',
-    text: _('MAC'),
+    text: __('MAC'),
   }, {
     id: 'ip',
-    text: _('IP'),
+    text: __('IP'),
   },
   // {
   //   id: 'osType',
-  //   text: _('OS Type'),
+  //   text: __('OS Type'),
   //   transform(val) {
   //     if (val === '' || val === undefined) {
   //       return '--';
@@ -73,13 +73,13 @@ const userModalOptions = fromJS([
   // },
   {
     id: 'curRate',
-    text: _('Current Rate'),
+    text: __('Current Rate'),
     transform(val) {
       return `${flowRateFilter.transform(val)}/s`;
     },
   }, {
     id: 'trafficPercent',
-    text: _('Proportion'),
+    text: __('Proportion'),
   },
 ]);
 
@@ -152,10 +152,10 @@ export default class ProtoInfo extends React.Component {
     const listOptions = fromJS([
       {
         id: 'attr_name',
-        text: _('Application'),
+        text: __('Application'),
       }, {
         id: 'userNum',
-        text: _('User Number'),
+        text: __('User Number'),
         transform: function (val, item) {
           return (
             <span
@@ -165,11 +165,11 @@ export default class ProtoInfo extends React.Component {
                 cursor: 'pointer',
                 display: 'inline-block',
               }}
-              title={_('Click for details')}
+              title={__('Click for details')}
               onClick={() => {
                 // 找到traffic在options中的位置，然后改变traffic的text属性
                 // const optionsIndex = this.state.userModalOptions.findIndex(name => name.get('id') === 'traffic');
-                // const options = this.state.userModalOptions.setIn([optionsIndex, 'text'], `${item.get('attr_name')} ${_('Traffic')}`);
+                // const options = this.state.userModalOptions.setIn([optionsIndex, 'text'], `${item.get('attr_name')} ${__('Traffic')}`);
                 this.setState({
                   showModal: true,
                   // userModalOptions: options,
@@ -191,13 +191,13 @@ export default class ProtoInfo extends React.Component {
         }.bind(this),
       }, {
         id: 'curRate',
-        text: _('Current Rate'),
+        text: __('Current Rate'),
         transform(val) {
           return `${flowRateFilter.transform(val)}/s`;
         },
       }, {
         id: 'trafficPercent',
-        text: _('Proportion'),
+        text: __('Proportion'),
       },
     ]);
 
@@ -216,12 +216,12 @@ export default class ProtoInfo extends React.Component {
               page: '1',
             },
           }}
-          // listTitle={_('Statistics Within 30 Seconds')}
+          // listTitle={__('Statistics Within 30 Seconds')}
         >
           <div className="t-overview">
             <Modal
               isShow={this.state.showModal}
-              title={`${_('Clients List')}`}
+              title={`${__('Clients List')}`}
               cancelButton={false}
               draggable
               size="lg"
@@ -244,10 +244,10 @@ export default class ProtoInfo extends React.Component {
                       fontWeight: 'bold',
                     }}
                   >
-                    {_('View')}
+                    {__('View')}
                   </span>
                   <FormInput
-                    label={_('View')}
+                    label={__('View')}
                     options={viewOptions.toJS()}
                     type="select"
                     value={store.getIn([curScreenId, 'query', 'modalSize'])}
@@ -272,7 +272,7 @@ export default class ProtoInfo extends React.Component {
                     marginRight: '10px',
                   }}
                 >
-                  {_('Time')}
+                  {__('Time')}
                 </span>
                 <Select
                   options={timeTypeSwitchs.toJS()}
@@ -283,7 +283,7 @@ export default class ProtoInfo extends React.Component {
                 <FormGroup
                   type="select"
                   className="fr"
-                  label={_('View')}
+                  label={__('View')}
                   options={viewOptions.toJS()}
                   value={store.getIn([curScreenId, 'query', 'size'])}
                   onChange={this.onChangeView}

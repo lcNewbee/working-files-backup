@@ -357,7 +357,7 @@ export default class View extends React.Component {
           <FormGroup
             type="select"
             className="fl"
-            label={_('Building')}
+            label={__('Building')}
             options={this.state.buildingNameOptions.toJS()}
             value={this.state.buildId}
             onChange={data => this.onChangeBuilding(data.value)}
@@ -365,7 +365,7 @@ export default class View extends React.Component {
           <FormGroup
             type="select"
             className="fl"
-            label={_('Map')}
+            label={__('Map')}
             options={this.state.layerMapOptions.toJS()}
             value={this.state.curMapId}
             onChange={data => this.onChangeMapId(data.value)}
@@ -373,7 +373,7 @@ export default class View extends React.Component {
           <FormGroup
             type="select"
             className="fl"
-            label={_('Client')}
+            label={__('Client')}
             options={this.state.clientMacOptions.toJS()}
             value={this.state.macId}
             onChange={data => this.onChangeMac(data.value)}
@@ -381,7 +381,7 @@ export default class View extends React.Component {
           <FormGroup
             type="date"
             className="fl"
-            label={_('Date')}
+            label={__('Date')}
             value={$$screenQuery.get('date')}
             onChange={(data) => {
               this.handleChangeQuery('date', data);
@@ -390,7 +390,7 @@ export default class View extends React.Component {
           <FormGroup
             type="time"
             className="fl"
-            label={_('Time from')}
+            label={__('Time from')}
             value={$$screenQuery.get('fromTime')}
             onChange={(data) => {
               this.handleChangeQuery('fromTime', data);
@@ -401,7 +401,7 @@ export default class View extends React.Component {
           <FormGroup
             type="time"
             className="fl"
-            label={_('to')}
+            label={__('to')}
             value={$$screenQuery.get('toTime')}
             onChange={(data) => {
               this.handleChangeQuery('toTime', data);

@@ -11,23 +11,23 @@ import * as appActions from 'shared/actions/app';
 const listOptions = fromJS([
   {
     id: 'name',
-    text: _('Name'),
+    text: __('Name'),
     formProps: {
       type: 'plain-text',
     },
   }, {
     id: 'workModel',
-    text: _('Physical Mode'),
+    text: __('Physical Mode'),
     options: [
       {
         value: 'half',
-        label: _('Half Duplex'),
+        label: __('Half Duplex'),
       }, {
         value: 'full',
-        label: _('Full Duplex'),
+        label: __('Full Duplex'),
       }, {
         value: 'auto',
-        label: _('Auto'),
+        label: __('Auto'),
       },
     ],
     formProps: {
@@ -36,7 +36,7 @@ const listOptions = fromJS([
   },
   {
     id: 'speed',
-    text: _('Port Speed'),
+    text: __('Port Speed'),
     options: [
       {
         value: '10',
@@ -46,7 +46,7 @@ const listOptions = fromJS([
         label: '100',
       }, {
         value: '1000',
-        label: _('1000'),
+        label: __('1000'),
       },
     ],
     formProps: {
@@ -57,7 +57,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'description',
-    text: _('Description'),
+    text: __('Description'),
     formProps: {
       type: 'textarea',
       maxLength: '31',
@@ -67,11 +67,11 @@ const listOptions = fromJS([
     },
   }, {
     id: 'status',
-    text: _('Port Status'),
+    text: __('Port Status'),
     options: [
       {
         value: 1,
-        label: _('ON'),
+        label: __('ON'),
         render() {
           return (
             <span
@@ -79,13 +79,13 @@ const listOptions = fromJS([
                 color: 'green',
               }}
             >
-              {_('ON')}
+              {__('ON')}
             </span>
           );
         },
       }, {
         value: 0,
-        label: _('OFF'),
+        label: __('OFF'),
         render() {
           return (
             <span
@@ -93,7 +93,7 @@ const listOptions = fromJS([
                 color: 'red',
               }}
             >
-              {_('OFF')}
+              {__('OFF')}
             </span>
           );
         },

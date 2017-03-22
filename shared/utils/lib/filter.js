@@ -15,9 +15,9 @@ function transformComplex(num, unit) {
   var ret = unit;
 
   if(num > 1) {
-    ret = num + _(ret + 's');
+    ret = num + __(ret + 's');
   } else {
-    ret = num + _(ret);
+    ret = num + __(ret);
   }
 
   return ret;
@@ -39,10 +39,10 @@ helper = {
   },
 
   checkbox: function(val) {
-    var ret = _('Enabled');
+    var ret = __('Enabled');
 
     if(!val || val == '0') {
-      ret = _('Disabled')
+      ret = __('Disabled')
     }
 
     return ret;

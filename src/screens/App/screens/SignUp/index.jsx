@@ -7,8 +7,8 @@ import utils from 'shared/utils';
 import urls from 'shared/config/urls';
 
 const msg = {
-  password: _('Password'),
-  confirmpasswd: _('Confirm Password'),
+  password: __('Password'),
+  confirmpasswd: __('Confirm Password'),
 };
 
 const formGroups = List([
@@ -133,7 +133,7 @@ export class SignUp extends React.PureComponent {
 
     if (!checkResult) {
       if (this.state.password !== this.state.confirmpasswd) {
-        checkResult = _('Password and confirm password must match');
+        checkResult = __('Password and confirm password must match');
       }
     }
 
@@ -172,19 +172,19 @@ export class SignUp extends React.PureComponent {
       <div>
         <header className="navbar">
           <div className="brand" />
-          <h1>{_('Axilspot Access Manager')}</h1>
+          <h1>{__('Axilspot Access Manager')}</h1>
           <span className="version">GUI {version}</span>
         </header>
         <div className="sign sign-up">
           <div className="sign-backdrop" />
           <div className="sign-content">
-            <h1>{_('Please Sign Up')}</h1>
+            <h1>{__('Please Sign Up')}</h1>
             {
               formGroups.map(
                 item => this.createList(item),
               )
             }
-            <a href="#/" className="help-link">{_('Login in')}</a>
+            <a href="#/" className="help-link">{__('Login in')}</a>
             {
               this.state.status !== 'ok' ?
                 <p className="msg-error ">{this.state.status}</p> :
@@ -194,7 +194,7 @@ export class SignUp extends React.PureComponent {
               className="btn btn-info btn-lg"
               onClick={this.onSignUp}
             >
-              {_('Sign Up')}
+              {__('Sign Up')}
             </button>
           </div>
         </div>

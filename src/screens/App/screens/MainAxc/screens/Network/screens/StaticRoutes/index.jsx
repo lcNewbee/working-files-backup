@@ -33,7 +33,7 @@ const listOptions = fromJS([
   {
     id: 'id',
     type: 'text',
-    text: _('ID'),
+    text: __('ID'),
     notEditable: true,
     formProps: {
       noAdd: true,
@@ -41,7 +41,7 @@ const listOptions = fromJS([
   },
   {
     id: 'ipType',
-    text: _('IP Type'),
+    text: __('IP Type'),
     type: 'select',
     options: ipTypeOptions,
     formProps: {
@@ -51,21 +51,21 @@ const listOptions = fromJS([
   },
   {
     id: 'destIP',
-    text: _('Destination IP'),
+    text: __('Destination IP'),
     formProps: {
       type: 'text',
     },
   },
   {
     id: 'destMask',
-    text: _('Destination Mask'),
+    text: __('Destination Mask'),
     formProps: {
       type: 'text',
     },
   },
   {
     id: 'nextHopIp',
-    text: _('Next Hop IP'),
+    text: __('Next Hop IP'),
     formProps: {
       type: 'text',
     },
@@ -73,7 +73,7 @@ const listOptions = fromJS([
   {
     id: 'interface',
     type: 'select',
-    text: _('Interface'),
+    text: __('Interface'),
     options: portIdOptions,
     formProps: {
       type: 'select',

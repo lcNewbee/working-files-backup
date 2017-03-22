@@ -80,9 +80,9 @@ export default class ChannelUtilization extends React.Component {
     let channelUtiOptions = fromJS([
       {
         id: 'title',
-        text: _('Channel'),
+        text: __('Channel'),
         transform() {
-          return _('Utilization');
+          return __('Utilization');
         },
       },
     ]);
@@ -106,14 +106,14 @@ export default class ChannelUtilization extends React.Component {
     // const { channelUtiOptions, channelUtiList } = this.props.selfState.toJS();
     return (
       <div className="stats-group">
-        <h3>{_('Channel Utilization Survey')}</h3><br />
+        <h3>{__('Channel Utilization Survey')}</h3><br />
         <div className="clearfix">
           <div className="fl">
             {
               this.props.product.get('deviceRadioList').size > 1 ? (
                 <FormInput
                   type="select"
-                  label={_('Radio Select')}
+                  label={__('Radio Select')}
                   minWidth="100px"
                   options={this.props.product.get('radioSelectOptions').toJS()}
                   value={this.props.selfState.getIn(['currRadioConfig', 'radioId'])}
@@ -125,7 +125,7 @@ export default class ChannelUtilization extends React.Component {
           <div className="fl">
             <Button
               theme="primary"
-              text={_('Start Scan')}
+              text={__('Start Scan')}
               loading={this.props.app.get('fetching')}
               disabled={this.props.app.get('fetching')}
               onClick={() => this.onRunScanBtnClick()}
@@ -141,7 +141,7 @@ export default class ChannelUtilization extends React.Component {
             <div className="stats-group-cell">
               <Table
                 className="table"
-                title={_('Channel Utilization:')}
+                title={__('Channel Utilization:')}
                 options={this.props.selfState.get('channelUtiOptions')}
                 list={this.props.selfState.get('channelUtiList')}
               />

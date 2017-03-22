@@ -16,18 +16,18 @@ const listOptions = fromJS([
   {
     id: 'userType',
     width: '160',
-    text: _('User Type'),
+    text: __('User Type'),
     defaultValue: 1,
     options: [
       {
         value: 0,
-        label: _('Admin'),
+        label: __('Admin'),
       }, {
         value: 1,
-        label: _('Manager(Branch)'),
+        label: __('Manager(Branch)'),
       }, {
         value: 2,
-        label: _('Manager(Read-only)'),
+        label: __('Manager(Read-only)'),
       },
     ],
     formProps: {
@@ -38,7 +38,7 @@ const listOptions = fromJS([
   }, {
     id: 'purview',
     width: '160',
-    text: _('Purview'),
+    text: __('Purview'),
     defaultValue: '',
     options: purviewOptions,
     multi: true,
@@ -62,7 +62,7 @@ const listOptions = fromJS([
   }, {
     id: 'userName',
     width: '200',
-    text: _('User Name'),
+    text: __('User Name'),
     defaultValue: '',
     formProps: {
       required: true,
@@ -72,7 +72,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'userPassword',
-    text: _('New Password'),
+    text: __('New Password'),
     noTable: true,
     defaultValue: '',
     formProps: {
@@ -84,7 +84,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'confirmPassword',
-    text: _('Confirm Password'),
+    text: __('Confirm Password'),
     noTable: true,
     defaultValue: '',
     formProps: {
@@ -122,7 +122,7 @@ export default class View extends React.Component {
     if ('add,edit'.indexOf(actionType) !== -1) {
       if (this.props.app.get('invalid').isEmpty() &&
           $$curListItem.get('userPassword') !== $$curListItem.get('confirmPassword')) {
-        ret = _('New password and confirm password must match');
+        ret = __('New password and confirm password must match');
       } else if (userType === 0) {
         this.props.updateCurEditListItem({
           purview: PURVIEW_ADMIN,

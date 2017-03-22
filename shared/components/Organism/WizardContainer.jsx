@@ -242,7 +242,7 @@ class WizardContainer extends React.Component {
             currStep > 0 ? (
               <Button
                 onClick={this.onPrev}
-                text={_('Back')}
+                text={__('Back')}
               />
             ) : null
           }
@@ -252,14 +252,14 @@ class WizardContainer extends React.Component {
                 theme="info"
                 onClick={this.onNext}
                 disabled={nextDisabled}
-                text={_('Next Step')}
+                text={__('Next Step')}
               />
             ) : (
               <SaveButton
                 theme="info"
                 loading={this.props.saving}
                 onClick={this.onNext}
-                text={_('Completed')}
+                text={__('Completed')}
               />
             )
           }

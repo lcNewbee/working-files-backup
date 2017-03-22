@@ -1,43 +1,43 @@
 export const apStatus = [
   {
     value: 'new',
-    label: _('non-configurable'),
+    label: __('non-configurable'),
   }, {
     value: 'run',
-    label: _('Online'),
+    label: __('Online'),
   }, {
     value: 'no_up',
-    label: _('Offline'),
+    label: __('Offline'),
   }, {
     value: 'no_cfg',
-    label: _('Offline'),
+    label: __('Offline'),
   }, {
     value: 'quick_off',
-    label: _('Offline'),
+    label: __('Offline'),
   }, {
     value: 'down',
-    label: _('Offline'),
+    label: __('Offline'),
   }, {
     value: 'update',
-    label: _('Update'),
+    label: __('Update'),
   }, {
     value: 'jdle',
-    label: _('Offline'),
+    label: __('Offline'),
   }, {
     value: 'join',
-    label: _('Offline'),
+    label: __('Offline'),
   }, {
     value: 'conf',
-    label: _('Offline'),
+    label: __('Offline'),
   }, {
     value: 'restart',
-    label: _('Restart'),
+    label: __('Restart'),
   }, {
     value: 'build',
-    label: _('Offline'),
+    label: __('Offline'),
   }, {
     value: 'unknown',
-    label: _('Offline'),
+    label: __('Offline'),
   },
 ];
 

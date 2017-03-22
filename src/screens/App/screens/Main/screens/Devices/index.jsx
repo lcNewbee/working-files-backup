@@ -22,20 +22,20 @@ import './_index.scss';
 const typeArr = [
   {
     value: '0',
-    label: _('ALL'),
+    label: __('ALL'),
   }, {
     value: '1',
-    label: _('INDOOR'),
+    label: __('INDOOR'),
   }, {
     value: '3',
-    label: _('OUTDOOR'),
+    label: __('OUTDOOR'),
   }, {
     value: '4',
-    label: _('IN OPERATION...'),
+    label: __('IN OPERATION...'),
   },
 ];
 
-const labelPre = _('Items per page: ');
+const labelPre = __('Items per page: ');
 
 const validOptions = Map({
   ip: validator({
@@ -133,7 +133,7 @@ export const Device = React.createClass({
    *
    */
   onResetDevice(mac) {
-    let msg_text = _('Are you sure reset device: %s?', mac);
+    let msg_text = __('Are you sure reset device: %s?', mac);
 
     this.props.createModal({
       id: 'settings',
@@ -145,7 +145,7 @@ export const Device = React.createClass({
     });
   },
   onRebootDevice(mac) {
-    let msg_text = _('Are you sure reboot device: %s?', mac);
+    let msg_text = __('Are you sure reboot device: %s?', mac);
 
     this.props.createModal({
       id: 'settings',
@@ -165,7 +165,7 @@ export const Device = React.createClass({
     this.handleAction(mac, actionType);
   },
   onUpgradeDevice(mac) {
-    let msg_text = _('Upgrade need reboot Device, are you sure upgrade device: %s?', mac);
+    let msg_text = __('Upgrade need reboot Device, are you sure upgrade device: %s?', mac);
 
     this.props.createModal({
       id: 'settings',
@@ -220,24 +220,24 @@ export const Device = React.createClass({
         if (invalid.isEmpty()) {
           if (combineResult) {
             this.props.createModal({
-              title: _('DEVICES'),
+              title: __('DEVICES'),
               role: 'alert',
               text: combineResult,
             });
           } else {
             if ((oriGateway && validator.combine.needStaticIP(ip, oriMask, oriGateway)) || oriMask !== mask) {
               this.props.createModal({
-                title: _('DEVICES'),
+                title: __('DEVICES'),
                 role: 'confirm',
-                text: _('You might be unable to control the device after modifying its network segment, are you sure you want to modify it?'),
+                text: __('You might be unable to control the device after modifying its network segment, are you sure you want to modify it?'),
                 apply: () => this.props.saveDeviceNetwork(),
               });
             } else {
               if (validator.combine.needStaticIP(ip, oriMask, oriGateway) || oriMask !== mask) {
                 this.props.createModal({
-                  title: _('DEVICES'),
+                  title: __('DEVICES'),
                   role: 'confirm',
-                  text: _('You might be unable to control the device after modifying its network segment, are you sure you want to modify it?'),
+                  text: __('You might be unable to control the device after modifying its network segment, are you sure you want to modify it?'),
                   apply: function () {
                     this.props.saveDeviceNetwork();
                   }.bind(this),
@@ -259,7 +259,7 @@ export const Device = React.createClass({
       ret = fromJS([
         {
           id: 'devicename',
-          text: _('MAC Address') + '/' + _('Name'),
+          text: __('MAC Address') + '/' + __('Name'),
           transform (val, item) {
               let deviceMac = item.get('mac');
 
@@ -267,17 +267,17 @@ export const Device = React.createClass({
             },
         }, {
           id: 'model',
-          text: _('Model'),
+          text: __('Model'),
         }, {
           id: 'softversion',
-          text: _('Version'),
+          text: __('Version'),
         }, {
           id: 'operationhours',
-          text: _('Uptime'),
+          text: __('Uptime'),
           filter: 'connectTime',
         }, {
           id: 'operate',
-          text: _('Action'),
+          text: __('Action'),
           filter: 'translate',
         },
       ]);
@@ -285,7 +285,7 @@ export const Device = React.createClass({
       ret = fromJS([
         {
           id: 'devicename',
-          text: _('MAC Address') + '/' + _('Name'),
+          text: __('MAC Address') + '/' + __('Name'),
           transform: function (val, item) {
             let deviceMac = item.get('mac');
             let name = item.get('devicename') || deviceMac;
@@ -300,7 +300,7 @@ export const Device = React.createClass({
                 className="link-text"
                 onClick={this.showEditNetwork(deviceMac)}
                 value={deviceMac}
-                title={_('MAC Address') + ': ' + deviceMac}
+                title={__('MAC Address') + ': ' + deviceMac}
               >
                 {name}
               </span>
@@ -308,7 +308,7 @@ export const Device = React.createClass({
           }.bind(this),
         }, {
           id: 'ip',
-          text: _('IP Address'),
+          text: __('IP Address'),
           transform: function (val, item) {
             let deviceMac = item.get('mac');
             let deviceStatus = item.get('status');
@@ -329,21 +329,21 @@ export const Device = React.createClass({
           }.bind(this),
         }, {
           id: 'status',
-          text: _('Status'),
+          text: __('Status'),
           filter: 'translate',
         }, {
           id: 'model',
-          text: _('Model'),
+          text: __('Model'),
         }, {
           id: 'softversion',
-          text: _('Version'),
+          text: __('Version'),
         }, {
           id: 'operationhours',
-          text: _('Uptime'),
+          text: __('Uptime'),
           filter: 'connectTime',
         }, {
           id: 'op',
-          text: _('Actions'),
+          text: __('Actions'),
           width: '360',
           transform: function (val, item) {
             let deviceMac = item.get('mac');
@@ -363,7 +363,7 @@ export const Device = React.createClass({
             if (item.get('newest') === '0') {
               upgradeBtn = (<Button
                 onClick={this.onUpgradeDevice.bind(this, deviceMac) }
-                text={_('Upgrade') }
+                text={__('Upgrade') }
                 size="sm"
                 icon="level-up"
                 />);
@@ -373,20 +373,20 @@ export const Device = React.createClass({
               <div className="action-btns">
                 <Button
                   onClick={this.onRebootDevice.bind(this, deviceMac)}
-                  text={_('Reboot')}
+                  text={__('Reboot')}
                   size="sm"
                   icon="recycle"
                 />
                 <Button
                   className={locationClassName}
                   onClick={this.onLocateDevice.bind(this, deviceMac, isLocating)}
-                  text={_('Locate')}
+                  text={__('Locate')}
                   size="sm"
                   icon="location-arrow"
                 />
                 <Button
                   onClick={this.onResetDevice.bind(this, deviceMac)}
-                  text={_('Reset')}
+                  text={__('Reset')}
                   size="sm"
                   icon="reply-all"
                 />
@@ -412,7 +412,7 @@ export const Device = React.createClass({
         label: 'DHCP',
       }, {
         value: 'static',
-        label: _('Static IP'),
+        label: __('Static IP'),
       },
     ]);
     const currData = this.props.store.get('edit') || Map({});
@@ -421,12 +421,12 @@ export const Device = React.createClass({
 
     return (
       <div>
-        <h2>{_('Devices Info') }</h2>
+        <h2>{__('Devices Info') }</h2>
         <div className="m-action-bar">
           <Search
             className="search fl"
             value={text}
-            placeholder={_('IP or MAC Address')}
+            placeholder={__('IP or MAC Address')}
             onChange={this.onChangeSearchText}
             onSearch={this.handleSearch}
           />
@@ -464,14 +464,14 @@ export const Device = React.createClass({
           draggable
         >
           <FormGroup
-            label={_('Nickname')}
+            label={__('Nickname')}
             maxLength="24"
             value={currData.get('nickname')}
             onChange={this.onChangeDeviceNetwork('nickname')}
           />
 
           <div className="form-group">
-            <label htmlFor="">{_('Connect Type') }</label>
+            <label htmlFor="">{__('Connect Type') }</label>
             <div className="form-control">
               <Switchs
                 options={typeOptions}
@@ -485,7 +485,7 @@ export const Device = React.createClass({
             currData.get('connect_type') === 'static' ? (
               <div>
                 <FormGroup
-                  label={_('Static IP')}
+                  label={__('Static IP')}
                   required
                   maxLength="15"
                   value={currData.get('ip')}
@@ -496,7 +496,7 @@ export const Device = React.createClass({
 
                 <FormGroup
                   {...mask}
-                  label={_('Subnet Mask')}
+                  label={__('Subnet Mask')}
                   required
                   maxLength="15"
                   value={currData.get('mask')}
@@ -504,21 +504,21 @@ export const Device = React.createClass({
                 />
 
                 <FormGroup
-                  label={_('Default Gateway')}
+                  label={__('Default Gateway')}
                   maxLength="15"
                   value={currData.get('gateway')}
                   onChange={this.onChangeDeviceNetwork('gateway')}
                   {...gateway}
                 />
                 <FormGroup
-                  label={_('DNS 1')}
+                  label={__('DNS 1')}
                   maxLength="15"
                   value={currData.get('main_dns')}
                   onChange={this.onChangeDeviceNetwork('main_dns')}
                   {...main_dns}
                 />
                 <FormGroup
-                  label={_('DNS 2')}
+                  label={__('DNS 2')}
                   maxLength="15"
                   value={currData.get('second_dns')}
                   onChange={this.onChangeDeviceNetwork('second_dns')}

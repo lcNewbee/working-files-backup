@@ -11,7 +11,7 @@ import * as screenActions from 'shared/actions/screens';
 const listOptions = fromJS([
   {
     id: 'template_name',
-    label: _('Server Name'),
+    label: __('Server Name'),
     formProps: {
       type: 'text',
       maxLength: '31',
@@ -24,15 +24,15 @@ const listOptions = fromJS([
   },
   // {
   //   id: 'address_type',
-  //   label: _('Address Type'),
+  //   label: __('Address Type'),
   //   defaultValue: '1',
   //   options: [
   //     {
   //       value: '1',
-  //       label: _('IP Address'),
+  //       label: __('IP Address'),
   //     }, {
   //       value: '2',
-  //       label: _('Domain'),
+  //       label: __('Domain'),
   //       disabled: true,
   //     },
   //   ],
@@ -42,7 +42,7 @@ const listOptions = fromJS([
   // },
   {
     id: 'server_ipaddr',
-    label: _('Server IP'),
+    label: __('Server IP'),
     formProps: {
       type: 'text',
       required: true,
@@ -56,7 +56,7 @@ const listOptions = fromJS([
   },
   // {
   //   id: 'server_domain',
-  //   label: _('Server Domain'),
+  //   label: __('Server Domain'),
   //   formProps: {
   //     type: 'text',
   //     required: true,
@@ -70,7 +70,7 @@ const listOptions = fromJS([
   // },
   {
     id: 'server_port',
-    label: _('Server Port'),
+    label: __('Server Port'),
     formProps: {
       type: 'number',
       min: '1',
@@ -79,7 +79,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'server_key',
-    label: _('Shared Key'),
+    label: __('Shared Key'),
     noTable: true,
     formProps: {
       type: 'password',
@@ -91,14 +91,14 @@ const listOptions = fromJS([
     },
   }, {
     id: 'server_url',
-    label: _('Redirect URL'),
+    label: __('Redirect URL'),
     formProps: {
       type: 'text',
       required: true,
     },
   }, {
     id: 'ac_ip',
-    label: _('AC IP'),
+    label: __('AC IP'),
     formProps: {
       type: 'text',
       required: true,

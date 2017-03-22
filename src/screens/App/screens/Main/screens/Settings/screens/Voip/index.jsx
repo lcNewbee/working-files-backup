@@ -13,18 +13,18 @@ import myReducer from './reducer';
 
 
 const msg = {
-  upSpeed: _('Up Speed'),
-  downSpeed: _('Down Speed'),
-  selectGroup: _('Select Group'),
+  upSpeed: __('Up Speed'),
+  downSpeed: __('Down Speed'),
+  selectGroup: __('Select Group'),
 };
 const encryptionOptions = [
   {
     value: 'none',
-    label: _('NONE'),
+    label: __('NONE'),
   },
   {
     value: 'psk-mixed',
-    label: _('STRONG'),
+    label: __('STRONG'),
   },
 ];
 
@@ -98,7 +98,7 @@ export const Voip = React.createClass({
         let label = groupname;
 
         if (groupname === 'Default') {
-          label = _('Ungrouped Devices');
+          label = __('Ungrouped Devices');
         }
         return {
           value: groupname,
@@ -121,7 +121,7 @@ export const Voip = React.createClass({
 
     return (
       <div>
-        <h3>{ _('Current Group') }</h3>
+        <h3>{ __('Current Group') }</h3>
         <FormGroup
           label={msg.selectGroup}
           type="select"
@@ -130,12 +130,12 @@ export const Voip = React.createClass({
           onChange={this.onChangeGroup}
         />
 
-        <h3>{_('VoIP Settings') }</h3>
+        <h3>{__('VoIP Settings') }</h3>
         <FormGroup
-          label={_('Enable VoIP')}
+          label={__('Enable VoIP')}
           type="checkbox"
           options={{
-            label: _('Enable'),
+            label: __('Enable'),
           }}
           checked={getCurrData('enable') == '1'}
           onChange={this.onUpdate('enable')}

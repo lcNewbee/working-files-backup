@@ -62,9 +62,9 @@ export default class ChannelUtilization extends React.Component {
     let channelUtiOptions = fromJS([
       {
         id: 'title',
-        text: _('Channel'),
+        text: __('Channel'),
         transform() {
-          return _('Utilization');
+          return __('Utilization');
         },
       },
     ]);
@@ -88,11 +88,11 @@ export default class ChannelUtilization extends React.Component {
     // const { channelUtiOptions, channelUtiList } = this.props.selfState.toJS();
     return (
       <div className="stats-group">
-        <h3>{_('Channel Utilization Survey')}</h3><br />
+        <h3>{__('Channel Utilization Survey')}</h3><br />
         <div className="stats-group-cell">
           <Table
             className="table"
-            title={_('Channel Utilization:')}
+            title={__('Channel Utilization:')}
             options={this.props.selfState.get('channelUtiOptions')}
             list={this.props.selfState.get('channelUtiList')}
           />
@@ -104,7 +104,7 @@ export default class ChannelUtilization extends React.Component {
         >
           <Button
             theme="primary"
-            text={_('Run Test')}
+            text={__('Run Test')}
             onClick={() => this.onRunScanBtnClick()}
           />
         </div>

@@ -34,7 +34,7 @@ export default class View extends React.Component {
       {
         id: 'id',
         type: 'text',
-        text: _('Rule ID'),
+        text: __('Rule ID'),
         formProps: {
           noAdd: true,
         },
@@ -42,17 +42,17 @@ export default class View extends React.Component {
       },
       {
         id: 'ruleName',
-        text: _('Rule Name'),
+        text: __('Rule Name'),
         type: 'text',
       },
       {
         id: 'action',
-        text: _('Action'),
+        text: __('Action'),
         type: 'select',
         options: [
-          { label: _('Accept'), value: 'accept' },
-          { label: _('Reject'), value: 'reject' },
-          { label: _('Redirect'), value: 'redirect' },
+          { label: __('Accept'), value: 'accept' },
+          { label: __('Reject'), value: 'reject' },
+          { label: __('Redirect'), value: 'redirect' },
         ],
         formProps: {
           type: 'select',
@@ -61,7 +61,7 @@ export default class View extends React.Component {
       {
         id: 'ipType',
         type: 'select',
-        text: _('IP Type'),
+        text: __('IP Type'),
         options: [
           { label: 'IPV4', value: 'ipv4' },
           { label: 'IPV6', value: 'ipv6' },
@@ -73,7 +73,7 @@ export default class View extends React.Component {
       {
         id: 'protoType',
         type: 'select',
-        text: _('Protocol'),
+        text: __('Protocol'),
         options: protoTypeOptions,
         formProps: {
           type: 'select',
@@ -81,7 +81,7 @@ export default class View extends React.Component {
       },
       {
         id: 'flowDirection',
-        text: _('Flow Direction'),
+        text: __('Flow Direction'),
         formProps: {
           type: 'select',
           options: flowDirectionOptions,
@@ -89,35 +89,35 @@ export default class View extends React.Component {
       },
       {
         id: 'srcIp',
-        text: _('Source IP'),
+        text: __('Source IP'),
         formProps: {
           type: 'text',
         },
       },
       {
         id: 'srcIpMask',
-        text: _('Source IP Mask'),
+        text: __('Source IP Mask'),
         formProps: {
           type: 'text',
         },
       },
       {
         id: 'destIp',
-        text: _('Destination IP'),
+        text: __('Destination IP'),
         formProps: {
           type: 'text',
         },
       },
       {
         id: 'destIpMask',
-        text: _('Destination IP Mask'),
+        text: __('Destination IP Mask'),
         formProps: {
           type: 'text',
         },
       },
       {
         id: 'srcPortRange',
-        text: _('Source Port'),
+        text: __('Source Port'),
         transform: (val, item) => {
           const srcStartPort = item.get('srcStartPort');
           const srcEndPort = item.get('srcEndPort');
@@ -148,7 +148,7 @@ export default class View extends React.Component {
       },
       {
         id: 'destPortRange',
-        text: _('Destination Port'),
+        text: __('Destination Port'),
         transform: (val, item) => {
           const destStartPort = item.get('srcStartPort');
           const destEndPort = item.get('srcEndPort');

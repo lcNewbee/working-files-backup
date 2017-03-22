@@ -133,7 +133,7 @@ export default class ClientsDetails extends React.Component {
       },
       {
         id: 'deviceName',
-        text: _('Device Name'),
+        text: __('Device Name'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -143,7 +143,7 @@ export default class ClientsDetails extends React.Component {
       },
       {
         id: 'ssid',
-        text: _('Owner SSID'),
+        text: __('Owner SSID'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -153,7 +153,7 @@ export default class ClientsDetails extends React.Component {
       },
       {
         id: 'signal',
-        text: _('Signal(dBm)'),
+        text: __('Signal(dBm)'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -163,7 +163,7 @@ export default class ClientsDetails extends React.Component {
       },
       {
         id: 'noise',
-        text: _('Noise(dBm)'),
+        text: __('Noise(dBm)'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -173,7 +173,7 @@ export default class ClientsDetails extends React.Component {
       },
       {
         id: 'txRate',
-        text: _('Tx Rate'),
+        text: __('Tx Rate'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -183,7 +183,7 @@ export default class ClientsDetails extends React.Component {
       },
       {
         id: 'rxRate',
-        text: _('Rx Rate'),
+        text: __('Rx Rate'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -193,7 +193,7 @@ export default class ClientsDetails extends React.Component {
       },
       {
         id: 'txBytes',
-        text: _('Tx Data'),
+        text: __('Tx Data'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -203,7 +203,7 @@ export default class ClientsDetails extends React.Component {
       },
       {
         id: 'rxBytes',
-        text: _('Rx Data'),
+        text: __('Rx Data'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -213,7 +213,7 @@ export default class ClientsDetails extends React.Component {
       },
       {
         id: 'txPackets',
-        text: _('Tx Packets'),
+        text: __('Tx Packets'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -223,7 +223,7 @@ export default class ClientsDetails extends React.Component {
       },
       {
         id: 'rxPackets',
-        text: _('Rx Packets'),
+        text: __('Rx Packets'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -233,7 +233,7 @@ export default class ClientsDetails extends React.Component {
       },
       {
         id: 'connectTime',
-        text: _('Connect Time'),
+        text: __('Connect Time'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -243,7 +243,7 @@ export default class ClientsDetails extends React.Component {
       },
       {
         id: 'ipAddr',
-        text: _('IP'),
+        text: __('IP'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -253,11 +253,11 @@ export default class ClientsDetails extends React.Component {
       },
       {
         id: 'block',
-        text: _('Block'),
+        text: __('Block'),
         transform(val, item) {
           return (
             val ? (
-              <span>{_('offline')}</span>
+              <span>{__('offline')}</span>
             ) : (
               <Icon
                 name="user-times"
@@ -295,7 +295,7 @@ export default class ClientsDetails extends React.Component {
     return (
       <div className="o-box">
         <Button
-          text={_('Back')}
+          text={__('Back')}
           theme="primary"
           style={{
             marginBottom: '15px',
@@ -313,13 +313,13 @@ export default class ClientsDetails extends React.Component {
               marginRight: '15px',
             }}
           >
-            {_('Clients')}
+            {__('Clients')}
           </h3>
           {
             this.props.product.get('deviceRadioList').size > 1 ? (
               <FormInput
                 type="switch"
-                label={_('Radio Select')}
+                label={__('Radio Select')}
                 minWidth="100px"
                 options={this.props.product.get('radioSelectOptions')}
                 value={this.props.selfState.getIn(['currRadioConfig', 'radioId'])}

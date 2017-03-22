@@ -26,7 +26,7 @@ function getChannelList(data) {
 
       ret.options.unshift({
         value: 0,
-        label: _('Auto'),
+        label: __('Auto'),
       });
       return ret;
     },
@@ -175,7 +175,7 @@ class DeviceSystem extends React.Component {
             inputStyle={{
               display: 'block',
             }}
-            label={_('Select Network Adapter')}
+            label={__('Select Network Adapter')}
             value={this.getCurData('activeIndex')}
             options={this.getCurData('radiosOptions')}
             onChange={option => this.props.onChangeItem({
@@ -185,9 +185,9 @@ class DeviceSystem extends React.Component {
         ]}
         actionable={actionable}
         hasSaveButton={actionable}
-        saveText={_('Apply')}
-        savingText={_('Applying')}
-        savedText={_('Applied')}
+        saveText={__('Apply')}
+        savingText={__('Applying')}
+        savedText={__('Applied')}
       />
     );
   }

@@ -10,11 +10,11 @@ import * as screenActions from 'shared/actions/screens';
 const formOptions = fromJS([
   {
     id: 'ip',
-    label: _('IP Address'),
+    label: __('IP Address'),
     type: 'text',
   }, {
     id: 'version',
-    label: _('Version'),
+    label: __('Version'),
     defaultValue: 'V1',
     options: [
       {
@@ -32,24 +32,24 @@ const formOptions = fromJS([
     minWidth: '60px',
   }, {
     id: 'trapPassword',
-    label: _('Community Name'),
+    label: __('Community Name'),
     type: 'text',
   }, {
     id: 'readPassword',
-    label: _('Read Password'),
+    label: __('Read Password'),
     type: 'textarea',
   }, {
     id: 'writePassword',
-    label: _('Write Password'),
+    label: __('Write Password'),
     type: 'textarea',
   }, {
     id: 'trapServer',
-    label: _('Trap Server'),
+    label: __('Trap Server'),
     required: true,
     type: 'text',
   }, {
     id: 'trapPassword',
-    label: _('Trap Password'),
+    label: __('Trap Password'),
     required: true,
     type: 'password',
   },

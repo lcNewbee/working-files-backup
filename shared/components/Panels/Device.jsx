@@ -10,10 +10,10 @@ import DeviceRadioBase from './DeviceRadioBase';
 import DeviceRadioQos from './DeviceRadioQos';
 
 const MY_MSG = {
-  saveText: _('Apply'),
-  savingText: _('Applying'),
-  savedText: _('Applied'),
-  unsavedText: _('Unapplied'),
+  saveText: __('Apply'),
+  savingText: __('Applying'),
+  savedText: __('Applied'),
+  unsavedText: __('Unapplied'),
 };
 
 const panelsComponentMap = {
@@ -59,10 +59,10 @@ function DevicesProperties(props) {
   let statuIconClass = 'o-properties-header__status';
   let statuTagClass = 'a-tag a-tag--danger';
 
-  if (apStatuVal === _('Offline')) {
+  if (apStatuVal === __('Offline')) {
     statuIconClass = `${statuIconClass} offline`;
     statuTagClass = 'a-tag a-tag--danger';
-  } else if (apStatuVal === _('Online')) {
+  } else if (apStatuVal === __('Online')) {
     statuIconClass = `${statuIconClass} online`;
     avatarIconClass = 'Icon Icon-ap-online';
     statuTagClass = 'a-tag a-tag--success';
@@ -117,7 +117,7 @@ function DevicesProperties(props) {
                     className={activeTab === 'details' ? 'active' : ''}
                     onClick={e => onChangeTab(e, 'details')}
                   >
-                    {_('Details')}
+                    {__('Details')}
                   </a>
                 </li>
                 <li>
@@ -127,7 +127,7 @@ function DevicesProperties(props) {
                       e => onChangeTab(e, 'configuration')
                     }
                   >
-                    {_('Configuration')}
+                    {__('Configuration')}
                   </a>
                 </li>
               </ul>
@@ -183,7 +183,7 @@ function DevicesProperties(props) {
                             <Icon
                               name={isActive ? 'angle-down' : 'angle-right'}
                             />
-                            <span>{_(panel.get('text'))}</span>
+                            <span>{__(panel.get('text'))}</span>
                           </div>
                           {
                             MyComponent ? (

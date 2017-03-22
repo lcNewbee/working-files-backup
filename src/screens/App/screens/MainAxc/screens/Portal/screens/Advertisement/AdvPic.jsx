@@ -11,7 +11,7 @@ import * as appActions from 'shared/actions/app';
 const listOptions = fromJS([
   {
     id: 'name',
-    text: _('Name'),
+    text: __('Name'),
     formProps: {
       type: 'text',
       required: true,
@@ -19,7 +19,7 @@ const listOptions = fromJS([
   },
   {
     id: 'aid',
-    text: _('Ads'),
+    text: __('Ads'),
     formProps: {
       type: 'select',
       required: true,
@@ -27,7 +27,7 @@ const listOptions = fromJS([
   },
   {
     id: 'pos',
-    text: _('Sorting'),
+    text: __('Sorting'),
     formProps: {
       type: 'text',
       required: true,
@@ -35,7 +35,7 @@ const listOptions = fromJS([
   },
   {
     id: 'url',
-    text: _('URL'),
+    text: __('URL'),
     noTable: true,
     formProps: {
       type: 'text',
@@ -44,7 +44,7 @@ const listOptions = fromJS([
   },
   {
     id: 'img',
-    text: _('Adv Pitcture'),
+    text: __('Adv Pitcture'),
     formProps: {
       type: 'file',
       required: true,
@@ -52,7 +52,7 @@ const listOptions = fromJS([
   },
   {
     id: 'imgW',
-    text: _('Adv Big Pitcture'),
+    text: __('Adv Big Pitcture'),
     formProps: {
       type: 'file',
       required: true,
@@ -60,7 +60,7 @@ const listOptions = fromJS([
   },
   {
     id: 'uid',
-    text: _('User'),
+    text: __('User'),
     noForm: true,
     formProps: {
       type: 'text',
@@ -69,7 +69,7 @@ const listOptions = fromJS([
   },
   {
     id: 'sid',
-    text: _('Store Name'),
+    text: __('Store Name'),
     noForm: true,
     formProps: {
       type: 'text',
@@ -78,7 +78,7 @@ const listOptions = fromJS([
   },
   {
     id: 'showCount',
-    text: _('Show Count'),
+    text: __('Show Count'),
     formProps: {
       type: 'number',
       required: true,
@@ -86,7 +86,7 @@ const listOptions = fromJS([
   },
   {
     id: 'clickCount',
-    text: _('Click Count'),
+    text: __('Click Count'),
     formProps: {
       type: 'number',
       required: true,

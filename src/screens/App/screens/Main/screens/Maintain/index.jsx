@@ -7,21 +7,21 @@ var MaintenanceSetting=React.createClass({
     return(
     <div className="row">
      <div className="cols col-6">
-       <FormGroup label={_('Firmware Upade:')}>
+       <FormGroup label={__('Firmware Upade:')}>
        <Button/>
        </FormGroup>
-       <FormGroup label={_('Reboot device:')}>
+       <FormGroup label={__('Reboot device:')}>
        <Button/>
        </FormGroup>
      </div>
     <div className="cols col-6">
-       <FormGroup label={_('Backup configuration:')}>
+       <FormGroup label={__('Backup configuration:')}>
        <Button/>
        </FormGroup>
-       <FormGroup label={_('Restore device configuration:')}>
+       <FormGroup label={__('Restore device configuration:')}>
        <Button/>
         </FormGroup>
-       <FormGroup label={_('Reset to factory configuration:')}>
+       <FormGroup label={__('Reset to factory configuration:')}>
        <Button/>
        </FormGroup>
      </div>
@@ -34,12 +34,12 @@ var ActiveFirmware=React.createClass({
     return(
      <div className="row">
        <div className="cols col-6">
-       <FormGroup label={_('Active Firmware:')}>
+       <FormGroup label={__('Active Firmware:')}>
        PTP MA-1.v7.51.10362
         </FormGroup>
        </div>
       <div className="cols col-6">
-       <FormGroup label={_('Backup firmware:')}>
+       <FormGroup label={__('Backup firmware:')}>
        PTP MA-1.v7.51.9456(Activate)
         </FormGroup>
        </div>

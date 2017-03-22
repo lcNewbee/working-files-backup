@@ -164,7 +164,7 @@ const validOptions = Map({
 function getCountryNameFromCode(code, map) {
   for (const name of Object.keys(map)) {
     if (map[name] === code) {
-      return _(name);
+      return __(name);
     }
   }
   return '';
@@ -175,7 +175,7 @@ function makeCountryOptions(map) {
   const countryList = [];
   for (const key of Object.keys(map)) {
     const entry = {
-      label: _(key),
+      label: __(key),
       value: map[key],
     };
     countryList.push(entry);
@@ -215,7 +215,7 @@ export default class Basic extends React.Component {
       ssidTableFullMemberOptions: fromJS([
         {
           id: 'enable',
-          label: _('Enable'),
+          label: __('Enable'),
           width: '300px',
           transform: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
@@ -236,7 +236,7 @@ export default class Basic extends React.Component {
         },
         {
           id: 'ssid',
-          label: _('SSID'),
+          label: __('SSID'),
           width: '250px',
           transform: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
@@ -262,7 +262,7 @@ export default class Basic extends React.Component {
         },
         {
           id: 'vlanId',
-          label: _('VLAN ID'),
+          label: __('VLAN ID'),
           width: '250px',
           transform: function (val, item) {
             // const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
@@ -290,7 +290,7 @@ export default class Basic extends React.Component {
         },
         {
           id: 'maxClients',
-          label: _('Max Clients'),
+          label: __('Max Clients'),
           width: '250px',
           transform: function (val, item) {
             // if (val === '' || !Number.isInteger(+val) || parseInt(val, 10) <= 0) {
@@ -318,7 +318,7 @@ export default class Basic extends React.Component {
         },
         {
           id: 'airTimeEnable',
-          label: _('Airtime Fairness'),
+          label: __('Airtime Fairness'),
           width: '250px',
           transform: function (val, item) {
             return (
@@ -336,7 +336,7 @@ export default class Basic extends React.Component {
         },
         {
           id: 'hideSsid',
-          label: _('Hide'),
+          label: __('Hide'),
           width: '200px',
           transform: function (val, item) {
             return (
@@ -353,7 +353,7 @@ export default class Basic extends React.Component {
         },
         {
           id: 'isolation',
-          label: _('Client Isolation'),
+          label: __('Client Isolation'),
           width: '200px',
           transform: function (val, item) {
             return (
@@ -371,7 +371,7 @@ export default class Basic extends React.Component {
         },
         {
           id: 'portalEnable',
-          label: _('Portal'),
+          label: __('Portal'),
           width: '200px',
           transform: function (val, item) {
             return (
@@ -387,14 +387,14 @@ export default class Basic extends React.Component {
         },
         {
           id: 'security',
-          label: _('Security'),
+          label: __('Security'),
           width: '200px',
           transform: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
             const pos = this.props.store.getIn(['curData', 'radioList', radioId, 'vapList']).keyOf(item);
             return (
               <Button
-                text={_('Edit')}
+                text={__('Edit')}
                 icon="pencil-square"
                 size="sm"
                 disabled={pos === 0 && this.props.store.getIn(['curData', 'radioList', radioId, 'wirelessMode']) !== 'ap'}
@@ -410,7 +410,7 @@ export default class Basic extends React.Component {
         },
         {
           id: 'speedLimit',
-          label: _('Speed Limit'),
+          label: __('Speed Limit'),
           width: '200px',
           transform: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
@@ -418,7 +418,7 @@ export default class Basic extends React.Component {
             return (
               <div style={{ marginLeft: '7px' }}>
                 <Button
-                  text={_('Edit')}
+                  text={__('Edit')}
                   icon="pencil-square"
                   size="sm"
                   onClick={() => {
@@ -435,7 +435,7 @@ export default class Basic extends React.Component {
         },
         {
           id: 'delete',
-          label: _('Delete'),
+          label: __('Delete'),
           width: '200px',
           transform: function (val, item) {
             const radioId = this.props.selfState.getIn(['currRadioConfig', 'radioId']);
@@ -443,7 +443,7 @@ export default class Basic extends React.Component {
             return (
               <div style={{ marginLeft: '-12px' }}>
                 <Button
-                  text={_('Delete')}
+                  text={__('Delete')}
                   icon="times"
                   size="sm"
                   disabled={pos === 0}
@@ -846,7 +846,7 @@ export default class Basic extends React.Component {
     const modalOptions = fromJS([
       {
         id: 'operate',
-        text: _('Select'),
+        text: __('Select'),
         transform: function (val, item) {
           return (
             <FormInput
@@ -859,15 +859,15 @@ export default class Basic extends React.Component {
       },
       {
         id: 'mac',
-        text: _('MAC'),
+        text: __('MAC'),
       },
       {
         id: 'ssid',
-        text: _('SSID'),
+        text: __('SSID'),
       },
       {
         id: 'security',
-        text: _('Security Mode'),
+        text: __('Security Mode'),
         transform(val) {
           const mode = val.get('mode');
           if (mode === 'wpa') return 'WPA-PSK';
@@ -879,23 +879,23 @@ export default class Basic extends React.Component {
       },
       {
         id: 'signal',
-        text: _('Signal'),
+        text: __('Signal'),
       },
       {
         id: 'noise',
-        text: _('Noise'),
+        text: __('Noise'),
       },
       {
         id: 'protocol',
-        text: _('Protocol'),
+        text: __('Protocol'),
       },
       {
         id: 'frequency',
-        text: _('Channel'),
+        text: __('Channel'),
       },
       {
         id: 'channelWidth',
-        text: _('Channel Width'),
+        text: __('Channel Width'),
       },
     ]);
     // const curData = this.props.store.get('curData');
@@ -920,7 +920,7 @@ export default class Basic extends React.Component {
           this.props.productInfo.get('deviceRadioList').size > 1 ? (
             <FormInput
               type="switch"
-              label={_('Radio Select')}
+              label={__('Radio Select')}
               value={this.props.selfState.getIn(['currRadioConfig', 'radioId'])}
               options={this.props.productInfo.get('radioSelectOptions')}
               minWidth="100px"
@@ -941,8 +941,8 @@ export default class Basic extends React.Component {
           isShow={this.props.selfState.get('showScanResult')}
           onOk={this.onModalOkBtnClick}
           onClose={this.onModalCloseBtnClick}
-          okText={_('Select')}
-          cancelText={_('Cancel')}
+          okText={__('Select')}
+          cancelText={__('Cancel')}
           size="lg"
           okButton
           cancelButton
@@ -976,7 +976,7 @@ export default class Basic extends React.Component {
                       cursor: 'pointer',
                     }}
                   >
-                    {_('Radio Settings')}
+                    {__('Radio Settings')}
                   </span>
                 </icon>
               ) : (
@@ -1000,7 +1000,7 @@ export default class Basic extends React.Component {
                       cursor: 'pointer',
                     }}
                   >
-                    {_('Radio Settings')}
+                    {__('Radio Settings')}
                   </span>
                 </icon>
               )
@@ -1018,7 +1018,7 @@ export default class Basic extends React.Component {
               >
                 <FormGroup
                   type="checkbox"
-                  label={_('Radio')}
+                  label={__('Radio')}
                   checked={curData.getIn(['radioList', radioId, 'enable']) === '1'}
                   onChange={(data) => {
                     const radioList = curData.get('radioList').setIn([radioId, 'enable'], data.value);
@@ -1032,12 +1032,12 @@ export default class Basic extends React.Component {
                       options={funConfig.devicemodeOptions}
                       value={curData.getIn(['radioList', radioId, 'wirelessMode'])}
                       onChange={data => this.onChengeWirelessMode(data)}
-                      label={_('Radio Mode')}
+                      label={__('Radio Mode')}
                     />
                   )
                 }
                 <FormGroup
-                  label={_('Country')}
+                  label={__('Country')}
                 >
                   <FormInput
                     type="text"
@@ -1051,7 +1051,7 @@ export default class Basic extends React.Component {
                     }}
                   />
                   <Button
-                    text={_('Change')}
+                    text={__('Change')}
                     style={{
                       marginLeft: '-1px',
                       width: '70px',
@@ -1062,24 +1062,24 @@ export default class Basic extends React.Component {
                 { /* 国家代码弹出选择框 */
                 }
                 <Modal
-                  title={_('Country Code')}
+                  title={__('Country Code')}
                   onClose={this.onCloseCountrySelectModal}
                   onOk={this.saveCountrySelectModal}
                   draggable
                   isShow={this.props.selfState.get('showCtyModal')}
                 >
-                  <h3>{_('User Protocol')}</h3>
+                  <h3>{__('User Protocol')}</h3>
                   <span>
-                    {_('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
+                    {__('The initial Wi-Fi setup requires you to specify the country code for the country in which the AP operates. Configuring a country code ensures the radio’s frequency bands, channels, and transmit power levels are compliant with country-specific regulations.')}
                   </span>
                   <FormGroup
                     type="radio"
-                    text={_('I have read and agree')}
+                    text={__('I have read and agree')}
                     checked={this.props.selfState.get('agreeProtocol')}
                     onChange={() => { this.props.changeAgreeProtocol(true); }}
                   />
                   <FormGroup
-                    label={_('Country')}
+                    label={__('Country')}
                     type="select"
                     options={makeCountryOptions(countryMap)}
                     value={this.props.selfState.get('selectedCountry')}
@@ -1088,7 +1088,7 @@ export default class Basic extends React.Component {
                   />
                 </Modal>
                 <FormGroup
-                  label={_('Wireless Mode')}
+                  label={__('Wireless Mode')}
                   type="select"
                   options={radioType === '5G' ? radioModeOptionsFor5g : radioModeOptionsFor2g}
                   value={curData.getIn(['radioList', radioId, 'radioMode'])}
@@ -1112,7 +1112,7 @@ export default class Basic extends React.Component {
                   curData.getIn(['radioList', radioId, 'radioMode']) === '11ng' &&
                   this.props.selfState.getIn(['currRadioConfig', 'radioType']) === '2.4G' ? (
                     <FormGroup
-                      label={_('Channel Bandwidth')}
+                      label={__('Channel Bandwidth')}
                       type="switch"
                       minWidth="66px"
                       options={channelWidthOptions.slice(0, 3)}
@@ -1133,7 +1133,7 @@ export default class Basic extends React.Component {
                   this.props.selfState.getIn(['currRadioConfig', 'radioType']) === '5G' &&
                   curData.getIn(['radioList', radioId, 'radioMode']) === '11na' ? (
                     <FormGroup
-                      label={_('Channel Bandwidth')}
+                      label={__('Channel Bandwidth')}
                       type="switch"
                       minWidth="66px"
                       options={channelWidthOptions.slice(0, 3)}
@@ -1154,7 +1154,7 @@ export default class Basic extends React.Component {
                   this.props.selfState.getIn(['currRadioConfig', 'radioType']) === '5G' &&
                   curData.getIn(['radioList', radioId, 'radioMode']) === '11ac' ? (
                     <FormGroup
-                      label={_('Channel Bandwidth')}
+                      label={__('Channel Bandwidth')}
                       type="switch"
                       minWidth="42px"
                       options={channelWidthOptions}
@@ -1172,7 +1172,7 @@ export default class Basic extends React.Component {
                   ) : null
                 }
                 <FormGroup
-                  label={_('Channel')}
+                  label={__('Channel')}
                   type="select"
                   options={this.makeChannelOptions()}
                   value={curData.getIn(['radioList', radioId, 'frequency'])}
@@ -1185,7 +1185,7 @@ export default class Basic extends React.Component {
                 {
                   funConfig.radioMaxClientsLimit ? (
                     <FormGroup
-                      label={_('Max Clients')}
+                      label={__('Max Clients')}
                       type="number"
                       max={200}
                       min={1}
@@ -1196,14 +1196,14 @@ export default class Basic extends React.Component {
                                           .setIn([radioId, 'maxRadioClients'], data.value);
                         this.props.updateItemSettings({ radioList });
                       }}
-                      help={`${_('Range: ')}1 ~ 200`}
+                      help={`${__('Range: ')}1 ~ 200`}
                       required
                       {...validMaxClients}
                     />
                   ) : null
                 }
                 <FormGroup
-                  label={_('Tx Power')}
+                  label={__('Tx Power')}
                   type="number"
                   min={this.props.selfState.get('minTxpower')}
                   form="radioSettings"
@@ -1214,7 +1214,7 @@ export default class Basic extends React.Component {
                                       .setIn([radioId, 'txPower'], data.value);
                     this.props.updateItemSettings({ radioList });
                   }}
-                  help={`${_('Range: ')} ${this.props.selfState.get('minTxpower') || '3'}~${this.props.selfState.get('maxTxpower') || '23'} dBm`}
+                  help={`${__('Range: ')} ${this.props.selfState.get('minTxpower') || '3'}~${this.props.selfState.get('maxTxpower') || '23'} dBm`}
                   required
                   {...validTxpower}
                 />
@@ -1244,7 +1244,7 @@ export default class Basic extends React.Component {
                               }}
                             >
                               <FormGroup
-                                label={_('Remote SSID')}
+                                label={__('Remote SSID')}
                                 className="fl"
                                 type="text"
                                 form="radioSettings"
@@ -1268,13 +1268,13 @@ export default class Basic extends React.Component {
                             {
                               this.props.selfState.get('scaning') ? (
                                 <Button
-                                  text={_('Stop')}
+                                  text={__('Stop')}
                                   onClick={this.onStopScanClick}
                                   loading
                                 />
                               ) : (
                                 <Button
-                                  text={_('Scan')}
+                                  text={__('Scan')}
                                   onClick={this.onScanBtnClick}
                                 />
                               )
@@ -1298,7 +1298,7 @@ export default class Basic extends React.Component {
                               }}
                             >
                               <FormGroup
-                                label={_('Remote SSID')}
+                                label={__('Remote SSID')}
                                 className="fl"
                                 type="text"
                                 form="radioSettings"
@@ -1322,13 +1322,13 @@ export default class Basic extends React.Component {
                             {
                               this.props.selfState.get('scaning') ? (
                                 <Button
-                                  text={_('Stop')}
+                                  text={__('Stop')}
                                   onClick={this.onStopScanClick}
                                   loading
                                 />
                               ) : (
                                 <Button
-                                  text={_('Scan')}
+                                  text={__('Scan')}
                                   onClick={this.onScanBtnClick}
                                 />
                               )
@@ -1346,7 +1346,7 @@ export default class Basic extends React.Component {
                               checked={curData.getIn(['radioList', radioId, 'vapList', '0', 'hideSsid']) === '1'}
                               onClick={data => this.onHideSsidboxClick(data)}
                             />
-                            {_('Hide')}
+                            {__('Hide')}
                           </div>
                         </div>
                       ) : null
@@ -1355,9 +1355,9 @@ export default class Basic extends React.Component {
                       curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta' ? null : (
                         <FormGroup
                           type="number"
-                          label={_('VLAN ID')}
+                          label={__('VLAN ID')}
                           value={curData.getIn(['radioList', radioId, 'vapList', '0', 'vlanId'])}
-                          help={`${_('Range: ')}1~4094`}
+                          help={`${__('Range: ')}1~4094`}
                           min="1"
                           max="4094"
                           defaultValue="1"
@@ -1431,7 +1431,7 @@ export default class Basic extends React.Component {
                       (curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta') ? (
                         <div>
                           <FormGroup
-                            label={_('Lock To AP')}
+                            label={__('Lock To AP')}
                             type="checkbox"
                             checked={curData.getIn(['radioList', radioId, 'vapList', '0', 'apMacEnable']) === '1'}
                             onChange={(data) => {
@@ -1443,7 +1443,7 @@ export default class Basic extends React.Component {
                           {
                             curData.getIn(['radioList', radioId, 'vapList', '0', 'apMacEnable']) === '1' ? (
                               <FormGroup
-                                label={_('Peer Mac')}
+                                label={__('Peer Mac')}
                                 form="radioSettings"
                                 value={curData.getIn(['radioList', radioId, 'vapList', '0', 'apMac'])}
                                 onChange={(data) => {
@@ -1451,7 +1451,7 @@ export default class Basic extends React.Component {
                                                   .setIn([radioId, 'vapList', '0', 'apMac'], data.value);
                                   this.props.updateItemSettings({ radioList });
                                 }}
-                                placeholder={_('not necessary')}
+                                placeholder={__('not necessary')}
                                 {...staApmac}
                               />
                             ) : null
@@ -1463,7 +1463,7 @@ export default class Basic extends React.Component {
                       (curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta') ? (
                         <div>
                           <FormGroup
-                            label={_('Lock To AP')}
+                            label={__('Lock To AP')}
                             type="checkbox"
                             checked={curData.getIn(['radioList', radioId, 'vapList', '0', 'apMacEnable']) === '1'}
                             onChange={(data) => {
@@ -1475,7 +1475,7 @@ export default class Basic extends React.Component {
                           {
                             curData.getIn(['radioList', radioId, 'vapList', '0', 'apMacEnable']) === '1' ? (
                               <FormGroup
-                                label={_('Peer Mac')}
+                                label={__('Peer Mac')}
                                 form="radioSettings"
                                 value={apMac}
                                 onChange={(data) => {
@@ -1483,7 +1483,7 @@ export default class Basic extends React.Component {
                                                   .setIn([radioId, 'vapList', '0', 'apMac'], data.value);
                                   this.props.updateItemSettings({ radioList });
                                 }}
-                                placeholder={_('not necessary')}
+                                placeholder={__('not necessary')}
                                 {...staApmac}
                               />
                             ) : null
@@ -1496,7 +1496,7 @@ export default class Basic extends React.Component {
                       (curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta' && curData.get('lockType') === '0') ? (
                         <div>
                           <FormGroup
-                            label={_('Lock To AP')}
+                            label={__('Lock To AP')}
                             type="checkbox"
                             checked={curData.getIn(['radioList', radioId, 'vapList', '0', 'apMacEnable']) === '1'}
                             onChange={(data) => {
@@ -1508,7 +1508,7 @@ export default class Basic extends React.Component {
                           {
                             curData.getIn(['radioList', radioId, 'vapList', '0', 'apMacEnable']) === '1' ? (
                               <FormGroup
-                                label={_('Peer Mac')}
+                                label={__('Peer Mac')}
                                 form="radioSettings"
                                 value={apMac}
                                 onChange={(data) => {
@@ -1516,7 +1516,7 @@ export default class Basic extends React.Component {
                                                   .setIn([radioId, 'vapList', '0', 'apMac'], data.value);
                                   this.props.updateItemSettings({ radioList });
                                 }}
-                                placeholder={_('not necessary')}
+                                placeholder={__('not necessary')}
                                 {...staApmac}
                               />
                             ) : null
@@ -1528,7 +1528,7 @@ export default class Basic extends React.Component {
                       (curData.getIn(['radioList', radioId, 'wirelessMode']) === 'sta' && curData.get('lockType') === '1') ? (
                         <div>
                           <FormGroup
-                            label={_('Lock To AP')}
+                            label={__('Lock To AP')}
                             type="checkbox"
                             checked={curData.getIn(['radioList', radioId, 'vapList', '0', 'apMacEnable']) === '1'}
                             onChange={(data) => {
@@ -1543,7 +1543,7 @@ export default class Basic extends React.Component {
                                 <div className="clearfix">
                                   <FormGroup
                                     className="fl"
-                                    label={_('Peer Mac')}
+                                    label={__('Peer Mac')}
                                   >
                                     {
                                       apMacList.size === 0 ? (
@@ -1636,7 +1636,7 @@ export default class Basic extends React.Component {
                                       <span
                                         className="fl peer-mac-notice"
                                       >
-                                        {_('Peers mac address table. The mac order represents the connection priority. The mac in higher order has the higher priority than mac bellow.The table allows you to drag to re-order to change the priority.')}
+                                        {__('Peers mac address table. The mac order represents the connection priority. The mac in higher order has the higher priority than mac bellow.The table allows you to drag to re-order to change the priority.')}
                                       </span>
                                     ) : null
                                   }
@@ -1657,7 +1657,7 @@ export default class Basic extends React.Component {
                                     {...this.props.validateOption.validMacInput}
                                   />
                                   <Button
-                                    text={_('Add')}
+                                    text={__('Add')}
                                     className="fl"
                                     theme="primary"
                                     onClick={() => {
@@ -1669,13 +1669,13 @@ export default class Basic extends React.Component {
                                             this.props.createModal({
                                               id: 'settings',
                                               role: 'alert',
-                                              text: _('Mac list number can not exceed 5.'),
+                                              text: __('Mac list number can not exceed 5.'),
                                             });
                                           } else if (macList.includes(val)) {
                                             this.props.createModal({
                                               id: 'settings',
                                               role: 'alert',
-                                              text: _('The mac address already exists in the list!'),
+                                              text: __('The mac address already exists in the list!'),
                                             });
                                           } else if (val !== '') {
                                             macList = macList.push(val);
@@ -1701,7 +1701,7 @@ export default class Basic extends React.Component {
                           curData.getIn(['radioList', radioId, 'wirelessMode']) === 'ap') ? (
                             <div>
                               <FormGroup
-                                label={_('Security')}
+                                label={__('Security')}
                                 type="select"
                                 options={staAndApSecurityOptions}
                                 value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'mode']) || 'none'}
@@ -1714,7 +1714,7 @@ export default class Basic extends React.Component {
                         (curData.getIn(['radioList', radioId, 'wirelessMode']) === 'repeater') ? (
                           <div>
                             <FormGroup
-                              label={_('Security')}
+                              label={__('Security')}
                               type="select"
                               options={repeaterSecurityOptions}
                               value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'mode'])}
@@ -1728,7 +1728,7 @@ export default class Basic extends React.Component {
                         curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'mode']) === 'wep') ? null : (
                           <div style={{ width: '350px' }}>
                             <FormGroup
-                              label={_('Encryption')}
+                              label={__('Encryption')}
                               minWidth="66px"
                               type="switch"
                               value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'cipher'])}
@@ -1746,7 +1746,7 @@ export default class Basic extends React.Component {
                               ]}
                             />
                             <FormGroup
-                              label={_('Password')}
+                              label={__('Password')}
                               type="password"
                               form="radioSettings"
                               required
@@ -1767,7 +1767,7 @@ export default class Basic extends React.Component {
                         (curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'mode']) === 'wep') ? (
                           <div style={{ width: '350px' }}>
                             <FormGroup
-                              label={_('Auth Type')}
+                              label={__('Auth Type')}
                               type="select"
                               options={wepAuthenOptions}
                               value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'auth'])}
@@ -1780,7 +1780,7 @@ export default class Basic extends React.Component {
                               }}
                             />
                             <FormGroup
-                              label={_('Key Index')}
+                              label={__('Key Index')}
                               type="select"
                               options={keyIndexOptions}
                               value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'keyIndex'])}
@@ -1793,7 +1793,7 @@ export default class Basic extends React.Component {
                               }}
                             />
                             <FormGroup
-                              label={_('Key Format')}
+                              label={__('Key Format')}
                               type="select"
                               options={keyTypeOptions}
                               value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'keyType'])}
@@ -1808,7 +1808,7 @@ export default class Basic extends React.Component {
                             <FormGroup
                               type="password"
                               required
-                              label={_('Password')}
+                              label={__('Password')}
                               form="radioSettings"
                               value={curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'key'])}
                               onChange={(data) => {
@@ -1876,7 +1876,7 @@ export default class Basic extends React.Component {
                     cursor: 'pointer',
                   }}
                 >
-                  {_('Multiple SSID')}
+                  {__('Multiple SSID')}
                 </span>
               </icon>
             ) : (
@@ -1901,7 +1901,7 @@ export default class Basic extends React.Component {
                     cursor: 'pointer',
                   }}
                 >
-                  {_('Multiple SSID')}
+                  {__('Multiple SSID')}
                 </span>
               </icon>
             )
@@ -1929,7 +1929,7 @@ export default class Basic extends React.Component {
                 style={{ marginTop: '10px' }}
               >
                 <Button
-                  text={_('Add')}
+                  text={__('Add')}
                   icon="plus"
                   onClick={() => this.onAddNewSsidItem()}
                   style={{ marginRight: '10px' }}
@@ -1950,15 +1950,15 @@ export default class Basic extends React.Component {
                     const re = /^[0-9]*[1-9][0-9]*$/;
                     for (let i = 0; i < len; i++) {
                       if (!re.test(vapList[i].vlanId)) {
-                        error = _('Vlan ID must be positive interger !');
+                        error = __('Vlan ID must be positive interger !');
                         break;
                       }
                       if (vapList[i].vlanId < 1 || vapList[i].vlanId > 4094) {
-                        error = _('Vlan ID number out of range ! (1 ~ 4094)');
+                        error = __('Vlan ID number out of range ! (1 ~ 4094)');
                         break;
                       }
                       if (vapList[i].ssid === '') {
-                        error = _('SSID can not be empty string !');
+                        error = __('SSID can not be empty string !');
                         break;
                       }
                       // for (let j = i + 1; j < len; j++) {
@@ -1972,7 +1972,7 @@ export default class Basic extends React.Component {
                         if (vapList[i].maxClients === '' ||
                             !Number.isInteger(+vapList[i].maxClients) ||
                             parseInt(vapList[i].maxClients, 10) <= 0) {
-                          error = _('Max clients number must be positive interger !');
+                          error = __('Max clients number must be positive interger !');
                           break;
                         }
                         totalNum += Number(vapList[i].maxClients);
@@ -1981,7 +1981,7 @@ export default class Basic extends React.Component {
                     if (funConfig.radioMaxClientsLimit && // 射频最大客户端限制功能存在
                         radioClientLimit !== 0 && // 为零表示不限制
                         totalNum > radioClientLimit) {
-                      error = `${_('The total number of ssid maximum clients should not exceed ')}${radioClientLimit}`;
+                      error = `${__('The total number of ssid maximum clients should not exceed ')}${radioClientLimit}`;
                     }
                     if (error === '') {
                       this.props.changeWhichButton('multiSsid');
@@ -2015,7 +2015,7 @@ export default class Basic extends React.Component {
         }
 
         <Modal
-          title={_('Speed Limit')}
+          title={__('Speed Limit')}
           isShow={this.props.selfState.get('showSpeedLimitModal')}
           draggable
           onOk={() => {
@@ -2049,7 +2049,7 @@ export default class Basic extends React.Component {
         >
           <FormGroup
             type="checkbox"
-            label={_('Speed Limit')}
+            label={__('Speed Limit')}
             checked={tableItemForSsid.getIn(['item', 'speedLimit', 'enable']) === '1'}
             onClick={() => {
               const val = tableItemForSsid.getIn(['item', 'speedLimit', 'enable']) === '1' ? '0' : '1';
@@ -2064,7 +2064,7 @@ export default class Basic extends React.Component {
               <div>
                 <FormGroup
                   type="number"
-                  label={_('Max Upload Speed')}
+                  label={__('Max Upload Speed')}
                   form="speedlimitform"
                   value={tableItemForSsid.getIn(['item', 'speedLimit', 'upload'])}
                   onChange={(data) => {
@@ -2080,7 +2080,7 @@ export default class Basic extends React.Component {
                 />
                 <FormGroup
                   type="number"
-                  label={_('Max Download Speed')}
+                  label={__('Max Download Speed')}
                   form="speedlimitform"
                   value={tableItemForSsid.getIn(['item', 'speedLimit', 'download'])}
                   onChange={(data) => {
@@ -2099,7 +2099,7 @@ export default class Basic extends React.Component {
           }
         </Modal>
         <Modal
-          title={_('Security Settings For SSID')}
+          title={__('Security Settings For SSID')}
           isShow={tableItemForSsid.get('isShow') === '1'}
           draggable
           onOk={() => {
@@ -2132,7 +2132,7 @@ export default class Basic extends React.Component {
           cancelButton
         >
           <FormGroup
-            label={_('Security')}
+            label={__('Security')}
             type="select"
             options={staAndApSecurityOptions}
             value={tableItemForSsid.getIn(['item', 'security', 'mode'])}
@@ -2158,7 +2158,7 @@ export default class Basic extends React.Component {
               tableItemForSsid.getIn(['item', 'security', 'mode']) === 'wep') ? null : (
                 <div>
                   <FormGroup
-                    label={_('Encryption')}
+                    label={__('Encryption')}
                     minWidth="66px"
                     type="switch"
                     value={tableItemForSsid.getIn(['item', 'security', 'cipher'])}
@@ -2175,7 +2175,7 @@ export default class Basic extends React.Component {
                     }}
                   />
                   <FormGroup
-                    label={_('Password')}
+                    label={__('Password')}
                     type="password"
                     required
                     form="ssidSecurityModal"
@@ -2195,7 +2195,7 @@ export default class Basic extends React.Component {
             (tableItemForSsid.getIn(['item', 'security', 'mode']) === 'wep') ? (
               <div>
                 <FormGroup
-                  label={_('Auth Type')}
+                  label={__('Auth Type')}
                   type="select"
                   options={wepAuthenOptions}
                   value={tableItemForSsid.getIn(['item', 'security', 'auth'])}
@@ -2209,7 +2209,7 @@ export default class Basic extends React.Component {
                 {
                   /**
                   <FormGroup
-                    label={_('Key Length')}
+                    label={__('Key Length')}
                     type="select"
                     options={wepKeyLengthOptions}
                     value={tableItemForSsid.getIn(['item', 'security', 'keyLength'])}
@@ -2223,7 +2223,7 @@ export default class Basic extends React.Component {
                    */
                 }
                 <FormGroup
-                  label={_('Key Index')}
+                  label={__('Key Index')}
                   type="select"
                   options={keyIndexOptions}
                   value={tableItemForSsid.getIn(['item', 'security', 'keyIndex'])}
@@ -2235,7 +2235,7 @@ export default class Basic extends React.Component {
                   }}
                 />
                 <FormGroup
-                  label={_('Key Format')}
+                  label={__('Key Format')}
                   type="select"
                   options={keyTypeOptions}
                   value={tableItemForSsid.getIn(['item', 'security', 'keyType'])}
@@ -2249,7 +2249,7 @@ export default class Basic extends React.Component {
                 <FormGroup
                   type="password"
                   required
-                  label={_('Password')}
+                  label={__('Password')}
                   form="ssidSecurityModal"
                   value={tableItemForSsid.getIn(['item', 'security', 'key'])}
                   onChange={(data) => {

@@ -210,7 +210,7 @@ export default class ACL extends React.Component {
     return (
       <div>
         <FormGroup
-          label={_('Enable')}
+          label={__('Enable')}
           type="checkbox"
           checked={store.getIn(['curData', 'aclEnable']) === '1'}
           onChange={() => {
@@ -221,7 +221,7 @@ export default class ACL extends React.Component {
           }}
         />
         <FormGroup
-          label={_('SSID')}
+          label={__('SSID')}
           type="select"
           size="min"
           options={ssidSelectOptions}
@@ -233,7 +233,7 @@ export default class ACL extends React.Component {
           })}
         />
         <FormGroup
-          label={_('Filter Mode')}
+          label={__('Filter Mode')}
         >
           <div
             style={{
@@ -243,7 +243,7 @@ export default class ACL extends React.Component {
             <FormInput
               name="filtermode"
               type="radio"
-              text={_('Allow Only')}
+              text={__('Allow Only')}
               disabled={store.getIn(['curData', 'aclEnable']) === '0'}
               checked={store.getIn(['curData', 'aclConfList', selectedSsid, 'aclMode']) === 'allow'}
               onClick={() => {
@@ -260,7 +260,7 @@ export default class ACL extends React.Component {
             <FormInput
               name="filtermode"
               type="radio"
-              text={_('Block Only')}
+              text={__('Block Only')}
               disabled={store.getIn(['curData', 'aclEnable']) === '0'}
               checked={store.getIn(['curData', 'aclConfList', selectedSsid, 'aclMode']) === 'deny'}
               onClick={() => {
@@ -274,7 +274,7 @@ export default class ACL extends React.Component {
           </div>
         </FormGroup>
         <FormGroup
-          label={_('Station List')}
+          label={__('Station List')}
           className="clearfix"
         >
           <div
@@ -298,7 +298,7 @@ export default class ACL extends React.Component {
           <Button
             className="fl"
             theme="primary"
-            text={_('Remove')}
+            text={__('Remove')}
             disabled={store.getIn(['curData', 'aclEnable']) === '0'}
             onClick={this.updateAclMacList}
           />
@@ -316,7 +316,7 @@ export default class ACL extends React.Component {
           <Button
             className="fl"
             theme="primary"
-            text={_('Add')}
+            text={__('Add')}
             disabled={store.getIn(['curData', 'aclEnable']) === '0'}
             onClick={this.onAddMacToLocalList}
             style={{
@@ -328,7 +328,7 @@ export default class ACL extends React.Component {
         <FormGroup>
           <SaveButton
             theme="primary"
-            text={_('Save')}
+            text={__('Save')}
             loading={this.props.app.get('saving')}
             onClick={() => this.props.saveSettings('goform/set_acl')}
           />

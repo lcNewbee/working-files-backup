@@ -13,7 +13,7 @@ const flowFilter = utils.filter('flowRate');
 const listOptions = fromJS([
   {
     id: 'ip',
-    text: _('IP'),
+    text: __('IP'),
     type: 'text',
     formProps: {
       required: true,
@@ -23,26 +23,26 @@ const listOptions = fromJS([
     },
   }, {
     id: 'mac',
-    text: _('Mac'),
+    text: __('Mac'),
     type: 'text',
     formProps: {
       required: true,
     },
   }, {
     id: 'loginName',
-    text: _('Login Name'),
+    text: __('Login Name'),
     formProps: {
       required: true,
     },
   }, {
     id: 'startDate',
-    text: _('Online Date'),
+    text: __('Online Date'),
     formProps: {
       required: true,
     },
   }, {
     id: 'time',
-    text: _('Online Time'),
+    text: __('Online Time'),
     formProps: {
       required: true,
     },
@@ -51,32 +51,32 @@ const listOptions = fromJS([
     },
   }, {
     id: 'state',
-    text: _('Acc Type'),
+    text: __('Acc Type'),
     options: [
       {
         value: '0',
-        label: _('Unavailability'),
+        label: __('Unavailability'),
       }, {
         value: '1',
-        label: _('Free of Charge'),
+        label: __('Free of Charge'),
       },
       {
         value: '2',
-        label: _('Timekeeping'),
+        label: __('Timekeeping'),
       }, {
         value: '3',
-        label: _('Buy Out'),
+        label: __('Buy Out'),
       }, {
         value: '4',
-        label: _('Traffic'),
+        label: __('Traffic'),
       }, {
         value: '-1',
-        label: _('Outside User'),
+        label: __('Outside User'),
       },
     ],
   }, {
     id: 'ins',
-    text: _('Up Traffic'),
+    text: __('Up Traffic'),
     formProps: {
       required: true,
     },
@@ -85,7 +85,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'outs',
-    text: _('Down Traffic'),
+    text: __('Down Traffic'),
     formProps: {
       required: true,
     },
@@ -94,56 +94,56 @@ const listOptions = fromJS([
     },
   }, {
     id: 'octets',
-    text: _('Used Traffic'),
+    text: __('Used Traffic'),
     formProps: {
       required: true,
     },
   }, {
     id: 'basname',
-    text: _('Bas Name'),
+    text: __('Bas Name'),
     noTable: true,
     formProps: {
       required: true,
     },
   }, {
     id: 'ssid',
-    text: _('SSID'),
+    text: __('SSID'),
     noTable: true,
     formProps: {
       required: true,
     },
   }, {
     id: 'apmac',
-    text: _('AP Mac'),
+    text: __('AP Mac'),
     formProps: {
       required: true,
     },
   }, {
     id: 'type',
-    text: _('Authetication Type'),
+    text: __('Authetication Type'),
     formProps: {
       required: true,
     },
   }, {
     id: 'auto',
-    text: _('Auto Log'),
+    text: __('Auto Log'),
     formProps: {
       required: true,
     },
   }, {
     id: 'agent',
-    text: _('Client'),
+    text: __('Client'),
     formProps: {
       required: true,
     },
   }, {
     id: '__actions__',
-    text: _('Actions'),
+    text: __('Actions'),
     actions: [
       {
         icon: 'arrow-down',
         actionName: 'delete',
-        text: _('Offline'),
+        text: __('Offline'),
       },
     ],
   },
@@ -152,7 +152,7 @@ const listOptions = fromJS([
 const listActionBarButtons = [
   {
     actionName: 'delete',
-    text: _('Batch Offline'),
+    text: __('Batch Offline'),
     icon: 'arrow-down',
   },
 ];

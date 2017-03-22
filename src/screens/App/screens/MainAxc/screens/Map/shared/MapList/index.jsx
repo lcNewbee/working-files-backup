@@ -204,7 +204,7 @@ export default class MapList extends React.PureComponent {
           ) : null
         }
         <Modal
-          title={_('Add')}
+          title={__('Add')}
           isShow={this.state.isModalShow}
           onClose={() => {
             this.setState({
@@ -245,7 +245,7 @@ export default class MapList extends React.PureComponent {
             />
 
             <FormGroup
-              label={_('Name')}
+              label={__('Name')}
               value={this.state.mapName}
               name="mapImg"
               onChange={
@@ -258,7 +258,7 @@ export default class MapList extends React.PureComponent {
               required
             />
             <FormGroup
-              label={_('Physical Length')}
+              label={__('Physical Length')}
               value={this.state.length}
               name="length"
               type="number"
@@ -270,11 +270,11 @@ export default class MapList extends React.PureComponent {
                   });
                 }
               }
-              help={_('Meter')}
+              help={__('Meter')}
               required
             />
             <FormGroup
-              label={_('Physical Width')}
+              label={__('Physical Width')}
               value={this.state.width}
               name="width"
               type="number"
@@ -286,11 +286,11 @@ export default class MapList extends React.PureComponent {
                   });
                 }
               }
-              help={_('Meter')}
+              help={__('Meter')}
               required
             />
             <FormGroup
-              label={_('Backgroud Image')}
+              label={__('Backgroud Image')}
               name="mapImg"
               type="file"
               onChange={(data, evt) => {
@@ -306,7 +306,7 @@ export default class MapList extends React.PureComponent {
                   },
                 );
               }}
-              help={_('Image ratio: %s', mapRatio)}
+              help={__('Image ratio: %s', mapRatio)}
               required
             />
             <p

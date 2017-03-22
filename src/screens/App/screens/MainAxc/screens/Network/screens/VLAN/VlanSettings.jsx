@@ -12,13 +12,13 @@ import * as appActions from 'shared/actions/app';
 const listOptions = fromJS([
   {
     id: 'vlanId',
-    text: _('VLAN ID'),
+    text: __('VLAN ID'),
     formProps: {
       type: 'number',
     },
   }, {
     id: 'description',
-    text: _('Description'),
+    text: __('Description'),
     formProps: {
       type: 'textarea',
     },

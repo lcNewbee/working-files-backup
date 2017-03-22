@@ -68,7 +68,7 @@ function wirelessModeShowStyle(wirelessMode) {
 const vapInterfaceOptions = fromJS([
   {
     id: 'name',
-    text: _('Name'),
+    text: __('Name'),
     transform(val, item) {
       const ssid = item.get('ssid');
       if (val === '') {
@@ -79,7 +79,7 @@ const vapInterfaceOptions = fromJS([
     width: '152px',
   }, {
     id: 'mac',
-    text: _('MAC'),
+    text: __('MAC'),
     sortable: true,
     transform(val) {
       if (val === '') {
@@ -90,7 +90,7 @@ const vapInterfaceOptions = fromJS([
     width: '152px',
   }, {
     id: 'txBytes',
-    text: _('Tx Data'),
+    text: __('Tx Data'),
     sortable: true,
     sortFun: (a, b) => {
       const aVal = parseInt(a, 10);
@@ -107,7 +107,7 @@ const vapInterfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'rxBytes',
-    text: _('Rx Data'),
+    text: __('Rx Data'),
     sortable: true,
     sortFun: (a, b) => {
       const aVal = parseInt(a, 10);
@@ -124,7 +124,7 @@ const vapInterfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'txPackets',
-    text: _('Tx Packets'),
+    text: __('Tx Packets'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -134,7 +134,7 @@ const vapInterfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'rxPackets',
-    text: _('Rx Packets'),
+    text: __('Rx Packets'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -144,7 +144,7 @@ const vapInterfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'txErrorPackets',
-    text: _('Tx Errors'),
+    text: __('Tx Errors'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -154,7 +154,7 @@ const vapInterfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'rxErrorPackets',
-    text: _('Rx Errors'),
+    text: __('Rx Errors'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -164,7 +164,7 @@ const vapInterfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'ccq',
-    text: _('CCQ'),
+    text: __('CCQ'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -253,7 +253,7 @@ export default class RadioDetails extends React.Component {
       },
       {
         id: 'deviceName',
-        text: _('Device Name'),
+        text: __('Device Name'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -263,7 +263,7 @@ export default class RadioDetails extends React.Component {
       },
       {
         id: 'ssid',
-        text: _('Owner SSID'),
+        text: __('Owner SSID'),
         sortable: true,
         transform(val) {
           if (val === '' || val === undefined) {
@@ -274,7 +274,7 @@ export default class RadioDetails extends React.Component {
       },
       {
         id: 'signal',
-        text: _('Signal(dBm)'),
+        text: __('Signal(dBm)'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -284,7 +284,7 @@ export default class RadioDetails extends React.Component {
       },
       {
         id: 'noise',
-        text: _('Noise(dBm)'),
+        text: __('Noise(dBm)'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -294,7 +294,7 @@ export default class RadioDetails extends React.Component {
       },
       {
         id: 'txRate',
-        text: _('Tx Rate'),
+        text: __('Tx Rate'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -304,7 +304,7 @@ export default class RadioDetails extends React.Component {
       },
       {
         id: 'rxRate',
-        text: _('Rx Rate'),
+        text: __('Rx Rate'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -314,7 +314,7 @@ export default class RadioDetails extends React.Component {
       },
       {
         id: 'txBytes',
-        text: _('Tx Data'),
+        text: __('Tx Data'),
         sortFun: (a, b) => {
           const aVal = parseInt(a, 10);
           const bVal = parseInt(b, 10);
@@ -331,7 +331,7 @@ export default class RadioDetails extends React.Component {
       },
       {
         id: 'rxBytes',
-        text: _('Rx Data'),
+        text: __('Rx Data'),
         sortFun: (a, b) => {
           const aVal = parseInt(a, 10);
           const bVal = parseInt(b, 10);
@@ -348,7 +348,7 @@ export default class RadioDetails extends React.Component {
       },
       {
         id: 'txPackets',
-        text: _('Tx Packets'),
+        text: __('Tx Packets'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -358,7 +358,7 @@ export default class RadioDetails extends React.Component {
       },
       {
         id: 'rxPackets',
-        text: _('Rx Packets'),
+        text: __('Rx Packets'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -368,7 +368,7 @@ export default class RadioDetails extends React.Component {
       },
       {
         id: 'connectTime',
-        text: _('Connect Time'),
+        text: __('Connect Time'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -378,7 +378,7 @@ export default class RadioDetails extends React.Component {
       },
       {
         id: 'ipAddr',
-        text: _('IP'),
+        text: __('IP'),
         sortable: true,
         transform(val) {
           if (val === '' || val === undefined) {
@@ -389,11 +389,11 @@ export default class RadioDetails extends React.Component {
       },
       {
         id: 'block',
-        text: _('Block'),
+        text: __('Block'),
         transform(val, item) {
           return (
             val ? (
-              <span>{_('offline')}</span>
+              <span>{__('offline')}</span>
             ) : (
               <Icon
                 name="user-times"
@@ -434,7 +434,7 @@ export default class RadioDetails extends React.Component {
     return (
       <div className="o-box">
         <Button
-          text={_('Back')}
+          text={__('Back')}
           theme="primary"
           style={{
             marginBottom: '15px',
@@ -446,58 +446,58 @@ export default class RadioDetails extends React.Component {
         <div className="row">
           {/*
             <div className="o-box__cell">
-              <h3>{`${_('Radio')} (${this.props.product.getIn(['radioSelectOptions', radioId, 'label'])})`}</h3>
+              <h3>{`${__('Radio')} (${this.props.product.getIn(['radioSelectOptions', radioId, 'label'])})`}</h3>
             </div>
             <div className="o-box__cell">
               <div className="cols col-6">
                 <FormGroup
-                  label={_('Wireless Mode :')}
+                  label={__('Wireless Mode :')}
                   type="plain-text"
                   value={wirelessModeShowStyle(radioList.getIn([radioId, 'wirelessMode']))}
                 />
                 <FormGroup
-                  label={_('Protocol :')}
+                  label={__('Protocol :')}
                   type="plain-text"
                   value={radioList.getIn([radioId, 'radioMode'])}
                 />
                 <FormGroup
-                  label={_('Channel/Frequency :')}
+                  label={__('Channel/Frequency :')}
                   type="plain-text"
                   value={`${radioList.getIn([radioId, 'channel'])}/${radioList.getIn([radioId, 'frequency'])}`}
                 />
                 <FormGroup
-                  label={_('Channel Width :')}
+                  label={__('Channel Width :')}
                   type="plain-text"
                   value={radioList.getIn([radioId, 'channelWidth'])}
                 />
               </div>
               <div className="cols col-6">
                 <FormGroup
-                  label={_('Distance :')}
+                  label={__('Distance :')}
                   type="plain-text"
                   value={radioList.getIn([radioId, 'distance'])}
                   help="km"
                 />
                 <FormGroup
-                  label={_('Tx Power :')}
+                  label={__('Tx Power :')}
                   type="plain-text"
                   value={radioList.getIn([radioId, 'txPower'])}
                   help="dBm"
                 />
                 <FormGroup
-                  label={_('Signal :')}
+                  label={__('Signal :')}
                   type="plain-text"
                   value={radioList.getIn([radioId, 'signal'])}
                   help="dBm"
                 />
                 <FormGroup
-                  label={_('Noise :')}
+                  label={__('Noise :')}
                   type="plain-text"
                   value={radioList.getIn([radioId, 'noise'])}
                   help="dBm"
                 />
                 <FormGroup
-                  label={_('Channel Utilization :')}
+                  label={__('Channel Utilization :')}
                   type="plain-text"
                   value={radioList.getIn([radioId, 'chutil'])}
                 />
@@ -509,8 +509,8 @@ export default class RadioDetails extends React.Component {
 
         <div className="o-box__cell">
           <h3>
-            {`${_('Wireless Interfaces')} (${this.props.product.getIn(['radioSelectOptions', radioId, 'label'])})`}
-            {/* {_('Wireless Interfaces')}*/}
+            {`${__('Wireless Interfaces')} (${this.props.product.getIn(['radioSelectOptions', radioId, 'label'])})`}
+            {/* {__('Wireless Interfaces')}*/}
           </h3>
         </div>
         <div className="o-box__cell">
@@ -523,7 +523,7 @@ export default class RadioDetails extends React.Component {
 
         <div className="o-box__cell">
           <h3>
-            {`${_('Clients')} (${this.props.product.getIn(['radioSelectOptions', radioId, 'label'])})`}
+            {`${__('Clients')} (${this.props.product.getIn(['radioSelectOptions', radioId, 'label'])})`}
           </h3>
         </div>
         <div className="o-box__cell">

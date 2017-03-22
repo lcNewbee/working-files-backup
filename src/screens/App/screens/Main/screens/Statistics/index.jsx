@@ -10,22 +10,22 @@ import Switchs from 'shared/components/Switchs';
 import Table from 'shared/components/Table';
 
 const msg = {
-  TITIE: _('Reports'),
-  EXPORTING: _('Exporting The Reports'),
-  EMAILREPORT: _('Email The Reports'),
-  DELETEREPORT: _('Delete The Reports'),
+  TITIE: __('Reports'),
+  EXPORTING: __('Exporting The Reports'),
+  EMAILREPORT: __('Email The Reports'),
+  DELETEREPORT: __('Delete The Reports'),
 };
 
 const typeArr = [
   {
     value: '0',
-    label: _('1 day'),
+    label: __('1 day'),
   }, {
     value: '1',
-    label: _('1 week'),
+    label: __('1 week'),
   }, {
     value: '2',
-    label: _('1 month'),
+    label: __('1 month'),
   },
 ];
 
@@ -65,19 +65,19 @@ export const Statistics = React.createClass({
     const reportsTableOptions = fromJS([
       {
         id: 'id',
-        text: _('No.'),
+        text: __('No.'),
       }, {
           id: 'createAt',
-          text: _('Create Time'),
+          text: __('Create Time'),
         }, {
         id: 'startdate',
-        text: _('Report start time'),
+        text: __('Report start time'),
       }, {
         id: 'enddate',
-        text: _('Report end time'),
+        text: __('Report end time'),
       }, {
         id: 'operate',
-        text: _('Action'),
+        text: __('Action'),
         transform: function (val, item) {
           let curId = item.get('id');
 
@@ -115,7 +115,7 @@ export const Statistics = React.createClass({
           />
           <Button
             icon="plus"
-            text={_('Generate Report')}
+            text={__('Generate Report')}
             onClick={this.onGenerateReport}
           />
         </div>

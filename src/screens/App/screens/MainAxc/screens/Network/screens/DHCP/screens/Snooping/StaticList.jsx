@@ -27,7 +27,7 @@ function getInterfaceList() {
 const listOptions = fromJS([
   {
     id: 'name',
-    text: _('Name'),
+    text: __('Name'),
     formProps: {
       required: true,
       type: 'text',
@@ -38,21 +38,21 @@ const listOptions = fromJS([
     },
   }, {
     id: 'interface',
-    text: _('Interface'),
+    text: __('Interface'),
     formProps: {
       type: 'select',
       required: true,
     },
   }, {
     id: 'ip',
-    text: _('IP Types'),
+    text: __('IP Types'),
     options: [
       {
         value: '0',
-        label: _('IPV4'),
+        label: __('IPV4'),
       }, {
         value: '1',
-        label: _('IPV6'),
+        label: __('IPV6'),
       },
     ],
     formProps: {
@@ -61,7 +61,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'source_ip',
-    text: _('Source IP'),
+    text: __('Source IP'),
     formProps: {
       required: true,
       type: 'text',
@@ -71,7 +71,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'destination_ip',
-    text: _('Destination IP'),
+    text: __('Destination IP'),
     type: 'text',
     formProps: {
       required: true,

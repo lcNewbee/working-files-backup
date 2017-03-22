@@ -440,7 +440,7 @@ export default class View extends React.PureComponent {
       <Button
         icon="arrow-left"
         theme="primary"
-        text={_('Back')}
+        text={__('Back')}
         key="back"
         onClick={() => {
           if (curMapId) {
@@ -540,7 +540,7 @@ export default class View extends React.PureComponent {
                   onClick={() => this.onToggleUnplacedList()}
                 >
                   <Icon
-                    title={_('Unplaced AP List')}
+                    title={__('Unplaced AP List')}
                     name="align-justify"
                     size="2x"
                   />
@@ -549,7 +549,7 @@ export default class View extends React.PureComponent {
             }
 
             <div className="o-list__header">
-              {_('Unplaced AP List')}
+              {__('Unplaced AP List')}
               <Icon
                 className="fr"
                 style={{
@@ -573,7 +573,7 @@ export default class View extends React.PureComponent {
                   <Button
                     icon="plus"
                     theme="primary"
-                    text={_('Add AP to Group')}
+                    text={__('Add AP to Group')}
                     onClick={
                       () => {
                         this.props.selectManageGroupAp({
@@ -583,7 +583,7 @@ export default class View extends React.PureComponent {
                         this.props.resetGroupAddDevice();
                         this.props.fetchGroupAps(-1);
                         this.props.showMainModal({
-                          title: _('Add AP to Group'),
+                          title: __('Add AP to Group'),
                           size: 'md',
                           isShow: true,
                           name: 'groupApAdd',

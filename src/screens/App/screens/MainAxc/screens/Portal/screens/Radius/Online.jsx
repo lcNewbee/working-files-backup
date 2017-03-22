@@ -12,58 +12,58 @@ const onlinetimeFilter = utils.filter('connectTime');
 const listOptions = fromJS([
   {
     id: 'nasIP',
-    text: _('NAS IP'),
+    text: __('NAS IP'),
   }, {
     id: 'ip',
-    text: _('Source IP'),
+    text: __('Source IP'),
   }, {
     id: 'userIP',
-    text: _('User IP'),
+    text: __('User IP'),
   }, {
     id: 'callingStationId',
-    text: _('Mac'),
+    text: __('Mac'),
   }, {
     id: 'name',
-    text: _('Name'),
+    text: __('Name'),
   }, {
     id: 'sessionTime',
-    text: _('Session Time'),
+    text: __('Session Time'),
     transform(val) {
       return onlinetimeFilter.transform(val / 1000);
     },
   }, {
     id: 'octets',
-    text: _('Available Traffic'),
+    text: __('Available Traffic'),
   }, {
     id: 'clientType',
-    text: _('Time out'),
+    text: __('Time out'),
   }, {
     id: 'startDate',
-    text: _('Online Date'),
+    text: __('Online Date'),
   }, {
     id: 'costTime',
-    text: _('Online Time'),
+    text: __('Online Time'),
     transform(val) {
       return onlinetimeFilter.transform(val / 1000);
     },
   }, {
     id: 'inS',
-    text: _('Up Traffic'),
+    text: __('Up Traffic'),
   }, {
     id: 'outS',
-    text: _('Down Traffic'),
+    text: __('Down Traffic'),
   }, {
     id: 'costOctets',
-    text: _('Used Traffic'),
+    text: __('Used Traffic'),
   }, {
     id: 'updateDate',
-    text: _('Update Date'),
+    text: __('Update Date'),
   }, {
     id: 'acctSessionId',
-    text: _('Acc ID'),
+    text: __('Acc ID'),
   }, {
     id: 'state',
-    text: _('Acc Type'),
+    text: __('Acc Type'),
     formProps: {
       type: 'select',
       required: true,
@@ -71,23 +71,23 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: _('Unavailability'),
+        label: __('Unavailability'),
       }, {
         value: '1',
-        label: _('Free of Charge'),
+        label: __('Free of Charge'),
       },
       {
         value: '2',
-        label: _('Timekeeping'),
+        label: __('Timekeeping'),
       }, {
         value: '3',
-        label: _('Buy Out'),
+        label: __('Buy Out'),
       }, {
         value: '4',
-        label: _('Traffic'),
+        label: __('Traffic'),
       }, {
         value: '-1',
-        label: _('Outside User'),
+        label: __('Outside User'),
       },
     ],
   },

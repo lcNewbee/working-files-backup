@@ -147,13 +147,13 @@ export default class Main extends React.PureComponent {
                 <Icon
                   name="key"
                 />
-                {_('Change Password')}
+                {__('Change Password')}
               </a>
               <a className="sign-out" href="#/" onClick={this.onLogout}>
                 <Icon
                   name="sign-out"
                 />
-                {_('Login Out')}
+                {__('Login Out')}
               </a>
             </div>
           </div>
@@ -176,7 +176,7 @@ export default class Main extends React.PureComponent {
     if (location.pathname.indexOf('/main/group') === 0) {
       breadcrumbList = breadcrumbList.unshift({
         path: '/main/group',
-        text: _('All Group'),
+        text: __('All Group'),
       });
 
       if (groupData.getIn(['selected', 'id']) !== ALL_GROUP_ID) {
@@ -235,7 +235,7 @@ export default class Main extends React.PureComponent {
           <div className="aside">
             <button className="as-control" onClick={this.onRefresh} >
               <Icon name="refresh" className="icon" />
-              <span>{_('Refresh')}</span>
+              <span>{__('Refresh')}</span>
             </button>
             <div className="user" onClick={this.showUserPopOver}>
               <Icon name="user" className="icon-user" />
@@ -277,11 +277,11 @@ export default class Main extends React.PureComponent {
             <li>
               <a
                 className=""
-                title={_('Email to Axilspot')}
+                title={__('Email to Axilspot')}
                 href="mailto:sales@axilspot.com"
               >
                 <Icon name="envelope" />
-                <div>{_('Contact Us')}</div>
+                <div>{__('Contact Us')}</div>
               </a>
             </li>
           </ul>

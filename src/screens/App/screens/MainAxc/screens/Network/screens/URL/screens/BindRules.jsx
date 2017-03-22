@@ -42,14 +42,14 @@ function getFilterRules() {
 const listOptions = fromJS([
   {
     id: 'filterGroup',
-    text: _('Group Name'),
+    text: __('Group Name'),
     formProps: {
       type: 'select',
       required: true,
     },
   }, {
     id: 'rule_name',
-    text: _('Filter Rules'),
+    text: __('Filter Rules'),
     formProps: {
       multi: true,
       type: 'select',

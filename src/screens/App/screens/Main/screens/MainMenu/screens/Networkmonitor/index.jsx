@@ -10,10 +10,10 @@ import {
 } from 'shared/components';
 
 const msg = {
-  REMOTEAPINFO_TITLE: _('Remote AP Info'),
-  REMOTESTAINFO_TITLE: _('Remote Station Info'),
-  INTERFERENCE_TITLE: _('Interface'),
-  LOGINFO_TITLE: _('Log Info'),
+  REMOTEAPINFO_TITLE: __('Remote AP Info'),
+  REMOTESTAINFO_TITLE: __('Remote Station Info'),
+  INTERFERENCE_TITLE: __('Interface'),
+  LOGINFO_TITLE: __('Log Info'),
 };
 
 const propTypes = {
@@ -43,13 +43,13 @@ export default class Networkmonitor extends React.Component {
     const remoteApInfoOptions = fromJS([
       {
         id: 'devicename',
-        text: _('Device Name '),
+        text: __('Device Name '),
       }, {
         id: 'devicemodel',
-        text: _('Device Model'),
+        text: __('Device Model'),
       }, {
         id: 'softwareversion',
-        text: _('Software Version'),
+        text: __('Software Version'),
       },
     ]);
 
@@ -59,23 +59,23 @@ export default class Networkmonitor extends React.Component {
         text: 'MAC',
       }, {
         id: 'devicename',
-        text: _('Device Name '),
+        text: __('Device Name '),
       }, {
         id: 'txstrength',
-        text: _('TX Singal Strength'),
+        text: __('TX Singal Strength'),
       }, {
         id: 'rxstrength',
-        text: _('RX Singal Strength'),
+        text: __('RX Singal Strength'),
       }, {
         id: 'noise',
-        text: _('Background Noise'),
+        text: __('Background Noise'),
       },
     ]);
 
     const interfaceInfoOptions = fromJS([
       {
         id: 'interface',
-        text: _('Interface'),
+        text: __('Interface'),
       }, {
         id: 'mac',
         text: 'MAC',
@@ -87,16 +87,16 @@ export default class Networkmonitor extends React.Component {
         text: 'IP',
       }, {
         id: 'txflow',
-        text: _('TX Flow'),
+        text: __('TX Flow'),
       }, {
         id: 'txerror',
-        text: _('TX Errors'),
+        text: __('TX Errors'),
       }, {
         id: 'rxflow',
-        text: _('RX Flow'),
+        text: __('RX Flow'),
       }, {
         id: 'rxerror',
-        text: _('RX Errors'),
+        text: __('RX Errors'),
       },
     ]);
 

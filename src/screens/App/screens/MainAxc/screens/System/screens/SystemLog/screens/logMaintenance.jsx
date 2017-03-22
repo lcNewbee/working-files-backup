@@ -12,14 +12,14 @@ import * as appActions from 'shared/actions/app';
 const settingsFormOptions = fromJS([
   {
     id: 'retainDays',
-    label: _('Retain Days'),
+    label: __('Retain Days'),
     fieldset: 'retainDays',
-    legend: _('Log Duration'),
+    legend: __('Log Duration'),
     defaultValue: '7',
     type: 'number',
     min: '1',
     max: '365',
-    help: _('Days'),
+    help: __('Days'),
     saveOnChange: true,
   },
 ]);
@@ -47,12 +47,12 @@ export default class View extends React.Component {
       >
         <div className="o-form">
           <fieldset className="o-form__fieldset">
-            <legend className="o-form__legend">{_('System Log')}</legend>
-            <FormGroup label={_('Download System Log')}>
+            <legend className="o-form__legend">{__('System Log')}</legend>
+            <FormGroup label={__('Download System Log')}>
               <SaveButton
                 type="button"
                 icon="download"
-                text={_('Download')}
+                text={__('Download')}
                 onClick={
                   () => this.onDownloadSystemLog()
                 }

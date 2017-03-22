@@ -14,21 +14,21 @@ import reducer from './reducer';
 const flowRateFilter = utils.filter('flowRate');
 const flowRateKbFilter = utils.filter('flowRate:["KB"]');
 const msg = {
-  ip: _('IP Address'),
-  mac: _('MAC Address'),
-  days: _('Days'),
-  apStatus: _('AP Status'),
-  total: _('Total:'),
-  apNumber: _('AP Number'),
+  ip: __('IP Address'),
+  mac: __('MAC Address'),
+  days: __('Days'),
+  apStatus: __('AP Status'),
+  total: __('Total:'),
+  apNumber: __('AP Number'),
 };
 const timeTypeSwitchs = fromJS([
   {
     value: 'today',
-    label: _('Today'),
+    label: __('Today'),
   },
   {
     value: 'yesterday',
-    label: _('Yesterday'),
+    label: __('Yesterday'),
   },
   {
     value: 'week',
@@ -46,28 +46,28 @@ const timeTypeSwitchs = fromJS([
 const clientTypeSwitchs = fromJS([
   {
     value: '1',
-    label: _('Activity'),
+    label: __('Activity'),
   },
   {
     value: '2',
-    label: _('Connect Time'),
+    label: __('Connect Time'),
   },
 ]);
 const clientNetworkChartOption = {
   tooltip: {
     trigger: 'item',
-    formatter: '{a} <br/>{b} : {c} ' + _('clientUnit') + ' ({d}%)',
+    formatter: '{a} <br/>{b} : {c} ' + __('clientUnit') + ' ({d}%)',
   },
 
   title: {
-    text: _('Clients Frequency Diagram'),
+    text: __('Clients Frequency Diagram'),
     subtext: msg.total,
     x: 'center',
   },
 
   series: [
     {
-      name: _('Frequency'),
+      name: __('Frequency'),
       type: 'pie',
       radius: ['10%', '45%'],
       center: ['50%', '58%'],
@@ -85,18 +85,18 @@ const clientNetworkChartOption = {
 const clientProducerOption = {
   tooltip: {
     trigger: 'item',
-    formatter: '{a} <br/>{b} : {c} ' + _('clientUnit') + ' ({d}%)',
+    formatter: '{a} <br/>{b} : {c} ' + __('clientUnit') + ' ({d}%)',
   },
 
   title: {
-    text: _('Terminal Type'),
+    text: __('Terminal Type'),
     subtext: msg.total,
     x: 'center',
   },
 
   series: [
     {
-      name: _('Producer'),
+      name: __('Producer'),
       type: 'pie',
       radius: ['10%', '45%'],
       center: ['50%', '58%'],
@@ -115,7 +115,7 @@ const apChartOption = {
   color: ['#c23531', '#4BC076', '#2f4554', '#61a0a8', '#d48265'],
   tooltip: {
     trigger: 'item',
-    formatter: `{a} <br/>{b} : {c} ${_('apUnit')} ({d}%)`,
+    formatter: `{a} <br/>{b} : {c} ${__('apUnit')} ({d}%)`,
   },
   title: {
     text: msg.apStatus,
@@ -124,7 +124,7 @@ const apChartOption = {
   },
   series: [
     {
-      name: _('Status'),
+      name: __('Status'),
       type: 'pie',
       radius: ['10%', '45%'],
       center: ['50%', '58%'],
@@ -145,7 +145,7 @@ const clientsStatsOption = fromJS({
     trigger: 'axis',
   },
   legend: {
-    data: ['2.4G', '5G', _('Total')],
+    data: ['2.4G', '5G', __('Total')],
   },
   xAxis: [{
     type: 'category',
@@ -159,7 +159,7 @@ const clientsStatsOption = fromJS({
   }],
   yAxis: [{
     type: 'value',
-    name: _('Number'),
+    name: __('Number'),
     minInterval: 1,
     min: 0,
     splitNumber: 5,
@@ -189,7 +189,7 @@ const clientsStatsOption = fromJS({
       type: 'bar',
     },
     {
-      name: _('Total'),
+      name: __('Total'),
       type: 'line',
     },
   ],
@@ -292,26 +292,26 @@ export class Status extends React.PureComponent {
     const ret = fromJS([
       {
         id: 'hostname',
-        text: _('Name'),
+        text: __('Name'),
         transform(val, item) {
           return val || item.get('macaddress');
         },
       }, {
         id: 'ipaddress',
-        text: _('IP Address'),
+        text: __('IP Address'),
       }, {
         id: 'macaddress',
-        text: _('MAC Address'),
+        text: __('MAC Address'),
       }, {
         id: 'softversion',
-        text: _('UP/Down'),
+        text: __('UP/Down'),
         transform(val, item) {
           return flowRateKbFilter.transform(item.get('upstream')) +
               ' / ' + flowRateKbFilter.transform(item.get('downstream'));
         },
       }, {
         id: 'connecttime',
-        text: _('Connect Time'),
+        text: __('Connect Time'),
         filter: 'connectTime',
         width: '160',
       },
@@ -324,19 +324,19 @@ export class Status extends React.PureComponent {
     const ret = fromJS([
       {
         id: 'devicename',
-        text: _('Name'),
+        text: __('Name'),
         transform(val, item) {
           return val || item.get('macaddress');
         },
       }, {
         id: 'ipaddress',
-        text: _('IP Address'),
+        text: __('IP Address'),
       }, {
         id: 'macaddress',
-        text: _('MAC Address'),
+        text: __('MAC Address'),
       }, {
         id: 'up/down flow',
-        text: _('UP/Down'),
+        text: __('UP/Down'),
         transform(val, item) {
           return flowRateFilter.transform(item.get('upstream')) + ' / ' +
               flowRateFilter.transform(item.get('downstream'));
@@ -351,24 +351,24 @@ export class Status extends React.PureComponent {
     const ret = fromJS([
       {
         id: 'devicename',
-        text: _('Name'),
+        text: __('Name'),
         transform(val, item) {
           return val || item.get('mac');
         },
       }, {
         id: 'model',
-        text: _('Model'),
+        text: __('Model'),
       }, {
         id: 'softversion',
-        text: _('Version'),
+        text: __('Version'),
       }, {
         id: 'channel',
-        text: _('Channel'),
+        text: __('Channel'),
         transform(val, item) {
           let ret = val;
 
           if (val == 0) {
-            ret = _('auto');
+            ret = __('auto');
           }
           return ret;
         },
@@ -385,7 +385,7 @@ export class Status extends React.PureComponent {
       clientProducerOption.series[0].data = clientInfo.get('producerlist')
         .map((val, key) => ({
           value: val,
-          name: _(key),
+          name: __(key),
         })).toArray()
       .sort((prev, next) => prev.value <= next.value);
     }
@@ -393,7 +393,7 @@ export class Status extends React.PureComponent {
     clientNetworkChartOption.series[0].data = clientInfo.delete('total').delete('producerlist')
       .map((val, key) => ({
         value: val,
-        name: _(key),
+        name: __(key),
       })).toArray()
       .sort((prev, next) => prev.value <= next.value);
 
@@ -410,7 +410,7 @@ export class Status extends React.PureComponent {
     const data = apInfo.delete('total').delete('default').map(function (val, key) {
       return {
         value: val,
-        name: _(key),
+        name: __(key),
       };
     }).toArray();
 
@@ -423,7 +423,7 @@ export class Status extends React.PureComponent {
     let clientStatisticsList = this.props.data.get('clientStatisticsList');
     let totalClientStatisticsList = null;
     let xAxisData;
-    let xAxisName = _('Days');
+    let xAxisName = __('Days');
     let maxData = 200;
     let ret = clientsDayStatsOption;
 
@@ -449,7 +449,7 @@ export class Status extends React.PureComponent {
       xAxisData = List(new Array(24)).map(function (val, i) {
         return (i) + ':00';
       }).toJS();
-      xAxisName = _('Hours');
+      xAxisName = __('Hours');
       ret = clientsDayStatsOption;
     } else if (this.props.query.get('time_type') === 'week') {
       xAxisData = List(new Array(7)).map(function (val, i) {
@@ -493,7 +493,7 @@ export class Status extends React.PureComponent {
 
     return (
       <div className="Stats">
-        <h2>{ _('Statistics') }</h2>
+        <h2>{ __('Statistics') }</h2>
         <div className="o-box row" >
           <div className="cols col-4" >
             <div className="o-box__cell">
@@ -518,7 +518,7 @@ export class Status extends React.PureComponent {
           </div>
           <div className="cols col-8" >
             <div className="o-box__cell">
-              <h3>{ _('Clients Number') }</h3>
+              <h3>{ __('Clients Number') }</h3>
             </div>
             <div className="o-box__cell row">
               <div className="cols col-6">
@@ -538,7 +538,7 @@ export class Status extends React.PureComponent {
           </div>
           <div className="cols col-12" >
             <div className="o-box__cell">
-              <h3>{ _('Clients Statistics') }
+              <h3>{ __('Clients Statistics') }
                 <Switchs
                   options={timeTypeSwitchs}
                   value={this.props.query.get('time_type')}
@@ -561,14 +561,14 @@ export class Status extends React.PureComponent {
 
           <div className="cols col-12">
             <div className="o-box__cell">
-              <h3>{_('Clients Ranklist')}
+              <h3>{__('Clients Ranklist')}
                 <Switchs
                   options={clientTypeSwitchs}
                   value={this.props.query.get('sort_type')}
                   onChange={this.onChangeClientSortType}
                 />
                 <a className="link-more" href="#/main/clients">
-                  {_('See More')}
+                  {__('See More')}
                   <Icon name="arrow-circle-o-right" className="icon" />
                 </a>
               </h3>
@@ -584,8 +584,8 @@ export class Status extends React.PureComponent {
 
           <div className="cols col-12">
             <div className="o-box__cell">
-              <h3>{ _('AP Activity Ranklist') }
-                <a className="link-more" href="#/main/devices">{_('See More')}
+              <h3>{ __('AP Activity Ranklist') }
+                <a className="link-more" href="#/main/devices">{__('See More')}
                   <Icon name="arrow-circle-o-right" className="icon" />
                 </a>
               </h3>
@@ -603,7 +603,7 @@ export class Status extends React.PureComponent {
 
         <Modal
           isShow={this.props.isOfflineApShow}
-          title={_('Offline Ap List')}
+          title={__('Offline Ap List')}
           onClose={this.hideOfflineApp}
           onOk={this.hideOfflineApp}
           draggable

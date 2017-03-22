@@ -10,24 +10,24 @@ import * as appActions from 'shared/actions/app';
 const listOptions = fromJS([
   {
     id: 'timer',
-    text: _('Time'),
+    text: __('Time'),
     width: '130px',
   }, {
     id: 'eventtype',
-    text: _('Event Type'),
+    text: __('Event Type'),
     defaultQuery: '',
     formProps: {
       display: 'inline',
     },
   }, {
     id: 'event',
-    text: _('Event'),
+    text: __('Event'),
   }, {
     id: 'level',
-    text: _('Level'),
+    text: __('Level'),
   }, {
     id: 'msginfo',
-    text: _('Info'),
+    text: __('Info'),
   },
 ]);
 const propTypes = {

@@ -13,9 +13,9 @@ const funConfig = {
   // 无线设置页面
   basic: {
     devicemodeOptions: [
-      { value: 'ap', label: _('AP') },              // AP模式
-      { value: 'sta', label: _('Station') },        // Station模式
-      { value: 'repeater', label: _('Repeater') },  // Repeater模式
+      { value: 'ap', label: __('AP') },              // AP模式
+      { value: 'sta', label: __('Station') },        // Station模式
+      { value: 'repeater', label: __('Repeater') },  // Repeater模式
     ],
     radioMaxClientsLimit: true,    // 射频最大客户端限制
     // 功能项参见WirelessConfig -> Basic页面下的ssidTableFullMemberOptions变量

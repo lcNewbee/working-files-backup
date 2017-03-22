@@ -24,7 +24,7 @@ const settingsFormOptions = radioBase
             ['options'],
             $$options => $$options.unshift(Map({
               value: 0,
-              label: _('Automatic'),
+              label: __('Automatic'),
             })),
           ).set('disabled', true);
 
@@ -34,7 +34,7 @@ const settingsFormOptions = radioBase
             ['options'],
             $$options => $$options.unshift(Map({
               value: 'auto',
-              label: _('Automatic'),
+              label: __('Automatic'),
             })),
           ).set('disabled', true);
 
@@ -45,7 +45,7 @@ const settingsFormOptions = radioBase
             fromJS([
               {
                 value: 0,
-                label: _('Automatic'),
+                label: __('Automatic'),
               },
             ]),
           ).set('disabled', true);
@@ -189,7 +189,7 @@ export default class SmartRf extends React.Component {
                   marginRight: '5px',
                 }}
               />
-              {_('Base Settings')}
+              {__('Base Settings')}
             </h3>
           </div>
           {
@@ -204,9 +204,9 @@ export default class SmartRf extends React.Component {
                   invalidMsg={app.get('invalid')}
                   validateAt={app.get('validateAt')}
                   isSaving={app.get('saving')}
-                  saveText={_('Apply')}
-                  savingText={_('Applying')}
-                  savedText={_('Applied')}
+                  saveText={__('Apply')}
+                  savingText={__('Applying')}
+                  savedText={__('Applied')}
                 />
               </div>
             ) : null
@@ -225,7 +225,7 @@ export default class SmartRf extends React.Component {
                 }}
                 onClick={() => this.toggleBox('isAdvancedShow')}
               />
-              {_('Advanced Settings')}
+              {__('Advanced Settings')}
             </h3>
           </div>
           {
@@ -242,9 +242,9 @@ export default class SmartRf extends React.Component {
                   onValidError={this.props.reportValidError}
                   isSaving={app.get('saving')}
                   hasSaveButton={this.actionable}
-                  saveText={_('Apply')}
-                  savingText={_('Applying')}
-                  savedText={_('Applied')}
+                  saveText={__('Apply')}
+                  savingText={__('Applying')}
+                  savedText={__('Applied')}
                 />
               </div>
             ) : null

@@ -105,14 +105,14 @@ export default class Advance extends React.Component {
     const { validLed1, validLed2, validLed3, validLed4, validSens } = this.props.validateOption;
     return (
       <div className="advanceWrap">
-        <h3>{_('Advance')}</h3>
+        <h3>{__('Advance')}</h3>
         <div className="clearfix">
           <div style={{ width: '300px' }} >
             <FormGroup
               className="rtsThresholdValue fl"
-              label={_('RTS Threshold')}
+              label={__('RTS Threshold')}
               type="number"
-              placeholder={_('Range: ')}
+              placeholder={__('Range: ')}
               disabled={rtsEnable === '0'}
               value={rts}
               onChange={(data) => this.props.updateItemSettings({
@@ -140,7 +140,7 @@ export default class Advance extends React.Component {
                 }}
                 style={{ marginRight: '3px' }}
               />
-              {_('Default')}
+              {__('Default')}
             </label>
           </span>
         </div>
@@ -149,10 +149,10 @@ export default class Advance extends React.Component {
           <div style={{ width: '300px' }} >
             <FormGroup
               className="sensThresholdValue fl"
-              label={_('Threshold Value')}
+              label={__('Threshold Value')}
               type="number"
               disabled={sensEnable === '0'}
-              placeholder={_('Range: -90 ~ -50')}
+              placeholder={__('Range: -90 ~ -50')}
               value={sensThreshold}
               onChange={(data) => this.props.updateItemSettings({
                 sensThreshold: data.value,
@@ -180,7 +180,7 @@ export default class Advance extends React.Component {
                 }}
                 style={{ marginRight: '3px' }}
               />
-              {_('Default')}
+              {__('Default')}
             </label>
           </span>
         </div>
@@ -188,7 +188,7 @@ export default class Advance extends React.Component {
           <FormGroup
             className="fl"
             type="range"
-            label={_('Distance Value')}
+            label={__('Distance Value')}
             min="0"
             max="10"
             step="0.1"
@@ -221,13 +221,13 @@ export default class Advance extends React.Component {
                 }}
                 style={{ marginRight: '3px' }}
               />
-              {_('auto')}
+              {__('auto')}
             </label>
           </span>
         </div>
         <div className="signalLedConfg">
           <FormGroup
-            label={_('Signal LED Thresholds')}
+            label={__('Signal LED Thresholds')}
           >
             <br /><br />
             <div
@@ -241,7 +241,7 @@ export default class Advance extends React.Component {
                 id="threshdForLed1"
                 type="number"
                 label="LED1"
-                help={"dbm " + _('range:') + " -98 ~ -10"}
+                help={"dbm " + __('range:') + " -98 ~ -10"}
                 value={led1Threshold}
                 onChange={(data) => this.props.updateItemSettings({
                   led1Threshold: data.value,
@@ -264,7 +264,7 @@ export default class Advance extends React.Component {
                 id="threshdForLed2"
                 type="number"
                 label="LED2"
-                help={"dbm " + _('range:') + " -98 ~ -10"}
+                help={"dbm " + __('range:') + " -98 ~ -10"}
                 value={led2Threshold}
                 onChange={(data) => this.props.updateItemSettings({
                   led2Threshold: data.value,
@@ -287,7 +287,7 @@ export default class Advance extends React.Component {
                 id="threshdForLed3"
                 type="number"
                 label="LED3"
-                help={"dbm " + _('range:') + " -98 ~ -10"}
+                help={"dbm " + __('range:') + " -98 ~ -10"}
                 value={led3Threshold}
                 onChange={(data) => this.props.updateItemSettings({
                   led3Threshold: data.value,
@@ -310,7 +310,7 @@ export default class Advance extends React.Component {
                 id="threshdForLed4"
                 type="number"
                 label="LED4"
-                help={"dbm " + _('range:') + " -98 ~ -10"}
+                help={"dbm " + __('range:') + " -98 ~ -10"}
                 value={led4Threshold}
                 onChange={(data) => this.props.updateItemSettings({
                   led4Threshold: data.value,

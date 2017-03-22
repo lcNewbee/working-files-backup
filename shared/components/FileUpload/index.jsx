@@ -6,8 +6,8 @@ import InputFile from '../Form/File';
 import './_FileUpload.scss';
 
 const MSG = {
-  shouldSelectFile: _('Please select a upload file'),
-  extensionRange: _('Select file extension range: %s'),
+  shouldSelectFile: __('Please select a upload file'),
+  extensionRange: __('Select file extension range: %s'),
 };
 
 const propTypes = {
@@ -84,7 +84,7 @@ class FileUpload extends React.Component {
 
     // 验证可接受的文件类型
     if (acceptExt && acceptExt.indexOf(extension) === -1) {
-      this.onAlert(_(MSG.extensionRange, acceptExt));
+      this.onAlert(__(MSG.extensionRange, acceptExt));
       thisElem.value = '';
       this.restImageStatus();
       return;
@@ -178,7 +178,7 @@ class FileUpload extends React.Component {
   render() {
     const { url, target, buttonText, name, buttonIcon, disabled } = this.props;
     const { imageStatus } = this.state;
-    const curButtonText = buttonText || _('Upload Image');
+    const curButtonText = buttonText || __('Upload Image');
     let displayStyle = 'none';
 
     if (imageStatus === 'default') {

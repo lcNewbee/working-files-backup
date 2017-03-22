@@ -70,9 +70,9 @@ const funConfig = {
   // 无线设置页面
   basic: {
     devicemodeOptions: [
-      { value: 'ap', label: _('AP') },
-      // { value: 'sta', label: _('Station') },
-      // { value: 'repeater', label: _('Repeater') },
+      { value: 'ap', label: __('AP') },
+      // { value: 'sta', label: __('Station') },
+      // { value: 'repeater', label: __('Repeater') },
     ],
     radioMaxClientsLimit: false,    // 射频最大客户端限制
     // 功能项参见WirelessConfig -> Basic页面下的ssidTableFullMemberOptions变量
@@ -119,7 +119,7 @@ const routes = [{
       id: 'systemstatus',
       path: '/main/status',
       icon: 'pie-chart',
-      text: _('Status'),
+      text: __('Status'),
       noTree: true,
       routes: [
         {
@@ -147,7 +147,7 @@ const routes = [{
     }, {
       id: 'quicksetup',
       path: '/main/quicksetup',
-      text: _('Quick Setup'),
+      text: __('Quick Setup'),
       icon: 'map-signs',
       funConfig: funConfig.coverageQuickSetup,
       fetchUrl: 'goform/get_quicksetup_info_forTestUse',
@@ -157,7 +157,7 @@ const routes = [{
       id: 'networksettings',
       path: '/main/networksettings',
       icon: 'sphere',
-      text: _('Network'),
+      text: __('Network'),
       component: SharedComponents.TabContainer,
       routes: [
         {
@@ -166,7 +166,7 @@ const routes = [{
           saveUrl: 'goform/set_network',
           funConfig: funConfig.network,
           path: '/main/networksettings/networksettings',
-          text: _('LAN Settings'),
+          text: __('LAN Settings'),
           component: sNetworkSettings.Screen,
         },
       ],
@@ -174,13 +174,13 @@ const routes = [{
       id: 'wirelessconfig',
       path: '/main/wirelessconfig',
       icon: 'wifi',
-      text: _('Wireless'),
+      text: __('Wireless'),
       component: SharedComponents.TabContainer,
       routes: [
         {
           id: 'basic',
           path: '/main/wirelessconfig/basic',
-          text: _('Basic'),
+          text: __('Basic'),
           formUrl: 'goform/get_wl_info_forTestUse',
           saveUrl: 'goform/set_wireless_forTestUse',
           funConfig: funConfig.basic,
@@ -189,7 +189,7 @@ const routes = [{
         {
           id: 'advance',
           path: '/main/wirelessconfig/advance',
-          text: _('Advance'),
+          text: __('Advance'),
           fetchUrl: 'goform/get_adv_wl_info_forTestUse',
           funConfig: funConfig.advance,
           component: sAdvance.Screen,
@@ -206,25 +206,25 @@ const routes = [{
       id: 'pMaintenance',
       path: '/main/maintenance',
       icon: 'wrench',
-      text: _('System'),
+      text: __('System'),
       component: SharedComponents.TabContainer,
       routes: [
         {
           id: 'systemmaintenance',
           fetchUrl: 'goform/save_config',
           path: '/main/maintenance/systemmaintenance',
-          text: _('System Maintenance'),
+          text: __('System Maintenance'),
           component: sSystemMaintenance.Screen,
           funConfig: funConfig.systemmaintenance,
         }, {
           id: 'accountsettings',
           path: '/main/maintenance/accountsettings',
-          text: _('Account Settings'),
+          text: __('Account Settings'),
           component: sAccountSettings.Screen,
         }, {
           id: 'timesettings',
           path: '/main/maintenance/timesettings',
-          text: _('Time Settings'),
+          text: __('Time Settings'),
           component: sTimeSettings.Screen,
         },
       ],
@@ -232,32 +232,32 @@ const routes = [{
       id: 'tools',
       path: '/main/tools',
       icon: 'cogs',
-      text: _('Tools'),
+      text: __('Tools'),
       component: SharedComponents.TabContainer,
       indexRoute: { onEnter: (nextState, replace) => replace('/main/tools/speedtest') },
       routes: [
         {
           id: 'speedtest',
           path: '/main/tools/speedtest',
-          text: _('Speed Test'),
+          text: __('Speed Test'),
           saveUrl: '/goform/bandwidth_test',
           component: sSpeedTest.Screen,
         }, {
           id: 'sitesurvey',
           path: '/main/tools/sitesurvey',
           fetchUrl: 'goform/get_site_survey',
-          text: _('Site Survey'),
+          text: __('Site Survey'),
           component: sSiteSurvey.Screen,
         }, {
           id: 'systemlogs',
           formUrl: 'goform/get_log_list',
           path: '/main/tools/systemlogs',
-          text: _('System Logs'),
+          text: __('System Logs'),
           component: sSystemLogs.Screen,
         }, {
           id: 'channelutilization',
           path: '/main/tools/channelutilization',
-          text: _('Channel Utilization'),
+          text: __('Channel Utilization'),
           fetchUrl: 'goform/get_chanutil',
           component: sChannelUtilization.Screen,
         },
@@ -265,7 +265,7 @@ const routes = [{
     }, {
       id: 'modesettings',
       path: '/main/modesettings',
-      text: _('Mode'),
+      text: __('Mode'),
       icon: 'exchange',
       component: SharedComponents.TabContainer,
       indexRoute: { onEnter: (nextState, replace) => replace('/main/modesettings/modesettings') },
@@ -273,7 +273,7 @@ const routes = [{
         {
           id: 'modesettings',
           path: '/main/modesettings/modesettings',
-          text: _('Mode Settings'),
+          text: __('Mode Settings'),
           component: sModeSettings.Screen,
         },
       ],

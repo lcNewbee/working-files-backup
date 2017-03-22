@@ -15,29 +15,29 @@ const defaultProps = {};
 const settingsOptions = fromJS([
   {
     id: 'dhcp_service',
-    label: _('DHCP Service'),
+    label: __('DHCP Service'),
     fieldset: 'service_setting',
     defaultValue: '0',
     value: '1',
     required: true,
     type: 'checkbox',
-    text: _('Enable'),
+    text: __('Enable'),
   }, {
     id: 'isLease',
-    label: _('Backup Lease'),
+    label: __('Backup Lease'),
     fieldset: 'service_setting',
     defaultValue: '0',
     value: '1',
     required: true,
     type: 'checkbox',
-    text: _('Enable'),
+    text: __('Enable'),
   },
   {
     id: 'ping_delay',
-    label: _('PING Delay'),
+    label: __('PING Delay'),
     fieldset: 'service_setting',
     type: 'number',
-    help: _('Second'),
+    help: __('Second'),
   },
 ]).groupBy(item => item.get('fieldset'))
 .toList();

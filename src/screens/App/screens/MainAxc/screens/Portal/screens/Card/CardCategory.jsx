@@ -11,7 +11,7 @@ import * as appActions from 'shared/actions/app';
 const listOptions = fromJS([
   {
     id: 'name',
-    text: _('Name'),
+    text: __('Name'),
     width: '120px',
     formProps: {
       type: 'text',
@@ -23,7 +23,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'state',
-    text: _('Type'),
+    text: __('Type'),
     formProps: {
       type: 'select',
       required: true,
@@ -31,25 +31,25 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: _('Hour Card'),
+        label: __('Hour Card'),
       }, {
         value: '1',
-        label: _('Day Card'),
+        label: __('Day Card'),
       },
       {
         value: '2',
-        label: _('Month Card'),
+        label: __('Month Card'),
       }, {
         value: '3',
-        label: _('Year Card'),
+        label: __('Year Card'),
       }, {
         value: '4',
-        label: _('Traffic Card'),
+        label: __('Traffic Card'),
       },
     ],
   }, {
     id: 'maclimit',
-    text: _('Mac Limit'),
+    text: __('Mac Limit'),
     formProps: {
       type: 'select',
       required: true,
@@ -57,15 +57,15 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: _('Closed'),
+        label: __('Closed'),
       }, {
         value: '1',
-        label: _('Open'),
+        label: __('Open'),
       },
     ],
   }, {
     id: 'maclimitcount',
-    text: _('Mac Quantity'),
+    text: __('Mac Quantity'),
     formProps: {
       type: 'number',
       required: true,
@@ -74,14 +74,14 @@ const listOptions = fromJS([
     },
   }, {
     id: 'autologin',
-    text: _('Auto Login'),
+    text: __('Auto Login'),
     options: [
       {
         value: '0',
-        label: _('Closed'),
+        label: __('Closed'),
       }, {
         value: '1',
-        label: _('Open'),
+        label: __('Open'),
       },
     ],
     formProps: {
@@ -91,7 +91,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'speed',
-    text: _('Speed Limit'),
+    text: __('Speed Limit'),
     formProps: {
       type: 'select',
       required: true,
@@ -100,29 +100,29 @@ const listOptions = fromJS([
     options: [
       {
         value: '1',
-        label: _('1M'),
+        label: __('1M'),
       },
     ],
   }, {
     id: 'time',
-    text: _('Count'),
+    text: __('Count'),
     formProps: {
       type: 'text',
       required: true,
     },
   }, {
     id: 'money',
-    text: _('Price'),
+    text: __('Price'),
     formProps: {
       type: 'number',
       required: true,
       min: '0',
       max: '999999999',
-      help: _('$'),
+      help: __('$'),
     },
   }, {
     id: 'description',
-    text: _('Description'),
+    text: __('Description'),
     width: '120px',
     options: [],
     formProps: {

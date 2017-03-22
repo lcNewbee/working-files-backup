@@ -27,7 +27,7 @@ const listOptions = fromJS({
   list: [
     {
       id: 'name',
-      label: _('Name'),
+      label: __('Name'),
       defaultValue: 'building',
       formProps: {
         type: 'text',
@@ -35,7 +35,7 @@ const listOptions = fromJS({
       },
     }, {
       id: 'mapNumber',
-      label: _('Map Number'),
+      label: __('Map Number'),
       noForm: true,
       formProps: {
         required: true,
@@ -43,20 +43,20 @@ const listOptions = fromJS({
       },
     }, {
       id: 'address',
-      label: _('Address'),
+      label: __('Address'),
       formProps: {
         required: true,
         type: 'text',
       },
     }, {
       id: 'lat',
-      label: _('lat'),
+      label: __('lat'),
       formProps: {
         type: 'text',
       },
     }, {
       id: 'lng',
-      label: _('lng'),
+      label: __('lng'),
       formProps: {
         type: 'text',
       },
@@ -145,13 +145,13 @@ export default class LiveMap extends React.PureComponent {
     if (this.actionable) {
       this.listTableOptions = listTableOptions.push(fromJS({
         id: 'actions',
-        text: _('Actions'),
+        text: __('Actions'),
         width: '180',
         transform: (val, $$item, index) => (
           <div className="action-btns">
             <Button
               icon="edit"
-              text={_('Edit')}
+              text={__('Edit')}
               size="sm"
               onClick={() => {
                 this.props.editListItemByIndex(index);
@@ -159,7 +159,7 @@ export default class LiveMap extends React.PureComponent {
             />
             <Button
               icon="trash"
-              text={_('Delete')}
+              text={__('Delete')}
               size="sm"
               onClick={() => {
                 this.onRemoveItem($$item.get('id'));
@@ -302,17 +302,17 @@ export default class LiveMap extends React.PureComponent {
                             '<h4>'}${  item.get('name')  }</h4>` +
                             `<div class="o-description-list">` +
                               `<dl class="o-description-list-row">` +
-                                `<dt>${  _('Address')  }</dt>` +
+                                `<dt>${  __('Address')  }</dt>` +
                                 `<dd>${  item.get('address')  }</dd>` +
                               `</dl>` +
                               `<dl class="o-description-list-row">` +
-                                `<dt>${  _('Map Number')  }</dt>` +
+                                `<dt>${  __('Map Number')  }</dt>` +
                                 `<dd>${  item.get('mapNumber')  }</dd>` +
                               `</dl>` +
                             `</div>` +
                             `<div class="m-map__marker-infowindow-footer">${
-                              this.actionable ? ('<button class="a-btn a-btn--primary" id="editBulid' + markerId + '">' + _('Edit') + '</button>') : ''
-                              }<button class="a-btn a-btn--info" id="viewBulid${  markerId  }">${  _('View')  }</button>` +
+                              this.actionable ? ('<button class="a-btn a-btn--primary" id="editBulid' + markerId + '">' + __('Edit') + '</button>') : ''
+                              }<button class="a-btn a-btn--info" id="viewBulid${  markerId  }">${  __('View')  }</button>` +
                             `</div>` +
                           `</div>`;
     const infowindow = new google.maps.InfoWindow({
@@ -470,7 +470,7 @@ export default class LiveMap extends React.PureComponent {
     //     <Button
     //       icon="lock"
     //       key="0"
-    //       text={_('Unlock Map')}
+    //       text={__('Unlock Map')}
     //       onClick={() => {
     //         this.props.updateScreenSettings({
     //           isLocked: '0',
@@ -481,7 +481,7 @@ export default class LiveMap extends React.PureComponent {
     //     <Button
     //       icon="unlock-alt"
     //       key="2"
-    //       text={_('Lock Map')}
+    //       text={__('Lock Map')}
     //       onClick={() => {
     //         this.props.updateScreenSettings({
     //           isLocked: '1',
@@ -497,10 +497,10 @@ export default class LiveMap extends React.PureComponent {
           options={[
             {
               value: '0',
-              label: _('Live Google Map'),
+              label: __('Live Google Map'),
             }, {
               value: '1',
-              label: _('Local Building List'),
+              label: __('Local Building List'),
             },
           ]}
           key="list"
@@ -520,12 +520,12 @@ export default class LiveMap extends React.PureComponent {
           this.actionable ? (
             <Button
               icon="plus"
-              text={_('Add')}
+              text={__('Add')}
               theme="primary"
               onClick={
                 () => this.props.changeScreenActionQuery({
                   action: 'add',
-                  myTitle: _('Add Building'),
+                  myTitle: __('Add Building'),
                 })
               }
             />

@@ -25,20 +25,20 @@ const propTypes = fromJS({
 // };
 
 const msg = {
-  days: _('Days'),
+  days: __('Days'),
 };
 const timeTypeSwitchs = fromJS([
   {
     value: '-1',
-    label: _('Current'),
+    label: __('Current'),
   },
   {
     value: '0',
-    label: _('Today'),
+    label: __('Today'),
   },
   {
     value: '1',
-    label: _('Yesterday'),
+    label: __('Yesterday'),
   },
   {
     value: '7',
@@ -79,14 +79,14 @@ const timeTypeSwitchs = fromJS([
 const userModalOptions = fromJS([
   {
     id: 'mac',
-    text: _('MAC'),
+    text: __('MAC'),
   }, {
     id: 'ip',
-    text: _('IP'),
+    text: __('IP'),
   },
   // {
   //   id: 'osType',
-  //   text: _('OS Type'),
+  //   text: __('OS Type'),
   //   transform(val) {
   //     if (val === '' || val === undefined) {
   //       return '--';
@@ -96,7 +96,7 @@ const userModalOptions = fromJS([
   // },
   {
     id: 'application',
-    text: _('Applications'),
+    text: __('Applications'),
     transform(val) {
       if (typeof (val) === 'undefined' || val.size === 0) return '--';
       const len = val.size;
@@ -115,13 +115,13 @@ const userModalOptions = fromJS([
     },
   }, {
     id: 'curRate',
-    text: _('Current Rate'),
+    text: __('Current Rate'),
     transform(val) {
       return `${flowRateFilter.transform(val)}/s`;
     },
   }, {
     id: 'trafficPercent',
-    text: _('Proportion'),
+    text: __('Proportion'),
   },
 ]);
 
@@ -172,7 +172,7 @@ function getFlowOption(serverData, timeType) {
       trigger: 'axis',
     },
     legend: {
-      data: [_('Throughput')],
+      data: [__('Throughput')],
     },
     grid: {
       left: '0',
@@ -204,7 +204,7 @@ function getFlowOption(serverData, timeType) {
     }],
     yAxis: [{
       type: 'value',
-      name: _('KB'),
+      name: __('KB'),
       splitNumber: 5,
       min: '0',
       axisLabel: {
@@ -226,7 +226,7 @@ function getFlowOption(serverData, timeType) {
     }],
     series: [
       {
-        name: _('Throughput'),
+        name: __('Throughput'),
         type: 'line',
         // smooth: true,
         // itemStyle: {
@@ -240,7 +240,7 @@ function getFlowOption(serverData, timeType) {
       },
       // ,
       // {
-        // name: _('Download'),
+        // name: __('Download'),
         // type: 'line',
         // smooth: true,
         // itemStyle: {
@@ -255,7 +255,7 @@ function getFlowOption(serverData, timeType) {
     ],
   };
   let xAxisData;
-  let xAxisName = _('Days');
+  let xAxisName = __('Days');
   let $$upDataList = serverData.getIn(['upFlowList']);
   // let $$downDataList = serverData.getIn(['downFlowList']);
   let maxVal = 0;
@@ -282,7 +282,7 @@ function getFlowOption(serverData, timeType) {
     xAxisData = List(new Array(25)).map(
       (val, i) => `${i}:00`,
     ).toJS();
-    xAxisName = _('Hours');
+    xAxisName = __('Hours');
   } else if (timeType === '7') {
     xAxisData = List(new Array(8)).map(
       (val, i) => i,
@@ -381,10 +381,10 @@ export default class EthStatistic extends React.Component {
     const listOptions = fromJS([
       {
         id: 'ethx_name',
-        text: _('Name'),
+        text: __('Name'),
       }, {
         id: 'userNum',
-        text: _('User Number'),
+        text: __('User Number'),
         transform: function (val, item) {
           return (
             <span
@@ -394,7 +394,7 @@ export default class EthStatistic extends React.Component {
                 cursor: 'pointer',
                 display: 'inline-block',
               }}
-              title={_('Click for details')}
+              title={__('Click for details')}
               onClick={() => {
                 const ethList = store.getIn([curScreenId, 'data', 'list']);
                 const eth = item.get('ethx_name');
@@ -420,7 +420,7 @@ export default class EthStatistic extends React.Component {
         }.bind(this),
       }, {
         id: 'application',
-        text: _('Applications'),
+        text: __('Applications'),
         transform(val) {
           if (typeof (val) === 'undefined' || val.size === 0) return '--';
           const len = val.size;
@@ -439,14 +439,14 @@ export default class EthStatistic extends React.Component {
         },
       }, {
         id: 'curRate',
-        text: _('Current Rate'),
+        text: __('Current Rate'),
         transform(val) {
           return `${flowRateFilter.transform(val)}/s`;
         },
       },
       {
         id: 'active_eth',
-        text: _('Active Status'),
+        text: __('Active Status'),
         actionName: 'active',
         type: 'switch',
         transform: function(val, item) {
@@ -493,7 +493,7 @@ export default class EthStatistic extends React.Component {
         // editable={false}
         // deleteable={false}
         // listKey="ethx_name"
-        // listTitle={_('Statistics Within 30 Seconds')}
+        // listTitle={__('Statistics Within 30 Seconds')}
       >
         <div className="t-overview">
           <div className="t-overview__section">
@@ -504,7 +504,7 @@ export default class EthStatistic extends React.Component {
                     marginRight: '10px',
                   }}
                 >
-                  {_('Time')}
+                  {__('Time')}
                 </span>
                 <Select
                   options={timeTypeSwitchs.toJS()}
@@ -518,7 +518,7 @@ export default class EthStatistic extends React.Component {
                     marginLeft: '20px',
                   }}
                 >
-                  {_('Interface')}
+                  {__('Interface')}
                 </span>
                 <Select
                   options={interfaceSwitchs.toJS()}
@@ -546,7 +546,7 @@ export default class EthStatistic extends React.Component {
         </div>
         <Modal
           isShow={this.state.showModal}
-          title={`Eth${this.state.ethId} ${_('Clients List')}`}
+          title={`Eth${this.state.ethId} ${__('Clients List')}`}
           cancelButton={false}
           size="lg"
           draggable
@@ -569,10 +569,10 @@ export default class EthStatistic extends React.Component {
                   fontWeight: 'bold',
                 }}
               >
-                {_('View')}
+                {__('View')}
               </span>
               <FormInput
-                label={_('View')}
+                label={__('View')}
                 options={viewOptions.toJS()}
                 type="select"
                 value={store.getIn([curScreenId, 'query', 'size'])}

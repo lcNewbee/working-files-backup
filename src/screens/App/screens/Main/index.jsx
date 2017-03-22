@@ -54,7 +54,7 @@ export default class Main extends React.PureComponent {
           <div className="aside">
             <a href="#" className="as-control" onClick={this.onRefresh}>
               <Icon name="refresh" className="icon" />
-              <span>{_('REFRESH')}</span>
+              <span>{__('REFRESH')}</span>
             </a>
             <div className="user" onClick={this.showUserPopOver}>
               <Icon name="user-secret" className="icon-user" />
@@ -91,13 +91,13 @@ export default class Main extends React.PureComponent {
                     <Icon
                       name="key"
                     />
-                    {_('CHANGE PASSWORD')}
+                    {__('CHANGE PASSWORD')}
                   </a>
                   <a className="sign-out" href="#" onClick={this.onLogout}>
                     <Icon
                       name="sign-out"
                     />
-                    {_('LOG OUT')}
+                    {__('LOG OUT')}
                   </a>
                 </div>
               </div>

@@ -33,7 +33,7 @@ const defaultProps = {};
 const interfaceOptions = fromJS([
   {
     id: 'name',
-    text: _('Name'),
+    text: __('Name'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -43,7 +43,7 @@ const interfaceOptions = fromJS([
     width: '152px',
   }, {
     id: 'mac',
-    text: _('MAC'),
+    text: __('MAC'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -53,7 +53,7 @@ const interfaceOptions = fromJS([
     width: '152px',
   }, {
     id: 'txBytes',
-    text: _('Tx Data'),
+    text: __('Tx Data'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -63,7 +63,7 @@ const interfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'rxBytes',
-    text: _('Rx Data'),
+    text: __('Rx Data'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -73,7 +73,7 @@ const interfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'txPackets',
-    text: _('Tx Packets'),
+    text: __('Tx Packets'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -83,7 +83,7 @@ const interfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'rxPackets',
-    text: _('Rx Packets'),
+    text: __('Rx Packets'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -93,7 +93,7 @@ const interfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'txErrorPackets',
-    text: _('Tx Errors'),
+    text: __('Tx Errors'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -103,7 +103,7 @@ const interfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'rxErrorPackets',
-    text: _('Rx Errors'),
+    text: __('Rx Errors'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -113,7 +113,7 @@ const interfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'status',
-    text: _('Status'),
+    text: __('Status'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -125,7 +125,7 @@ const interfaceOptions = fromJS([
 // const vapInterfaceOptions = fromJS([
 //   {
 //     id: 'name',
-//     text: _('Name'),
+//     text: __('Name'),
 //     transform(val, item) {
 //       const ssid = item.get('ssid');
 //       if (val === '') {
@@ -136,7 +136,7 @@ const interfaceOptions = fromJS([
 //     width: '152px',
 //   }, {
 //     id: 'mac',
-//     text: _('MAC'),
+//     text: __('MAC'),
 //     transform(val) {
 //       if (val === '') {
 //         return '--';
@@ -146,7 +146,7 @@ const interfaceOptions = fromJS([
 //     width: '152px',
 //   }, {
 //     id: 'txBytes',
-//     text: _('Tx Bytes'),
+//     text: __('Tx Bytes'),
 //     transform(val) {
 //       if (val === '') {
 //         return '--';
@@ -156,7 +156,7 @@ const interfaceOptions = fromJS([
 //     width: '144px',
 //   }, {
 //     id: 'rxBytes',
-//     text: _('Rx Bytes'),
+//     text: __('Rx Bytes'),
 //     transform(val) {
 //       if (val === '') {
 //         return '--';
@@ -166,7 +166,7 @@ const interfaceOptions = fromJS([
 //     width: '144px',
 //   }, {
 //     id: 'txPackets',
-//     text: _('Tx Packets'),
+//     text: __('Tx Packets'),
 //     transform(val) {
 //       if (val === '') {
 //         return '--';
@@ -176,7 +176,7 @@ const interfaceOptions = fromJS([
 //     width: '144px',
 //   }, {
 //     id: 'rxPackets',
-//     text: _('Rx Packets'),
+//     text: __('Rx Packets'),
 //     transform(val) {
 //       if (val === '') {
 //         return '--';
@@ -186,7 +186,7 @@ const interfaceOptions = fromJS([
 //     width: '144px',
 //   }, {
 //     id: 'txErrorPackets',
-//     text: _('Tx Error'),
+//     text: __('Tx Error'),
 //     transform(val) {
 //       if (val === '') {
 //         return '--';
@@ -196,7 +196,7 @@ const interfaceOptions = fromJS([
 //     width: '144px',
 //   }, {
 //     id: 'rxErrorPackets',
-//     text: _('Rx Error'),
+//     text: __('Rx Error'),
 //     transform(val) {
 //       if (val === '') {
 //         return '--';
@@ -206,7 +206,7 @@ const interfaceOptions = fromJS([
 //     width: '144px',
 //   }, {
 //     id: 'ccq',
-//     text: _('CCQ'),
+//     text: __('CCQ'),
 //     transform(val) {
 //       if (val === '') {
 //         return '--';
@@ -257,15 +257,15 @@ function wirelessModeShowStyle(wirelessMode) {
 //     legend: {
 //       orient: 'vertical',
 //       x: 'left',
-//       data: [_('Used'), _('Free')],
+//       data: [__('Used'), __('Free')],
 //     },
 //     title: {
-//       text: _('CPU Usage'),
+//       text: __('CPU Usage'),
 //       x: 'center',
 //     },
 //     series: [
 //       {
-//         name: _('CPU Usage'),
+//         name: __('CPU Usage'),
 //         type: 'pie',
 //         radius: ['40%', '70%'],
 //         avoidLabelOverlap: false,
@@ -293,8 +293,8 @@ function wirelessModeShowStyle(wirelessMode) {
 //   };
 
 //   ret.series[0].data = [
-//     { value: serverData.get('cpuInfo'), name: _('Used') },
-//     { value: serverData.get('cpuTotal') - serverData.get('cpuInfo'), name: _('Free') },
+//     { value: serverData.get('cpuInfo'), name: __('Used') },
+//     { value: serverData.get('cpuTotal') - serverData.get('cpuInfo'), name: __('Free') },
 //   ];
 
 //   return ret;
@@ -306,17 +306,17 @@ function wirelessModeShowStyle(wirelessMode) {
 //       formatter: '{a} <br/>{b}: {c}KB ({d}%)',
 //     },
 //     title: {
-//       text: _('Memory Usage'),
+//       text: __('Memory Usage'),
 //       x: 'center',
 //     },
 //     legend: {
 //       orient: 'vertical',
 //       x: 'left',
-//       data: [_('Used'), _('Free')],
+//       data: [__('Used'), __('Free')],
 //     },
 //     series: [
 //       {
-//         name: _('Memory Usage'),
+//         name: __('Memory Usage'),
 //         type: 'pie',
 //         radius: ['40%', '70%'],
 //         avoidLabelOverlap: false,
@@ -343,8 +343,8 @@ function wirelessModeShowStyle(wirelessMode) {
 //   };
 
 //   ret.series[0].data = [
-//     { value: serverData.get('memTotal') - serverData.get('memFree'), name: _('Used') },
-//     { value: serverData.get('memFree'), name: _('Free') },
+//     { value: serverData.get('memTotal') - serverData.get('memFree'), name: __('Used') },
+//     { value: serverData.get('memFree'), name: __('Free') },
 //   ];
 
 //   return ret;
@@ -361,7 +361,7 @@ function getFlowPerSsidOption(serverData) {
       formatter: '{a} <br/>{b} ({d}%)',
     },
     title: {
-      text: _('Total: ') + flowRateFilter.transform(totalNum),
+      text: __('Total: ') + flowRateFilter.transform(totalNum),
       left: '55%',
       // padding: [0, 0, 0, 370],
       textStyle: {
@@ -419,7 +419,7 @@ function getTopTenFlowClientsOption(serverData) {
       formatter: '{a} <br/>{b} ({d}%)',
     },
     title: {
-      text: _('Top10 Flow Clients'),
+      text: __('Top10 Flow Clients'),
       // x: 'center',
       // padding: [0, 0, 0, 350],
       left: '50%',
@@ -429,11 +429,11 @@ function getTopTenFlowClientsOption(serverData) {
       orient: 'vertical',
       x: 'left',
       y: 'top',
-      // data: [_('Offline'), _('Online')],
+      // data: [__('Offline'), __('Online')],
     },
     series: [
       {
-        name: _('Name'),
+        name: __('Name'),
         type: 'pie',
         radius: ['0%', '60%'],
         avoidLabelOverlap: false,
@@ -626,7 +626,7 @@ export default class SystemStatus extends React.Component {
     //   },
     //   {
     //     id: 'deviceName',
-    //     text: _('Device Name'),
+    //     text: __('Device Name'),
     //     transform(val) {
     //       if (val === '' || val === undefined) {
     //         return '--';
@@ -636,7 +636,7 @@ export default class SystemStatus extends React.Component {
     //   },
     //   {
     //     id: 'ssid',
-    //     text: _('Owner SSID'),
+    //     text: __('Owner SSID'),
     //     transform(val) {
     //       if (val === '' || val === undefined) {
     //         return '--';
@@ -646,7 +646,7 @@ export default class SystemStatus extends React.Component {
     //   },
     //   {
     //     id: 'signal',
-    //     text: _('Signal(dBm)'),
+    //     text: __('Signal(dBm)'),
     //     transform(val) {
     //       if (val === '' || val === undefined) {
     //         return '--';
@@ -656,7 +656,7 @@ export default class SystemStatus extends React.Component {
     //   },
     //   {
     //     id: 'noise',
-    //     text: _('Noise(dBm)'),
+    //     text: __('Noise(dBm)'),
     //     transform(val) {
     //       if (val === '' || val === undefined) {
     //         return '--';
@@ -666,7 +666,7 @@ export default class SystemStatus extends React.Component {
     //   },
     //   {
     //     id: 'txRate',
-    //     text: _('Tx Rate'),
+    //     text: __('Tx Rate'),
     //     transform(val) {
     //       if (val === '' || val === undefined) {
     //         return '--';
@@ -676,7 +676,7 @@ export default class SystemStatus extends React.Component {
     //   },
     //   {
     //     id: 'rxRate',
-    //     text: _('Rx Rate'),
+    //     text: __('Rx Rate'),
     //     transform(val) {
     //       if (val === '' || val === undefined) {
     //         return '--';
@@ -686,7 +686,7 @@ export default class SystemStatus extends React.Component {
     //   },
     //   {
     //     id: 'txBytes',
-    //     text: _('Tx Bytes'),
+    //     text: __('Tx Bytes'),
     //     transform(val) {
     //       if (val === '' || val === undefined) {
     //         return '--';
@@ -696,7 +696,7 @@ export default class SystemStatus extends React.Component {
     //   },
     //   {
     //     id: 'rxBytes',
-    //     text: _('Rx Bytes'),
+    //     text: __('Rx Bytes'),
     //     transform(val) {
     //       if (val === '' || val === undefined) {
     //         return '--';
@@ -706,7 +706,7 @@ export default class SystemStatus extends React.Component {
     //   },
     //   {
     //     id: 'txPackets',
-    //     text: _('Tx Packets'),
+    //     text: __('Tx Packets'),
     //     transform(val) {
     //       if (val === '' || val === undefined) {
     //         return '--';
@@ -716,7 +716,7 @@ export default class SystemStatus extends React.Component {
     //   },
     //   {
     //     id: 'rxPackets',
-    //     text: _('Rx Packets'),
+    //     text: __('Rx Packets'),
     //     transform(val) {
     //       if (val === '' || val === undefined) {
     //         return '--';
@@ -726,7 +726,7 @@ export default class SystemStatus extends React.Component {
     //   },
     //   {
     //     id: 'connectTime',
-    //     text: _('Connect Time'),
+    //     text: __('Connect Time'),
     //     transform(val) {
     //       if (val === '' || val === undefined) {
     //         return '--';
@@ -736,7 +736,7 @@ export default class SystemStatus extends React.Component {
     //   },
     //   {
     //     id: 'ipAddr',
-    //     text: _('IP'),
+    //     text: __('IP'),
     //     transform(val) {
     //       if (val === '' || val === undefined) {
     //         return '--';
@@ -748,7 +748,7 @@ export default class SystemStatus extends React.Component {
     const connectionInfoOption = fromJS([
       {
         id: 'status',
-        text: _('Connection Status'),
+        text: __('Connection Status'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -757,7 +757,7 @@ export default class SystemStatus extends React.Component {
         },
       }, {
         id: 'connectTime',
-        text: _('Connect Time'),
+        text: __('Connect Time'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -766,7 +766,7 @@ export default class SystemStatus extends React.Component {
         },
       }, {
         id: 'txrate',
-        text: _('Tx Rate'),
+        text: __('Tx Rate'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -775,7 +775,7 @@ export default class SystemStatus extends React.Component {
         },
       }, {
         id: 'rxrate',
-        text: _('Rx Rate'),
+        text: __('Rx Rate'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -784,7 +784,7 @@ export default class SystemStatus extends React.Component {
         },
       }, {
         id: 'mac',
-        text: _('Peer MAC'),
+        text: __('Peer MAC'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -820,7 +820,7 @@ export default class SystemStatus extends React.Component {
           this.props.product.get('deviceRadioList').size > 1 ? (
             <FormInput
               type="switch"
-              label={_('Radio Select')}
+              label={__('Radio Select')}
               minWidth="100px"
               options={this.props.product.get('radioSelectOptions')}
               value={this.props.selfState.getIn(['currRadioConfig', 'radioId'])}
@@ -844,7 +844,7 @@ export default class SystemStatus extends React.Component {
           <div className="o-box row">
             <div className="cols col-6" >
               <div className="o-box__cell">
-                <h3>{ _('Memory') }</h3>
+                <h3>{ __('Memory') }</h3>
               </div>
               <div className="o-box__cell">
                 <EchartReact
@@ -859,7 +859,7 @@ export default class SystemStatus extends React.Component {
             </div>
             <div className="cols col-6">
               <div className="o-box__cell">
-                <h3>{ _('CPU') }</h3>
+                <h3>{ __('CPU') }</h3>
               </div>
               <div className="o-box__cell">
                 <EchartReact
@@ -887,13 +887,13 @@ export default class SystemStatus extends React.Component {
                       marginRight: '10px',
                     }}
                   >
-                    { _('SSID Flow') }
+                    { __('SSID Flow') }
                   </h3>
                   <FormInput
                     type="select"
                     options={[
-                      { label: _('Upload'), value: 'upload' },
-                      { label: _('Download'), value: 'download' },
+                      { label: __('Upload'), value: 'upload' },
+                      { label: __('Download'), value: 'download' },
                     ]}
                     value={this.props.selfState.getIn(['customSettingsForChart', 'ssidFlowDir'])}
                     onChange={(data) => {
@@ -917,7 +917,7 @@ export default class SystemStatus extends React.Component {
                           // textDecoration: 'underline',
                         }}
                       >
-                        {_('More Details')}
+                        {__('More Details')}
                       </a>
                     ) : null
                   }
@@ -959,13 +959,13 @@ export default class SystemStatus extends React.Component {
                       marginRight: '10px',
                     }}
                   >
-                    { _('Top10 Flow Clients') }
+                    { __('Top10 Flow Clients') }
                   </h3>
                   <FormInput
                     type="select"
                     options={[
-                      { label: _('Upload'), value: 'upload' },
-                      { label: _('Download'), value: 'download' },
+                      { label: __('Upload'), value: 'upload' },
+                      { label: __('Download'), value: 'download' },
                     ]}
                     value={this.props.selfState.getIn(['customSettingsForChart', 'top10ClientFlowDir'])}
                     onChange={(data) => {
@@ -988,7 +988,7 @@ export default class SystemStatus extends React.Component {
                           color: 'blue',
                         }}
                       >
-                        {_('More Details')}
+                        {__('More Details')}
                       </a>
                     ) : null
                   }
@@ -1005,7 +1005,7 @@ export default class SystemStatus extends React.Component {
                           fontSize: '20px',
                           fontWeight: 'bold',
                         }}
-                      >{_('No Client')}</div>
+                      >{__('No Client')}</div>
                     ) : (
                       <EchartReact
                         option={topTenFlowClients}
@@ -1025,7 +1025,7 @@ export default class SystemStatus extends React.Component {
         <div className="row" style={{ minWidth: '1200px' }}>
           <div className="cols col-6" style={{ minWidth: '600px' }}>
             <div className="o-box__cell">
-              <h3>{_('System Status')}</h3>
+              <h3>{__('System Status')}</h3>
             </div>
             <div className="o-box__cell">
               <div
@@ -1036,26 +1036,26 @@ export default class SystemStatus extends React.Component {
                 <div className="cols col-6">
                   <FormGroup
                     type="plain-text"
-                    label={_('Device Model :')}
+                    label={__('Device Model :')}
                     value={deviceModel}
                   />
                   <FormGroup
-                    label={_('Network Mode :')}
+                    label={__('Network Mode :')}
                     type="plain-text"
                     value={networkMode}
                   />
                   <FormGroup
-                    label={_('System Uptime :')}
+                    label={__('System Uptime :')}
                     type="plain-text"
                     value={changeUptimeToReadable(uptime)}
                   />
                   <FormGroup
-                    label={_('AP MAC :')}
+                    label={__('AP MAC :')}
                     type="plain-text"
                     value={systemMac}
                   />
                   <FormGroup
-                    label={_('Memory Used :')}
+                    label={__('Memory Used :')}
                     type="plain-text"
                     value={memInfo}
                     help="%"
@@ -1063,36 +1063,36 @@ export default class SystemStatus extends React.Component {
                 </div>
                 <div className="cols col-6">
                   <FormGroup
-                    label={_('Device Name :')}
+                    label={__('Device Name :')}
                     type="plain-text"
                     value={deviceName}
                   />
                   <FormGroup
-                    label={_('Firmware Version :')}
+                    label={__('Firmware Version :')}
                     type="plain-text"
                     value={version}
                   />
                   <FormGroup
-                    label={_('System Time :')}
+                    label={__('System Time :')}
                     type="plain-text"
                     value={systemTime}
                   />
                   {/*
                     <FormGroup
-                      label={_('LAN1 MAC :')}
+                      label={__('LAN1 MAC :')}
                       type="plain-text"
                       value={lan0Mac}
                     />
                     wirelessMode !== 'sta' ? (
                       <FormGroup
-                        label={_('Client Number :')}
+                        label={__('Client Number :')}
                         type="plain-text"
                         value={staList.length}
                       />
                     ) : null
                   */}
                   <FormGroup
-                    label={_('CPU Used :')}
+                    label={__('CPU Used :')}
                     type="plain-text"
                     value={cpuInfo}
                     help="%"
@@ -1103,48 +1103,48 @@ export default class SystemStatus extends React.Component {
           </div>
           <div className="cols col-6" style={{ minWidth: '600px' }}>
             <div className="o-box__cell">
-              <h3>{_('Radio')}</h3>
+              <h3>{__('Radio')}</h3>
             </div>
             {
               this.props.store.getIn(['curData', 'radioList', radioId, 'enable']) === '1' ? (
                 <div className="o-box__cell" style={{ height: '227px' }}>
                   <div className="cols col-6">
                     <FormGroup
-                      label={_('Radio Mode :')}
+                      label={__('Radio Mode :')}
                       type="plain-text"
                       value={wirelessModeShowStyle(wirelessMode)}
                     />
                     <FormGroup
-                      label={_('Wireless Mode :')}
+                      label={__('Wireless Mode :')}
                       type="plain-text"
                       value={radioMode}
                     />
                     <FormGroup
-                      label={_('Channel/Frequency :')}
+                      label={__('Channel/Frequency :')}
                       type="plain-text"
                       value={`${channel}/${frequency}`}
                     />
                     <FormGroup
-                      label={_('Channel Utilization :')}
+                      label={__('Channel Utilization :')}
                       type="plain-text"
                       value={chutil}
                     />
                   </div>
                   <div className="cols col-6">
                     <FormGroup
-                      label={_('Tx Power :')}
+                      label={__('Tx Power :')}
                       type="plain-text"
                       value={txPower}
                       help="dBm"
                     />
                     <FormGroup
-                      label={_('Signal :')}
+                      label={__('Signal :')}
                       type="plain-text"
                       value={signal}
                       help="dBm"
                     />
                     <FormGroup
-                      label={_('Noise :')}
+                      label={__('Noise :')}
                       type="plain-text"
                       value={noise}
                       help="dBm"
@@ -1173,7 +1173,7 @@ export default class SystemStatus extends React.Component {
 
         <div>
           <div className="o-box__cell">
-            <h3>{_('Ethernet')}</h3>
+            <h3>{__('Ethernet')}</h3>
           </div>
           <div className="o-box__cell">
             <Table
@@ -1188,7 +1188,7 @@ export default class SystemStatus extends React.Component {
           wirelessMode === 'sta' ? (
             <div className="remoteApTable o-box">
               <div className="o-box__cell">
-                <h3>{_('Connection Info')}</h3>
+                <h3>{__('Connection Info')}</h3>
               </div>
               <div className="o-box__cell">
                 <Table

@@ -31,7 +31,7 @@ const defaultProps = {
 const interfaceOptions = fromJS([
   {
     id: 'name',
-    text: _('Name'),
+    text: __('Name'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -41,7 +41,7 @@ const interfaceOptions = fromJS([
     width: '152px',
   }, {
     id: 'mac',
-    text: _('MAC'),
+    text: __('MAC'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -51,7 +51,7 @@ const interfaceOptions = fromJS([
     width: '152px',
   }, {
     id: 'txBytes',
-    text: _('Tx Data'),
+    text: __('Tx Data'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -61,7 +61,7 @@ const interfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'rxBytes',
-    text: _('Rx Data'),
+    text: __('Rx Data'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -71,7 +71,7 @@ const interfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'txPackets',
-    text: _('Tx Packets'),
+    text: __('Tx Packets'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -81,7 +81,7 @@ const interfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'rxPackets',
-    text: _('Rx Packets'),
+    text: __('Rx Packets'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -91,7 +91,7 @@ const interfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'txErrorPackets',
-    text: _('Tx Errors'),
+    text: __('Tx Errors'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -101,7 +101,7 @@ const interfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'rxErrorPackets',
-    text: _('Rx Errors'),
+    text: __('Rx Errors'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -111,7 +111,7 @@ const interfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'status',
-    text: _('Status'),
+    text: __('Status'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -124,7 +124,7 @@ const interfaceOptions = fromJS([
 const vapInterfaceOptions = fromJS([
   {
     id: 'name',
-    text: _('Name'),
+    text: __('Name'),
     transform(val, item) {
       const ssid = item.get('ssid');
       if (val === '') {
@@ -135,7 +135,7 @@ const vapInterfaceOptions = fromJS([
     width: '152px',
   }, {
     id: 'mac',
-    text: _('MAC'),
+    text: __('MAC'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -145,7 +145,7 @@ const vapInterfaceOptions = fromJS([
     width: '152px',
   }, {
     id: 'txBytes',
-    text: _('Tx Data'),
+    text: __('Tx Data'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -155,7 +155,7 @@ const vapInterfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'rxBytes',
-    text: _('Rx Data'),
+    text: __('Rx Data'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -165,7 +165,7 @@ const vapInterfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'txPackets',
-    text: _('Tx Packets'),
+    text: __('Tx Packets'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -175,7 +175,7 @@ const vapInterfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'rxPackets',
-    text: _('Rx Packets'),
+    text: __('Rx Packets'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -185,7 +185,7 @@ const vapInterfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'txErrorPackets',
-    text: _('Tx Errors'),
+    text: __('Tx Errors'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -195,7 +195,7 @@ const vapInterfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'rxErrorPackets',
-    text: _('Rx Errors'),
+    text: __('Rx Errors'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -205,7 +205,7 @@ const vapInterfaceOptions = fromJS([
     width: '144px',
   }, {
     id: 'ccq',
-    text: _('CCQ'),
+    text: __('CCQ'),
     transform(val) {
       if (val === '') {
         return '--';
@@ -281,7 +281,7 @@ export default class SystemStatus extends React.Component {
       },
       {
         id: 'deviceName',
-        text: _('Device Name'),
+        text: __('Device Name'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -291,7 +291,7 @@ export default class SystemStatus extends React.Component {
       },
       {
         id: 'signal',
-        text: _('Signal(dBm)'),
+        text: __('Signal(dBm)'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -301,7 +301,7 @@ export default class SystemStatus extends React.Component {
       },
       {
         id: 'noise',
-        text: _('Noise(dBm)'),
+        text: __('Noise(dBm)'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -311,7 +311,7 @@ export default class SystemStatus extends React.Component {
       },
       {
         id: 'txRate',
-        text: _('Tx Rate'),
+        text: __('Tx Rate'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -321,7 +321,7 @@ export default class SystemStatus extends React.Component {
       },
       {
         id: 'rxRate',
-        text: _('Rx Rate'),
+        text: __('Rx Rate'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -331,7 +331,7 @@ export default class SystemStatus extends React.Component {
       },
       {
         id: 'txBytes',
-        text: _('Tx Data'),
+        text: __('Tx Data'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -341,7 +341,7 @@ export default class SystemStatus extends React.Component {
       },
       {
         id: 'rxBytes',
-        text: _('Rx Data'),
+        text: __('Rx Data'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -351,7 +351,7 @@ export default class SystemStatus extends React.Component {
       },
       {
         id: 'txPackets',
-        text: _('Tx Packets'),
+        text: __('Tx Packets'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -361,7 +361,7 @@ export default class SystemStatus extends React.Component {
       },
       {
         id: 'rxPackets',
-        text: _('Rx Packets'),
+        text: __('Rx Packets'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -371,7 +371,7 @@ export default class SystemStatus extends React.Component {
       },
       {
         id: 'connectTime',
-        text: _('Connect Time'),
+        text: __('Connect Time'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -381,7 +381,7 @@ export default class SystemStatus extends React.Component {
       },
       {
         id: 'ipAddr',
-        text: _('IP'),
+        text: __('IP'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -393,7 +393,7 @@ export default class SystemStatus extends React.Component {
     const connectionInfoOption = fromJS([
       {
         id: 'status',
-        text: _('Connection Status'),
+        text: __('Connection Status'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -402,7 +402,7 @@ export default class SystemStatus extends React.Component {
         },
       }, {
         id: 'connectTime',
-        text: _('Connect Time'),
+        text: __('Connect Time'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -411,7 +411,7 @@ export default class SystemStatus extends React.Component {
         },
       }, {
         id: 'txrate',
-        text: _('Tx Rate'),
+        text: __('Tx Rate'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -420,7 +420,7 @@ export default class SystemStatus extends React.Component {
         },
       }, {
         id: 'rxrate',
-        text: _('Rx Rate'),
+        text: __('Rx Rate'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -429,7 +429,7 @@ export default class SystemStatus extends React.Component {
         },
       }, {
         id: 'ip',
-        text: _('Peer IP'),
+        text: __('Peer IP'),
         transform(val) {
           if (val === '' || val === undefined) {
             return '--';
@@ -492,34 +492,34 @@ export default class SystemStatus extends React.Component {
       }
         <div className="stats-group">
           <div className="stats-group-cell">
-            <h3>{_('System Status')}</h3>
+            <h3>{__('System Status')}</h3>
           </div>
           <div className="stats-group-cell">
             <div className="row">
               <div className="cols col-5">
                 <FormGroup
                   type="plain-text"
-                  label={_('Device Model :')}
+                  label={__('Device Model :')}
                   value={deviceModel}
                 />
                 <FormGroup
-                  label={_('Network Mode :')}
+                  label={__('Network Mode :')}
                   type="plain-text"
                   value={networkMode}
                 />
                 <FormGroup
-                  label={_('System Uptime :')}
+                  label={__('System Uptime :')}
                   id="uptime"
                   type="plain-text"
                   value={this.changeUptimeToReadable(uptime)}
                 />
                 <FormGroup
-                  label={_('WLAN0 MAC :')}
+                  label={__('WLAN0 MAC :')}
                   type="plain-text"
                   value={wlan0Mac}
                 />
                 <FormGroup
-                  label={_('LAN1 MAC :')}
+                  label={__('LAN1 MAC :')}
                   type="plain-text"
                   value={lan1Mac}
                 />
@@ -527,30 +527,30 @@ export default class SystemStatus extends React.Component {
               </div>
               <div className="cols col-6">
                 <FormGroup
-                  label={_('Device Name :')}
+                  label={__('Device Name :')}
                   type="plain-text"
                   value={deviceName}
                 />
                 <FormGroup
-                  label={_('Firmware Version :')}
+                  label={__('Firmware Version :')}
                   type="plain-text"
                   value={version}
                 />
                 <FormGroup
-                  label={_('System Time :')}
+                  label={__('System Time :')}
                   id="systemtime"
                   type="plain-text"
                   value={systemTime}
                 />
                 <FormGroup
-                  label={_('LAN0 MAC :')}
+                  label={__('LAN0 MAC :')}
                   type="plain-text"
                   value={lan0Mac}
                 />
                 {
                   ap === undefined ? null : (
                     <FormGroup
-                      label={_('Client Number :')}
+                      label={__('Client Number :')}
                       id="userNumber"
                       type="plain-text"
                       value={this.props.store.getIn(['curData', 'status', 'ap', 'clientNum'])}
@@ -561,76 +561,76 @@ export default class SystemStatus extends React.Component {
             </div>
           </div>
           <div className="stats-group-cell">
-            <h3>{_('Radio')}</h3>
+            <h3>{__('Radio')}</h3>
           </div>
           <div className="stats-group-cell">
             <div className="row">
               <div className="cols col-5">
                 <FormGroup
-                  label={_('Wireless Model :')}
+                  label={__('Wireless Model :')}
                   type="plain-text"
                   value={wirelessMode === 'sta' ? 'station' : wirelessMode}
                 />
                 <FormGroup
-                  label={_('SSID :')}
+                  label={__('SSID :')}
                   type="plain-text"
                   value={ssid}
                 />
                 <FormGroup
-                  label={_('Protocol :')}
+                  label={__('Protocol :')}
                   type="plain-text"
                   value={protocol}
                 />
                 <FormGroup
-                  label={_('Channel/Frequency :')}
+                  label={__('Channel/Frequency :')}
                   type="plain-text"
                   value={frequency}
                 />
                 <FormGroup
-                  label={_('Channel Width :')}
+                  label={__('Channel Width :')}
                   type="plain-text"
                   value={channelWidth}
                 />
                 <FormGroup
-                  label={_('Security Mode :')}
+                  label={__('Security Mode :')}
                   type="plain-text"
                   value={security}
                 />
               </div>
               <div className="cols col-6">
                 <FormGroup
-                  label={_('Distance :')}
+                  label={__('Distance :')}
                   type="plain-text"
                   value={distance}
                   help="km"
                 />
                 <FormGroup
-                  label={_('Tx Power :')}
+                  label={__('Tx Power :')}
                   type="plain-text"
                   value={txPower}
                   help="dBm"
                 />
                 <FormGroup
-                  label={_('Signal :')}
+                  label={__('Signal :')}
                   type="plain-text"
                   value={status.signal}
                   help="dBm"
                 />
                 <FormGroup
-                  label={_('Noise :')}
+                  label={__('Noise :')}
                   type="plain-text"
                   value={noise}
                   help="dBm"
                 />
                 <FormGroup
-                  label={_('Channel Utilization :')}
+                  label={__('Channel Utilization :')}
                   type="plain-text"
                   value={chutil}
                 />
               </div>
             </div>
           </div>
-          <h3 className="stats-group-cell">{_('Wired Interfaces')}</h3>
+          <h3 className="stats-group-cell">{__('Wired Interfaces')}</h3>
           <div className="stats-group-cell">
             <Table
               className="table"
@@ -638,7 +638,7 @@ export default class SystemStatus extends React.Component {
               list={interfaces}
             />
           </div>
-          <h3 className="stats-group-cell">{_('Wireless Interfaces')}</h3>
+          <h3 className="stats-group-cell">{__('Wireless Interfaces')}</h3>
           <div className="stats-group-cell">
             <Table
               className="table"
@@ -649,7 +649,7 @@ export default class SystemStatus extends React.Component {
           {
             ap === undefined ? null : (
               <div className="clientListTable">
-                <h3 className="stats-group-cell">{_('Clients')}</h3>
+                <h3 className="stats-group-cell">{__('Clients')}</h3>
                 <div className="stats-group-cell">
                   <Table
                     className="table"
@@ -663,7 +663,7 @@ export default class SystemStatus extends React.Component {
           {
             station === undefined ? null : (
               <div className="remoteApTable">
-                <h3 className="stats-group-cell">{_('Connection Info')}</h3>
+                <h3 className="stats-group-cell">{__('Connection Info')}</h3>
                 <div className="stats-group-cell">
                   <Table
                     className="table"

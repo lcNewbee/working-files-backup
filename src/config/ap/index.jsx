@@ -86,7 +86,7 @@ const routes = [{
       fetchUrl: 'goform/get_system_info',
       path: '/main/status',
       icon: 'pie-chart',
-      text: _('Device Status'),
+      text: __('Device Status'),
       component: pSystemStatus.Screen,
     }, {
       id: 'quicksetup',
@@ -94,13 +94,13 @@ const routes = [{
       icon: 'map-signs',
       fetchUrl: 'goform/get_quicksetup_info',
       saveUrl: 'goform/set_quicksetup',
-      text: _('Quick Setup'),
+      text: __('Quick Setup'),
       component: pQuickSetup.Screen,
     }, {
       id: 'networksettings',
       path: '/main/networksettings',
       icon: 'sphere',
-      text: _('Network'),
+      text: __('Network'),
       component: SharedComponents.TabContainer,
       routes: [
         {
@@ -108,7 +108,7 @@ const routes = [{
           formUrl: 'goform/get_network_info',
           saveUrl: 'goform/set_network',
           path: '/main/networksettings/networksettings',
-          text: _('LAN Settings'),
+          text: __('LAN Settings'),
           component: sNetworkSettings.Screen,
         },
       ],
@@ -116,13 +116,13 @@ const routes = [{
       id: 'wirelessconfig',
       path: '/main/wirelessconfig',
       icon: 'wifi',
-      text: _('Wireless'),
+      text: __('Wireless'),
       component: SharedComponents.TabContainer,
       routes: [
         {
           id: 'basic',
           path: '/main/wirelessconfig/basic',
-          text: _('Basic'),
+          text: __('Basic'),
           formUrl: 'goform/get_wl_info',
           saveUrl: 'goform/set_wireless',
           component: sBasic.Screen,
@@ -131,7 +131,7 @@ const routes = [{
           path: '/main/wirelessconfig/advance',
           fetchUrl: 'goform/get_adv_wl_info',
           saveUrl: 'goform/set_adv_wireless',
-          text: _('Advance'),
+          text: __('Advance'),
           component: sAdvance.Screen,
         }, {
           id: 'acl',
@@ -144,24 +144,24 @@ const routes = [{
       id: 'pMaintenance',
       path: '/main/maintenance',
       icon: 'wrench',
-      text: _('Maintenance'),
+      text: __('Maintenance'),
       component: SharedComponents.TabContainer,
       routes: [
         {
           id: 'systemmaintenance',
           fetchUrl: 'goform/save_config',
           path: '/main/maintenance/systemmaintenance',
-          text: _('System Maintenance'),
+          text: __('System Maintenance'),
           component: sSystemMaintenance.Screen,
         }, {
           id: 'accountsettings',
           path: '/main/maintenance/accountsettings',
-          text: _('Account Settings'),
+          text: __('Account Settings'),
           component: sAccountSettings.Screen,
         }, {
           id: 'timesettings',
           path: '/main/maintenance/timesettings',
-          text: _('Time Settings'),
+          text: __('Time Settings'),
           component: sTimeSettings.Screen,
         },
       ],
@@ -169,31 +169,31 @@ const routes = [{
       id: 'tools',
       path: '/main/tools',
       icon: 'cogs',
-      text: _('Tools'),
+      text: __('Tools'),
       component: SharedComponents.TabContainer,
       routes: [
         {
           id: 'speedtest',
           path: '/main/tools/speedtest',
-          text: _('Speed Test'),
+          text: __('Speed Test'),
           saveUrl: '/goform/bandwidth_test',
           component: sSpeedTest.Screen,
         }, {
           id: 'sitesurvey',
           path: '/main/tools/sitesurvey',
           fetchUrl: 'goform/get_site_survey',
-          text: _('Site Survey'),
+          text: __('Site Survey'),
           component: sSiteSurvey.Screen,
         }, {
           id: 'systemlogs',
           formUrl: 'goform/get_log_list',
           path: '/main/tools/systemlogs',
-          text: _('System Logs'),
+          text: __('System Logs'),
           component: sSystemLogs.Screen,
         }, {
           id: 'channelutilization',
           path: '/main/tools/channelutilization',
-          text: _('Channel Utilization'),
+          text: __('Channel Utilization'),
           fetchUrl: 'goform/get_chanutil',
           component: sChannelUtilization.Screen,
         },
@@ -269,7 +269,7 @@ export default ac5000;
       id: 'networkservice',
       path: '/main/networkservice',
       icon: 'cog',
-      text: _('NETWORK SERVICE'),
+      text: __('NETWORK SERVICE'),
       component: pNetworkService,
       indexRoute: {
         onEnter: (nextState, replace) => replace('/main/networkservice/ntpclient'),
@@ -278,12 +278,12 @@ export default ac5000;
         {
           id: 'ntpclient',
           path: '/main/networkservice/ntpclient',
-          text: _('NTP Client'),
+          text: __('NTP Client'),
           component: sNTPClient.Screen,
         }, {
           id: 'systemlog',
           path: '/main/settings/systemlog',
-          text: _('System Log'),
+          text: __('System Log'),
           component: sSystemLog.Screen,
         }],
 }

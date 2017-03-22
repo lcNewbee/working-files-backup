@@ -29,7 +29,7 @@ function getUserName() {
 const listOptions = fromJS([
   {
     id: 'toPos',
-    text: _('Receiver Type'),
+    text: __('Receiver Type'),
     noForm: true,
     noTable: true,
     formProps: {
@@ -39,15 +39,15 @@ const listOptions = fromJS([
     options: [
       {
         value: '0',
-        label: _('System User'),
+        label: __('System User'),
       }, {
         value: '1',
-        label: _('AP User'),
+        label: __('AP User'),
       },
     ],
   }, {
     id: 'toname',
-    text: _('Receiver'),
+    text: __('Receiver'),
     noTable: true,
     formProps: {
       type: 'select',
@@ -55,7 +55,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'fromid',
-    text: _('Sender ID'),
+    text: __('Sender ID'),
     noForm: true,
     noTable: true,
     formProps: {
@@ -63,7 +63,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'fromPos',
-    text: _('Sender Type'),
+    text: __('Sender Type'),
     noForm: true,
     noTable: true,
     formProps: {
@@ -72,7 +72,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'fromname',
-    text: _('Sender'),
+    text: __('Sender'),
     noForm: true,
     formProps: {
       type: 'select',
@@ -81,7 +81,7 @@ const listOptions = fromJS([
   },
   {
     id: 'title',
-    text: _('Title'),
+    text: __('Title'),
     formProps: {
       required: true,
       maxLength: 33,
@@ -91,14 +91,14 @@ const listOptions = fromJS([
     },
   }, {
     id: 'date',
-    text: _('Date'),
+    text: __('Date'),
     noForm: true,
     formProps: {
       required: true,
     },
   }, {
     id: 'description',
-    text: _('Content'),
+    text: __('Content'),
     noTable: true,
     formProps: {
       type: 'textarea',
@@ -110,7 +110,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'ip',
-    text: _('IP'),
+    text: __('IP'),
     noTable: true,
     noForm: true,
     formProps: {
@@ -118,7 +118,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'toId',
-    text: _('Receiver ID'),
+    text: __('Receiver ID'),
     type: 'text',
     noTable: true,
     noForm: true,
@@ -127,7 +127,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'state',
-    text: _('State'),
+    text: __('State'),
     noForm: true,
     actionName: 'update',
     type: 'switch',
@@ -137,7 +137,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'delin',
-    text: _('delin'),
+    text: __('delin'),
     type: 'text',
     noTable: true,
     noForm: true,
@@ -146,7 +146,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'delout',
-    text: _('delout'),
+    text: __('delout'),
     type: 'text',
     noTable: true,
     noForm: true,
@@ -155,21 +155,21 @@ const listOptions = fromJS([
     },
   }, {
     id: '__actions__',
-    text: _('Actions'),
+    text: __('Actions'),
     noForm: true,
   },
 ]);
 const sendMessageOptions = fromJS([
   {
     id: 'toname',
-    label: _('Receiver'),
+    label: __('Receiver'),
     form: 'sendMessage',
     required: true,
     type: 'select',
   },
   {
     id: 'title',
-    label: _('Title'),
+    label: __('Title'),
     form: 'sendMessage',
     type: 'text',
     required: true,
@@ -180,7 +180,7 @@ const sendMessageOptions = fromJS([
   },
   {
     id: 'description',
-    label: _('Content'),
+    label: __('Content'),
     form: 'sendMessage',
     type: 'textarea',
     required: true,
@@ -194,28 +194,28 @@ const sendMessageOptions = fromJS([
 const viewMessageOptions = fromJS([
   {
     id: 'date',
-    label: _('Date'),
+    label: __('Date'),
     type: 'text',
     form: 'viewMessage',
     required: true,
   },
   {
     id: 'ip',
-    label: _('IP'),
+    label: __('IP'),
     form: 'viewMessage',
     type: 'text',
     required: true,
   },
   {
     id: 'title',
-    label: _('Title'),
+    label: __('Title'),
     form: 'viewMessage',
     type: 'text',
     required: true,
   },
   {
     id: 'description',
-    label: _('Content'),
+    label: __('Content'),
     form: 'viewMessage',
     type: 'textarea',
     rows: '5',
@@ -321,14 +321,14 @@ export default class OpenPortalBase extends React.Component {
       .setIn([-1, 'transform'], (val, $$data) => (
         <span>
           <Button
-            text={_('View Message')}
+            text={__('View Message')}
             key="viewActionButton"
             icon="eye"
             theme="primary"
             onClick={() => {
               this.props.changeScreenActionQuery({
                 action: 'viewMessage',
-                myTitle: _('View Message'),
+                myTitle: __('View Message'),
               });
               this.props.updateCurEditListItem({
                 date: $$data.get('date'),
@@ -339,14 +339,14 @@ export default class OpenPortalBase extends React.Component {
             }}
           />
           <Button
-            text={_('Reply')}
+            text={__('Reply')}
             key="sendActionButton"
             icon="mail-reply"
             theme="primary"
             onClick={() => {
               this.props.changeScreenActionQuery({
                 action: 'sendMessage',
-                myTitle: _('Reply'),
+                myTitle: __('Reply'),
               });
               this.props.updateCurEditListItem({
                 toname: $$data.get('fromname'),
@@ -358,13 +358,13 @@ export default class OpenPortalBase extends React.Component {
         );
     const listActionBarChildren = (
       <Button
-        text={_('Send Message')}
+        text={__('Send Message')}
         key="sendActionButton"
         icon="envelope-o"
         theme="primary"
         onClick={() => this.props.changeScreenActionQuery({
           action: 'sendMessage',
-          myTitle: _('Send Message'),
+          myTitle: __('Send Message'),
         })}
       />
     );

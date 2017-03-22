@@ -19,7 +19,7 @@ const flowRateFilter = utils.filter('flowRate:["KB"]');
 const listOptions = fromJS([
   {
     id: 'devicename',
-    text: _('Client'),
+    text: __('Client'),
     transform(val, item) {
       return item.get('devicename') || item.get('mac');
     },
@@ -28,30 +28,30 @@ const listOptions = fromJS([
     }),
   }, {
     id: 'ip',
-    text: _('IP Address'),
+    text: __('IP Address'),
   }, {
     id: 'vendor',
-    text: _('Vendor'),
+    text: __('Vendor'),
   },
   // {
   //   id: 'terminalType',
-  //   text: _('OS'),
+  //   text: __('OS'),
   // },
   {
     id: 'ssid',
     text: 'SSID',
   }, {
     id: 'authType',
-    text: _('Auth Type'),
+    text: __('Auth Type'),
   }, {
     id: 'connectap',
-    text: _('Associated AP'),
+    text: __('Associated AP'),
     transform(val, item) {
       return item.get('connectap') || item.get('apmac');
     },
   }, {
     id: 'bandwidth',
-    text: _('Data'),
+    text: __('Data'),
     transform(val, item) {
       const upRate = flowRateFilter.transform(item.get('upstream'));
       const downRate = flowRateFilter.transform(item.get('downstream'));
@@ -60,7 +60,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'rssi',
-    text: _('RSSI'),
+    text: __('RSSI'),
     transform(val, item) {
       const intVal = parseInt(val, 10);
       let classNames = 'Icon Icon-block Icon-wifi';
@@ -93,21 +93,21 @@ const listOptions = fromJS([
     },
   }, {
     id: 'operationhours',
-    text: _('Online Time'),
+    text: __('Online Time'),
     filter: 'connectTime',
   }, {
     id: '__action__',
-    text: _('Actions'),
+    text: __('Actions'),
   },
 ]);
 
 const msg = {
-  TITLE: _('User List'),
-  reconnect: _('Reconnect'),
-  wireless: _('WIRELESS'),
-  lock: _('Lock'),
-  unlock: _('Unlock'),
-  perPage: _('Items per page: '),
+  TITLE: __('User List'),
+  reconnect: __('Reconnect'),
+  wireless: __('WIRELESS'),
+  lock: __('Lock'),
+  unlock: __('Unlock'),
+  perPage: __('Items per page: '),
 };
 
 const styles = {
@@ -150,7 +150,7 @@ export default class Clients extends React.Component {
       this.props.createModal({
         id: actionType,
         role: 'alert',
-        text: _('Need enable ACL'),
+        text: __('Need enable ACL'),
       });
     } else {
       this.props.changeScreenActionQuery({

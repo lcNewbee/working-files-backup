@@ -26,7 +26,7 @@ function getPortList() {
 const listOptions = fromJS([
   {
     id: 'interface_bind',
-    label: _('Port'),
+    label: __('Port'),
     formProps: {
       type: 'select',
       required: true,
@@ -34,7 +34,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'src_mac',
-    label: _('Mac White List'),
+    label: __('Mac White List'),
     formProps: {
       type: 'text',
       maxLength: '31',

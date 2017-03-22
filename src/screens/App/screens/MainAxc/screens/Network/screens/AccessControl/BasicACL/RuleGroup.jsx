@@ -32,19 +32,19 @@ const slotIdOptions = [
 ];
 
 const balanceAlgthmOptions = [
-  { label: _('Source MAC'), value: 'srcmac' },
-  { label: _('Destiation MAc'), value: 'desmac' },
-  { label: _('Source & Destination MAC'), value: 'mac' },
-  { label: _('Source IP'), value: 'srcip' },
-  { label: _('Destination IP'), value: 'desmac' },
-  { label: _('Source & Destination IP'), value: 'ip' },
+  { label: __('Source MAC'), value: 'srcmac' },
+  { label: __('Destiation MAc'), value: 'desmac' },
+  { label: __('Source & Destination MAC'), value: 'mac' },
+  { label: __('Source IP'), value: 'srcip' },
+  { label: __('Destination IP'), value: 'desmac' },
+  { label: __('Source & Destination IP'), value: 'ip' },
 ];
 
 const listOptions = fromJS([
   {
     id: 'id',
     type: 'text',
-    text: _('Group ID'),
+    text: __('Group ID'),
     formProps: {
       noAdd: true,
     },
@@ -52,17 +52,17 @@ const listOptions = fromJS([
   },
   {
     id: 'groupName',
-    text: _('Group Name'),
+    text: __('Group Name'),
     type: 'text',
   },
   {
     id: 'defaultAction',
-    text: _('Default Action'),
+    text: __('Default Action'),
     type: 'select',
     options: [
-      { label: _('Accept'), value: 'accept' },
-      { label: _('Reject'), value: 'reject' },
-      { label: _('Redirect'), value: 'redirect' },
+      { label: __('Accept'), value: 'accept' },
+      { label: __('Reject'), value: 'reject' },
+      { label: __('Redirect'), value: 'redirect' },
     ],
     formProps: {
       type: 'select',
@@ -70,7 +70,7 @@ const listOptions = fromJS([
   },
   {
     id: 'description',
-    text: _('Description'),
+    text: __('Description'),
     formProps: {
       type: 'textarea',
     },

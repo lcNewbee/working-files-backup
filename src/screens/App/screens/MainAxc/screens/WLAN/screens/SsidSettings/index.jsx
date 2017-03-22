@@ -12,17 +12,17 @@ import * as appActions from 'shared/actions/app';
 import * as productActions from '../../../../reducer';
 
 const msg = {
-  upSpeed: _('Up Speed'),
-  downSpeed: _('Down Speed'),
-  selectGroup: _('Select Group'),
+  upSpeed: __('Up Speed'),
+  downSpeed: __('Down Speed'),
+  selectGroup: __('Select Group'),
 };
 let encryptionOptions = fromJS([
   {
     value: 'none',
-    label: _('NONE'),
+    label: __('NONE'),
   }, {
     value: 'psk-mixed',
-    label: _('SECURITY'),
+    label: __('SECURITY'),
   }, {
     value: '802.1x',
     label: '802.1x',
@@ -37,13 +37,13 @@ if (window.guiConfig.versionCode < 20500) {
 const loadBalanceTypeArr = [
   {
     value: '0',
-    label: _('Disable'),
+    label: __('Disable'),
   }, {
     value: '1',
-    label: _('Users'),
+    label: __('Users'),
   }, {
     value: '2',
-    label: _('SSID'),
+    label: __('SSID'),
   },
 ];
 
@@ -70,20 +70,20 @@ const validOptions = Map({
 const storeForwardOption = [
   {
     value: 'local',
-    label: _('Local Forward'),
+    label: __('Local Forward'),
   },
   //  {
   //   value: 'centralized-802.3',
-  //   label: _('Centralized Forward-%s', '802.3'),
+  //   label: __('Centralized Forward-%s', '802.3'),
   // }, {
   //   value: 'centralized-802.11',
-  //   label: _('Centralized Forward-%s', '802.11'),
+  //   label: __('Centralized Forward-%s', '802.11'),
   // },
 ];
 const checkboxOptions = [
   {
     value: '1',
-    label: _('On'),
+    label: __('On'),
     render() {
       return (
         <span
@@ -91,13 +91,13 @@ const checkboxOptions = [
             color: 'green',
           }}
         >
-          {_('On')}
+          {__('On')}
         </span>
       );
     },
   }, {
     value: '0',
-    label: _('Off'),
+    label: __('Off'),
     render() {
       return (
         <span
@@ -105,7 +105,7 @@ const checkboxOptions = [
             color: 'red',
           }}
         >
-          {_('Off')}
+          {__('Off')}
         </span>
       );
     },
@@ -114,24 +114,24 @@ const checkboxOptions = [
 const $$accessTypeSeletOptions = fromJS([
   {
     value: 'portal',
-    label: _('Portal'),
+    label: __('Portal'),
   },
   {
     value: '8021x-access',
-    label: _('802.1x'),
+    label: __('802.1x'),
     disabled: true,
   },
   {
     value: 'lan-access',
-    label: _('LAN'),
+    label: __('LAN'),
     disabled: true,
   }, {
     value: 'ppp-access',
-    label: _('PPP'),
+    label: __('PPP'),
     disabled: true,
   }, {
     value: 'mac-access',
-    label: _('MAC'),
+    label: __('MAC'),
     disabled: true,
   },
 ]);
@@ -140,7 +140,7 @@ const listOptions = fromJS([
   {
     id: 'ssid',
     notEditable: true,
-    text: _('SSID'),
+    text: __('SSID'),
     maxLength: '31',
     formProps: {
       type: 'text',
@@ -152,7 +152,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'remark',
-    text: _('Description'),
+    text: __('Description'),
     formProps: {
       type: 'text',
       maxLength: 255,
@@ -163,7 +163,7 @@ const listOptions = fromJS([
     noTable: true,
   }, {
     id: 'enabled',
-    text: _('Status'),
+    text: __('Status'),
     options: checkboxOptions,
     defaultValue: '1',
     formProps: {
@@ -172,11 +172,11 @@ const listOptions = fromJS([
     },
   }, {
     id: 'hiddenSsid',
-    text: _('Hide SSID'),
+    text: __('Hide SSID'),
     options: [
       {
         value: '1',
-        label: _('YES'),
+        label: __('YES'),
         render() {
           return (
             <span
@@ -184,13 +184,13 @@ const listOptions = fromJS([
                 color: 'red',
               }}
             >
-              {_('YES')}
+              {__('YES')}
             </span>
           );
         },
       }, {
         value: '0',
-        label: _('NO'),
+        label: __('NO'),
         render() {
           return (
             <span
@@ -198,7 +198,7 @@ const listOptions = fromJS([
                 color: 'green',
               }}
             >
-              {_('NO')}
+              {__('NO')}
             </span>
           );
         },
@@ -211,7 +211,7 @@ const listOptions = fromJS([
     },
   }, {
     id: 'ssidisolate',
-    text: _('Terminal Isolation'),
+    text: __('Terminal Isolation'),
     defaultValue: '1',
     options: checkboxOptions,
     formProps: {
@@ -221,7 +221,7 @@ const listOptions = fromJS([
   },
   {
     id: 'greenap',
-    text: _('Green AP Mode'),
+    text: __('Green AP Mode'),
     defaultValue: '1',
     options: checkboxOptions,
     formProps: {
@@ -231,7 +231,7 @@ const listOptions = fromJS([
   },
   {
     id: 'maxBssUsers',
-    text: _('Max Clients'),
+    text: __('Max Clients'),
     defaultValue: 64,
     formProps: {
       type: 'number',
@@ -241,7 +241,7 @@ const listOptions = fromJS([
   },
   {
     id: 'vlanId',
-    text: _('VLAN ID'),
+    text: __('VLAN ID'),
     defaultValue: '1',
     noTable: true,
     formProps: {
@@ -254,14 +254,14 @@ const listOptions = fromJS([
   {
     id: 'storeForwardPattern',
     options: storeForwardOption,
-    text: _('Forwarding Mode'),
+    text: __('Forwarding Mode'),
     defaultValue: 'local',
     formProps: {
       type: 'select',
     },
   }, {
     id: 'upstream/downstream',
-    text: _('UP/Down Traffic'),
+    text: __('UP/Down Traffic'),
     transform(val, item) {
       const upRate = flowRateFilter.transform(item.get('upstream'));
       const downRate = flowRateFilter.transform(item.get('downstream'));
@@ -271,7 +271,7 @@ const listOptions = fromJS([
     noForm: true,
   }, {
     id: 'loadBalanceType',
-    text: _('Traffic Control'),
+    text: __('Traffic Control'),
     defaultValue: '0',
     options: loadBalanceTypeArr,
     formProps: {
@@ -314,7 +314,7 @@ const listOptions = fromJS([
   },
   {
     id: 'encryption',
-    text: _('Encryption'),
+    text: __('Encryption'),
     defaultValue: 'psk-mixed',
     options: encryptionOptions,
     formProps: {
@@ -323,7 +323,7 @@ const listOptions = fromJS([
   },
   {
     id: 'password',
-    text: _('Password'),
+    text: __('Password'),
     defaultValue: '',
     noTable: true,
     formProps: {
@@ -342,7 +342,7 @@ const listOptions = fromJS([
   },
   {
     id: 'mandatorydomain',
-    text: _('AAA Policy'),
+    text: __('AAA Policy'),
     defaultValue: '',
     noTable: true,
     formProps: {
@@ -432,7 +432,7 @@ export default class View extends React.Component {
       if ($$copySelectedList.size < 1) {
         this.props.createModal({
           type: 'alert',
-          text: _('Please select ssid'),
+          text: __('Please select ssid'),
         });
       } else {
         this.props.changeScreenActionQuery({
@@ -458,7 +458,7 @@ export default class View extends React.Component {
 
     this.props.changeScreenActionQuery({
       action: 'copy',
-      myTitle: _('Copy Form Other Group'),
+      myTitle: __('Copy Form Other Group'),
       copySelectedList: fromJS([]),
     });
     this.fetchCopyGroupSsids(copyFromGroupId);
@@ -555,7 +555,7 @@ export default class View extends React.Component {
         if (options) {
           options.unshift({
             value: '',
-            label: _('None'),
+            label: __('None'),
           });
         }
 
@@ -596,7 +596,7 @@ export default class View extends React.Component {
   renderActionBar() {
     return (
       <Button
-        text={_('Link From Other Group')}
+        text={__('Link From Other Group')}
         key="cpoyActionButton"
         icon="link"
         theme="primary"
@@ -622,7 +622,7 @@ export default class View extends React.Component {
     return (
       <div className="row">
         <div className="o-list cols col-4">
-          <h3 className="o-list__header">{_('Group List')}</h3>
+          <h3 className="o-list__header">{__('Group List')}</h3>
           <ul className="m-menu m-menu--open">
             {
               $$group.getIn(['list']).map((item) => {
@@ -656,19 +656,19 @@ export default class View extends React.Component {
 
         </div>
         <div className="o-list cols col-8">
-          <h3 className="o-list__header">{_('Group SSID List')}</h3>
+          <h3 className="o-list__header">{__('Group SSID List')}</h3>
           <Table
             options={[
               {
                 id: 'ssid',
-                text: _('SSID'),
+                text: __('SSID'),
               }, {
                 id: 'hiddenSsid',
-                text: _('Hide SSID'),
+                text: __('Hide SSID'),
                 options: [
                   {
                     value: '1',
-                    label: _('YES'),
+                    label: __('YES'),
                     render() {
                       return (
                         <span
@@ -676,13 +676,13 @@ export default class View extends React.Component {
                             color: 'red',
                           }}
                         >
-                          {_('YES')}
+                          {__('YES')}
                         </span>
                       );
                     },
                   }, {
                     value: '0',
-                    label: _('NO'),
+                    label: __('NO'),
                     render() {
                       return (
                         <span
@@ -690,7 +690,7 @@ export default class View extends React.Component {
                             color: 'green',
                           }}
                         >
-                          {_('NO')}
+                          {__('NO')}
                         </span>
                       );
                     },
@@ -700,11 +700,11 @@ export default class View extends React.Component {
               }, {
                 id: 'storeForwardPattern',
                 options: storeForwardOption,
-                text: _('Forward Pattern'),
+                text: __('Forward Pattern'),
                 defaultValue: 'local',
               }, {
                 id: 'encryption',
-                text: _('Encryption'),
+                text: __('Encryption'),
                 defaultValue: 'psk-mixed',
               },
             ]}
