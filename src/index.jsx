@@ -1,4 +1,3 @@
-
 // 浏览器更好的支持es5, fetch,  promise等标准
 require('es5-shim');
 require('es5-shim/es5-sham');
@@ -56,23 +55,17 @@ function renderApp(renderRoutes) {
     mountNode,
   );
 }
-
 renderApp(prodConfig.routes);
-
 
 // Enable hot reload by react-hot-loader
 if (module.hot) {
   module.hot.accept('./config/ap', () => {
-    //setImmediate(() => {
     const nextConfig = require('./config/ap');
-    // Preventing the hot reloading error from react-router
-    // unmountComponentAtNode(mountNode);
 
-      stores.replaceReducer(combineReducers({
-        ...nextConfig.reducers,
-      }));
-      // 主渲染入口
-      renderApp(nextConfig.routes);
-    });
-  //});
+    stores.replaceReducer(combineReducers({
+      ...nextConfig.reducers,
+    }));
+    // 主渲染入口
+    renderApp(nextConfig.routes);
+  });
 }
