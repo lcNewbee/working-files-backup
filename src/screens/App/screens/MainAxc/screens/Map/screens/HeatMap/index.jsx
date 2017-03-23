@@ -121,6 +121,7 @@ export default class View extends React.PureComponent {
   }
 
   componentWillMount() {
+    console.log('componentWillMount curScreenId', this.props.store.get('curScreenId'));
     this.props.fetch('goform/group/map/building').then((json) => {
       if (json.state && json.state.code === 2000) {
         this.buildOptions = fromJS(json.data.list).map(item => fromJS({ label: item.get('name'), value: item.get('id') }));
