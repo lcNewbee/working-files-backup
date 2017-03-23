@@ -10,29 +10,12 @@ class CateGory_Model extends CI_Model {
         $tablenames = 'portal_cardcategory';
         $pageindex = (int)element('page', $data, 1);
         $pagesize = (int)element('size', $data, 20);
-        $datalist = help_data_page($this->portalsql,$columns,$tablenames,$pageindex,$pagesize);
-        $htmdata = array();
-        foreach($datalist['data'] as $row){
-            $time = $row['time'];
-            switch($row['state']){
-                case 0 : $row['time'] = $time.'H';
-                    break;
-                case 1 : $row['time'] = $time.'D';
-                    break;
-                case 2 : $row['time'] = $time.'M';
-                    break;
-                case 3 : $row['time'] = $time.'Year';
-                    break;
-                case 4 : $row['time'] = $time.'Mb';
-                    break; 
-            }
-            $htmdata[] = $row;
-        }
+        $datalist = help_data_page($this->portalsql,$columns,$tablenames,$pageindex,$pagesize);    
         $arr = array(
             'state'=>array('code'=>2000,'msg'=>'ok'),
             'data'=>array(
                 'page'=>$datalist['page'],
-                'list' => $htmdata
+                'list'=>$datalist['data']
             )
         );
         return json_encode($arr);
