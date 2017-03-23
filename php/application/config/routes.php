@@ -99,7 +99,6 @@ $route['goform/group/map/apPlan'] = 'group/mapApPlan';
 $route['goform/group/map/clients_trace'] = 'group/mapClients';
 $route['goform/group/map/heatmap'] = 'group/mapHeat';
 $route['goform/group/map/orbittrace'] = 'group/mapOrbit';
-$route['goform/group/map/orbit/user'] = 'group/mapOrbit/getmac';
 
 // 系统设置
 $route['goform/system/version/upload'] = 'system/systemVersion/upload';
@@ -158,12 +157,12 @@ $route['goform/portal/message/sendmessage'] = 'portal/messageAdd';
 $route['goform/portal/advertisement/stores'] = 'portal/advStores';
 $route['goform/portal/advertisement/adv'] = 'portal/advManagement';
 
-
+/*
 $route['goform/portal/card/cardlist'] = 'portal/cardList';
 $route['goform/portal/card/cardcategory'] = 'portal/cateGory';
 $route['goform/portal/message/receive'] = 'portal/messageReceive';
 $route['goform/portal/message/send'] = 'portal/messageSend';
 $route['goform/portal/message/sendmessage'] = 'portal/messageAdd';
-
+*/
 
 

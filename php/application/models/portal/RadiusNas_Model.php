@@ -36,11 +36,15 @@ class RadiusNas_Model extends CI_Model {
             'ex5' => element('ex5',$data,'1'),
         );
         if(is_columns($this->portalsql,'name','radius_nas'," where name='".$data['name']."'")){
-            return json_encode(json_no('name Already exist'));
+            $result = json_no('name Already exist');
+            $result['state']['code'] = 6403;
+            return json_encode($result);
         }
         if(is_columns($this->portalsql,'ip','radius_nas'," where ip='".$data['ip']."'")){
-            return json_encode(json_no('ip Already exist'));
-        }       
+            $result = json_no('ip Already exist');
+            $result['state']['code'] = 6402;
+            return json_encode($result);
+        }            
         if($this->notice_socket($this->get_socket_pramse('add',$data))) {
             $result = $this->portalsql->insert('radius_nas', $insertdata);
             if($result){

@@ -23,9 +23,7 @@ class MapOrbit_Model extends CI_Model {
             $macList = array_merge($macList, $this->get_mac($groupid,$row['ap_mac'])); 
         }
         //2.通过终端mac 查询数据    
-        //call active_orbit_func(3,'68:c9:7b:cd:a3:da','2017-03-21 21:00:30','2017-03-22 20:00:00');        
-        $strtime = '2017-03-22 20:00:00';
-        $endtime = '2017-03-22 23:00:00';
+        //call active_orbit_func(3,'68:c9:7b:cd:a3:da','2017-03-21 21:00:30','2017-03-22 20:00:00');            
         if($sta_mac){            
             $sql = "call active_orbit_func({$groupid},'{$sta_mac}','{$strtime}','{$endtime}')";            
             $queryd = $this->mysql->query($sql);        

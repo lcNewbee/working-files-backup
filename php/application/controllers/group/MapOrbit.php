@@ -20,9 +20,6 @@ class MapOrbit extends CI_Controller {
 	function fetch() {
 		return $this->MapOrbit_Model->get_list($_GET);
 	}
-	function getmac() {
-		echo $this->MapOrbit_Model->get_mac($_GET);
-	}
 	function onAction($data) {
 		if (!$data) {
             $data = $_POST;
