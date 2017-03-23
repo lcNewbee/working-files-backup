@@ -25,6 +25,10 @@ class AccessSms_Model extends CI_Model {
         $result = 0;
         $arr = $this->params($data);
         $result = $this->portalsql->insert('portal_smsapi',$arr);
+        if($result == 1 && $data['state'] == 1){
+            //关闭其他网关
+            $this->close_sms($this->portalsql->insert_id());
+        }
         $result = $result ? json_ok() : json_no('delete error');
         return json_encode($result);
     }    
@@ -43,6 +47,10 @@ class AccessSms_Model extends CI_Model {
         $arr = $this->params($data);        
         $this->portalsql->where('id', $data['id']);
         $result = $this->portalsql->update('portal_smsapi', $arr);
+        if($result == 1 && $data['state'] == 1){
+            //关闭其他网关
+            $this->close_sms($data['id']);
+        }
         $result = $result ? json_ok() : json_no('edit error');
         return json_encode($result);
     }    
@@ -63,5 +71,13 @@ class AccessSms_Model extends CI_Model {
             'company'=>element('company',$data)//公司名称
         );
         return $arr;
+    }
+    private function close_sms($id){
+        $this->portalsql->set('state',0);
+        $this->portalsql->where('id !=',$id);
+        if($this->portalsql->update('portal_smsapi')){
+            return 1;
+        }        
+        return 0;
     }
 }
