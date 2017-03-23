@@ -4,7 +4,7 @@ class WirelessAcl_Model extends CI_Model {
         parent::__construct();
         $this->load->library('session');
         $this->load->database();
-        $this->load->helper(array('array', 'my_customfun_helper'));
+        $this->load->helper(array('array', 'my_customfun_helper','array_page'));
         $this->load->library('SqlPage');
     }
     public function get_acl_list($retdata) {
@@ -34,9 +34,17 @@ class WirelessAcl_Model extends CI_Model {
                 )
               );
             }
-
             $result = $cgidata;
         }
+        /*对数组分页*/        
+        $where = array();
+        if($retdata['search'] != "" && $retdata['search'] != null){
+            $where = array('mac',$retdata['search']);
+        }
+        $data = array_page(json_decode(json_encode($result->data->list),true),$retdata['page'],$retdata['size'],$where);        
+        $result->data->list = $data['data'];
+        $result->data->page = $data['page'];
+        
         return json_encode($result);
     }
     public function add_acl($data) {
@@ -158,4 +166,5 @@ class WirelessAcl_Model extends CI_Model {
         }
         return $result;
     }
+
 }
