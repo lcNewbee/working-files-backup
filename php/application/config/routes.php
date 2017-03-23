@@ -140,6 +140,8 @@ $route['goform/portal/access/smsgateWay'] = 'portal/AccessSms';
 $route['goform/portal/access/portalsmslog'] = 'portal/AccessSmslog';
 $route['goform/portal/access/ssidmanagement'] = 'portal/AccessSsid';
 $route['goform/portal/access/ap'] = 'portal/AccessSsid/apmac';
+$route['goform/portal/access/facebook'] = 'portal/AccessFacebook';
+
 
 
 $route['goform/portal/system/user'] = 'portal/systemUser';
@@ -156,13 +158,5 @@ $route['goform/portal/message/sendmessage'] = 'portal/messageAdd';
 
 $route['goform/portal/advertisement/stores'] = 'portal/advStores';
 $route['goform/portal/advertisement/adv'] = 'portal/advManagement';
-
-/*
-$route['goform/portal/card/cardlist'] = 'portal/cardList';
-$route['goform/portal/card/cardcategory'] = 'portal/cateGory';
-$route['goform/portal/message/receive'] = 'portal/messageReceive';
-$route['goform/portal/message/send'] = 'portal/messageSend';
-$route['goform/portal/message/sendmessage'] = 'portal/messageAdd';
-*/
 
 
