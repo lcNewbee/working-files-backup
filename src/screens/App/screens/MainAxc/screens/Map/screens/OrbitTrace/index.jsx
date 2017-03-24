@@ -4,56 +4,13 @@ import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import AppScreen from 'shared/components/Template/AppScreen';
-import { FormGroup } from 'shared/components';
+import { FormInput } from 'shared/components';
 import { Icon } from 'shared/components';
 import moment from 'moment';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 import * as propertiesActions from 'shared/actions/properties';
 import './orbitTrace.scss';
-
-
-// function getBuildingName() {
-//   return utils.fetch('goform/group/map/building')
-//     .then(json => (
-//       {
-//         options: json.data.list.map(
-//           item => ({
-//             value: item.id,
-//             label: item.name,
-//           }),
-//         ),
-//       }
-//     ),
-//   );
-// }
-// function getLayerMap() {
-//   return utils.fetch('/goform/group/map/list')
-//     .then(json => (
-//       {
-//         options: json.data.list.map(
-//           item => ({
-//             value: item.id,
-//             label: item.mapName,
-//           }),
-//         ),
-//         list: json.data.list,
-//       }
-//     ),
-//   );
-// }
-
-// function getClientMac() {
-//   return utils.fetch('/goform/group/map/orbit/user').then(json => ({
-//     options: json.data.list.map(
-//       item => ({
-//         value: item,
-//         label: item,
-//       }),
-//     ),
-//   }),
-//   );
-// }
 
 function getDistance(p1, p2) {
   return Math.sqrt(((p1[0] - p2[0]) * (p1[0] - p2[0])) + ((p1[1] - p2[1]) * (p1[1] - p2[1])));
@@ -79,8 +36,8 @@ const defaultQuery = {
   curMapId: '',
   mac: '',
   date: moment().format('YYYY-MM-DD'),
-  fromTime: '08:00:11',
-  toTime: '20:00:11',
+  fromTime: '00:00:00',
+  toTime: '23:59:59',
 };
 
 export default class View extends React.Component {
@@ -88,14 +45,11 @@ export default class View extends React.Component {
     super(props);
     this.curvePath = [];
     this.timeoutVal = [];
+    this.mapMouseDown = false;
     this.colors = ['#c23531', '#2f4554', '#0093dd', '#d48265', '#91c7ae'];
     this.state = {
       mapList: fromJS([]),
-      date: moment().format('YYYY-MM-DD'),
-      curMapId: 1,
-      fromTime: '08:00:11',
-      toTime: '20:00:11',
-      zoom: 50,
+      zoom: 100,
       mapOffsetX: 0,
       mapOffsetY: 0,
     };
@@ -108,8 +62,6 @@ export default class View extends React.Component {
         'onChangeMapId',
         'onSearch',
         'stationaryPoint',
-        // 'oribitPath',
-        // 'drawCircle',
         'onMapMouseUp',
         'onMapMouseDown',
         'onMapMouseMove',
@@ -247,12 +199,15 @@ export default class View extends React.Component {
 
   onMapMouseUp() {
     this.mapMouseDown = false;
-    if (this.posXBeforeMove !== this.state.mapOffsetX || this.posYBeforeMove !== this.state.mapOffsetY) {
+    if (this.posXBeforeMove !== this.state.mapOffsetX ||
+        this.posYBeforeMove !== this.state.mapOffsetY) {
+      console.log('onmapmouseup', this.posXBeforeMove, this.state.mapOffsetX);
       const ctx = this.canvasElem.getContext('2d');
       this.drawCurveAnimPath(ctx, this.curvePath);
     }
   }
   onMapMouseDown(e) {
+    console.log('onmapmousedown running');
     this.mapMouseDown = true;
     this.mapClientX = e.clientX;
     this.mapClientY = e.clientY;
@@ -267,6 +222,10 @@ export default class View extends React.Component {
       });
       this.mapClientX = e.clientX;
       this.mapClientY = e.clientY;
+      if (this.posXBeforeMove !== this.state.mapOffsetX ||
+          this.posYBeforeMove !== this.state.mapOffsetY) {
+        this.clearTimeout();
+      }
     }
   }
   onSearch() {
@@ -324,31 +283,6 @@ export default class View extends React.Component {
       },
     );
   }
-  // drawCircle(ctx, $$point) {
-  //   ctx.beginPath();
-  //   ctx.arc($$point.get('x'), $$point.get('y'), 1, 0, 2 * Math.PI);
-  //   ctx.closePath();
-  //   ctx.fillStyle = 'red';
-  //   ctx.fill();
-  // }
-  // oribitPath(ctx, startX, startY, $$pathList) {
-  //   const len = $$pathList.size;
-  //   if (len === 1 || $$pathList === null) {
-  //     return null;
-  //   }
-  //   ctx.save();
-  //   ctx.beginPath();
-  //   ctx.moveTo(startX, startY);
-  //   $$pathList.forEach(
-  //     ($$point) => {
-  //       ctx.lineTo($$point.get('x'), $$point.get('y'));
-  //     },
-  //   );
-  //   ctx.strokeStyle = 'red';
-  //   ctx.lineWidth = '1';
-  //   ctx.stroke();
-  //   ctx.restore();
-  // }
   handleChangeQuery(name, data) {
     Promise.resolve().then(() => {
       this.props.changeScreenQuery(fromJS({ [name]: data.value }));
@@ -356,9 +290,19 @@ export default class View extends React.Component {
       this.props.fetchScreenData();
     });
   }
+  getNaturalWidthAndHeight(url) {
+    const image = new Image();
+    image.src = url;
+    this.naturalWidth = image.width;
+    this.naturalHeight = image.height;
+  }
+
   renderCurMap(mapList, curMapId, myZoom) {
     const curItem = mapList.find(item => item.get('id') === curMapId);
     const imgUrl = curItem ? curItem.get('backgroundImg') : '';
+    // 获取图片的原始大小
+    // 如果使用百分比设置canvas的宽高，当浏览器放大缩小时，画布不会重绘，导致画布图案超出图片
+    this.getNaturalWidthAndHeight(imgUrl);
     return (
       <div
         className="o-map-container"
@@ -374,8 +318,8 @@ export default class View extends React.Component {
         style={{
           left: this.state.mapOffsetX,
           top: this.state.mapOffsetY,
-          width: `${myZoom}%`,
-
+          width: `${((myZoom * this.naturalWidth) / 100)}px`,
+          height: `${((myZoom * this.naturalHeight) / 100)}px`,
         }}
         onMouseDown={this.onMapMouseDown}
         onMouseUp={this.onMapMouseUp}
@@ -550,9 +494,7 @@ export default class View extends React.Component {
     const store = this.props.store;
     const curScreenId = store.get('curScreenId');
     const macList = store.getIn([curScreenId, 'data', 'macList']) || fromJS([]);
-    return macList.toJS().map((mac) => {
-      return { value: mac, label: mac };
-    });
+    return macList.toJS().map(mac => ({ value: mac, label: mac }));
   }
 
   render() {
@@ -569,68 +511,117 @@ export default class View extends React.Component {
           query: defaultQuery,
         }}
       >
-        <div className="m-action-bar">
-          <div className="clearfix">
-            <FormGroup
+        <div className="m-action-bar" style={{ minWidth: '950px' }}>
+          <div style={{ marginBottom: '20px' }}>
+            <span
+              style={{
+                marginRight: '10px',
+                display: 'inline-block',
+                width: '100px',
+                textAlign: 'right',
+              }}
+            >
+              {__('Building')}
+            </span>
+            <FormInput
               type="select"
-              className="fl"
-              label={_('Building')}
               options={this.buildOptions ? this.buildOptions.toJS() : []}
               value={this.state.buildId}
               onChange={data => this.onChangeBuilding(data.value)}
             />
-            <FormGroup
+            <span
+              style={{
+                marginRight: '10px',
+                display: 'inline-block',
+                width: '100px',
+                textAlign: 'right',
+              }}
+            >
+              {__('Map')}
+            </span>
+            <FormInput
               type="select"
-              className="fl"
-              label={_('Map')}
               options={this.mapOptions ? this.mapOptions.toJS() : []}
               value={this.state.curMapId}
               onChange={data => this.onChangeMapId(data.value)}
             />
-            <FormGroup
+            <span
+              style={{
+                marginRight: '10px',
+                display: 'inline-block',
+                width: '100px',
+                textAlign: 'right',
+              }}
+            >
+              {__('Client')}
+            </span>
+            <FormInput
               type="select"
-              className="fl"
-              label={_('Client')}
               options={this.generateMacOptions()}
               value={store.getIn([curScreenId, 'query', 'mac'])}
               onChange={data => this.onChangeMac(data.value)}
               searchable
             />
           </div>
-          <div className="clearfix">
-            <FormGroup
+          <div style={{ marginBottom: '20px' }}>
+            <span
+              style={{
+                marginRight: '10px',
+                display: 'inline-block',
+                width: '100px',
+                textAlign: 'right',
+              }}
+            >
+              {__('Date')}
+            </span>
+            <FormInput
               type="date"
-              className="fl"
-              label={_('Date')}
               value={$$screenQuery.get('date')}
               onChange={(data) => {
                 this.handleChangeQuery('date', data);
               }}
               isOutsideRange={() => false}
             />
-            <FormGroup
+            <span
+              style={{
+                marginRight: '10px',
+                marginLeft: '90px',
+                display: 'inline-block',
+                width: '100px',
+                textAlign: 'right',
+              }}
+            >
+              {__('Start Time')}
+            </span>
+            <FormInput
               type="time"
-              className="fl"
-              label={_('Time from')}
               value={$$screenQuery.get('fromTime')}
               onChange={(data) => {
                 this.handleChangeQuery('fromTime', data);
               }}
               // showSecond={false}
             />
-            <FormGroup
+            <span
+              style={{
+                marginRight: '10px',
+                marginLeft: '30px',
+                display: 'inline-block',
+                width: '100px',
+                textAlign: 'right',
+              }}
+            >
+              {__('End Time')}
+            </span>
+            <FormInput
               type="time"
-              className="fl"
-              label={_('to')}
               value={$$screenQuery.get('toTime')}
               onChange={(data) => {
                 this.handleChangeQuery('toTime', data);
               }}
-              // showSecond={false}
             />
           </div>
         </div>
-        <div className="o-map-warp" style={{ marginTop: '50px' }}>
+        <div className="o-map-warp" style={{ marginTop: '50px', minWidth: '950px' }}>
           {this.renderCurMap(this.mapList, this.state.curMapId, this.state.zoom)}
           <div className="o-map-zoom-bar">
             <Icon
@@ -668,6 +659,7 @@ function mapStateToProps(state) {
     store: state.screens,
     // product: state.product,
     groupid: state.product.getIn(['group', 'selected', 'id']),
+    // isShowPanel: state.properties.get('isShowPanel'),
   };
 }
 
