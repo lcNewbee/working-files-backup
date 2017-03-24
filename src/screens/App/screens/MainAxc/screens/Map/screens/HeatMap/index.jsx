@@ -7,7 +7,7 @@ import h337 from 'heatmap.js';
 import moment from 'moment';
 import AppScreen from 'shared/components/Template/AppScreen';
 import {
-  FormInput, Icon,
+  FormInput, Icon, FormGroup,
 } from 'shared/components';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
@@ -340,55 +340,34 @@ export default class View extends React.PureComponent {
           },
         }}
       >
-        <div className="m-action-bar" style={{ minWidth: '950px' }}>
-          <span
-            style={{
-              marginRight: '10px',
-              display: 'inline-block',
-              width: '100px',
-              textAlign: 'right',
-            }}
-          >
-            {__('Building')}
-          </span>
-          <FormInput
+        <div className="o-form o-form--flow">
+          <FormGroup
             type="select"
             label={__('Building')}
             value={this.state.buildId}
             options={this.buildOptions ? this.buildOptions.toJS() : []}
             onChange={data => this.onChangeBuilding(data.value)}
           />
-          <span
-            style={{
-              marginRight: '10px',
-              marginLeft: '100px',
-              display: 'inline-block',
-              width: '100px',
-              textAlign: 'right',
-            }}
-          >
-            {__('Map Name')}
-          </span>
-          <FormInput
+          <FormGroup
             type="select"
             label={__('Map Name')}
             value={this.state.curMapId}
             options={this.mapOptions ? this.mapOptions.toJS() : []}
             onChange={data => this.onChangeMapId(data.value)}
           />
-        </div>
-        <div style={{ marginBottom: '10px', minWidth: '950px' }}>
-          <div>
-            <span
-              style={{
-                marginRight: '10px',
-                display: 'inline-block',
-                width: '100px',
-                textAlign: 'right',
-              }}
-            >
-              {__('Start Date')}
-            </span>
+          <FormGroup
+            label={__('Observe Radius')}
+            type="select"
+            value={store.getIn([curScreenId, 'query', 'mapType'])}
+            options={[
+              { label: __('User Number'), value: 'number' },
+              { label: __('User Times'), value: 'times' },
+            ]}
+            onChange={(data) => { this.setState({ observeRadius: data.value }); }}
+          />
+          <FormGroup
+            label={__('Start Date')}
+          >
             <FormInput
               type="date"
               value={store.getIn([curScreenId, 'query', 'startDate'])}
@@ -406,17 +385,6 @@ export default class View extends React.PureComponent {
               }}
               isOutsideRange={() => false}
             />
-            <span
-              style={{
-                marginRight: '10px',
-                marginLeft: '185px',
-                display: 'inline-block',
-                width: '100px',
-                textAlign: 'right',
-              }}
-            >
-              {__('Start Time')}
-            </span>
             <FormInput
               type="time"
               value={store.getIn([curScreenId, 'query', 'startTime'])}
@@ -429,22 +397,13 @@ export default class View extends React.PureComponent {
               }}
               style={{
                 marginLeft: '5px',
-                paddingTop: '3px',
-                display: 'inline-block',
+                verticalAlign: 'middle',
               }}
             />
-          </div>
-          <div style={{ marginBottom: '5px' }}>
-            <span
-              style={{
-                marginRight: '10px',
-                display: 'inline-block',
-                width: '100px',
-                textAlign: 'right',
-              }}
-            >
-              {__('End Date')}
-            </span>
+          </FormGroup>
+          <FormGroup
+            label={__('End Date')}
+          >
             <FormInput
               type="date"
               value={store.getIn([curScreenId, 'query', 'endDate'])}
@@ -462,17 +421,6 @@ export default class View extends React.PureComponent {
               }}
               isOutsideRange={() => false}
             />
-            <span
-              style={{
-                marginRight: '10px',
-                marginLeft: '185px',
-                display: 'inline-block',
-                width: '100px',
-                textAlign: 'right',
-              }}
-            >
-              {__('End Time')}
-            </span>
             <FormInput
               type="time"
               value={store.getIn([curScreenId, 'query', 'endTime'])}
@@ -485,53 +433,15 @@ export default class View extends React.PureComponent {
               }}
               style={{
                 marginLeft: '5px',
-                paddingTop: '3px',
-                display: 'inline-block',
+                verticalAlign: 'middle',
               }}
             />
-          </div>
-        </div>
-        <div style={{ minWidth: '950px' }}>
-          <span
-            style={{
-              marginRight: '10px',
-              display: 'inline-block',
-              width: '100px',
-              textAlign: 'right',
-            }}
-          >
-            {__('Map Type')}
-          </span>
-          <FormInput
-            type="select"
+          </FormGroup>
+
+          <FormGroup
+            type="switch"
             value={store.getIn([curScreenId, 'query', 'mapType'])}
             label={__('Map Type')}
-            options={[
-              { label: __('User Number'), value: 'number' },
-              { label: __('User Times'), value: 'times' },
-            ]}
-            onChange={(data) => {
-              Promise.resolve().then(() => {
-                this.props.changeScreenQuery({ mapType: data.value });
-              }).then(() => {
-                this.props.fetchScreenData();
-              });
-            }}
-          />
-          <span
-            style={{
-              marginRight: '10px',
-              marginLeft: '100px',
-              display: 'inline-block',
-              width: '100px',
-              textAlign: 'right',
-            }}
-          >
-            {__('Observe Radius')}
-          </span>
-          <FormInput
-            type="select"
-            value={this.state.observeRadius}
             options={[
               { value: 3, label: '3m' }, { value: 5, label: '5m' },
               { value: 10, label: '10m' }, { value: 15, label: '15m' },
@@ -545,7 +455,7 @@ export default class View extends React.PureComponent {
             border: '1px solid #CCC',
             overflow: 'hidden',
             minHeight: '500px',
-            marginTop: '20px',
+            marginTop: '5px',
           }}
         >
           {this.renderCurMap(this.mapList, this.state.curMapId, this.state.zoom)}

@@ -3,13 +3,12 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import utils from 'shared/utils';
 import { Map, List, fromJS } from 'immutable';
-import EchartReact from 'shared/components/EchartReact';
-import Table from 'shared/components/Table';
-import Select from 'shared/components/Select';
 import * as appActions from 'shared/actions/app';
 import * as actions from 'shared/actions/screens';
 import { colors, $$commonPieOption } from 'shared/config/axc';
-import AppScreen from 'shared/components/Template/AppScreen';
+import {
+  Modal, AppScreen, Table, Select, EchartReact, Button, FormGroup,
+} from 'shared/components';
 
 const flowRateFilter = utils.filter('flowRate');
 
@@ -330,13 +329,44 @@ const propTypes = {
   changeScreenQuery: PropTypes.func,
 };
 const defaultProps = {};
-export default class View extends React.Component {
+export default class GroupOverview extends React.Component {
   constructor(props) {
     super(props);
 
     utils.binds(this, [
       'onChangeTimeType',
+      'handleCounterAp',
+      'handleModelOk',
     ]);
+
+    this.rogueSsidOptions = ssidTableOptions.push(
+      fromJS({
+        id: '__actions__',
+        text: __('Actions'),
+        transform: (val, $$data) => {
+          const isCounter = $$data.get('isCounter');
+          let btnText = _('Counter This AP');
+
+          if (isCounter === 1) {
+            btnText = _('Countering');
+          }
+
+          return (
+            <Button
+              text={btnText}
+              disabled={isCounter === 1}
+              onClick={
+                () => this.handleCounterAp($$data)
+              }
+            />
+          );
+        },
+      }),
+    );
+
+    this.state = {
+      counterAps: [],
+    }
   }
   componentWillMount() {
     this.initOptions(this.props);
@@ -349,12 +379,57 @@ export default class View extends React.Component {
       this.initOptions(nextProps);
     }
   }
-
   onChangeTimeType(data) {
     this.props.changeScreenQuery({
       timeType: data.value,
     });
     this.props.fetchScreenData();
+  }
+  handleCounterAp($$data) {
+    const isCounter = $$data.get('isCounter');
+
+    if (isCounter === 0) {
+      this.props.updateCurEditListItem({
+        apMac: 1,
+        radioId: 0,
+        ssidmac: $$data.get('mac'),
+        ssidname: $$data.get('ssid'),
+        channel: $$data.get('channel'),
+      });
+      this.props.changeScreenActionQuery({
+        action: 'edit',
+        myTitle: __('Counter AP: %s', $$data.get('mac')),
+      });
+      this.props.fetch('/goform/group/ap/counter', {
+        ssidmac: $$data.get('mac'),
+        ssidname: $$data.get('ssid'),
+      }).then(
+        (rqData) => {
+          if (rqData && rqData.data && rqData.data.list) {
+            this.setState({
+              counterAps: rqData.data.list.map(
+                (item) => ({
+                  value: item.apMac,
+                  label: item.apMac,
+                  radioId: item.radioId,
+                }),
+              )
+            });
+          }
+        }
+      );
+    }
+  }
+  handleModelOk() {
+    this.props.createModal({
+      type: 'confrim',
+      text: __('此ap将全力支持反制功能，停止正常业务，你确定要开启？'),
+      apply: () => {
+        this.props.onListAction({
+          url: '/goform/group/ap/counter',
+        });
+      },
+    });
   }
 
   initOptions(props) {
@@ -372,6 +447,8 @@ export default class View extends React.Component {
     const { store } = this.props;
     const { serverData, apStatusOption, terminalTypeOption, flowOption } = this;
     const curScreenId = store.get('curScreenId');
+    const $$actionQuery = store.getIn([curScreenId, 'actionQuery']);
+    const $$curListItem = store.getIn([curScreenId, 'curListItem']);
     return (
       <AppScreen
         {...this.props}
@@ -444,7 +521,7 @@ export default class View extends React.Component {
           <div className="element t-overview__section">
             <Table
               className="table table--light"
-              options={ssidTableOptions}
+              options={this.rogueSsidOptions}
               list={serverData.getIn(['neighborsAps', 'list']) || fromJS([])}
               page={serverData.getIn(['neighborsAps', 'page'])}
             />
@@ -461,13 +538,39 @@ export default class View extends React.Component {
             />
           </div>
         </div>
+        <Modal
+          id="AppScreenListModal"
+          isShow={$$actionQuery.get('action') === 'edit'}
+          title={$$actionQuery.get('myTitle')}
+          onClose={() => {
+            this.props.closeListItemModal();
+          }}
+          onOk={this.handleModelOk}
+        >
+          <FormGroup
+            id="apMac"
+            label={__('Select Counter AP')}
+            type="select"
+            value={$$curListItem.get('apMac')}
+            options={this.state.counterAps}
+            onChange={
+              (data) => {
+                this.props.updateCurEditListItem({
+                  apMac: data.value,
+                  radioId: data.radioId,
+                });
+              }
+            }
+            searchable
+          />
+        </Modal>
       </AppScreen>
     );
   }
 }
 
-View.propTypes = propTypes;
-View.defaultProps = defaultProps;
+GroupOverview.propTypes = propTypes;
+GroupOverview.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
@@ -487,4 +590,4 @@ function mapDispatchToProps(dispatch) {
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
-)(View);
+)(GroupOverview);

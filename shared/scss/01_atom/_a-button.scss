@@ -25,6 +25,7 @@
   }
   .icon {
     margin-right: 6px;
+    float: left;
   }
 
   &.a-btn--no-text {
@@ -60,10 +61,18 @@ a.a-btn {
 .a-btn--sm {
   font-size: 12px;
   padding: 4px 8px;
+
+  .icon {
+    margin-right: 4px;
+  }
 }
 .a-btn--min {
   font-size: 10px;
-  padding: .2em .6em;
+  padding: .25em .5em;
+
+  .icon {
+    margin-right: 3px;
+  }
 }
 
 .a-btn--lg {

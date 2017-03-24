@@ -3,6 +3,7 @@ import { Map, fromJS } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import validator from 'shared/validator';
 import FormContainer from '../Organism/FormContainer';
+import SaveButton from '../Button/SaveButton';
 
 const formOptions = fromJS([
   {
@@ -60,7 +61,6 @@ class Panel extends React.Component {
       store, app, actionable, ...restProps
     } = this.props;
     const formData = store.get('data');
-
     return (
       <FormContainer
         {...restProps}

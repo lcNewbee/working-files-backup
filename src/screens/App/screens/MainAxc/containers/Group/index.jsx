@@ -10,11 +10,11 @@ import Modal from 'shared/components/Modal';
 import Icon from 'shared/components/Icon';
 import { FormGroup } from 'shared/components/Form';
 import Table from 'shared/components/Table';
-import * as appActions from 'shared/actions/app';
-import * as propertiesActions from 'shared/actions/properties';
 import { renderRoutesList } from 'shared/components/Organism/RouterConfig';
 import { getActionable } from 'shared/axc';
-import * as actions from '../../actions';
+import * as appActions from 'shared/actions/app';
+import * as propertiesActions from 'shared/actions/properties';
+import * as mainActions from '../../actions';
 
 const ALL_GROUP_ID = -100;
 
@@ -82,7 +82,7 @@ const defaultProps = {
   role: 'default',
 };
 
-export default class MainGroup extends React.PureComponent {
+export default class MainGroup extends React.Component {
   constructor(props) {
     super(props);
 
@@ -1011,7 +1011,7 @@ export default class MainGroup extends React.PureComponent {
 
         <Modal
           {...modal}
-          id="appScreenModal"
+          id="mainGroupModal"
           onClose={() => {
             this.props.showMainModal({
               isShow: false,
@@ -1045,8 +1045,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    actions,
     propertiesActions,
+    mainActions,
   ), dispatch);
 }
 

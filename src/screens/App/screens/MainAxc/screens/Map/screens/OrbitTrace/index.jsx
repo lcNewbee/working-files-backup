@@ -3,9 +3,7 @@ import utils, { gps } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
-import AppScreen from 'shared/components/Template/AppScreen';
-import { FormInput } from 'shared/components';
-import { Icon } from 'shared/components';
+import { FormGroup, Icon, AppScreen } from 'shared/components';
 import moment from 'moment';
 import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
@@ -511,117 +509,63 @@ export default class View extends React.Component {
           query: defaultQuery,
         }}
       >
-        <div className="m-action-bar" style={{ minWidth: '950px' }}>
-          <div style={{ marginBottom: '20px' }}>
-            <span
-              style={{
-                marginRight: '10px',
-                display: 'inline-block',
-                width: '100px',
-                textAlign: 'right',
-              }}
-            >
-              {__('Building')}
-            </span>
-            <FormInput
-              type="select"
-              options={this.buildOptions ? this.buildOptions.toJS() : []}
-              value={this.state.buildId}
-              onChange={data => this.onChangeBuilding(data.value)}
-            />
-            <span
-              style={{
-                marginRight: '10px',
-                display: 'inline-block',
-                width: '100px',
-                textAlign: 'right',
-              }}
-            >
-              {__('Map')}
-            </span>
-            <FormInput
-              type="select"
-              options={this.mapOptions ? this.mapOptions.toJS() : []}
-              value={this.state.curMapId}
-              onChange={data => this.onChangeMapId(data.value)}
-            />
-            <span
-              style={{
-                marginRight: '10px',
-                display: 'inline-block',
-                width: '100px',
-                textAlign: 'right',
-              }}
-            >
-              {__('Client')}
-            </span>
-            <FormInput
-              type="select"
-              options={this.generateMacOptions()}
-              value={store.getIn([curScreenId, 'query', 'mac'])}
-              onChange={data => this.onChangeMac(data.value)}
-              searchable
-            />
-          </div>
-          <div style={{ marginBottom: '20px' }}>
-            <span
-              style={{
-                marginRight: '10px',
-                display: 'inline-block',
-                width: '100px',
-                textAlign: 'right',
-              }}
-            >
-              {__('Date')}
-            </span>
-            <FormInput
-              type="date"
-              value={$$screenQuery.get('date')}
-              onChange={(data) => {
-                this.handleChangeQuery('date', data);
-              }}
-              isOutsideRange={() => false}
-            />
-            <span
-              style={{
-                marginRight: '10px',
-                marginLeft: '90px',
-                display: 'inline-block',
-                width: '100px',
-                textAlign: 'right',
-              }}
-            >
-              {__('Start Time')}
-            </span>
-            <FormInput
-              type="time"
-              value={$$screenQuery.get('fromTime')}
-              onChange={(data) => {
-                this.handleChangeQuery('fromTime', data);
-              }}
-              // showSecond={false}
-            />
-            <span
-              style={{
-                marginRight: '10px',
-                marginLeft: '30px',
-                display: 'inline-block',
-                width: '100px',
-                textAlign: 'right',
-              }}
-            >
-              {__('End Time')}
-            </span>
-            <FormInput
-              type="time"
-              value={$$screenQuery.get('toTime')}
-              onChange={(data) => {
-                this.handleChangeQuery('toTime', data);
-              }}
-            />
-          </div>
+        <div className="o-form o-form--flow">
+          <FormGroup
+            type="select"
+            className="fl"
+            label={__('Building')}
+            options={this.state.buildingNameOptions.toJS()}
+            value={this.state.buildId}
+            onChange={data => this.onChangeBuilding(data.value)}
+          />
+          <FormGroup
+            type="select"
+            className="fl"
+            label={__('Map')}
+            options={this.state.layerMapOptions.toJS()}
+            value={this.state.curMapId}
+            onChange={data => this.onChangeMapId(data.value)}
+          />
+          <FormGroup
+            type="select"
+            className="fl"
+            label={__('Client')}
+            options={this.state.clientMacOptions.toJS()}
+            value={this.state.macId}
+            onChange={data => this.onChangeMac(data.value)}
+          />
+          <FormGroup
+            type="date"
+            className="fl"
+            label={__('Date')}
+            value={$$screenQuery.get('date')}
+            onChange={(data) => {
+              this.handleChangeQuery('date', data);
+            }}
+          />
+          <FormGroup
+            type="time"
+            className="fl"
+            label={__('Time from')}
+            value={$$screenQuery.get('fromTime')}
+            onChange={(data) => {
+              this.handleChangeQuery('fromTime', data);
+            }}
+            showSecond={false}
+          />
+
+          <FormGroup
+            type="time"
+            className="fl"
+            label={__('to')}
+            value={$$screenQuery.get('toTime')}
+            onChange={(data) => {
+              this.handleChangeQuery('toTime', data);
+            }}
+            showSecond={false}
+          />
         </div>
-        <div className="o-map-warp" style={{ marginTop: '50px', minWidth: '950px' }}>
+        <div className="o-map-warp" style={{ top: '5rem' }}>
           {this.renderCurMap(this.mapList, this.state.curMapId, this.state.zoom)}
           <div className="o-map-zoom-bar">
             <Icon

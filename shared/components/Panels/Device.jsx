@@ -8,6 +8,7 @@ import DeviceGeneral from './DeviceGeneral';
 import DeviceRadioAdvance from './DeviceRadioAdvance';
 import DeviceRadioBase from './DeviceRadioBase';
 import DeviceRadioQos from './DeviceRadioQos';
+import SaveButton from '../Button/SaveButton';
 
 const MY_MSG = {
   saveText: __('Apply'),
@@ -39,17 +40,23 @@ const defaultProps = {
 
 function DevicesProperties(props) {
   const {
-    item, isCollapsed,
-    onCollapse, onChangeTab, onChangeItem, onRemove,
+    item, isCollapsed, app,
+    onCollapse, onChangeTab, onChangeItem, onRemove, actionable,
   } = props;
   const activeTab = item.get('activeTab');
   const activeTabPanels = item.get(activeTab);
   const activePanelKey = `${activeTab}ActivePanelIndex`;
-  const versionCode = props.app.get('versionCode');
+  const versionCode = app.get('versionCode');
+  const against = item.getIn(['data', 'info', 'status']) === 'against';
   let apStatuVal = fromJS(apStatus).find(
     $$item => $$item.get('value') === item.getIn(['data', 'info', 'status']),
   );
   let curSavedText = MY_MSG.savedText;
+  let thisActionable = actionable;
+
+  if (against) {
+    thisActionable = false;
+  }
 
   if (apStatuVal) {
     apStatuVal = apStatuVal.get('label');
@@ -98,6 +105,34 @@ function DevicesProperties(props) {
           </span>
           <div className="o-properties-header__title-more">
             <span className={statuTagClass}>{apStatuVal}</span>
+            {
+              against ? (
+                <SaveButton
+                  id="against"
+                  type="button"
+                  size="min"
+                  icon="close"
+                  style={{
+                    marginLeft: '6px',
+                  }}
+                  loading={app.get('saving')}
+                  text={__('Cancel Counter')}
+                  savingText={__('Applying')}
+                  savedText={__('Applied')}
+                  onClick={
+                    () => {
+                      props.onChangeData({
+                        against: 0,
+                      });
+                      setTimeout(
+                        () => props.onSave('deviceGeneral'),
+                        20,
+                      );
+                    }
+                  }
+                />
+              ) : null
+            }
           </div>
         </div>
         <div className="o-properties-header__actions">
@@ -145,6 +180,9 @@ function DevicesProperties(props) {
                           panel.getIn(['data', 'first5g']) !== undefined ?
                             panel.getIn(['data', 'first5g']) : item.getIn(['curData', 'radio', 'first5g']),
                         );
+                        if (against) {
+                          $$curStore = $$curStore.setIn(['data', 'against'], 1);
+                        }
 
                         if (item.getIn(['data', 'radios']) && item.getIn(['data', 'radios']).size > 1) {
                           $$curStore = $$curStore.setIn(['data', 'has5g'], true);
@@ -190,6 +228,7 @@ function DevicesProperties(props) {
                               <div className="o-panel__body">
                                 <MyComponent
                                   {...props}
+                                  actionable={thisActionable}
                                   store={$$curStore}
                                   saveText={MY_MSG.saveText}
                                   savingText={MY_MSG.savingText}

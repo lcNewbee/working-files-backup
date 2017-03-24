@@ -6,7 +6,7 @@ import AppScreen from 'shared/components/Template/AppScreen';
 // custom
 import * as screenActions from 'shared/actions/screens';
 
-const flowRateFilter = utils.filter('flowRate:["KB"]');
+const flowRateFilter = utils.filter('flowRate');
 const checkboxOptions = [
   {
     value: 1,

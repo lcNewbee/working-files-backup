@@ -14,7 +14,7 @@ import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 import { getActionable } from 'shared/axc';
 
-const flowRateFilter = utils.filter('flowRate:["KB"]');
+const flowRateFilter = utils.filter('flowRate');
 
 const listOptions = fromJS([
   {

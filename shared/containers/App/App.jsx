@@ -148,3 +148,6 @@ export const Screen = connect(
   mapStateToProps,
   actions,
 )(App);
+
+export { default as reducers } from './reducer';
+export { default as actions } from './action';

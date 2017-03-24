@@ -373,6 +373,7 @@
   "Security Alarm Events": "安全告警事件",
 
   "Map": "地图",
+  "Map Type": "地图类型",
   "Map Name": "地图名称",
   "Map Backgroud Image": "地图背景图",
   "Backgroud Image": "背景图",
@@ -711,5 +712,11 @@
   "Optimized for Capacity": "超多用户性能优化",
   "Manual Configuration": "手动配置",
   "Latest Configuration:": "最近配置：",
-  "Interfaces with the same segment already exists": "接口中已存在相同的网段"
+  "Interfaces with the same segment already exists": "接口中已存在相同的网段",
+
+  "Select Counter AP": "选择执行反制AP",
+  "Countering": "反制中...",
+  "Counter This AP": "反制此AP",
+  "Cancel Counter": "取消反制",
+  "Counter AP: %s": "反制AP: %s"
 }

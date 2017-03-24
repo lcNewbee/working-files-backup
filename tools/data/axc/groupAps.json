@@ -71,6 +71,25 @@
         "guestnum2.4G": "10",
         "guestnum5G": "10",
         "locatestatus": "location"
+      }, {
+        "devicename": "Market 2",
+        "mac": "00:12:32:33:11:33",
+        "status": "conuter",
+        "devicetype": "inside",
+        "ip": "192.168.5.54",
+        "model": "V2.2",
+        "softversion": "V1.1",
+        "channel": "1",
+        "operationhours": 6600,
+        "newest": "0",
+        "downstream": "256",
+        "upstream": "1232323",
+        "connectedNumbers": 233,
+        "usernum2.4G": "10",
+        "usernum5G": "10",
+        "guestnum2.4G": "10",
+        "guestnum5G": "10",
+        "locatestatus": "location"
       }
     ]
   }

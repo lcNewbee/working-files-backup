@@ -17,7 +17,7 @@ import * as screenActions from 'shared/actions/screens';
 import * as propertiesActions from 'shared/actions/properties';
 
 const EDIT_LIST_ACTION = 'editList';
-const flowRateFilter = utils.filter('flowRate:["KB"]');
+const flowRateFilter = utils.filter('flowRate');
 
 const settingsFormOptions = radioBase
   // 添加自动功率

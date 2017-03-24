@@ -101,6 +101,11 @@ class PropertyPanel extends React.Component {
           first5g,
         });
       }
+      if ($$configData.getIn(['data', 'against']) !== undefined) {
+        $$subData = $$subData.merge({
+          against: $$configData.getIn(['data', 'against']),
+        });
+      }
 
       if (curName && ($$activeListData.getIn(['info', 'devicename']) !== curName)) {
         $$subData = $$subData.merge({

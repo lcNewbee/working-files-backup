@@ -37,14 +37,20 @@
       },
       "list": [
           {
+              "time": "2017-2-2",
+              "ssid": "xxxx",
               "mac": "12:33:44:55:66:78",
               "channel": 7,
-              "rssi": -49
+              "rssi": -49,
+              "isCounter": 1
           },
           {
+              "time": "2017-2-2",
+              "ssid": "dsds",
               "mac": "12:33:44:55:66:79",
               "channel": 7,
-              "rssi": -49
+              "rssi": -49,
+              "isCounter": 0
           }
       ]
     },
@@ -60,11 +66,15 @@
       },
       "list": [
           {
+              "time": "2017-2-2",
+              "ssid": "dsds",
               "mac": "12:33:44:55:66:78",
               "channel": 7,
               "rssi": -49
           },
           {
+              "time": "2017-2-2",
+              "ssid": "dsds",
               "mac": "12:33:44:55:66:79",
               "channel": 7,
               "rssi": -49

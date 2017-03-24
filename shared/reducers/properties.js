@@ -22,6 +22,7 @@ const defaultItem = fromJS({
       data: {
         devicename: '',
         mac: '',
+        isCounter: 2,
       },
     }, {
       panelKey: 'radioBase',

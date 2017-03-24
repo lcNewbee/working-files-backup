@@ -38,6 +38,9 @@ export const apStatus = [
   }, {
     value: 'unknown',
     label: __('Offline'),
+  }, {
+    value: 'against',
+    label: __('Countering'),
   },
 ];
 
