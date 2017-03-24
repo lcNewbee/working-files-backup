@@ -495,7 +495,7 @@ export default class View extends React.Component {
             type="select"
             className="fl"
             label={__('Building')}
-            options={this.state.buildingNameOptions.toJS()}
+            options={this.buildOptions ? this.buildOptions.toJS() : []}
             value={this.state.buildId}
             onChange={data => this.onChangeBuilding(data.value)}
           />
@@ -503,7 +503,7 @@ export default class View extends React.Component {
             type="select"
             className="fl"
             label={__('Map')}
-            options={this.state.layerMapOptions.toJS()}
+            options={this.mapOptions ? this.mapOptions.toJS() : []}
             value={this.state.curMapId}
             onChange={data => this.onChangeMapId(data.value)}
           />
@@ -511,8 +511,8 @@ export default class View extends React.Component {
             type="select"
             className="fl"
             label={__('Client')}
-            options={this.state.clientMacOptions.toJS()}
-            value={this.state.macId}
+            options={this.generateMacOptions()}
+            value={store.getIn([curScreenId, 'query', 'mac'])}
             onChange={data => this.onChangeMac(data.value)}
           />
           <FormGroup
@@ -523,27 +523,28 @@ export default class View extends React.Component {
             onChange={(data) => {
               this.handleChangeQuery('date', data);
             }}
+            isOutsideRange={() => false}
           />
           <FormGroup
             type="time"
             className="fl"
-            label={__('Time from')}
+            label={__('Start Time')}
             value={$$screenQuery.get('fromTime')}
             onChange={(data) => {
               this.handleChangeQuery('fromTime', data);
             }}
-            showSecond={false}
+            // showSecond={false}
           />
 
           <FormGroup
             type="time"
             className="fl"
-            label={__('to')}
+            label={__('End Time')}
             value={$$screenQuery.get('toTime')}
             onChange={(data) => {
               this.handleChangeQuery('toTime', data);
             }}
-            showSecond={false}
+            // showSecond={false}
           />
         </div>
         <div className="o-map-warp" style={{ top: '5rem' }}>

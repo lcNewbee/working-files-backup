@@ -197,8 +197,8 @@ export default class View extends React.PureComponent {
       showDiv.className = 'observeShower';
       showDiv.style.width = '150px';
       showDiv.style.height = '50px';
-      showDiv.style.backgroundColor = '#00ddca';
-      showDiv.style.color = '#00f';
+      showDiv.style.backgroundColor = '#62b7ed';
+      showDiv.style.color = '#000';
       showDiv.style.fontSize = '15px';
       showDiv.style.fontWeight = 'bold';
       showDiv.style.textAlign = 'center';
