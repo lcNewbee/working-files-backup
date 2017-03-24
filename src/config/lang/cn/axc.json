@@ -718,5 +718,11 @@
   "Countering": "反制中...",
   "Counter This AP": "反制此AP",
   "Cancel Counter": "取消反制",
-  "Counter AP: %s": "反制AP: %s"
+  "Counter AP: %s": "反制AP: %s",
+  "Start Date": "开始日期",
+  "Observe Radius": "观察半径",
+  "Orbit Trace": "行动轨迹图",
+  "User Times": "用户次数",
+  "Total User": "用户总人数",
+  "Total Times": "用户总人次"
 }

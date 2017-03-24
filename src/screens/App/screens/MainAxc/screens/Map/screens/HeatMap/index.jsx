@@ -192,6 +192,8 @@ export default class View extends React.PureComponent {
       this.removeShowerDiv();
       const showDiv = doc.createElement('div');
       const yPosition = (y - mapRadius - 50) < 0 ? (y + mapRadius) : (y - mapRadius - 50);
+      const curScreenId = this.props.store.get('curScreenId');
+      const mapType = this.props.store.getIn([curScreenId, 'query', 'mapType']);
       showDiv.className = 'observeShower';
       showDiv.style.width = '150px';
       showDiv.style.height = '50px';
@@ -206,7 +208,7 @@ export default class View extends React.PureComponent {
       showDiv.style.top = `${yPosition}px`;
       showDiv.style.left = `${x + mapRadius}px`;
       showDiv.style.position = 'absolute';
-      showDiv.innerHTML = `Total User: ${observeValue}`;
+      showDiv.innerHTML = mapType === 'number' ? `${__('Total User')}: ${observeValue}` : `${__('Total Times')}: ${observeValue}`;
       this.mapContent.appendChild(showDiv);
     });
   }

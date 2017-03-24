@@ -16,7 +16,7 @@ function getDistance(p1, p2) {
 
 function sleep(n) {
   const start = new Date().getTime();
-  while(true) {
+  while (true) {
     const end = new Date().getTime();
     if (end - start > n) break;
   }
@@ -69,7 +69,7 @@ export default class View extends React.Component {
         'getOffsetPoint',
         'getPointList',
         'interpolate',
-        'drawCurvePath',
+        // 'drawCurvePath',
         'drawCurveAnimPath',
         'drawLineBetweenPoints',
         'clearTimeout',
@@ -85,17 +85,6 @@ export default class View extends React.Component {
       }
       this.onChangeBuilding(this.buildOptions.getIn([0, 'value']));
     });
-    // .then((list) => {
-    //   if (typeof (list) !== 'undefined') {
-    //     this.onChangeMapId(this.mapOptions.getIn([0, 'value']));
-    //   }
-    // });
-    // this.props.fetch('/goform/group/user').then((json) => {
-    //   if (json.state && json.state.code === 2000) {
-    //     this.macOptions = fromJS(json.data.list).map(item => fromJS({ label: item.get('mac'), value: item.get('id') }));
-    //   }
-    //   this.onChangeMac(this.macOptions.getIn([0, 'value']));
-    // });
   }
   componentDidMount() {
     if (typeof (this.canvasElem) === 'undefined') return;
@@ -112,7 +101,7 @@ export default class View extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps() {
     this.clearTimeout();
     // if (this.canvasElem) {
     //   const ctx = this.canvasElem.getContext('2d');
@@ -199,13 +188,13 @@ export default class View extends React.Component {
     this.mapMouseDown = false;
     if (this.posXBeforeMove !== this.state.mapOffsetX ||
         this.posYBeforeMove !== this.state.mapOffsetY) {
-      console.log('onmapmouseup', this.posXBeforeMove, this.state.mapOffsetX);
+      // console.log('onmapmouseup', this.posXBeforeMove, this.state.mapOffsetX);
       const ctx = this.canvasElem.getContext('2d');
       this.drawCurveAnimPath(ctx, this.curvePath);
     }
   }
   onMapMouseDown(e) {
-    console.log('onmapmousedown running');
+    // console.log('onmapmousedown running');
     this.mapMouseDown = true;
     this.mapClientX = e.clientX;
     this.mapClientY = e.clientY;
@@ -234,53 +223,21 @@ export default class View extends React.Component {
     }, 200);
   }
 
-  clearTimeout() {
-    let timeoutLen = this.timeoutVal.length;
-    while (timeoutLen--) {
-      clearTimeout(this.timeoutVal[timeoutLen]);
-    }
-  }
-
-  drawLineBetweenPoints(ctx, point1, point2) {
-    ctx.moveTo(point1[0], point1[1]);
-    ctx.lineTo(point2[0], point2[1]);
-    ctx.stroke();
-    sleep(1);
-  }
-
-  drawCurvePath(ctx, crvPoints) {
-    const len = crvPoints.length;
-    const colorsLen = this.colors.length;
-    if (len === null) return null;
-    ctx.moveTo(crvPoints[0][0], crvPoints[0][1]);
-    ctx.save();
-    ctx.beginPath();
-    ctx.strokeStyle = this.colors[Math.floor(colorsLen * Math.random())];
-    ctx.lineWidth = 2;
-    crvPoints.forEach((point) => {
-      ctx.lineTo(point[0], point[1]);
-    });
-    ctx.stroke();
-    ctx.restore();
-  }
-
-  stationaryPoint(ctx, $$pathList) {
-    const len = $$pathList.size;
-    if (len === null) {
-      return null;
-    }
-    $$pathList.forEach(
-      ($$point) => {
-        ctx.save();
-        ctx.beginPath();
-        ctx.fillStyle = 'red';
-        ctx.arc($$point.x, $$point.y, 4, 0, 2 * Math.PI);
-        ctx.closePath();
-        ctx.fill();
-        ctx.restore();
-      },
-    );
-  }
+  // drawCurvePath(ctx, crvPoints) {
+  //   const len = crvPoints.length;
+  //   const colorsLen = this.colors.length;
+  //   if (len === null) return null;
+  //   ctx.moveTo(crvPoints[0][0], crvPoints[0][1]);
+  //   ctx.save();
+  //   ctx.beginPath();
+  //   ctx.strokeStyle = this.colors[Math.floor(colorsLen * Math.random())];
+  //   ctx.lineWidth = 2;
+  //   crvPoints.forEach((point) => {
+  //     ctx.lineTo(point[0], point[1]);
+  //   });
+  //   ctx.stroke();
+  //   ctx.restore();
+  // }
   handleChangeQuery(name, data) {
     Promise.resolve().then(() => {
       this.props.changeScreenQuery(fromJS({ [name]: data.value }));
@@ -387,6 +344,30 @@ export default class View extends React.Component {
     return mp;
   }
 
+  stationaryPoint(ctx, pathList) { // pathList为数组
+    if (typeof pathList === 'undefined' || pathList.length === 0) return null;
+    pathList.forEach((point) => {
+      ctx.beginPath();
+      ctx.fillStyle = 'red';
+      ctx.arc(point.x, point.y, 3, 0, 2 * Math.PI);
+      ctx.fill();
+    });
+  }
+
+  drawLineBetweenPoints(ctx, point1, point2) {
+    ctx.moveTo(point1[0], point1[1]);
+    ctx.lineTo(point2[0], point2[1]);
+    ctx.stroke();
+    sleep(1);
+  }
+
+  clearTimeout() {
+    let timeoutLen = this.timeoutVal.length;
+    while (timeoutLen--) {
+      clearTimeout(this.timeoutVal[timeoutLen]);
+    }
+  }
+
   // 动态画线
   drawCurveAnimPath(ctx, curvePath) {
     const len = curvePath.length;
@@ -483,8 +464,8 @@ export default class View extends React.Component {
   }
 
   interpolate(p0, p1, p2, p3, t, t2, t3) {
-    let v0 = (p2 - p0) * 0.5;
-    let v1 = (p3 - p1) * 0.5;
+    const v0 = (p2 - p0) * 0.5;
+    const v1 = (p3 - p1) * 0.5;
     return (2 * (p1 - p2) + v0 + v1) * t3 + (-3 * (p1 - p2) - 2 * v0 - v1) * t2 + v0 * t + p1;
   }
 
