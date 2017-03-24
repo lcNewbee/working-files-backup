@@ -356,12 +356,12 @@ export default class View extends React.PureComponent {
             onChange={data => this.onChangeMapId(data.value)}
           />
           <FormGroup
-            label={__('Observe Radius')}
             type="select"
-            value={store.getIn([curScreenId, 'query', 'mapType'])}
+            label={__('Observe Radius')}
+            value={this.state.observeRadius}
             options={[
-              { label: __('User Number'), value: 'number' },
-              { label: __('User Times'), value: 'times' },
+              { value: 3, label: '3m' }, { value: 5, label: '5m' },
+              { value: 10, label: '10m' }, { value: 15, label: '15m' },
             ]}
             onChange={(data) => { this.setState({ observeRadius: data.value }); }}
           />
@@ -443,10 +443,13 @@ export default class View extends React.PureComponent {
             value={store.getIn([curScreenId, 'query', 'mapType'])}
             label={__('Map Type')}
             options={[
-              { value: 3, label: '3m' }, { value: 5, label: '5m' },
-              { value: 10, label: '10m' }, { value: 15, label: '15m' },
+              { label: __('User Number'), value: 'number' },
+              { label: __('User Times'), value: 'times' },
             ]}
-            onChange={(data) => { this.setState({ observeRadius: data.value }); }}
+            onChange={(data) => {
+              this.props.changeScreenQuery({ mapType: data.value });
+              this.props.fetchScreenData();
+            }}
           />
         </div>
         <div

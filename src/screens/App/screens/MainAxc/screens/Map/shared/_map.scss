@@ -94,7 +94,7 @@ $map-distance-y: $map-distance * .75;
 // AP 规划图
 .o-map-warp {
   position: absolute;
-  top: $map-distance * 3;
+  top: $map-distance * 2.5;
   right: $map-distance;
   bottom: $map-distance;
   left: $map-distance;
@@ -195,7 +195,7 @@ $map-distance-y: $map-distance * .75;
 // 实时地图
 .o-map {
   position: absolute;
-  top: $map-distance * 3;
+  top: $map-distance * 2.5;
   right: $map-distance-x;
   bottom: $map-distance-y;
   left: $map-distance-x;
