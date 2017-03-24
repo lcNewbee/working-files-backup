@@ -17,7 +17,7 @@ const applyMiddleware = require('redux').applyMiddleware;
 const createStore = require('redux').createStore;
 const Provider = require('react-redux').Provider;
 const renderRoutesSwitch = require('shared/components/Organism/RouterConfig').renderRoutesSwitch;
-const prodConfig = require('./config/axc3.0');
+const prodConfig = require('./config/axc2.5');
 
 const HashRouter = ReactRouterDom.HashRouter;
 const mountNode = document.getElementById('app');
