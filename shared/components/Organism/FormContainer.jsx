@@ -185,6 +185,10 @@ class FormContainer extends React.Component {
     delete myProps.legend;
     delete myProps.fieldsetOption;
 
+    if (myProps.noForm) {
+      return null;
+    }
+
     if (myProps.type === 'file') {
       this.hasFile = true;
     }
