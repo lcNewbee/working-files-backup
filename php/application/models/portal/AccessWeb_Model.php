@@ -79,7 +79,9 @@ class AccessWeb_Model extends CI_Model {
                     }
                 }
             }
-        }             
+        }else{
+            return json_encode(array('state'=>array('code'=>6204,'msg'=>$this->upload->display_errors())));
+        }           
         $result = $result ? json_ok() : json_no($this->upload->display_errors());
         return json_encode($result);
     }
