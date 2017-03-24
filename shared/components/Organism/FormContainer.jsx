@@ -543,6 +543,9 @@ class FormContainer extends React.Component {
               </div>
             ) : null
           }
+          {
+            this.props.children
+          }
         </div>
         <div className="o-form__footer">
           {

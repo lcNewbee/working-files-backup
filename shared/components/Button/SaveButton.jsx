@@ -51,7 +51,6 @@ class SaveButton extends React.Component {
   render() {
     const { text, savingText, savedText } = this.props;
     let showText = text;
-
     if (this.state.status === 'saving') {
       showText = savingText;
     } else if (this.state.status === 'ok') {

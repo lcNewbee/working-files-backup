@@ -34,7 +34,7 @@ let autoprefixerHandle = autoprefixer(GLOBALS.autoprefixer);
 let config = {
 
   // more info:https://webpack.github.io/docs/build-performance.html#sourcemaps and https://webpack.github.io/docs/configuration.html#devtool
-  devtool: 'eval',
+  devtool: 'eval-source-map',
 
   entry: {
     index: [

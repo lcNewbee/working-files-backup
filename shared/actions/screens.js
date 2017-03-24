@@ -84,6 +84,11 @@ export function fetchScreenData(option) {
       if (option.url) {
         myUrl = option.url;
       }
+
+      // 处理自定义的 查询条件
+      if(option.query) {
+        query = option.query;
+      }
     }
 
     return dispatch(appActions.fetch(myUrl, query, ajaxOption))
