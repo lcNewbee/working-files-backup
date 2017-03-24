@@ -187,11 +187,17 @@ const sPortalDefaultWeb =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/DefaultWeb');
 const sPortalWeixin =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Weixin');
+const sPortalFacebook =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Facebook');
 const sPortalSMSGateWay =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/SMSGateway');
 const sPortalSMSLog =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/SMSLog');
 
+const sPortalApSetting =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/ApSetting');
+const sPortalSsid =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/SsidManagement');
 // const sPortalApSetting =
 //     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/ApSetting');
 // const sPortalSsidManagement =
@@ -696,6 +702,38 @@ const routes = [
                     formUrl: 'goform/portal/access/weixin',
                     text: __('Wechat Auth'),
                     component: sPortalWeixin.Screen,
+                  }, {
+                    id: 'portalFacebook',
+                    path: '/main/portal/access/facebook',
+                    formUrl: 'goform/portal/access/facebook',
+                    text: __('Facebook Auth'),
+                    component: sPortalFacebook.Screen,
+                  }, {
+                    id: 'portaSMSGateWay',
+                    path: '/main/portal/access/smsgateWay',
+                    formUrl: 'goform/portal/access/smsgateWay',
+                    text: __('SMS Gateway'),
+                    component: sPortalSMSGateWay.Screen,
+                  }, {
+                    id: 'portalSMSLog',
+                    path: '/main/portal/access/portalsmslog',
+                    formUrl: 'goform/portal/access/portalsmslog',
+                    text: __('SMS Log'),
+                    component: sPortalSMSLog.Screen,
+                  }, {
+                    id: 'portaSsidManagement',
+                    path: '/main/portal/access/ssidmanagement',
+                    formUrl: 'goform/portal/access/ssidmanagement',
+                    text: __('SSID Management'),
+                    component: sPortalSsid.Screen,
+                  },
+                  {
+                    id: 'portalApSetting',
+                    path: '/main/portal/access/ap',
+                    formUrl: 'goform/portal/access/ap',
+                    text: __('AP Setting'),
+                    component: sPortalApSetting.Screen,
+                    noNav: true,
                   },
                 ],
               }, {
