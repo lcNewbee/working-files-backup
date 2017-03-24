@@ -9,7 +9,7 @@ import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
 const uptimeFilter = utils.filter('connectTime');
-const flowFilter = utils.filter('flowRate');
+const flowFilter = utils.filter('flowRate:MB');
 const listOptions = fromJS([
   {
     id: 'ip',

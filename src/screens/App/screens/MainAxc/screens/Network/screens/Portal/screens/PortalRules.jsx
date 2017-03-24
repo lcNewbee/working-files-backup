@@ -136,16 +136,15 @@ const listOptions = fromJS([
       required: true,
     },
   },
-  // 闲置检查
-  // {
-  //   id: 'idle_test',
-  //   label: __('Idle Detection'),
-  //   defaultValue: '0',
-  //   formProps: {
-  //     type: 'checkbox',
-  //     value: '1',
-  //   },
-  // },
+  {
+    id: 'idle_test',
+    label: __('Permanent Authentication'),
+    defaultValue: '0',
+    formProps: {
+      type: 'checkbox',
+      value: '1',
+    },
+  },
 ]);
 
 const propTypes = {

@@ -27,10 +27,10 @@ const listOptions = fromJS([
     width: '120px',
     formProps: {
       type: 'text',
-      maxLength: '33',
+      maxLength: '129',
       required: true,
       validator: validator({
-        rules: 'utf8Len:[1, 32]',
+        rules: 'utf8Len:[1, 128]',
       }),
     },
   }, {
@@ -57,7 +57,7 @@ const listOptions = fromJS([
       min: '0',
       max: '999999999',
       validator: validator({
-        rules: 'num',
+        rules: 'num:[0,999999999]',
       }),
     },
   }, {
@@ -69,7 +69,7 @@ const listOptions = fromJS([
       min: '0',
       max: '999999999',
       validator: validator({
-        rules: 'num',
+        rules: 'num:[0,999999999]',
       }),
     },
   }, {

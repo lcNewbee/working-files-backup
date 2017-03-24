@@ -194,7 +194,7 @@ const sPortalSMSLog =
 
 // const sPortalApSetting =
 //     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/ApSetting');
-// const sPortalSsid =
+// const sPortalSsidManagement =
 //     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Ssid');
 
 const sPortalNas =

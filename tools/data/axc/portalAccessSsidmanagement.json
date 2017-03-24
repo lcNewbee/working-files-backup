@@ -6,16 +6,18 @@
   "data": {
     "list": [{
       "id": 1,
-      "name": "fanny",
+      "name": "2",
       "ip": "129.0.0.1",
       "mac": "22:22:22:22:22",
-      "address": "深圳",
+      "address": "广东深圳",
       "basip": "129.0.0.1",
       "web": "LeeSon",
-      "count": "3",
-      "des": "hello",
+      "count": "5",
+      "apMac": "22:22:22:22:2",
+      "des": "aaa",
       "x": "4",
-      "y": "0"
+      "y": "0",
+      "ssid":""
     }]
   }
 }

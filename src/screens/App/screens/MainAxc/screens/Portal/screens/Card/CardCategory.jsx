@@ -8,6 +8,8 @@ import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
+let ret;
+
 const listOptions = fromJS([
   {
     id: 'name',
@@ -16,9 +18,9 @@ const listOptions = fromJS([
     formProps: {
       type: 'text',
       required: true,
-      maxLength: 33,
+      maxLength: 129,
       validator: validator({
-        rules: 'utf8Len:[1,32]',
+        rules: 'utf8Len:[1,128]',
       }),
     },
   }, {
@@ -70,7 +72,10 @@ const listOptions = fromJS([
       type: 'number',
       required: true,
       min: '0',
-      max: '999999999',
+      max: '999999',
+      validator: validator({
+        rules: 'num:[0,999999]',
+      }),
     },
   }, {
     id: 'autologin',
@@ -107,8 +112,31 @@ const listOptions = fromJS([
     id: 'time',
     text: __('Count'),
     formProps: {
-      type: 'text',
+      type: 'number',
       required: true,
+      min: 1,
+      max: 999999,
+      validator: validator({
+        rules: 'num:[1,999999]',
+      }),
+    },
+    transform(val, data) {
+      if (data.get('state') === '0') {
+        ret = `${val}h`;
+      } else if (data.get('state') === '1') {
+        ret = `${val}d`;
+      } else if (data.get('state') === '2') {
+        ret = `${val}m`;
+      } else if (data.get('state') === '3') {
+        ret = `${val}y`;
+      } else if (data.get('state') === '4') {
+        if (val > 1024) {
+          ret = `${(val / 1024).toFixed(2)}Gb`;
+        } else {
+          ret = `${val}Mb`;
+        }
+      }
+      return ret;
     },
   }, {
     id: 'money',
@@ -118,6 +146,9 @@ const listOptions = fromJS([
       required: true,
       min: '0',
       max: '999999999',
+      validator: validator({
+        rules: 'num:[1,999999]',
+      }),
       help: __('$'),
     },
   }, {
@@ -128,7 +159,7 @@ const listOptions = fromJS([
     formProps: {
       type: 'textarea',
       required: true,
-      maxLength: 255,
+      maxLength: 256,
       validator: validator({
         rules: 'utf8Len:[1,255]',
       }),

@@ -36,9 +36,9 @@ const listOptions = fromJS([
     formProps: {
       type: 'text',
       required: true,
-      maxLength: '33',
+      maxLength: '129',
       validator: validator({
-        rules: 'utf8Len:[1,32]',
+        rules: 'utf8Len:[1,128]',
       }),
     },
   }, {
@@ -47,9 +47,9 @@ const listOptions = fromJS([
     formProps: {
       type: 'password',
       required: true,
-      maxLength: '33',
+      maxLength: '129',
       validator: validator({
-        rules: 'utf8Len:[1,32]',
+        rules: 'utf8Len:[1,128]',
       }),
     },
   }, {
@@ -75,6 +75,9 @@ const listOptions = fromJS([
       min: '0',
       max: '99999999',
       type: 'number',
+      validator: validator({
+        rules: 'num:[0,99999999]',
+      }),
       required: true,
     },
     transform(val) {
@@ -89,6 +92,9 @@ const listOptions = fromJS([
       min: '0',
       max: '99999999',
       type: 'number',
+      validator: validator({
+        rules: 'num:[0,99999999]',
+      }),
       required: true,
     },
     transform(val) {
@@ -117,10 +123,9 @@ const listOptions = fromJS([
     text: __('Description'),
     formProps: {
       type: 'textarea',
-      required: true,
-      maxLength: '257',
+      maxLength: '256',
       validator: validator({
-        rules: 'utf8Len:[1,256]',
+        rules: 'utf8Len:[1,255]',
       }),
     },
   }, {

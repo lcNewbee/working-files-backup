@@ -23,47 +23,64 @@ function getWebTemplate() {
   );
 }
 
+function getApMac() {
+  return utils.fetch('goform/portal/access/ap')
+    .then(json => (
+      {
+        options: json.data.list.map(
+          item => ({
+            value: item.mac,
+            label: item.mac,
+          }),
+        ),
+      }
+    ),
+  );
+}
+
 const listOptions = fromJS([
   {
-    id: 'name',
-    text: __('Name'),
-    width: '120px',
+    id: 'id',
+    text: _('ID'),
+    noForm: true,
     formProps: {
       type: 'text',
       required: true,
+    },
+  }, {
+    id: 'name',
+    text: _('Name'),
+    formProps: {
+      maxLength: '129',
+      type: 'text',
+      required: true,
+      validator: validator({
+        rules: 'utf8Len:[1, 128]',
+      }),
     },
   }, {
     id: 'ip',
-    text: __('IP'),
-    width: '120px',
-    options: [],
+    text: _('IP'),
+    noTable: true,
+    noForm: true,
     formProps: {
       type: 'text',
       required: true,
-      validator: validator({
-        rules: 'ip',
-      }),
-    },
-  }, {
-    id: 'mac',
-    text: __('Mac'),
-    formProps: {
-      type: 'number',
-      required: true,
-      validator: validator({
-        rules: 'ip',
-      }),
     },
   }, {
     id: 'address',
-    text: __('Address'),
+    text: _('Address'),
     formProps: {
       type: 'text',
+      maxLength: '256',
       required: true,
+      validator: validator({
+        rules: 'utf8Len:[1, 255]',
+      }),
     },
   }, {
     id: 'basip',
-    text: __('Bas IP'),
+    text: _('BAS'),
     formProps: {
       type: 'text',
       required: true,
@@ -73,50 +90,63 @@ const listOptions = fromJS([
     },
   }, {
     id: 'web',
-    text: __('Web Template'),
+    text: _('Web Template'),
     formProps: {
       type: 'select',
       required: true,
     },
   }, {
-    id: 'count',
-    text: __('Authetication Count'),
-    noTable: true,
+    id: 'apmac',
+    text: _('AP Mac'),
     formProps: {
-      type: 'number',
-      required: true,
+      type: 'select',
     },
   }, {
     id: 'des',
-    text: __('Description'),
+    text: _('Description'),
     noTable: true,
     formProps: {
-      type: 'textarea',
       required: true,
+      type: 'textarea',
+      maxLength: '257',
+      validator: validator({
+        rules: 'utf8Len:[1, 256]',
+      }),
     },
   }, {
     id: 'x',
-    text: __('X'),
+    text: _('x'),
     noForm: true,
     noTable: true,
     formProps: {
-      type: 'text',
-      required: true,
+      type: 'select',
     },
   }, {
     id: 'y',
-    text: __('Y'),
+    text: _('y'),
     noForm: true,
     noTable: true,
     formProps: {
-      type: 'text',
-      required: true,
+      type: 'select',
+
     },
   }, {
     id: 'ssid',
-    text: __('SSID Location'),
+    text: _('SSID'),
     formProps: {
-      required: true,
+      type: 'text',
+      maxLength: '129',
+      validator: validator({
+        rules: 'utf8Len:[1, 128]',
+      }),
+    },
+  }, {
+    id: 'apid',
+    text: _('AP ID'),
+    noForm: true,
+    noTable: true,
+    formProps: {
+      type: 'select',
     },
   },
 ]);
@@ -130,6 +160,7 @@ export default class View extends React.Component {
     super(props);
     this.state = {
       webTemplateOptions: fromJS([]),
+      macOptions: fromJS([]),
     };
   }
   componentWillMount() {
@@ -139,10 +170,17 @@ export default class View extends React.Component {
           webTemplateOptions: fromJS(data.options),
         });
       });
+    getApMac()
+      .then((data) => {
+        this.setState({
+          macOptions: fromJS(data.options),
+        });
+      });
   }
   render() {
     const curListOptions = listOptions
-      .setIn([5, 'options'], this.state.webTemplateOptions);
+      .setIn([5, 'options'], this.state.webTemplateOptions)
+      .setIn([6, 'options'], this.state.macOptions);
     return (
       <AppScreen
         {...this.props}

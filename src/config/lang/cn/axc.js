@@ -663,7 +663,8 @@ var axc = {
   "Optimized for Throughput": "单用户性能优化",
   "Optimized for Capacity": "超多用户性能优化",
   "Manual Configuration": "手动配置",
-  "Latest Configuration:": "最近配置："
+  "Latest Configuration:": "最近配置：",
+  "Orbit Trace"
 };
 
 // exports

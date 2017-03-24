@@ -8,7 +8,7 @@
       "id":"0",
       "name": "1小时包时卡",
       "description": "包时卡详细说明",
-      "time":"1H",
+      "time":"1",
       "state":"0",
       "money":"0.01",
       "speed":"1",
@@ -27,10 +27,10 @@
       "ex10":null
     },{
       "id":"1",
-      "name": "2小时包时卡",
+      "name": "1M",
       "description": "包时卡详细说明",
-      "time":"1H",
-      "state":"0",
+      "time":"1055",
+      "state":"4",
       "money":"0.01",
       "speed":"1",
       "maclimit":"0",

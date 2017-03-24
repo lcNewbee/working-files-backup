@@ -17,9 +17,9 @@ const listOptions = fromJS([
     formProps: {
       type: 'text',
       required: true,
-      maxLength: '65',
+      maxLength: '129',
       validator: validator({
-        rules: 'utf8Len:[1, 64]',
+        rules: 'utf8Len:[1, 128]',
       }),
     },
   }, {
@@ -29,9 +29,9 @@ const listOptions = fromJS([
     formProps: {
       type: 'text',
       required: true,
-      maxLength: '65',
+      maxLength: '256',
       validator: validator({
-        rules: 'utf8Len:[1, 64]',
+        rules: 'utf8Len:[1, 255]',
       }),
     },
   }, {
@@ -39,18 +39,18 @@ const listOptions = fromJS([
     text: __('App Key'),
     formProps: {
       help: __('gwid,accountid,username'),
-      maxLength: '65',
+      maxLength: '129',
       type: 'text',
       required: true,
       validator: validator({
-        rules: 'utf8Len:[1, 64]',
+        rules: 'utf8Len:[1, 128]',
       }),
     },
   }, {
     id: 'appsecret',
     text: __('Password'),
     formProps: {
-      maxLength: '32',
+      maxLength: '128',
       type: 'password',
       required: true,
       validator: validator({
@@ -61,11 +61,11 @@ const listOptions = fromJS([
     id: 'smstemplate',
     text: __('Template ID'),
     formProps: {
-      maxLength: '33',
+      maxLength: '256',
       help: __('ServiceID, Spcode'),
       type: 'text',
       validator: validator({
-        rules: 'utf8Len:[1, 32]',
+        rules: 'utf8Len:[1, 255]',
       }),
     },
   }, {
@@ -102,7 +102,7 @@ const listOptions = fromJS([
       defaultValue: '5',
       help: __('Times'),
       validator: validator({
-        rules: 'num',
+        rules: 'num:[0,99999]',
       }),
     },
   }, {
@@ -163,7 +163,7 @@ const listOptions = fromJS([
       defaultValue: '5',
       help: __('Minutes'),
       validator: validator({
-        rules: 'num',
+        rules: 'num:[0,10]',
       }),
     },
   }, {

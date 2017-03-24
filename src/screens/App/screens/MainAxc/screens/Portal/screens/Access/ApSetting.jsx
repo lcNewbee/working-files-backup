@@ -23,8 +23,17 @@ function getWebTemplate() {
   );
 }
 
-
 const listOptions = fromJS([
+  {
+    id: 'id',
+    text: _('ID'),
+    width: '120px',
+    noForm: true,
+    formProps: {
+      type: 'text',
+      required: true,
+    },
+  },
   {
     id: 'name',
     text: __('Name'),

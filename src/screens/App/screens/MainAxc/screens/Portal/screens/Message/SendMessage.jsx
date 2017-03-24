@@ -44,9 +44,9 @@ const settingsOptions = fromJS([
     label: __('Title'),
     type: 'text',
     required: true,
-    maxLength: 33,
+    maxLength: 129,
     validator: validator({
-      rules: 'utf8Len:[1,32]',
+      rules: 'utf8Len:[1,128]',
     }),
   },
   {
@@ -56,7 +56,7 @@ const settingsOptions = fromJS([
     required: true,
     rows: '5',
     validator: validator({
-      rules: 'utf8Len:[1,256]',
+      rules: 'utf8Len:[1,255]',
     }),
   },
 ]);

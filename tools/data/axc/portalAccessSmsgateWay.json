@@ -1,0 +1,34 @@
+{
+  "state":{
+    "code":2000,
+    "msg":"ok"
+  },
+  "data":{
+    "page":{
+      "start":1,
+      "size":20,
+      "currPage":1,
+      "totalPage":1,
+      "total":2,
+      "nextPage":-1,
+      "lastPage":1
+    },
+    "list":[{
+      "id":"2",
+      "name":"\u6df1\u5733\u524d\u6d77\u667a\u8baf",
+      "url":"http:\/\/api.cnsms.cn",
+      "count":"0",
+      "state":"0",
+      "type":"2",
+      "more":"0",
+      "time":"1",
+      "text":"[yzm]",
+      "appkey":"103756",
+      "appsecret":"t18503082566",
+      "smssign":"we",
+      "smstemplate":"we",
+      "company":"we"
+      }
+    ]
+  }
+}

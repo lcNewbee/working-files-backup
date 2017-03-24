@@ -1,0 +1,15 @@
+{
+  "state": {
+    "code": 2000,
+    "msg": "ok"
+  },
+  "data": {
+    "list": [{
+      "id": 1,
+      "appId": "fanny",
+      "appSecret": "112334Fanny",
+      "appVersion": "Facebook3.0",
+      "state": "1"
+    }]
+  }
+}

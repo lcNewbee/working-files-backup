@@ -24,14 +24,16 @@ const listOptions = fromJS([
     text: __('Mac'),
   }, {
     id: 'name',
-    text: __('Name'),
-  }, {
-    id: 'sessionTime',
-    text: __('Session Time'),
-    transform(val) {
-      return onlinetimeFilter.transform(val / 1000);
-    },
-  }, {
+    text: _('Name'),
+  },
+  // {
+  //   id: 'sessionTime',
+  //   text: _('Session Time'),
+  //   transform(val) {
+  //     return onlinetimeFilter.transform(val / 1000);
+  //   },
+  // },
+  {
     id: 'octets',
     text: __('Available Traffic'),
   }, {

@@ -8,95 +8,64 @@ import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
-const uptimeFilter = utils.filter('connectTime');
+
+
 const listOptions = fromJS([
   {
-    id: 'basip',
-    text: __('Bas IP'),
+    id: 'id',
+    text: __('ID'),
     width: '120px',
+    noForm: true,
     formProps: {
       type: 'text',
       required: true,
-      validator: validator({
-        rules: 'ip',
-      }),
     },
-  }, {
-    id: 'ssid',
-    text: __('SSID'),
-    width: '120px',
-    options: [],
-    formProps: {
-      maxLength: '129',
-      type: 'text',
-      required: true,
-      validator: validator({
-        rules: 'utf8Len:[1, 128]',
-      }),
-    },
-  }, {
-    id: 'shopId',
-    text: __('Shop ID'),
-    formProps: {
-      maxLength: '129',
-      type: 'text',
-      required: true,
-      validator: validator({
-        rules: 'utf8Len:[1, 129]',
-      }),
-    },
-  }, {
+  },
+  {
     id: 'appId',
     text: __('App ID'),
     formProps: {
-      maxLength: '129',
       type: 'text',
       required: true,
+      maxLength: '256',
       validator: validator({
-        rules: 'utf8Len:[1, 128]',
+        rules: 'utf8Len:[1, 255]',
       }),
     },
   }, {
-    id: 'domain',
-    text: __('Domain'),
-    noForm: true,
+    id: 'appSecret',
+    text: __('Password'),
     formProps: {
-      noAdd: true,
-      type: 'text',
-      maxLength: '129',
-      required: true,
-      validator: validator({
-        rules: 'utf8Len:[1, 128]',
-      }),
-    },
-  }, {
-    id: 'outTime',
-    text: __('Out Time'),
-    noForm: true,
-    formProps: {
-      min: '0',
-      max: '99999999',
-      type: 'number',
-      validator: validator({
-        rules: 'num:[0,999999999]',
-      }),
-      required: true,
-    },
-    transform(val) {
-      return uptimeFilter.transform(val / 1000);
-    },
-  }, {
-    id: 'secretKey',
-    text: __('Secret Key'),
-    noTable: true,
-    formProps: {
+      maxLength: '128',
       type: 'password',
       required: true,
-      maxLength: '129',
       validator: validator({
-        rules: 'utf8Len:[1, 128]',
+        rules: 'pwd',
       }),
     },
+  }, {
+    id: 'appVersion',
+    text: __('App Version'),
+    formProps: {
+      type: 'text',
+    },
+  }, {
+    id: 'state',
+    text: __('State'),
+    formProps: {
+      type: 'select',
+      required: true,
+    },
+    defaultValue: '1',
+    options: [
+      {
+        value: '1',
+        label: __('On Service'),
+      }, {
+        value: '0',
+        label: __('Out of Service'),
+      },
+    ],
   },
 ]);
 
@@ -111,9 +80,6 @@ export default class View extends React.Component {
         {...this.props}
         listOptions={listOptions}
         noTitle
-        deleteable={
-          ($$item, index) => (index !== 0)
-        }
         actionable
         selectable
       />

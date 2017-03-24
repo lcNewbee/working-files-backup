@@ -240,5 +240,16 @@
   "On Service":"启用",
   "Out of Service":"停用",
   "SMS Log":"短信发送日志",
-  "Gate Type":"网关类型"
+  "Gate Type":"网关类型",
+
+  "SSID Management":"SSID管理",
+  "Auth Count":"认证次数",
+  "times":"次",
+  "Virtual Gateway":"虚拟网关",
+  "Qianhai Smart Commumication":"前海智讯",
+  "Facebook Auth":"Facebook认证",
+  "App Version":"App版本",
+  "This username has benn used":"该用户名已经存在",
+  "This IP has existed":"该IP已经存在",
+  "The format of the file is incorrect,please upload zip file!":"文件格式不正确,请选择ZIP格式的文件"
 }

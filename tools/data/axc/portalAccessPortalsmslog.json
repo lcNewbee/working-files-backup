@@ -1,0 +1,26 @@
+{
+  "state":{
+    "code":2000,
+    "msg":"ok"
+  },
+  "data":{
+    "page":{
+      "start":1,
+      "size":20,
+      "currPage":1,
+      "totalPage":1,
+      "total":2,
+      "nextPage":-1,
+      "lastPage":1
+    },
+    "list":[{
+      "id":"2",
+      "info":"\u6df1\u5733\u524d\u6d77\u667a\u8baf",
+      "sendDate":"http:\/\/api.cnsms.cn",
+      "phone":"0",
+      "sid":"0",
+      "type":"we"
+      }
+    ]
+  }
+}

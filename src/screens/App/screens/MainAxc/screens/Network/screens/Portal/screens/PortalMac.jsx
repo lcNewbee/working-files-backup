@@ -25,6 +25,14 @@ function getPortList() {
 }
 const listOptions = fromJS([
   {
+    id: 'id',
+    text: _('ID'),
+    noForm: true,
+    formProps: {
+      required: true,
+    },
+  },
+  {
     id: 'interface_bind',
     label: __('Port'),
     formProps: {

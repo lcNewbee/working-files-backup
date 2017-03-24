@@ -256,6 +256,7 @@
   "Local": "本地",
   "Remote": "远程",
 
+  "Permanent Authentication":"二次免认证",
   "Portal Policy": "Portal策略",
   "Portal Server": "Portal服务器",
   "Portal Rules": "Portal规则",

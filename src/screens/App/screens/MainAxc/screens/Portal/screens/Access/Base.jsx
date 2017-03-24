@@ -40,7 +40,7 @@ const settingsOptions = fromJS([
     min: '1',
     max: '65535',
     validator: validator({
-      rules: 'num',
+      rules: 'num:[1,65535]',
     }),
   },
   {
@@ -50,7 +50,7 @@ const settingsOptions = fromJS([
     className: 'cols col-6',
     fieldset: 'base_setting',
     label: __('Shared Secret'),
-    maxLength: '32',
+    maxLength: '128',
     validator: validator({
       rules: 'pwd',
     }),
@@ -61,10 +61,10 @@ const settingsOptions = fromJS([
     required: true,
     className: 'cols col-6',
     fieldset: 'base_setting',
-    maxLength: '32',
+    maxLength: '129',
     label: __('User'),
     validator: validator({
-      rules: 'utf8Len:[1, 31]',
+      rules: 'utf8Len:[1, 128]',
     }),
   },
   {
@@ -74,7 +74,7 @@ const settingsOptions = fromJS([
     className: 'cols col-6',
     fieldset: 'base_setting',
     label: __('Password'),
-    maxLength: '32',
+    maxLength: '128',
     validator: validator({
       rules: 'pwd',
     }),
@@ -144,7 +144,7 @@ const settingsOptions = fromJS([
     defaultValue: '4',
     help: __('Second'),
     validator: validator({
-      rules: 'num',
+      rules: 'num:[0,10]',
     }),
   }, {
     id: 'web',
@@ -275,6 +275,9 @@ const settingsOptions = fromJS([
           }, {
             value: '7',
             label: __('Visitor Auth'),
+          }, {
+            value: '8',
+            label: __('Facebook Auth'),
           },
         ],
         noForm: true,
@@ -283,15 +286,15 @@ const settingsOptions = fromJS([
         label: __('Public User Name'),
         defaultValue: 'Empty Wanted',
         type: 'text',
-        maxLength: '32',
+        maxLength: '129',
         validator: validator({
-          rules: 'utf8Len:[1, 31]',
+          rules: 'utf8Len:[1, 128]',
         }),
       }, {
         id: 'password',
         label: __('Public Password'),
         type: 'password',
-        maxLength: '30',
+        maxLength: '128',
         validator: validator({
           rules: 'pwd',
         }),
@@ -302,15 +305,14 @@ const settingsOptions = fromJS([
         min: '0',
         max: '99999',
         validator: validator({
-          rules: 'num',
+          rules: 'num:[0,99999]',
         }),
       }, {
         id: 'url',
         label: __('URL After Authentication'),
         type: 'text',
-        maxLength: '32',
         validator: validator({
-          rules: 'utf8Len:[1, 31]',
+          rules: 'utf8Len:[0, 255]',
         }),
       },
     ],

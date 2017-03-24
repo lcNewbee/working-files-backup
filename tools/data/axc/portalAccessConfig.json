@@ -110,6 +110,17 @@
           "basip": "192.168.4.225",
           "url": "http://www.baidu.com",
           "sessiontime": "0"
+        },
+        {
+          "id": "9",
+          "basid": "0",
+          "enbale": "1",
+          "type": "8",
+          "username": "username",
+          "password": "123",
+          "basip": "192.168.4.225",
+          "url": "http://www.baidu.com",
+          "sessiontime": "0"
         }
       ]
     }

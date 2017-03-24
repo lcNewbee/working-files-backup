@@ -84,9 +84,9 @@ const listOptions = fromJS([
     text: __('Title'),
     formProps: {
       required: true,
-      maxLength: 33,
+      maxLength: 129,
       validator: validator({
-        rules: 'utf8Len:[1,32]',
+        rules: 'utf8Len:[1,128]',
       }),
     },
   }, {
@@ -173,9 +173,9 @@ const sendMessageOptions = fromJS([
     form: 'sendMessage',
     type: 'text',
     required: true,
-    maxLength: 33,
+    maxLength: 129,
     validator: validator({
-      rules: 'utf8Len:[1,32]',
+      rules: 'utf8Len:[1,128]',
     }),
   },
   {

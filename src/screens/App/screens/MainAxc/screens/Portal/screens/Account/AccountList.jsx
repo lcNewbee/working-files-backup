@@ -240,9 +240,9 @@ export const baseSetting = fromJS([
     className: 'cols col-6',
     type: 'text',
     required: true,
-    maxLength: '33',
+    maxLength: '129',
     validator: validator({
-      rules: 'utf8Len:[1,32]',
+      rules: 'utf8Len:[1,128]',
     }),
   }, {
     id: 'password',
@@ -251,9 +251,9 @@ export const baseSetting = fromJS([
     type: 'password',
     noTable: true,
     required: true,
-    maxLength: '33',
+    maxLength: '129',
     validator: validator({
-      rules: 'utf8Len:[1,32]',
+      rules: 'utf8Len:[1,128]',
     }),
   }, {
     id: 'ex1',
@@ -261,9 +261,9 @@ export const baseSetting = fromJS([
     className: 'cols col-6',
     noTable: true,
     type: 'text',
-    maxLength: '33',
+    maxLength: '129',
     validator: validator({
-      rules: 'utf8Len:[1,32]',
+      rules: 'utf8Len:[1,128]',
     }),
   }, {
     id: 'ex2',
@@ -271,9 +271,9 @@ export const baseSetting = fromJS([
     className: 'cols col-6',
     noTable: true,
     type: 'text',
-    maxLength: '33',
+    maxLength: '129',
     validator: validator({
-      rules: 'utf8Len:[1,32]',
+      rules: 'utf8Len:[1,128]',
     }),
   }, {
     id: 'state',
@@ -327,6 +327,9 @@ export const baseSetting = fromJS([
     type: 'number',
     min: '0',
     max: '999999',
+    validator: validator({
+      rules: 'num:[0,999999]',
+    }),
     required: true,
   }, {
     id: 'autologin',
@@ -370,6 +373,9 @@ export const baseSetting = fromJS([
     required: true,
     min: '1',
     max: '12',
+    validator: validator({
+      rules: 'num:[0,12]',
+    }),
   }, {
     id: 'ex3',
     label: __('Unbind Times'),
@@ -377,6 +383,9 @@ export const baseSetting = fromJS([
     type: 'number',
     min: '0',
     max: '999999',
+    validator: validator({
+      rules: 'num:[0,999999]',
+    }),
     required: true,
   },
 ]);
@@ -554,7 +563,7 @@ const rechargeOptions = fromJS([
       return data.get('name') !== undefined;
     },
     validator: validator({
-      rules: 'num[0,9999]',
+      rules: 'num:[0,9999]',
     }),
   }, {
     id: 'autologin',
@@ -601,7 +610,7 @@ const rechargeOptions = fromJS([
       return data.get('name') !== undefined;
     },
     validator: validator({
-      rules: 'num[0,9999]',
+      rules: 'num:[0,9999]',
     }),
   }, {
     id: 'money',

@@ -50,7 +50,7 @@ const settingsOptions = fromJS([
     label: __('URL'),
     type: 'text',
     validator: validator({
-      rules: 'utf8Len:[1,32]',
+      rules: 'utf8Len:[1,128]',
     }),
   },
   {
