@@ -14,7 +14,7 @@ class GroupOverview extends CI_Controller {
         $result = null;
         $actionType = element('action', $data);
         return $result;
-    }
+    }    
     public function index() {
         $result = null;
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {

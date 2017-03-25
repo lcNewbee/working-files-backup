@@ -4,7 +4,7 @@ class GroupOverview_Model extends CI_Model {
         parent::__construct();
         $this->mysql = $this->load->database('mysqli', TRUE);
         $this->load->helper('array');
-    }
+    }  
     public function get_neighbors_aps_list($reqdata) {
         $aps = axc_get_neighbors_aps(json_encode($reqdata));
         $result = json_decode($aps);
@@ -20,8 +20,8 @@ class GroupOverview_Model extends CI_Model {
         $reqdata['timeType'] = (string)$reqdata['timeType'];
         $result = json_decode($staticJsonStr);
 
-        $result->data->neighborsAps = $this->get_ap_info($reqdata['groupid'],'getdoubtfulssid');
-        $result->data->aroundAps = $this->get_ap_info($reqdata['groupid'],'getaroundssid');
+        $result->data->neighborsAps = $this->get_ap_info($reqdata['groupid'],'getdoubtfulssid');//非法AP
+        $result->data->aroundAps = $this->get_ap_info($reqdata['groupid'],'getaroundssid');//干扰AP
         //$result->data->flowList = $this->flow_list($reqdata);
         $result->data->flowList = $this->get_flow_data($reqdata);
         $retobj = $this->get_overvies($reqdata['groupid']);        
@@ -40,11 +40,12 @@ class GroupOverview_Model extends CI_Model {
                 $arr[] = $mary;
             }
         }
-        $result->data->terminalType = $arr;//链接数量
+        $result->data->terminalType = $arr;//链接数量        
+        $result->data->neighborsAps['list'] = $this->get_counter_ap($result->data->neighborsAps['list']);
         return $result;
     }
-    //周围AP
-    public function get_ap_info($groupid,$prename) {
+    //周围AP （getdoubtfulssid/非法AP，getaroundssid/干扰AP）
+    private function get_ap_info($groupid,$prename) {
         $arr = array(
             'page'=>array(
                 "start"=>2,
@@ -69,6 +70,7 @@ class GroupOverview_Model extends CI_Model {
                     $temporaryAry['ssid'] = $row['NbrSsid'];
                     $temporaryAry['channel'] = $row['ChlNum'];
                     $temporaryAry['rssi'] = $row['MeanRSSI'];
+                    $temporaryAry['radioId'] = $row['RadioId'];
                     $db_list[] = $temporaryAry;
                 }
             }            
@@ -80,7 +82,7 @@ class GroupOverview_Model extends CI_Model {
         return $arr;
     }
     //流量处理
-    public function get_flow_data($data){
+    private function get_flow_data($data){
         $result = null;
         $groupid = (int)element('groupid',$data,0);        
         if($groupid === -100) {
@@ -120,7 +122,7 @@ class GroupOverview_Model extends CI_Model {
         return $result;
     }
     //流量
-    public function flow_list($data) {        
+    private function flow_list($data) {        
         $groupid = (int)element('groupid',$data,0);
         $timeType = (string)element('timeType',$data,'today');
         $tablename = 'data_flow_day';
@@ -186,7 +188,7 @@ class GroupOverview_Model extends CI_Model {
         );                       
         return $arr;        
     }
-    public function get_start_end_time($gettype='today') {
+    private function get_start_end_time($gettype='today') {
         date_default_timezone_set('Asia/Shanghai');
         //echo (string)exec('date "+%Y-%m-%d %H:%M:%S"');
         //当天初始时间
@@ -214,10 +216,26 @@ class GroupOverview_Model extends CI_Model {
         return $arr;
     }
 
-    function get_overvies($groupid) {
+    private function get_overvies($groupid) {
         $cgiarr = array('groupid'=>$groupid);
         $cgistr = axc_get_overvies(json_encode($cgiarr));
         $retobj = json_decode($cgistr);
         return $retobj;
+    }
+    //1.得到反制AP 列表
+    private function get_counter_ap($doubtful){
+        $result = array();                
+        $query = $this->mysql->query('select SsidMac from against_list');        
+        foreach($doubtful as $row){
+            $row['isCounter'] = 0;
+            foreach($query->result_array() as $rows){
+                if($rows['SsidMac'] === $row['mac']){
+                    $row['isCounter'] = 1;
+                    break;
+                }
+            }
+            $result[] = $row;
+        }
+        return $result;
     }
 }

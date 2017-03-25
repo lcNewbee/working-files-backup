@@ -77,6 +77,7 @@ $route['goform/network/dpi/protoinfo'] = 'network/dpiProto';
 // AP组管理
 $route['goform/group'] = 'group/group';
 $route['goform/group/overview'] = 'group/groupOverview';
+$route['goform/group/ap/counter'] = 'group/apCounter';
 $route['goform/group/ap'] = 'group/apRadio/fetch';
 $route['goform/group/ap/radio'] = 'group/apRadio/radio';
 $route['goform/group/ap/base'] = 'group/apRadio/base';
