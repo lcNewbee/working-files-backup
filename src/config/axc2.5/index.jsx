@@ -818,7 +818,7 @@ const routes = [
                     id: 'portalLogOnlineRecordList',
                     path: '/main/portal/log/onlineRecordList',
                     formUrl: 'goform/portal/log/onlineRecordList',
-                    text: __('Online Record List'),
+                    text: __('History Record List'),
                     component: sPortalOnlineRecordList.Screen,
                   },
                 ],

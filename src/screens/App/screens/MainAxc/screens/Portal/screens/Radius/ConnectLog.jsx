@@ -86,7 +86,7 @@ const listOptions = fromJS([
     required: true,
   }, {
     id: 'time',
-    text: __('Time'),
+    text: __('Online Time'),
     formProps: {
       required: true,
     },
