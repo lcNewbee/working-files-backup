@@ -7,16 +7,51 @@ import * as actions from 'shared/actions/app';
 import Modal from 'shared/components/Modal';
 import ProgressBar from 'shared/components/ProgressBar';
 import stringUtils from 'shared/utils/lib/string';
-import { matchRoutes } from 'react-router-config';
+import { renderRoutesSwitch } from 'shared/components/Organism/RouterConfig';
+import matchPath from 'react-router/matchPath';
+import Router from 'react-router/Router';
+
+// ensure we're using the exact code for default root match
+const { computeMatch } = Router.prototype;
+
+const matchRoutes = (routes, pathname, /* not public API*/branch = []) => {
+  routes.some((route) => {
+    const match = route.path
+      ? matchPath(pathname, route)
+      : branch.length
+        ? branch[branch.length - 1].match // use parent match
+        : computeMatch(pathname); // use default "root" match
+    if (match) {
+      branch.push({ ...route, match });
+
+      if (route.routes) {
+        matchRoutes(route.routes, pathname, branch);
+      }
+    }
+
+    return match;
+  });
+
+  return branch;
+};
 
 const propTypes = {
   closeModal: PropTypes.func,
   fetchProductInfo: PropTypes.func,
   updateRouter: PropTypes.func,
   app: PropTypes.object,
-  route: PropTypes.object,
-  location: PropTypes.object,
-  children: PropTypes.node,
+  route: PropTypes.shape({
+    routes: PropTypes.array,
+  }),
+  history: PropTypes.shape({
+    replace: PropTypes.func.isRequired,
+  }),
+  match: PropTypes.shape({
+    url: PropTypes.string.isRequired,
+  }),
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired,
+  }),
 };
 
 const defaultProps = {
@@ -26,7 +61,6 @@ const defaultProps = {
 export default class App extends Component {
   constructor(props) {
     super(props);
-
     this.onModalClose = this.onModalClose.bind(this);
     this.onModalApply = this.onModalApply.bind(this);
     this.renderHtmlBody = this.renderHtmlBody.bind(this);
@@ -60,8 +94,7 @@ export default class App extends Component {
   }
 
   updateRouter() {
-    const routes = fromJS(matchRoutes(this.props.route.routes));
-
+    const routes = fromJS(matchRoutes(this.props.route.routes, this.props.location.pathname));
     this.props.updateRouter({
       routes,
     });
@@ -89,7 +122,8 @@ export default class App extends Component {
     return (
       <div>
         {
-          this.props.children
+          renderRoutesSwitch(this.props.route.routes)
+          // renderRoutesConfig(this.props.route.routes)
         }
         <Modal
           id="appModal"
@@ -148,6 +182,3 @@ export const Screen = connect(
   mapStateToProps,
   actions,
 )(App);
-
-export { default as reducers } from './reducer';
-export { default as actions } from './action';

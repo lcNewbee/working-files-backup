@@ -47,5 +47,4 @@ export function getActionable(props, moduleName) {
   return ret;
 }
 
-
 export default {};
