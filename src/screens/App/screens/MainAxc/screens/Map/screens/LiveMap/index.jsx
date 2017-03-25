@@ -102,6 +102,7 @@ const propTypes = {
   reportValidError: PropTypes.func,
   closeListItemModal: PropTypes.func,
   changeScreenActionQuery: PropTypes.func,
+  addListItem: PropTypes.func,
   history: PropTypes.object,
 };
 const defaultProps = {};
@@ -308,23 +309,31 @@ export default class LiveMap extends React.PureComponent {
       animation: google.maps.Animation.DROP,
     });
     const markerId = item.get('id');
-    const contentString = `${'<div class="m-map__marker-infowindow">' +
-                            '<h4>'}${ item.get('name')}</h4>` +
-                            '<div class="o-description-list">' +
-                              '<dl class="o-description-list-row">' +
-                                `<dt>${__('Address') }</dt>` +
-                                `<dd>${item.get('address') }</dd>` +
-                              '</dl>' +
-                              '<dl class="o-description-list-row">' +
-                                `<dt>${ __('Map Number') }</dt>` +
-                                `<dd>${ item.get('mapNumber') }</dd>` +
-                              '</dl>' +
-                            '</div>' +
-                            `<div class="m-map__marker-infowindow-footer">${
-                              this.actionable ? (`<button class="a-btn a-btn--primary" id="editBulid${  markerId  }">${  __('Edit')  }</button>`) : ''
-                              }<button class="a-btn a-btn--info" id="viewBulid${ markerId}">${__('View')}</button>` +
-                            '</div>' +
-                          '</div>';
+    const contentString = `
+      <div class="m-map__marker-infowindow">
+        <h4>${item.get('name')}</h4>
+        <div class="o-description-list">
+          <dl class="o-description-list-row">
+            <dt>${__('Address')}</dt>
+            <dd>${item.get('address')}</dd>
+          </dl>
+          <dl class="o-description-list-row">
+            <dt>${__('Map Number')}</dt>
+            <dd>${item.get('mapNumber')}</dd>
+          </dl>
+        </div>
+        <div class="m-map__marker-infowindow-footer">
+        ${this.actionable ? (
+          `<button class="a-btn a-btn--primary" id="editBulid${markerId}">
+            ${__('Edit')}
+          </button>`
+        ) : ''}
+        <button class="a-btn a-btn--info" id="viewBulid${markerId}">
+          ${__('View')}
+        </button>
+        </div>
+      </div>
+    `;
     const infowindow = new google.maps.InfoWindow({
       content: contentString,
       maxWidth: 500,
@@ -548,35 +557,6 @@ export default class LiveMap extends React.PureComponent {
       </div>
     );
   }
-
-  // renderHeatMap() {
-  //   const heatmap = h337.create({
-  //     container: this.mapContent,
-  //     radius: 10,
-  //     maxOpacity: .3,
-  //     minOpacity: 0,
-  //     blur: .75
-  //   });
-  //   console.log(this.mapContent.getElementsByTagName('canvas'));
-  //   const width = this.mapContent.offsetWidth;
-  //   const height = this.mapContent.offsetHeight;
-  //   const data = [];
-  //   for (let i = 0; i < 100; i++) {
-  //     for (let j = 0; j < 100; j++) {
-  //       data.push({ x: Math.floor(width * Math.random()), y: Math.floor(height * Math.random()), value: Math.floor(Math.random() * 100) });
-  //     }
-  //   }
-  //   heatmap.setData({
-  //     max: 100,
-  //     min: 0,
-  //     data: data,
-  //   });
-
-  //   let nodes = this.mapContent.getElementsByTagName('canvas');
-  //   for ( let i = 0; i < nodes.length - 1; i++) {
-  //     this.mapContent.removeChild(nodes[1]);
-  //   }
-  // }
 
   render() {
     const { app, store } = this.props;
