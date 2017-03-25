@@ -16,6 +16,7 @@
   },
   "plugins": [
     "add-module-exports",
+    "transform-flow-strip-types",
     ["transform-runtime", {
       "helpers": true,
       "polyfill": true, // defaults to true
