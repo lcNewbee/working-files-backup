@@ -103,10 +103,6 @@ export default class View extends React.Component {
 
   componentWillReceiveProps() {
     this.clearTimeout();
-    // if (this.canvasElem) {
-    //   const ctx = this.canvasElem.getContext('2d');
-    //   ctx.clearRect(0, 0, this.state.mapWidth, this.state.mapHeight);
-    // }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -142,9 +138,12 @@ export default class View extends React.Component {
     const $$pathList = store.getIn([curScreenId, 'data', 'list']);
     const mapList = this.mapList;
     const ctx = this.canvasElem.getContext('2d');
-    if (typeof (mapList) !== 'undefined') {
+    ctx.clearRect(0, 0, this.state.mapWidth, this.state.mapHeight);
+    this.stationaryPoint(ctx, this.pathList);
+    // this.mapMouseDown用来检测是否是拖动引起的页面重绘，如果是，则坐标点位置没有变化无需重新计算
+    if (typeof (mapList) !== 'undefined' && !this.mapMouseDown) {
       this.updateCanvas($$pathList, mapList, curMapId);
-      if (!this.mapMouseDown) this.drawCurveAnimPath(ctx, this.curvePath);
+      this.drawCurveAnimPath(ctx, this.curvePath);
     }
   }
 
@@ -222,81 +221,11 @@ export default class View extends React.Component {
       this.onFetchList();
     }, 200);
   }
-
-  // drawCurvePath(ctx, crvPoints) {
-  //   const len = crvPoints.length;
-  //   const colorsLen = this.colors.length;
-  //   if (len === null) return null;
-  //   ctx.moveTo(crvPoints[0][0], crvPoints[0][1]);
-  //   ctx.save();
-  //   ctx.beginPath();
-  //   ctx.strokeStyle = this.colors[Math.floor(colorsLen * Math.random())];
-  //   ctx.lineWidth = 2;
-  //   crvPoints.forEach((point) => {
-  //     ctx.lineTo(point[0], point[1]);
-  //   });
-  //   ctx.stroke();
-  //   ctx.restore();
-  // }
-  handleChangeQuery(name, data) {
-    Promise.resolve().then(() => {
-      this.props.changeScreenQuery(fromJS({ [name]: data.value }));
-    }).then(() => {
-      this.props.fetchScreenData();
-    });
-  }
   getNaturalWidthAndHeight(url) {
     const image = new Image();
     image.src = url;
     this.naturalWidth = image.width;
     this.naturalHeight = image.height;
-  }
-
-  renderCurMap(mapList, curMapId, myZoom) {
-    const curItem = mapList.find(item => item.get('id') === curMapId);
-    const imgUrl = curItem ? curItem.get('backgroundImg') : '';
-    // 获取图片的原始大小
-    // 如果使用百分比设置canvas的宽高，当浏览器放大缩小时，画布不会重绘，导致画布图案超出图片
-    this.getNaturalWidthAndHeight(imgUrl);
-    return (
-      <div
-        className="o-map-container"
-        ref={(mapContent) => {
-          if (mapContent) {
-            this.mapContent = mapContent;
-            this.setState({
-              mapWidth: mapContent.offsetWidth,
-              mapHeight: mapContent.offsetHeight,
-            });
-          }
-        }}
-        style={{
-          left: this.state.mapOffsetX,
-          top: this.state.mapOffsetY,
-          width: `${((myZoom * this.naturalWidth) / 100)}px`,
-          height: `${((myZoom * this.naturalHeight) / 100)}px`,
-        }}
-        onMouseDown={this.onMapMouseDown}
-        onMouseUp={this.onMapMouseUp}
-        onMouseMove={this.onMapMouseMove}
-      >
-        <img src={imgUrl} className="auto" alt={curMapId} />
-        <canvas
-          ref={(canvasElem) => {
-            if (canvasElem && this.canvasElem !== canvasElem) {
-              this.canvasElem = canvasElem;
-            }
-          }}
-          width={this.state.mapWidth}
-          height={this.state.mapHeight}
-          style={{
-            position: 'absolute',
-            left: 0,
-            top: 0,
-          }}
-        />
-      </div>
-    );
   }
 
   getPointList(from, to) {
@@ -344,6 +273,14 @@ export default class View extends React.Component {
     return mp;
   }
 
+  handleChangeQuery(name, data) {
+    Promise.resolve().then(() => {
+      this.props.changeScreenQuery(fromJS({ [name]: data.value }));
+    }).then(() => {
+      this.props.fetchScreenData();
+    });
+  }
+
   stationaryPoint(ctx, pathList) { // pathList为数组
     if (typeof pathList === 'undefined' || pathList.length === 0) return null;
     pathList.forEach((point) => {
@@ -383,16 +320,19 @@ export default class View extends React.Component {
     let point1 = curvePath[0];
     ctx.strokeStyle = this.colors[Math.floor(colorsLen * Math.random())];
     ctx.lineWidth = 2;
+    // 使用setTimeOut可以主动管理UI线程，但是下面的做法好像并没有达到线程管理以使页面更加流畅的目的。
+    // 要达到管理线程的目的，需要当一个函数执行完成后再注册下一个定时器
     curvePath.forEach((point) => {
       const a = setTimeout(() => {
         this.drawLineBetweenPoints(ctx, point1, point);
         point1 = point;
-      }, 10);
+      }, 25);
       this.timeoutVal.push(a);
     });
   }
 
   updateCanvas($$pathList, mapList, curMapId) {
+    console.log('updateCanvas');
     // if (typeof $$pathList === 'undefined' || typeof mapList === 'undefined') { return null; }
     let arguLen = arguments.length;
     while (arguLen--) {
@@ -411,6 +351,8 @@ export default class View extends React.Component {
       const y = Math.floor((ret.y * this.state.mapHeight) / 100);
       return { x, y };
     });
+    this.pathList = pathListPixel; // 存储起来，避免在没有请求数据的情况下做多余的计算。
+    this.stationaryPoint(ctx, pathListPixel);
 
     const len = pathListPixel.length;
     this.curvePath = [];
@@ -421,7 +363,6 @@ export default class View extends React.Component {
       // this.drawCurvePath(ctx, crvPoints);
     });
 
-    this.stationaryPoint(ctx, pathListPixel);
     // this.drawCurveAnimPath(ctx, this.curvePath);
     // this.oribitPath(ctx, startX, startY, fromJS(pathListPixel));
   }
@@ -474,6 +415,52 @@ export default class View extends React.Component {
     const curScreenId = store.get('curScreenId');
     const macList = store.getIn([curScreenId, 'data', 'macList']) || fromJS([]);
     return macList.toJS().map(mac => ({ value: mac, label: mac }));
+  }
+  renderCurMap(mapList, curMapId, myZoom) {
+    const curItem = mapList.find(item => item.get('id') === curMapId);
+    const imgUrl = curItem ? curItem.get('backgroundImg') : '';
+    // 获取图片的原始大小
+    // 如果使用百分比设置canvas的宽高，当浏览器放大缩小时，画布不会重绘，导致画布图案超出图片
+    this.getNaturalWidthAndHeight(imgUrl);
+    return (
+      <div
+        className="o-map-container"
+        ref={(mapContent) => {
+          if (mapContent) {
+            this.mapContent = mapContent;
+            this.setState({
+              mapWidth: mapContent.offsetWidth,
+              mapHeight: mapContent.offsetHeight,
+            });
+          }
+        }}
+        style={{
+          left: this.state.mapOffsetX,
+          top: this.state.mapOffsetY,
+          width: `${((myZoom * this.naturalWidth) / 100)}px`,
+          height: `${((myZoom * this.naturalHeight) / 100)}px`,
+        }}
+        onMouseDown={this.onMapMouseDown}
+        onMouseUp={this.onMapMouseUp}
+        onMouseMove={this.onMapMouseMove}
+      >
+        <img src={imgUrl} className="auto" alt={curMapId} />
+        <canvas
+          ref={(canvasElem) => {
+            if (canvasElem && this.canvasElem !== canvasElem) {
+              this.canvasElem = canvasElem;
+            }
+          }}
+          width={this.state.mapWidth}
+          height={this.state.mapHeight}
+          style={{
+            position: 'absolute',
+            left: 0,
+            top: 0,
+          }}
+        />
+      </div>
+    );
   }
 
   render() {

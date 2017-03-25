@@ -96,12 +96,12 @@ export default class View extends React.PureComponent {
   }
 
   componentDidUpdate() {
+    this.removeShowerDiv();
     Promise.resolve().then(() => {
       this.renderHeatMap();
     }).then(() => {
       this.bindCanvasEvent();
     });
-    this.removeShowerDiv();
   }
 
   onChangeBuilding(id) {
@@ -170,6 +170,8 @@ export default class View extends React.PureComponent {
     let x = 0;
     let y = 0;
     blankCanvas.addEventListener('click', (e) => {
+      // 删除之前绘制的提示框
+      this.removeShowerDiv();
       // 获得鼠标在canvas上的坐标位置
       const bb = canvas.getBoundingClientRect(); // 窗口位置
       x = e.clientX - bb.left;
@@ -189,7 +191,6 @@ export default class View extends React.PureComponent {
       // this.setState({ observeValue }); // 不能在这里更新state，会导致重绘，无法显示结果。
 
       // 显示计算的结果
-      this.removeShowerDiv();
       const showDiv = doc.createElement('div');
       const yPosition = (y - mapRadius - 50) < 0 ? (y + mapRadius) : (y - mapRadius - 50);
       const curScreenId = this.props.store.get('curScreenId');
@@ -231,7 +232,7 @@ export default class View extends React.PureComponent {
   }
 
   renderCurMap(list, curMapId, myZoom) {
-    console.log('renderCurMap');
+    // console.log('renderCurMap');
     const curItem = list.find(item => item.get('id') === curMapId);
     const imgUrl = curItem ? curItem.get('backgroundImg') : '';
     this.getNaturalWidthAndHeight(imgUrl);
@@ -262,31 +263,21 @@ export default class View extends React.PureComponent {
     );
   }
   renderHeatMap() {
+    if (this.mapMouseDown) return null; // 移动图片时不重新计算绘图位置，因为坐标位置并没有改变
     let max = 0;
     const curMapInfo = this.mapList.find(item => item.get('id') === this.state.curMapId);
     if (!curMapInfo) return null;
     const curScreenId = this.props.store.get('curScreenId');
     const points = this.props.store.getIn([curScreenId, 'data', 'list']);
-    // 实际数据生成代码
+    // 热力图数据生成代码
     this.datas = points.toJS().map((point) => {
-      console.log('renderHeatMap');
+      // console.log('renderHeatMap');
       const ret = gps.getOffsetFromGpsPoint(point, curMapInfo.toJS());
-      // console.log(gps.getGpsPointFromOffset(ret, curMapInfo.toJS()));
       const x = Math.floor((ret.x * this.mapWidth) / 100);
       const y = Math.floor((ret.y * this.mapHeight) / 100);
       max = max > point.value ? max : point.value;
       return { x, y, value: point.value };
     });
-
-    // 模拟代码
-    // let n = 200;
-    // while (n--) {
-    //   this.datas = this.datas.push({
-    //     x: Math.floor(Math.random() * this.mapWidth),
-    //     y: Math.floor(Math.random() * this.mapHeight),
-    //     value: Math.floor(Math.random() * 20),
-    //   });
-    // }
     const data = {
       max,
       data: this.datas,
@@ -302,7 +293,7 @@ export default class View extends React.PureComponent {
       });
       heatmapInstance.setData(data);
     }
-
+    // 一个画布，用来绘制可擦除的圆形观察范围，因为热力图不能擦除，故不能在热力图上绘制
     this.renderBlankCanvas(this.mapContent);
   }
 
