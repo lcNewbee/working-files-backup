@@ -6,8 +6,8 @@
   "data": {
     "list": [{
       "id": 1,
-      "lat": 22.5476177,
-      "lng": 113.9462726,
+      "lat": 0,
+      "lng": 0,
       "address": "5 \u79d1\u82d1\u8def \u5357\u5c71\u533a",
       "name": "\u603b\u90e8",
       "mapNumber": 1,

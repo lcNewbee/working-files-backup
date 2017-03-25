@@ -49,16 +49,26 @@ const listOptions = fromJS({
         type: 'text',
       },
     }, {
-      id: 'lat',
-      label: __('lat'),
+      id: 'lng',
+      label: __('Longitude'),
       formProps: {
-        type: 'text',
+        type: 'number',
+        min: '-180',
+        max: '180',
+        defaultValue: '0',
+        required: true,
+        help: _('e.g. %s', 123.23123231),
       },
     }, {
-      id: 'lng',
-      label: __('lng'),
+      id: 'lat',
+      label: __('Latitude'),
       formProps: {
-        type: 'text',
+        type: 'number',
+        min: '-90',
+        max: '90',
+        defaultValue: '0',
+        required: true,
+        help: _('e.g. %s', 43.23123231),
       },
     },
   ],
@@ -187,9 +197,9 @@ export default class LiveMap extends React.PureComponent {
       this.heatmap = h337.create({
         container: this.mapContent,
         radius: 10,
-        maxOpacity: .3,
+        maxOpacity: 0.3,
         minOpacity: 0,
-        blur: .75
+        blur: 0.75,
       });
       // this.renderHeatMap();
     }
@@ -299,22 +309,22 @@ export default class LiveMap extends React.PureComponent {
     });
     const markerId = item.get('id');
     const contentString = `${'<div class="m-map__marker-infowindow">' +
-                            '<h4>'}${  item.get('name')  }</h4>` +
-                            `<div class="o-description-list">` +
-                              `<dl class="o-description-list-row">` +
-                                `<dt>${  __('Address')  }</dt>` +
-                                `<dd>${  item.get('address')  }</dd>` +
-                              `</dl>` +
-                              `<dl class="o-description-list-row">` +
-                                `<dt>${  __('Map Number')  }</dt>` +
-                                `<dd>${  item.get('mapNumber')  }</dd>` +
-                              `</dl>` +
-                            `</div>` +
+                            '<h4>'}${ item.get('name')}</h4>` +
+                            '<div class="o-description-list">' +
+                              '<dl class="o-description-list-row">' +
+                                `<dt>${__('Address') }</dt>` +
+                                `<dd>${item.get('address') }</dd>` +
+                              '</dl>' +
+                              '<dl class="o-description-list-row">' +
+                                `<dt>${ __('Map Number') }</dt>` +
+                                `<dd>${ item.get('mapNumber') }</dd>` +
+                              '</dl>' +
+                            '</div>' +
                             `<div class="m-map__marker-infowindow-footer">${
-                              this.actionable ? ('<button class="a-btn a-btn--primary" id="editBulid' + markerId + '">' + __('Edit') + '</button>') : ''
-                              }<button class="a-btn a-btn--info" id="viewBulid${  markerId  }">${  __('View')  }</button>` +
-                            `</div>` +
-                          `</div>`;
+                              this.actionable ? (`<button class="a-btn a-btn--primary" id="editBulid${  markerId  }">${  __('Edit')  }</button>`) : ''
+                              }<button class="a-btn a-btn--info" id="viewBulid${ markerId}">${__('View')}</button>` +
+                            '</div>' +
+                          '</div>';
     const infowindow = new google.maps.InfoWindow({
       content: contentString,
       maxWidth: 500,
@@ -523,10 +533,13 @@ export default class LiveMap extends React.PureComponent {
               text={__('Add')}
               theme="primary"
               onClick={
-                () => this.props.changeScreenActionQuery({
-                  action: 'add',
-                  myTitle: __('Add Building'),
-                })
+                () => {
+                  this.props.addListItem();
+                  // this.props.changeScreenActionQuery({
+                  //   action: 'add',
+                  //   myTitle: __('Add Building'),
+                  // }
+                }
               }
             />
           ) : null

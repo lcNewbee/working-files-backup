@@ -725,5 +725,8 @@
   "Orbit Trace": "行动轨迹图",
   "User Times": "用户次数",
   "Total User": "用户总人数",
-  "Total Times": "用户总人次"
+  "Total Times": "用户总人次",
+
+  "Longitude": "经度",
+  "Latitude": "纬度"
 }
