@@ -83,7 +83,7 @@ const listOptions = fromJS([
       required: true,
     },
     transform(val) {
-      return uptimeFilter.transform(val / 1000);
+      return uptimeFilter.transform(val);
     },
   }, {
     id: 'secretKey',

@@ -276,7 +276,7 @@ const settingsOptions = fromJS([
             value: '7',
             label: __('Visitor Auth'),
           }, {
-            value: '8',
+            value: '9',
             label: __('Facebook Auth'),
           },
         ],
