@@ -22,100 +22,6 @@ import * as selfActions from './actions';
 import reducer from './reducer';
 import imgEn from './modeEN.png';
 
-const _ = window._;
-const msg = {
-  password: __('Password'),
-  country: __('Country'),
-  timeZone: __('Time Zone'),
-  confirmpasswd: __('Confirm Password'),
-  welcomeDes: __('Thank you for purchasing Axilspot enterprise-class products,' +
-    ' you will complete the configuration for management system in minutes'),
-  passwordDes: __('Please provide an administrator password to login to Axilspot management system'),
-  completeDes: __('Please confirm your configuration below.' +
-    ' Click back to modify the configuration or click finish to activate the configuration.' +
-    ' After finish you will skip to management interface.'),
-};
-const defaultCountry = ((window.navigator.language || window.navigator.userLanguage ||
-    window.navigator.browserLanguage || window.navigator.systemLanguage ||
-    'en').toUpperCase().split('-')[1] || '').toString();
-const defaultCountryLabel = List(countries).find(item =>
-  (item.country === defaultCountry),
-)[b28n.getLang()];
-
-const defaultTimeZoneTitle = (((new Date()).getTimezoneOffset() / 60) * -1).toString();
-let defaultTimeZoneLabel;
-let defaultTimeZoneValue;
-
-TIME_ZONE.forEach((item) => {
-  if (item.title === defaultTimeZoneTitle) {
-    defaultTimeZoneLabel = item.label;
-    defaultTimeZoneValue = item.value;
-  }
-});
-
-const countryList = List(countries).map(item => ({
-  value: item.country,
-  label: item[b28n.getLang()],
-})).toJS();
-
-const formGroups = Map({
-  country: {
-    input: {
-      type: 'select',
-      label: msg.country,
-      name: 'country',
-      options: countryList,
-      maxLength: 21,
-      placeholder: msg.country,
-    },
-  },
-  timeZone: {
-    input: {
-      type: 'select',
-      label: msg.timeZone,
-      name: 'timeZone',
-      options: TIME_ZONE,
-      maxLength: 21,
-      placeholder: msg.timeZone,
-    },
-  },
-  password: {
-    input: {
-      type: 'password',
-      label: msg.password,
-      name: 'password',
-      maxLength: 32,
-      placeholder: msg.password,
-      autoFocus: true,
-      required: true,
-      style: {
-        display: 'block',
-      },
-    },
-    validator: validator({
-      label: msg.password,
-      rules: 'len:[8, 32]',
-    }),
-  },
-  confirmpasswd: {
-    input: {
-      label: msg.confirmpasswd,
-      type: 'password',
-      name: 'confirmpasswd',
-      maxLength: 32,
-      required: true,
-      placeholder: msg.confirmpasswd,
-      style: {
-        display: 'block',
-      },
-    },
-    validator: validator({
-      label: msg.confirmpasswd,
-      rules: 'len:[8, 32]',
-    }),
-  },
-});
-
 const propTypes = {
   fetch: PropTypes.func,
   selfState: PropTypes.instanceOf(Map),
@@ -154,6 +60,8 @@ export default class SignUp extends React.Component {
         const data = fromJS(json.data).delete('ifFirstLogin');
         this.props.changeCurrModeData(data);
         this.props.changeNextModeData(data);
+        this.props.changeShowProgressBar(false);
+        console.log('did mount');
       }
     }).then(() => {
       // 后台根据是否请求过下面的接口识别是否是第一次登陆
@@ -162,27 +70,50 @@ export default class SignUp extends React.Component {
     });
   }
 
+  // onOkButtonClick() {
+  //   const { currModeData, nextModeData } = this.props.selfState.toJS();
+  //   const showThinModeConfigModal = this.props.selfState.get('showThinModeConfigModal');
+  //   this.props.validateAll('acipinput').then((mg) => {
+  //     let str = true;
+  //     if (mg.isEmpty()) {
+  //       const acIp = nextModeData.acIp;
+  //       const mask = '255.255.255.0';
+  //       // 只有瘦AP才会验证IP地址，否则直接跳过
+  //       str = nextModeData.enable === '1' ? validator.combine.noBroadcastIp(acIp, mask) : null;
+  //       // console.log('str', str);
+  //       if (str) {
+  //         this.props.createModal({
+  //           role: 'alert',
+  //           text: str,
+  //         });
+  //       }
+  //     }
+  //     return str;
+  //   }).then((str) => {
+  //     if (!str) {
+  //       if (nextModeData.enable === '1' && !showThinModeConfigModal) {
+  //         this.props.changeShowThinModeConfigModal(true);
+  //       } else if (currModeData.enable === nextModeData.enable) {
+  //         if (currModeData.enable === '0' ||
+  //             (currModeData.enable === '1' && fromJS(currModeData).equals(fromJS(nextModeData)))) {
+  //           window.location.href = '#/main/status';
+  //         } else {
+  //           this.comfirmModeChange();
+  //           this.props.changeShowThinModeConfigModal(false);
+  //         }
+  //       } else {
+  //         this.comfirmModeChange();
+  //         this.props.changeShowThinModeConfigModal(false);
+  //       }
+  //     }
+  //   });
+  // }
+
   onOkButtonClick() {
     const { currModeData, nextModeData } = this.props.selfState.toJS();
     const showThinModeConfigModal = this.props.selfState.get('showThinModeConfigModal');
     this.props.validateAll('acipinput').then((mg) => {
-      let str = true;
       if (mg.isEmpty()) {
-        const acIp = nextModeData.acIp;
-        const mask = '255.255.255.0';
-        // 只有瘦AP才会验证IP地址，否则直接跳过
-        str = nextModeData.enable === '1' ? validator.combine.noBroadcastIp(acIp, mask) : null;
-        // console.log('str', str);
-        if (str) {
-          this.props.createModal({
-            role: 'alert',
-            text: str,
-          });
-        }
-      }
-      return str;
-    }).then((str) => {
-      if (!str) {
         if (nextModeData.enable === '1' && !showThinModeConfigModal) {
           this.props.changeShowThinModeConfigModal(true);
         } else if (currModeData.enable === nextModeData.enable) {
@@ -216,6 +147,8 @@ export default class SignUp extends React.Component {
   comfirmModeChange() {
     const query = this.props.selfState.get('nextModeData').toJS();
     this.props.save('goform/set_thin', query);
+
+    console.log('change')
     this.props.changeShowProgressBar(true);
   }
 
@@ -470,6 +403,7 @@ export default class SignUp extends React.Component {
 SignUp.propTypes = propTypes;
 
 function mapStateToProps(state) {
+  // console.log(state.wizard.toJS())
   return {
     app: state.app,
     selfState: state.wizard,

@@ -33,7 +33,7 @@ const stores = remoteActionMiddleware(
   }),
 
   // 支持 chrome 插件 Redux DevTools
-  window.devToolsExtension ? window.devToolsExtension() : f => f,
+  // window.devToolsExtension ? window.devToolsExtension() : f => f,
 );
 
 // 初始化 App Config

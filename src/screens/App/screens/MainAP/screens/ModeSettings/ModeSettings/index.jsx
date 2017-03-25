@@ -62,25 +62,54 @@ export default class ModeSettings extends React.Component {
         });
   }
 
+  // onSave() {
+  //   this.props.validateAll().then((msg) => {
+  //     let str = true;
+  //     if (msg.isEmpty()) { // 因IP地址最后一个数字修改为不允许设为255，该部分代码失效
+  //       const acIp = this.props.store.getIn(['curData', 'acIp']);
+  //       const mask = '255.255.255.0';
+  //       str = validator.combine.noBroadcastIp(acIp, mask);
+  //       console.log('str', str);
+  //       if (str) {
+  //         this.props.createModal({
+  //           role: 'alert',
+  //           text: str,
+  //         });
+  //       }
+  //     }
+  //     return str;
+  //   }).then((str) => {
+  //     console.log('str', str);
+  //     if (!str) {
+  //       const {
+  //         nextMode, currMode, currDiscoveryType, discoveryType, currAcIp, acIp,
+  //       } = this.props.store.get('curData').toJS();
+  //       if (nextMode !== currMode) {
+  //         this.props.createModal({
+  //           role: 'alert',
+  //           text: __('Mode changed, REBOOT to take effect ?'),
+  //           apply: this.saveModalChange,
+  //         });
+  //       } else if (nextMode === currMode && nextMode === '1' &&
+  //         (currDiscoveryType !== discoveryType || currAcIp !== acIp)) {
+  //         this.props.createModal({
+  //           role: 'alert',
+  //           text: __('Mode configuration changed, REBOOT to take effect ?'),
+  //           apply: this.saveModalChange,
+  //         });
+  //       } else {
+  //         this.props.createModal({
+  //           role: 'alert',
+  //           text: __('Nothing changed, no need to do anything!'),
+  //         });
+  //       }
+  //     }
+  //   });
+  // }
+
   onSave() {
     this.props.validateAll().then((msg) => {
-      let str = true;
       if (msg.isEmpty()) {
-        const acIp = this.props.store.getIn(['curData', 'acIp']);
-        const mask = '255.255.255.0';
-        str = validator.combine.noBroadcastIp(acIp, mask);
-        console.log('str', str);
-        if (str) {
-          this.props.createModal({
-            role: 'alert',
-            text: str,
-          });
-        }
-      }
-      return str;
-    }).then((str) => {
-      console.log('str', str);
-      if (!str) {
         const {
           nextMode, currMode, currDiscoveryType, discoveryType, currAcIp, acIp,
         } = this.props.store.get('curData').toJS();
@@ -218,12 +247,12 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
-    appActions, sharedActions
+    appActions, sharedActions,
   ), dispatch);
 }
 
 export const Screen = connect(
   mapStateToProps,
   mapDispatchToProps,
-  validator.mergeProps(validOptions)
+  validator.mergeProps(validOptions),
 )(ModeSettings);
