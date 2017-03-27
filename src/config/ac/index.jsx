@@ -34,35 +34,35 @@ const appScreen = require('shared/containers/appScreen');
 const SharedComponents = require('shared/components');
 
 // 登录界面
-const sLogin = require('../../screens/App/screens/Login');
-// const sRegister = require('../../screens/App/screens/SignUp');
-const sWizard = require('../../screens/App/screens/Wizard');
+const sLogin = require('../../screens/Login');
+// const sRegister = require('../../screens/SignUp');
+const sWizard = require('../../screens/Wizard');
 
 // 布局
-const Main = require('../../screens/App/screens/Main').Screen;
+const Main = require('../../screens/Main').Screen;
 
 // 热点统计
-const sStatus = require('../../screens/App/screens/Main/screens/Stats');
+const sStatus = require('../../screens/Main/screens/Stats');
 
 // 设备
-const sDevices = require('../../screens/App/screens/Main/screens/Devices');
+const sDevices = require('../../screens/Main/screens/Devices');
 
 // 设备地图
-// const sDeviceMap = require('../../screens/App/screens/Main/screens/DeviceMap');
-// const sStatistics = require('../../screens/App/screens/Main/screens/Statistics');
-const sLogs = require('../../screens/App/screens/Main/screens/Logs');
-const sClients = require('../../screens/App/screens/Main/screens/Clients');
-// const sPreview = require('../../screens/App/screens/Main/screens/Preview');
+// const sDeviceMap = require('../../screens/Main/screens/DeviceMap');
+// const sStatistics = require('../../screens/Main/screens/Statistics');
+const sLogs = require('../../screens/Main/screens/Logs');
+const sClients = require('../../screens/Main/screens/Clients');
+// const sPreview = require('../../screens/Main/screens/Preview');
 
 // 设置
 const sGroupSettings =
-  require('../../screens/App/screens/Main/screens/Settings/screens/GroupSettings');
-const sWireless = require('../../screens/App/screens/Main/screens/Settings/screens/Wireless');
-const sPortal = require('../../screens/App/screens/Main/screens/Settings/screens/Portal');
-const sGuest = require('../../screens/App/screens/Main/screens/Settings/screens/Guest');
-const sVoip = require('../../screens/App/screens/Main/screens/Settings/screens/Voip');
-const sMode = require('../../screens/App/screens/Main/screens/Settings/screens/Mode');
-const sAdmin = require('../../screens/App/screens/Main/screens/Settings/screens/Admin');
+  require('../../screens/Main/screens/Settings/screens/GroupSettings');
+const sWireless = require('../../screens/Main/screens/Settings/screens/Wireless');
+const sPortal = require('../../screens/Main/screens/Settings/screens/Portal');
+const sGuest = require('../../screens/Main/screens/Settings/screens/Guest');
+const sVoip = require('../../screens/Main/screens/Settings/screens/Voip');
+const sMode = require('../../screens/Main/screens/Settings/screens/Mode');
+const sAdmin = require('../../screens/Main/screens/Settings/screens/Admin');
 
 
 const routes = [

@@ -22,40 +22,40 @@ const app = require('shared/containers/app');
 const settings = require('shared/containers/settings');
 const SharedComponents = require('shared/components');
 
-const pMainAP = require('../../screens/App/screens/MainAP');
-const sWizard = require('../../screens/App/screens/MainAP/Wizard');
-// const sThinModeNotice = require('../../screens/App/screens/MainAP/ThinModeNotice');
+const pMainAP = require('../../screens/MainAP');
+const sWizard = require('../../screens/MainAP/Wizard');
+// const sThinModeNotice = require('../../screens/MainAP/ThinModeNotice');
 // 登录界面
-const pLogin = require('../../screens/App/screens/Login');
+const pLogin = require('../../screens/Login');
 // 布局
-const MainAP = require('../../screens/App/screens/MainAP');
+const MainAP = require('../../screens/MainAP');
 // 网络设置
-const sNetworkSettings = require('../../screens/App/screens/MainAP/screens/NetworkSettings/NetworkSettings');
+const sNetworkSettings = require('../../screens/MainAP/screens/NetworkSettings/NetworkSettings');
 
-const pSystemStatus = require('../../screens/App/screens/MainAP/screens/SystemStatus/MultiRadioOverview');
-const sSsidDetails = require('../../screens/App/screens/MainAP/screens/SystemStatus/SsidDetails');
-const sClientsDetails = require('../../screens/App/screens/MainAP/screens/SystemStatus/ClientsDetails');
-const sRadioDetails = require('../../screens/App/screens/MainAP/screens/SystemStatus/RadioDetails');
+const pSystemStatus = require('../../screens/MainAP/screens/SystemStatus/MultiRadioOverview');
+const sSsidDetails = require('../../screens/MainAP/screens/SystemStatus/SsidDetails');
+const sClientsDetails = require('../../screens/MainAP/screens/SystemStatus/ClientsDetails');
+const sRadioDetails = require('../../screens/MainAP/screens/SystemStatus/RadioDetails');
 
 // 快速设置
-const pQuickSetup = require('../../screens/App/screens/MainAP/screens/QuickSetup/P2pQuickSetup');
+const pQuickSetup = require('../../screens/MainAP/screens/QuickSetup/P2pQuickSetup');
 
 // 无线设置
 // 子菜单
-const sBasic = require('../../screens/App/screens/MainAP/screens/WirelessConfig/Basic/BasicForCoverage');
-const sAdvance = require('../../screens/App/screens/MainAP/screens/WirelessConfig/Advance');
-// const sQos = require('../../screens/App/screens/MainAP/screens/WirelessConfig/QoS');
-const sACL = require('../../screens/App/screens/MainAP/screens/WirelessConfig/ACL');
+const sBasic = require('../../screens/MainAP/screens/WirelessConfig/Basic/BasicForCoverage');
+const sAdvance = require('../../screens/MainAP/screens/WirelessConfig/Advance');
+// const sQos = require('../../screens/MainAP/screens/WirelessConfig/QoS');
+const sACL = require('../../screens/MainAP/screens/WirelessConfig/ACL');
 // 系统维护
-const sSystemMaintenance = require('../../screens/App/screens/MainAP/screens/Maintenance/SystemMaintenance');
-const sTimeSettings = require('../../screens/App/screens/MainAP/screens/Maintenance/TimeSettings');
-const sAccountSettings = require('../../screens/App/screens/MainAP/screens/Maintenance/AccountSettings');
-const sModeSettings = require('../../screens/App/screens/MainAP/screens/ModeSettings/ModeSettings');
+const sSystemMaintenance = require('../../screens/MainAP/screens/Maintenance/SystemMaintenance');
+const sTimeSettings = require('../../screens/MainAP/screens/Maintenance/TimeSettings');
+const sAccountSettings = require('../../screens/MainAP/screens/Maintenance/AccountSettings');
+const sModeSettings = require('../../screens/MainAP/screens/ModeSettings/ModeSettings');
 // 工具
-const sSpeedTest = require('../../screens/App/screens/MainAP/screens/Tools/SpeedTest');
-const sSiteSurvey = require('../../screens/App/screens/MainAP/screens/Tools/SiteSurvey');
-const sSystemLogs = require('../../screens/App/screens/MainAP/screens/Tools/SystemLogs');
-const sChannelUtilization = require('../../screens/App/screens/MainAP/screens/Tools/ChannelUtilization');
+const sSpeedTest = require('../../screens/MainAP/screens/Tools/SpeedTest');
+const sSiteSurvey = require('../../screens/MainAP/screens/Tools/SiteSurvey');
+const sSystemLogs = require('../../screens/MainAP/screens/Tools/SystemLogs');
+const sChannelUtilization = require('../../screens/MainAP/screens/Tools/ChannelUtilization');
 
 // 页面功能项配置
 const funConfig = {

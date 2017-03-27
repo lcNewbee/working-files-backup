@@ -33,42 +33,42 @@ const settings = require('shared/containers/settings');
 const SharedComponents = require('shared/components');
 
 // 登录界面
-const pLogin = require('../../screens/App/screens/Login');
-const sWizard = require('../../screens/App/screens/Wizard');
+const pLogin = require('../../screens/Login');
+const sWizard = require('../../screens/Wizard');
 
 // 布局
-const Main = require('../../screens/App/screens/Main').Screen;
+const Main = require('../../screens/Main').Screen;
 
 // system status
-const pSystemStatus = require('../../screens/App/screens/Main/screens/SystemStatus');
+const pSystemStatus = require('../../screens/Main/screens/SystemStatus');
 
 // Quick Setup
-const pQuickSetup = require('../../screens/App/screens/Main/screens/QuickSetup');
+const pQuickSetup = require('../../screens/Main/screens/QuickSetup');
 
 // System Settings
-const pNetworkSettings = require('../../screens/App/screens/Main/screens/NetworkSettings');
-const sNetworkSettings = require('../../screens/App/screens/Main/screens/NetworkSettings/NetworkSettings');
-const sTimeSettings = require('../../screens/App/screens/Main/screens/Maintenance/TimeSettings');
-const sAccountSettings = require('../../screens/App/screens/Main/screens/Maintenance/AccountSettings');
+const pNetworkSettings = require('../../screens/Main/screens/NetworkSettings');
+const sNetworkSettings = require('../../screens/Main/screens/NetworkSettings/NetworkSettings');
+const sTimeSettings = require('../../screens/Main/screens/Maintenance/TimeSettings');
+const sAccountSettings = require('../../screens/Main/screens/Maintenance/AccountSettings');
 
 // 无线设置
-const pWirelessConfig = require('../../screens/App/screens/Main/screens/WirelessConfig');
+const pWirelessConfig = require('../../screens/Main/screens/WirelessConfig');
 // 子菜单
-const sBasic = require('../../screens/App/screens/Main/screens/WirelessConfig/Basic');
-const sAdvance = require('../../screens/App/screens/Main/screens/WirelessConfig/Advance');
-// const sQoS = require('../../screens/App/screens/Main/screens/WirelessConfig/QoS');
-const sACL = require('../../screens/App/screens/Main/screens/WirelessConfig/ACL');
+const sBasic = require('../../screens/Main/screens/WirelessConfig/Basic');
+const sAdvance = require('../../screens/Main/screens/WirelessConfig/Advance');
+// const sQoS = require('../../screens/Main/screens/WirelessConfig/QoS');
+const sACL = require('../../screens/Main/screens/WirelessConfig/ACL');
 
 // 热点统计
-const pStatus = require('../../screens/App/screens/Main/screens/Stats');
+const pStatus = require('../../screens/Main/screens/Stats');
 
 // 维护
-const sSystemMaintenance = require('../../screens/App/screens/Main/screens/Maintenance/SystemMaintenance');
+const sSystemMaintenance = require('../../screens/Main/screens/Maintenance/SystemMaintenance');
 // 工具
-const sSpeedTest = require('../../screens/App/screens/Main/screens/Tools/SpeedTest');
-const sSiteSurvey = require('../../screens/App/screens/Main/screens/Tools/SiteSurvey');
-const sSystemLogs = require('../../screens/App/screens/Main/screens/Tools/SystemLogs');
-const sChannelUtilization = require('../../screens/App/screens/Main/screens/Tools/ChannelUtilization');
+const sSpeedTest = require('../../screens/Main/screens/Tools/SpeedTest');
+const sSiteSurvey = require('../../screens/Main/screens/Tools/SiteSurvey');
+const sSystemLogs = require('../../screens/Main/screens/Tools/SystemLogs');
+const sChannelUtilization = require('../../screens/Main/screens/Tools/ChannelUtilization');
 
 const routes = [{
   path: '/',

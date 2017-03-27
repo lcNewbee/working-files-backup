@@ -1,6 +1,6 @@
 import { fromJS } from 'immutable';
 
-import reducer from 'src/screens/App/screens/MainAxc/reducer';
+import reducer from 'src/screens/MainAxc/reducer';
 
 describe('MainAxc index reducer', () => {
   it('Should toggle isShow porp when TOGGLE_MAIN_POP_OVER with undefined option', () => {
