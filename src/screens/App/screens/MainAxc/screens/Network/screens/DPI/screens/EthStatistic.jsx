@@ -10,8 +10,8 @@ import Modal from 'shared/components/Modal';
 import FormInput from 'shared/components/Form/FormInput';
 // import EchartReact from 'shared/components/EchartReact';
 import AppScreen from 'shared/components/Template/AppScreen';
-import * as appActions from 'shared/actions/app';
-import * as actions from 'shared/actions/screens';
+import { actions as appActions } from 'shared/containers/app';
+import { actions } from 'shared/containers/appScreen';
 
 const flowRateFilter = utils.filter('flowRate');
 const propTypes = fromJS({

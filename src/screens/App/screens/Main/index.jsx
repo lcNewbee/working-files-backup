@@ -6,7 +6,7 @@ import Nav from 'shared/components/Nav';
 import Icon from 'shared/components/Icon';
 import Navbar from 'shared/components/Navbar';
 import { renderRoutesList } from 'shared/components/Organism/RouterConfig';
-import * as appActions from 'shared/actions/app';
+import { actions as appActions } from 'shared/containers/app';
 import * as actions from './actions';
 
 

@@ -5,8 +5,8 @@ import { fromJS, Map } from 'immutable';
 import validator from 'shared/validator';
 import { bindActionCreators } from 'redux';
 import AppScreen from 'shared/components/Template/AppScreen';
-import * as appActions from 'shared/actions/app';
-import * as screenActions from 'shared/actions/screens';
+import { actions as appActions } from 'shared/containers/app';
+import { actions as screenActions } from 'shared/containers/appScreen';
 
 function getPortList() {
   return utils.fetch('goform/network/port')

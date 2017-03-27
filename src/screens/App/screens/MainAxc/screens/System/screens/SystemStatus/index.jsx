@@ -6,8 +6,8 @@ import { Map } from 'immutable';
 import EchartReact from 'shared/components/EchartReact';
 import Progress from 'shared/components/Progress';
 import AppScreen from 'shared/components/Template/AppScreen';
-import * as appActions from 'shared/actions/app';
-import * as actions from 'shared/actions/screens';
+import { actions as appActions } from 'shared/containers/app';
+import { actions } from 'shared/containers/appScreen';
 import { colors, $$commonPieOption } from 'shared/config/axc';
 
 const uptimeFilter = utils.filter('connectTime');

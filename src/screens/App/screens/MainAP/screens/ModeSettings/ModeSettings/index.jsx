@@ -8,8 +8,8 @@ import validator from 'shared/validator';
 import Modal from 'shared/components/Modal';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
-import * as appActions from 'shared/actions/app';
-import * as sharedActions from 'shared/actions/settings';
+import { actions as appActions } from 'shared/containers/app';
+import { actions as sharedActions } from 'shared/containers/settings';
 
 const propTypes = {
   fetch: PropTypes.func,

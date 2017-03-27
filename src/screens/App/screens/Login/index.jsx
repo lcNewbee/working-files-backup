@@ -4,7 +4,7 @@ import { Map } from 'immutable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/validator';
-import * as appActions from 'shared/actions/app';
+import { actions as appActions } from 'shared/containers/app';
 import Navbar from 'shared/components/Navbar';
 import Button from 'shared/components/Button/Button';
 import FormGroup from 'shared/components/Form/FormGroup';

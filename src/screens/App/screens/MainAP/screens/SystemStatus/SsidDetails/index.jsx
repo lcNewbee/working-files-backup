@@ -5,8 +5,8 @@ import Table from 'shared/components/Table';
 import Button from 'shared/components/Button/Button';
 import { fromJS, Map } from 'immutable';
 import utils from 'shared/utils';
-import * as sharedActions from 'shared/actions/settings';
-import * as appActions from 'shared/actions/app';
+import { actions as sharedActions } from 'shared/containers/settings';
+import { actions as appActions } from 'shared/containers/app';
 import * as selfActions from './actions';
 import reducer from './reducer';
 

@@ -8,44 +8,26 @@ import classNamesUtils from 'classnames';
 import Icon from 'shared/components/Icon';
 import PopOver from 'shared/components/PopOver';
 import Navbar from 'shared/components/Navbar';
-import PropertyPanel from 'shared/components/Template/PropertyPanel';
-import * as appActions from 'shared/actions/app';
-import * as propertiesActions from 'shared/actions/properties';
-import { renderRoutesSwitch, renderRoutesList } from 'shared/components/Organism/RouterConfig';
+import { actions as appActions } from 'shared/containers/app';
+import {
+  actions as propertiesActions,
+  Screen as PropertyPanel,
+} from 'shared/containers/properties';
+import { renderRoutesSwitch } from 'shared/components/Organism/RouterConfig';
 import * as actions from './actions';
 import myReducer from './reducer';
 
 const ALL_GROUP_ID = -100;
 
 const propTypes = {
-  fetchApGroup: PropTypes.func,
-  fetchGroupAps: PropTypes.func,
   refreshAll: PropTypes.func,
   changeLoginStatus: PropTypes.func,
   toggleMainPopOver: PropTypes.func,
-  validateAll: PropTypes.func,
-  selectGroup: PropTypes.func,
-  selectManageGroup: PropTypes.func,
-  selectAddApGroupDevice: PropTypes.func,
-  showMainModal: PropTypes.func,
   togglePropertyContainer: PropTypes.func,
-  updateAddApGroup: PropTypes.func,
-  updateEditApGroup: PropTypes.func,
-  updateGroupMoveDevice: PropTypes.func,
-  updateGroupAddDevice: PropTypes.func,
-  resetGroupAddDevice: PropTypes.func,
-  selectManageGroupAp: PropTypes.func,
   route: PropTypes.object,
   history: PropTypes.object,
   location: PropTypes.object,
   routes: PropTypes.array,
-  createModal: PropTypes.func,
-  save: PropTypes.func,
-  fetchModelList: PropTypes.func,
-  resetVaildateMsg: PropTypes.func,
-
-  children: PropTypes.node,
-  validateOption: PropTypes.object,
 
   // immutable data
   app: PropTypes.instanceOf(Map),
@@ -197,19 +179,17 @@ export default class Main extends React.PureComponent {
     return (
       <ol className="m-breadcrumb m-breadcrumb--simple">
         {
-          breadcrumbList.map((item) => {
-            return (
-              <li key={item.path}>
-                <NavLink
-                  className="m-breadcrumb__link"
-                  to={item.path}
-                  onClick={() => this.onClickNav(item.path)}
-                >
-                  {item.text}
-                </NavLink>
-              </li>
-            );
-          })
+          breadcrumbList.map(item => (
+            <li key={item.path}>
+              <NavLink
+                className="m-breadcrumb__link"
+                to={item.path}
+                onClick={() => this.onClickNav(item.path)}
+              >
+                {item.text}
+              </NavLink>
+            </li>
+          ))
         }
       </ol>
     );
@@ -293,7 +273,6 @@ export default class Main extends React.PureComponent {
         </div>
 
         {renderRoutesSwitch(this.props.route.routes)}
-        
         <PopOver
           onClose={this.onHiddenPopOver}
           {...popOver}

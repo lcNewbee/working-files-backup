@@ -10,8 +10,8 @@ import AppScreen from 'shared/components/Template/AppScreen';
 import Button from 'shared/components/Button/Button';
 
 // custom
-import * as screenActions from 'shared/actions/screens';
-import * as appActions from 'shared/actions/app';
+import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as appActions } from 'shared/containers/app';
 import { getActionable } from 'shared/axc';
 
 const flowRateFilter = utils.filter('flowRate');

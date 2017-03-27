@@ -3,8 +3,8 @@ import { fromJS } from 'immutable';
 import { AppScreen, FormInput, Button, Select } from 'shared/components';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as screenActions from 'shared/actions/screens';
-import * as appActions from 'shared/actions/app';
+import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as appActions } from 'shared/containers/app';
 import utils from 'shared/utils';
 
 const exchangeOptions = [

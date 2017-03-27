@@ -6,8 +6,8 @@ import { bindActionCreators } from 'redux';
 import { FormGroup } from 'shared/components/Form';
 import SaveButton from 'shared/components/Button/SaveButton';
 import AppScreen from 'shared/components/Template/AppScreen';
-import * as appActions from 'shared/actions/app';
-import * as screenActions from 'shared/actions/screens';
+import { actions as appActions } from 'shared/containers/app';
+import { actions as screenActions } from 'shared/containers/appScreen';
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),

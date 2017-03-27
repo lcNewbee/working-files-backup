@@ -6,8 +6,8 @@ import { bindActionCreators } from 'redux';
 import validator from 'shared/validator';
 import { FormInput, FormGroup } from 'shared/components/Form';
 import { SaveButton } from 'shared/components/Button';
-import * as sharedActions from 'shared/actions/settings';
-import * as appActions from 'shared/actions/app';
+import { actions as sharedActions } from 'shared/containers/settings';
+import { actions as appActions } from 'shared/containers/app';
 import * as selfActions from './actions';
 import reducer from './reducer';
 

@@ -5,7 +5,7 @@ import { Map, List } from 'immutable';
 import { connect } from 'react-redux';
 import { SaveButton, FormGroup } from 'shared/components';
 import validator from 'shared/validator';
-import * as appActions from 'shared/actions/app';
+import { actions as appActions } from 'shared/containers/app';
 import * as myActions from './actions';
 import myReducer from './reducer';
 

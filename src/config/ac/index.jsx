@@ -1,7 +1,5 @@
 import b28n from 'shared/b28n';
 import NotFound from 'shared/components/NotFound';
-import appReducer from 'shared/reducers/app';
-import screensReducer from 'shared/reducers/screens';
 import { reducer as toastrReducer } from 'react-redux-toastr';
 
 //
@@ -31,9 +29,8 @@ bodyElem.className = `${bodyElem.className} ${b28n.getLang()}`;
  */
 
 // 公用组件
-
-// 主APP
-const App = require('../../screens/App');
+const app = require('shared/containers/app');
+const appScreen = require('shared/containers/appScreen');
 const SharedComponents = require('shared/components');
 
 // 登录界面
@@ -71,7 +68,7 @@ const sAdmin = require('../../screens/App/screens/Main/screens/Settings/screens/
 const routes = [
   {
     path: '/',
-    component: App.Screen,
+    component: app.Screen,
     formUrl: '/goform/getAcInfo',
     indexPath: '/login',
     routes: [
@@ -169,8 +166,8 @@ const routes = [
 
 // 配置模块页面 store
 const reducers = {
-  app: appReducer,
-  screens: screensReducer,
+  app: app.reducer,
+  screens: appScreen.reducer,
 
   status: sStatus.status,
   devices: sDevices.devices,
@@ -187,11 +184,9 @@ const reducers = {
   toastr: toastrReducer,
 };
 
-const ac5000 = {
+export default {
   reducers,
   routes,
   appConfig: guiConfig,
 };
-
-export default ac5000;
 

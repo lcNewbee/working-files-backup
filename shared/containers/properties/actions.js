@@ -1,44 +1,30 @@
-import * as appActions from 'shared/actions/app';
-import {
-  TOGGLE_PROPERTY,
-  INIT_PROPERTY_PANEL,
-  COLLAPSE_PROPERTY_PANEL,
-  REMOVE_PROPERTY_PANEL,
-
-  // 操作属性面板内容
-  CHANGE_PROPERTY_PANEL_ITEM,
-
-  // 接收属性面板数据 Data
-  RC_PROPERTY_PANEL_DATA,
-
-  // 更新属性面板数据
-  CHANGE_PROPERTY_PANEL_DATA,
-} from 'shared/constants/action';
+import { actions as appActions } from 'shared/containers/app';
+import ACTION_TYPES from './actionTypes';
 
 export function togglePropertyContainer(isShow) {
   return {
-    type: TOGGLE_PROPERTY,
+    type: ACTION_TYPES.TOGGLE_VISIBLE,
     payload: isShow,
   };
 }
 
 export function collapsePropertyPanel(index) {
   return {
-    type: COLLAPSE_PROPERTY_PANEL,
+    type: ACTION_TYPES.COLLAPSE_PANEL,
     index,
   };
 }
 
 export function changePropertyPanelItem(item) {
   return {
-    type: CHANGE_PROPERTY_PANEL_ITEM,
+    type: ACTION_TYPES.CHANGE_PANEL_ITEM,
     payload: item,
   };
 }
 
 export function initPropertyPanel(query, info) {
   return {
-    type: INIT_PROPERTY_PANEL,
+    type: ACTION_TYPES.INIT_PANEL,
     payload: {
       query,
       info,
@@ -47,7 +33,7 @@ export function initPropertyPanel(query, info) {
 }
 export function rcPropertyPanelData(mac, data) {
   return {
-    type: RC_PROPERTY_PANEL_DATA,
+    type: ACTION_TYPES.RC_PANEL_DATA,
     payload: {
       mac,
       data,
@@ -75,14 +61,14 @@ export function addPropertyPanel(query, info) {
 
 export function changePropertyPanelData(data) {
   return {
-    type: CHANGE_PROPERTY_PANEL_DATA,
+    type: ACTION_TYPES.CHANGE_PANEL_DATA,
     data,
   };
 }
 
 export function removePropertyPanel(index) {
   return {
-    type: REMOVE_PROPERTY_PANEL,
+    type: ACTION_TYPES.REMOVE_PANEL,
     index,
   };
 }

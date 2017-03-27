@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import actions from './action';
+import * as actions from './actions';
+import reducer from './reducer';
 import App from './components/App';
 
 function mapStateToProps(state) {
@@ -8,11 +9,19 @@ function mapStateToProps(state) {
   };
 }
 
-// 添加 redux 属性的 react 页面
-export const AppContainer = connect(
-  mapStateToProps,
-  actions,
-)(App);
+function createContainer(component) {
+  return connect(
+    mapStateToProps,
+    actions,
+  )(component);
+}
 
-export { default as actions } from './action';
-export { default as reducer } from './reducer';
+// 添加 redux 属性的 react 页面
+const Screen = createContainer(App);
+
+export default {
+  createContainer,
+  actions,
+  reducer,
+  Screen,
+};

@@ -8,9 +8,9 @@ import AppScreen from 'shared/components/Template/AppScreen';
 import Button from 'shared/components/Button/Button';
 import Icon from 'shared/components/Icon';
 import { getActionable } from 'shared/axc';
-import * as appActions from 'shared/actions/app';
-import * as screenActions from 'shared/actions/screens';
-import * as propertiesActions from 'shared/actions/properties';
+import { actions as appActions } from 'shared/containers/app';
+import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as propertiesActions } from 'shared/containers/properties';
 import * as axcActions from '../../../../actions';
 import MapList from '../../shared/MapList';
 

@@ -1,4 +1,5 @@
 import { fromJS } from 'immutable';
+import ACTION_TYPES from './actionTypes';
 
 const emptyMap = fromJS({});
 const defaultItem = fromJS({
@@ -36,29 +37,29 @@ export default function (state = defaultState, action) {
   const curSettingName = action.name || state.get('curSettingId');
 
   switch (action.type) {
-    case 'INIT_SETTINGS':
+    case ACTION_TYPES.INIT:
       return initSettingsItem(state, action);
 
-    case 'REQEUST_FETCH_SETTINGS':
+    case ACTION_TYPES.REQEUST_FETCH:
       return state.setIn([curSettingName, 'fetching'], true);
 
-    case 'RECIVE_FETCH_SETTINGS':
+    case ACTION_TYPES.RECIVE_FETCH:
 
       return state.setIn([action.name, 'fetching'], false)
         .setIn([action.name, 'updateAt'], action.updateAt)
         .mergeIn([action.name, 'data'], action.data)
         .mergeIn(['curData'], fromJS(action.data));
 
-    case 'CHANGE_SETTINGS_QUERY':
+    case ACTION_TYPES.CHANGE_QUERY:
       return state.mergeIn(['curQuery'], action.query);
 
-    case 'CHANGE_SETTINGS_ACTION_QUERY':
+    case ACTION_TYPES.CHANGE_ACTION_QUERY:
       return state.mergeIn(['curSaveQuery'], action.query);
 
-    case 'UPDATE_ITEM_SETTINGS':
+    case ACTION_TYPES.UPDATE_SETTINGS:
       return state.mergeIn(['curData'], action.data);
 
-    case 'LEAVE_SETTINGS_SCREEN':
+    case ACTION_TYPES.LEAVE_SCREEN:
       return state.setIn(['curQuery'], fromJS({}))
         .set('curSaveQuery', fromJS({}))
         .set('curData', fromJS({}));

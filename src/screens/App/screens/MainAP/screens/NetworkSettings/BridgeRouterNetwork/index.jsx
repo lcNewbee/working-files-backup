@@ -7,12 +7,10 @@ import {
   SaveButton, FormGroup, FormInput,
 } from 'shared/components';
 import validator from 'shared/validator';
-import * as appActions from 'shared/actions/app';
-import * as sharedActions from 'shared/actions/settings';
+import { actions as appActions } from 'shared/containers/app';
+import { actions as sharedActions } from 'shared/containers/settings';
 import Modal from 'shared/components/Modal';
 import ProgressBar from 'shared/components/ProgressBar';
-// import * as sharedReducer from 'shared/reducers/settings';
-// import * as actions from './actions';
 import * as selfActions from './actions';
 import reducer from './reducer';
 

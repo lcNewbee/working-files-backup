@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { Map, fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { Button, FormGroup, Table } from 'shared/components';
-import * as appActions from 'shared/actions/app';
-import * as sharedActions from 'shared/actions/settings';
+import { actions as appActions } from 'shared/containers/app';
+import { actions as sharedActions } from 'shared/containers/settings';
 import * as selfActions from './actions';
 import reducer from './reducer';
 

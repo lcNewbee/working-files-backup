@@ -7,10 +7,8 @@ import {
   SaveButton, FormGroup, FormInput,
 } from 'shared/components';
 import validator from 'shared/validator';
-import * as appActions from 'shared/actions/app';
-import * as sharedActions from 'shared/actions/settings';
-// import * as sharedReducer from 'shared/reducers/settings';
-import * as actions from './actions';
+import { actions as appActions } from 'shared/containers/app';
+import { actions as sharedActions } from 'shared/containers/settings';
 import reducer from './reducer';
 
 const propTypes = {

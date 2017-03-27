@@ -3,7 +3,7 @@ import 'react-dom';
 import { fromJS } from 'immutable';
 import { connect } from 'react-redux';
 import ReduxToastr from 'react-redux-toastr';
-import * as actions from 'shared/actions/app';
+import * as actions from 'shared/containers/app/actions';
 import Modal from 'shared/components/Modal';
 import ProgressBar from 'shared/components/ProgressBar';
 import stringUtils from 'shared/utils/lib/string';

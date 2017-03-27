@@ -7,8 +7,8 @@ import {
 } from 'shared/components';
 
 import validator from 'shared/validator';
-import * as appActions from 'shared/actions/app';
-import * as settingsActions from 'shared/actions/settings';
+import { actions as appActions } from 'shared/containers/app';
+import { actions as settingsActions } from 'shared/containers/settings';
 import utils from 'shared/utils';
 import * as selfActions from './actions';
 import reducer from './reducer';

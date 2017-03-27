@@ -35,7 +35,10 @@ const propTypes = {
   'data-label': PropTypes.string,
   form: PropTypes.string,
   showLabel: PropTypes.bool,
-  options: PropTypes.array,
+  options: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object,
+  ]),
   type: PropTypes.string,
 };
 

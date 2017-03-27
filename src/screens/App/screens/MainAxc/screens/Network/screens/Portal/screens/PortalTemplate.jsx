@@ -8,8 +8,8 @@ import FileUploads from 'shared/components/FileUpload';
 import FormGroup from 'shared/components/Form/FormGroup';
 import { Button, SaveButton } from 'shared/components/Button';
 import FormContainer from 'shared/components/Organism/FormContainer';
-import * as appActions from 'shared/actions/app';
-import * as screenActions from 'shared/actions/screens';
+import { actions as appActions } from 'shared/containers/app';
+import { actions as screenActions } from 'shared/containers/appScreen';
 
 import '../style.scss';
 

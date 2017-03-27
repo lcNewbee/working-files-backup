@@ -9,8 +9,8 @@ import { FormGroup } from 'shared/components/Form';
 import {
   purviewOptions, PURVIEW_ADMIN, PURVIEW_GUEST,
 } from 'shared/config/axc';
-import * as screenActions from 'shared/actions/screens';
-import * as appActions from 'shared/actions/app';
+import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as appActions } from 'shared/containers/app';
 
 const listOptions = fromJS([
   {

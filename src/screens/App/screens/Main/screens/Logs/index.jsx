@@ -14,7 +14,7 @@ import Switchs from 'shared/components/Switchs';
 
 // custom
 import * as actions from './actions';
-import * as appActions from 'shared/actions/app';
+import { actions as appActions } from 'shared/containers/app';
 import reducer from './reducer';
 
 const logsTableOptions = fromJS([

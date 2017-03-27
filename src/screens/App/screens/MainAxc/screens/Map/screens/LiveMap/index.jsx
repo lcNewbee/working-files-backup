@@ -11,9 +11,9 @@ import Table from 'shared/components/Table';
 import Modal from 'shared/components/Modal';
 import Switchs from 'shared/components/Switchs';
 import AppScreen from 'shared/components/Template/AppScreen';
-import * as appActions from 'shared/actions/app';
-import * as screenActions from 'shared/actions/screens';
-import * as propertiesActions from 'shared/actions/properties';
+import { actions as appActions } from 'shared/containers/app';
+import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as propertiesActions } from 'shared/containers/properties';
 import h337 from 'heatmap.js';
 
 import '../../shared/_map.scss';

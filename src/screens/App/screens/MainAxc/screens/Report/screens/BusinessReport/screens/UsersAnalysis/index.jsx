@@ -7,7 +7,7 @@ import {
   Button, Table, Switchs,
   FormInput,
 } from 'shared/components';
-import * as appActions from 'shared/actions/app';
+import { actions as appActions } from 'shared/containers/app';
 import * as actions from './actions';
 import myReducer from './reducer';
 

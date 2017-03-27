@@ -1,5 +1,5 @@
 import utils from 'shared/utils';
-import * as appActions from 'shared/actions/app';
+import { actions as appActions } from 'shared/containers/app';
 import urls from 'shared/config/urls';
 
 // Fetch

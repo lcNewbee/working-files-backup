@@ -7,8 +7,8 @@ import utils from 'shared/utils';
 import {
   FormGroup, FormInput, WizardContainer,
 } from 'shared/components';
-import * as appActions from 'shared/actions/app';
-import * as settingActions from 'shared/actions/settings';
+import { actions as appActions } from 'shared/containers/app';
+import { actions as settingActions } from 'shared/containers/settings';
 import * as selfActions from './actions';
 import reducer from './reducer';
 import './index.scss';

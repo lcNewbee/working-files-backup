@@ -1,9 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import 'react-dom';
 import { fromJS } from 'immutable';
-import { connect } from 'react-redux';
 import ReduxToastr from 'react-redux-toastr';
-import * as actions from 'shared/actions/app';
 import Modal from 'shared/components/Modal';
 import ProgressBar from 'shared/components/ProgressBar';
 import stringUtils from 'shared/utils/lib/string';
@@ -42,12 +40,7 @@ const propTypes = {
   app: PropTypes.object,
   route: PropTypes.shape({
     routes: PropTypes.array,
-  }),
-  history: PropTypes.shape({
-    replace: PropTypes.func.isRequired,
-  }),
-  match: PropTypes.shape({
-    url: PropTypes.string.isRequired,
+    formUrl: PropTypes.string.isRequired,
   }),
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired,
@@ -171,14 +164,3 @@ export default class App extends Component {
 
 App.propTypes = propTypes;
 App.defaultProps = defaultProps;
-
-function mapStateToProps(state) {
-  return {
-    app: state.app,
-  };
-}
-// 添加 redux 属性的 react 页面
-export const Screen = connect(
-  mapStateToProps,
-  actions,
-)(App);

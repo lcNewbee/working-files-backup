@@ -9,7 +9,7 @@ import { FormGroup } from 'shared/components/Form';
 import Table from 'shared/components/Table';
 import Modal from 'shared/components/Modal';
 import Button from 'shared/components/Button/Button';
-import * as appActions from 'shared/actions/app';
+import { actions as appActions } from 'shared/containers/app';
 import * as actions from './actions';
 import reducer from './reducer';
 

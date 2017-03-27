@@ -5,9 +5,9 @@ import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { FormGroup, Icon, AppScreen } from 'shared/components';
 import moment from 'moment';
-import * as appActions from 'shared/actions/app';
-import * as screenActions from 'shared/actions/screens';
-import * as propertiesActions from 'shared/actions/properties';
+import { actions as appActions } from 'shared/containers/app';
+import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as propertiesActions } from 'shared/containers/properties';
 import './orbitTrace.scss';
 
 function getDistance(p1, p2) {

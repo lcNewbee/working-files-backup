@@ -1,6 +1,6 @@
 import utils from 'shared/utils';
 import urls from 'shared/config/urls';
-import * as appActions from 'shared/actions/app';
+import { actions as appActions } from 'shared/containers/app';
 
 export function changePasswordSettings(data) {
   return {

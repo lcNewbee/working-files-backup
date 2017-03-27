@@ -12,9 +12,9 @@ import { apStatus } from 'shared/config/axcAp';
 import validator from 'shared/validator';
 
 // custom
-import * as appActions from 'shared/actions/app';
-import * as screenActions from 'shared/actions/screens';
-import * as propertiesActions from 'shared/actions/properties';
+import { actions as appActions } from 'shared/containers/app';
+import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as propertiesActions } from 'shared/containers/properties';
 
 const EDIT_LIST_ACTION = 'editList';
 const flowRateFilter = utils.filter('flowRate');
@@ -160,11 +160,11 @@ const listActionBarButtons = [
   }, {
     actionName: 'reboot',
     text: __('Reboot'),
-    icon: 'recycle',
+    icon: 'power-off',
   }, {
     actionName: 'reset',
     text: __('Reset'),
-    icon: 'reply-all',
+    icon: 'undo',
   },
 ];
 

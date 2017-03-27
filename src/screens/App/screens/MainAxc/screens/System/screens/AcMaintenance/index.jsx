@@ -8,8 +8,8 @@ import AppScreen from 'shared/components/Template/AppScreen';
 import FormGroup from 'shared/components/Form/FormGroup';
 import SaveButton from 'shared/components/Button/SaveButton';
 import FileUpload from 'shared/components/FileUpload';
-import * as appActions from 'shared/actions/app';
-import * as screenActions from 'shared/actions/screens';
+import { actions as appActions } from 'shared/containers/app';
+import { actions as screenActions } from 'shared/containers/appScreen';
 import { getActionable } from 'shared/axc';
 import AcVersion from './AcVersion';
 
@@ -217,7 +217,7 @@ export default class View extends React.PureComponent {
             <FormGroup label={__('Reboot Controller')}>
               <SaveButton
                 type="button"
-                icon="refresh"
+                icon="power-off"
                 text={__('Reboot Now')}
                 disabled={!this.actionable}
                 onClick={

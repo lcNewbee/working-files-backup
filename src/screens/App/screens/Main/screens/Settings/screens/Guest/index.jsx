@@ -7,7 +7,7 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import validator from 'shared/validator';
 import { FormGroup, FormInput } from 'shared/components/Form';
 import { SaveButton } from 'shared/components';
-import * as appActions from 'shared/actions/app';
+import { actions as appActions } from 'shared/containers/app';
 import * as myActions from './actions';
 import { fetchDeviceGroups } from '../GroupSettings/actions';
 import myReducer from './reducer';

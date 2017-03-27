@@ -7,8 +7,8 @@ import { bindActionCreators } from 'redux';
 import { SaveButton, Button } from 'shared/components/Button';
 import Table from 'shared/components/Table';
 import AppScreen from 'shared/components/Template/AppScreen';
-import * as screenActions from 'shared/actions/screens';
-import * as appActions from 'shared/actions/app';
+import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as appActions } from 'shared/containers/app';
 import * as productActions from '../../../../reducer';
 
 const msg = {

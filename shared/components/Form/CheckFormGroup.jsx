@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import FormGroup from 'shared/components/Form/FormGroup';
-import * as appActions from 'shared/actions/app';
+import { actions as appActions } from 'shared/containers/app';
 
 const propTypes = {
   id: PropTypes.string,

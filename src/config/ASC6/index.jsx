@@ -1,7 +1,5 @@
 import NotFound from 'shared/components/NotFound';
-import settingsReducer from 'shared/reducers/settings';
 import b28n from 'shared/b28n';
-import appReducer from 'shared/reducers/app';
 import { reducer as toastrReducer } from 'react-redux-toastr';
 
 //
@@ -20,7 +18,9 @@ window.CB = b28n.init({
 window.guiConfig = guiConfig;
 
 
-const App = require('../../screens/App');
+const app = require('shared/containers/app');
+const settings = require('shared/containers/settings');
+
 const pMainAP = require('../../screens/App/screens/MainAP');
 const sWizard = require('../../screens/App/screens/MainAP/Wizard');
 // const sThinModeNotice = require('../../screens/App/screens/MainAP/ThinModeNotice');
@@ -109,7 +109,7 @@ const funConfig = {
 
 const routes = [{
   path: '/',
-  component: App.Screen,
+  component: app.Screen,
   formUrl: '/goform/get_product_info',
   indexPath: '/login',
   routes: [{
@@ -293,8 +293,8 @@ const routes = [{
 }];
 
 const reducers = {
-  app: appReducer,
-  settings: settingsReducer,
+  app: app.reducer,
+  settings: settings.reducer,
   toastr: toastrReducer,
   networksettings: sNetworkSettings.networksettings,
   systemstatus: pSystemStatus.systemstatus,
@@ -320,10 +320,10 @@ const reducers = {
   product: pMainAP.product,
 };
 
-const ac5000 = {
+export default {
   reducers,
   routes,
   appConfig: guiConfig,
 };
 
-export default ac5000;
+

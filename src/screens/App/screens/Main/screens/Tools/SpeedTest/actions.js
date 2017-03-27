@@ -1,6 +1,6 @@
 // import urls from 'shared/config/urls';
-// import * as appActions from 'shared/actions/app';
-// import * as settingActions from 'shared/actions/settings';
+// import { actions as appActions } from 'shared/containers/app';
+// import { actions as settingActions } from 'shared/containers/settings';
 
 export function toggleShowAdvanceBtn() {
   return {

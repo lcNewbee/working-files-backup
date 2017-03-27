@@ -9,7 +9,7 @@ import Table from 'shared/components/Table';
 import {
   Search, FormGroup, Button, Select, Modal, Switchs,
 } from 'shared/components';
-import * as appActions from 'shared/actions/app';
+import { actions as appActions } from 'shared/containers/app';
 import * as actions from './actions';
 import reducer from './reducer';
 

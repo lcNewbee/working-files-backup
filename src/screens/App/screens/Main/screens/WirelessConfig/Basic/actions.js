@@ -1,5 +1,5 @@
-import { updateItemSettings } from 'shared/actions/settings';
-import { fetch } from 'shared/actions/app';
+import { updateItemSettings } from 'shared/containers/settings/actions';
+import { fetch } from 'shared/containers/app/actions';
 
 
 export function changeScanStatus(data) {

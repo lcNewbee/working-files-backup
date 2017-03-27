@@ -7,8 +7,8 @@ import FormGroup from 'shared/components/Form/FormGroup';
 import FormInput from 'shared/components/Form/FormInput';
 import { fromJS, Map, List } from 'immutable';
 import utils from 'shared/utils';
-import * as sharedActions from 'shared/actions/settings';
-import * as appActions from 'shared/actions/app';
+import { actions as sharedActions } from 'shared/containers/settings';
+import { actions as appActions } from 'shared/containers/app';
 import * as selfActions from './actions';
 import reducer from './reducer';
 

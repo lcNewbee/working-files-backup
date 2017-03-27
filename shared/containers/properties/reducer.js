@@ -1,5 +1,5 @@
 import { fromJS } from 'immutable';
-import ACTIONS from 'shared/constants/action';
+import ACTION_TYPES from './actionTypes';
 
 const defaultItem = fromJS({
   id: '-1',
@@ -275,10 +275,10 @@ function changePropertyPanelItem(state, action) {
 
 export default function (state = defaultState, action) {
   switch (action.type) {
-    case ACTIONS.CHANGE_PROPERTY_PANEL_DATA:
+    case ACTION_TYPES.CHANGE_PANEL_DATA:
       return updatePropertyPanelData(state, action.data);
 
-    case ACTIONS.TOGGLE_PROPERTY:
+    case ACTION_TYPES.TOGGLE:
       return state.update('isShowPanel', (val) => {
         let ret = !val;
 
@@ -288,14 +288,14 @@ export default function (state = defaultState, action) {
         return ret;
       });
 
-    case ACTIONS.INIT_PROPERTY_PANEL:
+    case ACTION_TYPES.INIT_PANEL:
       return initAddPropertyPanel(state, action);
 
-    case ACTIONS.RC_PROPERTY_PANEL_DATA:
+    case ACTION_TYPES.RC_PANEL_DATA:
       return receivePropertyPanelData(state, action);
 
     // 切换属性列表body折叠状态
-    case ACTIONS.COLLAPSE_PROPERTY_PANEL:
+    case ACTION_TYPES.COLLAPSE_PANEL:
       return state.update('activeIndex', (i) => {
         let ret = action.index;
 
@@ -306,11 +306,11 @@ export default function (state = defaultState, action) {
         return ret;
       });
 
-    case ACTIONS.REMOVE_PROPERTY_PANEL:
+    case ACTION_TYPES.REMOVE_PANEL:
       return removePropertyPanel(state, action);
 
     // 修改合并属性列表某项的数据
-    case ACTIONS.CHANGE_PROPERTY_PANEL_ITEM:
+    case ACTION_TYPES.CHANGE_PANEL_ITEM:
       return changePropertyPanelItem(state, action);
 
     default:

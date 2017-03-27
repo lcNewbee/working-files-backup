@@ -8,7 +8,7 @@ const propTypes = {
   icon: PropTypes.string,
   className: PropTypes.string,
   theme: PropTypes.oneOf(['default', 'primary', 'success', 'info', 'warning', 'danger']),
-  size: PropTypes.oneOf(['sm', 'lg']),
+  size: PropTypes.oneOf(['sm', 'lg', 'min']),
   type: PropTypes.oneOf(['button', 'reset', 'submit']),
   inverse: PropTypes.bool,
   Component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),

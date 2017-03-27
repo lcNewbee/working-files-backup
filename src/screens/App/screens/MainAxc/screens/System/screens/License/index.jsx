@@ -7,8 +7,8 @@ import SaveButton from 'shared/components/Button/SaveButton';
 import FormGroup from 'shared/components/Form/FormGroup';
 import { getActionable } from 'shared/axc';
 import AppScreen from 'shared/components/Template/AppScreen';
-import * as appActions from 'shared/actions/app';
-import * as screensActions from 'shared/actions/screens';
+import { actions as appActions } from 'shared/containers/app';
+import { actions as screensActions } from 'shared/containers/appScreen';
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),

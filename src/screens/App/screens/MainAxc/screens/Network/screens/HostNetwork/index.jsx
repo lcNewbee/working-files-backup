@@ -1,7 +1,7 @@
 import React from 'react';
 import { AppScreen } from 'shared/components';
-import * as screenActions from 'shared/actions/screens';
-import * as appActions from 'shared/actions/app';
+import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as appActions } from 'shared/containers/app';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';

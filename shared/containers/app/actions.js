@@ -1,7 +1,7 @@
 import { toastr } from 'react-redux-toastr';
 import ERROR_MSG_MAP from 'shared/config/serverError';
 import utils from 'shared/utils';
-import ACTIONS from 'shared/constants/action';
+import ACTION_TYPES from './actionTypes';
 
 const APP_CONFIG = {
   fetchInfo: '/goform/getAcInfo',
@@ -9,28 +9,28 @@ const APP_CONFIG = {
 
 export function updateRouter(payload) {
   return {
-    type: ACTIONS.UPDATE_ROUTER,
+    type: ACTION_TYPES.UPDATE_ROUTER,
     payload,
   };
 }
 
 export function refreshAll() {
   return {
-    type: ACTIONS.REFRESH_ALL,
+    type: ACTION_TYPES.REFRESH_ALL,
     refreshAt: Date.now(),
   };
 }
 
 export function createModal(data) {
   return {
-    type: ACTIONS.CREATE_MODAL,
+    type: ACTION_TYPES.CREATE_MODAL,
     data,
   };
 }
 
 export function changeModalState(data) {
   return {
-    type: ACTIONS.CHANGE_MODAL_STATE,
+    type: ACTION_TYPES.CHANGE_MODAL_STATE,
     data,
   };
 }
@@ -54,14 +54,9 @@ export function closeModal(data) {
   };
 }
 
-export function requestFetchProductInfo() {
-  return {
-    type: ACTIONS.REQUEST_FETCH_AC_INFO,
-  };
-}
 export function receiveFetchProductInfo(data) {
   return {
-    type: ACTIONS.RECIVECE_FETCH_AC_INFO,
+    type: ACTION_TYPES.RECIVECE_PRODUCT_INFO,
     data,
   };
 }
@@ -74,13 +69,13 @@ export function receiveFetchProductInfo(data) {
  */
 export function requestSave() {
   return {
-    type: ACTIONS.REQUEST_SAVE,
+    type: ACTION_TYPES.REQUEST_SAVE,
   };
 }
 
 export function receiveSave(state) {
   return {
-    type: ACTIONS.RECEIVE_SAVE,
+    type: ACTION_TYPES.RECEIVE_SAVE,
     savedAt: Date.now(),
     state,
   };
@@ -88,7 +83,7 @@ export function receiveSave(state) {
 
 export function receiveAjaxError(payload) {
   return {
-    type: ACTIONS.RECEIVE_AJAX_ERROR,
+    type: ACTION_TYPES.RECEIVE_AJAX_ERROR,
     payload,
   };
 }
@@ -105,7 +100,7 @@ export function receiveServerError(state) {
   }
 
   return {
-    type: ACTIONS.RECEIVE_SERVER_ERROR,
+    type: ACTION_TYPES.RECEIVE_SERVER_ERROR,
     payload: utils.extend({}, state, {
       errorAt: Date.now(),
     }),
@@ -117,12 +112,12 @@ export function receiveServerError(state) {
  */
 export function rqFetch() {
   return {
-    type: ACTIONS.RQ_FETCH,
+    type: ACTION_TYPES.RQ_FETCH,
   };
 }
 export function rcFetch() {
   return {
-    type: ACTIONS.RC_FETCH,
+    type: ACTION_TYPES.RC_FETCH,
   };
 }
 
@@ -243,8 +238,6 @@ export function saveFile(url, formElem, option) {
 export function fetchProductInfo(url) {
   return (dispatch) => {
     const fetchUrl = url || APP_CONFIG.fetchInfo;
-    dispatch(requestFetchProductInfo());
-
     return dispatch(fetch(fetchUrl))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
@@ -262,7 +255,7 @@ export function fetchProductInfo(url) {
  */
 export function startValidateAll(formId) {
   return {
-    type: ACTIONS.START_VALIDATE_ALL,
+    type: ACTION_TYPES.START_VALIDATE_ALL,
     payload: {
       validateAt: Date.now(),
       formId,
@@ -298,20 +291,20 @@ export function validateAll(formId, func) {
 
 export function resetVaildateMsg() {
   return {
-    type: ACTIONS.RESET_VAILDATE_MSG,
+    type: ACTION_TYPES.RESET_VAILDATE_MSG,
   };
 }
 
 export function reportValidError(data) {
   return {
-    type: ACTIONS.REPORT_VALID_ERROR,
+    type: ACTION_TYPES.REPORT_VALID_ERROR,
     data,
   };
 }
 
 export function initAppConfig(payload) {
   return {
-    type: ACTIONS.INIT_APP_CONFIG,
+    type: ACTION_TYPES.INIT_CONFIG,
     payload,
   };
 }
@@ -322,7 +315,7 @@ export function initAppConfig(payload) {
 // 修改登录相关对象
 export function changeLoginState(payload) {
   return {
-    type: ACTIONS.CHANGE_LOGIN_STATE,
+    type: ACTION_TYPES.CHANGE_LOGIN_STATE,
     payload,
   };
 }
@@ -330,7 +323,7 @@ export function changeLoginState(payload) {
 // 修改登录状态值
 export function changeLoginStatus(data) {
   return {
-    type: ACTIONS.CHANGE_LOGIN_STATUS,
+    type: ACTION_TYPES.CHANGE_LOGIN_STATUS,
     data,
   };
 }

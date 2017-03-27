@@ -12,8 +12,8 @@ import { FormGroup } from 'shared/components/Form';
 import Table from 'shared/components/Table';
 import { renderRoutesList } from 'shared/components/Organism/RouterConfig';
 import { getActionable } from 'shared/axc';
-import * as appActions from 'shared/actions/app';
-import * as propertiesActions from 'shared/actions/properties';
+import { actions as appActions } from 'shared/containers/app';
+import { actions as propertiesActions } from 'shared/containers/properties';
 import * as mainActions from '../../actions';
 
 const ALL_GROUP_ID = -100;

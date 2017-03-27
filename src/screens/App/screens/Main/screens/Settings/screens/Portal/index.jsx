@@ -9,7 +9,7 @@ import validator from 'shared/validator';
 import { FormGroup } from 'shared/components/Form';
 import Select from 'shared/components/Select';
 import { Button, SaveButton } from 'shared/components';
-import * as appActions from 'shared/actions/app';
+import { actions as appActions } from 'shared/containers/app';
 import * as myActions from './actions';
 import myReducer from './reducer';
 import './index.scss';

@@ -1,7 +1,5 @@
 import NotFound from 'shared/components/NotFound';
-import settingsReducer from 'shared/reducers/settings';
 import b28n from 'shared/b28n';
-import appReducer from 'shared/reducers/app';
 import { reducer as toastrReducer } from 'react-redux-toastr';
 
 //
@@ -29,10 +27,9 @@ document.getElementsByTagName('body')[0].className += ' ' + b28n.getLang();
   产品界面配置
  */
 
-// 公用组件
-
-// 主APP
-const App = require('../../screens/App');
+// 公用
+const app = require('shared/containers/app');
+const settings = require('shared/containers/settings');
 const SharedComponents = require('shared/components');
 
 // 登录界面
@@ -75,7 +72,7 @@ const sChannelUtilization = require('../../screens/App/screens/Main/screens/Tool
 
 const routes = [{
   path: '/',
-  component: App.Screen,
+  component: app.Screen,
   formUrl: '/goform/get_system_info',
   indexPath: '/login',
   routes: [{
@@ -215,8 +212,8 @@ const routes = [{
 
 // 配置模块页面 store
 const reducers = {
-  app: appReducer,
-  settings: settingsReducer,
+  app: app.reducer,
+  settings: settings.reducer,
   toastr: toastrReducer,
 
   status: pStatus.status,
@@ -256,35 +253,9 @@ const reducers = {
 };
 
 
-const ac5000 = {
+export default {
   reducers,
   routes,
   appConfig: guiConfig,
 };
 
-
-export default ac5000;
-
-/* {
-      id: 'networkservice',
-      path: '/main/networkservice',
-      icon: 'cog',
-      text: __('NETWORK SERVICE'),
-      component: pNetworkService,
-      indexRoute: {
-        onEnter: (nextState, replace) => replace('/main/networkservice/ntpclient'),
-      },
-      routes: [
-        {
-          id: 'ntpclient',
-          path: '/main/networkservice/ntpclient',
-          text: __('NTP Client'),
-          component: sNTPClient.Screen,
-        }, {
-          id: 'systemlog',
-          path: '/main/settings/systemlog',
-          text: __('System Log'),
-          component: sSystemLog.Screen,
-        }],
-}
-*/

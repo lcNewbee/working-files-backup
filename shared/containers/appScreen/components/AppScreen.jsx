@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react';
-import utils, { immutableUtils } from 'shared/utils';
 import immutable, { List, Map } from 'immutable';
-import AppScreenList from 'shared/components/Template/AppScreenList';
-import AppScreenSettings from 'shared/components/Template/AppScreenSettings';
+import utils, { immutableUtils } from 'shared/utils';
 import { getActionable } from 'shared/axc';
+import AppScreenList from './AppScreenList';
+import AppScreenSettings from './AppScreenSettings';
 
 function emptyFunc() {}
 
@@ -24,7 +24,7 @@ const propTypes = {
   changeScreenActionQuery: PropTypes.func.isRequired,
   changeScreenQuery: PropTypes.func.isRequired,
 
-  // List 相关属性
+  // List 相关属性list
   listOptions: PropTypes.oneOfType([
     PropTypes.instanceOf(List),
     PropTypes.array,
@@ -63,7 +63,6 @@ export default class AppScreen extends React.Component {
       defaultSettingsData, settingsFormOptions, listOptions,
       groupid,
     } = props;
-    console.log(props.route)
     const initOption = utils.extend({
       id: props.route.id,
       formUrl: props.route.formUrl,

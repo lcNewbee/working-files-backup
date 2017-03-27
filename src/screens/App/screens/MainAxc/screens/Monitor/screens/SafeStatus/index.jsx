@@ -8,7 +8,7 @@ import { $$commonPieOption } from 'shared/config/axc';
 import {
   Table, EchartReact, Button,
 } from 'shared/components';
-import * as screenActions from 'shared/actions/screens';
+import { actions as screenActions } from 'shared/containers/appScreen';
 
 
 const tableOptions = fromJS([

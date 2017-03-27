@@ -9,9 +9,8 @@ import {
 import Modal from 'shared/components/Modal';
 import ProgressBar from 'shared/components/ProgressBar';
 import validator from 'shared/validator';
-import * as appActions from 'shared/actions/app';
-import * as sharedActions from 'shared/actions/settings';
-// import * as sharedReducer from 'shared/reducers/settings';
+import { actions as appActions } from 'shared/containers/app';
+import { actions as sharedActions } from 'shared/containers/settings';
 import * as selfActions from './actions';
 import reducer from './reducer';
 

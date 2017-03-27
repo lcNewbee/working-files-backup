@@ -7,8 +7,8 @@ import {
 } from 'shared/components';
 import validator from 'shared/validator';
 import { bindActionCreators } from 'redux';
-import * as appActions from 'shared/actions/app';
-import * as sharedActions from 'shared/actions/settings';
+import { actions as appActions } from 'shared/containers/app';
+import { actions as sharedActions } from 'shared/containers/settings';
 import * as selfActions from './actions';
 import selfReducer from './reducer';
 

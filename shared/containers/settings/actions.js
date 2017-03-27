@@ -1,14 +1,15 @@
-import * as appActions from 'shared/actions/app';
+import { actions as appActions } from '../app';
+import ACTION_TYPES from './actionTypes';
 
 export function reqeustFetchSettings() {
   return {
-    type: 'REQEUST_FETCH_SETTINGS',
+    type: ACTION_TYPES.REQEUST_FETCH,
   };
 }
 
 export function reciveFetchSettings(data, name) {
   return {
-    type: 'RECIVE_FETCH_SETTINGS',
+    type: ACTION_TYPES.RECIVE_FETCH,
     updateAt: Date.now(),
     data,
     name,
@@ -17,32 +18,32 @@ export function reciveFetchSettings(data, name) {
 
 export function changeSettingsQuery(query) {
   return {
-    type: 'CHANGE_SETTINGS_QUERY',
+    type: ACTION_TYPES.CHANGE_QUERY,
     query,
   };
 }
 export function changeSettingsActionQuery(query) {
   return {
-    type: 'CHANGE_SETTINGS_ACTION_QUERY',
+    type: ACTION_TYPES.CHANGE_ACTION_QUERY,
     query,
   };
 }
 export function updateItemSettings(data) {
   return {
-    type: 'UPDATE_ITEM_SETTINGS',
+    type: ACTION_TYPES.UPDATE_SETTINGS,
     data,
   };
 }
 
 export function leaveSettingsScreen() {
   return {
-    type: 'LEAVE_SETTINGS_SCREEN',
+    type: ACTION_TYPES.LEAVE_SCREEN,
   };
 }
 
 export function initSettings(option) {
   return {
-    type: 'INIT_SETTINGS',
+    type: ACTION_TYPES.INIT,
     option,
   };
 }
@@ -76,7 +77,7 @@ export function saveSettings(url) {
     const saveUrl = globalState.settings.getIn([name, 'saveUrl']) || formUrl;
 
     if (!curData.equals(oriData)) {
-      console.log('hasChange');
+      //console.log('hasChange');
     }
 
     return dispatch(appActions.save(url || saveUrl, curData.toJS()))

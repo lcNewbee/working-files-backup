@@ -1,9 +1,6 @@
 import b28n from 'shared/b28n';
 import NotFound from 'shared/components/NotFound';
 import stringUtils from 'shared/utils/lib/string';
-import appReducer from 'shared/reducers/app';
-import screensReducer from 'shared/reducers/screens';
-import propertiesReducer from 'shared/reducers/properties';
 import moment from 'moment';
 import { reducer as toastrReducer } from 'react-redux-toastr';
 
@@ -60,10 +57,10 @@ bodyElem.className = stringUtils.addClassName(bodyElem.className, b28n.getLang()
  * 产品界面配置
  */
 
-// 公用组件
-
-// 主APP
-const App = require('../../screens/App');
+// 公用
+const app = require('shared/containers/app');
+const appScreen = require('shared/containers/appScreen');
+const properties = require('shared/containers/properties');
 const SharedComponents = require('shared/components');
 
 //
@@ -235,7 +232,7 @@ const routes = [
   {
     id: 'root',
     path: '/',
-    component: App.Screen,
+    component: app.Screen,
     formUrl: 'goform/axcInfo',
     indexPath: '/login',
     routes: [
@@ -986,13 +983,12 @@ const routes = [
   },
 ];
 
-
-// 配置模块页面 store
+// 配置模块页面 reducers
 const reducers = {
   // shared reducers
-  app: appReducer,
-  screens: screensReducer,
-  properties: propertiesReducer,
+  app: app.reducer,
+  screens: appScreen.reducer,
+  properties: properties.reducer,
 
   // product comstom reducers
   product: sMainAxc.reducer,
@@ -1000,11 +996,9 @@ const reducers = {
   toastr: toastrReducer,
 };
 
-const app = {
+export default {
   reducers,
   routes,
   appConfig: guiConfig,
 };
-
-export default app;
 

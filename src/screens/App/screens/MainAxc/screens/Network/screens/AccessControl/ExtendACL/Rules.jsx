@@ -4,8 +4,8 @@ import { AppScreen, FormInput } from 'shared/components';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import utils from 'shared/utils';
-import * as appActions from 'shared/actions/app';
-import * as screenActions from 'shared/actions/screens';
+import { actions as appActions } from 'shared/containers/app';
+import { actions as screenActions } from 'shared/containers/appScreen';
 
 const protoTypeOptions = [
   { label: 'any', value: 'any' },

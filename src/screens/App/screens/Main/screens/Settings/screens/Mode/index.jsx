@@ -6,8 +6,8 @@ import AppScreen from 'shared/components/Template/AppScreen';
 import FormContainer from 'shared/components/Organism/FormContainer';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
-import * as appActions from 'shared/actions/app';
-import * as screenActions from 'shared/actions/screens';
+import { actions as appActions } from 'shared/containers/app';
+import { actions as screenActions } from 'shared/containers/appScreen';
 
 const msg = {
   upSpeed: __('Up Speed'),

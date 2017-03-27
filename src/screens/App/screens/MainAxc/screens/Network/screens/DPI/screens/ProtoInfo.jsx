@@ -8,8 +8,8 @@ import Select from 'shared/components/Select';
 import Table from 'shared/components/Table';
 import Modal from 'shared/components/Modal';
 import { FormGroup, FormInput } from 'shared/components/Form';
-import * as appActions from 'shared/actions/app';
-import * as actions from 'shared/actions/screens';
+import { actions as appActions } from 'shared/containers/app';
+import { actions } from 'shared/containers/appScreen';
 
 const flowRateFilter = utils.filter('flowRate');
 const propTypes = fromJS({

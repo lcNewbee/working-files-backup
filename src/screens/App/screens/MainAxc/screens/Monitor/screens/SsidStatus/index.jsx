@@ -4,7 +4,7 @@ import { fromJS } from 'immutable';
 import utils from 'shared/utils';
 import AppScreen from 'shared/components/Template/AppScreen';
 // custom
-import * as screenActions from 'shared/actions/screens';
+import { actions as screenActions } from 'shared/containers/appScreen';
 
 const flowRateFilter = utils.filter('flowRate');
 const checkboxOptions = [

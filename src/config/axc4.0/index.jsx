@@ -1,9 +1,6 @@
 import b28n from 'shared/b28n';
 import NotFound from 'shared/components/NotFound';
 import stringUtils from 'shared/utils/lib/string';
-import appReducer from 'shared/reducers/app';
-import screensReducer from 'shared/reducers/screens';
-import propertiesReducer from 'shared/reducers/properties';
 import moment from 'moment';
 import { reducer as toastrReducer } from 'react-redux-toastr';
 
@@ -48,7 +45,10 @@ bodyElem.className = stringUtils.addClassName(bodyElem.className, b28n.getLang()
 // 公用组件
 
 // 主APP
-const App = require('../../screens/App');
+const app = require('shared/containers/app');
+const appScreen = require('shared/containers/appScreen');
+const properties = require('shared/containers/properties');
+
 const SharedComponents = require('shared/components');
 
 //
@@ -64,7 +64,6 @@ const sMainAxc = require('../../screens/App/screens/MainAxc');
 // const sNetworkVlan = require('../../screens/App/screens/MainAxc/screens/Network/screens/VLAN');
 const sVlanSettings = require('../../screens/App/screens/MainAxc/screens/Network/screens/VLAN/VlanSettings');
 const sQinqSettings = require('../../screens/App/screens/MainAxc/screens/Network/screens/VLAN/QinqSettings');
-// const sInterfaces = require('../../screens/App/screens/MainAxc/screens/Network/screens/Interfaces');
 const sV3Interfaces = require('../../screens/App/screens/MainAxc/screens/Network/screens/V3Interfaces');
 const sHostNetwork = require('../../screens/App/screens/MainAxc/screens/Network/screens/HostNetwork');
 const sPortSettings = require('../../screens/App/screens/MainAxc/screens/Network/screens/EthernetPort/PortSettings');
@@ -77,9 +76,6 @@ const sSnoopingUserList = require('../../screens/App/screens/MainAxc/screens/Net
 const sSnoopingStaticList = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/Snooping/StaticList');
 const sDhcpRelay = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/Relay/DhcpRelay');
 const sDhcpFilter = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/Filter/DhcpFilter');
-// const sNetworkRoutes = require('../../screens/App/screens/MainAxc/screens/Network/screens/Routes');
-// const sNetworkNat = require('../../screens/App/screens/MainAxc/screens/Network/screens/Nat');
-// const sNetworkRoutes = require('../../screens/App/screens/MainAxc/screens/Network/screens/Routes');
 const sNetowrkStaticRoutes = require('../../screens/App/screens/MainAxc/screens/Network/screens/StaticRoutes');
 const sBasicVlanInterface = require('../../screens/App/screens/MainAxc/screens/Network/screens/AccessControl/BasicACL/VlanInterface');
 const sBasicWLAN = require('../../screens/App/screens/MainAxc/screens/Network/screens/AccessControl/BasicACL/WLAN');
@@ -112,7 +108,6 @@ const sPortalRules =
 const sPortalMac =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalMac');
 // const sPortalTemplate =
-//    require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalTemplate');
 const sNetworkUrlWlan =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/URL/screens/Wlan');
 const sNetworkUrlRulesGroup =
@@ -162,7 +157,6 @@ const sEndpointProtection =
 // const sFlowReport =
 //     require('../../screens/App/screens/MainAxc/screens/Report/screens/FlowReport');
 // const sUsersAnalysis =
-//     require('../../screens/App/screens/MainAxc/screens/Report/screens/BusinessReport/screens/UsersAnalysis');
 const sLiveMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/LiveMap');
 const sApPlanMap =
     require('../../screens/App/screens/MainAxc/screens/Map/screens/ApPlanMap');
@@ -171,7 +165,6 @@ const sClientsTraceList = require('../../screens/App/screens/MainAxc/screens/Map
 const sClientsTraceSettings = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace/Settings');
 // const sRfMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/Rf');
 const sHeatMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/HeatMap');
-// const sClientsTrace = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace');
 
 /**
  * 系统管理
@@ -278,7 +271,7 @@ const sPortalOnlineList =
 const routes = [
   {
     path: '/',
-    component: App.Screen,
+    component: app.Screen,
     formUrl: 'goform/axcInfo',
     indexPath: '/login',
     routes: [
@@ -1423,9 +1416,9 @@ const routes = [
 // 配置模块页面 store
 const reducers = {
   // shared reducers
-  app: appReducer,
-  screens: screensReducer,
-  properties: propertiesReducer,
+  app: app.reducer,
+  screens: appScreen.reducer,
+  properties: properties.reducer,
 
   // product comstom reducers
   product: sMainAxc.reducer,
@@ -1433,12 +1426,9 @@ const reducers = {
   toastr: toastrReducer,
 };
 
-const app = {
+export default {
   reducers,
   routes,
   appConfig: guiConfig,
 };
-
-
-export default app;
 

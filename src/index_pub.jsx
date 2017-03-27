@@ -9,7 +9,7 @@ require('whatwg-fetch');
 const React = require('react');
 const ReactDOM = require('react-dom');
 const ReactRouterDom = require('react-router-dom');
-const appActions = require('shared/actions/app');
+const appActions = require('shared/containers/app/actions');
 
 const thunkMiddleware = require('redux-thunk').default;
 const combineReducers = require('redux').combineReducers;
@@ -17,7 +17,7 @@ const applyMiddleware = require('redux').applyMiddleware;
 const createStore = require('redux').createStore;
 const Provider = require('react-redux').Provider;
 const renderRoutesSwitch = require('shared/components/Organism/RouterConfig').renderRoutesSwitch;
-const prodConfig = require('./config/axc3.0');
+const prodConfig = require('./config/AEC120');
 
 const HashRouter = ReactRouterDom.HashRouter;
 const mountNode = document.getElementById('app');

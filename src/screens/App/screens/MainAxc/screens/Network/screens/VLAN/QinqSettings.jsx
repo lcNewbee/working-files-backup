@@ -6,8 +6,8 @@ import { bindActionCreators } from 'redux';
 import {
   AppScreen,
 } from 'shared/components';
-import * as screenActions from 'shared/actions/screens';
-import * as appActions from 'shared/actions/app';
+import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as appActions } from 'shared/containers/app';
 
 const qinqOptions = [
   { label: __('Turn Off'), value: '0' },

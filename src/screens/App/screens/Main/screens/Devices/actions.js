@@ -1,5 +1,5 @@
 import utils from 'shared/utils';
-import * as appActions from 'shared/actions/app'
+import * as appActions from 'shared/containers/app/actions'
 import urls from 'shared/config/urls';
 
 let refreshTimeout = null;
