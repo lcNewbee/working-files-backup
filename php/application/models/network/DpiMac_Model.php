@@ -43,12 +43,14 @@ class DpiMac_Model extends CI_Model {
             }
         }
         if($mac){
+            $search_ary = array();
             foreach($listData as $rows){
                  if($mac == $rows['mac']){
-                     $listData = array($rows);
+                     array_push($search_ary,$rows);
                      break;
                  }
             }
+            $listData = $search_ary;
         }
         $arr =  array(
             'state'=>array('code'=>2000,'msg'=>'ok'),
