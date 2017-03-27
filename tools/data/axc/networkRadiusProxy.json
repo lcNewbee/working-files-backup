@@ -6,7 +6,7 @@
   },
   "data": {
     "settings": {
-      "radsec_enable": "0",
+      "radsec_enable": "1",
       "radius_template": "test"
     }
   }
