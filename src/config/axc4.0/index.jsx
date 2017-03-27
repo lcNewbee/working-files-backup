@@ -31,21 +31,6 @@ b28n.addDict(langEn, 'en');
 window.CB = b28n.init({
   supportLang: ['en', 'cn'],
 });
-
-guiConfig.versionCode = guiConfig.version.split('.').reduce(
-  (x, y, index) => {
-    let ret = parseInt(x, 10);
-    const nextVal = parseInt(y, 10);
-
-    if (index === 1) {
-      ret = (10000 * ret) + (nextVal * 100);
-    } else if (index === 2) {
-      ret += nextVal;
-    }
-
-    return ret;
-  },
-);
 window.guiConfig = guiConfig;
 
 if (b28n.getLang() === 'cn') {
@@ -76,17 +61,49 @@ const sMainAxc = require('../../screens/App/screens/MainAxc');
 /**
  * 网络设置
  */
-const sInterfaces = require('../../screens/App/screens/MainAxc/screens/Network/screens/Interfaces');
+// const sNetworkVlan = require('../../screens/App/screens/MainAxc/screens/Network/screens/VLAN');
+const sVlanSettings = require('../../screens/App/screens/MainAxc/screens/Network/screens/VLAN/VlanSettings');
+const sQinqSettings = require('../../screens/App/screens/MainAxc/screens/Network/screens/VLAN/QinqSettings');
+// const sInterfaces = require('../../screens/App/screens/MainAxc/screens/Network/screens/Interfaces');
+const sV3Interfaces = require('../../screens/App/screens/MainAxc/screens/Network/screens/V3Interfaces');
+const sHostNetwork = require('../../screens/App/screens/MainAxc/screens/Network/screens/HostNetwork');
+const sPortSettings = require('../../screens/App/screens/MainAxc/screens/Network/screens/EthernetPort/PortSettings');
+const sPortMirring = require('../../screens/App/screens/MainAxc/screens/Network/screens/EthernetPort/PortMirring');
+const sPortAggregation = require('../../screens/App/screens/MainAxc/screens/Network/screens/EthernetPort/PortAggregation');
 const sDhcpList = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/DHCP/DhcpList');
+const sDhcpService = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/DHCP/DhcpService');
+const sDpcpStaticList = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/DHCP/DpcpStaticList');
+const sSnoopingUserList = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/Snooping/UserList');
+const sSnoopingStaticList = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/Snooping/StaticList');
 const sDhcpRelay = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/Relay/DhcpRelay');
-const sNetworkRoutes = require('../../screens/App/screens/MainAxc/screens/Network/screens/Routes');
-const sNetworkNat = require('../../screens/App/screens/MainAxc/screens/Network/screens/Nat');
+const sDhcpFilter = require('../../screens/App/screens/MainAxc/screens/Network/screens/DHCP/screens/Filter/DhcpFilter');
+// const sNetworkRoutes = require('../../screens/App/screens/MainAxc/screens/Network/screens/Routes');
+// const sNetworkNat = require('../../screens/App/screens/MainAxc/screens/Network/screens/Nat');
+// const sNetworkRoutes = require('../../screens/App/screens/MainAxc/screens/Network/screens/Routes');
+const sNetowrkStaticRoutes = require('../../screens/App/screens/MainAxc/screens/Network/screens/StaticRoutes');
+const sBasicVlanInterface = require('../../screens/App/screens/MainAxc/screens/Network/screens/AccessControl/BasicACL/VlanInterface');
+const sBasicWLAN = require('../../screens/App/screens/MainAxc/screens/Network/screens/AccessControl/BasicACL/WLAN');
+const sBasicRuleGroup = require('../../screens/App/screens/MainAxc/screens/Network/screens/AccessControl/BasicACL/RuleGroup');
+const sBasicRuleDetails = require('../../screens/App/screens/MainAxc/screens/Network/screens/AccessControl/BasicACL/Rules');
+const sBasicRuleBinding = require('../../screens/App/screens/MainAxc/screens/Network/screens/AccessControl/BasicACL/BindRules');
+
+const sExtendVlanInterface = require('../../screens/App/screens/MainAxc/screens/Network/screens/AccessControl/ExtendACL/VlanInterface');
+const sExtendWLAN = require('../../screens/App/screens/MainAxc/screens/Network/screens/AccessControl/ExtendACL/WLAN');
+const sExtendRuleGroup = require('../../screens/App/screens/MainAxc/screens/Network/screens/AccessControl/ExtendACL/RuleGroup');
+const sExtendRuleDetails = require('../../screens/App/screens/MainAxc/screens/Network/screens/AccessControl/ExtendACL/Rules');
+const sExtendRuleBinding = require('../../screens/App/screens/MainAxc/screens/Network/screens/AccessControl/ExtendACL/BindRules');
+// const sNetworkNat = require('../../screens/App/screens/MainAxc/screens/Network/screens/Nat');
+const sNetworkNatSettings = require('../../screens/App/screens/MainAxc/screens/Network/screens/NatSettings/screens/NatEnable');
+const sNetworkNatInterfaceType = require('../../screens/App/screens/MainAxc/screens/Network/screens/NatSettings/screens/InterfaceType');
+const sNetworkNatAddressPool = require('../../screens/App/screens/MainAxc/screens/Network/screens/NatSettings/screens/AddressPool');
+const sNetworkNatAddressObject = require('../../screens/App/screens/MainAxc/screens/Network/screens/NatSettings/screens/AddressObject');
+const sNetworkNatServeObject = require('../../screens/App/screens/MainAxc/screens/Network/screens/NatSettings/screens/ServeObject');
+const sNetworkNatRuleDetails = require('../../screens/App/screens/MainAxc/screens/Network/screens/NatSettings/screens/RuleDetails');
+const sNetworkNatUlog = require('../../screens/App/screens/MainAxc/screens/Network/screens/NatSettings/screens/ULog');
 // const sNetworkAcl = require('../../screens/App/screens/MainAxc/screens/Network/screens/ACL');
-const sNetworkPort = require('../../screens/App/screens/MainAxc/screens/Network/screens/Port');
+// const sNetworkPort = require('../../screens/App/screens/MainAxc/screens/Network/screens/Port');
 const sRaduisTemplate =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/RadiusTemplate');
-const sRadiusProxy =
-    require('../../screens/App/screens/MainAxc/screens/Network/screens/RadiusProxy');
 const sNetworkAaa = require('../../screens/App/screens/MainAxc/screens/Network/screens/AAA');
 const sPortalServer =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalServer');
@@ -94,6 +111,31 @@ const sPortalRules =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalRules');
 const sPortalMac =
     require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalMac');
+// const sPortalTemplate =
+//    require('../../screens/App/screens/MainAxc/screens/Network/screens/Portal/screens/PortalTemplate');
+const sNetworkUrlWlan =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/URL/screens/Wlan');
+const sNetworkUrlRulesGroup =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/URL/screens/RulesGroup');
+const sNetworkUrlFilterRules =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/URL/screens/FilterRules');
+const sNetworkUrlBindRules =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/URL/screens/BindRules');
+
+const sPPPOEBaseConfig = require('../../screens/App/screens/MainAxc/screens/Network/screens/PPPOE/screens/Base');
+const sPPPOEUserList = require('../../screens/App/screens/MainAxc/screens/Network/screens/PPPOE/screens/User');
+const sPPPOEBindVlan = require('../../screens/App/screens/MainAxc/screens/Network/screens/PPPOE/screens/Vlan');
+
+const sDPIOverview =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/DPIOverview');
+// const sFlowInfo =
+//     require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/FlowInfo');
+const sMacStatistic =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/MacStatistic');
+const sEthStatistic =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/EthStatistic');
+const sProtoInfo =
+    require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/ProtoInfo');
 
 
 /**
@@ -117,25 +159,19 @@ const sWips =
 const sEndpointProtection =
   require('../../screens/App/screens/MainAxc/screens/WLAN/screens/SafePolicy/screens/EndpointProtection');
 
+// const sFlowReport =
+//     require('../../screens/App/screens/MainAxc/screens/Report/screens/FlowReport');
+// const sUsersAnalysis =
+//     require('../../screens/App/screens/MainAxc/screens/Report/screens/BusinessReport/screens/UsersAnalysis');
 const sLiveMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/LiveMap');
 const sApPlanMap =
     require('../../screens/App/screens/MainAxc/screens/Map/screens/ApPlanMap');
 const sOrbitTrace = require('../../screens/App/screens/MainAxc/screens/Map/screens/OrbitTrace');
 const sClientsTraceList = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace');
 const sClientsTraceSettings = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace/Settings');
+// const sRfMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/Rf');
 const sHeatMap = require('../../screens/App/screens/MainAxc/screens/Map/screens/HeatMap');
-
-// ndpi
-const sDPIOverview =
-    require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/DPIOverview');
-// const sFlowInfo =
-const sMacStatistic =
-    require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/MacStatistic');
-const sEthStatistic =
-    require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/EthStatistic');
-const sProtoInfo =
-    require('../../screens/App/screens/MainAxc/screens/Network/screens/DPI/screens/ProtoInfo');
-
+// const sClientsTrace = require('../../screens/App/screens/MainAxc/screens/Map/screens/ClientsTrace');
 
 /**
  * 系统管理
@@ -168,7 +204,6 @@ const sAcMaintenance =
     require('../../screens/App/screens/MainAxc/screens/System/screens/AcMaintenance');
 const sNetworkTimeProtocol =
     require('../../screens/App/screens/MainAxc/screens/System/screens/NetworkTimeProtocol');
-
 
 /**
  * Portal
@@ -206,12 +241,6 @@ const sPortalOnline =
 const sPortalConnectLog =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Radius/ConnectLog');
 
-const sPortalAccountList =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Account/AccountList');
-const sPortalAccountListMac =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Account/AccountListMac');
-const sPortalConnectRecord =
-    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Account/ConnectRecord');
 const sPortalSendMessage =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Message/SendMessage');
 const sPortalSendBox =
@@ -219,6 +248,21 @@ const sPortalSendBox =
 const sPortalReceiveBox =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Message/ReceiveBox');
 
+const sPortalAccountList =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Account/AccountList');
+const sPortalAccountListMac =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Account/AccountListMac');
+const sPortalConnectRecord =
+    require('../../screens/App/screens/MainAxc/screens/Portal/screens/Account/ConnectRecord');
+
+// const sPortalPermission =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Permission');
+// const sPortalClassification =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Classification');
+// const sPortalUser =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/User');
+// const sPortalRole =
+//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/System/Role');
 
 const sPortalCardCategory =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Card/CardCategory');
@@ -233,7 +277,6 @@ const sPortalOnlineList =
 
 const routes = [
   {
-    id: 'root',
     path: '/',
     component: App.Screen,
     formUrl: 'goform/axcInfo',
@@ -245,88 +288,402 @@ const routes = [
         component: sMainAxc.Screen,
         routes: [
           {
-            id: 'network',
             path: '/main/network',
+            component: SharedComponents.NavContainer,
             icon: 'sphere',
             text: __('Network '),
-            component: SharedComponents.NavContainer,
-            indexPath: '/main/network/interface',
             routes: [
               {
-                id: 'networkInterface',
-                icon: 'th',
-                path: '/main/network/interface',
-                formUrl: 'goform/network/interface',
-                text: __('Interfaces'),
-                component: sInterfaces.Screen,
-              }, {
-                id: 'networkDhcp',
-                icon: 'random',
-                noTree: true,
+                id: 'vlan',
+                icon: 'road',
                 component: SharedComponents.TabContainer,
-                path: '/main/network/dhcp',
-                text: __('DHCP'),
-                indexPath: '/main/network/dhcp/service/list',
+                path: '/main/network/vlan',
+                text: __('VLAN'),
+                noTree: true,
+                indexRoute: { onEnter: (nextState, replace) => replace('/main/network/vlan/vlansettings') },
                 routes: [
                   {
-                    id: 'dhcpList',
-                    path: '/main/network/dhcp/service/list',
-                    formUrl: 'goform/network/dhcp/service/list',
-                    text: __('DHCP List'),
-                    component: sDhcpList.Screen,
-                  }, {
+                    id: 'networkVlanSettings',
+                    path: '/main/network/vlan/vlansettings',
+                    formUrl: 'goform/network/vlan/vlansettings',
+                    text: __('VLAN Settings'),
+                    component: sVlanSettings.Screen,
+                  },
+                  {
+                    id: 'networkQinqSettings',
+                    path: '/main/network/vlan/qinqsettings',
+                    formUrl: 'goform/network/vlan/qinqsettings',
+                    text: __('QINQ Settings'),
+                    component: sQinqSettings.Screen,
+                  },
+                ],
+              },
+              {
+                id: 'networkHostnetwork',
+                path: '/main/network/hostnetwork',
+                formUrl: 'goform/network/hostnetwork',
+                text: __('Host Network'),
+                icon: 'th',
+                component: sHostNetwork.Screen,
+              },
+              {
+                id: 'ethernetPort',
+                path: '/main/network/ethernetport',
+                isIndex: true,
+                icon: 'th-large',
+                text: __('Ethernet Port'),
+                indexRoute: { onEnter: (nextState, replace) => replace('/main/network/ethernetport/portsettings') },
+                routes: [
+                  {
+                    id: 'ethernetPortSettings',
+                    path: '/main/network/ethernetport/portsettings',
+                    formUrl: 'goform/network/portsettings',
+                    text: __('Settings'),
+                    icon: 'th',
+                    component: sPortSettings.Screen,
+                  },
+                  {
+                    id: 'ethernetPortMirring',
+                    path: '/main/network/ethernetport/portmirring',
+                    formUrl: 'goform/network/portmirring',
+                    text: __('Mirring'),
+                    icon: 'th',
+                    component: sPortMirring.Screen,
+                  },
+                  {
+                    id: 'ethernetPortAggregation',
+                    path: '/main/network/ethernetport/portaggregation',
+                    formUrl: 'goform/network/portaggregation',
+                    text: __('Aggregation'),
+                    icon: 'th',
+                    component: sPortAggregation.Screen,
+                  },
+                ],
+              },
+              // { // V2.0版本接口设置
+              //   id: 'networkInterface',
+              //   icon: 'th',
+              //   path: '/main/network/interface',
+              //   formUrl: 'goform/network/interface',
+              //   text: __('Interfaces'),
+              //   component: sInterfaces.Screen,
+              // },
+              { // V3.0版本接口设置
+                id: 'networkInterface',
+                icon: 'th',
+                path: '/main/network/v3interface',
+                formUrl: 'goform/network/v3interface',
+                text: __('Interfaces'),
+                component: sV3Interfaces.Screen,
+              },
+              // {
+              //   id: 'networkPort',
+              //   path: '/main/network/port',
+              //   icon: 'th-large',
+              //   formUrl: '/goform/network/port',
+              //   text: __('Ports'),
+              //   component: sNetworkPort.Screen,
+              // },
+              {
+                id: 'networkDhcp',
+                icon: 'random',
+                path: '/main/network/dhcp',
+                text: __('DHCP Config'),
+                indexRoute: { onEnter: (nextState, replace) => replace('/main/network/dhcp/dhcp') },
+                routes: [
+                  {
+                    id: 'dhcp',
+                    path: '/main/network/dhcp/dhcp',
+                    text: __('DHCP Service'),
+                    component: SharedComponents.TabContainer,
+                    indexRoute: {
+                      onEnter: (nextState, replace) => replace('/main/network/dhcp/service/serviceConfig'),
+                    },
+                    routes: [
+                      {
+                        id: 'dhcpService',
+                        path: '/main/network/dhcp/service/serviceConfig',
+                        formUrl: 'goform/network/dhcp/service/serviceConfig',
+                        text: __('DHCP Service'),
+                        component: sDhcpService.Screen,
+                      },
+                      {
+                        id: 'dhcpList',
+                        path: '/main/network/dhcp/service/list',
+                        formUrl: 'goform/network/dhcp/service/list',
+                        text: __('DHCP List'),
+                        component: sDhcpList.Screen,
+                      },
+                      {
+                        id: 'dhcpStaticList',
+                        path: '/main/network/dhcp/service/staticList',
+                        formUrl: 'goform/network/dhcp/service/staticList',
+                        text: __('DHCP Static List'),
+                        component: sDpcpStaticList.Screen,
+                      },
+                    ],
+                  },
+                  {
+                    id: 'snooping',
+                    path: '/main/network/dhcp/snooping',
+                    text: __('Snooping'),
+                    component: SharedComponents.TabContainer,
+                    indexRoute: {
+                      onEnter: (nextState, replace) => replace('/main/network/dhcp/snooping/userList'),
+                    },
+                    routes: [
+                      {
+                        id: 'userList',
+                        path: '/main/network/dhcp/snooping/userList',
+                        formUrl: 'goform/network/dhcp/snooping/userList',
+                        text: __('Snooping User List'),
+                        component: sSnoopingUserList.Screen,
+                      },
+                      {
+                        id: 'staticList',
+                        path: '/main/network/dhcp/snooping/staticList',
+                        formUrl: 'goform/network/dhcp/snooping/staticList',
+                        text: __('Snooping Static List'),
+                        component: sSnoopingStaticList.Screen,
+                      },
+                    ],
+                  },
+                  {
                     id: 'dhcpRelay',
                     path: '/main/network/dhcp/relay',
                     formUrl: 'goform/network/dhcp/relay',
                     text: __('DHCP Relay'),
                     component: sDhcpRelay.Screen,
                   },
+                  {
+                    id: 'dhcpFilter',
+                    path: '/main/network/dhcp/filter',
+                    formUrl: 'goform/network/dhcp/filter',
+                    text: __('DHCP Filter'),
+                    component: sDhcpFilter.Screen,
+                  },
                 ],
-              }, {
-                id: 'networkNat',
-                icon: 'exchange',
-                path: '/main/network/nat',
-                text: __('NAT'),
-                formUrl: 'goform/network/nat',
-                component: sNetworkNat.Screen,
               },
+              // {
+              //   id: 'networkNat',
+              //   icon: 'exchange',
+              //   path: '/main/network/nat',
+              //   text: __('NAT'),
+              //   formUrl: 'goform/network/nat',
+              //   component: sNetworkNat.Screen,
+              // },
               {
-                id: 'staticRoutes',
-                path: '/main/network/static_routes',
-                text: __('Routes'),
-                icon: 'map-signs',
-                formUrl: 'goform/network/route',
-                component: sNetworkRoutes.Screen,
-              }, {
-                id: 'networkPort',
-                path: '/main/network/port',
-                icon: 'th-large',
-                formUrl: '/goform/network/port',
-                text: __('Ports'),
-                component: sNetworkPort.Screen,
-              }, {
-                id: 'networkRadius',
-                icon: 'clone',
-                path: '/main/network/radius',
-                text: __('Radius'),
+                id: 'networkNatSettings',
+                icon: 'exchange',
+                path: '/main/network/natsettings',
                 noTree: true,
+                text: __('NAT'),
                 component: SharedComponents.TabContainer,
+                indexRoute: { onEnter: (nextState, replace) => replace('/main/network/natsettings/natenable') },
                 routes: [
                   {
-                    id: 'radiusTemplate',
-                    path: '/main/network/radius/template',
-                    formUrl: 'goform/network/radius/template',
-                    text: __('Radius Server'),
-                    component: sRaduisTemplate.Screen,
+                    id: 'networkNatEnable',
+                    path: '/main/network/natsettings/natenable',
+                    formUrl: 'goform/network/natsettings/natenable',
+                    text: __('NAT Enable'),
+                    component: sNetworkNatSettings.Screen,
                   },
                   {
-                    id: 'radiusProxy',
-                    path: '/main/network/radius/proxy',
-                    formUrl: 'goform/network/radius/proxy',
-                    text: __('Radius Proxy'),
-                    component: sRadiusProxy.Screen,
+                    id: 'networkNatInterfaceType',
+                    path: '/main/network/natsettings/interfacetype',
+                    formUrl: 'goform/network/natsettings/interfacetype',
+                    text: __('Interface Type'),
+                    component: sNetworkNatInterfaceType.Screen,
+                  },
+                  {
+                    id: 'networkNatAddressPool',
+                    path: '/main/network/natsettings/addresspool',
+                    formUrl: 'goform/network/natsettings/addresspool',
+                    text: __('Address Pool'),
+                    component: sNetworkNatAddressPool.Screen,
+                  },
+                  {
+                    id: 'networkNatAddressObject',
+                    path: '/main/network/natsettings/addressobject',
+                    formUrl: 'goform/network/natsettings/addressobject',
+                    text: __('Address Object'),
+                    component: sNetworkNatAddressObject.Screen,
+                  },
+                  {
+                    id: 'networkNatServeObject',
+                    path: '/main/network/natsettings/serveobject',
+                    formUrl: 'goform/network/natsettings/serveobject',
+                    text: __('Serve Object'),
+                    component: sNetworkNatServeObject.Screen,
+                  },
+                  {
+                    id: 'networkNatRuleDetails',
+                    path: '/main/network/natsettings/ruledetails',
+                    formUrl: 'goform/network/natsettings/ruledetails',
+                    text: __('Rule Details'),
+                    component: sNetworkNatRuleDetails.Screen,
+                  },
+                  {
+                    id: 'networkNatUlog',
+                    path: '/main/network/natsettings/ulog',
+                    formUrl: 'goform/network/natsettings/ulog',
+                    text: __('ULOG'),
+                    component: sNetworkNatUlog.Screen,
                   },
                 ],
+              },
+              {
+                id: 'networkAcl',
+                path: '/main/network/acl',
+                isIndex: true,
+                icon: 'th-large',
+                text: __('ACL'),
+                indexRoute: { onEnter: (nextState, replace) => replace('/main/network/acl/basicacl') },
+                routes: [
+                  {
+                    id: 'networkBasicAcl',
+                    path: '/main/network/acl/basicacl',
+                    text: __('Basic ACL'),
+                    icon: 'th',
+                    indexRoute: { onEnter: (nextState, replace) => replace('/main/network/acl/basicacl/vlaninterface') },
+                    routes: [
+                      {
+                        id: 'basicAclIndex',
+                        path: '/main/network/acl/basicacl/basicaclindex',
+                        component: SharedComponents.TabContainer,
+                        routes: [
+                          {
+                            id: 'basicAclVlanInterface',
+                            path: '/main/network/acl/basicacl/vlaninterface',
+                            formUrl: 'goform/network/basicacl/vlaninterface',
+                            text: __('Vlan Interface'),
+                            component: sBasicVlanInterface.Screen,
+                          },
+                          {
+                            id: 'basicAclWlan',
+                            path: '/main/network/acl/basicacl/wlan',
+                            formUrl: 'goform/network/basicacl/wlan',
+                            text: __('WLAN'),
+                            component: sBasicWLAN.Screen,
+                          },
+                          {
+                            id: 'basicAclRuleGroup',
+                            path: '/main/network/acl/basicacl/rulegroup',
+                            formUrl: 'goform/network/basicacl/rulegroup',
+                            text: __('Rule Group'),
+                            component: sBasicRuleGroup.Screen,
+                          },
+                          {
+                            id: 'basicAclRuleDetails',
+                            path: '/main/network/acl/basicacl/ruledetails',
+                            formUrl: 'goform/network/basicacl/ruledetails',
+                            text: __('Rules'),
+                            component: sBasicRuleDetails.Screen,
+                          },
+                          {
+                            id: 'basicAclRuleBinding',
+                            path: '/main/network/acl/basicacl/rulebinding',
+                            formUrl: 'goform/network/basicacl/rulebinding',
+                            text: __('Rules Binding'),
+                            component: sBasicRuleBinding.Screen,
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  {
+                    id: 'networkExtendAcl',
+                    path: '/main/network/acl/extendacl',
+                    text: __('Extend ACL'),
+                    icon: 'th',
+                    indexRoute: { onEnter: (nextState, replace) => replace('/main/network/acl/extendacl/vlaninterface') },
+                    routes: [
+                      {
+                        id: 'extendAclIndex',
+                        path: '/main/network/acl/extendacl/extendaclindex',
+                        component: SharedComponents.TabContainer,
+                        routes: [
+                          {
+                            id: 'extendAclVlanInterface',
+                            path: '/main/network/acl/extendacl/vlaninterface',
+                            formUrl: 'goform/network/extendacl/vlaninterface',
+                            text: __('Vlan Interface'),
+                            component: sExtendVlanInterface.Screen,
+                          },
+                          {
+                            id: 'extendAclWlan',
+                            path: '/main/network/acl/extendacl/wlan',
+                            formUrl: 'goform/network/extendacl/wlan',
+                            text: __('WLAN'),
+                            component: sExtendWLAN.Screen,
+                          },
+                          {
+                            id: 'extendAclRuleGroup',
+                            path: '/main/network/acl/extendacl/rulegroup',
+                            formUrl: 'goform/network/extendacl/rulegroup',
+                            text: __('Rule Group'),
+                            component: sExtendRuleGroup.Screen,
+                          },
+                          {
+                            id: 'extendAclRuleDetails',
+                            path: '/main/network/acl/extendacl/ruledetails',
+                            formUrl: 'goform/network/extendacl/ruledetails',
+                            text: __('Rules'),
+                            component: sExtendRuleDetails.Screen,
+                          },
+                          {
+                            id: 'extendAclRuleBinding',
+                            path: '/main/network/acl/extendacl/rulebinding',
+                            formUrl: 'goform/network/extendacl/rulebinding',
+                            text: __('Rules Binding'),
+                            component: sExtendRuleBinding.Screen,
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+              // 先隐藏ACL
+              // {
+              //   id: 'networkAcl',
+              //   icon: 'ban',
+              //   path: '/main/network/acl',
+              //   text: __('Access Control'),
+              //   formUrl: 'goform/network/acl',
+              //   component: sNetworkAcl.Screen,
+              // },
+              // { // v2.5版本的路由设置
+              //   id: 'staticRoutes',
+              //   path: '/main/network/static_routes',
+              //   text: __('Routes'),
+              //   icon: 'map-signs',
+              //   formUrl: 'goform/network/route',
+              //   component: sNetworkRoutes.Screen,
+              // },
+              { // v3版本的路由设置
+                id: 'staticRoutes',
+                path: '/main/network/staticroutes',
+                formUrl: 'goform/network/staticroutes',
+                text: __('Static Route'),
+                icon: 'map-signs',
+                component: sNetowrkStaticRoutes.Screen,
+              },
+              // { // v2.5版本端口设置
+              //   id: 'networkPort',
+              //   path: '/main/network/port',
+              //   icon: 'th-large',
+              //   formUrl: '/goform/network/port',
+              //   text: __('Ports'),
+              //   component: sNetworkPort.Screen,
+              // },
+              {
+                id: 'radiusTemplate',
+                icon: 'clone',
+                path: '/main/network/radius_template',
+                formUrl: 'goform/network/radius/template',
+                text: __('Radius Server'),
+                component: sRaduisTemplate.Screen,
               }, {
                 id: 'networkAaa',
                 icon: 'lock',
@@ -335,13 +692,84 @@ const routes = [
                 text: __('AAA'),
                 component: sNetworkAaa.Screen,
               }, {
+                id: 'networkURL',
+                icon: 'filter',
+                path: '/main/network/url',
+                formUrl: 'goform/network/url',
+                text: __('URL Filter'),
+                noTree: true,
+                component: SharedComponents.TabContainer,
+                indexRoute: { onEnter: (nextState, replace) => replace('/main/network/url/wlan') },
+                routes: [
+                  {
+                    id: 'urlWlan',
+                    path: '/main/network/url/wlan',
+                    formUrl: 'goform/network/url/wlan',
+                    text: __('WLAN'),
+                    component: sNetworkUrlWlan.Screen,
+                  },
+                  {
+                    id: 'urlRulesGroup',
+                    path: '/main/network/url/rulesgroup',
+                    formUrl: 'goform/network/url/rulesgroup',
+                    text: __('Rules Group'),
+                    component: sNetworkUrlRulesGroup.Screen,
+                  },
+                  {
+                    id: 'urlFilterRules',
+                    path: '/main/network/url/filterrules',
+                    formUrl: 'goform/network/url/filterrules',
+                    text: __('Filter Rules'),
+                    component: sNetworkUrlFilterRules.Screen,
+                  },
+                  {
+                    id: 'urlBindRules',
+                    path: '/main/network/url/bindrules',
+                    formUrl: 'goform/network/url/bindrules',
+                    text: __('Bind Rules'),
+                    component: sNetworkUrlBindRules.Screen,
+                  },
+                ],
+              }, {
+                id: 'networkPPPOE',
+                icon: 'filter',
+                path: '/main/network/pppoe',
+                formUrl: 'goform/network/pppoe',
+                text: __('PPPOE'),
+                noTree: true,
+                component: SharedComponents.TabContainer,
+                indexRoute: { onEnter: (nextState, replace) => replace('/main/network/pppoe/baseConfig') },
+                routes: [
+                  {
+                    id: 'pppoeBase',
+                    path: '/main/network/pppoe/baseConfig',
+                    formUrl: 'goform/network/pppoe/baseConfig',
+                    text: __('Base Config'),
+                    component: sPPPOEBaseConfig.Screen,
+                  },
+                  {
+                    id: 'pppoeUser',
+                    path: '/main/network/pppoe/userList',
+                    formUrl: 'goform/network/pppoe/userList',
+                    text: __('User List'),
+                    component: sPPPOEUserList.Screen,
+                  },
+                  {
+                    id: 'pppoeVlan',
+                    path: '/main/network/pppoe/vlan',
+                    formUrl: 'goform/network/pppoe/vlan',
+                    text: __('Bind Vlan'),
+                    component: sPPPOEBindVlan.Screen,
+                  },
+                ],
+              }, {
                 id: 'networkPortal',
                 icon: 'copy',
-                text: __('Portal Policy'),
                 noTree: true,
                 component: SharedComponents.TabContainer,
                 path: '/main/network/portal',
-                indexPath: '/main/network/portal/server',
+                text: __('Portal Policy'),
+                indexRoute: { onEnter: (nextState, replace) => replace('/main/network/portal/server') },
                 routes: [
                   {
                     id: 'portalServer',
@@ -351,7 +779,7 @@ const routes = [
                     component: sPortalServer.Screen,
                   }, {
                     id: 'portalRules',
-                    path: '/main/network/portal/rules',
+                    path: '/main/network/portal/rule',
                     formUrl: 'goform/network/portal/rule',
                     text: __('Rules'),
                     component: sPortalRules.Screen,
@@ -364,8 +792,7 @@ const routes = [
                     component: sPortalMac.Screen,
                   },
                 ],
-              },
-              {
+              }, {
                 id: 'dpi',
                 icon: 'copy',
                 noTree: true,
@@ -381,6 +808,13 @@ const routes = [
                     text: __('Overview'),
                     component: sDPIOverview.Screen,
                   },
+                  // {
+                  //   id: 'flowinfo',
+                  //   path: '/main/network/dpi/flowinfo',
+                  //   formUrl: 'goform/network/dpi/flowinfo',
+                  //   text: __('Flow Info'),
+                  //   component: sFlowInfo.Screen,
+                  // },
                   {
                     id: 'macstatistic',
                     path: '/main/network/dpi/macstatistic',
@@ -397,7 +831,7 @@ const routes = [
                     id: 'protoinfo',
                     path: '/main/network/dpi/protoinfo',
                     formUrl: 'goform/network/dpi/protoinfo',
-                    text: __('Proto Info'),
+                    text: __('Applications'),
                     component: sProtoInfo.Screen,
                   },
                 ],
@@ -968,7 +1402,6 @@ const routes = [
         ],
       },
       {
-        id: 'wizard',
         path: '/wizard',
         component: sWizard.Screen,
       },
@@ -1005,6 +1438,7 @@ const app = {
   routes,
   appConfig: guiConfig,
 };
+
 
 export default app;
 

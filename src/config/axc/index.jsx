@@ -198,10 +198,6 @@ const sPortalApSetting =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/ApSetting');
 const sPortalSsid =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/SsidManagement');
-// const sPortalApSetting =
-//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/ApSetting');
-// const sPortalSsidManagement =
-//     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Access/Ssid');
 
 const sPortalNas =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Radius/Nas');
@@ -216,8 +212,6 @@ const sPortalAccountListMac =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Account/AccountListMac');
 const sPortalConnectRecord =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Account/ConnectRecord');
-
-
 const sPortalSendMessage =
     require('../../screens/App/screens/MainAxc/screens/Portal/screens/Message/SendMessage');
 const sPortalSendBox =
@@ -537,46 +531,22 @@ const routes = [
                     component: sApPlanMap.Screen,
                     noNav: true,
                   },
-                  // {
-                  //   id: 'liveMap',
-                  //   path: '/main/group/map/live',
-                  //   text: __('Live Map'),
-                  //   indexPath: '/main/group/map/live/list',
-                  //   routes: [
-                  //     {
-                  //       id: 'liveMap',
-                  //       path: '/main/group/map/live/list',
-                  //       text: __('Live Map'),
-                  //       formUrl: 'goform/group/map/building',
-                  //       isIndex: true,
-                  //       component: sLiveMap.Screen,
-                  //     }, {
-
-                  //       id: 'buildMap',
-                  //       path: '/main/group/map/live/(:id)',
-                  //       text: __('AP Plan Map'),
-                  //       formUrl: 'goform/group/map/apPlan',
-                  //       component: sApPlanMap.Screen,
-                  //       noNav: true,
-                  //     },
-                  //   ],
-                  // },
-                  // {
-                  //   id: 'heatMap',
-                  //   path: '/main/group/map/heat_map',
-                  //   formUrl: 'goform/group/map/heatmap',
-                  //   fetchUrl: 'goform/group/map/heatmap',
-                  //   text: __('Heat Map'),
-                  //   component: sHeatMap.Screen,
-                  // },
-                  // {
-                  //   id: 'orbitTrace',
-                  //   path: '/main/group/map/orbittrace',
-                  //   formUrl: '/goform/group/map/orbittrace',
-                  //   fetchUrl: '/goform/group/map/orbittrace',
-                  //   text: __('Orbit Trace'),
-                  //   component: sOrbitTrace.Screen,
-                  // },
+                  {
+                    id: 'heatMap',
+                    path: '/main/group/map/heat_map',
+                    formUrl: 'goform/group/map/heatmap',
+                    fetchUrl: 'goform/group/map/heatmap',
+                    text: __('Heat Map'),
+                    component: sHeatMap.Screen,
+                  },
+                  {
+                    id: 'orbitTrace',
+                    path: '/main/group/map/orbittrace',
+                    formUrl: '/goform/group/map/orbittrace',
+                    fetchUrl: '/goform/group/map/orbittrace',
+                    text: __('Orbit Trace'),
+                    component: sOrbitTrace.Screen,
+                  },
                   {
                     id: 'cientsTrace',
                     path: '/main/group/map/clients_trace',
