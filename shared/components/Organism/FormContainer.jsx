@@ -19,6 +19,7 @@ const propTypes = {
   header: PropTypes.node,
   leftChildren: PropTypes.node,
   rightChildren: PropTypes.node,
+  children: PropTypes.node,
 
   // 数据验证相关
   invalidMsg: PropTypes.instanceOf(Map),
@@ -169,7 +170,7 @@ class FormContainer extends React.Component {
   }
   renderFormGroup($$option, valueQuery) {
     const {
-      invalidMsg, validateAt, onValidError, actionQuery, id, actionable, formKey,
+      invalidMsg, validateAt, onValidError, actionQuery, id, actionable,
     } = this.props;
     const index = $$option.get('__index__') || '';
     const myProps = $$option.delete('__index__').toJS();

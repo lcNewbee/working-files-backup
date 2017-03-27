@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
-import { fromJS, Map } from 'immutable';
+import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/validator';
 import AppScreen from 'shared/components/Template/AppScreen';
@@ -124,11 +124,7 @@ export default class NetworkPort extends React.Component {
       type,
     };
 
-    this.props.save(this.props.route.formUrl, query)
-      .then((json) => {
-        if (json.state && json.state.code === 2000) {
-        }
-      });
+    this.props.save(this.props.route.formUrl, query);
   }
 
   render() {

@@ -21,9 +21,7 @@ if (argv.n) {
 
 // 发布硬AC版本
 // 发布 AXC版本
-gulp.task('clean:pubaxc', () => {
-  return del([distPath], { force: true });
-});
+gulp.task('clean:pubaxc', () => del([distPath], { force: true }));
 gulp.task('pub:copyaxc', () => {
   if (argv.z) {
     return gulp.src([`${paths.build}/**/*`, `${paths.php}/**/*`])

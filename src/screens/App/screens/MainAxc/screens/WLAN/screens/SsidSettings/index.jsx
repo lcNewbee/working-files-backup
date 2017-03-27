@@ -384,8 +384,6 @@ const defaultProps = {};
 
 export default class View extends React.Component {
   constructor(props) {
-    const versionCode = props.app.get('versionCode');
-
     super(props);
 
     this.getCurrData = this.getCurrData.bind(this);

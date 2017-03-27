@@ -174,7 +174,6 @@ export default class ModeSettings extends React.Component {
             thinacip: '',
           },
         }}
-       
       >
         <FormContainer
           options={this.formOptions}

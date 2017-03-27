@@ -3,7 +3,6 @@ import { Map, fromJS } from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import validator from 'shared/validator';
 import FormContainer from '../Organism/FormContainer';
-import SaveButton from '../Button/SaveButton';
 
 const formOptions = fromJS([
   {
