@@ -115,10 +115,37 @@ const listOptions = fromJS([
     options: [
       {
         value: '1',
-        label: __('Virtual Gateway'),
+        label: __('iKuai'),
       }, {
         value: '2',
-        label: __('Qianhai Smart Commumication'),
+        label: __('Alidayu'),
+      }, {
+        value: '3',
+        label: __('Sucker Ducker'),
+      }, {
+        value: '4',
+        label: __('China Mobile ESMS'),
+      }, {
+        value: '5',
+        label: __('China Unicome OSMS'),
+      }, {
+        value: '6',
+        label: __('China Mobile OpenMas'),
+      }, {
+        value: '7',
+        label: __('Submail'),
+      }, {
+        value: '8',
+        label: __('Carrier Message'),
+      }, {
+        value: '9',
+        label: __('China Telicome SMGP'),
+      }, {
+        value: '10',
+        label: __('Huaxin Message System'),
+      }, {
+        value: '11',
+        label: __('China Telicome ESMS'),
       },
     ],
   }, {

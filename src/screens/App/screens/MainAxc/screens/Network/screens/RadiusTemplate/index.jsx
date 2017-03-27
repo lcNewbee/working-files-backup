@@ -12,6 +12,41 @@ import * as appActions from 'shared/actions/app';
 import * as screenActions from 'shared/actions/screens';
 import * as propertiesActions from 'shared/actions/properties';
 
+function getNasIP() {
+  return utils.fetch('goform/portal/radius/nas', {
+    size: 9999,
+    page: 1,
+  })
+    .then(json => (
+      {
+        options: json.data.list.map(
+          item => ({
+            value: item.id,
+            label: item.name,
+          }),
+        ),
+      }
+    ),
+  );
+}
+
+const serverChoices = fromJS([
+  {
+    id: 'serverType',
+    laber: __('Server Type'),
+    className: 'cols col-5',
+    options: [
+      {
+        value: 'local',
+        label: __('Local Server'),
+      }, {
+        value: 'remote',
+        label: __('Remote Server'),
+      },
+    ],
+    type: 'switch',
+  },
+]);
 const authServer = fromJS([
   {
     id: 'template_name',
@@ -35,8 +70,33 @@ const authServer = fromJS([
     validator: validator({
       rules: 'ip',
     }),
+    showPrecondition($$data) {
+      return $$data.get('serverType') === 'local';
+    },
+  }, {
+    id: 'nasip',
+    label: __('Nas IP'),
+    form: 'authServer',
+    type: 'select',
+    required: true,
+    className: 'cols col-12',
+    validator: validator({
+      rules: 'ip',
+    }),
+    showPrecondition($$data) {
+      return $$data.get('serverType') === 'remote';
+    },
+    // onChange: ($$datadata, formData) => {
+    //   return {
+    //     authpri_ipaddr: $$data.get('nasip'),
+    //     authpri_port: 1812,
+    //   };
+    // },
   }, {
     id: 'authpri_ipaddr',
+    disabled: ($$data) => {
+      return $$data.get('serverType') === 'remote';
+    },
     fieldset: 'auth',
     fieldsetOption: {
       legend: __('Primary Auth Server'),
@@ -51,6 +111,9 @@ const authServer = fromJS([
     }),
   }, {
     id: 'authpri_port',
+    disabled: ($$data) => {
+      return $$data.get('serverType') === 'remote';
+    },
     label: __('Port'),
     fieldset: 'auth',
     form: 'authServer',
@@ -61,6 +124,9 @@ const authServer = fromJS([
     max: '65535',
   }, {
     id: 'authpri_key',
+    disabled: ($$data) => {
+      return $$data.get('serverType') === 'remote';
+    },
     label: __('Password'),
     fieldset: 'auth',
     form: 'authServer',
@@ -72,6 +138,9 @@ const authServer = fromJS([
     }),
   }, {
     id: 'authsecond_ipaddr',
+    disabled: ($$data) => {
+      return $$data.get('serverType') === 'remote';
+    },
     label: __('IP Address'),
     fieldset: 'auth_secondary',
     fieldsetOption: {
@@ -85,6 +154,9 @@ const authServer = fromJS([
     }),
   }, {
     id: 'authsecond_port',
+    disabled: ($$data) => {
+      return $$data.get('serverType') === 'remote';
+    },
     label: __('Port'),
     fieldset: 'auth_secondary',
     type: 'number',
@@ -93,6 +165,9 @@ const authServer = fromJS([
     max: '65535',
   }, {
     id: 'authsecond_key',
+    disabled: ($$data) => {
+      return $$data.get('serverType') === 'remote';
+    },
     label: __('Password'),
     fieldset: 'auth_secondary',
     type: 'password',
@@ -107,6 +182,9 @@ const authServer = fromJS([
 const accServer = fromJS([
   {
     id: 'acctpri_ipaddr',
+    disabled: ($$data) => {
+      return $$data.get('serverType') === 'remote';
+    },
     label: __('IP Address'),
     fieldset: 'primary',
     fieldsetOption: {
@@ -122,6 +200,9 @@ const accServer = fromJS([
   },
   {
     id: 'acctpri_port',
+    disabled: ($$data) => {
+      return $$data.get('serverType') === 'remote';
+    },
     label: __('Port'),
     fieldset: 'primary',
     required: true,
@@ -156,6 +237,9 @@ const accServer = fromJS([
     }),
   }, {
     id: 'acctsecond_port',
+    disabled: ($$data) => {
+      return $$data.get('serverType') === 'remote';
+    },
     label: __('Port'),
     fieldset: 'secondary',
     type: 'number',
@@ -164,6 +248,9 @@ const accServer = fromJS([
     max: '65535',
   }, {
     id: 'acctsecond_key',
+    disabled: ($$data) => {
+      return $$data.get('serverType') === 'remote';
+    },
     label: __('Password'),
     fieldset: 'secondary',
     form: 'accServer',
@@ -178,6 +265,9 @@ const accServer = fromJS([
 const advancedSetting = fromJS([
   {
     id: 'username_format',
+    disabled: ($$data) => {
+      return $$data.get('serverType') === 'remote';
+    },
     label: __('User Format'),
     fieldset: 'parameter',
     defaultValue: 'UNCHANGE',
@@ -199,6 +289,9 @@ const advancedSetting = fromJS([
     ],
   }, {
     id: 'quiet_time',
+    disabled: ($$data) => {
+      return $$data.get('serverType') === 'remote';
+    },
     label: __('Silent Time'),
     fieldset: 'parameter',
     defaultValue: '300',
@@ -210,6 +303,9 @@ const advancedSetting = fromJS([
     help: __('Seconds'),
   }, {
     id: 'retry_times',
+    disabled: ($$data) => {
+      return $$data.get('serverType') === 'remote';
+    },
     label: __('Max Messaging Times'),
     fieldset: 'parameter',
     type: 'number',
@@ -230,6 +326,9 @@ const advancedSetting = fromJS([
   },
   {
     id: 'accton_enable',
+    disabled: ($$data) => {
+      return $$data.get('serverType') === 'remote';
+    },
     label: __('Accounting-on'),
     defaultValue: '0',
     value: '1',
@@ -241,6 +340,9 @@ const advancedSetting = fromJS([
     text: __('Enable'),
   }, {
     id: 'accton_sendtimes',
+    disabled: ($$data) => {
+      return $$data.get('serverType') === 'remote';
+    },
     label: __('Accounting-on Resend Times'),
     fieldset: 'acctonAdvance',
     type: 'number',
@@ -271,6 +373,9 @@ const advancedSetting = fromJS([
   },
   {
     id: 'acct_interim_interval',
+    disabled: ($$data) => {
+      return $$data.get('serverType') === 'remote';
+    },
     label: __('Accounting Messaging Interval'),
     fieldset: 'acctonAdvance',
     noTable: true,
@@ -282,6 +387,9 @@ const advancedSetting = fromJS([
     max: '3600',
   }, {
     id: 'realretrytimes',
+    disabled: ($$data) => {
+      return $$data.get('serverType') === 'remote';
+    },
     label: __('Accounting Message-Resend Times'),
     fieldset: 'acctonAdvance',
     type: 'number',
@@ -457,10 +565,22 @@ export default class View extends React.Component {
         },
       );
     }
-
-
     return (
       <div className="o-box row">
+        <div className="o-box__cell">
+          <FormContainer
+            id="authServer"
+            className="o-form--compassed"
+            options={serverChoices}
+            data={$$curData}
+            onChangeData={this.props.updateCurEditListItem}
+            onSave={() => this.onSave('serverChoices')}
+            invalidMsg={app.get('invalid')}
+            validateAt={app.get('validateAt')}
+            onValidError={this.props.reportValidError}
+            isSaving={app.get('saving')}
+          />
+        </div>
         <div className="o-box__cell">
           <h3
             style={{ cursor: 'pointer' }}

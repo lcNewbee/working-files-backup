@@ -72,8 +72,10 @@ const listOptions = fromJS([
   }, {
     id: 'outTime',
     text: __('Out Time'),
-    noForm: true,
+    help: __('Second'),
     formProps: {
+      help: __('Second'),
+      noAdd: true,
       min: '0',
       max: '99999999',
       type: 'number',

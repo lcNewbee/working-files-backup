@@ -8,8 +8,10 @@ import AppScreen from 'shared/components/Template/AppScreen';
 import * as screenActions from 'shared/actions/screens';
 import * as appActions from 'shared/actions/app';
 
+let ret;
+
 const uptimeFilter = utils.filter('connectTime');
-const flowFilter = utils.filter('flowRate:MB');
+const flowFilter = utils.filter('flowRate');
 const listOptions = fromJS([
   {
     id: 'ip',
@@ -47,7 +49,16 @@ const listOptions = fromJS([
       required: true,
     },
     transform(val) {
-      return uptimeFilter.transform(val / 1000);
+      // 大于一天
+      if (val >= 360) {
+        ret = `${parseInt(val / 360, 10)}d${val % 360}h`;
+        // 大于一小时
+      } else if (val >= 60) {
+        ret = `${parseInt(val / 60, 10)}h${val % 60}m`;
+      } else {
+        ret = `${val}m`;
+      }
+      return ret;
     },
   }, {
     id: 'state',
