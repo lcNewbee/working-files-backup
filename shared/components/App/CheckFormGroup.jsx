@@ -83,8 +83,8 @@ function CheckFormGroup(props) {
   }
 
   // 处理显示前提条件
-  if (typeof myProps.showPrecondition === 'function') {
-    isShow = myProps.showPrecondition(data);
+  if (typeof myProps.visible === 'function') {
+    isShow = myProps.visible(data);
   }
 
   if (myProps.type === 'checkbox') {

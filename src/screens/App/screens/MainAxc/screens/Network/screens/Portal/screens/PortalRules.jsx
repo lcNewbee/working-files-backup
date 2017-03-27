@@ -110,7 +110,7 @@ const listOptions = fromJS([
         rules: 'ip',
       }),
       required: true,
-      showPrecondition(data) {
+      visible(data) {
         return data.get('auth_mode') === '2';
       },
     },
@@ -123,7 +123,7 @@ const listOptions = fromJS([
         rules: 'mask',
       }),
       required: true,
-      showPrecondition(data) {
+      visible(data) {
         return data.get('auth_mode') === '2';
       },
     },

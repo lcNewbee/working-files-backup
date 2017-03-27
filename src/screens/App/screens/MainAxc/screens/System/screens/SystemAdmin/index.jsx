@@ -33,7 +33,7 @@ const listOptions = fromJS([
     formProps: {
       type: 'switch',
       minWidth: '100px',
-      showPrecondition: $$data => $$data.get('id') !== 1,
+      visible: $$data => $$data.get('id') !== 1,
     },
   }, {
     id: 'purview',

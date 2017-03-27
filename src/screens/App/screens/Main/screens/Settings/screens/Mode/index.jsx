@@ -61,14 +61,14 @@ const formOptions = fromJS([
     },
     type: 'switch',
     required: true,
-    showPrecondition: $$data => $$data.get('thinenable') === 1,
+    visible: $$data => $$data.get('thinenable') === 1,
   }, {
     id: 'thinacip',
     label: __('AC IP'),
     fieldset: 'mode',
     type: 'text',
     required: true,
-    showPrecondition:
+    visible:
       $$data => (
         $$data.get('thindiscovery') === 'static' &&
         $$data.get('thinenable') === 1

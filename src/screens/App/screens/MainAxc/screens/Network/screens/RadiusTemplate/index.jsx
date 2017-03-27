@@ -250,7 +250,7 @@ const advancedSetting = fromJS([
     required: true,
     noForm: true,
     noTable: true,
-    showPrecondition(data) {
+    visible(data) {
       return data.get('accton_enable') === '1';
     },
   }, {
@@ -265,7 +265,7 @@ const advancedSetting = fromJS([
     defaultValue: '3',
     min: '1',
     max: '30',
-    showPrecondition(data) {
+    visible(data) {
       return data.get('accton_enable') === '1';
     },
   },

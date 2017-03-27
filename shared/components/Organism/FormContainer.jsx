@@ -292,13 +292,15 @@ class FormContainer extends React.Component {
     }
 
     // 处理显示前提条件
-    if (typeof myProps.showPrecondition === 'function') {
-      isShow = myProps.showPrecondition($$data);
+    if (typeof myProps.visible === 'function') {
+      isShow = myProps.visible($$data);
     }
 
     // 如果是不可操作的
     if (!actionable) {
       myProps.disabled = true;
+    } else if (typeof myProps.disabled === 'function') {
+      myProps.disabled = myProps.disabled($$data);
     }
 
     if (myComponent) {
@@ -358,12 +360,12 @@ class FormContainer extends React.Component {
   renderFormGroupTable($$option) {
     const $$data = this.props.data;
     const $$optionsList = $$option.get('list');
-    const showPrecondition = $$option.get('showPrecondition');
+    const visible = $$option.get('visible');
     let isShow = true;
     let ret = null;
 
-    if (typeof showPrecondition === 'function') {
-      isShow = showPrecondition($$data);
+    if (typeof visible === 'function') {
+      isShow = visible($$data);
     }
 
     if (isShow && $$optionsList) {

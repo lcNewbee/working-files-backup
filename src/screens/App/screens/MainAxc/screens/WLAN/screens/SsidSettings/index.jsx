@@ -287,7 +287,7 @@ const listOptions = fromJS([
       min: 1,
       max: 102400,
       required: true,
-      showPrecondition($$data) {
+      visible($$data) {
         const curRepaet = $$data.get('loadBalanceType');
 
         return curRepaet !== '0';
@@ -304,7 +304,7 @@ const listOptions = fromJS([
       min: 1,
       max: 102400,
       required: true,
-      showPrecondition($$data) {
+      visible($$data) {
         const curRepaet = $$data.get('loadBalanceType');
 
         return curRepaet !== '0';
@@ -333,7 +333,7 @@ const listOptions = fromJS([
       validator: validator({
         rules: 'remarkTxt:["\'\\\\"]|utf8Len:[8, 63]',
       }),
-      showPrecondition($$data) {
+      visible($$data) {
         const curRepaet = $$data.get('encryption');
 
         return curRepaet === 'psk-mixed';

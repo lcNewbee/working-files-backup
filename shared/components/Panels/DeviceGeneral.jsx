@@ -24,7 +24,7 @@ const formOptions = fromJS([
     defaultValue: 1,
     dataType: 'number',
     text: __('Band Steering'),
-    showPrecondition($$data) {
+    visible($$data) {
       return $$data.get('has5g');
     },
   },

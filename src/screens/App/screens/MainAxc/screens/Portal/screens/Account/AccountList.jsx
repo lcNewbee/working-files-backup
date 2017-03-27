@@ -529,7 +529,7 @@ const rechargeOptions = fromJS([
         label: __('Traffic Card'),
       },
     ],
-    showPrecondition(data) {
+    visible(data) {
       return data.get('name') !== undefined;
     },
   }, {
@@ -539,7 +539,7 @@ const rechargeOptions = fromJS([
     disabled: true,
     type: 'select',
     required: true,
-    showPrecondition(data) {
+    visible(data) {
       return data.get('name') !== undefined;
     },
     options: [
@@ -559,7 +559,7 @@ const rechargeOptions = fromJS([
     type: 'number',
     required: true,
     min: 0,
-    showPrecondition(data) {
+    visible(data) {
       return data.get('name') !== undefined;
     },
     validator: validator({
@@ -569,7 +569,7 @@ const rechargeOptions = fromJS([
     id: 'autologin',
     label: __('Auto Login'),
     disabled: true,
-    showPrecondition(data) {
+    visible(data) {
       return data.get('name') !== undefined;
     },
     options: [
@@ -590,7 +590,7 @@ const rechargeOptions = fromJS([
     form: 'recharge',
     type: 'select',
     required: true,
-    showPrecondition(data) {
+    visible(data) {
       return data.get('name') !== undefined;
     },
     options: [
@@ -606,7 +606,7 @@ const rechargeOptions = fromJS([
     form: 'recharge',
     disabled: true,
     required: true,
-    showPrecondition(data) {
+    visible(data) {
       return data.get('name') !== undefined;
     },
     validator: validator({
@@ -620,7 +620,7 @@ const rechargeOptions = fromJS([
     type: 'text',
     required: true,
     help: __('$'),
-    showPrecondition(data) {
+    visible(data) {
       return data.get('name') !== undefined;
     },
   }, {
@@ -631,7 +631,7 @@ const rechargeOptions = fromJS([
     width: '120px',
     type: 'textarea',
     required: true,
-    showPrecondition(data) {
+    visible(data) {
       return data.get('name') !== undefined;
     },
   },

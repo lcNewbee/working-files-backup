@@ -51,7 +51,7 @@ const listOptions = fromJS([
     ],
     formProps: {
       type: 'switch',
-      showPrecondition(data) {
+      visible(data) {
         return data.get('workModel') !== 'auto';
       },
     },

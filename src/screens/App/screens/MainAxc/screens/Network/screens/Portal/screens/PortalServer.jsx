@@ -49,7 +49,7 @@ const listOptions = fromJS([
       validator: validator({
         rules: 'ip',
       }),
-      // showPrecondition(data) {
+      // visible(data) {
       //   return data.get('address_type') === '1';
       // },
     },
@@ -63,7 +63,7 @@ const listOptions = fromJS([
   //     validator: validator({
   //       rules: 'utf8Len:[1,31]',
   //     }),
-  //     showPrecondition(data) {
+  //     visible(data) {
   //       return data.get('address_type') === '2';
   //     },
   //   },

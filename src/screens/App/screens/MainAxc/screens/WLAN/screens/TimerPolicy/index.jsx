@@ -133,7 +133,7 @@ const screenOptions = fromJS([
         const ret = oldVal;
         return ret;
       },
-      showPrecondition($$data) {
+      visible($$data) {
         const curRepaet = $$data.get('policy_type');
 
         return curRepaet === 'custom';
@@ -162,7 +162,7 @@ const screenOptions = fromJS([
     defaultValue: moment().format('YYYY-MM-DD'),
     formProps: {
       type: 'date',
-      showPrecondition($$data) {
+      visible($$data) {
         const curRepaet = $$data.get('policy_type');
 
         return curRepaet === 'Once';
@@ -216,7 +216,7 @@ const screenOptions = fromJS([
     formProps: {
       type: 'select',
       required: true,
-      showPrecondition($$data) {
+      visible($$data) {
         const curRepaet = $$data.get('objects_name');
 
         return curRepaet !== 'scan';
@@ -237,7 +237,7 @@ const screenOptions = fromJS([
     ],
     formProps: {
       type: 'switch',
-      showPrecondition($$data) {
+      visible($$data) {
         const curRepaet = $$data.get('objects_name');
 
         return curRepaet !== 'scan';
