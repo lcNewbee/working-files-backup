@@ -71,6 +71,7 @@ class GroupOverview_Model extends CI_Model {
                     $temporaryAry['channel'] = $row['ChlNum'];
                     $temporaryAry['rssi'] = $row['MeanRSSI'];
                     $temporaryAry['radioId'] = $row['RadioId'];
+                    $temporaryAry['wirelessmode'] = $row['WirelessMode'];
                     $db_list[] = $temporaryAry;
                 }
             }            
@@ -225,9 +226,9 @@ class GroupOverview_Model extends CI_Model {
     //1.得到反制AP 列表
     private function get_counter_ap($doubtful){
         $result = array();                
-        $query = $this->mysql->query('select SsidMac from against_list');        
+        $query = $this->mysql->query('select SsidMac,WirelessMode from against_list');        
         foreach($doubtful as $row){
-            $row['isCounter'] = 0;
+            $row['isCounter'] = 0;            
             foreach($query->result_array() as $rows){
                 if($rows['SsidMac'] === $row['mac']){
                     $row['isCounter'] = 1;

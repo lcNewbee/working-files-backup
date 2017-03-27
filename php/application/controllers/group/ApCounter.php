@@ -55,7 +55,8 @@ class ApCounter extends CI_Controller {
             'radioid'=>(int)element('radioId',$data,1),
             'ssidmac'=>element('ssidmac',$data),
             'ssidname'=>element('ssidname',$data),
-            'channel'=>(int)element('channel',$data)
+            'channel'=>(int)element('channel',$data),
+            'wirelessmode'=>element('wirelessmode',$data)
         );
         $result = axc_set_apagainst(json_encode($arycgi));
         return $result;
