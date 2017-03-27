@@ -53,7 +53,7 @@ class Panel extends React.Component {
   }
   onSave() {
     if (this.props.onSave) {
-      this.props.onSave('deviceGeneral');
+      this.props.onSave();
     }
   }
   render() {

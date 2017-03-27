@@ -18,7 +18,7 @@ const createStore = require('redux').createStore;
 const Provider = require('react-redux').Provider;
 const AppContainer = require('react-hot-loader').AppContainer;
 const renderRoutesSwitch = require('shared/components/Organism/RouterConfig').renderRoutesSwitch;
-const prodConfig = require('./config/axcIndiaSchool');
+const prodConfig = require('./config/axc2.5');
 
 const HashRouter = ReactRouterDom.HashRouter;
 const mountNode = document.getElementById('app');
@@ -59,8 +59,8 @@ renderApp(prodConfig.routes);
 
 // Enable hot reload by react-hot-loader
 if (module.hot) {
-  module.hot.accept('./config/axcIndiaSchool', () => {
-    const nextConfig = require('./config/axcIndiaSchool');
+  module.hot.accept('./config/axc2.5', () => {
+    const nextConfig = require('./config/axc2.5');
 
     stores.replaceReducer(combineReducers({
       ...nextConfig.reducers,

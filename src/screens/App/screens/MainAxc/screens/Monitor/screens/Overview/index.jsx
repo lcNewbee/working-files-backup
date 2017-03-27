@@ -192,11 +192,11 @@ function getFlowOption(serverData, timeType) {
     color: [colors[0], colors[1]],
     tooltip: {
       trigger: 'axis',
-      formatter: (params) => {
-        return `${params[0].name}<br />
-                ${params[0].seriesName}: ${flowRateFilter.transform(params[0].value)}<br />
-                ${params[1].seriesName}: ${flowRateFilter.transform(params[1].value)}`
-      }
+      formatter: params => `
+        ${params[0].name}<br />
+        ${params[0].seriesName}: ${flowRateFilter.transform(params[0].value)}<br />
+        ${params[1].seriesName}: ${flowRateFilter.transform(params[1].value)}
+      `,
     },
     legend: {
       data: ['AP', __('Wireless')],
@@ -327,6 +327,12 @@ const propTypes = {
   store: PropTypes.instanceOf(Map),
   fetchScreenData: PropTypes.func,
   changeScreenQuery: PropTypes.func,
+  updateCurEditListItem: PropTypes.func,
+  createModal: PropTypes.func,
+  onListAction: PropTypes.func,
+  changeScreenActionQuery: PropTypes.func,
+  fetch: PropTypes.func,
+  closeListItemModal: PropTypes.func,
 };
 const defaultProps = {};
 export default class GroupOverview extends React.Component {
@@ -351,6 +357,11 @@ export default class GroupOverview extends React.Component {
             btnText = _('Countering');
           }
 
+          // 如果没有值则放回null, 兼容以前版本
+          if (typeof isCounter === 'undefined') {
+            return null;
+          }
+
           return (
             <Button
               text={btnText}
@@ -366,7 +377,7 @@ export default class GroupOverview extends React.Component {
 
     this.state = {
       counterAps: [],
-    }
+    };
   }
   componentWillMount() {
     this.initOptions(this.props);
@@ -390,8 +401,7 @@ export default class GroupOverview extends React.Component {
 
     if (isCounter === 0) {
       this.props.updateCurEditListItem({
-        apMac: 1,
-        radioId: 0,
+        radioId: $$data.get('radioId'),
         ssidmac: $$data.get('mac'),
         ssidname: $$data.get('ssid'),
         channel: $$data.get('channel'),
@@ -408,28 +418,34 @@ export default class GroupOverview extends React.Component {
           if (rqData && rqData.data && rqData.data.list) {
             this.setState({
               counterAps: rqData.data.list.map(
-                (item) => ({
+                item => ({
                   value: item.apMac,
                   label: item.apMac,
-                  radioId: item.radioId,
                 }),
-              )
+              ),
             });
           }
-        }
+        },
       );
     }
   }
   handleModelOk() {
-    this.props.createModal({
-      type: 'confrim',
-      text: __('此ap将全力支持反制功能，停止正常业务，你确定要开启？'),
-      apply: () => {
-        this.props.onListAction({
-          url: '/goform/group/ap/counter',
-        });
-      },
-    });
+    if (this.noApMac) {
+      this.props.createModal({
+        type: 'alert',
+        text: __('Please select a counter ap'),
+      });
+    } else {
+      this.props.createModal({
+        type: 'confrim',
+        text: __('This ap will fully support the counter function, stop the normal business, you sure to open?'),
+        apply: () => {
+          this.props.onListAction({
+            url: '/goform/group/ap/counter',
+          });
+        },
+      });
+    }
   }
 
   initOptions(props) {
@@ -449,6 +465,12 @@ export default class GroupOverview extends React.Component {
     const curScreenId = store.get('curScreenId');
     const $$actionQuery = store.getIn([curScreenId, 'actionQuery']);
     const $$curListItem = store.getIn([curScreenId, 'curListItem']);
+
+    if (!$$curListItem.get('apMac')) {
+      this.noApMac = true;
+    } else {
+      this.noApMac = false;
+    }
     return (
       <AppScreen
         {...this.props}
@@ -557,7 +579,6 @@ export default class GroupOverview extends React.Component {
               (data) => {
                 this.props.updateCurEditListItem({
                   apMac: data.value,
-                  radioId: data.radioId,
                 });
               }
             }

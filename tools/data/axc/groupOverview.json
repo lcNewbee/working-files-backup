@@ -42,6 +42,7 @@
               "mac": "12:33:44:55:66:78",
               "channel": 7,
               "rssi": -49,
+              "radioId": 1,
               "isCounter": 1
           },
           {
@@ -50,6 +51,7 @@
               "mac": "12:33:44:55:66:79",
               "channel": 7,
               "rssi": -49,
+              "radioId": 0,
               "isCounter": 0
           }
       ]

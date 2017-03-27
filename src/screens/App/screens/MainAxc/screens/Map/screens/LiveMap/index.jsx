@@ -182,15 +182,6 @@ export default class LiveMap extends React.PureComponent {
     } else {
       this.listTableOptions = listTableOptions;
     }
-
-    // console.log('didmount', this.mapContent);
-    // this.heatmap = h337.create({
-    //   container: this.mapContent,
-    //   radius: 10,
-    //   maxOpacity: .3,
-    //   minOpacity: 0,
-    //   blur: .75
-    // });
   }
 
   componentDidMount() {
@@ -211,6 +202,7 @@ export default class LiveMap extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps) {
+    const { store } = this.props;
     const $$thisData = getCurAppScreenState(this.props.store);
     const $$prevData = getCurAppScreenState(prevProps.store);
     const curScreenId = this.props.store.get('curScreenId');
@@ -282,6 +274,9 @@ export default class LiveMap extends React.PureComponent {
     }
   }
   addMarkerToMap(item, map, index) {
+    const { store } = this.props;
+    const curScreenId = store.get('curScreenId');
+    const actionType = store.getIn([curScreenId, 'actionQuery', 'action']);
     const apIcon = {
       path: google.maps.SymbolPath.CIRCLE,
       scale: 10,
@@ -295,6 +290,7 @@ export default class LiveMap extends React.PureComponent {
       anchor: new google.maps.Point(0, 0), // anchor
     };
     const marker = new google.maps.Marker({
+      map,
       position: {
         lat: item.get('lat'),
         lng: item.get('lng'),
@@ -305,8 +301,8 @@ export default class LiveMap extends React.PureComponent {
       label: {
         text: item.get('markerTitle') || `${index}`,
       },
-      draggable: item.get('isLocked') !== '1',
-      animation: google.maps.Animation.DROP,
+      // draggable: actionType === 'add' || actionType === 'edit',
+      //animation: google.maps.Animation.DROP,
     });
     const markerId = item.get('id');
     const contentString = `
@@ -341,22 +337,22 @@ export default class LiveMap extends React.PureComponent {
     let editButtonElem = document.getElementById(`editBulid${markerId}`);
     let viewButtonElem = document.getElementById(`viewBulid${markerId}`);
 
-    marker.addListener('click', () => {
-      infowindow.open(map, marker);
-      editButtonElem = document.getElementById(`editBulid${markerId}`);
-      viewButtonElem = document.getElementById(`viewBulid${markerId}`);
+    infowindow.addListener('domready',
+      () => {
+        editButtonElem = document.getElementById(`editBulid${markerId}`);
+        viewButtonElem = document.getElementById(`viewBulid${markerId}`);
 
-      if (!editButtonElem.inited) {
         editButtonElem.addEventListener('click', () => {
           this.props.editListItemByIndex(index);
+          marker.setDraggable(true);
         });
         viewButtonElem.addEventListener('click', () => {
           this.props.history.push(`/main/group/map/building/${index}`);
         });
-      }
-    });
-    marker.addListener('mouseup', () => {
-      // console.log(e.latLng.toJSON());
+      },
+    );
+    marker.addListener('click', () => {
+      infowindow.open(map, marker);
     });
 
     this.map.addListener('click', () => {
@@ -451,8 +447,8 @@ export default class LiveMap extends React.PureComponent {
     const google = window.google;
     const markers = [];
     let center = {
-      lat: -34.397,
-      lng: 150.644,
+      lat: 22.554255,
+      lng: 113.878773,
     };
 
     if (list.size > 0) {
@@ -471,14 +467,13 @@ export default class LiveMap extends React.PureComponent {
      // console.log('init Map = ', this.map)
     }
 
-    this.setMapOnAll(null);
+    //this.setMapOnAll(null);
     list.forEach((item, index) => {
       markers.push(this.addMarkerToMap(item.merge(settings), this.map, index));
     });
     this.markers = markers;
-    this.setMapOnAll(this.map);
+    //this.setMapOnAll(this.map);
   }
-
   renderActionBar() {
     const { store } = this.props;
     const myScreenId = store.get('curScreenId');

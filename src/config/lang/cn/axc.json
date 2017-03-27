@@ -716,10 +716,12 @@
   "Interfaces with the same segment already exists": "接口中已存在相同的网段",
 
   "Select Counter AP": "选择执行反制AP",
+  "Please select a counter ap": "请选择一台执行反制的AP",
   "Countering": "反制中...",
   "Counter This AP": "反制此AP",
   "Cancel Counter": "取消反制",
   "Counter AP: %s": "反制AP: %s",
+  "This ap will fully support the counter function, stop the normal business, you sure to open?": "此ap将全力支持反制功能，停止正常业务，你确定要开启？",
   "Start Date": "开始日期",
   "Observe Radius": "观察半径",
   "Orbit Trace": "行动轨迹图",

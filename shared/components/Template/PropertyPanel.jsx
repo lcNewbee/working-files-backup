@@ -56,7 +56,7 @@ class PropertyPanel extends React.Component {
   }
 
   // 模块数据保存
-  onSave() {
+  onSave(option) {
     const { properties } = this.props;
     const activeIndex = properties.get('activeIndex');
     const activePanelState = properties.getIn([
@@ -68,7 +68,7 @@ class PropertyPanel extends React.Component {
       'configuration', activePanelconfigIndex,
     ]);
     const query = activePanelState.get('query').toJS();
-    const curModule = $$configData.get('module');
+    const curModule = (option && option.module) || $$configData.get('module');
     let formUrl = 'goform/group/ap/radio';
     let $$subData = $$configData.get('data');
     let curName = '';
@@ -101,9 +101,10 @@ class PropertyPanel extends React.Component {
           first5g,
         });
       }
-      if ($$configData.getIn(['data', 'against']) !== undefined) {
+      
+      if (option && option.subData && option.subData.against !== undefined) {
         $$subData = $$subData.merge({
-          against: $$configData.getIn(['data', 'against']),
+          againstEnable: option.subData.against,
         });
       }
 
@@ -206,15 +207,19 @@ class PropertyPanel extends React.Component {
                   onRemove={
                     () => this.props.removePropertyPanel(index)
                   }
-                  onSave={(formId) => {
-                    this.props.validateAll(formId)
-                      .then(
-                        ($$msg) => {
-                          if ($$msg.isEmpty()) {
-                            this.onSave();
-                          }
-                        },
-                      );
+                  onSave={(option) => {
+                    if (!option || typeof option === 'string') {
+                      this.props.validateAll(option)
+                        .then(
+                          ($$msg) => {
+                            if ($$msg.isEmpty()) {
+                              this.onSave();
+                            }
+                          },
+                        );
+                    } else {
+                      this.onSave(option);
+                    }
                   }}
                   actionable={actionAable}
 

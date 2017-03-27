@@ -121,11 +121,13 @@ function DevicesProperties(props) {
                   savedText={__('Applied')}
                   onClick={
                     () => {
-                      props.onChangeData({
-                        against: 0,
-                      });
                       setTimeout(
-                        () => props.onSave('deviceGeneral'),
+                        () => props.onSave({
+                          module: 'info',
+                          subData: {
+                            against: 0,
+                          },
+                        }),
                         20,
                       );
                     }
