@@ -129,8 +129,8 @@ class FormContainer extends React.Component {
     }
 
     // 处理 额外要合并的数据
-    if (typeof data.mergeData === 'object') {
-      $$upDate = $$upDate.merge(data.mergeData);
+    if (typeof data.mergeData === 'object' && typeof data.mergeData !== 'function') {
+      $$upDate = $$upDate.mergeDeep(data.mergeData);
     }
 
     if (this.props.onChangeData) {
@@ -172,7 +172,7 @@ class FormContainer extends React.Component {
     const {
       invalidMsg, validateAt, onValidError, actionQuery, id, actionable,
     } = this.props;
-    const index = $$option.get('__index__') || '';
+    const index = $$option.get('__index__') !== undefined ? $$option.get('__index__') : '';
     const myProps = $$option.delete('__index__').toJS();
     const myComponent = myProps.component;
     const checkboxValue = myProps.value || '1';
@@ -257,8 +257,16 @@ class FormContainer extends React.Component {
     // change
     if (typeof $$option.get('onChange') === 'function') {
       myProps.onChange = (myData) => {
-        const customChangeData = $$option.get('onChange')(myData, $$data.toJS());
-        const changeData = customChangeData || myData;
+        let customChangeData = null;
+        let changeData = myData;
+
+        // 列表点击时需要传递 index
+        if (index !== undefined) {
+          changeData.index = index;
+        }
+
+        customChangeData = $$option.get('onChange')(changeData, $$data.toJS());
+        changeData = customChangeData || changeData;
 
         this.changeFormGoupData({
           id: formGroupId,

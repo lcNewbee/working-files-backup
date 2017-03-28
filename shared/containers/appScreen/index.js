@@ -5,7 +5,6 @@ import { actions as appActions } from '../app';
 import * as actions from './actions';
 import reducer from './reducer';
 import components from './components';
-import AppScreen from './components/AppScreen';
 
 function mapStateToProps(state) {
   return {
@@ -28,12 +27,13 @@ function createContainer(component) {
 }
 
 // 添加 redux 属性的 react 页面
-const AppContainer = createContainer(AppScreen);
+const AppContainer = createContainer(components.AppScreen);
 
 export default {
-  createContainer,
   actions,
-  components,
   reducer,
+  components,
+  createContainer,
   AppContainer,
+  AppScreen: components.AppScreen,
 };

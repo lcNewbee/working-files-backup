@@ -247,6 +247,33 @@ const settingsOptions = fromJS([
         label: __('Initiate Mode'),
         type: 'checkbox',
         display: 'block',
+        onChange: (data) => {
+          const curIndex = data.index;
+          const retData = data;
+
+          if (retData.value === '1') {
+            // 接入认证
+            if (curIndex === 1) {
+              retData.mergeData = {
+                list: [
+                  {},
+                  {},
+                  { enable: '0' },
+                ],
+              };
+            // Radiu认证
+            } else if (curIndex === 2) {
+              retData.mergeData = {
+                list: [
+                  {},
+                  { enable: '0' },
+                ],
+              };
+            }
+          }
+
+          return retData;
+        },
       }, {
         id: 'type',
         label: __('Authentication Types'),
