@@ -242,7 +242,7 @@ const routes = [
                 id: 'networkRadius',
                 icon: 'clone',
                 path: '/main/network/radius',
-                text: __('Radius'),
+                text: __('Radius Setting'),
                 noTree: true,
                 component: SharedComponents.TabContainer,
                 routes: [

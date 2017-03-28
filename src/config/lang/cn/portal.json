@@ -109,7 +109,8 @@
   "Public Password":"公共密码",
   "Sesssion Time":"允许时长",
   "URL After Authentication":"认证后跳转页面",
-
+  "Secret Key":"密钥",
+  "Shop ID":"商店ID",
   "Acc Logic":"计费逻辑",
 
   "Access Account":"接入账户管理",

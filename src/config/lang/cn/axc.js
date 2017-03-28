@@ -157,6 +157,9 @@ var axc = {
   "Full Duplex": "双工",
   "Auto": "自动",
 
+  "Server Type":"服务器类型",
+  "Local Server":"本地服务器",
+  "Remote Server":"远程服务器",
   "Radius Template": "Radius模板",
   "Auth Server Settings": "认证服务器设置",
   "Primary Auth Server":" 主认证服务器",

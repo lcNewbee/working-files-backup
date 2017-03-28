@@ -12,6 +12,7 @@ const propTypes = {
   store: PropTypes.instanceOf(Map),
   app: PropTypes.instanceOf(Map),
   test: PropTypes.number,
+  updateScreenSettings: PropTypes.func,
 };
 const defaultProps = {
   test: 0,
@@ -250,7 +251,6 @@ const settingsOptions = fromJS([
         onChange: (data) => {
           const curIndex = data.index;
           const retData = data;
-
           if (retData.value === '1') {
             // 接入认证
             if (curIndex === 1) {
@@ -271,7 +271,6 @@ const settingsOptions = fromJS([
               };
             }
           }
-
           return retData;
         },
       }, {
@@ -347,12 +346,32 @@ const settingsOptions = fromJS([
 ]);
 
 export default class View extends React.Component {
+  constructor(props) {
+    super(props);
+    utils.binds(this, [
+      'onBeforeSync',
+    ]);
+  }
+  // onBeforeSync($$actionQuery, $$curSettings) {
+  //   const radiusEnable = $$curSettings.getIn(['list', 1, 'enable']);
+  //   const accessEnable = $$curSettings.getIn(['list', 2, 'enable']);
+  //   console.log('radiusEnable', radiusEnable);
+  //   if (radiusEnable === 1) {
+  //     this.props.updateScreenSettings({
+
+  //     });
+  //   } else if (accessEnable === 1) {
+  //     this.props.updateScreenSettings({
+  //     });
+  //   }
+  // }
   render() {
     return (
       <AppScreen
         {...this.props}
         className="port-base"
         settingsFormOptions={settingsOptions}
+        onBeforeSync={this.onBeforeSync}
         hasSettingsSaveButton
         noTitle
       />

@@ -11,6 +11,10 @@ import Icon from 'shared/components/Icon';
 import { actions as appActions } from 'shared/containers/app';
 import { actions as screenActions } from 'shared/containers/appScreen';
 import { actions as propertiesActions } from 'shared/containers/properties';
+// import * as appActions from 'shared/actions/app';
+// import * as screenActions from 'shared/actions/screens';
+// // import * as propertiesActions from 'shared/actions/properties';
+// import './index.scss';
 
 function getNasIP() {
   return utils.fetch('goform/portal/radius/nas', {
@@ -23,23 +27,7 @@ function getNasIP() {
           item => ({
             value: item.ip,
             label: item.ip,
-          }),
-        ),
-      }
-    ),
-  );
-}
-function getSharedSecret() {
-  return utils.fetch('goform/portal/radius/nas', {
-    size: 9999,
-    page: 1,
-  })
-    .then(json => (
-      {
-        options: json.data.list.map(
-          item => ({
-            value: item.id,
-            label: item.sharedSecret,
+            item,
           }),
         ),
       }
@@ -47,12 +35,14 @@ function getSharedSecret() {
   );
 }
 
+
 const serverChoices = fromJS([
   {
     id: 'serverType',
     label: __('Server Type'),
     className: 'cols col-5',
     defaultValue: 'local',
+    display: 'block',
     options: [
       {
         value: 'local',
@@ -104,12 +94,25 @@ const authServer = fromJS([
     visible(data) {
       return data.get('serverType') === 'remote';
     },
-    // onChange: (data, formData) => {
-    //   return {
-    //     authpri_ipaddr: data.get('nasip'),
-    //     authpri_port: 1812,
-    //   };
-    // },
+    onChange: (data) => {
+      const item = data.item;
+      const retData = data;
+      retData.mergeData = {
+        authpri_ipaddr: item.ip,
+        authpri_port: '1812',
+        authpri_key: item.sharedSecret,
+        authsecond_ipaddr: item.ip,
+        authsecond_port: '1812',
+        authsecond_key: item.sharedSecret,
+        acctpri_ipaddr: item.ip,
+        acctpri_port: '1813',
+        acctpri_key: item.sharedSecret,
+        acctsecond_ipaddr: item.ip,
+        acctsecond_port: '1813',
+        acctsecond_key: item.sharedSecret,
+      };
+      return retData;
+    },
   }, {
     id: 'authpri_ipaddr',
     disabled: (data) => {
@@ -530,6 +533,7 @@ const propTypes = {
   onListAction: PropTypes.func,
   updateCurEditListItem: PropTypes.func,
   reportValidError: PropTypes.func,
+  createModal: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -551,7 +555,7 @@ export default class View extends React.Component {
       'toggleBox',
       'getDefaultEditData',
       'onBeforeSave',
-      'onChange',
+      // 'onChange',
     ]);
   }
 
@@ -562,15 +566,7 @@ export default class View extends React.Component {
         this.setState({
           nasIPOptions: fromJS(data.options),
         });
-      })
-      .then(
-        getSharedSecret()
-          .then((data) => {
-            this.setState({
-              pwdOptions: fromJS(data.options),
-            });
-          }),
-      );
+      });
   }
   onBeforeSave() {
     const { store } = this.props;
@@ -594,21 +590,6 @@ export default class View extends React.Component {
             this.props.onListAction();
           }
         });
-    }
-  }
-
-  onChange() {
-    const { store } = this.props;
-    const myScreenId = store.get('curScreenId');
-    const $$myScreenStore = store.get(myScreenId);
-    const $$curData = $$myScreenStore.get('curListItem');
-    const $$curNasIP = $$curData.get('nasip');
-    if ($$curNasIP !== null) {
-      this.props.updateCurEditListItem({
-        acctpri_ipaddr: $$curNasIP,
-        authsecond_ipaddr: $$curNasIP,
-        authpri_key: this.state.pwdOptions,
-      });
     }
   }
   getDefaultEditData() {
@@ -669,11 +650,9 @@ export default class View extends React.Component {
     const actionType = $$myScreenStore.getIn(['actionQuery', 'action']);
     const curAuthServer = authServer.setIn([2, 'options'], this.state.nasIPOptions);
     let $$myAuthServer = curAuthServer;
-
     if (actionType !== 'add' && actionType !== 'edit') {
       return null;
     }
-
     if (actionType === 'edit') {
       $$myAuthServer = $$myAuthServer.map(
         ($$item) => {
@@ -691,10 +670,19 @@ export default class View extends React.Component {
         <div className="o-box__cell">
           <FormContainer
             id="serverChoice"
-            className="o-form--compassed"
+            className="o-form--compassed serverType"
             options={serverChoices}
             data={$$curData}
-            onChangeData={this.props.updateCurEditListItem}
+            onChangeData={(data) => {
+              if (data.serverType === 'remote' && this.state.nasIPOptions.size < 1) {
+                this.props.createModal({
+                  type: 'alert',
+                  text: _('No data, please go to the Portal-->Radius page to add nas data!'),
+                });
+              } else {
+                this.props.updateCurEditListItem(data);
+              }
+            }}
             onSave={() => this.onSave('serverChoices')}
             invalidMsg={app.get('invalid')}
             validateAt={app.get('validateAt')}
