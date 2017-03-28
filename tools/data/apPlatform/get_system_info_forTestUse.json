@@ -5,8 +5,8 @@
   },
   "data": {
 	"sysStatus": {
-		"deviceModel":"NS300",
-		"deviceName":"NS300",
+		"deviceModel":"AIP5",
+		"deviceName":"AIP5",
 		"version":"p2p1.0.1",
 		"uptime":"1000",
 		"systemTime":"2016-11-30 11:39:56",
@@ -52,7 +52,7 @@
 			"radioId":"0",
       "enable": "1",
 			"wirelessMode":"ap",
-			"radioMode":"802.11ac",
+			"radioMode":"802.11an",
 			"ssid":"axilspot",
 			"security":"none",
 			"channel":"11",
@@ -279,7 +279,7 @@
 			"radioId":"1",
       "enable": "1",
 			"wirelessMode":"sta",
-			"radioMode":"802.11ac",
+			"radioMode":"802.11an",
 			"ssid":"axilspot",
 			"security":"none",
 			"channel":"11",
@@ -287,8 +287,8 @@
 			"channelWidth":"40+",
 			"distance":"1000",
 			"txPower":"14",
-			"noise":"80",
-			"signal":"90",
+			"noise":"-80",
+			"signal":"-90",
 			"chutil": "40%",
 			"staList":[
 					{
@@ -340,7 +340,7 @@
 			"radioId":"2",
       "enable": "1",
 			"wirelessMode":"repeater",
-			"radioMode":"802.11ac",
+			"radioMode":"802.11an",
 			"ssid":"axilspot",
 			"security":"none",
 			"channel":"11",
@@ -348,8 +348,8 @@
 			"channelWidth":"40+",
 			"distance":"1000",
 			"txPower":"14",
-			"noise":"80",
-			"signal":"90",
+			"noise":"-80",
+			"signal":"-90",
 			"chutil": "40%",
 			"staList":[
 

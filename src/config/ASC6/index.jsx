@@ -74,6 +74,10 @@ const funConfig = {
       // { value: 'sta', label: __('Station') },
       // { value: 'repeater', label: __('Repeater') },
     ],
+    radioModeOptionsFor5g: [
+      { value: '11na', label: '802.11an' },
+      { value: '11a', label: '802.11a' },
+    ],
     radioMaxClientsLimit: false,    // 射频最大客户端限制
     // 功能项参见WirelessConfig -> Basic页面下的ssidTableFullMemberOptions变量
     ssidTableKeys: [

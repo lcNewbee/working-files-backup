@@ -49,11 +49,11 @@ const siteScanResultOptions = fromJS([
   },
   {
     id: 'signal',
-    text: __('Signal,dBm'),
+    text: __('Signal(dBm)'),
   },
   {
     id: 'noise',
-    text: __('Noise,dBm'),
+    text: __('Noise(dBm)'),
   },
   {
     id: 'protocol',
@@ -65,7 +65,7 @@ const siteScanResultOptions = fromJS([
   },
   {
     id: 'channelWidth',
-    text: __('Channel Width'),
+    text: __('Channel Bandwidth'),
   },
 ]);
 

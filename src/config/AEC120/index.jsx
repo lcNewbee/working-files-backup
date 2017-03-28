@@ -276,6 +276,7 @@ const routes = [{
     path: '/wizard',
     component: sWizard.Screen,
   }, {
+    id: 'login',
     path: '/login',
     component: pLogin.Screen,
   }],

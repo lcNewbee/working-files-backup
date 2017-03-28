@@ -902,7 +902,7 @@ export default class SystemStatus extends React.Component {
                 <dd>{radioList.getIn([radioId, 'radioMode'])}</dd>
               </dl>
               <dl className="o-description-list-row">
-                <dt>{__('Bandwidth')}</dt>
+                <dt>{__('Channel Bandwidth')}</dt>
                 <dd>{radioList.getIn([radioId, 'channelWidth'])}</dd>
               </dl>
               <dl className="o-description-list-row">
@@ -925,10 +925,14 @@ export default class SystemStatus extends React.Component {
                 <dt>{__('Tx Power')}</dt>
                 <dd style={{ whiteSpace: 'pre' }}>{modifySignalShowStyle(radioList.getIn([radioId, 'txPower']))}</dd>
               </dl>
-              {/* <dl className="o-description-list-row">
-                <dt>{__('Signal')}</dt>
-                <dd style={{ whiteSpace: 'pre' }}>{modifySignalShowStyle(radioList.getIn([radioId, 'signal']))}</dd>
-              </dl>*/}
+              {
+                deviceModel === 'AIP5' ? (
+                  <dl className="o-description-list-row">
+                    <dt>{__('Signal')}</dt>
+                    <dd style={{ whiteSpace: 'pre' }}>{modifySignalShowStyle(radioList.getIn([radioId, 'signal']))}</dd>
+                  </dl>
+                ) : null
+              }
               <dl className="o-description-list-row">
                 <dt>{__('Noise')}</dt>
                 <dd style={{ whiteSpace: 'pre' }}>{modifySignalShowStyle(radioList.getIn([radioId, 'noise']))}</dd>

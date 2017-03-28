@@ -91,7 +91,7 @@ const keyTypeOptions = [
   { value: 'ASCII', label: 'ASCII' },
 ];
 
-const radioModeOptionsFor5g = [
+const defaultRadioModeOptionsFor5g = [
   // { value: 'auto', label: 'auto' },
   { value: '11ac', label: '802.11ac' },
   { value: '11na', label: '802.11an' },
@@ -910,6 +910,7 @@ export default class Basic extends React.Component {
     const apMac = curData.getIn(['radioList', radioId, 'vapList', '0', 'apMac']);
     const apMacList = curData.getIn(['radioList', radioId, 'vapList', '0', 'apMacList']) || fromJS([]);
     // const keysFromRoute = funConfig.ssidTableKeys;
+    const radioModeOptionsFor5g = funConfig.radioModeOptionsFor5g ? funConfig.radioModeOptionsFor5g : defaultRadioModeOptionsFor5g;
     if (this.props.store.get('curSettingId') === 'base') {
       return null;
     }

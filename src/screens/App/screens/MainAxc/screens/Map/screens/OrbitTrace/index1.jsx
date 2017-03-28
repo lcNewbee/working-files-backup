@@ -5,9 +5,9 @@ import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { FormGroup, Icon, AppScreen } from 'shared/components';
 import moment from 'moment';
-import { actions as appActions } from 'shared/containers/app';
-import { actions as screenActions } from 'shared/containers/appScreen';
-import { actions as propertiesActions } from 'shared/containers/properties';
+import * as appActions from 'shared/actions/app';
+import * as screenActions from 'shared/actions/screens';
+import * as propertiesActions from 'shared/actions/properties';
 import './orbitTrace.scss';
 
 function getDistance(p1, p2) {
@@ -20,113 +20,6 @@ function sleep(n) {
     const end = new Date().getTime();
     if (end - start > n) break;
   }
-}
-
-function fromObjArrToArr(objArr) {
-  const arr = [];
-  objArr.forEach((item) => {
-    arr.push(item.x, item.y);
-  });
-  return arr;
-}
-
-function fromArrToListArr(arr) {
-  const listArr = [];
-  const len = arr.length;
-  for (let i = 0; i < len; i++) {
-    listArr.push([arr[i], arr[++i]]);
-  }
-  return listArr;
-}
-
-function getCurvePoints(points, tension, numOfSeg, close) {
-  // 'use strict';
-  // options or defaults
-  tension = (typeof tension === 'number') ? tension : 0.5;
-  numOfSeg = numOfSeg || 25;
-
-  let pts;              // for cloning point array
-  let i = 1;
-  let l = points.length;
-  let rPos = 0;
-  const rLen = ((l - 2) * numOfSeg) + 2 + (close ? 2 * numOfSeg : 0);
-  const res = new Float32Array(rLen);
-  const cache = new Float32Array((numOfSeg + 2) * 4);
-  let cachePtr = 4;
-
-  pts = points.slice(0);
-
-  if (close) {
-    pts.unshift(points[l - 1]);         // insert end point as first point
-    pts.unshift(points[l - 2]);
-    pts.push(points[0], points[1]);     // first point as last point
-  } else {
-    pts.unshift(points[1]);             // copy 1. point and insert at beginning
-    pts.unshift(points[0]);
-    pts.push(points[l - 2], points[l - 1]);   // duplicate end-points
-  }
-
-  //  cache inner-loop calculations as they are based on t alone
-  cache[0] = 1;       // 1,0,0,0
-
-  for (; i < numOfSeg; i++) {
-    const st = i / numOfSeg;
-    const st2 = st * st;
-    const st3 = st2 * st;
-    const st23 = st3 * 2;
-    const st32 = st2 * 3;
-
-    cache[cachePtr++] = (st23 - st32) + 1;        // c1
-    cache[cachePtr++] = st32 - st23;            // c2
-    cache[cachePtr++] = (st3 - (2 * st2)) + st; // c3
-    cache[cachePtr++] = st3 - st2;              // c4
-  }
-
-  cache[++cachePtr] = 1;                    // 0,1,0,0
-
-  // calc. points
-  parse(pts, cache, l);
-
-  if (close) {
-    // l = points.length;
-    pts = [];
-    pts.push(points[l - 4], points[l - 3], points[l - 2], points[l - 1]); // second last and last
-    pts.push(points[0], points[1], points[2], points[3]); // first and second
-    parse(pts, cache, 4);
-  }
-
-  function parse(pts, cache, l) {
-    for (let i = 2, t; i < l; i += 2) {
-      const pt1 = pts[i];
-      const pt2 = pts[i + 1];
-      const pt3 = pts[i + 2];
-      const pt4 = pts[i + 3];
-
-      const t1x = (pt3 - pts[i - 2]) * tension;
-      const t1y = (pt4 - pts[i - 1]) * tension;
-      const t2x = (pts[i + 4] - pt1) * tension;
-      const t2y = (pts[i + 5] - pt2) * tension;
-
-      for (t = 0; t < numOfSeg; t++) {
-        const c = t << 2;               // t * 4;
-
-        const c1 = cache[c];
-        const c2 = cache[c + 1];
-        const c3 = cache[c + 2];
-        const c4 = cache[c + 3];
-
-        res[rPos++] = (c1 * pt1) + (c2 * pt3) + (c3 * t1x) + (c4 * t2x);
-        res[rPos++] = (c1 * pt2) + (c2 * pt4) + (c3 * t1y) + (c4 * t2y);
-      }
-    }
-  }
-
-  // add last point
-  l = close ? 0 : points.length - 2;
-  res[rPos++] = points[l];
-  res[rPos] = points[l + 1];
-  console.log('res', res);
-  return res;
 }
 
 const propTypes = {
@@ -461,21 +354,14 @@ export default class View extends React.Component {
     this.pathList = pathListPixel; // 存储起来，避免在没有请求数据的情况下做多余的计算。
     this.stationaryPoint(ctx, pathListPixel);
 
-    // const len = pathListPixel.length;
+    const len = pathListPixel.length;
     this.curvePath = [];
-    // 由于画图的相关函数提前写好，作图点的获取函数是后来添加，要将获取的点的格式转化为作图函数可用的形式，故有以下的转化
-    // 这里将pathListPixel转化成[x1,y1,x2,y2,...]的形式，传入新的插值函数
-    const arrPathList = fromObjArrToArr(pathListPixel);
-    // 获取作图点，但不是最终的形式，还需进一步转化
-    const pathPoint = getCurvePoints(arrPathList, 0.5, 30);
-    // 转化为作图函数需要的形式
-    this.curvePath = fromArrToListArr(pathPoint);
-    // arrPathList.forEach((item, index, arr) => {
-    //   if (index === len - 1) return;
-    //   const crvPoints = this.getPointList(item, arr[index + 1]);
-    //   this.curvePath = this.curvePath.concat(crvPoints);
-    //   // this.drawCurvePath(ctx, crvPoints);
-    // });
+    pathListPixel.forEach((item, index, arr) => {
+      if (index === len - 1) return;
+      const crvPoints = this.getPointList(item, arr[index + 1]);
+      this.curvePath = this.curvePath.concat(crvPoints);
+      // this.drawCurvePath(ctx, crvPoints);
+    });
 
     // this.drawCurveAnimPath(ctx, this.curvePath);
     // this.oribitPath(ctx, startX, startY, fromJS(pathListPixel));
