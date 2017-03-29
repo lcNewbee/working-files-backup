@@ -56,7 +56,7 @@ class DpiOverview_Model extends CI_Model {
                 case 'ndpi_send_proto_statistics':
                     foreach($result as $row){                    
                         $b['name'] = $row->proto;
-                        $b['value'] = sprintf("%.3f", $row->bytes);//round($row->bytes_precent,3);
+                        $b['value'] = sprintf("%.3f", $row->bytes);//round($row->bytes,3);
                         $arreth[] = $b;
                     }
                     break;
