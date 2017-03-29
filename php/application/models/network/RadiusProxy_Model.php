@@ -29,7 +29,7 @@ class RadiusProxy_Model extends CI_Model {
             'data'=>array(
                 'settings'=>array(
                     'enable'=>$enable,
-                    'temlate_name'=>$temlate_name
+                    'template_name'=>$temlate_name
                 )
             )            
         );
