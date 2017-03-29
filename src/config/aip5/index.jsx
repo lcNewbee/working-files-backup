@@ -113,7 +113,7 @@ const funConfig = {
 const routes = [{
   path: '/',
   component: app.Screen,
-  formUrl: '/goform/get_product_info',
+  // formUrl: '/goform/get_product_info',
   routes: [{
     path: '/main',
     component: MainAP.Screen,

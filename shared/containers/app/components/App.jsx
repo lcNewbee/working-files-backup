@@ -60,7 +60,7 @@ export default class App extends Component {
     this.updateRouter = this.updateRouter.bind(this);
   }
   componentWillMount() {
-    if (this.props.fetchProductInfo) {
+    if (this.props.fetchProductInfo && typeof (this.props.route.formUrl) !== 'undefined') {
       this.props.fetchProductInfo(this.props.route.formUrl);
     }
   }

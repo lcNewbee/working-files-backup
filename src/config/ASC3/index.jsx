@@ -110,7 +110,7 @@ const funConfig = {
 const routes = [{
   path: '/',
   component: app.Screen,
-  formUrl: '/goform/get_product_info',
+  // formUrl: '/goform/get_product_info',
   indexPath: '/login',
   routes: [{
     path: '/main',
