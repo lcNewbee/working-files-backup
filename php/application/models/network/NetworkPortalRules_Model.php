@@ -36,7 +36,8 @@ class NetworkPortalRules_Model extends CI_Model {
                     case 'auth_nasid':$sarr['auth_nasid'] = $res['attr_value'];break;
                     case 'vrrrp_id':$sarr['vrrrp_id'] = $res['attr_value'];break;
                     case 'traffic_flag':$sarr['traffic_flag'] = $res['attr_value'];break;
-                    case 'acctinterim_flag':$sarr['acctinterim_flag'] = $res['attr_value'];break;                                    
+                    case 'acctinterim_flag':$sarr['acctinterim_flag'] = $res['attr_value'];break; 
+                    case 'twoauth_exempt_flag':$sarr['idle_test'] = $res['attr_value'];break;
                 }               
             }   
             $arr[] = $sarr;
