@@ -73,6 +73,7 @@ $route['goform/network/dpi/flowinfo'] = 'network/dpiFlowInfo';
 $route['goform/network/dpi/macstatistic'] = 'network/dpiMac';
 $route['goform/network/dpi/ethstatistic'] = 'network/dpiEth';
 $route['goform/network/dpi/protoinfo'] = 'network/dpiProto';
+$route['goform/network/dpi/dpisettings'] = 'network/dpiSettings';
 
 // AP组管理
 $route['goform/group'] = 'group/group';
