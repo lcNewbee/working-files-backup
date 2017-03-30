@@ -1,7 +1,7 @@
 /** *****************************************
  * APP Actions
  */
-const ACTION_TYPES = {
+export default {
   // 通用操作
   INIT_CONFIG: 'app/INIT_CONFIG',
   UPDATE_ROUTER: 'app/UPDATE_ROUTER',
@@ -29,6 +29,3 @@ const ACTION_TYPES = {
   CREATE_MODAL: 'app/CREATE_MODAL',
   CHANGE_MODAL_STATE: 'app/CHANGE_MODAL_STATE',
 };
-
-export default ACTION_TYPES;
-
