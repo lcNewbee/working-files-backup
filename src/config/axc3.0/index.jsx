@@ -365,10 +365,11 @@ const routes = [
               {
                 id: 'dpi',
                 icon: 'copy',
-                noTree: true,
-                component: SharedComponents.TabContainer,
+                // noTree: true,
+                //component: SharedComponents.TabContainer,
                 path: '/main/network/dpi',
                 text: __('DPI'),
+                indexPath: '/main/network/dpi/dpioverview',
                 indexRoute: { onEnter: (nextState, replace) => replace('/main/network/dpi/dpioverview') },
                 routes: [
                   {
