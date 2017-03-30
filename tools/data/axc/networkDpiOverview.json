@@ -5,7 +5,7 @@
   },
   "data": {
     "settings": {
-      "ndpiEnable": "1"
+      "ndpiEnable": "0"
     },
     "ethInterface": [
       {

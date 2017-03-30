@@ -426,12 +426,12 @@ export default class EthStatistic extends React.Component {
           const len = val.size;
           const n1 = len / 10;
           const n2 = len % 10;
-          let div = [];
+          const div = [];
           for (let i = 0; i < n1; i++) {
             const start = i * 10;
-            const end = i * 10 + 10;
+            const end = (i * 10) + 10;
             const arrStr = val.slice(start, end).join(', ');
-            div.push(<span>{arrStr}<br /></span>)
+            div.push(<span>{arrStr}<br /></span>);
           }
           const lastArrStr = n2 === 0 ? '' : val.slice(n1 * 10, len).join(', ');
           div.push(<span>{lastArrStr}</span>);
@@ -444,7 +444,7 @@ export default class EthStatistic extends React.Component {
           return `${flowRateFilter.transform(val)}/s`;
         },
       },
-      {
+      /*{
         id: 'active_eth',
         text: __('Active Status'),
         actionName: 'active',
@@ -474,7 +474,7 @@ export default class EthStatistic extends React.Component {
             />
           );
         }.bind(this),
-      },
+      },*/
     ]);
     return (
       <AppScreen

@@ -123,15 +123,11 @@ const sClientsTraceSettings = require('../../screens/MainAxc/screens/Map/screens
 const sHeatMap = require('../../screens/MainAxc/screens/Map/screens/HeatMap');
 
 // ndpi
-const sDPIOverview =
-    require('../../screens/MainAxc/screens/Network/screens/DPI/screens/DPIOverview');
-// const sFlowInfo =
-const sMacStatistic =
-    require('../../screens/MainAxc/screens/Network/screens/DPI/screens/MacStatistic');
-const sEthStatistic =
-    require('../../screens/MainAxc/screens/Network/screens/DPI/screens/EthStatistic');
-const sProtoInfo =
-    require('../../screens/MainAxc/screens/Network/screens/DPI/screens/ProtoInfo');
+const sDPIOverview = require('../../screens/MainAxc/screens/Network/screens/DPI/screens/DPIOverview');
+const sMacStatistic = require('../../screens/MainAxc/screens/Network/screens/DPI/screens/MacStatistic');
+const sEthStatistic = require('../../screens/MainAxc/screens/Network/screens/DPI/screens/EthStatistic');
+const sProtoInfo = require('../../screens/MainAxc/screens/Network/screens/DPI/screens/ProtoInfo');
+const sDPISettings = require('../../screens/MainAxc/screens/Network/screens/DPI/screens/DPISettings');
 
 
 /**
@@ -394,6 +390,13 @@ const routes = [
                     formUrl: 'goform/network/dpi/protoinfo',
                     text: __('Proto Info'),
                     component: sProtoInfo.Screen,
+                  },
+                  {
+                    id: 'dpisettings',
+                    path: '/main/network/dpi/dpisettings',
+                    formUrl: 'goform/network/dpi/dpisettings',
+                    text: __('DPI Settings'),
+                    component: sDPISettings.Screen,
                   },
                 ],
               },

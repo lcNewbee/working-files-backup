@@ -1,0 +1,17 @@
+{
+  "state":	{
+    "code":	2000,
+    "msg":	"ok"
+  },
+  "data":	{
+    "settings": {
+      "ndpiEnable": "0",
+      "eth0Enable": "1",
+      "eth1Enable": "0",
+      "eth2Enable": "1",
+      "eth3Enable": "0",
+      "eth4Enable": "1"
+    }
+  }
+}
+

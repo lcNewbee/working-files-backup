@@ -143,14 +143,6 @@ export default class DPIOverview extends React.Component {
             timeType: '0',
           },
         }}
-        settingsFormOptions={fromJS([
-          {
-            id: 'ndpiEnable',
-            label: __('NDPI Enable'),
-            type: 'checkbox',
-            saveOnChange: true,
-          },
-        ])}
       >
         {
           this.props.store.getIn([curScreenId, 'curSettings', 'ndpiEnable']) === '1' ? (
@@ -265,7 +257,19 @@ export default class DPIOverview extends React.Component {
                 </div>
               </div>
             </div>
-          ) : null
+          ) : (
+            <div
+              style={{
+                fontWeight: 'bold',
+                fontSize: '20px',
+                paddingLeft: '230px',
+                marginTop: '30px',
+                color: '#CCC',
+              }}
+            >
+              {__('NDPI Disabled')}
+            </div>
+          )
         }
       </AppScreen>
     );
