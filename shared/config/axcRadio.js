@@ -17,6 +17,7 @@ const $$bandwidthOptions = fromJS([{
   value: 80,
   label: 'HT80',
 }]);
+
 const channelsList = List(channels);
 
 const spatialstreamsOptions = [{
@@ -138,7 +139,7 @@ export const radioBase = fromJS([
   //   value: '1',
   //   defaultValue: '0',
   //   text: __('11n Frist'),
-  //   showPrecondition(data) {
+  //   visible(data) {
   //     return parseInt(data.get('phymode'), 10) > 8;
   //   },
   // },
@@ -202,7 +203,7 @@ export const radioBase = fromJS([
     },
     options($$data) {
       const phymode = $$data.get('phymode');
-      const ret = [];
+      const ret = $$bandwidthOptions;
 
       switch (phymode) {
         case 4:
@@ -218,7 +219,7 @@ export const radioBase = fromJS([
 
       return ret;
     },
-    showPrecondition(data) {
+    visible(data) {
       const showArr = '4,7,12,16'.split(',');
       const phymode = `${data.get('phymode')}`;
 
@@ -244,7 +245,7 @@ export const radioAdvance = fromJS([
     defaultValue: '1x1',
     required: true,
     options: spatialstreamsOptions,
-    showPrecondition(data) {
+    visible(data) {
       return parseInt(data.get('spatialstreams'), 10) !== 1;
     },
   },
@@ -257,7 +258,7 @@ export const radioAdvance = fromJS([
   //   required: true,
   //   noForm: true,
   //   options: spatialstreamsOptions,
-  //   showPrecondition(data) {
+  //   visible(data) {
   //     return parseInt(data.get('spatialstreams'), 10) !== 1;
   //   },
   // },
@@ -390,7 +391,7 @@ export const radioAdvance = fromJS([
   //   type: 'checkbox',
   //   value: '1',
   //   defaultValue: '1',
-  //   showPrecondition(data) {
+  //   visible(data) {
   //     return parseInt(data.get('phymode'), 10) >= 8;
   //   },
   // },
@@ -412,7 +413,7 @@ export const radioAdvance = fromJS([
   //     },
   //   ],
   //   defaultValue: '1',
-  //   showPrecondition(data) {
+  //   visible(data) {
   //     return parseInt(data.get('phymode'), 10) === 8 &&
   //         parseInt(data.get('shortgi'), 10) === 1;
   //   },
@@ -424,7 +425,7 @@ export const radioAdvance = fromJS([
   //   type: 'checkbox',
   //   value: '1',
   //   defaultValue: '0',
-  //   showPrecondition(data) {
+  //   visible(data) {
   //     return parseInt(data.get('phymode'), 10) >= 8;
   //   },
   // }, {
@@ -434,7 +435,7 @@ export const radioAdvance = fromJS([
   //   type: 'checkbox',
   //   value: '1',
   //   defaultValue: '0',
-  //   showPrecondition(data) {
+  //   visible(data) {
   //     return parseInt(data.get('phymode'), 10) >= 8;
   //   },
   // },
@@ -501,7 +502,7 @@ export const radioQos = fromJS([{
     __('TXOP'),
     __('NOACK'),
   ],
-  showPrecondition($$data) {
+  visible($$data) {
     return $$data.get('wmmtemplate') === 3;
   },
   list: [

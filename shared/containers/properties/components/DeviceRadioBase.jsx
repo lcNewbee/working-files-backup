@@ -24,10 +24,10 @@ function getChannelList(data) {
         }),
       );
 
-      ret.options.unshift({
-        value: 0,
-        label: __('Auto'),
-      });
+      // ret.options.unshift({
+      //   value: 0,
+      //   label: __('Auto'),
+      // });
       return ret;
     },
   );
