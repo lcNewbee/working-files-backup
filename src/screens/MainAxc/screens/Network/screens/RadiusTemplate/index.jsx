@@ -40,7 +40,7 @@ const serverChoices = fromJS([
   {
     id: 'serverType',
     label: __('Server Type'),
-    className: 'cols col-5',
+    className: 'cols col-4',
     defaultValue: 'local',
     display: 'block',
     options: [
@@ -670,7 +670,7 @@ export default class View extends React.Component {
         <div className="o-box__cell">
           <FormContainer
             id="serverChoice"
-            className="o-form--compassed serverType"
+            className="o-form--compassed"
             options={serverChoices}
             data={$$curData}
             onChangeData={(data) => {
