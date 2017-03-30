@@ -365,8 +365,6 @@ const routes = [
               {
                 id: 'dpi',
                 icon: 'copy',
-                // noTree: true,
-                //component: SharedComponents.TabContainer,
                 path: '/main/network/dpi',
                 text: __('DPI'),
                 indexPath: '/main/network/dpi/dpioverview',
