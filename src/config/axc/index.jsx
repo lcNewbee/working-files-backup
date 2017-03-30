@@ -57,13 +57,10 @@ bodyElem.className = stringUtils.addClassName(bodyElem.className, b28n.getLang()
  * 产品界面配置
  */
 
-// 公用组件
-
-// Containers
+// 公用
 const app = require('shared/containers/app');
 const appScreen = require('shared/containers/appScreen');
 const properties = require('shared/containers/properties');
-
 const SharedComponents = require('shared/components');
 
 //
@@ -235,7 +232,7 @@ const routes = [
   {
     id: 'root',
     path: '/',
-    component: App.Screen,
+    component: app.Screen,
     formUrl: 'goform/axcInfo',
     indexPath: '/login',
     routes: [
@@ -368,11 +365,9 @@ const routes = [
               {
                 id: 'dpi',
                 icon: 'copy',
-                noTree: true,
-                component: SharedComponents.TabContainer,
                 path: '/main/network/dpi',
                 text: __('DPI'),
-                indexRoute: { onEnter: (nextState, replace) => replace('/main/network/dpi/dpioverview') },
+                indexPath: '/main/network/dpi/dpioverview',
                 routes: [
                   {
                     id: 'dpioverview',
@@ -426,31 +421,6 @@ const routes = [
                     text: __('Overview'),
                     component: sOverview.Screen,
                   },
-                  // {
-                  //   id: 'groupTraffic',
-                  //   path: '/main/group/monitor/flow',
-                  //   formUrl: 'goform/group/flow/user',
-                  //   text: __('Traffic'),
-                  //   component: sFlowUser.Screen,
-                  //   indexRoute: {
-                  //     onEnter: (nextState, replace) => replace('/main/group/monitor/flow/user'),
-                  //   },
-                  //   routes: [
-                  //     {
-                  //       id: 'userFlow',
-                  //       path: '/main/group/monitor/flow/user',
-                  //       formUrl: 'goform/group/flow/user',
-                  //       text: __('User'),
-                  //       component: sFlowUser.Screen,
-                  //     }, {
-                  //       id: 'appFlow',
-                  //       path: '/main/group/monitor/flow/app',
-                  //       formUrl: 'goform/group/flow/app',
-                  //       text: __('App'),
-                  //       component: sFlowApp.Screen,
-                  //     },
-                  //   ],
-                  // },
                   {
                     id: 'ssidStatus',
                     path: '/main/group/monitor/ssid',
@@ -491,7 +461,6 @@ const routes = [
 
                 // 不要删除空格
                 text: __('Radio '),
-                indexRoute: { onEnter: (nextState, replace) => replace('/main/group/wireless/ssid') },
                 routes: [
                   {
                     id: 'ssidSettings',
@@ -588,9 +557,6 @@ const routes = [
                 text: __('Safe Policy'),
                 noTree: true,
                 component: SharedComponents.TabContainer,
-                indexRoute: {
-                  onEnter: (nextState, replace) => replace('/main/group/safe/wips'),
-                },
                 routes: [
                   {
                     id: 'wirelessWips',
@@ -829,9 +795,6 @@ const routes = [
                 path: '/main/portal/card',
                 icon: 'vcard-o',
                 text: __('Rechargeable Card'),
-                indexRoute: {
-                  onEnter: (nextState, replace) => replace('/main/portal/card/cardcategory'),
-                },
                 routes: [
                   {
                     id: 'sPortalCardCategory',
@@ -1004,3 +967,4 @@ export default {
   routes,
   appConfig: guiConfig,
 };
+

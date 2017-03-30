@@ -348,7 +348,6 @@ const routes = [
             component: SharedComponents.NavContainer,
             icon: 'cogs',
             text: __('System '),
-            indexRoute: { onEnter: (nextState, replace) => replace('/main/system/status') },
             routes: [
               {
                 id: 'systemStatus',

@@ -314,31 +314,6 @@ const routes = [
                     text: __('Overview'),
                     component: sOverview.Screen,
                   },
-                  // {
-                  //   id: 'groupTraffic',
-                  //   path: '/main/group/monitor/flow',
-                  //   formUrl: 'goform/group/flow/user',
-                  //   text: __('Traffic'),
-                  //   component: sFlowUser.Screen,
-                  //   indexRoute: {
-                  //     onEnter: (nextState, replace) => replace('/main/group/monitor/flow/user'),
-                  //   },
-                  //   routes: [
-                  //     {
-                  //       id: 'userFlow',
-                  //       path: '/main/group/monitor/flow/user',
-                  //       formUrl: 'goform/group/flow/user',
-                  //       text: __('User'),
-                  //       component: sFlowUser.Screen,
-                  //     }, {
-                  //       id: 'appFlow',
-                  //       path: '/main/group/monitor/flow/app',
-                  //       formUrl: 'goform/group/flow/app',
-                  //       text: __('App'),
-                  //       component: sFlowApp.Screen,
-                  //     },
-                  //   ],
-                  // },
                   {
                     id: 'ssidStatus',
                     path: '/main/group/monitor/ssid',
@@ -491,7 +466,6 @@ const routes = [
             component: SharedComponents.NavContainer,
             icon: 'cogs',
             text: __('System '),
-            indexRoute: { onEnter: (nextState, replace) => replace('/main/system/status') },
             routes: [
               {
                 id: 'systemStatus',

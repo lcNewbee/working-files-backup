@@ -293,7 +293,6 @@ const routes = [
                 path: '/main/network/vlan',
                 text: __('VLAN'),
                 noTree: true,
-                indexRoute: { onEnter: (nextState, replace) => replace('/main/network/vlan/vlansettings') },
                 routes: [
                   {
                     id: 'networkVlanSettings',
@@ -325,7 +324,6 @@ const routes = [
                 isIndex: true,
                 icon: 'th-large',
                 text: __('Ethernet Port'),
-                indexRoute: { onEnter: (nextState, replace) => replace('/main/network/ethernetport/portsettings') },
                 routes: [
                   {
                     id: 'ethernetPortSettings',
@@ -382,16 +380,12 @@ const routes = [
                 icon: 'random',
                 path: '/main/network/dhcp',
                 text: __('DHCP Config'),
-                indexRoute: { onEnter: (nextState, replace) => replace('/main/network/dhcp/dhcp') },
                 routes: [
                   {
                     id: 'dhcp',
                     path: '/main/network/dhcp/dhcp',
                     text: __('DHCP Service'),
                     component: SharedComponents.TabContainer,
-                    indexRoute: {
-                      onEnter: (nextState, replace) => replace('/main/network/dhcp/service/serviceConfig'),
-                    },
                     routes: [
                       {
                         id: 'dhcpService',
@@ -421,9 +415,6 @@ const routes = [
                     path: '/main/network/dhcp/snooping',
                     text: __('Snooping'),
                     component: SharedComponents.TabContainer,
-                    indexRoute: {
-                      onEnter: (nextState, replace) => replace('/main/network/dhcp/snooping/userList'),
-                    },
                     routes: [
                       {
                         id: 'userList',
@@ -472,7 +463,6 @@ const routes = [
                 noTree: true,
                 text: __('NAT'),
                 component: SharedComponents.TabContainer,
-                indexRoute: { onEnter: (nextState, replace) => replace('/main/network/natsettings/natenable') },
                 routes: [
                   {
                     id: 'networkNatEnable',
@@ -531,14 +521,12 @@ const routes = [
                 isIndex: true,
                 icon: 'th-large',
                 text: __('ACL'),
-                indexRoute: { onEnter: (nextState, replace) => replace('/main/network/acl/basicacl') },
                 routes: [
                   {
                     id: 'networkBasicAcl',
                     path: '/main/network/acl/basicacl',
                     text: __('Basic ACL'),
                     icon: 'th',
-                    indexRoute: { onEnter: (nextState, replace) => replace('/main/network/acl/basicacl/vlaninterface') },
                     routes: [
                       {
                         id: 'basicAclIndex',
@@ -589,7 +577,6 @@ const routes = [
                     path: '/main/network/acl/extendacl',
                     text: __('Extend ACL'),
                     icon: 'th',
-                    indexRoute: { onEnter: (nextState, replace) => replace('/main/network/acl/extendacl/vlaninterface') },
                     routes: [
                       {
                         id: 'extendAclIndex',
@@ -692,7 +679,6 @@ const routes = [
                 text: __('URL Filter'),
                 noTree: true,
                 component: SharedComponents.TabContainer,
-                indexRoute: { onEnter: (nextState, replace) => replace('/main/network/url/wlan') },
                 routes: [
                   {
                     id: 'urlWlan',
@@ -731,7 +717,6 @@ const routes = [
                 text: __('PPPOE'),
                 noTree: true,
                 component: SharedComponents.TabContainer,
-                indexRoute: { onEnter: (nextState, replace) => replace('/main/network/pppoe/baseConfig') },
                 routes: [
                   {
                     id: 'pppoeBase',
@@ -762,7 +747,6 @@ const routes = [
                 component: SharedComponents.TabContainer,
                 path: '/main/network/portal',
                 text: __('Portal Policy'),
-                indexRoute: { onEnter: (nextState, replace) => replace('/main/network/portal/server') },
                 routes: [
                   {
                     id: 'portalServer',
@@ -792,7 +776,6 @@ const routes = [
                 component: SharedComponents.TabContainer,
                 path: '/main/network/dpi',
                 text: __('DPI'),
-                indexRoute: { onEnter: (nextState, replace) => replace('/main/network/dpi/dpioverview') },
                 routes: [
                   {
                     id: 'dpioverview',
@@ -853,31 +836,6 @@ const routes = [
                     text: __('Overview'),
                     component: sOverview.Screen,
                   },
-                  // {
-                  //   id: 'groupTraffic',
-                  //   path: '/main/group/monitor/flow',
-                  //   formUrl: 'goform/group/flow/user',
-                  //   text: __('Traffic'),
-                  //   component: sFlowUser.Screen,
-                  //   indexRoute: {
-                  //     onEnter: (nextState, replace) => replace('/main/group/monitor/flow/user'),
-                  //   },
-                  //   routes: [
-                  //     {
-                  //       id: 'userFlow',
-                  //       path: '/main/group/monitor/flow/user',
-                  //       formUrl: 'goform/group/flow/user',
-                  //       text: __('User'),
-                  //       component: sFlowUser.Screen,
-                  //     }, {
-                  //       id: 'appFlow',
-                  //       path: '/main/group/monitor/flow/app',
-                  //       formUrl: 'goform/group/flow/app',
-                  //       text: __('App'),
-                  //       component: sFlowApp.Screen,
-                  //     },
-                  //   ],
-                  // },
                   {
                     id: 'ssidStatus',
                     path: '/main/group/monitor/ssid',
@@ -918,7 +876,6 @@ const routes = [
 
                 // 不要删除空格
                 text: __('Radio '),
-                indexRoute: { onEnter: (nextState, replace) => replace('/main/group/wireless/ssid') },
                 routes: [
                   {
                     id: 'ssidSettings',
@@ -1015,9 +972,6 @@ const routes = [
                 text: __('Safe Policy'),
                 noTree: true,
                 component: SharedComponents.TabContainer,
-                indexRoute: {
-                  onEnter: (nextState, replace) => replace('/main/group/safe/wips'),
-                },
                 routes: [
                   {
                     id: 'wirelessWips',
@@ -1256,9 +1210,6 @@ const routes = [
                 path: '/main/portal/card',
                 icon: 'vcard-o',
                 text: __('Rechargeable Card'),
-                indexRoute: {
-                  onEnter: (nextState, replace) => replace('/main/portal/card/cardcategory'),
-                },
                 routes: [
                   {
                     id: 'sPortalCardCategory',

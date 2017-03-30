@@ -300,7 +300,6 @@ const routes = [
                 component: SharedComponents.TabContainer,
                 path: '/main/network/dpi',
                 text: __('DPI'),
-                indexRoute: { onEnter: (nextState, replace) => replace('/main/network/dpi/dpioverview') },
                 routes: [
                   {
                     id: 'dpioverview',
@@ -394,7 +393,6 @@ const routes = [
 
                 // 不要删除空格
                 text: __('Radio '),
-                indexRoute: { onEnter: (nextState, replace) => replace('/main/group/wireless/ssid') },
                 routes: [
                   {
                     id: 'ssidSettings',
@@ -475,9 +473,6 @@ const routes = [
                 text: __('Safe Policy'),
                 noTree: true,
                 component: SharedComponents.TabContainer,
-                indexRoute: {
-                  onEnter: (nextState, replace) => replace('/main/group/safe/wips'),
-                },
                 routes: [
                   {
                     id: 'wirelessWips',
