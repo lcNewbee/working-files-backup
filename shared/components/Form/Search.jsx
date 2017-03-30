@@ -63,8 +63,9 @@ class Search extends React.Component {
   }
 
   handleKeyUp(e) {
+    // which 属性指示按了哪个键或按钮。
     const which = e.which;
-
+    // 键码13表示enter
     if (which === 13) {
       this.props.onSearch(e);
     }

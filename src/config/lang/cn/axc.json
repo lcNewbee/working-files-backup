@@ -206,7 +206,7 @@
   "Local Server":"本地服务器",
   "Remote Server":"远程服务器",
   "Radius Setting":"Radius设置",
-  "No data, please go to the Portal-->Radius page to add nas data!":"没有数据，请先前往Portal-->Radius增加nas列表数据",
+  "No data, please go to the %s-->%s page to add nas data!":"没有数据，请先前往 %s-->%s 增加nas列表数据",
   "Auth Server Settings": "认证服务器设置",
   "Primary Auth Server":" 主认证服务器",
   "Primary Auth Server IP":" 主认证服务器IP",

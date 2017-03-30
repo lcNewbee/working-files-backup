@@ -677,7 +677,11 @@ export default class View extends React.Component {
               if (data.serverType === 'remote' && this.state.nasIPOptions.size < 1) {
                 this.props.createModal({
                   type: 'alert',
-                  text: _('No data, please go to the Portal-->Radius page to add nas data!'),
+                  text: __(
+                    'No data, please go to the %s-->%s page to add nas data!',
+                    __('Hotspot'),
+                    __('Radius Server'),
+                  ),
                 });
               } else {
                 this.props.updateCurEditListItem(data);
