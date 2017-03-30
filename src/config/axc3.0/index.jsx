@@ -395,7 +395,7 @@ const routes = [
                     id: 'dpisettings',
                     path: '/main/network/dpi/dpisettings',
                     formUrl: 'goform/network/dpi/dpisettings',
-                    text: __('DPI Settings'),
+                    text: __('Settings'),
                     component: sDPISettings.Screen,
                   },
                 ],

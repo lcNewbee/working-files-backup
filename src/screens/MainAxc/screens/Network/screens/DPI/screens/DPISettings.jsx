@@ -38,51 +38,58 @@ export default class EthStatistic extends React.Component {
         id: 'ndpiEnable',
         label: __('NDPI Enable'),
         type: 'checkbox',
-        onChange: (data) => {
-          const payload = {
-            action: 'setting',
-            ndpiEnable: data.value,
-          };
-          this.props.save(this.props.route.formUrl, payload).then((json) => {
-            if (json.state && json.state.code === 2000) {
-              this.props.fetchScreenData();
-            }
-          });
-        },
+        saveOnChange: true,
+        // onChange: (data) => {
+        //   const payload = {
+        //     action: 'setting',
+        //     ndpiEnable: data.value,
+        //   };
+        //   this.props.save(this.props.route.formUrl, payload).then((json) => {
+        //     if (json.state && json.state.code === 2000) {
+        //       this.props.fetchScreenData();
+        //     }
+        //   });
+        // },
       },
       {
         id: 'eth0Enable',
-        label: __('Eth0 Active Status'),
+        label: __('Active Status'),
+        text: __('eth0'),
         type: 'checkbox',
         onChange: (data) => { this.onChangeSettingData(data, 'eth0Enable'); },
       },
       {
         id: 'eth1Enable',
-        label: __('Eth1 Active Status'),
+        label: __('Active Status'),
+        text: __('eth1'),
         type: 'checkbox',
         onChange: (data) => { this.onChangeSettingData(data, 'eth1Enable'); },
       },
       {
         id: 'eth2Enable',
-        label: __('Eth2 Active Status'),
+        label: __('Active Status'),
+        text: __('eth2'),
         type: 'checkbox',
         onChange: (data) => { this.onChangeSettingData(data, 'eth2Enable'); },
       },
       {
         id: 'eth3Enable',
-        label: __('Eth3 Active Status'),
+        label: __('Active Status'),
+        text: __('eth3'),
         type: 'checkbox',
         onChange: (data) => { this.onChangeSettingData(data, 'eth3Enable'); },
       },
       {
         id: 'eth4Enable',
-        label: __('Eth4 Active Status'),
+        label: __('Active Status'),
+        text: __('eth4'),
         type: 'checkbox',
         onChange: (data) => { this.onChangeSettingData(data, 'eth4Enable'); },
       },
       {
         id: 'eth5Enable',
-        label: __('Eth5 Active Status'),
+        label: __('Active Status'),
+        text: __('eth5'),
         type: 'checkbox',
         onChange: (data) => { this.onChangeSettingData(data, 'eth5Enable'); },
       },
