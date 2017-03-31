@@ -108,6 +108,7 @@
 		$arr['total_row'] = $total_row;
 		$arr['total_page'] = $total_page;
 		$arr['data'] = $sqldata;
+		$arr['sqlcmd'] = $db->last_query();
 		return $arr;
 		/*
 		$this->CI->db->select('ssid_template.id,ssid_template.name,ssid_template.remark,ssid_group.group_name');
@@ -185,7 +186,7 @@
 		);
 		$arr['total_row'] = $total_row;
 		$arr['total_page'] = $total_page;
-		$arr['data'] = $sqldata;
+		$arr['data'] = $sqldata;		
 		return $arr;
 	}
 

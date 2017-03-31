@@ -22,7 +22,7 @@ class DpiEth_Model extends CI_Model {
 			for($i = 0; $i < 6; $i++){
 				foreach($cgiary['data']['list'] as $row){
 					if($ary[$i]['ethx_name'] === $row['ethx_name']){
-                        $curRate = ((int)$row['eth_bytes_pre'] - (int)$row['eth_bytes'])/(int)$row['interval_time'];//版本编好再打开
+                        $curRate = abs( ((int)$row['eth_bytes_pre'] - (int)$row['eth_bytes'])/(int)$row['interval_time'] );//版本编好再打开
                         $tary['active_eth'] = "1";
                         $tary['ethx_name']=$row['ethx_name'];
                         $tary['userNum']= (string)$this->get_user_num($data,$row['ethx_name']);

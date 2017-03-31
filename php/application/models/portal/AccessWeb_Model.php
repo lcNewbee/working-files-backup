@@ -11,7 +11,14 @@ class AccessWeb_Model extends CI_Model {
         $tablenames = 'portal_web';
         $pageindex = (int)element('page', $data, 1);
         $pagesize = (int)element('size', $data, 20);	
-        $where = array(array('portal_web.id>','0'));
+        $where = array(
+            array('portal_web.id>','0'),
+            array('portal_web.name LIKE',"%".$data['search']."%")            
+        );
+        if( isset($data['adv'])){
+            //搜索广告
+            array_push($where,array('adv_adv.id =',$data['adv']));
+        }
         $join = array(array('adv_adv','portal_web.adv=adv_adv.id','left'));	
         $datalist = help_data_page($this->portalsql,$columns,$tablenames,$pageindex,$pagesize,$where,$join);
         $arr = array(
