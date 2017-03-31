@@ -42,7 +42,7 @@ class DpiOverview_Model extends CI_Model {
                 case 'ndpi_send_ethx_statistics':
                     foreach($result as $row){                    
                         $b['name'] = $row->ethx;
-                        $b['value'] = round($row->throughput_percent,3);
+                        $b['value'] = round($row->throughput,3);
                         $arreth[] = $b;
                     }
                     break;
