@@ -17,13 +17,12 @@ class AccessConfig_Model extends CI_Model {
         if(count($datalist['data']) > 0){
             $cdata = $this->portalsql->query('select * from portal_basauth where basid='.$datalist['data'][0]['bas']);
             $configdata = $cdata->result_array();
-             
-            $str_array = explode(',',$datalist['data'][0]['auth_interface']);
-            
+                         
+            $str_array = explode(',',$datalist['data'][0]['auth_interface']);            
             for($i = 0; $i < count($configdata); $i++){
-                $configdata[$i]['enable'] = 0;                          
-                for($j = 0; $j < count($str_array); $j++){                    
-                    if( (int)$str_array[$j] === $i){
+                $configdata[$i]['enable'] = 0;  	
+                foreach($str_array as $res){              
+                    if( $configdata[$i]['type'] == $res){
                         $configdata[$i]['enable'] = 1;
                     }                   
                 }
@@ -125,7 +124,7 @@ class AccessConfig_Model extends CI_Model {
          $result = '';
          for($i = 0; $i < count($data); $i++){         
              if((int)$data[$i]['enable'] === 1){
-                 $result .= $i.',';
+                 $result .= $data[$i]['type'].',';
              }
          }
          $result = rtrim($result,',');
