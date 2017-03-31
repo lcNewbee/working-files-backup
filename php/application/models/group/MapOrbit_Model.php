@@ -24,9 +24,9 @@ class MapOrbit_Model extends CI_Model {
         }
         //2.通过终端mac 查询数据    
         //call active_orbit_func(3,'68:c9:7b:cd:a3:da','2017-03-21 21:00:30','2017-03-22 20:00:00');   
-        if( ($sta_mac === "" || $sta_mac === null) && count($macList) > 0) {
+        if( ($sta_mac == "" || $sta_mac == null || $sta_mac == "undefined") && count($macList) > 0) {
             $sta_mac = $macList[0];
-        }
+        }        
         if($sta_mac){            
             $sql = "call active_orbit_func({$groupid},'{$sta_mac}','{$strtime}','{$endtime}')";            
             $queryd = $this->mysql->query($sql);        
@@ -67,9 +67,10 @@ class MapOrbit_Model extends CI_Model {
     //用内部平面图查找该 图中所有AP mac
     private function get_ap_mac($build_id){
         $result = array();
-        $query = $this->db->query("select ap_mac from ap_map where build_id=".$build_id);
-
-        $result = $query->result_array();
-        return $result;        
+        if($build_id){
+            $query = $this->db->query("select ap_mac from ap_map where build_id=".$build_id);
+            $result = $query->result_array();
+        }
+        return $result;
     }
 }
