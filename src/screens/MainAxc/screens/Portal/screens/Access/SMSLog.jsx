@@ -7,6 +7,19 @@ import validator from 'shared/validator';
 import AppScreen from 'shared/components/Template/AppScreen';
 import { actions as screenActions } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
+import moment from 'moment';
+
+const queryFormOptions = fromJS([
+  {
+    id: 'sendDate',
+    type: 'date',
+    label: __('Date'),
+    saveOnChange: true,
+  },
+]);
+const defaultQuery = {
+  sendDate: moment().format('YYYY-MM-DD'),
+};
 
 const listOptions = fromJS([
   {
@@ -73,12 +86,21 @@ export default class View extends React.Component {
     return (
       <AppScreen
         {...this.props}
+        initOption={{
+          query: defaultQuery,
+        }}
+        queryFormOptions={queryFormOptions}
         listOptions={listOptions}
         noTitle
         actionable
         selectable
         addable={false}
         editable={false}
+
+        searchable
+        searchProps={{
+          placeholder: `${__('Phone')}`,
+        }}
       />
     );
   }

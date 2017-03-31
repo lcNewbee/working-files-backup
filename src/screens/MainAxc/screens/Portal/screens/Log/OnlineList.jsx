@@ -12,6 +12,71 @@ let ret;
 
 const uptimeFilter = utils.filter('connectTime');
 const flowFilter = utils.filter('flowRate');
+const queryFormOptions = fromJS([
+  {
+    id: 'state',
+    type: 'select',
+    label: __('Acc Type'),
+    options: [
+      {
+        value: '0',
+        label: __('Unavailability'),
+      }, {
+        value: '1',
+        label: __('Free of Charge'),
+      },
+      {
+        value: '2',
+        label: __('Timekeeping'),
+      }, {
+        value: '3',
+        label: __('Buy Out'),
+      }, {
+        value: '4',
+        label: __('Traffic'),
+      }, {
+        value: '-1',
+        label: __('Outside User'),
+      },
+    ],
+    saveOnChange: true,
+  }, {
+    id: 'type',
+    type: 'select',
+    label: __('Authentication Types'),
+    options: [
+      {
+        value: '0',
+        label: __('One Key Auth'),
+      }, {
+        value: '1',
+        label: __('Access User Auth'),
+      }, {
+        value: '2',
+        label: __('Radius Auth'),
+      }, {
+        value: '3',
+        label: __('App Auth'),
+      }, {
+        value: '4',
+        label: __('Messages Auth'),
+      }, {
+        value: '5',
+        label: __('Wechat Auth'),
+      }, {
+        value: '6',
+        label: __('Public Platform Auth'),
+      }, {
+        value: '7',
+        label: __('Visitor Auth'),
+      }, {
+        value: '9',
+        label: __('Facebook Auth'),
+      },
+    ],
+    saveOnChange: true,
+  },
+]);
 const listOptions = fromJS([
   {
     id: 'ip',
@@ -200,11 +265,16 @@ export default class OpenPortalBase extends React.Component {
         {...this.props}
         actionBarButtons={myActionButtons}
         listOptions={listOptions}
+        queryFormOptions={queryFormOptions}
         actionable
         selectable
         addable={false}
         editable={false}
         deleteable={false}
+        searchable
+        searchProps={{
+          placeholder: `${__('IP')}`,
+        }}
       />
     );
   }

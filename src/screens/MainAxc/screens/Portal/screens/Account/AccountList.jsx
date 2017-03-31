@@ -44,6 +44,33 @@ function getCardInformation() {
 
 const uptimeFilter = utils.filter('connectTime');
 
+const queryFormOptions = fromJS([
+  {
+    id: 'state',
+    type: 'select',
+    label: __('Acc Type'),
+    options: [
+      {
+        value: '0',
+        label: __('Unavailability'),
+      }, {
+        value: '1',
+        label: __('Free of Charge'),
+      },
+      {
+        value: '2',
+        label: __('Timekeeping'),
+      }, {
+        value: '3',
+        label: __('Buy Out'),
+      }, {
+        value: '4',
+        label: __('Traffic'),
+      },
+    ],
+    saveOnChange: true,
+  },
+]);
 // 列表相关配置
 const listOptions = fromJS([
   {
@@ -883,6 +910,11 @@ export default class View extends React.Component {
         modalChildren={this.renderCustomModal()}
         selectable
         actionable
+        queryFormOptions={queryFormOptions}
+        searchable
+        searchProps={{
+          placeholder: `${__('Login Name')}`,
+        }}
       />
     );
   }

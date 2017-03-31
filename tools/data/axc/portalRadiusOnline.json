@@ -16,9 +16,9 @@
       "clientType": "1",
       "startDate": "1",
       "costTime": "1",
-      "inS": "1",
-      "outS": "1",
-      "costOctets": "1",
+      "inS": "10000M",
+      "outS": "100M",
+      "costOctets": "10000M",
       "updateDate": "1",
       "acctSessionId": "1",
       "state": "1"

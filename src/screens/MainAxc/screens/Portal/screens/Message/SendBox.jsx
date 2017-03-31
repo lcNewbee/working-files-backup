@@ -9,7 +9,7 @@ import { actions as screenActions } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 import { Button } from 'shared/components/Button';
 import FormContainer from 'shared/components/Organism/FormContainer';
-
+import moment from 'moment';
 function getUserName() {
   return utils.fetch('goform/portal/account/accountList')
     .then(json => (
@@ -24,6 +24,18 @@ function getUserName() {
     ),
   );
 }
+const queryFormOptions = fromJS([
+  {
+    id: 'sendDate',
+    type: 'date',
+    label: __('Date'),
+    saveOnChange: true,
+  },
+]);
+const defaultQuery = {
+  sendDate: moment().format('YYYY-MM-DD'),
+};
+
 const listOptions = fromJS([
   {
     id: 'toPos',
@@ -370,11 +382,19 @@ export default class SendBox extends React.Component {
     return (
       <AppScreen
         {...this.props}
+        initOption={{
+          query: defaultQuery,
+        }}
+        queryFormOptions={queryFormOptions}
         listOptions={curListOptions}
         actionBarChildren={listActionBarChildren}
         modalChildren={this.renderSendMessageModal()}
         actionable
         selectable
+        searchable
+        searchProps={{
+          placeholder: `${__('Receiver')}/${__('Title')}`,
+        }}
         editable={false}
         addable={false}
       />

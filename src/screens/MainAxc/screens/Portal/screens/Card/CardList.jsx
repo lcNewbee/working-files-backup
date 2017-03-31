@@ -41,6 +41,61 @@ function getUserName() {
     ),
   );
 }
+const queryFormOptions = fromJS([
+  {
+    id: 'payType',
+    type: 'select',
+    label: __('Recharge Type'),
+    options: [
+      {
+        value: '0',
+        label: __('Unavailability'),
+      }, {
+        value: '1',
+        label: __('Free of Charge'),
+      },
+      {
+        value: '2',
+        label: __('Timekeeping'),
+      }, {
+        value: '3',
+        label: __('Buy Out'),
+      }, {
+        value: '4',
+        label: __('Traffic'),
+      }, {
+        value: '-1',
+        label: __('Outside User'),
+      },
+    ],
+    saveOnChange: true,
+  }, {
+    id: 'categoryType',
+    type: 'select',
+    label: __('Category Type'),
+    options: [
+      {
+        value: '0',
+        label: __('Hour Card'),
+      }, {
+        value: '1',
+        label: __('Day Card'),
+      },
+      {
+        value: '2',
+        label: __('Month Card'),
+      }, {
+        value: '3',
+        label: __('Year Card'),
+      }, {
+        value: '4',
+        label: __('Traffic Card'),
+      },
+    ],
+    saveOnChange: true,
+  },
+]);
+
 const listOptions = fromJS([
   {
     id: 'name',
@@ -447,10 +502,15 @@ export default class View extends React.Component {
       <AppScreen
         {...this.props}
         listOptions={curListOptions}
+        queryFormOptions={queryFormOptions}
         modalChildren={this.renderSendMessageModal()}
         noTitle
         actionable
         selectable
+        searchable
+        searchProps={{
+          placeholder: `${__('Name')}`,
+        }}
         editable={false}
       />
     );

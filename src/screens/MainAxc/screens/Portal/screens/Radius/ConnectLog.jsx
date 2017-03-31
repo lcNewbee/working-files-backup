@@ -9,7 +9,7 @@ import { actions as screenActions } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 
 const onlinetimeFilter = utils.filter('connectTime');
-
+const flowFilter = utils.filter('flowRate');
 const listOptions = fromJS([
   {
     id: 'nasip',
@@ -99,17 +99,26 @@ const listOptions = fromJS([
     formProps: {
       required: true,
     },
+    transform(val) {
+      return `${flowFilter.transform(val)}`;
+    },
   }, {
     id: 'outs',
     text: __('Down Traffic'),
     formProps: {
       required: true,
     },
+    transform(val) {
+      return `${flowFilter.transform(val)}`;
+    },
   }, {
     id: 'octets',
     text: __('Used Traffic'),
     formProps: {
       required: true,
+    },
+    transform(val) {
+      return `${flowFilter.transform(val)}`;
     },
   }, {
     id: 'acctsessionid',
@@ -131,6 +140,37 @@ const listOptions = fromJS([
     formProps: {
       required: true,
     },
+  },
+]);
+
+const queryFormOptions = fromJS([
+  {
+    id: 'state',
+    type: 'select',
+    label: __('Acc Type'),
+    options: [
+      {
+        value: '0',
+        label: __('Unavailability'),
+      }, {
+        value: '1',
+        label: __('Free of Charge'),
+      },
+      {
+        value: '2',
+        label: __('Timekeeping'),
+      }, {
+        value: '3',
+        label: __('Buy Out'),
+      }, {
+        value: '4',
+        label: __('Traffic'),
+      }, {
+        value: '-1',
+        label: __('Outside User'),
+      },
+    ],
+    saveOnChange: true,
   },
 ]);
 const propTypes = {
@@ -168,6 +208,11 @@ export default class OpenPortalBase extends React.Component {
         selectable
         addable={false}
         editable={false}
+        queryFormOptions={queryFormOptions}
+        searchable
+        searchProps={{
+          placeholder: `${__('Login Name')}/NAS IP`,
+        }}
       />
     );
   }

@@ -181,6 +181,10 @@ export default class View extends React.Component {
         listOptions={listOptions}
         actionable
         selectable
+        searchable
+        searchProps={{
+          placeholder: `${__('Name')}/IP`,
+        }}
       />
     );
   }

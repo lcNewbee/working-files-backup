@@ -352,19 +352,6 @@ export default class View extends React.Component {
       'onBeforeSync',
     ]);
   }
-  // onBeforeSync($$actionQuery, $$curSettings) {
-  //   const radiusEnable = $$curSettings.getIn(['list', 1, 'enable']);
-  //   const accessEnable = $$curSettings.getIn(['list', 2, 'enable']);
-  //   console.log('radiusEnable', radiusEnable);
-  //   if (radiusEnable === 1) {
-  //     this.props.updateScreenSettings({
-
-  //     });
-  //   } else if (accessEnable === 1) {
-  //     this.props.updateScreenSettings({
-  //     });
-  //   }
-  // }
   render() {
     return (
       <AppScreen

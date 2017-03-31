@@ -9,6 +9,7 @@ import { actions as screenActions } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 
 const uptimeFilter = utils.filter('connectTime');
+
 const listOptions = fromJS([
   {
     id: 'basip',
@@ -118,6 +119,10 @@ export default class View extends React.Component {
         }
         actionable
         selectable
+        searchable
+        searchProps={{
+          placeholder: `${__('Bas IP')}/SSID`,
+        }}
       />
     );
   }

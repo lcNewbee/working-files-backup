@@ -4,12 +4,12 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/validator';
-import AppScreen from 'shared/components/Template/AppScreen';
+import { FormGroup, AppScreen } from 'shared/components';
 import { actions as screenActions } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
+import './smsgateway.scss';
 
-
-
+let ret;
 const listOptions = fromJS([
   {
     id: 'name',
@@ -193,6 +193,10 @@ const listOptions = fromJS([
         rules: 'num:[0,10]',
       }),
     },
+    transform(val) {
+      ret = `${val}m`;
+      return ret;
+    },
   }, {
     id: 'text',
     text: __('Message Content'),
@@ -208,19 +212,77 @@ const listOptions = fromJS([
   },
 ]);
 
+const queryFormOptions = fromJS([
+  {
+    id: 'type',
+    type: 'select',
+    label: __('Type'),
+    options: [
+      {
+        value: '1',
+        label: __('iKuai'),
+      }, {
+        value: '2',
+        label: __('Alidayu'),
+      }, {
+        value: '3',
+        label: __('Sucker Ducker'),
+      }, {
+        value: '4',
+        label: __('China Mobile ESMS'),
+      }, {
+        value: '5',
+        label: __('China Unicome OSMS'),
+      }, {
+        value: '6',
+        label: __('China Mobile OpenMas'),
+      }, {
+        value: '7',
+        label: __('Submail'),
+      }, {
+        value: '8',
+        label: __('Carrier Message'),
+      }, {
+        value: '9',
+        label: __('China Telicome SMGP'),
+      }, {
+        value: '10',
+        label: __('Huaxin Message System'),
+      }, {
+        value: '11',
+        label: __('China Telicome ESMS'),
+      },
+    ],
+    saveOnChange: true,
+  },
+]);
+
 const propTypes = {
-  store: PropTypes.instanceOf(Map),
 };
 const defaultProps = {};
 export default class View extends React.Component {
+  constructor(props) {
+    super(props);
+    utils.binds(this,
+      [
+        'onSearch',
+        'clearTimeout',
+      ],
+    );
+  }
   render() {
     return (
       <AppScreen
         {...this.props}
         listOptions={listOptions}
+        queryFormOptions={queryFormOptions}
         noTitle
         actionable
         selectable
+        searchable
+        searchProps={{
+          placeholder: `${__('Name')}`,
+        }}
       />
     );
   }

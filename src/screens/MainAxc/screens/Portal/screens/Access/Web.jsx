@@ -9,6 +9,20 @@ import { actions as screenActions } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 import './web.scss';
 
+const queryFormOptions = fromJS([
+  {
+    id: 'adv',
+    type: 'select',
+    label: __('Ads Page'),
+    options: [
+      {
+        value: '1',
+        label: 'OpenPortal',
+      },
+    ],
+    saveOnChange: true,
+  },
+]);
 
 const listOptions = fromJS([
   {
@@ -180,6 +194,11 @@ export default class View extends React.Component {
         noTitle
         actionable
         selectable
+        searchable
+        searchProps={{
+          placeholder: `${__('Name')}`,
+        }}
+        queryFormOptions={queryFormOptions}
         deleteable={
           ($$item, index) => (index !== 0)
         }

@@ -8,7 +8,9 @@ import { actions as screenActions } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 
 const onlinetimeFilter = utils.filter('connectTime');
-
+let ret;
+let s;
+let subVal;
 const listOptions = fromJS([
   {
     id: 'nasIP',
@@ -51,12 +53,54 @@ const listOptions = fromJS([
   }, {
     id: 'inS',
     text: __('Up Traffic'),
+    transform(val) {
+      s = val;
+      if (s === undefined) {
+        ret = '';
+      } else {
+        subVal = s.slice(0, s.length - 1);
+        if (subVal > 1024) {
+          ret = `${(subVal / 1024).toFixed(2)}Gb`;
+        } else {
+          ret = `${subVal}Mb`;
+        }
+      }
+      return ret;
+    },
   }, {
     id: 'outS',
     text: __('Down Traffic'),
+    transform(val) {
+      s = val;
+      if (s === undefined) {
+        ret = '';
+      } else {
+        subVal = s.slice(0, s.length - 1);
+        if (subVal > 1024) {
+          ret = `${(subVal / 1024).toFixed(2)}Gb`;
+        } else {
+          ret = `${subVal}Mb`;
+        }
+      }
+      return ret;
+    },
   }, {
     id: 'costOctets',
     text: __('Used Traffic'),
+    transform(val) {
+      s = val;
+      if (s === undefined) {
+        ret = '';
+      } else {
+        subVal = s.slice(0, s.length - 1);
+        if (subVal > 1024) {
+          ret = `${(subVal / 1024).toFixed(2)}Gb`;
+        } else {
+          ret = `${subVal}Mb`;
+        }
+      }
+      return ret;
+    },
   }, {
     id: 'updateDate',
     text: __('Update Date'),
@@ -94,9 +138,40 @@ const listOptions = fromJS([
     ],
   },
 ]);
+const queryFormOptions = fromJS([
+  {
+    id: 'state',
+    type: 'select',
+    label: __('Acc Type'),
+    options: [
+      {
+        value: '0',
+        label: __('Unavailability'),
+      }, {
+        value: '1',
+        label: __('Free of Charge'),
+      },
+      {
+        value: '2',
+        label: __('Timekeeping'),
+      }, {
+        value: '3',
+        label: __('Buy Out'),
+      }, {
+        value: '4',
+        label: __('Traffic'),
+      }, {
+        value: '-1',
+        label: __('Outside User'),
+      },
+    ],
+    saveOnChange: true,
+  },
+]);
 const propTypes = {
   route: PropTypes.object,
   save: PropTypes.func,
+  substring: PropTypes.func,
 };
 const defaultProps = {};
 
@@ -129,6 +204,11 @@ export default class OpenPortalBase extends React.Component {
         selectable
         addable={false}
         editable={false}
+        searchable
+        queryFormOptions={queryFormOptions}
+        searchProps={{
+          placeholder: `${__('Name')}/NAS IP`,
+        }}
       />
     );
   }

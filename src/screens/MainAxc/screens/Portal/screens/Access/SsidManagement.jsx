@@ -188,6 +188,10 @@ export default class View extends React.Component {
         noTitle
         actionable
         selectable
+        searchable
+        searchProps={{
+          placeholder: `${__('Name')}`,
+        }}
       />
     );
   }

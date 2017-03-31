@@ -9,6 +9,33 @@ import { actions as screenActions } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 
 let ret;
+const queryFormOptions = fromJS([
+  {
+    id: 'state',
+    type: 'select',
+    label: __('Type'),
+    options: [
+      {
+        value: '0',
+        label: __('Hour Card'),
+      }, {
+        value: '1',
+        label: __('Day Card'),
+      },
+      {
+        value: '2',
+        label: __('Month Card'),
+      }, {
+        value: '3',
+        label: __('Year Card'),
+      }, {
+        value: '4',
+        label: __('Traffic Card'),
+      },
+    ],
+    saveOnChange: true,
+  },
+]);
 
 const listOptions = fromJS([
   {
@@ -176,10 +203,15 @@ export default class View extends React.Component {
     return (
       <AppScreen
         {...this.props}
+        queryFormOptions={queryFormOptions}
         listOptions={listOptions}
         noTitle
         actionable
         selectable
+        searchable
+        searchProps={{
+          placeholder: `${__('Name')}`,
+        }}
       />
     );
   }
