@@ -1,4 +1,3 @@
-// 使用 bluebird 替换 babel-runtime/core-js/promise
 require('es6-promise/auto');
 
 const React = require('react');
@@ -10,7 +9,7 @@ const appActions = require('shared/containers/app/actions');
 const thunkMiddleware = require('redux-thunk').default;
 const Provider = require('react-redux').Provider;
 const renderRoutesSwitch = require('shared/components/Organism/RouterConfig').renderRoutesSwitch;
-const prodConfig = require('./config/AEC120').default;
+const prodConfig = require('./config/axc3.0').default;
 
 const combineReducers = redux.combineReducers;
 const applyMiddleware = redux.applyMiddleware;

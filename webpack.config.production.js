@@ -232,7 +232,7 @@ module.exports = {
       disable: false,
       allChunks: true
     }),
-    //new webpack.optimize.UglifyJsPlugin(),
+    new webpack.optimize.UglifyJsPlugin(),
 
     new HtmlWebpackIncludeAssetsPlugin({
       assets: ['scripts/vendors.bundle.js'],

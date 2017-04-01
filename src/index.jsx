@@ -12,7 +12,7 @@ const createStore = require('redux').createStore;
 const Provider = require('react-redux').Provider;
 const AppContainer = require('react-hot-loader').AppContainer;
 const renderRoutesSwitch = require('shared/components/Organism/RouterConfig').renderRoutesSwitch;
-const prodConfig = require('./config/AEC120').default;
+const prodConfig = require('./config/axc3.0').default;
 
 const HashRouter = ReactRouterDom.HashRouter;
 const mountNode = document.getElementById('app');
@@ -53,8 +53,8 @@ renderApp(prodConfig.routes);
 
 // Enable hot reload by react-hot-loader
 if (module.hot) {
-  module.hot.accept('./config/AEC120', () => {
-    const nextConfig = require('./config/AEC120').default;
+  module.hot.accept('./config/axc3.0', () => {
+    const nextConfig = require('./config/axc3.0').default;
 
     stores.replaceReducer(combineReducers({
       ...nextConfig.reducers,
