@@ -14,7 +14,6 @@ import AppScreen from 'shared/components/Template/AppScreen';
 import { actions as appActions } from 'shared/containers/app';
 import { actions as screenActions } from 'shared/containers/appScreen';
 import { actions as propertiesActions } from 'shared/containers/properties';
-import h337 from 'heatmap.js';
 
 import '../../shared/_map.scss';
 import buildingIconImg from '../../shared/images/building_3d.png';
@@ -92,9 +91,11 @@ function getCurAppScreenState(listStore, name) {
 const propTypes = {
   app: PropTypes.instanceOf(Map),
   store: PropTypes.instanceOf(Map),
+  curStore: PropTypes.instanceOf(Map),
   route: PropTypes.object,
   updateScreenSettings: PropTypes.func,
   updateCurEditListItem: PropTypes.func,
+  updateScreenCustomProps: PropTypes.func,
   validateAll: PropTypes.func,
   editListItemByIndex: PropTypes.func,
   resetVaildateMsg: PropTypes.func,
@@ -126,31 +127,17 @@ export default class LiveMap extends React.PureComponent {
       'addMarkerToMap',
       'onViewBuildingInfo',
       'renderGooglePlaceInput',
-      // 'renderHeatMap',
+      'onLoadGoogleMapScript',
     ]);
-
-    this.loadingGoogleMap = true;
   }
 
   componentWillMount() {
     this.actionable = getActionable(this.props);
 
     if (!window.google || (window.google && !window.google.maps)) {
-      utils.loadScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyBGOC8axWomvnetRPnTdcuNW-a558l-JAU&libraries=places',
-        (error) => {
-          if (!error) {
-            this.renderGoogleMap();
-            this.loadingGoogleMap = false;
-          } else {
-            this.props.updateScreenSettings({
-              type: '1',
-            });
-          }
-        },
-      8000);
+      this.onLoadGoogleMapScript();
     } else if (this.mapContent) {
       this.renderGoogleMap();
-      this.loadingGoogleMap = false;
     }
 
     if (this.actionable) {
@@ -184,25 +171,11 @@ export default class LiveMap extends React.PureComponent {
     }
   }
 
-  componentDidMount() {
-    if (this.mapContent) {
-      this.heatmap = h337.create({
-        container: this.mapContent,
-        radius: 10,
-        maxOpacity: 0.3,
-        minOpacity: 0,
-        blur: 0.75,
-      });
-      // this.renderHeatMap();
-    }
-  }
-
   componentWillUpdate(nextProps) {
     this.actionable = getActionable(nextProps);
   }
 
   componentDidUpdate(prevProps) {
-    const { store } = this.props;
     const $$thisData = getCurAppScreenState(this.props.store);
     const $$prevData = getCurAppScreenState(prevProps.store);
     const curScreenId = this.props.store.get('curScreenId');
@@ -230,6 +203,37 @@ export default class LiveMap extends React.PureComponent {
     }
 
     // this.renderHeatMap()
+  }
+  onLoadGoogleMapScript() {
+    if (!window.google) {
+      this.props.updateScreenCustomProps({
+        loadGoogleMapStatus: 'loading',
+      });
+      utils.loadScript(
+        'https://maps.googleapis.com/maps/api/js?key=AIzaSyBGOC8axWomvnetRPnTdcuNW-a558l-JAU&libraries=places',
+        {
+          timeout: 8000,
+        },
+      )
+      .then(
+        (error) => {
+          if (error) {
+            this.props.updateScreenCustomProps({
+              loadGoogleMapStatus: 'fail',
+            });
+          } else {
+            this.renderGoogleMap();
+            this.props.updateScreenCustomProps({
+              loadGoogleMapStatus: 'ok',
+            });
+          }
+        },
+      );
+    } else {
+      this.props.updateScreenCustomProps({
+        loadGoogleMapStatus: 'ok',
+      });
+    }
   }
   onViewBuildingInfo(e, i) {
     const list = this.props.store.getIn([this.props.route.id, 'data', 'list']);
@@ -274,9 +278,6 @@ export default class LiveMap extends React.PureComponent {
     }
   }
   addMarkerToMap(item, map, index) {
-    const { store } = this.props;
-    const curScreenId = store.get('curScreenId');
-    const actionType = store.getIn([curScreenId, 'actionQuery', 'action']);
     const apIcon = {
       path: google.maps.SymbolPath.CIRCLE,
       scale: 10,
@@ -442,6 +443,7 @@ export default class LiveMap extends React.PureComponent {
 
   renderGoogleMap() {
     const store = this.props.store;
+    const googleMapStatus = this.props.curStore.getIn(['customProps', 'loadGoogleMapStatus']);
     const list = getCurAppScreenState(store, 'list');
     const settings = getCurAppScreenState(store, 'settings');
     const google = window.google;
@@ -450,6 +452,10 @@ export default class LiveMap extends React.PureComponent {
       lat: 22.554255,
       lng: 113.878773,
     };
+
+    if (googleMapStatus !== 'ok') {
+      return;
+    }
 
     if (list.size > 0) {
       center = {
@@ -464,15 +470,12 @@ export default class LiveMap extends React.PureComponent {
         center,
         zoom: 13,
       });
-     // console.log('init Map = ', this.map)
     }
 
-    //this.setMapOnAll(null);
     list.forEach((item, index) => {
       markers.push(this.addMarkerToMap(item.merge(settings), this.map, index));
     });
     this.markers = markers;
-    //this.setMapOnAll(this.map);
   }
   renderActionBar() {
     const { store } = this.props;
@@ -562,12 +565,12 @@ export default class LiveMap extends React.PureComponent {
     const page = store.getIn([myScreenId, 'data', 'page']);
     const editData = store.getIn([myScreenId, 'curListItem']);
     const isOpenHeader = actionQuery.get('action') === 'add' || actionQuery.get('action') === 'edit';
+    const googleMapStatus = this.props.curStore.getIn(['customProps', 'loadGoogleMapStatus']);
     let mapClassName = 'o-map';
 
     if (isOpenHeader) {
       mapClassName = 'o-map o-map--open';
     }
-
     this.isGoogleMapAdd = isOpenHeader && settings.get('type') === LIVE_GOOGLE_MAP;
     return (
       <AppScreen
@@ -583,6 +586,7 @@ export default class LiveMap extends React.PureComponent {
           this.renderActionBar()
         }
         {
+          // 实时google地图
           settings.get('type') === LIVE_GOOGLE_MAP ? (
             <div className={mapClassName}>
               <div className="o-map__header">
@@ -622,8 +626,21 @@ export default class LiveMap extends React.PureComponent {
                   }}
                 >
                   <div className="o-map__body-loading">
-                    <Icon name="spinner" size="2x" spin />
+                    {
+                      googleMapStatus === 'fail' ? (
+                        <Button
+                          className="fail"
+                          theme="primary"
+                          text={__('Reload')}
+                          onClick={this.onLoadGoogleMapScript}
+                        />
+                      ) : null
+                    }
+                    {
+                      googleMapStatus !== 'ok' && googleMapStatus !== 'fail' ? <Icon name="spinner" size="2x" spin /> : null
+                    }
                   </div>
+
                 </div>
               </div>
             </div>
@@ -677,9 +694,11 @@ LiveMap.propTypes = propTypes;
 LiveMap.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
+  const curScreenId = state.screens.get('curScreenId');
   return {
     app: state.app,
     store: state.screens,
+    curStore: state.screens.get(curScreenId),
     groupid: state.product.getIn(['group', 'selected', 'id']),
   };
 }

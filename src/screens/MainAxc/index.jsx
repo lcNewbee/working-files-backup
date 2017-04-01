@@ -72,13 +72,14 @@ export default class Main extends React.PureComponent {
       this.props.history.push('/login');
     }
   }
+  componentWillUnmount() {
+    clearTimeout(this.onRefreshTimeout);
+  }
 
-  onRefresh(e) {
-    e.preventDefault();
+  onRefresh() {
     this.props.refreshAll();
   }
-  onLogout(e) {
-    e.preventDefault();
+  onLogout() {
     this.props.changeLoginStatus('0');
     this.onHiddenPopOver();
     this.props.history.push('/login');

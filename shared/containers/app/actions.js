@@ -6,6 +6,7 @@ import ACTION_TYPES from './actionTypes';
 const APP_CONFIG = {
   fetchInfo: '/goform/getAcInfo',
 };
+let refreshAllTimeout = null;
 
 export function updateRouter(payload) {
   return {
@@ -14,10 +15,24 @@ export function updateRouter(payload) {
   };
 }
 
-export function refreshAll() {
+// 数据刷新
+function doRefresh() {
   return {
     type: ACTION_TYPES.REFRESH_ALL,
     refreshAt: Date.now(),
+  };
+}
+export function refreshAll() {
+  return (dispatch) => {
+    // 防止频繁的点击不停刷新
+    clearTimeout(refreshAllTimeout);
+
+    refreshAllTimeout = setTimeout(
+      () => {
+        dispatch(doRefresh());
+      },
+      240,
+    );
   };
 }
 

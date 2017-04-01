@@ -243,7 +243,6 @@ const listOptions = fromJS([
     id: 'vlanId',
     text: __('VLAN ID'),
     defaultValue: '1',
-    noTable: true,
     formProps: {
       type: 'number',
       min: '1',
