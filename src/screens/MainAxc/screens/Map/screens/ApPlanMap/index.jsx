@@ -485,6 +485,7 @@ export default class View extends React.PureComponent {
           {
             curMapId ? this.renderCurMap(list, curMapId, myZoom) : (
               <MapList
+                {...this.props}
                 actionable={this.actionable}
                 $$mapList={$$thisMapList}
                 groupid={this.props.groupid}
@@ -499,6 +500,7 @@ export default class View extends React.PureComponent {
                     curList: $$mapAps,
                   });
                 }}
+                validateAll={this.props.validateAll}
                 save={this.props.save}
                 fetch={this.props.fetch}
                 saveFile={this.props.saveFile}

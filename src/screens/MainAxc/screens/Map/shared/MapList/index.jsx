@@ -82,14 +82,20 @@ export default class MapList extends React.PureComponent {
   onSaveMap() {
     const url = 'goform/group/map/list';
     const formElem = this.formElem;
-
-    this.props.saveFile(url, formElem)
-      .then(() => {
-        this.setState({
-          isModalShow: false,
-        });
-        this.fetchMapList();
-      });
+    this.props.validateAll()
+      .then(
+        (errMsg) => {
+          if (errMsg.isEmpty()) {
+            this.props.saveFile(url, formElem)
+              .then(() => {
+                this.setState({
+                  isModalShow: false,
+                });
+                this.fetchMapList();
+              });
+          }
+        },
+      );
   }
   onAddMap() {
     this.setState({
@@ -128,8 +134,13 @@ export default class MapList extends React.PureComponent {
     );
   }
   render() {
-    const { actionable, $$mapList, onSelectMap } = this.props;
+    const { actionable, $$mapList, onSelectMap, app } = this.props;
     let mapRatio = '1024 * 760';
+    const invalidMsg = app.get('invalid');
+    const validateProps = {
+      validateAt: app.get('validateAt'),
+      onValidError: this.props.reportValidError,
+    };
 
     if (this.state.width && this.state.length) {
       mapRatio = `1024 * ${parseInt((this.state.width * 1024) / this.state.length, 10)}`;
@@ -210,10 +221,12 @@ export default class MapList extends React.PureComponent {
             this.setState({
               backgroundImgUrl: '',
               isModalShow: false,
+              mapImg: '',
               mapName: '',
               width: '',
               length: '',
             });
+            this.props.resetVaildateMsg();
           }}
           noFooter
           customBackdrop
@@ -247,7 +260,7 @@ export default class MapList extends React.PureComponent {
             <FormGroup
               label={__('Name')}
               value={this.state.mapName}
-              name="mapImg"
+              name="mapName"
               onChange={
                 (data) => {
                   this.setState({
@@ -256,6 +269,8 @@ export default class MapList extends React.PureComponent {
                 }
               }
               required
+              errMsg={invalidMsg.get('mapName')}
+              {...validateProps}
             />
             <FormGroup
               label={__('Physical Length')}
@@ -271,6 +286,8 @@ export default class MapList extends React.PureComponent {
                 }
               }
               help={__('Meter')}
+              {...validateProps}
+              errMsg={invalidMsg.get('length')}
               required
             />
             <FormGroup
@@ -287,15 +304,21 @@ export default class MapList extends React.PureComponent {
                 }
               }
               help={__('Meter')}
+              {...validateProps}
+              errMsg={invalidMsg.get('width')}
               required
             />
             <FormGroup
               label={__('Backgroud Image')}
+              value={this.state.mapImg}
               name="mapImg"
               type="file"
               onChange={(data, evt) => {
                 const selectFile = evt.target.files[0];
-
+                console.log(data.value)
+                this.setState({
+                  mapImg: data.value,
+                });
                 previewFile(selectFile).then(
                   (url) => {
                     if (url) {
@@ -307,6 +330,8 @@ export default class MapList extends React.PureComponent {
                 );
               }}
               help={__('Image ratio: %s', mapRatio)}
+              {...validateProps}
+              errMsg={invalidMsg.get('mapImg')}
               required
             />
             <p
