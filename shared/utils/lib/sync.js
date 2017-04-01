@@ -122,64 +122,72 @@ var sync = {
       .then(handleServerError);
   },
 
-  loadScript: function (url, callback, timeout, isAsync){
-    var script = document.createElement("script");
-    var myCallback = callback;
-    var thisTimeout = null;
-    var myTimeout = timeout || 6000;
-    var scriptElems = document.getElementsByTagName('script');
-    var len = scriptElems.length;
-    var i;
+  loadScript: function (url, option){
+    return new Promise(function(resolve) {
+      var myOption = option || {};
+      var script = document.createElement("script");
+      var thisTimeout = null;
+      var myTimeout = myOption.timeout || 6000;
+      var scriptElems = document.getElementsByTagName('script');
+      var len = scriptElems.length;
+      var i;
 
-    // 判断是否已加载了相同的 域名和端口的文件
-    for (i = 0; i < len; i++) {
-      if (url.split('?')[0] === scriptElems[i].src.split('?')[0]) {
+      // 判断是否已加载了相同的 域名和端口的文件
+      for (i = 0; i < len; i++) {
+        if (url.split('?')[0] === scriptElems[i].src.split('?')[0]) {
+          return null;
+        }
+      }
+
+      // 防止重复加载同一URL
+      if(loadedScripts.indexOf(url) !== -1) {
         return null;
       }
-    }
 
-    // 防止重复加载同一URL
-    if(loadedScripts.indexOf(url) !== -1) {
-      return null;
-    }
+      script.type = "text/javascript";
+      script.async = !!myOption.isAsync;
 
-    // 如果callback不是函数则赋值为空函数
-    if (typeof callback !== 'function') {
-      myCallback = function(){};
-    }
+      // IE
+      if (script.readyState) {
+        script.onreadystatechange = function () {
+          if (script.readyState == "loaded" || script.readyState == "complete") {
+            script.onreadystatechange = null;
+            resolve();
+            loadedScripts.push(url);
+            clearTimeout(thisTimeout);
+          }
+        };
 
-    script.type = "text/javascript";
-    script.async = !!isAsync;
-
-    // IE
-    if (script.readyState) {
-      script.onreadystatechange = function () {
-        if (script.readyState == "loaded" || script.readyState == "complete") {
-          script.onreadystatechange = null;
-          myCallback();
+      // Others: Firefox, Safari, Chrome, and Opera
+      } else {
+        script.onload = function () {
+          resolve();
           loadedScripts.push(url);
           clearTimeout(thisTimeout);
+        };
+      }
+
+      thisTimeout = setTimeout(function() {
+        var urlIndex = loadedScripts.indexOf(url);
+
+        resolve('load script ' + url + ' error!');
+        document.body.removeChild(script);
+
+        if (urlIndex !== -1) {
+          loadedScripts.splice(urlIndex, 1);
         }
-      };
+        script = null;
+      }, myTimeout);
 
-    // Others: Firefox, Safari, Chrome, and Opera
-    } else {
-      script.onload = function () {
-        myCallback();
-        loadedScripts.push(url);
-        clearTimeout(thisTimeout);
-      };
-    }
+      if (typeof script.onerror === 'function') {
+        script.onerror = function(error) {
+          resolve(error);
+        }
+      }
 
-    thisTimeout = setTimeout(function() {
-      myCallback('load error');
-      clearTimeout(thisTimeout);
-      document.body.removeChild(script);
-      script = null;
-    }, myTimeout)
-
-    script.src = url;
-    document.body.appendChild(script);
+      script.src = url;
+      document.body.appendChild(script);
+    });
   },
 }
 
