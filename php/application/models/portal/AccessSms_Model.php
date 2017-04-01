@@ -3,15 +3,23 @@ class AccessSms_Model extends CI_Model {
 	public function __construct() {
 		parent::__construct();
 		$this->portalsql = $this->load->database('mysqlportal', TRUE);
-		$this->load->helper(array('array', 'my_customfun_helper'));
+		$this->load->helper(array('array', 'db_operation'));
 	}
 	function get_list($data) {   
-		$columns = '*';
-		$tablenames = 'portal_smsapi';
-		$pageindex = (int)element('page', $data, 1);
-		$pagesize = (int)element('size', $data, 20);	
-		$order = array(array('id','DESC'));      		
-		$datalist = help_data_page_order($this->portalsql,$columns,$tablenames,$pageindex,$pagesize,$order);		
+        $parameter = array(
+            'db' => $this->portalsql, 
+            'columns' => '*', 
+            'tablenames' => 'portal_smsapi', 
+            'pageindex' => (int) element('page', $data, 1), 
+            'pagesize' => (int) element('size', $data, 20), 
+            'wheres' => "name LIKE '%".$data['search']."%'", 
+            'joins' => array(), 
+            'order' => array(array('id','DESC'))
+        );
+        if(isset($data['type'])){
+            $parameter['wheres'] = $parameter['wheres']." AND type='".$data['type']."'";
+        }
+        $datalist = help_data_page_all($parameter);
 		$arr = array(
 			'state'=>array('code'=>2000,'msg'=>'ok'),
 			'data'=>array(

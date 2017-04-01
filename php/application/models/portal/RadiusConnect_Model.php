@@ -3,22 +3,29 @@ class RadiusConnect_Model extends CI_Model {
 	public function __construct() {
 		parent::__construct();
 		$this->portalsql = $this->load->database('mysqlportal', TRUE);
-		$this->load->helper(array('array', 'my_customfun_helper'));
-        //$this->load->library('PortalSocket');
+		$this->load->helper(array('array', 'db_operation'));
 	}
 	function get_radius_connect($data) {   
-		//help_data_page
-		$columns = '*';
-		$tablenames = 'radius_linkrecordall';
-		$pageindex = (int)element('page', $data, 1);
-		$pagesize = (int)element('size', $data, 20);		
-		$datalist = help_data_page($this->portalsql,$columns,$tablenames,$pageindex,$pagesize);
-
+		$parameter = array(
+			'db' => $this->portalsql, 
+			'columns' => '*', 
+			'tablenames' => 'radius_linkrecordall', 
+			'pageindex' => (int) element('page', $data, 1), 
+			'pagesize' => (int) element('size', $data, 20), 
+			'wheres' => "(name LIKE '%".$data['search']."%' or nasip Like '%".$data['search']."%')", 
+			'joins' => array(), 
+			'order' => array()
+		);
+		if(isset($data['state'])){
+			$parameter['wheres'] = $parameter['wheres'] . " AND state='".$data['state']."'";
+		}
+		$datalist = help_data_page_all($parameter);
 		$arr = array(
 			'state'=>array('code'=>2000,'msg'=>'ok'),
 			'data'=>array(
 				'page'=>$datalist['page'],
-				'list' => $datalist['data']
+				'list' => $datalist['data'],
+				'sqlcmd' => $datalist['sqlcmd']
 			)
 		);       
 		return json_encode($arr);

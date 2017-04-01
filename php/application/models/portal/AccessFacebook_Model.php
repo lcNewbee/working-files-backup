@@ -3,16 +3,22 @@ class AccessFacebook_Model extends CI_Model {
 	public function __construct() {
 		parent::__construct();
 		$this->portalsql = $this->load->database('mysqlportal', TRUE);
-		$this->load->helper(array('array', 'my_customfun_helper'));
+		$this->load->helper(array('array', 'db_operation'));
 	}
 	function get_list($data) {   
         $list = array();
-		$columns = '*';
-		$tablenames = 'portal_facebook';
-		$pageindex = (int)element('page', $data, 1);
-		$pagesize = (int)element('size', $data, 20);	
-		$order = array(array('id','ASC'));      		
-		$datalist = help_data_page_order($this->portalsql,$columns,$tablenames,$pageindex,$pagesize,$order);	
+        $parameter = array(
+            'db' => $this->portalsql, 
+            'columns' => '*', 
+            'tablenames' => 'portal_facebook', 
+            'pageindex' => (int) element('page', $data, 1), 
+            'pagesize' => (int) element('size', $data, 20), 
+            'wheres' => "app_id LIKE '%".$data['search']."%'", 
+            'joins' => array(), 
+            'order' => array(array('id','ASC'))
+        );
+        $datalist = help_data_page_all($parameter);
+
         foreach($datalist['data'] as $row)	{
             $list[] = array(
                 'id'=>element('id',$row),

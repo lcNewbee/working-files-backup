@@ -3,14 +3,20 @@ class AccessWeixin_Model extends CI_Model {
     public function __construct() {
         parent::__construct();
         $this->portalsql = $this->load->database('mysqlportal', TRUE);
-        $this->load->helper(array('array', 'my_customfun_helper'));
+        $this->load->helper(array('array', 'db_operation'));        
     }
     function get_list($data) {
-        $columns = 'portal_weixin_wifi.id,portal_weixin_wifi.basip,portal_weixin_wifi.ssid,portal_weixin_wifi.shopId,portal_weixin_wifi.appId,portal_weixin_wifi.secretKey,portal_weixin_wifi.domain,portal_weixin_wifi.outTime';
-        $tablenames = 'portal_weixin_wifi';
-        $pageindex = (int)element('page', $data, 1);
-        $pagesize = (int)element('size', $data, 20);
-        $datalist = help_data_page($this->portalsql,$columns,$tablenames,$pageindex,$pagesize);
+        $parameter = array(
+            'db' => $this->portalsql, 
+            'columns' => 'portal_weixin_wifi.id,portal_weixin_wifi.basip,portal_weixin_wifi.ssid,portal_weixin_wifi.shopId,portal_weixin_wifi.appId,portal_weixin_wifi.secretKey,portal_weixin_wifi.domain,portal_weixin_wifi.outTime', 
+            'tablenames' => 'portal_weixin_wifi', 
+            'pageindex' => (int) element('page', $data, 1), 
+            'pagesize' => (int) element('size', $data, 20), 
+            'wheres' => "basip LIKE '%".$data['search']."%' or ssid Like '%".$data['search']."%'", 
+            'joins' => array(), 
+            'order' => array()
+        );
+        $datalist = help_data_page_all($parameter);
         $arr = array(
             'state'=>array('code'=>2000,'msg'=>'ok'),
             'data'=>array(

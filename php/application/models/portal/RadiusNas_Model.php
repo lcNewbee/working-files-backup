@@ -3,15 +3,21 @@ class RadiusNas_Model extends CI_Model {
 	public function __construct() {
 		parent::__construct();
 		$this->portalsql = $this->load->database('mysqlportal', TRUE);
-		$this->load->helper(array('array', 'my_customfun_helper'));
+		$this->load->helper(array('array', 'db_operation'));
         $this->load->library('PortalSocket');
 	}
 	function get_nas_list($data) {        
-        $columns = '*';
-		$tablenames = 'radius_nas';
-		$pageindex = (int)element('page', $data, 1);
-		$pagesize = (int)element('size', $data, 20);	
-		$datalist = help_data_page($this->portalsql,$columns,$tablenames,$pageindex,$pagesize);
+        $parameter = array(
+            'db' => $this->portalsql, 
+            'columns' => '*', 
+            'tablenames' => 'radius_nas', 
+            'pageindex' => (int) element('page', $data, 1), 
+            'pagesize' => (int) element('size', $data, 20), 
+            'wheres' => "name LIKE '%".$data['search']."%' or ip Like '%".$data['search']."%'", 
+            'joins' => array(), 
+            'order' => array()
+        );
+        $datalist = help_data_page_all($parameter);
 		$arr = array(
 			'state'=>array('code'=>2000,'msg'=>'ok'),            
 			'data'=>array(                
@@ -35,15 +41,11 @@ class RadiusNas_Model extends CI_Model {
             'ex4' => element('ex4',$data,'600'),    
             'ex5' => element('ex5',$data,'1'),
         );
-        if(is_columns($this->portalsql,'name','radius_nas'," where name='".$data['name']."'")){
-            $result = json_no('name Already exist');
-            $result['state']['code'] = 6403;
-            return json_encode($result);
+        if(is_columns($this->portalsql,'name','radius_nas'," where name='".$data['name']."'")){           
+            return json_encode(json_no('name Already exist',6403));
         }
-        if(is_columns($this->portalsql,'ip','radius_nas'," where ip='".$data['ip']."'")){
-            $result = json_no('ip Already exist');
-            $result['state']['code'] = 6402;
-            return json_encode($result);
+        if(is_columns($this->portalsql,'ip','radius_nas'," where ip='".$data['ip']."'")){        
+            return json_encode(json_no('ip Already exist',6402));
         }            
         if($this->notice_socket($this->get_socket_pramse('add',$data))) {
             $result = $this->portalsql->insert('radius_nas', $insertdata);

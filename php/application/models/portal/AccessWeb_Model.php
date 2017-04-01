@@ -3,24 +3,25 @@ class AccessWeb_Model extends CI_Model {
     public function __construct() {
         parent::__construct();
         $this->portalsql = $this->load->database('mysqlportal', TRUE);
-        $this->load->helper(array('array', 'my_customfun_helper'));	
+        $this->load->helper(array('array', 'db_operation'));
         $this->load->library('PHPZip');        	
     }
-    function get_list($data) {   		
-        $columns = 'portal_web.id,portal_web.name,portal_web.countShow,portal_web.countAuth,portal_web.description,adv_adv.name as adv';
-        $tablenames = 'portal_web';
-        $pageindex = (int)element('page', $data, 1);
-        $pagesize = (int)element('size', $data, 20);	
-        $where = array(
-            array('portal_web.id>','0'),
-            array('portal_web.name LIKE',"%".$data['search']."%")            
+    function get_list($data) {           
+        $parameter = array(
+            'db' => $this->portalsql, 
+            'columns' => 'portal_web.id,portal_web.name,portal_web.countShow,portal_web.countAuth,portal_web.description,adv_adv.name as adv', 
+            'tablenames' => 'portal_web', 
+            'pageindex' => (int) element('page', $data, 1), 
+            'pagesize' => (int) element('size', $data, 20), 
+            'wheres' => "portal_web.name LIKE '%".$data['search']."%'",
+            'joins' => array(array('adv_adv','portal_web.adv=adv_adv.id','left')), 
+            'order' => array()
         );
-        if( isset($data['adv'])){
-            //搜索广告
-            array_push($where,array('adv_adv.id =',$data['adv']));
-        }
-        $join = array(array('adv_adv','portal_web.adv=adv_adv.id','left'));	
-        $datalist = help_data_page($this->portalsql,$columns,$tablenames,$pageindex,$pagesize,$where,$join);
+        if(isset($data['adv'])){
+            //广告页面搜索
+           $parameter['wheres'] = $parameter['wheres']." AND adv_adv.id =".$data['adv'];
+        } 
+        $datalist = help_data_page_all($parameter);
         $arr = array(
             'state'=>array('code'=>2000,'msg'=>'ok'),
             'data'=>array(
@@ -87,7 +88,7 @@ class AccessWeb_Model extends CI_Model {
                 }
             }
         }else{
-            return json_encode(array('state'=>array('code'=>6204,'msg'=>$this->upload->display_errors())));
+            return json_encode(json_no($this->upload->display_errors(),6204));
         }           
         $result = $result ? json_ok() : json_no($this->upload->display_errors());
         return json_encode($result);

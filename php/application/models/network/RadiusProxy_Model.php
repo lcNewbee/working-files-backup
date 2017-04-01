@@ -38,8 +38,8 @@ class RadiusProxy_Model extends CI_Model {
     function setting($data) {
         $result = null;
         $cgiary = array(
-            'radsec_enable'=>(string)element('radsec_enable',$data,1),
-            'radius_template'=>(string)element('radius_template',$data)
+            'radsec_enable'=>(string)element('enable',$data,1),
+            'radius_template'=>(string)element('template_name',$data)
         );
         $result = radsec_set_radsecproxy_info(json_encode($cgiary));
         return $result;
