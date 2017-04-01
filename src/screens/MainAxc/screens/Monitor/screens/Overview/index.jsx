@@ -275,10 +275,14 @@ function getFlowOption(serverData, timeType) {
     return null;
   }
   if ($$dataList.getIn([0, 'data'])) {
-    maxVal = $$dataList.getIn([0, 'data']).max();
+    maxVal = $$dataList.getIn([0, 'data']).max(
+      (a, b) => parseInt(a, 10) > parseInt(b, 10),
+    );
   }
   if ($$dataList.getIn([1, 'data'])) {
-    maxVal1 = $$dataList.getIn([1, 'data']).max();
+    maxVal1 = $$dataList.getIn([1, 'data']).max(
+      (a, b) => parseInt(a, 10) > parseInt(b, 10),
+    );
   }
 
   if (maxVal1 > maxVal) {

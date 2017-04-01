@@ -100,7 +100,7 @@ describe('utils core', () => {
 
       // stub some console methods
       sandbox.stub(console, 'log');
-      sandbox.stub(console, 'error');
+      sandbox.stub(console, 'warn');
     });
 
     afterEach(() => {
@@ -128,8 +128,8 @@ describe('utils core', () => {
     it('should call console.error when no param', () => {
       const errorMsg = 'utils.binds should call with object target and array keys';
       core.binds();
-      sinon.assert.calledOnce(console.error);
-      sinon.assert.calledWithExactly(console.error, errorMsg);
+      sinon.assert.calledOnce(console.warn);
+      sinon.assert.calledWithExactly(console.warn, errorMsg);
     });
     it('should console.error when param keys is not array', () => {
       const errorMsg = 'utils.binds should call with object target and array keys';
@@ -138,8 +138,8 @@ describe('utils core', () => {
       core.binds({}, null);
       core.binds({}, 1222);
       core.binds({}, 'ds');
-      sinon.assert.callCount(console.error, 4);
-      sinon.assert.calledWithExactly(console.error, errorMsg);
+      sinon.assert.callCount(console.warn, 4);
+      sinon.assert.calledWithExactly(console.warn, errorMsg);
     });
   });
 
