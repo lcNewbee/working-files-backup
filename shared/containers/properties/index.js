@@ -1,9 +1,7 @@
-import * as actions from './actions';
-import reducer from './reducer';
+import * as myActions from './actions';
+import myReducer from './reducer';
 import Properties from './components/Properties';
 
-export default {
-  actions,
-  reducer,
-  Screen: Properties,
-};
+export const reducer = myReducer;
+export const actions = myActions;
+export const Screen = Properties;

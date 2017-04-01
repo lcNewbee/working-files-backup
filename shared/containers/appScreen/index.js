@@ -2,9 +2,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import utils from 'shared/utils';
 import { actions as appActions } from '../app';
-import * as actions from './actions';
-import reducer from './reducer';
-import components from './components';
+import * as myActions from './actions';
+import myReducer from './reducer';
+import myComponents from './components';
 
 function mapStateToProps(state) {
   return {
@@ -15,25 +15,18 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(utils.extend({},
     appActions,
-    actions,
+    myActions,
   ), dispatch);
 }
 
-function createContainer(component) {
+// Export List
+export function createContainer(component) {
   return connect(
     mapStateToProps,
     mapDispatchToProps,
   )(component);
 }
-
-// 添加 redux 属性的 react 页面
-const AppContainer = createContainer(components.AppScreen);
-
-export default {
-  actions,
-  reducer,
-  components,
-  createContainer,
-  AppContainer,
-  AppScreen: components.AppScreen,
-};
+export const AppContainer = createContainer(myComponents.AppScreen);
+export const actions = myActions;
+export const reducer = myReducer;
+export const components = myComponents;

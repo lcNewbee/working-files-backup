@@ -1,24 +1,20 @@
-// 浏览器更好的支持es5, fetch,  promise等标准
-require('es5-shim');
-require('es5-shim/es5-sham');
-require('console-polyfill');
-require('es6-promise').polyfill();
-require('whatwg-fetch');
-// end 支持
+// 使用 bluebird 替换 babel-runtime/core-js/promise
+require('es6-promise/auto');
 
 const React = require('react');
 const ReactDOM = require('react-dom');
 const ReactRouterDom = require('react-router-dom');
+const redux = require('redux');
 const appActions = require('shared/containers/app/actions');
 
 const thunkMiddleware = require('redux-thunk').default;
-const combineReducers = require('redux').combineReducers;
-const applyMiddleware = require('redux').applyMiddleware;
-const createStore = require('redux').createStore;
 const Provider = require('react-redux').Provider;
 const renderRoutesSwitch = require('shared/components/Organism/RouterConfig').renderRoutesSwitch;
-const prodConfig = require('./config/axc3.0');
+const prodConfig = require('./config/AEC120').default;
 
+const combineReducers = redux.combineReducers;
+const applyMiddleware = redux.applyMiddleware;
+const createStore = redux.createStore;
 const HashRouter = ReactRouterDom.HashRouter;
 const mountNode = document.getElementById('app');
 

@@ -80,10 +80,14 @@ var vendorList = [
   'echarts/lib/component/title',
 ];
 
+var polyfillList = [
+  "es6-promise/auto",
+  "whatwg-fetch",
+]
+
 module.exports = {
   entry: {
     app: './src/index_pub.jsx',
-    // vendors: vendorList,
   },
   module: {
     rules: [
@@ -209,10 +213,14 @@ module.exports = {
         context: __dirname,
       }
     }),
+    new webpack.ProvidePlugin({
+      'fetch': 'isomorphic-fetch',
+    }),
     new webpack.DllReferencePlugin({
       context: "dll",
       manifest: require("./src/config/scripts/vendors-manifest.json")
     }),
+
     new webpack.DefinePlugin(GLOBALS.DEFINE_OBJ),
     // new webpack.optimize.CommonsChunkPlugin({
     //   name: ['vendors'], // 将公共模块提取，生成名为`vendors`bundle
@@ -224,7 +232,7 @@ module.exports = {
       disable: false,
       allChunks: true
     }),
-    new webpack.optimize.UglifyJsPlugin(),
+    //new webpack.optimize.UglifyJsPlugin(),
 
     new HtmlWebpackIncludeAssetsPlugin({
       assets: ['scripts/vendors.bundle.js'],

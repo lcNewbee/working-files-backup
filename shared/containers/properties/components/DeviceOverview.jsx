@@ -3,7 +3,7 @@ import { Map } from 'immutable';
 import utils from 'shared/utils';
 
 const uptimeFilter = utils.filter('connectTime');
-const flowRateFilter = utils.filter('flowRate:["KB"]');
+const flowRateFilter = utils.filter('flowRate');
 
 const propTypes = {
   onCollapse: PropTypes.func,
@@ -49,7 +49,7 @@ function DeviceOverview(props) {
       </dl>
       <dl className="o-description-list-row">
         <dt>{__('Data')}</dt>
-        <dd>{flowRateFilter.transform(info.get('downstream'))}/{flowRateFilter.transform(info.get('upstream'))}</dd>
+        <dd>{flowRateFilter.transform(info.get('upstream'))}/{flowRateFilter.transform(info.get('downstream'))}</dd>
       </dl>
     </div>
   );

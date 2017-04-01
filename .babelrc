@@ -1,8 +1,13 @@
 {
   "presets": [
-    "latest",
+    ["env", {
+      "targets": {
+        "browsers": ["not ie <= 8"]
+      }
+    }],
     "stage-3",
-    "react"
+    "react",
+    "flow"
   ],
   "env": {
     "development": {
@@ -15,10 +20,8 @@
     }
   },
   "plugins": [
-    "add-module-exports",
-    "transform-flow-strip-types",
     ["transform-runtime", {
-      "helpers": true,
+      "helpers": true, // defaults to true
       "polyfill": true, // defaults to true
       "regenerator": true // defaults to true
     }],

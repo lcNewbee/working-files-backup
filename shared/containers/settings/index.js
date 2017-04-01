@@ -1,7 +1,5 @@
-import * as actions from './actions';
-import reducer from './reducer';
+import * as myActions from './actions';
+import myReducer from './reducer';
 
-export default {
-  actions,
-  reducer,
-};
+export const actions = myActions;
+export const reducer = myReducer;

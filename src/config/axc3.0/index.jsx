@@ -66,7 +66,6 @@ const SharedComponents = require('shared/components');
 //
 const sLogin = require('../../screens/Login');
 const sWizard = require('../../screens/Wizard');
-
 //
 const sMainAxc = require('../../screens/MainAxc');
 

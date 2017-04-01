@@ -2,9 +2,11 @@
 var hasOwnProperty = Object.prototype.hasOwnProperty;
 var utils = {};
 
-function toObject(val) {
+function toObject(val, callerMsg) {
+  var showCallerMsg = callerMsg || (this && this.caller) || '';
+
   if (val === null || val === undefined) {
-    throw new TypeError('utils.extend cannot be called with null or undefined');
+    console.warn(showCallerMsg + ' should not be null or undefined');
   }
 
   return Object(val);
@@ -26,15 +28,17 @@ function isLowSurrogate(codePoint) {
  */
 utils.objectAssign = Object.assign || function (target) {
   var fromObj;
-  var ret = toObject(target);
+  var ret = toObject(target, 'utils.objectAssign param target');
   var len = arguments.length;
 
   for (var i = 1; i < len; i++) {
-    fromObj = toObject(arguments[i]);
+    if (typeof arguments[i] === 'object') {
+      fromObj = arguments[i];
 
-    for (var key in fromObj) {
-      if (hasOwnProperty.call(fromObj, key)) {
-        ret[key] = fromObj[key];
+      for (var key in fromObj) {
+        if (hasOwnProperty.call(fromObj, key)) {
+          ret[key] = fromObj[key];
+        }
       }
     }
   }
@@ -221,7 +225,7 @@ utils.extend({
     var ret = parseInt(val || '0', 10);
 
     if (isNaN(ret)) {
-      console.error(funcName + ' expected be called with number or number string,'+
+      console.warn(funcName + ' expected be called with number or number string,'+
           ' actual is ' + valType + 'and value = ' + val);
     }
 
@@ -232,7 +236,7 @@ utils.extend({
     var valType = typeof val;
 
     if(valType !== 'string') {
-      console.error(funcName + ' expected be called with string, actual is ' + valType + ' and value = ' + val);
+      console.warn(funcName + ' expected be called with string, actual is ' + valType + ' and value = ' + val);
     }
 
     return val;
@@ -244,7 +248,7 @@ utils.extend({
     var func;
 
     if (typeof target !== 'object' || !utils.isArray(keys)) {
-      console.error('utils.binds should call with object target and array keys');
+      console.warn('utils.binds should call with object target and array keys');
       return ;
     }
 

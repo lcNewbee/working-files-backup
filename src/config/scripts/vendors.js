@@ -1,47 +1,40 @@
 /**
  * 公共库配置文件
  */
-
-import 'es5-shim';
-import 'es5-shim/es5-sham';
-import 'es6-promise';
-import 'classnames';
-import 'whatwg-fetch';
-import 'console-polyfill';
-import 'immutable';
-import 'react';
-import 'react-addons-css-transition-group';
-import 'react-addons-pure-render-mixin';
-import 'react-addons-shallow-compare';
-import 'react-dom';
-import 'react-redux';
-import 'react-router';
-import 'react-select';
-import 'react-dates';
-import 'rc-time-picker';
-import 'redux';
-import 'redux-thunk';
-import 'moment';
+require('immutable');
+require('react');
+require('react-addons-css-transition-group');
+require('react-addons-pure-render-mixin');
+require('react-addons-shallow-compare');
+require('react-dom');
+require('react-redux');
+require('react-router');
+require('react-select');
+require('react-dates');
+require('rc-time-picker');
+require('redux');
+require('redux-thunk');
+require('moment');
 
 /**
  * echarts图标按需引入
  */
-import 'echarts/lib/echarts';
+require('echarts/lib/echarts');
 // 引入柱状图
-import 'echarts/lib/chart/bar';
+require('echarts/lib/chart/bar');
 
 // 引入折线图
-import 'echarts/lib/chart/line';
-import 'echarts/lib/chart/lines';
+require('echarts/lib/chart/line');
+require('echarts/lib/chart/lines');
 
 // 引入折饼图
-import 'echarts/lib/chart/pie';
+require('echarts/lib/chart/pie');
 
 // 仪表盘
-import 'echarts/lib/chart/gauge';
+require('echarts/lib/chart/gauge');
 
 // 引入提示框和标题组件
-import 'echarts/lib/component/tooltip';
-import 'echarts/lib/component/legend';
-import 'echarts/lib/component/title';
+require('echarts/lib/component/tooltip');
+require('echarts/lib/component/legend');
+require('echarts/lib/component/title');
 

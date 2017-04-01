@@ -62,6 +62,7 @@ export default class View extends React.PureComponent {
       curShowOptionDeviceMac: -100,
       zoom: 100,
     };
+    this.curMapItem = {};
     utils.binds(this,
       [
         'onSave',
@@ -390,6 +391,8 @@ export default class View extends React.PureComponent {
     return ret;
   }
   renderCurMap($$list, curMapId, myZoom) {
+    const backgroundImgUrl = this.curMapItem && this.curMapItem.backgroundImg;
+
     return (
       <div
         className="o-map-container"
@@ -408,7 +411,7 @@ export default class View extends React.PureComponent {
           width: `${myZoom}%`,
           minHeight: '300px',
           backgroundColor: '#ccc',
-          backgroundImage: `url(${this.curMapItem.backgroundImg})`,
+          backgroundImage: `url(${backgroundImgUrl})`,
           backgroundRepeat: 'no-repeat',
         }}
         onMouseDown={this.onMapMouseDown}
@@ -416,7 +419,7 @@ export default class View extends React.PureComponent {
         onMouseMove={this.onMapMouseMove}
       >
         <img
-          src={this.curMapItem.backgroundImg}
+          src={backgroundImgUrl}
           draggable="false"
           alt={this.curMapItem.mapName}
         />

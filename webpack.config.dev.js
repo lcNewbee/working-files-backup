@@ -135,7 +135,9 @@ let config = {
             options: {
               presets: [
                 ["es2015", { "modules": false }]
-              ]
+              ],
+              plugins: ['syntax-dynamic-import'],
+              cacheDirectory: true,
             }
           },
         ]

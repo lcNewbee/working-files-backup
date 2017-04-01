@@ -40,7 +40,7 @@ const propTypes = {
   app: PropTypes.object,
   route: PropTypes.shape({
     routes: PropTypes.array,
-    formUrl: PropTypes.string.isRequired,
+    formUrl: PropTypes.string,
   }),
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired,

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
-import * as actions from './actions';
-import reducer from './reducer';
+import * as appActions from './actions';
+import appReducer from './reducer';
 import App from './components/App';
 
 function mapStateToProps(state) {
@@ -9,19 +9,17 @@ function mapStateToProps(state) {
   };
 }
 
-function createContainer(component) {
+
+// Export List
+export function createContainer(component) {
   return connect(
     mapStateToProps,
-    actions,
+    appActions,
   )(component);
 }
+export const actions = appActions;
+export const reducer = appReducer;
 
 // 添加 redux 属性的 react 页面
-const Screen = createContainer(App);
+export const Screen = createContainer(App);
 
-export default {
-  createContainer,
-  actions,
-  reducer,
-  Screen,
-};
