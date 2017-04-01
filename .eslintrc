@@ -30,6 +30,7 @@
   "globals": {
     "window": true,
     "document": true,
+    "Promise": true,
     "fetch": true,
     "_": true,
     "__": true,
