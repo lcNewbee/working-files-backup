@@ -94,7 +94,8 @@ class MapApPlan extends CI_Controller {
 			'locked' => element('locked',$data['map']),
 			'coverage' => element('coverage',$data['map'])
         );
-        if( $this->db->insert('ap_map', $arr) ) {
+		$this->db->where('ap_mac',$data['mac']);
+        if( $this->db->update('ap_map', $arr) ) {
             $result = json_ok();
 			$this->up_netmanager_ap($data);
         }

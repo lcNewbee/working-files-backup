@@ -19,8 +19,8 @@ class AccessSms_Model extends CI_Model {
         if(isset($data['search'])){
             $parameter['wheres'] = $parameter['wheres'] . " AND name LIKE '%".$data['search']."%'";
         }
-        if(isset($data['type'])){
-            $parameter['wheres'] = $parameter['wheres']." AND type='".$data['type']."'";
+        if(isset($data['gateway_type'])){
+            $parameter['wheres'] = $parameter['wheres']." AND type='".$data['gateway_type']."'";
         }
         $datalist = help_data_page_all($parameter);
 		$arr = array(
