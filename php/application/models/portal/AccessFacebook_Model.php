@@ -13,10 +13,13 @@ class AccessFacebook_Model extends CI_Model {
             'tablenames' => 'portal_facebook', 
             'pageindex' => (int) element('page', $data, 1), 
             'pagesize' => (int) element('size', $data, 20), 
-            'wheres' => "app_id LIKE '%".$data['search']."%'", 
+            'wheres' => "1=1", 
             'joins' => array(), 
             'order' => array(array('id','ASC'))
         );
+        if(isset($data['search'])){
+            $parameter['wheres'] = $parameter['wheres'] . " AND app_id LIKE '%".$data['search']."%'";
+        }
         $datalist = help_data_page_all($parameter);
 
         foreach($datalist['data'] as $row)	{

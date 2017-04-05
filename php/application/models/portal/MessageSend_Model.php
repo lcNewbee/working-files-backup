@@ -4,16 +4,26 @@ class MessageSend_Model extends CI_Model {
         parent::__construct();
         $this->load->library('session');
         $this->portalsql = $this->load->database('mysqlportal', TRUE);
-        $this->load->helper(array('array', 'my_customfun_helper'));
+        $this->load->helper(array('array', 'db_operation'));
     }
     function get_list($data) {
-        $columns = '*';
-        $tablenames = 'portal_message';
-        $pageindex = (int)element('page', $data, 1);
-        $pagesize = (int)element('size', $data, 20);
-        $order = array(array('id','DESC'));
-        $where = array(array('fromname','admin'));
-        $datalist = help_data_page_order($this->portalsql,$columns,$tablenames,$pageindex,$pagesize,$order,$where);
+        $parameter = array(
+            'db' => $this->portalsql, 
+            'columns' => '*', 
+            'tablenames' => 'portal_message', 
+            'pageindex' => (int) element('page', $data, 1), 
+            'pagesize' => (int) element('size', $data, 20), 
+            'wheres' => "1=1", 
+            'joins' => array(), 
+            'order' => array()
+        );
+        if(isset($data['search'])){
+            $parameter['wheres'] = $parameter['wheres'] . " AND (toname LIKE '%".$data['search']."%' or title LIKE '%".$data['search']."%')";
+        }
+        if(isset($data['sendDate'])){
+            $parameter['wheres'] = $parameter['wheres'] . " AND date > '".$data['sendDate']."'";
+        }
+        $datalist = help_data_page_all($parameter);
         $arr = array(
             'state'=>array('code'=>2000,'msg'=>'ok'),
             'data'=>array(
@@ -99,12 +109,7 @@ class MessageSend_Model extends CI_Model {
             'delout' => 0,// 默认值0，值为1表示在发件箱中删除了此条记录
         );
         $result = $this->portalsql->insert('portal_message', $insertary);
-        if($result){
-            $result = json_ok();
-        }else{
-            $result = json_no('sendMessage error');
-            $result['state']['code'] = 6401;
-        }
+        $result = $result ? json_ok() : json_no('sendMessage error',6401);
         return json_encode($result);
     }
 }

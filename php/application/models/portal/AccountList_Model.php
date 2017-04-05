@@ -3,26 +3,39 @@ class AccountList_Model extends CI_Model {
 	public function __construct() {
 		parent::__construct();
 		$this->portalsql = $this->load->database('mysqlportal', TRUE);
-		$this->load->helper(array('array', 'my_customfun_helper'));
+		$this->load->helper(array('array', 'db_operation'));
         $this->load->library('PortalSocket');
 	}
 	function get_account_list($data) {   
-		$columns = '*';
-		$tablenames = 'portal_account';
-		$pageindex = (int)element('page', $data, 1);
-		$pagesize = (int)element('size', $data, 20);		
-		$datalist = help_data_page($this->portalsql,$columns,$tablenames,$pageindex,$pagesize);
-
+        $parameter = array(
+			'db' => $this->portalsql, 
+			'columns' => '*', 
+			'tablenames' => 'portal_account', 
+			'pageindex' => (int) element('page', $data, 1), 
+			'pagesize' => (int) element('size', $data, 20), 
+			'wheres' => "1=1", 
+			'joins' => array(), 
+			'order' => array()
+		);
+        if(isset($data['search'])){
+            $parameter['wheres'] = $parameter['wheres'] . " AND loginName LIKE '%".$data['search']."%'";
+        }
+        if(isset($data['state'])){
+            $parameter['wheres'] = $parameter['wheres'] . " AND state='".$data['state']."'";
+        }
+        $datalist = help_data_page_all($parameter);
+        /*
         $htmdata = array();
         foreach($datalist['data'] as $row){
             $row['octets'] = ( (int)$row['octets'] / 1024 /1024).'M';
             $htmdata[] = $row;
         }
+        */
 		$arr = array(
 			'state'=>array('code'=>2000,'msg'=>'ok'),
 			'data'=>array(
 				'page'=>$datalist['page'],
-				'list' => $htmdata
+				'list' => $datalist['data']
 			)
 		);       
 		return json_encode($arr);

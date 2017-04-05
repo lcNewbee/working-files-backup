@@ -3,21 +3,32 @@ class LogList_Model extends CI_Model {
 	public function __construct() {
 		parent::__construct();
 		$this->portalsql = $this->load->database('mysqlportal', TRUE);
-		$this->load->helper(array('array', 'my_customfun_helper'));
+		$this->load->helper(array('array', 'db_operation'));
 	}
 	function get_list($data) {   
-		$columns = 'id,info,rec_date as recDate';
-		$tablenames = 'portal_logrecord';
-		$pageindex = (int)element('page', $data, 1);
-		$pagesize = (int)element('size', $data, 20);	
-		$order = array(array('id','DESC'));      
-		//$datalist = help_data_page($this->portalsql,$columns,$tablenames,$pageindex,$pagesize);
-		$datalist = help_data_page_order($this->portalsql,$columns,$tablenames,$pageindex,$pagesize,$order);		
+		$parameter = array(
+			'db' => $this->portalsql, 
+			'columns' => 'id,info,rec_date as recDate', 
+			'tablenames' => 'portal_logrecord', 
+			'pageindex' => (int) element('page', $data, 1), 
+			'pagesize' => (int) element('size', $data, 20), 
+			'wheres' => "1=1", 
+			'joins' => array(), 
+			'order' => array()
+		);
+		if(isset($data['search'])){
+			$parameter['wheres'] = $parameter['wheres'] . " AND info LIKE '%".$data['search']."%'";
+		}
+		if(isset($data['sendDate'])){
+			$parameter['wheres'] = $parameter['wheres'] . " AND rec_date > '".$data['sendDate']."'";
+		}	
+		$datalist = help_data_page_all($parameter);
 		$arr = array(
 			'state'=>array('code'=>2000,'msg'=>'ok'),
 			'data'=>array(
 				'page'=>$datalist['page'],
-				'list' =>$datalist['data']
+				'list' =>$datalist['data'],
+				'sql' =>$datalist['sqlcmd']
 			)
 		);               
 		return json_encode($arr);

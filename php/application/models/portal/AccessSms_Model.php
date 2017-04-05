@@ -12,10 +12,13 @@ class AccessSms_Model extends CI_Model {
             'tablenames' => 'portal_smsapi', 
             'pageindex' => (int) element('page', $data, 1), 
             'pagesize' => (int) element('size', $data, 20), 
-            'wheres' => "name LIKE '%".$data['search']."%'", 
+            'wheres' => "1=1", 
             'joins' => array(), 
             'order' => array(array('id','DESC'))
         );
+        if(isset($data['search'])){
+            $parameter['wheres'] = $parameter['wheres'] . " AND name LIKE '%".$data['search']."%'";
+        }
         if(isset($data['type'])){
             $parameter['wheres'] = $parameter['wheres']." AND type='".$data['type']."'";
         }

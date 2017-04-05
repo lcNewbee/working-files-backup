@@ -13,10 +13,13 @@ class AccessWeb_Model extends CI_Model {
             'tablenames' => 'portal_web', 
             'pageindex' => (int) element('page', $data, 1), 
             'pagesize' => (int) element('size', $data, 20), 
-            'wheres' => "portal_web.name LIKE '%".$data['search']."%'",
+            'wheres' => "1=1",
             'joins' => array(array('adv_adv','portal_web.adv=adv_adv.id','left')), 
             'order' => array()
         );
+        if(isset($data['search'])){
+            $parameter['wheres'] = $parameter['wheres'] . " AND portal_web.name LIKE '%".$data['search']."%'";
+        }
         if(isset($data['adv'])){
             //广告页面搜索
            $parameter['wheres'] = $parameter['wheres']." AND adv_adv.id =".$data['adv'];
