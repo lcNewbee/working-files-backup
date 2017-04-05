@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import utils from 'shared/utils';
-import { List } from 'immutable';
+import { List, Map } from 'immutable';
 import SaveButton from 'shared/components/Button/SaveButton';
 import Icon from 'shared/components/Icon';
 import {
@@ -44,6 +44,7 @@ function previewFile(file) {
 const propTypes = {
   $$mapList: PropTypes.instanceOf(List),
   actionable: PropTypes.bool,
+  app: PropTypes.instanceOf(Map),
 
   // 操作函数
   onSelectMap: PropTypes.func,
@@ -51,6 +52,10 @@ const propTypes = {
   save: PropTypes.func,
   saveFile: PropTypes.func,
   reciveScreenData: PropTypes.func,
+  createModal: PropTypes.func,
+  validateAll: PropTypes.func,
+  reportValidError: PropTypes.func,
+  resetVaildateMsg: PropTypes.func,
 
   // 参数
   groupid: PropTypes.any,
@@ -68,6 +73,7 @@ export default class MapList extends React.PureComponent {
       'fetchMapList',
       'onSaveMap',
       'onAddMap',
+      'checkMapData',
     ]);
 
     this.state = {
@@ -85,7 +91,8 @@ export default class MapList extends React.PureComponent {
     this.props.validateAll()
       .then(
         (errMsg) => {
-          if (errMsg.isEmpty()) {
+          // 数据验证结果
+          if (errMsg.isEmpty() && !this.checkMapData()) {
             this.props.saveFile(url, formElem)
               .then(() => {
                 this.setState({
@@ -101,6 +108,22 @@ export default class MapList extends React.PureComponent {
     this.setState({
       isModalShow: true,
     });
+  }
+  checkMapData() {
+    const mapName = this.state.mapName;
+    const $$mapList = this.props.$$mapList;
+    const hasSameNameText = __('Same %s item already exists', __('name'));
+    let retMsg = '';
+
+    if ($$mapList.find($$item => $$item.get('mapName') === mapName)) {
+      this.props.createModal({
+        type: 'alert',
+        text: hasSameNameText,
+      });
+      retMsg = hasSameNameText;
+    }
+
+    return retMsg;
   }
   fetchMapList() {
     const url = 'goform/group/map/list';
@@ -315,7 +338,6 @@ export default class MapList extends React.PureComponent {
               type="file"
               onChange={(data, evt) => {
                 const selectFile = evt.target.files[0];
-                console.log(data.value)
                 this.setState({
                   mapImg: data.value,
                 });

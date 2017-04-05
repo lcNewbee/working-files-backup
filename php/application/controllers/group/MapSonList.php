@@ -43,7 +43,7 @@ class MapSonList extends CI_Controller {
         $result = null;
 
         $arr['maplist_id'] = element('buildId',$_POST,-1);
-        $arr['mapname'] = element('mapImg',$_POST,'Name');
+        $arr['mapname'] = element('mapName',$_POST,'Name');
         $arr['imgpath'] = str_replace('/var/conf/images','/images/mapimg',element('full_path',$data['upload_data']) );
         $arr['locked'] = 1;
         $arr['length'] = element('length',$_POST,100);
