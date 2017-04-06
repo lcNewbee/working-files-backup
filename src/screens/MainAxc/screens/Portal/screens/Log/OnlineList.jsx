@@ -79,6 +79,11 @@ const queryFormOptions = fromJS([
 ]);
 const listOptions = fromJS([
   {
+    id: 'index',
+    text: __('No.'),
+    type: 'text',
+    noForm: true,
+  }, {
     id: 'ip',
     text: __('IP'),
     type: 'text',

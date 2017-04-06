@@ -91,7 +91,7 @@ const listOptions = fromJS([
       required: true,
     },
     transform(val) {
-      return onlinetimeFilter.transform(val);
+      return onlinetimeFilter.transform(val / 1000);
     },
   }, {
     id: 'ins',

@@ -214,7 +214,7 @@ const listOptions = fromJS([
 
 const queryFormOptions = fromJS([
   {
-    id: 'type',
+    id: 'gateway_type',
     type: 'select',
     label: __('Type'),
     options: [

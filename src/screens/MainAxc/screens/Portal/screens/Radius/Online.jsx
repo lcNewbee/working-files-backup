@@ -48,7 +48,7 @@ const listOptions = fromJS([
     id: 'costTime',
     text: __('Online Time'),
     transform(val) {
-      return onlinetimeFilter.transform(val / 1000);
+      return onlinetimeFilter.transform(val);
     },
   }, {
     id: 'inS',

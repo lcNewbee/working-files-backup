@@ -39,7 +39,7 @@ const queryFormOptions = fromJS([
     ],
     saveOnChange: true,
   }, {
-    id: 'type',
+    id: 'auth_type',
     type: 'select',
     label: __('Authentication Types'),
     options: [

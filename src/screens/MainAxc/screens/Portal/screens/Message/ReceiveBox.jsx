@@ -13,14 +13,22 @@ import moment from 'moment';
 
 const queryFormOptions = fromJS([
   {
-    id: 'sendDate',
+    id: 'startDate',
     type: 'date',
-    label: __('Date'),
+    label: __('Start Date'),
+    isOutsideRange: () => false,
+    saveOnChange: true,
+  }, {
+    id: 'endDate',
+    type: 'date',
+    label: __('End Date'),
+    isOutsideRange: () => false,
     saveOnChange: true,
   },
 ]);
 const defaultQuery = {
-  sendDate: moment().format('YYYY-MM-DD'),
+  startDate: moment().format('YYYY-MM-DD'),
+  endDate: moment().format('YYYY-MM-DD'),
 };
 
 function getUserName() {

@@ -5,8 +5,9 @@
   },
   "data": {
     "list": [{
-      "id": "0",
-      "ip": "192.168.0.1",
+      "index": "1",
+      "id": "1",
+      "ip": "192.168.0.2",
       "mac": "22:22:22:22:221",
       "loginName":"FannyZHANG",
       "startDate":"2017.12.24",
@@ -22,7 +23,8 @@
       "auto":"no",
       "agent":"Client"
     },{
-      "id": "1",
+      "index":"2",
+      "id": "2",
       "ip": "192.168.0.1",
       "mac": "22:22:22:22:221",
       "loginName":"FannyZHANG",
