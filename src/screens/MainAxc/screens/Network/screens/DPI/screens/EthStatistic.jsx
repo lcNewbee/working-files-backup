@@ -381,7 +381,7 @@ export default class EthStatistic extends React.Component {
     const listOptions = fromJS([
       {
         id: 'ethx_name',
-        text: __('Name'),
+        text: __('Ports'),
       }, {
         id: 'userNum',
         text: __('User Number'),

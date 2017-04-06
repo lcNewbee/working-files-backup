@@ -52,11 +52,13 @@ function getEchartOptionByName(serverData, listName) {
           case 'proto':
             title = __('Applications'); break;
           case 'mac':
-            title = __('MAC'); break;
+            title = __('Clients'); break;
           default:
         }
         return title;
       })(),
+      left: '24%',
+      top: 'center',
     },
     tooltip: {
       trigger: 'item',
@@ -64,7 +66,7 @@ function getEchartOptionByName(serverData, listName) {
     },
     legend: {
       orient: 'vertical',
-      x: '56%',
+      x: '50%',
       y: 'center',
       itemWidth: 12,
       itemHeight: 12,
@@ -88,6 +90,7 @@ function getEchartOptionByName(serverData, listName) {
     series: [
       {
         name: __('Traffic'),
+        center: ['25%', '50%'],
       },
     ],
   }).toJS();
@@ -146,7 +149,7 @@ export default class DPIOverview extends React.Component {
       >
         {
           this.props.store.getIn([curScreenId, 'curSettings', 'ndpiEnable']) === '1' ? (
-            <div className="t-overview">
+            <div className="t-overview" style={{ minWidth: '1100px' }}>
               {/* <div className="element t-overview__section-header">
                 <h3>
                   <span
@@ -166,8 +169,8 @@ export default class DPIOverview extends React.Component {
               </div>*/}
               <div className="t-overview__section row">
                 <div className="cols col-6" >
-                  <div className="element clearfix">
-                    <h3 className="fl">{__('MAC')}</h3>
+                  <div className="element clearfix" style={{ minWidth: '550px' }}>
+                    <h3 className="fl">{__('Clients')}</h3>
                     <span
                       className="fr"
                       style={{
@@ -183,7 +186,7 @@ export default class DPIOverview extends React.Component {
                       {__('More Details >>')}
                     </span>
                   </div>
-                  <div className="element row">
+                  <div className="element row" style={{ minWidth: '550px' }}>
                     <EchartReact
                       option={getEchartOptionByName(serverData, 'mac')}
                       className="o-box__canvas"
@@ -195,7 +198,7 @@ export default class DPIOverview extends React.Component {
                   </div>
                 </div>
                 <div className="cols col-6">
-                  <div className="element clearfix">
+                  <div className="element clearfix" style={{ minWidth: '550px' }}>
                     <h3 className="fl">{__('Applications')}</h3>
                     <span
                       className="fr"
@@ -244,7 +247,7 @@ export default class DPIOverview extends React.Component {
                       {__('More Details >>')}
                     </span>
                   </div>
-                  <div className="element">
+                  <div className="element" style={{ minWidth: '550px' }}>
                     <EchartReact
                       option={getEchartOptionByName(serverData, 'ethInterface')}
                       className="o-box__canvas"

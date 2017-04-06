@@ -36,7 +36,7 @@ export default class EthStatistic extends React.Component {
     const settingsFormOptions = fromJS([
       {
         id: 'ndpiEnable',
-        label: __('NDPI Enable'),
+        label: __('Application Analyze'),
         type: 'checkbox',
         saveOnChange: true,
         // onChange: (data) => {
@@ -53,43 +53,37 @@ export default class EthStatistic extends React.Component {
       },
       {
         id: 'eth0Enable',
-        label: __('Active Status'),
-        text: __('eth0'),
+        label: `ETH0 ${__('Active Status')}`,
         type: 'checkbox',
         onChange: (data) => { this.onChangeSettingData(data, 'eth0Enable'); },
       },
       {
         id: 'eth1Enable',
-        label: __('Active Status'),
-        text: __('eth1'),
+        label: `ETH1 ${__('Active Status')}`,
         type: 'checkbox',
         onChange: (data) => { this.onChangeSettingData(data, 'eth1Enable'); },
       },
       {
         id: 'eth2Enable',
-        label: __('Active Status'),
-        text: __('eth2'),
+        label: `ETH2 ${__('Active Status')}`,
         type: 'checkbox',
         onChange: (data) => { this.onChangeSettingData(data, 'eth2Enable'); },
       },
       {
         id: 'eth3Enable',
-        label: __('Active Status'),
-        text: __('eth3'),
+        label: `ETH3 ${__('Active Status')}`,
         type: 'checkbox',
         onChange: (data) => { this.onChangeSettingData(data, 'eth3Enable'); },
       },
       {
         id: 'eth4Enable',
-        label: __('Active Status'),
-        text: __('eth4'),
+        label: `ETH4 ${__('Active Status')}`,
         type: 'checkbox',
         onChange: (data) => { this.onChangeSettingData(data, 'eth4Enable'); },
       },
       {
         id: 'eth5Enable',
-        label: __('Active Status'),
-        text: __('eth5'),
+        label: `ETH5 ${__('Active Status')}`,
         type: 'checkbox',
         onChange: (data) => { this.onChangeSettingData(data, 'eth5Enable'); },
       },

@@ -5,7 +5,7 @@
   },
   "data": {
     "settings": {
-      "ndpiEnable": "0"
+      "ndpiEnable": "1"
     },
     "ethInterface": [
       {
@@ -78,6 +78,60 @@
     ],
     "proto": [
       {
+        "name": "udp",
+        "value": "30123"
+      }, {
+        "name": "tcp",
+        "value": "1120"
+      }, {
+        "name": "dhcp1",
+        "value": "61230"
+      },{
+        "name": "udp1",
+        "value": "30123"
+      }, {
+        "name": "tcp1",
+        "value": "1120"
+      }, {
+        "name": "dhcp123",
+        "value": "61230"
+      }, {
+        "name": "udp123",
+        "value": "30123"
+      }, {
+        "name": "tcp123",
+        "value": "1120"
+      }, {
+        "name": "dhcp1234",
+        "value": "61230"
+      }, {
+        "name": "udp1234",
+        "value": "30123"
+      }, {
+        "name": "tcp1234",
+        "value": "1120"
+      }, {
+        "name": "dhcp12345",
+        "value": "61230"
+      }, {
+        "name": "udp12345",
+        "value": "30123"
+      }, {
+        "name": "tcp12345",
+        "value": "1120"
+      }, {
+        "name": "dhcp12345",
+        "value": "61230"
+      }, {
+        "name": "udp123451",
+        "value": "30123"
+      }, {
+        "name": "tcp123451",
+        "value": "1120"
+      }, {
+        "name": "dhcp123451",
+        "value": "61230"
+      }, {
         "name": "udp",
         "value": "30123"
       }, {

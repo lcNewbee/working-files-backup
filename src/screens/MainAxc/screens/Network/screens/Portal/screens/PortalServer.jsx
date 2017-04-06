@@ -114,7 +114,9 @@ const defaultProps = {};
 
 export default class View extends React.Component {
 
-  componentWillUnmount() {}
+  componentWillUnmount() {
+    console.log('portalserver componentWillUnmount');
+  }
 
   render() {
     return (

@@ -14,19 +14,12 @@ function getDistance(p1, p2) {
   return Math.sqrt(((p1[0] - p2[0]) * (p1[0] - p2[0])) + ((p1[1] - p2[1]) * (p1[1] - p2[1])));
 }
 
-function sleep(n) {
-  const start = new Date().getTime();
-  while (true) {
-    const end = new Date().getTime();
-    if (end - start > n) break;
-  }
-}
-
 const propTypes = {
   store: PropTypes.object,
   changeScreenQuery: PropTypes.func,
   fetch: PropTypes.func,
   fetchScreenData: PropTypes.func,
+  reciveScreenData: PropTypes.func,
 };
 const defaultProps = {};
 const defaultQuery = {
@@ -43,6 +36,7 @@ export default class View extends React.Component {
     super(props);
     this.curvePath = [];
     this.timeoutVal = [];
+    this.pathList = [];
     this.mapMouseDown = false;
     this.colors = ['#c23531', '#2f4554', '#0093dd', '#d48265', '#91c7ae'];
     this.state = {
@@ -50,6 +44,8 @@ export default class View extends React.Component {
       zoom: 100,
       mapOffsetX: 0,
       mapOffsetY: 0,
+      mapWidth: 1,
+      mapHeight: 1,
     };
     utils.binds(this,
       [
@@ -78,6 +74,8 @@ export default class View extends React.Component {
     );
   }
   componentWillMount() {
+    // if (this.curvePath) console.log('componentWillMount:this.curvePath', this.curvePath.length);
+    // if (this.pathList) console.log('componentWillMount:this.pathList', this.pathList.length);
     this.preScreenId = this.props.store.get('curScreenId');
     this.props.fetch('goform/group/map/building').then((json) => {
       if (json.state && json.state.code === 2000) {
@@ -85,24 +83,29 @@ export default class View extends React.Component {
       }
       this.onChangeBuilding(this.buildOptions.getIn([0, 'value']));
     });
+    // console.log('will mount this.curvePath', this.curvePath);
   }
-  componentDidMount() {
-    if (typeof (this.canvasElem) === 'undefined') return;
-    const store = this.props.store;
-    const curScreenId = store.get('curScreenId');
-    // const curMapId = store.getIn([curScreenId, 'query', 'curMapId']);
-    const curMapId = this.state.curMapId;
-    const $$pathList = store.getIn([curScreenId, 'data', 'list']);
-    const mapList = this.mapList;
-    const ctx = this.canvasElem.getContext('2d');
-    if (typeof (mapList) !== 'undefined') {
-      this.updateCanvas($$pathList, mapList, curMapId);
-      this.drawCurveAnimPath(ctx, this.curvePath);
-    }
-  }
+  // componentDidMount() {
+  //   if (typeof (this.canvasElem) === 'undefined') return;
+  //   const store = this.props.store;
+  //   const curScreenId = store.get('curScreenId');
+  //   // const curMapId = store.getIn([curScreenId, 'query', 'curMapId']);
+  //   const curMapId = this.state.curMapId;
+  //   const $$pathList = store.getIn([curScreenId, 'data', 'list']);
+  //   console.log('did mount curScreenId & pathlist', curScreenId, $$pathList);
+  //   const mapList = this.mapList;
+  //   const ctx = this.canvasElem.getContext('2d');
+  //   if (typeof (mapList) !== 'undefined') {
+  //     this.updateCanvas($$pathList, mapList, curMapId);
+  //     this.drawCurveAnimPath(ctx, this.curvePath);
+  //   }
+  // }
 
-  componentWillReceiveProps() {
-    this.clearTimeout();
+  componentWillReceiveProps(nextProps) {
+    const curScreenId = this.props.store.get('curScreenId');
+    const thisData = this.props.store.getIn([curScreenId, 'data']);
+    const nextData = nextProps.store.getIn([curScreenId, 'data']);
+    if (!thisData.equals(nextData)) this.clearTimeout();
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -127,7 +130,7 @@ export default class View extends React.Component {
 
     /** *********hack: 暂时解决store中curScreenId更新不及时引起的bug**********/
     if (this.preScreenId !== curScreenId) {
-      // console.log('this.preScreenId', this.preScreenId, curScreenId);
+      // console.log('In hack code', this.preScreenId, curScreenId);
       this.onChangeBuilding(this.buildOptions.getIn([0, 'value']));
       this.preScreenId = curScreenId;
     }
@@ -142,9 +145,23 @@ export default class View extends React.Component {
     this.stationaryPoint(ctx, this.pathList);
     // this.mapMouseDown用来检测是否是拖动引起的页面重绘，如果是，则坐标点位置没有变化无需重新计算
     if (typeof (mapList) !== 'undefined' && !this.mapMouseDown) {
+      // console.log('did update curScreenId & pathlist', curScreenId, $$pathList);
       this.updateCanvas($$pathList, mapList, curMapId);
       this.drawCurveAnimPath(ctx, this.curvePath);
     }
+  }
+
+  componentWillUnmount() {
+    // console.log('orbitTrace componentWillUnmount');
+    const curScreenId = this.props.store.get('curScreenId');
+    this.clearTimeout();
+    // delete this.curvePath;
+    // delete this.pathList;
+    // 清空数据，解决首次进入，在请求未返回之前使用历史数据绘图问题
+    this.props.reciveScreenData(fromJS({
+      list: [],
+      macList: [],
+    }), curScreenId);
   }
 
   onChangeBuilding(id) {
@@ -161,22 +178,34 @@ export default class View extends React.Component {
         });
   }
   onChangeMapId(id) {
+    const curScreenId = this.props.store.get('curScreenId');
     Promise.resolve().then(() => {
       this.props.changeScreenQuery(fromJS({ curMapId: id }));
       this.setState({ curMapId: id });
     }).then(() => {
       this.props.fetchScreenData().then(() => {
-        const curScreenId = this.props.store.get('curScreenId');
-        const firstMac = this.props.store.getIn([curScreenId, 'data', 'macList', '0']);
-        // this.onChangeMac(firstMac);
-        // 如果后台默认返回第一条Mac地址的数据，则使用下面的操作，否则使用上面的onChangeMac
-        // 目的是减少一次数据请求
-        this.props.changeScreenQuery(fromJS({ mac: firstMac }));
+        const mac = this.props.store.getIn([curScreenId, 'query', 'mac']);
+        // 如果query参数有mac地址，则无需处理
+        // 如果query参数没有mac，或mac为空，则后台返回第一条Mac的轨迹，需做特殊处理
+        if (typeof (mac) === 'undefined' || mac === '') {
+          const firstMac = this.props.store.getIn([curScreenId, 'data', 'macList', '0']);
+          // this.onChangeMac(firstMac);
+          // 如果后台默认返回第一条Mac地址的数据，则使用下面的操作，否则使用上面的onChangeMac
+          // 目的是减少一次数据请求
+          this.props.changeScreenQuery(fromJS({ mac: firstMac }));
+        }
       });
     });
   }
   onChangeMac(value) {
+    const curScreenId = this.props.store.get('curScreenId');
     Promise.resolve().then(() => {
+      // 清空历史数据，解决修改参数后，在数据返回之前使用历史数据绘图问题
+      this.props.reciveScreenData(fromJS({
+        list: [],
+        macList: [],
+      }), curScreenId);
+    }).then(() => {
       this.props.changeScreenQuery(fromJS({ mac: value }));
     }).then(() => {
       this.props.fetchScreenData();
@@ -248,7 +277,7 @@ export default class View extends React.Component {
     const distance = getDistance(start, end) / 3; // 除以3？
     let angle; let dX; let dY;
     const mp = [start[0], start[1]];
-    const deltaAngle = start[1] >= end[1] ? -0.2 : 0.2; // 偏移0.2弧度
+    const deltaAngle = start[1] >= end[1] ? -0.1 : 0.1; // 偏移0.2弧度
     if (start[0] !== end[0] && start[1] !== end[1]) { // 斜率存在
       const k = (end[1] - start[1]) / (end[0] - start[0]);
       angle = Math.atan(k);
@@ -274,7 +303,14 @@ export default class View extends React.Component {
   }
 
   handleChangeQuery(name, data) {
+    const curScreenId = this.props.store.get('curScreenId');
     Promise.resolve().then(() => {
+      // 清空历史数据，解决修改参数后，在数据返回之前使用历史数据绘图问题
+      this.props.reciveScreenData(fromJS({
+        list: [],
+        macList: [],
+      }), curScreenId);
+    }).then(() => {
       this.props.changeScreenQuery(fromJS({ [name]: data.value }));
     }).then(() => {
       this.props.fetchScreenData();
@@ -292,17 +328,32 @@ export default class View extends React.Component {
   }
 
   drawLineBetweenPoints(ctx, point1, point2) {
-    ctx.moveTo(point1[0], point1[1]);
+    // ctx.moveTo(point1[0], point1[1]);
+    // console.log('drawLineBetweenPoints');
     ctx.lineTo(point2[0], point2[1]);
     ctx.stroke();
-    sleep(1);
+    // sleep(1);
   }
+
+  // drawLineBetweenPoints(ctx, pathArr) {
+  //   console.log('drawLineBetweenPoints');
+  //   if (pathArr.length < 1) return null;
+  //   ctx.lineTo(pathArr[0][0], pathArr[0][1]);
+  //   ctx.stroke();
+  //   pathArr.splice(0, 1);
+  //   this.timeout = setTimeout(this.drawLineBetweenPoints(ctx, pathArr), 10);
+  // }
 
   clearTimeout() {
     let timeoutLen = this.timeoutVal.length;
-    while (timeoutLen--) {
-      clearTimeout(this.timeoutVal[timeoutLen]);
+    // console.log('clearTimeout total length', timeoutLen);
+    // if (timeoutLen === 0) return;
+    while (timeoutLen) {
+      clearTimeout(this.timeoutVal[--timeoutLen]);
+      // if (timeoutLen === 0) console.log('timeout clear');
     }
+    this.timeoutVal = [];
+    // clearTimeout(this.timeout);
   }
 
   // 动态画线
@@ -322,17 +373,27 @@ export default class View extends React.Component {
     ctx.lineWidth = 2;
     // 使用setTimeOut可以主动管理UI线程，但是下面的做法好像并没有达到线程管理以使页面更加流畅的目的。
     // 要达到管理线程的目的，需要当一个函数执行完成后再注册下一个定时器
+    const start = (new Date()).getTime();
     curvePath.forEach((point) => {
       const a = setTimeout(() => {
         this.drawLineBetweenPoints(ctx, point1, point);
         point1 = point;
       }, 25);
       this.timeoutVal.push(a);
+      // const end = (new Date()).getTime();
+      // console.log('time run', end - start);
     });
+
+    // ctx.moveTo(curvePath[0][0], curvePath[0][1]);
+    // this.drawLineBetweenPoints(ctx, curvePath);
+
+    const endend = (new Date()).getTime();
+    // console.log('total time', endend - start);
   }
 
   updateCanvas($$pathList, mapList, curMapId) {
-    console.log('updateCanvas');
+    // console.log('updateCanvas, curScreenId', this.props.store.get('curScreenId'));
+    // console.log('updateCanvas, original path', $$pathList);
     // if (typeof $$pathList === 'undefined' || typeof mapList === 'undefined') { return null; }
     let arguLen = arguments.length;
     while (arguLen--) {
@@ -345,24 +406,30 @@ export default class View extends React.Component {
     const curItem = mapList.find(item => item.get('id') === curMapId);
     if (typeof curItem === 'undefined') return null;
     // 经纬度转换为画布上的像素
+    const start = (new Date()).getTime();
     const pathListPixel = $$pathList.toJS().map(($$point) => {
       const ret = gps.getOffsetFromGpsPoint($$point, curItem.toJS());
       const x = Math.floor((ret.x * this.state.mapWidth) / 100);
       const y = Math.floor((ret.y * this.state.mapHeight) / 100);
       return { x, y };
     });
+    const end = (new Date()).getTime();
+    // console.log('list data to map data time', end - start);
     this.pathList = pathListPixel; // 存储起来，避免在没有请求数据的情况下做多余的计算。
     this.stationaryPoint(ctx, pathListPixel);
 
     const len = pathListPixel.length;
     this.curvePath = [];
+    const start1 = (new Date()).getTime();
     pathListPixel.forEach((item, index, arr) => {
       if (index === len - 1) return;
       const crvPoints = this.getPointList(item, arr[index + 1]);
       this.curvePath = this.curvePath.concat(crvPoints);
       // this.drawCurvePath(ctx, crvPoints);
     });
-
+    const end1 = (new Date()).getTime();
+    // console.log('interpolate time spent', end1 - start1);
+    // console.log('total points on curve path', this.curvePath.length);
     // this.drawCurveAnimPath(ctx, this.curvePath);
     // this.oribitPath(ctx, startX, startY, fromJS(pathListPixel));
   }
@@ -477,7 +544,12 @@ export default class View extends React.Component {
           query: defaultQuery,
         }}
       >
-        <div className="o-form o-form--flow">
+        <div
+          className="o-form o-form--flow"
+          style={{
+            minWidth: '850px',
+          }}
+        >
           <FormGroup
             type="select"
             className="fl"
@@ -501,6 +573,7 @@ export default class View extends React.Component {
             options={this.generateMacOptions()}
             value={store.getIn([curScreenId, 'query', 'mac'])}
             onChange={data => this.onChangeMac(data.value)}
+            searchable
           />
           <FormGroup
             type="date"
@@ -534,7 +607,13 @@ export default class View extends React.Component {
             // showSecond={false}
           />
         </div>
-        <div className="o-map-warp" style={{ top: '5rem' }}>
+        <div
+          className="o-map-warp"
+          style={{
+            top: '5rem',
+            minWidth: '850px',
+          }}
+        >
           {this.renderCurMap(this.mapList, this.state.curMapId, this.state.zoom)}
           <div className="o-map-zoom-bar">
             <Icon

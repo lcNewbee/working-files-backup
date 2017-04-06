@@ -361,7 +361,7 @@ const routes = [
                 id: 'dpi',
                 icon: 'copy',
                 path: '/main/network/dpi',
-                text: __('DPI'),
+                text: __('Application Analyze'),
                 indexPath: '/main/network/dpi/dpioverview',
                 routes: [
                   {
@@ -375,19 +375,19 @@ const routes = [
                     id: 'macstatistic',
                     path: '/main/network/dpi/macstatistic',
                     formUrl: 'goform/network/dpi/macstatistic',
-                    text: __('Mac Statistic'),
+                    text: __('Clients '),
                     component: sMacStatistic.Screen,
                   }, {
                     id: 'ethstatistic',
                     path: '/main/network/dpi/ethstatistic',
                     formUrl: 'goform/network/dpi/ethstatistic',
-                    text: __('Ethernet Statistic'),
+                    text: __('Ports '),
                     component: sEthStatistic.Screen,
                   }, {
                     id: 'protoinfo',
                     path: '/main/network/dpi/protoinfo',
                     formUrl: 'goform/network/dpi/protoinfo',
-                    text: __('Proto Info'),
+                    text: __('Protocols '),
                     component: sProtoInfo.Screen,
                   },
                   {

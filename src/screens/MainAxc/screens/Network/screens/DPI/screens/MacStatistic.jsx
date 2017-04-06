@@ -233,7 +233,7 @@ function getFlowUnit(val) {
 const listOptions = fromJS([
   {
     id: 'mac',
-    text: __('MAC'),
+    text: __('Clients'),
   }, {
     id: 'ip',
     text: __('IP'),

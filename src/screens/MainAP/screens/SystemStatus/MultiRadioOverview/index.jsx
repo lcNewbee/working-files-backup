@@ -819,6 +819,7 @@ export default class SystemStatus extends React.Component {
               }}
             >
               <div className="o-description-list o-description-list--lg info-box">
+                {/** *********************************************************
                 <dl className="o-description-list-row">
                   <dt>{__('Device Model')}</dt>
                   <dd>{deviceModel}</dd>
@@ -827,6 +828,7 @@ export default class SystemStatus extends React.Component {
                   <dt>{__('Device Name')}</dt>
                   <dd>{deviceName}</dd>
                 </dl>
+                **************************************************************/}
                 <dl className="o-description-list-row">
                   <dt>{__('Firmware Version')}</dt>
                   <dd>{version}</dd>
@@ -926,7 +928,7 @@ export default class SystemStatus extends React.Component {
                 <dd style={{ whiteSpace: 'pre' }}>{modifySignalShowStyle(radioList.getIn([radioId, 'txPower']))}</dd>
               </dl>
               {
-                deviceModel === 'AIP5' ? (
+                wirelessMode === 'sta' ? (
                   <dl className="o-description-list-row">
                     <dt>{__('Signal')}</dt>
                     <dd style={{ whiteSpace: 'pre' }}>{modifySignalShowStyle(radioList.getIn([radioId, 'signal']))}</dd>
