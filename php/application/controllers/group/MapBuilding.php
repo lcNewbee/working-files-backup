@@ -16,13 +16,18 @@ class MapBuilding extends CI_Controller {
 	} 
 	function onAction($data) {
 		$result = null;
-		$actionType = element('action', $data);		
-		if ($actionType === 'add') {
-            $result = $this->MapBuilding_Model->add_building($data);
-		} elseif ($actionType === 'edit') {
-			$result = $this->MapBuilding_Model->update_building($data);
-		} elseif ($actionType === 'delete') {
-			$result = $this->MapBuilding_Model->delete_building($data);
+		$actionType = element('action', $data);	
+		switch($actionType)	{
+			case "add" : $result = $this->MapBuilding_Model->add_building($data);
+				break;
+			case "edit" : $result = $this->MapBuilding_Model->update_building($data);
+				break;
+			case "delete" : $result = $this->MapBuilding_Model->delete_building($data);
+				break;
+			case "setting" : $result = $this->MapBuilding_Model->setting_building($data);
+				break;
+			default : $result = json_encode(array('state' => array('code' => 4000, 'msg' => 'No request action')));
+                break;
 		}
 		return $result;
 	}

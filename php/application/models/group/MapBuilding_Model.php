@@ -15,8 +15,13 @@ class MapBuilding_Model extends CI_Model {
 		$pageindex = (int)element('page', $data, 1);
 		$pagesize = (int)element('size', $data, 20);		
         $datalist = $sqlpage->sql_data_page($columns,$tablenames,$pageindex,$pagesize);
-        $arr['state'] = array('code' => 2000, 'msg' => 'ok');
-		$arr['data'] = array("list" => $datalist['data']);
+        $arr = array(
+            'state' => array('code'=>2000,'msg'=>'ok'),
+            'data' => array(
+                'settings'=> $this->get_map_type(),//地图api
+                'list' => $datalist['data']
+            )
+        );    
 		return json_encode($arr);     
     }
     public function add_building($data) {
@@ -62,7 +67,6 @@ class MapBuilding_Model extends CI_Model {
 
         return json_encode(json_ok());
     } 
-
     public function delete_building($data) {
         $result = null;
         if( count($data['selectedList']) > 0 ) {
@@ -79,7 +83,17 @@ class MapBuilding_Model extends CI_Model {
             $result = json_ok();
         }
         return json_encode($result);
-    }     
+    }   
+    public function setting_building($data)  {
+        $result = null;
+        if(isset($data['liveMapType'])){
+            $this->db->set('value', $data['liveMapType']);
+            $this->db->where('cfg_type',1);
+            $result = $this->db->update('ac_basis_cfg');
+        }
+        $result = $result ? json_ok() : josn_no('config error');
+        return json_encode($result);
+    }
     //delete map_son_list
     public function del_son_list($id) {     
         $querydata = $this->db->query("select id,imgpath from map_son_list where id=".$id);
@@ -105,6 +119,7 @@ class MapBuilding_Model extends CI_Model {
         }
         return 0;
     }
+    //ap 位置偏移修正
     private function up_ap_map($id,$lat,$lng){
         //update ap_map set xpos=xpos+22.12,ypos=ypos+113.10 where build_id=(select id from map_son_list where maplist_id=1);
         //1.修改config.db
@@ -115,5 +130,15 @@ class MapBuilding_Model extends CI_Model {
             $this->mysql->query("update ap_list set Lat=Lat+{$lat},Lon=Lon+{$lng} where ApMac='{$row['ap_mac']}'");
         }
 
+    }
+
+    // 获取地图类型
+    private function get_map_type(){
+        $result = array('liveMapType'=>'Google');
+        $query = $this->db->query("select value from ac_basis_cfg where cfg_type=1");
+        if(count($query->result_array()) > 0){
+            $result['liveMapType'] = $query->result_array()[0]['value'];
+        }
+        return $result;
     }
 }
