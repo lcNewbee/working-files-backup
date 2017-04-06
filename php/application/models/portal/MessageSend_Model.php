@@ -13,22 +13,25 @@ class MessageSend_Model extends CI_Model {
             'tablenames' => 'portal_message', 
             'pageindex' => (int) element('page', $data, 1), 
             'pagesize' => (int) element('size', $data, 20), 
-            'wheres' => "1=1", 
+            'wheres' => "fromname='admin'",
             'joins' => array(), 
             'order' => array()
         );
         if(isset($data['search'])){
             $parameter['wheres'] = $parameter['wheres'] . " AND (toname LIKE '%".$data['search']."%' or title LIKE '%".$data['search']."%')";
         }
-        if(isset($data['sendDate'])){
-            $parameter['wheres'] = $parameter['wheres'] . " AND date > '".$data['sendDate']."'";
+        if(isset($data['startDate'])){
+            $start_date = $data['startDate'] . " 00:00:00";
+            $end_date = $data['endDate'] . " 23:59:59";
+            $parameter['wheres'] = $parameter['wheres'] . " AND (date > '{$start_date}' AND date < '{$end_date}')";
         }
         $datalist = help_data_page_all($parameter);
         $arr = array(
             'state'=>array('code'=>2000,'msg'=>'ok'),
             'data'=>array(
                 'page'=>$datalist['page'],
-                'list' => $datalist['data']
+                'list' => $datalist['data'],
+                'sql' => $datalist['sqlcmd']
             )
         );
         return json_encode($arr);

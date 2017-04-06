@@ -3,14 +3,30 @@ class CardList_Model extends CI_Model {
     public function __construct() {
         parent::__construct();
         $this->portalsql = $this->load->database('mysqlportal', TRUE);
-        $this->load->helper(array('array', 'my_customfun_helper'));
+        $this->load->helper(array('array', 'db_operation'));
     }
-    function get_list($data) {
-        $columns = '*';
-        $tablenames = 'portal_card';
-        $pageindex = (int)element('page', $data, 1);
-        $pagesize = (int)element('size', $data, 20);
-        $datalist = help_data_page($this->portalsql,$columns,$tablenames,$pageindex,$pagesize);
+    function get_list($data) {        
+        $parameter = array(
+            'db' => $this->portalsql, 
+            'columns' => '*', 
+            'tablenames' => 'portal_card', 
+            'pageindex' => (int) element('page', $data, 1), 
+            'pagesize' => (int) element('size', $data, 20), 
+            'wheres' => "1=1", 
+            'joins' => array(), 
+            'order' => array()
+        );
+        if(isset($data['search'])){
+            $parameter['wheres'] = $parameter['wheres'] . " AND name LIKE '%".$data['search']."%'";
+        }
+        if(isset($data['payType'])){
+            $parameter['wheres'] = $parameter['wheres'] . " AND payType='".$data['payType']."'";
+        }
+        if(isset($data['categoryType'])){
+            $parameter['wheres'] = $parameter['wheres'] . " AND categoryType='".$data['categoryType']."'";
+        }        
+        $datalist = help_data_page_all($parameter);
+
         $htmdata = array();
         foreach($datalist['data'] as $row){
             $time = (int)$row['payTime'];

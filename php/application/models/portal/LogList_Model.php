@@ -19,16 +19,17 @@ class LogList_Model extends CI_Model {
 		if(isset($data['search'])){
 			$parameter['wheres'] = $parameter['wheres'] . " AND info LIKE '%".$data['search']."%'";
 		}
-		if(isset($data['sendDate'])){
-			$parameter['wheres'] = $parameter['wheres'] . " AND rec_date > '".$data['sendDate']."'";
+		if(isset($data['startDate'])){
+			$start_date = $data['startDate'] . " 00:00:00";
+            $end_date = $data['endDate'] . " 23:59:59";
+            $parameter['wheres'] = $parameter['wheres'] . " AND (rec_date > '{$start_date}' AND rec_date < '{$end_date}')";			
 		}	
 		$datalist = help_data_page_all($parameter);
 		$arr = array(
 			'state'=>array('code'=>2000,'msg'=>'ok'),
 			'data'=>array(
 				'page'=>$datalist['page'],
-				'list' =>$datalist['data'],
-				'sql' =>$datalist['sqlcmd']
+				'list' =>$datalist['data']
 			)
 		);               
 		return json_encode($arr);

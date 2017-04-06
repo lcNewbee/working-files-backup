@@ -12,10 +12,13 @@ class RadiusConnect_Model extends CI_Model {
 			'tablenames' => 'radius_linkrecordall', 
 			'pageindex' => (int) element('page', $data, 1), 
 			'pagesize' => (int) element('size', $data, 20), 
-			'wheres' => "(name LIKE '%".$data['search']."%' or nasip Like '%".$data['search']."%')", 
+			'wheres' => "1=1", 
 			'joins' => array(), 
 			'order' => array()
 		);
+		if(isset($data['search'])){
+			$parameter['wheres'] = $parameter['wheres'] . " AND (name LIKE '%".$data['search']."%' or nasip Like '%".$data['search']."%')";
+		}
 		if(isset($data['state'])){
 			$parameter['wheres'] = $parameter['wheres'] . " AND state='".$data['state']."'";
 		}
@@ -24,8 +27,7 @@ class RadiusConnect_Model extends CI_Model {
 			'state'=>array('code'=>2000,'msg'=>'ok'),
 			'data'=>array(
 				'page'=>$datalist['page'],
-				'list' => $datalist['data'],
-				'sqlcmd' => $datalist['sqlcmd']
+				'list' => $datalist['data']				
 			)
 		);       
 		return json_encode($arr);

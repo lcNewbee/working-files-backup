@@ -24,13 +24,6 @@ class AccountList_Model extends CI_Model {
             $parameter['wheres'] = $parameter['wheres'] . " AND state='".$data['state']."'";
         }
         $datalist = help_data_page_all($parameter);
-        /*
-        $htmdata = array();
-        foreach($datalist['data'] as $row){
-            $row['octets'] = ( (int)$row['octets'] / 1024 /1024).'M';
-            $htmdata[] = $row;
-        }
-        */
 		$arr = array(
 			'state'=>array('code'=>2000,'msg'=>'ok'),
 			'data'=>array(

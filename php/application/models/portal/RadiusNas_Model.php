@@ -13,10 +13,13 @@ class RadiusNas_Model extends CI_Model {
             'tablenames' => 'radius_nas', 
             'pageindex' => (int) element('page', $data, 1), 
             'pagesize' => (int) element('size', $data, 20), 
-            'wheres' => "name LIKE '%".$data['search']."%' or ip Like '%".$data['search']."%'", 
+            'wheres' => "1=1", 
             'joins' => array(), 
             'order' => array()
         );
+        if(isset($data['search'])){
+            $parameter['wheres'] = $parameter['wheres'] . " AND name LIKE '%".$data['search']."%' OR ip Like '%".$data['search']."%'";
+        }
         $datalist = help_data_page_all($parameter);
 		$arr = array(
 			'state'=>array('code'=>2000,'msg'=>'ok'),            
