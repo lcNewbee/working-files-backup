@@ -3,8 +3,9 @@ import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
-import Button from 'shared/components/Button/Button';
-import Icon from 'shared/components/Icon';
+import {
+  Icon, FormGroup, Button,
+} from 'shared/components';
 import { getActionable } from 'shared/axc';
 import FormContainer from 'shared/components/Organism/FormContainer';
 import Table from 'shared/components/Table';
@@ -122,23 +123,25 @@ export default class LiveMap extends React.PureComponent {
       'onSave',
       'onCloseEditModal',
       'onRemoveItem',
-      'renderGoogleMap',
       'renderActionBar',
-      'addMarkerToMap',
       'onViewBuildingInfo',
+
+      // Google Map
+      'renderGoogleMap',
+      'renderMarkerToGoogleMap',
       'renderGooglePlaceInput',
-      'onLoadGoogleMapScript',
+      'loadMapScript',
+
+      // Baidu Map
+      'renderBaiduMap',
+      'renderMarkerToBaiduMap',
     ]);
   }
 
   componentWillMount() {
     this.actionable = getActionable(this.props);
 
-    if (!window.google || (window.google && !window.google.maps)) {
-      this.onLoadGoogleMapScript();
-    } else if (this.mapContent) {
-      this.renderGoogleMap();
-    }
+    this.loadMapScript();
 
     if (this.actionable) {
       this.listTableOptions = listTableOptions.push(fromJS({
@@ -180,21 +183,16 @@ export default class LiveMap extends React.PureComponent {
     const $$prevData = getCurAppScreenState(prevProps.store);
     const curScreenId = this.props.store.get('curScreenId');
     const curType = this.props.store.getIn([curScreenId, 'curSettings', 'type']);
+    const liveMapType = this.props.curStore.getIn(['curSettings', 'liveMapType']);
+    const lastLiveMapType = prevProps.curStore.getIn(['curSettings', 'liveMapType']);
 
-    // google 实时地图
-    if (curType === '0') {
-      if (typeof window.google !== 'undefined' && this.mapContent) {
-        if (!this.map) {
-          this.renderGoogleMap();
-        } else if ($$thisData !== $$prevData) {
-          // 服务器数据更新需要清空地图
-          this.map = null;
-          this.renderGoogleMap();
-        }
-
-        if (this.isGoogleMapAdd) {
-          this.renderGooglePlaceInput();
-        }
+    // 实时地图
+    if (curType === '0' && this.mapContent) {
+      if ($$thisData !== $$prevData) {
+        this.map = null;
+        this.loadMapScript();
+      } else if (!this.map) {
+        this.loadMapScript();
       }
 
     // 本地建筑列表
@@ -202,39 +200,10 @@ export default class LiveMap extends React.PureComponent {
       this.map = null;
     }
 
+
     // this.renderHeatMap()
   }
-  onLoadGoogleMapScript() {
-    if (!window.google) {
-      this.props.updateScreenCustomProps({
-        loadGoogleMapStatus: 'loading',
-      });
-      utils.loadScript(
-        'https://maps.googleapis.com/maps/api/js?key=AIzaSyBGOC8axWomvnetRPnTdcuNW-a558l-JAU&libraries=places',
-        {
-          timeout: 8000,
-        },
-      )
-      .then(
-        (error) => {
-          if (error) {
-            this.props.updateScreenCustomProps({
-              loadGoogleMapStatus: 'fail',
-            });
-          } else {
-            this.renderGoogleMap();
-            this.props.updateScreenCustomProps({
-              loadGoogleMapStatus: 'ok',
-            });
-          }
-        },
-      );
-    } else {
-      this.props.updateScreenCustomProps({
-        loadGoogleMapStatus: 'ok',
-      });
-    }
-  }
+
   onViewBuildingInfo(e, i) {
     const list = this.props.store.getIn([this.props.route.id, 'data', 'list']);
     const buildId = list.getIn([i, 'id']);
@@ -269,15 +238,255 @@ export default class LiveMap extends React.PureComponent {
       this.props.resetVaildateMsg();
     }
   }
+  loadMapScript() {
+    const liveMapType = this.props.curStore.getIn(['curSettings', 'liveMapType']);
 
-  setMapOnAll(map) {
-    const markers = this.markers;
+    // Google 地图
+    if (liveMapType === 'Google' && this.mapContent) {
+      if (window.google && window.google.maps) {
+        this.renderGoogleMap();
+        this.props.updateScreenCustomProps({
+          loadMapStatus: 'ok',
+        });
+      } else {
+        this.props.updateScreenCustomProps({
+          loadMapStatus: 'loading',
+        });
+        utils.loadScript(
+          'https://maps.googleapis.com/maps/api/js?key=AIzaSyBGOC8axWomvnetRPnTdcuNW-a558l-JAU&libraries=places',
+          {
+            timeout: 8000,
+          },
+        )
+        .then(
+          (error) => {
+            if (error) {
+              this.props.updateScreenCustomProps({
+                loadMapStatus: 'fail',
+              });
+            } else {
+              this.renderGoogleMap();
+              this.props.updateScreenCustomProps({
+                loadMapStatus: 'ok',
+              });
+            }
+          },
+        );
+      }
 
-    for (let i = 0; i < markers.length; i += 1) {
-      markers[i].setMap(map);
+    // 百度地图
+    } else if (liveMapType === 'Baidu' && this.mapContent) {
+      if (window.BMap && window.BMap.Map) {
+        this.props.updateScreenCustomProps({
+          loadMapStatus: 'ok',
+        });
+        this.renderBaiduMap();
+      } else {
+        this.props.updateScreenCustomProps({
+          loadMapStatus: 'loading',
+        });
+        utils.loadScript(
+          'https://api.map.baidu.com/api?v=2.0&ak=po9QoGKxy9nyplgmTHh7SrEPGl48lzDE&callback=initializeBaidu',
+          {
+            timeout: 8000,
+          },
+        )
+        .then(
+          (error) => {
+            if (error) {
+              this.props.updateScreenCustomProps({
+                loadMapStatus: 'fail',
+              });
+            }
+          },
+        );
+        window.initializeBaidu = () => {
+          this.renderBaiduMap();
+          this.props.updateScreenCustomProps({
+            loadMapStatus: 'ok',
+          });
+        };
+      }
     }
   }
-  addMarkerToMap(item, map, index) {
+
+  // Baidu Map
+  renderMarkerToBaiduMap(item, map, index) {
+    const myIcon = new BMap.Icon(
+      buildingIconImg,
+      new BMap.Size(50, 50),
+      {
+      // 指定定位位置。
+      // 当标注显示在地图上时，其所指向的地理位置距离图标左上
+      // 角各偏移10像素和25像素。您可以看到在本例中该位置即是
+        // 图标中央下端的尖角位置。
+        offset: new BMap.Size(10, 25),
+
+        // 设置图片偏移。
+        // 当您需要从一幅较大的图片中截取某部分作为标注图标时，您
+        // 需要指定大图的偏移位置，此做法与css sprites技术类似。
+        imageOffset: new BMap.Size(0, 0 - index * 25),   // 设置图片偏移
+      },
+    );
+    const point = new BMap.Point(item.get('lng'), item.get('lat'));
+    // 创建标注对象并添加到地图
+    const marker = new BMap.Marker(
+      point,
+      {
+        // icon: myIcon,
+      },
+    );
+    const markerId = item.get('id');
+    const contentString = `
+      <div class="m-map__marker-infowindow">
+        <h4>${item.get('name')}</h4>
+        <div class="o-description-list">
+          <dl class="o-description-list-row">
+            <dt>${__('Address')}</dt>
+            <dd>${item.get('address')}</dd>
+          </dl>
+          <dl class="o-description-list-row">
+            <dt>${__('Map Number')}</dt>
+            <dd>${item.get('mapNumber')}</dd>
+          </dl>
+        </div>
+        <div class="m-map__marker-infowindow-footer">
+        ${this.actionable ? (
+          `<button class="a-btn a-btn--primary" id="editBulid${markerId}">
+            ${__('Edit')}
+          </button>`
+        ) : ''}
+        <button class="a-btn a-btn--info" id="viewBulid${markerId}">
+          ${__('View')}
+        </button>
+        </div>
+      </div>
+    `;
+    const infoWindow = new BMap.InfoWindow(contentString, {
+      maxWidth: 500,
+      offset: new BMap.Size(-2, -18),
+    });  // 创建信息窗口对象
+    const geoc = new BMap.Geocoder();
+    const initEvent = false;
+    let editButtonElem = document.getElementById(`editBulid${markerId}`);
+    let viewButtonElem = document.getElementById(`viewBulid${markerId}`);
+
+    infoWindow.addEventListener('open',
+      () => {
+        editButtonElem = document.getElementById(`editBulid${markerId}`);
+        viewButtonElem = document.getElementById(`viewBulid${markerId}`);
+
+        editButtonElem.addEventListener('click', () => {
+          this.props.editListItemByIndex(index);
+          marker.enableDragging();
+        });
+        viewButtonElem.addEventListener('click', () => {
+          this.props.history.push(`/main/group/map/building/${index}`);
+        });
+      },
+    );
+    marker.addEventListener('click', (e) => {
+      map.openInfoWindow(infoWindow, e.point);
+    });
+
+    marker.addEventListener('dragend', (e) => {
+      const curPoint = e.point;
+
+      marker.removeEventListener('click');
+
+      geoc.getLocation(curPoint, (rs) => {
+        const addComp = rs.addressComponents;
+        const address = addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber;
+        const newInfoWindow = new BMap.InfoWindow(address, {
+          maxWidth: 300,
+          height: 0,
+          offset: new BMap.Size(-2, -18),
+        });
+
+        marker.addEventListener('click', (event) => {
+          map.openInfoWindow(newInfoWindow, event.point);
+        });
+
+        this.props.updateCurEditListItem({
+          address,
+          lng: curPoint.lng,
+          lat: curPoint.lat,
+        });
+        this.map.openInfoWindow(newInfoWindow, curPoint);
+      });
+    });
+
+    map.addOverlay(marker);
+
+    return marker;
+  }
+  renderBaiduPlaceInput() {
+    const ac = new BMap.Autocomplete({
+      input: 'address',
+      location: this.map,
+    });
+
+    ac.addEventListener('onconfirm', (e) => {
+      const curValue = e.item.value;
+      const address = curValue.province + curValue.city + curValue.district + curValue.street + curValue.business;
+      const local = new BMap.LocalSearch(this.map, {
+        onSearchComplete: () => {
+          const pp = local.getResults().getPoi(0).point;
+
+          this.map.centerAndZoom(pp);
+          this.props.updateCurEditListItem({
+            address,
+            lng: pp.lng,
+            lat: pp.lat,
+          });
+        },
+      });
+
+      local.search(address);
+    });
+  }
+  renderBaiduMap() {
+    const store = this.props.store;
+    const loadMapStatus = this.props.curStore.getIn(['customProps', 'loadMapStatus']);
+    const list = getCurAppScreenState(store, 'list');
+    const $$settings = getCurAppScreenState(store, 'settings');
+    const markers = [];
+    let center = {
+      lat: 39.915,
+      lng: 116.404,
+    };
+
+    if (!BMap.Map || loadMapStatus !== 'ok') {
+      return;
+    }
+
+    if (list.size > 0) {
+      center = {
+        lat: list.getIn([0, 'lat']),
+        lng: list.getIn([0, 'lng']),
+      };
+    }
+
+    // Create a map object and specify the DOM element for display.
+    if (!this.map) {
+      this.map = new BMap.Map(this.mapContent);
+    }
+    this.map.centerAndZoom(new BMap.Point(center.lng, center.lat), 13);
+    this.map.addControl(new BMap.NavigationControl());
+    this.map.addControl(new BMap.ScaleControl());
+    this.map.addControl(new BMap.GeolocationControl());
+
+    if (this.isChangeMapBuilding) {
+      this.renderBaiduPlaceInput();
+    }
+    list.forEach((item, index) => {
+      markers.push(this.renderMarkerToBaiduMap(item.merge($$settings), this.map, index));
+    });
+    this.markers = markers;
+  }
+
+  // Google Map
+  renderMarkerToGoogleMap(item, map, index) {
     const apIcon = {
       path: google.maps.SymbolPath.CIRCLE,
       scale: 10,
@@ -337,7 +546,6 @@ export default class LiveMap extends React.PureComponent {
     });
     let editButtonElem = document.getElementById(`editBulid${markerId}`);
     let viewButtonElem = document.getElementById(`viewBulid${markerId}`);
-
     infowindow.addListener('domready',
       () => {
         editButtonElem = document.getElementById(`editBulid${markerId}`);
@@ -356,13 +564,12 @@ export default class LiveMap extends React.PureComponent {
       infowindow.open(map, marker);
     });
 
-    this.map.addListener('click', () => {
+    map.addListener('click', () => {
       infowindow.close(map, marker);
     });
 
     return marker;
   }
-
   renderGooglePlaceInput() {
     const geocoder = new google.maps.Geocoder();
     const infowindow = new google.maps.InfoWindow();
@@ -440,10 +647,9 @@ export default class LiveMap extends React.PureComponent {
       });
     }
   }
-
   renderGoogleMap() {
     const store = this.props.store;
-    const googleMapStatus = this.props.curStore.getIn(['customProps', 'loadGoogleMapStatus']);
+    const googleMapStatus = this.props.curStore.getIn(['customProps', 'loadMapStatus']);
     const list = getCurAppScreenState(store, 'list');
     const settings = getCurAppScreenState(store, 'settings');
     const google = window.google;
@@ -453,7 +659,7 @@ export default class LiveMap extends React.PureComponent {
       lng: 113.878773,
     };
 
-    if (googleMapStatus !== 'ok') {
+    if (googleMapStatus !== 'ok' || (google.maps && !google.maps.Map)) {
       return;
     }
 
@@ -471,68 +677,48 @@ export default class LiveMap extends React.PureComponent {
         zoom: 13,
       });
     }
-
+    if (this.isChangeMapBuilding) {
+      this.renderGooglePlaceInput();
+    }
     list.forEach((item, index) => {
-      markers.push(this.addMarkerToMap(item.merge(settings), this.map, index));
+      markers.push(this.renderMarkerToGoogleMap(item.merge(settings), this.map, index));
     });
     this.markers = markers;
   }
+
+  // 头部
   renderActionBar() {
     const { store } = this.props;
     const myScreenId = store.get('curScreenId');
-    const settings = store.getIn([myScreenId, 'curSettings']);
-    const lockButton = null;
-    // const lockButton = (
-    //   settings.get('isLocked') === '1' ? (
-    //     <Button
-    //       icon="lock"
-    //       key="0"
-    //       text={__('Unlock Map')}
-    //       onClick={() => {
-    //         this.props.updateScreenSettings({
-    //           isLocked: '0',
-    //         });
-    //       }}
-    //     />
-    //   ) : (
-    //     <Button
-    //       icon="unlock-alt"
-    //       key="2"
-    //       text={__('Lock Map')}
-    //       onClick={() => {
-    //         this.props.updateScreenSettings({
-    //           isLocked: '1',
-    //         });
-    //       }}
-    //     />
-    //   )
-    // );
+    const $$settings = store.getIn([myScreenId, 'curSettings']);
 
     return (
-      <div className="m-action-bar" key="actionBar">
-        <Switchs
-          options={[
-            {
-              value: '0',
-              label: __('Live Google Map'),
-            }, {
-              value: '1',
-              label: __('Local Building List'),
-            },
-          ]}
-          key="list"
-          value={settings.get('type')}
-          style={{
-            marginLeft: 0,
-            marginRight: '12px',
-          }}
-          onChange={(data) => {
-            this.onCloseEditModal();
-            this.props.updateScreenSettings({
-              type: data.value,
-            });
-          }}
-        />
+      <div className="m-action-bar o-form o-form--flow">
+        <FormGroup className="fl">
+          <Switchs
+            options={[
+              {
+                value: '0',
+                label: __('Live %s Map', $$settings.get('liveMapType')),
+              }, {
+                value: '1',
+                label: __('Local Building List'),
+              },
+            ]}
+            value={$$settings.get('type')}
+            style={{
+              marginLeft: 0,
+              marginRight: '12px',
+            }}
+            onChange={(data) => {
+              this.onCloseEditModal();
+              this.props.updateScreenSettings({
+                type: data.value,
+              });
+            }}
+          />
+        </FormGroup>
+
         {
           this.actionable ? (
             <Button
@@ -542,20 +728,46 @@ export default class LiveMap extends React.PureComponent {
               onClick={
                 () => {
                   this.props.addListItem();
-                  // this.props.changeScreenActionQuery({
-                  //   action: 'add',
-                  //   myTitle: __('Add Building'),
-                  // }
                 }
               }
             />
           ) : null
         }
-        { ((settings.get('type') === '0') && this.actionable) ? lockButton : null }
+        {
+          $$settings.get('type') === '0' ? (
+            <FormGroup
+              label={__('Live Map Type')}
+              type="select"
+              className="fr"
+              value={$$settings.get('liveMapType')}
+              options={[
+                {
+                  value: 'Baidu',
+                  label: 'Baidu',
+                },
+                {
+                  value: 'Google',
+                  label: 'Google',
+                },
+              ]}
+              onChange={(data) => {
+                this.props.createModal({
+                  type: 'confirm',
+                  text: __('切换实时地图类型，将清除所有已部署的AP数据，你确定要切换吗？'),
+                  apply: () => {
+                    this.props.updateScreenSettings({
+                      liveMapType: data.value,
+                    });
+                    this.props.saveScreenSettings();
+                  },
+                });
+              }}
+            />
+          ) : null
+        }
       </div>
     );
   }
-
   render() {
     const { app, store } = this.props;
     const myScreenId = store.get('curScreenId');
@@ -565,13 +777,13 @@ export default class LiveMap extends React.PureComponent {
     const page = store.getIn([myScreenId, 'data', 'page']);
     const editData = store.getIn([myScreenId, 'curListItem']);
     const isOpenHeader = actionQuery.get('action') === 'add' || actionQuery.get('action') === 'edit';
-    const googleMapStatus = this.props.curStore.getIn(['customProps', 'loadGoogleMapStatus']);
+    const googleMapStatus = this.props.curStore.getIn(['customProps', 'loadMapStatus']);
     let mapClassName = 'o-map';
 
     if (isOpenHeader) {
       mapClassName = 'o-map o-map--open';
     }
-    this.isGoogleMapAdd = isOpenHeader && settings.get('type') === LIVE_GOOGLE_MAP;
+    this.isChangeMapBuilding = isOpenHeader && settings.get('type') === LIVE_GOOGLE_MAP;
     return (
       <AppScreen
         {...this.props}
@@ -632,7 +844,9 @@ export default class LiveMap extends React.PureComponent {
                           className="fail"
                           theme="primary"
                           text={__('Reload')}
-                          onClick={this.onLoadGoogleMapScript}
+                          onClick={() => {
+                            this.loadMapScript(this.props.curStore.getIn(['curSettings', 'liveMapType']));
+                          }}
                         />
                       ) : null
                     }

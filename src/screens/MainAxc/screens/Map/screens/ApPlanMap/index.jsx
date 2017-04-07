@@ -62,7 +62,6 @@ export default class View extends React.PureComponent {
       curShowOptionDeviceMac: -100,
       zoom: 100,
     };
-    this.curMapItem = {};
     utils.binds(this,
       [
         'onSave',
@@ -80,10 +79,12 @@ export default class View extends React.PureComponent {
         'transformServerData',
         'savePlaceDevice',
         'onUppaceDrop',
+        'fetchMapList',
       ],
     );
     this.curBuildId = parseInt(props.match.params.id, 10);
     this.curScreenId = props.route.id;
+    this.curMapItem = {};
     this.$$mapList = fromJS([]);
     this.$$mapApList = fromJS({});
   }
@@ -211,9 +212,17 @@ export default class View extends React.PureComponent {
   }
   transformServerData($$newStore) {
     const $$list = $$newStore.getIn([this.curScreenId, 'data', 'list']);
+    const curMapId = $$newStore.getIn([this.curScreenId, 'curSettings', 'curMapId']);
 
     if ($$newStore.getIn([this.curScreenId, 'data', 'maps', 'list'])) {
       this.$$mapList = $$newStore.getIn([this.curScreenId, 'data', 'maps', 'list']);
+      this.curMapItem = this.$$mapList.find(
+        $$item => $$item.get('id') === curMapId,
+      );
+
+      if (this.curMapItem && typeof this.curMapItem.toJS === 'function') {
+        this.curMapItem = this.curMapItem.toJS();
+      }
     }
 
     if ($$list) {
@@ -482,31 +491,31 @@ export default class View extends React.PureComponent {
           }
         </div>
         <div className={mapWarpClassname}>
-          {
-            curMapId ? this.renderCurMap(list, curMapId, myZoom) : (
-              <MapList
-                {...this.props}
-                actionable={this.actionable}
-                $$mapList={$$thisMapList}
-                groupid={this.props.groupid}
-                buildId={this.props.match.params.id}
-                onSelectMap={($$mapItem) => {
-                  const mapId = $$mapItem.getIn(['id']);
-                  const $$mapAps = this.$$mapApList.get(mapId);
+          <MapList
+            {...this.props}
+            actionable={this.actionable}
+            $$mapList={$$thisMapList}
+            groupid={this.props.groupid}
+            buildId={this.props.match.params.id}
+            onSelectMap={($$mapItem) => {
+              const mapId = $$mapItem.getIn(['id']);
+              const $$mapAps = this.$$mapApList.get(mapId);
 
-                  this.curMapItem = $$mapItem.toJS();
-                  this.props.updateScreenSettings({
-                    curMapId: mapId,
-                    curList: $$mapAps,
-                  });
-                }}
-                validateAll={this.props.validateAll}
-                save={this.props.save}
-                fetch={this.props.fetch}
-                saveFile={this.props.saveFile}
-                reciveScreenData={this.props.reciveScreenData}
-              />
-            )
+              this.curMapItem = $$mapItem.toJS();
+              this.props.updateScreenSettings({
+                curMapId: mapId,
+                curList: $$mapAps,
+              });
+            }}
+            validateAll={this.props.validateAll}
+            save={this.props.save}
+            fetch={this.props.fetch}
+            saveFile={this.props.saveFile}
+            reciveScreenData={this.props.reciveScreenData}
+            visible={!curMapId}
+          />
+          {
+            curMapId ? this.renderCurMap(list, curMapId, myZoom) : null
           }
           {
             curMapId ? (

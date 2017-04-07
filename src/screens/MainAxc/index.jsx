@@ -185,7 +185,6 @@ export default class Main extends React.PureComponent {
               <NavLink
                 className="m-breadcrumb__link"
                 to={item.path}
-                onClick={() => this.onClickNav(item.path)}
               >
                 {item.text}
               </NavLink>

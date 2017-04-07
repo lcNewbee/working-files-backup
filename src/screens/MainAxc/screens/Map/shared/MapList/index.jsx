@@ -157,7 +157,7 @@ export default class MapList extends React.PureComponent {
     );
   }
   render() {
-    const { actionable, $$mapList, onSelectMap, app } = this.props;
+    const { actionable, $$mapList, onSelectMap, app, visible } = this.props;
     let mapRatio = '1024 * 760';
     const invalidMsg = app.get('invalid');
     const validateProps = {
@@ -168,6 +168,11 @@ export default class MapList extends React.PureComponent {
     if (this.state.width && this.state.length) {
       mapRatio = `1024 * ${parseInt((this.state.width * 1024) / this.state.length, 10)}`;
     }
+    // 如果不可见
+    if (!visible) {
+      return null;
+    }
+
     return (
       <div className="o-map-list">
         {

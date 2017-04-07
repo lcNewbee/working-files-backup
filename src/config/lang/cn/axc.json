@@ -384,6 +384,8 @@
   "Map Backgroud Image": "地图背景图",
   "Backgroud Image": "背景图",
   "Live Map": "实时地图",
+  "Live Map Type": "实时地图类型",
+  "Live %s Map": "实时 %s 地图",
   "Unlock Map": "解锁",
   "Lock Map": "锁定",
   "Marker Type": "标记类型",

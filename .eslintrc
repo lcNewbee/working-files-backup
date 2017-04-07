@@ -38,7 +38,8 @@
     "guiConfig": true,
     "sessionStorage": true,
     "b28n": true,
-    "google": true
+    "google": true,
+    "BMap": true,
   },
   "rules": {
     "new-cap": [
