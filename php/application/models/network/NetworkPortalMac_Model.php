@@ -15,8 +15,11 @@ class NetworkPortalMac_Model extends CI_Model {
         $datalist = help_data_page($this->db,$columns,$tablenames,$pageindex,$pagesize,$where,$joins);
         $arr = array();
         if(count($datalist['data']) > 0) {
+            $index = 0;
             foreach ($datalist['data'] as $row) {
                 $witeary = $this->get_white_info($row['id']);
+                $index++;
+                $witeary['index'] = $index;
                 $arr[] = $witeary;
             }
         }

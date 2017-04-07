@@ -17,7 +17,7 @@ class AonnectRecord_Model extends CI_Model {
 			'joins' => array(), 
 			'order' => array(array('id','DESC'))
 		); 		
-        if（isset($data['search']){
+        if(isset($data['search'])){
             $parameter['wheres'] = $parameter['wheres'] . " AND ip LIKE '%".$data['search']."%'";
         }
 		$datalist = help_data_page_all($parameter);

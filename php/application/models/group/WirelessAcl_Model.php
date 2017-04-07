@@ -42,7 +42,15 @@ class WirelessAcl_Model extends CI_Model {
             $where = array('mac',$retdata['search']);
         }
         $data = array_page(json_decode(json_encode($result->data->list),true),$retdata['page'],$retdata['size'],$where);        
-        $result->data->list = $data['data'];
+        //添加序号index
+        $datalist = array();
+        $k = 0;
+        foreach($data['data'] as $row){
+            $k++;
+            $row['index'] = $k;
+            $datalist[] = $row;
+        }
+        $result->data->list = $datalist;//$data['data'];
         $result->data->page = $data['page'];
         
         return json_encode($result);
