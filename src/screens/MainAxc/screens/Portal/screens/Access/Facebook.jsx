@@ -12,16 +12,6 @@ import { actions as appActions } from 'shared/containers/app';
 
 const listOptions = fromJS([
   {
-    id: 'id',
-    text: __('ID'),
-    width: '120px',
-    noForm: true,
-    formProps: {
-      type: 'text',
-      required: true,
-    },
-  },
-  {
     id: 'appId',
     text: __('App ID'),
     formProps: {

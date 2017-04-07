@@ -25,8 +25,8 @@ function getPortList() {
 }
 const listOptions = fromJS([
   {
-    id: 'id',
-    text: _('ID'),
+    id: 'index',
+    text: _('NO.'),
     noForm: true,
     formProps: {
       required: true,
@@ -98,7 +98,7 @@ export default class View extends React.Component {
   render() {
     const { store } = this.props;
     const curListOptions = listOptions
-      .setIn([0, 'options'], this.state.portOptions);
+      .setIn([1, 'options'], this.state.portOptions);
 
     return (
       <AppScreen

@@ -15,6 +15,7 @@ const msg = {
   selectFile: __('Firmware File'),
   dictDefaultMessage: __('Drop or click to select file'),
   removefile: __('Remove File'),
+  cancelUpload: __('Cancel upload'),
   currentVersion: __('Current Firmware Version'),
   upAcVersionTitle: __('Upgrading Firmware'),
   backupAcVersion: __('Backup AC Firmware'),
@@ -222,6 +223,7 @@ export default class AcVersion extends PureComponent {
       addRemoveLinks: 'dictCancelUploadConfirmation',
       dictDefaultMessage: msg.dictDefaultMessage,
       dictRemoveFile: msg.removefile,
+      dictCancelUpload: msg.cancelUpload,
     };
 
     return (

@@ -43,7 +43,7 @@ function getCardInformation() {
 }
 
 const uptimeFilter = utils.filter('connectTime');
-
+const flowFilter = utils.filter('flowRate');
 const queryFormOptions = fromJS([
   {
     id: 'state',
@@ -91,6 +91,9 @@ const listOptions = fromJS([
     id: 'octets',
     text: __('Left Traffic'),
     noForm: true,
+    transform(val) {
+      return flowFilter.transform(val);
+    },
   }, {
     id: 'password',
     text: __('Password'),

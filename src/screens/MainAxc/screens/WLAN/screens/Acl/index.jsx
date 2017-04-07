@@ -47,6 +47,14 @@ const settingsOptions = fromJS([
 
 const listOptions = fromJS([
   {
+    id: 'index',
+    text: _('NO.'),
+    noForm: true,
+    formProps: {
+      required: true,
+    },
+  },
+  {
     id: 'mac',
     text: __('MAC Address'),
     formProps: {

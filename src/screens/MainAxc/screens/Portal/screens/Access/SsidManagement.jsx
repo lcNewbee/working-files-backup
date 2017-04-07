@@ -40,14 +40,6 @@ function getApMac() {
 
 const listOptions = fromJS([
   {
-    id: 'id',
-    text: _('ID'),
-    noForm: true,
-    formProps: {
-      type: 'text',
-      required: true,
-    },
-  }, {
     id: 'name',
     text: _('Name'),
     formProps: {
@@ -179,8 +171,8 @@ export default class View extends React.Component {
   }
   render() {
     const curListOptions = listOptions
-      .setIn([5, 'options'], this.state.webTemplateOptions)
-      .setIn([6, 'options'], this.state.macOptions);
+      .setIn([4, 'options'], this.state.webTemplateOptions)
+      .setIn([5, 'options'], this.state.macOptions);
     return (
       <AppScreen
         {...this.props}

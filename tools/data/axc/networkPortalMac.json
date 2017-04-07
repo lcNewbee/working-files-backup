@@ -6,16 +6,19 @@
   "data": {
     "list": [
       {
+        "index":"1",
         "id":"1",
         "interface_bind": "eth0",
         "src_mac":"192.189.2.2",
         "template_name":"asw"
       }, {
+        "index":"2",
         "id":"2",
         "interface_bind": "eth1",
         "src_mac":"192.189.2.3",
         "template_name":"asw"
       }, {
+        "index":"3",
         "id":"3",
         "interface_bind": "eth2",
         "src_mac":"192.189.2.4",

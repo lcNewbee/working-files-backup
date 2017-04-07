@@ -179,6 +179,9 @@ const listOptions = fromJS([
     formProps: {
       required: true,
     },
+    transform(val) {
+      return `${flowFilter.transform(val)}`;
+    },
   }, {
     id: 'basname',
     text: __('Bas Name'),

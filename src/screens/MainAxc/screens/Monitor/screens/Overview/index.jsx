@@ -56,7 +56,7 @@ const ssidTableOptions = fromJS([
     width: '20%',
   }, {
     id: 'rssi',
-    text: __('rssi'),
+    text: __('RSSI'),
     width: '20%',
   },
 ]);

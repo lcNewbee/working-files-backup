@@ -9,7 +9,8 @@ import { actions as screenActions } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 
 let ret;
-
+let s;
+let subVal;
 const uptimeFilter = utils.filter('connectTime');
 const flowFilter = utils.filter('flowRate');
 const queryFormOptions = fromJS([
@@ -79,11 +80,6 @@ const queryFormOptions = fromJS([
 ]);
 const listOptions = fromJS([
   {
-    id: 'index',
-    text: __('No.'),
-    type: 'text',
-    noForm: true,
-  }, {
     id: 'ip',
     text: __('IP'),
     type: 'text',
@@ -162,7 +158,18 @@ const listOptions = fromJS([
       required: true,
     },
     transform(val) {
-      return `${flowFilter.transform(val)}`;
+      s = val;
+      if (s === undefined) {
+        ret = '';
+      } else {
+        subVal = s.slice(0, s.length - 1);
+        if (subVal > 1024) {
+          ret = `${(subVal / 1024).toFixed(2)}Gb`;
+        } else {
+          ret = `${subVal}Mb`;
+        }
+      }
+      return ret;
     },
   }, {
     id: 'outs',
@@ -171,13 +178,38 @@ const listOptions = fromJS([
       required: true,
     },
     transform(val) {
-      return `${flowFilter.transform(val)}`;
+      s = val;
+      if (s === undefined) {
+        ret = '';
+      } else {
+        subVal = s.slice(0, s.length - 1);
+        if (subVal > 1024) {
+          ret = `${(subVal / 1024).toFixed(2)}Gb`;
+        } else {
+          ret = `${subVal}Mb`;
+        }
+      }
+      return ret;
     },
   }, {
     id: 'octets',
     text: __('Used Traffic'),
     formProps: {
       required: true,
+    },
+    transform(val) {
+      s = val;
+      if (s === undefined) {
+        ret = '';
+      } else {
+        subVal = s.slice(0, s.length - 1);
+        if (subVal > 1024) {
+          ret = `${(subVal / 1024).toFixed(2)}Gb`;
+        } else {
+          ret = `${subVal}Mb`;
+        }
+      }
+      return ret;
     },
   }, {
     id: 'basname',
