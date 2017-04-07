@@ -62,6 +62,9 @@ let config = {
         use: [
           {
             loader: 'url-loader',
+            options: {
+              limit: 100,
+            },
           }
         ]
       },
