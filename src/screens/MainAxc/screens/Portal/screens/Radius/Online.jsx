@@ -28,13 +28,13 @@ const listOptions = fromJS([
     id: 'name',
     text: _('Name'),
   },
-  // {
-  //   id: 'sessionTime',
-  //   text: _('Session Time'),
-  //   transform(val) {
-  //     return onlinetimeFilter.transform(val / 1000);
-  //   },
-  // },
+  {
+    id: 'sessionTime',
+    text: _('Session Time'),
+    transform(val) {
+      return onlinetimeFilter.transform(val);
+    },
+  },
   {
     id: 'octets',
     text: __('Available Traffic'),
