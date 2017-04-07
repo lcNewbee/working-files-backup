@@ -1,0 +1,10 @@
+.m-action-bar--form {
+  padding: 10px 0;
+  margin-top: 10px;
+  .form-group > label {
+     min-width: 65px;
+  }
+  .form-group .form-control {
+      margin-left: 100px;
+  }
+}

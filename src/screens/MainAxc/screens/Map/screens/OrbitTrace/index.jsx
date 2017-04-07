@@ -334,12 +334,69 @@ export default class View extends React.Component {
   }
 
   handleChangeQuery(name, data) {
-    this.props.changeScreenQuery(
-      fromJS({
-        [name]: data.value,
-      },
-    ));
-    this.props.fetchScreenData();
+    const curScreenId = this.props.store.get('curScreenId');
+    //Promise.resolve().then(() => {
+      // 清空历史数据，解决修改参数后，在数据返回之前使用历史数据绘图问题
+    this.props.reciveScreenData(fromJS({
+      list: [],
+      macList: [],
+    }), curScreenId);
+    //}).then(() => {
+      this.props.changeScreenQuery(fromJS({ [name]: data.value }));
+    //}).then(() => {
+      this.props.fetchScreenData();
+    //});
+  }
+
+  stationaryPoint(ctx, pathList) { // pathList为数组
+    if (typeof pathList === 'undefined' || pathList.length === 0) return null;
+    pathList.forEach((point) => {
+      ctx.beginPath();
+      ctx.fillStyle = 'red';
+      ctx.arc(point.x, point.y, 3, 0, 2 * Math.PI);
+      ctx.fill();
+    });
+  }
+  // 使用直线连接点
+  drawLineBetweenPoints(ctx, point1, point2) {
+    // ctx.moveTo(point1[0], point1[1]);
+    // console.log('drawLineBetweenPoints');
+    ctx.lineTo(point2[0], point2[1]);
+    ctx.stroke();
+    // sleep(1);
+  }
+
+  // 使用二次贝塞尔曲线连接两点
+  // drawLineBetweenPoints(ctx, point1, point2) {
+  //   // ctx.moveTo(point1[0], point1[1]);
+  //   // console.log('drawLineBetweenPoints');
+  //   // ctx.lineTo(point2[0], point2[1]);
+  //   const x = (point1[0] + point2[0]) / 2;
+  //   const y = (point1[1] + point2[1]) / 2;
+  //   ctx.quadraticCurveTo(point1[0], point1[1], x, y);
+  //   ctx.stroke();
+  //   // sleep(1);
+  // }
+
+  // drawLineBetweenPoints(ctx, pathArr) {
+  //   console.log('drawLineBetweenPoints');
+  //   if (pathArr.length < 1) return null;
+  //   ctx.lineTo(pathArr[0][0], pathArr[0][1]);
+  //   ctx.stroke();
+  //   pathArr.splice(0, 1);
+  //   this.timeout = setTimeout(this.drawLineBetweenPoints(ctx, pathArr), 10);
+  // }
+
+  clearTimeout() {
+    let timeoutLen = this.timeoutVal.length;
+    // console.log('clearTimeout total length', timeoutLen);
+    // if (timeoutLen === 0) return;
+    while (timeoutLen) {
+      clearTimeout(this.timeoutVal[--timeoutLen]);
+      // if (timeoutLen === 0) console.log('timeout clear');
+    }
+    this.timeoutVal = [];
+    // clearTimeout(this.timeout);
   }
 
   // 动态画线

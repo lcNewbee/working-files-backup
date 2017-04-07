@@ -730,7 +730,9 @@ export default class QuickSetup extends React.Component {
             label={__('SSID')}
             value={this.props.store.getIn(['curData', 'ssid'])}
             onChange={(data) => {
-              this.props.updateItemSettings({ ssid: data.value });
+              if (utils.getUtf8Length(data.value) <= 32) {
+                this.props.updateItemSettings({ ssid: data.value });
+              }
             }}
             required
             {...validSsid}
@@ -743,7 +745,7 @@ export default class QuickSetup extends React.Component {
             onChange={(data) => {
               const security = fromJS({
                 mode: data.value,
-                cipher: 'aes',
+                cipher: 'aes&tkip',
                 auth: 'open',
                 keyIndex: '1',
                 keyLength: '64',

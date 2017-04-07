@@ -610,7 +610,7 @@ export default class Basic extends React.Component {
     const keyType = preSecurity.get('keyType') || 'Hex';
     // const key = preSecurity.get('key') || '';
     const keyIndex = preSecurity.get('keyIndex') || '1';
-    const cipher = preSecurity.get('cipher') || 'aes';
+    const cipher = preSecurity.get('cipher') || 'aes&tkip';
     const afterSecurity = preSecurity.set('mode', mode).set('auth', auth)
                           .set('keyType', keyType).set('keyLength', keyLength)
                           .set('keyIndex', keyIndex)
@@ -633,7 +633,7 @@ export default class Basic extends React.Component {
       airTimeEnable: '0',
       security: {
         mode: 'none',
-        cipher: 'aes',
+        cipher: 'aes&tkip',
         auth: 'open',
         keyLength: '64',
         keyType: 'Hex',
@@ -1376,7 +1376,7 @@ export default class Basic extends React.Component {
                         />
                       )
                     }
-                    <div style={{ width: '350px' }}>
+                    <div style={{ width: '370px' }}>
                       { // repeater模式下，对端AP的mac地址输入框
                         (curData.getIn(['radioList', radioId, 'wirelessMode']) === 'repeater') ? (
                           <div>
@@ -1727,7 +1727,7 @@ export default class Basic extends React.Component {
                       {
                         (curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'mode']) === 'none' ||
                         curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'mode']) === 'wep') ? null : (
-                          <div style={{ width: '350px' }}>
+                          <div style={{ width: '370px' }}>
                             <FormGroup
                               label={__('Encryption')}
                               minWidth="66px"
@@ -1766,7 +1766,7 @@ export default class Basic extends React.Component {
                       }
                       {
                         (curData.getIn(['radioList', radioId, 'vapList', '0', 'security', 'mode']) === 'wep') ? (
-                          <div style={{ width: '350px' }}>
+                          <div style={{ width: '370px' }}>
                             <FormGroup
                               label={__('Auth Type')}
                               type="select"
@@ -2139,7 +2139,7 @@ export default class Basic extends React.Component {
             value={tableItemForSsid.getIn(['item', 'security', 'mode'])}
             onChange={(data) => {
               const securDefault = fromJS({
-                cipher: 'aes',
+                cipher: 'aes&tkip',
                 auth: 'shared',
                 keyType: 'Hex',
                 keyIndex: '1',
