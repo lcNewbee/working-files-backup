@@ -48,8 +48,12 @@ class MapSonList extends CI_Controller {
         $arr['locked'] = 1;
         $arr['length'] = element('length',$_POST,100);
         $arr['width'] = element('width',$_POST,100);
-        if ( $this->db->insert('map_son_list', $arr)) {
-            $result = json_encode(json_ok());
+        $arr['column'] = 2;//element('column',$_POST,1);
+        $arr['rows'] = 2;//element('rows',$_POST,1);
+        if ( $this->db->insert('map_son_list', $arr)) {            
+            $result = json_encode(json_ok());  
+            $id = $this->db->insert_id();
+            $this->add_map_area($id,$arr);          
         }
         return $result;
     }
@@ -107,6 +111,48 @@ class MapSonList extends CI_Controller {
         else if($_SERVER['REQUEST_METHOD'] == 'GET') {
             $result = $this->fetch();
             echo json_encode($result);
+        }
+    }
+
+    private function add_map_area($id,$data){
+        //1.得到建筑地图经纬度
+        $query = $this->db->query("select lat,lng from map_list where id=".$data['maplist_id']);
+        if(count($query->result_array()) > 0){
+            $lat = $query->result_array()[0]['lat'];
+            $lng = $query->result_array()[0]['lng'];
+
+            $add_lat = sprintf("%.6f", $data['length'] / $data['rows'] / 10000); 
+            $add_lng = sprintf("%.6f", $data['width'] / $data['column'] / 10000); 
+            //得到纬度 lat （rows）
+            
+            $rows_ary = array();
+            array_push($rows_ary,$lat);
+            for($i = 0; $i < $data['rows']; $i++){  
+                $lat = $lat + $add_lat;
+                array_push($rows_ary,$lat);
+            }
+            
+            $column_ary = array();
+            array_push($column_ary,$lng);
+            for($i = 0; $i < $data['column']; $i++){
+                $lng = $lng + $add_lng;
+                array_push($column_ary,$lng);
+            }
+            
+            for($x = 0; $x < count($rows_ary) - 1; $x++){
+                for($y = 0; $y < count($column_ary) - 1; $y++){
+                    $insary = array(                        
+                        'map_son_id' => $id,
+                        'str_lat' => $rows_ary[$x],
+                        'str_lng' => $column_ary[$y],
+                        'end_lat' => $rows_ary[$x+1],
+                        'end_lng' => $column_ary[$y+1],
+                        'level' => 1,
+                        'describe' => 'test'
+                    );
+                    $this->db->insert('map_area', $insary);
+                }
+            }    
         }
     }
 }
