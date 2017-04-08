@@ -337,6 +337,40 @@ export default class MapList extends React.PureComponent {
               required
             />
             <FormGroup
+              label={__('Rows')}
+              value={this.state.rows}
+              name="rows"
+              type="number"
+              min="1"
+              onChange={
+                (data) => {
+                  this.setState({
+                    rows: data.value,
+                  });
+                }
+              }
+              {...validateProps}
+              errMsg={invalidMsg.get('rows')}
+              required
+            />
+            <FormGroup
+              label={__('Column')}
+              value={this.state.column}
+              name="column"
+              type="number"
+              min="1"
+              onChange={
+                (data) => {
+                  this.setState({
+                    column: data.value,
+                  });
+                }
+              }
+              {...validateProps}
+              errMsg={invalidMsg.get('column')}
+              required
+            />
+            <FormGroup
               label={__('Backgroud Image')}
               value={this.state.mapImg}
               name="mapImg"

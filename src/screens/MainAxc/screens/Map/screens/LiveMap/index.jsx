@@ -105,6 +105,8 @@ const propTypes = {
   closeListItemModal: PropTypes.func,
   changeScreenActionQuery: PropTypes.func,
   addListItem: PropTypes.func,
+  createModal: PropTypes.func,
+  saveScreenSettings: PropTypes.func,
   history: PropTypes.object,
 };
 const defaultProps = {};
@@ -183,8 +185,6 @@ export default class LiveMap extends React.PureComponent {
     const $$prevData = getCurAppScreenState(prevProps.store);
     const curScreenId = this.props.store.get('curScreenId');
     const curType = this.props.store.getIn([curScreenId, 'curSettings', 'type']);
-    const liveMapType = this.props.curStore.getIn(['curSettings', 'liveMapType']);
-    const lastLiveMapType = prevProps.curStore.getIn(['curSettings', 'liveMapType']);
 
     // 实时地图
     if (curType === '0' && this.mapContent) {
@@ -315,25 +315,13 @@ export default class LiveMap extends React.PureComponent {
     const myIcon = new BMap.Icon(
       buildingIconImg,
       new BMap.Size(50, 50),
-      {
-      // 指定定位位置。
-      // 当标注显示在地图上时，其所指向的地理位置距离图标左上
-      // 角各偏移10像素和25像素。您可以看到在本例中该位置即是
-        // 图标中央下端的尖角位置。
-        offset: new BMap.Size(10, 25),
-
-        // 设置图片偏移。
-        // 当您需要从一幅较大的图片中截取某部分作为标注图标时，您
-        // 需要指定大图的偏移位置，此做法与css sprites技术类似。
-        imageOffset: new BMap.Size(0, 0 - index * 25),   // 设置图片偏移
-      },
     );
     const point = new BMap.Point(item.get('lng'), item.get('lat'));
     // 创建标注对象并添加到地图
     const marker = new BMap.Marker(
       point,
       {
-        // icon: myIcon,
+        icon: myIcon,
       },
     );
     const markerId = item.get('id');
@@ -367,7 +355,6 @@ export default class LiveMap extends React.PureComponent {
       offset: new BMap.Size(-2, -18),
     });  // 创建信息窗口对象
     const geoc = new BMap.Geocoder();
-    const initEvent = false;
     let editButtonElem = document.getElementById(`editBulid${markerId}`);
     let viewButtonElem = document.getElementById(`viewBulid${markerId}`);
 
@@ -396,7 +383,8 @@ export default class LiveMap extends React.PureComponent {
 
       geoc.getLocation(curPoint, (rs) => {
         const addComp = rs.addressComponents;
-        const address = addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber;
+        const address = addComp.province + addComp.city + addComp.district +
+            addComp.street + addComp.streetNumber;
         const newInfoWindow = new BMap.InfoWindow(address, {
           maxWidth: 300,
           height: 0,
@@ -428,7 +416,8 @@ export default class LiveMap extends React.PureComponent {
 
     ac.addEventListener('onconfirm', (e) => {
       const curValue = e.item.value;
-      const address = curValue.province + curValue.city + curValue.district + curValue.street + curValue.business;
+      const address = curValue.province + curValue.city + curValue.district +
+          curValue.street + curValue.business;
       const local = new BMap.LocalSearch(this.map, {
         onSearchComplete: () => {
           const pp = local.getResults().getPoi(0).point;

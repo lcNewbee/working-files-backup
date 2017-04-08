@@ -739,6 +739,8 @@
   "Longitude": "经度",
   "Latitude": "纬度",
   "RSSI":"信号质量",
+  "Dubious Client": "可疑客户端",
+
   "Clients ": "客户端应用分析",
   "Ports ": "端口数据分析",
   "Protocols ": "协议信息",
