@@ -41,15 +41,15 @@ const serverChoices = fromJS([
     id: 'serverType',
     label: __('Server Type'),
     className: 'cols col-4',
-    defaultValue: 'local',
+    defaultValue: 'remote',
     display: 'block',
     options: [
       {
-        value: 'local',
-        label: __('Local Server'),
-      }, {
         value: 'remote',
         label: __('Remote Server'),
+      }, {
+        value: 'local',
+        label: __('Local Server'),
       },
     ],
     type: 'switch',
@@ -79,7 +79,7 @@ const authServer = fromJS([
       rules: 'ip',
     }),
     visible(data) {
-      return data.get('serverType') === 'local';
+      return data.get('serverType') === 'remote';
     },
   }, {
     id: 'nasip',
@@ -92,7 +92,7 @@ const authServer = fromJS([
       rules: 'ip',
     }),
     visible(data) {
-      return data.get('serverType') === 'remote';
+      return data.get('serverType') === 'local';
     },
     onChange: (data) => {
       const item = data.item;
@@ -116,7 +116,7 @@ const authServer = fromJS([
   }, {
     id: 'authpri_ipaddr',
     disabled: (data) => {
-      if (data.get('serverType') === 'remote') {
+      if (data.get('serverType') === 'local') {
         return true;
       }
       return false;
@@ -136,7 +136,7 @@ const authServer = fromJS([
   }, {
     id: 'authpri_port',
     disabled: (data) => {
-      if (data.get('serverType') === 'remote') {
+      if (data.get('serverType') === 'local') {
         return true;
       }
       return false;
@@ -152,7 +152,7 @@ const authServer = fromJS([
   }, {
     id: 'authpri_key',
     disabled: (data) => {
-      if (data.get('serverType') === 'remote') {
+      if (data.get('serverType') === 'local') {
         return true;
       }
       return false;
@@ -169,7 +169,7 @@ const authServer = fromJS([
   }, {
     id: 'authsecond_ipaddr',
     disabled: (data) => {
-      if (data.get('serverType') === 'remote') {
+      if (data.get('serverType') === 'local') {
         return true;
       }
       return false;
@@ -188,7 +188,7 @@ const authServer = fromJS([
   }, {
     id: 'authsecond_port',
     disabled: (data) => {
-      if (data.get('serverType') === 'remote') {
+      if (data.get('serverType') === 'local') {
         return true;
       }
       return false;
@@ -202,7 +202,7 @@ const authServer = fromJS([
   }, {
     id: 'authsecond_key',
     disabled: (data) => {
-      if (data.get('serverType') === 'remote') {
+      if (data.get('serverType') === 'local') {
         return true;
       }
       return false;
@@ -222,7 +222,7 @@ const accServer = fromJS([
   {
     id: 'acctpri_ipaddr',
     disabled: (data) => {
-      if (data.get('serverType') === 'remote') {
+      if (data.get('serverType') === 'local') {
         return true;
       }
       return false;
@@ -243,7 +243,7 @@ const accServer = fromJS([
   {
     id: 'acctpri_port',
     disabled: (data) => {
-      if (data.get('serverType') === 'remote') {
+      if (data.get('serverType') === 'local') {
         return true;
       }
       return false;
@@ -259,7 +259,7 @@ const accServer = fromJS([
   }, {
     id: 'acctpri_key',
     disabled: (data) => {
-      if (data.get('serverType') === 'remote') {
+      if (data.get('serverType') === 'local') {
         return true;
       }
       return false;
@@ -276,7 +276,7 @@ const accServer = fromJS([
   }, {
     id: 'acctsecond_ipaddr',
     disabled: (data) => {
-      if (data.get('serverType') === 'remote') {
+      if (data.get('serverType') === 'local') {
         return true;
       }
       return false;
@@ -295,7 +295,7 @@ const accServer = fromJS([
   }, {
     id: 'acctsecond_port',
     disabled: (data) => {
-      if (data.get('serverType') === 'remote') {
+      if (data.get('serverType') === 'local') {
         return true;
       }
       return false;
@@ -309,7 +309,7 @@ const accServer = fromJS([
   }, {
     id: 'acctsecond_key',
     disabled: (data) => {
-      if (data.get('serverType') === 'remote') {
+      if (data.get('serverType') === 'local') {
         return true;
       }
       return false;
@@ -329,7 +329,7 @@ const advancedSetting = fromJS([
   {
     id: 'username_format',
     disabled: (data) => {
-      if (data.get('serverType') === 'remote') {
+      if (data.get('serverType') === 'local') {
         return true;
       }
       return false;
@@ -356,7 +356,7 @@ const advancedSetting = fromJS([
   }, {
     id: 'quiet_time',
     disabled: (data) => {
-      if (data.get('serverType') === 'remote') {
+      if (data.get('serverType') === 'local') {
         return true;
       }
       return false;
@@ -373,7 +373,7 @@ const advancedSetting = fromJS([
   }, {
     id: 'retry_times',
     disabled: (data) => {
-      if (data.get('serverType') === 'remote') {
+      if (data.get('serverType') === 'local') {
         return true;
       }
       return false;
@@ -399,7 +399,7 @@ const advancedSetting = fromJS([
   {
     id: 'accton_enable',
     disabled: (data) => {
-      if (data.get('serverType') === 'remote') {
+      if (data.get('serverType') === 'local') {
         return true;
       }
       return false;
@@ -416,7 +416,7 @@ const advancedSetting = fromJS([
   }, {
     id: 'accton_sendtimes',
     disabled: (data) => {
-      if (data.get('serverType') === 'remote') {
+      if (data.get('serverType') === 'local') {
         return true;
       }
       return false;
@@ -436,7 +436,7 @@ const advancedSetting = fromJS([
   }, {
     id: 'accton_sendinterval',
     disabled: (data) => {
-      if (data.get('serverType') === 'remote') {
+      if (data.get('serverType') === 'local') {
         return true;
       }
       return false;
@@ -458,7 +458,7 @@ const advancedSetting = fromJS([
   {
     id: 'acct_interim_interval',
     disabled: (data) => {
-      if (data.get('serverType') === 'remote') {
+      if (data.get('serverType') === 'local') {
         return true;
       }
       return false;
@@ -475,7 +475,7 @@ const advancedSetting = fromJS([
   }, {
     id: 'realretrytimes',
     disabled: (data) => {
-      if (data.get('serverType') === 'remote') {
+      if (data.get('serverType') === 'local') {
         return true;
       }
       return false;
@@ -674,7 +674,7 @@ export default class View extends React.Component {
             options={serverChoices}
             data={$$curData}
             onChangeData={(data) => {
-              if (data.serverType === 'remote' && this.state.nasIPOptions.size < 1) {
+              if (data.serverType === 'local' && this.state.nasIPOptions.size < 1) {
                 this.props.createModal({
                   type: 'alert',
                   text: __(
