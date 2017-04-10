@@ -113,6 +113,7 @@ const sWips =
 const sEndpointProtection =
   require('../../screens/MainAxc/screens/WLAN/screens/SafePolicy/screens/EndpointProtection');
 
+const sDubiousClient = require('../../screens/MainAxc/screens/DubiousClient');
 const sLiveMap = require('../../screens/MainAxc/screens/Map/screens/LiveMap');
 const sApPlanMap =
     require('../../screens/MainAxc/screens/Map/screens/ApPlanMap');
@@ -517,6 +518,13 @@ const routes = [
                     fetchUrl: '/goform/group/map/orbittrace',
                     text: __('Orbit Trace'),
                     component: sOrbitTrace.Screen,
+                  },
+                  {
+                    id: 'dubiousClient',
+                    path: '/main/group/map/dubious',
+                    formUrl: '/goform/group/map/dubious',
+                    text: __('Dubious Client'),
+                    component: sDubiousClient.Screen,
                   },
                   {
                     id: 'cientsTrace',
