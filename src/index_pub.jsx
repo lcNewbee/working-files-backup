@@ -9,7 +9,7 @@ const appActions = require('shared/containers/app/actions');
 const thunkMiddleware = require('redux-thunk').default;
 const Provider = require('react-redux').Provider;
 const renderRoutesSwitch = require('shared/components/Organism/RouterConfig').renderRoutesSwitch;
-const prodConfig = require('./config/axc3.0').default;
+const prodConfig = require('./config/axcMonitor').default;
 
 const combineReducers = redux.combineReducers;
 const applyMiddleware = redux.applyMiddleware;

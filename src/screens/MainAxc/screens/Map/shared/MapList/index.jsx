@@ -7,6 +7,8 @@ import {
   Modal, FormGroup,
 } from 'shared/components';
 
+let isMoniterAc = false;
+
 function previewFile(file) {
   const retPromise = new Promise((resolve) => {
     let retUrl = '';
@@ -41,6 +43,12 @@ function previewFile(file) {
   return retPromise;
 }
 
+// 处理小于 2.5的版本
+if (window.guiConfig.versionCode >= 30900 && window.guiConfig.versionCode < 30949) {
+  isMoniterAc = true;
+}
+
+
 const propTypes = {
   $$mapList: PropTypes.instanceOf(List),
   actionable: PropTypes.bool,
@@ -56,6 +64,7 @@ const propTypes = {
   validateAll: PropTypes.func,
   reportValidError: PropTypes.func,
   resetVaildateMsg: PropTypes.func,
+  visible: PropTypes.bool,
 
   // 参数
   groupid: PropTypes.any,
@@ -336,40 +345,47 @@ export default class MapList extends React.PureComponent {
               errMsg={invalidMsg.get('width')}
               required
             />
-            <FormGroup
-              label={__('Rows')}
-              value={this.state.rows}
-              name="rows"
-              type="number"
-              min="1"
-              onChange={
-                (data) => {
-                  this.setState({
-                    rows: data.value,
-                  });
-                }
-              }
-              {...validateProps}
-              errMsg={invalidMsg.get('rows')}
-              required
-            />
-            <FormGroup
-              label={__('Column')}
-              value={this.state.column}
-              name="column"
-              type="number"
-              min="1"
-              onChange={
-                (data) => {
-                  this.setState({
-                    column: data.value,
-                  });
-                }
-              }
-              {...validateProps}
-              errMsg={invalidMsg.get('column')}
-              required
-            />
+            {
+              isMoniterAc ? ([
+                <FormGroup
+                  label={__('Rows')}
+                  key="rows"
+                  value={this.state.rows}
+                  name="rows"
+                  type="number"
+                  min="1"
+                  onChange={
+                    (data) => {
+                      this.setState({
+                        rows: data.value,
+                      });
+                    }
+                  }
+                  {...validateProps}
+                  errMsg={invalidMsg.get('rows')}
+                  required
+                />,
+                <FormGroup
+                  label={__('Column')}
+                  value={this.state.column}
+                  key="column"
+                  name="column"
+                  type="number"
+                  min="1"
+                  onChange={
+                    (data) => {
+                      this.setState({
+                        column: data.value,
+                      });
+                    }
+                  }
+                  {...validateProps}
+                  errMsg={invalidMsg.get('column')}
+                  required
+                />,
+              ]) : null
+            }
+
             <FormGroup
               label={__('Backgroud Image')}
               value={this.state.mapImg}
