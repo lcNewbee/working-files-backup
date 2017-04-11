@@ -208,8 +208,9 @@ export default class LiveMap extends React.PureComponent {
         } else if (thisLiveMapType === 'Baidu') {
           if (isOpenHeader) {
             this.renderBaiduPlaceInput(actionType);
-          } else {
+          } else if (this.placeInput) {
             this.placeInput.dispose();
+            this.placeInput = null;
           }
         }
       }
@@ -428,32 +429,91 @@ export default class LiveMap extends React.PureComponent {
     return marker;
   }
   renderBaiduPlaceInput() {
-    this.placeInput = new BMap.Autocomplete({
-      input: 'address',
-      location: this.map,
-    });
+    const myIcon = new BMap.Icon(
+      buildingIconImg,
+      new BMap.Size(50, 50),
+    );
+    const geoc = new BMap.Geocoder();
+    // 创建标注对象并添加到地图
+    let marker = null;
+    const placeInputElem = document.getElementById('address');
 
-    this.placeInput.addEventListener('onconfirm', (e) => {
-      const curValue = e.item.value;
-      const address = curValue.province + curValue.city + curValue.district +
-          curValue.street + curValue.business;
-
-      const local = new BMap.LocalSearch(this.map, {
-        onSearchComplete: () => {
-          const pp = local.getResults().getPoi(0).point;
-
-          this.map.centerAndZoom(pp);
-          this.props.updateCurEditListItem({
-            address,
-            lng: pp.lng,
-            lat: pp.lat,
-          });
-          this.placeInput.setInputValue(address);
-        },
+    if (!this.placeInput) {
+      this.placeInput = new BMap.Autocomplete({
+        input: 'address',
+        location: this.map,
       });
 
-      local.search(address);
-    });
+      this.placeInput.addEventListener('onconfirm', (e) => {
+        const curValue = e.item.value;
+        const address = curValue.province + curValue.city + curValue.district +
+            curValue.street + curValue.business;
+
+        const local = new BMap.LocalSearch(this.map, {
+          onSearchComplete: () => {
+            const pp = local.getResults().getPoi(0).point;
+
+            if (!marker) {
+              marker = new BMap.Marker(
+                pp,
+                {
+                  icon: myIcon,
+                  enableDragging: true,
+                },
+              );
+              this.map.addOverlay(marker);
+              marker.addEventListener('dragend', (event) => {
+                const curPoint = event.point;
+
+                marker.removeEventListener('click');
+
+                geoc.getLocation(curPoint, (rs) => {
+                  const addComp = rs.addressComponents;
+                  const curAddress = addComp.province + addComp.city + addComp.district +
+                      addComp.street + addComp.streetNumber;
+                  const newInfoWindow = new BMap.InfoWindow(curAddress, {
+                    maxWidth: 300,
+                    height: 0,
+                    offset: new BMap.Size(-2, -18),
+                  });
+
+                  marker.addEventListener('click', (event1) => {
+                    this.map.openInfoWindow(newInfoWindow, event1.point);
+                  });
+
+                  this.props.updateCurEditListItem({
+                    address: curAddress,
+                    lng: curPoint.lng,
+                    lat: curPoint.lat,
+                  });
+                  this.map.openInfoWindow(newInfoWindow, curPoint);
+                  this.placeInput.setInputValue(curAddress);
+                });
+              });
+            } else {
+              const infoWindow = new BMap.InfoWindow(address, {
+                maxWidth: 300,
+                height: 0,
+                offset: new BMap.Size(-2, -18),
+              });
+              marker.setPosition(pp);
+              marker.openInfoWindow(infoWindow);
+            }
+
+            this.map.centerAndZoom(pp);
+
+            this.props.updateCurEditListItem({
+              address,
+              lng: pp.lng,
+              lat: pp.lat,
+            });
+            this.placeInput.setInputValue(address);
+          },
+        });
+
+        local.search(address);
+      });
+    }
   }
   renderBaiduMap() {
     const store = this.props.store;
