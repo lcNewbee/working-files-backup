@@ -8,18 +8,18 @@
       {
         "id": 1,
         "mapName": "Floor One",
-        "width": 433,
-        "length": 655,
-        "lat": 22.502313986242,
-        "lng": 113.93832783228,
+        "width": 120,
+        "length": 120,
+        "lat": 43.23123231,
+        "lng": 123.2312323,
         "backgroundImg": "images/map_bg1.jpg"
       }, {
         "id": 2,
         "mapName": "Floor Two",
-        "width": 433,
-        "length": 655,
-        "lat": 22.502313986242,
-        "lng": 113.93832783228,
+        "width": 100,
+        "length": 100,
+        "lat": 43.23123231,
+        "lng": 123.2312323,
         "backgroundImg": "images/map_bg.jpg"
       }
     ]

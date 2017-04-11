@@ -1,0 +1,48 @@
+{
+  "area": [
+    {
+      "id": 0,
+      "total": 222,
+      "level": 1
+    }, {
+      "id": 1,
+      "total": 222,
+      "level": 1
+    }, {
+      "id": 2,
+      "total": 222,
+      "level": 1
+    }, {
+      "id": 3,
+      "total": 222,
+      "level": 1
+    }
+  ],
+  "events": [
+    {
+      "id": 0,
+      "type": "dubiousEnter",
+      "areaId": 1,
+      "areaLevel": 1,
+      "mac": 222
+    }, {
+      "id": 1,
+      "type": "1",
+      "areaId": 2,
+      "areaLevel": 1,
+      "mac": 222
+    }, {
+      "id": 2,
+      "type": "ss",
+      "areaId": 1,
+      "areaLevel": 1,
+      "mac": 222
+    }, {
+      "id": 3,
+      "type": "ss",
+      "areaId": 3,
+      "areaLevel": 1,
+      "mac": 222
+    }
+  ]
+}
