@@ -181,10 +181,16 @@ export default class LiveMap extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    const $$thisData = getCurAppScreenState(this.props.store);
+    const { store } = this.props;
+    const $$thisData = getCurAppScreenState(store);
     const $$prevData = getCurAppScreenState(prevProps.store);
-    const curScreenId = this.props.store.get('curScreenId');
-    const curType = this.props.store.getIn([curScreenId, 'curSettings', 'type']);
+    const curScreenId = store.get('curScreenId');
+    const actionType = store.getIn([curScreenId, 'actionQuery', 'action']);
+    const curType = store.getIn([curScreenId, 'curSettings', 'type']);
+    const prevActionType = $$prevData.getIn([curScreenId, 'actionQuery', 'action']);
+    const prevIsOpenHeader = prevActionType === 'add' || prevActionType === 'edit';
+    const isOpenHeader = actionType === 'add' || actionType === 'edit';
+    const thisLiveMapType = store.getIn([curScreenId, 'curSettings', 'liveMapType']);
 
     // 实时地图
     if (curType === '0' && this.mapContent) {
@@ -194,7 +200,19 @@ export default class LiveMap extends React.PureComponent {
       } else if (!this.map) {
         this.loadMapScript();
       }
-
+      if (prevIsOpenHeader !== isOpenHeader) {
+        if (thisLiveMapType === 'Google') {
+          if (isOpenHeader) {
+            this.renderGooglePlaceInput();
+          }
+        } else if (thisLiveMapType === 'Baidu') {
+          if (isOpenHeader) {
+            this.renderBaiduPlaceInput(actionType);
+          } else {
+            this.placeInput.dispose();
+          }
+        }
+      }
     // 本地建筑列表
     } else {
       this.map = null;
@@ -401,6 +419,7 @@ export default class LiveMap extends React.PureComponent {
           lat: curPoint.lat,
         });
         this.map.openInfoWindow(newInfoWindow, curPoint);
+        this.placeInput.setInputValue(address);
       });
     });
 
@@ -409,15 +428,16 @@ export default class LiveMap extends React.PureComponent {
     return marker;
   }
   renderBaiduPlaceInput() {
-    const ac = new BMap.Autocomplete({
+    this.placeInput = new BMap.Autocomplete({
       input: 'address',
       location: this.map,
     });
 
-    ac.addEventListener('onconfirm', (e) => {
+    this.placeInput.addEventListener('onconfirm', (e) => {
       const curValue = e.item.value;
       const address = curValue.province + curValue.city + curValue.district +
           curValue.street + curValue.business;
+
       const local = new BMap.LocalSearch(this.map, {
         onSearchComplete: () => {
           const pp = local.getResults().getPoi(0).point;
@@ -428,6 +448,7 @@ export default class LiveMap extends React.PureComponent {
             lng: pp.lng,
             lat: pp.lat,
           });
+          this.placeInput.setInputValue(address);
         },
       });
 
@@ -465,9 +486,6 @@ export default class LiveMap extends React.PureComponent {
     this.map.addControl(new BMap.ScaleControl());
     this.map.addControl(new BMap.GeolocationControl());
 
-    if (this.isChangeMapBuilding) {
-      this.renderBaiduPlaceInput();
-    }
     list.forEach((item, index) => {
       markers.push(this.renderMarkerToBaiduMap(item.merge($$settings), this.map, index));
     });
@@ -666,12 +684,12 @@ export default class LiveMap extends React.PureComponent {
         zoom: 13,
       });
     }
-    if (this.isChangeMapBuilding) {
-      this.renderGooglePlaceInput();
-    }
     list.forEach((item, index) => {
       markers.push(this.renderMarkerToGoogleMap(item.merge(settings), this.map, index));
     });
+    if (this.isChangeMapBuilding) {
+      this.renderGooglePlaceInput();
+    }
     this.markers = markers;
   }
 

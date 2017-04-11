@@ -62,3 +62,9 @@ gulp.task('pub:axc3.0', shell.task([
 ], {
   env: { FORCE_COLOR: true },
 }));
+
+gulp.task('pub:axcMonitor', shell.task([
+  `gulp pub -n axcMonitor -d ${paths.pubAxcR1}`,
+], {
+  env: { FORCE_COLOR: true },
+}));

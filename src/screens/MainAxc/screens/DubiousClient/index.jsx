@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import utils from 'shared/utils';
-import validator from 'shared/validator';
 
 // components
 import AppScreen from 'shared/components/Template/AppScreen';
@@ -13,22 +12,23 @@ import { actions as screenActions } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 
 const listOptions = fromJS([
-  {
-    id: 'devicename',
-    text: __('Name'),
-    transform(val, item) {
-      return item.get('devicename') || item.get('mac');
-    },
-    validator: validator({
-      rules: 'utf8Len:[1, 31]',
-    }),
-    formProps: {
-      required: true,
-    },
-  },
+  // {
+  //   id: 'devicename',
+  //   text: __('Name'),
+  //   transform(val, item) {
+  //     return item.get('devicename') || item.get('mac');
+  //   },
+  //   validator: validator({
+  //     rules: 'utf8Len:[1, 31]',
+  //   }),
+  //   formProps: {
+  //     required: true,
+  //   },
+  // },
   {
     id: 'mac',
     text: __('MAC'),
+    width: '180',
     formProps: {
       required: true,
     },
@@ -71,10 +71,10 @@ export default class DubiousClient extends React.Component {
         {...this.props}
         listOptions={listOptions}
         listKey="id"
-        // searchable
-        // searchProps={{
-        //   placeholder: 'MAC',
-        // }}
+        searchable
+        searchProps={{
+          placeholder: 'MAC',
+        }}
         actionable
       />
     );
