@@ -264,5 +264,8 @@
   "App Version":"App版本",
   "This username has benn used":"该用户名已经存在",
   "This IP has existed":"该IP已经存在",
-  "The format of the file is incorrect,please upload zip file!":"文件格式不正确,请选择ZIP格式的文件"
+  "The format of the file is incorrect,please upload zip file!":"文件格式不正确,请选择ZIP格式的文件",
+  "Please choose the date of today or before today!":"请选择今天的日期或者今天之前的日期！",
+  "%s should be the date of today or after %s !":"%s应该为今天的日期或者%s之后的日期！",
+  "%s should be the date of today or before %s!":"%s应该为今天的日期或者%s之前的日期！"
 }
