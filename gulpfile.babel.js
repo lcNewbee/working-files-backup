@@ -112,19 +112,19 @@ gulp.task('default', ['open:src']);
 // 处理浏览器标题
 function changeTitle(name) {
   return gulp.src([`${paths.build}/index.html`])
-      .pipe($.replace('<title>Axilspot Access Manager</title>', `<title>Axilspot ${name}</title>`))
+      .pipe($.replace('<title>Axilspot Access Manager</title>', `<title>Axilspot WIFI ${name}</title>`))
       .pipe(gulp.dest(paths.build));
 }
-gulp.task('changeAIP5Title', () => changeTitle('AIP5'));
-gulp.task('changeAIP10Title', () => changeTitle('AIP10'));
-gulp.task('changeAIP10LTitle', () => changeTitle('AIP10L'));
-gulp.task('changeAEC120Title', () => changeTitle('AEC120'));
-gulp.task('changeAEC175Title', () => changeTitle('AEC175'));
-gulp.task('changeASC175Title', () => changeTitle('ASC175'));
-gulp.task('changeASW3Title', () => changeTitle('ASW3'));
-gulp.task('changeASC120Title', () => changeTitle('ASC120'));
-gulp.task('changeAEC60Title', () => changeTitle('AEC60'));
-gulp.task('changeASC3Title', () => changeTitle('ASC3'));
-gulp.task('changeASC6Title', () => changeTitle('ASC6'));
-gulp.task('changeASW120Title', () => changeTitle('ASW120'));
+gulp.task('changeAIP5Title', () => changeTitle('Bridge'));
+gulp.task('changeAIP10Title', () => changeTitle('AP'));
+gulp.task('changeAIP10LTitle', () => changeTitle('AP'));
+gulp.task('changeAEC120Title', () => changeTitle('AP'));
+gulp.task('changeAEC175Title', () => changeTitle('AP'));
+gulp.task('changeASC175Title', () => changeTitle('AP'));
+gulp.task('changeASW3Title', () => changeTitle('AP'));
+gulp.task('changeASC120Title', () => changeTitle('AP'));
+gulp.task('changeAEC60Title', () => changeTitle('AP'));
+gulp.task('changeASC3Title', () => changeTitle('AP'));
+gulp.task('changeASC6Title', () => changeTitle('AP'));
+gulp.task('changeASW120Title', () => changeTitle('AP'));
 

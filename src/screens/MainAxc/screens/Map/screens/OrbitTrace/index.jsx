@@ -264,6 +264,7 @@ export default class View extends React.Component {
         macList: [],
       }), curScreenId);
     }).then(() => {
+      console.log('list', this.props.store.getIn([curScreenId, 'data', 'list']));
       this.props.changeScreenQuery(fromJS({ mac: value }));
     }).then(() => {
       this.props.fetchScreenData();

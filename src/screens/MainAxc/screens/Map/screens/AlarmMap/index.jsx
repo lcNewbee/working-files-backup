@@ -3,49 +3,46 @@ import utils, { gps } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
-import { FormGroup, Icon, AppScreen } from 'shared/components';
+import { FormGroup, Icon, AppScreen, Modal } from 'shared/components';
 import moment from 'moment';
 import { actions as appActions } from 'shared/containers/app';
 import { actions as screenActions } from 'shared/containers/appScreen';
 import { actions as propertiesActions } from 'shared/containers/properties';
 import './orbitTrace.scss';
 
-function getDistance(p1, p2) {
-  return Math.sqrt(((p1[0] - p2[0]) * (p1[0] - p2[0])) + ((p1[1] - p2[1]) * (p1[1] - p2[1])));
-}
-
 const propTypes = {
+  save: PropTypes.func,
   store: PropTypes.object,
   changeScreenQuery: PropTypes.func,
   fetch: PropTypes.func,
   fetchScreenData: PropTypes.func,
-  reciveScreenData: PropTypes.func,
 };
 const defaultProps = {};
 const defaultQuery = {
   buildId: '',
   curMapId: '',
   mac: '',
-  date: moment().format('YYYY-MM-DD'),
-  fromTime: '00:00:00',
-  toTime: '23:59:59',
 };
 
 export default class View extends React.Component {
   constructor(props) {
     super(props);
-    this.curvePath = [];
-    this.timeoutVal = [];
-    this.pathList = [];
     this.mapMouseDown = false;
-    this.colors = ['#c23531', '#2f4554', '#0093dd', '#d48265', '#91c7ae'];
+    this.colorArr = ['rgba(255, 255, 255, 0)', 'rgba(93, 61, 72, .4)', 'rgba(171, 43, 87, .4)', 'rgba(245, 6, 88, .4)'];
     this.state = {
+      pixelPos: fromJS([]),
       mapList: fromJS([]),
+      editGpsPos: fromJS([]),
       zoom: 100,
       mapOffsetX: 0,
       mapOffsetY: 0,
       mapWidth: 1,
       mapHeight: 1,
+      colorSwitch: true,
+      showId: true,
+      editable: false,
+      showEditModal: false,
+      onEditId: [0, 0],
     };
     utils.binds(this,
       [
@@ -68,8 +65,12 @@ export default class View extends React.Component {
         // 'drawCurvePath',
         'drawCurveAnimPath',
         'drawLineBetweenPoints',
-        'clearTimeout',
         'updateCanvas',
+
+        'chunkPosFromGeoToPixel',
+        'drawGridByPixelPos',
+        'markClientPosOnMap',
+        'renderEditLayor',
       ],
     );
   }
@@ -81,13 +82,13 @@ export default class View extends React.Component {
       }
       this.onChangeBuilding(this.buildOptions.getIn([0, 'value']));
     });
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const curScreenId = this.props.store.get('curScreenId');
-    const thisData = this.props.store.getIn([curScreenId, 'data']);
-    const nextData = nextProps.store.getIn([curScreenId, 'data']);
-    if (!thisData.equals(nextData)) this.clearTimeout();
+    // 请求分块信息并保存
+    this.props.fetch('goform/alarm_map_chunk_pos').then((json) => {
+      if (json.state && json.state.code === 2000) {
+        const posList = fromJS(json.data.list);
+        this.setState({ posList });
+      }
+    });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -116,18 +117,16 @@ export default class View extends React.Component {
       this.preScreenId = curScreenId;
     }
     /** *********************hack over*************************************/
+    if (!this.mapMouseDown) {
+      this.chunkPosFromGeoToPixel(); // 计算像素坐标点
+      const ctx = this.canvasElem.getContext('2d');
+      this.drawGridByPixelPos(ctx); // 画方格
+      this.markClientPosOnMap(ctx);
+    }
   }
 
   componentWillUnmount() {
-    const curScreenId = this.props.store.get('curScreenId');
-    this.clearTimeout();
-    // delete this.curvePath;
-    // delete this.pathList;
-    // 清空数据，解决首次进入，在请求未返回之前使用历史数据绘图问题
-    this.props.reciveScreenData(fromJS({
-      list: [],
-      macList: [],
-    }), curScreenId);
+    clearInterval(this.timeInterval);
   }
 
   onChangeBuilding(id) {
@@ -189,10 +188,6 @@ export default class View extends React.Component {
       });
       this.mapClientX = e.clientX;
       this.mapClientY = e.clientY;
-      if (this.posXBeforeMove !== this.state.mapOffsetX ||
-          this.posYBeforeMove !== this.state.mapOffsetY) {
-        this.clearTimeout();
-      }
     }
   }
   getNaturalWidthAndHeight(url) {
@@ -202,22 +197,259 @@ export default class View extends React.Component {
     this.naturalHeight = image.height;
   }
 
-  clearTimeout() {
-    let timeoutLen = this.timeoutVal.length;
-    // if (timeoutLen === 0) return;
-    while (timeoutLen) {
-      clearTimeout(this.timeoutVal[--timeoutLen]);
-    }
-    this.timeoutVal = [];
-    // clearTimeout(this.timeout);
-  }
-
   generateMacOptions() {
     const store = this.props.store;
     const curScreenId = store.get('curScreenId');
     const macList = store.getIn([curScreenId, 'data', 'macList']) || fromJS([]);
     return macList.toJS().map(mac => ({ value: mac, label: mac }));
   }
+
+  // 将分块经纬度坐标转化为像素坐标,参数posList为immutable类型
+  // mapList为当前建筑物下所有的地图信息
+  // curMapId是当前地图id
+  chunkPosFromGeoToPixel() {
+    const posList = this.state.posList;
+    const curMapId = this.state.curMapId;
+    const mapList = this.mapList;
+    // console.log('curMapId', curMapId);
+    if (typeof posList === 'undefined' || typeof curMapId === 'undefined') return null;
+    let storeArr = fromJS({}); // 避免重复计算，计算一个点后，将计算结果保存
+    const firstLen = posList.size;
+    let pixelPos = fromJS([]);
+    const curItem = mapList.find(item => item.get('id') === curMapId);
+    for (let i = 0; i < firstLen; i++) {
+      // console.log('i', i);
+      const secondLen = posList.get(i).size;
+      for (let j = 0; j < secondLen; j++) {
+        const staLng = posList.getIn([i, j, 'sta_lng']);
+        const staLat = posList.getIn([i, j, 'sta_lat']);
+        const endLng = posList.getIn([i, j, 'end_lng']);
+        const endLat = posList.getIn([i, j, 'end_lat']);
+        const level = posList.getIn([i, j, 'level']);
+        const describe = posList.getIn([i, j, 'describe']);
+        const id = posList.getIn([i, j, 'id']);
+        let startX; let startY; let endX; let endY;
+        if (storeArr.get(staLng) && storeArr.get(staLat)) {
+          startX = storeArr.get(staLng);
+          startY = storeArr.get(staLat);
+        } else {
+          const startPoint = { lng: staLng, lat: staLat };
+          const startRet = gps.getOffsetFromGpsPoint(startPoint, curItem.toJS());
+          startX = Math.floor((startRet.x * this.state.mapWidth) / 100);
+          startY = Math.floor((startRet.y * this.state.mapHeight) / 100);
+          storeArr = storeArr.set(staLng, startX).set(staLat, startY);
+        }
+        if (storeArr.get(endLng) && storeArr.get(endLat)) {
+          endX = storeArr.get(endLng);
+          endY = storeArr.get(endLat);
+        } else {
+          const endPoint = { lng: endLng, lat: endLat };
+          const endRet = gps.getOffsetFromGpsPoint(endPoint, curItem.toJS());
+          endX = Math.floor((endRet.x * this.state.mapWidth) / 100);
+          endY = Math.floor((endRet.y * this.state.mapHeight) / 100);
+          storeArr = storeArr.set(endLng, endX).set(endLat, endY);
+        }
+        pixelPos = pixelPos.setIn([i, j, 'startX'], startX).setIn([i, j, 'startY'], startY)
+                          .setIn([i, j, 'endX'], endX).setIn([i, j, 'endY'], endY)
+                          .setIn([i, j, 'level'], level).setIn([i, j, 'id'], id)
+                          .setIn([i, j, 'describe'], describe);
+      }
+    }
+    this.setState({ pixelPos });
+  }
+
+  // 利用转化后的坐标信息绘制网格线
+  drawGridByPixelPos(ctx) {
+    const pixelPos = this.state.pixelPos;
+    const firstLen = pixelPos.size;
+    const colorArr = this.colorArr;
+    ctx.clearRect(0, 0, this.state.mapWidth, this.state.mapHeight);
+    for (let i = 0; i < firstLen; i++) {
+      const secondLen = pixelPos.get(i).size;
+      for (let j = 0; j < secondLen; j++) {
+        const startX = pixelPos.getIn([i, j, 'startX']);
+        const startY = pixelPos.getIn([i, j, 'startY']);
+        const endX = pixelPos.getIn([i, j, 'endX']);
+        const endY = pixelPos.getIn([i, j, 'endY']);
+        const id = pixelPos.getIn([i, j, 'id']);
+        // 绘制网格和网格着色
+        ctx.beginPath();
+        ctx.moveTo(startX, startY);
+        ctx.strokeStyle = 'rgba(230, 6, 6, .65)';
+        ctx.lineWidth = 1;
+        ctx.lineTo(endX, startY);
+        ctx.lineTo(endX, endY);
+        ctx.lineTo(startX, endY);
+        ctx.closePath();
+        ctx.stroke();
+        if (this.state.colorSwitch) {
+          const level = pixelPos.getIn([i, j, 'level']);
+          const color = level < colorArr.length ? colorArr[level] : colorArr[colorArr.length - 1];
+          ctx.fillStyle = color;
+          ctx.fill();
+        }
+        // 绘制文本，网格显示编号
+        if (this.state.showId) {
+          const font = Math.round((endX - startX) / 5);
+          ctx.fillStyle = 'blue';
+          ctx.font = `bold ${font}px Courier New`;
+          ctx.fillText(id, ((startX + endX) / 2) - Math.round(font / 2),
+                      ((startY + endY) / 2) + Math.round(font / 2));
+        }
+      }
+    }
+  }
+
+  // 标记坐标点和显示告警动画
+  markClientPosOnMap(ctx) {
+    const pixelPos = this.state.pixelPos;
+    const curScreenId = this.props.store.get('curScreenId');
+    const clientList = this.props.store.getIn([curScreenId, 'data', 'list']);
+    const curMapId = this.state.curMapId;
+    const mapList = this.mapList;
+    const curItem = mapList.find(item => item.get('id') === curMapId);
+    if (typeof curItem === 'undefined') return null;
+    // 计算像素坐标点
+    const clientPos = clientList.map((item) => {
+      const ret = gps.getOffsetFromGpsPoint(item.toJS(), curItem.toJS());
+      const x = Math.floor((ret.x * this.state.mapWidth) / 100);
+      const y = Math.floor((ret.y * this.state.mapHeight) / 100);
+      return fromJS({
+        x, y, mac: item.get('mac'),
+      });
+    });
+    // 在图上画出坐标点
+    clientPos.forEach((item) => {
+      ctx.beginPath();
+      ctx.arc(item.get('x'), item.get('y'), 5, 0, 2 * Math.PI);
+      ctx.fillStyle = 'green';
+      ctx.fill();
+    });
+
+    // 找出需要告警的区域
+    const chunks = clientPos.map((item) => {
+      const firstLen = pixelPos.size;
+      for (let i = 0; i < firstLen; i++) {
+        const secondLen = pixelPos.get(i).size;
+        for (let j = 0; j < secondLen; j++) {
+          const posX = item.get('x');
+          const posY = item.get('y');
+          const { endX, startX, endY, startY } = pixelPos.getIn([i, j]).toJS();
+          if (posX >= startX && posX < endX && posY >= startY && posY < endY) {
+            return pixelPos.getIn([i, j]);
+          }
+        }
+      }
+      return fromJS({});
+    }).filter((chunk) => {
+      if (chunk.isEmpty() || chunk.get('level') === 0) return false;
+      return true;
+    });
+    // 告警动画
+    let startOpacity = 1;
+    let step = -0.2;
+    const alarmCtx = this.alarmCanvas.getContext('2d');
+    clearInterval(this.timeInterval);
+    this.timeInterval = window.setInterval(() => {
+      if (startOpacity <= 0) {
+        startOpacity = 0;
+        step = Math.abs(step);
+      } else if (startOpacity >= 1) {
+        startOpacity = 1;
+        step = -Math.abs(step);
+      }
+      startOpacity += step;
+      // console.log('startOpacity', startOpacity);
+      alarmCtx.strokeStyle = `rgba(255, 0, 0, ${startOpacity})`;
+      alarmCtx.lineWidth = 5;
+      chunks.forEach((chunk) => {
+        const startX = chunk.get('startX');
+        const startY = chunk.get('startY');
+        const endX = chunk.get('endX');
+        const endY = chunk.get('endY');
+        alarmCtx.clearRect(startX, startY, endX - startX, endY - startY);
+        alarmCtx.beginPath();
+        alarmCtx.moveTo(startX, startY);
+        alarmCtx.lineTo(endX, startY);
+        alarmCtx.lineTo(endX, endY);
+        alarmCtx.lineTo(startX, endY);
+        alarmCtx.closePath();
+        alarmCtx.stroke();
+      });
+    }, 100);
+  }
+
+  renderEditLayor() {
+    const editable = this.state.editable;
+    const myZoom = this.state.zoom;
+    if (!editable) return null;
+    return (
+      <div
+        ref={(editLayor) => {
+          if (editLayor) {
+            this.editLayor = editLayor;
+          }
+        }}
+        style={{
+          left: this.state.mapOffsetX,
+          top: this.state.mapOffsetY,
+          width: `${((myZoom * this.naturalWidth) / 100)}px`,
+          height: `${((myZoom * this.naturalHeight) / 100)}px`,
+          position: 'absolute',
+        }}
+        onMouseDown={this.onMapMouseDown}
+        onMouseUp={this.onMapMouseUp}
+        onMouseMove={this.onMapMouseMove}
+      >
+        {
+          (() => {
+            // console.log('this.state.pixelPos', this.state.pixelPos);
+            if (this.state.pixelPos.isEmpty()) return null;
+            const pixelPos = this.state.pixelPos;
+            const firstLen = this.state.pixelPos.size;
+            // const that = this;
+            const nodeList = [];
+            for (let i = 0; i < firstLen; i++) {
+              // console.log('i', i);
+              const secondLen = pixelPos.get(i).size;
+              for (let j = 0; j < secondLen; j++) {
+                const {
+                  endX, startX, endY, startY, id, level, describe,
+                } = pixelPos.getIn([i, j]).toJS();
+                // const width = Math.round((endX - startX) / 5);
+                nodeList.push(
+                  <Icon
+                    name="edit"
+                    id={id}
+                    style={{
+                      position: 'absolute',
+                      cursor: 'pointer',
+                      top: `${startY}px`,
+                      left: `${startX}px`,
+                      fontSize: `${Math.round((28 * this.state.zoom) / 100)}px`,
+                    }}
+                    onClick={() => {
+                      const editGpsPos = this.state.posList;
+                      const cLen = editGpsPos.get(0).size;
+                      const r = Math.floor((id - 1) / cLen);
+                      const c = (id - (r * cLen)) - 1;
+                      this.setState({
+                        editGpsPos,
+                        showEditModal: true,
+                        onEditId: [r, c],
+                      });
+                    }}
+                  />,
+                );
+              }
+            }
+            return nodeList;
+          })()
+        }
+      </div>
+    );
+  }
+
   renderCurMap(mapList, curMapId, myZoom) {
     const curItem = mapList.find(item => item.get('id') === curMapId);
     const imgUrl = curItem ? curItem.get('backgroundImg') : '';
@@ -261,20 +493,34 @@ export default class View extends React.Component {
             top: 0,
           }}
         />
+        <canvas
+          ref={(alarmCanvas) => {
+            if (alarmCanvas && this.alarmCanvas !== alarmCanvas) {
+              this.alarmCanvas = alarmCanvas;
+            }
+          }}
+          width={this.state.mapWidth}
+          height={this.state.mapHeight}
+          style={{
+            position: 'absolute',
+            left: 0,
+            top: 0,
+          }}
+        />
       </div>
     );
   }
 
   render() {
     const myZoom = this.state.zoom;
-    const { store } = this.props;
-    const curScreenId = store.get('curScreenId');
     if (!this.mapList) return null;
 
     return (
       <AppScreen
         {...this.props}
         initOption={{
+          isFetchInfinite: true,
+          fetchIntervalTime: 10000,
           query: defaultQuery,
         }}
       >
@@ -300,14 +546,51 @@ export default class View extends React.Component {
             value={this.state.curMapId}
             onChange={data => this.onChangeMapId(data.value)}
           />
+          {
+            /**
+             <FormGroup
+              type="select"
+              className="fl"
+              label={__('Client')}
+              options={this.generateMacOptions()}
+              value={store.getIn([curScreenId, 'query', 'mac'])}
+              onChange={data => this.onChangeMac(data.value)}
+              searchable
+            />
+             */
+          }
           <FormGroup
-            type="select"
+            type="checkbox"
             className="fl"
-            label={__('Client')}
-            options={this.generateMacOptions()}
-            value={store.getIn([curScreenId, 'query', 'mac'])}
-            onChange={data => this.onChangeMac(data.value)}
-            searchable
+            label={__('Show Priority')}
+            checked={this.state.colorSwitch}
+            onChange={(data) => {
+              this.setState({
+                colorSwitch: data.value === '1',
+              });
+            }}
+          />
+          <FormGroup
+            type="checkbox"
+            className="fl"
+            label={__('Show ID')}
+            checked={this.state.showId}
+            onChange={(data) => {
+              this.setState({
+                showId: data.value === '1',
+              });
+            }}
+          />
+          <FormGroup
+            type="checkbox"
+            className="fl"
+            label={__('Priority Editable')}
+            checked={this.state.editable}
+            onChange={(data) => {
+              this.setState({
+                editable: data.value === '1',
+              });
+            }}
           />
         </div>
         <div
@@ -339,7 +622,77 @@ export default class View extends React.Component {
               }}
             />
           </div>
+          {this.renderEditLayor()}
         </div>
+        <Modal
+          draggable
+          isShow={this.state.showEditModal}
+          title={`${__('Edit')}: ${(this.state.onEditId[0] * this.state.posList.get(0).size) + (this.state.onEditId[1] + 1)}`}
+          onClose={() => {
+            this.setState({
+              editGpsPos: fromJS([]),
+              showEditModal: false,
+            });
+          }}
+          onOk={() => {
+            const curScreenId = this.props.store.get('curScreenId');
+            this.props.save('goform/change_priority_settings', {
+              list: this.state.editGpsPos.toJS(),
+              buildId: this.state.buildId,
+              curMapId: this.state.curMapId,
+              groupid: this.props.store.getIn([curScreenId, 'query', 'groupid']),
+            }).then((json) => {
+              if (json.state && json.state.code === 2000) {
+                this.setState({
+                  editGpsPos: fromJS([]),
+                  showEditModal: false,
+                });
+              }
+            }).then(() => {
+              this.props.fetch('goform/alarm_map_chunk_pos', {
+                buildId: this.state.buildId,
+                curMapId: this.state.curMapId,
+                groupid: this.props.store.getIn([curScreenId, 'query', 'groupid']),
+              }).then((json) => {
+                if (json.state && json.state.code === 2000) {
+                  const posList = fromJS(json.data.list);
+                  this.setState({ posList });
+                }
+              });
+            });
+          }}
+        >
+          <FormGroup
+            type="select"
+            label={__('Priority')}
+            value={this.state.editGpsPos.getIn([this.state.onEditId[0], this.state.onEditId[1], 'level'])}
+            options={[
+              { value: 0, label: '0' },
+              { value: 1, label: '1' },
+              { value: 2, label: '2' },
+              { value: 3, label: '3' },
+            ]}
+            onChange={(data) => {
+              let editGpsPos = this.state.editGpsPos;
+              const i = this.state.onEditId[0];
+              const j = this.state.onEditId[1];
+              editGpsPos = editGpsPos.setIn([i, j, 'level'], data.value);
+              this.setState({ editGpsPos });
+            }}
+          />
+          <FormGroup
+            type="textarea"
+            label={__('Description')}
+            value={this.state.editGpsPos.getIn([this.state.onEditId[0], this.state.onEditId[1], 'describe'])}
+            onChange={(data) => {
+              let editGpsPos = this.state.editGpsPos;
+              const i = this.state.onEditId[0];
+              const j = this.state.onEditId[1];
+              editGpsPos = editGpsPos.setIn([i, j, 'describe'], data.value);
+              this.setState({ editGpsPos });
+            }}
+          />
+        </Modal>
       </AppScreen>
     );
   }
