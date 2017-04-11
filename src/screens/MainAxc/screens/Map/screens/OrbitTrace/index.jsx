@@ -40,7 +40,7 @@ function stationaryPoint(ctx, pathList) {
   if (pathList && pathList.length > 0) {
     ctx.strokeStyle = 'red';
     ctx.lineWidth = 1;
-    
+
     pathList.forEach((point) => {
       ctx.beginPath();
       ctx.arc(point.x, point.y, 3, 0, 2 * Math.PI);
@@ -111,7 +111,7 @@ export default class View extends React.Component {
     this.timeoutVal = [];
     this.pathList = [];
     this.mapMouseDown = false;
-    this.colors = ['#c23531', '#2f4554', '#0093dd', '#d48265', '#91c7ae'];
+    this.colors = ['#2f4554', '#0093dd', '#d48265', '#91c7ae'];
     this.state = {
       mapList: fromJS([]),
       zoom: 100,
@@ -430,8 +430,8 @@ export default class View extends React.Component {
     // 经纬度转换为画布上的像素
     const pathListPixel = $$pathList.toJS().map(($$point) => {
       const ret = gps.getOffsetFromGpsPoint($$point, curItem.toJS());
-      const x = Math.floor((ret.x * this.state.mapWidth) / 100) + 0.5;
-      const y = Math.floor((ret.y * this.state.mapHeight) / 100) + 0.5;
+      const x = Math.floor((ret.x * this.state.mapWidth) / 100);
+      const y = Math.floor((ret.y * this.state.mapHeight) / 100);
       return { x, y };
     });
 
@@ -507,6 +507,14 @@ export default class View extends React.Component {
     // 获取图片的原始大小
     // 如果使用百分比设置canvas的宽高，当浏览器放大缩小时，画布不会重绘，导致画布图案超出图片
     this.getNaturalWidthAndHeight(imgUrl);
+
+    let width = this.state.mapWidth;
+    let height = this.state.mapHeight;
+
+    if (window.devicePixelRatio) {
+      height = height * window.devicePixelRatio;
+      width = width * window.devicePixelRatio;
+    }
     return (
       <div
         className="o-map-container"
@@ -536,8 +544,8 @@ export default class View extends React.Component {
               this.canvasElem = canvasElem;
             }
           }}
-          width={this.state.mapWidth}
-          height={this.state.mapHeight}
+          width={width}
+          height={height}
           style={{
             position: 'absolute',
             left: 0,
