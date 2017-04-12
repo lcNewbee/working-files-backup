@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { FormGroup, Icon, AppScreen, Modal } from 'shared/components';
+import moment from 'moment';
 import { actions as appActions } from 'shared/containers/app';
 import { actions as screenActions } from 'shared/containers/appScreen';
 import { actions as propertiesActions } from 'shared/containers/properties';
@@ -28,12 +29,12 @@ export default class View extends React.Component {
     super(props);
     this.mapMouseDown = false;
     this.colorArr = ['rgba(255, 255, 255, 0)', 'rgba(93, 61, 72, .4)', 'rgba(171, 43, 87, .4)', 'rgba(245, 6, 88, .4)'];
+    this.clientPos = fromJS([]);
     this.state = {
       pixelPos: fromJS([]),
       mapList: fromJS([]),
       editGpsPos: fromJS([]),
       posList: fromJS([]),
-      clientPos: fromJS([]),
       zoom: 100,
       mapOffsetX: 0,
       mapOffsetY: 0,
@@ -222,37 +223,46 @@ export default class View extends React.Component {
     // console.log('curMapId', curMapId);
     if (typeof posList === 'undefined' || typeof curMapId === 'undefined') return null;
     let storeArr = fromJS({}); // 避免重复计算，计算一个点后，将计算结果保存
+    const firstLen = posList.size;
+    let pixelPos = fromJS([]);
     const curItem = mapList.find(item => item.get('id') === curMapId);
-    const pixelPos = posList.map((item, index) => {
-      const staLng = item.get('sta_lng');
-      const staLat = item.get('sta_lat');
-      const endLng = item.get('end_lng');
-      const endLat = item.get('end_lat');
-      const level = item.get('level');
-      const { describe, id } = item.toJS();
-      let startX; let startY; let endX; let endY;
-      if (storeArr.get(staLng) && storeArr.get(staLat)) {
-        startX = storeArr.get(staLng);
-        startY = storeArr.get(staLat);
-      } else {
-        const startPoint = { lng: staLng, lat: staLat };
-        const startRet = gps.getOffsetFromGpsPoint(startPoint, curItem.toJS());
-        startX = Math.floor((startRet.x * this.state.mapWidth) / 100);
-        startY = Math.floor((startRet.y * this.state.mapHeight) / 100);
-        storeArr = storeArr.set(staLng, startX).set(staLat, startY);
+    for (let i = 0; i < firstLen; i++) {
+      // console.log('i', i);
+      const secondLen = posList.get(i).size;
+      for (let j = 0; j < secondLen; j++) {
+        const staLng = posList.getIn([i, j, 'sta_lng']);
+        const staLat = posList.getIn([i, j, 'sta_lat']);
+        const endLng = posList.getIn([i, j, 'end_lng']);
+        const endLat = posList.getIn([i, j, 'end_lat']);
+        const level = posList.getIn([i, j, 'level']);
+        const { describe, id, index } = posList.getIn([i, j]).toJS();
+        let startX; let startY; let endX; let endY;
+        if (storeArr.get(staLng) && storeArr.get(staLat)) {
+          startX = storeArr.get(staLng);
+          startY = storeArr.get(staLat);
+        } else {
+          const startPoint = { lng: staLng, lat: staLat };
+          const startRet = gps.getOffsetFromGpsPoint(startPoint, curItem.toJS());
+          startX = Math.floor((startRet.x * this.state.mapWidth) / 100);
+          startY = Math.floor((startRet.y * this.state.mapHeight) / 100);
+          storeArr = storeArr.set(staLng, startX).set(staLat, startY);
+        }
+        if (storeArr.get(endLng) && storeArr.get(endLat)) {
+          endX = storeArr.get(endLng);
+          endY = storeArr.get(endLat);
+        } else {
+          const endPoint = { lng: endLng, lat: endLat };
+          const endRet = gps.getOffsetFromGpsPoint(endPoint, curItem.toJS());
+          endX = Math.floor((endRet.x * this.state.mapWidth) / 100);
+          endY = Math.floor((endRet.y * this.state.mapHeight) / 100);
+          storeArr = storeArr.set(endLng, endX).set(endLat, endY);
+        }
+        pixelPos = pixelPos.setIn([i, j, 'startX'], startX).setIn([i, j, 'startY'], startY)
+                          .setIn([i, j, 'endX'], endX).setIn([i, j, 'endY'], endY)
+                          .setIn([i, j, 'level'], level).setIn([i, j, 'id'], id)
+                          .setIn([i, j, 'describe'], describe).setIn([i, j, 'index'], ((i * secondLen) + j + 1));
       }
-      if (storeArr.get(endLng) && storeArr.get(endLat)) {
-        endX = storeArr.get(endLng);
-        endY = storeArr.get(endLat);
-      } else {
-        const endPoint = { lng: endLng, lat: endLat };
-        const endRet = gps.getOffsetFromGpsPoint(endPoint, curItem.toJS());
-        endX = Math.floor((endRet.x * this.state.mapWidth) / 100);
-        endY = Math.floor((endRet.y * this.state.mapHeight) / 100);
-        storeArr = storeArr.set(endLng, endX).set(endLat, endY);
-      }
-      return fromJS({ startX, startY, endX, endY, level, id, describe, index });
-    });
+    }
     this.setState({ pixelPos });
   }
 
@@ -260,34 +270,40 @@ export default class View extends React.Component {
   drawGridByPixelPos(ctx) {
     const pixelPos = this.state.pixelPos;
     if (typeof pixelPos === 'undefined' || pixelPos.isEmpty()) return null;
+    const firstLen = pixelPos.size;
     const colorArr = this.colorArr;
     ctx.clearRect(0, 0, this.state.mapWidth, this.state.mapHeight);
-    pixelPos.forEach((item) => {
-      const { startX, startY, endX, endY, id, index, level } = item.toJS();
-      // 绘制网格和网格着色
-      ctx.beginPath();
-      ctx.moveTo(startX, startY);
-      ctx.strokeStyle = 'rgba(230, 6, 6, .65)';
-      ctx.lineWidth = 1;
-      ctx.lineTo(endX, startY);
-      ctx.lineTo(endX, endY);
-      ctx.lineTo(startX, endY);
-      ctx.closePath();
-      ctx.stroke();
-      if (this.state.colorSwitch) {
-        const color = +level < colorArr.length ? colorArr[level] : colorArr[colorArr.length - 1];
-        ctx.fillStyle = color;
-        ctx.fill();
+    for (let i = 0; i < firstLen; i++) {
+      const secondLen = pixelPos.get(i).size;
+      for (let j = 0; j < secondLen; j++) {
+        const { startX, startY, endX, endY, id, index } = pixelPos.getIn([i, j]).toJS();
+        console.log('pixlpos', pixelPos.toJS());
+        // 绘制网格和网格着色
+        ctx.beginPath();
+        ctx.moveTo(startX, startY);
+        ctx.strokeStyle = 'rgba(230, 6, 6, .65)';
+        ctx.lineWidth = 1;
+        ctx.lineTo(endX, startY);
+        ctx.lineTo(endX, endY);
+        ctx.lineTo(startX, endY);
+        ctx.closePath();
+        ctx.stroke();
+        if (this.state.colorSwitch) {
+          const level = pixelPos.getIn([i, j, 'level']);
+          const color = level < colorArr.length ? colorArr[level] : colorArr[colorArr.length - 1];
+          ctx.fillStyle = color;
+          ctx.fill();
+        }
+        // 绘制文本，网格显示编号
+        if (this.state.showId) {
+          const font = Math.round((endX - startX) / 5);
+          ctx.fillStyle = 'blue';
+          ctx.font = `bold ${font}px Courier New`;
+          ctx.fillText(index, ((startX + endX) / 2) - Math.round(font / 2),
+                      ((startY + endY) / 2) + Math.round(font / 2));
+        }
       }
-      // 绘制文本，网格显示编号
-      if (this.state.showId) {
-        const font = Math.round((endX - startX) / 5);
-        ctx.fillStyle = 'blue';
-        ctx.font = `bold ${font}px Courier New`;
-        ctx.fillText(index + 1, ((startX + endX) / 2) - Math.round(font / 2),
-                    ((startY + endY) / 2) + Math.round(font / 2));
-      }
-    });
+    }
   }
 
   // 标记坐标点和显示告警动画
@@ -301,15 +317,17 @@ export default class View extends React.Component {
     if (typeof pixelPos === 'undefined' || pixelPos.isEmpty()) return null;
     if (typeof curItem === 'undefined') return null;
     // 计算像素坐标点
-    const clientPos = clientList.map((item) => {
+    this.clientPos = clientList.map((item) => {
       const ret = gps.getOffsetFromGpsPoint(item.toJS(), curItem.toJS());
       const x = Math.floor((ret.x * this.state.mapWidth) / 100);
       const y = Math.floor((ret.y * this.state.mapHeight) / 100);
-      return fromJS({ x, y, mac: item.get('mac') });
+      return fromJS({
+        x, y, mac: item.get('mac'),
+      });
     });
-    this.setState({ clientPos });
+    // console.log('this.clientPos', this.clientPos.toJS());
     // 在图上画出坐标点
-    // this.state.clientPos.forEach((item) => {
+    // this.clientPos.forEach((item) => {
     //   ctx.beginPath();
     //   ctx.arc(item.get('x'), item.get('y'), 5, 0, 2 * Math.PI);
     //   ctx.fillStyle = 'green';
@@ -317,22 +335,30 @@ export default class View extends React.Component {
     // });
 
     // 找出需要告警的区域
-    let chunks = fromJS([]);
-    clientPos.forEach((item) => {
-      const posX = item.get('x');
-      const posY = item.get('y');
-      const area = pixelPos.find((chunk) => {
-        const { endX, startX, endY, startY, level } = chunk.toJS();
-        return (posX >= startX && posX < endX && posY >= startY && posY < endY && level !== '0');
-      });
-      if (typeof area !== 'undefined' && !chunks.includes(area)) chunks = chunks.push(area);
+    const chunks = this.clientPos.map((item) => {
+      const firstLen = pixelPos.size;
+      for (let i = 0; i < firstLen; i++) {
+        const secondLen = pixelPos.get(i).size;
+        for (let j = 0; j < secondLen; j++) {
+          const posX = item.get('x');
+          const posY = item.get('y');
+          const { endX, startX, endY, startY } = pixelPos.getIn([i, j]).toJS();
+          if (posX >= startX && posX < endX && posY >= startY && posY < endY) {
+            return pixelPos.getIn([i, j]);
+          }
+        }
+      }
+      return fromJS({});
+    }).filter((chunk) => {
+      if (chunk.isEmpty() || chunk.get('level') === '0') return false;
+      return true;
     });
     // 告警动画
     let startOpacity = 1;
     let step = -0.2;
     const lineWidth = 4 * (this.state.zoom / 100);
     const alarmCtx = this.alarmCanvas.getContext('2d');
-    const staPos = pixelPos.get(0).toJS();
+    const staPos = pixelPos.getIn([0, 0]).toJS();
     alarmCtx.clearRect(staPos.startX, staPos.startY, this.state.mapWidth, this.state.mapHeight);
     clearInterval(this.timeInterval);
     this.timeInterval = window.setInterval(() => {
@@ -369,7 +395,7 @@ export default class View extends React.Component {
     const posList = this.state.posList;
     const onEditId = this.state.onEditId;
     if (typeof posList === 'undefined' || posList.isEmpty()) return null;
-    return `${__('Edit')}: ${onEditId + 1}`;
+    return `${__('Edit')}: ${(onEditId[0] * posList.get(0).size) + (onEditId[1] + 1)}`;
   }
 
   renderEditLayor() {
@@ -399,32 +425,44 @@ export default class View extends React.Component {
             // console.log('this.state.pixelPos', this.state.pixelPos);
             if (this.state.pixelPos.isEmpty()) return null;
             const pixelPos = this.state.pixelPos;
+            const firstLen = this.state.pixelPos.size;
             // const that = this;
-            const nodeList = pixelPos.map((item) => {
-              const { startX, startY, index } = item.toJS();
-              return (
-                <Icon
-                  name="edit"
-                  id={index}
-                  style={{
-                    position: 'absolute',
-                    cursor: 'pointer',
-                    top: `${startY}px`,
-                    left: `${startX}px`,
-                    fontSize: `${Math.round((28 * this.state.zoom) / 100)}px`,
-                  }}
-                  onClick={() => {
-                    const editGpsPos = this.state.posList;
-                    this.setState({
-                      editGpsPos,
-                      showEditModal: true,
-                      onEditId: index,
-                    });
-                  }}
-                />
-              );
-            });
-            return nodeList.toJS();
+            const nodeList = [];
+            for (let i = 0; i < firstLen; i++) {
+              // console.log('i', i);
+              const secondLen = pixelPos.get(i).size;
+              for (let j = 0; j < secondLen; j++) {
+                const {
+                  endX, startX, endY, startY, id, level, describe, index,
+                } = pixelPos.getIn([i, j]).toJS();
+                console.log('startx, starty', startX, startY);
+                nodeList.push(
+                  <Icon
+                    name="edit"
+                    id={index}
+                    style={{
+                      position: 'absolute',
+                      cursor: 'pointer',
+                      top: `${startY}px`,
+                      left: `${startX}px`,
+                      fontSize: `${Math.round((28 * this.state.zoom) / 100)}px`,
+                    }}
+                    onClick={() => {
+                      const editGpsPos = this.state.posList;
+                      const cLen = editGpsPos.get(0).size;
+                      const r = Math.floor((index - 1) / cLen);
+                      const c = (index - (r * cLen)) - 1;
+                      this.setState({
+                        editGpsPos,
+                        showEditModal: true,
+                        onEditId: [r, c],
+                      });
+                    }}
+                  />,
+                );
+              }
+            }
+            return nodeList;
           })()
         }
       </div>
@@ -451,9 +489,9 @@ export default class View extends React.Component {
         {
           (() => {
             // console.log('this.state.pixelPos', this.state.pixelPos);
-            if (this.state.clientPos.isEmpty()) return null;
+            if (this.clientPos.isEmpty()) return null;
             const fontsize = Math.round((25 * this.state.zoom) / 100);
-            const nodeList = this.state.clientPos.map(item => (
+            const nodeList = this.clientPos.map(item => (
               <Icon
                 name="map-pin"
                 style={{
@@ -705,7 +743,7 @@ export default class View extends React.Component {
           <FormGroup
             type="select"
             label={__('Priority')}
-            value={this.state.editGpsPos.getIn([this.state.onEditId, 'level'])}
+            value={this.state.editGpsPos.getIn([this.state.onEditId[0], this.state.onEditId[1], 'level'])}
             options={[
               { value: '0', label: '0' },
               { value: '1', label: '1' },
@@ -714,19 +752,21 @@ export default class View extends React.Component {
             ]}
             onChange={(data) => {
               let editGpsPos = this.state.editGpsPos;
-              const onEditId = this.state.onEditId;
-              editGpsPos = editGpsPos.setIn([onEditId, 'level'], data.value);
+              const i = this.state.onEditId[0];
+              const j = this.state.onEditId[1];
+              editGpsPos = editGpsPos.setIn([i, j, 'level'], data.value);
               this.setState({ editGpsPos });
             }}
           />
           <FormGroup
             type="textarea"
             label={__('Description')}
-            value={this.state.editGpsPos.getIn([this.state.onEditId, 'describe'])}
+            value={this.state.editGpsPos.getIn([this.state.onEditId[0], this.state.onEditId[1], 'describe'])}
             onChange={(data) => {
               let editGpsPos = this.state.editGpsPos;
-              const onEditId = this.state.onEditId;
-              editGpsPos = editGpsPos.setIn([onEditId, 'describe'], data.value);
+              const i = this.state.onEditId[0];
+              const j = this.state.onEditId[1];
+              editGpsPos = editGpsPos.setIn([i, j, 'describe'], data.value);
               this.setState({ editGpsPos });
             }}
           />
