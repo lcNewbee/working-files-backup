@@ -21,6 +21,12 @@ import buildingIconImg from '../../shared/images/building_3d.png';
 
 const LIVE_GOOGLE_MAP = '0';
 const LOCAL_BUILDING_LIST = '1';
+let isMoniterAc = false;
+
+// 处理小于 2.5的版本
+if (window.guiConfig.versionCode >= 30900 && window.guiConfig.versionCode < 30949) {
+  isMoniterAc = true;
+}
 
 const listOptions = fromJS({
   settings: [],
@@ -385,7 +391,10 @@ export default class LiveMap extends React.PureComponent {
 
         editButtonElem.addEventListener('click', () => {
           this.props.editListItemByIndex(index);
-          marker.enableDragging();
+
+          if (!isMoniterAc) {
+            marker.enableDragging();
+          }
         });
         viewButtonElem.addEventListener('click', () => {
           this.props.history.push(`/main/group/map/building/${index}`);
@@ -846,10 +855,32 @@ export default class LiveMap extends React.PureComponent {
     const editData = store.getIn([myScreenId, 'curListItem']);
     const isOpenHeader = actionQuery.get('action') === 'add' || actionQuery.get('action') === 'edit';
     const googleMapStatus = this.props.curStore.getIn(['customProps', 'loadMapStatus']);
+    let myFormOptions = formOptions;
     let mapClassName = 'o-map';
 
     if (isOpenHeader) {
       mapClassName = 'o-map o-map--open';
+    }
+
+    // 地理位置设置为不可修改
+    if (isMoniterAc && actionQuery.get('action') === 'edit') {
+      myFormOptions = myFormOptions.map(
+        ($$item) => {
+          const itemId = $$item.get('id');
+
+          switch (itemId) {
+            case 'lng':
+            case 'lat':
+            case 'address':
+              return $$item.set('readOnly', true);
+
+            default:
+              break;
+          }
+
+          return $$item;
+        },
+      );
     }
     this.isChangeMapBuilding = isOpenHeader && settings.get('type') === LIVE_GOOGLE_MAP;
     return (
@@ -881,7 +912,7 @@ export default class LiveMap extends React.PureComponent {
                     <FormContainer
                       data={editData}
                       options={
-                        formOptions.deleteIn([-1]).deleteIn([-1])
+                        myFormOptions.deleteIn([-1]).deleteIn([-1])
                       }
                       onSave={this.onSave}
                       onChangeData={this.props.updateCurEditListItem}
@@ -955,7 +986,7 @@ export default class LiveMap extends React.PureComponent {
             >
               <FormContainer
                 data={editData}
-                options={formOptions}
+                options={myFormOptions}
                 onSave={this.onSave}
                 onChangeData={this.props.updateCurEditListItem}
                 onValidError={this.props.reportValidError}
