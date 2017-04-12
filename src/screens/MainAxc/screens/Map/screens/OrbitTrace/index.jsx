@@ -182,6 +182,7 @@ export default class View extends React.Component {
     const curScreenId = store.get('curScreenId');
 
     /** *********hack: 暂时解决store中curScreenId更新不及时引起的bug**********/
+
     if (this.preScreenId !== curScreenId) {
       // console.log('In hack code', this.preScreenId, curScreenId);
       this.onChangeBuilding(this.buildOptions.getIn([0, 'value']));

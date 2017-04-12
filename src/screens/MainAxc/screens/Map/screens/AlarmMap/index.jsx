@@ -29,10 +29,12 @@ export default class View extends React.Component {
     super(props);
     this.mapMouseDown = false;
     this.colorArr = ['rgba(255, 255, 255, 0)', 'rgba(93, 61, 72, .4)', 'rgba(171, 43, 87, .4)', 'rgba(245, 6, 88, .4)'];
+    this.clientPos = fromJS([]);
     this.state = {
       pixelPos: fromJS([]),
       mapList: fromJS([]),
       editGpsPos: fromJS([]),
+      posList: fromJS([]),
       zoom: 100,
       mapOffsetX: 0,
       mapOffsetY: 0,
@@ -48,29 +50,19 @@ export default class View extends React.Component {
       [
         'onSave',
         'renderCurMap',
-        'updateState',
         'onChangeBuilding',
         'onChangeMapId',
-        'onSearch',
-        'stationaryPoint',
         'onMapMouseUp',
         'onMapMouseDown',
         'onMapMouseMove',
-
-        'drawLinePath',
-        'smoothSpline',
-        'getOffsetPoint',
-        'getPointList',
-        'interpolate',
-        // 'drawCurvePath',
-        'drawCurveAnimPath',
-        'drawLineBetweenPoints',
-        'updateCanvas',
 
         'chunkPosFromGeoToPixel',
         'drawGridByPixelPos',
         'markClientPosOnMap',
         'renderEditLayor',
+        'requestChunkPosition',
+        'getModalTitle',
+        'renderClientPosIcon',
       ],
     );
   }
@@ -81,13 +73,6 @@ export default class View extends React.Component {
         this.buildOptions = fromJS(json.data.list).map(item => fromJS({ label: item.get('name'), value: item.get('id') }));
       }
       this.onChangeBuilding(this.buildOptions.getIn([0, 'value']));
-    });
-    // 请求分块信息并保存
-    this.props.fetch('goform/alarm_map_chunk_pos').then((json) => {
-      if (json.state && json.state.code === 2000) {
-        const posList = fromJS(json.data.list);
-        this.setState({ posList });
-      }
     });
   }
 
@@ -142,6 +127,7 @@ export default class View extends React.Component {
           this.onChangeMapId(this.mapOptions.getIn([0, 'value']));
         });
   }
+
   onChangeMapId(id) {
     const curScreenId = this.props.store.get('curScreenId');
     Promise.resolve().then(() => {
@@ -160,8 +146,11 @@ export default class View extends React.Component {
           this.props.changeScreenQuery(fromJS({ mac: firstMac }));
         }
       });
+    }).then(() => {
+      this.requestChunkPosition();
     });
   }
+
   onChangeMac(value) {
     Promise.resolve().then(() => {
       this.props.changeScreenQuery(fromJS({ mac: value }));
@@ -173,6 +162,7 @@ export default class View extends React.Component {
   onMapMouseUp() {
     this.mapMouseDown = false;
   }
+
   onMapMouseDown(e) {
     this.mapMouseDown = true;
     this.mapClientX = e.clientX;
@@ -180,6 +170,7 @@ export default class View extends React.Component {
     this.posXBeforeMove = this.state.mapOffsetX;
     this.posYBeforeMove = this.state.mapOffsetY;
   }
+
   onMapMouseMove(e) {
     if (this.mapMouseDown) {
       this.setState({
@@ -195,6 +186,21 @@ export default class View extends React.Component {
     image.src = url;
     this.naturalWidth = image.width;
     this.naturalHeight = image.height;
+  }
+
+  requestChunkPosition() {
+    const curScreenId = this.props.store.get('curScreenId');
+    this.props.fetch('goform/alarm_map_chunk_pos', {
+      buildId: this.state.buildId,
+      curMapId: this.state.curMapId,
+      groupid: this.props.store.getIn([curScreenId, 'query', 'groupid']),
+    }).then((json) => {
+      if (json.state && json.state.code === 2000) {
+        const posList = fromJS(json.data.list);
+        console.log('posList ...', posList.toJS())
+        this.setState({ posList });
+      }
+    });
   }
 
   generateMacOptions() {
@@ -226,8 +232,7 @@ export default class View extends React.Component {
         const endLng = posList.getIn([i, j, 'end_lng']);
         const endLat = posList.getIn([i, j, 'end_lat']);
         const level = posList.getIn([i, j, 'level']);
-        const describe = posList.getIn([i, j, 'describe']);
-        const id = posList.getIn([i, j, 'id']);
+        const { describe, id, index } = posList.getIn([i, j]).toJS();
         let startX; let startY; let endX; let endY;
         if (storeArr.get(staLng) && storeArr.get(staLat)) {
           startX = storeArr.get(staLng);
@@ -252,7 +257,7 @@ export default class View extends React.Component {
         pixelPos = pixelPos.setIn([i, j, 'startX'], startX).setIn([i, j, 'startY'], startY)
                           .setIn([i, j, 'endX'], endX).setIn([i, j, 'endY'], endY)
                           .setIn([i, j, 'level'], level).setIn([i, j, 'id'], id)
-                          .setIn([i, j, 'describe'], describe);
+                          .setIn([i, j, 'describe'], describe).setIn([i, j, 'index'], ((i * secondLen) + j + 1));
       }
     }
     this.setState({ pixelPos });
@@ -261,17 +266,15 @@ export default class View extends React.Component {
   // 利用转化后的坐标信息绘制网格线
   drawGridByPixelPos(ctx) {
     const pixelPos = this.state.pixelPos;
+    if (typeof pixelPos === 'undefined' || pixelPos.isEmpty()) return null;
     const firstLen = pixelPos.size;
     const colorArr = this.colorArr;
     ctx.clearRect(0, 0, this.state.mapWidth, this.state.mapHeight);
     for (let i = 0; i < firstLen; i++) {
       const secondLen = pixelPos.get(i).size;
       for (let j = 0; j < secondLen; j++) {
-        const startX = pixelPos.getIn([i, j, 'startX']);
-        const startY = pixelPos.getIn([i, j, 'startY']);
-        const endX = pixelPos.getIn([i, j, 'endX']);
-        const endY = pixelPos.getIn([i, j, 'endY']);
-        const id = pixelPos.getIn([i, j, 'id']);
+        const { startX, startY, endX, endY, id, index } = pixelPos.getIn([i, j]).toJS();
+        console.log('pixlpos', pixelPos.toJS());
         // 绘制网格和网格着色
         ctx.beginPath();
         ctx.moveTo(startX, startY);
@@ -293,7 +296,7 @@ export default class View extends React.Component {
           const font = Math.round((endX - startX) / 5);
           ctx.fillStyle = 'blue';
           ctx.font = `bold ${font}px Courier New`;
-          ctx.fillText(id, ((startX + endX) / 2) - Math.round(font / 2),
+          ctx.fillText(index, ((startX + endX) / 2) - Math.round(font / 2),
                       ((startY + endY) / 2) + Math.round(font / 2));
         }
       }
@@ -308,9 +311,10 @@ export default class View extends React.Component {
     const curMapId = this.state.curMapId;
     const mapList = this.mapList;
     const curItem = mapList.find(item => item.get('id') === curMapId);
+    if (typeof pixelPos === 'undefined' || pixelPos.isEmpty()) return null;
     if (typeof curItem === 'undefined') return null;
     // 计算像素坐标点
-    const clientPos = clientList.map((item) => {
+    this.clientPos = clientList.map((item) => {
       const ret = gps.getOffsetFromGpsPoint(item.toJS(), curItem.toJS());
       const x = Math.floor((ret.x * this.state.mapWidth) / 100);
       const y = Math.floor((ret.y * this.state.mapHeight) / 100);
@@ -318,16 +322,17 @@ export default class View extends React.Component {
         x, y, mac: item.get('mac'),
       });
     });
+    // console.log('this.clientPos', this.clientPos.toJS());
     // 在图上画出坐标点
-    clientPos.forEach((item) => {
-      ctx.beginPath();
-      ctx.arc(item.get('x'), item.get('y'), 5, 0, 2 * Math.PI);
-      ctx.fillStyle = 'green';
-      ctx.fill();
-    });
+    // this.clientPos.forEach((item) => {
+    //   ctx.beginPath();
+    //   ctx.arc(item.get('x'), item.get('y'), 5, 0, 2 * Math.PI);
+    //   ctx.fillStyle = 'green';
+    //   ctx.fill();
+    // });
 
     // 找出需要告警的区域
-    const chunks = clientPos.map((item) => {
+    const chunks = this.clientPos.map((item) => {
       const firstLen = pixelPos.size;
       for (let i = 0; i < firstLen; i++) {
         const secondLen = pixelPos.get(i).size;
@@ -342,15 +347,19 @@ export default class View extends React.Component {
       }
       return fromJS({});
     }).filter((chunk) => {
-      if (chunk.isEmpty() || chunk.get('level') === 0) return false;
+      if (chunk.isEmpty() || chunk.get('level') === '0') return false;
       return true;
     });
     // 告警动画
     let startOpacity = 1;
     let step = -0.2;
+    const lineWidth = 4 * (this.state.zoom / 100);
     const alarmCtx = this.alarmCanvas.getContext('2d');
+    const staPos = pixelPos.getIn([0, 0]).toJS();
+    alarmCtx.clearRect(staPos.startX, staPos.startY, this.state.mapWidth, this.state.mapHeight);
     clearInterval(this.timeInterval);
     this.timeInterval = window.setInterval(() => {
+      startOpacity += step;
       if (startOpacity <= 0) {
         startOpacity = 0;
         step = Math.abs(step);
@@ -358,10 +367,10 @@ export default class View extends React.Component {
         startOpacity = 1;
         step = -Math.abs(step);
       }
-      startOpacity += step;
+
       // console.log('startOpacity', startOpacity);
       alarmCtx.strokeStyle = `rgba(255, 0, 0, ${startOpacity})`;
-      alarmCtx.lineWidth = 5;
+      alarmCtx.lineWidth = lineWidth;
       chunks.forEach((chunk) => {
         const startX = chunk.get('startX');
         const startY = chunk.get('startY');
@@ -369,14 +378,21 @@ export default class View extends React.Component {
         const endY = chunk.get('endY');
         alarmCtx.clearRect(startX, startY, endX - startX, endY - startY);
         alarmCtx.beginPath();
-        alarmCtx.moveTo(startX, startY);
-        alarmCtx.lineTo(endX, startY);
-        alarmCtx.lineTo(endX, endY);
-        alarmCtx.lineTo(startX, endY);
+        alarmCtx.moveTo(startX + (lineWidth / 2), startY + (lineWidth / 2));
+        alarmCtx.lineTo(endX - (lineWidth / 2), startY + (lineWidth / 2));
+        alarmCtx.lineTo(endX - (lineWidth / 2), endY - (lineWidth / 2));
+        alarmCtx.lineTo(startX + (lineWidth / 2), endY - (lineWidth / 2));
         alarmCtx.closePath();
         alarmCtx.stroke();
       });
     }, 100);
+  }
+
+  getModalTitle() {
+    const posList = this.state.posList;
+    const onEditId = this.state.onEditId;
+    if (typeof posList === 'undefined' || posList.isEmpty()) return null;
+    return `${__('Edit')}: ${(onEditId[0] * posList.get(0).size) + (onEditId[1] + 1)}`;
   }
 
   renderEditLayor() {
@@ -414,13 +430,13 @@ export default class View extends React.Component {
               const secondLen = pixelPos.get(i).size;
               for (let j = 0; j < secondLen; j++) {
                 const {
-                  endX, startX, endY, startY, id, level, describe,
+                  endX, startX, endY, startY, id, level, describe, index,
                 } = pixelPos.getIn([i, j]).toJS();
-                // const width = Math.round((endX - startX) / 5);
+                console.log('startx, starty', startX, startY);
                 nodeList.push(
                   <Icon
                     name="edit"
-                    id={id}
+                    id={index}
                     style={{
                       position: 'absolute',
                       cursor: 'pointer',
@@ -431,8 +447,8 @@ export default class View extends React.Component {
                     onClick={() => {
                       const editGpsPos = this.state.posList;
                       const cLen = editGpsPos.get(0).size;
-                      const r = Math.floor((id - 1) / cLen);
-                      const c = (id - (r * cLen)) - 1;
+                      const r = Math.floor((index - 1) / cLen);
+                      const c = (index - (r * cLen)) - 1;
                       this.setState({
                         editGpsPos,
                         showEditModal: true,
@@ -444,6 +460,64 @@ export default class View extends React.Component {
               }
             }
             return nodeList;
+          })()
+        }
+      </div>
+    );
+  }
+
+  renderClientPosIcon() {
+    const myZoom = this.state.zoom;
+    return (
+      <div
+        className="o-map-container"
+        style={{
+          left: this.state.mapOffsetX,
+          top: this.state.mapOffsetY,
+          width: `${((myZoom * this.naturalWidth) / 100)}px`,
+          height: `${((myZoom * this.naturalHeight) / 100)}px`,
+          position: 'absolute',
+          overflow: 'hidden',
+        }}
+        onMouseDown={this.onMapMouseDown}
+        onMouseUp={this.onMapMouseUp}
+        onMouseMove={this.onMapMouseMove}
+      >
+        {
+          (() => {
+            // console.log('this.state.pixelPos', this.state.pixelPos);
+            if (this.clientPos.isEmpty()) return null;
+            const fontsize = Math.round((25 * this.state.zoom) / 100);
+            const nodeList = this.clientPos.map(item => (
+              <Icon
+                name="map-pin"
+                style={{
+                  position: 'absolute',
+                  color: 'green',
+                  cursor: 'pointer',
+                  top: `${item.get('y') - fontsize}px`,
+                  left: `${item.get('x') - (Math.round((14.3 * this.state.zoom) / 100) / 2)}px`,
+                  fontSize: `${fontsize}px`,
+                }}
+                title={item.get('mac')}
+                onClick={() => {
+                  /** *******************************************************************
+                  const curScreenId = this.props.store.get('curScreenId');
+                  const date = moment().format('YYYY-MM-DD');
+                  const fromTime = '00:00:00';
+                  const toTime = '23:59:59';
+                  const mac = item.get('mac');
+                  const { groupid, curMapId, buildId } = this.props.store.getIn([curScreenId, 'query']).toJS();
+                  const paraForOrbit = fromJS({
+                    groupid, curMapId, buildId, date, fromTime, toTime, mac,
+                  });
+                  this.props.changeScreenQuery({ paraForOrbit });
+                  **********************************************************************/
+                  window.location.href = '#/main/group/map/orbittrace';
+                }}
+              />
+            ));
+            return nodeList.toJS();
           })()
         }
       </div>
@@ -547,7 +621,7 @@ export default class View extends React.Component {
             onChange={data => this.onChangeMapId(data.value)}
           />
           {
-            /**
+            /** ***************************************************
              <FormGroup
               type="select"
               className="fl"
@@ -557,7 +631,7 @@ export default class View extends React.Component {
               onChange={data => this.onChangeMac(data.value)}
               searchable
             />
-             */
+             ******************************************************/
           }
           <FormGroup
             type="checkbox"
@@ -622,12 +696,13 @@ export default class View extends React.Component {
               }}
             />
           </div>
+          {this.renderClientPosIcon()}
           {this.renderEditLayor()}
         </div>
         <Modal
           draggable
           isShow={this.state.showEditModal}
-          title={`${__('Edit')}: ${(this.state.onEditId[0] * this.state.posList.get(0).size) + (this.state.onEditId[1] + 1)}`}
+          title={this.getModalTitle()}
           onClose={() => {
             this.setState({
               editGpsPos: fromJS([]),
@@ -667,10 +742,10 @@ export default class View extends React.Component {
             label={__('Priority')}
             value={this.state.editGpsPos.getIn([this.state.onEditId[0], this.state.onEditId[1], 'level'])}
             options={[
-              { value: 0, label: '0' },
-              { value: 1, label: '1' },
-              { value: 2, label: '2' },
-              { value: 3, label: '3' },
+              { value: '0', label: '0' },
+              { value: '1', label: '1' },
+              { value: '2', label: '2' },
+              { value: '3', label: '3' },
             ]}
             onChange={(data) => {
               let editGpsPos = this.state.editGpsPos;
