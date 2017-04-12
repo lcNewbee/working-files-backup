@@ -351,6 +351,9 @@ export default class Blacklist extends React.Component {
           <div className="o-list__footer">
             <SaveButton
               type="button"
+              text={__('Apply')}
+              savingText={__('Applying')}
+              savedText={__('Applied')}
               className="fr"
               loading={app.get('saving')}
               onClick={() => this.onSave('copy')}

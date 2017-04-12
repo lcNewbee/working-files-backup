@@ -48,6 +48,9 @@ const defaultProps = {
   component: 'div',
   actionable: true,
   hasFile: false,
+  saveText: __('Apply'),
+  savingText: __('Applying'),
+  savedText: __('Applied'),
 };
 
 class FormContainer extends React.Component {

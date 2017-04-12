@@ -19,7 +19,7 @@ function getGpsPointFromOffset(offset, mapItem) {
   var ret = {};
 
   ret.lng = Number(mapItem.lng + (lng / 100000)).toFixed(12);
-  ret.lat = Number(mapItem.lat + (lat / 100000)).toFixed(12);
+  ret.lat = Number(mapItem.lat - (lat / 100000)).toFixed(12);
 
   ret.lng = parseFloat(ret.lng);
   ret.lat = parseFloat(ret.lat);

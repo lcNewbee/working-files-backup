@@ -45,7 +45,7 @@ describe('utils', () => {
       retGps.lng = stringUtils.cutFixedFloat(retGps.lng, 8);
 
       expect(retGps).toEqual({
-        lat: 22.50242398,
+        lat: 22.50220398,
         lng: 113.93842783,
       });
     });

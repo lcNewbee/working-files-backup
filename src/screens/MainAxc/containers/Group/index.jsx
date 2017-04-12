@@ -674,6 +674,9 @@ export default class MainGroup extends React.Component {
                 <SaveButton
                   type="button"
                   loading={isSaving}
+                  text={__('Apply')}
+                  savingText={__('Applying')}
+                  savedText={__('Applied')}
                   onClick={this.onSaveGroup}
                 />
               </div>
@@ -734,6 +737,9 @@ export default class MainGroup extends React.Component {
                 <SaveButton
                   type="button"
                   loading={isSaving}
+                  text={__('Apply')}
+                  savingText={__('Applying')}
+                  savedText={__('Applied')}
                   onClick={this.onSaveMoveGroup}
                 />
               </div>
@@ -775,6 +781,9 @@ export default class MainGroup extends React.Component {
                     <SaveButton
                       type="button"
                       loading={isSaving}
+                      text={__('Apply')}
+                      savingText={__('Applying')}
+                      savedText={__('Applied')}
                       onClick={this.onSaveGroup}
                     />
                   </div>
@@ -827,6 +836,9 @@ export default class MainGroup extends React.Component {
                 <SaveButton
                   type="button"
                   loading={isSaving}
+                  text={__('Apply')}
+                  savingText={__('Applying')}
+                  savedText={__('Applied')}
                   onClick={this.onSaveGroup}
                 />
               </div>

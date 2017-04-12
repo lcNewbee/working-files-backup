@@ -917,6 +917,8 @@ class AppScreenList extends React.PureComponent {
                 onSave={this.onSaveEditForm}
                 onChangeData={this.props.updateCurEditListItem}
                 onValidError={this.props.reportValidError}
+                saveText={saveText}
+                savingText={savingText}
                 savedText={savedText}
                 hasSaveButton
                 {...editFormOption}

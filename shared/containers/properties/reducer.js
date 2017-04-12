@@ -272,21 +272,23 @@ function changePropertyPanelItem(state, action) {
     action.payload,
   );
 }
+function toggleVisible(state, action) {
+  let ret = !state.get('isShowPanel');
+
+  if (typeof action.payload === 'boolean') {
+    ret = action.payload;
+  }
+
+  return state.set('isShowPanel', ret);
+}
 
 export default function (state = defaultState, action) {
   switch (action.type) {
     case ACTION_TYPES.CHANGE_PANEL_DATA:
       return updatePropertyPanelData(state, action.data);
 
-    case ACTION_TYPES.TOGGLE:
-      return state.update('isShowPanel', (val) => {
-        let ret = !val;
-
-        if (typeof action.payload === 'boolean') {
-          ret = action.payload;
-        }
-        return ret;
-      });
+    case ACTION_TYPES.TOGGLE_VISIBLE:
+      return toggleVisible(state, action);
 
     case ACTION_TYPES.INIT_PANEL:
       return initAddPropertyPanel(state, action);

@@ -47,6 +47,7 @@ const listOptions = fromJS({
       formProps: {
         required: true,
         type: 'text',
+        notEditable: true,
       },
     }, {
       id: 'lng',

@@ -6,7 +6,6 @@ import {
   createContainer,
   components as AppScreenCompoents,
 } from 'shared/containers/appScreen';
-import { actions as appActions } from 'shared/containers/app';
 
 function getPortList() {
   return utils.fetch('goform/network/port')

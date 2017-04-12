@@ -137,6 +137,7 @@ $map-distance-y: $map-distance * .75;
     position: relative;
     cursor: pointer;
 
+    .edit,
     .close {
       position: absolute;
       top: 0;
@@ -155,6 +156,10 @@ $map-distance-y: $map-distance * .75;
       display: block;
       transform: scale(0, 1);
       transition: transform .3s ease-in-out;
+    }
+    .edit {
+      right: 28px;
+      background-color: #333;
     }
     .m-thumbnail__content {
       position: relative;
@@ -181,6 +186,7 @@ $map-distance-y: $map-distance * .75;
           //width: 102%;
         }
       }
+      .edit,
       .close {
         transform:scale(1, 1);
       }

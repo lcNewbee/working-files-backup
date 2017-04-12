@@ -229,7 +229,9 @@ export default class PortalProfile extends React.Component {
               <div className="form-group form-group--save">
                 <div className="form-control">
                   <SaveButton
-                    text={__('Save')}
+                    text={__('Apply')}
+                    savingText={__('Applying')}
+                    savedText={__('Applied')}
                     id="online"
                   />
                 </div>

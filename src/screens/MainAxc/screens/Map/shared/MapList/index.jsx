@@ -83,6 +83,7 @@ export default class MapList extends React.PureComponent {
       'onSaveMap',
       'onAddMap',
       'checkMapData',
+      'editMapList',
     ]);
 
     this.state = {
@@ -116,15 +117,17 @@ export default class MapList extends React.PureComponent {
   onAddMap() {
     this.setState({
       isModalShow: true,
+      action: 'add',
     });
   }
   checkMapData() {
+    const mapId = this.state.id;
     const mapName = this.state.mapName;
     const $$mapList = this.props.$$mapList;
     const hasSameNameText = __('Same %s item already exists', __('name'));
     let retMsg = '';
 
-    if ($$mapList.find($$item => $$item.get('mapName') === mapName)) {
+    if ($$mapList.filterNot($$item => $$item.get('id') === mapId).find($$item => $$item.get('mapName') === mapName)) {
       this.props.createModal({
         type: 'alert',
         text: hasSameNameText,
@@ -150,20 +153,13 @@ export default class MapList extends React.PureComponent {
       },
     );
   }
-  deleteMapList(mapId) {
-    const url = 'goform/group/map/list';
-
-    this.props.save(url, {
-      groupid: this.props.groupid,
-      action: 'delete',
-      selectedList: [mapId],
-    }).then(
-      (json) => {
-        if (json && json.state && json.state.code === 2000) {
-          this.fetchMapList();
-        }
-      },
-    );
+  editMapList($$map) {
+    this.setState($$map.merge({
+      action: 'edit',
+      isModalShow: true,
+      mapImg: $$map.get('backgroundImg'),
+      backgroundImgUrl: $$map.get('backgroundImg'),
+    }).toJS());
   }
   render() {
     const { actionable, $$mapList, onSelectMap, app, visible } = this.props;
@@ -207,6 +203,19 @@ export default class MapList extends React.PureComponent {
                         onClick={
                           () => {
                             this.deleteMapList(mapId);
+                          }
+                        }
+                      />
+                    ) : null
+                  }
+                  {
+                    actionable ? (
+                      <Icon
+                        name="edit"
+                        className="edit"
+                        onClick={
+                          () => {
+                            this.editMapList($$map);
                           }
                         }
                       />
@@ -258,6 +267,7 @@ export default class MapList extends React.PureComponent {
             this.setState({
               backgroundImgUrl: '',
               isModalShow: false,
+              id: '',
               mapImg: '',
               mapName: '',
               width: '',
@@ -286,7 +296,7 @@ export default class MapList extends React.PureComponent {
             <input
               type="hidden"
               name="action"
-              value="add"
+              value={this.state.action}
             />
             <input
               type="hidden"
@@ -354,6 +364,7 @@ export default class MapList extends React.PureComponent {
                   name="rows"
                   type="number"
                   min="1"
+                  defaultValue="4"
                   onChange={
                     (data) => {
                       this.setState({
@@ -372,6 +383,7 @@ export default class MapList extends React.PureComponent {
                   name="column"
                   type="number"
                   min="1"
+                  defaultValue="4"
                   onChange={
                     (data) => {
                       this.setState({
@@ -441,6 +453,9 @@ export default class MapList extends React.PureComponent {
               <div className="form-control">
                 <SaveButton
                   type="button"
+                  text={__('Apply')}
+                  savingText={__('Applying')}
+                  savedText={__('Applied')}
                   onClick={this.onSaveMap}
                 />
               </div>
