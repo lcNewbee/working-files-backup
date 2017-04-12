@@ -4,6 +4,7 @@ class MapSonList extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->database();
+        $this->mysql = $this->load->database('mysqli', TRUE);  
         $this->load->helper(array('array', 'my_customfun_helper'));
     }
     function fetch() {
@@ -48,10 +49,10 @@ class MapSonList extends CI_Controller {
         $arr['locked'] = 1;
         $arr['length'] = element('length',$_POST,100);
         $arr['width'] = element('width',$_POST,100);
-        $arr['column'] = 2;//element('column',$_POST,1);
-        $arr['rows'] = 2;//element('rows',$_POST,1);
-        if ( $this->db->insert('map_son_list', $arr)) {
-            $result = json_encode(json_ok());
+        $arr['column'] = element('column',$_POST,1);
+        $arr['rows'] = element('rows',$_POST,1);
+        if ( $this->db->insert('map_son_list', $arr)) {            
+            $result = json_encode(json_ok());  
             $id = $this->db->insert_id();
             $this->add_map_area($id,$arr);
         }
@@ -65,6 +66,8 @@ class MapSonList extends CI_Controller {
             if( $row->imgpath != "" ) {
                 unlink('/usr/web'.$row->imgpath);
             }
+            //delete mysql map_area
+            $this->mysql->delete('map_area',array('map_son_id'=>$row->id));
             //delete ap_map
             $this->db->delete('ap_map',array('build_id'=>$row->id));
         }
@@ -118,17 +121,17 @@ class MapSonList extends CI_Controller {
         //1.得到建筑地图经纬度
         $query = $this->db->query("select lat,lng from map_list where id=".$data['maplist_id']);
         if(count($query->result_array()) > 0){
-            $lat = $query->result_array()[0]['lat'];
-            $lng = $query->result_array()[0]['lng'];
+            $lng = (float)$query->result_array()[0]['lng'];
+            $lat = (float)$query->result_array()[0]['lat'];
 
-            $add_lat = sprintf("%.6f", $data['length'] / $data['rows'] / 10000);
-            $add_lng = sprintf("%.6f", $data['width'] / $data['column'] / 10000);
-            //得到纬度 lat （rows）
+            $add_lng =  ($data['width'] / $data['column']) / 100000;
+	        $add_lat =  ($data['length'] / $data['rows'] ) / 110000;
 
+            //得到经纬度
             $rows_ary = array();
             array_push($rows_ary,$lat);
-            for($i = 0; $i < $data['rows']; $i++){
-                $lat = $lat + $add_lat;
+            for($i = 0; $i < $data['rows']; $i++){  
+                $lat = $lat - $add_lat;                
                 array_push($rows_ary,$lat);
             }
 
@@ -137,22 +140,28 @@ class MapSonList extends CI_Controller {
             for($i = 0; $i < $data['column']; $i++){
                 $lng = $lng + $add_lng;
                 array_push($column_ary,$lng);
-            }
+            }         
 
+            $area_sum = 0;
             for($x = 0; $x < count($rows_ary) - 1; $x++){
-                for($y = 0; $y < count($column_ary) - 1; $y++){
-                    $insary = array(
-                        'map_son_id' => $id,
-                        'str_lat' => $rows_ary[$x],
-                        'str_lng' => $column_ary[$y],
-                        'end_lat' => $rows_ary[$x+1],
-                        'end_lng' => $column_ary[$y+1],
-                        'level' => 1,
-                        'describe' => 'test'
-                    );
-                    $this->db->insert('map_area', $insary);
+                if($area_sum > 400){
+                    //区域最大只能400个
+                    break;
                 }
-            }
+                for($y = 0; $y < count($column_ary) - 1; $y++){                    
+                    $insary = array(                        
+                        'map_son_id' => $id,
+                        'sta_lat' => (float)$rows_ary[$x],
+                        'sta_lng' => (float)$column_ary[$y],
+                        'end_lat' => (float)$rows_ary[$x+1],
+                        'end_lng' => (float)$column_ary[$y+1],
+                        'level' => 1,
+                        'annotation' => ''
+                    );
+                    $this->mysql->insert('map_area', $insary);
+                    $area_sum++;                    
+                }
+            }                        
         }
     }
 }

@@ -5,6 +5,7 @@ class MapClients_Model extends CI_Model {
         $this->load->database();	       
         $this->mysql = $this->load->database('mysqli', TRUE);
         $this->load->helper(array('array', 'my_customfun_helper'));
+        $this->load->library('DbSqlite');
     }
     function get_list($data) {   
         $groupid = (int)element('groupid',$data,0);
@@ -14,9 +15,20 @@ class MapClients_Model extends CI_Model {
         if(count($timedata) > 0 && $mac !== ''){
             $s = 60 * (int)$timedata['reporttime'];            
             $dblist = $this->mysql->query("call getwidsreport('".$mac."',".$s.")");
-            //$datalist = $dblist->result_array();
+            
+            $sql_oui = new DbSqlite('/var/run/oui.db');
             foreach($dblist->result_array() as $row){
-                $row['endtime'] = $row['endtime'] === '0000-00-00 00:00:00'? '-- --' : $row['endtime'];
+                $row['endtime'] = $row['endtime'] === '0000-00-00 00:00:00'? '-- --' : $row['endtime'];   
+                $macary = explode(':',$row['stamac']);                
+                if(count($macary) > 2){
+                    $smac = strtoupper($macary[0].$macary[1].$macary[2]);                    
+                    $res = $sql_oui->querySingle("select company_simple from oui_info where mac_prefix='{$smac}'",true);
+                    if(isset($res['company_simple'])){
+                        $row['type'] = $res['company_simple'];                
+                    }else{
+                        $row['type'] = '';       
+                    }
+                } 
                 $datalist[] = $row;
             }
         }                
@@ -53,5 +65,5 @@ class MapClients_Model extends CI_Model {
         );        
         $result = wscan_set_param(json_encode($cgiary));
         return $result;
-    }
+    }    
 }
