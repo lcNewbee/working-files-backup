@@ -7,6 +7,7 @@ import {
   Modal, FormGroup,
 } from 'shared/components';
 
+// @@product(axcMonitor):
 let isMoniterAc = false;
 
 function previewFile(file) {
@@ -43,7 +44,7 @@ function previewFile(file) {
   return retPromise;
 }
 
-// 处理小于 2.5的版本
+// @@product(axcMonitor):
 if (window.guiConfig.versionCode >= 30900 && window.guiConfig.versionCode < 30949) {
   isMoniterAc = true;
 }
@@ -356,6 +357,7 @@ export default class MapList extends React.PureComponent {
               required
             />
             {
+              // @@product(axcMonitor): 该产品可配置监控区域
               isMoniterAc ? ([
                 <FormGroup
                   label={__('Rows')}

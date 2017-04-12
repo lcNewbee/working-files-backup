@@ -23,7 +23,7 @@ const LIVE_GOOGLE_MAP = '0';
 const LOCAL_BUILDING_LIST = '1';
 let isMoniterAc = false;
 
-// 处理小于 2.5的版本
+// axcMonitor: 监控模式
 if (window.guiConfig.versionCode >= 30900 && window.guiConfig.versionCode < 30949) {
   isMoniterAc = true;
 }
@@ -392,6 +392,7 @@ export default class LiveMap extends React.PureComponent {
         editButtonElem.addEventListener('click', () => {
           this.props.editListItemByIndex(index);
 
+          // @@product(axcMonitor): AXC监控模式下不可修改 地址
           if (!isMoniterAc) {
             marker.enableDragging();
           }
@@ -862,7 +863,7 @@ export default class LiveMap extends React.PureComponent {
       mapClassName = 'o-map o-map--open';
     }
 
-    // 地理位置设置为不可修改
+    // @@product(axcMonitor): 地理位置设置为不可修改
     if (isMoniterAc && actionQuery.get('action') === 'edit') {
       myFormOptions = myFormOptions.map(
         ($$item) => {
