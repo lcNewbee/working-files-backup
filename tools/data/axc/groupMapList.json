@@ -17,7 +17,7 @@
         "id": 2,
         "mapName": "Floor Two",
         "width": 100,
-        "length": 100,
+        "length": 200,
         "lat": 43.23123231,
         "lng": 123.2312323,
         "backgroundImg": "images/map_bg.jpg"
