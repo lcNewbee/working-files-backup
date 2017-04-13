@@ -4,7 +4,7 @@ import { fromJS, Map } from 'immutable';
 import validator from 'shared/validator';
 import {
   createContainer,
-  components as AppScreenCompoents,
+  AppScreen,
 } from 'shared/containers/appScreen';
 
 function getPortList() {
@@ -136,7 +136,7 @@ export default class NetworkInterface extends React.Component {
 
   render() {
     return (
-      <AppScreenCompoents.AppScreen
+      <AppScreen
         {...this.props}
         listOptions={this.state.listOptions}
         onBeforeSync={this.onBeforeSync}

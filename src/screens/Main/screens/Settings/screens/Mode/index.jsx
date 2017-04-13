@@ -2,12 +2,11 @@ import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { Map, fromJS } from 'immutable';
 import validator from 'shared/validator';
-import AppScreen from 'shared/components/Template/AppScreen';
 import FormContainer from 'shared/components/Organism/FormContainer';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { actions as appActions } from 'shared/containers/app';
-import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 
 const msg = {
   upSpeed: __('Up Speed'),

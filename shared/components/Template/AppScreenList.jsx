@@ -294,7 +294,7 @@ class AppScreenList extends React.PureComponent {
     const $$actionQuery = store.getIn(['actionQuery']);
     const listKey = option.actionKey || this.props.listKey;
     let actionName = option.actionName;
-    let selectStr = '';
+    let selectNumber = '';
     let msgText = '';
     let $$selectedList = $$actionQuery.get('selectedList');
     const doSelectedItemsAction = () => {
@@ -322,8 +322,8 @@ class AppScreenList extends React.PureComponent {
 
         return ret;
       });
-      selectStr = $$actionQuery.get('selectedList').sort().map(val => val + 1).join(', ');
-      msgText = __('Are you sure to %s selected rows: %s', __(actionName), selectStr);
+      selectNumber = $$actionQuery.get('selectedList').size;
+      msgText = __('Are you sure to %s selected %s rows', __(actionName), selectNumber);
 
       if (needConfirm) {
         this.props.createModal({

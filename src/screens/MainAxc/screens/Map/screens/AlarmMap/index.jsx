@@ -459,14 +459,15 @@ export default class View extends React.Component {
           (() => {
             // console.log('this.state.pixelPos', this.state.pixelPos);
             if (this.state.clientPos.isEmpty()) return null;
-            const fontsize = Math.round((25 * this.state.zoom) / 100);
+            const fontsize = Math.round((24 * this.state.zoom) / 100);
             const nodeList = this.state.clientPos.map(item => (
               <Icon
                 name="map-pin"
+                className="client"
                 key={item.get('id')}
                 style={{
                   position: 'absolute',
-                  color: 'green',
+                  color: '#0093DD',
                   cursor: 'pointer',
                   top: `${item.get('y') - fontsize}px`,
                   left: `${item.get('x') - (Math.round((14.3 * this.state.zoom) / 100) / 2)}px`,
@@ -643,7 +644,7 @@ export default class View extends React.Component {
         <div
           className="o-map-warp"
           style={{
-            top: '5rem',
+            top: '2.4rem',
             minWidth: '850px',
           }}
         >

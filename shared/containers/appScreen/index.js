@@ -26,7 +26,14 @@ export function createContainer(component) {
     mapDispatchToProps,
   )(component);
 }
+
 export const AppContainer = createContainer(myComponents.AppScreen);
 export const actions = myActions;
 export const reducer = myReducer;
 export const components = myComponents;
+
+export { default as AppScreen } from './components/AppScreen';
+export { default as AppScreenList } from './components/AppScreenList';
+export { default as AppScreenSettings } from './components/AppScreenSettings';
+
+

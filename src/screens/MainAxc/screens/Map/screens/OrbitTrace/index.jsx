@@ -265,7 +265,6 @@ export default class View extends React.Component {
         macList: [],
       }), curScreenId);
     }).then(() => {
-      console.log('list', this.props.store.getIn([curScreenId, 'data', 'list']));
       this.props.changeScreenQuery(fromJS({ mac: value }));
     }).then(() => {
       this.props.fetchScreenData();
@@ -337,17 +336,12 @@ export default class View extends React.Component {
 
   handleChangeQuery(name, data) {
     const curScreenId = this.props.store.get('curScreenId');
-    //Promise.resolve().then(() => {
-      // 清空历史数据，解决修改参数后，在数据返回之前使用历史数据绘图问题
     this.props.reciveScreenData(fromJS({
       list: [],
       macList: [],
     }), curScreenId);
-    //}).then(() => {
-      this.props.changeScreenQuery(fromJS({ [name]: data.value }));
-    //}).then(() => {
-      this.props.fetchScreenData();
-    //});
+    this.props.changeScreenQuery(fromJS({ [name]: data.value }));
+    this.props.fetchScreenData();
   }
 
   stationaryPoint(ctx, pathList) { // pathList为数组
@@ -436,6 +430,7 @@ export default class View extends React.Component {
         // 画线的轨迹
         for (curIndex; curIndex < distIndex; curIndex += 1) {
           curPoint = curvePath[curIndex];
+
           ctx.moveTo(prevPiont[0], prevPiont[1]);
           ctx.lineTo(curPoint[0], curPoint[1]);
           prevPiont = curPoint;
@@ -571,8 +566,8 @@ export default class View extends React.Component {
     let height = this.state.mapHeight;
 
     if (window.devicePixelRatio) {
-      height = height * window.devicePixelRatio;
-      width = width * window.devicePixelRatio;
+      height *= window.devicePixelRatio;
+      width *= window.devicePixelRatio;
     }
     return (
       <div
@@ -652,7 +647,7 @@ export default class View extends React.Component {
             onChange={data => this.onChangeMapId(data.value)}
           />
           <FormGroup
-            type="select"
+            type="text"
             className="fl"
             label={__('Client')}
             options={this.generateMacOptions()}

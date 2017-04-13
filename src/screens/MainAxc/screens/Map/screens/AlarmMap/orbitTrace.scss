@@ -8,7 +8,17 @@
       margin-left: 100px;
   }
 }
+.o-map-container {
+  .icon {
+    &.client {
+      transition: transform .2s ease-in-out;
 
+      &:hover {
+        transform: scale(1.2, 1.2);
+      }
+    }
+  }
+}
 .o-map-control-panel {
   .edit {
     transition: transform .2s ease-in-out;
@@ -17,4 +27,5 @@
       transform: scale(1.1, 1.1);
     }
   }
+
 }
