@@ -383,6 +383,7 @@ export default class View extends React.Component {
             this.editLayor = editLayor;
           }
         }}
+        className="o-map-control-panel"
         style={{
           left: this.state.mapOffsetX,
           top: this.state.mapOffsetY,
@@ -407,12 +408,17 @@ export default class View extends React.Component {
                   name="edit"
                   key={id}
                   id={index}
+                  className="edit"
                   style={{
                     position: 'absolute',
                     cursor: 'pointer',
-                    top: `${startY}px`,
-                    left: `${startX}px`,
-                    fontSize: `${Math.round((28 * this.state.zoom) / 100)}px`,
+                    top: `${startY + 2}px`,
+                    left: `${startX + 4}px`,
+                    background: '#333',
+                    color: '#fff',
+                    padding: '5px',
+                    borderRadius: '30px',
+                    fontSize: `${Math.round((16 * this.state.zoom) / 100)}px`,
                   }}
                   onClick={() => {
                     const editGpsPos = this.state.posList;
