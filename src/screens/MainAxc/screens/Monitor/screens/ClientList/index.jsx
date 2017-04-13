@@ -146,11 +146,11 @@ export default class Clients extends React.Component {
   }
 
   onAction(mac, actionType) {
-    if (this.props.selectedGroup.get('aclType') === 'disable') {
+    if (this.props.selectedGroup.get('aclType') !== 'black') {
       this.props.createModal({
         id: actionType,
         role: 'alert',
-        text: __('Need enable ACL'),
+        text: __('Need enable ACL Black List'),
       });
     } else {
       this.props.changeScreenActionQuery({

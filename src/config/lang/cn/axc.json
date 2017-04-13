@@ -411,6 +411,7 @@
   "ACL": "访问控制",
   "Blacklist": "黑名单列表",
   "Need enable ACL": "请先开启ACL功能",
+  "Need enable ACL Black List": "请先开启访问控制黑名单功能",
   "Image ratio: %s": "图片比例：%s",
   "Type Switch": "类型切换",
   "Manufacturer": "生产商",
