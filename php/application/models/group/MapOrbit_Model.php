@@ -4,12 +4,14 @@ class MapOrbit_Model extends CI_Model {
 		parent::__construct();
         $this->load->database();
 		$this->mysql = $this->load->database('mysqli', TRUE);        
-		$this->load->helper(array('array', 'my_customfun_helper'));
+		$this->load->helper(array('array', 'db_operation'));
 	}
 	function get_list($data) { 
         $list = array();
         $macList = array();
-                    
+		if( empty($data['groupid']) || empty($data['curMapId']) ){			
+			return json_encode(json_no('Parameter error !'));
+		}                     
         $build_id = $data['curMapId'];//区域id
         $groupid = $data['groupid'];
         $sta_mac = $data['mac'];    
