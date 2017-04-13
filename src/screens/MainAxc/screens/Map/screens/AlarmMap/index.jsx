@@ -481,7 +481,6 @@ export default class View extends React.Component {
                   this.props.changeScreenQuery({ paraForOrbit });
                   **********************************************************************/
                   window.location.href = '#/main/group/map/orbittrace';
-                  console.log(item.get('id'))
                 }}
               />
             ));
