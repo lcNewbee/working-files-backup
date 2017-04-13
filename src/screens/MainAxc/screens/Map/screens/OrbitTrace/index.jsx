@@ -3,7 +3,7 @@ import utils, { gps } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
-import { FormGroup, Icon } from 'shared/components';
+import { FormGroup, Icon, Button } from 'shared/components';
 import moment from 'moment';
 import { actions as appActions } from 'shared/containers/app';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
@@ -262,13 +262,14 @@ export default class View extends React.Component {
       // 清空历史数据，解决修改参数后，在数据返回之前使用历史数据绘图问题
       this.props.reciveScreenData(fromJS({
         list: [],
-        macList: [],
+        // macList: [],
       }), curScreenId);
     }).then(() => {
       this.props.changeScreenQuery(fromJS({ mac: value }));
-    }).then(() => {
-      this.props.fetchScreenData();
     });
+    // .then(() => {
+    //   this.props.fetchScreenData();
+    // });
   }
 
   onMapMouseUp() {
@@ -402,7 +403,6 @@ export default class View extends React.Component {
 
     // 当超过一个点时，才画线
     if (len > 1) {
-
       // 每帧连多少个点， 默认动画为 90 帧，1.5秒
       let animationFramePiontsLen = parseInt(len / DRAW_TIMES, 10);
       let prevPiont = curvePath[0];
@@ -549,12 +549,12 @@ export default class View extends React.Component {
     return ((2 * (p1 - p2)) + v0 + v1) * t3 + (-3 * (p1 - p2) - 2 * v0 - v1) * t2 + v0 * t + p1;
   }
 
-  generateMacOptions() {
-    const store = this.props.store;
-    const curScreenId = store.get('curScreenId');
-    const macList = store.getIn([curScreenId, 'data', 'macList']) || fromJS([]);
-    return macList.toJS().map(mac => ({ value: mac, label: mac }));
-  }
+  // generateMacOptions() {
+  //   const store = this.props.store;
+  //   const curScreenId = store.get('curScreenId');
+  //   const macList = store.getIn([curScreenId, 'data', 'macList']) || fromJS([]);
+  //   return macList.toJS().map(mac => ({ value: mac, label: mac }));
+  // }
   renderCurMap(mapList, curMapId, myZoom) {
     const curItem = mapList.find(item => item.get('id') === curMapId);
     const imgUrl = curItem ? curItem.get('backgroundImg') : '';
@@ -647,15 +647,6 @@ export default class View extends React.Component {
             onChange={data => this.onChangeMapId(data.value)}
           />
           <FormGroup
-            type="text"
-            className="fl"
-            label={__('Client')}
-            options={this.generateMacOptions()}
-            value={store.getIn([curScreenId, 'query', 'mac'])}
-            onChange={data => this.onChangeMac(data.value)}
-            searchable
-          />
-          <FormGroup
             type="date"
             className="fl"
             label={__('Date')}
@@ -686,6 +677,25 @@ export default class View extends React.Component {
             }}
           // showSecond={false}
           />
+          <div className="fl clearfix" style={{ position: 'relative' }}>
+            <FormGroup
+              type="text"
+              className="fl"
+              label={__('Client')}
+              value={store.getIn([curScreenId, 'query', 'mac'])}
+              onChange={data => this.onChangeMac(data.value)}
+            />
+            <Button
+              className="fl"
+              text={'GO'}
+              onClick={() => { this.props.fetchScreenData(); }}
+              style={{
+                position: 'absolute',
+                left: '212px',
+                height: '30px',
+              }}
+            />
+          </div>
         </div>
         <div
           className="o-map-warp"
