@@ -34,7 +34,6 @@ export { default as WizardContainer } from './Organism/WizardContainer';
 export { default as NavContainer } from './Organism/NavContainer';
 
 // Templates
-export { default as AppScreen } from './Template/AppScreen';
 export { default as NotFound } from './NotFound';
 
 // ProgressBar

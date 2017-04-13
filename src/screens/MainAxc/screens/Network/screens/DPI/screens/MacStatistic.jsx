@@ -6,10 +6,10 @@ import utils from 'shared/utils';
 import Select from 'shared/components/Select';
 import Table from 'shared/components/Table';
 // import EchartReact from 'shared/components/EchartReact';
-import AppScreen from 'shared/components/Template/AppScreen';
+
 import { FormGroup, FormInput } from 'shared/components/Form';
 import { actions as appActions } from 'shared/containers/app';
-import { actions } from 'shared/containers/appScreen';
+import { actions, AppScreen } from 'shared/containers/appScreen';
 import { colors } from 'shared/config/axc';
 
 const flowRateFilter = utils.filter('flowRate');

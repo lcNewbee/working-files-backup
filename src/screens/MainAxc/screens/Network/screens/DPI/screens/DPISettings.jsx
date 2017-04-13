@@ -4,9 +4,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import utils from 'shared/utils';
 // import EchartReact from 'shared/components/EchartReact';
-import AppScreen from 'shared/components/Template/AppScreen';
+
 import { actions as appActions } from 'shared/containers/app';
-import { actions } from 'shared/containers/appScreen';
+import { actions, AppScreen } from 'shared/containers/appScreen';
 
 const propTypes = fromJS({
   route: PropTypes.object,

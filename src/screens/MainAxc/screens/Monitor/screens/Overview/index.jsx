@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 import utils from 'shared/utils';
 import { Map, List, fromJS } from 'immutable';
 import { actions as appActions } from 'shared/containers/app';
-import { actions } from 'shared/containers/appScreen';
+import { actions, AppScreen } from 'shared/containers/appScreen';
 import { colors, $$commonPieOption } from 'shared/config/axc';
 import {
-  Modal, AppScreen, Table, Select, EchartReact, Button, FormGroup,
+  Modal, Table, Select, EchartReact, Button, FormGroup,
 } from 'shared/components';
 
 const flowRateFilter = utils.filter('flowRate');

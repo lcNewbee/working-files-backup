@@ -3,10 +3,10 @@ import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { Map, fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
-import AppScreen from 'shared/components/Template/AppScreen';
+
 import { countryOptions } from 'shared/config/axcRadio';
 import { actions as appActions } from 'shared/containers/app';
-import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 
 const settingsFormOptions = fromJS([
   {

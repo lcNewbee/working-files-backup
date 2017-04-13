@@ -3,13 +3,13 @@ import utils, { immutableUtils } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
-import AppScreen from 'shared/components/Template/AppScreen';
+
 import FileUploads from 'shared/components/FileUpload';
 import FormGroup from 'shared/components/Form/FormGroup';
 import { Button, SaveButton } from 'shared/components/Button';
 import FormContainer from 'shared/components/Organism/FormContainer';
 import { actions as appActions } from 'shared/containers/app';
-import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 
 import '../style.scss';
 

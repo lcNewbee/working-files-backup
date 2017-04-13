@@ -2,10 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import utils from 'shared/utils';
-import AppScreen from 'shared/components/Template/AppScreen';
+
 
 // custom
-import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 
 const flowRateFilter = utils.filter('flowRate:["KB"]');
 const flowListOptions = fromJS([

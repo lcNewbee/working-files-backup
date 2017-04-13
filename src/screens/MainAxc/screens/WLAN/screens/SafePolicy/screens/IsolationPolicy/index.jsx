@@ -5,9 +5,9 @@ import { Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { FormGroup } from 'shared/components/Form';
 import SaveButton from 'shared/components/Button/SaveButton';
-import AppScreen from 'shared/components/Template/AppScreen';
+
 import { actions as appActions } from 'shared/containers/app';
-import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 
 const propTypes = {
   app: PropTypes.instanceOf(Map),

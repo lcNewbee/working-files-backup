@@ -3,13 +3,13 @@ import { fromJS, Map, List } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import utils from 'shared/utils';
-import AppScreen from 'shared/components/Template/AppScreen';
+
 import Select from 'shared/components/Select';
 import Table from 'shared/components/Table';
 import Modal from 'shared/components/Modal';
 import { FormGroup, FormInput } from 'shared/components/Form';
 import { actions as appActions } from 'shared/containers/app';
-import { actions } from 'shared/containers/appScreen';
+import { actions, AppScreen } from 'shared/containers/appScreen';
 
 const flowRateFilter = utils.filter('flowRate');
 const propTypes = fromJS({

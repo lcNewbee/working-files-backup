@@ -4,7 +4,7 @@ import utils from 'shared/utils';
 import { actions as appActions } from '../app';
 import * as myActions from './actions';
 import myReducer from './reducer';
-import myComponents from './components';
+import MyAppScreen from './components/AppScreen';
 
 function mapStateToProps(state) {
   return {
@@ -27,12 +27,11 @@ export function createContainer(component) {
   )(component);
 }
 
-export const AppContainer = createContainer(myComponents.AppScreen);
+export const AppContainer = createContainer(MyAppScreen);
 export const actions = myActions;
 export const reducer = myReducer;
-export const components = myComponents;
+export const AppScreen = MyAppScreen;
 
-export { default as AppScreen } from './components/AppScreen';
 export { default as AppScreenList } from './components/AppScreenList';
 export { default as AppScreenSettings } from './components/AppScreenSettings';
 

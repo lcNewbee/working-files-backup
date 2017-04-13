@@ -5,12 +5,12 @@ import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import h337 from 'heatmap.js';
 import moment from 'moment';
-import AppScreen from 'shared/components/Template/AppScreen';
+
 import {
   FormInput, Icon, FormGroup,
 } from 'shared/components';
 import { actions as appActions } from 'shared/containers/app';
-import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as propertiesActions } from 'shared/containers/properties';
 
 import '../../shared/_map.scss';

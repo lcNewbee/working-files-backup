@@ -6,11 +6,11 @@ import utils from 'shared/utils';
 import validator from 'shared/validator';
 
 // components
-import AppScreen from 'shared/components/Template/AppScreen';
+
 import Button from 'shared/components/Button/Button';
 
 // custom
-import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 import { getActionable } from 'shared/axc';
 

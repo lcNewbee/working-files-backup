@@ -6,8 +6,8 @@ import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import { SaveButton, Button } from 'shared/components/Button';
 import Table from 'shared/components/Table';
-import AppScreen from 'shared/components/Template/AppScreen';
-import { actions as screenActions } from 'shared/containers/appScreen';
+
+import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 import * as productActions from '../../../../reducer';
 

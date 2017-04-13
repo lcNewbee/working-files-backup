@@ -3,10 +3,10 @@ import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
-import AppScreen from 'shared/components/Template/AppScreen';
+
 import { radioBase, radioAdvance, numberKeys, radioQos } from 'shared/config/axcRadio';
 import { actions as appActions } from 'shared/containers/app';
-import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import FormContainer from 'shared/components/Organism/FormContainer';
 import Icon from 'shared/components/Icon';
 import { getActionable } from 'shared/axc';

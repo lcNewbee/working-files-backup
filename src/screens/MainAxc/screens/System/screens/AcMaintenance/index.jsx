@@ -4,12 +4,12 @@ import { connect } from 'react-redux';
 import { Map, List, fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import moment from 'moment';
-import AppScreen from 'shared/components/Template/AppScreen';
+
 import FormGroup from 'shared/components/Form/FormGroup';
 import SaveButton from 'shared/components/Button/SaveButton';
 import FileUpload from 'shared/components/FileUpload';
 import { actions as appActions } from 'shared/containers/app';
-import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { getActionable } from 'shared/axc';
 import AcVersion from './AcVersion';
 

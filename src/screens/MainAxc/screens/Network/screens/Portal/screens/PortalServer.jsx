@@ -4,9 +4,9 @@ import validator from 'shared/validator';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
-import AppScreen from 'shared/components/Template/AppScreen';
+
 import { actions as appActions } from 'shared/containers/app';
-import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 
 const listOptions = fromJS([
   {

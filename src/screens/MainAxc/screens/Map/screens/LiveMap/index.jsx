@@ -11,9 +11,9 @@ import FormContainer from 'shared/components/Organism/FormContainer';
 import Table from 'shared/components/Table';
 import Modal from 'shared/components/Modal';
 import Switchs from 'shared/components/Switchs';
-import AppScreen from 'shared/components/Template/AppScreen';
+
 import { actions as appActions } from 'shared/containers/app';
-import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as propertiesActions } from 'shared/containers/properties';
 
 import '../../shared/_map.scss';
@@ -586,9 +586,9 @@ export default class LiveMap extends React.PureComponent {
       icon: item.get('markerType') === 'ap' ?
           apIcon : buildingIcon,
       title: item.get('markerTitle') || '',
-      label: {
-        text: item.get('markerTitle') || `${index}`,
-      },
+      // label: {
+      //   text: item.get('markerTitle') || `${index}`,
+      // },
       // draggable: actionType === 'add' || actionType === 'edit',
       //animation: google.maps.Animation.DROP,
     });

@@ -1,14 +1,14 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
-import AppScreen from 'shared/components/Template/AppScreen';
+
 import { $$commonPieOption } from 'shared/config/axc';
 
 // components
 import {
   Table, EchartReact, Button,
 } from 'shared/components';
-import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 
 
 const tableOptions = fromJS([

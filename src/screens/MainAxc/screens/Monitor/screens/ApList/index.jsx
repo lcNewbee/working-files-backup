@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import utils from 'shared/utils';
 import { radioBase, radioAdvance, radioQos, numberKeys } from 'shared/config/axcRadio';
 import { Button } from 'shared/components/Button';
-import AppScreen from 'shared/components/Template/AppScreen';
+
 import FormContainer from 'shared/components/Organism/FormContainer';
 import Icon from 'shared/components/Icon';
 import { apStatus } from 'shared/config/axcAp';
@@ -13,7 +13,7 @@ import validator from 'shared/validator';
 
 // custom
 import { actions as appActions } from 'shared/containers/app';
-import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as propertiesActions } from 'shared/containers/properties';
 
 const EDIT_LIST_ACTION = 'editList';

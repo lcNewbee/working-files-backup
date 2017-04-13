@@ -5,7 +5,7 @@
   },
   "data": {
     "settings": {
-      "liveMapType": "Baidu"
+      "liveMapType": "Google"
     },
     "list": [{
       "id": 1,

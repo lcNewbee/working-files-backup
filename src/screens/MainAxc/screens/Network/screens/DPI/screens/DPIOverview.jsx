@@ -2,13 +2,13 @@ import React, { PropTypes } from 'react';
 import { fromJS, List, Map } from 'immutable';
 import { $$commonPieOption } from 'shared/config/axc';
 import EchartReact from 'shared/components/EchartReact';
-import AppScreen from 'shared/components/Template/AppScreen';
+
 import Select from 'shared/components/Select';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import utils from 'shared/utils';
 import { actions as appActions } from 'shared/containers/app';
-import { actions } from 'shared/containers/appScreen';
+import { actions, AppScreen } from 'shared/containers/appScreen';
 
 const flowRateFilter = utils.filter('flowRate');
 const msg = {

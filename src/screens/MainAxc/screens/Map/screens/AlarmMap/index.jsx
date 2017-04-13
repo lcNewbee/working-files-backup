@@ -3,9 +3,9 @@ import utils, { gps } from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
-import { FormGroup, Icon, AppScreen, Modal } from 'shared/components';
+import { FormGroup, Icon, Modal } from 'shared/components';
 import { actions as appActions } from 'shared/containers/app';
-import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as propertiesActions } from 'shared/containers/properties';
 import './orbitTrace.scss';
 

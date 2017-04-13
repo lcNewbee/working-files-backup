@@ -3,10 +3,10 @@ import utils from 'shared/utils';
 import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
-import AppScreen from 'shared/components/Template/AppScreen';
+
 import FormGroup from 'shared/components/Form/FormGroup';
 import SaveButton from 'shared/components/Button/SaveButton';
-import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 
 const settingsFormOptions = fromJS([

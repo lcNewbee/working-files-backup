@@ -3,7 +3,7 @@ import { fromJS } from 'immutable';
 import { AppScreen, FormInput, Button, Select } from 'shared/components';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 import utils from 'shared/utils';
 

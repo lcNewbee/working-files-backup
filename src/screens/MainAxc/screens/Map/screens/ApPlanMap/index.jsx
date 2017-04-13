@@ -4,12 +4,12 @@ import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { fromJS, Map, List } from 'immutable';
 import { bindActionCreators } from 'redux';
-import AppScreen from 'shared/components/Template/AppScreen';
+
 import Button from 'shared/components/Button/Button';
 import Icon from 'shared/components/Icon';
 import { getActionable } from 'shared/axc';
 import { actions as appActions } from 'shared/containers/app';
-import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as propertiesActions } from 'shared/containers/properties';
 import * as axcActions from '../../../../actions';
 import MapList from '../../shared/MapList';

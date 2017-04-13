@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/validator';
-import AppScreen from 'shared/components/Template/AppScreen';
-import { actions as screenActions } from 'shared/containers/appScreen';
+
+import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 import { Button } from 'shared/components/Button';
 import FormContainer from 'shared/components/Organism/FormContainer';

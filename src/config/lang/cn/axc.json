@@ -19,7 +19,7 @@
   "Are you sure to delete selected aps: %s?": "你确定要删除AP：%s?",
   "Are you sure to %s selected rows: %s": "你确定要%s选中的行：%s",
   "Are you sure to %s selected %s row?": "你确定要%s选中的第 %s 行?",
-  "Are you sure to %s selected %s rows?": "你确定要%s选中的 %s 行?",
+  "Are you sure to %s selected %s rows?": "你确定要%s选中的 %s 项?",
   "Please select delete rows": "请选择你要删除的项",
   "Please select %s rows": "请选择你要%s的项",
   "delete": "删除",

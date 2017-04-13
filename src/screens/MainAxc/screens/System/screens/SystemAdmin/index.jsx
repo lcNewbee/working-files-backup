@@ -4,12 +4,12 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/validator';
-import AppScreen from 'shared/components/Template/AppScreen';
+
 import { FormGroup } from 'shared/components/Form';
 import {
   purviewOptions, PURVIEW_ADMIN, PURVIEW_GUEST,
 } from 'shared/config/axc';
-import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 
 const listOptions = fromJS([

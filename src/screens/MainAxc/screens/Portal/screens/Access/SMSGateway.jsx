@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import validator from 'shared/validator';
-import { FormGroup, AppScreen } from 'shared/components';
-import { actions as screenActions } from 'shared/containers/appScreen';
+import { FormGroup } from 'shared/components';
+import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 import './smsgateway.scss';
 

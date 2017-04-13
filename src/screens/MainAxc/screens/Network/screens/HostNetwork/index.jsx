@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppScreen } from 'shared/components';
-import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 import utils from 'shared/utils';
 import { connect } from 'react-redux';

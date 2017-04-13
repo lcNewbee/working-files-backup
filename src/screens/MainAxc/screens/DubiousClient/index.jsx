@@ -5,10 +5,10 @@ import { bindActionCreators } from 'redux';
 import utils from 'shared/utils';
 
 // components
-import AppScreen from 'shared/components/Template/AppScreen';
+
 
 // custom
-import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as appActions } from 'shared/containers/app';
 
 const listOptions = fromJS([

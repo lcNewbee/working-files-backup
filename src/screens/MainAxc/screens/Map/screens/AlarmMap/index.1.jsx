@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import { FormGroup, Icon, AppScreen, Modal } from 'shared/components';
 import moment from 'moment';
 import { actions as appActions } from 'shared/containers/app';
-import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as propertiesActions } from 'shared/containers/properties';
 import './orbitTrace.scss';
 

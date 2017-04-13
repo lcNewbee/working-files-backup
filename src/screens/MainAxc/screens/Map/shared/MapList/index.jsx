@@ -85,6 +85,7 @@ export default class MapList extends React.PureComponent {
       'onAddMap',
       'checkMapData',
       'editMapList',
+      'closeModal',
     ]);
 
     this.state = {
@@ -106,20 +107,31 @@ export default class MapList extends React.PureComponent {
           if (errMsg.isEmpty() && !this.checkMapData()) {
             this.props.saveFile(url, formElem)
               .then(() => {
-                this.setState({
-                  isModalShow: false,
-                });
+                this.closeModal();
                 this.fetchMapList();
               });
           }
         },
       );
   }
+
   onAddMap() {
     this.setState({
       isModalShow: true,
       action: 'add',
     });
+  }
+  closeModal() {
+    this.setState({
+      backgroundImgUrl: '',
+      isModalShow: false,
+      id: '',
+      mapImg: '',
+      mapName: '',
+      width: '',
+      length: '',
+    });
+    this.props.resetVaildateMsg();
   }
   checkMapData() {
     const mapId = this.state.id;
@@ -280,16 +292,7 @@ export default class MapList extends React.PureComponent {
           title={__('Add')}
           isShow={this.state.isModalShow}
           onClose={() => {
-            this.setState({
-              backgroundImgUrl: '',
-              isModalShow: false,
-              id: '',
-              mapImg: '',
-              mapName: '',
-              width: '',
-              length: '',
-            });
-            this.props.resetVaildateMsg();
+            this.closeModal();
           }}
           noFooter
           customBackdrop
@@ -308,6 +311,11 @@ export default class MapList extends React.PureComponent {
               type="hidden"
               name="groupid"
               value={this.props.groupid}
+            />
+            <input
+              type="hidden"
+              name="id"
+              value={this.state.id}
             />
             <input
               type="hidden"

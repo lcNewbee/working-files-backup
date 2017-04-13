@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import { fromJS } from 'immutable';
 import { bindActionCreators } from 'redux';
 import utils from 'shared/utils';
-import AppScreen from 'shared/components/Template/AppScreen';
+
 import validator from 'shared/validator';
 // custom
 import { actions as appActions } from 'shared/containers/app';
-import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as propertiesActions } from 'shared/containers/properties';
 
 const formOptions = fromJS([

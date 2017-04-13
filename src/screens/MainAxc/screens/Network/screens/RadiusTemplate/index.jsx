@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import { fromJS, Map } from 'immutable';
 import { bindActionCreators } from 'redux';
 import utils from 'shared/utils';
-import AppScreen from 'shared/components/Template/AppScreen';
+
 import validator from 'shared/validator';
 import FormContainer from 'shared/components/Organism/FormContainer';
 import Icon from 'shared/components/Icon';
 // custom
 import { actions as appActions } from 'shared/containers/app';
-import { actions as screenActions } from 'shared/containers/appScreen';
+import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as propertiesActions } from 'shared/containers/properties';
 // import * as appActions from 'shared/actions/app';
 // import * as screenActions from 'shared/actions/screens';
