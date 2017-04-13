@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import Nav from 'shared/components/Nav';
 import Icon from 'shared/components/Icon';
 import Navbar from 'shared/components/Navbar';
-import { renderRoutesList } from 'shared/components/Organism/RouterConfig';
+import { renderRoutesSwitch } from 'shared/components/Organism/RouterConfig';
 import { actions as appActions } from 'shared/containers/app';
 import * as actions from './actions';
 
@@ -75,7 +75,7 @@ export default class Main extends React.PureComponent {
           />
           <div className="t-main__content">
             {
-              renderRoutesList(this.props.route.routes)
+              renderRoutesSwitch(this.props.route.routes)
             }
           </div>
         </div>
