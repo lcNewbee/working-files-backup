@@ -401,10 +401,11 @@ export default class View extends React.Component {
             const pixelPos = this.state.pixelPos;
             // const that = this;
             const nodeList = pixelPos.map((item) => {
-              const { startX, startY, index } = item.toJS();
+              const { startX, startY, index, id } = item.toJS();
               return (
                 <Icon
                   name="edit"
+                  key={id}
                   id={index}
                   style={{
                     position: 'absolute',
@@ -456,6 +457,7 @@ export default class View extends React.Component {
             const nodeList = this.state.clientPos.map(item => (
               <Icon
                 name="map-pin"
+                key={item.get('id')}
                 style={{
                   position: 'absolute',
                   color: 'green',
@@ -479,6 +481,7 @@ export default class View extends React.Component {
                   this.props.changeScreenQuery({ paraForOrbit });
                   **********************************************************************/
                   window.location.href = '#/main/group/map/orbittrace';
+                  console.log(item.get('id'))
                 }}
               />
             ));

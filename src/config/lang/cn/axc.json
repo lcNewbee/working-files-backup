@@ -741,6 +741,12 @@
   "RSSI":"信号质量",
   "Dubious Client": "可疑客户端",
 
+  "Show Priority": "显示优先级",
+  "Priority": "优先级",
+  "Show ID": "显示ID",
+  "Priority Editable": "可编辑",
+  "Alarm Map": "告警地图",
+
   "Clients ": "客户端应用分析",
   "Ports ": "端口数据分析",
   "Protocols ": "协议信息",

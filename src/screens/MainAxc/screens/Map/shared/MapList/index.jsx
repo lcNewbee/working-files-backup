@@ -154,6 +154,21 @@ export default class MapList extends React.PureComponent {
       },
     );
   }
+  deleteMapList(mapId) {
+    const url = 'goform/group/map/list';
+
+    this.props.save(url, {
+      groupid: this.props.groupid,
+      action: 'delete',
+      selectedList: [mapId],
+    }).then(
+      (json) => {
+        if (json && json.state && json.state.code === 2000) {
+          this.fetchMapList();
+        }
+      },
+    );
+  }
   editMapList($$map) {
     this.setState($$map.merge({
       action: 'edit',
