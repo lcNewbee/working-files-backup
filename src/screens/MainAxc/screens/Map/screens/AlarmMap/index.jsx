@@ -7,6 +7,7 @@ import { FormGroup, Icon, Modal } from 'shared/components';
 import { actions as appActions } from 'shared/containers/app';
 import { actions as screenActions, AppScreen } from 'shared/containers/appScreen';
 import { actions as propertiesActions } from 'shared/containers/properties';
+import validator from 'shared/validator';
 import './orbitTrace.scss';
 
 const propTypes = {
@@ -281,7 +282,7 @@ export default class View extends React.Component {
       }
       // 绘制文本，网格显示编号
       if (this.state.showId) {
-        const font = Math.round((endX - startX) / 5);
+        const font = Math.min(Math.round((endX - startX) / 5, Math.round(endY - startY) / 5));
         ctx.fillStyle = 'blue';
         ctx.font = `bold ${font}px Courier New`;
         ctx.fillText(index + 1, ((startX + endX) / 2) - Math.round(font / 2),
@@ -725,6 +726,17 @@ export default class View extends React.Component {
               let editGpsPos = this.state.editGpsPos;
               const onEditId = this.state.onEditId;
               editGpsPos = editGpsPos.setIn([onEditId, 'level'], data.value);
+              this.setState({ editGpsPos });
+            }}
+          />
+          <FormGroup
+            type="number"
+            label={__('Gather Threshold')}
+            value={this.state.editGpsPos.getIn([this.state.onEditId, 'gather_threshold'])}
+            onChange={(data) => {
+              let editGpsPos = this.state.editGpsPos;
+              const onEditId = this.state.onEditId;
+              editGpsPos = editGpsPos.setIn([onEditId, 'gather_threshold'], data.value);
               this.setState({ editGpsPos });
             }}
           />

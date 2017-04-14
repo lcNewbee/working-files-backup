@@ -12,7 +12,9 @@
         "end_lng": 123.2322323,
         "end_lat": 43.230323231,
         "level": "3",
-        "describe": "aaa"
+        "id": "1",
+        "describe": "aaa",
+        "gather_threshold": "300"
       },
       {
         "sta_lat": 43.23123231,
@@ -20,7 +22,9 @@
         "end_lng": 123.2332323,
         "end_lat": 43.230323231,
         "level": "3",
-        "describe": "aaa"
+        "id": "2",
+        "describe": "aaa",
+        "gather_threshold": "400"
       }
     ]
   }
