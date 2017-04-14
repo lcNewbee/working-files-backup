@@ -400,6 +400,7 @@ export default class Blacklist extends React.Component {
         modalSize={isCopySsid ? 'lg' : 'md'}
         onBeforeSave={this.onBeforeSave}
         actionable
+        selectable
         searchable
         searchProps={{
           placeholder: 'MAC',
