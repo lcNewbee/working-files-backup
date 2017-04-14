@@ -13,7 +13,7 @@ import {
   actions as propertiesActions,
   Screen as PropertyPanel,
 } from 'shared/containers/properties';
-import { renderRoutesSwitch } from 'shared/components/Organism/RouterConfig';
+import { RouteSwitchs } from 'shared/components/Organism/RouterConfig';
 import * as actions from './actions';
 import myReducer from './reducer';
 
@@ -271,8 +271,9 @@ export default class Main extends React.PureComponent {
             this.renderBreadcrumb()
           }
         </div>
-
-        {renderRoutesSwitch(this.props.route.routes)}
+        <RouteSwitchs
+          routes={this.props.route.routes}
+        />
         <PopOver
           onClose={this.onHiddenPopOver}
           {...popOver}

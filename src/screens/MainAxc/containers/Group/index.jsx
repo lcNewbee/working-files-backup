@@ -10,7 +10,7 @@ import Modal from 'shared/components/Modal';
 import Icon from 'shared/components/Icon';
 import { FormGroup } from 'shared/components/Form';
 import Table from 'shared/components/Table';
-import { renderRoutesList } from 'shared/components/Organism/RouterConfig';
+import { RouteSwitchs } from 'shared/components/Organism/RouterConfig';
 import { getActionable } from 'shared/axc';
 import { actions as appActions } from 'shared/containers/app';
 import { actions as propertiesActions } from 'shared/containers/properties';
@@ -1018,7 +1018,9 @@ export default class MainGroup extends React.Component {
         </div>
 
         <div className="t-main__content">
-          {renderRoutesList(this.props.route.routes)}
+          <RouteSwitchs
+            routes={this.props.route.routes}
+          />
         </div>
 
         <Modal

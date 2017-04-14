@@ -802,12 +802,9 @@ export default class Basic extends React.Component {
       val: '',
       item: fromJS({}),
     }));
-    console.log('vlanEnable', vlanEnable);
     props.fetch('goform/get_network_info').then((json) => {
-      console.log('json', json);
       if (json.state && json.state.code === 2000) {
         vlanEnable = json.data.vlanEnable;
-        console.log('vlanEnable', vlanEnable);
       }
     });
     const config = fromJS({

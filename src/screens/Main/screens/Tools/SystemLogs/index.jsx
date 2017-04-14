@@ -106,7 +106,6 @@ export default class SystemLogs extends Component {
 
   onChangePage(data) {
     const totalPage = this.props.selfState.getIn(['logPage', 'totalPage']);
-    console.log('totalPage', totalPage);
     // console.log('selfState.get(searchItem)', this.props.selfState.get('searchItem'));
     // this.onChangeSearchItem(this.props.selfState.get('searchItem'));
     // let logList;
@@ -120,7 +119,6 @@ export default class SystemLogs extends Component {
     const perPageNum = this.props.selfState.get('perPageNum');
     const listLen = logList.length;
     const startNo = (data - 1) * perPageNum;
-    console.log(startNo, listLen);
     const list = [];
     let currPage;
     let nextPage;
@@ -160,7 +158,6 @@ export default class SystemLogs extends Component {
   }
 
   onChangeSearchItem(val) {
-    console.log('val', val);
     const temp = val;
     this.props.changeSearchItem(val);
     // if (temp.replace(/\s/g, '') === '') {
@@ -177,8 +174,6 @@ export default class SystemLogs extends Component {
     }
 
     // this.props.changeTableList(fromJS(searchList));
-    console.log('searchList.length', searchList.length);
-    console.log('this.props.selfState.get(perPageNum)', this.props.selfState.get('perPageNum'));
     this.props.changSearchList(fromJS(searchList));
     this.props.changePageObject(fromJS({
       totalPage: Math.ceil(searchList.length / this.props.selfState.get('perPageNum')),

@@ -205,7 +205,6 @@ export default class NetworkSettings extends React.Component {
     });
     props.fetchSettings().then(() => {
       this.curProto = this.props.store.getIn(['curData', 'proto']);
-      console.log('curProto', this.curProto);
     });
     // 初始化页面状态
     props.changeProgressModalShowStatus(false);

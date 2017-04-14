@@ -163,7 +163,6 @@ export default class Practice extends React.Component {
           //   });
           // }}
           onPageChange={(i) => {
-            console.log('i', i);
             const totalPage = this.state.page.get('totalPage');
             let nextPage;// = this.state.page.get('nextPage');
             if (i >= totalPage - 1) {
@@ -175,7 +174,6 @@ export default class Practice extends React.Component {
             this.setState({
               page: page1,
             });
-            console.log(this.state.page.toJS());
           }}
         />
       </div>

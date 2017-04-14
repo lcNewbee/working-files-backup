@@ -459,12 +459,10 @@ export default class SystemStatus extends React.Component {
       staList = ap.staList;
     }
     if (station !== undefined) {
-      console.log('station', station);
       const obj = station;
       obj['ip'] = station.apInfo.ip;
       obj['apInfo'] = undefined;
       connectInfo.push(obj);
-      console.log('connectInfo', connectInfo);
     }
     // console.log(status, deviceModel);
     // curData = this.props.store.getIn(['curData']);

@@ -427,7 +427,6 @@ export default class QuickSetup extends React.Component {
                 onChange={(data) => {
                   this.props.fetchSettings()
                       .then(() => {
-                        console.log(data.value);
                         this.props.changeDeviceMode(data.value);
                         this.props.updateItemSettings({
                           wirelessMode: data.value,

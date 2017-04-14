@@ -42,7 +42,7 @@ export default function (state = defaultState, action) { // 根据action修改�
       const apInfo = fromJS(action.data.remoteApInfo);
       // console.log(apInfo);
       const temp = state.delete('remoteApInfo').concat(apInfo);
-      console.log('temp:', temp);
+      //console.log('temp:', temp);
       return temp;
     default:
   }

@@ -414,7 +414,6 @@ export default class QuickSetup extends React.Component {
       }).then(() => {
         // 用radioList中第一个ssid名称初始化与radioList同级的ssid
         const ssid = this.props.store.getIn(['curData', 'radioList', '0', 'ssid']);
-        console.log('ssid', ssid);
         props.updateItemSettings({ ssid });
       });
     props.resetVaildateMsg();

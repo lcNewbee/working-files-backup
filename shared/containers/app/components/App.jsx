@@ -5,7 +5,7 @@ import ReduxToastr from 'react-redux-toastr';
 import Modal from 'shared/components/Modal';
 import ProgressBar from 'shared/components/ProgressBar';
 import stringUtils from 'shared/utils/lib/string';
-import { renderRoutesSwitch } from 'shared/components/Organism/RouterConfig';
+import { RouteSwitchs } from 'shared/components/Organism/RouterConfig';
 import matchPath from 'react-router/matchPath';
 import Router from 'react-router/Router';
 
@@ -114,10 +114,9 @@ export default class App extends Component {
 
     return (
       <div>
-        {
-          renderRoutesSwitch(this.props.route.routes)
-          // renderRoutesConfig(this.props.route.routes)
-        }
+        <RouteSwitchs
+          routes={this.props.route.routes}
+        />
         <Modal
           id="appModal"
           isShow={modal.status === 'show'}

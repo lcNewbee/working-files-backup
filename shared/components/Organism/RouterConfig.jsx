@@ -3,6 +3,9 @@ import Switch from 'react-router/Switch';
 import Route from 'react-router/Route';
 import { Redirect } from 'react-router-dom';
 
+let prevRouteList = null;
+let prevRoutes = null;
+
 export default function renderRoutesTree(routes) {
   if (!routes) {
     return null;
@@ -74,52 +77,66 @@ export function renderRoutesList(routes) {
     return routeList;
   }
 
-  routeList = [];
+  // 缓存执行结果
+  if (routes !== prevRoutes) {
+    routeList = [];
 
-  routes.forEach(
-    (route) => {
-      const retNodes = [];
-      const sunRoutes = route.routes;
-      const curKey = route.id || route.path;
-      const indexPath = route.indexPath ||
-        (sunRoutes && sunRoutes[0] && sunRoutes[0].path);
+    routes.forEach(
+      (route) => {
+        const retNodes = [];
+        const sunRoutes = route.routes;
+        const curKey = route.id || route.path;
+        const indexPath = route.indexPath ||
+          (sunRoutes && sunRoutes[0] && sunRoutes[0].path);
 
-      if (indexPath) {
-        routeList.push(
-          <Route
-            key={`${curKey}Redirect`}
+        if (indexPath) {
+          routeList.push(
+            <Route
+              key={`${curKey}Redirect`}
+              path={route.path}
+              render={() => (
+                <Redirect to={indexPath} />
+              )}
+              exact
+            />,
+          );
+        }
+
+        if (route.component) {
+          routeList.push(<Route
+            key={curKey}
             path={route.path}
-            render={() => (
-              <Redirect to={indexPath} />
-            )}
-            exact
-          />,
-        );
-      }
+            render={
+              routeProps => <route.component {...routeProps} route={route} />
+            }
+          />);
 
-      if (route.component) {
-        routeList.push(<Route
-          key={curKey}
-          path={route.path}
-          render={
-            routeProps => <route.component {...routeProps} route={route} />
-          }
-        />);
+        // 如果无 component 又有子路由
+        } else if (sunRoutes.length > 0) {
+          routeList = routeList.concat(renderRoutesList(sunRoutes));
+        }
 
-      // 如果无 component 又有子路由
-      } else if (sunRoutes.length > 0) {
-        routeList = routeList.concat(renderRoutesList(sunRoutes));
-      }
+        return retNodes;
+      },
+    );
 
-      return retNodes;
-    },
-  );
+    prevRoutes = routes;
+    prevRouteList = routeList;
+
+  // 如果参数没变返回上次结果
+  } else {
+    routeList = prevRouteList;
+  }
 
   return routeList;
 }
 
-export function renderRoutesSwitch(routes) {
+export function RouteSwitchs(props) {
+  const { routes } = props;
   const routeList = renderRoutesList(routes);
+
   return <Switch>{routeList}</Switch>;
 }
+
+
 

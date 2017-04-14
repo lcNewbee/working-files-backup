@@ -186,7 +186,6 @@ export default class AcVersion extends PureComponent {
         });
       },
       error: (file) => {
-        console.log(file);
       },
       processing: null,
       uploadprogress: null,

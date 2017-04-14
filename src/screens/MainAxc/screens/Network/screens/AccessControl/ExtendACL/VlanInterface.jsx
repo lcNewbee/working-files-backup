@@ -58,7 +58,6 @@ export default class View extends React.Component {
               return fromJS({ label: groupName, value: groupId });
             });
           }
-          console.log(this.aclGroupListOptions);
         });
   }
 

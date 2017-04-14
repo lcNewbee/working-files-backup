@@ -33,9 +33,7 @@ function onUpdateMacStatus(state, action) {
 }
 
 function onChangeSelectedSsid(state, action) {
-  console.log('action', action.data);
   const statusArr = new Array(action.data.macListLen).fill(false);
-  console.log('statusArr', statusArr);
   return state.set('selectedSsid', action.data.selectedSsid)
               .set('macstatus', fromJS(statusArr));
 }

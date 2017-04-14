@@ -61,7 +61,6 @@ export default class SignUp extends React.Component {
         this.props.changeCurrModeData(data);
         this.props.changeNextModeData(data);
         this.props.changeShowProgressBar(false);
-        console.log('did mount');
       }
     }).then(() => {
       // 后台根据是否请求过下面的接口识别是否是第一次登陆
@@ -148,7 +147,6 @@ export default class SignUp extends React.Component {
     const query = this.props.selfState.get('nextModeData').toJS();
     this.props.save('goform/set_thin', query);
 
-    console.log('change')
     this.props.changeShowProgressBar(true);
   }
 

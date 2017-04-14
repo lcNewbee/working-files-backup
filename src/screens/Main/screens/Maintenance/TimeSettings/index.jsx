@@ -77,12 +77,9 @@ export default class TimeSettings extends Component {
     const saveData = this.props.store.get('curData').set('timeZone', timeZone)
                       .delete('zoneName').toJS();
     const ntpStrValid = saveData.ntpServer.match(/^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/);
-    console.log(ntpStrValid);
     if (ntpStrValid[0] === saveData.ntpServer) {
-      console.log('ntp valid');
       this.props.save('goform/set_ntp', saveData);
     } else {
-      console.log('ntp not valid');
       this.props.createModal({
         role: 'alert',
         text: __('Please input a valid ntp server!'),

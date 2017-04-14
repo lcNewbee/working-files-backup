@@ -11,7 +11,7 @@ const applyMiddleware = require('redux').applyMiddleware;
 const createStore = require('redux').createStore;
 const Provider = require('react-redux').Provider;
 const AppContainer = require('react-hot-loader').AppContainer;
-const renderRoutesSwitch = require('shared/components/Organism/RouterConfig').renderRoutesSwitch;
+const RouteSwitchs = require('shared/components/Organism/RouterConfig').RouteSwitchs;
 const prodConfig = require('./config/ASW3').default;
 
 const HashRouter = ReactRouterDom.HashRouter;
@@ -42,7 +42,9 @@ function renderApp(renderRoutes) {
     <AppContainer>
       <Provider store={stores}>
         <HashRouter>
-          {renderRoutesSwitch(renderRoutes)}
+          <RouteSwitchs
+            routes={renderRoutes}
+          />
         </HashRouter>
       </Provider>
     </AppContainer>,

@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import Nav from 'shared/components/Nav';
-import { renderRoutesSwitch } from 'shared/components/Organism/RouterConfig';
+import { RouteSwitchs } from 'shared/components/Organism/RouterConfig';
 
 const propTypes = {
   route: PropTypes.shape({
@@ -28,7 +28,9 @@ class NavContainer extends React.PureComponent {
         </div>
 
         <div className="t-main__content">
-          {renderRoutesSwitch(route.routes)}
+          <RouteSwitchs
+            routes={route.routes}
+          />
         </div>
       </div>
     );

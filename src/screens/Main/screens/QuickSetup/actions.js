@@ -63,7 +63,6 @@ export function saveCountrySelectModal() {
     };
     dispatch(fetch('goform/get_country_info', saveInfo))
             .then((json) => {
-              console.log('json', json.data);
               if (json.state && json.state.code === 2000) {
                 dispatch(receiveCountryInfo(json.data));
               }

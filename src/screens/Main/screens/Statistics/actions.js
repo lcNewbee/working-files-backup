@@ -12,7 +12,6 @@ export function createReport() {
     dispatch(appActions.fetch(urls.createReport, query))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
-          console.log('json ok');
           dispatch(fetchReportInfo());
         }
       });
@@ -26,7 +25,6 @@ export function emailReport(num) {
     dispatch(appActions.fetch(urls.emailReport, id))
             .then((json) => {
               if (json.state && json.state.code === 2000) {
-                console.log('email report ok');
               }
             });
   };
@@ -39,7 +37,6 @@ export function downloadReport(num) {
     dispatch(appActions.fetch(urls.fetchReport, id))
             .then((json) => {
               if (json.state && json.state.code === 2000) {
-                console.log('download report');
               }
             });
   };
@@ -52,7 +49,6 @@ export function deleteReport(num) {
     dispatch(appActions.fetch(urls.deleteReport, id))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
-          console.log('json ok');
           dispatch(fetchReportInfo());
         }
       });
@@ -87,7 +83,6 @@ export function fetchReportInfo() {
     dispatch(appActions.fetch(urls.fetchReportList))
       .then((json) => {
         if (json.state && json.state.code === 2000) {
-          console.log('fetch');
           dispatch(reciveFetchReportInfo(json.data));
         }
       });

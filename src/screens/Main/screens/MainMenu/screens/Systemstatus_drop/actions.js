@@ -12,7 +12,6 @@ export function receiveSystemStatus(data) {
 
 export function fetchSystemStatus() {
   return (dispatch, getState) => {
-    console.log('in action');
     dispatch(appActions.fetch(urls.fetchSystemStatus)).then((json) => {
       // console.log(json);
       dispatch(receiveSystemStatus(json.data));

@@ -125,7 +125,6 @@ function getCurvePoints(points, tension, numOfSeg, close) {
   l = close ? 0 : points.length - 2;
   res[rPos++] = points[l];
   res[rPos] = points[l + 1];
-  console.log('res', res);
   return res;
 }
 
@@ -439,7 +438,6 @@ export default class View extends React.Component {
   }
 
   updateCanvas($$pathList, mapList, curMapId) {
-    console.log('updateCanvas');
     // if (typeof $$pathList === 'undefined' || typeof mapList === 'undefined') { return null; }
     let arguLen = arguments.length;
     while (arguLen--) {

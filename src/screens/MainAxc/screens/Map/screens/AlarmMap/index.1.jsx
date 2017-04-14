@@ -277,7 +277,6 @@ export default class View extends React.Component {
       const secondLen = pixelPos.get(i).size;
       for (let j = 0; j < secondLen; j++) {
         const { startX, startY, endX, endY, id, index } = pixelPos.getIn([i, j]).toJS();
-        console.log('pixlpos', pixelPos.toJS());
         // 绘制网格和网格着色
         ctx.beginPath();
         ctx.moveTo(startX, startY);
@@ -435,7 +434,6 @@ export default class View extends React.Component {
                 const {
                   endX, startX, endY, startY, id, level, describe, index,
                 } = pixelPos.getIn([i, j]).toJS();
-                console.log('startx, starty', startX, startY);
                 nodeList.push(
                   <Icon
                     name="edit"

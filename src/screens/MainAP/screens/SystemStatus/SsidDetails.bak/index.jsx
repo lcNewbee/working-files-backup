@@ -174,7 +174,6 @@ export default class SsidDetails extends React.Component {
     if (!this.props.store.getIn(['curData', 'radioList'])) return null;
     const { wirelessMode, vapList } = this.props.store.getIn(['curData', 'radioList', radioId]).toJS();
     const vapInterfacesList = (wirelessMode === 'sta') ? [vapList[0]] : vapList;
-    console.log('vapInterfacesList', vapInterfacesList);
     return (
       <div className="o-box">
         <Button

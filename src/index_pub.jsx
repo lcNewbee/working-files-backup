@@ -8,7 +8,7 @@ const appActions = require('shared/containers/app/actions');
 
 const thunkMiddleware = require('redux-thunk').default;
 const Provider = require('react-redux').Provider;
-const renderRoutesSwitch = require('shared/components/Organism/RouterConfig').renderRoutesSwitch;
+const RouteSwitchs = require('shared/components/Organism/RouterConfig').renderRoutesSwitch;
 const prodConfig = require('./config/ASW3').default;
 
 const combineReducers = redux.combineReducers;
@@ -41,7 +41,9 @@ function renderApp(renderRoutes) {
   ReactDOM.render(
     <Provider store={stores}>
       <HashRouter>
-        {renderRoutesSwitch(renderRoutes)}
+        <RouteSwitchs
+          routes={renderRoutes}
+        />
       </HashRouter>
     </Provider>,
     mountNode,

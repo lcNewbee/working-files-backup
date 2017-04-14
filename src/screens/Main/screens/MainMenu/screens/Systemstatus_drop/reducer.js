@@ -121,7 +121,6 @@ export default function (state = defaultState, action) {
     case 'RECEIVE_SYSTEM_STATUS':
       // return state.setIn(['data', 'WirelessMode'], action.data.WirelessMode);
       // console.log(state.get('data').toJS());
-      console.log(fromJS(action.data));
       const actionData = fromJS({
         data: action.data,
       });
