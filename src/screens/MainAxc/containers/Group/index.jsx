@@ -46,6 +46,7 @@ const propTypes = {
   }),
   location: PropTypes.shape({
     pathname: PropTypes.string.isRequired,
+    search: PropTypes.string.isRequired,
   }),
   createModal: PropTypes.func,
   save: PropTypes.func,
@@ -105,6 +106,7 @@ export default class MainGroup extends React.Component {
       'fetchManageGroupAps',
       'isDuplicateAp',
       'autoRefreshData',
+      'initFromLocationQuery',
     ]);
 
     document.onkeydown = (e) => {
@@ -133,11 +135,24 @@ export default class MainGroup extends React.Component {
       this.autoRefreshData();
     }, rateInterval);
   }
+
   componentDidUpdate(prevProps) {
     if (prevProps.route.path !== this.props.route.path) {
       this.autoRefreshData();
     }
+
+    // if (!prevProps.groupid && this.props.groupid) {
+    //   console.log(groupid);
+    // }
   }
+  // initFromLocationQuery() {
+  //   const locationQuery = utils.getQuery(this.props.location.search);
+
+  //   // 如果
+  //   if (typeof locationQuery.groupid !== 'undefined') {
+  //     this.onSelectManageGroup(locationQuery.groupid);
+  //   }
+  // }
   componentWillUnmount() {
     this.props.togglePropertyContainer(false);
     clearTimeout(this.autoRefreshTimer);
@@ -187,8 +202,7 @@ export default class MainGroup extends React.Component {
     e.preventDefault();
     this.props.selectGroup(id);
   }
-  onSelectManageGroup(id, e) {
-    e.preventDefault();
+  onSelectManageGroup(id) {
     this.props.selectManageGroup(id);
     this.props.fetchGroupAps(id);
   }
